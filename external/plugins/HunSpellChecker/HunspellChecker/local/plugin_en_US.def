@@ -1,0 +1,14 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=HunspellChecker
+Description=Hunspell spell checker plugin
+
+[Command]
+C[1].Label=Spell check (from file top)
+C[2].Label=Spell check (from current)
+C[3].Label=Spell check (current word)
+
+[Option]
+O[1].Label=Hunspell path
+O[2].Label=Language
+O[2].Select=English:en_US

@@ -1,0 +1,4 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=HelloComplementPlugin
+Description=Hello Complement Plugin

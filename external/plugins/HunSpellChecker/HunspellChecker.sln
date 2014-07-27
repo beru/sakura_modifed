@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HunspellChecker", "HunspellChecker.vcxproj", "{FB17FD57-ECF5-459A-AAD3-7C147C9DA22C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HunSpellChecker_1033", "HunSpellChecker_1033\HunSpellChecker_1033.vcxproj", "{28B7B01D-2B2B-49ED-A70A-883279F7C702}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB17FD57-ECF5-459A-AAD3-7C147C9DA22C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FB17FD57-ECF5-459A-AAD3-7C147C9DA22C}.Debug|Win32.Build.0 = Debug|Win32
+		{FB17FD57-ECF5-459A-AAD3-7C147C9DA22C}.Release|Win32.ActiveCfg = Release|Win32
+		{FB17FD57-ECF5-459A-AAD3-7C147C9DA22C}.Release|Win32.Build.0 = Release|Win32
+		{28B7B01D-2B2B-49ED-A70A-883279F7C702}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28B7B01D-2B2B-49ED-A70A-883279F7C702}.Debug|Win32.Build.0 = Debug|Win32
+		{28B7B01D-2B2B-49ED-A70A-883279F7C702}.Release|Win32.ActiveCfg = Release|Win32
+		{28B7B01D-2B2B-49ED-A70A-883279F7C702}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

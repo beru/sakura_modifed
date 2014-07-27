@@ -1,0 +1,17 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=SpeechPlugin
+Description=SpeechPlugin
+
+[Command]
+C[1].Label=Speech Dialog
+C[2].Label=Speak current word
+C[3].Label=Speak current line
+C[4].Label=Speak all text
+C[5].Label=Speak selected text
+C[6].Label=Purge speak
+
+[Option]
+O[1].Label=Voice type
+O[2].Label=Volume (0 ... 100) (Default:100)
+O[3].Label=Rate(-10 ... +10) (Default:0)

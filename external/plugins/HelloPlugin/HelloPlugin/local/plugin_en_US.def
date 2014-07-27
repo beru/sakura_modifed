@@ -1,0 +1,10 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=Hello plugin
+Description=Hello plugin
+
+[Command]
+C[1].Label=Hello Plugin
+
+[Option]
+O[1].Label=TEST1

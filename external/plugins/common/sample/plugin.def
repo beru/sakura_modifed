@@ -1,0 +1,46 @@
+;プラグイン定義ファイルv1
+;
+; sample file
+;
+[Plugin]
+Id=sakura.2.plugin.dll.sample.SakuraMeetsPlugin
+Name=Sakura Meets Plugin
+Description=Sakura Meets Plugin
+Type=dll
+Version=1.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+;Command=PluginCommand
+;;Install=PluginInstall
+;;Uninstall=PluginUninstall
+;;AppStart=PluginAppStart
+;;AppEnd=PluginAppEnd
+;EditorStart=PluginEditorStart
+;EditorEnd=PluginEditorEnd
+;DocumentOpen=PluginDocumentOpen
+;DocumentClose=PluginDocumentClose
+;DocumentBeforeSave=PluginDocumentBeforeSave
+;DocumentAfterSave=PluginDocumentAfterSave
+;Outline=PluginOutline
+;Outline.Label=Outline Label
+;SmartIndent=PluginSmartIndent
+;SmartIndent.Label=SmartIndent Label
+;Complement=PluginComplement
+;ComplementGlobal=PluginComplementGlobal
+;Macro=PluginMacro
+
+[Dll]
+Name=SakuraMeetsPlugin.dll
+
+[Command]
+C[1]=PluginHello
+C[1].Label=Sakura Meets Plugin
+;C[1].Icon=Icon.bmp
+
+[Option]
+O[1].Section=SakuraMeetsPlugin
+O[1].Key=TEST1
+O[1].Label=TEST1
+O[1].Type=Str

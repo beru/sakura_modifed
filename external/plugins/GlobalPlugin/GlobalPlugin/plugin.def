@@ -1,0 +1,42 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   GlobalPlugin/
+;     plugin.def
+;     GlobalPlugin.dll   このプラグインのDLLです
+;     GlobalPlugin_1033.dll   このプラグインの英語版リソースDLLです
+;     GlobalPlugin.ini   設定が保存されます
+;     local/
+;       plugin_en_US.def
+;     gtags.exe          gtags.exeコマンドを配置します
+;     global.exe         global.exeコマンドを配置します
+;     Result/            この配下にgtags結果ファイルが保存されます
+;       global.tmp
+;       xxxxxxxx/
+;         GPATH
+;         GRTAGS
+;         GTAGS
+;
+[Plugin]
+Id=sakura.2.plugin.dll.GlobalPlugin
+Name=GlobalPlugin
+Description=Global plugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+
+[Dll]
+Name=GlobalPlugin.dll
+
+[Command]
+C[1]=PluginGlobalJumpDialog
+C[1].Label=タグジャンプ一覧
+C[2]=PluginGlobalJump
+C[2].Label=タグジャンプ
+C[3]=PluginGlobalOptionDialog
+C[3].Label=GlobalPluginのオプション設定
+
+[Option]

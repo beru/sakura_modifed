@@ -1,0 +1,46 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   HunspellChecker/
+;     plugin.def
+;     HunspellChecker.dll   このプラグインのDLLです
+;     HunspellChecker_1033.dll   このプラグインの英語版リソースDLLです
+;     HunspellChecker.ini   設定が保存されます
+;     local/
+;       plugin_en_us.def
+;     Hunspell/             HunspellChekerを配置します
+;       en_US.aff
+;       en_US.dic
+;       libhunspell.dll
+;
+[Plugin]
+Id=sakura.2.plugin.dll.HunspellChecker
+Name=HunspellChecker
+Description=Hunspell spell checker plugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+
+[Dll]
+Name=HunspellChecker.dll
+
+[Command]
+C[1]=HunspellChecker
+C[1].Label=ファイル先頭からスペルチェック
+C[2]=HunspellCheckerCurrent
+C[2].Label=カーソル位置からスペルチェック
+C[3]=HunspellCheckerOneShot
+C[3].Label=カーソル位置の単語をスペルチェック
+
+[Option]
+O[1].Section=HunspellChecker
+O[1].Key=HunspellPath
+O[1].Label=Hunspellパス
+O[1].Type=Str
+O[2].Key=Language
+O[2].Label=言語
+O[2].Type=Sel
+O[2].Select=英語:en_US

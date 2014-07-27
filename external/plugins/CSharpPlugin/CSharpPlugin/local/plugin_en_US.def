@@ -1,0 +1,22 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   CSharpPlugin/
+;     plugin.def
+;     CSharpPlugin.dll
+;     CSharpPlugin_1033.dll
+;     local/
+;       plugin_en_us.def
+;
+[Plugin]
+Name=CSharpPlugin
+Description=CSharpPlugin
+
+[Command]
+C[1].Label=Compile C#
+C[2].Label=Compile C# and Run
+
+[Option]
+O[1].Label=Command Path
+O[2].Label=Select Mode
+O[2].Select=Always all text:0|Select text:1

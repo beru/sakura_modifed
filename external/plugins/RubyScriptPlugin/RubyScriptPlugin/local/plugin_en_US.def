@@ -1,0 +1,7 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=RubyScriptPlugin
+Description=RubyScriptPlugin
+
+[Option]
+O[1].Label=Ruby Module Path

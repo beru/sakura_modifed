@@ -1,0 +1,39 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   CtagsPlugin/
+;     plugin.def
+;     CtagsPlugin.dll   このプラグインのDLLです
+;     CtagsPlugin_1033.dll   このプラグインの英語版リソースDLLです
+;     CtagsPlugin.ini   設定が保存されます
+;     ctags.exe         CTAGSコマンドを配置します
+;     sqlite3.dll       SQLITEを使用する場合はDLLを配置します
+;     local/
+;       plugin_en_us.def
+;     Result/           この配下にCTAGS結果ファイル、SQLITEファイルが保存されます
+;       xxxxxxxx.ctags
+;       xxxxxxxx.sqlite
+;
+[Plugin]
+Id=sakura.2.plugin.dll.CtagsPlugin
+Name=CtagsPlugin
+Description=Ctags plugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+
+[Dll]
+Name=CtagsPlugin.dll
+
+[Command]
+C[1]=PluginCtagsJumpDialog
+C[1].Label=タグファイルジャンプ一覧
+C[2]=PluginCtagsJump
+C[2].Label=タグファイルジャンプ
+C[3]=PluginCtagsOptionDialog
+C[3].Label=CtagsPluginのオプション設定
+
+[Option]

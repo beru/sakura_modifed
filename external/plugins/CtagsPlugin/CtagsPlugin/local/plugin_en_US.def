@@ -1,0 +1,9 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=CtagsPlugin
+Description=Ctags plugin
+
+[Command]
+C[1].Label=Tag Jump List
+C[2].Label=Tag Jump
+C[3].Label=CtagsPlugin Option Setting

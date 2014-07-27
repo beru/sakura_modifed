@@ -1,0 +1,452 @@
+* DLLプラグイン仕様書(α版)
+
+********************************************************************************
+** はじめに
+********************************************************************************
+DLLプラグインはDLLを使用してサクラエディタ本体に様々な機能を提供します。
+DLLプラグインはサクラエディタのプラグイン機能の実装方法の1つです。
+DLLプラグインの開発を支援するため、サクラエディタが提供するインタフェースクラス
+にアクセスするクラス(プラグイン, エディタ, マクロ, アウトライン, スマートインデン
+ト, 補完)を用意しています
+サクラエディタへのプラグイン登録方法はプラグイン仕様書を参照してください。
+
+********************************************************************************
+** DLLプラグイン開発環境
+********************************************************************************
+プラグイン開発フォルダは以下のような構成になります。
+
+ <Sakura Editor Source>/
+   sakura_core/
+     plugin/
+       SakuraPlugin.h                   -- DLLプラグインI/Fヘッダ
+   external/
+     plugins/
+       all-plugins.sln                  -- 全プラグインビルド(出力位置が違うので注意)
+       common/
+         CBasePluginService.cpp         -- プラグインサービス基本クラス
+         CBasePluginService.h           -- プラグインサービス基本クラス
+         CExternalComplementIfObj.cpp   -- 補完アクセスクラス
+         CExternalComplementIfObj.h     -- 補完アクセスクラス
+         CExternalEditorIfObj.cpp       -- エディタアクセスクラス
+         CExternalEditorIfObj.h         -- エディタアクセスクラス
+         CExternalIfObj.h               -- アクセスクラス基本クラス
+         CExternalMacroIfObj.cpp        -- マクロアクセスクラス
+         CExternalMacroIfObj.h          -- マクロアクセスクラス
+         CExternalOutlineIfObj.cpp      -- アウトラインアクセスクラス
+         CExternalOutlineIfObj.h        -- アウトラインアクセスクラス
+         CExternalPluginIfObj.cpp       -- プラグインアクセスクラス
+         CExternalPluginIfObj.h         -- プラグインアクセスクラス
+         CExternalSmartIndentIfObj.cpp  -- スマートインデントアクセスクラス
+         CExternalSmartIndentIfObj.h    -- スマートインデントアクセスクラス
+         SakuraMeetsPlugin.cpp          -- プラグインサービス公開API
+         SakuraMeetsPlugin.h            -- プラグインサービス公開API
+         SakuraMeetsPlugin.def          -- プラグインサービス公開APIサンプル定義ファイル
+         plugin.def                     -- プラグイン定義サンプルファイル
+       utility/
+         CBregOnig.cpp                  -- bregonig.dll正規表現ライブラリアクセスクラス
+         CBregOnig.h
+         CPluginDialog.cpp              -- ダイアログ基本クラス
+         CPluginDialog.h                -- ダイアログ基本クラス
+         CDllLoader.cpp                 -- DLL利用クラス
+         CDllLoader.h
+         CSqlite.cpp                    -- SQLITE利用クラス
+         CSqlite.h
+       HelloPlugin/
+         CPluginService.cpp             -- プラグインサービス本体です
+         CPluginService.h               -- プラグインサービス本体です
+         dllmain.cpp                    -- ここに hInstance 設定を追加します
+         HelloPlugin.cpp                -- ここに独自の公開APIを追加します
+         HelloPlugin.def                -- プラグインサービス公開API定義ファイル
+         HelloPlugin.sln
+         HelloPlugin.vcxproj
+         HelloPlugin.filters
+         HelloPlugin/
+           plugin.def                   -- プラグイン定義サンプルファイル
+           ReadMe.txt                   -- 利用メモ
+           local/
+             plugin_en_US.def           -- 多言語版差分定義情報
+         stdafx.cpp
+         stdafx.h
+         HelloPlugin_1033/              -- 多言語版リソースDLL
+           HelloPlugin_1033.sln
+           HelloPlugin_1033.vcxproj
+           HelloPlugin_1033.filters
+         Makefile                       -- MinGW32用メイクファイル
+       <Your Plugin Folder>/            -- ここに新しいプラグインフォルダを作ります
+     tools/                             -- プラグイン作成のためのツール類をここに置きます
+       <Your Tool Folder>/
+
+********************************************************************************
+** プロジェクトの作成
+********************************************************************************
+Visual StudioでDLLアプリケーションプロジェクトを作成します。
+プロジェクトのプロパティを設定します。
+
+   モジュール定義ファイル            <YourPlugin>.def
+   追加のインクルードディレクトリ    .\;..\common;..\..\..\sakura_core;..\utility
+   プリプロセッサ                    PLUGIN_EXPORTS
+
+プロジェクトに common/ 配下のソースファイルとヘッダファイルをすべて追加します。
+dllmain.cppに以下のコードを追加します。
+
+   #include "stdafx.h"
+ + #include "SakuraMeetsPlugin.h"
+   BOOL APIENTRY DllMain( HMODULE hModule,
+                          DWORD  ul_reason_for_call,
+                          LPVOID lpReserved
+                        )
+   {
+       switch (ul_reason_for_call)
+       {
+       case DLL_PROCESS_ATTACH:
+ +         //DLLのリソースにアクセスするために必要です
+ +         ProcessAttach(hModule);
+ +         break;
+       case DLL_THREAD_ATTACH:
+       case DLL_THREAD_DETACH:
+ +         break;
+       case DLL_PROCESS_DETACH:
+ +         //リソースを解放します
+ +         ProcessDetach();
+ +         break;
+       }
+       return TRUE;
+   }
+
+CBasePluginServiceクラスを継承したCPluginServiceクラスを作成します。
+新しいコマンドを追加する場合は、<YourPlugin>.cppと<YourPlugin>.defにAPIを追加します。
+提供しているクラスはすべてUTF16LEです。
+SJISやUTF8のライブラリにアクセスする場合は適宜変換してください。
+
+
+********************************************************************************
+** アクセスクラス
+********************************************************************************
+
+--------------------------------------------------------------------------------
+*** Plugin
+--------------------------------------------------------------------------------
+サクラエディタのプラグイン情報にアクセスします。
+DLL呼び出し時には必ず提供します。
+提供するメソッドと使用方法は以下のファイルを参照してください。
+
+ sakura_core/plugin/CPluginIfObj.h
+ external/plugins/common/CExternalPluginIfObj.h
+
+- void SetOption(LPCWSTR section, LPCWSTR key, LPCWSTR value);
+オプションファイルに値を書き込みます。
+
+- void AddCommand(LPCWSTR arg1, LPCWSTR arg2, LPCWSTR arg3);
+
+- WideString GetPluginDir();
+プラグインディレクトリを取得します。
+
+- WideString GetDef(LPCWSTR section, LPCWSTR key);
+設定ファイルから値を読み込みます。
+
+- WideString GetOption(LPCWSTR section, LPCWSTR key);
+オプションファイルから値を読み込みます。
+
+- int GetCommandNo();
+実行中のプラグイン番号を取得します。
+
+- int GetString(const int arg1);
+
+--------------------------------------------------------------------------------
+*** Editor
+--------------------------------------------------------------------------------
+サクラエディタのエディタ情報にアクセスします。
+DLL呼び出し時には必ず提供します。
+提供するメソッドと使用方法は以下のファイルを参照してください。
+
+ sakura_core/macro/CEditorIfObj.h
+ external/plugins/common/CExternalEditorIfObj.h
+
+- おなじみのコマンド群です。使用方法はマクロヘルプを参照してください。
+
+--------------------------------------------------------------------------------
+*** Macro
+--------------------------------------------------------------------------------
+サクラエディタのマクロ情報にアクセスします。
+DLLマクロ呼び出し時に提供します。
+提供するメソッドと使用方法は以下のファイルを参照してください。
+
+ sakura_core/macro/CMacroIfObj.h
+ external/plugins/common/CExternalMacroIfObj.h
+ external/plugins/common/CBasePluginService.cpp の OnPluginMacroメソッド
+
+- void SetMatch(const int nMatch);
+実行マクロがこのDLLのものであることを通知します。
+1回目の呼び出しで拡張子が一致した場合は nMatch = 1 を指定して呼び出します。
+ 0: 自マクロ拡張子ではない
+ 1: 自マクロ拡張子である
+
+- int GetMode();
+実行マクロのモードを取得します。
+ 0: マクロ拡張子評価 | GetExt()でマクロ拡張子を取得し、自マクロ用である場合はSetMatch(1)を行います
+ 1: マクロ実行 | GetSource()で取得したソースを実行します
+
+- int GetFlags();
+マクロ実行時のflagsのマスク値です。
+CBasePluginService::OnPluginMacro()で自動付与されますので、通常はこの値を使用することはありません。
+
+- WideString GetExt();
+マクロの拡張子を取得します。
+GetMode() == 0の場合にマクロ拡張子を評価するために利用します。
+(WideStringはstd::wstringです)
+
+- WideString GetSource();
+マクロのソースを取得します。
+マクロ拡張子評価時にはセットされていません。
+マクロ実行時にセットされています。
+
+--------------------------------------------------------------------------------
+*** Outline
+--------------------------------------------------------------------------------
+サクラエディタのアウトライン情報にアクセスします。
+DLLアウトライン呼び出し時に提供します。
+提供するメソッドと使用方法は以下のファイルを参照してください。
+
+ sakura_core/plugin/COutlineIfObj.h
+ external/plugins/common/CExternalOutlineIfObj.h
+
+- void AddFunctionInfo(const int arg1, const int arg2, LPCWSTR arg3, const int arg4);
+アウトライン解析に追加します。
+
+- void AddFunctionInfo2(const int arg1, const int arg2, LPCWSTR arg3, const int arg4);
+深さ指定をしてアウトライン解析に追加します。
+
+- void SetTitle(LPCWSTR arg1);
+アウトラインダイアログのタイトルを指定します。
+
+- void SetListType(const int arg1);
+アウトライン解析リストの種別を指定します。
+
+--------------------------------------------------------------------------------
+*** SmartIndent
+--------------------------------------------------------------------------------
+サクラエディタのスマートインデント情報にアクセスします。
+DLLスマートインデント呼び出し時に提供します。
+提供するメソッドと使用方法は以下のファイルを参照してください。
+
+ sakura_core/plugin/CSmartIndentIfObj.h
+ external/plugins/common/CExternalSmartIndentIfObj.h
+
+- WideString GetChar();
+押下したキーを取得します。
+
+--------------------------------------------------------------------------------
+*** Complement
+--------------------------------------------------------------------------------
+サクラエディタの補完情報にアクセスします。
+DLL補完呼び出し時に提供します。
+提供するメソッドと使用方法は以下のファイルを参照してください。
+
+ sakura_core/plugin/CComplementIfObj.h
+ external/plugins/common/CExternalComplementIfObj.h
+
+- WideString GetCurrentWord();
+補完対象の文字列を取得します。
+
+- int GetOption();
+オプションを取得します。
+
+- int AddList(LPCWSTR arg1);
+候補に追加します。
+
+
+********************************************************************************
+** プラグインコーディングガイド
+********************************************************************************
+
+CBasePluginServiceクラスのGetPluginNameをオーバーライドしてプラグイン名を指定します。
+
+ virtual LPCWSTR GetPluginName(){ return L"SakuraMeetsPlugin"; }
+
+--------------------------------------------------------------------------------
+*** プラグイン情報
+--------------------------------------------------------------------------------
+CBasePluginServiceクラスのオーバーライド関数内で参照または設定します。
+
+ void CPluginService::OnPluginCommandExt0(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   if((Plugin.IsAvailable() == FALSE)
+   || (Editor.IsAvailable() == FALSE)){
+     return;
+   }
+   //TODO: ここにコードを追加します。
+   WideString pluginDir = Plugin.GetPluginDir();
+   WideString option = Plugin.GetOption(GetPluginName(), L"MyOptionString");
+   ...
+ }
+
+--------------------------------------------------------------------------------
+*** アウトライン解析(ジャック名: Outline)
+--------------------------------------------------------------------------------
+plugin.defファイルのエントリーを有効にします。
+
+ [Plug]
+ Outline=PluginOutline
+ Outline.Label=Outline Label
+
+CBasePluginServiceクラスのOnPluginOutlineをオーバーライドします。
+
+ void CPluginService::OnPluginOutline(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   if(Outline.IsAvailable() == FALSE){
+     return;
+   }
+   //TODO: ここにコードを追加します。
+   Outline.SetListType(type);
+   Outline.SetTitle(L"タイトル");
+   Outline.AddFunction(...);
+   ...
+ }
+
+--------------------------------------------------------------------------------
+*** スマートインデント(ジャック名: SmartIndent)
+--------------------------------------------------------------------------------
+plugin.defファイルのエントリーを有効にします。
+
+ [Plug]
+ SmartIndent=PluginSmartIndent
+ SmartIndent.Label=SmartIndent Label
+
+CBasePluginServiceクラスのOnPluginOutlineをオーバーライドします。
+
+ void CPluginService::OnPluginSmartIndent(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   if((Editor.IsAvailable() == FALSE)
+   || (SmartIndent.IsAvailable() == FALSE)){
+     return;
+   }
+   //TODO: ここにコードを追加します。
+   int x = Editor.ExpandParameter(L"$x");
+   int y = Editor.ExpandParameter(L"$y");
+   ...
+ }
+
+--------------------------------------------------------------------------------
+*** 補完検索(ジャック名: Complement, ComplementGlobal)
+--------------------------------------------------------------------------------
+plugin.defファイルのエントリーを有効にします。
+
+ [Plug]
+ Complement=PluginComplement
+ ComplementGlobal=PluginComplementGlobal
+
+CBasePluginServiceクラスのOnPluginComplement, OnPluginComplementGlobalをオーバーライドします。
+
+ void CPluginService::OnPluginComplement(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   if((Editor.IsAvailable() == FALSE)
+   || (Complement.IsAvailable() == FALSE)){
+     return;
+   }
+   //TODO: ここにコードを追加します。
+   ...
+ }
+ void CPluginService::OnPluginComplementGlobal(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   if((Editor.IsAvailable() == FALSE)
+   || (ComplementGlobal.IsAvailable() == FALSE)){
+     return;
+   }
+   //TODO: ここにコードを追加します。
+   ...
+ }
+
+--------------------------------------------------------------------------------
+*** エディタ
+--------------------------------------------------------------------------------
+plugin.defファイルのエントリーを追加にします。
+
+ [Command]
+ C[1]=PluginYourAPI
+ C[1].Label=Sakura Meets Plugin
+ ;C[1].Icon=SakuraMeetsPlugin.bmp
+
+YourPlugin.cppにAPIを定義します。
+
+ void PluginYourAPI(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   PLUGIN_INITIALIZE;  //プラグイン情報を初期設定する
+   thePluginService.OnPluginYourAPI(obj);
+ }
+
+CPluginServiceクラスのOnPluginYourAPIを作成します。
+
+ void CPluginService::OnPluginYourAPI(SAKURA_DLL_PLUGIN_OBJ* obj)
+ {
+   if(Editor.IsAvailable() == FALSE){
+     return;
+   }
+   //TODO: ここにコードを追加します。
+   int x = Editor.ExpandParameter(L"$x");
+   int y = Editor.ExpandParameter(L"$y");
+   ...
+ }
+
+--------------------------------------------------------------------------------
+*** マクロ(ジャック名: Macro)
+--------------------------------------------------------------------------------
+plugin.defファイルのエントリーを追加にします。
+
+ [Plug]
+ Macro=PluginMacro
+
+CBasePluginServiceクラスのGetMacroExtをオーバーライドしてマクロ拡張子を指定します。
+
+ virtual LPCWSTR GetMacroExt(){ return L"hello"; }
+
+CBasePluginServiceクラスのRunMacroをオーバーライドします。
+
+ void CPluginService::RunMacro(LPCWSTR Source)
+ {
+   //TODO: ここにコードを追加します。
+   AnsiString aSource = to_astr(Source.c_str());
+   ...
+ }
+
+※マクロの拡張子チェックと実行の判断はCBasePluginService::OnPluginMacro内に実装されています。
+
+
+********************************************************************************
+** 多言語対応について
+********************************************************************************
+
+--------------------------------------------------------------------------------
+*** plugin.def
+--------------------------------------------------------------------------------
+plugin.defファイルは呼び出し側が制御しています。
+以下のファイルを用意してください。
+
+ plugins/
+   <YourPlugin>/
+     local/
+       plugin_en_US.def  -- 英語版の英語表記だけを抜き出したもの
+
+--------------------------------------------------------------------------------
+*** リソースDLL
+--------------------------------------------------------------------------------
+DLLプラグインではサクラエディタ本体の言語モードを受け取ります。
+この情報をもとに自動的に言語モードを切り替えます。
+
+  SAKURA_DLL_PLUGIN_OBJ::m_wLangId
+
+DLLプラグインは言語IDに従ったリソースDLLを用意してください。
+リソースDLLが存在しない場合は本体のリソースを使用します。
+
+ plugins/
+   <YourPlugin>/
+     <YourPlugin>.dll       -- 本体(日本語リソースを含む)
+     <YourPlugin>_1033.dll  -- 英語版リソースDLL
+
+言語と言語IDの対応はMSのURLを参考にしてください。
+
+  http://msdn.microsoft.com/ja-jp/library/cc392381.aspx
+
+ダイアログを表示する場合のインスタンスには、thePluginService.GetInstance()を利用
+してください。
+文字列の取得にはthePluginService.LoadStringを利用してください。
+

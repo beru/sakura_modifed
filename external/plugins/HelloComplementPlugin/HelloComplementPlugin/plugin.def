@@ -1,0 +1,27 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   HelloComplementPlugin/
+;     plugin.def
+;     HelloComplementPlugin.dll
+;     HelloComplementPlugin_1033.dll
+;     local/
+;       plugin_en_US.def
+;
+[Plugin]
+Id=sakura.2.plugin.dll.HelloComplementPlugin
+Name=HelloComplementPlugin
+Description=Hello Complement Plugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+;Complement=PluginComplement
+ComplementGlobal=PluginComplementGlobal
+
+[Dll]
+Name=HelloComplementPlugin.dll
+
+[Option]

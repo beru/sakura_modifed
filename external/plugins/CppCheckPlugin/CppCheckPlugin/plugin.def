@@ -1,0 +1,39 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   CppCheckPlugin/
+;     plugin.def
+;     CppCheckPlugin.dll       このプラグインのDLLです
+;     CppCheckPlugin_1033.dll  このプラグインの英語版リソースDLLです
+;     local/
+;       plugin_en_US.def       英語版
+;     cppcheck_result.xml      ※Cppcheck実行結果ファイルが作成されます
+;
+[Plugin]
+Id=sakura.2.plugin.dll.CppCheckPlugin
+Name=CppCheckPlugin
+Description=CppCheck plugin
+Type=dll
+Version=1.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+
+[Dll]
+Name=CppCheckPlugin.dll
+
+[Command]
+C[1]=PluginCppCheckDialog
+C[1].Label=CppCheckの実行
+
+[Option]
+O[1].Section=CppCheckPlugin
+O[1].Key=CppCheckExePath
+O[1].Label=Cppcheck Path
+O[1].Type=Str
+O[1].Default=C:\Program Files (x86)\Cppcheck\cppcheck.exe
+O[2].Key=Platform
+O[2].Label=Platform
+O[2].Type=Str
+O[2].Default=win32W

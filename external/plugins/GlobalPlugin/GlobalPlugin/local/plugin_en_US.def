@@ -1,0 +1,24 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   GlobalPlugin/
+;     plugin.def
+;     GlobalPlugin.dll   このプラグインのDLLです
+;     GlobalPlugin.ini   設定が保存されます
+;     gtags.exe          gtags.exeコマンドを配置します
+;     global.exe         global.exeコマンドを配置します
+;     Result/            この配下にgtags結果ファイルが保存されます
+;       global.tmp
+;       xxxxxxxx/
+;         GPATH
+;         GRTAGS
+;         GTAGS
+;
+[Plugin]
+Name=GlobalPlugin
+Description=Global plugin
+
+[Command]
+C[1].Label=Tag Jump List
+C[2].Label=Tag Jump
+C[3].Label=GlobalPlugin Option Setting

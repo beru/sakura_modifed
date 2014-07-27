@@ -1,0 +1,41 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   CSharpPlugin/
+;     plugin.def
+;     CSharpPlugin.dll
+;     CSharpPlugin_1033.dll
+;     local/
+;       plugin_en_us.def
+;
+[Plugin]
+Id=sakura.2.plugin.dll.CSharpPlugin
+Name=CSharpPlugin
+Description=CSharpPlugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+
+[Dll]
+Name=CSharpPlugin.dll
+
+[Command]
+C[1]=PluginCscCompile
+C[1].Label=C#のコンパイル
+C[2]=PluginCscCompileAndRun
+C[2].Label=C#のコンパイルと実行
+
+[Option]
+O[1].Section=CSharpPlugin
+O[1].Key=CommandPath
+O[1].Label=Command Path
+O[1].Type=Str
+O[1].Default=C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe
+O[2].Key=SelectMode
+O[2].Label=Select Mode
+O[2].Type=Sel
+O[2].Select=Always all text:0|Select text:1
+O[2].Default=0

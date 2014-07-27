@@ -1,0 +1,51 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   HelloPlugin/
+;     plugin.def
+;     HelloPlugin.dll
+;     HelloPlugin_1033.dll
+;     local/
+;       plugin_en_us.def
+;
+[Plugin]
+Id=sakura.2.plugin.dll.HelloPlugin
+Name=Hello plugin
+Description=Hello plugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+;Command=PluginCommand
+;;Install=PluginInstall
+;;Uninstall=PluginUninstall
+;;AppStart=PluginAppStart
+;;AppEnd=PluginAppEnd
+;EditorStart=PluginEditorStart
+;EditorEnd=PluginEditorEnd
+;DocumentOpen=PluginDocumentOpen
+;DocumentClose=PluginDocumentClose
+;DocumentBeforeSave=PluginDocumentBeforeSave
+;DocumentAfterSave=PluginDocumentAfterSave
+;Outline=PluginOutline
+;Outline.Label=Outline Label
+;SmartIndent=PluginSmartIndent
+;SmartIndent.Label=SmartIndent Label
+;Complement=PluginComplement
+;ComplementGlobal=PluginComplementGlobal
+Macro=PluginMacro
+
+[Dll]
+Name=HelloPlugin.dll
+
+[Command]
+C[1]=PluginHello
+C[1].Label=Hello Plugin
+
+[Option]
+O[1].Section=HelloPlugin
+O[1].Key=TEST1
+O[1].Label=TEST1
+O[1].Type=Str

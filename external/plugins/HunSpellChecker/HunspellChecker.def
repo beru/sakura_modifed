@@ -1,0 +1,31 @@
+;
+; SakuraMeetsPlugin def file
+;
+LIBRARY	"HunspellChecker"
+
+EXPORTS
+	PluginCommand				@1
+;	PluginInstall				@2
+;	PluginUninstall				@3
+;	PluginAppStart				@4
+;	PluginAppEnd				@5
+	PluginEditorStart			@6
+	PluginEditorEnd				@7
+	PluginDocumentOpen			@8
+	PluginDocumentClose			@9
+	PluginDocumentBeforeSave	@10
+	PluginDocumentAfterSave		@11
+	PluginOutline				@12
+	PluginSmartIndent			@13
+	PluginComplement			@14
+	PluginComplementGlobal		@15
+	PluginMacro					@16
+
+;TODO: ここにコマンドAPIを追加します
+; @1-@99: 予約
+; @100以降: ユーザプラグイン用
+
+	HunspellChecker				@100
+	HunspellCheckerCurrent		@101
+	HunspellCheckerOneShot		@102
+

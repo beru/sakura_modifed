@@ -1,0 +1,11 @@
+;プラグイン定義ファイルv1
+[Plugin]
+Name=CppCheckPlugin
+Description=CppCheck plugin
+
+[Command]
+C[1].Label=CppCheck
+
+[Option]
+O[1].Label=Cppcheck Path
+O[2].Label=Platform

@@ -1,0 +1,54 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   SpeechPlugin/
+;     plugin.def
+;     SpeechPlugin.dll
+;     SpeechPlugin_1033.dll
+;     local/
+;       plugin_en_us.def
+;
+[Plugin]
+Id=sakura.2.plugin.dll.SpeechPlugin
+Name=SpeechPlugin
+Description=SpeechPlugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+
+[Dll]
+Name=SpeechPlugin.dll
+
+[Command]
+C[1]=PluginSpeechDialog
+C[1].Label=読み上げ画面を開く
+C[2]=PluginSpeechWord
+C[2].Label=カーソル位置の単語を読み上げ
+C[3]=PluginSpeechLine
+C[3].Label=カーソル行を読み上げ
+C[4]=PluginSpeechAll
+C[4].Label=すべてのテキストを読み上げ
+C[5]=PluginSpeechSelect
+C[5].Label=選択されたテキストを読み上げ
+C[6]=PluginSpeechPurge
+C[6].Label=読み上げを中止
+
+[Option]
+O[1].Section=SpeechPlugin
+O[1].Key=Voice
+O[1].Label=Voice type
+O[1].Type=Str
+#O[1].Default=Microsoft Haruka Desktop - Japanese
+O[2].Section=SpeechPlugin
+O[2].Key=Volume
+O[2].Label=Volume (0 ... 100) (Default:100)
+O[2].Type=Int
+O[2].Default=100
+O[3].Section=SpeechPlugin
+O[3].Key=Rate
+O[3].Label=Rate(-10 ... +10) (Default:0)
+O[3].Type=Int
+O[3].Default=0

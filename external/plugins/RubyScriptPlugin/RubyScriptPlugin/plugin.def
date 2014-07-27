@@ -1,0 +1,32 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   RubyScriptPlugin/
+;     plugin.def
+;     RubyScriptPlugin.dll
+;     RubyScriptPlugin_1033.dll
+;     local/
+;       plugin_en_us.def
+;
+[Plugin]
+Id=sakura.2.plugin.dll.RubyScriptPlugin
+Name=RubyScriptPlugin
+Description=RubyScriptPlugin
+Type=dll
+Version=1.0.0.0
+Url=
+Author=Plugins developers
+
+[Plug]
+Macro=PluginMacro
+
+[Dll]
+Name=RubyScriptPlugin.dll
+
+[Command]
+
+[Option]
+O[1].Section=RubyScriptPlugin
+O[1].Key=RubyModulePath
+O[1].Label=Ruby Module Path
+O[1].Type=Str

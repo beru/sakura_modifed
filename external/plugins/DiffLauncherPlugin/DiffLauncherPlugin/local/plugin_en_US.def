@@ -1,0 +1,16 @@
+;プラグイン定義ファイルv1
+;
+; plugins/
+;   DiffLauncherPlugin/
+;     plugin.def
+;     DiffLauncherPlugin.dll
+;
+[Plugin]
+Name=DiffLauncherPlugin
+Description=DiffLauncherPlugin
+
+[Command]
+C[1].Label=Diff Command
+
+[Option]
+O[1].Label=Command Path
