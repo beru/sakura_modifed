@@ -73,8 +73,7 @@ void CPluginService::OnPluginGlobalJump(SAKURA_DLL_PLUGIN_OBJ* obj)
 	//ê›íËÇì«Ç›çûÇﬁ
 	thePluginService.ReadProfile();
 
-	Editor.SelectWord();
-	WideString strKeyword = Editor.GetSelectedString(0);
+	WideString strKeyword = Editor.ExpandParameter(L"$C");
 
 	CJumpListDialog dlg(&m_GlobalOption, &m_GlobalInfoList);
 	dlg.ReadGlobalFile(strKeyword.c_str(), m_GlobalOption.m_dwMatchMode, m_GlobalOption.m_bIgnoreCase, m_GlobalOption.m_bSymbol, m_GlobalOption.m_bRef);
