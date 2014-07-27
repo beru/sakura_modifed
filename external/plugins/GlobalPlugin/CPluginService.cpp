@@ -50,7 +50,7 @@ void CPluginService::OnPluginGlobalOptionDialog(SAKURA_DLL_PLUGIN_OBJ* obj)
 	thePluginService.ReadProfile();
 
 	COptionDialog dlg(&m_GlobalOption, &m_GlobalInfoList);
-	if(dlg.DoModal(GetInstance(), GetParentHwnd()) == IDOK){
+	if (dlg.DoModal(GetInstance(), GetParentHwnd()) == IDOK) {
 		WriteProfile();
 	}
 }
@@ -74,9 +74,18 @@ void CPluginService::OnPluginGlobalJump(SAKURA_DLL_PLUGIN_OBJ* obj)
 	thePluginService.ReadProfile();
 
 	WideString strKeyword = Editor.ExpandParameter(L"$C");
+	WideString fileName = Editor.S_GetFilename();
+	int lineNo = _wtoi(Editor.ExpandParameter(L"$y").c_str());
 
 	CJumpListDialog dlg(&m_GlobalOption, &m_GlobalInfoList);
 	dlg.ReadGlobalFile(strKeyword.c_str(), m_GlobalOption.m_dwMatchMode, m_GlobalOption.m_bIgnoreCase, m_GlobalOption.m_bSymbol, m_GlobalOption.m_bRef);
+	
+	HANDLE hFile = ::CreateFile(fileName.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	if (hFile != INVALID_HANDLE_VALUE) {
+		::GetFileInformationByHandle(hFile, &dlg.m_fileInfo);
+		::CloseHandle(hFile);
+	}
+	dlg.m_lineNo = lineNo;
 
 	dlg.DoModal(GetInstance(), GetParentHwnd());
 }
@@ -92,7 +101,7 @@ void CPluginService::ReadProfile()
 	memset(szBuffer, 0, sizeof(szBuffer));
 	GetPrivateProfileString(PROFILE_SECTION_GENERAL, PROFILE_KEY_GTAGS_EXE_PATH, L"", szBuffer, _countof(szBuffer), strIniFile.c_str());
 	m_GlobalOption.m_strGtagsExePath = szBuffer;
-	if(m_GlobalOption.m_strGtagsExePath.length() == 0){
+	if (m_GlobalOption.m_strGtagsExePath.length() == 0) {
 		m_GlobalOption.m_strGtagsExePath = strPluginPath + L"\\" + PROFILE_DEF_GTAGS_EXE_PATH;
 	}
 
@@ -100,7 +109,7 @@ void CPluginService::ReadProfile()
 	memset(szBuffer, 0, sizeof(szBuffer));
 	GetPrivateProfileString(PROFILE_SECTION_GENERAL, PROFILE_KEY_GLOBAL_EXE_PATH, L"", szBuffer, _countof(szBuffer), strIniFile.c_str());
 	m_GlobalOption.m_strGlobalExePath = szBuffer;
-	if(m_GlobalOption.m_strGlobalExePath.length() == 0){
+	if (m_GlobalOption.m_strGlobalExePath.length() == 0) {
 		m_GlobalOption.m_strGlobalExePath = strPluginPath + L"\\" + PROFILE_DEF_GLOBAL_EXE_PATH;
 	}
 
@@ -121,7 +130,7 @@ void CPluginService::ReadProfile()
 	m_GlobalOption.m_dwPrevListCount = dwTotalCount;
 
 	RemoveAllGlobalInfoList(m_GlobalInfoList);
-	for(DWORD i = 0; i < dwTotalCount; i++){
+	for (DWORD i = 0; i < dwTotalCount; i++) {
 		CGlobalInfo* info = new CGlobalInfo;
 		wchar_t szKey[256];
 
@@ -178,7 +187,7 @@ void CPluginService::WriteProfile()
 	WritePrivateProfileString(PROFILE_SECTION_GENERAL, PROFILE_KEY_REF, szBuffer, strIniFile.c_str());
 
 	DWORD i;
-	for(DWORD i = 0; i < m_GlobalOption.m_dwPrevListCount; i++){
+	for (DWORD i = 0; i < m_GlobalOption.m_dwPrevListCount; i++) {
 		wchar_t szKey[256];
 		wsprintf(szKey, PROFILE_KEY_FLAG, (i + 1));
 		WritePrivateProfileString(PROFILE_SECTION_GLOBAL, szKey, NULL, strIniFile.c_str());
@@ -191,7 +200,7 @@ void CPluginService::WriteProfile()
 	wsprintf(szBuffer, L"%d", m_GlobalInfoList.size());
 	WritePrivateProfileString(PROFILE_SECTION_GLOBAL, PROFILE_KEY_COUNT, szBuffer, strIniFile.c_str());
 	i = 0;
-	for(std::list<CGlobalInfo*>::iterator it = m_GlobalInfoList.begin(); it != m_GlobalInfoList.end(); ++it){
+	for (std::list<CGlobalInfo*>::iterator it = m_GlobalInfoList.begin(); it != m_GlobalInfoList.end(); ++it) {
 		CGlobalInfo* info = *it;
 		wchar_t szKey[256];
 
@@ -217,7 +226,7 @@ void CPluginService::WriteProfile()
 ///////////////////////////////////////////////////////////////////////////////
 void CPluginService::RemoveAllGlobalInfoList(std::list<CGlobalInfo*>& p)
 {
-	for(std::list<CGlobalInfo*>::iterator it = p.begin(); it != p.end(); ++it){
+	for (std::list<CGlobalInfo*>::iterator it = p.begin(); it != p.end(); ++it) {
 		delete *it;
 	}
 	p.clear();
@@ -234,10 +243,10 @@ WideString CPluginService::GetResultPath(const DWORD dwUniqID)
 DWORD CPluginService::GetUniqID()
 {
 	DWORD dwUniqID = (DWORD)time(NULL);
-	while(1){
+	while (1) {
 		WideString strFile = GetResultPath(dwUniqID);
 		struct _stat st;
-		if(_wstat(strFile.c_str(), &st) != 0){
+		if (_wstat(strFile.c_str(), &st) != 0) {
 			return dwUniqID;
 		}
 		dwUniqID++;
@@ -281,7 +290,7 @@ void CPluginService::RemoveResultPath(const DWORD dwUniqID, BOOL bFull)
 	::DeleteFile(strResultFile.c_str());
 	strResultFile = strResultPath + L"\\GTAGS";
 	::DeleteFile(strResultFile.c_str());
-	if(bFull){
+	if (bFull) {
 		::RemoveDirectory(strResultPath.c_str());
 	}
 }

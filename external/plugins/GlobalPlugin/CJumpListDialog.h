@@ -68,6 +68,8 @@ public:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam);
 	virtual int GetData(void);
 	virtual void SetData(void);
+	void SetDataSub();
+	int InsertItem(HWND hList, int nIndex, CGlobalData* info);
 
 public:
 	CGlobalOption*				m_lpGlobalOption;
@@ -83,18 +85,18 @@ public:
 	BOOL						m_bRef;
 
 	ControlResizer				m_ctrlResizer;
+	BY_HANDLE_FILE_INFORMATION	m_fileInfo;
+	int							m_lineNo;
 
 	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
 	DWORD ReadGlobalFileOne(LPCWSTR lpszFileName, const DWORD dwPrevCount);
 	HANDLE OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFile);
 
-	int InsertItem(HWND hList, int nIndex, CGlobalData* info);
 	void GetItem(HWND hList, int nIndex, CGlobalData* info);
 	void StartTimer();
 	void StopTimer();
 	BOOL OnTimer(WPARAM wParam);
 	void RemoveAllGlobalDataList(std::list<CGlobalData*>& p);
-	void SetDataSub();
 	static bool Ascending(const CGlobalData* x, const CGlobalData* y);
 };
 

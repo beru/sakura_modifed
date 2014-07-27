@@ -76,7 +76,7 @@ BOOL COptionDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	::SendMessage(hEditMaxFind,   EM_LIMITTEXT, (WPARAM)6, 0);
 	::SendMessage(hEditDelay,     EM_LIMITTEXT, (WPARAM)6, 0);
 
-	for(int i = 0; i < _countof(layout); i++){
+	for (int i = 0; i < _countof(layout); i++) {
 		WideString strText;
 		thePluginService.LoadString(layout[i].m_nID, strText);
 		LV_COLUMN lvc;
@@ -106,11 +106,11 @@ BOOL COptionDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////////////
 BOOL COptionDialog::OnBnClicked(int wID)
 {
-	switch(wID){
+	switch (wID) {
 	case IDOK:
 		m_nRetCode = wID;
-		if(GetData()){
-			for(std::list<DWORD>::iterator it = m_DeleteList.begin(); it != m_DeleteList.end(); ++it){
+		if (GetData()) {
+			for (std::list<DWORD>::iterator it = m_DeleteList.begin(); it != m_DeleteList.end(); ++it) {
 				thePluginService.RemoveResultPath(*it);
 			}
 			m_DeleteList.clear();
@@ -134,7 +134,7 @@ BOOL COptionDialog::OnBnClicked(int wID)
 			WideString strResultPath = thePluginService.GetResultPath(info.m_dwUniqID);
 			CMakeDialog dlg(m_lpGlobalOption, &info);
 			INT_PTR nRet = dlg.DoModal(thePluginService.GetInstance(), GetHwnd());
-			if(nRet == IDOK){
+			if (nRet == IDOK) {
 				int nIndex = InsertItem(hList, ListView_GetItemCount(hList), &info);
 				ListView_SetItemState(hList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				ListView_EnsureVisible(hList, nIndex, FALSE);
@@ -146,13 +146,13 @@ BOOL COptionDialog::OnBnClicked(int wID)
 	case IDC_BUTTON_UPDATE:
 		{
 			HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
-			if(ListView_GetSelectedCount(hList) == 1){
+			if (ListView_GetSelectedCount(hList) == 1) {
 				int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
 				CGlobalInfo info;
 				GetItem(hList, nIndex, &info);
 				CMakeDialog dlg(m_lpGlobalOption, &info);
 				INT_PTR nRet = dlg.DoModal(thePluginService.GetInstance(), GetHwnd());
-				if(nRet == IDOK){
+				if (nRet == IDOK) {
 					ListView_SetItemText(hList, nIndex, 0, (LPWSTR)info.m_strTargetPath.c_str());
 					ListView_SetCheckState(hList, nIndex, info.m_bFlag);
 					WideString strUniqID = thePluginService.GetDwordToHexString(info.m_dwUniqID);
@@ -166,12 +166,12 @@ BOOL COptionDialog::OnBnClicked(int wID)
 	case IDC_BUTTON_DELETE:
 		{
 			HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
-			if(ListView_GetSelectedCount(hList) == 1){
+			if (ListView_GetSelectedCount(hList) == 1) {
 				WideString strMessage;
 				thePluginService.LoadString(IDS_STR_MSG1, strMessage);	//選択された項目を削除してもよろしいですか？
 				int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
 				INT_PTR nRet = ::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1);
-				if(nRet == IDYES){
+				if (nRet == IDYES) {
 					CGlobalInfo prev;
 					GetItem(hList, nIndex, &prev);
 					m_DeleteList.push_back(prev.m_dwUniqID);
@@ -185,10 +185,10 @@ BOOL COptionDialog::OnBnClicked(int wID)
 	case IDC_BUTTON_UP:
 		{
 			HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
-			if(ListView_GetSelectedCount(hList) == 1){
+			if (ListView_GetSelectedCount(hList) == 1) {
 				int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED);
 				//int nCount = ListView_GetItemCount(hList);
-				if(nIndex > 0){
+				if (nIndex > 0) {
 					CGlobalInfo prev;
 					GetItem(hList, nIndex, &prev);
 					ListView_DeleteItem(hList, nIndex);
@@ -204,10 +204,10 @@ BOOL COptionDialog::OnBnClicked(int wID)
 	case IDC_BUTTON_DOWN:
 		{
 			HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
-			if(ListView_GetSelectedCount(hList) == 1){
+			if (ListView_GetSelectedCount(hList) == 1) {
 				int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED);
 				int nCount = ListView_GetItemCount(hList);
-				if(nIndex < (nCount - 1)){
+				if (nIndex < (nCount - 1)) {
 					CGlobalInfo prev;
 					GetItem(hList, nIndex, &prev);
 					InsertItem(hList, nIndex + 2, &prev);
@@ -232,7 +232,7 @@ BOOL COptionDialog::OnBnClicked(int wID)
 			Replace(szFilter, L'|', L'\0');
 			WideString strCaption;
 			thePluginService.LoadString(IDS_STR_CAPTION1, strCaption);	//gtags.exeパスの指定
-			if(GetOpenFileNameDialog(thePluginService.GetInstance(), GetHwnd(), strCaption.c_str(), strGtagsExePath.c_str(), szFilter, strGtagsExeFile)){
+			if (GetOpenFileNameDialog(thePluginService.GetInstance(), GetHwnd(), strCaption.c_str(), strGtagsExePath.c_str(), szFilter, strGtagsExeFile)) {
 				::SetWindowText(hEditGtagsExe, strGtagsExeFile.c_str());
 			}
 		}
@@ -250,7 +250,7 @@ BOOL COptionDialog::OnBnClicked(int wID)
 			Replace(szFilter, L'|', L'\0');
 			WideString strCaption;
 			thePluginService.LoadString(IDS_STR_CAPTION2, strCaption);	//global.exeパスの指定
-			if(GetOpenFileNameDialog(thePluginService.GetInstance(), GetHwnd(), strCaption.c_str(), strGlobalExePath.c_str(), szFilter, strGlobalExeFile)){
+			if (GetOpenFileNameDialog(thePluginService.GetInstance(), GetHwnd(), strCaption.c_str(), strGlobalExePath.c_str(), szFilter, strGlobalExeFile)) {
 				::SetWindowText(hEditGlobalExe, strGlobalExeFile.c_str());
 			}
 		}
@@ -270,7 +270,7 @@ BOOL COptionDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 	case IDC_LIST:
 		{
 			NMHDR* pNMHDR = (NMHDR*)lParam;
-			switch(pNMHDR->code){
+			switch (pNMHDR->code) {
 			case LVN_ITEMCHANGED:
 				ControlButton();
 				break;
@@ -311,7 +311,7 @@ void COptionDialog::SetData(void)
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	ListView_DeleteAllItems(hList);
 	int nIndex = 0;
-	for(std::list<CGlobalInfo*>::iterator it = thePluginService.m_GlobalInfoList.begin(); it != thePluginService.m_GlobalInfoList.end(); ++it){
+	for (std::list<CGlobalInfo*>::iterator it = thePluginService.m_GlobalInfoList.begin(); it != thePluginService.m_GlobalInfoList.end(); ++it) {
 		InsertItem(hList, nIndex, *it);
 		nIndex++;
 	}
@@ -331,7 +331,7 @@ int COptionDialog::GetData(void)
 			m_lpGlobalOption->m_strGlobalExePath = GetWindowText(hEditGlobalExe);
 			WideString strMaxFind = GetWindowText(hEditMaxFind);
 			m_lpGlobalOption->m_dwMaxFind        = _wtoi(strMaxFind.c_str());
-			if((m_lpGlobalOption->m_dwMaxFind < 1) || (m_lpGlobalOption->m_dwMaxFind > 100000)){
+			if ((m_lpGlobalOption->m_dwMaxFind < 1) || (m_lpGlobalOption->m_dwMaxFind > 100000)) {
 				WideString strMessage;
 				thePluginService.LoadString(IDS_STR_MSG2, strMessage);	//1 から 100,000 の範囲で指定してください。
 				::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
@@ -339,19 +339,19 @@ int COptionDialog::GetData(void)
 			}
 			WideString strDelay = GetWindowText(hEditDelay);
 			m_lpGlobalOption->m_dwDelay = _wtoi(strDelay.c_str());
-			if(/*(m_lpGlobalOption->m_dwDelay < 0) ||*/ (m_lpGlobalOption->m_dwDelay > 60000)){
+			if (/*(m_lpGlobalOption->m_dwDelay < 0) ||*/ (m_lpGlobalOption->m_dwDelay > 60000)) {
 				WideString strMessage;
 				thePluginService.LoadString(IDS_STR_MSG2, strMessage);	//0 から 60,000 ミリ秒の範囲で指定してください。
 				::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 				return FALSE;
 			}
-			if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALL) == BST_CHECKED){
+			if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALL) == BST_CHECKED) {
 				m_lpGlobalOption->m_dwMatchMode = MATCH_MODE_PERFECT;
-			}else if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_BEGIN) == BST_CHECKED){
+			}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_BEGIN) == BST_CHECKED) {
 				m_lpGlobalOption->m_dwMatchMode = MATCH_MODE_BEGIN;
-			}else if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ANY) == BST_CHECKED){
+			}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ANY) == BST_CHECKED) {
 				m_lpGlobalOption->m_dwMatchMode = MATCH_MODE_ANY;
-			}else{
+			}else {
 				m_lpGlobalOption->m_dwMatchMode = MATCH_MODE_PERFECT;
 			}
 			m_lpGlobalOption->m_bIgnoreCase = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_CASE) == BST_CHECKED) ? FALSE : TRUE;
@@ -360,7 +360,7 @@ int COptionDialog::GetData(void)
 			thePluginService.RemoveAllGlobalInfoList(*m_lpGlobalInfoList);
 			HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 			DWORD dwCount = ListView_GetItemCount(hList);
-			for(DWORD nIndex = 0; nIndex < dwCount; nIndex++){
+			for (DWORD nIndex = 0; nIndex < dwCount; nIndex++) {
 				CGlobalInfo* info = new CGlobalInfo;
 				GetItem(hList, nIndex, info);
 				m_lpGlobalInfoList->push_back(info);
@@ -395,7 +395,7 @@ int COptionDialog::InsertItem(HWND hList, int nIndex, CGlobalInfo* info)
 void COptionDialog::GetItem(HWND hList, int nIndex, CGlobalInfo* info)
 {
 	wchar_t* lpszBuffer = new wchar_t[MAX_PATH_LENGTH];
-	if(lpszBuffer != NULL){
+	if (lpszBuffer != NULL) {
 		info->m_bFlag = ListView_GetCheckState(hList, nIndex);
 		ListView_GetItemText(hList, nIndex, 0, lpszBuffer, MAX_PATH_LENGTH);
 		info->m_strTargetPath = lpszBuffer;
@@ -423,12 +423,12 @@ void COptionDialog::ControlButton()
 
 	BOOL bUp = FALSE;
 	BOOL bDown = FALSE;
-	if(nCount > 1){
+	if (nCount > 1) {
 		int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
-		if(nIndex > 0){
+		if (nIndex > 0) {
 			bUp = TRUE;
 		}
-		if(nIndex < (nCount - 1)){
+		if (nIndex < (nCount - 1)) {
 			bDown = TRUE;
 		}
 	}
@@ -439,8 +439,8 @@ void COptionDialog::ControlButton()
 ///////////////////////////////////////////////////////////////////////////////
 void COptionDialog::Replace(wchar_t* szFilter, wchar_t c1, wchar_t c2)
 {
-	for(int i = 0; szFilter[i] != L'\0'; i++){
-		if(szFilter[i] == c1){
+	for (int i = 0; szFilter[i] != L'\0'; i++) {
+		if (szFilter[i] == c1) {
 			szFilter[i] = c2;
 		}
 	}

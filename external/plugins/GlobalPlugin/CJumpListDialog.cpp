@@ -106,7 +106,7 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 
-	for(int i = 0; i < _countof(layout); i++){
+	for (int i = 0; i < _countof(layout); i++) {
 		WideString strText;
 		thePluginService.LoadString(layout[i].m_nID, strText);
 		LV_COLUMN lvc;
@@ -152,17 +152,17 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////////////
 BOOL CJumpListDialog::OnBnClicked(int wID)
 {
-	switch(wID){
+	switch (wID) {
 	case IDOK:
 		m_bOperation = TRUE;
 		m_nRetCode = wID;
-		if(GetData()){
+		if (GetData()) {
 			StopTimer();
 			{
 				HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
-				if(ListView_GetSelectedCount(hList) == 1){
+				if (ListView_GetSelectedCount(hList) == 1) {
 					int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
-					if(nIndex >= 0){
+					if (nIndex >= 0) {
 						CGlobalData info;
 						GetItem(hList, nIndex, &info);
 						thePluginService.Editor.S_TagJumpEx(info.m_strFile, info.m_nLine, 0, 0);
@@ -190,7 +190,7 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 	case IDC_CHECKBOX_CASE:
 	case IDC_CHECKBOX_SYMBOL:
 	case IDC_CHECKBOX_REF:
-		if(m_bOperation == FALSE){
+		if (m_bOperation == FALSE) {
 			StartTimer();
 		}
 		break;
@@ -210,7 +210,7 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::SetData()
 {
-	if(GetHwnd() == NULL) return;
+	if (GetHwnd() == NULL) return;
 
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 	::SetWindowText(hEditKeyword, m_strKeyword.c_str());
@@ -228,7 +228,7 @@ void CJumpListDialog::SetDataSub()
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	ListView_DeleteAllItems(hList);
 	int nIndex = 0;
-	for(std::list<CGlobalData*>::iterator it = m_GlobalDataList.begin(); it != m_GlobalDataList.end(); ++it){
+	for (std::list<CGlobalData*>::iterator it = m_GlobalDataList.begin(); it != m_GlobalDataList.end(); ++it) {
 		InsertItem(hList, nIndex, *it);
 		nIndex++;
 	}
@@ -262,15 +262,15 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 	WideString strTmpFile = thePluginService.Plugin.GetPluginDir() + L"\\" + PROFILE_DEF_GTAGS_TMP_FILE;
 	
 	DWORD dwCount = 0;
-	if(m_strKeyword.length() != 0){
-		for(std::list<CGlobalInfo*>::iterator it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it){
+	if (m_strKeyword.length() != 0) {
+		for (std::list<CGlobalInfo*>::iterator it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it) {
 			CGlobalInfo* info = *it;
-			if(info->m_bFlag){
+			if (info->m_bFlag) {
 				::DeleteFile(strTmpFile.c_str());
 				WideString strMessage;
 				WideString strResultPath = thePluginService.GetResultPath(info->m_dwUniqID);
 				HANDLE hProcess = OnExecuteGlobal(info, strTmpFile);
-				if(hProcess != NULL){
+				if (hProcess != NULL) {
 #if 0
 					CPluginDlgCancel dlg;
 					INT_PTR nRet = dlg.DoModal(thePluginService.GetInstance(), GetHwnd(), IDD_EXECUTE_DIALOG, (LPARAM)hProcess);
@@ -297,7 +297,7 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 					dwCount += ReadGlobalFileOne(strTmpFile.c_str(), dwCount);
 				}
 				::DeleteFile(strTmpFile.c_str());
-				if(dwCount >= m_lpGlobalOption->m_dwMaxFind) break;
+				if (dwCount >= m_lpGlobalOption->m_dwMaxFind) break;
 			}
 		}
 	}
@@ -313,13 +313,13 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 bool CJumpListDialog::Ascending(const CGlobalData* x, const CGlobalData* y)
 {
 	int result = wcscmp(x->m_strKeyword.c_str(), y->m_strKeyword.c_str());
-	if(result < 0) return true;
-	if(result == 0){
+	if (result < 0) return true;
+	if (result == 0) {
 		result = x->m_nLine - y->m_nLine;
-		if(result < 0) return true;
-		if(result == 0){
+		if (result < 0) return true;
+		if (result == 0) {
 			result = wcscmp(x->m_strFile.c_str(), y->m_strFile.c_str());
-			if(result < 0) return true;
+			if (result < 0) return true;
 		}
 	}
 	return false;
@@ -330,23 +330,23 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPCWSTR lpszFileName, const DWORD dwPre
 {
 	DWORD dwCount = 0;
 	FILE* fp = _wfopen(lpszFileName, L"r");
-	if(fp == NULL) return 0;
+	if (fp == NULL) return 0;
 
 	wchar_t* lpszBuffer   = new wchar_t[MAX_PATH_LENGTH];
 	wchar_t* lpszKey      = new wchar_t[MAX_PATH_LENGTH];
 	wchar_t* lpszFile     = new wchar_t[MAX_PATH_LENGTH];
 	int nLine;
-	while(fgetws(lpszBuffer, MAX_PATH_LENGTH, fp)){
-		if(lpszBuffer[0] == L'!') continue;
+	while (fgetws(lpszBuffer, MAX_PATH_LENGTH, fp)) {
+		if (lpszBuffer[0] == L'!') continue;
 		wcscpy(lpszKey, _T(""));
 		wcscpy(lpszFile, _T(""));
 		nLine = 0;
-		if(swscanf(lpszBuffer, TAG_FORMAT, lpszKey, lpszFile, &nLine) < 3) continue;
+		if (swscanf(lpszBuffer, TAG_FORMAT, lpszKey, lpszFile, &nLine) < 3) continue;
 
 		CGlobalData* info = new CGlobalData(lpszKey, lpszFile, nLine);
 		m_GlobalDataList.push_back(info);
 		dwCount++;
-		if((dwCount + dwPrevCount) >= m_lpGlobalOption->m_dwMaxFind){
+		if ((dwCount + dwPrevCount) >= m_lpGlobalOption->m_dwMaxFind) {
 			break;
 		}
 	}
@@ -372,6 +372,25 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 	WideString strLine = thePluginService.GetDwordToString(info->m_nLine);
 	ListView_SetItemText(hList, nResult, 1, (LPWSTR)strLine.c_str());
 	ListView_SetItemText(hList, nResult, 2, (LPWSTR)info->m_strFile.c_str());
+
+	// タグジャンプ時に表示するリスト、起動時にフォーカスが当たっているキーワードに該当する行を選択する
+	
+	// ファイル同一判定
+	// http://stackoverflow.com/questions/562701/best-way-to-determine-if-two-path-reference-to-same-file-in-c-c
+	HANDLE hFile = ::CreateFile(info->m_strFile.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	if (hFile != INVALID_HANDLE_VALUE) {
+		BY_HANDLE_FILE_INFORMATION fileInfo;
+		if (::GetFileInformationByHandle(hFile, &fileInfo)) {
+			if (m_fileInfo.dwVolumeSerialNumber == fileInfo.dwVolumeSerialNumber
+				&& m_fileInfo.nFileIndexLow == fileInfo.nFileIndexLow
+				&& m_fileInfo.nFileIndexHigh == fileInfo.nFileIndexHigh
+				&& m_lineNo == info->m_nLine
+			) {
+				ListView_SetItemState(hList, nIndex,  LVIS_FOCUSED | LVIS_SELECTED,  LVIS_FOCUSED | LVIS_SELECTED);
+			}
+		}
+		::CloseHandle(hFile);
+	}
 	return nResult;
 }
 
@@ -379,7 +398,7 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 void CJumpListDialog::GetItem(HWND hList, int nIndex, CGlobalData* info)
 {
 	wchar_t* lpszBuffer = new wchar_t[MAX_PATH_LENGTH];
-	if(lpszBuffer != NULL){
+	if (lpszBuffer != NULL) {
 		ListView_GetItemText(hList, nIndex, 0, lpszBuffer, MAX_PATH_LENGTH);
 		info->m_strKeyword = lpszBuffer;
 		ListView_GetItemText(hList, nIndex, 1, lpszBuffer, MAX_PATH_LENGTH);
@@ -394,7 +413,7 @@ void CJumpListDialog::GetItem(HWND hList, int nIndex, CGlobalData* info)
 void CJumpListDialog::StartTimer()
 {
 	StopTimer();
-	if(m_lpGlobalOption->m_dwDelay > 0){
+	if (m_lpGlobalOption->m_dwDelay > 0) {
 		m_nTimerID = ::SetTimer(GetHwnd(), 1, m_lpGlobalOption->m_dwDelay, NULL);
 	}
 }
@@ -402,7 +421,7 @@ void CJumpListDialog::StartTimer()
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::StopTimer()
 {
-	if(m_nTimerID != 0){
+	if (m_nTimerID != 0) {
 		::KillTimer(GetHwnd(), m_nTimerID);
 		m_nTimerID = 0;
 	}
@@ -417,13 +436,13 @@ BOOL CJumpListDialog::OnTimer(WPARAM wParam)
 
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 	m_strKeyword = GetWindowText(hEditKeyword);
-	if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALL) == BST_CHECKED){
+	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALL) == BST_CHECKED) {
 		m_dwMatchMode = MATCH_MODE_PERFECT;
-	}else if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_BEGIN) == BST_CHECKED){
+	}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_BEGIN) == BST_CHECKED) {
 		m_dwMatchMode = MATCH_MODE_BEGIN;
-	}else if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ANY) == BST_CHECKED){
+	}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ANY) == BST_CHECKED) {
 		m_dwMatchMode = MATCH_MODE_ANY;
-	}else{
+	}else {
 		m_dwMatchMode = MATCH_MODE_PERFECT;
 	}
 	m_bIgnoreCase = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_CASE) == BST_CHECKED) ? FALSE : TRUE;
@@ -442,7 +461,7 @@ BOOL CJumpListDialog::OnTimer(WPARAM wParam)
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::RemoveAllGlobalDataList(std::list<CGlobalData*>& p)
 {
-	for(std::list<CGlobalData*>::iterator it = p.begin(); it != p.end(); ++it){
+	for (std::list<CGlobalData*>::iterator it = p.begin(); it != p.end(); ++it) {
 		delete *it;
 	}
 	p.clear();
@@ -451,7 +470,7 @@ void CJumpListDialog::RemoveAllGlobalDataList(std::list<CGlobalData*>& p)
 ///////////////////////////////////////////////////////////////////////////////
 BOOL CJumpListDialog::OnEnChange(HWND hwndCtl, int wID)
 {
-	if(m_bOperation == FALSE){
+	if (m_bOperation == FALSE) {
 		StartTimer();
 	}
 	return TRUE;
@@ -509,16 +528,16 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFile)
 {
 	WideString strOption = L"-xat";
-	if(m_bIgnoreCase) strOption += L"i";
-	if(m_bSymbol) strOption += L"s";
-	if(m_bRef) strOption += L"r";
-	if(m_dwMatchMode == MATCH_MODE_PERFECT){
+	if (m_bIgnoreCase) strOption += L"i";
+	if (m_bSymbol) strOption += L"s";
+	if (m_bRef) strOption += L"r";
+	if (m_dwMatchMode == MATCH_MODE_PERFECT) {
 		strOption += L" \"" + m_strKeyword + L"\"";
-	}else if(m_dwMatchMode == MATCH_MODE_BEGIN){
+	}else if(m_dwMatchMode == MATCH_MODE_BEGIN) {
 		strOption += L" \"^" + m_strKeyword + L"\"";
-	}else if(m_dwMatchMode == MATCH_MODE_ANY){
+	}else if(m_dwMatchMode == MATCH_MODE_ANY) {
 		strOption += L" \".*" + m_strKeyword + L"\".*";
-	}else{
+	}else {
 		return NULL;
 	}
 
@@ -527,7 +546,7 @@ HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFil
 	wchar_t szEnvironment[MAX_PATH_LENGTH];
 	swprintf(szEnvironment, L"GTAGSDBPATH=%s|GTAGSROOT=%s|", strResultPath.c_str(), info->m_strTargetPath.c_str());
 	//::MessageBox(GetHwnd(), szEnvironment, L"DEBUG", MB_OK);
-	for(int i = 0; szEnvironment[i] != 0; i++){
+	for (int i = 0; szEnvironment[i] != 0; i++) {
 		if(szEnvironment[i] == L'|') szEnvironment[i] = L'\0';
 	}
 
@@ -544,7 +563,7 @@ HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFil
 	si.dwFlags     = STARTF_USESHOWWINDOW;
 	si.wShowWindow = SW_HIDE;
 	BOOL bProcessResult = ::CreateProcess(NULL, lpszCmdLine, NULL, NULL, FALSE, CREATE_UNICODE_ENVIRONMENT, szEnvironment, info->m_strTargetPath.c_str(), &si, &pi);
-	if(bProcessResult == FALSE){
+	if (bProcessResult == FALSE) {
 		return NULL;
 	}
 	::CloseHandle(pi.hThread);

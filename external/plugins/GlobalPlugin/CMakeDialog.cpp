@@ -71,10 +71,10 @@ BOOL CMakeDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////////////
 BOOL CMakeDialog::OnBnClicked(int wID)
 {
-	switch(wID){
+	switch (wID) {
 	case IDOK:
 		m_nRetCode = wID;
-		if(GetData()){
+		if (GetData()) {
 			CloseDialog(IDOK);
 		}
 		break;
@@ -91,8 +91,8 @@ BOOL CMakeDialog::OnBnClicked(int wID)
 			WideString strTargetPathPrev = strTargetPath;
 			WideString strMessage;
 			thePluginService.LoadString(IDS_STR_MSG4, strMessage);	//生成ファイル格納フォルダを指定してください。
-			if(GetOpenFolderNameDialog(GetHwnd(), strMessage.c_str(), strTargetPath.c_str(), strTargetPath)){
-				if((strTargetPathPrev.length() != 0) && (strTargetPathPrev != strTargetPath)){
+			if (GetOpenFolderNameDialog(GetHwnd(), strMessage.c_str(), strTargetPath.c_str(), strTargetPath)) {
+				if ((strTargetPathPrev.length() != 0) && (strTargetPathPrev != strTargetPath)) {
 					thePluginService.LoadString(IDS_STR_MSG5, strMessage);	//生成ファイル格納フォルダを変更されました。\r\nタグファイルの再作成をしてください。
 					::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONINFORMATION | MB_OK);
 				}
@@ -118,7 +118,7 @@ BOOL CMakeDialog::OnBnClicked(int wID)
 			m_lpGlobalInfo->m_strTargetPath = GetWindowText(hEditFolder);
 			WideString strUniqID = GetWindowText(hEditResult);
 			m_lpGlobalInfo->m_dwUniqID      = thePluginService.GetHexStringToDword(strUniqID.c_str());
-			if(m_lpGlobalInfo->m_strTargetPath.length() == 0){
+			if (m_lpGlobalInfo->m_strTargetPath.length() == 0) {
 				thePluginService.LoadString(IDS_STR_MSG6, strMessage);	//必須項目が入力されていません。
 				::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 				return FALSE;
@@ -171,7 +171,7 @@ BOOL CMakeDialog::OnBnClicked(int wID)
 ///////////////////////////////////////////////////////////////////////////////
 void CMakeDialog::SetData(void)
 {
-	if(GetHwnd() == NULL) return;
+	if (GetHwnd() == NULL) return;
 	WideString strResultPath = thePluginService.GetDwordToHexString(m_lpGlobalInfo->m_dwUniqID);
 	HWND hEditFolder = ::GetDlgItem(GetHwnd(), IDC_EDIT_FOLDER);
 	HWND hEditResult = ::GetDlgItem(GetHwnd(), IDC_EDIT_RESULT);
@@ -182,7 +182,7 @@ void CMakeDialog::SetData(void)
 ///////////////////////////////////////////////////////////////////////////////
 int CMakeDialog::GetData( void )
 {
-	switch(m_nRetCode){
+	switch (m_nRetCode) {
 	case IDOK:
 		{
 			HWND hEditFolder = ::GetDlgItem(GetHwnd(), IDC_EDIT_FOLDER);
@@ -190,7 +190,7 @@ int CMakeDialog::GetData( void )
 			WideString strUniqID = GetWindowText(hEditResult);
 			m_lpGlobalInfo->m_strTargetPath = GetWindowText(hEditFolder);
 			m_lpGlobalInfo->m_dwUniqID      = thePluginService.GetHexStringToDword(strUniqID.c_str());
-			if(m_lpGlobalInfo->m_strTargetPath.length() == 0){
+			if (m_lpGlobalInfo->m_strTargetPath.length() == 0) {
 				WideString strMessage;
 				thePluginService.LoadString(IDS_STR_MSG6, strMessage);	//必須項目が入力されていません。
 				::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
@@ -240,3 +240,4 @@ HANDLE CMakeDialog::OnExecuteGtags()
 	::CloseHandle(pi.hThread);
 	return pi.hProcess;
 }
+
