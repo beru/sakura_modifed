@@ -30,6 +30,7 @@
 #include <list>
 #include "CPluginService.h"
 #include "CPluginDlgCancel.h"
+#include "ControlResizer.h"
 
 #define DEFAULT_DELAY_TIMER 1000
 
@@ -59,6 +60,8 @@ public:
 	virtual ~CJumpListDialog();
 
 	INT_PTR DoModal(HINSTANCE hInstance, HWND hwndParent);
+	
+	virtual INT_PTR DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnBnClicked(int wID);
 	virtual BOOL OnEnChange(HWND hwndCtl, int wID);
@@ -77,8 +80,11 @@ public:
 	BOOL						m_bIgnoreCase;
 	BOOL						m_bOperation;
 	BOOL						m_bSymbol;
+	BOOL						m_bRef;
 
-	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol);
+	ControlResizer				m_ctrlResizer;
+
+	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
 	DWORD ReadGlobalFileOne(LPCWSTR lpszFileName, const DWORD dwPrevCount);
 	HANDLE OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFile);
 

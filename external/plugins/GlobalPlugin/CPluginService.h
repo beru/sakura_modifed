@@ -65,6 +65,7 @@ enum {
 #define PROFILE_KEY_MATCH_MODE			L"MatchMode"		//!< 一致モード
 #define PROFILE_KEY_IGNORE_CASE			L"IgnoreCase"		//!< 大文字と小文字を無視する
 #define PROFILE_KEY_SYMBOL				L"Symbol"			//!< シンボルを検索する
+#define PROFILE_KEY_REF					L"Ref"				//!< 参照を検索する
 
 #define PROFILE_SECTION_GLOBAL			L"Global"
 #define PROFILE_KEY_COUNT				L"Count"			//!< 件数
@@ -80,7 +81,8 @@ enum {
 #define PROFILE_DEF_DELAY				1000				//!< 検索までの待ち時間
 #define PROFILE_DEF_MATCH_MODE			MATCH_MODE_BEGIN	//!< 一致モード
 #define PROFILE_DEF_IGNORE_CASE			FALSE				//!< 大文字と小文字を無視する
-#define PROFILE_DEF_SYMBOL				FALSE
+#define PROFILE_DEF_SYMBOL				FALSE				//!< シンボルを検索する
+#define PROFILE_DEF_REF					FALSE				//!< 参照を検索する
 #define PROFILE_DEF_FLAG				TRUE
 
 //#define TAG_FORMAT L"%[^\t\r\n]\t%[^\t\r\n]\t%d;\"\t%[^\t\r\n]\t%[^\t\r\n]"
@@ -97,6 +99,7 @@ public:
 	DWORD			m_dwMatchMode;			//!< 一致モード
 	BOOL			m_bIgnoreCase;			//!< 大文字と小文字を無視する
 	BOOL			m_bSymbol;				//!< シンボルを検索する
+	BOOL			m_bRef;					//!< 参照を検索する
 	DWORD			m_dwPrevListCount;		//!< INI登録数(前回情報を削除するため)
 
 	CGlobalOption(){
@@ -107,6 +110,7 @@ public:
 		m_dwMatchMode      = PROFILE_DEF_MATCH_MODE;
 		m_bIgnoreCase      = PROFILE_DEF_IGNORE_CASE;
 		m_bSymbol          = PROFILE_DEF_SYMBOL;
+		m_bRef             = PROFILE_DEF_REF;
 		m_dwPrevListCount  = 0;
 	}
 
@@ -119,6 +123,7 @@ public:
 			m_dwMatchMode      = src.m_dwMatchMode;
 			m_bIgnoreCase      = src.m_bIgnoreCase;
 			m_bSymbol          = src.m_bSymbol;
+			m_bRef             = src.m_bRef;
 			m_dwPrevListCount  = src.m_dwPrevListCount;
 		}
 		return *this;

@@ -96,6 +96,7 @@
     <ClInclude Include="..\utility\CPluginDlgCancel.h" />
     <ClInclude Include="CJumpListDialog.h" />
     <ClInclude Include="CMakeDialog.h" />
+    <ClInclude Include="ControlResizer.h" />
     <ClInclude Include="COptionDialog.h" />
     <ClInclude Include="CPluginService.h" />
     <ClInclude Include="resource.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="..\utility\CPluginDlgCancel.cpp" />
     <ClCompile Include="CJumpListDialog.cpp" />
     <ClCompile Include="CMakeDialog.cpp" />
+    <ClCompile Include="ControlResizer.cpp" />
     <ClCompile Include="COptionDialog.cpp" />
     <ClCompile Include="CPluginService.cpp" />
     <ClCompile Include="dllmain.cpp">

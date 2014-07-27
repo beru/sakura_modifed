@@ -62,8 +62,8 @@ void CPluginService::OnPluginGlobalJumpDialog(SAKURA_DLL_PLUGIN_OBJ* obj)
 	thePluginService.ReadProfile();
 
 	CJumpListDialog dlg(&m_GlobalOption, &m_GlobalInfoList);
-	dlg.ReadGlobalFile(_T(""), m_GlobalOption.m_dwMatchMode, m_GlobalOption.m_bIgnoreCase, m_GlobalOption.m_bSymbol);
-
+	dlg.ReadGlobalFile(_T(""), m_GlobalOption.m_dwMatchMode, m_GlobalOption.m_bIgnoreCase, m_GlobalOption.m_bSymbol, m_GlobalOption.m_bRef);
+	
 	dlg.DoModal(GetInstance(), GetParentHwnd());
 }
 
@@ -77,7 +77,7 @@ void CPluginService::OnPluginGlobalJump(SAKURA_DLL_PLUGIN_OBJ* obj)
 	WideString strKeyword = Editor.GetSelectedString(0);
 
 	CJumpListDialog dlg(&m_GlobalOption, &m_GlobalInfoList);
-	dlg.ReadGlobalFile(strKeyword.c_str(), m_GlobalOption.m_dwMatchMode, m_GlobalOption.m_bIgnoreCase, m_GlobalOption.m_bSymbol);
+	dlg.ReadGlobalFile(strKeyword.c_str(), m_GlobalOption.m_dwMatchMode, m_GlobalOption.m_bIgnoreCase, m_GlobalOption.m_bSymbol, m_GlobalOption.m_bRef);
 
 	dlg.DoModal(GetInstance(), GetParentHwnd());
 }
@@ -115,6 +115,8 @@ void CPluginService::ReadProfile()
 	m_GlobalOption.m_bIgnoreCase = (BOOL)GetPrivateProfileInt(PROFILE_SECTION_GENERAL, PROFILE_KEY_IGNORE_CASE, (DWORD)PROFILE_DEF_IGNORE_CASE, strIniFile.c_str());
 	//シンボルを検索する
 	m_GlobalOption.m_bSymbol = (BOOL)GetPrivateProfileInt(PROFILE_SECTION_GENERAL, PROFILE_KEY_SYMBOL, (DWORD)PROFILE_DEF_SYMBOL, strIniFile.c_str());
+	//参照を検索する
+	m_GlobalOption.m_bRef = (BOOL)GetPrivateProfileInt(PROFILE_SECTION_GENERAL, PROFILE_KEY_REF, (DWORD)PROFILE_DEF_REF, strIniFile.c_str());
 
 	DWORD dwTotalCount = GetPrivateProfileInt(PROFILE_SECTION_GLOBAL, PROFILE_KEY_COUNT, 0, strIniFile.c_str());
 	m_GlobalOption.m_dwPrevListCount = dwTotalCount;
@@ -172,6 +174,9 @@ void CPluginService::WriteProfile()
 	//シンボルを検索する
 	wsprintf(szBuffer, L"%d", (DWORD)m_GlobalOption.m_bSymbol);
 	WritePrivateProfileString(PROFILE_SECTION_GENERAL, PROFILE_KEY_SYMBOL, szBuffer, strIniFile.c_str());
+	//参照を検索する
+	wsprintf(szBuffer, L"%d", (DWORD)m_GlobalOption.m_bRef);
+	WritePrivateProfileString(PROFILE_SECTION_GENERAL, PROFILE_KEY_REF, szBuffer, strIniFile.c_str());
 
 	DWORD i;
 	for(DWORD i = 0; i < m_GlobalOption.m_dwPrevListCount; i++){

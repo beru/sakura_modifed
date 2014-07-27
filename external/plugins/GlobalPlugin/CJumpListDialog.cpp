@@ -49,6 +49,7 @@ CJumpListDialog::CJumpListDialog(CGlobalOption* lpGlobalOption, std::list<CGloba
 	m_dwMatchMode      = MATCH_MODE_PERFECT;
 	m_bIgnoreCase      = FALSE;
 	m_bSymbol          = FALSE;
+	m_bRef             = FALSE;
 	m_bOperation       = FALSE;
 }
 
@@ -69,6 +70,31 @@ INT_PTR CJumpListDialog::DoModal(HINSTANCE hInstance, HWND hwndParent)
 	m_nRetCode = IDCANCEL;
 	return CPluginDialog::DoModal(hInstance, hwndParent, IDD_JUMP_DIALOG, (LPARAM)NULL);
 }
+
+INT_PTR CJumpListDialog::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg) {
+	case WM_SIZE:
+		{
+			int width = LOWORD(lParam);
+			int height = HIWORD(lParam);
+			m_ctrlResizer.DefereWindowPos(width, height);
+		}
+		return 0;
+		break;
+	case WM_GETMINMAXINFO:
+		{
+			MINMAXINFO* pInfo = (MINMAXINFO*) lParam;
+			pInfo->ptMinTrackSize = {787, 480};
+		}
+		return 0;
+		break;
+	default:
+		return __super::DispatchEvent(hwndDlg, uMsg, wParam, lParam);
+		break;
+	}
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /*! ‰Šú‰»ˆ—
@@ -104,6 +130,22 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	SetDataSub();
 
 	m_bOperation = FALSE;
+
+	m_ctrlResizer.Init(m_hWnd);
+	m_ctrlResizer.Add(IDC_LIST, AnchorStyle::Left | AnchorStyle::Right | AnchorStyle::Top | AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_STATIC_KEYWORD, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_EDIT_KEYWORD, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_STATIC_METHOD, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_BUTTON_FIND, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_CHECKBOX_CASE, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_RADIO_ALL, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_RADIO_BEGIN, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_RADIO_ANY, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_CHECKBOX_SYMBOL, AnchorStyle::Bottom);
+	m_ctrlResizer.Add(IDC_CHECKBOX_REF, AnchorStyle::Bottom);
+//	m_ctrlResizer.Add(IDOK, AnchorStyle::Bottom);
+//	m_ctrlResizer.Add(IDCANCEL, AnchorStyle::Bottom);
+
 	return bResult;
 }
 
@@ -147,6 +189,7 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 	case IDC_RADIO_ANY:
 	case IDC_CHECKBOX_CASE:
 	case IDC_CHECKBOX_SYMBOL:
+	case IDC_CHECKBOX_REF:
 		if(m_bOperation == FALSE){
 			StartTimer();
 		}
@@ -176,6 +219,7 @@ void CJumpListDialog::SetData()
 	::CheckDlgButton(GetHwnd(), IDC_RADIO_ANY,   (m_dwMatchMode == MATCH_MODE_ANY    ) ? BST_CHECKED : BST_UNCHECKED);
 	::CheckDlgButton(GetHwnd(), IDC_CHECKBOX_CASE, m_bIgnoreCase ? BST_UNCHECKED : BST_CHECKED);
 	::CheckDlgButton(GetHwnd(), IDC_CHECKBOX_SYMBOL, m_bSymbol ? BST_CHECKED : BST_UNCHECKED);
+	::CheckDlgButton(GetHwnd(), IDC_CHECKBOX_REF, m_bSymbol ? BST_CHECKED : BST_UNCHECKED);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,12 +249,13 @@ int CJumpListDialog::GetData()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol)
+DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef)
 {
 	m_strKeyword = lpszKeyword;
 	m_dwMatchMode = dwMatchMode;
 	m_bIgnoreCase = bIgnoreCase;
 	m_bSymbol = bSymbol;
+	m_bRef = bRef;
 
 	RemoveAllGlobalDataList(m_GlobalDataList);
 
@@ -375,8 +420,9 @@ BOOL CJumpListDialog::OnTimer(WPARAM wParam)
 	}
 	m_bIgnoreCase = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_CASE) == BST_CHECKED) ? FALSE : TRUE;
 	m_bSymbol = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_SYMBOL) == BST_CHECKED) ? TRUE : FALSE;
+	m_bRef = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_REF) == BST_CHECKED) ? TRUE : FALSE;
 
-	ReadGlobalFile(m_strKeyword.c_str(), m_dwMatchMode, m_bIgnoreCase, m_bSymbol);
+	ReadGlobalFile(m_strKeyword.c_str(), m_dwMatchMode, m_bIgnoreCase, m_bSymbol, m_bRef);
 
 	SetDataSub();
 
@@ -421,18 +467,21 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == IDC_LIST) {
 		NMLISTVIEW* pNM = (NMLISTVIEW*)lParam;
-		if (pNM->hdr.code == NM_DBLCLK) {
+		if (pNM->hdr.code == NM_DBLCLK && pNM->iItem >= 0) {
+			m_bOperation = TRUE;
+			m_nRetCode = wParam;
+			StopTimer();
 			HWND hList = pNM->hdr.hwndFrom;
-			thePluginService.Editor.S_TagJumpEx(
-				getListViewItemText(hList, pNM->iItem, 2).c_str(),
-				_wtoi(getListViewItemText(hList, pNM->iItem, 1).c_str()),
-				0,
-				0
-			);
-
+			CGlobalData info;
+			GetItem(hList, pNM->iItem, &info);
+			thePluginService.Editor.S_TagJumpEx(info.m_strFile, info.m_nLine, 0, 0);
+			RemoveAllGlobalDataList(m_GlobalDataList);
+			CloseDialog(IDOK);
+			m_bOperation = FALSE;
 		}
+		return TRUE;
 	}
-	return TRUE;
+	return FALSE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -453,7 +502,8 @@ HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFil
 {
 	WideString strOption = L"-xat";
 	if(m_bIgnoreCase) strOption += L"i";
-	if(m_bSymbol) strOption += L"sr";
+	if(m_bSymbol) strOption += L"s";
+	if(m_bRef) strOption += L"r";
 	if(m_dwMatchMode == MATCH_MODE_PERFECT){
 		strOption += L" \"" + m_strKeyword + L"\"";
 	}else if(m_dwMatchMode == MATCH_MODE_BEGIN){

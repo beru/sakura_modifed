@@ -40,6 +40,8 @@ public:
 	HWND GetHwnd(){ return m_hWnd; }
 	int GetRetCode() const { return m_nRetCode; }
 
+	HWND GetDlgItem(int id) { return ::GetDlgItem(m_hWnd, id); }
+
 	virtual INT_PTR DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnDestroy(void);

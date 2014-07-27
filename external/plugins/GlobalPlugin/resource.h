@@ -29,6 +29,9 @@
 #define IDC_BUTTON_BROWSE2                      20020
 #define IDC_BUTTON_FIND                         20021
 #define IDC_CHECKBOX_SYMBOL                     20022
+#define IDC_CHECKBOX_REF                        20023
+#define IDC_STATIC_KEYWORD						20024
+#define IDC_STATIC_METHOD						20025
 #define IDS_STR_HEADER11                        40000
 #define IDS_STR_HEADER12                        40001
 #define IDS_STR_HEADER13                        40002
