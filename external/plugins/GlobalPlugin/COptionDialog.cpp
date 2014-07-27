@@ -305,6 +305,7 @@ void COptionDialog::SetData(void)
 	::CheckDlgButton(GetHwnd(), IDC_RADIO_BEGIN, (m_lpGlobalOption->m_dwMatchMode == MATCH_MODE_BEGIN  ) ? BST_CHECKED : BST_UNCHECKED);
 	::CheckDlgButton(GetHwnd(), IDC_RADIO_ANY,   (m_lpGlobalOption->m_dwMatchMode == MATCH_MODE_ANY    ) ? BST_CHECKED : BST_UNCHECKED);
 	::CheckDlgButton(GetHwnd(), IDC_CHECKBOX_CASE, m_lpGlobalOption->m_bIgnoreCase ? BST_UNCHECKED : BST_CHECKED);
+	::CheckDlgButton(GetHwnd(), IDC_CHECKBOX_SYMBOL, m_lpGlobalOption->m_bSymbol ? BST_CHECKED : BST_UNCHECKED);
 
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	ListView_DeleteAllItems(hList);
@@ -353,6 +354,7 @@ int COptionDialog::GetData(void)
 				m_lpGlobalOption->m_dwMatchMode = MATCH_MODE_PERFECT;
 			}
 			m_lpGlobalOption->m_bIgnoreCase = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_CASE) == BST_CHECKED) ? FALSE : TRUE;
+			m_lpGlobalOption->m_bSymbol = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_SYMBOL) == BST_CHECKED) ? TRUE : FALSE;
 			thePluginService.RemoveAllGlobalInfoList(*m_lpGlobalInfoList);
 			HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 			DWORD dwCount = ListView_GetItemCount(hList);

@@ -31,6 +31,7 @@
 #include "CPluginService.h"
 #include "CommonTools.h"
 #include <algorithm>
+#include <windowsx.h>
 
 LVCOLUMN_LAYOUT CJumpListDialog::layout[] = {
 	{ LVCFMT_LEFT,   170, IDS_STR_HEADER11 },	//L"キーワード"
@@ -145,6 +146,7 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 	case IDC_RADIO_BEGIN:
 	case IDC_RADIO_ANY:
 	case IDC_CHECKBOX_CASE:
+	case IDC_CHECKBOX_SYMBOL:
 		if(m_bOperation == FALSE){
 			StartTimer();
 		}
@@ -208,6 +210,7 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 	m_strKeyword = lpszKeyword;
 	m_dwMatchMode = dwMatchMode;
 	m_bIgnoreCase = bIgnoreCase;
+	m_bSymbol = bSymbol;
 
 	RemoveAllGlobalDataList(m_GlobalDataList);
 
@@ -400,6 +403,38 @@ BOOL CJumpListDialog::OnEnChange(HWND hwndCtl, int wID)
 	return TRUE;
 }
 
+static
+WideString getListViewItemText(HWND hList, int iItem, int iSubItem)
+{
+	LVITEM item = {0};
+	TCHAR buff[1024];
+	item.mask = LVIF_TEXT;
+	item.iItem = iItem;
+	item.pszText = buff;
+	item.cchTextMax = sizeof(buff) / sizeof(buff[0]);
+	item.iSubItem = iSubItem;
+	ListView_GetItem(hList, &item);
+	return buff;
+}
+
+BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
+{
+	if (wParam == IDC_LIST) {
+		NMLISTVIEW* pNM = (NMLISTVIEW*)lParam;
+		if (pNM->hdr.code == NM_DBLCLK) {
+			HWND hList = pNM->hdr.hwndFrom;
+			thePluginService.Editor.S_TagJumpEx(
+				getListViewItemText(hList, pNM->iItem, 2).c_str(),
+				_wtoi(getListViewItemText(hList, pNM->iItem, 1).c_str()),
+				0,
+				0
+			);
+
+		}
+	}
+	return TRUE;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 /*
 	GTAGSDBPATH=DBのあるパス
@@ -418,7 +453,7 @@ HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFil
 {
 	WideString strOption = L"-xat";
 	if(m_bIgnoreCase) strOption += L"i";
-	if(m_bSymbol) strOption += L"s";
+	if(m_bSymbol) strOption += L"sr";
 	if(m_dwMatchMode == MATCH_MODE_PERFECT){
 		strOption += L" \"" + m_strKeyword + L"\"";
 	}else if(m_dwMatchMode == MATCH_MODE_BEGIN){

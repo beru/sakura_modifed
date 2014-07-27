@@ -62,6 +62,7 @@ public:
 	virtual BOOL OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnBnClicked(int wID);
 	virtual BOOL OnEnChange(HWND hwndCtl, int wID);
+	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam);
 	virtual int GetData(void);
 	virtual void SetData(void);
 
