@@ -130,12 +130,12 @@ BOOL CMakeDialog::OnBnClicked(int wID)
 			::CreateDirectory(strResultPath.c_str(), NULL);
 
 			HANDLE hProcess = OnExecuteGtags();
-			if(hProcess == NULL){
+			if (hProcess == NULL) {
 				thePluginService.LoadString(IDS_STR_MSG8, strMessage);	//タグファイルの作成に失敗しました。
 				::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 				return FALSE;
 			}
-
+#if 0
 			CPluginDlgCancel dlg;
 			INT_PTR nRet = dlg.DoModal(thePluginService.GetInstance(), GetHwnd(), IDD_EXECUTE_DIALOG, (LPARAM)hProcess);
 			switch(nRet){
@@ -151,7 +151,9 @@ BOOL CMakeDialog::OnBnClicked(int wID)
 				::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 				return FALSE;
 			}
-
+#else
+			// TODO: check timeout, error
+#endif
 			thePluginService.LoadString(IDS_STR_MSG9, strMessage);	//タグファイルを作成しました。
 			::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONINFORMATION | MB_OK);
 			OnBnClicked(IDOK);
@@ -216,7 +218,8 @@ HANDLE CMakeDialog::OnExecuteGtags()
 
 	wchar_t szCmdLine[MAX_PATH_LENGTH];
 	wsprintf(szCmdLine, L"\"%s\\cmd.exe\" /D /C \"\"%s\" %s\"", strCmdPath.c_str(), m_lpGlobalOption->m_strGtagsExePath.c_str(), strOption.c_str());
-	//::MessageBox(GetHwnd(), lpszCmdLine, L"DEBUG", MB_OK);
+
+//	::MessageBox(GetHwnd(), szCmdLine, L"DEBUG", MB_OK);
 
 	//gtags.exeを実行する
 	PROCESS_INFORMATION pi;
@@ -227,7 +230,11 @@ HANDLE CMakeDialog::OnExecuteGtags()
 	si.dwFlags     = STARTF_USESHOWWINDOW;
 	si.wShowWindow = SW_HIDE;
 	BOOL bProcessResult = ::CreateProcess(NULL, szCmdLine, NULL, NULL, FALSE, 0, NULL, m_lpGlobalInfo->m_strTargetPath.c_str(), &si, &pi);
-	if(bProcessResult == FALSE){
+	if (bProcessResult == FALSE) {
+		DWORD err = ::GetLastError();
+		TCHAR buff[64];
+		_itot(err, buff, 10);
+		MessageBox(0, buff, 0, 0);
 		return NULL;
 	}
 	::CloseHandle(pi.hThread);

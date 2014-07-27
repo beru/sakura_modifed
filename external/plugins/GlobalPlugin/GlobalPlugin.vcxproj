@@ -78,6 +78,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\GlobalPlugin.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>copy .\Release\GlobalPlugin.dll ..\..\..\sakura\Release_Unicode\plugins\GlobalPlugin</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\sakura_core\plugin\SakuraPlugin.h" />

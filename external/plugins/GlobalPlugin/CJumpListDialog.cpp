@@ -271,6 +271,7 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 				WideString strResultPath = thePluginService.GetResultPath(info->m_dwUniqID);
 				HANDLE hProcess = OnExecuteGlobal(info, strTmpFile);
 				if(hProcess != NULL){
+#if 0
 					CPluginDlgCancel dlg;
 					INT_PTR nRet = dlg.DoModal(thePluginService.GetInstance(), GetHwnd(), IDD_EXECUTE_DIALOG, (LPARAM)hProcess);
 					switch(nRet){
@@ -286,6 +287,13 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 						::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 						return dwCount;
 					}
+#else
+					// TODO: check timeout, error
+					DWORD dwRet = ::WaitForSingleObject(hProcess, 1000);
+					DWORD dwExitCode = 0;
+					BOOL bRet = ::GetExitCodeProcess(hProcess, &dwExitCode);
+					::CloseHandle(hProcess);
+#endif
 					dwCount += ReadGlobalFileOne(strTmpFile.c_str(), dwCount);
 				}
 				::DeleteFile(strTmpFile.c_str());
