@@ -75,27 +75,30 @@ int WINAPI _tWinMain(
 	//プロセスの生成とメッセージループ
 	CProcessFactory aFactory;
 	CProcess *process = 0;
-	try{
+	try {
 #ifdef __MINGW32__
 		LPTSTR pszCommandLine;
 		pszCommandLine = ::GetCommandLine();
 		// 実行ファイル名をスキップする
-		if( _T('\"') == *pszCommandLine ){
+		if (_T('\"') == *pszCommandLine) {
 			pszCommandLine++;
-			while( _T('\"') != *pszCommandLine && _T('\0') != *pszCommandLine ){
+			while (_T('\"') != *pszCommandLine && _T('\0') != *pszCommandLine) {
 				pszCommandLine++;
 			}
-			if( _T('\"') == *pszCommandLine ){
+			if (_T('\"') == *pszCommandLine) {
 				pszCommandLine++;
 			}
-		}else{
-			while( _T(' ') != *pszCommandLine && _T('\t') != *pszCommandLine
-				&& _T('\0') != *pszCommandLine ){
+		}else {
+			while (
+				_T(' ') != *pszCommandLine
+				&& _T('\t') != *pszCommandLine
+				&& _T('\0') != *pszCommandLine
+			) {
 				pszCommandLine++;
 			}
 		}
 		// 次のトークンまで進める
-		while( _T(' ') == *pszCommandLine || _T('\t') == *pszCommandLine ){
+		while (_T(' ') == *pszCommandLine || _T('\t') == *pszCommandLine) {
 			pszCommandLine++;
 		}
 		process = aFactory.Create( hInstance, pszCommandLine );
@@ -103,10 +106,10 @@ int WINAPI _tWinMain(
 		process = aFactory.Create( hInstance, lpCmdLine );
 #endif
 		MY_TRACETIME( cRunningTimer, "ProcessObject Created" );
+	}catch (...) {
+		;
 	}
-	catch(...){
-	}
-	if( 0 != process ){
+	if (0 != process) {
 		process->Run();
 		delete process;
 	}
