@@ -32,6 +32,7 @@
 #include "CommonTools.h"
 #include <algorithm>
 #include <windowsx.h>
+#include <array>
 
 LVCOLUMN_LAYOUT CJumpListDialog::layout[] = {
 	{ LVCFMT_LEFT,   170, IDS_STR_HEADER11 },	//L"キーワード"
@@ -238,7 +239,7 @@ void CJumpListDialog::SetDataSub()
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	ListView_DeleteAllItems(hList);
 	int nIndex = 0;
-	for (std::list<CGlobalData*>::iterator it = m_GlobalDataList.begin(); it != m_GlobalDataList.end(); ++it) {
+	for (auto it = m_GlobalDataList.begin(); it != m_GlobalDataList.end(); ++it) {
 		InsertItem(hList, nIndex, *it);
 		nIndex++;
 	}
@@ -273,7 +274,7 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 	if (m_strKeyword.length() != 0) {
 		static const size_t nBytes = 1024 * 104;
 		std::vector<char> buff(nBytes);
-		for (std::list<CGlobalInfo*>::iterator it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it) {
+		for (auto it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it) {
 			CGlobalInfo* info = *it;
 			if (info->m_bFlag) {
 				WideString strMessage;
@@ -458,7 +459,7 @@ BOOL CJumpListDialog::OnTimer(WPARAM wParam)
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::RemoveAllGlobalDataList(std::list<CGlobalData*>& p)
 {
-	for (std::list<CGlobalData*>::iterator it = p.begin(); it != p.end(); ++it) {
+	for (auto it = p.begin(); it != p.end(); ++it) {
 		delete *it;
 	}
 	p.clear();
@@ -495,7 +496,7 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 }
 
 // http://www.usamimi.info/~hellfather/win32api/API_CreatePipe.xml
-BOOL GetCUIAppMsg( LPWSTR cmdline, char* buf, DWORD size, BOOL stdOut, BOOL stdErr, DWORD timeout )
+BOOL GetCUIAppMsg( LPWSTR cmdline, LPCWSTR szEnvironment, char* buf, DWORD size, BOOL stdOut, BOOL stdErr, DWORD timeout )
 {
 	HANDLE				read,	write;
  	SECURITY_ATTRIBUTES	sa;
@@ -519,9 +520,8 @@ BOOL GetCUIAppMsg( LPWSTR cmdline, char* buf, DWORD size, BOOL stdOut, BOOL stdE
 
 	buf[0] = 0;
 
-	do
-	{
-		if( !CreateProcess( NULL, cmdline, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi ) ) {
+	do {
+		if (!CreateProcess( NULL, cmdline, NULL, NULL, TRUE, CREATE_NEW_CONSOLE|CREATE_UNICODE_ENVIRONMENT, (LPVOID)szEnvironment, NULL, &si, &pi)) {
 			break;
 		}
 //		if( WaitForInputIdle( pi.hProcess, timeout ) != 0 ) break;
@@ -585,13 +585,11 @@ bool CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nByt
 		if (szEnvironment[i] == L'|') szEnvironment[i] = L'\0';
 	}
 
-	wchar_t* lpszCmdLine = new wchar_t[MAX_PATH_LENGTH];
-	wsprintf(lpszCmdLine, L"\"%s\" %s", m_lpGlobalOption->m_strGlobalExePath.c_str(), strOption.c_str());
+	std::array<wchar_t, MAX_PATH_LENGTH> cmdLine;
+	wsprintf(&cmdLine[0], L"\"%s\" %s", m_lpGlobalOption->m_strGlobalExePath.c_str(), strOption.c_str());
 	//::MessageBox(GetHwnd(), lpszCmdLine, L"DEBUG", MB_OK);
 
-	GetCUIAppMsg(lpszCmdLine, buff, nBytes, TRUE, TRUE, 200);
-
-	delete lpszCmdLine;
+	GetCUIAppMsg(&cmdLine[0], szEnvironment, buff, nBytes, TRUE, TRUE, 200);
 	return true;
 }
 
