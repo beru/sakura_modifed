@@ -293,9 +293,9 @@ DWORD CJumpListDialog::ReadGlobalFile(
 
 	DWORD dwCount = 0;
 	if (m_strKeyword.length() != 0) {
-		static const size_t nBytes = 1024 * 104;
 		// assume GNU GLOBAL outputs multibyte characters to console (not UTF-16)
-		std::vector<char> buff(nBytes);
+		static const size_t nBytes = 1024 * 104;
+		std::array<char, nBytes> buff;
 		for (auto it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it) {
 			CGlobalInfo* info = *it;
 			if (info->m_bFlag) {
@@ -317,9 +317,7 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 {
 	DWORD dwCount = 0;
 
-	wchar_t* lpszLine     = new wchar_t[MAX_PATH_LENGTH];
-
-	int lineNum;
+	std::array<wchar_t, MAX_PATH_LENGTH> szLine;
 
 	char* line;
 	char* lf = buff - 2;
@@ -335,22 +333,21 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 		if (line[0] == L'!') {
 			continue;
 		}
-		MultiByteToWideChar(CP_OEMCP, MB_PRECOMPOSED, line, -1, lpszLine, MAX_PATH_LENGTH);
-		wchar_t* found0 = wcschr(lpszLine, L':');
+		MultiByteToWideChar(CP_OEMCP, MB_PRECOMPOSED, line, -1, &szLine[0], MAX_PATH_LENGTH);
+		wchar_t* found0 = wcschr(&szLine[0], L':');
 		wchar_t* found1 = wcschr(found0+1, L':');
 		wchar_t* found2 = wcschr(found1+1, L':');
 		wchar_t* cr = wcschr(found2+1, L'\r');
 		*found1 = 0;
 		*found2 = 0;
 		*cr = 0;
-		CGlobalData* info = new CGlobalData(lpszLine, _wtoi(found1+1), found2+1);
+		CGlobalData* info = new CGlobalData(&szLine[0], _wtoi(found1+1), found2+1);
 		m_GlobalDataList.push_back(info);
 		dwCount++;
 		if ((dwCount + dwPrevCount) >= m_lpGlobalOption->m_dwMaxFind) {
 			break;
 		}
 	}
-	delete[] lpszLine;
 
 	return dwCount;
 }
@@ -391,6 +388,7 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 				&& m_lineNo == info->m_lineNum
 			) {
 				ListView_SetItemState(hList, nIndex,  LVIS_FOCUSED | LVIS_SELECTED,  LVIS_FOCUSED | LVIS_SELECTED);
+				ListView_EnsureVisible(hList, nIndex, FALSE);
 			}
 		}
 		::CloseHandle(hFile);
@@ -523,7 +521,9 @@ BOOL GetCUIAppMsg(
 	sa.lpSecurityDescriptor	=	0;
 	sa.bInheritHandle		=	TRUE;
 
-	if (!CreatePipe(&read, &write, &sa, 0)) return FALSE;
+	if (!CreatePipe(&read, &write, &sa, 0)) {
+		return FALSE;
+	}
 
 	memset(&si, 0, sizeof(si));
 	si.cb			=	sizeof(si);
@@ -549,18 +549,26 @@ BOOL GetCUIAppMsg(
 		)) {
 			break;
 		}
-//		if (WaitForInputIdle(pi.hProcess, timeout) != 0) break;
-		if (WaitForSingleObject(pi.hProcess, timeout) != WAIT_OBJECT_0) break;
+		int remainTime = timeout;
+		static const int dividedTime = 5;
+		while (remainTime > 0) {
+			DWORD ret = WaitForSingleObject(pi.hProcess, dividedTime);
+			remainTime -= dividedTime;
 
+			if (PeekNamedPipe(read, NULL, 0, NULL, &len, NULL)) {
+				if (len > 0 && !ReadFile(read, buf, len, &len, NULL)) {
+					break;
+				}
+				buf += len;
+			}
+			if (ret == WAIT_OBJECT_0) {
+				break;
+			}
+		}
 		CloseHandle(pi.hThread);
 		CloseHandle(pi.hProcess);
 
-		if (!PeekNamedPipe(read, NULL, 0, NULL, &len, NULL)) break;
-
-		memset(buf, '\0', size);
-
-		if (len > 0 && !ReadFile(read, buf, len, &len, NULL)) break;
-		buf[len] = 0;
+		*buf = 0;
 
 		isOK = TRUE;
 	}while (0);
@@ -611,9 +619,7 @@ bool CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nByt
 
 	std::array<wchar_t, MAX_PATH_LENGTH> cmdLine;
 	wsprintf(&cmdLine[0], L"\"%s\" %s", m_lpGlobalOption->m_strGlobalExePath.c_str(), strOption.c_str());
-	//::MessageBox(GetHwnd(), lpszCmdLine, L"DEBUG", MB_OK);
-
-	GetCUIAppMsg(&cmdLine[0], szEnvironment, buff, nBytes, TRUE, TRUE, 200);
+	GetCUIAppMsg(&cmdLine[0], szEnvironment, buff, nBytes, TRUE, TRUE, 100);
 	return true;
 }
 
