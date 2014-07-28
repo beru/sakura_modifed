@@ -69,7 +69,6 @@ public:
 	virtual int GetData(void);
 	virtual void SetData(void);
 	void SetDataSub();
-	int InsertItem(HWND hList, int nIndex, CGlobalData* info);
 	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, DWORD dwMatchMode, BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
 
 	BY_HANDLE_FILE_INFORMATION	m_fileInfo;
@@ -98,6 +97,7 @@ private:
 	void StartTimer();
 	void StopTimer();
 	BOOL OnTimer(WPARAM wParam);
+	bool InsertItem(HWND hList, int nIndex, CGlobalData* info);
 	void RemoveAllGlobalDataList(std::list<CGlobalData*>& p);
 };
 

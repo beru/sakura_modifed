@@ -253,9 +253,16 @@ void CJumpListDialog::SetDataSub()
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	ListView_DeleteAllItems(hList);
 	int nIndex = 0;
+	int selectedIndex = -1;
 	for (auto it = m_GlobalDataList.begin(); it != m_GlobalDataList.end(); ++it) {
-		InsertItem(hList, nIndex, *it);
+		if (InsertItem(hList, nIndex, *it)) {
+			selectedIndex = nIndex;
+		}
 		nIndex++;
+	}
+	ListView_SetColumnWidth(hList, 0, LVSCW_AUTOSIZE);
+	if (selectedIndex != -1) {
+		ListView_EnsureVisible(hList, selectedIndex, FALSE);
 	}
 }
 
@@ -352,7 +359,7 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
+bool CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 {
 	LV_ITEM lvi;
 	lvi.mask     = LVIF_TEXT | LVIF_PARAM;
@@ -366,6 +373,7 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 	ListView_SetItemText(hList, nResult, 2, (LPWSTR)info->m_strLine.c_str());
 
 	// タグジャンプ時に表示するリスト、起動時にフォーカスが当たっているキーワードに該当する行を選択する
+	bool bFocus = false;
 	
 	// ファイル同一判定
 	// http://stackoverflow.com/questions/562701/best-way-to-determine-if-two-path-reference-to-same-file-in-c-c
@@ -387,12 +395,12 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 				&& m_lineNo == info->m_lineNum
 			) {
 				ListView_SetItemState(hList, nIndex,  LVIS_FOCUSED | LVIS_SELECTED,  LVIS_FOCUSED | LVIS_SELECTED);
-				ListView_EnsureVisible(hList, nIndex, FALSE);
+				bFocus = true;
 			}
 		}
 		::CloseHandle(hFile);
 	}
-	return nResult;
+	return bFocus;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
