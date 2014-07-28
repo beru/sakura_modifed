@@ -144,8 +144,7 @@ SAKURA_DLL_PLUGIN_OBJ* CDllPlugin::CreateIfObj(CEditView* view, CWSHIfObj::List&
 		if(obj->m_dwIfObjListCount > 0){
 			obj->m_IfObjList     = new SAKURA_DLL_PLUGIN_IF_OBJ[obj->m_dwIfObjListCount];
 			int i = 0;
-			CWSHIfObj::List::iterator it;
-			for(it = params.begin(); it != params.end(); it++){
+			for(auto it = params.begin(); it != params.end(); it++){
 				SAKURA_DLL_PLUGIN_IF_OBJ* ifobj = &(obj->m_IfObjList[i++]);
 				memset(ifobj, 0, sizeof(SAKURA_DLL_PLUGIN_IF_OBJ));
 				if(wcslen((*it)->Name()) >= _countof(ifobj->m_szName)) continue;
