@@ -102,7 +102,7 @@ public:
 	BOOL			m_bRef;					//!< 参照を検索する
 	DWORD			m_dwPrevListCount;		//!< INI登録数(前回情報を削除するため)
 
-	CGlobalOption(){
+	CGlobalOption() {
 		m_strGtagsExePath  = L"";
 		m_strGlobalExePath = L"";
 		m_dwMaxFind        = PROFILE_DEF_MAXFIND;
@@ -114,8 +114,8 @@ public:
 		m_dwPrevListCount  = 0;
 	}
 
-	CGlobalOption& operator=(const CGlobalOption& src){
-		if(this != &src){
+	CGlobalOption& operator = (const CGlobalOption& src) {
+		if (this != &src) {
 			m_strGtagsExePath  = src.m_strGtagsExePath;
 			m_strGlobalExePath = src.m_strGlobalExePath;
 			m_dwMaxFind        = src.m_dwMaxFind;
@@ -137,14 +137,14 @@ public:
 	WideString		m_strTargetPath;	//!< GTAGS化するフォルダ
 	DWORD			m_dwUniqID;			//!< 結果ファイルID
 
-	CGlobalInfo(){
+	CGlobalInfo() {
 		m_bFlag         = PROFILE_DEF_FLAG;
 		m_strTargetPath = L"";
 		m_dwUniqID      = 0;
 	}
 
-	CGlobalInfo& operator=(const CGlobalInfo& src){
-		if(this != &src){
+	CGlobalInfo& operator = (const CGlobalInfo& src) {
+		if (this != &src) {
 			m_bFlag         = src.m_bFlag;
 			m_strTargetPath = src.m_strTargetPath;
 			m_dwUniqID      = src.m_dwUniqID;

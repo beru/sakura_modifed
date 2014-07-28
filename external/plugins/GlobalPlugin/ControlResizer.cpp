@@ -60,7 +60,8 @@ void ControlResizer::DefereWindowPos(int width, int height)
 			y += diffH;
 		}
 		HWND ctrlHWND = ::GetDlgItem(hWnd_, s.id);
-		DeferWindowPos(hdwp, ctrlHWND, 0, x, y, w, h, SWP_NOZORDER);
+		DeferWindowPos(hdwp, ctrlHWND, 0, x, y, w, h, SWP_NOZORDER|SWP_NOOWNERZORDER|SWP_NOACTIVATE|SWP_NOCOPYBITS
+					   );
 	}
 //	DeferWindowPos(hdwp, GetDlgItem(IDC_LIST), 0, 5, 7, width-10, height-150, SWP_NOZORDER);
 	EndDeferWindowPos(hdwp);

@@ -41,11 +41,11 @@ public:
 	WideString	m_strFile;
 	int			m_nLine;
 
-	CGlobalData(){
+	CGlobalData() {
 		m_nLine = 0;
 	}
 
-	CGlobalData(LPCWSTR lpszKeyword, LPCWSTR lpszFile, const int nLine){
+	CGlobalData(LPCWSTR lpszKeyword, LPCWSTR lpszFile, const int nLine) {
 		m_strKeyword  = lpszKeyword;
 		m_strFile     = lpszFile;
 		m_nLine       = nLine;
@@ -89,8 +89,8 @@ public:
 	int							m_lineNo;
 
 	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
-	DWORD ReadGlobalFileOne(LPCWSTR lpszFileName, const DWORD dwPrevCount);
-	HANDLE OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFile);
+	DWORD ReadGlobalFileOne(LPSTR buff, const DWORD dwPrevCount);
+	bool OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nBytes);
 
 	void GetItem(HWND hList, int nIndex, CGlobalData* info);
 	void StartTimer();

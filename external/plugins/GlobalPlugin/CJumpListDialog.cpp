@@ -74,13 +74,20 @@ INT_PTR CJumpListDialog::DoModal(HINSTANCE hInstance, HWND hwndParent)
 INT_PTR CJumpListDialog::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg) {
-	case WM_SIZE:
+//	case WM_ERASEBKGND:
+//		return TRUE;
+	case WM_WINDOWPOSCHANGED:
 		{
-			int width = LOWORD(lParam);
-			int height = HIWORD(lParam);
-			m_ctrlResizer.DefereWindowPos(width, height);
+			WINDOWPOS* p = (WINDOWPOS*) lParam;
+			if (!(p->flags & SWP_NOSIZE)) {
+				RECT rect;
+				GetClientRect(m_hWnd, &rect);
+				int width = rect.right - rect.left;
+				int height = rect.bottom - rect.top;
+				m_ctrlResizer.DefereWindowPos(width, height);
+				return 0;
+			}
 		}
-		return 0;
 		break;
 	case WM_GETMINMAXINFO:
 		{
@@ -106,6 +113,9 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 
+//	LONG_PTR exStyle = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
+//	::SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, exStyle | WS_EX_COMPOSITED);
+
 	for (int i = 0; i < _countof(layout); i++) {
 		WideString strText;
 		thePluginService.LoadString(layout[i].m_nID, strText);
@@ -123,7 +133,7 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	::CheckDlgButton(GetHwnd(), IDC_RADIO_ALL, BST_CHECKED);
 
 	long lngStyle = ListView_GetExtendedListViewStyle(hList);
-	lngStyle |= LVS_EX_FULLROWSELECT;// | LVS_SHOWSELALWAYS;
+	lngStyle |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER;// | LVS_SHOWSELALWAYS;
 	ListView_SetExtendedListViewStyle(hList, lngStyle);
 
 	SetData();
@@ -259,44 +269,18 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 
 	RemoveAllGlobalDataList(m_GlobalDataList);
 
-	WideString strTmpFile = thePluginService.Plugin.GetPluginDir() + L"\\" + PROFILE_DEF_GTAGS_TMP_FILE;
-	
 	DWORD dwCount = 0;
 	if (m_strKeyword.length() != 0) {
+		static const size_t nBytes = 1024 * 104;
+		std::vector<char> buff(nBytes);
 		for (std::list<CGlobalInfo*>::iterator it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it) {
 			CGlobalInfo* info = *it;
 			if (info->m_bFlag) {
-				::DeleteFile(strTmpFile.c_str());
 				WideString strMessage;
 				WideString strResultPath = thePluginService.GetResultPath(info->m_dwUniqID);
-				HANDLE hProcess = OnExecuteGlobal(info, strTmpFile);
-				if (hProcess != NULL) {
-#if 0
-					CPluginDlgCancel dlg;
-					INT_PTR nRet = dlg.DoModal(thePluginService.GetInstance(), GetHwnd(), IDD_EXECUTE_DIALOG, (LPARAM)hProcess);
-					switch(nRet){
-					case IDOK:
-						break;
-					case IDCANCEL:
-						thePluginService.LoadString(IDS_STR_MSG11, strMessage);	//タグファイルの検索を中止しました。
-						::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
-						return dwCount;
-					case IDABORT:
-					default:
-					thePluginService.LoadString(IDS_STR_MSG10, strMessage);	//タグファイルの検索に失敗しました。
-						::MessageBox(GetHwnd(), strMessage.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
-						return dwCount;
-					}
-#else
-					// TODO: check timeout, error
-					DWORD dwRet = ::WaitForSingleObject(hProcess, 1000);
-					DWORD dwExitCode = 0;
-					BOOL bRet = ::GetExitCodeProcess(hProcess, &dwExitCode);
-					::CloseHandle(hProcess);
-#endif
-					dwCount += ReadGlobalFileOne(strTmpFile.c_str(), dwCount);
+				if (OnExecuteGlobal(info, &buff[0], nBytes)) {
+					dwCount += ReadGlobalFileOne(&buff[0], dwCount);
 				}
-				::DeleteFile(strTmpFile.c_str());
 				if (dwCount >= m_lpGlobalOption->m_dwMaxFind) break;
 			}
 		}
@@ -326,23 +310,37 @@ bool CJumpListDialog::Ascending(const CGlobalData* x, const CGlobalData* y)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-DWORD CJumpListDialog::ReadGlobalFileOne(LPCWSTR lpszFileName, const DWORD dwPrevCount)
+DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, const DWORD dwPrevCount)
 {
 	DWORD dwCount = 0;
-	FILE* fp = _wfopen(lpszFileName, L"r");
-	if (fp == NULL) return 0;
 
+	wchar_t* lpszLine     = new wchar_t[MAX_PATH_LENGTH];
 	wchar_t* lpszBuffer   = new wchar_t[MAX_PATH_LENGTH];
 	wchar_t* lpszKey      = new wchar_t[MAX_PATH_LENGTH];
 	wchar_t* lpszFile     = new wchar_t[MAX_PATH_LENGTH];
-	int nLine;
-	while (fgetws(lpszBuffer, MAX_PATH_LENGTH, fp)) {
-		if (lpszBuffer[0] == L'!') continue;
-		wcscpy(lpszKey, _T(""));
-		wcscpy(lpszFile, _T(""));
-		nLine = 0;
-		if (swscanf(lpszBuffer, TAG_FORMAT, lpszKey, lpszFile, &nLine) < 3) continue;
 
+	int nLine;
+
+	char* line;
+	char* lf = buff - 2;
+
+	while (1) {
+		line = lf + 2;
+		lf = strchr(line, '\r');
+		if (!lf) {
+			break;
+		}
+		if (line[0] == L'!') {
+			continue;
+		}
+		lpszKey[0] = 0;
+		lpszFile[0] = 0;
+		nLine = 0;
+
+		MultiByteToWideChar(CP_OEMCP, MB_PRECOMPOSED, line, -1, lpszLine, MAX_PATH_LENGTH);
+		if (swscanf(lpszLine, TAG_FORMAT, lpszKey, lpszFile, &nLine) < 3) {
+			continue;
+		}
 		CGlobalData* info = new CGlobalData(lpszKey, lpszFile, nLine);
 		m_GlobalDataList.push_back(info);
 		dwCount++;
@@ -350,11 +348,10 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPCWSTR lpszFileName, const DWORD dwPre
 			break;
 		}
 	}
+	delete[] lpszLine;
 	delete[] lpszBuffer;
 	delete[] lpszKey;
 	delete[] lpszFile;
-
-	fclose(fp);
 
 	return dwCount;
 }
@@ -476,20 +473,6 @@ BOOL CJumpListDialog::OnEnChange(HWND hwndCtl, int wID)
 	return TRUE;
 }
 
-static
-WideString getListViewItemText(HWND hList, int iItem, int iSubItem)
-{
-	LVITEM item = {0};
-	TCHAR buff[1024];
-	item.mask = LVIF_TEXT;
-	item.iItem = iItem;
-	item.pszText = buff;
-	item.cchTextMax = sizeof(buff) / sizeof(buff[0]);
-	item.iSubItem = iSubItem;
-	ListView_GetItem(hList, &item);
-	return buff;
-}
-
 BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == IDC_LIST) {
@@ -511,6 +494,59 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
+// http://www.usamimi.info/~hellfather/win32api/API_CreatePipe.xml
+BOOL GetCUIAppMsg( LPWSTR cmdline, char* buf, DWORD size, BOOL stdOut, BOOL stdErr, DWORD timeout )
+{
+	HANDLE				read,	write;
+ 	SECURITY_ATTRIBUTES	sa;
+	STARTUPINFO 		si;
+	PROCESS_INFORMATION	pi;
+	DWORD				len;
+	BOOL 				isOK = FALSE;
+
+	sa.nLength				=	sizeof(sa);
+	sa.lpSecurityDescriptor	=	0;
+	sa.bInheritHandle		=	TRUE;
+
+	if( !CreatePipe( &read, &write, &sa, 0 ) ) return FALSE;
+
+	memset( &si, 0, sizeof(si) );
+	si.cb			=	sizeof(si);
+	si.dwFlags		=	STARTF_USESTDHANDLES|STARTF_USESHOWWINDOW ;
+	si.wShowWindow	= 	SW_HIDE;
+	if( stdOut ) si.hStdOutput	=	write;
+	if( stdErr ) si.hStdError	=	write;
+
+	buf[0] = 0;
+
+	do
+	{
+		if( !CreateProcess( NULL, cmdline, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi ) ) {
+			break;
+		}
+//		if( WaitForInputIdle( pi.hProcess, timeout ) != 0 ) break;
+		if( WaitForSingleObject( pi.hProcess, timeout ) != WAIT_OBJECT_0 ) break;
+
+		CloseHandle( pi.hThread );
+		CloseHandle( pi.hProcess );
+
+		if( !PeekNamedPipe( read, NULL, 0, NULL, &len, NULL ) ) break;
+
+		memset( buf, '\0', size );
+
+		if( len > 0 && !ReadFile( read, buf, len, &len, NULL ) ) break;
+		buf[len] = 0;
+
+		isOK = TRUE;
+	}
+	while(0);
+
+	CloseHandle( read );
+	CloseHandle( write );
+
+	return isOK;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 /*
 	GTAGSDBPATH=DBのあるパス
@@ -525,7 +561,7 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 	       "^x"		前方一致
 	       ".*x.*"	部分一致
 */
-HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFile)
+bool CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nBytes)
 {
 	WideString strOption = L"-xat";
 	if (m_bIgnoreCase) strOption += L"i";
@@ -538,34 +574,24 @@ HANDLE CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, WideString& strTmpFil
 	}else if(m_dwMatchMode == MATCH_MODE_ANY) {
 		strOption += L" \".*" + m_strKeyword + L"\".*";
 	}else {
-		return NULL;
+		return false;
 	}
 
 	WideString strResultPath = thePluginService.GetResultPath(info->m_dwUniqID);
-	WideString strCmdPath = GetSystemDirectory();
 	wchar_t szEnvironment[MAX_PATH_LENGTH];
 	swprintf(szEnvironment, L"GTAGSDBPATH=%s|GTAGSROOT=%s|", strResultPath.c_str(), info->m_strTargetPath.c_str());
 	//::MessageBox(GetHwnd(), szEnvironment, L"DEBUG", MB_OK);
 	for (int i = 0; szEnvironment[i] != 0; i++) {
-		if(szEnvironment[i] == L'|') szEnvironment[i] = L'\0';
+		if (szEnvironment[i] == L'|') szEnvironment[i] = L'\0';
 	}
 
 	wchar_t* lpszCmdLine = new wchar_t[MAX_PATH_LENGTH];
-	wsprintf(lpszCmdLine, L"\"%s\\cmd.exe\" /D /C \"\"%s\" %s > \"%s\"\"", strCmdPath.c_str(), m_lpGlobalOption->m_strGlobalExePath.c_str(), strOption.c_str(), strTmpFile.c_str());
+	wsprintf(lpszCmdLine, L"\"%s\" %s", m_lpGlobalOption->m_strGlobalExePath.c_str(), strOption.c_str());
 	//::MessageBox(GetHwnd(), lpszCmdLine, L"DEBUG", MB_OK);
 
-	//gtags.exeを実行する
-	PROCESS_INFORMATION pi;
-	::ZeroMemory(&pi, sizeof(pi));
-	STARTUPINFO si;
-	::ZeroMemory(&si, sizeof(si));
-	si.cb          = sizeof(si);
-	si.dwFlags     = STARTF_USESHOWWINDOW;
-	si.wShowWindow = SW_HIDE;
-	BOOL bProcessResult = ::CreateProcess(NULL, lpszCmdLine, NULL, NULL, FALSE, CREATE_UNICODE_ENVIRONMENT, szEnvironment, info->m_strTargetPath.c_str(), &si, &pi);
-	if (bProcessResult == FALSE) {
-		return NULL;
-	}
-	::CloseHandle(pi.hThread);
-	return pi.hProcess;
+	GetCUIAppMsg(lpszCmdLine, buff, nBytes, TRUE, TRUE, 200);
+
+	delete lpszCmdLine;
+	return true;
 }
+

@@ -288,7 +288,7 @@ BOOL COptionDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////////////
 void COptionDialog::SetData(void)
 {
-	if(GetHwnd() == NULL) return;
+	if (GetHwnd() == NULL) return;
 	HWND hEditGtagsExe  = ::GetDlgItem(GetHwnd(), IDC_EDIT_GTAGS);
 	HWND hEditGlobalExe = ::GetDlgItem(GetHwnd(), IDC_EDIT_GLOBAL);
 	HWND hEditMaxFind   = ::GetDlgItem(GetHwnd(), IDC_EDIT_MAXFIND);
@@ -416,7 +416,7 @@ void COptionDialog::ControlButton()
 
 	int nCount = ListView_GetItemCount(hList);
 	int nIndex = -1;
-	if(nCount >= 1) nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
+	if (nCount >= 1) nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
 	BOOL bSelected = (nIndex >= 0) ? TRUE : FALSE;
 	::EnableWindow(hButtonUpdate, bSelected);
 	::EnableWindow(hButtonDelete, bSelected);
