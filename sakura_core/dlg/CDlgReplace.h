@@ -15,8 +15,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef SAKURA_CDLGREPLACE_H_
-#define SAKURA_CDLGREPLACE_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 #include "recent/CRecent.h"
@@ -78,11 +77,4 @@ protected:
 	void SetCombosList( void );	/* 検索文字列/置換後文字列リストの設定 */
 	int GetData( void );		/* ダイアログデータの取得 */
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_CDLGREPLACE_H_ */
-
-
 

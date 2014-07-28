@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_STRING_EX2_AA243462_59E7_4F55_B206_FD9ED8836A09_H_
-#define SAKURA_STRING_EX2_AA243462_59E7_4F55_B206_FD9ED8836A09_H_
+#pragma once
 
 class CEol;
 
@@ -76,5 +75,3 @@ int scan_ints(
 	int*			anBuf		//!< [out] Žæ“¾‚µ‚½”’l (—v‘f”‚ÍÅ‘å32‚Ü‚Å)
 );
 
-#endif /* SAKURA_STRING_EX2_AA243462_59E7_4F55_B206_FD9ED8836A09_H_ */
-/*[EOF]*/

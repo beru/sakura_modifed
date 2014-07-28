@@ -31,8 +31,7 @@
 		   distribution.
 */
 
-#ifndef _CMEMORY_H_
-#define _CMEMORY_H_
+#pragma once
 
 /*! ファイル文字コードセット判別時の先読み最大サイズ */
 #define CheckKanjiCode_MAXREADLENGTH 16384
@@ -123,9 +122,4 @@ inline void* CMemory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
 	if(pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CMEMORY_H_ */
-
-
 

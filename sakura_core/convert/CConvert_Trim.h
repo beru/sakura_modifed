@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCONVERT_TRIM_09061551_FDED_4982_A974_FAC9AE9AF040_H_
-#define SAKURA_CCONVERT_TRIM_09061551_FDED_4982_A974_FAC9AE9AF040_H_
+#pragma once
 
 #include "CConvert.h"
 
@@ -38,5 +37,3 @@ private:
 	bool m_bLeft;
 };
 
-#endif /* SAKURA_CCONVERT_TRIM_09061551_FDED_4982_A974_FAC9AE9AF040_H_ */
-/*[EOF]*/

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CMYRECT_25A0FB5F_E06F_4F51_B046_E6951B95B0059_H_
-#define SAKURA_CMYRECT_25A0FB5F_E06F_4F51_B046_E6951B95B0059_H_
+#pragma once
 
 #include <Windows.h> //RECT
 #include "CMyPoint.h"
@@ -101,5 +100,3 @@ public:
 //!CRectçáê¨ÅBrc1,rc2Çä‹Çﬁç≈è¨ÇÃãÈå`Çê∂ê¨Ç∑ÇÈÅB
 CMyRect MergeRect(const CMyRect& rc1, const CMyRect& rc2);
 
-#endif /* SAKURA_CMYRECT_25A0FB5F_E06F_4F51_B046_E6951B95B0059_H_ */
-/*[EOF]*/

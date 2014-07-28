@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_OS_4EAF837F_94E1_4B90_BF99_5AC3DEC630E79_H_
-#define SAKURA_OS_4EAF837F_94E1_4B90_BF99_5AC3DEC630E79_H_
+#pragma once
 
 #include <ObjIdl.h> // LPDATAOBJECT
 
@@ -108,5 +107,3 @@ private:
 #define IMR_CONFIRMRECONVERTSTRING             0x0005
 #endif // IMR_CONFIRMRECONVERTSTRING
 
-#endif /* SAKURA_OS_4EAF837F_94E1_4B90_BF99_5AC3DEC630E79_H_ */
-/*[EOF]*/

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CUNICODE_95AC7095_F71E_458B_80B3_1AA4036E25109_H_
-#define SAKURA_CUNICODE_95AC7095_F71E_458B_80B3_1AA4036E25109_H_
+#pragma once
 
 // IsUtf16SurrogHi()ÅAIsUtf16SurrogLow() ä÷êîÇcharset/codechecker.h Ç…à⁄ìÆ
 
@@ -50,5 +49,3 @@ public:
 
 };
 
-#endif /* SAKURA_CUNICODE_95AC7095_F71E_458B_80B3_1AA4036E25109_H_ */
-/*[EOF]*/

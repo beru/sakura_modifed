@@ -11,8 +11,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
-#ifndef SAKURA_WINDOW_CSPLITTERWND_H_
-#define SAKURA_WINDOW_CSPLITTERWND_H_
+#pragma once
 
 #include "CWnd.h"
 
@@ -92,11 +91,5 @@ protected:
 	void DrawSplitter( int , int , int );	/* 分割トラッカーの表示 */
 
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_WINDOW_CSPLITTERWND_H_ */
-
 
 

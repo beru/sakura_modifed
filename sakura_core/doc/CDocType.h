@@ -26,8 +26,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CDOCTYPE_BB51F346_E9F1_42DD_8B28_2F5BAFCE7CE09_H_
-#define SAKURA_CDOCTYPE_BB51F346_E9F1_42DD_8B28_2F5BAFCE7CE09_H_
+#pragma once
 
 #include "types/CType.h" // CTypeConfig
 #include "env/CDocTypeManager.h"
@@ -68,5 +67,3 @@ private:
 	bool					m_nSettingTypeLocked;		//!< •¶‘Ží•Ê‚ÌˆêŽžÝ’èó‘Ô
 };
 
-#endif /* SAKURA_CDOCTYPE_BB51F346_E9F1_42DD_8B28_2F5BAFCE7CE09_H_ */
-/*[EOF]*/

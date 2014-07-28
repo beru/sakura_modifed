@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CNATIVE_211120FF_E38A_4AFA_8270_8927A77F4DA79_H_
-#define SAKURA_CNATIVE_211120FF_E38A_4AFA_8270_8927A77F4DA79_H_
+#pragma once
 
 #include "mem/CMemory.h"
 
@@ -41,5 +40,3 @@ public:
 #include "mem/CNativeA.h"
 #include "mem/CNativeW.h"
 
-#endif /* SAKURA_CNATIVE_211120FF_E38A_4AFA_8270_8927A77F4DA79_H_ */
-/*[EOF]*/

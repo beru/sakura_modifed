@@ -31,8 +31,7 @@
 
 class CDlgProperty;
 
-#ifndef _CDLGPROPERTY_H_
-#define _CDLGPROPERTY_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 /*-----------------------------------------------------------------------
@@ -50,7 +49,4 @@ protected:
 	void SetData( void );	/* ダイアログデータの設定 */
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 };
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGPROPERTY_H_ */
-
 

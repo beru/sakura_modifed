@@ -15,8 +15,7 @@
 
 class CFuncInfo;
 
-#ifndef _CFUNCINFO_H_
-#define _CFUNCINFO_H_
+#pragma once
 
 #include "mem/CMemory.h"
 
@@ -48,11 +47,5 @@ class CFuncInfo {
 		int			m_nInfo;		/*!< •t‰Áî•ñ */
 		int			m_nDepth;		/*!< [‚³ */
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CFUNCINFO_H_ */
-
 
 

@@ -24,8 +24,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef CMACROIFOBJ_H
-#define CMACROIFOBJ_H
+#pragma once
 
 #include "macro/CWSHIfObj.h"
 #include "CEditApp.h"
@@ -167,4 +166,3 @@ public:
 	int m_nIndex;
 };
 
-#endif	//CMACROIFOBJ_H

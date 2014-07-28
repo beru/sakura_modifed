@@ -16,9 +16,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-
-#ifndef _CDIALOG_H_
-#define _CDIALOG_H_
+#pragma once
 
 class CDialog;
 
@@ -162,11 +160,4 @@ protected:
 	// コントロールに画面のフォントを設定	2012/11/27 Uchi
 	HFONT SetMainFont( HWND hTarget );
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDIALOG_H_ */
-
-
 

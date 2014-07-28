@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCONVERT_TOHANKAKU_AA990D46_6904_44DF_8162_B2D96E20AE3A_H_
-#define SAKURA_CCONVERT_TOHANKAKU_AA990D46_6904_44DF_8162_B2D96E20AE3A_H_
+#pragma once
 
 #include "CConvert.h"
 
@@ -40,5 +39,3 @@ enum EToHankakuMode{
 	TO_EISU		= 0x04, //!< ‰p”Žš‚É‰e‹¿ƒAƒŠ
 };
 
-#endif /* SAKURA_CCONVERT_TOHANKAKU_AA990D46_6904_44DF_8162_B2D96E20AE3A_H_ */
-/*[EOF]*/

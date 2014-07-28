@@ -34,9 +34,7 @@
 		   distribution.
 */
 
-
-#ifndef SAKURA_WINDOW_CTABWND_H_
-#define SAKURA_WINDOW_CTABWND_H_
+#pragma once
 
 #include "CWnd.h"
 
@@ -196,8 +194,4 @@ private:
 	bool		m_bTabCloseHover;		//!< マウスカーソル下にタブ内の閉じるボタンがあるか
 	int			m_nTabCloseCapture;		//!< 閉じるボタンがマウス押下されているタブ（無いときは-1）
 };
-
-#endif /* SAKURA_WINDOW_CTABWND_H_ */
-
-
 

@@ -32,9 +32,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_SYSTEM_CONSTANTS_608BC31D_86C2_4526_B749_70DBD090752A_H_
-#define SAKURA_SYSTEM_CONSTANTS_608BC31D_86C2_4526_B749_70DBD090752A_H_
-
+#pragma once
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       íËêîñΩñºï‚èï                          //
@@ -693,5 +691,3 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 #define PBS_MARQUEE 0x08
 #endif
 
-#endif /* SAKURA_SYSTEM_CONSTANTS_608BC31D_86C2_4526_B749_70DBD090752A_H_ */
-/*[EOF]*/

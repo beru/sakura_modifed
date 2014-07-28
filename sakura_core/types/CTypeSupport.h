@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CTYPESUPPORT_21FC7075_96B4_4572_BA60_A6550E11AC0B9_H_
-#define SAKURA_CTYPESUPPORT_21FC7075_96B4_4572_BA60_A6550E11AC0B9_H_
+#pragma once
 
 #include "uiparts/CGraphics.h"
 #include "doc/CEditDoc.h"
@@ -148,5 +147,3 @@ private:
 	CGraphics* m_gr;        //ê›íËÇïœçXÇµÇΩHDC
 };
 
-#endif /* SAKURA_CTYPESUPPORT_21FC7075_96B4_4572_BA60_A6550E11AC0B9_H_ */
-/*[EOF]*/

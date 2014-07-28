@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CGRAPHICS_BA5156BF_99C6_4854_8131_CE8B091A5EFF9_H_
-#define SAKURA_CGRAPHICS_BA5156BF_99C6_4854_8131_CE8B091A5EFF9_H_
+#pragma once
 
 /*
 2008.05.20 kobake ì¬
@@ -250,5 +249,3 @@ private:
 	bool				m_bDynamicBrush;	//m_hbrCurrent‚ğ“®“I‚Éì¬‚µ‚½ê‡‚Ítrue
 };
 
-#endif /* SAKURA_CGRAPHICS_BA5156BF_99C6_4854_8131_CE8B091A5EFF9_H_ */
-/*[EOF]*/

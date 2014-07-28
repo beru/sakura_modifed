@@ -30,8 +30,8 @@
 
 class CDlgTypeAscertain;
 
-#ifndef _CDLGTYPEASCERTAIN_H_
-#define _CDLGTYPEASCERTAIN_H_
+#pragma once
+
 using std::wstring;
 using std::tstring;
 
@@ -70,11 +70,4 @@ protected:
 private:
 	SAscertainInfo* m_psi;			// インターフェイス
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGTYPEASCERTAIN_H_ */
-
-
 

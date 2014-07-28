@@ -16,8 +16,7 @@
 
 class CDlgJump;
 
-#ifndef _CDLGJUMP_H_
-#define _CDLGJUMP_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 //! 指定行へのジャンプダイアログボックス
@@ -48,11 +47,5 @@ protected:
 	void SetData( void );	/* ダイアログデータの設定 */
 	int GetData( void );	/* ダイアログデータの取得 */
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGJUMP_H_ */
-
 
 

@@ -24,8 +24,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_RELATION_TOOL_333B6596_FCE9_45EE_96B8_50BE6BF997779_H_
-#define SAKURA_RELATION_TOOL_333B6596_FCE9_45EE_96B8_50BE6BF997779_H_
+#pragma once
 
 #include <vector>
 class CSubject;
@@ -88,5 +87,3 @@ public:
 	}
 };
 
-#endif /* SAKURA_RELATION_TOOL_333B6596_FCE9_45EE_96B8_50BE6BF997779_H_ */
-/*[EOF]*/

@@ -28,8 +28,7 @@
 		   distribution.
 */
 
-#ifndef	_CFILEEXT_H_
-#define	_CFILEEXT_H_
+#pragma once
 
 #include "_main/global.h"
 #include "config/maxdata.h"
@@ -64,6 +63,4 @@ private:
 	FileExtInfoTag	*m_puFileExtInfo;
 	TCHAR			m_szFilter[4096];
 };
-
-#endif	//_CFILEEXT_H_
 

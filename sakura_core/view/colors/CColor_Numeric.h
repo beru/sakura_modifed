@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCOLOR_NUMERIC_19741AD7_75D8_455C_9E04_7A8901616E8B_H_
-#define SAKURA_CCOLOR_NUMERIC_19741AD7_75D8_455C_9E04_7A8901616E8B_H_
+#pragma once
 
 #include "view/colors/CColorStrategy.h"
 
@@ -38,5 +37,3 @@ private:
 	int m_nCOMMENTEND;
 };
 
-#endif /* SAKURA_CCOLOR_NUMERIC_19741AD7_75D8_455C_9E04_7A8901616E8B_H_ */
-/*[EOF]*/

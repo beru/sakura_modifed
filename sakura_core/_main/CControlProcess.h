@@ -12,8 +12,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CCONTROLPROCESS_H_
-#define _CCONTROLPROCESS_H_
+#pragma once
 
 #include "global.h"
 #include "CProcess.h"
@@ -54,9 +53,4 @@ private:
 	HANDLE			m_hEventCPInitialized;	//!< コントロールプロセス初期化完了イベント 2006.04.10 ryoji
 	CControlTray*	m_pcTray;
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CCONTROLPROCESS_H_ */
-
 

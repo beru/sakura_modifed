@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_APP_CONSTANTS_AD36E2CE_B62E_497D_806F_6B9738310127_H_
-#define SAKURA_APP_CONSTANTS_AD36E2CE_B62E_497D_806F_6B9738310127_H_
+#pragma once
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           名前                              //
@@ -62,5 +61,3 @@ const int COLUMNSPACE_MAX = 64;
 const int MAXLINEKETAS		= 10240;	//!< 1行の桁数の最大値
 const int MINLINEKETAS		= 10;		//!< 1行の桁数の最小値
 
-#endif /* SAKURA_APP_CONSTANTS_AD36E2CE_B62E_497D_806F_6B9738310127_H_ */
-/*[EOF]*/

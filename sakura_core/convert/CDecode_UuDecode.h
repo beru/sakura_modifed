@@ -28,8 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CDECODE_UUDECODE_2082FDBF_E5F4_4173_87E3_A862FA4F694B_H_
-#define SAKURA_CDECODE_UUDECODE_2082FDBF_E5F4_4173_87E3_A862FA4F694B_H_
+#pragma once
 
 #include "convert/CDecode.h"
 
@@ -41,5 +40,3 @@ public:
 	void CopyFilename( TCHAR *pcDst ) const { _tcscpy( pcDst, m_aFilename ); }
 };
 
-#endif /* SAKURA_CDECODE_UUDECODE_2082FDBF_E5F4_4173_87E3_A862FA4F694B_H_ */
-/*[EOF]*/

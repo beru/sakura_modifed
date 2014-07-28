@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CSOUNDSET_FFF3DED9_DD53_49CD_B0FF_7A9AB2D2BE719_H_
-#define SAKURA_CSOUNDSET_FFF3DED9_DD53_49CD_B0FF_7A9AB2D2BE719_H_
+#pragma once
 
 class CSoundSet{
 public:
@@ -34,5 +33,3 @@ private:
 	int	m_nMuteCount;
 };
 
-#endif /* SAKURA_CSOUNDSET_FFF3DED9_DD53_49CD_B0FF_7A9AB2D2BE719_H_ */
-/*[EOF]*/

@@ -29,10 +29,7 @@
 		   distribution.
 */
 
-
-
-#ifndef SAKURA_CDLGFAVORITE_H_
-#define SAKURA_CDLGFAVORITE_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 #include "recent/CRecent.h"
@@ -130,6 +127,4 @@ private:
 
 	static void  ListViewSort(ListViewSortInfo&, const CRecent* , int, bool);
 };
-
-#endif	//SAKURA_CDLGFAVORITE_H_
 

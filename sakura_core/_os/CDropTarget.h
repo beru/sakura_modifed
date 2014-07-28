@@ -13,9 +13,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-
-#ifndef _CEDITDROPTARGET_H_
-#define _CEDITDROPTARGET_H_
+#pragma once
 
 #include <Unknwn.h>
 
@@ -173,9 +171,4 @@ public:
 	STDMETHOD( Reset )(void);
 	STDMETHOD( Clone )(IEnumFORMATETC** ppenum);
 };
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CEDITDROPTARGET_H_ */
-
-
 

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_EDITINFO_38A7E267_160D_4250_9012_AC3FC31993D69_H_
-#define SAKURA_EDITINFO_38A7E267_160D_4250_9012_AC3FC31993D69_H_
+#pragma once
 
 #include "basis/SakuraBasis.h"
 #include "config/maxdata.h"
@@ -89,5 +88,3 @@ struct EditInfo {
 	}
 };
 
-#endif /* SAKURA_EDITINFO_38A7E267_160D_4250_9012_AC3FC31993D69_H_ */
-/*[EOF]*/

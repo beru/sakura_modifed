@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCONVERT_HANKATATOZENKATA_45FB10FC_3254_4F79_A244_077BED31A42B9_H_
-#define SAKURA_CCONVERT_HANKATATOZENKATA_45FB10FC_3254_4F79_A244_077BED31A42B9_H_
+#pragma once
 
 #include "CConvert.h"
 
@@ -33,5 +32,3 @@ public:
 	bool DoConvert(CNativeW* pcData);
 };
 
-#endif /* SAKURA_CCONVERT_HANKATATOZENKATA_45FB10FC_3254_4F79_A244_077BED31A42B9_H_ */
-/*[EOF]*/

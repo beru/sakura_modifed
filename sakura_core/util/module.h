@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_MODULE_4F382EF5_EF52_47E1_A774_5CDFB545AB25_H_
-#define SAKURA_MODULE_4F382EF5_EF52_47E1_A774_5CDFB545AB25_H_
+#pragma once
 
 void GetAppVersionInfo( HINSTANCE, int, DWORD*, DWORD* );	/* リソースから製品バージョンの取得 */
 
@@ -35,5 +34,3 @@ void ChangeCurrentDirectoryToExeDir();
 //! カレントディレクトリ移動機能付LoadLibrary
 HMODULE LoadLibraryExedir( LPCTSTR pszDll);
 
-#endif /* SAKURA_MODULE_4F382EF5_EF52_47E1_A774_5CDFB545AB25_H_ */
-/*[EOF]*/

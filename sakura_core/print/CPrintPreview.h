@@ -29,8 +29,7 @@
 		   distribution.
 */
 
-#ifndef SAKURA_CPRINTPREVIEW_4FBD8BE8_4E93_4714_A3F2_F69081A2EDBDR_H_
-#define SAKURA_CPRINTPREVIEW_4FBD8BE8_4E93_4714_A3F2_F69081A2EDBDR_H_
+#pragma once
 
 #include <Windows.h> // 2002/2/10 aroka
 #include "basis/SakuraBasis.h"
@@ -263,4 +262,3 @@ protected:
 	bool			m_bDemandUpdateSetting;		// ê›íËÇÃçXêVóvãÅ
 };
 
-#endif /* SAKURA_CPRINTPREVIEW_4FBD8BE8_4E93_4714_A3F2_F69081A2EDBDR_H_ */

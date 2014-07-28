@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CHARPOINTER_6EAF62A9_67F6_4CEF_80C2_B7C34014C253_H_
-#define SAKURA_CHARPOINTER_6EAF62A9_67F6_4CEF_80C2_B7C34014C253_H_
+#pragma once
 
 #include "charset/charcode.h"
 
@@ -116,5 +115,3 @@ typedef CharPointerW CharPointerT;
 typedef CharPointerA CharPointerT;
 #endif
 
-#endif /* SAKURA_CHARPOINTER_6EAF62A9_67F6_4CEF_80C2_B7C34014C253_H_ */
-/*[EOF]*/

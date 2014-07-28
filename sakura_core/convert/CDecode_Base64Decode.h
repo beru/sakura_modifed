@@ -28,8 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CDECODE_BASE64DECODE_FD175ABC_35B6_470E_850C_3F50E35320FF9_H_
-#define SAKURA_CDECODE_BASE64DECODE_FD175ABC_35B6_470E_850C_3F50E35320FF9_H_
+#pragma once
 
 #include "convert/CDecode.h"
 
@@ -39,5 +38,3 @@ public:
 
 };
 
-#endif /* SAKURA_CDECODE_BASE64DECODE_FD175ABC_35B6_470E_850C_3F50E35320FF9_H_ */
-/*[EOF]*/

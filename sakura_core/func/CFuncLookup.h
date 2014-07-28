@@ -32,8 +32,7 @@
 		   distribution.
 */
 
-#ifndef __CNAMELOOKUP_H__
-#define __CNAMELOOKUP_H__
+#pragma once
 
 #include <Windows.h>
 #include "_main/global.h"
@@ -94,5 +93,3 @@ private:
 
 };
 
-#endif
-/* [EOF] */

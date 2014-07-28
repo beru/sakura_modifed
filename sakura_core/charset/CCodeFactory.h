@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCODEFACTORY_953F01EB_9094_453E_92FC_35456A0E11A9_H_
-#define SAKURA_CCODEFACTORY_953F01EB_9094_453E_92FC_35456A0E11A9_H_
+#pragma once
 
 class CCodeBase;
 
@@ -35,5 +34,3 @@ public:
 	);
 };
 
-#endif /* SAKURA_CCODEFACTORY_953F01EB_9094_453E_92FC_35456A0E11A9_H_ */
-/*[EOF]*/

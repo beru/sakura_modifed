@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CVIEWSELECT_F4CBAF6E_90C8_44D2_B6EC_7FE066968A8D9_H_
-#define SAKURA_CVIEWSELECT_F4CBAF6E_90C8_44D2_B6EC_7FE066968A8D9_H_
+#pragma once
 
 class CEditView;
 
@@ -189,5 +188,3 @@ m_sSelectOld‚É‚Â‚¢‚Ä
 	DrawSelectArea()‚ğŒÄ‚Ñ‚¾‚·‚±‚Æ‚ÅV‚µ‚¢”ÍˆÍ‚ª•`‚©‚ê‚éD
 */
 
-#endif /* SAKURA_CVIEWSELECT_F4CBAF6E_90C8_44D2_B6EC_7FE066968A8D9_H_ */
-/*[EOF]*/

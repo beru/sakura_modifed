@@ -28,8 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CTEXTSTREAM_0D3CC877_CA34_4CC8_9596_B120F4F902939_H_
-#define SAKURA_CTEXTSTREAM_0D3CC877_CA34_4CC8_9596_B120F4F902939_H_
+#pragma once
 
 #include <string>
 
@@ -78,5 +77,3 @@ public:
 	CTextInputStream_AbsIni(const TCHAR* tszPath, bool bOrExedir = true);
 };
 
-#endif /* SAKURA_CTEXTSTREAM_0D3CC877_CA34_4CC8_9596_B120F4F902939_H_ */
-/*[EOF]*/

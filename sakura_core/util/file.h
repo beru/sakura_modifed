@@ -22,8 +22,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_FILE_2813BD8E_F6B9_400F_AA27_A6DDC372D6B89_H_
-#define SAKURA_FILE_2813BD8E_F6B9_400F_AA27_A6DDC372D6B89_H_
+#pragma once
 
 bool fexist(LPCTSTR pszPath); //!< ファイルまたはディレクトリが存在すればtrue
 
@@ -109,5 +108,3 @@ void my_splitpath_t ( const TCHAR *comln , TCHAR *drv,TCHAR *dir,TCHAR *fnm,TCHA
 
 int FileMatchScoreSepExt( const TCHAR *file1, const TCHAR *file2 );
 
-#endif /* SAKURA_FILE_2813BD8E_F6B9_400F_AA27_A6DDC372D6B89_H_ */
-/*[EOF]*/

@@ -30,8 +30,7 @@
 
 class CDlgTagsMake;
 
-#ifndef _CDLGTAGSMAKE_H_
-#define _CDLGTAGSMAKE_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 /*!
@@ -68,10 +67,4 @@ private:
 	void SelectFolder( HWND hwndDlg );
 
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGTAGSMAKE_H_ */
-
 

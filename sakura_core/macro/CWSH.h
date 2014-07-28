@@ -16,8 +16,7 @@
 
 */
 
-#ifndef __WSH_H__
-#define __WSH_H__
+#pragma once
 
 #include <ActivScp.h>
 //Å™Microsoft Platform SDK ÇÊÇË
@@ -60,5 +59,3 @@ private:
 	List m_IfObjArr;
 };
 
-
-#endif

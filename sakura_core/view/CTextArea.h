@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CTEXTAREA_BE5C17FA_E8D8_4659_9AA4_552DF90288CC9_H_
-#define SAKURA_CTEXTAREA_BE5C17FA_E8D8_4659_9AA4_552DF90288CC9_H_
+#pragma once
 
 class CViewFont;
 class CEditView;
@@ -244,5 +243,3 @@ public:
 	int		m_nViewAlignLeftCols;	/* çsî‘çÜàÊÇÃåÖêî */
 };
 
-#endif /* SAKURA_CTEXTAREA_BE5C17FA_E8D8_4659_9AA4_552DF90288CC9_H_ */
-/*[EOF]*/

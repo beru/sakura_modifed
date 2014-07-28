@@ -17,8 +17,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CDOCLINEMGR_H_
-#define _CDOCLINEMGR_H_
+#pragma once
 
 #include <Windows.h>
 #include "_main/global.h" // 2002/2/10 aroka
@@ -91,10 +90,4 @@ public:
 	mutable CLogicInt	m_nPrevReferLine;
 	mutable CDocLine*	m_pCodePrevRefer;
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDOCLINEMGR_H_ */
-
-
 

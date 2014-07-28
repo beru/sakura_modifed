@@ -19,8 +19,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CLAYOUTMGR_H_
-#define _CLAYOUTMGR_H_
+#pragma once
 
 #include <Windows.h>// 2002/2/10 aroka
 #include <vector>
@@ -372,10 +371,4 @@ protected:
 	CLayoutInt				m_nTextWidth;				// テキスト最大幅の記憶
 	CLayoutInt				m_nTextWidthMaxLine;		// 最大幅のレイアウト行
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CLAYOUTMGR_H_ */
-
-
 

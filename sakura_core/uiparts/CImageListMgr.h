@@ -29,8 +29,7 @@
 		   distribution.
 */
 
-#ifndef _CIMAGELIST_MGR_H_
-#define _CIMAGELIST_MGR_H_
+#pragma once
 
 #include "_main/global.h"
 
@@ -127,8 +126,4 @@ protected:
 	void Extend(bool = true);
 
 };
-
-#endif
-
-
 

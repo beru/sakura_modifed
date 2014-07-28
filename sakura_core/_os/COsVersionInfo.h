@@ -35,8 +35,7 @@
 		   distribution.
 */
 
-#ifndef _COSVERSIONINFO_H_
-#define _COSVERSIONINFO_H_
+#pragma once
 
 #ifndef _WIN32_WINNT_WIN2K
 #define _WIN32_WINNT_WIN2K	0x0500
@@ -278,7 +277,4 @@ inline bool IsWinMe() {
 inline bool IsWine() {
 	return COsVersionInfo()._IsWine();
 }
-
-#endif
-
 

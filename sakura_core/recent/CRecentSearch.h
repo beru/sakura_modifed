@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CRECENTSEARCH_23B8363C_C92F_4506_8803_90ABB9EC0370_H_
-#define SAKURA_CRECENTSEARCH_23B8363C_C92F_4506_8803_90ABB9EC0370_H_
+#pragma once
 
 #include "CRecentImp.h"
 #include "util/StaticType.h"
@@ -43,5 +42,3 @@ public:
 	bool			TextToDataType( CSearchString* dst, LPCTSTR pszText ) const;
 };
 
-#endif /* SAKURA_CRECENTSEARCH_23B8363C_C92F_4506_8803_90ABB9EC0370_H_ */
-/*[EOF]*/

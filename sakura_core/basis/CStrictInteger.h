@@ -28,8 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CSTRICTINTEGER_6F202774_0F82_4BB7_B107_37DE5443309E_H_
-#define SAKURA_CSTRICTINTEGER_6F202774_0F82_4BB7_B107_37DE5443309E_H_
+#pragma once
 
 //int以外の整数型もintにキャストして扱う
 #define STRICTINT_OTHER_TYPE_AS_INT(TYPE) \
@@ -232,5 +231,3 @@ STRICTINT_LEFT_INT_CMP(short)
 STRICTINT_LEFT_INT_CMP(size_t)
 STRICTINT_LEFT_INT_CMP(LONG)
 
-#endif /* SAKURA_CSTRICTINTEGER_6F202774_0F82_4BB7_B107_37DE5443309E_H_ */
-/*[EOF]*/

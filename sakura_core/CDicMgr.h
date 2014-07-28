@@ -11,8 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CDICMGR_H_
-#define _CDICMGR_H_
+#pragma once
 
 #include <Windows.h>
 #include "util/container.h"
@@ -44,11 +43,5 @@ protected:
 	||  À‘•ƒwƒ‹ƒpŠÖ”
 	*/
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDICMGR_H_ */
-
 
 

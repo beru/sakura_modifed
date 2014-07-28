@@ -14,8 +14,7 @@
 
 class CDlgTypeList;
 
-#ifndef _CDLGTYPELIST_H_
-#define _CDLGTYPELIST_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 using std::wstring;
@@ -67,11 +66,4 @@ private:
 	bool m_bAlertFileAssociation;			//関連付け警告の表示フラグ
 	bool m_bEnableTempChange;				//一時適用の有効化
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGTYPELIST_H_ */
-
-
 

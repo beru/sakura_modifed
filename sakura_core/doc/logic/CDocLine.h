@@ -17,8 +17,7 @@
 
 class CDocLine;
 
-#ifndef _CDOCLINE_H_
-#define _CDOCLINE_H_
+#pragma once
 
 #include "CEol.h"
 #include "mem/CMemory.h"
@@ -108,10 +107,4 @@ public:
 	};
 	MarkType m_sMark;
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDOCLINE_H_ */
-
-
 

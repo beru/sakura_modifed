@@ -25,8 +25,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CDLLPLUGIN_A62D7B59_C283_4C5A_887F_DA0138E09D2C_H_
-#define SAKURA_CDLLPLUGIN_A62D7B59_C283_4C5A_887F_DA0138E09D2C_H_
+#pragma once
 
 #include "CPlugin.h"
 #include "plugin/SakuraPlugin.h"
@@ -92,5 +91,3 @@ private:
 	static void WINAPI HandleCommandCallback(LPCWSTR lpszName, LPVOID lpIfObj, LPVOID lpEditView, const DWORD ID, LPCWSTR Arguments[], const int ArgLengths[], const int ArgSize);
 };
 
-#endif /* SAKURA_CDLLPLUGIN_A62D7B59_C283_4C5A_887F_DA0138E09D2C_H_ */
-/*[EOF]*/

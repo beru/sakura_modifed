@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CTEXTDRAWER_AECD0708_CE8E_489C_A9ED_484CBAB9523E9_H_
-#define SAKURA_CTEXTDRAWER_AECD0708_CE8E_489C_A9ED_484CBAB9523E9_H_
+#pragma once
 
 class CTextMetrics;
 class CTextArea;
@@ -67,5 +66,3 @@ private:
 	const CEditView* m_pEditView;
 };
 
-#endif /* SAKURA_CTEXTDRAWER_AECD0708_CE8E_489C_A9ED_484CBAB9523E9_H_ */
-/*[EOF]*/

@@ -15,8 +15,7 @@
 
 class CDlgCancel;
 
-#ifndef _CDLGCANCEL_H_
-#define _CDLGCANCEL_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 
@@ -59,11 +58,4 @@ protected:
 	BOOL OnBnClicked( int );
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGCANCEL_H_ */
-
-
 

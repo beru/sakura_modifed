@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCODECHECKER_4EBAEA37_FC62_4206_A9DD_82DDB8CDE44E9_H_
-#define SAKURA_CCODECHECKER_4EBAEA37_FC62_4206_A9DD_82DDB8CDE44E9_H_
+#pragma once
 
 #include "doc/CDocListener.h"
 #include "util/design_template.h"
@@ -40,5 +39,3 @@ public:
 	void OnFinalLoad(ELoadResult eLoadResult);
 };
 
-#endif /* SAKURA_CCODECHECKER_4EBAEA37_FC62_4206_A9DD_82DDB8CDE44E9_H_ */
-/*[EOF]*/

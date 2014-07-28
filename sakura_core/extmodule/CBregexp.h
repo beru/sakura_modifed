@@ -39,8 +39,7 @@
 		   distribution.
 */
 
-#ifndef _DLL_BREGEXP_H_
-#define _DLL_BREGEXP_H_
+#pragma once
 
 #include "CBregexpDll2.h"
 
@@ -228,9 +227,4 @@ private:
 bool CheckRegexpVersion( HWND hWnd, int nCmpId, bool bShowMsg = false );
 bool CheckRegexpSyntax( const wchar_t* szPattern, HWND hWnd, bool bShowMessage, int nOption = -1, bool bKakomi = false );// 2002/2/1 hor’Ç‰Á
 bool InitRegexp( HWND hWnd, CBregexp& rRegexp, bool bShowMessage );
-
-
-#endif
-
-
 

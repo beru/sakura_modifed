@@ -31,8 +31,7 @@
 		   distribution.
 */
 
-#ifndef SAKURA_CMACRO_500D8D68_B51E_4B8B_9752_2B130EA3310B_H_
-#define SAKURA_CMACRO_500D8D68_B51E_4B8B_9752_2B130EA3310B_H_
+#pragma once
 
 #include <Windows.h>
 #include <ObjIdl.h>  // VARIANT“™
@@ -105,6 +104,3 @@ protected:
 };
 
 
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_CMACRO_500D8D68_B51E_4B8B_9752_2B130EA3310B_H_ */

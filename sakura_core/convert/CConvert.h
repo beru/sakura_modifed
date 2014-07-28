@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCONVERT_BF272748_9EF0_4F5A_952C_8BED216658F9_H_
-#define SAKURA_CCONVERT_BF272748_9EF0_4F5A_952C_8BED216658F9_H_
+#pragma once
 
 //2007.10.02 kobake CEditView‚©‚ç•ª—£
 
@@ -54,5 +53,3 @@ public:
 	virtual bool DoConvert( CNativeW* pcData )=0;
 };
 
-#endif /* SAKURA_CCONVERT_BF272748_9EF0_4F5A_952C_8BED216658F9_H_ */
-/*[EOF]*/

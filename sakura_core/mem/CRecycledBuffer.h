@@ -25,8 +25,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CRECYCLEDBUFFER_865628A4_D60A_4F2E_8021_EA83D0D438819_H_
-#define SAKURA_CRECYCLEDBUFFER_865628A4_D60A_4F2E_8021_EA83D0D438819_H_
+#pragma once
 
 class CRecycledBuffer{
 //コンフィグ
@@ -114,5 +113,3 @@ private:
 	int   m_current;
 };
 
-#endif /* SAKURA_CRECYCLEDBUFFER_865628A4_D60A_4F2E_8021_EA83D0D438819_H_ */
-/*[EOF]*/

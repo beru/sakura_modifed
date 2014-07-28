@@ -28,9 +28,7 @@
 //2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を m_aTagJumpKeywords にまとめました
 //2007.12.13 kobake DLLSHAREDATAへの簡易アクセサを用意
 
-
-#ifndef SAKURA_ENV_CSHAREDATA_H_
-#define SAKURA_ENV_CSHAREDATA_H_
+#pragma once
 
 #include "CSelectLang.h"		// 2011.04.10 nasukoji
 
@@ -113,11 +111,4 @@ private:
 	HWND			m_hwndTraceOutSource;	// TraceOutA()起動元ウィンドウ（いちいち起動元を指定しなくてすむように）
 
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_ENV_CSHAREDATA_H_ */
-
-
 

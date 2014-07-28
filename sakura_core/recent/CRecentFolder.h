@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CRECENTFOLDER_A671E5A1_CE40_4BEF_BA37_B468B056F081_H_
-#define SAKURA_CRECENTFOLDER_A671E5A1_CE40_4BEF_BA37_B468B056F081_H_
+#pragma once
 
 #include "CRecentImp.h"
 #include "util/StaticType.h"
@@ -45,5 +44,3 @@ public:
 	bool			TextToDataType( CPathString* dst, LPCTSTR pszText ) const;
 };
 
-#endif /* SAKURA_CRECENTFOLDER_A671E5A1_CE40_4BEF_BA37_B468B056F081_H_ */
-/*[EOF]*/

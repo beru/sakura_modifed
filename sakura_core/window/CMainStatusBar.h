@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CMAINSTATUSBAR_2F45F977_E8DD_4787_8EA8_FF15685D114F_H_
-#define SAKURA_CMAINSTATUSBAR_2F45F977_E8DD_4787_8EA8_FF15685D114F_H_
+#pragma once
 
 #include "doc/CDocListener.h"
 
@@ -59,5 +58,3 @@ private:
 	HWND		m_hwndProgressBar;
 };
 
-#endif /* SAKURA_CMAINSTATUSBAR_2F45F977_E8DD_4787_8EA8_FF15685D114F_H_ */
-/*[EOF]*/

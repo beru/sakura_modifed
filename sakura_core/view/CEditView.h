@@ -38,8 +38,7 @@
 		   distribution.
 */
 
-#ifndef _CEDITVIEW_H_
-#define _CEDITVIEW_H_
+#pragma once
 
 #include <Windows.h>
 #include <ObjIdl.h>  // LPDATAOBJECT
@@ -739,12 +738,4 @@ public:
 	int				m_nMyIndex;	/* ï™äÑèÛë‘ */
 	CMigemo*		m_pcmigemo;
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CEDITVIEW_H_ */
-
-
-
 

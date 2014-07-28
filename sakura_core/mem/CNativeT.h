@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CNATIVET_3D479750_1FB7_4936_80B9_A043FEEBB7149_H_
-#define SAKURA_CNATIVET_3D479750_1FB7_4936_80B9_A043FEEBB7149_H_
+#pragma once
 
 class CNativeW;
 class CNativeA;
@@ -37,5 +36,3 @@ typedef CNativeA CNativeT;
 #include "mem/CNativeA.h"
 #include "mem/CNativeW.h"
 
-#endif /* SAKURA_CNATIVET_3D479750_1FB7_4936_80B9_A043FEEBB7149_H_ */
-/*[EOF]*/

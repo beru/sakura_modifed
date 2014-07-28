@@ -14,8 +14,7 @@
 #include "dlg/CDialog.h"
 #include "recent/CRecentCmd.h"
 
-#ifndef _CDLGEXEC_H_
-#define _CDLGEXEC_H_
+#pragma once
 
 /*-----------------------------------------------------------------------
 ÉNÉâÉXÇÃêÈåæ
@@ -52,10 +51,5 @@ protected:
 
 
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGEXEC_H_ */
 
 

@@ -12,8 +12,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CKEYMACROMGR_H_
-#define _CKEYMACROMGR_H_
+#pragma once
 
 #include <Windows.h>
 #include "CMacroManagerBase.h"
@@ -62,11 +61,5 @@ protected:
 	CMacro*	m_pTop;	//	êÊì™Ç∆èIí[Çï€éù
 	CMacro*	m_pBot;
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CKEYMACROMGR_H_ */
-
 
 

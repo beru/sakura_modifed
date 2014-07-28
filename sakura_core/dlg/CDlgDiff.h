@@ -31,8 +31,7 @@
 
 class CDlgDiff;
 
-#ifndef _CDLGDIFF_H_
-#define _CDLGDIFF_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 /*!
@@ -83,10 +82,5 @@ public:
 	HWND		m_hWnd_Dst;			// 相手ウインドウハンドル
 
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGDIFF_H_ */
 
 

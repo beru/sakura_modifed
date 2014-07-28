@@ -13,9 +13,7 @@
 
 class COpeBuf;
 
-#ifndef _COPEBUF_H_
-#define _COPEBUF_H_
-
+#pragma once
 
 #include <vector>
 #include "_main/global.h"
@@ -60,11 +58,5 @@ private:
 	int						m_nCurrentPointer;	//!< Œ»ÝˆÊ’u
 	int						m_nNoModifiedIndex;	//!< –³•ÏX‚Èó‘Ô‚É‚È‚Á‚½ˆÊ’u
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _COPEBUF_H_ */
-
 
 

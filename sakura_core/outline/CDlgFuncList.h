@@ -18,8 +18,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CDLGFUNCLIST_H_
-#define _CDLGFUNCLIST_H_
+#pragma once
 
 #include <Windows.h>
 #include "dlg/CDialog.h"
@@ -187,11 +186,4 @@ private:
 	POINT				m_ptDefaultSizeClient;
 	RECT				m_rcItems[12];
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGFUNCLIST_H_ */
-
-
 

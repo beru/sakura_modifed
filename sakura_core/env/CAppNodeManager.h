@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CAPPNODEMANAGER_3F3F3625_BEB8_4EA6_86AD_9497B1D7B061_H_
-#define SAKURA_CAPPNODEMANAGER_3F3F3625_BEB8_4EA6_86AD_9497B1D7B061_H_
+#pragma once
 
 #include "util/design_template.h"
 #include "config/maxdata.h"
@@ -142,5 +141,3 @@ inline CAppNodeHandle::CAppNodeHandle(HWND hwnd)
 	m_pNodeRef = CAppNodeManager::getInstance()->GetEditNode(hwnd);
 }
 
-#endif /* SAKURA_CAPPNODEMANAGER_3F3F3625_BEB8_4EA6_86AD_9497B1D7B061_H_ */
-/*[EOF]*/

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CLAYOUTEXINFO_H_
-#define SAKURA_CLAYOUTEXINFO_H_
+#pragma once
 
 class CLayoutColorInfo{
 public:
@@ -60,4 +59,3 @@ private:
 	CLayoutExInfo& operator=(const CLayoutExInfo&);
 };
 
-#endif

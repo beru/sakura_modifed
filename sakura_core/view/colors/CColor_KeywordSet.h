@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCOLOR_KEYWORDSET_FA3FF02C_3855_4447_BE0A_5311E0E65822_H_
-#define SAKURA_CCOLOR_KEYWORDSET_FA3FF02C_3855_4447_BE0A_5311E0E65822_H_
+#pragma once
 
 #include "view/colors/CColorStrategy.h"
 
@@ -39,5 +38,3 @@ private:
 	int m_nCOMMENTEND;
 };
 
-#endif /* SAKURA_CCOLOR_KEYWORDSET_FA3FF02C_3855_4447_BE0A_5311E0E65822_H_ */
-/*[EOF]*/

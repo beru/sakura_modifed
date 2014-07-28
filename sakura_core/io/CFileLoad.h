@@ -28,8 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef _CFILELOAD_H_
-#define _CFILELOAD_H_
+#pragma once
 
 #include <Windows.h>
 #include "CStream.h" //CError_FileOpen
@@ -159,8 +158,4 @@ inline DWORD CFileLoad::FilePointer( DWORD offset, DWORD origin )
 		throw CError_FileRead();
 	return fp;
 }
-
-
-#endif /* _CFILELOAD_H_ */
-
 

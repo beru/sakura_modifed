@@ -28,8 +28,7 @@
 		   distribution.
 */
 
-#ifndef SAKURA_CSORTED_TAGJUMP_LIST_H_
-#define SAKURA_CSORTED_TAGJUMP_LIST_H_
+#pragma once
 
 #define MAX_TAG_STRING_LENGTH _MAX_PATH	//ä«óùÇ∑ÇÈï∂éöóÒÇÃç≈ëÂí∑
 
@@ -79,4 +78,3 @@ private:
 	void Free( TagJumpInfo* item );
 };
 
-#endif	//SAKURA_CSORTED_TAGJUMP_LIST_H_

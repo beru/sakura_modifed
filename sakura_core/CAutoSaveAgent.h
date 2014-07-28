@@ -27,8 +27,8 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef __CAUTOSAVE_H_
-#define __CAUTOSAVE_H_
+#pragma once
+
 #include <Windows.h>
 #include "_main/global.h"
 #include "doc/CDocListener.h"
@@ -78,10 +78,4 @@ public:
 private:
 	CPassiveTimer m_cPassiveTimer;
 };
-
-
-
-
-
-#endif
 

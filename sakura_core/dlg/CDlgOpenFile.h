@@ -17,8 +17,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CDLGOPENFILE_H_
-#define _CDLGOPENFILE_H_
+#pragma once
 
 #include <CommDlg.h>
 #include <vector>
@@ -123,11 +122,5 @@ protected:
 
 	friend UINT_PTR CALLBACK OFNHookProc( HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam );
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGOPENFILE_H_ */
-
 
 

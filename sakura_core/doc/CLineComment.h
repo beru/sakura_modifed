@@ -11,8 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CLINECOMMENT_H_
-#define _CLINECOMMENT_H_
+#pragma once
 
 //	sakura
 #include "_main/global.h"
@@ -50,10 +49,4 @@ private:
 	int		m_nLineCommentPos[COMMENT_DELIMITER_NUM];	//!< 行コメントの開始位置(負数は指定無し)
 	int		m_nLineCommentLen[COMMENT_DELIMITER_NUM];	//!< 行コメント文字列の長さ
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CLINECOMMENT_H_ */
-
-
 

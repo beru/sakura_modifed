@@ -15,9 +15,8 @@
 #include "dlg/CDialog.h"
 #include "recent/CRecentSearch.h"
 #include "util/window.h"
-#ifndef SAKURA_CDLGFIND_H_
-#define SAKURA_CDLGFIND_H_
 
+#pragma once
 
 /*-----------------------------------------------------------------------
 ÉNÉâÉXÇÃêÈåæ
@@ -63,11 +62,4 @@ protected:
 	// virtual BOOL OnKeyDown( WPARAM wParam, LPARAM lParam );
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_CDLGFIND_H_ */
-
-
 

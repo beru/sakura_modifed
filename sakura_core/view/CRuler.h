@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CRULER_CF213704_1CF6_427E_AD78_D628D2D1F9029_H_
-#define SAKURA_CRULER_CF213704_1CF6_427E_AD78_D628D2D1F9029_H_
+#pragma once
 
 class CTextArea;
 class CEditView;
@@ -68,5 +67,3 @@ private:
 	int		m_nOldRulerWidth;	// 前回描画したルーラーのキャレット幅   2002.02.25 Add By KK  2007.08.26 kobake 名前変更
 };
 
-#endif /* SAKURA_CRULER_CF213704_1CF6_427E_AD78_D628D2D1F9029_H_ */
-/*[EOF]*/

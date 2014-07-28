@@ -25,8 +25,7 @@
 		   distribution.
 */
 
-#ifndef _CPLUGINMACROMANAGER_H_
-#define _CPLUGINMACROMANAGER_H_
+#pragma once
 
 #include <Windows.h>
 #include "CMacroManagerBase.h"
@@ -58,4 +57,3 @@ protected:
 	CPlug*			m_Plug;		//!< ƒvƒ‰ƒOƒCƒ“
 };
 
-#endif	//_CPLUGINMACROMANAGER_H_

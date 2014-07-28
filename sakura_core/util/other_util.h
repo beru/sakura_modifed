@@ -26,8 +26,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_OTHER_UTIL_F0E0EBE0_94B6_4E28_8241_6D842C0E8B73_H_
-#define SAKURA_OTHER_UTIL_F0E0EBE0_94B6_4E28_8241_6D842C0E8B73_H_
+#pragma once
 
 /*!
 	auto_ptr ‚Ì ”z—ñ”Å
@@ -73,5 +72,3 @@ private:
 	T* m_array;
 };
 
-#endif /* SAKURA_OTHER_UTIL_F0E0EBE0_94B6_4E28_8241_6D842C0E8B73_H_ */
-/*[EOF]*/

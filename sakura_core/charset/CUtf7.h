@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CUTF7_D489ED48_E52A_43DD_8124_CB439CA30FC8_H_
-#define SAKURA_CUTF7_D489ED48_E52A_43DD_8124_CB439CA30FC8_H_
+#pragma once
 
 #include "CCodeBase.h"
 
@@ -54,5 +53,3 @@ protected:
 
 };
 
-#endif /* SAKURA_CUTF7_D489ED48_E52A_43DD_8124_CB439CA30FC8_H_ */
-/*[EOF]*/

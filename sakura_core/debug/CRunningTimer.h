@@ -31,8 +31,7 @@
 		   distribution.
 */
 
-#ifndef _CRUNNINGTIMER_H_
-#define _CRUNNINGTIMER_H_
+#pragma once
 
 #include <windows.h>
 // RunningTimerで経過時間の測定を行う場合にはコメントを外してください
@@ -86,9 +85,4 @@ protected:
   #define MY_TRACETIME(c,m)
   #define MY_RUNNINGTIMER(c,m)
 #endif
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CRUNNINGTIMER_H_ */
-
-
 

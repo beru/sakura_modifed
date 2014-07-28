@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_ECOLORINDEXTYPE_H_
-#define SAKURA_ECOLORINDEXTYPE_H_
+#pragma once
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          êFíËêî                             //
@@ -111,4 +110,3 @@ enum EColorIndexType {
 	COLORIDX_SEARCHTAIL		= COLORIDX_SEARCH5,
 };
 
-#endif

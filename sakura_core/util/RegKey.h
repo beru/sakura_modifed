@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_REGKEY_9BB6B5D5_D652_4227_9726_ADB94F2CA44E9_H_
-#define SAKURA_REGKEY_9BB6B5D5_D652_4227_9726_ADB94F2CA44E9_H_
+#pragma once
 
 class CRegKey
 {
@@ -188,5 +187,3 @@ public:
 	}
 };
 
-#endif /* SAKURA_REGKEY_9BB6B5D5_D652_4227_9726_ADB94F2CA44E9_H_ */
-/*[EOF]*/

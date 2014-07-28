@@ -11,9 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CWAITCURSOR_H_
-#define _CWAITCURSOR_H_
-
+#pragma once
 
 #include <Windows.h>
 
@@ -41,10 +39,4 @@ private: // 2002/2/10 aroka
 	HCURSOR	m_hCursorOld;
 	bool	m_bEnable;
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CWAITCURSOR_H_ */
-
-
 

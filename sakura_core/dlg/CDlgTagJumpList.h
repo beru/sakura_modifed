@@ -30,8 +30,7 @@
 		   distribution.
 */
 
-#ifndef	SAKURA_CDLGTAGJUMPLIST_H_
-#define	SAKURA_CDLGTAGJUMPLIST_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 #include "recent/CRecentTagjumpKeyword.h"
@@ -158,6 +157,4 @@ private:
 	POINT	m_ptDefaultSize;
 	RECT	m_rcItems[11];
 };
-
-#endif	//SAKURA_CDLGTAGJUMPLIST_H_
 

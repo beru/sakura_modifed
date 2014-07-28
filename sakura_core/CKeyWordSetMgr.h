@@ -34,8 +34,7 @@
 		   distribution.
 */
 
-#ifndef _CKEYWORDSETMGR_H_
-#define _CKEYWORDSETMGR_H_
+#pragma once
 
 #include <Windows.h>
 #include "_main/global.h"// 2002/2/10 aroka
@@ -162,12 +161,4 @@ protected:
 	//bool KeyWordAlloc( int );
 	bool KeyWordReAlloc( int, int );
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CKEYWORDSETMGR_H_ */
-
-
-
 

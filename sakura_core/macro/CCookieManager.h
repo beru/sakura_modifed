@@ -26,8 +26,7 @@
 		   distribution.
 */
 
-#ifndef SAKURA_CCOOKIE_MANAGER_H_
-#define SAKURA_CCOOKIE_MANAGER_H_
+#pragma once
 
 #include <map>
 #include <string>
@@ -54,4 +53,3 @@ private:
 	std::map<wstring, wstring> m_cookieDocument;
 };
 
-#endif

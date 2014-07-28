@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CHARCODE_5A887F7C_8E08_4940_AF65_BD6850C3A7B5_H_
-#define SAKURA_CHARCODE_5A887F7C_8E08_4940_AF65_BD6850C3A7B5_H_
+#pragma once
 
 //2007.09.13 kobake 作成
 #include "parse/CWordParse.h"
@@ -331,5 +330,3 @@ enum ECharWidthCacheMode {
 void SelectCharWidthCache( ECharWidthFontMode fMode, ECharWidthCacheMode cMode );  //<! モードを変更したいとき
 void InitCharWidthCache( const LOGFONT &lf, ECharWidthFontMode fMode=CWM_FONT_EDIT ); //<! フォントを変更したとき
 
-#endif /* SAKURA_CHARCODE_5A887F7C_8E08_4940_AF65_BD6850C3A7B5_H_ */
-/*[EOF]*/

@@ -29,8 +29,7 @@
 		   distribution.
 */
 
-#ifndef __CMARKMGR_H_
-#define __CMARKMGR_H_
+#pragma once
 
 #include <vector>
 
@@ -137,8 +136,4 @@ public:
 	virtual void Add(const CMark& m);	//!<	—v‘f‚Ì’Ç‰Á
 	virtual void Expire(void);	//!<	—v‘f”‚Ì’²®
 };
-
-#endif
-
-
 

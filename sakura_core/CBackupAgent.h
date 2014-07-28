@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CBACKUPAGENT_54267C70_F49D_418B_B1EA_0F98DD5DE4B19_H_
-#define SAKURA_CBACKUPAGENT_54267C70_F49D_418B_B1EA_0F98DD5DE4B19_H_
+#pragma once
 
 #include "doc/CDocListener.h"
 
@@ -35,5 +34,3 @@ protected:
 	bool FormatBackUpPath( TCHAR*, size_t, const TCHAR* );	//!< バックアップパスの作成 2005.11.21 aroka
 };
 
-#endif /* SAKURA_CBACKUPAGENT_54267C70_F49D_418B_B1EA_0F98DD5DE4B19_H_ */
-/*[EOF]*/

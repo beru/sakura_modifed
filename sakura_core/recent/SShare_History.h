@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_SSHARE_HISTORY_9F7E6200_FEE2_4CAC_A5D3_32EEC4130CFC_H_
-#define SAKURA_SSHARE_HISTORY_9F7E6200_FEE2_4CAC_A5D3_32EEC4130CFC_H_
+#pragma once
 
 #include "config/maxdata.h"
 
@@ -47,5 +46,3 @@ struct SShare_History{
 	StaticVector< StaticString<TCHAR, _MAX_PATH>, MAX_CMDARR > m_aCurDirs;		// カレントディレクトリ履歴
 };
 
-#endif /* SAKURA_SSHARE_HISTORY_9F7E6200_FEE2_4CAC_A5D3_32EEC4130CFC_H_ */
-/*[EOF]*/

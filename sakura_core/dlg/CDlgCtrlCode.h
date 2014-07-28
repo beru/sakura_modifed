@@ -30,8 +30,7 @@
 
 class CDlgCtrlCode;
 
-#ifndef _CDLGCTRLCODE_H_
-#define _CDLGCTRLCODE_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 /*!
@@ -71,10 +70,5 @@ private:
 	*/
 	wchar_t		m_nCode;	// ÉRÅ[Éh
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGCTRLCODE_H_ */
 
 

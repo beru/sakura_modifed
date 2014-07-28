@@ -27,8 +27,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_DESIGN_TEMPLATE_8F7F7545_B66E_47C3_AE3A_0E406B3A0B0B_H_
-#define SAKURA_DESIGN_TEMPLATE_8F7F7545_B66E_47C3_AE3A_0E406B3A0B0B_H_
+#pragma once
 
 /*!
 	SingletonÉpÉ^Å[Éì
@@ -108,5 +107,3 @@ private:
 };
 template <class T> std::vector<T*> TInstanceHolder<T>::gm_table;
 
-#endif /* SAKURA_DESIGN_TEMPLATE_8F7F7545_B66E_47C3_AE3A_0E406B3A0B0B_H_ */
-/*[EOF]*/

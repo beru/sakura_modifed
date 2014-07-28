@@ -21,8 +21,8 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_WINDOW_E7B899CD_2106_4A3B_BBA1_EB29FD9640F39_H_
-#define SAKURA_WINDOW_E7B899CD_2106_4A3B_BBA1_EB29FD9640F39_H_
+
+#pragma once
 
 /*!
 	@brief 画面 DPI スケーリング
@@ -166,6 +166,3 @@ private:
 	HWND  m_hwnd;
 };
 
-
-#endif /* SAKURA_WINDOW_E7B899CD_2106_4A3B_BBA1_EB29FD9640F39_H_ */
-/*[EOF]*/

@@ -24,8 +24,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_PLUGIN_H_1CD5F14E_1BC6_4F74_8891_96D238C3230B
-#define SAKURA_PLUGIN_H_1CD5F14E_1BC6_4F74_8891_96D238C3230B
+#pragma once
 
 #include <Windows.h>
 #include <OleAuto.h>
@@ -109,4 +108,3 @@ typedef void (WINAPI *DllPlugHandler)(SAKURA_DLL_PLUGIN_OBJ* obj);
 }
 #endif
 
-#endif	//SAKURA_PLUGIN_H_1CD5F14E_1BC6_4F74_8891_96D238C3230B

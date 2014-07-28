@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCONVERT_TOLOWER_B0D85F8A_5D8F_44CC_A027_5A452BE56109_H_
-#define SAKURA_CCONVERT_TOLOWER_B0D85F8A_5D8F_44CC_A027_5A452BE56109_H_
+#pragma once
 
 #include "CConvert.h"
 
@@ -31,5 +30,3 @@ public:
 	bool DoConvert(CNativeW* pcData);
 };
 
-#endif /* SAKURA_CCONVERT_TOLOWER_B0D85F8A_5D8F_44CC_A027_5A452BE56109_H_ */
-/*[EOF]*/

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_STRING_EX_29EB1DD7_7259_4D6C_A651_B9174E5C3D3C9_H_
-#define SAKURA_STRING_EX_29EB1DD7_7259_4D6C_A651_B9174E5C3D3C9_H_
+#pragma once
 
 // 2007.10.19 kobake
 // string.h Ç≈íËã`Ç≥ÇÍÇƒÇ¢ÇÈä÷êîÇägí£ÇµÇΩÇÊÇ§Ç»ÉÇÉmíB
@@ -327,5 +326,3 @@ inline int wcsncmp_auto(const wchar_t* strData1, const wchar_t* szData2)
 	#define _tcsncmp_literal strncmp_literal
 #endif
 
-#endif /* SAKURA_STRING_EX_29EB1DD7_7259_4D6C_A651_B9174E5C3D3C9_H_ */
-/*[EOF]*/

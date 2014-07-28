@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CGREPAGENT_89E8C8B7_433B_47F3_A389_75C91E00A4BA9_H_
-#define SAKURA_CGREPAGENT_89E8C8B7_433B_47F3_A389_75C91E00A4BA9_H_
+#pragma once
 
 #include "doc/CDocListener.h"
 class CDlgCancel;
@@ -146,5 +145,3 @@ public: //$$ ‰¼
 	bool	m_bGrepRunning;		//!< Grepˆ—’†
 };
 
-#endif /* SAKURA_CGREPAGENT_89E8C8B7_433B_47F3_A389_75C91E00A4BA9_H_ */
-/*[EOF]*/

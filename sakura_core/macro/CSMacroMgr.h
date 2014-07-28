@@ -31,8 +31,7 @@
 		   distribution.
 */
 
-#ifndef _CSMACROMGR_H_
-#define _CSMACROMGR_H_
+#pragma once
 
 #include <Windows.h>
 #include <WTypes.h> //VARTYPE
@@ -179,11 +178,4 @@ public:
 	static MacroFuncInfo	m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
 	static MacroFuncInfo	m_MacroFuncInfoArr[];		// 関数情報(戻り値あり)
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CSMacroMGR_H_ */
-
-
 

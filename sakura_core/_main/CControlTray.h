@@ -22,8 +22,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CCONTROLTRAY_H_
-#define _CCONTROLTRAY_H_
+#pragma once
 
 #include <Windows.h>
 #include "uiparts/CMenuDrawer.h"
@@ -130,10 +129,4 @@ private:
 
 	TCHAR			m_szLanguageDll[MAX_PATH];
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CCONTROLTRAY_H_ */
-
-
 

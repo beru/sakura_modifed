@@ -13,8 +13,7 @@
 
 class CSplitBoxWnd;
 
-#ifndef _CSPLITBOXWND_H_
-#define _CSPLITBOXWND_H_
+#pragma once
 
 #include "CWnd.h"
 
@@ -59,10 +58,4 @@ protected:
 
 
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CSPLITBOXWND_H_ */
-
-
 

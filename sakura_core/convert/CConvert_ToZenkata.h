@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCONVERT_TOZENKATA_F23E454A_B7B2_4655_910D_EF97F0A98E6A_H_
-#define SAKURA_CCONVERT_TOZENKATA_F23E454A_B7B2_4655_910D_EF97F0A98E6A_H_
+#pragma once
 
 #include "CConvert.h"
 
@@ -33,5 +32,3 @@ public:
 	bool DoConvert(CNativeW* pcData);
 };
 
-#endif /* SAKURA_CCONVERT_TOZENKATA_F23E454A_B7B2_4655_910D_EF97F0A98E6A_H_ */
-/*[EOF]*/

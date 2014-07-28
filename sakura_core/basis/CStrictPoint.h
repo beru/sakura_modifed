@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CSTRICTPOINT_56029CB9_EAD4_489E_9300_5990D582337F_H_
-#define SAKURA_CSTRICTPOINT_56029CB9_EAD4_489E_9300_5990D582337F_H_
+#pragma once
 
 //単位が明示的に区別されたポイント型。※POINTは継承しないことにした
 /*
@@ -112,5 +111,3 @@ public:
 	}
 };
 
-#endif /* SAKURA_CSTRICTPOINT_56029CB9_EAD4_489E_9300_5990D582337F_H_ */
-/*[EOF]*/

@@ -24,8 +24,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CTAGJUMPMANAGER_A826CC13_50FF_44A9_813D_CC5B918410A7_H_
-#define SAKURA_CTAGJUMPMANAGER_A826CC13_50FF_44A9_813D_CC5B918410A7_H_
+#pragma once
 
 // óvêÊçsíËã`
 // #define DLLSHAREDATA.h
@@ -72,5 +71,3 @@ private:
 	DLLSHAREDATA* m_pShareData;
 };
 
-#endif /* SAKURA_CTAGJUMPMANAGER_A826CC13_50FF_44A9_813D_CC5B918410A7_H_ */
-/*[EOF]*/

@@ -13,8 +13,7 @@
 
 class COpeBlk;
 
-#ifndef _COPEBLK_H_
-#define _COPEBLK_H_
+#pragma once
 
 #include "COpe.h"
 #include <vector>
@@ -58,11 +57,5 @@ private:
 	//　COpeBlkをnewしたときにAddRef()するのが作法だが、しなくても使える。
 	int m_refCount;
 };
-
-
-
-//////////////////////////////////////////////////////////////////////12
-#endif /* _COPEBLK_H_ */
-
 
 

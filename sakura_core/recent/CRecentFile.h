@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CRECENTFILE_EE3F27C6_A91E_426D_8EB9_2E35D191F4199_H_
-#define SAKURA_CRECENTFILE_EE3F27C6_A91E_426D_8EB9_2E35D191F4199_H_
+#pragma once
 
 #include "CRecentImp.h"
 #include "EditInfo.h" //EditInfo
@@ -43,5 +42,3 @@ public:
 	int FindItemByPath(const TCHAR* pszPath) const;
 };
 
-#endif /* SAKURA_CRECENTFILE_EE3F27C6_A91E_426D_8EB9_2E35D191F4199_H_ */
-/*[EOF]*/

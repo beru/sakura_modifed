@@ -16,8 +16,7 @@
 
 class CTipWnd;
 
-#ifndef _CTIPWND_H_
-#define _CTIPWND_H_
+#pragma once
 
 #include "CWnd.h"
 #include "mem/CMemory.h"
@@ -74,11 +73,5 @@ protected:
 	/* 仮想関数 メッセージ処理 詳しくは実装を参照 */
 	LRESULT OnPaint( HWND, UINT, WPARAM, LPARAM );/* 描画処理 */
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CTIPWND_H_ */
-
 
 

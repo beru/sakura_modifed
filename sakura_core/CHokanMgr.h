@@ -12,8 +12,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CHOKANMGR_H_
-#define _CHOKANMGR_H_
+#pragma once
 
 #include <Windows.h>
 #include "dlg/CDialog.h"
@@ -94,11 +93,4 @@ protected:
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CHOKANMGR_H_ */
-
-
 

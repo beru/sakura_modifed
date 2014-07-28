@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CBINARYSTREAM_F33600DB_8369_4FB2_B7B1_8B59249B7216_H_
-#define SAKURA_CBINARYSTREAM_F33600DB_8369_4FB2_B7B1_8B59249B7216_H_
+#pragma once
 
 #include "CStream.h"
 
@@ -43,5 +42,3 @@ public:
 	CBinaryOutputStream(LPCTSTR tszFilePath, bool bExceptionMode = false);
 };
 
-#endif /* SAKURA_CBINARYSTREAM_F33600DB_8369_4FB2_B7B1_8B59249B7216_H_ */
-/*[EOF]*/

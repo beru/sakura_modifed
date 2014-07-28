@@ -28,8 +28,7 @@
 		   distribution.
 */
 
-#ifndef SAKURA_HANDCURSOR_A545F10D_9F24_4AB5_889F_13732FC0150B_H_
-#define SAKURA_HANDCURSOR_A545F10D_9F24_4AB5_889F_13732FC0150B_H_
+#pragma once
 
 #include "_os/COsVersionInfo.h"
 #include "sakura_rc.h"
@@ -51,4 +50,3 @@ inline void SetHandCursor ()
 	}
 }
 
-#endif	// SAKURA_HANDCURSOR_A545F10D_9F24_4AB5_889F_13732FC0150B_H_

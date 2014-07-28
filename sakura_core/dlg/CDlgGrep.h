@@ -15,8 +15,7 @@
 
 class CDlgGrep;
 
-#ifndef _CDLGGREP_H_
-#define _CDLGGREP_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 #include "recent/CRecent.h"
@@ -76,11 +75,4 @@ protected:
 	int GetData( void );	/* ダイアログデータの取得 */
 	void SetDataFromThisText( bool );	/* 現在編集中ファイルから検索チェックでの設定 */
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGGREP_H_ */
-
-
 

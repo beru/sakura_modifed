@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CMYSTRING_43EB58CF_8782_43AC_AC82_A22DFC99E063_H_
-#define SAKURA_CMYSTRING_43EB58CF_8782_43AC_AC82_A22DFC99E063_H_
+#pragma once
 
 #include <string>
 #include "util/string_ex.h"
@@ -158,5 +157,3 @@ private:
 	TCHAR*	m_pHead;
 };
 
-#endif /* SAKURA_CMYSTRING_43EB58CF_8782_43AC_AC82_A22DFC99E063_H_ */
-/*[EOF]*/

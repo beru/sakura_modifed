@@ -13,10 +13,7 @@
 
 class COpe;
 
-#ifndef SAKURA_COPE_H_
-#define SAKURA_COPE_H_
-
-
+#pragma once
 
 // アンドゥバッファ用 操作コード
 enum EOpeCode {
@@ -121,17 +118,4 @@ public:
 		m_ptCaretPos_PHY_After = ptAfter;
 	}
 };
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_COPE_H_ */
-
-
 

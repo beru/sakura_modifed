@@ -11,8 +11,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-#ifndef _CNORMALPROCESS_H_
-#define _CNORMALPROCESS_H_
+#pragma once
 
 #include "global.h"
 #include "CProcess.h"
@@ -48,9 +47,4 @@ protected:
 private:
 	CEditApp*	m_pcEditApp;	//2007.10.23 kobake
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CNORMALPROCESS_H_ */
-
 

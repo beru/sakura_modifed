@@ -15,9 +15,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-
-#ifndef _CMENUDRAWER_H_
-#define _CMENUDRAWER_H_
+#pragma once
 
 #include "Funccode_enum.h"
 
@@ -144,11 +142,4 @@ protected:
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 	void SetTBBUTTONVal( TBBUTTON*, int, int, BYTE, BYTE, DWORD_PTR, INT_PTR ) const;	/* TBBUTTON構造体にデータをセット */
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CMENUDRAWER_H_ */
-
-
 

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_STDAPI_85471C2C_6AEE_410D_BD09_A59056A5BA68_H_
-#define SAKURA_STDAPI_85471C2C_6AEE_410D_BD09_A59056A5BA68_H_
+#pragma once
 
 #include <ImageHlp.h> //MakeSureDirectoryPathExists
 
@@ -288,5 +287,3 @@ using namespace ApiWrap;
 #define COLOR_MENUBAR 30
 #endif
 
-#endif /* SAKURA_STDAPI_85471C2C_6AEE_410D_BD09_A59056A5BA68_H_ */
-/*[EOF]*/

@@ -23,8 +23,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CDIFFMANAGER_A4D99FE4_A4AB_468A_96FC_00858B04DEA1_H_
-#define SAKURA_CDIFFMANAGER_A4D99FE4_A4AB_468A_96FC_00858B04DEA1_H_
+#pragma once
 
 #include "view/colors/EColorIndexType.h"
 #include "util/design_template.h" //TSingleton
@@ -96,5 +95,3 @@ private:
 	CDocLineMgr* m_pcDocLineMgr;
 };
 
-#endif /* SAKURA_CDIFFMANAGER_A4D99FE4_A4AB_468A_96FC_00858B04DEA1_H_ */
-/*[EOF]*/

@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CBOOKMARKMANAGER_0BD65312_87D5_4C0F_AA25_7F077D00E8DC_H_
-#define SAKURA_CBOOKMARKMANAGER_0BD65312_87D5_4C0F_AA25_7F077D00E8DC_H_
+#pragma once
 
 #include "_main/global.h" // ESearchDirection, SSearchOption
 
@@ -75,5 +74,3 @@ private:
 	CDocLineMgr* m_pcDocLineMgr;
 };
 
-#endif /* SAKURA_CBOOKMARKMANAGER_0BD65312_87D5_4C0F_AA25_7F077D00E8DC_H_ */
-/*[EOF]*/

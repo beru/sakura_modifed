@@ -13,8 +13,7 @@
 
 class CDlgCompare;
 
-#ifndef _CDLGCOMPARE_H_
-#define _CDLGCOMPARE_H_
+#pragma once
 
 #include "dlg/CDialog.h"
 /*!
@@ -59,10 +58,5 @@ private:
 	POINT			m_ptDefaultSize;
 	RECT			m_rcItems[6];
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CDLGCOMPARE_H_ */
 
 

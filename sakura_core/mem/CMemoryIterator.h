@@ -12,8 +12,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
-#ifndef _CMEMORYITERATOR_H_
-#define _CMEMORYITERATOR_H_
+#pragma once
 
 //	sakura
 #include "_main/global.h"
@@ -124,10 +123,4 @@ private:
 	CLayoutInt	m_nColumn_Delta; //columnëùï™
 
 };
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* _CBLOCKCOMMENT_H_ */
-
-
 

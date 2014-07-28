@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_CCOLOR_REGEXKEYWORD_70C5BFF3_FC04_450E_BC07_F5E777B205C29_H_
-#define SAKURA_CCOLOR_REGEXKEYWORD_70C5BFF3_FC04_450E_BC07_F5E777B205C29_H_
+#pragma once
 
 #include "view/colors/CColorStrategy.h"
 
@@ -42,5 +41,3 @@ private:
 	EColorIndexType m_nCOMMENTMODE;
 };
 
-#endif /* SAKURA_CCOLOR_REGEXKEYWORD_70C5BFF3_FC04_450E_BC07_F5E777B205C29_H_ */
-/*[EOF]*/

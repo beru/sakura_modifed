@@ -30,8 +30,7 @@
 		   distribution.
 */
 
-#ifndef _SAKURA_HTMLHELP_H_
-#define _SAKURA_HTMLHELP_H_
+#pragma once
 
 #include "CDllHandler.h"
 
@@ -54,8 +53,4 @@ protected:
 	virtual bool InitDllImp();
 	virtual LPCTSTR GetDllNameImp(int nIndex);
 };
-
-#endif
-
-
 

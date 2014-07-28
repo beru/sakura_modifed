@@ -21,8 +21,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
-#ifndef SAKURA_TCHAR_RECEIVE_173C52CE_CAC9_4ED5_8399_EFEF8CC7DBD2_H_
-#define SAKURA_TCHAR_RECEIVE_173C52CE_CAC9_4ED5_8399_EFEF8CC7DBD2_H_
+#pragma once
 
 /*!
 	実際のデータ種に関わらず、TCHAR[]型の受け取りバッファを提供するクラス。
@@ -64,5 +63,3 @@ private:
 	TCHAR*				m_pBuff;
 };
 
-#endif /* SAKURA_TCHAR_RECEIVE_173C52CE_CAC9_4ED5_8399_EFEF8CC7DBD2_H_ */
-/*[EOF]*/
