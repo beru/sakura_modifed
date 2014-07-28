@@ -272,15 +272,15 @@ int CEditView::HokanSearchByFile(
 			word = pszLine + nWordBegin;
 
 			// キーと比較する
-			if( bHokanLoHiCase ){
+			if (bHokanLoHiCase) {
 				nRet = auto_memicmp( pszKey, word, nKeyLen );
-			}else{
+			}else {
 				nRet = auto_memcmp( pszKey, word, nKeyLen );
 			}
-			if( nRet!=0 )continue;
+			if (nRet != 0) continue;
 
 			// カーソル位置の単語は候補からはずす
-			if( ptCur.y == i && nWordBegin <= ptCur.x && ptCur.x <= nWordBegin + nWordLen ){	// 2010.02.20 syat 修正// 2008.11.09 syat 修正
+			if (ptCur.y == i && nWordBegin <= ptCur.x && ptCur.x <= nWordBegin + nWordLen) {	// 2010.02.20 syat 修正// 2008.11.09 syat 修正
 				continue;
 			}
 
