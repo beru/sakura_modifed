@@ -35,9 +35,9 @@
 #include <array>
 
 LVCOLUMN_LAYOUT CJumpListDialog::layout[] = {
-	{ LVCFMT_LEFT,   170, IDS_STR_HEADER11 },	//L"キーワード"
-	{ LVCFMT_RIGHT,   60, IDS_STR_HEADER12 },	//L"行番号"
-	{ LVCFMT_LEFT,   500, IDS_STR_HEADER13 }	//L"ファイル名"
+	{ LVCFMT_LEFT,   330, IDS_STR_HEADER13 },	//L"ファイル名"
+	{ LVCFMT_RIGHT,   50, IDS_STR_HEADER12 },	//L"行番号"
+	{ LVCFMT_LEFT,   330, IDS_STR_HEADER11 },	//L"行"
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ INT_PTR CJumpListDialog::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, L
 	case WM_GETMINMAXINFO:
 		{
 			MINMAXINFO* pInfo = (MINMAXINFO*) lParam;
-			pInfo->ptMinTrackSize = {787, 480};
+			pInfo->ptMinTrackSize = m_initialSize;
 		}
 		return 0;
 		break;
@@ -113,6 +113,11 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	BOOL bResult = CPluginDialog::OnInitDialog(hwndDlg, wParam, lParam);
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
+
+	RECT rect;
+	GetWindowRect(m_hWnd, &rect);
+	m_initialSize.x = rect.right - rect.left;
+	m_initialSize.y = rect.bottom- rect.top;
 
 //	LONG_PTR exStyle = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
 //	::SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, exStyle | WS_EX_COMPOSITED);
@@ -160,6 +165,16 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	return bResult;
 }
 
+static
+void tagJump(const CGlobalData& info, const WideString& keyword)
+{
+	auto editor = thePluginService.Editor;
+	const wchar_t* begin = &info.m_strLine[0];
+	const wchar_t* pos = wcsstr(begin, keyword.c_str());
+	editor.S_TagJumpEx(info.m_strFile, info.m_lineNum, pos-begin+1, 0);
+
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 BOOL CJumpListDialog::OnBnClicked(int wID)
 {
@@ -176,7 +191,7 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 					if (nIndex >= 0) {
 						CGlobalData info;
 						GetItem(hList, nIndex, &info);
-						thePluginService.Editor.S_TagJumpEx(info.m_strFile, info.m_nLine, 0, 0);
+						tagJump(info, m_strKeyword);
 						RemoveAllGlobalDataList(m_GlobalDataList);
 						CloseDialog(IDOK);
 					}
@@ -294,27 +309,7 @@ DWORD CJumpListDialog::ReadGlobalFile(
 		}
 	}
 
-#ifndef __MINGW32__
-	std::stable_sort(m_GlobalDataList.begin(), m_GlobalDataList.end(), Ascending);
-#endif
-
 	return dwCount;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-bool CJumpListDialog::Ascending(const CGlobalData* x, const CGlobalData* y)
-{
-	int result = wcscmp(x->m_strKeyword.c_str(), y->m_strKeyword.c_str());
-	if (result < 0) return true;
-	if (result == 0) {
-		result = x->m_nLine - y->m_nLine;
-		if (result < 0) return true;
-		if (result == 0) {
-			result = wcscmp(x->m_strFile.c_str(), y->m_strFile.c_str());
-			if (result < 0) return true;
-		}
-	}
-	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -323,14 +318,13 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 	DWORD dwCount = 0;
 
 	wchar_t* lpszLine     = new wchar_t[MAX_PATH_LENGTH];
-	wchar_t* lpszBuffer   = new wchar_t[MAX_PATH_LENGTH];
-	wchar_t* lpszKey      = new wchar_t[MAX_PATH_LENGTH];
-	wchar_t* lpszFile     = new wchar_t[MAX_PATH_LENGTH];
 
-	int nLine;
+	int lineNum;
 
 	char* line;
 	char* lf = buff - 2;
+
+//	MessageBoxA(0, buff, 0, 0);
 
 	while (1) {
 		line = lf + 2;
@@ -341,15 +335,15 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 		if (line[0] == L'!') {
 			continue;
 		}
-		lpszKey[0] = 0;
-		lpszFile[0] = 0;
-		nLine = 0;
-
 		MultiByteToWideChar(CP_OEMCP, MB_PRECOMPOSED, line, -1, lpszLine, MAX_PATH_LENGTH);
-		if (swscanf(lpszLine, TAG_FORMAT, lpszKey, lpszFile, &nLine) < 3) {
-			continue;
-		}
-		CGlobalData* info = new CGlobalData(lpszKey, lpszFile, nLine);
+		wchar_t* found0 = wcschr(lpszLine, L':');
+		wchar_t* found1 = wcschr(found0+1, L':');
+		wchar_t* found2 = wcschr(found1+1, L':');
+		wchar_t* cr = wcschr(found2+1, L'\r');
+		*found1 = 0;
+		*found2 = 0;
+		*cr = 0;
+		CGlobalData* info = new CGlobalData(lpszLine, _wtoi(found1+1), found2+1);
 		m_GlobalDataList.push_back(info);
 		dwCount++;
 		if ((dwCount + dwPrevCount) >= m_lpGlobalOption->m_dwMaxFind) {
@@ -357,9 +351,6 @@ DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 		}
 	}
 	delete[] lpszLine;
-	delete[] lpszBuffer;
-	delete[] lpszKey;
-	delete[] lpszFile;
 
 	return dwCount;
 }
@@ -371,12 +362,12 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 	lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 	lvi.iItem    = nIndex;
 	lvi.iSubItem = 0;
-	lvi.pszText  = (LPWSTR)info->m_strKeyword.c_str();
+	lvi.pszText  = (LPWSTR)info->m_strFile.c_str();
 	lvi.lParam   = (LPARAM)info;
 	int nResult = ListView_InsertItem(hList, &lvi);
-	WideString strLine = thePluginService.GetDwordToString(info->m_nLine);
+	WideString strLine = thePluginService.GetDwordToString(info->m_lineNum);
 	ListView_SetItemText(hList, nResult, 1, (LPWSTR)strLine.c_str());
-	ListView_SetItemText(hList, nResult, 2, (LPWSTR)info->m_strFile.c_str());
+	ListView_SetItemText(hList, nResult, 2, (LPWSTR)info->m_strLine.c_str());
 
 	// タグジャンプ時に表示するリスト、起動時にフォーカスが当たっているキーワードに該当する行を選択する
 	
@@ -397,7 +388,7 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 			if (m_fileInfo.dwVolumeSerialNumber == fileInfo.dwVolumeSerialNumber
 				&& m_fileInfo.nFileIndexLow == fileInfo.nFileIndexLow
 				&& m_fileInfo.nFileIndexHigh == fileInfo.nFileIndexHigh
-				&& m_lineNo == info->m_nLine
+				&& m_lineNo == info->m_lineNum
 			) {
 				ListView_SetItemState(hList, nIndex,  LVIS_FOCUSED | LVIS_SELECTED,  LVIS_FOCUSED | LVIS_SELECTED);
 			}
@@ -413,11 +404,11 @@ void CJumpListDialog::GetItem(HWND hList, int nIndex, CGlobalData* info)
 	wchar_t* lpszBuffer = new wchar_t[MAX_PATH_LENGTH];
 	if (lpszBuffer != NULL) {
 		ListView_GetItemText(hList, nIndex, 0, lpszBuffer, MAX_PATH_LENGTH);
-		info->m_strKeyword = lpszBuffer;
-		ListView_GetItemText(hList, nIndex, 1, lpszBuffer, MAX_PATH_LENGTH);
-		info->m_nLine = _wtoi(lpszBuffer);
-		ListView_GetItemText(hList, nIndex, 2, lpszBuffer, MAX_PATH_LENGTH);
 		info->m_strFile = lpszBuffer;
+		ListView_GetItemText(hList, nIndex, 1, lpszBuffer, MAX_PATH_LENGTH);
+		info->m_lineNum = _wtoi(lpszBuffer);
+		ListView_GetItemText(hList, nIndex, 2, lpszBuffer, MAX_PATH_LENGTH);
+		info->m_strLine = lpszBuffer;
 		delete[] lpszBuffer;
 	}
 }
@@ -500,7 +491,7 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 			HWND hList = pNM->hdr.hwndFrom;
 			CGlobalData info;
 			GetItem(hList, pNM->iItem, &info);
-			thePluginService.Editor.S_TagJumpEx(info.m_strFile, info.m_nLine, 0, 0);
+			tagJump(info, m_strKeyword);
 			RemoveAllGlobalDataList(m_GlobalDataList);
 			CloseDialog(IDOK);
 			m_bOperation = FALSE;
@@ -596,7 +587,7 @@ BOOL GetCUIAppMsg(
 */
 bool CJumpListDialog::OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nBytes)
 {
-	WideString strOption = L"-xat";
+	WideString strOption = L"--result=grep -a";
 	if (m_bIgnoreCase) strOption += L"i";
 	if (m_bSymbol) strOption += L"s";
 	if (m_bRef) strOption += L"r";

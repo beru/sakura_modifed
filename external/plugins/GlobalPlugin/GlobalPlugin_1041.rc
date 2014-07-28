@@ -110,7 +110,7 @@ FONT 9, "ＭＳ Ｐゴシック"
 LANGUAGE LANG_JAPANESE, SUBLANG_JAPANESE_JAPAN
 STRINGTABLE
 {
-    IDS_STR_HEADER11              "キーワード"
+    IDS_STR_HEADER11              "行"
     IDS_STR_HEADER12              "行番号"
     IDS_STR_HEADER13              "ファイル名"
     IDS_STR_HEADER21              "タグ作成対象フォルダ"

@@ -37,18 +37,18 @@
 class CGlobalData
 {
 public:
-	WideString	m_strKeyword;
 	WideString	m_strFile;
-	int			m_nLine;
+	int			m_lineNum;
+	WideString	m_strLine;
 
 	CGlobalData() {
-		m_nLine = 0;
+		m_lineNum	= 0;
 	}
 
-	CGlobalData(LPCWSTR lpszKeyword, LPCWSTR lpszFile, const int nLine) {
-		m_strKeyword  = lpszKeyword;
-		m_strFile     = lpszFile;
-		m_nLine       = nLine;
+	CGlobalData(LPCWSTR lpszFile, int lineNum, LPCWSTR lpszLine) {
+		m_strFile	= lpszFile;
+		m_lineNum	= lineNum;
+		m_strLine	= lpszLine;
 	}
 };
 
@@ -70,8 +70,12 @@ public:
 	virtual void SetData(void);
 	void SetDataSub();
 	int InsertItem(HWND hList, int nIndex, CGlobalData* info);
+	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, DWORD dwMatchMode, BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
 
-public:
+	BY_HANDLE_FILE_INFORMATION	m_fileInfo;
+	int							m_lineNo;
+
+private:
 	CGlobalOption*				m_lpGlobalOption;
 	std::list<CGlobalInfo*>*	m_lpGlobalInfoList;
 	std::list<CGlobalData*>		m_GlobalDataList;
@@ -85,10 +89,8 @@ public:
 	BOOL						m_bRef;
 
 	ControlResizer				m_ctrlResizer;
-	BY_HANDLE_FILE_INFORMATION	m_fileInfo;
-	int							m_lineNo;
+	POINT						m_initialSize;
 
-	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, DWORD dwMatchMode, BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
 	DWORD ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount);
 	bool OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nBytes);
 
@@ -97,7 +99,6 @@ public:
 	void StopTimer();
 	BOOL OnTimer(WPARAM wParam);
 	void RemoveAllGlobalDataList(std::list<CGlobalData*>& p);
-	static bool Ascending(const CGlobalData* x, const CGlobalData* y);
 };
 
 #endif	// _PLUGIN_CJUMPLISTDIALOG_H__

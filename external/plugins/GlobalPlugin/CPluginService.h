@@ -85,9 +85,6 @@ enum {
 #define PROFILE_DEF_REF					FALSE				//!< ŽQÆ‚ðŒŸõ‚·‚é
 #define PROFILE_DEF_FLAG				TRUE
 
-//#define TAG_FORMAT L"%[^\t\r\n]\t%[^\t\r\n]\t%d;\"\t%[^\t\r\n]\t%[^\t\r\n]"
-#define TAG_FORMAT L"%[^\t\r\n]\t%[^\t\r\n]\t%d"
-
 ///////////////////////////////////////////////////////////////////////////////
 class CGlobalOption
 {
