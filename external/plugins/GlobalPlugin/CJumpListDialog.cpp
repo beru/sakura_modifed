@@ -189,9 +189,8 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 				if (ListView_GetSelectedCount(hList) == 1) {
 					int nIndex = ListView_GetNextItem(hList, -1, LVIS_SELECTED | LVIS_FOCUSED);
 					if (nIndex >= 0) {
-						CGlobalData info;
-						GetItem(hList, nIndex, &info);
-						tagJump(info, m_strKeyword);
+						const CGlobalData* info = GetItem(hList, nIndex);
+						tagJump(*info, m_strKeyword);
 						RemoveAllGlobalDataList(m_GlobalDataList);
 						CloseDialog(IDOK);
 					}
@@ -397,18 +396,12 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CJumpListDialog::GetItem(HWND hList, int nIndex, CGlobalData* info)
+const CGlobalData* CJumpListDialog::GetItem(HWND hList, int nIndex)
 {
-	wchar_t* lpszBuffer = new wchar_t[MAX_PATH_LENGTH];
-	if (lpszBuffer != NULL) {
-		ListView_GetItemText(hList, nIndex, 0, lpszBuffer, MAX_PATH_LENGTH);
-		info->m_strFile = lpszBuffer;
-		ListView_GetItemText(hList, nIndex, 1, lpszBuffer, MAX_PATH_LENGTH);
-		info->m_lineNum = _wtoi(lpszBuffer);
-		ListView_GetItemText(hList, nIndex, 2, lpszBuffer, MAX_PATH_LENGTH);
-		info->m_strLine = lpszBuffer;
-		delete[] lpszBuffer;
-	}
+	LVITEM lvi;
+	lvi.iItem = nIndex;
+	lvi.mask = LVIF_PARAM;
+	return ListView_GetItem(hList, &lvi) ? (const CGlobalData*)lvi.lParam : 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -487,9 +480,8 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 			m_nRetCode = wParam;
 			StopTimer();
 			HWND hList = pNM->hdr.hwndFrom;
-			CGlobalData info;
-			GetItem(hList, pNM->iItem, &info);
-			tagJump(info, m_strKeyword);
+			const CGlobalData* info = GetItem(hList, pNM->iItem);
+			tagJump(*info, m_strKeyword);
 			RemoveAllGlobalDataList(m_GlobalDataList);
 			CloseDialog(IDOK);
 			m_bOperation = FALSE;

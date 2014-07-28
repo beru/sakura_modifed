@@ -94,7 +94,7 @@ private:
 	DWORD ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount);
 	bool OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nBytes);
 
-	void GetItem(HWND hList, int nIndex, CGlobalData* info);
+	const CGlobalData* GetItem(HWND hList, int nIndex);
 	void StartTimer();
 	void StopTimer();
 	BOOL OnTimer(WPARAM wParam);
