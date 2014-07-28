@@ -88,8 +88,8 @@ public:
 	BY_HANDLE_FILE_INFORMATION	m_fileInfo;
 	int							m_lineNo;
 
-	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
-	DWORD ReadGlobalFileOne(LPSTR buff, const DWORD dwPrevCount);
+	DWORD ReadGlobalFile(LPCWSTR lpszKeyword, DWORD dwMatchMode, BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef);
+	DWORD ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount);
 	bool OnExecuteGlobal(CGlobalInfo* info, char* buff, size_t nBytes);
 
 	void GetItem(HWND hList, int nIndex, CGlobalData* info);

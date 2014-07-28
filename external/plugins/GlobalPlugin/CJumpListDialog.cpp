@@ -260,7 +260,13 @@ int CJumpListDialog::GetData()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMode, const BOOL bIgnoreCase, BOOL bSymbol, BOOL bRef)
+DWORD CJumpListDialog::ReadGlobalFile(
+	LPCWSTR lpszKeyword,
+	DWORD dwMatchMode,
+	BOOL bIgnoreCase,
+	BOOL bSymbol,
+	BOOL bRef
+	)
 {
 	m_strKeyword = lpszKeyword;
 	m_dwMatchMode = dwMatchMode;
@@ -273,6 +279,7 @@ DWORD CJumpListDialog::ReadGlobalFile(LPCWSTR lpszKeyword, const DWORD dwMatchMo
 	DWORD dwCount = 0;
 	if (m_strKeyword.length() != 0) {
 		static const size_t nBytes = 1024 * 104;
+		// assume GNU GLOBAL outputs multibyte characters to console (not UTF-16)
 		std::vector<char> buff(nBytes);
 		for (auto it = m_lpGlobalInfoList->begin(); it != m_lpGlobalInfoList->end(); ++it) {
 			CGlobalInfo* info = *it;
@@ -311,7 +318,7 @@ bool CJumpListDialog::Ascending(const CGlobalData* x, const CGlobalData* y)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, const DWORD dwPrevCount)
+DWORD CJumpListDialog::ReadGlobalFileOne(LPSTR buff, DWORD dwPrevCount)
 {
 	DWORD dwCount = 0;
 
@@ -375,7 +382,15 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CGlobalData* info)
 	
 	// ƒtƒ@ƒCƒ‹“¯ˆê”»’è
 	// http://stackoverflow.com/questions/562701/best-way-to-determine-if-two-path-reference-to-same-file-in-c-c
-	HANDLE hFile = ::CreateFile(info->m_strFile.c_str(), 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = ::CreateFile(
+		info->m_strFile.c_str(),
+		0,
+		FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
+		0,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		0
+	);
 	if (hFile != INVALID_HANDLE_VALUE) {
 		BY_HANDLE_FILE_INFORMATION fileInfo;
 		if (::GetFileInformationByHandle(hFile, &fileInfo)) {
@@ -496,7 +511,15 @@ BOOL CJumpListDialog::OnNotify(WPARAM wParam, LPARAM lParam)
 }
 
 // http://www.usamimi.info/~hellfather/win32api/API_CreatePipe.xml
-BOOL GetCUIAppMsg( LPWSTR cmdline, LPCWSTR szEnvironment, char* buf, DWORD size, BOOL stdOut, BOOL stdErr, DWORD timeout )
+BOOL GetCUIAppMsg(
+	LPWSTR cmdline,
+	LPCWSTR szEnvironment,
+	char* buf,
+	DWORD size,
+	BOOL stdOut,
+	BOOL stdErr,
+	DWORD timeout
+	)
 {
 	HANDLE				read,	write;
  	SECURITY_ATTRIBUTES	sa;
@@ -509,40 +532,50 @@ BOOL GetCUIAppMsg( LPWSTR cmdline, LPCWSTR szEnvironment, char* buf, DWORD size,
 	sa.lpSecurityDescriptor	=	0;
 	sa.bInheritHandle		=	TRUE;
 
-	if( !CreatePipe( &read, &write, &sa, 0 ) ) return FALSE;
+	if (!CreatePipe(&read, &write, &sa, 0)) return FALSE;
 
-	memset( &si, 0, sizeof(si) );
+	memset(&si, 0, sizeof(si));
 	si.cb			=	sizeof(si);
 	si.dwFlags		=	STARTF_USESTDHANDLES|STARTF_USESHOWWINDOW ;
 	si.wShowWindow	= 	SW_HIDE;
-	if( stdOut ) si.hStdOutput	=	write;
-	if( stdErr ) si.hStdError	=	write;
+	if (stdOut) si.hStdOutput	=	write;
+	if (stdErr) si.hStdError	=	write;
 
 	buf[0] = 0;
 
 	do {
-		if (!CreateProcess( NULL, cmdline, NULL, NULL, TRUE, CREATE_NEW_CONSOLE|CREATE_UNICODE_ENVIRONMENT, (LPVOID)szEnvironment, NULL, &si, &pi)) {
+		if (!CreateProcess(
+			NULL,
+			cmdline,
+			NULL,
+			NULL,
+			TRUE,
+			CREATE_NEW_CONSOLE|CREATE_UNICODE_ENVIRONMENT,
+			(LPVOID)szEnvironment,
+			NULL,
+			&si,
+			&pi
+		)) {
 			break;
 		}
-//		if( WaitForInputIdle( pi.hProcess, timeout ) != 0 ) break;
-		if( WaitForSingleObject( pi.hProcess, timeout ) != WAIT_OBJECT_0 ) break;
+//		if (WaitForInputIdle(pi.hProcess, timeout) != 0) break;
+		if (WaitForSingleObject(pi.hProcess, timeout) != WAIT_OBJECT_0) break;
 
-		CloseHandle( pi.hThread );
-		CloseHandle( pi.hProcess );
+		CloseHandle(pi.hThread);
+		CloseHandle(pi.hProcess);
 
-		if( !PeekNamedPipe( read, NULL, 0, NULL, &len, NULL ) ) break;
+		if (!PeekNamedPipe(read, NULL, 0, NULL, &len, NULL)) break;
 
-		memset( buf, '\0', size );
+		memset(buf, '\0', size);
 
-		if( len > 0 && !ReadFile( read, buf, len, &len, NULL ) ) break;
+		if (len > 0 && !ReadFile(read, buf, len, &len, NULL)) break;
 		buf[len] = 0;
 
 		isOK = TRUE;
-	}
-	while(0);
+	}while (0);
 
-	CloseHandle( read );
-	CloseHandle( write );
+	CloseHandle(read);
+	CloseHandle(write);
 
 	return isOK;
 }
