@@ -68,7 +68,7 @@ namespace ApiWrap
 		const int*		lpDx
 	)
 	{
-		BOOL ret=::ExtTextOut(hdc,x,y,fuOptions,lprc,lpwString,cbCount,lpDx);
+		BOOL ret = ::ExtTextOut(hdc,x,y,fuOptions,lprc,lpwString,cbCount,lpDx);
 		DEBUG_SETPIXEL(hdc);
 		return ret;
 	}
@@ -94,7 +94,7 @@ namespace ApiWrap
 		int		cbString
 	)
 	{
-		BOOL ret=::TextOut(hdc,nXStart,nYStart,lpwString,cbString);
+		BOOL ret = ::TextOut(hdc,nXStart,nYStart,lpwString,cbString);
 		DEBUG_SETPIXEL(hdc);
 		return ret;
 	}
@@ -177,19 +177,19 @@ namespace ApiWrap
 	//! SHIFT‚ð‰Ÿ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	inline bool GetKeyState_Shift()
 	{
-		return (::GetKeyState(VK_SHIFT)&0x8000)!=0;
+		return (::GetKeyState(VK_SHIFT)&0x8000) != 0;
 	}
 
 	//! CTRL‚ð‰Ÿ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	inline bool GetKeyState_Control()
 	{
-		return (::GetKeyState(VK_CONTROL)&0x8000)!=0;
+		return (::GetKeyState(VK_CONTROL)&0x8000) != 0;
 	}
 
 	//! ALT‚ð‰Ÿ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	inline bool GetKeyState_Alt()
 	{
-		return (::GetKeyState(VK_MENU)&0x8000)!=0;
+		return (::GetKeyState(VK_MENU)&0x8000) != 0;
 	}
 
 

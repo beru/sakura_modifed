@@ -135,17 +135,17 @@ inline void TwoPointToRect(
 	CStrictPoint<T,INT_TYPE>							pt2
 )
 {
-	if( pt1.y < pt2.y ){
+	if (pt1.y < pt2.y) {
 		prcRect->top	= pt1.GetY2();
 		prcRect->bottom	= pt2.GetY2();
-	}else{
+	}else {
 		prcRect->top	= pt2.GetY2();
 		prcRect->bottom	= pt1.GetY2();
 	}
-	if( pt1.x < pt2.x ){
+	if (pt1.x < pt2.x) {
 		prcRect->left	= pt1.GetX2();
 		prcRect->right	= pt2.GetX2();
-	}else{
+	}else {
 		prcRect->left	= pt2.GetX2();
 		prcRect->right	= pt1.GetX2();
 	}

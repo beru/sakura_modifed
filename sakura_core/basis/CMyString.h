@@ -110,15 +110,15 @@ public:
 	{
 		const TCHAR* head = c_str();
 		const TCHAR* p = auto_strchr(head,_T('\0')) - 1;
-		while(p>=head){
-			if(*p==_T('.'))break;
-			if(*p==_T('\\'))break;
-			if(*p==_T('/'))break;
+		while (p>=head) {
+			if (*p==_T('.')) break;
+			if (*p==_T('\\')) break;
+			if (*p==_T('/')) break;
 			p--;
 		}
-		if(p>=head && *p==_T('.')){
+		if (p>=head && *p==_T('.')) {
 			return bWithoutDot ? p+1 : p;	//bWithoutDot==true‚È‚çƒhƒbƒg‚È‚µ‚ð•Ô‚·
-		}else{
+		}else {
 			return auto_strchr(head,_T('\0'));
 		}
 	}
@@ -137,7 +137,7 @@ public:
 	{
 		va_list v;
 		va_start(v,szFormat);
-		m_pHead+=auto_vsprintf_s(m_pHead,_countof(m_szCmdLine)-(m_pHead-m_szCmdLine),szFormat,v);
+		m_pHead += auto_vsprintf_s(m_pHead,_countof(m_szCmdLine)-(m_pHead-m_szCmdLine),szFormat,v);
 		va_end(v);
 	}
 	const TCHAR* c_str() const

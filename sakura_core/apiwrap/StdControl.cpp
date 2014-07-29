@@ -9,7 +9,7 @@ namespace ApiWrap{
 	LRESULT List_GetText(HWND hwndList, int nIndex, ACHAR* str)
 	{
 		LRESULT nCount = SendMessage( hwndList, LB_GETTEXTLEN, (WPARAM)nIndex, (LPARAM)0);
-		if( nCount == LB_ERR )
+		if (nCount == LB_ERR)
 			return LB_ERR;
 		return SendMessage( hwndList, LB_GETTEXT, (WPARAM)nIndex, (LPARAM)(TCHAR*)TcharReceiver<ACHAR>(str,nCount+1) );	// +1: NULL •¶Žš•ª
 	}
@@ -17,7 +17,7 @@ namespace ApiWrap{
 	LRESULT List_GetText(HWND hwndList, int nIndex, WCHAR* str)
 	{
 		LRESULT nCount = SendMessage( hwndList, LB_GETTEXTLEN, (WPARAM)nIndex, (LPARAM)0);
-		if( nCount == LB_ERR )
+		if (nCount == LB_ERR)
 			return LB_ERR;
 		return SendMessage( hwndList, LB_GETTEXT, (WPARAM)nIndex, (LPARAM)(TCHAR*)TcharReceiver<WCHAR>(str,nCount+1) );	// +1: NULL •¶Žš•ª
 	}
@@ -33,3 +33,4 @@ namespace ApiWrap{
 	}
 
 }
+

@@ -106,7 +106,7 @@ public:
 	//“ÁŽê
 	POINT GetPOINT() const
 	{
-		POINT pt={(Int)x,(Int)y};
+		POINT pt = {(Int)x,(Int)y};
 		return pt;
 	}
 };

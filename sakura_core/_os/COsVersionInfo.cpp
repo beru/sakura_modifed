@@ -60,9 +60,9 @@ COsVersionInfo::COsVersionInfo( bool pbStart )
 #endif
 
 	CRegKey reg;
-	if( ERROR_SUCCESS == reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ)  ){
+	if (ERROR_SUCCESS == reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ) ) {
 		m_bWine = true;
-	}else{
+	}else {
 		m_bWine = false;
 	}
 }

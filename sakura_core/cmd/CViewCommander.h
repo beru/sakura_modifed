@@ -35,7 +35,7 @@ class CColorStrategyPool;
 class CSMacroMgr;
 #include "CEol.h"
 
-class CViewCommander{
+class CViewCommander {
 public:
 	CViewCommander(CEditView* pEditView);
 

@@ -53,21 +53,19 @@ void CViewCommander::Command_COMPARE( void )
 		szPath,
 		&hwndCompareWnd
 	);
-	if( !bDlgCompareResult ){
+	if (!bDlgCompareResult) {
 		return;
 	}
 	/* 比較後、左右に並べて表示 */
 	GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz = cDlgCompare.m_bCompareAndTileHorz;
 
 	//タブウインドウ時は禁止	//@@@ 2003.06.12 MIK
-	if( TRUE  == GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd
-	 && !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin )
-	{
+	if (TRUE  == GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd
+		&& !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin
+	) {
 		hwndMsgBox = m_pCommanderView->GetHwnd();
 		GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz = FALSE;
-	}
-	else
-	{
+	}else {
 		hwndMsgBox = hwndCompareWnd;
 	}
 
@@ -97,14 +95,14 @@ void CViewCommander::Command_COMPARE( void )
 	nLineLenDes = ::SendMessageAny( hwndCompareWnd, MYWM_GETLINEDATA, poDes.y, 0 );
 	pLineDes = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<EDIT_CHAR>();
 	for (;;) {
-		if( pLineSrc == NULL &&	0 == nLineLenDes ){
+		if (pLineSrc == NULL &&	0 == nLineLenDes) {
 			bDefferent = FALSE;
 			break;
 		}
-		if( pLineSrc == NULL || 0 == nLineLenDes ){
+		if (pLineSrc == NULL || 0 == nLineLenDes) {
 			break;
 		}
-		if( nLineLenDes > (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>() ){
+		if (nLineLenDes > (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>()) {
 			TopErrorMessage( m_pCommanderView->GetHwnd(),
 				LS( STR_ERR_CMPERR ), // "比較先のファイル\n%ts\n%d文字を超える行があります。\n比較できません。"
 				szPath,
@@ -112,17 +110,17 @@ void CViewCommander::Command_COMPARE( void )
 			);
 			return;
 		}
-		for( ; poSrc.x < nLineLenSrc; ){
-			if( poDes.x >= nLineLenDes ){
+		for (; poSrc.x < nLineLenSrc;) {
+			if (poDes.x >= nLineLenDes) {
 				goto end_of_compare;
 			}
-			if( pLineSrc[poSrc.x] != pLineDes[poDes.x] ){
+			if (pLineSrc[poSrc.x] != pLineDes[poDes.x]) {
 				goto end_of_compare;
 			}
 			poSrc.x++;
 			poDes.x++;
 		}
-		if( poDes.x < nLineLenDes ){
+		if (poDes.x < nLineLenDes) {
 			goto end_of_compare;
 		}
 		poSrc.x = 0;
@@ -137,15 +135,15 @@ end_of_compare:;
 	/* 比較後、左右に並べて表示 */
 //From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 //	うまくいかなかったので元に戻してある…
-	if( GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz ){
+	if (GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz) {
 		HWND* phwndArr = new HWND[2];
 		phwndArr[0] = GetMainWindow();
 		phwndArr[1] = hwndCompareWnd;
 		
 		int i;	// Jan. 28, 2002 genta ループ変数 intの宣言を前に出した．
 				// 互換性対策．forの()内で宣言すると古い規格と新しい規格で矛盾するので．
-		for( i = 0; i < 2; ++i ){
-			if( ::IsZoomed( phwndArr[i] ) ){
+		for (i = 0; i < 2; ++i) {
+			if (::IsZoomed( phwndArr[i] )) {
 				::ShowWindow( phwndArr[i], SW_RESTORE );
 			}
 		}
@@ -154,7 +152,7 @@ end_of_compare:;
 		//	May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( phwndArr[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left ) / 2;
-		for( i = 1; i >= 0; i-- ){
+		for (i = 1; i >= 0; i--) {
 			::SetWindowPos(
 				phwndArr[i], 0,
 				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
@@ -168,10 +166,9 @@ end_of_compare:;
 //To Here Oct. 10, 2000
 
 	//	2002/05/11 YAZAKI 親ウィンドウをうまく設定してみる。
-	if( !bDefferent ){
+	if (!bDefferent) {
 		TopInfoMessage( hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD22) );
-	}
-	else{
+	}else {
 //		TopInfoMessage( hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23) );
 		/* カーソルを移動させる
 			比較相手は、別プロセスなのでメッセージを飛ばす。
@@ -205,13 +202,12 @@ void CViewCommander::Command_Diff( const WCHAR* _szTmpFile2, int nFlgOpt )
 	bool	bTmpFile1 = false;
 	TCHAR	szTmpFile1[_MAX_PATH * 2];
 
-	if( (DWORD)-1 == ::GetFileAttributes( szTmpFile2 ) )
-	{
+	if ((DWORD)-1 == ::GetFileAttributes( szTmpFile2 )) {
 		WarningMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF1) );
 		return;
 	}
 
-	//自ファイル
+	// 自ファイル
 	if (!GetDocument()->m_cDocEditor.IsModified()) _tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
 	else if (m_pCommanderView->MakeDiffTmpFile ( szTmpFile1, NULL )) bTmpFile1 = true;
 	else return;
@@ -220,12 +216,11 @@ void CViewCommander::Command_Diff( const WCHAR* _szTmpFile2, int nFlgOpt )
 	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, nFlgOpt);
 
 	//一時ファイルを削除する
-	if( bTmpFile1 ) _tunlink( szTmpFile1 );
+	if (bTmpFile1) _tunlink( szTmpFile1 );
 
 	return;
 
 }
-
 
 
 /*!	差分表示
@@ -248,7 +243,7 @@ void CViewCommander::Command_Diff_Dialog( void )
 		GetDocument()->m_cDocFile.GetFilePath(),
 		GetDocument()->m_cDocEditor.IsModified()
 	);
-	if( !nDiffDlgResult ){
+	if (!nDiffDlgResult) {
 		return;
 	}
 	
@@ -262,19 +257,17 @@ void CViewCommander::Command_Diff_Dialog( void )
 	TCHAR	szTmpFile2[_MAX_PATH * 2];
 	if (!cDlgDiff.m_bIsModifiedDst ) _tcscpy( szTmpFile2, cDlgDiff.m_szFile2);
 	else if (m_pCommanderView->MakeDiffTmpFile ( szTmpFile2, cDlgDiff.m_hWnd_Dst )) bTmpFile2 = true;
-	else 
-	{
-		if( bTmpFile1 ) _tunlink( szTmpFile1 );
+	else {
+		if (bTmpFile1) _tunlink( szTmpFile1 );
 		return;
 	}
 	
 	//差分表示
 	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, cDlgDiff.m_nDiffFlgOpt);
 	
-	
 	//一時ファイルを削除する
-	if( bTmpFile1 ) _tunlink( szTmpFile1 );
-	if( bTmpFile2 ) _tunlink( szTmpFile2 );
+	if (bTmpFile1) _tunlink( szTmpFile1 );
+	if (bTmpFile2) _tunlink( szTmpFile2 );
 
 	return;
 }
@@ -293,38 +286,35 @@ void CViewCommander::Command_Diff_Next( void )
 	CLogicInt tmp_y;
 
 re_do:;	
-	if( CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark( ptXY.GetY2(), SEARCH_FORWARD, &tmp_y ) ){
+	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark( ptXY.GetY2(), SEARCH_FORWARD, &tmp_y )) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		CLayoutPoint ptXY_Layout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout( ptXY, &ptXY_Layout );
-		if( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ){
-			if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ) m_pCommanderView->GetSelectionInfo().BeginSelectArea();
-		}
-		else{
-			if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ) m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+		if (m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {
+			if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) m_pCommanderView->GetSelectionInfo().BeginSelectArea();
+		}else {
+			if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
 		}
 
-		if( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ){
+		if (m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {
 			m_pCommanderView->GetSelectionInfo().ChangeSelectAreaByCurrentCursor( ptXY_Layout );
 		}
 		GetCaret().MoveCursor( ptXY_Layout, true );
 	}
 
-
-	if( GetDllShareData().m_Common.m_sSearch.m_bSearchAll ){
+	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
 		// 見つからなかった。かつ、最初の検索
-		if( !bFound	&& bRedo ){
+		if (!bFound	&& bRedo) {
 			ptXY.y = 0 - 1;	// 1個手前を指定
 			bRedo = FALSE;
 			goto re_do;		// 先頭から再検索
 		}
 	}
 
-	if( bFound ){
-		if( nYOld_Logic >= ptXY.y ) m_pCommanderView->SendStatusMessage( LS(STR_ERR_SRNEXT1) );
-	}
-	else{
+	if (bFound) {
+		if (nYOld_Logic >= ptXY.y) m_pCommanderView->SendStatusMessage( LS(STR_ERR_SRNEXT1) );
+	}else {
 		m_pCommanderView->SendStatusMessage( LS(STR_ERR_SRNEXT2) );
 		AlertNotFound( m_pCommanderView->GetHwnd(), false, LS(STR_DIFF_NEXT_NOT_FOUND) );
 	}
@@ -346,27 +336,26 @@ void CViewCommander::Command_Diff_Prev( void )
 	CLogicInt tmp_y;
 
 re_do:;
-	if( CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark( ptXY.GetY2(), SEARCH_BACKWARD, &tmp_y) ){
+	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark( ptXY.GetY2(), SEARCH_BACKWARD, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		CLayoutPoint ptXY_Layout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout( ptXY, &ptXY_Layout );
-		if( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ){
-			if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ) m_pCommanderView->GetSelectionInfo().BeginSelectArea();
-		}
-		else{
-			if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ) m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+		if (m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {
+			if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) m_pCommanderView->GetSelectionInfo().BeginSelectArea();
+		}else {
+			if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
 		}
 
-		if( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ){
+		if (m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {
 			m_pCommanderView->GetSelectionInfo().ChangeSelectAreaByCurrentCursor( ptXY_Layout );
 		}
 		GetCaret().MoveCursor( ptXY_Layout, true );
 	}
 
-	if( GetDllShareData().m_Common.m_sSearch.m_bSearchAll ){
+	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
-		if( !bFound	&& bRedo ){
+		if (!bFound	&& bRedo) {
 			// 2011.02.02 m_cLayoutMgr→m_cDocLineMgr
 			ptXY.y = GetDocument()->m_cDocLineMgr.GetLineCount();	// 1個手前を指定
 			bRedo = FALSE;
@@ -374,10 +363,9 @@ re_do:;
 		}
 	}
 
-	if( bFound ){
-		if( nYOld_Logic <= ptXY.y ) m_pCommanderView->SendStatusMessage( LS(STR_ERR_SRPREV1) );
-	}
-	else{
+	if (bFound) {
+		if (nYOld_Logic <= ptXY.y) m_pCommanderView->SendStatusMessage( LS(STR_ERR_SRPREV1) );
+	}else {
 		m_pCommanderView->SendStatusMessage( LS(STR_ERR_SRPREV2) );
 		AlertNotFound( m_pCommanderView->GetHwnd(), false, LS(STR_DIFF_PREV_NOT_FOUND) );
 	}
@@ -399,3 +387,4 @@ void CViewCommander::Command_Diff_Reset( void )
 	GetEditWindow()->Views_Redraw();
 	return;
 }
+

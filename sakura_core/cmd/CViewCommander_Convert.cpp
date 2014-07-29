@@ -255,14 +255,14 @@ void CViewCommander::Command_CODECNV_SJIS2UTF7( void )
 void CViewCommander::Command_BASE64DECODE( void )
 {
 	/* テキストが選択されているか */
-	if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
 	/* 選択範囲のデータを取得 */
 	/* 正常時はTRUE,範囲未選択の場合はFALSEを返す */
 	CNativeW	ctextBuf;
-	if( !m_pCommanderView->GetSelectedDataSimple(ctextBuf) ){
+	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
 		return;
 	}
@@ -270,14 +270,14 @@ void CViewCommander::Command_BASE64DECODE( void )
 	/* Base64デコード */
 	CMemory cmemBuf;
 	bool bret = CDecode_Base64Decode().CallDecode(ctextBuf, &cmemBuf);
-	if( !bret ){
+	if (!bret) {
 		return;
 	}
 	ctextBuf.Clear();
 
 	/* 保存ダイアログ モーダルダイアログの表示 */
 	TCHAR		szPath[_MAX_PATH] = _T("");
-	if( !GetDocument()->m_cDocFileOperation.SaveFileDialog( szPath ) ){
+	if (!GetDocument()->m_cDocFileOperation.SaveFileDialog( szPath )) {
 		return;
 	}
 
@@ -287,8 +287,8 @@ void CViewCommander::Command_BASE64DECODE( void )
 
 	//カキコ
 	CBinaryOutputStream out(szPath);
-	if(!out)goto err;
-	if( nDataLen != out.Write(pData, nDataLen) )goto err;
+	if (!out) goto err;
+	if (nDataLen != out.Write(pData, nDataLen)) goto err;
 
 	return;
 
@@ -304,7 +304,7 @@ err:
 void CViewCommander::Command_UUDECODE( void )
 {
 	/* テキストが選択されているか */
-	if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
@@ -312,7 +312,7 @@ void CViewCommander::Command_UUDECODE( void )
 	// 選択範囲のデータを取得 -> cmemBuf
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 	CNativeW	ctextBuf;
-	if( !m_pCommanderView->GetSelectedDataSimple(ctextBuf) ){
+	if (!m_pCommanderView->GetSelectedDataSimple(ctextBuf)) {
 		ErrorBeep();
 		return;
 	}
@@ -321,14 +321,14 @@ void CViewCommander::Command_UUDECODE( void )
 	CMemory cmemBin;
 	TCHAR szPath[_MAX_PATH]=_T("");
 	CDecode_UuDecode decoder;
-	if( !decoder.CallDecode(ctextBuf, &cmemBin) ){
+	if (!decoder.CallDecode(ctextBuf, &cmemBin)) {
 		return;
 	}
 	decoder.CopyFilename( szPath );
 	ctextBuf.Clear();
 
 	/* 保存ダイアログ モーダルダイアログの表示 */
-	if( !GetDocument()->m_cDocFileOperation.SaveFileDialog( szPath ) ){
+	if (!GetDocument()->m_cDocFileOperation.SaveFileDialog( szPath )) {
 		return;
 	}
 
@@ -338,8 +338,8 @@ void CViewCommander::Command_UUDECODE( void )
 
 	//カキコ
 	CBinaryOutputStream out(szPath);
-	if( !out )goto err;
-	if( nDataLen != out.Write(pData,nDataLen) )goto err;
+	if (!out) goto err;
+	if (nDataLen != out.Write(pData,nDataLen)) goto err;
 
 	//完了
 	return;
@@ -348,3 +348,4 @@ err:
 	ErrorBeep();
 	ErrorMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD16), szPath );
 }
+

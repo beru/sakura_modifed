@@ -5,7 +5,7 @@
 
 void CMyString::set(const char* szData)
 {
-	wchar_t* wszData=mbstowcs_new(szData);
+	wchar_t* wszData = mbstowcs_new(szData);
 	set(wszData);
 	delete[] wszData;
 }
@@ -13,15 +13,15 @@ void CMyString::set(const char* szData)
 void CMyString::set(const char* szData, int nLength)
 {
 	int nLen;
-	wchar_t* wszData=mbstowcs_new(szData,nLength,&nLen);
+	wchar_t* wszData = mbstowcs_new(szData,nLength,&nLen);
 	set(wszData,nLen);
 	delete[] wszData;
 }
 
 const char* CMyString::c_astr() const
 {
-	if(!m_str_cache)
-		m_str_cache=wcstombs_new(m_wstr.c_str());
+	if (!m_str_cache)
+		m_str_cache = wcstombs_new(m_wstr.c_str());
 	return m_str_cache;
 }
 

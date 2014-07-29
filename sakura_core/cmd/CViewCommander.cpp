@@ -70,7 +70,7 @@ BOOL CViewCommander::HandleCommand(
 	nCommand = (EFunctionCode)LOWORD( nCommand );
 
 
-	if( m_pCommanderView->m_nAutoScrollMode && F_AUTOSCROLL != nCommand ){
+	if (m_pCommanderView->m_nAutoScrollMode && F_AUTOSCROLL != nCommand) {
 		m_pCommanderView->AutoScrollExit();
 	}
 	m_pCommanderView->GetCaret().m_bClearStatus = true;
@@ -82,7 +82,7 @@ BOOL CViewCommander::HandleCommand(
 	m_pCommanderView->TranslateCommand_isearch( nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4 );
 
 	// 2013.09.23 novice 機能が利用可能か調べる
-	if( !IsFuncEnable( GetDocument(), &GetDllShareData(), nCommand ) ){
+	if (!IsFuncEnable( GetDocument(), &GetDllShareData(), nCommand )) {
 		return TRUE;
 	}
 
@@ -94,27 +94,27 @@ BOOL CViewCommander::HandleCommand(
 //	}
 	/* 印刷プレビューモードか */
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
-	if( GetEditWindow()->m_pPrintPreview && F_PRINT_PREVIEW != nCommand ){
+	if (GetEditWindow()->m_pPrintPreview && F_PRINT_PREVIEW != nCommand) {
 		ErrorBeep();
 		return -1;
 	}
 	/* キーリピート状態 */
-	if( m_bPrevCommand == nCommand ){
+	if (m_bPrevCommand == nCommand) {
 		bRepeat = true;
 	}
 	m_bPrevCommand = nCommand;
-	if( GetDllShareData().m_sFlags.m_bRecordingKeyMacro &&									/* キーボードマクロの記録中 */
+	if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro &&									/* キーボードマクロの記録中 */
 		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro == GetMainWindow() &&	/* キーボードマクロを記録中のウィンドウ */
-		( nCommandFrom & FA_NONRECORD ) != FA_NONRECORD	/* 2007.07.07 genta 記録抑制フラグ off */
-	){
+		(nCommandFrom & FA_NONRECORD) != FA_NONRECORD	/* 2007.07.07 genta 記録抑制フラグ off */
+	) {
 		/* キーリピート状態をなくする */
 		bRepeat = false;
 		/* キーマクロに記録可能な機能かどうかを調べる */
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		//F_EXECEXTMACROコマンドはファイルを選択した後にマクロ文が確定するため個別に記録する。
-		if( CSMacroMgr::CanFuncIsKeyMacro( nCommand ) &&
+		if (CSMacroMgr::CanFuncIsKeyMacro( nCommand ) &&
 			nCommand != F_EXECEXTMACRO	//F_EXECEXTMACROは個別で記録します
-		){
+		) {
 			/* キーマクロのバッファにデータ追加 */
 			//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
 			LPARAM lparams[] = {lparam1, lparam2, lparam3, lparam4};
@@ -128,16 +128,17 @@ BOOL CViewCommander::HandleCommand(
 	m_pCommanderView->m_bExecutingKeyMacro = ( nCommandFrom & FA_FROMMACRO ) ? true : false;
 
 	/* キーボードマクロの実行中 */
-	if( m_pCommanderView->m_bExecutingKeyMacro ){
+	if (m_pCommanderView->m_bExecutingKeyMacro) {
 		/* キーリピート状態をなくする */
 		bRepeat = false;
 	}
 
 	//	From Here Sep. 29, 2001 genta マクロの実行機能追加
-	if( F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO ){
+	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一（インターフェースの変更）
-		if( !m_pcSMacroMgr->Exec( nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
-			nCommandFrom & FA_NONRECORD )){
+		if (!m_pcSMacroMgr->Exec( nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
+			nCommandFrom & FA_NONRECORD )
+		) {
 			InfoMessage(
 				this->m_pCommanderView->m_hwndParent,
 				LS(STR_ERR_MACRO1),
@@ -154,7 +155,7 @@ BOOL CViewCommander::HandleCommand(
 	//	Call mode basis message handler
 	// -------------------------------------
 	m_pCommanderView->PreprocessCommand_hokan(nCommand);
-	if( m_pCommanderView->ProcessCommand_isearch( nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4 ))
+	if (m_pCommanderView->ProcessCommand_isearch( nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4 ))
 		return TRUE;
 
 	// -------------------------------------
@@ -162,7 +163,7 @@ BOOL CViewCommander::HandleCommand(
 	//	ここより前ではUndoバッファの準備ができていないので
 	//	文書の操作を行ってはいけない
 	//@@@ 2002.2.2 YAZAKI HandleCommand内でHandleCommandを呼び出せない問題に対処（何か副作用がある？）
-	if( NULL == GetOpeBlk() ){	/* 操作ブロック */
+	if (NULL == GetOpeBlk()) {	/* 操作ブロック */
 		SetOpeBlk(new COpeBlk);
 	}
 	GetOpeBlk()->AddRef();	//参照カウンタ増加
@@ -172,7 +173,7 @@ BOOL CViewCommander::HandleCommand(
 	//	途中で処理の打ち切りを行ってはいけない
 	// -------------------------------------
 
-	switch( nCommand ){
+	switch (nCommand) {
 	case F_WCHAR:	/* 文字入力 */
 		{
 			Command_WCHAR( (wchar_t)lparam1 );
@@ -195,12 +196,12 @@ BOOL CViewCommander::HandleCommand(
 		//	Feb. 28, 2004 genta 保存＆閉じる
 		//	保存が不要なら単に閉じる
 		{	// Command_FILESAVE()とは別に保存不要をチェック	//### Command_FILESAVE() は実際に保存した場合だけ true を返すようになった（仕様変更？）
-			if( !GetDllShareData().m_Common.m_sFile.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_cDocEditor.IsModified() ){
+			if (!GetDllShareData().m_Common.m_sFile.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_cDocEditor.IsModified()) {
 				Command_WINCLOSE();
 				break;
 			}
 		}
-		if( Command_FILESAVE( false, true )){
+		if (Command_FILESAVE( false, true )) {
 			Command_WINCLOSE();
 		}
 		break;
@@ -336,24 +337,24 @@ BOOL CViewCommander::HandleCommand(
 	/* 矩形選択系 */
 //	case F_BOXSELALL:		Command_BOXSELECTALL();break;		//矩形ですべて選択
 	case F_BEGIN_BOX:		Command_BEGIN_BOXSELECT( true );break;	/* 矩形範囲選択開始 */
-	case F_UP_BOX:			if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_UP( true, bRepeat ); break;		//(矩形選択)カーソル上移動
-	case F_DOWN_BOX:		if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_DOWN( true, bRepeat ); break;		//(矩形選択)カーソル下移動
-	case F_LEFT_BOX:		if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_LEFT( true, bRepeat ); break;		//(矩形選択)カーソル左移動
-	case F_RIGHT_BOX:		if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_RIGHT( true, false, bRepeat ); break;	//(矩形選択)カーソル右移動
-	case F_UP2_BOX:			if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_UP2( true ); break;				//(矩形選択)カーソル上移動(２行ごと)
-	case F_DOWN2_BOX:		if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_DOWN2( true );break;				//(矩形選択)カーソル下移動(２行ごと)
-	case F_WORDLEFT_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_WORDLEFT( true );break;			//(矩形選択)単語の左端に移動
-	case F_WORDRIGHT_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_WORDRIGHT( true );break;			//(矩形選択)単語の右端に移動
-	case F_GOLOGICALLINETOP_BOX:if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINETOP( true, 8 | lparam1 );break;	//(矩形選択)行頭に移動(改行単位)
-//	case F_GOLOGICALLINEEND_BOX:if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINEEND( true, 0, 8 | lparam1 );break;	//(矩形選択)行末に移動(改行単位)
-	case F_GOLINETOP_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINETOP( true, lparam1 );break;	//(矩形選択)行頭に移動(折り返し単位/改行単位)
-	case F_GOLINEEND_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINEEND( true, 0, lparam1 );break;	//(矩形選択)行末に移動(折り返し単位/改行単位)
-	case F_HalfPageUp_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_HalfPageUp( true ); break;		//(矩形選択)半ページアップ
-	case F_HalfPageDown_BOX:if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_HalfPageDown( true ); break;		//(矩形選択)半ページダウン
-	case F_1PageUp_BOX:		if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_1PageUp( true ); break;			//(矩形選択)１ページアップ
-	case F_1PageDown_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_1PageDown( true ); break;			//(矩形選択)１ページダウン
-	case F_GOFILETOP_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOFILETOP( true );break;			//(矩形選択)ファイルの先頭に移動
-	case F_GOFILEEND_BOX:	if( ! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOFILEEND( true );break;			//(矩形選択)ファイルの最後に移動
+	case F_UP_BOX:			if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_UP( true, bRepeat ); break;		//(矩形選択)カーソル上移動
+	case F_DOWN_BOX:		if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_DOWN( true, bRepeat ); break;		//(矩形選択)カーソル下移動
+	case F_LEFT_BOX:		if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_LEFT( true, bRepeat ); break;		//(矩形選択)カーソル左移動
+	case F_RIGHT_BOX:		if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_RIGHT( true, false, bRepeat ); break;	//(矩形選択)カーソル右移動
+	case F_UP2_BOX:			if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_UP2( true ); break;				//(矩形選択)カーソル上移動(２行ごと)
+	case F_DOWN2_BOX:		if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_DOWN2( true );break;				//(矩形選択)カーソル下移動(２行ごと)
+	case F_WORDLEFT_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_WORDLEFT( true );break;			//(矩形選択)単語の左端に移動
+	case F_WORDRIGHT_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_WORDRIGHT( true );break;			//(矩形選択)単語の右端に移動
+	case F_GOLOGICALLINETOP_BOX:if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINETOP( true, 8 | lparam1 );break;	//(矩形選択)行頭に移動(改行単位)
+//	case F_GOLOGICALLINEEND_BOX:if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINEEND( true, 0, 8 | lparam1 );break;	//(矩形選択)行末に移動(改行単位)
+	case F_GOLINETOP_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINETOP( true, lparam1 );break;	//(矩形選択)行頭に移動(折り返し単位/改行単位)
+	case F_GOLINEEND_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOLINEEND( true, 0, lparam1 );break;	//(矩形選択)行末に移動(折り返し単位/改行単位)
+	case F_HalfPageUp_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_HalfPageUp( true ); break;		//(矩形選択)半ページアップ
+	case F_HalfPageDown_BOX:if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_HalfPageDown( true ); break;		//(矩形選択)半ページダウン
+	case F_1PageUp_BOX:		if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_1PageUp( true ); break;			//(矩形選択)１ページアップ
+	case F_1PageDown_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_1PageDown( true ); break;			//(矩形選択)１ページダウン
+	case F_GOFILETOP_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOFILETOP( true );break;			//(矩形選択)ファイルの先頭に移動
+	case F_GOFILEEND_BOX:	if (! this->m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { this->Command_BEGIN_BOXSELECT( false ); } this->Command_GOFILEEND( true );break;			//(矩形選択)ファイルの最後に移動
 
 	/* クリップボード系 */
 	case F_CUT:						Command_CUT();break;					//切り取り(選択範囲をクリップボードにコピーして削除)
@@ -549,7 +550,7 @@ BOOL CViewCommander::HandleCommand(
 		/* 再帰処理対策 */
 		m_pCommanderView->SetUndoBuffer( true );
 		nFuncID = Command_CUSTMENU( nCommand - F_CUSTMENU_1 + 1 );
-		if( 0 != nFuncID ){
+		if (0 != nFuncID) {
 			/* コマンドコードによる処理振り分け */
 //			HandleCommand( nFuncID, true, 0, 0, 0, 0 );
 			::PostMessageCmd( GetMainWindow(), WM_COMMAND, MAKELONG( nFuncID, 0 ), (LPARAM)NULL );
@@ -617,7 +618,7 @@ BOOL CViewCommander::HandleCommand(
 			CPlug::Array plugs;
 			CJackManager::getInstance()->GetUsablePlug( PP_COMMAND, nCommand, &plugs );
 
-			if( plugs.size() > 0 ){
+			if (plugs.size() > 0) {
 				assert_warning( 1 == plugs.size() );
 				//インタフェースオブジェクト準備
 				CWSHIfObj::List params;
@@ -645,22 +646,21 @@ CLogicInt CViewCommander::ConvertEol(const wchar_t* pszText, CLogicInt nTextLen,
 	CEol eol = GetDocument()->m_cDocEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
-	for( int i = 0; i < nTextLen; i++ ){
-		if( WCODE::IsLineDelimiter(pszText[i]) ){
-			if( pszText[i] == WCODE::CR ){
-				if( i + 1 < nTextLen && pszText[i + 1] == WCODE::LF ){
+	for (int i = 0; i < nTextLen; i++) {
+		if (WCODE::IsLineDelimiter(pszText[i])) {
+			if (pszText[i] == WCODE::CR) {
+				if (i + 1 < nTextLen && pszText[i + 1] == WCODE::LF) {
 					i++;
 				}
 			}
 			wmemcpy( &pszConvertedText[nConvertedTextLen], eol.GetValue2(), eol.GetLen() );
 			nConvertedTextLen += eol.GetLen();
-		} else {
+		}else {
 			pszConvertedText[nConvertedTextLen++] = pszText[i];
 		}
 	}
 	return nConvertedTextLen;
 }
-
 
 
 /*!
@@ -670,10 +670,10 @@ CLogicInt CViewCommander::ConvertEol(const wchar_t* pszText, CLogicInt nTextLen,
 */
 void CViewCommander::AlertNotFound(HWND hwnd, bool bReplaceAll, LPCTSTR format, ...)
 {
-	if( GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND
+	if (GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND
 		&& !bReplaceAll
-	){
-		if( NULL == hwnd ){
+	) {
+		if (NULL == hwnd) {
 			hwnd = m_pCommanderView->GetHwnd();
 		}
 		//InfoMessage(hwnd, format, __VA_ARGS__);
@@ -681,7 +681,8 @@ void CViewCommander::AlertNotFound(HWND hwnd, bool bReplaceAll, LPCTSTR format, 
 		va_start(p, format);
 		VMessageBoxF(hwnd, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME, format, p);
 		va_end(p);
-	}else{
+	}else {
 		DefaultBeep();
 	}
 }
+

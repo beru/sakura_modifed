@@ -39,8 +39,8 @@ public:
 	}
 	CMyRect(const RECT& rc)
 	{
-		RECT* p=this;
-		*p=rc;
+		RECT* p = this;
+		*p = rc;
 	}
 
 	//‰‰ŽZŽq
