@@ -57,7 +57,6 @@ static const int codeTable1[] = { 0x00, 0x08, 0x80 };
 static const int codeTable2[] = { 0x00, 0x10, 0x100 };
 
 
-
 /* モーダルダイアログの表示 */
 int CDlgExec::DoModal( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
 {
@@ -75,11 +74,11 @@ BOOL CDlgExec::OnInitDialog( HWND hwnd, WPARAM wParam, LPARAM lParam )
 	HWND hwndCombo;
 	int i;
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_GET );
-	for( i = 0; i < _countof(codes); ++i ){
+	for (i = 0; i < _countof(codes); ++i) {
 		Combo_AddString( hwndCombo, CCodeTypeName(codes[i]).Normal() );
 	}
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_SEND );
-	for( i = 0; i < _countof(codes); ++i ){
+	for (i = 0; i < _countof(codes); ++i) {
 		Combo_AddString( hwndCombo, CCodeTypeName(codes[i]).Normal() );
 	}
 
@@ -116,7 +115,7 @@ void CDlgExec::SetData( void )
 		nExecFlgOpt = m_pShareData->m_nExecFlgOpt;
 		
 		// ビューモードや上書き禁止のときは編集中ウィンドウへは出力しない	// 2009.02.21 ryoji
-		if( !m_bEditable ){
+		if (!m_bEditable) {
 			nExecFlgOpt &= ~0x02;
 		}
 
@@ -142,7 +141,7 @@ void CDlgExec::SetData( void )
 	Combo_ResetContent( hwndCombo );
 	::DlgItem_SetText( GetHwnd(), IDC_COMBO_TEXT, m_szCommand );
 	int nSize = m_pShareData->m_sHistory.m_aCommands.size();
-	for( i = 0; i < nSize; ++i ){
+	for (i = 0; i < nSize; ++i) {
 		Combo_AddString( hwndCombo, m_pShareData->m_sHistory.m_aCommands[i] );
 	}
 	Combo_SetCurSel( hwndCombo, 0 );
@@ -151,7 +150,7 @@ void CDlgExec::SetData( void )
 	hwndCombo = GetItemHwnd( IDC_COMBO_CUR_DIR );
 	Combo_ResetContent( hwndCombo );
 	::DlgItem_SetText( GetHwnd(), IDC_COMBO_TEXT, m_szCurDir );
-	for( i = 0; i < m_pShareData->m_sHistory.m_aCurDirs.size(); ++i ){
+	for (i = 0; i < m_pShareData->m_sHistory.m_aCurDirs.size(); ++i) {
 		Combo_AddString( hwndCombo, m_pShareData->m_sHistory.m_aCurDirs[i] );
 	}
 	Combo_SetCurSel( hwndCombo, 0 );
@@ -159,16 +158,16 @@ void CDlgExec::SetData( void )
 	int nOpt;
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_GET );
 	nOpt = m_pShareData->m_nExecFlgOpt & 0x88;
-	for( i = 0; _countof(codeTable1); i++ ){
-		if( codeTable1[i] == nOpt ){
+	for (i = 0; _countof(codeTable1); i++) {
+		if (codeTable1[i] == nOpt) {
 			Combo_SetCurSel( hwndCombo, i );
 			break;
 		}
 	}
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_SEND );
 	nOpt = m_pShareData->m_nExecFlgOpt & 0x110;
-	for( i = 0; _countof(codeTable2); i++ ){
-		if( codeTable2[i] == nOpt ){
+	for (i = 0; _countof(codeTable2); i++) {
+		if (codeTable2[i] == nOpt) {
 			Combo_SetCurSel( hwndCombo, i );
 			break;
 		}
@@ -177,17 +176,16 @@ void CDlgExec::SetData( void )
 }
 
 
-
-
 /* ダイアログデータの取得 */
 int CDlgExec::GetData( void )
 {
 	DlgItem_GetText( GetHwnd(), IDC_COMBO_m_szCommand, m_szCommand, _countof( m_szCommand ));
-	if( IsDlgButtonCheckedBool( GetHwnd(), IDC_CHECK_CUR_DIR ) ){
+	if (IsDlgButtonCheckedBool( GetHwnd(), IDC_CHECK_CUR_DIR )) {
 		DlgItem_GetText( GetHwnd(), IDC_COMBO_CUR_DIR, &m_szCurDir[0], _countof2( m_szCurDir ));
-	}else{
+	}else {
 		m_szCurDir[0] = _T('\0');
 	}
+	
 	{	//	From Here 2007.01.02 maru 引数を拡張のため
 		//	マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nFlgOpt = 0;
@@ -206,10 +204,9 @@ int CDlgExec::GetData( void )
 }
 
 
-
 BOOL CDlgExec::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_CHECK_GETSTDOUT:
 		{	//	From Here 2007.01.02 maru 引数を拡張のため
 			BOOL bEnabled;
@@ -256,7 +253,7 @@ BOOL CDlgExec::OnBnClicked( int wID )
 				_T("*.com;*.exe;*.bat;*.cmd"),
 				m_szCommand
 			);
-			if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+			if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 				_tcscpy( m_szCommand, szPath );
 				::DlgItem_SetText( GetHwnd(), IDC_COMBO_m_szCommand, m_szCommand );
 			}
@@ -266,9 +263,8 @@ BOOL CDlgExec::OnBnClicked( int wID )
 
 	case IDC_BUTTON_REFERENCE2:
 		{
-			if( SelectDir( GetHwnd(), LS(STR_DLGEXEC_SELECT_CURDIR), &m_szCurDir[0], &m_szCurDir[0] ) ){
+			if (SelectDir( GetHwnd(), LS(STR_DLGEXEC_SELECT_CURDIR), &m_szCurDir[0], &m_szCurDir[0] )) {
 				::DlgItem_SetText( GetHwnd(), IDC_COMBO_CUR_DIR, &m_szCurDir[0] );
-				
 			}
 		}
 		return TRUE;

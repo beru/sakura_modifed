@@ -49,7 +49,7 @@ BOOL CDlgFileUpdateQuery::OnInitDialog( HWND hWnd, WPARAM wParam, LPARAM lParam 
 BOOL CDlgFileUpdateQuery::OnBnClicked(int id)
 {
 	int result;
-	switch( id ){
+	switch (id) {
 	case IDC_BTN_RELOAD: // çƒì«çû
 		result = 1;
 		break;
@@ -73,3 +73,4 @@ BOOL CDlgFileUpdateQuery::OnBnClicked(int id)
 
 	return 0;
 }
+

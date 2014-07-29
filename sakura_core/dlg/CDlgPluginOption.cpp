@@ -96,7 +96,7 @@ int CDlgPluginOption::DoModal(
 	m_cPlugin = CPluginManager::getInstance()->GetPlugin( m_ID );
 	m_cPropPlugin = cPropPlugin;
 
-	if( m_cPlugin == NULL ){
+	if (m_cPlugin == NULL) {
 		::ErrorMessage( hwndParent, LS(STR_DLGPLUGINOPT_LOAD) );
 		return 0;
 	}
@@ -128,7 +128,7 @@ void CDlgPluginOption::SetData( void )
 
 	CPluginOption* cOpt;
 	CPluginOption::ArrayIter it;
-	for( i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++ ){
+	for (i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
 		cOpt = *it;
 
 		auto_snprintf_s( buf, _countof(buf), _T("%ls"), cOpt->GetLabel().c_str());
@@ -145,14 +145,13 @@ void CDlgPluginOption::SetData( void )
 		wstring sType;
 
 		cOpt->GetKey(&sSection, &sKey);
-		if( sSection.empty() || sKey.empty() ) {
+		if (sSection.empty() || sKey.empty()) {
 			sValue = L"";
-		}
-		else {
-			if( !cProfile->IOProfileData( sSection.c_str(), sKey.c_str(), sValue ) ){
+		}else {
+			if (!cProfile->IOProfileData( sSection.c_str(), sKey.c_str(), sValue )) {
 				// Optionが見つからなかったらDefault値を設定
 				sValue = cOpt->GetDefaultVal();
-				if( sValue != wstring(L"") ){
+				if (sValue != wstring(L"")) {
 					bLoadDefault = true;
 					cProfile->SetWritingMode();
 					cProfile->IOProfileData( sSection.c_str(), sKey.c_str(), sValue );
@@ -163,12 +162,10 @@ void CDlgPluginOption::SetData( void )
 
 		if (cOpt->GetType() == OPTION_TYPE_BOOL) {
 			_tcscpy( buf, sValue == wstring( L"0") || sValue == wstring( L"") ? BOOL_DISP_FALSE : BOOL_DISP_TRUE );
-		}
-		else if (cOpt->GetType() == OPTION_TYPE_INT) {
+		}else if (cOpt->GetType() == OPTION_TYPE_INT) {
 			// 数値へ正規化
 			auto_sprintf( buf, _T("%d"), _wtoi(sValue.c_str()));
-		}
-		else if (cOpt->GetType() == OPTION_TYPE_SEL) {
+		}else if (cOpt->GetType() == OPTION_TYPE_SEL) {
 			// 値から表示へ
 			wstring	sView;
 			wstring	sTrg;
@@ -183,8 +180,7 @@ void CDlgPluginOption::SetData( void )
 					break;
 				}
 			}
-		}
-		else {
+		}else {
 			auto_snprintf_s( buf, _countof(buf), _T("%ls"), sValue.c_str());
 		}
 		lvi.mask     = LVIF_TEXT;
@@ -195,7 +191,7 @@ void CDlgPluginOption::SetData( void )
 		ListView_SetItemState( hwndList, i, 0, LVIS_SELECTED | LVIS_FOCUSED );
 	}
 
-	if( bLoadDefault ){
+	if (bLoadDefault) {
 		cProfile->SetWritingMode();
 		cProfile->WriteProfile( m_cPlugin->GetOptionPath().c_str() ,(m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
@@ -234,7 +230,7 @@ int CDlgPluginOption::GetData( void )
 	CPluginOption* cOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE+1];
 	CPluginOption::ArrayIter it;
-	for( i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++ ){
+	for (i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
 		cOpt = *it;
 
 		memset_raw( &lvi, 0, sizeof( lvi ));
@@ -248,12 +244,10 @@ int CDlgPluginOption::GetData( void )
 		if (cOpt->GetType() == OPTION_TYPE_BOOL) {
 			if (_tcscmp(buf,  BOOL_DISP_FALSE) == 0) {
 				_tcscpy (buf, _T("0"));
-			}
-			else {
+			}else {
 				_tcscpy (buf, _T("1"));
 			}
-		}
-		else if (cOpt->GetType() == OPTION_TYPE_SEL) {
+		}else if (cOpt->GetType() == OPTION_TYPE_SEL) {
 			// 表示から値へ
 			wstring	sView;
 			wstring	sTrg;
@@ -275,7 +269,7 @@ int CDlgPluginOption::GetData( void )
 		wstring sValue;
 
 		cOpt->GetKey(&sSection, &sKey);
-		if( sSection.empty() || sKey.empty() ) {
+		if (sSection.empty() || sKey.empty()) {
 			continue;
 		}
 
@@ -344,10 +338,10 @@ BOOL CDlgPluginOption::OnNotify( WPARAM wParam, LPARAM lParam )
 	int			idCtrl;
 
 	idCtrl = (int)wParam;
-	switch( idCtrl ){
+	switch (idCtrl) {
 	case IDC_LIST_PLUGIN_OPTIONS:
 		pNMHDR = (NMHDR*)lParam;
-		switch( pNMHDR->code ){
+		switch (pNMHDR->code) {
 		case LVN_ITEMCHANGED:
 			ChangeListPosition( );
 			break;
@@ -365,12 +359,11 @@ BOOL CDlgPluginOption::OnNotify( WPARAM wParam, LPARAM lParam )
 		pMNUD  = (NM_UPDOWN*)lParam;
 
 		nVal = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, NULL, TRUE );
-		if( pMNUD->iDelta < 0 ){
-			if (nVal < INT_MAX)		++nVal;
-		}else
-		if( pMNUD->iDelta > 0 ){
+		if (pMNUD->iDelta < 0) {
+			if (nVal < INT_MAX) ++nVal;
+		}else if (pMNUD->iDelta > 0) {
 			// INT_MINは SetDlgItemInt で扱えない
-			if (nVal > -INT_MAX)	--nVal;
+			if (nVal > -INT_MAX) --nVal;
 		}
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, nVal, TRUE );
 
@@ -384,11 +377,9 @@ BOOL CDlgPluginOption::OnNotify( WPARAM wParam, LPARAM lParam )
 }
 
 
-
 BOOL CDlgPluginOption::OnBnClicked( int wID )
 {
-	switch( wID )
-	{
+	switch (wID) {
 	case IDC_CHECK_PLUGIN_OPTION:
 		// 編集中のデータの戻し
 		SetFromEdit( m_Line );
@@ -406,7 +397,7 @@ BOOL CDlgPluginOption::OnBnClicked( int wID )
 				if (!m_cPropPlugin->BrowseReadMe(m_sReadMeName)) {
 					WarningMessage( GetHwnd(), LS(STR_PROPCOMPLG_ERR2) );
 				}
-			}else{
+			}else {
 				WarningMessage( GetHwnd(), LS(STR_PROPCOMPLG_ERR3) );
 			}
 		}
@@ -435,7 +426,7 @@ BOOL CDlgPluginOption::OnBnClicked( int wID )
 
 BOOL CDlgPluginOption::OnCbnSelChange( HWND hwndCtl, int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_COMBO_PLUGIN_OPTION:
 		// 編集中のデータの戻し
 		SetFromEdit( m_Line );
@@ -450,7 +441,7 @@ BOOL CDlgPluginOption::OnCbnSelChange( HWND hwndCtl, int wID )
 
 BOOL CDlgPluginOption::OnEnChange( HWND hwndCtl, int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_EDIT_PLUGIN_OPTION:
 	case IDC_EDIT_PLUGIN_OPTION_DIR:
 	case IDC_EDIT_PLUGIN_OPTION_NUM:
@@ -467,12 +458,10 @@ BOOL CDlgPluginOption::OnEnChange( HWND hwndCtl, int wID )
 
 BOOL CDlgPluginOption::OnActivate( WPARAM wParam, LPARAM lParam )
 {
-	switch( LOWORD( wParam ) )
-	{
+	switch (LOWORD( wParam )) {
 	case WA_INACTIVE:
 		SetFromEdit( m_Line );
 		break;
-
 	case WA_ACTIVE:
 	case WA_CLICKACTIVE:
 	default:
@@ -497,7 +486,7 @@ void CDlgPluginOption::ChangeListPosition( void )
 	//	現在のFocus取得
 	int current = ListView_GetNextItem( hwndList, -1, LVNI_SELECTED);
 
-	if( current == -1 || current == m_Line ){
+	if (current == -1 || current == m_Line) {
 		return;
 	}
 
@@ -539,20 +528,16 @@ void CDlgPluginOption::MoveFocusToEdit( void )
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_CHECK_PLUGIN_OPTION );
 			::SetFocus( hwndCtrl );
-		}
-		else if (sType == OPTION_TYPE_INT) {
+		}else if (sType == OPTION_TYPE_INT) {
 			hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM );
 			::SetFocus( hwndCtrl );
-		}
-		else if (sType == OPTION_TYPE_SEL) {
+		}else if (sType == OPTION_TYPE_SEL) {
 			hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_COMBO_PLUGIN_OPTION );
 			::SetFocus( hwndCtrl );
-		}
-		else if (sType == OPTION_TYPE_DIR) {
+		}else if (sType == OPTION_TYPE_DIR) {
 			hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR );
 			::SetFocus( hwndCtrl );
-		}
-		else {
+		}else {
 			hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_EDIT_PLUGIN_OPTION );
 			::SetFocus( hwndCtrl );
 		}
@@ -587,14 +572,12 @@ void CDlgPluginOption::SetToEdit( int iLine )
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_CHECK_PLUGIN_OPTION);
-		}
-		else if (sType == OPTION_TYPE_INT) {
+		}else if (sType == OPTION_TYPE_INT) {
 			::DlgItem_SetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, buf );
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_EDIT_PLUGIN_OPTION_NUM);
-		}
-		else if (sType == OPTION_TYPE_SEL) {
+		}else if (sType == OPTION_TYPE_SEL) {
 			// CONBO 設定
 			std::vector<wstring>	selects;
 			selects = m_cPlugin->m_options[iLine]->GetSelects();
@@ -623,14 +606,12 @@ void CDlgPluginOption::SetToEdit( int iLine )
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_COMBO_PLUGIN_OPTION);
-		}
-		else if (sType == OPTION_TYPE_DIR) {
+		}else if (sType == OPTION_TYPE_DIR) {
 			::DlgItem_SetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, buf );
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_EDIT_PLUGIN_OPTION_DIR);
-		}
-		else {
+		}else {
 			::DlgItem_SetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf );
 
 			// 編集領域の切り替え
@@ -665,10 +646,9 @@ void CDlgPluginOption::SetFromEdit( int iLine )
 		sType = m_cPlugin->m_options[iLine]->GetType();
 		transform (sType.begin (), sType.end (), sType.begin (), tolower);
 		if (sType == OPTION_TYPE_BOOL) {
-			if( ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_PLUGIN_OPTION ) ) {
+			if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_PLUGIN_OPTION )) {
 				_tcscpy( buf, BOOL_DISP_TRUE );
-			}
-			else {
+			}else {
 				_tcscpy( buf, BOOL_DISP_FALSE );
 			}
 			lvi.mask     = LVIF_TEXT;
@@ -676,18 +656,14 @@ void CDlgPluginOption::SetFromEdit( int iLine )
 			lvi.iSubItem = 1;
 			lvi.pszText  = buf;
 			ListView_SetItem( hwndList, &lvi );
-		}
-		else if (sType == OPTION_TYPE_INT) {
+		}else if (sType == OPTION_TYPE_INT) {
 			nVal = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, NULL, TRUE );
 			auto_sprintf( buf, _T("%d"), nVal);
-		}
-		else if (sType == OPTION_TYPE_SEL) {
+		}else if (sType == OPTION_TYPE_SEL) {
 			::DlgItem_GetText( GetHwnd(), IDC_COMBO_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE+1);
-		}
-		else if (sType == OPTION_TYPE_DIR) {
+		}else if (sType == OPTION_TYPE_DIR) {
 			::DlgItem_GetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, buf, MAX_LENGTH_VALUE+1);
-		}
-		else {
+		}else {
 			::DlgItem_GetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE+1);
 		}
 		memset_raw( &lvi, 0, sizeof( lvi ));
@@ -706,8 +682,7 @@ void CDlgPluginOption::SepSelect( wstring sTrg, wstring* spView, wstring* spValu
 	ix = sTrg.find(L':');
 	if ((std::wstring::size_type)ix == std::wstring::npos) {
 		*spView = *spValue = sTrg;
-	}
-	else {
+	}else {
 #ifdef _DEBUG
 		*spView  = sTrg;
 #else
@@ -751,3 +726,4 @@ void CDlgPluginOption::SelectDirectory( int iLine )
 		::DlgItem_SetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, szDir );
 	}
 }
+

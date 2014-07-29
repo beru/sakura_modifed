@@ -106,13 +106,13 @@ INT_PTR CDlgAbout::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lP
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent( hWnd, wMsg, wParam, lParam );
-	switch( wMsg ){
+	switch (wMsg) {
 	case WM_CTLCOLORDLG:
 	case WM_CTLCOLORSTATIC:
 		// EDITも READONLY か DISABLEの場合 WM_CTLCOLORSTATIC になります
-		if( (HWND)lParam == GetDlgItem(hWnd, IDC_EDIT_ABOUT) ){
+		if ((HWND)lParam == GetDlgItem(hWnd, IDC_EDIT_ABOUT)) {
 			::SetTextColor( (HDC)wParam, RGB( 102, 102, 102 ) );
-		} else {
+		}else {
 			::SetTextColor( (HDC)wParam, RGB( 0, 0, 0 ) );
         }
 		return (INT_PTR)GetStockObject( WHITE_BRUSH );
@@ -223,7 +223,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	//	Edit Boxにメッセージを追加する．
 	// 2011.06.01 nasukoji	各国語メッセージリソース対応
 	LPCTSTR pszDesc = LS( IDS_ABOUT_DESCRIPTION );
-	if( _tcslen(pszDesc) > 0 ){
+	if (_tcslen(pszDesc) > 0) {
 		_tcsncpy( szMsg, pszDesc, _countof(szMsg) - 1 );
 		szMsg[_countof(szMsg) - 1] = 0;
 		::DlgItem_SetText( GetHwnd(), IDC_EDIT_ABOUT, szMsg );
@@ -235,7 +235,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	HICON hIcon = GetAppIcon( m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false );
 	HWND hIconWnd = GetDlgItem( GetHwnd(), IDC_STATIC_MYICON );
 	
-	if( hIconWnd != NULL && hIcon != NULL ){
+	if (hIconWnd != NULL && hIcon != NULL) {
 		StCtl_SetIcon( hIconWnd, hIcon );
 	}
 	//	To Here Dec. 2, 2002 genta
@@ -253,7 +253,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 BOOL CDlgAbout::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_BUTTON_COPY:
 		{
 			HWND hwndEditVer = GetDlgItem( GetHwnd(), IDC_EDIT_VER );
@@ -268,7 +268,7 @@ BOOL CDlgAbout::OnBnClicked( int wID )
 
 BOOL CDlgAbout::OnStnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	//	2006.07.27 genta 原作者連絡先のボタンを削除 (ヘルプから削除されているため)
 	case IDC_STATIC_URL_UR:
 //	case IDC_STATIC_URL_ORG:	del 2008/7/4 Uchi
@@ -294,19 +294,19 @@ BOOL CUrlWnd::SetSubclassWindow( HWND hWnd )
 {
 	// STATICウィンドウをサブクラス化する
 	// 元のSTATICは WS_TABSTOP, SS_NOTIFY スタイルのものを使用すること
-	if( GetHwnd() != NULL )
+	if (GetHwnd() != NULL)
 		return FALSE;
-	if( !IsWindow( hWnd ) )
+	if (!IsWindow( hWnd ))
 		return FALSE;
 
 	// サブクラス化を実行する
 	LONG_PTR lptr;
 	SetLastError( 0 );
 	lptr = SetWindowLongPtr( hWnd, GWLP_USERDATA, (LONG_PTR)this );
-	if( lptr == 0 && GetLastError() != 0 )
+	if (lptr == 0 && GetLastError() != 0)
 		return FALSE;
 	m_pOldProc = (WNDPROC)SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)UrlWndProc );
-	if( m_pOldProc == NULL )
+	if (m_pOldProc == NULL)
 		return FALSE;
 	m_hWnd = hWnd;
 
@@ -317,7 +317,7 @@ BOOL CUrlWnd::SetSubclassWindow( HWND hWnd )
 	GetObject( hFont, sizeof(lf), &lf );
 	lf.lfUnderline = TRUE;
 	m_hFont = CreateFontIndirect( &lf );
-	if(m_hFont != NULL)
+	if (m_hFont != NULL)
 		SendMessageAny( hWnd, WM_SETFONT, (WPARAM)m_hFont, (LPARAM)FALSE );
 
 	return TRUE;
@@ -398,7 +398,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 		SelectObject( hdc, (HGDIOBJ)hFontOld );
 
 		// フォーカス枠描画
-		if( GetFocus() == hWnd )
+		if (GetFocus() == hWnd)
 			DrawFocusRect( hdc, &rc );
 
 		EndPaint( hWnd, &ps );
@@ -408,11 +408,11 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 		GetClientRect( hWnd, &rc );
 
 		// 背景描画
-		if( pUrlWnd->m_bHilighted ){
+		if (pUrlWnd->m_bHilighted) {
 			// ハイライト時背景描画
 			SetBkColor( hdc, RGB( 0xff, 0xff, 0 ) );
 			::ExtTextOutW_AnyBuild( hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL );
-		}else{
+		}else {
 			// 親にWM_CTLCOLORSTATICを送って背景ブラシを取得し、背景描画する
 			HBRUSH hbr;
 			HBRUSH hbrOld;
@@ -426,7 +426,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 		// 後始末
 		KillTimer( hWnd, 1 );
 		SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)pUrlWnd->m_pOldProc );
-		if( pUrlWnd->m_hFont != NULL )
+		if (pUrlWnd->m_hFont != NULL)
 			DeleteObject( pUrlWnd->m_hFont );
 		pUrlWnd->m_hWnd = NULL;
 		pUrlWnd->m_hFont = NULL;

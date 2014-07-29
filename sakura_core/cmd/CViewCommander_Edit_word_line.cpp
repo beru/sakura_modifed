@@ -22,9 +22,9 @@
 void CViewCommander::Command_WordDeleteToStart( void )
 {
 	/* 矩形選択状態では実行不能(★★もろ手抜き★★) */
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		/* 矩形範囲選択中か */
-		if( m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ){
+		if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
 			ErrorBeep();
 			return;
 		}
@@ -32,12 +32,12 @@ void CViewCommander::Command_WordDeleteToStart( void )
 
 	// 単語の左端に移動
 	CViewCommander::Command_WORDLEFT( true );
-	if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
 
-	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
 		//$$ 動作上は問題が無いらしいですが。
 		//   ここの COpe だけ、意味付け(EOpeCode指定)がされていないので、
 		//   せめて何らかの名前付けをしてあげないと、意図が読み取れません。
@@ -63,20 +63,20 @@ void CViewCommander::Command_WordDeleteToEnd( void )
 {
 
 	/* 矩形選択状態では実行不能((★★もろ手抜き★★)) */
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		/* 矩形範囲選択中か */
-		if( m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ){
+		if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
 			ErrorBeep();
 			return;
 		}
 	}
 	/* 単語の右端に移動 */
 	CViewCommander::Command_WORDRIGHT( true );
-	if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
-	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
 		CMoveCaretOpe*	pcOpe = new CMoveCaretOpe();
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
 			GetSelect().GetFrom(),
@@ -91,11 +91,10 @@ void CViewCommander::Command_WordDeleteToEnd( void )
 }
 
 
-
 //単語切り取り
 void CViewCommander::Command_WordCut( void )
 {
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		/* 切り取り(選択範囲をクリップボードにコピーして削除) */
 		Command_CUT();
 		return;
@@ -103,7 +102,7 @@ void CViewCommander::Command_WordCut( void )
 	//現在位置の単語選択
 	Command_SELECTWORD();
 	/* 切り取り(選択範囲をクリップボードにコピーして削除) */
-	if ( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		//	単語選択で選択できなかったら、次の文字を選ぶことに挑戦。
 		Command_RIGHT( true, false, false );
 	}
@@ -112,11 +111,10 @@ void CViewCommander::Command_WordCut( void )
 }
 
 
-
 //単語削除
 void CViewCommander::Command_WordDelete( void )
 {
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		/* 削除 */
 		m_pCommanderView->DeleteData( true );
 		return;
@@ -129,25 +127,24 @@ void CViewCommander::Command_WordDelete( void )
 }
 
 
-
 //行頭まで切り取り(改行単位)
 void CViewCommander::Command_LineCutToStart( void )
 {
 	CLayout*	pCLayout;
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		/* 切り取り(選択範囲をクリップボードにコピーして削除) */
 		Command_CUT();
 		return;
 	}
 	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );	/* 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す */
-	if( NULL == pCLayout ){
+	if (NULL == pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
 	CLayoutPoint ptPos;
 	GetDocument()->m_cLayoutMgr.LogicToLayout( CLogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos );
-	if( GetCaret().GetCaretLayoutPos() == ptPos ){
+	if (GetCaret().GetCaretLayoutPos() == ptPos){
 		ErrorBeep();
 		return;
 	}
@@ -167,20 +164,20 @@ void CViewCommander::Command_LineCutToStart( void )
 void CViewCommander::Command_LineCutToEnd( void )
 {
 	CLayout*	pCLayout;
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		/* 切り取り(選択範囲をクリップボードにコピーして削除) */
 		Command_CUT();
 		return;
 	}
 	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );	/* 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す */
-	if( NULL == pCLayout ){
+	if (NULL == pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
 	CLayoutPoint ptPos;
 
-	if( EOL_NONE == pCLayout->GetDocLineRef()->GetEol() ){	/* 改行コードの種類 */
+	if (EOL_NONE == pCLayout->GetDocLineRef()->GetEol()) {	/* 改行コードの種類 */
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
 				pCLayout->GetDocLineRef()->GetLengthWithEOL(),
@@ -188,8 +185,7 @@ void CViewCommander::Command_LineCutToEnd( void )
 			),
 			&ptPos
 		);
-	}
-	else{
+	}else {
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
 				pCLayout->GetDocLineRef()->GetLengthWithEOL() - pCLayout->GetDocLineRef()->GetEol().GetLen(),
@@ -199,7 +195,7 @@ void CViewCommander::Command_LineCutToEnd( void )
 		);
 	}
 
-	if( GetCaret().GetCaretLayoutPos().GetY2() == ptPos.y && GetCaret().GetCaretLayoutPos().GetX2() >= ptPos.x ){
+	if (GetCaret().GetCaretLayoutPos().GetY2() == ptPos.y && GetCaret().GetCaretLayoutPos().GetX2() >= ptPos.x) {
 		ErrorBeep();
 		return;
 	}
@@ -214,17 +210,16 @@ void CViewCommander::Command_LineCutToEnd( void )
 }
 
 
-
 //行頭まで削除(改行単位)
 void CViewCommander::Command_LineDeleteToStart( void )
 {
 	CLayout*	pCLayout;
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		m_pCommanderView->DeleteData( true );
 		return;
 	}
 	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );	/* 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す */
-	if( NULL == pCLayout ){
+	if (NULL == pCLayout) {
 		ErrorBeep();
 		return;
 	}
@@ -232,7 +227,7 @@ void CViewCommander::Command_LineDeleteToStart( void )
 	CLayoutPoint ptPos;
 
 	GetDocument()->m_cLayoutMgr.LogicToLayout( CLogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos );
-	if( GetCaret().GetCaretLayoutPos() == ptPos ){
+	if (GetCaret().GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
 	}
@@ -247,24 +242,23 @@ void CViewCommander::Command_LineDeleteToStart( void )
 }
 
 
-
 //行末まで削除(改行単位)
 void CViewCommander::Command_LineDeleteToEnd( void )
 {
 	CLayout*	pCLayout;
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		m_pCommanderView->DeleteData( true );
 		return;
 	}
 	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );	/* 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す */
-	if( NULL == pCLayout ){
+	if (NULL == pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
 	CLayoutPoint ptPos;
 
-	if( EOL_NONE == pCLayout->GetDocLineRef()->GetEol() ){	/* 改行コードの種類 */
+	if (EOL_NONE == pCLayout->GetDocLineRef()->GetEol()) {	/* 改行コードの種類 */
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
 				pCLayout->GetDocLineRef()->GetLengthWithEOL(),
@@ -272,7 +266,7 @@ void CViewCommander::Command_LineDeleteToEnd( void )
 			),
 			&ptPos
 		);
-	}else{
+	}else {
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
 				pCLayout->GetDocLineRef()->GetLengthWithEOL() - pCLayout->GetDocLineRef()->GetEol().GetLen(),
@@ -282,7 +276,7 @@ void CViewCommander::Command_LineDeleteToEnd( void )
 		);
 	}
 
-	if( GetCaret().GetCaretLayoutPos().GetY2() == ptPos.y && GetCaret().GetCaretLayoutPos().GetX2() >= ptPos.x ){
+	if (GetCaret().GetCaretLayoutPos().GetY2() == ptPos.y && GetCaret().GetCaretLayoutPos().GetX2() >= ptPos.x) {
 		ErrorBeep();
 		return;
 	}
@@ -297,22 +291,21 @@ void CViewCommander::Command_LineDeleteToEnd( void )
 }
 
 
-
 //行切り取り(折り返し単位)
 void CViewCommander::Command_CUT_LINE( void )
 {
-	if( m_pCommanderView->GetSelectionInfo().IsMouseSelecting() ){	/* マウスによる範囲選択中 */
+	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	/* マウスによる範囲選択中 */
 		ErrorBeep();
 		return;
 	}
 
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		ErrorBeep();
 		return;
 	}
 
 	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().y );
-	if( NULL == pcLayout ){
+	if (NULL == pcLayout) {
 		ErrorBeep();
 		return;
 	}
@@ -328,22 +321,21 @@ void CViewCommander::Command_CUT_LINE( void )
 }
 
 
-
 /* 行削除(折り返し単位) */
 void CViewCommander::Command_DELETE_LINE( void )
 {
-	if( m_pCommanderView->GetSelectionInfo().IsMouseSelecting() ){	/* マウスによる範囲選択中 */
+	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	/* マウスによる範囲選択中 */
 		ErrorBeep();
 		return;
 	}
 
 	const CLayout*	pcLayout;
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		ErrorBeep();
 		return;
 	}
 	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );
-	if( NULL == pcLayout ){
+	if (NULL == pcLayout) {
 		ErrorBeep();
 		return;
 	}
@@ -354,11 +346,11 @@ void CViewCommander::Command_DELETE_LINE( void )
 
 	Command_DELETE();
 	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );
-	if( NULL != pcLayout ){
+	if (NULL != pcLayout) {
 		// 2003-04-30 かろと
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
-		if( !GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode ) {
+		if (!GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode) {
 			CLogicInt nIndex;
 
 			CLayoutInt tmp;
@@ -367,14 +359,14 @@ void CViewCommander::Command_DELETE_LINE( void )
 
 			if (ptCaretPos_OLD.x > 0) {
 				ptCaretPos_OLD.x--;
-			} else {
+			}else {
 				ptCaretPos_OLD.x = m_pCommanderView->LineIndexToColumn( pcLayout, nIndex );
 			}
 		}
 		/* 操作前の位置へカーソルを移動 */
 		GetCaret().MoveCursor( ptCaretPos_OLD, true );
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
-		if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+		if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
 			/* 操作の追加 */
 			GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(
@@ -388,7 +380,6 @@ void CViewCommander::Command_DELETE_LINE( void )
 }
 
 
-
 /* 行の二重化(折り返し単位) */
 void CViewCommander::Command_DUPLICATELINE( void )
 {
@@ -397,18 +388,18 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	CNativeW		cmemBuf;
 	const CLayout*	pcLayout;
 
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
 		/* 現在の選択範囲を非選択状態に戻す */
 		m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
 	}
 
 	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );
-	if( NULL == pcLayout ){
+	if (NULL == pcLayout) {
 		ErrorBeep();
 		return;
 	}
 
-	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
 		/* 操作の追加 */
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
@@ -423,7 +414,7 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	//行頭に移動(折り返し単位)
 	Command_GOLINETOP( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */ );
 
-	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
 		/* 操作の追加 */
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
@@ -432,7 +423,6 @@ void CViewCommander::Command_DUPLICATELINE( void )
 			)
 		);
 	}
-
 
 
 	/* 二重化したい行を調べる
@@ -446,14 +436,14 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	bCRLF = ( EOL_NONE == pcLayout->GetLayoutEol() ) ? FALSE : TRUE;
 
 	bAddCRLF = FALSE;
-	if( !bCRLF ){
-		if( GetCaret().GetCaretLayoutPos().GetY2() == GetDocument()->m_cLayoutMgr.GetLineCount() - 1 ){
+	if (!bCRLF) {
+		if (GetCaret().GetCaretLayoutPos().GetY2() == GetDocument()->m_cLayoutMgr.GetLineCount() - 1) {
 			bAddCRLF = TRUE;
 		}
 	}
 
 	cmemBuf.SetString( pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen() );	//	※pcLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
-	if( bAddCRLF ){
+	if (bAddCRLF) {
 		/* 現在、Enterなどで挿入する改行コードの種類を取得 */
 		CEol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
 		cmemBuf.AppendString( cWork.GetValue2(), cWork.GetLen() );
@@ -473,8 +463,7 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	GetCaret().MoveCursor( ptCaretPosOld, true );
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-
-	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
 		/* 操作の追加 */
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
@@ -485,3 +474,4 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	}
 	return;
 }
+

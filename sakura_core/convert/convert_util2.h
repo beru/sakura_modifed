@@ -43,68 +43,66 @@
 
 inline ACHAR _GetHexChar( ACHAR c )
 {
-	if( (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') ){
+	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
 		return c;
-	}else if( c >= 'a' && c <= 'f' ){
+	}else if (c >= 'a' && c <= 'f') {
 		return  c - ('a' - 'A');
-	}else{
+	}else {
 		return '\0';
 	}
 }
 inline WCHAR _GetHexChar( WCHAR c )
 {
-	if( (c >= L'0' && c <= L'9') || (c >= L'A' && c <= L'F') ){
+	if ((c >= L'0' && c <= L'9') || (c >= L'A' && c <= L'F')) {
 		return c;
-	}else if( c >= L'a' && c <= L'f' ){
+	}else if (c >= L'a' && c <= L'f') {
 		return  c - (L'a' - L'A');
-	}else{
+	}else {
 		return L'\0';
 	}
 }
-
 
 /*
 	c の入力値： 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
 */
 inline int _HexToInt( ACHAR c )
 {
-	if( c <= '9' ){
+	if (c <= '9') {
 		return c - '0';
-	}else{
+	}else {
 		return c - 'A' + 10;
 	}
 }
 inline int _HexToInt( WCHAR c )
 {
-	if( c <= L'9' ){
+	if (c <= L'9') {
 		return c - L'0';
-	}else{
+	}else {
 		return c - L'A' + 10;
 	}
 }
 
-
 template< class CHAR_TYPE >
 int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 {
-	const CHAR_TYPE *pr;
-	char *pw;
+	const CHAR_TYPE* pr;
+	char* pw;
 	int ninc_len;
 
 	pr = pS;
 	pw = pDst;
 
-	while( pr < pS + nLen ){
+	while (pr < pS + nLen) {
 		/* =XX の形式でない部分をデコード */
-		if( sizeof(CHAR_TYPE) == 2 ){
-			if( *pr != L'=' ){
+		if (sizeof(CHAR_TYPE) == 2) {
+			if (*pr != L'=') {
 				*pw = static_cast<char>( *pr );
 				pw += 1;
 				pr += 1;
 				continue;
 			}
-		}else{
-			if( *pr != '=' ){
+		}else {
+			if (*pr != '=') {
 				*pw = static_cast<char>( *pr );
 				pw += 1;
 				pr += 1;
@@ -114,15 +112,15 @@ int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 
 		/* =XX の部分をデコード */
 		ninc_len = 1;   // '=' の部分のインクリメント。
-		if( pr + 2 < pS + nLen ){
+		if (pr + 2 < pS + nLen) {
 			// デコード実行部分
 			CHAR_TYPE c1, c2;
 			c1 = _GetHexChar(pr[1]);
 			c2 = _GetHexChar(pr[2]);
-			if( c1 != 0 && c2 != 0 ){
+			if (c1 != 0 && c2 != 0) {
 				*pw = static_cast<char>(_HexToInt(c1) << 4) | static_cast<char>(_HexToInt(c2));
 				++pw;
-			}else{
+			}else {
 				pw[0] = '=';
 				pw[1] = static_cast<char>(pr[1] & 0x00ff);
 				pw[2] = static_cast<char>(pr[2] & 0x00ff);
@@ -136,11 +134,6 @@ int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 
 	return pw - pDst;
 }
-
-
-
-
-
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -178,7 +171,7 @@ bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
 {
 	bool bret = true;
 
-	if( nSrcLen < 1 ){
+	if (nSrcLen < 1) {
 		return false;
 	}
 
@@ -188,19 +181,19 @@ bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
 		ooxx xxxx   ooxx xxxx   ooxx xxxx   ooxx xxxx -> 3 byte(s)
 	*/
 	
-	switch( nSrcLen % 4 ){
+	switch (nSrcLen % 4) {
 	case 0:
 		break;
 	case 1:
 		bret = false;
 		break;
 	case 2:
-		if( (Base64ToVal(pSrc[nSrcLen-1]) & 0x0f) != 0 ){
+		if ((Base64ToVal(pSrc[nSrcLen-1]) & 0x0f) != 0) {
 			bret = false;
 		}
 		break;
 	case 3:
-		if( (Base64ToVal(pSrc[nSrcLen-1]) & 0x03) != 0 ){
+		if ((Base64ToVal(pSrc[nSrcLen-1]) & 0x03) != 0) {
 			bret = false;
 		}
 		break;
@@ -227,13 +220,13 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	{
 		int i = 0;
 		bool bret;
-		for( ; i < nsrclen; i++ ){
-			if( sizeof(CHAR_TYPE) == 2 ){
+		for (; i < nsrclen; i++) {
+			if (sizeof(CHAR_TYPE) == 2) {
 				bret = ( pSrc[nsrclen-1-i] == L'=' );
-			}else{
+			}else {
 				bret = ( pSrc[nsrclen-1-i] == '=' );
 			}
-			if( bret != true ){
+			if (bret != true) {
 				break;
 			}
 		}
@@ -241,18 +234,18 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	}
 
 	nDesLen = 0;
-	for( int i = 0; i < nsrclen; i++ ){
-		if( i < nsrclen - (nsrclen % 4) ){
+	for (int i = 0; i < nsrclen; i++) {
+		if (i < nsrclen - (nsrclen % 4)) {
 			sMax = 4;
-		}else{
+		}else {
 			sMax = (nsrclen % 4);
 		}
 		lData = 0;
-		for( int j = 0; j < sMax; j++ ){
+		for (int j = 0; j < sMax; j++) {
 			long k = Base64ToVal( pSrc[i + j] );
 			lData |= k << ((4 - j - 1) * 6);
 		}
-		for( int j = 0; j < (sMax * 6)/ 8 ; j++ ){
+		for (int j = 0; j < (sMax * 6)/ 8 ; j++) {
 			pDest[nDesLen] = static_cast<char>((lData >> (8 * (2 - j))) & 0x0000ff);
 			nDesLen++;
 		}
@@ -271,7 +264,7 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 template< class CHAR_TYPE >
 int _EncodeBase64( const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest )
 {
-	const unsigned char *psrc;
+	const unsigned char* psrc;
 	unsigned long lDataSrc;
 	int i, j, k, n;
 	char v;
@@ -279,25 +272,24 @@ int _EncodeBase64( const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest )
 
 	psrc = reinterpret_cast<const unsigned char *>(pSrc);
 	nDesLen = 0;
-	for( i = 0; i < nSrcLen; i += 3 ){
+	for (i = 0; i < nSrcLen; i += 3) {
 		lDataSrc = 0;
-		if( nSrcLen - i < 3 ){
+		if (nSrcLen - i < 3) {
 			n = nSrcLen % 3;
 			j = (n * 4 + 2) / 3;  // 端数切り上げ
-		}else{
+		}else {
 			n = 3;
 			j = 4;
 		}
 		// n 今回エンコードする長さ
 		// j エンコード後のBASE64文字数
-		for( k = 0; k < n; k++ ){
-			lDataSrc |=
-				static_cast<unsigned long>(psrc[i + k]) << ((n - k - 1) * 8);
+		for (k = 0; k < n; k++) {
+			lDataSrc |= static_cast<unsigned long>(psrc[i + k]) << ((n - k - 1) * 8);
 		}
 		// パッドビット付加。lDataSrc の長さが 6*j になるように調節する。
 		lDataSrc <<= j * 6 - n * 8;
 		// エンコードして書き込む。
-		for( k = 0; k < j; k++ ){
+		for (k = 0; k < j; k++) {
 			v = static_cast<char>((lDataSrc >> (6 * (j - k - 1))) & 0x0000003f);
 			pDest[nDesLen] = static_cast<CHAR_TYPE>(ValToBase64<CHAR_TYPE>( v ));
 			nDesLen++;
@@ -307,18 +299,12 @@ int _EncodeBase64( const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest )
 }
 
 
-
-
-
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 // UU デコード
 //
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
-
-
 
 
 /*
@@ -351,24 +337,22 @@ end
 */
 
 
-
-
 inline BYTE _UUDECODE_CHAR( WCHAR c )
 {
 	BYTE c_ = (c & 0xff);
-	if( c_ == L'`' || c_ == L'~' ){
+	if (c_ == L'`' || c_ == L'~') {
 		c_ = L' ';
 	}
 	return static_cast<BYTE>((static_cast<BYTE>(c_) - 0x20) & 0x3f);
 }
+
 inline BYTE _UUDECODE_CHAR( ACHAR c )
 {
-	if( c == '`' || c == '~' ){
+	if (c == '`' || c == '~') {
 		c = ' ';
 	}
 	return static_cast<BYTE>((static_cast<BYTE>(c) - 0x20) & 0x3f);
 }
-
 
 
 /*
@@ -386,7 +370,7 @@ int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	unsigned long lDataDes;
 	const CHAR_TYPE *pr;
 
-	if( nSrcLen < 1 ){
+	if (nSrcLen < 1) {
 		return 0;
 	}
 
@@ -394,12 +378,12 @@ int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	for( ; i < nSrcLen; i += 4 ){
+	for (; i < nSrcLen; i += 4) {
 		lDataDes = 0;
-		for( j = 0; j < 4; ++j ){
+		for (j = 0; j < 4; ++j) {
 			lDataDes |= _UUDECODE_CHAR(pr[i+j]) << ((4 - j - 1) * 6);
 		}
-		for( j = 0; j < 3; ++j ){
+		for (j = 0; j < 3; ++j) {
 			pDest[k + j] = (char)((lDataDes >> ((3 - j - 1) * 8)) & 0x000000ff);
 		}
 		k += 3;
@@ -421,35 +405,34 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 	int nwlen, nstartidx;
 	CHAR_TYPE pszSplitChars[16];
 
-	if( sizeof(CHAR_TYPE) == 2 ){
+	if (sizeof(CHAR_TYPE) == 2) {
 		// スペースまたはタブが区切り文字
 		pszSplitChars[0] = L' ';
 		pszSplitChars[1] = L'\t';
 		pszSplitChars[2] = L'\0';
-	}else{
+	}else {
 		// スペースまたはタブが区切り文字
 		pszSplitChars[0] = ' ';
 		pszSplitChars[1] = '\t';
 		pszSplitChars[2] = '\0';
 	}
 	
-
-	if( nLen < 1 ){
-		if( pszFilename ){
+	if (nLen < 1) {
+		if (pszFilename) {
 			pszFilename[0] = _WINT('\0');
 		}
 		return false;
 	}
 
 	// 先頭の空白・改行文字をスキップ
-	for( nstartidx = 0; nstartidx < nLen; ++nstartidx ){
+	for (nstartidx = 0; nstartidx < nLen; ++nstartidx) {
 		CHAR_TYPE c = pSrc[nstartidx];
-		if( sizeof(CHAR_TYPE) == 2 ){
-			if( c != L'\r' && c != L'\n' && c != L' ' && c != L'\t' ){
+		if (sizeof(CHAR_TYPE) == 2) {
+			if (c != L'\r' && c != L'\n' && c != L' ' && c != L'\t') {
 				break;
 			}
-		}else{
-			if( c != '\r' && c != '\n' && c != ' ' && c != '\t' ){
+		}else {
+			if (c != '\r' && c != '\n' && c != ' ' && c != '\t') {
 				break;
 			}
 		}
@@ -464,17 +447,17 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 	/* begin を取得 */
 
 	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
-	if( nwlen != 5 ){
+	if (nwlen != 5) {
 		// error.
 		return false;
 	}
-	if( sizeof(CHAR_TYPE) == 2 ){
-		if( wcsncmp(pwstart, L"begin", 5) != 0 ){
+	if (sizeof(CHAR_TYPE) == 2) {
+		if (wcsncmp(pwstart, L"begin", 5) != 0) {
 			// error.
 			return false;
 		}
-	}else{
-		if( strncmp(reinterpret_cast<const char*>(pwstart), "begin", 5) != 0 ){
+	}else {
+		if (strncmp(reinterpret_cast<const char*>(pwstart), "begin", 5) != 0) {
 			// error.
 			return false;
 		}
@@ -483,20 +466,20 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 	/* 3桁の8進数（Unix システムのパーミッション）を取得 */
 
 	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
-	if( nwlen != 3 ){
+	if (nwlen != 3) {
 		// error.
 		return false;
 	}
-	for( int i = 0; i < nwlen; i++ ){
-		if( sizeof(CHAR_TYPE) == 2 ){
+	for (int i = 0; i < nwlen; i++) {
+		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
-			if( !iswdigit(pwstart[i]) || (pwstart[i] == L'8' || pwstart[i] == L'9') ){
+			if (!iswdigit(pwstart[i]) || (pwstart[i] == L'8' || pwstart[i] == L'9')) {
 				// error.
 				return false;
 			}
-		}else{
+		}else {
 			// ACHAR の場合の処理
-			if( !isdigit(pwstart[i]) || (pwstart[i] == '8' || pwstart[i] == '9') ){
+			if (!isdigit(pwstart[i]) || (pwstart[i] == '8' || pwstart[i] == '9')) {
 				// error.
 				return false;
 			}
@@ -507,24 +490,24 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
 	// 末尾の空白・改行文字をスキップ
-	for( ; nwlen > 0; --nwlen ){
+	for (; nwlen > 0; --nwlen) {
 		CHAR_TYPE c = pwstart[nwlen-1];
-		if( sizeof(CHAR_TYPE) == 2 ){
-			if( !WCODE::IsLineDelimiter(c) && c != L' ' && c != L'\t' ){
+		if (sizeof(CHAR_TYPE) == 2) {
+			if (!WCODE::IsLineDelimiter(c) && c != L' ' && c != L'\t') {
 				break;
 			}
-		}else{
-			if( c != '\r' && c != '\n' && c != ' ' && c != '\t' ){
+		}else {
+			if (c != '\r' && c != '\n' && c != ' ' && c != '\t') {
 				break;
 			}
 		}
 	}
-	if( nwlen < 1 || nwlen + 1  > _MAX_PATH ){
+	if (nwlen < 1 || nwlen + 1  > _MAX_PATH) {
 		// error.
 		return false;
 	}
 	// ファイル名を格納
-	if( pszFilename ){
+	if (pszFilename) {
 		strtotcs( pszFilename, pwstart, (size_t)nwlen );
 		pszFilename[nwlen] = _WINT('\0');
 	}
@@ -549,16 +532,16 @@ bool CheckUUFooter( const CHAR_TYPE *pS, const int nLen )
 	// ※ 空行はフッターに含めない。
 
 	// 先頭の改行・空白文字をスキップ
-	for( nstartidx = 0; nstartidx < nLen; ++nstartidx ){
+	for (nstartidx = 0; nstartidx < nLen; ++nstartidx) {
 		CHAR_TYPE c = pS[nstartidx];
-		if( sizeof(CHAR_TYPE) == 2 ){
+		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
-			if( c != L'\r' && c != L'\n' && c != L' ' && c != L'\t' ){
+			if (c != L'\r' && c != L'\n' && c != L' ' && c != L'\t') {
 				break;
 			}
-		}else{
+		}else {
 			// ACHAR の場合の処理
-			if( c != '\r' && c != '\n' && c != ' ' && c != '\t' ){
+			if (c != '\r' && c != '\n' && c != ' ' && c != '\t') {
 				break;
 			}
 		}
@@ -568,16 +551,16 @@ bool CheckUUFooter( const CHAR_TYPE *pS, const int nLen )
 	nsrclen = nLen - nstartidx;
 	i = 0;
 
-	if( nsrclen < 3 ){
+	if (nsrclen < 3) {
 		return false;
 	}
-	if( sizeof(CHAR_TYPE) == 2 ){
-		if( wcsncmp(&pS[nstartidx], L"end", 3) != 0 ){
+	if (sizeof(CHAR_TYPE) == 2) {
+		if (wcsncmp(&pS[nstartidx], L"end", 3) != 0) {
 			// error.
 			return false;
 		}
-	}else{
-		if( strncmp(reinterpret_cast<const char*>(&pS[nstartidx]), "end", 3) != 0 ){
+	}else {
+		if (strncmp(reinterpret_cast<const char*>(&pS[nstartidx]), "end", 3) != 0) {
 			// error.
 			return false;
 		}
@@ -585,16 +568,16 @@ bool CheckUUFooter( const CHAR_TYPE *pS, const int nLen )
 	i += 3;
 
 	// end の後が空白文字ばかりであることを確認
-	for( ; i < nsrclen; ++i ){
+	for (; i < nsrclen; ++i) {
 		CHAR_TYPE c = psrc[i];
-		if( sizeof(CHAR_TYPE) == 2 ){
+		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
-			if( !WCODE::IsLineDelimiter(c) && c != L' ' && c != L'\t' ){
+			if (!WCODE::IsLineDelimiter(c) && c != L' ' && c != L'\t') {
 				return false;
 			}
-		}else{
+		}else {
 			// ACHAR の場合の処理
-			if( c != '\r' && c != '\n' && c != ' ' && c != '\t' ){
+			if (c != '\r' && c != '\n' && c != ' ' && c != '\t') {
 				return false;
 			}
 		}
@@ -602,9 +585,6 @@ bool CheckUUFooter( const CHAR_TYPE *pS, const int nLen )
 
 	return true;
 }
-
-
-
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -648,27 +628,27 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 	//   "=?ISO-2022-JP?", "=?UTF-8?" などの部分を検出
 	//
 
-	if( pSrc+14 < pSrc+nSrcLen ){
+	if (pSrc+14 < pSrc+nSrcLen) {
 		// JIS の場合
-		if( sizeof(CHAR_TYPE) == 2 ){
+		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?ISO-2022-JP?", 14 );
-		}else{
+		}else {
 			ncmpresult = strnicmp( &pSrc[0], "=?ISO-2022-JP?", 14 );
 		}
-		if( ncmpresult == 0 ){  // 
+		if (ncmpresult == 0) {  // 
 			ecode = CODE_JIS;
 			nLen_part1 = 14;
 			goto finish_first_detect;
 		}
 	}
-	if( pSrc+8 < pSrc+nSrcLen ){
+	if (pSrc+8 < pSrc+nSrcLen) {
 		// UTF-8 の場合
-		if( sizeof(CHAR_TYPE) == 2 ){
+		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?UTF-8?", 8 );
-		}else{
+		}else {
 			ncmpresult = strnicmp( &pSrc[0], "=?UTF-8?", 8 );
 		}
-		if( ncmpresult == 0 ){
+		if (ncmpresult == 0) {
 			ecode = CODE_UTF8;
 			nLen_part1 = 8;
 			goto finish_first_detect;
@@ -676,14 +656,14 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 	}
 	// マッチしなかった場合
 	pcMem_alt->SetRawData( "", 0 );
-	if( peCodetype ){
+	if (peCodetype) {
 		*peCodetype = CODE_NONE;
 	}
 	return 0;
 
 finish_first_detect:;
 
-	if( peCodetype ){
+	if (peCodetype) {
 		*peCodetype = ecode;
 	}
 
@@ -693,22 +673,22 @@ finish_first_detect:;
 	//   "B?" または "Q?" の部分を検出
 	//
 
-	if( pSrc+nLen_part1+2 >= pSrc+nSrcLen ){
+	if (pSrc+nLen_part1+2 >= pSrc+nSrcLen) {
 		pcMem_alt->SetRawData( "", 0 );
 		return 0;
 	}
-	if( sizeof(CHAR_TYPE) == 2 ){
+	if (sizeof(CHAR_TYPE) == 2) {
 		ncmpresult1 = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[nLen_part1]), L"B?", 2 );
 		ncmpresult2 = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[nLen_part1]), L"Q?", 2 );
-	}else{
+	}else {
 		ncmpresult1 = strnicmp( &pSrc[nLen_part1], "B?", 2 );
 		ncmpresult2 = strnicmp( &pSrc[nLen_part1], "Q?", 2 );
 	}
-	if( ncmpresult1 == 0 ){
+	if (ncmpresult1 == 0) {
 		emethod = EM_BASE64;
-	}else if( ncmpresult2 == 0 ){
+	}else if (ncmpresult2 == 0) {
 		emethod = EM_QP;
-	}else{
+	}else {
 		pcMem_alt->SetRawData( "", 0 );
 		return 0;
 	}
@@ -720,17 +700,17 @@ finish_first_detect:;
 
 	pr_base = pSrc + nLen_part1 + nLen_part2;
 	pr = pSrc + nLen_part1 + nLen_part2;
-	for( ; pr < pSrc+nSrcLen-1; ++pr ){
-		if( sizeof(CHAR_TYPE) == 2 ){
+	for (; pr < pSrc+nSrcLen-1; ++pr) {
+		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsncmp( reinterpret_cast<const wchar_t*>(pr), L"?=", 2 );
-		}else{
+		}else {
 			ncmpresult = strncmp( pr, "?=", 2 );
 		}
-		if( ncmpresult == 0 ){
+		if (ncmpresult == 0) {
 			break;
 		}
 	}
-	if( pr == pSrc+nSrcLen-1 ){
+	if (pr == pSrc+nSrcLen-1) {
 		pcMem_alt->SetRawData( "", 0 );
 		return 0;
 	}
@@ -742,14 +722,14 @@ finish_first_detect:;
 
 	pcMem_alt->AllocBuffer( pr - pr_base );
 	pdst = reinterpret_cast<char*>( pcMem_alt->GetRawPtr() );
-	if( pdst == NULL ){
+	if (pdst == NULL) {
 		pcMem_alt->SetRawData( "", 0 );
 		return 0;
 	}
 
-	if( emethod == EM_BASE64 ){
+	if (emethod == EM_BASE64) {
 		ndecoded_len = _DecodeBase64( pr_base, pr-pr_base, pdst );
-	}else{
+	}else {
 		ndecoded_len = _DecodeQP( pr_base, pr-pr_base, pdst );
 	}
 

@@ -41,20 +41,20 @@ INT_PTR CALLBACK CDlgInput1Proc(
 )
 {
 	CDlgInput1* pCDlgInput1;
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		pCDlgInput1 = ( CDlgInput1* )lParam;
-		if( NULL != pCDlgInput1 ){
+		if (NULL != pCDlgInput1) {
 			return pCDlgInput1->DispatchEvent( hwndDlg, uMsg, wParam, lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCDlgInput1 = ( CDlgInput1* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if( NULL != pCDlgInput1 ){
+		if (NULL != pCDlgInput1) {
 			return pCDlgInput1->DispatchEvent( hwndDlg, uMsg, wParam, lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	}
@@ -117,12 +117,11 @@ BOOL CDlgInput1::DoModal(
 	TCHAR buf[1024];
 	buf[0] = _T('\0');
 	BOOL ret=DoModal(hInstApp, hwndParent, pszTitle, pszMessage, nMaxTextLen, buf);
-	if(ret){
+	if (ret) {
 		auto_strcpy(pszText,to_not_tchar(buf));
 	}
 	return ret;
 }
-
 
 
 /* ダイアログのメッセージ処理 */
@@ -136,7 +135,7 @@ INT_PTR CDlgInput1::DispatchEvent(
 	WORD	wNotifyCode;
 	WORD	wID;
 //	int		nRet;
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 */
 		// Modified by KEITA for WIN64 2003.9.6
@@ -151,10 +150,10 @@ INT_PTR CDlgInput1::DispatchEvent(
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
 		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		switch( wNotifyCode ){
+		switch (wNotifyCode) {
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
-			switch( wID ){
+			switch (wID) {
 			case IDOK:
 				m_cmemText.AllocStringBuffer( ::GetWindowTextLength( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ) ) );
 				::GetWindowText( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ), m_cmemText.GetStringPtr(), m_nMaxTextLen + 1 );	/* テキスト */
@@ -183,6 +182,4 @@ INT_PTR CDlgInput1::DispatchEvent(
 	}
 	return FALSE;
 }
-
-
 

@@ -29,13 +29,11 @@ const DWORD p_helpids[] = {
 };
 
 
-
 CDlgSetCharSet::CDlgSetCharSet()
 {
 	m_pnCharSet = NULL;			// 文字コードセット
 	m_pbBom = NULL;				// 文字コードセット
 }
-
 
 
 /* モーダルダイアログの表示 */
@@ -46,7 +44,6 @@ int CDlgSetCharSet::DoModal( HINSTANCE hInstance, HWND hwndParent, ECodeType* pn
 
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_SETCHARSET, (LPARAM)NULL );
 }
-
 
 
 BOOL CDlgSetCharSet::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
@@ -73,17 +70,16 @@ BOOL CDlgSetCharSet::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 }
 
 
-
 BOOL CDlgSetCharSet::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_BUTTON_HELP:
 		/* 「文字コードセット設定」のヘルプ */
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CHG_CHARSET) );
 		return TRUE;
 	case IDOK:
 		/* ダイアログデータの取得 */
-		if( GetData() ){
+		if (GetData()) {
 			CloseDialog( TRUE );
 		}
 		return TRUE;
@@ -95,7 +91,6 @@ BOOL CDlgSetCharSet::OnBnClicked( int wID )
 	/* 基底クラスメンバ */
 	return CDialog::OnBnClicked( wID );
 }
-
 
 
 // BOM の設定
@@ -112,18 +107,15 @@ void CDlgSetCharSet::SetBOM( void )
 		::EnableWindow( m_hwndCheckBOM, TRUE );
 		if (lRes == *m_pnCharSet) {
 			fCheck = *m_pbBom ? BST_CHECKED : BST_UNCHECKED;
-		}
-		else{
+		}else {
 			fCheck = cCodeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 		}
-	}
-	else {
+	}else {
 		::EnableWindow( m_hwndCheckBOM, FALSE );
 		fCheck = BST_UNCHECKED;
 	}
 	BtnCtl_SetCheck( m_hwndCheckBOM, fCheck );
 }
-
 
 
 // 文字コード選択時の処理
@@ -144,12 +136,10 @@ BOOL CDlgSetCharSet::OnCbnSelChange( HWND hwndCtl, int wID )
 			::EnableWindow( m_hwndCheckBOM, TRUE );
 			if (lRes == *m_pnCharSet) {
 				fCheck = *m_pbBom ? BST_CHECKED : BST_UNCHECKED;
-			}
-			else{
+			}else {
 				fCheck = cCodeTypeName.IsBomDefOn() ? BST_CHECKED : BST_UNCHECKED;
 			}
-		}
-		else {
+		}else {
 			::EnableWindow( m_hwndCheckBOM, FALSE );
 			fCheck = BST_UNCHECKED;
 		}
@@ -160,12 +150,10 @@ BOOL CDlgSetCharSet::OnCbnSelChange( HWND hwndCtl, int wID )
 }
 
 
-
 LPVOID CDlgSetCharSet::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
-
 
 
 /* ダイアログデータの設定 */
@@ -190,7 +178,6 @@ void CDlgSetCharSet::SetData( void )
 }
 
 
-
 /* ダイアログデータの取得 */
 /* TRUE==正常  FALSE==入力エラー  */
 int CDlgSetCharSet::GetData( void )
@@ -205,3 +192,4 @@ int CDlgSetCharSet::GetData( void )
 
 	return TRUE;
 }
+

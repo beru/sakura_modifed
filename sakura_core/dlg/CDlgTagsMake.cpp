@@ -73,8 +73,7 @@ int CDlgTagsMake::DoModal(
 
 BOOL CDlgTagsMake::OnBnClicked( int wID )
 {
-	switch( wID )
-	{
+	switch (wID) {
 	case IDC_BUTTON_HELP:
 		/* ヘルプ */
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TAGS_MAKE) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
@@ -89,7 +88,7 @@ BOOL CDlgTagsMake::OnBnClicked( int wID )
 			TCHAR szDir[_MAX_PATH];
 			HWND hwnd = GetItemHwnd( IDC_EDIT_TAG_MAKE_FOLDER );
 			::GetWindowText( hwnd, szDir, _countof(szDir) );
-			if( DirectoryUp( szDir ) ){
+			if (DirectoryUp( szDir )) {
 				::SetWindowText( hwnd, szDir );
 			}
 		}
@@ -122,12 +121,10 @@ void CDlgTagsMake::SelectFolder( HWND hwndDlg )
 	/* フォルダ */
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_TAG_MAKE_FOLDER, szPath, _MAX_PATH );
 
-	if( SelectDir( hwndDlg, LS(STR_DLGTAGMAK_SELECTDIR), szPath, szPath ) )
-	{
+	if (SelectDir( hwndDlg, LS(STR_DLGTAGMAK_SELECTDIR), szPath, szPath )) {
 		//末尾に\\マークを追加する．
 		int pos = _tcslen( szPath );
-		if( pos > 0 && szPath[ pos - 1 ] != _T('\\') )
-		{
+		if (pos > 0 && szPath[ pos - 1 ] != _T('\\')) {
 			szPath[ pos     ] = _T('\\');
 			szPath[ pos + 1 ] = _T('\0');
 		}
@@ -145,7 +142,7 @@ void CDlgTagsMake::SetData( void )
 
 	//オプション
 	m_nTagsOpt = m_pShareData->m_nTagsOpt;
-	if( m_nTagsOpt & 0x0001 ) ::CheckDlgButton( GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE, TRUE );
+	if (m_nTagsOpt & 0x0001) ::CheckDlgButton( GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE, TRUE );
 
 	//コマンドライン
 	Combo_LimitText( ::GetDlgItem( GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE ), _countof( m_pShareData->m_szTagsCmdLine ) );
@@ -162,14 +159,13 @@ int CDlgTagsMake::GetData( void )
 	//フォルダ
 	::DlgItem_GetText( GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof( m_szPath ) );
 	int length = _tcslen( m_szPath );
-	if( length > 0 )
-	{
-		if( m_szPath[ length - 1 ] != _T('\\') ) _tcscat( m_szPath, _T("\\") );
+	if (length > 0) {
+		if (m_szPath[ length - 1 ] != _T('\\')) _tcscat( m_szPath, _T("\\") );
 	}
 
 	//CTAGSオプション
 	m_nTagsOpt = 0;
-	if( ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE ) == BST_CHECKED ) m_nTagsOpt |= 0x0001;
+	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE ) == BST_CHECKED) m_nTagsOpt |= 0x0001;
 	m_pShareData->m_nTagsOpt = m_nTagsOpt;
 
 	//コマンドライン

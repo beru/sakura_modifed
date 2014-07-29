@@ -26,15 +26,15 @@ INT_PTR CDlgCancel::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent( hWnd, wMsg, wParam, lParam );
-	switch( wMsg ){
+	switch (wMsg) {
 	case WM_CLOSE:
-		if( m_bAutoCleanup ){
+		if (m_bAutoCleanup) {
 			::DestroyWindow( GetHwnd() );
 			return TRUE;
 		}
 		break;
 	case WM_NCDESTROY:
-		if( m_bAutoCleanup ){
+		if (m_bAutoCleanup) {
 			delete this;
 			return TRUE;
 		}
@@ -85,7 +85,7 @@ BOOL CDlgCancel::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 BOOL CDlgCancel::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDCANCEL:
 		m_bCANCEL = TRUE;	/* IDCANCELƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ */
 //		CloseDialog( 0 );

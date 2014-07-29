@@ -80,7 +80,7 @@ int CDlgCompare::DoModal(
 
 BOOL CDlgCompare::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_BUTTON_HELP:
 		/* 「内容比較」のヘルプ */
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
@@ -136,7 +136,7 @@ void CDlgCompare::SetData( void )
 	int				nItem;
 	int				selIndex = 0;
 
-	hwndList = :: GetDlgItem( GetHwnd(), IDC_LIST_FILES );
+	hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_FILES );
 
 //	2002/2/10 aroka ファイル名で比較しないため不用 (2001.12.26 YAZAKIさん)
 //	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
@@ -144,7 +144,7 @@ void CDlgCompare::SetData( void )
 
 	/* 現在開いている編集窓のリストをメニューにする */
 	nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNodeArr, TRUE );
-	if( nRowNum > 0 ){
+	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 		HDC hDC = ::GetDC( hwndList );
 		HFONT hFont = (HFONT)::SendMessageAny(hwndList, WM_GETFONT, 0, 0);
@@ -153,13 +153,13 @@ void CDlgCompare::SetData( void )
 		int score = 0;
 		TCHAR		szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
-		for( i = 0; i < nRowNum; ++i ){
+		for (i = 0; i < nRowNum; ++i) {
 			/* トレイからエディタへの編集ファイル名要求通知 */
 			::SendMessageAny( pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0 );
 			pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
-			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()){
+			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 				// 2010.07.30 自分の名前もここから設定する
 				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, -1 );
 				::DlgItem_SetText( GetHwnd(), IDC_STATIC_COMPARESRC, szMenu );
@@ -173,7 +173,9 @@ void CDlgCompare::SetData( void )
 
 			// 横幅を計算する
 			SIZE sizeExtent;
-			if( ::GetTextExtentPoint32( hDC, szMenu, _tcslen(szMenu), &sizeExtent ) && sizeExtent.cx > nExtent ){
+			if (::GetTextExtentPoint32(hDC, szMenu, _tcslen(szMenu), &sizeExtent)
+				&& sizeExtent.cx > nExtent
+			) {
 				nExtent = sizeExtent.cx;
 			}
 
@@ -181,7 +183,7 @@ void CDlgCompare::SetData( void )
 			TCHAR szFile2[_MAX_PATH];
 			SplitPath_FolderAndFile( pfi->m_szPath, NULL, szFile2 );
 			int scoreTemp = FileMatchScoreSepExt( szFile1, szFile2 );
-			if( score < scoreTemp ){
+			if (score < scoreTemp) {
 				// スコアのいいものを選択
 				score = scoreTemp;
 				selIndex = nItem;
@@ -198,17 +200,15 @@ void CDlgCompare::SetData( void )
 	/* 左右に並べて表示 */
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if( TRUE  == m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
-	 && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin )
-	{
+	if (TRUE  == m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
+		&& !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin
+	) {
 		m_bCompareAndTileHorz = FALSE;
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHECK_TILE_H ), FALSE );
 	}
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_TILE_H, m_bCompareAndTileHorz );
 	return;
 }
-
-
 
 
 /* ダイアログデータの取得 */
@@ -220,9 +220,9 @@ int CDlgCompare::GetData( void )
 	EditInfo*		pfi;
 	hwndList = :: GetDlgItem( GetHwnd(), IDC_LIST_FILES );
 	nItem = List_GetCurSel( hwndList );
-	if( LB_ERR == nItem ){
+	if (LB_ERR == nItem) {
 		return FALSE;
-	}else{
+	}else {
 		*m_phwndCompareWnd = (HWND)List_GetItemData( hwndList, nItem );
 		/* トレイからエディタへの編集ファイル名要求通知 */
 		::SendMessageAny( *m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0 );
@@ -251,7 +251,7 @@ INT_PTR CDlgCompare::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 	INT_PTR result;
 	result = CDialog::DispatchEvent( hWnd, wMsg, wParam, lParam );
 
-	if( wMsg == WM_GETMINMAXINFO ){
+	if (wMsg == WM_GETMINMAXINFO) {
 		return OnMinMaxInfo( lParam );
 	}
 	return result;
@@ -269,13 +269,14 @@ BOOL CDlgCompare::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
 
-	for( int i = 0; i < _countof(anchorList); i++ ){
+	for (int i = 0; i < _countof(anchorList); i++) {
 		GetItemClientRect( anchorList[i].id, m_rcItems[i] );
 	}
 
 	RECT rcDialog = GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog;
-	if( rcDialog.left != 0 ||
-		rcDialog.bottom != 0 ){
+	if (rcDialog.left != 0
+		|| rcDialog.bottom != 0
+	) {
 		m_xPos = rcDialog.left;
 		m_yPos = rcDialog.top;
 		m_nWidth = rcDialog.right - rcDialog.left;
@@ -298,7 +299,7 @@ BOOL CDlgCompare::OnSize( WPARAM wParam, LPARAM lParam )
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for( int i = 0 ; i < _countof(anchorList); i++ ){
+	for (int i = 0 ; i < _countof(anchorList); i++) {
 		ResizeItem( GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor );
 	}
 	::InvalidateRect( GetHwnd(), NULL, TRUE );
@@ -315,7 +316,7 @@ BOOL CDlgCompare::OnMove( WPARAM wParam, LPARAM lParam )
 BOOL CDlgCompare::OnMinMaxInfo( LPARAM lParam )
 {
 	LPMINMAXINFO lpmmi = (LPMINMAXINFO) lParam;
-	if( m_ptDefaultSize.x < 0 ){
+	if (m_ptDefaultSize.x < 0) {
 		return 0;
 	}
 	lpmmi->ptMinTrackSize.x = m_ptDefaultSize.x;
@@ -324,3 +325,4 @@ BOOL CDlgCompare::OnMinMaxInfo( LPARAM lParam )
 	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y*3;
 	return 0;
 }
+

@@ -28,7 +28,7 @@ int CRunningTimer::m_nNestCount = 0;
 CRunningTimer::CRunningTimer( const char* pszText )
 {
 	Reset();
-	if( pszText != NULL )
+	if (pszText != NULL)
 		strcpy( m_szText, pszText );
 	else
 		m_szText[0] = '\0';

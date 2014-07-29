@@ -32,7 +32,6 @@ void CViewCommander::Command_INS_DATE( void )
 }
 
 
-
 //時刻挿入
 void CViewCommander::Command_INS_TIME( void )
 {
@@ -47,7 +46,6 @@ void CViewCommander::Command_INS_TIME( void )
 }
 
 
-
 //	from CViewCommander_New.cpp
 /*!	コントロールコードの入力(ダイアログ)
 	@author	MIK
@@ -58,11 +56,11 @@ void CViewCommander::Command_CtrlCode_Dialog( void )
 	CDlgCtrlCode	cDlgCtrlCode;
 
 	//コントロールコード入力ダイアログを表示する
-	if( cDlgCtrlCode.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument() ) )
-	{
+	if (cDlgCtrlCode.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument() )) {
 		//コントロールコードを入力する
 		// 2013.06.11 Command_WCHAR -> HandleCommand マクロ記録対応
 		// 2013.12.12 F_WCHAR -> F_CTRL_CODE
 		HandleCommand( F_CTRL_CODE, true, cDlgCtrlCode.GetCharCode(), 0, 0, 0 );
 	}
 }
+

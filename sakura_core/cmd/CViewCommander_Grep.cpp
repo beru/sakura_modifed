@@ -33,14 +33,14 @@ void CViewCommander::Command_GREP_DIALOG( void )
 	/* 現在カーソル位置単語または選択範囲より検索等のキーを取得 */
 	m_pCommanderView->GetCurrentTextForSearchDlg( cmemCurText );	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
-	if( 0 < cmemCurText.GetStringLength() ){
+	if (0 < cmemCurText.GetStringLength()) {
 		GetEditWindow()->m_cDlgGrep.m_strText = cmemCurText.GetStringPtr();
 	}
 
 	/* Grepダイアログの表示 */
 	int nRet = GetEditWindow()->m_cDlgGrep.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_cDocFile.GetFilePath() );
 //	MYTRACE( _T("nRet=%d\n"), nRet );
-	if( !nRet ){
+	if (!nRet) {
 		return;
 	}
 	HandleCommand(F_GREP, true, 0, 0, 0, 0);	//	GREPコマンドの発行
@@ -64,15 +64,19 @@ void CViewCommander::Command_GREP( void )
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
-	if( (  CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode &&
-		  !CEditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning ) ||
-		( !GetDocument()->m_cDocEditor.IsModified() &&
-		  !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() &&		/* 現在編集中のファイルのパス */
-		  !CAppMode::getInstance()->IsDebugMode()
+	if (
+		(
+			CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
+			&& !CEditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning
 		)
-	){
+		|| (
+			!GetDocument()->m_cDocEditor.IsModified()
+			&& !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()		/* 現在編集中のファイルのパス */
+			&& !CAppMode::getInstance()->IsDebugMode()
+		)
+	) {
 		// 2011.01.23 Grepタイプ別適用
-		if( !GetDocument()->m_cDocEditor.IsModified() && GetDocument()->m_cDocLineMgr.GetLineCount() == 0 ){
+		if (!GetDocument()->m_cDocEditor.IsModified() && GetDocument()->m_cDocLineMgr.GetLineCount() == 0) {
 			CTypeConfig cTypeGrep = CDocTypeManager().GetDocumentTypeOfExt( _T("grepout") );
 			const STypeConfigMini* pConfig;
 			CDocTypeManager().GetTypeConfigMini( cTypeGrep, &pConfig );
@@ -101,13 +105,12 @@ void CViewCommander::Command_GREP( void )
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-		for( CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++ ){
+		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 		}
-	}
-	else{
+	}else {
 		// 編集ウィンドウの上限チェック
-		if( GetDllShareData().m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	//最大値修正	//@@@ 2003.05.31 MIK
 			OkMessage( m_pCommanderView->GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS );
 			return;
 		}

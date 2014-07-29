@@ -129,12 +129,11 @@ void CDlgCtrlCode::SetData( void )
 	/* データ表示 */
 	TCHAR	tmp[10];
 	count = 0;
-	for( i = 0; i < _countof(p_ctrl_list); i++ )
-	{
-		if( p_ctrl_list[i].jname == NULL ) continue;
+	for (i = 0; i < _countof(p_ctrl_list); i++) {
+		if (p_ctrl_list[i].jname == NULL) continue;
 		
 		// 2011.06.01 nasukoji	元のjnameがNULLのものはそのまま残す
-		if( p_ctrl_list[i].jname ){
+		if (p_ctrl_list[i].jname) {
 			// LMP: Added, nasukoji changed
 			p_ctrl_list[i].jname = (LPTSTR)cLabel_jname[i].LoadString(STR_ERR_DLGCTL5 + i);
 		}
@@ -147,9 +146,9 @@ void CDlgCtrlCode::SetData( void )
 		lvi.lParam   = 0;
 		ListView_InsertItem( hwndWork, &lvi );
 		
-		if( p_ctrl_list[i].code <= 0x1f )
+		if (p_ctrl_list[i].code <= 0x1f)
 			auto_sprintf( tmp, _T("^%tc"), _T('@') + p_ctrl_list[i].code );
-		else if( p_ctrl_list[i].code == 0x7f )
+		else if (p_ctrl_list[i].code == 0x7f)
 			_tcscpy( tmp, _T("^?") );
 		else
 			_tcscpy( tmp, _T("･") );
@@ -188,7 +187,7 @@ int CDlgCtrlCode::GetData( void )
 	hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
 	//選択中のキー番号を探す。
 	nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
-	if( nIndex == -1 ) return FALSE;
+	if (nIndex == -1) return FALSE;
 
 	m_nCode = p_ctrl_list[nIndex].code;
 
@@ -240,8 +239,7 @@ BOOL CDlgCtrlCode::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 BOOL CDlgCtrlCode::OnBnClicked( int wID )
 {
-	switch( wID )
-	{
+	switch (wID) {
 	case IDC_BUTTON_HELP:
 		/* ヘルプ */
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CTRL_CODE_DIALOG) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
@@ -265,9 +263,9 @@ BOOL CDlgCtrlCode::OnBnClicked( int wID )
 #ifdef __MINGW32__
 #ifndef BUILD_OPT_NEW_HEADERS
 typedef struct tagNMKEY {
-  NMHDR hdr;
-  UINT  nVKey;
-  UINT  uFlags;
+	NMHDR hdr;
+	UINT  nVKey;
+	UINT  uFlags;
 } NMKEY, *LPNMKEY;
 #endif
 #endif
@@ -277,14 +275,12 @@ BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
 	NMHDR*	pNMHDR;
 	HWND	hwndList;
 
-	pNMHDR = (NMHDR*)lParam;
+	pNMHDR = (NMHDR*) lParam;
 
 	hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
 
-	if( hwndList == pNMHDR->hwndFrom )
-	{
-		switch( pNMHDR->code )
-		{
+	if (hwndList == pNMHDR->hwndFrom) {
+		switch (pNMHDR->code) {
 		case NM_DBLCLK:
 			::EndDialog( GetHwnd(), GetData() );
 			return TRUE;
@@ -292,18 +288,14 @@ BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
 		case LVN_KEYDOWN:
 			{
 				HWND	hwndList;
-				NMKEY	*p = (NMKEY*)lParam;
+				NMKEY*	p = (NMKEY*)lParam;
 				int		i, j;
 				unsigned int	c;
-				for( i = 0; i < _countof(p_ctrl_list); i++ )
-				{
+				for (i = 0; i < _countof(p_ctrl_list); i++) {
 					c = p_ctrl_list[i].vKey;
-					if( c == (p->nVKey & 0xffff) )
-					{
-						for( j = 0; j < _countof(p_ctrl_list); j++ )
-						{
-							if( p_ctrl_list[i].code == p_ctrl_list[j].code )
-							{
+					if (c == (p->nVKey & 0xffff)) {
+						for (j = 0; j < _countof(p_ctrl_list); j++) {
+							if (p_ctrl_list[i].code == p_ctrl_list[j].code) {
 								hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
 								ListView_SetItemState( hwndList, j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 								ListView_EnsureVisible( hwndList, j, FALSE );

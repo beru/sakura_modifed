@@ -42,9 +42,9 @@
 void CViewCommander::Command_CHGMOD_INS( void )
 {
 	/* 挿入モードか？ */
-	if( m_pCommanderView->IsInsMode() ){
+	if (m_pCommanderView->IsInsMode()) {
 		m_pCommanderView->SetInsMode( false );
-	}else{
+	}else {
 		m_pCommanderView->SetInsMode( true );
 	}
 	/* キャレットの表示・更新 */
@@ -54,7 +54,6 @@ void CViewCommander::Command_CHGMOD_INS( void )
 }
 
 
-
 //	from CViewCommander_New.cpp
 /*! 入力する改行コードを設定
 
@@ -62,14 +61,13 @@ void CViewCommander::Command_CHGMOD_INS( void )
 	@date 2003.06.23 新規作成
 */
 void CViewCommander::Command_CHGMOD_EOL( EEolType e ){
-	if( EOL_NONE < e && e < EOL_CODEMAX  ){
+	if (EOL_NONE < e && e < EOL_CODEMAX) {
 		GetDocument()->m_cDocEditor.SetNewLineCode( e );
 		// ステータスバーを更新するため
 		// キャレットの行桁位置を表示する関数を呼び出す
 		GetCaret().ShowCaretPosInfo();
 	}
 }
-
 
 
 //! 文字コードセット指定
@@ -98,18 +96,17 @@ void CViewCommander::Command_CHG_CHARSET(
 }
 
 
-
 /** 各種モードの取り消し
 	@param whereCursorIs 選択をキャンセルした後、キャレットをどこに置くか。0=動かさない。1=左上。2=右下。
 */
 void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
 {
 	bool bBoxSelect = false;
-	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ) {
+	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		// 選択解除後のカーソル位置を決める。
 		CLayoutPoint ptTo ;
 		CLayoutRange rcMoveTo = GetSelect();
-		if( m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ) { // 矩形選択ではキャレットが改行の後ろに取り残されないように、左上。
+		if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) { // 矩形選択ではキャレットが改行の後ろに取り残されないように、左上。
 			bBoxSelect = true;
 			/* 2点を対角とする矩形を求める */
 			CLayoutRange rcSel;
@@ -121,11 +118,11 @@ void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
 			// 2013.04.22 Moca 左上固定はやめる
 			rcMoveTo = rcSel;
 		}
-		if( 1 == whereCursorIs ) { // 左上
+		if (1 == whereCursorIs) { // 左上
 			ptTo = rcMoveTo.GetFrom();
-		} else if( 2 == whereCursorIs ) { // 右下
+		}else if (2 == whereCursorIs) { // 右下
 			ptTo = rcMoveTo.GetTo();
-		} else {
+		}else {
 			ptTo = GetCaret().GetCaretLayoutPos();
 		}
 
@@ -133,14 +130,14 @@ void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
 		m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
 
 		/* カーソルを移動 */
-		if( ptTo.y >= GetDocument()->m_cLayoutMgr.GetLineCount() ){
+		if (ptTo.y >= GetDocument()->m_cLayoutMgr.GetLineCount()) {
 			/* ファイルの最後に移動 */
 			Command_GOFILEEND(false);
-		} else {
-			if( !GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect ){
+		}else {
+			if (!GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
 				const CLayout*	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( ptTo.y );
-				if(pcLayout){
+				if (pcLayout) {
 					ptTo.x = t_min(ptTo.x, pcLayout->CalcLayoutWidth(GetDocument()->m_cLayoutMgr));
 				}
 			}
@@ -148,13 +145,15 @@ void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
 			GetCaret().MoveCursor( ptTo, true );
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 		}
-	}else{
+	}else {
 		// 2011.12.05 Moca 選択中の未選択状態でもLockの解除と描画が必要
-		if( m_pCommanderView->GetSelectionInfo().IsTextSelecting()
-				|| m_pCommanderView->GetSelectionInfo().IsBoxSelecting() ){
+		if (m_pCommanderView->GetSelectionInfo().IsTextSelecting()
+			|| m_pCommanderView->GetSelectionInfo().IsBoxSelecting()
+		) {
 			m_pCommanderView->GetSelectionInfo().DisableSelectArea(true);
 			GetCaret().m_cUnderLine.CaretUnderLineON(true,false);
 			m_pCommanderView->GetSelectionInfo().PrintSelectionInfoMsg();
 		}
 	}
 }
+

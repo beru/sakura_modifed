@@ -107,7 +107,7 @@ int CALLBACK SetData_EnumFontFamProc(
 	hwndComboFontZen = ::GetDlgItem( pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN );
 
 	/* LOGFONT */
-	if( FIXED_PITCH & pelf->elfLogFont.lfPitchAndFamily ){
+	if (FIXED_PITCH & pelf->elfLogFont.lfPitchAndFamily) {
 //		MYTRACE( _T("%ls\n\n"), pelf->elfLogFont.lfFaceName );
 		Combo_AddString( hwndComboFontHan, pelf->elfLogFont.lfFaceName  );
 		Combo_AddString( hwndComboFontZen, pelf->elfLogFont.lfFaceName  );
@@ -127,15 +127,15 @@ int CDlgPrintSetting::DoModal(
 	int		nRet;
 	int		i;
 	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
-	for( i = 0; i < MAX_PRINTSETTINGARR; ++i ){
+	for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 		m_PrintSettingArr[i] = pPrintSettingArr[i];
 	}
 	m_nLineNumberColumns = nLineNumberColumns;
 
 	nRet = (int)CDialog::DoModal( hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL );
-	if( TRUE == nRet ){
+	if (TRUE == nRet) {
 		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
-		for( i = 0; i < MAX_PRINTSETTINGARR; ++i ){
+		for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 			pPrintSettingArr[i] = m_PrintSettingArr[i];
 		}
 	}
@@ -195,12 +195,12 @@ BOOL CDlgPrintSetting::OnNotify( WPARAM wParam, LPARAM lParam )
 	BOOL			bSpinDown;
 	idCtrl = (int)wParam;
 	pMNUD  = (NM_UPDOWN*)lParam;
-	if( pMNUD->iDelta < 0 ){
+	if (pMNUD->iDelta < 0) {
 		bSpinDown = FALSE;
-	}else{
+	}else {
 		bSpinDown = TRUE;
 	}
-	switch( idCtrl ){
+	switch (idCtrl) {
 	case IDC_SPIN_FONTHEIGHT:
 	case IDC_SPIN_LINESPACE:
 	case IDC_SPIN_DANSUU:
@@ -220,7 +220,7 @@ BOOL CDlgPrintSetting::OnNotify( WPARAM wParam, LPARAM lParam )
 BOOL CDlgPrintSetting::OnCbnSelChange( HWND hwndCtl, int wID )
 {
 //	if( ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME ) == hwndCtl ){
-	switch( wID ){
+	switch (wID) {
 	case IDC_COMBO_SETTINGNAME:
 		/* 設定のタイプが変わった */
 		OnChangeSettingType( TRUE );
@@ -240,7 +240,7 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 	TCHAR			szWork[256];
 	CDlgInput1		cDlgInput1;
 	HWND			hwndComboSettingName;
-	switch( wID ){
+	switch (wID) {
 	case IDC_BUTTON_HELP:
 		/* 「印刷ページ設定」のヘルプ */
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
@@ -257,11 +257,11 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 				_countof( m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName ) - 1,
 				szWork
 			);
-			if( !bDlgInputResult ){
+			if (!bDlgInputResult) {
 				return TRUE;
 			}
 		}
-		if( szWork[0] != _T('\0') ){
+		if (szWork[0] != _T('\0')) {
 			int		size = _countof(m_PrintSettingArr[0].m_szPrintSettingName) - 1;
 			_tcsncpy( m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName, szWork, size);
 			m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName[size] = _T('\0');
@@ -272,13 +272,13 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 			int		i;
 			int		nItemIdx;
 			nSelectIdx = 0;
-			for( i = 0; i < MAX_PRINTSETTINGARR; ++i ){
+			for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 				nItemIdx = Combo_AddString( 
 					hwndComboSettingName,
 					m_PrintSettingArr[i].m_szPrintSettingName
 				);
 				Combo_SetItemData( hwndComboSettingName, nItemIdx, i );
-				if( i == m_nCurrentPrintSetting ){
+				if (i == m_nCurrentPrintSetting) {
 					nSelectIdx = nItemIdx;
 				}
 			}
@@ -352,7 +352,7 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 		UpdatePrintableLineAndColumn();
 		return TRUE;
 	case IDOK:
-		if( CalcPrintableLineAndColumn() ){
+		if (CalcPrintableLineAndColumn()) {
 			/* ダイアログデータの取得 */
 			::EndDialog( GetHwnd(), GetData() );
 		}
@@ -375,12 +375,12 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 
 BOOL CDlgPrintSetting::OnStnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_STATIC_ENABLECOLUMNS:
 	case IDC_STATIC_ENABLELINES:
 		// 現状クリックは受け付けていないが、メッセージ処理したいのでここに配置 2013.5.5 aroka
 		// メッセージが連続して送られたときは一回だけ対応する 2013.5.5 aroka
-		if( m_bPrintableLinesAndColumnInvalid ){
+		if (m_bPrintableLinesAndColumnInvalid) {
 			m_bPrintableLinesAndColumnInvalid = false;
 			CalcPrintableLineAndColumn();
 		}
@@ -395,7 +395,7 @@ BOOL CDlgPrintSetting::OnEnChange( HWND hwndCtl, int wID )
 {
 	switch( wID ){
 	case IDC_EDIT_FONTHEIGHT:	// フォント幅の最小値が非０のため'12'と入力すると'1'のところで蹴られてしまう 2013.5.5 aroka
-		if( ::GetDlgItemInt( GetHwnd(), IDC_EDIT_FONTHEIGHT, NULL, FALSE ) >=10 ){	// 二桁以上の場合は領域チェック 2013.5.20 aroka
+		if (::GetDlgItemInt( GetHwnd(), IDC_EDIT_FONTHEIGHT, NULL, FALSE ) >=10) {	// 二桁以上の場合は領域チェック 2013.5.20 aroka
 			UpdatePrintableLineAndColumn();
 		}
 		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
@@ -416,7 +416,7 @@ BOOL CDlgPrintSetting::OnEnChange( HWND hwndCtl, int wID )
 
 BOOL CDlgPrintSetting::OnEnKillFocus( HWND hwndCtl, int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_EDIT_FONTHEIGHT:
 	//case IDC_EDIT_LINESPACE:	// EN_CHANGE で計算しているので冗長かな、と思いコメントアウト 2013.5.5 aroka
 	//case IDC_EDIT_DANSUU:
@@ -469,7 +469,7 @@ void CDlgPrintSetting::SetData( void )
 	hwndComboPaper = ::GetDlgItem( GetHwnd(), IDC_COMBO_PAPER );
 	Combo_ResetContent( hwndComboPaper );
 	// 2006.08.14 Moca 用紙名一覧の重複削除
-	for( i = 0; i < CPrint::m_nPaperInfoArrNum; ++i ){
+	for (i = 0; i < CPrint::m_nPaperInfoArrNum; ++i) {
 		nItemIdx = Combo_AddString( hwndComboPaper, CPrint::m_paperInfoArr[i].m_pszName );
 		Combo_SetItemData( hwndComboPaper, nItemIdx, CPrint::m_paperInfoArr[i].m_nId );
 	}
@@ -479,10 +479,10 @@ void CDlgPrintSetting::SetData( void )
 	hwndComboSettingName = ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME );
 	Combo_ResetContent( hwndComboSettingName );
 	nSelectIdx = 0;
-	for( i = 0; i < MAX_PRINTSETTINGARR; ++i ){
+	for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 		nItemIdx = Combo_AddString( hwndComboSettingName, m_PrintSettingArr[i].m_szPrintSettingName );
 		Combo_SetItemData( hwndComboSettingName, nItemIdx, i );
-		if( i == m_nCurrentPrintSetting ){
+		if (i == m_nCurrentPrintSetting) {
 			nSelectIdx = nItemIdx;
 		}
 	}
@@ -493,8 +493,6 @@ void CDlgPrintSetting::SetData( void )
 
 	return;
 }
-
-
 
 
 /* ダイアログデータの取得 */
@@ -525,24 +523,24 @@ int CDlgPrintSetting::GetData( void )
 
 	/* 入力値(数値)のエラーチェックをして正しい値を返す */
 	nWork = DataCheckAndCorrect( IDC_EDIT_FONTHEIGHT, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight = nWork;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_FONTHEIGHT, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight, FALSE );
 	}
 	m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontWidth = ( m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight+1 ) / 2;
 
 	nWork = DataCheckAndCorrect( IDC_EDIT_LINESPACE, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintLineSpacing );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintLineSpacing ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintLineSpacing) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintLineSpacing = nWork;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_LINESPACE, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintLineSpacing, FALSE );
 	}
 	nWork = DataCheckAndCorrect( IDC_EDIT_DANSUU, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDansuu );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDansuu ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDansuu) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDansuu = nWork;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_DANSUU, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDansuu, FALSE );
 	}
 	nWork = DataCheckAndCorrect( IDC_EDIT_DANSPACE, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDanSpace / 10 );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDanSpace / 10 ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDanSpace / 10) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDanSpace = nWork * 10;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_DANSPACE, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDanSpace / 10, FALSE );
 	}
@@ -555,9 +553,9 @@ int CDlgPrintSetting::GetData( void )
 
 	// 用紙の向き
 	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
-	if( IsDlgButtonCheckedBool( GetHwnd(), IDC_RADIO_PORTRAIT ) ){
+	if (IsDlgButtonCheckedBool( GetHwnd(), IDC_RADIO_PORTRAIT )) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintPaperOrientation = DMORIENT_PORTRAIT;
-	}else{
+	}else {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintPaperOrientation = DMORIENT_LANDSCAPE;
 	}
 
@@ -568,22 +566,22 @@ int CDlgPrintSetting::GetData( void )
 
 	/* 入力値(数値)のエラーチェックをして正しい値を返す */
 	nWork = DataCheckAndCorrect( IDC_EDIT_MARGINTY, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginTY / 10 );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginTY / 10 ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginTY / 10) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginTY = nWork * 10;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_MARGINTY, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginTY / 10, FALSE );
 	}
 	nWork = DataCheckAndCorrect( IDC_EDIT_MARGINBY, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginBY / 10 );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginBY / 10 ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginBY / 10) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginBY = nWork * 10;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_MARGINBY, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginBY / 10, FALSE );
 	}
 	nWork = DataCheckAndCorrect( IDC_EDIT_MARGINLX, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginLX / 10 );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginLX / 10 ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginLX / 10) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginLX = nWork * 10;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_MARGINLX, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginLX / 10, FALSE );
 	}
 	nWork = DataCheckAndCorrect( IDC_EDIT_MARGINRX, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginRX / 10 );
-	if( nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginRX / 10 ){
+	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginRX / 10) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginRX = nWork * 10;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_MARGINRX, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintMarginRX / 10, FALSE );
 	}
@@ -640,13 +638,13 @@ void CDlgPrintSetting::OnChangeSettingType( BOOL bGetData )
 	int		nItemData;
 	int		i;
 
-	if( bGetData ){
+	if (bGetData) {
 		GetData();
 	}
 
 	hwndComboSettingName = ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME );
 	nIdx1 = Combo_GetCurSel( hwndComboSettingName );
-	if( CB_ERR == nIdx1 ){
+	if (CB_ERR == nIdx1) {
 		return;
 	}
 	m_nCurrentPrintSetting = Combo_GetItemData( hwndComboSettingName, nIdx1 );
@@ -669,9 +667,9 @@ void CDlgPrintSetting::OnChangeSettingType( BOOL bGetData )
 	/* 用紙サイズ一覧 */
 	hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_COMBO_PAPER );
 	nItemNum = Combo_GetCount( hwndCtrl );
-	for( i = 0; i < nItemNum; ++i ){
+	for (i = 0; i < nItemNum; ++i) {
 		nItemData = Combo_GetItemData( hwndCtrl, i );
-		if( m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintPaperSize == nItemData ){
+		if (m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintPaperSize == nItemData) {
 			Combo_SetCurSel( hwndCtrl, i );
 			break;
 		}
@@ -754,7 +752,7 @@ void CDlgPrintSetting::OnSpin( int nCtrlId, BOOL bDown )
 	int		nCtrlIdEDIT = 0;
 	int		nDiff = 1;
 	int		nIdx = -1;
-	switch( nCtrlId ){
+	switch (nCtrlId) {
 	case IDC_SPIN_FONTHEIGHT:	nIdx = 0;				break;
 	case IDC_SPIN_LINESPACE:	nIdx = 1;	nDiff=10;	break;
 	case IDC_SPIN_DANSUU:		nIdx = 2;				break;
@@ -764,12 +762,12 @@ void CDlgPrintSetting::OnSpin( int nCtrlId, BOOL bDown )
 	case IDC_SPIN_MARGINLX:		nIdx = 6;				break;
 	case IDC_SPIN_MARGINRX:		nIdx = 7;				break;
 	}
-	if( nIdx >= 0 ){
+	if (nIdx >= 0) {
 		nCtrlIdEDIT = sDataRange[nIdx].ctrlid;
  		nData = ::GetDlgItemInt( GetHwnd(), nCtrlIdEDIT, NULL, FALSE );
- 		if( bDown ){
+ 		if (bDown) {
 			nData -= nDiff;
- 		}else{
+ 		}else {
 			nData += nDiff;
  		}
 		/* 入力値(数値)のエラーチェックをして正しい値を返す */
@@ -783,7 +781,7 @@ void CDlgPrintSetting::OnSpin( int nCtrlId, BOOL bDown )
 int CDlgPrintSetting::DataCheckAndCorrect( int nCtrlId, int nData )
 {
 	int nIdx = -1;
-	switch( nCtrlId ){
+	switch (nCtrlId) {
 	case IDC_EDIT_FONTHEIGHT:	nIdx = 0;		break;
 	case IDC_EDIT_LINESPACE:	nIdx = 1;		break;
 	case IDC_EDIT_DANSUU:		nIdx = 2;		break;
@@ -793,11 +791,11 @@ int CDlgPrintSetting::DataCheckAndCorrect( int nCtrlId, int nData )
 	case IDC_EDIT_MARGINLX:		nIdx = 6;		break;
 	case IDC_EDIT_MARGINRX:		nIdx = 7;		break;
 	}
-	if( nIdx >= 0 ){
-		if( nData <= sDataRange[nIdx].minval ){
+	if (nIdx >= 0) {
+		if (nData <= sDataRange[nIdx].minval) {
 			nData = sDataRange[nIdx].minval;
  		}
-		if( nData > sDataRange[nIdx].maxval ){
+		if (nData > sDataRange[nIdx].maxval) {
 			nData = sDataRange[nIdx].maxval;
  		}
 	}
@@ -827,11 +825,12 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 	dmDummy.dmPaperSize = pPS->m_nPrintPaperSize;
 	dmDummy.dmOrientation = pPS->m_nPrintPaperOrientation;
 	/* 用紙の幅、高さ */
-	if( !CPrint::GetPaperSize(
-		&nPaperAllWidth,
-		&nPaperAllHeight,
-		&dmDummy
-	) ){
+	if (!CPrint::GetPaperSize(
+			&nPaperAllWidth,
+			&nPaperAllHeight,
+			&dmDummy
+		)
+	) {
 	// 2001.12.21 hor GetPaperSize失敗時はそのまま終了
 	//	nPaperAllWidth = 210 * 10;		/* 用紙幅 */
 	//	nPaperAllHeight = 297 * 10;		/* 用紙高さ */
@@ -853,10 +852,10 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 	::DlgItem_SetText( GetHwnd(), IDC_STATIC_FONTSIZE, szFontPoints );
 
 	// 印字可能領域がない場合は OK を押せなくする 2013.5.10 aroka
-	if( nEnableColumns == 0 || nEnableLines == 0 ){
+	if (nEnableColumns == 0 || nEnableLines == 0) {
 		::EnableWindow( GetDlgItem( GetHwnd(), IDOK ), FALSE );
 		return FALSE;
-	}else{
+	}else {
 		::EnableWindow( GetDlgItem( GetHwnd(), IDOK ), TRUE );
 		return TRUE;
 	}
@@ -912,9 +911,9 @@ void CDlgPrintSetting::SetFontName( int idTxt, int idUse, LOGFONT& lf, int nPoin
 					lf.lfFaceName,
 					double(nPointSize)/10,
 					nMM/10, nMM/10);
-	}
-	else {
+	}else {
 		szName[0] = _T('\0');
 	}
 	::DlgItem_SetText( GetHwnd(), idTxt, szName );
 }
+

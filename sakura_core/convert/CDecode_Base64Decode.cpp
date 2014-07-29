@@ -56,25 +56,25 @@ bool CDecode_Base64Decode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 	pw_base = pw = reinterpret_cast<char *>(pcDst->GetRawPtr());
 
 	i = 0;  // pcSrc の添え字
-	do{
+	do {
 		j = 0;
-		for( ; i < nSrcLen; ++i ){
+		for (; i < nSrcLen; ++i) {
 		// バッファに文字をためるループ
 			c = pSrc[i];
-			if( IsLineDelimiter(c) || c == TAB || c == SPACE ){
+			if (IsLineDelimiter(c) || c == TAB || c == SPACE) {
 				continue;
 			}
-			if( j == _BUFSIZE || c == LTEXT('=') ){
+			if (j == _BUFSIZE || c == LTEXT('=')) {
 				break;
 			}
-			if( !IsBase64(c) ){
+			if (!IsBase64(c)) {
 				return false;
 			}
 			buffer[j] = static_cast<char>(c & 0xff);
 			++j;
 		}
 		pw += _DecodeBase64( &buffer[0], j, pw );
-	}while( i < nSrcLen && c != LTEXT('=') );
+	}while (i < nSrcLen && c != LTEXT('='));
 
 	//if( CheckBase64Padbit(&buffer[0], j) == false ){
 	//	return false;
@@ -83,3 +83,4 @@ bool CDecode_Base64Decode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 	pcDst->_SetRawLength( pw - pw_base );
 	return true;
 }
+
