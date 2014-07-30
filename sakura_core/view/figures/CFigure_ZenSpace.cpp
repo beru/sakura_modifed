@@ -10,7 +10,7 @@
 
 bool CFigure_ZenSpace::Match(const wchar_t* pText) const
 {
-	if( pText[0] == L'　' ){
+	if (pText[0] == L'　') {
 		return true;
 	}
 	return false;
@@ -26,8 +26,7 @@ void CFigure_ZenSpace::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* p
 {
 	//クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if(pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,2))
-	{
+	if (pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,2)) {
 		//描画
 		const wchar_t* szZenSpace =
 			CTypeSupport(pcView,COLORIDX_ZENSPACE).IsDisp()?L"□":L"　";
@@ -46,3 +45,4 @@ void CFigure_ZenSpace::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* p
 	//位置進める
 	pDispPos->ForwardDrawCol(2);
 }
+

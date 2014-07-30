@@ -20,9 +20,9 @@ CLogicInt CViewCalc::LineColumnToIndex( const CDocLine* pcDocLine, CLayoutInt nC
 {
 	CLogicInt i2 = CLogicInt(0);
 	CMemoryIterator it( pcDocLine, GetTabSpace() );
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getColumn() + it.getColumnDelta() > nColumn ){
+		if (it.getColumn() + it.getColumnDelta() > nColumn) {
 			break;
 		}
 		it.addDelta();
@@ -40,9 +40,9 @@ CLogicInt CViewCalc::LineColumnToIndex( const CLayout* pcLayout, CLayoutInt nCol
 {
 	CLogicInt i2 = CLogicInt(0);
 	CMemoryIterator it( pcLayout, GetTabSpace() );
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getColumn() + it.getColumnDelta() > nColumn ){
+		if (it.getColumn() + it.getColumnDelta() > nColumn) {
 			break;
 		}
 		it.addDelta();
@@ -66,23 +66,20 @@ CLogicInt CViewCalc::LineColumnToIndex2( const CLayout* pcLayout, CLayoutInt nCo
 	CLogicInt i2 = CLogicInt(0);
 	CLayoutInt nPosX2 = CLayoutInt(0);
 	CMemoryIterator it( pcLayout, GetTabSpace() );
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getColumn() + it.getColumnDelta() > nColumn ){
+		if (it.getColumn() + it.getColumnDelta() > nColumn) {
 			break;
 		}
 		it.addDelta();
 	}
 	i2 += it.getIndex();
-	if( i2 >= pcLayout->GetLengthWithEOL() ){
+	if (i2 >= pcLayout->GetLengthWithEOL()) {
 		nPosX2 += it.getColumn();
 		*pnLineAllColLen = nPosX2;
 	}
 	return i2;
 }
-
-
-
 
 
 /*
@@ -95,9 +92,9 @@ CLayoutInt CViewCalc::LineIndexToColumn( const CLayout* pcLayout, CLogicInt nInd
 	//	ˆÈ‰ºAiterator”Å
 	CLayoutInt nPosX2 = CLayoutInt(0);
 	CMemoryIterator it( pcLayout, GetTabSpace() );
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getIndex() + it.getIndexDelta() > nIndex ){
+		if (it.getIndex() + it.getIndexDelta() > nIndex) {
 			break;
 		}
 		it.addDelta();
@@ -116,9 +113,9 @@ CLayoutInt CViewCalc::LineIndexToColumn( const CDocLine* pcDocLine, CLogicInt nI
 {
 	CLayoutInt nPosX2 = CLayoutInt(0);
 	CMemoryIterator it( pcDocLine, GetTabSpace() );
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getIndex() + it.getIndexDelta() > nIndex ){
+		if (it.getIndex() + it.getIndexDelta() > nIndex) {
 			break;
 		}
 		it.addDelta();
@@ -126,6 +123,5 @@ CLayoutInt CViewCalc::LineIndexToColumn( const CDocLine* pcDocLine, CLogicInt nI
 	nPosX2 += it.getColumn();
 	return nPosX2;
 }
-
 
 

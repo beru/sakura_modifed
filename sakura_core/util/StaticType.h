@@ -63,9 +63,9 @@ public:
 	//“ÁŽê
 	int& _GetSizeRef(){ return m_nCount; }
 	void SetSizeLimit(){
-		if( MAX_SIZE < m_nCount ){
+		if (MAX_SIZE < m_nCount) {
 			m_nCount = MAX_SIZE;
-		}else if( m_nCount < 0 ){
+		}else if (m_nCount < 0) {
 			m_nCount = 0;
 		}
 	}

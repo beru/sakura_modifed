@@ -51,11 +51,11 @@ inline int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexCol
 */
 inline int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 {
-	if( eColorIndex>=0 && eColorIndex<COLORIDX_LAST )
+	if (eColorIndex>=0 && eColorIndex<COLORIDX_LAST)
 		return eColorIndex;
-	else if( eColorIndex & COLORIDX_BLOCK_BIT )
+	else if (eColorIndex & COLORIDX_BLOCK_BIT)
 		return COLORIDX_COMMENT;
-	else if( eColorIndex & COLORIDX_REGEX_BIT )
+	else if (eColorIndex & COLORIDX_REGEX_BIT)
 		return ToColorInfoArrIndex_RegularExpression( eColorIndex );
 
 	assert(0); // ここには来ない
@@ -116,21 +116,24 @@ struct SColorStrategyInfo{
 	void DoChangeColor(CColor3Setting *pcColor);
 	EColorIndexType GetCurrentColor() const { return m_cIndex.eColorIndex; }
 	EColorIndexType GetCurrentColor2() const { return m_cIndex.eColorIndex2; }
-	EColorIndexType GetCurrentColorBg() const{ return m_cIndex.eColorIndexBg; }
+	EColorIndexType GetCurrentColorBg() const { return m_cIndex.eColorIndexBg; }
 
 	//! 現在のスキャン位置
 	CLogicInt GetPosInLogic() const
 	{
 		return m_nPosInLogic;
 	}
+	
 	const CDocLine* GetDocLine() const
 	{
 		return m_pDispPos->GetLayoutRef()->GetDocLineRef();
 	}
+	
 	const CLayout* GetLayout() const
 	{
 		return m_pDispPos->GetLayoutRef();
 	}
+	
 };
 
 class CColorStrategy{
@@ -138,14 +141,14 @@ public:
 	virtual ~CColorStrategy(){}
 	//! 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
-	virtual CLayoutColorInfo* GetStrategyColorInfo() const{
+	virtual CLayoutColorInfo* GetStrategyColorInfo() const {
 		return NULL;
 	}
 	//! 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual void InitStrategyStatus() = 0;
-	virtual void SetStrategyColorInfo(const CLayoutColorInfo* = NULL){};
-	virtual bool BeginColor(const CStringRef& cStr, int nPos){ return false; }
-	virtual bool EndColor(const CStringRef& cStr, int nPos){ return true; }
+	virtual void SetStrategyColorInfo(const CLayoutColorInfo* = NULL) {};
+	virtual bool BeginColor(const CStringRef& cStr, int nPos) { return false; }
+	virtual bool EndColor(const CStringRef& cStr, int nPos) { return true; }
 	virtual bool Disp() const = 0;
 	//イベント
 	virtual void OnStartScanLogic(){}
@@ -158,9 +161,9 @@ public:
 	}
 
 	//#######ラップ
-	EColorIndexType GetStrategyColorSafe() const{ if(this)return GetStrategyColor(); else return COLORIDX_TEXT; }
+	EColorIndexType GetStrategyColorSafe() const { if (this) return GetStrategyColor(); else return COLORIDX_TEXT; }
 	CLayoutColorInfo* GetStrategyColorInfoSafe() const{
-		if(this){
+		if (this) {
 			return GetStrategyColorInfo();
 		}
 		return NULL;
@@ -187,13 +190,13 @@ class CColorStrategyPool : public TSingleton<CColorStrategyPool>{
 public:
 
 	//取得
-	CColorStrategy*	GetStrategy(int nIndex) const{ return m_vStrategiesDisp[nIndex]; }
-	int				GetStrategyCount() const{ return (int)m_vStrategiesDisp.size(); }
+	CColorStrategy*	GetStrategy(int nIndex) const { return m_vStrategiesDisp[nIndex]; }
+	int				GetStrategyCount() const { return (int)m_vStrategiesDisp.size(); }
 	CColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
 	//特定取得
-	CColor_Found*   GetFoundStrategy() const{ return m_pcFoundStrategy; }
-	CColor_Select*  GetSelectStrategy() const{ return m_pcSelectStrategy; }
+	CColor_Found*   GetFoundStrategy() const { return m_pcFoundStrategy; }
+	CColor_Select*  GetSelectStrategy() const { return m_pcSelectStrategy; }
 
 	//イベント
 	void NotifyOnStartScanLogic();
@@ -209,7 +212,7 @@ public:
 	void OnChangeSetting(void);
 
 	//ビューの設定・取得
-	CEditView* GetCurrentView(void) const{ return m_pcView; }
+	CEditView* GetCurrentView(void) const { return m_pcView; }
 	void SetCurrentView(CEditView* pcView) { m_pcView = pcView; }
 
 private:

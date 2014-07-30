@@ -45,10 +45,10 @@ public:
 	}
 
 protected:
-	TSingleton(){}
+	TSingleton() {}
 private:
 	TSingleton(TSingleton const&);
-	void operator=(TSingleton const&);
+	void operator = (TSingleton const&);
 };
 
 /*!
@@ -61,18 +61,17 @@ template <class T>
 class TSingleInstance{
 public:
 	//公開インターフェース
-	static T* getInstance(){ return gm_instance; } //!< 作成済みのインスタンスを返す。インスタンスが存在しなければ NULL。
+	static T* getInstance() { return gm_instance; } //!< 作成済みのインスタンスを返す。インスタンスが存在しなければ NULL。
 
 protected:
 	//※2個以上のインスタンスは想定していません。assertが破綻を検出します。
-	TSingleInstance(){ assert(gm_instance==NULL); gm_instance=static_cast<T*>(this); }
-	~TSingleInstance(){ assert(gm_instance); gm_instance=NULL; }
+	TSingleInstance() { assert(gm_instance==NULL); gm_instance = static_cast<T*>(this); }
+	~TSingleInstance() { assert(gm_instance); gm_instance = NULL; }
 private:
 	static T* gm_instance;
 };
 template <class T>
 T* TSingleInstance<T>::gm_instance = NULL;
-
 
 
 //記録もする
@@ -85,23 +84,22 @@ public:
 	}
 	virtual ~TInstanceHolder()
 	{
-		for(size_t i=0;i<gm_table.size();i++){
-			if(gm_table[i]==static_cast<T*>(this)){
+		for (size_t i=0;i<gm_table.size();i++) {
+			if (gm_table[i]==static_cast<T*>(this)) {
 				gm_table.erase(gm_table.begin()+i);
 				break;
 			}
 		}
 	}
-	static int GetInstanceCount(){ return (int)gm_table.size(); }
+	static int GetInstanceCount() { return (int)gm_table.size(); }
 	static T* GetInstance(int nIndex)
 	{
-		if(nIndex>=0 && nIndex<(int)gm_table.size()){
+		if (nIndex>=0 && nIndex<(int)gm_table.size()) {
 			return gm_table[nIndex];
-		}else{
+		}else {
 			return 0;
 		}
 	}
-
 private:
 	static std::vector<T*> gm_table;
 };

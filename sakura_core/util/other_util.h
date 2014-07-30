@@ -57,16 +57,16 @@ public:
 	//保持値を変更する
 	void reset(T* p)
 	{
-		if(m_array==p)return;
+		if (m_array==p) return;
 		delete[] m_array;
 		m_array = p;
 	}
 
 	//保持値にアクセス
-	T* get(){ return m_array; }
+	T* get() { return m_array; }
 
 	//配列要素にアクセス
-	T& operator[](int i){ return m_array[i]; }
+	T& operator[](int i) { return m_array[i]; }
 
 private:
 	T* m_array;

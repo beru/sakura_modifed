@@ -13,13 +13,13 @@
 
 bool CColor_Url::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!cStr.IsValid())return false;
+	if (!cStr.IsValid()) return false;
 
 	int	nUrlLen;
 
-	if( _IsPosKeywordHead(cStr,nPos) /* URLを表示する */
+	if (_IsPosKeywordHead(cStr,nPos) /* URLを表示する */
 	 && IsURL( cStr.GetPtr() + nPos, cStr.GetLength() - nPos, &nUrlLen )	/* 指定アドレスがURLの先頭ならばTRUEとその長さを返す */
-	){
+	) {
 		this->m_nCOMMENTEND = nPos + nUrlLen;
 		return true;
 	}
@@ -28,7 +28,7 @@ bool CColor_Url::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_Url::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( nPos == this->m_nCOMMENTEND ){
+	if (nPos == this->m_nCOMMENTEND) {
 		return true;
 	}
 	return false;

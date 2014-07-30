@@ -62,26 +62,26 @@ LPCTSTR GetRelPath( LPCTSTR pszPath );
 //ファイル時刻
 class CFileTime{
 public:
-	CFileTime(){ ClearFILETIME(); }
-	CFileTime(const FILETIME& ftime){ SetFILETIME(ftime); }
+	CFileTime() { ClearFILETIME(); }
+	CFileTime(const FILETIME& ftime) { SetFILETIME(ftime); }
 	//設定
-	void ClearFILETIME(){ m_ftime.dwLowDateTime = m_ftime.dwHighDateTime = 0; m_bModified = true; }
-	void SetFILETIME(const FILETIME& ftime){ m_ftime = ftime; m_bModified = true; }
+	void ClearFILETIME() { m_ftime.dwLowDateTime = m_ftime.dwHighDateTime = 0; m_bModified = true; }
+	void SetFILETIME(const FILETIME& ftime) { m_ftime = ftime; m_bModified = true; }
 	//取得
-	const FILETIME& GetFILETIME() const{ return m_ftime; }
+	const FILETIME& GetFILETIME() const { return m_ftime; }
 	const SYSTEMTIME& GetSYSTEMTIME() const
 	{
 		//キャッシュ更新 -> m_systime, m_bModified
-		if(m_bModified){
+		if (m_bModified) {
 			m_bModified = false;
 			FILETIME ftimeLocal;
-			if(!::FileTimeToLocalFileTime( &m_ftime, &ftimeLocal ) || !::FileTimeToSystemTime( &ftimeLocal, &m_systime )){
+			if (!::FileTimeToLocalFileTime( &m_ftime, &ftimeLocal ) || !::FileTimeToSystemTime( &ftimeLocal, &m_systime )) {
 				memset(&m_systime,0,sizeof(m_systime)); //失敗時ゼロクリア
 			}
 		}
 		return m_systime;
 	}
-	const SYSTEMTIME* operator->() const{ return &GetSYSTEMTIME(); }
+	const SYSTEMTIME* operator->() const { return &GetSYSTEMTIME(); }
 	//判定
 	bool IsZero() const
 	{

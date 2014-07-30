@@ -8,16 +8,16 @@
 template <class T>
 inline bool is_field_begin(T c)
 {
-	return c==_T2(T,'%');
+	return c == _T2(T,'%');
 }
 
 //書式指定: flag
 template <class T>
 inline const T* skip_field_flag(const T* p)
 {
-	while(*p){
-		T c=*p;
-		if(c==_T2(T,'-') || c==_T2(T,'+') || c==_T2(T,'0') || c==_T2(T,' ') || c==_T2(T,'#')){ p++; continue; }
+	while (*p) {
+		T c = *p;
+		if (c==_T2(T,'-') || c==_T2(T,'+') || c==_T2(T,'0') || c==_T2(T,' ') || c==_T2(T,'#')) { p++; continue; }
 		break;
 	}
 	return p;
@@ -27,8 +27,8 @@ inline const T* skip_field_flag(const T* p)
 template <class T>
 inline const T* skip_field_width(const T* p)
 {
-	if(*p>=_T2(T,'1') && *p<=_T2(T,'9'))p++; else return p; //一桁目は0を受け付けない
-	while(*p>=_T2(T,'0') && *p<=_T2(T,'9'))p++;
+	if (*p>=_T2(T,'1') && *p<=_T2(T,'9')) p++; else return p; //一桁目は0を受け付けない
+	while (*p>=_T2(T,'0') && *p<=_T2(T,'9')) p++;
 	return p;
 }
 
@@ -36,8 +36,8 @@ inline const T* skip_field_width(const T* p)
 template <class T>
 inline const T* skip_field_precision(const T* p)
 {
-	if(*p==_T2(T,'.'))p++; else return p; //ドットで始まる文字列のみ受け付ける
-	while(*p>=_T2(T,'0') && *p<=_T2(T,'9'))p++; //よくわからんのでとりあえず全数字を受け付ける
+	if (*p==_T2(T,'.')) p++; else return p; //ドットで始まる文字列のみ受け付ける
+	while (*p>=_T2(T,'0') && *p<=_T2(T,'9')) p++; //よくわからんのでとりあえず全数字を受け付ける
 	return p;
 }
 
@@ -45,65 +45,64 @@ inline const T* skip_field_precision(const T* p)
 template <class T>
 inline const T* skip_field_prefix(const T* p)
 {
-	if(*p==_T2(T,'t'))return p+1; //独自拡張
-	if(*p==_T2(T,'h'))return p+1;
-	if(p[0]==_T2(T,'l') && p[1]==_T2(T,'l'))return p+2;
-	if(*p==_T2(T,'l'))return p+1;
-	if(p[0]==_T2(T,'I') && p[1]==_T2(T,'3') && p[2]==_T2(T,'2'))return p+3;
-	if(p[0]==_T2(T,'I') && p[1]==_T2(T,'6') && p[2]==_T2(T,'4'))return p+3;
-	if(*p==_T2(T,'I'))return p+1;
+	if (*p==_T2(T,'t')) return p+1; //独自拡張
+	if (*p==_T2(T,'h')) return p+1;
+	if (p[0]==_T2(T,'l') && p[1]==_T2(T,'l')) return p+2;
+	if (*p==_T2(T,'l')) return p+1;
+	if (p[0]==_T2(T,'I') && p[1]==_T2(T,'3') && p[2]==_T2(T,'2')) return p+3;
+	if (p[0]==_T2(T,'I') && p[1]==_T2(T,'6') && p[2]==_T2(T,'4')) return p+3;
+	if (*p==_T2(T,'I')) return p+1;
 	return p;
 }
 
 //書式指定: type
 inline bool is_field_type(char c)
 {
-	return strchr("cCdiouxXeEfgGaAnpsS",c)!=NULL;
+	return strchr("cCdiouxXeEfgGaAnpsS", c) != NULL;
 }
 inline bool is_field_type(wchar_t c)
 {
-	return wcschr(L"cCdiouxXeEfgGaAnpsS",c)!=NULL;
+	return wcschr(L"cCdiouxXeEfgGaAnpsS", c) != NULL;
 }
-
 
 //vsprintf_s API
 static int local_vsprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
 {
-	return vsprintf_s(buf,nBufCount,format,v);
+	return vsprintf_s(buf, nBufCount, format, v);
 }
 
 static int local_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
-	return vswprintf_s(buf,nBufCount,format,v);
+	return vswprintf_s(buf, nBufCount, format, v);
 }
 
 //vsprintf API
 static int local_vsprintf(char* buf, const char* format, va_list& v)
 {
-	return vsprintf(buf,format,v);
+	return vsprintf(buf, format, v);
 }
 
 static int local_vsprintf(wchar_t* buf, const wchar_t* format, va_list& v)
 {
-	return vswprintf(buf,format,v);
+	return vswprintf(buf, format, v);
 }
 
 //vsnprintf_s API
 static int local_vsnprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
 {
-	return vsnprintf_s(buf,nBufCount,_TRUNCATE,format,v);
+	return vsnprintf_s(buf, nBufCount, _TRUNCATE, format, v);
 }
 
 static int local_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
-	return _vsnwprintf_s(buf,nBufCount,_TRUNCATE,format,v);
+	return _vsnwprintf_s(buf, nBufCount, _TRUNCATE, format, v);
 }
 
 static void my_va_forward(va_list& v, const char* field)
 {
-	if(*field==0)return;
-	const char* field_end=auto_strchr(field,0)-1;
-	switch(*field_end){
+	if (*field==0) return;
+	const char* field_end = auto_strchr(field,0) - 1;
+	switch (*field_end) {
 	case 's':
 	case 'S':
 	case 'p':
@@ -118,12 +117,12 @@ static void my_va_forward(va_list& v, const char* field)
 		va_arg(v,int);
 		break;
 	case 'c':
-		if(field_end-1>=field && *(field_end-1)=='w')va_arg(v,int); // wchar_t
-		else if(field_end-1>=field && *(field_end-1)=='l')va_arg(v,int); // wchar_t
+		if (field_end-1>=field && *(field_end-1)=='w') va_arg(v,int); // wchar_t
+		else if (field_end-1>=field && *(field_end-1)=='l') va_arg(v,int); // wchar_t
 		else va_arg(v,int);
 		break;
 	case 'C':
-		if(field_end-1>=field && *(field_end-1)=='h')va_arg(v,int);
+		if (field_end-1>=field && *(field_end-1)=='h') va_arg(v,int);
 		else va_arg(v,int); // wchar_t
 		break;
 	case 'e':
@@ -139,9 +138,9 @@ static void my_va_forward(va_list& v, const char* field)
 }
 static void my_va_forward(va_list& v, const wchar_t* field)
 {
-	if(*field==0)return;
-	const wchar_t* field_end=auto_strchr(field,0)-1;
-	switch(*field_end){
+	if (*field==0) return;
+	const wchar_t* field_end = auto_strchr(field,0)-1;
+	switch (*field_end) {
 	case L's':
 	case L'S':
 	case L'p':
@@ -156,12 +155,12 @@ static void my_va_forward(va_list& v, const wchar_t* field)
 		va_arg(v,int);
 		break;
 	case 'c':
-		if(field_end-1>=field && *(field_end-1)==L'h')va_arg(v,int);
+		if (field_end-1>=field && *(field_end-1)==L'h') va_arg(v,int);
 		else va_arg(v,int);
 		break;
 	case 'C':
-		if(field_end-1>=field && *(field_end-1)==L'l')va_arg(v,int); // wchar_t
-		else if(field_end-1>=field && *(field_end-1)==L'w')va_arg(v,int); // wchar_t
+		if (field_end-1>=field && *(field_end-1)==L'l') va_arg(v,int); // wchar_t
+		else if (field_end-1>=field && *(field_end-1)==L'w') va_arg(v,int); // wchar_t
 		else va_arg(v,int);
 		break;
 	case L'e':
@@ -178,7 +177,7 @@ static void my_va_forward(va_list& v, const wchar_t* field)
 
 static void field_convert(char* src)
 {
-	if(strncmp(src,"%ts",3)==0 || strncmp(src,"%tc",3)==0){
+	if (strncmp(src,"%ts",3)==0 || strncmp(src,"%tc",3)==0) {
 #ifdef _UNICODE
 		src[1]='l';
 #else
@@ -189,7 +188,7 @@ static void field_convert(char* src)
 
 static void field_convert(wchar_t* src)
 {
-	if(wcsncmp(src,L"%ts",3)==0 || wcsncmp(src,L"%tc",3)==0){
+	if (wcsncmp(src,L"%ts",3)==0 || wcsncmp(src,L"%tc",3)==0) {
 #ifdef _UNICODE
 		src[1]=L'l';
 #else
@@ -204,28 +203,28 @@ static void field_convert(wchar_t* src)
 template <class T>
 int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, bool truncate)
 {
-	T* buf_end=buf+nBufCount; //変換リミット
+	T* buf_end = buf+nBufCount; //変換リミット
 
-	T* dst=buf;          //変換先ワーク変数
-	const T* src=format; //変換元ワーク変数
-	while(*src){
-		if(nBufCount!=MAX_BUF && dst>=buf_end-1)break;
+	T* dst = buf;          //変換先ワーク変数
+	const T* src = format; //変換元ワーク変数
+	while (*src) {
+		if (nBufCount!=MAX_BUF && dst>=buf_end-1) break;
 		//書式指定フィールドを取得
-		if(is_field_begin(*src)){
-			const T* field_begin=src;
+		if (is_field_begin(*src)) {
+			const T* field_begin = src;
 			src++;
-			src=skip_field_flag(src);
-			src=skip_field_width(src);
-			src=skip_field_precision(src);
-			src=skip_field_prefix(src);
+			src = skip_field_flag(src);
+			src = skip_field_width(src);
+			src = skip_field_precision(src);
+			src = skip_field_prefix(src);
 
-			if(is_field_type(*src)){
+			if (is_field_type(*src)) {
 				src++;
 				const T* field_end=src;
 
 				//フィールドを一時変数にコピー
 				T field[64];
-				if(field_end-field_begin>=_countof(field))field_end=field_begin+_countof(field)-1; //フィールド長制限
+				if (field_end-field_begin>=_countof(field)) field_end = field_begin+_countof(field)-1; //フィールド長制限
 				auto_strncpy(field,field_begin,field_end-field_begin);
 				field[field_end-field_begin] = 0;
 				
@@ -235,35 +234,31 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 				//変換処理は標準ライブラリに委譲
 				int ret;
 				va_list tmp_v=v; //※vをコピーして用いる
-				if(truncate){
-					ret=local_vsnprintf_s(dst,buf_end-dst,field,tmp_v);
-					if( ret<0 ){
+				if (truncate) {
+					ret = local_vsnprintf_s(dst,buf_end-dst,field,tmp_v);
+					if (ret<0) {
 						//バッファに入りきらない文字列が切り捨てられた
 						return -1;
 					}
-				}
-				else if(nBufCount!=MAX_BUF){
-					ret=local_vsprintf_s(dst,buf_end-dst,field,tmp_v);
-				}
-				else{
-					ret=local_vsprintf(dst,field,tmp_v);
+				}else if (nBufCount!=MAX_BUF) {
+					ret = local_vsprintf_s(dst,buf_end-dst,field,tmp_v);
+				}else {
+					ret = local_vsprintf(dst,field,tmp_v);
 				}
 
 				//vを進める。自信なっしんぐ
 				my_va_forward(v,field);
 
 				//変換先ワークポインタを進める
-				if(ret!=-1){
+				if (ret != -1) {
 					dst+=ret;
 				}
 				src=field_end;
-			}
-			else{
+			}else {
 				//有効な型フィールドではなかったので、そのまんま出力しちゃう
 				*dst++ = *src++;
 			}
-		}
-		else{
+		}else {
 			//無変換
 			*dst++ = *src++;
 		}
@@ -271,7 +266,7 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 	//終端
 	*dst = 0;
 
-	if( truncate && *src != '\0' ){		//切り詰めありで、srcの処理が完了していない場合
+	if (truncate && *src != '\0') {		//切り詰めありで、srcの処理が完了していない場合
 		return -1;						//切り詰められた
 	}
 	return dst-buf;
@@ -287,8 +282,6 @@ int tchar_vswprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list
 {
 	return tchar_vsprintf_s_imp<WCHAR>(buf,nBufCount,format,v,false);
 }
-
-
 
 
 // vsprintfラップ
@@ -329,7 +322,7 @@ int tchar_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...)
 {
 	va_list v;
 	va_start(v,format);
-	int ret=tchar_vsprintf_s(buf,nBufCount,format,v);
+	int ret = tchar_vsprintf_s(buf,nBufCount,format,v);
 	va_end(v);
 	return ret;
 }
@@ -337,7 +330,7 @@ int tchar_swprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v,format);
-	int ret=tchar_vswprintf_s(buf,nBufCount,format,v);
+	int ret = tchar_vswprintf_s(buf,nBufCount,format,v);
 	va_end(v);
 	return ret;
 }
@@ -356,7 +349,7 @@ int tchar_sprintf(ACHAR* buf, const ACHAR* format, ...)
 {
 	va_list v;
 	va_start(v,format);
-	int ret=tchar_vsprintf_s(buf,MAX_BUF,format,v);
+	int ret = tchar_vsprintf_s(buf,MAX_BUF,format,v);
 	va_end(v);
 	return ret;
 }
@@ -365,7 +358,7 @@ int tchar_swprintf(WCHAR* buf, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v,format);
-	int ret=tchar_vswprintf_s(buf,MAX_BUF,format,v);
+	int ret = tchar_vswprintf_s(buf,MAX_BUF,format,v);
 	va_end(v);
 	return ret;
 }
@@ -377,7 +370,7 @@ int tchar_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...)
 {
 	va_list v;
 	va_start(v,format);
-	int ret=tchar_vsprintf_s(buf,count,format,v);
+	int ret = tchar_vsprintf_s(buf,count,format,v);
 	va_end(v);
 	return ret;
 }
@@ -385,7 +378,7 @@ int tchar_snwprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v,format);
-	int ret=tchar_vswprintf_s(buf,count,format,v);
+	int ret = tchar_vswprintf_s(buf,count,format,v);
 	va_end(v);
 	return ret;
 }

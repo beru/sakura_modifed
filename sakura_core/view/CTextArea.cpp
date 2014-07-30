@@ -45,7 +45,7 @@ void CTextArea::CopyTextAreaStatus(CTextArea* pDst) const
 //!表示域の再計算
 void CTextArea::UpdateViewColRowNums()
 {
-	CEditView* pView=m_pEditView;
+	CEditView* pView = m_pEditView;
 	// Note: マイナスの割り算は処理系依存です。
 	// 0だとカーソルを設定できない・選択できないなど動作不良になるので1以上にする
 	m_nViewColNum = CLayoutInt(t_max(1, t_max(0, m_nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx()));	// 表示域の桁数
@@ -55,7 +55,7 @@ void CTextArea::UpdateViewColRowNums()
 //!フォント変更の際、各種パラメータを計算し直す
 void CTextArea::UpdateAreaMetrics(HDC hdc)
 {
-	CEditView* pView=m_pEditView;
+	CEditView* pView = m_pEditView;
 
 	// 文字間隔
 	pView->GetTextMetrics().SetHankakuDx( pView->GetTextMetrics().GetHankakuWidth() + pView->m_pTypeData->m_nColumnSpace );
@@ -70,7 +70,7 @@ void CTextArea::UpdateAreaMetrics(HDC hdc)
 
 void CTextArea::GenerateCharRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const
 {
-	const CEditView* pView=m_pEditView;
+	const CEditView* pView = m_pEditView;
 
 	rc->left   = sPos.GetDrawPos().x;
 	rc->right  = sPos.GetDrawPos().x + pView->GetTextMetrics().GetHankakuDx() * nHankakuNum;
@@ -81,13 +81,13 @@ void CTextArea::GenerateCharRect(RECT* rc,const DispPos& sPos,int nHankakuNum) c
 bool CTextArea::TrimRectByArea(RECT* rc) const
 {
 	//左はみ出し調整
-	if( rc->left < GetAreaLeft() ){
+	if (rc->left < GetAreaLeft()) {
 		rc->left = GetAreaLeft();
 	}
 
-	if(rc->left >= rc->right)return false; //左と右があべこべ
-	if(rc->left >= GetAreaRight())return false; //画面外(右)
-	if(rc->right <= GetAreaLeft())return false; //画面外(左)
+	if (rc->left >= rc->right) return false; //左と右があべこべ
+	if (rc->left >= GetAreaRight()) return false; //画面外(右)
+	if (rc->right <= GetAreaLeft()) return false; //画面外(左)
 
 	//$ 元動作踏襲：画面上下のはみ出し判定は省略
 
@@ -103,7 +103,7 @@ bool CTextArea::GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) c
 //!右の残りを表す矩形を生成する
 bool CTextArea::GenerateClipRectRight(RECT* rc,const DispPos& sPos) const
 {
-	const CEditView* pView=m_pEditView;
+	const CEditView* pView = m_pEditView;
 
 	rc->left   = sPos.GetDrawPos().x;
 	rc->right  = GetAreaRight();
@@ -111,13 +111,13 @@ bool CTextArea::GenerateClipRectRight(RECT* rc,const DispPos& sPos) const
 	rc->bottom = sPos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
 
 	//左はみ出し調整
-	if( rc->left < GetAreaLeft() ){
+	if (rc->left < GetAreaLeft()) {
 		rc->left = GetAreaLeft();
 	}
 
-	if(rc->left >= rc->right)return false; //左と右があべこべ
-	if(rc->left >= GetAreaRight())return false; //画面外(右)
-	if(rc->right <= GetAreaLeft())return false; //画面外(左)
+	if (rc->left >= rc->right) return false; //左と右があべこべ
+	if (rc->left >= GetAreaRight()) return false; //画面外(右)
+	if (rc->right <= GetAreaLeft()) return false; //画面外(左)
 
 	//$ 元動作踏襲：画面上下のはみ出し判定は省略
 
@@ -139,25 +139,24 @@ bool CTextArea::GenerateClipRectLine(RECT* rc,const DispPos& sPos) const
 */
 bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 {
-	const CEditView* pView=m_pEditView;
-	CEditView* pView2=m_pEditView;
+	const CEditView* pView = m_pEditView;
+	CEditView* pView2 = m_pEditView;
 
 	int				nViewAlignLeftNew;
 
-	if( pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp ){
+	if (pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp) {
 		/* 行番号表示に必要な桁数を計算 */
 		int i = DetectWidthOfLineNumberArea_calculate();
 		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	/* 表示域の左端座標 */
 		m_nViewAlignLeftCols = i + 1;
-	}
-	else{
+	}else {
 		nViewAlignLeftNew = 8;
 		m_nViewAlignLeftCols = 0;
 	}
 
 	//	Sep 18, 2002 genta
 	nViewAlignLeftNew += GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace;
-	if( nViewAlignLeftNew != GetAreaLeft() ){
+	if (nViewAlignLeftNew != GetAreaLeft()) {
 		CMyRect			rc;
 		SetAreaLeft(nViewAlignLeftNew);
 		pView->GetClientRect( &rc );
@@ -167,7 +166,7 @@ bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 		// m_nViewColNum = CLayoutInt(t_max(0, m_nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx());	// 表示域の桁数
 		UpdateViewColRowNums();
 
-		if( bRedraw ){
+		if (bRedraw) {
 			/* 再描画 */
 			pView2->GetCaret().m_cUnderLine.Lock();
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
@@ -191,7 +190,7 @@ bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 		}
 		pView2->GetRuler().SetRedrawFlag();
 		return true;
-	}else{
+	}else {
 		return false;
 	}
 }
@@ -200,29 +199,28 @@ bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 /* 行番号表示に必要な桁数を計算 */
 int CTextArea::DetectWidthOfLineNumberArea_calculate() const
 {
-	const CEditView* pView=m_pEditView;
+	const CEditView* pView = m_pEditView;
 
 	int nAllLines; //$$ 単位混在
 
 	/* 行番号の表示 false=折り返し単位／true=改行単位 */
-	if( pView->m_pTypeData->m_bLineNumIsCRLF ){
+	if (pView->m_pTypeData->m_bLineNumIsCRLF) {
 		nAllLines = pView->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
-	}
-	else{
+	}else {
 		nAllLines = (Int)pView->m_pcEditDoc->m_cLayoutMgr.GetLineCount();
 	}
 	
-	if( 0 < nAllLines ){
+	if (0 < nAllLines) {
 		int nWork = 100;
 		int i;
-		for( i = 3; i < 12; ++i ){
-			if( nWork > nAllLines ){	// Oct. 18, 2003 genta 式を整理
+		for (i = 3; i < 12; ++i) {
+			if (nWork > nAllLines) {	// Oct. 18, 2003 genta 式を整理
 				break;
 			}
 			nWork *= 10;
 		}
 		return i;
-	}else{
+	}else {
 		//	2003.09.11 wmlhq 行番号が1桁のときと幅を合わせる
 		return 3;
 	}
@@ -240,7 +238,6 @@ void CTextArea::TextArea_OnSize(
 }
 
 
-
 int CTextArea::GetDocumentLeftClientPointX() const
 {
 	return GetAreaLeft() - (Int)GetViewLeftCol() * m_pEditView->GetTextMetrics().GetHankakuDx();
@@ -249,7 +246,7 @@ int CTextArea::GetDocumentLeftClientPointX() const
 //! クライアント座標からレイアウト位置に変換する
 void CTextArea::ClientToLayout(CMyPoint ptClient, CLayoutPoint* pptLayout) const
 {
-	const CEditView* pView=m_pEditView;
+	const CEditView* pView = m_pEditView;
 	pptLayout->Set(
 		GetViewLeftCol() + CLayoutInt( (ptClient.x - GetAreaLeft()) / pView->GetTextMetrics().GetHankakuDx() ),
 		GetViewTopLine() + CLayoutInt( (ptClient.y - GetAreaTop()) / pView->GetTextMetrics().GetHankakuDy() )
@@ -306,6 +303,4 @@ void CTextArea::GenerateTextAreaRect(RECT* rc) const
 	rc->top    = m_nViewAlignTop;
 	rc->bottom = m_nViewAlignTop + m_nViewCy;
 }
-
-
 

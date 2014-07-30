@@ -13,13 +13,13 @@ void ChangeCurrentDirectoryToExeDir()
 	TCHAR szExeDir[_MAX_PATH];
 	szExeDir[0] = _T('\0');
 	GetExedir( szExeDir, NULL );
-	if( szExeDir[0] ){
+	if (szExeDir[0]) {
 		::SetCurrentDirectory( szExeDir );
-	}else{
+	}else {
 		// ˆÚ“®‚Å‚«‚È‚¢‚Æ‚«‚ÍSYSTEM32(9x‚Å‚ÍSYSTEM)‚ÉˆÚ“®
 		szExeDir[0] = _T('\0');
 		int n = ::GetSystemDirectory( szExeDir, _MAX_PATH );
-		if( n && n < _MAX_PATH ){
+		if (n && n < _MAX_PATH) {
 			::SetCurrentDirectory( szExeDir );
 		}
 	}
@@ -54,8 +54,7 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 	   tested to ensure that it is a fully qualified path before it is used. */
 	hinstDll = LoadLibraryExedir(lpszDllName);
 
-	if(hinstDll)
-	{
+	if (hinstDll) {
 		DLLGETVERSIONPROC pDllGetVersion;
 		pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinstDll,
 						  "DllGetVersion");
@@ -65,8 +64,7 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 		DLL, the lack of a DllGetVersion function can be a useful
 		indicator of the version. */
 
-		if(pDllGetVersion)
-		{
+		if (pDllGetVersion) {
 			DLLVERSIONINFO dvi;
 			HRESULT hr;
 
@@ -75,8 +73,7 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 
 			hr = (*pDllGetVersion)(&dvi);
 
-			if(SUCCEEDED(hr))
-			{
+			if (SUCCEEDED(hr)) {
 			   dwVersion = PACKVERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
 			}
 		}
@@ -85,7 +82,6 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 	}
 	return dwVersion;
 }
-
 
 
 /*!
@@ -124,7 +120,7 @@ HICON GetAppIcon( HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSma
 		size,
 		LR_SHARED | LR_LOADFROMFILE
 	);
-	if( hIcon != NULL ){
+	if (hIcon != NULL) {
 		return hIcon;
 	}
 
@@ -140,10 +136,6 @@ HICON GetAppIcon( HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSma
 	
 	return hIcon;
 }
-
-
-
-
 
 
 struct VS_VERSION_INFO_HEAD {
@@ -173,18 +165,18 @@ void GetAppVersionInfo(
 	static bool bLoad = false;
 	static DWORD dwVersionMS = 0;
 	static DWORD dwVersionLS = 0;
-	if( hInstance == NULL && bLoad ){
+	if (hInstance == NULL && bLoad) {
 		*pdwProductVersionMS = dwVersionMS;
 		*pdwProductVersionLS = dwVersionLS;
 		return;
 	}
-	if( NULL != ( hRSRC = ::FindResource( hInstance, MAKEINTRESOURCE(nVersionResourceID), RT_VERSION ) )
+	if (NULL != ( hRSRC = ::FindResource( hInstance, MAKEINTRESOURCE(nVersionResourceID), RT_VERSION ) )
 	 && NULL != ( hgRSRC = ::LoadResource( hInstance, hRSRC ) )
 	 && NULL != ( pVVIH = (VS_VERSION_INFO_HEAD*)::LockResource( hgRSRC ) )
-	){
+	) {
 		*pdwProductVersionMS = pVVIH->Value.dwProductVersionMS;
 		*pdwProductVersionLS = pVVIH->Value.dwProductVersionLS;
-		if( hInstance == NULL ){
+		if (hInstance == NULL) {
 			dwVersionMS = pVVIH->Value.dwProductVersionMS;
 			dwVersionLS = pVVIH->Value.dwProductVersionLS;
 			bLoad = true;
@@ -193,3 +185,4 @@ void GetAppVersionInfo(
 	return;
 
 }
+

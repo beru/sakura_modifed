@@ -38,7 +38,7 @@ void CViewFont::CreateFont(const LOGFONT *plf)
 	/* ‘¾šƒtƒHƒ“ƒgì¬ */
 	lf = *plf;
 	lf.lfWeight += 300;
-	if( 1000 < lf.lfWeight ){
+	if (1000 < lf.lfWeight) {
 		lf.lfWeight = 1000;
 	}
 	m_hFont_HAN_BOLD = CreateFontIndirect( &lf );
@@ -52,7 +52,7 @@ void CViewFont::CreateFont(const LOGFONT *plf)
 	lf = *plf;
 	lf.lfUnderline = TRUE;
 	lf.lfWeight += 300;
-	if( 1000 < lf.lfWeight ){
+	if (1000 < lf.lfWeight) {
 		lf.lfWeight = 1000;
 	}
 	m_hFont_HAN_BOLD_UL = CreateFontIndirect( &lf );
@@ -74,16 +74,16 @@ void CViewFont::DeleteFont()
 */
 HFONT CViewFont::ChooseFontHandle( SFontAttr sFontAttr ) const
 {
-	if( sFontAttr.m_bBoldFont ){	/* ‘¾š‚© */
-		if( sFontAttr.m_bUnderLine ){	/* ‰ºü‚© */
+	if (sFontAttr.m_bBoldFont) {	/* ‘¾š‚© */
+		if (sFontAttr.m_bUnderLine) {	/* ‰ºü‚© */
 			return m_hFont_HAN_BOLD_UL;
-		}else{
+		}else {
 			return m_hFont_HAN_BOLD;
 		}
-	}else{
-		if( sFontAttr.m_bUnderLine ){	/* ‰ºü‚© */
+	}else {
+		if (sFontAttr.m_bUnderLine) {	/* ‰ºü‚© */
 			return m_hFont_HAN_UL;
-		}else{
+		}else {
 			return m_hFont_HAN;
 		}
 	}

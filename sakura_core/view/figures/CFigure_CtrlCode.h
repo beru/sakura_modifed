@@ -33,7 +33,7 @@ public:
 
 	//action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;
-	EColorIndexType GetColorIdx(void) const{ return COLORIDX_CTRLCODE; }
+	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 
 //! ƒoƒCƒiƒŠ”¼Šp•`‰æ
@@ -44,7 +44,7 @@ public:
 
 	//action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;
-	EColorIndexType GetColorIdx(void) const{ return COLORIDX_CTRLCODE; }
+	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 
 //! ƒoƒCƒiƒŠ‘SŠp•`‰æ
@@ -55,6 +55,6 @@ public:
 
 	//action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;
-	EColorIndexType GetColorIdx(void) const{ return COLORIDX_CTRLCODE; }
+	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 

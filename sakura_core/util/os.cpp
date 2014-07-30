@@ -13,7 +13,7 @@
 static DWORD s_dwComctl32Version = PACKVERSION(0, 0);
 DWORD GetComctl32Version()
 {
-	if( PACKVERSION(0, 0) == s_dwComctl32Version )
+	if (PACKVERSION(0, 0) == s_dwComctl32Version)
 		s_dwComctl32Version = GetDllVersion(_T("Comctl32.dll"));
 	return s_dwComctl32Version;
 }
@@ -35,7 +35,6 @@ BOOL IsVisualStyle()
 }
 
 
-
 /*!	指定ウィンドウでビジュアルスタイルを使わないようにする
 
 	@param[in] hWnd ウィンドウ
@@ -50,8 +49,6 @@ void PreventVisualStyle( HWND hWnd )
 }
 
 
-
-
 /*!	コモンコントロールを初期化する
 
 	@author ryoji
@@ -63,9 +60,9 @@ void MyInitCommonControls()
 
 	BOOL bInit = FALSE;
 	HINSTANCE hDll = ::GetModuleHandle(_T("COMCTL32"));
-	if( NULL != hDll ){
+	if (NULL != hDll) {
 		*(FARPROC*)&pfnInitCommonControlsEx = ::GetProcAddress( hDll, "InitCommonControlsEx" );
-		if( NULL != pfnInitCommonControlsEx ){
+		if (NULL != pfnInitCommonControlsEx) {
 			INITCOMMONCONTROLSEX icex;
 			icex.dwSize = sizeof(icex);
 			icex.dwICC = ICC_WIN95_CLASSES | ICC_COOL_CLASSES;
@@ -73,13 +70,10 @@ void MyInitCommonControls()
 		}
 	}
 
-	if( !bInit ){
+	if (!bInit) {
 		::InitCommonControls();
 	}
 }
-
-
-
 
 
 /*!
@@ -125,15 +119,13 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NUL
 	::ZeroMemory( &mi, sizeof( mi ));
 	mi.cbSize = sizeof( mi );
 	::GetMonitorInfo( hMon, &mi );
-	if( NULL != prcWork )
+	if (NULL != prcWork)
 		*prcWork = mi.rcWork;		// work area rectangle of the display monitor
-	if( NULL != prcMonitor )
+	if (NULL != prcMonitor)
 		*prcMonitor = mi.rcMonitor;	// display monitor rectangle
 	return ( mi.dwFlags == MONITORINFOF_PRIMARY ) ? true : false;
 }
 //	To Here 2006.04.21 ryoji MutiMonitor
-
-
 
 
 /*!
@@ -156,8 +148,7 @@ bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer
 	bool Result = false;
 	
 	HKEY Key;
-	if(RegOpenKeyEx(Hive, Path, 0, KEY_READ, &Key) == ERROR_SUCCESS)
-	{
+	if (RegOpenKeyEx(Hive, Path, 0, KEY_READ, &Key) == ERROR_SUCCESS) {
 		auto_memset(Buffer, 0, BufferCount);
 
 		DWORD dwType = REG_SZ;
@@ -194,29 +185,27 @@ bool SetClipboardTextImp( HWND hwnd, const T* pszText, int nLength )
 	T*		pszClip;
 
 	hgClip = ::GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, (nLength + 1) * sizeof(T) );
-	if( NULL == hgClip ){
+	if (NULL == hgClip) {
 		return false;
 	}
 	pszClip = (T*)::GlobalLock( hgClip );
-	if( NULL == pszClip ){
+	if (NULL == pszClip) {
 		::GlobalFree( hgClip );
 		return false;
 	}
 	auto_memcpy( pszClip, pszText, nLength );
 	pszClip[nLength] = 0;
 	::GlobalUnlock( hgClip );
-	if( !::OpenClipboard( hwnd ) ){
+	if (!::OpenClipboard( hwnd )) {
 		::GlobalFree( hgClip );
 		return false;
 	}
 	::EmptyClipboard();
-	if(sizeof(T)==sizeof(char)){
+	if (sizeof(T)==sizeof(char)) {
 		::SetClipboardData( CF_OEMTEXT, hgClip );
-	}
-	else if(sizeof(T)==sizeof(wchar_t)){
+	}else if (sizeof(T)==sizeof(wchar_t)) {
 		::SetClipboardData( CF_UNICODETEXT, hgClip );
-	}
-	else{
+	}else {
 		assert(0); //※ここには来ない
 	}
 	::CloseClipboard();
@@ -266,15 +255,15 @@ HGLOBAL GetGlobalData( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat )
 	HGLOBAL hDest = NULL;
 	STGMEDIUM stgMedium;
 	// 2006.03.16 Moca SUCCEEDEDマクロではS_FALSEのとき困るので、S_OKに変更
-	if( S_OK == pDataObject->GetData( &fe, &stgMedium ) ){
+	if (S_OK == pDataObject->GetData( &fe, &stgMedium )) {
 		if( stgMedium.pUnkForRelease == NULL ){
-			if( stgMedium.tymed == TYMED_HGLOBAL )
+			if (stgMedium.tymed == TYMED_HGLOBAL)
 				hDest = stgMedium.hGlobal;
-		}else{
-			if( stgMedium.tymed == TYMED_HGLOBAL ){
+		}else {
+			if (stgMedium.tymed == TYMED_HGLOBAL) {
 				DWORD nSize = ::GlobalSize( stgMedium.hGlobal );
 				hDest = ::GlobalAlloc( GMEM_SHARE|GMEM_MOVEABLE, nSize );
-				if( hDest != NULL ){
+				if (hDest != NULL) {
 					// copy the bits
 					LPVOID lpSource = ::GlobalLock( stgMedium.hGlobal );
 					LPVOID lpDest = ::GlobalLock( hDest );
@@ -314,26 +303,25 @@ BOOL GetSystemResources(
 	int (CALLBACK *GetFreeSystemResources)( int );
 
 	hlib = ::LoadLibraryExedir( _T("RSRC32.dll") );
-	if( (INT_PTR)hlib > 32 ){
+	if ((INT_PTR)hlib > 32) {
 		GetFreeSystemResources = (int (CALLBACK *)( int ))GetProcAddress(
 			hlib,
 			"_MyGetFreeSystemResources32@4"
 		);
-		if( GetFreeSystemResources != NULL ){
+		if (GetFreeSystemResources != NULL) {
 			*pnSystemResources = GetFreeSystemResources( GFSR_SYSTEMRESOURCES );
 			*pnUserResources = GetFreeSystemResources( GFSR_USERRESOURCES );
 			*pnGDIResources = GetFreeSystemResources( GFSR_GDIRESOURCES );
 			::FreeLibrary( hlib );
 			return TRUE;
-		}else{
+		}else {
 			::FreeLibrary( hlib );
 			return FALSE;
 		}
-	}else{
+	}else {
 		return FALSE;
 	}
 }
-
 
 #if (WINVER < _WIN32_WINNT_WIN2K)
 // NTではリソースチェックを行わない
@@ -345,21 +333,19 @@ BOOL CheckSystemResources( const TCHAR* pszAppName )
 	int		nGDIResources;
 	const TCHAR*	pszResourceName;
 	/* システムリソースの取得 */
-	if( GetSystemResources( &nSystemResources, &nUserResources,	&nGDIResources ) ){
+	if (GetSystemResources( &nSystemResources, &nUserResources,	&nGDIResources )) {
 //		MYTRACE( _T("nSystemResources=%d\n"), nSystemResources );
 //		MYTRACE( _T("nUserResources=%d\n"), nUserResources );
 //		MYTRACE( _T("nGDIResources=%d\n"), nGDIResources );
 		pszResourceName = NULL;
-		if( nSystemResources <= 5 ){
+		if (nSystemResources <= 5) {
 			pszResourceName = _T("システム ");
-		}else
-		if( nUserResources <= 5 ){
+		}else if (nUserResources <= 5) {
 			pszResourceName = _T("ユーザー ");
-		}else
-		if( nGDIResources <= 5 ){
+		}else if (nGDIResources <= 5) {
 			pszResourceName = _T("GDI ");
 		}
-		if( NULL != pszResourceName ){
+		if (NULL != pszResourceName) {
 			ErrorBeep();
 			ErrorBeep();
 			::MYMESSAGEBOX( NULL, MB_OK | /*MB_YESNO | */ MB_ICONSTOP | MB_APPLMODAL | MB_TOPMOST, pszAppName,
@@ -396,10 +382,9 @@ BOOL CheckSystemResources( const TCHAR* pszAppName )
 CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
 {
 	int n = ::GetCurrentDirectory(_countof(m_szCurDir),m_szCurDir);
-	if(n>0 && n<_countof(m_szCurDir)){
+	if (n>0 && n<_countof(m_szCurDir)) {
 		//ok
-	}
-	else{
+	}else {
 		//ng
 		m_szCurDir[0] = _T('\0');
 	}
@@ -407,10 +392,9 @@ CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
 
 CCurrentDirectoryBackupPoint::~CCurrentDirectoryBackupPoint()
 {
-	if(m_szCurDir[0]){
+	if (m_szCurDir[0]) {
 		::SetCurrentDirectory(m_szCurDir);
 	}
 }
-
 
 

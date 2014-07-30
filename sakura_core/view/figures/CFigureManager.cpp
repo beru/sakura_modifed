@@ -49,7 +49,7 @@ CFigureManager::~CFigureManager()
 	m_vFiguresDisp.clear();
 
 	int size = (int)m_vFigures.size();
-	for(int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		SAFE_DELETE(m_vFigures[i]);
 	}
 	m_vFigures.clear();
@@ -59,9 +59,9 @@ CFigureManager::~CFigureManager()
 CFigure& CFigureManager::GetFigure(const wchar_t* pText)
 {
 	int size = (int)m_vFiguresDisp.size();
-	for(int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		CFigure* pcFigure = m_vFiguresDisp[i];
-		if(pcFigure->Match(pText)){
+		if (pcFigure->Match(pText)) {
 			return *pcFigure;
 		}
 	}
@@ -78,10 +78,10 @@ void CFigureManager::OnChangeSetting(void)
 
 	int size = (int)m_vFigures.size();
 	int i;
-	for(i = 0; i < size; i++){
+	for (i = 0; i < size; i++) {
 		m_vFigures[i]->Update();
 		// F•ª‚¯•\Ž¦‘ÎÛ‚Ì‚Ý‚ð“o˜^
-		if( m_vFigures[i]->Disp() ){
+		if (m_vFigures[i]->Disp()) {
 			m_vFiguresDisp.push_back(m_vFigures[i]);
 		}
 	}

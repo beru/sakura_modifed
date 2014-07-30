@@ -102,15 +102,14 @@ void CEditView::ViewDiffInfo(
 
 	//	From Here Dec. 28, 2002 MIK
 	//	diff.exeの存在チェック
-	if( INVALID_FILE_ATTRIBUTES == ::GetFileAttributes( cmdline ) )
-	{
+	if (INVALID_FILE_ATTRIBUTES == ::GetFileAttributes( cmdline )) {
 		WarningMessage( GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF2) );
 		return;
 	}
 	cmdline[0] = _T('\0');
 
 	//今あるDIFF差分を消去する。
-	if( CDiffManager::getInstance()->IsDiffUse() )
+	if (CDiffManager::getInstance()->IsDiffUse())
 		GetCommander().Command_Diff_Reset();
 		//m_pcEditDoc->m_cDocLineMgr.ResetAllDiffMark();
 
@@ -124,8 +123,7 @@ void CEditView::ViewDiffInfo(
 	sa.bInheritHandle       = TRUE;
 	sa.lpSecurityDescriptor = NULL;
 	hStdOutRead = hStdOutWrite = 0;
-	if( CreatePipe( &hStdOutRead, &hStdOutWrite, &sa, 1000 ) == FALSE )
-	{
+	if (CreatePipe( &hStdOutRead, &hStdOutWrite, &sa, 1000 ) == FALSE) {
 		//エラー。対策無し
 		return;
 	}
@@ -148,14 +146,14 @@ void CEditView::ViewDiffInfo(
 	//オプションを作成する
 	TCHAR	szOption[16];	// "-cwbBt"
 	_tcscpy( szOption, _T("-") );
-	if( nFlgOpt & 0x0001 ) _tcscat( szOption, _T("i") );	//-i ignore-case         大文字小文字同一視
-	if( nFlgOpt & 0x0002 ) _tcscat( szOption, _T("w") );	//-w ignore-all-space    空白無視
-	if( nFlgOpt & 0x0004 ) _tcscat( szOption, _T("b") );	//-b ignore-space-change 空白変更無視
-	if( nFlgOpt & 0x0008 ) _tcscat( szOption, _T("B") );	//-B ignore-blank-lines  空行無視
-	if( nFlgOpt & 0x0010 ) _tcscat( szOption, _T("t") );	//-t expand-tabs         TAB-SPACE変換
-	if( _tcscmp( szOption, _T("-") ) == 0 ) _tcscpy( szOption, _T("") );	//オプションなし
-	if( nFlgOpt & 0x0020 ) nFlgFile12 = 0;
-	else                   nFlgFile12 = 1;
+	if (nFlgOpt & 0x0001) _tcscat( szOption, _T("i") );	//-i ignore-case         大文字小文字同一視
+	if (nFlgOpt & 0x0002) _tcscat( szOption, _T("w") );	//-w ignore-all-space    空白無視
+	if (nFlgOpt & 0x0004) _tcscat( szOption, _T("b") );	//-b ignore-space-change 空白変更無視
+	if (nFlgOpt & 0x0008) _tcscat( szOption, _T("B") );	//-B ignore-blank-lines  空行無視
+	if (nFlgOpt & 0x0010) _tcscat( szOption, _T("t") );	//-t expand-tabs         TAB-SPACE変換
+	if (_tcscmp( szOption, _T("-") ) == 0) _tcscpy( szOption, _T("") );	//オプションなし
+	if (nFlgOpt & 0x0020) nFlgFile12 = 0;
+	else                  nFlgFile12 = 1;
 
 	//	To Here Dec. 28, 2002 MIK
 
@@ -165,7 +163,7 @@ void CEditView::ViewDiffInfo(
 		TCHAR szCmdDir[_MAX_PATH];
 
 		//コマンドライン文字列作成(MAX:1024)
-		if (IsWin32NT()){
+		if (IsWin32NT()) {
 			::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
 			auto_sprintf(
 				cmdline,
@@ -177,8 +175,7 @@ void CEditView::ViewDiffInfo(
 				( nFlgFile12 ? pszFile2 : pszFile1 ),
 				( nFlgFile12 ? pszFile1 : pszFile2 )
 			);
-		}
-		else{
+		}else {
 			::GetWindowsDirectory(szCmdDir, _countof(szCmdDir));
 			auto_sprintf(
 				cmdline,
@@ -194,10 +191,10 @@ void CEditView::ViewDiffInfo(
 	}
 
 	//コマンドライン実行
-	if( CreateProcess( NULL, cmdline, NULL, NULL, TRUE,
-			CREATE_NEW_CONSOLE, NULL, NULL, &sui, &pi ) == FALSE )
-	{
-			WarningMessage( NULL, LS(STR_ERR_DLGEDITVWDIFF3), cmdline );
+	if (CreateProcess( NULL, cmdline, NULL, NULL, TRUE,
+			CREATE_NEW_CONSOLE, NULL, NULL, &sui, &pi ) == FALSE
+	) {
+		WarningMessage( NULL, LS(STR_ERR_DLGEDITVWDIFF3), cmdline );
 		goto finish;
 	}
 
@@ -223,53 +220,42 @@ void CEditView::ViewDiffInfo(
 			// Jan. 23, 2004 genta
 			// 子プロセスの出力をどんどん受け取らないと子プロセスが
 			// 停止してしまうため，待ち時間を200msから20msに減らす
-			if( WaitForSingleObject( pi.hProcess, 20 ) == WAIT_OBJECT_0 )
-			{
+			if (WaitForSingleObject( pi.hProcess, 20 ) == WAIT_OBJECT_0) {
 				//終了していればループフラグをFALSEとする
 				//ただしループの終了条件は プロセス終了 && パイプが空
 				bLoopFlag = FALSE;
 			}
 
 			new_cnt = 0;
-			if( PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL ) )
-			{
-				while( new_cnt > 0 )												//待機中のものがある
-				{
-					if( new_cnt >= _countof(work) - 2 )							//パイプから読み出す量を調整
-					{
+			if (PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL )) {
+				while (new_cnt > 0) {												//待機中のものがある
+					if (new_cnt >= _countof(work) - 2) {							//パイプから読み出す量を調整
 						new_cnt = _countof(work) - 2;
 					}
 					::ReadFile( hStdOutRead, &work[0], new_cnt, &read_cnt, NULL );	//パイプから読み出し
-					if( read_cnt == 0 )
-					{
+					if (read_cnt == 0) {
 						// Jan. 23, 2004 genta while追加のため制御を変更
 						break;
 					}
 
 					//@@@ 2003.05.31 MIK
 					//	先頭がBinary filesならバイナリファイルのため意味のある差分が取られなかった
-					if( bFirst )
-					{
+					if (bFirst) {
 						bFirst = false;
-						if( strncmp( work, "Binary files ", strlen( "Binary files " ) ) == 0 )
-						{
+						if (strncmp( work, "Binary files ", strlen( "Binary files " ) ) == 0) {
 							WarningMessage( NULL, LS(STR_ERR_DLGEDITVWDIFF4) );
 							goto finish;
 						}
 					}
 
 					//読み出した文字列をチェックする
-					for( j = 0; j < (int)read_cnt/*-1*/; j++ )
-					{
-						if( bLineHead )
-						{
-							if( work[j] != '\n' && work[j] != '\r' )
-							{
+					for (j = 0; j < (int)read_cnt/*-1*/; j++) {
+						if (bLineHead) {
+							if (work[j] != '\n' && work[j] != '\r') {
 								bLineHead = false;
 							
 								//DIFF情報の始まりか？
-								if( work[j] >= '0' && work[j] <= '9' )
-								{
+								if (work[j] >= '0' && work[j] <= '9') {
 									bDiffInfo = true;
 									nDiffLen = 0;
 									szDiffData[nDiffLen++] = work[j];
@@ -282,15 +268,11 @@ void CEditView::ViewDiffInfo(
 								}
 								*/
 							}
-						}
-						else
-						{
+						}else {
 							//行末に達したか？
-							if( work[j] == '\n' || work[j] == '\r' )
-							{
+							if (work[j] == '\n' || work[j] == '\r') {
 								//DIFF情報があれば解析する
-								if( bDiffInfo == true && nDiffLen > 0 )
-								{
+								if (bDiffInfo == true && nDiffLen > 0) {
 									szDiffData[nDiffLen] = '\0';
 									AnalyzeDiffInfo( szDiffData, nFlgFile12 );
 									nDiffLen = 0;
@@ -298,13 +280,10 @@ void CEditView::ViewDiffInfo(
 								
 								bDiffInfo = false;
 								bLineHead = true;
-							}
-							else if( bDiffInfo == true )
-							{
+							}else if (bDiffInfo == true) {
 								//DIFF情報に追加する
 								szDiffData[nDiffLen++] = work[j];
-								if( nDiffLen >= 99 )
-								{
+								if (nDiffLen >= 99) {
 									nDiffLen = 0;
 									bDiffInfo = false;
 								}
@@ -315,28 +294,24 @@ void CEditView::ViewDiffInfo(
 					// 子プロセスの出力をどんどん受け取らないと子プロセスが
 					// 停止してしまうため，バッファが空になるまでどんどん読み出す．
 					new_cnt = 0;
-					if( ! PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL ) ){
+					if (!PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL )) {
 						break;
 					}
 					Sleep(0); // Jan. 23, 2004 genta タスクスイッチを促す
 				}
 			}
-		} while( bLoopFlag || new_cnt > 0 );
+		} while (bLoopFlag || new_cnt > 0);
 
 		//残ったDIFF情報があれば解析する
-		if( bDiffInfo == true && nDiffLen > 0 )
-		{
+		if (bDiffInfo == true && nDiffLen > 0) {
 			szDiffData[nDiffLen] = '\0';
 			AnalyzeDiffInfo( szDiffData, nFlgFile12 );
 		}
 	}
 
-
 	//DIFF差分が見つからなかったときにメッセージ表示
-	if( nFlgOpt & 0x0040 )
-	{
-		if( !CDiffManager::getInstance()->IsDiffUse() )
-		{
+	if (nFlgOpt & 0x0040) {
+		if (!CDiffManager::getInstance()->IsDiffUse()) {
 			InfoMessage( this->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF5) );
 		}
 	}
@@ -346,8 +321,8 @@ finish:
 	//終了処理
 	CloseHandle( hStdOutWrite );
 	CloseHandle( hStdOutRead  );
-	if( pi.hProcess ) CloseHandle( pi.hProcess );
-	if( pi.hThread  ) CloseHandle( pi.hThread  );
+	if (pi.hProcess) CloseHandle( pi.hProcess );
+	if (pi.hThread) CloseHandle( pi.hThread  );
 
 	//分割したビューも更新
 	m_pcEditWnd->Views_Redraw();
@@ -384,82 +359,69 @@ void CEditView::AnalyzeDiffInfo(
 
 	//前半ファイルの開始行
 	s1 = 0;
-	for( q = pszDiffInfo; *q; q++ )
-	{
-		if( *q == ',' ) break;
-		if( *q == 'a' || *q == 'c' || *q == 'd' ) break;
+	for (q = pszDiffInfo; *q; q++) {
+		if (*q == ',') break;
+		if (*q == 'a' || *q == 'c' || *q == 'd') break;
 		//行番号を抽出
-		if( *q >= '0' && *q <= '9' ) s1 = s1 * 10 + (*q - '0');
+		if (*q >= '0' && *q <= '9') s1 = s1 * 10 + (*q - '0');
 		else return;
 	}
-	if( ! *q ) return;
+	if (!*q) return;
 
 	//前半ファイルの終了行
-	if( *q != ',' )
-	{
+	if (*q != ',') {
 		//開始・終了行番号は同じ
 		e1 = s1;
-	}
-	else
-	{
+	}else {
 		e1 = 0;
-		for( q++; *q; q++ )
-		{
-			if( *q == 'a' || *q == 'c' || *q == 'd' ) break;
+		for (q++; *q; q++) {
+			if (*q == 'a' || *q == 'c' || *q == 'd') break;
 			//行番号を抽出
-			if( *q >= '0' && *q <= '9' ) e1 = e1 * 10 + (*q - '0');
+			if (*q >= '0' && *q <= '9') e1 = e1 * 10 + (*q - '0');
 			else return;
 		}
 	}
-	if( ! *q ) return;
+	if (!*q) return;
 
 	//DIFFモードを取得
 	mode = *q;
 
 	//後半ファイルの開始行
 	s2 = 0;
-	for( q++; *q; q++ )
-	{
-		if( *q == ',' ) break;
+	for (q++; *q; q++) {
+		if (*q == ',') break;
 		//行番号を抽出
-		if( *q >= '0' && *q <= '9' ) s2 = s2 * 10 + (*q - '0');
+		if (*q >= '0' && *q <= '9') s2 = s2 * 10 + (*q - '0');
 		else return;
 	}
 
 	//後半ファイルの終了行
-	if( *q != ',' )
-	{
+	if (*q != ',') {
 		//開始・終了行番号は同じ
 		e2 = s2;
-	}
-	else
-	{
+	}else {
 		e2 = 0;
-		for( q++; *q; q++ )
-		{
+		for (q++; *q; q++) {
 			//行番号を抽出
-			if( *q >= '0' && *q <= '9' ) e2 = e2 * 10 + (*q - '0');
+			if (*q >= '0' && *q <= '9') e2 = e2 * 10 + (*q - '0');
 			else return;
 		}
 	}
 
 	//行末に達してなければエラー
-	if( *q ) return;
+	if (*q) return;
 
 	//抽出したDIFF情報から行番号に差分マークを付ける
-	if( 0 == nFlgFile12 )	//編集中ファイルは旧ファイル
-	{
-		if     ( mode == 'a' ) CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_DELETE, CLogicInt(s1    ), CLogicInt(e1    ) );
-		else if( mode == 'c' ) CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_CHANGE, CLogicInt(s1 - 1), CLogicInt(e1 - 1) );
-		else if( mode == 'd' ) CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_APPEND, CLogicInt(s1 - 1), CLogicInt(e1 - 1) );
+	if (0 == nFlgFile12) {	//編集中ファイルは旧ファイル
+		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_DELETE, CLogicInt(s1    ), CLogicInt(e1    ) );
+		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_CHANGE, CLogicInt(s1 - 1), CLogicInt(e1 - 1) );
+		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_APPEND, CLogicInt(s1 - 1), CLogicInt(e1 - 1) );
+	}else {	//編集中ファイルは新ファイル
+		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_APPEND, CLogicInt(s2 - 1), CLogicInt(e2 - 1) );
+		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_CHANGE, CLogicInt(s2 - 1), CLogicInt(e2 - 1) );
+		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_DELETE, CLogicInt(s2    ), CLogicInt(e2    ) );
 	}
-	else	//編集中ファイルは新ファイル
-	{
-		if     ( mode == 'a' ) CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_APPEND, CLogicInt(s2 - 1), CLogicInt(e2 - 1) );
-		else if( mode == 'c' ) CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_CHANGE, CLogicInt(s2 - 1), CLogicInt(e2 - 1) );
-		else if( mode == 'd' ) CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange( MARK_DIFF_DELETE, CLogicInt(s2    ), CLogicInt(e2    ) );
-	}
-
+	
 	return;
 }
 
@@ -475,7 +437,7 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 {
 	//一時
 	TCHAR* pszTmpName = _ttempnam( NULL, SAKURA_DIFF_TEMP_PREFIX );
-	if( NULL == pszTmpName ){
+	if (NULL == pszTmpName) {
 		WarningMessage( NULL, LS(STR_DIFF_FAILED) );
 		return FALSE;
 	}
@@ -484,8 +446,7 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 	free( pszTmpName );
 
 	//自分か？
-	if( NULL == hWnd )
-	{
+	if (NULL == hWnd) {
 		EConvertResult eWriteResult = CWriteManager().WriteFile_From_CDocLineMgr(
 			m_pcEditDoc->m_cDocLineMgr,
 			SSaveInfo(
@@ -499,7 +460,7 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 	}
 
 	CTextOutputStream out(filename, CODE_SJIS);
-	if(!out){
+	if (!out) {
 		WarningMessage( NULL, LS(STR_DIFF_FAILED_TEMP) );
 		return FALSE;
 	}
@@ -510,28 +471,26 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 		// 行(改行単位)データの要求 
 		const wchar_t*	pLineData;
 		CLogicInt		nLineLen;
-		if( hWnd ){
+		if (hWnd) {
 			pLineData = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<EDIT_CHAR>();
 			nLineLen = CLogicInt(::SendMessageAny( hWnd, MYWM_GETLINEDATA, y, 0 ));
 
 			// 一時バッファを超える場合はエラー終了
-			if( nLineLen > (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>() ){
+			if (nLineLen > (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>()) {
 				out.Close();
 				_tunlink( filename );	//関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。2005.10.29
 				WarningMessage( NULL, LS(STR_DIFF_FAILED_LONG) );
 				return FALSE;
 			}
-		}
-		else{
+		}else {
 			pLineData = m_pcEditDoc->m_cDocLineMgr.GetLine(y)->GetDocLineStrWithEOL(&nLineLen);
 		}
 
-		if( 0 == nLineLen || NULL == pLineData ) break;
+		if (0 == nLineLen || NULL == pLineData) break;
 
-		try{
+		try {
 			out.WriteString(pLineData,nLineLen);
-		}
-		catch(...){
+		}catch (...) {
 			out.Close();
 			_tunlink( filename );	//関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。2005.10.29
 			WarningMessage( NULL, LS(STR_DIFF_FAILED_TEMP) );
@@ -544,6 +503,5 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 
 	return TRUE;
 }
-
 
 

@@ -82,13 +82,13 @@ void CTextMetrics::Update(HFONT hFont)
 
 void CTextMetrics::SetHankakuWidth(int nHankakuWidth)
 {
-	m_nCharWidth=nHankakuWidth;
+	m_nCharWidth = nHankakuWidth;
 }
 
 //! 半角文字の縦幅を設定。単位はピクセル。
 void CTextMetrics::SetHankakuHeight(int nHankakuHeight)
 {
-	m_nCharHeight=nHankakuHeight;
+	m_nCharHeight = nHankakuHeight;
 }
 
 
@@ -96,12 +96,13 @@ void CTextMetrics::SetHankakuHeight(int nHankakuHeight)
 void CTextMetrics::SetHankakuDx(int nDxBasis)
 {
 	m_nDxBasis=nDxBasis;
-	for(int i=0;i<_countof(m_anHankakuDx);i++)m_anHankakuDx[i]=GetHankakuDx();
-	for(int i=0;i<_countof(m_anZenkakuDx);i++)m_anZenkakuDx[i]=GetZenkakuDx();
+	for (int i=0;i<_countof(m_anHankakuDx);i++) m_anHankakuDx[i]=GetHankakuDx();
+	for (int i=0;i<_countof(m_anZenkakuDx);i++) m_anZenkakuDx[i]=GetZenkakuDx();
 }
+
 void CTextMetrics::SetHankakuDy(int nDyBasis)
 {
-	m_nDyBasis=nDyBasis;
+	m_nDyBasis = nDyBasis;
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -121,11 +122,11 @@ const int* CTextMetrics::GenerateDxArray(
 	bool bHigh;				// サロゲートペア（上位）
 
 	vResultArray->resize(nLength);
-	if(!pText || nLength<=0)return NULL;
+	if (!pText || nLength<=0) return NULL;
 
-	int* p=&(*vResultArray)[0];
+	int* p = &(*vResultArray)[0];
 	int	 nLayoutCnt = nIndent;
-	const wchar_t* q=pText;
+	const wchar_t* q = pText;
 	bHigh = false;
 	for (int i=0; i<nLength; i++, p++, q++) {
 		if (*q == WCODE::TAB) {
@@ -133,50 +134,43 @@ const int* CTextMetrics::GenerateDxArray(
 			if (i > 0 && *(q-1) == WCODE::TAB) {
 				*p = nTabSpace * nHankakuDx;
 				nLayoutCnt += nTabSpace;
-			}
-			else {
+			}else {
 				*p = (nTabSpace - nLayoutCnt % nTabSpace) * nHankakuDx;
 				nLayoutCnt += (nTabSpace - nLayoutCnt % nTabSpace);
 			}
 			bHigh = false;
-		}
 		// サロゲートチェック BMP 以外は全角扱い	2008/7/5 Uchi
-		else if (IsUTF16High(*q)) {
+		}else if (IsUTF16High(*q)) {
 			*p = nHankakuDx*2;
 			nLayoutCnt += 2;
 			bHigh = true;
-		}
-		else if (IsUTF16Low(*q)) {
+		}else if (IsUTF16Low(*q)) {
 			// サロゲートペア（下位）単独の場合は全角扱い
 			//*p = (bHigh) ? 0 : nHankakuDx*2;
 			if (bHigh) {
 				*p = 0;
-			}
-			else{
+			}else {
 				if (IsBinaryOnSurrogate(*q)) {
 					*p = nHankakuDx;
 					nLayoutCnt++;
-				}
-				else{
+				}else {
 					*p = nHankakuDx*2;
 					nLayoutCnt += 2;
 				}
 			}
 			bHigh = false;
-		}
-		else if(WCODE::IsHankaku(*q)){
+		}else if (WCODE::IsHankaku(*q)) {
 			*p = nHankakuDx;
 			nLayoutCnt++;
 			bHigh = false;				// サロゲートペア対策	2008/7/5 Uchi
-		}
-		else{
+		}else {
 			*p = nHankakuDx*2;
 			nLayoutCnt += 2;
 			bHigh = false;				// サロゲートペア対策	2008/7/5 Uchi
 		}
 	}
 
-	if(vResultArray->size())
+	if (vResultArray->size())
 		return &(*vResultArray)[0];
 	else
 		return NULL;
@@ -194,8 +188,8 @@ int CTextMetrics::CalcTextWidth(
 
 	//UNICODE時代の動作
 	int w=0;
-	for(int i=0;i<nLength;i++){
-		w+=pnDx[i];
+	for (int i=0;i<nLength;i++) {
+		w += pnDx[i];
 	}
 	return w;
 }

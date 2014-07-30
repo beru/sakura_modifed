@@ -14,13 +14,14 @@ static int IsNumber( const CStringRef& cStr, int offset );/* ”’l‚È‚ç‚»‚Ì’·‚³‚ğ•
 
 bool CColor_Numeric::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!cStr.IsValid())return false;
+	if (!cStr.IsValid()) return false;
 
 	int	nnn;
 
-	if( _IsPosKeywordHead(cStr,nPos)
-		&& (nnn = IsNumber(cStr, nPos)) > 0 )		/* ”¼Šp”š‚ğ•\¦‚·‚é */
-	{
+	if (1
+		&& _IsPosKeywordHead(cStr,nPos)
+		&& (nnn = IsNumber(cStr, nPos)) > 0
+	) {		/* ”¼Šp”š‚ğ•\¦‚·‚é */
 		/* ƒL[ƒ[ƒh•¶š—ñ‚ÌI’[‚ğƒZƒbƒg‚·‚é */
 		this->m_nCOMMENTEND = nPos + nnn;
 		return true;	/* ”¼Šp”’l‚Å‚ ‚é */ // 2002/03/13 novice
@@ -31,7 +32,7 @@ bool CColor_Numeric::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_Numeric::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( nPos == this->m_nCOMMENTEND ){
+	if (nPos == this->m_nCOMMENTEND) {
 		return true;
 	}
 	return false;
@@ -78,374 +79,269 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 	p = cStr.GetPtr() + offset;
 	q = cStr.GetPtr() + cStr.GetLength();
 
-	if( *p == L'0' )  /* 10i”,C‚Ì16i” */
-	{
+	if (*p == L'0') {  /* 10i”,C‚Ì16i” */
 		p++; i++;
-		if( ( p < q ) && ( *p == L'x' ) )  /* C‚Ì16i” */
-		{
+		if (( p < q ) && ( *p == L'x' )) {  /* C‚Ì16i” */
 			p++; i++;
-			while( p < q )
-			{
-				if( ( *p >= L'0' && *p <= L'9' )
-				 || ( *p >= L'A' && *p <= L'F' )
-				 || ( *p >= L'a' && *p <= L'f' ) )
-				{
+			while (p < q) {
+				if (0
+					|| ( *p >= L'0' && *p <= L'9' )
+					|| ( *p >= L'A' && *p <= L'F' )
+					|| ( *p >= L'a' && *p <= L'f' )
+				) {
 					p++; i++;
-				}
-				else
-				{
+				}else {
 					break;
 				}
 			}
 			/* "0x" ‚È‚ç "0" ‚¾‚¯‚ª”’l */
-			if( i == 2 ) return 1;
+			if (i == 2) return 1;
 			
 			/* Ú”öŒê */
-			if( p < q )
-			{
-				if( *p == L'L' || *p == L'l' || *p == L'F' || *p == L'f' )
-				{
+			if (p < q) {
+				if (*p == L'L' || *p == L'l' || *p == L'F' || *p == L'f') {
 					p++; i++;
 				}
 			}
 			return i;
-		}
-		else if( *p >= L'0' && *p <= L'9' )
-		{
+		}else if (*p >= L'0' && *p <= L'9') {
 			p++; i++;
-			while( p < q )
-			{
-				if( *p < L'0' || *p > L'9' )
-				{
-					if( *p == L'.' )
-					{
-						if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+			while (p < q) {
+				if (*p < L'0' || *p > L'9') {
+					if (*p == L'.') {
+						if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
 						d++;
-						if( d > 1 )
-						{
-							if( *(p - 1) == L'.' ) break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
+						if (d > 1) {
+							if (*(p - 1) == L'.') break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
 						}
-					}
-					else if( *p == L'E' || *p == L'e' )
-					{
-						if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
-						if( p + 2 < q )
-						{
-							if( ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-							 && ( *(p + 2) >= L'0' && *(p + 2) <= L'9' ) )
-							{
+					}else if (*p == L'E' || *p == L'e') {
+						if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+						if (p + 2 < q) {
+							if (1
+								&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
+								&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+							) {
 								p++; i++;
 								p++; i++;
 								f = 1;
-							}
-							else if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-							{
+							}else if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 								p++; i++;
 								f = 1;
-							}
-							else
-							{
+							}else {
 								break;
 							}
-						}
-						else if( p + 1 < q )
-						{
-							if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-							{
+						}else if (p + 1 < q) {
+							if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 								p++; i++;
 								f = 1;
-							}
-							else
-							{
+							}else {
 								break;
 							}
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else
-					{
+					}else {
 						break;
 					}
 				}
 				p++; i++;
 			}
-			if( *(p - 1)  == L'.' ) return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
+			if (*(p - 1)  == L'.') return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
 			/* Ú”öŒê */
-			if( p < q )
-			{
-				if( (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
-				 || *p == L'F' || *p == L'f' )
-				{
+			if (p < q) {
+				if (0
+					|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+					|| *p == L'F'
+					|| *p == L'f'
+				) {
 					p++; i++;
 				}
 			}
 			return i;
-		}
-		else if( *p == L'.' )
-		{
-			while( p < q )
-			{
-				if( *p < L'0' || *p > L'9' )
-				{
-					if( *p == L'.' )
-					{
-						if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+		}else if (*p == L'.') {
+			while (p < q) {
+				if (*p < L'0' || *p > L'9') {
+					if (*p == L'.') {
+						if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
 						d++;
-						if( d > 1 )
-						{
-							if( *(p - 1) == L'.' ) break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
+						if (d > 1) {
+							if (*(p - 1) == L'.') break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
 						}
-					}
-					else if( *p == L'E' || *p == L'e' )
-					{
-						if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
-						if( p + 2 < q )
-						{
-							if( ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-							 && ( *(p + 2) >= L'0' && *(p + 2) <= L'9' ) )
-							{
+					}else if (*p == L'E' || *p == L'e') {
+						if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+						if (p + 2 < q) {
+							if (1
+								&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
+								&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+							) {
 								p++; i++;
 								p++; i++;
 								f = 1;
-							}
-							else if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-							{
+							}else if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 								p++; i++;
 								f = 1;
-							}
-							else
-							{
+							}else {
 								break;
 							}
-						}
-						else if( p + 1 < q )
-						{
-							if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-							{
+						}else if (p + 1 < q) {
+							if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 								p++; i++;
 								f = 1;
-							}
-							else
-							{
+							}else {
 								break;
 							}
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else
-					{
+					}else {
 						break;
 					}
 				}
 				p++; i++;
 			}
-			if( *(p - 1)  == L'.' ) return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
+			if (*(p - 1)  == L'.') return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
 			/* Ú”öŒê */
-			if( p < q )
-			{
-				if( *p == L'F' || *p == L'f' )
-				{
+			if (p < q) {
+				if (*p == L'F' || *p == L'f') {
 					p++; i++;
 				}
 			}
 			return i;
-		}
-		else if( *p == L'E' || *p == L'e' )
-		{
+		}else if (*p == L'E' || *p == L'e') {
 			p++; i++;
-			while( p < q )
-			{
-				if( *p < L'0' || *p > L'9' )
-				{
-					if( ( *p == L'+' || *p == L'-' ) && ( *(p - 1) == L'E' || *(p - 1) == L'e' ) )
-					{
-						if( p + 1 < q )
-						{
-							if( *(p + 1) < L'0' || *(p + 1) > L'9' )
-							{
+			while (p < q) {
+				if (*p < L'0' || *p > L'9') {
+					if (( *p == L'+' || *p == L'-' ) && ( *(p - 1) == L'E' || *(p - 1) == L'e' )) {
+						if (p + 1 < q) {
+							if (*(p + 1) < L'0' || *(p + 1) > L'9') {
 								/* "0E+", "0E-" */
 								break;
 							}
-						}
-						else
-						{
+						}else {
 							/* "0E-", "0E+" */
 							break;
 						}
-					}
-					else
-					{
+					}else {
 						break;
 					}
 				}
 				p++; i++;
 			}
-			if( i == 2 ) return 1;  /* "0E", 0e" ‚È‚ç "0" ‚ª”’l */
+			if (i == 2) return 1;  /* "0E", 0e" ‚È‚ç "0" ‚ª”’l */
 			/* Ú”öŒê */
-			if( p < q )
-			{
-				if( (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
-				 || *p == L'F' || *p == L'f' )
-				{
+			if (p < q) {
+				if (0
+					|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+					|| *p == L'F' || *p == L'f'
+				) {
 					p++; i++;
 				}
 			}
 			return i;
-		}
-		else
-		{
+		}else {
 			/* "0" ‚¾‚¯‚ª”’l */
 			/*if( *p == L'.' ) return i - 1;*/  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
-			if( p < q )
-			{
-				if( (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
-				 || *p == L'F' || *p == L'f' )
-				{
+			if (p < q) {
+				if (0
+					|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+					|| *p == L'F' || *p == L'f'
+				) {
 					p++; i++;
 				}
 			}
 			return i;
 		}
-	}
-
-	else if( *p >= L'1' && *p <= L'9' )  /* 10i” */
-	{
+	}else if (*p >= L'1' && *p <= L'9') { /* 10i” */
 		p++; i++;
-		while( p < q )
-		{
-			if( *p < L'0' || *p > L'9' )
-			{
-				if( *p == L'.' )
-				{
-					if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+		while (p < q) {
+			if (*p < L'0' || *p > L'9') {
+				if (*p == L'.') {
+					if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
 					d++;
-					if( d > 1 )
-					{
-						if( *(p - 1) == L'.' ) break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
+					if (d > 1) {
+						if (*(p - 1) == L'.') break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
 					}
-				}
-				else if( *p == L'E' || *p == L'e' )
-				{
-					if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
-					if( p + 2 < q )
-					{
-						if( ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-						 && ( *(p + 2) >= L'0' && *(p + 2) <= L'9' ) )
-						{
+				}else if (*p == L'E' || *p == L'e') {
+					if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+					if (p + 2 < q) {
+						if (1
+							&& (*(p + 1) == L'+' || *(p + 1) == L'-')
+							&& (*(p + 2) >= L'0' && *(p + 2) <= L'9')
+						) {
 							p++; i++;
 							p++; i++;
 							f = 1;
-						}
-						else if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-						{
+						}else if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 							p++; i++;
 							f = 1;
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else if( p + 1 < q )
-					{
-						if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-						{
+					}else if (p + 1 < q) {
+						if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 							p++; i++;
 							f = 1;
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else
-					{
+					}else {
 						break;
 					}
-				}
-				else
-				{
+				}else {
 					break;
 				}
 			}
 			p++; i++;
 		}
-		if( *(p - 1) == L'.' ) return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
+		if (*(p - 1) == L'.') return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
 		/* Ú”öŒê */
-		if( p < q )
-		{
-			if( (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
-			 || *p == L'F' || *p == L'f' )
-			{
+		if (p < q) {
+			if (0
+				|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+				|| *p == L'F'
+				|| *p == L'f'
+			) {
 				p++; i++;
 			}
 		}
 		return i;
-	}
-
-	else if( *p == L'-' )  /* ƒ}ƒCƒiƒX */
-	{
+	}else if (*p == L'-') {  /* ƒ}ƒCƒiƒX */
 		p++; i++;
-		while( p < q )
-		{
-			if( *p < L'0' || *p > L'9' )
-			{
-				if( *p == L'.' )
-				{
-					if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+		while (p < q) {
+			if (*p < L'0' || *p > L'9') {
+				if (*p == L'.') {
+					if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
 					d++;
-					if( d > 1 )
-					{
-						if( *(p - 1) == L'.' ) break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
+					if (d > 1) {
+						if (*(p - 1) == L'.') break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
 					}
-				}
-				else if( *p == L'E' || *p == L'e' )
-				{
-					if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
-					if( p + 2 < q )
-					{
-						if( ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-						 && ( *(p + 2) >= L'0' && *(p + 2) <= L'9' ) )
-						{
+				}else if (*p == L'E' || *p == L'e') {
+					if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+					if (p + 2 < q) {
+						if (1
+							&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
+							&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+						) {
 							p++; i++;
 							p++; i++;
 							f = 1;
-						}
-						else if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-						{
+						}else if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 							p++; i++;
 							f = 1;
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else if( p + 1 < q )
-					{
-						if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-						{
+					}else if (p + 1 < q) {
+						if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 							p++; i++;
 							f = 1;
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else
-					{
+					}else {
 						break;
 					}
-				}
-				else
-				{
+				}else {
 					break;
 				}
 			}
@@ -455,96 +351,72 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 		//@@@ 2001.11.09 start MIK
 		//if( i <= 2 ) return 0;
 		//if( *(p - 1)  == L'.' ) return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
-		if( i == 1 ) return 0;
-		if( *(p - 1) == L'.' )
-		{
+		if (i == 1) return 0;
+		if (*(p - 1) == L'.') {
 			i--;
-			if( i == 1 ) return 0;
+			if (i == 1) return 0;
 			return i;
 		}  //@@@ 2001.11.09 end MIK
 		/* Ú”öŒê */
-		if( p < q )
-		{
-			if( (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
-			 || *p == L'F' || *p == L'f' )
-			{
+		if (p < q) {
+			if (0
+				|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+				|| *p == L'F'
+				|| *p == L'f'
+			) {
 				p++; i++;
 			}
 		}
 		return i;
-	}
-
-	else if( *p == L'.' )  /* ¬”“_ */
-	{
+	}else if (*p == L'.') {  /* ¬”“_ */
 		d++;
 		p++; i++;
-		while( p < q )
-		{
-			if( *p < L'0' || *p > L'9' )
-			{
-				if( *p == L'.' )
-				{
-					if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+		while (p < q) {
+			if (*p < L'0' || *p > L'9') {
+				if (*p == L'.') {
+					if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
 					d++;
-					if( d > 1 )
-					{
-						if( *(p - 1) == L'.' ) break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
+					if (d > 1) {
+						if (*(p - 1) == L'.') break;  /* "." ‚ª˜A‘±‚È‚ç’†’f */
 					}
-				}
-				else if( *p == L'E' || *p == L'e' )
-				{
-					if( f == 1 ) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
-					if( p + 2 < q )
-					{
-						if( ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-						 && ( *(p + 2) >= L'0' && *(p + 2) <= L'9' ) )
-						{
+				}else if (*p == L'E' || *p == L'e') {
+					if (f == 1) break;  /* w”•”‚É“ü‚Á‚Ä‚¢‚é */
+					if (p + 2 < q) {
+						if (1
+							&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
+							&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+						) {
 							p++; i++;
 							p++; i++;
 							f = 1;
-						}
-						else if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-						{
+						}else if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 							p++; i++;
 							f = 1;
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else if( p + 1 < q )
-					{
-						if( *(p + 1) >= L'0' && *(p + 1) <= L'9' )
-						{
+					}else if (p + 1 < q) {
+						if (*(p + 1) >= L'0' && *(p + 1) <= L'9') {
 							p++; i++;
 							f = 1;
-						}
-						else
-						{
+						}else {
 							break;
 						}
-					}
-					else
-					{
+					}else {
 						break;
 					}
-				}
-				else
-				{
+				}else {
 					break;
 				}
 			}
 			p++; i++;
 		}
 		/* "." ‚¾‚¯‚È‚ç”’l‚Å‚È‚¢ */
-		if( i == 1 ) return 0;
-		if( *(p - 1)  == L'.' ) return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
+		if (i == 1) return 0;
+		if (*(p - 1)  == L'.') return i - 1;  /* ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢ */
 		/* Ú”öŒê */
-		if( p < q )
-		{
-			if( *p == L'F' || *p == L'f' )
-			{
+		if (p < q) {
+			if (*p == L'F' || *p == L'f') {
 				p++; i++;
 			}
 		}
@@ -552,27 +424,23 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 	}
 
 #if 0
-	else if( *p == L'&' )  /* VB‚Ì16i” */
-	{
+	else if (*p == L'&') {  /* VB‚Ì16i” */
 		p++; i++;
-		if( ( p < q ) && ( *p == L'H' ) )
-		{
+		if (( p < q ) && ( *p == L'H' )) {
 			p++; i++;
-			while( p < q )
-			{
-				if( ( *p >= L'0' && *p <= L'9' )
-				 || ( *p >= L'A' && *p <= L'F' )
-				 || ( *p >= L'a' && *p <= L'f' ) )
-				{
+			while (p < q) {
+				if (0
+					|| ( *p >= L'0' && *p <= L'9' )
+					|| ( *p >= L'A' && *p <= L'F' )
+					|| ( *p >= L'a' && *p <= L'f' )
+				) {
 					p++; i++;
-				}
-				else
-				{
+				}else {
 					break;
 				}
 			}
 			/* "&H" ‚¾‚¯‚È‚ç”’l‚Å‚È‚¢ */
-			if( i == 2 ) i = 0;
+			if (i == 2) i = 0;
 			return i;
 		}
 
@@ -585,3 +453,4 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 	return 0;
 }
 //@@@ 2001.11.07 End by MIK
+

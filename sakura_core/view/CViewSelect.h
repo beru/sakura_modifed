@@ -30,8 +30,8 @@ class CEditView;
 
 class CViewSelect{
 public:
-	CEditView* GetEditView(){ return m_pcEditView; }
-	const CEditView* GetEditView() const{ return m_pcEditView; }
+	CEditView* GetEditView() { return m_pcEditView; }
+	const CEditView* GetEditView() const { return m_pcEditView; }
 
 public:
 	CViewSelect(CEditView* pcEditView);
@@ -106,7 +106,7 @@ private:
 	) const;
 public:
 	void GetSelectAreaLineFromRange(CLayoutRange& ret, CLayoutInt nLineNum, const CLayout* pcLayout, const CLayoutRange& sRange) const;
-	void GetSelectAreaLine(CLayoutRange& ret, CLayoutInt nLineNum, const CLayout* pcLayout) const{
+	void GetSelectAreaLine(CLayoutRange& ret, CLayoutInt nLineNum, const CLayout* pcLayout) const {
 		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_sSelect);
 	}
 	CLayoutRange GetSelectAreaLine(CLayoutInt nLineNum, const CLayout* pcLayout) const{

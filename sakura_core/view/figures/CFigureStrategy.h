@@ -83,9 +83,9 @@ protected:
 		CFigure::Update();
 
 		EColorIndexType nColorIndex = GetColorIdx();
-		if( m_pTypeData->m_ColorInfoArr[nColorIndex].m_bDisp ){
+		if (m_pTypeData->m_ColorInfoArr[nColorIndex].m_bDisp) {
 			m_nDispColorIndex = nColorIndex;
-		}else{
+		}else {
 			m_nDispColorIndex = COLORIDX_TEXT;
 		}
 	}

@@ -23,43 +23,42 @@ int CViewParser::GetLeftWord( CNativeW* pcmemWord, int nMaxWordLen ) const
 
 	nCurLine = m_pEditView->GetCaret().GetCaretLayoutPos().GetY2();
 	pLine = m_pEditView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( nCurLine, &nLineLen, &pcLayout );
-	if( NULL == pLine ){
+	if (NULL == pLine) {
 //		return 0;
 		nIdxTo = CLogicInt(0);
-	}else{
+	}else {
 		/* 指定された桁に対応する行のデータ内の位置を調べる Ver1 */
 		nIdxTo = m_pEditView->LineColumnToIndex( pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2() );
 	}
-	if( 0 == nIdxTo || NULL == pLine ){
-		if( nCurLine <= 0 ){
+	if (0 == nIdxTo || NULL == pLine) {
+		if (nCurLine <= 0) {
 			return 0;
 		}
 		nCurLine--;
 		pLine = m_pEditView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( nCurLine, &nLineLen );
-		if( NULL == pLine ){
+		if (NULL == pLine) {
 			return 0;
 		}
-		if( WCODE::IsLineDelimiter(pLine[nLineLen - 1]) ){
+		if (WCODE::IsLineDelimiter(pLine[nLineLen - 1])) {
 			return 0;
 		}
 
 		nCharChars = &pLine[nLineLen] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nLineLen] );
-		if( 0 == nCharChars ){
+		if (0 == nCharChars) {
 			return 0;
 		}
 		nIdxTo = nLineLen;
 		nIdx = nIdxTo - CLogicInt(nCharChars);
-	}
-	else{
+	}else {
 		nCharChars = &pLine[nIdxTo] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nIdxTo] );
-		if( 0 == nCharChars ){
+		if (0 == nCharChars) {
 			return 0;
 		}
 		nIdx = nIdxTo - CLogicInt(nCharChars);
 	}
 
-	if( 1 == nCharChars ){
-		if( WCODE::IsWordDelimiter(pLine[nIdx]) ){
+	if (1 == nCharChars) {
+		if (WCODE::IsWordDelimiter(pLine[nIdx])) {
 			return 0;
 		}
 	}
@@ -73,11 +72,10 @@ int CViewParser::GetLeftWord( CNativeW* pcmemWord, int nMaxWordLen ) const
 		&cmemWord,
 		pcmemWord
 	);
-	if( bResult ){
+	if (bResult) {
 		pcmemWord->AppendString( &pLine[nIdx], nCharChars );
-
 		return pcmemWord->GetStringLength();
-	}else{
+	}else {
 		return 0;
 	}
 }
@@ -97,7 +95,7 @@ bool CViewParser::GetCurrentWord(
 ) const
 {
 	const CLayout*	pcLayout = m_pEditView->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( m_pEditView->GetCaret().GetCaretLayoutPos().GetY2() );
-	if( NULL == pcLayout ){
+	if (NULL == pcLayout) {
 		return false;	/* 単語選択に失敗 */
 	}
 

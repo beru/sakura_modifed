@@ -51,8 +51,8 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 
 bool CFigure_Eol::Match(const wchar_t* pText) const
 {
-	if(pText[0]==L'\r' && pText[1]==L'\n' && pText[2]==L'\0')return true;
-	if(WCODE::IsLineDelimiter(pText[0]) && pText[1]==L'\0')return true;
+	if (pText[0]==L'\r' && pText[1]==L'\n' && pText[2]==L'\0') return true;
+	if (WCODE::IsLineDelimiter(pText[0]) && pText[1]==L'\0') return true;
 	return false;
 }
 
@@ -65,7 +65,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	// 改行取得
 	const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
 	CEol cEol = pcLayout->GetLayoutEol();
-	if(cEol.GetLen()){
+	if (cEol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
 		CTypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
 		CTypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
@@ -80,23 +80,23 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		bool blendColor = bSelecting && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
 		CTypeSupport& currentStyle = blendColor ? cCurrentType2 : cCurrentType;
 		CTypeSupport *pcText, *pcBack;
-		if( bSelecting && !blendColor ){
+		if (bSelecting && !blendColor) {
 			// 選択文字色固定指定
 			pcText = &cCurrentType;
 			pcBack = &cCurrentType;
-		}else if( pInfo->GetCurrentColor2() == COLORIDX_SEARCH ){
+		}else if (pInfo->GetCurrentColor2() == COLORIDX_SEARCH) {
 			// 検索色優先
 			pcText = &cSearchType;
 			pcBack = &cSearchType;
-		}else{
+		}else {
 			pcText = cSpaceType.GetTextColor() == cTextType.GetTextColor() ? &cCurrentType2 : &cSpaceType;
 			pcBack = cSpaceType.GetBackColor() == cTextType.GetBackColor() ? &cCurrentType3 : &cSpaceType;
 		}
-		if( blendColor ){
+		if (blendColor) {
 			// 混合色(検索色を優先しつつ)
 			crText = pcView->GetTextColorByColorInfo2(cCurrentType.GetColorInfo(), pcText->GetColorInfo());
 			crBack = pcView->GetBackColorByColorInfo2(cCurrentType.GetColorInfo(), pcBack->GetColorInfo());
-		}else{
+		}else {
 			crText = pcText->GetTextColor();
 			crBack = pcBack->GetBackColor();
 		}
@@ -128,8 +128,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum )
 {
 	RECT rcClip2;
-	if(pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,1))
-	{
+	if (pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,1)) {
 		//サポートクラス
 		CTypeSupport cWrapType(pcView,COLORIDX_WRAP);
 		CTypeSupport cTextType(pcView,COLORIDX_TEXT);
@@ -138,14 +137,14 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 		bool bBgcolor = cWrapType.GetBackColor() == cTextType.GetBackColor();
 		EColorIndexType eBgcolorOverwrite = COLORIDX_WRAP;
 		bool bTrans = pcView->IsBkBitmap();
-		if( cWrapType.IsDisp() ){
-			if( cBgLineType.IsDisp() && pcView->GetCaret().GetCaretLayoutPos().GetY2() == nLineNum ){
-				if( bBgcolor ){
+		if (cWrapType.IsDisp()) {
+			if (cBgLineType.IsDisp() && pcView->GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
+				if (bBgcolor) {
 					eBgcolorOverwrite = COLORIDX_CARETLINEBG;
 					bTrans = bTrans && cBgLineType.GetBackColor() == cTextType.GetBackColor();
 				}
-			}else if( cEvenBgLineType.IsDisp() && nLineNum % 2 == 1 ){
-				if( bBgcolor ){
+			}else if (cEvenBgLineType.IsDisp() && nLineNum % 2 == 1) {
+				if (bBgcolor) {
 					eBgcolorOverwrite = COLORIDX_EVENLINEBG;
 					bTrans = bTrans && cEvenBgLineType.GetBackColor() == cTextType.GetBackColor();
 				}
@@ -155,17 +154,14 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 
 		//描画文字列と色の決定
 		const wchar_t* szText;
-		if( cWrapType.IsDisp() )
-		{
+		if (cWrapType.IsDisp()) {
 			szText = L"<";
 			cWrapType.SetGraphicsState_WhileThisObj(gr);
-			if( eBgcolorOverwrite != COLORIDX_WRAP ){
+			if (eBgcolorOverwrite != COLORIDX_WRAP) {
 				bChangeColor = true;
 				gr.PushTextBackColor( CTypeSupport(pcView, eBgcolorOverwrite).GetBackColor() );
 			}
-		}
-		else
-		{
+		}else {
 			szText = L" ";
 		}
 
@@ -180,7 +176,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 			wcslen(szText),
 			pcView->GetTextMetrics().GetDxArray_AllHankaku()
 		);
-		if( bChangeColor ){
+		if (bChangeColor) {
 			gr.PopTextBackColor();
 		}
 	}
@@ -204,7 +200,7 @@ void _DispEOF(
 {
 	// 描画に使う色情報
 	CTypeSupport cEofType(pcView,COLORIDX_EOF);
-	if(!cEofType.IsDisp())
+	if (!cEofType.IsDisp())
 		return;
 	CTypeSupport cTextType(pcView,COLORIDX_TEXT);
 	bool bTrans = pcView->IsBkBitmap() && cEofType.GetBackColor() == cTextType.GetBackColor();
@@ -219,8 +215,7 @@ void _DispEOF(
 
 	//クリッピング領域を計算
 	RECT rcClip;
-	if(pArea->GenerateClipRect(&rcClip,*pDispPos,nEofLen))
-	{
+	if (pArea->GenerateClipRect(&rcClip,*pDispPos,nEofLen)) {
 		//色設定
 		cEofType.SetGraphicsState_WhileThisObj(gr);
 
@@ -261,7 +256,7 @@ void _DrawEOL(
 void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView, bool bTrans)
 {
 	RECT rcClip2;
-	if(pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,2)){
+	if (pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,2)) {
 		// 2003.08.17 ryoji 改行文字が欠けないように
 		::ExtTextOutW_AnyBuild(
 			gr,
@@ -275,7 +270,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 		);
 
 		// 改行記号の表示
-		if( CTypeSupport(pcView,COLORIDX_EOL).IsDisp() ){
+		if (CTypeSupport(pcView,COLORIDX_EOL).IsDisp()) {
 			// From Here 2003.08.17 ryoji 改行文字が欠けないように
 
 			// リージョン作成、選択。
@@ -326,7 +321,7 @@ void _DrawEOL(
 	int sx, sy;	//	矢印の先頭
 	gr.SetPen( pColor );
 
-	switch( cEol.GetType() ){
+	switch (cEol.GetType()) {
 	case EOL_CRLF:	//	下左矢印
 		{
 			sx = rcEol.left;						//X左端
@@ -347,7 +342,7 @@ void _DrawEOL(
 			pt[5].y = sy - rcEol.Height() / 4;
 			::PolyPolyline( gr, pt, pp, _countof(pp));
 
-			if ( bBold ) {
+			if (bBold) {
 				pt[0].x += 1;	//	上へ（右へずらす）
 				pt[0].y += 0;
 				pt[1].x += 1;	//	右へ（右にひとつずれている）
@@ -382,7 +377,7 @@ void _DrawEOL(
 			pt[4].y = sy - rcEol.Height() / 4;
 			::PolyPolyline( gr, pt, pp, _countof(pp));
 
-			if ( bBold ) {
+			if (bBold) {
 				pt[0].x += 0;	//	右へ
 				pt[0].y += 1;
 				pt[1].x += 0;	//	先頭へ
@@ -419,7 +414,7 @@ void _DrawEOL(
 			pt[4].y = sy - rcEol.Height() / 4;
 			::PolyPolyline( gr, pt, pp, _countof(pp));
 
-			if( bBold ){
+			if (bBold) {
 				pt[0].x += 1;	//	上へ
 				pt[0].y += 0;
 				pt[1].x += 1;	//	上から下へ
@@ -436,3 +431,4 @@ void _DrawEOL(
 		break;
 	}
 }
+

@@ -42,10 +42,9 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 HWND GetMessageBoxOwner(HWND hwndOwner)
 {
-	if(hwndOwner==NULL && g_pcEditWnd){
+	if (hwndOwner==NULL && g_pcEditWnd) {
 		return g_pcEditWnd->GetHwnd();
-	}
-	else{
+	}else {
 		return hwndOwner;
 	}
 }
@@ -64,7 +63,7 @@ int VMessageBoxF(
 	va_list&	v			//!< [in/out] 引数リスト
 )
 {
-	hwndOwner=GetMessageBoxOwner(hwndOwner);
+	hwndOwner = GetMessageBoxOwner(hwndOwner);
 	//整形
 	static TCHAR szBuf[16000];
 #ifdef _UNICODE
@@ -79,7 +78,7 @@ int VMessageBoxF(
 int MessageBoxF( HWND hwndOwner, UINT uType, LPCTSTR lpCaption, LPCTSTR lpText, ... )
 {
 	va_list v;
-	va_start(v,lpText);
+	va_start(v, lpText);
 	int nRet = VMessageBoxF(hwndOwner, uType, lpCaption, lpText, v);
 	va_end(v);
 	return nRet;
@@ -116,6 +115,4 @@ int TopCustomMessage(HWND hwnd, UINT uType, LPCTSTR format, ...){   va_list p;va
 
 //作者に教えて欲しいエラー
 int PleaseReportToAuthor(HWND hwnd, LPCTSTR format, ...){ va_list p;va_start(p, format);int n=VMessageBoxF  (hwnd, MB_OK | MB_ICONSTOP | MB_TOPMOST, LS(STR_ERR_DLGDOCLMN1), format, p);va_end(p);return n;}
-
-
 

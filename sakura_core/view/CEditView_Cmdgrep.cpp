@@ -35,14 +35,15 @@ void CEditView::TranslateCommand_grep(
 	LPARAM&			lparam4
 )
 {
-	if( ! CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode )
+	if (! CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)
 		return;
 
-	if( nCommand == F_WCHAR ){
+	if (nCommand == F_WCHAR) {
 		//	Jan. 23, 2005 genta •¶Žš”»’è–Y‚ê
-		if( WCODE::IsLineDelimiter((wchar_t)lparam1) && GetDllShareData().m_Common.m_sSearch.m_bGTJW_RETURN ){
+		if (WCODE::IsLineDelimiter((wchar_t)lparam1) && GetDllShareData().m_Common.m_sSearch.m_bGTJW_RETURN) {
 			nCommand = F_TAGJUMP;
 			lparam1 = GetKeyState_Control()?1:0;
 		}
 	}
 }
+

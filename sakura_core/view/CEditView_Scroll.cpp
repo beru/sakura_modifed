@@ -64,7 +64,7 @@ BOOL CEditView::CreateScrollBar()
 
 	/* スクロールバーの作成 */
 	m_hwndHScrollBar = NULL;
-	if( GetDllShareData().m_Common.m_sWindow.m_bScrollBarHorz ){	/* 水平スクロールバーを使う */
+	if (GetDllShareData().m_Common.m_sWindow.m_bScrollBarHorz) {	/* 水平スクロールバーを使う */
 		m_hwndHScrollBar = ::CreateWindowEx(
 			0L,									/* no extended styles */
 			_T("SCROLLBAR"),					/* scroll bar control class */
@@ -90,9 +90,8 @@ BOOL CEditView::CreateScrollBar()
 		::ShowScrollBar( m_hwndHScrollBar, SB_CTL, TRUE );
 	}
 
-
 	/* サイズボックス */
-	if( GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0 ){	/* ファンクションキー表示位置／0:上 1:下 */
+	if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	/* ファンクションキー表示位置／0:上 1:下 */
 		m_hwndSizeBox = ::CreateWindowEx(
 			WS_EX_CONTROLPARENT/*0L*/, 			/* no extended styles */
 			_T("SCROLLBAR"),					/* scroll bar control class */
@@ -107,7 +106,7 @@ BOOL CEditView::CreateScrollBar()
 			G_AppInstance(),						/* instance owning this window */
 			(LPVOID) NULL						/* pointer not needed */
 		);
-	}else{
+	}else {
 		m_hwndSizeBox = ::CreateWindowEx(
 			0L, 								/* no extended styles */
 			_T("STATIC"),						/* scroll bar control class */
@@ -133,20 +132,17 @@ BOOL CEditView::CreateScrollBar()
 */
 void CEditView::DestroyScrollBar()
 {
-	if( m_hwndVScrollBar )
-	{
+	if (m_hwndVScrollBar) {
 		::DestroyWindow( m_hwndVScrollBar );
 		m_hwndVScrollBar = NULL;
 	}
 
-	if( m_hwndHScrollBar )
-	{
+	if (m_hwndHScrollBar) {
 		::DestroyWindow( m_hwndHScrollBar );
 		m_hwndHScrollBar = NULL;
 	}
 
-	if( m_hwndSizeBox )
-	{
+	if (m_hwndSizeBox) {
 		::DestroyWindow( m_hwndSizeBox );
 		m_hwndSizeBox = NULL;
 	}
@@ -166,8 +162,8 @@ CLayoutInt CEditView::OnVScroll( int nScrollCode, int nPos )
 	CLayoutInt nScrollVal = CLayoutInt(0);
 
 	// nPos 32bit対応
-	if( nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION ){
-		if( m_hwndVScrollBar ){
+	if (nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION) {
+		if (m_hwndVScrollBar) {
 			HWND hWndScroll = m_hwndVScrollBar;
 			SCROLLINFO info;
 			info.cbSize = sizeof(SCROLLINFO);
@@ -177,7 +173,7 @@ CLayoutInt CEditView::OnVScroll( int nScrollCode, int nPos )
 		}
 	}
 
-	switch( nScrollCode ){
+	switch (nScrollCode) {
 	case SB_LINEDOWN:
 //		for( i = 0; i < 4; ++i ){
 //			ScrollAtV( GetTextArea().GetViewTopLine() + 1 );
@@ -229,8 +225,8 @@ CLayoutInt CEditView::OnHScroll( int nScrollCode, int nPos )
 	CLayoutInt nScrollVal = CLayoutInt(0);
 
 	// nPos 32bit対応
-	if( nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION ){
-		if( m_hwndHScrollBar ){
+	if (nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION) {
+		if (m_hwndHScrollBar) {
 			HWND hWndScroll = m_hwndHScrollBar;
 			SCROLLINFO info;
 			info.cbSize = sizeof(SCROLLINFO);
@@ -241,7 +237,7 @@ CLayoutInt CEditView::OnHScroll( int nScrollCode, int nPos )
 	}
 
 	GetRuler().SetRedrawFlag(); // YAZAKI
-	switch( nScrollCode ){
+	switch (nScrollCode) {
 	case SB_LINELEFT:
 		nScrollVal = ScrollAtH( GetTextArea().GetViewLeftCol() - nHScrollNum );
 		break;
@@ -285,15 +281,14 @@ CLayoutInt CEditView::OnHScroll( int nScrollCode, int nPos )
 */
 void CEditView::AdjustScrollBars()
 {
-	if( !GetDrawSwitch() ){
+	if (!GetDrawSwitch()) {
 		return;
 	}
-
 
 	SCROLLINFO	si;
 	bool		bEnable;
 
-	if( NULL != m_hwndVScrollBar ){
+	if (NULL != m_hwndVScrollBar) {
 		/* 垂直スクロールバー */
 		const CLayoutInt	nEofMargin = CLayoutInt(2); // EOFとその下のマージン
 		const CLayoutInt	nAllLines = m_pcEditDoc->m_cLayoutMgr.GetLineCount() + nEofMargin;
@@ -301,7 +296,7 @@ void CEditView::AdjustScrollBars()
 #ifdef _WIN64
 		/* nAllLines / nVScrollRate < INT_MAX となる整数nVScrollRateを求める */
 		// 64bit版用スクロール率
-		while( nAllLines / nVScrollRate > INT_MAX ){
+		while (nAllLines / nVScrollRate > INT_MAX) {
 			++nVScrollRate;
 		}
 #endif
@@ -320,14 +315,14 @@ void CEditView::AdjustScrollBars()
 		//	スクロールさせる
 		//	2005.11.01 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
 		bEnable = ( GetTextArea().m_nViewRowNum < nAllLines );
-		if( bEnable != (::IsWindowEnabled( m_hwndVScrollBar ) != 0) ){
+		if (bEnable != (::IsWindowEnabled( m_hwndVScrollBar ) != 0)) {
 			::EnableWindow( m_hwndVScrollBar, bEnable? TRUE: FALSE );	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
-		if( !bEnable ){
+		if (!bEnable) {
 			ScrollAtV( CLayoutInt(0) );
 		}
 	}
-	if( NULL != m_hwndHScrollBar ){
+	if (NULL != m_hwndHScrollBar) {
 		/* 水平スクロールバー */
 		si.cbSize = sizeof( si );
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
@@ -340,10 +335,10 @@ void CEditView::AdjustScrollBars()
 
 		//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
 		bEnable = ( GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar() );
-		if( bEnable != (::IsWindowEnabled( m_hwndHScrollBar ) != 0) ){
+		if (bEnable != (::IsWindowEnabled( m_hwndHScrollBar ) != 0)) {
 			::EnableWindow( m_hwndHScrollBar, bEnable? TRUE: FALSE );	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
-		if( !bEnable ){
+		if (!bEnable) {
 			ScrollAtH( CLayoutInt(0) );
 		}
 	}
@@ -361,31 +356,30 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 	CLayoutInt	nScrollRowNum;
 	RECT		rcScrol;
 	RECT		rcClip;
-	if( nPos < 0 ){
+	if (nPos < 0) {
 		nPos = CLayoutInt(0);
-	}
-	else if( (m_pcEditDoc->m_cLayoutMgr.GetLineCount() + 2 )- GetTextArea().m_nViewRowNum < nPos ){
+	}else if ((m_pcEditDoc->m_cLayoutMgr.GetLineCount() + 2) - GetTextArea().m_nViewRowNum < nPos) {
 		nPos = ( m_pcEditDoc->m_cLayoutMgr.GetLineCount() + CLayoutInt(2) ) - GetTextArea().m_nViewRowNum;
-		if( nPos < 0 ){
+		if (nPos < 0) {
 			nPos = CLayoutInt(0);
 		}
 	}
-	if( GetTextArea().GetViewTopLine() == nPos ){
+	if (GetTextArea().GetViewTopLine() == nPos) {
 		return CLayoutInt(0);	//	スクロール無し。
 	}
 	/* 垂直スクロール量（行数）の算出 */
 	nScrollRowNum = GetTextArea().GetViewTopLine() - nPos;
 
 	/* スクロール */
-	if( t_abs( nScrollRowNum ) >= GetTextArea().m_nViewRowNum ){
+	if (t_abs( nScrollRowNum ) >= GetTextArea().m_nViewRowNum) {
 		GetTextArea().SetViewTopLine( CLayoutInt(nPos) );
 		::InvalidateRect( GetHwnd(), NULL, TRUE );
-	}else{
+	}else {
 		rcScrol.left = 0;
 		rcScrol.right = GetTextArea().GetAreaRight();
 		rcScrol.top = GetTextArea().GetAreaTop();
 		rcScrol.bottom = GetTextArea().GetAreaBottom();
-		if( nScrollRowNum > 0 ){
+		if (nScrollRowNum > 0) {
 			rcScrol.bottom =
 				GetTextArea().GetAreaBottom() -
 				(Int)nScrollRowNum * GetTextMetrics().GetHankakuDy();
@@ -395,8 +389,7 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 			rcClip.top = GetTextArea().GetAreaTop();
 			rcClip.bottom =
 				GetTextArea().GetAreaTop() + (Int)nScrollRowNum * GetTextMetrics().GetHankakuDy();
-		}
-		else if( nScrollRowNum < 0 ){
+		}else if (nScrollRowNum < 0) {
 			rcScrol.top =
 				GetTextArea().GetAreaTop() - (Int)nScrollRowNum * GetTextMetrics().GetHankakuDy();
 			GetTextArea().SetViewTopLine( CLayoutInt(nPos) );
@@ -407,7 +400,7 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 				(Int)nScrollRowNum * GetTextMetrics().GetHankakuDy();
 			rcClip.bottom = GetTextArea().GetAreaBottom();
 		}
-		if( GetDrawSwitch() ){
+		if (GetDrawSwitch()) {
 			RECT rcClip2 = {0,0,0,0};
 			ScrollDraw(nScrollRowNum, CLayoutInt(0), rcScrol, rcClip, rcClip2);
 			::UpdateWindow( GetHwnd() );
@@ -424,8 +417,6 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 }
 
 
-
-
 /*! 指定左端桁位置へスクロール
 
 	@param nPos [in] スクロール位置
@@ -439,37 +430,37 @@ CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 {
 	RECT		rcScrol;
 	RECT		rcClip2;
-	if( nPos < 0 ){
+	if (nPos < 0) {
 		nPos = CLayoutInt(0);
 	}
 	//	Aug. 18, 2003 ryoji 変数のミスを修正
 	//	ウィンドウの幅をきわめて狭くしたときに編集領域が行番号から離れてしまうことがあった．
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	else if( GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum  < nPos ){
+	else if (GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum  < nPos) {
 		nPos = GetRightEdgeForScrollBar() + GetWrapOverhang() - GetTextArea().m_nViewColNum ;
 		//	May 29, 2004 genta 折り返し幅よりウィンドウ幅が大きいときにWM_HSCROLLが来ると
 		//	nPosが負の値になることがあり，その場合にスクロールバーから編集領域が
 		//	離れてしまう．
-		if( nPos < 0 )
+		if (nPos < 0)
 			nPos = CLayoutInt(0);
 	}
-	if( GetTextArea().GetViewLeftCol() == nPos ){
+	if (GetTextArea().GetViewLeftCol() == nPos) {
 		return CLayoutInt(0);
 	}
 	/* 水平スクロール量（文字数）の算出 */
 	const CLayoutInt	nScrollColNum = GetTextArea().GetViewLeftCol() - nPos;
 
 	/* スクロール */
-	if( t_abs( nScrollColNum ) >= GetTextArea().m_nViewColNum /*|| abs( nScrollRowNum ) >= GetTextArea().m_nViewRowNum*/ ){
+	if (t_abs( nScrollColNum ) >= GetTextArea().m_nViewColNum /*|| abs( nScrollRowNum ) >= GetTextArea().m_nViewRowNum*/) {
 		GetTextArea().SetViewLeftCol( nPos );
 		::InvalidateRect( GetHwnd(), NULL, TRUE );
-	}else{
+	}else {
 		rcScrol.left = 0;
 		rcScrol.right = GetTextArea().GetAreaRight();
 		rcScrol.top = GetTextArea().GetAreaTop();
 		rcScrol.bottom = GetTextArea().GetAreaBottom();
 		int nScrollColPxWidth = (Int)nScrollColNum * GetTextMetrics().GetHankakuDx();
-		if( nScrollColNum > 0 ){
+		if (nScrollColNum > 0) {
 			rcScrol.left = GetTextArea().GetAreaLeft();
 			rcScrol.right =
 				GetTextArea().GetAreaRight() - nScrollColPxWidth;
@@ -477,8 +468,7 @@ CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 			rcClip2.right = GetTextArea().GetAreaLeft() + nScrollColPxWidth;
 			rcClip2.top = GetTextArea().GetAreaTop();
 			rcClip2.bottom = GetTextArea().GetAreaBottom();
-		}
-		else if( nScrollColNum < 0 ){
+		}else if (nScrollColNum < 0) {
 			rcScrol.left = GetTextArea().GetAreaLeft() - nScrollColPxWidth;
 			rcClip2.left =
 				GetTextArea().GetAreaRight() + nScrollColPxWidth;
@@ -487,7 +477,7 @@ CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 			rcClip2.bottom = GetTextArea().GetAreaBottom();
 		}
 		GetTextArea().SetViewLeftCol( nPos );
-		if( GetDrawSwitch() ){
+		if (GetDrawSwitch()) {
 			RECT rcClip = {0,0,0,0};
 			ScrollDraw(CLayoutInt(0), nScrollColNum, rcScrol, rcClip, rcClip2);
 			::UpdateWindow( GetHwnd() );
@@ -519,12 +509,12 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 	bool bBackImgFixed = IsBkBitmap() &&
 		(0 != nScrollRowNum && !m_pTypeData->m_backImgScrollY ||
 		 0 != nScrollColNum && !m_pTypeData->m_backImgScrollX);
-	if( bBackImgFixed ){
+	if (bBackImgFixed) {
 		CMyRect rcBody = area.GetAreaRect();
 		rcBody.left = 0; // 行番号も移動
 		rcBody.top = area.GetRulerHeight();
 		InvalidateRect(&rcBody, FALSE);
-	}else{
+	}else {
 		int nScrollColPxWidth = (Int)nScrollColNum * GetTextMetrics().GetHankakuDx();
 		ScrollWindowEx(
 			nScrollColPxWidth,	// 水平スクロール量
@@ -533,7 +523,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 			NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE
 		);
 		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-		if( m_hbmpCompatBMP ){
+		if (m_hbmpCompatBMP) {
 			// 互換BMPもスクロール処理のためにBitBltで移動させる
 			::BitBlt(
 				m_hdcCompatDC,
@@ -544,14 +534,16 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 			);
 		}
 
-		if( 0 < area.GetTopYohaku() &&
-		  IsBkBitmap() &&
-		  (0 != nScrollRowNum && m_pTypeData->m_backImgScrollY || 0 != nScrollColNum && m_pTypeData->m_backImgScrollX) ){
+		if (1
+			&& 0 < area.GetTopYohaku()
+			&& IsBkBitmap()
+			&& (0 != nScrollRowNum && m_pTypeData->m_backImgScrollY || 0 != nScrollColNum && m_pTypeData->m_backImgScrollX)
+		) {
 			// Scrollのときにルーラー余白更新
 			CMyRect rcTopYohaku;
-			if( CTypeSupport(this, COLORIDX_TEXT).GetBackColor() == CTypeSupport(this, COLORIDX_GYOU).GetBackColor() ){
+			if (CTypeSupport(this, COLORIDX_TEXT).GetBackColor() == CTypeSupport(this, COLORIDX_GYOU).GetBackColor()) {
 				rcTopYohaku.left = 0;
-			}else{
+			}else {
 				rcTopYohaku.left = area.GetLineNumberWidth();
 			}
 			rcTopYohaku.top  = area.GetRulerHeight();
@@ -563,11 +555,11 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 			DrawBackImage(hdcSelf, rcTopYohaku, hdcBgImg);
 			SelectObject(hdcBgImg, hOldBmp);
 			ReleaseDC(hdcSelf);
-			if( !m_hdcCompatDC ){
+			if (!m_hdcCompatDC) {
 				DeleteObject(hdcBgImg);
 			}
 		}
-		if( IsBkBitmap() && 0 != nScrollColNum && m_pTypeData->m_backImgScrollX ){
+		if (IsBkBitmap() && 0 != nScrollColNum && m_pTypeData->m_backImgScrollX) {
 			// 行番号背景のために更新
 			CMyRect rcLineNum;
 			area.GenerateLineNumberRect(&rcLineNum);
@@ -575,7 +567,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 		}
 	}
 	// カーソルの縦線がテキストと行番号の隙間にあるとき、スクロール時に縦線領域を更新
-	if( nScrollColNum != 0 && m_nOldCursorLineX == GetTextArea().GetAreaLeft() - 1 ){
+	if (nScrollColNum != 0 && m_nOldCursorLineX == GetTextArea().GetAreaLeft() - 1) {
 		RECT rcClip3;
 		rcClip3.left   = m_nOldCursorLineX - (m_nOldCursorVLineWidth - 1);
 		rcClip3.right  = m_nOldCursorLineX + 1;
@@ -585,15 +577,15 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 	}
 	// To Here 2007.09.09 Moca
 
-	if( nScrollRowNum != 0 ){
+	if (nScrollRowNum != 0) {
 		InvalidateRect( &rcClip );
-		if( nScrollColNum != 0 ){
+		if (nScrollColNum != 0) {
 			RECT lineNumClip;
 			GetTextArea().GenerateLineNumberRect(&lineNumClip);
 			InvalidateRect( &lineNumClip, FALSE );
 		}
 	}
-	if( nScrollColNum != 0 ){
+	if (nScrollColNum != 0) {
 		InvalidateRect( &rcClip2, FALSE );
 	}
 }
@@ -614,9 +606,9 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 */
 void CEditView::SyncScrollV( CLayoutInt line )
 {
-	if( GetDllShareData().m_Common.m_sWindow.m_bSplitterWndVScroll && line != 0 
+	if (GetDllShareData().m_Common.m_sWindow.m_bSplitterWndVScroll && line != 0 
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x01) 
-	){
+	) {
 		CEditView&	editView = m_pcEditWnd->GetView(m_nMyIndex^0x01);
 #if 0
 		//	差分を保ったままスクロールする場合
@@ -641,9 +633,9 @@ void CEditView::SyncScrollV( CLayoutInt line )
 */
 void CEditView::SyncScrollH( CLayoutInt col )
 {
-	if( GetDllShareData().m_Common.m_sWindow.m_bSplitterWndHScroll && col != 0
+	if (GetDllShareData().m_Common.m_sWindow.m_bSplitterWndHScroll && col != 0
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x02)
-	){
+	) {
 		CEditView&	cEditView = m_pcEditWnd->GetView(m_nMyIndex^0x02);
 		HDC			hdc = ::GetDC( cEditView.GetHwnd() );
 		
@@ -666,9 +658,9 @@ CLayoutInt CEditView::GetWrapOverhang( void ) const
 {
 	int nMargin = 1;	// 折り返し記号
 	if (!m_pTypeData->m_bKinsokuHide) {	// ぶら下げを隠す時はスキップ	2012/11/30 Uchi
-		if( m_pTypeData->m_bKinsokuRet )
+		if (m_pTypeData->m_bKinsokuRet)
 			nMargin += 1;	// 改行ぶら下げ
-		if( m_pTypeData->m_bKinsokuKuto )
+		if (m_pTypeData->m_bKinsokuKuto)
 			nMargin += 2;	// 句読点ぶら下げ
 	}
 	return CLayoutInt( nMargin );
@@ -685,7 +677,7 @@ CLayoutInt CEditView::ViewColNumToWrapColNum( CLayoutInt nViewColNum ) const
 	int nWidth = (Int)(nViewColNum - GetWrapOverhang());
 
 	// MINLINEKETAS未満の時はMINLINEKETASで折り返しとする
-	if( nWidth < MINLINEKETAS )
+	if (nWidth < MINLINEKETAS)
 		nWidth = MINLINEKETAS;		// 折り返し幅の最小桁数に設定
 
 	return CLayoutInt( nWidth );
@@ -718,23 +710,23 @@ CLayoutInt CEditView::GetRightEdgeForScrollBar( void )
 	// 折り返し桁以後のぶら下げ余白計算
 	CLayoutInt nWidth = m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
-	if( m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP ){
+	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 		CLayoutInt nRightEdge = m_pcEditDoc->m_cLayoutMgr.GetMaxTextWidth();	// テキストの最大幅
 
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
-		if( GetSelectionInfo().IsTextSelected() ){
+		if (GetSelectionInfo().IsTextSelected()) {
 			// 開始位置・終了位置のより右側にある方で比較
-			if( GetSelectionInfo().m_sSelect.GetFrom().GetX2() < GetSelectionInfo().m_sSelect.GetTo().GetX2() ){
-				if( nRightEdge < GetSelectionInfo().m_sSelect.GetTo().GetX2() )
+			if (GetSelectionInfo().m_sSelect.GetFrom().GetX2() < GetSelectionInfo().m_sSelect.GetTo().GetX2()) {
+				if (nRightEdge < GetSelectionInfo().m_sSelect.GetTo().GetX2())
 					nRightEdge = GetSelectionInfo().m_sSelect.GetTo().GetX2();
-			}else{
-				if( nRightEdge < GetSelectionInfo().m_sSelect.GetFrom().GetX2() )
+			}else {
+				if (nRightEdge < GetSelectionInfo().m_sSelect.GetFrom().GetX2())
 					nRightEdge = GetSelectionInfo().m_sSelect.GetFrom().GetX2();
 			}
 		}
 
 		// フリーカーソルモード かつ キャレット位置がテキストの幅より右側
-		if( GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2() )
+		if (GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
 			nRightEdge = GetCaret().GetCaretLayoutPos().GetX2();
 
 		// 右マージン分（3桁）を考慮しつつnWidthを超えないようにする
@@ -743,3 +735,4 @@ CLayoutInt CEditView::GetRightEdgeForScrollBar( void )
 
 	return nWidth;
 }
+
