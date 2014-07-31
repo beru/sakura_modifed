@@ -115,6 +115,15 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 
 	RECT rect;
+	if (GetPrivateProfileStructW(PROFILE_SECTION_GLOBAL, PROFILE_KEY_JUMPLIST_WINDOW_RECT, &rect, sizeof(rect), thePluginService.GetPluginIniFilePath().c_str())) {
+/*
+		char buff[64];
+		sprintf(buff, "%d %d %d %d", rect.left, rect.top, rect.right, rect.bottom);
+		MessageBoxA(0, buff, 0, 0);
+*/
+		SetWindowPos(m_hWnd, 0, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, SWP_NOSIZE|SWP_NOZORDER);
+	}
+
 	GetWindowRect(m_hWnd, &rect);
 	m_initialSize.x = rect.right - rect.left;
 	m_initialSize.y = rect.bottom- rect.top;
@@ -163,6 +172,29 @@ BOOL CJumpListDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 //	m_ctrlResizer.Add(IDCANCEL, AnchorStyle::Bottom);
 
 	return bResult;
+}
+
+/* virtual */
+BOOL CJumpListDialog::OnClose(void)
+{
+	CloseDialog(IDCANCEL);
+	return 0;
+}
+
+/* virtual */
+void CJumpListDialog::CloseDialog(int nRetVal)
+{
+	RECT rect;
+	if (GetWindowRect(m_hWnd, &rect)) {
+/*
+		char buff[64];
+		sprintf(buff, "%d %d %d %d", rect.left, rect.top, rect.right, rect.bottom);
+		MessageBoxA(0, buff, 0, 0);
+*/
+		WritePrivateProfileStructW(PROFILE_SECTION_GLOBAL, PROFILE_KEY_JUMPLIST_WINDOW_RECT, &rect, sizeof(rect), thePluginService.GetPluginIniFilePath().c_str());
+	}
+
+	__super::CloseDialog(nRetVal);
 }
 
 static

@@ -99,7 +99,7 @@ public:
 	BOOL			m_bIgnoreCase;			//!< ‘å•¶Žš‚Æ¬•¶Žš‚ð–³Ž‹‚·‚é
 	DWORD			m_dwPrevListCount;		//!< INI“o˜^”(‘O‰ñî•ñ‚ðíœ‚·‚é‚½‚ß)
 
-	CtagsOption(){
+	CtagsOption() {
 		m_strCtagsExePath  = L"";
 		m_strSqliteDllPath = L"";
 		m_dwMaxFind        = PROFILE_DEF_MAXFIND;
@@ -109,8 +109,8 @@ public:
 		m_dwPrevListCount  = 0;
 	}
 
-	CtagsOption& operator=(const CtagsOption& src){
-		if(this != &src){
+	CtagsOption& operator = (const CtagsOption& src){
+		if (this != &src) {
 			m_strCtagsExePath  = src.m_strCtagsExePath;
 			m_strSqliteDllPath = src.m_strSqliteDllPath;
 			m_dwMaxFind        = src.m_dwMaxFind;
@@ -140,8 +140,8 @@ public:
 		m_dwUniqID      = 0;
 	}
 
-	CtagsInfo& operator=(const CtagsInfo& src){
-		if(this != &src){
+	CtagsInfo& operator = (const CtagsInfo& src) {
+		if (this != &src) {
 			m_bFlag         = src.m_bFlag;
 			m_strTargetPath = src.m_strTargetPath;
 			m_bSubFolder    = src.m_bSubFolder;

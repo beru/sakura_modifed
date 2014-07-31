@@ -36,7 +36,7 @@ public:
 
 	INT_PTR DoModal(HINSTANCE hInstance, HWND hwndDlg, int nDlgTemplete, LPARAM lParam);
 	HWND DoModeless(HINSTANCE hInstance, HWND hwndDlg, int nDlgTemplete, LPARAM lParam);
-	void CloseDialog(int nRetVal);
+	virtual void CloseDialog(int nRetVal);
 	HWND GetHwnd(){ return m_hWnd; }
 	int GetRetCode() const { return m_nRetCode; }
 

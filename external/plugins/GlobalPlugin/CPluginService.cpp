@@ -90,11 +90,18 @@ void CPluginService::OnPluginGlobalJump(SAKURA_DLL_PLUGIN_OBJ* obj)
 	dlg.DoModal(GetInstance(), GetParentHwnd());
 }
 
+WideString CPluginService::GetPluginIniFilePath()
+{
+	WideString strPluginPath = Plugin.GetPluginDir();
+	WideString strIniFile = strPluginPath + L"\\" + PLUGIN_INI_FILE;
+	return strIniFile;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 void CPluginService::ReadProfile()
 {
 	WideString strPluginPath = Plugin.GetPluginDir();
-	WideString strIniFile = strPluginPath + L"\\" + PLUGIN_INI_FILE;
+	WideString strIniFile = GetPluginIniFilePath();
 	wchar_t szBuffer[MAX_PATH_LENGTH];
 
 	//gtags.exeƒpƒX

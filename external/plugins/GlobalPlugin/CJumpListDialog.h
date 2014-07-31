@@ -63,6 +63,8 @@ public:
 	
 	virtual INT_PTR DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam);
+	virtual void CloseDialog(int nRetVal);
+	virtual BOOL OnClose(void);
 	virtual BOOL OnBnClicked(int wID);
 	virtual BOOL OnEnChange(HWND hwndCtl, int wID);
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam);

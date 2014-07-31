@@ -169,7 +169,7 @@ BOOL CJumpListDialog::OnBnClicked(int wID)
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::SetData()
 {
-	if(GetHwnd() == NULL) return;
+	if (GetHwnd() == NULL) return;
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 	::SetWindowText(hEditKeyword, m_strKeyword.c_str());
 	::CheckDlgButton(GetHwnd(), IDC_RADIO_ALL,   (m_dwMatchMode == MATCH_MODE_PERFECT) ? BST_CHECKED : BST_UNCHECKED);
@@ -184,7 +184,7 @@ void CJumpListDialog::SetDataSub()
 	HWND hList = ::GetDlgItem(GetHwnd(), IDC_LIST);
 	ListView_DeleteAllItems(hList);
 	int nIndex = 0;
-	for(std::list<CtagsData*>::iterator it = m_CtagsDataList.begin(); it != m_CtagsDataList.end(); ++it){
+	for (std::list<CtagsData*>::iterator it = m_CtagsDataList.begin(); it != m_CtagsDataList.end(); ++it) {
 		InsertItem(hList, nIndex, *it);
 		nIndex++;
 	}
@@ -277,50 +277,50 @@ DWORD CJumpListDialog::ReadCtagsFileOne(LPCWSTR lpszKeyword, const DWORD dwMatch
 	wchar_t* lpszTypeName = new wchar_t[MAX_PATH_LENGTH];
 	wchar_t* lpszKeyLow   = new wchar_t[MAX_PATH_LENGTH];
 	int nLine;
-	while(fgetws(lpszBuffer, MAX_PATH_LENGTH, fp)){
+	while (fgetws(lpszBuffer, MAX_PATH_LENGTH, fp)) {
 		if(lpszBuffer[0] == L'!') continue;
 		wcscpy(lpszKey, _T(""));
 		wcscpy(lpszFile, _T(""));
 		wcscpy(lpszType, _T(""));
 		wcscpy(lpszTypeName, _T(""));
 		nLine = 0;
-		if(swscanf(lpszBuffer, TAG_FORMAT, lpszKey, lpszFile, &nLine, lpszType, lpszTypeName) < 3) continue;
-		if(dwMatchMode == MATCH_MODE_PERFECT){
-			if(bIgnoreCase){
+		if (swscanf(lpszBuffer, TAG_FORMAT, lpszKey, lpszFile, &nLine, lpszType, lpszTypeName) < 3) continue;
+		if (dwMatchMode == MATCH_MODE_PERFECT) {
+			if (bIgnoreCase) {
 				if(wcsicmp(lpszKey, lpszKeyword) != 0) continue;
-			}else{
+			}else {
 				int result = wcscmp(lpszKey, lpszKeyword);
-				if(result < 0) continue;
-				if(result > 0) break;
+				if (result < 0) continue;
+				if (result > 0) break;
 			}
-		}else if(dwMatchMode == MATCH_MODE_BEGIN){
-			if(bIgnoreCase){
+		}else if (dwMatchMode == MATCH_MODE_BEGIN) {
+			if (bIgnoreCase) {
 				if(wcsnicmp(lpszKey, lpszKeyword, nLength) != 0) continue;
-			}else{
+			}else {
 				int result = wcsncmp(lpszKey, lpszKeyword, nLength);
-				if(result < 0) continue;
-				if(result > 0) break;
+				if (result < 0) continue;
+				if (result > 0) break;
 			}
-		}else if(dwMatchMode == MATCH_MODE_ANY){
-			if(bIgnoreCase){
+		}else if (dwMatchMode == MATCH_MODE_ANY) {
+			if (bIgnoreCase) {
 				wcscpy(lpszKeyLow, lpszKey);
-				for(int i = 0; lpszKeyLow[i] != 0; i++){
-					if(lpszKeyLow[i] >= L'A' && lpszKeyLow[i] <= L'Z'){
+				for (int i = 0; lpszKeyLow[i] != 0; i++) {
+					if (lpszKeyLow[i] >= L'A' && lpszKeyLow[i] <= L'Z') {
 						lpszKeyLow[i] -= L'a' - L'A';
 					}
 				}
-				if(wcsstr(lpszKey, lpszKeywordLow) == 0) continue;
-			}else{
-				if(wcsstr(lpszKey, lpszKeyword) == 0) continue;
+				if (wcsstr(lpszKey, lpszKeywordLow) == 0) continue;
+			}else {
+				if (wcsstr(lpszKey, lpszKeyword) == 0) continue;
 			}
-		}else{
+		}else {
 			break;
 		}
 
 		CtagsData* info = new CtagsData(lpszKey, lpszFile, nLine, lpszType, lpszTypeName);
 		m_CtagsDataList.push_back(info);
 		dwCount++;
-		if((dwCount + dwPrevCount) >= m_lpCtagsOption->m_dwMaxFind){
+		if ((dwCount + dwPrevCount) >= m_lpCtagsOption->m_dwMaxFind) {
 			break;
 		}
 	}
@@ -330,7 +330,7 @@ DWORD CJumpListDialog::ReadCtagsFileOne(LPCWSTR lpszKeyword, const DWORD dwMatch
 	delete[] lpszType;
 	delete[] lpszTypeName;
 	delete[] lpszKeyLow;
-	if(lpszKeywordLow != NULL) delete[] lpszKeywordLow;
+	if (lpszKeywordLow != NULL) delete[] lpszKeywordLow;
 
 	fclose(fp);
 
@@ -359,7 +359,7 @@ int CJumpListDialog::InsertItem(HWND hList, int nIndex, CtagsData* info)
 void CJumpListDialog::GetItem(HWND hList, int nIndex, CtagsData* info)
 {
 	wchar_t* lpszBuffer = new wchar_t[MAX_PATH_LENGTH];
-	if(lpszBuffer != NULL){
+	if (lpszBuffer != NULL) {
 		ListView_GetItemText(hList, nIndex, 0, lpszBuffer, MAX_PATH_LENGTH);
 		info->m_strKeyword = lpszBuffer;
 		ListView_GetItemText(hList, nIndex, 1, lpszBuffer, MAX_PATH_LENGTH);
@@ -378,7 +378,7 @@ void CJumpListDialog::GetItem(HWND hList, int nIndex, CtagsData* info)
 void CJumpListDialog::StartTimer()
 {
 	StopTimer();
-	if(m_lpCtagsOption->m_dwDelay > 0){
+	if (m_lpCtagsOption->m_dwDelay > 0) {
 		m_nTimerID = ::SetTimer(GetHwnd(), 1, m_lpCtagsOption->m_dwDelay, NULL);
 	}
 }
@@ -386,7 +386,7 @@ void CJumpListDialog::StartTimer()
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::StopTimer()
 {
-	if(m_nTimerID != 0){
+	if (m_nTimerID != 0) {
 		::KillTimer(GetHwnd(), m_nTimerID);
 		m_nTimerID = 0;
 	}
@@ -401,13 +401,13 @@ BOOL CJumpListDialog::OnTimer(WPARAM wParam)
 
 	HWND hEditKeyword = ::GetDlgItem(GetHwnd(), IDC_EDIT_KEYWORD);
 	m_strKeyword = GetWindowText(hEditKeyword);
-	if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALL) == BST_CHECKED){
+	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALL) == BST_CHECKED) {
 		m_dwMatchMode = MATCH_MODE_PERFECT;
-	}else if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_BEGIN) == BST_CHECKED){
+	}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_BEGIN) == BST_CHECKED) {
 		m_dwMatchMode = MATCH_MODE_BEGIN;
-	}else if(::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ANY) == BST_CHECKED){
+	}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ANY) == BST_CHECKED) {
 		m_dwMatchMode = MATCH_MODE_ANY;
-	}else{
+	}else {
 		m_dwMatchMode = MATCH_MODE_PERFECT;
 	}
 	m_bIgnoreCase = (::IsDlgButtonChecked(GetHwnd(), IDC_CHECKBOX_CASE) == BST_CHECKED) ? FALSE : TRUE;
@@ -424,7 +424,7 @@ BOOL CJumpListDialog::OnTimer(WPARAM wParam)
 ///////////////////////////////////////////////////////////////////////////////
 void CJumpListDialog::RemoveAllCtagsDataList(std::list<CtagsData*>& p)
 {
-	for(std::list<CtagsData*>::iterator it = p.begin(); it != p.end(); ++it){
+	for (std::list<CtagsData*>::iterator it = p.begin(); it != p.end(); ++it) {
 		delete *it;
 	}
 	p.clear();
@@ -433,7 +433,7 @@ void CJumpListDialog::RemoveAllCtagsDataList(std::list<CtagsData*>& p)
 ///////////////////////////////////////////////////////////////////////////////
 BOOL CJumpListDialog::OnEnChange(HWND hwndCtl, int wID)
 {
-	if(m_bOperation == FALSE){
+	if (m_bOperation == FALSE) {
 		StartTimer();
 	}
 	return TRUE;
@@ -450,30 +450,30 @@ DWORD CJumpListDialog::ReadSqliteFileOne(LPCWSTR lpszKeyword, const DWORD dwMatc
 	LPCWSTR sql_base;
 	wchar_t sql[MAX_PATH_LENGTH];
 
-	if(dwMatchMode == MATCH_MODE_PERFECT){
+	if (dwMatchMode == MATCH_MODE_PERFECT) {
 		strKeyword = lpszKeyword;
-		if(bIgnoreCase == FALSE){
+		if (bIgnoreCase == FALSE) {
 			//sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword=? ORDER BY strKeyword ASC, nLine ASC, strFile ASC LIMIT %u;";
 			sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword=? LIMIT %u;";
-		}else{
+		}else {
 			//sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword COLLATE NOCASE=? ORDER BY strKeyword ASC, nLine ASC, strFile ASC LIMIT %u;";
 			sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword COLLATE NOCASE=? LIMIT %u;";
 		}
-	}else if(dwMatchMode == MATCH_MODE_BEGIN){
+	}else if (dwMatchMode == MATCH_MODE_BEGIN) {
 		strKeyword = lpszKeyword + strLike;
-		if(bIgnoreCase == FALSE){
+		if (bIgnoreCase == FALSE) {
 			//sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword LIKE ? ORDER BY strKeyword ASC, nLine ASC, strFile ASC LIMIT %u;";
 			sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword LIKE ? LIMIT %u;";
-		}else{
+		}else {
 			//sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword COLLATE NOCASE LIKE ? ORDER BY strKeyword ASC, nLine ASC, strFile ASC LIMIT %u;";
 			sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword COLLATE NOCASE LIKE ? LIMIT %u;";
 		}
-	}else if(dwMatchMode == MATCH_MODE_ANY){
+	}else if (dwMatchMode == MATCH_MODE_ANY) {
 		strKeyword = strLike + lpszKeyword + strLike;
-		if(bIgnoreCase == FALSE){
+		if (bIgnoreCase == FALSE) {
 			//sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword LIKE ? ORDER BY strKeyword ASC, nLine ASC, strFile ASC LIMIT %u;";
 			sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword LIKE ? LIMIT %u;";
-		}else{
+		}else {
 			//sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword COLLATE NOCASE LIKE ? ORDER BY strKeyword ASC, nLine ASC, strFile ASC LIMIT %u;";
 			sql_base = L"SELECT strKeyword,strFile,nLine,strType,strTypeName FROM CTAGS WHERE strKeyword COLLATE NOCASE LIKE ? LIMIT %u;";
 		}
@@ -484,7 +484,7 @@ DWORD CJumpListDialog::ReadSqliteFileOne(LPCWSTR lpszKeyword, const DWORD dwMatc
 
 	sqlite3* db = NULL;
 	int result = thePluginService.Sqlite.sqlite3_open16(lpszFileName, &db);
-	if(result != SQLITE_OK){
+	if (result != SQLITE_OK) {
 		WideString strCause = thePluginService.Sqlite.sqlite3_errmsg16(db);
 		//::MessageBox(GetHwnd(), strCause.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 		return 0;
@@ -492,7 +492,7 @@ DWORD CJumpListDialog::ReadSqliteFileOne(LPCWSTR lpszKeyword, const DWORD dwMatc
 
 	sqlite3_stmt* select_sql = NULL;
 	result = thePluginService.Sqlite.sqlite3_prepare16(db, sql, wcslen(sql) * sizeof(wchar_t), &select_sql, NULL);
-	if(result != SQLITE_OK){
+	if (result != SQLITE_OK) {
 		WideString strCause = thePluginService.Sqlite.sqlite3_errmsg16(db);
 		//::MessageBox(GetHwnd(), strCause.c_str(), thePluginService.GetPluginName(), MB_ICONEXCLAMATION | MB_OK);
 		thePluginService.Sqlite.sqlite3_close(db);
@@ -503,7 +503,7 @@ DWORD CJumpListDialog::ReadSqliteFileOne(LPCWSTR lpszKeyword, const DWORD dwMatc
 	thePluginService.Sqlite.sqlite3_bind_text16(select_sql, 1, strKeyword.c_str(), strKeyword.length() * sizeof(wchar_t),      SQLITE_STATIC);
 	thePluginService.Sqlite.sqlite3_bind_int(   select_sql, 2, m_lpCtagsOption->m_dwMaxFind);
 
-	while(thePluginService.Sqlite.sqlite3_step(select_sql) == SQLITE_ROW){
+	while (thePluginService.Sqlite.sqlite3_step(select_sql) == SQLITE_ROW) {
 		WideString strKeyword  = thePluginService.Sqlite.sqlite3_column_text16(select_sql, 0);
 		WideString strFile     = thePluginService.Sqlite.sqlite3_column_text16(select_sql, 1);
 		int        nLine       = thePluginService.Sqlite.sqlite3_column_int(select_sql, 2);
@@ -511,16 +511,16 @@ DWORD CJumpListDialog::ReadSqliteFileOne(LPCWSTR lpszKeyword, const DWORD dwMatc
 		WideString strTypeName = thePluginService.Sqlite.sqlite3_column_text16(select_sql, 4);
 
 		//SQLITEのLIKE句は常にCOLLATE NOCASEなのでチェックする
-		if((dwMatchMode == MATCH_MODE_BEGIN) && (bIgnoreCase == FALSE)){
-			if(wcsncmp(strKeyword.c_str(), lpszKeyword, nLength) != 0) continue;
-		}else if((dwMatchMode == MATCH_MODE_ANY) && (bIgnoreCase == FALSE)){
-			if(wcsstr(strKeyword.c_str(), lpszKeyword) == 0) continue;
+		if ((dwMatchMode == MATCH_MODE_BEGIN) && (bIgnoreCase == FALSE)) {
+			if (wcsncmp(strKeyword.c_str(), lpszKeyword, nLength) != 0) continue;
+		}else if ((dwMatchMode == MATCH_MODE_ANY) && (bIgnoreCase == FALSE)) {
+			if (wcsstr(strKeyword.c_str(), lpszKeyword) == 0) continue;
 		}
 
 		CtagsData* p = new CtagsData(strKeyword.c_str(), strFile.c_str(), nLine, strType.c_str(), strTypeName.c_str());
 		m_CtagsDataList.push_back(p);
 		dwCount++;
-		if((dwCount + dwPrevCount) >= m_lpCtagsOption->m_dwMaxFind){
+		if ((dwCount + dwPrevCount) >= m_lpCtagsOption->m_dwMaxFind) {
 			break;
 		}
 	}
@@ -530,3 +530,4 @@ DWORD CJumpListDialog::ReadSqliteFileOne(LPCWSTR lpszKeyword, const DWORD dwMatc
 
 	return dwCount;
 }
+

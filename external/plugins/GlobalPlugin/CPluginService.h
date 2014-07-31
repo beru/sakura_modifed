@@ -66,6 +66,7 @@ enum {
 #define PROFILE_KEY_IGNORE_CASE			L"IgnoreCase"		//!< 大文字と小文字を無視する
 #define PROFILE_KEY_SYMBOL				L"Symbol"			//!< シンボルを検索する
 #define PROFILE_KEY_REF					L"Ref"				//!< 参照を検索する
+#define PROFILE_KEY_JUMPLIST_WINDOW_RECT	L"JumpListWindowRect"	//!< ジャンプリストウィンドウの表示状態
 
 #define PROFILE_SECTION_GLOBAL			L"Global"
 #define PROFILE_KEY_COUNT				L"Count"			//!< 件数
@@ -178,6 +179,9 @@ public:
 
 	void ReadProfile();
 	void WriteProfile();
+
+	WideString GetPluginIniFilePath();
+
 	void RemoveAllGlobalInfoList(std::list<CGlobalInfo*>& p);
 	WideString GetResultPath(const DWORD dwUniqID);
 	DWORD GetUniqID();
