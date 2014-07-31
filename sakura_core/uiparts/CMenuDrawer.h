@@ -60,7 +60,6 @@ public:
 	~CMenuDrawer();
 	void Create( HINSTANCE, HWND, CImageListMgr* );
 
-
 	/*
 	||  Attributes & Operations
 	*/

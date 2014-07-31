@@ -11,11 +11,11 @@
 //Jul. 08, 2001 JEPRO 追加
 void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy( pType->m_szTypeName, _T("Perl") );
 	_tcscpy( pType->m_szTypeExts, _T("cgi,pl,pm") );
 
-	//設定
+	// 設定
 	pType->m_cLineComment.CopyTo( 0, L"#", -1 );					/* 行コメントデリミタ */
 	pType->m_eDefaultOutline = OUTLINE_PERL;						/* アウトライン解析方法 */
 	pType->m_nKeyWordSetIdx[0]  = 11;								/* キーワードセット */
@@ -24,7 +24,6 @@ void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	//対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
-
 
 
 //	From Here Sep 8, 2000 genta
@@ -45,7 +44,7 @@ void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 {
 	const wchar_t*	pLine;
-	CLogicInt			nLineLen;
+	CLogicInt		nLineLen;
 	int			i;
 	int			nCharChars;
 	wchar_t		szWord[100];
@@ -54,81 +53,77 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 	int			nMode;
 
 	CLogicInt	nLineCount;
-	for( nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount ){
+	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nMode = 0;
-		for( i = 0; i < nLineLen; ++i ){
+		for (i = 0; i < nLineLen; ++i) {
 			/* 1バイト文字だけを処理する */
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
-			if(	1 < nCharChars ){
+			if (1 < nCharChars) {
 				break;
 			}
 
 			/* 単語読み込み中 */
-			if( 0 == nMode ){
+			if (0 == nMode) {
 				/* 空白やタブ記号等を飛ばす */
-				if( L'\t' == pLine[i] ||
+				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i])
-				){
+				) {
 					continue;
 				}
-				if( 's' != pLine[i] )
+				if ('s' != pLine[i])
 					break;
 				//	sub の一文字目かもしれない
-				if( nLineLen - i < 4 )
+				if (nLineLen - i < 4)
 					break;
-				if( wcsncmp_literal( pLine + i, L"sub" ) )
+				if (wcsncmp_literal( pLine + i, L"sub" ))
 					break;
 				int c = pLine[ i + 3 ];
-				if( c == L' ' || c == L'\t' ){
+				if (c == L' ' || c == L'\t') {
 					nMode = 2;	//	発見
 					i += 3;
-				}
-				else
+				}else
 					break;
-			}
-			else if( 2 == nMode ){
-				if( L'\t' == pLine[i] ||
+			}else if (2 == nMode) {
+				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i])
-				){
+				) {
 					continue;
 				}
-				if( L'_' == pLine[i] ||
+				if (L'_' == pLine[i] ||
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z' )||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z' )||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9' )
-				){
+				) {
 					//	関数名の始まり
 					nWordIdx = 0;
 					szWord[nWordIdx] = pLine[i];
 					szWord[nWordIdx + 1] = L'\0';
 					nMode = 1;
 					continue;
-				}
-				else
+				}else {
 					break;
-
-			}
-			else if( 1 == nMode ){
-				if( L'_' == pLine[i] ||
+				}
+			}else if (1 == nMode) {
+				if (L'_' == pLine[i] ||
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z' )||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z' )||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9' )||
 					//	Jun. 18, 2005 genta パッケージ修飾子を考慮
 					//	コロンは2つ連続しないといけないのだが，そこは手抜き
 					L':' == pLine[i] || L'\'' == pLine[i]
-				){
+				) {
 					++nWordIdx;
-					if( nWordIdx >= nMaxWordLeng ){
+					if (nWordIdx >= nMaxWordLeng) {
 						break;
-					}else{
+					}else {
 						szWord[nWordIdx] = pLine[i];
 						szWord[nWordIdx + 1] = L'\0';
 					}
-				}else{
+				}else {
 					//	関数名取得
 					/*
 					  カーソル位置変換
@@ -155,8 +150,6 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 	return;
 }
 //	To HERE Sep. 8, 2000 genta
-
-
 
 
 const wchar_t* g_ppszKeywordsPERL[] = {
@@ -394,7 +387,6 @@ const wchar_t* g_ppszKeywordsPERL[] = {
 int g_nKeywordsPERL = _countof(g_ppszKeywordsPERL);
 
 
-
 //Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
 // 2008/05/05 novice 重複文字列削除
 const wchar_t* g_ppszKeywordsPERL2[] = {
@@ -501,3 +493,4 @@ const wchar_t* g_ppszKeywordsPERL2[] = {
 	L"$SIG"
 };
 int g_nKeywordsPERL2 = _countof(g_ppszKeywordsPERL2);
+

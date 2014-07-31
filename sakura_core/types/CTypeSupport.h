@@ -50,7 +50,7 @@ public:
 	}
 	virtual ~CTypeSupport()
 	{
-		if(m_gr){
+		if (m_gr) {
 			RewindGraphicsState(*m_gr);
 		}
 	}
@@ -115,7 +115,7 @@ public:
 	}
 	void SetGraphicsState_WhileThisObj(CGraphics& gr)
 	{
-		if(m_gr){
+		if (m_gr) {
 			RewindGraphicsState(*m_gr);
 		}
 
@@ -130,7 +130,7 @@ public:
 	}
 	void RewindGraphicsState(CGraphics& gr)
 	{
-		if(m_gr){
+		if (m_gr) {
 			gr.PopTextBackColor();
 			gr.PopTextForeColor();
 			gr.PopMyFont();

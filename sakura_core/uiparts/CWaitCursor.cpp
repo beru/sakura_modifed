@@ -19,25 +19,21 @@
 CWaitCursor::CWaitCursor( HWND hWnd, bool bEnable )
 {
 	m_bEnable = bEnable;
-	if( ! bEnable ) return;
+	if (!bEnable) return;
 	SetCapture( hWnd );
 	m_hCursor = ::LoadCursor( NULL, IDC_WAIT );
 	m_hCursorOld = ::SetCursor( m_hCursor );
 	return;
 }
 
-
-
 /*!
 	カーソル形状を元に戻す
 */
 CWaitCursor::~CWaitCursor()
 {
-	if( m_bEnable ){
+	if (m_bEnable) {
 		ReleaseCapture();
 		::SetCursor( m_hCursorOld );
 	}
 }
-
-
 

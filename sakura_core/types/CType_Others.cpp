@@ -8,3 +8,4 @@ void CType_Other::InitTypeConfigImp(STypeConfig* pType)
 	_tcscpy( pType->m_szTypeExts, _T("") );
 
 }
+

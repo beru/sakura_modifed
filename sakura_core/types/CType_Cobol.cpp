@@ -29,8 +29,6 @@ void CType_Cobol::InitTypeConfigImp(STypeConfig* pType)
 }
 
 
-
-
 /*! COBOL アウトライン解析 */
 void CDocOutline::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 {
@@ -49,30 +47,30 @@ void CDocOutline::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 
 
 	CLogicInt	nLineCount;
-	for( nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount ){
+	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		if( NULL == pLine ){
+		if (NULL == pLine) {
 			break;
 		}
 		/* コメント行か */
-		if( 7 <= nLineLen && pLine[6] == L'*' ){
+		if (7 <= nLineLen && pLine[6] == L'*') {
 			continue;
 		}
 		/* ラベル行か */
-		if( 8 <= nLineLen && pLine[7] != L' ' ){
+		if (8 <= nLineLen && pLine[7] != L' ') {
 			k = 0;
-			for( i = 7; i < nLineLen; ){
-				if( pLine[i] == '.'
+			for (i = 7; i < nLineLen;) {
+				if (pLine[i] == '.'
 				 || WCODE::IsLineDelimiter(pLine[i])
-				){
+				) {
 					break;
 				}
 				szLabel[k] = pLine[i];
 				++k;
 				++i;
-				if( pLine[i - 1] == L' ' ){
-					for( ; i < nLineLen; ++i ){
-						if( pLine[i] != L' ' ){
+				if (pLine[i - 1] == L' ') {
+					for (; i < nLineLen; ++i) {
+						if (pLine[i] != L' ') {
 							break;
 						}
 					}
@@ -81,21 +79,19 @@ void CDocOutline::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 			szLabel[k] = L'\0';
 //			MYTRACE( _T("szLabel=[%ls]\n"), szLabel );
 
-
-
 			pszKeyWord = L"division";
 			nKeyWordLen = wcslen( pszKeyWord );
 			bDivision = FALSE;
 			int nLen = (int)wcslen( szLabel ) - nKeyWordLen;
-			for( i = 0; i <= nLen ; ++i ){
-				if( 0 == auto_memicmp( &szLabel[i], pszKeyWord, nKeyWordLen ) ){
+			for (i = 0; i <= nLen ; ++i) {
+				if (0 == auto_memicmp( &szLabel[i], pszKeyWord, nKeyWordLen )) {
 					szLabel[i + nKeyWordLen] = L'\0';
 					wcscpy( szDivision, szLabel );
 					bDivision = TRUE;
 					break;
 				}
 			}
-			if( bDivision ){
+			if (bDivision) {
 				continue;
 			}
 			/*
@@ -117,9 +113,6 @@ void CDocOutline::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 	}
 	return;
 }
-
-
-
 
 //Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsCOBOL[] = {
@@ -227,3 +220,4 @@ const wchar_t* g_ppszKeywordsCOBOL[] = {
 	L"ZERO"
 };
 int g_nKeywordsCOBOL = _countof(g_ppszKeywordsCOBOL);
+

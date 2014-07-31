@@ -68,13 +68,13 @@ void CVisualProgress::OnProgress(int nPer)
 void CVisualProgress::_Begin()
 {
 	//砂時計
-	if(!m_pcWaitCursor){
+	if (!m_pcWaitCursor) {
 		m_pcWaitCursor = new CWaitCursor( CEditWnd::getInstance()->GetHwnd() );
 	}
 
 	//プログレスバー
 	HWND hwndProgress = CEditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
-	if( hwndProgress ){
+	if (hwndProgress) {
 		::ShowWindow( hwndProgress, SW_SHOW );
 		//範囲設定・リセット
 		Progress_SetRange( hwndProgress, 0, 101 );
@@ -86,8 +86,8 @@ void CVisualProgress::_Doing(int nPer)
 {
 	//プログレスバー更新
 	HWND hwndProgress = CEditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
-	if(hwndProgress){
-		if( nOldValue != nPer ){
+	if (hwndProgress) {
+		if (nOldValue != nPer) {
 			Progress_SetPos( hwndProgress, nPer + 1 ); // 2013.06.10 Moca Vista/7等でプログレスバーがアニメーションで遅れる対策
 			Progress_SetPos( hwndProgress, nPer );
 			nOldValue = nPer;
@@ -99,7 +99,7 @@ void CVisualProgress::_End()
 {
 	//プログレスバー
 	HWND hwndProgress = CEditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
-	if( hwndProgress ){
+	if (hwndProgress) {
 		Progress_SetPos( hwndProgress, 0);
 		::ShowWindow( hwndProgress, SW_HIDE );
 	}

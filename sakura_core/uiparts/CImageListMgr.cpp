@@ -56,7 +56,7 @@ static void FillSolidRect( HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 CImageListMgr::~CImageListMgr()
 {
 	//	2003.07.21 Image Listの代わりに描画用bitmapを解放
-	if( m_hIconBitmap != NULL ){
+	if (m_hIconBitmap != NULL) {
 		DeleteObject( m_hIconBitmap );
 	}
 }
@@ -74,7 +74,7 @@ CImageListMgr::~CImageListMgr()
 bool CImageListMgr::Create(HINSTANCE hInstance)
 {
 	MY_RUNNINGTIMER( cRunningTimer, "CImageListMgr::Create" );
-	if( m_hIconBitmap != NULL ){	//	既に構築済みなら無視する
+	if (m_hIconBitmap != NULL) {	//	既に構築済みなら無視する
 		return true;
 	}
 
@@ -94,14 +94,14 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		hRscbmp = (HBITMAP)::LoadImage( NULL, szPath, IMAGE_BITMAP, 0, 0,
 			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS );
 
-		if( hRscbmp == NULL ) {	// ローカルファイルの読み込み失敗時はリソースから取得
+		if (hRscbmp == NULL) {	// ローカルファイルの読み込み失敗時はリソースから取得
 			//	このブロック内は従来の処理
 			//	リソースからBitmapを読み込む
 			//	2003.09.29 wmlhq 環境によってアイコンがつぶれる
 			//hRscbmp = ::LoadBitmap( hInstance, MAKEINTRESOURCE( IDB_MYTOOL ) );
 			hRscbmp = (HBITMAP)::LoadImage( hInstance, MAKEINTRESOURCE( IDB_MYTOOL ), IMAGE_BITMAP, 0, 0,
 				LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS  );
-			if( hRscbmp == NULL ){
+			if (hRscbmp == NULL) {
 				//	Oct. 4, 2003 genta エラーコード追加
 				//	正常終了と同じコードだとdcFromを不正に解放してしまう
 				nRetPos = 2;
@@ -114,7 +114,7 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		//	透過色を得るためにDCにマップする
 		//	2003.07.21 genta 透過色を得る以外の目的では使わなくなった
 		dcFrom = CreateCompatibleDC(0);	//	転送元用
-		if( dcFrom == NULL ){
+		if (dcFrom == NULL) {
 			nRetPos = 1;
 			break;
 		}
@@ -126,7 +126,7 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		//	スクリーンのDCに対してCreateCompatibleBitmapを
 		//	使うとモノクロBitmapになる．
 		hFOldbmp = (HBITMAP)SelectObject( dcFrom, hRscbmp );
-		if( hFOldbmp == NULL ){
+		if (hFOldbmp == NULL) {
 			nRetPos = 4;
 			break;
 		}
@@ -149,10 +149,10 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		//	これによって250msecくらい速度が改善される．
 		//---------------------------------------------------------
 
-	} while(0);	//	1回しか通らない. breakでここまで飛ぶ
+	}while (0);	//	1回しか通らない. breakでここまで飛ぶ
 
 	//	後処理
-	switch( nRetPos ){
+	switch (nRetPos) {
 	case 0:
 		//	Oct. 4, 2003 genta hRscBmpをdcFromから切り離しておく必要がある
 		//	アイコン描画変更時に過って削除されていた
@@ -167,7 +167,6 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 	}
 
 	return nRetPos == 0;
-
 }
 
 
@@ -344,16 +343,15 @@ void CImageListMgr::DitherBlt2( HDC drawdc, int nXDest, int nYDest, int nWidth,
 */
 bool CImageListMgr::Draw(int index, HDC dc, int x, int y, int fstyle ) const
 {
-	if( m_hIconBitmap == NULL )
+	if (m_hIconBitmap == NULL)
 		return false;
-	if( index < 0 )
+	if (index < 0)
 		return false;
 
-	if( fstyle == ILD_MASK ){
+	if (fstyle == ILD_MASK) {
 		DitherBlt2( dc, x, y, cx(), cy(), m_hIconBitmap,
 			( index % MAX_X ) * cx(), ( index / MAX_X ) * cy());
-	}
-	else {
+	}else {
 		MyBitBlt( dc, x, y, cx(), cy(), m_hIconBitmap,
 			( index % MAX_X ) * cx(), ( index / MAX_X ) * cy(), m_cTrans );
 	}
@@ -373,7 +371,7 @@ int CImageListMgr::Count() const
 /*!	アイコンを追加してそのIDを返す */
 int CImageListMgr::Add(const TCHAR* szPath)
 {
-	if( (m_nIconCount % MAX_X) == 0 ){
+	if ((m_nIconCount % MAX_X) == 0) {
 		Extend();
 	}
 	int index = m_nIconCount;
@@ -383,7 +381,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 	HBITMAP hExtBmp = (HBITMAP)::LoadImage( NULL, szPath, IMAGE_BITMAP, 0, 0,
 		LR_LOADFROMFILE | LR_CREATEDIBSECTION );
 
-	if( hExtBmp == NULL ) {
+	if (hExtBmp == NULL) {
 		return -1;
 	}
 
@@ -410,7 +408,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 void CImageListMgr::Extend(bool bExtend)
 {
 	int curY = m_nIconCount / MAX_X;
-	if( curY < MAX_Y )
+	if (curY < MAX_Y)
 		curY = MAX_Y;
 
 	HDC hSrcDC = ::CreateCompatibleDC( 0 );
@@ -424,7 +422,7 @@ void CImageListMgr::Extend(bool bExtend)
 	::BitBlt( hDestDC, 0, 0, MAX_X * cx(), curY * cy(), hSrcDC, 0, 0, SRCCOPY );
 
 	//拡張した部分は透過色で塗る
-	if( bExtend ){
+	if (bExtend) {
 		FillSolidRect( hDestDC, 0, curY * cy(), MAX_X * cx(), cy(), m_cTrans );
 	}
 
@@ -444,3 +442,4 @@ void CImageListMgr::ResetExtend()
 	m_nIconCount = MAX_TOOLBAR_ICON_COUNT;
 	Extend(false);
 }
+

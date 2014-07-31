@@ -21,7 +21,6 @@ void CType_Rich::InitTypeConfigImp(STypeConfig* pType)
 }
 
 
-
 //Jul. 10, 2001 JEPRO ’Ç‰Á
 const wchar_t* g_ppszKeywordsRTF[] = {
 	L"\\ansi",
@@ -109,3 +108,4 @@ const wchar_t* g_ppszKeywordsRTF[] = {
 	L"emr"
 };
 int g_nKeywordsRTF = _countof(g_ppszKeywordsRTF);
+

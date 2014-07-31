@@ -16,7 +16,7 @@ void CType::InitTypeConfig(int nIdx, STypeConfig& type)
 	//規定値をコピー
 	static STypeConfig sDefault;
 	static bool bLoadedDefault = false;
-	if(!bLoadedDefault){
+	if (!bLoadedDefault) {
 		_DefaultConfig(&sDefault);
 		bLoadedDefault=true;
 	}
@@ -63,7 +63,7 @@ void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConf
 	};
 	types.clear();
 	assert( _countof(table) <= MAX_TYPES );
-	for(int i = 0; i < _countof(table) && i < MAX_TYPES; i++){
+	for (int i = 0; i < _countof(table) && i < MAX_TYPES; i++) {
 		STypeConfig* type = new STypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
@@ -134,7 +134,7 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_nColumnSpace = 0;					/* 文字と文字の隙間 */
 	pType->m_nLineSpace = 1;					/* 行間のすきま */
 	pType->m_nTabSpace = CLayoutInt(4);					/* TABの文字数 */
-	for( int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++ ){
+	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		pType->m_nKeyWordSetIdx[i] = -1;
 	}
 	wcscpy( pType->m_szTabViewString, _EDITL("^       ") );	/* TAB表示文字列 */
@@ -186,9 +186,8 @@ void _DefaultConfig(STypeConfig* pType)
 
 	pType->m_nIndentLayout = 0;	/* 折り返しは2行目以降を字下げ表示 */
 
-
 	assert( COLORIDX_LAST <= _countof(pType->m_ColorInfoArr) );
-	for( int i = 0; i < COLORIDX_LAST; ++i ){
+	for (int i = 0; i < COLORIDX_LAST; ++i) {
 		GetDefaultColorInfo(&pType->m_ColorInfoArr[i],i);
 	}
 	pType->m_szBackImgPath[0] = '\0';
@@ -231,8 +230,7 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_bUseDocumentIcon = false;				// 文書に関連づけられたアイコンを使う
 
 //@@@ 2001.11.17 add start MIK
-	for(int i = 0; i < _countof(pType->m_RegexKeywordArr); i++)
-	{
+	for (int i = 0; i < _countof(pType->m_RegexKeywordArr); i++) {
 		pType->m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
 	}
 	pType->m_RegexKeywordList[0] = L'\0';
@@ -241,7 +239,7 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_nRegexKeyMagicNumber = 0;
 
 //@@@ 2006.04.10 fon ADD-start
-	for(int i = 0; i < MAX_KEYHELP_FILE; i++){
+	for (int i = 0; i < MAX_KEYHELP_FILE; i++) {
 		pType->m_KeyHelpArr[i].m_bUse = false;
 		pType->m_KeyHelpArr[i].m_szAbout[0] = _T('\0');
 		pType->m_KeyHelpArr[i].m_szPath[0] = _T('\0');
@@ -254,7 +252,7 @@ void _DefaultConfig(STypeConfig* pType)
 //@@@ 2006.04.10 fon ADD-end
 
 	// 2005.11.08 Moca 指定位置縦線の設定
-	for(int i = 0; i < MAX_VERTLINES; i++ ){
+	for (int i = 0; i < MAX_VERTLINES; i++) {
 		pType->m_nVertLineIdx[i] = CLayoutInt(0);
 	}
 
@@ -263,3 +261,4 @@ void _DefaultConfig(STypeConfig* pType)
 
 	pType->m_bUseTypeFont = false;			//!< タイプ別フォントの使用
 }
+

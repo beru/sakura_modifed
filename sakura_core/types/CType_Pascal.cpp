@@ -20,8 +20,6 @@ void CType_Pascal::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_bStringLineOnly = true; // ï∂éöóÒÇÕçsì‡ÇÃÇ›
 }
 
-
-
 const wchar_t* g_ppszKeywordsPASCAL[] = {
 	L"and",
 	L"exports",
@@ -95,3 +93,4 @@ const wchar_t* g_ppszKeywordsPASCAL[] = {
 	L"override"
 };
 int g_nKeywordsPASCAL = _countof(g_ppszKeywordsPASCAL);
+

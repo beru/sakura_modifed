@@ -14,8 +14,6 @@ void CType_Dos::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_nKeyWordSetIdx[0] = 7;					/* キーワードセット */
 }
 
-
-
 const wchar_t* g_ppszKeywordsBAT[] = {
 	L"PATH",
 	L"PROMPT",
@@ -91,3 +89,4 @@ const wchar_t* g_ppszKeywordsBAT[] = {
 	L"CONFIG$"
 };
 int g_nKeywordsBAT = _countof(g_ppszKeywordsBAT);
+
