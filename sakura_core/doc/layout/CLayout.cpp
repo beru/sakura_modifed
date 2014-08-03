@@ -47,11 +47,10 @@ CLayoutInt CLayout::CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const
 
 	//ŒvŽZ
 	CLayoutInt nWidth = GetIndent();
-	for(CLogicInt i=m_ptLogicPos.GetX2();i<m_ptLogicPos.GetX2()+m_nLength;i++){
-		if(pText[i]==WCODE::TAB){
+	for (CLogicInt i=m_ptLogicPos.GetX2();i<m_ptLogicPos.GetX2()+m_nLength;i++) {
+		if (pText[i]==WCODE::TAB) {
 			nWidth += cLayoutMgr.GetActualTabSpace(nWidth);
-		}
-		else{
+		}else {
 			nWidth += CNativeW::GetKetaOfChar(pText,nTextLen,i);
 		}
 	}
@@ -62,20 +61,17 @@ CLayoutInt CLayout::CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const
 CLayoutInt CLayout::CalcLayoutOffset(const CLayoutMgr& cLayoutMgr) const
 {
 	CLayoutInt nRet(0);
-	if(this->GetLogicOffset()){
+	if (this->GetLogicOffset()) {
 		const wchar_t* pLine = this->m_pCDocLine->GetPtr();
 		int nLineLen = this->m_pCDocLine->GetLengthWithEOL();
-		for(int i=0;i<GetLogicOffset();i++){
-			if(pLine[i]==WCODE::TAB){
-				nRet+=cLayoutMgr.GetActualTabSpace(nRet);
-			}
-			else{
-				nRet+=CNativeW::GetKetaOfChar(pLine,nLineLen,i);
+		for (int i=0;i<GetLogicOffset();i++) {
+			if (pLine[i]==WCODE::TAB) {
+				nRet += cLayoutMgr.GetActualTabSpace(nRet);
+			}else {
+				nRet += CNativeW::GetKetaOfChar(pLine,nLineLen,i);
 			}
 		}
 	}
 	return nRet;
 }
-
-
 

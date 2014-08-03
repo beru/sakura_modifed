@@ -36,8 +36,8 @@ bool CDocLine::IsEmptyLine() const
 	const wchar_t* pLine = GetPtr();
 	int nLineLen = GetLengthWithoutEOL();
 	int i;
-	for ( i = 0; i < nLineLen; i++ ){
-		if (pLine[i] != L' ' && pLine[i] != L'\t'){
+	for (i = 0; i < nLineLen; i++) {
+		if (pLine[i] != L' ' && pLine[i] != L'\t') {
 			return false;	//	スペースでもタブでもない文字があったらfalse。
 		}
 	}
@@ -50,12 +50,11 @@ void CDocLine::SetEol()
 	int nLength = m_cLine.GetStringLength();
 	//改行コード設定
 	const wchar_t* p = &pData[nLength] - 1;
-	while(p>=pData && WCODE::IsLineDelimiter(*p))p--;
+	while (p>=pData && WCODE::IsLineDelimiter(*p)) p--;
 	p++;
-	if(p>=pData){
+	if (p>=pData) {
 		m_cEol.SetTypeByString(p, &pData[nLength]-p);
-	}
-	else{
+	}else {
 		m_cEol = EOL_NONE;
 	}
 }
@@ -81,7 +80,7 @@ void CDocLine::SetDocLineStringMove(CNativeW* pcDataFrom)
 void CDocLine::SetEol(const CEol& cEol, COpeBlk* pcOpeBlk)
 {
 	//改行コードを削除
-	for(int i=0;i<(Int)m_cEol.GetLen();i++){
+	for (int i=0;i<(Int)m_cEol.GetLen();i++) {
 		m_cLine.Chop();
 	}
 
@@ -89,3 +88,4 @@ void CDocLine::SetEol(const CEol& cEol, COpeBlk* pcOpeBlk)
 	m_cEol = cEol;
 	m_cLine += cEol.GetValue2();
 }
+

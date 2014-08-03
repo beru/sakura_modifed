@@ -25,8 +25,6 @@
 #include "util/window.h"
 
 
-
-
 /*!
 	行頭禁則文字に該当するかを調べる．
 
@@ -76,8 +74,7 @@ bool CLayoutMgr::IsKinsokuPosHead(
 	CLayoutInt nCharKetas2	//!< [in] 現在位置の次の文字サイズ
 )
 {
-	switch( (Int)nRest )
-	{
+	switch ((Int)nRest) {
 	//    321012  ↓マジックナンバー
 	// 3 "る）" : 22 "）"の2バイト目で折り返しのとき
 	// 2  "Z）" : 12 "）"の2バイト目で折り返しのとき
@@ -88,20 +85,19 @@ bool CLayoutMgr::IsKinsokuPosHead(
 	//↑何文字前か？
 	// ※ただし、"るZ"部分が禁則なら処理しない。
 	case 3:	// 3文字前
-		if( nCharKetas == 2 && nCharKetas2 == 2 ){
+		if (nCharKetas == 2 && nCharKetas2 == 2) {
 			return true;
 		}
 		break;
 	case 2:	// 2文字前
-		if( nCharKetas == 2 ){
+		if (nCharKetas == 2) {
 			return true;
-		}
-		else if( nCharKetas == 1 && nCharKetas2 == 2 ){
+		}else if (nCharKetas == 1 && nCharKetas2 == 2) {
 			return true;
 		}
 		break;
 	case 1:	// 1文字前
-		if( nCharKetas == 1 ){
+		if (nCharKetas == 1) {
 			return true;
 		}
 		break;
@@ -118,26 +114,24 @@ bool CLayoutMgr::IsKinsokuPosTail(
 	CLayoutInt nCharKetas2	//!< [in] 現在位置の次の文字サイズ
 )
 {
-	switch( (Int)nRest )
-	{
+	switch ((Int)nRest) {
 	case 3:	// 3文字前
-		if( nCharKetas == 2 && nCharKetas2 == 2){
+		if (nCharKetas == 2 && nCharKetas2 == 2) {
 			// "（あ": "あ"の2バイト目で折り返しのとき
 			return true;
 		}
 		break;
 	case 2:	// 2文字前
-		if( nCharKetas == 2 ){
+		if (nCharKetas == 2) {
 			// "（あ": "あ"で折り返しのとき
 			return true;
-		}
-		else if( nCharKetas == 1 && nCharKetas2 == 2){
+		}else if (nCharKetas == 1 && nCharKetas2 == 2) {
 			// "(あ": "あ"の2バイト目で折り返しのとき
 			return true;
 		}
 		break;
 	case 1:	// 1文字前
-		if( nCharKetas == 1 ){
+		if (nCharKetas == 1) {
 			// "(あ": "あ"で折り返しのとき
 			return true;
 		}
@@ -178,24 +172,24 @@ CLayoutInt CLayoutMgr::getIndentOffset_Normal( CLayout* )
 CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
 {
 	//	前の行が無いときは、インデント不要。
-	if ( pLayoutPrev == NULL ) return CLayoutInt(0);
+	if (pLayoutPrev == NULL) return CLayoutInt(0);
 
 	CLayoutInt nIpos = pLayoutPrev->GetIndent();
 
 	//	前の行が折り返し行ならばそれに合わせる
-	if( pLayoutPrev->GetLogicOffset() > 0 )
+	if (pLayoutPrev->GetLogicOffset() > 0)
 		return nIpos;
 	
 	CMemoryIterator it( pLayoutPrev, GetTabSpace() );
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getIndexDelta() == 1 && it.getCurrentChar() == WCODE::TAB ){
+		if (it.getIndexDelta() == 1 && it.getCurrentChar() == WCODE::TAB) {
 			nIpos = it.getColumn() + it.getColumnDelta();
 		}
 		it.addDelta();
 	}
 	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
-	if ( GetMaxLineKetas() - nIpos < GetTabSpace() + 2 ){
+	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
 		nIpos = t_max(CLayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
 	return nIpos;	//	インデント
@@ -215,14 +209,14 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
 CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
 {
 	//	前の行が無いときは、インデント不要。
-	if ( pLayoutPrev == NULL ) return CLayoutInt(0);
+	if (pLayoutPrev == NULL) return CLayoutInt(0);
 
 	//	インデントの計算
 	CLayoutInt nIpos = pLayoutPrev->GetIndent();
 	
 	//	Oct. 5, 2002 genta
 	//	折り返しの3行目以降は1つ前の行のインデントに合わせる．
-	if( pLayoutPrev->GetLogicOffset() > 0 )
+	if (pLayoutPrev->GetLogicOffset() > 0)
 		return nIpos;
 	
 	//	2002.10.07 YAZAKI インデントの計算
@@ -231,36 +225,32 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
 	//	Jul. 20, 2003 genta 自動インデントに準じた動作にする
 	bool bZenSpace = m_pTypeConfig->m_bAutoIndent_ZENSPACE;
 	const wchar_t* szSpecialIndentChar = m_pTypeConfig->m_szIndentChars;
-	while( !it.end() ){
+	while (!it.end()) {
 		it.scanNext();
-		if ( it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(),bZenSpace) )
-		{
+		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(),bZenSpace)) {
 			//	インデントのカウントを継続する
-		}
 		//	Jul. 20, 2003 genta インデント対象文字
-		else if( szSpecialIndentChar[0] != L'\0' ){
+		}else if (szSpecialIndentChar[0] != L'\0') {
 			wchar_t buf[3]; // 文字の長さは1 or 2
 			wmemcpy( buf, it.getCurrentPos(), it.getIndexDelta() );
 			buf[ it.getIndexDelta() ] = L'\0';
-			if( NULL != wcsstr( szSpecialIndentChar, buf )){
+			if (NULL != wcsstr( szSpecialIndentChar, buf )) {
 				//	インデントのカウントを継続する
-			}
-			else {
+			}else {
 				nIpos = it.getColumn();	//	終了
 				break;
 			}
-		}
-		else {
+		}else {
 			nIpos = it.getColumn();	//	終了
 			break;
 		}
 		it.addDelta();
 	}
-	if( it.end() ){
+	if (it.end()) {
 		nIpos = it.getColumn();	//	終了
 	}
 	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
-	if ( GetMaxLineKetas() - nIpos < GetTabSpace() + 2 ){
+	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
 		nIpos = t_max(CLayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
 	return nIpos;	//	インデント
@@ -294,15 +284,15 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 	CLayoutInt nLines = GetLineCount();		// テキストのレイアウト行数
 
 	// 開始・終了位置がどちらも指定されていない
-	if( nStart < 0 && nEnd < 0 )
+	if (nStart < 0 && nEnd < 0)
 		bOnlyExpansion = FALSE;		// 最大幅の拡大・縮小をチェックする
 
-	if( nStart < 0 )			// 算出開始行の指定なし
+	if (nStart < 0)			// 算出開始行の指定なし
 		nStart = 0;
-	else if( nStart > nLines )	// 範囲オーバー
+	else if (nStart > nLines)	// 範囲オーバー
 		nStart = nLines;
 	
-	if( nEnd < 0 || nEnd >= nLines )	// 算出終了行の指定なし または 文書行数以上
+	if (nEnd < 0 || nEnd >= nLines)	// 算出終了行の指定なし または 文書行数以上
 		nEnd = nLines;
 	else
 		nEnd++;					// 算出終了行の次行
@@ -311,29 +301,29 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 
 	// 算出開始レイアウト行を探す
 	// 2013.05.13 SearchLineByLayoutYを使う
-	if( nStart == 0 ){
+	if (nStart == 0) {
 		pLayout = m_pLayoutTop;
-	}else{
+	}else {
 		pLayout = SearchLineByLayoutY(nStart);
 	}
 #if 0
-	if( nStart * 2 < nLines ){
+	if (nStart * 2 < nLines) {
 		// 前方からサーチ
 		CLayoutInt nCount = CLayoutInt(0);
 		pLayout = m_pLayoutTop;
-		while( NULL != pLayout ){
-			if( nStart == nCount ){
+		while (NULL != pLayout) {
+			if (nStart == nCount) {
 				break;
 			}
 			pLayout = pLayout->GetNextLayout();
 			nCount++;
 		}
-	}else{
+	}else {
 		// 後方からサーチ
 		CLayoutInt nCount = CLayoutInt( m_nLines - 1 );
 		pLayout = m_pLayoutBot;
-		while( NULL != pLayout ){
-			if( nStart == nCount ){
+		while (NULL != pLayout) {
+			if (nStart == nCount) {
 				break;
 			}
 			pLayout = pLayout->GetPrevLayout();
@@ -343,23 +333,23 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 #endif
 
 	// レイアウト行の最大幅を取り出す
-	for( CLayoutInt i = nStart; i < nEnd; i++ ){
-		if( !pLayout )
+	for (CLayoutInt i = nStart; i < nEnd; i++) {
+		if (!pLayout)
 			break;
 
 		// レイアウト行の長さを算出する
-		if( bCalLineLen ){
+		if (bCalLineLen) {
 			CLayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen()>0?1:0);
 			pLayout->SetLayoutWidth( nWidth );
 		}
 
 		// 最大幅を更新
-		if( nMaxLen < pLayout->GetLayoutWidth() ){
+		if (nMaxLen < pLayout->GetLayoutWidth()) {
 			nMaxLen = pLayout->GetLayoutWidth();
 			nMaxLineNum = i;		// 最大幅のレイアウト行
 
 			// アプリケーションの最大幅となったら算出は停止
-			if( nMaxLen >= MAXLINEKETAS && !bCalLineLen )
+			if (nMaxLen >= MAXLINEKETAS && !bCalLineLen)
 				break;
 		}
 
@@ -368,16 +358,16 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 	}
 
 	// テキストの幅の変化をチェック
-	if( Int(nMaxLen) ){
+	if (Int(nMaxLen)) {
 		// 最大幅が拡大した または 最大幅の拡大のみチェックでない
-		if( m_nTextWidth < nMaxLen || !bOnlyExpansion ){
+		if (m_nTextWidth < nMaxLen || !bOnlyExpansion) {
 			m_nTextWidthMaxLine = nMaxLineNum;
-			if( m_nTextWidth != nMaxLen ){	// 最大幅変化あり
+			if (m_nTextWidth != nMaxLen) {	// 最大幅変化あり
 				m_nTextWidth = nMaxLen;
 				bRet = TRUE;
 			}
 		}
-	}else if( Int(m_nTextWidth) && !Int(nLines) ){
+	}else if (Int(m_nTextWidth) && !Int(nLines)) {
 		// 全削除されたら幅の記憶をクリア
 		m_nTextWidthMaxLine = 0;
 		m_nTextWidth = 0;
@@ -403,11 +393,9 @@ void CLayoutMgr::ClearLayoutLineWidth( void )
 {
 	CLayout* pLayout = m_pLayoutTop;
 
-	while( pLayout ){
+	while (pLayout) {
 		pLayout->m_nLayoutWidth = 0;			// レイアウト行長をクリア
 		pLayout = pLayout->GetNextLayout();		// 次のレイアウト行のデータ
-		
 	}
 }
-
 

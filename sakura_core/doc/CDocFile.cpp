@@ -34,8 +34,8 @@ const TCHAR* CDocFile::GetSaveFilePath(void) const
 {
 	if (m_szSaveFilePath.IsValidPath()) {
 		return m_szSaveFilePath;
-	}
-	else {
+	}else {
 		return GetFilePath();
 	}
 }
+

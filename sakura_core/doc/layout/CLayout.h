@@ -76,7 +76,7 @@ public:
 	void OffsetLogicLineNo(CLogicInt n){ m_ptLogicPos.y+=n; }
 	void SetColorTypePrev(EColorIndexType n)
 	{
-		m_nTypePrev=n;
+		m_nTypePrev = n;
 	}
 	void SetLayoutWidth(CLayoutInt nWidth){ m_nLayoutWidth = nWidth; }
 

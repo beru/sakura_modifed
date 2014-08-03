@@ -19,23 +19,23 @@ bool CDiffLineGetter::GetDiffColor(EColorIndexType* pnColorIndex) const
 	CEditView* pView = &CEditWnd::getInstance()->GetActiveView();
 
 	//DIFF差分マーク表示	//@@@ 2002.05.25 MIK
-	if( type ){
-		switch( type ){
+	if (type) {
+		switch (type) {
 		case MARK_DIFF_APPEND:	//追加
-			if( CTypeSupport(pView,COLORIDX_DIFF_APPEND).IsDisp() ){
+			if (CTypeSupport(pView,COLORIDX_DIFF_APPEND).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_APPEND;
 				return true;
 			}
 			break;
 		case MARK_DIFF_CHANGE:	//変更
-			if( CTypeSupport(pView,COLORIDX_DIFF_CHANGE).IsDisp() ){
+			if (CTypeSupport(pView,COLORIDX_DIFF_CHANGE).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_CHANGE;
 				return true;
 			}
 			break;
 		case MARK_DIFF_DELETE:	//削除
 		case MARK_DIFF_DEL_EX:	//削除
-			if( CTypeSupport(pView,COLORIDX_DIFF_DELETE).IsDisp() ){
+			if (CTypeSupport(pView,COLORIDX_DIFF_DELETE).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_DELETE;
 				return true;
 			}
@@ -54,14 +54,12 @@ bool CDiffLineGetter::DrawDiffMark(CGraphics& gr, int y, int nLineHeight, COLORR
 {
 	EDiffMark type = GetLineDiffMark();
 
-	if( type )	//DIFF差分マーク表示	//@@@ 2002.05.25 MIK
-	{
+	if (type) {	//DIFF差分マーク表示	//@@@ 2002.05.25 MIK
 		int	cy = y + nLineHeight / 2;
 
 		gr.PushPen(color, 0);
 
-		switch( type )
-		{
+		switch (type) {
 		case MARK_DIFF_APPEND:	//追加
 			::MoveToEx( gr, 3, cy, NULL );
 			::LineTo  ( gr, 6, cy );
@@ -106,7 +104,7 @@ bool CDiffLineGetter::DrawDiffMark(CGraphics& gr, int y, int nLineHeight, COLORR
 //                     CDiffLineSetter                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CDiffLineSetter::SetLineDiffMark(EDiffMark mark){ m_pcDocLine->m_sMark.m_cDiffmarked = mark; }
+void CDiffLineSetter::SetLineDiffMark(EDiffMark mark) { m_pcDocLine->m_sMark.m_cDiffmarked = mark; }
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -120,8 +118,7 @@ void CDiffLineSetter::SetLineDiffMark(EDiffMark mark){ m_pcDocLine->m_sMark.m_cD
 void CDiffLineMgr::ResetAllDiffMark()
 {
 	CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
-	while( pDocLine )
-	{
+	while (pDocLine) {
 		pDocLine->m_sMark.m_cDiffmarked = MARK_DIFF_NONE;
 		pDocLine = pDocLine->GetNextLine();
 	}
@@ -142,30 +139,23 @@ bool CDiffLineMgr::SearchDiffMark(
 	CLogicInt	nLinePos = nLineNum;
 
 	//前方検索
-	if( bPrevOrNext == SEARCH_BACKWARD )
-	{
+	if (bPrevOrNext == SEARCH_BACKWARD) {
 		nLinePos--;
 		CDocLine*	pDocLine = m_pcDocLineMgr->GetLine( nLinePos );
-		while( pDocLine )
-		{
-			if( CDiffLineGetter(pDocLine).GetLineDiffMark() != 0 )
-			{
+		while (pDocLine) {
+			if (CDiffLineGetter(pDocLine).GetLineDiffMark() != 0) {
 				*pnLineNum = nLinePos;				/* マッチ行 */
 				return true;
 			}
 			nLinePos--;
 			pDocLine = pDocLine->GetPrevLine();
 		}
-	}
 	//後方検索
-	else
-	{
+	}else {
 		nLinePos++;
 		CDocLine*	pDocLine = m_pcDocLineMgr->GetLine( nLinePos );
-		while( pDocLine )
-		{
-			if( CDiffLineGetter(pDocLine).GetLineDiffMark() != 0 )
-			{
+		while (pDocLine) {
+			if (CDiffLineGetter(pDocLine).GetLineDiffMark() != 0) {
 				*pnLineNum = nLinePos;				/* マッチ行 */
 				return true;
 			}
@@ -184,23 +174,22 @@ void CDiffLineMgr::SetDiffMarkRange( EDiffMark nMode, CLogicInt nStartLine, CLog
 {
 	CDiffManager::getInstance()->SetDiffUse(true);
 
-	if( nStartLine < CLogicInt(0) ) nStartLine = CLogicInt(0);
+	if (nStartLine < CLogicInt(0)) nStartLine = CLogicInt(0);
 
 	//最終行より後に削除行あり
 	CLogicInt	nLines = m_pcDocLineMgr->GetLineCount();
-	if( nLines <= nEndLine )
-	{
+	if (nLines <= nEndLine) {
 		nEndLine = nLines - CLogicInt(1);
 		CDocLine*	pCDocLine = m_pcDocLineMgr->GetLine( nEndLine );
-		if( pCDocLine ) CDiffLineSetter(pCDocLine).SetLineDiffMark(MARK_DIFF_DEL_EX);
+		if (pCDocLine) CDiffLineSetter(pCDocLine).SetLineDiffMark(MARK_DIFF_DEL_EX);
 	}
 
 	//行範囲にマークをつける
-	for( CLogicInt i = nStartLine; i <= nEndLine; i++ )
-	{
+	for (CLogicInt i = nStartLine; i <= nEndLine; i++) {
 		CDocLine*	pCDocLine = m_pcDocLineMgr->GetLine( i );
-		if( pCDocLine ) CDiffLineSetter(pCDocLine).SetLineDiffMark(nMode);
+		if (pCDocLine) CDiffLineSetter(pCDocLine).SetLineDiffMark(nMode);
 	}
 
 	return;
 }
+

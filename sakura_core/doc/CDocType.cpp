@@ -43,29 +43,29 @@ CDocType::CDocType(CEditDoc* pcDoc)
 //! 文書種別の設定
 void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly )
 {
-	if( !m_nSettingTypeLocked || force ){
+	if (!m_nSettingTypeLocked || force) {
 		m_nSettingType = type;
-		if( false == CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig ) ){
+		if (false == CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
 			// 削除されてる/不正
 			m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
 			CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
 		}
-		if( bTypeOnly ) return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
+		if (bTypeOnly) return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
 		UnlockDocumentType();
-	}else{
+	}else {
 		// データは更新しておく
 		CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId( m_typeConfig.m_id );
-		if( temp.IsValidType() ){
+		if (temp.IsValidType()) {
 			m_nSettingType = temp;
 			CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
-		}else{
+		}else {
 			m_nSettingType = type;
-			if( false == CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig ) ){
+			if (false == CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
 				m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
 				CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
 			}
 		}
-		if( bTypeOnly ) return;
+		if (bTypeOnly) return;
 	}
 
 	// タイプ別設定更新を反映
@@ -78,13 +78,13 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly )
 void CDocType::SetDocumentTypeIdx( int id, bool force )
 {
 	int setId = m_typeConfig.m_id;
-	if( !m_nSettingTypeLocked || force ){
-		if( id != -1 ){
+	if (!m_nSettingTypeLocked || force) {
+		if (id != -1) {
 			setId = id;
 		}
 	}
 	CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId( setId );
-	if( temp.IsValidType() ){
+	if (temp.IsValidType()) {
 		m_nSettingType = temp;
 		m_typeConfig.m_nIdx = temp.GetIndex();
 		m_typeConfig.m_id = setId;
@@ -101,11 +101,11 @@ void CDocType::SetDocumentTypeIdx( int id, bool force )
 */
 void CDocType::SetDocumentIcon()
 {
-	if( CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode )	// Grepモードの時はアイコンを変更しない
+	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)	// Grepモードの時はアイコンを変更しない
 		return;
 	
 	HICON	hIconBig, hIconSmall;
-	if( this->GetDocumentAttribute().m_bUseDocumentIcon )
+	if (this->GetDocumentAttribute().m_bUseDocumentIcon)
 		m_pcDocRef->m_pcEditWnd->GetRelatedIcon( m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall );
 	else
 		m_pcDocRef->m_pcEditWnd->GetDefaultIcon( &hIconBig, &hIconSmall );
@@ -113,3 +113,4 @@ void CDocType::SetDocumentIcon()
 	m_pcDocRef->m_pcEditWnd->SetWindowIcon( hIconBig, ICON_BIG );
 	m_pcDocRef->m_pcEditWnd->SetWindowIcon( hIconSmall, ICON_SMALL );
 }
+

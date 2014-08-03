@@ -119,3 +119,4 @@ int GetDefaultColorInfoCount()
 {
 	return _countof(ColorInfo_DEFAULT);
 }
+

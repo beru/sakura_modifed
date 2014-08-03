@@ -336,7 +336,6 @@ void CLayoutMgr::_DoLayout()
 		pWork->nPosX		= CLayoutInt(0);	// 表示上のX位置
 		pWork->nIndent		= CLayoutInt(0);	// インデント幅
 
-
 		_MakeOneLine(pWork, &CLayoutMgr::_OnLine1);
 
 		if( pWork->nPos - pWork->nBgn > 0 ){

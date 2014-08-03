@@ -54,22 +54,22 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 	int i;
 	TCHAR szBuf[_MAX_PATH + 1];
 
-	if( -1 == m_nTransformFileNameCount ){
+	if (-1 == m_nTransformFileNameCount) {
 		TransformFileName_MakeCache();
 	}
 
-	if( 0 < m_nTransformFileNameCount ){
+	if (0 < m_nTransformFileNameCount) {
 		GetFilePathFormat( pszSrc, pszDest, nDestLen,
 			m_szTransformFileNameFromExp[0],
 			m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
-		for( i = 1; i < m_nTransformFileNameCount; i++ ){
+		for (i = 1; i < m_nTransformFileNameCount; i++) {
 			_tcscpy( szBuf, pszDest );
 			GetFilePathFormat( szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
 				m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]] );
 		}
-	}else{
+	}else {
 		// 変換する必要がない コピーだけする
 		_tcsncpy( pszDest, pszSrc, nDestLen - 1 );
 		pszDest[nDestLen - 1] = '\0';
@@ -85,10 +85,11 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 int CFileNameManager::TransformFileName_MakeCache( void ){
 	int i;
 	int nCount = 0;
-	for( i = 0; i < m_pShareData->m_Common.m_sFileName.m_nTransformFileNameArrNum; i++ ){
-		if( L'\0' != m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i][0] ){
-			if( ExpandMetaToFolder( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i],
-			 m_szTransformFileNameFromExp[nCount], _MAX_PATH ) ){
+	for (i = 0; i < m_pShareData->m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
+		if (L'\0' != m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i][0]) {
+			if (ExpandMetaToFolder( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i],
+			 m_szTransformFileNameFromExp[nCount], _MAX_PATH )
+			) {
 				// m_szTransformFileNameToとm_szTransformFileNameFromExpの番号がずれることがあるので記録しておく
 				m_nTransformFileNameOrgId[nCount] = i;
 				nCount++;
@@ -117,26 +118,26 @@ LPCTSTR CFileNameManager::GetFilePathFormat( LPCTSTR pszSrc, LPTSTR pszDest, int
 
 	nDestLen--;
 
-	for( i = 0, j = 0; i < nSrcLen && j < nDestLen; i++ ){
+	for (i = 0, j = 0; i < nSrcLen && j < nDestLen; i++) {
 #if defined(_MBCS)
-		if( 0 == strnicmp( &pszSrc[i], pszFrom, nFromLen ) )
+		if (0 == strnicmp( &pszSrc[i], pszFrom, nFromLen ))
 #else
-		if( 0 == _tcsncicmp( &pszSrc[i], pszFrom, nFromLen ) )
+		if (0 == _tcsncicmp( &pszSrc[i], pszFrom, nFromLen ))
 #endif
 		{
 			nCopy = t_min( nToLen, nDestLen - j );
 			memcpy( &pszDest[j], pszTo, nCopy * sizeof( TCHAR ) );
 			j += nCopy;
 			i += nFromLen - 1;
-		}else{
+		}else {
 #if defined(_MBCS)
 // SJIS 専用処理
-			if( _IS_SJIS_1( (unsigned char)pszSrc[i] ) && i + 1 < nSrcLen && _IS_SJIS_2( (unsigned char)pszSrc[i + 1] ) ){
-				if( j + 1 < nDestLen ){
+			if ( _IS_SJIS_1( (unsigned char)pszSrc[i] ) && i + 1 < nSrcLen && _IS_SJIS_2( (unsigned char)pszSrc[i + 1] )) {
+				if (j + 1 < nDestLen) {
 					pszDest[j] = pszSrc[i];
 					j++;
 					i++;
-				}else{
+				}else {
 					// SJISの先行バイトだけコピーされるのを防ぐ
 					break;// goto end_of_func;
 				}
@@ -188,29 +189,29 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 #endif
 
 	pd_end = pszDes + ( nDesLen - 1 );
-	for( ps = pszSrc, pd = pszDes; _T('\0') != *ps; ps++ ){
-		if( pd_end <= pd ){
-			if( pd_end == pd ){
+	for (ps = pszSrc, pd = pszDes; _T('\0') != *ps; ps++) {
+		if (pd_end <= pd) {
+			if (pd_end == pd) {
 				*pd = _T('\0');
 			}
 			return false;
 		}
 
-		if( _T('%') != *ps ){
+		if (_T('%') != *ps) {
 			*pd = *ps;
 			pd++;
 			continue;
 		}
 
 		// %% は %
-		if( _T('%') == ps[1] ){
+		if (_T('%') == ps[1]) {
 			*pd = _T('%');
 			pd++;
 			ps++;
 			continue;
 		}
 
-		if( _T('\0') != ps[1] ){
+		if (_T('\0') != ps[1]) {
 			TCHAR szMeta[_MAX_PATH];
 			TCHAR szPath[_MAX_PATH + 1];
 			int   nMetaLen;
@@ -219,35 +220,32 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 			LPCTSTR  pStr;
 			ps++;
 			// %SAKURA%
-			if( 0 == auto_strnicmp( _T("SAKURA%"), ps, 7 ) ){
+			if (0 == auto_strnicmp( _T("SAKURA%"), ps, 7 )) {
 				// exeのあるフォルダ
 				GetExedir( szPath );
 				nMetaLen = 6;
-			}
 			// %SAKURADATA%	// 2007.06.06 ryoji
-			else if( 0 == auto_strnicmp( _T("SAKURADATA%"), ps, 11 ) ){
+			}else if (0 == auto_strnicmp( _T("SAKURADATA%"), ps, 11 )) {
 				// iniのあるフォルダ
 				GetInidir( szPath );
 				nMetaLen = 10;
-			}
 			// メタ文字列っぽい
-			else if( NULL != (pStr = _tcschr( ps, _T('%') ) )){
+			}else if (NULL != (pStr = _tcschr( ps, _T('%') ) )) {
 				nMetaLen = pStr - ps;
-				if( nMetaLen < _MAX_PATH ){
+				if (nMetaLen < _MAX_PATH) {
 					auto_memcpy( szMeta, ps, nMetaLen );
 					szMeta[nMetaLen] = _T('\0');
-				}
-				else{
+				}else {
 					*pd = _T('\0');
 					return false;
 				}
 #ifdef _USE_META_ALIAS
 				// メタ文字列がエイリアス名なら書き換える
 				const MetaAlias* pAlias;
-				for( pAlias = &AliasList[0]; nMetaLen < pAlias->nLenth; pAlias++ )
+				for (pAlias = &AliasList[0]; nMetaLen < pAlias->nLenth; pAlias++)
 					; // 読み飛ばす
-				for( ; nMetaLen == pAlias->nLenth; pAlias++ ){
-					if( 0 == auto_stricmp( pAlias->szAlias, szMeta ) ){
+				for (; nMetaLen == pAlias->nLenth; pAlias++) {
+					if (0 == auto_stricmp( pAlias->szAlias, szMeta )) {
 						_tcscpy( szMeta, pAlias->szOrig );
 						break;
 					}
@@ -258,37 +256,36 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 				bFolderPath = ReadRegistry( HKEY_CURRENT_USER,
 					_T("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 					szMeta, szPath, _countof( szPath ) );
-				if( false == bFolderPath || _T('\0') == szPath[0] ){
+				if (false == bFolderPath || _T('\0') == szPath[0]) {
 					bFolderPath = ReadRegistry( HKEY_LOCAL_MACHINE,
 						_T("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 						szMeta, szPath, _countof( szPath ) );
 				}
-				if( false == bFolderPath || _T('\0') == szPath[0] ){
+				if (false == bFolderPath || _T('\0') == szPath[0]) {
 					pStr = _tgetenv( szMeta );
 					// 環境変数
-					if( NULL != pStr ){
+					if (NULL != pStr) {
 						nPathLen = _tcslen( pStr );
-						if( nPathLen < _MAX_PATH ){
+						if (nPathLen < _MAX_PATH) {
 							_tcscpy( szPath, pStr );
-						}else{
+						}else {
 							*pd = _T('\0');
 							return false;
 						}
-					}
 					// 未定義のメタ文字列は 入力された%...%を，そのまま文字として処理する
-					else if(  pd + ( nMetaLen + 2 ) < pd_end ){
+					}else if (pd + ( nMetaLen + 2 ) < pd_end) {
 						*pd = _T('%');
 						auto_memcpy( &pd[1], ps, nMetaLen );
 						pd[nMetaLen + 1] = _T('%');
 						pd += nMetaLen + 2;
 						ps += nMetaLen;
 						continue;
-					}else{
+					}else {
 						*pd = _T('\0');
 						return false;
 					}
 				}
-			}else{
+			}else {
 				// %...%の終わりの%がない とりあえず，%をコピー
 				*pd = _T('%');
 				pd++;
@@ -299,36 +296,36 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 			// ロングファイル名にする
 			nPathLen = _tcslen( szPath );
 			LPTSTR pStr2 = szPath;
-			if( nPathLen < _MAX_PATH && 0 != nPathLen ){
-				if( FALSE != GetLongFileName( szPath, szMeta ) ){
+			if (nPathLen < _MAX_PATH && 0 != nPathLen) {
+				if (FALSE != GetLongFileName( szPath, szMeta )) {
 					pStr2 = szMeta;
 				}
 			}
 
 			// 最後のフォルダ区切り記号を削除する
 			// [A:\]などのルートであっても削除
-			for(nPathLen = 0; pStr2[nPathLen] != _T('\0'); nPathLen++ ){
+			for (nPathLen = 0; pStr2[nPathLen] != _T('\0'); nPathLen++) {
 #ifdef _MBCS
-				if( _IS_SJIS_1( (unsigned char)pStr2[nPathLen] ) && _IS_SJIS_2( (unsigned char)pStr2[nPathLen + 1] ) ){
+				if (_IS_SJIS_1( (unsigned char)pStr2[nPathLen] ) && _IS_SJIS_2( (unsigned char)pStr2[nPathLen + 1] )) {
 					// SJIS読み飛ばし
 					nPathLen++; // 2003/01/17 sui
 				}else
 #endif
-				if( _T('\\') == pStr2[nPathLen] && _T('\0') == pStr2[nPathLen + 1] ){
+				if (_T('\\') == pStr2[nPathLen] && _T('\0') == pStr2[nPathLen + 1]) {
 					pStr2[nPathLen] = _T('\0');
 					break;
 				}
 			}
 
-			if( pd + nPathLen < pd_end && 0 != nPathLen ){
+			if (pd + nPathLen < pd_end && 0 != nPathLen) {
 				auto_memcpy( pd, pStr2, nPathLen );
 				pd += nPathLen;
 				ps += nMetaLen;
-			}else{
+			}else {
 				*pd = _T('\0');
 				return false;
 			}
-		}else{
+		}else {
 			// 最後の文字が%だった
 			*pd = *ps;
 			pd++;
@@ -339,11 +336,9 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 }
 
 
-
-
 /* static */ TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
 {
-	if( index < 0 ) return 0;
+	if (index < 0) return 0;
 	int accKeyIndex = ((bZeroOrigin? index: index+1) % 36);
 	TCHAR c = (TCHAR)((accKeyIndex < 10) ? (_T('0') + accKeyIndex) : (_T('A') + accKeyIndex - 10));
 	return c;
@@ -352,18 +347,18 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index, bool bZeroOrigin)
 {
 	TCHAR c = CFileNameManager::GetAccessKeyByIndex(index, bZeroOrigin);
-	if( c ){
-		if( bEspaceAmp ){
+	if (c) {
+		if (bEspaceAmp) {
 			pszLabel[0] = _T('&');
 			pszLabel[1] = c;
 			pszLabel[2] = _T(' ');
 			pszLabel[3] = _T('\0');
-		}else{
+		}else {
 			pszLabel[0] = c;
 			pszLabel[1] = _T(' ');
 			pszLabel[2] = _T('\0');
 		}
-	}else{
+	}else {
 		pszLabel[0] = _T('\0');
 	}
 }
@@ -381,11 +376,11 @@ bool CFileNameManager::GetMenuFullLabel(
 	const EditInfo* pfi = editInfo;
 	TCHAR szAccKey[4];
 	int ret = 0;
-	if( NULL == pfi ){
+	if (NULL == pfi) {
 		GetAccessKeyLabelByIndex( szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin );
 		ret = auto_snprintf_s( pszOutput, nBuffSize, LS(STR_MENU_UNKOWN), szAccKey );
 		return true; // trueにしておく
-	}else if( pfi->m_bIsGrep ){
+	}else if (pfi->m_bIsGrep) {
 		
 		GetAccessKeyLabelByIndex( szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin );
 		//pfi->m_szGrepKeyShort → cmemDes
@@ -398,10 +393,10 @@ bool CFileNameManager::GetMenuFullLabel(
 		
 		const TCHAR* pszKey;
 		TCHAR szMenu2[GREPKEY_LIMIT_LEN*2*2+1]; // WCHAR=>ACHARで2倍、&で2倍
-		if( bEspaceAmp ){
+		if (bEspaceAmp) {
 			dupamp( cmemDes.GetStringT(), szMenu2 );
 			pszKey = szMenu2;
-		}else{
+		}else {
 			pszKey = cmemDes.GetStringT();
 		}
 
@@ -413,10 +408,10 @@ bool CFileNameManager::GetMenuFullLabel(
 			szAccKey, pszKey,
 			( nGrepKeyLen > cmemDes.GetStringLength() ) ? _T("..."):_T("")
 		);
-	}else if( pfi->m_bIsDebug ){
+	}else if (pfi->m_bIsDebug) {
 		GetAccessKeyLabelByIndex( szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin );
 		ret = auto_snprintf_s( pszOutput, nBuffSize, LS(STR_MENU_OUTPUT), szAccKey );
-	}else{
+	}else {
 		return GetMenuFullLabel(pszOutput, nBuffSize, bEspaceAmp, pfi->m_szPath, nId, pfi->m_bIsModified, pfi->m_nCharCode, bFavorite,
 			 index, bAccKeyZeroOrigin);
 	}
@@ -434,28 +429,28 @@ bool CFileNameManager::GetMenuFullLabel(
 	const TCHAR* pszName;
 
 	GetAccessKeyLabelByIndex( szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin );
-	if( pszFile[0] ){
+	if (pszFile[0]) {
 		this->GetTransformFileNameFast( pszFile, szFileName, _MAX_PATH );
 
 		// szFileName → szMenu2
 		//	Jan. 19, 2002 genta
 		//	メニュー文字列の&を考慮
-		if( bEspaceAmp ){
+		if (bEspaceAmp) {
 			dupamp( szFileName, szMenu2 );
 			pszName = szMenu2;
-		}else{
+		}else {
 			pszName = szFileName;
 		}
-	}else{
-		if( nId == -1 ){
+	}else {
+		if (nId == -1) {
 			wsprintf( szFileName, LS( STR_NO_TITLE1 ));
-		}else{
+		}else {
 			wsprintf( szFileName, _T("%s%d"), LS( STR_NO_TITLE1 ), nId);
 		}
 		pszName = szFileName;
 	}
 	const TCHAR* pszCharset = _T("");
-	if( IsValidCodeTypeExceptSJIS(nCharCode)){
+	if (IsValidCodeTypeExceptSJIS(nCharCode)) {
 		pszCharset = CCodeTypeName(nCharCode).Bracket();
 	}
 	
@@ -499,12 +494,12 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 	//		exeと同じフォルダに置かれたマルチユーザ構成設定ファイル（sakura.exe.ini）の内容
 	//		に従ってマルチユーザ用のiniファイルパスを決める
 	pszPrivateIniFile[0] = _T('\0');
-	if( IsWin2000_or_later() ){
+	if (IsWin2000_or_later()) {
 		auto_snprintf_s( szPath, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".exe.ini") );
 		int nEnable = ::GetPrivateProfileInt(_T("Settings"), _T("MultiUser"), 0, szPath );
-		if( nEnable ){
+		if (nEnable) {
 			int nFolder = ::GetPrivateProfileInt(_T("Settings"), _T("UserRootFolder"), 0, szPath );
-			switch( nFolder ){
+			switch (nFolder) {
 			case 1:
 				nFolder = CSIDL_PROFILE;			// ユーザのルートフォルダ
 				break;
@@ -519,9 +514,9 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 				break;
 			}
 			::GetPrivateProfileString(_T("Settings"), _T("UserSubFolder"), _T("sakura"), szDir, _MAX_DIR, szPath );
-			if( szDir[0] == _T('\0') )
+			if (szDir[0] == _T('\0'))
 				::lstrcpy( szDir, _T("sakura") );
-			if( GetSpecialFolderPath( nFolder, szPath ) ){
+			if (GetSpecialFolderPath( nFolder, szPath )) {
 				auto_snprintf_s( pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, _T(".ini") );
 			}
 		}
@@ -542,20 +537,20 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 */
 void CFileNameManager::GetIniFileName( LPTSTR pszIniFileName, BOOL bRead/*=FALSE*/ )
 {
-	if( !m_pShareData->m_sFileNameManagement.m_IniFolder.m_bInit ){
+	if (!m_pShareData->m_sFileNameManagement.m_IniFolder.m_bInit) {
 		m_pShareData->m_sFileNameManagement.m_IniFolder.m_bInit = true;			// 初期化済フラグ
 		m_pShareData->m_sFileNameManagement.m_IniFolder.m_bReadPrivate = false;	// マルチユーザ用iniからの読み出しフラグ
 		m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate = false;	// マルチユーザ用iniへの書き込みフラグ
 
 		GetIniFileNameDirect( m_pShareData->m_sFileNameManagement.m_IniFolder.m_szPrivateIniFile, m_pShareData->m_sFileNameManagement.m_IniFolder.m_szIniFile );
-		if( m_pShareData->m_sFileNameManagement.m_IniFolder.m_szPrivateIniFile[0] != _T('\0') ){
+		if (m_pShareData->m_sFileNameManagement.m_IniFolder.m_szPrivateIniFile[0] != _T('\0')) {
 			m_pShareData->m_sFileNameManagement.m_IniFolder.m_bReadPrivate = true;
 			m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate = true;
-			if( CCommandLine::getInstance()->IsNoWindow() && CCommandLine::getInstance()->IsWriteQuit() )
+			if (CommandLine::getInstance()->IsNoWindow() && CCommandLine::getInstance()->IsWriteQuit())
 				m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate = false;
 
 			// マルチユーザ用のiniフォルダを作成しておく
-			if( m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate ){
+			if (m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate) {
 				TCHAR szPath[_MAX_PATH];
 				TCHAR szDrive[_MAX_DRIVE];
 				TCHAR szDir[_MAX_DIR];

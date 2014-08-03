@@ -55,11 +55,11 @@ CDocEditor::CDocEditor(CEditDoc* pcDoc)
 */
 void CDocEditor::SetModified( bool flag, bool redraw)
 {
-	if( m_bIsDocModified == flag )	//	変更がなければ何もしない
+	if (m_bIsDocModified == flag)	//	変更がなければ何もしない
 		return;
 
 	m_bIsDocModified = flag;
-	if( redraw )
+	if (redraw)
 		m_pcDocRef->m_pcEditWnd->UpdateCaption();
 }
 
@@ -77,16 +77,15 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	//	編集用改行コードの設定
 	{
 		const STypeConfig& type = pcDoc->m_cDocType.GetDocumentAttribute();
-		if ( pcDoc->m_cDocFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype ){
+		if (pcDoc->m_cDocFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype) {
 			SetNewLineCode( type.m_encoding.m_eDefaultEoltype );	// 2011.01.24 ryoji デフォルトEOL
-		}
-		else{
+		}else {
 			SetNewLineCode( EOL_CRLF );
 		}
 		CDocLine*	pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine( CLogicInt(0) );
-		if( pFirstlineinfo != NULL ){
+		if (pFirstlineinfo != NULL) {
 			EEolType t = pFirstlineinfo->GetEol();
-			if( t != EOL_NONE && t != EOL_UNKNOWN ){
+			if (t != EOL_NONE && t != EOL_UNKNOWN) {
 				SetNewLineCode( t );
 			}
 		}
@@ -115,8 +114,6 @@ void CDocEditor::OnAfterSave(const SSaveInfo& sSaveInfo)
 	::SetCurrentDirectory( pcDoc->m_cDocFile.GetFilePathClass().GetDirPath().c_str() );
 }
 
-
-
 //	From Here Nov. 20, 2000 genta
 /*!	IME状態の設定
 	
@@ -133,13 +130,13 @@ void CDocEditor::SetImeMode( int mode )
 	hIme = ImmGetContext( hwnd ); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
 
 	//	最下位ビットはIME自身のOn/Off制御
-	if( ( mode & 3 ) == 2 ){
+	if ((mode & 3) == 2) {
 		ImmSetOpenStatus( hIme, FALSE );
 	}
-	if( ( mode >> 2 ) > 0 ){
+	if ((mode >> 2) > 0) {
 		ImmGetConversionStatus( hIme, &conv, &sent );
 
-		switch( mode >> 2 ){
+		switch (mode >> 2) {
 		case 1:	//	FullShape
 			conv |= IME_CMODE_FULLSHAPE;
 			conv &= ~IME_CMODE_NOCONVERSION;
@@ -158,20 +155,12 @@ void CDocEditor::SetImeMode( int mode )
 		}
 		ImmSetConversionStatus( hIme, conv, sent );
 	}
-	if( ( mode & 3 ) == 1 ){
+	if (( mode & 3) == 1) {
 		ImmSetOpenStatus( hIme, TRUE );
 	}
 	ImmReleaseContext( hwnd, hIme ); //######大丈夫？
 }
 //	To Here Nov. 20, 2000 genta
-
-
-
-
-
-
-
-
 
 
 /*!

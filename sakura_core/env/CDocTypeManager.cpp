@@ -45,18 +45,18 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfPath( const TCHAR* pszFilePath )
 	TCHAR	szName[_MAX_FNAME];
 	TCHAR*	pszExt = szExt;
 
-	if( NULL != pszFilePath && pszFilePath[0] ){
+	if (NULL != pszFilePath && pszFilePath[0]) {
 		_tsplitpath( pszFilePath, NULL, NULL, szName, szExt );
 		// 2重拡張子探索
 		TCHAR* pFileExt = _tcschr( szName, '.' );
-		if( pFileExt ){
+		if (pFileExt) {
 			pFileExt++;
 			auto_strcat( pFileExt, pszExt );
-		}else{
-			if( 0 == pszExt[0] ){
+		}else {
+			if (0 == pszExt[0]) {
 				// 拡張子がファイルにない
 				pFileExt = szName;
-			}else{
+			}else {
 				pFileExt = pszExt + 1;
 			}
 		}
@@ -84,20 +84,20 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfExt( const TCHAR* pszExt )
 	TCHAR*	pszToken;
 	TCHAR	szText[MAX_TYPES_EXTS];
 
-	for( i = 0; i < m_pShareData->m_nTypesCount; ++i ){
+	for (i = 0; i < m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;
 		GetTypeConfigMini( CTypeConfig(i), &mini );
 		_tcscpy( szText, mini->m_szTypeExts );
 		pszToken = _tcstok( szText, pszSeps );
-		while( NULL != pszToken ){
-			if( 0 == _tcsicmp( pszExt, pszToken ) ){
+		while (NULL != pszToken) {
+			if (0 == _tcsicmp( pszExt, pszToken )) {
 				return CTypeConfig(i);	//	番号
 			}
 			pszToken = _tcstok( NULL, pszSeps );
 		}
 	}
 	const TCHAR* pFileExt = _tcschr( pszExt, _T('.') );
-	if( pFileExt && pFileExt[1] ){
+	if (pFileExt && pFileExt[1]) {
 		return GetDocumentTypeOfExt( pFileExt + 1 );
 	}
 	return CTypeConfig(0);	//	ハズレ
@@ -107,10 +107,10 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfId( int id )
 {
 	int		i;
 
-	for( i = 0; i < m_pShareData->m_nTypesCount; ++i ){
+	for (i = 0; i < m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;
 		GetTypeConfigMini( CTypeConfig(i), &mini );
-		if( mini->m_id == id ){
+		if (mini->m_id == id) {
 			return CTypeConfig(i);
 		}
 	}
@@ -120,13 +120,13 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfId( int id )
 bool CDocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, STypeConfig& type)
 {
 	int n = cDocumentType.GetIndex();
-	if( 0 <= n && n < m_pShareData->m_nTypesCount ){
-		if( 0 == n ){
+	if (0 <= n && n < m_pShareData->m_nTypesCount) {
+		if (0 == n) {
 			type = m_pShareData->m_TypeBasis;
 			return true;
-		}else{
+		}else {
 			LockGuard<CMutex> guard( g_cDocTypeMutex );
-			 if( SendMessageAny( m_pShareData->m_sHandles.m_hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0 ) ){
+			 if (SendMessageAny( m_pShareData->m_sHandles.m_hwndTray, MYWM_GET_TYPESETTING, (WPARAM)n, 0 )) {
 				type = m_pShareData->m_sWorkBuffer.m_TypeConfig;
 				return true;
 			}
@@ -138,10 +138,10 @@ bool CDocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, STypeConfig& type
 bool CDocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const STypeConfig& type)
 {
 	int n = cDocumentType.GetIndex();
-	if( 0 <= n && n < m_pShareData->m_nTypesCount ){
+	if (0 <= n && n < m_pShareData->m_nTypesCount) {
 		LockGuard<CMutex> guard( g_cDocTypeMutex );
 		m_pShareData->m_sWorkBuffer.m_TypeConfig = type;
-		if( SendMessageAny( m_pShareData->m_sHandles.m_hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0 ) ){
+		if (SendMessageAny( m_pShareData->m_sHandles.m_hwndTray, MYWM_SET_TYPESETTING, (WPARAM)n, 0 )) {
 			return true;
 		}
 	}
@@ -151,7 +151,7 @@ bool CDocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const STypeConfig
 bool CDocTypeManager::GetTypeConfigMini(CTypeConfig cDocumentType, const STypeConfigMini** type)
 {
 	int n = cDocumentType.GetIndex();
-	if( 0 <= n && n < m_pShareData->m_nTypesCount ){
+	if (0 <= n && n < m_pShareData->m_nTypesCount) {
 		*type = &m_pShareData->m_TypeMini[n];
 		return true;
 	}
@@ -169,3 +169,4 @@ bool CDocTypeManager::DelTypeConfig(CTypeConfig cDocumentType)
 	LockGuard<CMutex> guard( g_cDocTypeMutex );
 	return FALSE != SendMessageAny( m_pShareData->m_sHandles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0 );
 }
+

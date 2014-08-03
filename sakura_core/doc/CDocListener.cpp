@@ -57,9 +57,9 @@ CDocSubject::~CDocSubject()
 #define DEF_NOTIFY(NAME) ECallbackResult CDocSubject::Notify##NAME() \
 { \
 	int n = GetListenerCount(); \
-	for(int i=0;i<n;i++){ \
+	for (int i=0;i<n;i++) { \
 		ECallbackResult eRet = GetListener(i)->On##NAME(); \
-		if(eRet!=CALLBACK_CONTINUE)return eRet; \
+		if (eRet!=CALLBACK_CONTINUE) return eRet; \
 	} \
 	return CALLBACK_CONTINUE; \
 }
@@ -67,9 +67,9 @@ CDocSubject::~CDocSubject()
 #define DEF_NOTIFY2(NAME,ARGTYPE) ECallbackResult CDocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
-	for(int i=0;i<n;i++){ \
+	for (int i=0;i<n;i++) { \
 		ECallbackResult eRet = GetListener(i)->On##NAME(a); \
-		if(eRet!=CALLBACK_CONTINUE)return eRet; \
+		if (eRet!=CALLBACK_CONTINUE) return eRet; \
 	} \
 	return CALLBACK_CONTINUE; \
 }
@@ -77,7 +77,7 @@ CDocSubject::~CDocSubject()
 #define VOID_NOTIFY(NAME) void CDocSubject::Notify##NAME() \
 { \
 	int n = GetListenerCount(); \
-	for(int i=0;i<n;i++){ \
+	for (int i=0;i<n;i++) { \
 		GetListener(i)->On##NAME(); \
 	} \
 }
@@ -85,7 +85,7 @@ CDocSubject::~CDocSubject()
 #define VOID_NOTIFY2(NAME,ARGTYPE) void CDocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
-	for(int i=0;i<n;i++){ \
+	for (int i=0;i<n;i++) { \
 		GetListener(i)->On##NAME(a); \
 	} \
 }
@@ -95,10 +95,10 @@ CDocSubject::~CDocSubject()
 { \
 	int n = GetListenerCount(); \
 	ELoadResult eRet = LOADED_FAILURE; \
-	for(int i=0;i<n;i++){ \
+	for (int i=0;i<n;i++) { \
 		ELoadResult e = GetListener(i)->On##NAME(a); \
-		if(e==LOADED_NOIMPLEMENT)continue; \
-		if(e==LOADED_FAILURE)return e; \
+		if (e==LOADED_NOIMPLEMENT) continue; \
+		if (e==LOADED_FAILURE) return e; \
 		eRet = e; \
 	} \
 	return eRet; \
@@ -129,7 +129,7 @@ DEF_NOTIFY(BeforeClose)
 
 CDocListener::CDocListener(CDocSubject* pcDoc)
 {
-	if(pcDoc==NULL)pcDoc = CEditDoc::GetInstance(0); //$$ インチキ
+	if (pcDoc==NULL) pcDoc = CEditDoc::GetInstance(0); //$$ インチキ
 	assert( pcDoc );
 	Listen(pcDoc);
 }
@@ -150,14 +150,13 @@ CEditDoc* CDocListenerEx::GetListeningDoc() const
 }
 
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     CProgressSubject                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 void CProgressSubject::NotifyProgress(int nPer)
 {
 	int n = GetListenerCount();
-	for(int i=0;i<n;i++){
+	for (int i=0;i<n;i++) {
 		GetListener(i)->OnProgress(nPer);
 	}
 }

@@ -13,16 +13,16 @@ void CModifyManager::OnAfterSave(const SSaveInfo& sSaveInfo)
 	CModifyVisitor().ResetAllModifyFlag(&pcDoc->m_cDocLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
 }
 
-
-
 bool CModifyVisitor::IsLineModified(const CDocLine* pcDocLine, int saveSeq) const
 {
 	return pcDocLine->m_sMark.m_cModified.GetSeq() != saveSeq;
 }
+
 int CModifyVisitor::GetLineModifiedSeq(const CDocLine* pcDocLine) const
 {
 	return pcDocLine->m_sMark.m_cModified.GetSeq();
 }
+
 void CModifyVisitor::SetLineModified(CDocLine* pcDocLine, int seq)
 {
 	pcDocLine->m_sMark.m_cModified = seq;
@@ -45,11 +45,10 @@ void CModifyVisitor::SetLineModified(CDocLine* pcDocLine, int seq)
 void CModifyVisitor::ResetAllModifyFlag(CDocLineMgr* pcDocLineMgr, int seq)
 {
 	CDocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
-	while( pDocLine ){
+	while (pDocLine) {
 		CDocLine* pDocLineNext = pDocLine->GetNextLine();
 		SetLineModified(pDocLine, seq);
 		pDocLine = pDocLineNext;
 	}
 }
-
 

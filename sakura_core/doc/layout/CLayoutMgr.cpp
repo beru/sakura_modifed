@@ -51,6 +51,7 @@ CLayoutMgr::CLayoutMgr()
 	Init();
 }
 
+
 CLayoutMgr::~CLayoutMgr()
 {
 	_Empty();
@@ -74,6 +75,7 @@ void CLayoutMgr::Create( CEditDoc* pcEditDoc, CDocLineMgr* pcDocLineMgr )
 	m_pcDocLineMgr = pcDocLineMgr;
 }
 
+
 void CLayoutMgr::Init()
 {
 	m_pLayoutTop = NULL;
@@ -89,7 +91,6 @@ void CLayoutMgr::Init()
 }
 
 
-
 void CLayoutMgr::_Empty()
 {
 	CLayout* pLayout = m_pLayoutTop;
@@ -99,8 +100,6 @@ void CLayoutMgr::_Empty()
 		pLayout = pLayoutNext;
 	}
 }
-
-
 
 
 /*! レイアウト情報の変更
@@ -932,7 +931,7 @@ void CLayoutMgr::LayoutToLogicEx(
 {
 	pptLogic->Set(CLogicInt(0), CLogicInt(0));
 	pptLogic->ext = 0;
-	if( ptLayout.GetY2() > m_nLines ){
+	if (ptLayout.GetY2() > m_nLines) {
 		//2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, m_nLines);
 		pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
@@ -948,26 +947,23 @@ void CLayoutMgr::LayoutToLogicEx(
 	BOOL			bEOF = FALSE;
 	CLayoutInt		nX;
 	const CLayout*	pcLayout = SearchLineByLayoutY( ptLayout.GetY2() );
-	if( !pcLayout ){
-		if( 0 < ptLayout.y ){
+	if (!pcLayout) {
+		if (0 < ptLayout.y) {
 			pcLayout = SearchLineByLayoutY( ptLayout.GetY2() - CLayoutInt(1) );
-			if( NULL == pcLayout ){
+			if (NULL == pcLayout) {
 				pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
 				return;
-			}
-			else{
+			}else {
 				pData = GetLineStr( ptLayout.GetY2() - CLayoutInt(1), &nDataLen );
-				if( WCODE::IsLineDelimiter(pData[nDataLen - 1]) ){
+				if (WCODE::IsLineDelimiter(pData[nDataLen - 1])) {
 					pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
 					return;
-				}
-				else{
+				}else {
 					pptLogic->y = m_pcDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka CDocLineMgr変更
 					bEOF = TRUE;
 					// nX = CLayoutInt(MAXLINEKETAS);
 					nX = pcLayout->GetIndent();
 					goto checkloop;
-
 				}
 			}
 		}
@@ -975,12 +971,10 @@ void CLayoutMgr::LayoutToLogicEx(
 		//pptLogic->Set(0, m_nLines);
 		pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
 		return;
-	}
-	else{
+	}else {
 		pptLogic->y = pcLayout->GetLogicLineNo();
 	}
-
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        Ｘ値の決定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -989,33 +983,31 @@ void CLayoutMgr::LayoutToLogicEx(
 
 checkloop:;
 	CLogicInt	i;
-	for( i = CLogicInt(0); i < nDataLen; ++i )
-	{
+	for (i = CLogicInt(0); i < nDataLen; ++i) {
 		//文字ロジック幅 -> nCharChars
 		CLogicInt	nCharChars;
 		nCharChars = CNativeW::GetSizeOfChar( pData, nDataLen, i );
-		if( nCharChars == 0 )
+		if (nCharChars == 0)
 			nCharChars = CLogicInt(1);
 		
 		//文字レイアウト幅 -> nCharKetas
 		CLayoutInt	nCharKetas;
-		if( pData[i] == WCODE::TAB ){
+		if (pData[i] == WCODE::TAB) {
 			nCharKetas = GetActualTabSpace( nX );
-		}
-		else{
+		}else {
 			nCharKetas = CNativeW::GetKetaOfChar( pData, nDataLen, i );
 		}
 //		if( nCharKetas == 0 )				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //			nCharKetas = CLayoutInt(1);
 
 		//レイアウト加算
-		if( nX + nCharKetas > ptLayout.GetX2() && !bEOF ){
+		if (nX + nCharKetas > ptLayout.GetX2() && !bEOF) {
 			break;
 		}
 		nX += nCharKetas;
 
 		//ロジック加算
-		if( pData[i] ==	WCODE::TAB ){
+		if (pData[i] ==	WCODE::TAB) {
 			nCharChars = CLogicInt(1);
 		}
 		i += nCharChars - CLogicInt(1);
@@ -1033,7 +1025,6 @@ void CLayoutMgr::LayoutToLogic( const CLayoutPoint& ptLayout, CLogicPoint* pptLo
 	LayoutToLogicEx( ptLayout, &ptEx );
 	*pptLogic = ptEx;
 }
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -1056,7 +1047,7 @@ void CLayoutMgr::DUMP()
 	CLayout* pLayout;
 	CLayout* pLayoutNext;
 	pLayout = m_pLayoutTop;
-	while( NULL != pLayout ){
+	while (NULL != pLayout) {
 		pLayoutNext = pLayout->GetNextLayout();
 		MYTRACE( _T("\t-------\n") );
 		MYTRACE( _T("\tthis=%08lxh\n"), pLayout );
@@ -1076,6 +1067,5 @@ void CLayoutMgr::DUMP()
 #endif
 	return;
 }
-
 
 
