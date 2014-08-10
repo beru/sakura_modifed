@@ -53,7 +53,7 @@ CUxTheme::~CUxTheme()
 */
 bool CUxTheme::InitThemeDll( TCHAR* str )
 {
-	if( m_bInitialized )
+	if (m_bInitialized)
 		return IsAvailable();
 
 	m_bInitialized = true;
@@ -80,7 +80,7 @@ bool CUxTheme::InitDllImp()
 		{ NULL, 0 }
 	};
 
-	if( !RegisterEntries( table ) ){
+	if (!RegisterEntries( table )) {
 		return false;
 	}
 
@@ -90,7 +90,7 @@ bool CUxTheme::InitDllImp()
 /*! IsThemeActive API Wrapper */
 BOOL CUxTheme::IsThemeActive( VOID )
 {
-	if( !InitThemeDll() )
+	if (!InitThemeDll())
 		return FALSE;
 	return m_pfnIsThemeActive();
 }
@@ -98,7 +98,7 @@ BOOL CUxTheme::IsThemeActive( VOID )
 /*! SetWindowTheme API Wrapper */
 HRESULT CUxTheme::SetWindowTheme( HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList )
 {
-	if( !InitThemeDll() )
+	if (!InitThemeDll())
 		return S_FALSE;
 	return m_pfnSetWindowTheme( hwnd, pszSubAppName, pszSubIdList );
 }
@@ -106,7 +106,7 @@ HRESULT CUxTheme::SetWindowTheme( HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszS
 /*! SetWindowTheme API Wrapper */
 HTHEME CUxTheme::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
 {
-	if( !InitThemeDll() )
+	if (!InitThemeDll())
 		return NULL;
 	return (HTHEME)m_pfnOpenThemeData( hwnd, pszClassList );
 }
@@ -114,7 +114,7 @@ HTHEME CUxTheme::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
 /*! SetWindowTheme API Wrapper */
 HRESULT CUxTheme::DrawThemeBackground( HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip )
 {
-	if( !InitThemeDll() )
+	if (!InitThemeDll())
 		return S_FALSE;
 	return m_pfnDrawThemeBackground( htheme, hdc, iPartId, iStateId, prc, prcClip );
 }
@@ -122,7 +122,7 @@ HRESULT CUxTheme::DrawThemeBackground( HTHEME htheme, HDC hdc, int iPartId, int 
 /*! SetWindowTheme API Wrapper */
 HRESULT CUxTheme::DrawThemeParentBackground( HWND hwnd, HDC hdc, RECT *prc )
 {
-	if( !InitThemeDll() )
+	if (!InitThemeDll())
 		return S_FALSE;
 	return m_pfnDrawThemeParentBackground( hwnd, hdc, prc );
 }
@@ -130,9 +130,8 @@ HRESULT CUxTheme::DrawThemeParentBackground( HWND hwnd, HDC hdc, RECT *prc )
 /*! SetWindowTheme API Wrapper */
 HRESULT CUxTheme::IsThemeBackgroundPartiallyTransparent( HTHEME htheme, int iPartId, int iStateId )
 {
-	if( !InitThemeDll() )
+	if (!InitThemeDll())
 		return S_FALSE;
 	return m_pfnIsThemeBackgroundPartiallyTransparent( htheme, iPartId, iStateId );
 }
-
 

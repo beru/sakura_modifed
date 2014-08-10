@@ -45,9 +45,10 @@ bool CBregexpDll2::InitDllImp()
 		{ NULL, 0 }
 	};
 	
-	if( ! RegisterEntries( table )){
+	if (!RegisterEntries( table )) {
 		return false;
 	}
 	
 	return true;
 }
+
