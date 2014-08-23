@@ -62,8 +62,8 @@ public:
 	CPPA();
 	virtual ~CPPA();
 
-	const char* GetVersion(){		//!< DLLのバージョン情報を取得。m_szMsgを壊す
-		if ( IsAvailable() ){
+	const char* GetVersion() {		//!< DLLのバージョン情報を取得。m_szMsgを壊す
+		if (IsAvailable()) {
 			auto_sprintf(m_szMsg, "PPA.DLL Version %d.%d", m_fnGetVersion() / 100, m_fnGetVersion() % 100);
 			return m_szMsg;
 		}

@@ -53,7 +53,7 @@ public:
 	}
 
 	void ClearItems( void ){
-		for( int i = 0; i < GetCount(); i++ ){
+		for (int i = 0; i < GetCount(); i++) {
 			LPTSTR lp = m_vpItems[ i ].first;
 			m_vpItems[ i ].first = NULL;
 			delete [] lp;
@@ -63,8 +63,8 @@ public:
 	}
 
 	BOOL IsExist( LPCTSTR lpFileName ){
-		for( int i = 0; i < GetCount(); i++ ){
-			if( _tcscmp( m_vpItems[ i ].first, lpFileName ) == 0 ){
+		for (int i = 0; i < GetCount(); i++) {
+			if (_tcscmp( m_vpItems[ i ].first, lpFileName ) == 0) {
 				return TRUE;
 			}
 		}
@@ -72,33 +72,39 @@ public:
 	}
 
 	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
-		if( ! IsExist( pFile ? pFile : w32fd.cFileName ) ){
+		if (!IsExist( pFile ? pFile : w32fd.cFileName )) {
 			return TRUE;
 		}
 		return FALSE;
 	}
 
-	int GetCount( void ){
+	int GetCount( void ) {
 		return (int)m_vpItems.size();
 	}
 
 	LPCTSTR GetFileName( int i ){
-		if( i < 0 || i >= GetCount() ) return NULL;
+		if (i < 0 || i >= GetCount()) {
+			return NULL;
+		}
 		return m_vpItems[ i ].first;
 	}
 
 	DWORD GetFileSizeLow( int i ){
-		if( i < 0 || i >= GetCount() ) return 0;
+		if (i < 0 || i >= GetCount()) {
+			return 0;
+		}
 		return m_vpItems[ i ].second;
 	}
 
 	int Enumerates( LPCTSTR lpBaseFolder, VGrepEnumKeys& vecKeys, CGrepEnumFileBase* pExceptItems = NULL ){
 		int found = 0;
 
-		for( int i = 0; i < (int)vecKeys.size(); i++ ){
+		for (int i = 0; i < (int)vecKeys.size(); i++) {
 			int baseLen = _tcslen( lpBaseFolder );
 			LPTSTR lpPath = new TCHAR[ baseLen + _tcslen( vecKeys[ i ] ) + 2 ];
-			if( NULL == lpPath ) break;
+			if (NULL == lpPath) {
+				break;
+			}
 			auto_strcpy( lpPath, lpBaseFolder );
 			auto_strcpy( lpPath + baseLen, _T("\\") );
 			auto_strcpy( lpPath + baseLen + 1, vecKeys[ i ] );
@@ -106,21 +112,21 @@ public:
 			const TCHAR* keyDirYen = _tcsrchr( vecKeys[ i ], _T('\\') );
 			const TCHAR* keyDirSlash = _tcsrchr( vecKeys[ i ], _T('/') );
 			const TCHAR* keyDir;
-			if( keyDirYen == NULL ){
+			if (keyDirYen == NULL) {
 				keyDir = keyDirSlash;
-			}else if( keyDirSlash == NULL ){
+			}else if (keyDirSlash == NULL) {
 				keyDir = keyDirYen;
-			}else if( keyDirYen < keyDirSlash ){
+			}else if (keyDirYen < keyDirSlash) {
 				keyDir = keyDirSlash;
-			}else{
+			}else {
 				keyDir = keyDirYen;
 			}
 			int nKeyDirLen = keyDir ? keyDir - vecKeys[ i ] + 1 : 0;
 
 			WIN32_FIND_DATA w32fd;
 			HANDLE handle = ::FindFirstFile( lpPath, &w32fd );
-			if( INVALID_HANDLE_VALUE != handle ){
-				do{
+			if (INVALID_HANDLE_VALUE != handle) {
+				do {
 					LPTSTR lpName = new TCHAR[ nKeyDirLen + _tcslen( w32fd.cFileName ) + 1 ];
 					_tcsncpy( lpName, vecKeys[ i ], nKeyDirLen );
 					_tcscpy( lpName + nKeyDirLen, w32fd.cFileName );
@@ -128,15 +134,15 @@ public:
 					auto_strcpy( lpFullPath, lpBaseFolder );
 					auto_strcpy( lpFullPath + baseLen, _T("\\") );
 					auto_strcpy( lpFullPath + baseLen + 1, lpName );
-					if( IsValid( w32fd, lpName ) ){
-						if( pExceptItems && pExceptItems->IsExist( lpFullPath ) ){
-						}else{
+					if (IsValid( w32fd, lpName )) {
+						if (pExceptItems && pExceptItems->IsExist( lpFullPath )) {
+						}else {
 							m_vpItems.push_back( PairGrepEnumItem( lpName, w32fd.nFileSizeLow ) );
 							found++; // 2011.11.19
-							if( pExceptItems && nKeyDirLen ){
+							if (pExceptItems && nKeyDirLen) {
 								// フォルダを含んだパスなら検索済みとして除外指定に追加する
 								pExceptItems->m_vpItems.push_back( PairGrepEnumItem( lpFullPath, w32fd.nFileSizeLow ) );
-							}else{
+							}else {
 								delete [] lpFullPath;
 							}
 							continue;
@@ -144,7 +150,7 @@ public:
 					}
 					delete [] lpName;
 					delete [] lpFullPath;
-				}while( ::FindNextFile( handle, &w32fd ) );
+				}while (::FindNextFile( handle, &w32fd ));
 				::FindClose( handle );
 			}
 			delete [] lpPath;
@@ -152,3 +158,4 @@ public:
 		return found;
 	}
 };
+

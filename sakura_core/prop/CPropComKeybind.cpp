@@ -71,7 +71,7 @@ INT_PTR CALLBACK CPropKeybind::DlgProc_page(
 // ウィンドウプロシージャの中で・・・
 LRESULT CALLBACK CPropComKeybindWndProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	switch( uMsg ) {
+	switch (uMsg) {
 	// WM_CTLCOLORSTATIC メッセージに対して
 	case WM_CTLCOLORSTATIC:
 	// 白色のブラシハンドルを返す
@@ -82,11 +82,6 @@ LRESULT CALLBACK CPropComKeybindWndProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 	return 0;
 }
 /* To Here Oct. 13, 2000 */
-
-
-
-
-
 
 
 /* Keybind メッセージ処理 */
@@ -121,7 +116,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 	EFunctionCode	nFuncCode;
 	static WCHAR pszLabel[256];
 
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 Keybind */
 		SetData( hwndDlg );
@@ -153,7 +148,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 
 	case WM_NOTIFY:
 		pNMHDR = (NMHDR*)lParam;
-		switch( pNMHDR->code ){
+		switch (pNMHDR->code) {
 		case PSN_HELP:
 //			OnHelp( hwndDlg, IDD_PROP1P5 );		// Sept. 9, 2000 JEPRO 実際のID名に変更
 			OnHelp( hwndDlg, IDD_PROP_KEYBIND );
@@ -171,12 +166,12 @@ INT_PTR CPropKeybind::DispatchEvent(
 			nIndex = List_GetCurSel( hwndKeyList );
 			nIndex2 = Combo_GetCurSel( hwndCombo );
 			nIndex3 = List_GetCurSel( hwndFuncList );
-			if( nIndex != LB_ERR ){
+			if (nIndex != LB_ERR) {
 				::SendMessageAny( hwndDlg, WM_COMMAND, MAKEWPARAM( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );
 			}
-			if( nIndex2 != CB_ERR ){
+			if (nIndex2 != CB_ERR) {
 				::SendMessageAny( hwndDlg, WM_COMMAND, MAKEWPARAM( IDC_COMBO_FUNCKIND, CBN_SELCHANGE ), (LPARAM)hwndCombo );
-				if( nIndex3 != LB_ERR ){
+				if (nIndex3 != LB_ERR) {
 					List_SetCurSel( hwndFuncList, nIndex3 );
 				}
 			}
@@ -189,10 +184,10 @@ INT_PTR CPropKeybind::DispatchEvent(
 		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
 		hwndCtl = (HWND) lParam;	/* コントロールのハンドル */
 
-		switch( wNotifyCode ){
+		switch (wNotifyCode) {
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
-			switch( wID ){
+			switch (wID) {
 			case IDC_BUTTON_IMPORT:	/* インポート */
 				/* Keybind:キー割り当て設定をインポートする */
 				Import( hwndDlg );
@@ -205,18 +200,18 @@ INT_PTR CPropKeybind::DispatchEvent(
 				nIndex = List_GetCurSel( hwndKeyList );
 				nIndex2 = Combo_GetCurSel( hwndCombo );
 				nIndex3 = List_GetCurSel( hwndFuncList );
-				if( nIndex == LB_ERR || nIndex2 == CB_ERR || nIndex3 == LB_ERR ){
+				if (nIndex == LB_ERR || nIndex2 == CB_ERR || nIndex3 == LB_ERR) {
 					return TRUE;
 				}
 				nFuncCode = m_cLookup.Pos2FuncCode( nIndex2, nIndex3 );	// Oct. 2, 2001 genta
 				i = 0;
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT )) {
 					i |= _SHIFT;
 				}
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL )) {
 					i |= _CTRL;
 				}
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 					i |= _ALT;
 				}
 				m_Common.m_sKeyBind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
@@ -225,18 +220,18 @@ INT_PTR CPropKeybind::DispatchEvent(
 				return TRUE;
 			case IDC_BUTTON_RELEASE:	/* 解除 */
 				nIndex = List_GetCurSel( hwndKeyList );
-				if( nIndex == LB_ERR ){
+				if (nIndex == LB_ERR) {
 					return TRUE;
 				}
 				nFuncCode = F_DEFAULT;
 				i = 0;
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT )) {
 					i |= _SHIFT;
 				}
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL )) {
 					i |= _CTRL;
 				}
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 					i |= _ALT;
 				}
 				m_Common.m_sKeyBind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
@@ -246,45 +241,44 @@ INT_PTR CPropKeybind::DispatchEvent(
 			}
 			break;	/* BN_CLICKED */
 		}
-		if( hwndCheckShift == hwndCtl
+		if ( hwndCheckShift == hwndCtl
 		 || hwndCheckCtrl == hwndCtl
 		 || hwndCheckAlt == hwndCtl
-		){
-			switch( wNotifyCode ){
+		) {
+			switch (wNotifyCode) {
 			case BN_CLICKED:
 				ChangeKeyList( hwndDlg );
-
 				return TRUE;
 			}
 		}else
-		if( hwndKeyList == hwndCtl ){
-			switch( wNotifyCode ){
+		if (hwndKeyList == hwndCtl) {
+			switch (wNotifyCode) {
 			case LBN_SELCHANGE:
 				nIndex = List_GetCurSel( hwndKeyList );
 				i = 0;
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT )) {
 					i |= _SHIFT;
 				}
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL )) {
 					i |= _CTRL;
 				}
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 					i |= _ALT;
 				}
 				nFuncCode = m_Common.m_sKeyBind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i];
 				// Oct. 2, 2001 genta
 				// 2007.11.02 ryoji F_DISABLEなら未割付
-				if( nFuncCode == F_DISABLE ){
+				if (nFuncCode == F_DISABLE) {
 					auto_strcpy( pszLabel, LSW(STR_PROPCOMKEYBIND_UNASSIGN) );
-				}else{
+				}else {
 					m_cLookup.Funccode2Name( nFuncCode, pszLabel, 255 );
 				}
 				Wnd_SetText( hwndEDIT_KEYSFUNC, pszLabel );
 				return TRUE;
 			}
 		}else
-		if( hwndFuncList == hwndCtl ){
-			switch( wNotifyCode ){
+		if (hwndFuncList == hwndCtl) {
+			switch (wNotifyCode) {
 			case LBN_SELCHANGE:
 				nIndex = List_GetCurSel( hwndKeyList );
 				nIndex2 = Combo_GetCurSel( hwndCombo );
@@ -299,8 +293,8 @@ INT_PTR CPropKeybind::DispatchEvent(
 				);	
 				/* 割り当てキーリストをクリアして値の設定 */
 				List_ResetContent( hwndAssignedkeyList );
-				if( 0 < nAssignedKeyNum){
-					for( j = 0; j < nAssignedKeyNum; ++j ){
+				if (0 < nAssignedKeyNum) {
+					for (j = 0; j < nAssignedKeyNum; ++j) {
 						/* デバッグモニタに出力 */
 						const TCHAR* cpszString = ppcAssignedKeyList[j]->GetStringPtr();
 						::List_AddString( hwndAssignedkeyList, cpszString );
@@ -311,8 +305,8 @@ INT_PTR CPropKeybind::DispatchEvent(
 				return TRUE;
 			}
 		}else
-		if( hwndCombo == hwndCtl){
-			switch( wNotifyCode ){
+		if (hwndCombo == hwndCtl) {
+			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIndex2 = Combo_GetCurSel( hwndCombo );
 				/* 機能一覧に文字列をセット（リストボックス）*/
@@ -322,8 +316,8 @@ INT_PTR CPropKeybind::DispatchEvent(
 
 //@@@ 2001.11.08 add start MIK
 		}else
-		if( hwndAssignedkeyList == hwndCtl){
-			switch( wNotifyCode ){
+		if (hwndAssignedkeyList == hwndCtl) {
+			switch (wNotifyCode) {
 			case LBN_SELCHANGE:
 			//case LBN_DBLCLK:
 				{
@@ -333,36 +327,33 @@ INT_PTR CPropKeybind::DispatchEvent(
 					nIndex = List_GetCurSel( hwndAssignedkeyList );
 					auto_memset(buff, 0, _countof(buff));
 					ret = List_GetText( hwndAssignedkeyList, nIndex, buff);
-					if( ret != LB_ERR )
-					{
+					if (ret != LB_ERR) {
 						i = 0;
 						p = buff;
 						//SHIFT
-						if( auto_memcmp(p, STR_SHIFT_PLUS, _tcslen(STR_SHIFT_PLUS)) == 0 ){
+						if (auto_memcmp(p, STR_SHIFT_PLUS, _tcslen(STR_SHIFT_PLUS)) == 0) {
 							p += _tcslen(STR_SHIFT_PLUS);
 							i |= _SHIFT;
 						}
 						//CTRL
-						if( auto_memcmp(p, STR_CTRL_PLUS, _tcslen(STR_CTRL_PLUS)) == 0 ){
+						if (auto_memcmp(p, STR_CTRL_PLUS, _tcslen(STR_CTRL_PLUS)) == 0) {
 							p += _tcslen(STR_CTRL_PLUS);
 							i |= _CTRL;
 						}
 						//ALT
-						if( auto_memcmp(p, STR_ALT_PLUS, _tcslen(STR_ALT_PLUS)) == 0 ){
+						if (auto_memcmp(p, STR_ALT_PLUS, _tcslen(STR_ALT_PLUS)) == 0) {
 							p += _tcslen(STR_ALT_PLUS);
 							i |= _ALT;
 						}
-						for(j = 0; j < m_Common.m_sKeyBind.m_nKeyNameArrNum; j++)
-						{
-							if( _tcscmp(m_Common.m_sKeyBind.m_pKeyNameArr[j].m_szKeyName, p) == 0 )
-							{
+						for (j = 0; j < m_Common.m_sKeyBind.m_nKeyNameArrNum; j++) {
+							if (_tcscmp(m_Common.m_sKeyBind.m_pKeyNameArr[j].m_szKeyName, p) == 0) {
 								List_SetCurSel( hwndKeyList, j);
-								if( i & _SHIFT ) ::CheckDlgButton( hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED );  //チェック
-								else             ::CheckDlgButton( hwndDlg, IDC_CHECK_SHIFT, BST_UNCHECKED );  //チェックをはずす
-								if( i & _CTRL )  ::CheckDlgButton( hwndDlg, IDC_CHECK_CTRL,  BST_CHECKED );  //チェック
-								else             ::CheckDlgButton( hwndDlg, IDC_CHECK_CTRL,  BST_UNCHECKED );  //チェックをはずす
-								if( i & _ALT )   ::CheckDlgButton( hwndDlg, IDC_CHECK_ALT,   BST_CHECKED );  //チェック
-								else             ::CheckDlgButton( hwndDlg, IDC_CHECK_ALT,   BST_UNCHECKED );  //チェックをはずす
+								if (i & _SHIFT) ::CheckDlgButton( hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED );  //チェック
+								else            ::CheckDlgButton( hwndDlg, IDC_CHECK_SHIFT, BST_UNCHECKED );  //チェックをはずす
+								if (i & _CTRL)  ::CheckDlgButton( hwndDlg, IDC_CHECK_CTRL,  BST_CHECKED );  //チェック
+								else            ::CheckDlgButton( hwndDlg, IDC_CHECK_CTRL,  BST_UNCHECKED );  //チェックをはずす
+								if (i & _ALT)   ::CheckDlgButton( hwndDlg, IDC_CHECK_ALT,   BST_CHECKED );  //チェック
+								else            ::CheckDlgButton( hwndDlg, IDC_CHECK_ALT,   BST_UNCHECKED );  //チェックをはずす
 								::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );
 
 								// キー一覧の文字列も変更
@@ -395,7 +386,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -415,11 +406,6 @@ INT_PTR CPropKeybind::DispatchEvent(
 }
 
 
-
-
-
-
-
 /* ダイアログデータの設定 Keybind */
 void CPropKeybind::SetData( HWND hwndDlg )
 {
@@ -436,13 +422,12 @@ void CPropKeybind::SetData( HWND hwndDlg )
 
 	/* キー一覧に文字列をセット（リストボックス）*/
 	hwndKeyList = ::GetDlgItem( hwndDlg, IDC_LIST_KEY );
-	for( i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i ){
+	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
 		::List_AddString( hwndKeyList, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
 	}
 
 	return;
 }
-
 
 
 /* ダイアログデータの取得 Keybind */
@@ -464,21 +449,21 @@ void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 	nIndexTop = List_GetTopIndex( hwndKeyList );
 	wcscpy( szKeyState, L"" );
 	i = 0;
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT ) ){
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT )) {
 		i |= _SHIFT;
 		wcscat( szKeyState, L"Shift+" );
 	}
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL ) ){
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CTRL )) {
 		i |= _CTRL;
 		wcscat( szKeyState, L"Ctrl+" );
 	}
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT ) ){
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 		i |= _ALT;
 		wcscat( szKeyState, L"Alt+" );
 	}
 	/* キー一覧に文字列をセット（リストボックス）*/
 	List_ResetContent( hwndKeyList );
-	for( i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i ){
+	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
 		TCHAR	pszLabel[256];
 		auto_sprintf( pszLabel, _T("%ls%ts"), szKeyState, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
 		::List_AddString( hwndKeyList, pszLabel );
@@ -521,3 +506,4 @@ void CPropKeybind::Export( HWND hwndDlg )
 		return;
 	}
 }
+

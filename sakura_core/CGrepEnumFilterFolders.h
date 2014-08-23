@@ -39,23 +39,24 @@ public:
 	CGrepEnumFolders m_cGrepEnumExceptFolders;
 
 public:
-	CGrepEnumFilterFolders(){
+	CGrepEnumFilterFolders() {
 	}
 
-	virtual ~CGrepEnumFilterFolders(){
+	virtual ~CGrepEnumFilterFolders() {
 	}
 
 	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
-		if( CGrepEnumFolders::IsValid( w32fd, pFile ) ){
-			if( m_cGrepEnumExceptFolders.IsValid( w32fd, pFile ) ){
+		if (CGrepEnumFolders::IsValid( w32fd, pFile )) {
+			if (m_cGrepEnumExceptFolders.IsValid( w32fd, pFile )) {
 				return TRUE;
 			}
 		}
 		return FALSE;
 	}
 
-	int Enumerates( LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumFolders& except ){
+	int Enumerates( LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumFolders& except ) {
 		m_cGrepEnumExceptFolders.Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecExceptFolderKeys, NULL );
 		return CGrepEnumFolders::Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecSearchFolderKeys, &except );
 	}
 };
+

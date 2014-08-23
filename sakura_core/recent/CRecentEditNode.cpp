@@ -85,8 +85,10 @@ void CRecentEditNode::CopyItem( EditNode* dst, const EditNode* src ) const
 int CRecentEditNode::FindItemByHwnd(HWND hwnd) const
 {
 	int n = GetItemCount();
-	for(int i=0;i<n;i++){
-		if(GetItem(i)->m_hWnd == hwnd)return i;
+	for (int i=0;i<n;i++) {
+		if (GetItem(i)->m_hWnd == hwnd) {
+			return i;
+		}
 	}
 	return -1;
 }
@@ -94,10 +96,10 @@ int CRecentEditNode::FindItemByHwnd(HWND hwnd) const
 void CRecentEditNode::DeleteItemByHwnd(HWND hwnd)
 {
 	int n = FindItemByHwnd(hwnd);
-	if(n!=-1){
+	if (n!=-1) {
 		DeleteItem(n);
-	}
-	else{
+	}else {
 		DEBUG_TRACE( _T("DeleteItemByHwndé∏îs\n") );
 	}
 }
+

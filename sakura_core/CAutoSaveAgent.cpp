@@ -34,26 +34,25 @@
 #include "env/DLLSHAREDATA.h"
 
 
-
-
-
 //	From Here Aug. 21, 2000 genta
 //
 //	自動保存を行うかどうかのチェック
 //
 void CAutoSaveAgent::CheckAutoSave()
 {
-	if( m_cPassiveTimer.CheckAction() ){
+	if (m_cPassiveTimer.CheckAction()) {
 		CEditDoc* pcDoc = GetListeningDoc();
 
 		//	上書き保存
 
-		if( !pcDoc->m_cDocEditor.IsModified() )	//	変更無しなら何もしない
+		if (!pcDoc->m_cDocEditor.IsModified()) {	//	変更無しなら何もしない
 			return;				//	ここでは，「無変更でも保存」は無視する
+		}
 
 		//	2003.10.09 zenryaku 保存失敗エラーの抑制
-		if( !pcDoc->m_cDocFile.GetFilePathClass().IsValidPath() )	//	まだファイル名が設定されていなければ保存しない
+		if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {	//	まだファイル名が設定されていなければ保存しない
 			return;
+		}
 
 		bool en = m_cPassiveTimer.IsEnabled();
 		m_cPassiveTimer.Enable(false);	//	2重呼び出しを防ぐため
@@ -71,7 +70,6 @@ void CAutoSaveAgent::ReloadAutoSaveParam()
 	m_cPassiveTimer.Enable( GetDllShareData().m_Common.m_sBackup.IsAutoBackupEnabled() );
 }
 
-
 //----------------------------------------------------------
 //	class CPassiveTimer
 //
@@ -83,13 +81,14 @@ void CAutoSaveAgent::ReloadAutoSaveParam()
 */
 void CPassiveTimer::SetInterval(int m)
 {
-	if( m <= 0 )
+	if (m <= 0) {
 		m = 1;
-	else if( m >= 35792 )	//	35792分以上だと int で表現できなくなる
+	}else if (m >= 35792) {	//	35792分以上だと int で表現できなくなる
 		m = 35792;
-
+	}
 	nInterval = m * MSec2Min;
 }
+
 /*!
 	タイマーの有効・無効の切り替え
 	@param flag true:有効 / false: 無効
@@ -97,13 +96,14 @@ void CPassiveTimer::SetInterval(int m)
 */
 void CPassiveTimer::Enable(bool flag)
 {
-	if( bEnabled != flag ){	//	変更があるとき
+	if (bEnabled != flag) {	//	変更があるとき
 		bEnabled = flag;
-		if( flag ){	//	enabled
+		if (flag) {	//	enabled
 			Reset();
 		}
 	}
 }
+
 /*!
 	外部で定期に実行されるところから呼び出される関数。
 	呼び出されると経過時間をチェックする。
@@ -113,8 +113,9 @@ void CPassiveTimer::Enable(bool flag)
 */
 bool CPassiveTimer::CheckAction(void)
 {
-	if( !IsEnabled() )	//	有効でなければ何もしない
+	if (!IsEnabled()) {	//	有効でなければ何もしない
 		return false;
+	}
 
 	//	時刻比較
 	DWORD now = ::GetTickCount();
@@ -122,12 +123,11 @@ bool CPassiveTimer::CheckAction(void)
 
 	diff = now - nLastTick;	//	TickCountが一回りしてもこれでうまくいくはず...
 
-	if( diff < nInterval )	//	規定時間に達していない
+	if (diff < nInterval) {	//	規定時間に達していない
 		return false;
+	}
 
 	Reset();
 	return true;
 }
-
-
 

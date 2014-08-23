@@ -77,8 +77,7 @@ public:
 	}
 
 	virtual ULONG _stdcall Release() {
-		if(--m_RefCount == 0)
-		{
+		if (--m_RefCount == 0) {
 			delete this;
 			return 0;
 		}
@@ -91,7 +90,7 @@ public:
 	{
 		*ppvObject = NULL;
 
-		if(iid == IID_IActiveScriptSiteWindow){
+		if (iid == IID_IActiveScriptSiteWindow) {
 			*ppvObject = static_cast<IActiveScriptSiteWindow*>(this);
 			++m_RefCount;
 			return S_OK;
@@ -120,18 +119,14 @@ public:
 #endif
 		//指定された名前のインタフェースオブジェクトを検索
 		const CWSHClient::List& objects = m_Client->GetInterfaceObjects();
-		for( CWSHClient::ListIter it = objects.begin(); it != objects.end(); it++ )
-		{
+		for (CWSHClient::ListIter it = objects.begin(); it != objects.end(); it++) {
 			//	Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
-			if( _wcsicmp( pstrName, (*it)->m_sName.c_str() ) == 0 )
-			{
-				if(dwReturnMask & SCRIPTINFO_IUNKNOWN)
-				{
+			if (_wcsicmp( pstrName, (*it)->m_sName.c_str() ) == 0) {
+				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
 					(*ppiunkItem) = *it;
 					(*ppiunkItem)->AddRef();
 				}
-				if(dwReturnMask & SCRIPTINFO_ITYPEINFO)
-				{
+				if (dwReturnMask & SCRIPTINFO_ITYPEINFO) {
 					(*it)->GetTypeInfo(0, 0, ppti);
 				}
 				return S_OK;
@@ -174,17 +169,15 @@ public:
 	  /* [in] */ IActiveScriptError *pscripterror)
 	{ 
 		EXCEPINFO Info;
-		if(pscripterror->GetExceptionInfo(&Info) == S_OK)
-		{
+		if (pscripterror->GetExceptionInfo(&Info) == S_OK) {
 			DWORD Context;
 			ULONG Line;
 			LONG Pos;
-			if(Info.bstrDescription == NULL) {
+			if (Info.bstrDescription == NULL) {
 				Info.bstrDescription = SysAllocString(LSW(STR_ERR_CWSH09));
 			}
-			if(pscripterror->GetSourcePosition(&Context, &Line, &Pos) == S_OK)
-			{
-				wchar_t *Message = new wchar_t[SysStringLen(Info.bstrDescription) + 128];
+			if (pscripterror->GetSourcePosition(&Context, &Line, &Pos) == S_OK) {
+				wchar_t* Message = new wchar_t[SysStringLen(Info.bstrDescription) + 128];
 				//	Nov. 10, 2003 FILE Win9Xでは、[wsprintfW]が無効のため、[auto_sprintf]に修正
 				const wchar_t* szDesc=Info.bstrDescription;
 				auto_sprintf(Message, L"[Line %d] %ls", Line + 1, szDesc);
@@ -239,22 +232,17 @@ CWSHClient::CWSHClient(const wchar_t *AEngine, ScriptErrorHandler AErrorHandler,
 	ChangeCurrentDirectoryToExeDir();
 	
 	CLSID ClassID;
-	if(CLSIDFromProgID(AEngine, &ClassID) != S_OK)
+	if (CLSIDFromProgID(AEngine, &ClassID) != S_OK) {
 		Error(LSW(STR_ERR_CWSH01));
-	else
-	{
-		if(CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&m_Engine)) != S_OK)
+	}else {
+		if (CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&m_Engine)) != S_OK) {
 			Error(LSW(STR_ERR_CWSH02));
-		else
-		{
-			IActiveScriptSite *Site = new CWSHSite(this);
-			if(m_Engine->SetScriptSite(Site) != S_OK)
-			{
+		}else {
+			IActiveScriptSite* Site = new CWSHSite(this);
+			if (m_Engine->SetScriptSite(Site) != S_OK) {
 				delete Site;
 				Error(LSW(STR_ERR_CWSH03));
-			}
-			else
-			{
+			}else {
 				m_Valid = true;
 			}
 		}
@@ -264,20 +252,21 @@ CWSHClient::CWSHClient(const wchar_t *AEngine, ScriptErrorHandler AErrorHandler,
 CWSHClient::~CWSHClient()
 {
 	//インタフェースオブジェクトを解放
-	for( ListIter it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++ ){
+	for (ListIter it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
 		(*it)->Release();
 	}
 	
-	if(m_Engine != NULL) 
+	if (m_Engine != NULL) {
 		m_Engine->Release();
+	}
 }
 
 // AbortMacroProcのパラメータ構造体
 typedef struct {
 	HANDLE hEvent;
-	IActiveScript *pEngine;				//ActiveScript
+	IActiveScript* pEngine;				//ActiveScript
 	int nCancelTimer;
-	CEditView *view;
+	CEditView* view;
 } SAbortMacroParam;
 
 // WSHマクロ実行を中止するスレッド
@@ -286,7 +275,7 @@ static unsigned __stdcall AbortMacroProc( LPVOID lpParameter )
 	SAbortMacroParam* pParam = (SAbortMacroParam*) lpParameter;
 
 	//停止ダイアログ表示前に数秒待つ
-	if(::WaitForSingleObject(pParam->hEvent, pParam->nCancelTimer * 1000) == WAIT_TIMEOUT){
+	if (::WaitForSingleObject(pParam->hEvent, pParam->nCancelTimer * 1000) == WAIT_TIMEOUT) {
 		//停止ダイアログ表示
 		DEBUG_TRACE(_T("AbortMacro: Show Dialog\n"));
 
@@ -299,28 +288,28 @@ static unsigned __stdcall AbortMacroProc( LPVOID lpParameter )
 			WM_SETTEXT, 0, (LPARAM)pParam->view->GetDocument()->m_cDocFile.GetFilePath());
 		
 		bool bCanceled = false;
-		for(;;){
+		for (;;) {
 			DWORD dwResult = MsgWaitForMultipleObjects( 1, &pParam->hEvent, FALSE, INFINITE, QS_ALLINPUT );
-			if(dwResult == WAIT_OBJECT_0){
+			if (dwResult == WAIT_OBJECT_0) {
 				::SendMessage( cDlgCancel.GetHwnd(), WM_CLOSE, 0, 0 );
-			}else if(dwResult == WAIT_OBJECT_0+1){
-				while(::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE )){
-					if(cDlgCancel.GetHwnd() != NULL && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)){
-					}else{
+			}else if (dwResult == WAIT_OBJECT_0+1) {
+				while (::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE )) {
+					if (cDlgCancel.GetHwnd() != NULL && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)) {
+					}else {
 						::TranslateMessage(&msg);
 						::DispatchMessage(&msg);
 					}
 				}
-			}else{
+			}else {
 				//MsgWaitForMultipleObjectsに与えたハンドルのエラー
 				break;
 			}
-			if(!bCanceled && cDlgCancel.IsCanceled()){
+			if (!bCanceled && cDlgCancel.IsCanceled()) {
 				DEBUG_TRACE(_T("Canceld\n"));
 				bCanceled = true;
 				cDlgCancel.CloseDialog( 0 );
 			}
-			if(cDlgCancel.GetHwnd() == NULL){
+			if (cDlgCancel.GetHwnd() == NULL) {
 				DEBUG_TRACE(_T("Close\n"));
 				break;
 			}
@@ -340,31 +329,26 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 {
 	bool bRet = false;
 	IActiveScriptParse *Parser;
-	if(m_Engine->QueryInterface(IID_IActiveScriptParse, reinterpret_cast<void **>(&Parser)) != S_OK)
+	if (m_Engine->QueryInterface(IID_IActiveScriptParse, reinterpret_cast<void **>(&Parser)) != S_OK) {
 		Error(LSW(STR_ERR_CWSH04));
-	else 
-	{
-		if(Parser->InitNew() != S_OK)
+	}else {
+		if (Parser->InitNew() != S_OK) {
 			Error(LSW(STR_ERR_CWSH05));
-		else
-		{
+		}else {
 			bool bAddNamedItemError = false;
 
-			for( ListIter it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++ )
-			{
+			for (ListIter it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
 				DWORD dwFlag = SCRIPTITEM_ISVISIBLE;
 
-				if( (*it)->IsGlobal() ){ dwFlag |= SCRIPTITEM_GLOBALMEMBERS; }
+				if ((*it)->IsGlobal()) { dwFlag |= SCRIPTITEM_GLOBALMEMBERS; }
 
-				if(m_Engine->AddNamedItem( (*it)->Name(), dwFlag ) != S_OK)
-				{
+				if (m_Engine->AddNamedItem( (*it)->Name(), dwFlag ) != S_OK) {
 					bAddNamedItemError = true;
 					Error(LSW(STR_ERR_CWSH06));
 					break;
 				}
 			}
-			if( !bAddNamedItemError )
-			{
+			if (!bAddNamedItemError) {
 				//マクロ停止スレッドの起動
 				SAbortMacroParam sThreadParam;
 				sThreadParam.pEngine = m_Engine;
@@ -373,31 +357,30 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 
 				HANDLE hThread = NULL;
 				unsigned int nThreadId = 0;
-				if( 0 < sThreadParam.nCancelTimer ){
+				if (0 < sThreadParam.nCancelTimer) {
 					sThreadParam.hEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
 					hThread = (HANDLE)_beginthreadex( NULL, 0, AbortMacroProc, (LPVOID)&sThreadParam, 0, &nThreadId );
 					DEBUG_TRACE(_T("Start AbortMacroProc 0x%08x\n"), nThreadId);
 				}
 
 				//マクロ実行
-				if(m_Engine->SetScriptState(SCRIPTSTATE_STARTED) != S_OK)
+				if (m_Engine->SetScriptState(SCRIPTSTATE_STARTED) != S_OK) {
 					Error(LSW(STR_ERR_CWSH07));
-				else
-				{
+				}else {
 					HRESULT hr = Parser->ParseScriptText(AScript, 0, 0, 0, 0, 0, SCRIPTTEXT_ISVISIBLE, 0, 0);
 					if (hr == SCRIPT_E_REPORTED) {
 					/*
 						IActiveScriptSite->OnScriptErrorに通知済み。
 						中断メッセージが既に表示されてるはず。
 					*/
-					} else if(hr != S_OK) {
+					}else if(hr != S_OK) {
 						Error(LSW(STR_ERR_CWSH08));
-					} else {
+					}else {
 						bRet = true;
 					}
 				}
 
-				if( 0 < sThreadParam.nCancelTimer ){
+				if (0 < sThreadParam.nCancelTimer) {
 					::SetEvent(sThreadParam.hEvent);
 
 					//マクロ停止スレッドの終了待ち
@@ -416,8 +399,9 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 
 void CWSHClient::Error(BSTR Description, BSTR Source)
 {
-	if(m_OnError != NULL)
+	if (m_OnError != NULL) {
 		m_OnError(Description, Source, m_Data);
+	}
 }
 
 void CWSHClient::Error(const wchar_t* Description)
@@ -432,7 +416,7 @@ void CWSHClient::Error(const wchar_t* Description)
 //インタフェースオブジェクトの追加
 void CWSHClient::AddInterfaceObject( CIfObj* obj )
 {
-	if( !obj ) return;
+	if (!obj) return;
 	m_IfObjArr.push_back( obj );
 	obj->m_Owner = this;
 	obj->AddRef();

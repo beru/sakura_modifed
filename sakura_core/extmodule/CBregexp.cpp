@@ -481,7 +481,7 @@ bool CBregexp::Match( const wchar_t* target, int len, int nStart )
 	int matched;		//!< 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
 	//	DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
-	if ((!IsAvailable() || m_pRegExp == NULL) {
+	if ((!IsAvailable() || m_pRegExp == NULL)) {
 		return false;
 	}
 

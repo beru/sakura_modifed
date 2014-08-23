@@ -55,28 +55,28 @@ void CWSHIfObj::ReadyMethods( CEditView* pView, int flags )
 */
 void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 {
-	while(Info->m_nFuncID != -1)	// Aug. 29, 2002 genta 番人の値が変更されたのでここも変更
-	{
+	while (Info->m_nFuncID != -1) {	// Aug. 29, 2002 genta 番人の値が変更されたのでここも変更
 		wchar_t FuncName[256];
 		wcscpy(FuncName, Info->m_pszFuncName);
 
 		int ArgCount = 0;
-		if( Info->m_pData ){
+		if (Info->m_pData) {
 			ArgCount = Info->m_pData->m_nArgSize;
-		}else{
-			for(int i = 0; i < 4; ++i){
-				if(Info->m_varArguments[i] != VT_EMPTY) 
+		}else {
+			for (int i = 0; i < 4; ++i) {
+				if (Info->m_varArguments[i] != VT_EMPTY) {
 					++ArgCount;
+				}
 			}
 		}
 		VARTYPE* varArgTmp = NULL;
 		VARTYPE* varArg = Info->m_varArguments;
-		if( 4 < ArgCount ){
+		if (4 < ArgCount) {
 			varArgTmp = varArg = new VARTYPE[ArgCount];
-			for( int i = 0; i < ArgCount; i++ ){
-				if( i < 4 ){
+			for (int i = 0; i < ArgCount; i++) {
+				if (i < 4) {
 					varArg[i] = Info->m_varArguments[i];
-				}else{
+				}else {
 					varArg[i] = Info->m_pData->m_pVarArgEx[i-4];
 				}
 			}
@@ -110,49 +110,42 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 
 	const EFunctionCode ID = static_cast<EFunctionCode>(IntID);
 	//	2007.07.22 genta : コマンドは下位16ビットのみ
-	if(LOWORD(ID) >= F_FUNCTION_FIRST)
-	{
+	if (LOWORD(ID) >= F_FUNCTION_FIRST) {
 		VARIANT ret; // 2005.06.27 zenryaku 戻り値の受け取りが無くても関数を実行する
 		VariantInit(&ret);
 
 		// 2011.3.18 syat 引数の順序を正しい順にする
 		auto_array_ptr<VARIANTARG> rgvargParam( new VARIANTARG[ArgCount] );
-		for(I = 0; I < ArgCount; I++){
+		for (I = 0; I < ArgCount; I++) {
 			::VariantInit(&rgvargParam[ArgCount - I - 1]);
 			::VariantCopy(&rgvargParam[ArgCount - I - 1], &Arguments->rgvarg[I]);
 		}
 
 		// 2009.9.5 syat HandleFunctionはサブクラスでオーバーライドする
 		bool r = HandleFunction(m_pView, ID, &rgvargParam[0], ArgCount, ret);
-		if(Result) {::VariantCopyInd(Result, &ret);}
+		if (Result) {::VariantCopyInd(Result, &ret);}
 		VariantClear(&ret);
-		for(I = 0; I < ArgCount; I++){
+		for (I = 0; I < ArgCount; I++) {
 			::VariantClear(&rgvargParam[I]);
 		}
 		return r ? S_OK : E_FAIL;
-	}
-	else
-	{
+	}else {
 		// 最低4つは確保
 		int argCountMin = t_max(4, ArgCount);
 		//	Nov. 29, 2005 FILE 引数を文字列で取得する
 		auto_array_ptr<LPWSTR> StrArgs( new LPWSTR[argCountMin] );
 		auto_array_ptr<int> strLengths( new int[argCountMin] );
-		for(I = ArgCount; I < argCountMin; I++ ){
+		for (I = ArgCount; I < argCountMin; I++) {
 			StrArgs[I] = NULL;
 			strLengths[I] = 0;
 		}
-		WCHAR *S = NULL;								// 初期化必須
+		WCHAR* S = NULL;								// 初期化必須
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
-		for(I = 0; I < ArgCount; ++I)
-		{
-			if(VariantChangeType(&varCopy.Data, &(Arguments->rgvarg[I]), 0, VT_BSTR) == S_OK)
-			{
+		for (I = 0; I < ArgCount; ++I) {
+			if (VariantChangeType(&varCopy.Data, &(Arguments->rgvarg[I]), 0, VT_BSTR) == S_OK) {
 				Wrap(&varCopy.Data.bstrVal)->GetW(&S, &Len);
-			}
-			else
-			{
+			}else {
 				S = new WCHAR[1];
 				S[0] = 0;
 				Len = 0;
@@ -165,9 +158,10 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 		HandleCommand(m_pView, ID, const_cast<WCHAR const **>(&StrArgs[0]), &strLengths[0], ArgCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
-		for(int J = 0; J < ArgCount; ++J)
+		for (int J = 0; J < ArgCount; ++J) {
 			delete [] StrArgs[J];
-
+		}
 		return S_OK;
 	}
 }
+

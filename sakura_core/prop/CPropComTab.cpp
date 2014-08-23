@@ -86,8 +86,7 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 	NMHDR*		pNMHDR;
 //	int			idCtrl;
 
-	switch( uMsg ){
-
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 Tab */
 		SetData( hwndDlg );
@@ -95,14 +94,14 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
 		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
-
 		return TRUE;
+		
 	case WM_NOTIFY:
 //		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
 //		switch( idCtrl ){
 //		default:
-			switch( pNMHDR->code ){
+			switch (pNMHDR->code) {
 			case PSN_HELP:
 				OnHelp( hwndDlg, IDD_PROP_TAB );
 				return TRUE;
@@ -123,8 +122,8 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 		{
 			WORD wNotifyCode = HIWORD(wParam);	/* 通知コード */
 			WORD wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-			if( wNotifyCode == BN_CLICKED ){
-				switch( wID ){
+			if (wNotifyCode == BN_CLICKED) {
+				switch (wID) {
 				case IDC_CHECK_DispTabWnd:
 				case IDC_CHECK_DispTabWndMultiWin:
 					EnableTabPropInput( hwndDlg );
@@ -133,12 +132,12 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 					LOGFONT   lf = m_Common.m_sTabBar.m_lf;
 					INT nPointSize = m_Common.m_sTabBar.m_nPointSize;
 
-					if( MySelectFont( &lf, &nPointSize, hwndDlg, false) ){
+					if (MySelectFont( &lf, &nPointSize, hwndDlg, false)) {
 						m_Common.m_sTabBar.m_lf = lf;
 						m_Common.m_sTabBar.m_nPointSize = nPointSize;
 						// タブ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel( hwndDlg, IDC_STATIC_TABFONT, m_Common.m_sTabBar.m_lf, m_Common.m_sTabBar.m_nPointSize);
-						if (m_hTabFont != NULL){
+						if (m_hTabFont != NULL) {
 							::DeleteObject( m_hTabFont );
 						}
 						m_hTabFont = hFont;
@@ -151,7 +150,7 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -193,9 +192,9 @@ void CPropTab::SetData( HWND hwndDlg )
 	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_CHECK_DispTabClose );
 	Combo_ResetContent( hwndCombo );
 	int nSelPos = 0;
-	for( int i = 0; i < _countof( DispTabCloseArr ); ++i ){
+	for (int i = 0; i < _countof( DispTabCloseArr ); ++i) {
 		Combo_InsertString( hwndCombo, i, LS(DispTabCloseArr[i].nNameId) );
-		if( DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_bDispTabClose ){
+		if (DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_bDispTabClose) {
 			nSelPos = i;
 		}
 	}
@@ -247,7 +246,7 @@ void CPropTab::EnableTabPropInput(HWND hwndDlg)
 	
 	BOOL bTabWnd = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabWnd );
 	BOOL bMultiWin = FALSE;
-	if( bTabWnd ){
+	if (bTabWnd) {
 		bMultiWin = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabWndMultiWin );
 	}
 	::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DispTabWndMultiWin ), bTabWnd );
@@ -263,3 +262,4 @@ void CPropTab::EnableTabPropInput(HWND hwndDlg)
 	::EnableWindow( ::GetDlgItem( hwndDlg, IDC_TABWND_CAPTION           ), bTabWnd );
 	::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_ChgWndByWheel      ), bTabWnd );	// 2007.04.03 ryoji
 }
+

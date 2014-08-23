@@ -62,8 +62,7 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 //	int			nVal;
 //    LPDRAWITEMSTRUCT pDis;
 
-	switch( uMsg ){
-
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 Grep */
 		SetData( hwndDlg );
@@ -77,7 +76,7 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 		pNMHDR = (NMHDR*)lParam;
 //		switch( idCtrl ){
 //		default:
-			switch( pNMHDR->code ){
+			switch (pNMHDR->code) {
 			case PSN_HELP:
 				OnHelp( hwndDlg, IDD_PROP_GREP );
 				return TRUE;
@@ -95,7 +94,7 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 		break;	/* WM_NOTIFY */
 	case WM_COMMAND:
 		//	2007.08.12 genta 正規表現DLLの変更に応じてVersionを再取得する
-		if( wParam == MAKEWPARAM( IDC_EDIT_REGEXPLIB, EN_KILLFOCUS )){
+		if (wParam == MAKEWPARAM( IDC_EDIT_REGEXPLIB, EN_KILLFOCUS )) {
 			SetRegexpVersion( hwndDlg );
 		}
 		break;
@@ -103,7 +102,7 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -153,8 +152,6 @@ void CPropGrep::SetData( HWND hwndDlg )
 }
 
 
-
-
 /* ダイアログデータの取得 */
 int CPropGrep::GetData( HWND hwndDlg )
 {
@@ -187,12 +184,10 @@ void CPropGrep::SetRegexpVersion( HWND hwndDlg )
 	
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_REGEXPLIB, regexp_dll, _countof( regexp_dll ));
 	CBregexp breg;
-	if( DLL_SUCCESS != breg.InitDll( regexp_dll ) ){
+	if (DLL_SUCCESS != breg.InitDll( regexp_dll )) {
 		::DlgItem_SetText( hwndDlg, IDC_LABEL_REGEXP_VER, LS(STR_PROPCOMGREP_DLL) );
 		return;
 	}
 	::DlgItem_SetText( hwndDlg, IDC_LABEL_REGEXP_VER, breg.GetVersionT() );
 }
-
-
 

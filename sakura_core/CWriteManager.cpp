@@ -26,8 +26,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 	EConvertResult		nRetVal = RESULT_COMPLETE;
 	std::auto_ptr<CCodeBase> pcCodeBase( CCodeFactory::CreateCodeBase(sSaveInfo.eCharCode,0) );
 
-	try
-	{
+	try {
 		//ファイルオープン
 		CBinaryOutputStream out(sSaveInfo.cFilePath,true);
 
@@ -42,36 +41,36 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 				CNativeW cstrSrc;
 				CMemory cstrBomCheck;
 				pcCodeBase->GetBom( &cstrBomCheck );
-				if( sSaveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength() ){
+				if (sSaveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
 					CUnicode().GetBom( cstrSrc._GetMemory() );
 				}
-				if( pcDocLine ){
+				if (pcDocLine) {
 					cstrSrc.AppendNativeData( pcDocLine->_GetDocLineDataWithEOL() );
 				}
 				EConvertResult e = pcCodeBase->UnicodeToCode( cstrSrc, &cmemOutputBuffer );
-				if(e==RESULT_LOSESOME){
+				if (e==RESULT_LOSESOME) {
 					nRetVal=RESULT_LOSESOME;
 				}
 			}
 			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
-			if( pcDocLine ){
+			if (pcDocLine) {
 				pcDocLine = pcDocLine->GetNextLine();
 			}
 		}
-		while( pcDocLine ){
+		while (pcDocLine) {
 			++nLineNumber;
 
-			//経過通知
-			if(pcDocLineMgr.GetLineCount()>0 && nLineNumber%1024==0){
+			// 経過通知
+			if (pcDocLineMgr.GetLineCount()>0 && nLineNumber%1024==0) {
 				NotifyProgress(nLineNumber * 100 / pcDocLineMgr.GetLineCount());
 				// 処理中のユーザー操作を可能にする
-				if( !::BlockingHook( NULL ) ){
+				if (!::BlockingHook( NULL )) {
 					throw CAppExitException(); //中断検出
 				}
 			}
 
-			//1行出力 -> cmemOutputBuffer
+			// 1行出力 -> cmemOutputBuffer
 			CMemory cmemOutputBuffer;
 			{
 				// 書き込み時のコード変換 cstrSrc -> cmemOutputBuffer
@@ -79,36 +78,35 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 					pcDocLine->_GetDocLineDataWithEOL(),
 					&cmemOutputBuffer
 				);
-				if(e==RESULT_LOSESOME){
-					if(nRetVal==RESULT_COMPLETE)nRetVal=RESULT_LOSESOME;
+				if (e == RESULT_LOSESOME) {
+					if (nRetVal == RESULT_COMPLETE) {
+						nRetVal = RESULT_LOSESOME;
+					}
 				}
 			}
 
-			//ファイルに出力 cmemOutputBuffer -> fp
+			// ファイルに出力 cmemOutputBuffer -> fp
 			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
 
-			//次の行へ
+			// 次の行へ
 			pcDocLine = pcDocLine->GetNextLine();
 		}
 
-		//ファイルクローズ
+		// ファイルクローズ
 		out.Close();
-	}
-	catch(CError_FileOpen){ //########### 現時点では、この例外が発生した場合は正常に動作できない
+	}catch (CError_FileOpen) { //########### 現時点では、この例外が発生した場合は正常に動作できない
 		ErrorMessage(
 			CEditWnd::getInstance()->GetHwnd(),
 			LS(STR_SAVEAGENT_OTHER_APP),
 			sSaveInfo.cFilePath.c_str()
 		);
 		nRetVal = RESULT_FAILURE;
-	}
-	catch(CError_FileWrite){
+	}catch (CError_FileWrite) {
 		nRetVal = RESULT_FAILURE;
-	}
-	catch(CAppExitException){
-		//中断検出
+	}catch (CAppExitException) {
+		// 中断検出
 		return RESULT_FAILURE;
 	}
-
 	return nRetVal;
 }
+

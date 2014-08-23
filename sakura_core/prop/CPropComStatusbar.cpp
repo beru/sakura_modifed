@@ -56,8 +56,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 {
 	NMHDR*		pNMHDR;
 
-	switch( uMsg ){
-
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 */
 		SetData( hwndDlg );
@@ -70,7 +69,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 
 	case WM_NOTIFY:
 		pNMHDR = (NMHDR*)lParam;
-		switch( pNMHDR->code ){
+		switch (pNMHDR->code) {
 		case PSN_HELP:
 			OnHelp( hwndDlg, IDD_PROP_STATUSBAR );
 			return TRUE;
@@ -90,7 +89,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -108,7 +107,6 @@ INT_PTR CPropStatusbar::DispatchEvent(
 	}
 	return FALSE;
 }
-
 
 /* ダイアログデータの設定 */
 void CPropStatusbar::SetData( HWND hwndDlg )
@@ -129,7 +127,6 @@ void CPropStatusbar::SetData( HWND hwndDlg )
 	return;
 }
 
-
 /* ダイアログデータの取得 */
 int CPropStatusbar::GetData( HWND hwndDlg )
 {
@@ -149,3 +146,4 @@ int CPropStatusbar::GetData( HWND hwndDlg )
 
 	return TRUE;
 }
+

@@ -91,6 +91,6 @@ public:
 //WM_QUITåüèoó·äO
 class CAppExitException : public std::exception{
 public:
-	const char* what() const throw(){ return "CAppExitException"; }
+	const char* what() const throw() { return "CAppExitException"; }
 };
 

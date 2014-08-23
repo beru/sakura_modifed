@@ -49,8 +49,6 @@ public:
 	std::wstring GetAppendText( int info );
 	int AppendTextLenMax(){ return m_nAppendTextLenMax; }
 
-
-
 public:
 	SFilePath	m_szFilePath;	/*!< ‰ðÍ‘ÎÛƒtƒ@ƒCƒ‹–¼ */
 private:

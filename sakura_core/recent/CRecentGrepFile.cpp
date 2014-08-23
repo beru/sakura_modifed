@@ -78,3 +78,4 @@ void CRecentGrepFile::CopyItem( CGrepFileString* dst, LPCTSTR src ) const
 {
 	_tcscpy(*dst,src);
 }
+

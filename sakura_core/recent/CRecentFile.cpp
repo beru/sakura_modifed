@@ -39,8 +39,6 @@ const TCHAR* CRecentFile::GetItemText( int nIndex ) const
 }
 
 
-
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           ¶¬                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -64,7 +62,7 @@ bool CRecentFile::DataToReceiveType( const EditInfo** dst, const EditInfo* src )
 
 bool CRecentFile::TextToDataType( EditInfo* dst, LPCTSTR pszText ) const
 {
-	if( _countof(dst->m_szPath) < auto_strlen(pszText) + 1 ){
+	if (_countof(dst->m_szPath) < auto_strlen(pszText) + 1) {
 		return false;
 	}
 	_tcscpy(dst->m_szPath, pszText);
@@ -88,8 +86,10 @@ void CRecentFile::CopyItem( EditInfo* dst, const EditInfo* src ) const
 int CRecentFile::FindItemByPath(const TCHAR* pszPath) const
 {
 	int n = GetItemCount();
-	for(int i=0;i<n;i++){
-		if(_tcsicmp(GetItem(i)->m_szPath,pszPath)==0)return i;
+	for (int i=0;i<n;i++) {
+		if (_tcsicmp(GetItem(i)->m_szPath,pszPath) == 0) {
+			return i;
+		}
 	}
 	return -1;
 }

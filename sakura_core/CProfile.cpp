@@ -66,26 +66,28 @@ void CProfile::ReadOneline(
 )
 {
 	//	空行を読み飛ばす
-	if( line.empty() )
+	if (line.empty()) {
 		return;
+	}
 
 	//コメント行を読みとばす
-	if( 0 == line.compare( 0, 2, LTEXT("//") ))
+	if (0 == line.compare( 0, 2, LTEXT("//") )) {
 		return;
+	}
 
 	// セクション取得
 	//	Jan. 29, 2004 genta compare使用
-	if( line.compare( 0, 1, LTEXT("[") ) == 0 
+	if (line.compare( 0, 1, LTEXT("[") ) == 0 
 			&& line.find( LTEXT("=") ) == line.npos
-			&& line.find( LTEXT("]") ) == ( line.size() - 1 ) ) {
+			&& line.find( LTEXT("]") ) == ( line.size() - 1 )
+	) {
 		Section Buffer;
 		Buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
 		m_ProfileData.push_back( Buffer );
-	}
 	// エントリ取得
-	else if( !m_ProfileData.empty() ) {	//最初のセクション以前の行のエントリは無視
+	}else if (!m_ProfileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		wstring::size_type idx = line.find( LTEXT("=") );
-		if( line.npos != idx ) {
+		if (line.npos != idx) {
 			m_ProfileData.back().mapEntries.insert( PAIR_STR_STR( line.substr(0,idx), line.substr(idx+1) ) );
 		}
 	}
@@ -109,20 +111,19 @@ bool CProfile::ReadProfile( const TCHAR* pszProfileName )
 	m_strProfileName = pszProfileName;
 
 	CTextInputStream in(m_strProfileName.c_str());
-	if(!in){
+	if (!in) {
 		return false;
 	}
 
-	try{
-		while( in ){
+	try {
+		while (in) {
 			//1行読込
 			wstring line=in.ReadLineW();
 
 			//解析
 			ReadOneline(line);
 		}
-	}
-	catch( ... ){
+	}catch (...) {
 		return false;
 	}
 
@@ -160,7 +161,8 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 	if (( hRsrc = ::FindResource( 0, pName, pType )) != NULL
 	 && ( hGlobal = ::LoadResource( 0, hRsrc )) != NULL
 	 && ( psMMres = (char *)::LockResource(hGlobal)) != NULL
-	 && ( nSize = (size_t)::SizeofResource( 0, hRsrc )) != 0) {
+	 && ( nSize = (size_t)::SizeofResource( 0, hRsrc )) != 0
+	) {
 		p    = psMMres;
 		if (nSize >= sizeof(UTF8_BOM) && memcmp( p, UTF8_BOM, sizeof(UTF8_BOM) )==0) {
 			// Skip BOM
@@ -172,15 +174,18 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 			if (pn == NULL) {
 				// 最終行
 				pn = psMMres + nSize;
-			}
-			else {
+			}else {
 				pn++;
 			}
 			lnsz = (pn-p)<=300 ? (pn-p) : 300;
 			memcpy(sLine, p, lnsz);
 			sLine[lnsz] = '\0';
-			if (sLine[lnsz-1] == '\n')	sLine[--lnsz] = '\0';
-			if (sLine[lnsz-1] == '\r')	sLine[--lnsz] = '\0';
+			if (sLine[lnsz-1] == '\n') {
+				sLine[--lnsz] = '\0';
+			}
+			if (sLine[lnsz-1] == '\r') {
+				sLine[--lnsz] = '\0';
+			}
 			
 			// UTF-8 -> UNICODE
 			CMemory cmLine( sLine, lnsz );
@@ -211,21 +216,21 @@ bool CProfile::WriteProfile(
 	const WCHAR* pszComment
 )
 {
-	if( pszProfileName!=NULL ) {
+	if (pszProfileName!=NULL) {
 		m_strProfileName = pszProfileName;
 	}
     
 	std::vector< wstring > vecLine;
-	if( NULL != pszComment ) {
+	if (NULL != pszComment) {
 		vecLine.push_back( LTEXT(";") + wstring( pszComment ) );		// //->;	2008/5/24 Uchi
 		vecLine.push_back( LTEXT("") );
 	}
 	auto iterEnd = m_ProfileData.end();
-	for(auto iter = m_ProfileData.begin(); iter != iterEnd; iter++ ) {
+	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
 		//セクション名を書き込む
 		vecLine.push_back( LTEXT("[") + iter->strSectionName + LTEXT("]") );
 		auto mapiterEnd = iter->mapEntries.end();
-		for(auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++ ) {
+		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
 			//エントリを書き込む
 			vecLine.push_back( mapiter->first + LTEXT("=") + mapiter->second );
 		}
@@ -238,17 +243,18 @@ bool CProfile::WriteProfile(
 	TCHAR szPath[_MAX_PATH];
 	LPTSTR lpszName;
 	DWORD nLen = ::GetFullPathName(m_strProfileName.c_str(), _countof(szPath), szPath, &lpszName);
-	if( 0 < nLen && nLen < _countof(szPath)
-		&& (lpszName - szPath + 11) < _countof(szMirrorFile) )	// path\preuuuu.TMP
-	{
+	if (0 < nLen && nLen < _countof(szPath)
+		&& (lpszName - szPath + 11) < _countof(szMirrorFile)
+	) { // path\preuuuu.TMP
 		*lpszName = _T('\0');
 		::GetTempFileName(szPath, _T("sak"), 0, szMirrorFile);
 	}
 
-	if( !_WriteFile(szMirrorFile[0]? szMirrorFile: m_strProfileName, vecLine) )
+	if (!_WriteFile(szMirrorFile[0]? szMirrorFile: m_strProfileName, vecLine)) {
 		return false;
+	}
 
-	if( szMirrorFile[0] ){
+	if (szMirrorFile[0]) {
 		BOOL (__stdcall *pfnReplaceFile)(LPCTSTR, LPCTSTR, LPCTSTR, DWORD, LPVOID, LPVOID);
 		HMODULE hModule = ::GetModuleHandle(_T("KERNEL32"));
 		pfnReplaceFile = (BOOL (__stdcall *)(LPCTSTR, LPCTSTR, LPCTSTR, DWORD, LPVOID, LPVOID))
@@ -257,7 +263,7 @@ bool CProfile::WriteProfile(
 #else
 			::GetProcAddress(hModule, "ReplaceFileW");
 #endif
-		if( !pfnReplaceFile || !pfnReplaceFile(m_strProfileName.c_str(), szMirrorFile, NULL, 0, NULL, NULL) ){
+		if (!pfnReplaceFile || !pfnReplaceFile(m_strProfileName.c_str(), szMirrorFile, NULL, 0, NULL, NULL)) {
 			if (fexist(m_strProfileName.c_str())) {
 				if (!::DeleteFile(m_strProfileName.c_str())) {
 					return false;
@@ -286,12 +292,12 @@ bool CProfile::_WriteFile(
 )
 {
 	CTextOutputStream out(strFilename.c_str());
-	if(!out){
+	if (!out) {
 		return false;
 	}
 
 	int nSize = (int)vecLine.size();
-	for(int i=0;i<nSize;i++){
+	for (int i=0;i<nSize;i++) {
 		// 出力
 		out.WriteString(vecLine[i].c_str());
 		out.WriteString(L"\n");
@@ -323,10 +329,10 @@ bool CProfile::GetProfileDataImp(
 {
 	wstring strWork;
 	auto iterEnd = m_ProfileData.end();
-	for(auto iter = m_ProfileData.begin(); iter != iterEnd; iter++ ) {
-		if( iter->strSectionName == strSectionName ) {
+	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
+		if (iter->strSectionName == strSectionName) {
 			auto mapiter = iter->mapEntries.find( strEntryKey );
-			if( iter->mapEntries.end() != mapiter ) {
+			if (iter->mapEntries.end() != mapiter) {
 				strEntryValue = mapiter->second;
 				return true;
 			}
@@ -350,24 +356,23 @@ bool CProfile::SetProfileDataImp(
 {
 	auto iterEnd = m_ProfileData.end();
 	auto iter = m_ProfileData.begin();
-	for( ; iter != iterEnd; iter++ ) {
-		if( iter->strSectionName == strSectionName ) {
-			//既存のセクションの場合
+	for (; iter != iterEnd; iter++) {
+		if (iter->strSectionName == strSectionName) {
+			// 既存のセクションの場合
 			auto mapiter = iter->mapEntries.find( strEntryKey );
-			if( iter->mapEntries.end() != mapiter ) {
-				//既存のエントリの場合は値を上書き
+			if (iter->mapEntries.end() != mapiter) {
+				// 既存のエントリの場合は値を上書き
 				mapiter->second = strEntryValue;
 				break;
-			}
-			else {
-				//既存のエントリが見つからない場合は追加
+			}else {
+				// 既存のエントリが見つからない場合は追加
 				iter->mapEntries.insert( PAIR_STR_STR( strEntryKey, strEntryValue ) );
 				break;
 			}
 		}
 	}
-	//既存のセクションではない場合，セクション及びエントリを追加
-	if( iterEnd == iter ) {
+	// 既存のセクションではない場合，セクション及びエントリを追加
+	if (iterEnd == iter) {
 		Section Buffer;
 		Buffer.strSectionName = strSectionName;
 		Buffer.mapEntries.insert( PAIR_STR_STR( strEntryKey, strEntryValue ) );
@@ -377,17 +382,16 @@ bool CProfile::SetProfileDataImp(
 }
 
 
-
 void CProfile::DUMP( void )
 {
 #ifdef _DEBUG
 	auto iterEnd = m_ProfileData.end();
 	//	2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
 	MYTRACE( _T("\n\nCProfile::DUMP()======================") );
-	for(auto iter = m_ProfileData.begin(); iter != iterEnd; iter++ ) {
+	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
 		MYTRACE( _T("\n■strSectionName=%ls"), iter->strSectionName.c_str() );
 		auto mapiterEnd = iter->mapEntries.end();
-		for(auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++ ) {
+		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
 			MYTRACE( _T("\"%ls\" = \"%ls\"\n"), mapiter->first.c_str(), mapiter->second.c_str() );
 		}
 	}
@@ -395,5 +399,4 @@ void CProfile::DUMP( void )
 #endif
 	return;
 }
-
 

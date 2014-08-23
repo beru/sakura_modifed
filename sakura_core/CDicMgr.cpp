@@ -29,14 +29,10 @@ CDicMgr::CDicMgr()
 }
 
 
-
-
 CDicMgr::~CDicMgr()
 {
 	return;
 }
-
-
 
 
 /*!
@@ -64,20 +60,19 @@ BOOL CDicMgr::Search(
 	wchar_t*	pszToken;
 	const wchar_t*	pszKeySeps = L",\0";
 
-
 	/* 辞書ファイル */
-	if( pszKeyWordHelpFile[0] == _T('\0') ){
+	if (pszKeyWordHelpFile[0] == _T('\0')) {
 		return FALSE;
 	}
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	CTextInputStream_AbsIni in(pszKeyWordHelpFile);
-	if(!in){
+	if (!in) {
 		return FALSE;
 	}
 
 	wchar_t	szLine[LINEREADBUFSIZE];
-	for(int line=1 ; in; line++ ){	// 2006.04.10 fon
+	for (int line=1 ; in; line++) {	// 2006.04.10 fon
 		//1行読み込み
 		{
 			wstring tmp = in.ReadLineW(); //NULL != fgetws( szLine, _countof(szLine), pFile );
@@ -86,26 +81,26 @@ BOOL CDicMgr::Search(
 		}
 
 		pszWork = wcsstr( szLine, pszDelimit );
-		if( NULL != pszWork && szLine[0] != L';' ){
+		if (NULL != pszWork && szLine[0] != L';') {
 			*pszWork = L'\0';
 			pszWork += wcslen( pszDelimit );
 
 			/* 最初のトークンを取得します。 */
 			pszToken = wcstok( szLine, pszKeySeps );
-			while( NULL != pszToken ){
+			while (NULL != pszToken) {
 				nRes = _wcsnicmp( pszKey, pszToken, nCmpLen );	// 2006.04.10 fon
-				if( 0 == nRes ){
+				if (0 == nRes) {
 					int nLen = (int)wcslen(pszWork);
-					for( i = 0; i < nLen; ++i ){
-						if( WCODE::IsLineDelimiter(pszWork[i]) ){
+					for (i = 0; i < nLen; ++i) {
+						if (WCODE::IsLineDelimiter(pszWork[i])) {
 							pszWork[i] = L'\0';
 							break;
 						}
 					}
-					//キーワードのセット
+					// キーワードのセット
 					*ppcmemKey = new CNativeW;	// 2006.04.10 fon
 					(*ppcmemKey)->SetString( pszToken );
-					//意味のセット
+					// 意味のセット
 					*ppcmemMean = new CNativeW;
 					(*ppcmemMean)->SetString( pszWork );
 
@@ -118,9 +113,6 @@ BOOL CDicMgr::Search(
 	}
 	return FALSE;
 }
-
-
-
 
 
 /*
@@ -140,36 +132,40 @@ int CDicMgr::HokanSearch(
 {
 	int		nKeyLen;
 	int		nRet;
-	if( pszKeyWordFile[0] == _T('\0') ){
+	if (pszKeyWordFile[0] == _T('\0')) {
 		return 0;
 	}
 
 	CTextInputStream_AbsIni in(pszKeyWordFile);
-	if(!in){
+	if (!in) {
 		return 0;
 	}
 	nKeyLen = wcslen( pszKey );
 	wstring szLine;
-	while( in ){
+	while (in) {
 		szLine = in.ReadLineW();
-		if( nKeyLen > (int)szLine.length() ){
+		if (nKeyLen > (int)szLine.length()) {
 			continue;
 		}
 
 		//コメント無視
-		if( szLine[0] == L';' )continue;
+		if (szLine[0] == L';') {
+			continue;
+		}
 
 		//空行無視
-		if( szLine.length() == 0 )continue;
+		if (szLine.length() == 0) {
+			continue;
+		}
 
-		if( bHokanLoHiCase ){	/* 英大文字小文字を同一視する */
+		if (bHokanLoHiCase) {	/* 英大文字小文字を同一視する */
 			nRet = auto_memicmp( pszKey, szLine.c_str(), nKeyLen );
-		}else{
+		}else {
 			nRet = auto_memcmp( pszKey, szLine.c_str(), nKeyLen );
 		}
-		if( 0 == nRet ){
+		if (0 == nRet) {
 			vKouho.push_back( szLine );
-			if( 0 != nMaxKouho && nMaxKouho <= (int)vKouho.size() ){
+			if (0 != nMaxKouho && nMaxKouho <= (int)vKouho.size()) {
 				break;
 			}
 		}
@@ -177,6 +173,5 @@ int CDicMgr::HokanSearch(
 	in.Close();
 	return (int)vKouho.size();
 }
-
 
 

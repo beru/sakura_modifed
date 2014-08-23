@@ -79,10 +79,11 @@ HMENU CMRUFile::CreateMenu( HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer ) const
 
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
 
-	for( i = 0; i < m_cRecentFile.GetItemCount(); ++i )
-	{
+	for (i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if ( i >= m_cRecentFile.GetViewCount() ) break;
+		if (i >= m_cRecentFile.GetViewCount()) {
+			break;
+		}
 		
 		/* MRUリストの中にある開かれていないファイル */
 
@@ -113,9 +114,11 @@ BOOL CMRUFile::DestroyMenu( HMENU hMenuPopUp ) const
 std::vector<LPCTSTR> CMRUFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for( int i = 0; i < m_cRecentFile.GetItemCount(); ++i ){
+	for (int i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
-		if ( i >= m_cRecentFile.GetViewCount() ) break;
+		if (i >= m_cRecentFile.GetViewCount()) {
+			break;
+		}
 		ret.push_back(m_cRecentFile.GetItemText(i));
 	}
 	return ret;
@@ -147,7 +150,9 @@ void CMRUFile::ClearAll(void)
 bool CMRUFile::GetEditInfo( int num, EditInfo* pfi ) const
 {
 	const EditInfo*	p = m_cRecentFile.GetItem( num );
-	if( NULL == p ) return false;
+	if (NULL == p) {
+		return false;
+	}
 
 	*pfi = *p;
 
@@ -168,7 +173,9 @@ bool CMRUFile::GetEditInfo( int num, EditInfo* pfi ) const
 bool CMRUFile::GetEditInfo( const TCHAR* pszPath, EditInfo* pfi ) const
 {
 	const EditInfo*	p = m_cRecentFile.GetItem( m_cRecentFile.FindItemByPath( pszPath ) );
-	if( NULL == p ) return false;
+	if (NULL == p) {
+		return false;
+	}
 
 	*pfi = *p;
 
@@ -187,17 +194,17 @@ bool CMRUFile::GetEditInfo( const TCHAR* pszPath, EditInfo* pfi ) const
 void CMRUFile::Add( EditInfo* pEditInfo )
 {
 	//	ファイル名が無ければ無視
-	if( NULL == pEditInfo || pEditInfo->m_szPath[0] == L'\0' ){
+	if (NULL == pEditInfo || pEditInfo->m_szPath[0] == L'\0') {
 		return;
 	}
 	
 	// すでに登録されている場合は、除外指定を無視する
-	if( -1 == m_cRecentFile.FindItemByPath( pEditInfo->m_szPath ) ){
+	if (-1 == m_cRecentFile.FindItemByPath( pEditInfo->m_szPath )) {
 		int nSize = m_pShareData->m_sHistory.m_aExceptMRU.size();
-		for( int i = 0 ; i < nSize; i++ ){
+		for (int i = 0 ; i < nSize; i++) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			CFileNameManager::ExpandMetaToFolder( m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU) );
-			if( NULL != _tcsistr( pEditInfo->m_szPath,  szExceptMRU) ){
+			if (NULL != _tcsistr( pEditInfo->m_szPath,  szExceptMRU)) {
 				return;
 			}
 		}

@@ -89,8 +89,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	WORD		wNotifyCode;
 	WORD		wID;
 
-	switch( uMsg ){
-
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 Macro */
 		InitDialog( hwndDlg );
@@ -104,21 +103,21 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		// 2003.06.23 Moca
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACRODIR ), _countof2( m_Common.m_sMacro.m_szMACROFOLDER ) - 1 );
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACROCANCELTIMER ), 4 );
-
 		return TRUE;
+		
 	case WM_NOTIFY:
 		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
-		switch( idCtrl ){
+		switch (idCtrl) {
 		case IDC_MACROLIST:
-			switch( pNMHDR->code ){
+			switch (pNMHDR->code) {
 			case LVN_ITEMCHANGED:
 				CheckListPosition_Macro( hwndDlg );
 				break;
 			}
 			break;
 		default:
-			switch( pNMHDR->code ){
+			switch (pNMHDR->code) {
 			case PSN_HELP:
 				OnHelp( hwndDlg, IDD_PROP_MACRO );
 				return TRUE;
@@ -139,10 +138,10 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
 		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
 
-		switch( wNotifyCode ){
+		switch (wNotifyCode) {
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
-			switch( wID ){
+			switch (wID) {
 			case IDC_MACRODIRREF:	// マクロディレクトリ参照
 				SelectBaseDir_Macro( hwndDlg );
 				break;
@@ -152,7 +151,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			}
 			break;
 		case CBN_DROPDOWN:
-			switch( wID ){
+			switch (wID) {
 			case IDC_MACROPATH:
 				OnFileDropdown_Macro( hwndDlg );
 				break;
@@ -160,12 +159,12 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			break;	/* CBN_DROPDOWN */
 		// From Here 2003.06.23 Moca マクロフォルダの最後の\がなければ付ける
 		case EN_KILLFOCUS:
-			switch( wID ){
+			switch (wID) {
 			case IDC_MACRODIR:
 				{
 					TCHAR szDir[_MAX_PATH];
 					::DlgItem_GetText( hwndDlg, IDC_MACRODIR, szDir, _MAX_PATH );
-					if( 1 == AddLastChar( szDir, _MAX_PATH, _T('\\') ) ){
+					if (1 == AddLastChar( szDir, _MAX_PATH, _T('\\') )) {
 						::DlgItem_SetText( hwndDlg, IDC_MACRODIR, szDir );
 					}
 				}
@@ -179,7 +178,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -212,7 +211,7 @@ void CPropMacro::SetData( HWND hwndDlg )
 	//	マクロデータ
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
 	
-	for( index = 0; index < MAX_CUSTMACRO; ++index ){
+	for (index = 0; index < MAX_CUSTMACRO; ++index) {
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -237,12 +236,15 @@ void CPropMacro::SetData( HWND hwndDlg )
 		// 自動実行マクロ	// 2006.09.01 ryoji
 		TCHAR szText[8];
 		szText[0] = _T('\0');
-		if( index == m_pShareData->m_Common.m_sMacro.m_nMacroOnOpened )
+		if (index == m_pShareData->m_Common.m_sMacro.m_nMacroOnOpened) {
 			::lstrcat(szText, _T("O"));
-		if( index == m_pShareData->m_Common.m_sMacro.m_nMacroOnTypeChanged )
+		}
+		if (index == m_pShareData->m_Common.m_sMacro.m_nMacroOnTypeChanged) {
 			::lstrcat(szText, _T("T"));
-		if( index == m_pShareData->m_Common.m_sMacro.m_nMacroOnSave )
+		}
+		if (index == m_pShareData->m_Common.m_sMacro.m_nMacroOnSave) {
 			::lstrcat(szText, _T("S"));
+		}
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -290,7 +292,7 @@ int CPropMacro::GetData( HWND hwndDlg )
 	//	マクロデータ
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
 
-	for( index = 0; index < MAX_CUSTMACRO; ++index ){
+	for (index = 0; index < MAX_CUSTMACRO; ++index) {
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -317,10 +319,9 @@ int CPropMacro::GetData( HWND hwndDlg )
 		sItem.pszText = buf;
 		sItem.cchTextMax = MAX_PATH;
 		ListView_GetItem( hListView, &sItem );
-		if ( _tcscmp(buf, _T("on")) == 0){
+		if (_tcscmp(buf, _T("on")) == 0) {
 			m_Common.m_sMacro.m_MacroTable[index].m_bReloadWhenExecute = true;
-		}
-		else {
+		}else {
 			m_Common.m_sMacro.m_MacroTable[index].m_bReloadWhenExecute = false;
 		}
 
@@ -336,14 +337,16 @@ int CPropMacro::GetData( HWND hwndDlg )
 		int i;
 		int nLen;
 		nLen = ::lstrlen(szText);
-		for( i = 0; i < nLen; i++)
-		{
-			if( szText[i] == _T('O') )
+		for (i = 0; i < nLen; i++) {
+			if (szText[i] == _T('O')) {
 				m_Common.m_sMacro.m_nMacroOnOpened = index;
-			if( szText[i] == _T('T') )
+			}
+			if (szText[i] == _T('T')) {
 				m_Common.m_sMacro.m_nMacroOnTypeChanged = index;
-			if( szText[i] == _T('S') )
+			}
+			if (szText[i] == _T('S')) {
 				m_Common.m_sMacro.m_nMacroOnSave = index;
+			}
 		}
 	}
 
@@ -378,7 +381,7 @@ void CPropMacro::InitDialog( HWND hwndDlg )
 
 	//	ListViewの初期化
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
-	if( hListView == NULL ){
+	if (hListView == NULL) {
 		PleaseReportToAuthor( hwndDlg, _T("PropComMacro::InitDlg::NoListView") );
 		return;	//	よくわからんけど失敗した	
 	}
@@ -389,7 +392,7 @@ void CPropMacro::InitDialog( HWND hwndDlg )
 	::GetWindowRect( hListView, &rc );
 	int width = rc.right - rc.left;
 	
-	for( pos = 0; pos < _countof( ColumnList ); ++pos ){
+	for (pos = 0; pos < _countof( ColumnList ); ++pos) {
 		
 		memset_raw( &sColumn, 0, sizeof( sColumn ));
 		sColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_FMT;
@@ -398,7 +401,7 @@ void CPropMacro::InitDialog( HWND hwndDlg )
 		sColumn.iSubItem = pos;
 		sColumn.fmt = LVCFMT_LEFT;
 		
-		if( ListView_InsertColumn( hListView, pos, &sColumn ) < 0 ){
+		if (ListView_InsertColumn( hListView, pos, &sColumn ) < 0) {
 			PleaseReportToAuthor( hwndDlg, _T("PropComMacro::InitDlg::ColumnRegistrationFail") );
 			return;	//	よくわからんけど失敗した
 		}
@@ -409,7 +412,7 @@ void CPropMacro::InitDialog( HWND hwndDlg )
 	ListView_SetItemCount( hListView, MAX_CUSTMACRO );
 
 	//	Index部分の登録
-	for( pos = 0; pos < MAX_CUSTMACRO ; ++pos ){
+	for (pos = 0; pos < MAX_CUSTMACRO ; ++pos) {
 		LVITEM sItem;
 		TCHAR buf[4];
 		memset_raw( &sItem, 0, sizeof( sItem ));
@@ -424,15 +427,14 @@ void CPropMacro::InitDialog( HWND hwndDlg )
 	
 	// 登録先指定 ComboBoxの初期化
 	HWND hNumCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_MACROID );
-	for( pos = 0; pos < MAX_CUSTMACRO ; ++pos ){
+	for (pos = 0; pos < MAX_CUSTMACRO ; ++pos) {
 		wchar_t buf[10];
 		auto_sprintf( buf, L"%d", pos );
 		int result = Combo_AddString( hNumCombo, buf );
-		if( result == CB_ERR ){
+		if (result == CB_ERR) {
 			PleaseReportToAuthor( hwndDlg, _T("PropComMacro::InitDlg::AddMacroId") );
 			return;	//	よくわからんけど失敗した
-		}
-		else if( result == CB_ERRSPACE ){
+		}else if (result == CB_ERRSPACE) {
 			PleaseReportToAuthor( hwndDlg, _T("PropComMacro::InitDlg::AddMacroId/InsufficientSpace") );
 			return;	//	よくわからんけど失敗した
 		}
@@ -450,7 +452,7 @@ void CPropMacro::SetMacro2List_Macro( HWND hwndDlg )
 
 	//	設定先取得
 	index = Combo_GetCurSel( hNum );
-	if( index == CB_ERR ){
+	if (index == CB_ERR) {
 		PleaseReportToAuthor( hwndDlg, _T("PropComMacro::SetMacro2List::GetCurSel") );
 		return;	//	よくわからんけど失敗した
 	}
@@ -490,7 +492,7 @@ void CPropMacro::SetMacro2List_Macro( HWND hwndDlg )
 	int nMacroOnSave = -1;
 	TCHAR szText[8];
 	int iItem;
-	for( iItem = 0; iItem < MAX_CUSTMACRO; iItem++){
+	for (iItem = 0; iItem < MAX_CUSTMACRO; iItem++) {
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = iItem;
 		sItem.mask = LVIF_TEXT;
@@ -501,36 +503,44 @@ void CPropMacro::SetMacro2List_Macro( HWND hwndDlg )
 		int i;
 		int nLen;
 		nLen = ::lstrlen(szText);
-		for( i = 0; i < nLen; i++)
-		{
-			if( szText[i] == _T('O') )
+		for (i = 0; i < nLen; i++) {
+			if (szText[i] == _T('O')) {
 				nMacroOnOpened = iItem;
-			if( szText[i] == _T('T') )
+			}
+			if (szText[i] == _T('T')) {
 				nMacroOnTypeChanged = iItem;
-			if( szText[i] == _T('S') )
+			}
+			if (szText[i] == _T('S')) {
 				nMacroOnSave = iItem;
+			}
 		}
 	}
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MacroOnOpened ) )
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MacroOnOpened )) {
 		nMacroOnOpened = index;
-	else if( nMacroOnOpened == index )
+	}else if (nMacroOnOpened == index) {
 		nMacroOnOpened = -1;
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MacroOnTypeChanged ) )
+	}
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MacroOnTypeChanged )) {
 		nMacroOnTypeChanged = index;
-	else if( nMacroOnTypeChanged == index )
+	}else if (nMacroOnTypeChanged == index) {
 		nMacroOnTypeChanged = -1;
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MacroOnSave ) )
+	}
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MacroOnSave )) {
 		nMacroOnSave = index;
-	else if( nMacroOnSave == index )
+	}else if (nMacroOnSave == index) {
 		nMacroOnSave = -1;
-	for( iItem = 0; iItem < MAX_CUSTMACRO; iItem++){
+	}
+	for (iItem = 0; iItem < MAX_CUSTMACRO; iItem++) {
 		szText[0] = _T('\0');
-		if( iItem == nMacroOnOpened )
+		if (iItem == nMacroOnOpened) {
 			::lstrcat(szText, _T("O"));
-		if( iItem == nMacroOnTypeChanged )
+		}
+		if (iItem == nMacroOnTypeChanged) {
 			::lstrcat(szText, _T("T"));
-		if( iItem == nMacroOnSave )
+		}
+		if (iItem == nMacroOnSave) {
 			::lstrcat(szText, _T("S"));
+		}
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = iItem;
 		sItem.mask = LVIF_TEXT;
@@ -554,13 +564,13 @@ void CPropMacro::SelectBaseDir_Macro( HWND hwndDlg )
 
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	if( _IS_REL_PATH( szDir ) ){
+	if (_IS_REL_PATH( szDir )) {
 		TCHAR folder[_MAX_PATH];
 		_tcscpy( folder, szDir );
 		GetInidirOrExedir( szDir, folder );
 	}
 
-	if( SelectDir( hwndDlg, LS(STR_PROPCOMMACR_SEL_DIR), szDir, szDir ) ){
+	if (SelectDir( hwndDlg, LS(STR_PROPCOMMACR_SEL_DIR), szDir, szDir )) {
 		//	末尾に\\マークを追加する．
 		AddLastChar( szDir, _countof(szDir), _T('\\') );
 		::DlgItem_SetText( hwndDlg, IDC_MACRODIR, szDir );
@@ -584,17 +594,17 @@ void CPropMacro::OnFileDropdown_Macro( HWND hwndDlg )
 
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	if( _IS_REL_PATH( path ) ){
+	if (_IS_REL_PATH( path )) {
 		TCHAR folder[_MAX_PATH * 2];
 		_tcscpy( folder, path );
 		GetInidirOrExedir( path, folder );
 	}
 	_tcscat( path, _T("*.*") );	//	2002/05/01 YAZAKI どんなファイルもどんと来い。
 
-	//	候補の初期化
+	// 候補の初期化
 	Combo_ResetContent( hCombo );
 
-	//	ファイルの検索
+	// ファイルの検索
 	WIN32_FIND_DATA wf;
 	hFind = FindFirstFile(path, &wf);
 
@@ -606,12 +616,13 @@ void CPropMacro::OnFileDropdown_Macro( HWND hwndDlg )
 		//	コンボボックスに設定
 		//	でも.と..は勘弁。
 		//if (_tcscmp( wf.cFileName, _T(".") ) != 0 && _tcscmp( wf.cFileName, _T("..") ) != 0){
-		if( (wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0 ){	// 2009.02.12 ryoji フォルダを除外
+		if ((wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {	// 2009.02.12 ryoji フォルダを除外
 			int result = Combo_AddString( hCombo, wf.cFileName );
-			if( result == CB_ERR || result == CB_ERRSPACE )
+			if (result == CB_ERR || result == CB_ERRSPACE) {
 				break;
+			}
 		}
-	} while( FindNextFile( hFind, &wf ));
+	}while (FindNextFile( hFind, &wf ));
 
     FindClose(hFind);
 }
@@ -624,8 +635,9 @@ void CPropMacro::CheckListPosition_Macro( HWND hwndDlg )
 	//	現在のFocus取得
 	int current = ListView_GetNextItem( hListView, -1, LVNI_SELECTED);
 
-	if( current == -1 || current == nLastPos_Macro )
+	if (current == -1 || current == nLastPos_Macro) {
 		return;
+	}
 
 	nLastPos_Macro = current;
 	
@@ -662,10 +674,9 @@ void CPropMacro::CheckListPosition_Macro( HWND hwndDlg )
 	sItem.pszText = buf;
 	sItem.cchTextMax = MAX_PATH;
 	ListView_GetItem( hListView, &sItem );
-	if ( _tcscmp(buf, _T("on")) == 0){
+	if (_tcscmp(buf, _T("on")) == 0) {
 		::CheckDlgButton( hwndDlg, IDC_CHECK_RELOADWHENEXECUTE, true );
-	}
-	else {
+	}else {
 		::CheckDlgButton( hwndDlg, IDC_CHECK_RELOADWHENEXECUTE, false );
 	}
 
@@ -684,16 +695,16 @@ void CPropMacro::CheckListPosition_Macro( HWND hwndDlg )
 	::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnOpened, false );
 	::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnTypeChanged, false );
 	::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnSave, false );
-	for( i = 0; i < nLen; i++)
-	{
-		if( szText[i] == _T('O') )
+	for (i = 0; i < nLen; i++) {
+		if (szText[i] == _T('O')) {
 			::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnOpened, true );
-		if( szText[i] == _T('T') )
+		}
+		if (szText[i] == _T('T')) {
 			::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnTypeChanged, true );
-		if( szText[i] == _T('S') )
+		}
+		if (szText[i] == _T('S')) {
 			::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnSave, true );
+		}
 	}
 }
-
-
 

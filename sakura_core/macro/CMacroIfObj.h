@@ -63,7 +63,7 @@ public:
 		m_nIsMatch = 0;
 		m_Source = Source;
 		m_nIndex = INVALID_MACRO_IDX;
-		if(nMode == MACRO_MODE_EXEC){
+		if (nMode == MACRO_MODE_EXEC) {
 			//呼び出しの直前で設定されている番号を保存する
 			m_nIndex = CEditApp::getInstance()->m_pcSMacroMgr->GetCurrentIdx();
 		}
@@ -138,9 +138,9 @@ public:
 
 	//コマンドを処理する
 	virtual bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize){
-		switch(LOWORD(ID)){
+		switch (LOWORD(ID)) {
 		case F_MA_SET_MATCH:
-			if(Arguments[0] != NULL){
+			if (Arguments[0] != NULL) {
 				m_nIsMatch = _wtol(Arguments[0]);
 			}
 			return true;

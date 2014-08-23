@@ -216,3 +216,4 @@ bool CZipFile::Unzip(const std::tstring sOutPath)
 
 	return (hr == S_OK);
 }
+

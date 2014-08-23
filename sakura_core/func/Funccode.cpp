@@ -970,56 +970,56 @@ int FuncID_To_HelpContextID( EFunctionCode nFuncID )
 bool IsFuncEnable( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFunctionCode nId )
 {
 	/* 書き換え禁止のときを一括チェック */
-	if( pcEditDoc->IsModificationForbidden( nId ) )
+	if (pcEditDoc->IsModificationForbidden( nId ))
 		return false;
 
-	switch( nId ){
+	switch (nId) {
 	case F_RECKEYMACRO:	/* キーマクロの記録開始／終了 */
-		if( pShareData->m_sFlags.m_bRecordingKeyMacro ){	/* キーボードマクロの記録中 */
-			if( pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd() ){	/* キーボードマクロを記録中のウィンドウ */
+		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	/* キーボードマクロの記録中 */
+			if (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) {	/* キーボードマクロを記録中のウィンドウ */
 				return true;
-			}else{
+			}else {
 				return false;
 			}
-		}else{
+		}else {
 			return true;
 		}
 	case F_SAVEKEYMACRO:	/* キーマクロの保存 */
 		//	Jun. 16, 2002 genta
 		//	キーマクロエンジン以外のマクロを読み込んでいるときは
 		//	実行はできるが保存はできない．
-		if( pShareData->m_sFlags.m_bRecordingKeyMacro ){	/* キーボードマクロの記録中 */
-			if( pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd() ){	/* キーボードマクロを記録中のウィンドウ */
+		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	/* キーボードマクロの記録中 */
+			if (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) {	/* キーボードマクロを記録中のウィンドウ */
 				return true;
-			}else{
+			}else {
 				return false;
 			}
-		}else{
+		}else {
 			return CEditApp::getInstance()->m_pcSMacroMgr->IsSaveOk();
 		}
 	case F_EXECKEYMACRO:	/* キーマクロの実行 */
-		if( pShareData->m_sFlags.m_bRecordingKeyMacro ){	/* キーボードマクロの記録中 */
-			if( pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd() ){	/* キーボードマクロを記録中のウィンドウ */
+		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	/* キーボードマクロの記録中 */
+			if (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) {	/* キーボードマクロを記録中のウィンドウ */
 				return true;
-			}else{
+			}else {
 				return false;
 			}
-		}else{
+		}else {
 			//@@@ 2002.1.24 YAZAKI m_szKeyMacroFileNameにファイル名がコピーされているかどうか。
-			if (pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0] ) {
+			if (pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0]) {
 				return true;
-			}else{
+			}else {
 				return false;
 			}
 		}
 	case F_LOADKEYMACRO:	/* キーマクロの読み込み */
-		if( pShareData->m_sFlags.m_bRecordingKeyMacro ){	/* キーボードマクロの記録中 */
-			if( pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd() ){	/* キーボードマクロを記録中のウィンドウ */
+		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	/* キーボードマクロの記録中 */
+			if (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) {	/* キーボードマクロを記録中のウィンドウ */
 				return true;
-			}else{
+			}else {
 				return false;
 			}
-		}else{
+		}else {
 			return true;
 		}
 	case F_EXECEXTMACRO:	/* 名前を指定してマクロ実行 */
@@ -1030,24 +1030,25 @@ bool IsFuncEnable( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 
 	// 02/06/26 ai Start
 	case F_JUMP_SRCHSTARTPOS:	// 検索開始位置へ戻る
-		if( pcEditDoc->m_pcEditWnd->GetActiveView().m_ptSrchStartPos_PHY.BothNatural() ){
+		if (pcEditDoc->m_pcEditWnd->GetActiveView().m_ptSrchStartPos_PHY.BothNatural()) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 	// 02/06/26 ai End
 
 	case F_COMPARE:	/* ファイル内容比較 */
-		if( 2 <= pShareData->m_sNodes.m_nEditArrNum ){
+		if (2 <= pShareData->m_sNodes.m_nEditArrNum) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 
 	case F_DIFF_NEXT:	/* 次の差分へ */	//@@@ 2002.05.25 MIK
 	case F_DIFF_PREV:	/* 前の差分へ */	//@@@ 2002.05.25 MIK
 	case F_DIFF_RESET:	/* 差分の全解除 */	//@@@ 2002.05.25 MIK
-		if( !CDiffManager::getInstance()->IsDiffUse() ) return false;
+		if (!CDiffManager::getInstance()->IsDiffUse())
+			return false;
 		return true;
 	case F_DIFF_DIALOG:	/* DIFF差分表示 */	//@@@ 2002.05.25 MIK
 		//if( pcEditDoc->IsModified() ) return false;
@@ -1072,52 +1073,50 @@ bool IsFuncEnable( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 	case F_1PageDown_BOX:
 	case F_GOFILETOP_BOX:
 	case F_GOFILEEND_BOX:
-		if( pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH ){	/* 現在のフォントは固定幅フォントである */
+		if (pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH) {	/* 現在のフォントは固定幅フォントである */
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 	case F_PASTEBOX:
 		/* クリップボードから貼り付け可能か？ */
-		if( pcEditDoc->m_cDocEditor.IsEnablePaste() && pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH ){
+		if (pcEditDoc->m_cDocEditor.IsEnablePaste() && pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 	case F_PASTE:
 		/* クリップボードから貼り付け可能か？ */
-		if( pcEditDoc->m_cDocEditor.IsEnablePaste() ){
+		if (pcEditDoc->m_cDocEditor.IsEnablePaste()) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 
 	case F_FILENEW:	/* 新規作成 */
 	case F_GREP_DIALOG:	/* Grep */
 		/* 編集ウィンドウの上限チェック */
-		if( pShareData->m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
+		if (pShareData->m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	//最大値修正	//@@@ 2003.05.31 MIK
 			return false;
-		}else{
+		}else {
 			return true;
 		}
 
 	case F_FILESAVE:	/* 上書き保存 */
-		if( !CAppMode::getInstance()->IsViewMode() ){	/* ビューモード */
-			if( pcEditDoc->m_cDocEditor.IsModified() ){	/* 変更フラグ */
+		if (!CAppMode::getInstance()->IsViewMode()) {	/* ビューモード */
+			if (pcEditDoc->m_cDocEditor.IsModified()) {	/* 変更フラグ */
 				return true;
-			}
-			else if (pcEditDoc->m_cDocFile.IsChgCodeSet()) {	// 文字コードの変更
+			}else if (pcEditDoc->m_cDocFile.IsChgCodeSet()) {	// 文字コードの変更
 				return true;
-			}
-			else {
+			}else {
 				/* 無変更でも上書きするか */
-				if( !pShareData->m_Common.m_sFile.m_bEnableUnmodifiedOverwrite ){
+				if (!pShareData->m_Common.m_sFile.m_bEnableUnmodifiedOverwrite) {
 					return false;
-				}else{
+				}else {
 					return true;
 				}
 			}
-		}else{
+		}else {
 			return false;
 		}
 	case F_COPYLINES:				//選択範囲内全行コピー
@@ -1178,12 +1177,12 @@ bool IsFuncEnable( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 		return pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
 
 	case F_JUMPHIST_PREV:	//	移動履歴: 前へ
-		if( pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckPrev() )
+		if (pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckPrev())
 			return true;
 		else
 			return false;
 	case F_JUMPHIST_NEXT:	//	移動履歴: 次へ
-		if( pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckNext() )
+		if (pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckNext())
 			return true;
 		else
 			return false;
@@ -1194,10 +1193,11 @@ bool IsFuncEnable( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 	case F_TAGJUMP_KEYWORD:	//キーワードを指定してダイレクトタグジャンプ	//@@@ 2005.03.31 MIK
 	//	2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	//タグファイルの作成	//@@@ 2003.04.13 MIK
-		if( false == CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
-			&& pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath() ){
+		if (false == CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
+			&& pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()
+		) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 	
@@ -1229,7 +1229,6 @@ bool IsFuncEnable( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 }
 
 
-
 /* 機能がチェック状態か調べる */
 bool IsFuncChecked( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFunctionCode nId )
 {
@@ -1238,7 +1237,7 @@ bool IsFuncChecked( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, E
 	pCEditWnd = ( CEditWnd* )::GetWindowLongPtr( CEditWnd::getInstance()->GetHwnd(), GWLP_USERDATA );
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことにより、プレビュー判定削除
 	ECodeType eDocCode = pcEditDoc->GetDocumentEncoding();
-	switch( nId ){
+	switch (nId) {
 	case F_FILE_REOPEN_SJIS:		return CODE_SJIS == eDocCode;
 	case F_FILE_REOPEN_JIS:			return CODE_JIS == eDocCode;
 	case F_FILE_REOPEN_EUC:			return CODE_EUC == eDocCode;
@@ -1249,13 +1248,13 @@ bool IsFuncChecked( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, E
 	case F_FILE_REOPEN_CESU8:		return CODE_CESU8 == eDocCode;
 	case F_FILE_REOPEN_UTF7:		return CODE_UTF7 == eDocCode;
 	case F_RECKEYMACRO:	/* キーマクロの記録開始／終了 */
-		if( pShareData->m_sFlags.m_bRecordingKeyMacro ){	/* キーボードマクロの記録中 */
-			if( pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd() ){	/* キーボードマクロを記録中のウィンドウ */
+		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	/* キーボードマクロの記録中 */
+			if (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) {	/* キーボードマクロを記録中のウィンドウ */
 				return true;
-			}else{
+			}else {
 				return false;
 			}
-		}else{
+		}else {
 			return false;
 		}
 	case F_SHOWTOOLBAR:			return pCEditWnd->m_cToolbar.GetToolbarHwnd() != NULL;
@@ -1298,3 +1297,4 @@ bool IsFuncChecked( const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, E
 
 	return false;
 }
+

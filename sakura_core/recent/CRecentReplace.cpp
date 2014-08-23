@@ -79,3 +79,4 @@ void CRecentReplace::CopyItem( CReplaceString* dst, LPCWSTR src ) const
 {
 	wcscpy(*dst,src);
 }
+

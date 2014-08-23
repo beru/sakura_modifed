@@ -27,8 +27,6 @@ struct STypeConfig;
 #define USE_PARENT	//親を使ってキーワード格納領域を削減する。
 
 
-
-
 //@@@ 2001.11.17 add start MIK
 struct RegexKeywordInfo {
 	int	m_nColorIndex;		//色指定番号
@@ -52,7 +50,6 @@ typedef struct RegexInfo_t {
 } REGEX_INFO;
 
 
-
 //!	正規表現キーワードクラス
 /*!
 	正規表現キーワードを扱う。
@@ -74,13 +71,11 @@ public:
 
 	static DWORD GetNewMagicNumber();
 
-
 protected:
 	//! コンパイル
 	BOOL RegexKeyCompile(void);
 	//! 変数初期化
 	BOOL RegexKeyInit( void );
-
 
 public:
 	int				m_nTypeIndex;				//!< 現在のタイプ設定番号

@@ -76,8 +76,7 @@ INT_PTR CPropEdit::DispatchEvent(
 //	int			nVal;
 //	LPDRAWITEMSTRUCT pDis;
 
-	switch( uMsg ){
-
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_FILEOPENDIR ), _MAX_PATH - 1 );
 		/* ダイアログデータの設定 Edit */
@@ -86,20 +85,19 @@ INT_PTR CPropEdit::DispatchEvent(
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
 		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
-
 		return TRUE;
+		
 	case WM_COMMAND:
 		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
 		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		switch( wNotifyCode ){
+		switch (wNotifyCode) {
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
-			switch( wID ){
+			switch (wID) {
 			case IDC_CHECK_DRAGDROP:	/* タスクトレイを使う */
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP ) ){
+				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP )) {
 					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DROPSOURCE ), TRUE );
-				}
-				else{
+				}else {
 					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DROPSOURCE ), FALSE );
 				}
 				return TRUE;
@@ -114,7 +112,7 @@ INT_PTR CPropEdit::DispatchEvent(
 					TCHAR szPath[_MAX_PATH];
 					::DlgItem_GetText( hwndDlg, IDC_EDIT_FILEOPENDIR, szMetaPath, _countof(szMetaPath) );
 					CFileNameManager::ExpandMetaToFolder( szMetaPath, szPath, _countof(szPath) );
-					if( SelectDir( hwndDlg, LS(STR_PROPEDIT_SELECT_DIR), szPath, szPath ) ){
+					if (SelectDir( hwndDlg, LS(STR_PROPEDIT_SELECT_DIR), szPath, szPath )) {
 						CNativeT cmem(szPath);
 						cmem.Replace(_T("%"), _T("%%"));
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_FILEOPENDIR, cmem.GetStringPtr() );
@@ -127,14 +125,13 @@ INT_PTR CPropEdit::DispatchEvent(
 		break;
 
 	case WM_NOTIFY:
-		pNMHDR = (NMHDR*)lParam;
-		switch( pNMHDR->code ){
+		pNMHDR = (NMHDR*) lParam;
+		switch (pNMHDR->code) {
 		case PSN_HELP:
 			OnHelp( hwndDlg, IDD_PROP_EDIT );
 			return TRUE;
 		case PSN_KILLACTIVE:
 			DEBUG_TRACE( _T("Edit PSN_KILLACTIVE\n") );
-
 			/* ダイアログデータの取得 Edit */
 			GetData( hwndDlg );
 			return TRUE;
@@ -148,7 +145,7 @@ INT_PTR CPropEdit::DispatchEvent(
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -173,10 +170,9 @@ void CPropEdit::SetData( HWND hwndDlg )
 {
 	/* ドラッグ & ドロップ編集 */
 	::CheckDlgButton( hwndDlg, IDC_CHECK_DRAGDROP, m_Common.m_sEdit.m_bUseOLE_DragDrop );
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP ) ){
+	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP )) {
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DROPSOURCE ), TRUE );
-	}
-	else{
+	}else {
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DROPSOURCE ), FALSE );
 	}
 
@@ -208,20 +204,19 @@ void CPropEdit::SetData( HWND hwndDlg )
 	::CheckDlgButton( hwndDlg, IDC_CHECK_CONVERTEOLPASTE, m_Common.m_sEdit.m_bConvertEOLPaste ? BST_CHECKED : BST_UNCHECKED );
 
 	// ファイルダイアログの初期位置
-	if( m_Common.m_sEdit.m_eOpenDialogDir == OPENDIALOGDIR_CUR ){
+	if (m_Common.m_sEdit.m_eOpenDialogDir == OPENDIALOGDIR_CUR) {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_CURDIR, TRUE );
 	}
-	if( m_Common.m_sEdit.m_eOpenDialogDir == OPENDIALOGDIR_MRU ){
+	if (m_Common.m_sEdit.m_eOpenDialogDir == OPENDIALOGDIR_MRU) {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_MRUDIR, TRUE );
 	}
-	if( m_Common.m_sEdit.m_eOpenDialogDir == OPENDIALOGDIR_SEL ){
+	if (m_Common.m_sEdit.m_eOpenDialogDir == OPENDIALOGDIR_SEL) {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_SELDIR, TRUE );
 	}
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_FILEOPENDIR, m_Common.m_sEdit.m_OpenDialogSelDir );
 
 	EnableEditPropInput( hwndDlg );
 }
-
 
 
 /* ダイアログデータの取得 */
@@ -256,13 +251,13 @@ int CPropEdit::GetData( HWND hwndDlg )
 	//	改行コードを変換して貼り付ける */	// 2009.02.28 salarm
 	m_Common.m_sEdit.m_bConvertEOLPaste = (0 != ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CONVERTEOLPASTE ));
 
-	if( ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CURDIR) ){
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CURDIR)) {
 		m_Common.m_sEdit.m_eOpenDialogDir = OPENDIALOGDIR_CUR;
 	}
-	if( ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_MRUDIR) ){
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_MRUDIR)) {
 		m_Common.m_sEdit.m_eOpenDialogDir = OPENDIALOGDIR_MRU;
 	}
-	if( ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_SELDIR) ){
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_SELDIR)) {
 		m_Common.m_sEdit.m_eOpenDialogDir = OPENDIALOGDIR_SEL;
 	}
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_FILEOPENDIR, m_Common.m_sEdit.m_OpenDialogSelDir, _countof2(m_Common.m_sEdit.m_OpenDialogSelDir) );
@@ -279,10 +274,10 @@ int CPropEdit::GetData( HWND hwndDlg )
 void CPropEdit::EnableEditPropInput( HWND hwndDlg )
 {
 	// 指定フォルダ
-	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_SELDIR ) ){
+	if (::IsDlgButtonChecked( hwndDlg, IDC_RADIO_SELDIR )) {
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_FILEOPENDIR ), TRUE );
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_FILEOPENDIR ), TRUE );
-	}else{
+	}else {
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_FILEOPENDIR ), FALSE );
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_FILEOPENDIR ), FALSE );
 	}

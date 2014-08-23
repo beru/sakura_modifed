@@ -78,3 +78,4 @@ void CRecentTagjumpKeyword::CopyItem( CTagjumpKeywordString* dst, LPCWSTR src ) 
 {
 	wcscpy(*dst,src);
 }
+

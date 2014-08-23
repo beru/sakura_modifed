@@ -53,10 +53,10 @@ bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 	bool result = false;
 	CWSHIfObj::List params;
 	CMacroIfObj* objMacro = new CMacroIfObj(CMacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_Source.c_str());
-	if(objMacro != NULL){
+	if (objMacro != NULL) {
 		objMacro->AddRef();
 		params.push_back(objMacro);
-		if(m_Plug != NULL){
+		if (m_Plug != NULL) {
 			objMacro->SetMatch(1);	//Run macro mode
 			m_Plug->Invoke(EditView, params);
 			result = true;
@@ -73,8 +73,8 @@ BOOL CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 {
 	m_Source = L"";
 	CTextInputStream in(Path);
-	if(in){
-		while(in){
+	if (in) {
+		while (in) {
 			m_Source += in.ReadLineW() + L"\r\n";
 		}
 		return TRUE;
@@ -108,10 +108,10 @@ CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
 
 	CPlug::Array plugs;
 	CJackManager::getInstance()->GetUsablePlug(PP_MACRO, 0, &plugs);
-	for(CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++){
+	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
 		objMacro->SetMatch(0);	//Check macro ext mode
 		(*it)->Invoke(NULL, params);
-		if(objMacro->IsMatch()){
+		if (objMacro->IsMatch()) {
 			objMacro->Release();
 #ifdef _UNICODE
 			return new CPluginMacroManager(Ext, *it);
@@ -120,7 +120,6 @@ CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
 #endif
 		}
 	}
-
 	objMacro->Release();
 	return NULL;
 }
@@ -132,3 +131,4 @@ void CPluginMacroManager::declare(void)
 {
 	CMacroFactory::getInstance()->RegisterCreator(Creator);
 }
+

@@ -85,8 +85,7 @@ public:
 	{
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
-		switch(LOWORD(ID))
-		{
+		switch (LOWORD(ID)) {
 		case F_PL_GETPLUGINDIR:			//プラグインフォルダパスを取得する
 			{
 				SysString S(m_cPlugin.m_sBaseDir.c_str(), m_cPlugin.m_sBaseDir.size());
@@ -100,17 +99,22 @@ public:
 				wstring sSection;
 				wstring sKey;
 				wstring sValue;
-				if( variant_to_wstr( Arguments[0], sSection ) != true) return false;
-				if( variant_to_wstr( Arguments[1], sKey ) != true) return false;
+				if (variant_to_wstr( Arguments[0], sSection ) != true) {
+					return false;
+				}
+				if (variant_to_wstr( Arguments[1], sKey ) != true) {
+					return false;
+				}
 
 				cProfile.SetReadingMode();
-				if( LOWORD(ID) == F_PL_GETDEF ){
+				if (LOWORD(ID) == F_PL_GETDEF) {
 					cProfile.ReadProfile( m_cPlugin.GetPluginDefPath().c_str() );
-				}else{
+				}else {
 					cProfile.ReadProfile( m_cPlugin.GetOptionPath().c_str() );
 				}
 				if (!cProfile.IOProfileData( sSection.c_str(), sKey.c_str(), sValue )
-					&& LOWORD(ID) == F_PL_GETOPTION ) {
+					&& LOWORD(ID) == F_PL_GETOPTION
+				) {
 					// 設定されていなければデフォルトを取得 
 					CPluginOption::ArrayIter it;
 					for (it = m_cPlugin.m_options.begin(); it != m_cPlugin.m_options.end(); it++) {
@@ -136,13 +140,15 @@ public:
 		case F_PL_GETSTRING:
 			{
 				int num;
-				if(variant_to_int( Arguments[0], num ) == false) return false;
-				if( 0 < num && num < MAX_PLUG_STRING ){
+				if (variant_to_int( Arguments[0], num ) == false) {
+					return false;
+				}
+				if (0 < num && num < MAX_PLUG_STRING) {
 					std::wstring& str = m_cPlugin.m_aStrings[num];
 					SysString S(str.c_str(), str.size());
 					Wrap(&Result)->Receive(S);
 					return true;
-				}else if( 0 == num ){
+				}else if (0 == num) {
 					std::wstring str = to_wchar(m_cPlugin.m_sLangName.c_str());
 					SysString S(str.c_str(), str.size());
 					Wrap(&Result)->Receive(S);
@@ -155,13 +161,12 @@ public:
 	//コマンドを処理する
 	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
 	{
-		switch ( LOWORD(ID) ) 
-		{
+		switch (LOWORD(ID)) {
 		case F_PL_SETOPTION:			//オプションファイルに値を書く
 			{
-				if( Arguments[0] == NULL )return false;
-				if( Arguments[1] == NULL )return false;
-				if( Arguments[2] == NULL )return false;
+				if (Arguments[0] == NULL) return false;
+				if (Arguments[1] == NULL) return false;
+				if (Arguments[2] == NULL) return false;
 				CDataProfile cProfile;
 
 				cProfile.ReadProfile( m_cPlugin.GetOptionPath().c_str() );

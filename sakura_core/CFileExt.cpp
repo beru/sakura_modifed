@@ -46,7 +46,9 @@ CFileExt::CFileExt()
 
 CFileExt::~CFileExt()
 {
-	if( m_puFileExtInfo ) free( m_puFileExtInfo );
+	if (m_puFileExtInfo) {
+		free( m_puFileExtInfo );
+	}
 	m_puFileExtInfo = NULL;
 	m_nCount = 0;
 }
@@ -55,7 +57,9 @@ bool CFileExt::AppendExt( const TCHAR *pszName, const TCHAR *pszExt )
 {
 	TCHAR	szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
-	if( !ConvertTypesExtToDlgExt( pszExt, szWork ) ) return false;
+	if (!ConvertTypesExtToDlgExt( pszExt, szWork )) {
+		return false;
+	}
 	return AppendExtRaw( pszName, szWork );
 }
 
@@ -63,18 +67,23 @@ bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 {
 	FileExtInfoTag	*p;
 
-	if( NULL == pszName || pszName[0] == _T('\0') ) return false;
-	if( NULL == pszExt  || pszExt[0] == _T('\0') ) return false;
-
-	if( NULL == m_puFileExtInfo )
-	{
-		p = (FileExtInfoTag*)malloc( sizeof( FileExtInfoTag ) * 1 );
-		if( NULL == p ) return false;
+	if (NULL == pszName || pszName[0] == _T('\0')) {
+		return false;
 	}
-	else
-	{
+	if (NULL == pszExt  || pszExt[0] == _T('\0')) {
+		return false;
+	}
+
+	if (NULL == m_puFileExtInfo) {
+		p = (FileExtInfoTag*)malloc( sizeof( FileExtInfoTag ) * 1 );
+		if (NULL == p) {
+			return false;
+		}
+	}else {
 		p = (FileExtInfoTag*)realloc( m_puFileExtInfo, sizeof( FileExtInfoTag ) * ( m_nCount + 1 ) );
-		if( NULL == p ) return false;
+		if (NULL == p) {
+			return false;
+		}
 	}
 	m_puFileExtInfo = p;
 
@@ -85,21 +94,23 @@ bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 	return true;
 }
 
-const TCHAR *CFileExt::GetName( int nIndex )
+const TCHAR* CFileExt::GetName( int nIndex )
 {
-	if( nIndex < 0 || nIndex >= m_nCount ) return NULL;
-
+	if (nIndex < 0 || nIndex >= m_nCount) {
+		return NULL;
+	}
 	return m_puFileExtInfo[nIndex].m_szName;
 }
 
-const TCHAR *CFileExt::GetExt( int nIndex )
+const TCHAR* CFileExt::GetExt( int nIndex )
 {
-	if( nIndex < 0 || nIndex >= m_nCount ) return NULL;
-
+	if (nIndex < 0 || nIndex >= m_nCount) {
+		return NULL;
+	}
 	return m_puFileExtInfo[nIndex].m_szExt;
 }
 
-const TCHAR *CFileExt::GetExtFilter( void )
+const TCHAR* CFileExt::GetExtFilter( void )
 {
 	int		i;
 	TCHAR	szWork[_countof(m_puFileExtInfo[0].m_szName) + _countof(m_puFileExtInfo[0].m_szExt)*2 + 10];
@@ -107,8 +118,7 @@ const TCHAR *CFileExt::GetExtFilter( void )
 	/* ägí£éqÉtÉBÉãÉ^ÇÃçÏê¨ */
 	_tcscpy( m_szFilter, _T("") );
 
-	for( i = 0; i < m_nCount; i++ )
-	{
+	for (i = 0; i < m_nCount; i++) {
 		auto_sprintf( szWork,
 			_T("%ts (%ts)|%ts|"),
 			m_puFileExtInfo[i].m_szName,
@@ -120,9 +130,10 @@ const TCHAR *CFileExt::GetExtFilter( void )
 	_tcscat( m_szFilter, _T("|") );
 
 	//ãÊêÿÇËÇÕÇOÇ»ÇÃÇ≈íuÇ´ä∑Ç¶ÇÈÅB
-	for( i = 0; m_szFilter[i] != _T('\0'); i++ )
-	{
-		if( m_szFilter[i] == _T('|') ) m_szFilter[i] = _T('\0');
+	for (i = 0; m_szFilter[i] != _T('\0'); i++) {
+		if (m_szFilter[i] == _T('|')) {
+			m_szFilter[i] = _T('\0');
+		}
 	}
 
 	return m_szFilter;
@@ -134,25 +145,33 @@ const TCHAR *CFileExt::GetExtFilter( void )
 */
 bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt )
 {
-	TCHAR	*token;
-	TCHAR	*p;
+	TCHAR* token;
+	TCHAR* p;
 
 	//	2003.08.14 MIK NULLÇ∂Ç·Ç»Ç≠Çƒfalse
-	if( NULL == pszSrcExt ) return false;
-	if( NULL == pszDstExt ) return false;
+	if (NULL == pszSrcExt) {
+		return false;
+	}
+	if (NULL == pszDstExt) {
+		return false;
+	}
 
 	p = _tcsdup( pszSrcExt );
 	_tcscpy( pszDstExt, _T("") );
 
 	token = _tcstok( p, _T(" ;,") );
-	while( token )
-	{
-		if( _T('.') == *token ) _tcscat( pszDstExt, _T("*") );
-		else                 _tcscat( pszDstExt, _T("*.") );
+	while (token) {
+		if (_T('.') == *token) {
+			_tcscat( pszDstExt, _T("*") );
+		}else {
+			_tcscat( pszDstExt, _T("*.") );
+		}
 		_tcscat( pszDstExt, token );
 
 		token = _tcstok( NULL, _T(" ;,") );
-		if( token ) _tcscat( pszDstExt, _T(";") );
+		if (token) {
+			_tcscat( pszDstExt, _T(";") );
+		}
 	}
 	free( p );	// 2003.05.20 MIK ÉÅÉÇÉäâï˙òRÇÍ
 	return true;

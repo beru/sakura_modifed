@@ -70,8 +70,7 @@ void CSortedTagJumpList::Empty( void )
 {
 	TagJumpInfo*	p;
 	TagJumpInfo*	next;
-	for( p = m_pTagjump; p; p = next )
-	{
+	for (p = m_pTagjump; p; p = next) {
 		next = p->next;
 		Free( p );
 	}
@@ -119,7 +118,9 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 
 	//アイテムを作成する。
 	item = (TagJumpInfo*)malloc( sizeof( TagJumpInfo ) );
-	if( NULL == item ) return FALSE;
+	if (NULL == item) {
+		return FALSE;
+	}
 	item->keyword  = _tcsdup( to_tchar(keyword) );
 	item->filename = _tcsdup( to_tchar(filename) );
 	item->no       = no;
@@ -130,29 +131,31 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 	item->baseDirId = baseDirId;
 
 	//文字列長ガード
-	if( _tcslen( item->keyword  ) >= MAX_TAG_STRING_LENGTH ) item->keyword[  MAX_TAG_STRING_LENGTH-1 ] = 0;
-	if( _tcslen( item->filename ) >= MAX_TAG_STRING_LENGTH ) item->filename[ MAX_TAG_STRING_LENGTH-1 ] = 0;
-	if( _tcslen( item->note     ) >= MAX_TAG_STRING_LENGTH ) item->note[     MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen( item->keyword  ) >= MAX_TAG_STRING_LENGTH) item->keyword[  MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen( item->filename ) >= MAX_TAG_STRING_LENGTH) item->filename[ MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen( item->note     ) >= MAX_TAG_STRING_LENGTH) item->note[     MAX_TAG_STRING_LENGTH-1 ] = 0;
 
 	//アイテムをリストの適当な位置に追加する。
 	prev = NULL;
-	for( p = m_pTagjump; p; p = p->next )
-	{
-		if( _tcscmp( p->keyword, item->keyword ) > 0 ) break;
+	for (p = m_pTagjump; p; p = p->next) {
+		if (_tcscmp( p->keyword, item->keyword ) > 0) {
+			break;
+		}
 		prev = p;
 	}
 	item->next = p;
-	if( prev ) prev->next = item;
-	else       m_pTagjump = item;
+	if (prev) prev->next = item;
+	else      m_pTagjump = item;
 	m_nCount++;
 
-	//最大数を超えたら最後のアイテムを削除する。
-	if( m_nCount > m_MAX_TAGJUMPLIST )
-	{
+	// 最大数を超えたら最後のアイテムを削除する。
+	if (m_nCount > m_MAX_TAGJUMPLIST) {
 		prev = NULL;
-		for( p = m_pTagjump; p->next; p = p->next ) prev = p;
-		if( prev ) prev->next = NULL;
-		else       m_pTagjump = NULL;
+		for (p = m_pTagjump; p->next; p = p->next) {
+			prev = p;
+		}
+		if (prev) prev->next = NULL;
+		else      m_pTagjump = NULL;
 		Free( p );
 		m_nCount--;
 		m_bOverflow = true;
@@ -176,26 +179,25 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 */
 BOOL CSortedTagJumpList::GetParam( int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir )
 {
-	if( keyword  ) _tcscpy( keyword, _T("") );
-	if( filename ) _tcscpy( filename, _T("") );
-	if( no       ) *no    = 0;
-	if( type     ) *type  = 0;
-	if( note     ) _tcscpy( note, _T("") );
-	if( depth    ) *depth = 0;
-	if( baseDir  ) _tcscpy( baseDir, _T("") );
+	if (keyword ) _tcscpy( keyword, _T("") );
+	if (filename) _tcscpy( filename, _T("") );
+	if (no      ) *no    = 0;
+	if (type    ) *type  = 0;
+	if (note    ) _tcscpy( note, _T("") );
+	if (depth   ) *depth = 0;
+	if (baseDir ) _tcscpy( baseDir, _T("") );
 
 	CSortedTagJumpList::TagJumpInfo* p;
 	p = GetPtr( index );
-	if( NULL != p )
-	{
-		if( keyword  ) _tcscpy( keyword, p->keyword );
-		if( filename ) _tcscpy( filename, p->filename );
-		if( no       ) *no    = p->no;
-		if( type     ) *type  = p->type;
-		if( note     ) _tcscpy( note, p->note );
-		if( depth    ) *depth = p->depth;
-		if( baseDir ){
-			if( 0 <= p->baseDirId && (size_t)p->baseDirId < m_baseDirArr.size() ){
+	if (NULL != p) {
+		if (keyword ) _tcscpy( keyword, p->keyword );
+		if (filename) _tcscpy( filename, p->filename );
+		if (no      ) *no    = p->no;
+		if (type    ) *type  = p->type;
+		if (note    ) _tcscpy( note, p->note );
+		if (depth   ) *depth = p->depth;
+		if (baseDir) {
+			if (0 <= p->baseDirId && (size_t)p->baseDirId < m_baseDirArr.size()) {
 				auto_strcpy( baseDir, m_baseDirArr[p->baseDirId].c_str() );
 			}
 		}
@@ -213,13 +215,15 @@ BOOL CSortedTagJumpList::GetParam( int index, TCHAR* keyword, TCHAR* filename, i
 */
 CSortedTagJumpList::TagJumpInfo* CSortedTagJumpList::GetPtr( int index )
 {
-	TagJumpInfo*	p;
+	TagJumpInfo* p;
 	int	i;
 	i = 0;
-	for( p = m_pTagjump; p; p = p->next )
-	{
-		if( index == i ) return p;
+	for (p = m_pTagjump; p; p = p->next) {
+		if (index == i) {
+			return p;
+		}
 		i++;
 	}
 	return NULL;
 }
+

@@ -46,16 +46,17 @@ public:
 	}
 
 	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL  ){
-		if( CGrepEnumFiles::IsValid( w32fd, pFile ) ){
-			if( m_cGrepEnumExceptFiles.IsValid( w32fd, pFile ) ){
+		if (CGrepEnumFiles::IsValid( w32fd, pFile )) {
+			if (m_cGrepEnumExceptFiles.IsValid( w32fd, pFile )) {
 				return TRUE;
 			}
 		}
 		return FALSE;
 	}
 
-	int Enumerates( LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumFiles& pExcept ){
+	int Enumerates( LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumFiles& pExcept ) {
 		m_cGrepEnumExceptFiles.Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecExceptFileKeys, NULL );
 		return CGrepEnumFiles::Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecSearchFileKeys, &pExcept );
 	}
 };
+

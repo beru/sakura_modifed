@@ -145,8 +145,9 @@ inline BOOL CFileLoad::GetFileTime( FILETIME* pftCreate, FILETIME* pftLastAccess
 inline int CFileLoad::Read( void* pBuf, size_t nSize )
 {
 	DWORD ReadSize;
-	if( !::ReadFile( m_hFile, pBuf, nSize, &ReadSize, NULL ) )
+	if (!::ReadFile( m_hFile, pBuf, nSize, &ReadSize, NULL )) {
 		throw CError_FileRead();
+	}
 	return (int)ReadSize;
 }
 
@@ -154,8 +155,9 @@ inline int CFileLoad::Read( void* pBuf, size_t nSize )
 inline DWORD CFileLoad::FilePointer( DWORD offset, DWORD origin )
 {
 	DWORD fp;
-	if( INVALID_SET_FILE_POINTER == ( fp = ::SetFilePointer( m_hFile, offset, NULL, FILE_BEGIN ) ) )
+	if (INVALID_SET_FILE_POINTER == ( fp = ::SetFilePointer( m_hFile, offset, NULL, FILE_BEGIN ) )) {
 		throw CError_FileRead();
+	}
 	return fp;
 }
 

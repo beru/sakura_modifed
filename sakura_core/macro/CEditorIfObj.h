@@ -38,9 +38,9 @@ public:
 	CEditorIfObj() : CWSHIfObj( L"Editor", true ){}
 
 	// 実装
-	MacroFuncInfoArray GetMacroCommandInfo() const;	//コマンド情報を取得する
-	MacroFuncInfoArray GetMacroFuncInfo() const;	//関数情報を取得する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result);	//関数を処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize);	//コマンドを処理する
+	MacroFuncInfoArray GetMacroCommandInfo() const;	// コマンド情報を取得する
+	MacroFuncInfoArray GetMacroFuncInfo() const;	// 関数情報を取得する
+	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result);	// 関数を処理する
+	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize);	// コマンドを処理する
 };
 

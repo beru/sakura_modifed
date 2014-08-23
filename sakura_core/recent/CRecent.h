@@ -40,7 +40,7 @@
 
 class CRecent{
 public:
-	virtual ~CRecent(){}
+	virtual ~CRecent() {}
 
 	//インスタンス管理
 	virtual void	Terminate() = 0;
@@ -58,8 +58,10 @@ public:
 	int FindItemByText(const TCHAR* pszText) const
 	{
 		int n = GetItemCount();
-		for(int i=0;i<n;i++){
-			if(_tcscmp(GetItemText(i),pszText)==0)return i;
+		for (int i=0;i<n;i++) {
+			if (_tcscmp(GetItemText(i),pszText) == 0) {
+				return i;
+			}
 		}
 		return -1;
 	}

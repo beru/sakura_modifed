@@ -78,29 +78,21 @@ CMemory::~CMemory()
 	_Empty();
 }
 
-
-
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          演算子                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 const CMemory& CMemory::operator = ( const CMemory& rhs )
 {
-	if( this != &rhs ){
+	if (this != &rhs) {
 		SetRawData( rhs );
 	}
 	return *this;
 }
 
-
-
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         実装補助                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
-
 
 
 /*
@@ -108,7 +100,7 @@ const CMemory& CMemory::operator = ( const CMemory& rhs )
 */
 void CMemory::_AddData( const void* pData, int nDataLen )
 {
-	if( NULL == m_pRawData ){
+	if (NULL == m_pRawData) {
 		return;
 	}
 	memcpy( &m_pRawData[m_nRawLen], pData, nDataLen );
@@ -117,18 +109,6 @@ void CMemory::_AddData( const void* pData, int nDataLen )
 	m_pRawData[m_nRawLen+1] = '\0'; //終端'\0'を2つ付加する('\0''\0'==L'\0')。 2007.08.13 kobake 追加
 	return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 等しい内容か */
@@ -141,28 +121,13 @@ int CMemory::IsEqual( CMemory& cmem1, CMemory& cmem2 )
 
 	psz1 = (const char*)cmem1.GetRawPtr( &nLen1 );
 	psz2 = (const char*)cmem2.GetRawPtr( &nLen2 );
-	if( nLen1 == nLen2 ){
-		if( 0 == memcmp( psz1, psz2, nLen1 ) ){
+	if (nLen1 == nLen2) {
+		if (0 == memcmp( psz1, psz2, nLen1 )) {
 			return TRUE;
 		}
 	}
 	return FALSE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* !上位バイトと下位バイトを交換する
@@ -185,13 +150,13 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ){
 	pBuf = reinterpret_cast<unsigned char*>( pData );
 	nBufLen = nDataLen;
 
-	if( nBufLen < 2){
+	if (nBufLen < 2) {
 		return;
 	}
 	// 高速化のため
 	pdwchar = (unsigned int*)pBuf;
-	if( (size_t)pBuf % 2 == 0){
-		if( (size_t)pBuf % 4 == 2 ){
+	if ((size_t)pBuf % 2 == 0) {
+		if ((size_t)pBuf % 4 == 2) {
 			ctemp = pBuf[0];
 			pBuf[0]  = pBuf[1];
 			pBuf[1]  = ctemp;
@@ -199,7 +164,7 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ){
 		}
 		pdw_end = (unsigned int*)(pBuf + nBufLen - sizeof(unsigned int));
 
-		for(; pdwchar <= pdw_end ; ++pdwchar ){
+		for (; pdwchar <= pdw_end ; ++pdwchar) {
 			pdwchar[0] = ((pdwchar[0] & (unsigned int)0xff00ff00) >> 8) |
 						 ((pdwchar[0] & (unsigned int)0x00ff00ff) << 8);
 		}
@@ -207,7 +172,7 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ){
 	p = (unsigned char*)pdwchar;
 	p_end = pBuf + nBufLen - 2;
 	
-	for(; p <= p_end ; p+=2){
+	for (; p <= p_end ; p+=2) {
 		ctemp = p[0];
 		p[0]  = p[1];
 		p[1]  = ctemp;
@@ -224,7 +189,7 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ){
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
 void CMemory::SwapHLByte( void ){
-	char *pBuf;
+	char* pBuf;
 	int nBufLen;
 	pBuf = reinterpret_cast<char*>( GetRawPtr(&nBufLen) );
 	SwapHLByte( pBuf, nBufLen );
@@ -240,22 +205,22 @@ void CMemory::SwapHLByte( void ){
 
 	pBuf = (unsigned char*)GetRawPtr( &nBufLen );
 
-	if( nBufLen < 2){
+	if (nBufLen < 2) {
 		return;
 	}
 	// 高速化のため
-	if( (size_t)pBuf % 2 == 0){
-		if( (size_t)pBuf % 4 == 2 ){
+	if ((size_t)pBuf % 2 == 0) {
+		if ((size_t)pBuf % 4 == 2) {
 			ctemp = pBuf[0];
 			pBuf[0]  = pBuf[1];
 			pBuf[1]  = ctemp;
 			pdwchar = (unsigned int*)(pBuf + 2);
-		}else{
+		}else {
 			pdwchar = (unsigned int*)pBuf;
 		}
 		pdw_end = (unsigned int*)(pdwchar + nBufLen / sizeof(int)) - 1;
 
-		for(; pdwchar <= pdw_end ; ++pdwchar ){
+		for (; pdwchar <= pdw_end ; ++pdwchar) {
 			pdwchar[0] = ((pdwchar[0] & (unsigned int)0xff00ff00) >> 8) |
 						 ((pdwchar[0] & (unsigned int)0x00ff00ff) << 8);
 		}
@@ -263,15 +228,13 @@ void CMemory::SwapHLByte( void ){
 	p = (unsigned char*)pdwchar;
 	p_end = pBuf + nBufLen - 2;
 	
-	for(; p <= p_end ; p+=2){
+	for (; p <= p_end ; p+=2) {
 		ctemp = p[0];
 		p[0]  = p[1];
 		p[1]  = ctemp;
 	}
 */
 }
-
-
 
 /*
 || バッファサイズの調整
@@ -284,26 +247,25 @@ void CMemory::AllocBuffer( int nNewDataLen )
 	// 2バイト多くメモリ確保しておく('\0'またはL'\0'を入れるため) 2007.08.13 kobake 変更
 	nWorkLen = nNewDataLen + 2;
 
-	if( m_nDataBufSize == 0 ){
+	if (m_nDataBufSize == 0) {
 		/* 未確保の状態 */
 		pWork = malloc_char( nWorkLen );
 		m_nDataBufSize = nWorkLen;
-	}else{
+	}else {
 		/* 現在のバッファサイズより大きくなった場合のみ再確保する */
-		if( m_nDataBufSize < nWorkLen ){
+		if (m_nDataBufSize < nWorkLen) {
 			pWork = (char*)realloc( m_pRawData, nWorkLen );
 			m_nDataBufSize = nWorkLen;
-		}else{
+		}else {
 			return;
 		}
 	}
-
-
-	if( NULL == pWork ){
+	
+	if (NULL == pWork) {
 		::MYMESSAGEBOX(	NULL, MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
 			LS(STR_ERR_DLGMEM1), nNewDataLen
 		);
-		if( NULL != m_pRawData && 0 != nWorkLen ){
+		if (NULL != m_pRawData && 0 != nWorkLen) {
 			/* 古いバッファを解放して初期化 */
 			_Empty();
 		}
@@ -314,7 +276,6 @@ void CMemory::AllocBuffer( int nNewDataLen )
 }
 
 
-
 /* バッファの内容を置き換える */
 void CMemory::SetRawData( const void* pData, int nDataLen )
 {
@@ -323,6 +284,7 @@ void CMemory::SetRawData( const void* pData, int nDataLen )
 	_AddData( pData, nDataLen );
 	return;
 }
+
 
 /* バッファの内容を置き換える */
 void CMemory::SetRawData( const CMemory& pcmemData )
@@ -340,7 +302,7 @@ void CMemory::SetRawData( const CMemory& pcmemData )
 /* バッファの最後にデータを追加する（publicメンバ）*/
 void CMemory::AppendRawData( const void* pData, int nDataLenBytes )
 {
-	if(nDataLenBytes<=0)return;
+	if (nDataLenBytes <= 0) return;
 	AllocBuffer( m_nRawLen + nDataLenBytes );
 	_AddData( pData, nDataLenBytes );
 }
@@ -348,7 +310,7 @@ void CMemory::AppendRawData( const void* pData, int nDataLenBytes )
 /* バッファの最後にデータを追加する（publicメンバ）*/
 void CMemory::AppendRawData( const CMemory* pcmemData )
 {
-	if( this == pcmemData ){
+	if (this == pcmemData) {
 		CMemory cm = *pcmemData;
 		AppendRawData(&cm);
 	}
@@ -368,10 +330,9 @@ void CMemory::_Empty( void )
 }
 
 
-
 void CMemory::_AppendSz(const char* str)
 {
-	int len=strlen(str);
+	int len = strlen(str);
 	AllocBuffer( m_nRawLen + len );
 	_AddData(str,len);
 }
@@ -382,6 +343,7 @@ void CMemory::_SetRawLength(int nLength)
 	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_nRawLen = nLength;
 	assert(m_nRawLen <= m_nDataBufSize-2);
-	m_pRawData[m_nRawLen  ]=0;
-	m_pRawData[m_nRawLen+1]=0; //終端'\0'を2つ付加する('\0''\0'==L'\0')。
+	m_pRawData[m_nRawLen  ] = 0;
+	m_pRawData[m_nRawLen+1] = 0; //終端'\0'を2つ付加する('\0''\0'==L'\0')。
 }
+

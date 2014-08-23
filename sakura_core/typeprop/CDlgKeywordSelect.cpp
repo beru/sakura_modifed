@@ -85,13 +85,13 @@ int CDlgKeywordSelect::DoModal( HINSTANCE hInstance, HWND hwndParent, int* pnSet
 {
 	int i;
 
-	for( i = 0; i < KEYWORD_SELECT_NUM; i++ ){
+	for (i = 0; i < KEYWORD_SELECT_NUM; i++) {
 		m_nSet[ i ] = pnSet[ i ];
 	}
 
 	(void)CDialog::DoModal( hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL );
 
-	for( i = 0; i < KEYWORD_SELECT_NUM; i++ ){
+	for (i = 0; i < KEYWORD_SELECT_NUM; i++) {
 		pnSet[ i ] = m_nSet[ i ];
 	}
 
@@ -110,7 +110,7 @@ BOOL CDlgKeywordSelect::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam
 
 BOOL CDlgKeywordSelect::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDOK:
 		GetData();
 		break;
@@ -128,8 +128,7 @@ void CDlgKeywordSelect::SetData( void )
 	int		i;
 	int		index;
 
-	for( index = 0; index < KEYWORD_SELECT_NUM; index++ )
-	{
+	for (index = 0; index < KEYWORD_SELECT_NUM; index++) {
 		hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
 
 		/* コンボボックスを空にする */
@@ -138,20 +137,15 @@ void CDlgKeywordSelect::SetData( void )
 		/* 一行目は空白 */
 		Combo_AddString( hwndCombo, L" " );
 
-		if( m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0 )
-		{
-			for( i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; i++ )
-			{
+		if (m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0) {
+			for (i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; i++) {
 				Combo_AddString( hwndCombo, m_pCKeyWordSetMgr->GetTypeName( i ) );
 			}
 
-			if( -1 == m_nSet[ index ] )
-			{
+			if (-1 == m_nSet[ index ]) {
 				/* セット名コンボボックスのデフォルト選択 */
 				Combo_SetCurSel( hwndCombo, 0 );
-			}
-			else
-			{
+			}else {
 				/* セット名コンボボックスのデフォルト選択 */
 				Combo_SetCurSel( hwndCombo, m_nSet[ index ] + 1 );
 			}
@@ -168,17 +162,13 @@ int CDlgKeywordSelect::GetData( void )
 	int		index;
 	int		n;
 
-	for( index = 0; index < KEYWORD_SELECT_NUM; index++ )
-	{
+	for (index = 0; index < KEYWORD_SELECT_NUM; index++) {
 		hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
 
 		n = Combo_GetCurSel( hwndCombo );
-		if( CB_ERR == n || 0 == n )
-		{
+		if (CB_ERR == n || 0 == n) {
 			m_nSet[ index ] = -1;
-		}
-		else
-		{
+		}else {
 			m_nSet[ index ] = n - 1;
 		}
 	}

@@ -29,9 +29,6 @@
 #include <string.h>
 
 
-
-
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           ê∂ê¨                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -82,3 +79,4 @@ void CRecentSearch::CopyItem( CSearchString* dst, LPCWSTR src ) const
 {
 	wcscpy(*dst,src);
 }
+

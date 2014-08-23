@@ -353,9 +353,9 @@ bool CEditView::SearchBracket(
 		const KAKKO_T* p;
 		for (p = g_aKakkos; p->sStr != NULL;  p++) {
 			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
-				return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, mode );
+				return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
 			}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
-				return SearchBracketBackward( ptPos, pptLayoutNew, p->sStr, p->eStr, mode );
+				return SearchBracketBackward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
 			}
 		}
 	}
@@ -382,9 +382,9 @@ bool CEditView::SearchBracket(
 		ptPos.x = bPos - cline;
 		for (p = g_aKakkos; p->sStr != NULL; p++) {
 			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
-				return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, mode );
+				return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
 			}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
-				return SearchBracketBackward( ptPos, pptLayoutNew, p->sStr, p->eStr, mode );
+				return SearchBracketBackward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
 			}
 		}
 	}
@@ -413,35 +413,30 @@ bool CEditView::SearchBracketForward(
 	CLayoutPoint*	pptLayoutNew,
 	const wchar_t*	upChar,
 	const wchar_t*	dnChar,
-	int*			mode
+	int				mode
 )
 {
-	CDocLine* ci;
-
 	int			len;
-	const wchar_t* cPos;
-	const wchar_t* nPos;
-	const wchar_t* cline;
-	const wchar_t* lineend;
 	int			level = 0;
 
 	CLayoutPoint ptColLine;
 
-	CLayoutInt	nSearchNum;	// 02/09/19 ai
-
 	//	初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout( ptPos, &ptColLine );	// 02/09/19 ai
-	nSearchNum = ( GetTextArea().GetBottomLine() ) - ptColLine.y;					// 02/09/19 ai
-	ci = m_pcEditDoc->m_cDocLineMgr.GetLine( ptPos.GetY2() );
-	cline = ci->GetDocLineStrWithEOL( &len );
-	lineend = cline + len;
-	cPos = cline + ptPos.x;
+	CLayoutInt	nSearchNum = ( GetTextArea().GetBottomLine() ) - ptColLine.y;					// 02/09/19 ai
+	CDocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine( ptPos.GetY2() );
+	const wchar_t* cline = ci->GetDocLineStrWithEOL( &len );
+	const wchar_t* lineend = cline + len;
+	const wchar_t* cPos = cline + ptPos.x;
+
+//	auto typeData = *m_pTypeData;
+//	auto lineComment = typeData.m_cLineComment;
 
 	do {
 		while (cPos < lineend) {
-			nPos = CNativeW::GetCharNext( cline, len, cPos );
+			const wchar_t* nPos = CNativeW::GetCharNext(cline, len, cPos);
 			if (nPos - cPos > 1) {
-				//	skip
+				// skip
 				cPos = nPos;
 				continue;
 			}
@@ -463,7 +458,7 @@ bool CEditView::SearchBracketForward(
 
 		// 02/09/19 ai Start
 		nSearchNum--;
-		if (( 0 > nSearchNum ) && ( 0 == (*mode & 1 ) )) {
+		if (0 > nSearchNum && 0 == (mode & 1)) {
 			// 表示領域外を調べないモードで表示領域の終端の場合
 			//SendStatusMessage( "対括弧の検索を中断しました" );
 			break;
@@ -505,31 +500,23 @@ bool CEditView::SearchBracketBackward(
 	CLayoutPoint*	pptLayoutNew,
 	const wchar_t*	dnChar,
 	const wchar_t*	upChar,
-	int*			mode
+	int				mode
 )
 {
-	CDocLine* ci;
-
 	int			len;
-	const wchar_t* cPos;
-	const wchar_t* pPos;
-	const wchar_t* cline;
 	int			level = 1;
-	
 	CLayoutPoint ptColLine;
 
-	CLayoutInt		nSearchNum;	// 02/09/19 ai
-
-	//	初期位置の設定
+	// 初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout( ptPos, &ptColLine );	// 02/09/19 ai
-	nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
-	ci = m_pcEditDoc->m_cDocLineMgr.GetLine( ptPos.GetY2() );
-	cline = ci->GetDocLineStrWithEOL( &len );
-	cPos = cline + ptPos.x;
+	CLayoutInt nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
+	CDocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine( ptPos.GetY2() );
+	const wchar_t* cline = ci->GetDocLineStrWithEOL( &len );
+	const wchar_t* cPos = cline + ptPos.x;
 
 	do {
 		while (cPos > cline) {
-			pPos = CNativeW::GetCharPrev( cline, len, cPos );
+			const wchar_t* pPos = CNativeW::GetCharPrev(cline, len, cPos);
 			if (cPos - pPos > 1) {
 				//	skip
 				cPos = pPos;
@@ -544,7 +531,7 @@ bool CEditView::SearchBracketBackward(
 
 			if (level == 0) {	//	見つかった！
 				ptPos.x = pPos - cline;
-				m_pcEditDoc->m_cLayoutMgr.LogicToLayout( ptPos, pptLayoutNew );
+				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
 				//	Happy Ending
 			}
@@ -553,7 +540,7 @@ bool CEditView::SearchBracketBackward(
 
 		// 02/09/19 ai Start
 		nSearchNum--;
-		if (( 0 > nSearchNum ) && ( 0 == (*mode & 1 ) )) {
+		if (0 > nSearchNum && 0 == (mode & 1)) {
 			// 表示領域外を調べないモードで表示領域の先頭の場合
 			//SendStatusMessage( "対括弧の検索を中断しました" );
 			break;
@@ -566,7 +553,7 @@ bool CEditView::SearchBracketBackward(
 		if (ci == NULL)
 			break;	//	終わりに達した
 
-		cline = ci->GetDocLineStrWithEOL( &len );
+		cline = ci->GetDocLineStrWithEOL(&len);
 		cPos = cline + len;
 	}while (cline != NULL);
 	

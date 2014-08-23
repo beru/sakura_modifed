@@ -26,9 +26,6 @@ COpe::COpe(EOpeCode eCode)
 
 }
 
-
-
-
 /* COpeÉNÉâÉXè¡ñ≈ */
 COpe::~COpe()
 {
@@ -51,7 +48,7 @@ void CDeleteOpe::DUMP( void )
 	COpe::DUMP();
 	DEBUG_TRACE( _T("\t\tm_ptCaretPos_PHY_To     = [%d,%d]\n"), m_ptCaretPos_PHY_To.x, m_ptCaretPos_PHY_To.y );
 	DEBUG_TRACE( _T("\t\tm_pcmemData.size         = [%d]\n"), m_pcmemData.size() );
-	for( size_t i = 0; i < m_pcmemData.size(); i++ ){
+	for (size_t i = 0; i < m_pcmemData.size(); i++) {
 		DEBUG_TRACE( _T("\t\tm_pcmemData[%d].nSeq         = [%d]\n"), m_pcmemData[i].nSeq );
 		DEBUG_TRACE( _T("\t\tm_pcmemData[%d].cmemLine     = [%ls]\n"), m_pcmemData[i].cmemLine.GetStringPtr() );		
 	}
@@ -63,11 +60,10 @@ void CInsertOpe::DUMP( void )
 {
 	COpe::DUMP();
 	DEBUG_TRACE( _T("\t\tm_pcmemData.size         = [%d]\n"), m_pcmemData.size() );
-	for( size_t i = 0; i < m_pcmemData.size(); i++ ){
+	for (size_t i = 0; i < m_pcmemData.size(); i++) {
 		DEBUG_TRACE( _T("\t\tm_pcmemData[%d].nSeq         = [%d]\n"), m_pcmemData[i].nSeq );
 		DEBUG_TRACE( _T("\t\tm_pcmemData[%d].cmemLine     = [%ls]\n"), m_pcmemData[i].cmemLine.GetStringPtr() );		
 	}
 	return;
 }
-
 

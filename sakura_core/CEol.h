@@ -64,8 +64,8 @@ extern const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM];
 class CEol{
 public:
 	//コンストラクタ・デストラクタ
-	CEol(){ m_eEolType = EOL_NONE; }
-	CEol( EEolType t ){ SetType(t); }
+	CEol() { m_eEolType = EOL_NONE; }
+	CEol( EEolType t ) { SetType(t); }
 
 	//比較
 	bool operator==( EEolType t ) const { return GetType() == t; }
@@ -103,5 +103,4 @@ public:
 private:
 	EEolType	m_eEolType;	//!< 改行コードの種類
 };
-
 

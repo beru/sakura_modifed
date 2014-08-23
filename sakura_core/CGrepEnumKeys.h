@@ -52,19 +52,19 @@ public:
 	VGrepEnumKeys m_vecExceptAbsFolderKeys;
 
 public:
-	CGrepEnumKeys(){
+	CGrepEnumKeys() {
 	}
 
-	~CGrepEnumKeys(){
+	~CGrepEnumKeys() {
 		ClearItems();
 	}
 
-	int SetFileKeys( LPCTSTR lpKeys ){
+	int SetFileKeys( LPCTSTR lpKeys ) {
 		const TCHAR* WILDCARD_DELIMITER = _T(" ;,");	//リストの区切り
 		const TCHAR* WILDCARD_ANY = _T("*.*");	//サブフォルダ探索用
 		int nWildCardLen = _tcslen( lpKeys );
 		TCHAR* pWildCard = new TCHAR[ nWildCardLen + 1 ];
-		if( ! pWildCard ){
+		if (!pWildCard) {
 			return -1;
 		}
 		_tcscpy( pWildCard, lpKeys );
@@ -72,18 +72,18 @@ public:
 		
 		int nPos = 0;
 		TCHAR*	token;
-		while( NULL != (token = my_strtok<TCHAR>( pWildCard, nWildCardLen, &nPos, WILDCARD_DELIMITER )) ){	//トークン毎に繰り返す。
+		while (NULL != (token = my_strtok<TCHAR>( pWildCard, nWildCardLen, &nPos, WILDCARD_DELIMITER ))) {	//トークン毎に繰り返す。
 			//フィルタを種類ごとに振り分ける
-			enum KeyFilterType{
+			enum KeyFilterType {
 				FILTER_SEARCH,
 				FILTER_EXCEPT_FILE,
 				FILTER_EXCEPT_FOLDER,
 			};
 			KeyFilterType keyType = FILTER_SEARCH;
-			if( token[0] == _T('!') ){
+			if (token[0] == _T('!')) {
 				token++;
 				keyType = FILTER_EXCEPT_FILE;
-			}else if( token[0] == _T('#') ){
+			}else if (token[0] == _T('#')) {
 				token++;
 				keyType = FILTER_EXCEPT_FOLDER;
 			}
@@ -91,9 +91,9 @@ public:
 			TCHAR* p;
 			TCHAR* q;
 			p = q = token;
-			while( *p ){
-				if( *p != _T('"') ){
-					if( p != q ){
+			while (*p) {
+				if (*p != _T('"')) {
+					if (p != q) {
 						*q = *p;
 					}
 					q++;
@@ -104,37 +104,37 @@ public:
 			
 			bool bRelPath = _IS_REL_PATH( token );
 			int nValidStatus = ValidateKey( token );
-			if( 0 != nValidStatus ){
+			if (0 != nValidStatus) {
 				delete [] pWildCard;
 				return nValidStatus;
 			}
-			if( keyType == FILTER_SEARCH ){
-				if( bRelPath ){
+			if (keyType == FILTER_SEARCH) {
+				if (bRelPath) {
 					push_back_unique( m_vecSearchFileKeys, token );
-				}else{
+				}else {
 //					push_back_unique( m_vecSearchAbsFileKeys, token );
 //					push_back_unique( m_vecSearchFileKeys, token );
 					delete [] pWildCard;
 					return 2; // 絶対パス指定は不可
 				}
-			}else if( keyType == FILTER_EXCEPT_FILE ){
-				if( bRelPath ){
+			}else if (keyType == FILTER_EXCEPT_FILE) {
+				if (bRelPath) {
 					push_back_unique( m_vecExceptFileKeys, token );
-				}else{
+				}else {
 					push_back_unique( m_vecExceptAbsFileKeys, token );
 				}
-			}else if( keyType == FILTER_EXCEPT_FOLDER ){
-				if( bRelPath ){
+			}else if(keyType == FILTER_EXCEPT_FOLDER) {
+				if (bRelPath) {
 					push_back_unique( m_vecExceptFolderKeys, token );
-				}else{
+				}else {
 					push_back_unique( m_vecExceptAbsFolderKeys, token );
 				}
 			}
 		}
-		if( m_vecSearchFileKeys.size() == 0 ){
+		if (m_vecSearchFileKeys.size() == 0) {
 			push_back_unique( m_vecSearchFileKeys, WILDCARD_ANY );
 		}
-		if( m_vecSearchFolderKeys.size() == 0 ){
+		if (m_vecSearchFolderKeys.size() == 0) {
 			push_back_unique( m_vecSearchFolderKeys, WILDCARD_ANY );
 		}
 		delete [] pWildCard;
@@ -143,31 +143,31 @@ public:
 
 private:
 
-	void ClearItems( void ){
+	void ClearItems( void ) {
 		ClearEnumKeys(m_vecExceptFileKeys);
 		ClearEnumKeys(m_vecSearchFileKeys);
 		ClearEnumKeys(m_vecExceptFolderKeys);
 		ClearEnumKeys(m_vecSearchFolderKeys);
 		return;
 	}
-	void ClearEnumKeys( VGrepEnumKeys& keys ){
-		for( int i = 0; i < (int)keys.size(); i++ ){
+	void ClearEnumKeys( VGrepEnumKeys& keys ) {
+		for (int i = 0; i < (int)keys.size(); i++) {
 			delete [] keys[ i ];
 		}
 		keys.clear();
 	}
 
-	void push_back_unique( VGrepEnumKeys& keys, LPCTSTR addKey ){
-		if( ! IsExist( keys, addKey) ){
+	void push_back_unique( VGrepEnumKeys& keys, LPCTSTR addKey ) {
+		if (!IsExist( keys, addKey)) {
 			TCHAR* newKey = new TCHAR[ _tcslen( addKey ) + 1 ];
 			_tcscpy( newKey, addKey );
 			keys.push_back( newKey );
 		}
 	}
 
-	BOOL IsExist( VGrepEnumKeys& keys, LPCTSTR addKey ){
-		for( int i = 0; i < (int)keys.size(); i++ ){
-			if( _tcscmp( keys[ i ], addKey ) == 0 ){
+	BOOL IsExist( VGrepEnumKeys& keys, LPCTSTR addKey ) {
+		for (int i = 0; i < (int)keys.size(); i++) {
+			if (_tcscmp( keys[ i ], addKey ) == 0) {
 				return TRUE;
 			}
 		}
@@ -178,18 +178,17 @@ private:
 		@retval 0 正常終了
 		@retval 1 *\file.exe などのフォルダ部分でのワイルドカードはエラー
 	*/
-	int ValidateKey( LPCTSTR key ){
+	int ValidateKey( LPCTSTR key ) {
 		// 
 		bool wildcard = false;
-		for( int i = 0; key[i]; i++ ){
-			if( !wildcard && (key[i] == _T('*') || key[i] == _T('?')) ){
+		for (int i = 0; key[i]; i++) {
+			if (!wildcard && (key[i] == _T('*') || key[i] == _T('?'))) {
 				wildcard = true;
-			}else if( wildcard && (key[i] == _T('\\') || key[i] == _T('/')) ){
+			}else if (wildcard && (key[i] == _T('\\') || key[i] == _T('/'))) {
 				return 1;
 			}
 		}
 		return 0;
 	}
 };
-
 

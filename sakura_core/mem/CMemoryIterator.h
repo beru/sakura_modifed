@@ -75,17 +75,18 @@ public:
 
 		//データ増分を計算
 		m_nIndex_Delta = CLogicInt(CNativeW::GetSizeOfChar( m_pLine, m_nLineLen, m_nIndex ));
-		if( 0 == m_nIndex_Delta )
+		if (0 == m_nIndex_Delta) {
 			m_nIndex_Delta = CLogicInt(1);
+		}
 
 		//桁増分を計算
-		if (m_pLine[m_nIndex] == WCODE::TAB){
+		if (m_pLine[m_nIndex] == WCODE::TAB) {
 			m_nColumn_Delta = m_nTabSpace - ( m_nColumn % m_nTabSpace );
-		}
-		else{
+		}else {
 			m_nColumn_Delta = CLayoutInt(CNativeW::GetKetaOfChar( m_pLine, m_nLineLen, m_nIndex ));
-//			if( 0 == m_nColumn_Delta )				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//			if (0 == m_nColumn_Delta) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				m_nColumn_Delta = CLayoutInt(1);
+//			}
 		}
 	}
 	

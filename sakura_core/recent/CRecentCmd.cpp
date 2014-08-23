@@ -79,3 +79,4 @@ void CRecentCmd::CopyItem( CCmdString* dst, LPCTSTR src ) const
 {
 	_tcscpy(*dst,src);
 }
+

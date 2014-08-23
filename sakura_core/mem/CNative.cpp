@@ -6,3 +6,4 @@ void CNative::Clear()
 {
 	this->SetRawData("",0);
 }
+

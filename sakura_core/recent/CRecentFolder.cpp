@@ -28,9 +28,6 @@
 #include "env/DLLSHAREDATA.h"
 
 
-
-
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           ê∂ê¨                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -81,3 +78,4 @@ void CRecentFolder::CopyItem( CPathString* dst, LPCTSTR src ) const
 {
 	_tcscpy(*dst,src);
 }
+

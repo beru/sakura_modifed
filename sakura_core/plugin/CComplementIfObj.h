@@ -35,11 +35,11 @@
 class CComplementIfObj : public CWSHIfObj {
 	// 型定義
 	enum FuncId {
-		F_OL_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
-		F_OL_FUNCTION_FIRST = F_FUNCTION_FIRST,	//↓関数は以下に追加する
-		F_CM_GETCURRENTWORD,					//補完対象の文字列を取得
-		F_CM_GETOPTION,							//オプションを取得
-		F_CM_ADDLIST,							//候補に追加
+		F_OL_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
+		F_OL_FUNCTION_FIRST = F_FUNCTION_FIRST,	// ↓関数は以下に追加する
+		F_CM_GETCURRENTWORD,					// 補完対象の文字列を取得
+		F_CM_GETOPTION,							// オプションを取得
+		F_CM_ADDLIST,							// 候補に追加
 	};
 
 	// コンストラクタ
@@ -58,38 +58,42 @@ public:
 
 	// 実装
 public:
-	//コマンド情報を取得する
+	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const{ return m_MacroFuncInfoCommandArr; }
-	//関数情報を取得する
+	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const{ return m_MacroFuncInfoArr; };
-	//関数を処理する
+	// 関数を処理する
 	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result)
 	{
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
 		switch (LOWORD(ID)) {
-		case F_CM_GETCURRENTWORD:	//補完対象の文字列を取得
+		case F_CM_GETCURRENTWORD:	// 補完対象の文字列を取得
 			{
 				SysString s( m_sCurrentWord.c_str(), m_sCurrentWord.length() );
 				Wrap( &Result )->Receive( s );
 			}
 			return true;
-		case F_CM_GETOPTION:	//オプションを取得
+		case F_CM_GETOPTION:	// オプションを取得
 			{
 				Wrap( &Result )->Receive( m_nOption );
 			}
 			return true;
-		case F_CM_ADDLIST:		//候補に追加する
+		case F_CM_ADDLIST:		// 候補に追加する
 			{
 				std::wstring keyword;
-				if (variant_to_wstr( Arguments[0], keyword ) != true) return false;
+				if (variant_to_wstr( Arguments[0], keyword ) != true) {
+					return false;
+				}
 				const wchar_t* word = keyword.c_str();
 				int nWordLen = keyword.length();
-				if (nWordLen <= 0) return false;
+				if (nWordLen <= 0) {
+					return false;
+				}
 				std::wstring strWord = std::wstring(word, nWordLen);
 				if (CHokanMgr::AddKouhoUnique( m_pHokanMgr->m_vKouho, strWord )) {
 					Wrap( &Result )->Receive( m_pHokanMgr->m_vKouho.size() );
-				}else{
+				}else {
 					Wrap( &Result )->Receive( -1 );
 				}
 				return true;
@@ -97,7 +101,8 @@ public:
 		}
 		return false;
 	}
-	//コマンドを処理する
+	
+	// コマンドを処理する
 	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
 	{
 		return false;

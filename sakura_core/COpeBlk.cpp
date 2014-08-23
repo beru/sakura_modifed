@@ -28,7 +28,7 @@ COpeBlk::~COpeBlk()
 {
 	/* ‘€ì‚Ì”z—ñ‚ğíœ‚·‚é */
 	int size = (int)m_ppCOpeArr.size();
-	for( int i = 0; i < size; ++i ){
+	for (int i = 0; i < size; ++i) {
 		SAFE_DELETE(m_ppCOpeArr[i]);
 	}
 	m_ppCOpeArr.clear();
@@ -41,7 +41,7 @@ COpeBlk::~COpeBlk()
 /* ‘€ì‚Ì’Ç‰Á */
 bool COpeBlk::AppendOpe( COpe* pcOpe )
 {
-	if(pcOpe->m_ptCaretPos_PHY_Before.HasNegative() || pcOpe->m_ptCaretPos_PHY_After.HasNegative()){
+	if (pcOpe->m_ptCaretPos_PHY_Before.HasNegative() || pcOpe->m_ptCaretPos_PHY_After.HasNegative()) {
 		TopErrorMessage( NULL,
 			_T("COpeBlk::AppendOpe() error.\n")
 			_T("Bug.\n")
@@ -63,7 +63,7 @@ bool COpeBlk::AppendOpe( COpe* pcOpe )
 /* ‘€ì‚ğ•Ô‚· */
 COpe* COpeBlk::GetOpe( int nIndex )
 {
-	if( GetNum() <= nIndex ){
+	if (GetNum() <= nIndex) {
 		return NULL;
 	}
 	return m_ppCOpeArr[nIndex];
@@ -79,12 +79,10 @@ void COpeBlk::DUMP( void )
 #ifdef _DEBUG
 	int i;
 	int size = GetNum();
-	for( i = 0; i < size; ++i ){
+	for (i = 0; i < size; ++i) {
 		MYTRACE( _T("\tCOpeBlk.m_ppCOpeArr[%d]----\n"), i );
 		m_ppCOpeArr[i]->DUMP();
 	}
 #endif
 }
-
-
 

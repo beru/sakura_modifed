@@ -71,24 +71,23 @@ public:
 	//コマンドを処理する
 	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
 	{
-		switch ( LOWORD(ID) ) 
-		{
+		switch (LOWORD(ID)) {
 		case F_OL_ADDFUNCINFO:			//アウトライン解析に追加する
 		case F_OL_ADDFUNCINFO2:			//アウトライン解析に追加する（深さ指定）
 			{
-				if( Arguments[0] == NULL )return false;
-				if( Arguments[1] == NULL )return false;
-				if( Arguments[2] == NULL )return false;
-				if( Arguments[3] == NULL )return false;
+				if (Arguments[0] == NULL) return false;
+				if (Arguments[1] == NULL) return false;
+				if (Arguments[2] == NULL) return false;
+				if (Arguments[3] == NULL) return false;
 				CLogicPoint ptLogic( _wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1 );
-				if( ptLogic.x < 0 )ptLogic.x = 0;
-				if( ptLogic.y < 0 )ptLogic.y = 0;
+				if (ptLogic.x < 0) ptLogic.x = 0;
+				if (ptLogic.y < 0) ptLogic.y = 0;
 				CLayoutPoint ptLayout;
 				View->GetDocument()->m_cLayoutMgr.LogicToLayout( ptLogic, &ptLayout );
 				int nParam = _wtoi(Arguments[3]);
-				if( LOWORD(ID) == F_OL_ADDFUNCINFO ){
+				if (LOWORD(ID) == F_OL_ADDFUNCINFO) {
 					m_cFuncInfoArr.AppendData( ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam );
-				}else{
+				}else {
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
 					m_cFuncInfoArr.AppendData( ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam, nDepth );
@@ -96,15 +95,17 @@ public:
 			}
 			break;
 		case F_OL_SETTITLE:				//アウトラインダイアログタイトルを指定
-			if( Arguments[0] == NULL )return false;
+			if (Arguments[0] == NULL) return false;
 			m_sOutlineTitle = to_tchar( Arguments[0] );
 			break;
 		case F_OL_SETLISTTYPE:			//アウトラインリスト種別を指定
-			if( Arguments[0] == NULL )return false;
+			if (Arguments[0] == NULL) return false;
 			m_nListType = (EOutlineType)_wtol(Arguments[0]);
 			break;
 		case F_OL_SETLABEL:				//ラベル文字列を指定
-			if( Arguments[0] == NULL || Arguments[1] == NULL ) return false;
+			if (Arguments[0] == NULL || Arguments[1] == NULL) {
+				return false;
+			}
 			{
 				std::wstring sLabel = Arguments[1];
 				m_cFuncInfoArr.SetAppendText( _wtol(Arguments[0]), sLabel, true );
@@ -126,20 +127,20 @@ private:
 	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
 };
 
-//コマンド情報
+// コマンド情報
 MacroFuncInfo COutlineIfObj::m_MacroFuncInfoCommandArr[] = 
 {
-	//ID									関数名							引数										戻り値の型	m_pszData
+	// ID									関数名							引数										戻り値の型	m_pszData
 	{EFunctionCode(F_OL_ADDFUNCINFO),		LTEXT("AddFuncInfo"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, //アウトライン解析に追加する
 	{EFunctionCode(F_OL_ADDFUNCINFO2),		LTEXT("AddFuncInfo2"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, //アウトライン解析に追加する（深さ指定）
 	{EFunctionCode(F_OL_SETTITLE),			LTEXT("SetTitle"),				{VT_BSTR, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL },	//アウトラインダイアログタイトルを指定
 	{EFunctionCode(F_OL_SETLISTTYPE),		LTEXT("SetListType"),			{VT_I4, VT_EMPTY, VT_EMPTY, VT_EMPTY},		VT_EMPTY,	NULL }, //アウトラインリスト種別を指定
 	{EFunctionCode(F_OL_SETLABEL),			LTEXT("SetLabel"),				{VT_I4, VT_BSTR, VT_EMPTY, VT_EMPTY},		VT_EMPTY,	NULL }, //ラベル文字列を指定
-	//	終端
+	// 終端
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
-//関数情報
+// 関数情報
 MacroFuncInfo COutlineIfObj::m_MacroFuncInfoArr[] = 
 {
 	//ID									関数名							引数										戻り値の型	m_pszData

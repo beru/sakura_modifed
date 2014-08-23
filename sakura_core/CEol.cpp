@@ -56,6 +56,7 @@ struct SEolDefinition{
 	bool StartsWith(const WCHAR* pData, int nLen) const{ return m_nLen<=nLen && 0==auto_memcmp(pData,m_szDataW,m_nLen); }
 	bool StartsWith(const ACHAR* pData, int nLen) const{ return m_nLen<=nLen && m_szDataA[0] != '\0' && 0==auto_memcmp(pData,m_szDataA,m_nLen); }
 };
+
 static const SEolDefinition g_aEolTable[] = {
 	{ _T("‰üs–³"),	L"",			"",			0 },
 	{ _T("CRLF"),	L"\x0d\x0a",	"\x0d\x0a",	2 },
@@ -65,8 +66,6 @@ static const SEolDefinition g_aEolTable[] = {
 	{ _T("LS"),		L"\u2028",		"",			1 },
 	{ _T("PS"),		L"\u2029",		"",			1 },
 };
-
-
 
 struct SEolDefinitionForUniFile{
 	const char*	m_szDataW;
@@ -87,9 +86,6 @@ static const SEolDefinitionForUniFile g_aEolTable_uni_file[] = {
 };
 
 
-
-
-
 //-----------------------------------------------
 //	ŽÀ‘••â•
 //-----------------------------------------------
@@ -103,9 +99,10 @@ static const SEolDefinitionForUniFile g_aEolTable_uni_file[] = {
 template <class T>
 EEolType GetEOLType( const T* pszData, int nDataLen )
 {
-	for( int i = 1; i < EOL_TYPE_NUM; ++i ){
-		if( g_aEolTable[i].StartsWith(pszData, nDataLen) )
+	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
+		if (g_aEolTable[i].StartsWith(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
+		}
 	}
 	return EOL_NONE;
 }
@@ -117,18 +114,20 @@ EEolType GetEOLType( const T* pszData, int nDataLen )
 
 EEolType _GetEOLType_uni( const char* pszData, int nDataLen )
 {
-	for( int i = 1; i < EOL_TYPE_NUM; ++i ){
-		if( g_aEolTable_uni_file[i].StartsWithW(pszData, nDataLen) )
+	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
+		if (g_aEolTable_uni_file[i].StartsWithW(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
+		}
 	}
 	return EOL_NONE;
 }
 
 EEolType _GetEOLType_unibe( const char* pszData, int nDataLen )
 {
-	for( int i = 1; i < EOL_TYPE_NUM; ++i ){
-		if( g_aEolTable_uni_file[i].StartsWithWB(pszData, nDataLen) )
+	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
+		if (g_aEolTable_uni_file[i].StartsWithWB(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
+		}
 	}
 	return EOL_NONE;
 }
@@ -164,7 +163,7 @@ const wchar_t* CEol::GetValue2() const
 */
 bool CEol::SetType( EEolType t )
 {
-	if( t < EOL_NONE || EOL_CODEMAX <= t ){
+	if (t < EOL_NONE || EOL_CODEMAX <= t) {
 		//	ˆÙí’l
 		m_eEolType = EOL_CRLF;
 		return false;

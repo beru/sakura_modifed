@@ -207,8 +207,6 @@ protected:
 		*profile = value;
 	}
 
-
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         “üo—Í•”                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -217,23 +215,22 @@ public:
 	template <class T> //T=={bool, int, WORD, wchar_t, char, wstring, StringBufferA, StringBufferW, StaticString}
 	bool IOProfileData( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue )
 	{
-		//“Ç‚İ‚İ
-		if(m_bRead){
-			//•¶š—ñ“Ç‚İ‚İ
+		// “Ç‚İ‚İ
+		if (m_bRead) {
+			// •¶š—ñ“Ç‚İ‚İ
 			wstring buf;
 			bool ret=GetProfileDataImp( pszSectionName, pszEntryKey, buf);
-			if(ret){
-				//T‚É•ÏŠ·
+			if (ret) {
+				// T‚É•ÏŠ·
 				profile_to_value(buf, &tEntryValue);
 			}
 			return ret;
-		}
-		//‘‚«‚İ
-		else{
-			//•¶š—ñ‚É•ÏŠ·
+		// ‘‚«‚İ
+		}else {
+			// •¶š—ñ‚É•ÏŠ·
 			wstring buf;
 			value_to_profile(tEntryValue, &buf);
-			//•¶š—ñ‘‚«‚İ
+			// •¶š—ñ‘‚«‚İ
 			return SetProfileDataImp( pszSectionName, pszEntryKey, buf);
 		}
 	}
@@ -243,9 +240,9 @@ public:
 	template <class T>
 	bool IOProfileData_WrapInt( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue)
 	{
-		int n=nEntryValue;
-		bool ret=this->IOProfileData( pszSectionName, pszEntryKey, n );
-		nEntryValue=(T)n;
+		int n = nEntryValue;
+		bool ret = this->IOProfileData( pszSectionName, pszEntryKey, n );
+		nEntryValue = (T)n;
 		return ret;
 	}
 };

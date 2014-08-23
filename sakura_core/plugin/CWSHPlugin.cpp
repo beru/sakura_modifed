@@ -33,7 +33,7 @@
 // デストラクタ
 CWSHPlugin::~CWSHPlugin(void)
 {
-	for( CPlug::ArrayIter it = m_plugs.begin(); it != m_plugs.end(); it++ ){
+	for (CPlug::ArrayIter it = m_plugs.begin(); it != m_plugs.end(); it++) {
 		delete *it;
 	}
 }
@@ -73,20 +73,22 @@ bool CWSHPlugin::InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& para
 	CWSHPlug& wshPlug = static_cast<CWSHPlug&>( plug );
 	CWSHMacroManager* pWsh = NULL;
 
-	if( !m_bUseCache || wshPlug.m_Wsh == NULL ){
+	if (!m_bUseCache || wshPlug.m_Wsh == NULL) {
 		CFilePath path( plug.m_cPlugin.GetFilePath( to_tchar(plug.m_sHandler.c_str()) ).c_str() );
 
 		pWsh = (CWSHMacroManager*)CWSHMacroManager::Creator( path.GetExt( true ) );
-		if( pWsh == NULL ){ return false; }
+		if (pWsh == NULL) {
+			return false;
+		}
 
 		BOOL bLoadResult = pWsh->LoadKeyMacro( G_AppInstance(), path );
-		if ( !bLoadResult ){
+		if (!bLoadResult) {
 			ErrorMessage( NULL, LS(STR_WSHPLUG_LOADMACRO), static_cast<const TCHAR*>(path) );
 			delete pWsh;
 			return false;
 		}
 
-	}else{
+	}else {
 		pWsh = wshPlug.m_Wsh;
 	}
 
@@ -101,12 +103,13 @@ bool CWSHPlugin::InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& para
 
 	pWsh->ClearParam();
 
-	if( m_bUseCache ){
+	if (m_bUseCache) {
 		wshPlug.m_Wsh = pWsh;
-	}else{
+	}else {
 		// 終わったら開放
 		delete pWsh;
 	}
 
 	return true;
 }
+

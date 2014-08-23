@@ -247,23 +247,23 @@ CIfObj::CIfObj(const wchar_t* name, bool isGlobal)
 //デストラクタ
 CIfObj::~CIfObj()
 {
-	if(m_TypeInfo != NULL)
+	if (m_TypeInfo != NULL) {
 		m_TypeInfo->Release();
+	}
 }
 	
 //IUnknown実装
 HRESULT STDMETHODCALLTYPE CIfObj::QueryInterface(REFIID iid, void ** ppvObject) 
 {
-	if(ppvObject == NULL) 
+	if (ppvObject == NULL) {
 		return E_POINTER;
-	else if(IsEqualIID(iid, IID_IUnknown) || IsEqualIID(iid, IID_IDispatch))
-	{
+	}else if (IsEqualIID(iid, IID_IUnknown) || IsEqualIID(iid, IID_IDispatch)) {
 		AddRef();
 		*ppvObject = this;
 		return S_OK;
-	}
-	else
+	}else {
 		return E_NOINTERFACE;
+	}
 }
 
 //IDispatch実装
@@ -277,10 +277,11 @@ HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
 				EXCEPINFO FAR* pexcepinfo,
 				UINT FAR* puArgErr)
 {
-	if((unsigned)dispidMember < m_Methods.size())
+	if ((unsigned)dispidMember < m_Methods.size()) {
 		return (this->* (m_Methods[dispidMember].Method))( m_Methods[dispidMember].ID, pdispparams, pvarResult, m_Owner->GetData() );
-	else
+	}else {
 		return E_UNEXPECTED;
+	}
 }
 
 HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo( 
@@ -288,12 +289,10 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
 				/* [in] */ LCID lcid,
 				/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
-	if(m_TypeInfo == NULL)
-	{
+	if (m_TypeInfo == NULL) {
 		m_TypeInfo = new CIfObjTypeInfo(this->m_Methods);
 		m_TypeInfo->AddRef();
 	}
-		
 	(*ppTInfo) = m_TypeInfo;
 	(*ppTInfo)->AddRef();
 	return S_OK;
@@ -316,18 +315,15 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
   LCID lcid,
   DISPID FAR* rgdispid)
 {
-	for(unsigned i = 0; i < cNames; ++i)
-	{
+	for (unsigned i = 0; i < cNames; ++i) {
 #ifdef TEST
 		//大量にメッセージが出るので注意。
 		//DEBUG_TRACE( _T("GetIDsOfNames: %ls\n"), rgszNames[i] );
 #endif
 		size_t nSize = m_Methods.size();
-		for(size_t j = 0; j < nSize; ++j)
-		{
+		for (size_t j = 0; j < nSize; ++j) {
 			//	Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
-			if(_wcsicmp(rgszNames[i], m_Methods[j].Name) == 0)
-			{
+			if (_wcsicmp(rgszNames[i], m_Methods[j].Name) == 0) {
 				rgdispid[i] = j;
 				goto Found;
 			}
@@ -362,11 +358,11 @@ void CIfObj::AddMethod(
 	wcscpy(Info->Name, Name);
 	Info->Method = Method;
 	Info->ID = ID;
-	for(int i = 0; i < ArgumentCount; ++i)
-	{
+	for (int i = 0; i < ArgumentCount; ++i) {
 		Info->Arguments[i].tdesc.vt = ArgumentTypes[ArgumentCount - i - 1];
 		Info->Arguments[i].paramdesc.wParamFlags = PARAMFLAG_FIN;
 	}
 	Info->Arguments[ArgumentCount].tdesc.vt = ResultType;
 	Info->Arguments[ArgumentCount].paramdesc.wParamFlags = PARAMFLAG_FRETVAL;
 }
+

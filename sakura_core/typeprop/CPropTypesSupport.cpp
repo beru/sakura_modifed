@@ -49,7 +49,7 @@ static const DWORD p_helpids3[] = {	//11500
 };
 
 
-struct SHokanMethod{
+struct SHokanMethod {
 	int nMethod;
 	std::wstring name;
 };
@@ -75,7 +75,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 	WORD		wID;
 	NMHDR*		pNMHDR;
 
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 p2 */
 		SetData( hwndDlg );
@@ -91,21 +91,21 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
 		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
 //		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
-		switch( wNotifyCode ){
+		switch (wNotifyCode) {
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
 			/* ダイアログデータの取得 p2 */
 			GetData( hwndDlg );
-			switch( wID ){
+			switch (wID) {
 			case IDC_BUTTON_HOKANFILE_REF:	/* 入力補完 単語ファイルの「参照...」ボタン */
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Types.m_szHokanFile ) ){
+					if (_IS_REL_PATH( m_Types.m_szHokanFile )) {
 						GetInidirOrExedir( szPath, m_Types.m_szHokanFile );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Types.m_szHokanFile );
 					}
 					/* ファイルオープンダイアログの初期化 */
@@ -115,7 +115,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 						_T("*.*"),
 						szPath
 					);
-					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+					if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 						_tcscpy( m_Types.m_szHokanFile, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_HOKANFILE, m_Types.m_szHokanFile );
 					}
@@ -127,9 +127,9 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Types.m_szExtHelp ) ){
+					if (_IS_REL_PATH( m_Types.m_szExtHelp )) {
 						GetInidirOrExedir( szPath, m_Types.m_szExtHelp, TRUE );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Types.m_szExtHelp );
 					}
 					/* ファイルオープンダイアログの初期化 */
@@ -139,7 +139,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 						_T("*.hlp;*.chm;*.col"),
 						szPath
 					);
-					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+					if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 						_tcscpy( m_Types.m_szExtHelp, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPEEXTHELP, m_Types.m_szExtHelp );
 					}
@@ -151,9 +151,9 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH + 1];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Types.m_szExtHtmlHelp ) ){
+					if (_IS_REL_PATH( m_Types.m_szExtHtmlHelp )) {
 						GetInidirOrExedir( szPath, m_Types.m_szExtHtmlHelp, TRUE );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Types.m_szExtHtmlHelp );
 					}
 					/* ファイルオープンダイアログの初期化 */
@@ -163,7 +163,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 						_T("*.chm;*.col"),
 						szPath
 					);
-					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+					if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 						_tcscpy( m_Types.m_szExtHtmlHelp, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_Types.m_szExtHtmlHelp );
 					}
@@ -177,7 +177,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 //		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
 //		pMNUD  = (NM_UPDOWN*)lParam;
-		switch( pNMHDR->code ){
+		switch (pNMHDR->code) {
 		case PSN_HELP:	//Jul. 03, 2001 JEPRO 支援タブのヘルプを有効化
 			OnHelp( hwndDlg, IDD_PROP_SUPPORT );
 			return TRUE;
@@ -195,7 +195,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 //From Here Jul. 05, 2001 JEPRO: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids3 );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -226,9 +226,9 @@ void CPropTypesSupport::SetData( HWND hwndDlg )
 		ApiWrap::Combo_AddString( hCombo, LS(STR_SMART_INDENT_NONE) );
 		Combo_SetCurSel( hCombo, 0 );
 		size_t nSize = pMedothList->size();
-		for( size_t i = 0; i < nSize; i++ ){
+		for (size_t i = 0; i < nSize; i++) {
 			ApiWrap::Combo_AddString( hCombo, (*pMedothList)[i].name.c_str() );
-			if( m_Types.m_nHokanType == (*pMedothList)[i].nMethod ){
+			if (m_Types.m_nHokanType == (*pMedothList)[i].nMethod) {
 				Combo_SetCurSel( hCombo, i + 1 );
 			}
 		}
@@ -268,9 +268,9 @@ int CPropTypesSupport::GetData( HWND hwndDlg )
 	{
 		HWND hCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_HOKAN_TYPE );
 		int i = Combo_GetCurSel( hCombo );
-		if( 0 == i ){
+		if (0 == i) {
 			m_Types.m_nHokanType = 0;
-		}else if( CB_ERR != i ){
+		}else if (CB_ERR != i) {
 			m_Types.m_nHokanType = (*GetHokanMethodList())[i - 1].nMethod;
 		}
 	}
@@ -299,10 +299,11 @@ void CPropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
 void CPropTypesSupport::RemoveHokanMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = GetHokanMethodList()->size();
-	for(int i = 0; i < nSize; i++ ){
-		if( (*GetHokanMethodList())[i].nMethod == (EOutlineType)nMethod ){
+	for (int i = 0; i < nSize; i++) {
+		if ((*GetHokanMethodList())[i].nMethod == (EOutlineType)nMethod) {
 			GetHokanMethodList()->erase( GetHokanMethodList()->begin() + i );
 			break;
 		}
 	}
 }
+

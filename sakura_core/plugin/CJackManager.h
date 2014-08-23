@@ -52,33 +52,33 @@ enum EJack {
 	PP_COMPLEMENTGLOBAL,
 	PP_MACRO,
 
-	//↑ジャックを追加するときはこの行の上に。
-	PP_BUILTIN_JACK_COUNT	//組み込みジャック数
+	// ↑ジャックを追加するときはこの行の上に。
+	PP_BUILTIN_JACK_COUNT	// 組み込みジャック数
 };
 
 // ジャック定義構造体
 typedef struct tagJackDef {
 	EJack			ppId;
 	const WCHAR*	szName;
-	CPlug::Array		plugs;	//ジャックに関連付けられたプラグ
+	CPlug::Array	plugs;	// ジャックに関連付けられたプラグ
 } JackDef;
 
 // プラグ登録結果
 enum ERegisterPlugResult {
-	PPMGR_REG_OK,				//プラグイン登録成功
-	PPMGR_INVALID_NAME,			//ジャック名が不正
-	PPMGR_CONFLICT				//指定したジャックは別のプラグインが接続している
+	PPMGR_REG_OK,				// プラグイン登録成功
+	PPMGR_INVALID_NAME,			// ジャック名が不正
+	PPMGR_CONFLICT				// 指定したジャックは別のプラグインが接続している
 };
 
 
-//ジャック管理クラス
+// ジャック管理クラス
 class CJackManager : public TSingleton<CJackManager>{
 	friend class TSingleton<CJackManager>;
 	CJackManager();
 
 	typedef std::wstring wstring;
 
-	//操作
+	// 操作
 public:
 	ERegisterPlugResult RegisterPlug( wstring pszJack, CPlug* plug );	//プラグをジャックに関連付ける
 	bool UnRegisterPlug( wstring pszJack, CPlug* plug );	//プラグの関連付けを解除する

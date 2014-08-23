@@ -77,8 +77,7 @@ public:
 	//ŠÖ”‚ğˆ—‚·‚é
 	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result)
 	{
-		switch ( LOWORD(ID) ) 
-		{
+		switch (LOWORD(ID)) {
 		case F_SI_GETCHAR:						//‰Ÿ‰º‚µ‚½ƒL[‚ğæ“¾‚·‚é
 			{
 				wstring sValue;

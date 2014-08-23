@@ -49,8 +49,8 @@
 int	CPropCommon::SearchIntArr( int nKey, int* pnArr, int nArrNum )
 {
 	int i;
-	for( i = 0; i < nArrNum; ++i ){
-		if( nKey == pnArr[i] ){
+	for (i = 0; i < nArrNum; ++i) {
+		if (nKey == pnArr[i]) {
 			return i;
 		}
 	}
@@ -75,21 +75,21 @@ INT_PTR CPropCommon::DlgProc(
 {
 	PROPSHEETPAGE*	pPsp;
 	CPropCommon*	pCPropCommon;
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
 		pCPropCommon = ( CPropCommon* )(pPsp->lParam);
-		if( NULL != pCPropCommon ){
+		if (NULL != pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, wParam, pPsp->lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCPropCommon = ( CPropCommon* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if( NULL != pCPropCommon ){
+		if (NULL != pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, wParam, lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	}
@@ -103,20 +103,20 @@ INT_PTR CPropCommon::DlgProc2(
 )
 {
 	CPropCommon*	pCPropCommon;
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		pCPropCommon = ( CPropCommon* )(lParam);
-		if( NULL != pCPropCommon ){
+		if (NULL != pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, IDOK, lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCPropCommon = ( CPropCommon* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if( NULL != pCPropCommon ){
+		if (NULL != pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, wParam, lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	}
@@ -158,15 +158,9 @@ CPropCommon::CPropCommon()
 }
 
 
-
-
-
 CPropCommon::~CPropCommon()
 {
 }
-
-
-
 
 
 /* 初期化 */
@@ -186,10 +180,6 @@ void CPropCommon::Create( HWND hwndParent, CImageListMgr* pcIcons, CMenuDrawer* 
 
 	return;
 }
-
-
-
-
 
 
 //	From Here Jun. 2, 2001 genta
@@ -243,10 +233,10 @@ INT_PTR CPropCommon::DoPropertySheet( int nPageNum, bool bTrayProc )
 
 	std::tstring		sTabname[_countof(ComPropSheetInfoList)];
 	PROPSHEETPAGE		psp[_countof(ComPropSheetInfoList)];
-	for( nIdx = 0; nIdx < _countof(ComPropSheetInfoList); nIdx++ ){
+	for (nIdx = 0; nIdx < _countof(ComPropSheetInfoList); nIdx++) {
 		sTabname[nIdx] = LS(ComPropSheetInfoList[nIdx].m_nTabNameId);
 
-		PROPSHEETPAGE *p = &psp[nIdx];
+		PROPSHEETPAGE* p = &psp[nIdx];
 		memset_raw( p, 0, sizeof_raw( *p ) );
 		p->dwSize      = sizeof_raw( *p );
 		p->dwFlags     = PSP_USETITLE | PSP_HASHELP;
@@ -276,15 +266,15 @@ INT_PTR CPropCommon::DoPropertySheet( int nPageNum, bool bTrayProc )
 	psh.nPages     = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
-	if( -1 == nPageNum ){
+	if (-1 == nPageNum) {
 		psh.nStartPage = m_nPageNum;
 	}else
-	if( 0 > nPageNum ){			//- 20020106 aroka
+	if (0 > nPageNum) {			//- 20020106 aroka
 		psh.nStartPage = 0;
-	}else{
+	}else {
 		psh.nStartPage = nPageNum;
 	}
-	if( psh.nPages - 1 < psh.nStartPage ){
+	if (psh.nPages - 1 < psh.nStartPage) {
 		psh.nStartPage = psh.nPages - 1;
 	}
 
@@ -292,7 +282,7 @@ INT_PTR CPropCommon::DoPropertySheet( int nPageNum, bool bTrayProc )
 	psh.pfnCallback = NULL;
 
 	nRet = MyPropertySheet( &psh );	// 2007.05.24 ryoji 独自拡張プロパティシート
-	if( -1 == nRet ){
+	if (-1 == nRet) {
 		TCHAR*	pszMsgBuf;
 		::FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -326,12 +316,12 @@ void CPropCommon::InitData( void )
 
 	//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
 	int i;
-	for( i = 0; i < GetDllShareData().m_nTypesCount; ++i ){
+	for (i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
 		SKeywordSetIndex indexs;
 		STypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(i), type);
 		indexs.typeId = type.m_id;
-		for( int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++ ){
+		for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++) {
 			indexs.index[j] = type.m_nKeyWordSetIdx[j];
 		}
 		m_Types_nKeyWordSetIdx.push_back(indexs);
@@ -348,14 +338,14 @@ void CPropCommon::ApplyData( void )
 
 	int i;
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
-	for( i = 0; i < nSize; ++i ){
+	for (i = 0; i < nSize; ++i) {
 		CTypeConfig configIdx = CDocTypeManager().GetDocumentTypeOfId( m_Types_nKeyWordSetIdx[i].typeId );
-		if( configIdx.IsValidType() ){
+		if (configIdx.IsValidType()) {
 			STypeConfig type;
 			CDocTypeManager().GetTypeConfig(configIdx, type);
 			//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
 			/* 変更された設定値のコピー */
-			for( int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++ ){
+			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++) {
 				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];
 			}
 			CDocTypeManager().SetTypeConfig(configIdx, type);
@@ -364,13 +354,12 @@ void CPropCommon::ApplyData( void )
 }
 
 
-
 /* ヘルプ */
 //Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
 void CPropCommon::OnHelp( HWND hwndParent, int nPageID )
 {
 	int		nContextID;
-	switch( nPageID ){
+	switch (nPageID) {
 	case IDD_PROP_GENERAL:
 		nContextID = ::FuncID_To_HelpContextID(F_OPTION_GENERAL);
 		break;
@@ -438,12 +427,11 @@ void CPropCommon::OnHelp( HWND hwndParent, int nPageID )
 		nContextID = -1;
 		break;
 	}
-	if( -1 != nContextID ){
+	if (-1 != nContextID) {
 		MyWinHelp( hwndParent, HELP_CONTEXT, nContextID );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	}
 	return;
 }
-
 
 
 /*!	コントロールにフォント設定する
@@ -461,10 +449,8 @@ HFONT CPropCommon::SetCtrlFont( HWND hwndDlg, int idc_ctrl, const LOGFONT& lf )
 		// フォントの設定
 		::SendMessage( hCtrl, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(FALSE, 0) );
 	}
-
 	return hFont;
 }
-
 
 
 /*!	フォントラベルにフォントとフォント名設定する
@@ -477,7 +463,7 @@ HFONT CPropCommon::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf
 	LOGFONT lfTemp;
 	lfTemp = lf;
 	// 大きすぎるフォントは小さく表示
-	if( lfTemp.lfHeight < -16 ){
+	if (lfTemp.lfHeight < -16) {
 		lfTemp.lfHeight = -16;
 	}
 
@@ -490,3 +476,4 @@ HFONT CPropCommon::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf
 
 	return hFont;
 }
+

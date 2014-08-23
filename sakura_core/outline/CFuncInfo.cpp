@@ -36,13 +36,9 @@ CFuncInfo::CFuncInfo(
 }
 
 
-
-
 /* CFuncInfoÉNÉâÉXè¡ñ≈ */
 CFuncInfo::~CFuncInfo()
 {
 
 }
-
-
 

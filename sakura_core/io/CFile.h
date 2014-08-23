@@ -35,20 +35,20 @@ enum EShareMode{
 
 class CFile{
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CFile(LPCTSTR pszPath = NULL);
 	virtual ~CFile();
-	//パス
+	// パス
 	const CFilePath& GetFilePathClass() const { return m_szFilePath; }
 	LPCTSTR GetFilePath() const { return m_szFilePath; }
-	//設定
+	// 設定
 	void SetFilePath(LPCTSTR pszPath){ m_szFilePath.Assign(pszPath); }
-	//各種判定
+	// 各種判定
 	bool IsFileExist() const;
 	bool HasWritablePermission() const;
 	bool IsFileWritable() const;
 	bool IsFileReadable() const;
-	//ロック
+	// ロック
 	bool FileLock(EShareMode eShareMode, bool bMsg);	//!< ファイルの排他ロック
 	void FileUnlock();						//!< ファイルの排他ロック解除
 	bool IsFileLocking() const{ return m_hLockedFile!=INVALID_HANDLE_VALUE; }
@@ -61,7 +61,7 @@ private:
 };
 
 
-//!一時ファイル
+//! 一時ファイル
 class CTmpFile{
 public:
 	CTmpFile(){ m_fp = tmpfile(); }

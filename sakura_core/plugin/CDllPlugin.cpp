@@ -37,7 +37,7 @@
 // デストラクタ
 CDllPlugin::~CDllPlugin(void)
 {
-	for( CPlug::ArrayIter it = m_plugs.begin(); it != m_plugs.end(); it++ ){
+	for (CPlug::ArrayIter it = m_plugs.begin(); it != m_plugs.end(); it++) {
 		delete (CDllPlug*)(*it);
 	}
 }
@@ -46,7 +46,7 @@ CDllPlugin::~CDllPlugin(void)
 // CPlugの代わりにCDllPlugを作成する
 CPlug* CDllPlugin::CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel )
 {
-	CDllPlug *newPlug =  new CDllPlug( plugin, id, sJack, sHandler, sLabel );
+	CDllPlug* newPlug = new CDllPlug( plugin, id, sJack, sHandler, sLabel );
 	return newPlug;
 }
 
@@ -55,19 +55,19 @@ bool CDllPlugin::ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMl
 {
 	ReadPluginDefCommon( cProfile, cProfileMlang );
 
-	//DLL名の読み込み
+	// DLL名の読み込み
 	cProfile->IOProfileData( PII_DLL, PII_DLL_NAME, m_sDllName );
 
-	//プラグの読み込み
+	// プラグの読み込み
 	ReadPluginDefPlug( cProfile, cProfileMlang );
 
-	//コマンドの読み込み
+	// コマンドの読み込み
 	ReadPluginDefCommand( cProfile, cProfileMlang );
 
-	//オプション定義の読み込み	// 2010/3/24 Uchi
+	// オプション定義の読み込み	// 2010/3/24 Uchi
 	ReadPluginDefOption( cProfile, cProfileMlang );
 
-	//文字列定義の読み込み
+	// 文字列定義の読み込み
 	ReadPluginDefString( cProfile, cProfileMlang );
 
 	return true;
@@ -78,19 +78,19 @@ bool CDllPlugin::InvokePlug( CEditView* view, CPlug& plug_raw, CWSHIfObj::List& 
 {
 	tstring dllPath = GetFilePath( to_tchar(m_sDllName.c_str()) );
 	EDllResult resInit = InitDll( to_tchar( dllPath.c_str() ) );
-	if( resInit != DLL_SUCCESS ){
+	if (resInit != DLL_SUCCESS) {
 		::MYMESSAGEBOX( view->m_hwndParent, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR1), dllPath.c_str(), m_sName.c_str() );
 		return false;
 	}
 
 	CDllPlug& plug = *(static_cast<CDllPlug*>(&plug_raw));
-	if( ! plug.m_handler ){
+	if (!plug.m_handler) {
 		//DLL関数の取得
 		ImportTable imp[2] = {
 			{ &plug.m_handler, to_achar( plug.m_sHandler.c_str() ) },
 			{ NULL, 0 }
 		};
-		if( ! RegisterEntries( imp ) ){
+		if (!RegisterEntries( imp )) {
 //			DWORD err = GetLastError();
 			::MYMESSAGEBOX( NULL, MB_OK, LS(STR_DLLPLG_TITLE), LS(STR_DLLPLG_INIT_ERR2) );
 			return false;
@@ -98,18 +98,20 @@ bool CDllPlugin::InvokePlug( CEditView* view, CPlug& plug_raw, CWSHIfObj::List& 
 	}
 	CMacroBeforeAfter ba;
 	int flags = FA_NONRECORD | FA_FROMMACRO;
-	if (view != NULL) ba.ExecKeyMacroBefore(view, flags);
+	if (view != NULL) {
+		ba.ExecKeyMacroBefore(view, flags);
+	}
 
 	CPluginIfObj* objPlugin = new CPluginIfObj(*this);
 	objPlugin->AddRef();
-	objPlugin->SetPlugIndex(plug.m_id);	//実行中プラグ番号を提供
+	objPlugin->SetPlugIndex(plug.m_id);	// 実行中プラグ番号を提供
 	params.push_back(objPlugin);
 	CEditorIfObj* objEditor = new CEditorIfObj();
 	objEditor->AddRef();
 	params.push_back(objEditor);
 	SAKURA_DLL_PLUGIN_OBJ* obj = CreateIfObj(view, params);
 
-	//DLL関数の呼び出し
+	// DLL関数の呼び出し
 	plug.m_handler(obj);
 
 	EraseIfObj(obj);
@@ -118,7 +120,9 @@ bool CDllPlugin::InvokePlug( CEditView* view, CPlug& plug_raw, CWSHIfObj::List& 
 	params.remove(objPlugin);
 	objPlugin->Release();
 
-	if (view != NULL) ba.ExecKeyMacroAfter(view, flags, true);
+	if (view != NULL) {
+		ba.ExecKeyMacroAfter(view, flags, true);
+	}
 	
 	return true;
 }
@@ -128,7 +132,7 @@ bool CDllPlugin::InvokePlug( CEditView* view, CPlug& plug_raw, CWSHIfObj::List& 
 SAKURA_DLL_PLUGIN_OBJ* CDllPlugin::CreateIfObj(CEditView* view, CWSHIfObj::List& params)
 {
 	SAKURA_DLL_PLUGIN_OBJ* obj = new SAKURA_DLL_PLUGIN_OBJ;
-	if(obj != NULL){
+	if (obj != NULL) {
 		memset(obj, 0, sizeof(SAKURA_DLL_PLUGIN_OBJ));
 		obj->m_dwVersion         = SAKURA_DLL_PLUGIN_VERSION;
 		GetAppVersionInfo(NULL, VS_VERSION_INFO, &(obj->m_dwVersionMS), &(obj->m_dwVersionLS));
@@ -141,13 +145,15 @@ SAKURA_DLL_PLUGIN_OBJ* CDllPlugin::CreateIfObj(CEditView* view, CWSHIfObj::List&
 		obj->m_fnFunctionHandler = &HandleFunctionCallback;
 		obj->m_dwIfObjListCount  = params.size();
 		obj->m_IfObjList         = NULL;
-		if(obj->m_dwIfObjListCount > 0){
+		if (obj->m_dwIfObjListCount > 0) {
 			obj->m_IfObjList     = new SAKURA_DLL_PLUGIN_IF_OBJ[obj->m_dwIfObjListCount];
 			int i = 0;
-			for(auto it = params.begin(); it != params.end(); it++){
+			for (auto it = params.begin(); it != params.end(); it++) {
 				SAKURA_DLL_PLUGIN_IF_OBJ* ifobj = &(obj->m_IfObjList[i++]);
 				memset(ifobj, 0, sizeof(SAKURA_DLL_PLUGIN_IF_OBJ));
-				if(wcslen((*it)->Name()) >= _countof(ifobj->m_szName)) continue;
+				if (wcslen((*it)->Name()) >= _countof(ifobj->m_szName)) {
+					continue;
+				}
 				wcscpy(ifobj->m_szName, (*it)->Name());
 				ifobj->m_lpIfObj      = (*it);
 				ifobj->m_FunctionInfo = (MACRO_FUNC_INFO*)(*it)->GetMacroFuncInfo();
@@ -161,8 +167,8 @@ SAKURA_DLL_PLUGIN_OBJ* CDllPlugin::CreateIfObj(CEditView* view, CWSHIfObj::List&
 ///////////////////////////////////////////////////////////////////////////////
 void CDllPlugin::EraseIfObj(SAKURA_DLL_PLUGIN_OBJ* obj)
 {
-	if(obj != NULL){
-		if(obj->m_IfObjList != NULL){
+	if (obj != NULL) {
+		if (obj->m_IfObjList != NULL) {
 			delete[] obj->m_IfObjList;
 		}
 		delete obj;
@@ -175,7 +181,7 @@ BOOL WINAPI CDllPlugin::HandleFunctionCallback(LPCWSTR lpszName, LPVOID lpIfObj,
 {
 	CWSHIfObj* obj = reinterpret_cast<CWSHIfObj*>(lpIfObj);
 	CEditView* view = reinterpret_cast<CEditView*>(lpEditView);
-	if(obj != NULL){
+	if (obj != NULL) {
 		//継承クラスが呼び出される
 		return obj->HandleFunction(view, (EFunctionCode)ID, Arguments, ArgSize, *Result);
 	}
@@ -188,7 +194,8 @@ void WINAPI CDllPlugin::HandleCommandCallback(LPCWSTR lpszName, LPVOID lpIfObj, 
 {
 	CWSHIfObj* obj = reinterpret_cast<CWSHIfObj*>(lpIfObj);
 	CEditView* view = reinterpret_cast<CEditView*>(lpEditView);
-	if(obj != NULL){
+	if (obj != NULL) {
 		obj->HandleCommand(view, (EFunctionCode)ID, Arguments, ArgLengths, ArgSize);
 	}
 }
+

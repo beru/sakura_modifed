@@ -48,7 +48,9 @@ public:
 		size_t* nCount //!< [out] 領域の要素数を受け取る。T単位。
 	)
 	{
-		if(nCount)*nCount=BLOCK_SIZE/sizeof(T);
+		if (nCount) {
+			*nCount = BLOCK_SIZE/sizeof(T);
+		}
 		m_current = (m_current+1) % CHAIN_COUNT;
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}
@@ -57,7 +59,7 @@ public:
 	template <class T>
 	size_t GetMaxCount() const
 	{
-		return BLOCK_SIZE/sizeof(T);
+		return BLOCK_SIZE / sizeof(T);
 	}
 
 
@@ -66,8 +68,6 @@ private:
 	BYTE m_buf[CHAIN_COUNT][BLOCK_SIZE];
 	int  m_current;
 };
-
-
 
 class CRecycledBufferDynamic{
 //コンフィグ
@@ -79,13 +79,13 @@ public:
 	CRecycledBufferDynamic()
 	{
 		m_current=0;
-		for(int i=0;i<_countof(m_buf);i++){
-			m_buf[i]=NULL;
+		for (int i=0; i<_countof(m_buf); i++) {
+			m_buf[i] = NULL;
 		}
 	}
 	~CRecycledBufferDynamic()
 	{
-		for(int i=0;i<_countof(m_buf);i++){
+		for (int i=0; i<_countof(m_buf); i++) {
 			if(m_buf[i])delete[] m_buf[i];
 		}
 	}
@@ -101,8 +101,10 @@ public:
 		m_current = (m_current+1) % CHAIN_COUNT;
 
 		//メモリ確保
-		if(m_buf[m_current])delete[] m_buf[m_current];
-		m_buf[m_current]=new BYTE[nCount*sizeof(T)];
+		if (m_buf[m_current]) {
+			delete[] m_buf[m_current];
+		}
+		m_buf[m_current] = new BYTE[nCount*sizeof(T)];
 
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}

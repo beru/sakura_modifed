@@ -44,7 +44,7 @@ public:
 		m_Wsh = NULL;
 	}
 	virtual ~CWSHPlug() {
-		if( m_Wsh ){
+		if (m_Wsh) {
 			delete m_Wsh;
 			m_Wsh = NULL;
 		}

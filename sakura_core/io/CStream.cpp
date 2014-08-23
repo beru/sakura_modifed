@@ -25,11 +25,11 @@ public:
 	//! 指定属性を取り除く
 	void PopAttribute(DWORD dwPopAttribute)
 	{
-		if(m_bAttributeChanged)return; //既に取り除き済み
+		if(m_bAttributeChanged) return; //既に取り除き済み
 
 		m_dwAttribute = ::GetFileAttributes(m_strPath.c_str());
-		if( m_dwAttribute != (DWORD)-1 ){
-			if(m_dwAttribute & dwPopAttribute){
+		if (m_dwAttribute != (DWORD)-1) {
+			if (m_dwAttribute & dwPopAttribute) {
 				DWORD dwNewAttribute = m_dwAttribute & ~dwPopAttribute;
 				::SetFileAttributes(m_strPath.c_str(), dwNewAttribute);
 				m_bAttributeChanged=true;
@@ -40,8 +40,9 @@ public:
 	//! 属性を元に戻す
 	void RestoreAttribute()
 	{
-		if(m_bAttributeChanged)
+		if (m_bAttributeChanged) {
 			::SetFileAttributes(m_strPath.c_str(),m_dwAttribute);
+		}
 		m_bAttributeChanged = false;
 		m_dwAttribute = 0;
 	}
@@ -91,26 +92,26 @@ void CStream::Open(const TCHAR* tszPath, const TCHAR* tszMode)
 
 	//オープン
 	m_fp = _tfopen(tszPath,tszMode);
-	if(!m_fp){
+	if (!m_fp) {
 		Close(); //属性復元
 	}
 
 	//エラー処理
-	if(!m_fp && IsExceptionMode()){
+	if (!m_fp && IsExceptionMode()) {
 		throw CError_FileOpen();
 	}
 }
 
 void CStream::Close()
 {
-	//クローズ
-	if(m_fp){
+	// クローズ
+	if (m_fp) {
 		fclose(m_fp);
 		m_fp=NULL;
 	}
 
-	//属性復元
-	if(m_pcFileAttribute){
+	// 属性復元
+	if (m_pcFileAttribute) {
 		m_pcFileAttribute->RestoreAttribute();
 		SAFE_DELETE(m_pcFileAttribute);
 	}
@@ -134,3 +135,4 @@ void CStream::SeekEnd(   //!< シーク
 {
 	fseek(m_fp,offset,SEEK_END);
 }
+

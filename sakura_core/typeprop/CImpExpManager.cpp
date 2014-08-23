@@ -103,12 +103,12 @@ static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar
 	auto_strcpy( conv, trg );
 
 	p = conv;
-	while ( (p = wcspbrk( p, L"\t\\:*?\"<>|" )) != NULL ) {
+	while ((p = wcspbrk( p, L"\t\\:*?\"<>|" )) != NULL) {
 		// ファイル名に使えない文字を _ に置き換える
 		*p++ = L'_';
 	}
 	p = conv;
-	while ( (p = wcspbrk( p, L"/" )) != NULL ) {
+	while ((p = wcspbrk( p, L"/" )) != NULL) {
 		// ファイル名に使えない文字を ／ に置き換える
 		*p++ = L'／';
 	}
@@ -130,10 +130,10 @@ bool CImpExpManager::ImportUI( HINSTANCE hInstance, HWND hwndParent )
 	);
 	TCHAR	szPath[_MAX_PATH + 1];
 	szPath[0] = _T('\0');
-	if( !GetFileName().empty() ){
+	if (!GetFileName().empty()) {
 		auto_strcpy( szPath, to_tchar( GetFullPath().c_str() ));
 	}
-	if( !cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+	if (!cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 		return false;
 	}
 
@@ -177,10 +177,10 @@ bool CImpExpManager::ExportUI( HINSTANCE hInstance, HWND hwndParent )
 	);
 	TCHAR			szPath[_MAX_PATH + 1];
 	szPath[0] = _T('\0');
-	if( !GetFileName().empty() ){
+	if (!GetFileName().empty()) {
 		auto_strcpy( szPath, to_tchar( GetFullPath().c_str() ));
 	}
-	if( !cDlgOpenFile.DoModal_GetSaveFileName( szPath ) ){
+	if (!cDlgOpenFile.DoModal_GetSaveFileName( szPath )) {
 		return false;
 	}
 
@@ -258,7 +258,7 @@ bool CImpExpType::ImportAscertain( HINSTANCE hInstance, HWND hwndParent, const w
 		int nRet = ConfirmMessage( hwndParent,
 			LS(STR_IMPEXP_VER), 
 			_APP_NAME_(LTEXT), szKeyVersion, nStructureVersion );
-		if ( IDYES != nRet ) {
+		if (IDYES != nRet) {
 			return false;
 		}
 	}
@@ -303,14 +303,12 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 		CImpExpColors	cImpExpColors( colorInfoArr );
 		if (cImpExpColors.Import( cImpExpColors.MakeFullPath( m_sColorFile ), TmpMsg)) {
 			files += wstring(L"\n") + m_sColorFile;
-		}
-		else {
+		}else {
 			// 失敗したら基本をコピー(メッセージは出さない)
 			memcpy( &colorInfoArr, GetDllShareData().m_TypeBasis.m_ColorInfoArr, sizeof(colorInfoArr) );
 			files += wstring(L"\n× ") + m_sColorFile;	// 失敗
 		}
-	}
-	else if (m_nColorType >= 0 ) {
+	}else if (m_nColorType >= 0) {
 		// 色指定(内部)
 		STypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(m_nColorType), type);
@@ -326,12 +324,12 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 		_tcscpy( m_Types.m_szTypeName, LS(STR_TYPE_NAME_BASIS) );
 		_tcscpy( m_Types.m_szTypeExts, _T("") );
 		m_Types.m_id = 0;
-	}else{
+	}else {
 		m_Types.m_id = (::GetTickCount() & 0x3fffffff) + m_nIdx * 0x10000;
 	}
 
 	// 色の設定
-	if (m_nColorType >= 0 ) {
+	if (m_nColorType >= 0) {
 		// 色指定あり
 		for (i = 0; i < _countof(colorInfoArr); i++) {
 			bool bDisp = m_Types.m_ColorInfoArr[i].m_bDisp;
@@ -375,9 +373,9 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 				auto_sprintf( szKeyName, szKeyKeywordFileTemp, i+1 );
 				szFileName[0] = L'\0';
 				if (m_cProfile.IOProfileData( szSecTypeEx, szKeyName, MakeStringBufferW( szFileName ))) {
-					if( cImpExpKeyWord.Import( cImpExpKeyWord.MakeFullPath( szFileName ), TmpMsg )) {
+					if (cImpExpKeyWord.Import( cImpExpKeyWord.MakeFullPath( szFileName ), TmpMsg )) {
 						files += wstring(L"\n") + szFileName;
-					} else {
+					}else {
 						files += wstring(L"\n× ") + szFileName;	// 失敗
 					}
 				}
@@ -398,7 +396,7 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 				nIdx = i;
 				if (pSlashPos) {	// スラッシュの後ろのプラグIDを取得
 					nPlug = _wtoi( pSlashPos + 1 );
-				} else {
+				}else {
 					nPlug = 0;
 				}
 				break;
@@ -419,7 +417,7 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 				nIdx = i;
 				if (pSlashPos) {	// スラッシュの後ろのプラグIDを取得
 					nPlug = _wtoi( pSlashPos + 1 );
-				} else {
+				}else {
 					nPlug = 0;
 				}
 				break;
@@ -495,7 +493,7 @@ bool CImpExpType::Export( const wstring& sFileName, wstring& sErrMsg )
 	if ((nPIdx = CPlug::GetPluginId( static_cast<EFunctionCode>( m_Types.m_eDefaultOutline ))) >= 0) {
 		cProfile.IOProfileData( szSecTypeEx, szKeyPluginOutlineName, MakeStringBufferW(plugin.m_PluginTable[nPIdx].m_szName));
 		wcscpyn( szId, plugin.m_PluginTable[nPIdx].m_szId, _countof(szId) );
-		if( (nPlug = CPlug::GetPlugId( static_cast<EFunctionCode>( m_Types.m_eDefaultOutline ))) != 0 ){
+		if ((nPlug = CPlug::GetPlugId( static_cast<EFunctionCode>( m_Types.m_eDefaultOutline ))) != 0) {
 			wchar_t szPlug[8];
 			swprintf( szPlug, L"/%d", nPlug );
 			wcscat( szId, szPlug );
@@ -506,7 +504,7 @@ bool CImpExpType::Export( const wstring& sFileName, wstring& sErrMsg )
 	if ((nPIdx = CPlug::GetPluginId( static_cast<EFunctionCode>( m_Types.m_eSmartIndent ))) >= 0) {
 		cProfile.IOProfileData( szSecTypeEx, szKeyPluginSmartIndentName, MakeStringBufferW(plugin.m_PluginTable[nPIdx].m_szName));
 		wcscpyn( szId, plugin.m_PluginTable[nPIdx].m_szId, _countof(szId) );
-		if( (nPlug = CPlug::GetPlugId( static_cast<EFunctionCode>( m_Types.m_eSmartIndent ))) != 0 ){
+		if ((nPlug = CPlug::GetPlugId( static_cast<EFunctionCode>( m_Types.m_eSmartIndent ))) != 0) {
 			wchar_t szPlug[8];
 			swprintf( szPlug, L"/%d", nPlug );
 			wcscat( szId, szPlug );
@@ -555,13 +553,13 @@ bool CImpExpColors::Import( const wstring& sFileName, wstring& sErrMsg )
 	}
 
 	/* ファイル先頭 */
-	//ヘッダ読取
+	// ヘッダ読取
 	wstring szHeader = in.ReadLineW();
-	if(szHeader.length()>=2) {
+	if (szHeader.length() >= 2) {
 		//コメントを抜く
 		szHeader = &szHeader.c_str()[ szHeader.c_str()[0] == _T(';') ? 1 : 2];
 	}
-	//比較
+	// 比較
 	if (szHeader != WSTR_COLORDATA_HEAD3) {
 		in.Close();
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_COLOR_OLD))	// 旧バージョンの説明の削除 2010/4/22 Uchi
@@ -574,7 +572,7 @@ bool CImpExpColors::Import( const wstring& sFileName, wstring& sErrMsg )
 	cProfile.SetReadingMode();
 
 	/* 色設定Ver3 */
-	if( !cProfile.ReadProfile( strPath.c_str() ) ){
+	if (!cProfile.ReadProfile( strPath.c_str() )) {
 		return false;
 	}
 
@@ -618,52 +616,54 @@ bool CImpExpRegex::Import( const wstring& sFileName, wstring& sErrMsg )
 	int	keywordPos = 0;
 	TCHAR				buff[MAX_REGEX_KEYWORDLEN + 20];
 	int count = 0;
-	while(in)
-	{
+	while (in) {
 		//1行読み込み
 		wstring line=in.ReadLineW();
 		_wcstotcs(buff,line.c_str(),_countof(buff));
 
-		if(count >= MAX_REGEX_KEYWORD){
+		if (count >= MAX_REGEX_KEYWORD) {
 			sErrMsg = LSW(STR_IMPEXP_REGEX1);
 			break;
 		}
 
 		//RxKey[999]=ColorName,RegexKeyword
-		if( auto_strlen(buff) < 12 ) continue;
-		if( auto_memcmp(buff, _T("RxKey["), 6) != 0 ) continue;
-		if( auto_memcmp(&buff[9], _T("]="), 2) != 0 ) continue;
+		if (auto_strlen(buff) < 12) {
+			continue;
+		}
+		if (auto_memcmp(buff, _T("RxKey["), 6) != 0) {
+			continue;
+		}
+		if (auto_memcmp(&buff[9], _T("]="), 2) != 0) {
+			continue;
+		}
 		TCHAR	*p;
 		p = auto_strstr(&buff[11], _T(","));
-		if( p )
-		{
+		if (p) {
 			*p = _T('\0');
 			p++;
-			if( p[0] && CRegexKeyword::RegexKeyCheckSyntax(to_wchar(p)) )	//囲みがある
-			{
-				//色指定名に対応する番号を探す
+			if (p[0] && CRegexKeyword::RegexKeyCheckSyntax(to_wchar(p))) {	// 囲みがある
+				// 色指定名に対応する番号を探す
 				int k = GetColorIndexByName( &buff[11] );	//@@@ 2002.04.30
-				if( k == -1 ){
+				if (k == -1) {
 					/* 日本語名からインデックス番号に変換する */
-					for(int m = 0; m < COLORIDX_LAST; m++){
-						if( auto_strcmp(m_Types.m_ColorInfoArr[m].m_szName, &buff[11]) == 0 ){
+					for (int m = 0; m < COLORIDX_LAST; m++) {
+						if (auto_strcmp(m_Types.m_ColorInfoArr[m].m_szName, &buff[11]) == 0) {
 							k = m;
 							break;
 						}
 					}
 				}
-				if( k != -1 )	/* 3文字カラー名からインデックス番号に変換 */
-				{
-					if( 0 < MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1 ){
+				if (k != -1) {	/* 3文字カラー名からインデックス番号に変換 */
+					if (0 < MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1) {
 						regexKeyArr[count].m_nColorIndex = k;
 						_tcstowcs(&pKeyword[keywordPos], p, t_min<int>(MAX_REGEX_KEYWORDLEN, MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1));
 						count++;
 						keywordPos += auto_strlen(&pKeyword[keywordPos]) + 1;
-					}else{
+					}else {
 						sErrMsg = LSW(STR_IMPEXP_REGEX2);
 					}
 				}
-			}else{
+			}else {
 				sErrMsg = LSW(STR_IMPEXP_REGEX3);
 			}
 		}
@@ -672,11 +672,10 @@ bool CImpExpRegex::Import( const wstring& sFileName, wstring& sErrMsg )
 
 	in.Close();
 
-	
-	for(int i = 0; i < count; i++ ){
+	for (int i = 0; i < count; i++) {
 		m_Types.m_RegexKeywordArr[i] = regexKeyArr[i];
 	}
-	for( int i = 0; i <= keywordPos; i++ ){
+	for (int i = 0; i <= keywordPos; i++) {
 		m_Types.m_RegexKeywordList[i] = pKeyword[i];
 	}
 
@@ -687,7 +686,7 @@ bool CImpExpRegex::Import( const wstring& sFileName, wstring& sErrMsg )
 bool CImpExpRegex::Export( const wstring& sFileName, wstring& sErrMsg )
 {
 	CTextOutputStream out( to_tchar( sFileName.c_str() ) );
-	if(!out){
+	if (!out) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
 		return false;
 	}
@@ -695,14 +694,15 @@ bool CImpExpRegex::Export( const wstring& sFileName, wstring& sErrMsg )
 	out.WriteF( WSTR_REGEXKW_HEAD );
 
 	const wchar_t* regex = m_Types.m_RegexKeywordList;
-	for (int i = 0; i < MAX_REGEX_KEYWORD; i++)
-	{
-		if( regex[0] == L'\0' ) break;
+	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+		if (regex[0] == L'\0') {
+			break;
+		}
 		
 		const TCHAR* name  = GetColorNameByIndex(m_Types.m_RegexKeywordArr[i].m_nColorIndex);
 		out.WriteF( L"RxKey[%03d]=%ts,%ls\n", i, name, regex);
 
-		for(; *regex != '\0'; regex++ ){}
+		for (; *regex != '\0'; regex++) {}
 		regex++;
 	}
 
@@ -736,20 +736,21 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 
 		// 2007.02.03 genta コメントみたいな行は黙ってスキップ
 		// 2007.10.08 kobake 空行もスキップ
-		if( buff[0] == LTEXT('\0') ||
+		if (buff[0] == LTEXT('\0') ||
 			buff[0] == LTEXT('\n') ||
 			buff[0] == LTEXT('#') ||
 			buff[0] == LTEXT(';') ||
-			( buff[0] == LTEXT('/') && buff[1] == LTEXT('/') )){
-				//	2007.02.03 genta 処理を継続
-				continue;
+			( buff[0] == LTEXT('/') && buff[1] == LTEXT('/') )
+		) {
+			//	2007.02.03 genta 処理を継続
+			continue;
 		}
 
 		//KDct[99]=ON/OFF,DictAbout,KeyHelpPath
-		if( buff.length() < 10 ||
+		if (buff.length() < 10 ||
 			auto_memcmp(buff.c_str(), LTEXT("KDct["), 5) != 0 ||
 			auto_memcmp(&buff[7], LTEXT("]="), 2) != 0
-			){
+		) {
 			//	2007.02.03 genta 処理を継続
 			++invalid_record;
 			continue;
@@ -758,19 +759,19 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 		WCHAR *p1, *p2, *p3;
 		p1 = &buff[9];
 		p3 = p1;					//結果確認用に初期化
-		if( NULL != (p2=wcsstr(p1,LTEXT(","))) ){
+		if (NULL != (p2=wcsstr(p1,LTEXT(",")))) {
 			*p2 = LTEXT('\0');
 			p2 += 1;				//カンマの次が、次の要素
-			if( NULL != (p3=wcsstr(p2,LTEXT(","))) ){
+			if (NULL != (p3=wcsstr(p2,LTEXT(",")))) {
 				*p3 = LTEXT('\0');
 				p3 += 1;			//カンマの次が、次の要素
 			}
 		}/* 結果の確認 */
-		if( (p3==NULL) ||			//カンマが1個足りない
+		if ((p3==NULL) ||			//カンマが1個足りない
 			(p3==p1) //||			//カンマが2個足りない
 			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
 			//(NULL!=wcsstr(p3,","))	//カンマが多すぎる
-		){
+		) {
 			//	2007.02.03 genta 処理を継続
 			++invalid_record;
 			continue;
@@ -779,19 +780,19 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 		//ON/OFF
 		//	2007.02.03 genta 1でなければ1にする
 		unsigned int b_enable_flag = (unsigned int)_wtoi(p1);
-		if( b_enable_flag > 1){
+		if (b_enable_flag > 1) {
 			b_enable_flag = 1;
 		}
 		//Path
 		FILE* fp2;
 		const WCHAR* p4 = p2;
-		if( (fp2=_tfopen_absini(to_tchar(p3),_T("r"))) == NULL ){	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+		if ((fp2=_tfopen_absini(to_tchar(p3),_T("r"))) == NULL) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
 			p4 = LSW(STR_IMPEXP_DIC_NOTFOUND);
 			b_enable_flag = 0;
-		}
-		else
+		}else {
 			fclose(fp2);
+		}
 
 		//About
 		if (wcslen(p2) > DICT_ABOUT_LEN) {
@@ -810,7 +811,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 	in.Close();
 
 	// 空きがあるなら番兵を設定
-	if( i < _countof(m_Types.m_KeyHelpArr) ){
+	if (i < _countof(m_Types.m_KeyHelpArr)) {
 		m_Types.m_KeyHelpArr[i].m_bUse = false;
 		m_Types.m_KeyHelpArr[i].m_szAbout[0] = _T('\0');
 		m_Types.m_KeyHelpArr[i].m_szPath[0]  = _T('\0');
@@ -818,7 +819,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 	m_Types.m_nKeyHelpNum = i;
 
 	// 2007.02.03 genta 失敗したら警告する
-	if( invalid_record > 0 ){
+	if (invalid_record > 0) {
 		auto_sprintf( msgBuff, LSW(STR_IMPEXP_DIC_RECORD), invalid_record );
 		sErrMsg = msgBuff;
 	}
@@ -881,11 +882,14 @@ bool CImpExpKeybind::Import( const wstring& sFileName, wstring& sErrMsg )
 	bVer3 = false;
 	bVer2 = false;
 	in.IOProfileData(szSecInfo, L"KEYBIND_VERSION", MakeStringBufferW(szHeader));
-	if(wcscmp(szHeader,WSTR_KEYBIND_HEAD4)==0)	bVer4=true;
-	else if(wcscmp(szHeader,WSTR_KEYBIND_HEAD3)==0)	bVer3=true;
+	if (wcscmp(szHeader,WSTR_KEYBIND_HEAD4)==0) {
+		bVer4 = true;
+	}else if (wcscmp(szHeader,WSTR_KEYBIND_HEAD3)==0) {
+		bVer3 = true;
+	}
 
 	//int	nKeyNameArrNum;			// キー割り当て表の有効データ数
-	if ( bVer3 || bVer4 ) {
+	if (bVer3 || bVer4) {
 		//Count取得 -> nKeyNameArrNum
 		in.IOProfileData(szSecInfo, L"KEYBIND_COUNT", sKeyBind.m_nKeyNameArrNum);
 		if (sKeyBind.m_nKeyNameArrNum < 0 || sKeyBind.m_nKeyNameArrNum > KEYNAME_SIZE){	bVer3=false; bVer4=false; } //範囲チェック
@@ -903,23 +907,24 @@ bool CImpExpKeybind::Import( const wstring& sFileName, wstring& sErrMsg )
 		// ヘッダチェック
 		wstring	szLine = in.ReadLineW();
 		bVer2 = true;
-		if ( wcscmp(szLine.c_str(), WSTR_KEYBIND_HEAD2) != 0)	bVer2 = false;
+		if (wcscmp(szLine.c_str(), WSTR_KEYBIND_HEAD2) != 0) {
+			bVer2 = false;
+		}
 		// カウントチェック
 		int	i, cnt;
-		if ( bVer2 ) {
+		if (bVer2) {
 			int	an;
 			szLine = in.ReadLineW();
 			cnt = swscanf(szLine.c_str(), L"Count=%d", &an);
-			if ( cnt != 1 || an < 0 || an > KEYNAME_SIZE ) {
+			if (cnt != 1 || an < 0 || an > KEYNAME_SIZE) {
 				bVer2 = false;
-			}
-			else {
+			}else {
 				sKeyBind.m_nKeyNameArrNum = an;
 			}
 		}
-		if ( bVer2 ) {
+		if (bVer2) {
 			//各要素取得
-			for(i = 0; i < KEYNAME_SIZE; i++) {
+			for (i = 0; i < KEYNAME_SIZE; i++) {
 				int n, kc, nc;
 				//値 -> szData
 				wchar_t szData[1024];
@@ -928,29 +933,32 @@ bool CImpExpKeybind::Import( const wstring& sFileName, wstring& sErrMsg )
 				//解析開始
 				cnt = swscanf(szData, L"KeyBind[%03d]=%04x,%n",
 												&n,   &kc, &nc);
-				if( cnt !=2 && cnt !=3 )	{ bVer2= false; break;}
-				if( i != n ) break;
+				if (cnt !=2 && cnt !=3)	{
+					bVer2= false;
+					break;
+				}
+				if (i != n) {
+					break;
+				}
 				sKeyBind.m_pKeyNameArr[i].m_nKeyCode = (short)kc;
 				wchar_t* p = szData + nc;
 
 				//後に続くトークン
-				for(int j=0;j<8;j++)
-				{
-					wchar_t* q=auto_strchr(p,L',');
-					if(!q)	{ bVer2= false; break;}
-					*q=L'\0';
+				for (int j=0;j<8;j++) {
+					wchar_t* q = auto_strchr(p,L',');
+					if (!q) {
+						bVer2 = false;
+						break;
+					}
+					*q = L'\0';
 
 					//機能名を数値に置き換える。(数値の機能名もあるかも)
 					//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 					EFunctionCode n = CSMacroMgr::GetFuncInfoByName(G_AppInstance(), p, NULL);
-					if( n == F_INVALID )
-					{
-						if( WCODE::Is09(*p) )
-						{
+					if (n == F_INVALID) {
+						if (WCODE::Is09(*p)) {
 							n = (EFunctionCode)auto_atol(p);
-						}
-						else
-						{
+						}else {
 							n = F_DEFAULT;
 						}
 					}
@@ -972,27 +980,28 @@ bool CImpExpKeybind::Import( const wstring& sFileName, wstring& sErrMsg )
 	//m_Common.m_sKeyBind.m_nKeyNameArrNum = nKeyNameArrNum;
 	//memcpy_raw( m_Common.m_sKeyBind.m_pKeyNameArr, pKeyNameArr, sizeof_raw( pKeyNameArr ) );
 	int nKeyNameArrUsed = m_Common.m_sKeyBind.m_nKeyNameArrNum; // 使用済み領域
-	for( int j=sKeyBind.m_nKeyNameArrNum-1; j>=0; j-- ){
-		if( (bVer2 || bVer3) && sKeyBind.m_pKeyNameArr[j].m_nKeyCode <= 0 ){ // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
-			for( int im=0; im< MOUSEFUNCTION_KEYBEGIN; im++ ){
-				if( _tcscmp( sKeyBind.m_pKeyNameArr[j].m_szKeyName, m_Common.m_sKeyBind.m_pKeyNameArr[im].m_szKeyName ) == 0 ){
+	for (int j=sKeyBind.m_nKeyNameArrNum-1; j>=0; j--) {
+		if ((bVer2 || bVer3) && sKeyBind.m_pKeyNameArr[j].m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
+			for (int im=0; im< MOUSEFUNCTION_KEYBEGIN; im++) {
+				if (_tcscmp( sKeyBind.m_pKeyNameArr[j].m_szKeyName, m_Common.m_sKeyBind.m_pKeyNameArr[im].m_szKeyName ) == 0) {
 					m_Common.m_sKeyBind.m_pKeyNameArr[im] = sKeyBind.m_pKeyNameArr[j];
 				}
 			}
-		}
-		else{
+		}else {
 			// 割り当て済みキーコードは上書き
 			int idx = sKeyBind.m_VKeyToKeyNameArr[sKeyBind.m_pKeyNameArr[j].m_nKeyCode];
-			if( idx != KEYNAME_SIZE ){
+			if (idx != KEYNAME_SIZE) {
 				m_Common.m_sKeyBind.m_pKeyNameArr[idx] = sKeyBind.m_pKeyNameArr[j];
 			}
 		}
 	}
 	// 未割り当てのキーコードは空き領域が一杯になるまで追加
-	for( int j2=0; j2<sKeyBind.m_nKeyNameArrNum; j2++ ){
+	for (int j2=0; j2<sKeyBind.m_nKeyNameArrNum; j2++) {
 		int idx = sKeyBind.m_VKeyToKeyNameArr[sKeyBind.m_pKeyNameArr[j2].m_nKeyCode];
-		if( idx == KEYNAME_SIZE ){// not assigned
-			if( nKeyNameArrUsed >= KEYNAME_SIZE ) continue;
+		if (idx == KEYNAME_SIZE) { // not assigned
+			if (nKeyNameArrUsed >= KEYNAME_SIZE) {
+				continue;
+			}
 			m_Common.m_sKeyBind.m_pKeyNameArr[nKeyNameArrUsed] = sKeyBind.m_pKeyNameArr[j2];
 			sKeyBind.m_VKeyToKeyNameArr[sKeyBind.m_pKeyNameArr[j2].m_nKeyCode] = (BYTE)nKeyNameArrUsed++;
 		}
@@ -1062,7 +1071,7 @@ bool CImpExpCustMenu::Import( const wstring& sFileName, wstring& sErrMsg )
 	//バージョン確認
 	WCHAR szHeader[256];
 	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
-	if(wcscmp(szHeader, WSTR_CUSTMENU_HEAD_V2)!=0) {
+	if (wcscmp(szHeader, WSTR_CUSTMENU_HEAD_V2) != 0) {
 		sErrMsg = wstring(LSW(STR_IMPEXP_CUSTMENU_FORMAT)) + sFileName;
 		return false;
 	}
@@ -1125,7 +1134,7 @@ bool CImpExpKeyWord::Import( const wstring& sFileName, wstring& sErrMsg )
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
 		return false;
 	}
-	while( in ){
+	while (in) {
 		wstring szLine = in.ReadLineW();
 
 		// コメント無視
@@ -1135,18 +1144,17 @@ bool CImpExpKeyWord::Import( const wstring& sFileName, wstring& sErrMsg )
 		if (2 <= szLine.length() && 0 == auto_memcmp( szLine.c_str(), L"//", 2 )) {
 			if (szLine == WSTR_CASE_TRUE) {
 				m_bCase = true;
-			}
-			else if (szLine == WSTR_CASE_FALSE) {
+			}else if (szLine == WSTR_CASE_FALSE) {
 				m_bCase = false;
 			}
 			continue;
 		}
 		
 		//解析
-		if( 0 < szLine.length() ){
+		if (0 < szLine.length()) {
 			/* ｎ番目のセットにキーワードを追加 */
 			int nRetValue = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWord( m_nIdx, szLine.c_str() );
-			if( 2 == nRetValue ){
+			if (2 == nRetValue) {
 				bAddError = true;
 				break;
 			}
@@ -1188,7 +1196,7 @@ bool CImpExpKeyWord::Export( const wstring& sFileName, wstring& sErrMsg )
 
 	/* ｎ番目のセットのキーワードの数を返す */
 	nKeyWordNum = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWordNum( m_nIdx );
-	for( i = 0; i < nKeyWordNum; ++i ){
+	for (i = 0; i < nKeyWordNum; ++i) {
 		/* ｎ番目のセットのｍ番目のキーワードを返す */
 		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
 		out.WriteString( m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWord( m_nIdx, i ) );
@@ -1223,7 +1231,7 @@ bool CImpExpMainMenu::Import( const wstring& sFileName, wstring& sErrMsg )
 	//バージョン確認
 	WCHAR szHeader[256];
 	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
-	if(wcscmp(szHeader, WSTR_MAINMENU_HEAD_V1)!=0) {
+	if (wcscmp(szHeader, WSTR_MAINMENU_HEAD_V1) != 0) {
 		sErrMsg = wstring(LSW(STR_IMPEXP_MEINMENU)) + sFileName;
 		return false;
 	}
@@ -1268,3 +1276,4 @@ bool CImpExpMainMenu::Export( const wstring& sFileName, wstring& sErrMsg )
 
 	return true;
 }
+

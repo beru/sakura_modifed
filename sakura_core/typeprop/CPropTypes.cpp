@@ -40,21 +40,21 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 {
 	PROPSHEETPAGE*	pPsp;
 	CPropTypes* pCPropTypes;
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
 		pCPropTypes = ( CPropTypes* )(pPsp->lParam);
-		if( NULL != pCPropTypes ){
+		if (NULL != pCPropTypes) {
 			return (pCPropTypes->*pDispatch)( hwndDlg, uMsg, wParam, pPsp->lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCPropTypes = ( CPropTypes* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if( NULL != pCPropTypes ){
+		if (NULL != pCPropTypes) {
 			return (pCPropTypes->*pDispatch)( hwndDlg, uMsg, wParam, lParam );
-		}else{
+		}else {
 			return FALSE;
 		}
 	}
@@ -104,7 +104,7 @@ CPropTypes::CPropTypes()
 
 	// 2005.11.30 Moca カスタム色を設定・保持
 	int i;
-	for( i = 0; i < _countof(m_dwCustColors); i++ ){
+	for (i = 0; i < _countof(m_dwCustColors); i++) {
 		m_dwCustColors[i] = RGB( 255, 255, 255 );
 	}
 
@@ -155,7 +155,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 	std::tstring		sTabname[_countof(TypePropSheetInfoList)];
 	m_bChangeKeyWordSet = false;
 	PROPSHEETPAGE		psp[_countof(TypePropSheetInfoList)];
-	for( nIdx = 0; nIdx < _countof(TypePropSheetInfoList); nIdx++ ){
+	for (nIdx = 0; nIdx < _countof(TypePropSheetInfoList); nIdx++) {
 		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].m_nTabNameId);
 
 		PROPSHEETPAGE *p = &psp[nIdx];
@@ -187,17 +187,15 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 	psh.nPages     = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
-	if( -1 == nPageNum ){
+	if (-1 == nPageNum) {
 		psh.nStartPage = m_nPageNum;
-	}
-	else if( 0 > nPageNum ){			//- 20020106 aroka
+	}else if (0 > nPageNum) {			//- 20020106 aroka
 		psh.nStartPage = 0;
-	}
-	else{
+	}else {
 		psh.nStartPage = nPageNum;
 	}
 	
-	if( psh.nPages - 1 < psh.nStartPage ){
+	if (psh.nPages - 1 < psh.nStartPage) {
 		psh.nStartPage = psh.nPages - 1;
 	}
 	psh.ppsp = psp;
@@ -205,7 +203,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 
 	nRet = MyPropertySheet( &psh );	// 2007.05.24 ryoji 独自拡張プロパティシート
 
-	if( -1 == nRet ){
+	if (-1 == nRet) {
 		TCHAR*	pszMsgBuf;
 		::FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -231,7 +229,6 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 }
 
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         イベント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -243,7 +240,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 void CPropTypes::OnHelp( HWND hwndParent, int nPageID )
 {
 	int		nContextID;
-	switch( nPageID ){
+	switch (nPageID) {
 	case IDD_PROP_SCREEN:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_SCREEN);			break;
 	case IDD_PROP_COLOR:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_COLOR);			break;
 	case IDD_PROP_WINDOW:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_WINDOW);			break;
@@ -252,11 +249,10 @@ void CPropTypes::OnHelp( HWND hwndParent, int nPageID )
 	case IDD_PROP_KEYHELP:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_KEYHELP);			break;
 	default:				nContextID = -1;												break;
 	}
-	if( -1 != nContextID ){
+	if (-1 != nContextID) {
 		MyWinHelp( hwndParent, HELP_CONTEXT, nContextID );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	}
 }
-
 
 
 /*!	コントロールにフォント設定する
@@ -279,7 +275,6 @@ HFONT CPropTypes::SetCtrlFont( HWND hwndDlg, int idc_ctrl, const LOGFONT& lf )
 }
 
 
-
 /*!	フォントラベルにフォントとフォント名設定する
 	@date 2013.04.24 Uchi
 */
@@ -290,7 +285,7 @@ HFONT CPropTypes::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf,
 	LOGFONT lfTemp;
 	lfTemp = lf;
 	// 大きすぎるフォントは小さく表示
-	if( lfTemp.lfHeight < -16 ){
+	if (lfTemp.lfHeight < -16) {
 		lfTemp.lfHeight = -16;
 	}
 
@@ -301,11 +296,11 @@ HFONT CPropTypes::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf,
 		auto_sprintf( szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
 			lf.lfFaceName, double(nps)/10 );
 		::DlgItem_SetText( hwndDlg, idc_static, szFontName );
-	}
-	else {
+	}else {
 		hFont = NULL;
 		::DlgItem_SetText( hwndDlg, idc_static, _T("") );
 	}
 
 	return hFont;
 }
+

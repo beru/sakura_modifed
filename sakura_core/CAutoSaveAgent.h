@@ -69,7 +69,6 @@ private:
 };
 
 
-
 class CAutoSaveAgent : public CDocListenerEx{
 public:
 	void CheckAutoSave();

@@ -79,3 +79,4 @@ void CRecentCurDir::CopyItem( CCurDirString* dst, LPCTSTR src ) const
 {
 	_tcscpy(*dst,src);
 }
+

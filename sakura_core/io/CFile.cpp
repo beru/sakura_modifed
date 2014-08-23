@@ -11,7 +11,7 @@ CFile::CFile(LPCTSTR pszPath)
 : m_hLockedFile( INVALID_HANDLE_VALUE )
 , m_nFileShareModeOld( SHAREMODE_NOT_EXCLUSIVE )
 {
-	if(pszPath){
+	if (pszPath) {
 		SetFilePath(pszPath);
 	}
 }
@@ -50,7 +50,7 @@ bool CFile::IsFileWritable() const
 		FILE_ATTRIBUTE_NORMAL,			//特に属性は指定しない
 		NULL							//テンプレート無し
 	);
-	if(hFile==INVALID_HANDLE_VALUE){
+	if (hFile==INVALID_HANDLE_VALUE) {
 		return false;
 	}
 	CloseHandle(hFile);
@@ -68,7 +68,7 @@ bool CFile::IsFileReadable() const
 		FILE_FLAG_SEQUENTIAL_SCAN,
 		NULL
 	);
-	if(hTest==INVALID_HANDLE_VALUE){
+	if (hTest==INVALID_HANDLE_VALUE) {
 		// 読み込みアクセス権がない
 		return false;
 	}
@@ -84,12 +84,11 @@ bool CFile::IsFileReadable() const
 void CFile::FileUnlock()
 {
 	//クローズ
-	if( m_hLockedFile != INVALID_HANDLE_VALUE ){
+	if (m_hLockedFile != INVALID_HANDLE_VALUE) {
 		::CloseHandle( m_hLockedFile );
 		m_hLockedFile = INVALID_HANDLE_VALUE;
 	}
 }
-
 
 //! ファイルの排他ロック
 bool CFile::FileLock( EShareMode eShareMode, bool bMsg )
@@ -98,23 +97,23 @@ bool CFile::FileLock( EShareMode eShareMode, bool bMsg )
 	FileUnlock();
 
 	// ファイルの存在チェック
-	if( !this->IsFileExist() ){
+	if (!this->IsFileExist()) {
 		return false;
 	}
 
 	// モード設定
-	if(eShareMode==SHAREMODE_NOT_EXCLUSIVE)return true;
+	if (eShareMode==SHAREMODE_NOT_EXCLUSIVE) return true;
 	
 	//フラグ
 	DWORD dwShareMode=0;
-	switch(eShareMode){
+	switch (eShareMode) {
 	case SHAREMODE_NOT_EXCLUSIVE:	return true;										break; //排他制御無し
 	case SHAREMODE_DENY_READWRITE:	dwShareMode = 0;									break; //読み書き禁止→共有無し
 	case SHAREMODE_DENY_WRITE:		dwShareMode = FILE_SHARE_READ;						break; //書き込み禁止→読み込みのみ認める
 	default:						dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;	break; //禁止事項なし→読み書き共に認める
 	}
 
-	//オープン
+	// オープン
 	m_hLockedFile = CreateFile(
 		this->GetFilePath(),			//ファイル名
 		GENERIC_READ,					//読み書きタイプ
@@ -125,8 +124,8 @@ bool CFile::FileLock( EShareMode eShareMode, bool bMsg )
 		NULL							//テンプレート無し
 	);
 
-	//結果
-	if( INVALID_HANDLE_VALUE == m_hLockedFile && bMsg ){
+	// 結果
+	if (INVALID_HANDLE_VALUE == m_hLockedFile && bMsg) {
 		const TCHAR*	pszMode;
 		switch( eShareMode ){
 		case SHAREMODE_DENY_READWRITE:	pszMode = LS(STR_EXCLU_DENY_READWRITE); break;

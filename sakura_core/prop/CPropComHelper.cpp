@@ -95,7 +95,7 @@ INT_PTR CPropHelper::DispatchEvent(
 	WORD		wID;
 	NMHDR*		pNMHDR;
 
-	switch( uMsg ){
+	switch (uMsg) {
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 Helper */
 		SetData( hwndDlg );
@@ -112,21 +112,21 @@ INT_PTR CPropHelper::DispatchEvent(
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
 		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		switch( wNotifyCode ){
+		switch (wNotifyCode) {
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
 			/* ダイアログデータの取得 Helper */
 			GetData( hwndDlg );
-			switch( wID ){
+			switch (wID) {
 			case IDC_BUTTON_OPENHELP1:	/* 外部ヘルプ１の「参照...」ボタン */
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Common.m_sHelper.m_szExtHelp ) ){
+					if (_IS_REL_PATH( m_Common.m_sHelper.m_szExtHelp )) {
 						GetInidirOrExedir( szPath, m_Common.m_sHelper.m_szExtHelp, TRUE );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szExtHelp );
 					}
 					/* ファイルオープンダイアログの初期化 */
@@ -136,7 +136,7 @@ INT_PTR CPropHelper::DispatchEvent(
 						_T("*.hlp;*.chm;*.col"),
 						szPath
 					);
-					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+					if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 						_tcscpy( m_Common.m_sHelper.m_szExtHelp, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_EXTHELP1, m_Common.m_sHelper.m_szExtHelp );
 					}
@@ -148,9 +148,9 @@ INT_PTR CPropHelper::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Common.m_sHelper.m_szExtHtmlHelp ) ){
+					if (_IS_REL_PATH( m_Common.m_sHelper.m_szExtHtmlHelp )) {
 						GetInidirOrExedir( szPath, m_Common.m_sHelper.m_szExtHtmlHelp, TRUE );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szExtHtmlHelp );
 					}
 					/* ファイルオープンダイアログの初期化 */
@@ -160,7 +160,7 @@ INT_PTR CPropHelper::DispatchEvent(
 						_T("*.chm;*.col"),
 						szPath
 					);
-					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+					if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 						_tcscpy( m_Common.m_sHelper.m_szExtHtmlHelp, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_EXTHTMLHELP, m_Common.m_sHelper.m_szExtHtmlHelp );
 					}
@@ -172,12 +172,12 @@ INT_PTR CPropHelper::DispatchEvent(
 					LOGFONT   lf = m_Common.m_sHelper.m_lf;
 					INT nPointSize = m_Common.m_sHelper.m_nPointSize;
 
-					if( MySelectFont( &lf, &nPointSize, hwndDlg, false) ){
+					if (MySelectFont( &lf, &nPointSize, hwndDlg, false)) {
 						m_Common.m_sHelper.m_lf = lf;
 						m_Common.m_sHelper.m_nPointSize = nPointSize;	// 2009.10.01 ryoji
 						// キーワードヘルプ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel( hwndDlg, IDC_STATIC_KEYWORDHELPFONT, m_Common.m_sHelper.m_lf, m_Common.m_sHelper.m_nPointSize);
-						if(m_hKeywordHelpFont != NULL){
+						if (m_hKeywordHelpFont != NULL) {
 							::DeleteObject( m_hKeywordHelpFont );
 						}
 						m_hKeywordHelpFont = hFont;
@@ -191,9 +191,9 @@ INT_PTR CPropHelper::DispatchEvent(
 					TCHAR			szPath[_MAX_PATH];
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Common.m_sHelper.m_szMigemoDll ) ){
+					if (_IS_REL_PATH( m_Common.m_sHelper.m_szMigemoDll )) {
 						GetInidirOrExedir( szPath, m_Common.m_sHelper.m_szMigemoDll, TRUE );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szMigemoDll );
 					}
 					/* ファイルオープンダイアログの初期化 */
@@ -203,7 +203,7 @@ INT_PTR CPropHelper::DispatchEvent(
 						_T("*.dll"),
 						szPath
 					);
-					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
+					if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 						_tcscpy( m_Common.m_sHelper.m_szMigemoDll, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_MIGEMO_DLL, m_Common.m_sHelper.m_szMigemoDll );
 					}
@@ -214,12 +214,12 @@ INT_PTR CPropHelper::DispatchEvent(
 					TCHAR	szPath[_MAX_PATH];
 					/* 検索フォルダ */
 					// 2007.05.27 ryoji 相対パスは設定ファイルからのパスを優先
-					if( _IS_REL_PATH( m_Common.m_sHelper.m_szMigemoDict ) ){
+					if (_IS_REL_PATH( m_Common.m_sHelper.m_szMigemoDict )) {
 						GetInidirOrExedir( szPath, m_Common.m_sHelper.m_szMigemoDict, TRUE );
-					}else{
+					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szMigemoDict );
 					}
-					if( SelectDir( hwndDlg, LS(STR_PROPCOMHELP_MIGEMODIR), szPath, szPath ) ){
+					if (SelectDir( hwndDlg, LS(STR_PROPCOMHELP_MIGEMODIR), szPath, szPath )) {
 						_tcscpy( m_Common.m_sHelper.m_szMigemoDict, szPath );
 						::DlgItem_SetText( hwndDlg, IDC_EDIT_MIGEMO_DICT, m_Common.m_sHelper.m_szMigemoDict );
 					}
@@ -235,7 +235,7 @@ INT_PTR CPropHelper::DispatchEvent(
 //		case ???????:
 //			return 0L;
 //		default:
-			switch( pNMHDR->code ){
+			switch (pNMHDR->code) {
 			case PSN_HELP:
 				OnHelp( hwndDlg, IDD_PROP_HELPER );
 				return TRUE;
@@ -262,7 +262,7 @@ INT_PTR CPropHelper::DispatchEvent(
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO*) lParam;
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
@@ -337,3 +337,4 @@ int CPropHelper::GetData( HWND hwndDlg )
 
 	return TRUE;
 }
+

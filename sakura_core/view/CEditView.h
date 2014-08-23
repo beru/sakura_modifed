@@ -485,9 +485,9 @@ public:
 	//	Jun. 16, 2000 genta
 	bool  SearchBracket( const CLayoutPoint& ptPos, CLayoutPoint* pptLayoutNew, int* mode );	// ‘ÎŠ‡ŒÊ‚ÌŒŸõ		// mode‚Ì’Ç‰Á 02/09/18 ai
 	bool  SearchBracketForward( CLogicPoint ptPos, CLayoutPoint* pptLayoutNew,
-						const wchar_t* upChar, const wchar_t* dnChar, int* mode );	//	‘ÎŠ‡ŒÊ‚Ì‘O•ûŒŸõ	// mode‚Ì’Ç‰Á 02/09/19 ai
+						const wchar_t* upChar, const wchar_t* dnChar, int mode );	//	‘ÎŠ‡ŒÊ‚Ì‘O•ûŒŸõ	// mode‚Ì’Ç‰Á 02/09/19 ai
 	bool  SearchBracketBackward( CLogicPoint ptPos, CLayoutPoint* pptLayoutNew,
-						const wchar_t* dnChar, const wchar_t* upChar, int* mode );	//	‘ÎŠ‡ŒÊ‚ÌŒã•ûŒŸõ	// mode‚Ì’Ç‰Á 02/09/19 ai
+						const wchar_t* dnChar, const wchar_t* upChar, int mode );	//	‘ÎŠ‡ŒÊ‚ÌŒã•ûŒŸõ	// mode‚Ì’Ç‰Á 02/09/19 ai
 	void DrawBracketPair( bool );								/* ‘ÎŠ‡ŒÊ‚Ì‹­’²•\¦ 02/09/18 ai */
 	bool IsBracket( const wchar_t*, CLogicInt, CLogicInt );					/* Š‡ŒÊ”»’è 03/01/09 ai */
 

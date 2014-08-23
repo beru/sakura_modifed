@@ -66,7 +66,7 @@ int CDlgTypeAscertain::DoModal( HINSTANCE hInstance, HWND hwndParent, SAscertain
 // ボタンクリック
 BOOL CDlgTypeAscertain::OnBnClicked( int wID )
 {
-	switch( wID ){
+	switch (wID) {
 	case IDC_BUTTON_HELP:
 		/* 「タイプ別設定インポート」のヘルプ */
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, HLP000338 );
@@ -78,7 +78,9 @@ BOOL CDlgTypeAscertain::OnBnClicked( int wID )
 		m_psi->bAddType = IsDlgButtonCheckedBool( GetHwnd(), IDC_RADIO_TYPE_ADD );
 		m_psi->sColorFile = L"";
 		m_psi->nColorType = Combo_GetCurSel( GetDlgItem( GetHwnd(), IDC_COMBO_COLORS ) ) - 1;
-		if (m_psi->nColorType >= MAX_TYPES && Combo_GetLBText( ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS ), m_psi->nColorType + 1, buff1)) {
+		if (m_psi->nColorType >= MAX_TYPES
+			&& Combo_GetLBText( ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS ), m_psi->nColorType + 1, buff1)
+		) {
 			if (_stscanf( buff1, _T("File -- %ls"), buff2 ) > 0) {
 				m_psi->sColorFile = buff2;
 				m_psi->nColorType = MAX_TYPES;
@@ -118,13 +120,12 @@ void CDlgTypeAscertain::SetData( void )
 	for (nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
-		if (type->m_szTypeExts[0] != _T('\0') ) {		/* タイプ属性：拡張子リスト */
+		if (type->m_szTypeExts[0] != _T('\0')) {		/* タイプ属性：拡張子リスト */
 			auto_sprintf( szText, _T("%ts (%ts)"),
 				type->m_szTypeName,	/* タイプ属性：名称 */
 				type->m_szTypeExts	/* タイプ属性：拡張子リスト */
 			);
-		}
-		else{
+		}else {
 			auto_sprintf( szText, _T("%ts"),
 				type->m_szTypeName	/* タイプ属性：拡称 */
 			);
@@ -141,8 +142,9 @@ void CDlgTypeAscertain::SetData( void )
 	_tcscat( sTrgCol, _T("\\*.col") );
 	for (bFind = ( ( hFind = FindFirstFile( sTrgCol, &wf ) ) != INVALID_HANDLE_VALUE );
 		bFind;
-		bFind = FindNextFile( hFind, &wf )) {
-		if ( (wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+		bFind = FindNextFile( hFind, &wf )
+	) {
+		if ((wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 			// 読込色設定ファイル発見
 			auto_sprintf( szText, _T("File -- %ts"), wf.cFileName );
 			::Combo_AddString( hwndCombo, szText );
@@ -159,3 +161,4 @@ LPVOID CDlgTypeAscertain::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
+

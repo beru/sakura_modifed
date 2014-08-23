@@ -5,7 +5,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     クォーテーション                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CLayoutColorQuoteInfo : public CLayoutColorInfo{
+class CLayoutColorQuoteInfo : public CLayoutColorInfo {
 public:
 	std::wstring m_tag;
 	int m_nColorTypeIndex;

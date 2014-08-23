@@ -80,7 +80,9 @@ public:
 	int Write(const void* pBuffer, int nSizeInBytes)
 	{
 		int nRet = fwrite(pBuffer,1,nSizeInBytes,GetFp());
-		if(nRet!=nSizeInBytes && IsExceptionMode())throw CError_FileWrite();
+		if (nRet != nSizeInBytes && IsExceptionMode()) {
+			throw CError_FileWrite();
+		}
 		return nRet;
 	}
 };

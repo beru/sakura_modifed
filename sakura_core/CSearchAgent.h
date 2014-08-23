@@ -94,7 +94,6 @@ public:
 		bool	bLoHiCase,
 		int*	pnMatchLen
 	);
-
 	
 	// ŒŸõğŒ‚Ìî•ñ
 	static void CreateCharCharsArr(

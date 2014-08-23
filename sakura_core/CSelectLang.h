@@ -41,7 +41,7 @@ public:
 	/*
 	||  Constructors
 	*/
-	CSelectLang(){}
+	CSelectLang() {}
 	~CSelectLang();
 
 	/*
@@ -63,8 +63,6 @@ protected:
 
 private:
 };
-
-
 
 
 /*!

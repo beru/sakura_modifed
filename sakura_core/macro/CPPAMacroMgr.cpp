@@ -47,7 +47,7 @@ bool CPPAMacroMgr::ExecKeyMacro( CEditView* pcEditView, int flags ) const
 BOOL CPPAMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 {
 	CTextInputStream in( pszPath );
-	if(!in){
+	if (!in) {
 		m_nReady = false;
 		return FALSE;
 	}
@@ -55,7 +55,7 @@ BOOL CPPAMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 	CNativeW cmemWork;
 
 	// バッファ（cmemWork）にファイル内容を読み込み、m_cPPAに渡す。
-	while( in ){
+	while (in) {
 		wstring szLine = in.ReadLineW();
 		szLine += L"\n";
 		cmemWork.AppendString(szLine.c_str());
@@ -91,7 +91,7 @@ BOOL CPPAMacroMgr::LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode )
 */
 CMacroManagerBase* CPPAMacroMgr::Creator(const TCHAR* ext)
 {
-	if( _tcscmp( ext, _T("ppa") ) == 0 ){
+	if (_tcscmp( ext, _T("ppa") ) == 0) {
 		return new CPPAMacroMgr;
 	}
 	return NULL;
@@ -105,7 +105,7 @@ CMacroManagerBase* CPPAMacroMgr::Creator(const TCHAR* ext)
 */
 void CPPAMacroMgr::declare (void)
 {
-	if( DLL_SUCCESS == m_cPPA.InitDll() ){
+	if (DLL_SUCCESS == m_cPPA.InitDll()) {
 		CMacroFactory::getInstance()->RegisterCreator( Creator );
 	}
 }
