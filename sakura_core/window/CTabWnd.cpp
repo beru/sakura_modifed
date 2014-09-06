@@ -313,7 +313,6 @@ LRESULT CTabWnd::OnTabLButtonUp( WPARAM wParam, LPARAM lParam )
 LRESULT CTabWnd::OnTabMouseMove( WPARAM wParam, LPARAM lParam )
 {
 	TCHITTESTINFO	hitinfo;
-	int i;
 	int nTabCount;
 	hitinfo.pt.x = LOWORD( (DWORD)lParam );
 	hitinfo.pt.y = HIWORD( (DWORD)lParam );
@@ -396,6 +395,7 @@ LRESULT CTabWnd::OnTabMouseMove( WPARAM wParam, LPARAM lParam )
 			delete[] m_nTabBorderArray;
 		}
 		m_nTabBorderArray = new LONG[nTabCount];
+		int i;
 		for (i = 0 ; i < nTabCount-1; i++) {
 			RECT rc;
 			TabCtrl_GetItemRect(m_hwndTab, i, &rc);
@@ -1315,7 +1315,7 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
 		item.mask = TCIF_TEXT | TCIF_PARAM | TCIF_IMAGE;
 		item.pszText = szBuf;
-		item.cchTextMax = sizeof(szBuf) / sizeof(TCHAR);
+		item.cchTextMax = _countof(szBuf);
 		TabCtrl_GetItem(hwndItem, nTabIndex, &item);
 
 		//描画対象
@@ -1481,7 +1481,7 @@ LRESULT CTabWnd::OnMouseMove( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		if( m_bListBtnHilighted )	// ボタンに入ってきた?
 		{
 			pszTip = szText;
-			_tcscpy( szText, LS(STR_TABWND_LR_INFO) );
+			_tcscpy_s( szText, LS(STR_TABWND_LR_INFO) );
 		}
 	}
 
@@ -1501,7 +1501,7 @@ LRESULT CTabWnd::OnMouseMove( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			{
 				if( !m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin )
 				{
-					_tcscpy( szText, LS(STR_TABWND_CLOSETAB) );
+					_tcscpy_s( szText, LS(STR_TABWND_CLOSETAB) );
 				}
 				else
 				{
@@ -1697,7 +1697,7 @@ void CTabWnd::TabWindowNotify( WPARAM wParam, LPARAM lParam )
 			TCITEM	tcitem;
 			TCHAR	szName[1024];
 
-			_tcscpy( szName, LS(STR_NO_TITLE1) );
+			_tcscpy_s( szName, LS(STR_NO_TITLE1) );
 
 			tcitem.mask    = TCIF_TEXT | TCIF_PARAM;
 			tcitem.pszText = szName;
@@ -1961,7 +1961,7 @@ void CTabWnd::Refresh( BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/
 
 		// タブが無ければ１つ作成して選択状態にする（自ウィンドウのタブ用）
 		TCHAR		szName[2048];
-		_tcscpy( szName, _T("") );
+		szName[0] = 0;
 		tcitem.mask    = TCIF_TEXT | TCIF_PARAM;
 		tcitem.pszText = szName;
 		tcitem.lParam  = (LPARAM)GetParentHwnd();
@@ -2504,9 +2504,7 @@ HIMAGELIST CTabWnd::ImageList_Duplicate( HIMAGELIST himl )
 	{
 		ImageList_SetBkColor( hImlNew, CLR_NONE );
 		int nCount = ImageList_GetImageCount( himl );
-		int i;
-		for( i = 0; i < nCount; i++ )
-		{
+		for (int i = 0; i < nCount; i++) {
 			HICON hIcon = ImageList_GetIcon( himl, i, ILD_TRANSPARENT );
 			if( NULL == hIcon )
 			{
@@ -2583,11 +2581,8 @@ void CTabWnd::DrawCloseFigure( CGraphics& gr, const RECT& rcBtn )
 		{{12, 5}, {4, 13}}
 	};
 	POINT pt[2];
-	int i;
-
 	// [x]を描画（直線6本）
-	for( i = 0; i < _countof(ptBase1); i++ )
-	{
+	for (int i = 0; i < _countof(ptBase1); i++) {
 		pt[0].x = ptBase1[i][0].x + rcBtn.left;
 		pt[0].y = ptBase1[i][0].y + rcBtn.top;
 		pt[1].x = ptBase1[i][1].x + rcBtn.left;
@@ -2619,7 +2614,6 @@ void CTabWnd::DrawCloseBtn( CGraphics& gr, const LPRECT lprcClient )
 	};
 
 	POINT pt[2];
-	int i;
 
 	RECT rcBtn;
 	GetCloseBtnRect( lprcClient, &rcBtn );
@@ -2650,8 +2644,7 @@ void CTabWnd::DrawCloseBtn( CGraphics& gr, const LPRECT lprcClient )
 	else
 	{
 		 // [xx]を描画（矩形10個）
-		for( i = 0; i < _countof(ptBase2); i++ )
-		{
+		for (int i = 0; i < _countof(ptBase2); i++) {
 			pt[0].x = ptBase2[i][0].x + rcBtn.left;
 			pt[0].y = ptBase2[i][0].y + rcBtn.top;
 			pt[1].x = ptBase2[i][1].x + rcBtn.left;
@@ -2794,18 +2787,15 @@ LRESULT CTabWnd::TabListMenu( POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FAL
 	do
 	{
 		EditNode* pEditNode;
-		int i;
-		int nGroup = 0;
-		int nSelfTab;
-		int nTab;
-		int nCount;
 
 		// タブメニュー用の情報を取得する
-		nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNode, TRUE );
+		int nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNode, TRUE );
 		if( 0 >= nCount )
 			return 0L;
 
+		int nGroup = 0;
 		// 自ウィンドウのグループ番号を調べる
+		int i;
 		for( i = 0; i < nCount; i++ )
 		{
 			if( pEditNode[i].m_hWnd == GetParentHwnd() )
@@ -2821,10 +2811,10 @@ LRESULT CTabWnd::TabListMenu( POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FAL
 		TABMENU_DATA* pData = new TABMENU_DATA[nCount];	// タブメニュー用の情報
 
 		// 自グループのウィンドウ一覧情報を作成する
-		nSelfTab = 0;
+		int nSelfTab = 0;
 		if( i < nCount )
 		{
-			for( i = 0; i < nCount; i++ )
+			for(int i = 0; i < nCount; i++ )
 			{
 				if( pEditNode[i].m_nGroup != nGroup )
 					continue;
@@ -2842,8 +2832,8 @@ LRESULT CTabWnd::TabListMenu( POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FAL
 		}
 
 		// 他グループのウィンドウ一覧情報を作成する
-		nTab = nSelfTab;
-		for( i = 0; i < nCount; i++ )
+		int nTab = nSelfTab;
+		for(int i = 0; i < nCount; i++ )
 		{
 			if( pEditNode[i].m_nGroup == nGroup )
 				continue;
@@ -2866,7 +2856,7 @@ LRESULT CTabWnd::TabListMenu( POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FAL
 		int iMenuSel = -1;
 		UINT uFlags = MF_BYPOSITION | (m_hIml? MF_OWNERDRAW: MF_STRING);
 		HMENU hMenu = ::CreatePopupMenu();
-		for( i = 0; i < nSelfTab; i++ )
+		for(int i = 0; i < nSelfTab; i++ )
 		{
 			::InsertMenu( hMenu, i, uFlags, IDM_SELWINDOW + i, m_hIml? (LPCTSTR)&pData[i]: pData[i].szText );
 			if( pData[i].hwnd == GetParentHwnd() )
@@ -2884,7 +2874,7 @@ LRESULT CTabWnd::TabListMenu( POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FAL
 		{
 			if( bOtherGroup )
 			{
-				for( i = nSelfTab; i < nTab; i++ )
+				for(int i = nSelfTab; i < nTab; i++ )
 				{
 					::InsertMenu( hMenu, i, uFlags, IDM_SELWINDOW + i, m_hIml? (LPCTSTR)&pData[i]: pData[i].szText );
 				}
@@ -2951,13 +2941,10 @@ HWND CTabWnd::GetNextGroupWnd( void )
 	if( m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin )
 	{
 		EditNode* pWndArr;
-		int i;
-		int j;
-		int n;
-
-		n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE, TRUE );	// グループ番号順ソート
+		int n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE, TRUE );	// グループ番号順ソート
 		if( 0 == n )
 			return NULL;
+		int i;
 		for( i = 0; i < n; i++ )
 		{
 			if( pWndArr[i].m_hWnd == GetParentHwnd() )
@@ -2965,6 +2952,7 @@ HWND CTabWnd::GetNextGroupWnd( void )
 		}
 		if( i < n )
 		{
+			int j;
 			for( j = i + 1; j < n; j++ )
 			{
 				if( pWndArr[j].m_nGroup != pWndArr[i].m_nGroup )
@@ -3000,20 +2988,18 @@ HWND CTabWnd::GetPrevGroupWnd( void )
 	if( m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin )
 	{
 		EditNode* pWndArr;
-		int i;
-		int j;
-		int n;
-
-		n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE, TRUE );	// グループ番号順ソート
+		int n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE, TRUE );	// グループ番号順ソート
 		if( 0 == n )
 			return NULL;
+		int i;
 		for( i = 0; i < n; i++ )
-		{
+			{
 			if( pWndArr[i].m_hWnd == GetParentHwnd() )
 				break;
 		}
 		if( i < n )
 		{
+			int j;
 			for( j = i - 1; j >= 0; j-- )
 			{
 				if( pWndArr[j].m_nGroup != pWndArr[i].m_nGroup )

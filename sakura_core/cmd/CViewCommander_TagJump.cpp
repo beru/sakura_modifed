@@ -394,7 +394,7 @@ bool CViewCommander::Command_TagsMake( void )
 
 	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/ ];
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		_tcscpy( szTargetPath, GetDocument()->m_cDocFile.GetFilePath() );
+		_tcscpy_s( szTargetPath, GetDocument()->m_cDocFile.GetFilePath() );
 		szTargetPath[ _tcslen( szTargetPath ) - _tcslen( GetDocument()->m_cDocFile.GetFileName() ) ] = _T('\0');
 	}else {
 		// 20100722 Moca サクラのフォルダからカレントディレクトリに変更
@@ -464,28 +464,16 @@ bool CViewCommander::Command_TagsMake( void )
 	_tcscat( options, _T(" *") );	//配下のすべてのファイル
 
 	//コマンドライン文字列作成(MAX:1024)
-	if (IsWin32NT()) {
-		// 2010.08.28 Moca システムディレクトリ付加
-		TCHAR szCmdDir[_MAX_PATH];
-		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
-		//	2006.08.04 genta add /D to disable autorun
-		auto_sprintf( cmdline, _T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
-				szCmdDir,
-				szExeFolder,	//sakura.exeパス
-				CTAGS_COMMAND,	//ctags.exe
-				options			//ctagsオプション
-			);
-	}else {
-		// 2010.08.28 Moca システムディレクトリ付加
-		TCHAR szCmdDir[_MAX_PATH];
-		::GetWindowsDirectory(szCmdDir, _countof(szCmdDir));
-		auto_sprintf( cmdline, _T("\"%ts\\command.com\" /C \"%ts\\%ts\" %ts"),
-				szCmdDir,
-				szExeFolder,	//sakura.exeパス
-				CTAGS_COMMAND,	//ctags.exe
-				options			//ctagsオプション
-			);
-	}
+	// 2010.08.28 Moca システムディレクトリ付加
+	TCHAR szCmdDir[_MAX_PATH];
+	::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
+	//	2006.08.04 genta add /D to disable autorun
+	auto_sprintf_s( cmdline, _T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
+			szCmdDir,
+			szExeFolder,	//sakura.exeパス
+			CTAGS_COMMAND,	//ctags.exe
+			options			//ctagsオプション
+		);
 
 	//コマンドライン実行
 	BOOL bProcessResult = CreateProcess(
@@ -498,16 +486,13 @@ bool CViewCommander::Command_TagsMake( void )
 	}
 
 	{
-		DWORD	read_cnt;
 		DWORD	new_cnt;
 		char	work[1024];
 		bool	bLoopFlag = true;
 
 		//中断ダイアログ表示
-		HWND	hwndCancel;
-		HWND	hwndMsg;
-		hwndCancel = cDlgCancel.DoModeless( G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING );
-		hwndMsg = ::GetDlgItem( hwndCancel, IDC_STATIC_CMD );
+		HWND	hwndCancel = cDlgCancel.DoModeless( G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING );
+		HWND	hwndMsg = ::GetDlgItem( hwndCancel, IDC_STATIC_CMD );
 		SetWindowText( hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05) );
 
 		//実行結果の取り込み
@@ -544,6 +529,7 @@ bool CViewCommander::Command_TagsMake( void )
 					if (new_cnt >= _countof(work) - 2) {						//パイプから読み出す量を調整
 						new_cnt = _countof(work) - 2;
 					}
+					DWORD read_cnt;
 					::ReadFile( hStdOutRead, &work[0], new_cnt, &read_cnt, NULL );	//パイプから読み出し
 					if (read_cnt == 0) {
 						continue;
@@ -613,13 +599,13 @@ bool CViewCommander::Command_TagJumpByTagsFileMsg( bool bMsg )
 */
 bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
 {
-	CNativeW	cmemKeyW;
+	CNativeW cmemKeyW;
 	m_pCommanderView->GetCurrentTextForSearch( cmemKeyW, true, true );
 	if (0 == cmemKeyW.GetStringLength()) {
 		return false;
 	}
 	
-	TCHAR	szDirFile[1024];
+	TCHAR szDirFile[1024];
 	if (false == Sub_PreProcTagJumpByTagsFile( szDirFile, _countof(szDirFile) )) {
 		return false;
 	}
@@ -663,15 +649,13 @@ bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
 */
 bool CViewCommander::Command_TagJumpByTagsFileKeyword( const wchar_t* keyword )
 {
-	CDlgTagJumpList	cDlgTagJumpList(false);
-	TCHAR	fileName[1024];
-	int		fileLine;	// 行番号
-	TCHAR	szCurrentPath[1024];
+	TCHAR szCurrentPath[1024];
 
 	if (false == Sub_PreProcTagJumpByTagsFile( szCurrentPath, _countof(szCurrentPath) )) {
 		return false;
 	}
 
+	CDlgTagJumpList	cDlgTagJumpList(false);
 	cDlgTagJumpList.SetFileName( szCurrentPath );
 	cDlgTagJumpList.SetKeyword( keyword );
 
@@ -680,6 +664,8 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword( const wchar_t* keyword )
 	}
 
 	//タグジャンプする。
+	TCHAR fileName[1024];
+	int	 fileLine;	// 行番号
 	if (false == cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine, NULL )) {
 		return false;
 	}

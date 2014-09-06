@@ -188,11 +188,9 @@ BOOL CDlgGrep::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	::SendMessageAny( GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall );
 	::SendMessageAny( GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIconBig );
 
-	// 2002/09/22 Moca Add
-	int i;
 	/* 文字コードセット選択コンボボックス初期化 */
 	CCodeTypesForCombobox cCodeTypes;
-	for (i = 0; i < cCodeTypes.GetCount(); ++i) {
+	for (int i = 0; i < cCodeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString( ::GetDlgItem( GetHwnd(), IDC_COMBO_CHARSET ), cCodeTypes.GetName(i) );
 		Combo_SetItemData( ::GetDlgItem( GetHwnd(), IDC_COMBO_CHARSET ), idx, cCodeTypes.GetCode(i) );
 	}

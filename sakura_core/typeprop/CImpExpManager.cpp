@@ -321,8 +321,8 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 	m_Types.m_nIdx = m_nIdx;
 	if (m_nIdx == 0) {
 		// 基本の場合の名前と拡張子を初期化
-		_tcscpy( m_Types.m_szTypeName, LS(STR_TYPE_NAME_BASIS) );
-		_tcscpy( m_Types.m_szTypeExts, _T("") );
+		_tcscpy_s( m_Types.m_szTypeName, LS(STR_TYPE_NAME_BASIS) );
+		m_Types.m_szTypeExts[0] = 0;
 		m_Types.m_id = 0;
 	}else {
 		m_Types.m_id = (::GetTickCount() & 0x3fffffff) + m_nIdx * 0x10000;
@@ -354,7 +354,7 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 	CKeyWordSetMgr&	cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 	for (i=0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		//types.m_nKeyWordSetIdx[i] = -1;
-		auto_sprintf( szKeyName, szKeyKeywordTemp, i+1 );
+		auto_sprintf_s( szKeyName, szKeyKeywordTemp, i+1 );
 		if (m_cProfile.IOProfileData( szSecTypeEx, szKeyName, MakeStringBufferW( szKeyData ))) {
 			nIdx = cKeyWordSetMgr.SearchKeyWordSet( szKeyData );
 			if (nIdx < 0) {
@@ -363,14 +363,14 @@ bool CImpExpType::Import( const wstring& sFileName, wstring& sErrMsg )
 				nIdx = cKeyWordSetMgr.SearchKeyWordSet( szKeyData );
 			}
 			if (nIdx >= 0) {
-				auto_sprintf( szKeyName, szKeyKeywordCaseTemp, i+1 );
+				auto_sprintf_s( szKeyName, szKeyKeywordCaseTemp, i+1 );
 				bCase = false;		// 大文字小文字区別しない (Defaule)
 				m_cProfile.IOProfileData( szSecTypeEx, szKeyName, bCase );
 
 				// キーワード定義ファイル入力
 				CImpExpKeyWord	cImpExpKeyWord( common, nIdx, bCase );
 
-				auto_sprintf( szKeyName, szKeyKeywordFileTemp, i+1 );
+				auto_sprintf_s( szKeyName, szKeyKeywordFileTemp, i+1 );
 				szFileName[0] = L'\0';
 				if (m_cProfile.IOProfileData( szSecTypeEx, szKeyName, MakeStringBufferW( szFileName ))) {
 					if (cImpExpKeyWord.Import( cImpExpKeyWord.MakeFullPath( szFileName ), TmpMsg )) {
@@ -460,7 +460,7 @@ bool CImpExpType::Export( const wstring& sFileName, wstring& sErrMsg )
 	for (i=0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		if (m_Types.m_nKeyWordSetIdx[i] >= 0) {
 			nIdx = m_Types.m_nKeyWordSetIdx[i];
-			auto_sprintf( szKeyName, szKeyKeywordTemp, i+1 );
+			auto_sprintf_s( szKeyName, szKeyKeywordTemp, i+1 );
 			auto_strcpy( buff, cKeyWordSetMgr.GetTypeName( nIdx ));
 			cProfile.IOProfileData( szSecTypeEx, szKeyName, MakeStringBufferW( buff ));
 
@@ -473,13 +473,13 @@ bool CImpExpType::Export( const wstring& sFileName, wstring& sErrMsg )
 
 			if ( cImpExpKeyWord.Export( cImpExpKeyWord.GetFullPath(), sTmpMsg ) ) {
 				auto_strcpy( szFileName, cImpExpKeyWord.GetFileName().c_str());
-				auto_sprintf( szKeyName, szKeyKeywordFileTemp, i+1 );
+				auto_sprintf_s( szKeyName, szKeyKeywordFileTemp, i+1 );
 				if (cProfile.IOProfileData( szSecTypeEx, szKeyName, MakeStringBufferW( szFileName ))) {
 					files += wstring( L"\n" ) + cImpExpKeyWord.GetFileName();
 				}
 			}
 
-			auto_sprintf( szKeyName, szKeyKeywordCaseTemp, i+1 );
+			auto_sprintf_s( szKeyName, szKeyKeywordCaseTemp, i+1 );
 			cProfile.IOProfileData( szSecTypeEx, szKeyName, bCase );
 		}
 	}
@@ -516,7 +516,7 @@ bool CImpExpType::Export( const wstring& sFileName, wstring& sErrMsg )
 	DLLSHAREDATA* pShare = &GetDllShareData();
 	int		nStructureVersion;
 	wchar_t	wbuff[_MAX_PATH + 1];
-	auto_sprintf( wbuff, L"%d.%d.%d.%d", 
+	auto_sprintf_s( wbuff, L"%d.%d.%d.%d", 
 				HIWORD( pShare->m_sVersion.m_dwProductVersionMS ),
 				LOWORD( pShare->m_sVersion.m_dwProductVersionMS ),
 				HIWORD( pShare->m_sVersion.m_dwProductVersionLS ),
@@ -796,7 +796,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 
 		//About
 		if (wcslen(p2) > DICT_ABOUT_LEN) {
-			auto_sprintf( msgBuff, LSW(STR_IMPEXP_DIC_LENGTH), DICT_ABOUT_LEN );
+			auto_sprintf_s( msgBuff, LSW(STR_IMPEXP_DIC_LENGTH), DICT_ABOUT_LEN );
 			sErrMsg = msgBuff;
 			++invalid_record;
 			continue;
@@ -804,7 +804,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 
 		//良さそうなら
 		m_Types.m_KeyHelpArr[i].m_bUse = (b_enable_flag!=0);	// 2007.02.03 genta
-		_tcscpy(m_Types.m_KeyHelpArr[i].m_szAbout, to_tchar(p4));
+		_tcscpy_s(m_Types.m_KeyHelpArr[i].m_szAbout, to_tchar(p4));
 		_tcscpy(m_Types.m_KeyHelpArr[i].m_szPath,  to_tchar(p3));
 		i++;
 	}
@@ -820,7 +820,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 
 	// 2007.02.03 genta 失敗したら警告する
 	if (invalid_record > 0) {
-		auto_sprintf( msgBuff, LSW(STR_IMPEXP_DIC_RECORD), invalid_record );
+		auto_sprintf_s( msgBuff, LSW(STR_IMPEXP_DIC_RECORD), invalid_record );
 		sErrMsg = msgBuff;
 	}
 

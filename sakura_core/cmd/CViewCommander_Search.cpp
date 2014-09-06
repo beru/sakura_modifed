@@ -117,18 +117,19 @@ void CViewCommander::Command_SEARCH_NEXT(
 		goto end_of_func;
 	}
 
+	auto& si = m_pCommanderView->GetSelectionInfo();
 	// 検索開始位置を調整
 	bFlag1 = false;
-	if (NULL == pcSelectLogic && m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
+	if (NULL == pcSelectLogic && si.IsTextSelected()) {	/* テキストが選択されているか */
 		/* 矩形範囲選択中でない & 選択状態のロック */
-		if (!m_pCommanderView->GetSelectionInfo().IsBoxSelecting() && m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {
+		if (!si.IsBoxSelecting() && si.m_bSelectingLock) {
 			bSelecting = true;
-			bSelectingLock_Old = m_pCommanderView->GetSelectionInfo().m_bSelectingLock;
+			bSelectingLock_Old = si.m_bSelectingLock;
 
-			sSelectBgn_Old = m_pCommanderView->GetSelectionInfo().m_sSelectBgn; //範囲選択(原点)
+			sSelectBgn_Old = si.m_sSelectBgn; //範囲選択(原点)
 			sSelect_Old = GetSelect();
 
-			if (PointCompare(m_pCommanderView->GetSelectionInfo().m_sSelectBgn.GetFrom(),GetCaret().GetCaretLayoutPos()) >= 0) {
+			if (PointCompare(si.m_sSelectBgn.GetFrom(),GetCaret().GetCaretLayoutPos()) >= 0) {
 				// カーソル移動
 				GetCaret().SetCaretLayoutPos(GetSelect().GetFrom());
 				if (GetSelect().IsOne()) {
@@ -153,7 +154,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 			}
 
 			/* 現在の選択範囲を非選択状態に戻す */
-			m_pCommanderView->GetSelectionInfo().DisableSelectArea( bRedraw, false );
+			si.DisableSelectArea( bRedraw, false );
 			bDisableSelect = true;
 		}
 	}
@@ -220,16 +221,16 @@ re_do:;
 
 		if (bSelecting) {
 			/* 現在のカーソル位置によって選択範囲を変更 */
-			m_pCommanderView->GetSelectionInfo().ChangeSelectAreaByCurrentCursor( sRangeA.GetTo() );
-			m_pCommanderView->GetSelectionInfo().m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
+			si.ChangeSelectAreaByCurrentCursor( sRangeA.GetTo() );
+			si.m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
 		}else if (NULL == pcSelectLogic) {
 			/* 選択範囲の変更 */
 			//	2005.06.24 Moca
-			m_pCommanderView->GetSelectionInfo().SetSelectArea( sRangeA );
+			si.SetSelectArea( sRangeA );
 
 			if (bRedraw) {
 				/* 選択領域描画 */
-				m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+				si.DrawSelectArea();
 			}
 		}
 
@@ -245,11 +246,11 @@ re_do:;
 		bFound = TRUE;
 	}else {
 		if (bSelecting) {
-			m_pCommanderView->GetSelectionInfo().m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
+			si.m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
 
 			/* 選択範囲の変更 */
-			m_pCommanderView->GetSelectionInfo().m_sSelectBgn = sSelectBgn_Old; //範囲選択(原点)
-			m_pCommanderView->GetSelectionInfo().m_sSelectOld = sSelect_Old;	// 2011.12.24
+			si.m_sSelectBgn = sSelectBgn_Old; //範囲選択(原点)
+			si.m_sSelectOld = sSelect_Old;	// 2011.12.24
 			GetSelect().SetFrom(sSelect_Old.GetFrom());
 			GetSelect().SetTo(sRangeA.GetFrom());
 
@@ -259,7 +260,7 @@ re_do:;
 
 			if (bRedraw) {
 				/* 選択領域描画 */
-				m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+				si.DrawSelectArea();
 			}
 		}else {
 			if (bDisableSelect) {
@@ -346,18 +347,19 @@ void CViewCommander::Command_SEARCH_PREV( bool bReDraw, HWND hwndParent )
 	if (0 == m_pCommanderView->m_strCurSearchKey.size()) {
 		goto end_of_func;
 	}
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
-		sSelectBgn_Old = m_pCommanderView->GetSelectionInfo().m_sSelectBgn; //範囲選択(原点)
+	auto& si = m_pCommanderView->GetSelectionInfo();
+	if (si.IsTextSelected()) {	/* テキストが選択されているか */
+		sSelectBgn_Old = si.m_sSelectBgn; //範囲選択(原点)
 		sSelect_Old = GetSelect();
 		
-		bSelectingLock_Old = m_pCommanderView->GetSelectionInfo().m_bSelectingLock;
+		bSelectingLock_Old = si.m_bSelectingLock;
 
 		/* 矩形範囲選択中か */
-		if (!m_pCommanderView->GetSelectionInfo().IsBoxSelecting() && m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {	/* 選択状態のロック */
+		if (!si.IsBoxSelecting() && si.m_bSelectingLock) {	/* 選択状態のロック */
 			bSelecting = true;
 		}else {
 			/* 現在の選択範囲を非選択状態に戻す */
-			m_pCommanderView->GetSelectionInfo().DisableSelectArea( bReDraw, false );
+			si.DisableSelectArea( bReDraw, false );
 			bDisableSelect = true;
 		}
 	}
@@ -400,16 +402,16 @@ re_do:;							//	hor
 	) {
 		if (bSelecting) {
 			/* 現在のカーソル位置によって選択範囲を変更 */
-			m_pCommanderView->GetSelectionInfo().ChangeSelectAreaByCurrentCursor( sRangeA.GetFrom() );
-			m_pCommanderView->GetSelectionInfo().m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
+			si.ChangeSelectAreaByCurrentCursor( sRangeA.GetFrom() );
+			si.m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
 		}else {
 			/* 選択範囲の変更 */
 			//	2005.06.24 Moca
-			m_pCommanderView->GetSelectionInfo().SetSelectArea( sRangeA );
+			si.SetSelectArea( sRangeA );
 
 			if (bReDraw) {
 				/* 選択領域描画 */
-				m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+				si.DrawSelectArea();
 			}
 		}
 		/* カーソル移動 */
@@ -420,16 +422,16 @@ re_do:;							//	hor
 		bFound = TRUE;
 	}else {
 		if (bSelecting) {
-			m_pCommanderView->GetSelectionInfo().m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
+			si.m_bSelectingLock = bSelectingLock_Old;	/* 選択状態のロック */
 			/* 選択範囲の変更 */
-			m_pCommanderView->GetSelectionInfo().m_sSelectBgn = sSelectBgn_Old;
+			si.m_sSelectBgn = sSelectBgn_Old;
 			GetSelect() = sSelect_Old;
 
 			/* カーソル移動 */
 			GetCaret().MoveCursor( sRangeA.GetFrom(), bReDraw );
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 			/* 選択領域描画 */
-			m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+			si.DrawSelectArea();
 		}else {
 			if (bDisableSelect) {
 				m_pCommanderView->DrawBracketCursorLine(bReDraw);

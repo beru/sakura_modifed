@@ -166,7 +166,7 @@ bool IsLocalDrive( const TCHAR* pszDrive )
 	long	lngRet;
 
 	if (iswalpha(pszDrive[0])) {
-		auto_sprintf(szDriveType, _T("%tc:\\"), _totupper(pszDrive[0]));
+		auto_sprintf_s(szDriveType, _T("%tc:\\"), _totupper(pszDrive[0]));
 		lngRet = GetDriveType( szDriveType );
 		if (lngRet == DRIVE_REMOVABLE || lngRet == DRIVE_CDROM || lngRet == DRIVE_REMOTE) {
 			return false;

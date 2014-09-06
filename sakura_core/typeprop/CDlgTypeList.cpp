@@ -317,12 +317,12 @@ void CDlgTypeList::SetData( int selIdx )
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		/* タイプ属性：拡張子リスト */
-			auto_sprintf( szText, _T("%ts ( %ts )"),
+			auto_sprintf_s( szText, _T("%ts ( %ts )"),
 				type->m_szTypeName,	/* タイプ属性：名称 */
 				type->m_szTypeExts	/* タイプ属性：拡張子リスト */
 			);
 		}else {
-			auto_sprintf( szText, _T("%ts"),
+			auto_sprintf_s( szText, _T("%ts"),
 				type->m_szTypeName	/* タイプ属性：拡称 */
 			);
 		}
@@ -499,7 +499,7 @@ bool CDlgTypeList::InitializeType( void )
 	bool bUpdate = true;
 	for (int i = 1; i < GetDllShareData().m_nTypesCount; i++) {
 		if (bUpdate) {
-			auto_sprintf( type.m_szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum );
+			auto_sprintf_s( type.m_szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum );
 			nNameNum++;
 			bUpdate = false;
 		}
@@ -513,7 +513,7 @@ bool CDlgTypeList::InitializeType( void )
 			bUpdate = true;
 		}
 	}
-	_tcscpy( type.m_szTypeExts, _T("") );
+	type.m_szTypeExts[0] = 0;
 	type.m_nIdx = iDocType;
 	type.m_id = (::GetTickCount() & 0x3fffffff) + iDocType * 0x10000;
 
@@ -557,7 +557,7 @@ bool CDlgTypeList::CopyType()
 				n++;
 			}
 			TCHAR szNum[12];
-			auto_sprintf( szNum, _T("%d"), n );
+			auto_sprintf_s( szNum, _T("%d"), n );
 			auto_strcat( type.m_szTypeName, szNum );
 			bUpdate = false;
 		}
@@ -799,7 +799,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 
 	//小文字化
 	TCHAR szLowerExt[MAX_PATH] = {0};
-	_tcsncpy_s(szLowerExt, sizeof(szLowerExt) / sizeof(szLowerExt[0]), sExt, _tcslen(sExt));
+	_tcsncpy_s(szLowerExt, _countof(szLowerExt), sExt, _tcslen(sExt));
 	CharLower(szLowerExt);
 
 	tstring sDotExt = sBasePath + _T(".") + szLowerExt;
@@ -924,7 +924,7 @@ int UnregistExt(LPCTSTR sExt)
 
 	//小文字化
 	TCHAR szLowerExt[MAX_PATH] = {0};
-	_tcsncpy_s(szLowerExt, sizeof(szLowerExt) / sizeof(szLowerExt[0]), sExt, _tcslen(sExt));
+	_tcsncpy_s(szLowerExt, _countof(szLowerExt), sExt, _tcslen(sExt));
 	CharLower(szLowerExt);
 
 	tstring sDotExt = sBasePath + _T(".") + szLowerExt;
@@ -1017,7 +1017,7 @@ int CheckExt(LPCTSTR sExt, bool* pbRMenu, bool* pbDblClick)
 
 	//小文字化
 	TCHAR szLowerExt[MAX_PATH] = {0};
-	_tcsncpy_s(szLowerExt, sizeof(szLowerExt) / sizeof(szLowerExt[0]), sExt, _tcslen(sExt));
+	_tcsncpy_s(szLowerExt, _countof(szLowerExt), sExt, _tcslen(sExt));
 	CharLower(szLowerExt);
 
 	tstring sDotExt = sBasePath + _T(".") + szLowerExt;

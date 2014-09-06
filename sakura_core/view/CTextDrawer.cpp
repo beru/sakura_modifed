@@ -205,8 +205,7 @@ void CTextDrawer::DispVerticalLines(
 		gr.SetPen( cVertType.GetTextColor() );
 	}
 
-	int k;
-	for (k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; k++) {
+	for (int k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; k++) {
 		// nXColは1開始。GetTextArea().GetViewLeftCol()は0開始なので注意。
 		CLayoutInt nXCol = typeData.m_nVertLineIdx[k];
 		CLayoutInt nXColEnd = nXCol;

@@ -450,8 +450,7 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 			//	関数内部の実行文のさらに奧に関数があるケースを考慮
 			//	def/class以外のインデントは記録しない方がいいので
 			//	見出し行と確定してからインデントレベルの判定を行う
-			int i;
-			for (i = depth_index; i >= 0; --i) {
+			for (int i = depth_index; i >= 0; --i) {
 				if (depth == indent_level[ i ]) {
 					depth_index = i;
 					break;
@@ -494,7 +493,7 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 				wcsncpy( szWord, pLine + col, len );
 				szWord[ len ] = L'\0';
 			}else {
-				wcscpy( szWord, LSW(STR_OUTLINE_PYTHON_UNDEFINED) );
+				wcscpy_s(szWord, LSW(STR_OUTLINE_PYTHON_UNDEFINED));
 				len = 8;
 			}
 			if (nItemFuncId == 4) {
@@ -503,7 +502,7 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 					len = _countof( szWord ) - 8;
 				}
 				// class
-				wcscpy( szWord + len, LSW(STR_OUTLINE_PYTHON_CLASS) );
+				wcscpy(szWord + len, LSW(STR_OUTLINE_PYTHON_CLASS));
 			}
 			
 			/*

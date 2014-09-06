@@ -222,8 +222,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				/* èdï°åüç∏ */
 				nIndex2 = ListView_GetItemCount(hwndList);
 				TCHAR szPath2[_MAX_PATH];
-				int i;
-				for (i = 0; i < nIndex2; i++) {
+				for (int i = 0; i < nIndex2; i++) {
 					auto_memset(szPath2, 0, _countof(szPath2));
 					ListView_GetItemText(hwndList, i, 2, szPath2, _countof(szPath2));
 					if (_tcscmp(szPath, szPath2) == 0) {

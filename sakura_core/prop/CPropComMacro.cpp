@@ -334,10 +334,8 @@ int CPropMacro::GetData( HWND hwndDlg )
 		sItem.pszText = szText;
 		sItem.cchTextMax = _countof(szText);
 		ListView_GetItem( hListView, &sItem );
-		int i;
-		int nLen;
-		nLen = ::lstrlen(szText);
-		for (i = 0; i < nLen; i++) {
+		int nLen = ::lstrlen(szText);
+		for (int i = 0; i < nLen; i++) {
 			if (szText[i] == _T('O')) {
 				m_Common.m_sMacro.m_nMacroOnOpened = index;
 			}
@@ -500,10 +498,8 @@ void CPropMacro::SetMacro2List_Macro( HWND hwndDlg )
 		sItem.pszText = szText;
 		sItem.cchTextMax = _countof(szText);
 		ListView_GetItem( hListView, &sItem );
-		int i;
-		int nLen;
-		nLen = ::lstrlen(szText);
-		for (i = 0; i < nLen; i++) {
+		int nLen = ::lstrlen(szText);
+		for (int i = 0; i < nLen; i++) {
 			if (szText[i] == _T('O')) {
 				nMacroOnOpened = iItem;
 			}
@@ -689,13 +685,11 @@ void CPropMacro::CheckListPosition_Macro( HWND hwndDlg )
 	sItem.pszText = szText;
 	sItem.cchTextMax = _countof(szText);
 	ListView_GetItem( hListView, &sItem );
-	int i;
-	int nLen;
-	nLen = ::lstrlen(szText);
 	::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnOpened, false );
 	::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnTypeChanged, false );
 	::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnSave, false );
-	for (i = 0; i < nLen; i++) {
+	int nLen = ::lstrlen(szText);
+	for (int i = 0; i < nLen; i++) {
 		if (szText[i] == _T('O')) {
 			::CheckDlgButton( hwndDlg, IDC_CHECK_MacroOnOpened, true );
 		}

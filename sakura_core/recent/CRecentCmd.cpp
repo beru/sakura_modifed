@@ -77,6 +77,6 @@ int CRecentCmd::CompareItem( const CCmdString* p1, LPCTSTR p2 ) const
 
 void CRecentCmd::CopyItem( CCmdString* dst, LPCTSTR src ) const
 {
-	_tcscpy(*dst,src);
+	_tcscpy(*dst, src);
 }
 

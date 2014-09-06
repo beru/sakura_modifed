@@ -128,7 +128,7 @@ const wchar_t* COutlineErlang::ScanFuncName( const wchar_t* buf, const wchar_t* 
 		}while (IS_ALNUM( *p ) && p < end);
 	}
 	
-	int buf_len = sizeof( m_func ) / sizeof( m_func[0]);
+	int buf_len = _countof( m_func );
 	int len = p - buf;
 	if (buf[0] == L'\'') {
 		++buf;
@@ -218,7 +218,7 @@ const wchar_t* COutlineErlang::ScanArgs( const wchar_t* end, const wchar_t* p )
 {
 	assert( m_state == STATE_FUNC_ARGS );
 
-	const int parptr_max = sizeof( m_parenthesis ) / sizeof( m_parenthesis[0] );
+	const int parptr_max = _countof( m_parenthesis );
 	wchar_t quote = L'\0'; // æ“ªˆÊ’u‚ð•Û‘¶
 	for (const wchar_t* head = p ; p < end ; p++) {
 		if (quote) {
@@ -372,7 +372,7 @@ bool COutlineErlang::parse( const wchar_t* buf, int linelen, CLogicInt linenum )
 void COutlineErlang::build_arity( int arity )
 {
 	int len = wcslen( m_func );
-	const int buf_size = sizeof( m_func ) / sizeof( m_func[0]);
+	const int buf_size = _countof( m_func );
 	wchar_t* p = &m_func[len];
 	wchar_t numstr[12];
 	

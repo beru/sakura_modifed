@@ -83,15 +83,13 @@ CDlgKeywordSelect::~CDlgKeywordSelect()
 */
 int CDlgKeywordSelect::DoModal( HINSTANCE hInstance, HWND hwndParent, int* pnSet )
 {
-	int i;
-
-	for (i = 0; i < KEYWORD_SELECT_NUM; i++) {
+	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
 		m_nSet[ i ] = pnSet[ i ];
 	}
 
 	(void)CDialog::DoModal( hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL );
 
-	for (i = 0; i < KEYWORD_SELECT_NUM; i++) {
+	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
 		pnSet[ i ] = m_nSet[ i ];
 	}
 

@@ -192,7 +192,7 @@ void CEditDoc::Clear()
 void CEditDoc::InitDoc()
 {
 	CAppMode::getInstance()->SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
-	wcscpy( CAppMode::getInstance()->m_szGrepKey, L"" );	//$$
+	CAppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
 
 	CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode = false;	/* Grepモード */	//$$同上
 	m_cAutoReloadAgent.m_eWatchUpdate = WU_QUERY; // Dec. 4, 2002 genta 更新監視方法 $$
@@ -407,7 +407,7 @@ void CEditDoc::GetEditInfo(
 ) const
 {
 	//ファイルパス
-	_tcscpy(pfi->m_szPath, m_cDocFile.GetFilePath());
+	_tcscpy_s(pfi->m_szPath, m_cDocFile.GetFilePath());
 
 	//表示域
 	pfi->m_nViewTopLine = m_pcEditWnd->GetActiveView().GetTextArea().GetViewTopLine();	/* 表示域の一番上の行(0開始) */
@@ -423,7 +423,7 @@ void CEditDoc::GetEditInfo(
 
 	//GREPモード
 	pfi->m_bIsGrep = CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode;
-	wcscpy( pfi->m_szGrepKey, CAppMode::getInstance()->m_szGrepKey );
+	wcscpy_s( pfi->m_szGrepKey, CAppMode::getInstance()->m_szGrepKey );
 
 	//デバッグモニタ (アウトプットウインドウ) モード
 	pfi->m_bIsDebug = CAppMode::getInstance()->IsDebugMode();
@@ -832,7 +832,7 @@ BOOL CEditDoc::OnFileClose()
 		int			nLen = (int)wcslen( pszGrepKey );
 		CNativeW	cmemDes;
 		LimitStringLengthW( pszGrepKey , nLen, 64, cmemDes );
-		auto_sprintf( szGrepTitle, LS(STR_TITLE_GREP),
+		auto_sprintf_s( szGrepTitle, LS(STR_TITLE_GREP),
 			cmemDes.GetStringPtr(),
 			( nLen > cmemDes.GetStringLength() ) ? _T("...") : _T("")
 		);
@@ -840,7 +840,7 @@ BOOL CEditDoc::OnFileClose()
 	}
 	if (NULL == pszTitle) {
 		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode( CEditWnd::getInstance()->GetHwnd() );
-		auto_sprintf( szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->m_nId );	//(無題)
+		auto_sprintf_s( szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->m_nId );	//(無題)
 		pszTitle = szGrepTitle;
 	}
 	/* ウィンドウをアクティブにする */

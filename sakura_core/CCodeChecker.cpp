@@ -36,8 +36,8 @@ static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
 //! CDocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
 static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECodeType eCodeType)
 {
-	CDocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
-	CCodeBase* pCodeBase=CCodeFactory::CreateCodeBase(eCodeType,0);
+	CDocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
+	CCodeBase* pCodeBase = CCodeFactory::CreateCodeBase(eCodeType,0);
 	while (pcDocLine) {
 		// コード変換 pcDocLine -> cmemTmp
 		CMemory cmemTmp;
@@ -46,7 +46,7 @@ static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECod
 			&cmemTmp,
 			pCodeBase
 		);
-		if (e!=RESULT_COMPLETE) {
+		if (e != RESULT_COMPLETE) {
 			delete pCodeBase;
 			return e;
 		}
@@ -93,7 +93,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 	);
 
 	//ユーザ問い合わせ
-	if (nTmpResult==RESULT_LOSESOME) {
+	if (nTmpResult == RESULT_LOSESOME) {
 		int nDlgResult = MYMESSAGEBOX(
 			CEditWnd::getInstance()->GetHwnd(),
 			MB_YESNO | MB_ICONWARNING,

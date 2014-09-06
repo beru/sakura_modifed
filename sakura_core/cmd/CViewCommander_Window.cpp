@@ -123,8 +123,6 @@ void CViewCommander::Command_WINLIST( int nCommandFrom )
 */
 void CViewCommander::Command_CASCADE( void )
 {
-	int i;
-
 	/* 現在開いている編集窓のリストを取得する */
 	EditNode*	pEditNodeArr;
 	int			nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNodeArr, TRUE/*FALSE*/, TRUE );
@@ -145,7 +143,7 @@ void CViewCommander::Command_CASCADE( void )
 		//	ウィンドウ(ハンドル)リストの作成
 		// -----------------------------------------
 
-		for (i = 0; i < nRowNum; ++i) {
+		for (int i = 0; i < nRowNum; ++i) {
 			if (::IsIconic( pEditNodeArr[i].GetHwnd() )) {	//	最小化しているウィンドウは無視。
 				continue;
 			}
@@ -170,7 +168,7 @@ void CViewCommander::Command_CASCADE( void )
 		}
 
 		//	デスクトップサイズを得る
-		RECT	rcDesktop;
+		RECT rcDesktop;
 		//	May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( m_pCommanderView->GetHwnd(), &rcDesktop );
 		
@@ -195,7 +193,7 @@ void CViewCommander::Command_CASCADE( void )
 		int roundtrip = 0; //２度目の描画以降で使用するカウント
 		int sw_offset = w_delta; //右スライドの幅
 
-		for (i = 0; i < count; ++i) {
+		for (int i = 0; i < count; ++i) {
 			if (w_offset + width > rcDesktop.right || h_offset + height > rcDesktop.bottom) {
 				++roundtrip;
 				if ((rcDesktop.right - rcDesktop.left) - sw_offset * roundtrip < width) {
@@ -222,7 +220,7 @@ void CViewCommander::Command_CASCADE( void )
 		//
 		//	Sep. 04, 2004 genta
 		// -----------------------------------------
-		for (i = 0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			::ShowWindow( pWndArr[i].hWnd, SW_RESTORE | SW_SHOWNA );
 		}
 
@@ -233,7 +231,7 @@ void CViewCommander::Command_CASCADE( void )
 		// -----------------------------------------
 
 		// まずカレントを最前面に
-		i = count - 1;
+		int i = count - 1;
 		
 		::SetWindowPos(
 			pWndArr[i].hWnd, HWND_TOP,
@@ -262,8 +260,6 @@ void CViewCommander::Command_CASCADE( void )
 //上下に並べて表示
 void CViewCommander::Command_TILE_V( void )
 {
-	int i;
-
 	/* 現在開いている編集窓のリストを取得する */
 	EditNode*	pEditNodeArr;
 	int			nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNodeArr, TRUE/*FALSE*/, TRUE );
@@ -272,10 +268,10 @@ void CViewCommander::Command_TILE_V( void )
 		HWND*	phwndArr = new HWND[nRowNum];
 		int		count = 0;
 		//	デスクトップサイズを得る
-		RECT	rcDesktop;
+		RECT rcDesktop;
 		//	May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( m_pCommanderView->GetHwnd(), &rcDesktop );
-		for (i = 0; i < nRowNum; ++i) {
+		for (int i = 0; i < nRowNum; ++i) {
 			if (::IsIconic( pEditNodeArr[i].GetHwnd() )) {	//	最小化しているウィンドウは無視。
 				continue;
 			}
@@ -294,7 +290,7 @@ void CViewCommander::Command_TILE_V( void )
 			count++;
 		}
 		int height = (rcDesktop.bottom - rcDesktop.top ) / count;
-		for (i = 0; i < count; ++i) {
+		for (int i = 0; i < count; ++i) {
 			//	Jul. 21, 2002 genta
 			::ShowWindow( phwndArr[i], SW_RESTORE );
 			::SetWindowPos(
@@ -316,8 +312,6 @@ void CViewCommander::Command_TILE_V( void )
 //左右に並べて表示
 void CViewCommander::Command_TILE_H( void )
 {
-	int i;
-
 	/* 現在開いている編集窓のリストを取得する */
 	EditNode*	pEditNodeArr;
 	int			nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNodeArr, TRUE/*FALSE*/, TRUE );
@@ -329,7 +323,7 @@ void CViewCommander::Command_TILE_H( void )
 		RECT	rcDesktop;
 		//	May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( m_pCommanderView->GetHwnd(), &rcDesktop );
-		for (i = 0; i < nRowNum; ++i) {
+		for (int i = 0; i < nRowNum; ++i) {
 			if (::IsIconic( pEditNodeArr[i].GetHwnd() )) {	//	最小化しているウィンドウは無視。
 				continue;
 			}
@@ -348,7 +342,7 @@ void CViewCommander::Command_TILE_H( void )
 			count++;
 		}
 		int width = (rcDesktop.right - rcDesktop.left ) / count;
-		for (i = 0; i < count; ++i) {
+		for (int i = 0; i < count; ++i) {
 			//	Jul. 21, 2002 genta
 			::ShowWindow( phwndArr[i], SW_RESTORE );
 			::SetWindowPos(

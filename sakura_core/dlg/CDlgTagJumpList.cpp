@@ -313,13 +313,13 @@ void CDlgTagJumpList::UpdateData( bool bInit )
 		ListView_InsertItem( hwndList, &lvi );
 
 		if (item->baseDirId) {
-			auto_sprintf( tmp, _T("(%d)"), item->depth );
+			auto_sprintf_s( tmp, _T("(%d)"), item->depth );
 		}else {
-			auto_sprintf( tmp, _T("%d"), item->depth );
+			auto_sprintf_s( tmp, _T("%d"), item->depth );
 		}
 		ListView_SetItemText( hwndList, nIndex, 1, tmp );
 
-		auto_sprintf( tmp, _T("%d"), item->no );
+		auto_sprintf_s( tmp, _T("%d"), item->no );
 		ListView_SetItemText( hwndList, nIndex, 2, tmp );
 
 		TCHAR	*p;
@@ -398,7 +398,7 @@ int CDlgTagJumpList::GetData( void )
 			return FALSE;
 		}
 		wchar_t	tmp[MAX_TAG_STRING_LENGTH];
-		wcscpy( tmp, L"" );
+		tmp[0] = 0;
 		::DlgItem_GetText( GetHwnd(), IDC_KEYWORD, tmp, _countof( tmp ) );
 		SetKeyword( tmp );
 
@@ -867,8 +867,8 @@ int CDlgTagJumpList::SearchBestTag( void )
 	int		i;
 	int		count;
 
-	_tcscpy( szFileSrc, _T("") );
-	_tcscpy( szExtSrc,  _T("") );
+	szFileSrc[0] = 0;
+	szExtSrc[0] = 0;
 	_tsplitpath( m_pszFileName, NULL, NULL, szFileSrc, szExtSrc );
 
 	count = m_pcList->GetCount();
@@ -877,8 +877,8 @@ int CDlgTagJumpList::SearchBestTag( void )
 		CSortedTagJumpList::TagJumpInfo* item;
 		item = m_pcList->GetPtr( i );
 
-		_tcscpy( szFileDst, _T("") );
-		_tcscpy( szExtDst,  _T("") );
+		szFileDst[0] = 0;
+		szExtDst[0] = 0;
 		_tsplitpath( item->filename, NULL, NULL, szFileDst, szExtDst );
 		
 		if (_tcsicmp( szFileSrc, szFileDst ) == 0) {
@@ -898,7 +898,7 @@ int CDlgTagJumpList::SearchBestTag( void )
 void CDlgTagJumpList::FindNext( bool bNewFind )
 {
 	wchar_t	szKey[ MAX_TAG_STRING_LENGTH ];
-	wcscpy( szKey, L"" );
+	szKey[0] = 0;
 	::DlgItem_GetText( GetHwnd(), IDC_KEYWORD, szKey, _countof( szKey ) );
 	if (bNewFind) {
 		// 前回のキーワードからの絞込検索のときで、tagsをスキップできるときはスキップ
@@ -1015,7 +1015,7 @@ int CDlgTagJumpList::find_key_core(
 		// 初回or使えないときはクリア
 		ClearPrevFindInfo();
 		// ファイル名をコピーしたあと、ディレクトリ(最後\)のみにする
-		_tcscpy( state.m_szCurPath, GetFilePath() );
+		_tcscpy_s( state.m_szCurPath, GetFilePath() );
 		state.m_szCurPath[ GetFileName() - GetFilePath() ] = _T('\0');
 		state.m_nLoop = m_nLoop;
 	}
@@ -1048,7 +1048,7 @@ int CDlgTagJumpList::find_key_core(
 		}
 
 		//タグファイル名を作成する。
-		auto_sprintf( szTagFile, _T("%ts%ts"), state.m_szCurPath, TAG_FILENAME_T );
+		auto_sprintf_s( szTagFile, _T("%ts%ts"), state.m_szCurPath, TAG_FILENAME_T );
 		DEBUG_TRACE( _T("tag: %ts\n"), szTagFile );
 		
 		//タグファイルを開く。

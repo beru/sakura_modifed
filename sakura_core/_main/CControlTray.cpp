@@ -70,16 +70,17 @@ void CControlTray::DoGrep()
 		return;
 	}
 
-	if (0 < m_pShareData->m_sSearchKeywords.m_aSearchKeys.size()
+	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
+	if (0 < searchKeywords.m_aSearchKeys.size()
 		&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
 	) {
-		m_cDlgGrep.m_strText = m_pShareData->m_sSearchKeywords.m_aSearchKeys[0];
+		m_cDlgGrep.m_strText = searchKeywords.m_aSearchKeys[0];
 	}
-	if (0 < m_pShareData->m_sSearchKeywords.m_aGrepFiles.size()) {
-		_tcscpy( m_cDlgGrep.m_szFile, m_pShareData->m_sSearchKeywords.m_aGrepFiles[0] );		/* 検索ファイル */
+	if (0 < searchKeywords.m_aGrepFiles.size()) {
+		_tcscpy( m_cDlgGrep.m_szFile, searchKeywords.m_aGrepFiles[0] );		/* 検索ファイル */
 	}
-	if (0 < m_pShareData->m_sSearchKeywords.m_aGrepFolders.size()) {
-		_tcscpy( m_cDlgGrep.m_szFolder, m_pShareData->m_sSearchKeywords.m_aGrepFolders[0] );	/* 検索フォルダ */
+	if (0 < searchKeywords.m_aGrepFolders.size()) {
+		_tcscpy( m_cDlgGrep.m_szFolder, searchKeywords.m_aGrepFolders[0] );	/* 検索フォルダ */
 	}
 
 	/* Grepダイアログの表示 */
@@ -117,7 +118,7 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	cCmdLine.AppendString(_T("\" -GFOLDER=\""));
 	cCmdLine.AppendString(cmWork3.GetStringPtr());
 	cCmdLine.AppendString(_T("\" -GCODE="));
-	auto_sprintf( szTemp, _T("%d"), cDlgGrep.m_nGrepCharSet );
+	auto_sprintf_s( szTemp, _T("%d"), cDlgGrep.m_nGrepCharSet );
 	cCmdLine.AppendString(szTemp);
 
 	//GOPTオプション
@@ -312,8 +313,6 @@ bool CControlTray::CreateTrayIcon( HWND hWnd )
 }
 
 
-
-
 /* メッセージループ */
 void CControlTray::MessageLoop( void )
 {
@@ -332,8 +331,6 @@ void CControlTray::MessageLoop( void )
 	return;
 
 }
-
-
 
 
 /* タスクトレイのアイコンに関する処理 */
@@ -358,9 +355,6 @@ BOOL CControlTray::TrayMessage( HWND hDlg, DWORD dwMessage, UINT uID, HICON hIco
 	}
 	return res;
 }
-
-
-
 
 
 /* メッセージ処理 */
@@ -482,7 +476,7 @@ LRESULT CControlTray::DispatchEvent(
 
 			//szHtmlFile取得
 			TCHAR	szHtmlHelpFile[1024];
-			_tcscpy( szHtmlHelpFile, pWork );
+			_tcscpy_s( szHtmlHelpFile, pWork );
 			int		nLen = _tcslen( szHtmlHelpFile );
 
 			//	Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
@@ -591,7 +585,7 @@ LRESULT CControlTray::DispatchEvent(
 			switch( (e_PM_CHANGESETTING_SELECT)lParam ){
 			case PM_CHANGESETTING_ALL:
 				{
-					bool bChangeLang = auto_strcmp( GetDllShareData().m_Common.m_sWindow.m_szLanguageDll, m_szLanguageDll ) != 0;
+					bool bChangeLang = auto_strcmp( GetDllShareData().m_Common.m_sWindow.m_szLanguageDll, m_szLanguageDll )		!= 0;
 					auto_strcpy( m_szLanguageDll, GetDllShareData().m_Common.m_sWindow.m_szLanguageDll );
 					std::vector<std::wstring> values;
 					if (bChangeLang) {
@@ -675,15 +669,15 @@ LRESULT CControlTray::DispatchEvent(
 					type->m_id = (::GetTickCount() & 0x3fffffff) + nInsert * 0x10000;
 					// 同じ名前のものがあったらその次にする
 					int nAddNameNum = nInsert + 1;
-					auto_sprintf( type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum ); 
+					auto_sprintf_s( type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum ); 
 					for (int k = 1; k < m_pShareData->m_nTypesCount; k++) {
 						if (auto_strcmp(types[k]->m_szTypeName, type->m_szTypeName) == 0) {
 							nAddNameNum++;
-							auto_sprintf( type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum ); 
+							auto_sprintf_s( type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum ); 
 							k = 0;
 						}
 					}
-					auto_strcpy( type->m_szTypeExts, _T("") );
+					type->m_szTypeExts[0] = 0;
 					types.resize( m_pShareData->m_nTypesCount + 1 );
 					int nTypeSizeOld = m_pShareData->m_nTypesCount;
 					m_pShareData->m_nTypesCount++;
@@ -716,8 +710,8 @@ LRESULT CControlTray::DispatchEvent(
 					}
 					types.resize( m_pShareData->m_nTypesCount - 1 );
 					m_pShareData->m_nTypesCount--;
-					auto_strcpy(m_pShareData->m_TypeMini[nTypeSizeOld-1].m_szTypeName, _T(""));
-					auto_strcpy(m_pShareData->m_TypeMini[nTypeSizeOld-1].m_szTypeExts, _T(""));
+					m_pShareData->m_TypeMini[nTypeSizeOld-1].m_szTypeName[0] = 0;
+					m_pShareData->m_TypeMini[nTypeSizeOld-1].m_szTypeExts[0] = 0;
 					m_pShareData->m_TypeMini[nTypeSizeOld-1].m_id = 0;
 				}else {
 					return FALSE;
@@ -1195,7 +1189,7 @@ bool CControlTray::OpenNewEditor(
 #ifdef _DEBUG
 //	dwCreationFlag |= DEBUG_PROCESS; //2007.09.22 kobake デバッグ用フラグ
 #endif
-	TCHAR szCmdLine[1024]; _tcscpy_s(szCmdLine, _countof(szCmdLine), cCmdLineBuf.c_str());
+	TCHAR szCmdLine[1024]; _tcscpy_s(szCmdLine, cCmdLineBuf.c_str());
 	BOOL bCreateResult = CreateProcess(
 		szEXE,					// 実行可能モジュールの名前
 		szCmdLine,				// コマンドラインの文字列
@@ -1255,8 +1249,7 @@ bool CControlTray::OpenNewEditor(
 	// Note. 起動先プロセスが初期化処理中に COM 関数（SHGetFileInfo API なども含む）を実行すると、
 	//       その時点で COM の同期機構が動いて WaitForInputIdle は終了してしまう可能性がある（らしい）。
 	if (sync && bRet) {
-		int i;
-		for (i = 0; i < 200; i++) {
+		for (int i = 0; i < 200; i++) {
 			MSG msg;
 			DWORD dwExitCode;
 			if (::PeekMessage( &msg, 0, MYWM_FIRST_IDLE, MYWM_FIRST_IDLE, PM_REMOVE )) {

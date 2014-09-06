@@ -143,7 +143,7 @@ bool CShareData::InitShareData()
 		AddLastChar( szIniFolder, _MAX_PATH, _T('\\') );
 
 		m_pShareData->m_vStructureVersion = uShareDataVersion;
-		_tcscpy(m_pShareData->m_Common.m_sMacro.m_szKeyMacroFileName, _T(""));	/* キーワードマクロのファイル名 */ //@@@ 2002.1.24 YAZAKI
+		m_pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0] = 0;	/* キーワードマクロのファイル名 */ //@@@ 2002.1.24 YAZAKI
 		m_pShareData->m_sFlags.m_bRecordingKeyMacro = FALSE;		/* キーボードマクロの記録中 */
 		m_pShareData->m_sFlags.m_hwndRecordingKeyMacro = NULL;	/* キーボードマクロを記録中のウィンドウ */
 
@@ -179,25 +179,26 @@ bool CShareData::InitShareData()
 		_tcscpy( m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER, szIniFolder );	/* マクロ用フォルダ */
 		_tcscpy( m_pShareData->m_sHistory.m_szIMPORTFOLDER, szIniFolder );	/* 設定インポート用フォルダ */
 
+		auto& csFileName = m_pShareData->m_Common.m_sFileName;
 		for (int i = 0; i < MAX_TRANSFORM_FILENAME; ++i) {
-			_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i], _T("") );
-			_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[i], _T("") );
+			csFileName.m_szTransformFileNameFrom[i][0] = 0;
+			csFileName.m_szTransformFileNameTo[i][0] = 0;
 		}
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[0], _T("%DeskTop%\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[0],   _T("デスクトップ\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[1], _T("%Personal%\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[1],   _T("マイドキュメント\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[2], _T("%Cache%\\Content.IE5\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[2],   _T("IEキャッシュ\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[3], _T("%TEMP%\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[3],   _T("TEMP\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[4], _T("%Common DeskTop%\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[4],   _T("共有デスクトップ\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[5], _T("%Common Documents%\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[5],   _T("共有ドキュメント\\") );
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[6], _T("%AppData%\\") );	// 2007.05.19 ryoji 追加
-		_tcscpy( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[6],   _T("アプリデータ\\") );	// 2007.05.19 ryoji 追加
-		m_pShareData->m_Common.m_sFileName.m_nTransformFileNameArrNum = 7;
+		_tcscpy( csFileName.m_szTransformFileNameFrom[0], _T("%DeskTop%\\") );
+		_tcscpy( csFileName.m_szTransformFileNameTo[0],   _T("デスクトップ\\") );
+		_tcscpy( csFileName.m_szTransformFileNameFrom[1], _T("%Personal%\\") );
+		_tcscpy( csFileName.m_szTransformFileNameTo[1],   _T("マイドキュメント\\") );
+		_tcscpy( csFileName.m_szTransformFileNameFrom[2], _T("%Cache%\\Content.IE5\\") );
+		_tcscpy( csFileName.m_szTransformFileNameTo[2],   _T("IEキャッシュ\\") );
+		_tcscpy( csFileName.m_szTransformFileNameFrom[3], _T("%TEMP%\\") );
+		_tcscpy( csFileName.m_szTransformFileNameTo[3],   _T("TEMP\\") );
+		_tcscpy( csFileName.m_szTransformFileNameFrom[4], _T("%Common DeskTop%\\") );
+		_tcscpy( csFileName.m_szTransformFileNameTo[4],   _T("共有デスクトップ\\") );
+		_tcscpy( csFileName.m_szTransformFileNameFrom[5], _T("%Common Documents%\\") );
+		_tcscpy( csFileName.m_szTransformFileNameTo[5],   _T("共有ドキュメント\\") );
+		_tcscpy( csFileName.m_szTransformFileNameFrom[6], _T("%AppData%\\") );	// 2007.05.19 ryoji 追加
+		_tcscpy( csFileName.m_szTransformFileNameTo[6],   _T("アプリデータ\\") );	// 2007.05.19 ryoji 追加
+		csFileName.m_nTransformFileNameArrNum = 7;
 		
 		/* m_PrintSettingArr[0]を設定して、残りの1～7にコピーする。
 			必要になるまで遅らせるために、CPrintに、CShareDataを操作する権限を与える。
@@ -209,12 +210,12 @@ bool CShareData::InitShareData()
 			*/
 			TCHAR szSettingName[64];
 			int i = 0;
-			auto_sprintf( szSettingName, _T("印刷設定 %d"), i + 1 );
+			auto_sprintf_s( szSettingName, _T("印刷設定 %d"), i + 1 );
 			CPrint::SettingInitialize( m_pShareData->m_PrintSettingArr[0], szSettingName );	//	初期化命令。
 		}
 		for (int i = 1; i < MAX_PRINTSETTINGARR; ++i) {
 			m_pShareData->m_PrintSettingArr[i] = m_pShareData->m_PrintSettingArr[0];
-			auto_sprintf( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1 );	/* 印刷設定の名前 */
+			auto_sprintf_s( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1 );	/* 印刷設定の名前 */
 		}
 
 		//	Jan. 30, 2005 genta 関数として独立
@@ -339,7 +340,7 @@ bool CShareData::InitShareData()
 
 		m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd = FALSE;			//タブウインドウ表示	//@@@ 2003.05.31 MIK
 		m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin = FALSE;	//タブウインドウ表示	//@@@ 2003.05.31 MIK
-		wcscpy(	//@@@ 2003.06.13 MIK
+		wcscpy_s(	//@@@ 2003.06.13 MIK
 			m_pShareData->m_Common.m_sTabBar.m_szTabWndCaption,
 			L"${w?【Grep】$h$:【アウトプット】$:$f$n$}${U?(更新)$}${R?(ビューモード)$:(上書き禁止)$}${M?【キーマクロの記録中】$}"
 		);
@@ -373,9 +374,9 @@ bool CShareData::InitShareData()
 
 
 		/* 見出し記号 */
-		wcscpy( m_pShareData->m_Common.m_sFormat.m_szMidashiKigou, L"１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
+		wcscpy_s( m_pShareData->m_Common.m_sFormat.m_szMidashiKigou, L"１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
 		/* 引用符 */
-		wcscpy( m_pShareData->m_Common.m_sFormat.m_szInyouKigou, L"> " );		/* 引用符 */
+		wcscpy_s( m_pShareData->m_Common.m_sFormat.m_szInyouKigou, L"> " );		/* 引用符 */
 		m_pShareData->m_Common.m_sHelper.m_bUseHokan = FALSE;					/* 入力補完機能を使用する */
 
 		// 2001/06/14 asa-o 補完とキーワードヘルプはタイプ別に移動したので削除
@@ -556,7 +557,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_nDiffFlgOpt = 0;	/* DIFF差分表示 */	//@@@ 2002.05.27 MIK
 
 		m_pShareData->m_nTagsOpt = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
-		_tcscpy( m_pShareData->m_szTagsCmdLine, _T("") );	/* CTAGS */	//@@@ 2003.05.12 MIK
+		m_pShareData->m_szTagsCmdLine[0] = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
 		//From Here 2005.04.03 MIK キーワード指定タグジャンプのHistory保管
 		m_pShareData->m_sTagJump.m_aTagJumpKeywords.clear();
 		m_pShareData->m_sTagJump.m_bTagJumpICase = FALSE;
@@ -654,7 +655,6 @@ static void ConvertLangValueImpl( char* pBuf, size_t chBufSize, int nStrId, std:
 void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetValues)
 {
 	DLLSHAREDATA&	shareData = *m_pShareData;
-	int i;
 	int index = 0;
 	int indexBackup;
 	CommonSetting& common = shareData.m_Common;
@@ -681,7 +681,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	ConvertLangValue( common.m_sFormat.m_szDateFormat, STR_DATA_FORMAT );
 	ConvertLangValue( common.m_sFormat.m_szTimeFormat, STR_TIME_FORMAT );
 	indexBackup = index;
-	for (i = 0; i < common.m_sFileName.m_nTransformFileNameArrNum; i++) {
+	for (int i = 0; i < common.m_sFileName.m_nTransformFileNameArrNum; i++) {
 		index = indexBackup;
 		ConvertLangValue( common.m_sFileName.m_szTransformFileNameTo[i], STR_TRANSNAME_COMDESKTOP );
 		ConvertLangValue( common.m_sFileName.m_szTransformFileNameTo[i], STR_TRANSNAME_COMDOC );
@@ -695,7 +695,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 		}
 	}
 	indexBackup = index;
-	for (i = 0; i < MAX_PRINTSETTINGARR; i++) {
+	for (int i = 0; i < MAX_PRINTSETTINGARR; i++) {
 		index = indexBackup;
 		ConvertLangValue( shareData.m_PrintSettingArr[i].m_szPrintSettingName, STR_PRINT_SET_NAME );
 		if (bSetValues) {
@@ -705,7 +705,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	assert( m_pvTypeSettings != NULL );
 	indexBackup = index;
 	ConvertLangValue( shareData.m_TypeBasis.m_szTypeName, STR_TYPE_NAME_BASIS );
-	for (i = 0; i < (int)GetTypeSettings().size(); i++) {
+	for (int i = 0; i < (int)GetTypeSettings().size(); i++) {
 		index = indexBackup;
 		STypeConfig& type = *(GetTypeSettings()[i]);
 		ConvertLangValue2( type.m_szTypeName, STR_TYPE_NAME_BASIS );

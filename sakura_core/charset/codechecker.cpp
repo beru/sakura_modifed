@@ -1102,7 +1102,7 @@ int CheckUtf7BPart( const char *pS, const int nLen, char **ppNextChar, bool *pbE
 		goto EndFunc;
 	}
 	ndatalen = _DecodeBase64(pS, nchecklen, reinterpret_cast<char*>(pdata)) / sizeof(wchar_t);
-	CMemory::SwapHLByte( reinterpret_cast<char*>(pdata), ndatalen*sizeof(wchar_t) );
+	CMemory::SwapHLByte( reinterpret_cast<char*>(pdata), ndatalen * sizeof(wchar_t) );
 	for( int i = 0; i < ndatalen; i += nret ){
 		nret = CheckUtf16leChar( &pdata[i], ndatalen - i, &echarset, nOption & UC_NONCHARACTER );
 		if( echarset == CHARSET_BINARY ){

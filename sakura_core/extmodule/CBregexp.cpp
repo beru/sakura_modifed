@@ -278,7 +278,7 @@ wchar_t* CBregexp::MakePattern( const wchar_t* szPattern, const wchar_t* szPatte
 				szPattern = sReg->outp;
 				if (szPattern2 != NULL) {
 					// 置換パターンもあるので、置換パターンの最後に $(nParens+1)を追加
-					auto_sprintf( szAdd2, L"$%d", nParens + 1 );
+					auto_sprintf_s( szAdd2, L"$%d", nParens + 1 );
 				}
 			}
 			// sReg->outp のポインタを参照しているので、sRegを解放するのは最後に
@@ -313,9 +313,9 @@ wchar_t* CBregexp::MakePatternAlternate( const wchar_t* const szSearch, const wc
 	std::wstring::size_type modifiedSearchSize = 0;
 	for (const wchar_t* p = szSearch; *p; ++p) {
 		if (*p == L'.') {
-			modifiedSearchSize += (sizeof szDotAlternative) / (sizeof szDotAlternative[0]) - 1;
+			modifiedSearchSize += _countof(szDotAlternative) - 1;
 		}else if (*p == L'$') {
-			modifiedSearchSize += (sizeof szDollarAlternative) / (sizeof szDollarAlternative[0]) - 1;
+			modifiedSearchSize += _countof(szDollarAlternative) - 1;
 		}else {
 			modifiedSearchSize += 1;
 		}

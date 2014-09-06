@@ -734,7 +734,7 @@ void CCaret::ShowCaretPosInfo()
 					delete pCode;
 				}
 			}else {
-				_tcscpy_s(szCaretChar, _countof(szCaretChar), pcLayout->GetLayoutEol().GetName());
+				_tcscpy_s(szCaretChar, pcLayout->GetLayoutEol().GetName());
 			}
 		}
 	}
@@ -752,12 +752,12 @@ void CCaret::ShowCaretPosInfo()
 		{	// メッセージの左側文字列（「行:列」を除いた表示）
 			nLen = _tcslen(pszCodeName) + _tcslen(szEolMode) + _tcslen(szCaretChar);
 			// これは %s(%s)%6s%s%s 等になる。%6ts表記は使えないので注意
-			auto_sprintf(
+			auto_sprintf_s(
 				szFormat,
 				_T("%%s(%%s)%%%ds%%s%%s"),	// 「キャレット位置の文字情報」を右詰で配置（足りないときは左詰になって右に伸びる）
 				(nLen < 15)? 15 - nLen: 1
 			);
-			auto_sprintf(
+			auto_sprintf_s(
 				szLeft,
 				szFormat,
 				pszCodeName,
@@ -771,24 +771,24 @@ void CCaret::ShowCaretPosInfo()
 		nLen = MENUBAR_MESSAGE_MAX_LEN - _tcslen(szLeft);	// 右側に残っている文字長
 		if (nLen > 0) {	// メッセージの右側文字列（「行:列」表示）
 			TCHAR szRowCol[32];
-			auto_sprintf(
+			auto_sprintf_s(
 				szRowCol,
 				_T("%d:%-4d"),	// 「列」は最小幅を指定して左寄せ（足りないときは右に伸びる）
 				ptCaret.y,
 				ptCaret.x
 			);
-			auto_sprintf(
+			auto_sprintf_s(
 				szFormat,
 				_T("%%%ds"),	// 「行:列」を右詰で配置（足りないときは左詰になって右に伸びる）
 				nLen
 			);
-			auto_sprintf(
+			auto_sprintf_s(
 				szRight,
 				szFormat,
 				szRowCol
 			);
 		}
-		auto_sprintf(
+		auto_sprintf_s(
 			szText,
 			_T("%s%s"),
 			szLeft,
@@ -798,13 +798,13 @@ void CCaret::ShowCaretPosInfo()
 	// ステータスバーに状態を書き出す
 	}else {
 		TCHAR	szText_1[64];
-		auto_sprintf( szText_1, LS( STR_STATUS_ROW_COL ), ptCaret.y, ptCaret.x );	//Oct. 30, 2000 JEPRO 千万行も要らん
+		auto_sprintf_s( szText_1, LS( STR_STATUS_ROW_COL ), ptCaret.y, ptCaret.x );	//Oct. 30, 2000 JEPRO 千万行も要らん
 
 		TCHAR	szText_6[16];
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
-			_tcscpy( szText_6, LS( STR_INS_MODE_INS ) );	// "挿入"
+			_tcscpy_s( szText_6, LS( STR_INS_MODE_INS ) );	// "挿入"
 		}else {
-			_tcscpy( szText_6, LS( STR_INS_MODE_OVR ) );	// "上書"
+			_tcscpy_s( szText_6, LS( STR_INS_MODE_OVR ) );	// "上書"
 		}
 		if (m_bClearStatus) {
 			::StatusBar_SetText( hwndStatusBar, 0 | SBT_NOBORDERS, _T("") );

@@ -336,8 +336,7 @@ bool CRecentImp<T, S>::DeleteItemsNoFavorite()
 	}
 
 	bool bDeleted = false;
-	int i;
-	for (i = *m_pnUserItemCount - 1; 0 <= i; i--) {
+	for (int i = *m_pnUserItemCount - 1; 0 <= i; i--) {
 		if (false == IsFavorite( i )) {
 			if (DeleteItem( i )) {
 				bDeleted = true;

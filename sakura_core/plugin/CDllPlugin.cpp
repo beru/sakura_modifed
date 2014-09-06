@@ -37,7 +37,7 @@
 // デストラクタ
 CDllPlugin::~CDllPlugin(void)
 {
-	for (CPlug::ArrayIter it = m_plugs.begin(); it != m_plugs.end(); it++) {
+	for (auto it = m_plugs.begin(); it != m_plugs.end(); it++) {
 		delete (CDllPlug*)(*it);
 	}
 }
@@ -154,7 +154,7 @@ SAKURA_DLL_PLUGIN_OBJ* CDllPlugin::CreateIfObj(CEditView* view, CWSHIfObj::List&
 				if (wcslen((*it)->Name()) >= _countof(ifobj->m_szName)) {
 					continue;
 				}
-				wcscpy(ifobj->m_szName, (*it)->Name());
+				wcscpy_s(ifobj->m_szName, (*it)->Name());
 				ifobj->m_lpIfObj      = (*it);
 				ifobj->m_FunctionInfo = (MACRO_FUNC_INFO*)(*it)->GetMacroFuncInfo();
 				ifobj->m_CommandInfo  = (MACRO_FUNC_INFO*)(*it)->GetMacroCommandInfo();

@@ -96,10 +96,9 @@ private:
 */
 void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir )
 {
-	HANDLE				hStdOutWrite, hStdOutRead, hStdIn;
 	PROCESS_INFORMATION	pi;
 	ZeroMemory( &pi, sizeof(pi) );
-	CDlgCancel				cDlgCancel;
+	CDlgCancel cDlgCancel;
 
 	bool bEditable = m_pcEditDoc->IsEditable();
 
@@ -144,6 +143,7 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	sa.nLength = sizeof(sa);
 	sa.bInheritHandle = TRUE;
 	sa.lpSecurityDescriptor = NULL;
+	HANDLE hStdOutWrite, hStdOutRead;
 	if (CreatePipe( &hStdOutRead, &hStdOutWrite, &sa, 1000 ) == FALSE) {
 		//エラー。対策無し
 		return;
@@ -159,18 +159,16 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	// CDocLineMgr::WriteFileなど既存のファイル出力系の関数のなかには
 	// ファイルハンドルを返すタイプのものがないので、一旦書き出してから
 	// 一時ファイル属性でオープンすることに。
-	hStdIn = NULL;
+	HANDLE hStdIn = NULL;
 	if (bSendStdin) {	/* 現在編集中のファイルを子プロセスの標準入力へ */
-		TCHAR		szPathName[MAX_PATH];
-		TCHAR		szTempFileName[MAX_PATH];
-		int			nFlgOpt;
+		TCHAR szPathName[MAX_PATH];
+		TCHAR szTempFileName[MAX_PATH];
 
 		GetTempPath( MAX_PATH, szPathName );
 		GetTempFileName( szPathName, TEXT("skr_"), 0, szTempFileName );
 		DEBUG_TRACE( _T("CEditView::ExecCmd() TempFilename=[%ts]\n"), szTempFileName );
 
-		nFlgOpt = bBeforeTextSelected ? 0x01 : 0x00;		/* 選択範囲を出力 */
-
+		int nFlgOpt = bBeforeTextSelected ? 0x01 : 0x00;		/* 選択範囲を出力 */
 		if (!GetCommander().Command_PUTFILE( to_wchar(szTempFileName), sendEncoding, nFlgOpt)) {	// 一時ファイル出力
 			hStdIn = NULL;
 		}else {
@@ -205,7 +203,6 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	}
 	// To Here 2007.03.18 maru 子プロセスの標準入力ハンドル
 	
-
 	//CreateProcessに渡すSTARTUPINFOを作成
 	STARTUPINFO	sui;
 	ZeroMemory( &sui, sizeof(sui) );
@@ -219,8 +216,8 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	}
 
 	//コマンドライン実行
-	TCHAR	cmdline[1024];
-	_tcscpy( cmdline, pszCmd );
+	TCHAR cmdline[1024];
+	_tcscpy_s( cmdline, pszCmd );
 	if (CreateProcess( NULL, cmdline, NULL, NULL, TRUE,
 				CREATE_NEW_CONSOLE, NULL, bCurDir ? pszCurDir : NULL, &sui, &pi ) == FALSE
 	) {
@@ -229,18 +226,14 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 
 		// 2010.08.27 Moca システムディレクトリ付加
 		TCHAR szCmdDir[_MAX_PATH];
-		if (IsWin32NT()) {
-			::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
-		}else {
-			::GetWindowsDirectory(szCmdDir, _countof(szCmdDir));
-		}
+		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
 
 		//コマンドライン文字列作成
-		auto_sprintf(
+		auto_sprintf_s(
 			cmdline,
 			_T("\"%ts\\%ts\" %ts%ts%ts"),
 			szCmdDir,
-			( IsWin32NT() ? _T("cmd.exe") : _T("command.com") ),
+			_T("cmd.exe"),
 			( outputEncoding == CODE_UNICODE ? _T("/U") : _T("") ),		// Unicdeモードでコマンド実行	2008/6/17 Uchi
 			( bGetStdout ? _T("/C ") : _T("/K ") ),
 			pszCmd
@@ -374,18 +367,15 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 					}
 					// Unicode で データを受け取る start 2008/6/8 Uchi
 					if (outputEncoding == CODE_UNICODE) {
-						wchar_t*	workw;
-						int			read_cntw;
-						bool		bCarry;
-						char		byteCarry = 0;
-						workw = (wchar_t*)work;
-						read_cntw = (int)read_cnt/sizeof(wchar_t);
+						char byteCarry = 0;
+						wchar_t* workw = (wchar_t*)work;
+						int read_cntw = (int)read_cnt/sizeof(wchar_t);
 						if (read_cnt % (int)sizeof(wchar_t)) {
 							byteCarry = work[read_cnt-1];
 						}
 						if (read_cntw) {
 							workw[read_cntw] = L'\0';
-							bCarry = false;
+							bool bCarry = false;
 							//読み出した文字列をチェックする
 							if (workw[read_cntw-1] == L'\r') {
 								bCarry = true;
@@ -412,7 +402,7 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 						// \r\n を \r だけとか漢字の第一バイトだけを出力するのを防ぐ必要がある
 						//@@@ 2002.1.24 YAZAKI 1バイト取りこぼす可能性があった。
 						//	Jan. 28, 2004 Moca 最後の文字はあとでチェックする
-						int		j;
+						int j;
 						for (j=0; j<(int)read_cnt - 1; j++) {
 							//	2007.09.10 ryoji
 							if (CNativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
@@ -452,11 +442,10 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 							DEBUG_TRACE( _T("ExecCmd: Carry last character [%x]\n"), tmp );
 						}
 					}else if (outputEncoding == CODE_UTF8) {
-						int		j;
-						int checklen = 0;
+						int j;
 						for (j = 0; j < (int)read_cnt;) {
 							ECharSet echarset;
-							checklen = CheckUtf8Char2(work + j , read_cnt - j, &echarset, true, 0);
+							int checklen = CheckUtf8Char2(work + j , read_cnt - j, &echarset, true, 0);
 							if (echarset == CHARSET_BINARY2) {
 								break;
 							}else if (read_cnt - 1 == j && work[j] == _T2(PIPE_CHAR,'\r')) {
@@ -552,7 +541,7 @@ user_cancel:
 			::GetExitCodeProcess( pi.hProcess, &result );
 			if (bOutputExtInfo) {
 				WCHAR endCode[128];
-				auto_sprintf( endCode, LSW(STR_EDITVIEW_EXECCMD_RET), result );
+				auto_sprintf_s( endCode, LSW(STR_EDITVIEW_EXECCMD_RET), result );
 				oa.OutputW( endCode );
 			}
 			// 2004.09.20 naoh 終了コードが1以上の時はアウトプットをアクティブにする

@@ -129,15 +129,6 @@ bool CProcessFactory::IsValidVersion()
 	}
 #endif
 
-#if (WINVER < _WIN32_WINNT_WIN2K)
-	/* システムリソースのチェック */
-	// Jul. 5, 2001 shoji masami NTではリソースチェックを行わない
-	if (!IsWin32NT()) {
-		if (!CheckSystemResources( GSTR_APPNAME )) {
-			return false;
-		}
-	}
-#endif
 	return true;
 }
 
@@ -162,8 +153,7 @@ bool CProcessFactory::IsStartingControlProcess()
 */
 bool CProcessFactory::IsExistControlProcess()
 {
- 	HANDLE hMutexCP;
-	hMutexCP = ::OpenMutex( MUTEX_ALL_ACCESS, FALSE, GSTR_MUTEX_SAKURA_CP );	// 2006.04.10 ryoji ::CreateMutex() を ::OpenMutex()に変更
+ 	HANDLE hMutexCP = ::OpenMutex( MUTEX_ALL_ACCESS, FALSE, GSTR_MUTEX_SAKURA_CP );	// 2006.04.10 ryoji ::CreateMutex() を ::OpenMutex()に変更
 	if (NULL != hMutexCP) {
 		::CloseHandle( hMutexCP );
 		return true;	// コントロールプロセスが見つかった
@@ -203,7 +193,7 @@ bool CProcessFactory::StartControlProcess()
 	TCHAR szEXE[MAX_PATH + 1];	//	アプリケーションパス名
 
 	::GetModuleFileName( NULL, szEXE, _countof( szEXE ));
-	::auto_sprintf( szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE ); // ""付加
+	::auto_sprintf_s( szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE ); // ""付加
 
 	//常駐プロセス起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
@@ -245,8 +235,7 @@ bool CProcessFactory::StartControlProcess()
 	// Note: この待ちにより、ここで起動したコントロールプロセスが競争に生き残れなかった場合でも、
 	// 唯一生き残ったコントロールプロセスが多重起動防止用ミューテックスを作成しているはず。
 	//
-	int nResult;
-	nResult = ::WaitForInputIdle( p.hProcess, 10000 );	//	最大10秒間待つ
+	int nResult = ::WaitForInputIdle( p.hProcess, 10000 );	//	最大10秒間待つ
 	if (0 != nResult) {
 		ErrorMessage( NULL, _T("\'%ls\'\nコントロールプロセスの起動に失敗しました。"), szEXE );
 		::CloseHandle( p.hThread );
@@ -279,8 +268,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 		return false;
 	}
 
-	HANDLE hEvent;
-	hEvent = ::OpenEvent( EVENT_ALL_ACCESS, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED );
+	HANDLE hEvent = ::OpenEvent( EVENT_ALL_ACCESS, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED );
 	if (NULL == hEvent) {
 		// 動作中のコントロールプロセスを旧バージョンとみなし、イベントを待たずに処理を進める
 		//
@@ -293,8 +281,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 		//
 		return true;
 	}
-	DWORD dwRet;
-	dwRet = ::WaitForSingleObject( hEvent, 10000 );	// 最大10秒間待つ
+	DWORD dwRet = ::WaitForSingleObject( hEvent, 10000 );	// 最大10秒間待つ
 	if (WAIT_TIMEOUT == dwRet) {	// コントロールプロセスの初期化が終了しない
 		::CloseHandle( hEvent );
 		TopErrorMessage( NULL, _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。") );

@@ -176,7 +176,7 @@ static void ShowCodeBox( HWND hWnd, CEditDoc* pcEditDoc )
 				}
 
 				// メッセージボックス表示
-				auto_sprintf(szMsg, LS(STR_ERR_DLGEDITWND13),
+				auto_sprintf_s(szMsg, LS(STR_ERR_DLGEDITWND13),
 					szChar, szCodeCP, szCode[CODE_SJIS], szCode[CODE_JIS], szCode[CODE_EUC], szCode[CODE_LATIN1], szCode[CODE_UNICODE], szCode[CODE_UTF8], szCode[CODE_CESU8]);
 				::MessageBox( hWnd, szMsg, GSTR_APPNAME, MB_OK );
 			}
@@ -926,7 +926,7 @@ void CEditWnd::LayoutMainMenu()
 					const CJackManager* pcJackManager = CJackManager::getInstance();
 
 					CPlug::Array plugs = pcJackManager->GetPlugs( PP_COMMAND );
-					for( CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++ ){
+					for (auto it = plugs.begin(); it != plugs.end(); it++ ){
 						nCount++;
 					}
 				}
@@ -1603,14 +1603,14 @@ LRESULT CEditWnd::DispatchEvent(
 			CPlug::Array plugs;
 			CWSHIfObj::List params;
 			CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
-			for( CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++ ){
+			for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 				(*it)->Invoke(&GetActiveView(), params);
 			}
 
 			//プラグイン：EditorEndイベント実行
 			plugs.clear();
 			CJackManager::getInstance()->GetUsablePlug( PP_EDITOR_END, 0, &plugs );
-			for( CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++ ){
+			for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 				(*it)->Invoke(&GetActiveView(), params);
 			}
 
@@ -1689,12 +1689,10 @@ LRESULT CEditWnd::DispatchEvent(
 
 			// 水平スクロールバーの表示／非表示切り替え	// 2006.12.19 ryoji
 			{
-				int i;
 				bool b1;
 				bool b2;
 				b1 = (m_pShareData->m_Common.m_sWindow.m_bScrollBarHorz == FALSE);
-				for( i = 0; i < GetAllViewCount(); i++ )
-				{
+				for (int i = 0; i < GetAllViewCount(); i++) {
 					b2 = (GetView(i).m_hwndHScrollBar == NULL);
 					if( b1 != b2 )		/* 水平スクロールバーを使う */
 					{
@@ -2397,7 +2395,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 
 		CPlug::Array plugs = pcJackManager->GetPlugs( PP_COMMAND );
 		j = -1;
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 			if ((*it)->GetFunctionCode() == eFunc) {
 				//コマンドを登録
 				j = eFunc - F_PLUGCOMMAND_FIRST;
@@ -2478,14 +2476,14 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 					WCHAR szBuf[60];
 					pszLabel = szBuf;
 					if( mode == CEditView::TGWRAP_FULL ){
-						auto_sprintf(
+						auto_sprintf_s(
 							szBuf,
 							LSW( STR_WRAP_WIDTH_FULL ),	//L"折り返し桁数: %d 桁（最大）",
 							MAXLINEKETAS
 						);
 					}
 					else if( mode == CEditView::TGWRAP_WINDOW ){
-						auto_sprintf(
+						auto_sprintf_s(
 							szBuf,
 							LSW( STR_WRAP_WIDTH_WINDOW ),	//L"折り返し桁数: %d 桁（右端）",
 							GetActiveView().ViewColNumToWrapColNum(
@@ -2494,7 +2492,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 						);
 					}
 					else {
-						auto_sprintf(
+						auto_sprintf_s(
 							szBuf,
 							LSW( STR_WRAP_WIDTH_FIXED ),	//L"折り返し桁数: %d 桁（指定）",
 							GetDocument()->m_cDocType.GetDocumentAttribute().m_nMaxLineKetas
@@ -2517,7 +2515,6 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 */
 bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 {
-	int j;
 	bool bInList = false;
 	switch (eFunc) {
 	case F_WINDOW_LIST:				// ウィンドウリスト
@@ -2556,7 +2553,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 			bInList = true;
 		}
 		//	カスタムメニュー
-		for( j = 1; j < MAX_CUSTOM_MENU; ++j ){
+		for(int j = 1; j < MAX_CUSTOM_MENU; ++j ){
 			if( m_pShareData->m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[j] > 0 ){
 				 m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING,
 			 		F_CUSTMENU_BASE + j, GetDocument()->m_cFuncLookup.Custmenu2Name( j, buf, _countof(buf) ), L""  );
@@ -2565,7 +2562,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		}
 		break;
 	case F_USERMACRO_LIST:			// 登録済みマクロリスト
-		for( j = 0; j < MAX_CUSTMACRO; ++j ){
+		for(int j = 0; j < MAX_CUSTMACRO; ++j ){
 			MacroRec *mp = &m_pShareData->m_Common.m_sMacro.m_MacroTable[j];
 			if( mp->IsEnabled() ){
 				if(  mp->m_szName[0] ){
@@ -2586,7 +2583,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 			HMENU hMenuPlugin = 0;
 
 			CPlug::Array plugs = pcJackManager->GetPlugs( PP_COMMAND );
-			for( CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++ ){
+			for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 				const CPlugin* curPlugin = &(*it)->m_cPlugin;
 				if( curPlugin != prevPlugin ){
 					//プラグインが変わったらプラグインポップアップメニューを登録
@@ -3978,9 +3975,9 @@ void CEditWnd::WindowTopMost( int top )
 
 	// タブまとめ時は WS_EX_TOPMOST 状態を全ウィンドウで同期する	// 2007.05.18 ryoji
 	if( m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin ){
-		HWND hwnd;
 		int i;
-		for( i = 0, hwndInsertAfter = GetHwnd(); i < m_pShareData->m_sNodes.m_nEditArrNum; i++ ){
+		HWND hwnd;
+		for (i = 0, hwndInsertAfter = GetHwnd(); i < m_pShareData->m_sNodes.m_nEditArrNum; i++) {
 			hwnd = m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd();
 			if( hwnd != GetHwnd() && IsSakuraMainWindow( hwnd ) ){
 				if( !CAppNodeManager::IsSameGroup( GetHwnd(), hwnd ) )
@@ -4337,10 +4334,8 @@ void  CEditWnd::SetActivePane( int nIndex )
 */
 bool CEditWnd::SetDrawSwitchOfAllViews( bool bDraw )
 {
-	int i;
 	bool bDrawSwitchOld = GetActiveView().GetDrawSwitch();
-
-	for( i = 0; i < GetAllViewCount(); i++ ){
+	for (int i = 0; i < GetAllViewCount(); i++) {
 		GetView(i).SetDrawSwitch( bDraw );
 	}
 	return bDrawSwitchOld;
@@ -4357,16 +4352,13 @@ bool CEditWnd::SetDrawSwitchOfAllViews( bool bDraw )
 */
 void CEditWnd::RedrawAllViews( CEditView* pcViewExclude )
 {
-	int i;
-	CEditView* pcView;
-
-	for( i = 0; i < GetAllViewCount(); i++ ){
-		pcView = &GetView(i);
-		if( pcView == pcViewExclude )
+	for (int i = 0; i < GetAllViewCount(); i++) {
+		CEditView* pcView = &GetView(i);
+		if (pcView == pcViewExclude)
 			continue;
-		if( i == m_nActivePaneIndex ){
+		if (i == m_nActivePaneIndex) {
 			pcView->RedrawAll();
-		}else{
+		}else {
 			pcView->Redraw();
 			pcView->AdjustScrollBars();
 		}
@@ -4695,7 +4687,7 @@ void CEditWnd::RegisterPluginCommand( int idCommand )
 void CEditWnd::RegisterPluginCommand()
 {
 	const CPlug::Array& plugs = CJackManager::getInstance()->GetPlugs( PP_COMMAND );
-	for( CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++ ) {
+	for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 		RegisterPluginCommand( *it );
 	}
 }

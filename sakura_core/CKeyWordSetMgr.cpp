@@ -76,11 +76,10 @@ CKeyWordSetMgr::~CKeyWordSetMgr( void)
 void CKeyWordSetMgr::ResetAllKeyWordSet( void )
 {
 	m_nKeyWordSetNum = 0;
-	int i;
-	for (i = 0; i < MAX_SETNUM+1; i++) {
+	for (int i = 0; i < MAX_SETNUM+1; i++) {
 		m_nStartIdx[i] = 0;
 	}
-	for (i = 0; i < MAX_SETNUM; i++) {
+	for (int i = 0; i < MAX_SETNUM; i++) {
 		m_nKeyWordNumArr[i] = 0;
 	}
 }
@@ -140,7 +139,6 @@ bool CKeyWordSetMgr::AddKeyWordSet(
 /* ｎ番目のセットを削除 */
 bool CKeyWordSetMgr::DelKeyWordSet( int nIdx )
 {
-	int		i;
 	if (m_nKeyWordSetNum <= nIdx ||
 		0 > nIdx
 	) {
@@ -149,7 +147,7 @@ bool CKeyWordSetMgr::DelKeyWordSet( int nIdx )
 	// キーワード領域を開放
 	KeyWordReAlloc( nIdx, 0 );
 	
-	for (i = nIdx; i < m_nKeyWordSetNum - 1; ++i) {
+	for (int i = nIdx; i < m_nKeyWordSetNum - 1; ++i) {
 		// 配列まるごとコピー
 		memcpy_raw( m_szSetNameArr[i], m_szSetNameArr[i + 1], sizeof( m_szSetNameArr[0] ) );
 		m_bKEYWORDCASEArr[i] = m_bKEYWORDCASEArr[i + 1];
@@ -229,7 +227,6 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 	const WCHAR*	pszKeyWord	//!< [in] 設定するキーワード
 )
 {
-	int i;
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return NULL;
 	}
@@ -241,7 +238,7 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 		return NULL;
 	}
 	/* 重複したキーワードは編集しない */
-	for (i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; ++i) {
+	for (int i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; ++i) {
 		if (0 == wcscmp( m_szKeyWordArr[i], pszKeyWord )) {
 			return NULL;
 		}
@@ -262,7 +259,6 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 */
 int CKeyWordSetMgr::AddKeyWord( int nIdx, const wchar_t* pszKeyWord )
 {
-	int  i;
 	if (m_nKeyWordSetNum <= nIdx) {
 		return 1;
 	}
@@ -279,7 +275,7 @@ int CKeyWordSetMgr::AddKeyWord( int nIdx, const wchar_t* pszKeyWord )
 		return 3;
 	}
 	/* 重複したキーワードは登録しない */
-	for (i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; ++i) {
+	for (int i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; ++i) {
 		if (0 == wcscmp( m_szKeyWordArr[i], pszKeyWord )) {
 			return 4;
 		}
@@ -313,10 +309,9 @@ int CKeyWordSetMgr::DelKeyWord( int nIdx, int nIdx2 )
 	if (0 >= m_nKeyWordNumArr[nIdx]) {
 		return 3;	//	登録数が0なら上の条件で引っかかるのでここには来ない？
 	}
-	int  i;
-	int  endPos = m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx] - 1;
-	for (i = m_nStartIdx[nIdx] + nIdx2; i < endPos; ++i) {
-		wcscpy( m_szKeyWordArr[i], m_szKeyWordArr[i + 1] );
+	int endPos = m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx] - 1;
+	for (int i = m_nStartIdx[nIdx] + nIdx2; i < endPos; ++i) {
+		wcscpy_s( m_szKeyWordArr[i], m_szKeyWordArr[i + 1] );
 	}
 	m_nKeyWordNumArr[nIdx]--;
 
@@ -354,11 +349,9 @@ void CKeyWordSetMgr::SortKeyWord( int nIdx )
 	}
 
 	{
-		int i;
-		int len;
 		m_nKeyWordMaxLenArr[nIdx] = 0;
-		for (i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; i++) {
-			len = wcslen( m_szKeyWordArr[i] );
+		for (int i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; i++) {
+			size_t len = wcslen( m_szKeyWordArr[i] );
 			if (m_nKeyWordMaxLenArr[nIdx] < len) {
 				m_nKeyWordMaxLenArr[nIdx] = len;
 			}
@@ -443,7 +436,7 @@ void CKeyWordSetMgr::SetKeyWordCase( int nIdx, int nCase )
 
 bool CKeyWordSetMgr::GetKeyWordCase( int nIdx )
 {
-	return 	m_bKEYWORDCASEArr[nIdx];
+	return m_bKEYWORDCASEArr[nIdx];
 }
 //MIK END
 
@@ -498,9 +491,8 @@ int CKeyWordSetMgr::SetKeyWordArr(
 	if (!KeyWordReAlloc( nIdx, nSize )) {
 		return 0;
 	}
-	int cnt, i;
-	for (cnt = 0, i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + nSize; cnt++, i++) {
-		wcscpy( m_szKeyWordArr[i], ppszKeyWordArr[cnt] );
+	for (int cnt = 0, i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + nSize; cnt++, i++) {
+		wcscpy_s( m_szKeyWordArr[i], ppszKeyWordArr[cnt] );
 	}
 	m_nKeyWordNumArr[nIdx] = nSize;
 	return nSize;
@@ -594,8 +586,7 @@ bool CKeyWordSetMgr::KeyWordAlloc( int nSize )
 		return false;
 	}
 	m_nStartIdx[m_nKeyWordSetNum + 1] = m_nStartIdx[m_nKeyWordSetNum] + nAllocSize;
-	int i;
-	for (i = m_nKeyWordSetNum + 1; i < MAX_SETNUM; i++) {
+	for (int i = m_nKeyWordSetNum + 1; i < MAX_SETNUM; i++) {
 		m_nStartIdx[i + 1] = m_nStartIdx[i];
 	}
 	return true;
@@ -629,7 +620,6 @@ bool CKeyWordSetMgr::KeyWordReAlloc( int nIdx, int nSize )
 		return false;
 	}
 	// 後ろのキーワードセットのキーワードをすべて移動する
-	int i;
 	if (nIdx + 1 < m_nKeyWordSetNum) {
 		int nKeyWordIdx = m_nStartIdx[nIdx + 1];
 		int nKeyWordNum = m_nStartIdx[m_nKeyWordSetNum] - m_nStartIdx[nIdx + 1];
@@ -637,7 +627,7 @@ bool CKeyWordSetMgr::KeyWordReAlloc( int nIdx, int nSize )
 			m_szKeyWordArr[nKeyWordIdx],
 			nKeyWordNum * sizeof( m_szKeyWordArr[0] ) );
 	}
-	for (i = nIdx + 1; i <= m_nKeyWordSetNum; i++) {
+	for (int i = nIdx + 1; i <= m_nKeyWordSetNum; i++) {
 		m_nStartIdx[ i ] += nDiffSize;
 	}
 	return true;
@@ -670,9 +660,8 @@ int CKeyWordSetMgr::GetFreeSize( void ) const
 //	Uchi 2010/4/14
 int  CKeyWordSetMgr::SearchKeyWordSet( const wchar_t* pszKeyWord )
 {
-	int		i;
-	int 	nIdx = -1;
-	for (i = 0; i < m_nKeyWordSetNum; i++) {
+	int nIdx = -1;
+	for (int i = 0; i < m_nKeyWordSetNum; i++) {
 		if (wcscmp(m_szSetNameArr[i], pszKeyWord) == 0) {
 			nIdx = i;
 			break;

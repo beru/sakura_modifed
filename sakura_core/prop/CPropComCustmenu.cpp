@@ -243,8 +243,8 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 //			idListBox = (int) LOWORD(wParam);	// identifier of list box
 //			hwndListBox = (HWND) lParam;		// handle of list box
-				TCHAR		szKey[2];
-				auto_sprintf( szKey, _T("%hc"), m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] );
+				TCHAR szKey[2];
+				auto_sprintf_s( szKey, _T("%hc"), m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] );
 				{
 					BOOL bDlgInputResult = cDlgInput1.DoModal(
 						G_AppInstance(),
@@ -269,12 +269,12 @@ INT_PTR CPropCustmenu::DispatchEvent(
 				}
 //@@@ 2002.01.08 YAZAKI カスタムメニューでアクセスキーを消した時、左カッコ ( がメニュー項目に一回残るバグ修正
 				if (m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]) {
-					auto_sprintf( szLabel2, LTEXT("%ts(%hc)"),
+					auto_sprintf_s( szLabel2, LTEXT("%ts(%hc)"),
 						szLabel,
 						m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]
 					);
 				}else {
-					auto_sprintf( szLabel2, LTEXT("%ls"), szLabel );
+					auto_sprintf_s( szLabel2, LTEXT("%ls"), szLabel );
 				}
 
 				List_InsertString( hwndLIST_RES, nIdx2, szLabel2 );
@@ -691,7 +691,7 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 		if ('\0' == m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx][i]) {
 			auto_strcpy( szLabel2, szLabel );
 		}else {
-			auto_sprintf( szLabel2, LTEXT("%ls(%hc)"),
+			auto_sprintf_s( szLabel2, LTEXT("%ls(%hc)"),
 				szLabel,
 				m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx][i]
 			);

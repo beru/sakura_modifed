@@ -93,7 +93,7 @@ WORD CSelectLang::getDefaultLangId( void )
 HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 {
 	int nCount;
-	SSelLangInfo *psLangInfo;
+	SSelLangInfo* psLangInfo;
 
 	if (m_psLangInfoList.size() == 0) {
 		// デフォルト情報を作成する

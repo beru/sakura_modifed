@@ -24,9 +24,10 @@ bool CViewCommander::Command_SELECTWORD( CLayoutPoint* pptCaretPos )
 {
 	CLayoutRange sRange;
 	CLogicInt	nIdx;
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
+	auto& si = m_pCommanderView->GetSelectionInfo();
+	if (si.IsTextSelected()) {	/* テキストが選択されているか */
 		/* 現在の選択範囲を非選択状態に戻す */
-		m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+		si.DisableSelectArea( true );
 	}
 	CLayoutPoint ptCaretPos = (NULL == pptCaretPos ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
 	const CLayout*	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( ptCaretPos.GetY2() );
@@ -50,9 +51,9 @@ bool CViewCommander::Command_SELECTWORD( CLayoutPoint* pptCaretPos )
 
 		/* 選択範囲の変更 */
 		//	2005.06.24 Moca
-		m_pCommanderView->GetSelectionInfo().SetSelectArea( sRange );
+		si.SetSelectArea( sRange );
 		/* 選択領域描画 */
-		m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+		si.DrawSelectArea();
 
 		/* 単語の先頭にカーソルを移動 */
 		GetCaret().MoveCursor( sRange.GetTo(), true );
@@ -68,9 +69,10 @@ bool CViewCommander::Command_SELECTWORD( CLayoutPoint* pptCaretPos )
 /* すべて選択 */
 void CViewCommander::Command_SELECTALL( void )
 {
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
+	auto& si = m_pCommanderView->GetSelectionInfo();
+	if (si.IsTextSelected()) {	/* テキストが選択されているか */
 		/* 現在の選択範囲を非選択状態に戻す */
-		m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+		si.DisableSelectArea( true );
 	}
 
 	/* 先頭へカーソルを移動 */
@@ -84,10 +86,10 @@ void CViewCommander::Command_SELECTALL( void )
 	CLayoutRange sRange;
 	sRange.SetFrom(CLayoutPoint(0,0));
 	GetDocument()->m_cLayoutMgr.GetEndLayoutPos(sRange.GetToPointer());
-	m_pCommanderView->GetSelectionInfo().SetSelectArea( sRange );
+	si.SetSelectArea( sRange );
 
 	/* 選択領域描画 */
-	m_pCommanderView->GetSelectionInfo().DrawSelectArea(false);
+	si.DrawSelectArea(false);
 }
 
 
@@ -104,7 +106,8 @@ void CViewCommander::Command_SELECTLINE( int lparam )
 	// 改行単位で1行選択する
 	Command_GOLINETOP( false, 0x9 );	// 物理行頭に移動
 
-	m_pCommanderView->GetSelectionInfo().m_bBeginLineSelect = true;		// 行単位選択中
+	auto& si = m_pCommanderView->GetSelectionInfo();
+	si.m_bBeginLineSelect = true;		// 行単位選択中
 
 	CLayoutPoint ptCaret;
 
@@ -125,18 +128,18 @@ void CViewCommander::Command_SELECTLINE( int lparam )
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
 		if (
-			!m_pCommanderView->GetSelectionInfo().IsTextSelected()
+			!si.IsTextSelected()
 			&& (GetCaret().GetCaretLogicPos().y >= GetDocument()->m_cDocLineMgr.GetLineCount())
 		) {
 			// 現在の選択範囲を非選択状態に戻す
-			m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+			si.DisableSelectArea( true );
 		}
 	}
 	
-	if (m_pCommanderView->GetSelectionInfo().m_bBeginLineSelect) {
+	if (si.m_bBeginLineSelect) {
 		// 範囲選択開始行・カラムを記憶
-		m_pCommanderView->GetSelectionInfo().m_sSelect.SetTo( ptCaret );
-		m_pCommanderView->GetSelectionInfo().m_sSelectBgn.SetTo( ptCaret );
+		si.m_sSelect.SetTo( ptCaret );
+		si.m_sSelectBgn.SetTo( ptCaret );
 	}
 
 	return;
@@ -146,21 +149,22 @@ void CViewCommander::Command_SELECTLINE( int lparam )
 /* 範囲選択開始 */
 void CViewCommander::Command_BEGIN_SELECT( void )
 {
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
+	auto& si = m_pCommanderView->GetSelectionInfo();
+	if (!si.IsTextSelected()) {	/* テキストが選択されているか */
 		/* 現在のカーソル位置から選択を開始する */
-		m_pCommanderView->GetSelectionInfo().BeginSelectArea();
+		si.BeginSelectArea();
 	}
 
 	//	ロックの解除切り替え
-	if (m_pCommanderView->GetSelectionInfo().m_bSelectingLock) {
-		m_pCommanderView->GetSelectionInfo().m_bSelectingLock = false;	/* 選択状態のロック解除 */
+	if (si.m_bSelectingLock) {
+		si.m_bSelectingLock = false;	/* 選択状態のロック解除 */
 	}else {
-		m_pCommanderView->GetSelectionInfo().m_bSelectingLock = true;	/* 選択状態のロック */
+		si.m_bSelectingLock = true;	/* 選択状態のロック */
 	}
 	if (GetSelect().IsOne()) {
 		GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
 	}
-	m_pCommanderView->GetSelectionInfo().PrintSelectionInfoMsg();
+	si.PrintSelectionInfoMsg();
 	return;
 }
 
@@ -172,19 +176,20 @@ void CViewCommander::Command_BEGIN_BOXSELECT( bool bSelectingLock )
 		return;
 	}
 
+	auto& si = m_pCommanderView->GetSelectionInfo();
 //@@@ 2002.01.03 YAZAKI 範囲選択中にShift+F6を実行すると選択範囲がクリアされない問題に対処
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	/* テキストが選択されているか */
+	if (si.IsTextSelected()) {	/* テキストが選択されているか */
 		/* 現在の選択範囲を非選択状態に戻す */
-		m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+		si.DisableSelectArea( true );
 	}
 
 	/* 現在のカーソル位置から選択を開始する */
-	m_pCommanderView->GetSelectionInfo().BeginSelectArea();
+	si.BeginSelectArea();
 
-	m_pCommanderView->GetSelectionInfo().m_bSelectingLock = bSelectingLock;	/* 選択状態のロック */
-	m_pCommanderView->GetSelectionInfo().SetBoxSelect(true);	/* 矩形範囲選択中 */
+	si.m_bSelectingLock = bSelectingLock;	/* 選択状態のロック */
+	si.SetBoxSelect(true);	/* 矩形範囲選択中 */
 
-	m_pCommanderView->GetSelectionInfo().PrintSelectionInfoMsg();
+	si.PrintSelectionInfoMsg();
 	GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
 	return;
 }

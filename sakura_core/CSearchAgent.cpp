@@ -770,7 +770,6 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 	int nWorkLen;
 	const wchar_t* pLine;
 	int nLineLen;
-	int i;
 	CLogicInt	nAllLinesOld;
 	int			nProgress;
 	CDocLine::MarkType	markNext;
@@ -839,7 +838,7 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 
 	/* Œ»Ýs‚Ìî•ñ‚ð“¾‚é */
 	pCDocLine = m_pcDocLineMgr->GetLine( pArg->sDelRange.GetTo().GetY2() );
-	i = pArg->sDelRange.GetTo().y;
+	int i = pArg->sDelRange.GetTo().y;
 	if (0 < pArg->sDelRange.GetTo().y && NULL == pCDocLine) {
 		pCDocLine = m_pcDocLineMgr->GetLine( pArg->sDelRange.GetTo().GetY2() - CLogicInt(1) );
 		i--;

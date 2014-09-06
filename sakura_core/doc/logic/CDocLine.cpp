@@ -35,8 +35,7 @@ bool CDocLine::IsEmptyLine() const
 {
 	const wchar_t* pLine = GetPtr();
 	int nLineLen = GetLengthWithoutEOL();
-	int i;
-	for (i = 0; i < nLineLen; i++) {
+	for (int i = 0; i < nLineLen; i++) {
 		if (pLine[i] != L' ' && pLine[i] != L'\t') {
 			return false;	//	スペースでもタブでもない文字があったらfalse。
 		}

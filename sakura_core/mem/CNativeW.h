@@ -116,7 +116,7 @@ public:
 	//“Áê
 	void _SetStringLength(int nLength)
 	{
-		_GetMemory()->_SetRawLength(nLength*sizeof(wchar_t));
+		_GetMemory()->_SetRawLength(nLength * sizeof(wchar_t));
 	}
 	//––”ö‚ğ1•¶ší‚é
 	void Chop()

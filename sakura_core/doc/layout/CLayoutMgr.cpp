@@ -474,13 +474,12 @@ void CLayoutMgr::GetEndLayoutPos(
 	}
 
 	CLayout *btm = m_pLayoutBot;
-	if( btm->m_cEol != EOL_NONE ){
+	if (btm->m_cEol != EOL_NONE) {
 		//	––”ö‚É‰üs‚ª‚ ‚é
 		ptLayoutEnd->Set(CLayoutInt(0), GetLineCount());
-	}
-	else {
+	}else {
 		CMemoryIterator it( btm, GetTabSpace() );
-		while( !it.end() ){
+		while (!it.end()) {
 			it.scanNext();
 			it.addDelta();
 		}

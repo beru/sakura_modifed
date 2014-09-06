@@ -46,13 +46,12 @@ HMODULE LoadLibraryExedir(LPCTSTR pszDll)
 */
 DWORD GetDllVersion(LPCTSTR lpszDllName)
 {
-	HINSTANCE hinstDll;
 	DWORD dwVersion = 0;
 
 	/* For security purposes, LoadLibrary should be provided with a
 	   fully-qualified path to the DLL. The lpszDllName variable should be
 	   tested to ensure that it is a fully qualified path before it is used. */
-	hinstDll = LoadLibraryExedir(lpszDllName);
+	HINSTANCE hinstDll = LoadLibraryExedir(lpszDllName);
 
 	if (hinstDll) {
 		DLLGETVERSIONPROC pDllGetVersion;
@@ -107,12 +106,11 @@ HICON GetAppIcon( HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSma
 	int size = ( bSmall ? 16 : 32 );
 
 	TCHAR szPath[_MAX_PATH];
-	HICON hIcon;
 
 	// ÉtÉ@ÉCÉãÇ©ÇÁÇÃì«Ç›çûÇ›ÇÇ‹Ç∏ééÇ›ÇÈ
 	GetInidirOrExedir( szPath, szFile );
 
-	hIcon = (HICON)::LoadImage(
+	HICON hIcon = (HICON)::LoadImage(
 		NULL,
 		szPath,
 		IMAGE_ICON,

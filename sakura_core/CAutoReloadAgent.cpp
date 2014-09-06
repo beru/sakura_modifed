@@ -93,10 +93,10 @@ bool CAutoReloadAgent::_ToDoChecking() const
 		return false; // ファイルの排他制御モード
 	}
 	HWND hwndActive = ::GetActiveWindow();
-	if (hwndActive==NULL) {
+	if (hwndActive == NULL) {
 		return false;	/* アクティブ？ */
 	}
-	if (hwndActive!=CEditWnd::getInstance()->GetHwnd()) {
+	if (hwndActive != CEditWnd::getInstance()->GetHwnd()) {
 		return false;
 	}
 	if (!GetListeningDoc()->m_cDocFile.GetFilePathClass().IsValidPath()) {
@@ -153,10 +153,10 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 	switch (m_eWatchUpdate) {
 	case WU_NOTIFY:
 		{
-			//ファイル更新のお知らせ -> ステータスバー
+			// ファイル更新のお知らせ -> ステータスバー
 			TCHAR szText[40];
 			const CFileTime& ctime = pcDoc->m_cDocFile.GetFileTime();
-			auto_sprintf( szText, LS(STR_AUTORELOAD_NOFITY), ctime->wHour, ctime->wMinute, ctime->wSecond );
+			auto_sprintf_s( szText, LS(STR_AUTORELOAD_NOFITY), ctime->wHour, ctime->wMinute, ctime->wSecond );
 			pcDoc->m_pcEditWnd->SendStatusMessage( szText );
 		}
 		break;

@@ -131,7 +131,7 @@ EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
 	int nDstLen = SjisToUni( pSrc, nSrcLen, pDst, &bError );
 
 	// pMemÇçXêV
-	pMem->SetRawData( pDst, nDstLen*sizeof(wchar_t) );
+	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
 
 	// å„énññ
 	delete [] pDst;

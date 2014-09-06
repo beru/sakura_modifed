@@ -140,9 +140,7 @@ end_of_compare:;
 		phwndArr[0] = GetMainWindow();
 		phwndArr[1] = hwndCompareWnd;
 		
-		int i;	// Jan. 28, 2002 genta ループ変数 intの宣言を前に出した．
-				// 互換性対策．forの()内で宣言すると古い規格と新しい規格で矛盾するので．
-		for (i = 0; i < 2; ++i) {
+		for (int i = 0; i < 2; ++i) {
 			if (::IsZoomed( phwndArr[i] )) {
 				::ShowWindow( phwndArr[i], SW_RESTORE );
 			}
@@ -152,7 +150,7 @@ end_of_compare:;
 		//	May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( phwndArr[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left ) / 2;
-		for (i = 1; i >= 0; i--) {
+		for (int i = 1; i >= 0; i--) {
 			::SetWindowPos(
 				phwndArr[i], 0,
 				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
@@ -208,7 +206,7 @@ void CViewCommander::Command_Diff( const WCHAR* _szTmpFile2, int nFlgOpt )
 	}
 
 	// 自ファイル
-	if (!GetDocument()->m_cDocEditor.IsModified()) _tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
+	if (!GetDocument()->m_cDocEditor.IsModified()) _tcscpy_s( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
 	else if (m_pCommanderView->MakeDiffTmpFile ( szTmpFile1, NULL )) bTmpFile1 = true;
 	else return;
 
@@ -249,13 +247,13 @@ void CViewCommander::Command_Diff_Dialog( void )
 	
 	//自ファイル
 	TCHAR	szTmpFile1[_MAX_PATH * 2];
-	if (!GetDocument()->m_cDocEditor.IsModified()) _tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
+	if (!GetDocument()->m_cDocEditor.IsModified()) _tcscpy_s( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
 	else if (m_pCommanderView->MakeDiffTmpFile ( szTmpFile1, NULL )) bTmpFile1 = true;
 	else return;
 		
 	//相手ファイル
 	TCHAR	szTmpFile2[_MAX_PATH * 2];
-	if (!cDlgDiff.m_bIsModifiedDst ) _tcscpy( szTmpFile2, cDlgDiff.m_szFile2);
+	if (!cDlgDiff.m_bIsModifiedDst ) _tcscpy_s( szTmpFile2, cDlgDiff.m_szFile2);
 	else if (m_pCommanderView->MakeDiffTmpFile ( szTmpFile2, cDlgDiff.m_hWnd_Dst )) bTmpFile2 = true;
 	else {
 		if (bTmpFile1) _tunlink( szTmpFile1 );

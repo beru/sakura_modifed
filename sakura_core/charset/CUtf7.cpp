@@ -150,7 +150,7 @@ EConvertResult CUtf7::UTF7ToUnicode( CMemory* pMem )
 	int nDstLen = Utf7ToUni( pData, nDataLen, pDst, &bError );
 
 	// pMem Çê›íË
-	pMem->SetRawData( pDst, nDstLen*sizeof(wchar_t) );
+	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
 
 	delete [] pDst;
 
@@ -165,12 +165,11 @@ EConvertResult CUtf7::UTF7ToUnicode( CMemory* pMem )
 
 int CUtf7::_UniToUtf7SetD_block( const wchar_t* pSrc, const int nSrcLen, char* pDst )
 {
-	int i;
-
 	if( nSrcLen < 1 ){
 		return 0;
 	}
 
+	int i;
 	for( i = 0; i < nSrcLen; ++i ){
 		pDst[i] = static_cast<char>( pSrc[i] & 0x00ff );
 	}
@@ -200,13 +199,13 @@ int CUtf7::_UniToUtf7SetB_block( const wchar_t* pSrc, const int nSrcLen, char* p
 
 	// // UTF-16 LE Å® UTF-16 BE
 	wcsncpy( &psrc[0], pSrc, nSrcLen );
-	CMemory::SwapHLByte( reinterpret_cast<char*>(psrc), nSrcLen*sizeof(wchar_t) );
+	CMemory::SwapHLByte( reinterpret_cast<char*>(psrc), nSrcLen * sizeof(wchar_t) );
 
 	// èëÇ´çûÇ›
 	pw = pDst;
 	pw[0] = '+';
 	++pw;
-	pw += _EncodeBase64( reinterpret_cast<char*>(psrc), nSrcLen*sizeof(wchar_t), pw );
+	pw += _EncodeBase64( reinterpret_cast<char*>(psrc), nSrcLen * sizeof(wchar_t), pw );
 	pw[0] = '-';
 	++pw;
 

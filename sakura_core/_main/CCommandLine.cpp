@@ -194,7 +194,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 
 		int		len = _tcslen( exename );
 
-		for (TCHAR *p = exename + len - 1; p > exename; p--) {
+		for (TCHAR* p = exename + len - 1; p > exename; p--) {
 			if (*p == _T('.')) {
 				ECodeType n = (ECodeType)(p[-1] - _T('0'));
 				if (IsValidCodeType(n)) {
@@ -261,12 +261,12 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				if (len > 0) {
 					cmWork.SetString( &pszToken[1], len - ( pszToken[len] == _T('"') ? 1 : 0 ));
 					cmWork.Replace( _T("\"\""), _T("\"") );
-					_tcscpy_s( szPath, _countof(szPath), cmWork.GetStringPtr() );	/* ファイル名 */
+					_tcscpy_s( szPath, cmWork.GetStringPtr() );	/* ファイル名 */
 				}else {
 					szPath[0] = _T('\0');
 				}
 			}else {
-				_tcscpy_s( szPath, _countof(szPath), pszToken );		/* ファイル名 */
+				_tcscpy_s( szPath, pszToken );		/* ファイル名 */
 			}
 
 			// Nov. 11, 2005 susu

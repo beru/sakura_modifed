@@ -425,9 +425,9 @@ UINT_PTR CALLBACK OFNHookProc(
 					&& pcDlgOpenFile->m_ofn.Flags & OFN_ALLOWMULTISELECT
 					&&
 #ifdef _UNICODE
-						IsWin32NT()
+						1
 #else
-						!IsWin32NT()
+						0
 #endif
 				) {
 					DWORD nLength = CommDlg_OpenSave_GetSpec( hwndOpenDlg, NULL, 0 );
@@ -604,7 +604,7 @@ void CDlgOpenFile::Create(
 		my_splitpath_t( pszDefaultPath, szDrive, szDir, NULL, NULL );
 		// 2010.08.28 相対パス解決
 		TCHAR szRelPath[_MAX_PATH];
-		auto_sprintf( szRelPath, _T("%ts%ts"), szDrive, szDir );
+		auto_sprintf_s( szRelPath, _T("%ts%ts"), szDrive, szDir );
 		const TCHAR* p = szRelPath;
 		if (! ::GetLongFileName( p, m_szInitialDir )) {
 			auto_strcpy(m_szInitialDir, p );
@@ -631,7 +631,7 @@ bool CDlgOpenFile::DoModal_GetOpenFileName( TCHAR* pszPath , bool bSetCurDir )
 	CCurrentDirectoryBackupPoint cCurDirBackup;
 
 	//	2003.05.12 MIK
-	CFileExt	cFileExt;
+	CFileExt cFileExt;
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME1), m_szDefaultWildCard );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt") );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME3), _T("*.*") );
@@ -660,7 +660,7 @@ bool CDlgOpenFile::DoModal_GetOpenFileName( TCHAR* pszPath , bool bSetCurDir )
 			pszPath[0] = _T('\0');
 		}else {
 			TCHAR szRelPath[_MAX_PATH];
-			auto_sprintf( szRelPath, _T("%ts%ts%ts%ts"), szDrive, szDir, szName, szExt );
+			auto_sprintf_s( szRelPath, _T("%ts%ts%ts%ts"), szDrive, szDir, szName, szExt );
 			const TCHAR* p = szRelPath;
 			if (!::GetLongFileName( p, pszPath )) {
 				auto_strcpy( pszPath, p );
@@ -701,7 +701,7 @@ bool CDlgOpenFile::DoModal_GetSaveFileName( TCHAR* pszPath, bool bSetCurDir )
 	CCurrentDirectoryBackupPoint cCurDirBackup;
 
 	//	2003.05.12 MIK
-	CFileExt	cFileExt;
+	CFileExt cFileExt;
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME1), m_szDefaultWildCard );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt") );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME3), _T("*.*") );
@@ -753,7 +753,7 @@ bool CDlgOpenFile::DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstrin
 	bool bMultiSelect = pFileNames != NULL;
 
 	// ファイルの種類	2003.05.12 MIK
-	CFileExt	cFileExt;
+	CFileExt cFileExt;
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME3), _T("*.*") );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt") );
 	for (int i = 0; i < GetDllShareData().m_nTypesCount; i++) {
@@ -843,7 +843,7 @@ bool CDlgOpenFile::DoModalSaveDlg(SSaveInfo* pSaveInfo, bool bSimpleMode)
 	m_bIsSaveDialog = TRUE;	/* 保存のダイアログか */
 
 	//	2003.05.12 MIK
-	CFileExt	cFileExt;
+	CFileExt cFileExt;
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME1), m_szDefaultWildCard );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt") );
 	cFileExt.AppendExtRaw( LS(STR_DLGOPNFL_EXTNAME3), _T("*.*") );
@@ -930,7 +930,7 @@ bool CDlgOpenFile::DoModalSaveDlg(SSaveInfo* pSaveInfo, bool bSimpleMode)
 */
 void CDlgOpenFile::DlgOpenFail(void)
 {
-	const TCHAR*	pszError;
+	const TCHAR* pszError;
 	DWORD dwError = ::CommDlgExtendedError();
 	if (dwError == 0) {
 		//	ユーザキャンセルによる
@@ -994,37 +994,32 @@ void CDlgOpenFile::InitOfn( OPENFILENAMEZ* ofn )
 void CDlgOpenFile::InitLayout( HWND hwndOpenDlg, HWND hwndDlg, HWND hwndBaseCtrl )
 {
 	HWND hwndFilelabel;
-	HWND hwndFilebox;
-	HWND hwndCtrl;
-	RECT rcBase;
-	RECT rc;
-	POINT po;
-	int nLeft;
-	int nShift;
-	int nWidth;
-
 	// ファイル名ラベルとファイル名ボックスを取得する
 	if (!::IsWindow( hwndFilelabel = ::GetDlgItem( hwndOpenDlg, stc3 ) ))		// ファイル名ラベル
 		return;
+	HWND hwndFilebox;
 	if (!::IsWindow( hwndFilebox = ::GetDlgItem( hwndOpenDlg, cmb13 ) )) {		// ファイル名コンボ（Windows 2000タイプ）
 		if (!::IsWindow( hwndFilebox = ::GetDlgItem( hwndOpenDlg, edt1 ) ))	// ファイル名エディット（レガシータイプ）
 			return;
 	}
 
 	// コントロールの基準位置、移動量を決定する
+	RECT rcBase;
+	RECT rc;
 	::GetWindowRect( hwndFilelabel, &rc );
-	nLeft = rc.left;						// 左端に揃えるコントロールの位置
+	int nLeft = rc.left;						// 左端に揃えるコントロールの位置
 	::GetWindowRect( hwndFilebox, &rc );
 	::GetWindowRect( hwndBaseCtrl, &rcBase );
-	nShift = rc.left - rcBase.left;			// 左端以外のコントロールの右方向への相対移動量
+	int nShift = rc.left - rcBase.left;			// 左端以外のコントロールの右方向への相対移動量
 
 	// 追加コントロールをすべて移動する
 	// ・基準コントロールよりも左にあるものはファイル名ラベルに合わせて左端に移動
 	// ・その他は移動基準コントロール（ファイル名ボックスと左端を合わせるコントロール）と同じだけ右方向へ相対移動
-	hwndCtrl = ::GetWindow( hwndDlg, GW_CHILD );
+	HWND hwndCtrl = ::GetWindow( hwndDlg, GW_CHILD );
 	while (hwndCtrl) {
 		if (::GetDlgCtrlID(hwndCtrl) != stc32) {
 			::GetWindowRect( hwndCtrl, &rc );
+			POINT po;
 			po.x = ( rc.right < rcBase.left )? nLeft: rc.left + nShift;
 			po.y = rc.top;
 			::ScreenToClient( hwndDlg, &po );
@@ -1041,7 +1036,7 @@ void CDlgOpenFile::InitLayout( HWND hwndOpenDlg, HWND hwndDlg, HWND hwndBaseCtrl
 
 	// オープンダイアログのクライアント領域の幅を取得する
 	::GetClientRect( hwndOpenDlg, &rc );
-	nWidth = rc.right - rc.left;
+	int nWidth = rc.right - rc.left;
 
 	// 標準コントロールプレースフォルダの幅を変更する
 	hwndCtrl = ::GetDlgItem( hwndDlg, stc32 );
@@ -1066,28 +1061,22 @@ void CDlgOpenFile::InitLayout( HWND hwndOpenDlg, HWND hwndDlg, HWND hwndBaseCtrl
 */
 void CDlgOpenFile::OnCmbDropdown( HWND hwnd )
 {
-	HDC hDC;
-	HFONT hFont;
-	LONG nWidth;
-	RECT rc;
-	SIZE sizeText;
-	int nTextLen;
-	int iItem;
-	int nItem;
-
-	hDC = ::GetDC( hwnd );
+	HDC hDC = ::GetDC( hwnd );
 	if (NULL == hDC)
 		return;
+	HFONT hFont;
 	hFont = (HFONT)::SendMessageAny( hwnd, WM_GETFONT, 0, (LPARAM)NULL );
 	hFont = (HFONT)::SelectObject( hDC, hFont );
-	nItem = Combo_GetCount( hwnd );
+	int nItem = Combo_GetCount( hwnd );
+	RECT rc;
 	::GetWindowRect( hwnd, &rc );
-	nWidth = rc.right - rc.left - 8;
-	for (iItem = 0; iItem < nItem; iItem++) {
-		nTextLen = Combo_GetLBTextLen( hwnd, iItem );
+	LONG nWidth = rc.right - rc.left - 8;
+	for (int iItem = 0; iItem < nItem; iItem++) {
+		int nTextLen = Combo_GetLBTextLen( hwnd, iItem );
 		if (0 < nTextLen) {
 			TCHAR* pszText = new TCHAR[nTextLen + 1];
 			Combo_GetLBText( hwnd, iItem, pszText );
+			SIZE sizeText;
 			if (::GetTextExtentPoint32( hDC, pszText, nTextLen, &sizeText )) {
 				if (nWidth < sizeText.cx)
 					nWidth = sizeText.cx;

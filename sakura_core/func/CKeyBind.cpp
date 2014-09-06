@@ -159,7 +159,7 @@ int CKeyBind::CreateKeyBindList(
 	int		i;
 	int		j;
 	int		nValidKeys;
-	WCHAR	pszStr[256];
+	WCHAR	szStr[256];
 	WCHAR	szFuncName[256];
 	WCHAR	szFuncNameJapanese[256];
 
@@ -226,8 +226,8 @@ int CKeyBind::CreateKeyBindList(
 
 				/* 機能番号 */
 				cMemList.AppendString( pszTAB );
-				auto_sprintf( pszStr, LTEXT("%d"), iFunc );
-				cMemList.AppendString( pszStr );
+				auto_sprintf_s( szStr, LTEXT("%d"), iFunc );
+				cMemList.AppendString( szStr );
 
 				/* キーマクロに記録可能な機能かどうかを調べる */
 				cMemList.AppendString( pszTAB );
@@ -843,7 +843,7 @@ void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];
 
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {
-			_tcscpy( pKeydata->m_szKeyName, LS( KeyDataInit[i].m_nKeyNameId ) );
+			_tcscpy_s( pKeydata->m_szKeyName, LS( KeyDataInit[i].m_nKeyNameId ) );
 		}
 	}
 
@@ -864,7 +864,7 @@ static void SetKeyNameArrVal(
 
 	pKeydata->m_nKeyCode = pKeydataInit->m_nKeyCode;
 	if (0xFFFF < pKeydataInit->m_nKeyNameId) {
-		_tcscpy( pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName );
+		_tcscpy_s( pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName );
 	}
 	memcpy_raw( pKeydata->m_nFuncCodeArr, pKeydataInit->m_nFuncCodeArr, sizeof(pKeydataInit->m_nFuncCodeArr) );
 }

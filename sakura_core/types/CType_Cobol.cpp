@@ -17,7 +17,7 @@ void CType_Cobol::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_cLineComment.CopyTo( 0, L"*", 6 );			//Jun. 02, 2001 JEPRO 修正
 	pType->m_cLineComment.CopyTo( 1, L"D", 6 );			//Jun. 04, 2001 JEPRO 追加
 	pType->m_nStringType = STRING_LITERAL_PLSQL;							/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-	wcscpy( pType->m_szIndentChars, L"*" );				/* その他のインデント対象文字 */
+	wcscpy_s( pType->m_szIndentChars, L"*" );				/* その他のインデント対象文字 */
 	pType->m_nKeyWordSetIdx[0] = 3;						/* キーワードセット */		//Jul. 10, 2001 JEPRO
 	pType->m_eDefaultOutline = OUTLINE_COBOL;			/* アウトライン解析方法 */
 	// 指定桁縦線	//2005.11.08 Moca
@@ -86,7 +86,7 @@ void CDocOutline::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 			for (i = 0; i <= nLen ; ++i) {
 				if (0 == auto_memicmp( &szLabel[i], pszKeyWord, nKeyWordLen )) {
 					szLabel[i + nKeyWordLen] = L'\0';
-					wcscpy( szDivision, szLabel );
+					wcscpy_s( szDivision, szLabel );
 					bDivision = TRUE;
 					break;
 				}
@@ -107,7 +107,7 @@ void CDocOutline::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 				CLogicPoint(0, nLineCount),
 				&ptPos
 			);
-			auto_sprintf( szWork, L"%ls::%ls", szDivision, szLabel );
+			auto_sprintf_s( szWork, L"%ls::%ls", szDivision, szLabel );
 			pcFuncInfoArr->AppendData( nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , szWork, 0 );
 		}
 	}

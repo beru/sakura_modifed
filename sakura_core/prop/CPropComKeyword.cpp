@@ -257,7 +257,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 						return TRUE;
 					}
 					/* モードレスダイアログの表示 */
-					wcscpy( szKeyWord, L"" );
+					szKeyWord[0] = 0;
 					//	Oct. 5, 2002 genta 長さ制限の設定を修正．バッファオーバーランしていた．
 					if (!cDlgInput1.DoModal(
 						G_AppInstance(),
@@ -286,7 +286,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					}
 					/* 削除対象のセットを使用しているファイルタイプを列挙 */
 					static TCHAR		pszLabel[1024];
-					_tcscpy( pszLabel, _T("") );
+					pszLabel[0] = 0;
 					for (i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
 						std::auto_ptr<STypeConfig> type(new STypeConfig());
 						CDocTypeManager().GetTypeConfig( CTypeConfig(i), *type );
@@ -336,7 +336,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					return TRUE;
 				case IDC_BUTTON_KEYSETRENAME: // キーワードセットの名称変更
 					// モードレスダイアログの表示
-					wcscpy( szKeyWord, m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetTypeName( m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) );
+					wcscpy_s( szKeyWord, m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetTypeName( m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) );
 					{
 						BOOL bDlgInputResult = cDlgInput1.DoModal(
 							G_AppInstance(),
@@ -367,7 +367,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 						return TRUE;
 					}
 					/* モードレスダイアログの表示 */
-					wcscpy( szKeyWord, L"" );
+					szKeyWord[0] = 0;
 					if (!cDlgInput1.DoModal( G_AppInstance(), hwndDlg, LS(STR_PROPCOMKEYWORD_KEYADD1), LS(STR_PROPCOMKEYWORD_KEYADD2), MAX_KEYWORDLEN, szKeyWord )) {
 						return TRUE;
 					}
@@ -468,7 +468,7 @@ void CPropKeyword::Edit_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	ListView_GetItem( hwndLIST_KEYWORD, &lvi );
 
 	/* ｎ番目のセットのｍ番目のキーワードを返す */
-	wcscpy( szKeyWord, m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWord( m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, lvi.lParam ) );
+	wcscpy_s( szKeyWord, m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWord( m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, lvi.lParam ) );
 
 	/* モードレスダイアログの表示 */
 	if (!cDlgInput1.DoModal( G_AppInstance(), hwndDlg, LS(STR_PROPCOMKEYWORD_KEYEDIT1), LS(STR_PROPCOMKEYWORD_KEYEDIT2), MAX_KEYWORDLEN, szKeyWord )) {

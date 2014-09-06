@@ -42,7 +42,6 @@ void CDocOutline::MakeTopicList_asm( CFuncInfoArr* pcFuncInfoArr )
 		int offset;
 #define MAX_ASM_TOKEN 2
 		WCHAR* token[MAX_ASM_TOKEN];
-		int j;
 		WCHAR* p;
 
 		//1行取得する。
@@ -64,8 +63,8 @@ void CDocOutline::MakeTopicList_asm( CFuncInfoArr* pcFuncInfoArr )
 		offset = 0;
 
 		//トークンに分割
-		for (j = 0; j < MAX_ASM_TOKEN; j++) token[ j ] = NULL;
-		for (j = 0; j < MAX_ASM_TOKEN; j++) {
+		for (int j = 0; j < MAX_ASM_TOKEN; j++) token[ j ] = NULL;
+		for (int j = 0; j < MAX_ASM_TOKEN; j++) {
 			token[ j ] = my_strtok<WCHAR>( pTmpLine, length, &offset, L" \t\r\n" );
 			if (token[ j ] == NULL) break;
 			//トークンに含まれるべき文字でないか？

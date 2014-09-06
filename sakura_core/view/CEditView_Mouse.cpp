@@ -1521,9 +1521,9 @@ void CEditView::OnLBUTTONDBLCLK( WPARAM fwKeys, int _xPos , int _yPos )
 				CWaitCursor cWaitCursor( GetHwnd() );	// カーソルを砂時計にする
 
 				unsigned int nThreadId;
-				LPCTSTR szUrl = to_tchar(wstrOPEN.c_str());
-				LPTSTR szUrlDup = new TCHAR[_tcslen( szUrl ) + 1];
-				_tcscpy( szUrlDup, szUrl );
+				LPCTSTR pszUrl = to_tchar(wstrOPEN.c_str());
+				LPTSTR szUrlDup = new TCHAR[_tcslen( pszUrl ) + 1];
+				_tcscpy( szUrlDup, pszUrl );
 				HANDLE hThread = (HANDLE)_beginthreadex( NULL, 0, ShellExecuteProc, (LPVOID)szUrlDup, 0, &nThreadId );
 				if (hThread != INVALID_HANDLE_VALUE) {
 					// ユーザーのURL起動指示に反応した目印としてちょっとの時間だけ砂時計カーソルを表示しておく

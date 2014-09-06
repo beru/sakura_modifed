@@ -97,7 +97,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 	int nDstLen = EucjpToUni( pSrc, nSrcLen, pDst, &bError );
 
 	// pMem を更新
-	pMem->SetRawData( pDst, nDstLen*sizeof(wchar_t) );
+	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
 
 	// 後始末
 	delete [] pDst;
@@ -224,10 +224,10 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	}
 
 	// 1文字データバッファ
-	cCharBuffer.SetRawData("",0);
+	cCharBuffer.SetRawData("", 0);
 	cCharBuffer.AppendRawData( cSrc, sizeof(wchar_t));
 
-	if( IsBinaryOnSurrogate(cSrc[0]) ){
+	if (IsBinaryOnSurrogate(cSrc[0])) {
 		bbinary = true;
 	}
 

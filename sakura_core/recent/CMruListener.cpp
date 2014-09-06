@@ -181,7 +181,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 			CBookmarkManager(&pcDoc->m_cDocLineMgr).SetBookMarks(eiOld.m_szMarkLines);
 		}
 	}else {
-		wcscpy(eiOld.m_szMarkLines,L"");
+		eiOld.m_szMarkLines[0] = 0;
 	}
 
 	// MRUリストへの登録
@@ -223,7 +223,7 @@ void CMruListener::_HoldBookmarks_And_AddToMRU()
 	pcDoc->GetEditInfo( &fi );
 
 	//ブックマーク情報の保存
-	wcscpy( fi.m_szMarkLines, CBookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks() );
+	wcscpy_s( fi.m_szMarkLines, CBookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks() );
 
 	//MRUリストに登録
 	CMRUFile	cMRU;

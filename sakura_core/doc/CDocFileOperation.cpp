@@ -143,7 +143,7 @@ bool CDocFileOperation::FileLoad(
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
 	}
@@ -168,7 +168,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
-	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}
 
@@ -211,7 +211,7 @@ void CDocFileOperation::ReloadCurrentFile(
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
 	}
@@ -302,7 +302,7 @@ bool CDocFileOperation::SaveFileDialog(
 		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode( m_pcDocRef->m_pcEditWnd->GetHwnd() );
 		if (0 < node->m_nId) {
 			TCHAR szText[16];
-			auto_sprintf(szText, _T("%d"), node->m_nId);
+			auto_sprintf_s(szText, _T("%d"), node->m_nId);
 			auto_strcpy(pSaveInfo->cFilePath, LS(STR_NO_TITLE2));	// 無題
 			auto_strcat(pSaveInfo->cFilePath, szText);
 		}
@@ -373,7 +373,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_BEFORE_SAVE, 0, &plugs );
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
 
@@ -381,7 +381,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 			//プラグイン：DocumentCloseイベント実行
 			plugs.clear();
 			CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
-			for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+			for (auto it = plugs.begin(); it != plugs.end(); it++) {
 				(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 			}
 		}
@@ -394,7 +394,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		//プラグイン：DocumentAfterSaveイベント実行
 		plugs.clear();
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_AFTER_SAVE, 0, &plugs );
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
 
@@ -483,7 +483,7 @@ bool CDocFileOperation::FileSaveAs( const WCHAR* filename,ECodeType eCodeType, E
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
 
@@ -516,7 +516,7 @@ bool CDocFileOperation::FileClose()
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
-	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}
 
@@ -557,7 +557,7 @@ void CDocFileOperation::FileCloseOpen( const SLoadInfo& _sLoadInfo )
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
-	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}
 
@@ -608,7 +608,7 @@ void CDocFileOperation::FileCloseOpen( const SLoadInfo& _sLoadInfo )
 	//プラグイン：DocumentOpenイベント実行
 	plugs.clear();
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}
 }

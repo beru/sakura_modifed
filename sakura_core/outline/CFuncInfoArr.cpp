@@ -37,9 +37,8 @@ CFuncInfoArr::~CFuncInfoArr()
 
 void CFuncInfoArr::Empty( void )
 {
-	int i;
 	if (m_nFuncInfoArrNum > 0 && NULL != m_ppcFuncInfoArr) {
-		for (i = 0; i < m_nFuncInfoArrNum; ++i) {
+		for (int i = 0; i < m_nFuncInfoArrNum; ++i) {
 			delete m_ppcFuncInfoArr[i];
 			m_ppcFuncInfoArr[i] = NULL;
 		}
@@ -138,9 +137,8 @@ void CFuncInfoArr::AppendData(
 void CFuncInfoArr::DUMP( void )
 {
 #ifdef _DEBUG
-	int i;
 	MYTRACE( _T("=============================\n") );
-	for (i = 0; i < m_nFuncInfoArrNum; i++) {
+	for (int i = 0; i < m_nFuncInfoArrNum; i++) {
 		MYTRACE( _T("[%d]------------------\n"), i );
 		MYTRACE( _T("m_nFuncLineCRLF	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineCRLF );
 		MYTRACE( _T("m_nFuncLineLAYOUT	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineLAYOUT );

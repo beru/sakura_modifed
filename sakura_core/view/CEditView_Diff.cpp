@@ -163,31 +163,17 @@ void CEditView::ViewDiffInfo(
 		TCHAR szCmdDir[_MAX_PATH];
 
 		//コマンドライン文字列作成(MAX:1024)
-		if (IsWin32NT()) {
-			::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
-			auto_sprintf(
-				cmdline,
-				_T("\"%ts\\cmd.exe\" /C \"\"%ts\\%ts\" %ts \"%ts\" \"%ts\"\""),
-				szCmdDir,
-				szExeFolder,	//sakura.exeパス
-				_T("diff.exe"),		//diff.exe
-				szOption,		//diffオプション
-				( nFlgFile12 ? pszFile2 : pszFile1 ),
-				( nFlgFile12 ? pszFile1 : pszFile2 )
-			);
-		}else {
-			::GetWindowsDirectory(szCmdDir, _countof(szCmdDir));
-			auto_sprintf(
-				cmdline,
-				_T("\"%ts\\command.com\" /C \"%ts\\%ts\" %ts \"%ts\" \"%ts\""),
-				szCmdDir,
-				szExeFolder,	//sakura.exeパス
-				_T("diff.exe"),		//diff.exe
-				szOption,		//diffオプション
-				( nFlgFile12 ? pszFile2 : pszFile1 ),
-				( nFlgFile12 ? pszFile1 : pszFile2 )
-			);
-		}
+		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
+		auto_sprintf_s(
+			cmdline,
+			_T("\"%ts\\cmd.exe\" /C \"\"%ts\\%ts\" %ts \"%ts\" \"%ts\"\""),
+			szCmdDir,
+			szExeFolder,	//sakura.exeパス
+			_T("diff.exe"),		//diff.exe
+			szOption,		//diffオプション
+			( nFlgFile12 ? pszFile2 : pszFile1 ),
+			( nFlgFile12 ? pszFile1 : pszFile2 )
+		);
 	}
 
 	//コマンドライン実行
@@ -353,12 +339,11 @@ void CEditView::AnalyzeDiffInfo(
 	 * s1,e1 mode s2,e2
 	 * 先頭の場合0の次行となることもある
 	 */
-	const char	*q;
-	int		s1, e1, s2, e2;
-	char	mode;
+	const char* q;
 
 	//前半ファイルの開始行
-	s1 = 0;
+	int s1 = 0;
+	int e1;
 	for (q = pszDiffInfo; *q; q++) {
 		if (*q == ',') break;
 		if (*q == 'a' || *q == 'c' || *q == 'd') break;
@@ -384,10 +369,11 @@ void CEditView::AnalyzeDiffInfo(
 	if (!*q) return;
 
 	//DIFFモードを取得
-	mode = *q;
+	char mode = *q;
 
 	//後半ファイルの開始行
-	s2 = 0;
+	int s2 = 0;
+	int e2;
 	for (q++; *q; q++) {
 		if (*q == ',') break;
 		//行番号を抽出

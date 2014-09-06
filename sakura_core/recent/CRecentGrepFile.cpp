@@ -76,6 +76,6 @@ int CRecentGrepFile::CompareItem( const CGrepFileString* p1, LPCTSTR p2 ) const
 
 void CRecentGrepFile::CopyItem( CGrepFileString* dst, LPCTSTR src ) const
 {
-	_tcscpy(*dst,src);
+	_tcscpy(*dst, src);
 }
 

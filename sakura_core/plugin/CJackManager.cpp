@@ -33,8 +33,6 @@
 // コンストラクタ
 CJackManager::CJackManager()
 {
-	int i;
-
 	// ジャック定義一覧
 	// 添え字がEJackの値と同じであること。
 	struct tagJackEntry {
@@ -62,7 +60,7 @@ CJackManager::CJackManager()
 	m_pShareData = &GetDllShareData();
 
 	m_Jacks.reserve( PP_BUILTIN_JACK_COUNT );
-	for (i=0; i<PP_BUILTIN_JACK_COUNT; i++) {
+	for (int i=0; i<PP_BUILTIN_JACK_COUNT; i++) {
 		assert( i == jackNames[i].id );
 
 		JackDef jack;
@@ -164,10 +162,9 @@ bool CJackManager::UnRegisterPlug( wstring pszJack, CPlug* plug )
 // ジャック名をジャック番号に変換する
 EJack CJackManager::GetJackFromName( wstring sName )
 {
-	unsigned int i;
 	const WCHAR* szName = sName.c_str();
 
-	for (i=0; i < m_Jacks.size(); i++) {
+	for (size_t i=0; i < m_Jacks.size(); i++) {
 		if (wcscmp( m_Jacks[i].szName, szName ) == 0) {
 			return m_Jacks[i].ppId;
 		}
@@ -207,7 +204,7 @@ EFunctionCode CJackManager::GetCommandCode( int index ) const
 // プラグインコマンドの名前を返す
 int CJackManager::GetCommandName( int funccode, WCHAR* buf, int size ) const
 {
-	for (CPlug::ArrayIter it = m_Jacks[ PP_COMMAND ].plugs.begin(); it != m_Jacks[ PP_COMMAND ].plugs.end(); it++) {
+	for (auto it = m_Jacks[ PP_COMMAND ].plugs.begin(); it != m_Jacks[ PP_COMMAND ].plugs.end(); it++) {
 		if (((CPlug*)(*it))->GetFunctionCode() == funccode) {
 			wcsncpy( buf, ((CPlug*)(*it))->m_sLabel.c_str(), size );
 			buf[ size-1 ] = L'\0';
@@ -227,7 +224,7 @@ int CJackManager::GetCommandCount() const
 CPlug* CJackManager::GetCommandById( int id ) const
 {
 	const CPlug::Array& plugs = GetPlugs( PP_COMMAND );
-	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		if ((*it)->GetFunctionCode() == id) {
 			return (*it);
 		}

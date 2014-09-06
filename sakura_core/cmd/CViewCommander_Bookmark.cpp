@@ -269,12 +269,12 @@ void CViewCommander::Command_BOOKMARK_SET(void)
 			&ptTo
 		);
 		for (CLogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; nY++) {
-			pCDocLine=GetDocument()->m_cDocLineMgr.GetLine( nY );
+			pCDocLine = GetDocument()->m_cDocLineMgr.GetLine( nY );
 			CBookmarkSetter cBookmark(pCDocLine);
 			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 		}
 	}else {
-		pCDocLine=GetDocument()->m_cDocLineMgr.GetLine( GetCaret().GetCaretLogicPos().GetY2() );
+		pCDocLine = GetDocument()->m_cDocLineMgr.GetLine( GetCaret().GetCaretLogicPos().GetY2() );
 		CBookmarkSetter cBookmark(pCDocLine);
 		if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 	}

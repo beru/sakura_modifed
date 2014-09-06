@@ -103,8 +103,7 @@ CPropTypes::CPropTypes()
 	m_nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
 
 	// 2005.11.30 Moca カスタム色を設定・保持
-	int i;
-	for (i = 0; i < _countof(m_dwCustColors); i++) {
+	for (int i = 0; i < _countof(m_dwCustColors); i++) {
 		m_dwCustColors[i] = RGB( 255, 255, 255 );
 	}
 
@@ -293,7 +292,7 @@ HFONT CPropTypes::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf,
 		hFont = SetCtrlFont( hwndDlg, idc_static, lfTemp );
 
 		// フォント名の設定
-		auto_sprintf( szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
+		auto_sprintf_s( szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
 			lf.lfFaceName, double(nps)/10 );
 		::DlgItem_SetText( hwndDlg, idc_static, szFontName );
 	}else {

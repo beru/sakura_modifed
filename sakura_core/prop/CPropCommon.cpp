@@ -48,8 +48,7 @@
 
 int	CPropCommon::SearchIntArr( int nKey, int* pnArr, int nArrNum )
 {
-	int i;
-	for (i = 0; i < nArrNum; ++i) {
+	for (int i = 0; i < nArrNum; ++i) {
 		if (nKey == pnArr[i]) {
 			return i;
 		}
@@ -314,9 +313,8 @@ void CPropCommon::InitData( void )
 {
 	m_Common = m_pShareData->m_Common;
 
-	//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
-	int i;
-	for (i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
+	//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。	;
+	for (int i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
 		SKeywordSetIndex indexs;
 		STypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(i), type);
@@ -336,9 +334,8 @@ void CPropCommon::ApplyData( void )
 {
 	m_pShareData->m_Common = m_Common;
 
-	int i;
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
-	for (i = 0; i < nSize; ++i) {
+	for (int i = 0; i < nSize; ++i) {
 		CTypeConfig configIdx = CDocTypeManager().GetDocumentTypeOfId( m_Types_nKeyWordSetIdx[i].typeId );
 		if (configIdx.IsValidType()) {
 			STypeConfig type;
@@ -470,7 +467,7 @@ HFONT CPropCommon::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf
 	hFont = SetCtrlFont( hwndDlg, idc_static, lfTemp );
 
 	// フォント名の設定
-	auto_sprintf( szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
+	auto_sprintf_s( szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
 		lf.lfFaceName, double(nps)/10 );
 	::DlgItem_SetText( hwndDlg, idc_static, szFontName );
 

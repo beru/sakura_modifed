@@ -108,7 +108,7 @@ EConvertResult CUtf8::_UTF8ToUnicode( CMemory* pMem, bool bCESU8Mode/*, bool dec
 	int nDstLen = Utf8ToUni( psrc, nsrclen, pDst, bCESU8Mode );
 
 	// pMem ÇçXêV
-	pMem->SetRawData( pDst, nDstLen*sizeof(wchar_t) );
+	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
 
 	// å„énññ
 	delete [] pDst;

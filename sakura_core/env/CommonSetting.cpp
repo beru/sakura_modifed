@@ -51,7 +51,7 @@ struct CommonValueInfo{
 		printf("%hs=",m_szEntryKey);
 
 		//intと同じサイズならintとして出力
-		if (m_nValueSize==sizeof(int)) {
+		if (m_nValueSize == sizeof(int)) {
 			printf("%d\n",*((int*)m_pValue));
 		//それ以外ならバイナリ出力
 		}else {
@@ -82,9 +82,9 @@ public:
 	void Regist(const char* szEntryKey)
 	{
 		//CommonValueリストに自分を追加
-		g_commonvalues.push_back(CommonValueInfo(&m_value,sizeof(m_value),szEntryKey));
+		g_commonvalues.push_back(CommonValueInfo(&m_value, sizeof(m_value), szEntryKey));
 	}
-	Me& operator = (const T& rhs){ m_value=rhs; return *this; }
+	Me& operator = (const T& rhs){ m_value = rhs; return *this; }
 	operator T& () { return m_value; }
 	operator const T& () const{ return m_value; }
 private:

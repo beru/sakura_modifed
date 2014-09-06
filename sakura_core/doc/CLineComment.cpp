@@ -16,8 +16,7 @@
 
 CLineComment::CLineComment()
 {
-	int i;
-	for (i=0; i<COMMENT_DELIMITER_NUM; i++) {
+	for (int i=0; i<COMMENT_DELIMITER_NUM; i++) {
 		m_pszLineComment[i][0] = '\0';
 		m_nLineCommentPos[i] = -1;
 	}
@@ -33,7 +32,7 @@ void CLineComment::CopyTo( const int n, const wchar_t* buffer, int nCommentPos )
 {
 	int nStrLen = wcslen( buffer );
 	if (0 < nStrLen && nStrLen < COMMENT_DELIMITER_BUFFERSIZE) {
-		wcscpy( m_pszLineComment[n], buffer );
+		wcscpy_s( m_pszLineComment[n], buffer );
 		m_nLineCommentPos[n] = nCommentPos;
 		m_nLineCommentLen[n] = nStrLen;
 	}else {
@@ -45,8 +44,7 @@ void CLineComment::CopyTo( const int n, const wchar_t* buffer, int nCommentPos )
 
 bool CLineComment::Match( int nPos, const CStringRef& cStr ) const
 {
-	int i;
-	for (i=0; i<COMMENT_DELIMITER_NUM; i++) {
+	for (int i=0; i<COMMENT_DELIMITER_NUM; i++) {
 		if (
 			L'\0' != m_pszLineComment[i][0] &&	/* 行コメントデリミタ */
 			( m_nLineCommentPos[i] < 0 || nPos == m_nLineCommentPos[i] ) &&	//	位置指定ON.

@@ -180,12 +180,10 @@ bool CPPA::InitDllImp()
 	SetDefine( "sakura-editor" );	// 2003.06.01 Moca SAKURAエディタ用独自関数を準備
 	AddStrObj( "UserErrorMes", "", FALSE, 2 ); // 2003.06.01 デバッグ用文字列変数を用意
 
-	int i;
-	
 	//	Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
-	for (i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName != NULL; i++) {
+	for (int i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName != NULL; i++) {
 		//	2003.06.08 Moca メモリーリークの修正
 		//	2003.06.16 genta バッファを外から与えるように
 		//	関数登録用文字列を作成する
@@ -194,7 +192,7 @@ bool CPPA::InitDllImp()
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
-	for (i=0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; i++) {
+	for (int i=0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; i++) {
 		//	2003.06.08 Moca メモリーリークの修正
 		//	2003.06.16 genta バッファを外から与えるように
 		//	関数登録用文字列を作成する
@@ -217,7 +215,7 @@ bool CPPA::InitDllImp()
 
 	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
-char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer )
+char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer )
 {
 	char szType[20];			//	procedure/function用バッファ
 	char szReturn[20];			//	戻り値型用バッファ
@@ -260,15 +258,14 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer
 		}
 	}
 	if (i > 0) {	//	引数があったとき
-		int j;
 		char szArgument[8*20];
 		// 2002.12.06 Moca 原因不明だが，strcatがVC6Proでうまく動かなかったため，strcpyにしてみたら動いた
 		strcpy( szArgument, szArguments[0] );
-		for (j=1; j<i; j++) {
+		for (int j=1; j<i; j++) {
 			strcat( szArgument, "; " );
 			strcat( szArgument, szArguments[j] );
 		}
-		auto_sprintf( szBuffer, "%hs S_%ls(%hs)%hs; index %d;",
+		auto_sprintf( pszBuffer, "%hs S_%ls(%hs)%hs; index %d;",
 			szType,
 			cMacroFuncInfo.m_pszFuncName,
 			szArgument,
@@ -276,7 +273,7 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer
 			cMacroFuncInfo.m_nFuncID
 		);
 	}else {
-		auto_sprintf( szBuffer, "%hs S_%ls%hs; index %d;",
+		auto_sprintf( pszBuffer, "%hs S_%ls%hs; index %d;",
 			szType,
 			cMacroFuncInfo.m_pszFuncName,
 			szReturn,
@@ -284,7 +281,7 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer
 		);
 	}
 	//	Jun. 01, 2003 Moca / Jun. 16, 2003 genta
-	return szBuffer;
+	return pszBuffer;
 }
 
 /*! ユーザー定義文字列型オブジェクト
@@ -354,9 +351,9 @@ void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
 			}
 		}
 		if (szFuncDec[0] != '\0') {
-			auto_sprintf( szMes, LS(STR_ERR_DLGPPA2), szFuncDec );
+			auto_sprintf_s( szMes, LS(STR_ERR_DLGPPA2), szFuncDec );
 		}else {
-			auto_sprintf( szMes, LS(STR_ERR_DLGPPA3), FuncID );
+			auto_sprintf_s( szMes, LS(STR_ERR_DLGPPA3), FuncID );
 		}
 	}else {
 		//	2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
@@ -373,7 +370,7 @@ void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
 				}
 				break;
 			default:
-				auto_sprintf( szMes, LS(STR_ERR_DLGPPA5), Err_CD, to_tchar(Err_Mes) );
+				auto_sprintf_s( szMes, LS(STR_ERR_DLGPPA5), Err_CD, to_tchar(Err_Mes) );
 			}
 		}
 	}

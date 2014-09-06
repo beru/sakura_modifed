@@ -244,7 +244,6 @@ void CPropTypesWindow::SetData( HWND hwndDlg )
 
 	/* 「文字コード」グループの設定 */
 	{
-		int i;
 		HWND hCombo;
 
 		// 「自動認識時にCESU-8を優先」m_Types.m_encoding.m_bPriorCesu8 をチェック
@@ -255,7 +254,7 @@ void CPropTypesWindow::SetData( HWND hwndDlg )
 		int		j = 0;
 		hCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_DEFAULT_CODETYPE );
 		CCodeTypesForCombobox cCodeTypes;
-		for (i = 0; i < cCodeTypes.GetCount(); i++) {
+		for (int i = 0; i < cCodeTypes.GetCount(); i++) {
 			if (CCodeTypeName( cCodeTypes.GetCode(i) ).CanDefault()) {
 				int idx = Combo_AddString( hCombo, cCodeTypes.GetName(i) );
 				Combo_SetItemData( hCombo, idx, cCodeTypes.GetCode(i) );
@@ -277,9 +276,10 @@ void CPropTypesWindow::SetData( HWND hwndDlg )
 
 		// デフォルト改行タイプのコンボボックス設定
 		hCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_DEFAULT_EOLTYPE );
-		for (i = 0; i < _countof(aszEolStr); ++i) {
+		for (int i = 0; i < _countof(aszEolStr); ++i) {
 			ApiWrap::Combo_AddString( hCombo, aszEolStr[i] );
 		}
+		int i;
 		for (i = 0; i < _countof(aeEolType); ++i) {
 			if (m_Types.m_encoding.m_eDefaultEoltype == aeEolType[i]) {
 				break;
@@ -348,7 +348,7 @@ void CPropTypesWindow::SetData( HWND hwndDlg )
 
 	/* 行番号区切り文字 */
 	wchar_t	szLineTermChar[2];
-	auto_sprintf( szLineTermChar, L"%lc", m_Types.m_cLineTermChar );
+	auto_sprintf_s( szLineTermChar, L"%lc", m_Types.m_cLineTermChar );
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar );
 
 	//	From Here Sept. 10, 2000 JEPRO
@@ -387,15 +387,12 @@ int CPropTypesWindow::GetData( HWND hwndDlg )
 
 	/* 「文字コード」グループの設定 */
 	{
-		int i;
-		HWND hCombo;
-
 		// m_Types.m_bPriorCesu8 を設定
 		m_Types.m_encoding.m_bPriorCesu8 = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_PRIOR_CESU8 ) != 0;
 
 		// m_Types.eDefaultCodetype を設定
-		hCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_DEFAULT_CODETYPE );
-		i = Combo_GetCurSel( hCombo );
+		HWND hCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_DEFAULT_CODETYPE );
+		int i = Combo_GetCurSel( hCombo );
 		if (CB_ERR != i) {
 			m_Types.m_encoding.m_eDefaultCodetype = ECodeType( Combo_GetItemData( hCombo, i ) );
 		}

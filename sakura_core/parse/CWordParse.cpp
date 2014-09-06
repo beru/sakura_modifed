@@ -41,12 +41,12 @@ bool CWordParse::WhereCurrentWord_2(
 	ECharKind nCharKind = WhatKindOfChar( pLine, nLineLen, nIdx );
 
 	// 文字種類が変わるまで前方へサーチ
-	CLogicInt	nIdxNext = nIdx;
-	CLogicInt	nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nIdxNext] ));
+	CLogicInt nIdxNext = nIdx;
+	CLogicInt nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nIdxNext] ));
 	while (nCharChars > 0) {
-		CLogicInt	nIdxNextPrev = nIdxNext;
+		CLogicInt nIdxNextPrev = nIdxNext;
 		nIdxNext -= nCharChars;
-		ECharKind	nCharKindNext = WhatKindOfChar( pLine, nLineLen, nIdxNext );
+		ECharKind nCharKindNext = WhatKindOfChar( pLine, nLineLen, nIdxNext );
 
 		ECharKind nCharKindMerge = WhatKindOfTwoChars( nCharKindNext, nCharKind );
 		if (nCharKindMerge == CK_NULL) {

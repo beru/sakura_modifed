@@ -114,7 +114,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 	int			i;
 	int			j;
 	EFunctionCode	nFuncCode;
-	static WCHAR pszLabel[256];
+	static WCHAR szLabel[256];
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -269,11 +269,11 @@ INT_PTR CPropKeybind::DispatchEvent(
 				// Oct. 2, 2001 genta
 				// 2007.11.02 ryoji F_DISABLEなら未割付
 				if (nFuncCode == F_DISABLE) {
-					auto_strcpy( pszLabel, LSW(STR_PROPCOMKEYBIND_UNASSIGN) );
+					auto_strcpy( szLabel, LSW(STR_PROPCOMKEYBIND_UNASSIGN) );
 				}else {
-					m_cLookup.Funccode2Name( nFuncCode, pszLabel, 255 );
+					m_cLookup.Funccode2Name( nFuncCode, szLabel, 255 );
 				}
-				Wnd_SetText( hwndEDIT_KEYSFUNC, pszLabel );
+				Wnd_SetText( hwndEDIT_KEYSFUNC, szLabel );
 				return TRUE;
 			}
 		}else
@@ -447,7 +447,7 @@ void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 	hwndKeyList = ::GetDlgItem( hwndDlg, IDC_LIST_KEY );
 	nIndex = List_GetCurSel( hwndKeyList );
 	nIndexTop = List_GetTopIndex( hwndKeyList );
-	wcscpy( szKeyState, L"" );
+	szKeyState[0] = 0;
 	i = 0;
 	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SHIFT )) {
 		i |= _SHIFT;
@@ -464,9 +464,9 @@ void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 	/* キー一覧に文字列をセット（リストボックス）*/
 	List_ResetContent( hwndKeyList );
 	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
-		TCHAR	pszLabel[256];
-		auto_sprintf( pszLabel, _T("%ls%ts"), szKeyState, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
-		::List_AddString( hwndKeyList, pszLabel );
+		TCHAR	szLabel[256];
+		auto_sprintf( szLabel, _T("%ls%ts"), szKeyState, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
+		::List_AddString( hwndKeyList, szLabel );
 	}
 	List_SetCurSel( hwndKeyList, nIndex );
 	List_SetTopIndex( hwndKeyList, nIndexTop );

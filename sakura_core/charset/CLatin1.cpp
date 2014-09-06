@@ -124,7 +124,7 @@ EConvertResult CLatin1::Latin1ToUnicode( CMemory* pMem )
 	int nDstLen = Latin1ToUni( pSrc, nSrcLen, pDst, &bError );
 
 	// pMemÇçXêV
-	pMem->SetRawData( pDst, nDstLen*sizeof(wchar_t) );
+	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
 
 	// å„énññ
 	delete [] pDst;
@@ -261,7 +261,7 @@ EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR
 		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
-	cCharBuffer.SetRawData("",0);
+	cCharBuffer.SetRawData("", 0);
 	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
 
 	if( IsBinaryOnSurrogate(cSrc[0]) ){

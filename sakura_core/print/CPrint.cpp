@@ -162,19 +162,16 @@ BOOL CPrint::PrintDlg( PRINTDLG *pPD, MYDEVMODE *pMYDEVMODE )
 	// プリンタドライバ名
 	_tcscpy_s(
 		pMYDEVMODE->m_szPrinterDriverName,
-		_countof(pMYDEVMODE->m_szPrinterDriverName),
 		(const TCHAR*)pDEVNAMES + pDEVNAMES->wDriverOffset
 	);
 	// プリンタデバイス名
 	_tcscpy_s(
 		pMYDEVMODE->m_szPrinterDeviceName,
-		_countof(pMYDEVMODE->m_szPrinterDeviceName),
 		(const TCHAR*)pDEVNAMES + pDEVNAMES->wDeviceOffset
 	);
 	// プリンタポート名
 	_tcscpy_s(
 		pMYDEVMODE->m_szPrinterOutputName,
-		_countof(pMYDEVMODE->m_szPrinterOutputName),
 		(const TCHAR*)pDEVNAMES + pDEVNAMES->wOutputOffset
 	);
 
@@ -244,19 +241,16 @@ BOOL CPrint::GetDefaultPrinter( MYDEVMODE* pMYDEVMODE )
 	// プリンタドライバ名
 	_tcscpy_s(
 		pMYDEVMODE->m_szPrinterDriverName,
-		_countof(pMYDEVMODE->m_szPrinterDriverName),
 		(const TCHAR*)pDEVNAMES + pDEVNAMES->wDriverOffset
 	);
 	// プリンタデバイス名
 	_tcscpy_s(
 		pMYDEVMODE->m_szPrinterDeviceName,
-		_countof(pMYDEVMODE->m_szPrinterDeviceName),
 		(const TCHAR*)pDEVNAMES + pDEVNAMES->wDeviceOffset
 	);
 	// プリンタポート名
 	_tcscpy_s(
 		pMYDEVMODE->m_szPrinterOutputName,
-		_countof(pMYDEVMODE->m_szPrinterOutputName),
 		(const TCHAR*)pDEVNAMES + pDEVNAMES->wOutputOffset
 	);
 
@@ -576,7 +570,7 @@ const PAPER_INFO* CPrint::FindPaperInfo( int id )
 */
 void CPrint::SettingInitialize( PRINTSETTING& pPrintSetting, const TCHAR* settingName )
 {
-	_tcscpy( pPrintSetting.m_szPrintSettingName, settingName );			/* 印刷設定の名前 */
+	_tcscpy_s( pPrintSetting.m_szPrintSettingName, settingName );			/* 印刷設定の名前 */
 	_tcscpy( pPrintSetting.m_szPrintFontFaceHan, _T("ＭＳ 明朝") );		/* 印刷フォント */
 	_tcscpy( pPrintSetting.m_szPrintFontFaceZen, _T("ＭＳ 明朝") );		/* 印刷フォント */
 	pPrintSetting.m_bColorPrint = false;		// カラー印刷			// 2013/4/26 Uchi
@@ -603,15 +597,15 @@ void CPrint::SettingInitialize( PRINTSETTING& pPrintSetting, const TCHAR* settin
 	pPrintSetting.m_bHeaderUse[0] = TRUE;
 	pPrintSetting.m_bHeaderUse[1] = FALSE;
 	pPrintSetting.m_bHeaderUse[2] = FALSE;
-	wcscpy( pPrintSetting.m_szHeaderForm[0], L"$f" );
-	wcscpy( pPrintSetting.m_szHeaderForm[1], L"" );
-	wcscpy( pPrintSetting.m_szHeaderForm[2], L"" );
+	wcscpy_s( pPrintSetting.m_szHeaderForm[0], L"$f" );
+	wcscpy_s( pPrintSetting.m_szHeaderForm[1], L"" );
+	wcscpy_s( pPrintSetting.m_szHeaderForm[2], L"" );
 	pPrintSetting.m_bFooterUse[0] = TRUE;
 	pPrintSetting.m_bFooterUse[1] = FALSE;
 	pPrintSetting.m_bFooterUse[2] = FALSE;
-	wcscpy( pPrintSetting.m_szFooterForm[0], L"" );
-	wcscpy( pPrintSetting.m_szFooterForm[1], L"- $p -" );
-	wcscpy( pPrintSetting.m_szFooterForm[2], L"" );
+	wcscpy_s( pPrintSetting.m_szFooterForm[0], L"" );
+	wcscpy_s( pPrintSetting.m_szFooterForm[1], L"- $p -" );
+	wcscpy_s( pPrintSetting.m_szFooterForm[2], L"" );
 }
 
 

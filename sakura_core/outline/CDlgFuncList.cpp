@@ -554,9 +554,9 @@ void CDlgFuncList::SetData()
 			//	From Here Apr. 23, 2005 genta 行番号を左端へ
 			/* 行番号の表示 false=折り返し単位／true=改行単位 */
 			if (m_bLineNumIsCRLF) {
-				auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncLineCRLF );
+				auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncLineCRLF );
 			}else {
-				auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncLineLAYOUT );
+				auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncLineLAYOUT );
 			}
 			item.mask = LVIF_TEXT | LVIF_PARAM;
 			item.pszText = szText;
@@ -568,9 +568,9 @@ void CDlgFuncList::SetData()
 			// 2010.03.17 syat 桁追加
 			/* 行番号の表示 false=折り返し単位／true=改行単位 */
 			if (m_bLineNumIsCRLF) {
-				auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncColCRLF );
+				auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncColCRLF );
 			}else {
-				auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncColLAYOUT );
+				auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncColLAYOUT );
 			}
 			item.mask = LVIF_TEXT;
 			item.pszText = szText;
@@ -608,7 +608,7 @@ void CDlgFuncList::SetData()
 			/* クリップボードにコピーするテキストを編集 */
 			if (item.pszText[0] != _T('\0')) {
 				// 検出結果の種類(関数,,,)があるとき
-				auto_sprintf(
+				auto_sprintf_s(
 					szText,
 					_T("%ts(%d,%d): "),
 					m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
@@ -623,7 +623,7 @@ void CDlgFuncList::SetData()
 				m_cmemClipText.AppendString(L")\r\n");
 			}else {
 				// 検出結果の種類(関数,,,)がないとき
-				auto_sprintf(
+				auto_sprintf_s(
 					szText,
 					_T("%ts(%d,%d): "),
 					m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
@@ -1009,8 +1009,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 				htiClass = htiGlobal;
 			}
 		}
-		TCHAR*		pFuncName;
-		pFuncName = new TCHAR[ _tcslen(pWork) + m_pcFuncInfoArr->AppendTextLenMax() ];	// ↓で追加する文字列が収まるだけ確保
+		TCHAR* pFuncName = new TCHAR[ _tcslen(pWork) + m_pcFuncInfoArr->AppendTextLenMax() ];	// ↓で追加する文字列が収まるだけ確保
 		_tcscpy( pFuncName, pWork );
 
 		// 2002/10/27 frozen 追加文字列の種類を増やした
@@ -1034,7 +1033,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 
 		/* クリップボードにコピーするテキストを編集 */
 		WCHAR szText[2048];
-		auto_sprintf(
+		auto_sprintf_s(
 			szText,
 			L"%ts(%d,%d): ",
 			m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
@@ -1170,9 +1169,9 @@ void CDlgFuncList::SetListVB (void)
 		//	From Here Apr. 23, 2005 genta 行番号を左端へ
 		/* 行番号の表示 false=折り返し単位／true=改行単位 */
 		if (m_bLineNumIsCRLF) {
-			auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncLineCRLF );
+			auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncLineCRLF );
 		}else {
-			auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncLineLAYOUT );
+			auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncLineLAYOUT );
 		}
 		item.mask = LVIF_TEXT | LVIF_PARAM;
 		item.pszText = szText;
@@ -1184,9 +1183,9 @@ void CDlgFuncList::SetListVB (void)
 		// 2010.03.17 syat 桁追加
 		/* 行番号の表示 false=折り返し単位／true=改行単位 */
 		if (m_bLineNumIsCRLF) {
-			auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncColCRLF );
+			auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncColCRLF );
 		}else {
-			auto_sprintf( szText, _T("%d"), pcFuncInfo->m_nFuncColLAYOUT );
+			auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncColLAYOUT );
 		}
 		item.mask = LVIF_TEXT;
 		item.pszText = szText;
@@ -1211,7 +1210,7 @@ void CDlgFuncList::SetListVB (void)
 		if (1 == ((pcFuncInfo->m_nInfo >> 8) & 0x01)) {
 			// スタティック宣言(Static)
 			// 2006.12.12 Moca 末尾にスペース追加
-			_tcscpy(szOption, LS(STR_DLGFNCLST_VB_STATIC));
+			_tcscpy_s(szOption, LS(STR_DLGFNCLST_VB_STATIC));
 		}
 		switch ((pcFuncInfo->m_nInfo >> 4) & 0x0f) {
 		case 2  :	// プライベート(Private)
@@ -1228,40 +1227,40 @@ void CDlgFuncList::SetListVB (void)
 		int nInfo = pcFuncInfo->m_nInfo;
 		switch (nInfo & 0x0f) {
 		case 1:		// 関数(Function)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_FUNCTION));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_FUNCTION));
 			break;
 
 		// 2006.12.12 Moca ステータス→プロシージャに変更
 		case 2:		// プロシージャ(Sub)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_PROC));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_PROC));
 			break;
 
 		case 3:		// プロパティ 取得(Property Get)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_PROPGET));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_PROPGET));
 			break;
 
 		case 4:		// プロパティ 設定(Property Let)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_PROPLET));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_PROPLET));
 			break;
 
 		case 5:		// プロパティ 参照(Property Set)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_PROPSET));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_PROPSET));
 			break;
 
 		case 6:		// 定数(Const)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_CONST));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_CONST));
 			break;
 
 		case 7:		// 列挙型(Enum)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_ENUM));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_ENUM));
 			break;
 
 		case 8:		// ユーザ定義型(Type)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_TYPE));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_TYPE));
 			break;
 
 		case 9:		// イベント(Event)
-			_tcscpy(szType, LS(STR_DLGFNCLST_VB_EVENT));
+			_tcscpy_s(szType, LS(STR_DLGFNCLST_VB_EVENT));
 			break;
 
 		default:	// 未定義なのでクリア
@@ -1278,9 +1277,9 @@ void CDlgFuncList::SetListVB (void)
 			szTypeOption[0] = _T('\0');	//	2006.12.17 genta 全体を0で埋める必要はない
 		}else
 		if (szOption[0] == _T('\0')) {
-			auto_sprintf(szTypeOption, _T("%ts"), szType);
+			auto_sprintf_s(szTypeOption, _T("%ts"), szType);
 		}else {
-			auto_sprintf(szTypeOption, _T("%ts（%ts）"), szType, szOption);
+			auto_sprintf_s(szTypeOption, _T("%ts（%ts）"), szType, szOption);
 		}
 		item.pszText = szTypeOption;
 		item.iItem = i;
@@ -1291,7 +1290,7 @@ void CDlgFuncList::SetListVB (void)
 		if (item.pszText[0] != _T('\0')) {
 			// 検出結果の種類(関数,,,)があるとき
 			// 2006.12.12 Moca szText を自分自身にコピーしていたバグを修正
-			auto_sprintf(
+			auto_sprintf_s(
 				szText,
 				_T("%ts(%d,%d): "),
 				m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
@@ -1306,7 +1305,7 @@ void CDlgFuncList::SetListVB (void)
 			m_cmemClipText.AppendString(L")\r\n");
 		}else {
 			// 検出結果の種類(関数,,,)がないとき
-			auto_sprintf(
+			auto_sprintf_s(
 				szText,
 				_T("%ts(%d,%d): "),
 				m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
@@ -1355,7 +1354,6 @@ void CDlgFuncList::SetTree(bool tagjump)
 	HTREEITEM hItemSelectedTop = NULL;
 	HWND hwndTree = ::GetDlgItem( GetHwnd(), IDC_TREE_FL );
 
-	int i;
 	int nFuncInfoArrNum = m_pcFuncInfoArr->GetNum();
 	int nStackPointer = 0;
 	int nStackDepth = 32; // phParentStack の確保している数
@@ -1386,7 +1384,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 		m_cmemClipText.AllocStringBuffer( nBuffLen + nBuffLenTag * nCount );
 	}
 
-	for (i = 0; i < nFuncInfoArrNum; i++) {
+	for (int i = 0; i < nFuncInfoArrNum; i++) {
 		CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
 		/*	新しいアイテムを作成
@@ -1455,7 +1453,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 				m_cmemClipText.AppendStringT( m_pcFuncInfoArr->m_szFilePath.c_str() );
 				
 				WCHAR linenum[32];
-				auto_sprintf( linenum, L"(%d,%d): ",
+				auto_sprintf_s( linenum, L"(%d,%d): ",
 					pcFuncInfo->m_nFuncLineCRLF,				/* 検出行番号 */
 					pcFuncInfo->m_nFuncColCRLF					/* 検出桁番号 */
 				);

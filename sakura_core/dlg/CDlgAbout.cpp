@@ -166,9 +166,9 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	DWORD dwVersionMS, dwVersionLS;
 	GetAppVersionInfo( NULL, VS_VERSION_INFO, &dwVersionMS, &dwVersionLS );
 #if (SVN_REV == 0)
-	auto_sprintf( szMsg, _T("Ver. %d.%d.%d.%d\r\n"),
+	auto_sprintf_s( szMsg, _T("Ver. %d.%d.%d.%d\r\n"),
 #else
-	auto_sprintf( szMsg, _T("Ver. %d.%d.%d.%d (Rev.") _T(SVN_REV_STR) _T(")\r\n"),
+	auto_sprintf_s( szMsg, _T("Ver. %d.%d.%d.%d (Rev.") _T(SVN_REV_STR) _T(")\r\n"),
 #endif
 		HIWORD( dwVersionMS ),
 		LOWORD( dwVersionMS ),
@@ -180,7 +180,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	cmemMsg.AppendString( _T("\r\n") );
 
 	// 共有メモリ情報
-	auto_sprintf( szMsg,  _T("      Share Ver: %3d\r\n"),
+	auto_sprintf_s( szMsg,  _T("      Share Ver: %3d\r\n"),
 		N_SHAREDATA_VERSION
 	);
 	cmemMsg.AppendString( szMsg );
@@ -188,7 +188,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	// コンパイル情報
 	cmemMsg.AppendString( _T("      Compile Info: ") );
 	int Compiler_ver = COMPILER_VER;
-	auto_sprintf( szMsg, _T(COMPILER_TYPE) _T(TARGET_M_SUFFIX) _T("%d ")
+	auto_sprintf_s( szMsg, _T(COMPILER_TYPE) _T(TARGET_M_SUFFIX) _T("%d ")
 			TSTR_TARGET_MODE _T(" WIN%03x/I%03x/C%03x/N%03x\r\n"),
 		Compiler_ver,
 		WINVER, _WIN32_IE, MY_WIN32_WINDOWS, MY_WIN32_WINNT
@@ -198,7 +198,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	// 更新日情報
 	CFileTime cFileTime;
 	GetLastWriteTimestamp( szFile, &cFileTime );
-	auto_sprintf( szMsg,  _T("      Last Modified: %d/%d/%d %02d:%02d:%02d\r\n"),
+	auto_sprintf_s( szMsg,  _T("      Last Modified: %d/%d/%d %02d:%02d:%02d\r\n"),
 		cFileTime->wYear,
 		cFileTime->wMonth,
 		cFileTime->wDay,

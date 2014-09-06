@@ -62,7 +62,7 @@ BOOL SelectDir( HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TC
 	BOOL	bRes;
 	TCHAR	szInitFolder[MAX_PATH];
 
-	_tcscpy( szInitFolder, pszInitFolder );
+	_tcscpy_s( szInitFolder, pszInitFolder );
 	/* フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない*/
 	CutLastYenFromDirectoryPath( szInitFolder );
 
@@ -310,7 +310,6 @@ DWORD NetConnect ( const TCHAR strNetWorkPass[] )
 	DWORD dwRet;				//戻り値　エラーコードはWINERROR.Hを参照
 	TCHAR sTemp[256];
 	TCHAR sDrive[] = _T("");
-    int i;
 
 	if (_tcslen(strNetWorkPass) < 3)	return ERROR_BAD_NET_NAME;  //UNCではない。
 	if (strNetWorkPass[0] != _T('\\') && strNetWorkPass[1] != _T('\\'))	return ERROR_BAD_NET_NAME;  //UNCではない。
@@ -318,8 +317,11 @@ DWORD NetConnect ( const TCHAR strNetWorkPass[] )
 	//3文字目から数えて最初の\の直前までを切り出す
 	sTemp[0] = _T('\\');
 	sTemp[1] = _T('\\');
+    int i;
 	for (i = 2; strNetWorkPass[i] != _T('\0'); i++) {
-		if (strNetWorkPass[i] == _T('\\')) break;
+		if (strNetWorkPass[i] == _T('\\')) {
+			break;
+		}
 		sTemp[i] = strNetWorkPass[i];
 	}
 	sTemp[i] = _T('\0');	//終端

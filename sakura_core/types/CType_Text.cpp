@@ -30,8 +30,8 @@ void CType_Text::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
 	pType->m_bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
 	pType->m_bKinsokuKuto = false;								// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	wcscpy( pType->m_szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠" );		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
-	wcscpy( pType->m_szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥" );		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
+	wcscpy_s( pType->m_szKinsokuHead, L"!%),.:;?]}￠°’”‰′″℃、。々〉》」』】〕゛゜ゝゞ・ヽヾ！％），．：；？］｝｡｣､･ﾞﾟ￠" );		/* 行頭禁則 */	//@@@ 2002.04.13 MIK 
+	wcscpy_s( pType->m_szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥" );		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
 	// pType->m_szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
 
 	//※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
@@ -100,10 +100,9 @@ void CDocOutline::MakeTopicList_txt( CFuncInfoArr* pcFuncInfoArr )
 		}
 
 		//先頭文字が見出し記号のいずれかであれば、次へ進む
-		int j;
-		int nCharChars;
+		int nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
 		int nCharChars2;
-		nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
+		int j;
 		for (j = 0; j < nStartsLen; j += nCharChars2) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars2 = CNativeW::GetSizeOfChar( pszStarts, nStartsLen, j );
@@ -119,9 +118,9 @@ void CDocOutline::MakeTopicList_txt( CFuncInfoArr* pcFuncInfoArr )
 
 		//見出し種類の判別 -> szTitle
 		if (pLine[i] == L'(') {
-			     if (IsInRange(pLine[i + 1], L'0', L'9')) wcscpy( szTitle, L"(0)" ); //数字
-			else if (IsInRange(pLine[i + 1], L'A', L'Z')) wcscpy( szTitle, L"(A)" ); //英大文字
-			else if (IsInRange(pLine[i + 1], L'a', L'z')) wcscpy( szTitle, L"(a)" ); //英小文字
+			     if (IsInRange(pLine[i + 1], L'0', L'9')) wcscpy_s( szTitle, L"(0)" ); //数字
+			else if (IsInRange(pLine[i + 1], L'A', L'Z')) wcscpy_s( szTitle, L"(A)" ); //英大文字
+			else if (IsInRange(pLine[i + 1], L'a', L'z')) wcscpy_s( szTitle, L"(a)" ); //英小文字
 			else continue; //※「(」の次が英数字で無い場合、見出しとみなさない
 		}
 		else if (IsInRange(pLine[i], L'０', L'９')) wcscpy( szTitle, L"０" ); // 全角数字
@@ -198,7 +197,7 @@ void CDocOutline::MakeTopicList_txt( CFuncInfoArr* pcFuncInfoArr )
 		}else if (nMaxStack > k) {
 			//	いままでに同じ見出しが存在しなかった。
 			//	ので、pszStackにコピーしてAppendData.
-			wcscpy(pszStack[nDepth], szTitle);
+			wcscpy_s(pszStack[nDepth], szTitle);
 		}else {
 			// 2002.11.03 Moca 最大値を超えるとバッファオーバーラン
 			// nDepth = nMaxStack;
@@ -270,7 +269,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 			}
 			levelPrev = level;
 
-			nLength = auto_sprintf(szTitle,L"%d - ", level );
+			nLength = auto_sprintf_s(szTitle, L"%d - ", level );
 			
 			wchar_t *pDest = szTitle + nLength; // 書き込み先
 			wchar_t *pDestEnd = szTitle + _countof(szTitle) - 2;

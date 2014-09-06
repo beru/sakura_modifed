@@ -77,7 +77,7 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 	}
 
 	// 他のウィンドウで既に開かれている場合は、それをアクティブにする
-	HWND	hWndOwner;
+	HWND hWndOwner;
 	if (CShareData::getInstance()->ActiveAlreadyOpenedWindow(pLoadInfo->cFilePath, &hWndOwner, pLoadInfo->eCharCode)) {
 		pLoadInfo->bOpened = true;
 		return CALLBACK_INTERRUPT;

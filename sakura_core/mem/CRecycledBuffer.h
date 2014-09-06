@@ -49,7 +49,7 @@ public:
 	)
 	{
 		if (nCount) {
-			*nCount = BLOCK_SIZE/sizeof(T);
+			*nCount = BLOCK_SIZE / sizeof(T);
 		}
 		m_current = (m_current+1) % CHAIN_COUNT;
 		return reinterpret_cast<T*>(m_buf[m_current]);
@@ -104,7 +104,7 @@ public:
 		if (m_buf[m_current]) {
 			delete[] m_buf[m_current];
 		}
-		m_buf[m_current] = new BYTE[nCount*sizeof(T)];
+		m_buf[m_current] = new BYTE[nCount * sizeof(T)];
 
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}

@@ -76,6 +76,6 @@ int CRecentExceptMRU::CompareItem( const CMetaPath* p1, LPCTSTR p2 ) const
 
 void CRecentExceptMRU::CopyItem( CMetaPath* dst, LPCTSTR src ) const
 {
-	_tcscpy(*dst,src);
+	_tcscpy(*dst, src);
 }
 

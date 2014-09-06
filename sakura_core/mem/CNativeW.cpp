@@ -82,7 +82,7 @@ void CNativeW::AppendString( const wchar_t* pszData, int nLength )
 //! バッファの最後にデータを追加する
 void CNativeW::AppendNativeData( const CNativeW& cmemData )
 {
-	AppendString(cmemData.GetStringPtr(),cmemData.GetStringLength());
+	AppendString(cmemData.GetStringPtr(), cmemData.GetStringLength());
 }
 
 // -- -- charからの移行用 -- -- //

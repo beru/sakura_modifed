@@ -105,7 +105,7 @@ void CViewCommander::Command_GREP( void )
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 		}
 	}else {

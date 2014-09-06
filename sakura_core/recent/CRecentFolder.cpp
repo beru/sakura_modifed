@@ -76,6 +76,6 @@ int CRecentFolder::CompareItem( const CPathString* p1, LPCTSTR p2 ) const
 
 void CRecentFolder::CopyItem( CPathString* dst, LPCTSTR src ) const
 {
-	_tcscpy(*dst,src);
+	_tcscpy(*dst, src);
 }
 

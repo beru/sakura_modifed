@@ -361,7 +361,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 				}
 				pFuncWk = &msMenu[tvi.lParam];
 				if (pFuncWk->m_nFunc != F_SEPARATOR) {
-					auto_sprintf( szKey, _T("%ls"), pFuncWk->m_sKey);
+					auto_sprintf_s( szKey, _T("%ls"), pFuncWk->m_sKey);
 
 					if (!cDlgInput1.DoModal(
 							G_AppInstance(),
@@ -373,7 +373,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 					) {
 						return TRUE;
 					}
-					auto_sprintf( pFuncWk->m_sKey, L"%ts", szKey);
+					auto_sprintf_s( pFuncWk->m_sKey, L"%ts", szKey);
 					pFuncWk->m_bDupErr = false;
 
 					tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;

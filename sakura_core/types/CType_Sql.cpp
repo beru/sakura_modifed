@@ -16,7 +16,7 @@ void CType_Sql::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_cLineComment.CopyTo( 0, L"--", -1 );					/* 行コメントデリミタ */
 	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );	/* ブロックコメントデリミタ */
 	pType->m_nStringType = STRING_LITERAL_PLSQL;					/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-	wcscpy( pType->m_szIndentChars, L"|★" );						/* その他のインデント対象文字 */
+	wcscpy_s(pType->m_szIndentChars, L"|★");						/* その他のインデント対象文字 */
 	pType->m_nKeyWordSetIdx[0] = 2;									/* キーワードセット */
 	pType->m_eDefaultOutline = OUTLINE_PLSQL;						/* アウトライン解析方法 */
 }
@@ -127,7 +127,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 							4 == nFuncOrProc
 						) {
 							++nParseCnt;
-							wcscpy( szFuncName, szWord );
+							wcscpy_s(szFuncName, szWord);
 //						}else
 //						if( 3 == nFuncOrProc ){
 
@@ -194,7 +194,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 							}
 						}
 					}
-					wcscpy( szWordPrev, szWord );
+					wcscpy_s(szWordPrev, szWord);
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
@@ -222,7 +222,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 					 L'-' == pLine[i] ||
 					 2 == nCharChars
 				) {
-					wcscpy( szWordPrev, szWord );
+					wcscpy_s(szWordPrev, szWord);
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
@@ -307,7 +307,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 						)
 						|| 2 == nCharChars
 					) {
-						wcscpy( szWordPrev, szWord );
+						wcscpy_s(szWordPrev, szWord);
 						nWordIdx = 0;
 
 //						szWord[nWordIdx] = pLine[i];
@@ -318,7 +318,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 
 						nMode = 1;
 					}else {
-						wcscpy( szWordPrev, szWord );
+						wcscpy_s(szWordPrev, szWord);
 						nWordIdx = 0;
 //						szWord[nWordIdx] = pLine[i];
 //						szWord[nWordIdx + 1] = '\0';

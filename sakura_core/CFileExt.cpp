@@ -37,7 +37,7 @@ CFileExt::CFileExt()
 {
 	m_puFileExtInfo = NULL;
 	m_nCount = 0;
-	_tcscpy( m_szFilter, _T("") );
+	m_szFilter[0] = 0;
 
 //	//テキストエディタとして、既定でリストに載ってほしい拡張子
 //	AppendExt( "すべてのファイル", "*" );
@@ -55,7 +55,7 @@ CFileExt::~CFileExt()
 
 bool CFileExt::AppendExt( const TCHAR *pszName, const TCHAR *pszExt )
 {
-	TCHAR	szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
+	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
 	if (!ConvertTypesExtToDlgExt( pszExt, szWork )) {
 		return false;
@@ -65,8 +65,6 @@ bool CFileExt::AppendExt( const TCHAR *pszName, const TCHAR *pszExt )
 
 bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 {
-	FileExtInfoTag	*p;
-
 	if (NULL == pszName || pszName[0] == _T('\0')) {
 		return false;
 	}
@@ -74,6 +72,7 @@ bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 		return false;
 	}
 
+	FileExtInfoTag* p;
 	if (NULL == m_puFileExtInfo) {
 		p = (FileExtInfoTag*)malloc( sizeof( FileExtInfoTag ) * 1 );
 		if (NULL == p) {
@@ -87,8 +86,8 @@ bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 	}
 	m_puFileExtInfo = p;
 
-	_tcscpy( m_puFileExtInfo[m_nCount].m_szName, pszName );
-	_tcscpy( m_puFileExtInfo[m_nCount].m_szExt, pszExt );
+	_tcscpy_s( m_puFileExtInfo[m_nCount].m_szName, pszName );
+	_tcscpy_s( m_puFileExtInfo[m_nCount].m_szExt, pszExt );
 	m_nCount++;
 
 	return true;
@@ -112,14 +111,12 @@ const TCHAR* CFileExt::GetExt( int nIndex )
 
 const TCHAR* CFileExt::GetExtFilter( void )
 {
-	int		i;
-	TCHAR	szWork[_countof(m_puFileExtInfo[0].m_szName) + _countof(m_puFileExtInfo[0].m_szExt)*2 + 10];
-
 	/* 拡張子フィルタの作成 */
-	_tcscpy( m_szFilter, _T("") );
+	m_szFilter[0] = 0;
 
-	for (i = 0; i < m_nCount; i++) {
-		auto_sprintf( szWork,
+	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szName) + _countof(m_puFileExtInfo[0].m_szExt)*2 + 10];
+	for (int i = 0; i < m_nCount; i++) {
+		auto_sprintf_s( szWork,
 			_T("%ts (%ts)|%ts|"),
 			m_puFileExtInfo[i].m_szName,
 			m_puFileExtInfo[i].m_szExt,
@@ -130,7 +127,7 @@ const TCHAR* CFileExt::GetExtFilter( void )
 	_tcscat( m_szFilter, _T("|") );
 
 	//区切りは０なので置き換える。
-	for (i = 0; m_szFilter[i] != _T('\0'); i++) {
+	for (int i = 0; m_szFilter[i] != _T('\0'); i++) {
 		if (m_szFilter[i] == _T('|')) {
 			m_szFilter[i] = _T('\0');
 		}
@@ -145,9 +142,6 @@ const TCHAR* CFileExt::GetExtFilter( void )
 */
 bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt )
 {
-	TCHAR* token;
-	TCHAR* p;
-
 	//	2003.08.14 MIK NULLじゃなくてfalse
 	if (NULL == pszSrcExt) {
 		return false;
@@ -156,10 +150,10 @@ bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt
 		return false;
 	}
 
-	p = _tcsdup( pszSrcExt );
-	_tcscpy( pszDstExt, _T("") );
+	TCHAR* p = _tcsdup( pszSrcExt );
+	pszDstExt[0] = 0;
 
-	token = _tcstok( p, _T(" ;,") );
+	TCHAR* token = _tcstok( p, _T(" ;,") );
 	while (token) {
 		if (_T('.') == *token) {
 			_tcscat( pszDstExt, _T("*") );

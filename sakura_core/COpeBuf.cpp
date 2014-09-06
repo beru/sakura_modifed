@@ -117,12 +117,11 @@ COpeBlk* COpeBuf::DoUndo( bool* pbModified )
 /* 現在のRedo対象の操作ブロックを返す */
 COpeBlk* COpeBuf::DoRedo( bool* pbModified )
 {
-	COpeBlk* pcOpeBlk;
 	/* Redo可能な状態か */
 	if (!IsEnableRedo()) {
 		return NULL;
 	}
-	pcOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
+	COpeBlk* pcOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
 	m_nCurrentPointer++;
 	if (m_nCurrentPointer == m_nNoModifiedIndex) {		/* 無変更な状態になった位置 */
 		*pbModified = false;
@@ -141,10 +140,9 @@ COpeBlk* COpeBuf::DoRedo( bool* pbModified )
 void COpeBuf::DUMP()
 {
 #ifdef _DEBUG
-	int i;
 	MYTRACE( _T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer );
 	int size = (int)m_vCOpeBlkArr.size();
-	for (i = 0; i < size; ++i) {
+	for (int i = 0; i < size; ++i) {
 		MYTRACE( _T("COpeBuf.m_vCOpeBlkArr[%d]----\n"), i );
 		m_vCOpeBlkArr[i]->DUMP();
 	}

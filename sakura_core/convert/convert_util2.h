@@ -674,7 +674,7 @@ finish_first_detect:;
 	//
 
 	if (pSrc+nLen_part1+2 >= pSrc+nSrcLen) {
-		pcMem_alt->SetRawData( "", 0 );
+		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
 	if (sizeof(CHAR_TYPE) == 2) {
@@ -689,7 +689,7 @@ finish_first_detect:;
 	}else if (ncmpresult2 == 0) {
 		emethod = EM_QP;
 	}else {
-		pcMem_alt->SetRawData( "", 0 );
+		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
 	nLen_part2 = 2;
@@ -711,7 +711,7 @@ finish_first_detect:;
 		}
 	}
 	if (pr == pSrc+nSrcLen-1) {
-		pcMem_alt->SetRawData( "", 0 );
+		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
 
@@ -723,7 +723,7 @@ finish_first_detect:;
 	pcMem_alt->AllocBuffer( pr - pr_base );
 	pdst = reinterpret_cast<char*>( pcMem_alt->GetRawPtr() );
 	if (pdst == NULL) {
-		pcMem_alt->SetRawData( "", 0 );
+		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
 

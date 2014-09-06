@@ -72,7 +72,7 @@ void CKeyMacroMgr::Append(
 	CEditView*		pcEditView
 )
 {
-	CMacro* macro = new CMacro( nFuncID );
+	auto macro = new CMacro( nFuncID );
 	macro->AddLParam( lParams, pcEditView );
 	Append(macro);
 }

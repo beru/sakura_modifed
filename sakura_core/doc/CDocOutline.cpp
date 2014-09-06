@@ -225,7 +225,7 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 	// çÄñ⁄ñºÇÕÉOÉãÅ[Évñº
 	if (test[0].nLength == 0) {
 		const wchar_t* g = test[0].szGroupName;
-		wcscpy(pszStack[0], g);
+		wcscpy_s(pszStack[0], g);
 		nLvStack[0] = test[0].nLv;
 		const wchar_t *p = wcschr(g, L',');
 		int len;
@@ -264,12 +264,12 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 		for (j = 0; j < nCount; j++) {
 			if (bRegex) {
 				if (0 < test[j].nLength && pRegex[j].Match( pLine, nLineLen, 0 )) {
-					wcscpy( szTitle, test[j].szGroupName );
+					wcscpy_s( szTitle, test[j].szGroupName );
 					break;
 				}
 			}else {
 				if (0 < test[j].nLength && 0 == wcsncmp( &pLine[i], test[j].szMatch, test[j].nLength )) {
-					wcscpy( szTitle, test[j].szGroupName );
+					wcscpy_s( szTitle, test[j].szGroupName );
 					break;
 				}
 			}
@@ -333,7 +333,7 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 			if (k < 0) {
 				k = 0;
 			}
-			wcscpy(pszStack[k], szTitle);
+			wcscpy_s(pszStack[k], szTitle);
 			nLvStack[k] = test[j].nLv;
 			nDepth = k;
 		}else {

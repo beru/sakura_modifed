@@ -1556,9 +1556,8 @@ const TCHAR* CMenuDrawer::GetLabel( int nFuncID )
 
 TCHAR CMenuDrawer::GetAccelCharFromLabel( const TCHAR* pszLabel )
 {
-	int i;
 	int nLen = (int)_tcslen( pszLabel );
-	for (i = 0; i + 1 < nLen; ++i) {
+	for (int i = 0; i + 1 < nLen; ++i) {
 		if (_T('&') == pszLabel[i]) {
 			if (_T('&') == pszLabel[i + 1]) {
 				i++;
@@ -1578,9 +1577,8 @@ struct WorkData{
 /*! メニューアクセスキー押下時の処理(WM_MENUCHAR処理) */
 LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	TCHAR				chUser;
-	HMENU				hmenu;
-	int i;
+	TCHAR chUser;
+	HMENU hmenu;
 	chUser = (TCHAR) LOWORD(wParam);	// character code
 	hmenu = (HMENU) lParam;				// handle to menu
 //	MYTRACE( _T("::GetMenuItemCount( %xh )==%d\n"), hmenu, ::GetMenuItemCount( hmenu ) );
@@ -1595,7 +1593,7 @@ LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	// 2011.11.18 vector化
 	std::vector<WorkData> vecAccel;
 	size_t nAccelSel = 99999;
-	for (i = 0; i < ::GetMenuItemCount( hmenu ); i++) {
+	for (int i = 0; i < ::GetMenuItemCount( hmenu ); i++) {
 		TCHAR	szText[1024];
 		// メニュー項目に関する情報を取得します。
 		MENUITEMINFO		mii;

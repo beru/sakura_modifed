@@ -180,13 +180,11 @@ const TCHAR* CFuncLookup::Category2Name( int category ) const
 */
 void CFuncLookup::SetCategory2Combo( HWND hComboBox ) const
 {
-	int i;
-
 	//	コンボボックスを初期化する
 	Combo_ResetContent( hComboBox );
 
 	//	固定機能リスト
-	for (i = 0; i < nsFuncCode::nFuncKindNum; ++i) {
+	for (int i = 0; i < nsFuncCode::nFuncKindNum; ++i) {
 		Combo_AddString( hComboBox, LS( nsFuncCode::ppszFuncKind[i] ) );
 	}
 
@@ -208,14 +206,11 @@ void CFuncLookup::SetCategory2Combo( HWND hComboBox ) const
 void CFuncLookup::SetListItem( HWND hListBox, int category ) const
 {
 	WCHAR pszLabel[256];
-	int n;
-	int i;
-
 	//	リストを初期化する
 	List_ResetContent( hListBox );
 
-	n = GetItemCount( category );
-	for (i = 0; i < n; i++) {
+	int n = GetItemCount( category );
+	for (int i = 0; i < n; i++) {
 		if (Pos2FuncCode( category, i ) == F_DISABLE)
 			continue;
 		Pos2FuncName( category, i, pszLabel, _countof(pszLabel) );

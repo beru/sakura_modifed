@@ -511,7 +511,7 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	}
 
 	// 1文字データバッファ
-	cCharBuffer.SetRawData("",0);
+	cCharBuffer.SetRawData("", 0);
 	cCharBuffer.AppendRawData( cSrc, sizeof(wchar_t));
 
 	// EUC-JP 変換

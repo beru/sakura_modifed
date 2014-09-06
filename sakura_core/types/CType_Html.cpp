@@ -123,7 +123,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				都度比較するのはコストが高いので、最初に分類しておく。 2008.08.15 aroka
 				比較の回数が多いため、小文字に変換しておいてstrcmpを使う。
 			*/
-			wcscpy( szTag, szTitle );
+			wcscpy_s(szTag, szTitle);
 			_wcslwr( szTag );
 			
 			nLabelType = LT_DEFAULT;
@@ -214,7 +214,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 
 					if (nLabelType!=LT_EMPTY) {
 						// 終了タグなしを除く全てのタグらしきものを判定
-						wcscpy(pszStack[nDepth],szTitle);
+						wcscpy_s(pszStack[nDepth], szTitle);
 						k = j;
 						if (j < _countof(szTitle)-3) {
 							for (;i+j<nLineLen;j++) {

@@ -65,7 +65,7 @@ bool CRecentFile::TextToDataType( EditInfo* dst, LPCTSTR pszText ) const
 	if (_countof(dst->m_szPath) < auto_strlen(pszText) + 1) {
 		return false;
 	}
-	_tcscpy(dst->m_szPath, pszText);
+	_tcscpy_s(dst->m_szPath, pszText);
 	return true;
 }
 

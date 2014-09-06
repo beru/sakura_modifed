@@ -268,8 +268,8 @@ INT_PTR CPropFileName::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 */
 void CPropFileName::SetData( HWND hwndDlg )
 {
-	int nIndex;
 	int i;
+	int nIndex;
 	LVITEM lvItem;
 
 	// ファイル名置換リスト

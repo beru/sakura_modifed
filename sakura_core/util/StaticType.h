@@ -99,6 +99,7 @@ public:
 	//簡易データアクセス
 	operator       CHAR_TYPE*()      { return m_szData; }
 	operator const CHAR_TYPE*() const{ return m_szData; }
+
 	CHAR_TYPE At(int nIndex) const{ return m_szData[nIndex]; }
 
 	//簡易コピー

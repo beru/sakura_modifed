@@ -306,7 +306,7 @@ void CPropFile::SetData( HWND hwndDlg )
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 35791 ? 35791 : nN;
 
-	auto_sprintf( buf, _T("%d"), nN);
+	auto_sprintf_s( buf, _T("%d"), nN);
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, buf );
 	//	To Here Aug. 21, 2000 genta
 

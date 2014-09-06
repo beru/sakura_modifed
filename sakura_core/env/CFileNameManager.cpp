@@ -51,7 +51,6 @@
 */
 LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen )
 {
-	int i;
 	TCHAR szBuf[_MAX_PATH + 1];
 
 	if (-1 == m_nTransformFileNameCount) {
@@ -63,8 +62,8 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 			m_szTransformFileNameFromExp[0],
 			m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
-		for (i = 1; i < m_nTransformFileNameCount; i++) {
-			_tcscpy( szBuf, pszDest );
+		for (int i = 1; i < m_nTransformFileNameCount; i++) {
+			_tcscpy_s( szBuf, pszDest );
 			GetFilePathFormat( szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
 				m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]] );
@@ -83,9 +82,8 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 	@date 2003.06.23 Moca ä÷êîñºïœçX
 */
 int CFileNameManager::TransformFileName_MakeCache( void ){
-	int i;
 	int nCount = 0;
-	for (i = 0; i < m_pShareData->m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
+	for (int i = 0; i < m_pShareData->m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
 		if (L'\0' != m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i][0]) {
 			if (ExpandMetaToFolder( m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i],
 			 m_szTransformFileNameFromExp[nCount], _MAX_PATH )
@@ -246,7 +244,7 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 					; // ì«Ç›îÚÇŒÇ∑
 				for (; nMetaLen == pAlias->nLenth; pAlias++) {
 					if (0 == auto_stricmp( pAlias->szAlias, szMeta )) {
-						_tcscpy( szMeta, pAlias->szOrig );
+						_tcscpy_s( szMeta, pAlias->szOrig );
 						break;
 					}
 				}
@@ -267,7 +265,7 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 					if (NULL != pStr) {
 						nPathLen = _tcslen( pStr );
 						if (nPathLen < _MAX_PATH) {
-							_tcscpy( szPath, pStr );
+							_tcscpy_s( szPath, pStr );
 						}else {
 							*pd = _T('\0');
 							return false;

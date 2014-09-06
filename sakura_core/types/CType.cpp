@@ -137,7 +137,7 @@ void _DefaultConfig(STypeConfig* pType)
 	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		pType->m_nKeyWordSetIdx[i] = -1;
 	}
-	wcscpy( pType->m_szTabViewString, _EDITL("^       ") );	/* TAB表示文字列 */
+	wcscpy_s( pType->m_szTabViewString, _EDITL("^       ") );	/* TAB表示文字列 */
 	pType->m_bTabArrow = TABARROW_STRING;	/* タブ矢印表示 */	// 2001.12.03 hor	// default on 2013/4/11 Uchi
 	pType->m_bInsSpace = false;				/* スペースの挿入 */	// 2001.12.03 hor
 	
@@ -152,12 +152,12 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_bStringLineOnly = false;
 	pType->m_bStringEndLine  = false;
 	pType->m_nHeredocType = HEREDOC_PHP;
-	wcscpy( pType->m_szIndentChars, L"" );		/* その他のインデント対象文字 */
+	pType->m_szIndentChars[0] = 0;		/* その他のインデント対象文字 */
 
 	pType->m_nColorInfoArrNum = COLORIDX_LAST;
 
 	// 2001/06/14 Start by asa-o
-	_tcscpy( pType->m_szHokanFile, _T("") );		/* 入力補完 単語ファイル */
+	pType->m_szHokanFile[0] = 0;		/* 入力補完 単語ファイル */
 	// 2001/06/14 End
 
 	pType->m_nHokanType = 0;
@@ -223,9 +223,9 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_bKinsokuTail = false;					// 行末禁則				//@@@ 2002.04.08 MIK
 	pType->m_bKinsokuRet  = false;					// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
 	pType->m_bKinsokuKuto = false;					// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	wcscpy( pType->m_szKinsokuHead, L"" );			// 行頭禁則				//@@@ 2002.04.08 MIK
-	wcscpy( pType->m_szKinsokuTail, L"" );			// 行末禁則				//@@@ 2002.04.08 MIK
-	wcscpy( pType->m_szKinsokuKuto, L"、。，．､｡,." );	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
+	pType->m_szKinsokuHead[0] = 0;					// 行頭禁則				//@@@ 2002.04.08 MIK
+	pType->m_szKinsokuTail[0] = 0;					// 行末禁則				//@@@ 2002.04.08 MIK
+	wcscpy_s(pType->m_szKinsokuKuto, L"、。，．､｡,.");	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
 
 	pType->m_bUseDocumentIcon = false;				// 文書に関連づけられたアイコンを使う
 

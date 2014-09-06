@@ -60,7 +60,7 @@ CFuncKeyWnd::CFuncKeyWnd()
 	m_pShareData = &GetDllShareData();
 	m_nCurrentKeyState = -1;
 	for (i = 0; i < _countof(m_szFuncNameArr); ++i) {
-		wcscpy( m_szFuncNameArr[i], LTEXT("") );
+		m_szFuncNameArr[i][0] = 0;
 	}
 //	2002.11.04 Moca Open()側で設定
 //	m_nButtonGroupNum = 4;
@@ -312,7 +312,7 @@ LRESULT CFuncKeyWnd::OnTimer( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			if (nFuncCode != m_nFuncCodeArr[i]) {
 				m_nFuncCodeArr[i] = nFuncCode;
 				if (0 == m_nFuncCodeArr[i]) {
-					wcscpy( m_szFuncNameArr[i], LTEXT("") );
+					m_szFuncNameArr[i][0] = 0;
 				}else {
 					//	Oct. 2, 2001 genta
 					m_pcEditDoc->m_cFuncLookup.Funccode2Name(
@@ -347,13 +347,11 @@ LRESULT CFuncKeyWnd::OnTimer( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 // WM_DESTROY処理
 LRESULT CFuncKeyWnd::OnDestroy( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	int i;
-
 	/* タイマーを削除 */
 	Timer_ONOFF( false ); // 20060126 aroka
 
 	/* ボタンを削除 */
-	for (i = 0; i < _countof( m_hwndButtonArr ); ++i) {
+	for (int i = 0; i < _countof( m_hwndButtonArr ); ++i) {
 		if (NULL != m_hwndButtonArr[i]) {
 			::DestroyWindow( m_hwndButtonArr[i]	);
 			m_hwndButtonArr[i] = NULL;

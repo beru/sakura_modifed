@@ -186,7 +186,7 @@ struct SSearchOption{
 	bool operator == (const SSearchOption& rhs) const
 	{
 		//‚Æ‚è‚ ‚¦‚¸memcmp‚Å‚¢‚¢‚â
-		return memcmp(this,&rhs,sizeof(*this))==0;
+		return memcmp(this, &rhs, sizeof(*this)) == 0;
 	}
 	bool operator != (const SSearchOption& rhs) const
 	{

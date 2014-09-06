@@ -71,11 +71,11 @@ bool CRecentTagjumpKeyword::TextToDataType( CTagjumpKeywordString* dst, LPCTSTR 
 
 int CRecentTagjumpKeyword::CompareItem( const CTagjumpKeywordString* p1, LPCWSTR p2 ) const
 {
-	return wcscmp(*p1,p2);
+	return wcscmp(*p1, p2);
 }
 
 void CRecentTagjumpKeyword::CopyItem( CTagjumpKeywordString* dst, LPCWSTR src ) const
 {
-	wcscpy(*dst,src);
+	wcscpy(*dst, src);
 }
 

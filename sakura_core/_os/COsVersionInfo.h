@@ -208,16 +208,6 @@ protected:
 	static bool m_bWine;
 };
 
-
-
-inline bool IsWin32NT() {
-#if (WINVER >= _WIN32_WINNT_WIN2K)
-	return true;
-#else
-	return COsVersionInfo()._IsWin32NT();
-#endif
-}
-
 inline bool HasWinHelpContentsProblem() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return false;
@@ -263,14 +253,6 @@ inline bool IsWin2000_or_later() {
 	return true;
 #else
 	return COsVersionInfo()._IsWin2000_or_later();
-#endif
-}
-
-inline bool IsWinMe() {
-#if (WINVER >= _WIN32_WINNT_WIN2K)
-	return false;
-#else
-	return COsVersionInfo()._IsWinMe();
 #endif
 }
 

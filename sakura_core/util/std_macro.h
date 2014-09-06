@@ -72,19 +72,6 @@ T t_unit(T t)
 		0;
 }
 
-
-/*
-	2007.10.19 kobake
-	_countofマクロ。_countofが使えない古いコンパイラ用。
-
-	ただし、他の場所でテンプレートごりごり使っているので、
-	どっちにしろ古い環境でビルドは通らない予感。
-*/
-
-#ifndef _countof
-#define _countof(A) (sizeof(A)/sizeof(A[0]))
-#endif
-
 //sizeof
 #define sizeof_raw(V)  sizeof(V)
 #define sizeof_type(V) sizeof(V)
@@ -103,4 +90,19 @@ T t_unit(T t)
 
 //ビルド種に関係なく、ANSI。
 #define ATEXT(A) A
+
+// http://bits.stephan-brumme.com/roundUpToNextPowerOfTwo.html
+static inline
+unsigned int roundUpToNextPowerOfTwo(unsigned int x)
+{
+	x--;
+	x |= x >> 1;  // handle  2 bit numbers
+	x |= x >> 2;  // handle  4 bit numbers
+	x |= x >> 4;  // handle  8 bit numbers
+	x |= x >> 8;  // handle 16 bit numbers
+	x |= x >> 16; // handle 32 bit numbers
+	x++;
+
+	return x;
+}
 

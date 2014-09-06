@@ -77,9 +77,8 @@ COpe* COpeBlk::GetOpe( int nIndex )
 void COpeBlk::DUMP( void )
 {
 #ifdef _DEBUG
-	int i;
 	int size = GetNum();
-	for (i = 0; i < size; ++i) {
+	for (int i = 0; i < size; ++i) {
 		MYTRACE( _T("\tCOpeBlk.m_ppCOpeArr[%d]----\n"), i );
 		m_ppCOpeArr[i]->DUMP();
 	}

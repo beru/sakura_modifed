@@ -94,10 +94,10 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 	wchar_t szBuff[10];
 	CLogicInt	nLinePos=CLogicInt(0);
 	pCDocLine = m_pcDocLineMgr->GetLine( nLinePos );
-	wcscpy( szText, L"" );
+	szText[0] = 0;
 	while (pCDocLine) {
 		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
-			auto_sprintf( szBuff, L"%d,",nLinePos );
+			auto_sprintf_s( szBuff, L"%d,",nLinePos );
 			if (wcslen(szBuff)+wcslen(szText)>MAX_MARKLINES_LEN) break;	//2002.01.17
 			wcscat( szText, szBuff);
 		}

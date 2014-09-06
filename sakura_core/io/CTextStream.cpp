@@ -22,8 +22,8 @@ CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 		// BOM確認 -> m_bIsUtf8
 		static const BYTE UTF8_BOM[]={0xEF,0xBB,0xBF};
 		BYTE buf[3];
-		if (sizeof(UTF8_BOM) == fread(&buf,1,sizeof(UTF8_BOM),GetFp())) {
-			m_bIsUtf8 = (memcmp(buf,UTF8_BOM,sizeof(UTF8_BOM))==0);
+		if (sizeof(UTF8_BOM) == fread(&buf,1, sizeof(UTF8_BOM), GetFp())) {
+			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM))==0);
 		}
 
 		// UTF-8じゃなければ、ファイルポインタを元に戻す
@@ -70,7 +70,7 @@ wstring CTextInputStream::ReadLineW()
 		if (c == '\n') {
 			break;
 		}
-		line.AppendRawData(&c,sizeof(char));
+		line.AppendRawData(&c, sizeof(char));
 	}
 
 	// UTF-8 → UNICODE
@@ -152,7 +152,7 @@ void CTextOutputStream::WriteString(
 			fwrite(cDst.GetRawPtr(),1,cDst.GetRawLength(),GetFp());
 
 			// 次へ
-			p=lf+1;
+			p = lf+1;
 		}else {
 			// 残りぜんぶ出力
 			CNativeW cSrc(p,pEnd-p);

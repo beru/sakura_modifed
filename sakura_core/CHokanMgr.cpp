@@ -25,7 +25,7 @@
 #include "util/os.h"
 #include "sakura_rc.h"
 
-WNDPROC			gm_wpHokanListProc;
+WNDPROC gm_wpHokanListProc;
 
 
 LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -86,8 +86,7 @@ CHokanMgr::~CHokanMgr()
 /* モードレスダイアログの表示 */
 HWND CHokanMgr::DoModeless( HINSTANCE hInstance , HWND hwndParent, LPARAM lParam )
 {
-	HWND hwndWork;
-	hwndWork = CDialog::DoModeless( hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE );
+	HWND hwndWork = CDialog::DoModeless( hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE );
 	OnSize( 0, 0 );
 	/* リストをフック */
 	// Modified by KEITA for WIN64 2003.9.6
@@ -249,18 +248,14 @@ int CHokanMgr::Search(
 //@@	::EnableWindow( ::GetParent( ::GetParent( m_hwndParent ) ), FALSE );
 
 
-	int nX;
-	int nY;
-	int nCX;
-	int nCY;
-	RECT	rcDesktop;
+	RECT rcDesktop;
 	//	May 01, 2004 genta マルチモニタ対応
 	::GetMonitorWorkRect( GetHwnd(), &rcDesktop );
 
-	nX = m_poWin.x - m_nColumnWidth;
-	nY = m_poWin.y + m_nWinHeight + 4;
-	nCX = m_nWidth;
-	nCY = m_nHeight;
+	int nX = m_poWin.x - m_nColumnWidth;
+	int nY = m_poWin.y + m_nWinHeight + 4;
+	int nCX = m_nWidth;
+	int nCY = m_nHeight;
 
 	/* 下に入るなら */
 	if (nY + nCY < rcDesktop.bottom) {
@@ -393,18 +388,10 @@ BOOL CHokanMgr::OnSize( WPARAM wParam, LPARAM lParam )
 	int	Controls[] = {
 		IDC_LIST_WORDS
 	};
-	int		nControls = _countof( Controls );
-	int		nWidth;
-	int		nHeight;
-	int		i;
-	RECT	rc;
-	HWND	hwndCtrl;
-	POINT	po;
 	RECT	rcDlg;
-
 	::GetClientRect( GetHwnd(), &rcDlg );
-	nWidth = rcDlg.right - rcDlg.left;  // width of client area
-	nHeight = rcDlg.bottom - rcDlg.top; // height of client area
+	int nWidth = rcDlg.right - rcDlg.left;  // width of client area
+	int nHeight = rcDlg.bottom - rcDlg.top; // height of client area
 
 //	2001/06/18 Start by asa-o: サイズ変更後の位置を保存
 	m_poWin.x = rcDlg.left - 4;
@@ -412,9 +399,12 @@ BOOL CHokanMgr::OnSize( WPARAM wParam, LPARAM lParam )
 	::ClientToScreen(GetHwnd(),&m_poWin);
 //	2001/06/18 End
 
-	for (i = 0; i < nControls; ++i) {
-		hwndCtrl = ::GetDlgItem( GetHwnd(), Controls[i] );
+	int nControls = _countof( Controls );
+	for (int i = 0; i < nControls; ++i) {
+		HWND hwndCtrl = ::GetDlgItem( GetHwnd(), Controls[i] );
+		RECT rc;
 		::GetWindowRect( hwndCtrl, &rc );
+		POINT po;
 		po.x = rc.left;
 		po.y = rc.top;
 		::ScreenToClient( GetHwnd(), &po );
@@ -464,8 +454,7 @@ BOOL CHokanMgr::OnBnClicked( int wID )
 
 BOOL CHokanMgr::OnKeyDown( WPARAM wParam, LPARAM lParam )
 {
-	int nVKey;
-	nVKey = (int) wParam;	// virtual-key code
+	int nVKey = (int) wParam;	// virtual-key code
 //	lKeyData = lParam;			// key data
 	switch (nVKey) {
 	case VK_HOME:
@@ -514,19 +503,16 @@ BOOL CHokanMgr::DoHokan( int nVKey )
 	if (VK_TAB		== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE;/* VK_TAB    補完決定キーが有効/無効 */
 	if (VK_RIGHT	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)	return FALSE;/* VK_RIGHT  補完決定キーが有効/無効 */
 
-	HWND hwndList;
-	int nItem;
-	wchar_t wszLabel[1024];
-	CEditView* pcEditView;
-	hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
-	nItem = List_GetCurSel( hwndList );
+	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
+	int nItem = List_GetCurSel( hwndList );
 	if (LB_ERR == nItem) {
 		return FALSE;
 	}
+	wchar_t wszLabel[1024];
 	List_GetText( hwndList, nItem, wszLabel );
 
  	/* テキストを貼り付け */
-	pcEditView = (CEditView*)m_lParam;
+	CEditView* pcEditView = (CEditView*)m_lParam;
 	//	Apr. 28, 2000 genta
 	pcEditView->GetCommander().HandleCommand( F_WordDeleteToStart, false, 0, 0, 0, 0 );
 	pcEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)wszLabel, wcslen(wszLabel), TRUE, 0 );
@@ -585,8 +571,7 @@ BOOL CHokanMgr::DoHokan( int nVKey )
 
 int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
 {
-	WORD vkey;
-	vkey = LOWORD(wParam);		// virtual-key code
+	WORD vkey = LOWORD(wParam);		// virtual-key code
 //	MYTRACE( _T("CHokanMgr::OnVKeyToItem vkey=%xh\n"), vkey );
 	switch (vkey) {
 	case VK_HOME:
@@ -620,26 +605,16 @@ int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
 //	2001/06/18 Start by asa-o: 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 void CHokanMgr::ShowTip()
 {
-	INT			nItem,
-				nTopItem,
-				nItemHeight;
-	WCHAR		szLabel[1024];
-	POINT		point;
-	CEditView*	pcEditView;
-	HWND		hwndCtrl;
-	RECT		rcHokanWin;
-
-	hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
-
-	nItem = List_GetCurSel( hwndCtrl );
+	HWND hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
+	int nItem = List_GetCurSel( hwndCtrl );
 	if (LB_ERR == nItem) {
 		return ;
 	}
 
+	WCHAR szLabel[1024];
 	List_GetText( hwndCtrl, nItem, szLabel );	// 選択中の単語を取得
 
-	pcEditView = (CEditView*)m_lParam;
-
+	CEditView* pcEditView = (CEditView*)m_lParam;
 	// すでに辞書Tipが表示されていたら
 	if (pcEditView->m_dwTipTimer == 0) {
 		// 辞書Tipを消す
@@ -648,12 +623,14 @@ void CHokanMgr::ShowTip()
 	}
 
 	// 表示する位置を決定
-	nTopItem = List_GetTopIndex( hwndCtrl );
-	nItemHeight = List_GetItemHeight( hwndCtrl, 0 );
+	int nTopItem = List_GetTopIndex( hwndCtrl );
+	int nItemHeight = List_GetItemHeight( hwndCtrl, 0 );
+	POINT point;
 	point.x = m_poWin.x + m_nWidth;
 	point.y = m_poWin.y + 4 + (nItem - nTopItem) * nItemHeight;
 	// 2001/06/19 asa-o 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
 	if (point.y > m_poWin.y && point.y < m_poWin.y + m_nHeight) {
+		RECT rcHokanWin;
 		::SetRect( &rcHokanWin , m_poWin.x, m_poWin.y, m_poWin.x + m_nWidth, m_poWin.y + m_nHeight );
 		if (!pcEditView -> ShowKeywordHelp( point,szLabel, &rcHokanWin )) {
 			pcEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い

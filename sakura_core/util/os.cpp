@@ -181,14 +181,11 @@ bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer
 template <class T>
 bool SetClipboardTextImp( HWND hwnd, const T* pszText, int nLength )
 {
-	HGLOBAL	hgClip;
-	T*		pszClip;
-
-	hgClip = ::GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, (nLength + 1) * sizeof(T) );
+	HGLOBAL	hgClip = ::GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, (nLength + 1) * sizeof(T) );
 	if (NULL == hgClip) {
 		return false;
 	}
-	pszClip = (T*)::GlobalLock( hgClip );
+	T* pszClip = (T*)::GlobalLock( hgClip );
 	if (NULL == pszClip) {
 		::GlobalFree( hgClip );
 		return false;
@@ -299,10 +296,9 @@ BOOL GetSystemResources(
 	#define GFSR_SYSTEMRESOURCES	0x0000
 	#define GFSR_GDIRESOURCES		0x0001
 	#define GFSR_USERRESOURCES		0x0002
-	HINSTANCE	hlib;
 	int (CALLBACK *GetFreeSystemResources)( int );
 
-	hlib = ::LoadLibraryExedir( _T("RSRC32.dll") );
+	HINSTANCE hlib = ::LoadLibraryExedir( _T("RSRC32.dll") );
 	if ((INT_PTR)hlib > 32) {
 		GetFreeSystemResources = (int (CALLBACK *)( int ))GetProcAddress(
 			hlib,
@@ -322,56 +318,6 @@ BOOL GetSystemResources(
 		return FALSE;
 	}
 }
-
-#if (WINVER < _WIN32_WINNT_WIN2K)
-// NTではリソースチェックを行わない
-/* システムリソースのチェック */
-BOOL CheckSystemResources( const TCHAR* pszAppName )
-{
-	int		nSystemResources;
-	int		nUserResources;
-	int		nGDIResources;
-	const TCHAR*	pszResourceName;
-	/* システムリソースの取得 */
-	if (GetSystemResources( &nSystemResources, &nUserResources,	&nGDIResources )) {
-//		MYTRACE( _T("nSystemResources=%d\n"), nSystemResources );
-//		MYTRACE( _T("nUserResources=%d\n"), nUserResources );
-//		MYTRACE( _T("nGDIResources=%d\n"), nGDIResources );
-		pszResourceName = NULL;
-		if (nSystemResources <= 5) {
-			pszResourceName = _T("システム ");
-		}else if (nUserResources <= 5) {
-			pszResourceName = _T("ユーザー ");
-		}else if (nGDIResources <= 5) {
-			pszResourceName = _T("GDI ");
-		}
-		if (NULL != pszResourceName) {
-			ErrorBeep();
-			ErrorBeep();
-			::MYMESSAGEBOX( NULL, MB_OK | /*MB_YESNO | */ MB_ICONSTOP | MB_APPLMODAL | MB_TOPMOST, pszAppName,
-				_T("%tsリソースが極端に不足しています。\n")
-				_T("このまま%tsを起動すると、正常に動作しない可能性があります。\n")
-				_T("新しい%tsの起動を中断します。\n")
-				_T("\n")
-				_T("システム リソース\t残り  %d%%\n")
-				_T("User リソース\t残り  %d%%\n")
-				_T("GDI リソース\t残り  %d%%\n\n"),
-				pszResourceName,
-				pszAppName,
-				pszAppName,
-				nSystemResources,
-				nUserResources,
-				nGDIResources
-			);
-//			) ){
-				return FALSE;
-//			}
-		}
-	}
-	return TRUE;
-}
-#endif	// (WINVER < _WIN32_WINNT_WIN2K)
-
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        便利クラス                           //

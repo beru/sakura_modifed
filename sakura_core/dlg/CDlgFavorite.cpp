@@ -116,7 +116,7 @@ CDlgFavorite::CDlgFavorite()
 	int	i;
 
 	m_nCurrentTab = 0;
-	_tcscpy( m_szMsg, _T("") );
+	m_szMsg[0] = 0;
 
 	/* サイズ変更時に位置を制御するコントロール数 */
 	assert( _countof(anchorList) == _countof(m_rcItems) );
@@ -732,8 +732,8 @@ bool CDlgFavorite::RefreshList( void )
 	bool	ret_val = false;
 	TCHAR	msg[1024];
 
-	_tcscpy( msg, _T("") );
-	_tcscpy( m_szMsg, _T("") );
+	msg[0] = 0;
+	m_szMsg[0] = 0;
 
 	//全リストの現在選択中のアイテムを取得する。
 	for (nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
@@ -918,7 +918,7 @@ void CDlgFavorite::AddItem()
 	}
 	TCHAR szAddText[_MAX_PATH];
 	int max_size = _MAX_PATH;
-	_tcscpy( szAddText, _T("") );
+	szAddText[0] = 0;
 
 	CDlgInput1	cDlgInput1;
 	std::tstring strTitle = LS( STR_DLGFAV_ADD );

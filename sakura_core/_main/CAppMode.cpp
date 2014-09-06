@@ -16,13 +16,14 @@ void CAppMode::OnAfterSave(const SSaveInfo& sSaveInfo)
 //! デバッグモニタモードに設定
 void CAppMode::SetDebugModeON()
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
-	if (pShare->m_sHandles.m_hwndDebug) {
-		if (IsSakuraMainWindow(pShare->m_sHandles.m_hwndDebug)) {
+	auto& shared = GetDllShareData();
+	
+	if (shared.m_sHandles.m_hwndDebug) {
+		if (IsSakuraMainWindow(shared.m_sHandles.m_hwndDebug)) {
 			return;
 		}
 	}
-	pShare->m_sHandles.m_hwndDebug = CEditWnd::getInstance()->GetHwnd();
+	shared.m_sHandles.m_hwndDebug = CEditWnd::getInstance()->GetHwnd();
 	this->_SetDebugMode(true);
 	this->SetViewMode(false);	// ビューモード	// 2001/06/23 N.Nakatani アウトプット窓への出力テキストの追加F_ADDTAIL_Wが抑止されるのでとりあえずビューモードは辞めました
 	CEditWnd::getInstance()->UpdateCaption();
@@ -32,9 +33,9 @@ void CAppMode::SetDebugModeON()
 //! デバックモニタモードの解除
 void CAppMode::SetDebugModeOFF()
 {
-	DLLSHAREDATA* pShare = &GetDllShareData();
-	if (pShare->m_sHandles.m_hwndDebug == CEditWnd::getInstance()->GetHwnd()) {
-		pShare->m_sHandles.m_hwndDebug = NULL;
+	auto& shared = GetDllShareData();
+	if (shared.m_sHandles.m_hwndDebug == CEditWnd::getInstance()->GetHwnd()) {
+		shared.m_sHandles.m_hwndDebug = NULL;
 		this->_SetDebugMode(false);
 		CEditWnd::getInstance()->UpdateCaption();
 	}

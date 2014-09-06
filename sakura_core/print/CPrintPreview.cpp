@@ -167,7 +167,7 @@ LRESULT CPrintPreview::OnPaint(
 	// 要素情報の表示 -> IDD_PRINTPREVIEWBAR右下のSTATICへ
 	TCHAR	szPaperName[256];
 	CPrint::GetPaperName( m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperName );
-	auto_sprintf(
+	auto_sprintf_s(
 		szText,
 		_T("%ts  %ts"),
 		szPaperName,
@@ -875,8 +875,8 @@ void CPrintPreview::OnPreviewGoDirectPage( void )
 	TCHAR      szMessage[512];
 	TCHAR      szPageNum[INPUT_PAGE_NUM_LEN];
 	
-	auto_sprintf( szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum );
-	auto_sprintf( szPageNum, _T("%d"), m_nCurPageNum + 1 );
+	auto_sprintf_s( szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum );
+	auto_sprintf_s( szPageNum, _T("%d"), m_nCurPageNum + 1 );
 
 	BOOL bDlgInputPageResult=cDlgInputPage.DoModal(
 		CEditApp::getInstance()->GetAppInstance(),
@@ -887,9 +887,8 @@ void CPrintPreview::OnPreviewGoDirectPage( void )
 		szPageNum
 	);
 	if (FALSE != bDlgInputPageResult) {
-		int i;
 		int nPageNumLen = _tcslen( szPageNum );
-		for (i = 0; i < nPageNumLen;  i++) {
+		for (int i = 0; i < nPageNumLen;  i++) {
 			if (!(_T('0') <= szPageNum[i] &&  szPageNum[i] <= _T('9'))) {
 				return;
 			}
@@ -938,10 +937,10 @@ void CPrintPreview::OnPreviewGoPage( int nPage )
 		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE ), FALSE );
 	}
 	wchar_t	szEdit[1024];
-	auto_sprintf( szEdit, LSW(STR_ERR_DLGPRNPRVW6), m_nCurPageNum + 1, m_nAllPageNum );
+	auto_sprintf_s( szEdit, LSW(STR_ERR_DLGPRNPRVW6), m_nCurPageNum + 1, m_nAllPageNum );
 	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_PAGENUM, szEdit );
 
-	auto_sprintf( szEdit, L"%d %%", m_nPreview_Zoom );
+	auto_sprintf_s( szEdit, L"%d %%", m_nPreview_Zoom );
 	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit );
 
 	::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
@@ -990,7 +989,7 @@ void CPrintPreview::OnPreviewZoom( BOOL bZoomUp )
 	}
 
 	wchar_t	szEdit[1024];
-	auto_sprintf( szEdit, L"%d %%", m_nPreview_Zoom );
+	auto_sprintf_s( szEdit, L"%d %%", m_nPreview_Zoom );
 	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit );
 
 	/* WM_SIZE 処理 */
@@ -1041,7 +1040,7 @@ void CPrintPreview::OnPrint( void )
 
 	/* プリンタに渡すジョブ名を生成 */
 	if (!m_pParentWnd->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {	/* 現在編集中のファイルのパス */
-		_tcscpy( szJobName, LS(STR_NO_TITLE2) );
+		_tcscpy_s( szJobName, LS(STR_NO_TITLE2) );
 	}else {
 		TCHAR	szFileName[_MAX_FNAME];
 		TCHAR	szExt[_MAX_EXT];
@@ -1137,7 +1136,7 @@ void CPrintPreview::OnPrint( void )
 
 		/* 印刷過程を表示 */
 		//	Jun. 18, 2001 genta ページ番号表示の計算ミス修正
-		auto_sprintf( szProgress, _T("%d/%d"), i + 1, nNum );
+		auto_sprintf_s( szProgress, _T("%d/%d"), i + 1, nNum );
 		::DlgItem_SetText( cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, szProgress );
 
 		/* 印刷 ページ開始 */
@@ -1487,7 +1486,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				if (m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_bLineNumIsCRLF) {
 					/* 論理行番号表示モード */
 					if (0 != pcLayout->GetLogicOffset()) { //折り返しレイアウト行
-						wcscpy( szLineNum, L" " );
+						wcscpy_s( szLineNum, L" " );
 					}else {
 						_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	/* 対応する論理行番号 */
 					}

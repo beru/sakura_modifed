@@ -70,7 +70,7 @@ int WINAPI _tWinMain(
 	
 	//開発情報
 	DEBUG_TRACE(_T("-- -- WinMain -- --\n"));
-	DEBUG_TRACE(_T("sizeof(DLLSHAREDATA) = %d\n"),sizeof(DLLSHAREDATA));
+	DEBUG_TRACE(_T("sizeof(DLLSHAREDATA) = %d\n"), sizeof(DLLSHAREDATA));
 
 	//プロセスの生成とメッセージループ
 	CProcessFactory aFactory;

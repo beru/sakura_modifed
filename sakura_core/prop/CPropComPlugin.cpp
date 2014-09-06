@@ -171,7 +171,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 					static std::tstring	sTrgDir;
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
-					_tcscpy( szPath, (sTrgDir.empty() ? CPluginManager::getInstance()->GetBaseDir().c_str() : sTrgDir.c_str()));
+					_tcscpy_s( szPath, (sTrgDir.empty() ? CPluginManager::getInstance()->GetBaseDir().c_str() : sTrgDir.c_str()));
 					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						G_AppInstance(),
@@ -569,7 +569,7 @@ static void LoadPluginTemp(CommonSetting& common, CMenuDrawer& cMenuDrawer)
 		// ツールバーアイコンの更新
 		const CPlug::Array& plugs = CJackManager::getInstance()->GetPlugs( PP_COMMAND );
 		cMenuDrawer.m_pcIcons->ResetExtend();
-		for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			int iBitmap = CMenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 			const CPlug* plug = *it;
 			if (!plug->m_sIcon.empty()) {

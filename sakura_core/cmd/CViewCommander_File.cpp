@@ -248,7 +248,7 @@ void CViewCommander::Command_FILECLOSE_OPEN( LPCWSTR filename, ECodeType nCharCo
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
-	for (CPlug::ArrayIter it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 	}
 }
@@ -416,9 +416,9 @@ void CViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS( void )
 		/* ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む */
 		//	2003.10.20 MIK コード簡略化
 		if (_tcschr( GetDocument()->m_cDocFile.GetFilePath(), TCODE::SPACE ) ? TRUE : FALSE) {
-			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_cDocFile.GetFilePath() );
+			auto_sprintf_s( szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_cDocFile.GetFilePath() );
 		}else {
-			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument()->m_cDocFile.GetFilePath() );
+			auto_sprintf_s( szPath, _T("@%ts\r\n"), GetDocument()->m_cDocFile.GetFilePath() );
 		}
 		/* クリップボードにデータを設定 */
 		m_pCommanderView->MySetClipboardData( szPath, _tcslen( szPath ), false );
@@ -458,12 +458,12 @@ void CViewCommander::Command_BROWSE( void )
 		return;
 	}
 //	char	szURL[MAX_PATH + 64];
-//	auto_sprintf( szURL, L"%ls", GetDocument()->m_cDocFile.GetFilePath() );
+//	auto_sprintf_s( szURL, L"%ls", GetDocument()->m_cDocFile.GetFilePath() );
 	/* URLを開く */
 //	::ShellExecuteEx( NULL, L"open", szURL, NULL, NULL, SW_SHOW );
 
     SHELLEXECUTEINFO info; 
-    info.cbSize =sizeof(info);
+    info.cbSize = sizeof(info);
     info.fMask = 0;
     info.hwnd = NULL;
     info.lpVerb = NULL;

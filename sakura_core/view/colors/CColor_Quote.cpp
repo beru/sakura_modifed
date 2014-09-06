@@ -197,8 +197,7 @@ bool CColor_Quote::EndColor(const CStringRef& cStr, int nPos)
 int CColor_Quote::Match_Quote( wchar_t wcQuote, int nPos, const CStringRef& cLineStr, int escapeType, bool* pbEscapeEnd )
 {
 	int nCharChars;
-	int i;
-	for (i = nPos; i < cLineStr.GetLength(); ++i) {
+	for (int i = nPos; i < cLineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar( cLineStr.GetPtr(), cLineStr.GetLength(), i ));
 		if (escapeType == STRING_LITERAL_CPP) {
@@ -238,11 +237,10 @@ int CColor_Quote::Match_Quote( wchar_t wcQuote, int nPos, const CStringRef& cLin
 int CColor_Quote::Match_QuoteStr( const wchar_t* pszQuote, int nQuoteLen, int nPos, const CStringRef& cLineStr, bool bEscape )
 {
 	int nCharChars;
-	int i;
 	const int nCompLen = cLineStr.GetLength() - nQuoteLen + 1;
 	const WCHAR quote1 = pszQuote[0];
 	const WCHAR* pLine = cLineStr.GetPtr();
-	for (i = nPos; i < nCompLen; i += nCharChars) {
+	for (int i = nPos; i < nCompLen; i += nCharChars) {
 		if (quote1 == pLine[i] && wmemcmp( pszQuote + 1, pLine + i + 1, nQuoteLen - 1 ) == 0) {
 			return i + nQuoteLen;
 		}

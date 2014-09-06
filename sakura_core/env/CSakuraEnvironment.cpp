@@ -397,7 +397,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				//	2004.05.13 Moca バージョン番号は、プロセスごとに取得する
 				DWORD dwVersionMS, dwVersionLS;
 				GetAppVersionInfo( NULL, VS_VERSION_INFO, &dwVersionMS, &dwVersionLS );
-				int len = auto_sprintf( buf, L"%d.%d.%d.%d",
+				int len = auto_sprintf_s( buf, L"%d.%d.%d.%d",
 					HIWORD( dwVersionMS ),
 					LOWORD( dwVersionMS ),
 					HIWORD( dwVersionLS ),
@@ -651,7 +651,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	case OPENDIALOGDIR_MRU:
 		{
 			const CMRUFolder cMRU;
-			std::vector<LPCTSTR> vMRU = cMRU.GetPathList();
+			auto& vMRU = cMRU.GetPathList();
 			int nCount = cMRU.Length();
 			for (int i = 0; i < nCount ; i++) {
 				DWORD attr = GetFileAttributes( vMRU[i] );
@@ -714,7 +714,7 @@ void CSakuraEnvironment::ResolvePath(TCHAR* pszPath)
 /* 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる */
 BOOL IsSakuraMainWindow( HWND hWnd )
 {
-	TCHAR	szClassName[64];
+	TCHAR szClassName[64];
 	if (hWnd == NULL) {	// 2007.06.20 ryoji 条件追加
 		return FALSE;
 	}

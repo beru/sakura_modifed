@@ -202,9 +202,8 @@ STDMETHODIMP CDropSource::GiveFeedback( DWORD dropEffect )
 void CDataObject::SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect )
 {
 	//Feb. 26, 2001, fixed by yebisuya sugoroku
-	int i;
 	if (m_pData != NULL) {
-		for (i = 0; i < m_nFormat; i++) {
+		for (int i = 0; i < m_nFormat; i++) {
 			delete [](m_pData[i].data);
 		}
 		delete []m_pData;
@@ -215,7 +214,7 @@ void CDataObject::SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect )
 		m_nFormat = bColumnSelect? 4: 3;	// ‹éŒ`‚ðŠÜ‚ß‚é‚©
 		m_pData = new DATA[m_nFormat];
 
-		i = 0;
+		int i = 0;
 		m_pData[0].cfFormat = CF_UNICODETEXT;
 		m_pData[0].size = (nTextLen + 1) * sizeof(wchar_t);
 		m_pData[0].data = new BYTE[m_pData[0].size];

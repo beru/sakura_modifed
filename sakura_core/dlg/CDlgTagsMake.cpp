@@ -52,8 +52,8 @@ const DWORD p_helpids[] = {	//13700
 
 CDlgTagsMake::CDlgTagsMake()
 {
-	_tcscpy( m_szPath, _T("") );
-	_tcscpy( m_szTagsCmdLine, _T("") );
+	m_szPath[0] = 0;
+	m_szTagsCmdLine[0] = 0;
 	m_nTagsOpt = 0;
 	return;
 }
@@ -66,7 +66,7 @@ int CDlgTagsMake::DoModal(
 	const TCHAR*	pszPath		//ƒpƒX
 )
 {
-	_tcscpy( m_szPath, pszPath );
+	_tcscpy_s( m_szPath, pszPath );
 
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_TAG_MAKE, lParam );
 }

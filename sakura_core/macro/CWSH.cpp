@@ -119,7 +119,7 @@ public:
 #endif
 		//指定された名前のインタフェースオブジェクトを検索
 		const CWSHClient::List& objects = m_Client->GetInterfaceObjects();
-		for (CWSHClient::ListIter it = objects.begin(); it != objects.end(); it++) {
+		for (auto it = objects.begin(); it != objects.end(); it++) {
 			//	Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
 			if (_wcsicmp( pstrName, (*it)->m_sName.c_str() ) == 0) {
 				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
@@ -179,7 +179,7 @@ public:
 			if (pscripterror->GetSourcePosition(&Context, &Line, &Pos) == S_OK) {
 				wchar_t* Message = new wchar_t[SysStringLen(Info.bstrDescription) + 128];
 				//	Nov. 10, 2003 FILE Win9Xでは、[wsprintfW]が無効のため、[auto_sprintf]に修正
-				const wchar_t* szDesc=Info.bstrDescription;
+				const wchar_t* szDesc = Info.bstrDescription;
 				auto_sprintf(Message, L"[Line %d] %ls", Line + 1, szDesc);
 				SysReAllocString(&Info.bstrDescription, Message);
 				delete[] Message;
@@ -252,7 +252,7 @@ CWSHClient::CWSHClient(const wchar_t *AEngine, ScriptErrorHandler AErrorHandler,
 CWSHClient::~CWSHClient()
 {
 	//インタフェースオブジェクトを解放
-	for (ListIter it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
+	for (auto it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
 		(*it)->Release();
 	}
 	
@@ -337,7 +337,7 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 		}else {
 			bool bAddNamedItemError = false;
 
-			for (ListIter it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
+			for (auto it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
 				DWORD dwFlag = SCRIPTITEM_ISVISIBLE;
 
 				if ((*it)->IsGlobal()) { dwFlag |= SCRIPTITEM_GLOBALMEMBERS; }

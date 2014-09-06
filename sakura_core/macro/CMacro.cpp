@@ -944,7 +944,7 @@ bool CMacro::HandleCommand(
 			cCmdLine.AppendString(_T("\" -GFOLDER=\""));
 			cCmdLine.AppendString(cmWork3.GetStringPtr());
 			cCmdLine.AppendString(_T("\" -GCODE="));
-			auto_sprintf( szTemp, _T("%d"), nCharSet );
+			auto_sprintf_s( szTemp, _T("%d"), nCharSet );
 			cCmdLine.AppendString(szTemp);
 
 			//GOPTƒIƒvƒVƒ‡ƒ“
@@ -961,7 +961,7 @@ bool CMacro::HandleCommand(
 			if (lFlag & 0x40000) _tcscat( pOpt, _T("B") );
 			if (lFlag & 0x80000) _tcscat( pOpt, _T("D") );
 			if (pOpt[0] != _T('\0')) {
-				auto_sprintf( szTemp, _T(" -GOPT=%ts"), pOpt );
+				auto_sprintf_s( szTemp, _T(" -GOPT=%ts"), pOpt );
 				cCmdLine.AppendString(szTemp);
 			}
 
@@ -1558,7 +1558,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			}
 
 			TCHAR* Buffer = new TCHAR[ nMaxLen+1 ];
-			_tcscpy( Buffer, sDefaultValue.c_str() );
+			_tcscpy_s( Buffer, nMaxLen+1, sDefaultValue.c_str() );
 			CDlgInput1 cDlgInput1;
 			if (cDlgInput1.DoModal( G_AppInstance(), View->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, Buffer )) {
 				SysString S( Buffer, _tcslen(Buffer) );
@@ -1679,7 +1679,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			);
 			bool bRet;
 			TCHAR szPath[ _MAX_PATH ];
-			_tcscpy( szPath, sDefault.c_str() );
+			_tcscpy_s( szPath, sDefault.c_str() );
 			if (LOWORD(ID) == F_FILEOPENDIALOG) {
 				bRet = cDlgOpenFile.DoModal_GetOpenFileName( szPath );
 			}else {

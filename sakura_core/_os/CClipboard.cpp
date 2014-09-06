@@ -139,7 +139,7 @@ bool CClipboard::SetText(
 		//確保した領域にデータをコピー
 		BYTE* pClip = GlobalLockBYTE( hgClipSakura );
 		*((int*)pClip) = nDataLen; pClip += sizeof(int);								//データの長さ
-		wmemcpy( (wchar_t*)pClip, pData, nDataLen ); pClip += nDataLen*sizeof(wchar_t);	//データ
+		wmemcpy( (wchar_t*)pClip, pData, nDataLen ); pClip += nDataLen * sizeof(wchar_t);	//データ
 		*((wchar_t*)pClip) = L'\0'; pClip += sizeof(wchar_t);							//終端ヌル
 		::GlobalUnlock( hgClipSakura );
 

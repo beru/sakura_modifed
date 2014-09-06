@@ -68,7 +68,7 @@ bool CEditView::TagJumpSub(
 	if (bRelFromIni && _IS_REL_PATH( pszFileName )) {
 		GetInidirOrExedir( szJumpToFile, pszFileName );
 	}else {
-		_tcscpy( szJumpToFile, pszFileName );
+		_tcscpy_s( szJumpToFile, pszFileName );
 	}
 
 	/* ロングファイル名を取得する */

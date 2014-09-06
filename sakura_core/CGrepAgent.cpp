@@ -43,7 +43,7 @@ void CGrepAgent::OnAfterSave(const SSaveInfo& sSaveInfo)
 {
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	m_bGrepMode = false;	// grepウィンドウは通常ウィンドウ化
-	wcscpy( CAppMode::getInstance()->m_szGrepKey, L"" );
+	CAppMode::getInstance()->m_szGrepKey[0] = 0;
 }
 
 void CGrepAgent::CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths )
@@ -422,10 +422,10 @@ DWORD CGrepAgent::DoGrep(
 	}
 	{
 		WCHAR szBuffer[128];
-		auto_sprintf( szBuffer, LSW( STR_GREP_MATCH_COUNT ), nHitCount );	//L"%d 個が検索されました。\r\n"
+		auto_sprintf_s( szBuffer, LSW( STR_GREP_MATCH_COUNT ), nHitCount );	//L"%d 個が検索されました。\r\n"
 		pcViewDst->GetCommander().Command_ADDTAIL( szBuffer, -1 );
 #ifdef _DEBUG
-		auto_sprintf( szBuffer, LSW(STR_GREP_TIMER), cRunningTimer.Read() );
+		auto_sprintf_s( szBuffer, LSW(STR_GREP_TIMER), cRunningTimer.Read() );
 		pcViewDst->GetCommander().Command_ADDTAIL( szBuffer, -1 );
 #endif
 	}
@@ -704,25 +704,29 @@ void CGrepAgent::SetGrepResult(
 	bool bEOL = true;
 	int nMaxOutStr = 0;
 
+	switch (sGrepOption.nGrepOutputStyle) {
 	/* ノーマル */
-	if (1 == sGrepOption.nGrepOutputStyle) {
+	case 1:
 		if (sGrepOption.bGrepOutputBaseFolder || sGrepOption.bGrepSeparateFolder) {
 			cmemBuf.AppendString( L"・" );
 		}
 		cmemBuf.AppendStringT( pszFilePath );
-		::auto_sprintf( strWork, L"(%d,%d)", nLine, nColumn );
+		::auto_sprintf_s( strWork, L"(%d,%d)", nLine, nColumn );
 		cmemBuf.AppendString( strWork );
 		cmemBuf.AppendStringT( pszCodeName );
 		cmemBuf.AppendString( L": " );
 		nMaxOutStr = 2000; // 2003.06.10 Moca 最大長変更
+		break;
 	/* WZ風 */
-	}else if (2 == sGrepOption.nGrepOutputStyle) {
-		::auto_sprintf( strWork, L"・(%6d,%-5d): ", nLine, nColumn );
+	case 2:
+		::auto_sprintf_s( strWork, L"・(%6d,%-5d): ", nLine, nColumn );
 		cmemBuf.AppendString( strWork );
 		nMaxOutStr = 2500; // 2003.06.10 Moca 最大長変更
+		break;
 	// 結果のみ
-	}else if (3 == sGrepOption.nGrepOutputStyle) {
+	case 3:
 		nMaxOutStr = 2500;
+		break;
 	}
 
 	/* 該当行 */
@@ -769,11 +773,7 @@ static void OutputPathInfo(
 {
 	{
 		// バッファを2^n 分確保する
-		int n = 1024;
-		int size = cmemMessage.GetStringLength() + 300;
-		while (n < size) {
-			n *= 2;
-		}
+		int n = roundUpToNextPowerOfTwo(cmemMessage.GetStringLength() + 300);
 		cmemMessage.AllocStringBuffer( n );
 	}
 	if (3 == sGrepOption.nGrepOutputStyle) {
@@ -1014,7 +1014,7 @@ int CGrepAgent::DoGrepFile(
 					if (5 <= nPercent - nOldPercent) {
 						nOldPercent = nPercent;
 						TCHAR szWork[10];
-						::auto_sprintf( szWork, _T(" (%3d%%)"), nPercent );
+						::auto_sprintf_s( szWork, _T(" (%3d%%)"), nPercent );
 						std::tstring str;
 						str = str + pszFile + szWork;
 						::DlgItem_SetText( pcDlgCancel->GetHwnd(), IDC_STATIC_CURFILE, str.c_str() );

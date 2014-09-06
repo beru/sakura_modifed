@@ -72,13 +72,12 @@ BOOL CDlgExec::OnInitDialog( HWND hwnd, WPARAM wParam, LPARAM lParam )
 	
 	ECodeType codes[] = { CODE_SJIS, CODE_UNICODE, CODE_UTF8 };
 	HWND hwndCombo;
-	int i;
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_GET );
-	for (i = 0; i < _countof(codes); ++i) {
+	for (int i = 0; i < _countof(codes); ++i) {
 		Combo_AddString( hwndCombo, CCodeTypeName(codes[i]).Normal() );
 	}
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_SEND );
-	for (i = 0; i < _countof(codes); ++i) {
+	for (int i = 0; i < _countof(codes); ++i) {
 		Combo_AddString( hwndCombo, CCodeTypeName(codes[i]).Normal() );
 	}
 

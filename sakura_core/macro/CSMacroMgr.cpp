@@ -759,15 +759,14 @@ void CSMacroMgr::Clear( int idx )
 */
 const MacroFuncInfo* CSMacroMgr::GetFuncInfoByID( int nFuncID )
 {
-	int i;
 	//	Jun. 27, 2002 genta
 	//	番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
-	for (i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; ++i) {
+	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; ++i) {
 		if (m_MacroFuncInfoCommandArr[i].m_nFuncID == nFuncID) {
 			return &m_MacroFuncInfoCommandArr[i];
 		}
 	}
-	for (i = 0; m_MacroFuncInfoArr[i].m_pszFuncName != NULL; ++i) {
+	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName != NULL; ++i) {
 		if (m_MacroFuncInfoArr[i].m_nFuncID == nFuncID) {
 			return &m_MacroFuncInfoArr[i];
 		}

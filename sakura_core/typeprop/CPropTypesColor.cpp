@@ -732,8 +732,7 @@ int CPropTypesColor::GetData( HWND hwndDlg )
 	UINT en;
 	BOOL bTranslated;
 
-	int i;
-	for (i=0; i<COMMENT_DELIMITER_NUM; i++) {
+	for (int i=0; i<COMMENT_DELIMITER_NUM; i++) {
 		en = ::IsDlgButtonChecked( hwndDlg, cLineComment[i].nCheckBoxID );
 		pos = ::GetDlgItemInt( hwndDlg, cLineComment[i].nTextID, &bTranslated, FALSE );
 		if (bTranslated != TRUE) {
@@ -790,7 +789,7 @@ int CPropTypesColor::GetData( HWND hwndDlg )
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_VERTLINE, szVertLine, MAX_VERTLINES * 15 );
 
 	int offset = 0;
-	i = 0;
+	int i = 0;
 	while (i < MAX_VERTLINES) {
 		int value = 0;
 		for (; '0' <= szVertLine[offset] && szVertLine[offset] <= '9';  offset++) {

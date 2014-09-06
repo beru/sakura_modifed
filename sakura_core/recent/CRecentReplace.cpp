@@ -77,6 +77,6 @@ int CRecentReplace::CompareItem( const CReplaceString* p1, LPCWSTR p2 ) const
 
 void CRecentReplace::CopyItem( CReplaceString* dst, LPCWSTR src ) const
 {
-	wcscpy(*dst,src);
+	wcscpy(*dst, src);
 }
 
