@@ -28,16 +28,16 @@
 */
 void CViewCommander::Command_GREP_DIALOG( void )
 {
-	CNativeW	cmemCurText;
+	CNativeW cmemCurText;
 
-	/* 現在カーソル位置単語または選択範囲より検索等のキーを取得 */
+	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	m_pCommanderView->GetCurrentTextForSearchDlg( cmemCurText );	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (0 < cmemCurText.GetStringLength()) {
 		GetEditWindow()->m_cDlgGrep.m_strText = cmemCurText.GetStringPtr();
 	}
 
-	/* Grepダイアログの表示 */
+	// Grepダイアログの表示
 	int nRet = GetEditWindow()->m_cDlgGrep.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_cDocFile.GetFilePath() );
 //	MYTRACE( _T("nRet=%d\n"), nRet );
 	if (!nRet) {
@@ -52,56 +52,59 @@ void CViewCommander::Command_GREP_DIALOG( void )
 */
 void CViewCommander::Command_GREP( void )
 {
-	CNativeW		cmWork1;
-	CNativeT		cmWork2;
-	CNativeT		cmWork3;
+	CNativeW cmWork1;
+	CNativeT cmWork2;
+	CNativeT cmWork3;
 
-	cmWork1.SetString( GetEditWindow()->m_cDlgGrep.m_strText.c_str() );
-	cmWork2.SetString( GetEditWindow()->m_cDlgGrep.m_szFile );
-	cmWork3.SetString( GetEditWindow()->m_cDlgGrep.m_szFolder );
+	auto& dlgGrep = GetEditWindow()->m_cDlgGrep;
+	cmWork1.SetString( dlgGrep.m_strText.c_str() );
+	cmWork2.SetString( dlgGrep.m_szFile );
+	cmWork3.SetString( dlgGrep.m_szFolder );
 
+	auto& grepAgent = *CEditApp::getInstance()->m_pcGrepAgent;
+	auto& doc = *GetDocument();
 	/*	今のEditViewにGrep結果を表示する。
 		Grepモードのとき、または未編集で無題かつアウトプットでない場合。
 		自ウィンドウがGrep実行中も、(異常終了するので)別ウィンドウにする
 	*/
 	if (
 		(
-			CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
-			&& !CEditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning
+			grepAgent.m_bGrepMode
+			&& !grepAgent.m_bGrepRunning
 		)
 		|| (
-			!GetDocument()->m_cDocEditor.IsModified()
-			&& !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()		/* 現在編集中のファイルのパス */
+			!doc.m_cDocEditor.IsModified()
+			&& !doc.m_cDocFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
 			&& !CAppMode::getInstance()->IsDebugMode()
 		)
 	) {
 		// 2011.01.23 Grepタイプ別適用
-		if (!GetDocument()->m_cDocEditor.IsModified() && GetDocument()->m_cDocLineMgr.GetLineCount() == 0) {
+		if (!doc.m_cDocEditor.IsModified() && doc.m_cDocLineMgr.GetLineCount() == 0) {
 			CTypeConfig cTypeGrep = CDocTypeManager().GetDocumentTypeOfExt( _T("grepout") );
 			const STypeConfigMini* pConfig;
 			CDocTypeManager().GetTypeConfigMini( cTypeGrep, &pConfig );
-			GetDocument()->m_cDocType.SetDocumentTypeIdx( pConfig->m_id );
-			GetDocument()->m_cDocType.LockDocumentType();
-			GetDocument()->OnChangeType();
+			doc.m_cDocType.SetDocumentTypeIdx( pConfig->m_id );
+			doc.m_cDocType.LockDocumentType();
+			doc.OnChangeType();
 		}
 		
-		CEditApp::getInstance()->m_pcGrepAgent->DoGrep(
+		grepAgent.DoGrep(
 			m_pCommanderView,
 			&cmWork1,
 			&cmWork2,
 			&cmWork3,
 			false,
-			GetEditWindow()->m_cDlgGrep.m_bSubFolder,
-			GetEditWindow()->m_cDlgGrep.m_sSearchOption,
-			GetEditWindow()->m_cDlgGrep.m_nGrepCharSet,
-			GetEditWindow()->m_cDlgGrep.m_bGrepOutputLine,
-			GetEditWindow()->m_cDlgGrep.m_nGrepOutputStyle,
-			GetEditWindow()->m_cDlgGrep.m_bGrepOutputFileOnly,
-			GetEditWindow()->m_cDlgGrep.m_bGrepOutputBaseFolder,
-			GetEditWindow()->m_cDlgGrep.m_bGrepSeparateFolder
+			dlgGrep.m_bSubFolder,
+			dlgGrep.m_sSearchOption,
+			dlgGrep.m_nGrepCharSet,
+			dlgGrep.m_bGrepOutputLine,
+			dlgGrep.m_nGrepOutputStyle,
+			dlgGrep.m_bGrepOutputFileOnly,
+			dlgGrep.m_bGrepOutputBaseFolder,
+			dlgGrep.m_bGrepSeparateFolder
 		);
 
-		//プラグイン：DocumentOpenイベント実行
+		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
@@ -115,9 +118,9 @@ void CViewCommander::Command_GREP( void )
 			return;
 		}
 
-		/*======= Grepの実行 =============*/
-		/* Grep結果ウィンドウの表示 */
-		CControlTray::DoGrepCreateWindow(G_AppInstance(), m_pCommanderView->GetHwnd(), GetEditWindow()->m_cDlgGrep);
+		//======= Grepの実行 =============
+		// Grep結果ウィンドウの表示
+		CControlTray::DoGrepCreateWindow(G_AppInstance(), m_pCommanderView->GetHwnd(), dlgGrep);
 	}
 	return;
 }

@@ -169,7 +169,7 @@ namespace ApiWrap{
 
 	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, ACHAR* str, int nMaxCount);
 	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, WCHAR* str, int nMaxCount);
-	//GetDlgItemText
+	// GetDlgItemText
 
 }
 using namespace ApiWrap;

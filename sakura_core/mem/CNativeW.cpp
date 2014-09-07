@@ -132,20 +132,18 @@ wchar_t CNativeW::operator[](int nIndex) const
 }
 
 
-/* 等しい内容か */
+// 等しい内容か
 bool CNativeW::IsEqual( const CNativeW& cmem1, const CNativeW& cmem2 )
 {
-	if (&cmem1==&cmem2) {
+	if (&cmem1 == &cmem2) {
 		return true;
 	}
 
-	const wchar_t* psz1;
-	const wchar_t* psz2;
 	int nLen1;
+	const wchar_t* psz1 = cmem1.GetStringPtr( &nLen1 );
 	int nLen2;
-
-	psz1 = cmem1.GetStringPtr( &nLen1 );
-	psz2 = cmem2.GetStringPtr( &nLen2 );
+	const wchar_t* psz2 = cmem2.GetStringPtr( &nLen2 );
+	
 	if (nLen1 == nLen2) {
 		if (0 == wmemcmp( psz1, psz2, nLen1 )) {
 			return true;
@@ -188,7 +186,7 @@ void CNativeW::Replace( const wchar_t* pszFrom, const wchar_t* pszTo )
 		}
 		SetNativeData( cmemWork );
 	}else {
-		if (this->GetStringPtr() == NULL) {
+		if (!this->GetStringPtr()) {
 			this->SetString(L"");
 		}
 	}
@@ -220,7 +218,7 @@ CLogicInt CNativeW::GetSizeOfChar( const wchar_t* pData, int nDataLen, int nIdx 
 //! 指定した位置の文字が半角何個分かを返す
 CLayoutInt CNativeW::GetKetaOfChar( const wchar_t* pData, int nDataLen, int nIdx )
 {
-	//文字列範囲外なら 0
+	// 文字列範囲外なら 0
 	if (nIdx >= nDataLen) {
 		return CLayoutInt(0);
 	}
@@ -252,8 +250,8 @@ CLayoutInt CNativeW::GetKetaOfChar( const wchar_t* pData, int nDataLen, int nIdx
 	}
 }
 
-/* ポインタで示した文字の次にある文字の位置を返します */
-/* 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します */
+// ポインタで示した文字の次にある文字の位置を返します
+// 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
 const wchar_t* CNativeW::GetCharNext( const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent )
 {
 	const wchar_t* pNext = pDataCurrent + 1;
@@ -272,8 +270,8 @@ const wchar_t* CNativeW::GetCharNext( const wchar_t* pData, int nDataLen, const 
 	return pNext;
 }
 
-/* ポインタで示した文字の直前にある文字の位置を返します */
-/* 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します */
+// ポインタで示した文字の直前にある文字の位置を返します
+// 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します
 const wchar_t* CNativeW::GetCharPrev( const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent )
 {
 	const wchar_t* pPrev = pDataCurrent - 1;
@@ -293,7 +291,7 @@ const wchar_t* CNativeW::GetCharPrev( const wchar_t* pData, int nDataLen, const 
 }
 
 
-//ShiftJISに変換して返す
+// ShiftJISに変換して返す
 const char* CNativeW::GetStringPtrOld() const
 {
 	return to_achar(GetStringPtr(),GetStringLength());

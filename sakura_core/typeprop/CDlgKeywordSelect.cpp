@@ -122,12 +122,8 @@ BOOL CDlgKeywordSelect::OnBnClicked( int wID )
 */
 void CDlgKeywordSelect::SetData( void )
 {
-	HWND	hwndCombo;
-	int		i;
-	int		index;
-
-	for (index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
+	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
+		HWND hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
 
 		/* コンボボックスを空にする */
 		Combo_ResetContent( hwndCombo );
@@ -136,7 +132,7 @@ void CDlgKeywordSelect::SetData( void )
 		Combo_AddString( hwndCombo, L" " );
 
 		if (m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0) {
-			for (i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; i++) {
+			for (int i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; i++) {
 				Combo_AddString( hwndCombo, m_pCKeyWordSetMgr->GetTypeName( i ) );
 			}
 
@@ -156,14 +152,10 @@ void CDlgKeywordSelect::SetData( void )
 */
 int CDlgKeywordSelect::GetData( void )
 {
-	HWND	hwndCombo;
-	int		index;
-	int		n;
+	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
+		HWND hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
 
-	for (index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
-
-		n = Combo_GetCurSel( hwndCombo );
+		int n = Combo_GetCurSel( hwndCombo );
 		if (CB_ERR == n || 0 == n) {
 			m_nSet[ index ] = -1;
 		}else {
@@ -178,5 +170,4 @@ LPVOID CDlgKeywordSelect::GetHelpIdTable( void )
 {
 	return (LPVOID)p_helpids;
 }
-
 

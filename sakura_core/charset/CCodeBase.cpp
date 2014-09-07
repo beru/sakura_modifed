@@ -19,24 +19,15 @@ EConvertResult CCodeBase::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 		// サロゲートペア
 		if (psStatusbar->m_bDispSPCodepoint) {
 			auto_sprintf( pDst, _T("U+%05X"), 0x10000 + ((cSrc[0] & 0x3FF)<<10) + (cSrc[1] & 0x3FF));
-		}
-		else {
+		}else {
 			auto_sprintf( pDst, _T("%04X%04X"), cSrc[0], cSrc[1]);
 		}
-	}
-	else {
+	}else {
 		auto_sprintf( pDst, _T("U+%04X"), cSrc[0] );
 	}
 
 	return RESULT_COMPLETE;
 }
-
-
-
-
-
-
-
 
 
 /*!
@@ -52,7 +43,7 @@ bool CCodeBase::MIMEHeaderDecode( const char* pSrc, const int nSrcLen, CMemory* 
 	// ソースを取得
 	pcMem->AllocBuffer( nSrcLen );
 	char* pdst = reinterpret_cast<char*>( pcMem->GetRawPtr() );
-	if( pdst == NULL ){
+	if (!pdst) {
 		pcMem->SetRawData( "", 0 );
 		return false;
 	}
@@ -60,26 +51,26 @@ bool CCodeBase::MIMEHeaderDecode( const char* pSrc, const int nSrcLen, CMemory* 
 	CMemory cmembuf;
 	int i = 0;
 	int j = 0;
-	while( i < nSrcLen ){
-		if( pSrc[i] != '=' ){
+	while (i < nSrcLen) {
+		if (pSrc[i] != '=') {
 			pdst[j] = pSrc[i];
 			++i;
 			++j;
 			continue;
 		}
 		nskip_bytes = _DecodeMimeHeader( &pSrc[i], nSrcLen-i, &cmembuf, &ecodetype );
-		if( nskip_bytes < 1 ){
+		if (nskip_bytes < 1) {
 			pdst[j] = pSrc[i];
 			++i;
 			++j;
-		}else{
-			if( ecodetype == eCodetype ){
+		}else {
+			if (ecodetype == eCodetype) {
 				// eChartype が ecodetype と一致している場合にだけ、
 				// 変換結果をコピー
 				memcpy( &pdst[j], cmembuf.GetRawPtr(), cmembuf.GetRawLength() );
 				i += nskip_bytes;
 				j += cmembuf.GetRawLength();
-			}else{
+			}else {
 				memcpy( &pdst[j], &pSrc[i], nskip_bytes );
 				i += nskip_bytes;
 				j += nskip_bytes;
@@ -112,3 +103,4 @@ void CCodeBase::S_GetEol(CMemory* pcmemEol, EEolType eEolType)
 	};
 	pcmemEol->SetRawData(aEolTable[eEolType].szData,aEolTable[eEolType].nLen);
 }
+

@@ -34,7 +34,7 @@
 
 	#include "CStrictInteger.h"
 
-	//ロジック単位
+	// ロジック単位
 	typedef CStrictInteger <
 		0,		//!< 型を分けるための数値。
 		true,	//!< intとの比較を許すかどうか
@@ -44,7 +44,7 @@
 	>
 	CLogicInt;
 
-	//レイアウト単位
+	// レイアウト単位
 	typedef CStrictInteger <
 		1,		//!< 型を分けるための数値。
 		true,	//!< intとの比較を許すかどうか
@@ -57,10 +57,10 @@
 #else
 	// -- -- 通常のintで単位型を定義
 
-	//ロジック単位
+	// ロジック単位
 	typedef int CLogicInt;
 
-	//レイアウト単位
+	// レイアウト単位
 	typedef int CLayoutInt;
 
 #endif
@@ -89,19 +89,19 @@ typedef CLayoutXInt CKetaXInt;
 #include "CStrictPoint.h"
 #include "CStrictRect.h"
 
-//ロジック単位
-struct SLogicPoint{ CLogicInt x; CLogicInt y; }; //基底構造体
+// ロジック単位
+struct SLogicPoint{ CLogicInt x; CLogicInt y; }; // 基底構造体
 typedef CStrictPoint<SLogicPoint, CLogicInt>	CLogicPoint;
 typedef CRangeBase<CLogicPoint>					CLogicRange;
 typedef CStrictRect<CLogicInt, CLogicPoint>		CLogicRect;
 
-//レイアウト単位
-struct SLayoutPoint{ CLayoutInt x; CLayoutInt y; }; //基底構造体
+// レイアウト単位
+struct SLayoutPoint{ CLayoutInt x; CLayoutInt y; }; // 基底構造体
 typedef CStrictPoint<SLayoutPoint, CLayoutInt>	CLayoutPoint;
 typedef CRangeBase<CLayoutPoint>				CLayoutRange;
 typedef CStrictRect<CLayoutInt, CLayoutPoint>	CLayoutRect;
 
-//ゆるい単位
+// ゆるい単位
 #include "CMyPoint.h"
 typedef CRangeBase<CMyPoint>     SelectionRange;
 
@@ -112,7 +112,7 @@ typedef CRangeBase<CMyPoint>     SelectionRange;
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 #include "CMyRect.h"
 
-//変換関数
+// 変換関数
 template <class POINT_T>
 inline void TwoPointToRange(
 	CRangeBase<POINT_T>* prangeDst,

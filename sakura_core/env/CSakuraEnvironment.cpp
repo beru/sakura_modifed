@@ -334,7 +334,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			break;
 		case L'p':	//	現在のページ
 			{
-				CEditWnd*	pcEditWnd = GetMainWindow();	//	Sep. 10, 2002 genta
+				CEditWnd* pcEditWnd = GetMainWindow();	//	Sep. 10, 2002 genta
 				if (pcEditWnd->m_pPrintPreview) {
 					wchar_t szText[1024];
 					_itow(pcEditWnd->m_pPrintPreview->GetCurPageNum() + 1, szText, 10);
@@ -348,7 +348,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			break;
 		case L'P':	//	総ページ
 			{
-				CEditWnd*	pcEditWnd = GetMainWindow();	//	Sep. 10, 2002 genta
+				CEditWnd* pcEditWnd = GetMainWindow();	//	Sep. 10, 2002 genta
 				if (pcEditWnd->m_pPrintPreview){
 					wchar_t szText[1024];
 					_itow(pcEditWnd->m_pPrintPreview->GetAllPageNum(), szText, 10);
@@ -411,7 +411,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			//	Grep Key文字列 MAX 32文字
 			//	中身はSetParentCaption()より移植
 			{
-				CNativeW	cmemDes;
+				CNativeW cmemDes;
 				// m_szGrepKey → cmemDes
 				LimitStringLengthW( CAppMode::getInstance()->m_szGrepKey, wcslen( CAppMode::getInstance()->m_szGrepKey ), (q_max - q > 32 ? 32 : q_max - q - 3), cmemDes );
 				if ((int)wcslen( CAppMode::getInstance()->m_szGrepKey ) > cmemDes.GetStringLength()){
@@ -424,8 +424,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case L'S':	//	Sep. 15, 2005 FILE
 			//	サクラエディタのフルパス
 			{
-				SFilePath	szPath;
-
+				SFilePath szPath;
 				::GetModuleFileName( NULL, szPath, _countof2(szPath) );
 				q = wcs_pushT( q, q_max - q, szPath );
 				++p;
@@ -434,7 +433,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case 'I':	//	May. 19, 2007 ryoji
 			//	iniファイルのフルパス
 			{
-				TCHAR	szPath[_MAX_PATH + 1];
+				TCHAR szPath[_MAX_PATH + 1];
 				CFileNameManager::getInstance()->GetIniFileName( szPath );
 				q = wcs_pushT( q, q_max - q, szPath );
 				++p;
@@ -476,8 +475,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		//	
 		case L'{':	// 条件分岐
 			{
-				int cond;
-				cond = _ExParam_Evaluate( p + 1 );
+				int cond = _ExParam_Evaluate( p + 1 );
 				while (*p != '?' && *p != '\0')
 					++p;
 				if (*p == '\0')
@@ -521,12 +519,12 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 */
 const wchar_t* CSakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, int part)
 {
-	if( part == 0 )
+	if (part == 0)
 		return pszSource;
 	
 	int nest = 0;	// 入れ子のレベル
 	bool next = true;	// 継続フラグ
-	const wchar_t *p;
+	const wchar_t* p;
 	for (p = pszSource; next && *p != L'\0'; ++p) {
 		if( *p == L'$' && p[1] != L'\0' ){ // $が末尾なら無視
 			switch (*(++p)) {

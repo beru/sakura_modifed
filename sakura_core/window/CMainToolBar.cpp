@@ -149,7 +149,7 @@ void CMainToolBar::CreateToolBar( void )
 			NULL
 		);
 
-		if( NULL == m_hwndReBar ){
+		if( !m_hwndReBar ){
 			TopWarningMessage( m_pOwner->GetHwnd(), LS(STR_ERR_DLGEDITWND04) );
 			return;
 		}
@@ -184,7 +184,7 @@ void CMainToolBar::CreateToolBar( void )
 		CEditApp::getInstance()->GetAppInstance(),
 		NULL
 	);
-	if( NULL == m_hwndToolBar ){
+	if( !m_hwndToolBar ){
 		if( GetDllShareData().m_Common.m_sToolBar.m_bToolBarIsFlat ){	/* フラットツールバーにする／しない */
 			GetDllShareData().m_Common.m_sToolBar.m_bToolBarIsFlat = FALSE;
 		}

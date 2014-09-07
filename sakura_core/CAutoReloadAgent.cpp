@@ -93,8 +93,8 @@ bool CAutoReloadAgent::_ToDoChecking() const
 		return false; // ファイルの排他制御モード
 	}
 	HWND hwndActive = ::GetActiveWindow();
-	if (hwndActive == NULL) {
-		return false;	/* アクティブ？ */
+	if (!hwndActive) {
+		return false;	// アクティブ？
 	}
 	if (hwndActive != CEditWnd::getInstance()->GetHwnd()) {
 		return false;
@@ -103,7 +103,7 @@ bool CAutoReloadAgent::_ToDoChecking() const
 		return false;
 	}
 	if (GetListeningDoc()->m_cDocFile.IsFileTimeZero()) { 
-		return false;	/* 現在編集中のファイルのタイムスタンプ */
+		return false;	// 現在編集中のファイルのタイムスタンプ
 	}
 	if (GetListeningDoc()->m_pcEditWnd->m_pPrintPreview ) {
 		return false;	// 印刷プレビュー中	2013/5/8 Uchi
@@ -113,7 +113,7 @@ bool CAutoReloadAgent::_ToDoChecking() const
 
 bool CAutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 {
-	/* ファイルスタンプをチェックする */
+	// ファイルスタンプをチェックする
 	// 2005.10.20 ryoji FindFirstFileを使うように変更（ファイルがロックされていてもタイムスタンプ取得可能）
 	CFileTime ftime;
 	if (GetLastWriteTimestamp( GetListeningDoc()->m_cDocFile.GetFilePath(), &ftime )) {
@@ -125,7 +125,7 @@ bool CAutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 	return false;
 }
 
-/* ファイルのタイムスタンプのチェック処理 */
+// ファイルのタイムスタンプのチェック処理
 void CAutoReloadAgent::CheckFileTimeStamp()
 {
 	// 未編集で再ロード時の遅延
@@ -142,12 +142,12 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	//タイムスタンプ監視
+	// タイムスタンプ監視
 	FILETIME ftime;
 	if (!_IsFileUpdatedByOther(&ftime)) {
 		return;
 	}
-	pcDoc->m_cDocFile.SetFileTime( ftime ); //タイムスタンプ更新
+	pcDoc->m_cDocFile.SetFileTime( ftime ); // タイムスタンプ更新
 
 	//	From Here Dec. 4, 2002 genta
 	switch (m_eWatchUpdate) {
@@ -160,15 +160,15 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 			pcDoc->m_pcEditWnd->SendStatusMessage( szText );
 		}
 		break;
-	case WU_AUTOLOAD:		//以後未編集で再ロード
+	case WU_AUTOLOAD:		// 以後未編集で再ロード
 		if (!pcDoc->m_cDocEditor.IsModified()) {
 			PauseWatching(); // 更新監視の抑制
 
-			/* 同一ファイルの再オープン */
+			// 同一ファイルの再オープン
 			pcDoc->m_cDocFileOperation.ReloadCurrentFile( pcDoc->m_cDocFile.GetCodeSet() );
 			m_eWatchUpdate = WU_AUTOLOAD;
 
-			ResumeWatching(); //監視再開
+			ResumeWatching(); // 監視再開
 			break;
 		}
 		// through
@@ -186,7 +186,7 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 
 			switch (result) {
 			case 1:	// 再読込
-				/* 同一ファイルの再オープン */
+				// 同一ファイルの再オープン
 				pcDoc->m_cDocFileOperation.ReloadCurrentFile( pcDoc->m_cDocFile.GetCodeSet() );
 				m_eWatchUpdate = WU_QUERY;
 				break;
@@ -197,7 +197,7 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 				m_eWatchUpdate = WU_NONE;
 				break;
 			case 4:	// 以後未編集で再ロード
-				/* 同一ファイルの再オープン */
+				// 同一ファイルの再オープン
 				pcDoc->m_cDocFileOperation.ReloadCurrentFile( pcDoc->m_cDocFile.GetCodeSet() );
 				m_eWatchUpdate = WU_AUTOLOAD;
 				m_nDelayCount = 0;
@@ -208,7 +208,7 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 				break;
 			}
 
-			ResumeWatching(); //監視再開
+			ResumeWatching(); // 監視再開
 		}
 		break;
 	}

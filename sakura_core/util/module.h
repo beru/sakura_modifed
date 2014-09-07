@@ -23,7 +23,7 @@
 */
 #pragma once
 
-void GetAppVersionInfo( HINSTANCE, int, DWORD*, DWORD* );	/* リソースから製品バージョンの取得 */
+void GetAppVersionInfo( HINSTANCE, int, DWORD*, DWORD* );	// リソースから製品バージョンの取得
 
 HICON GetAppIcon( HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSmall = false);
 

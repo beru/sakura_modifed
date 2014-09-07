@@ -35,7 +35,7 @@ CTipWnd::CTipWnd()
 /* CTipWndクラス デストラクタ */
 CTipWnd::~CTipWnd()
 {
-	if( NULL != m_hFont ){
+	if( m_hFont ){
 		::DeleteObject( m_hFont );
 		m_hFont = NULL;
 	}
@@ -75,7 +75,7 @@ void CTipWnd::Create( HINSTANCE hInstance, HWND hwndParent )
 		NULL // handle to menu, or child-window identifier
 	);
 
-	if( NULL != m_hFont ){
+	if( m_hFont ){
 		::DeleteObject( m_hFont );
 		m_hFont = NULL;
 	}
@@ -101,7 +101,7 @@ void CTipWnd::Show( int nX, int nY, const TCHAR* szText, RECT* pRect )
 	HDC		hdc;
 	RECT	rc;
 
-	if( NULL != szText ){
+	if( szText ){
 		m_cInfo.SetString( szText );
 	}
 	const TCHAR* pszInfo = m_cInfo.GetStringPtr();

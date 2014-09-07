@@ -37,7 +37,7 @@
 template <class T>
 class TSingleton{
 public:
-	//公開インターフェース
+	// 公開インターフェース
 	static T* getInstance()
 	{
 		static T instance;
@@ -60,11 +60,11 @@ private:
 template <class T>
 class TSingleInstance{
 public:
-	//公開インターフェース
+	// 公開インターフェース
 	static T* getInstance() { return gm_instance; } //!< 作成済みのインスタンスを返す。インスタンスが存在しなければ NULL。
 
 protected:
-	//※2個以上のインスタンスは想定していません。assertが破綻を検出します。
+	// ※2個以上のインスタンスは想定していません。assertが破綻を検出します。
 	TSingleInstance() { assert(gm_instance==NULL); gm_instance = static_cast<T*>(this); }
 	~TSingleInstance() { assert(gm_instance); gm_instance = NULL; }
 private:
@@ -74,7 +74,7 @@ template <class T>
 T* TSingleInstance<T>::gm_instance = NULL;
 
 
-//記録もする
+// 記録もする
 #include <vector>
 template <class T> class TInstanceHolder{
 public:
@@ -94,7 +94,7 @@ public:
 	static int GetInstanceCount() { return (int)gm_table.size(); }
 	static T* GetInstance(int nIndex)
 	{
-		if (nIndex>=0 && nIndex<(int)gm_table.size()) {
+		if (nIndex >= 0 && nIndex < (int)gm_table.size()) {
 			return gm_table[nIndex];
 		}else {
 			return 0;

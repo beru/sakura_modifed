@@ -77,7 +77,7 @@ private:
 
 	// Jan. 31, 2004 genta
 	// バイナリサイズ削減のため
-	//MacroTypeRep m_mMacroExts;	/*!< 拡張子対応表 */
+	//MacroTypeRep m_mMacroExts;	//!< 拡張子対応表
 	/*!
 		Creatorリスト
 		@date 2002.08.25 genta 追加

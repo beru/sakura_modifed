@@ -45,7 +45,7 @@ CKeyMacroMgr::~CKeyMacroMgr()
 }
 
 
-/*! キーマクロのバッファをクリアする */
+//! キーマクロのバッファをクリアする
 void CKeyMacroMgr::ClearAll( void )
 {
 	CMacro* p = m_pTop;
@@ -105,10 +105,10 @@ BOOL CKeyMacroMgr::SaveKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath ) con
 		return FALSE;
 	}
 
-	//最初のコメント
+	// 最初のコメント
 	out.WriteF(LSW(STR_ERR_DLGKEYMACMGR1));
 
-	//マクロ内容
+	// マクロ内容
 	CMacro* p = m_pTop;
 	while (p) {
 		p->Save( hInstance, out );
@@ -147,7 +147,7 @@ bool CKeyMacroMgr::ExecKeyMacro( CEditView* pcEditView, int flags ) const
 */
 BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 {
-	/* キーマクロのバッファをクリアする */
+	// キーマクロのバッファをクリアする
 	ClearAll();
 
 	CTextInputStream in( pszPath );
@@ -206,7 +206,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 		}
 		// 関数名にS_が付いていたら
 
-		/* 関数名→機能ID，機能名日本語 */
+		// 関数名→機能ID，機能名日本語
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		nFuncID = CSMacroMgr::GetFuncInfoByName( hInstance, szFuncName, szFuncNameJapanese );
 		if (-1 != nFuncID) {
@@ -394,7 +394,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 	return m_nReady ? TRUE : FALSE;
 }
 
-/*! キーボードマクロを文字列から読み込み */
+//! キーボードマクロを文字列から読み込み
 BOOL CKeyMacroMgr::LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode )
 {
 	// 一時ファイル名を作成

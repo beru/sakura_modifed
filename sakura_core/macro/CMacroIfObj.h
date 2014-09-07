@@ -64,7 +64,7 @@ public:
 		m_Source = Source;
 		m_nIndex = INVALID_MACRO_IDX;
 		if (nMode == MACRO_MODE_EXEC) {
-			//呼び出しの直前で設定されている番号を保存する
+			// 呼び出しの直前で設定されている番号を保存する
 			m_nIndex = CEditApp::getInstance()->m_pcSMacroMgr->GetCurrentIdx();
 		}
 	}
@@ -80,13 +80,13 @@ public:
 		static MacroFuncInfo macroFuncInfoArr[] = {
 			//ID									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_SET_MATCH),		LTEXT("SetMatch"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//flagsを取得する
-			//	終端
+			// 終端
 			{ F_INVALID, NULL, { VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY }, VT_EMPTY, NULL }
 		};
 		return macroFuncInfoArr;
 	}
 
-	//関数情報を取得する
+	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const{
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
 			//ID									関数名						引数										戻り値の型	m_pszData
@@ -95,21 +95,29 @@ public:
 			{ EFunctionCode(F_MA_GET_EXT),			LTEXT("GetExt"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_BSTR,	NULL },	//Extを取得する
 			{ EFunctionCode(F_MA_GET_SOURCE),		LTEXT("GetSource"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_BSTR,	NULL },	//Sourceを取得する
 			{ EFunctionCode(F_MA_GET_INDEX),		LTEXT("GetIndex"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//マクロIndexを取得する
-			//	終端
+			// 終端
 			{ F_INVALID, NULL, { VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY }, VT_EMPTY, NULL }
 		};
 		return macroFuncInfoNotCommandArr;
 	}
 
-	//関数を処理する
-	virtual bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result){
-		switch(LOWORD(ID)){
+	// 関数を処理する
+	virtual
+	bool HandleFunction(
+		CEditView*		View,
+		EFunctionCode	ID,
+		const VARIANT*	Arguments,
+		const int		ArgSize,
+		VARIANT&		Result
+		)
+	{
+		switch (LOWORD(ID)) {
 		case F_MA_GET_MODE:
 			{
 				Wrap(&Result)->Receive(m_nMode);
 			}
 			return true;
-		case F_MA_GET_FLAGS:	//flagsを取得する
+		case F_MA_GET_FLAGS:	// flagsを取得する
 			{
 				Wrap(&Result)->Receive(m_nFlags);
 			}
@@ -136,8 +144,16 @@ public:
 		return false;
 	}
 
-	//コマンドを処理する
-	virtual bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize){
+	// コマンドを処理する
+	virtual
+	bool HandleCommand(
+		CEditView*		View,
+		EFunctionCode	ID,
+		const WCHAR*	Arguments[],
+		const int		ArgLengths[],
+		const int		ArgSize
+		)
+	{
 		switch (LOWORD(ID)) {
 		case F_MA_SET_MATCH:
 			if (Arguments[0] != NULL) {
@@ -148,7 +164,7 @@ public:
 		return false;
 	}
 
-	BOOL IsMatch(){
+	BOOL IsMatch() {
 		return (m_nIsMatch != 0) ? TRUE : FALSE;
 	}
 

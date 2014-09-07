@@ -8,6 +8,6 @@
 //! BOMƒf[ƒ^Žæ“¾
 void CCesu8::GetBom(CMemory* pcmemBom)
 {
-	static const BYTE UTF8_BOM[]={0xEF,0xBB,0xBF};
+	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 	pcmemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
 }

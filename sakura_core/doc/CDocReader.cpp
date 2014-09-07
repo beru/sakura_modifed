@@ -10,30 +10,25 @@
 */
 wchar_t* CDocReader::GetAllData(int* pnDataLen)
 {
-	int			nDataLen;
-	int			nLineLen;
-	CDocLine* 	pDocLine;
-
-	pDocLine = m_pcDocLineMgr->GetDocLineTop();
-	nDataLen = 0;
-	while (NULL != pDocLine) {
+	CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	int nDataLen = 0;
+	while (pDocLine) {
 		//	Oct. 7, 2002 YAZAKI
 		nDataLen += pDocLine->GetLengthWithoutEOL() + 2;	//	\r\n‚ð’Ç‰Á‚µ‚Ä•Ô‚·‚½‚ß+2‚·‚éB
 		pDocLine = pDocLine->GetNextLine();
 	}
 
-	wchar_t* pData;
-	pData = (wchar_t*)malloc( (nDataLen + 1) * sizeof(wchar_t) );
-	if (NULL == pData) {
+	wchar_t* pData = (wchar_t*)malloc( (nDataLen + 1) * sizeof(wchar_t) );
+	if (!pData) {
 		TopErrorMessage( NULL, LS(STR_ERR_DLGDOCLM6), nDataLen + 1 );
 		return NULL;
 	}
 	pDocLine = m_pcDocLineMgr->GetDocLineTop();
 
 	nDataLen = 0;
-	while (NULL != pDocLine) {
+	while (pDocLine) {
 		//	Oct. 7, 2002 YAZAKI
-		nLineLen = pDocLine->GetLengthWithoutEOL();
+		int nLineLen = pDocLine->GetLengthWithoutEOL();
 		if (0 < nLineLen) {
 			wmemcpy( &pData[nDataLen], pDocLine->GetPtr(), nLineLen );
 			nDataLen += nLineLen;
@@ -50,9 +45,8 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 
 const wchar_t* CDocReader::GetLineStr( CLogicInt nLine, CLogicInt* pnLineLen )
 {
-	CDocLine* pDocLine;
-	pDocLine = m_pcDocLineMgr->GetLine( nLine );
-	if (NULL == pDocLine) {
+	CDocLine* pDocLine = m_pcDocLineMgr->GetLine( nLine );
+	if (!pDocLine) {
 		*pnLineLen = CLogicInt(0);
 		return NULL;
 	}
@@ -70,7 +64,7 @@ const wchar_t* CDocReader::GetLineStr( CLogicInt nLine, CLogicInt* pnLineLen )
 const wchar_t* CDocReader::GetLineStrWithoutEOL( CLogicInt nLine, int* pnLineLen )
 {
 	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine( nLine );
-	if (NULL == pDocLine) {
+	if (!pDocLine) {
 		*pnLineLen = 0;
 		return NULL;
 	}
@@ -94,7 +88,6 @@ const wchar_t* CDocReader::GetFirstLinrStr( int* pnLineLen )
 		*pnLineLen = 0;
 	}else {
 		pszLine = m_pcDocLineMgr->GetDocLineTop()->GetDocLineStrWithEOL( pnLineLen );
-
 		m_pcDocLineMgr->m_pDocLineCurrent = m_pcDocLineMgr->GetDocLineTop()->GetNextLine();
 	}
 	return pszLine;
@@ -112,7 +105,7 @@ const wchar_t* CDocReader::GetFirstLinrStr( int* pnLineLen )
 const wchar_t* CDocReader::GetNextLinrStr( int* pnLineLen )
 {
 	const wchar_t* pszLine;
-	if (NULL == m_pcDocLineMgr->m_pDocLineCurrent) {
+	if (!m_pcDocLineMgr->m_pDocLineCurrent) {
 		pszLine = NULL;
 		*pnLineLen = 0;
 	}else {

@@ -1199,7 +1199,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 		nCaretPosX_PHY = GetCaret().GetCaretLogicPos().x;
 
 		pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
-		if (NULL == pLine) {
+		if (!pLine) {
 			if (WCODE::CR != wcChar) {
 				return;
 			}
@@ -1267,7 +1267,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 			pLine2 = m_pcEditDoc->m_cDocLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == GetCaret().GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
-				if (NULL == pLine2) {
+				if (!pLine2) {
 					if (GetCaret().GetCaretLogicPos().y == m_pcEditDoc->m_cDocLineMgr.GetLineCount())
 						continue;	// EOF のみの行
 					break;
@@ -1275,7 +1275,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 				nCharChars = CLogicInt(&pLine2[nWork] - CNativeW::GetCharPrev( pLine2, nLineLen2, &pLine2[nWork] ));
 				k = nWork - nCharChars;
 			}else {
-				if (NULL == pLine2)
+				if (!pLine2)
 					break;
 				nCharChars = CLogicInt(&pLine2[nLineLen2] - CNativeW::GetCharPrev( pLine2, nLineLen2, &pLine2[nLineLen2] ));
 				k = nLineLen2 - nCharChars;
@@ -1402,7 +1402,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 			delete [] pszData;
 			return;
 		}
-		if (NULL == pLine) {
+		if (!pLine) {
 			pszSrc[0] = L'\0';
 		}else {
 			wmemcpy( pszSrc, &pLine[sRangeA.GetFrom().x], nSrcLen );
@@ -1450,7 +1450,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 		}
 		break;
 	}
-	if (NULL != pszData) {
+	if (pszData) {
 		delete [] pszData;
 		pszData = NULL;
 	}

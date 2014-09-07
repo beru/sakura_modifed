@@ -48,7 +48,6 @@ CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPCTSTR lpCmdLine )
 {
 	CCommandLine::getInstance()->ParseCommandLine(lpCmdLine);
 
-	CProcess* process = 0;
 	if (!IsValidVersion()) {
 		return 0;
 	}
@@ -62,6 +61,7 @@ CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPCTSTR lpCmdLine )
 	// 起動されることもある。
 	// しかし、そのような場合でもミューテックスを最初に確保したコントロールプロセスが唯一生き残る。
 	//
+	CProcess* process = 0;
 	if (IsStartingControlProcess()) {
 		if (TestWriteQuit()) {	// 2007.09.04 ryoji「設定を保存して終了する」オプション処理（sakuext連携用）
 			return 0;
@@ -93,7 +93,7 @@ CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPCTSTR lpCmdLine )
 bool CProcessFactory::IsValidVersion()
 {
 	/* Windowsバージョンのチェック */
-	COsVersionInfo	cOsVer(true);	// 初期化を行う
+	COsVersionInfo cOsVer(true);	// 初期化を行う
 	if (cOsVer.GetVersion()) {
 		if (!cOsVer.OsIsEnableVersion()) {
 			InfoMessage( NULL,
@@ -154,7 +154,7 @@ bool CProcessFactory::IsStartingControlProcess()
 bool CProcessFactory::IsExistControlProcess()
 {
  	HANDLE hMutexCP = ::OpenMutex( MUTEX_ALL_ACCESS, FALSE, GSTR_MUTEX_SAKURA_CP );	// 2006.04.10 ryoji ::CreateMutex() を ::OpenMutex()に変更
-	if (NULL != hMutexCP) {
+	if (hMutexCP) {
 		::CloseHandle( hMutexCP );
 		return true;	// コントロールプロセスが見つかった
 	}
@@ -269,7 +269,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 	}
 
 	HANDLE hEvent = ::OpenEvent( EVENT_ALL_ACCESS, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED );
-	if (NULL == hEvent) {
+	if (!hEvent) {
 		// 動作中のコントロールプロセスを旧バージョンとみなし、イベントを待たずに処理を進める
 		//
 		// Note: Ver1.5.9.91以前のバージョンは初期化完了イベントを作らない。

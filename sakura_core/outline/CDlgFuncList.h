@@ -42,8 +42,8 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	HWND DoModeless( HINSTANCE, HWND, LPARAM, CFuncInfoArr*, CLayoutInt, CLayoutInt, int, int, bool );/* モードレスダイアログの表示 */
-	void ChangeView( LPARAM );	/* モードレス時：検索対象となるビューの変更 */
+	HWND DoModeless( HINSTANCE, HWND, LPARAM, CFuncInfoArr*, CLayoutInt, CLayoutInt, int, int, bool ); // モードレスダイアログの表示
+	void ChangeView( LPARAM );	// モードレス時：検索対象となるビューの変更
 	bool IsDocking() { return m_eDockSide > DOCKSIDE_FLOAT; }
 	EDockSide GetDockSide() { return m_eDockSide; }
 
@@ -63,33 +63,32 @@ protected:
 	void SetTypeConfig( CTypeConfig, const STypeConfig& );
 
 public:
-	/*! 現在の種別と同じなら
-	*/
+	//! 現在の種別と同じなら
 	bool CheckListType( int nOutLineType ) const { return nOutLineType == m_nOutlineType; }
 	void Redraw( int nOutLineType, int nListType, CFuncInfoArr*, CLayoutInt nCurLine, CLayoutInt nCurCol );
 	void Refresh( void );
 	bool ChangeLayout( int nId );
 	void OnOutlineNotify( WPARAM wParam, LPARAM lParam );
 	void SyncColor( void );
-	void SetWindowText( const TCHAR* szTitle );		//ダイアログタイトルの設定
+	void SetWindowText( const TCHAR* szTitle );		// ダイアログタイトルの設定
 	EFunctionCode GetFuncCodeRedraw(int outlineType);
 
 protected:
 	bool m_bInChangeLayout;
 
-	CFuncInfoArr*	m_pcFuncInfoArr;	/* 関数情報配列 */
-	CLayoutInt		m_nCurLine;			/* 現在行 */
-	CLayoutInt		m_nCurCol;			/* 現在桁 */
-	int				m_nSortCol;			/* ソートする列番号 */
+	CFuncInfoArr*	m_pcFuncInfoArr;	// 関数情報配列
+	CLayoutInt		m_nCurLine;			// 現在行
+	CLayoutInt		m_nCurCol;			// 現在桁
+	int				m_nSortCol;			// ソートする列番号
 	int				m_nSortColOld;		//!< ソートする列番号(OLD)
 	bool			m_bSortDesc;		//!< 降順
-	int				m_nDocType;			/* ドキュメントの種類 */
-	CNativeW		m_cmemClipText;		/* クリップボードコピー用テキスト */
-	bool			m_bLineNumIsCRLF;	/* 行番号の表示 false=折り返し単位／true=改行単位 */
-	int				m_nListType;		/* 一覧の種類 */
+	int				m_nDocType;			// ドキュメントの種類
+	CNativeW		m_cmemClipText;		// クリップボードコピー用テキスト
+	bool			m_bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
+	int				m_nListType;		// 一覧の種類
 public:
-	int				m_nOutlineType;		/* アウトライン解析の種別 */
-	bool			m_bEditWndReady;	/* エディタ画面の準備完了 */
+	int				m_nOutlineType;		// アウトライン解析の種別
+	bool			m_bEditWndReady;	// エディタ画面の準備完了
 protected:
 	BOOL OnInitDialog( HWND, WPARAM, LPARAM );
 	BOOL OnBnClicked( int );
@@ -99,23 +98,23 @@ protected:
 	BOOL OnDestroy(void); // 20060201 aroka
 	BOOL OnCbnSelChange( HWND hwndCtl, int wID ); // 2002/11/1 frozen
 	BOOL OnContextMenu( WPARAM, LPARAM );
-	void SetData();	/* ダイアログデータの設定 */
-	int GetData( void );	/* ダイアログデータの取得 */
+	void SetData();	// ダイアログデータの設定
+	int GetData( void );	// ダイアログデータの取得
 
 	/*
 	||  実装ヘルパ関数
 	*/
 	BOOL OnJump( bool bCheckAutoClose = true );	//	bCheckAutoClose：「このダイアログを自動的に閉じる」をチェックするかどうか
-	void SetTreeCpp( HWND );	/* ツリーコントロールの初期化：C++メソッドツリー */
-	void SetTreeJava( HWND, BOOL );	/* ツリーコントロールの初期化：Javaメソッドツリー */
-	void SetTree(bool tagjump = false);		/* ツリーコントロールの初期化：汎用品 */
-	void SetListVB( void );			/* リストビューコントロールの初期化：VisualBasic */		// Jul 10, 2003  little YOSHI
+	void SetTreeCpp( HWND );	// ツリーコントロールの初期化：C++メソッドツリー
+	void SetTreeJava( HWND, BOOL );	// ツリーコントロールの初期化：Javaメソッドツリー
+	void SetTree(bool tagjump = false);		// ツリーコントロールの初期化：汎用品
+	void SetListVB( void );			// リストビューコントロールの初期化：VisualBasic		// Jul 10, 2003  little YOSHI
 
 	// 2002/11/1 frozen 
 	void SortTree(HWND hWndTree,HTREEITEM htiParent);//!< ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
 #if 0
 2002.04.01 YAZAKI SetTreeTxt()、SetTreeTxtNest()は廃止。GetTreeTextNextはもともと使用されていなかった。
-	void SetTreeTxt( HWND );	/* ツリーコントロールの初期化：テキストトピックツリー */
+	void SetTreeTxt( HWND );	// ツリーコントロールの初期化：テキストトピックツリー
 	int SetTreeTxtNest( HWND, HTREEITEM, int, int, HTREEITEM*, int );
 	void GetTreeTextNext( HWND, HTREEITEM, int );
 #endif
@@ -126,7 +125,7 @@ protected:
 	static int CALLBACK CompareFunc_Desc( LPARAM, LPARAM, LPARAM );
 
 	// 2001.12.03 hor
-//	void SetTreeBookMark( HWND );		/* ツリーコントロールの初期化：ブックマーク */
+//	void SetTreeBookMark( HWND );		// ツリーコントロールの初期化：ブックマーク
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 	void Key2Command( WORD );		//	キー操作→コマンド変換
 	bool HitTestSplitter( int xPos, int yPos );
@@ -170,7 +169,7 @@ private:
 	CFuncInfo* m_cFuncInfo;
 
 	EDockSide	m_eDockSide;	// 現在の画面の表示位置
-	HWND		m_hwndToolTip;	/*!< ツールチップ（ボタン用） */
+	HWND		m_hwndToolTip;	//!< ツールチップ（ボタン用）
 	bool		m_bStretching;
 	bool		m_bHovering;
 	int			m_nHilightedBtn;

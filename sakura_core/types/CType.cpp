@@ -13,7 +13,7 @@ void _DefaultConfig(STypeConfig* pType);
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 void CType::InitTypeConfig(int nIdx, STypeConfig& type)
 {
-	//規定値をコピー
+	// 規定値をコピー
 	static STypeConfig sDefault;
 	static bool bLoadedDefault = false;
 	if (!bLoadedDefault) {
@@ -21,12 +21,12 @@ void CType::InitTypeConfig(int nIdx, STypeConfig& type)
 		bLoadedDefault=true;
 	}
 	type = sDefault;
-
-	//インデックスを設定
+	
+	// インデックスを設定
 	type.m_nIdx = nIdx;
 	type.m_id = nIdx;
-
-	//個別設定
+	
+	// 個別設定
 	InitTypeConfigImp(&type);
 }
 
@@ -44,22 +44,22 @@ void CType::InitTypeConfig(int nIdx, STypeConfig& type)
 void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConfig*>& types )
 {
 	CType* table[] = {
-		new CType_Basis(),	//基本
-		new CType_Text(),	//テキスト
-		new CType_Cpp(),	//C/C++
-		new CType_Html(),	//HTML
-		new CType_Sql(),	//PL/SQL
-		new CType_Cobol(),	//COBOL
-		new CType_Java(),	//Java
-		new CType_Asm(),	//アセンブラ
-		new CType_Awk(),	//awk
-		new CType_Dos(),	//MS-DOSバッチファイル
-		new CType_Pascal(),	//Pascal
-		new CType_Tex(),	//TeX
-		new CType_Perl(),	//Perl
-		new CType_Vb(),		//Visual Basic
-		new CType_Rich(),	//リッチテキスト
-		new CType_Ini(),	//設定ファイル
+		new CType_Basis(),	// 基本
+		new CType_Text(),	// テキスト
+		new CType_Cpp(),	// C/C++
+		new CType_Html(),	// HTML
+		new CType_Sql(),	// PL/SQL
+		new CType_Cobol(),	// COBOL
+		new CType_Java(),	// Java
+		new CType_Asm(),	// アセンブラ
+		new CType_Awk(),	// awk
+		new CType_Dos(),	// MS-DOSバッチファイル
+		new CType_Pascal(),	// Pascal
+		new CType_Tex(),	// TeX
+		new CType_Perl(),	// Perl
+		new CType_Vb(),		// Visual Basic
+		new CType_Rich(),	// リッチテキスト
+		new CType_Ini(),	// 設定ファイル
 	};
 	types.clear();
 	assert( _countof(table) <= MAX_TYPES );
@@ -67,10 +67,11 @@ void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConf
 		STypeConfig* type = new STypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
-		auto_strcpy(pShareData->m_TypeMini[i].m_szTypeExts, type->m_szTypeExts);
-		auto_strcpy(pShareData->m_TypeMini[i].m_szTypeName, type->m_szTypeName);
-		pShareData->m_TypeMini[i].m_encoding = type->m_encoding;
-		pShareData->m_TypeMini[i].m_id = type->m_id;
+		auto& typeMini = pShareData->m_TypeMini[i];
+		auto_strcpy(typeMini.m_szTypeExts, type->m_szTypeExts);
+		auto_strcpy(typeMini.m_szTypeName, type->m_szTypeName);
+		typeMini.m_encoding = type->m_encoding;
+		typeMini.m_id = type->m_id;
 		SAFE_DELETE(table[i]);
 	}
 	pShareData->m_TypeBasis = *types[0];
@@ -170,10 +171,11 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_bUseHokanByKeyword = false;			// 強調キーワードから入力補完
 
 	// 文字コード設定
-	pType->m_encoding.m_bPriorCesu8 = false;
-	pType->m_encoding.m_eDefaultCodetype = CODE_SJIS;
-	pType->m_encoding.m_eDefaultEoltype = EOL_CRLF;
-	pType->m_encoding.m_bDefaultBom = false;
+	auto& encoding = pType->m_encoding;
+	encoding.m_bPriorCesu8 = false;
+	encoding.m_eDefaultCodetype = CODE_SJIS;
+	encoding.m_eDefaultEoltype = EOL_CRLF;
+	encoding.m_bDefaultBom = false;
 
 	//@@@2002.2.4 YAZAKI
 	pType->m_szExtHelp[0] = L'\0';
@@ -197,7 +199,7 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_backImgScrollX = true;
 	pType->m_backImgScrollY = true;
 	{
-		POINT pt ={0,0};
+		POINT pt ={0, 0};
 		pType->m_backImgPosOffset = pt;
 	}
 	pType->m_bLineNumIsCRLF = true;					// 行番号の表示 false=折り返し単位／true=改行単位
@@ -240,9 +242,10 @@ void _DefaultConfig(STypeConfig* pType)
 
 //@@@ 2006.04.10 fon ADD-start
 	for (int i = 0; i < MAX_KEYHELP_FILE; i++) {
-		pType->m_KeyHelpArr[i].m_bUse = false;
-		pType->m_KeyHelpArr[i].m_szAbout[0] = _T('\0');
-		pType->m_KeyHelpArr[i].m_szPath[0] = _T('\0');
+		auto& attr = pType->m_KeyHelpArr[i];
+		attr.m_bUse = false;
+		attr.m_szAbout[0] = _T('\0');
+		attr.m_szPath[0] = _T('\0');
 	}
 	pType->m_bUseKeyWordHelp = false;		// 辞書選択機能の使用可否
 	pType->m_nKeyHelpNum = 0;				// 登録辞書数

@@ -36,13 +36,13 @@
 #include "StdAfx.h"
 #include "macro/CIfObj.h"
 
-//トレースメッセージ有無
+// トレースメッセージ有無
 #if defined( _DEBUG ) && defined( _UNICODE )
 #define TEST
 #endif
 
 /////////////////////////////////////////////
-//スクリプトに渡されるオブジェクトの型情報
+// スクリプトに渡されるオブジェクトの型情報
 class CIfObjTypeInfo: public ImplementsIUnknown<ITypeInfo>
 {
 private:
@@ -204,7 +204,7 @@ CIfObjTypeInfo::CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods)
 				: ImplementsIUnknown<ITypeInfo>(), m_MethodsRef(methods)
 { 
 	ZeroMemory(&m_TypeAttr, sizeof(m_TypeAttr));
-	m_TypeAttr.cImplTypes = 0; //親クラスのITypeInfoの数
+	m_TypeAttr.cImplTypes = 0; // 親クラスのITypeInfoの数
 	m_TypeAttr.cFuncs = (WORD)m_MethodsRef.size();
 }
 
@@ -236,15 +236,15 @@ HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames(
 
 
 /////////////////////////////////////////////
-//インタフェースオブジェクト
+// インタフェースオブジェクト
 
-//コンストラクタ
+// コンストラクタ
 CIfObj::CIfObj(const wchar_t* name, bool isGlobal)
 : ImplementsIUnknown<IDispatch>(), m_sName(name), m_isGlobal(isGlobal), m_Owner(0), m_Methods(), m_TypeInfo(NULL)
 { 
 };
 
-//デストラクタ
+// デストラクタ
 CIfObj::~CIfObj()
 {
 	if (m_TypeInfo != NULL) {
@@ -252,10 +252,10 @@ CIfObj::~CIfObj()
 	}
 }
 	
-//IUnknown実装
+// IUnknown実装
 HRESULT STDMETHODCALLTYPE CIfObj::QueryInterface(REFIID iid, void ** ppvObject) 
 {
-	if (ppvObject == NULL) {
+	if (!ppvObject) {
 		return E_POINTER;
 	}else if (IsEqualIID(iid, IID_IUnknown) || IsEqualIID(iid, IID_IDispatch)) {
 		AddRef();
@@ -266,16 +266,16 @@ HRESULT STDMETHODCALLTYPE CIfObj::QueryInterface(REFIID iid, void ** ppvObject)
 	}
 }
 
-//IDispatch実装
+// IDispatch実装
 HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
-				DISPID dispidMember,
-				REFIID riid,
-				LCID lcid,
-				WORD wFlags,
-				DISPPARAMS FAR* pdispparams,
-				VARIANT FAR* pvarResult,
-				EXCEPINFO FAR* pexcepinfo,
-				UINT FAR* puArgErr)
+	DISPID dispidMember,
+	REFIID riid,
+	LCID lcid,
+	WORD wFlags,
+	DISPPARAMS FAR* pdispparams,
+	VARIANT FAR* pvarResult,
+	EXCEPINFO FAR* pexcepinfo,
+	UINT FAR* puArgErr)
 {
 	if ((unsigned)dispidMember < m_Methods.size()) {
 		return (this->* (m_Methods[dispidMember].Method))( m_Methods[dispidMember].ID, pdispparams, pvarResult, m_Owner->GetData() );
@@ -285,11 +285,11 @@ HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
 }
 
 HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo( 
-				/* [in] */ UINT iTInfo,
-				/* [in] */ LCID lcid,
-				/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
+	/* [in] */ UINT iTInfo,
+	/* [in] */ LCID lcid,
+	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
-	if (m_TypeInfo == NULL) {
+	if (!m_TypeInfo) {
 		m_TypeInfo = new CIfObjTypeInfo(this->m_Methods);
 		m_TypeInfo->AddRef();
 	}
@@ -299,7 +299,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
 }
 
 HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfoCount( 
-				/* [out] */ UINT __RPC_FAR *pctinfo)
+	/* [out] */ UINT __RPC_FAR *pctinfo)
 {
 	*pctinfo = 1;
 	return S_OK;
@@ -309,15 +309,15 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfoCount(
 #pragma argsused
 #endif
 HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
-  REFIID riid,
-  OLECHAR FAR* FAR* rgszNames,
-  UINT cNames,
-  LCID lcid,
-  DISPID FAR* rgdispid)
+	REFIID riid,
+	OLECHAR FAR* FAR* rgszNames,
+	UINT cNames,
+	LCID lcid,
+	DISPID FAR* rgdispid)
 {
 	for (unsigned i = 0; i < cNames; ++i) {
 #ifdef TEST
-		//大量にメッセージが出るので注意。
+		// 大量にメッセージが出るので注意。
 		//DEBUG_TRACE( _T("GetIDsOfNames: %ls\n"), rgszNames[i] );
 #endif
 		size_t nSize = m_Methods.size();
@@ -335,7 +335,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
 	return S_OK;
 }
 
-//型情報にメソッドを追加する
+// 型情報にメソッドを追加する
 void CIfObj::AddMethod(
 	const wchar_t*	Name,
 	int				ID,
@@ -345,14 +345,12 @@ void CIfObj::AddMethod(
 	CIfObjMethod	Method
 )
 {
-	/*
-		this->m_TypeInfoが NULLでなければ AddMethod()は反映されない。
-	*/
+	// this->m_TypeInfoが NULLでなければ AddMethod()は反映されない。
 	m_Methods.push_back(CMethodInfo());
-	CMethodInfo *Info = &m_Methods[m_Methods.size() - 1];
+	CMethodInfo* Info = &m_Methods[m_Methods.size() - 1];
 	ZeroMemory(Info, sizeof(CMethodInfo));
 	Info->Desc.invkind = INVOKE_FUNC;
-	Info->Desc.cParams = (SHORT)ArgumentCount + 1; //戻り値の分
+	Info->Desc.cParams = (SHORT)ArgumentCount + 1; // 戻り値の分
 	Info->Desc.lprgelemdescParam = Info->Arguments;
 	//	Nov. 10, 2003 FILE Win9Xでは、[lstrcpyW]が無効のため、[wcscpy]に修正
 	wcscpy_s(Info->Name, Name);

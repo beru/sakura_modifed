@@ -163,9 +163,9 @@ public:
 		switch (LOWORD(ID)) {
 		case F_PL_SETOPTION:			//オプションファイルに値を書く
 			{
-				if (Arguments[0] == NULL) return false;
-				if (Arguments[1] == NULL) return false;
-				if (Arguments[2] == NULL) return false;
+				if (!Arguments[0]) return false;
+				if (!Arguments[1]) return false;
+				if (!Arguments[2]) return false;
 				CDataProfile cProfile;
 
 				cProfile.ReadProfile( m_cPlugin.GetOptionPath().c_str() );

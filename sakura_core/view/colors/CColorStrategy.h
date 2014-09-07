@@ -92,19 +92,19 @@ struct SColorStrategyInfo{
 		m_cIndex.eColorIndexBg = COLORIDX_TEXT;
 	}
 
-	//参照
+	// 参照
 	CEditView*	m_pcView;
-	CGraphics	m_gr;	//(SColorInfoでは未使用)
+	CGraphics	m_gr;	// (SColorInfoでは未使用)
 
-	//スキャン位置
+	// スキャン位置
 	LPCWSTR			m_pLineOfLogic;
 	CLogicInt		m_nPosInLogic;
 
-	//描画位置
+	// 描画位置
 	DispPos*		m_pDispPos;
 	DispPos			m_sDispPosBegin;
 
-	//色変え
+	// 色変え
 	CColorStrategy*		m_pStrategy;
 	CColor_Found*		m_pStrategyFound;
 	CColor_Select*		m_pStrategySelect;
@@ -150,7 +150,7 @@ public:
 	virtual bool BeginColor(const CStringRef& cStr, int nPos) { return false; }
 	virtual bool EndColor(const CStringRef& cStr, int nPos) { return true; }
 	virtual bool Disp() const = 0;
-	//イベント
+	// イベント
 	virtual void OnStartScanLogic(){}
 
 	//! 設定更新
@@ -189,16 +189,16 @@ class CColorStrategyPool : public TSingleton<CColorStrategyPool>{
 
 public:
 
-	//取得
+	// 取得
 	CColorStrategy*	GetStrategy(int nIndex) const { return m_vStrategiesDisp[nIndex]; }
 	int				GetStrategyCount() const { return (int)m_vStrategiesDisp.size(); }
 	CColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
-	//特定取得
+	// 特定取得
 	CColor_Found*   GetFoundStrategy() const { return m_pcFoundStrategy; }
 	CColor_Select*  GetSelectStrategy() const { return m_pcSelectStrategy; }
 
-	//イベント
+	// イベント
 	void NotifyOnStartScanLogic();
 
 	/*
@@ -208,10 +208,10 @@ public:
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	void CheckColorMODE( CColorStrategy** ppcColorStrategy, int nPos, const CStringRef& cLineStr );
 
-	//設定変更
+	// 設定変更
 	void OnChangeSetting(void);
 
-	//ビューの設定・取得
+	// ビューの設定・取得
 	CEditView* GetCurrentView(void) const { return m_pcView; }
 	void SetCurrentView(CEditView* pcView) { m_pcView = pcView; }
 

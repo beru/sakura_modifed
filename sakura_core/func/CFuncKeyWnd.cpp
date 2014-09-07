@@ -40,7 +40,7 @@ LRESULT CALLBACK CFuncKeyWndProc(
 {
 	CFuncKeyWnd*	pCFuncKeyWnd;
 	pCFuncKeyWnd = ( CFuncKeyWnd* )::GetWindowLongPtr( hwnd, GWLP_USERDATA );
-	if (NULL != pCFuncKeyWnd) {
+	if (pCFuncKeyWnd) {
 		return pCFuncKeyWnd->DispatchEvent( hwnd, uMsg, wParam, lParam );
 	}
 	return ::DefWindowProc( hwnd, uMsg, wParam, lParam );
@@ -52,25 +52,24 @@ LRESULT CALLBACK CFuncKeyWndProc(
 CFuncKeyWnd::CFuncKeyWnd()
 : CWnd(_T("::CFuncKeyWnd"))
 {
-	int		i;
-	LOGFONT	lf;
 	m_pszClassName = _T("CFuncKeyWnd");
 	m_pcEditDoc = NULL;
 	/* 共有データ構造体のアドレスを返す */
 	m_pShareData = &GetDllShareData();
 	m_nCurrentKeyState = -1;
-	for (i = 0; i < _countof(m_szFuncNameArr); ++i) {
+	for (int i = 0; i < _countof(m_szFuncNameArr); ++i) {
 		m_szFuncNameArr[i][0] = 0;
 	}
 //	2002.11.04 Moca Open()側で設定
 //	m_nButtonGroupNum = 4;
 
-	for (i = 0; i < _countof( m_hwndButtonArr ); ++i) {
+	for (int i = 0; i < _countof( m_hwndButtonArr ); ++i) {
 		m_hwndButtonArr[i] = NULL;
 	}
 
 	/* 表示用フォント */
 	/* LOGFONTの初期化 */
+	LOGFONT	lf;
 	memset_raw( &lf, 0, sizeof(lf) );
 	lf.lfHeight			= DpiPointsToPixels(-9);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
 	lf.lfWidth			= 0;
@@ -187,28 +186,23 @@ void CFuncKeyWnd::Close( void )
 // WM_SIZE処理
 LRESULT CFuncKeyWnd::OnSize( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	int			nButtonWidth;
-	int			nButtonHeight;
-	int			i;
-	int			nX;
-//	RECT		rc;
-	int			nButtonNum;
-	RECT		rcParent;
-
-	if (NULL == GetHwnd()) {
+	if (!GetHwnd()) {
 		return 0L;
 	}
 
-	nButtonNum = _countof( m_hwndButtonArr );
+//	RECT rc;
+
+	int nButtonNum = _countof( m_hwndButtonArr );
 
 	/* ボタンのサイズを計算 */
-	nButtonWidth = CalcButtonSize();
+	int nButtonWidth = CalcButtonSize();
 
+	RECT rcParent;
 	::GetWindowRect( GetHwnd(), &rcParent );
-	nButtonHeight = rcParent.bottom - rcParent.top - 2;
+	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
-	nX = 1;
-	for (i = 0; i < nButtonNum; ++i) {
+	int nX = 1;
+	for (int i = 0; i < nButtonNum; ++i) {
 		if (0 < i  && 0 == ( i % m_nButtonGroupNum )) {
 			nX += 12;
 		}
@@ -228,7 +222,7 @@ LRESULT CFuncKeyWnd::DispatchEvent(
 	LPARAM	lParam 	// second message parameter
 )
 {
-//	if (NULL == GetHwnd()) {
+//	if (!GetHwnd()) {
 //		return 0L;
 //	}
 
@@ -252,13 +246,10 @@ LRESULT CFuncKeyWnd::DispatchEvent(
 
 LRESULT CFuncKeyWnd::OnCommand( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	int		i;
-	HWND	hwndCtl;
-
-	hwndCtl = (HWND) lParam;		// handle of control
+	HWND hwndCtl = (HWND) lParam;		// handle of control
 //	switch (wNotifyCode) {
 //	case BN_PUSHED:
-		for (i = 0; i < _countof( m_hwndButtonArr ); ++i) {
+		for (int i = 0; i < _countof( m_hwndButtonArr ); ++i) {
 			if (hwndCtl == m_hwndButtonArr[i]) {
 				if (0 != m_nFuncCodeArr[i]) {
 					::SendMessageCmd( GetParentHwnd(), WM_COMMAND, MAKELONG( m_nFuncCodeArr[i], 0 ),  (LPARAM)hwnd );
@@ -282,7 +273,7 @@ LRESULT CFuncKeyWnd::OnTimer( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 //	DWORD dwTime 	// current system time
 
 	//	return;
-	if (NULL == GetHwnd()) {
+	if (!GetHwnd()) {
 		return 0;
 	}
 
@@ -290,19 +281,17 @@ LRESULT CFuncKeyWnd::OnTimer( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		return 0;
 	}
 
-	int			nIdx;
 //	int			nFuncId;
-	int			i;
 
 // novice 2004/10/10
 	/* Shift,Ctrl,Altキーが押されていたか */
-	nIdx = getCtrlKeyState();
+	int nIdx = getCtrlKeyState();
 	/* ALT,Shift,Ctrlキーの状態が変化したか */
 	if (nIdx != m_nCurrentKeyState) {
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		/* ファンクションキーの機能名を取得 */
-		for (i = 0; i < _countof( m_szFuncNameArr ); ++i) {
+		for (int i = 0; i < _countof( m_szFuncNameArr ); ++i) {
 			// 2007.02.22 ryoji CKeyBind::GetFuncCode()を使う
 			EFunctionCode	nFuncCode = CKeyBind::GetFuncCode(
 					(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
@@ -331,7 +320,7 @@ LRESULT CFuncKeyWnd::OnTimer( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	) {
 		m_nTimerCount = 0;
 		/* 機能が利用可能か調べる */
-		for (i = 0; i < _countof(	m_szFuncNameArr ); ++i) {
+		for (int i = 0; i < _countof(	m_szFuncNameArr ); ++i) {
 			if (IsFuncEnable( (CEditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i]  )) {
 				::EnableWindow( m_hwndButtonArr[i], TRUE );
 			}else {
@@ -352,14 +341,14 @@ LRESULT CFuncKeyWnd::OnDestroy( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 	/* ボタンを削除 */
 	for (int i = 0; i < _countof( m_hwndButtonArr ); ++i) {
-		if (NULL != m_hwndButtonArr[i]) {
+		if (m_hwndButtonArr[i]) {
 			::DestroyWindow( m_hwndButtonArr[i]	);
 			m_hwndButtonArr[i] = NULL;
 		}
 	}
 
 	/* サイズボックスを削除 */
-	if (NULL != m_hwndSizeBox) {
+	if (m_hwndSizeBox) {
 		::DestroyWindow( m_hwndSizeBox );
 		m_hwndSizeBox = NULL;
 	}
@@ -373,20 +362,17 @@ LRESULT CFuncKeyWnd::OnDestroy( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 /*! ボタンのサイズを計算 */
 int CFuncKeyWnd::CalcButtonSize( void )
 {
-	int			nButtonNum;
-	RECT		rc;
-	int			nCyHScroll;
-	int			nCxVScroll;
+	RECT rc;
 	::GetWindowRect( GetHwnd(), &rc );
 
-	nButtonNum = _countof( m_hwndButtonArr );
-
-	if (NULL == m_hwndSizeBox) {
+	int nButtonNum = _countof( m_hwndButtonArr );
+	int nCxVScroll;
+	if (!m_hwndSizeBox) {
 //		return ( rc.right - rc.left - nButtonNum - ( (nButtonNum + m_nButtonGroupNum - 1) / m_nButtonGroupNum - 1 ) * 12 ) / nButtonNum;
 		nCxVScroll = 0;
 	}else {
 		/* サイズボックスの位置、サイズ変更 */
-		nCyHScroll = ::GetSystemMetrics( SM_CYHSCROLL );
+		int nCyHScroll = ::GetSystemMetrics( SM_CYHSCROLL );
 		nCxVScroll = ::GetSystemMetrics( SM_CXVSCROLL );
 		::MoveWindow( m_hwndSizeBox,  rc.right - rc.left - nCxVScroll, rc.bottom - rc.top - nCyHScroll, nCxVScroll, nCyHScroll, TRUE );
 //		::MoveWindow( m_hwndSizeBox,  0, 0, nCxVScroll, nCyHScroll, TRUE );
@@ -403,18 +389,15 @@ int CFuncKeyWnd::CalcButtonSize( void )
 */
 void CFuncKeyWnd::CreateButtons( void )
 {
-	RECT	rcParent;
-	int		nButtonHeight;
-	int		i;
-
+	RECT rcParent;
 	::GetWindowRect( GetHwnd(), &rcParent );
-	nButtonHeight = rcParent.bottom - rcParent.top - 2;
+	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
-	for (i = 0; i < _countof(	m_nFuncCodeArr ); ++i) {
+	for (int i = 0; i < _countof(	m_nFuncCodeArr ); ++i) {
 		m_nFuncCodeArr[i] = F_0;
 	}
 
-	for (i = 0; i < _countof( m_hwndButtonArr ); ++i) {
+	for (int i = 0; i < _countof( m_hwndButtonArr ); ++i) {
 		m_hwndButtonArr[i] = ::CreateWindow(
 			_T("BUTTON"),						// predefined class
 			_T(""),								// button text
@@ -441,8 +424,7 @@ void CFuncKeyWnd::CreateButtons( void )
 /*! サイズボックスの表示／非表示切り替え */
 void CFuncKeyWnd::SizeBox_ONOFF( bool bSizeBox )
 {
-
-	RECT		rc;
+	RECT rc;
 	::GetWindowRect( GetHwnd(), &rc );
 	if (m_bSizeBox == bSizeBox) {
 		return;
@@ -455,17 +437,17 @@ void CFuncKeyWnd::SizeBox_ONOFF( bool bSizeBox )
 	}else {
 		m_hwndSizeBox = ::CreateWindowEx(
 			0L, 						/* no extended styles			*/
-			_T("SCROLLBAR"),				/* scroll bar control class		*/
+			_T("SCROLLBAR"),			/* scroll bar control class		*/
 			NULL,						/* text for window title bar	*/
 			WS_VISIBLE | WS_CHILD | SBS_SIZEBOX | SBS_SIZEGRIP, /* scroll bar styles */
 			0,							/* horizontal position			*/
 			0,							/* vertical position			*/
 			200,						/* width of the scroll bar		*/
 			CW_USEDEFAULT,				/* default height				*/
-			GetHwnd(), 				/* handle of main window		*/
+			GetHwnd(), 					/* handle of main window		*/
 			(HMENU) NULL,				/* no menu for a scroll bar 	*/
-			GetAppInstance(),				/* instance owning this window	*/
-			(LPVOID) NULL			/* pointer not needed				*/
+			GetAppInstance(),			/* instance owning this window	*/
+			(LPVOID) NULL				/* pointer not needed			*/
 		);
 		::ShowWindow( m_hwndSizeBox, SW_SHOW );
 		m_bSizeBox = true;
@@ -481,8 +463,8 @@ void CFuncKeyWnd::SizeBox_ONOFF( bool bSizeBox )
 //	呼び出してもらうことにより、余計な負荷を停止したい。
 void CFuncKeyWnd::Timer_ONOFF( bool bStart )
 {
-	if (NULL != GetHwnd()) {
-		if( bStart ){
+	if (GetHwnd()) {
+		if (bStart) {
 			/* タイマーを起動 */
 			if (0 == ::SetTimer( GetHwnd(), IDT_FUNCWND, TIMER_TIMEOUT, NULL )) {
 				WarningMessage(	GetHwnd(), LS(STR_ERR_DLGFUNCKEYWN1) );

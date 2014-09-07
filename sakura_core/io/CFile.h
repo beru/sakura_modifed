@@ -26,7 +26,7 @@
 #include "basis/CMyString.h" //CFilePath
 #include "util/file.h"
 
-//!ファイルの排他制御モード  2007.10.11 kobake 作成
+//! ファイルの排他制御モード  2007.10.11 kobake 作成
 enum EShareMode{
 	SHAREMODE_NOT_EXCLUSIVE,	//!< 排他制御しない
 	SHAREMODE_DENY_WRITE,		//!< 他プロセスからの上書きを禁止

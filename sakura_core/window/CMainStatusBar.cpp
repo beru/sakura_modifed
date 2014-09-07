@@ -41,7 +41,7 @@ void CMainStatusBar::CreateStatusBar()
 		0
 	);
 
-	if( NULL != m_pOwner->m_CFuncKeyWnd.GetHwnd() ){
+	if( m_pOwner->m_CFuncKeyWnd.GetHwnd() ){
 		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF( FALSE );
 	}
 
@@ -53,14 +53,14 @@ void CMainStatusBar::CreateStatusBar()
 /* ステータスバー破棄 */
 void CMainStatusBar::DestroyStatusBar()
 {
-	if( NULL != m_hwndProgressBar ){
+	if( m_hwndProgressBar ){
 		::DestroyWindow( m_hwndProgressBar );
 		m_hwndProgressBar = NULL;
 	}
 	::DestroyWindow( m_hwndStatusBar );
 	m_hwndStatusBar = NULL;
 
-	if( NULL != m_pOwner->m_CFuncKeyWnd.GetHwnd() ){
+	if( m_pOwner->m_CFuncKeyWnd.GetHwnd() ){
 		bool bSizeBox;
 		if( GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0 ){	/* ファンクションキー表示位置／0:上 1:下 */
 			/* サイズボックスの表示／非表示切り替え */
@@ -69,7 +69,7 @@ void CMainStatusBar::DestroyStatusBar()
 		else{
 			bSizeBox = true;
 			/* ステータスパーを表示している場合はサイズボックスを表示しない */
-			if( NULL != m_hwndStatusBar ){
+			if( m_hwndStatusBar ){
 				bSizeBox = false;
 			}
 		}
@@ -96,7 +96,7 @@ void CMainStatusBar::DestroyStatusBar()
 */
 void CMainStatusBar::SendStatusMessage2( const TCHAR* msg )
 {
-	if( NULL != m_hwndStatusBar ){
+	if( m_hwndStatusBar ){
 		// ステータスバーへ
 		StatusBar_SetText( m_hwndStatusBar,0 | SBT_NOBORDERS,msg );
 	}

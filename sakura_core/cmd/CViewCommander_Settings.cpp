@@ -38,11 +38,11 @@ void CViewCommander::Command_SHOWTOOLBAR( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispTOOLBAR = ((NULL == pCEditWnd->m_cToolbar.GetToolbarHwnd())? TRUE: FALSE);	/* ツールバー表示 */
+	GetDllShareData().m_Common.m_sWindow.m_bDispTOOLBAR = ((!pCEditWnd->m_cToolbar.GetToolbarHwnd())? TRUE: FALSE);	/* ツールバー表示 */
 	pCEditWnd->LayoutToolBar();
 	pCEditWnd->EndLayoutBars();
 
-	//全ウインドウに変更を通知する。
+	// 全ウインドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_TOOLBAR,
@@ -60,11 +60,11 @@ void CViewCommander::Command_SHOWFUNCKEY( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispFUNCKEYWND = ((NULL == pCEditWnd->m_CFuncKeyWnd.GetHwnd())? TRUE: FALSE);	/* ファンクションキー表示 */
+	GetDllShareData().m_Common.m_sWindow.m_bDispFUNCKEYWND = ((!pCEditWnd->m_CFuncKeyWnd.GetHwnd())? TRUE: FALSE);	/* ファンクションキー表示 */
 	pCEditWnd->LayoutFuncKey();
 	pCEditWnd->EndLayoutBars();
 
-	//全ウインドウに変更を通知する。
+	// 全ウインドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_FUNCKEY,
@@ -85,7 +85,7 @@ void CViewCommander::Command_SHOWTAB( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = ((NULL == pCEditWnd->m_cTabWnd.GetHwnd())? TRUE: FALSE);	/* タブバー表示 */
+	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = ((!pCEditWnd->m_cTabWnd.GetHwnd())? TRUE: FALSE);	/* タブバー表示 */
 	pCEditWnd->LayoutTabBar();
 	pCEditWnd->EndLayoutBars();
 
@@ -98,7 +98,7 @@ void CViewCommander::Command_SHOWTAB( void )
 		);
 	}
 
-	//全ウインドウに変更を通知する。
+	// 全ウインドウに変更を通知する。
 	CAppNodeManager::getInstance()->ResetGroupId();
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
@@ -117,11 +117,11 @@ void CViewCommander::Command_SHOWSTATUSBAR( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispSTATUSBAR = ((NULL == pCEditWnd->m_cStatusBar.GetStatusHwnd())? TRUE: FALSE);	/* ステータスバー表示 */
+	GetDllShareData().m_Common.m_sWindow.m_bDispSTATUSBAR = ((!pCEditWnd->m_cStatusBar.GetStatusHwnd())? TRUE: FALSE);	/* ステータスバー表示 */
 	pCEditWnd->LayoutStatusBar();
 	pCEditWnd->EndLayoutBars();
 
-	//全ウインドウに変更を通知する。
+	// 全ウインドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_STATUSBAR,
@@ -131,11 +131,11 @@ void CViewCommander::Command_SHOWSTATUSBAR( void )
 }
 
 
-/* タイプ別設定一覧 */
+// タイプ別設定一覧
 void CViewCommander::Command_TYPE_LIST( void )
 {
-	CDlgTypeList			cDlgTypeList;
-	CDlgTypeList::SResult	sResult;
+	CDlgTypeList cDlgTypeList;
+	CDlgTypeList::SResult sResult;
 	sResult.cDocumentType = GetDocument()->m_cDocType.GetDocumentType();
 	sResult.bTempChange = true;
 	if (cDlgTypeList.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), &sResult )) {
@@ -144,7 +144,7 @@ void CViewCommander::Command_TYPE_LIST( void )
 		if (sResult.bTempChange) {
 			HandleCommand( F_CHANGETYPE, true, (LPARAM)sResult.cDocumentType.GetIndex() + 1, 0, 0, 0 );
 		}else {
-			/* タイプ別設定 */
+			// タイプ別設定
 			CEditApp::getInstance()->OpenPropertySheetTypes( -1, sResult.cDocumentType );
 		}
 	}
@@ -152,7 +152,7 @@ void CViewCommander::Command_TYPE_LIST( void )
 }
 
 
-/*! タイプ別設定一時適用 */
+//! タイプ別設定一時適用
 void CViewCommander::Command_CHANGETYPE( int nTypePlusOne )
 {
 	CTypeConfig type = CTypeConfig(nTypePlusOne - 1);
@@ -169,28 +169,27 @@ void CViewCommander::Command_CHANGETYPE( int nTypePlusOne )
 }
 
 
-/* タイプ別設定 */
+// タイプ別設定
 void CViewCommander::Command_OPTION_TYPE( void )
 {
 	CEditApp::getInstance()->OpenPropertySheetTypes( -1, GetDocument()->m_cDocType.GetDocumentType() );
 }
 
 
-/* 共通設定 */
+// 共通設定
 void CViewCommander::Command_OPTION( void )
 {
-	/* 設定プロパティシート テスト用 */
+	// 設定プロパティシート テスト用
 	CEditApp::getInstance()->OpenPropertySheet( -1 );
 }
 
 
-/* フォント設定 */
+// フォント設定
 void CViewCommander::Command_FONT( void )
 {
-	HWND	hwndFrame;
-	hwndFrame = GetMainWindow();
+	HWND hwndFrame = GetMainWindow();
 
-	/* フォント設定ダイアログ */
+	// フォント設定ダイアログ
 	auto& csView = GetDllShareData().m_Common.m_sView;
 	LOGFONT lf = csView.m_lf;
 	INT nPointSize;
@@ -204,12 +203,12 @@ void CViewCommander::Command_FONT( void )
 		csView.m_nPointSize = nPointSize;
 
 		if (csView.m_lf.lfPitchAndFamily & FIXED_PITCH) {
-			csView.m_bFontIs_FIXED_PITCH = TRUE;	/* 現在のフォントは固定幅フォントである */
+			csView.m_bFontIs_FIXED_PITCH = TRUE;	// 現在のフォントは固定幅フォントである
 		}else {
-			csView.m_bFontIs_FIXED_PITCH = FALSE;	/* 現在のフォントは固定幅フォントである */
+			csView.m_bFontIs_FIXED_PITCH = FALSE;	// 現在のフォントは固定幅フォントでないアル
 		}
-		/* 設定変更を反映させる */
-		/* 全編集ウィンドウへメッセージをポストする */
+		// 設定変更を反映させる
+		// 全編集ウィンドウへメッセージをポストする
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_SAVEEDITSTATE,
 			(WPARAM)0, (LPARAM)0, hwndFrame
@@ -219,12 +218,12 @@ void CViewCommander::Command_FONT( void )
 			(WPARAM)0, (LPARAM)PM_CHANGESETTING_FONT, hwndFrame
 		);
 
-		/* キャレットの表示 */
+		// キャレットの表示
 //		::HideCaret( GetHwnd() );
 //		::ShowCaret( GetHwnd() );
 
-//		/* アクティブにする */
-//		/* アクティブにする */
+//		// アクティブにする
+//		// アクティブにする
 //		ActivateFrameWindow( hwndFrame );
 	}
 	return;
@@ -305,16 +304,17 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 		GetDocument()->m_nPointSizeOrg = GetEditWindow()->GetFontPointSize(false);
 	}
 
-	HWND	hwndFrame;
-	hwndFrame = GetMainWindow();
+	HWND hwndFrame = GetMainWindow();
 
-	/* 設定変更を反映させる */
+	// 設定変更を反映させる
 	// 新たにタイプ別や一時設定が有効になってもフォント名は変わらないのでSIZEのみの変更通知をする
 	if (mode == 0 || mode == 1) {
 		/* 全編集ウィンドウへメッセージをポストする */
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_CHANGESETTING,
-			(WPARAM)nTypeIndex, (LPARAM)PM_CHANGESETTING_FONTSIZE, hwndFrame
+			(WPARAM)nTypeIndex,
+			(LPARAM)PM_CHANGESETTING_FONTSIZE,
+			hwndFrame
 		);
 	}else if (mode == 2) {
 		// 自分だけ更新
@@ -348,14 +348,13 @@ void CViewCommander::Command_WRAPWINDOWWIDTH( void )	//	Oct. 7, 2000 JEPRO WRAPW
 
 	GetEditWindow()->ChangeLayoutParam( true, GetDocument()->m_cLayoutMgr.GetTabSpace(), newKetas );
 	
-
 	//	Aug. 14, 2005 genta 共通設定へは反映させない
 //	m_pCommanderView->m_pTypeData->m_nMaxLineKetas = m_nViewColNum;
 
 //	2013.12.30 左隅に移動しないように
-//	m_pCommanderView->GetTextArea().SetViewLeftCol( CLayoutInt(0) );		/* 表示域の一番左の桁(0開始) */
+//	m_pCommanderView->GetTextArea().SetViewLeftCol( CLayoutInt(0) );		// 表示域の一番左の桁(0開始)
 
-	/* フォーカス移動時の再描画 */
+	// フォーカス移動時の再描画
 	m_pCommanderView->RedrawAll();
 	return;
 }
@@ -370,7 +369,7 @@ void CViewCommander::Command_Favorite( void )
 {
 	CDlgFavorite	cDlgFavorite;
 
-	//ダイアログを表示する
+	// ダイアログを表示する
 	if (!cDlgFavorite.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument() )) {
 		return;
 	}
@@ -417,7 +416,7 @@ void CViewCommander::Command_TEXTWRAPMETHOD( int nWrapMethod )
 		break;
 
 	default:
-		return;		// 不正な値の時は何もしない
+		return;	// 不正な値の時は何もしない
 	}
 
 	pcDoc->m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
@@ -453,7 +452,7 @@ void CViewCommander::Command_SELECT_COUNT_MODE( int nMode )
 	ESelectCountMode* pnSelectCountMode = &GetEditWindow()->m_nSelectCountMode;
 
 	if (nMode == SELECT_COUNT_TOGGLE) {
-		//文字数⇔バイト数トグル
+		// 文字数⇔バイト数トグル
 		ESelectCountMode nCurrentMode;
 		if (*pnSelectCountMode == SELECT_COUNT_TOGGLE) {
 			nCurrentMode = ( GetDllShareData().m_Common.m_sStatusbar.m_bDispSelCountByByte ?
@@ -476,7 +475,7 @@ void CViewCommander::Command_SELECT_COUNT_MODE( int nMode )
 */
 void CViewCommander::Command_SET_QUOTESTRING( const wchar_t* quotestr )
 {
-	if (quotestr == NULL)
+	if (!quotestr)
 		return;
 
 	wcsncpy( GetDllShareData().m_Common.m_sFormat.m_szInyouKigou, quotestr,

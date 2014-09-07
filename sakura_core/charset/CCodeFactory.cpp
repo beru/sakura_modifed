@@ -20,7 +20,7 @@ CCodeBase* CCodeFactory::CreateCodeBase(
 	int			nFlag			//!< bit 0: MIME Encode‚³‚ê‚½ƒwƒbƒ_‚ðdecode‚·‚é‚©‚Ç‚¤‚©
 )
 {
-  	switch( eCodeType ){
+  	switch (eCodeType) {
 	case CODE_SJIS:			return new CShiftJis();
 	case CODE_EUC:			return new CEuc();
 	case CODE_JIS:			return new CJis((nFlag&1)==1);

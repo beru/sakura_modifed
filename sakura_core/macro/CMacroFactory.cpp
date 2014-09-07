@@ -49,7 +49,7 @@ CMacroFactory::CMacroFactory()
 */
 std::tstring CMacroFactory::Ext2Key(const TCHAR *ext)
 {
-	if (ext == NULL) {
+	if (!ext) {
 		ext = NULSTR;
 	}
 	
@@ -73,7 +73,7 @@ std::tstring CMacroFactory::Ext2Key(const TCHAR *ext)
 */
 bool CMacroFactory::RegisterCreator( Creator f )
 {
-	if (f == NULL) {
+	if (!f) {
 		return false;
 	}
 

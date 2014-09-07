@@ -78,7 +78,7 @@ INT_PTR CPropCommon::DlgProc(
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
 		pCPropCommon = ( CPropCommon* )(pPsp->lParam);
-		if (NULL != pCPropCommon) {
+		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, wParam, pPsp->lParam );
 		}else {
 			return FALSE;
@@ -86,7 +86,7 @@ INT_PTR CPropCommon::DlgProc(
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCPropCommon = ( CPropCommon* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if (NULL != pCPropCommon) {
+		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, wParam, lParam );
 		}else {
 			return FALSE;
@@ -105,7 +105,7 @@ INT_PTR CPropCommon::DlgProc2(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pCPropCommon = ( CPropCommon* )(lParam);
-		if (NULL != pCPropCommon) {
+		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, IDOK, lParam );
 		}else {
 			return FALSE;
@@ -113,7 +113,7 @@ INT_PTR CPropCommon::DlgProc2(
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCPropCommon = ( CPropCommon* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if (NULL != pCPropCommon) {
+		if (pCPropCommon) {
 			return (pCPropCommon->*DispatchPage)( hwndDlg, uMsg, wParam, lParam );
 		}else {
 			return FALSE;

@@ -9,9 +9,9 @@
 
 bool CFigure_CtrlCode::Match(const wchar_t* pText) const
 {
-	//当面はASCII制御文字（C0 Controls, IsHankaku()で半角扱い）だけを制御文字表示にする
-	//そうしないと IsHankaku(0x0600)==false なのに iswcntrl(0x0600)!=0 のようなケースで表示桁がずれる
-	//U+0600: ARABIC NUMBER SIGN
+	// 当面はASCII制御文字（C0 Controls, IsHankaku()で半角扱い）だけを制御文字表示にする
+	// そうしないと IsHankaku(0x0600)==false なのに iswcntrl(0x0600)!=0 のようなケースで表示桁がずれる
+	// U+0600: ARABIC NUMBER SIGN
 	if (!(pText[0] & 0xFF80) && WCODE::IsControlCode(pText[0])) {
 		return true;
 	}
@@ -20,7 +20,7 @@ bool CFigure_CtrlCode::Match(const wchar_t* pText) const
 
 void CFigure_CtrlCode::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans ) const
 {
-	//クリッピング矩形を計算。画面外なら描画しない
+	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
 	if (pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,1)) {
 		::ExtTextOutW_AnyBuild(
@@ -35,7 +35,7 @@ void CFigure_CtrlCode::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* p
 		);
 	}
 
-	//位置進める
+	// 位置進める
 	pDispPos->ForwardDrawCol(1);
 }
 
@@ -59,7 +59,7 @@ bool CFigure_HanBinary::Match(const wchar_t* pText) const
 
 void CFigure_HanBinary::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans ) const
 {
-	//クリッピング矩形を計算。画面外なら描画しない
+	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
 	if (pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,1)) {
 		::ExtTextOutW_AnyBuild(
@@ -74,7 +74,7 @@ void CFigure_HanBinary::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* 
 		);
 	}
 
-	//位置進める
+	// 位置進める
 	pDispPos->ForwardDrawCol(1);
 }
 
@@ -98,9 +98,9 @@ bool CFigure_ZenBinary::Match(const wchar_t* pText) const
 
 void CFigure_ZenBinary::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans ) const
 {
-	//クリッピング矩形を計算。画面外なら描画しない
+	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if (pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,2)) {
+	if (pcView->GetTextArea().GenerateClipRect(&rc, *pDispPos, 2)) {
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -113,7 +113,7 @@ void CFigure_ZenBinary::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* 
 		);
 	}
 
-	//位置進める
+	// 位置進める
 	pDispPos->ForwardDrawCol(2);
 }
 

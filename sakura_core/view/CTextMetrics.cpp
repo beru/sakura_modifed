@@ -47,8 +47,8 @@ CTextMetrics::~CTextMetrics()
 
 void CTextMetrics::CopyTextMetricsStatus(CTextMetrics* pDst) const
 {
-	pDst->SetHankakuWidth			(GetHankakuWidth());		/* 半角文字の幅 */
-	pDst->SetHankakuHeight			(GetHankakuHeight());		/* 文字の高さ */
+	pDst->SetHankakuWidth	(GetHankakuWidth());		// 半角文字の幅
+	pDst->SetHankakuHeight	(GetHankakuHeight());		// 文字の高さ
 }
 
 /*
@@ -176,18 +176,18 @@ const int* CTextMetrics::GenerateDxArray(
 		return NULL;
 }
 
-//!文字列のピクセル幅を返す。
+//! 文字列のピクセル幅を返す。
 int CTextMetrics::CalcTextWidth(
 	const wchar_t* pText, //!< 文字列
 	int nLength,          //!< 文字列長
 	const int* pnDx       //!< 文字間隔の入った配列
 )
 {
-	//ANSI時代の動作 ※pnDxにはすべて同じ値が入っていた
-	//return pnDx[0] * nLength;
+	// ANSI時代の動作 ※pnDxにはすべて同じ値が入っていた
+	// return pnDx[0] * nLength;
 
-	//UNICODE時代の動作
-	int w=0;
+	// UNICODE時代の動作
+	int w = 0;
 	for (int i=0;i<nLength;i++) {
 		w += pnDx[i];
 	}

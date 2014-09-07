@@ -105,25 +105,21 @@ int CFileNameManager::TransformFileName_MakeCache( void ){
 */
 LPCTSTR CFileNameManager::GetFilePathFormat( LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, LPCTSTR pszFrom, LPCTSTR pszTo )
 {
-	int i, j;
-	int nSrcLen;
-	int nFromLen, nToLen;
-	int nCopy;
-
-	nSrcLen  = _tcslen( pszSrc );
-	nFromLen = _tcslen( pszFrom );
-	nToLen   = _tcslen( pszTo );
+	int nSrcLen  = _tcslen( pszSrc );
+	int nFromLen = _tcslen( pszFrom );
+	int nToLen   = _tcslen( pszTo );
 
 	nDestLen--;
 
-	for (i = 0, j = 0; i < nSrcLen && j < nDestLen; i++) {
+	int j = 0;
+	for (int i = 0; i < nSrcLen && j < nDestLen; i++) {
 #if defined(_MBCS)
 		if (0 == strnicmp( &pszSrc[i], pszFrom, nFromLen ))
 #else
 		if (0 == _tcsncicmp( &pszSrc[i], pszFrom, nFromLen ))
 #endif
 		{
-			nCopy = t_min( nToLen, nDestLen - j );
+			int nCopy = t_min( nToLen, nDestLen - j );
 			memcpy( &pszDest[j], pszTo, nCopy * sizeof( TCHAR ) );
 			j += nCopy;
 			i += nFromLen - 1;
@@ -162,9 +158,6 @@ LPCTSTR CFileNameManager::GetFilePathFormat( LPCTSTR pszSrc, LPTSTR pszDest, int
 */
 bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nDesLen )
 {
-	LPCTSTR ps;
-	LPTSTR  pd, pd_end;
-
 #define _USE_META_ALIAS
 #ifdef _USE_META_ALIAS
 	struct MetaAlias{
@@ -186,7 +179,9 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 	};
 #endif
 
-	pd_end = pszDes + ( nDesLen - 1 );
+	LPCTSTR ps;
+	LPTSTR  pd;
+	LPTSTR pd_end = pszDes + ( nDesLen - 1 );
 	for (ps = pszSrc, pd = pszDes; _T('\0') != *ps; ps++) {
 		if (pd_end <= pd) {
 			if (pd_end == pd) {
@@ -228,7 +223,7 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 				GetInidir( szPath );
 				nMetaLen = 10;
 			// メタ文字列っぽい
-			}else if (NULL != (pStr = _tcschr( ps, _T('%') ) )) {
+			}else if (pStr = _tcschr( ps, _T('%') )) {
 				nMetaLen = pStr - ps;
 				if (nMetaLen < _MAX_PATH) {
 					auto_memcpy( szMeta, ps, nMetaLen );
@@ -254,15 +249,15 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 				bFolderPath = ReadRegistry( HKEY_CURRENT_USER,
 					_T("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 					szMeta, szPath, _countof( szPath ) );
-				if (false == bFolderPath || _T('\0') == szPath[0]) {
+				if (!bFolderPath || _T('\0') == szPath[0]) {
 					bFolderPath = ReadRegistry( HKEY_LOCAL_MACHINE,
 						_T("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 						szMeta, szPath, _countof( szPath ) );
 				}
-				if (false == bFolderPath || _T('\0') == szPath[0]) {
+				if (!bFolderPath || _T('\0') == szPath[0]) {
 					pStr = _tgetenv( szMeta );
 					// 環境変数
-					if (NULL != pStr) {
+					if (pStr) {
 						nPathLen = _tcslen( pStr );
 						if (nPathLen < _MAX_PATH) {
 							_tcscpy_s( szPath, pStr );
@@ -336,7 +331,9 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 
 /* static */ TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
 {
-	if (index < 0) return 0;
+	if (index < 0) {
+		return 0;
+	}
 	int accKeyIndex = ((bZeroOrigin? index: index+1) % 36);
 	TCHAR c = (TCHAR)((accKeyIndex < 10) ? (_T('0') + accKeyIndex) : (_T('A') + accKeyIndex - 10));
 	return c;
@@ -374,7 +371,7 @@ bool CFileNameManager::GetMenuFullLabel(
 	const EditInfo* pfi = editInfo;
 	TCHAR szAccKey[4];
 	int ret = 0;
-	if (NULL == pfi) {
+	if (!pfi) {
 		GetAccessKeyLabelByIndex( szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin );
 		ret = auto_snprintf_s( pszOutput, nBuffSize, LS(STR_MENU_UNKOWN), szAccKey );
 		return true; // trueにしておく
@@ -382,7 +379,7 @@ bool CFileNameManager::GetMenuFullLabel(
 		
 		GetAccessKeyLabelByIndex( szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin );
 		//pfi->m_szGrepKeyShort → cmemDes
-		CNativeW	cmemDes;
+		CNativeW cmemDes;
 		int nGrepKeyLen = wcslen(pfi->m_szGrepKey);
 		const int GREPKEY_LIMIT_LEN = 64;
 		// CSakuraEnvironment::ExpandParameter では 32文字制限
@@ -492,31 +489,29 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 	//		exeと同じフォルダに置かれたマルチユーザ構成設定ファイル（sakura.exe.ini）の内容
 	//		に従ってマルチユーザ用のiniファイルパスを決める
 	pszPrivateIniFile[0] = _T('\0');
-	if (IsWin2000_or_later()) {
-		auto_snprintf_s( szPath, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".exe.ini") );
-		int nEnable = ::GetPrivateProfileInt(_T("Settings"), _T("MultiUser"), 0, szPath );
-		if (nEnable) {
-			int nFolder = ::GetPrivateProfileInt(_T("Settings"), _T("UserRootFolder"), 0, szPath );
-			switch (nFolder) {
-			case 1:
-				nFolder = CSIDL_PROFILE;			// ユーザのルートフォルダ
-				break;
-			case 2:
-				nFolder = CSIDL_PERSONAL;			// ユーザのドキュメントフォルダ
-				break;
-			case 3:
-				nFolder = CSIDL_DESKTOPDIRECTORY;	// ユーザのデスクトップフォルダ
-				break;
-			default:
-				nFolder = CSIDL_APPDATA;			// ユーザのアプリケーションデータフォルダ
-				break;
-			}
-			::GetPrivateProfileString(_T("Settings"), _T("UserSubFolder"), _T("sakura"), szDir, _MAX_DIR, szPath );
-			if (szDir[0] == _T('\0'))
-				::lstrcpy( szDir, _T("sakura") );
-			if (GetSpecialFolderPath( nFolder, szPath )) {
-				auto_snprintf_s( pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, _T(".ini") );
-			}
+	auto_snprintf_s( szPath, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".exe.ini") );
+	int nEnable = ::GetPrivateProfileInt(_T("Settings"), _T("MultiUser"), 0, szPath );
+	if (nEnable) {
+		int nFolder = ::GetPrivateProfileInt(_T("Settings"), _T("UserRootFolder"), 0, szPath );
+		switch (nFolder) {
+		case 1:
+			nFolder = CSIDL_PROFILE;			// ユーザのルートフォルダ
+			break;
+		case 2:
+			nFolder = CSIDL_PERSONAL;			// ユーザのドキュメントフォルダ
+			break;
+		case 3:
+			nFolder = CSIDL_DESKTOPDIRECTORY;	// ユーザのデスクトップフォルダ
+			break;
+		default:
+			nFolder = CSIDL_APPDATA;			// ユーザのアプリケーションデータフォルダ
+			break;
+		}
+		::GetPrivateProfileString(_T("Settings"), _T("UserSubFolder"), _T("sakura"), szDir, _MAX_DIR, szPath );
+		if (szDir[0] == _T('\0'))
+			::lstrcpy( szDir, _T("sakura") );
+		if (GetSpecialFolderPath( nFolder, szPath )) {
+			auto_snprintf_s( pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, _T(".ini") );
 		}
 	}
 }

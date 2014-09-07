@@ -694,11 +694,11 @@ static TCHAR* strcnv(TCHAR *str)
 {
 	TCHAR* p=str;
 	/* 改行コードの削除 */
-	if (NULL != (p=_tcschr(p,_T('\n')))) {
+	if ((p=_tcschr(p,_T('\n')))) {
 		*p = _T('\0');
 	}
 	p = str;
-	if (NULL != (p=_tcschr(p,_T('\r')))) {
+	if ((p=_tcschr(p,_T('\r')))) {
 		*p = _T('\0');
 	}
 	/* カンマの置換 */

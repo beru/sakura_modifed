@@ -592,7 +592,7 @@ void CDlgOpenFile::Create(
 	m_hwndParent = hwndParent;
 
 	/* ユーザー定義ワイルドカード（保存時の拡張子補完でも使用される） */
-	if (NULL != pszUserWildCard) {
+	if (pszUserWildCard) {
 		_tcscpy( m_szDefaultWildCard, pszUserWildCard );
 	}
 
@@ -974,7 +974,7 @@ void CDlgOpenFile::InitOfn( OPENFILENAMEZ* ofn )
 {
 	memset_raw(ofn, 0, sizeof(m_ofn));
 
-	ofn->lStructSize = IsWinV5forOfn()? sizeof(OPENFILENAMEZ): OPENFILENAME_SIZE_VERSION_400;
+	ofn->lStructSize = sizeof(OPENFILENAMEZ);
 	ofn->lCustData = (LPARAM)this;
 	ofn->lpfnHook = OFNHookProc;
 	ofn->lpTemplateName = MAKEINTRESOURCE(IDD_FILEOPEN);	// <-_T("IDD_FILEOPEN"); 2008/7/26 Uchi
@@ -1062,7 +1062,7 @@ void CDlgOpenFile::InitLayout( HWND hwndOpenDlg, HWND hwndDlg, HWND hwndBaseCtrl
 void CDlgOpenFile::OnCmbDropdown( HWND hwnd )
 {
 	HDC hDC = ::GetDC( hwnd );
-	if (NULL == hDC)
+	if (!hDC)
 		return;
 	HFONT hFont;
 	hFont = (HFONT)::SendMessageAny( hwnd, WM_GETFONT, 0, (LPARAM)NULL );

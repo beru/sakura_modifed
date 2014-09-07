@@ -379,7 +379,7 @@ void CPropMacro::InitDialog( HWND hwndDlg )
 
 	//	ListViewÇÃèâä˙âª
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
-	if (hListView == NULL) {
+	if (!hListView) {
 		PleaseReportToAuthor( hwndDlg, _T("PropComMacro::InitDlg::NoListView") );
 		return;	//	ÇÊÇ≠ÇÌÇ©ÇÁÇÒÇØÇ«é∏îsÇµÇΩ	
 	}

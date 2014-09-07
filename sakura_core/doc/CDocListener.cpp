@@ -129,7 +129,9 @@ DEF_NOTIFY(BeforeClose)
 
 CDocListener::CDocListener(CDocSubject* pcDoc)
 {
-	if (pcDoc==NULL) pcDoc = CEditDoc::GetInstance(0); //$$ インチキ
+	if (!pcDoc) {
+		pcDoc = CEditDoc::GetInstance(0); //$$ インチキ
+	}
 	assert( pcDoc );
 	Listen(pcDoc);
 }
@@ -156,7 +158,7 @@ CEditDoc* CDocListenerEx::GetListeningDoc() const
 void CProgressSubject::NotifyProgress(int nPer)
 {
 	int n = GetListenerCount();
-	for (int i=0;i<n;i++) {
+	for (int i=0; i<n; i++) {
 		GetListener(i)->OnProgress(nPer);
 	}
 }

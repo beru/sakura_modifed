@@ -40,7 +40,6 @@ CAutoScrollWnd::~CAutoScrollWnd()
 }
 
 
-
 HWND CAutoScrollWnd::Create( HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const CMyPoint& point, CEditView* view )
 {
 	m_cView = view;
@@ -137,5 +136,4 @@ LRESULT CAutoScrollWnd::OnPaint( HWND hwnd, UINT, WPARAM, LPARAM )
 	::EndPaint(hwnd, &ps);
 	return 0;
 }
-
 

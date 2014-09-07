@@ -25,7 +25,7 @@ int __cdecl my_internal_icmp( const char *s1, const char *s2, unsigned int n, un
  */
 int __cdecl my_stricmp( const char *s1, const char *s2 )
 {
-	/* チェックする文字数をuint最大に設定する */
+	// チェックする文字数をuint最大に設定する
 	//return my_internal_icmp( s1, s2, (unsigned int)(~0), 0, true );
 	return my_internal_icmp( s1, s2, UINT_MAX, 0, true );
 }
@@ -125,7 +125,7 @@ char* strncpy_ex(char *dst, size_t dst_count, const char* src, size_t src_count)
 
 const wchar_t* wcsistr( const wchar_t* s1, const wchar_t* s2 )
 {
-	size_t len2=wcslen(s2);
+	size_t len2 = wcslen(s2);
 	const wchar_t* p = s1;
 	const wchar_t* q = wcschr(s1,L'\0')-len2;
 	while (p <= q) {
@@ -142,7 +142,7 @@ const char* stristr(const char* s1, const char* s2)
 	const char* p = s1;
 	const char* q = strchr(s1,L'\0')-len2;
 	while (p <= q) {
-		if (auto_memicmp(p,s2,len2)==0) return p;
+		if (auto_memicmp(p,s2,len2) == 0) return p;
 		p++;
 	}
 	return NULL;
@@ -154,7 +154,7 @@ const char* stristr(const char* s1, const char* s2)
 */
 const char* strichr_j( const char* s1, char c2 )
 {
-	if (c2==0) return ::strchr(s1,0); //文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
+	if (c2==0) return ::strchr(s1,0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
 
 	int C2 = my_toupper( c2 );
 	for (const char* p1 = s1; *p1; p1++) {
@@ -170,7 +170,7 @@ const char* strichr_j( const char* s1, char c2 )
 */
 const char* strchr_j(const char* str, char c)
 {
-	if (c==0) return ::strchr(str,0); //文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
+	if (c==0) return ::strchr(str,0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
 
 	for (const char* p1 = str; *p1; p1++) {
 		if (*p1 == c) return p1;
@@ -228,16 +228,16 @@ errno_t wcscat_s(wchar_t* szDst, size_t nDstCount, const wchar_t* szSrc)
 	if (!szSrc) return EINVAL;
 
 	size_t nDstLen = wcslen(szDst);
-	if (nDstLen>=nDstCount) return EINVAL;
+	if (nDstLen >= nDstCount) return EINVAL;
 
 	size_t nSrcCount = wcslen(szSrc)+1;
-	wchar_t* p = &szDst[nDstLen];           //追加場所
-	int nRestCount = nDstCount-(p-szDst); //szDstに追加できる要素数
+	wchar_t* p = &szDst[nDstLen];           // 追加場所
+	int nRestCount = nDstCount-(p-szDst); // szDstに追加できる要素数
 
-	//はみ出さない
-	if ((int)nSrcCount<=nRestCount) {
+	// はみ出さない
+	if ((int)nSrcCount <= nRestCount) {
 		wmemmove(p,szSrc,nSrcCount);
-	//はみ出す
+	// はみ出す
 	}else {
 		return ERANGE;
 		//wmemmove(p,szSrc,nRestCount-1); p[nRestCount-1]=L'\0';
@@ -346,16 +346,16 @@ int _vsnwprintf_s(wchar_t *buf, size_t num, size_t count, const wchar_t *fmt, va
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-//SJIS→UNICODE。終端にL'\0'を付けてくれる版。
-size_t mbstowcs2(wchar_t* dst,const char* src,size_t dst_count)
+// SJIS→UNICODE。終端にL'\0'を付けてくれる版。
+size_t mbstowcs2(wchar_t* dst, const char* src, size_t dst_count)
 {
-	size_t ret = ::mbstowcs(dst,src,dst_count-1);
+	size_t ret = ::mbstowcs(dst, src, dst_count-1);
 	dst[ret] = L'\0';
 	return ret;
 }
 size_t mbstowcs2(wchar_t* pDst, int nDstCount, const char* pSrc, int nSrcCount)
 {
-	int ret=MultiByteToWideChar(
+	int ret = MultiByteToWideChar(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
 		pSrc,
@@ -367,26 +367,26 @@ size_t mbstowcs2(wchar_t* pDst, int nDstCount, const char* pSrc, int nSrcCount)
 	return (size_t)ret;
 }
 
-//UNICODE→SJIS。終端に'\0'を付けてくれる版。
-size_t wcstombs2(char* dst,const wchar_t* src,size_t dst_count)
+// UNICODE→SJIS。終端に'\0'を付けてくれる版。
+size_t wcstombs2(char* dst, const wchar_t* src, size_t dst_count)
 {
-	size_t ret = ::wcstombs(dst,src,dst_count-1);
+	size_t ret = ::wcstombs(dst, src, dst_count-1);
 	dst[ret] = '\0';
 	return ret;
 }
 
-//SJIS→UNICODE。戻り値はnew[]で確保して返す。
+// SJIS→UNICODE。戻り値はnew[]で確保して返す。
 wchar_t* mbstowcs_new(const char* src)
 {
 	size_t new_length = mbstowcs(NULL,src,0);
 	wchar_t* ret = new wchar_t[new_length+1];
-	mbstowcs(ret,src,new_length);
+	mbstowcs(ret, src, new_length);
 	ret[new_length] = L'\0';
 	return ret;
 }
 wchar_t* mbstowcs_new(const char* pSrc, int nSrcLen, int* pnDstLen)
 {
-	//必要な領域サイズ
+	// 必要な領域サイズ
 	int nNewLength = MultiByteToWideChar(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -396,10 +396,10 @@ wchar_t* mbstowcs_new(const char* pSrc, int nSrcLen, int* pnDstLen)
 		0
 	);
 	
-	//確保
+	// 確保
 	wchar_t* pNew = new wchar_t[nNewLength+1];
 
-	//変換
+	// 変換
 	nNewLength = MultiByteToWideChar(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -415,15 +415,15 @@ wchar_t* mbstowcs_new(const char* pSrc, int nSrcLen, int* pnDstLen)
 	return pNew;
 }
 
-//UNICODE→SJIS。戻り値はnew[]で確保して返す。
+// UNICODE→SJIS。戻り値はnew[]で確保して返す。
 char* wcstombs_new(const wchar_t* src)
 {
 	return wcstombs_new(src,wcslen(src));
 }
-//戻り値はnew[]で確保して返す。
-char* wcstombs_new(const wchar_t* pSrc,int nSrcLen)
+// 戻り値はnew[]で確保して返す。
+char* wcstombs_new(const wchar_t* pSrc, int nSrcLen)
 {
-	//必要な領域サイズ
+	// 必要な領域サイズ
 	int nNewLength = WideCharToMultiByte(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -435,10 +435,10 @@ char* wcstombs_new(const wchar_t* pSrc,int nSrcLen)
 		NULL
 	);
 
-	//確保
+	// 確保
 	char* pNew = new char[nNewLength+1];
 
-	//変換
+	// 変換
 	nNewLength = WideCharToMultiByte(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -454,16 +454,16 @@ char* wcstombs_new(const wchar_t* pSrc,int nSrcLen)
 	return pNew;
 }
 
-//SJIS→UNICODE。戻り値はvectorとして返す。
+// SJIS→UNICODE。戻り値はvectorとして返す。
 void mbstowcs_vector(const char* src, std::vector<wchar_t>* ret)
 {
-	mbstowcs_vector(src,strlen(src),ret);
+	mbstowcs_vector(src, strlen(src), ret);
 }
 
-//※戻り値retにおいて、ret->size()が文字列長ではないことに注意。正しくは、(ret->size()-1)が文字列長となる。
+// ※戻り値retにおいて、ret->size()が文字列長ではないことに注意。正しくは、(ret->size()-1)が文字列長となる。
 void mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret)
 {
-	//必要な容量
+	// 必要な容量
 	int nNewLen = MultiByteToWideChar(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -473,10 +473,10 @@ void mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret)
 		0
 	);
 
-	//確保
+	// 確保
 	ret->resize(nNewLen+1);
 
-	//変換
+	// 変換
 	nNewLen = MultiByteToWideChar(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -489,14 +489,14 @@ void mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret)
 }
 
 
-//UNICODE→SJIS。戻り値はvectorとして返す。
+// UNICODE→SJIS。戻り値はvectorとして返す。
 void wcstombs_vector(const wchar_t* src, std::vector<char>* ret)
 {
-	wcstombs_vector(src,wcslen(src),ret);
+	wcstombs_vector(src, wcslen(src), ret);
 }
 void wcstombs_vector(const wchar_t* pSrc, int nSrcLen, std::vector<char>* ret)
 {
-	//必要な容量
+	// 必要な容量
 	int nNewLen = WideCharToMultiByte(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -508,10 +508,10 @@ void wcstombs_vector(const wchar_t* pSrc, int nSrcLen, std::vector<char>* ret)
 		NULL
 	);
 
-	//確保
+	// 確保
 	ret->resize(nNewLen + 1);
 
-	//変換
+	// 変換
 	nNewLen = WideCharToMultiByte(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -545,13 +545,13 @@ size_t _mbstotcs(TCHAR* tszDst, const CHAR*  szSrc,  size_t nDstCount)
 {
 	return mbstowcs2(tszDst, szSrc, nDstCount);
 }
-int _tctomb(const TCHAR* p,ACHAR* mb)
+int _tctomb(const TCHAR* p, ACHAR* mb)
 {
 	return wctomb(mb,*p);
 }
-int _tctowc(const TCHAR* p,WCHAR* wc)
+int _tctowc(const TCHAR* p, WCHAR* wc)
 {
-	*wc=*p;
+	*wc = *p;
 	return 1;
 }
 
@@ -575,42 +575,44 @@ size_t _mbstotcs(TCHAR* tszDst, const CHAR*  szSrc,  size_t nDstCount)
 	strncpy_s(tszDst, nDstCount, szSrc, _TRUNCATE);
 	return strlen(tszDst);
 }
-int _tctomb(const TCHAR* tc,ACHAR* mb)
+int _tctomb(const TCHAR* tc, ACHAR* mb)
 {
-	mb[0]=tc[0];
-	if(_IS_SJIS_1(tc[0])){ mb[1]=tc[1]; return 2; }
+	mb[0] = tc[0];
+	if (_IS_SJIS_1(tc[0])) {
+		mb[1] = tc[1];
+		return 2;
+	}
 	return 1;
 }
-int _tctowc(const TCHAR* tc,WCHAR* wc)
+int _tctowc(const TCHAR* tc, WCHAR* wc)
 {
-	return mbtowc(wc,tc,_IS_SJIS_1(tc[0])?2:1);
+	return mbtowc(wc, tc, _IS_SJIS_1(tc[0])?2:1);
 }
 
 #endif
-
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          メモリ                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int wmemicmp(const WCHAR* p1,const WCHAR* p2,size_t count)
+int wmemicmp(const WCHAR* p1, const WCHAR* p2, size_t count)
 {
-	for (size_t i=0;i<count;i++) {
-		int n = skr_towlower(*p1++) - skr_towlower(*p2++);	//非ASCIIも変換
-		if (n!=0) return n;
+	for (size_t i=0; i<count; i++) {
+		int n = skr_towlower(*p1++) - skr_towlower(*p2++);	// 非ASCIIも変換
+		if (n != 0) return n;
 	}
 	return 0;
 }
 
-int wmemicmp(const WCHAR* p1,const WCHAR* p2)
+int wmemicmp(const WCHAR* p1, const WCHAR* p2)
 {
-	return wmemicmp(p1,p2, t_max(wcslen(p1), wcslen(p2)));
+	return wmemicmp(p1, p2, t_max(wcslen(p1), wcslen(p2)));
 }
 
-int wmemicmp_ascii(const WCHAR* p1,const WCHAR* p2,size_t count)
+int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
 {
-	for (size_t i=0;i<count;i++) {
-		int n = my_towlower(*p1++)-my_towlower(*p2++);	//ASCIIのみ変換（高速）
+	for (size_t i=0; i<count; i++) {
+		int n = my_towlower(*p1++) - my_towlower(*p2++);	// ASCIIのみ変換（高速）
 		if (n != 0) return n;
 	}
 	return 0;
@@ -645,7 +647,7 @@ CHAR_TYPE* my_strtok(
 	CHAR_TYPE* p;
 
 	do {
-		bool bFlag = false;	//ダブルコーテーションの中か？
+		bool bFlag = false;	// ダブルコーテーションの中か？
 		if (i >= nLen) return NULL;
 		p = &pBuffer[i];
 		for (; i < nLen; i++) {
@@ -658,10 +660,10 @@ CHAR_TYPE* my_strtok(
 			}
 		}
 		*pnOffset = i;
-	}while (!*p);	//空のトークンなら次を探す
+	}while (!*p);	// 空のトークンなら次を探す
 	return p;
 }
-//インスタンス化
+// インスタンス化
 template ACHAR* my_strtok(ACHAR*,int,int*,const ACHAR*);
 template WCHAR* my_strtok(WCHAR*,int,int*,const WCHAR*);
 
@@ -674,7 +676,7 @@ template WCHAR* my_strtok(WCHAR*,int,int*,const WCHAR*);
 int my_mbtoupper2( int c );
 int my_mbtolower2( int c );
 int my_mbisalpha2( int c );
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 
 #ifdef MY_ICMP_MBS
 /*!	全角アルファベットの２文字目を大文字に変換する。
@@ -735,91 +737,89 @@ int my_mbisalpha2( int c )
  */
 int __cdecl my_internal_icmp( const char *s1, const char *s2, unsigned int n, unsigned int dcount, bool flag )
 {
-	unsigned int	i;
-	unsigned char	*p1, *p2;
 //	2002.11.29 Moca 元の値を保持する必要がなくなったため *_lo, *_upを削除
 //	int	c1, c1_lo, c1_up;
 //	int	c2, c2_lo, c2_up;
 	int 	c1, c2;
-	bool	prev1, prev2; /* 前の文字が SJISの１バイト目か */
+	bool	prev1, prev2; // 前の文字が SJISの１バイト目か
 #ifdef MY_ICMP_MBS
 	bool	mba1, mba2;
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 
-	p1 = (unsigned char*) s1;
-	p2 = (unsigned char*) s2;
+	unsigned char* p1 = (unsigned char*) s1;
+	unsigned char* p2 = (unsigned char*) s2;
 	prev1 = prev2 = false;
 #ifdef MY_ICMP_MBS
 	mba1 = mba2 = false;
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 
-	/* 指定長だけ繰り返す */
-	for (i = n; i > 0; i -= dcount) {
-		/* 比較対象となる文字を取得する */
+	// 指定長だけ繰り返す
+	for (unsigned int i = n; i > 0; i -= dcount) {
+		// 比較対象となる文字を取得する
 //		c1 = c1_lo = c1_up = (int)((unsigned int)*p1);
 //		c2 = c2_lo = c2_up = (int)((unsigned int)*p2);
 		c1 = (int)((unsigned int)*p1);
 		c2 = (int)((unsigned int)*p2);
 
-		/* 2002.11.29 Moca 文字列の終端に達したか調べる部分 は後方へ移動 */
+		// 2002.11.29 Moca 文字列の終端に達したか調べる部分 は後方へ移動
 
-		/* 文字１の日本語チェックを行い比較用の大文字小文字をセットする */
-		if (prev1) {	/* 前の文字が日本語１バイト目 */
-			/* 今回は日本語２バイト目なので変換しない */
+		// 文字１の日本語チェックを行い比較用の大文字小文字をセットする
+		if (prev1) {	// 前の文字が日本語１バイト目
+			// 今回は日本語２バイト目なので変換しない
 			prev1 = false;
 #ifdef MY_ICMP_MBS
-			/* 全角文字のアルファベット */
+			// 全角文字のアルファベット
 			if (mba1) {
 				mba1 = false;
 				if (my_mbisalpha2( c1 )) {
 					c1 = my_mbtoupper2( c1 );
 				}
 			}
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 		}else if (my_iskanji1(c1)) {
-			/* 今回は日本語１バイト目なので変換しない */
+			// 今回は日本語１バイト目なので変換しない
 			prev1 = true;
 #ifdef MY_ICMP_MBS
 			if (c1 == 0x82) mba1 = true;
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 		}else {
 			c1 = my_toupper(c1);
 		}
 
-		/* 文字２の日本語チェックを行い比較用の大文字小文字をセットする */
-		if (prev2) {	/* 前の文字が日本語１バイト目 */
-			/* 今回は日本語２バイト目なので変換しない */
+		// 文字２の日本語チェックを行い比較用の大文字小文字をセットする
+		if (prev2) {	// 前の文字が日本語１バイト目
+			// 今回は日本語２バイト目なので変換しない
 			prev2 = false;
 #ifdef MY_ICMP_MBS
-			/* 全角文字のアルファベット */
+			// 全角文字のアルファベット
 			if (mba2) {
 				mba2 = false;
 				if (my_mbisalpha2( c2 )) {
 					c2 = my_mbtoupper2( c2 );
 				}
 			}
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 		}else if (my_iskanji1(c2)) {
-			/* 今回は日本語１バイト目なので変換しない */
+			// 今回は日本語１バイト目なので変換しない
 			prev2 = true;
 #ifdef MY_ICMP_MBS
 			if (c2 == 0x82) mba2 = true;
-#endif  /* MY_ICMP_MBS */
+#endif  // MY_ICMP_MBS
 		}else {
 			c2 = my_toupper(c2);
 		}
 
-		/* 比較する */
-//		if ((c1_lo - c2_lo) && (c1_up - c2_up)) return c1 - c2;	/* 戻り値は元の文字の差 */
-		if (c1 - c2) return c1 - c2;	/* 戻り値は大文字に変換した文字の差 */
+		// 比較する
+//		if ((c1_lo - c2_lo) && (c1_up - c2_up)) return c1 - c2;	// 戻り値は元の文字の差
+		if (c1 - c2) return c1 - c2;	// 戻り値は大文字に変換した文字の差
 
 		/* 2002.11.29 Moca 戻り値を変更したことにより，小文字→大文字変換の後に移動
 		   片方だけ NULL文字 の場合は上の比較した時点で return するためその処理は不要 */
 		if (flag) {
-			/* 文字列の終端に達したか調べる */
+			// 文字列の終端に達したか調べる
 			if (!c1) return 0;
 		}
-		/* ポインタを進める */
+		// ポインタを進める
 		p1++;
 		p2++;
 	}
@@ -838,7 +838,7 @@ int __cdecl my_internal_icmp( const char *s1, const char *s2, unsigned int n, un
 // ※ ランタイムの towupper(c)/tolower(c) が将来期待する動作になったとしてもこの方法を使い続けて問題無いはず
 int skr_towupper( int c )
 {
-#if defined(_MSC_VER) && _MSC_VER>=1400 //VS2005以降なら
+#if defined(_MSC_VER) && _MSC_VER>=1400 // VS2005以降なら
 	static wchar_t szMap[256];	// c < 256 用の変換テーブル
 	static bool bInit = false;
 	if (!bInit) {
@@ -859,7 +859,7 @@ int skr_towupper( int c )
 
 int skr_towlower( int c )
 {
-#if defined(_MSC_VER) && _MSC_VER>=1400 //VS2005以降なら
+#if defined(_MSC_VER) && _MSC_VER>=1400 // VS2005以降なら
 	static wchar_t szMap[256];	// c < 256 用の変換テーブル
 	static bool bInit = false;
 	if (!bInit) {

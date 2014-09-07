@@ -14,7 +14,7 @@ public:
 			return false;
 		}
 		const CLayoutColorQuoteInfo* info = dynamic_cast<const CLayoutColorQuoteInfo*>(p);
-		if (info == NULL) {
+		if (!info) {
 			return false;
 		}
 		return info->m_tag == this->m_tag;
@@ -48,7 +48,7 @@ void CColor_Quote::SetStrategyColorInfo(const CLayoutColorInfo* colorInfo)
 {
 	if (colorInfo) {
 		const CLayoutColorQuoteInfo* info = dynamic_cast<const CLayoutColorQuoteInfo*>(colorInfo);
-		if (info == NULL) {
+		if (!info) {
 			return;
 		}
 		m_tag = info->m_tag;
@@ -77,7 +77,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 		m_nCOMMENTEND = -1;
 		int nStringType = m_pTypeData->m_nStringType;
 		bool bPreString = true;
-		/* クォーテーション文字列の終端があるか */
+		// クォーテーション文字列の終端があるか
 		switch (nStringType) {
 		case STRING_LITERAL_CPP:
 			if (0 < nPos && cStr.At(nPos-1) == 'R' && cStr.At(nPos) == '"'

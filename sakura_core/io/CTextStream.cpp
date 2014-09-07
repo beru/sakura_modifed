@@ -16,11 +16,11 @@ using namespace std;
 CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 : CStream(tszPath,_T("rb"))
 {
-	m_bIsUtf8=false;
+	m_bIsUtf8 = false;
 
 	if (Good()) {
 		// BOM確認 -> m_bIsUtf8
-		static const BYTE UTF8_BOM[]={0xEF,0xBB,0xBF};
+		static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 		BYTE buf[3];
 		if (sizeof(UTF8_BOM) == fread(&buf,1, sizeof(UTF8_BOM), GetFp())) {
 			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM))==0);
@@ -94,7 +94,7 @@ CTextOutputStream::CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType, 
 {
 	m_pcCodeBase = CCodeFactory::CreateCodeBase(eCodeType,0);
 	if (Good()) {
-		//BOM付加
+		// BOM付加
 		CMemory cmemBom;
 		m_pcCodeBase->GetBom(&cmemBom);
 		if (cmemBom.GetRawLength() > 0) {
@@ -127,18 +127,13 @@ void CTextOutputStream::WriteString(
 	for (;;) {
 		// \nを検出。ただし\r\nは除外。
 		const wchar_t* q = p;
-		while (q<pEnd) {
+		while (q < pEnd) {
 			if (*q==L'\n' && !((q-1)>=p && *(q-1)==L'\r')) {
 				break;
 			}
 			q++;
 		}
-		const wchar_t* lf;
-		if (q<pEnd) {
-			lf = q;
-		}else {
-			lf = NULL;
-		}
+		const wchar_t* lf = (q < pEnd) ? q : NULL;
 		if (lf) {
 			// \nの前まで(p～lf)出力
 			CNativeW cSrc(p,lf-p);

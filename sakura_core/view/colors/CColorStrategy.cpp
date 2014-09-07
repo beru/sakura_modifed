@@ -58,14 +58,14 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	CColor_Select* pcSelect = pool->GetSelectStrategy();
 	bool bChange = false;
 
-	//選択範囲色終了
+	// 選択範囲色終了
 	if (m_pStrategySelect) {
 		if (m_pStrategySelect->EndColor(cLineStr,this->GetPosInLogic())) {
 			m_pStrategySelect = NULL;
 			bChange = true;
 		}
 	}
-	//選択範囲色開始
+	// 選択範囲色開始
 	if (!m_pStrategySelect) {
 		if (pcSelect->BeginColorEx(cLineStr,this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
 			m_pStrategySelect = pcSelect;
@@ -73,7 +73,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 
-	//検索色終了
+	// 検索色終了
 	if (m_pStrategyFound) {
 		if (m_pStrategyFound->EndColor(cLineStr,this->GetPosInLogic())) {
 			m_pStrategyFound = NULL;
@@ -81,7 +81,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 
-	//検索色開始
+	// 検索色開始
 	if (!m_pStrategyFound) {
 		if (pcFound->BeginColor(cLineStr,this->GetPosInLogic())) {
 			m_pStrategyFound = pcFound;
@@ -89,7 +89,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 
-	//色終了
+	// 色終了
 	if (m_pStrategy) {
 		if (m_pStrategy->EndColor(cLineStr,this->GetPosInLogic())) {
 			m_pStrategy = NULL;
@@ -97,7 +97,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 
-	//色開始
+	// 色開始
 	if (!m_pStrategy) {
 		int size = pool->GetStrategyCount();
 		for (int i = 0; i < size; i++) {
@@ -109,7 +109,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 
-	//カーソル行背景色
+	// カーソル行背景色
 	CTypeSupport cCaretLineBg(m_pcView, COLORIDX_CARETLINEBG);
 	if (cCaretLineBg.IsDisp()) {
 		if (m_colorIdxBackLine==COLORIDX_CARETLINEBG) {
@@ -124,7 +124,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 			}
 		}
 	}
-	//偶数行の背景色
+	// 偶数行の背景色
 	CTypeSupport cEvenLineBg(m_pcView, COLORIDX_EVENLINEBG);
 	if (cEvenLineBg.IsDisp() && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
 		if (m_colorIdxBackLine == COLORIDX_EVENLINEBG) {
@@ -359,8 +359,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
  */
 int GetColorIndexByName( const TCHAR *name )
 {
-	int	i;
-	for (i = 0; i < COLORIDX_LAST; i++) {
+	for (int i=0; i<COLORIDX_LAST; i++) {
 		if (_tcscmp( name, g_ColorAttributeArr[i].szName ) == 0) return i;
 	}
 	return -1;

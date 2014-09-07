@@ -89,8 +89,9 @@ static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
 	}
 
 	// グループ比較が行われなかったときはウィンドウ比較する
-	if (s_bSort)
+	if (s_bSort) {
 		return ( ((EditNodeEx*)e1)->p->m_nIndex - ((EditNodeEx*)e2)->p->m_nIndex );	// ウィンドウ番号比較
+	}
 	return ( ((EditNodeEx*)e1)->p - ((EditNodeEx*)e2)->p );	// ウィンドウMRU比較（ソートしない）
 }
 
@@ -106,11 +107,8 @@ EditNode* CAppNodeGroupHandle::GetEditNodeAt( int nIndex )
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	int	i;
-	int iIndex;
-
-	iIndex = 0;
-	for (i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
+	int iIndex = 0;
+	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
 		if (m_nGroup == 0 || m_nGroup == pShare->m_sNodes.m_pEditArr[i].m_nGroup) {
 			if (IsSakuraMainWindow( pShare->m_sNodes.m_pEditArr[i].m_hWnd )) {
 				if (iIndex == nIndex)
@@ -135,11 +133,9 @@ BOOL CAppNodeGroupHandle::AddEditWndList( HWND hWnd )
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	int		nSubCommand = TWNT_ADD;
-	int		nIndex;
-	EditNode	sMyEditNode;
-	EditNode	*p;
-
+	int nSubCommand = TWNT_ADD;
+	EditNode sMyEditNode;
+	
 	memset_raw( &sMyEditNode, 0, sizeof( sMyEditNode ) );
 	sMyEditNode.m_hWnd = hWnd;
 
@@ -149,7 +145,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList( HWND hWnd )
 		CRecentEditNode	cRecentEditNode;
 
 		//登録済みか？
-		nIndex = cRecentEditNode.FindItemByHwnd( hWnd );
+		int nIndex = cRecentEditNode.FindItemByHwnd( hWnd );
 		if (-1 != nIndex) {
 			//もうこれ以上登録できないか？
 			if (cRecentEditNode.GetItemCount() >= cRecentEditNode.GetArrayCount()) {
@@ -159,14 +155,13 @@ BOOL CAppNodeGroupHandle::AddEditWndList( HWND hWnd )
 			nSubCommand = TWNT_ORDER;
 
 			//以前の情報をコピーする。
-			p = cRecentEditNode.GetItem( nIndex );
+			EditNode* p = cRecentEditNode.GetItem( nIndex );
 			if (p) {
 				memcpy_raw( &sMyEditNode, p, sizeof( sMyEditNode ) );
 			}
 		}
 
 		/* ウィンドウ連番 */
-
 		if (0 == ::GetWindowLongPtr( hWnd, sizeof(LONG_PTR) )) {
 			pShare->m_sNodes.m_nSequences++;
 			::SetWindowLongPtr( hWnd, sizeof(LONG_PTR) , (LONG_PTR)pShare->m_sNodes.m_nSequences );
@@ -183,11 +178,12 @@ BOOL CAppNodeGroupHandle::AddEditWndList( HWND hWnd )
 					pShare->m_sNodes.m_nGroupSequences = m_nGroup;
 				}
 			}else {
-				p = cRecentEditNode.GetItem( 0 );
-				if (NULL == p)
+				EditNode* p = cRecentEditNode.GetItem( 0 );
+				if (!p) {
 					sMyEditNode.m_nGroup = ++pShare->m_sNodes.m_nGroupSequences;	// 新規グループ
-				else
+				}else {
 					sMyEditNode.m_nGroup = p->m_nGroup;	// 最近アクティブのグループ
+				}
 			}
 
 			sMyEditNode.m_showCmdRestore = ::IsZoomed(hWnd)? SW_SHOWMAXIMIZED: SW_SHOWNORMAL;
@@ -266,12 +262,13 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor( EditNode* pWndArr, int nArrCnt, BO
 		}
 	}
 
-	bool		bInThisClose = false;		// 要求元のウィンドウをクローズするか
+	bool bInThisClose = false;		// 要求元のウィンドウをクローズするか
 	CWaitCursor	cWaitCursor( hWndFrom );	// 砂時計カーソル
 	for (int i = 0; i < nArrCnt; ++i) {
 		/* m_hWndにNULLを設定したEditNodeはとばす */
-		if (pWndArr[i].m_hWnd == NULL) continue;
-
+		if (!pWndArr[i].m_hWnd) {
+			continue;
+		}
 		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 			if (IsSakuraMainWindow( pWndArr[i].m_hWnd )) {
 				if (pWndArr[i].m_hWnd == hWndFrom) {	// 要求元?
@@ -311,16 +308,22 @@ int CAppNodeGroupHandle::GetEditorWindowsNum( bool bExcludeClosing/* = true */ )
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	int		i;
-	int		j;
-
-	j = 0;
-	for (i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
-		if (IsSakuraMainWindow( pShare->m_sNodes.m_pEditArr[i].m_hWnd )) {
-			if (m_nGroup != 0 && m_nGroup != CAppNodeManager::getInstance()->GetEditNode( pShare->m_sNodes.m_pEditArr[i].m_hWnd )->GetGroup())
+	int j = 0;
+	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
+		auto hWnd = pShare->m_sNodes.m_pEditArr[i].m_hWnd;
+		if (IsSakuraMainWindow(hWnd)) {
+			if (1
+				&& m_nGroup != 0
+				&& m_nGroup != CAppNodeManager::getInstance()->GetEditNode(hWnd)->GetGroup()
+			) {
 				continue;
-			if (bExcludeClosing && pShare->m_sNodes.m_pEditArr[i].m_bClosing)
+			}
+			if (1
+				&& bExcludeClosing
+				&& pShare->m_sNodes.m_pEditArr[i].m_bClosing
+			) {
 				continue;
+			}
 			j++;
 		}
 	}
@@ -341,19 +344,16 @@ BOOL CAppNodeGroupHandle::PostMessageToAllEditors(
 	HWND		hWndLast	/*!< 最後に送りたいウィンドウ */
 )
 {
-	EditNode*	pWndArr;
-	int		i;
-	int		n;
-
-	n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE );
+	EditNode* pWndArr;
+	int n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE );
 	if (0 == n) {
 		return TRUE;
 	}
 
 	// hWndLast以外へのメッセージ
-	for (i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		//	Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
-		if (hWndLast == NULL || hWndLast != pWndArr[i].m_hWnd) {
+		if (!hWndLast || hWndLast != pWndArr[i].m_hWnd) {
 			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 				if (IsSakuraMainWindow( pWndArr[i].m_hWnd )) {
 					/* メッセージをポスト */
@@ -364,7 +364,7 @@ BOOL CAppNodeGroupHandle::PostMessageToAllEditors(
 	}
 
 	// hWndLastへのメッセージ
-	for (i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		if (hWndLast == pWndArr[i].m_hWnd) {
 			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 				if (IsSakuraMainWindow( pWndArr[i].m_hWnd )) {
@@ -391,17 +391,14 @@ BOOL CAppNodeGroupHandle::SendMessageToAllEditors(
 	HWND		hWndLast	/* 最後に送りたいウィンドウ */
 )
 {
-	EditNode*	pWndArr;
-	int		i;
-	int		n;
-
-	n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE );
+	EditNode* pWndArr;
+	int n = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pWndArr, FALSE );
 	if (0 == n) {
 		return TRUE;
 	}
 
 	// hWndLast以外へのメッセージ
-	for (i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		//	Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
 		if (hWndLast == NULL || hWndLast != pWndArr[i].m_hWnd) {
 			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
@@ -414,7 +411,7 @@ BOOL CAppNodeGroupHandle::SendMessageToAllEditors(
 	}
 
 	// hWndLastへのメッセージ
-	for (i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		if (hWndLast == pWndArr[i].m_hWnd) {
 			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 				if (IsSakuraMainWindow( pWndArr[i].m_hWnd )) {
@@ -515,10 +512,8 @@ int CAppNodeManager::GetNoNameNumber( HWND hWnd )
 */
 int CAppNodeManager::GetOpenedWindowArr( EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */ )
 {
-	int nRet;
-
 	LockGuard<CMutex> guard( g_cEditArrMutex );
-	nRet = _GetOpenedWindowArrCore( ppEditNode, bSort, bGSort );
+	int nRet = _GetOpenedWindowArrCore( ppEditNode, bSort, bGSort );
 
 	return nRet;
 }
@@ -528,10 +523,6 @@ int CAppNodeManager::_GetOpenedWindowArrCore( EditNode** ppEditNode, BOOL bSort,
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	//編集ウインドウ数を取得する。
-	EditNodeEx*	pNode;	// ソート処理用の拡張リスト
-	int		nRowNum;	//編集ウインドウ数
-	int		i;
 
 	//編集ウインドウ数を取得する。
 	*ppEditNode = NULL;
@@ -540,20 +531,21 @@ int CAppNodeManager::_GetOpenedWindowArrCore( EditNode** ppEditNode, BOOL bSort,
 
 	//編集ウインドウリスト格納領域を作成する。
 	*ppEditNode = new EditNode[ pShare->m_sNodes.m_nEditArrNum ];
-	if (NULL == *ppEditNode)
+	if (!(*ppEditNode))
 		return 0;
 
 	// 拡張リストを作成する
-	pNode = new EditNodeEx[ pShare->m_sNodes.m_nEditArrNum ];
-	if (NULL == pNode) {
+	// ソート処理用の拡張リスト
+	EditNodeEx*	pNode = new EditNodeEx[ pShare->m_sNodes.m_nEditArrNum ];
+	if (!pNode) {
 		delete [](*ppEditNode);
 		*ppEditNode = NULL;
 		return 0;
 	}
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
-	nRowNum = 0;
-	for (i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
+	int nRowNum = 0;	//編集ウインドウ数
+	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
 		if (IsSakuraMainWindow( pShare->m_sNodes.m_pEditArr[ i ].m_hWnd )) {
 			pNode[ nRowNum ].p = &pShare->m_sNodes.m_pEditArr[ i ];	// ポインタ格納
 			pNode[ nRowNum ].nGroupMru = -1;	// グループ単位のMRU番号初期化
@@ -571,7 +563,7 @@ int CAppNodeManager::_GetOpenedWindowArrCore( EditNode** ppEditNode, BOOL bSort,
 	if (!bGSort) {
 		int iGroupMru = 0;	// グループ単位のMRU番号
 		int nGroup = -1;
-		for (i = 0; i < nRowNum; i++) {
+		for (int i = 0; i < nRowNum; i++) {
 			if (pNode[ i ].nGroupMru == -1 && nGroup != pNode[ i ].p->m_nGroup) {
 				nGroup = pNode[ i ].p->m_nGroup;
 				iGroupMru++;
@@ -594,7 +586,7 @@ int CAppNodeManager::_GetOpenedWindowArrCore( EditNode** ppEditNode, BOOL bSort,
 	qsort( pNode, nRowNum, sizeof(EditNodeEx), cmpGetOpenedWindowArr );
 
 	// 拡張リストのソート結果をもとに編集ウインドウリスト格納領域に結果を格納する
-	for (i = 0; i < nRowNum; i++) {
+	for (int i = 0; i < nRowNum; i++) {
 		(*ppEditNode)[i] = *pNode[i].p;
 
 		//インデックスを付ける。
@@ -618,24 +610,24 @@ int CAppNodeManager::_GetOpenedWindowArrCore( EditNode** ppEditNode, BOOL bSort,
 bool CAppNodeManager::ReorderTab( HWND hwndSrc, HWND hwndDst )
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-
-	EditNode	*p = NULL;
-	int			nCount;
-	int			i;
-
+	EditNode* p = NULL;
 	int nSrcTab = -1;
 	int nDstTab = -1;
 	LockGuard<CMutex> guard( g_cEditArrMutex );
-	nCount = _GetOpenedWindowArrCore( &p, TRUE );	// ロックは自分でやっているので直接コア部呼び出し
-	for (i = 0; i < nCount; i++) {
-		if (hwndSrc == p[i].m_hWnd)
+	int nCount = _GetOpenedWindowArrCore( &p, TRUE );	// ロックは自分でやっているので直接コア部呼び出し
+	for (int i = 0; i < nCount; i++) {
+		if (hwndSrc == p[i].m_hWnd) {
 			nSrcTab = i;
-		if (hwndDst == p[i].m_hWnd)
+		}
+		if (hwndDst == p[i].m_hWnd) {
 			nDstTab = i;
+		}
 	}
 
 	if (0 > nSrcTab || 0 > nDstTab || nSrcTab == nDstTab) {
-		if (p) delete []p;
+		if (p) {
+			delete []p;
+		}
 		return false;
 	}
 
@@ -647,14 +639,14 @@ bool CAppNodeManager::ReorderTab( HWND hwndSrc, HWND hwndDst )
 	nIndex = pShare->m_sNodes.m_pEditArr[ nArr0 ].m_nIndex;
 	if (nSrcTab < nDstTab) {
 		// タブ左方向ローテート
-		for (i = nDstTab - 1; i >= nSrcTab; i--) {
+		for (int i = nDstTab - 1; i >= nSrcTab; i--) {
 			nArr1 = p[ i ].m_nIndex;
 			pShare->m_sNodes.m_pEditArr[ nArr0 ].m_nIndex = pShare->m_sNodes.m_pEditArr[ nArr1 ].m_nIndex;
 			nArr0 = nArr1;
 		}
 	}else {
 		// タブ右方向ローテート
-		for (i = nDstTab + 1; i <= nSrcTab; i++) {
+		for (int i = nDstTab + 1; i <= nSrcTab; i++) {
 			nArr1 = p[ i ].m_nIndex;
 			pShare->m_sNodes.m_pEditArr[ nArr0 ].m_nIndex = pShare->m_sNodes.m_pEditArr[ nArr1 ].m_nIndex;
 			nArr0 = nArr1;
@@ -662,7 +654,9 @@ bool CAppNodeManager::ReorderTab( HWND hwndSrc, HWND hwndDst )
 	}
 	pShare->m_sNodes.m_pEditArr[ nArr0 ].m_nIndex = nIndex;
 
-	if (p) delete []p;
+	if (p) {
+		delete []p;
+	}
 	return true;
 }
 
@@ -688,7 +682,7 @@ HWND CAppNodeManager::SeparateGroup( HWND hwndSrc, HWND hwndDst, bool bSrcIsTop,
 	EditNode* pDstEditNode = GetEditNode( hwndDst );
 	int nSrcGroup = pSrcEditNode->m_nGroup;
 	int nDstGroup;
-	if (pDstEditNode == NULL) {
+	if (!pDstEditNode) {
 		hwndDst = NULL;
 		nDstGroup = ++pShare->m_sNodes.m_nGroupSequences;	// 新規グループ
 	}else {
@@ -726,8 +720,9 @@ HWND CAppNodeManager::SeparateGroup( HWND hwndSrc, HWND hwndDst, bool bSrcIsTop,
 */
 bool CAppNodeManager::IsSameGroup( HWND hWnd1, HWND hWnd2 )
 {
-	if (hWnd1 == hWnd2)
+	if (hWnd1 == hWnd2) {
 		return true;
+	}
 
 	CAppNodeGroupHandle cGroup1 = CAppNodeManager::getInstance()->GetEditNode(hWnd1)->GetGroup();
 	CAppNodeGroupHandle cGroup2 = CAppNodeManager::getInstance()->GetEditNode(hWnd2)->GetGroup();
@@ -759,25 +754,25 @@ int CAppNodeManager::GetFreeGroupId( void )
 //
 HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 {
-	HWND	hWnd = NULL;
-	if (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd
+	HWND hWnd = NULL;
+	if (1
+		&& GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd
 		&& !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin
 	) {
-		int			i;
 		int			nGroup = 0;
 		bool		bFound = false;
 		EditNode*	p = NULL;
 		int			nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr( &p, FALSE, FALSE );
 		if (nCount > 1) {
 			// search Group No.
-			for (i = 0; i < nCount; i++) {
+			for (int i = 0; i < nCount; i++) {
 				if (p[i].GetHwnd() == hWndCur) {
 					nGroup = p[i].m_nGroup;
 					break;
 				}
 			}
 			// Search Next Window
-			for (i = 0; i < nCount; i++) {
+			for (int i = 0; i < nCount; i++) {
 				if (p[i].m_nGroup == nGroup) {
 					if (p[i].GetHwnd() == hWndCur) {
 						bFound= true;

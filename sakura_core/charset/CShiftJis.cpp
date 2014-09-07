@@ -123,7 +123,7 @@ EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -230,7 +230,7 @@ EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -257,7 +257,6 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 {
 	CMemory cCharBuffer;
 	EConvertResult	res;
-	int				i;
 	unsigned char*	ps;
 	TCHAR*			pd;
 	bool			bbinary=false;
@@ -285,7 +284,7 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 	ps = reinterpret_cast<unsigned char*>( cCharBuffer.GetRawPtr() );
 	pd = pDst;
 	if( bbinary == false ){
-		for (i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
+		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf( pd, _T("%02X"), *ps);
 		}
 	}else{

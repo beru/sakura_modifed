@@ -68,12 +68,12 @@ public:
 	// 何もしない
 	COsVersionInfo() {}
 
-	/* OsVersionが取得できたか？ */
+	// OsVersionが取得できたか？
 	BOOL GetVersion(){
 		return m_bSuccess;
 	}
 
-	/* 使用しているOS（Windows）が、動作対象か確認する */
+	// 使用しているOS（Windows）が、動作対象か確認する
 	bool OsIsEnableVersion(){
 #if (WINVER >= _WIN32_WINNT_WIN7)
 		return ( _IsWin32NT() &&
@@ -224,14 +224,6 @@ inline bool OsSupportReconvert() {
 #endif
 }
 
-inline bool IsWinV5forOfn() {
-#if (WINVER >= _WIN32_WINNT_WIN2K)
-	return true;
-#else
-	return COsVersionInfo()._IsWinV5forOfn();
-#endif
-}
-
 inline bool IsWinVista_or_later() {
 #if (WINVER >= _WIN32_WINNT_VISTA)
 	return true;
@@ -245,14 +237,6 @@ inline bool IsWinXP_or_later() {
 	return true;
 #else
 	return COsVersionInfo()._IsWinXP_or_later();
-#endif
-}
-
-inline bool IsWin2000_or_later() {
-#if (WINVER >= _WIN32_WINNT_WIN2K)
-	return true;
-#else
-	return COsVersionInfo()._IsWin2000_or_later();
 #endif
 }
 

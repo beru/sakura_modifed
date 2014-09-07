@@ -72,7 +72,7 @@ LPCTSTR CSelectLang::getDefaultLangString( void )
 // Œ¾ŒêID‚ð•Ô‚·
 WORD CSelectLang::getDefaultLangId( void )
 {
-	if (m_psLangInfo == NULL) {
+	if (!m_psLangInfo) {
 		return ::GetUserDefaultLangID();
 	}
 	return m_psLangInfo->wLangId;
@@ -393,7 +393,7 @@ HINSTANCE CSelectLang::ChangeLang( UINT nIndex )
 	SSelLangInfo *psLangInfo = m_psLangInfoList.at( nIndex );
 	if (psLangInfo->hInstance != GetModuleHandle(NULL)) {
 		psLangInfo->hInstance = LoadLangRsrcLibrary( *psLangInfo );
-		if (psLangInfo->hInstance == NULL) {
+		if (!psLangInfo->hInstance) {
 			return m_psLangInfo->hInstance;
 		}else if (!psLangInfo->bValid) {
 			::FreeLibrary( psLangInfo->hInstance );

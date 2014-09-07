@@ -13,8 +13,8 @@ void CMyString::set(const char* szData)
 void CMyString::set(const char* szData, int nLength)
 {
 	int nLen;
-	wchar_t* wszData = mbstowcs_new(szData,nLength,&nLen);
-	set(wszData,nLen);
+	wchar_t* wszData = mbstowcs_new(szData, nLength, &nLen);
+	set(wszData, nLen);
 	delete[] wszData;
 }
 
@@ -44,3 +44,4 @@ CFilePath::CFilePath(const wchar_t* rhs)
 	_wcstotcs(m_tszPath, _countof(m_tszPath), rhs);
 }
 */
+

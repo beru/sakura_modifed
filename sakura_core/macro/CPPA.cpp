@@ -44,14 +44,13 @@
 
 #define NEVER_USED_PARAM(p) ((void)p)
 
-
 // 2003.06.01 Moca
 #define omGet (0)
 #define omSet (1)
 
-//	2007.07.26 genta
+// 2007.07.26 genta
 CPPA::PpaExecInfo* CPPA::m_CurInstance = NULL;
-bool			CPPA::m_bIsRunning = false;
+bool CPPA::m_bIsRunning = false;
 
 CPPA::CPPA()
 {
@@ -88,7 +87,7 @@ bool CPPA::Execute(CEditView* pcEditView, int flags )
 	// マクロ実行完了後はここに戻ってくる
 	m_CurInstance = old_instance;
 
-	//PPAの多重起動禁止 2008.10.22 syat
+	// PPAの多重起動禁止 2008.10.22 syat
 	CPPA::m_bIsRunning = false;
 	return !info.m_bError;
 }
@@ -108,13 +107,12 @@ LPCTSTR CPPA::GetDllNameImp(int nIndex)
 */
 bool CPPA::InitDllImp()
 {
-	/* PPA.DLLが持っている関数を準備 */
+	// PPA.DLLが持っている関数を準備
 
-	//	Apr. 15, 2002 genta constを付けた
-	//	アドレスの入れ場所はオブジェクトに依存するので
-	//	static配列にはできない。
-	const ImportTable table[] = 
-	{
+	// pr. 15, 2002 genta constを付けた
+	// アドレスの入れ場所はオブジェクトに依存するので
+	// tatic配列にはできない。
+	const ImportTable table[] = {
 		{ &m_fnExecute,		"Execute" },
 		{ &m_fnSetDeclare,	"SetDeclare" },
 		{ &m_fnSetSource,	"SetSource" },
@@ -160,8 +158,8 @@ bool CPPA::InitDllImp()
 		{ NULL, 0 }
 	};
 
-	//	Apr. 15, 2002 genta
-	//	CDllImpの共通関数化した
+	// pr. 15, 2002 genta
+	// DllImpの共通関数化した
 	if (! RegisterEntries(table)) {
 		return false;
 	}
@@ -180,7 +178,7 @@ bool CPPA::InitDllImp()
 	SetDefine( "sakura-editor" );	// 2003.06.01 Moca SAKURAエディタ用独自関数を準備
 	AddStrObj( "UserErrorMes", "", FALSE, 2 ); // 2003.06.01 デバッグ用文字列変数を用意
 
-	//	Jun. 16, 2003 genta 一時作業エリア
+	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
 	for (int i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName != NULL; i++) {
@@ -217,8 +215,8 @@ bool CPPA::InitDllImp()
 */
 char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer )
 {
-	char szType[20];			//	procedure/function用バッファ
-	char szReturn[20];			//	戻り値型用バッファ
+	char szType[20];	// procedure/function用バッファ
+	char szReturn[20];	// 戻り値型用バッファ
 	if (cMacroFuncInfo.m_varResult == VT_EMPTY) {
 		strcpy( szType, "procedure" );
 		szReturn[0] = '\0';
@@ -233,7 +231,7 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* pszBuffe
 		}
 	}
 	
-	char szArguments[8][20];	//	引数用バッファ
+	char szArguments[8][20]; // 引数用バッファ
 	int i;
 	for (i=0; i<8; i++) {
 		VARTYPE type = VT_EMPTY;
@@ -399,10 +397,10 @@ void __stdcall CPPA::stdProc(
 
 	*Err_CD = 0;
 
-	//Argumentをwchar_t[]に変換 -> tmpArguments
+	// Argumentをwchar_t[]に変換 -> tmpArguments
 	WCHAR** tmpArguments2=new WCHAR*[ArgSize];
 	int* tmpArgLengths = new int[ArgSize];
-	for (int i=0;i<ArgSize;i++) {
+	for (int i=0; i<ArgSize; i++) {
 		if (Argument[i]) {
 			tmpArguments2[i]=mbstowcs_new(Argument[i]);
 			tmpArgLengths[i]=wcslen(tmpArguments2[i]);
@@ -413,14 +411,14 @@ void __stdcall CPPA::stdProc(
 	}
 	const WCHAR** tmpArguments=(const WCHAR**)tmpArguments2;
 
-	//処理
+	// 処理
 	bool bRet = CMacro::HandleCommand( m_CurInstance->m_pcEditView, (EFunctionCode)(Index | m_CurInstance->m_commandflags), tmpArguments,tmpArgLengths, ArgSize );
 	if (!bRet) {
 		*Err_CD = Index + 1;
 	}
 
-	//tmpArgumentsを解放
-	for (int i=0;i<ArgSize;i++) {
+	// tmpArgumentsを解放
+	for (int i=0; i<ArgSize; i++) {
 		if (tmpArguments2[i]) {
 			WCHAR* p = const_cast<WCHAR*>(tmpArguments2[i]);
 			delete[] p;
@@ -516,17 +514,16 @@ bool CPPA::CallHandleFunction(
 	const int Index, const char* Arg[],
 	int ArgSize, VARIANT* Result )
 {
-	int i, ArgCnt;
+	int ArgCnt;
 	const int maxArgSize = 8;
 	VARIANT vtArg[maxArgSize];
-	const MacroFuncInfo* mfi;
-	bool Ret;
-
-	mfi = CSMacroMgr::GetFuncInfoByID(Index);
-	for (i=0; i<maxArgSize && i<ArgSize; i++) {
+	
+	const MacroFuncInfo* mfi = CSMacroMgr::GetFuncInfoByID(Index);
+	for (int i=0; i<maxArgSize && i<ArgSize; i++) {
 		::VariantInit( &vtArg[i] );
 	}
-	for (i=0, ArgCnt=0; i<maxArgSize && i<ArgSize; i++) {
+	ArgCnt = 0;
+	for (int i=0; i<maxArgSize && i<ArgSize; i++) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
 			type = mfi->m_varArguments[i];
@@ -552,7 +549,7 @@ bool CPPA::CallHandleFunction(
 			break;
 		}
 		default:
-			for (i=0; i<maxArgSize && i<ArgSize; i++) {
+			for (int i=0; i<maxArgSize && i<ArgSize; i++) {
 				::VariantClear( &vtArg[i] );
 			}
 			return false;
@@ -561,13 +558,13 @@ bool CPPA::CallHandleFunction(
 	}
 
 	if (Index >= F_FUNCTION_FIRST) {
-		Ret = CMacro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
-		for (i=0; i<maxArgSize && i<ArgSize; i++) {
+		bool Ret = CMacro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
+		for (int i=0; i<maxArgSize && i<ArgSize; i++) {
 			::VariantClear( &vtArg[i] );
 		}
 		return Ret;
 	}else {
-		for (i=0; i<maxArgSize && i<ArgSize; i++) {
+		for (int i=0; i<maxArgSize && i<ArgSize; i++) {
 			::VariantClear( &vtArg[i] );
 		}
 		return false;

@@ -50,7 +50,7 @@ void CMacroBeforeAfter::ExecKeyMacroAfter( class CEditView* pcEditView, int flag
 {
 	if (0 < m_nOpeBlkCount) {
 		COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
-		if (opeBlk == NULL) {
+		if (!opeBlk) {
 			pcEditView->m_cCommander.SetOpeBlk(new COpeBlk());
 		}
 		if (pcEditView->m_cCommander.GetOpeBlk()->GetRefCount() != m_nOpeBlkCount) {

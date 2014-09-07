@@ -172,13 +172,15 @@ CLayoutInt CLayoutMgr::getIndentOffset_Normal( CLayout* )
 CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
 {
 	//	前の行が無いときは、インデント不要。
-	if (pLayoutPrev == NULL) return CLayoutInt(0);
-
+	if (!pLayoutPrev) {
+		return CLayoutInt(0);
+	}
 	CLayoutInt nIpos = pLayoutPrev->GetIndent();
 
 	//	前の行が折り返し行ならばそれに合わせる
-	if (pLayoutPrev->GetLogicOffset() > 0)
+	if (pLayoutPrev->GetLogicOffset() > 0) {
 		return nIpos;
+	}
 	
 	CMemoryIterator it( pLayoutPrev, GetTabSpace() );
 	while (!it.end()) {
@@ -209,15 +211,17 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
 CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
 {
 	//	前の行が無いときは、インデント不要。
-	if (pLayoutPrev == NULL) return CLayoutInt(0);
-
+	if (!pLayoutPrev) {
+		return CLayoutInt(0);
+	}
 	//	インデントの計算
 	CLayoutInt nIpos = pLayoutPrev->GetIndent();
 	
 	//	Oct. 5, 2002 genta
 	//	折り返しの3行目以降は1つ前の行のインデントに合わせる．
-	if (pLayoutPrev->GetLogicOffset() > 0)
+	if (pLayoutPrev->GetLogicOffset() > 0) {
 		return nIpos;
+	}
 	
 	//	2002.10.07 YAZAKI インデントの計算
 	CMemoryIterator it( pLayoutPrev, GetTabSpace() );
@@ -234,7 +238,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
 			wchar_t buf[3]; // 文字の長さは1 or 2
 			wmemcpy( buf, it.getCurrentPos(), it.getIndexDelta() );
 			buf[ it.getIndexDelta() ] = L'\0';
-			if (NULL != wcsstr( szSpecialIndentChar, buf )) {
+			if (wcsstr(szSpecialIndentChar, buf)) {
 				//	インデントのカウントを継続する
 			}else {
 				nIpos = it.getColumn();	//	終了
@@ -284,21 +288,20 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 	CLayoutInt nLines = GetLineCount();		// テキストのレイアウト行数
 
 	// 開始・終了位置がどちらも指定されていない
-	if (nStart < 0 && nEnd < 0)
+	if (nStart < 0 && nEnd < 0) {
 		bOnlyExpansion = FALSE;		// 最大幅の拡大・縮小をチェックする
-
-	if (nStart < 0)			// 算出開始行の指定なし
+	}
+	if (nStart < 0) {			// 算出開始行の指定なし
 		nStart = 0;
-	else if (nStart > nLines)	// 範囲オーバー
+	}else if (nStart > nLines) {	// 範囲オーバー
 		nStart = nLines;
-	
-	if (nEnd < 0 || nEnd >= nLines)	// 算出終了行の指定なし または 文書行数以上
+	}
+	if (nEnd < 0 || nEnd >= nLines) {	// 算出終了行の指定なし または 文書行数以上
 		nEnd = nLines;
-	else
+	}else {
 		nEnd++;					// 算出終了行の次行
-
+	}
 	CLayout* pLayout;
-
 	// 算出開始レイアウト行を探す
 	// 2013.05.13 SearchLineByLayoutYを使う
 	if (nStart == 0) {
@@ -311,7 +314,7 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 		// 前方からサーチ
 		CLayoutInt nCount = CLayoutInt(0);
 		pLayout = m_pLayoutTop;
-		while (NULL != pLayout) {
+		while (pLayout) {
 			if (nStart == nCount) {
 				break;
 			}
@@ -322,7 +325,7 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 		// 後方からサーチ
 		CLayoutInt nCount = CLayoutInt( m_nLines - 1 );
 		pLayout = m_pLayoutBot;
-		while (NULL != pLayout) {
+		while (pLayout) {
 			if (nStart == nCount) {
 				break;
 			}
@@ -334,9 +337,9 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 
 	// レイアウト行の最大幅を取り出す
 	for (CLayoutInt i = nStart; i < nEnd; i++) {
-		if (!pLayout)
+		if (!pLayout) {
 			break;
-
+		}
 		// レイアウト行の長さを算出する
 		if (bCalLineLen) {
 			CLayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen()>0?1:0);
@@ -349,8 +352,9 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 			nMaxLineNum = i;		// 最大幅のレイアウト行
 
 			// アプリケーションの最大幅となったら算出は停止
-			if (nMaxLen >= MAXLINEKETAS && !bCalLineLen)
+			if (nMaxLen >= MAXLINEKETAS && !bCalLineLen) {
 				break;
+			}
 		}
 
 		// 次のレイアウト行のデータ
@@ -392,7 +396,6 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 void CLayoutMgr::ClearLayoutLineWidth( void )
 {
 	CLayout* pLayout = m_pLayoutTop;
-
 	while (pLayout) {
 		pLayout->m_nLayoutWidth = 0;			// レイアウト行長をクリア
 		pLayout = pLayout->GetNextLayout();		// 次のレイアウト行のデータ

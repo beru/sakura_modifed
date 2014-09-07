@@ -114,7 +114,7 @@ bool CFuncLookup::Funccode2Name( int funccode, WCHAR* ptr, int bufsize ) const
 	if (F_USERMACRO_0 <= funccode && funccode < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		int position = funccode - F_USERMACRO_0;
 		if (m_pMacroRec[position].IsEnabled()) {
-			const TCHAR *p = m_pMacroRec[position].GetTitle();
+			const TCHAR* p = m_pMacroRec[position].GetTitle();
 			_tcstowcs( ptr, p, bufsize - 1 );
 			ptr[ bufsize - 1 ] = LTEXT('\0');
 		}else {

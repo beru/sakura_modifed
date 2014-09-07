@@ -19,25 +19,25 @@
 #include "CViewCommander_inline.h"
 
 
-/* 現在位置の単語選択 */
+// 現在位置の単語選択
 bool CViewCommander::Command_SELECTWORD( CLayoutPoint* pptCaretPos )
 {
 	CLayoutRange sRange;
 	CLogicInt	nIdx;
 	auto& si = m_pCommanderView->GetSelectionInfo();
-	if (si.IsTextSelected()) {	/* テキストが選択されているか */
-		/* 現在の選択範囲を非選択状態に戻す */
+	if (si.IsTextSelected()) {	// テキストが選択されているか
+		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea( true );
 	}
-	CLayoutPoint ptCaretPos = (NULL == pptCaretPos ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
+	CLayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
 	const CLayout*	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( ptCaretPos.GetY2() );
-	if (NULL == pcLayout) {
+	if (!pcLayout) {
 		return false;	//	単語選択に失敗
 	}
-	/* 指定された桁に対応する行のデータ内の位置を調べる */
+	// 指定された桁に対応する行のデータ内の位置を調べる
 	nIdx = m_pCommanderView->LineColumnToIndex( pcLayout, ptCaretPos.GetX2() );
 
-	/* 現在位置の単語の範囲を調べる */
+	// 現在位置の単語の範囲を調べる
 	if (GetDocument()->m_cLayoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &sRange, NULL, NULL )) {
 
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
@@ -49,13 +49,13 @@ bool CViewCommander::Command_SELECTWORD( CLayoutPoint* pptCaretPos )
 		sRange.SetToX( m_pCommanderView->LineIndexToColumn( pcLayout, sRange.GetTo().x ) );
 		*/
 
-		/* 選択範囲の変更 */
+		// 選択範囲の変更
 		//	2005.06.24 Moca
 		si.SetSelectArea( sRange );
-		/* 選択領域描画 */
+		// 選択領域描画
 		si.DrawSelectArea();
 
-		/* 単語の先頭にカーソルを移動 */
+		// 単語の先頭にカーソルを移動
 		GetCaret().MoveCursor( sRange.GetTo(), true );
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
@@ -66,16 +66,16 @@ bool CViewCommander::Command_SELECTWORD( CLayoutPoint* pptCaretPos )
 }
 
 
-/* すべて選択 */
+// すべて選択
 void CViewCommander::Command_SELECTALL( void )
 {
 	auto& si = m_pCommanderView->GetSelectionInfo();
-	if (si.IsTextSelected()) {	/* テキストが選択されているか */
-		/* 現在の選択範囲を非選択状態に戻す */
+	if (si.IsTextSelected()) {	// テキストが選択されているか
+		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea( true );
 	}
 
-	/* 先頭へカーソルを移動 */
+	// 先頭へカーソルを移動
 	//	Sep. 8, 2000 genta
 	m_pCommanderView->AddCurrentLineToHistory();
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
@@ -88,7 +88,7 @@ void CViewCommander::Command_SELECTALL( void )
 	GetDocument()->m_cLayoutMgr.GetEndLayoutPos(sRange.GetToPointer());
 	si.SetSelectArea( sRange );
 
-	/* 選択領域描画 */
+	// 選択領域描画
 	si.DrawSelectArea(false);
 }
 
@@ -145,21 +145,20 @@ void CViewCommander::Command_SELECTLINE( int lparam )
 	return;
 }
 
-
-/* 範囲選択開始 */
+// 範囲選択開始
 void CViewCommander::Command_BEGIN_SELECT( void )
 {
 	auto& si = m_pCommanderView->GetSelectionInfo();
-	if (!si.IsTextSelected()) {	/* テキストが選択されているか */
-		/* 現在のカーソル位置から選択を開始する */
+	if (!si.IsTextSelected()) {	// テキストが選択されているか
+		// 現在のカーソル位置から選択を開始する
 		si.BeginSelectArea();
 	}
 
-	//	ロックの解除切り替え
+	// ロックの解除切り替え
 	if (si.m_bSelectingLock) {
-		si.m_bSelectingLock = false;	/* 選択状態のロック解除 */
+		si.m_bSelectingLock = false;	// 選択状態のロック解除
 	}else {
-		si.m_bSelectingLock = true;	/* 選択状態のロック */
+		si.m_bSelectingLock = true;		// 選択状態のロック
 	}
 	if (GetSelect().IsOne()) {
 		GetCaret().m_cUnderLine.CaretUnderLineOFF(true);
@@ -169,25 +168,25 @@ void CViewCommander::Command_BEGIN_SELECT( void )
 }
 
 
-/* 矩形範囲選択開始 */
+// 矩形範囲選択開始
 void CViewCommander::Command_BEGIN_BOXSELECT( bool bSelectingLock )
 {
-	if (!GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {	/* 現在のフォントは固定幅フォントである */
+	if (!GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
 	auto& si = m_pCommanderView->GetSelectionInfo();
 //@@@ 2002.01.03 YAZAKI 範囲選択中にShift+F6を実行すると選択範囲がクリアされない問題に対処
 	if (si.IsTextSelected()) {	/* テキストが選択されているか */
-		/* 現在の選択範囲を非選択状態に戻す */
+		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea( true );
 	}
 
-	/* 現在のカーソル位置から選択を開始する */
+	// 現在のカーソル位置から選択を開始する
 	si.BeginSelectArea();
 
-	si.m_bSelectingLock = bSelectingLock;	/* 選択状態のロック */
-	si.SetBoxSelect(true);	/* 矩形範囲選択中 */
+	si.m_bSelectingLock = bSelectingLock;	// 選択状態のロック
+	si.SetBoxSelect(true);	// 矩形範囲選択中
 
 	si.PrintSelectionInfoMsg();
 	GetCaret().m_cUnderLine.CaretUnderLineOFF(true);

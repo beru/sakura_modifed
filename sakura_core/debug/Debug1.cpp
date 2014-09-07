@@ -22,7 +22,7 @@
 #include "debug/Debug3.h"
 
 #if 0
-//デバッグウォッチ用の型
+// デバッグウォッチ用の型
 struct TestArrayA{ char    a[100]; };
 struct TestArrayW{ wchar_t a[100]; };
 struct TestArrayI{ int     a[100]; };
@@ -49,13 +49,13 @@ void Test()
 #ifdef _UNICODE
 void DebugOutW( LPCWSTR lpFmt, ...)
 {
-	//整形
+	// 整形
 	static WCHAR szText[16000];
 	va_list argList;
 	va_start(argList, lpFmt);
 	int ret = tchar_vsnwprintf_s( szText, _countof(szText), lpFmt, argList );
 
-	//出力
+	// 出力
 	::OutputDebugStringW( szText );
 	if (-1 == ret) {
 		::OutputDebugStringW( L"(切り捨てました...)\n" );
@@ -64,7 +64,7 @@ void DebugOutW( LPCWSTR lpFmt, ...)
 	DebugMonitor_Output(NULL, to_wchar(szText));
 #endif
 
-	//ウェイト
+	// ウェイト
 	::Sleep(1);	// Norio Nakatani, 2001/06/23 大量にトレースするときのために
 
 	va_end(argList);
@@ -74,13 +74,13 @@ void DebugOutW( LPCWSTR lpFmt, ...)
 
 void DebugOutA( LPCSTR lpFmt, ...)
 {
-	//整形
+	// 整形
 	static CHAR szText[16000];
 	va_list argList;
 	va_start(argList, lpFmt);
 	int ret = tchar_vsnprintf_s( szText, _countof(szText), lpFmt, argList );
 
-	//出力
+	// 出力
 	::OutputDebugStringA( szText );
 	if (-1 == ret) {
 		::OutputDebugStringA( "(切り捨てました...)\n" );
@@ -89,7 +89,7 @@ void DebugOutA( LPCSTR lpFmt, ...)
 	DebugMonitor_Output(NULL, to_wchar(szText));
 #endif
 
-	//ウェイト
+	// ウェイト
 	::Sleep(1);	// Norio Nakatani, 2001/06/23 大量にトレースするときのために
 
 	va_end(argList);

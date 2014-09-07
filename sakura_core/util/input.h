@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//キー入力
+// キー入力
 // novice 2004/10/10
 int getCtrlKeyState();
 

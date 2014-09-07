@@ -56,7 +56,7 @@ bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nL
 
 bool CColor_Select::EndColor(const CStringRef& cStr, int nPos)
 {
-	//マッチ文字列終了検出
+	// マッチ文字列終了検出
 	if (m_nSelectEnd <= nPos) {
 		// -- -- マッチ文字列を描画 -- -- //
 		return true;
@@ -104,7 +104,7 @@ bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 			&m_nSearchEnd
 		);
 	}
-	//マッチ文字列検出
+	// マッチ文字列検出
 	if (m_nSearchResult && m_nSearchStart==nPos) {
 		return true;
 	}
@@ -113,7 +113,7 @@ bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_Found::EndColor(const CStringRef& cStr, int nPos)
 {
-	//マッチ文字列終了検出
+	// マッチ文字列終了検出
 	if (m_nSearchEnd <= nPos) { //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
 		// -- -- マッチ文字列を描画 -- -- //
 

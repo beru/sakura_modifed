@@ -79,7 +79,6 @@ typedef unsigned long	uchar32_t;		//  UTF-32 ópÅD
 typedef long			wchar32_t;
 
 
-
 // -- -- -- -- ÇªÇÃëº -- -- -- -- //
 
 typedef char KEYCODE;

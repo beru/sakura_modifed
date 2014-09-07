@@ -63,16 +63,15 @@ INT_PTR CALLBACK CPropFileName::DlgProc_page(
 
 INT_PTR CPropFileName::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-
-	HWND	hListView;
-	int		nIndex;
-	TCHAR	szFrom[_MAX_PATH];
-	TCHAR	szTo[_MAX_PATH];
+	HWND hListView;
+	int nIndex;
+	TCHAR szFrom[_MAX_PATH];
+	TCHAR szTo[_MAX_PATH];
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		{
-			RECT		rc;
+			RECT rc;
 			LV_COLUMN	col;
 			hListView = GetDlgItem( hwndDlg, IDC_LIST_FNAME );
 
@@ -107,8 +106,8 @@ INT_PTR CPropFileName::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
 	case WM_NOTIFY:
 		{
-			NMHDR*		pNMHDR = (NMHDR*)lParam;
-			int			idCtrl = (int)wParam;
+			NMHDR* pNMHDR = (NMHDR*)lParam;
+			int idCtrl = (int)wParam;
 
 			switch (idCtrl) {
 			case IDC_LIST_FNAME:
@@ -268,20 +267,18 @@ INT_PTR CPropFileName::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 */
 void CPropFileName::SetData( HWND hwndDlg )
 {
-	int i;
-	int nIndex;
-	LVITEM lvItem;
-
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_LIST_FNAME );
 	ListView_DeleteAllItems( hListView ); // リストを空にする
 
 	// リストにデータをセット
-	for (i = 0, nIndex = 0; i < m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
+	int nIndex = 0;
+	for (int i = 0; i < m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
 		if ('\0' == m_Common.m_sFileName.m_szTransformFileNameFrom[i][0]) {
 			continue;
 		}
 
+		LVITEM lvItem;
 		::ZeroMemory( &lvItem, sizeof_raw( lvItem ));
 		lvItem.mask     = LVIF_TEXT;
 		lvItem.iItem    = nIndex;
@@ -320,15 +317,11 @@ void CPropFileName::SetData( HWND hwndDlg )
 
 int CPropFileName::GetData( HWND hwndDlg )
 {
-
-	int nIndex;
-	int nCount;
-
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_LIST_FNAME );
 	m_Common.m_sFileName.m_nTransformFileNameArrNum = ListView_GetItemCount( hListView );
 
-	for (nIndex = 0, nCount = 0; nIndex < MAX_TRANSFORM_FILENAME ; ++nIndex) {
+	for (int nIndex = 0, nCount = 0; nIndex < MAX_TRANSFORM_FILENAME ; ++nIndex) {
 		if (nIndex < m_Common.m_sFileName.m_nTransformFileNameArrNum) {
 			ListView_GetItemText( hListView, nIndex, 0, m_Common.m_sFileName.m_szTransformFileNameFrom[nCount], _MAX_PATH );
 
@@ -351,14 +344,11 @@ int CPropFileName::GetData( HWND hwndDlg )
 
 int CPropFileName::SetListViewItem_FILENAME( HWND hListView, int nIndex, LPTSTR szFrom, LPTSTR szTo, bool bInsMode )
 {
-	LV_ITEM	Item;
-	int nCount;
-
 	if (_T('\0') == szFrom[0] || -1 == nIndex) {
 		return -1;
 	}
 
-	nCount = ListView_GetItemCount( hListView );
+	int nCount = ListView_GetItemCount( hListView );
 
 	// これ以上追加できない
 	if (bInsMode && MAX_TRANSFORM_FILENAME <= nCount) {
@@ -366,6 +356,7 @@ int CPropFileName::SetListViewItem_FILENAME( HWND hListView, int nIndex, LPTSTR 
 		return -1;
 	}
 
+	LV_ITEM	Item;
 	::ZeroMemory( &Item, sizeof_raw( Item ));
 	Item.mask     = LVIF_TEXT;
 	Item.iItem    = nIndex;

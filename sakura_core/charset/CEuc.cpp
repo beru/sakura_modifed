@@ -10,22 +10,20 @@
 */
 int CEuc::EucjpToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError )
 {
-	const unsigned char *pr, *pr_end;
-	unsigned short *pw;
 	int nclen;
 	ECharSet echarset;
 	bool berror_tmp, berror=false;
 
-	if( nSrcLen < 1 ){
-		if( pbError ){
+	if (nSrcLen < 1) {
+		if (pbError) {
 			*pbError = false;
 		}
 		return 0;
 	}
 
-	pr = reinterpret_cast<const unsigned char*>(pSrc);
-	pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
-	pw = reinterpret_cast<unsigned short*>(pDst);
+	auto pr = reinterpret_cast<const unsigned char*>(pSrc);
+	auto pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
+	auto pw = reinterpret_cast<unsigned short*>(pDst);
 
 	for( ; (nclen = CheckEucjpChar(reinterpret_cast<const char*>(pr), pr_end-pr, &echarset)) != 0; pr += nclen ){
 		switch( echarset ){
@@ -89,7 +87,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -112,20 +110,15 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 }
 
 
-
-
-
 int CEuc::UniToEucjp( const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError )
 {
 	int nclen;
-	const unsigned short *pr, *pr_end;
-	unsigned char* pw;
 	bool berror=false, berror_tmp;
 	ECharSet echarset;
 
-	pr = reinterpret_cast<const unsigned short*>(pSrc);
-	pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
-	pw = reinterpret_cast<unsigned char*>(pDst);
+	auto pr = reinterpret_cast<const unsigned short*>(pSrc);
+	auto pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
+	auto pw = reinterpret_cast<unsigned char*>(pDst);
 
 	while( (nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0 ){
 		// 保護コード
@@ -184,7 +177,7 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -210,19 +203,15 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
-	CMemory	cCharBuffer;
-	EConvertResult	res;
-	int				i;
-	TCHAR*			pd; 
-	unsigned char*	ps; 
-	bool			bbinary=false;
-
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInEuc) {
 		// Unicodeで表示
 		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
+	CMemory	cCharBuffer;
+	bool bbinary = false;
+	
 	// 1文字データバッファ
 	cCharBuffer.SetRawData("", 0);
 	cCharBuffer.AppendRawData( cSrc, sizeof(wchar_t));
@@ -232,16 +221,16 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	}
 
 	// EUC-JP 変換
-	res = UnicodeToEUC(&cCharBuffer);
+	EConvertResult	res = UnicodeToEUC(&cCharBuffer);
 	if (res != RESULT_COMPLETE) {
 		return res;
 	}
 
 	// Hex変換
-	ps = reinterpret_cast<unsigned char*>( cCharBuffer.GetRawPtr() );
-	pd = pDst;
-	if( bbinary == false ){
-		for (i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
+	unsigned char* ps = reinterpret_cast<unsigned char*>( cCharBuffer.GetRawPtr() );
+	TCHAR* pd = pDst;
+	if (bbinary == false) {
+		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf( pd, _T("%02X"), *ps);
 		}
 	}else{

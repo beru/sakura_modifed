@@ -12,10 +12,10 @@ EConvertResult CIoBridge::FileToImpl(
 	int					nFlag		//!< [in]  bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 )
 {
-	//任意の文字コードからUnicodeへ変換する
+	// 任意の文字コードからUnicodeへ変換する
 	EConvertResult ret = pCode->CodeToUnicode(cSrc,pDst);
 
-	//結果
+	// 結果
 	return ret;
 }
 
@@ -28,7 +28,7 @@ EConvertResult CIoBridge::ImplToFile(
 	// Unicodeから任意の文字コードへ変換する
 	EConvertResult ret = pCode->UnicodeToCode(cSrc,pDst);
 
-	//結果
+	// 結果
 	return ret;
 }
 

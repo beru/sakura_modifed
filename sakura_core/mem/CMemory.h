@@ -33,7 +33,7 @@
 
 #pragma once
 
-/*! ファイル文字コードセット判別時の先読み最大サイズ */
+//! ファイル文字コードセット判別時の先読み最大サイズ
 #define CheckKanjiCode_MAXREADLENGTH 16384
 
 #include "_main/global.h"
@@ -41,7 +41,7 @@
 //! メモリバッファクラス
 class CMemory
 {
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 public:
 	CMemory();
 	CMemory(const CMemory& rhs);
@@ -50,7 +50,7 @@ public:
 protected:
 	void _init_members();
 
-	//インターフェース
+	// インターフェース
 public:
 	void AllocBuffer( int );                               //!< バッファサイズの調整。必要に応じて拡大する。
 	void SetRawData( const void* pData, int nDataLen );    //!< バッファの内容を置き換える
@@ -96,16 +96,16 @@ public:
 #ifdef _DEBUG
 protected:
 	typedef char* PCHAR;
-	PCHAR& _DebugGetPointerRef(){ return m_pRawData; } //デバッグ用。バッファポインタの参照を返す。
+	PCHAR& _DebugGetPointerRef(){ return m_pRawData; } // デバッグ用。バッファポインタの参照を返す。
 #endif
 
 private: // 2002/2/10 aroka アクセス権変更
 	/*
 	|| メンバ変数
 	*/
-	int		m_nDataBufSize;	//バッファサイズ。バイト単位。
-	char*	m_pRawData;		//バッファ
-	int		m_nRawLen;		//データサイズ(m_nDataBufSize以内)。バイト単位。
+	int		m_nDataBufSize;	// バッファサイズ。バイト単位。
+	char*	m_pRawData;		// バッファ
+	int		m_nRawLen;		// データサイズ(m_nDataBufSize以内)。バイト単位。
 };
 
 
@@ -114,12 +114,12 @@ private: // 2002/2/10 aroka アクセス権変更
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 inline const void* CMemory::GetRawPtr(int* pnLength) const //!< データへのポインタと長さ返す
 {
-	if(pnLength) *pnLength = GetRawLength();
+	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
 inline void* CMemory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
 {
-	if(pnLength) *pnLength = GetRawLength();
+	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
 

@@ -82,9 +82,9 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	static char* GetFuncInfoByID( HINSTANCE , int , char* , char* );	/* 機能ID→関数名，機能名日本語 */
-	static int GetFuncInfoByName( HINSTANCE , const char* , char* );	/* 関数名→機能ID，機能名日本語 */
-	static BOOL CanFuncIsKeyMacro( int );	/* キーマクロに記録可能な機能かどうかを調べる */
+	static char* GetFuncInfoByID( HINSTANCE , int , char* , char* );	// 機能ID→関数名，機能名日本語
+	static int GetFuncInfoByName( HINSTANCE , const char* , char* );	// 関数名→機能ID，機能名日本語
+	static BOOL CanFuncIsKeyMacro( int );	// キーマクロに記録可能な機能かどうかを調べる
 #endif
 
 protected:
@@ -102,5 +102,4 @@ protected:
 	CMacroParam*	m_pParamBot;
 	CMacro*			m_pNext;		//	次のマクロへのポインタ
 };
-
 

@@ -51,14 +51,14 @@
 		2GB以上のファイルは開けない
 */
 
-/*! ロード用バッファサイズの初期値 */
+//! ロード用バッファサイズの初期値 */
 const int CFileLoad::gm_nBufSizeDef = 32768;
-//(最適値がマシンによって違うのでとりあえず32KB確保する)
+// (最適値がマシンによって違うのでとりあえず32KB確保する)
 
-// /*! ロード用バッファサイズの設定可能な最低値 */
+// ロード用バッファサイズの設定可能な最低値
 // const int gm_nBufSizeMin = 1024;
 
-/*! コンストラクタ */
+//! コンストラクタ
 CFileLoad::CFileLoad( const SEncodingConfig& encode )
 {
 	m_pEencoding = &encode;
@@ -81,16 +81,16 @@ CFileLoad::CFileLoad( const SEncodingConfig& encode )
 	m_nReadBufOffSet  = 0;
 }
 
-/*! デストラクタ */
+//! デストラクタ
 CFileLoad::~CFileLoad( void )
 {
-	if (NULL != m_hFile) {
+	if (m_hFile) {
 		FileClose();
 	}
-	if (NULL != m_pReadBuf) {
+	if (m_pReadBuf) {
 		free( m_pReadBuf );
 	}
-	if (NULL != m_pCodeBase) {
+	if (m_pCodeBase) {
 		delete m_pCodeBase;
 	}
 }
@@ -106,19 +106,14 @@ CFileLoad::~CFileLoad( void )
 */
 ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, ECodeType CharCode, int nFlag, bool* pbBomExist )
 {
-	HANDLE	hFile;
-	DWORD	FileSize;
-	DWORD	FileSizeHigh;
-	ECodeType	nBomCode;
-
 	// FileCloseを呼んでからにしてください
-	if (NULL != m_hFile) {
+	if (m_hFile) {
 #ifdef _DEBUG
 		::MessageBox( NULL, _T("CFileLoad::FileOpen\nFileCloseを呼んでからにしてください") , NULL, MB_OK );
 #endif
 		throw CError_FileOpen();
 	}
-	hFile = ::CreateFile(
+	HANDLE hFile = ::CreateFile(
 		pFileName,
 		GENERIC_READ,
 		//	Oct. 18, 2002 genta FILE_SHARE_WRITE 追加
@@ -134,7 +129,8 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, ECodeType CharCode, int nFlag,
 	}
 	m_hFile = hFile;
 
-	FileSize = ::GetFileSize( hFile, &FileSizeHigh );
+	DWORD FileSizeHigh;
+	DWORD FileSize = ::GetFileSize( hFile, &FileSizeHigh );
 	// ファイルサイズが、約2GBを超える場合はとりあえずエラー
 	if (0x80000000 <= FileSize || 0 < FileSizeHigh) {
 		FileClose();
@@ -147,7 +143,7 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, ECodeType CharCode, int nFlag,
 	// データ読み込み
 	Buffering();
 
-	nBomCode = CCodeMediator::DetectUnicodeBom( m_pReadBuf, m_nReadDataLen );
+	ECodeType nBomCode = CCodeMediator::DetectUnicodeBom( m_pReadBuf, m_nReadDataLen );
 	if (CharCode == CODE_AUTODETECT) {
 		if (nBomCode != CODE_NONE) {
 			CharCode = nBomCode;
@@ -201,11 +197,11 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, ECodeType CharCode, int nFlag,
 void CFileLoad::FileClose( void )
 {
 	ReadBufEmpty();
-	if (NULL != m_hFile) {
+	if (m_hFile) {
 		::CloseHandle( m_hFile );
 		m_hFile = NULL;
 	}
-	if (NULL != m_pCodeBase) {
+	if (m_pCodeBase) {
 		delete m_pCodeBase;
 		m_pCodeBase = NULL;
 	}
@@ -239,20 +235,20 @@ EConvertResult CFileLoad::ReadLine(
 		return RESULT_FAILURE;
 	}
 #endif
-	//行データバッファ (文字コード変換無しの生のデータ)
+	// 行データバッファ (文字コード変換無しの生のデータ)
 	/*static */CMemory cLineBuffer;
 	cLineBuffer.SetRawData("",0);
 
 	// 1行取り出し ReadBuf -> m_memLine
-	//	Oct. 19, 2002 genta while条件を整理
+	// Oct. 19, 2002 genta while条件を整理
 	int			nBufLineLen;
 	int			nEolLen;
 	for (;;) {
 		const char* pLine = GetNextLineCharCode(
 			m_pReadBuf,
 			m_nReadDataLen,    //[in] バッファの有効データサイズ
-			&nBufLineLen,      //[out]改行を含まない長さ
-			&m_nReadBufOffSet, //[i/o]オフセット
+			&nBufLineLen,      //[out] 改行を含まない長さ
+			&m_nReadBufOffSet, //[i/o] オフセット
 			pcEol,
 			&nEolLen
 		);
@@ -305,20 +301,18 @@ EConvertResult CFileLoad::ReadLine(
 */
 void CFileLoad::Buffering( void )
 {
-	DWORD	ReadSize;
-
 	// メモリー確保
-	if (NULL == m_pReadBuf) {
+	if (!m_pReadBuf) {
 		int nBufSize;
 		nBufSize = ( m_nFileSize < gm_nBufSizeDef )?( m_nFileSize ):( gm_nBufSizeDef );
-		//	Borland C++では0バイトのmallocを獲得失敗と見なすため
-		//	最低1バイトは取得することで0バイトのファイルを開けるようにする
+		// Borland C++では0バイトのmallocを獲得失敗と見なすため
+		// 最低1バイトは取得することで0バイトのファイルを開けるようにする
 		if (0 >= nBufSize) {
 			nBufSize = 1; // Jun. 08, 2003  BCCのmalloc(0)がNULLを返す仕様に対処
 		}
 
 		m_pReadBuf = (char*) malloc( nBufSize );
-		if (NULL == m_pReadBuf) {
+		if (!m_pReadBuf) {
 			throw CError_FileRead(); // メモリー確保に失敗
 		}
 		m_nReadDataLen = 0;
@@ -334,7 +328,7 @@ void CFileLoad::Buffering( void )
 		m_nReadDataLen = 0;
 	}
 	// ファイルの読み込み
-	ReadSize = Read( &m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen );
+	DWORD ReadSize = Read( &m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen );
 	if (0 == ReadSize) {
 		m_eMode = FLMODE_READBUFEND;	// ファイルなどの終わりに達したらしい
 	}
@@ -346,7 +340,7 @@ void CFileLoad::Buffering( void )
 */
 void CFileLoad::ReadBufEmpty( void )
 {
-	if (NULL != m_pReadBuf) {
+	if (m_pReadBuf) {
 		free( m_pReadBuf );
 		m_pReadBuf = NULL;
 	}
@@ -384,7 +378,6 @@ const char* CFileLoad::GetNextLineCharCode(
 ){
 	int nbgn = *pnBgn;
 	int i;
-	int neollen;
 
 	pcEol->SetType( EOL_NONE );
 
@@ -422,9 +415,9 @@ const char* CFileLoad::GetNextLineCharCode(
 		}
 	}
 
-	neollen = pcEol->GetLen();
+	int neollen = pcEol->GetLen();
 	if (m_CharCode == CODE_UNICODE || m_CharCode == CODE_UNICODEBE) {
-		neollen *= sizeof(wchar_t);   // EOL のバイト数を計算
+		neollen *= sizeof(wchar_t);	// EOL のバイト数を計算
 		if (neollen < 1) {
 			if (i != nDataLen) {
 				i = nDataLen;		// 最後の半端な1バイトを落とさないように

@@ -32,12 +32,13 @@
 #include "env/CSakuraEnvironment.h"
 
 
-/* キーマクロの記録開始／終了 */
+// キーマクロの記録開始／終了
 void CViewCommander::Command_RECKEYMACRO( void )
 {
-	if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro) {									/* キーボードマクロの記録中 */
-		GetDllShareData().m_sFlags.m_bRecordingKeyMacro = FALSE;
-		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = NULL;							/* キーボードマクロを記録中のウィンドウ */
+	auto& sFlags = GetDllShareData().m_sFlags;
+	if (sFlags.m_bRecordingKeyMacro) {									// キーボードマクロの記録中
+		sFlags.m_bRecordingKeyMacro = FALSE;
+		sFlags.m_hwndRecordingKeyMacro = NULL;							// キーボードマクロを記録中のウィンドウ
 		//@@@ 2002.1.24 YAZAKI キーマクロをマクロ用フォルダに「RecKey.mac」という名で保存
 		TCHAR szInitDir[MAX_PATH];
 		int nRet;
@@ -59,28 +60,29 @@ void CViewCommander::Command_RECKEYMACRO( void )
 			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName );
 		}
 	}else {
-		GetDllShareData().m_sFlags.m_bRecordingKeyMacro = TRUE;
-		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = GetMainWindow();	/* キーボードマクロを記録中のウィンドウ */
-		/* キーマクロのバッファをクリアする */
+		sFlags.m_bRecordingKeyMacro = TRUE;
+		sFlags.m_hwndRecordingKeyMacro = GetMainWindow();	// キーボードマクロを記録中のウィンドウ
+		// キーマクロのバッファをクリアする
 		//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		m_pcSMacroMgr->Clear(STAND_KEYMACRO);
 //		GetDocument()->m_CKeyMacroMgr.ClearAll();
 //		GetDllShareData().m_CKeyMacroMgr.Clear();
 	}
-	/* 親ウィンドウのタイトルを更新 */
+	// 親ウィンドウのタイトルを更新
 	GetEditWindow()->UpdateCaption();
 
-	/* キャレットの行桁位置を表示する */
+	// キャレットの行桁位置を表示する
 	GetCaret().ShowCaretPosInfo();
 }
 
 
-/* キーマクロの保存 */
+// キーマクロの保存
 void CViewCommander::Command_SAVEKEYMACRO( void )
 {
-	GetDllShareData().m_sFlags.m_bRecordingKeyMacro = FALSE;
-	GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = NULL;	/* キーボードマクロを記録中のウィンドウ */
+	auto& sFlags = GetDllShareData().m_sFlags;
+	sFlags.m_bRecordingKeyMacro = FALSE;
+	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	//	Jun. 16, 2002 genta
 	if (!m_pcSMacroMgr->IsSaveOk()) {
@@ -94,12 +96,13 @@ void CViewCommander::Command_SAVEKEYMACRO( void )
 	szPath[0] = 0;
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	if (_IS_REL_PATH( GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER )) {
-		GetInidirOrExedir( szInitDir, GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER );
+	auto& macroFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
+	if (_IS_REL_PATH( macroFolder )) {
+		GetInidirOrExedir( szInitDir, macroFolder );
 	}else {
-		_tcscpy( szInitDir, GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER );	/* マクロ用フォルダ */
+		_tcscpy( szInitDir, macroFolder );	// マクロ用フォルダ
 	}
-	/* ファイルオープンダイアログの初期化 */
+	// ファイルオープンダイアログの初期化
 	cDlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -109,12 +112,12 @@ void CViewCommander::Command_SAVEKEYMACRO( void )
 	if (!cDlgOpenFile.DoModal_GetSaveFileName( szPath )) {
 		return;
 	}
-	/* ファイルのフルパスを、フォルダとファイル名に分割 */
+	// ファイルのフルパスを、フォルダとファイル名に分割
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-//	::SplitPath_FolderAndFile( szPath, GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER, NULL );
-//	wcscat( GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER, L"\\" );
+//	::SplitPath_FolderAndFile( szPath, macroFolder, NULL );
+//	wcscat( macroFolder, L"\\" );
 
-	/* キーボードマクロの保存 */
+	// キーボードマクロの保存
 	//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 	//@@@ 2002.1.24 YAZAKI
 	if (!m_pcSMacroMgr->Save( STAND_KEYMACRO, G_AppInstance(), szPath )) {
@@ -129,8 +132,9 @@ void CViewCommander::Command_SAVEKEYMACRO( void )
  */
 void CViewCommander::Command_LOADKEYMACRO( void )
 {
-	GetDllShareData().m_sFlags.m_bRecordingKeyMacro = FALSE;
-	GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = NULL;	/* キーボードマクロを記録中のウィンドウ */
+	auto& sFlags = GetDllShareData().m_sFlags;
+	sFlags.m_bRecordingKeyMacro = FALSE;
+	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	CDlgOpenFile	cDlgOpenFile;
 	TCHAR			szPath[_MAX_PATH + 1];
@@ -143,9 +147,9 @@ void CViewCommander::Command_LOADKEYMACRO( void )
 	if (_IS_REL_PATH( pszFolder )) {
 		GetInidirOrExedir( szInitDir, pszFolder );
 	}else {
-		_tcscpy_s( szInitDir, pszFolder );	/* マクロ用フォルダ */
+		_tcscpy_s( szInitDir, pszFolder );	// マクロ用フォルダ
 	}
-	/* ファイルオープンダイアログの初期化 */
+	// ファイルオープンダイアログの初期化
 	cDlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -158,7 +162,7 @@ void CViewCommander::Command_LOADKEYMACRO( void )
 		return;
 	}
 
-	/* キーボードマクロの読み込み */
+	// キーボードマクロの読み込み
 	//@@@ 2002.1.24 YAZAKI 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
 	_tcscpy(GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName, szPath);
 //	GetDllShareData().m_CKeyMacroMgr.LoadKeyMacro( G_AppInstance(), m_pCommanderView->GetHwnd(), szPath );
@@ -166,17 +170,18 @@ void CViewCommander::Command_LOADKEYMACRO( void )
 }
 
 
-/* キーマクロの実行 */
+// キーマクロの実行
 void CViewCommander::Command_EXECKEYMACRO( void )
 {
+	auto& sFlags = GetDllShareData().m_sFlags;
 	//@@@ 2002.1.24 YAZAKI 記録中は終了してから実行
-	if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro) {
+	if (sFlags.m_bRecordingKeyMacro) {
 		Command_RECKEYMACRO();
 	}
-	GetDllShareData().m_sFlags.m_bRecordingKeyMacro = FALSE;
-	GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = NULL;	/* キーボードマクロを記録中のウィンドウ */
+	sFlags.m_bRecordingKeyMacro = FALSE;
+	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
-	/* キーボードマクロの実行 */
+	// キーボードマクロの実行
 	//@@@ 2002.1.24 YAZAKI
 	if (GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName[0]) {
 		//	ファイルが保存されていたら
@@ -207,12 +212,9 @@ void CViewCommander::Command_EXECKEYMACRO( void )
  */
 void CViewCommander::Command_EXECEXTMACRO( const WCHAR* pszPathW, const WCHAR* pszTypeW )
 {
-	CDlgOpenFile	cDlgOpenFile;
 	TCHAR			szPath[_MAX_PATH + 1];
-	TCHAR			szInitDir[_MAX_PATH + 1];	//ファイル選択ダイアログの初期フォルダ
-	const TCHAR*	pszFolder;					//マクロフォルダ
-	const TCHAR*	pszPath = NULL;				//第1引数をTCHAR*に変換した文字列
-	const TCHAR*	pszType = NULL;				//第2引数をTCHAR*に変換した文字列
+	const TCHAR*	pszPath = NULL;				// 第1引数をTCHAR*に変換した文字列
+	const TCHAR*	pszType = NULL;				// 第2引数をTCHAR*に変換した文字列
 	HWND			hwndRecordingKeyMacro = NULL;
 
 	if (pszPathW != NULL) {
@@ -223,14 +225,18 @@ void CViewCommander::Command_EXECEXTMACRO( const WCHAR* pszPathW, const WCHAR* p
 	}else {
 		// ファイルが指定されていない場合、ダイアログを表示する
 		szPath[0] = 0;
-		pszFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
+		// マクロフォルダ
+		const TCHAR* pszFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
 
+		// ファイル選択ダイアログの初期フォルダ
+		TCHAR szInitDir[_MAX_PATH + 1];
 		if (_IS_REL_PATH( pszFolder )) {
 			GetInidirOrExedir( szInitDir, pszFolder );
 		}else {
-			_tcscpy_s( szInitDir, pszFolder );	/* マクロ用フォルダ */
+			_tcscpy_s( szInitDir, pszFolder );	// マクロ用フォルダ
 		}
-		/* ファイルオープンダイアログの初期化 */
+		// ファイルオープンダイアログの初期化
+		CDlgOpenFile cDlgOpenFile;
 		cDlgOpenFile.Create(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
@@ -244,20 +250,21 @@ void CViewCommander::Command_EXECEXTMACRO( const WCHAR* pszPathW, const WCHAR* p
 		pszType = NULL;
 	}
 
-	//キーマクロ記録中の場合、追加する
-	if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro &&									/* キーボードマクロの記録中 */
-		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro == GetMainWindow()	/* キーボードマクロを記録中のウィンドウ */
+	auto& sFlags = GetDllShareData().m_sFlags;
+	// キーマクロ記録中の場合、追加する
+	if (sFlags.m_bRecordingKeyMacro &&						// キーボードマクロの記録中
+		sFlags.m_hwndRecordingKeyMacro == GetMainWindow()	// キーボードマクロを記録中のウィンドウ
 	) {
 		LPARAM lparams[] = {(LPARAM)pszPath, 0, 0, 0};
 		m_pcSMacroMgr->Append( STAND_KEYMACRO, F_EXECEXTMACRO, lparams, m_pCommanderView );
 
 		// キーマクロの記録を一時停止する
-		GetDllShareData().m_sFlags.m_bRecordingKeyMacro = FALSE;
-		hwndRecordingKeyMacro = GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro;
-		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = NULL;	/* キーボードマクロを記録中のウィンドウ */
+		sFlags.m_bRecordingKeyMacro = FALSE;
+		hwndRecordingKeyMacro = sFlags.m_hwndRecordingKeyMacro;
+		sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 	}
 
-	//古い一時マクロの退避
+	// 古い一時マクロの退避
 	CMacroManagerBase* oldMacro = m_pcSMacroMgr->SetTempMacro( NULL );
 
 	BOOL bLoadResult = m_pcSMacroMgr->Load(
@@ -280,8 +287,8 @@ void CViewCommander::Command_EXECEXTMACRO( const WCHAR* pszPathW, const WCHAR* p
 
 	// キーマクロ記録中だった場合は再開する
 	if (hwndRecordingKeyMacro != NULL) {
-		GetDllShareData().m_sFlags.m_bRecordingKeyMacro = TRUE;
-		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro = hwndRecordingKeyMacro;	/* キーボードマクロを記録中のウィンドウ */
+		sFlags.m_bRecordingKeyMacro = TRUE;
+		sFlags.m_hwndRecordingKeyMacro = hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
 	}
 	return;
 }
@@ -294,7 +301,7 @@ void CViewCommander::Command_EXECCOMMAND_DIALOG( void )
 {
 	CDlgExec cDlgExec;
 
-	/* モードレスダイアログの表示 */
+	// モードレスダイアログの表示
 	if (!cDlgExec.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
 		return;
 	}

@@ -62,11 +62,10 @@ CWSHMacroManager::~CWSHMacroManager()
 */
 bool CWSHMacroManager::ExecKeyMacro(CEditView *EditView, int flags) const
 {
-	CWSHClient* Engine;
-	Engine = new CWSHClient(m_EngineName.c_str(), MacroError, EditView);
+	CWSHClient* Engine = new CWSHClient(m_EngineName.c_str(), MacroError, EditView);
 	bool bRet = false;
 	if (Engine->m_Valid) {
-		//インタフェースオブジェクトの登録
+		// インタフェースオブジェクトの登録
 		CWSHIfObj* objEditor = new CEditorIfObj();
 		objEditor->ReadyMethods( EditView, flags );
 		Engine->AddInterfaceObject( objEditor );
@@ -89,8 +88,8 @@ bool CWSHMacroManager::ExecKeyMacro(CEditView *EditView, int flags) const
 */
 BOOL CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
-	//ソース読み込み -> m_Source
-	m_Source=L"";
+	// ソース読み込み -> m_Source
+	m_Source = L"";
 	
 	CTextInputStream in(pszPath);
 	if (!in) {
@@ -111,14 +110,14 @@ BOOL CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 */
 BOOL CWSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
-	//ソース読み込み -> m_Source
+	// ソース読み込み -> m_Source
 	m_Source = to_wchar( pszCode );
 	return TRUE;
 }
 
 CMacroManagerBase* CWSHMacroManager::Creator(const TCHAR* FileExt)
 {
-	TCHAR FileExtWithDot[1024], FileType[1024], EngineName[1024]; //1024を超えたら後は知りません
+	TCHAR FileExtWithDot[1024], FileType[1024], EngineName[1024]; // 1024を超えたら後は知りません
 	
 	_tcscpy( FileExtWithDot, _T(".") );
 	_tcscat( FileExtWithDot, FileExt );
@@ -136,23 +135,23 @@ CMacroManagerBase* CWSHMacroManager::Creator(const TCHAR* FileExt)
 
 void CWSHMacroManager::declare()
 {
-	//暫定
+	// 暫定
 	CMacroFactory::getInstance()->RegisterCreator(Creator);
 }
 
-//インタフェースオブジェクトを追加する
+// インタフェースオブジェクトを追加する
 void CWSHMacroManager::AddParam( CWSHIfObj* param )
 {
 	m_Params.push_back( param );
 }
 
-//インタフェースオブジェクト達を追加する
+// インタフェースオブジェクト達を追加する
 void CWSHMacroManager::AddParam( CWSHIfObj::List& params )
 {
 	m_Params.insert( m_Params.end(), params.begin(), params.end() );
 }
 
-//インタフェースオブジェクトを削除する
+// インタフェースオブジェクトを削除する
 void CWSHMacroManager::ClearParam()
 {
 	m_Params.clear();

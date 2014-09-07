@@ -56,12 +56,12 @@ private:
 //! 行全体のModified情報アクセサ
 class CModifyVisitor{
 public:
-	//状態
+	// 状態
 	bool IsLineModified(const CDocLine* pcDocLine, int nSaveSeq) const;
 	int GetLineModifiedSeq(const CDocLine* pcDocLine) const;
 	void SetLineModified(CDocLine* pcDocLine, int nModifiedSeq);
 
-	//一括操作
+	// 一括操作
 	void ResetAllModifyFlag(CDocLineMgr* pcDocLineMgr, int nSeq);	// 行変更状態をすべてリセット
 };
 

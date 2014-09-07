@@ -116,9 +116,9 @@ private:
 
 	typedef struct {
 		CLIPFORMAT cfFormat;
-		//Feb. 26, 2001, fixed by yebisuya sugoroku
-		LPBYTE			data;	//データ
-		unsigned int	size;	//データサイズ。バイト単位。
+		// Feb. 26, 2001, fixed by yebisuya sugoroku
+		LPBYTE			data;	// データ
+		unsigned int	size;	// データサイズ。バイト単位。
 	} DATA, *PDATA;
 
 	int m_nFormat;

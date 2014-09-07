@@ -102,7 +102,7 @@ protected:
 	int Read( void*, size_t ); // inline
 	DWORD FilePointer( DWORD, DWORD ); // inline
 
-	/* メンバオブジェクト */
+	// メンバオブジェクト
 	const SEncodingConfig* m_pEencoding;
 
 //	LPTSTR	m_pszFileName;	// ファイル名
@@ -118,12 +118,12 @@ protected:
 	//	Jun. 13, 2003 Moca
 	//	状態をenumとしてわかりやすく．
 	enum enumFileLoadMode{
-		FLMODE_CLOSE = 0, //!< 初期状態
-		FLMODE_OPEN, //!< ファイルオープンのみ
-		FLMODE_READY, //!< 順アクセスOK
-		FLMODE_READBUFEND //!<ファイルの終端までバッファに入れた
+		FLMODE_CLOSE = 0,	//!< 初期状態
+		FLMODE_OPEN,		//!< ファイルオープンのみ
+		FLMODE_READY,		//!< 順アクセスOK
+		FLMODE_READBUFEND	//!<ファイルの終端までバッファに入れた
 	};
-	enumFileLoadMode	m_eMode;		// 現在の読み込み状態
+	enumFileLoadMode	m_eMode;	// 現在の読み込み状態
 
 	// 読み込みバッファ系
 	char*	m_pReadBuf;			// 読み込みバッファへのポインタ

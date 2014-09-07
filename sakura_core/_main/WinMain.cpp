@@ -74,7 +74,7 @@ int WINAPI _tWinMain(
 
 	//プロセスの生成とメッセージループ
 	CProcessFactory aFactory;
-	CProcess *process = 0;
+	CProcess* process = 0;
 	try {
 #ifdef __MINGW32__
 		LPTSTR pszCommandLine;

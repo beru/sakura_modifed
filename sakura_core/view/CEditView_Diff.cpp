@@ -423,7 +423,7 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 {
 	//ˆêŽž
 	TCHAR* pszTmpName = _ttempnam( NULL, SAKURA_DIFF_TEMP_PREFIX );
-	if (NULL == pszTmpName) {
+	if (!pszTmpName) {
 		WarningMessage( NULL, LS(STR_DIFF_FAILED) );
 		return FALSE;
 	}
@@ -432,7 +432,7 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 	free( pszTmpName );
 
 	//Ž©•ª‚©H
-	if (NULL == hWnd) {
+	if (!hWnd) {
 		EConvertResult eWriteResult = CWriteManager().WriteFile_From_CDocLineMgr(
 			m_pcEditDoc->m_cDocLineMgr,
 			SSaveInfo(
@@ -472,7 +472,7 @@ BOOL CEditView::MakeDiffTmpFile( TCHAR* filename, HWND hWnd )
 			pLineData = m_pcEditDoc->m_cDocLineMgr.GetLine(y)->GetDocLineStrWithEOL(&nLineLen);
 		}
 
-		if (0 == nLineLen || NULL == pLineData) break;
+		if (0 == nLineLen || !pLineData) break;
 
 		try {
 			out.WriteString(pLineData,nLineLen);

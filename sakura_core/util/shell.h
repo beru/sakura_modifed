@@ -25,16 +25,16 @@
 */
 #pragma once
 
-BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData);	/* WinHelp ‚Ì‚©‚í‚è‚É HtmlHelp ‚ğŒÄ‚Ño‚· */	// 2006.07.22 ryoji
+BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData);	// WinHelp ‚Ì‚©‚í‚è‚É HtmlHelp ‚ğŒÄ‚Ño‚·	// 2006.07.22 ryoji
 
-/* Shell InterfaceŒn(?) */
-BOOL SelectDir(HWND, const TCHAR*, const TCHAR*, TCHAR* );	/* ƒtƒHƒ‹ƒ_‘I‘ğƒ_ƒCƒAƒƒO */
-BOOL ResolveShortcutLink(HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath);/* ƒVƒ‡[ƒgƒJƒbƒg(.lnk)‚Ì‰ğŒˆ */
+// Shell InterfaceŒn(?)
+BOOL SelectDir(HWND, const TCHAR*, const TCHAR*, TCHAR* );	// ƒtƒHƒ‹ƒ_‘I‘ğƒ_ƒCƒAƒƒO
+BOOL ResolveShortcutLink(HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath);	// ƒVƒ‡[ƒgƒJƒbƒg(.lnk)‚Ì‰ğŒˆ
 
 HWND OpenHtmlHelp( HWND hWnd, LPCTSTR szFile, UINT uCmd, DWORD_PTR data,bool msgflag = true);
 DWORD NetConnect ( const TCHAR strNetWorkPass[] );
 
-/* ƒwƒ‹ƒv‚Ì–ÚŸ‚ğ•\¦ */
+// ƒwƒ‹ƒv‚Ì–ÚŸ‚ğ•\¦
 void ShowWinHelpContents( HWND hwnd );
 
 BOOL GetSpecialFolderPath( int nFolder, LPTSTR pszPath );	// “ÁêƒtƒHƒ‹ƒ_‚ÌƒpƒX‚ğæ“¾‚·‚é	// 2007.05.19 ryoji
@@ -44,6 +44,6 @@ BOOL GetSpecialFolderPath( int nFolder, LPTSTR pszPath );	// “ÁêƒtƒHƒ‹ƒ_‚ÌƒpƒX‚
 INT_PTR MyPropertySheet( LPPROPSHEETHEADER lppsph );	// “Æ©Šg’£ƒvƒƒpƒeƒBƒV[ƒg	// 2007.05.24 ryoji
 
 
-//!ƒtƒHƒ“ƒg‘I‘ğƒ_ƒCƒAƒƒO
+//! ƒtƒHƒ“ƒg‘I‘ğƒ_ƒCƒAƒƒO
 BOOL MySelectFont( LOGFONT* plf, INT* piPointSize, HWND hwndDlgOwner, bool );	// 2009.10.01 ryoji ƒ|ƒCƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊjˆø”’Ç‰Á
 

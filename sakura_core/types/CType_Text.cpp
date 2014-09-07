@@ -85,7 +85,7 @@ void CDocOutline::MakeTopicList_txt( CFuncInfoArr* pcFuncInfoArr )
 		//sæ“¾
 		CLogicInt		nLineLen;
 		const wchar_t*	pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		if (NULL == pLine) break;
+		if (!pLine) break;
 
 		//s“ª‚Ì‹ó”’”ò‚Î‚µ
 		int i;

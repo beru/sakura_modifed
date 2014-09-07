@@ -74,7 +74,7 @@ bool CNormalProcess::InitializeProcess()
 
 	/* プロセス初期化の目印 */
 	HANDLE	hMutex = _GetInitializeMutex();	// 2002/2/8 aroka 込み入っていたので分離
-	if (NULL == hMutex) {
+	if (!hMutex) {
 		return false;
 	}
 
@@ -103,9 +103,9 @@ bool CNormalProcess::InitializeProcess()
 		//	MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
 		//	行われるのでここでは必要なし．
 
-		HWND hwndOwner;
 		/* 指定ファイルが開かれているか調べる */
 		// 2007.03.13 maru 文字コードが異なるときはワーニングを出すように
+		HWND hwndOwner;
 		if (GetShareData().ActiveAlreadyOpenedWindow( fi.m_szPath, &hwndOwner, fi.m_nCharCode )) {
 			//	From Here Oct. 19, 2001 genta
 			//	カーソル位置が引数に指定されていたら指定位置にジャンプ
@@ -152,7 +152,7 @@ bool CNormalProcess::InitializeProcess()
 	m_pcEditApp->Create(GetProcessInstance(), nGroupId);
 	CEditWnd* pEditWnd = m_pcEditApp->GetEditWindow();
 	auto& activeView = pEditWnd->GetActiveView();
-	if (NULL == pEditWnd->GetHwnd()) {
+	if (!pEditWnd->GetHwnd()) {
 		::ReleaseMutex( hMutex );
 		::CloseHandle( hMutex );
 		return false;	// 2009.06.23 ryoji CEditWnd::Create()失敗のため終了
@@ -373,10 +373,10 @@ bool CNormalProcess::InitializeProcess()
 
 	SetMainWindow( pEditWnd->GetHwnd() );
 
-	//	YAZAKI 2002/05/30 IMEウィンドウの位置がおかしいのを修正。
+	// YAZAKI 2002/05/30 IMEウィンドウの位置がおかしいのを修正。
 	activeView.SetIMECompFormPos();
 
-	//WM_SIZEをポスト
+	// WM_SIZEをポスト
 	{	// ファイル読み込みしなかった場合にはこの WM_SIZE がアウトライン画面を配置する
 		HWND hEditWnd = pEditWnd->GetHwnd();
 		if (!::IsIconic( hEditWnd )) {
@@ -386,7 +386,7 @@ bool CNormalProcess::InitializeProcess()
 		}
 	}
 
-	//再描画
+	// 再描画
 	::InvalidateRect( pEditWnd->GetHwnd(), NULL, TRUE );
 
 	if (hMutex) {
@@ -394,7 +394,7 @@ bool CNormalProcess::InitializeProcess()
 		::CloseHandle( hMutex );
 	}
 
-	//プラグイン：EditorStartイベント実行
+	// プラグイン：EditorStartイベント実行
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug(
@@ -415,7 +415,7 @@ bool CNormalProcess::InitializeProcess()
 	LPCWSTR pszMacro = cmdLine.GetMacro();
 	if (pEditWnd->GetHwnd()  &&  pszMacro  &&  pszMacro[0] != L'\0') {
 		LPCWSTR pszMacroType = cmdLine.GetMacroType();
-		if (pszMacroType == NULL || pszMacroType[0] == L'\0' || wcsicmp(pszMacroType, L"file") == 0) {
+		if (!pszMacroType || pszMacroType[0] == L'\0' || wcsicmp(pszMacroType, L"file") == 0) {
 			pszMacroType = NULL;
 		}
 		activeView.GetCommander().HandleCommand( F_EXECEXTMACRO, true, (LPARAM)pszMacro, (LPARAM)pszMacroType, 0, 0 );
@@ -442,7 +442,7 @@ bool CNormalProcess::InitializeProcess()
 		cmdLine.ClearFile();
 	}
 
-	//プラグイン：DocumentOpenイベント実行
+	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
@@ -476,7 +476,7 @@ bool CNormalProcess::MainLoop()
 */
 void CNormalProcess::OnExitProcess()
 {
-	/* プラグイン解放 */
+	// プラグイン解放
 	CPluginManager::getInstance()->UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
 }
 
@@ -498,9 +498,8 @@ void CNormalProcess::OnExitProcess()
 HANDLE CNormalProcess::_GetInitializeMutex() const
 {
 	MY_RUNNINGTIMER( cRunningTimer, "NormalProcess::_GetInitializeMutex" );
-	HANDLE hMutex;
-	hMutex = ::CreateMutex( NULL, TRUE, GSTR_MUTEX_SAKURA_INIT );
-	if (NULL == hMutex) {
+	HANDLE hMutex = ::CreateMutex( NULL, TRUE, GSTR_MUTEX_SAKURA_INIT );
+	if (!hMutex) {
 		ErrorBeep();
 		TopErrorMessage( NULL, _T("CreateMutex()失敗。\n終了します。") );
 		return NULL;

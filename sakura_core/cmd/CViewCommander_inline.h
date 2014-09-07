@@ -28,7 +28,7 @@
 #include "window/CEditWnd.h"
 #include "COpeBlk.h"
 
-//ŠO•”ˆË‘¶
+// ŠO•”ˆË‘¶
 inline CEditDoc* CViewCommander::GetDocument()
 {
 	return m_pCommanderView->m_pcEditDoc;

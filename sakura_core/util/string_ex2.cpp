@@ -95,7 +95,7 @@ int AddLastChar( TCHAR* pszPath, int nMaxLen, TCHAR c ){
 	return 0;
 }
 
-/* CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない */
+// CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない
 const char* GetNextLine(
 	const char*		pData,
 	int				nDataLen,
@@ -104,19 +104,18 @@ const char* GetNextLine(
 	CEol*			pcEol
 )
 {
-	int		i;
-	int		nBgn;
-	nBgn = *pnBgn;
+	int nBgn = *pnBgn;
 
 	//	May 15, 2000 genta
 	pcEol->SetType( EOL_NONE );
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
+	int i;
 	for (i = *pnBgn; i < nDataLen; ++i) {
-		/* 改行コードがあった */
+		// 改行コードがあった
 		if (pData[i] == '\n' || pData[i] == '\r') {
-			/* 行終端子の種類を調べる */
+			// 行終端子の種類を調べる
 			pcEol->SetTypeByString( &pData[i], nDataLen - i );
 			break;
 		}
@@ -139,14 +138,13 @@ const wchar_t* GetNextLineW(
 	CEol*			pcEol		//!< [out]	EOL
 )
 {
-	int		i;
-	int		nBgn;
-	nBgn = *pnBgn;
+	int nBgn = *pnBgn;
 
 	pcEol->SetType( EOL_NONE );
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
+	int i;
 	for (i = *pnBgn; i < nDataLen; ++i) {
 		// 改行コードがあった
 		if (WCODE::IsLineDelimiter(pData[i])) {
@@ -168,7 +166,7 @@ const wchar_t* GetNextLineW(
 */
 static EEolType GetEOLTypeUniBE( const wchar_t* pszData, int nDataLen )
 {
-	/*! 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca */
+	//! 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca
 	static const wchar_t* aEolTable[EOL_TYPE_NUM] = {
 		L"",									// EOL_NONE
 		(const wchar_t*)"\x00\x0d\x00\x0a\x00",	// EOL_CRLF
@@ -176,8 +174,7 @@ static EEolType GetEOLTypeUniBE( const wchar_t* pszData, int nDataLen )
 		(const wchar_t*)"\x00\x0d\x00"			// EOL_CR
 	};
 
-	/* 改行コードの長さを調べる */
-
+	// 改行コードの長さを調べる
 	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
 		CEol cEol((EEolType)i);
 		if (cEol.GetLen()<=nDataLen && 0==auto_memcmp(pszData,aEolTable[i],cEol.GetLen())) {
@@ -200,14 +197,13 @@ const wchar_t* GetNextLineWB(
 	CEol*		pcEol		//!< [i/o]	EOL
 )
 {
-	int		i;
-	int		nBgn;
-	nBgn = *pnBgn;
+	int nBgn = *pnBgn;
 
 	pcEol->SetType( EOL_NONE );
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
+	int i;
 	for (i = *pnBgn; i < nDataLen; ++i) {
 		// 改行コードがあった
 		if (pData[i] == (wchar_t)0x0a00 || pData[i] == (wchar_t)0x0d00) {
@@ -234,16 +230,14 @@ const wchar_t* GetNextLineWB(
 */
 const char* GetNextLimitedLengthText( const char* pText, int nTextLen, int nLimitLen, int* pnLineLen, int* pnBgn )
 {
-	int		i;
-	int		nBgn;
-	int		nCharChars;
-	nBgn = *pnBgn;
+	int nBgn = *pnBgn;
 	if (nBgn >= nTextLen) {
 		return NULL;
 	}
+	int i;
 	for (i = nBgn; i + 1 < nTextLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CNativeA::GetSizeOfChar( pText, nTextLen, i );
+		int nCharChars = CNativeA::GetSizeOfChar( pText, nTextLen, i );
 		if (0 == nCharChars) {
 			nCharChars = 1;
 		}
@@ -267,7 +261,7 @@ int LimitStringLengthW(
 )
 {
 	int n = nDataLength;
-	if (n>nLimitLength) {
+	if (n > nLimitLength) {
 		int i = 0;
 		int charSize = CNativeW::GetSizeOfChar(pszData, nDataLength, i);
 		for (; i + charSize <= nLimitLength;) {
@@ -276,19 +270,15 @@ int LimitStringLengthW(
 		}
 		n = i;
 	}
-	cmemDes.SetString(pszData,n);
+	cmemDes.SetString(pszData, n);
 	return n;
 }
 
 
 void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn )
 {
-	int		i;
-	int		j;
-	int		nLineLen;
-	wchar_t	szNumber[32];
-	nLineLen = wcslen( pLine );
-	i = 0;
+	int nLineLen = wcslen( pLine );
+	int i = 0;
 	for (; i < nLineLen; ++i) {
 		if (pLine[i] >= L'0' &&
 			pLine[i] <= L'9'
@@ -296,11 +286,12 @@ void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn
 			break;
 		}
 	}
+	wchar_t	szNumber[32];
 	wmemset( szNumber, 0, _countof( szNumber ) );
 	if (i >= nLineLen) {
 	}else {
-		/* 行位置 改行単位行番号(1起点)の抽出 */
-		j = 0;
+		// 行位置 改行単位行番号(1起点)の抽出
+		int j = 0;
 		for (; i < nLineLen && j + 1 < _countof( szNumber );) {
 			szNumber[j] = pLine[i];
 			j++;
@@ -314,10 +305,10 @@ void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn
 		}
 		*pnJumpToLine = _wtoi( szNumber );
 
-		/* 桁位置 改行単位行先頭からのバイト数(1起点)の抽出 */
+		// 桁位置 改行単位行先頭からのバイト数(1起点)の抽出
 		if (i < nLineLen && pLine[i] == ',') {
 			wmemset( szNumber, 0, _countof( szNumber ) );
-			j = 0;
+			int j = 0;
 			++i;
 			for (; i < nLineLen && j + 1 < _countof( szNumber );) {
 				szNumber[j] = pLine[i];
@@ -351,7 +342,7 @@ int scan_ints(
 	int*			anBuf		//!< [out]
 )
 {
-	//要素数
+	// 要素数
 	int num = 0;
 	const wchar_t* p = pszFormat;
 	while (*p) {
@@ -359,19 +350,19 @@ int scan_ints(
 		p++;
 	}
 
-	//スキャン
+	// スキャン
 	int dummy[32];
-	memset(dummy,0,sizeof(dummy));
+	memset(dummy, 0, sizeof(dummy));
 	int nRet = swscanf(
-		pszData,pszFormat,
+		pszData, pszFormat,
 		&dummy[ 0],&dummy[ 1],&dummy[ 2],&dummy[ 3],&dummy[ 4],&dummy[ 5],&dummy[ 6],&dummy[ 7],&dummy[ 8],&dummy[ 9],
 		&dummy[10],&dummy[11],&dummy[12],&dummy[13],&dummy[14],&dummy[15],&dummy[16],&dummy[17],&dummy[18],&dummy[19],
 		&dummy[20],&dummy[21],&dummy[22],&dummy[23],&dummy[24],&dummy[25],&dummy[26],&dummy[27],&dummy[28],&dummy[29]
 	);
 
-	//結果コピー
-	for (int i=0;i<num;i++) {
-		anBuf[i]=dummy[i];
+	// 結果コピー
+	for (int i=0; i<num; i++) {
+		anBuf[i] = dummy[i];
 	}
 
 	return nRet;

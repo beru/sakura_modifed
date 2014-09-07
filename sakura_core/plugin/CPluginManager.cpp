@@ -482,7 +482,7 @@ bool CPluginManager::LoadAllPlugin(CommonSetting* common)
 		if (plugin_table[iNo].m_state == PLS_DELETED) {
 			continue;
 		}
-		if (NULL != GetPlugin( iNo )) {
+		if (GetPlugin( iNo )) {
 			continue; // 2013.05.31 ì«Ç›çûÇ›çœÇ›
 		}
 		std::tstring name = to_tchar(plugin_table[iNo].m_szName);

@@ -306,7 +306,7 @@ BOOL CUrlWnd::SetSubclassWindow( HWND hWnd )
 	if (lptr == 0 && GetLastError() != 0)
 		return FALSE;
 	m_pOldProc = (WNDPROC)SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)UrlWndProc );
-	if (m_pOldProc == NULL)
+	if (!m_pOldProc)
 		return FALSE;
 	m_hWnd = hWnd;
 

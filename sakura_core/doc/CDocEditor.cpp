@@ -123,17 +123,15 @@ void CDocEditor::OnAfterSave(const SSaveInfo& sSaveInfo)
 */
 void CDocEditor::SetImeMode( int mode )
 {
-	DWORD	conv, sent;
-	HIMC	hIme;
-	HWND	hwnd = m_pcDocRef->m_pcEditWnd->GetActiveView().GetHwnd();
-
-	hIme = ImmGetContext( hwnd ); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
+	HWND hwnd = m_pcDocRef->m_pcEditWnd->GetActiveView().GetHwnd();
+	HIMC hIme = ImmGetContext( hwnd ); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
 
 	//	最下位ビットはIME自身のOn/Off制御
 	if ((mode & 3) == 2) {
 		ImmSetOpenStatus( hIme, FALSE );
 	}
 	if ((mode >> 2) > 0) {
+		DWORD conv, sent;
 		ImmGetConversionStatus( hIme, &conv, &sent );
 
 		switch (mode >> 2) {

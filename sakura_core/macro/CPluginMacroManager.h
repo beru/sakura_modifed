@@ -36,8 +36,7 @@
 class CEditView;
 
 ///////////////////////////////////////////////////////////////////////////////
-/*!	Plugin macro manager
-*/
+//!	Plugin macro manager
 class CPluginMacroManager: public CMacroManagerBase
 {
 public:

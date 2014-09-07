@@ -54,8 +54,8 @@ bool CRecentImp<T, S>::Create(
 	Terminate();
 
 	//パラメータチェック
-	if (NULL == pszItemArray) return false;
-	if (NULL == pnItemCount) return false;
+	if (!pszItemArray) return false;
+	if (!pnItemCount) return false;
 	if (nArrayCount <= 0) return false;
 	if (pnViewCount && (*pnViewCount < 0 || nArrayCount < *pnViewCount)) return false;
 
@@ -135,7 +135,7 @@ bool CRecentImp<T, S>::SetFavorite( int nIndex, bool bFavorite )
 {
 	if (! IsAvailable()) return false;
 	if (nIndex < 0 || nIndex >= *m_pnUserItemCount) return false;
-	if (NULL == m_pbUserItemFavorite) return false;
+	if (!m_pbUserItemFavorite) return false;
 
 	m_pbUserItemFavorite[nIndex] = bFavorite;
 
@@ -168,7 +168,7 @@ bool CRecentImp<T, S>::IsFavorite( int nIndex ) const
 {
 	if (! IsAvailable()) return false;
 	if (nIndex < 0 || nIndex >= *m_pnUserItemCount) return false;
-	if (NULL == m_pbUserItemFavorite) return false;
+	if (!m_pbUserItemFavorite) return false;
 
 	return m_pbUserItemFavorite[nIndex];
 }
@@ -337,7 +337,7 @@ bool CRecentImp<T, S>::DeleteItemsNoFavorite()
 
 	bool bDeleted = false;
 	for (int i = *m_pnUserItemCount - 1; 0 <= i; i--) {
-		if (false == IsFavorite( i )) {
+		if (!IsFavorite( i )) {
 			if (DeleteItem( i )) {
 				bDeleted = true;
 			}

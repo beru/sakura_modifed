@@ -29,19 +29,19 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 
-//折り返し描画
+// 折り返し描画
 void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 
-//EOF描画関数
-//実際には pX と nX が更新される。
+// EOF描画関数
+// 実際には pX と nX が更新される。
 //2004.05.29 genta
 //2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 //2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
 //2007.08.28 kobake 引数 fuOptions を削除
 //void _DispEOF( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, bool bTrans);
 
-//改行記号描画
-//2007.08.30 kobake 追加
+// 改行記号描画
+// 2007.08.30 kobake 追加
 void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView, bool bTrans);
 
 
@@ -128,8 +128,8 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum )
 {
 	RECT rcClip2;
-	if (pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,1)) {
-		//サポートクラス
+	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos,1)) {
+		// サポートクラス
 		CTypeSupport cWrapType(pcView,COLORIDX_WRAP);
 		CTypeSupport cTextType(pcView,COLORIDX_TEXT);
 		CTypeSupport cBgLineType(pcView,COLORIDX_CARETLINEBG);
@@ -152,7 +152,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 		}
 		bool bChangeColor = false;
 
-		//描画文字列と色の決定
+		// 描画文字列と色の決定
 		const wchar_t* szText;
 		if (cWrapType.IsDisp()) {
 			szText = L"<";
@@ -165,7 +165,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 			szText = L" ";
 		}
 
-		//描画
+		// 描画
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -182,6 +182,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 	}
 	pDispPos->ForwardDrawCol(1);
 }
+
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       EOF描画実装                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -205,21 +206,21 @@ void _DispEOF(
 	CTypeSupport cTextType(pcView,COLORIDX_TEXT);
 	bool bTrans = pcView->IsBkBitmap() && cEofType.GetBackColor() == cTextType.GetBackColor();
 
-	//必要なインターフェースを取得
+	// 必要なインターフェースを取得
 	const CTextMetrics* pMetrics=&pcView->GetTextMetrics();
 	const CTextArea* pArea=&pcView->GetTextArea();
 
-	//定数
+	// 定数
 	static const wchar_t	szEof[] = L"[EOF]";
 	const int		nEofLen = _countof(szEof) - 1;
 
-	//クリッピング領域を計算
+	// クリッピング領域を計算
 	RECT rcClip;
 	if (pArea->GenerateClipRect(&rcClip,*pDispPos,nEofLen)) {
-		//色設定
+		// 色設定
 		cEofType.SetGraphicsState_WhileThisObj(gr);
 
-		//描画
+		// 描画
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -232,7 +233,7 @@ void _DispEOF(
 		);
 	}
 
-	//描画位置を進める
+	// 描画位置を進める
 	pDispPos->ForwardDrawCol(nEofLen);
 }
 
@@ -241,7 +242,7 @@ void _DispEOF(
 //                       改行描画実装                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//画面描画補助関数
+// 画面描画補助関数
 //May 23, 2000 genta
 //@@@ 2001.12.21 YAZAKI 改行記号の書きかたが変だったので修正
 void _DrawEOL(
@@ -256,7 +257,7 @@ void _DrawEOL(
 void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView, bool bTrans)
 {
 	RECT rcClip2;
-	if (pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,2)) {
+	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 2)) {
 		// 2003.08.17 ryoji 改行文字が欠けないように
 		::ExtTextOutW_AnyBuild(
 			gr,
@@ -294,7 +295,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 		}
 	}
 
-	//描画位置を進める(2桁)
+	// 描画位置を進める(2桁)
 	pDispPos->ForwardDrawCol(2);
 }
 
@@ -311,88 +312,88 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 						矢印の先頭を、sx, syにして描画ルーチン書き直し。
 */
 void _DrawEOL(
-	CGraphics&		gr,		//!< Device Context Handle
+	CGraphics&		gr,			//!< Device Context Handle
 	const CMyRect&	rcEol,		//!< 描画領域
 	CEol			cEol,		//!< 行末コード種別
 	bool			bBold,		//!< TRUE: 太字
 	COLORREF		pColor		//!< 色
 )
 {
-	int sx, sy;	//	矢印の先頭
+	int sx, sy;	// 矢印の先頭
 	gr.SetPen( pColor );
 
 	switch (cEol.GetType()) {
-	case EOL_CRLF:	//	下左矢印
+	case EOL_CRLF:	// 下左矢印
 		{
-			sx = rcEol.left;						//X左端
-			sy = rcEol.top + ( rcEol.Height() / 2);	//Y中心
+			sx = rcEol.left;						// X左端
+			sy = rcEol.top + ( rcEol.Height() / 2);	// Y中心
 			DWORD pp[] = { 3, 3 };
 			POINT pt[6];
-			pt[0].x = sx + rcEol.Width();	//	上へ
+			pt[0].x = sx + rcEol.Width();	// 上へ
 			pt[0].y = sy - rcEol.Height() / 4;
-			pt[1].x = sx + rcEol.Width();	//	下へ
+			pt[1].x = sx + rcEol.Width();	// 下へ
 			pt[1].y = sy;
-			pt[2].x = sx;	//	先頭へ
+			pt[2].x = sx;	// 先頭へ
 			pt[2].y = sy;
-			pt[3].x = sx + rcEol.Height() / 4;	//	先頭から下へ
+			pt[3].x = sx + rcEol.Height() / 4;	// 先頭から下へ
 			pt[3].y = sy + rcEol.Height() / 4;
-			pt[4].x = sx;	//	先頭へ戻り
+			pt[4].x = sx;	// 先頭へ戻り
 			pt[4].y = sy;
-			pt[5].x = sx + rcEol.Height() / 4;	//	先頭から上へ
+			pt[5].x = sx + rcEol.Height() / 4;	// 先頭から上へ
 			pt[5].y = sy - rcEol.Height() / 4;
 			::PolyPolyline( gr, pt, pp, _countof(pp));
 
 			if (bBold) {
-				pt[0].x += 1;	//	上へ（右へずらす）
+				pt[0].x += 1;	// 上へ（右へずらす）
 				pt[0].y += 0;
-				pt[1].x += 1;	//	右へ（右にひとつずれている）
+				pt[1].x += 1;	// 右へ（右にひとつずれている）
 				pt[1].y += 1;
-				pt[2].x += 0;	//	先頭へ
+				pt[2].x += 0;	// 先頭へ
 				pt[2].y += 1;
-				pt[3].x += 0;	//	先頭から下へ
+				pt[3].x += 0;	// 先頭から下へ
 				pt[3].y += 1;
-				pt[4].x += 0;	//	先頭へ戻り
+				pt[4].x += 0;	// 先頭へ戻り
 				pt[4].y += 1;
-				pt[5].x += 0;	//	先頭から上へ
+				pt[5].x += 0;	// 先頭から上へ
 				pt[5].y += 1;
 				::PolyPolyline( gr, pt, pp, _countof(pp));
 			}
 		}
 		break;
-	case EOL_CR:	//	左向き矢印	// 2007.08.17 ryoji EOL_LF -> EOL_CR
+	case EOL_CR:	// 左向き矢印	// 2007.08.17 ryoji EOL_LF -> EOL_CR
 		{
 			sx = rcEol.left;
 			sy = rcEol.top + ( rcEol.Height() / 2 );
 			DWORD pp[] = { 3, 2 };
 			POINT pt[5];
-			pt[0].x = sx + rcEol.Width();	//	右へ
+			pt[0].x = sx + rcEol.Width();	// 右へ
 			pt[0].y = sy;
-			pt[1].x = sx;	//	先頭へ
+			pt[1].x = sx;	// 先頭へ
 			pt[1].y = sy;
-			pt[2].x = sx + rcEol.Height() / 4;	//	先頭から下へ
+			pt[2].x = sx + rcEol.Height() / 4;	// 先頭から下へ
 			pt[2].y = sy + rcEol.Height() / 4;
-			pt[3].x = sx;	//	先頭へ戻り
+			pt[3].x = sx;	// 先頭へ戻り
 			pt[3].y = sy;
-			pt[4].x = sx + rcEol.Height() / 4;	//	先頭から上へ
+			pt[4].x = sx + rcEol.Height() / 4;	// 先頭から上へ
 			pt[4].y = sy - rcEol.Height() / 4;
 			::PolyPolyline( gr, pt, pp, _countof(pp));
 
 			if (bBold) {
-				pt[0].x += 0;	//	右へ
+				pt[0].x += 0;	// 右へ
 				pt[0].y += 1;
-				pt[1].x += 0;	//	先頭へ
+				pt[1].x += 0;	// 先頭へ
 				pt[1].y += 1;
-				pt[2].x += 0;	//	先頭から下へ
+				pt[2].x += 0;	// 先頭から下へ
 				pt[2].y += 1;
-				pt[3].x += 0;	//	先頭へ戻り
+				pt[3].x += 0;	// 先頭へ戻り
 				pt[3].y += 1;
-				pt[4].x += 0;	//	先頭から上へ
+				pt[4].x += 0;	// 先頭から上へ
 				pt[4].y += 1;
 				::PolyPolyline( gr, pt, pp, _countof(pp));
 			}
 		}
 		break;
-	case EOL_LF:	//	下向き矢印	// 2007.08.17 ryoji EOL_CR -> EOL_LF
+	case EOL_LF:	// 下向き矢印	// 2007.08.17 ryoji EOL_CR -> EOL_LF
 	// 2013.04.22 Moca NEL,LS,PS対応。暫定でLFと同じにする
 	case EOL_NEL:
 	case EOL_LS:
@@ -402,28 +403,28 @@ void _DrawEOL(
 			sy = rcEol.top + ( rcEol.Height() * 3 / 4 );
 			DWORD pp[] = { 3, 2 };
 			POINT pt[5];
-			pt[0].x = sx;	//	上へ
+			pt[0].x = sx;	// 上へ
 			pt[0].y = rcEol.top + rcEol.Height() / 4 + 1;
-			pt[1].x = sx;	//	上から下へ
+			pt[1].x = sx;	// 上から下へ
 			pt[1].y = sy;
-			pt[2].x = sx - rcEol.Height() / 4;	//	そのまま左上へ
+			pt[2].x = sx - rcEol.Height() / 4;	// そのまま左上へ
 			pt[2].y = sy - rcEol.Height() / 4;
-			pt[3].x = sx;	//	矢印の先端に戻る
+			pt[3].x = sx;	// 矢印の先端に戻る
 			pt[3].y = sy;
-			pt[4].x = sx + rcEol.Height() / 4;	//	そして右上へ
+			pt[4].x = sx + rcEol.Height() / 4;	// そして右上へ
 			pt[4].y = sy - rcEol.Height() / 4;
 			::PolyPolyline( gr, pt, pp, _countof(pp));
 
 			if (bBold) {
-				pt[0].x += 1;	//	上へ
+				pt[0].x += 1;	// 上へ
 				pt[0].y += 0;
-				pt[1].x += 1;	//	上から下へ
+				pt[1].x += 1;	// 上から下へ
 				pt[1].y += 0;
-				pt[2].x += 1;	//	そのまま左上へ
+				pt[2].x += 1;	// そのまま左上へ
 				pt[2].y += 0;
-				pt[3].x += 1;	//	矢印の先端に戻る
+				pt[3].x += 1;	// 矢印の先端に戻る
 				pt[3].y += 0;
-				pt[4].x += 1;	//	そして右上へ
+				pt[4].x += 1;	// そして右上へ
 				pt[4].y += 0;
 				::PolyPolyline( gr, pt, pp, _countof(pp));
 			}

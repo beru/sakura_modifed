@@ -122,7 +122,7 @@ EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 
 bool CDllImp::DeinitDll(bool force)
 {
-	if (m_hInstance == NULL || (!IsAvailable())) {
+	if (!m_hInstance || (!IsAvailable())) {
 		//	DLLÇ™ì«Ç›çûÇ‹ÇÍÇƒÇ¢Ç»ÇØÇÍÇŒâΩÇ‡ÇµÇ»Ç¢
 		return true;
 	}
@@ -183,16 +183,16 @@ bool CDllImp::DeinitDllImp()
 */
 bool CDllImp::RegisterEntries(const ImportTable table[])
 {
-	if (!IsAvailable()) return false;
-
+	if (!IsAvailable()) {
+		return false;
+	}
 	for (int i = 0; table[i].proc!=NULL; i++) {
 		FARPROC proc;
-		if ((proc = ::GetProcAddress(GetInstance(), table[i].name)) == NULL) {
+		if (!(proc = ::GetProcAddress(GetInstance(), table[i].name))) {
 			return false;
 		}
 		*((FARPROC*)table[i].proc) = proc;
 	}
 	return true;
 }
-
 

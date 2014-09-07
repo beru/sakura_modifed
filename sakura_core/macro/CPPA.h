@@ -263,8 +263,8 @@ private:
 	static void __stdcall stdError( int, const char* );	//	2003.06.01 Moca
 	static void __stdcall stdFinishProc();	//	2003.06.01 Moca
 
-	//	メンバ変数
-	char		m_szMsg[80];		//!< CPPAからのメッセージを保持する
+	// メンバ変数
+	char m_szMsg[80];		//!< CPPAからのメッセージを保持する
 
 	//	2007.07.26 genta : PPAのネストを許容するために，別データ構造とする．
 	
@@ -283,7 +283,7 @@ private:
 	};
 	//	2007.07.26 genta : 現在実行中のインスタンス
 	static PpaExecInfo* m_CurInstance;
-	//PPAの多重起動禁止 2008.10.22 syat
+	// PPAの多重起動禁止 2008.10.22 syat
 	static bool				m_bIsRunning;	//!< PPAが同時実行されるのを防ぐ
 
 

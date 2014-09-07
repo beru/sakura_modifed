@@ -21,12 +21,12 @@ bool CColor_LineComment::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_LineComment::EndColor(const CStringRef& cStr, int nPos)
 {
-	//文字列終端
+	// 文字列終端
 	if (nPos >= cStr.GetLength()) {
 		return true;
 	}
 
-	//改行
+	// 改行
 	if (WCODE::IsLineDelimiter(cStr.At(nPos))) {
 		return true;
 	}
@@ -46,7 +46,7 @@ bool CColor_BlockComment::BeginColor(const CStringRef& cStr, int nPos)
 	// ブロックコメント
 	if (m_pcBlockComment->Match_CommentFrom( nPos, cStr )	//@@@ 2002.09.22 YAZAKI
 	) {
-		/* この物理行にブロックコメントの終端があるか */	//@@@ 2002.09.22 YAZAKI
+		// この物理行にブロックコメントの終端があるか		//@@@ 2002.09.22 YAZAKI
 		this->m_nCOMMENTEND = m_pcBlockComment->Match_CommentTo(
 			nPos + m_pcBlockComment->getBlockFromLen(),
 			cStr
@@ -60,7 +60,7 @@ bool CColor_BlockComment::BeginColor(const CStringRef& cStr, int nPos)
 bool CColor_BlockComment::EndColor(const CStringRef& cStr, int nPos)
 {
 	if (0 == this->m_nCOMMENTEND) {
-		/* この物理行にブロックコメントの終端があるか */
+		// この物理行にブロックコメントの終端があるか
 		this->m_nCOMMENTEND = m_pcBlockComment->Match_CommentTo(
 			nPos,
 			cStr

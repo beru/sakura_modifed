@@ -116,7 +116,7 @@ void CShareDataLockCounter::WaitLock( HWND hwndParent, CShareDataLockCounter** p
 			if (!BlockingHook( hwndCancel )) {
 				break;
 			}
-			if (NULL == pDlg) {
+			if (!pDlg) {
 				DWORD dwTimeNow = ::GetTickCount();
 				if (2000 < dwTimeNow - dwTime) {
 					pDlg = new CLockCancel();

@@ -26,7 +26,7 @@
 #include "util/StaticType.h"
 #include "CProfile.h"
 
-//文字列バッファの型
+// 文字列バッファの型
 struct StringBufferW_{
 	WCHAR*    pData;
 	const int nDataCount;
@@ -61,7 +61,7 @@ typedef const StringBufferW_ StringBufferW;
 	typedef StringBufferA StringBufferT;
 #endif
 
-//文字列バッファ型インスタンスの生成マクロ
+// 文字列バッファ型インスタンスの生成マクロ
 #define MakeStringBufferW(S) StringBufferW(S,_countof(S))
 #define MakeStringBufferA(S) StringBufferA(S,_countof(S))
 #define MakeStringBufferT(S) StringBufferT(S,_countof(S))
@@ -69,11 +69,11 @@ typedef const StringBufferW_ StringBufferW;
 #define MakeStringBufferT0(S) StringBufferT(S,0)
 
 
-//2007.09.24 kobake データ変換部を子クラスに分離
-//!各種データ変換付きCProfile
+// 2007.09.24 kobake データ変換部を子クラスに分離
+//! 各種データ変換付きCProfile
 class CDataProfile : public CProfile{
 private:
-	//専用型
+	// 専用型
 	typedef std::wstring wstring;
 #ifndef _UNICODE
 	typedef std::tstring tstring;
@@ -100,7 +100,7 @@ protected:
 	{
 		*profile = _work_itow(value?1:0);
 	}
-	//int
+	// int
 	void profile_to_value(const wstring& profile, int* value)
 	{
 		*value = _wtoi(profile.c_str());
@@ -110,94 +110,93 @@ protected:
 		*profile = _work_itow(value);
 	}
 
-	//int式入出力実装マクロ
+	// int式入出力実装マクロ
 	#define AS_INT(TYPE) \
 		void profile_to_value(const wstring& profile, TYPE* value){ *value = (TYPE)_wtoi(profile.c_str()); } \
 		void value_to_profile(const TYPE& value, wstring* profile){ *profile = _work_itow(value);    }
 
-	//int式
+	// int式
 // CType.hをincludeしないといけないから廃止
 //	AS_INT(EOutlineType) 
 	AS_INT(WORD)
 
 #ifdef USE_STRICT_INT
-	//CLayoutInt
+	// CLayoutInt
 	void profile_to_value(const wstring& profile, CLayoutInt* value){ *value = (CLayoutInt)_wtoi(profile.c_str()); }
 	void value_to_profile(const CLayoutInt& value, wstring* profile){ *profile = _work_itow((Int)value);    }
-	//CLogicInt
+	// CLogicInt
 	void profile_to_value(const wstring& profile, CLogicInt* value){ *value = (CLogicInt)_wtoi(profile.c_str()); }
 	void value_to_profile(const CLogicInt& value, wstring* profile){ *profile = _work_itow((Int)value);    }
 #endif
-	//ACHAR
+	// ACHAR
 	void profile_to_value(const wstring& profile, ACHAR* value)
 	{
-		if(profile.length()>0){
-			ACHAR buf[2]={0};
-			int ret=wctomb(buf,profile[0]);
-			assert_warning(ret==1);
+		if (profile.length() > 0) {
+			ACHAR buf[2] = {0};
+			int ret = wctomb(buf,profile[0]);
+			assert_warning(ret == 1);
 			(void)ret;
 			*value = buf[0];
-		}
-		else{
+		}else {
 			*value = '\0';
 		}
 	}
 	void value_to_profile(const ACHAR& value, wstring* profile)
 	{
-		WCHAR buf[2]={0};
-		mbtowc(buf,&value,1);
-		profile->assign(1,buf[0]);
+		WCHAR buf[2] = {0};
+		mbtowc(buf, &value, 1);
+		profile->assign(1, buf[0]);
 	}
-	//WCHAR
+	// WCHAR
 	void profile_to_value(const wstring& profile, WCHAR* value)
 	{
 		*value = profile[0];
 	}
 	void value_to_profile(const WCHAR& value, wstring* profile)
 	{
-		profile->assign(1,value);
+		profile->assign(1, value);
 	}
-	//StringBufferW
+	// StringBufferW
 	void profile_to_value(const wstring& profile, StringBufferW* value)
 	{
-		wcscpy_s(value->pData,value->nDataCount,profile.c_str());
+		wcscpy_s(value->pData, value->nDataCount, profile.c_str());
 	}
 	void value_to_profile(const StringBufferW& value, wstring* profile)
 	{
 		*profile = value.pData;
 	}
-	//StringBufferA
+	// StringBufferA
 	void profile_to_value(const wstring& profile, StringBufferA* value)
 	{
-		strcpy_s(value->pData,value->nDataCount,to_achar(profile.c_str()));
+		strcpy_s(value->pData, value->nDataCount, to_achar(profile.c_str()));
 	}
 	void value_to_profile(const StringBufferA& value, wstring* profile)
 	{
-		*profile = to_wchar(value.pData);
+		*profile = to_wchar(value. pData);
 	}
-	//StaticString<WCHAR,N>
+	// StaticString<WCHAR,N>
 	template <int N>
 	void profile_to_value(const wstring& profile, StaticString<WCHAR, N>* value)
 	{
-		wcscpy_s(value->GetBufferPointer(),value->GetBufferCount(),profile.c_str());
+		wcscpy_s(value->GetBufferPointer(), value->GetBufferCount(), profile.c_str());
 	}
 	template <int N>
 	void value_to_profile(const StaticString<WCHAR, N>& value, wstring* profile)
 	{
 		*profile = value.GetBufferPointer();
 	}
-	//StaticString<ACHAR,N>
+	// StaticString<ACHAR,N>
 	template <int N>
 	void profile_to_value(const wstring& profile, StaticString<ACHAR, N>* value)
 	{
-		strcpy_s(value->GetBufferPointer(),value->GetBufferCount(),to_achar(profile.c_str()));
+		strcpy_s(value->GetBufferPointer(), value->GetBufferCount(), to_achar(profile.c_str()));
 	}
 	template <int N>
 	void value_to_profile(const StaticString<ACHAR, N>& value, wstring* profile)
 	{
-		*profile = to_wchar(value.GetBufferPointer());
+		*profile = to_wchar(value. GetBufferPointer());
 	}
-	//wstring
+	// wstring
 	void profile_to_value(const wstring& profile, wstring* value)
 	{
 		*value = profile;

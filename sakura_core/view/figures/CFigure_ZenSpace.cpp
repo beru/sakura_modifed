@@ -24,12 +24,12 @@ bool CFigure_ZenSpace::Match(const wchar_t* pText) const
 //! 全角スペース描画
 void CFigure_ZenSpace::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans ) const
 {
-	//クリッピング矩形を計算。画面外なら描画しない
+	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
-	if (pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,2)) {
-		//描画
+	if (pcView->GetTextArea().GenerateClipRect(&rc, *pDispPos, 2)) {
+		// 描画
 		const wchar_t* szZenSpace =
-			CTypeSupport(pcView,COLORIDX_ZENSPACE).IsDisp()?L"□":L"　";
+			CTypeSupport(pcView, COLORIDX_ZENSPACE).IsDisp() ? L"□" : L"　";
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -42,7 +42,7 @@ void CFigure_ZenSpace::DispSpace( CGraphics& gr, DispPos* pDispPos, CEditView* p
 		);
 	}
 
-	//位置進める
+	// 位置進める
 	pDispPos->ForwardDrawCol(2);
 }
 

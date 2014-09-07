@@ -201,7 +201,7 @@ STDMETHODIMP CDropSource::GiveFeedback( DWORD dropEffect )
 */
 void CDataObject::SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect )
 {
-	//Feb. 26, 2001, fixed by yebisuya sugoroku
+	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (m_pData != NULL) {
 		for (int i = 0; i < m_nFormat; i++) {
 			delete [](m_pData[i].data);
@@ -259,10 +259,10 @@ DWORD CDataObject::DragDrop( BOOL bLeft, DWORD dwEffects )
 */
 STDMETHODIMP CDataObject::GetData( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 {
-	//Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (lpfe == NULL || lpsm == NULL)
+	// Feb. 26, 2001, fixed by yebisuya sugoroku
+	if (!lpfe || !lpsm)
 		return E_INVALIDARG;
-	if (m_pData == NULL)
+	if (!m_pData)
 		return OLE_E_NOTRUNNING;
 	if (lpfe->lindex != -1)
 		return DV_E_LINDEX;
@@ -298,9 +298,9 @@ STDMETHODIMP CDataObject::GetData( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 STDMETHODIMP CDataObject::GetDataHere( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 {
 	//Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (lpfe == NULL || lpsm == NULL || lpsm->hGlobal == NULL)
+	if (!lpfe || !lpsm || !lpsm->hGlobal)
 		return E_INVALIDARG;
-	if (m_pData == NULL)
+	if (!m_pData)
 		return OLE_E_NOTRUNNING;
 
 	if (lpfe->lindex != -1)
@@ -332,10 +332,10 @@ STDMETHODIMP CDataObject::GetDataHere( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 */
 STDMETHODIMP CDataObject::QueryGetData( LPFORMATETC lpfe )
 {
-	if (lpfe == NULL)
+	if (!lpfe)
 		return E_INVALIDARG;
 	//Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (m_pData == NULL)
+	if (!m_pData)
 		return OLE_E_NOTRUNNING;
 
 	if (lpfe->ptd != NULL
@@ -396,9 +396,9 @@ STDMETHODIMP CDataObject::EnumDAdvise( LPENUMSTATDATA* )
 */
 STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
-	if (celt <= 0 || rgelt == NULL || m_nIndex >= m_pcDataObject->m_nFormat)
+	if (celt <= 0 || !rgelt || m_nIndex >= m_pcDataObject->m_nFormat)
 		return S_FALSE;
-	if (celt != 1 && pceltFetched == NULL)
+	if (celt != 1 && !pceltFetched)
 		return S_FALSE;
 
 	ULONG i = celt;

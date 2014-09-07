@@ -31,7 +31,6 @@
 
 static CMutex g_cDocTypeMutex( FALSE, GSTR_MUTEX_SAKURA_DOCTYPE );
 
-
 /*!
 	ファイル名から、ドキュメントタイプ（数値）を取得する
 	
@@ -41,11 +40,10 @@ static CMutex g_cDocTypeMutex( FALSE, GSTR_MUTEX_SAKURA_DOCTYPE );
 */
 CTypeConfig CDocTypeManager::GetDocumentTypeOfPath( const TCHAR* pszFilePath )
 {
-	TCHAR	szExt[_MAX_EXT];
-	TCHAR	szName[_MAX_FNAME];
-	TCHAR*	pszExt = szExt;
-
-	if (NULL != pszFilePath && pszFilePath[0]) {
+	if (pszFilePath && pszFilePath[0]) {
+		TCHAR	szExt[_MAX_EXT];
+		TCHAR	szName[_MAX_FNAME];
+		TCHAR*	pszExt = szExt;
 		_tsplitpath( pszFilePath, NULL, NULL, szName, szExt );
 		// 2重拡張子探索
 		TCHAR* pFileExt = _tcschr( szName, '.' );
@@ -80,16 +78,14 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfExt( const TCHAR* pszExt )
 {
 	static const TCHAR	pszSeps[] = _T(" ;,");	// separator
 
-	int		i;
-	TCHAR*	pszToken;
 	TCHAR	szText[MAX_TYPES_EXTS];
 
-	for (i = 0; i < m_pShareData->m_nTypesCount; ++i) {
+	for (int i = 0; i < m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;
 		GetTypeConfigMini( CTypeConfig(i), &mini );
 		_tcscpy( szText, mini->m_szTypeExts );
-		pszToken = _tcstok( szText, pszSeps );
-		while (NULL != pszToken) {
+		TCHAR* pszToken = _tcstok( szText, pszSeps );
+		while (pszToken) {
 			if (0 == _tcsicmp( pszExt, pszToken )) {
 				return CTypeConfig(i);	//	番号
 			}
@@ -105,9 +101,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfExt( const TCHAR* pszExt )
 
 CTypeConfig CDocTypeManager::GetDocumentTypeOfId( int id )
 {
-	int		i;
-
-	for (i = 0; i < m_pShareData->m_nTypesCount; ++i) {
+	for (int i = 0; i < m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;
 		GetTypeConfigMini( CTypeConfig(i), &mini );
 		if (mini->m_id == id) {

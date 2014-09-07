@@ -4,6 +4,6 @@
 //! ‹ó‚Á‚Û‚É‚·‚é
 void CNative::Clear()
 {
-	this->SetRawData("",0);
+	this->SetRawData("", 0);
 }
 

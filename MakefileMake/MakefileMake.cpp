@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
 			return usage();
 		}
 	}
-	if (makefile == NULL && top_dir != NULL) { return usage(); }
+	if (!makefile && top_dir != NULL) { return usage(); }
 	if (!makefile)	{ printf("Error: makefileを指定してください\n\n");				return usage(); }
 	if (!top_dir)	{ printf("Error: トップディレクトリを指定してください\n\n");	return usage(); }
 
@@ -338,7 +338,7 @@ int main(int argc, char* argv[])
 			}
 			else {
 				fl_nm = getFile();
-				if (fl_nm == NULL) {
+				if (!fl_nm) {
 					// ファイルが減った
 					change = true;
 					continue;

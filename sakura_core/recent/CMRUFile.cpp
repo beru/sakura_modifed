@@ -53,10 +53,8 @@ CMRUFile::~CMRUFile()
 */
 HMENU CMRUFile::CreateMenu( CMenuDrawer* pCMenuDrawer ) const
 {
-	HMENU	hMenuPopUp;
-
 	//	空メニューを作る
-	hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
+	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
 	return CreateMenu( hMenuPopUp, pCMenuDrawer );
 }
 /*!
@@ -72,14 +70,11 @@ HMENU CMRUFile::CreateMenu( CMenuDrawer* pCMenuDrawer ) const
 */
 HMENU CMRUFile::CreateMenu( HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer ) const
 {
-	TCHAR	szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
-	int		i;
-	bool	bFavorite;
+	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 	const BOOL bMenuIcon = m_pShareData->m_Common.m_sWindow.m_bMenuIcon;
-
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
 
-	for (i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
+	for (int i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_cRecentFile.GetViewCount()) {
 			break;
@@ -88,7 +83,7 @@ HMENU CMRUFile::CreateMenu( HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer ) const
 		/* MRUリストの中にある開かれていないファイル */
 
 		const EditInfo	*p = m_cRecentFile.GetItem( i );
-		bFavorite = m_cRecentFile.IsFavorite( i );
+		bool bFavorite = m_cRecentFile.IsFavorite( i );
 		bool bFavoriteLabel = bFavorite && !bMenuIcon;
 		CFileNameManager::getInstance()->GetMenuFullLabel_MRU( szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i );
 
@@ -150,7 +145,7 @@ void CMRUFile::ClearAll(void)
 bool CMRUFile::GetEditInfo( int num, EditInfo* pfi ) const
 {
 	const EditInfo*	p = m_cRecentFile.GetItem( num );
-	if (NULL == p) {
+	if (!p) {
 		return false;
 	}
 
@@ -173,7 +168,7 @@ bool CMRUFile::GetEditInfo( int num, EditInfo* pfi ) const
 bool CMRUFile::GetEditInfo( const TCHAR* pszPath, EditInfo* pfi ) const
 {
 	const EditInfo*	p = m_cRecentFile.GetItem( m_cRecentFile.FindItemByPath( pszPath ) );
-	if (NULL == p) {
+	if (!p) {
 		return false;
 	}
 
@@ -194,7 +189,7 @@ bool CMRUFile::GetEditInfo( const TCHAR* pszPath, EditInfo* pfi ) const
 void CMRUFile::Add( EditInfo* pEditInfo )
 {
 	//	ファイル名が無ければ無視
-	if (NULL == pEditInfo || pEditInfo->m_szPath[0] == L'\0') {
+	if (!pEditInfo || pEditInfo->m_szPath[0] == L'\0') {
 		return;
 	}
 	
@@ -204,7 +199,7 @@ void CMRUFile::Add( EditInfo* pEditInfo )
 		for (int i = 0 ; i < nSize; i++) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			CFileNameManager::ExpandMetaToFolder( m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU) );
-			if (NULL != _tcsistr( pEditInfo->m_szPath,  szExceptMRU)) {
+			if (_tcsistr( pEditInfo->m_szPath,  szExceptMRU)) {
 				return;
 			}
 		}

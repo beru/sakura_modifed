@@ -51,7 +51,7 @@ bool CEditView::TagJumpSub(
 	CMyPoint		ptJumpTo,
 	bool			bClose,			//!< [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
 	bool			bRelFromIni
-)
+	)
 {
 	HWND	hwndOwner;
 	POINT	poCaret;
@@ -64,7 +64,7 @@ bool CEditView::TagJumpSub(
 	//	Feb. 17, 2007 genta 実行ファイルからの相対指定の場合は
 	//	予め絶対パスに変換する．(キーワードヘルプジャンプで用いる)
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	TCHAR	szJumpToFile[1024];
+	TCHAR szJumpToFile[1024];
 	if (bRelFromIni && _IS_REL_PATH( pszFileName )) {
 		GetInidirOrExedir( szJumpToFile, pszFileName );
 	}else {
@@ -72,8 +72,8 @@ bool CEditView::TagJumpSub(
 	}
 
 	/* ロングファイル名を取得する */
-	TCHAR	szWork[1024];
-	if (TRUE == ::GetLongFileName( szJumpToFile, szWork )) {
+	TCHAR szWork[1024];
+	if (::GetLongFileName( szJumpToFile, szWork )) {
 		_tcscpy( szJumpToFile, szWork );
 	}
 
@@ -126,8 +126,8 @@ bool CEditView::TagJumpSub(
 			G_AppInstance(),
 			this->GetHwnd(),
 			&inf,
-			false,	/* ビューモードか */
-			true	//	同期モードで開く
+			false,	// ビューモードか
+			true	// 同期モードで開く
 		);
 
 		if (!bSuccess)	//	ファイルが開けなかった
@@ -167,12 +167,8 @@ BOOL CEditView::OPEN_ExtFromtoExt(
 	const TCHAR*	errmes			//!< [in] ファイルを開けなかった場合に表示するエラーメッセージ
 )
 {
-//From Here Feb. 7, 2001 JEPRO 追加
-	int		i;
-//To Here Feb. 7, 2001
-
 	/* 編集中ファイルの拡張子を調べる */
-	for (i = 0; i < file_extno; i++) {
+	for (int i = 0; i < file_extno; i++) {
 		if (CheckEXT( GetDocument()->m_cDocFile.GetFilePath(), file_ext[i] )) {
 			goto open_c;
 		}
@@ -193,7 +189,7 @@ open_c:;
 
 	_tsplitpath( GetDocument()->m_cDocFile.GetFilePath(), szDrive, szDir, szFname, szExt );
 
-	for (i = 0; i < open_extno; i++) {
+	for (int i = 0; i < open_extno; i++) {
 		_tmakepath( szPath, szDrive, szDir, szFname, open_ext[i] );
 		if (!fexist(szPath)) {
 			if (i < open_extno - 1)
@@ -276,7 +272,7 @@ open_c:;
 */
 CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 {
-	CLayoutInt& newKetas=*_newKetas;
+	CLayoutInt& newKetas = *_newKetas;
 	//@@@ 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするコマンド。
 	//2002/04/08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
 	// 20051022 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにするコマンド
@@ -307,13 +303,14 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 		c)　└→ウィンドウ幅
 	*/
 	
-	if (GetDocument()->m_cLayoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum( GetTextArea().m_nViewColNum )) {
+	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum( GetTextArea().m_nViewColNum )) {
 		// a)
 		newKetas = CLayoutInt(MAXLINEKETAS);
 		return TGWRAP_FULL;
 	}else if (MINLINEKETAS > GetTextArea().m_nViewColNum - GetWrapOverhang()) { // 2)
 		// 3)
-		if (GetDocument()->m_cLayoutMgr.GetMaxLineKetas() != MAXLINEKETAS) {
+		if (layoutMgr.GetMaxLineKetas() != MAXLINEKETAS) {
 			// 4)
 			newKetas = CLayoutInt(MAXLINEKETAS);
 			return TGWRAP_FULL;
@@ -326,7 +323,7 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 		}
 	}else { // 8)
 		if (1
-			&& GetDocument()->m_cLayoutMgr.GetMaxLineKetas() == MAXLINEKETAS // 9)
+			&& layoutMgr.GetMaxLineKetas() == MAXLINEKETAS // 9)
 			&& m_pTypeData->m_nMaxLineKetas != MAXLINEKETAS
 		) {
 			// a)
@@ -344,11 +341,10 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 
 void CEditView::AddToCmdArr( const TCHAR* szCmd )
 {
-	CRecentCmd	cRecentCmd;
+	CRecentCmd cRecentCmd;
 	cRecentCmd.AppendItem( szCmd );
 	cRecentCmd.Terminate();
 }
-
 
 /*! 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときはFALSEを返す)
 	@date 2002.01.16 hor 共通ロジックを関数にしただけ・・・
@@ -356,7 +352,7 @@ void CEditView::AddToCmdArr( const TCHAR* szCmd )
 */
 BOOL CEditView::ChangeCurRegexp( bool bRedrawIfChanged )
 {
-	bool	bChangeState = false;
+	bool bChangeState = false;
 
 	if (GetDllShareData().m_Common.m_sSearch.m_bInheritKeyOtherView
 			&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
@@ -412,8 +408,8 @@ void CEditView::CopyCurLine(
 		return;
 	}
 
-	const CLayout*	pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().y );
-	if (NULL == pcLayout) {
+	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().y );
+	if (!pcLayout) {
 		return;
 	}
 
@@ -457,12 +453,11 @@ void CEditView::DrawBracketCursorLine(bool bDraw)
 HWND CEditView::StartProgress()
 {
 	HWND hwndProgress = m_pcEditWnd->m_cStatusBar.GetProgressHwnd();
-	if (NULL != hwndProgress) {
+	if (hwndProgress) {
 		::ShowWindow( hwndProgress, SW_SHOW );
 		Progress_SetRange( hwndProgress, 0, 101 );
 		Progress_SetPos( hwndProgress, 0 );
 	}
 	return hwndProgress;
 }
-
 

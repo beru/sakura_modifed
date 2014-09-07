@@ -245,7 +245,7 @@ void CEditDoc::SetBackgroundImage()
 		}
 		DWORD fileSize  = ::GetFileSize(hFile, NULL);
 		HGLOBAL hGlobal = ::GlobalAlloc(GMEM_MOVEABLE, fileSize);
-		if (hGlobal == NULL) {
+		if (!hGlobal) {
 			::CloseHandle(hFile);
 			return;
 		}
@@ -617,12 +617,10 @@ void CEditDoc::OnChangeSetting(
 	bool	bDoLayout
 )
 {
-	int			i;
-	HWND		hwndProgress = NULL;
+	HWND hwndProgress = NULL;
+	CEditWnd* pCEditWnd = m_pcEditWnd;	//	Sep. 10, 2002 genta
 
-	CEditWnd*	pCEditWnd = m_pcEditWnd;	//	Sep. 10, 2002 genta
-
-	if (NULL != pCEditWnd) {
+	if (pCEditWnd) {
 		hwndProgress = pCEditWnd->m_cStatusBar.GetProgressHwnd();
 		//	Status Barが表示されていないときはm_hwndProgressBar == NULL
 	}
@@ -655,7 +653,6 @@ void CEditDoc::OnChangeSetting(
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
 
 	CLogicPointEx* posSaveAry = NULL;
-
 	if (m_pcEditWnd->m_posSaveAry) {
 		if (bDoLayout) {
 			posSaveAry = m_pcEditWnd->m_posSaveAry;
@@ -777,13 +774,13 @@ void CEditDoc::OnChangeSetting(
 
 	/* ビューに設定変更を反映させる */
 	int viewCount = m_pcEditWnd->GetAllViewCount();
-	for (i = 0; i < viewCount; ++i) {
+	for (int i = 0; i < viewCount; ++i) {
 		m_pcEditWnd->GetView(i).OnChangeSetting();
 	}
 	if (posSaveAry) {
 		m_pcEditWnd->RestorePhysPosOfAllView( posSaveAry );
 	}
-	for (i = 0; i < viewCount; i++) {
+	for (int i = 0; i < viewCount; i++) {
 		m_pcEditWnd->GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
 	}
 	if (hwndProgress) {
@@ -801,12 +798,9 @@ void CEditDoc::OnChangeSetting(
 */
 BOOL CEditDoc::OnFileClose()
 {
-	int			nRet;
-	int			nBool;
-
 	//クローズ事前処理
 	ECallbackResult eBeforeCloseResult = NotifyBeforeClose();
-	if (eBeforeCloseResult==CALLBACK_INTERRUPT) return FALSE;
+	if (eBeforeCloseResult == CALLBACK_INTERRUPT) return FALSE;
 	
 	// デバッグモニタモードのときは保存確認しない
 	if (CAppMode::getInstance()->IsDebugMode()) return TRUE;
@@ -838,7 +832,7 @@ BOOL CEditDoc::OnFileClose()
 		);
 		pszTitle = szGrepTitle;
 	}
-	if (NULL == pszTitle) {
+	if (!pszTitle) {
 		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode( CEditWnd::getInstance()->GetHwnd() );
 		auto_sprintf_s( szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->m_nId );	//(無題)
 		pszTitle = szGrepTitle;
@@ -846,9 +840,10 @@ BOOL CEditDoc::OnFileClose()
 	/* ウィンドウをアクティブにする */
 	HWND	hwndMainFrame = CEditWnd::getInstance()->GetHwnd();
 	ActivateFrameWindow( hwndMainFrame );
+	int nBool;
 	if (CAppMode::getInstance()->IsViewMode()) {	/* ビューモード */
 		ConfirmBeep();
-		nRet = ::MYMESSAGEBOX(
+		int nRet = ::MYMESSAGEBOX(
 			hwndMainFrame,
 			MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 			GSTR_APPNAME,
@@ -867,6 +862,7 @@ BOOL CEditDoc::OnFileClose()
 		}
 	}else {
 		ConfirmBeep();
+		int nRet;
 		if (m_cDocFile.IsChgCodeSet()) {
 			nRet = ::MYMESSAGEBOX(
 				hwndMainFrame,
@@ -917,7 +913,7 @@ BOOL CEditDoc::OnFileClose()
 void CEditDoc::RunAutoMacro( int idx, LPCTSTR pszSaveFilePath )
 {
 	// 開ファイル／タイプ変更時はアウトラインを再解析する
-	if (pszSaveFilePath == NULL) {
+	if (!pszSaveFilePath) {
 		m_pcEditWnd->m_cDlgFuncList.Refresh();
 	}
 
@@ -928,7 +924,7 @@ void CEditDoc::RunAutoMacro( int idx, LPCTSTR pszSaveFilePath )
 	bRunning = true;
 	if (CEditApp::getInstance()->m_pcSMacroMgr->IsEnabled(idx)) {
 		if (!( ::GetAsyncKeyState(VK_SHIFT) & 0x8000 )) {	// Shift キーが押されていなければ実行
-			if(NULL != pszSaveFilePath)
+			if (pszSaveFilePath)
 				m_cDocFile.SetSaveFilePath(pszSaveFilePath);
 			//	2007.07.20 genta 自動実行マクロで発行したコマンドはキーマクロに保存しない
 			HandleCommand((EFunctionCode)(( F_USERMACRO_0 + idx ) | FA_NONRECORD) );

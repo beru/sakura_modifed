@@ -22,17 +22,17 @@
 
 /* 文字列置換 */
 void CLayoutMgr::ReplaceData_CLayoutMgr(
-	LayoutReplaceArg*	pArg
+	LayoutReplaceArg* pArg
 )
 {
-	CLayoutInt	nWork_nLines = m_nLines;	//変更前の全行数の保存	@@@ 2002.04.19 MIK
+	CLayoutInt nWork_nLines = m_nLines;	//変更前の全行数の保存	@@@ 2002.04.19 MIK
 
 	/* 置換先頭位置のレイアウト情報 */
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
 	CLayoutColorInfo*	colorInfo = NULL;
 	CLayoutInt		nLineWork = pArg->sDelRange.GetFrom().GetY2();
 
-	CLayout*		pLayoutWork = SearchLineByLayoutY( pArg->sDelRange.GetFrom().GetY2() );
+	CLayout* pLayoutWork = SearchLineByLayoutY( pArg->sDelRange.GetFrom().GetY2() );
 	if (pLayoutWork) {
 		while (0 != pLayoutWork->GetLogicOffset()) {
 			pLayoutWork = pLayoutWork->GetPrevLayout();
@@ -78,8 +78,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 
 	CLayoutInt	nModifyLayoutLinesOld = CLayoutInt(0);
 	CLayout* pLayoutPrev;
-	CLogicInt nWork;
-	nWork = t_max( DLRArg.nDeletedLineNum, DLRArg.nInsLineNum );
+	CLogicInt nWork = t_max( DLRArg.nDeletedLineNum, DLRArg.nInsLineNum );
 
 	if (pLayoutWork) {
 		pLayoutPrev = DeleteLayoutAsLogical(
@@ -105,15 +104,15 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	}
 
 	/* 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする */
-	CLogicInt	nRowNum;
-	if (NULL == pLayoutPrev) {
-		if (NULL == m_pLayoutTop) {
+	CLogicInt nRowNum;
+	if (!pLayoutPrev) {
+		if (!m_pLayoutTop) {
 			nRowNum = m_pcDocLineMgr->GetLineCount();
 		}else {
 			nRowNum = m_pLayoutTop->GetLogicLineNo();
 		}
 	}else {
-		if (NULL == pLayoutPrev->GetNextLayout()) {
+		if (!pLayoutPrev->GetNextLayout()) {
 			nRowNum =
 				m_pcDocLineMgr->GetLineCount() -
 				pLayoutPrev->GetLogicLineNo() - CLogicInt(1);
@@ -144,13 +143,13 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	);
 
 	pArg->nAddLineNum = m_nLines - nWork_nLines;	//変更後の全行数との差分	@@@ 2002.04.19 MIK
-	if (0 == pArg->nAddLineNum)
+	if (0 == pArg->nAddLineNum) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	/* 再描画ヒント レイアウト行の増減 */
+	}
 	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	/* 再描画ヒント 変更されたレイアウト行From */
 	pArg->nModLineTo += ( pArg->nModLineFrom - CLayoutInt(1) ) ;	/* 再描画ヒント 変更されたレイアウト行To */
 
 	//2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
 	LogicToLayout(DLRArg.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置
 }
-
 

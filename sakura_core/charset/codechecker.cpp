@@ -1098,7 +1098,7 @@ int CheckUtf7BPart( const char *pS, const int nLen, char **ppNextChar, bool *pbE
 
 	cmbuffer.AllocBuffer( nchecklen );
 	pdata = reinterpret_cast<wchar_t*>( cmbuffer.GetRawPtr() );
-	if( pdata == NULL ){
+	if (!pdata) {
 		goto EndFunc;
 	}
 	ndatalen = _DecodeBase64(pS, nchecklen, reinterpret_cast<char*>(pdata)) / sizeof(wchar_t);

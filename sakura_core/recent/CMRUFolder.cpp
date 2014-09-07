@@ -48,9 +48,7 @@ CMRUFolder::~CMRUFolder()
 */
 HMENU CMRUFolder::CreateMenu( CMenuDrawer* pCMenuDrawer ) const
 {
-	HMENU	hMenuPopUp;
-
-	hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
+	HMENU hMenuPopUp = ::CreatePopupMenu();	// Jan. 29, 2002 genta
 	return CreateMenu( hMenuPopUp, pCMenuDrawer );
 }
 
@@ -65,19 +63,17 @@ HMENU CMRUFolder::CreateMenu( CMenuDrawer* pCMenuDrawer ) const
 */
 HMENU CMRUFolder::CreateMenu( HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer ) const
 {
-	TCHAR	szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
-	int		i;
-	bool	bFavorite;
+	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
-	for (i = 0; i < m_cRecentFolder.GetItemCount(); ++i) {
+	for (int i = 0; i < m_cRecentFolder.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_cRecentFolder.GetViewCount()) {
 			break;
 		}
 
 		const TCHAR* pszFolder = m_cRecentFolder.GetItemText( i );
-		bFavorite = m_cRecentFolder.IsFavorite( i );
+		bool bFavorite = m_cRecentFolder.IsFavorite( i );
 		bool bFavoriteLabel = bFavorite && !m_pShareData->m_Common.m_sWindow.m_bMenuIcon;
 		CFileNameManager::getInstance()->GetMenuFullLabel( szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true );
 
@@ -117,7 +113,7 @@ void CMRUFolder::ClearAll()
 */
 void CMRUFolder::Add( const TCHAR* pszFolder )
 {
-	if (NULL == pszFolder
+	if (!pszFolder
 	 || pszFolder[0] == _T('\0')
 	) {	//	長さが0なら排除。
 		return;
@@ -129,7 +125,7 @@ void CMRUFolder::Add( const TCHAR* pszFolder )
 		for (int i = 0 ; i < nSize; i++) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			CFileNameManager::ExpandMetaToFolder( m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU) );
-			if (NULL != _tcsistr( pszFolder, szExceptMRU )) {
+			if (_tcsistr( pszFolder, szExceptMRU )) {
 				return;
 			}
 		}

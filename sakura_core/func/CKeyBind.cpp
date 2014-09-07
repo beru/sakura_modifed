@@ -62,19 +62,15 @@ CKeyBind::~CKeyBind()
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
 HACCEL CKeyBind::CreateAccerelator(
-		int			nKeyNameArrNum,
-		KEYDATA*	pKeyNameArr
+	int			nKeyNameArrNum,
+	KEYDATA*	pKeyNameArr
 )
 {
-	ACCEL*	pAccelArr;
-	HACCEL	hAccel;
-	int		j, k;
-
 	// 機能が割り当てられているキーの数をカウント -> nAccelArrNum
 	int nAccelArrNum = 0;
 	for (int i = 0; i < nKeyNameArrNum; ++i) {
 		if (0 != pKeyNameArr[i].m_nKeyCode) {
-			for (j = 0; j < 8; ++j) {
+			for (int j = 0; j < 8; ++j) {
 				if (0 != GetFuncCodeAt( pKeyNameArr[i], j )) {
 					nAccelArrNum++;
 				}
@@ -82,16 +78,15 @@ HACCEL CKeyBind::CreateAccerelator(
 		}
 	}
 
-
 	if (nAccelArrNum <= 0) {
 		/* 機能割り当てがゼロ */
 		return NULL;
 	}
-	pAccelArr = new ACCEL[nAccelArrNum];
-	k = 0;
+	ACCEL* pAccelArr = new ACCEL[nAccelArrNum];
+	int k = 0;
 	for (int i = 0; i < nKeyNameArrNum; ++i) {
 		if (0 != pKeyNameArr[i].m_nKeyCode) {
-			for (j = 0; j < 8; ++j) {
+			for (int j = 0; j < 8; ++j) {
 				if (0 != GetFuncCodeAt( pKeyNameArr[i], j )) {
 					pAccelArr[k].fVirt = FNOINVERT | FVIRTKEY;
 					pAccelArr[k].fVirt |= ( j & _SHIFT ) ? FSHIFT   : 0;
@@ -106,7 +101,7 @@ HACCEL CKeyBind::CreateAccerelator(
 			}
 		}
 	}
-	hAccel = ::CreateAcceleratorTable( pAccelArr, nAccelArrNum );
+	HACCEL hAccel = ::CreateAcceleratorTable( pAccelArr, nAccelArrNum );
 	delete [] pAccelArr;
 	return hAccel;
 }
@@ -118,11 +113,11 @@ HACCEL CKeyBind::CreateAccerelator(
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
 EFunctionCode CKeyBind::GetFuncCode(
-		WORD		nAccelCmd,
-		int			nKeyNameArrNum,
-		KEYDATA*	pKeyNameArr,
-		BOOL		bGetDefFuncCode /* = TRUE */
-)
+	WORD		nAccelCmd,
+	int			nKeyNameArrNum,
+	KEYDATA*	pKeyNameArr,
+	BOOL		bGetDefFuncCode /* = TRUE */
+	)
 {
 	int nCmd = (int)LOBYTE(nAccelCmd);
 	int nSts = (int)HIBYTE(nAccelCmd);
@@ -156,14 +151,11 @@ int CKeyBind::CreateKeyBindList(
 	BOOL			bGetDefFuncCode //!< [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:TRUE
 )
 {
-	int		i;
-	int		j;
-	int		nValidKeys;
 	WCHAR	szStr[256];
 	WCHAR	szFuncName[256];
 	WCHAR	szFuncNameJapanese[256];
 
-	nValidKeys = 0;
+	int nValidKeys = 0;
 	cMemList.SetString(LTEXT(""));
 	const WCHAR*	pszSHIFT = LTEXT("Shift+");
 	const WCHAR*	pszCTRL  = LTEXT("Ctrl+");
@@ -171,14 +163,13 @@ int CKeyBind::CreateKeyBindList(
 	const WCHAR*	pszTAB   = LTEXT("\t");
 	const WCHAR*	pszCR    = LTEXT("\r\n");	//\r=0x0d=CRを追加
 
-
 	cMemList.AppendString( LSW(STR_ERR_DLGKEYBIND1) );
 	cMemList.AppendString( pszCR );
 	cMemList.AppendString( LTEXT("-----\t-----\t-----\t-----\t-----") );
 	cMemList.AppendString( pszCR );
 
-	for (j = 0; j < 8; ++j) {
-		for (i = 0; i < nKeyNameArrNum; ++i) {
+	for (int j = 0; j < 8; ++j) {
+		for (int i = 0; i < nKeyNameArrNum; ++i) {
 			int iFunc = GetFuncCodeAt( pKeyNameArr[i], j, bGetDefFuncCode );
 
 			if (0 != iFunc) {
@@ -263,18 +254,18 @@ int CKeyBind::CreateKeyBindList(
 	@param[in]	bGetDefFuncCode 標準機能を取得するかどうか
 */
 bool CKeyBind::GetKeyStrSub(
-		int&		nKeyNameArrBegin,
-		int			nKeyNameArrEnd,
-		KEYDATA*	pKeyNameArr,
-		int			nShiftState,
-		CNativeT&	cMemList,
-		int			nFuncId,
-		BOOL		bGetDefFuncCode /* = TRUE */
+	int&		nKeyNameArrBegin,
+	int			nKeyNameArrEnd,
+	KEYDATA*	pKeyNameArr,
+	int			nShiftState,
+	CNativeT&	cMemList,
+	int			nFuncId,
+	BOOL		bGetDefFuncCode /* = TRUE */
 )
 {
-	const TCHAR*	pszSHIFT = _T("Shift+");
-	const TCHAR*	pszCTRL  = _T("Ctrl+");
-	const TCHAR*	pszALT   = _T("Alt+");
+	static const TCHAR*	pszSHIFT = _T("Shift+");
+	static const TCHAR*	pszCTRL  = _T("Ctrl+");
+	static const TCHAR*	pszALT   = _T("Alt+");
 
 	int i;
 	for (i = nKeyNameArrBegin; i < nKeyNameArrEnd; ++i) {
@@ -304,21 +295,19 @@ bool CKeyBind::GetKeyStrSub(
 	@date 2007.11.04 genta 共通機能のサブルーチン化
 */
 int CKeyBind::GetKeyStr(
-		HINSTANCE	hInstance,
-		int			nKeyNameArrNum,
-		KEYDATA*	pKeyNameArr,
-		CNativeT&	cMemList,
-		int			nFuncId,
-		BOOL		bGetDefFuncCode /* = TRUE */
+	HINSTANCE	hInstance,
+	int			nKeyNameArrNum,
+	KEYDATA*	pKeyNameArr,
+	CNativeT&	cMemList,
+	int			nFuncId,
+	BOOL		bGetDefFuncCode /* = TRUE */
 )
 {
-	int		i;
-	int		j;
 	cMemList.SetString(_T(""));
 
 	//	先にキー部分を調査する
-	for (j = 0; j < 8; ++j) {
-		for (i = MOUSEFUNCTION_KEYBEGIN; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
+	for (int j = 0; j < 8; ++j) {
+		for (int i = MOUSEFUNCTION_KEYBEGIN; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode )) {
 				return 1;
 			}
@@ -326,8 +315,8 @@ int CKeyBind::GetKeyStr(
 	}
 
 	//	後にマウス部分を調査する
-	for (j = 0; j < 8; ++j) {
-		for (i = 0; i < MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
+	for (int j = 0; j < 8; ++j) {
+		for (int i = 0; i < MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode )) {
 				return 1;
 			}
@@ -350,16 +339,12 @@ int CKeyBind::GetKeyStrList(
 	BOOL		bGetDefFuncCode /* = TRUE */
 )
 {
-	int		i;
-	int		j;
-	int		nAssignedKeysNum;
-
-	nAssignedKeysNum = 0;
+	int nAssignedKeysNum = 0;
 	if (0 == nFuncId) {
 		return 0;
 	}
-	for (j = 0; j < 8; ++j) {
-		for (i = 0; i < nKeyNameArrNum; ++i) {
+	for (int j = 0; j < 8; ++j) {
+		for (int i = 0; i < nKeyNameArrNum; ++i) {
 			if (nFuncId == GetFuncCodeAt( pKeyNameArr[i], j, bGetDefFuncCode )) {
 				nAssignedKeysNum++;
 			}
@@ -369,14 +354,15 @@ int CKeyBind::GetKeyStrList(
 		return 0;
 	}
 	(*pppcMemList) = new CNativeT*[nAssignedKeysNum + 1];
+	int i;
 	for (i = 0; i < nAssignedKeysNum; ++i) {
 		(*pppcMemList)[i] = new CNativeT;
 	}
 	(*pppcMemList)[i] = NULL;
 	
 	nAssignedKeysNum = 0;
-	for (j = 0; j < 8; ++j) {
-		for (i = 0; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
+	for (int j = 0; j < 8; ++j) {
+		for (int i = 0; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
 			//	2007.11.04 genta 共通機能のサブルーチン化
 			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j,
 					*((*pppcMemList)[nAssignedKeysNum]), nFuncId, bGetDefFuncCode )
@@ -397,12 +383,11 @@ int CKeyBind::GetKeyStrList(
 */
 TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
-	static	TCHAR	sLabel[300];
-	const	TCHAR*	p;
-
-	if (sKey == NULL || sKey[0] == L'\0') {
+	if (!sKey || sKey[0] == L'\0') {
 		return const_cast<TCHAR*>( to_tchar(sName) );
 	}else {
+		static	TCHAR	sLabel[300];
+		const	TCHAR*	p;
 		if (!GetDllShareData().m_Common.m_sMainMenu.m_bMainMenuKeyParentheses
 			  && (((p = auto_strchr( sName, sKey[0])) != NULL) || ((p = auto_strchr( sName, _totlower(sKey[0]))) != NULL))
 		) {
@@ -437,18 +422,17 @@ TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 	2010/5/17	アクセスキーの追加
 */
 TCHAR* CKeyBind::GetMenuLabel(
-		HINSTANCE	hInstance,
-		int			nKeyNameArrNum,
-		KEYDATA*	pKeyNameArr,
-		int			nFuncId,
-		TCHAR*      pszLabel,   //!< [in,out] バッファは256以上と仮定
-		const TCHAR*	pszKey,
-		BOOL		bKeyStr,
-		BOOL		bGetDefFuncCode /* = TRUE */
+	HINSTANCE	hInstance,
+	int			nKeyNameArrNum,
+	KEYDATA*	pKeyNameArr,
+	int			nFuncId,
+	TCHAR*      pszLabel,   //!< [in,out] バッファは256以上と仮定
+	const TCHAR*	pszKey,
+	BOOL		bKeyStr,
+	BOOL		bGetDefFuncCode /* = TRUE */
 )
 {
 	const int LABEL_MAX = 256;
-
 
 	if (_T('\0') == pszLabel[0]) {
 		_tcsncpy( pszLabel, LS( nFuncId ), LABEL_MAX - 1 );
@@ -462,7 +446,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 
 	/* 機能に対応するキー名を追加するか */
 	if (bKeyStr) {
-		CNativeT    cMemAccessKey;
+		CNativeT cMemAccessKey;
 		// 2010.07.11 Moca メニューラベルの「\t」の付加条件変更
 		// [ファイル/フォルダ/ウィンドウ一覧以外]から[アクセスキーがあるときのみ]に付加するように変更
 		/* 機能に対応するキー名の取得 */
@@ -490,7 +474,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 EFunctionCode CKeyBind::GetDefFuncCode( int nKeyCode, int nState )
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
-	if (pShareData == NULL)
+	if (!pShareData)
 		return F_DEFAULT;
 
 	EFunctionCode nDefFuncCode = F_DEFAULT;
@@ -802,8 +786,8 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	/********************/
 	/* 共通設定の規定値 */
 	/********************/
-	const int	nKeyDataInitNum = _countof( KeyDataInit );
-	const int	KEYNAME_SIZE = _countof( pShareData->m_Common.m_sKeyBind.m_pKeyNameArr ) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int nKeyDataInitNum = _countof( KeyDataInit );
+	const int KEYNAME_SIZE = _countof( pShareData->m_Common.m_sKeyBind.m_pKeyNameArr ) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
 	//	From Here 2007.11.04 genta バッファオーバーラン防止
 	assert( !(nKeyDataInitNum > KEYNAME_SIZE) );
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
@@ -813,7 +797,7 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	//	To Here 2007.11.04 genta バッファオーバーラン防止
 
 	// マウスコードの固定と重複排除 2012.11.25 aroka
-	static const KEYDATAINIT	dummy[] = {
+	static const KEYDATAINIT dummy[] = {
 		{ 0,		_T(""),				{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 } }
 	};
 
@@ -837,7 +821,7 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 /*!	@brief 言語選択後の文字列更新処理 */
 void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
-	const int	nKeyDataInitNum = _countof( KeyDataInit );
+	const int nKeyDataInitNum = _countof( KeyDataInit );
 
 	for (int i = 0; i < nKeyDataInitNum; ++i) {
 		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];

@@ -669,7 +669,6 @@ void CPropCustmenu::SetData( HWND hwndDlg )
 
 void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 {
-	int			i;
 	WCHAR		szLabel[300];
 	WCHAR		szLabel2[300];
 
@@ -677,7 +676,7 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 	HWND hwndLIST_RES = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 //	hwndEDIT_KEY = ::GetDlgItem( hwndDlg, IDC_EDIT_KEY );
 	List_ResetContent( hwndLIST_RES );
-	for (i = 0; i < m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
+	for (int i = 0; i < m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
 		if (0 == m_Common.m_sCustomMenu.m_nCustMenuItemFuncArr[nIdx][i]) {
 			auto_strcpy( szLabel, LSW(STR_PROPCOMCUSTMENU_SEP) );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 		}else {

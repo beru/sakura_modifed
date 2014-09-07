@@ -17,8 +17,6 @@
 #include "charset/charcode.h"
 #include "extmodule/CBregexp.h" // CLayoutMgr‚Ì’è‹`‚Å•K—v
 
-
-
 CLayout::~CLayout()
 {
 	return;

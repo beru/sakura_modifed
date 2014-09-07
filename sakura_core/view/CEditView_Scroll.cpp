@@ -35,8 +35,6 @@
 */
 BOOL CEditView::CreateScrollBar()
 {
-	SCROLLINFO	si;
-
 	/* スクロールバーの作成 */
 	m_hwndVScrollBar = ::CreateWindowEx(
 		0L,									/* no extended styles */
@@ -52,6 +50,7 @@ BOOL CEditView::CreateScrollBar()
 		G_AppInstance(),						/* instance owning this window */
 		(LPVOID) NULL						/* pointer not needed */
 	);
+	SCROLLINFO si;
 	si.cbSize = sizeof( si );
 	si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 	si.nMin  = 0;
@@ -286,9 +285,8 @@ void CEditView::AdjustScrollBars()
 	}
 
 	SCROLLINFO	si;
-	bool		bEnable;
 
-	if (NULL != m_hwndVScrollBar) {
+	if (m_hwndVScrollBar) {
 		/* 垂直スクロールバー */
 		const CLayoutInt	nEofMargin = CLayoutInt(2); // EOFとその下のマージン
 		const CLayoutInt	nAllLines = m_pcEditDoc->m_cLayoutMgr.GetLineCount() + nEofMargin;
@@ -314,7 +312,7 @@ void CEditView::AdjustScrollBars()
 		//	縦スクロールバーがDisableになったときは必ず全体が画面内に収まるように
 		//	スクロールさせる
 		//	2005.11.01 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		bEnable = ( GetTextArea().m_nViewRowNum < nAllLines );
+		bool bEnable = ( GetTextArea().m_nViewRowNum < nAllLines );
 		if (bEnable != (::IsWindowEnabled( m_hwndVScrollBar ) != 0)) {
 			::EnableWindow( m_hwndVScrollBar, bEnable? TRUE: FALSE );	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
@@ -322,8 +320,8 @@ void CEditView::AdjustScrollBars()
 			ScrollAtV( CLayoutInt(0) );
 		}
 	}
-	if (NULL != m_hwndHScrollBar) {
-		/* 水平スクロールバー */
+	if (m_hwndHScrollBar) {
+		// 水平スクロールバー
 		si.cbSize = sizeof( si );
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
@@ -334,7 +332,7 @@ void CEditView::AdjustScrollBars()
 		::SetScrollInfo( m_hwndHScrollBar, SB_CTL, &si, TRUE );
 
 		//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		bEnable = ( GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar() );
+		bool bEnable = ( GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar() );
 		if (bEnable != (::IsWindowEnabled( m_hwndHScrollBar ) != 0)) {
 			::EnableWindow( m_hwndHScrollBar, bEnable? TRUE: FALSE );	// SIF_DISABLENOSCROLL 誤動作時の強制切替
 		}
@@ -354,8 +352,6 @@ void CEditView::AdjustScrollBars()
 CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 {
 	CLayoutInt	nScrollRowNum;
-	RECT		rcScrol;
-	RECT		rcClip;
 	if (nPos < 0) {
 		nPos = CLayoutInt(0);
 	}else if ((m_pcEditDoc->m_cLayoutMgr.GetLineCount() + 2) - GetTextArea().m_nViewRowNum < nPos) {
@@ -375,6 +371,8 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 		GetTextArea().SetViewTopLine( CLayoutInt(nPos) );
 		::InvalidateRect( GetHwnd(), NULL, TRUE );
 	}else {
+		RECT rcClip;
+		RECT rcScrol;
 		rcScrol.left = 0;
 		rcScrol.right = GetTextArea().GetAreaRight();
 		rcScrol.top = GetTextArea().GetAreaTop();
@@ -428,8 +426,6 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 */
 CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 {
-	RECT		rcScrol;
-	RECT		rcClip2;
 	if (nPos < 0) {
 		nPos = CLayoutInt(0);
 	}
@@ -455,6 +451,8 @@ CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 		GetTextArea().SetViewLeftCol( nPos );
 		::InvalidateRect( GetHwnd(), NULL, TRUE );
 	}else {
+		RECT rcClip2;
+		RECT rcScrol;
 		rcScrol.left = 0;
 		rcScrol.right = GetTextArea().GetAreaRight();
 		rcScrol.top = GetTextArea().GetAreaTop();
@@ -636,8 +634,8 @@ void CEditView::SyncScrollH( CLayoutInt col )
 	if (GetDllShareData().m_Common.m_sWindow.m_bSplitterWndHScroll && col != 0
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x02)
 	) {
-		CEditView&	cEditView = m_pcEditWnd->GetView(m_nMyIndex^0x02);
-		HDC			hdc = ::GetDC( cEditView.GetHwnd() );
+		CEditView& cEditView = m_pcEditWnd->GetView(m_nMyIndex^0x02);
+		HDC hdc = ::GetDC( cEditView.GetHwnd() );
 		
 #if 0
 		//	差分を保ったままスクロールする場合

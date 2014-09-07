@@ -153,11 +153,11 @@ CDocLine* CDocLineMgr::GetLine( CLogicInt nLine ) const
 	}
 	// 2004.03.28 Moca m_pCodePrevRefer‚æ‚èATop,Bot‚Ì‚Ù‚¤‚ª‹ß‚¢ê‡‚ÍA‚»‚¿‚ç‚ğ—˜—p‚·‚é
 	CLogicInt nPrevToLineNumDiff = t_abs( m_nPrevReferLine - nLine );
-	if ( m_pCodePrevRefer == NULL
+	if ( !m_pCodePrevRefer
 	  || nLine < nPrevToLineNumDiff
 	  || m_nLines - nLine < nPrevToLineNumDiff
 	) {
-		if (m_pCodePrevRefer == NULL) {
+		if (!m_pCodePrevRefer) {
 			MY_RUNNINGTIMER( cRunningTimer, "CDocLineMgr::GetLine() 	m_pCodePrevRefer == NULL" );
 		}
 
@@ -177,7 +177,7 @@ CDocLine* CDocLineMgr::GetLine( CLogicInt nLine ) const
 		}else {
 			nCounter = m_nLines - CLogicInt(1);
 			pDocLine = m_pDocLineBot;
-			while (NULL != pDocLine) {
+			while (pDocLine) {
 				if (nLine == nCounter) {
 					m_nPrevReferLine = nLine;
 					m_pCodePrevRefer = pDocLine;
@@ -197,7 +197,7 @@ CDocLine* CDocLineMgr::GetLine( CLogicInt nLine ) const
 		}else if (nLine > m_nPrevReferLine) {
 			nCounter = m_nPrevReferLine + CLogicInt(1);
 			pDocLine = m_pCodePrevRefer->GetNextLine();
-			while (NULL != pDocLine) {
+			while (pDocLine) {
 				if (nLine == nCounter) {
 					m_nPrevReferLine = nLine;
 					m_pCodePrevRefer = pDocLine;
@@ -210,7 +210,7 @@ CDocLine* CDocLineMgr::GetLine( CLogicInt nLine ) const
 		}else {
 			nCounter = m_nPrevReferLine - CLogicInt(1);
 			pDocLine = m_pCodePrevRefer->GetPrevLine();
-			while (NULL != pDocLine) {
+			while (pDocLine) {
 				if (nLine == nCounter) {
 					m_nPrevReferLine = nLine;
 					m_pCodePrevRefer = pDocLine;
@@ -337,20 +337,20 @@ void CDocLineMgr::DUMP()
 	bool bIncludeCurrent = false;
 	bool bIncludePrevRefer = false;
 	CLogicInt nNum = CLogicInt(0);
-	if (m_pDocLineTop->m_pPrev != NULL) {
+	if (m_pDocLineTop->m_pPrev) {
 		MYTRACE( _T("error: m_pDocLineTop->m_pPrev != NULL\n"));
 	}
-	if (m_pDocLineBot->m_pNext != NULL) {
+	if (m_pDocLineBot->m_pNext) {
 		MYTRACE( _T("error: m_pDocLineBot->m_pNext != NULL\n") );
 	}
-	while (NULL != pDocLine) {
+	while (pDocLine) {
 		if (m_pDocLineCurrent == pDocLine) {
 			bIncludeCurrent = true;
 		}
 		if (m_pCodePrevRefer == pDocLine) {
 			bIncludePrevRefer = true;
 		}
-		if (NULL != pDocLine->GetNextLine()) {
+		if (pDocLine->GetNextLine()) {
 			if (pDocLine->m_pNext == pDocLine) {
 				MYTRACE( _T("error: pDocLine->m_pPrev Invalid value.\n") );
 				break;
@@ -373,10 +373,10 @@ void CDocLineMgr::DUMP()
 	if (nNum != m_nLines) {
 		MYTRACE( _T("error: nNum(%d) != m_nLines(%d)\n"), nNum, m_nLines );
 	}
-	if (false == bIncludeCurrent && m_pDocLineCurrent != NULL) {
+	if (!bIncludeCurrent && m_pDocLineCurrent != NULL) {
 		MYTRACE( _T("error: m_pDocLineCurrent=%08lxh Invalid value.\n"), m_pDocLineCurrent );
 	}
-	if (false == bIncludePrevRefer && m_pCodePrevRefer != NULL) {
+	if (!bIncludePrevRefer && m_pCodePrevRefer != NULL) {
 		MYTRACE( _T("error: m_pCodePrevRefer =%08lxh Invalid value.\n"), m_pCodePrevRefer );
 	}
 
@@ -385,7 +385,7 @@ void CDocLineMgr::DUMP()
 	MYTRACE( _T("m_pDocLineTop=%08lxh\n"), m_pDocLineTop );
 	MYTRACE( _T("m_pDocLineBot=%08lxh\n"), m_pDocLineBot );
 	pDocLine = m_pDocLineTop;
-	while (NULL != pDocLine) {
+	while (pDocLine) {
 		pDocLineNext = pDocLine->GetNextLine();
 		MYTRACE( _T("\t-------\n") );
 		MYTRACE( _T("\tthis=%08lxh\n"), pDocLine );

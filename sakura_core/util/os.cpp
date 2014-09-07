@@ -60,9 +60,9 @@ void MyInitCommonControls()
 
 	BOOL bInit = FALSE;
 	HINSTANCE hDll = ::GetModuleHandle(_T("COMCTL32"));
-	if (NULL != hDll) {
+	if (hDll) {
 		*(FARPROC*)&pfnInitCommonControlsEx = ::GetProcAddress( hDll, "InitCommonControlsEx" );
-		if (NULL != pfnInitCommonControlsEx) {
+		if (pfnInitCommonControlsEx) {
 			INITCOMMONCONTROLSEX icex;
 			icex.dwSize = sizeof(icex);
 			icex.dwICC = ICC_WIN95_CLASSES | ICC_COOL_CLASSES;
@@ -119,9 +119,9 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NUL
 	::ZeroMemory( &mi, sizeof( mi ));
 	mi.cbSize = sizeof( mi );
 	::GetMonitorInfo( hMon, &mi );
-	if (NULL != prcWork)
+	if (prcWork)
 		*prcWork = mi.rcWork;		// work area rectangle of the display monitor
-	if (NULL != prcMonitor)
+	if (prcMonitor)
 		*prcMonitor = mi.rcMonitor;	// display monitor rectangle
 	return ( mi.dwFlags == MONITORINFOF_PRIMARY ) ? true : false;
 }
@@ -152,7 +152,7 @@ bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer
 		auto_memset(Buffer, 0, BufferCount);
 
 		DWORD dwType = REG_SZ;
-		DWORD dwDataLen = (BufferCount - 1) * sizeof(TCHAR); //※バイト単位！
+		DWORD dwDataLen = (BufferCount - 1) * sizeof(TCHAR); // ※バイト単位！
 		
 		Result = (RegQueryValueEx(Key, Item, NULL, &dwType, reinterpret_cast<LPBYTE>(Buffer), &dwDataLen) == ERROR_SUCCESS);
 		
@@ -182,11 +182,11 @@ template <class T>
 bool SetClipboardTextImp( HWND hwnd, const T* pszText, int nLength )
 {
 	HGLOBAL	hgClip = ::GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, (nLength + 1) * sizeof(T) );
-	if (NULL == hgClip) {
+	if (!hgClip) {
 		return false;
 	}
 	T* pszClip = (T*)::GlobalLock( hgClip );
-	if (NULL == pszClip) {
+	if (!pszClip) {
 		::GlobalFree( hgClip );
 		return false;
 	}
@@ -203,7 +203,7 @@ bool SetClipboardTextImp( HWND hwnd, const T* pszText, int nLength )
 	}else if (sizeof(T)==sizeof(wchar_t)) {
 		::SetClipboardData( CF_UNICODETEXT, hgClip );
 	}else {
-		assert(0); //※ここには来ない
+		assert(0); // ※ここには来ない
 	}
 	::CloseClipboard();
 
@@ -253,7 +253,7 @@ HGLOBAL GetGlobalData( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat )
 	STGMEDIUM stgMedium;
 	// 2006.03.16 Moca SUCCEEDEDマクロではS_FALSEのとき困るので、S_OKに変更
 	if (S_OK == pDataObject->GetData( &fe, &stgMedium )) {
-		if( stgMedium.pUnkForRelease == NULL ){
+		if( !stgMedium.pUnkForRelease ){
 			if (stgMedium.tymed == TYMED_HGLOBAL)
 				hDest = stgMedium.hGlobal;
 		}else {
@@ -329,9 +329,9 @@ CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
 {
 	int n = ::GetCurrentDirectory(_countof(m_szCurDir),m_szCurDir);
 	if (n>0 && n<_countof(m_szCurDir)) {
-		//ok
+		// ok
 	}else {
-		//ng
+		// ng
 		m_szCurDir[0] = _T('\0');
 	}
 }

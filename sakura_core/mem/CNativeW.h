@@ -57,26 +57,26 @@ private:
 //! UNICODE文字列管理クラス
 class CNativeW : public CNative{
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CNativeW();
 	CNativeW( const CNativeW& );
 	CNativeW( const wchar_t* pData, int nDataLen ); //!< nDataLenは文字単位。
 	CNativeW( const wchar_t* pData);
 
-	//管理
+	// 管理
 	void AllocStringBuffer( int nDataLen );                    //!< (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 
-	//WCHAR
+	// WCHAR
 	void SetString( const wchar_t* pData, int nDataLen );      //!< バッファの内容を置き換える。nDataLenは文字単位。
 	void SetString( const wchar_t* pszData );                  //!< バッファの内容を置き換える
 	void AppendString( const wchar_t* pszData );               //!< バッファの最後にデータを追加する
 	void AppendString( const wchar_t* pszData, int nLength );  //!< バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
 
-	//CNativeW
+	// CNativeW
 	void SetNativeData( const CNativeW& pcNative );            //!< バッファの内容を置き換える
 	void AppendNativeData( const CNativeW& );                  //!< バッファの最後にデータを追加する
 
-	//演算子
+	// 演算子
 	const CNativeW& operator+=(wchar_t wch)				{ AppendString(&wch,1);   return *this; }
 	const CNativeW& operator=(wchar_t wch)				{ SetString(&wch,1);      return *this; }
 	const CNativeW& operator+=(const CNativeW& rhs)		{ AppendNativeData(rhs); return *this; }
@@ -84,7 +84,7 @@ public:
 	CNativeW operator+(const CNativeW& rhs) const		{ CNativeW tmp=*this; return tmp+=rhs; }
 
 
-	//ネイティブ取得インターフェース
+	// ネイティブ取得インターフェース
 	wchar_t operator[](int nIndex) const;                    //!< 任意位置の文字取得。nIndexは文字単位。
 	CLogicInt GetStringLength() const                        //!< 文字列長を返す。文字単位。
 	{
@@ -113,12 +113,12 @@ public:
 	}
 #endif
 
-	//特殊
+	// 特殊
 	void _SetStringLength(int nLength)
 	{
 		_GetMemory()->_SetRawLength(nLength * sizeof(wchar_t));
 	}
-	//末尾を1文字削る
+	// 末尾を1文字削る
 	void Chop()
 	{
 		int n = GetStringLength();
@@ -158,21 +158,21 @@ public:
 	// ひとつはオーバーヘッドを抑える意味で。
 	// ひとつは変換によるデータ喪失を抑える意味で。
 
-	//ACHAR
+	// ACHAR
 	void SetStringOld( const char* pData, int nDataLen );    //!< バッファの内容を置き換える。pDataはSJIS。nDataLenは文字単位。
 	void SetStringOld( const char* pszData );                //!< バッファの内容を置き換える。pszDataはSJIS。
 	void AppendStringOld( const char* pData, int nDataLen ); //!< バッファの最後にデータを追加する。pszDataはSJIS。
 	void AppendStringOld( const char* pszData );             //!< バッファの最後にデータを追加する。pszDataはSJIS。
 	const char* GetStringPtrOld() const; //ShiftJISに変換して返す
 
-	//WCHAR
+	// WCHAR
 	void SetStringW(const wchar_t* pszData)				{ return SetString(pszData); }
 	void SetStringW(const wchar_t* pData, int nLength)		{ return SetString(pData,nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendString(pszData); }
 	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendString(pData,nLength); }
 	const wchar_t* GetStringW() const						{ return GetStringPtr(); }
 
-	//TCHAR
+	// TCHAR
 #ifdef _UNICODE
 	void SetStringT( const TCHAR* pData, int nDataLen )	{ return SetString(pData,nDataLen); }
 	void SetStringT( const TCHAR* pszData )				{ return SetString(pszData); }
@@ -192,7 +192,7 @@ public:
 #if _DEBUG
 private:
 	typedef wchar_t* PWCHAR;
-	PWCHAR& m_pDebugData; //デバッグ用。CMemoryの内容をwchar_t*型でウォッチするためのモノ
+	PWCHAR& m_pDebugData; // デバッグ用。CMemoryの内容をwchar_t*型でウォッチするためのモノ
 #endif
 
 public:

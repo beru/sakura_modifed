@@ -47,14 +47,19 @@
 bool CDocFileOperation::_ToDoLock() const
 {
 	// ファイルを開いていない
-	if (!m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) return false;
+	if (!m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
+		return false;
+	}
 
 	// ビューモード
-	if (CAppMode::getInstance()->IsViewMode()) return false;
+	if (CAppMode::getInstance()->IsViewMode()) {
+		return false;
+	}
 
 	// 排他設定
-	if (GetDllShareData().m_Common.m_sFile.m_nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) return false;
-
+	if (GetDllShareData().m_Common.m_sFile.m_nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) {
+		return false;
+	}
 	return true;
 }
 
@@ -78,13 +83,13 @@ void CDocFileOperation::DoFileUnlock()
 /* 「ファイルを開く」ダイアログ */
 //	Mar. 30, 2003 genta	ファイル名未定時の初期ディレクトリをカレントフォルダに
 bool CDocFileOperation::OpenFileDialog(
-	HWND				hwndParent,		//!< [in]
-	const TCHAR*		pszOpenFolder,	//!< [in]     NULL以外を指定すると初期フォルダを指定できる
-	SLoadInfo*			pLoadInfo,		//!< [in/out] ロード情報
+	HWND			hwndParent,		//!< [in]
+	const TCHAR*	pszOpenFolder,	//!< [in]     NULL以外を指定すると初期フォルダを指定できる
+	SLoadInfo*		pLoadInfo,		//!< [in/out] ロード情報
 	std::vector<std::tstring>&	files
 )
 {
-	/* アクティブにする */
+	// アクティブにする
 	ActivateFrameWindow( hwndParent );
 
 	// ファイルオープンダイアログを表示
@@ -108,25 +113,25 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 	ELoadResult eLoadResult = LOADED_FAILURE;
 
 	try {
-		//ロード前チェック
+		// ロード前チェック
 		if (CALLBACK_INTERRUPT==m_pcDocRef->NotifyCheckLoad(pLoadInfo)) throw CFlowInterruption();
 
-		//ロード処理
-		m_pcDocRef->NotifyBeforeLoad(pLoadInfo);			//前処理
-		eLoadResult = m_pcDocRef->NotifyLoad(*pLoadInfo);	//本処理
-		m_pcDocRef->NotifyAfterLoad(*pLoadInfo);			//後処理
+		// ロード処理
+		m_pcDocRef->NotifyBeforeLoad(pLoadInfo);			// 前処理
+		eLoadResult = m_pcDocRef->NotifyLoad(*pLoadInfo);	// 本処理
+		m_pcDocRef->NotifyAfterLoad(*pLoadInfo);			// 後処理
 	}catch (CFlowInterruption) {
 		eLoadResult = LOADED_INTERRUPT;
 	}catch (...) {
-		//予期せぬ例外が発生した場合も NotifyFinalLoad は必ず呼ぶ！
+		// 予期せぬ例外が発生した場合も NotifyFinalLoad は必ず呼ぶ！
 		m_pcDocRef->NotifyFinalLoad(LOADED_FAILURE);
 		throw;
 	}
 	
-	//最終処理
+	// 最終処理
 	m_pcDocRef->NotifyFinalLoad(eLoadResult);
 
-	return eLoadResult==LOADED_OK;
+	return eLoadResult == LOADED_OK;
 }
 
 //! ファイルを開く
@@ -164,44 +169,48 @@ void CDocFileOperation::ReloadCurrentFile(
 	ECodeType	nCharCode		//!< [in] 文字コード種別
 )
 {
+	auto& activeView = m_pcDocRef->m_pcEditWnd->GetActiveView();
+
 	//プラグイン：DocumentCloseイベント実行
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
-		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+		(*it)->Invoke(&activeView, params);
 	}
 
+	auto& caret = activeView.GetCaret();
 	if (!fexist(m_pcDocRef->m_cDocFile.GetFilePath())) {
 		/* ファイルが存在しない */
 		//	Jul. 26, 2003 ryoji BOMを標準設定に	// IsBomDefOn使用 2013/5/17	Uchi
 		m_pcDocRef->m_cDocFile.SetCodeSet( nCharCode,  CCodeTypeName( nCharCode ).IsBomDefOn() );
 		// カーソル位置表示を更新する	// 2008.07.22 ryoji
-		m_pcDocRef->m_pcEditWnd->GetActiveView().GetCaret().ShowCaretPosInfo();
+		caret.ShowCaretPosInfo();
 		return;
 	}
 
+	auto& textArea = activeView.GetTextArea();
 	//カーソル位置保存
-	CLayoutInt		nViewTopLine = m_pcDocRef->m_pcEditWnd->GetActiveView().GetTextArea().GetViewTopLine();	/* 表示域の一番上の行(0開始) */
-	CLayoutInt		nViewLeftCol = m_pcDocRef->m_pcEditWnd->GetActiveView().GetTextArea().GetViewLeftCol();	/* 表示域の一番左の桁(0開始) */
-	CLayoutPoint	ptCaretPosXY = m_pcDocRef->m_pcEditWnd->GetActiveView().GetCaret().GetCaretLayoutPos();
+	CLayoutInt		nViewTopLine = textArea.GetViewTopLine();	/* 表示域の一番上の行(0開始) */
+	CLayoutInt		nViewLeftCol = textArea.GetViewLeftCol();	/* 表示域の一番左の桁(0開始) */
+	CLayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	//ロード
 	SLoadInfo sLoadInfo;
-	sLoadInfo.cFilePath=m_pcDocRef->m_cDocFile.GetFilePath();
-	sLoadInfo.eCharCode=nCharCode;
-	sLoadInfo.bViewMode=!m_pcDocRef->IsEditable(); //CAppMode::getInstance()->IsViewMode();
-	sLoadInfo.bRequestReload=true;
+	sLoadInfo.cFilePath = m_pcDocRef->m_cDocFile.GetFilePath();
+	sLoadInfo.eCharCode = nCharCode;
+	sLoadInfo.bViewMode = !m_pcDocRef->IsEditable(); //CAppMode::getInstance()->IsViewMode();
+	sLoadInfo.bRequestReload = true;
 	bool bRet = this->DoLoadFlow(&sLoadInfo);
 
 	// カーソル位置復元 (※ここではオプションのカーソル位置復元（＝改行単位）が指定されていない場合でも復元する)
 	// 2007.08.23 ryoji 表示領域復元
 	if (ptCaretPosXY.GetY2() < m_pcDocRef->m_cLayoutMgr.GetLineCount()) {
-		m_pcDocRef->m_pcEditWnd->GetActiveView().GetTextArea().SetViewTopLine(nViewTopLine);
-		m_pcDocRef->m_pcEditWnd->GetActiveView().GetTextArea().SetViewLeftCol(nViewLeftCol);
+		textArea.SetViewTopLine(nViewTopLine);
+		textArea.SetViewLeftCol(nViewLeftCol);
 	}
-	m_pcDocRef->m_pcEditWnd->GetActiveView().GetCaret().MoveCursorProperly( ptCaretPosXY, true );	// 2007.08.23 ryoji MoveCursor()->MoveCursorProperly()
-	m_pcDocRef->m_pcEditWnd->GetActiveView().GetCaret().m_nCaretPosX_Prev = m_pcDocRef->m_pcEditWnd->GetActiveView().GetCaret().GetCaretLayoutPos().GetX2();
+	caret.MoveCursorProperly( ptCaretPosXY, true );	// 2007.08.23 ryoji MoveCursor()->MoveCursorProperly()
+	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
@@ -216,8 +225,6 @@ void CDocFileOperation::ReloadCurrentFile(
 		}
 	}
 }
-
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -237,7 +244,7 @@ bool CDocFileOperation::SaveFileDialog(
 	//拡張子指定
 	// 一時適用や拡張子なしの場合の拡張子をタイプ別設定から持ってくる
 	// 2008/6/14 大きく改造 Uchi
-	TCHAR	szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
+	TCHAR szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
 	{
 		LPCTSTR	szExt;
 		TCHAR	szWork[MAX_TYPES_EXTS];
@@ -314,7 +321,7 @@ bool CDocFileOperation::SaveFileDialog(
 		CEditWnd::getInstance()->GetHwnd(),
 		szDefaultWildCard,
 		CSakuraEnvironment::GetDlgInitialDir().c_str(),	// 初期フォルダ
-		CMRUFile().GetPathList(),		//	最近のファイル
+		CMRUFile().GetPathList(),	//	最近のファイル
 		CMRUFolder().GetPathList()	//	最近のフォルダ
 	);
 	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );

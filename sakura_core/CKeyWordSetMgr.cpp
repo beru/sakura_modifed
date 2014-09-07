@@ -187,7 +187,7 @@ const wchar_t* CKeyWordSetMgr::GetTypeName( int nIdx )
 */
 const wchar_t* CKeyWordSetMgr::SetTypeName( int nIdx, const wchar_t* name )
 {
-	if (NULL == name || nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
+	if (!name || nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return NULL;
 	}
 	wcsncpy( m_szSetNameArr[nIdx], name, MAX_SETNAMELEN );
@@ -351,7 +351,7 @@ void CKeyWordSetMgr::SortKeyWord( int nIdx )
 	{
 		m_nKeyWordMaxLenArr[nIdx] = 0;
 		for (int i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; i++) {
-			size_t len = wcslen( m_szKeyWordArr[i] );
+			int len = (int)wcslen( m_szKeyWordArr[i] );
 			if (m_nKeyWordMaxLenArr[nIdx] < len) {
 				m_nKeyWordMaxLenArr[nIdx] = len;
 			}

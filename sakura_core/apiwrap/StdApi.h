@@ -25,11 +25,11 @@
 
 #include <ImageHlp.h> //MakeSureDirectoryPathExists
 
-//デバッグ用。
-//VistaだとExtTextOutの結果が即反映されない。この関数を用いると即反映されるので、
-//デバッグ時ステップ実行する際に便利になる。ただし、当然重くなる。
+// デバッグ用。
+// VistaだとExtTextOutの結果が即反映されない。この関数を用いると即反映されるので、
+// デバッグ時ステップ実行する際に便利になる。ただし、当然重くなる。
 #ifdef _DEBUG
-#define DEBUG_SETPIXEL(hdc) SetPixel(hdc,-1,-1,0); //SetPixelをすると、結果が即反映される。
+#define DEBUG_SETPIXEL(hdc) SetPixel(hdc,-1,-1,0); // SetPixelをすると、結果が即反映される。
 #else
 #define DEBUG_SETPIXEL(hdc)
 #endif
@@ -94,7 +94,7 @@ namespace ApiWrap
 		int		cbString
 	)
 	{
-		BOOL ret = ::TextOut(hdc,nXStart,nYStart,lpwString,cbString);
+		BOOL ret = ::TextOut(hdc, nXStart, nYStart, lpwString, cbString);
 		DEBUG_SETPIXEL(hdc);
 		return ret;
 	}
@@ -128,8 +128,6 @@ namespace ApiWrap
 	);
 #endif
 
-
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//             その他W系API (ANSI版でも利用可能)               //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -157,8 +155,8 @@ namespace ApiWrap
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                    描画API 不具合ラップ                     //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//VistaでSetPixelが動かないため、代替関数を用意。
-	void SetPixelSurely(HDC hdc,int x,int y,COLORREF c);
+	// VistaでSetPixelが動かないため、代替関数を用意。
+	void SetPixelSurely(HDC hdc, int x, int y, COLORREF c);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      よく使う引数値                         //
@@ -177,19 +175,19 @@ namespace ApiWrap
 	//! SHIFTを押しているかどうか
 	inline bool GetKeyState_Shift()
 	{
-		return (::GetKeyState(VK_SHIFT)&0x8000) != 0;
+		return (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
 	}
 
 	//! CTRLを押しているかどうか
 	inline bool GetKeyState_Control()
 	{
-		return (::GetKeyState(VK_CONTROL)&0x8000) != 0;
+		return (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
 	}
 
 	//! ALTを押しているかどうか
 	inline bool GetKeyState_Alt()
 	{
-		return (::GetKeyState(VK_MENU)&0x8000) != 0;
+		return (::GetKeyState(VK_MENU) & 0x8000) != 0;
 	}
 
 
@@ -197,17 +195,17 @@ namespace ApiWrap
 	//                           定数                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//	Jun. 29, 2002 こおり
-	//	Windows 95対策．Property SheetのサイズをWindows95が認識できる物に固定する．
+	// Jun. 29, 2002 こおり
+	// Windows 95対策．Property SheetのサイズをWindows95が認識できる物に固定する．
 	#if defined(_WIN64) || defined(_UNICODE)
 		static const size_t sizeof_old_PROPSHEETHEADER = sizeof(PROPSHEETHEADER);
 	#else
 		static const size_t sizeof_old_PROPSHEETHEADER = 40;
 	#endif
 
-	//	Jan. 29, 2002 genta
-	//	Win95/NTが納得するsizeof( MENUITEMINFO )
-	//	これ以外の値を与えると古いOSでちゃんと動いてくれない．
+	// Jan. 29, 2002 genta
+	// Win95/NTが納得するsizeof( MENUITEMINFO )
+	// これ以外の値を与えると古いOSでちゃんと動いてくれない．
 	#if defined(_WIN64) || defined(_UNICODE)
 		static const int SIZEOF_MENUITEMINFO = sizeof(MENUITEMINFO);
 	#else
@@ -221,16 +219,16 @@ namespace ApiWrap
 	// 過去のUNICODE化の名残です。
 	// 現在となっては、特に意味はありません。
 
-	//文字コードに関係のなさそうな SendMessage は SendMessageAny に差し替えておく。
+	// 文字コードに関係のなさそうな SendMessage は SendMessageAny に差し替えておく。
 	#define SendMessageAny SendMessage
 
-	//WM_COMMAND系の SendMessage は SendMessageCmd に差し替えておく。
+	// WM_COMMAND系の SendMessage は SendMessageCmd に差し替えておく。
 	#define SendMessageCmd SendMessage
 
-	//文字コードに関係のなさそうな PostMessage は PostMessageAny に差し替えておく。
+	// 文字コードに関係のなさそうな PostMessage は PostMessageAny に差し替えておく。
 	#define PostMessageAny PostMessage
 
-	//WM_COMMAND系の PostMessage は PostMessageCmd に差し替えておく。
+	// WM_COMMAND系の PostMessage は PostMessageCmd に差し替えておく。
 	#define PostMessageCmd PostMessage
 
 }
@@ -239,8 +237,8 @@ using namespace ApiWrap;
 
 
 
-//	Sep. 22, 2003 MIK
-//	古いSDK対策．新しいSDKでは不要
+// Sep. 22, 2003 MIK
+// 古いSDK対策．新しいSDKでは不要
 #ifndef _WIN64
 #ifndef DWORD_PTR
 #define DWORD_PTR DWORD

@@ -118,7 +118,7 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 
 	//アイテムを作成する。
 	item = (TagJumpInfo*)malloc( sizeof( TagJumpInfo ) );
-	if (NULL == item) {
+	if (!item) {
 		return FALSE;
 	}
 	item->keyword  = _tcsdup( to_tchar(keyword) );
@@ -189,7 +189,7 @@ BOOL CSortedTagJumpList::GetParam( int index, TCHAR* keyword, TCHAR* filename, i
 
 	CSortedTagJumpList::TagJumpInfo* p;
 	p = GetPtr( index );
-	if (NULL != p) {
+	if (p) {
 		if (keyword ) _tcscpy( keyword, p->keyword );
 		if (filename) _tcscpy( filename, p->filename );
 		if (no      ) *no    = p->no;

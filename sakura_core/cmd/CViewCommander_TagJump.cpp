@@ -103,11 +103,11 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 	);
 	ptXYOrg = ptXY;
 
-	/* 現在行のデータを取得 */
+	// 現在行のデータを取得
 	CLogicInt		nLineLen;
 	const wchar_t*	pLine;
 	pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
-	if (NULL == pLine) {
+	if (!pLine) {
 		goto can_not_tagjump;
 	}
 
@@ -170,7 +170,7 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 			TAGLIST_ROOT,
 		} searchMode = TAGLIST_FILEPATH;
 		if (0 == wmemcmp( pLine, L"■\"", 2 )) {
-			/* WZ風のタグリストか */
+			// WZ風のタグリストか
 			if (IsFilePath( &pLine[2], &nBgn, &nPathLen ) && !_IS_REL_PATH( to_tchar(&pLine[2]) )) {
 				wmemcpy( szJumpToFile, &pLine[2 + nBgn], nPathLen );
 				GetLineColumn( &pLine[2] + nPathLen, &nJumpToLine, &nJumpToColumn );
@@ -240,7 +240,7 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 
 		for (; 0 <= ptXY.y; ptXY.y--) {
 			pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
-			if (NULL == pLine) {
+			if (!pLine) {
 				break;
 			}
 			if (0 == wmemcmp( pLine, L"・", 1 )) {
@@ -304,7 +304,7 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 
 	if (szJumpToFile[0] == L'\0') {
 		pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
-		if (NULL == pLine) {
+		if (!pLine) {
 			goto can_not_tagjump;
 		}
 		//@@@ 2001.12.31 YAZAKI
@@ -355,13 +355,13 @@ can_not_tagjump:;
 }
 
 
-/* タグジャンプバック */
+// タグジャンプバック
 void CViewCommander::Command_TAGJUMPBACK( void )
 {
 // 2004/06/21 novice タグジャンプ機能追加
 	TagJump tagJump;
 
-	/* タグジャンプ情報の参照 */
+	// タグジャンプ情報の参照
 	if (!CTagJumpManager().PopTagJump(&tagJump) || !IsSakuraMainWindow(tagJump.hwndReferer)) {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_TAGJMPBK1));
 		// 2004.07.10 Moca m_TagJumpNumを0にしなくてもいいと思う
@@ -369,10 +369,10 @@ void CViewCommander::Command_TAGJUMPBACK( void )
 		return;
 	}
 
-	/* アクティブにする */
+	// アクティブにする
 	ActivateFrameWindow( tagJump.hwndReferer );
 
-	/* カーソルを移動させる */
+	// カーソルを移動させる
 	memcpy_raw( GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof( tagJump.point ) );
 	::SendMessageAny( tagJump.hwndReferer, MYWM_SETCARETPOS, 0, 0 );
 
@@ -401,18 +401,18 @@ bool CViewCommander::Command_TagsMake( void )
 		::GetCurrentDirectory( _countof(szTargetPath), szTargetPath );
 	}
 
-	//ダイアログを表示する
+	// ダイアログを表示する
 	CDlgTagsMake	cDlgTagsMake;
 	if (!cDlgTagsMake.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath )) return false;
 
 	TCHAR	cmdline[1024];
-	/* exeのあるフォルダ */
+	// exeのあるフォルダ
 	TCHAR	szExeFolder[_MAX_PATH + 1];
 
 	GetExedir( cmdline, CTAGS_COMMAND );
 	SplitPath_FolderAndFile( cmdline, szExeFolder, NULL );
 
-	//ctags.exeの存在チェック
+	// ctags.exeの存在チェック
 	if ((DWORD)-1 == ::GetFileAttributes( cmdline )) {
 		WarningMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD03) );
 		return false;
@@ -425,7 +425,7 @@ bool CViewCommander::Command_TagsMake( void )
 	PROCESS_INFORMATION	pi;
 	ZeroMemory( &pi, sizeof(pi) );
 
-	//子プロセスの標準出力と接続するパイプを作成
+	// 子プロセスの標準出力と接続するパイプを作成
 	SECURITY_ATTRIBUTES	sa;
 	ZeroMemory( &sa, sizeof(sa) );
 	sa.nLength              = sizeof(sa);
@@ -433,16 +433,16 @@ bool CViewCommander::Command_TagsMake( void )
 	sa.lpSecurityDescriptor = NULL;
 	hStdOutRead = hStdOutWrite = 0;
 	if (CreatePipe( &hStdOutRead, &hStdOutWrite, &sa, 1000 ) == FALSE) {
-		//エラー
+		// エラー
 		return false;
 	}
 
-	//継承不能にする
+	// 継承不能にする
 	DuplicateHandle( GetCurrentProcess(), hStdOutRead,
 				GetCurrentProcess(), NULL,
 				0, FALSE, DUPLICATE_SAME_ACCESS );
 
-	//CreateProcessに渡すSTARTUPINFOを作成
+	// CreateProcessに渡すSTARTUPINFOを作成
 	STARTUPINFO	sui;
 	ZeroMemory( &sui, sizeof(sui) );
 	sui.cb          = sizeof(sui);
@@ -455,27 +455,27 @@ bool CViewCommander::Command_TagsMake( void )
 	//	To Here Dec. 28, 2002 MIK
 
 	TCHAR	options[1024];
-	_tcscpy( options, _T("--excmd=n") );	//デフォルトのオプション
-	if (cDlgTagsMake.m_nTagsOpt & 0x0001) _tcscat( options, _T(" -R") );	//サブフォルダも対象
-	if (cDlgTagsMake.m_szTagsCmdLine[0] != _T('\0')) {	//個別指定のコマンドライン
+	_tcscpy( options, _T("--excmd=n") );	// デフォルトのオプション
+	if (cDlgTagsMake.m_nTagsOpt & 0x0001) _tcscat( options, _T(" -R") );	// サブフォルダも対象
+	if (cDlgTagsMake.m_szTagsCmdLine[0] != _T('\0')) {	// 個別指定のコマンドライン
 		_tcscat( options, _T(" ") );
 		_tcscat( options, cDlgTagsMake.m_szTagsCmdLine );
 	}
-	_tcscat( options, _T(" *") );	//配下のすべてのファイル
+	_tcscat( options, _T(" *") );	// 配下のすべてのファイル
 
-	//コマンドライン文字列作成(MAX:1024)
+	// コマンドライン文字列作成(MAX:1024)
 	// 2010.08.28 Moca システムディレクトリ付加
 	TCHAR szCmdDir[_MAX_PATH];
 	::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
-	//	2006.08.04 genta add /D to disable autorun
+	// 2006.08.04 genta add /D to disable autorun
 	auto_sprintf_s( cmdline, _T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
 			szCmdDir,
-			szExeFolder,	//sakura.exeパス
-			CTAGS_COMMAND,	//ctags.exe
-			options			//ctagsオプション
+			szExeFolder,	// sakura.exeパス
+			CTAGS_COMMAND,	// ctags.exe
+			options			// ctagsオプション
 		);
 
-	//コマンドライン実行
+	// コマンドライン実行
 	BOOL bProcessResult = CreateProcess(
 		NULL, cmdline, NULL, NULL, TRUE,
 		CREATE_NEW_CONSOLE, NULL, cDlgTagsMake.m_szPath, &sui, &pi
@@ -490,24 +490,24 @@ bool CViewCommander::Command_TagsMake( void )
 		char	work[1024];
 		bool	bLoopFlag = true;
 
-		//中断ダイアログ表示
+		// 中断ダイアログ表示
 		HWND	hwndCancel = cDlgCancel.DoModeless( G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING );
 		HWND	hwndMsg = ::GetDlgItem( hwndCancel, IDC_STATIC_CMD );
 		SetWindowText( hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05) );
 
-		//実行結果の取り込み
+		// 実行結果の取り込み
 		do {
 			// Jun. 04, 2003 genta CPU消費を減らすために200msec待つ
 			// その間メッセージ処理が滞らないように待ち方をWaitForSingleObjectから
 			// MsgWaitForMultipleObjectに変更
 			switch (MsgWaitForMultipleObjects( 1, &pi.hProcess, FALSE, 200, QS_ALLEVENTS )) {
 			case WAIT_OBJECT_0:
-				//終了していればループフラグをFALSEとする
-				//ただしループの終了条件は プロセス終了 && パイプが空
+				// 終了していればループフラグをFALSEとする
+				// ただしループの終了条件は プロセス終了 && パイプが空
 				bLoopFlag = FALSE;
 				break;
 			case WAIT_OBJECT_0 + 1:
-				//処理中のユーザー操作を可能にする
+				// 処理中のユーザー操作を可能にする
 				if( !::BlockingHook( cDlgCancel.GetHwnd() ) ){
 					break;
 				}
@@ -516,29 +516,29 @@ bool CViewCommander::Command_TagsMake( void )
 				break;
 			}
 
-			//中断ボタン押下チェック
+			// 中断ボタン押下チェック
 			if (cDlgCancel.IsCanceled()) {
-				//指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
+				// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
 				::TerminateProcess( pi.hProcess, 0 );
 				break;
 			}
 
 			new_cnt = 0;
-			if (PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL )) {	//パイプの中の読み出し待機中の文字数を取得
-				if (new_cnt > 0) {												//待機中のものがある
-					if (new_cnt >= _countof(work) - 2) {						//パイプから読み出す量を調整
+			if (PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL )) {	// パイプの中の読み出し待機中の文字数を取得
+				if (new_cnt > 0) {												// 待機中のものがある
+					if (new_cnt >= _countof(work) - 2) {						// パイプから読み出す量を調整
 						new_cnt = _countof(work) - 2;
 					}
 					DWORD read_cnt;
-					::ReadFile( hStdOutRead, &work[0], new_cnt, &read_cnt, NULL );	//パイプから読み出し
+					::ReadFile( hStdOutRead, &work[0], new_cnt, &read_cnt, NULL );	// パイプから読み出し
 					if (read_cnt == 0) {
 						continue;
 					}else {
 						// 2003.11.09 じゅうじ
-						//	正常終了の時はメッセージが出力されないので
-						//	何か出力されたらエラーメッセージと見なす．
+						// 正常終了の時はメッセージが出力されないので
+						// 何か出力されたらエラーメッセージと見なす．
 					
-						//終了処理
+						// 終了処理
 						CloseHandle( hStdOutWrite );
 						CloseHandle( hStdOutRead  );
 						if (pi.hProcess) CloseHandle( pi.hProcess );
@@ -560,7 +560,7 @@ bool CViewCommander::Command_TagsMake( void )
 
 
 finish:
-	//終了処理
+	// 終了処理
 	CloseHandle( hStdOutWrite );
 	CloseHandle( hStdOutRead  );
 	if (pi.hProcess) CloseHandle( pi.hProcess );
@@ -582,7 +582,7 @@ finish:
 bool CViewCommander::Command_TagJumpByTagsFileMsg( bool bMsg )
 {
 	bool ret = Command_TagJumpByTagsFile(false);
-	if (false == ret && bMsg) {
+	if (!ret && bMsg) {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_TAGJMP1));
 	}
 	return ret;
@@ -606,7 +606,7 @@ bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
 	}
 	
 	TCHAR szDirFile[1024];
-	if (false == Sub_PreProcTagJumpByTagsFile( szDirFile, _countof(szDirFile) )) {
+	if (!Sub_PreProcTagJumpByTagsFile( szDirFile, _countof(szDirFile) )) {
 		return false;
 	}
 	CDlgTagJumpList	cDlgTagJumpList(true);	//タグジャンプリスト
@@ -630,7 +630,7 @@ bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
 		TCHAR fileName[1024];
 		int   fileLine;
 
-		if (false == cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine , NULL )) {
+		if (!cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine , NULL )) {
 			return false;
 		}
 		return m_pCommanderView->TagJumpSub( fileName, CMyPoint(0, fileLine), bClose );
@@ -651,7 +651,7 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword( const wchar_t* keyword )
 {
 	TCHAR szCurrentPath[1024];
 
-	if (false == Sub_PreProcTagJumpByTagsFile( szCurrentPath, _countof(szCurrentPath) )) {
+	if (!Sub_PreProcTagJumpByTagsFile( szCurrentPath, _countof(szCurrentPath) )) {
 		return false;
 	}
 
@@ -660,13 +660,13 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword( const wchar_t* keyword )
 	cDlgTagJumpList.SetKeyword( keyword );
 
 	if (!cDlgTagJumpList.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
-		return true;	//キャンセル
+		return true;	// キャンセル
 	}
 
-	//タグジャンプする。
+	// タグジャンプする。
 	TCHAR fileName[1024];
 	int	 fileLine;	// 行番号
-	if (false == cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine, NULL )) {
+	if (!cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine, NULL )) {
 		return false;
 	}
 
@@ -711,7 +711,7 @@ bool CViewCommander::Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int cou
 			pszExt = _tcstok( szExts, _T(" ;,") );
 		}
 		int nExtLen = 0;
-		if (NULL != pszExt) {
+		if (pszExt) {
 			nExtLen = auto_strlen( pszExt );
 		}
 		_tcscat( szCurrentPath, _T("\\dmy") );
@@ -737,7 +737,7 @@ bool CViewCommander::Command_TagJumpEx(const TCHAR* szFileName, const int nLine,
 	if (szFileName != NULL) {
 		return m_pCommanderView->TagJumpSub(szFileName, CMyPoint(nColumn, nLine), bClose);
 	}else {
-		//通常のジャンプ？
+		// 通常のジャンプ？
 		return false;
 	}
 }

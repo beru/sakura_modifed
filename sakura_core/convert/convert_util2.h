@@ -722,7 +722,7 @@ finish_first_detect:;
 
 	pcMem_alt->AllocBuffer( pr - pr_base );
 	pdst = reinterpret_cast<char*>( pcMem_alt->GetRawPtr() );
-	if (pdst == NULL) {
+	if (!pdst) {
 		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}

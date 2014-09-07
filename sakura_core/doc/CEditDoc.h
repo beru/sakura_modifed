@@ -76,20 +76,20 @@ class CEditDoc
 , public TInstanceHolder<CEditDoc>
 {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CEditDoc(CEditApp* pcApp);
 	~CEditDoc();
 
-	//初期化
+	// 初期化
 	BOOL Create( CEditWnd* pcEditWnd );
-	void InitDoc();	/* 既存データのクリア */
-	void InitAllView();	/* 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する */
+	void InitDoc();		// 既存データのクリア
+	void InitAllView();	// 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する
 	void Clear();
 
-	//設定
+	// 設定
 	void SetFilePathAndIcon(const TCHAR* szFile);	// Sep. 9, 2002 genta
 
-	//属性
+	// 属性
 	ECodeType	GetDocumentEncoding() const;				//!< ドキュメントの文字コードを取得
 	bool		GetDocumentBomExist() const;				//!< ドキュメントのBOM付加を取得
 	void		SetDocumentEncoding(ECodeType eCharCode, bool bBom);	//!< ドキュメントの文字コードを設定
@@ -97,15 +97,15 @@ public:
 	bool IsEditable() const { return !CAppMode::getInstance()->IsViewMode() && !(!m_cDocLocker.IsDocWritable() && GetDllShareData().m_Common.m_sFile.m_bUneditableIfUnwritable); }	//!< 編集可能かどうか
 	void GetSaveInfo(SSaveInfo* pSaveInfo) const;			//!< セーブ情報を取得
 
-	//状態
+	// 状態
 	void GetEditInfo( EditInfo* ) const;	//!< 編集ファイル情報を取得 //2007.10.24 kobake 関数名変更: SetFileInfo→GetEditInfo
 	bool IsAcceptLoad() const;				//!< このウィンドウで(新しいウィンドウを開かずに)新しいファイルを開けるか
 
-	//イベント
+	// イベント
 	BOOL HandleCommand( EFunctionCode );
 	void OnChangeType();
 	void OnChangeSetting(bool bDoLayout = true);		// ビューに設定変更を反映させる
-	BOOL OnFileClose();			/* ファイルを閉じるときのMRU登録 & 保存確認 ＆ 保存実行 */
+	BOOL OnFileClose();									// ファイルを閉じるときのMRU登録 & 保存確認 ＆ 保存実行
 
 	void RunAutoMacro( int idx, LPCTSTR pszSaveFilePath = NULL );	// 2006.09.01 ryoji マクロ自動実行
 
@@ -115,14 +115,14 @@ public:
 	//                       メンバ変数群                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	//参照
+	// 参照
 	CEditWnd*		m_pcEditWnd;	//	Sep. 10, 2002
 
-	//データ構造
+	// データ構造
 	CDocLineMgr		m_cDocLineMgr;
 	CLayoutMgr		m_cLayoutMgr;
 
-	//各種機能
+	// 各種機能
 public:
 	CDocFile			m_cDocFile;
 	CDocFileOperation	m_cDocFileOperation;
@@ -130,7 +130,7 @@ public:
 	CDocType			m_cDocType;
 	CCookieManager		m_cCookie;
 
-	//ヘルパ
+	// ヘルパ
 public:
 	CBackupAgent		m_cBackupAgent;
 	CAutoSaveAgent		m_cAutoSaveAgent;		//!< 自動保存管理
@@ -138,15 +138,15 @@ public:
 	CDocOutline			m_cDocOutline;
 	CDocLocker			m_cDocLocker;
 
-	//動的状態
+	// 動的状態
 public:
 	int				m_nCommandExecNum;			//!< コマンド実行回数
 
-	//環境情報
+	// 環境情報
 public:
 	CFuncLookup		m_cFuncLookup;				//!< 機能名，機能番号などのresolve
 
-	//未整理変数
+	// 未整理変数
 public:
 	int				m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
 	bool			m_bTextWrapMethodCurTemp;	// 折り返し方法一時設定適用中	// 2008.05.30 nasukoji

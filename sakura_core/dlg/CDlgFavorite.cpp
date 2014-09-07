@@ -265,9 +265,7 @@ int CDlgFavorite::DoModal(
 /* ダイアログデータの設定 */
 void CDlgFavorite::SetData( void )
 {
-	int		nTab;
-
-	for (nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		SetDataOne( nTab, 0 );
 	}
 
@@ -284,21 +282,20 @@ void CDlgFavorite::SetData( void )
 */
 void CDlgFavorite::SetDataOne( int nIndex, int nLvItemIndex )
 {
-	HWND	hwndList;
 	LV_ITEM	lvi;
-	int		nNewFocus = -1;
+	int nNewFocus = -1;
 
 	const CRecent*  pRecent = m_aFavoriteInfo[nIndex].m_pRecent;
 
 	/* リスト */
-	hwndList = ::GetDlgItem( GetHwnd(), m_aFavoriteInfo[nIndex].m_nId );
+	HWND hwndList = ::GetDlgItem( GetHwnd(), m_aFavoriteInfo[nIndex].m_nId );
 	ListView_DeleteAllItems( hwndList );  /* リストを空にする */
 
-	const int   nViewCount = pRecent->GetViewCount();
-	const int   nItemCount = pRecent->GetItemCount();
+	const int nViewCount = pRecent->GetViewCount();
+	const int nItemCount = pRecent->GetItemCount();
 	m_aFavoriteInfo[nIndex].m_nViewCount = nViewCount;
 
-	TCHAR	tmp[1024];
+	TCHAR tmp[1024];
 	for (int i = 0; i < nItemCount; i++) {
 		FormatFavoriteColumn( tmp, _countof(tmp), i, i < nViewCount );
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
@@ -320,7 +317,6 @@ void CDlgFavorite::SetDataOne( int nIndex, int nLvItemIndex )
 		if (m_aFavoriteInfo[nIndex].m_bHaveFavorite) {
 			ListView_SetCheckState( hwndList, i, (BOOL)pRecent->IsFavorite( i ) );
 		}
-
 	}
 
 	if (-1 != m_aListViewInfo[nIndex].nSortColumn) {
@@ -351,9 +347,7 @@ void CDlgFavorite::SetDataOne( int nIndex, int nLvItemIndex )
 */
 int CDlgFavorite::GetData( void )
 {
-	int		nTab;
-
-	for (nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		if (m_aFavoriteInfo[nTab].m_bHaveFavorite) {
 			GetFavorite( nTab );
 			//リストを更新する。
@@ -368,17 +362,13 @@ int CDlgFavorite::GetData( void )
 BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	HWND		hwndList;
-	HWND		hwndBaseList;
-	HWND		hwndTab;
 	TCITEM		tcitem;
 	LV_COLUMN	col;
-	RECT		rc;
-	int			nTab;
-	long		lngStyle;
 
 	_SetHwnd( hwndDlg );
 	::SetWindowLongPtr( GetHwnd(), DWLP_USER, lParam );
 
+	RECT rc;
 	::GetWindowRect( hwndDlg, &rc );
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
@@ -403,7 +393,7 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 	//リストビューの表示位置を取得する。
 	m_nCurrentTab = 0;
-	hwndBaseList = ::GetDlgItem( hwndDlg, m_aFavoriteInfo[0].m_nId );
+	HWND hwndBaseList = ::GetDlgItem( hwndDlg, m_aFavoriteInfo[0].m_nId );
 	{
 		rc.left = rc.top = rc.right = rc.bottom = 0;
 		GetItemClientRect( m_aFavoriteInfo[0].m_nId, rc );
@@ -413,7 +403,7 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	// ウィンドウのリサイズ
 	SetDialogPosSize();
 
-	hwndTab = ::GetDlgItem( hwndDlg, IDC_TAB_FAVORITE );
+	HWND hwndTab = ::GetDlgItem( hwndDlg, IDC_TAB_FAVORITE );
 	TabCtrl_DeleteAllItems( hwndTab );
 
 	GetItemClientRect( m_aFavoriteInfo[0].m_nId, rc );
@@ -444,7 +434,7 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		}
 	}
 
-	for (nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		hwndList = GetDlgItem( hwndDlg, m_aFavoriteInfo[nTab].m_nId );
 		m_aListViewInfo[nTab].hListView = hwndList;
 		
@@ -466,7 +456,7 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		ListView_InsertColumn( hwndList, 1, &col );
 
 		/* 行選択 */
-		lngStyle = ListView_GetExtendedListViewStyle( hwndList );
+		long lngStyle = ListView_GetExtendedListViewStyle( hwndList );
 		lngStyle |= LVS_EX_FULLROWSELECT;
 		if( m_aFavoriteInfo[nTab].m_bHaveFavorite ) lngStyle |= LVS_EX_CHECKBOXES;
 		ListView_SetExtendedListViewStyle( hwndList, lngStyle );
@@ -559,7 +549,7 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 						TCHAR szPath[_MAX_PATH];
 						auto_strcpy( szPath, pRecent->GetItemText(i) );
 						CutLastYenFromDirectoryPath(szPath);
-						if (false == IsFileExists(szPath, false )) {
+						if (!IsFileExists(szPath, false )) {
 							pRecent->DeleteItem(i);
 						}
 					}

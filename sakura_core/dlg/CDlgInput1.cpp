@@ -44,7 +44,7 @@ INT_PTR CALLBACK CDlgInput1Proc(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pCDlgInput1 = ( CDlgInput1* )lParam;
-		if (NULL != pCDlgInput1) {
+		if (pCDlgInput1) {
 			return pCDlgInput1->DispatchEvent( hwndDlg, uMsg, wParam, lParam );
 		}else {
 			return FALSE;

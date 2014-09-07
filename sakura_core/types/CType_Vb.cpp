@@ -74,7 +74,7 @@ void CDocOutline::MakeFuncList_VisualBasic( CFuncInfoArr* pcFuncInfoArr )
 	bProcedure	= false;
 	CLogicInt		nLineCount;
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		if (NULL != pLine) {
+		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
 			}

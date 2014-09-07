@@ -127,11 +127,10 @@ int CCommandLine::CheckCommandLine(
 		{NULL, 0, 0}
 	};
 
-	const _CmdLineOpt *ptr;
 	int len = lstrlen( str );
 
 	//	引数がある場合を先に確認
-	for (ptr = _COptWithA; ptr->opt != NULL; ptr++) {
+	for (const auto* ptr = _COptWithA; ptr->opt != NULL; ptr++) {
 		if (
 			len >= ptr->len		//	長さが足りているか
 			&& (str[ptr->len] == '=' || str[ptr->len] == ':')	// オプション部分の長さチェック
@@ -155,7 +154,7 @@ int CCommandLine::CheckCommandLine(
 	}
 
 	// 引数がない場合
-	for (ptr = _COptWoA; ptr->opt != NULL; ptr++) {
+	for (const auto* ptr = _COptWoA; ptr->opt != NULL; ptr++) {
 		if (
 			len == ptr->len									// 長さチェック
 			&& auto_memicmp(str, ptr->opt, ptr->len) == 0	// 文字列の比較
@@ -189,10 +188,10 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 	//	May 30, 2000 genta
 	//	実行ファイル名をもとに漢字コードを固定する．
 	{
-		TCHAR	exename[512];
+		TCHAR exename[512];
 		::GetModuleFileName( NULL, exename, _countof(exename) );
 
-		int		len = _tcslen( exename );
+		int len = _tcslen( exename );
 
 		for (TCHAR* p = exename + len - 1; p > exename; p--) {
 			if (*p == _T('.')) {
@@ -309,7 +308,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				}
 			}
 			++pszToken;	//	先頭の'-'はskip
-			TCHAR *arg = NULL;
+			TCHAR* arg = NULL;
 			int nArgLen;
 			switch (CheckCommandLine(pszToken, &arg, &nArgLen)) {
 			case CMDLINEOPT_AT:

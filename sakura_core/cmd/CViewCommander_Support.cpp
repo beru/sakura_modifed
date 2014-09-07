@@ -51,7 +51,7 @@ void CViewCommander::Command_HOKAN( void )
 #if 0
 // 2011.06.24 Moca Plugin導入に従い未設定の確認をやめる
 retry:;
-	/* 補完候補一覧ファイルが設定されていないときは、設定するように促す。 */
+	// 補完候補一覧ファイルが設定されていないときは、設定するように促す。
 	// 2003.06.22 Moca ファイル内から検索する場合には補完ファイルの設定は必須ではない
 	if (m_pCommanderView->m_pTypeData->m_bUseHokanByFile == FALSE &&
 		m_pCommanderView->m_pTypeData->m_bUseHokanByKeyword == false &&
@@ -63,7 +63,7 @@ retry:;
 				LS(STR_ERR_DLGEDITVWHOKAN1)
 			) 
 		) {
-			/* タイプ別設定 プロパティシート */
+			// タイプ別設定 プロパティシート
 			if (!CEditApp::getInstance()->m_pcPropertyManager->OpenPropertySheetTypes( 2, GetDocument()->m_cDocType.GetDocumentType() )) {
 				return;
 			}
@@ -71,8 +71,8 @@ retry:;
 		}
 	}
 #endif
-	CNativeW	cmemData;
-	/* カーソル直前の単語を取得 */
+	CNativeW cmemData;
+	// カーソル直前の単語を取得
 	if (0 < m_pCommanderView->GetParser().GetLeftWord( &cmemData, 100 )) {
 		m_pCommanderView->ShowHokanMgr( cmemData, TRUE );
 	}else {
@@ -89,22 +89,19 @@ retry:;
 	@date 2006.03.24 fon 新規作成
 */
 void CViewCommander::Command_ToggleKeySearch( int option )
-{	/* 共通設定ダイアログの設定をキー割り当てでも切り替えられるように */
+{	// 共通設定ダイアログの設定をキー割り当てでも切り替えられるように
+	auto& bUseCaretKeyword = GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord;
 	if (option == 0) {
-		if (GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord) {
-			GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord = FALSE;
-		}else {
-			GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord = TRUE;
-		}
+		bUseCaretKeyword = !bUseCaretKeyword;
 	}else if (option == 1) {
-		GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord = TRUE;
+		bUseCaretKeyword = TRUE;
 	}else if (option == 2) {
-		GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord = FALSE;
+		bUseCaretKeyword = FALSE;
 	}
 }
 
 
-/* ヘルプ目次 */
+// ヘルプ目次
 void CViewCommander::Command_HELP_CONTENTS( void )
 {
 	ShowWinHelpContents( m_pCommanderView->GetHwnd() );	//	目次を表示する
@@ -112,7 +109,7 @@ void CViewCommander::Command_HELP_CONTENTS( void )
 }
 
 
-/* ヘルプキーワード検索 */
+// ヘルプキーワード検索
 void CViewCommander::Command_HELP_SEARCH( void )
 {
 	MyWinHelp( m_pCommanderView->GetHwnd(), HELP_KEY, (ULONG_PTR)_T("") );	// 2006.10.10 ryoji MyWinHelpに変更に変更
@@ -120,7 +117,7 @@ void CViewCommander::Command_HELP_SEARCH( void )
 }
 
 
-/* コマンド一覧 */
+// コマンド一覧
 void CViewCommander::Command_MENU_ALLFUNC( void )
 {
 
@@ -190,7 +187,7 @@ void CViewCommander::Command_MENU_ALLFUNC( void )
 	);
 	::DestroyMenu( hMenu );
 	if (0 != nId) {
-		/* コマンドコードによる処理振り分け */
+		// コマンドコードによる処理振り分け
 //		HandleCommand( nFuncID, true, 0, 0, 0, 0 );
 		::PostMessageCmd( GetMainWindow(), WM_COMMAND, MAKELONG( nId, 0 ), (LPARAM)NULL );
 	}
@@ -217,7 +214,7 @@ retry:;
 				LS(STR_ERR_CEDITVIEW_CMD01)
 			)
 		) {
-			/* 共通設定 プロパティシート */
+			// 共通設定 プロパティシート
 			if (!CEditApp::getInstance()->OpenPropertySheet( ID_PROPCOM_PAGENUM_HELPER )) {
 				return;
 			}
@@ -231,7 +228,7 @@ retry:;
 	CNativeW		cmemCurText;
 	const TCHAR*	helpfile = CHelpManager().GetExtWinHelp( &(GetDocument()->m_cDocType.GetDocumentAttribute()) );
 
-	/* 現在カーソル位置単語または選択範囲より検索等のキーを取得 */
+	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	m_pCommanderView->GetCurrentTextForSearch( cmemCurText, false );
 	TCHAR path[_MAX_PATH];
 	if (_IS_REL_PATH( helpfile )) {
@@ -274,7 +271,7 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 	DEBUG_TRACE( _T("helpfile=%ts\n"), helpfile.c_str() );
 
 	//	From Here Jul. 5, 2002 genta
-	const TCHAR *filename = NULL;
+	const TCHAR* filename = NULL;
 	if (0 == helpfile.length()) {
 		while (!CHelpManager().ExtHTMLHelpIsSet( &(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 			ErrorBeep();
@@ -290,7 +287,7 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 			) {
 				return;
 			}
-			/* 共通設定 プロパティシート */
+			// 共通設定 プロパティシート
 			if (!CEditApp::getInstance()->OpenPropertySheet( ID_PROPCOM_PAGENUM_HELPER )) {
 				return;
 			}
@@ -307,11 +304,11 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 	if (kwd != NULL && kwd[0] != _T('\0')) {
 		cmemCurText.SetString( kwd );
 	}else {
-		/* 現在カーソル位置単語または選択範囲より検索等のキーを取得 */
+		// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 		m_pCommanderView->GetCurrentTextForSearch( cmemCurText );
 	}
 
-	/* HtmlHelpビューアはひとつ */
+	// HtmlHelpビューアはひとつ
 	if (CHelpManager().HTMLHelpIsSingle( &(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 		// タスクトレイのプロセスにHtmlHelpを起動させる
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
@@ -331,7 +328,7 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 			0
 		);
 	}else {
-		/* 自分でHtmlHelpを起動させる */
+		// 自分でHtmlHelpを起動させる
 		HH_AKLINK	link;
 		link.cbStruct = sizeof( link ) ;
 		link.fReserved = FALSE ;
@@ -374,7 +371,7 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 }
 
 
-/* バージョン情報 */
+// バージョン情報
 void CViewCommander::Command_ABOUT( void )
 {
 	CDlgAbout cDlgAbout;

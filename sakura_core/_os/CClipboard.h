@@ -25,14 +25,14 @@
 
 class CEol;
 
-//!サクラエディタ用クリップボードクラス。後々はこの中で全てのクリップボードAPIを呼ばせたい。
+//! サクラエディタ用クリップボードクラス。後々はこの中で全てのクリップボードAPIを呼ばせたい。
 class CClipboard{
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CClipboard(HWND hwnd); //!< コンストラクタ内でクリップボードが開かれる
 	virtual ~CClipboard(); //!< デストラクタ内でCloseが呼ばれる
 
-	//インターフェース
+	// インターフェース
 	void Empty(); //!< クリップボードを空にする
 	void Close(); //!< クリップボードを閉じる
 	bool SetText(const wchar_t* pData, int nDataLen, bool bColumnSelect, bool bLineSelect, UINT uFormat = (UINT)-1);   //!< テキストを設定する
@@ -43,7 +43,7 @@ public:
 	bool GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const CEol& cEol);
 
 
-	//演算子
+	// 演算子
 	operator bool() const{ return m_bOpenResult!=FALSE; } //!< クリップボードを開けたならtrue
 
 private:

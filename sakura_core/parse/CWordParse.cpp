@@ -25,7 +25,7 @@ bool CWordParse::WhereCurrentWord_2(
 	*pnIdxFrom = nIdx;
 	*pnIdxTo = nIdx;
 
-	if (NULL == pLine) {
+	if (!pLine) {
 		return false;
 	}
 	if (nIdx >= nLineLen) {
@@ -58,7 +58,7 @@ bool CWordParse::WhereCurrentWord_2(
 	}
 	*pnIdxFrom = nIdxNext;
 
-	if (NULL != pcmcmWordLeft) {
+	if (pcmcmWordLeft) {
 		pcmcmWordLeft->SetString( &pLine[*pnIdxFrom], nIdx - *pnIdxFrom );
 	}
 
@@ -78,7 +78,7 @@ bool CWordParse::WhereCurrentWord_2(
 	}
 	*pnIdxTo = nIdxNext;
 
-	if (NULL != pcmcmWord) {
+	if (pcmcmWord) {
 		pcmcmWord->SetString( &pLine[*pnIdxFrom], *pnIdxTo - *pnIdxFrom );
 	}
 	return true;
@@ -137,7 +137,7 @@ ECharKind CWordParse::WhatKindOfChar(
 													// ラテン１補助、ラテン拡張のうちアルファベット風のもの（×÷を除く）
 		//if( c == L'#'|| c == L'$' || c == L'@'|| c == L'\\' )return CK_UDEF;	// ユーザ定義
 
-		//その他
+		// その他
 		if (IsZenkakuSpace(c)    ) return CK_ZEN_SPACE;	// 全角スペース
 		if (c==L'ー'             ) return CK_ZEN_NOBASU;	// 伸ばす記号 'ー'
 		if (c==L'゛' || c==L'゜' ) return CK_ZEN_DAKU;	// 全角濁点 「゛゜」
@@ -149,7 +149,7 @@ ECharKind CWordParse::WhatKindOfChar(
 		if (IsCyrillic(c)        ) return CK_ZEN_ROS;	// ロシア文字
 		if (IsBoxDrawing(c)      ) return CK_ZEN_SKIGO;	// 全角の特殊記号
 
-		//未分類
+		// 未分類
 		if (IsHankaku(c)) return CK_ETC;	// 半角のその他
 		else return CK_ZEN_ETC;				// 全角のその他(漢字など)
 	}else if (nCharChars == 2) {
@@ -374,24 +374,24 @@ BOOL IsURL(
 		bool	is_mail;
 	};
 	static const struct _url_table_t	url_table[] = {
-		/* アルファベット順 */
-		{ L"file://",		7,	false }, /* 1 */
-		{ L"ftp://",		6,	false }, /* 2 */
-		{ L"gopher://",		9,	false }, /* 3 */
-		{ L"http://",		7,	false }, /* 4 */
-		{ L"https://",		8,	false }, /* 5 */
-		{ L"mailto:",		7,	true  }, /* 6 */
-		{ L"news:",			5,	false }, /* 7 */
-		{ L"nntp://",		7,	false }, /* 8 */
-		{ L"prospero://",	11,	false }, /* 9 */
-		{ L"telnet://",		9,	false }, /* 10 */
-		{ L"tp://",			5,	false }, /* 11 */	//2004.02.02
-		{ L"ttp://",		6,	false }, /* 12 */	//2004.02.02
-		{ L"wais://",		7,	false }, /* 13 */
-		{ L"{",				0,	false }  /* 14 */  /* '{' is 'z'+1 : terminate */
+		// アルファベット順
+		{ L"file://",		7,	false }, // 1
+		{ L"ftp://",		6,	false }, // 2
+		{ L"gopher://",		9,	false }, // 3
+		{ L"http://",		7,	false }, // 4
+		{ L"https://",		8,	false }, // 5
+		{ L"mailto:",		7,	true  }, // 6
+		{ L"news:",			5,	false }, // 7
+		{ L"nntp://",		7,	false }, // 8
+		{ L"prospero://",	11,	false }, // 9
+		{ L"telnet://",		9,	false }, // 10
+		{ L"tp://",			5,	false }, // 11	//2004.02.02
+		{ L"ttp://",		6,	false }, // 12	//2004.02.02
+		{ L"wais://",		7,	false }, // 13
+		{ L"{",				0,	false }  // 14  /* '{' is 'z'+1 : terminate */
 	};
 
-/* テーブルの保守性を高めるための定義 */
+// テーブルの保守性を高めるための定義
 	const char urF = 1;
 	const char urG = 3;
 	const char urH = 4;
@@ -403,46 +403,46 @@ BOOL IsURL(
 
 	static const char	url_char[] = {
 	  /* +0  +1  +2  +3  +4  +5  +6  +7  +8  +9  +A  +B  +C  +D  +E  +F */
-		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,	/* +00: */
-		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,	/* +10: */
-		  0, -1,  0, -1, -1, -1, -1,  0,  0,  0,  0, -1, -1, -1, -1, -1,	/* +20: " !"#$%&'()*+,-./" */
-		 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1,  0, -1,	/* +30: "0123456789:;<=>?" */
-		 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* +40: "@ABCDEFGHIJKLMNO" */
-		 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1,  0,  0, -1,	/* +50: "PQRSTUVWXYZ[\]^_" */
-		  0, -1, -1, -1, -1, -1,urF,urG,urH, -1, -1, -1, -1,urM,urN, -1,	/* +60: "`abcdefghijklmno" */
-		urP, -1, -1, -1,urT, -1, -1,urW, -1, -1, -1,  0,  0,  0, -1,  0,	/* +70: "pqrstuvwxyz{|}~ " */
-		/* あと128バイト犠牲にすればif文を2箇所削除できる */
+		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,	// +00: 
+		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,	// +10: 
+		  0, -1,  0, -1, -1, -1, -1,  0,  0,  0,  0, -1, -1, -1, -1, -1,	// +20: " !"#$%&'()*+,-./"
+		 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1,  0, -1,	// +30: "0123456789:;<=>?"
+		 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	// +40: "@ABCDEFGHIJKLMNO"
+		 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1,  0,  0, -1,	// +50: "PQRSTUVWXYZ[\]^_"
+		  0, -1, -1, -1, -1, -1,urF,urG,urH, -1, -1, -1, -1,urM,urN, -1,	// +60: "`abcdefghijklmno"
+		urP, -1, -1, -1,urT, -1, -1,urW, -1, -1, -1,  0,  0,  0, -1,  0,	// +70: "pqrstuvwxyz{|}~ "
+		// あと128バイト犠牲にすればif文を2箇所削除できる
 		/* 0    : not url char
 		 * -1   : url char
 		 * other: url head char --> url_table array number + 1
 		 */
 	};
 
-	const wchar_t *p = pszLine;
-	const struct _url_table_t	*urlp;
+	const wchar_t* p = pszLine;
+	const struct _url_table_t* urlp;
 	int	i;
 
 	if (wc_to_c(*p) == 0) {
-		return FALSE;	/* 2バイト文字 */
+		return FALSE;	// 2バイト文字
 	}
-	if (0 < url_char[wc_to_c(*p)]) {	/* URL開始文字 */
-		for (urlp = &url_table[url_char[wc_to_c(*p)]-1]; urlp->name[0] == wc_to_c(*p); urlp++) {	/* URLテーブルを探索 */
-			if ((urlp->length <= nLineLen) && (auto_memcmp(urlp->name, pszLine, urlp->length) == 0)) {	/* URLヘッダは一致した */
-				p += urlp->length;	/* URLヘッダ分をスキップする */
-				if (urlp->is_mail) {	/* メール専用の解析へ */
+	if (0 < url_char[wc_to_c(*p)]) {	// URL開始文字
+		for (urlp = &url_table[url_char[wc_to_c(*p)]-1]; urlp->name[0] == wc_to_c(*p); urlp++) {	// URLテーブルを探索
+			if ((urlp->length <= nLineLen) && (auto_memcmp(urlp->name, pszLine, urlp->length) == 0)) {	// URLヘッダは一致した
+				p += urlp->length;	// URLヘッダ分をスキップする
+				if (urlp->is_mail) {	// メール専用の解析へ
 					if (IsMailAddress(p, nLineLen - urlp->length, pnMatchLen)) {
 						*pnMatchLen = *pnMatchLen + urlp->length;
 						return TRUE;
 					}
 					return FALSE;
 				}
-				for (i = urlp->length; i < nLineLen; i++, p++) {	/* 通常の解析へ */
+				for (i = urlp->length; i < nLineLen; i++, p++) {	// 通常の解析へ
 					if (wc_to_c(*p)==0 || (!(url_char[wc_to_c(*p)]))) {
-						break;	/* 終端に達した */
+						break;	// 終端に達した
 					}
 				}
 				if (i == urlp->length) {
-					return FALSE;	/* URLヘッダだけ */
+					return FALSE;	// URLヘッダだけ
 				}
 				*pnMatchLen = i;
 				return TRUE;
@@ -452,14 +452,12 @@ BOOL IsURL(
 	return IsMailAddress(pszLine, nLineLen, pnMatchLen);
 }
 
-/* 現在位置がメールアドレスならば、NULL以外と、その長さを返す */
+// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
 BOOL IsMailAddress( const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth )
 {
-	int		j;
-	int		nDotCount;
 	int		nBgn;
 
-	j = 0;
+	int j = 0;
 	if ( (pszBuf[j] >= L'a' && pszBuf[j] <= L'z')
 	 || (pszBuf[j] >= L'A' && pszBuf[j] <= L'Z')
 	 || (pszBuf[j] >= L'0' && pszBuf[j] <= L'9')
@@ -489,7 +487,7 @@ BOOL IsMailAddress( const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth )
 	}
 //	nAtPos = j;
 	j++;
-	nDotCount = 0;
+	int nDotCount = 0;
 //	nAlphaCount = 0;
 	
 	for (;;) {
@@ -520,7 +518,7 @@ BOOL IsMailAddress( const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth )
 			j++;
 		}
 	}
-	if (NULL != pnAddressLenfth) {
+	if (pnAddressLenfth) {
 		*pnAddressLenfth = j;
 	}
 	return TRUE;

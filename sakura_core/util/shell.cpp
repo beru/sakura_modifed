@@ -56,14 +56,12 @@ int CALLBACK MYBrowseCallbackProc(
 }
 
 
-/* フォルダ選択ダイアログ */
+// フォルダ選択ダイアログ
 BOOL SelectDir( HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TCHAR* strFolderName )
 {
-	BOOL	bRes;
-	TCHAR	szInitFolder[MAX_PATH];
-
+	TCHAR szInitFolder[MAX_PATH];
 	_tcscpy_s( szInitFolder, pszInitFolder );
-	/* フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない*/
+	// フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない
 	CutLastYenFromDirectoryPath( szInitFolder );
 
 	// 2010.08.28 フォルダを開くとフックも含めて色々DLLが読み込まれるので移動
@@ -83,9 +81,9 @@ BOOL SelectDir( HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TC
 	// アイテムＩＤリストを返す
 	// ITEMIDLISTはアイテムの一意を表す構造体
 	LPITEMIDLIST pList = ::SHBrowseForFolder(&bi);
-	if (NULL != pList) {
+	if (pList) {
 		// SHGetPathFromIDList()関数はアイテムＩＤリストの物理パスを探してくれる
-		bRes = ::SHGetPathFromIDList( pList, strFolderName );
+		BOOL bRes = ::SHGetPathFromIDList( pList, strFolderName );
 		// :SHBrowseForFolder()で取得したアイテムＩＤリストを削除
 		::CoTaskMemFree( pList );
 		if (bRes) {
@@ -106,15 +104,14 @@ BOOL SelectDir( HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TC
 */
 BOOL GetSpecialFolderPath( int nFolder, LPTSTR pszPath )
 {
-	BOOL bRet = FALSE;
-	HRESULT hres;
 	LPMALLOC pMalloc;
-	LPITEMIDLIST pidl;
 
-	hres = ::SHGetMalloc( &pMalloc );
+	HRESULT hres = ::SHGetMalloc( &pMalloc );
 	if (FAILED( hres ))
 		return FALSE;
 
+	BOOL bRet = FALSE;
+	LPITEMIDLIST pidl;
 	hres = ::SHGetSpecialFolderLocation( NULL, nFolder, &pidl );
 	if (SUCCEEDED( hres )) {
 		bRet = ::SHGetPathFromIDList( pidl, pszPath );
@@ -142,12 +139,11 @@ static LRESULT CALLBACK PropSheetWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 	case WM_SHOWWINDOW:
 		// 追加ボタンの位置を調整する
 		if (wParam) {
-			HWND hwndBtn;
 			RECT rcOk;
 			RECT rcTab;
 			POINT pt;
 
-			hwndBtn = ::GetDlgItem( hwnd, 0x02000 );
+			HWND hwndBtn = ::GetDlgItem( hwnd, 0x02000 );
 			::GetWindowRect( ::GetDlgItem( hwnd, IDOK ), &rcOk );
 			::GetWindowRect( PropSheet_GetTabControl( hwnd ), &rcTab );
 			pt.x = rcTab.left;
@@ -289,11 +285,11 @@ INT_PTR MyPropertySheet( LPPROPSHEETHEADER lppsph )
 void ShowWinHelpContents( HWND hwnd )
 {
 	if (HasWinHelpContentsProblem()) {
-		/* 目次ページを表示する */
+		// 目次ページを表示する
 		MyWinHelp( hwnd, HELP_CONTENTS , 0 );	// 2006.10.10 ryoji MyWinHelpに変更
 		return;
 	}
-	/* 目次タブを表示する */
+	// 目次タブを表示する
 	MyWinHelp( hwnd, HELP_COMMAND, (ULONG_PTR)"CONTENTS()" );	// 2006.10.10 ryoji MyWinHelpに変更
 	return;
 }
@@ -307,14 +303,12 @@ DWORD NetConnect ( const TCHAR strNetWorkPass[] )
 {
 	//char sPassWord[] = "\0";	//パスワード
 	//char sUser[] = "\0";		//ユーザー名
-	DWORD dwRet;				//戻り値　エラーコードはWINERROR.Hを参照
+
+	if (_tcslen(strNetWorkPass) < 3)	return ERROR_BAD_NET_NAME;  // UNCではない。
+	if (strNetWorkPass[0] != _T('\\') && strNetWorkPass[1] != _T('\\'))	return ERROR_BAD_NET_NAME;  // UNCではない。
+
 	TCHAR sTemp[256];
-	TCHAR sDrive[] = _T("");
-
-	if (_tcslen(strNetWorkPass) < 3)	return ERROR_BAD_NET_NAME;  //UNCではない。
-	if (strNetWorkPass[0] != _T('\\') && strNetWorkPass[1] != _T('\\'))	return ERROR_BAD_NET_NAME;  //UNCではない。
-
-	//3文字目から数えて最初の\の直前までを切り出す
+	// 3文字目から数えて最初の\の直前までを切り出す
 	sTemp[0] = _T('\\');
 	sTemp[1] = _T('\\');
     int i;
@@ -324,9 +318,10 @@ DWORD NetConnect ( const TCHAR strNetWorkPass[] )
 		}
 		sTemp[i] = strNetWorkPass[i];
 	}
-	sTemp[i] = _T('\0');	//終端
+	sTemp[i] = _T('\0');	// 終端
 
-	//NETRESOURCE作成
+	TCHAR sDrive[] = _T("");
+	// NETRESOURCE作成
 	NETRESOURCE nr;
 	ZeroMemory( &nr, sizeof( nr ) );
 	nr.dwScope       = RESOURCE_GLOBALNET;
@@ -336,9 +331,9 @@ DWORD NetConnect ( const TCHAR strNetWorkPass[] )
 	nr.lpLocalName   = sDrive;
 	nr.lpRemoteName  = sTemp;
 
-	//ユーザー認証ダイアログを表示
-	dwRet = WNetAddConnection3(0, &nr, NULL, NULL, CONNECT_UPDATE_PROFILE | CONNECT_INTERACTIVE);
-
+	// ユーザー認証ダイアログを表示
+	// 戻り値　エラーコードはWINERROR.Hを参照
+	DWORD dwRet = WNetAddConnection3(0, &nr, NULL, NULL, CONNECT_UPDATE_PROFILE | CONNECT_INTERACTIVE);
 	return dwRet;
 }
 
@@ -389,16 +384,8 @@ HWND OpenHtmlHelp(
 */
 BOOL ResolveShortcutLink( HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath )
 {
-	BOOL			bRes;
-	HRESULT			hRes;
-	IShellLink*		pIShellLink;
-	IPersistFile*	pIPersistFile;
-	WIN32_FIND_DATA	wfd;
-	/* 初期化 */
-	pIShellLink = NULL;
-	pIPersistFile = NULL;
+	// 初期化
 	*lpszPath = 0; // assume failure
-	bRes = FALSE;
 
 // 2009.01.08 ryoji CoInitializeを削除（WinMainにOleInitialize追加）
 
@@ -409,10 +396,14 @@ BOOL ResolveShortcutLink( HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath )
 		return FALSE;
 	}
 
+	BOOL bRes = FALSE;
 	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
 	CCurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 
+	IShellLink* pIShellLink = NULL;
+	IPersistFile* pIPersistFile = NULL;
+	HRESULT hRes;
 	if (SUCCEEDED( hRes = ::CoCreateInstance( CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&pIShellLink ) )) {
 		// Get a pointer to the IPersistFile interface.
 		if (SUCCEEDED(hRes = pIShellLink->QueryInterface( IID_IPersistFile, (void**)&pIPersistFile ) )) {
@@ -427,12 +418,13 @@ BOOL ResolveShortcutLink( HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath )
 					// Get the path to the link target.
 					TCHAR szGotPath[MAX_PATH];
 					szGotPath[0] = _T('\0');
+					WIN32_FIND_DATA	wfd;
 					if (SUCCEEDED( hRes = pIShellLink->GetPath(szGotPath, MAX_PATH, &wfd, SLGP_SHORTPATH ) )) {
 						// Get the description of the target.
 						TCHAR szDescription[MAX_PATH];
 						if (SUCCEEDED(hRes = pIShellLink->GetDescription(szDescription, MAX_PATH ) )) {
 							if (_T('\0') != szGotPath[0]) {
-								/* 正常終了 */
+								// 正常終了
 								_tcscpy_s( lpszPath, _MAX_PATH, szGotPath );
 								bRes = TRUE;
 							}
@@ -443,12 +435,12 @@ BOOL ResolveShortcutLink( HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath )
 		}
 	}
 	// Release the pointer to the IPersistFile interface.
-	if (NULL != pIPersistFile) {
+	if (pIPersistFile) {
 		pIPersistFile->Release();
 		pIPersistFile = NULL;
 	}
 	// Release the pointer to the IShellLink interface.
-	if (NULL != pIShellLink) {
+	if (pIShellLink) {
 		pIShellLink->Release();
 		pIShellLink = NULL;
 	}
@@ -472,7 +464,7 @@ BOOL ResolveShortcutLink( HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath )
 static LPCTSTR GetHelpFilePath()
 {
 	static TCHAR szHelpFile[_MAX_PATH] = _T("");
-	if (szHelpFile[0]==_T('\0')) {
+	if (szHelpFile[0] == _T('\0')) {
 		GetExedir( szHelpFile, _T("sakura.chm") );
 	}
 	return szHelpFile;
@@ -594,14 +586,14 @@ BOOL MySelectFont( LOGFONT* plf, INT* piPointSize, HWND hwndDlgOwner, bool Fixed
 {
 	// 2004.02.16 Moca CHOOSEFONTをメンバから外す
 	CHOOSEFONT cf;
-	/* CHOOSEFONTの初期化 */
+	// CHOOSEFONTの初期化
 	::ZeroMemory( &cf, sizeof( cf ) );
 	cf.lStructSize = sizeof( cf );
 	cf.hwndOwner = hwndDlgOwner;
 	cf.hDC = NULL;
 	cf.Flags = CF_SCREENFONTS | CF_INITTOLOGFONTSTRUCT;
 	if (FixedFontOnly) {
-		//FIXEDフォント
+		// FIXEDフォント
 		cf.Flags |= CF_FIXEDPITCHONLY;
 	}
 	cf.lpLogFont = plf;

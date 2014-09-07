@@ -39,12 +39,6 @@
 
 inline void SetHandCursor ()
 {
-#ifdef IDC_CURSOR_HAND
-	if (!IsWin2000_or_later()) {
-		SetCursor( LoadCursor( GetModuleHandle( NULL ), MAKEINTRESOURCE( IDC_CURSOR_HAND ) ) );
-	}
-	else
-#endif
 	{
 		SetCursor( LoadCursor( NULL, IDC_HAND ) );
 	}

@@ -44,9 +44,7 @@ const GUID CLSID_Shell =
 
 // コンストラクタ
 CZipFile::CZipFile() {
-	HRESULT		hr;
-
-	hr = CoCreateInstance(CLSID_Shell, NULL, CLSCTX_INPROC_SERVER, IID_IShellDispatch, reinterpret_cast<void **>(&psd));
+	HRESULT hr = CoCreateInstance(CLSID_Shell, NULL, CLSCTX_INPROC_SERVER, IID_IShellDispatch, reinterpret_cast<void **>(&psd));
 	if (FAILED(hr)) {
 		psd = NULL;
 	}
@@ -68,19 +66,17 @@ CZipFile::~CZipFile() {
 // Zip File名 設定
 bool CZipFile::SetZip(const std::tstring& sZipPath)
 {
-	HRESULT			hr;
-	VARIANT			var;
-
 	if (pZipFile != NULL) {
 		pZipFile->Release();
 		pZipFile = NULL;
 	}
 
 	// ZIP Folder設定
+	VARIANT var;
 	VariantInit(&var);
 	var.vt = VT_BSTR;
 	var.bstrVal = SysAllocString(to_wchar(sZipPath.c_str()));
-	hr = psd->NameSpace(var, &pZipFile);
+	HRESULT hr = psd->NameSpace(var, &pZipFile);
 	if (hr != S_OK) {
 		pZipFile = NULL;
 		return false;
@@ -96,7 +92,6 @@ bool CZipFile::SetZip(const std::tstring& sZipPath)
 // ZIP File 内 フォルダ名取得と定義ファイル検査(Plugin用)
 bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderName)
 {
-	HRESULT			hr;
 	VARIANT			vari;
 	FolderItems*	pZipFileItems;
 	long			lCount;
@@ -105,7 +100,7 @@ bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderN
 	sFolderName = _T("");
 
 	// ZIP File List
-	hr = pZipFile->Items(&pZipFileItems);
+	HRESULT hr = pZipFile->Items(&pZipFileItems);
 	if (hr != S_OK) {
 		pZipFile->Release();
 		return false;
@@ -175,20 +170,18 @@ bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderN
 // ZIP File 解凍
 bool CZipFile::Unzip(const std::tstring sOutPath)
 {
-	HRESULT			hr;
-	VARIANT			var;
-	VARIANT			varOpt;
 	Folder*			pOutFolder;
 	FolderItems*	pZipFileItems;
 
 	// ZIP File List
-	hr = pZipFile->Items(&pZipFileItems);
+	HRESULT hr = pZipFile->Items(&pZipFileItems);
 	if (hr != S_OK) {
 		pZipFile->Release();
 		return false;
 	}
 
 	// 出力Folder設定
+	VARIANT var;
 	VariantInit(&var);
 	var.vt = VT_BSTR;
 	var.bstrVal = SysAllocString(to_wchar(sOutPath.c_str()));
@@ -204,6 +197,7 @@ bool CZipFile::Unzip(const std::tstring sOutPath)
 	VariantInit(&var);
 	var.vt = VT_DISPATCH;
 	var.pdispVal = pZipFileItems;
+	VARIANT varOpt;
 	VariantInit(&varOpt);
 	varOpt.vt = VT_I4;
 	varOpt.lVal = FOF_SILENT | FOF_NOCONFIRMATION;

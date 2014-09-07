@@ -46,7 +46,7 @@ void CViewSelect::BeginSelectArea( const CLayoutPoint* po )
 {
 	const CEditView* pView=GetEditView();
 	CLayoutPoint temp;
-	if (NULL == po) {
+	if (!po) {
 		temp = pView->GetCaret().GetCaretLayoutPos();
 		po = &temp;
 	}
@@ -396,13 +396,13 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 //@@		TraceRgn( hrgnDraw );
 
 
-		if (NULL != hrgnDraw) {
+		if (hrgnDraw) {
 			::DeleteObject( hrgnDraw );
 		}
-		if (NULL != hrgnNew) {
+		if (hrgnNew) {
 			::DeleteObject( hrgnNew );
 		}
-		if (NULL != hrgnOld) {
+		if (hrgnOld) {
 			::DeleteObject( hrgnOld );
 		}
 	}else {
@@ -768,7 +768,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 					) {
 						pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
-						if (NULL == pLine)
+						if (!pLine)
 							break;
 						select_sum += pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen();
 					}

@@ -267,9 +267,9 @@ void CPropFile::SetData( HWND hwndDlg )
 {
 	/*--- File ---*/
 	/* ファイルの排他制御モード */
-	HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FILESHAREMODE );
+	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FILESHAREMODE );
 	Combo_ResetContent( hwndCombo );
-	int		nSelPos = 0;
+	int nSelPos = 0;
 	for (int i = 0; i < _countof( ShareModeArr ); ++i) {
 		Combo_InsertString( hwndCombo, i, LS( ShareModeArr[i].nNameId ) );
 		if (ShareModeArr[i].nMethod == m_Common.m_sFile.m_nFileShareMode) {
@@ -300,9 +300,7 @@ void CPropFile::SetData( HWND hwndDlg )
 	::CheckDlgButton( hwndDlg, IDC_CHECK_AUTOSAVE, m_Common.m_sBackup.IsAutoBackupEnabled() );
 
 	TCHAR buf[6];
-	int nN;
-
-	nN = m_Common.m_sBackup.GetAutoBackupInterval();
+	int nN = m_Common.m_sBackup.GetAutoBackupInterval();
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 35791 ? 35791 : nN;
 
@@ -344,8 +342,8 @@ void CPropFile::SetData( HWND hwndDlg )
 int CPropFile::GetData( HWND hwndDlg )
 {
 	/* ファイルの排他制御モード */
-	HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FILESHAREMODE );
-	int		nSelPos = Combo_GetCurSel( hwndCombo );
+	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FILESHAREMODE );
+	int nSelPos = Combo_GetCurSel( hwndCombo );
 	m_Common.m_sFile.m_nFileShareMode = ShareModeArr[nSelPos].nMethod;
 
 	/* 更新の監視 */
@@ -377,11 +375,10 @@ int CPropFile::GetData( HWND hwndDlg )
 
 	//	自動保存間隔の取得
 	TCHAR szNumBuf[/*6*/ 7];	//@@@ 2001.03.21 by MIK
-	int	 nN;
-	TCHAR *pDigit;
-
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, szNumBuf, /*5*/ 6 );	//@@@ 2001.03.21 by MIK
 
+	int nN;
+	TCHAR* pDigit;
 	for (nN = 0, pDigit = szNumBuf; *pDigit != _T('\0'); pDigit++) {
 		if (_T('0') <= *pDigit && *pDigit <= _T('9')) {
 			nN = nN * 10 + *pDigit - _T('0');

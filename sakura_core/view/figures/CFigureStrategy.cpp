@@ -33,7 +33,7 @@
 bool CFigure_Text::DrawImp(SColorStrategyInfo* pInfo)
 {
 	int nIdx = pInfo->GetPosInLogic();
-	int nLength =	CNativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
+	int nLength = CNativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
 						pInfo->m_pLineOfLogic,
 						pInfo->GetDocLine()->GetLengthWithoutEOL(),
 						nIdx

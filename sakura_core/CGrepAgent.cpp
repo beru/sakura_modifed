@@ -54,7 +54,7 @@ void CGrepAgent::CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>&
 	auto_strcpy( &szPath[0], pszPath );
 	TCHAR* token;
 	int nPathPos = 0;
-	while (NULL != (token = my_strtok<TCHAR>( &szPath[0], nPathLen, &nPathPos, _T(";")))) {
+	while (token = my_strtok<TCHAR>( &szPath[0], nPathLen, &nPathPos, _T(";"))) {
 		auto_strcpy( &szTmp[0], token );
 		TCHAR* p;
 		TCHAR* q;
@@ -119,7 +119,7 @@ DWORD CGrepAgent::DoGrep(
 
 	// 再入不可
 	if (this->m_bGrepRunning) {
-		assert_warning( false == this->m_bGrepRunning );
+		assert_warning( !this->m_bGrepRunning );
 		return 0xffffffff;
 	}
 
@@ -143,7 +143,7 @@ DWORD CGrepAgent::DoGrep(
 
 
 	/* アンドゥバッファの処理 */
-	if (NULL != pcViewDst->GetDocument()->m_cDocEditor.m_pcOpeBlk) {	/* 操作ブロック */
+	if (pcViewDst->GetDocument()->m_cDocEditor.m_pcOpeBlk) {	/* 操作ブロック */
 //@@@2002.2.2 YAZAKI NULLじゃないと進まないので、とりあえずコメント。＆NULLのときは、new COpeBlkする。
 //		while (NULL != m_pcOpeBlk) {}
 //		delete m_pcOpeBlk;

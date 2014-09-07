@@ -100,7 +100,7 @@ EConvertResult CUtf8::_UTF8ToUnicode( CMemory* pMem, bool bCESU8Mode/*, bool dec
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -196,7 +196,7 @@ EConvertResult CUtf8::_UnicodeToUTF8( CMemory* pMem, bool bCesu8Mode )
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -221,7 +221,6 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 {
 	CMemory	cBuff;
 	EConvertResult	res;
-	int				i;
 	TCHAR*			pd;
 	unsigned char*	ps;
 	bool			bbinary=false;
@@ -257,7 +256,7 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	ps = reinterpret_cast<unsigned char*>( cBuff.GetRawPtr() );
 	pd = pDst;
 	if( bbinary == false ){
-		for (i = cBuff.GetRawLength(); i >0; i--, ps ++, pd += 2) {
+		for (int i = cBuff.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf( pd, _T("%02X"), *ps);
 		}
 	}else{

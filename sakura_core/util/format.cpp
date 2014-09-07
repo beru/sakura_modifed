@@ -63,7 +63,7 @@ bool GetDateTimeFormat( TCHAR* szResult, int size, const TCHAR* format, const SY
 				len = 1;
 				break;
 			}
-			q += len;//q += strlen(szTime);
+			q += len; // q += strlen(szTime);
 			++p;
 			
 		}else {
@@ -88,15 +88,15 @@ bool GetDateTimeFormat( TCHAR* szResult, int size, const TCHAR* format, const SY
 UINT32 ParseVersion( const TCHAR* sVer )
 {
 	int nVer;
-	int nShift = 0;	//特別な文字列による下駄
-	int nDigit = 0;	//連続する数字の数
+	int nShift = 0;	// 特別な文字列による下駄
+	int nDigit = 0;	// 連続する数字の数
 	UINT32 ret = 0;
 
 	const TCHAR* p = sVer;
 	int i;
 
 	for (i=0; *p && i<4; i++) {
-		//特別な文字列の処理
+		// 特別な文字列の処理
 		if (*p == _T('a')) {
 			if (_tcsncmp( _T("alpha"), p, 5 ) == 0) p += 5;
 			else p++;
@@ -119,18 +119,18 @@ UINT32 ParseVersion( const TCHAR* sVer )
 			nShift = 0;
 		}
 		while (*p && !_istdigit(*p)) { p++; }
-		//数値の抽出
+		// 数値の抽出
 		for (nVer = 0, nDigit = 0; _istdigit(*p); p++) {
-			if (++nDigit > 2) break;	//数字は2桁までで止める
+			if (++nDigit > 2) break;	// 数字は2桁までで止める
 			nVer = nVer * 10 + *p - _T('0');
 		}
-		//区切り文字の処理
+		// 区切り文字の処理
 		while (*p && _tcschr( _T(".-_+"), *p )) { p++; }
 
 		DEBUG_TRACE(_T("  VersionPart%d: ver=%d,shift=%d\n"), i, nVer, nShift);
 		ret |= ( (nShift + nVer + 128) << (24-8*i) );
 	}
-	for (; i<4; i++) {	//残りの部分はsigned 0 (=0x80)を埋める
+	for (; i<4; i++) {	// 残りの部分はsigned 0 (=0x80)を埋める
 		ret |= ( 128 << (24-8*i) );
 	}
 

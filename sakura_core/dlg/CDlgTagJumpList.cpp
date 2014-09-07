@@ -304,7 +304,7 @@ void CDlgTagJumpList::UpdateData( bool bInit )
 	for (nIndex = 0; nIndex < count; nIndex++) {
 		CSortedTagJumpList::TagJumpInfo* item;
 		item = m_pcList->GetPtr( nIndex );
-		if (NULL == item) break;
+		if (!item) break;
 
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = nIndex;
@@ -745,7 +745,7 @@ bool CDlgTagJumpList::GetSelectedFullPathAndLine( TCHAR *fullPath, int count, in
 	SplitPath_FolderAndFile( GetFilePath(), path, NULL );
 	AddLastYenFromDirectoryPath( path );
 	
-	if (false == GetSelectedParam( NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName )) {
+	if (!GetSelectedParam( NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName )) {
 		return false;
 	}
 	if (depth) {
@@ -823,7 +823,7 @@ TCHAR *CDlgTagJumpList::GetNameByType( const TCHAR type, const TCHAR *name )
 void CDlgTagJumpList::SetFileName( const TCHAR *pszFileName )
 {
 	assert_warning( pszFileName );
-	if (NULL == pszFileName) return;
+	if (!pszFileName) return;
 
 	if (m_pszFileName) free( m_pszFileName );
 
@@ -838,7 +838,7 @@ void CDlgTagJumpList::SetFileName( const TCHAR *pszFileName )
 */
 void CDlgTagJumpList::SetKeyword( const wchar_t *pszKeyword )
 {
-	if (NULL == pszKeyword) return;
+	if (!pszKeyword) return;
 
 	if (m_pszKeyword) free( m_pszKeyword );
 
@@ -857,7 +857,7 @@ void CDlgTagJumpList::SetKeyword( const wchar_t *pszKeyword )
 int CDlgTagJumpList::SearchBestTag( void )
 {
 	if (m_pcList->GetCount() <= 0) return -1;	//選べません。
-	if (NULL == m_pszFileName) return 0;
+	if (!m_pszFileName) return 0;
 
 	TCHAR	szFileSrc[1024];
 	TCHAR	szFileDst[1024];
@@ -1231,7 +1231,7 @@ next_line:
 			DirUp( state.m_szCurPath );
 		}
 		
-		if (0 != state.m_nMatchAll && false == m_bNextItem) {
+		if (0 != state.m_nMatchAll && !m_bNextItem) {
 			// 0 ページめくり用: 打ち切られていないので次のページでは、このtagsの次から検索できる
 			// (最後に通過したものを保持)
 			*m_psFindPrev = state;

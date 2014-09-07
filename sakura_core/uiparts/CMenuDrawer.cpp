@@ -735,7 +735,7 @@ CMenuDrawer::CMenuDrawer()
 
 CMenuDrawer::~CMenuDrawer()
 {
-	if (NULL != m_hFontMenu) {
+	if (m_hFontMenu) {
 		::DeleteObject( m_hFontMenu );
 		m_hFontMenu = NULL;
 	}
@@ -765,7 +765,7 @@ void CMenuDrawer::ResetContents( void )
 	ncm.cbSize = CCSIZEOF_STRUCT( NONCLIENTMETRICS, lfMessageFont );
 	::SystemParametersInfo( SPI_GETNONCLIENTMETRICS, ncm.cbSize, (PVOID)&ncm, 0 );
 
-	if (NULL != m_hFontMenu) {
+	if (m_hFontMenu) {
 		::DeleteObject( m_hFontMenu );
 		m_hFontMenu = NULL;
 	}
@@ -814,7 +814,7 @@ void CMenuDrawer::MyAppendMenu(
 	if (nForceIconId == -1) nForceIconId = nFuncId;	//お気に入り	//@@@ 2003.04.08 MIK
 
 	szLabel[0] = _T('\0');
-	if (NULL != pszLabel) {
+	if (pszLabel) {
 		_tcsncpy( szLabel, pszLabel, _countof( szLabel ) - 1 );
 		szLabel[ _countof( szLabel ) - 1 ] = _T('\0');
 	}
@@ -934,7 +934,7 @@ int CMenuDrawer::MeasureItem( int nFuncID, int* pnItemHeight )
 		// セパレータ。フォントの方の通常項目の半分の高さ
 		*pnItemHeight = m_nMenuFontHeight / 2;
 		return 30; // ダミーの幅
-	}else if (NULL == ( pszLabel = GetLabel( nFuncID ) )) {
+	}else if (!( pszLabel = GetLabel( nFuncID ) )) {
 		*pnItemHeight = m_nMenuHeight;
 		return 0;
 	}
@@ -1172,7 +1172,7 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 	mii.dwTypeData = szText;
 	mii.cch = _countof( szText ) - 1;
 	if (0 != ::GetMenuItemInfo((HMENU)lpdis->hwndItem, lpdis->itemID, FALSE, &mii)
-		&& NULL == mii.hSubMenu
+		&& !mii.hSubMenu
 		&& 0 == /* CEditWnd */::FuncID_To_HelpContextID( (EFunctionCode)lpdis->itemID ) 	/* 機能IDに対応するメニューコンテキスト番号を返す */
 	) {
 		//@@@ 2001.12.21 YAZAKI
@@ -1610,7 +1610,7 @@ LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			continue;
 		}
 		const TCHAR* pszLabel;
-		if (NULL == ( pszLabel = GetLabel( mii.wID ) )) {
+		if (!( pszLabel = GetLabel( mii.wID ) )) {
 			continue;
 		}
 		if (chUser == GetAccelCharFromLabel( pszLabel )) {

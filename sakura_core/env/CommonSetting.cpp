@@ -102,7 +102,7 @@ void sample()
 	intvalue.Regist("intvalue");
 	strvalue.Regist("strvalue");
 
-	intvalue=3;
+	intvalue = 3;
 	strcpy(strvalue,"hage");
 
 	CommonValue_AllSave();

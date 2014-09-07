@@ -28,7 +28,7 @@
 const int MAX_X = MAX_TOOLBAR_ICON_X;
 const int MAX_Y = MAX_TOOLBAR_ICON_Y;	//2002.01.17
 
-/*! コンストラクタ */
+//! コンストラクタ
 CImageListMgr::CImageListMgr()
 	: m_cx( 16 ), m_cy( 16 )
 	, m_cTrans( RGB( 0, 0, 0 ))
@@ -94,14 +94,14 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		hRscbmp = (HBITMAP)::LoadImage( NULL, szPath, IMAGE_BITMAP, 0, 0,
 			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS );
 
-		if (hRscbmp == NULL) {	// ローカルファイルの読み込み失敗時はリソースから取得
+		if (!hRscbmp) {	// ローカルファイルの読み込み失敗時はリソースから取得
 			//	このブロック内は従来の処理
 			//	リソースからBitmapを読み込む
 			//	2003.09.29 wmlhq 環境によってアイコンがつぶれる
 			//hRscbmp = ::LoadBitmap( hInstance, MAKEINTRESOURCE( IDB_MYTOOL ) );
 			hRscbmp = (HBITMAP)::LoadImage( hInstance, MAKEINTRESOURCE( IDB_MYTOOL ), IMAGE_BITMAP, 0, 0,
 				LR_CREATEDIBSECTION | LR_LOADMAP3DCOLORS  );
-			if (hRscbmp == NULL) {
+			if (!hRscbmp) {
 				//	Oct. 4, 2003 genta エラーコード追加
 				//	正常終了と同じコードだとdcFromを不正に解放してしまう
 				nRetPos = 2;
@@ -114,7 +114,7 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		//	透過色を得るためにDCにマップする
 		//	2003.07.21 genta 透過色を得る以外の目的では使わなくなった
 		dcFrom = CreateCompatibleDC(0);	//	転送元用
-		if (dcFrom == NULL) {
+		if (!dcFrom) {
 			nRetPos = 1;
 			break;
 		}
@@ -126,7 +126,7 @@ bool CImageListMgr::Create(HINSTANCE hInstance)
 		//	スクリーンのDCに対してCreateCompatibleBitmapを
 		//	使うとモノクロBitmapになる．
 		hFOldbmp = (HBITMAP)SelectObject( dcFrom, hRscbmp );
-		if (hFOldbmp == NULL) {
+		if (!hFOldbmp) {
 			nRetPos = 4;
 			break;
 		}
@@ -186,7 +186,7 @@ void CImageListMgr::MyBitBlt(
 	HBITMAP bmp, 
 	int nXSrc, 
 	int nYSrc,
-	COLORREF colToTransParent	/* BMPの中の透明にする色 */
+	COLORREF colToTransParent	// BMPの中の透明にする色
 ) const
 {
 //	HBRUSH	brShadow, brHilight;
@@ -343,7 +343,7 @@ void CImageListMgr::DitherBlt2( HDC drawdc, int nXDest, int nYDest, int nWidth,
 */
 bool CImageListMgr::Draw(int index, HDC dc, int x, int y, int fstyle ) const
 {
-	if (m_hIconBitmap == NULL)
+	if (!m_hIconBitmap)
 		return false;
 	if (index < 0)
 		return false;
@@ -381,7 +381,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 	HBITMAP hExtBmp = (HBITMAP)::LoadImage( NULL, szPath, IMAGE_BITMAP, 0, 0,
 		LR_LOADFROMFILE | LR_CREATEDIBSECTION );
 
-	if (hExtBmp == NULL) {
+	if (!hExtBmp) {
 		return -1;
 	}
 

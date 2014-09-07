@@ -120,7 +120,7 @@ void CEditView::SetIMECompFormFont( void )
 */
 LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bool bDocumentFeed)
 {
-	if (false == bDocumentFeed) {
+	if (!bDocumentFeed) {
 		m_nLastReconvIndex = -1;
 		m_nLastReconvLine  = -1;
 	}
@@ -198,7 +198,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 
 	//ドキュメント行取得 -> pcCurDocLine
 	CDocLine* pcCurDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptSelect.GetY2());
-	if (NULL == pcCurDocLine)
+	if (!pcCurDocLine)
 		return 0;
 
 	//テキスト取得 -> pLine, nLineLen
@@ -348,7 +348,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        構造体設定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	if (NULL != pReconv) {
+	if (pReconv) {
 		//再変換構造体の設定
 		DWORD dwOrgSize = pReconv->dwSize;
 		// 2010.03.17 Moca dwSizeはpReconvを用意する側(IME等)が設定
@@ -413,7 +413,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		}
 	}
 	
-	if (false == bDocumentFeed) {
+	if (!bDocumentFeed) {
 		// 再変換情報の保存
 		m_nLastReconvIndex = nReconvIndex;
 		m_nLastReconvLine  = ptSelect.y;

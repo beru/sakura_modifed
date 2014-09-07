@@ -117,21 +117,22 @@ void CDlgCtrlCode::SetData( void )
 	long	lngStyle;
 	LV_ITEM	lvi;
 
-	/* リスト */
+	// リスト
 	hwndWork = ::GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
 	ListView_DeleteAllItems( hwndWork );  /* リストを空にする */
 
-	/* 行選択 */
+	// 行選択
 	lngStyle = ListView_GetExtendedListViewStyle( hwndWork );
 	lngStyle |= LVS_EX_FULLROWSELECT;
 	ListView_SetExtendedListViewStyle( hwndWork, lngStyle );
 
-	/* データ表示 */
-	TCHAR	tmp[10];
+	// データ表示
+	TCHAR tmp[10];
 	count = 0;
 	for (i = 0; i < _countof(p_ctrl_list); i++) {
-		if (p_ctrl_list[i].jname == NULL) continue;
-		
+		if (!p_ctrl_list[i].jname) {
+			continue;
+		}
 		// 2011.06.01 nasukoji	元のjnameがNULLのものはそのまま残す
 		if (p_ctrl_list[i].jname) {
 			// LMP: Added, nasukoji changed
@@ -177,18 +178,16 @@ void CDlgCtrlCode::SetData( void )
 	return;
 }
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgCtrlCode::GetData( void )
 {
-	int		nIndex;
-	HWND	hwndList;
-
-	hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
-	//選択中のキー番号を探す。
-	nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
-	if (nIndex == -1) return FALSE;
-
+	HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
+	// 選択中のキー番号を探す。
+	int nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
+	if (nIndex == -1) {
+		return FALSE;
+	}
 	m_nCode = p_ctrl_list[nIndex].code;
 
 	return TRUE;
@@ -196,15 +195,14 @@ int CDlgCtrlCode::GetData( void )
 
 BOOL CDlgCtrlCode::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
-	HWND		hwndList;
-	LV_COLUMN	col;
-	RECT		rc;
 
 	_SetHwnd( hwndDlg );
 
-	hwndList = GetDlgItem( hwndDlg, IDC_LIST_CTRLCODE );
+	HWND hwndList = GetDlgItem( hwndDlg, IDC_LIST_CTRLCODE );
+	RECT rc;
 	::GetWindowRect( hwndList, &rc );
 
+	LV_COLUMN col;
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
@@ -241,12 +239,12 @@ BOOL CDlgCtrlCode::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* ヘルプ */
+		// ヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CTRL_CODE_DIALOG) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 
-	case IDOK:			/* 左右に表示 */
-		/* ダイアログデータの取得 */
+	case IDOK:			// 左右に表示
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), GetData() );
 		return TRUE;
 
@@ -256,7 +254,7 @@ BOOL CDlgCtrlCode::OnBnClicked( int wID )
 
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
@@ -287,20 +285,18 @@ BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
 
 		case LVN_KEYDOWN:
 			{
-				HWND	hwndList;
-				NMKEY*	p = (NMKEY*)lParam;
-				int		i, j;
-				unsigned int	c;
-				for (i = 0; i < _countof(p_ctrl_list); i++) {
+				NMKEY* p = (NMKEY*)lParam;
+				unsigned int c;
+				for (int i = 0; i < _countof(p_ctrl_list); i++) {
 					c = p_ctrl_list[i].vKey;
 					if (c == (p->nVKey & 0xffff)) {
-						for (j = 0; j < _countof(p_ctrl_list); j++) {
+						for (int j = 0; j < _countof(p_ctrl_list); j++) {
 							if (p_ctrl_list[i].code == p_ctrl_list[j].code) {
-								hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
+								HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
 								ListView_SetItemState( hwndList, j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 								ListView_EnsureVisible( hwndList, j, FALSE );
 						
-								/* ダイアログデータの取得 */
+								// ダイアログデータの取得
 								::EndDialog( GetHwnd(), GetData() );
 								return TRUE;
 							}

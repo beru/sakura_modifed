@@ -56,7 +56,7 @@ BOOL CDicMgr::Search(
 	const wchar_t*	pszDelimit = L" /// ";
 	const wchar_t*	pszKeySeps = L",\0";
 
-	/* 辞書ファイル */
+	// 辞書ファイル
 	if (pszKeyWordHelpFile[0] == _T('\0')) {
 		return FALSE;
 	}
@@ -77,13 +77,13 @@ BOOL CDicMgr::Search(
 		}
 
 		wchar_t* pszWork = wcsstr( szLine, pszDelimit );
-		if (NULL != pszWork && szLine[0] != L';') {
+		if (pszWork && szLine[0] != L';') {
 			*pszWork = L'\0';
 			pszWork += wcslen( pszDelimit );
 
-			/* 最初のトークンを取得します。 */
+			// 最初のトークンを取得します。
 			wchar_t* pszToken = wcstok( szLine, pszKeySeps );
-			while (NULL != pszToken) {
+			while (pszToken) {
 				int nRes = _wcsnicmp( pszKey, pszToken, nCmpLen );	// 2006.04.10 fon
 				if (0 == nRes) {
 					int nLen = (int)wcslen(pszWork);
@@ -141,18 +141,18 @@ int CDicMgr::HokanSearch(
 			continue;
 		}
 
-		//コメント無視
+		// コメント無視
 		if (szLine[0] == L';') {
 			continue;
 		}
 
-		//空行無視
+		// 空行無視
 		if (szLine.length() == 0) {
 			continue;
 		}
 
 		int nRet;
-		if (bHokanLoHiCase) {	/* 英大文字小文字を同一視する */
+		if (bHokanLoHiCase) {	// 英大文字小文字を同一視する
 			nRet = auto_memicmp( pszKey, szLine.c_str(), nKeyLen );
 		}else {
 			nRet = auto_memcmp( pszKey, szLine.c_str(), nKeyLen );
@@ -167,5 +167,4 @@ int CDicMgr::HokanSearch(
 	in.Close();
 	return (int)vKouho.size();
 }
-
 

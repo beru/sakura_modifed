@@ -139,7 +139,7 @@ EConvertResult CUtf7::UTF7ToUnicode( CMemory* pMem )
 	wchar_t* pDst;
 	try{
 		pDst = new wchar_t[nDataLen + 1];
-		if( pDst == NULL ){
+		if (!pDst) {
 			return RESULT_FAILURE;
 		}
 	}catch( ... ){
@@ -193,7 +193,7 @@ int CUtf7::_UniToUtf7SetB_block( const wchar_t* pSrc, const int nSrcLen, char* p
 	}catch( ... ){
 		psrc = NULL;
 	}
-	if( psrc == NULL ){
+	if (!psrc) {
 		return 0;
 	}
 
@@ -277,7 +277,7 @@ EConvertResult CUtf7::UnicodeToUTF7( CMemory* pMem )
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 

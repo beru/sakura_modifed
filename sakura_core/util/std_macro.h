@@ -40,19 +40,19 @@
 template <class T>
 inline T t_min(T t1,T t2)
 {
-	return t1<t2?t1:t2;
+	return t1 < t2 ? t1 : t2;
 }
 
 template <class T>
 inline T t_max(T t1,T t2)
 {
-	return t1>t2?t1:t2;
+	return t1 > t2 ? t1 : t2;
 }
 
 template <class T>
 T t_abs(T t)
 {
-	return t>=T(0)?t:T(-t);
+	return t >= T(0) ? t : T(-t);
 }
 
 template <class T>
@@ -67,12 +67,12 @@ template <class T>
 T t_unit(T t)
 {
 	return
-		t>T(0)?1:
-		t<T(0)?-1:
+		t > T(0) ? 1:
+		t <T(0) ? -1:
 		0;
 }
 
-//sizeof
+// sizeof
 #define sizeof_raw(V)  sizeof(V)
 #define sizeof_type(V) sizeof(V)
 
@@ -83,12 +83,12 @@ T t_unit(T t)
 	リテラル文字列種、明示指定マクロ
 */
 
-//ビルド種に関係なく、UNICODE。
+// ビルド種に関係なく、UNICODE。
 #define __LTEXT(A) L##A
 #define LTEXT(A) __LTEXT(A)
 #define LCHAR(A) __LTEXT(A)
 
-//ビルド種に関係なく、ANSI。
+// ビルド種に関係なく、ANSI。
 #define ATEXT(A) A
 
 // http://bits.stephan-brumme.com/roundUpToNextPowerOfTwo.html

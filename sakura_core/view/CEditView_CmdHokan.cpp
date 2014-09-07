@@ -55,7 +55,7 @@ void CEditView::PreprocessCommand_hokan( int nCommand )
 void CEditView::PostprocessCommand_hokan(void)
 {
 	if (GetDllShareData().m_Common.m_sHelper.m_bUseHokan && !m_bExecutingKeyMacro) { /* キーボードマクロの実行中 */
-		CNativeW	cmemData;
+		CNativeW cmemData;
 
 		/* カーソル直前の単語を取得 */
 		if (0 < GetParser().GetLeftWord( &cmemData, 100 )) {
@@ -81,14 +81,15 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 {
 	/* 補完対象ワードリストを調べる */
 	CNativeW	cmemHokanWord;
-	int			nKouhoNum;
 	POINT		poWin;
+	auto& textArea = GetTextArea();
+	auto& caretLayoutPos = GetCaret().GetCaretLayoutPos();
 	/* 補完ウィンドウの表示位置を算出 */
-	poWin.x = GetTextArea().GetAreaLeft()
-			 + (Int)(GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol())
+	poWin.x = textArea.GetAreaLeft()
+			 + (Int)(caretLayoutPos.GetX2() - textArea.GetViewLeftCol())
 			  * GetTextMetrics().GetHankakuDx();
-	poWin.y = GetTextArea().GetAreaTop()
-			 + (Int)(GetCaret().GetCaretLayoutPos().GetY2() - GetTextArea().GetViewTopLine())
+	poWin.y = textArea.GetAreaTop()
+			 + (Int)(caretLayoutPos.GetY2() - textArea.GetViewTopLine())
 			  * GetTextMetrics().GetHankakuDy();
 	this->ClientToScreen( &poWin );
 	poWin.x -= (
@@ -112,15 +113,16 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 	// エディタ起動時だとエディタ可視化の途中になぜか不可視の入力補完ウィンドウが一時的にフォアグラウンドになって、
 	// タブバーに新規タブが追加されるときのタブ切替でタイトルバーがちらつく（一瞬非アクティブ表示になるのがはっきり見える）ことがあった。
 	// ※ Vista/7 の特定の PC でだけのちらつきか？ 該当 PC 以外の Vista/7 PC でもたまに微妙に表示が乱れた感じになる程度の症状が見られたが、それらが同一原因かどうかは不明。
-	if (!m_pcEditWnd->m_cHokanMgr.GetHwnd()) {
-		m_pcEditWnd->m_cHokanMgr.DoModeless(
+	auto& hokanMgr = m_pcEditWnd->m_cHokanMgr;
+	if (!hokanMgr.GetHwnd()) {
+		hokanMgr.DoModeless(
 			G_AppInstance(),
 			GetHwnd(),
 			(LPARAM)this
 		);
 		::SetFocus( GetHwnd() );	//エディタにフォーカスを戻す
 	}
-	nKouhoNum = m_pcEditWnd->m_cHokanMgr.CHokanMgr::Search(
+	int nKouhoNum = hokanMgr.CHokanMgr::Search(
 		&poWin,
 		GetTextMetrics().GetHankakuHeight(),
 		GetTextMetrics().GetHankakuDx(),
@@ -135,14 +137,14 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 	/* 補完候補の数によって動作を変える */
 	if (nKouhoNum <= 0) {				//	候補無し
 		if (m_bHokan) {
-			m_pcEditWnd->m_cHokanMgr.Hide();
+			hokanMgr.Hide();
 			m_bHokan = FALSE;
 			// 2003.06.25 Moca 失敗してたら、ビープ音を出して補完終了。
 			ErrorBeep();
 		}
 	}else if (bAutoDecided && nKouhoNum == 1) { //	候補1つのみ→確定。
 		if (m_bHokan) {
-			m_pcEditWnd->m_cHokanMgr.Hide();
+			hokanMgr.Hide();
 			m_bHokan = FALSE;
 		}
 		// 2004.05.14 Moca CHokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
@@ -185,18 +187,14 @@ int CEditView::HokanSearchByFile(
 	int nLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
-	const wchar_t* pszLine;
-	const wchar_t* word;
-
 	CLogicPoint ptCur = GetCaret().GetCaretLogicPos(); //物理カーソル位置
-	bool bKeyStartWithMark;			//キーが記号で始まるか
-	bool bWordStartWithMark;		//候補が記号で始まるか
 
+	// キーが記号で始まるか
 	// キーの先頭が記号(#$@\)かどうか判定
-	bKeyStartWithMark = ( wcschr( L"$@#\\", pszKey[0] ) != NULL ? true : false );
+	bool bKeyStartWithMark = ( wcschr( L"$@#\\", pszKey[0] ) != NULL ? true : false );
 
 	for (CLogicInt i = CLogicInt(0); i < nLines; i++) {
-		pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL( i, &nLineLen );
+		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL( i, &nLineLen );
 
 		for (j = 0; j < nLineLen; j += nCharSize) {
 			nCharSize = CNativeW::GetSizeOfChar( pszLine, nLineLen, j );
@@ -220,7 +218,8 @@ int CEditView::HokanSearchByFile(
 			)
 				continue;
 
-			bWordStartWithMark = ( wcschr( L"$@#\\", pszLine[j] ) != NULL ? true : false );
+			// 候補が記号で始まるか
+			bool bWordStartWithMark = ( wcschr( L"$@#\\", pszLine[j] ) != NULL ? true : false );
 
 			nWordBegin = j;
 			// 候補単語の終了位置を求める
@@ -272,7 +271,7 @@ int CEditView::HokanSearchByFile(
 			if (nKeyLen > nWordLen) continue;
 
 			// 候補単語の開始位置を求める
-			word = pszLine + nWordBegin;
+			const wchar_t* word = pszLine + nWordBegin;
 
 			// キーと比較する
 			if (bHokanLoHiCase) {

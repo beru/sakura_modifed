@@ -489,7 +489,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		int		nSelPos = 0;
 		int nSize = (int)m_SIndentArr.size();
 		for (int i = 0; i < nSize; ++i) {
-			if (m_SIndentArr[i].pszName == NULL) {
+			if (!m_SIndentArr[i].pszName) {
 				Combo_InsertString( hwndCombo, i, LS(m_SIndentArr[i].nNameId) );
 			}else {
 				Combo_InsertString( hwndCombo, i, m_SIndentArr[i].pszName );
@@ -528,7 +528,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		int		nSelPos = 0;
 		int nSize = (int)m_OlmArr.size();
 		for (int i = 0; i < nSize; ++i) {
-			if (m_OlmArr[i].pszName == NULL) {
+			if (!m_OlmArr[i].pszName) {
 				Combo_InsertString( hwndCombo, i, LS(m_OlmArr[i].nNameId) );
 			}else {
 				Combo_InsertString( hwndCombo, i, m_OlmArr[i].pszName );

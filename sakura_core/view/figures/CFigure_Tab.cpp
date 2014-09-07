@@ -7,7 +7,7 @@
 
 //2007.08.28 kobake 追加
 void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView );
-//タブ矢印描画関数	//@@@ 2003.03.26 MIK
+// タブ矢印描画関数	//@@@ 2003.03.26 MIK
 void _DrawTabArrow( CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor );
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -38,7 +38,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 {
 	DispPos& sPos = *pDispPos;
 
-	//必要なインターフェース
+	// 必要なインターフェース
 	const CTextMetrics* pMetrics = &pcView->GetTextMetrics();
 	const CTextArea* pArea = &pcView->GetTextArea();
 
@@ -61,7 +61,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 	rcClip2.bottom = sPos.GetDrawPos().y + nLineHeight;
 
 	if (pArea->IsRectIntersected(rcClip2)) {
-		if (cTabType.IsDisp() && TABARROW_STRING == m_pTypeData->m_bTabArrow) {	//タブ通常表示	//@@@ 2003.03.26 MIK
+		if (cTabType.IsDisp() && TABARROW_STRING == m_pTypeData->m_bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
 			//@@@ 2001.03.16 by MIK
 			::ExtTextOutW_AnyBuild(
 				gr,
@@ -74,7 +74,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 				pMetrics->GetDxArray_AllHankaku()
 			);
 		}else {
-			//背景
+			// 背景
 			::ExtTextOutW_AnyBuild(
 				gr,
 				sPos.GetDrawPos().x,
@@ -86,7 +86,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 				pMetrics->GetDxArray_AllHankaku()
 			);
 
-			//タブ矢印表示
+			// タブ矢印表示
 			if (cTabType.IsDisp()) {
 				// 文字色や太字かどうかを現在の DC から調べる	// 2009.05.29 ryoji 
 				// （検索マッチ等の状況に柔軟に対応するため、ここは記号の色指定には決め打ちしない）
@@ -121,7 +121,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 		}
 	}
 
-	//Xを進める
+	// Xを進める
 	sPos.ForwardDrawCol(tabDispWidth);
 }
 

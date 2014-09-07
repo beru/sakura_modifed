@@ -273,7 +273,7 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 	wchar_t* pDst;
 	try{
 		pDst = new wchar_t[nsrclen * 3 + 1];
-		if( pDst == NULL ){
+		if (!pDst) {
 			return RESULT_FAILURE;
 		}
 	}catch( ... ){
@@ -472,7 +472,7 @@ EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
 	}catch( ... ){
 		pDst = NULL;
 	}
-	if( pDst == NULL ){
+	if (!pDst) {
 		return RESULT_FAILURE;
 	}
 
@@ -499,10 +499,6 @@ EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
 EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	static CMemory	cCharBuffer;
-	EConvertResult	res;
-	int				i;
-	TCHAR*			pd; 
-	unsigned char*	ps; 
 
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInJis) {
@@ -515,15 +511,16 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	cCharBuffer.AppendRawData( cSrc, sizeof(wchar_t));
 
 	// EUC-JP •ÏŠ·
-	res = UnicodeToJIS(&cCharBuffer);
+	EConvertResult res = UnicodeToJIS(&cCharBuffer);
 	if (res != RESULT_COMPLETE) {
 		return res;
 	}
 
 	// Hex•ÏŠ·
-	bool	bInEsc;
-	bInEsc = false;
-	pd = pDst;
+	bool bInEsc = false;
+	TCHAR* pd = pDst;
+	int i;
+	unsigned char*	ps; 
 	for (i = cCharBuffer.GetRawLength(), ps = (unsigned char*)cCharBuffer.GetRawPtr(); i >0; i--, ps ++) {
 		if (*ps == 0x1B) {
 			bInEsc = true;

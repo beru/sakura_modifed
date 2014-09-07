@@ -759,10 +759,10 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 		WCHAR *p1, *p2, *p3;
 		p1 = &buff[9];
 		p3 = p1;					//結果確認用に初期化
-		if (NULL != (p2=wcsstr(p1,LTEXT(",")))) {
+		if ((p2=wcsstr(p1,LTEXT(",")))) {
 			*p2 = LTEXT('\0');
 			p2 += 1;				//カンマの次が、次の要素
-			if (NULL != (p3=wcsstr(p2,LTEXT(",")))) {
+			if ((p3=wcsstr(p2,LTEXT(",")))) {
 				*p3 = LTEXT('\0');
 				p3 += 1;			//カンマの次が、次の要素
 			}
@@ -786,7 +786,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 		//Path
 		FILE* fp2;
 		const WCHAR* p4 = p2;
-		if ((fp2=_tfopen_absini(to_tchar(p3),_T("r"))) == NULL) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+		if (!(fp2=_tfopen_absini(to_tchar(p3),_T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
 			p4 = LSW(STR_IMPEXP_DIC_NOTFOUND);
 			b_enable_flag = 0;

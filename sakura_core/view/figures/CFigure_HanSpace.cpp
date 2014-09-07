@@ -24,10 +24,10 @@ bool CFigure_HanSpace::Match(const wchar_t* pText) const
 //! 半角スペース描画
 void CFigure_HanSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
 {
-	//クリッピング矩形を計算。画面外なら描画しない
+	// クリッピング矩形を計算。画面外なら描画しない
 	CMyRect rcClip;
-	if (pcView->GetTextArea().GenerateClipRect(&rcClip,*pDispPos,1)) {
-		//小文字"o"の下半分を出力
+	if (pcView->GetTextArea().GenerateClipRect(&rcClip, *pDispPos,1)) {
+		// 小文字"o"の下半分を出力
 		CMyRect rcClipBottom = rcClip;
 		rcClipBottom.top = rcClip.top+pcView->GetTextMetrics().GetHankakuHeight()/2;
 		::ExtTextOutW_AnyBuild(
@@ -41,7 +41,7 @@ void CFigure_HanSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pc
 			pcView->GetTextMetrics().GetDxArray_AllHankaku()
 		);
 		
-		//上半分は普通の空白で出力（"o"の上半分を消す）
+		// 上半分は普通の空白で出力（"o"の上半分を消す）
 		CMyRect rcClipTop = rcClip;
 		rcClipTop.bottom = rcClip.top+pcView->GetTextMetrics().GetHankakuHeight()/2;
 		::ExtTextOutW_AnyBuild(
@@ -56,7 +56,7 @@ void CFigure_HanSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pc
 		);
 	}
 
-	//位置進める
+	// 位置進める
 	pDispPos->ForwardDrawCol(1);
 }
 

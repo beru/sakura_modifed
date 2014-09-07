@@ -208,7 +208,7 @@ INT_PTR CDlgTypeList::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM
 
 						m_bExtRMenu[ nIdx ] = true;
 						m_bExtDblClick[ nIdx ] = true;
-						while( NULL != ext ){
+						while (ext) {
 							bool bRMenu;
 							bool bDblClick;
 							CheckExt( ext, &bRMenu, &bDblClick );
@@ -235,7 +235,7 @@ INT_PTR CDlgTypeList::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM
 			static const TCHAR	pszSeps[] = _T(" ;,");	// separator
 			TCHAR *ext = _tcstok( exts, pszSeps );
 			int nRet;
-			while (NULL != ext) {
+			while (ext) {
 				if (checked) {	//「右クリック」チェックON
 					if ((nRet = RegistExt( ext, true )) != 0) {
 						TCHAR buf[BUFFER_SIZE] = {0};
@@ -269,7 +269,7 @@ INT_PTR CDlgTypeList::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM
 			static const TCHAR	pszSeps[] = _T(" ;,");	// separator
 			TCHAR *ext = _tcstok( exts, pszSeps );
 			int nRet;
-			while (NULL != ext) {
+			while (ext) {
 				if ((nRet = RegistExt( ext, checked )) != 0) {
 					TCHAR buf[BUFFER_SIZE] = {0};
 					::FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, NULL, nRet, 0, buf, _countof(buf), NULL ); 

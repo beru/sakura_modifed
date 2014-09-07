@@ -1041,7 +1041,7 @@ void CPropTypesColor::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	RECT		rc1;
 	COLORREF	cRim = (COLORREF)::GetSysColor( COLOR_3DSHADOW );
 
-	if (pDis == NULL || pDis->itemData == 0) {
+	if (!pDis || pDis->itemData == 0) {
 		return;
 	}
 

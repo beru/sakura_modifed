@@ -41,7 +41,7 @@ INT_PTR CALLBACK MyDialogProc(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pCDialog = (CDialog*) lParam;
-		if (NULL != pCDialog) {
+		if (pCDialog) {
 			return pCDialog->DispatchEvent( hwndDlg, uMsg, wParam, lParam );
 		}else {
 			return FALSE;
@@ -49,7 +49,7 @@ INT_PTR CALLBACK MyDialogProc(
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCDialog = ( CDialog* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if (NULL != pCDialog) {
+		if (pCDialog) {
 			return pCDialog->DispatchEvent( hwndDlg, uMsg, wParam, lParam );
 		}else {
 			return FALSE;
@@ -135,7 +135,7 @@ HWND CDialog::DoModeless( HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete
 		MyDialogProc,
 		(LPARAM)this
 	);
-	if (NULL != m_hWnd) {
+	if (m_hWnd) {
 		::ShowWindow( m_hWnd, nCmdShow );
 	}
 	return m_hWnd;
@@ -155,7 +155,7 @@ HWND CDialog::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPCDLGTEMPLATE l
 		MyDialogProc,
 		(LPARAM)this
 	);
-	if (NULL != m_hWnd) {
+	if (m_hWnd) {
 		::ShowWindow( m_hWnd, nCmdShow );
 	}
 	return m_hWnd;
@@ -163,7 +163,7 @@ HWND CDialog::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPCDLGTEMPLATE l
 
 void CDialog::CloseDialog( int nModalRetVal )
 {
-	if (NULL != m_hWnd) {
+	if (m_hWnd) {
 		if (m_bModal) {
 			::EndDialog( m_hWnd, nModalRetVal );
 		}else {
@@ -272,7 +272,7 @@ BOOL CDialog::OnDestroy( void )
 		m_nHeight = cWindowPlacement.rcNormalPosition.bottom - cWindowPlacement.rcNormalPosition.top;
 	}
 	/* 破棄 */
-	if (NULL != m_hwndSizeBox) {
+	if (m_hwndSizeBox) {
 		::DestroyWindow( m_hwndSizeBox );
 		m_hwndSizeBox = NULL;
 	}
@@ -309,7 +309,7 @@ BOOL CDialog::OnSize( WPARAM wParam, LPARAM lParam )
 	m_nHeight = rc.bottom - rc.top;
 
 	/* サイズボックスの移動 */
-	if (NULL != m_hwndSizeBox) {
+	if (m_hwndSizeBox) {
 		::GetClientRect( m_hWnd, &rc );
 //		::SetWindowPos( m_hwndSizeBox, NULL,
 //	Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
@@ -544,7 +544,7 @@ BOOL CDialog::OnCbnDropDown( HWND hwndCtl, int wID )
 	int nMargin = 8;
 
 	hDC = ::GetDC( hwndCtl );
-	if (NULL == hDC)
+	if (!hDC)
 		return FALSE;
 	hFont = (HFONT)::SendMessageAny( hwndCtl, WM_GETFONT, 0, (LPARAM)NULL );
 	hFont = (HFONT)::SelectObject( hDC, hFont );
@@ -630,13 +630,14 @@ bool CDialog::DirectoryUp( TCHAR* szDir )
 // コントロールに画面のフォントを設定	2012/11/27 Uchi
 HFONT CDialog::SetMainFont( HWND hTarget )
 {
-	if (hTarget == NULL)	return NULL;
+	if (!hTarget) {
+		return NULL;
+	}
 
-	HFONT	hFont;
 	LOGFONT	lf;
 
 	// 設定するフォントの高さを取得
-	hFont = (HFONT)::SendMessage(hTarget, WM_GETFONT, 0, 0);
+	HFONT hFont = (HFONT)::SendMessage(hTarget, WM_GETFONT, 0, 0);
 	GetObject(hFont, sizeof(lf), &lf);
 	LONG nfHeight = lf.lfHeight;
 
@@ -807,7 +808,7 @@ LRESULT CALLBACK SubComboBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	switch (uMsg) {
 	case WM_CTLCOLOREDIT:
 	{
-		if (NULL == data->pEditWndProc) {
+		if (!data->pEditWndProc) {
 			HWND hwndCtl = (HWND)lParam;
 			data->pEditWndProc = (WNDPROC)::GetWindowLongPtr(hwndCtl, GWLP_WNDPROC);
 			::SetProp(hwndCtl, TSTR_SUBCOMBOBOXDATA, data);
@@ -817,7 +818,7 @@ LRESULT CALLBACK SubComboBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 	case WM_CTLCOLORLISTBOX:
 	{
-		if (NULL == data->pListBoxWndProc) {
+		if (!data->pListBoxWndProc) {
 			HWND hwndCtl = (HWND)lParam;
 			data->pListBoxWndProc = (WNDPROC)::GetWindowLongPtr(hwndCtl, GWLP_WNDPROC);
 			::SetProp(hwndCtl, TSTR_SUBCOMBOBOXDATA, data);
@@ -842,7 +843,7 @@ LRESULT CALLBACK SubComboBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 void CDialog::SetComboBoxDeleter( HWND hwndCtl, SComboBoxItemDeleter* data )
 {
-	if (NULL == data->pRecent) {
+	if (!data->pRecent) {
 		return;
 	}
 	data->hwndCombo = hwndCtl;

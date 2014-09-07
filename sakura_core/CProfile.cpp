@@ -171,7 +171,7 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 		for (; p < psMMres + nSize ; p = pn) {
 			// 1行切り取り（長すぎた場合切捨て）
 			pn = strpbrk(p, "\n");
-			if (pn == NULL) {
+			if (!pn) {
 				// 最終行
 				pn = psMMres + nSize;
 			}else {
@@ -221,7 +221,7 @@ bool CProfile::WriteProfile(
 	}
     
 	std::vector< wstring > vecLine;
-	if (NULL != pszComment) {
+	if (pszComment) {
 		vecLine.push_back( LTEXT(";") + wstring( pszComment ) );		// //->;	2008/5/24 Uchi
 		vecLine.push_back( LTEXT("") );
 	}

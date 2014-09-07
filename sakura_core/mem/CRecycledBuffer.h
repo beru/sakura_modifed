@@ -28,21 +28,21 @@
 #pragma once
 
 class CRecycledBuffer{
-//コンフィグ
+// コンフィグ
 private:
-	static const int BLOCK_SIZE  = 1024; //ブロックサイズ。バイト単位。
-	static const int CHAIN_COUNT = 64;   //再利用可能なブロック数。
+	static const int BLOCK_SIZE  = 1024;	// ブロックサイズ。バイト単位。
+	static const int CHAIN_COUNT = 64;		// 再利用可能なブロック数。
 
-//コンストラクタ・デストラクタ
+// コンストラクタ・デストラクタ
 public:
 	CRecycledBuffer()
 	{
 		m_current=0;
 	}
 
-//インターフェース
+// インターフェース
 public:
-	//!一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
+	//! 一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
 	template <class T>
 	T* GetBuffer(
 		size_t* nCount //!< [out] 領域の要素数を受け取る。T単位。
@@ -55,7 +55,7 @@ public:
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}
 
-	//!領域の要素数を取得。T単位
+	//! 領域の要素数を取得。T単位
 	template <class T>
 	size_t GetMaxCount() const
 	{
@@ -63,18 +63,18 @@ public:
 	}
 
 
-//メンバ変数
+// メンバ変数
 private:
 	BYTE m_buf[CHAIN_COUNT][BLOCK_SIZE];
 	int  m_current;
 };
 
 class CRecycledBufferDynamic{
-//コンフィグ
+// コンフィグ
 private:
-	static const int CHAIN_COUNT = 64;   //再利用可能なブロック数。
+	static const int CHAIN_COUNT = 64;   // 再利用可能なブロック数。
 
-//コンストラクタ・デストラクタ
+// コンストラクタ・デストラクタ
 public:
 	CRecycledBufferDynamic()
 	{
@@ -90,9 +90,9 @@ public:
 		}
 	}
 
-//インターフェース
+// インターフェース
 public:
-	//!一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
+	//! 一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
 	template <class T>
 	T* GetBuffer(
 		size_t nCount //!< [in] 確保する要素数。T単位。
@@ -100,7 +100,7 @@ public:
 	{
 		m_current = (m_current+1) % CHAIN_COUNT;
 
-		//メモリ確保
+		// メモリ確保
 		if (m_buf[m_current]) {
 			delete[] m_buf[m_current];
 		}
@@ -109,7 +109,7 @@ public:
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}
 
-//メンバ変数
+// メンバ変数
 private:
 	BYTE* m_buf[CHAIN_COUNT];
 	int   m_current;

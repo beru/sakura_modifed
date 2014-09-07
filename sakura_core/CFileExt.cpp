@@ -65,22 +65,22 @@ bool CFileExt::AppendExt( const TCHAR *pszName, const TCHAR *pszExt )
 
 bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 {
-	if (NULL == pszName || pszName[0] == _T('\0')) {
+	if (!pszName || pszName[0] == _T('\0')) {
 		return false;
 	}
-	if (NULL == pszExt  || pszExt[0] == _T('\0')) {
+	if (!pszExt  || pszExt[0] == _T('\0')) {
 		return false;
 	}
 
 	FileExtInfoTag* p;
-	if (NULL == m_puFileExtInfo) {
+	if (!m_puFileExtInfo) {
 		p = (FileExtInfoTag*)malloc( sizeof( FileExtInfoTag ) * 1 );
-		if (NULL == p) {
+		if (!p) {
 			return false;
 		}
 	}else {
 		p = (FileExtInfoTag*)realloc( m_puFileExtInfo, sizeof( FileExtInfoTag ) * ( m_nCount + 1 ) );
-		if (NULL == p) {
+		if (!p) {
 			return false;
 		}
 	}
@@ -143,10 +143,10 @@ const TCHAR* CFileExt::GetExtFilter( void )
 bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt )
 {
 	//	2003.08.14 MIK NULL‚¶‚á‚È‚­‚Äfalse
-	if (NULL == pszSrcExt) {
+	if (!pszSrcExt) {
 		return false;
 	}
-	if (NULL == pszDstExt) {
+	if (!pszDstExt) {
 		return false;
 	}
 

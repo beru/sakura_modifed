@@ -102,7 +102,7 @@ public:
 		for (int i = 0; i < (int)vecKeys.size(); i++) {
 			int baseLen = _tcslen( lpBaseFolder );
 			LPTSTR lpPath = new TCHAR[ baseLen + _tcslen( vecKeys[ i ] ) + 2 ];
-			if (NULL == lpPath) {
+			if (!lpPath) {
 				break;
 			}
 			auto_strcpy( lpPath, lpBaseFolder );
@@ -112,9 +112,9 @@ public:
 			const TCHAR* keyDirYen = _tcsrchr( vecKeys[ i ], _T('\\') );
 			const TCHAR* keyDirSlash = _tcsrchr( vecKeys[ i ], _T('/') );
 			const TCHAR* keyDir;
-			if (keyDirYen == NULL) {
+			if (!keyDirYen) {
 				keyDir = keyDirSlash;
-			}else if (keyDirSlash == NULL) {
+			}else if (!keyDirSlash) {
 				keyDir = keyDirYen;
 			}else if (keyDirYen < keyDirSlash) {
 				keyDir = keyDirSlash;

@@ -44,7 +44,7 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
 		pCPropTypes = ( CPropTypes* )(pPsp->lParam);
-		if (NULL != pCPropTypes) {
+		if (pCPropTypes) {
 			return (pCPropTypes->*pDispatch)( hwndDlg, uMsg, wParam, pPsp->lParam );
 		}else {
 			return FALSE;
@@ -52,7 +52,7 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCPropTypes = ( CPropTypes* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
-		if (NULL != pCPropTypes) {
+		if (pCPropTypes) {
 			return (pCPropTypes->*pDispatch)( hwndDlg, uMsg, wParam, lParam );
 		}else {
 			return FALSE;

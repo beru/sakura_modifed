@@ -25,8 +25,9 @@ public:
 	//! 指定属性を取り除く
 	void PopAttribute(DWORD dwPopAttribute)
 	{
-		if(m_bAttributeChanged) return; //既に取り除き済み
-
+		if (m_bAttributeChanged) {
+			return; // 既に取り除き済み
+		}
 		m_dwAttribute = ::GetFileAttributes(m_strPath.c_str());
 		if (m_dwAttribute != (DWORD)-1) {
 			if (m_dwAttribute & dwPopAttribute) {
@@ -84,19 +85,19 @@ CStream::~CStream()
 //
 void CStream::Open(const TCHAR* tszPath, const TCHAR* tszMode)
 {
-	Close(); //既に開いていたら、一度閉じる
+	Close(); // 既に開いていたら、一度閉じる
 
-	//属性変更：隠しorシステムファイルはCの関数で読み書きできないので属性を変更する
+	// 属性変更：隠しorシステムファイルはCの関数で読み書きできないので属性を変更する
 	m_pcFileAttribute = new CFileAttribute(tszPath);
 	m_pcFileAttribute->PopAttribute(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
-	//オープン
+	// オープン
 	m_fp = _tfopen(tszPath,tszMode);
 	if (!m_fp) {
-		Close(); //属性復元
+		Close(); // 属性復元
 	}
 
-	//エラー処理
+	// エラー処理
 	if (!m_fp && IsExceptionMode()) {
 		throw CError_FileOpen();
 	}

@@ -45,7 +45,7 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly )
 {
 	if (!m_nSettingTypeLocked || force) {
 		m_nSettingType = type;
-		if (false == CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
+		if (!CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
 			// 削除されてる/不正
 			m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
 			CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
@@ -60,7 +60,7 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly )
 			CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
 		}else {
 			m_nSettingType = type;
-			if (false == CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
+			if (!CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
 				m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
 				CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
 			}
@@ -90,6 +90,7 @@ void CDocType::SetDocumentTypeIdx( int id, bool force )
 		m_typeConfig.m_id = setId;
 	}
 }
+
 /*!
 	アイコンの設定
 	
@@ -104,7 +105,7 @@ void CDocType::SetDocumentIcon()
 	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)	// Grepモードの時はアイコンを変更しない
 		return;
 	
-	HICON	hIconBig, hIconSmall;
+	HICON hIconBig, hIconSmall;
 	if (this->GetDocumentAttribute().m_bUseDocumentIcon)
 		m_pcDocRef->m_pcEditWnd->GetRelatedIcon( m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall );
 	else

@@ -527,7 +527,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 	CGraphics gr(_hdc);
 
 	// 2004.01.28 Moca デスクトップに作画しないように
-	if ((HDC)NULL == gr) return;
+	if (!gr) return;
 
 	if (!GetDrawSwitch()) return;
 	//@@@
@@ -563,7 +563,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 		}
 		return;
 	}
-	if (m_hdcCompatDC && NULL == m_hbmpCompatBMP
+	if (m_hdcCompatDC && !m_hbmpCompatBMP
 		 || m_nCompatBMPWidth < (pPs->rcPaint.right - pPs->rcPaint.left)
 		 || m_nCompatBMPHeight < (pPs->rcPaint.bottom - pPs->rcPaint.top)
 	) {
@@ -1208,7 +1208,7 @@ void CEditView::DispTextSelected(
 */
 bool CEditView::CreateOrUpdateCompatibleBitmap( int cx, int cy )
 {
-	if (NULL == m_hdcCompatDC) {
+	if (!m_hdcCompatDC) {
 		return false;
 	}
 	// サイズを64の倍数で整列
@@ -1288,9 +1288,8 @@ void CEditView::UseCompatibleDC(BOOL fCache)
 {
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (fCache) {
-		if (m_hdcCompatDC == NULL) {
-			HDC			hdc;
-			hdc = ::GetDC( GetHwnd() );
+		if (!m_hdcCompatDC) {
+			HDC hdc = ::GetDC( GetHwnd() );
 			m_hdcCompatDC = ::CreateCompatibleDC( hdc );
 			::ReleaseDC( GetHwnd(), hdc );
 			DEBUG_TRACE(_T("CEditView::UseCompatibleDC: Created\n"), fCache);

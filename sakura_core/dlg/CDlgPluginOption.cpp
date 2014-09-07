@@ -96,7 +96,7 @@ int CDlgPluginOption::DoModal(
 	m_cPlugin = CPluginManager::getInstance()->GetPlugin( m_ID );
 	m_cPropPlugin = cPropPlugin;
 
-	if (m_cPlugin == NULL) {
+	if (!m_cPlugin) {
 		::ErrorMessage( hwndParent, LS(STR_DLGPLUGINOPT_LOAD) );
 		return 0;
 	}

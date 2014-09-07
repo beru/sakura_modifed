@@ -247,7 +247,7 @@ void CDlgProperty::SetData( void )
 		nBufLen = CheckKanjiCode_MAXREADLENGTH;
 	}
 	hgData = ::GlobalAlloc( GHND, nBufLen + 1 );
-	if (NULL == hgData) {
+	if (!hgData) {
 		in.Close();
 		goto end_of_CodeTest;
 	}
@@ -259,7 +259,7 @@ void CDlgProperty::SetData( void )
 	CESI::GetDebugInfo(pBuf,nBufLen,&ctext);
 	cmemProp.AppendNativeData(ctext);
 
-	if (NULL != hgData) {
+	if (hgData) {
 		::GlobalUnlock( hgData );
 		::GlobalFree( hgData );
 		hgData = NULL;

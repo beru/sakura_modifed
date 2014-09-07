@@ -91,8 +91,6 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 
 	// ƒtƒHƒ“ƒgÝ’è (ƒ‹[ƒ‰[ã‚Ì”Žš—p)
 	LOGFONT	lf;
-	HFONT		hFont;
-	HFONT		hFontOld;
 	memset_raw( &lf, 0, sizeof(lf) );
 	lf.lfHeight			= 1 - pCommon->m_sWindow.m_nRulerHeight;	//	2002/05/13 ai
 	lf.lfWidth			= 5;
@@ -108,8 +106,8 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	lf.lfQuality		= 1;
 	lf.lfPitchAndFamily	= 34;
 	_tcscpy( lf.lfFaceName, _T("Arial") );
-	hFont = ::CreateFontIndirect( &lf );
-	hFontOld = (HFONT)::SelectObject( gr, hFont );
+	HFONT hFont = ::CreateFontIndirect( &lf );
+	HFONT hFontOld = (HFONT)::SelectObject( gr, hFont );
 	::SetBkMode( gr, TRANSPARENT );
 	
 	//”wŒi“h‚è‚Â‚Ô‚µ
@@ -138,7 +136,6 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	}
 	::MoveToEx( gr, m_pEditView->GetTextArea().GetAreaLeft(), nY + 1, NULL );
 	::LineTo( gr, nToX, nY + 1 );
-
 
 	//–Ú·‚ð•`‰æ
 	CLayoutInt i = m_pEditView->GetTextArea().GetViewLeftCol();

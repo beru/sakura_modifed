@@ -18,45 +18,42 @@
 #include "util/os.h" //WM_MOUSEWHEEL
 
 
-
-
-/* CWndウィンドウメッセージのコールバック関数 */
+// CWndウィンドウメッセージのコールバック関数
 LRESULT CALLBACK CWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	CWnd* pCWnd = (CWnd*)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
 
-	if( pCWnd ){
-		/* クラスオブジェクトのポインタを使ってメッセージを配送する */
+	if (pCWnd) {
+		// クラスオブジェクトのポインタを使ってメッセージを配送する
 		return pCWnd->DispatchEvent( hwnd, uMsg, wParam, lParam );
-	}
-	else{
-		/* ふつうはここには来ない */
+	}else {
+		// ふつうはここには来ない
 		return ::DefWindowProc( hwnd, uMsg, wParam, lParam );
 	}
 }
 
-//!Windowsフック(CBT)
+//! Windowsフック(CBT)
 namespace CWindowCreationHook
 {
-	int		g_nCnt  = 0; //参照カウンタ
+	int		g_nCnt  = 0;	// 参照カウンタ
 	HHOOK	g_hHook = NULL;
 
-	//!フック用コールバック
+	//! フック用コールバック
 	static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
-		if(nCode==HCBT_CREATEWND){
+		if (nCode==HCBT_CREATEWND) {
 			HWND hwnd = (HWND)wParam;
 			CBT_CREATEWND* pCreateWnd = (CBT_CREATEWND*)lParam;
 			CWnd* pcWnd = (CWnd*)pCreateWnd->lpcs->lpCreateParams;
 
-			//CWnd以外のウィンドウ生成イベントは無視する
+			// CWnd以外のウィンドウ生成イベントは無視する
 			WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
-			if(wndproc!=CWndProc)goto next;
+			if (wndproc!=CWndProc) goto next;
 
-			//ウィンドウにCWndを関連付ける
+			// ウィンドウにCWndを関連付ける
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pcWnd);
 
-			//CWndにウィンドウを関連付ける
+			// CWndにウィンドウを関連付ける
 			pcWnd->_SetHwnd(hwnd);
 		}
 next:
@@ -66,7 +63,7 @@ next:
 	//!フック開始
 	void Use()
 	{
-		if(++g_nCnt>=1 && g_hHook==NULL){
+		if (++g_nCnt >= 1 && !g_hHook) {
 			g_hHook = ::SetWindowsHookEx(WH_CBT, CBTProc, NULL, GetCurrentThreadId());
 		}
 	}
@@ -183,7 +180,7 @@ HWND CWnd::Create(
 	//Windowsフック解除
 	CWindowCreationHook::Unuse();
 
-	if( NULL == m_hWnd ){
+	if( !m_hWnd ){
 		::MessageBox( m_hwndParent, _T("CWnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK );
 		return NULL;
 	}

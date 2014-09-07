@@ -8,9 +8,6 @@
       <UniqueIdentifier>{fe4ec4ec-aa2d-459c-a39d-bddbf929752a}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
-    <Filter Include="C Source Files">
-      <UniqueIdentifier>{8e1f3382-244c-4a9f-a355-6ad3d7d32117}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Cpp Source Files">
       <UniqueIdentifier>{a8100ec7-8444-4a2e-8f67-44ddaecceded}</UniqueIdentifier>
     </Filter>

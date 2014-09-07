@@ -159,10 +159,11 @@ void CEditView::ISearchEnter( int mode, ESearchDirection direction)
 		ISearchExec(true);
 
 	}else {
+		auto& selInfo = GetSelectionInfo();
 		//インクリメンタルサーチモードに入るだけ.		
 		//選択範囲の解除
-		if (GetSelectionInfo().IsTextSelected())	
-			GetSelectionInfo().DisableSelectArea( true );
+		if (selInfo.IsTextSelected())	
+			selInfo.DisableSelectArea( true );
 
 		m_sCurSearchOption = GetDllShareData().m_Common.m_sSearch.m_sSearchOption;
 		switch (mode) {
@@ -349,8 +350,8 @@ void CEditView::ISearchExec(bool bNext)
 	
 	ISearchWordMake();
 	
-	CLayoutInt	nLine(0);
-	CLayoutInt	nIdx1(0);
+	CLayoutInt nLine(0);
+	CLayoutInt nIdx1(0);
 	
 	if (bNext && m_bISearchWrap) {
 		switch (m_nISearchDirection) {
@@ -362,32 +363,35 @@ void CEditView::ISearchExec(bool bNext)
 			//最後から検索
 			CLogicInt nLineP;
 			int nIdxP;
-			nLineP =  m_pcEditDoc->m_cDocLineMgr.GetLineCount() - CLogicInt(1);
-			CDocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine( nLineP );
+			auto& docLineMgr = m_pcEditDoc->m_cDocLineMgr;
+			nLineP =  docLineMgr.GetLineCount() - CLogicInt(1);
+			CDocLine* pDocLine = docLineMgr.GetLine( nLineP );
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
 			CLayoutPoint ptTmp;
 			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nIdxP,nLineP),&ptTmp);
-			nIdx1=ptTmp.GetX2();
-			nLine=ptTmp.GetY2();
+			nIdx1 = ptTmp.GetX2();
+			nLine = ptTmp.GetY2();
 		}
 	}else if (GetSelectionInfo().IsTextSelected()) {
+		auto& sSelect = GetSelectionInfo().m_sSelect;
 		switch (m_nISearchDirection * 2 + (bNext ? 1: 0)) {
 		case 2 : //前方検索で現在位置から検索のとき
 		case 1 : //後方検索で次を検索のとき
 			//選択範囲の先頭を検索開始位置に
-			nLine = GetSelectionInfo().m_sSelect.GetFrom().GetY2();
-			nIdx1 = GetSelectionInfo().m_sSelect.GetFrom().GetX2();
+			nLine = sSelect.GetFrom().GetY2();
+			nIdx1 = sSelect.GetFrom().GetX2();
 			break;
 		case 0 : //前方検索で次を検索
 		case 3 : //後方検索で現在位置から検索
 			//選択範囲の後ろから
-			nLine = GetSelectionInfo().m_sSelect.GetTo().GetY2();
-			nIdx1 = GetSelectionInfo().m_sSelect.GetTo().GetX2();
+			nLine = sSelect.GetTo().GetY2();
+			nIdx1 = sSelect.GetTo().GetX2();
 			break;
 		}
 	}else {
-		nLine = GetCaret().GetCaretLayoutPos().GetY2();
-		nIdx1  = GetCaret().GetCaretLayoutPos().GetX2();
+		auto& pos = GetCaret().GetCaretLayoutPos();
+		nLine = pos.GetY2();
+		nIdx1  = pos.GetX2();
 	}
 
 	//桁位置からindexに変換

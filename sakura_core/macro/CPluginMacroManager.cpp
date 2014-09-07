@@ -46,8 +46,7 @@ CPluginMacroManager::~CPluginMacroManager()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/*!	マクロを実行する
-*/
+//!	マクロを実行する
 bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 {
 	bool result = false;
@@ -57,7 +56,7 @@ bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 		objMacro->AddRef();
 		params.push_back(objMacro);
 		if (m_Plug != NULL) {
-			objMacro->SetMatch(1);	//Run macro mode
+			objMacro->SetMatch(1);	// Run macro mode
 			m_Plug->Invoke(EditView, params);
 			result = true;
 		}
@@ -67,8 +66,7 @@ bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/*!	ファイルからマクロを読み込む
-*/
+//!	ファイルからマクロを読み込む
 BOOL CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 {
 	m_Source = L"";
@@ -83,8 +81,7 @@ BOOL CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/*!	文字列からマクロを読み込む
-*/
+//!	文字列からマクロを読み込む
 BOOL CPluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 {
 	m_Source = to_wchar(Code);
@@ -92,8 +89,7 @@ BOOL CPluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/*!	拡張子が一致したらオブジェクトを生成する
-*/
+//!	拡張子が一致したらオブジェクトを生成する
 CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
 {
 	CWSHIfObj::List params;
@@ -125,8 +121,7 @@ CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/*!	Register plugin macro manager
-*/
+//!	Register plugin macro manager
 void CPluginMacroManager::declare(void)
 {
 	CMacroFactory::getInstance()->RegisterCreator(Creator);

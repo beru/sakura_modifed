@@ -146,7 +146,7 @@ public:
 		//	置換後文字列が0幅の場合にoutpがNULLでもoutendpがNULLでない場合があるので，
 		//	outpのNULLチェックが必要
 
-		if (m_pRegExp->outp == NULL) {
+		if (!m_pRegExp->outp) {
 			return CLogicInt(0);
 		} else {
 			return CLogicInt(m_pRegExp->outendp - m_pRegExp->outp);

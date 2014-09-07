@@ -38,8 +38,6 @@
 */
 void CEditView::SetBracketPairPos( bool flag )
 {
-	int	mode;
-
 	// 03/03/06 ai すべて置換、すべて置換後のUndo&Redoがかなり遅い問題に対応
 	if (m_bDoing_UndoRedo || !GetDrawSwitch()) {
 		return;
@@ -55,7 +53,7 @@ void CEditView::SetBracketPairPos( bool flag )
 	bit1(in)  : 前方文字を調べるか？   0:調べない  1:調べる
 	bit2(out) : 見つかった位置         0:後ろ      1:前
 	*/
-	mode = 2;
+	int	mode = 2;
 
 	CLayoutPoint ptColLine;
 
@@ -276,8 +274,8 @@ void CEditView::DrawBracketPair( bool bDraw )
 //!対括弧の対応表
 //2007.10.16 kobake
 struct KAKKO_T{
-	const wchar_t *sStr;
-	const wchar_t *eStr;
+	const wchar_t* sStr;
+	const wchar_t* eStr;
 };
 static const KAKKO_T g_aKakkos[] = {
 	//半角
@@ -342,21 +340,18 @@ bool CEditView::SearchBracket(
 	CLogicPoint ptPos;
 
 	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic( ptLayout, &ptPos );
-	const wchar_t *cline = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
+	const wchar_t* cline = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
 
 	//	Jun. 19, 2000 genta
-	if (cline == NULL)	//	最後の行に本文がない場合
+	if (!cline)	//	最後の行に本文がない場合
 		return false;
 
 	// 括弧処理 2007.10.16 kobake
-	{
-		const KAKKO_T* p;
-		for (p = g_aKakkos; p->sStr != NULL;  p++) {
-			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
-				return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
-			}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
-				return SearchBracketBackward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
-			}
+	for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL;  p++) {
+		if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
+			return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
+		}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
+			return SearchBracketBackward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
 		}
 	}
 
@@ -378,9 +373,8 @@ bool CEditView::SearchBracket(
 	int nCharSize = cline + ptPos.x - bPos;
 	// 括弧処理 2007.10.16 kobake
 	if (nCharSize==1) {
-		const KAKKO_T* p;
 		ptPos.x = bPos - cline;
-		for (p = g_aKakkos; p->sStr != NULL; p++) {
+		for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL; p++) {
 			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
 				return SearchBracketForward( ptPos, pptLayoutNew, p->sStr, p->eStr, *mode );
 			}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
@@ -416,14 +410,14 @@ bool CEditView::SearchBracketForward(
 	int				mode
 )
 {
-	int			len;
-	int			level = 0;
+	int len;
+	int level = 0;
 
 	CLayoutPoint ptColLine;
 
-	//	初期位置の設定
+	// 初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout( ptPos, &ptColLine );	// 02/09/19 ai
-	CLayoutInt	nSearchNum = ( GetTextArea().GetBottomLine() ) - ptColLine.y;					// 02/09/19 ai
+	CLayoutInt nSearchNum = ( GetTextArea().GetBottomLine() ) - ptColLine.y;					// 02/09/19 ai
 	CDocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine( ptPos.GetY2() );
 	const wchar_t* cline = ci->GetDocLineStrWithEOL( &len );
 	const wchar_t* lineend = cline + len;
@@ -468,7 +462,7 @@ bool CEditView::SearchBracketForward(
 		//	次の行へ
 		ptPos.y++;
 		ci = ci->GetNextLine();	//	次のアイテム
-		if (ci == NULL)
+		if (!ci)
 			break;	//	終わりに達した
 
 		cline = ci->GetDocLineStrWithEOL( &len );
@@ -550,7 +544,7 @@ bool CEditView::SearchBracketBackward(
 		//	次の行へ
 		ptPos.y--;
 		ci = ci->GetPrevLine();	//	次のアイテム
-		if (ci == NULL)
+		if (!ci)
 			break;	//	終わりに達した
 
 		cline = ci->GetDocLineStrWithEOL(&len);
@@ -577,8 +571,7 @@ bool CEditView::IsBracket( const wchar_t *pLine, CLogicInt x, CLogicInt size )
 {
 	// 括弧処理 2007.10.16 kobake
 	if (size == 1) {
-		const KAKKO_T* p;
-		for (p = g_aKakkos; p->sStr != NULL; p++) {
+		for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL; p++) {
 			if (wcsncmp( p->sStr, &pLine[x], 1 ) == 0) {
 				return true;
 			}else if (wcsncmp( p->eStr, &pLine[x], 1 ) == 0) {
@@ -586,7 +579,6 @@ bool CEditView::IsBracket( const wchar_t *pLine, CLogicInt x, CLogicInt size )
 			}
 		}
 	}
-
 	return false;
 }
 //@@@ 2003.01.09 End

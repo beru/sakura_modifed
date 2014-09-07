@@ -12,15 +12,15 @@ int getCtrlKeyState()
 {
 	int nIdx = 0;
 
-	/* Shiftキーが押されているなら */
+	// Shiftキーが押されているなら
 	if (GetKeyState_Shift()) {
 		nIdx |= _SHIFT;
 	}
-	/* Ctrlキーが押されているなら */
+	// Ctrlキーが押されているなら
 	if (GetKeyState_Control()) {
 		nIdx |= _CTRL;
 	}
-	/* Altキーが押されているなら */
+	// Altキーが押されているなら
 	if (GetKeyState_Alt()) {
 		nIdx |= _ALT;
 	}

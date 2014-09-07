@@ -60,7 +60,7 @@ LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 		break;
 	case WM_GETDLGCODE:
 		pMsg = (MSG*) lParam; // pointer to an MSG structure
-		if (NULL == pMsg) {
+		if (!pMsg) {
 //			MYTRACE( _T("WM_GETDLGCODE  pMsg==NULL\n") );
 			return 0;
 		}

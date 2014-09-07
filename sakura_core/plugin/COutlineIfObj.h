@@ -75,10 +75,10 @@ public:
 		case F_OL_ADDFUNCINFO:			//アウトライン解析に追加する
 		case F_OL_ADDFUNCINFO2:			//アウトライン解析に追加する（深さ指定）
 			{
-				if (Arguments[0] == NULL) return false;
-				if (Arguments[1] == NULL) return false;
-				if (Arguments[2] == NULL) return false;
-				if (Arguments[3] == NULL) return false;
+				if (!Arguments[0]) return false;
+				if (!Arguments[1]) return false;
+				if (!Arguments[2]) return false;
+				if (!Arguments[3]) return false;
 				CLogicPoint ptLogic( _wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1 );
 				if (ptLogic.x < 0) ptLogic.x = 0;
 				if (ptLogic.y < 0) ptLogic.y = 0;
@@ -94,16 +94,16 @@ public:
 				}
 			}
 			break;
-		case F_OL_SETTITLE:				//アウトラインダイアログタイトルを指定
-			if (Arguments[0] == NULL) return false;
+		case F_OL_SETTITLE:				// アウトラインダイアログタイトルを指定
+			if (!Arguments[0]) return false;
 			m_sOutlineTitle = to_tchar( Arguments[0] );
 			break;
-		case F_OL_SETLISTTYPE:			//アウトラインリスト種別を指定
-			if (Arguments[0] == NULL) return false;
+		case F_OL_SETLISTTYPE:			// アウトラインリスト種別を指定
+			if (!Arguments[0]) return false;
 			m_nListType = (EOutlineType)_wtol(Arguments[0]);
 			break;
-		case F_OL_SETLABEL:				//ラベル文字列を指定
-			if (Arguments[0] == NULL || Arguments[1] == NULL) {
+		case F_OL_SETLABEL:				// ラベル文字列を指定
+			if (!Arguments[0] || !Arguments[1]) {
 				return false;
 			}
 			{

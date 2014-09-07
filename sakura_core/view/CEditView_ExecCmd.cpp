@@ -186,10 +186,10 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 		}
 	}
 	
-	if (hStdIn == NULL) {	/* 標準入力を制御しない場合、または一時ファイルの生成に失敗した場合 */
+	if (!hStdIn) {	/* 標準入力を制御しない場合、または一時ファイルの生成に失敗した場合 */
 		bSendStdin = FALSE;
 		hStdIn = GetStdHandle( STD_INPUT_HANDLE );
-		if (hStdIn == NULL) {
+		if (!hStdIn) {
 			// 2013.06.12 Moca 標準入力ハンドルを用意する
 			HANDLE hStdInWrite = NULL;
 			if (CreatePipe( &hStdIn, &hStdInWrite, &sa, 1000 ) == FALSE) {

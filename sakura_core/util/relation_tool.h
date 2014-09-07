@@ -33,16 +33,16 @@ class CListener;
 //! 複数のCListenerからウォッチされる
 class CSubject{
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CSubject();
 	virtual ~CSubject();
 
-	//公開インターフェース
+	// 公開インターフェース
 	int GetListenerCount() const{ return (int)m_vListenersRef.size(); }
 	CListener* GetListener(int nIndex) const{ return m_vListenersRef[nIndex]; }
 
 public:
-	//管理用
+	// 管理用
 	void _AddListener(CListener* pcListener);
 	void _RemoveListener(CListener* pcListener);
 
@@ -56,7 +56,7 @@ public:
 	CListener();
 	virtual ~CListener();
 
-	//公開インターフェース
+	// 公開インターフェース
 	CSubject* Listen(CSubject* pcSubject); //!< 直前にウォッチしていたサブジェクトを返す
 	CSubject* GetListeningSubject() const{ return m_pcSubjectRef; }
 

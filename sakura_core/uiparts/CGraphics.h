@@ -72,7 +72,7 @@ struct SFONT {
 };
 
 //! 描画管理
-//最新実装：ブラシ
+// 最新実装：ブラシ
 class CGraphics{
 public:
 	CGraphics(const CGraphics& rhs){ Init(rhs.m_hdc); }
@@ -82,7 +82,7 @@ public:
 
 	operator HDC() const{ return m_hdc; }
 
-	//クリッピング
+	// クリッピング
 private:
 	void _InitClipping();
 public:
@@ -95,7 +95,7 @@ public:
 		PushClipping(rc);
 	}
 
-	//テキスト文字色
+	// テキスト文字色
 public:
 	void PushTextForeColor(COLORREF color);
 	void PopTextForeColor();
@@ -111,7 +111,7 @@ public:
 		return m_vTextForeColors.back();
 	}
 
-	//テキスト背景色
+	// テキスト背景色
 public:
 	void PushTextBackColor(COLORREF color);
 	void PopTextBackColor();
@@ -127,18 +127,18 @@ public:
 		return m_vTextBackColors.back();
 	}
 
-	//テキストモード
+	// テキストモード
 public:
 	void SetTextBackTransparent(bool b)
 	{
 		m_nTextModeOrg.AssignOnce( ::SetBkMode(m_hdc,b?TRANSPARENT:OPAQUE) );
 	}
 
-	//テキスト
+	// テキスト
 public:
 	void RestoreTextColors();
 
-	//フォント
+	// フォント
 public:
 	void PushMyFont(HFONT hFont)
 	{
@@ -160,7 +160,7 @@ public:
 		return  m_vFonts.back().m_sFontAttr.m_bBoldFont;
 	}
 
-	//ペン
+	// ペン
 public:
 	void PushPen(COLORREF color, int nPenWidth, int nStyle = PS_SOLID);
 	void PopPen();
@@ -172,7 +172,7 @@ public:
 	void ClearPen();
 	COLORREF GetPenColor() const;
 
-	//ブラシ
+	// ブラシ
 public:
 	void _InitBrushColor();
 	void PushBrushColor(
@@ -188,7 +188,7 @@ public:
 	}
 	HBRUSH GetCurrentBrush() const{ return m_vBrushes.size()?m_vBrushes.back():NULL; }
 
-	//描画
+	// 描画
 public:
 	//! 直線
 	void DrawLine(int x1, int y1, int x2, int y2)
@@ -221,31 +221,31 @@ public:
 	static void DrawDropRect(LPCRECT lpRectNew, SIZE sizeNew, LPCRECT lpRectLast, SIZE sizeLast);	// ドロップ先の矩形を描画する
 
 private:
-	//型
+	// 型
 	typedef TOriginalHolder<COLORREF>	COrgColor;
 	typedef TOriginalHolder<int>		COrgInt;
 private:
 	HDC					m_hdc;
 
-	//クリッピング
+	// クリッピング
 	std::vector<HRGN>		m_vClippingRgns;
 
-	//テキスト
+	// テキスト
 	std::vector<COLORREF>	m_vTextForeColors;
 	std::vector<COLORREF>	m_vTextBackColors;
 	std::vector<SFONT>		m_vFonts;
 
-	//テキスト
+	// テキスト
 	COrgInt				m_nTextModeOrg;
 
-	//ペン
+	// ペン
 	HPEN				m_hpnOrg;
 	std::vector<HPEN>	m_vPens;
 
-	//ブラシ
+	// ブラシ
 	std::vector<HBRUSH>	m_vBrushes;
 	HBRUSH				m_hbrOrg;
 	HBRUSH				m_hbrCurrent;
-	bool				m_bDynamicBrush;	//m_hbrCurrentを動的に作成した場合はtrue
+	bool				m_bDynamicBrush;	// m_hbrCurrentを動的に作成した場合はtrue
 };
 

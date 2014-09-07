@@ -31,12 +31,12 @@
 class CMyString{
 public:
 	//コンストラクタ・デストラクタ
-	CMyString(WCHAR wc)								: m_wstr(1,wc),          m_str_cache(NULL) { }
-	CMyString(const WCHAR* szData=L"")				: m_wstr(szData),        m_str_cache(NULL) { }
-	CMyString(const WCHAR* pData, size_t nLength)	: m_wstr(pData,nLength), m_str_cache(NULL) { }
+	CMyString(WCHAR wc)								: m_wstr(1, wc),		m_str_cache(NULL) { }
+	CMyString(const WCHAR* szData = L"")			: m_wstr(szData),		m_str_cache(NULL) { }
+	CMyString(const WCHAR* pData, size_t nLength)	: m_wstr(pData, nLength), m_str_cache(NULL) { }
 	CMyString(const ACHAR* szData)					: m_wstr(L""), m_str_cache(NULL) { set(szData); }
 	CMyString(const ACHAR* pData, size_t nLength)	: m_wstr(L""), m_str_cache(NULL) { set(pData,nLength); }
-	CMyString(ACHAR wc)								: m_wstr(L""), m_str_cache(NULL) { ACHAR buf[2]={wc,0}; set(buf); }
+	CMyString(ACHAR wc)								: m_wstr(L""), m_str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
 	CMyString(const CMyString& rhs) : m_wstr(rhs.c_wstr()), m_str_cache(NULL) { }
 	~CMyString();
 
@@ -46,7 +46,7 @@ public:
 	CMyString& operator = (const CMyString& rhs){ set(rhs); return *this; }
 
 	//設定
-	void set(const wchar_t* wszData){ m_wstr=wszData; m_delete2(m_str_cache); }
+	void set(const wchar_t* wszData){ m_wstr = wszData; m_delete2(m_str_cache); }
 	void set(const wchar_t* wszData, int nLength){ m_wstr.assign(wszData, nLength); m_delete2(m_str_cache); }
 	void set(const char* szData);
 	void set(const char* szData, int nLength);
@@ -80,21 +80,20 @@ private:
 #define astring string
 
 
-
 //共通マクロ
 #define _FT _T
 #include "util/StaticType.h"
 
 //共通型
-typedef StaticString<TCHAR,_MAX_PATH> SFilePath;
-class CFilePath : public StaticString<TCHAR,_MAX_PATH>{
+typedef StaticString<TCHAR, _MAX_PATH> SFilePath;
+class CFilePath : public StaticString<TCHAR, _MAX_PATH>{
 private:
-	typedef StaticString<TCHAR,_MAX_PATH> Super;
+	typedef StaticString<TCHAR, _MAX_PATH> Super;
 public:
 	CFilePath() : Super() { }
 	CFilePath(const TCHAR* rhs) : Super(rhs) { }
 
-	bool IsValidPath() const{ return At(0)!=_T('\0'); }
+	bool IsValidPath() const{ return At(0) != _T('\0'); }
 	std::tstring GetDirPath() const
 	{
 		TCHAR	szDirPath[_MAX_PATH];
@@ -109,17 +108,17 @@ public:
 	LPCTSTR GetExt( bool bWithoutDot = false ) const
 	{
 		const TCHAR* head = c_str();
-		const TCHAR* p = auto_strchr(head,_T('\0')) - 1;
-		while (p>=head) {
-			if (*p==_T('.')) break;
-			if (*p==_T('\\')) break;
-			if (*p==_T('/')) break;
+		const TCHAR* p = auto_strchr(head, _T('\0')) - 1;
+		while (p >= head) {
+			if (*p == _T('.')) break;
+			if (*p == _T('\\')) break;
+			if (*p == _T('/')) break;
 			p--;
 		}
-		if (p>=head && *p==_T('.')) {
+		if (p >= head && *p == _T('.')) {
 			return bWithoutDot ? p+1 : p;	//bWithoutDot==trueならドットなしを返す
 		}else {
-			return auto_strchr(head,_T('\0'));
+			return auto_strchr(head, _T('\0'));
 		}
 	}
 };
@@ -136,8 +135,8 @@ public:
 	void AppendF(const TCHAR* szFormat, ...)
 	{
 		va_list v;
-		va_start(v,szFormat);
-		m_pHead += auto_vsprintf_s(m_pHead,_countof(m_szCmdLine)-(m_pHead-m_szCmdLine),szFormat,v);
+		va_start(v, szFormat);
+		m_pHead += auto_vsprintf_s(m_pHead, _countof(m_szCmdLine)-(m_pHead-m_szCmdLine), szFormat, v);
 		va_end(v);
 	}
 	const TCHAR* c_str() const

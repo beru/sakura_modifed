@@ -615,7 +615,7 @@ BOOL CTabWnd::SeparateGroup( HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptD
 {
 	HWND hWnd = GetParentHwnd();
 	EditNode* pTopEditNode = CAppNodeGroupHandle(0).GetEditNodeAt(0);
-	if( pTopEditNode == NULL )
+	if( !pTopEditNode )
 		return FALSE;
 	if( hWnd != pTopEditNode->m_hWnd || hWnd != ::GetForegroundWindow() )
 		return FALSE;
@@ -644,7 +644,7 @@ BOOL CTabWnd::SeparateGroup( HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptD
 									SMTO_ABORTIFHUNG | SMTO_BLOCK, 10000, &dwResult );
 		}
 	}
-	else if( pDstEditNode == NULL )
+	else if( !pDstEditNode )
 	{
 		::SetWindowPos( hwndSrc, hwndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE );
 	}
@@ -657,7 +657,7 @@ BOOL CTabWnd::SeparateGroup( HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptD
 	RECT rcDstWork;
 	GetMonitorWorkRect( ptDrop, &rcDstWork );
 	wp.length = sizeof(wp);
-	if( hwndDst == NULL )
+	if( !hwndDst )
 	{	// 新規グループのウィンドウ処理
 		// ウィンドウを移動先に表示する
 		::GetWindowPlacement( hwndTop, &wp );
@@ -1005,7 +1005,7 @@ LRESULT CTabWnd::OnSize( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	RECT	rcWnd;
 
-	if( NULL == GetHwnd() || NULL == m_hwndTab ) return 0L;
+	if( !GetHwnd() || !m_hwndTab ) return 0L;
 
 	::GetWindowRect( GetHwnd(), &rcWnd );
 
@@ -1051,7 +1051,7 @@ LRESULT CTabWnd::OnDestroy( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 	}
 
 	// 2006.01.28 ryoji イメージリストを削除
-	if( NULL != m_hIml )
+	if( m_hIml )
 	{
 		ImageList_Destroy( m_hIml );
 		m_hIml = NULL;
@@ -1218,7 +1218,7 @@ LRESULT CTabWnd::OnMeasureItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 		int cxIcon = CX_SMICON;
 		int cyIcon = CY_SMICON;
-		if( NULL != m_hIml )
+		if( m_hIml )
 		{
 			ImageList_GetIconSize( m_hIml, &cxIcon, &cyIcon );
 		}
@@ -1271,7 +1271,7 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		// アイコン描画
 		int cxIcon = CX_SMICON;
 		int cyIcon = CY_SMICON;
-		if( NULL != m_hIml )
+		if( m_hIml )
 		{
 			ImageList_GetIconSize( m_hIml, &cxIcon, &cyIcon );
 			if( 0 <= pData->iImage )
@@ -1388,7 +1388,7 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		// アイコン描画
 		int cxIcon = CX_SMICON;
 		int cyIcon = CY_SMICON;
-		if( NULL != m_hIml )
+		if( m_hIml )
 		{
 			ImageList_GetIconSize( m_hIml, &cxIcon, &cyIcon );
 			if( 0 <= item.iImage )
@@ -1668,7 +1668,7 @@ LRESULT CTabWnd::OnNotify( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 void CTabWnd::TabWindowNotify( WPARAM wParam, LPARAM lParam )
 {
-	if( NULL == m_hwndTab ) return;
+	if( !m_hwndTab ) return;
 
 	bool	bFlag = false;	//前回何もタブがなかったか？
 	int		nCount;
@@ -1886,7 +1886,7 @@ int CTabWnd::FindTabIndexByHWND( HWND hWnd )
 	int		nCount;
 	TCITEM	tcitem;
 
-	if( NULL == m_hwndTab ) return -1;
+	if( !m_hwndTab ) return -1;
 
 	nCount = TabCtrl_GetItemCount( m_hwndTab );
 	for( i = 0; i < nCount; i++ )
@@ -1920,7 +1920,7 @@ void CTabWnd::Refresh( BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/
 	int			i;
 	int			j;
 
-	if( NULL == m_hwndTab ) return;
+	if( !m_hwndTab ) return;
 
 	pEditNode = NULL;
 	nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNode, TRUE );
@@ -2064,7 +2064,7 @@ void CTabWnd::AdjustWindowPlacement( void )
 			// Note. WS_EX_TOPMOST については hwndInsertAfter ウィンドウの状態が引き継がれる
 			EditNode* pEditNode;
 			pEditNode = CAppNodeManager::getInstance()->GetEditNode(hwnd)->GetGroup().GetTopEditNode();
-			if( pEditNode == NULL )
+			if( !pEditNode )
 			{
 				::ShowWindow( hwnd, SW_SHOWNA );
 				return;
@@ -2118,7 +2118,7 @@ int CTabWnd::SetCarmWindowPlacement( HWND hwnd, const WINDOWPLACEMENT* pWndpl )
 
 void CTabWnd::ShowHideWindow( HWND hwnd, BOOL bDisp )
 {
-	if( NULL == hwnd ) return;
+	if( !hwnd ) return;
 
 	if( bDisp )
 	{
@@ -2281,12 +2281,12 @@ void CTabWnd::LayoutTab( void )
 	// アイコンの表示を切り替える
 	BOOL bDispTabIcon = m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon;
 	HIMAGELIST hImg = TabCtrl_GetImageList( m_hwndTab );
-	if( NULL == hImg && bDispTabIcon )
+	if( !hImg && bDispTabIcon )
 	{
-		if( NULL != InitImageList() )
+		if( InitImageList() )
 			Refresh( TRUE, TRUE );
 	}
-	else if( NULL != hImg && !bDispTabIcon )
+	else if( hImg && !bDispTabIcon )
 	{
 		InitImageList();
 	}
@@ -2380,7 +2380,7 @@ HIMAGELIST CTabWnd::InitImageList( void )
 			sizeof(sfi),
 			SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES
 		);
-		if( NULL == hImlSys )
+		if( !hImlSys )
 			goto l_end;
 		m_iIconApp = sfi.iIcon;
 
@@ -2391,13 +2391,13 @@ HIMAGELIST CTabWnd::InitImageList( void )
 			sizeof(sfi),
 			SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES | SHGFI_OPENICON
 		);
-		if( NULL == hImlSys )
+		if( !hImlSys )
 			goto l_end;
 		m_iIconGrep = sfi.iIcon;
 
 		// システムイメージリストを複製する
 		hImlNew = ImageList_Duplicate( hImlSys );
-		if( NULL == hImlNew )
+		if( !hImlNew )
 			goto l_end;
 		ImageList_SetBkColor( hImlNew, CLR_NONE );
 
@@ -2414,7 +2414,7 @@ l_end:
 	TabCtrl_SetImageList( m_hwndTab, hImlNew );
 
 	// 新しいイメージリストを記憶する
-	if( NULL != m_hIml )
+	if( m_hIml )
 		ImageList_Destroy( m_hIml );
 	m_hIml = hImlNew;
 
@@ -2430,7 +2430,7 @@ int CTabWnd::GetImageIndex( EditNode* pNode )
 	HIMAGELIST hImlSys;
 	HIMAGELIST hImlNew;
 
-	if( NULL == m_hIml )
+	if( !m_hIml )
 		return -1;	// イメージリストを使っていない
 
 	if( pNode )
@@ -2443,14 +2443,14 @@ int CTabWnd::GetImageIndex( EditNode* pNode )
 
 			// 拡張子に関連付けられたアイコンイメージのインデックスを取得する
 			hImlSys = (HIMAGELIST)::SHGetFileInfo( szExt, FILE_ATTRIBUTE_NORMAL, &sfi, sizeof(sfi), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES );
-			if( NULL == hImlSys )
+			if( !hImlSys )
 				return -1;
 			if( ImageList_GetImageCount( m_hIml ) > sfi.iIcon )
 				return sfi.iIcon;	// インデックスを返す
 
 			// システムイメージリストを複製する
 			hImlNew = ImageList_Duplicate( hImlSys );
-			if( NULL == hImlNew )
+			if( !hImlNew )
 				return -1;
 			ImageList_SetBkColor( hImlNew, CLR_NONE );
 
@@ -2481,14 +2481,14 @@ int CTabWnd::GetImageIndex( EditNode* pNode )
 */
 HIMAGELIST CTabWnd::ImageList_Duplicate( HIMAGELIST himl )
 {
-	if( NULL == himl ) return NULL;
+	if( !himl ) return NULL;
 
 	// 本物の ImageList_Duplicate() があればそれを呼び出す
 	HIMAGELIST hImlNew;
 	if( m_RealImageList_Duplicate )
 	{
 		hImlNew = m_RealImageList_Duplicate( himl );
-		if( NULL != hImlNew )
+		if( hImlNew )
 			return hImlNew;
 		m_RealImageList_Duplicate = NULL;	// 2006.06.20 ryoji 失敗時は代替処理に切り替え
 	}
@@ -2506,7 +2506,7 @@ HIMAGELIST CTabWnd::ImageList_Duplicate( HIMAGELIST himl )
 		int nCount = ImageList_GetImageCount( himl );
 		for (int i = 0; i < nCount; i++) {
 			HICON hIcon = ImageList_GetIcon( himl, i, ILD_TRANSPARENT );
-			if( NULL == hIcon )
+			if( !hIcon )
 			{
 				ImageList_Destroy( hImlNew );
 				return NULL;
@@ -2725,7 +2725,7 @@ void CTabWnd::GetTabName( EditNode* pEditNode, BOOL bFull, BOOL bDupamp, LPTSTR 
 {
 	LPTSTR pszText = new TCHAR[nLen];
 
-	if( pEditNode == NULL )
+	if( !pEditNode )
 	{
 		::lstrcpyn( pszText, LS(STR_NO_TITLE1), nLen );
 	}

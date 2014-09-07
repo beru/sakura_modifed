@@ -29,7 +29,7 @@ struct SysString
 	SysString(const wchar_t *S, int L)  { Data = ::SysAllocStringLen(S, L); }
 	SysString(const char *S, int L)
 	{ 
-		wchar_t *buf = new wchar_t[L + 1];
+		wchar_t* buf = new wchar_t[L + 1];
 		int L2 = ::MultiByteToWideChar(CP_ACP, 0, S, L, buf, L);
 		Data = ::SysAllocStringLen(buf, L2); 
 		delete[] buf;

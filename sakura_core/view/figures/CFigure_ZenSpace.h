@@ -28,10 +28,10 @@
 //! 全角スペース描画
 class CFigure_ZenSpace : public CFigureSpace{
 public:
-	//traits
+	// traits
 	bool Match(const wchar_t* pText) const;
 
-	//action
+	// action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_ZENSPACE; }
 };

@@ -435,7 +435,7 @@ void CTextDrawer::DispLineNumber(
 			/* 行番号の表示 false=折り返し単位／true=改行単位 */
 			if (pTypes->m_bLineNumIsCRLF) {
 				/* 論理行番号表示モード */
-				if (NULL == pcLayout || 0 != pcLayout->GetLogicOffset()) { //折り返しレイアウト行
+				if (!pcLayout || 0 != pcLayout->GetLogicOffset()) { //折り返しレイアウト行
 					wcscpy( szLineNum, L" " );
 				}else {
 					_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	/* 対応する論理行番号 */

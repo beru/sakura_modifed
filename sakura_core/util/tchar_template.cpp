@@ -2,7 +2,7 @@
 #include "tchar_template.h"
 
 // -- -- 必要な文字群を手動で定義 -- -- //
-//アルファベット
+// アルファベット
 DEFINE_T2('A')
 DEFINE_T2('B')
 DEFINE_T2('C')
@@ -56,7 +56,7 @@ DEFINE_T2('x')
 DEFINE_T2('y')
 DEFINE_T2('z')
 
-//数字
+// 数字
 DEFINE_T2('0')
 DEFINE_T2('1')
 DEFINE_T2('2')
@@ -68,7 +68,7 @@ DEFINE_T2('7')
 DEFINE_T2('8')
 DEFINE_T2('9')
 
-//記号
+// 記号
 DEFINE_T2('-')
 DEFINE_T2('^')
 DEFINE_T2('\\')
@@ -103,7 +103,7 @@ DEFINE_T2('?')
 DEFINE_T2('_')
 DEFINE_T2(' ')
 
-//特殊文字
+// 特殊文字
 DEFINE_T2('\r')
 DEFINE_T2('\n')
 DEFINE_T2('\t')

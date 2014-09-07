@@ -46,7 +46,7 @@ bool CControlProcess::InitializeProcess()
 
 	// アプリケーション実行検出用(インストーラで使用)
 	m_hMutex = ::CreateMutex(NULL, FALSE, GSTR_MUTEX_SAKURA);
-	if (m_hMutex == NULL) {
+	if (!m_hMutex) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));
 		return false;
@@ -54,7 +54,7 @@ bool CControlProcess::InitializeProcess()
 
 	// 初期化完了イベントを作成する
 	m_hEventCPInitialized = ::CreateEvent(NULL, TRUE, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED);
-	if (m_hEventCPInitialized == NULL) {
+	if (!m_hEventCPInitialized) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateEvent()失敗。\n終了します。"));
 		return false;
@@ -62,7 +62,7 @@ bool CControlProcess::InitializeProcess()
 
 	// コントロールプロセスの目印
 	m_hMutexCP = ::CreateMutex(NULL, TRUE, GSTR_MUTEX_SAKURA_CP);
-	if (m_hMutexCP == NULL) {
+	if (!m_hMutexCP) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));
 		return false;

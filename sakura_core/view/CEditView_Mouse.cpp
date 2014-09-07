@@ -154,7 +154,7 @@ void CEditView::OnLBUTTONDOWN( WPARAM fwKeys, int _xPos , int _yPos )
 							// 移動範囲を削除する
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
 							// →ドロップ先は外部のウィンドウである
-							if (NULL == m_cCommander.GetOpeBlk()) {
+							if (!m_cCommander.GetOpeBlk()) {
 								m_cCommander.SetOpeBlk(new COpeBlk);
 							}
 							m_cCommander.GetOpeBlk()->AddRef();
@@ -346,7 +346,7 @@ normal_action:;
 					&nLineLen,
 					&pcLayout
 				);
-				if (NULL != pLine) {
+				if (pLine) {
 					nIdx = LineColumnToIndex( pcLayout, GetSelectionInfo().m_sSelect.GetFrom().GetX2() );
 					/* 現在位置の単語の範囲を調べる */
 					bool bWhareResult = m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
@@ -378,7 +378,7 @@ normal_action:;
 					}
 				}
 				pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( GetSelectionInfo().m_sSelect.GetTo().GetY2(), &nLineLen, &pcLayout );
-				if (NULL != pLine) {
+				if (pLine) {
 					nIdx = LineColumnToIndex( pcLayout, GetSelectionInfo().m_sSelect.GetTo().GetX2() );
 					/* 現在位置の単語の範囲を調べる */
 					if (m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
@@ -691,7 +691,7 @@ void CALLBACK AutoScrollTimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
 {
 	CEditView*	pCEditView;
 	pCEditView = ( CEditView* )::GetWindowLongPtr( hwnd, 0 );
-	if (NULL != pCEditView) {
+	if (pCEditView) {
 		pCEditView->AutoScrollOnTimer();
 	}
 }
@@ -1116,7 +1116,7 @@ void CEditView::OnMOUSEMOVE( WPARAM fwKeys, int xPos_, int yPos_ )
 			}
 			CLogicInt nLineLen;
 			const CLayout* pcLayout;
-			if (NULL != m_pcEditDoc->m_cLayoutMgr.GetLineStr( GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout )){
+			if (m_pcEditDoc->m_cLayoutMgr.GetLineStr( GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout )){
 				CLogicInt	nIdx = LineColumnToIndex( pcLayout, GetCaret().GetCaretLayoutPos().GetX2() );
 				CLayoutRange sRange;
 
@@ -1641,7 +1641,7 @@ STDMETHODIMP CEditView::DragEnter( LPDATAOBJECT pDataObject, DWORD dwKeyState, P
 	if (!m_pcEditDoc->IsEditable()) return E_UNEXPECTED;
 
 
-	if (pDataObject == NULL || pdwEffect == NULL)
+	if (!pDataObject || !pdwEffect)
 		return E_INVALIDARG;
 
 	m_cfDragData = GetAvailableClipFormat( pDataObject );
@@ -1678,7 +1678,7 @@ STDMETHODIMP CEditView::DragOver( DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect
 	::ScreenToClient( GetHwnd(), (LPPOINT)&pt );
 	OnMOUSEMOVE( dwKeyState, pt.x , pt.y );
 
-	if (pdwEffect == NULL)
+	if (!pdwEffect)
 		return E_INVALIDARG;
 
 	*pdwEffect = TranslateDropEffect( m_cfDragData, dwKeyState, pt, *pdwEffect );
@@ -1709,7 +1709,7 @@ STDMETHODIMP CEditView::DragLeave( void )
 	RedrawAll();	// ルーラー、アンダーライン、カーソル位置表示更新
 
 	// 非アクティブ時は表示状態を非アクティブに戻す	// 2007.12.09 ryoji
-	if (::GetActiveWindow() == NULL)
+	if (!::GetActiveWindow())
 		OnKillFocus();
 
 	return S_OK;
@@ -1732,10 +1732,10 @@ STDMETHODIMP CEditView::Drop( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL
 	_SetDragMode( FALSE );
 
 	// 非アクティブ時は表示状態を非アクティブに戻す	// 2007.12.09 ryoji
-	if (::GetActiveWindow() == NULL)
+	if (!::GetActiveWindow())
 		OnKillFocus();
 
-	if (pDataObject == NULL || pdwEffect == NULL)
+	if (!pDataObject || !pdwEffect)
 		return E_INVALIDARG;
 
 	CLIPFORMAT cf;
@@ -1772,7 +1772,7 @@ STDMETHODIMP CEditView::Drop( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL
 
 	// ドロップデータの取得
 	HGLOBAL hData = GetGlobalData( pDataObject, cf );
-	if (hData == NULL)
+	if (!hData)
 		return E_INVALIDARG;
 	LPVOID pData = ::GlobalLock( hData );
 	SIZE_T nSize = ::GlobalSize( hData );
@@ -1788,7 +1788,7 @@ STDMETHODIMP CEditView::Drop( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL
 	}
 
 	// アンドゥバッファの準備
-	if (NULL == m_cCommander.GetOpeBlk()) {
+	if (!m_cCommander.GetOpeBlk()) {
 		m_cCommander.SetOpeBlk(new COpeBlk);
 	}
 	m_cCommander.GetOpeBlk()->AddRef();
@@ -1995,7 +1995,7 @@ STDMETHODIMP CEditView::Drop( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL
 STDMETHODIMP CEditView::PostMyDropFiles( LPDATAOBJECT pDataObject )
 {
 	HGLOBAL hData = GetGlobalData( pDataObject, CF_HDROP );
-	if (hData == NULL)
+	if (!hData)
 		return E_INVALIDARG;
 	LPVOID pData = ::GlobalLock( hData );
 	SIZE_T nSize = ::GlobalSize( hData );

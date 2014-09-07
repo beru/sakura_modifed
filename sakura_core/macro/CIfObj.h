@@ -35,7 +35,7 @@
 #include "_os/OleTypes.h"
 class CEditView;
 
-//COM一般
+// COM一般
 
 template<class Base>
 class ImplementsIUnknown: public Base
@@ -59,19 +59,19 @@ public:
 	virtual ~ImplementsIUnknown(){}
 };
 
-//WSH一般
+// WSH一般
 
 class CIfObj;
 typedef HRESULT (CIfObj::*CIfObjMethod)(int ID, DISPPARAMS *Arguments, VARIANT* Result, void *Data);
 
-//CIfObjが必要とするWSHClientのインタフェース
+// CIfObjが必要とするWSHClientのインタフェース
 class IWSHClient
 {
 public:
 	virtual void* GetData() const = 0;
 };
 
-//スクリプトに渡されるオブジェクト
+// スクリプトに渡されるオブジェクト
 
 class CIfObj
 : public ImplementsIUnknown<IDispatch>
@@ -94,7 +94,7 @@ public:
 
 	// フィールド・アクセサ
 	const std::wstring::value_type* Name() const { return this->m_sName.c_str(); } // インタフェースオブジェクト名
-	bool IsGlobal() const { return this->m_isGlobal; } //オブジェクト名の省略可否
+	bool IsGlobal() const { return this->m_isGlobal; } // オブジェクト名の省略可否
 	IWSHClient* Owner() const { return this->m_Owner; } // オーナーIWSHClient
 	std::wstring m_sName;
 	bool m_isGlobal;
@@ -134,7 +134,7 @@ public:
 
 private:
 	// メンバ変数
-	CMethodInfoList m_Methods;			//メソッド情報リスト
+	CMethodInfoList m_Methods;			// メソッド情報リスト
 	ITypeInfo* m_TypeInfo;
 };
 

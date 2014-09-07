@@ -18,7 +18,7 @@
 #include "dlg/CDlgCtrlCode.h"	//コントロールコードの入力(ダイアログ)
 #include "env/CFormatManager.h"
 
-//日付挿入
+// 日付挿入
 void CViewCommander::Command_INS_DATE( void )
 {
 	// 日付をフォーマット
@@ -32,7 +32,7 @@ void CViewCommander::Command_INS_DATE( void )
 }
 
 
-//時刻挿入
+// 時刻挿入
 void CViewCommander::Command_INS_TIME( void )
 {
 	// 時刻をフォーマット
@@ -55,9 +55,9 @@ void CViewCommander::Command_CtrlCode_Dialog( void )
 {
 	CDlgCtrlCode	cDlgCtrlCode;
 
-	//コントロールコード入力ダイアログを表示する
+	// コントロールコード入力ダイアログを表示する
 	if (cDlgCtrlCode.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument() )) {
-		//コントロールコードを入力する
+		// コントロールコードを入力する
 		// 2013.06.11 Command_WCHAR -> HandleCommand マクロ記録対応
 		// 2013.12.12 F_WCHAR -> F_CTRL_CODE
 		HandleCommand( F_CTRL_CODE, true, cDlgCtrlCode.GetCharCode(), 0, 0, 0 );

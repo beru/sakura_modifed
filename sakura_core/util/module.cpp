@@ -65,13 +65,11 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 
 		if (pDllGetVersion) {
 			DLLVERSIONINFO dvi;
-			HRESULT hr;
 
 			ZeroMemory(&dvi, sizeof(dvi));
 			dvi.cbSize = sizeof(dvi);
 
-			hr = (*pDllGetVersion)(&dvi);
-
+			HRESULT hr = (*pDllGetVersion)(&dvi);
 			if (SUCCEEDED(hr)) {
 			   dwVersion = PACKVERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
 			}
@@ -122,7 +120,7 @@ HICON GetAppIcon( HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSma
 		return hIcon;
 	}
 
-	//	ファイルからの読み込みに失敗したらリソースから取得
+	// ファイルからの読み込みに失敗したらリソースから取得
 	hIcon = (HICON)::LoadImage(
 		hInst,
 		MAKEINTRESOURCE(nResource),
@@ -154,27 +152,27 @@ void GetAppVersionInfo(
 	DWORD*		pdwProductVersionLS
 )
 {
-	HRSRC					hRSRC;
-	HGLOBAL					hgRSRC;
-	VS_VERSION_INFO_HEAD*	pVVIH;
-	/* リソースから製品バージョンの取得 */
+	// リソースから製品バージョンの取得
 	*pdwProductVersionMS = 0;
 	*pdwProductVersionLS = 0;
 	static bool bLoad = false;
 	static DWORD dwVersionMS = 0;
 	static DWORD dwVersionLS = 0;
-	if (hInstance == NULL && bLoad) {
+	if (!hInstance && bLoad) {
 		*pdwProductVersionMS = dwVersionMS;
 		*pdwProductVersionLS = dwVersionLS;
 		return;
 	}
-	if (NULL != ( hRSRC = ::FindResource( hInstance, MAKEINTRESOURCE(nVersionResourceID), RT_VERSION ) )
-	 && NULL != ( hgRSRC = ::LoadResource( hInstance, hRSRC ) )
-	 && NULL != ( pVVIH = (VS_VERSION_INFO_HEAD*)::LockResource( hgRSRC ) )
+	HRSRC hRSRC;
+	HGLOBAL hgRSRC;
+	VS_VERSION_INFO_HEAD* pVVIH;
+	if (( hRSRC = ::FindResource( hInstance, MAKEINTRESOURCE(nVersionResourceID), RT_VERSION ) )
+	 && ( hgRSRC = ::LoadResource( hInstance, hRSRC ) )
+	 && ( pVVIH = (VS_VERSION_INFO_HEAD*)::LockResource( hgRSRC ) )
 	) {
 		*pdwProductVersionMS = pVVIH->Value.dwProductVersionMS;
 		*pdwProductVersionLS = pVVIH->Value.dwProductVersionLS;
-		if (hInstance == NULL) {
+		if (!hInstance) {
 			dwVersionMS = pVVIH->Value.dwProductVersionMS;
 			dwVersionLS = pVVIH->Value.dwProductVersionLS;
 			bLoad = true;

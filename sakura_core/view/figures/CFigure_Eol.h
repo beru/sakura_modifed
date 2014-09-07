@@ -28,14 +28,14 @@
 //! â¸çsï`âÊ
 class CFigure_Eol : public CFigureSpace{
 public:
-	//traits
+	// traits
 	bool Match(const wchar_t* pText) const;
 	bool Disp(void) const
 	{
 		return true;
 	}
 
-	//action
+	// action
 	bool DrawImp(SColorStrategyInfo* pInfo);
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const {};
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_EOL; }

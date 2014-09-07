@@ -18,17 +18,17 @@
 #include "outline/CFuncInfo.h"
 
 
-/* CFuncInfoArrクラス構築 */
+// CFuncInfoArrクラス構築
 CFuncInfoArr::CFuncInfoArr()
 {
-	m_nFuncInfoArrNum = 0;	/* 配列要素数 */
-	m_ppcFuncInfoArr = NULL;	/* 配列 */
+	m_nFuncInfoArrNum = 0;		// 配列要素数
+	m_ppcFuncInfoArr = NULL;	// 配列
 	m_nAppendTextLenMax = 0;
 	return;
 }
 
 
-/* CFuncInfoArrクラス消滅 */
+// CFuncInfoArrクラス消滅
 CFuncInfoArr::~CFuncInfoArr()
 {
 	Empty();
@@ -37,7 +37,7 @@ CFuncInfoArr::~CFuncInfoArr()
 
 void CFuncInfoArr::Empty( void )
 {
-	if (m_nFuncInfoArrNum > 0 && NULL != m_ppcFuncInfoArr) {
+	if (m_nFuncInfoArrNum > 0 && m_ppcFuncInfoArr) {
 		for (int i = 0; i < m_nFuncInfoArrNum; ++i) {
 			delete m_ppcFuncInfoArr[i];
 			m_ppcFuncInfoArr[i] = NULL;
@@ -52,8 +52,8 @@ void CFuncInfoArr::Empty( void )
 }
 
 
-/* 0<=の指定番号のデータを返す */
-/* データがない場合はNULLを返す */
+// 0<=の指定番号のデータを返す
+// データがない場合はNULLを返す
 CFuncInfo* CFuncInfoArr::GetAt( int nIdx )
 {
 	if (nIdx >= m_nFuncInfoArrNum) {
@@ -62,7 +62,7 @@ CFuncInfo* CFuncInfoArr::GetAt( int nIdx )
 	return m_ppcFuncInfoArr[nIdx];
 }
 
-/*! 配列の最後にデータを追加する */
+//! 配列の最後にデータを追加する
 void CFuncInfoArr::AppendData( CFuncInfo* pcFuncInfo )
 {
 	if (0 == m_nFuncInfoArrNum) {

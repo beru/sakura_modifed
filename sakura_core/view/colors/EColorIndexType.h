@@ -94,14 +94,14 @@ enum EColorIndexType {
 	COLORIDX_DIFF_DELETE,	//!< DIFF追加  //@@@ 2002.06.01 MIK
 	COLORIDX_MARK,			//!< ブックマーク  // 02/10/16 ai Add
 
-	//カラーの最後
+	// カラーの最後
 	COLORIDX_LAST,			//!< カラーの最後
 
-	//カラー表示制御用(ブロックコメント)
+	// カラー表示制御用(ブロックコメント)
 	COLORIDX_BLOCK1			= COLORIDX_BLOCK_BIT,			//!< ブロックコメント1(文字色と背景色は行コメントと同じ)
 	COLORIDX_BLOCK2,										//!< ブロックコメント2(文字色と背景色は行コメントと同じ)
 
-	//カラー表示制御用(正規表現キーワード)
+	// カラー表示制御用(正規表現キーワード)
 	COLORIDX_REGEX_FIRST	= COLORIDX_REGEX_BIT,						//!< 正規表現キーワード(最初)
 	COLORIDX_REGEX_LAST		= COLORIDX_REGEX_FIRST + COLORIDX_LAST - 1,	//!< 正規表現キーワード(最後)
 

@@ -44,8 +44,7 @@ public:
 	}
 	~CMutex()
 	{
-		if( NULL != m_hObj )
-		{
+		if (m_hObj) {
 			::CloseHandle( m_hObj );
 			m_hObj = NULL;
 		}

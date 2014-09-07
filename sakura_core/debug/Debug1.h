@@ -53,7 +53,7 @@ void DebugOutA( LPCSTR lpFmt, ...);
 	inline void DEBUG_TRACE( ... ){}
 #endif
 
-//RELEASE版でも出力する版 (RELEASEでのみ発生するバグを監視する目的)
+// RELEASE版でも出力する版 (RELEASEでのみ発生するバグを監視する目的)
 #ifdef USE_RELPRINT
 	#ifdef _UNICODE
 	#define RELPRINT DebugOutW

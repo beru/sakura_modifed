@@ -55,7 +55,7 @@ HWND MyGetAncestor( HWND hWnd, UINT gaFlags )
 		do {
 			hwndAncestor = hwndWk;
 			hwndWk = ::GetParent( hwndAncestor );
-			if (hwndWk == NULL)
+			if (!hwndWk)
 				hwndWk = ::GetWindow( hwndAncestor, GW_OWNER );
 		}while (hwndWk != NULL);
 		break;
@@ -79,18 +79,18 @@ BOOL BlockingHook( HWND hwndDlgCancel )
 {
 	MSG		msg;
 	BOOL	ret;
-	//	Jun. 04, 2003 genta メッセージをあるだけ処理するように
+	// Jun. 04, 2003 genta メッセージをあるだけ処理するように
 	while (( ret = (BOOL)::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE )) != 0) {
 		if (msg.message == WM_QUIT) {
 			return FALSE;
 		}
-		if (NULL != hwndDlgCancel && IsDialogMessage( hwndDlgCancel, &msg )) {
+		if (hwndDlgCancel && IsDialogMessage( hwndDlgCancel, &msg )) {
 		}else {
 			::TranslateMessage( &msg );
 			::DispatchMessage( &msg );
 		}
 	}
-	return TRUE/*ret*/;
+	return TRUE; // ret;
 }
 
 

@@ -26,13 +26,13 @@
 #include <ObjIdl.h> // LPDATAOBJECT
 
 
-//システム資源
-BOOL GetSystemResources( int*, int*, int* );	/* システムリソースを調べる */
-BOOL CheckSystemResources( const TCHAR* );	/* システムリソースのチェック */
+// システム資源
+BOOL GetSystemResources( int*, int*, int* );	// システムリソースを調べる
+BOOL CheckSystemResources( const TCHAR* );		// システムリソースのチェック
 
-//クリップボード
-bool SetClipboardText( HWND hwnd, const ACHAR* pszText, int nLength );    //!< クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
-bool SetClipboardText( HWND hwnd, const WCHAR* pszText, int nLength ); //!< クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
+// クリップボード
+bool SetClipboardText( HWND hwnd, const ACHAR* pszText, int nLength );	//!< クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
+bool SetClipboardText( HWND hwnd, const WCHAR* pszText, int nLength );	//!< クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
 BOOL IsDataAvailable( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat );
 HGLOBAL GetGlobalData( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat );
 
@@ -54,9 +54,9 @@ void PreventVisualStyle( HWND hWnd );		// 指定ウィンドウでビジュアルスタイルを使
 void MyInitCommonControls();				// コモンコントロールを初期化する							// 2006.06.21 ryoji
 
 
-//カレントディレクトリユーティリティ。
-//コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
-//2008.03.01 kobake 作成
+// カレントディレクトリユーティリティ。
+// コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
+// 2008.03.01 kobake 作成
 class CCurrentDirectoryBackupPoint{
 public:
 	CCurrentDirectoryBackupPoint();
@@ -102,7 +102,7 @@ private:
 #define IMR_RECONVERTSTRING             0x0004
 #endif // IMR_RECONVERTSTRING
 
-/* 2002.04.09 minfu 再変換調整 */
+// 2002.04.09 minfu 再変換調整
 #ifndef IMR_CONFIRMRECONVERTSTRING
 #define IMR_CONFIRMRECONVERTSTRING             0x0005
 #endif // IMR_CONFIRMRECONVERTSTRING

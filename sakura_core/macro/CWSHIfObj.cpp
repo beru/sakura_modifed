@@ -38,11 +38,11 @@
 #include "util/other_util.h" // auto_array_ptr
 
 
-//コマンド・関数を準備する
+// コマンド・関数を準備する
 void CWSHIfObj::ReadyMethods( CEditView* pView, int flags )
 {
 	this->m_pView = pView;
-	//	 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
+	// 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
 	ReadyCommands(GetMacroCommandInfo(), flags | FA_FROMMACRO );
 	ReadyCommands(GetMacroFuncInfo(), 0);
 	/* CWSHIfObjを継承したサブクラスからReadyMethodsを呼び出した場合、
@@ -81,7 +81,7 @@ void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 				}
 			}
 		}
-		//	2007.07.21 genta : flagを加えた値を登録する
+		// 2007.07.21 genta : flagを加えた値を登録する
 		this->AddMethod(
 			FuncName,
 			(Info->m_nFuncID | flags),
@@ -139,7 +139,7 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 			StrArgs[I] = NULL;
 			strLengths[I] = 0;
 		}
-		WCHAR* S = NULL;								// 初期化必須
+		WCHAR* S = NULL;							// 初期化必須
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
 		for (I = 0; I < ArgCount; ++I) {
