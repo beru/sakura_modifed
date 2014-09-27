@@ -98,7 +98,7 @@ void InitCodeSet();
 //                           名前                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CCodeTypeName{
+class CCodeTypeName {
 public:
 	CCodeTypeName(ECodeType eCodeType) : m_eCodeType(eCodeType) { InitCodeSet(); }
 	CCodeTypeName(int eCodeType) : m_eCodeType((ECodeType)eCodeType) { InitCodeSet(); }
@@ -117,7 +117,7 @@ private:
 //                      コンボボックス                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CCodeTypesForCombobox{
+class CCodeTypesForCombobox {
 public:
 	CCodeTypesForCombobox() { InitCodeSet(); }
 	int			GetCount() const;

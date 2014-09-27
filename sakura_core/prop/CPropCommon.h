@@ -130,7 +130,7 @@ public:
 	CommonSetting	m_Common;
 
 	// 2005.01.13 MIK ƒZƒbƒg”‘‰Á
-	struct SKeywordSetIndex{
+	struct SKeywordSetIndex {
 		int typeId;
 		int index[MAX_KEYWORDSET_PER_TYPE];
 	};

@@ -31,7 +31,7 @@
 #include "types/CType.h" // CTypeConfig
 #include "env/CDocTypeManager.h"
 
-class CDocType{
+class CDocType {
 public:
 	// ¶¬‚Æ”jŠü
 	CDocType(CEditDoc* pcDoc);
@@ -44,16 +44,13 @@ public:
 	// •¶‘í•Ê‚Ìİ’è‚Ææ“¾		// Nov. 23, 2000 genta
 	void SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly = false);	//!< •¶‘í•Ê‚Ìİ’è
 	void SetDocumentTypeIdx( int id = -1, bool force = false);
-	CTypeConfig GetDocumentType() const					//!< •¶‘í•Ê‚Ìæ“¾
-	{
+	CTypeConfig GetDocumentType() const {					//!< •¶‘í•Ê‚Ìæ“¾
 		return m_nSettingType;
 	}
-	const STypeConfig& GetDocumentAttribute() const						//!< •¶‘í•Ê‚ÌÚ×î•ñ
-	{
+	const STypeConfig& GetDocumentAttribute() const {		//!< •¶‘í•Ê‚ÌÚ×î•ñ
 		return m_typeConfig;
 	}
-	STypeConfig& GetDocumentAttributeWrite()						//!< •¶‘í•Ê‚ÌÚ×î•ñ
-	{
+	STypeConfig& GetDocumentAttributeWrite() {				//!< •¶‘í•Ê‚ÌÚ×î•ñ
 		return m_typeConfig;
 	}
 

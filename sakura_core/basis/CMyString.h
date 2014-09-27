@@ -86,7 +86,7 @@ private:
 
 // ‹¤’ÊŒ^
 typedef StaticString<TCHAR, _MAX_PATH> SFilePath;
-class CFilePath : public StaticString<TCHAR, _MAX_PATH>{
+class CFilePath : public StaticString<TCHAR, _MAX_PATH> {
 private:
 	typedef StaticString<TCHAR, _MAX_PATH> Super;
 public:
@@ -94,8 +94,7 @@ public:
 	CFilePath(const TCHAR* rhs) : Super(rhs) { }
 
 	bool IsValidPath() const { return At(0) != _T('\0'); }
-	std::tstring GetDirPath() const
-	{
+	std::tstring GetDirPath() const {
 		TCHAR	szDirPath[_MAX_PATH];
 		TCHAR	szDrive[_MAX_DRIVE];
 		TCHAR	szDir[_MAX_DIR];
@@ -105,8 +104,7 @@ public:
 		return szDirPath;
 	}
 	// Šg’£Žq‚ðŽæ“¾‚·‚é
-	LPCTSTR GetExt( bool bWithoutDot = false ) const
-	{
+	LPCTSTR GetExt( bool bWithoutDot = false ) const {
 		const TCHAR* head = c_str();
 		const TCHAR* p = auto_strchr(head, _T('\0')) - 1;
 		while (p >= head) {
@@ -127,28 +125,23 @@ public:
 //$$ ‰¼
 class CCommandLineString {
 public:
-	CCommandLineString()
-	{
+	CCommandLineString() {
 		m_szCmdLine[0] = _T('\0');
 		m_pHead = m_szCmdLine;
 	}
-	void AppendF(const TCHAR* szFormat, ...)
-	{
+	void AppendF(const TCHAR* szFormat, ...) {
 		va_list v;
 		va_start(v, szFormat);
 		m_pHead += auto_vsprintf_s(m_pHead, _countof(m_szCmdLine)-(m_pHead-m_szCmdLine), szFormat, v);
 		va_end(v);
 	}
-	const TCHAR* c_str() const
-	{
+	const TCHAR* c_str() const {
 		return m_szCmdLine;
 	}
-	size_t size() const
-	{
+	size_t size() const {
 		return m_pHead - m_szCmdLine;
 	}
-	size_t max_size() const
-	{
+	size_t max_size() const {
 		return _countof(m_szCmdLine) - 1;
 	}
 private:

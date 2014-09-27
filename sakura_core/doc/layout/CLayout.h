@@ -28,8 +28,7 @@ class CLayoutMgr;
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CLayout
-{
+class CLayout {
 protected:
 	friend class CLayoutMgr; //####仮
 public:
@@ -74,8 +73,7 @@ public:
 
 	// 変更インターフェース
 	void OffsetLogicLineNo(CLogicInt n){ m_ptLogicPos.y+=n; }
-	void SetColorTypePrev(EColorIndexType n)
-	{
+	void SetColorTypePrev(EColorIndexType n) {
 		m_nTypePrev = n;
 	}
 	void SetLayoutWidth(CLayoutInt nWidth){ m_nLayoutWidth = nWidth; }
@@ -87,22 +85,22 @@ public:
 	CLayoutInt CalcLayoutOffset(const CLayoutMgr& cLayoutMgr) const;
 
 	//! 文字列参照を取得
-	CStringRef GetStringRef() const{ return CStringRef(GetPtr(), GetLengthWithEOL()); }
+	CStringRef GetStringRef() const { return CStringRef(GetPtr(), GetLengthWithEOL()); }
 
 	// チェーン属性
-	CLayout* GetPrevLayout(){ return m_pPrev; }
-	const CLayout* GetPrevLayout() const{ return m_pPrev; }
-	CLayout* GetNextLayout(){ return m_pNext; }
-	const CLayout* GetNextLayout() const{ return m_pNext; }
-	void _SetPrevLayout(CLayout* pcLayout){ m_pPrev = pcLayout; }
-	void _SetNextLayout(CLayout* pcLayout){ m_pNext = pcLayout; }
+	CLayout* GetPrevLayout() { return m_pPrev; }
+	const CLayout* GetPrevLayout() const { return m_pPrev; }
+	CLayout* GetNextLayout() { return m_pNext; }
+	const CLayout* GetNextLayout() const { return m_pNext; }
+	void _SetPrevLayout(CLayout* pcLayout) { m_pPrev = pcLayout; }
+	void _SetNextLayout(CLayout* pcLayout) { m_pNext = pcLayout; }
 
 	// 実データ参照
 	const CDocLine* GetDocLineRef() const{ if(this)return m_pCDocLine; else return NULL; } //$$note:高速化
 
 	// その他属性参照
-	const CEol& GetLayoutEol() const{ return m_cEol; }
-	const CLayoutColorInfo* GetColorInfo() const{ return m_cExInfo.GetColorInfo(); }
+	const CEol& GetLayoutEol() const { return m_cEol; }
+	const CLayoutColorInfo* GetColorInfo() const { return m_cExInfo.GetColorInfo(); }
 	CLayoutExInfo* GetLayoutExInfo(){
 		return &m_cExInfo;
 	}

@@ -44,14 +44,12 @@ public:
 
 	// ‘€ì
 	void clear() { m_nCount=0; }
-	void push_back(SET_TYPE e)
-	{
+	void push_back(SET_TYPE e) {
 		assert(m_nCount<MAX_SIZE);
 		m_nCount++;
 		m_aElements[m_nCount-1]=e;
 	}
-	void resize(int nNewSize)
-	{
+	void resize(int nNewSize) {
 		assert(0 <= nNewSize);
 		assert(nNewSize <= MAX_SIZE);
 		m_nCount = nNewSize;

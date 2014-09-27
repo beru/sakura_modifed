@@ -33,9 +33,7 @@
 #define PII_WSH						L"Wsh"			// WSHセクション
 #define PII_WSH_USECACHE			L"UseCache"		// 読み込んだスクリプトを再利用する
 
-class CWSHPlug :
-	public CPlug
-{
+class CWSHPlug : public CPlug {
 public:
 	CWSHPlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel ) :
 		CPlug( plugin, id, sJack, sHandler, sLabel )
@@ -51,9 +49,7 @@ public:
 	CWSHMacroManager* m_Wsh;
 };
 
-class CWSHPlugin :
-	public CPlugin
-{
+class CWSHPlugin : public CPlugin {
 	// コンストラクタ
 public:
 	CWSHPlugin( const tstring& sBaseDir ) : CPlugin( sBaseDir ) {
@@ -66,8 +62,7 @@ public:
 
 	// 操作
 	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
-	virtual CPlug* CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel )
-	{
+	virtual CPlug* CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel ) {
 		return new CWSHPlug( plugin, id, sJack, sHandler, sLabel );
 	}
 

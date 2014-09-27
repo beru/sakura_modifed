@@ -41,89 +41,71 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	//! 表示される最初の行
-	CLayoutInt GetViewTopLine() const
-	{
+	CLayoutInt GetViewTopLine() const {
 		return m_nViewTopLine;
 	}
-	void SetViewTopLine(CLayoutInt nLine)
-	{
+	void SetViewTopLine(CLayoutInt nLine) {
 		m_nViewTopLine=nLine;
 	}
 
 	//! 表示域の一番左の桁
-	CLayoutInt GetViewLeftCol() const
-	{
+	CLayoutInt GetViewLeftCol() const {
 		return m_nViewLeftCol;
 	}
-	void SetViewLeftCol(CLayoutInt nLeftCol)
-	{
+	void SetViewLeftCol(CLayoutInt nLeftCol) {
 		m_nViewLeftCol=nLeftCol;
 	}
 
 	//!右にはみ出した最初の列を返す
-	CLayoutInt GetRightCol() const
-	{
+	CLayoutInt GetRightCol() const {
 		return m_nViewLeftCol + m_nViewColNum;
 	}
 
 	//!下にはみ出した最初の行を返す
-	CLayoutInt GetBottomLine() const
-	{
+	CLayoutInt GetBottomLine() const {
 		return m_nViewTopLine + m_nViewRowNum;
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                   領域を取得(ピクセル)                      //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	int GetAreaLeft() const
-	{
+	int GetAreaLeft() const {
 		return m_nViewAlignLeft;
 	}
-	int GetAreaTop() const
-	{
+	int GetAreaTop() const {
 		return m_nViewAlignTop;
 	}
-	int GetAreaRight() const
-	{
+	int GetAreaRight() const {
 		return m_nViewAlignLeft + m_nViewCx;
 	}
-	int GetAreaBottom() const
-	{
+	int GetAreaBottom() const {
 		return m_nViewAlignTop + m_nViewCy;
 	}
-	CMyRect GetAreaRect() const
-	{
+	CMyRect GetAreaRect() const {
 		return CMyRect(GetAreaLeft(), GetAreaTop(), GetAreaRight(), GetAreaBottom());
 	}
 
-	int GetAreaWidth() const
-	{
+	int GetAreaWidth() const {
 		return m_nViewCx;
 	}
-	int GetAreaHeight() const
-	{
+	int GetAreaHeight() const {
 		return m_nViewCy;
 	}
 
-	int GetTopYohaku() const
-	{
+	int GetTopYohaku() const {
 		return m_nTopYohaku;
 	}
-	void SetTopYohaku(int nPixel)
-	{
+	void SetTopYohaku(int nPixel) {
 		m_nTopYohaku=nPixel;
 	}
-	int GetLeftYohaku() const
-	{
+	int GetLeftYohaku() const {
 		return m_nLeftYohaku;
 	}
-	void SetLeftYohaku(int nPixel)
-	{
+	void SetLeftYohaku(int nPixel) {
 		m_nLeftYohaku=nPixel;
 	}
 	// 行番号の幅(余白なし)
-	int GetLineNumberWidth() const
-	{
+	int GetLineNumberWidth() const {
 		return m_nViewAlignLeft - m_nLeftYohaku;
 	}
 
@@ -143,8 +125,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           判定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	bool IsRectIntersected(const RECT& rc) const
-	{
+	bool IsRectIntersected(const RECT& rc) const {
 		// rcが無効またはゼロ領域の場合はfalse
 		if (rc.left >= rc.right) return false;
 		if (rc.top  >= rc.bottom) return false;
@@ -160,8 +141,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        その他取得                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	int GetRulerHeight() const
-	{
+	int GetRulerHeight() const {
 		return m_nViewAlignTop - GetTopYohaku();
 	}
 	//! ドキュメント左端のクライアント座標を取得 (つまり、スクロールされた状態であれば、マイナスを返す)
@@ -175,16 +155,13 @@ public:
 	//                           設定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void UpdateAreaMetrics(HDC hdc);
-	void SetAreaLeft(int nAreaLeft)
-	{
+	void SetAreaLeft(int nAreaLeft) {
 		m_nViewAlignLeft = nAreaLeft;
 	}
-	void SetAreaTop(int nAreaTop)
-	{
+	void SetAreaTop(int nAreaTop) {
 		m_nViewAlignTop = nAreaTop;
 	}
-	void OffsetViewTopLine(CLayoutInt nOff)
-	{
+	void OffsetViewTopLine(CLayoutInt nOff) {
 		m_nViewTopLine += nOff;
 	}
 protected:
@@ -232,14 +209,14 @@ private:
 
 	// テキスト
 private:
-	CLayoutInt	m_nViewTopLine;			// 表示域の一番上の行(0開始)
+	CLayoutInt	m_nViewTopLine;		// 表示域の一番上の行(0開始)
 public:
-	CLayoutInt	m_nViewRowNum;			// 表示域の行数
+	CLayoutInt	m_nViewRowNum;		// 表示域の行数
 
 private:
-	CLayoutInt	m_nViewLeftCol;			// 表示域の一番左の桁(0開始)
+	CLayoutInt	m_nViewLeftCol;		// 表示域の一番左の桁(0開始)
 public:
-	CLayoutInt	m_nViewColNum;			// 表示域の桁数
+	CLayoutInt	m_nViewColNum;		// 表示域の桁数
 
 	// その他
 	int		m_nViewAlignLeftCols;	// 行番号域の桁数

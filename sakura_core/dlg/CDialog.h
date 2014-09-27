@@ -23,8 +23,7 @@ class CDialog;
 struct DLLSHAREDATA;
 class CRecent;
 
-enum EAnchorStyle
-{
+enum EAnchorStyle {
 	ANCHOR_NONE              = 0,
 	ANCHOR_LEFT              = 1,
 	ANCHOR_RIGHT             = 2,
@@ -69,8 +68,7 @@ struct SComboBoxItemDeleter
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CDialog
-{
+class CDialog {
 public:
 	/*
 	||  Constructors

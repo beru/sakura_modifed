@@ -47,15 +47,13 @@ public:
 	//                         描画位置                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 固定値
-	void InitDrawPos(const POINT& pt)
-	{
+	void InitDrawPos(const POINT& pt) {
 		m_ptDrawOrigin = pt;
 		m_ptDrawLayout.x = m_ptDrawLayout.y = CLayoutInt(0);
 	}
 
 	// 取得
-	CMyPoint GetDrawPos() const
-	{
+	CMyPoint GetDrawPos() const {
 		return CMyPoint(
 			m_ptDrawOrigin.x + (Int)m_ptDrawLayout.x * m_nDx,
 			m_ptDrawOrigin.y + (Int)m_ptDrawLayout.y * m_nDy
@@ -78,19 +76,16 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 変更
-	void SetLayoutLineRef(CLayoutInt nOffsetLine)
-	{
+	void SetLayoutLineRef(CLayoutInt nOffsetLine) {
 		m_nLineRef = nOffsetLine;
 		// キャッシュ更新
 		m_pcLayoutRef = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( m_nLineRef );
 	}
 	void ForwardLayoutLineRef(int nOffsetLine);
 
-
 	// 取得
 	CLayoutInt		GetLayoutLineRef() const { return m_nLineRef; }
 	const CLayout*	GetLayoutRef() const { return m_pcLayoutRef; }
-
 
 private:
 	// 固定要素

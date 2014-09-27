@@ -29,119 +29,96 @@ public:
 	typedef typename PointType::IntType IntType;
 public:
 	// コンストラクタ
-	CRangeBase()
-	{
+	CRangeBase() {
 	}
-	CRangeBase(const CRangeBase& rhs)
-	{
+	CRangeBase(const CRangeBase& rhs) {
 		operator = (rhs);
 	}
-	CRangeBase(const PointType& _ptFrom, const PointType& _ptTo)
-	{
+	CRangeBase(const PointType& _ptFrom, const PointType& _ptTo) {
 		m_ptFrom = _ptFrom;
 		m_ptTo = _ptTo;
 	}
 
 	// 代入
-	CRangeBase& operator = (const CRangeBase& rhs)
-	{
+	CRangeBase& operator = (const CRangeBase& rhs) {
 		m_ptFrom = rhs.m_ptFrom;
 		m_ptTo = rhs.m_ptTo;
 		return *this;
 	}
 
 	// 比較
-	bool operator == (const CRangeBase& rhs) const
-	{
+	bool operator == (const CRangeBase& rhs) const {
 		return m_ptFrom == rhs.m_ptFrom && m_ptTo == rhs.m_ptTo;
 	}
-	bool operator != (const CRangeBase& rhs) const
-	{
+	bool operator != (const CRangeBase& rhs) const {
 		return !(operator==(rhs));
 	}
 
 	// 判定
 	//! 1文字しか選択してない状態ならtrue
-	bool IsOne() const
-	{
+	bool IsOne() const {
 		return m_ptFrom == m_ptTo;
 	}
-	bool IsLineOne() const
-	{
+	bool IsLineOne() const {
 		return m_ptFrom.y == m_ptTo.y;
 	}
-	bool IsValid() const //! 有効な範囲ならtrue
-	{
+	bool IsValid() const { //! 有効な範囲ならtrue
 		return m_ptFrom.BothNatural() && m_ptTo.BothNatural();
 	}
 
 	// 取得
-	PointType GetFrom() const
-	{
+	PointType GetFrom() const {
 		return m_ptFrom;
 	}
-	PointType GetTo() const
-	{
+	PointType GetTo() const {
 		return m_ptTo;
 	}
 
 	// 特殊
-	PointType* GetFromPointer()
-	{
+	PointType* GetFromPointer() {
 		return &m_ptFrom;
 	}
-	PointType* GetToPointer()
-	{
+	PointType* GetToPointer() {
 		return &m_ptTo;
 	}
 
 	// 設定
-	void Clear(int n)
-	{
+	void Clear(int n) {
 		m_ptFrom.Set(IntType(n), IntType(n));
 		m_ptTo.Set(IntType(n), IntType(n));
 	}
-	void Set(const PointType& pt)
-	{
+	void Set(const PointType& pt) {
 		m_ptFrom = pt;
 		m_ptTo = pt;
 	}
-	void SetFrom(const PointType& pt)
-	{
+	void SetFrom(const PointType& pt) {
 		m_ptFrom = pt;
 	}
-	void SetTo(const PointType& pt)
-	{
+	void SetTo(const PointType& pt) {
 		m_ptTo = pt;
 	}
 
-	void SetFromX(IntType nX)
-	{
+	void SetFromX(IntType nX) {
 		m_ptFrom.x = nX;
 	}
 	/*
-	void SetFromY(int nY)
-	{
+	void SetFromY(int nY) {
 		m_ptFrom.y = nY;
 	}
 	*/
-	void SetFromY(IntType nY)
-	{
+	void SetFromY(IntType nY) {
 		m_ptFrom.y = nY;
 	}
 	
-	void SetToX(IntType nX)
-	{
+	void SetToX(IntType nX) {
 		m_ptTo.x = nX;
 	}
 	/*
-	void SetToY(int nY)
-	{
+	void SetToY(int nY) {
 		m_ptTo.y = nY;
 	}
 	*/
-	void SetToY(IntType nY)
-	{
+	void SetToY(IntType nY) {
 		m_ptTo.y = nY;
 	}
 

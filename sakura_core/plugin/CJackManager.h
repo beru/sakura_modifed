@@ -70,9 +70,8 @@ enum ERegisterPlugResult {
 	PPMGR_CONFLICT				// 指定したジャックは別のプラグインが接続している
 };
 
-
 // ジャック管理クラス
-class CJackManager : public TSingleton<CJackManager>{
+class CJackManager : public TSingleton<CJackManager> {
 	friend class TSingleton<CJackManager>;
 	CJackManager();
 

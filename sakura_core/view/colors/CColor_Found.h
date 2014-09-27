@@ -48,8 +48,13 @@ private:
 class CColor_Found : public CColorStrategy {
 public:
 	CColor_Found();
-	virtual EColorIndexType GetStrategyColor() const
-	{ return this->validColorNum != 0 ? this->highlightColors[ (m_nSearchResult - 1) % this->validColorNum ] : COLORIDX_DEFAULT; }
+	virtual EColorIndexType GetStrategyColor() const {
+		return
+			this->validColorNum != 0
+			? this->highlightColors[ (m_nSearchResult - 1) % this->validColorNum ]
+			: COLORIDX_DEFAULT
+		;
+	}
 	// F‘Ö‚¦
 	virtual void InitStrategyStatus(){ } //############—vŒŸØ
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);

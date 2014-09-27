@@ -25,7 +25,7 @@
 
 #include <Windows.h> //POINT
 
-class CMyPoint : public POINT{
+class CMyPoint : public POINT {
 public:
 	// コンストラクタ・デストラクタ
 	CMyPoint() { x = 0; y = 0; }

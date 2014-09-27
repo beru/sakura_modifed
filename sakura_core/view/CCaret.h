@@ -41,25 +41,21 @@ public:
 		m_nUnderLineLockCounter = 0;
 	}
 	// 表示非表示を切り替えられないようにする
-	void Lock()
-	{
+	void Lock() {
 		m_nLockCounter++;
 	}
 	// 表示非表示を切り替えられるようにする
-	void UnLock()
-	{
+	void UnLock() {
 		m_nLockCounter--;
 		if (m_nLockCounter < 0){
 			m_nLockCounter = 0;
 		}
 	}
-	void UnderLineLock()
-	{
+	void UnderLineLock() {
 		m_nUnderLineLockCounter++;
 	}
 	// 表示非表示を切り替えられるようにする
-	void UnderLineUnLock()
-	{
+	void UnderLineUnLock() {
 		m_nUnderLineLockCounter--;
 		if (m_nUnderLineLockCounter < 0){
 			m_nUnderLineLockCounter = 0;
@@ -118,8 +114,7 @@ public:
 	);
 	
 	//! キャレットを破棄する（内部的にも破棄）
-	void DestroyCaret()
-	{
+	void DestroyCaret() {
 		::DestroyCaret();
 		m_sizeCaret.cx = 0;
 	}

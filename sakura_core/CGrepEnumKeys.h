@@ -71,7 +71,7 @@ public:
 		ClearItems();
 		
 		int nPos = 0;
-		TCHAR*	token;
+		TCHAR* token;
 		while ((token = my_strtok<TCHAR>( pWildCard, nWildCardLen, &nPos, WILDCARD_DELIMITER ))) {	//トークン毎に繰り返す。
 			//フィルタを種類ごとに振り分ける
 			enum KeyFilterType {

@@ -31,7 +31,7 @@
 
 #include "CCodeBase.h"
 
-class CLatin1 : public CCodeBase{
+class CLatin1 : public CCodeBase {
 
 public:
 	//CCodeBaseインターフェース

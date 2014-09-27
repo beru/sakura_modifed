@@ -124,20 +124,17 @@ const int CMD_FROM_MOUSE = 2;
 //2007.08.25 kobake 文字間隔配列の機能をCTextMetricsに移動
 //2007.10.02 kobake Command_TRIM2をCConvertに移動
 
-class CEditView
-	:
+class CEditView :
 	public CViewCalc, //$$ これが親クラスである必要は無いが、このクラスのメソッド呼び出しが多いので、暫定的に親クラスとする。
 	public CEditView_Paint,
 	public CMyWnd,
 	public CDocListenerEx
 {
 public:
-	const CEditDoc* GetDocument() const
-	{
+	const CEditDoc* GetDocument() const {
 		return m_pcEditDoc;
 	}
-	CEditDoc* GetDocument()
-	{
+	CEditDoc* GetDocument() {
 		return m_pcEditDoc;
 	}
 public:
@@ -146,15 +143,12 @@ public:
 	bool IsBkBitmap() const{ return NULL != m_pcEditDoc->m_hBackImg; }
 
 public:
-	CEditView* GetEditView()
-	{
+	CEditView* GetEditView() {
 		return this;
 	}
-	const CEditView* GetEditView() const
-	{
+	const CEditView* GetEditView() const {
 		return this;
 	}
-
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        生成と破棄                           //
@@ -264,21 +258,17 @@ public:
 	void Redraw();											// 2001/06/21 asa-o 再描画
 	void CaretUnderLineON( bool, bool, bool );				// カーソル行アンダーラインのON
 	void CaretUnderLineOFF( bool, bool, bool, bool );		// カーソル行アンダーラインのOFF
-	bool GetDrawSwitch() const
-	{
+	bool GetDrawSwitch() const {
 		return m_bDrawSWITCH;
 	}
-	bool SetDrawSwitch(bool b)
-	{
+	bool SetDrawSwitch(bool b) {
 		bool bOld = m_bDrawSWITCH;
 		m_bDrawSWITCH = b;
 		return bOld;
 	}
 	bool IsDrawCursorVLinePos( int );
 	void DrawBracketCursorLine( bool );
-
-
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        スクロール                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -297,7 +287,6 @@ public:
 	//	Aug. 25, 2002 genta protected->publicに移動
 	bool IsImeON( void );	// IME ONか	// 2006.12.04 ryoji
 	
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        スクロール                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -324,8 +313,7 @@ public:
 public:
 	void SetIMECompFormPos( void );								// IME編集エリアの位置を変更
 	void SetIMECompFormFont( void );							// IME編集エリアの表示フォントを変更
-
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       テキスト選択                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -348,9 +336,7 @@ public:
 public:
 	bool IsCurrentPositionURL( const CLayoutPoint& ptCaretPos, CLogicRange* pUrlRange, std::wstring* pwstrURL ); // カーソル位置にURLが有る場合のその範囲を調べる
 	BOOL CheckTripleClick( CMyPoint ptMouse );							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
-
-
-
+	
 	void ExecCmd(const TCHAR*, int, const TCHAR*) ;							// 子プロセスの標準出力をリダイレクトする
 	void AddToCmdArr( const TCHAR* );
 	BOOL ChangeCurRegexp(bool bRedrawIfChanged= true);									// 2002.01.16 hor 正規表現の検索パターンを必要に応じて更新する(ライブラリが使用できないときはFALSEを返す)
@@ -373,12 +359,10 @@ public: // テスト用にアクセス属性を変更
 	DWORD TranslateDropEffect( CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, DWORD dwEffect );
 	bool IsDragSource( void );
 
-	void _SetDragMode(BOOL b)
-	{
+	void _SetDragMode(BOOL b) {
 		m_bDragMode = b;
 	}
-
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           編集                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

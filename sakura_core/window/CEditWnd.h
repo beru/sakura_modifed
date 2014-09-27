@@ -80,7 +80,7 @@ struct DLLSHAREDATA;
 #define IDT_SYSMENU		1357
 #define ID_TOOLBAR		100
 
-struct STabGroupInfo{
+struct STabGroupInfo {
 	HWND			hwndTop;
 	WINDOWPLACEMENT	wpTop;
 
@@ -92,8 +92,7 @@ struct STabGroupInfo{
 // 2002.02.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 // 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
-class CEditWnd
-	:
+class CEditWnd :
 	public TSingleton<CEditWnd>,
 	public CDocListenerEx
 {
@@ -220,8 +219,7 @@ public:
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 
 	//! 印刷プレビュー中かどうか
-	bool IsInPreviewMode()
-	{
+	bool IsInPreviewMode() {
 		return m_pPrintPreview!=NULL;
 	}
 

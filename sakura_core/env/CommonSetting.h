@@ -49,8 +49,7 @@ static const int MAX_TOOLBAR_ICON_COUNT		= MAX_TOOLBAR_ICON_X * MAX_TOOLBAR_ICON
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           全般                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-struct CommonSetting_General
-{
+struct CommonSetting_General {
 	//	Jul. 3, 2000 genta
 	//	アクセス関数(簡易)
 	//	intをビット単位に分割して使う
@@ -67,7 +66,7 @@ struct CommonSetting_General
 	BOOL	m_bNoCaretMoveByActivation;				// マウスクリックにてアクティベートされた時はカーソル位置を移動しない  2007.10.02 nasukoji (add by genta)
 
 	// スクロール
-	CLayoutInt		m_nRepeatedScrollLineNum;		// キーリピート時のスクロール行数
+	CLayoutInt	m_nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
 	BOOL	m_nRepeatedScroll_Smooth;		// キーリピート時のスクロールを滑らかにするか
 	int		m_nPageScrollByWheel;			// キー/マウスボタン + ホイールスクロールでページUP/DOWNする	// 2009.01.17 nasukoji
 	int		m_nHorizontalScrollByWheel;		// キー/マウスボタン + ホイールスクロールで横スクロールする		// 2009.01.17 nasukoji
@@ -236,10 +235,10 @@ public:
 
 public:
 	// ファイルの排他制御モード
-	EShareMode		m_nFileShareMode;
-	bool			m_bCheckFileTimeStamp;	// 更新の監視
-	int 			m_nAutoloadDelay;		// 自動読込時遅延
-	bool			m_bUneditableIfUnwritable;	// 上書き禁止検出時は編集禁止にする
+	EShareMode	m_nFileShareMode;
+	bool		m_bCheckFileTimeStamp;		// 更新の監視
+	int 		m_nAutoloadDelay;			// 自動読込時遅延
+	bool		m_bUneditableIfUnwritable;	// 上書き禁止検出時は編集禁止にする
 
 	// ファイルの保存
 	bool	m_bEnableUnmodifiedOverwrite;	// 無変更でも上書きするか
@@ -414,9 +413,9 @@ struct CommonSetting_CustomMenu {
 //                        ツールバー                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_ToolBar {
-	int			m_nToolBarButtonNum;			// ツールバーボタンの数
-	int			m_nToolBarButtonIdxArr[MAX_TOOLBAR_BUTTON_ITEMS];	// ツールバーボタン構造体
-	int			m_bToolBarIsFlat;				// フラットツールバーにする／しない
+	int		m_nToolBarButtonNum;			// ツールバーボタンの数
+	int		m_nToolBarButtonIdxArr[MAX_TOOLBAR_BUTTON_ITEMS];	// ツールバーボタン構造体
+	int		m_bToolBarIsFlat;				// フラットツールバーにする／しない
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -474,9 +473,9 @@ struct CommonSetting_Macro {
 //                      ファイル名表示                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_FileName {
-	int			m_nTransformFileNameArrNum;
-	TCHAR		m_szTransformFileNameFrom[MAX_TRANSFORM_FILENAME][_MAX_PATH];
-	TCHAR		m_szTransformFileNameTo[MAX_TRANSFORM_FILENAME][_MAX_PATH];	// お気に入り	//@@@ 2003.04.08 MIK
+	int		m_nTransformFileNameArrNum;
+	TCHAR	m_szTransformFileNameFrom[MAX_TRANSFORM_FILENAME][_MAX_PATH];
+	TCHAR	m_szTransformFileNameTo[MAX_TRANSFORM_FILENAME][_MAX_PATH];	// お気に入り	//@@@ 2003.04.08 MIK
 };
 
 

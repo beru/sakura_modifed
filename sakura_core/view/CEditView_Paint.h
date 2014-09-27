@@ -36,7 +36,7 @@ enum EPaintArea{
 	PAINT_ALL        = PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, //!< ‚º‚ñ‚Ô
 };
 
-class CEditView_Paint{
+class CEditView_Paint {
 public:
 	virtual CEditView* GetEditView()=0;
 

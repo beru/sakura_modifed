@@ -24,7 +24,7 @@
 
 struct STypeConfig;
 
-#define USE_PARENT	//親を使ってキーワード格納領域を削減する。
+#define USE_PARENT	// 親を使ってキーワード格納領域を削減する。
 
 
 //@@@ 2001.11.17 add start MIK
@@ -41,12 +41,12 @@ typedef struct RegexInfo_t {
 #else
 	struct RegexKeywordInfo	sRegexKey;	//コンパイルパターンを保持
 #endif
-	int    nStatus;		//状態(EMPTY,CLOSE,OPEN,ACTIVE,ERROR)
-	int    nMatch;		//このキーワードのマッチ状態(EMPTY,MATCH,NOMATCH)
-	int    nOffset;		//マッチした位置
-	int    nLength;		//マッチした長さ
-	int    nHead;		//先頭のみチェックするか？
-	int    nFlag;           //色指定のチェックが入っているか？ YES=RK_EMPTY, NO=RK_NOMATCH
+	int    nStatus;		// 状態(EMPTY,CLOSE,OPEN,ACTIVE,ERROR)
+	int    nMatch;		// このキーワードのマッチ状態(EMPTY,MATCH,NOMATCH)
+	int    nOffset;		// マッチした位置
+	int    nLength;		// マッチした長さ
+	int    nHead;		// 先頭のみチェックするか？
+	int    nFlag;		// 色指定のチェックが入っているか？ YES=RK_EMPTY, NO=RK_NOMATCH
 } REGEX_INFO;
 
 
@@ -54,9 +54,7 @@ typedef struct RegexInfo_t {
 /*!
 	正規表現キーワードを扱う。
 */
-class CRegexKeyword :
-	public CBregexp
-{
+class CRegexKeyword : public CBregexp {
 public:
 	CRegexKeyword(LPCTSTR);
 	~CRegexKeyword();

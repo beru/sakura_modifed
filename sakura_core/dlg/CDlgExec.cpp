@@ -96,9 +96,6 @@ BOOL CDlgExec::OnInitDialog( HWND hwnd, WPARAM wParam, LPARAM lParam )
 void CDlgExec::SetData( void )
 {
 //	MYTRACE( _T("CDlgExec::SetData()") );
-	int		i;
-	HWND	hwndCombo;
-
 	/*****************************
 	*           ‰Šú             *
 	*****************************/
@@ -136,11 +133,11 @@ void CDlgExec::SetData( void )
 	*         ƒf[ƒ^Ý’è         *
 	*****************************/
 	_tcscpy( m_szCommand, m_pShareData->m_sHistory.m_aCommands[0] );
-	hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_m_szCommand );
+	HWND hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_m_szCommand );
 	Combo_ResetContent( hwndCombo );
 	::DlgItem_SetText( GetHwnd(), IDC_COMBO_TEXT, m_szCommand );
 	int nSize = m_pShareData->m_sHistory.m_aCommands.size();
-	for (i = 0; i < nSize; ++i) {
+	for (int i = 0; i < nSize; ++i) {
 		Combo_AddString( hwndCombo, m_pShareData->m_sHistory.m_aCommands[i] );
 	}
 	Combo_SetCurSel( hwndCombo, 0 );
@@ -149,7 +146,7 @@ void CDlgExec::SetData( void )
 	hwndCombo = GetItemHwnd( IDC_COMBO_CUR_DIR );
 	Combo_ResetContent( hwndCombo );
 	::DlgItem_SetText( GetHwnd(), IDC_COMBO_TEXT, m_szCurDir );
-	for (i = 0; i < m_pShareData->m_sHistory.m_aCurDirs.size(); ++i) {
+	for (int i = 0; i < m_pShareData->m_sHistory.m_aCurDirs.size(); ++i) {
 		Combo_AddString( hwndCombo, m_pShareData->m_sHistory.m_aCurDirs[i] );
 	}
 	Combo_SetCurSel( hwndCombo, 0 );
@@ -157,7 +154,7 @@ void CDlgExec::SetData( void )
 	int nOpt;
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_GET );
 	nOpt = m_pShareData->m_nExecFlgOpt & 0x88;
-	for (i = 0; _countof(codeTable1); i++) {
+	for (int i = 0; _countof(codeTable1); i++) {
 		if (codeTable1[i] == nOpt) {
 			Combo_SetCurSel( hwndCombo, i );
 			break;
@@ -165,7 +162,7 @@ void CDlgExec::SetData( void )
 	}
 	hwndCombo = GetItemHwnd( IDC_COMBO_CODE_SEND );
 	nOpt = m_pShareData->m_nExecFlgOpt & 0x110;
-	for (i = 0; _countof(codeTable2); i++) {
+	for (int i = 0; _countof(codeTable2); i++) {
 		if (codeTable2[i] == nOpt) {
 			Combo_SetCurSel( hwndCombo, i );
 			break;

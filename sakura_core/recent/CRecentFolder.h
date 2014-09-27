@@ -31,9 +31,7 @@
 typedef StaticString<TCHAR, _MAX_PATH> CPathString;
 
 //! ƒtƒHƒ‹ƒ_‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_FOLDER)
-class CRecentFolder :
-	public CRecentImp<CPathString, LPCTSTR>
-{
+class CRecentFolder : public CRecentImp<CPathString, LPCTSTR> {
 public:
 	// ¶¬
 	CRecentFolder();

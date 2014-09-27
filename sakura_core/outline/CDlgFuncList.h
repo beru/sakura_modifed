@@ -32,8 +32,7 @@ class CFuncInfoArr; // 2002/2/10 aroka
 #define OUTLINE_LAYOUT_FILECHANGED (2)
 
 //!	アウトライン解析ダイアログボックス
-class CDlgFuncList : public CDialog
-{
+class CDlgFuncList : public CDialog {
 public:
 	/*
 	||  Constructors

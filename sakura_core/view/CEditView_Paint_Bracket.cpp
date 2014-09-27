@@ -273,7 +273,7 @@ void CEditView::DrawBracketPair( bool bDraw )
 //======================================================================
 //!‘ÎŠ‡ŒÊ‚Ì‘Î‰ž•\
 //2007.10.16 kobake
-struct KAKKO_T{
+struct KAKKO_T {
 	const wchar_t* sStr;
 	const wchar_t* eStr;
 };

@@ -61,7 +61,9 @@ class CInterfaceObjectTypeInfo: public ImplementsIUnknown<ITypeInfo>
 	@date Sep. 15, 2005 FILE IActiveScriptSiteWindow実装．
 		マクロでMsgBoxを使用可能にする．
 */
-class CWSHSite: public IActiveScriptSite, public IActiveScriptSiteWindow
+class CWSHSite :
+	public IActiveScriptSite,
+	public IActiveScriptSiteWindow
 {
 private:
 	CWSHClient *m_Client;

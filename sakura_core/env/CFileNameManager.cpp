@@ -160,7 +160,7 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 {
 #define _USE_META_ALIAS
 #ifdef _USE_META_ALIAS
-	struct MetaAlias{
+	struct MetaAlias {
 		LPCTSTR szAlias;
 		int nLenth;
 		LPCTSTR szOrig;

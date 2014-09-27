@@ -53,8 +53,7 @@ struct STypeConfig;
 
 	@date 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 */
-class CShareData : public TSingleton<CShareData>
-{
+class CShareData : public TSingleton<CShareData> {
 	friend class TSingleton<CShareData>;
 	CShareData();
 	~CShareData();
@@ -79,8 +78,8 @@ public:
 	BOOL IsPrivateSettings( void );
 
 	// マクロ関連
-	int			GetMacroFilename( int idx, TCHAR* pszPath, int nBufLen ); // idxで指定したマクロファイル名（フルパス）を取得する	//	Jun. 14, 2003 genta 引数追加．書式変更
-	bool		BeReloadWhenExecuteMacro( int idx );	//	idxで指定したマクロは、実行するたびにファイルを読み込む設定か？
+	int	 GetMacroFilename( int idx, TCHAR* pszPath, int nBufLen ); // idxで指定したマクロファイル名（フルパス）を取得する	//	Jun. 14, 2003 genta 引数追加．書式変更
+	bool BeReloadWhenExecuteMacro( int idx );	//	idxで指定したマクロは、実行するたびにファイルを読み込む設定か？
 
 	// タイプ別設定(コントロールプロセス専用)
 	void CreateTypeSettings();
@@ -103,7 +102,7 @@ protected:
 	void InitPopupMenu(DLLSHAREDATA*);
 
 private:
-	CSelectLang m_cSelectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
+	CSelectLang		m_cSelectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
 	HANDLE			m_hFileMap;
 	DLLSHAREDATA*	m_pShareData;
 	std::vector<STypeConfig*>* 	m_pvTypeSettings;	//	(コントロールプロセスのみ)

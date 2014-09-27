@@ -30,9 +30,9 @@ private:
 
 public:
 	// コンストラクタ・デストラクタ
-	CLaxInteger(){ m_value = 0; }
+	CLaxInteger() { m_value = 0; }
 	CLaxInteger(const Me& rhs) { m_value = rhs.m_value; }
-	CLaxInteger(int value){ m_value = value; }
+	CLaxInteger(int value) { m_value = value; }
 
 	// 暗黙の変換
 	operator const int&() const { return m_value; }

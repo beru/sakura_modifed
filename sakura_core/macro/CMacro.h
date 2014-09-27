@@ -55,8 +55,7 @@ class CEditView;
 	  渡された値が数値なのか、文字列へのポインタなのかは、m_nFuncID（機能 ID）によって、このクラス内で判別し、よろしくやること。
 	@li 引数は、CMacro内部ではすべて文字列で保持すること（数値97は、"97"として保持）（いまのところ）
 */
-class CMacro
-{
+class CMacro {
 public:
 	/*
 	||  Constructors
@@ -64,15 +63,15 @@ public:
 	CMacro( EFunctionCode nFuncID );	//	機能IDを指定して初期化
 	~CMacro();
 
-	void SetNext(CMacro* pNext){ m_pNext = pNext; }
-	CMacro* GetNext(){ return m_pNext; }
+	void SetNext(CMacro* pNext) { m_pNext = pNext; }
+	CMacro* GetNext() { return m_pNext; }
 	// 2007.07.20 genta : flags追加
 	bool Exec( CEditView* pcEditView, int flags ) const; //2007.09.30 kobake const追加
 	void Save( HINSTANCE hInstance, CTextOutputStream& out ) const; //2007.09.30 kobake const追加
 	
 	void AddLParam( const LPARAM* lParam, const CEditView* pcEditView  );	//@@@ 2002.2.2 YAZAKI pcEditViewも渡す
 	void AddStringParam( const WCHAR* lParam );
-	void AddStringParam( const ACHAR* lParam ){ return AddStringParam(to_wchar(lParam)); }
+	void AddStringParam( const ACHAR* lParam ) { return AddStringParam(to_wchar(lParam)); }
 	void AddIntParam( const int lParam );
 
 	static bool HandleCommand( CEditView *View, EFunctionCode ID, const WCHAR* Argument[], const int ArgLengths[], const int ArgSize );
@@ -88,7 +87,7 @@ public:
 #endif
 
 protected:
-	struct CMacroParam{
+	struct CMacroParam {
 		WCHAR*			m_pData;
 		CMacroParam*	m_pNext;
 	};

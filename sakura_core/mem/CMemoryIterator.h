@@ -27,8 +27,7 @@
 #include "doc/logic/CDocLine.h"
 
 //! ブロックコメントデリミタを管理する
-class CMemoryIterator
-{
+class CMemoryIterator {
 public:
 	// CDocLine用コンストラクタ
 	CMemoryIterator( const CDocLine* pcT, CLayoutInt nTabSpace )
@@ -53,8 +52,7 @@ public:
 	}
 
 	//! 桁位置を行の先頭にセット
-	void first()
-	{
+	void first() {
 		m_nIndex = CLogicInt(0);
 		m_nColumn = m_nIndent;
 		m_nIndex_Delta = CLogicInt(0);
@@ -64,14 +62,12 @@ public:
 	/*! 行末かどうか
 		@return true: 行末, false: 行末ではない
 	 */
-	bool end() const
-	{
+	bool end() const {
 		return (m_nLineLen <= m_nIndex);
 	}
 
 	// 次の文字を確認して次の文字との差を求める
-	void scanNext()
-	{
+	void scanNext() {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		// 2007.09.04 kobake UNICODE化：データ増分と桁増分を別々の値として計算する。
 
@@ -95,7 +91,7 @@ public:
 	/*! 予め計算した差分を桁位置に加える．
 		@sa scanNext()
 	 */
-	void addDelta(){
+	void addDelta() {
 		m_nColumn += m_nColumn_Delta;
 		m_nIndex += m_nIndex_Delta;
 	}	// ポインタをずらす
@@ -106,10 +102,10 @@ public:
 	CLayoutInt	getColumnDelta()	const {	return m_nColumn_Delta;	}
 
 	// 2002.10.07 YAZAKI
-	const wchar_t getCurrentChar(){	return m_pLine[m_nIndex];	}
+	const wchar_t getCurrentChar() {	return m_pLine[m_nIndex];	}
 	// Jul. 20, 2003 genta 追加
 	// memcpyをするのにポインタがとれないと面倒
-	const wchar_t* getCurrentPos(){	return m_pLine + m_nIndex;	}
+	const wchar_t* getCurrentPos() {	return m_pLine + m_nIndex;	}
 
 
 private:

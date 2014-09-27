@@ -42,14 +42,14 @@ struct DocLineReplaceArg {
 クラスの宣言
 -----------------------------------------------------------------------*/
 //2007.09.30 kobake WhereCurrentWord_2 を CWordParse に移動
-class CDocLineMgr{
+class CDocLineMgr {
 public:
 	// コンストラクタ・デストラクタ
 	CDocLineMgr();
 	~CDocLineMgr();
 
 	// 状態
-	CLogicInt GetLineCount() const{ return m_nLines; }	//!< 全行数を返す
+	CLogicInt GetLineCount() const { return m_nLines; }	//!< 全行数を返す
 
 	// 行データへのアクセス
 	CDocLine* GetLine( CLogicInt nLine ) const;						//!< 指定行を取得

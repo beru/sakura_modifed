@@ -30,9 +30,7 @@
 typedef StaticString<TCHAR, _MAX_PATH> CCurDirString;
 
 //! ƒRƒ}ƒ“ƒh‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_CUR_DIR)
-class CRecentCurDir :
-	public CRecentImp<CCurDirString, LPCTSTR>
-{
+class CRecentCurDir : public CRecentImp<CCurDirString, LPCTSTR> {
 public:
 	// ¶¬
 	CRecentCurDir();

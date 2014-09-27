@@ -41,7 +41,7 @@ enum EEolType;
 	ここで言う「特定コード」とは、
 	CCodeBaseを継承した子クラスが定める、一意の文字コードのことです。
 */
-class CCodeBase{
+class CCodeBase {
 public:
 	virtual ~CCodeBase(){}
 //	virtual bool IsCode(const CMemory* pMem){return false;}  //!< 特定コードであればtrue
@@ -80,7 +80,7 @@ inline int CCodeBase::BinToText( const unsigned char *pSrc, const int nLen, unsi
 {
 	int i;
 
-	for( i = 0; i < nLen; ++i ){
+	for (i = 0; i < nLen; ++i) {
 		pDst[i] = static_cast<unsigned short>(pSrc[i]) + 0xdc00;
 	}
 

@@ -25,13 +25,11 @@
 
 #include <CommCtrl.h> // コモンコントロール
 
-namespace ApiWrap
-{
+namespace ApiWrap {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ステータスバー                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline LRESULT StatusBar_SetText(HWND hwndStatus, WPARAM opt, const TCHAR* str)
-	{
+	inline LRESULT StatusBar_SetText(HWND hwndStatus, WPARAM opt, const TCHAR* str) {
 		return ::SendMessage( hwndStatus, SB_SETTEXT, opt, (LPARAM)str );
 	}
 

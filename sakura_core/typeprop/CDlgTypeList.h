@@ -25,13 +25,12 @@ using std::wstring;
 /*!
 	@brief ファイルタイプ一覧ダイアログ
 */
-class CDlgTypeList : public CDialog
-{
+class CDlgTypeList : public CDialog {
 public:
 	// 型
-	struct SResult{
-		CTypeConfig	cDocumentType;		//!< 文書種類
-		bool			bTempChange;	//!< 旧PROP_TEMPCHANGE_FLAG
+	struct SResult {
+		CTypeConfig	cDocumentType;	//!< 文書種類
+		bool		bTempChange;	//!< 旧PROP_TEMPCHANGE_FLAG
 	};
 
 public:
@@ -58,7 +57,7 @@ protected:
 	bool AlertFileAssociation();	// 2011/8/20 syat
 
 private:
-	CTypeConfig				m_nSettingType;
+	CTypeConfig m_nSettingType;
 	// 関連付け状態
 	bool m_bRegistryChecked[ MAX_TYPES ];	//レジストリ確認 未／済
 	bool m_bExtRMenu[ MAX_TYPES ];			//右クリック登録 未／済

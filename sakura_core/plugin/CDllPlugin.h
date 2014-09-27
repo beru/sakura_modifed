@@ -35,25 +35,29 @@
 
 //typedef void (WINAPI *DllPlugHandler)(SAKURA_DLL_PLUGIN_OBJ* obj);
 
-class CDllPlug
-	: public CPlug
-{
+class CDllPlug : public CPlug {
 public:
 	CDllPlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel )
-		: CPlug( plugin, id, sJack, sHandler, sLabel )
-		, m_handler( NULL )
+		:
+		CPlug( plugin, id, sJack, sHandler, sLabel ),
+		m_handler( NULL )
 	{
 	}
 public:
 	DllPlugHandler m_handler;
 };
 
-class CDllPlugin
-	: public CPlugin, public CDllImp
+class CDllPlugin :
+	public CPlugin,
+	public CDllImp
 {
 	// コンストラクタ
 public:
-	CDllPlugin( const tstring& sBaseDir ) : CPlugin( sBaseDir ), CDllImp() {
+	CDllPlugin( const tstring& sBaseDir )
+		:
+		CPlugin( sBaseDir ),
+		CDllImp()
+	{
 	}
 
 	// デストラクタ

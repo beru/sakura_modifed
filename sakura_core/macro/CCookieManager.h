@@ -32,10 +32,8 @@
 #include <string>
 #include "_os/OleTypes.h"
 
-class CCookieManager
-{
+class CCookieManager {
 	typedef std::wstring wstring;
-
 
 public:
 	SysString GetCookie(LPCWSTR scope, LPCWSTR cookieName) const;

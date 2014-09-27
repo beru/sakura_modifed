@@ -37,17 +37,15 @@ UNICODE版では問題無いが、ANSI版では設定の前にコード変換する必要がある。
 
 #include "../util/tchar_convert.h"
 
-namespace ApiWrap{
+namespace ApiWrap {
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ウィンドウ共通                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline BOOL Wnd_SetText(HWND hwnd, const ACHAR* str)
-	{
+	inline BOOL Wnd_SetText(HWND hwnd, const ACHAR* str) {
 		return SetWindowTextA(hwnd, str);
 	}
-	inline BOOL Wnd_SetText(HWND hwnd, const WCHAR* str)
-	{
+	inline BOOL Wnd_SetText(HWND hwnd, const WCHAR* str) {
 #ifdef _UNICODE
 		return SetWindowTextW(hwnd, str);
 #else
@@ -59,23 +57,19 @@ namespace ApiWrap{
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      コンボボックス                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline LRESULT Combo_AddString(HWND hwndCombo, const ACHAR* str)
-	{
+	inline LRESULT Combo_AddString(HWND hwndCombo, const ACHAR* str) {
 		return ::SendMessage( hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
 	}
 
-	inline LRESULT Combo_AddString(HWND hwndCombo, const WCHAR* str)
-	{
+	inline LRESULT Combo_AddString(HWND hwndCombo, const WCHAR* str) {
 		return ::SendMessage( hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
 	}
 
-	inline LRESULT Combo_GetLBText(HWND hwndCombo, int nIndex, TCHAR* str)
-	{
+	inline LRESULT Combo_GetLBText(HWND hwndCombo, int nIndex, TCHAR* str) {
 		return ::SendMessage( hwndCombo, CB_GETLBTEXT, nIndex, (LPARAM)str );
 	}
 
-	inline LRESULT Combo_GetText(HWND hwndCombo, TCHAR* str, int cchMax)
-	{
+	inline LRESULT Combo_GetText(HWND hwndCombo, TCHAR* str, int cchMax) {
 		return ::GetWindowText( hwndCombo, str, cchMax );
 	}
 
@@ -106,12 +100,10 @@ namespace ApiWrap{
 	LRESULT List_GetText(HWND hwndList, int nIndex, ACHAR* str);
 	LRESULT List_GetText(HWND hwndList, int nIndex, WCHAR* str);
 
-	inline LRESULT List_AddString(HWND hwndList, const ACHAR* str)
-	{
+	inline LRESULT List_AddString(HWND hwndList, const ACHAR* str) {
 		return ::SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
 	}
-	inline LRESULT List_AddString(HWND hwndList, const WCHAR* str)
-	{
+	inline LRESULT List_AddString(HWND hwndList, const WCHAR* str) {
 		return ::SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
 	}
 	inline int List_AddItemData(HWND hwndCtl, int data)					{ return (int)(DWORD)::SendMessage(hwndCtl, LB_ADDSTRING, 0L, (LPARAM)data); }
@@ -158,12 +150,10 @@ namespace ApiWrap{
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       ダイアログ内                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline BOOL DlgItem_SetText(HWND hwndDlg, int nIDDlgItem, const ACHAR* str)
-	{
+	inline BOOL DlgItem_SetText(HWND hwndDlg, int nIDDlgItem, const ACHAR* str) {
 		return SetDlgItemText(hwndDlg, nIDDlgItem, to_tchar(str));
 	}
-	inline BOOL DlgItem_SetText(HWND hwndDlg, int nIDDlgItem, const WCHAR* str)
-	{
+	inline BOOL DlgItem_SetText(HWND hwndDlg, int nIDDlgItem, const WCHAR* str) {
 		return SetDlgItemText(hwndDlg, nIDDlgItem, to_tchar(str));
 	}
 

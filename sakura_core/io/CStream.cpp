@@ -13,12 +13,13 @@
 //                  ファイル属性操作クラス                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CFileAttribute{
+class CFileAttribute {
 public:
 	CFileAttribute(const TCHAR* tszPath)
-	: m_strPath(tszPath)
-	, m_bAttributeChanged(false)
-	, m_dwAttribute(0)
+		:
+		m_strPath(tszPath),
+		m_bAttributeChanged(false),
+		m_dwAttribute(0)
 	{
 	}
 

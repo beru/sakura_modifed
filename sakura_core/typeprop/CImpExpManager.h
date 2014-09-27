@@ -35,8 +35,7 @@
 
 using std::wstring;
 
-class CImpExpManager
-{
+class CImpExpManager {
 public:
 	bool ImportUI( HINSTANCE, HWND );
 	bool ExportUI( HINSTANCE, HWND );
@@ -46,13 +45,11 @@ public:
 	// ファイル名の初期値を設定
 	void SetBaseName( const wstring& );
 	// フルパス名を取得
-	inline wstring GetFullPath()
-	{
+	inline wstring GetFullPath() {
 		return to_wchar( GetDllShareData().m_sHistory.m_szIMPORTFOLDER ) + m_sOriginName;
 	}
 	// フルパス名を取得
-	inline wstring MakeFullPath( wstring sFileName )
-	{
+	inline wstring MakeFullPath( wstring sFileName ) {
 		return to_wchar( GetDllShareData().m_sHistory.m_szIMPORTFOLDER ) + sFileName;
 	}
 	// ファイル名を取得
@@ -60,8 +57,7 @@ public:
 
 protected:
 	// Import Folderの設定
-	inline void SetImportFolder( const TCHAR* szPath ) 
-	{
+	inline void SetImportFolder( const TCHAR* szPath ) {
 		// ファイルのフルパスをフォルダとファイル名に分割
 		// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
 		::SplitPath_FolderAndFile( szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL );
@@ -82,8 +78,7 @@ protected:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          タイプ別設定                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpType : public CImpExpManager
-{
+class CImpExpType : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpType( int nIdx, STypeConfig& types, HWND hwndList )
@@ -124,12 +119,12 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          カラー                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpColors : public CImpExpManager
-{
+class CImpExpColors : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpColors( ColorInfo * psColorInfoArr )
-		: m_ColorInfoArr( psColorInfoArr )
+		:
+		m_ColorInfoArr( psColorInfoArr )
 	{
 	}
 
@@ -150,12 +145,12 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                    正規表現キーワード                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpRegex : public CImpExpManager
-{
+class CImpExpRegex : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpRegex( STypeConfig& types )
-		: m_Types( types )
+		:
+		m_Types( types )
 	{
 	}
 
@@ -176,12 +171,12 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpKeyHelp : public CImpExpManager
-{
+class CImpExpKeyHelp : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpKeyHelp( STypeConfig& types )
-		: m_Types( types )
+		:
+		m_Types( types )
 	{
 	}
 
@@ -202,12 +197,12 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キー割り当て                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpKeybind : public CImpExpManager
-{
+class CImpExpKeybind : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpKeybind( CommonSetting& common )
-		: m_Common( common )
+		:
+		m_Common( common )
 	{
 	}
 
@@ -221,19 +216,19 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"key"; }
 
 private:
-	CommonSetting&		m_Common;
+	CommonSetting& m_Common;
 };
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     カスタムメニュー                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpCustMenu : public CImpExpManager
-{
+class CImpExpCustMenu : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpCustMenu( CommonSetting& common )
-		: m_Common( common )
+		:
+		m_Common( common )
 	{
 	}
 
@@ -247,21 +242,21 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"mnu"; }
 
 private:
-	CommonSetting&		m_Common;
+	CommonSetting& m_Common;
 };
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     強調キーワード                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpKeyWord : public CImpExpManager
-{
+class CImpExpKeyWord : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpKeyWord( CommonSetting& common, int nKeyWordSetIdx, bool& bCase )
-		: m_Common( common )
-		, m_nIdx( nKeyWordSetIdx )
-		, m_bCase( bCase )
+		:
+		m_Common( common ),
+		m_nIdx( nKeyWordSetIdx ),
+		m_bCase( bCase )
 	{
 	}
 
@@ -275,21 +270,21 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"kwd"; }
 
 private:
-	CommonSetting&		m_Common;
-	int 				m_nIdx;
-	bool&				m_bCase;
+	CommonSetting&	m_Common;
+	int 			m_nIdx;
+	bool&			m_bCase;
 };
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     メインメニュー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpMainMenu : public CImpExpManager
-{
+class CImpExpMainMenu : public CImpExpManager {
 public:
 	// Constructor
 	CImpExpMainMenu( CommonSetting& common )
-		: m_Common( common )
+		:
+		m_Common( common )
 	{
 	}
 
@@ -303,6 +298,6 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
 
 private:
-	CommonSetting&		m_Common;
+	CommonSetting& m_Common;
 };
 

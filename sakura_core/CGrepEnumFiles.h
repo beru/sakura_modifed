@@ -36,11 +36,11 @@ class CGrepEnumFiles : public CGrepEnumFileBase {
 private:
 
 public:
-	CGrepEnumFiles(){
+	CGrepEnumFiles() {
 	}
 
 	virtual
-	~CGrepEnumFiles(){
+	~CGrepEnumFiles() {
 	}
 
 	virtual

@@ -29,10 +29,8 @@
 #include "recent/CRecent.h"
 
 
-template < class DATA_TYPE, class RECEIVE_TYPE = const DATA_TYPE* >
-class CRecentImp :
-	public CRecent
-{
+template <class DATA_TYPE, class RECEIVE_TYPE = const DATA_TYPE*>
+class CRecentImp : public CRecent {
 private:
 	typedef CRecentImp<DATA_TYPE,RECEIVE_TYPE>	Me;
 	typedef DATA_TYPE							DataType;
@@ -76,8 +74,7 @@ public:
 	bool AppendItemText( LPCTSTR pszText );
 	bool EditItemText( int nIndex, LPCTSTR pszText );
 	bool DeleteItem( int nIndex );				// アイテムをクリア
-	bool DeleteItem( ReceiveType pItemData )
-	{
+	bool DeleteItem( ReceiveType pItemData ) {
 		return DeleteItem( FindItem( pItemData ) );
 	}
 	bool DeleteItemsNoFavorite();			// お気に入り以外のアイテムをクリア

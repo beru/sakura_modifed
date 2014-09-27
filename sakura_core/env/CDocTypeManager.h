@@ -29,10 +29,9 @@
 #include "DLLSHAREDATA.h"
 
 //! ドキュメントタイプ管理
-class CDocTypeManager{
+class CDocTypeManager {
 public:
-	CDocTypeManager()
-	{
+	CDocTypeManager() {
 		m_pShareData = &GetDllShareData();
 	}
 	CTypeConfig GetDocumentTypeOfPath( const TCHAR* pszFilePath );	// ファイルパスを渡して、ドキュメントタイプ（数値）を取得する

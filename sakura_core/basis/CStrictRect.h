@@ -39,24 +39,20 @@ public:
 
 public:
 	//! 左上座標 (TopLeft)
-	PointType UpperLeft() const
-	{
+	PointType UpperLeft() const {
 		return PointType(left, top);
 	}
 	//! 右下座標 (BottomRight)
-	PointType LowerRight() const
-	{
+	PointType LowerRight() const {
 		return PointType(right,bottom);
 	}
 
 	//! ヒットチェック
-	bool PtInRect(const PointType& pt) const
-	{
+	bool PtInRect(const PointType& pt) const {
 		return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
 	}
 
-	Me& UnionStrictRect(const Me& rc1, const Me& rc2)
-	{
+	Me& UnionStrictRect(const Me& rc1, const Me& rc2) {
 		this->left		= t_min(rc1.left,	rc2.left);
 		this->top		= t_min(rc1.top,	rc2.top);
 		this->right		= t_max(rc1.right,	rc2.right);

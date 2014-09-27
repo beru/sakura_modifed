@@ -28,15 +28,15 @@ class CMemory;
 	20020118 aroka
 */
 struct GrepInfo {
-	CNativeW		cmGrepKey;			//!< 検索キー
-	CNativeT		cmGrepFile;			//!< 検索対象ファイル
-	CNativeT		cmGrepFolder;		//!< 検索対象フォルダ
-	SSearchOption	sGrepSearchOption;	//!< 検索オプション
-	bool			bGrepCurFolder;		//!< カレントディレクトリを維持
-	bool			bGrepSubFolder;		//!< サブフォルダを検索する
-	ECodeType		nGrepCharSet;		//!< 文字コードセット
-	int				nGrepOutputStyle;	//!< 結果出力形式
-	bool			bGrepOutputLine;	//!< 結果出力で該当行を出力する
+	CNativeW		cmGrepKey;				//!< 検索キー
+	CNativeT		cmGrepFile;				//!< 検索対象ファイル
+	CNativeT		cmGrepFolder;			//!< 検索対象フォルダ
+	SSearchOption	sGrepSearchOption;		//!< 検索オプション
+	bool			bGrepCurFolder;			//!< カレントディレクトリを維持
+	bool			bGrepSubFolder;			//!< サブフォルダを検索する
+	ECodeType		nGrepCharSet;			//!< 文字コードセット
+	int				nGrepOutputStyle;		//!< 結果出力形式
+	bool			bGrepOutputLine;		//!< 結果出力で該当行を出力する
 	bool			bGrepOutputFileOnly;	//!< ファイル毎最初のみ検索
 	bool			bGrepOutputBaseFolder;	//!< ベースフォルダ表示
 	bool			bGrepSeparateFolder;	//!< フォルダ毎に表示
@@ -50,7 +50,7 @@ struct GrepInfo {
 /*!
 	@brief コマンドラインパーサ クラス
 */
-class CCommandLine  : public TSingleton<CCommandLine> {
+class CCommandLine : public TSingleton<CCommandLine> {
 	friend class TSingleton<CCommandLine>;
 	CCommandLine();
 

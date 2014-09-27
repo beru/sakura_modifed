@@ -28,7 +28,7 @@
 class CNativeW;
 
 //! 文字種類識別子
-enum ECharKind{
+enum ECharKind {
 	CK_NULL,			//!< NULL
 	CK_TAB,				//!< タブ 0x9<=c<=0x9
 	CK_CR,				//!< CR = 0x0d 
@@ -56,7 +56,7 @@ enum ECharKind{
 	CK_ZEN_ETC,			//!< 全角のその他（漢字など）
 };
 
-class CWordParse{
+class CWordParse {
 public:
 	//2001.06.23 N.Nakatani
 	//2007.09.30 kobake     CDocLineMgrから移動

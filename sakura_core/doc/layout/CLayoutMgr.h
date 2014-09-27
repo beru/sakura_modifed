@@ -104,7 +104,6 @@ public:
 	CKetaXInt GetTabSpaceKetas() const { return m_nTabSpace; }
 	CLayoutInt GetTabSpace() const { return m_nTabSpace; }
 
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                          参照系                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -165,34 +164,30 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	//! ロジック→レイアウト
-	void LogicToLayoutEx( const CLogicPointEx& ptLogicEx, CLayoutPoint* pptLayout, CLayoutInt nLineHint = CLayoutInt(0) )
-	{
+	void LogicToLayoutEx( const CLogicPointEx& ptLogicEx, CLayoutPoint* pptLayout, CLayoutInt nLineHint = CLayoutInt(0) ) {
 		LogicToLayout( ptLogicEx, pptLayout, nLineHint );
 		pptLayout->x += ptLogicEx.ext;
 	}
 	void LogicToLayout( const CLogicPoint& ptLogic, CLayoutPoint* pptLayout, CLayoutInt nLineHint = CLayoutInt(0) );
-	void LogicToLayout( const CLogicRange& rangeLogic, CLayoutRange* prangeLayout )
-	{
+	void LogicToLayout( const CLogicRange& rangeLogic, CLayoutRange* prangeLayout ) {
 		LogicToLayout(rangeLogic.GetFrom(), prangeLayout->GetFromPointer());
 		LogicToLayout(rangeLogic.GetTo(), prangeLayout->GetToPointer());
 	}
-
+	
 	//! レイアウト→ロジック変換
 	void LayoutToLogicEx( const CLayoutPoint& ptLayout, CLogicPointEx* pptLogicEx ) const;
 	void LayoutToLogic( const CLayoutPoint& ptLayout, CLogicPoint* pptLogic ) const;
-	void LayoutToLogic( const CLayoutRange& rangeLayout, CLogicRange* prangeLogic ) const
-	{
+	void LayoutToLogic( const CLayoutRange& rangeLayout, CLogicRange* prangeLogic ) const {
 		LayoutToLogic(rangeLayout.GetFrom(), prangeLogic->GetFromPointer());
 		LayoutToLogic(rangeLayout.GetTo(), prangeLogic->GetToPointer());
 	}
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         デバッグ                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	void DUMP();	// テスト用にレイアウト情報をダンプ
-
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         編集とか                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -227,7 +222,6 @@ protected:
 	const char* GetFirstLinrStr( int* );	// 順アクセスモード：先頭行を得る
 	const char* GetNextLinrStr( int* );		// 順アクセスモード：次の行を得る
 
-
 	/*
 	|| 更新系
 	*/
@@ -243,7 +237,7 @@ protected:
 	void ShiftLogicalLineNum( CLayout* , CLogicInt );	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 
 	// 部品
-	struct SLayoutWork{
+	struct SLayoutWork {
 		// 毎ループ初期化
 		EKinsokuType	eKinsokuType;
 		CLogicInt		nPos;
@@ -291,8 +285,7 @@ protected:
 	void _OnLine1(SLayoutWork* pWork);
 	// DoLayout_Range用コア
 	void _OnLine2(SLayoutWork* pWork);
-
-
+	
 private:
 	bool _ExistKinsokuKuto(wchar_t wc) const{ return m_pszKinsokuKuto_1.exist(wc); }
 	bool _ExistKinsokuHead(wchar_t wc) const{ return m_pszKinsokuHead_1.exist(wc); }

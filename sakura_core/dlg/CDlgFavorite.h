@@ -36,8 +36,7 @@
 
 //!「履歴とお気に入りの管理」ダイアログ
 //アクセス方法：[設定] - [履歴の管理]
-class CDlgFavorite : public CDialog
-{
+class CDlgFavorite : public CDialog {
 public:
 	/*
 	||  Constructors

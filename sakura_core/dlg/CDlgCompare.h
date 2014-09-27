@@ -19,8 +19,7 @@ class CDlgCompare;
 /*!
 	@brief ファイル比較ダイアログボックス
 */
-class CDlgCompare : public CDialog
-{
+class CDlgCompare : public CDialog {
 public:
 	/*
 	||  Constructors

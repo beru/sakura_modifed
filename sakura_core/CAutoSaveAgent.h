@@ -50,12 +50,12 @@ public:
 	*/
 	CPassiveTimer() : nInterval(1), bEnabled(false){ Reset(); }
 
-	//ŠÔŠÔŠu
+	// ŠÔŠÔŠu
 	void SetInterval(int m);	//!	ŠÔŠÔŠu‚Ìİ’è
 	int GetInterval(void) const {return nInterval / MSec2Min; }	//!< ŠÔŠÔŠu‚Ìæ“¾
 	void Reset(void){ nLastTick = ::GetTickCount(); }			//!< Šî€‚ÌƒŠƒZƒbƒg
 
-	//—LŒø^–³Œø
+	// —LŒø^–³Œø
 	void Enable(bool flag);							//!< —LŒø^–³Œø‚Ìİ’è
 	bool IsEnabled(void) const { return bEnabled; }	//!< —LŒø^–³Œø‚Ì“Ç‚İo‚µ
 
@@ -69,9 +69,7 @@ private:
 };
 
 
-class CAutoSaveAgent :
-	public CDocListenerEx
-{
+class CAutoSaveAgent : public CDocListenerEx {
 public:
 	void CheckAutoSave();
 	void ReloadAutoSaveParam();	//!< İ’è‚ğSharedArea‚©‚ç“Ç‚İo‚·

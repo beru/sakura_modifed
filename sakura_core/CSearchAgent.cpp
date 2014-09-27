@@ -782,7 +782,7 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 
 	// ‘å—Ê‚Ìƒf[ƒ^‚ğ‘€ì‚·‚é‚Æ‚«
 	CDlgCancel*	pCDlgCancel = NULL;
-	class CDLgCandelCloser{
+	class CDLgCandelCloser {
 		CDlgCancel*& m_pDlg;
 	public:
 		CDLgCandelCloser(CDlgCancel*& pDlg): m_pDlg(pDlg){}

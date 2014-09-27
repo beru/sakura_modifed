@@ -41,8 +41,7 @@ class CPropertyManager;
 	
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CControlTray
-{
+class CControlTray {
 public:
 	/*
 	||  Constructors

@@ -61,7 +61,7 @@
 	@date 2005.03.19 かろと リファクタリング。クラス内部を隠蔽
 	@date 2006.01.22 かろと オプション追加・名称変更(全て行置換用Globalオプション追加のため)
 */
-class CBregexp : public CBregexpDll2{
+class CBregexp : public CBregexpDll2 {
 public:
 	CBregexp();
 	virtual ~CBregexp();
@@ -113,24 +113,21 @@ public:
 	    検索に一致した文字列の先頭位置を返す(文字列先頭なら0)
 		@retval 検索に一致した文字列の先頭位置
 	*/
-	CLogicInt GetIndex(void)
-	{
+	CLogicInt GetIndex(void) {
 		return CLogicInt(m_pRegExp->startp[0] - m_szTarget);
 	}
 	/*!
 	    検索に一致した文字列の次の位置を返す
 		@retval 検索に一致した文字列の次の位置
 	*/
-	CLogicInt GetLastIndex(void)
-	{
+	CLogicInt GetLastIndex(void) {
 		return CLogicInt(m_pRegExp->endp[0] - m_szTarget);
 	}
 	/*!
 		検索に一致した文字列の長さを返す
 		@retval 検索に一致した文字列の長さ
 	*/
-	CLogicInt GetMatchLen(void)
-	{
+	CLogicInt GetMatchLen(void) {
 		return CLogicInt(m_pRegExp->endp[0] - m_pRegExp->startp[0]);
 	}
 	/*!
@@ -156,8 +153,7 @@ public:
 		置換された文字列を返す
 		@retval 置換された文字列へのポインタ
 	*/
-	const wchar_t *GetString(void)
-	{
+	const wchar_t *GetString(void) {
 		return m_pRegExp->outp;
 	}
 	/*! @} */
@@ -195,7 +191,7 @@ protected:
 		元々NULLなら何もしない
 	*/
 	void ReleaseCompileBuffer(void){
-		if( m_pRegExp ){
+		if (m_pRegExp) {
 			BRegfree( m_pRegExp );
 			m_pRegExp = NULL;
 		}

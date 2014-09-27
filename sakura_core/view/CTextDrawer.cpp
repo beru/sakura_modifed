@@ -35,7 +35,6 @@
 #include "charset/charcode.h"
 #include "doc/layout/CLayout.h"
 
-
 const CTextArea* CTextDrawer::GetTextArea() const
 {
 	return &m_pEditView->GetTextArea();

@@ -8,14 +8,16 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 CNativeW::CNativeW()
 #if _DEBUG
-: m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	:
+	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 }
 
 CNativeW::CNativeW(const CNativeW& rhs)
 #if _DEBUG
-: m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	:
+	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 	SetNativeData(rhs);
@@ -24,7 +26,8 @@ CNativeW::CNativeW(const CNativeW& rhs)
 //! nDataLenÇÕï∂éöíPà ÅB
 CNativeW::CNativeW( const wchar_t* pData, int nDataLen )
 #if _DEBUG
-: m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	:
+	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 	SetString(pData,nDataLen);
@@ -32,7 +35,8 @@ CNativeW::CNativeW( const wchar_t* pData, int nDataLen )
 
 CNativeW::CNativeW( const wchar_t* pData)
 #if _DEBUG
-: m_pDebugData((PWCHAR&)_DebugGetPointerRef())
+	:
+	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
 	SetString(pData,wcslen(pData));

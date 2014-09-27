@@ -121,15 +121,13 @@ CRegexKeyword::~CRegexKeyword()
 */
 BOOL CRegexKeyword::RegexKeyInit( void )
 {
-	int	i;
-
 	MYDBGMSG("RegexKeyInit")
 	m_nTypeIndex = -1;
 	m_nTypeId = -1;
 	m_nCompiledMagicNumber = 1;
 	m_bUseRegexKeyword = false;
 	m_nRegexKeyCount = 0;
-	for (i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
 		m_sInfo[i].pBregexp = NULL;
 #ifdef USE_PARENT
 #else
@@ -202,13 +200,12 @@ BOOL CRegexKeyword::RegexKeySetTypes( const STypeConfig *pTypesPtr )
 */
 BOOL CRegexKeyword::RegexKeyCompile( void )
 {
-	int	i;
 	static const wchar_t dummy[2] = L"\0";
 	const struct RegexKeywordInfo	*rp;
 
 	MYDBGMSG("RegexKeyCompile")
 	// コンパイル済みのバッファを解放する。
-	for (i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
 		if (m_sInfo[i].pBregexp && IsAvailable()) {
 			BRegfree(m_sInfo[i].pBregexp);
 		}
@@ -222,7 +219,7 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 #else
 	wmemcpy( m_keywordList,  m_pTypes->m_RegexKeywordList, _countof(m_RegexKeywordList) );
 #endif
-	for (i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
 		if (pKeyword[0] == L'\0') {
 			break;
 		}
@@ -254,7 +251,7 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 	pKeyword = &m_keywordList[0];
 #endif
 	// パターンをコンパイルする。
-	for (i = 0; i < m_nRegexKeyCount; i++) {
+	for (int i = 0; i < m_nRegexKeyCount; i++) {
 #ifdef USE_PARENT
 		rp = &m_pTypes->m_RegexKeywordArr[i];
 #else
@@ -321,8 +318,6 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 */
 BOOL CRegexKeyword::RegexKeyLineStart( void )
 {
-	int	i;
-
 	MYDBGMSG("RegexKeyLineStart")
 
 	// 動作に必要なチェックをする。
@@ -340,7 +335,7 @@ BOOL CRegexKeyword::RegexKeyLineStart( void )
 #endif
 
 	// 検索開始のためにオフセット情報等をクリアする。
-	for (i = 0; i < m_nRegexKeyCount; i++) {
+	for (int i = 0; i < m_nRegexKeyCount; i++) {
 		m_sInfo[i].nOffset = -1;
 		//m_sInfo[i].nMatch  = RK_EMPTY;
 		m_sInfo[i].nMatch  = m_sInfo[i].nFlag;
@@ -369,8 +364,6 @@ BOOL CRegexKeyword::RegexIsKeyword(
 	int*				nMatchColor	//!< [out] マッチした色番号
 )
 {
-	int	i, matched;
-
 	MYDBGMSG("RegexIsKeyword")
 
 	// 動作に必要なチェックをする。
@@ -383,7 +376,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 		return FALSE;
 	}
 
-	for (i = 0; i < m_nRegexKeyCount; i++) {
+	for (int i = 0; i < m_nRegexKeyCount; i++) {
 		if (m_sInfo[i].nMatch != RK_NOMATCH) {  // この行にキーワードがないと分かっていない
 			if (m_sInfo[i].nOffset == nPos) {  // 以前検索した結果に一致する
 				*nMatchLen   = m_sInfo[i].nLength;
@@ -398,11 +391,11 @@ BOOL CRegexKeyword::RegexIsKeyword(
 			// 以前の結果はもう古いので再検索する
 			if (m_sInfo[i].nOffset < nPos) {
 #ifdef USE_PARENT
-				matched = ExistBMatchEx()
+				int matched = ExistBMatchEx()
 					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg)
 					: BMatch(NULL,                  cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 #else
-				matched = ExistBMatchEx()
+				int matched = ExistBMatchEx()
 					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 					: BMatch(NULL,                  cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 #endif

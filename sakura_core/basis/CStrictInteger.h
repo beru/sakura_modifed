@@ -70,11 +70,15 @@ private:
 		CDummy();
 		CDummy(int);
 	};
-	template<bool t, bool=false> struct ChooseIntOrDummy {
+	
+	template<bool t, bool=false>
+	struct ChooseIntOrDummy {
 		typedef int Type;
 	};
+	
 	// クラス内でテンプレートの特殊化をするとG++に怒られるので部分特殊化にする
-	template<bool _> struct ChooseIntOrDummy<false, _> {
+	template<bool _>
+	struct ChooseIntOrDummy<false, _> {
 		typedef CDummy Type;
 	};
 public:
@@ -211,8 +215,6 @@ private:
 private:
 	int m_value;
 };
-
-
 
 // 左辺がint等の場合の演算子
 #define STRICTINT_LEFT_INT_CMP(TYPE) \

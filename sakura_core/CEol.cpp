@@ -47,7 +47,7 @@ const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
 //	å≈íËÉfÅ[É^
 //-----------------------------------------------
 
-struct SEolDefinition{
+struct SEolDefinition {
 	const TCHAR*	m_szName;
 	const WCHAR*	m_szDataW;
 	const ACHAR*	m_szDataA;
@@ -67,7 +67,7 @@ static const SEolDefinition g_aEolTable[] = {
 	{ _T("PS"),		L"\u2029",		"",			1 },
 };
 
-struct SEolDefinitionForUniFile{
+struct SEolDefinitionForUniFile {
 	const char*	m_szDataW;
 	const char* m_szDataWB;
 	int			m_nLen;

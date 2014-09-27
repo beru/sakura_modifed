@@ -23,9 +23,7 @@
 */
 #pragma once
 
-class CSaveAgent :
-	public CDocListenerEx
-{
+class CSaveAgent : public CDocListenerEx {
 public:
 	CSaveAgent();
 	ECallbackResult OnCheckSave(SSaveInfo* pSaveInfo);

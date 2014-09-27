@@ -33,7 +33,7 @@ enum EShareMode{
 	SHAREMODE_DENY_READWRITE,	//!< 他プロセスからの読み書きを禁止
 };
 
-class CFile{
+class CFile {
 public:
 	// コンストラクタ・デストラクタ
 	CFile(LPCTSTR pszPath = NULL);
@@ -62,7 +62,7 @@ private:
 
 
 //! 一時ファイル
-class CTmpFile{
+class CTmpFile {
 public:
 	CTmpFile(){ m_fp = tmpfile(); }
 	~CTmpFile(){ fclose(m_fp); }

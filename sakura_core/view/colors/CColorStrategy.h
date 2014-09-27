@@ -33,13 +33,15 @@ class CEditView;
 bool _IsPosKeywordHead(const CStringRef& cStr, int nPos);
 
 //! 正規表現キーワードのEColorIndexType値を作る関数
-inline EColorIndexType ToColorIndexType_RegularExpression(const int nRegexColorIndex)
+inline
+EColorIndexType ToColorIndexType_RegularExpression(const int nRegexColorIndex)
 {
 	return (EColorIndexType)(COLORIDX_REGEX_FIRST + nRegexColorIndex);
 }
 
 //! 正規表現キーワードのEColorIndexType値を色番号に戻す関数
-inline int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexColorIndex)
+inline
+int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexColorIndex)
 {
 	return eRegexColorIndex - COLORIDX_REGEX_FIRST;
 }
@@ -48,7 +50,8 @@ inline int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexCol
 
 	@date 2013.05.08 novice 範囲外のときはテキストを選択する
 */
-inline int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
+inline
+int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 {
 	if (eColorIndex>=0 && eColorIndex<COLORIDX_LAST)
 		return eColorIndex;
@@ -84,8 +87,15 @@ struct CColor3Setting {
 	EColorIndexType eColorIndexBg;  //!< 背景色
 };
 
-struct SColorStrategyInfo{
-	SColorStrategyInfo() : m_sDispPosBegin(0,0), m_pStrategy(NULL), m_pStrategyFound(NULL), m_pStrategySelect(NULL), m_colorIdxBackLine(COLORIDX_TEXT) {
+struct SColorStrategyInfo {
+	SColorStrategyInfo()
+		:
+		m_sDispPosBegin(0,0),
+		m_pStrategy(NULL),
+		m_pStrategyFound(NULL),
+		m_pStrategySelect(NULL),
+		m_colorIdxBackLine(COLORIDX_TEXT)
+	{
 		m_cIndex.eColorIndex = COLORIDX_TEXT;
 		m_cIndex.eColorIndex2 = COLORIDX_TEXT;
 		m_cIndex.eColorIndexBg = COLORIDX_TEXT;
@@ -118,26 +128,23 @@ struct SColorStrategyInfo{
 	EColorIndexType GetCurrentColorBg() const { return m_cIndex.eColorIndexBg; }
 
 	//! 現在のスキャン位置
-	CLogicInt GetPosInLogic() const
-	{
+	CLogicInt GetPosInLogic() const {
 		return m_nPosInLogic;
 	}
 	
-	const CDocLine* GetDocLine() const
-	{
+	const CDocLine* GetDocLine() const {
 		return m_pDispPos->GetLayoutRef()->GetDocLineRef();
 	}
 	
-	const CLayout* GetLayout() const
-	{
+	const CLayout* GetLayout() const {
 		return m_pDispPos->GetLayoutRef();
 	}
 	
 };
 
-class CColorStrategy{
+class CColorStrategy {
 public:
-	virtual ~CColorStrategy(){}
+	virtual ~CColorStrategy() {}
 	//! 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
 	virtual CLayoutColorInfo* GetStrategyColorInfo() const {
@@ -153,8 +160,7 @@ public:
 	virtual void OnStartScanLogic(){}
 
 	//! 設定更新
-	virtual void Update(void)
-	{
+	virtual void Update(void) {
 		const CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	}

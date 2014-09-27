@@ -30,10 +30,9 @@
 // #include "DLLSHAREDATA.h"
 
 //! ‘®ŠÇ—
-class CFormatManager{
+class CFormatManager {
 public:
-	CFormatManager()
-	{
+	CFormatManager() {
 		m_pShareData = &GetDllShareData();
 	}
 	// ‘® //@@@ 2002.2.9 YAZAKI

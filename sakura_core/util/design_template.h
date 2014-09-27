@@ -38,8 +38,7 @@ template <class T>
 class TSingleton {
 public:
 	// 公開インターフェース
-	static T* getInstance()
-	{
+	static T* getInstance() {
 		static T instance;
 		return &instance;
 	}
@@ -79,12 +78,10 @@ T* TSingleInstance<T>::gm_instance = NULL;
 template <class T>
 class TInstanceHolder {
 public:
-	TInstanceHolder()
-	{
+	TInstanceHolder() {
 		gm_table.push_back(static_cast<T*>(this));
 	}
-	virtual ~TInstanceHolder()
-	{
+	virtual ~TInstanceHolder() {
 		for (size_t i=0;i<gm_table.size();i++) {
 			if (gm_table[i]==static_cast<T*>(this)) {
 				gm_table.erase(gm_table.begin()+i);
@@ -93,8 +90,7 @@ public:
 		}
 	}
 	static int GetInstanceCount() { return (int)gm_table.size(); }
-	static T* GetInstance(int nIndex)
-	{
+	static T* GetInstance(int nIndex) {
 		if (nIndex >= 0 && nIndex < (int)gm_table.size()) {
 			return gm_table[nIndex];
 		}else {

@@ -25,7 +25,8 @@
 
 // 単位が明示的に区別されたポイント型。※POINTは継承しないことにした
 /*
-template <int TYPE> class CStrictPoint : public CMyPoint{
+template <int TYPE>
+class CStrictPoint : public CMyPoint {
 public:
 	CStrictPoint() : CMyPoint() { }
 	CStrictPoint(int _x,int _y) : CMyPoint(_x,_y) { }
@@ -93,20 +94,17 @@ public:
 	INT_TYPE GetY2() const { return INT_TYPE(y); }
 
 	//! x,y いずれかが 0 より小さい場合に true を返す
-	bool HasNegative() const
-	{
+	bool HasNegative() const {
 		return x < 0 || y < 0;
 	}
 
 	//! x,y どちらも自然数であれば true
-	bool BothNatural() const
-	{
+	bool BothNatural() const {
 		return x >= 0 && y >= 0;
 	}
 
-	//特殊
-	POINT GetPOINT() const
-	{
+	// 特殊
+	POINT GetPOINT() const {
 		POINT pt = {(Int)x,(Int)y};
 		return pt;
 	}

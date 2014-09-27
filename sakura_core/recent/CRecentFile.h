@@ -27,9 +27,7 @@
 #include "EditInfo.h" //EditInfo
 
 //! EditInfo‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_FILE)
-class CRecentFile :
-	public CRecentImp<EditInfo>
-{
+class CRecentFile : public CRecentImp<EditInfo> {
 public:
 	// ¶¬
 	CRecentFile();

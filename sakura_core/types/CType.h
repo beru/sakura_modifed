@@ -93,10 +93,10 @@ enum EBackgroundImagePos {
 };
 
 struct SEncodingConfig {
-	bool				m_bPriorCesu8;					// 自動判別時に CESU-8 を優先するかどうか
-	ECodeType			m_eDefaultCodetype;				// デフォルト文字コード
-	EEolType			m_eDefaultEoltype;				// デフォルト改行コード		// 2011.01.24 ryoji
-	bool				m_bDefaultBom;					// デフォルトBOM			// 2011.01.24 ryoji
+	bool		m_bPriorCesu8;			// 自動判別時に CESU-8 を優先するかどうか
+	ECodeType	m_eDefaultCodetype;		// デフォルト文字コード
+	EEolType	m_eDefaultEoltype;		// デフォルト改行コード		// 2011.01.24 ryoji
+	bool		m_bDefaultBom;			// デフォルトBOM			// 2011.01.24 ryoji
 };
 
 enum EStringLiteralType {
@@ -239,8 +239,7 @@ struct STypeConfig {
 }; // STypeConfig
 
 // タイプ別設定(mini)
-struct STypeConfigMini
-{
+struct STypeConfigMini {
 	int			m_id;
 	TCHAR		m_szTypeName[64];				//!< タイプ属性：名称
 	TCHAR		m_szTypeExts[MAX_TYPES_EXTS];	//!< タイプ属性：拡張子リスト
@@ -266,12 +265,11 @@ public:
 #endif
 	}
 	
-	explicit CTypeConfig(int n)
-	{
+	explicit CTypeConfig(int n) {
 		m_nType = n;
 	}
-	bool IsValidType() const{ return m_nType>=0 && m_nType<MAX_TYPES; }
-	int GetIndex() const{ /*assert(IsValid());*/ return m_nType; }
+	bool IsValidType() const { return m_nType>=0 && m_nType<MAX_TYPES; }
+	int GetIndex() const { /*assert(IsValid());*/ return m_nType; }
 
 	//共有データへの簡易アクセサ
 //	STypeConfig* operator->(){ return GetTypeConfig(); }
@@ -279,7 +277,6 @@ public:
 private:
 	int m_nType;
 };
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -295,7 +292,7 @@ protected:
 };
 
 #define GEN_CTYPE(CLASS_NAME) \
-class CLASS_NAME : public CType{ \
+class CLASS_NAME : public CType { \
 protected: \
 	void InitTypeConfigImp(STypeConfig* pType); \
 };

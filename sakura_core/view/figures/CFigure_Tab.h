@@ -30,8 +30,7 @@ class CFigure_Tab : public CFigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText) const;
-	bool Disp(void) const
-	{
+	bool Disp(void) const {
 		return true;
 	}
 

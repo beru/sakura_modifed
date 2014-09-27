@@ -34,7 +34,7 @@
 #include <WinSpool.h>
 #include <CommDlg.h> // PRINTDLG
 
-struct	MYDEVMODE {
+struct MYDEVMODE {
 	BOOL	m_bPrinterNotFound;	// プリンタがなかったフラグ
 	TCHAR	m_szPrinterDriverName[_MAX_PATH + 1];	// プリンタドライバ名
 	TCHAR	m_szPrinterDeviceName[_MAX_PATH + 1];	// プリンタデバイス名
@@ -72,9 +72,6 @@ struct PAPER_INFO {
 };
 
 struct PRINTSETTING;
-
-
-
 
 //! 印刷設定
 #define POS_LEFT	0
@@ -127,12 +124,10 @@ struct PRINTSETTING {
 
 	オブジェクト指向でないクラス
 */
-class CPrint
-{
+class CPrint {
 public:
 	static const PAPER_INFO m_paperInfoArr[];	//!< 用紙情報一覧
 	static const int m_nPaperInfoArrNum; //!< 用紙情報一覧の要素数
-
 
 	/*
 	||	static関数群
@@ -176,7 +171,6 @@ public:
 		short*		pnPaperOffsetTop,	// 用紙余白上端
 		TCHAR*		pszErrMsg			// エラーメッセージ格納場所
 	);
-
 
 	// 印刷 ジョブ開始
 	BOOL PrintOpen(

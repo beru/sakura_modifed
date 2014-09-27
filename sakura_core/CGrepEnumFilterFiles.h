@@ -39,10 +39,10 @@ public:
 	CGrepEnumFiles m_cGrepEnumExceptFiles;
 
 public:
-	CGrepEnumFilterFiles(){
+	CGrepEnumFilterFiles() {
 	}
 
-	virtual ~CGrepEnumFilterFiles(){
+	virtual ~CGrepEnumFilterFiles() {
 	}
 
 	virtual

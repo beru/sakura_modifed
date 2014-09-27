@@ -14,7 +14,8 @@ using namespace std;
 
 	@retval 変換されたACHAR文字列
 */
-static ACHAR* CreateMbString(
+static
+ACHAR* CreateMbString(
 	const WCHAR*	pWideString,	//!< [in]  元のWCHAR文字列
 	int				nWideLength,	//!< [in]  元のWCHAR文字列の長さ。文字単位。
 	int*			pnMbLength		//!< [out] 変換されたACHAR文字列の長さの受け取り先。文字単位。
@@ -56,14 +57,14 @@ static ACHAR* CreateMbString(
 /*!
 	CreateMbString で確保したマルチバイト文字列を解放する
 */
-static void DestroyMbString(ACHAR* pMbString)
+static
+void DestroyMbString(ACHAR* pMbString)
 {
 	delete[] pMbString;
 }
 #endif	// ndef _UNICODE
 
-
-namespace ApiWrap{
+namespace ApiWrap {
 
 	/*!
 		MakeSureDirectoryPathExists の UNICODE 版。

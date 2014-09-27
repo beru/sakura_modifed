@@ -45,16 +45,15 @@ struct IniFolder {
 
 
 // 共有メモリ内構造体
-struct SShare_FileNameManagement{
-	IniFolder			m_IniFolder;	/**** iniフォルダ設定 ****/
+struct SShare_FileNameManagement {
+	IniFolder	m_IniFolder;	/**** iniフォルダ設定 ****/
 };
 
 
 //! ファイル名管理
-class CFileNameManager : public TSingleton<CFileNameManager>{
+class CFileNameManager : public TSingleton<CFileNameManager> {
 	friend class TSingleton<CFileNameManager>;
-	CFileNameManager()
-	{
+	CFileNameManager() {
 		m_pShareData = &GetDllShareData();
 		m_nTransformFileNameCount = -1;
 	}

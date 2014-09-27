@@ -136,7 +136,7 @@ COpeBlk* COpeBuf::DoRedo( bool* pbModified )
 //                         デバッグ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* アンドゥ・リドゥバッファのダンプ */
+// アンドゥ・リドゥバッファのダンプ
 void COpeBuf::DUMP()
 {
 #ifdef _DEBUG

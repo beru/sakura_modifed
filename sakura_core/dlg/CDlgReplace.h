@@ -27,8 +27,7 @@
 /*!
 	@brief 置換ダイアログボックス
 */
-class CDlgReplace : public CDialog
-{
+class CDlgReplace : public CDialog {
 public:
 	/*
 	||  Constructors

@@ -23,9 +23,9 @@
 
 #if 0
 // デバッグウォッチ用の型
-struct TestArrayA{ char    a[100]; };
-struct TestArrayW{ wchar_t a[100]; };
-struct TestArrayI{ int     a[100]; };
+struct TestArrayA { char    a[100]; };
+struct TestArrayW { wchar_t a[100]; };
+struct TestArrayI { int     a[100]; };
 void Test()
 {
 	TestArrayA a; a.a[0]=0;

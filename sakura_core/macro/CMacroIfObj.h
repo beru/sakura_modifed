@@ -30,8 +30,7 @@
 #include "CEditApp.h"
 
 // マクロWSHオブジェクト
-class CMacroIfObj : public CWSHIfObj
-{
+class CMacroIfObj : public CWSHIfObj {
 	// 型定義
 	enum FuncId {
 		F_MA_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
@@ -76,7 +75,7 @@ public:
 	// 実装
 public:
 	// コマンド情報を取得する
-	MacroFuncInfoArray GetMacroCommandInfo() const{
+	MacroFuncInfoArray GetMacroCommandInfo() const {
 		static MacroFuncInfo macroFuncInfoArr[] = {
 			// ID									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_SET_MATCH),		LTEXT("SetMatch"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//flagsを取得する
@@ -87,7 +86,7 @@ public:
 	}
 
 	// 関数情報を取得する
-	MacroFuncInfoArray GetMacroFuncInfo() const{
+	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
 			// ID									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_GET_MODE),			LTEXT("GetMode"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//モードを取得する

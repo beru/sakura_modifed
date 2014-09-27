@@ -61,18 +61,18 @@ extern const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM];
 	オブジェクトに対するメソッドで行えるだけだが、グローバル変数への参照を
 	クラス内部に閉じこめることができるのでそれなりに意味はあると思う。
 */
-class CEol{
+class CEol {
 public:
 	// コンストラクタ・デストラクタ
 	CEol() { m_eEolType = EOL_NONE; }
 	CEol( EEolType t ) { SetType(t); }
 
 	// 比較
-	bool operator==( EEolType t ) const { return GetType() == t; }
-	bool operator!=( EEolType t ) const { return GetType() != t; }
+	bool operator == ( EEolType t ) const { return GetType() == t; }
+	bool operator != ( EEolType t ) const { return GetType() != t; }
 
 	// 代入
-	const CEol& operator=( const CEol& t ){ m_eEolType = t.m_eEolType; return *this; }
+	const CEol& operator = ( const CEol& t ){ m_eEolType = t.m_eEolType; return *this; }
 
 	// 型変換
 	operator EEolType() const { return GetType(); }
@@ -94,8 +94,7 @@ public:
 	const wchar_t*	GetValue2()	const;	//!< 現在のEOL文字列先頭へのポインタを取得
 	//#####
 
-	bool IsValid() const
-	{
+	bool IsValid() const {
 		return m_eEolType>=EOL_CRLF && m_eEolType<EOL_CODEMAX;
 	}
 

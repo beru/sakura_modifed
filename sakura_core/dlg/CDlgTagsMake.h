@@ -36,8 +36,7 @@ class CDlgTagsMake;
 /*!
 	@brief タグファイル作成ダイアログボックス
 */
-class CDlgTagsMake : public CDialog
-{
+class CDlgTagsMake : public CDialog {
 public:
 	/*
 	||  Constructors

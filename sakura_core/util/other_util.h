@@ -48,17 +48,15 @@ public:
 	~auto_array_ptr(){ delete[] m_array; }
 
 	// è•ú‚· (‰ğ•ú‚Í‚µ‚È‚¢)
-	T* detach()
-	{
+	T* detach() {
 		T* p = m_array;
 		m_array = NULL;
 		return p;
 	}
 
 	// •Û’l‚ğ•ÏX‚·‚é
-	void reset(T* p)
-	{
-		if (m_array==p) return;
+	void reset(T* p) {
+		if (m_array == p) return;
 		delete[] m_array;
 		m_array = p;
 	}

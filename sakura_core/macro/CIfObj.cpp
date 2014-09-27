@@ -43,8 +43,7 @@
 
 /////////////////////////////////////////////
 // スクリプトに渡されるオブジェクトの型情報
-class CIfObjTypeInfo: public ImplementsIUnknown<ITypeInfo>
-{
+class CIfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
 	const CIfObj::CMethodInfoList& m_MethodsRef;
 	TYPEATTR m_TypeAttr;

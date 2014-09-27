@@ -2,9 +2,7 @@
 #include "StdControl.h"
 #include "util/tchar_receive.h"
 
-
-
-namespace ApiWrap{
+namespace ApiWrap {
 
 	LRESULT List_GetText(HWND hwndList, int nIndex, ACHAR* str)
 	{

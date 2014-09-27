@@ -30,9 +30,12 @@ class CDocLine;
 class CDocLineMgr;
 
 //! Modifiedä«óù
-class CModifyManager : public TSingleton<CModifyManager>, public CDocListenerEx {
+class CModifyManager :
+	public TSingleton<CModifyManager>,
+	public CDocListenerEx
+{
 	friend class TSingleton<CModifyManager>;
-	CModifyManager(){}
+	CModifyManager() {}
 
 public:
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
@@ -44,8 +47,7 @@ class CLineModified {
 public:
 	CLineModified() : m_nModifiedSeq(0) { }
 	int GetSeq() const { return m_nModifiedSeq; }
-	CLineModified& operator = (int seq)
-	{
+	CLineModified& operator = (int seq) {
 		m_nModifiedSeq = seq;
 		return *this;
 	}

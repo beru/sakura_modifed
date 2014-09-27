@@ -23,8 +23,7 @@
 	メッセージを捕捉する．
 */
 
-class CUrlWnd
-{
+class CUrlWnd {
 public:
 	CUrlWnd() { m_hWnd = NULL; m_hFont = NULL; m_bHilighted = FALSE; m_pOldProc = NULL; }
 	virtual ~CUrlWnd() { ; }
@@ -39,8 +38,7 @@ protected:
 	WNDPROC m_pOldProc;
 };
 
-class CDlgAbout : public CDialog
-{
+class CDlgAbout : public CDialog {
 public:
 	int DoModal( HINSTANCE, HWND );	// モーダルダイアログの表示
 	//	Nov. 7, 2000 genta	標準以外のメッセージを捕捉する

@@ -44,8 +44,7 @@ class CKeyWordSetMgr;
 //	2005.01.13 genta ShareData‚Ì’è‹`‚Æ˜A“®‚³‚¹‚é
 const int KEYWORD_SELECT_NUM = MAX_KEYWORDSET_PER_TYPE;
 
-class CDlgKeywordSelect : public CDialog
-{
+class CDlgKeywordSelect : public CDialog {
 public:
 	CDlgKeywordSelect();
 	~CDlgKeywordSelect();

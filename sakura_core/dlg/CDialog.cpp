@@ -727,7 +727,8 @@ void CDialog::GetItemClientRect( int wID, RECT& rc )
 
 static const TCHAR* TSTR_SUBCOMBOBOXDATA = _T("SubComboBoxData");
 
-static void DeleteItem(HWND hwnd, CRecent* pRecent)
+static
+void DeleteItem(HWND hwnd, CRecent* pRecent)
 {
 	int nIndex = Combo_GetCurSel(hwnd);
 	if (0 <= nIndex) {

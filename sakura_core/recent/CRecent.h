@@ -55,8 +55,7 @@ public:
 	virtual bool			AppendItemText(const TCHAR* pszText) = 0;
 	virtual bool			EditItemText( int nIndex, const TCHAR* pszText) = 0;
 
-	int FindItemByText(const TCHAR* pszText) const
-	{
+	int FindItemByText(const TCHAR* pszText) const {
 		int n = GetItemCount();
 		for (int i=0;i<n;i++) {
 			if (_tcscmp(GetItemText(i),pszText) == 0) {
@@ -75,8 +74,7 @@ public:
 	virtual bool	UpdateView() = 0;
 
 	// 共有メモリアクセス
-	DLLSHAREDATA*	GetShareData()
-	{
+	DLLSHAREDATA*	GetShareData() {
 		return &GetDllShareData();
 	}
 };

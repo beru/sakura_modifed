@@ -45,14 +45,15 @@ private:
 	VPGrepEnumItem m_vpItems;
 
 public:
-	CGrepEnumFileBase(){
+	CGrepEnumFileBase() {
 	}
 
-	virtual ~CGrepEnumFileBase(){
+	virtual
+	~CGrepEnumFileBase() {
 		ClearItems();
 	}
 
-	void ClearItems( void ){
+	void ClearItems( void ) {
 		for (int i = 0; i < GetCount(); i++) {
 			LPTSTR lp = m_vpItems[ i ].first;
 			m_vpItems[ i ].first = NULL;
@@ -62,7 +63,7 @@ public:
 		return;
 	}
 
-	BOOL IsExist( LPCTSTR lpFileName ){
+	BOOL IsExist( LPCTSTR lpFileName ) {
 		for (int i = 0; i < GetCount(); i++) {
 			if (_tcscmp( m_vpItems[ i ].first, lpFileName ) == 0) {
 				return TRUE;
@@ -71,7 +72,8 @@ public:
 		return FALSE;
 	}
 
-	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
+	virtual
+	BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ) {
 		if (!IsExist( pFile ? pFile : w32fd.cFileName )) {
 			return TRUE;
 		}
@@ -82,21 +84,25 @@ public:
 		return (int)m_vpItems.size();
 	}
 
-	LPCTSTR GetFileName( int i ){
+	LPCTSTR GetFileName( int i ) {
 		if (i < 0 || i >= GetCount()) {
 			return NULL;
 		}
 		return m_vpItems[ i ].first;
 	}
 
-	DWORD GetFileSizeLow( int i ){
+	DWORD GetFileSizeLow( int i ) {
 		if (i < 0 || i >= GetCount()) {
 			return 0;
 		}
 		return m_vpItems[ i ].second;
 	}
 
-	int Enumerates( LPCTSTR lpBaseFolder, VGrepEnumKeys& vecKeys, CGrepEnumFileBase* pExceptItems = NULL ){
+	int Enumerates(
+		LPCTSTR				lpBaseFolder,
+		VGrepEnumKeys&		vecKeys,
+		CGrepEnumFileBase*	pExceptItems = NULL
+	) {
 		int found = 0;
 
 		for (int i = 0; i < (int)vecKeys.size(); i++) {

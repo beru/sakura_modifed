@@ -38,8 +38,7 @@ public:
 	virtual bool Disp(void) const = 0;
 
 	//! 設定更新
-	virtual void Update(void)
-	{
+	virtual void Update(void) {
 		CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	}
@@ -51,14 +50,12 @@ protected:
 class CFigure_Text : public CFigure {
 public:
 	bool DrawImp(SColorStrategyInfo* pInfo);
-	bool Match(const wchar_t* pText) const
-	{
+	bool Match(const wchar_t* pText) const {
 		return true;
 	}
 
 	//! 色分け表示対象判定
-	virtual bool Disp(void) const
-	{
+	virtual bool Disp(void) const {
 		return true;
 	}
 };
@@ -72,14 +69,12 @@ protected:
 	virtual EColorIndexType GetColorIdx(void) const = 0;
 
 	//! 色分け表示対象判定
-	virtual bool Disp(void) const
-	{
+	virtual bool Disp(void) const {
 		EColorIndexType nColorIndex = GetColorIdx();
 		return m_pTypeData->m_ColorInfoArr[nColorIndex].m_bDisp;
 	}
 
-	virtual void Update(void)
-	{
+	virtual void Update(void) {
 		CFigure::Update();
 
 		EColorIndexType nColorIndex = GetColorIdx();

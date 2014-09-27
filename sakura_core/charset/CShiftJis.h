@@ -28,7 +28,7 @@
 
 struct CommonSetting_Statusbar;
 
-class CShiftJis : public CCodeBase{
+class CShiftJis : public CCodeBase {
 
 public:
 	//CCodeBaseインターフェース

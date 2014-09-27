@@ -34,8 +34,7 @@
 #define DEBUG_SETPIXEL(hdc)
 #endif
 
-namespace ApiWrap
-{
+namespace ApiWrap {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          W系が存在しないAPIのための、新しい関数定義         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -163,8 +162,7 @@ namespace ApiWrap
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	//! よく使うExtTextOutW_AnyBuildのオプション
-	inline UINT ExtTextOutOption()
-	{
+	inline UINT ExtTextOutOption() {
 		return ETO_CLIPPED | ETO_OPAQUE;
 	}
 
@@ -173,20 +171,17 @@ namespace ApiWrap
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	//! SHIFTを押しているかどうか
-	inline bool GetKeyState_Shift()
-	{
+	inline bool GetKeyState_Shift() {
 		return (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
 	}
 
 	//! CTRLを押しているかどうか
-	inline bool GetKeyState_Control()
-	{
+	inline bool GetKeyState_Control() {
 		return (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
 	}
 
 	//! ALTを押しているかどうか
-	inline bool GetKeyState_Alt()
-	{
+	inline bool GetKeyState_Alt() {
 		return (::GetKeyState(VK_MENU) & 0x8000) != 0;
 	}
 
@@ -233,8 +228,6 @@ namespace ApiWrap
 
 }
 using namespace ApiWrap;
-
-
 
 
 // Sep. 22, 2003 MIK

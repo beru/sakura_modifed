@@ -96,7 +96,7 @@ enum EBarChangeNotifyType {
 //#define COLOR_ATTRIB_NO_ITALIC		0x00000400	予約値
 #define COLOR_ATTRIB_NO_EFFECTS		0x00000F00
 
-struct SColorAttributeData{
+struct SColorAttributeData {
 	const TCHAR*	szName;
 	unsigned int	fAttribute;
 };
@@ -150,44 +150,47 @@ enum ESearchDirection{
 };
 
 //2007.09.06 kobake 追加
-struct SSearchOption{
+struct SSearchOption {
 //	ESearchDirection	eDirection;
 //	bool	bPrevOrNext;	//!< false==前方検索 true==後方検索
 	bool	bRegularExp;	//!< true==正規表現
 	bool	bLoHiCase;		//!< true==英大文字小文字の区別
 	bool	bWordOnly;		//!< true==単語のみ検索
 
-	SSearchOption() : bRegularExp(false), bLoHiCase(false), bWordOnly(false) { }
+	SSearchOption()
+		:
+		bRegularExp(false),
+		bLoHiCase(false),
+		bWordOnly(false)
+	{
+	}
 	SSearchOption(
 		bool _bRegularExp,
 		bool _bLoHiCase,
 		bool _bWordOnly
 	)
-	: bRegularExp(_bRegularExp)
-	, bLoHiCase(_bLoHiCase)
-	, bWordOnly(_bWordOnly)
+		:
+		bRegularExp(_bRegularExp),
+		bLoHiCase(_bLoHiCase),
+		bWordOnly(_bWordOnly)
 	{
 	}
-	void Reset()
-	{
+	void Reset() {
 		bRegularExp = false;
 		bLoHiCase   = false;
 		bWordOnly   = false;
 	}
 
 	// 演算子
-	bool operator == (const SSearchOption& rhs) const
-	{
-		//とりあえずmemcmpでいいや
+	bool operator == (const SSearchOption& rhs) const {
+		// とりあえずmemcmpでいいや
 		return memcmp(this, &rhs, sizeof(*this)) == 0;
 	}
-	bool operator != (const SSearchOption& rhs) const
-	{
+	bool operator != (const SSearchOption& rhs) const {
 		return !operator==(rhs);
 	}
 
 };
-
 
 //2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
 class CEditWnd;

@@ -39,8 +39,7 @@
 #include "_main/global.h"
 
 //! メモリバッファクラス
-class CMemory
-{
+class CMemory {
 	// コンストラクタ・デストラクタ
 public:
 	CMemory();
@@ -112,12 +111,14 @@ private: // 2002/2/10 aroka アクセス権変更
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     inline関数の実装                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-inline const void* CMemory::GetRawPtr(int* pnLength) const //!< データへのポインタと長さ返す
+inline
+const void* CMemory::GetRawPtr(int* pnLength) const //!< データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
-inline void* CMemory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
+inline
+void* CMemory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;

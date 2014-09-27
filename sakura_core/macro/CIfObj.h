@@ -38,8 +38,7 @@ class CEditView;
 // COM一般
 
 template<class Base>
-class ImplementsIUnknown: public Base
-{
+class ImplementsIUnknown : public Base {
 private:
 	int m_RefCount;
 	ImplementsIUnknown(const ImplementsIUnknown &);
@@ -48,8 +47,7 @@ public:
 	#ifdef __BORLANDC__
 	#pragma argsused
 	#endif
-	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) 
-	{ 
+	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) {
 		return E_NOINTERFACE; 
 	}
 	virtual ULONG STDMETHODCALLTYPE AddRef() { ++ m_RefCount; return m_RefCount; }
@@ -65,21 +63,17 @@ class CIfObj;
 typedef HRESULT (CIfObj::*CIfObjMethod)(int ID, DISPPARAMS *Arguments, VARIANT* Result, void *Data);
 
 // CIfObjが必要とするWSHClientのインタフェース
-class IWSHClient
-{
+class IWSHClient {
 public:
 	virtual void* GetData() const = 0;
 };
 
 // スクリプトに渡されるオブジェクト
 
-class CIfObj
-: public ImplementsIUnknown<IDispatch>
-{
+class CIfObj : public ImplementsIUnknown<IDispatch> {
 public:
 	// 型定義
-	struct CMethodInfo
-	{
+	struct CMethodInfo {
 		FUNCDESC		Desc;
 		wchar_t			Name[64];
 		CIfObjMethod	Method;
@@ -103,8 +97,7 @@ public:
 	// 操作
 	void AddMethod(const wchar_t* Name, int ID, VARTYPE *ArgumentTypes,
 		int ArgumentCount, VARTYPE ResultType, CIfObjMethod Method);
-	void ReserveMethods(int Count)
-	{
+	void ReserveMethods(int Count) {
 		m_Methods.reserve(Count);
 	}
 

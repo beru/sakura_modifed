@@ -26,9 +26,9 @@
 #include "charset/charcode.h"
 
 //!< ディレクトリを除いた、ファイル名だけを取得する
-class CharPointerA{
+class CharPointerA {
 public:
-	CharPointerA(){ }
+	CharPointerA() { }
 	CharPointerA(const char* p) : m_p(p) { }
 	CharPointerA(const CharPointerA& rhs) : m_p(rhs.m_p) { }
 
@@ -52,13 +52,11 @@ public:
 	const char* GetPointer() const{ return m_p; }
 
 protected:
-	void _forward() //!< 1文字進む
-	{
+	void _forward() { //!< 1文字進む
 		if(_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1]))m_p+=2;
 		else m_p+=1;
 	}
-	WORD _get() const //!< 1文字取得する
-	{
+	WORD _get() const { //!< 1文字取得する
 		if(_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1]))return *((WORD*)m_p);
 		else return *m_p;
 	}
@@ -68,9 +66,9 @@ private:
 };
 
 
-class CharPointerW{
+class CharPointerW {
 public:
-	CharPointerW(){ }
+	CharPointerW() { }
 	CharPointerW(const wchar_t* p) : m_p(p) { }
 	CharPointerW(const CharPointerW& rhs) : m_p(rhs.m_p) { }
 
@@ -94,19 +92,16 @@ public:
 	const wchar_t* GetPointer() const{ return m_p; }
 
 protected:
-	void _forward() //!< 1文字進む
-	{
+	void _forward() { //!< 1文字進む
 		++m_p;
 	}
-	WORD _get() const //!< 1文字取得する
-	{
+	WORD _get() const { //!< 1文字取得する
 		return *m_p;
 	}
 
 private:
 	const wchar_t* m_p;
 };
-
 
 
 #ifdef _UNICODE

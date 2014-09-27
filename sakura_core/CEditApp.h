@@ -42,14 +42,14 @@ enum EFunctionCode;
 //!エディタ部分アプリケーションクラス。CNormalProcess1個につき、1個存在。
 class CEditApp : public TSingleton<CEditApp> {
 	friend class TSingleton<CEditApp>;
-	CEditApp(){}
+	CEditApp() {}
 	virtual ~CEditApp();
 
 public:
 	void Create(HINSTANCE hInst, int);
 
 	// モジュール情報
-	HINSTANCE GetAppInstance() const{ return m_hInst; }	//!< インスタンスハンドル取得
+	HINSTANCE GetAppInstance() const { return m_hInst; }	//!< インスタンスハンドル取得
 
 	// ウィンドウ情報
 	CEditWnd* GetEditWindow() { return m_pcEditWnd; }		//!< ウィンドウ取得

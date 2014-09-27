@@ -43,9 +43,9 @@ public:
 	int AddBaseDir( const TCHAR* baseDir );
 	BOOL AddParamA( const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId );
 	BOOL GetParam( int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir );
-	int GetCount( void ){ return m_nCount; }
+	int GetCount( void ) { return m_nCount; }
 	void Empty( void );
-	bool IsOverflow( void ){ return m_bOverflow; }
+	bool IsOverflow( void ) { return m_bOverflow; }
 
 	typedef struct tagjump_info_t {
 		struct tagjump_info_t*	next;	//!< ŽŸ‚ÌƒŠƒXƒg

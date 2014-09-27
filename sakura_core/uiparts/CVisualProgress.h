@@ -26,8 +26,7 @@
 #include "doc/CDocListener.h"
 class CWaitCursor;
 
-class CVisualProgress
-	:
+class CVisualProgress :
 	public CDocListenerEx,
 	public CProgressListener
 {

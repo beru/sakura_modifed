@@ -37,27 +37,23 @@
 */
 class CMutex {
 public:
-	CMutex( BOOL bInitialOwner, LPCTSTR pszName, LPSECURITY_ATTRIBUTES psa = NULL )
-	{
+	CMutex( BOOL bInitialOwner, LPCTSTR pszName, LPSECURITY_ATTRIBUTES psa = NULL ) {
 		m_hObj = ::CreateMutex( psa, bInitialOwner, pszName );
 	}
-	~CMutex()
-	{
+	~CMutex() {
 		if (m_hObj) {
 			::CloseHandle( m_hObj );
 			m_hObj = NULL;
 		}
 	}
-	BOOL Lock( DWORD dwTimeout = INFINITE )
-	{
+	BOOL Lock( DWORD dwTimeout = INFINITE ) {
 		DWORD dwRet = ::WaitForSingleObject( m_hObj, dwTimeout );
 		if (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED)
 			return TRUE;
 		else
 			return FALSE;
 	}
-	BOOL Unlock()
-	{
+	BOOL Unlock() {
 		return ::ReleaseMutex( m_hObj );
 	}
 	operator HANDLE() const { return m_hObj; }

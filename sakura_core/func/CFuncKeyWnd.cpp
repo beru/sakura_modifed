@@ -50,7 +50,8 @@ LRESULT CALLBACK CFuncKeyWndProc(
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 CFuncKeyWnd::CFuncKeyWnd()
-: CWnd(_T("::CFuncKeyWnd"))
+	:
+	CWnd(_T("::CFuncKeyWnd"))
 {
 	m_pszClassName = _T("CFuncKeyWnd");
 	m_pcEditDoc = NULL;
@@ -103,7 +104,12 @@ CFuncKeyWnd::~CFuncKeyWnd()
 }
 
 // ウィンドウ オープン
-HWND CFuncKeyWnd::Open( HINSTANCE hInstance, HWND hwndParent, CEditDoc* pCEditDoc, bool bSizeBox )
+HWND CFuncKeyWnd::Open(
+	HINSTANCE	hInstance,
+	HWND		hwndParent,
+	CEditDoc*	pCEditDoc,
+	bool		bSizeBox
+)
 {
 	m_pcEditDoc = pCEditDoc;
 	m_bSizeBox = bSizeBox;
@@ -119,26 +125,26 @@ HWND CFuncKeyWnd::Open( HINSTANCE hInstance, HWND hwndParent, CEditDoc* pCEditDo
 	// ウィンドウクラス作成
 	RegisterWC(
 		hInstance,
-		NULL,// Handle to the class icon.
-		NULL,	//Handle to a small icon
+		NULL,							// Handle to the class icon.
+		NULL,							// Handle to a small icon
 		::LoadCursor( NULL, IDC_ARROW ),// Handle to the class cursor.
-		(HBRUSH)(COLOR_3DFACE + 1),// Handle to the class background brush.
+		(HBRUSH)(COLOR_3DFACE + 1),		// Handle to the class background brush.
 		NULL/*MAKEINTRESOURCE( MYDOCUMENT )*/,// Pointer to a null-terminated character string that specifies the resource name of the class menu, as the name appears in the resource file.
-		m_pszClassName// Pointer to a null-terminated string or is an atom.
+		m_pszClassName					// Pointer to a null-terminated string or is an atom.
 	);
 
 	// 基底クラスメンバ呼び出し
 	CWnd::Create(
 		hwndParent,
-		0, // extended window style
-		m_pszClassName,	// Pointer to a null-terminated string or is an atom.
-		m_pszClassName, // pointer to window name
+		0,								// extended window style
+		m_pszClassName,					// Pointer to a null-terminated string or is an atom.
+		m_pszClassName, 				// pointer to window name
 		WS_CHILD/* | WS_VISIBLE*/ | WS_CLIPCHILDREN, // window style	// 2006.06.17 ryoji WS_CLIPCHILDREN 追加	// 2007.03.08 ryoji WS_VISIBLE 除去
-		CW_USEDEFAULT, // horizontal position of window
-		0, // vertical position of window
-		0, // window width	// 2007.02.05 ryoji 100->0（半端なサイズで一瞬表示されるより見えないほうがいい）
-		::GetSystemMetrics( SM_CYMENU ), // window height
-		NULL // handle to menu, or child-window identifier
+		CW_USEDEFAULT,					// horizontal position of window
+		0,								// vertical position of window
+		0,								// window width	// 2007.02.05 ryoji 100->0（半端なサイズで一瞬表示されるより見えないほうがいい）
+		::GetSystemMetrics( SM_CYMENU ),// window height
+		NULL							// handle to menu, or child-window identifier
 	);
 
 

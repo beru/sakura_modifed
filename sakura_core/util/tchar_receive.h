@@ -51,9 +51,14 @@ template <class RECEIVE_CHAR_TYPE>
 class TcharReceiver {
 public:
 	TcharReceiver(RECEIVE_CHAR_TYPE* pReceiver, size_t nReceiverCount)	//!< 受け取りバッファを指定。
-	: m_pReceiver(pReceiver), m_nReceiverCount(nReceiverCount), m_pBuff(NULL) { }
-	operator TCHAR* (){ return GetBufferPointer(); }
-	~TcharReceiver(){ Apply(); }
+		:
+		m_pReceiver(pReceiver),
+		m_nReceiverCount(nReceiverCount),
+		m_pBuff(NULL)
+	{
+	}
+	operator TCHAR* () { return GetBufferPointer(); }
+	~TcharReceiver() { Apply(); }
 protected:
 	TCHAR* GetBufferPointer();	//!< 一時バッファを提供。バッファ寿命は短いので注意。
 	void Apply();				//!< 一時バッファから、実際の受け取りバッファへデータをコピー。

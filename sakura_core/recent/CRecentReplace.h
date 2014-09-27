@@ -29,9 +29,7 @@
 typedef StaticString<WCHAR, _MAX_PATH> CReplaceString;
 
 //! ’uŠ·‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_REPLACE)
-class CRecentReplace :
-	public CRecentImp<CReplaceString, LPCWSTR>
-{
+class CRecentReplace : public CRecentImp<CReplaceString, LPCWSTR> {
 public:
 	// ¶¬
 	CRecentReplace();

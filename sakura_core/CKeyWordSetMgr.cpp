@@ -136,7 +136,7 @@ bool CKeyWordSetMgr::AddKeyWordSet(
 	return true;
 }
 
-/* ｎ番目のセットを削除 */
+// ｎ番目のセットを削除
 bool CKeyWordSetMgr::DelKeyWordSet( int nIdx )
 {
 	if (m_nKeyWordSetNum <= nIdx ||
@@ -195,7 +195,7 @@ const wchar_t* CKeyWordSetMgr::SetTypeName( int nIdx, const wchar_t* name )
 	return m_szSetNameArr[nIdx];
 }
 
-/* ｎ番目のセットのキーワードの数を返す */
+// ｎ番目のセットのキーワードの数を返す
 int CKeyWordSetMgr::GetKeyWordNum( int nIdx )
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
@@ -233,11 +233,11 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 	if (nIdx2 < 0 || m_nKeyWordNumArr[nIdx] <= nIdx2) {
 		return NULL;
 	}
-	/* 0バイトの長さのキーワードは編集しない */
+	// 0バイトの長さのキーワードは編集しない
 	if (pszKeyWord[0] == L'\0') {
 		return NULL;
 	}
-	/* 重複したキーワードは編集しない */
+	// 重複したキーワードは編集しない
 	for (int i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; ++i) {
 		if (0 == wcscmp( m_szKeyWordArr[i], pszKeyWord )) {
 			return NULL;
@@ -270,17 +270,17 @@ int CKeyWordSetMgr::AddKeyWord( int nIdx, const wchar_t* pszKeyWord )
 //		return FALSE;
 //	}
 
-	/* 0バイトの長さのキーワードは登録しない */
+	// 0バイトの長さのキーワードは登録しない
 	if (pszKeyWord[0] == L'\0') {
 		return 3;
 	}
-	/* 重複したキーワードは登録しない */
+	// 重複したキーワードは登録しない
 	for (int i = m_nStartIdx[nIdx]; i < m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]; ++i) {
 		if (0 == wcscmp( m_szKeyWordArr[i], pszKeyWord )) {
 			return 4;
 		}
 	}
-	/* MAX_KEYWORDLENより長いキーワードは切り捨てる */
+	// MAX_KEYWORDLENより長いキーワードは切り捨てる
 	if (MAX_KEYWORDLEN < wcslen( pszKeyWord )) {
 		wmemcpy( m_szKeyWordArr[m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]], pszKeyWord, MAX_KEYWORDLEN );
 		m_szKeyWordArr[m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]][MAX_KEYWORDLEN] = L'\0';
@@ -648,7 +648,7 @@ int CKeyWordSetMgr::GetAllocSize( int nIdx ) const
 	@date 2004.07.29 Moca 新規作成
 	
 	@return 共有空き領域(キーワード数)
- */
+*/
 int CKeyWordSetMgr::GetFreeSize( void ) const 
 {
 	return MAX_KEYWORDNUM - m_nStartIdx[m_nKeyWordSetNum];

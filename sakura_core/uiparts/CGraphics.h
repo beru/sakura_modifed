@@ -34,29 +34,24 @@
 template <class T>
 class TOriginalHolder {
 public:
-	TOriginalHolder<T>()
-	{
+	TOriginalHolder<T>() {
 		m_data = 0;
 		m_hold = false;
 	}
-	void Clear()
-	{
+	void Clear() {
 		m_data = 0;
 		m_hold = false;
 	}
-	void AssignOnce(const T& t)
-	{
-		if(!m_hold){
+	void AssignOnce(const T& t) {
+		if (!m_hold) {
 			m_data = t;
 			m_hold = true;
 		}
 	}
-	const T& Get() const
-	{
+	const T& Get() const {
 		return m_data;
 	}
-	bool HasData() const
-	{
+	bool HasData() const {
 		return m_hold;
 	}
 private:
@@ -89,8 +84,7 @@ public:
 	void PushClipping(const RECT& rc);
 	void PopClipping();
 	void ClearClipping();
-	void SetClipping(const RECT& rc)
-	{
+	void SetClipping(const RECT& rc) {
 		ClearClipping();
 		PushClipping(rc);
 	}
@@ -100,13 +94,11 @@ public:
 	void PushTextForeColor(COLORREF color);
 	void PopTextForeColor();
 	void ClearTextForeColor();
-	void SetTextForeColor(COLORREF color)
-	{
+	void SetTextForeColor(COLORREF color) {
 		ClearTextForeColor();
 		PushTextForeColor(color);
 	}
-	COLORREF GetCurrentTextForeColor()
-	{
+	COLORREF GetCurrentTextForeColor() {
 		assert(!m_vTextForeColors.empty());
 		return m_vTextForeColors.back();
 	}
@@ -116,21 +108,18 @@ public:
 	void PushTextBackColor(COLORREF color);
 	void PopTextBackColor();
 	void ClearTextBackColor();
-	void SetTextBackColor(COLORREF color)
-	{
+	void SetTextBackColor(COLORREF color) {
 		ClearTextBackColor();
 		PushTextBackColor(color);
 	}
-	COLORREF GetTextBackColor()
-	{
+	COLORREF GetTextBackColor() {
 		assert(!m_vTextBackColors.empty());
 		return m_vTextBackColors.back();
 	}
 
 	// テキストモード
 public:
-	void SetTextBackTransparent(bool b)
-	{
+	void SetTextBackTransparent(bool b) {
 		m_nTextModeOrg.AssignOnce( ::SetBkMode(m_hdc,b?TRANSPARENT:OPAQUE) );
 	}
 
@@ -140,8 +129,7 @@ public:
 
 	// フォント
 public:
-	void PushMyFont(HFONT hFont)
-	{
+	void PushMyFont(HFONT hFont) {
 		SFONT sFont = { { false, false }, hFont };
 		PushMyFont(sFont);
 	}
@@ -149,13 +137,11 @@ public:
 	void PopMyFont();
 	void ClearMyFont();
 	//! フォント設定
-	void SetMyFont(const SFONT& sFont)
-	{
+	void SetMyFont(const SFONT& sFont) {
 		ClearMyFont();
 		PushMyFont(sFont);
 	}
-	bool GetCurrentMyFontBold()
-	{
+	bool GetCurrentMyFontBold() {
 		assert(!m_vFonts.empty());
 		return  m_vFonts.back().m_sFontAttr.m_bBoldFont;
 	}
@@ -164,8 +150,7 @@ public:
 public:
 	void PushPen(COLORREF color, int nPenWidth, int nStyle = PS_SOLID);
 	void PopPen();
-	void SetPen(COLORREF color)
-	{
+	void SetPen(COLORREF color) {
 		ClearPen();
 		PushPen(color,1);
 	}
@@ -181,8 +166,7 @@ public:
 	void PopBrushColor();
 	void ClearBrush();
 
-	void SetBrushColor(COLORREF color)
-	{
+	void SetBrushColor(COLORREF color) {
 		ClearBrush();
 		PushBrushColor(color);
 	}
@@ -191,30 +175,26 @@ public:
 	// 描画
 public:
 	//! 直線
-	void DrawLine(int x1, int y1, int x2, int y2)
-	{
+	void DrawLine(int x1, int y1, int x2, int y2) {
 		::MoveToEx(m_hdc,x1,y1,NULL);
 		::LineTo(m_hdc,x2,y2);
 	}
 	void DrawDotLine(int x1, int y1, int x2, int y2);	//点線
 	//! 矩形塗り潰し
-	void FillMyRect(const RECT& rc)
-	{
+	void FillMyRect(const RECT& rc) {
 		::FillRect(m_hdc,&rc,GetCurrentBrush());
 #ifdef _DEBUG
 		::SetPixel(m_hdc,-1,-1,0); //###########実験
 #endif
 	}
 	//! 矩形塗り潰し
-	void FillSolidMyRect(const RECT& rc, COLORREF color)
-	{
+	void FillSolidMyRect(const RECT& rc, COLORREF color) {
 		PushTextBackColor(color);
 		FillMyRectTextBackColor(rc);
 		PopTextBackColor();
 	}
 	//! 矩形塗り潰し
-	void FillMyRectTextBackColor(const RECT& rc)
-	{
+	void FillMyRectTextBackColor(const RECT& rc) {
 		::ExtTextOut(m_hdc, rc.left, rc.top, ETO_OPAQUE|ETO_CLIPPED, &rc, _T(""), 0, NULL);
 	}
 

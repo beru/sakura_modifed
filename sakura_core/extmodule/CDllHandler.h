@@ -40,16 +40,15 @@
 	今のところDeinitDllが使われている箇所が無いので、このクラスの出番はありませんが。
 	2008.05.10 kobake 作成
 */
-template <class DLLIMP> class CDllHandler {
+template <class DLLIMP>
+class CDllHandler {
 public:
 	// コンストラクタ・デストラクタ
-	CDllHandler()
-	{
+	CDllHandler() {
 		m_pcDllImp = new DLLIMP();
 		m_pcDllImp->InitDll();
 	}
-	~CDllHandler()
-	{
+	~CDllHandler() {
 		m_pcDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
 		delete m_pcDllImp;
 	}
@@ -84,7 +83,7 @@ enum EDllResult {
 										純粋仮想関数はやめてプレースホルダーを用意する．
 	@date 2008.05.10 kobake 整理。派生クラスは、～Impをオーバーロードすれば良いという方式です。
 */
-class CDllImp{
+class CDllImp {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                            型                               //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

@@ -28,7 +28,11 @@
 #include "env/CDocTypeManager.h"
 #include <memory>
 
-void CPropertyManager::Create( HWND hwndOwner, CImageListMgr* pImageList, CMenuDrawer* pMenuDrawer )
+void CPropertyManager::Create(
+	HWND			hwndOwner,
+	CImageListMgr*	pImageList,
+	CMenuDrawer*	pMenuDrawer
+)
 {
 	m_hwndOwner = hwndOwner;
 	m_pImageList = pImageList;
@@ -39,7 +43,11 @@ void CPropertyManager::Create( HWND hwndOwner, CImageListMgr* pImageList, CMenuD
 }
 
 //! 共通設定 プロパティシート
-bool CPropertyManager::OpenPropertySheet( HWND hWnd, int nPageNum, bool bTrayProc )
+bool CPropertyManager::OpenPropertySheet(
+	HWND	hWnd,
+	int		nPageNum,
+	bool	bTrayProc
+)
 {
 	bool bRet;
 	CPropCommon* pcPropCommon = new CPropCommon();
@@ -102,7 +110,11 @@ bool CPropertyManager::OpenPropertySheet( HWND hWnd, int nPageNum, bool bTrayPro
 
 
 //! タイプ別設定 プロパティシート
-bool CPropertyManager::OpenPropertySheetTypes( HWND hWnd, int nPageNum, CTypeConfig nSettingType )
+bool CPropertyManager::OpenPropertySheetTypes(
+	HWND		hWnd,
+	int			nPageNum,
+	CTypeConfig	nSettingType
+)
 {
 	bool bRet;
 	CPropTypes* pcPropTypes = new CPropTypes();

@@ -75,7 +75,7 @@ private:
 };
 
 //! グループアクセサ
-class CAppNodeGroupHandle{
+class CAppNodeGroupHandle {
 public:
 	CAppNodeGroupHandle(int nGroupId) : m_nGroup(nGroupId) { }
 	CAppNodeGroupHandle(HWND hwnd){ m_nGroup = CAppNodeHandle(hwnd)->GetGroup(); }

@@ -176,7 +176,7 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 	ELoadResult eRet = LOADED_OK;
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	/* 既存データのクリア */
+	// 既存データのクリア
 	pcDoc->InitDoc(); //$$
 
 	// パスを確定
@@ -222,7 +222,7 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 				types.m_encoding.m_bDefaultBom : CCodeTypeName( sLoadInfo.eCharCode ).IsBomDefOn() );
 	}
 
-	/* レイアウト情報の変更 */
+	// レイアウト情報の変更
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
@@ -244,7 +244,7 @@ void CLoadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	/* 親ウィンドウのタイトルを更新 */
+	// 親ウィンドウのタイトルを更新
 	pcDoc->m_pcEditWnd->UpdateCaption();
 
 	// -- -- ※ InitAllViewでやってたこと -- -- //	// 2009.08.28 nasukoji	CEditView::OnAfterLoad()からここに移動

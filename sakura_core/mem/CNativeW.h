@@ -30,7 +30,7 @@
 
 
 //! 文字列への参照を取得するインターフェース
-class IStringRef{
+class IStringRef {
 public:
 	virtual const wchar_t*	GetPtr()	const = 0;
 	virtual int				GetLength()	const = 0;
@@ -38,16 +38,16 @@ public:
 
 
 //! 文字列への参照を保持するクラス
-class CStringRef : public IStringRef{
+class CStringRef : public IStringRef {
 public:
 	CStringRef() : m_pData(NULL), m_nDataLen(0) { }
 	CStringRef(const wchar_t* pData, int nDataLen) : m_pData(pData), m_nDataLen(nDataLen) { }
-	const wchar_t*	GetPtr()		const{ return m_pData;    }
-	int				GetLength()		const{ return m_nDataLen; }
+	const wchar_t*	GetPtr()		const { return m_pData;    }
+	int				GetLength()		const { return m_nDataLen; }
 
 	//########補助
-	bool			IsValid()		const{ return m_pData!=NULL; }
-	wchar_t			At(int nIndex)	const{ assert(nIndex>=0 && nIndex<m_nDataLen); return m_pData[nIndex]; }
+	bool			IsValid()		const { return m_pData!=NULL; }
+	wchar_t			At(int nIndex)	const { assert(nIndex>=0 && nIndex<m_nDataLen); return m_pData[nIndex]; }
 private:
 	const wchar_t*	m_pData;
 	int				m_nDataLen;
@@ -55,7 +55,7 @@ private:
 
 
 //! UNICODE文字列管理クラス
-class CNativeW : public CNative{
+class CNativeW : public CNative {
 public:
 	// コンストラクタ・デストラクタ
 	CNativeW();
@@ -85,56 +85,49 @@ public:
 
 
 	// ネイティブ取得インターフェース
-	wchar_t operator[](int nIndex) const;                    //!< 任意位置の文字取得。nIndexは文字単位。
-	CLogicInt GetStringLength() const                        //!< 文字列長を返す。文字単位。
-	{
+	wchar_t operator[](int nIndex) const;					//!< 任意位置の文字取得。nIndexは文字単位。
+	CLogicInt GetStringLength() const {						//!< 文字列長を返す。文字単位。
 		return CLogicInt(CNative::GetRawLength() / sizeof(wchar_t));
 	}
-	const wchar_t* GetStringPtr() const
-	{
+	const wchar_t* GetStringPtr() const {
 		return reinterpret_cast<const wchar_t*>(GetRawPtr());
 	}
-	wchar_t* GetStringPtr()
-	{
+	wchar_t* GetStringPtr() {
 		return reinterpret_cast<wchar_t*>(GetRawPtr());
 	}
-	const wchar_t* GetStringPtr(int* pnLength) const //[out]pnLengthは文字単位。
-	{
+	const wchar_t* GetStringPtr(int* pnLength) const {		//[out]pnLengthは文字単位。
 		*pnLength=GetStringLength();
 		return reinterpret_cast<const wchar_t*>(GetRawPtr());
 	}
 #ifdef USE_STRICT_INT
-	const wchar_t* GetStringPtr(CLogicInt* pnLength) const //[out]pnLengthは文字単位。
-	{
+	const wchar_t* GetStringPtr(CLogicInt* pnLength) const {//[out]pnLengthは文字単位。
 		int n;
-		const wchar_t* p=GetStringPtr(&n);
+		const wchar_t* p = GetStringPtr(&n);
 		*pnLength=CLogicInt(n);
 		return p;
 	}
 #endif
 
 	// 特殊
-	void _SetStringLength(int nLength)
-	{
+	void _SetStringLength(int nLength) {
 		_GetMemory()->_SetRawLength(nLength * sizeof(wchar_t));
 	}
 	// 末尾を1文字削る
-	void Chop()
-	{
+	void Chop() {
 		int n = GetStringLength();
-		n-=1;
-		if(n>=0){
+		n -= 1;
+		if (n >= 0) {
 			_SetStringLength(n);
 		}
 	}
-	void swap( CNativeW& left ){
+	void swap( CNativeW& left ) {
 		_GetMemory()->swap( *left._GetMemory() );
 	}
-	int capacity(){
+	
+	int capacity() {
 		return _GetMemory()->capacity() / sizeof(wchar_t);
 	}
-
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           判定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -146,8 +139,6 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           変換                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
-
 	void Replace( const wchar_t* pszFrom, const wchar_t* pszTo );   //!< 文字列置換
 
 
@@ -166,7 +157,7 @@ public:
 	const char* GetStringPtrOld() const; //ShiftJISに変換して返す
 
 	// WCHAR
-	void SetStringW(const wchar_t* pszData)				{ return SetString(pszData); }
+	void SetStringW(const wchar_t* pszData)					{ return SetString(pszData); }
 	void SetStringW(const wchar_t* pData, int nLength)		{ return SetString(pData,nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendString(pszData); }
 	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendString(pData,nLength); }
@@ -202,16 +193,14 @@ public:
 	static const wchar_t* GetCharNext( const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent ); //!< ポインタで示した文字の次にある文字の位置を返します
 	static const wchar_t* GetCharPrev( const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent ); //!< ポインタで示した文字の直前にある文字の位置を返します
 
-	static CLayoutInt GetKetaOfChar( const CStringRef& cStr, int nIdx ) //!< 指定した位置の文字が半角何個分かを返す
-	{
+	static CLayoutInt GetKetaOfChar( const CStringRef& cStr, int nIdx ) { //!< 指定した位置の文字が半角何個分かを返す
 		return GetKetaOfChar(cStr.GetPtr(), cStr.GetLength(), nIdx);
 	}
 };
 
 namespace std {
-template <>
-	inline void swap(CNativeW& n1, CNativeW& n2)
-	{
+	template <>
+	inline void swap(CNativeW& n1, CNativeW& n2) {
 		n1.swap(n2);
 	}
 }

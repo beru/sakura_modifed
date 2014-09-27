@@ -23,8 +23,7 @@
 クラスの宣言
 -----------------------------------------------------------------------*/
 //! PPAマクロ
-class CPPAMacroMgr: public CMacroManagerBase
-{
+class CPPAMacroMgr: public CMacroManagerBase {
 public:
 	/*
 	||  Constructors

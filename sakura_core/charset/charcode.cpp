@@ -133,7 +133,7 @@ namespace WCODE
 		10:‘SŠp
 		11:-
 	*/
-	class LocalCache{
+	class LocalCache {
 	public:
 		LocalCache()
 		{
@@ -226,7 +226,7 @@ namespace WCODE
 		SCharWidthCache*	m_pCache;
 	};
 
-	class LocalCacheSelector{
+	class LocalCacheSelector {
 	public:
 		LocalCacheSelector()
 		{

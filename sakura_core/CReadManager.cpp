@@ -66,10 +66,10 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	}
 	pFileInfo->SetCodeSet( eCharCode, bBom );
 
-	/* 既存データのクリア */
+	// 既存データのクリア
 	pcDocLineMgr->DeleteAllLine();
 
-	/* 処理中のユーザー操作を可能にする */
+	// 処理中のユーザー操作を可能にする
 	if (!::BlockingHook( NULL )) {
 		return RESULT_FAILURE; //######INTERRUPT
 	}
@@ -85,7 +85,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		cfl.FileOpen( pszPath, eCharCode, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode(), &bBom );
 		pFileInfo->SetBomExist( bBom );
 
-		/* ファイル時刻の取得 */
+		// ファイル時刻の取得
 		FILETIME	FileTime;
 		if (cfl.GetFileTime( NULL, NULL, &FileTime )) {
 			pFileInfo->SetFileTime( FileTime );
@@ -150,17 +150,17 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 			LS(STR_ERR_DLGDOCLM4),
 			pszPath
 		 );
-		/* 既存データのクリア */
+		// 既存データのクリア
 		pcDocLineMgr->DeleteAllLine();
 	} // 例外処理終わり
 
 	NotifyProgress(0);
-	/* 処理中のユーザー操作を可能にする */
+	// 処理中のユーザー操作を可能にする
 	if (!::BlockingHook( NULL )) {
 		return RESULT_FAILURE; //####INTERRUPT
 	}
 
-	/* 行変更状態をすべてリセット */
+	// 行変更状態をすべてリセット
 //	CModifyVisitor().ResetAllModifyFlag(pcDocLineMgr, 0);
 	return eRet;
 }

@@ -38,8 +38,7 @@ class CDlgDiff;
 	@brief DIFF差分表示ダイアログボックス
 */
 //	Feb. 28, 2004 genta 最後に選択されていた番号を保存する
-class CDlgDiff : public CDialog
-{
+class CDlgDiff : public CDialog {
 public:
 	/*
 	||  Constructors

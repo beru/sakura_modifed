@@ -30,7 +30,7 @@
 typedef StaticString<TCHAR, MAX_CMDLEN> CCmdString;
 
 //! ƒRƒ}ƒ“ƒh‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_CMD)
-class CRecentCmd : public CRecentImp<CCmdString, LPCTSTR>{
+class CRecentCmd : public CRecentImp<CCmdString, LPCTSTR> {
 public:
 	// ¶¬
 	CRecentCmd();

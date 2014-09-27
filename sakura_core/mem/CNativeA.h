@@ -25,7 +25,7 @@
 
 #include "CNative.h"
 
-class CNativeA : public CNative{
+class CNativeA : public CNative {
 public:
 	CNativeA();
 	CNativeA(const CNativeA& rhs);
@@ -44,12 +44,10 @@ public:
 	// ネイティブ取得
 	int GetStringLength() const;
 	char operator[](int nIndex) const;                 //!< 任意位置の文字取得。nIndexは文字単位。
-	const char* GetStringPtr() const
-	{
+	const char* GetStringPtr() const {
 		return reinterpret_cast<const char*>(GetRawPtr());
 	}
-	char* GetStringPtr()
-	{
+	char* GetStringPtr() {
 		return reinterpret_cast<char*>(GetRawPtr());
 	}
 	const char* GetStringPtr(int* pnLength) const; // [out]pnLengthは文字単位。

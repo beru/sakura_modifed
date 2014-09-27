@@ -117,10 +117,10 @@ bool CProfile::ReadProfile( const TCHAR* pszProfileName )
 
 	try {
 		while (in) {
-			//1行読込
-			wstring line=in.ReadLineW();
+			// 1行読込
+			wstring line = in.ReadLineW();
 
-			//解析
+			// 解析
 			ReadOneline(line);
 		}
 	}catch (...) {
@@ -145,7 +145,7 @@ bool CProfile::ReadProfile( const TCHAR* pszProfileName )
 */
 bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 {
-	static const BYTE UTF8_BOM[]={0xEF,0xBB,0xBF};
+	static const BYTE UTF8_BOM[] = {0xEF,0xBB,0xBF};
 	HRSRC		hRsrc;
 	HGLOBAL		hGlobal;
 	size_t		nSize;
@@ -163,7 +163,7 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 	 && ( psMMres = (char *)::LockResource(hGlobal)) != NULL
 	 && ( nSize = (size_t)::SizeofResource( 0, hRsrc )) != 0
 	) {
-		p    = psMMres;
+		p = psMMres;
 		if (nSize >= sizeof(UTF8_BOM) && memcmp( p, UTF8_BOM, sizeof(UTF8_BOM) )==0) {
 			// Skip BOM
 			p += sizeof(UTF8_BOM);
@@ -214,7 +214,7 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 bool CProfile::WriteProfile(
 	const TCHAR* pszProfileName,
 	const WCHAR* pszComment
-)
+	)
 {
 	if (pszProfileName!=NULL) {
 		m_strProfileName = pszProfileName;
@@ -309,7 +309,6 @@ bool CProfile::_WriteFile(
 }
 
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                            Imp                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -325,7 +324,7 @@ bool CProfile::GetProfileDataImp(
 	const wstring&	strSectionName,	//!< [in] セクション名
 	const wstring&	strEntryKey,	//!< [in] エントリ名
 	wstring&		strEntryValue	//!< [out] エントリ値
-)
+	)
 {
 	wstring strWork;
 	auto iterEnd = m_ProfileData.end();
@@ -352,7 +351,7 @@ bool CProfile::SetProfileDataImp(
 	const wstring&	strSectionName,	//!< [in] セクション名
 	const wstring&	strEntryKey,	//!< [in] エントリ名
 	const wstring&	strEntryValue	//!< [in] エントリ値
-)
+	)
 {
 	auto iterEnd = m_ProfileData.end();
 	auto iter = m_ProfileData.begin();
@@ -386,7 +385,7 @@ void CProfile::DUMP( void )
 {
 #ifdef _DEBUG
 	auto iterEnd = m_ProfileData.end();
-	//	2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
+	// 2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
 	MYTRACE( _T("\n\nCProfile::DUMP()======================") );
 	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
 		MYTRACE( _T("\n■strSectionName=%ls"), iter->strSectionName.c_str() );

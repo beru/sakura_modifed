@@ -51,13 +51,13 @@ public:
 	int GetHankakuDy() const{ return m_nDyBasis; }			//!< Y•ûŒü•¶ŽšŠÔŠuB•¶Žšc•{sŠÔŠuB’PˆÊ‚ÍƒsƒNƒZƒ‹B
 
 	// ŒÅ’è•¶ŽšxŒ…‚ÌƒŒƒCƒAƒEƒg•‚ðŽæ“¾‚·‚é
-	CLayoutXInt GetLayoutXDefault(CKetaXInt chars = CKetaXInt(1)) const{
+	CLayoutXInt GetLayoutXDefault(CKetaXInt chars = CKetaXInt(1)) const {
 		return CLayoutXInt(chars);
 	}
 
 	// •¶ŽšŠÔŠu”z—ñ‚ðŽæ“¾
-	const int* GetDxArray_AllHankaku() const{ return m_anHankakuDx; } //!< ”¼Šp•¶Žš—ñ‚Ì•¶ŽšŠÔŠu”z—ñ‚ðŽæ“¾B—v‘f”‚Í64B
-	const int* GetDxArray_AllZenkaku() const{ return m_anZenkakuDx; } //!< ”¼Šp•¶Žš—ñ‚Ì•¶ŽšŠÔŠu”z—ñ‚ðŽæ“¾B—v‘f”‚Í64B
+	const int* GetDxArray_AllHankaku() const { return m_anHankakuDx; } //!< ”¼Šp•¶Žš—ñ‚Ì•¶ŽšŠÔŠu”z—ñ‚ðŽæ“¾B—v‘f”‚Í64B
+	const int* GetDxArray_AllZenkaku() const { return m_anZenkakuDx; } //!< ”¼Šp•¶Žš—ñ‚Ì•¶ŽšŠÔŠu”z—ñ‚ðŽæ“¾B—v‘f”‚Í64B
 
 	//! Žw’è‚µ‚½•¶Žš—ñ‚É‚æ‚è•¶ŽšŠÔŠu”z—ñ‚ð¶¬‚·‚éB
 	static
@@ -70,20 +70,20 @@ public:
 		int	nIndent = 0					//   [in]  ƒCƒ“ƒfƒ“ƒg
 	);
 
-	//!•¶Žš—ñ‚ÌƒsƒNƒZƒ‹•‚ð•Ô‚·B
+	//! •¶Žš—ñ‚ÌƒsƒNƒZƒ‹•‚ð•Ô‚·B
 	static
 	int CalcTextWidth(
-		const wchar_t* pText,	//!< •¶Žš—ñ
-		int nLength,			//!< •¶Žš—ñ’·
-		const int* pnDx			//!< •¶ŽšŠÔŠu‚Ì“ü‚Á‚½”z—ñ
+		const wchar_t*	pText,		//!< •¶Žš—ñ
+		int				nLength,	//!< •¶Žš—ñ’·
+		const int*		pnDx		//!< •¶ŽšŠÔŠu‚Ì“ü‚Á‚½”z—ñ
 	);
 
 	//! •¶Žš—ñ‚ÌƒsƒNƒZƒ‹•‚ð•Ô‚·B
 	static
 	int CalcTextWidth2(
-		const wchar_t* pText,	//!< •¶Žš—ñ
-		int nLength,			//!< •¶Žš—ñ’·
-		int nHankakuDx			//!< ”¼Šp•¶Žš‚Ì•¶ŽšŠÔŠu
+		const wchar_t*	pText,		//!< •¶Žš—ñ
+		int				nLength,	//!< •¶Žš—ñ’·
+		int				nHankakuDx	//!< ”¼Šp•¶Žš‚Ì•¶ŽšŠÔŠu
 	);
 
 private:

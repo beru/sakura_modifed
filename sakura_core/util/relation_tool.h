@@ -66,27 +66,20 @@ private:
 
 
 template <class LISTENER>
-class CSubjectT :
-	public CSubject
-{
+class CSubjectT : public CSubject {
 public:
-	LISTENER* GetListener(int nIndex) const
-	{
+	LISTENER* GetListener(int nIndex) const {
 		return static_cast<LISTENER*>(CSubject::GetListener(nIndex));
 	}
 };
 
 template <class SUBJECT>
-class CListenerT :
-	public CListener
-{
+class CListenerT : public CListener {
 public:
-	SUBJECT* Listen(SUBJECT* pcSubject)
-	{
+	SUBJECT* Listen(SUBJECT* pcSubject) {
 		return static_cast<SUBJECT*>(CListener::Listen(static_cast<CSubject*>(pcSubject)));
 	}
-	SUBJECT* GetListeningSubject() const
-	{
+	SUBJECT* GetListeningSubject() const {
 		return static_cast<SUBJECT*>(CListener::GetListeningSubject());
 	}
 };

@@ -80,7 +80,7 @@ void CommonValue_AllSave()
 
 // CommonValue Å¶virtualégÇ§ÇÃã÷é~
 template <class T>
-class CommonValue{
+class CommonValue {
 private:
 	typedef CommonValue<T> Me;
 public:

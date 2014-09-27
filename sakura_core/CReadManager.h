@@ -29,9 +29,7 @@
 class CDocLineMgr;
 struct SFileInfo; // doc/CDocFile.h
 
-class CReadManager :
-	public CProgressSubject
-{
+class CReadManager : public CProgressSubject {
 public:
 	//	Nov. 12, 2000 genta ˆø”’Ç‰Á
 	//	Jul. 26, 2003 ryoji BOMˆø”’Ç‰Á

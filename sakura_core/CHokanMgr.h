@@ -23,8 +23,7 @@
 
 	@date 2003.06.25 Moca ファイル内からの補完機能を追加
 */
-class CHokanMgr : public CDialog
-{
+class CHokanMgr : public CDialog {
 public:
 	/*
 	||  Constructors
@@ -32,9 +31,9 @@ public:
 	CHokanMgr();
 	~CHokanMgr();
 
-	HWND DoModeless( HINSTANCE, HWND, LPARAM );/* モードレスダイアログの表示 */
+	HWND DoModeless( HINSTANCE, HWND, LPARAM ); // モードレスダイアログの表示
 	void Hide( void );
-	/* 初期化 */
+	// 初期化
 	int Search(
 		POINT*			ppoWin,
 		int				nWinHeight,
@@ -54,7 +53,7 @@ public:
 	);
 //	void SetCurKouhoStr( void );
 	BOOL DoHokan( int );
-	void ChangeView( LPARAM );/* モードレス時：対象となるビューの変更 */
+	void ChangeView( LPARAM ); // モードレス時：対象となるビューの変更
 
 
 	BOOL OnInitDialog( HWND, WPARAM wParam, LPARAM lParam );

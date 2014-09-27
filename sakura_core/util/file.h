@@ -60,7 +60,7 @@ void GetInidirOrExedir( LPTSTR pDir, LPCTSTR szFile = NULL, BOOL bRetExedirIfFil
 LPCTSTR GetRelPath( LPCTSTR pszPath );
 
 // ファイル時刻
-class CFileTime{
+class CFileTime {
 public:
 	CFileTime() { ClearFILETIME(); }
 	CFileTime(const FILETIME& ftime) { SetFILETIME(ftime); }
@@ -69,8 +69,7 @@ public:
 	void SetFILETIME(const FILETIME& ftime) { m_ftime = ftime; m_bModified = true; }
 	// 取得
 	const FILETIME& GetFILETIME() const { return m_ftime; }
-	const SYSTEMTIME& GetSYSTEMTIME() const
-	{
+	const SYSTEMTIME& GetSYSTEMTIME() const {
 		// キャッシュ更新 -> m_systime, m_bModified
 		if (m_bModified) {
 			m_bModified = false;
@@ -83,8 +82,7 @@ public:
 	}
 	const SYSTEMTIME* operator->() const { return &GetSYSTEMTIME(); }
 	// 判定
-	bool IsZero() const
-	{
+	bool IsZero() const {
 		return m_ftime.dwLowDateTime == 0 && m_ftime.dwHighDateTime == 0;
 	}
 protected:
@@ -94,6 +92,7 @@ private:
 	mutable SYSTEMTIME	m_systime;
 	mutable bool		m_bModified;
 };
+
 bool GetLastWriteTimestamp( const TCHAR* filename, CFileTime* pcFileTime ); //	Oct. 22, 2005 genta
 
 // 文字列分割

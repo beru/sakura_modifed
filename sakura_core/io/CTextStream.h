@@ -36,7 +36,7 @@
 class CCodeBase;
 
 // テキスト入力ストリーム (UTF-8, SJIS)
-class CTextInputStream : public CStream{
+class CTextInputStream : public CStream {
 public:
 	// コンストラクタ・デストラクタ
 	CTextInputStream(const TCHAR* tszPath);
@@ -52,7 +52,7 @@ private:
 
 // テキスト出力ストリーム
 // 2008.01.26 kobake 出力文字コードを任意で指定できるように変更
-class CTextOutputStream : public COutputStream{
+class CTextOutputStream : public COutputStream {
 public:
 	// コンストラクタ・デストラクタ
 	CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType = CODE_UTF8, bool bExceptionMode = false);
@@ -71,7 +71,7 @@ private:
 
 
 // テキスト入力ストリーム。相対パスの場合はINIファイルのパスからの相対パスとして開く。
-class CTextInputStream_AbsIni : public CTextInputStream{
+class CTextInputStream_AbsIni : public CTextInputStream {
 public:
 	CTextInputStream_AbsIni(const TCHAR* tszPath, bool bOrExedir = true);
 };

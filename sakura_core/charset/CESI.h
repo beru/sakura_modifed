@@ -164,7 +164,7 @@ public:
 	void SortMBCInfo( void );
 
 	//! EUC と SJIS が候補のトップ２に上がっているかどうか
-	bool IsAmbiguousEucAndSjis( void ){
+	bool IsAmbiguousEucAndSjis( void ) {
 		// EUC と SJIS がトップ2に上がった時
 		// かつ、EUC と SJIS のポイント数が同数のとき
 		if( (m_apMbcInfo[0]->eCodeID == CODE_SJIS && m_apMbcInfo[1]->eCodeID == CODE_EUC
@@ -177,7 +177,7 @@ public:
 	}
 
 	//! SJIS と UTF-8 が候補のトップ2に上がっているかどうか
-	bool IsAmbiguousUtf8AndCesu8( void ){
+	bool IsAmbiguousUtf8AndCesu8( void ) {
 		// UTF-8 と SJIS がトップ2に上がった時
 		// かつ、UTF-8 と SJIS のポイント数が同数のとき
 		if( (m_apMbcInfo[0]->eCodeID == CODE_UTF8 && m_apMbcInfo[1]->eCodeID == CODE_CESU8

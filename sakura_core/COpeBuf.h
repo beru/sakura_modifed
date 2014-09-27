@@ -28,7 +28,7 @@ class COpeBlk;/// 2002/2/10 aroka
 */
 class COpeBuf {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	COpeBuf();
 	~COpeBuf();
 

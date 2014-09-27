@@ -28,7 +28,7 @@ class CEditView;
 #include "basis/SakuraBasis.h"
 #include "doc/layout/CLayout.h"
 
-class CViewSelect{
+class CViewSelect {
 public:
 	CEditView* GetEditView() { return m_pcEditView; }
 	const CEditView* GetEditView() const { return m_pcEditView; }
@@ -46,50 +46,44 @@ public:
 	void ChangeSelectAreaByCurrentCursor( const CLayoutPoint& ptCaretPos );			// 現在のカーソル位置によって選択範囲を変更
 	void ChangeSelectAreaByCurrentCursorTEST( const CLayoutPoint& ptCaretPos, CLayoutRange* pSelect );// 現在のカーソル位置によって選択範囲を変更
 
-	//!選択範囲を指定する(原点未選択)
+	//! 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
-	void SetSelectArea( const CLayoutRange& sRange )
-	{
+	void SetSelectArea( const CLayoutRange& sRange ) {
 		m_sSelectBgn.Set(sRange.GetFrom());
 		m_sSelect = sRange;
 	}
 
-	//!単語選択開始
-	void SelectBeginWord()
-	{
+	//! 単語選択開始
+	void SelectBeginWord() {
 		m_bBeginSelect     = true;			// 範囲選択中
 		m_bBeginBoxSelect  = false;			// 矩形範囲選択中でない
 		m_bBeginLineSelect = false;			// 行単位選択中
 		m_bBeginWordSelect = true;			// 単語単位選択中
 	}
 
-	//!矩形選択開始
-	void SelectBeginBox()
-	{
+	//! 矩形選択開始
+	void SelectBeginBox() {
 		m_bBeginSelect     = true;		// 範囲選択中
 		m_bBeginBoxSelect  = true;		// 矩形範囲選択中
 		m_bBeginLineSelect = false;		// 行単位選択中
 		m_bBeginWordSelect = false;		// 単語単位選択中
 	}
 
-	//!謎の選択開始
-	void SelectBeginNazo()
-	{
+	//! 謎の選択開始
+	void SelectBeginNazo() {
 		m_bBeginSelect     = true;		// 範囲選択中
 //		m_bBeginBoxSelect  = false;		// 矩形範囲選択中でない
 		m_bBeginLineSelect = false;		// 行単位選択中
 		m_bBeginWordSelect = false;		// 単語単位選択中
 	}
 
-	//!範囲選択終了
-	void SelectEnd()
-	{
+	//! 範囲選択終了
+	void SelectEnd() {
 		m_bBeginSelect = false;
 	}
 
-	//!m_bBeginBoxSelectを設定。
-	void SetBoxSelect(bool b)
-	{
+	//! m_bBeginBoxSelectを設定。
+	void SetBoxSelect(bool b) {
 		m_bBeginBoxSelect = b;
 	}
 
@@ -98,7 +92,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void DrawSelectArea(bool bDrawBracketCursorLine = true);		//!< 指定行の選択領域の描画
 private:
-	void DrawSelectArea2(HDC) const;		//!< 指定範囲の選択領域の描画
+	void DrawSelectArea2(HDC) const;	//!< 指定範囲の選択領域の描画
 	void DrawSelectAreaLine(			//!< 指定行の選択領域の描画
 		HDC					hdc,		//!< [in] 描画領域のDevice Context Handle
 		CLayoutInt			nLineNum,	//!< [in] 描画対象行(レイアウト行)
@@ -122,8 +116,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//! テキストが選択されているか
 	// 2002/03/29 Azumaiya インライン関数化
-	bool IsTextSelected() const
-	{
+	bool IsTextSelected() const {
 		return m_sSelect.IsValid();
 //		return 0!=(
 //			~((DWORD)(m_sSelect.nLineFrom | m_sSelect.nLineTo | m_sSelect.nColumnFrom | m_sSelect.nColumnTo)) >> 31
@@ -132,31 +125,26 @@ public:
 
 	//! テキストの選択中か
 	// 2002/03/29 Azumaiya インライン関数化
-	bool IsTextSelecting() const
-	{
+	bool IsTextSelecting() const {
 		// ジャンプ回数を減らして、一気に判定。
 		return m_bSelectingLock || IsTextSelected();
 	}
 
 	//!マウスで選択中か
-	bool IsMouseSelecting() const
-	{
+	bool IsMouseSelecting() const {
 		return m_bBeginSelect;
 	}
 
 	//!矩形選択中か
-	bool IsBoxSelecting() const
-	{
+	bool IsBoxSelecting() const {
 		return m_bBeginBoxSelect;
 	}
-
 
 private:
 	//参照
 	CEditView*	m_pcEditView;
 
 public:
-
 
 	bool	m_bDrawSelectArea;		// 選択範囲を描画したか	// 02/12/13 ai
 

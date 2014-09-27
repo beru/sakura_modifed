@@ -19,8 +19,9 @@
 #include "sakura_rc.h"
 
 CGrepAgent::CGrepAgent()
-: m_bGrepMode( false )			/* Grepモードか */
-, m_bGrepRunning( false )		/* Grep処理中 */
+	:
+	m_bGrepMode( false ),		// Grepモードか
+	m_bGrepRunning( false )		// Grep処理中
 {
 }
 

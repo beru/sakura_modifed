@@ -47,8 +47,7 @@ const int STAND_KEYMACRO	= -1;	//!< 標準マクロ(キーマクロ)
 const int TEMP_KEYMACRO		= -2;	//!< 一時マクロ(名前を指定してマクロ実行)
 const int INVALID_MACRO_IDX	= -3;	//!< 無効なマクロのインデックス番号 @date Sep. 15, 2005 FILE
 
-struct MacroFuncInfoEx
-{
+struct MacroFuncInfoEx {
 	int			m_nArgSize;
 	VARTYPE*	m_pVarArgEx;
 };
@@ -70,8 +69,7 @@ typedef MacroFuncInfo* MacroFuncInfoArray;
 
 @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 -----------------------------------------------------------------------*/
-class CSMacroMgr
-{
+class CSMacroMgr {
 	// データの型宣言
 	CMacroManagerBase* m_cSavedKeyMacro[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
 	// Jun. 16, 2002 genta
@@ -105,15 +103,13 @@ public:
 	}
 	
 	//!	表示する名前の取得
-	const TCHAR* GetTitle(int idx) const
-	{
+	const TCHAR* GetTitle(int idx) const {
 		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
 	}
 	
 	//!	表示名の取得
-	const TCHAR* GetName(int idx) const
-	{
+	const TCHAR* GetName(int idx) const {
 		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szName : NULL;
 	}
@@ -121,8 +117,7 @@ public:
 	/*!	@brief ファイル名の取得
 		@param idx [in] マクロ番号
 	*/
-	const TCHAR* GetFile(int idx) const
-	{
+	const TCHAR* GetFile(int idx) const {
 		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szFile : 
 		( (idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && m_sMacroPath != _T("") ) ?

@@ -32,7 +32,7 @@ class CKeyWordSetMgr;
 //2007.11.29 kobake 変数の意味を明確にするため、nMethos を テンプレート化。
 template <class TYPE>
 struct TYPE_NAME {
-	TYPE		nMethod;
+	TYPE			nMethod;
 	const TCHAR*	pszName;
 };
 
@@ -44,8 +44,8 @@ struct TYPE_NAME_ID {
 
 template <class TYPE>
 struct TYPE_NAME_ID2 {
-	TYPE		nMethod;
-	int			nNameId;
+	TYPE			nMethod;
+	int				nNameId;
 	const TCHAR*	pszName;
 };
 
@@ -68,33 +68,33 @@ enum PropTypeSheetOrder {
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CPropTypes{
+class CPropTypes {
 
 public:
-	//生成と破棄
+	// 生成と破棄
 	CPropTypes();
 	~CPropTypes();
-	void Create( HINSTANCE, HWND );	//!< 初期化
+	void Create( HINSTANCE, HWND );		//!< 初期化
 	INT_PTR DoPropertySheet( int );		//!< プロパティシートの作成
 
-	//インターフェース	
+	// インターフェース	
 	void SetTypeData( const STypeConfig& t ){ m_Types = t; }	//!< タイプ別設定データの設定  Jan. 23, 2005 genta
 	void GetTypeData( STypeConfig& t ) const { t = m_Types; }	//!< タイプ別設定データの取得  Jan. 23, 2005 genta
 	HWND GetHwndParent()const { return m_hwndParent; }
-	int GetPageNum(){ return m_nPageNum; }
+	int GetPageNum() { return m_nPageNum; }
 	bool GetChangeKeyWordSet() const { return m_bChangeKeyWordSet; }
 
 protected:
-	//イベント
+	// イベント
 	void OnHelp( HWND , int );	//!< ヘルプ
 
 protected:
-	//各種参照
+	// 各種参照
 	HINSTANCE	m_hInstance;	//!< アプリケーションインスタンスのハンドル
 	HWND		m_hwndParent;	//!< オーナーウィンドウのハンドル
 	HWND		m_hwndThis;		//!< このダイアログのハンドル
 
-	//ダイアログデータ
+	// ダイアログデータ
 	PropTypeSheetOrder	m_nPageNum;
 	DLLSHAREDATA*		m_pShareData;
 	STypeConfig			m_Types;
@@ -138,8 +138,7 @@ protected:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        スクリーン                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesScreen : CPropTypes
-{
+class CPropTypesScreen : CPropTypes {
 public:
 	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
 protected:
@@ -157,8 +156,7 @@ public:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ウィンドウ                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesWindow : CPropTypes
-{
+class CPropTypesWindow : CPropTypes {
 public:
 	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
 protected:
@@ -175,8 +173,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          カラー                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesColor : CPropTypes
-{
+class CPropTypesColor : CPropTypes {
 public:
 	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
 protected:
@@ -198,8 +195,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           支援                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesSupport : CPropTypes
-{
+class CPropTypesSupport : CPropTypes {
 public:
 	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
 protected:
@@ -213,8 +209,7 @@ public:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                    正規表現キーワード                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesRegex : CPropTypes
-{
+class CPropTypesRegex : CPropTypes {
 public:
 	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
 protected:
@@ -233,8 +228,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesKeyHelp : CPropTypes
-{
+class CPropTypesKeyHelp : CPropTypes {
 public:
 	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
 protected:

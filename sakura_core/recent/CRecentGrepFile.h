@@ -29,9 +29,7 @@
 typedef StaticString<TCHAR, _MAX_PATH> CGrepFileString;
 
 //! GREPƒtƒ@ƒCƒ‹‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_GREP_FILE)
-class CRecentGrepFile :
-	public CRecentImp<CGrepFileString, LPCTSTR>
-{
+class CRecentGrepFile : public CRecentImp<CGrepFileString, LPCTSTR> {
 public:
 	// ¶¬
 	CRecentGrepFile();

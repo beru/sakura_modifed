@@ -26,7 +26,10 @@
 #include "util/design_template.h"
 #include "doc/CDocListener.h"
 
-class CAppMode : public TSingleton<CAppMode>, public CDocListenerEx{ //###‰¼
+class CAppMode :
+	public TSingleton<CAppMode>,
+	public CDocListenerEx
+{ //###‰¼
 	friend class TSingleton<CAppMode>;
 	CAppMode()
 		:

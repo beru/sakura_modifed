@@ -29,9 +29,7 @@
 typedef StaticString<TCHAR, _MAX_PATH> CMetaPath;
 
 //! ƒtƒHƒ‹ƒ_‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_FOLDER)
-class CRecentExceptMRU :
-	public CRecentImp<CMetaPath, LPCTSTR>
-{
+class CRecentExceptMRU : public CRecentImp<CMetaPath, LPCTSTR> {
 public:
 	// ¶¬
 	CRecentExceptMRU();

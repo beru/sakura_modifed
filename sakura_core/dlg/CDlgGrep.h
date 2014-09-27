@@ -22,8 +22,7 @@ class CDlgGrep;
 #include "util/window.h"
 
 //! GREPダイアログボックス
-class CDlgGrep : public CDialog
-{
+class CDlgGrep : public CDialog {
 public:
 	/*
 	||  Constructors

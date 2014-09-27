@@ -21,8 +21,7 @@ class CDlgInput1;
 /*!
 	@brief １行入力ダイアログボックス
 */
-class CDlgInput1
-{
+class CDlgInput1 {
 public:
 	/*
 	||  Constructors

@@ -8,18 +8,21 @@
 #include "util/string_ex2.h"
 
 CNativeA::CNativeA(const char* szData)
-: CNative()
+	:
+	CNative()
 {
 	SetString(szData);
 }
 
 CNativeA::CNativeA()
-: CNative()
+	:
+	CNative()
 {
 }
 
 CNativeA::CNativeA(const CNativeA& rhs)
-: CNative()
+	:
+	CNative()
 {
 	SetString(rhs.GetStringPtr(),rhs.GetStringLength());
 }

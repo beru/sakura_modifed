@@ -27,28 +27,26 @@
 #include "CProfile.h"
 
 // 文字列バッファの型
-struct StringBufferW_{
+struct StringBufferW_ {
 	WCHAR*    pData;
 	const int nDataCount;
 
 //	StringBufferW_() : pData(L""), nDataCount(0) { }
 	StringBufferW_(WCHAR* _pData, int _nDataCount) : pData(_pData), nDataCount(_nDataCount) { }
 
-	StringBufferW_& operator = (const StringBufferW_& rhs)
-	{
+	StringBufferW_& operator = (const StringBufferW_& rhs) {
 		auto_strcpy_s(pData,nDataCount,rhs.pData);
 		return *this;
 	}
 };
-struct StringBufferA_{
+struct StringBufferA_ {
 	ACHAR* pData;
 	int    nDataCount;
 
 //	StringBufferA_() : pData(""), nDataCount(0) { }
 	StringBufferA_(ACHAR* _pData, int _nDataCount) : pData(_pData), nDataCount(_nDataCount) { }
 
-	StringBufferA_& operator = (const StringBufferA_& rhs)
-	{
+	StringBufferA_& operator = (const StringBufferA_& rhs) {
 		auto_strcpy_s(pData,nDataCount,rhs.pData);
 		return *this;
 	}
@@ -71,7 +69,7 @@ typedef const StringBufferW_ StringBufferW;
 
 // 2007.09.24 kobake データ変換部を子クラスに分離
 //! 各種データ変換付きCProfile
-class CDataProfile : public CProfile{
+class CDataProfile : public CProfile {
 private:
 	// 専用型
 	typedef std::wstring wstring;
@@ -80,8 +78,7 @@ private:
 #endif
 
 protected:
-	static const wchar_t* _work_itow(int n)
-	{
+	static const wchar_t* _work_itow(int n) {
 		static wchar_t buf[32];
 		_itow(n,buf,10);
 		return buf;
@@ -91,22 +88,18 @@ protected:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
 	//bool
-	void profile_to_value(const wstring& profile, bool* value)
-	{
+	void profile_to_value(const wstring& profile, bool* value) {
 		if(profile != L"0")*value=true;
 		else *value=false;
 	}
-	void value_to_profile(const bool& value, wstring* profile)
-	{
+	void value_to_profile(const bool& value, wstring* profile) {
 		*profile = _work_itow(value?1:0);
 	}
 	// int
-	void profile_to_value(const wstring& profile, int* value)
-	{
+	void profile_to_value(const wstring& profile, int* value) {
 		*value = _wtoi(profile.c_str());
 	}
-	void value_to_profile(const int& value, wstring* profile)
-	{
+	void value_to_profile(const int& value, wstring* profile) {
 		*profile = _work_itow(value);
 	}
 
@@ -129,8 +122,7 @@ protected:
 	void value_to_profile(const CLogicInt& value, wstring* profile){ *profile = _work_itow((Int)value);    }
 #endif
 	// ACHAR
-	void profile_to_value(const wstring& profile, ACHAR* value)
-	{
+	void profile_to_value(const wstring& profile, ACHAR* value) {
 		if (profile.length() > 0) {
 			ACHAR buf[2] = {0};
 			int ret = wctomb(buf,profile[0]);
@@ -141,68 +133,55 @@ protected:
 			*value = '\0';
 		}
 	}
-	void value_to_profile(const ACHAR& value, wstring* profile)
-	{
+	void value_to_profile(const ACHAR& value, wstring* profile) {
 		WCHAR buf[2] = {0};
 		mbtowc(buf, &value, 1);
 		profile->assign(1, buf[0]);
 	}
 	// WCHAR
-	void profile_to_value(const wstring& profile, WCHAR* value)
-	{
+	void profile_to_value(const wstring& profile, WCHAR* value) {
 		*value = profile[0];
 	}
-	void value_to_profile(const WCHAR& value, wstring* profile)
-	{
+	void value_to_profile(const WCHAR& value, wstring* profile) {
 		profile->assign(1, value);
 	}
 	// StringBufferW
-	void profile_to_value(const wstring& profile, StringBufferW* value)
-	{
+	void profile_to_value(const wstring& profile, StringBufferW* value) {
 		wcscpy_s(value->pData, value->nDataCount, profile.c_str());
 	}
-	void value_to_profile(const StringBufferW& value, wstring* profile)
-	{
+	void value_to_profile(const StringBufferW& value, wstring* profile) {
 		*profile = value.pData;
 	}
 	// StringBufferA
-	void profile_to_value(const wstring& profile, StringBufferA* value)
-	{
+	void profile_to_value(const wstring& profile, StringBufferA* value) {
 		strcpy_s(value->pData, value->nDataCount, to_achar(profile.c_str()));
 	}
-	void value_to_profile(const StringBufferA& value, wstring* profile)
-	{
+	void value_to_profile(const StringBufferA& value, wstring* profile) {
 		*profile = to_wchar(value. pData);
 	}
 	// StaticString<WCHAR,N>
 	template <int N>
-	void profile_to_value(const wstring& profile, StaticString<WCHAR, N>* value)
-	{
+	void profile_to_value(const wstring& profile, StaticString<WCHAR, N>* value) {
 		wcscpy_s(value->GetBufferPointer(), value->GetBufferCount(), profile.c_str());
 	}
 	template <int N>
-	void value_to_profile(const StaticString<WCHAR, N>& value, wstring* profile)
-	{
+	void value_to_profile(const StaticString<WCHAR, N>& value, wstring* profile) {
 		*profile = value.GetBufferPointer();
 	}
 	// StaticString<ACHAR,N>
 	template <int N>
-	void profile_to_value(const wstring& profile, StaticString<ACHAR, N>* value)
-	{
+	void profile_to_value(const wstring& profile, StaticString<ACHAR, N>* value) {
 		strcpy_s(value->GetBufferPointer(), value->GetBufferCount(), to_achar(profile.c_str()));
 	}
 	template <int N>
-	void value_to_profile(const StaticString<ACHAR, N>& value, wstring* profile)
-	{
+	void value_to_profile(const StaticString<ACHAR, N>& value, wstring* profile) {
 		*profile = to_wchar(value. GetBufferPointer());
 	}
 	// wstring
-	void profile_to_value(const wstring& profile, wstring* value)
-	{
+	void profile_to_value(const wstring& profile, wstring* value) {
 		*value = profile;
 	}
-	void value_to_profile(const wstring& value, wstring* profile)
-	{
+	void value_to_profile(const wstring& value, wstring* profile) {
 		*profile = value;
 	}
 
@@ -212,8 +191,7 @@ protected:
 public:
 	// 注意：StringBuffer系はバッファが足りないとabortします
 	template <class T> //T=={bool, int, WORD, wchar_t, char, wstring, StringBufferA, StringBufferW, StaticString}
-	bool IOProfileData( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue )
-	{
+	bool IOProfileData( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue ) {
 		// 読み込み
 		if (m_bRead) {
 			// 文字列読み込み
@@ -237,8 +215,7 @@ public:
 	//2007.08.14 kobake 追加
 	//! intを介して任意型の入出力を行う
 	template <class T>
-	bool IOProfileData_WrapInt( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue)
-	{
+	bool IOProfileData_WrapInt( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {
 		int n = nEntryValue;
 		bool ret = this->IOProfileData( pszSectionName, pszEntryKey, n );
 		nEntryValue = (T)n;

@@ -31,10 +31,8 @@
 	@date 2009.10.01 ryoji 高DPI対応用に作成
 */
 class CDPI {
-	static void Init()
-	{
-		if( !bInitialized )
-		{
+	static void Init() {
+		if (!bInitialized) {
 			HDC hDC = GetDC(NULL);
 			nDpiX = GetDeviceCaps(hDC, LOGPIXELSX);
 			nDpiY = GetDeviceCaps(hDC, LOGPIXELSY);
@@ -50,15 +48,13 @@ public:
 	static int ScaleY(int y){Init(); return ::MulDiv(y, nDpiY, 96);}
 	static int UnscaleX(int x){Init(); return ::MulDiv(x, 96, nDpiX);}
 	static int UnscaleY(int y){Init(); return ::MulDiv(y, 96, nDpiY);}
-	static void ScaleRect(LPRECT lprc)
-	{
+	static void ScaleRect(LPRECT lprc) {
 		lprc->left = ScaleX(lprc->left);
 		lprc->right = ScaleX(lprc->right);
 		lprc->top = ScaleY(lprc->top);
 		lprc->bottom = ScaleY(lprc->bottom);
 	}
-	static void UnscaleRect(LPRECT lprc)
-	{
+	static void UnscaleRect(LPRECT lprc) {
 		lprc->left = UnscaleX(lprc->left);
 		lprc->right = UnscaleX(lprc->right);
 		lprc->top = UnscaleY(lprc->top);
@@ -68,14 +64,14 @@ public:
 	static int PixelsToPoints(int px, int ptMag = 1){Init(); return ::MulDiv(px * ptMag, 72, nDpiY);}	// ptMag: 戻り値のポイント数にかける倍率
 };
 
-inline int DpiScaleX(int x){return CDPI::ScaleX(x);}
-inline int DpiScaleY(int y){return CDPI::ScaleY(y);}
-inline int DpiUnscaleX(int x){return CDPI::UnscaleX(x);}
-inline int DpiUnscaleY(int y){return CDPI::UnscaleY(y);}
-inline void DpiScaleRect(LPRECT lprc){CDPI::ScaleRect(lprc);}
-inline void DpiUnscaleRect(LPRECT lprc){CDPI::UnscaleRect(lprc);}
-inline int DpiPointsToPixels(int pt, int ptMag = 1){return CDPI::PointsToPixels(pt, ptMag);}
-inline int DpiPixelsToPoints(int px, int ptMag = 1){return CDPI::PixelsToPoints(px, ptMag);}
+inline int DpiScaleX(int x) {return CDPI::ScaleX(x);}
+inline int DpiScaleY(int y) {return CDPI::ScaleY(y);}
+inline int DpiUnscaleX(int x) {return CDPI::UnscaleX(x);}
+inline int DpiUnscaleY(int y) {return CDPI::UnscaleY(y);}
+inline void DpiScaleRect(LPRECT lprc) {CDPI::ScaleRect(lprc);}
+inline void DpiUnscaleRect(LPRECT lprc) {CDPI::UnscaleRect(lprc);}
+inline int DpiPointsToPixels(int pt, int ptMag = 1) {return CDPI::PointsToPixels(pt, ptMag);}
+inline int DpiPixelsToPoints(int px, int ptMag = 1) {return CDPI::PixelsToPoints(px, ptMag);}
 
 void ActivateFrameWindow( HWND );	// アクティブにする
 
@@ -98,18 +94,15 @@ HWND MyGetAncestor( HWND hWnd, UINT gaFlags );	// 指定したウィンドウの祖先のハン
 
 
 // チェックボックス
-inline void CheckDlgButtonBool(HWND hDlg, int nIDButton, bool bCheck)
-{
+inline void CheckDlgButtonBool(HWND hDlg, int nIDButton, bool bCheck) {
 	CheckDlgButton(hDlg,nIDButton,bCheck?BST_CHECKED:BST_UNCHECKED);
 }
-inline bool IsDlgButtonCheckedBool(HWND hDlg, int nIDButton)
-{
+inline bool IsDlgButtonCheckedBool(HWND hDlg, int nIDButton) {
 	return (IsDlgButtonChecked(hDlg,nIDButton) & BST_CHECKED) != 0;
 }
 
 // ダイアログアイテムの有効化
-inline bool DlgItem_Enable(HWND hwndDlg, int nIDDlgItem, bool nEnable)
-{
+inline bool DlgItem_Enable(HWND hwndDlg, int nIDDlgItem, bool nEnable) {
 	return FALSE != ::EnableWindow( ::GetDlgItem(hwndDlg, nIDDlgItem), nEnable?TRUE:FALSE);
 }
 
@@ -128,10 +121,10 @@ public:
 	bool SetWidthIfMax(int width, int extCx);
 	bool SetTextWidthIfMax(LPCTSTR pszText);
 	bool SetTextWidthIfMax(LPCTSTR pszText, int extCx);
-	int GetCx(){ return nCx; }
+	int GetCx() { return nCx; }
 	// 算出方法がよく分からないので定数にしておく
 	// 制御不要なら ListViewはLVSCW_AUTOSIZE等推奨
-	enum StaticMagicNambers{
+	enum StaticMagicNambers {
 		//! スクロールバーとアイテムの間の隙間
 		WIDTH_MARGIN_SCROLLBER = 8,
 		//! リストビューヘッダ マージン

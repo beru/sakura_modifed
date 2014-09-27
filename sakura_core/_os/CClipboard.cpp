@@ -373,8 +373,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 }
 
 
-struct SSystemClipFormatNames
-{
+struct SSystemClipFormatNames {
 	CLIPFORMAT	m_nClipFormat;
 	const wchar_t* m_pszName;
 };

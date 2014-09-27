@@ -631,7 +631,7 @@ int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
 */
 //$ ‚¢‚¿‚¢‚¿èŠÔ‚©‚©‚éBB
 namespace {
-	template <class T> struct Charset{};
+	template <class T> struct Charset {};
 	template <> struct Charset<ACHAR>{ static const ACHAR QUOT= '"'; };
 	template <> struct Charset<WCHAR>{ static const WCHAR QUOT=L'"'; };
 }

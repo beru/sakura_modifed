@@ -398,8 +398,8 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 	// nMamespaceLenは{10,20}
 	// nNestLevel_globalは2となる。
 	//
-	//　namespace Namespace{
-	//　class ClassName{
+	//　namespace Namespace {
+	//　class ClassName {
 	//　←
 	//　}}
 	wchar_t		szRawStringTag[32];	// C++11 raw string litteral

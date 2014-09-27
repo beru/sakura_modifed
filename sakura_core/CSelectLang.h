@@ -18,8 +18,7 @@
 
 #define MAX_SELLANG_NAME_STR	128		// メッセージリソースの言語名の最大文字列長（サイズは適当）
 
-class CSelectLang
-{
+class CSelectLang {
 public:
 	// メッセージリソース用構造体
 	struct SSelLangInfo {
@@ -73,12 +72,10 @@ private:
 
 #define LOADSTR_ADD_SIZE		256			// 文字列リソース用バッファの初期または追加サイズ（TCHAR単位）
 
-class CLoadString
-{
+class CLoadString {
 protected:
 	// 文字列リソース読み込み用バッファクラス
-	class CLoadStrBuffer
-	{
+	class CLoadStrBuffer {
 	public:
 		CLoadStrBuffer()
 		{
@@ -121,9 +118,9 @@ public:
 	/*
 	||  Constructors
 	*/
-	CLoadString(){}
-	CLoadString( UINT uid ){ LoadString( uid ); }		// 文字列読み込み付きコンストラクタ
-	/*virtual*/ ~CLoadString(){}
+	CLoadString() {}
+	CLoadString( UINT uid ) { LoadString( uid ); }		// 文字列読み込み付きコンストラクタ
+	/*virtual*/ ~CLoadString() {}
 
 
 	/*

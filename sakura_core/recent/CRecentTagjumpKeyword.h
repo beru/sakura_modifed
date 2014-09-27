@@ -29,9 +29,7 @@
 typedef StaticString<WCHAR, _MAX_PATH> CTagjumpKeywordString;
 
 //! タグジャンプキーワードの履歴を管理 (RECENT_FOR_TAGJUMP_KEYWORD)
-class CRecentTagjumpKeyword :
-	public CRecentImp<CTagjumpKeywordString, LPCWSTR>
-{
+class CRecentTagjumpKeyword : public CRecentImp<CTagjumpKeywordString, LPCWSTR> {
 public:
 	// 生成
 	CRecentTagjumpKeyword();
