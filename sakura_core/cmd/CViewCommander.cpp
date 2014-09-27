@@ -163,7 +163,7 @@ BOOL CViewCommander::HandleCommand(
 	//	ここより前ではUndoバッファの準備ができていないので
 	//	文書の操作を行ってはいけない
 	//@@@ 2002.2.2 YAZAKI HandleCommand内でHandleCommandを呼び出せない問題に対処（何か副作用がある？）
-	if (!GetOpeBlk()) {	/* 操作ブロック */
+	if (!GetOpeBlk()) {	// 操作ブロック
 		SetOpeBlk(new COpeBlk);
 	}
 	GetOpeBlk()->AddRef();	//参照カウンタ増加
@@ -208,7 +208,7 @@ BOOL CViewCommander::HandleCommand(
 	case F_FILECLOSE:										// 閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 		Command_FILECLOSE();
 		break;
-	case F_FILECLOSE_OPEN:	/* 閉じて開く */
+	case F_FILECLOSE_OPEN:	// 閉じて開く
 		Command_FILECLOSE_OPEN();
 		break;
 	case F_FILE_REOPEN:				Command_FILE_REOPEN( GetDocument()->GetDocumentEncoding(), lparam1!=0 );break;//	Dec. 4, 2002 genta
@@ -277,8 +277,8 @@ BOOL CViewCommander::HandleCommand(
 	case F_RIGHT:			Command_RIGHT( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, false, bRepeat ); break;	// カーソル右移動
 	case F_UP2:				Command_UP2( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;					// カーソル上移動(２行づつ)
 	case F_DOWN2:			Command_DOWN2( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;					// カーソル下移動(２行づつ)
-	case F_WORDLEFT:		Command_WORDLEFT( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;				// 単語の左端に移動 */
-	case F_WORDRIGHT:		Command_WORDRIGHT( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;				// 単語の右端に移動 */
+	case F_WORDLEFT:		Command_WORDLEFT( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;				// 単語の左端に移動
+	case F_WORDRIGHT:		Command_WORDRIGHT( m_pCommanderView->GetSelectionInfo().m_bSelectingLock ); break;				// 単語の右端に移動
 	//	0ct. 29, 2001 genta マクロ向け機能拡張
 	case F_GOLINETOP:		Command_GOLINETOP( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, lparam1  ); break;	// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:		Command_GOLINEEND( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0, lparam1 ); break;	// 行末に移動(折り返し単位)

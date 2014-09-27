@@ -32,7 +32,7 @@ LPCTSTR CBregexpDll2::GetDllNameImp( int index )
 */
 bool CBregexpDll2::InitDllImp()
 {
-	//DLL内関数名リスト
+	// DLL内関数名リスト
 	const ImportTable table[] = {
 		{ &m_BMatch,			"BMatchW" },
 		{ &m_BSubst,			"BSubstW" },

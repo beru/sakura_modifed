@@ -49,7 +49,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM, const TCHAR*, bool );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, LPARAM, const TCHAR*, bool );	// モーダルダイアログの表示
 
 protected:
 	/*
@@ -65,8 +65,8 @@ protected:
 	BOOL OnMove( WPARAM wParam, LPARAM lParam );
 	BOOL OnMinMaxInfo( LPARAM lParam );
 
-	void	SetData( void );	/* ダイアログデータの設定 */
-	int		GetData( void );	/* ダイアログデータの取得 */
+	void	SetData( void );	// ダイアログデータの設定
+	int		GetData( void );	// ダイアログデータの取得
 
 private:
 	int			m_nIndexSave;		// 最後に選択されていた番号

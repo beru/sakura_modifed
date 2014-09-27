@@ -38,14 +38,14 @@
 #include "_main/global.h"
 #include "env/DLLSHAREDATA.h"
 
-class CRecent{
+class CRecent {
 public:
 	virtual ~CRecent() {}
 
-	//インスタンス管理
+	// インスタンス管理
 	virtual void	Terminate() = 0;
 
-	//アイテム
+	// アイテム
 	virtual const TCHAR*	GetItemText( int nIndex ) const = 0;
 	virtual int				GetArrayCount() const = 0;
 	virtual int				GetItemCount() const = 0;
@@ -66,11 +66,11 @@ public:
 		return -1;
 	}
 
-	//お気に入り
+	// お気に入り
 	virtual bool	SetFavorite( int nIndex, bool bFavorite = true ) = 0;	//!< お気に入りに設定
 	virtual bool	IsFavorite(int nIndex) const = 0;						//!< お気に入りか調べる
 
-	//その他
+	// その他
 	virtual int		GetViewCount() const = 0;
 	virtual bool	UpdateView() = 0;
 

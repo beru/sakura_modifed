@@ -48,7 +48,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示
 
 protected:
 	/*
@@ -64,12 +64,12 @@ protected:
 	BOOL	OnMove( WPARAM wParam, LPARAM lParam );
 	BOOL	OnMinMaxInfo( LPARAM lParam );
 
-	void	SetData( void );	/* ダイアログデータの設定 */
-	int		GetData( void );	/* ダイアログデータの取得 */
+	void	SetData( void );	// ダイアログデータの設定
+	int		GetData( void );	// ダイアログデータの取得
 
 	void	TabSelectChange( bool );
 	bool	RefreshList( void );
-	void	SetDataOne( int nIndex, int nLvItemIndex );	/* ダイアログデータの設定 */
+	void	SetDataOne( int nIndex, int nLvItemIndex );	// ダイアログデータの設定
 	bool	RefreshListOne( int nIndex );
 	//void	ChangeSlider( int nIndex );
 	void	UpdateUIState();
@@ -92,26 +92,26 @@ private:
 	CRecentCurDir		m_cRecentCurDir;
 
 	enum {
-		// ! 管理数
+		//! 管理数
 		FAVORITE_INFO_MAX = 10 // 管理数 +1(番兵)
 	};
 
 	struct FavoriteInfo {
-		CRecent*	m_pRecent;			//オブジェクトへのポインタ
-		std::tstring	m_strCaption;	//キャプション
-		const TCHAR*	m_pszCaption;	//キャプション
-		int			m_nId;				//コントロールのID
-		bool		m_bHaveFavorite;	//お気に入りを持っているか？
-		bool		m_bHaveView;		//表示数変更機能をもっているか？
-		bool		m_bFilePath;		//ファイル/フォルダか？
-		bool		m_bEditable;		//編集可能
-		bool		m_bAddExcept;		//除外へ追加
-		int			m_nViewCount;		//カレントの表示数
+		CRecent*	m_pRecent;			// オブジェクトへのポインタ
+		std::tstring	m_strCaption;	// キャプション
+		const TCHAR*	m_pszCaption;	// キャプション
+		int			m_nId;				// コントロールのID
+		bool		m_bHaveFavorite;	// お気に入りを持っているか？
+		bool		m_bHaveView;		// 表示数変更機能をもっているか？
+		bool		m_bFilePath;		// ファイル/フォルダか？
+		bool		m_bEditable;		// 編集可能
+		bool		m_bAddExcept;		// 除外へ追加
+		int			m_nViewCount;		// カレントの表示数
 	};
 
 	struct ListViewSortInfo {
-		HWND	hListView; //!< リストビューの HWND
-		int		nSortColumn; //!< ソート列 -1で未指定
+		HWND	hListView;		//!< リストビューの HWND
+		int		nSortColumn;	//!< ソート列 -1で未指定
 		bool	bSortAscending; //!< ソートが昇順
 	};
 

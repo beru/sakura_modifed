@@ -68,11 +68,11 @@ int WINAPI _tWinMain(
 		::OleInitialize( NULL );	// 2009.01.07 ryoji 追加
 	}
 	
-	//開発情報
+	// 開発情報
 	DEBUG_TRACE(_T("-- -- WinMain -- --\n"));
 	DEBUG_TRACE(_T("sizeof(DLLSHAREDATA) = %d\n"), sizeof(DLLSHAREDATA));
 
-	//プロセスの生成とメッセージループ
+	// プロセスの生成とメッセージループ
 	CProcessFactory aFactory;
 	CProcess* process = 0;
 	try {

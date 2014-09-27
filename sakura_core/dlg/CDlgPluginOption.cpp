@@ -65,10 +65,10 @@ const DWORD p_helpids[] = {
 	IDC_SPIN_PLUGIN_OPTION,			HIDC_EDIT_PLUGIN_OPTION,		// オプション編集
 	IDC_CHECK_PLUGIN_OPTION,		HIDC_EDIT_PLUGIN_OPTION,		// オプション編集
 	IDC_COMBO_PLUGIN_OPTION,		HIDC_EDIT_PLUGIN_OPTION,		// オプション編集
-	IDOK,							HIDC_FAVORITE_IDOK,				//OK
-	IDCANCEL,						HIDC_FAVORITE_IDCANCEL,			//キャンセル
-	IDC_PLUGIN_README,				HIDC_PLUGIN_README,				//ReadMe
-	IDC_BUTTON_HELP,				HIDC_BUTTON_FAVORITE_HELP,		//ヘルプ
+	IDOK,							HIDC_FAVORITE_IDOK,				// OK
+	IDCANCEL,						HIDC_FAVORITE_IDCANCEL,			// キャンセル
+	IDC_PLUGIN_README,				HIDC_PLUGIN_README,				// ReadMe
+	IDC_BUTTON_HELP,				HIDC_BUTTON_FAVORITE_HELP,		// ヘルプ
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -83,7 +83,7 @@ CDlgPluginOption::~CDlgPluginOption()
 
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgPluginOption::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
@@ -104,7 +104,7 @@ int CDlgPluginOption::DoModal(
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_PLUGIN_OPTION, (LPARAM)NULL );
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgPluginOption::SetData( void )
 {
 	HWND	hwndList;
@@ -210,8 +210,8 @@ void CDlgPluginOption::SetData( void )
 	return;
 }
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgPluginOption::GetData( void )
 {
 	// .ini ファイルへの書き込み
@@ -328,7 +328,7 @@ BOOL CDlgPluginOption::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam 
 	EditCtl_LimitText( GetDlgItem( hwndDlg, IDC_EDIT_PLUGIN_OPTION_DIR ), _MAX_PATH );
 	EditCtl_LimitText( GetDlgItem( hwndDlg, IDC_EDIT_PLUGIN_OPTION_NUM ), 11 );
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnInitDialog( GetHwnd(), wParam, lParam );
 }
 
@@ -372,7 +372,7 @@ BOOL CDlgPluginOption::OnNotify( WPARAM wParam, LPARAM lParam )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnNotify( wParam, lParam );
 }
 
@@ -404,14 +404,14 @@ BOOL CDlgPluginOption::OnBnClicked( int wID )
 		return TRUE;
 
 	case IDC_BUTTON_HELP:
-		/* ヘルプ */
+		// ヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, HLP000153 );	// 『プラグイン設定』Helpの指定 	2011/11/26 Uchi
 		return TRUE;
 
 	case IDOK:
 		// 編集中のデータの戻し
 		SetFromEdit( m_Line );
-		/* ダイアログデータの取得 */
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), (BOOL)GetData() );
 		return TRUE;
 
@@ -420,7 +420,7 @@ BOOL CDlgPluginOption::OnBnClicked( int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
@@ -434,7 +434,7 @@ BOOL CDlgPluginOption::OnCbnSelChange( HWND hwndCtl, int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnCbnSelChange( hwndCtl, wID );
 }
 
@@ -451,7 +451,7 @@ BOOL CDlgPluginOption::OnEnChange( HWND hwndCtl, int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnEnChange( hwndCtl, wID );
 }
 
@@ -468,7 +468,7 @@ BOOL CDlgPluginOption::OnActivate( WPARAM wParam, LPARAM lParam )
 		break;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnActivate( wParam, lParam );
 }
 
@@ -493,14 +493,14 @@ void CDlgPluginOption::ChangeListPosition( void )
 	TCHAR	buf[MAX_LENGTH_VALUE+1];
 	LVITEM	lvi;
 
-// 戻し
+	// 戻し
 	if (m_Line >= 0) {
 		SetFromEdit( m_Line );
 	}
 
 	m_Line = current;
 
-// 編集領域に書き込み
+	// 編集領域に書き込み
 	SetToEdit(current);
 
 	memset_raw( &lvi, 0, sizeof( lvi ));
@@ -695,9 +695,9 @@ void CDlgPluginOption::SepSelect( wstring sTrg, wstring* spView, wstring* spValu
 // ディレクトリを選択する
 void CDlgPluginOption::SelectDirectory( int iLine )
 {
-	TCHAR	szDir[_MAX_PATH+1];
+	TCHAR szDir[_MAX_PATH+1];
 
-	/* 検索フォルダ */
+	// 検索フォルダ
 	::DlgItem_GetText( GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, szDir, _countof(szDir) );
 
 	if (_IS_REL_PATH( szDir )) {

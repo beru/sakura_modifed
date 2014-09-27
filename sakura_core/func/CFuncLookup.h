@@ -44,8 +44,8 @@ struct CommonSetting;// 2002/2/10 aroka
 //! マクロ情報
 struct MacroRec {
 	TCHAR	m_szName[MACRONAME_MAX];	//!< 表示名
-	TCHAR	m_szFile[_MAX_PATH+1];	//!< ファイル名(ディレクトリを含まない)
-	bool	m_bReloadWhenExecute;	//	実行時に読み込みなおすか（デフォルトon）
+	TCHAR	m_szFile[_MAX_PATH+1];		//!< ファイル名(ディレクトリを含まない)
+	bool	m_bReloadWhenExecute;		// 実行時に読み込みなおすか（デフォルトon）
 	
 	bool IsEnabled() const { return m_szFile[0] != _T('\0'); }
 	const TCHAR* GetTitle() const { return m_szName[0] == _T('\0') ? m_szFile: m_szName; }	// 2007.11.02 ryoji 追加
@@ -63,9 +63,9 @@ public:
 	// 2007.11.02 ryoji 引数変更（CSMacroMgr->MacroRec）
 //	CFuncLookup( HINSTANCE hInst, MacroRec* pMacroRec, CommonSetting* pCom )
 //		: m_pMacroRec( pMacroRec ), m_pCommon( pCom ) {}
-	CFuncLookup() : m_pMacroRec( NULL ){}
+	CFuncLookup() : m_pMacroRec( NULL ) {}
 
-	void Init( MacroRec* pMacroRec, CommonSetting* pCom ){
+	void Init( MacroRec* pMacroRec, CommonSetting* pCom ) {
 		m_pMacroRec = pMacroRec;
 		m_pCommon = pCom;
 	}
@@ -80,7 +80,7 @@ public:
 	void SetListItem( HWND hListBox, int category ) const;
 	
 	int GetCategoryCount(void) const {
-		return nsFuncCode::nFuncKindNum + 3;	//分類＋外部マクロ＋カスタムメニュー＋プラグイン
+		return nsFuncCode::nFuncKindNum + 3;	// 分類＋外部マクロ＋カスタムメニュー＋プラグイン
 	}
 	
 	int GetItemCount(int category) const;

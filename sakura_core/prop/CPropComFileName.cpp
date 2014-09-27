@@ -238,7 +238,7 @@ INT_PTR CPropFileName::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 			}
 		}
 
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{

@@ -71,7 +71,7 @@ bool CEditView::TagJumpSub(
 		_tcscpy_s( szJumpToFile, pszFileName );
 	}
 
-	/* ロングファイル名を取得する */
+	// ロングファイル名を取得する
 	TCHAR szWork[1024];
 	if (::GetLongFileName( szJumpToFile, szWork )) {
 		_tcscpy( szJumpToFile, szWork );
@@ -83,7 +83,7 @@ bool CEditView::TagJumpSub(
 // ジャンプ先の場所がジャンプ元として保存されてしまっているので、
 // その前で保存するように変更。
 
-	/* カーソル位置変換 */
+	// カーソル位置変換
 	GetDocument()->m_cLayoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&tagJump.point
@@ -93,13 +93,13 @@ bool CEditView::TagJumpSub(
 	CTagJumpManager().PushTagJump(&tagJump);
 
 
-	/* 指定ファイルが開かれているか調べる */
-	/* 開かれている場合は開いているウィンドウのハンドルも返す */
-	/* ファイルを開いているか */
+	// 指定ファイルが開かれているか調べる
+	// 開かれている場合は開いているウィンドウのハンドルも返す
+	// ファイルを開いているか
 	if (CShareData::getInstance()->IsPathOpened( szJumpToFile, &hwndOwner )) {
 		// 2004.05.13 Moca マイナス値は無効
 		if (0 < ptJumpTo.y) {
-			/* カーソルを移動させる */
+			// カーソルを移動させる
 			poCaret.y = ptJumpTo.y - 1;
 			if (0 < ptJumpTo.x) {
 				poCaret.x = ptJumpTo.x - 1;
@@ -109,10 +109,10 @@ bool CEditView::TagJumpSub(
 			memcpy_raw( GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &poCaret, sizeof(poCaret) );
 			::SendMessageAny( hwndOwner, MYWM_SETCARETPOS, 0, 0 );
 		}
-		/* アクティブにする */
+		// アクティブにする
 		ActivateFrameWindow( hwndOwner );
 	}else {
-		/* 新しく開く */
+		// 新しく開く
 		EditInfo	inf;
 		bool		bSuccess;
 
@@ -167,7 +167,7 @@ BOOL CEditView::OPEN_ExtFromtoExt(
 	const TCHAR*	errmes			//!< [in] ファイルを開けなかった場合に表示するエラーメッセージ
 )
 {
-	/* 編集中ファイルの拡張子を調べる */
+	// 編集中ファイルの拡張子を調べる
 	for (int i = 0; i < file_extno; i++) {
 		if (CheckEXT( GetDocument()->m_cDocFile.GetFilePath(), file_ext[i] )) {
 			goto open_c;
@@ -205,12 +205,12 @@ open_c:;
 		return TRUE;
 	}
 
-	/* 指定ファイルが開かれているか調べる */
-	/* 開かれている場合は開いているウィンドウのハンドルも返す */
-	/* ファイルを開いているか */
+	// 指定ファイルが開かれているか調べる
+	// 開かれている場合は開いているウィンドウのハンドルも返す
+	// ファイルを開いているか
 	if (CShareData::getInstance()->IsPathOpened( szPath, &hwndOwner )) {
 	}else {
-		/* 文字コードはこのファイルに合わせる */
+		// 文字コードはこのファイルに合わせる
 		SLoadInfo sLoadInfo;
 		sLoadInfo.cFilePath = szPath;
 		sLoadInfo.eCharCode = GetDocument()->GetDocumentEncoding();
@@ -222,7 +222,7 @@ open_c:;
 			NULL,
 			true
 		);
-		/* ファイルを開いているか */
+		// ファイルを開いているか
 		if (CShareData::getInstance()->IsPathOpened( szPath, &hwndOwner )) {
 		}else {
 			// 2011.01.12 ryoji エラーは表示しないでおく
@@ -233,7 +233,7 @@ open_c:;
 			return FALSE;
 		}
 	}
-	/* アクティブにする */
+	// アクティブにする
 	ActivateFrameWindow( hwndOwner );
 
 // 2004/06/21 novice タグジャンプ機能追加
@@ -413,7 +413,7 @@ void CEditView::CopyCurLine(
 		return;
 	}
 
-	/* クリップボードに入れるべきテキストデータを、cmemBufに格納する */
+	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
 	CNativeW cmemBuf;
 	cmemBuf.SetString( pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() );
 	if (pcLayout->GetLayoutEol().GetLen() != 0) {
@@ -428,7 +428,7 @@ void CEditView::CopyCurLine(
 		);
 	}
 
-	/* クリップボードにデータcmemBufの内容を設定 */
+	// クリップボードにデータcmemBufの内容を設定
 	BOOL bSetResult = MySetClipboardData(
 		cmemBuf.GetStringPtr(),
 		cmemBuf.GetStringLength(),

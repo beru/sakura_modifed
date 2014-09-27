@@ -27,7 +27,7 @@ int CViewParser::GetLeftWord( CNativeW* pcmemWord, int nMaxWordLen ) const
 //		return 0;
 		nIdxTo = CLogicInt(0);
 	}else {
-		/* 指定された桁に対応する行のデータ内の位置を調べる Ver1 */
+		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
 		nIdxTo = m_pEditView->LineColumnToIndex( pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2() );
 	}
 	if (0 == nIdxTo || !pLine) {
@@ -63,7 +63,7 @@ int CViewParser::GetLeftWord( CNativeW* pcmemWord, int nMaxWordLen ) const
 		}
 	}
 
-	/* 現在位置の単語の範囲を調べる */
+	// 現在位置の単語の範囲を調べる
 	CLayoutRange sRange;
 	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
 		nCurLine,
@@ -96,13 +96,13 @@ bool CViewParser::GetCurrentWord(
 {
 	const CLayout*	pcLayout = m_pEditView->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( m_pEditView->GetCaret().GetCaretLayoutPos().GetY2() );
 	if (!pcLayout) {
-		return false;	/* 単語選択に失敗 */
+		return false;	// 単語選択に失敗
 	}
 
-	/* 指定された桁に対応する行のデータ内の位置を調べる */
+	// 指定された桁に対応する行のデータ内の位置を調べる
 	CLogicInt		nIdx = m_pEditView->LineColumnToIndex( pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2() );
 
-	/* 現在位置の単語の範囲を調べる */
+	// 現在位置の単語の範囲を調べる
 	CLayoutRange sRange;
 	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
 		m_pEditView->GetCaret().GetCaretLayoutPos().GetY2(),

@@ -31,12 +31,14 @@
 typedef StaticString<TCHAR, _MAX_PATH> CPathString;
 
 //! フォルダの履歴を管理 (RECENT_FOR_FOLDER)
-class CRecentFolder : public CRecentImp<CPathString, LPCTSTR>{
+class CRecentFolder :
+	public CRecentImp<CPathString, LPCTSTR>
+{
 public:
-	//生成
+	// 生成
 	CRecentFolder();
 
-	//オーバーライド
+	// オーバーライド
 	int				CompareItem( const CPathString* p1, LPCTSTR p2 ) const;
 	void			CopyItem( CPathString* dst, LPCTSTR src ) const;
 	const TCHAR*	GetItemText( int nIndex ) const;

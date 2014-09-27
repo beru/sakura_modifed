@@ -35,8 +35,8 @@ public:
 	{
 		m_pShareData = &GetDllShareData();
 	}
-	CTypeConfig GetDocumentTypeOfPath( const TCHAR* pszFilePath );	/* ファイルパスを渡して、ドキュメントタイプ（数値）を取得する */
-	CTypeConfig GetDocumentTypeOfExt( const TCHAR* pszExt );		/* 拡張子を渡して、ドキュメントタイプ（数値）を取得する */
+	CTypeConfig GetDocumentTypeOfPath( const TCHAR* pszFilePath );	// ファイルパスを渡して、ドキュメントタイプ（数値）を取得する
+	CTypeConfig GetDocumentTypeOfExt( const TCHAR* pszExt );		// 拡張子を渡して、ドキュメントタイプ（数値）を取得する
 	CTypeConfig GetDocumentTypeOfId( int id );
 
 	bool GetTypeConfig(CTypeConfig cDocumentType, STypeConfig& type);

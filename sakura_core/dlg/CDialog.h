@@ -80,41 +80,41 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	virtual INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );	/* ダイアログのメッセージ処理 */
-	INT_PTR DoModal( HINSTANCE, HWND, int, LPARAM );	/* モーダルダイアログの表示 */
-	HWND DoModeless( HINSTANCE, HWND, int, LPARAM, int );	/* モードレスダイアログの表示 */
-	HWND DoModeless( HINSTANCE, HWND, LPCDLGTEMPLATE, LPARAM, int );	/* モードレスダイアログの表示 */
+	virtual INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );		// ダイアログのメッセージ処理
+	INT_PTR DoModal( HINSTANCE, HWND, int, LPARAM );					// モーダルダイアログの表示
+	HWND DoModeless( HINSTANCE, HWND, int, LPARAM, int );				// モードレスダイアログの表示
+	HWND DoModeless( HINSTANCE, HWND, LPCDLGTEMPLATE, LPARAM, int );	// モードレスダイアログの表示
 	void CloseDialog( int );
-
+	
 	virtual BOOL OnInitDialog( HWND, WPARAM wParam, LPARAM lParam );
 	virtual void SetDialogPosSize();
 	virtual BOOL OnDestroy( void );
-	virtual BOOL OnNotify( WPARAM wParam, LPARAM lParam ){return FALSE;}
+	virtual BOOL OnNotify( WPARAM wParam, LPARAM lParam ) {return FALSE;}
 	BOOL OnSize();
 	virtual BOOL OnSize( WPARAM wParam, LPARAM lParam );
 	virtual BOOL OnMove( WPARAM wParam, LPARAM lParam );
-	virtual BOOL OnDrawItem( WPARAM wParam, LPARAM lParam ){return TRUE;}
+	virtual BOOL OnDrawItem( WPARAM wParam, LPARAM lParam ) {return TRUE;}
 	virtual BOOL OnTimer( WPARAM wParam ){return TRUE;}
-	virtual BOOL OnKeyDown( WPARAM wParam, LPARAM lParam ){return TRUE;}
-	virtual BOOL OnDeviceChange( WPARAM wParam, LPARAM lParam ){return TRUE;}
-	virtual int GetData( void ){return 1;}/* ダイアログデータの取得 */
-	virtual void SetData( void ){return;}/* ダイアログデータの設定 */
+	virtual BOOL OnKeyDown( WPARAM wParam, LPARAM lParam ) {return TRUE;}
+	virtual BOOL OnDeviceChange( WPARAM wParam, LPARAM lParam ) {return TRUE;}
+	virtual int GetData( void ) {return 1;}	// ダイアログデータの取得
+	virtual void SetData( void ) {return;}	// ダイアログデータの設定
 	virtual BOOL OnBnClicked( int );
 	virtual BOOL OnStnClicked( int ){return FALSE;}
-	virtual BOOL OnEnChange( HWND hwndCtl, int wID ){return FALSE;}
-	virtual BOOL OnEnKillFocus( HWND hwndCtl, int wID ){return FALSE;}
-	virtual BOOL OnLbnSelChange( HWND hwndCtl, int wID ){return FALSE;}
-	virtual BOOL OnLbnDblclk( int wID ){return FALSE;}
-	virtual BOOL OnCbnSelChange( HWND hwndCtl, int wID ){return FALSE;}
-	virtual BOOL OnCbnEditChange( HWND hwndCtl, int wID ){return FALSE;} // @@2005.03.31 MIK タグジャンプDialog
+	virtual BOOL OnEnChange( HWND hwndCtl, int wID ) {return FALSE;}
+	virtual BOOL OnEnKillFocus( HWND hwndCtl, int wID ) {return FALSE;}
+	virtual BOOL OnLbnSelChange( HWND hwndCtl, int wID ) {return FALSE;}
+	virtual BOOL OnLbnDblclk( int wID ) {return FALSE;}
+	virtual BOOL OnCbnSelChange( HWND hwndCtl, int wID ) {return FALSE;}
+	virtual BOOL OnCbnEditChange( HWND hwndCtl, int wID ) {return FALSE;} // @@2005.03.31 MIK タグジャンプDialog
 	virtual BOOL OnCbnDropDown( HWND hwndCtl, int wID );
-//	virtual BOOL OnCbnCloseUp( HWND hwndCtl, int wID ){return FALSE;}
+//	virtual BOOL OnCbnCloseUp( HWND hwndCtl, int wID ) {return FALSE;}
 	virtual BOOL OnCbnSelEndOk( HWND hwndCtl, int wID );
 
-	virtual BOOL OnKillFocus( WPARAM wParam, LPARAM lParam ){return FALSE;}
-	virtual BOOL OnActivate( WPARAM wParam, LPARAM lParam ){return FALSE;}	//@@@ 2003.04.08 MIK
-	virtual int OnVKeyToItem( WPARAM wParam, LPARAM lParam ){ return -1; }
-	virtual LRESULT OnCharToItem( WPARAM wParam, LPARAM lParam ){ return -1; }
+	virtual BOOL OnKillFocus( WPARAM wParam, LPARAM lParam ) {return FALSE;}
+	virtual BOOL OnActivate( WPARAM wParam, LPARAM lParam ) {return FALSE;}	//@@@ 2003.04.08 MIK
+	virtual int OnVKeyToItem( WPARAM wParam, LPARAM lParam ) { return -1; }
+	virtual LRESULT OnCharToItem( WPARAM wParam, LPARAM lParam ) { return -1; }
 	virtual BOOL OnPopupHelp( WPARAM, LPARAM );	//@@@ 2002.01.18 add
 	virtual BOOL OnContextMenu( WPARAM, LPARAM );	//@@@ 2002.01.18 add
 	virtual LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
@@ -128,20 +128,20 @@ public:
 	static bool DirectoryUp( TCHAR* );
 
 public:
-	HWND GetHwnd() const{ return m_hWnd; }
-	//特殊インターフェース (使用は好ましくない)
-	void _SetHwnd(HWND hwnd){ m_hWnd = hwnd; }
+	HWND GetHwnd() const { return m_hWnd; }
+	// 特殊インターフェース (使用は好ましくない)
+	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
 
 public:
-	HINSTANCE		m_hInstance;	/* アプリケーションインスタンスのハンドル */
-	HWND			m_hwndParent;	/* オーナーウィンドウのハンドル */
+	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
+	HWND			m_hwndParent;	// オーナーウィンドウのハンドル
 private:
-	HWND			m_hWnd;			/* このダイアログのハンドル */
+	HWND			m_hWnd;			// このダイアログのハンドル
 public:
 	HWND			m_hwndSizeBox;
 	LPARAM			m_lParam;
-	BOOL			m_bModal;		/* モーダル ダイアログか */
-	int				m_nShowCmd;		//	最大化/最小化
+	BOOL			m_bModal;		// モーダル ダイアログか
+	int				m_nShowCmd;		// 最大化/最小化
 	int				m_nWidth;
 	int				m_nHeight;
 	int				m_xPos;

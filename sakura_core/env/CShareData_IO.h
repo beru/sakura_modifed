@@ -33,14 +33,14 @@ struct ColorInfo; // defined doc/CDocTypeSetting.h
 // 2008.XX.XX kobake CShareDataから分離
 // 2008.05.24 Uchi   ShareData_IO_CustMenu, ShareData_IO_KeyBind  move Export、Importに使用
 // 2010.08.21 Moca アクセス権、関数名の整理
-class CShareData_IO{
+class CShareData_IO {
 public:
-	//セーブ・ロード
-	static bool LoadShareData();	/* 共有データのロード */
-	static void SaveShareData();	/* 共有データの保存 */
+	// セーブ・ロード
+	static bool LoadShareData();	// 共有データのロード
+	static void SaveShareData();	// 共有データの保存
 
 protected:
-	static bool ShareData_IO_2( bool );	/* 共有データの保存 */
+	static bool ShareData_IO_2( bool );	// 共有データの保存
 
 	// Feb. 12, 2006 D.S.Koba
 	static void ShareData_IO_Mru( CDataProfile& );
@@ -69,7 +69,7 @@ public:
 public:
 	static void IO_CustMenu( CDataProfile&, CommonSetting_CustomMenu&, bool );
 	static void IO_KeyBind( CDataProfile&, CommonSetting_KeyBind&, bool);		// 2012.11.22 aroka
-	static void IO_MainMenu( CDataProfile&, CommonSetting_MainMenu&, bool );		// 2010/5/15 Uchi
-	static void IO_ColorSet( CDataProfile* , const WCHAR* , ColorInfo* );	/* 色設定 I/O */ // Feb. 12, 2006 D.S.Koba
+	static void IO_MainMenu( CDataProfile&, CommonSetting_MainMenu&, bool );	// 2010/5/15 Uchi
+	static void IO_ColorSet( CDataProfile* , const WCHAR* , ColorInfo* );		// 色設定 I/O // Feb. 12, 2006 D.S.Koba
 };
 

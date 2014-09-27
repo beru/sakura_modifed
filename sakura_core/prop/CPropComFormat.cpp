@@ -87,10 +87,10 @@ INT_PTR CALLBACK CPropFormat::DlgProc_page(
 
 void CPropFormat::ChangeDateExample( HWND hwndDlg )
 {
-	/* ダイアログデータの取得 Format */
+	// ダイアログデータの取得 Format
 	GetData( hwndDlg );
 
-	/* 日付をフォーマット */
+	// 日付をフォーマット
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime( &systime );
@@ -101,10 +101,10 @@ void CPropFormat::ChangeDateExample( HWND hwndDlg )
 
 void CPropFormat::ChangeTimeExample( HWND hwndDlg )
 {
-	/* ダイアログデータの取得 Format */
+	// ダイアログデータの取得 Format
 	GetData( hwndDlg );
 
-	/* 時刻をフォーマット */
+	// 時刻をフォーマット
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime( &systime );
@@ -114,7 +114,7 @@ void CPropFormat::ChangeTimeExample( HWND hwndDlg )
 }
 
 
-/* Format メッセージ処理 */
+// Format メッセージ処理
 INT_PTR CPropFormat::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,	// message
@@ -131,7 +131,7 @@ INT_PTR CPropFormat::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Format */
+		// ダイアログデータの設定 Format
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
@@ -139,22 +139,22 @@ INT_PTR CPropFormat::DispatchEvent(
 		ChangeDateExample( hwndDlg );
 		ChangeTimeExample( hwndDlg );
 
-		/* 見出し記号 */
+		// 見出し記号
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_MIDASHIKIGOU ), _countof(m_Common.m_sFormat.m_szMidashiKigou) - 1 );
 
-		/* 引用符 */
+		// 引用符
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_INYOUKIGOU ), _countof(m_Common.m_sFormat.m_szInyouKigou) - 1 );
 
-		/* 日付書式 */
+		// 日付書式
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_DFORM ), _countof(m_Common.m_sFormat.m_szDateFormat) - 1 );
 
-		/* 時刻書式 */
+		// 時刻書式
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_TFORM ), _countof(m_Common.m_sFormat.m_szTimeFormat) - 1 );
 
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode	= HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
 		case EN_CHANGE:
 			if (IDC_EDIT_DFORM == wID) {
@@ -167,7 +167,7 @@ INT_PTR CPropFormat::DispatchEvent(
 			}
 			break;
 
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_RADIO_DFORM_0:
@@ -189,9 +189,9 @@ INT_PTR CPropFormat::DispatchEvent(
 			//	To Here Sept. 10, 2000
 				return 0;
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		}
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 	case WM_NOTIFY:
 //		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
@@ -206,7 +206,7 @@ INT_PTR CPropFormat::DispatchEvent(
 				return TRUE;
 			case PSN_KILLACTIVE:
 //				MYTRACE( _T("Format PSN_KILLACTIVE\n") );
-				/* ダイアログデータの取得 Format */
+				// ダイアログデータの取得 Format
 				GetData( hwndDlg );
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -214,7 +214,7 @@ INT_PTR CPropFormat::DispatchEvent(
 				m_nPageNum = ID_PROPCOM_PAGENUM_FORMAT;
 				return TRUE;
 			}
-//			break;	/* default */
+//			break;	// default
 //		}
 
 //		MYTRACE( _T("pNMHDR->hwndFrom=%xh\n"), pNMHDR->hwndFrom );
@@ -222,7 +222,7 @@ INT_PTR CPropFormat::DispatchEvent(
 //		MYTRACE( _T("pNMHDR->code    =%xh\n"), pNMHDR->code );
 //		MYTRACE( _T("pMNUD->iPos    =%d\n"), pMNUD->iPos );
 //		MYTRACE( _T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta );
-		break;	/* WM_NOTIFY */
+		break;	// WM_NOTIFY
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
@@ -231,7 +231,7 @@ INT_PTR CPropFormat::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		break;
 //@@@ 2001.02.04 End
 
@@ -247,13 +247,13 @@ INT_PTR CPropFormat::DispatchEvent(
 }
 
 
-/* ダイアログデータの設定 Format */
+// ダイアログデータの設定 Format
 void CPropFormat::SetData( HWND hwndDlg )
 {
-	/* 見出し記号 */
+	// 見出し記号
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_MIDASHIKIGOU, m_Common.m_sFormat.m_szMidashiKigou );
 
-	/* 引用符 */
+	// 引用符
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_INYOUKIGOU, m_Common.m_sFormat.m_szInyouKigou );
 
 	//日付書式のタイプ
@@ -284,19 +284,19 @@ void CPropFormat::SetData( HWND hwndDlg )
 }
 
 
-/* ダイアログデータの取得 Format */
+// ダイアログデータの取得 Format
 int CPropFormat::GetData( HWND hwndDlg )
 {
-	/* 見出し記号 */
+	// 見出し記号
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_MIDASHIKIGOU, m_Common.m_sFormat.m_szMidashiKigou, _countof(m_Common.m_sFormat.m_szMidashiKigou) );
 
-//	/* 外部ヘルプ１ */
+//	// 外部ヘルプ１
 //	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHELP1, m_Common.m_sFormat.m_szExtHelp1, MAX_PATH - 1 );
 //
-//	/* 外部HTMLヘルプ */
+//	// 外部HTMLヘルプ
 //	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHTMLHELP, m_Common.m_sFormat.m_szExtHtmlHelp, MAX_PATH - 1 );
 
-	/* 引用符 */
+	// 引用符
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_INYOUKIGOU, m_Common.m_sFormat.m_szInyouKigou, _countof(m_Common.m_sFormat.m_szInyouKigou) );
 
 

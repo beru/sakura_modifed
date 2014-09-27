@@ -30,9 +30,8 @@
 #include "plugin/CPlugin.h"
 #include "macro/CWSHManager.h"
 
-#define PII_WSH						L"Wsh"			//WSHセクション
-#define PII_WSH_USECACHE			L"UseCache"		//読み込んだスクリプトを再利用する
-
+#define PII_WSH						L"Wsh"			// WSHセクション
+#define PII_WSH_USECACHE			L"UseCache"		// 読み込んだスクリプトを再利用する
 
 class CWSHPlug :
 	public CPlug
@@ -55,33 +54,33 @@ public:
 class CWSHPlugin :
 	public CPlugin
 {
-	//コンストラクタ
+	// コンストラクタ
 public:
 	CWSHPlugin( const tstring& sBaseDir ) : CPlugin( sBaseDir ) {
 		m_bUseCache = false;
 	}
 
-	//デストラクタ
+	// デストラクタ
 public:
 	~CWSHPlugin(void);
 
-	//操作
-	//CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
+	// 操作
+	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
 	virtual CPlug* CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel )
 	{
 		return new CWSHPlug( plugin, id, sJack, sHandler, sLabel );
 	}
 
-	//実装
+	// 実装
 public:
 	bool ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMlang );
 	bool ReadPluginOption( CDataProfile *cProfile );
-	CPlug::Array GetPlugs() const{
+	CPlug::Array GetPlugs() const {
 		return m_plugs;
 	}
 	bool InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& params );
 
-	//メンバ変数
+	// メンバ変数
 private:
 	bool m_bUseCache;
 

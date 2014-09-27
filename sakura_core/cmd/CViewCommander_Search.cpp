@@ -593,11 +593,11 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 				// 位置指定ないので、何もしない
 			}
 		}
-		/* コマンドコードによる処理振り分け */
-		/* テキストを貼り付け */
+		// コマンドコードによる処理振り分け
+		// テキストを貼り付け
 		if (nPaste) {
 			Command_PASTE(0);
-		}else if (bRegularExp) { /* 検索／置換  1==正規表現 */
+		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 先読みに対応するために物理行末までを使うように変更 2005/03/27 かろと
 			// 2002/01/19 novice 正規表現による文字列置換
 			CBregexp cRegexp;
@@ -703,7 +703,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	BOOL nReplaceTarget	= GetEditWindow()->m_cDlgReplace.m_nReplaceTarget;
 	BOOL bRegularExp	= m_pCommanderView->m_sCurSearchOption.bRegularExp;
 	BOOL bSelectedArea	= GetEditWindow()->m_cDlgReplace.m_bSelectedArea;
-	BOOL bConsecutiveAll = GetEditWindow()->m_cDlgReplace.m_bConsecutiveAll;	/* 「すべて置換」は置換の繰返し */	// 2007.01.16 ryoji
+	BOOL bConsecutiveAll = GetEditWindow()->m_cDlgReplace.m_bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 
 	GetEditWindow()->m_cDlgReplace.m_bCanceled = false;
 	GetEditWindow()->m_cDlgReplace.m_nReplaceCnt = 0;

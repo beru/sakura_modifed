@@ -25,11 +25,11 @@
 
 class CEditView;
 
-//!品詞解析クラス
-class CViewParser{
+//! 品詞解析クラス
+class CViewParser {
 public:
 	CViewParser(const CEditView* pEditView) : m_pEditView(pEditView) { }
-	virtual ~CViewParser(){}
+	virtual ~CViewParser() {}
 
 	//! カーソル直前の単語を取得
 	int GetLeftWord( CNativeW* pcmemWord, int nMaxWordLen ) const;

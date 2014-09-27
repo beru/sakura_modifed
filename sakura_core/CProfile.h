@@ -44,16 +44,14 @@
 /*!
 	@brief INIファイル入出力
 */
-class CProfile
-{
-	//文字列型
+class CProfile {
+	// 文字列型
 	typedef std::wstring wstring;
 	typedef std::string string;
 
 	typedef std::pair< wstring, wstring > PAIR_STR_STR;
 	typedef std::map< wstring, wstring > MAP_STR_STR;
-	struct Section
-	{
+	struct Section {
 		wstring     strSectionName;
 		MAP_STR_STR mapEntries;
 	};
@@ -69,8 +67,6 @@ public:
 	bool ReadProfileRes( const TCHAR*, const TCHAR* );				// 200/5/19 Uchi
 	bool WriteProfile( const TCHAR*, const WCHAR* pszComment);
 
-
-
 	void DUMP( void );
 
 protected:
@@ -79,7 +75,6 @@ protected:
 
 
 	bool GetProfileDataImp( const wstring& strSectionName, const wstring& strEntryKey, wstring& strEntryValue);
-
 	bool SetProfileDataImp( const wstring& strSectionName, const wstring& strEntryKey, const wstring& strEntryValue );
 
 protected:

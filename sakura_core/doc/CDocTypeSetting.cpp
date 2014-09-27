@@ -102,7 +102,7 @@ void GetDefaultColorInfo( ColorInfo* pColorInfo, int nIndex )
 	assert( nIndex < _countof(ColorInfo_DEFAULT) );
 
 	ColorInfoBase* p = pColorInfo;
-	*p = ColorInfo_DEFAULT[nIndex].m_sColorInfo; //ColorInfoBase
+	*p = ColorInfo_DEFAULT[nIndex].m_sColorInfo; // ColorInfoBase
 	GetDefaultColorInfoName( pColorInfo, nIndex );
 	pColorInfo->m_nColorIdx = nIndex;
 }

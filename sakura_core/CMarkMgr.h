@@ -88,10 +88,12 @@ public:
 	int GetMax(void) const { return m_nMaxitem; }	//!<	Å‘å€–Ú”‚ğ•Ô‚·
 	void SetMax(int max);	//!<	Å‘å€–Ú”‚ğİ’è
 
-	virtual void Add(const CMark& m) = 0;	//!<	—v‘f‚Ì’Ç‰Á
+	virtual
+	void Add(const CMark& m) = 0;	//!<	—v‘f‚Ì’Ç‰Á
 
 	//	Apr. 1, 2001 genta
-	virtual void Flush(void);	//!<	—v‘f‚Ì‘SÁ‹
+	virtual
+	void Flush(void);	//!<	—v‘f‚Ì‘SÁ‹
 
 	//!	—v‘f‚Ìæ“¾
 	const CMark& GetCurrent(void) const { return m_cMarkChain[m_nCurpos]; }
@@ -113,7 +115,8 @@ public:
 //	CMarkIterator End(void) const { return (CMarkIterator)m_cMarkChain.end(); }
 
 protected:
-	virtual void Expire(void) = 0;
+	virtual
+	void Expire(void) = 0;
 
 	// CMarkFactory m_factory;	//	Factory Class (ƒ}ƒNƒ‚Å¶¬‚³‚ê‚éj
 	CMarkChain m_cMarkChain;	//	ƒ}[ƒNƒf[ƒ^–{‘Ì
@@ -131,9 +134,12 @@ private:
 
 	CMarkMgr ‚ğŒp³‚µA“®ì‚ª‹K’è‚³‚ê‚Ä‚¢‚È‚¢•”•ª‚ğÀ‘•‚·‚éB
 */
-class CAutoMarkMgr : public CMarkMgr{
+class CAutoMarkMgr : public CMarkMgr {
 public:
-	virtual void Add(const CMark& m);	//!<	—v‘f‚Ì’Ç‰Á
-	virtual void Expire(void);	//!<	—v‘f”‚Ì’²®
+	virtual
+	void Add(const CMark& m);	//!<	—v‘f‚Ì’Ç‰Á
+	
+	virtual
+	void Expire(void);	//!<	—v‘f”‚Ì’²®
 };
 

@@ -9,7 +9,8 @@
 #include "view/colors/EColorIndexType.h"
 
 //!CPPキーワードで始まっていれば true
-inline bool IsHeadCppKeyword(const wchar_t* pData)
+inline
+bool IsHeadCppKeyword(const wchar_t* pData)
 {
 	#define HEAD_EQ(DATA,LITERAL) (wcsncmp(DATA,LITERAL,_countof(LITERAL)-1)==0)
 	if (HEAD_EQ(pData, L"case"      )) return true;
@@ -49,7 +50,8 @@ void CType_Cpp::InitTypeConfigImp(STypeConfig* pType)
 /*!
 	関数に用いることができる文字かどうかの判定
 */
-inline bool C_IsWordChar( wchar_t c )
+inline
+bool C_IsWordChar( wchar_t c )
 {
 	return (
 		L'_' == c ||
@@ -76,7 +78,8 @@ inline bool C_IsWordChar( wchar_t c )
 	@param nLen 文字列の長さ。
 	本質的には不要であるが、高速化のために既にある値を利用する。
 */
-static bool C_IsOperator( wchar_t* szStr, int nLen	)
+static
+bool C_IsOperator( wchar_t* szStr, int nLen	)
 {
 	if (nLen >= 8 && szStr[ nLen - 1 ] == L'r') {
 		if (nLen > 8 ?
@@ -95,7 +98,8 @@ static bool C_IsOperator( wchar_t* szStr, int nLen	)
 
 	@date 2005.12.06 じゅうじ 最後の1文字しか見ないと2バイトコードの後半がバックスラッシュの場合に誤認する
 */
-static bool C_IsLineEsc(const wchar_t *s, int len)
+static
+bool C_IsLineEsc(const wchar_t *s, int len)
 {
 	if (len > 0 && WCODE::IsLineDelimiter(s[len-1])) len--;
 	if (len > 0 && s[len-1] == L'\r') len--;
@@ -116,7 +120,8 @@ static bool C_IsLineEsc(const wchar_t *s, int len)
 	return(false);
 }
 
-static bool CPP_IsFunctionAfterKeyword( const wchar_t* s )
+static
+bool CPP_IsFunctionAfterKeyword( const wchar_t* s )
 {
 	return
 		wcscmp( s, L"const" ) == 0 ||

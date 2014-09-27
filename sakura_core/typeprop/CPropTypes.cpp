@@ -91,15 +91,15 @@ CPropTypes::CPropTypes()
 		assert( sizeof(CPropTypesKeyHelp) - sizeof(CPropTypes) == 0 );
 	}
 
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更
 	m_pCKeyWordSetMgr = &m_pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 
-	m_hInstance = NULL;		/* アプリケーションインスタンスのハンドル */
-	m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
-	m_hwndThis  = NULL;		/* このダイアログのハンドル */
+	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
+	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
+	m_hwndThis  = NULL;		// このダイアログのハンドル
 	m_nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
 
 	// 2005.11.30 Moca カスタム色を設定・保持
@@ -114,11 +114,11 @@ CPropTypes::~CPropTypes()
 {
 }
 
-/* 初期化 */
+// 初期化
 void CPropTypes::Create( HINSTANCE hInstApp, HWND hwndParent )
 {
-	m_hInstance = hInstApp;		/* アプリケーションインスタンスのハンドル */
-	m_hwndParent = hwndParent;	/* オーナーウィンドウのハンドル */
+	m_hInstance = hInstApp;		// アプリケーションインスタンスのハンドル
+	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 }
 
 struct TypePropSheetInfo {
@@ -128,7 +128,7 @@ struct TypePropSheetInfo {
 };
 
 // キーワード：タイプ別設定タブ順序(プロパティシート)
-/* プロパティシートの作成 */
+// プロパティシートの作成
 INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 {
 	INT_PTR				nRet;
@@ -232,7 +232,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 //                         イベント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* ヘルプ */
+// ヘルプ
 //2001.05.18 Stonee 機能番号からヘルプトピック番号を調べるようにした
 //2001.07.03 JEPRO  支援タブのヘルプを有効化
 //2001.11.17 MIK    IDD_PROP_REGEX

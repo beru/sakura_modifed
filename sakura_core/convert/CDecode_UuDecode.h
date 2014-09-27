@@ -32,7 +32,7 @@
 
 #include "convert/CDecode.h"
 
-class CDecode_UuDecode : public CDecode{
+class CDecode_UuDecode : public CDecode {
 
 	TCHAR m_aFilename[_MAX_PATH];
 public:

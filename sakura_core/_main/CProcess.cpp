@@ -28,11 +28,12 @@
 CProcess::CProcess(
 	HINSTANCE	hInstance,		//!< handle to process instance
 	LPCTSTR		lpCmdLine		//!< pointer to command line
-)
-: m_hInstance( hInstance )
-, m_hWnd( 0 )
+	)
+	:
+	m_hInstance( hInstance ),
+	m_hWnd( 0 )
 #ifdef USE_CRASHDUMP
-, m_pfnMiniDumpWriteDump(NULL)
+	, m_pfnMiniDumpWriteDump(NULL)
 #endif
 {
 	m_pcShareData = CShareData::getInstance();
@@ -45,17 +46,17 @@ CProcess::CProcess(
 */
 bool CProcess::InitializeProcess()
 {
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	if (!GetShareData().InitShareData()) {
-		//	適切なデータを得られなかった
+		// 適切なデータを得られなかった
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONERROR,
 			GSTR_APPNAME, _T("異なるバージョンのエディタを同時に起動することはできません。") );
 		return false;
 	}
 
-	/* リソースから製品バージョンの取得 */
-	//	2004.05.13 Moca 共有データのバージョン情報はコントロールプロセスだけが
-	//	ShareDataで設定するように変更したのでここからは削除
+	// リソースから製品バージョンの取得
+	// 004.05.13 Moca 共有データのバージョン情報はコントロールプロセスだけが
+	// hareDataで設定するように変更したのでここからは削除
 
 	return true;
 }

@@ -124,7 +124,7 @@ int CALLBACK CDlgFuncList::CompareFunc_Asc( LPARAM lParam1, LPARAM lParam2, LPAR
 			return 1;
 		}
 	}
-	if (FL_COL_COL == pcDlgFuncList->m_nSortCol) {	/* 桁でソート */
+	if (FL_COL_COL == pcDlgFuncList->m_nSortCol) {	// 桁でソート
 		if (pcFuncInfo1->m_nFuncColCRLF < pcFuncInfo2->m_nFuncColCRLF) {
 			return -1;
 		}else
@@ -135,7 +135,7 @@ int CALLBACK CDlgFuncList::CompareFunc_Asc( LPARAM lParam1, LPARAM lParam2, LPAR
 		}
 	}
 	// From Here 2001.12.07 hor
-	if (FL_COL_REMARK == pcDlgFuncList->m_nSortCol) {	/* 備考でソート */
+	if (FL_COL_REMARK == pcDlgFuncList->m_nSortCol) {	// 備考でソート
 		if (pcFuncInfo1->m_nInfo < pcFuncInfo2->m_nInfo) {
 			return -1;
 		}else
@@ -177,21 +177,21 @@ HINSTANCE CDlgFuncList::m_lastRcInstance = 0;
 
 CDlgFuncList::CDlgFuncList()
 {
-	/* サイズ変更時に位置を制御するコントロール数 */
+	// サイズ変更時に位置を制御するコントロール数
 	assert( _countof(anchorList) == _countof(m_rcItems) );
 
-	m_pcFuncInfoArr = NULL;		/* 関数情報配列 */
-	m_nCurLine = CLayoutInt(0);				/* 現在行 */
+	m_pcFuncInfoArr = NULL;		// 関数情報配列
+	m_nCurLine = CLayoutInt(0);				// 現在行
 	m_nOutlineType = OUTLINE_DEFAULT;
 	m_nListType = OUTLINE_DEFAULT;
 	//	Apr. 23, 2005 genta 行番号を左端へ
-	m_nSortCol = 0;				/* ソートする列番号 2004.04.06 zenryaku 標準は行番号(1列目) */
+	m_nSortCol = 0;				// ソートする列番号 2004.04.06 zenryaku 標準は行番号(1列目)
 	m_nSortColOld = -1;
-	m_bLineNumIsCRLF = false;	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+	m_bLineNumIsCRLF = false;	// 行番号の表示 false=折り返し単位／true=改行単位
 	m_bWaitTreeProcess = false;	// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 2/4
 	m_nSortType = 0;
-	m_cFuncInfo = NULL;			/* 現在の関数情報 */
-	m_bEditWndReady = false;	/* エディタ画面の準備完了 */
+	m_cFuncInfo = NULL;			// 現在の関数情報
+	m_bEditWndReady = false;	// エディタ画面の準備完了
 	m_bInChangeLayout = false;
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -310,19 +310,19 @@ HWND CDlgFuncList::DoModeless(
 	CLayoutInt		nCurCol,
 	int				nOutlineType,		
 	int				nListType,
-	bool			bLineNumIsCRLF		/* 行番号の表示 false=折り返し単位／true=改行単位 */
+	bool			bLineNumIsCRLF		// 行番号の表示 false=折り返し単位／true=改行単位
 )
 {
 	CEditView* pcEditView = (CEditView*)lParam;
 	if (!pcEditView) {
 		return NULL;
 	}
-	m_pcFuncInfoArr = pcFuncInfoArr;	/* 関数情報配列 */
-	m_nCurLine = nCurLine;				/* 現在行 */
-	m_nCurCol = nCurCol;				/* 現在桁 */
-	m_nOutlineType = nOutlineType;		/* アウトライン解析の種別 */
-	m_nListType = nListType;			/* 一覧の種類 */
-	m_bLineNumIsCRLF = bLineNumIsCRLF;	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+	m_pcFuncInfoArr = pcFuncInfoArr;	// 関数情報配列
+	m_nCurLine = nCurLine;				// 現在行
+	m_nCurCol = nCurCol;				// 現在桁
+	m_nOutlineType = nOutlineType;		// アウトライン解析の種別
+	m_nListType = nListType;			// 一覧の種類
+	m_bLineNumIsCRLF = bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
 	m_nDocType = pcEditView->GetDocument()->m_cDocType.GetDocumentType().GetIndex();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
 	m_nSortCol = m_type.m_nOutlineSortCol;
@@ -371,14 +371,14 @@ HWND CDlgFuncList::DoModeless(
 	return hwndRet;
 }
 
-/* モードレス時：検索対象となるビューの変更 */
+// モードレス時：検索対象となるビューの変更
 void CDlgFuncList::ChangeView( LPARAM pcEditView )
 {
 	m_lParam = pcEditView;
 	return;
 }
 
-/*! ダイアログデータの設定 */
+//! ダイアログデータの設定
 void CDlgFuncList::SetData()
 {
 	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_FL );
@@ -390,7 +390,7 @@ void CDlgFuncList::SetData()
 	ListView_DeleteAllItems( hwndList );
 	TreeView_DeleteAllItems( hwndTree );
 
-	if (OUTLINE_CPP == m_nListType) {	/* C++メソッドリスト */
+	if (OUTLINE_CPP == m_nListType) {	// C++メソッドリスト
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava( GetHwnd(), TRUE );	// Jan. 04, 2002 genta Java Method Treeに統合
 		::SetWindowText( GetHwnd(), LS(STR_DLGFNCLST_TITLE_CPP) );
@@ -410,36 +410,36 @@ void CDlgFuncList::SetData()
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText( GetHwnd(), _T("TeX") );
-	}else if (OUTLINE_TEXT == m_nListType) { /* テキスト・トピックリスト */
+	}else if (OUTLINE_TEXT == m_nListType) { // テキスト・トピックリスト
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();	//@@@ 2002.04.01 YAZAKI テキストトピックツリーも、汎用SetTreeを呼ぶように変更。
 		::SetWindowText( GetHwnd(), LS(STR_DLGFNCLST_TITLE_TEXT) );
-	}else if (OUTLINE_JAVA == m_nListType) { /* Javaメソッドツリー */
+	}else if (OUTLINE_JAVA == m_nListType) { // Javaメソッドツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava( GetHwnd(), TRUE );
 		::SetWindowText( GetHwnd(), LS(STR_DLGFNCLST_TITLE_JAVA) );
 	//	2007.02.08 genta Python追加
-	}else if (OUTLINE_PYTHON == m_nListType) { /* Python メソッドツリー */
+	}else if (OUTLINE_PYTHON == m_nListType) { // Python メソッドツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree( true );
 		::SetWindowText( GetHwnd(), LS(STR_DLGFNCLST_TITLE_PYTHON) );
-	}else if (OUTLINE_COBOL == m_nListType) { /* COBOL アウトライン */
+	}else if (OUTLINE_COBOL == m_nListType) { // COBOL アウトライン
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava( GetHwnd(), FALSE );
 		::SetWindowText( GetHwnd(), LS(STR_DLGFNCLST_TITLE_COBOL) );
-	}else if (OUTLINE_VB == m_nListType) {	/* VisualBasic アウトライン */
+	}else if (OUTLINE_VB == m_nListType) {	// VisualBasic アウトライン
 		m_nViewType = VIEWTYPE_LIST;
 		SetListVB();
 		::SetWindowText( GetHwnd(), LS(STR_DLGFNCLST_TITLE_VB) );
-	}else if (OUTLINE_TREE == m_nListType) { /* 汎用ツリー */
+	}else if (OUTLINE_TREE == m_nListType) { // 汎用ツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree();
 		::SetWindowText( GetHwnd(), _T("") );
-	}else if (OUTLINE_TREE_TAGJUMP == m_nListType) { /* 汎用ツリー(タグジャンプ付き) */
+	}else if (OUTLINE_TREE_TAGJUMP == m_nListType) { // 汎用ツリー(タグジャンプ付き)
 		m_nViewType = VIEWTYPE_TREE;
 		SetTree( true );
 		::SetWindowText( GetHwnd(), _T("") );
-	}else if (OUTLINE_CLSTREE == m_nListType) { /* 汎用クラスツリー */
+	}else if (OUTLINE_CLSTREE == m_nListType) { // 汎用クラスツリー
 		m_nViewType = VIEWTYPE_TREE;
 		SetTreeJava( GetHwnd(), TRUE );
 		::SetWindowText( GetHwnd(), _T("") );
@@ -496,7 +496,7 @@ void CDlgFuncList::SetData()
 		int				nSelectedLine = 0;
 		RECT			rc;
 
-		m_cmemClipText.SetString(L"");	/* クリップボードコピー用テキスト */
+		m_cmemClipText.SetString(L"");	// クリップボードコピー用テキスト
 		{
 			const int nBuffLenTag = 13 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 			const int nNum = m_pcFuncInfoArr->GetNum();
@@ -544,11 +544,11 @@ void CDlgFuncList::SetData()
 			nSelectedLine =  nSelectedLineTop;
 		}
 		for (i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
-			/* 現在の解析結果要素 */
+			// 現在の解析結果要素
 			pcFuncInfo = m_pcFuncInfoArr->GetAt( i );
 
 			//	From Here Apr. 23, 2005 genta 行番号を左端へ
-			/* 行番号の表示 false=折り返し単位／true=改行単位 */
+			// 行番号の表示 false=折り返し単位／true=改行単位
 			if (m_bLineNumIsCRLF) {
 				auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncLineCRLF );
 			}else {
@@ -562,7 +562,7 @@ void CDlgFuncList::SetData()
 			ListView_InsertItem( hwndList, &item);
 
 			// 2010.03.17 syat 桁追加
-			/* 行番号の表示 false=折り返し単位／true=改行単位 */
+			// 行番号の表示 false=折り返し単位／true=改行単位
 			if (m_bLineNumIsCRLF) {
 				auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncColCRLF );
 			}else {
@@ -601,15 +601,15 @@ void CDlgFuncList::SetData()
 			item.iSubItem = FL_COL_REMARK;
 			ListView_SetItem( hwndList, &item);
 
-			/* クリップボードにコピーするテキストを編集 */
+			// クリップボードにコピーするテキストを編集
 			if (item.pszText[0] != _T('\0')) {
 				// 検出結果の種類(関数,,,)があるとき
 				auto_sprintf_s(
 					szText,
 					_T("%ts(%d,%d): "),
-					m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
-					pcFuncInfo->m_nFuncLineCRLF,		/* 検出行番号 */
-					pcFuncInfo->m_nFuncColCRLF		/* 検出桁番号 */
+					m_pcFuncInfoArr->m_szFilePath.c_str(),	// 解析対象ファイル名
+					pcFuncInfo->m_nFuncLineCRLF,			// 検出行番号
+					pcFuncInfo->m_nFuncColCRLF				// 検出桁番号
 				);
 				m_cmemClipText.AppendStringT(szText);
 				// "%ts(%ts)\r\n"
@@ -622,18 +622,18 @@ void CDlgFuncList::SetData()
 				auto_sprintf_s(
 					szText,
 					_T("%ts(%d,%d): "),
-					m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
-					pcFuncInfo->m_nFuncLineCRLF,		/* 検出行番号 */
-					pcFuncInfo->m_nFuncColCRLF		/* 検出桁番号 */
+					m_pcFuncInfoArr->m_szFilePath.c_str(),	// 解析対象ファイル名
+					pcFuncInfo->m_nFuncLineCRLF,			// 検出行番号
+					pcFuncInfo->m_nFuncColCRLF				// 検出桁番号
 				);
 				m_cmemClipText.AppendStringT(szText);
 				m_cmemClipText.AppendNativeDataT(pcFuncInfo->m_cmemFuncName);
 				m_cmemClipText.AppendString(L"\r\n");
 			}
 		}
-		//2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
+		// 2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
 		::ShowWindow( hwndList, SW_SHOW );
-		/* 列の幅をデータに合わせて調整 */
+		// 列の幅をデータに合わせて調整
 		ListView_SetColumnWidth( hwndList, FL_COL_ROW, LVSCW_AUTOSIZE );
 		ListView_SetColumnWidth( hwndList, FL_COL_COL, LVSCW_AUTOSIZE );
 		ListView_SetColumnWidth( hwndList, FL_COL_NAME, LVSCW_AUTOSIZE );
@@ -654,20 +654,20 @@ void CDlgFuncList::SetData()
 			ListView_SetItemState( hwndList, nSelectedLine, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 		}
 	}
-	/* アウトライン ダイアログを自動的に閉じる */
+	// アウトライン ダイアログを自動的に閉じる
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList );
-	/* アウトライン ブックマーク一覧で空行を無視する */
+	// アウトライン ブックマーク一覧で空行を無視する
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable );
-	/* アウトライン ジャンプしたらフォーカスを移す */
+	// アウトライン ジャンプしたらフォーカスを移す
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump );
 
-	/* アウトライン ■位置とサイズを記憶する */ // 20060201 aroka
+	// アウトライン ■位置とサイズを記憶する // 20060201 aroka
 	::CheckDlgButton( GetHwnd(), IDC_BUTTON_WINSIZE, m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos );
 	// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 	::DlgItem_SetText( GetHwnd(), IDC_BUTTON_WINSIZE, 
 		m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□") );
 
-	/* ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない */
+	// ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない
 	if (m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList) {
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHECK_bFunclistSetFocusOnJump ), FALSE );
 	}else {
@@ -683,7 +683,7 @@ void CDlgFuncList::SetData()
 	}
 
 	//2002.02.08 hor
-	//空行をどう扱うかのチェックボックスはブックマーク一覧のときだけ表示する
+	// 空行をどう扱うかのチェックボックスはブックマーク一覧のときだけ表示する
 	if (OUTLINE_BOOKMARK == m_nListType) {
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHECK_bMarkUpBlankLineEnable ), TRUE );
 		if (!IsDocking()) {
@@ -728,8 +728,8 @@ void CDlgFuncList::SetData()
 }
 
 
-/* ダイアログデータの取得 */
-/* 0==条件未入力   0より大きい==正常   0より小さい==入力エラー */
+// ダイアログデータの取得
+// 0==条件未入力   0より大きい==正常   0より小さい==入力エラー
 int CDlgFuncList::GetData( void )
 {
 	m_cFuncInfo = NULL;
@@ -767,7 +767,7 @@ int CDlgFuncList::GetData( void )
 	return 1;
 }
 
-/* Java/C++メソッドツリーの最大ネスト深さ */
+// Java/C++メソッドツリーの最大ネスト深さ
 #define MAX_JAVA_TREE_NEST 16
 
 /*! ツリーコントロールの初期化：Javaメソッドツリー
@@ -826,11 +826,11 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		pWork = pcFuncInfo->m_cmemFuncName.GetStringPtr();
 		int m = 0;
 		int nClassNest = 0;
-		/* クラス名::メソッドの場合 */
+		// クラス名::メソッドの場合
 		if (( pPos = _tcsstr( pWork, _T("::") ) )
 			&& auto_strncmp( _T("operator "), pWork, 9) != 0
 		) {
-			/* インナークラスのネストレベルを調べる */
+			// インナークラスのネストレベルを調べる
 			int	k;
 			int	nWorkLen;
 			int	nCharChars;
@@ -884,7 +884,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 			//	関数先頭のセット(ツリー構築で使う)
 			pWork = pWork + m; // 2 == lstrlen( "::" );
 
-			/* クラス名のアイテムが登録されているか */
+			// クラス名のアイテムが登録されているか
 			htiClass = TreeView_GetFirstVisible( hwndTree );
 			HTREEITEM htiParent = TVI_ROOT;
 			for (k = 0; k < nClassNest; ++k) {
@@ -923,7 +923,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 					}
 				}
 
-				/* クラス名のアイテムが登録されていないので登録 */
+				// クラス名のアイテムが登録されていないので登録
 				if (!htiClass) {
 					// 2002/10/28 frozen 上からここへ移動
 					TCHAR* pClassName = new TCHAR[ _tcslen( szClassArr[k] ) + 1 + m_pcFuncInfoArr->AppendTextLenMax() ]; // 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）// 2011.09.25 syat プラグインによる拡張対応
@@ -1004,7 +1004,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 			_tcscat( pFuncName, to_tchar(m_pcFuncInfoArr->GetAppendText( pcFuncInfo->m_nInfo ).c_str()) );
 		}
 
-/* 該当クラス名のアイテムの子として、メソッドのアイテムを登録 */
+		// 該当クラス名のアイテムの子として、メソッドのアイテムを登録
 		tvis.hParent = htiClass;
 		tvis.hInsertAfter = TVI_LAST;
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -1013,22 +1013,22 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		htiItem = TreeView_InsertItem( hwndTree, &tvis );
 		delete [] pFuncName;
 
-		/* クリップボードにコピーするテキストを編集 */
+		// クリップボードにコピーするテキストを編集
 		WCHAR szText[2048];
 		auto_sprintf_s(
 			szText,
 			L"%ts(%d,%d): ",
-			m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
-			pcFuncInfo->m_nFuncLineCRLF,		/* 検出行番号 */
-			pcFuncInfo->m_nFuncColCRLF		/* 検出桁番号 */
+			m_pcFuncInfoArr->m_szFilePath.c_str(),	// 解析対象ファイル名
+			pcFuncInfo->m_nFuncLineCRLF,			// 検出行番号
+			pcFuncInfo->m_nFuncColCRLF				// 検出桁番号
 		);
-		m_cmemClipText.AppendString( szText ); /* クリップボードコピー用テキスト */
+		m_cmemClipText.AppendString( szText );		// クリップボードコピー用テキスト
 		// "%ts%ls\r\n"
 		m_cmemClipText.AppendNativeDataT(pcFuncInfo->m_cmemFuncName);
 		m_cmemClipText.AppendString(FL_OBJ_DECLARE == pcFuncInfo->m_nInfo ? m_pcFuncInfoArr->GetAppendText( FL_OBJ_DECLARE ).c_str() : L"" ); 	//	Jan. 04, 2001 genta C++で使用
 		m_cmemClipText.AppendString(L"\r\n");
 
-		/* 現在カーソル位置のメソッドかどうか調べる */
+		// 現在カーソル位置のメソッドかどうか調べる
 		if (!bSelected) {
 			if (pcFuncInfo->m_nFuncLineLAYOUT < nFuncLineTop
 				|| (pcFuncInfo->m_nFuncLineLAYOUT == nFuncLineTop && pcFuncInfo->m_nFuncColLAYOUT <= nFuncColTop)
@@ -1053,7 +1053,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		//	Jan. 04, 2001 genta
 		//	deleteはその都度行うのでここでは不要
 	}
-	/* ソート、ノードの展開をする */
+	// ソート、ノードの展開をする
 //	TreeView_SortChildren( hwndTree, TVI_ROOT, 0 );
 	htiClass = TreeView_GetFirstVisible( hwndTree );
 	while (htiClass) {
@@ -1061,7 +1061,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		TreeView_Expand( hwndTree, htiClass, TVE_EXPAND );
 		htiClass = TreeView_GetNextSibling( hwndTree, htiClass );
 	}
-	/* 現在カーソル位置のメソッドを選択状態にする */
+	// 現在カーソル位置のメソッドを選択状態にする
 	if (bSelected) {
 		TreeView_SelectItem( hwndTree, htiSelected );
 	}else {
@@ -1143,11 +1143,11 @@ void CDlgFuncList::SetListVB (void)
 
 	TCHAR szText[2048];
 	for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
-		/* 現在の解析結果要素 */
+		// 現在の解析結果要素
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt( i );
 
 		//	From Here Apr. 23, 2005 genta 行番号を左端へ
-		/* 行番号の表示 false=折り返し単位／true=改行単位 */
+		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (m_bLineNumIsCRLF) {
 			auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncLineCRLF );
 		}else {
@@ -1161,7 +1161,7 @@ void CDlgFuncList::SetListVB (void)
 		ListView_InsertItem( hwndList, &item);
 
 		// 2010.03.17 syat 桁追加
-		/* 行番号の表示 false=折り返し単位／true=改行単位 */
+		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (m_bLineNumIsCRLF) {
 			auto_sprintf_s( szText, _T("%d"), pcFuncInfo->m_nFuncColCRLF );
 		}else {
@@ -1178,7 +1178,7 @@ void CDlgFuncList::SetListVB (void)
 		item.iItem = i;
 		item.iSubItem = FL_COL_NAME;
 		ListView_SetItem( hwndList, &item);
-		//	To Here Apr. 23, 2005 genta 行番号を左端へ
+		// To Here Apr. 23, 2005 genta 行番号を左端へ
 
 		item.mask = LVIF_TEXT;
 
@@ -1266,16 +1266,16 @@ void CDlgFuncList::SetListVB (void)
 		item.iSubItem = FL_COL_REMARK;
 		ListView_SetItem( hwndList, &item);
 
-		/* クリップボードにコピーするテキストを編集 */
+		// クリップボードにコピーするテキストを編集
 		if (item.pszText[0] != _T('\0')) {
 			// 検出結果の種類(関数,,,)があるとき
 			// 2006.12.12 Moca szText を自分自身にコピーしていたバグを修正
 			auto_sprintf_s(
 				szText,
 				_T("%ts(%d,%d): "),
-				m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
-				pcFuncInfo->m_nFuncLineCRLF,		/* 検出行番号 */
-				pcFuncInfo->m_nFuncColCRLF		/* 検出桁番号 */
+				m_pcFuncInfoArr->m_szFilePath.c_str(),	// 解析対象ファイル名
+				pcFuncInfo->m_nFuncLineCRLF,			// 検出行番号
+				pcFuncInfo->m_nFuncColCRLF				// 検出桁番号
 			);
 			m_cmemClipText.AppendStringT(szText);
 			// "%ts(%ts)\r\n"
@@ -1288,9 +1288,9 @@ void CDlgFuncList::SetListVB (void)
 			auto_sprintf_s(
 				szText,
 				_T("%ts(%d,%d): "),
-				m_pcFuncInfoArr->m_szFilePath.c_str(),		/* 解析対象ファイル名 */
-				pcFuncInfo->m_nFuncLineCRLF,		/* 検出行番号 */
-				pcFuncInfo->m_nFuncColCRLF		/* 検出桁番号 */
+				m_pcFuncInfoArr->m_szFilePath.c_str(),	// 解析対象ファイル名
+				pcFuncInfo->m_nFuncLineCRLF,			// 検出行番号
+				pcFuncInfo->m_nFuncColCRLF				// 検出桁番号
 			);
 			m_cmemClipText.AppendStringT(szText);
 			// "%ts\r\n"
@@ -1301,7 +1301,7 @@ void CDlgFuncList::SetListVB (void)
 
 	//2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
 	::ShowWindow( hwndList, SW_SHOW );
-	/* 列の幅をデータに合わせて調整 */
+	// 列の幅をデータに合わせて調整
 	ListView_SetColumnWidth( hwndList, FL_COL_ROW, LVSCW_AUTOSIZE );
 	ListView_SetColumnWidth( hwndList, FL_COL_COL, LVSCW_AUTOSIZE );
 	ListView_SetColumnWidth( hwndList, FL_COL_NAME, LVSCW_AUTOSIZE );
@@ -1378,8 +1378,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 		cTVInsertStruct.item.pszText = pcFuncInfo->m_cmemFuncName.GetStringPtr();
 		cTVInsertStruct.item.lParam = i;	//	あとでこの数値（＝m_pcFuncInfoArrの何番目のアイテムか）を見て、目的地にジャンプするぜ!!。
 
-		/*	親子関係をチェック
-		*/
+		// 親子関係をチェック
 		if (nStackPointer != pcFuncInfo->m_nDepth) {
 			//	レベルが変わりました!!
 			//	※が、2段階深くなることは考慮していないので注意。
@@ -1402,8 +1401,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 		hItem = TreeView_InsertItem( hwndTree, &cTVInsertStruct );
 		phParentStack[ nStackPointer+1 ] = hItem;
 
-		/*	pcFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
-		*/
+		// pcFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
 		if (!bSelected) {
 			if (pcFuncInfo->m_nFuncLineLAYOUT < nFuncLineTop
 				|| (pcFuncInfo->m_nFuncLineLAYOUT == nFuncLineTop && pcFuncInfo->m_nFuncColLAYOUT <= nFuncColTop)
@@ -1424,18 +1422,18 @@ void CDlgFuncList::SetTree(bool tagjump)
 			bSelected = true;
 		}
 
-		/* クリップボードコピー用テキストを作成する */
-		//	2003.06.22 Moca dummy要素はツリーに入れるがTAGJUMPには加えない
+		// クリップボードコピー用テキストを作成する
+		// 2003.06.22 Moca dummy要素はツリーに入れるがTAGJUMPには加えない
 		if (pcFuncInfo->IsAddClipText()) {
 
 			if (tagjump) {
-				//	2007.03.04 genta タグジャンプできる形式で書き込む
+				// 2007.03.04 genta タグジャンプできる形式で書き込む
 				m_cmemClipText.AppendStringT( m_pcFuncInfoArr->m_szFilePath.c_str() );
 				
 				WCHAR linenum[32];
 				auto_sprintf_s( linenum, L"(%d,%d): ",
-					pcFuncInfo->m_nFuncLineCRLF,				/* 検出行番号 */
-					pcFuncInfo->m_nFuncColCRLF					/* 検出桁番号 */
+					pcFuncInfo->m_nFuncLineCRLF,				// 検出行番号
+					pcFuncInfo->m_nFuncColCRLF					// 検出桁番号
 				);
 				m_cmemClipText.AppendString( linenum );
 			}
@@ -1455,7 +1453,7 @@ end_of_func:;
 	::EnableWindow( ::GetDlgItem( GetHwnd() , IDC_BUTTON_COPY ), TRUE );
 
 	if (hItemSelected) {
-		/* 現在カーソル位置のメソッドを選択状態にする */
+		// 現在カーソル位置のメソッドを選択状態にする
 		TreeView_SelectItem( hwndTree, hItemSelected );
 	}else if (hItemSelectedTop) {
 		TreeView_SelectItem( hwndTree, hItemSelectedTop );
@@ -1519,14 +1517,14 @@ BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	col.iSubItem = FL_COL_REMARK;
 	ListView_InsertColumn( hwndList, FL_COL_REMARK, &col);
 
-	/* アウトライン位置とサイズを初期化する */ // 20060201 aroka
+	// アウトライン位置とサイズを初期化する // 20060201 aroka
 	CEditView* pcEditView=(CEditView*)m_lParam;
 	if (pcEditView != NULL) {
 		if (!IsDocking() && m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos) {
 			WINDOWPLACEMENT cWindowPlacement;
 			cWindowPlacement.length = sizeof( cWindowPlacement );
 			if (::GetWindowPlacement( pcEditView->m_pcEditWnd->GetHwnd(), &cWindowPlacement )) {
-				/* ウィンドウ位置・サイズを-1以外の値にしておくと、CDialogで使用される． */
+				// ウィンドウ位置・サイズを-1以外の値にしておくと、CDialogで使用される．
 				m_xPos = m_pShareData->m_Common.m_sOutline.m_xOutlineWindowPos + cWindowPlacement.rcNormalPosition.left;
 				m_yPos = m_pShareData->m_Common.m_sOutline.m_yOutlineWindowPos + cWindowPlacement.rcNormalPosition.top;
 				m_nWidth =  m_pShareData->m_Common.m_sOutline.m_widthOutlineWindow;
@@ -1586,7 +1584,7 @@ BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	}
 
 	if (!IsDocking()) {
-		/* 基底クラスメンバ */
+		// 基底クラスメンバ
 		CreateSizeBox();
 
 		LONG_PTR lStyle = ::GetWindowLongPtr( GetHwnd(), GWL_STYLE );
@@ -1596,7 +1594,7 @@ BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 	m_hwndToolTip = NULL;
 	if (IsDocking()) {
-		//ツールチップを作成する。（「閉じる」などのボタン用）
+		// ツールチップを作成する。（「閉じる」などのボタン用）
 		m_hwndToolTip = ::CreateWindowEx(
 			0,
 			TOOLTIPS_CLASS,
@@ -1684,14 +1682,14 @@ BOOL CDlgFuncList::OnBnClicked( int wID )
 		DoMenu( ptMenu, GetHwnd() );
 		return TRUE;
 	case IDC_BUTTON_HELP:
-		/* 「アウトライン解析」のヘルプ */
+		//「アウトライン解析」のヘルプ
 		//Apr. 5, 2001 JEPRO 修正漏れを追加 (Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした)
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_OUTLINE) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDOK:
 		return OnJump();
 	case IDCANCEL:
-		if (m_bModal) {		/* モーダル ダイアログか */
+		if (m_bModal) {		// モーダル ダイアログか
 			::EndDialog( GetHwnd(), 0 );
 		}else {
 			if (IsDocking()) {
@@ -1740,7 +1738,7 @@ BOOL CDlgFuncList::OnBnClicked( int wID )
 		}
 		return TRUE;
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 

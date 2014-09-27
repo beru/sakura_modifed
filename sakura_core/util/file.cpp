@@ -296,8 +296,8 @@ void AddLastYenFromDirectoryPath( WCHAR* pszFolder )
 }
 
 
-/* ファイルのフルパスを、フォルダとファイル名に分割 */
-/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
+// ファイルのフルパスを、フォルダとファイル名に分割
+// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
 void SplitPath_FolderAndFile( const TCHAR* pszFilePath, TCHAR* pszFolder, TCHAR* pszFile )
 {
 	TCHAR	szDrive[_MAX_DRIVE];

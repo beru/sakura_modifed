@@ -35,7 +35,7 @@ CMRUFile::CMRUFile()
 	m_pShareData = &GetDllShareData();
 }
 
-/*	デストラクタ	*/
+// デストラクタ
 CMRUFile::~CMRUFile()
 {
 	m_cRecentFile.Terminate();
@@ -80,7 +80,7 @@ HMENU CMRUFile::CreateMenu( HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer ) const
 			break;
 		}
 		
-		/* MRUリストの中にある開かれていないファイル */
+		// MRUリストの中にある開かれていないファイル
 
 		const EditInfo	*p = m_cRecentFile.GetItem( i );
 		bool bFavorite = m_cRecentFile.IsFavorite( i );
@@ -119,7 +119,7 @@ std::vector<LPCTSTR> CMRUFile::GetPathList() const
 	return ret;
 }
 
-/*! アイテム数を返す */
+//! アイテム数を返す
 int CMRUFile::Length(void) const
 {
 	return m_cRecentFile.GetItemCount();
@@ -233,4 +233,4 @@ void CMRUFile::Add( EditInfo* pEditInfo )
 	::SHAddToRecentDocs( SHARD_PATH, to_wchar(pEditInfo->m_szPath) );
 }
 
-/*EOF*/
+// EOF

@@ -25,10 +25,12 @@
 
 #include "CConvert.h"
 
-class CConvert_SpaceToTab : public CConvert{
+class CConvert_SpaceToTab : public CConvert {
 public:
 	CConvert_SpaceToTab(int nTabWidth, int nStartColumn)
-	: m_nTabWidth(nTabWidth), m_nStartColumn(nStartColumn)
+		:
+		m_nTabWidth(nTabWidth),
+		m_nStartColumn(nStartColumn)
 	{
 	}
 

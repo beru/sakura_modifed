@@ -51,7 +51,7 @@ void CViewCommander::Command_INDENT( wchar_t wcChar, EIndentType eIndent )
 
 #if 1	// ↓ここを残せば選択幅ゼロを最大にする（従来互換挙動）。無くても Command_INDENT() ver0 が適切に動作するように変更されたので、削除しても特に不都合にはならない。
 	// From Here 2001.12.03 hor
-	/* SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする */
+	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	if (INDENT_NONE != eIndent && m_pCommanderView->GetSelectionInfo().IsBoxSelecting() && GetSelect().GetFrom().x==GetSelect().GetTo().x) {
 		GetSelect().SetToX( GetDocument()->m_cLayoutMgr.GetMaxLineKetas() );
@@ -127,7 +127,7 @@ void CViewCommander::Command_INDENT( const wchar_t* const pData, const CLogicInt
 // 2012.10.31 Moca 上書きモードのときの選択範囲削除をやめる
 #if 0
 		// From Here 2001.12.03 hor
-		/* 上書モードのときは選択範囲削除 */
+		// 上書モードのときは選択範囲削除
 		if (!m_pCommanderView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			sSelectOld = GetSelect();
 			m_pCommanderView->DeleteData( false );
@@ -584,7 +584,7 @@ void CViewCommander::Command_TRIM(
 
 
 //	from CViewCommander_New.cpp
-/*!	物理行のソートに使う構造体*/
+//!	物理行のソートに使う構造体
 struct SORTDATA {
 	const CNativeW* pCmemLine;
 	CStringRef sKey;
@@ -597,10 +597,10 @@ inline int CNativeW_comp(const CNativeW& lhs, const CNativeW& rhs )
 			t_min(lhs.GetStringLength() + 1, rhs.GetStringLength() + 1));
 }
 
-/*!	物理行のソートに使う関数(昇順) */
+//!	物理行のソートに使う関数(昇順)
 bool SortByLineAsc (SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) < 0;}
 
-/*!	物理行のソートに使う関数(降順) */
+//!	物理行のソートに使う関数(降順)
 bool SortByLineDesc(SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) > 0;}
 
 inline int CStringRef_comp(const CStringRef& c1, const CStringRef& c2)
@@ -612,10 +612,10 @@ inline int CStringRef_comp(const CStringRef& c1, const CStringRef& c2)
 	return ret;
 }
 
-/*!	物理行のソートに使う関数(昇順) */
+//!	物理行のソートに使う関数(昇順)
 bool SortByKeyAsc(SORTDATA* pst1, SORTDATA* pst2)  {return CStringRef_comp(pst1->sKey, pst2->sKey) < 0 ;}
 
-/*!	物理行のソートに使う関数(降順) */
+//!	物理行のソートに使う関数(降順)
 bool SortByKeyDesc(SORTDATA* pst1, SORTDATA* pst2) {return CStringRef_comp(pst1->sKey, pst2->sKey) > 0 ;}
 
 /*!	@brief 物理行のソート
@@ -642,7 +642,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 	CLogicInt		nLineLen;
 	std::vector<SORTDATA*> sta;
 
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {			/* テキストが選択されているか */
+	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {			// テキストが選択されているか
 		return;
 	}
 
@@ -789,7 +789,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 		GetCaret().MoveCursor( m_pCommanderView->GetSelectionInfo().m_sSelect.GetTo(), true );
 	}
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
 				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置

@@ -138,7 +138,7 @@ void CTextOutputStream::WriteString(
 			// \nの前まで(p～lf)出力
 			CNativeW cSrc(p,lf-p);
 			CMemory cDst;
-			m_pcCodeBase->UnicodeToCode(cSrc,&cDst); //コード変換
+			m_pcCodeBase->UnicodeToCode(cSrc,&cDst); // コード変換
 			fwrite(cDst.GetRawPtr(),1,cDst.GetRawLength(),GetFp());
 
 			// \r\nを出力
@@ -152,7 +152,7 @@ void CTextOutputStream::WriteString(
 			// 残りぜんぶ出力
 			CNativeW cSrc(p,pEnd-p);
 			CMemory cDst;
-			m_pcCodeBase->UnicodeToCode(cSrc,&cDst); //コード変換
+			m_pcCodeBase->UnicodeToCode(cSrc,&cDst); // コード変換
 			fwrite(cDst.GetRawPtr(),1,cDst.GetRawLength(),GetFp());
 			break;
 		}

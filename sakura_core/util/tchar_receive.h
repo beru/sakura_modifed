@@ -48,7 +48,7 @@
 							サイズ制限の無い動的バッファを使うように変更。（負荷はどのみち変換のほうにがかかる）
 */
 template <class RECEIVE_CHAR_TYPE>
-class TcharReceiver{
+class TcharReceiver {
 public:
 	TcharReceiver(RECEIVE_CHAR_TYPE* pReceiver, size_t nReceiverCount)	//!< 受け取りバッファを指定。
 	: m_pReceiver(pReceiver), m_nReceiverCount(nReceiverCount), m_pBuff(NULL) { }

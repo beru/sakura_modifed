@@ -39,11 +39,13 @@ public:
 	CGrepEnumFolders() {
 	}
 
-	virtual ~CGrepEnumFolders() {
+	virtual
+	~CGrepEnumFolders() {
 	}
 
-	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
-		if ( ( w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+	virtual
+	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
+		if ( (w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			 && ( 0 != _tcscmp( w32fd.cFileName, _T(".") ) )
 			 && ( 0 != _tcscmp( w32fd.cFileName, _T("..") ) )
 		) {

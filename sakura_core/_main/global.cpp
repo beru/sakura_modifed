@@ -19,17 +19,17 @@
 #include "window/CEditWnd.h"
 #include "CNormalProcess.h"
 
-//2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
+// 2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
 CEditWnd* g_pcEditWnd = NULL;
 
 
-/*! 選択領域描画用パラメータ */
+//! 選択領域描画用パラメータ
 const COLORREF	SELECTEDAREA_RGB = RGB( 255, 255, 255 );
 const int		SELECTEDAREA_ROP2 = R2_XORPEN;
-
 
 
 HINSTANCE G_AppInstance()
 {
 	return CProcess::getInstance()->GetProcessInstance();
 }
+

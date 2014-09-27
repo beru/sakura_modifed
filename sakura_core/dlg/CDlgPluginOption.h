@@ -63,7 +63,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, CPropPlugin*, int );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, CPropPlugin*, int );	// モーダルダイアログの表示
 
 protected:
 	/*
@@ -77,8 +77,8 @@ protected:
 	BOOL	OnActivate( WPARAM wParam, LPARAM lParam );
 	LPVOID	GetHelpIdTable( void );
 
-	void	SetData( void );	/* ダイアログデータの設定 */
-	int		GetData( void );	/* ダイアログデータの取得 */
+	void	SetData( void );	// ダイアログデータの設定
+	int		GetData( void );	// ダイアログデータの取得
 
 	void	ChangeListPosition( void );					// 編集領域をリストビューに合せて切替える
 	void	MoveFocusToEdit( void );					// 編集領域にフォーカスを移す

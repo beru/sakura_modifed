@@ -39,8 +39,8 @@ enum ETabArrow {
 	TABARROW_LONG,			//!< 長い矢印
 };
 
-/* アウトライン解析の種類 */
-enum EOutlineType{
+// アウトライン解析の種類
+enum EOutlineType {
 	OUTLINE_C,
 	OUTLINE_CPP,
 	OUTLINE_PLSQL,
@@ -68,13 +68,13 @@ enum EOutlineType{
 	OUTLINE_LIST = 300,		// 汎用リスト 2010.03.28 syat
 };
 
-/* スマートインデント種別 */
+// スマートインデント種別
 enum ESmartIndentType {
 	SMARTINDENT_NONE,
 	SMARTINDENT_CPP
 };
 
-enum EHereDocType{
+enum EHereDocType {
 	HEREDOC_PHP,
 	HEREDOC_RUBY,
 	HEREDOC_PERL
@@ -231,7 +231,8 @@ struct STypeConfig {
 	INT					m_nPointSize;
 
 	STypeConfig()
-	: m_nMaxLineKetas(10) //	画面折り返し幅がTAB幅以下にならないことを初期値でも保証する	//	2004.04.03 Moca
+		:
+		m_nMaxLineKetas(10) //	画面折り返し幅がTAB幅以下にならないことを初期値でも保証する	//	2004.04.03 Moca
 	{
 	}
 
@@ -252,7 +253,7 @@ struct STypeConfigMini
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //!ドキュメント種類。共有データ内 STypeConfig へのアクセサも兼ねる。
 //2007.12.13 kobake 作成
-class CTypeConfig{
+class CTypeConfig {
 public:
 	CTypeConfig()
 	{
@@ -264,6 +265,7 @@ public:
 		m_nType = 0;
 #endif
 	}
+	
 	explicit CTypeConfig(int n)
 	{
 		m_nType = n;
@@ -284,9 +286,9 @@ private:
 //                        タイプ設定                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CType{
+class CType {
 public:
-	virtual ~CType(){ }
+	virtual ~CType() { }
 	void InitTypeConfig(int nIdx, STypeConfig&);
 protected:
 	virtual void InitTypeConfigImp(STypeConfig* pType) = 0;
@@ -324,7 +326,8 @@ GEN_CTYPE(CType_Other)
 /*!
 	スペースの判定
 */
-inline bool C_IsSpace( wchar_t c )
+inline
+bool C_IsSpace( wchar_t c )
 {
 	return (
 		L'\t' == c ||

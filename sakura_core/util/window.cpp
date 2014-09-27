@@ -77,8 +77,8 @@ HWND MyGetAncestor( HWND hWnd, UINT gaFlags )
 */
 BOOL BlockingHook( HWND hwndDlgCancel )
 {
-	MSG		msg;
-	BOOL	ret;
+	MSG msg;
+	BOOL ret;
 	// Jun. 04, 2003 genta メッセージをあるだけ処理するように
 	while (( ret = (BOOL)::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE )) != 0) {
 		if (msg.message == WM_QUIT) {
@@ -123,8 +123,7 @@ void ActivateFrameWindow( HWND hwnd )
 	}
 
 	// 対象がdisableのときは最近のポップアップをフォアグラウンド化する
-	HWND hwndActivate;
-	hwndActivate = ::IsWindowEnabled( hwnd )? hwnd: ::GetLastActivePopup( hwnd );
+	HWND hwndActivate = ::IsWindowEnabled( hwnd )? hwnd: ::GetLastActivePopup( hwnd );
 	if (::IsIconic( hwnd )) {
 		::ShowWindow( hwnd, SW_RESTORE );
 	}else if (::IsZoomed( hwnd )) {

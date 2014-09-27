@@ -690,7 +690,7 @@ BOOL CViewCommander::Command_INSFILE( LPCWSTR filename, ECodeType nCharCode, int
 	// 2007.09.08 genta CEditDoc::FileLoad()にならって砂時計カーソル
 	CWaitCursor cWaitCursor( m_pCommanderView->GetHwnd() );
 
-	// 範囲選択中なら挿入後も選択状態にするため	/* 2007.04.29 maru */
+	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
 	BOOL	bBeforeTextSelected = m_pCommanderView->GetSelectionInfo().IsTextSelected();
 	CLayoutPoint ptFrom;
 	if (bBeforeTextSelected) {

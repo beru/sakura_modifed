@@ -70,7 +70,7 @@ public:
 	const CMemory& operator=( const CMemory& );
 
 	// ”äŠr
-	static int IsEqual( CMemory&, CMemory& );	/* “™‚µ‚¢“à—e‚© */
+	static int IsEqual( CMemory&, CMemory& );	// “™‚µ‚¢“à—e‚©
 
 	// •ÏŠ·ŠÖ”
 	static void SwapHLByte( char*, const int ); // ‰º‹LŠÖ”‚ÌstaticŠÖ””Å

@@ -63,7 +63,7 @@ CShareData::CShareData()
 CShareData::~CShareData()
 {
 	if (m_pShareData) {
-		/* プロセスのアドレス空間から､ すでにマップされているファイル ビューをアンマップします */
+		// プロセスのアドレス空間から､ すでにマップされているファイル ビューをアンマップします
 		SetDllShareData( NULL );
 		::UnmapViewOfFile( m_pShareData );
 		m_pShareData = NULL;
@@ -99,7 +99,7 @@ bool CShareData::InitShareData()
 
 	m_hwndTraceOutSource = NULL;	// 2006.06.26 ryoji
 
-	/* ファイルマッピングオブジェクト */
+	// ファイルマッピングオブジェクト
 	m_hFileMap = ::CreateFileMapping(
 		INVALID_HANDLE_VALUE,	//	Sep. 6, 2003 wmlhq
 		NULL,
@@ -119,8 +119,8 @@ bool CShareData::InitShareData()
 	}
 
 	if (GetLastError() != ERROR_ALREADY_EXISTS) {
-		/* オブジェクトが存在していなかった場合 */
-		/* ファイルのビューを､ 呼び出し側プロセスのアドレス空間にマップします */
+		// オブジェクトが存在していなかった場合
+		// ファイルのビューを､ 呼び出し側プロセスのアドレス空間にマップします
 		m_pShareData = (DLLSHAREDATA*)::MapViewOfFile(
 			m_hFileMap,
 			FILE_MAP_ALL_ACCESS,
@@ -142,9 +142,9 @@ bool CShareData::InitShareData()
 		AddLastChar( szIniFolder, _MAX_PATH, _T('\\') );
 
 		m_pShareData->m_vStructureVersion = uShareDataVersion;
-		m_pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0] = 0;	/* キーワードマクロのファイル名 */ //@@@ 2002.1.24 YAZAKI
-		m_pShareData->m_sFlags.m_bRecordingKeyMacro = FALSE;		/* キーボードマクロの記録中 */
-		m_pShareData->m_sFlags.m_hwndRecordingKeyMacro = NULL;	/* キーボードマクロを記録中のウィンドウ */
+		m_pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0] = 0;	// キーワードマクロのファイル名 //@@@ 2002.1.24 YAZAKI
+		m_pShareData->m_sFlags.m_bRecordingKeyMacro = FALSE;		// キーボードマクロの記録中
+		m_pShareData->m_sFlags.m_hwndRecordingKeyMacro = NULL;		// キーボードマクロを記録中のウィンドウ
 
 		// 2004.05.13 Moca リソースから製品バージョンの取得
 		GetAppVersionInfo( NULL, VS_VERSION_INFO,
@@ -152,18 +152,18 @@ bool CShareData::InitShareData()
 		m_pShareData->m_sHandles.m_hwndTray = NULL;
 		m_pShareData->m_sHandles.m_hAccel = NULL;
 		m_pShareData->m_sHandles.m_hwndDebug = NULL;
-		m_pShareData->m_sNodes.m_nSequences = 0;					/* ウィンドウ連番 */
+		m_pShareData->m_sNodes.m_nSequences = 0;					// ウィンドウ連番
 		m_pShareData->m_sNodes.m_nNonameSequences = 0;
-		m_pShareData->m_sNodes.m_nGroupSequences = 0;			/* タブグループ連番 */	// 2007.06.20 ryoji
+		m_pShareData->m_sNodes.m_nGroupSequences = 0;			// タブグループ連番	// 2007.06.20 ryoji
 		m_pShareData->m_sNodes.m_nEditArrNum = 0;
 
 		m_pShareData->m_sFlags.m_bEditWndChanging = FALSE;	// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 
-		m_pShareData->m_Common.m_sGeneral.m_nMRUArrNum_MAX = 15;	/* ファイルの履歴MAX */	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+		m_pShareData->m_Common.m_sGeneral.m_nMRUArrNum_MAX = 15;	// ファイルの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 		CMRUFile cMRU;
 		cMRU.ClearAll();
-		m_pShareData->m_Common.m_sGeneral.m_nOPENFOLDERArrNum_MAX = 15;	/* フォルダの履歴MAX */	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+		m_pShareData->m_Common.m_sGeneral.m_nOPENFOLDERArrNum_MAX = 15;	// フォルダの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、CMRUFolderにすべて依頼する
 		CMRUFolder cMRUFolder;
 		cMRUFolder.ClearAll();
@@ -175,8 +175,8 @@ bool CShareData::InitShareData()
 		m_pShareData->m_sSearchKeywords.m_aGrepFiles.push_back(_T("*.*"));
 		m_pShareData->m_sSearchKeywords.m_aGrepFolders.clear();
 
-		_tcscpy( m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER, szIniFolder );	/* マクロ用フォルダ */
-		_tcscpy( m_pShareData->m_sHistory.m_szIMPORTFOLDER, szIniFolder );	/* 設定インポート用フォルダ */
+		_tcscpy( m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER, szIniFolder );	// マクロ用フォルダ
+		_tcscpy( m_pShareData->m_sHistory.m_szIMPORTFOLDER, szIniFolder );	// 設定インポート用フォルダ
 
 		auto& csFileName = m_pShareData->m_Common.m_sFileName;
 		for (int i = 0; i < MAX_TRANSFORM_FILENAME; ++i) {
@@ -214,7 +214,7 @@ bool CShareData::InitShareData()
 		}
 		for (int i = 1; i < MAX_PRINTSETTINGARR; ++i) {
 			m_pShareData->m_PrintSettingArr[i] = m_pShareData->m_PrintSettingArr[0];
-			auto_sprintf_s( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1 );	/* 印刷設定の名前 */
+			auto_sprintf_s( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1 );	// 印刷設定の名前
 		}
 
 		//	Jan. 30, 2005 genta 関数として独立
@@ -225,7 +225,7 @@ bool CShareData::InitShareData()
 
 //	From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
 //	MS ゴシック標準スタイル10ptに設定
-//		/* LOGFONTの初期化 */
+//		// LOGFONTの初期化
 		LOGFONT lf;
 		memset_raw( &lf, 0, sizeof( lf ) );
 		lf.lfHeight			= DpiPointsToPixels(-10);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
@@ -263,95 +263,95 @@ bool CShareData::InitShareData()
 
 //	To Here Sept. 19,2000
 
-		m_pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH = TRUE;				/* 現在のフォントは固定幅フォントである */
+		m_pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH = TRUE;				// 現在のフォントは固定幅フォントである
 
-//		m_pShareData->m_Common.m_bUseCaretKeyWord = FALSE;		/* キャレット位置の単語を辞書検索-機能OFF */	// 2006.03.24 fon sakura起動ごとFALSEとし、初期化しない
+//		m_pShareData->m_Common.m_bUseCaretKeyWord = FALSE;		// キャレット位置の単語を辞書検索-機能OFF	// 2006.03.24 fon sakura起動ごとFALSEとし、初期化しない
 
 
-		/* バックアップ */
+		// バックアップ
 		CommonSetting_Backup& sBackup = m_pShareData->m_Common.m_sBackup;
-		sBackup.m_bBackUp = false;										/* バックアップの作成 */
-		sBackup.m_bBackUpDialog = true;									/* バックアップの作成前に確認 */
-		sBackup.m_bBackUpFolder = false;								/* 指定フォルダにバックアップを作成する */
-		sBackup.m_szBackUpFolder[0] = L'\0';							/* バックアップを作成するフォルダ */
-		sBackup.m_nBackUpType = 2;										/* バックアップファイル名のタイプ 1=(.bak) 2=*_日付.* */
-		sBackup.m_nBackUpType_Opt1 = BKUP_YEAR | BKUP_MONTH | BKUP_DAY;	/* バックアップファイル名：日付 */
-		sBackup.m_nBackUpType_Opt2 = ('b' << 16 ) + 10;					/* バックアップファイル名：連番の数と先頭文字 */
-		sBackup.m_nBackUpType_Opt3 = 5;									/* バックアップファイル名：Option3 */
-		sBackup.m_nBackUpType_Opt4 = 0;									/* バックアップファイル名：Option4 */
-		sBackup.m_nBackUpType_Opt5 = 0;									/* バックアップファイル名：Option5 */
-		sBackup.m_nBackUpType_Opt6 = 0;									/* バックアップファイル名：Option6 */
-		sBackup.m_bBackUpDustBox = false;								/* バックアップファイルをごみ箱に放り込む */	//@@@ 2001.12.11 add MIK
-		sBackup.m_bBackUpPathAdvanced = false;							/* 20051107 aroka バックアップ先フォルダを詳細設定する */
-		sBackup.m_szBackUpPathAdvanced[0] = _T('\0');					/* 20051107 aroka バックアップを作成するフォルダの詳細設定 */
+		sBackup.m_bBackUp = false;										// バックアップの作成
+		sBackup.m_bBackUpDialog = true;									// バックアップの作成前に確認
+		sBackup.m_bBackUpFolder = false;								// 指定フォルダにバックアップを作成する
+		sBackup.m_szBackUpFolder[0] = L'\0';							// バックアップを作成するフォルダ
+		sBackup.m_nBackUpType = 2;										// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
+		sBackup.m_nBackUpType_Opt1 = BKUP_YEAR | BKUP_MONTH | BKUP_DAY;	// バックアップファイル名：日付
+		sBackup.m_nBackUpType_Opt2 = ('b' << 16 ) + 10;					// バックアップファイル名：連番の数と先頭文字
+		sBackup.m_nBackUpType_Opt3 = 5;									// バックアップファイル名：Option3
+		sBackup.m_nBackUpType_Opt4 = 0;									// バックアップファイル名：Option4
+		sBackup.m_nBackUpType_Opt5 = 0;									// バックアップファイル名：Option5
+		sBackup.m_nBackUpType_Opt6 = 0;									// バックアップファイル名：Option6
+		sBackup.m_bBackUpDustBox = false;								// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
+		sBackup.m_bBackUpPathAdvanced = false;							// 20051107 aroka バックアップ先フォルダを詳細設定する
+		sBackup.m_szBackUpPathAdvanced[0] = _T('\0');					// 20051107 aroka バックアップを作成するフォルダの詳細設定
 
-		m_pShareData->m_Common.m_sGeneral.m_nCaretType = 0;					/* カーソルのタイプ 0=win 1=dos */
-		m_pShareData->m_Common.m_sGeneral.m_bIsINSMode = true;				/* 挿入／上書きモード */
-		m_pShareData->m_Common.m_sGeneral.m_bIsFreeCursorMode = false;		/* フリーカーソルモードか */	//Oct. 29, 2000 JEPRO 「なし」に変更
+		m_pShareData->m_Common.m_sGeneral.m_nCaretType = 0;					// カーソルのタイプ 0=win 1=dos
+		m_pShareData->m_Common.m_sGeneral.m_bIsINSMode = true;				// 挿入／上書きモード
+		m_pShareData->m_Common.m_sGeneral.m_bIsFreeCursorMode = false;		// フリーカーソルモードか	//Oct. 29, 2000 JEPRO 「なし」に変更
 
-		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord = FALSE;	/* 単語単位で移動するときに、単語の両端で止まるか */
-		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph = FALSE;	/* 単語単位で移動するときに、単語の両端で止まるか */
+		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord = FALSE;	// 単語単位で移動するときに、単語の両端で止まるか
+		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph = FALSE;	// 単語単位で移動するときに、単語の両端で止まるか
 
 		m_pShareData->m_Common.m_sSearch.m_sSearchOption.Reset();			// 検索オプション
-		m_pShareData->m_Common.m_sSearch.m_bConsecutiveAll = 0;			// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+		m_pShareData->m_Common.m_sSearch.m_bConsecutiveAll = 0;				//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 		m_pShareData->m_Common.m_sSearch.m_bSelectedArea = FALSE;			// 選択範囲内置換
 		m_pShareData->m_Common.m_sHelper.m_szExtHelp[0] = L'\0';			// 外部ヘルプ１
 		m_pShareData->m_Common.m_sHelper.m_szExtHtmlHelp[0] = L'\0';		// 外部HTMLヘルプ
 		
-		m_pShareData->m_Common.m_sHelper.m_szMigemoDll[0] = L'\0';			/* migemo dll */
-		m_pShareData->m_Common.m_sHelper.m_szMigemoDict[0] = L'\0';		/* migemo dict */
+		m_pShareData->m_Common.m_sHelper.m_szMigemoDll[0] = L'\0';			// migemo dll
+		m_pShareData->m_Common.m_sHelper.m_szMigemoDict[0] = L'\0';			// migemo dict
 
-		m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = TRUE;		/* 検索／置換  見つからないときメッセージを表示 */
+		m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = TRUE;			// 検索／置換  見つからないときメッセージを表示
 
-		m_pShareData->m_Common.m_sGeneral.m_bCloseAllConfirm = FALSE;		/* [すべて閉じる]で他に編集用のウィンドウがあれば確認する */	// 2006.12.25 ryoji
-		m_pShareData->m_Common.m_sGeneral.m_bExitConfirm = FALSE;			/* 終了時の確認をする */
-		m_pShareData->m_Common.m_sGeneral.m_nRepeatedScrollLineNum = CLayoutInt(3);	/* キーリピート時のスクロール行数 */
-		m_pShareData->m_Common.m_sGeneral.m_nRepeatedScroll_Smooth = FALSE;/* キーリピート時のスクロールを滑らかにするか */
-		m_pShareData->m_Common.m_sGeneral.m_nPageScrollByWheel = 0;			/* キー/マウスボタン + ホイールスクロールでページスクロールする */	// 2009.01.17 nasukoji
-		m_pShareData->m_Common.m_sGeneral.m_nHorizontalScrollByWheel = 0;	/* キー/マウスボタン + ホイールスクロールで横スクロールする */		// 2009.01.17 nasukoji
+		m_pShareData->m_Common.m_sGeneral.m_bCloseAllConfirm = FALSE;		// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
+		m_pShareData->m_Common.m_sGeneral.m_bExitConfirm = FALSE;			// 終了時の確認をする
+		m_pShareData->m_Common.m_sGeneral.m_nRepeatedScrollLineNum = CLayoutInt(3);	// キーリピート時のスクロール行数
+		m_pShareData->m_Common.m_sGeneral.m_nRepeatedScroll_Smooth = FALSE;	// キーリピート時のスクロールを滑らかにするか
+		m_pShareData->m_Common.m_sGeneral.m_nPageScrollByWheel = 0;			// キー/マウスボタン + ホイールスクロールでページスクロールする		// 2009.01.17 nasukoji
+		m_pShareData->m_Common.m_sGeneral.m_nHorizontalScrollByWheel = 0;	// キー/マウスボタン + ホイールスクロールで横スクロールする			// 2009.01.17 nasukoji
 
-		m_pShareData->m_Common.m_sEdit.m_bAddCRLFWhenCopy = false;			/* 折り返し行に改行を付けてコピー */
-		m_pShareData->m_Common.m_sSearch.m_bGrepSubFolder = TRUE;			/* Grep: サブフォルダも検索 */
-		m_pShareData->m_Common.m_sSearch.m_bGrepOutputLine = TRUE;			/* Grep: 行を出力するか該当部分だけ出力するか */
-		m_pShareData->m_Common.m_sSearch.m_nGrepOutputStyle = 1;			/* Grep: 出力形式 */
+		m_pShareData->m_Common.m_sEdit.m_bAddCRLFWhenCopy = false;			// 折り返し行に改行を付けてコピー
+		m_pShareData->m_Common.m_sSearch.m_bGrepSubFolder = TRUE;			// Grep: サブフォルダも検索
+		m_pShareData->m_Common.m_sSearch.m_bGrepOutputLine = TRUE;			// Grep: 行を出力するか該当部分だけ出力するか
+		m_pShareData->m_Common.m_sSearch.m_nGrepOutputStyle = 1;			// Grep: 出力形式
 		m_pShareData->m_Common.m_sSearch.m_bGrepOutputFileOnly = false;
 		m_pShareData->m_Common.m_sSearch.m_bGrepOutputBaseFolder = false;
 		m_pShareData->m_Common.m_sSearch.m_bGrepSeparateFolder = false;
 
-		m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder=FALSE;		/* Grep: フォルダの初期値をカレントフォルダにする */
-		m_pShareData->m_Common.m_sSearch.m_nGrepCharSet = CODE_AUTODETECT;	/* Grep: 文字コードセット */
-		m_pShareData->m_Common.m_sSearch.m_bGrepRealTimeView = FALSE;		/* 2003.06.28 Moca Grep結果のリアルタイム表示 */
-		m_pShareData->m_Common.m_sSearch.m_bCaretTextForSearch = TRUE;		/* 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする */
+		m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder=FALSE;		// Grep: フォルダの初期値をカレントフォルダにする
+		m_pShareData->m_Common.m_sSearch.m_nGrepCharSet = CODE_AUTODETECT;	// Grep: 文字コードセット
+		m_pShareData->m_Common.m_sSearch.m_bGrepRealTimeView = FALSE;		// 2003.06.28 Moca Grep結果のリアルタイム表示
+		m_pShareData->m_Common.m_sSearch.m_bCaretTextForSearch = TRUE;		// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 		m_pShareData->m_Common.m_sSearch.m_bInheritKeyOtherView = true;
-		m_pShareData->m_Common.m_sSearch.m_szRegexpLib[0] =_T('\0');		/* 2007.08.12 genta 正規表現DLL */
-		m_pShareData->m_Common.m_sSearch.m_bGTJW_RETURN = TRUE;				/* エンターキーでタグジャンプ */
-		m_pShareData->m_Common.m_sSearch.m_bGTJW_LDBLCLK = TRUE;			/* ダブルクリックでタグジャンプ */
+		m_pShareData->m_Common.m_sSearch.m_szRegexpLib[0] =_T('\0');		// 2007.08.12 genta 正規表現DLL
+		m_pShareData->m_Common.m_sSearch.m_bGTJW_RETURN = TRUE;				// エンターキーでタグジャンプ
+		m_pShareData->m_Common.m_sSearch.m_bGTJW_LDBLCLK = TRUE;			// ダブルクリックでタグジャンプ
 
-//キーワード：ツールバー順序
+		// キーワード：ツールバー順序
 		//	Jan. 30, 2005 genta 関数として独立
 		InitToolButtons( m_pShareData );
 
-		m_pShareData->m_Common.m_sWindow.m_bDispTOOLBAR = TRUE;			/* 次回ウィンドウを開いたときツールバーを表示する */
-		m_pShareData->m_Common.m_sWindow.m_bDispSTATUSBAR = TRUE;			/* 次回ウィンドウを開いたときステータスバーを表示する */
-		m_pShareData->m_Common.m_sWindow.m_bDispFUNCKEYWND = FALSE;		/* 次回ウィンドウを開いたときファンクションキーを表示する */
-		m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place = 1;			/* ファンクションキー表示位置／0:上 1:下 */
-		m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_GroupNum = 4;			// 2002/11/04 Moca ファンクションキーのグループボタン数
+		m_pShareData->m_Common.m_sWindow.m_bDispTOOLBAR = TRUE;				// 次回ウィンドウを開いたときツールバーを表示する
+		m_pShareData->m_Common.m_sWindow.m_bDispSTATUSBAR = TRUE;			// 次回ウィンドウを開いたときステータスバーを表示する
+		m_pShareData->m_Common.m_sWindow.m_bDispFUNCKEYWND = FALSE;			// 次回ウィンドウを開いたときファンクションキーを表示する
+		m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place = 1;			// ファンクションキー表示位置／0:上 1:下
+		m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_GroupNum = 4;		// 2002/11/04 Moca ファンクションキーのグループボタン数
 
-		m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd = FALSE;			//タブウインドウ表示	//@@@ 2003.05.31 MIK
-		m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin = FALSE;	//タブウインドウ表示	//@@@ 2003.05.31 MIK
+		m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd = FALSE;				// タブウインドウ表示	//@@@ 2003.05.31 MIK
+		m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin = FALSE;		// タブウインドウ表示	//@@@ 2003.05.31 MIK
 		wcscpy_s(	//@@@ 2003.06.13 MIK
 			m_pShareData->m_Common.m_sTabBar.m_szTabWndCaption,
 			L"${w?【Grep】$h$:【アウトプット】$:$f$n$}${U?(更新)$}${R?(ビューモード)$:(上書き禁止)$}${M?【キーマクロの記録中】$}"
 		);
-		m_pShareData->m_Common.m_sTabBar.m_bSameTabWidth = FALSE;			//タブを等幅にする			//@@@ 2006.01.28 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon = FALSE;			//タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bDispTabClose = DISPTABCLOSE_NO;	//タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
-		m_pShareData->m_Common.m_sTabBar.m_bSortTabList = TRUE;			//タブ一覧をソートする		//@@@ 2006.05.10 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bTab_RetainEmptyWin = TRUE;	// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
-		m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin = FALSE;	// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
-		m_pShareData->m_Common.m_sTabBar.m_bTab_ListFull = FALSE;			//タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bChgWndByWheel = FALSE;		//マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bNewWindow = FALSE;			// 外部から起動するときは新しいウインドウで開く
+		m_pShareData->m_Common.m_sTabBar.m_bSameTabWidth = FALSE;			// タブを等幅にする			//@@@ 2006.01.28 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon = FALSE;			// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bDispTabClose = DISPTABCLOSE_NO;	// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
+		m_pShareData->m_Common.m_sTabBar.m_bSortTabList = TRUE;				// タブ一覧をソートする		//@@@ 2006.05.10 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bTab_RetainEmptyWin = TRUE;		// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
+		m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin = FALSE;		// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
+		m_pShareData->m_Common.m_sTabBar.m_bTab_ListFull = FALSE;			// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bChgWndByWheel = FALSE;			// マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bNewWindow = FALSE;				// 外部から起動するときは新しいウインドウで開く
 
 		m_pShareData->m_Common.m_sTabBar.m_lf = lfIconTitle;
 		m_pShareData->m_Common.m_sTabBar.m_nPointSize = nIconPointSize;
@@ -359,7 +359,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sWindow.m_bSplitterWndHScroll = TRUE;	// 2001/06/20 asa-o 分割ウィンドウの水平スクロールの同期をとる
 		m_pShareData->m_Common.m_sWindow.m_bSplitterWndVScroll = TRUE;	// 2001/06/20 asa-o 分割ウィンドウの垂直スクロールの同期をとる
 
-		/* カスタムメニュー情報 */
+		// カスタムメニュー情報
 		for (int i = 0; i < MAX_CUSTOM_MENU; ++i) {
 			m_pShareData->m_Common.m_sCustomMenu.m_szCustMenuNameArr[i][0] = '\0';
 			m_pShareData->m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[i] = 0;
@@ -372,68 +372,68 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sCustomMenu.m_szCustMenuNameArr[CUSTMENU_INDEX_FOR_TABWND][0] = '\0';	//@@@ 2003.06.13 MIK
 
 
-		/* 見出し記号 */
+		// 見出し記号
 		wcscpy_s( m_pShareData->m_Common.m_sFormat.m_szMidashiKigou, L"１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
-		/* 引用符 */
-		wcscpy_s( m_pShareData->m_Common.m_sFormat.m_szInyouKigou, L"> " );		/* 引用符 */
-		m_pShareData->m_Common.m_sHelper.m_bUseHokan = FALSE;					/* 入力補完機能を使用する */
+		// 引用符
+		wcscpy_s( m_pShareData->m_Common.m_sFormat.m_szInyouKigou, L"> " );		// 引用符
+		m_pShareData->m_Common.m_sHelper.m_bUseHokan = FALSE;					// 入力補完機能を使用する
 
 		// 2001/06/14 asa-o 補完とキーワードヘルプはタイプ別に移動したので削除
-		//	2004.05.13 Moca ウィンドウサイズ固定指定追加に伴う指定方法変更
+		// 2004.05.13 Moca ウィンドウサイズ固定指定追加に伴う指定方法変更
 		m_pShareData->m_Common.m_sWindow.m_eSaveWindowSize = WINSIZEMODE_SAVE;	// ウィンドウサイズ継承
 		m_pShareData->m_Common.m_sWindow.m_nWinSizeType = SIZE_RESTORED;
 		m_pShareData->m_Common.m_sWindow.m_nWinSizeCX = CW_USEDEFAULT;
 		m_pShareData->m_Common.m_sWindow.m_nWinSizeCY = 0;
 		
-		//	2004.05.13 Moca ウィンドウ位置
+		// 2004.05.13 Moca ウィンドウ位置
 		m_pShareData->m_Common.m_sWindow.m_eSaveWindowPos = WINSIZEMODE_DEF;		// ウィンドウ位置固定・継承
 		m_pShareData->m_Common.m_sWindow.m_nWinPosX = CW_USEDEFAULT;
 		m_pShareData->m_Common.m_sWindow.m_nWinPosY = 0;
 
-		m_pShareData->m_Common.m_sGeneral.m_bUseTaskTray = TRUE;				/* タスクトレイのアイコンを使う */
+		m_pShareData->m_Common.m_sGeneral.m_bUseTaskTray = TRUE;				// タスクトレイのアイコンを使う
 #ifdef _DEBUG
-		m_pShareData->m_Common.m_sGeneral.m_bStayTaskTray = FALSE;				/* タスクトレイのアイコンを常駐 */
+		m_pShareData->m_Common.m_sGeneral.m_bStayTaskTray = FALSE;				// タスクトレイのアイコンを常駐
 #else
-		m_pShareData->m_Common.m_sGeneral.m_bStayTaskTray = TRUE;				/* タスクトレイのアイコンを常駐 */
+		m_pShareData->m_Common.m_sGeneral.m_bStayTaskTray = TRUE;				// タスクトレイのアイコンを常駐
 #endif
-		m_pShareData->m_Common.m_sGeneral.m_wTrayMenuHotKeyCode = L'Z';		/* タスクトレイ左クリックメニュー キー */
-		m_pShareData->m_Common.m_sGeneral.m_wTrayMenuHotKeyMods = HOTKEYF_ALT | HOTKEYF_CONTROL;	/* タスクトレイ左クリックメニュー キー */
-		m_pShareData->m_Common.m_sEdit.m_bUseOLE_DragDrop = TRUE;			/* OLEによるドラッグ & ドロップを使う */
-		m_pShareData->m_Common.m_sEdit.m_bUseOLE_DropSource = TRUE;			/* OLEによるドラッグ元にするか */
-		m_pShareData->m_Common.m_sGeneral.m_bDispExitingDialog = FALSE;		/* 終了ダイアログを表示する */
-		m_pShareData->m_Common.m_sEdit.m_bSelectClickedURL = TRUE;			/* URLがクリックされたら選択するか */
-		m_pShareData->m_Common.m_sSearch.m_bGrepExitConfirm = FALSE;			/* Grepモードで保存確認するか */
-//		m_pShareData->m_Common.m_bRulerDisp = TRUE;					/* ルーラー表示 */
-		m_pShareData->m_Common.m_sWindow.m_nRulerHeight = 13;					/* ルーラーの高さ */
-		m_pShareData->m_Common.m_sWindow.m_nRulerBottomSpace = 0;				/* ルーラーとテキストの隙間 */
-		m_pShareData->m_Common.m_sWindow.m_nRulerType = 0;					/* ルーラーのタイプ */
+		m_pShareData->m_Common.m_sGeneral.m_wTrayMenuHotKeyCode = L'Z';		// タスクトレイ左クリックメニュー キー
+		m_pShareData->m_Common.m_sGeneral.m_wTrayMenuHotKeyMods = HOTKEYF_ALT | HOTKEYF_CONTROL;	// タスクトレイ左クリックメニュー キー
+		m_pShareData->m_Common.m_sEdit.m_bUseOLE_DragDrop = TRUE;			// OLEによるドラッグ & ドロップを使う
+		m_pShareData->m_Common.m_sEdit.m_bUseOLE_DropSource = TRUE;			// OLEによるドラッグ元にするか
+		m_pShareData->m_Common.m_sGeneral.m_bDispExitingDialog = FALSE;		// 終了ダイアログを表示する
+		m_pShareData->m_Common.m_sEdit.m_bSelectClickedURL = TRUE;			// URLがクリックされたら選択するか
+		m_pShareData->m_Common.m_sSearch.m_bGrepExitConfirm = FALSE;			// Grepモードで保存確認するか
+//		m_pShareData->m_Common.m_bRulerDisp = TRUE;							// ルーラー表示
+		m_pShareData->m_Common.m_sWindow.m_nRulerHeight = 13;					// ルーラーの高さ
+		m_pShareData->m_Common.m_sWindow.m_nRulerBottomSpace = 0;				// ルーラーとテキストの隙間
+		m_pShareData->m_Common.m_sWindow.m_nRulerType = 0;					// ルーラーのタイプ
 		//	Sep. 18, 2002 genta
-		m_pShareData->m_Common.m_sWindow.m_nLineNumRightSpace = 0;			/* 行番号の右の隙間 */
+		m_pShareData->m_Common.m_sWindow.m_nLineNumRightSpace = 0;			// 行番号の右の隙間
 		m_pShareData->m_Common.m_sWindow.m_nVertLineOffset = -1;			// 2005.11.10 Moca 指定桁縦線
 		m_pShareData->m_Common.m_sWindow.m_bUseCompatibleBMP = TRUE;		// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji FALSE->TRUE
-		m_pShareData->m_Common.m_sEdit.m_bCopyAndDisablSelection = FALSE;	/* コピーしたら選択解除 */
-		m_pShareData->m_Common.m_sEdit.m_bEnableNoSelectCopy = TRUE;		/* 選択なしでコピーを可能にする */	// 2007.11.18 ryoji
-		m_pShareData->m_Common.m_sEdit.m_bEnableLineModePaste = true;		/* ラインモード貼り付けを可能にする */	// 2007.10.08 ryoji
-		m_pShareData->m_Common.m_sHelper.m_bHtmlHelpIsSingle = true;		/* HtmlHelpビューアはひとつ */
-		m_pShareData->m_Common.m_sCompare.m_bCompareAndTileHorz = TRUE;		/* 文書比較後、左右に並べて表示 */
-		m_pShareData->m_Common.m_sEdit.m_bConvertEOLPaste = false;			/* 改行コードを変換して貼り付ける */	// 2009.02.28 salarm
+		m_pShareData->m_Common.m_sEdit.m_bCopyAndDisablSelection = FALSE;	// コピーしたら選択解除
+		m_pShareData->m_Common.m_sEdit.m_bEnableNoSelectCopy = TRUE;		// 選択なしでコピーを可能にする	// 2007.11.18 ryoji
+		m_pShareData->m_Common.m_sEdit.m_bEnableLineModePaste = true;		// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
+		m_pShareData->m_Common.m_sHelper.m_bHtmlHelpIsSingle = true;		// HtmlHelpビューアはひとつ
+		m_pShareData->m_Common.m_sCompare.m_bCompareAndTileHorz = TRUE;		// 文書比較後、左右に並べて表示
+		m_pShareData->m_Common.m_sEdit.m_bConvertEOLPaste = false;			// 改行コードを変換して貼り付ける	// 2009.02.28 salarm
 
-		//[ファイル]タブ
+		// [ファイル]タブ
 		{
-			//ファイルの排他制御
+			// ファイルの排他制御
 			m_pShareData->m_Common.m_sFile.m_nFileShareMode = SHAREMODE_DENY_WRITE;	// ファイルの排他制御モード
 			m_pShareData->m_Common.m_sFile.m_bCheckFileTimeStamp = true;			// 更新の監視
 			m_pShareData->m_Common.m_sFile.m_nAutoloadDelay = 0;					// 自動読込時遅延
 			m_pShareData->m_Common.m_sFile.m_bUneditableIfUnwritable = true;		// 上書き禁止検出時は編集禁止にする
 
-			//ファイルの保存
+			// ファイルの保存
 			m_pShareData->m_Common.m_sFile.m_bEnableUnmodifiedOverwrite = false;	// 無変更でも上書きするか
 
-			// 「名前を付けて保存」でファイルの種類が[ユーザ指定]のときのファイル一覧表示	//ファイル保存ダイアログのフィルタ設定	// 2006.11.16 ryoji
+			//「名前を付けて保存」でファイルの種類が[ユーザ指定]のときのファイル一覧表示	// ファイル保存ダイアログのフィルタ設定	// 2006.11.16 ryoji
 			m_pShareData->m_Common.m_sFile.m_bNoFilterSaveNew = true;		// 新規から保存時は全ファイル表示
 			m_pShareData->m_Common.m_sFile.m_bNoFilterSaveFile = true;		// 新規以外から保存時は全ファイル表示
 
-			//ファイルオープン
+			// ファイルオープン
 			m_pShareData->m_Common.m_sFile.m_bDropFileAndClose = false;		// ファイルをドロップしたときは閉じて開く
 			m_pShareData->m_Common.m_sFile.m_nDropFileNumMax = 8;			// 一度にドロップ可能なファイル数
 			m_pShareData->m_Common.m_sFile.m_bRestoreCurPosition = true;	// カーソル位置復元	//	Oct. 27, 2000 genta
@@ -445,50 +445,48 @@ bool CShareData::InitShareData()
 			m_pShareData->m_Common.m_sFile.m_nAlertFileSize = 10;			// 警告を始めるファイルサイズ（MB単位）
 		}
 
-		m_pShareData->m_Common.m_sEdit.m_bNotOverWriteCRLF = TRUE;			/* 改行は上書きしない */
+		m_pShareData->m_Common.m_sEdit.m_bNotOverWriteCRLF = TRUE;			// 改行は上書きしない
 		m_pShareData->m_Common.m_sEdit.m_bOverWriteFixMode = false;			// 文字幅に合わせてスペースを詰める
-		::SetRect( &m_pShareData->m_Common.m_sOthers.m_rcOpenDialog, 0, 0, 0, 0 );	/* 「開く」ダイアログのサイズと位置 */
+		::SetRect( &m_pShareData->m_Common.m_sOthers.m_rcOpenDialog, 0, 0, 0, 0 );	//「開く」ダイアログのサイズと位置
 		::SetRect( &m_pShareData->m_Common.m_sOthers.m_rcCompareDialog, 0, 0, 0, 0 );
 		::SetRect( &m_pShareData->m_Common.m_sOthers.m_rcDiffDialog, 0, 0, 0, 0 );
 		::SetRect( &m_pShareData->m_Common.m_sOthers.m_rcFavoriteDialog, 0, 0, 0, 0 );
 		::SetRect( &m_pShareData->m_Common.m_sOthers.m_rcTagJumpDialog, 0, 0, 0, 0 );
 		m_pShareData->m_Common.m_sEdit.m_eOpenDialogDir = OPENDIALOGDIR_CUR;
 		auto_strcpy(m_pShareData->m_Common.m_sEdit.m_OpenDialogSelDir, _T("%Personal%\\"));
-		m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind = TRUE;			/* 検索ダイアログを自動的に閉じる */
-		m_pShareData->m_Common.m_sSearch.m_bSearchAll		 = FALSE;			/* 検索／置換／ブックマーク  先頭（末尾）から再検索 2002.01.26 hor */
-		m_pShareData->m_Common.m_sWindow.m_bScrollBarHorz = TRUE;				/* 水平スクロールバーを使う */
-		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = FALSE;		/* アウトライン ダイアログを自動的に閉じる */	//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
-		m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = TRUE;		/* 置換 ダイアログを自動的に閉じる */
-		m_pShareData->m_Common.m_sEdit.m_bAutoColumnPaste = TRUE;			/* 矩形コピーのテキストは常に矩形貼り付け */
-		m_pShareData->m_Common.m_sGeneral.m_bNoCaretMoveByActivation = FALSE;	/* マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta) */
+		m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind = TRUE;			// 検索ダイアログを自動的に閉じる
+		m_pShareData->m_Common.m_sSearch.m_bSearchAll		 = FALSE;			// 検索／置換／ブックマーク  先頭（末尾）から再検索 2002.01.26 hor
+		m_pShareData->m_Common.m_sWindow.m_bScrollBarHorz = TRUE;				// 水平スクロールバーを使う
+		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = FALSE;		// アウトライン ダイアログを自動的に閉じる	//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
+		m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = TRUE;			// 置換 ダイアログを自動的に閉じる
+		m_pShareData->m_Common.m_sEdit.m_bAutoColumnPaste = TRUE;				// 矩形コピーのテキストは常に矩形貼り付け
+		m_pShareData->m_Common.m_sGeneral.m_bNoCaretMoveByActivation = FALSE;	// マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta)
 
-		m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN	= TRUE;			/* VK_RETURN 補完決定キーが有効/無効 */
-		m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB		= FALSE;		/* VK_TAB   補完決定キーが有効/無効 */
-		m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT	= TRUE;			/* VK_RIGHT 補完決定キーが有効/無効 */
-		m_pShareData->m_Common.m_sHelper.m_bHokanKey_SPACE	= FALSE;		/* VK_SPACE 補完決定キーが有効/無効 */
+		m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN	= TRUE;				// VK_RETURN 補完決定キーが有効/無効
+		m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB	= FALSE;			// VK_TAB   補完決定キーが有効/無効
+		m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT	= TRUE;				// VK_RIGHT 補完決定キーが有効/無効
+		m_pShareData->m_Common.m_sHelper.m_bHokanKey_SPACE	= FALSE;			// VK_SPACE 補完決定キーが有効/無効
 
-		m_pShareData->m_Common.m_sOutline.m_nOutlineDockSet = 0;					/* アウトライン解析のドッキング位置継承方法 */
-		m_pShareData->m_Common.m_sOutline.m_bOutlineDockSync = TRUE;				/* アウトライン解析のドッキング位置を同期する */
-		m_pShareData->m_Common.m_sOutline.m_bOutlineDockDisp = FALSE;				/* アウトライン解析表示の有無 */
-		m_pShareData->m_Common.m_sOutline.m_eOutlineDockSide = DOCKSIDE_FLOAT;		/* アウトライン解析ドッキング配置 */
-		m_pShareData->m_Common.m_sOutline.m_cxOutlineDockLeft		=	0;	// アウトラインの左ドッキング幅
-		m_pShareData->m_Common.m_sOutline.m_cyOutlineDockTop		=	0;	// アウトラインの上ドッキング高
-		m_pShareData->m_Common.m_sOutline.m_cxOutlineDockRight		=	0;	// アウトラインの右ドッキング幅
-		m_pShareData->m_Common.m_sOutline.m_cyOutlineDockBottom		=	0;	// アウトラインの下ドッキング高
+		m_pShareData->m_Common.m_sOutline.m_nOutlineDockSet = 0;				// アウトライン解析のドッキング位置継承方法
+		m_pShareData->m_Common.m_sOutline.m_bOutlineDockSync = TRUE;			// アウトライン解析のドッキング位置を同期する
+		m_pShareData->m_Common.m_sOutline.m_bOutlineDockDisp = FALSE;			// アウトライン解析表示の有無
+		m_pShareData->m_Common.m_sOutline.m_eOutlineDockSide = DOCKSIDE_FLOAT;	// アウトライン解析ドッキング配置
+		m_pShareData->m_Common.m_sOutline.m_cxOutlineDockLeft		=	0;		// アウトラインの左ドッキング幅
+		m_pShareData->m_Common.m_sOutline.m_cyOutlineDockTop		=	0;		// アウトラインの上ドッキング高
+		m_pShareData->m_Common.m_sOutline.m_cxOutlineDockRight		=	0;		// アウトラインの右ドッキング幅
+		m_pShareData->m_Common.m_sOutline.m_cyOutlineDockBottom		=	0;		// アウトラインの下ドッキング高
 		m_pShareData->m_Common.m_sOutline.m_nDockOutline = OUTLINE_TEXT;
-		m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable	=	FALSE;	//アウトラインダイアログでブックマークの空行を無視			2002.02.08 aroka,hor
-		m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump	=	FALSE;	//アウトラインダイアログでジャンプしたらフォーカスを移す	2002.02.08 hor
+		m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable	=	FALSE;	// アウトラインダイアログでブックマークの空行を無視			2002.02.08 aroka,hor
+		m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump	=	FALSE;	// アウトラインダイアログでジャンプしたらフォーカスを移す	2002.02.08 hor
 
-		/*
-			書式指定子の意味はWindows SDKのGetDateFormat(), GetTimeFormat()を参照のこと
-		*/
+		// 書式指定子の意味はWindows SDKのGetDateFormat(), GetTimeFormat()を参照のこと
 
-		m_pShareData->m_Common.m_sFormat.m_nDateFormatType = 0;	//日付書式のタイプ
+		m_pShareData->m_Common.m_sFormat.m_nDateFormatType = 0;		// 日付書式のタイプ
 		_tcscpy( m_pShareData->m_Common.m_sFormat.m_szDateFormat, _T("yyyy\'年\'M\'月\'d\'日(\'dddd\')\'") );	//日付書式
-		m_pShareData->m_Common.m_sFormat.m_nTimeFormatType = 0;	//時刻書式のタイプ
+		m_pShareData->m_Common.m_sFormat.m_nTimeFormatType = 0;		// 時刻書式のタイプ
 		_tcscpy( m_pShareData->m_Common.m_sFormat.m_szTimeFormat, _T("tthh\'時\'mm\'分\'ss\'秒\'")  );			//時刻書式
 
-		m_pShareData->m_Common.m_sWindow.m_bMenuIcon = TRUE;		/* メニューにアイコンを表示する */
+		m_pShareData->m_Common.m_sWindow.m_bMenuIcon = TRUE;		// メニューにアイコンを表示する */
 
 		// [ステータスバー]タブ
 		// 表示文字コードの指定		2008/6/21	Uchi
@@ -541,31 +539,31 @@ bool CShareData::InitShareData()
 			mptr->m_bReloadWhenExecute = false;
 		}
 		//	To Here Sep. 14, 2001 genta
-		m_pShareData->m_Common.m_sMacro.m_nMacroOnOpened = -1;	/* オープン後自動実行マクロ番号 */	//@@@ 2006.09.01 ryoji
-		m_pShareData->m_Common.m_sMacro.m_nMacroOnTypeChanged = -1;	/* タイプ変更後自動実行マクロ番号 */	//@@@ 2006.09.01 ryoji
-		m_pShareData->m_Common.m_sMacro.m_nMacroOnSave = -1;	/* 保存前自動実行マクロ番号 */	//@@@ 2006.09.01 ryoji
+		m_pShareData->m_Common.m_sMacro.m_nMacroOnOpened = -1;		// オープン後自動実行マクロ番号		//@@@ 2006.09.01 ryoji
+		m_pShareData->m_Common.m_sMacro.m_nMacroOnTypeChanged = -1;	// タイプ変更後自動実行マクロ番号	//@@@ 2006.09.01 ryoji
+		m_pShareData->m_Common.m_sMacro.m_nMacroOnSave = -1;		// 保存前自動実行マクロ番号			//@@@ 2006.09.01 ryoji
 		m_pShareData->m_Common.m_sMacro.m_nMacroCancelTimer = 10;	// マクロ停止ダイアログ表示待ち時間(秒)	// 2011.08.04 syat
 
 		// 2004/06/21 novice タグジャンプ機能追加
 		m_pShareData->m_sTagJump.m_TagJumpNum = 0;
 		// 2004.06.22 Moca タグジャンプの先頭
 		m_pShareData->m_sTagJump.m_TagJumpTop = 0;
-		m_pShareData->m_nExecFlgOpt = 1;	/* 外部コマンド実行の「標準出力を得る」 */	// 2006.12.03 maru オプションの拡張のため
-		m_pShareData->m_bLineNumIsCRLF_ForJump = true;	/* 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か */
+		m_pShareData->m_nExecFlgOpt = 1;	// 外部コマンド実行の「標準出力を得る」	// 2006.12.03 maru オプションの拡張のため
+		m_pShareData->m_bLineNumIsCRLF_ForJump = true;	// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
 
-		m_pShareData->m_nDiffFlgOpt = 0;	/* DIFF差分表示 */	//@@@ 2002.05.27 MIK
+		m_pShareData->m_nDiffFlgOpt = 0;	// DIFF差分表示	//@@@ 2002.05.27 MIK
 
-		m_pShareData->m_nTagsOpt = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
-		m_pShareData->m_szTagsCmdLine[0] = 0;	/* CTAGS */	//@@@ 2003.05.12 MIK
-		//From Here 2005.04.03 MIK キーワード指定タグジャンプのHistory保管
+		m_pShareData->m_nTagsOpt = 0;	// CTAGS	//@@@ 2003.05.12 MIK
+		m_pShareData->m_szTagsCmdLine[0] = 0;	// CTAGS	//@@@ 2003.05.12 MIK
+		// From Here 2005.04.03 MIK キーワード指定タグジャンプのHistory保管
 		m_pShareData->m_sTagJump.m_aTagJumpKeywords.clear();
 		m_pShareData->m_sTagJump.m_bTagJumpICase = FALSE;
 		m_pShareData->m_sTagJump.m_bTagJumpAnyWhere = FALSE;
-		//To Here 2005.04.03 MIK 
+		// To Here 2005.04.03 MIK 
 
 	}else {
-		/* オブジェクトがすでに存在する場合 */
-		/* ファイルのビューを､ 呼び出し側プロセスのアドレス空間にマップします */
+		// オブジェクトがすでに存在する場合
+		// ファイルのビューを､ 呼び出し側プロセスのアドレス空間にマップします
 		m_pShareData = (DLLSHAREDATA*)::MapViewOfFile(
 			m_hFileMap,
 			FILE_MAP_ALL_ACCESS,
@@ -595,8 +593,8 @@ bool CShareData::InitShareData()
 	return true;
 }
 
-
-static void ConvertLangString( wchar_t* pBuf, size_t chBufSize, std::wstring& org, std::wstring& to )
+static
+void ConvertLangString( wchar_t* pBuf, size_t chBufSize, std::wstring& org, std::wstring& to )
 {
 	CNativeW mem;
 	mem.SetString(pBuf);
@@ -605,7 +603,8 @@ static void ConvertLangString( wchar_t* pBuf, size_t chBufSize, std::wstring& or
 	pBuf[chBufSize - 1] = L'\0';
 }
 
-static void ConvertLangString( char* pBuf, size_t chBufSize, std::wstring& org, std::wstring& to )
+static
+void ConvertLangString( char* pBuf, size_t chBufSize, std::wstring& org, std::wstring& to )
 {
 	CNativeA mem;
 	mem.SetString(pBuf);
@@ -614,7 +613,16 @@ static void ConvertLangString( char* pBuf, size_t chBufSize, std::wstring& org, 
 	pBuf[chBufSize - 1] = '\0';
 }
 
-static void ConvertLangValueImpl( wchar_t* pBuf, size_t chBufSize, int nStrId, std::vector<std::wstring>& values, int& index, bool setValues, bool bUpdate )
+static
+void ConvertLangValueImpl(
+	wchar_t* pBuf,
+	size_t chBufSize,
+	int nStrId,
+	std::vector<std::wstring>& values,
+	int& index,
+	bool setValues,
+	bool bUpdate
+	)
 {
 	if (setValues) {
 		if (bUpdate) {
@@ -627,7 +635,16 @@ static void ConvertLangValueImpl( wchar_t* pBuf, size_t chBufSize, int nStrId, s
 	index++;
 }
 
-static void ConvertLangValueImpl( char* pBuf, size_t chBufSize, int nStrId, std::vector<std::wstring>& values, int& index, bool setValues, bool bUpdate )
+static
+void ConvertLangValueImpl(
+	char* pBuf,
+	size_t chBufSize,
+	int nStrId,
+	std::vector<std::wstring>& values,
+	int& index,
+	bool setValues,
+	bool bUpdate
+	)
 {
 	if (setValues) {
 		if (bUpdate) {
@@ -789,7 +806,7 @@ BOOL CShareData::ActiveAlreadyOpenedWindow( const TCHAR* pszPath, HWND* phwndOwn
 {
 	if (IsPathOpened( pszPath, phwndOwner )) {
 		
-		//文字コードの一致確認
+		// 文字コードの一致確認
 		::SendMessageAny( *phwndOwner, MYWM_GETFILEINFO, 0, 0 );
 		EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 		if (nCharCode != CODE_AUTODETECT) {
@@ -947,14 +964,14 @@ bool CShareData::OpenDebugWindow( HWND hwnd, bool bAllwaysActive )
 		//	Jun. 25, 2001 genta OpenNewEditorの同期機能を利用するように変更
 		bAllwaysActive = true; // 新しく作ったときはactive
 	}
-	/* 開いているウィンドウをアクティブにする */
+	// 開いているウィンドウをアクティブにする
 	if (ret && bAllwaysActive) {
 		ActivateFrameWindow( m_pShareData->m_sHandles.m_hwndDebug );
 	}
 	return ret;
 }
 
-/* iniファイルの保存先がユーザ別設定フォルダかどうか */	// 2007.05.25 ryoji
+// iniファイルの保存先がユーザ別設定フォルダかどうか	// 2007.05.25 ryoji
 BOOL CShareData::IsPrivateSettings( void ){
 	return m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate;
 }
@@ -1020,7 +1037,7 @@ int CShareData::GetMacroFilename( int idx, TCHAR *pszPath, int nBufLen )
 		int nFolderSep = AddLastChar( m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER, _countof2(m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER), _T('\\') );
 		TCHAR* pszDir;
 
-		 // 2003.06.24 Moca フォルダも相対パスなら実行ファイルからのパス
+		// 2003.06.24 Moca フォルダも相対パスなら実行ファイルからのパス
 		// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 		if (_IS_REL_PATH( m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER )) {
 			TCHAR szDir[_MAX_PATH + _countof2( m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER )];
@@ -1070,39 +1087,39 @@ bool CShareData::BeReloadWhenExecuteMacro( int idx )
 */
 void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 {
-	/* ツールバーボタン構造体 */
-//Sept. 16, 2000 JEPRO
-//	CShareData_new2.cppでできるだけ系ごとに集まるようにアイコンの順番を大幅に入れ替えたのに伴い以下の初期設定値を変更
+	// ツールバーボタン構造体
+	// Sept. 16, 2000 JEPRO
+	// CShareData_new2.cppでできるだけ系ごとに集まるようにアイコンの順番を大幅に入れ替えたのに伴い以下の初期設定値を変更
 	// 2010.06.26 Moca 内容は CMenuDrawer::FindToolbarNoFromCommandId の戻り値です
 	static const int DEFAULT_TOOL_BUTTONS[] = {
-		1,	//新規作成
-		25,		//ファイルを開く(DropDown)
-		3,		//上書き保存		//Sept. 16, 2000 JEPRO 3→11に変更	//Oct. 25, 2000 11→3
-		4,		//名前を付けて保存	//Sept. 19, 2000 JEPRO 追加
+		1,	// 新規作成
+		25,		// ファイルを開く(DropDown)
+		3,		// 上書き保存		//Sept. 16, 2000 JEPRO 3→11に変更	//Oct. 25, 2000 11→3
+		4,		// 名前を付けて保存	//Sept. 19, 2000 JEPRO 追加
 		0,
 
-		33,	//元に戻す(Undo)	//Sept. 16, 2000 JEPRO 7→19に変更	//Oct. 25, 2000 19→33
-		34,	//やり直し(Redo)	//Sept. 16, 2000 JEPRO 8→20に変更	//Oct. 25, 2000 20→34
+		33,	// 元に戻す(Undo)	//Sept. 16, 2000 JEPRO 7→19に変更	//Oct. 25, 2000 19→33
+		34,	// やり直し(Redo)	//Sept. 16, 2000 JEPRO 8→20に変更	//Oct. 25, 2000 20→34
 		0,
 
-		87,	//移動履歴: 前へ	//Dec. 24, 2000 JEPRO 追加
-		88,	//移動履歴: 次へ	//Dec. 24, 2000 JEPRO 追加
+		87,	// 移動履歴: 前へ	//Dec. 24, 2000 JEPRO 追加
+		88,	// 移動履歴: 次へ	//Dec. 24, 2000 JEPRO 追加
 		0,
 
-		225,	//検索		//Sept. 16, 2000 JEPRO 9→22に変更	//Oct. 25, 2000 22→225
-		226,	//次を検索	//Sept. 16, 2000 JEPRO 16→23に変更	//Oct. 25, 2000 23→226
-		227,	//前を検索	//Sept. 16, 2000 JEPRO 17→24に変更	//Oct. 25, 2000 24→227
-		228,	//置換		// Oct. 7, 2000 JEPRO 追加
-		229,	//検索マークのクリア	//Sept. 16, 2000 JEPRO 41→25に変更(Oct. 7, 2000 25→26)	//Oct. 25, 2000 25→229
-		230,	//Grep		//Sept. 16, 2000 JEPRO 14→31に変更	//Oct. 25, 2000 31→230
-		232,	//アウトライン解析	//Dec. 24, 2000 JEPRO 追加
+		225,	// 検索		//Sept. 16, 2000 JEPRO 9→22に変更	//Oct. 25, 2000 22→225
+		226,	// 次を検索	//Sept. 16, 2000 JEPRO 16→23に変更	//Oct. 25, 2000 23→226
+		227,	// 前を検索	//Sept. 16, 2000 JEPRO 17→24に変更	//Oct. 25, 2000 24→227
+		228,	// 置換		// Oct. 7, 2000 JEPRO 追加
+		229,	// 検索マークのクリア	//Sept. 16, 2000 JEPRO 41→25に変更(Oct. 7, 2000 25→26)	//Oct. 25, 2000 25→229
+		230,	// Grep		//Sept. 16, 2000 JEPRO 14→31に変更	//Oct. 25, 2000 31→230
+		232,	// アウトライン解析	//Dec. 24, 2000 JEPRO 追加
 		0,
 
-		264,	//タイプ別設定一覧	//Sept. 16, 2000 JEPRO 追加
-		265,	//タイプ別設定		//Sept. 16, 2000 JEPRO 18→36に変更	//Oct. 25, 2000 36→265
-		266,	//共通設定			//Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更	//Oct. 25, 2000 37→266
-		0,		//Oct. 8, 2000 jepro 次行のために追加
-		346,	//コマンド一覧	//Oct. 8, 2000 JEPRO 追加
+		264,	// タイプ別設定一覧	//Sept. 16, 2000 JEPRO 追加
+		265,	// タイプ別設定		//Sept. 16, 2000 JEPRO 18→36に変更	//Oct. 25, 2000 36→265
+		266,	// 共通設定			//Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更	//Oct. 25, 2000 37→266
+		0,		// Oct. 8, 2000 jepro 次行のために追加
+		346,	// コマンド一覧	//Oct. 8, 2000 JEPRO 追加
 	};
 
 	//	ツールバーアイコン数の最大値を超えないためのおまじない
@@ -1116,9 +1133,9 @@ void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 		sizeof(DEFAULT_TOOL_BUTTONS)
 	);
 
-	/* ツールバーボタンの数 */
+	// ツールバーボタンの数
 	pShareData->m_Common.m_sToolBar.m_nToolBarButtonNum = _countof(DEFAULT_TOOL_BUTTONS);
-	pShareData->m_Common.m_sToolBar.m_bToolBarIsFlat = !IsVisualStyle();			/* フラットツールバーにする／しない */	// 2006.06.23 ryoji ビジュアルスタイルでは初期値をノーマルにする
+	pShareData->m_Common.m_sToolBar.m_bToolBarIsFlat = !IsVisualStyle();			// フラットツールバーにする／しない	// 2006.06.23 ryoji ビジュアルスタイルでは初期値をノーマルにする
 	
 }
 
@@ -1131,11 +1148,11 @@ void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 */
 void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 {
-	/* カスタムメニュー 規定値 */
+	// カスタムメニュー 規定値
 	
 	CommonSetting_CustomMenu& rMenu = m_pShareData->m_Common.m_sCustomMenu;
 
-	/* 右クリックメニュー */
+	// 右クリックメニュー
 	int n = 0;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_UNDO;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'U';
@@ -1206,7 +1223,7 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	n++;
 	rMenu.m_nCustMenuItemNumArr[0] = n;
 
-	/* カスタムメニュー１ */
+	// カスタムメニュー１
 	rMenu.m_nCustMenuItemNumArr[1] = 7;
 	rMenu.m_nCustMenuItemFuncArr[1][0] = F_FILEOPEN;
 	rMenu.m_nCustMenuItemKeyArr [1][0] = 'O';		//Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (F→O)
@@ -1223,7 +1240,7 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	rMenu.m_nCustMenuItemFuncArr[1][6] = F_WINCLOSE;
 	rMenu.m_nCustMenuItemKeyArr [1][6] = 'C';
 
-	/* タブメニュー */	//@@@ 2003.06.14 MIK
+	// タブメニュー	//@@@ 2003.06.14 MIK
 	n = 0;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILESAVE;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'S';
@@ -1279,7 +1296,7 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	rMenu.m_nCustMenuItemNumArr[CUSTMENU_INDEX_FOR_TABWND] = n;
 }
 
-/* 言語選択後に共有メモリ内の文字列を更新する */
+// 言語選択後に共有メモリ内の文字列を更新する
 void CShareData::RefreshString()
 {
 

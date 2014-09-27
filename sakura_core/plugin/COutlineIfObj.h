@@ -33,13 +33,13 @@
 class COutlineIfObj : public CWSHIfObj {
 	// 型定義
 	enum FuncId {
-		F_OL_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
-		F_OL_ADDFUNCINFO,						//アウトライン解析に追加する
-		F_OL_ADDFUNCINFO2,						//アウトライン解析に追加する（深さ指定）
-		F_OL_SETTITLE,							//アウトラインダイアログタイトルを指定
-		F_OL_SETLISTTYPE,						//アウトラインリスト種別を指定
-		F_OL_SETLABEL,							//ラベル文字列を指定
-		F_OL_FUNCTION_FIRST = F_FUNCTION_FIRST	//↓関数は以下に追加する
+		F_OL_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
+		F_OL_ADDFUNCINFO,						// アウトライン解析に追加する
+		F_OL_ADDFUNCINFO2,						// アウトライン解析に追加する（深さ指定）
+		F_OL_SETTITLE,							// アウトラインダイアログタイトルを指定
+		F_OL_SETLISTTYPE,						// アウトラインリスト種別を指定
+		F_OL_SETLABEL,							// ラベル文字列を指定
+		F_OL_FUNCTION_FIRST = F_FUNCTION_FIRST	// ↓関数は以下に追加する
 	};
 	typedef std::string string;
 	typedef std::wstring wstring;
@@ -59,21 +59,21 @@ public:
 
 	// 実装
 public:
-	//コマンド情報を取得する
+	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const{ return m_MacroFuncInfoCommandArr; }
-	//関数情報を取得する
+	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const{ return m_MacroFuncInfoArr; }
-	//関数を処理する
+	// 関数を処理する
 	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result)
 	{
 		return false;
 	}
-	//コマンドを処理する
+	// コマンドを処理する
 	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
 	{
 		switch (LOWORD(ID)) {
-		case F_OL_ADDFUNCINFO:			//アウトライン解析に追加する
-		case F_OL_ADDFUNCINFO2:			//アウトライン解析に追加する（深さ指定）
+		case F_OL_ADDFUNCINFO:			// アウトライン解析に追加する
+		case F_OL_ADDFUNCINFO2:			// アウトライン解析に追加する（深さ指定）
 			{
 				if (!Arguments[0]) return false;
 				if (!Arguments[1]) return false;

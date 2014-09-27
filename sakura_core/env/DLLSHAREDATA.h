@@ -40,7 +40,8 @@ inline DLLSHAREDATA& GetDllShareData()
 }
 
 // DLLSHAREDATAを確保したら、まずこれを呼ぶ。破棄する前にも呼ぶ。
-inline void SetDllShareData(DLLSHAREDATA* pShareData)
+inline
+void SetDllShareData(DLLSHAREDATA* pShareData)
 {
 	extern DLLSHAREDATA* g_theDLLSHAREDATA;
 
@@ -69,7 +70,7 @@ inline void SetDllShareData(DLLSHAREDATA* pShareData)
 
 
 // 共有フラグ
-struct SShare_Flags{
+struct SShare_Flags {
 	BOOL				m_bEditWndChanging;				// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 	/*	@@@ 2002.1.24 YAZAKI
 		キーボードマクロは、記録終了した時点でファイル「m_szKeyMacroFileName」に書き出すことにする。
@@ -80,34 +81,34 @@ struct SShare_Flags{
 };
 
 // 共有ワークバッファ
-struct SShare_WorkBuffer{
+struct SShare_WorkBuffer {
 	//2007.09.16 kobake char型だと、常に文字列であるという誤解を招くので、BYTE型に変更。変数名も変更。
 	//           UNICODE版では、余分に領域を使うことが予想されるため、ANSI版の2倍確保。
 private:
-	BYTE				m_pWork[32000*sizeof(TCHAR)];
+	BYTE m_pWork[32000 * sizeof(TCHAR)];
 public:
 	template <class T>
-	T* GetWorkBuffer(){ return reinterpret_cast<T*>(m_pWork); }
+	T* GetWorkBuffer() { return reinterpret_cast<T*>(m_pWork); }
 
 	template <class T>
-	size_t GetWorkBufferCount(){ return sizeof(m_pWork)/sizeof(T); }
+	size_t GetWorkBufferCount() { return sizeof(m_pWork)/sizeof(T); }
 
 public:
-	EditInfo			m_EditInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
-	STypeConfig			m_TypeConfig;
+	EditInfo	m_EditInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
+	STypeConfig	m_TypeConfig;
 };
 
 // 共有ハンドル
-struct SShare_Handles{
-	HWND				m_hwndTray;
-	HWND				m_hwndDebug;
-	HACCEL				m_hAccel;
+struct SShare_Handles {
+	HWND	m_hwndTray;
+	HWND	m_hwndDebug;
+	HACCEL	m_hAccel;
 };
 
 // EXE情報
-struct SShare_Version{
-	DWORD				m_dwProductVersionMS;
-	DWORD				m_dwProductVersionLS;
+struct SShare_Version {
+	DWORD	m_dwProductVersionMS;
+	DWORD	m_dwProductVersionLS;
 };
 
 

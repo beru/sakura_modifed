@@ -42,10 +42,12 @@ public:
 	CGrepEnumFilterFolders() {
 	}
 
-	virtual ~CGrepEnumFilterFolders() {
+	virtual
+	~CGrepEnumFilterFolders() {
 	}
 
-	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
+	virtual
+	BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ){
 		if (CGrepEnumFolders::IsValid( w32fd, pFile )) {
 			if (m_cGrepEnumExceptFolders.IsValid( w32fd, pFile )) {
 				return TRUE;

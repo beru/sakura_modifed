@@ -113,7 +113,7 @@ void CViewCommander::Command_SAVEKEYMACRO( void )
 		return;
 	}
 	// ファイルのフルパスを、フォルダとファイル名に分割
-	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
+	// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
 //	::SplitPath_FolderAndFile( szPath, macroFolder, NULL );
 //	wcscat( macroFolder, L"\\" );
 

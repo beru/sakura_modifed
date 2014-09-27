@@ -27,18 +27,20 @@ class CViewFont;
 class CEditView;
 #include "DispPos.h"
 
-
-class CTextArea{
+class CTextArea {
 public:
 	CTextArea(CEditView* pEditView);
-	virtual ~CTextArea();
+	
+	virtual
+	~CTextArea();
+	
 	void CopyTextAreaStatus(CTextArea* pDst) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     ビュー情報を取得                        //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//!表示される最初の行
+	//! 表示される最初の行
 	CLayoutInt GetViewTopLine() const
 	{
 		return m_nViewTopLine;
@@ -48,7 +50,7 @@ public:
 		m_nViewTopLine=nLine;
 	}
 
-	//!表示域の一番左の桁
+	//! 表示域の一番左の桁
 	CLayoutInt GetViewLeftCol() const
 	{
 		return m_nViewLeftCol;
@@ -143,14 +145,14 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	bool IsRectIntersected(const RECT& rc) const
 	{
-		//rcが無効またはゼロ領域の場合はfalse
-		if( rc.left >= rc.right )return false;
-		if( rc.top  >= rc.bottom )return false;
+		// rcが無効またはゼロ領域の場合はfalse
+		if (rc.left >= rc.right) return false;
+		if (rc.top  >= rc.bottom) return false;
 
-		if( rc.left >= this->GetAreaRight() )return false; //右外
-		if( rc.right <= this->GetAreaLeft() )return false; //左外
-		if( rc.top >= this->GetAreaBottom() )return false; //下外
-		if( rc.bottom <= this->GetAreaTop() )return false; //上外
+		if (rc.left >= this->GetAreaRight()) return false; // 右外
+		if (rc.right <= this->GetAreaLeft()) return false; // 左外
+		if (rc.top >= this->GetAreaBottom()) return false; // 下外
+		if (rc.bottom <= this->GetAreaTop()) return false; // 上外
 		
 		return true;
 	}
@@ -165,8 +167,8 @@ public:
 	//! ドキュメント左端のクライアント座標を取得 (つまり、スクロールされた状態であれば、マイナスを返す)
 	int GetDocumentLeftClientPointX() const;
 
-	//計算
-	//! クライアント座標からレイアウト位置に変換する
+	// 計算
+	// ! クライアント座標からレイアウト位置に変換する
 	void ClientToLayout(CMyPoint ptClient, CLayoutPoint* pptLayout) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -195,7 +197,7 @@ public:
 	//                         サポート                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//$ Generateなんていう大げさな名前じゃなくて、Get～で良い気がしてきた
-	//!クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
+	//! クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
 	void GenerateCharRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const;
 	bool TrimRectByArea(RECT* rc) const;
 	bool GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const;
@@ -212,34 +214,34 @@ public:
 	void GenerateTextAreaRect(RECT* rc) const;
 
 private:
-	//参照
+	// 参照
 	CEditView*	m_pEditView;
 
 public:
-	/* 画面情報 */
-	//ピクセル
+	// 画面情報
+	// ピクセル
 private:
-	int		m_nViewAlignLeft;		/* 表示域の左端座標 */
-	int		m_nViewAlignTop;		/* 表示域の上端座標 */
+	int		m_nViewAlignLeft;		// 表示域の左端座標
+	int		m_nViewAlignTop;		// 表示域の上端座標
 private:
 	int		m_nTopYohaku;
 	int		m_nLeftYohaku;
 private:
-	int		m_nViewCx;				/* 表示域の幅 */
-	int		m_nViewCy;				/* 表示域の高さ */
+	int		m_nViewCx;				// 表示域の幅
+	int		m_nViewCy;				// 表示域の高さ
 
-	//テキスト
+	// テキスト
 private:
-	CLayoutInt	m_nViewTopLine;			/* 表示域の一番上の行(0開始) */
+	CLayoutInt	m_nViewTopLine;			// 表示域の一番上の行(0開始)
 public:
-	CLayoutInt	m_nViewRowNum;			/* 表示域の行数 */
+	CLayoutInt	m_nViewRowNum;			// 表示域の行数
 
 private:
-	CLayoutInt	m_nViewLeftCol;			/* 表示域の一番左の桁(0開始) */
+	CLayoutInt	m_nViewLeftCol;			// 表示域の一番左の桁(0開始)
 public:
-	CLayoutInt	m_nViewColNum;			/* 表示域の桁数 */
+	CLayoutInt	m_nViewColNum;			// 表示域の桁数
 
-	//その他
-	int		m_nViewAlignLeftCols;	/* 行番号域の桁数 */
+	// その他
+	int		m_nViewAlignLeftCols;	// 行番号域の桁数
 };
 

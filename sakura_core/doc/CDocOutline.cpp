@@ -45,14 +45,19 @@ struct SOneRule {
 };
 
 
-
 /*! ルールファイルを読み込み、ルール構造体の配列を作成する
 
 	@date 2002.04.01 YAZAKI
 	@date 2002.11.03 Moca 引数nMaxCountを追加。バッファ長チェックをするように変更
 	@date 2013.06.02 _tfopen_absini,fgetwsをCTextInputStream_AbsIniに変更。UTF-8対応。Regex対応
 */
-int CDocOutline::ReadRuleFile( const TCHAR* pszFilename, SOneRule* pcOneRule, int nMaxCount, bool& bRegex, std::wstring& title )
+int CDocOutline::ReadRuleFile(
+	const TCHAR*	pszFilename,
+	SOneRule*		pcOneRule,
+	int				nMaxCount,
+	bool&			bRegex,
+	std::wstring&	title
+	)
 {
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
@@ -60,7 +65,7 @@ int CDocOutline::ReadRuleFile( const TCHAR* pszFilename, SOneRule* pcOneRule, in
 	if (!file.Good()) {
 		return 0;
 	}
-	wchar_t			szLine[LINEREADBUFSIZE];
+	wchar_t szLine[LINEREADBUFSIZE];
 	static const wchar_t* pszDelimit = L" /// ";
 	static const int nDelimitLen = wcslen( pszDelimit );
 	static const wchar_t* pszKeySeps = L",\0";
@@ -84,7 +89,7 @@ int CDocOutline::ReadRuleFile( const TCHAR* pszFilename, SOneRule* pcOneRule, in
 			}
 			pszWork += nDelimitLen;
 
-			/* 最初のトークンを取得します。 */
+			// 最初のトークンを取得します。
 			wchar_t* pszToken;
 			bool bTopDummy = false;
 			if (bRegex) {
@@ -176,7 +181,7 @@ int CDocOutline::ReadRuleFile( const TCHAR* pszFilename, SOneRule* pcOneRule, in
 */
 void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstring& sTitleOverride )
 {
-	/* ルールファイルの内容をバッファに読み込む */
+	// ルールファイルの内容をバッファに読み込む
 	auto_array_ptr<SOneRule> test(new SOneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
 	bool bRegex;
 	std::wstring title;
@@ -236,14 +241,14 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 		nDepth = 1;
 	}
 	for (CLogicInt nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		//行取得
+		// 行取得
 		CLogicInt nLineLen;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
 
-		//行頭の空白飛ばし
+		// 行頭の空白飛ばし
 		int i;
 		for (i = 0; i < nLineLen; ++i) {
 			if (pLine[i] == L' ' || pLine[i] == L'\t' || pLine[i] == L'　') {
@@ -255,7 +260,7 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 			continue;
 		}
 
-		//先頭文字が見出し記号のいずれかであれば、次へ進む
+		// 先頭文字が見出し記号のいずれかであれば、次へ進む
 		int j;
 		for (j = 0; j < nCount; j++) {
 			if (bRegex) {
@@ -277,10 +282,9 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 			continue;
 		}
 
-		/*	ルールにマッチした行は、アウトライン結果に表示する。
-		*/
+		// ルールにマッチした行は、アウトライン結果に表示する。
 
-		//行文字列から改行を取り除く pLine -> pszText
+		// 行文字列から改行を取り除く pLine -> pszText
 		wchar_t* pszText = new wchar_t[nLineLen + 1];
 		wmemcpy( pszText, &pLine[i], nLineLen );
 		pszText[nLineLen] = L'\0';
@@ -303,7 +307,7 @@ void CDocOutline::MakeFuncList_RuleFile( CFuncInfoArr* pcFuncInfoArr, std::tstri
 			&ptPos
 		);
 
-		/* nDepthを計算 */
+		// nDepthを計算
 		BOOL bAppend = TRUE;
 		int k;
 		for (k = 0; k < nDepth; k++) {

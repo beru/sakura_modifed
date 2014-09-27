@@ -24,7 +24,7 @@
 #pragma once
 
 template <class PointType>
-class CRangeBase{
+class CRangeBase {
 public:
 	typedef typename PointType::IntType IntType;
 public:
@@ -42,7 +42,7 @@ public:
 		m_ptTo = _ptTo;
 	}
 
-	//‘ã“ü
+	// ‘ã“ü
 	CRangeBase& operator = (const CRangeBase& rhs)
 	{
 		m_ptFrom = rhs.m_ptFrom;
@@ -70,7 +70,7 @@ public:
 	{
 		return m_ptFrom.y == m_ptTo.y;
 	}
-	bool IsValid() const //!—LŒø‚È”ÍˆÍ‚È‚çtrue
+	bool IsValid() const //! —LŒø‚È”ÍˆÍ‚È‚çtrue
 	{
 		return m_ptFrom.BothNatural() && m_ptTo.BothNatural();
 	}
@@ -145,7 +145,7 @@ public:
 		m_ptTo.y = nY;
 	}
 
-	//“Áêİ’è
+	// “Áêİ’è
 	void SetLine(IntType nY)					{ m_ptFrom.y = nY;     m_ptTo.y = nY;   }
 	void SetXs(IntType nXFrom, IntType nXTo)	{ m_ptFrom.x = nXFrom; m_ptTo.x = nXTo; }
 private:

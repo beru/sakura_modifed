@@ -32,7 +32,7 @@
 
 #include "convert/CDecode.h"
 
-class CDecode_Base64Decode : public CDecode{
+class CDecode_Base64Decode : public CDecode {
 public:
 	bool DoDecode(const CNativeW& cData, CMemory* pcDst);
 

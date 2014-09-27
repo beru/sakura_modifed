@@ -20,7 +20,7 @@ bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 	CEol		cEol;
 	nBgn = 0;
 	nPosDes = 0;
-	/* CRLFで区切られる「行」を返す。CRLFは行長に加えない */
+	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
 	while (( pLine = GetNextLineW( pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
@@ -33,7 +33,7 @@ bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 				}else {
 					nPosDes++;
 					nPosX++;
-					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		//全角文字ずれ対応 2008.10.15 matsumo
+					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		// 全角文字ずれ対応 2008.10.15 matsumo
 				}
 			}
 		}
@@ -45,7 +45,7 @@ bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 	pDes = new wchar_t[nPosDes + 1];
 	nBgn = 0;
 	nPosDes = 0;
-	/* CRLFで区切られる「行」を返す。CRLFは行長に加えない */
+	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
 	while (( pLine = GetNextLineW( pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
@@ -60,7 +60,7 @@ bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 					pDes[nPosDes] = pLine[i];
 					nPosDes++;
 					nPosX++;
-					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		//全角文字ずれ対応 2008.10.15 matsumo
+					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		// 全角文字ずれ対応 2008.10.15 matsumo
 				}
 			}
 		}

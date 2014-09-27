@@ -33,7 +33,7 @@
 
 //! vector‚É‚¿‚å‚Á‚Æ‹@”\‚ð’Ç‰Á‚µ‚½”Å
 template <class T>
-class vector_ex : public std::vector<T>{
+class vector_ex : public std::vector<T> {
 public:
 	using std::vector<T>::begin;
 	using std::vector<T>::end;

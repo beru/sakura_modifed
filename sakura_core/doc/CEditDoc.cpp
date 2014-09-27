@@ -92,13 +92,14 @@
 	@date 2004.06.21 novice タグジャンプ機能追加
 */
 CEditDoc::CEditDoc(CEditApp* pcApp)
-: m_cDocFile(this)					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-, m_cDocFileOperation(this)			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-, m_cDocEditor(this)				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-, m_cDocType(this)					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-, m_cDocOutline(this)				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-, m_nCommandExecNum( 0 )			/* コマンド実行回数 */
-, m_hBackImg(NULL)
+	:
+	m_cDocFile(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_cDocFileOperation(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_cDocEditor(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_cDocType(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_cDocOutline(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
+	m_nCommandExecNum( 0 ),				// コマンド実行回数
+	m_hBackImg(NULL)
 {
 	MY_RUNNINGTIMER( cRunningTimer, "CEditDoc::CEditDoc" );
 
@@ -116,7 +117,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	}
 	m_cLayoutMgr.SetLayoutInfo( true, ref, ref.m_nTabSpace, nMaxLineKetas );
 
-	//	自動保存の設定	//	Aug, 21, 2000 genta
+	// 自動保存の設定	//	Aug, 21, 2000 genta
 	m_cAutoSaveAgent.ReloadAutoSaveParam();
 
 	//$$ CModifyManager インスタンスを生成
@@ -188,30 +189,30 @@ void CEditDoc::Clear()
 	m_cLayoutMgr.SetLayoutInfo( true, ref, ref.m_nTabSpace, nMaxLineKetas );
 }
 
-/* 既存データのクリア */
+// 既存データのクリア
 void CEditDoc::InitDoc()
 {
 	CAppMode::getInstance()->SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
 	CAppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
 
-	CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode = false;	/* Grepモード */	//$$同上
+	CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode = false;	// Grepモード	//$$同上
 	m_cAutoReloadAgent.m_eWatchUpdate = WU_QUERY; // Dec. 4, 2002 genta 更新監視方法 $$
 
 	// 2005.06.24 Moca バグ修正
-	//	アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま
+	// アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま
 	if (CAppMode::getInstance()->IsDebugMode()) {
 		CAppMode::getInstance()->SetDebugModeOFF();
 	}
 
-//	Sep. 10, 2002 genta
-//	アイコン設定はファイル名設定と一体化のためここからは削除
+	// Sep. 10, 2002 genta
+	// アイコン設定はファイル名設定と一体化のためここからは削除
 
 	Clear();
 
-	/* 変更フラグ */
+	// 変更フラグ
 	m_cDocEditor.SetModified(false,false);	//	Jan. 22, 2002 genta
 
-	/* 文字コード種別 */
+	// 文字コード種別
 	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
 	m_cDocFile.SetCodeSet( ref.m_encoding.m_eDefaultCodetype, ref.m_encoding.m_bDefaultBom );
 	m_cDocEditor.m_cNewLineCode = ref.m_encoding.m_eDefaultEoltype;
@@ -295,10 +296,10 @@ void CEditDoc::SetBackgroundImage()
 	}
 }
 
-/* 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する */
+// 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する
 void CEditDoc::InitAllView( void )
 {
-	m_nCommandExecNum = 0;	/* コマンド実行回数 */
+	m_nCommandExecNum = 0;	// コマンド実行回数
 
 	// 2008.05.30 nasukoji	テキストの折り返し方法を初期化
 	m_nTextWrapMethodCur = m_cDocType.GetDocumentAttribute().m_nTextWrapMethod;	// 折り返し方法
@@ -385,7 +386,7 @@ bool CEditDoc::GetDocumentBomExist() const
 //! ドキュメントの文字コードを設定
 void CEditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 {
-	if (!IsValidCodeType(eCharCode)) return; //無効な範囲を受け付けない
+	if (!IsValidCodeType(eCharCode)) return; // 無効な範囲を受け付けない
 
 	m_cDocFile.SetCodeSet( eCharCode, bBom );
 }
@@ -397,35 +398,35 @@ void CEditDoc::GetSaveInfo(SSaveInfo* pSaveInfo) const
 	pSaveInfo->eCharCode   = m_cDocFile.GetCodeSet();
 	pSaveInfo->bBomExist   = m_cDocFile.IsBomExist();
 	pSaveInfo->bChgCodeSet = m_cDocFile.IsChgCodeSet();
-	pSaveInfo->cEol        = m_cDocEditor.m_cNewLineCode; //編集時改行コードを保存時改行コードとして設定
+	pSaveInfo->cEol        = m_cDocEditor.m_cNewLineCode; // 編集時改行コードを保存時改行コードとして設定
 }
 
 
-/* 編集ファイル情報を格納 */
+// 編集ファイル情報を格納
 void CEditDoc::GetEditInfo(
 	EditInfo* pfi	//!< [out]
 ) const
 {
-	//ファイルパス
+	// ファイルパス
 	_tcscpy_s(pfi->m_szPath, m_cDocFile.GetFilePath());
 
-	//表示域
-	pfi->m_nViewTopLine = m_pcEditWnd->GetActiveView().GetTextArea().GetViewTopLine();	/* 表示域の一番上の行(0開始) */
-	pfi->m_nViewLeftCol = m_pcEditWnd->GetActiveView().GetTextArea().GetViewLeftCol();	/* 表示域の一番左の桁(0開始) */
+	// 表示域
+	pfi->m_nViewTopLine = m_pcEditWnd->GetActiveView().GetTextArea().GetViewTopLine();	// 表示域の一番上の行(0開始)
+	pfi->m_nViewLeftCol = m_pcEditWnd->GetActiveView().GetTextArea().GetViewLeftCol();	// 表示域の一番左の桁(0開始)
 
-	//キャレット位置
+	// キャレット位置
 	pfi->m_ptCursor.Set(m_pcEditWnd->GetActiveView().GetCaret().GetCaretLogicPos());
 
-	//各種状態
-	pfi->m_bIsModified = m_cDocEditor.IsModified();			/* 変更フラグ */
-	pfi->m_nCharCode = m_cDocFile.GetCodeSet();				/* 文字コード種別 */
+	// 各種状態
+	pfi->m_bIsModified = m_cDocEditor.IsModified();			// 変更フラグ
+	pfi->m_nCharCode = m_cDocFile.GetCodeSet();				// 文字コード種別
 	pfi->m_nTypeId = m_cDocType.GetDocumentAttribute().m_id;
 
-	//GREPモード
+	// GREPモード
 	pfi->m_bIsGrep = CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode;
 	wcscpy_s( pfi->m_szGrepKey, CAppMode::getInstance()->m_szGrepKey );
 
-	//デバッグモニタ (アウトプットウインドウ) モード
+	// デバッグモニタ (アウトプットウインドウ) モード
 	pfi->m_bIsDebug = CAppMode::getInstance()->IsDebugMode();
 }
 
@@ -437,14 +438,14 @@ void CEditDoc::GetEditInfo(
 //
 bool CEditDoc::IsModificationForbidden( EFunctionCode nCommand ) const
 {
-	//	編集可能の場合
+	// 編集可能の場合
 	if (IsEditable())
 		return false; // 常に書き換え許可
 
-	//	編集禁止の場合
-	//	暫定Case文: 実際にはもっと効率の良い方法を使うべき
+	// 編集禁止の場合
+	// 暫定Case文: 実際にはもっと効率の良い方法を使うべき
 	switch (nCommand) {
-	//	ファイルを書き換えるコマンドは使用禁止
+	// ファイルを書き換えるコマンドは使用禁止
 	case F_WCHAR:
 	case F_IME_CHAR:
 	case F_DELETE:
@@ -550,10 +551,10 @@ bool CEditDoc::IsAcceptLoad() const
 */
 BOOL CEditDoc::HandleCommand( EFunctionCode nCommand )
 {
-	//	May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
-	//	下位16ビットのみを取り出す
+	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
+	// 下位16ビットのみを取り出す
 	switch (LOWORD( nCommand )) {
-	case F_PREVWINDOW:	//前のウィンドウ
+	case F_PREVWINDOW:	// 前のウィンドウ
 		{
 			int nPane = m_pcEditWnd->m_cSplitterWnd.GetPrevPane();
 			if (-1 != nPane) {
@@ -563,7 +564,7 @@ BOOL CEditDoc::HandleCommand( EFunctionCode nCommand )
 			}
 		}
 		return TRUE;
-	case F_NEXTWINDOW:	//次のウィンドウ
+	case F_NEXTWINDOW:	// 次のウィンドウ
 		{
 			int nPane = m_pcEditWnd->m_cSplitterWnd.GetNextPane();
 			if (-1 != nPane) {
@@ -586,7 +587,7 @@ BOOL CEditDoc::HandleCommand( EFunctionCode nCommand )
 */
 void CEditDoc::OnChangeType()
 {
-	/* 設定変更を反映させる */
+	// 設定変更を反映させる
 	m_bTextWrapMethodCurTemp = false;	// 折り返し方法の一時設定適用中を解除	// 2008.06.08 ryoji
 	m_blfCurTemp = false;
 	m_bTabSpaceCurTemp = false;
@@ -622,18 +623,18 @@ void CEditDoc::OnChangeSetting(
 
 	if (pCEditWnd) {
 		hwndProgress = pCEditWnd->m_cStatusBar.GetProgressHwnd();
-		//	Status Barが表示されていないときはm_hwndProgressBar == NULL
+		// Status Barが表示されていないときはm_hwndProgressBar == NULL
 	}
 
 	if (hwndProgress) {
 		::ShowWindow( hwndProgress, SW_SHOW );
 	}
 
-	/* ファイルの排他モード変更 */
+	// ファイルの排他モード変更
 	if (m_cDocFile.GetShareMode() != GetDllShareData().m_Common.m_sFile.m_nFileShareMode) {
 		m_cDocFile.SetShareMode( GetDllShareData().m_Common.m_sFile.m_nFileShareMode );
 
-		/* ファイルの排他ロック解除 */
+		// ファイルの排他ロック解除
 		m_cDocFileOperation.DoFileUnlock();
 
 		// ファイル書込可能のチェック処理
@@ -643,13 +644,13 @@ void CEditDoc::OnChangeSetting(
 			pCEditWnd->UpdateCaption();
 		}
 
-		/* ファイルの排他ロック */
+		// ファイルの排他ロック
 		if (m_cDocLocker.IsDocWritable()) {
 			m_cDocFileOperation.DoFileLock();
 		}
 	}
 
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
 
 	CLogicPointEx* posSaveAry = NULL;
@@ -772,7 +773,7 @@ void CEditDoc::OnChangeSetting(
 	else
 		m_cLayoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
 
-	/* ビューに設定変更を反映させる */
+	// ビューに設定変更を反映させる
 	int viewCount = m_pcEditWnd->GetAllViewCount();
 	for (int i = 0; i < viewCount; ++i) {
 		m_pcEditWnd->GetView(i).OnChangeSetting();
@@ -798,21 +799,21 @@ void CEditDoc::OnChangeSetting(
 */
 BOOL CEditDoc::OnFileClose()
 {
-	//クローズ事前処理
+	// クローズ事前処理
 	ECallbackResult eBeforeCloseResult = NotifyBeforeClose();
 	if (eBeforeCloseResult == CALLBACK_INTERRUPT) return FALSE;
 	
 	// デバッグモニタモードのときは保存確認しない
 	if (CAppMode::getInstance()->IsDebugMode()) return TRUE;
 
-	//GREPモードで、かつ、「GREPモードで保存確認するか」がOFFだったら、保存確認しない
+	// GREPモードで、かつ、「GREPモードで保存確認するか」がOFFだったら、保存確認しない
 	// 2011.11.13 GrepモードでGrep直後は"未編集"状態になっているが保存確認が必要
 	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
 		if (!GetDllShareData().m_Common.m_sSearch.m_bGrepExitConfirm) {
 			return TRUE;
 		}
 	}else {
-		//テキスト,文字コードセットが変更されていない場合は保存確認しない
+		// テキスト,文字コードセットが変更されていない場合は保存確認しない
 		if (!m_cDocEditor.IsModified() && !m_cDocFile.IsChgCodeSet()) {
 			return TRUE;
 		}
@@ -837,11 +838,11 @@ BOOL CEditDoc::OnFileClose()
 		auto_sprintf_s( szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->m_nId );	//(無題)
 		pszTitle = szGrepTitle;
 	}
-	/* ウィンドウをアクティブにする */
+	// ウィンドウをアクティブにする
 	HWND	hwndMainFrame = CEditWnd::getInstance()->GetHwnd();
 	ActivateFrameWindow( hwndMainFrame );
 	int nBool;
-	if (CAppMode::getInstance()->IsViewMode()) {	/* ビューモード */
+	if (CAppMode::getInstance()->IsViewMode()) {	// ビューモード
 		ConfirmBeep();
 		int nRet = ::MYMESSAGEBOX(
 			hwndMainFrame,

@@ -90,11 +90,11 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0); //###
 
 	// Apr. 03, 2003 genta 固定文字列をまとめる
-	const wstring	PRINT_PREVIEW_ONLY		= LSW( STR_PREVIEW_ONLY );	//L"(印刷プレビューでのみ使用できます)";
+	const wstring	PRINT_PREVIEW_ONLY		= LSW( STR_PREVIEW_ONLY );	// L"(印刷プレビューでのみ使用できます)";
 	const int		PRINT_PREVIEW_ONLY_LEN	= PRINT_PREVIEW_ONLY.length();
-	const wstring	NO_TITLE				= LSW( STR_NO_TITLE1 );	//L"(無題)";
+	const wstring	NO_TITLE				= LSW( STR_NO_TITLE1 );	// L"(無題)";
 	const int		NO_TITLE_LEN			= NO_TITLE.length();
-	const wstring	NOT_SAVED				= LSW( STR_NOT_SAVED );	//L"(保存されていません)";
+	const wstring	NOT_SAVED				= LSW( STR_NOT_SAVED );	// L"(保存されていません)";
 	const int		NOT_SAVED_LEN			= NOT_SAVED.length();
 
 	const wchar_t *p, *r;	//	p：目的のバッファ。r：作業用のポインタ。
@@ -106,14 +106,14 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			continue;
 		}
 		switch (*(++p)) {
-		case L'$':	//	 $$ -> $
+		case L'$':	// $$ -> $
 			*q++ = *p++;
 			break;
-		case L'A':	//アプリ名
+		case L'A':	// アプリ名
 			q = wcs_pushW( q, q_max - q, GSTR_APPNAME_W, wcslen(GSTR_APPNAME_W) );
 			++p;
 			break;
-		case L'F':	//	開いているファイルの名前（フルパス）
+		case L'F':	// 開いているファイルの名前（フルパス）
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW( q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN );
 				++p;
@@ -123,10 +123,10 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}
 			break;
-		case L'f':	//	開いているファイルの名前（ファイル名+拡張子のみ）
+		case L'f':	// 開いているファイルの名前（ファイル名+拡張子のみ）
 			// Oct. 28, 2001 genta
-			//	ファイル名のみを渡すバージョン
-			//	ポインタを末尾に
+			// ファイル名のみを渡すバージョン
+			// ポインタを末尾に
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW( q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN );
 				++p;
@@ -137,21 +137,21 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}
 			break;
-		case L'g':	//	開いているファイルの名前（拡張子を除くファイル名のみ）
+		case L'g':	// 開いているファイルの名前（拡張子を除くファイル名のみ）
 			//	From Here Sep. 16, 2002 genta
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW( q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN );
 				++p;
 			}else {
-				//	ポインタを末尾に
+				// ポインタを末尾に
 				const wchar_t *dot_position, *end_of_path;
 				r = to_wchar(pcDoc->m_cDocFile.GetFileName()); // 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
 				end_of_path = dot_position =
 					r + wcslen( r );
-				//	後ろから.を探す
+				// 後ろから.を探す
 				for (--dot_position ; dot_position > r && *dot_position != '.'; --dot_position)
 					;
-				//	rと同じ場所まで行ってしまった⇔.が無かった
+				// rと同じ場所まで行ってしまった⇔.が無かった
 				if (dot_position == r)
 					dot_position = end_of_path;
 
@@ -159,14 +159,14 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}
 			break;
-			//	To Here Sep. 16, 2002 genta
-		case L'/':	//	開いているファイルの名前（フルパス。パスの区切りが/）
+			// To Here Sep. 16, 2002 genta
+		case L'/':	// 開いているファイルの名前（フルパス。パスの区切りが/）
 			// Oct. 28, 2001 genta
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW( q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN );
 				++p;
 			}else {
-				//	パスの区切りとして'/'を使うバージョン
+				// パスの区切りとして'/'を使うバージョン
 				for (r = to_wchar(pcDoc->m_cDocFile.GetFilePath()); *r != L'\0' && q < q_max; ++r, ++q) {
 					if (*r == L'\\')
 						*q = L'/';
@@ -176,8 +176,8 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}
 			break;
-		//	From Here 2003/06/21 Moca
-		case L'N':	//	開いているファイルの名前(簡易表示)
+		// From Here 2003/06/21 Moca
+		case L'N':	// 開いているファイルの名前(簡易表示)
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW( q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN );
 				++p;
@@ -188,7 +188,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}
 			break;
-		//	To Here 2003/06/21 Moca
+		// To Here 2003/06/21 Moca
 		case L'n':
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
@@ -709,7 +709,7 @@ void CSakuraEnvironment::ResolvePath(TCHAR* pszPath)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-/* 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる */
+// 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる
 BOOL IsSakuraMainWindow( HWND hWnd )
 {
 	TCHAR szClassName[64];

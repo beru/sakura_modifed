@@ -1569,12 +1569,12 @@ TCHAR CMenuDrawer::GetAccelCharFromLabel( const TCHAR* pszLabel )
 	return _T('\0');
 }
 
-struct WorkData{
+struct WorkData {
 	int				idx;
 	MENUITEMINFO	mii;
 };
 
-/*! メニューアクセスキー押下時の処理(WM_MENUCHAR処理) */
+//! メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
 LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	TCHAR chUser;
@@ -1702,7 +1702,7 @@ void CMenuDrawer::AddToolButton( int iBitmap, int iCommand )
 
 				// 未登録
 				SetTBBUTTONVal( &tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 );
-				//最後に追加に変更
+				// 最後に追加に変更
 				m_tbMyButton.push_back( tbb );
 				m_nMyButtonNum++;
 			}else {
@@ -1724,8 +1724,8 @@ void CMenuDrawer::AddToolButton( int iBitmap, int iCommand )
 			SetTBBUTTONVal( &tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 );
 
 			m_pShareData->m_PlugCmdIcon[iCmdNo] = (short)m_tbMyButton.size();
-			//最後から２番目に挿入する。一番最後は番兵で固定。
-			//2010.06.23 Moca 最後に追加に変更
+			// 最後から２番目に挿入する。一番最後は番兵で固定。
+			// 2010.06.23 Moca 最後に追加に変更
 			m_tbMyButton.push_back( tbb );
 			m_nMyButtonNum++;
 		}

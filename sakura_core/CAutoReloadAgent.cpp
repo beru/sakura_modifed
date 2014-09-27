@@ -34,8 +34,9 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CAutoReloadAgent::CAutoReloadAgent()
-: m_eWatchUpdate( WU_QUERY )
-, m_nPauseCount(0)
+	:
+	m_eWatchUpdate( WU_QUERY ),
+	m_nPauseCount(0)
 {
 }
 

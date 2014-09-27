@@ -26,7 +26,7 @@
 #include "view/figures/CFigureStrategy.h"
 
 //! ‰üs•`‰æ
-class CFigure_Eol : public CFigureSpace{
+class CFigure_Eol : public CFigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText) const;

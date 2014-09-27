@@ -26,19 +26,20 @@
 #include "CCodeBase.h"
 #include "CUtf8.h"
 
-
 class CCesu8 : public CCodeBase {
 public:
 
-	//CCodeBaseインターフェース
+	// CCodeBaseインターフェース
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){	//!< 特定コード → UNICODE    変換
 		*pDst->_GetMemory()=cSrc; return CUtf8::CESU8ToUnicode(pDst->_GetMemory());
 	}
+	
 	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst){	//!< UNICODE    → 特定コード 変換
 		*pDst=*cSrc._GetMemory(); return CUtf8::UnicodeToCESU8(pDst);
 	}
-	void GetBom(CMemory* pcmemBom);																			//!< BOMデータ取得
-// GetEolはCCodeBaseに移動	2010/6/13 Uchi
+	
+	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得
+	// GetEolはCCodeBaseに移動	2010/6/13 Uchi
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar){			//!< UNICODE → Hex 変換
 		return CUtf8()._UnicodeToHex( cSrc, iSLen, pDst, psStatusbar, true );
 	}

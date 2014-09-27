@@ -25,21 +25,21 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//検索 CDlgFind.cpp	//@@@ 2002.01.07 add start MIK
+// 検索 CDlgFind.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//11800
-	IDC_BUTTON_SEARCHNEXT,			HIDC_FIND_BUTTON_SEARCHNEXT,		//次を検索
-	IDC_BUTTON_SEARCHPREV,			HIDC_FIND_BUTTON_SEARCHPREV,		//前を検索
-	IDCANCEL,						HIDCANCEL_FIND,						//キャンセル
-	IDC_BUTTON_HELP,				HIDC_FIND_BUTTON_HELP,				//ヘルプ
-	IDC_CHK_WORD,					HIDC_FIND_CHK_WORD,					//単語単位
-	IDC_CHK_LOHICASE,				HIDC_FIND_CHK_LOHICASE,				//大文字小文字
-	IDC_CHK_REGULAREXP,				HIDC_FIND_CHK_REGULAREXP,			//正規表現
-	IDC_CHECK_NOTIFYNOTFOUND,		HIDC_FIND_CHECK_NOTIFYNOTFOUND,		//見つからないときに通知
-	IDC_CHECK_bAutoCloseDlgFind,	HIDC_FIND_CHECK_bAutoCloseDlgFind,	//自動的に閉じる
-	IDC_COMBO_TEXT,					HIDC_FIND_COMBO_TEXT,				//検索文字列
-	IDC_STATIC_JRE32VER,			HIDC_FIND_STATIC_JRE32VER,			//正規表現バージョン
-	IDC_BUTTON_SETMARK,				HIDC_FIND_BUTTON_SETMARK,			//2002.01.16 hor 検索該当行をマーク
-	IDC_CHECK_SEARCHALL,			HIDC_FIND_CHECK_SEARCHALL,			//2002.01.26 hor 先頭（末尾）から再検索
+	IDC_BUTTON_SEARCHNEXT,			HIDC_FIND_BUTTON_SEARCHNEXT,		// 次を検索
+	IDC_BUTTON_SEARCHPREV,			HIDC_FIND_BUTTON_SEARCHPREV,		// 前を検索
+	IDCANCEL,						HIDCANCEL_FIND,						// キャンセル
+	IDC_BUTTON_HELP,				HIDC_FIND_BUTTON_HELP,				// ヘルプ
+	IDC_CHK_WORD,					HIDC_FIND_CHK_WORD,					// 単語単位
+	IDC_CHK_LOHICASE,				HIDC_FIND_CHK_LOHICASE,				// 大文字小文字
+	IDC_CHK_REGULAREXP,				HIDC_FIND_CHK_REGULAREXP,			// 正規表現
+	IDC_CHECK_NOTIFYNOTFOUND,		HIDC_FIND_CHECK_NOTIFYNOTFOUND,		// 見つからないときに通知
+	IDC_CHECK_bAutoCloseDlgFind,	HIDC_FIND_CHECK_bAutoCloseDlgFind,	// 自動的に閉じる
+	IDC_COMBO_TEXT,					HIDC_FIND_COMBO_TEXT,				// 検索文字列
+	IDC_STATIC_JRE32VER,			HIDC_FIND_STATIC_JRE32VER,			// 正規表現バージョン
+	IDC_BUTTON_SETMARK,				HIDC_FIND_BUTTON_SETMARK,			// 2002.01.16 hor 検索該当行をマーク
+	IDC_CHECK_SEARCHALL,			HIDC_FIND_CHECK_SEARCHALL,			// 2002.01.26 hor 先頭（末尾）から再検索
 //	IDC_STATIC,						-1,
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
@@ -81,7 +81,7 @@ INT_PTR CDlgFind::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
 	return result;
 }
 
-/* モードレスダイアログの表示 */
+// モードレスダイアログの表示
 HWND CDlgFind::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
 {
 	m_sSearchOption = m_pShareData->m_Common.m_sSearch.m_sSearchOption;		// 検索オプション
@@ -91,7 +91,7 @@ HWND CDlgFind::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
 	return CDialog::DoModeless( hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW );
 }
 
-/* モードレス時：検索対象となるビューの変更 */
+// モードレス時：検索対象となるビューの変更
 void CDlgFind::ChangeView( LPARAM pcEditView )
 {
 	m_lParam = pcEditView;
@@ -121,7 +121,7 @@ BOOL CDlgFind::OnDestroy()
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgFind::SetData( void )
 {
 //	MYTRACE( _T("CDlgFind::SetData()") );
@@ -132,28 +132,28 @@ void CDlgFind::SetData( void )
 	// Here Jun. 26, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直しによりjre.dll判定を削除
 
-	/* ユーザーがコンボ ボックスのエディット コントロールに入力できるテキストの長さを制限する */
+	// ユーザーがコンボ ボックスのエディット コントロールに入力できるテキストの長さを制限する
 	// 2011.12.18 長さ制限撤廃
 	// Combo_LimitText( ::GetDlgItem( GetHwnd(), IDC_COMBO_TEXT ), _MAX_PATH - 1 );
-	/* コンボボックスのユーザー インターフェイスを拡張インターフェースにする */
+	// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
 	Combo_SetExtendedUI( ::GetDlgItem( GetHwnd(), IDC_COMBO_TEXT ), TRUE );
 
 
 	/*****************************
 	*         データ設定         *
 	*****************************/
-	/* 検索文字列 */
+	// 検索文字列
 	// 検索文字列リストの設定(関数化)	2010/5/28 Uchi
 	SetCombosList();
 
-	/* 英大文字と英小文字を区別する */
+	// 英大文字と英小文字を区別する
 	::CheckDlgButton( GetHwnd(), IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase );
 
 	// 2001/06/23 Norio Nakatani
-	/* 単語単位で検索 */
+	// 単語単位で検索
 	::CheckDlgButton( GetHwnd(), IDC_CHK_WORD, m_sSearchOption.bWordOnly );
 
-	/* 検索／置換  見つからないときメッセージを表示 */
+	// 検索／置換  見つからないときメッセージを表示
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND );
 
 	// From Here Jun. 29, 2001 genta
@@ -164,24 +164,24 @@ void CDlgFind::SetData( void )
 		&& CheckRegexpVersion( GetHwnd(), IDC_STATIC_JRE32VER, false )
 		&& m_sSearchOption.bRegularExp
 	) {
-		/* 英大文字と英小文字を区別する */
+		// 英大文字と英小文字を区別する
 		::CheckDlgButton( GetHwnd(), IDC_CHK_REGULAREXP, 1 );
 //正規表現がONでも、大文字小文字を区別する／しないを選択できるように。
 //		::CheckDlgButton( GetHwnd(), IDC_CHK_LOHICASE, 1 );
 //		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHK_LOHICASE ), FALSE );
 
 		// 2001/06/23 N.Nakatani
-		/* 単語単位で探す */
+		// 単語単位で探す
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHK_WORD ), FALSE );
 	}else {
 		::CheckDlgButton( GetHwnd(), IDC_CHK_REGULAREXP, 0 );
 	}
 	// To Here Jun. 29, 2001 genta
 
-	/* 検索ダイアログを自動的に閉じる */
+	// 検索ダイアログを自動的に閉じる
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_bAutoCloseDlgFind, m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind );
 
-	/* 先頭（末尾）から再検索 2002.01.26 hor */
+	// 先頭（末尾）から再検索 2002.01.26 hor
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll );
 
 	return;
@@ -194,7 +194,7 @@ void CDlgFind::SetCombosList( void )
 {
 	HWND	hwndCombo;
 
-	/* 検索文字列 */
+	// 検索文字列
 	hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_TEXT );
 	while (Combo_GetCount(hwndCombo) > 0) {
 		Combo_DeleteString( hwndCombo, 0);
@@ -208,41 +208,41 @@ void CDlgFind::SetCombosList( void )
 }
 
 
-/* ダイアログデータの取得 */
+// ダイアログデータの取得
 int CDlgFind::GetData( void )
 {
 //	MYTRACE( _T("CDlgFind::GetData()") );
 
-	/* 英大文字と英小文字を区別する */
+	// 英大文字と英小文字を区別する
 	m_sSearchOption.bLoHiCase = (0!=IsDlgButtonChecked( GetHwnd(), IDC_CHK_LOHICASE ));
 
 	// 2001/06/23 Norio Nakatani
-	/* 単語単位で検索 */
+	// 単語単位で検索
 	m_sSearchOption.bWordOnly = (0!=IsDlgButtonChecked( GetHwnd(), IDC_CHK_WORD ));
 
-	/* 一致する単語のみ検索する */
-	/* 正規表現 */
+	// 一致する単語のみ検索する
+	// 正規表現
 	m_sSearchOption.bRegularExp = (0!=IsDlgButtonChecked( GetHwnd(), IDC_CHK_REGULAREXP ));
 
-	/* 検索／置換  見つからないときメッセージを表示 */
+	// 検索／置換  見つからないときメッセージを表示
 	m_bNOTIFYNOTFOUND = ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND );
 
 	m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 
-	/* 検索文字列 */
+	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength( GetItemHwnd(IDC_COMBO_TEXT) ) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
 	::DlgItem_GetText( GetHwnd(), IDC_COMBO_TEXT, &vText[0], nBufferSize);
 	m_strText = to_wchar(&vText[0]);
 
-	/* 検索ダイアログを自動的に閉じる */
+	// 検索ダイアログを自動的に閉じる
 	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind = ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_bAutoCloseDlgFind );
 
-	/* 先頭（末尾）から再検索 2002.01.26 hor */
+	// 先頭（末尾）から再検索 2002.01.26 hor
 	m_pShareData->m_Common.m_sSearch.m_bSearchAll = ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_SEARCHALL );
 
 	if (0 < m_strText.length()) {
-		/* 正規表現？ */
+		// 正規表現？
 		// From Here Jun. 26, 2001 genta
 		//	正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
@@ -254,7 +254,7 @@ int CDlgFind::GetData( void )
 		}
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 
-		/* 検索文字列 */
+		// 検索文字列
 		//@@@ 2002.2.2 YAZAKI CShareDataに移動
 		if (m_strText.size() < _MAX_PATH) {
 			CSearchKeywordManager().AddToSearchKeyArr( m_strText.c_str() );
@@ -272,7 +272,7 @@ int CDlgFind::GetData( void )
 		}
 		pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence;
 		if (!m_bModal) {
-			/* ダイアログデータの設定 */
+			// ダイアログデータの設定
 			//SetData();
 			SetCombosList();		//	コンボのみの初期化	2010/5/28 Uchi
 		}
@@ -289,53 +289,53 @@ BOOL CDlgFind::OnBnClicked( int wID )
 	CEditView*	pcEditView = (CEditView*)m_lParam;
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「検索」のヘルプ */
+		//「検索」のヘルプ
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_SEARCH_DIALOG) );	//Apr. 5, 2001 JEPRO 修正漏れを追加	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		break;
-	case IDC_CHK_REGULAREXP:	/* 正規表現 */
+	case IDC_CHK_REGULAREXP:	// 正規表現
 //		MYTRACE( _T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked( GetHwnd(), IDC_CHK_REGULAREXP ) = %d\n"), ::IsDlgButtonChecked( GetHwnd(), IDC_CHK_REGULAREXP ) );
 		if (::IsDlgButtonChecked( GetHwnd(), IDC_CHK_REGULAREXP )) {
 			// From Here Jun. 26, 2001 genta
-			//	正規表現ライブラリの差し替えに伴う処理の見直し
+			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion( GetHwnd(), IDC_STATIC_JRE32VER, true )) {
 				::CheckDlgButton( GetHwnd(), IDC_CHK_REGULAREXP, 0 );
 			}else {
 			// To Here Jun. 26, 2001 genta
 
-				/* 英大文字と英小文字を区別する */
+				// 英大文字と英小文字を区別する
 				//	Jan. 31, 2002 genta
 				//	大文字・小文字の区別は正規表現の設定に関わらず保存する
 				//::CheckDlgButton( GetHwnd(), IDC_CHK_LOHICASE, 1 );
 				//::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHK_LOHICASE ), FALSE );
 
 				// 2001/06/23 Norio Nakatani
-				/* 単語単位で検索 */
+				// 単語単位で検索
 				::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHK_WORD ), FALSE );
 			}
 		}else {
-			/* 英大文字と英小文字を区別する */
+			// 英大文字と英小文字を区別する
 			//::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHK_LOHICASE ), TRUE );
 			//	Jan. 31, 2002 genta
 			//	大文字・小文字の区別は正規表現の設定に関わらず保存する
 			//::CheckDlgButton( GetHwnd(), IDC_CHK_LOHICASE, 0 );
 
 			// 2001/06/23 Norio Nakatani
-			/* 単語単位で検索 */
+			// 単語単位で検索
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHK_WORD ), TRUE );
 		}
 		break;
-	case IDC_BUTTON_SEARCHPREV:	/* 上検索 */	//Feb. 13, 2001 JEPRO ボタン名を[IDC_BUTTON1]→[IDC_BUTTON_SERACHPREV]に変更
-		/* ダイアログデータの取得 */
+	case IDC_BUTTON_SEARCHPREV:	// 上検索	//Feb. 13, 2001 JEPRO ボタン名を[IDC_BUTTON1]→[IDC_BUTTON_SERACHPREV]に変更
+		// ダイアログデータの取得
 		nRet = GetData();
 		if (0 < nRet) {
-			if (m_bModal) {		/* モーダルダイアログか */
+			if (m_bModal) {		// モーダルダイアログか
 				CloseDialog( 1 );
 			}else {
-				/* 前を検索 */
+				// 前を検索
 				pcEditView->GetCommander().HandleCommand( F_SEARCH_PREV, true, (LPARAM)GetHwnd(), 0, 0, 0 );
 
-				/* 再描画 2005.04.06 zenryaku 0文字幅マッチでキャレットを表示するため */
+				// 再描画 2005.04.06 zenryaku 0文字幅マッチでキャレットを表示するため
 				pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 
 				// 02/06/26 ai Start
@@ -347,7 +347,7 @@ BOOL CDlgFind::OnBnClicked( int wID )
 					// 02/07/28 ai end
 				}//  02/06/26 ai End
 
-				/* 検索ダイアログを自動的に閉じる */
+				// 検索ダイアログを自動的に閉じる
 				if (m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind) {
 					CloseDialog( 0 );
 				}
@@ -356,17 +356,17 @@ BOOL CDlgFind::OnBnClicked( int wID )
 			OkMessage( GetHwnd(), LS(STR_DLGFIND1) );	// 検索条件を指定してください。
 		}
 		return TRUE;
-	case IDC_BUTTON_SEARCHNEXT:		/* 下検索 */	//Feb. 13, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_SERACHNEXT]に変更
-		/* ダイアログデータの取得 */
+	case IDC_BUTTON_SEARCHNEXT:		// 下検索	//Feb. 13, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_SERACHNEXT]に変更
+		// ダイアログデータの取得
 		nRet = GetData();
 		if (0 < nRet) {
-			if (m_bModal) {		/* モーダルダイアログか */
+			if (m_bModal) {		// モーダルダイアログか
 				CloseDialog( 2 );
 			}else {
-				/* 次を検索 */
+				// 次を検索
 				pcEditView->GetCommander().HandleCommand( F_SEARCH_NEXT, true, (LPARAM)GetHwnd(), 0, 0, 0 );
 
-				/* 再描画 2005.04.06 zenryaku 0文字幅マッチでキャレットを表示するため */
+				// 再描画 2005.04.06 zenryaku 0文字幅マッチでキャレットを表示するため
 				pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要
 
 				// 検索開始位置を登録
@@ -376,7 +376,7 @@ BOOL CDlgFind::OnBnClicked( int wID )
 					pcEditView->m_bSearch = FALSE;
 				}
 
-				/* 検索ダイアログを自動的に閉じる */
+				// 検索ダイアログを自動的に閉じる
 				if (m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind) {
 					CloseDialog( 0 );
 				}
@@ -385,13 +385,13 @@ BOOL CDlgFind::OnBnClicked( int wID )
 			OkMessage( GetHwnd(), LS(STR_DLGFIND1) );	// 検索条件を指定してください。
 		}
 		return TRUE;
-	case IDC_BUTTON_SETMARK:	//2002.01.16 hor 該当行マーク
+	case IDC_BUTTON_SETMARK:	// 2002.01.16 hor 該当行マーク
 		if (0 < GetData()) {
-			if (m_bModal) {		/* モーダルダイアログか */
+			if (m_bModal) {		// モーダルダイアログか
 				CloseDialog( 2 );
 			}else {
 				pcEditView->GetCommander().HandleCommand( F_BOOKMARK_PATTERN, false, 0, 0, 0, 0 );
-				/* 検索ダイアログを自動的に閉じる */
+				// 検索ダイアログを自動的に閉じる
 				if (m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind) {
 					CloseDialog( 0 );
 				}else {

@@ -35,7 +35,7 @@
 #include <CommDlg.h> // PRINTDLG
 
 struct	MYDEVMODE {
-	BOOL	m_bPrinterNotFound;	/* プリンタがなかったフラグ */
+	BOOL	m_bPrinterNotFound;	// プリンタがなかったフラグ
 	TCHAR	m_szPrinterDriverName[_MAX_PATH + 1];	// プリンタドライバ名
 	TCHAR	m_szPrinterDeviceName[_MAX_PATH + 1];	// プリンタデバイス名
 	TCHAR	m_szPrinterOutputName[_MAX_PATH + 1];	// プリンタポート名
@@ -83,33 +83,33 @@ struct PRINTSETTING;
 #define HEADER_MAX	100
 #define FOOTER_MAX	HEADER_MAX
 struct PRINTSETTING {
-	TCHAR			m_szPrintSettingName[32 + 1];		/*!< 印刷設定の名前 */
-	TCHAR			m_szPrintFontFaceHan[LF_FACESIZE];	/*!< 印刷フォント */
-	TCHAR			m_szPrintFontFaceZen[LF_FACESIZE];	/*!< 印刷フォント */
-	int				m_nPrintFontWidth;					/*!< 印刷フォント幅(1/10mm単位単位) */
-	int				m_nPrintFontHeight;					/*!< 印刷フォント高さ(1/10mm単位単位) */
-	int				m_nPrintDansuu;						/*!< 段組の段数 */
-	int				m_nPrintDanSpace;					/*!< 段と段の隙間(1/10mm単位) */
-	int				m_nPrintLineSpacing;				/*!< 印刷フォント行間 文字の高さに対する割合(%) */
-	int				m_nPrintMarginTY;					/*!< 印刷用紙マージン 上(mm単位) */
-	int				m_nPrintMarginBY;					/*!< 印刷用紙マージン 下(mm単位) */
-	int				m_nPrintMarginLX;					/*!< 印刷用紙マージン 左(mm単位) */
-	int				m_nPrintMarginRX;					/*!< 印刷用紙マージン 右(mm単位) */
-	short			m_nPrintPaperOrientation;			/*!< 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2) */
-	short			m_nPrintPaperSize;					/*!< 用紙サイズ */
+	TCHAR			m_szPrintSettingName[32 + 1];		//!< 印刷設定の名前
+	TCHAR			m_szPrintFontFaceHan[LF_FACESIZE];	//!< 印刷フォント
+	TCHAR			m_szPrintFontFaceZen[LF_FACESIZE];	//!< 印刷フォント
+	int				m_nPrintFontWidth;					//!< 印刷フォント幅(1/10mm単位単位)
+	int				m_nPrintFontHeight;					//!< 印刷フォント高さ(1/10mm単位単位)
+	int				m_nPrintDansuu;						//!< 段組の段数
+	int				m_nPrintDanSpace;					//!< 段と段の隙間(1/10mm単位)
+	int				m_nPrintLineSpacing;				//!< 印刷フォント行間 文字の高さに対する割合(%)
+	int				m_nPrintMarginTY;					//!< 印刷用紙マージン 上(mm単位)
+	int				m_nPrintMarginBY;					//!< 印刷用紙マージン 下(mm単位)
+	int				m_nPrintMarginLX;					//!< 印刷用紙マージン 左(mm単位)
+	int				m_nPrintMarginRX;					//!< 印刷用紙マージン 右(mm単位)
+	short			m_nPrintPaperOrientation;			//!< 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
+	short			m_nPrintPaperSize;					//!< 用紙サイズ
 	bool			m_bColorPrint;						//!< カラー印刷			// 2013/4/26 Uchi
 	bool			m_bPrintWordWrap;					//!< 英文ワードラップする
 	bool			m_bPrintKinsokuHead;				//!< 行頭禁則する		//@@@ 2002.04.09 MIK
 	bool			m_bPrintKinsokuTail;				//!< 行末禁則する		//@@@ 2002.04.09 MIK
 	bool			m_bPrintKinsokuRet;					//!< 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
 	bool			m_bPrintKinsokuKuto;				//!< 句読点のぶらさげ	//@@@ 2002.04.17 MIK
-	bool			m_bPrintLineNumber;					/*!< 行番号を印刷する */
+	bool			m_bPrintLineNumber;					//!< 行番号を印刷する
 
-	MYDEVMODE		m_mdmDevMode;						/*!< プリンタ設定 DEVMODE用 */
-	BOOL			m_bHeaderUse[3];					/* ヘッダが使われているか？	*/
-	EDIT_CHAR		m_szHeaderForm[3][HEADER_MAX];		/* 0:左寄せヘッダ。1:中央寄せヘッダ。2:右寄せヘッダ。*/
-	BOOL			m_bFooterUse[3];					/* フッタが使われているか？	*/
-	EDIT_CHAR		m_szFooterForm[3][FOOTER_MAX];		/* 0:左寄せフッタ。1:中央寄せフッタ。2:右寄せフッタ。*/
+	MYDEVMODE		m_mdmDevMode;						//!< プリンタ設定 DEVMODE用
+	BOOL			m_bHeaderUse[3];					// ヘッダが使われているか？
+	EDIT_CHAR		m_szHeaderForm[3][HEADER_MAX];		// 0:左寄せヘッダ。1:中央寄せヘッダ。2:右寄せヘッダ。
+	BOOL			m_bFooterUse[3];					// フッタが使われているか？
+	EDIT_CHAR		m_szFooterForm[3][FOOTER_MAX];		// 0:左寄せフッタ。1:中央寄せフッタ。2:右寄せフッタ。
 
 	// ヘッダ/フッタのフォント(lfFaceNameが設定されていなければ半角/全角フォントを使用)
 	LOGFONT			m_lfHeader;							// ヘッダフォント用LOGFONT構造体
@@ -139,18 +139,18 @@ public:
 	*/
 	static void SettingInitialize( PRINTSETTING&, const TCHAR* settingName );
 
-	static TCHAR* GetPaperName( int , TCHAR* );	/* 用紙の名前を取得 */
-	/* 用紙の幅、高さ */
+	static TCHAR* GetPaperName( int , TCHAR* );	// 用紙の名前を取得
+	// 用紙の幅、高さ
 	static BOOL GetPaperSize(
 		short*		pnPaperAllWidth,
 		short*		pnPaperAllHeight,
 		MYDEVMODE*	pDEVMODE
 	);
-	/* 印字可能桁・行の計算 */
+	// 印字可能桁・行の計算
 	static int CalculatePrintableColumns( PRINTSETTING*, int width, int nLineNumberColumns );
 	static int CalculatePrintableLines( PRINTSETTING*, int height );
 
-	/* ヘッダ・フッタの高さ計算 */
+	// ヘッダ・フッタの高さ計算
 	static int CalcHeaderHeight( PRINTSETTING* );
 	static int CalcFooterHeight( PRINTSETTING* );
 public:
@@ -163,31 +163,31 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	BOOL GetDefaultPrinter( MYDEVMODE *pMYDEVMODE );		/* デフォルトのプリンタ情報を取得 */
-	BOOL PrintDlg( PRINTDLG *pd, MYDEVMODE *pMYDEVMODE );				/* プリンタ情報を取得 */
-	/* 印刷/プレビューに必要な情報を取得 */
+	BOOL GetDefaultPrinter( MYDEVMODE *pMYDEVMODE );		// デフォルトのプリンタ情報を取得
+	BOOL PrintDlg( PRINTDLG *pd, MYDEVMODE *pMYDEVMODE );	// プリンタ情報を取得
+	// 印刷/プレビューに必要な情報を取得
 	BOOL GetPrintMetrics(
 		MYDEVMODE*	pMYDEVMODE,
-		short*		pnPaperAllWidth,	/* 用紙幅 */
-		short*		pnPaperAllHeight,	/* 用紙高さ */
-		short*		pnPaperWidth,		/* 用紙印刷可能幅 */
-		short*		pnPaperHeight,		/* 用紙印刷可能高さ */
-		short*		pnPaperOffsetLeft,	/* 用紙余白左端 */
-		short*		pnPaperOffsetTop,	/* 用紙余白上端 */
-		TCHAR*		pszErrMsg			/* エラーメッセージ格納場所 */
+		short*		pnPaperAllWidth,	// 用紙幅
+		short*		pnPaperAllHeight,	// 用紙高さ
+		short*		pnPaperWidth,		// 用紙印刷可能幅
+		short*		pnPaperHeight,		// 用紙印刷可能高さ
+		short*		pnPaperOffsetLeft,	// 用紙余白左端
+		short*		pnPaperOffsetTop,	// 用紙余白上端
+		TCHAR*		pszErrMsg			// エラーメッセージ格納場所
 	);
 
 
-	/* 印刷 ジョブ開始 */
+	// 印刷 ジョブ開始
 	BOOL PrintOpen(
 		TCHAR*		pszJobName,
 		MYDEVMODE*	pMYDEVMODE,
 		HDC*		phdc,
-		TCHAR*		pszErrMsg		/* エラーメッセージ格納場所 */
+		TCHAR*		pszErrMsg		// エラーメッセージ格納場所
 	);
-	void PrintStartPage( HDC );	/* 印刷 ページ開始 */
-	void PrintEndPage( HDC );	/* 印刷 ページ終了 */
-	void PrintClose( HDC );		/* 印刷 ジョブ終了 */ // 2003.05.02 かろと 不要なhPrinter削除
+	void PrintStartPage( HDC );		// 印刷 ページ開始
+	void PrintEndPage( HDC );		// 印刷 ページ終了
+	void PrintClose( HDC );			// 印刷 ジョブ終了 // 2003.05.02 かろと 不要なhPrinter削除
 
 protected:
 	/*

@@ -32,7 +32,7 @@
 
 //! オリジナル値保存クラス
 template <class T>
-class TOriginalHolder{
+class TOriginalHolder {
 public:
 	TOriginalHolder<T>()
 	{
@@ -73,7 +73,7 @@ struct SFONT {
 
 //! 描画管理
 // 最新実装：ブラシ
-class CGraphics{
+class CGraphics {
 public:
 	CGraphics(const CGraphics& rhs){ Init(rhs.m_hdc); }
 	CGraphics(HDC hdc = NULL){ Init(hdc); }

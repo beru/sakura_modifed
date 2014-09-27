@@ -26,7 +26,7 @@ COpeBlk::COpeBlk()
 
 COpeBlk::~COpeBlk()
 {
-	/* 操作の配列を削除する */
+	// 操作の配列を削除する
 	int size = (int)m_ppCOpeArr.size();
 	for (int i = 0; i < size; ++i) {
 		SAFE_DELETE(m_ppCOpeArr[i]);
@@ -38,7 +38,7 @@ COpeBlk::~COpeBlk()
 //                     インターフェース                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* 操作の追加 */
+// 操作の追加
 bool COpeBlk::AppendOpe( COpe* pcOpe )
 {
 	if (pcOpe->m_ptCaretPos_PHY_Before.HasNegative() || pcOpe->m_ptCaretPos_PHY_After.HasNegative()) {
@@ -54,13 +54,13 @@ bool COpeBlk::AppendOpe( COpe* pcOpe )
 		);
 	}
 
-	/* 配列のメモリサイズを調整 */
+	// 配列のメモリサイズを調整
 	m_ppCOpeArr.push_back(pcOpe);
 	return true;
 }
 
 
-/* 操作を返す */
+// 操作を返す
 COpe* COpeBlk::GetOpe( int nIndex )
 {
 	if (GetNum() <= nIndex) {
@@ -73,7 +73,7 @@ COpe* COpeBlk::GetOpe( int nIndex )
 //                         デバッグ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* 編集操作要素ブロックのダンプ */
+// 編集操作要素ブロックのダンプ
 void COpeBlk::DUMP( void )
 {
 #ifdef _DEBUG

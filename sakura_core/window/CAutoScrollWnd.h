@@ -26,8 +26,7 @@
 #include "CWnd.h"
 class CEditView;
 
-class CAutoScrollWnd: public CWnd
-{
+class CAutoScrollWnd: public CWnd {
 public:
 	CAutoScrollWnd();
 	virtual ~CAutoScrollWnd();
@@ -35,13 +34,13 @@ public:
 	void Close();
 
 private:
-	LPCTSTR	m_pszClassName;	/* クラス名 */
+	LPCTSTR	m_pszClassName;	// クラス名
 	HBITMAP	m_hCenterImg;
 	CEditView*	m_cView;
 protected:
-	/* 仮想関数 */
+	// 仮想関数
 
-	/* 仮想関数 メッセージ処理 詳しくは実装を参照 */
+	// 仮想関数 メッセージ処理 詳しくは実装を参照
 	LRESULT OnLButtonDown( HWND, UINT, WPARAM, LPARAM );
 	LRESULT OnRButtonDown( HWND, UINT, WPARAM, LPARAM );
 	LRESULT OnMButtonDown( HWND, UINT, WPARAM, LPARAM );

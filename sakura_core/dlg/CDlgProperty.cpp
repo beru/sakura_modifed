@@ -56,7 +56,7 @@ const DWORD p_helpids[] = {	//12600
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgProperty::DoModal( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
 {
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_PROPERTY_FILE, lParam );
@@ -66,19 +66,19 @@ BOOL CDlgProperty::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「ファイルのプロパティ」のヘルプ */
+		//「ファイルのプロパティ」のヘルプ
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
-	case IDOK:			/* 下検索 */
-		/* ダイアログデータの取得 */
+	case IDOK:			// 下検索
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), FALSE );
 		return TRUE;
 //	case IDCANCEL:							// 未使用 del 2008/7/4 Uchi
 //		::EndDialog( GetHwnd(), FALSE );
 //		return TRUE;
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
@@ -236,7 +236,7 @@ void CDlgProperty::SetData( void )
 	char*					pBuf;
 	int						nBufLen;
 	CNativeT				ctext;
-	/* メモリ確保 & ファイル読み込み */
+	// メモリ確保 & ファイル読み込み
 	hgData = NULL;
 	CBinaryInputStream in(pCEditDoc->m_cDocFile.GetFilePath());
 	if (!in) {
@@ -255,7 +255,7 @@ void CDlgProperty::SetData( void )
 	in.Read( pBuf, nBufLen );
 	in.Close();
 
-	//CESIのデバッグ情報
+	// CESIのデバッグ情報
 	CESI::GetDebugInfo(pBuf,nBufLen,&ctext);
 	cmemProp.AppendNativeData(ctext);
 

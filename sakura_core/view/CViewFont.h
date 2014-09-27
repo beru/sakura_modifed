@@ -25,7 +25,7 @@
 
 #include "doc/CDocTypeSetting.h" // ColorInfo !!
 
-class CViewFont{
+class CViewFont {
 public:
 	CViewFont(const LOGFONT *plf)
 	{
@@ -42,7 +42,7 @@ public:
 		CreateFont(plf);
 	}
 
-	HFONT ChooseFontHandle( SFontAttr sFontAttr ) const;		/* フォントを選ぶ */
+	HFONT ChooseFontHandle( SFontAttr sFontAttr ) const;		// フォントを選ぶ
 
 	HFONT GetFontHan() const
 	{
@@ -52,9 +52,9 @@ private:
 	void CreateFont(const LOGFONT *plf);
 	void DeleteFont();
 
-	HFONT	m_hFont_HAN;			/* 現在のフォントハンドル */
-	HFONT	m_hFont_HAN_BOLD;		/* 現在のフォントハンドル(太字) */
-	HFONT	m_hFont_HAN_UL;			/* 現在のフォントハンドル(下線) */
-	HFONT	m_hFont_HAN_BOLD_UL;	/* 現在のフォントハンドル(太字、下線) */
+	HFONT	m_hFont_HAN;			// 現在のフォントハンドル
+	HFONT	m_hFont_HAN_BOLD;		// 現在のフォントハンドル(太字)
+	HFONT	m_hFont_HAN_UL;			// 現在のフォントハンドル(下線)
+	HFONT	m_hFont_HAN_BOLD_UL;	// 現在のフォントハンドル(太字、下線)
 };
 

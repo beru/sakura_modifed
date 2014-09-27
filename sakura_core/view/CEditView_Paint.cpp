@@ -347,7 +347,7 @@ CColor3Setting CEditView::GetColorIndex(
 		}
 
 		// 2005.11.20 Moca 色が正しくないことがある問題に対処
-		eRet = pcLayoutLineFirst->GetColorTypePrev();	/* 現在の色を指定 */	// 02/12/18 ai
+		eRet = pcLayoutLineFirst->GetColorTypePrev();	// 現在の色を指定	// 02/12/18 ai
 		colorInfo = pcLayoutLineFirst->GetColorInfo();
 		pInfo->m_nPosInLogic = pcLayoutLineFirst->GetLogicOffset();
 
@@ -558,7 +558,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 			SRCCOPY
 		);
 		if (m_pcEditWnd->GetActivePane() == m_nMyIndex) {
-			/* アクティブペインは、アンダーライン描画 */
+			// アクティブペインは、アンダーライン描画
 			GetCaret().m_cUnderLine.CaretUnderLineON( true, false );
 		}
 		return;
@@ -611,7 +611,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 		}
 	}
 
-	/* 03/02/18 対括弧の強調表示(消去) ai */
+	// 03/02/18 対括弧の強調表示(消去) ai
 	if (!bUseMemoryDC) {
 		// MemoryDCだとスクロール時に先に括弧だけ表示されて不自然なので後でやる。
 		DrawBracketPair( false );
@@ -626,7 +626,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 		DeleteObject(hdcBgImg);
 	}
 
-	/* ルーラーとテキストの間の余白 */
+	// ルーラーとテキストの間の余白
 	//@@@ 2002.01.03 YAZAKI 余白が0のときは無駄でした。
 	if (GetTextArea().GetTopYohaku()) {
 		if (!bTransText) {
@@ -638,7 +638,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 		}
 	}
 
-	/* 行番号の表示 */
+	// 行番号の表示
 	//	From Here Sep. 7, 2001 genta
 	//	Sep. 23, 2002 genta 行番号非表示でも行番号色の帯があるので隙間を埋める
 	if (GetTextArea().GetTopYohaku()) {
@@ -769,7 +769,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                     その他後始末など                        //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	/* メモリＤＣを利用した再描画の場合はメモリＤＣに描画した内容を画面へコピーする */
+	// メモリＤＣを利用した再描画の場合はメモリＤＣに描画した内容を画面へコピーする
 	if (bUseMemoryDC) {
 		// 2010.10.11 先に描くと背景固定のスクロールなどでの表示が不自然になる
 		DrawBracketPair( false );
@@ -790,15 +790,15 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	//     アンダーライン描画をメモリDCからのコピー前処理から後に移動
 	if (m_pcEditWnd->GetActivePane() == m_nMyIndex) {
-		/* アクティブペインは、アンダーライン描画 */
+		// アクティブペインは、アンダーライン描画
 		GetCaret().m_cUnderLine.CaretUnderLineON( true, false );
 	}
 	// To Here 2007.09.09 Moca
 
-	/* 03/02/18 対括弧の強調表示(描画) ai */
+	// 03/02/18 対括弧の強調表示(描画) ai
 	DrawBracketPair( true );
 
-	/* キャレットを現在位置に表示します */
+	// キャレットを現在位置に表示します
 	if (bCaretShowFlag_Old)	// 2008.06.09 ryoji
 		GetCaret().ShowCaret_( this->GetHwnd() ); // 2002/07/22 novice
 	return;
@@ -1109,7 +1109,7 @@ void CEditView::DispTextSelected(
 	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( nLineNum );
 	CLayoutRange& sSelect = GetSelectionInfo().m_sSelect;
 
-	/* 選択範囲内の行かな */
+	// 選択範囲内の行かな
 //	if( IsTextSelected() ){
 		if (nLineNum >= sSelect.GetFrom().y && nLineNum <= sSelect.GetTo().y) {
 			CLayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);

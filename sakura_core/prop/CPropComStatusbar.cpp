@@ -46,7 +46,7 @@ INT_PTR CALLBACK CPropStatusbar::DlgProc_page(
 	return DlgProc( reinterpret_cast<pDispatchPage>(&CPropStatusbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam );
 }
 
-/* メッセージ処理 */
+// メッセージ処理
 INT_PTR CPropStatusbar::DispatchEvent(
     HWND		hwndDlg,	// handle to dialog box
     UINT		uMsg,		// message
@@ -58,7 +58,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 */
+		// ダイアログデータの設定
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
@@ -76,7 +76,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 		case PSN_KILLACTIVE:
 			DEBUG_TRACE( _T("statusbar PSN_KILLACTIVE\n") );
 
-			/* ダイアログデータの取得 */
+			// ダイアログデータの取得
 			GetData( hwndDlg );
 			return TRUE;
 
@@ -84,7 +84,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 			m_nPageNum = ID_PROPCOM_PAGENUM_STATUSBAR;
 			return TRUE;
 		}
-		break;	/* WM_NOTIFY */
+		break;	// WM_NOTIFY
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
@@ -93,7 +93,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -108,7 +108,7 @@ INT_PTR CPropStatusbar::DispatchEvent(
 	return FALSE;
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CPropStatusbar::SetData( HWND hwndDlg )
 {
 	// 示文字コードの指定
@@ -127,7 +127,7 @@ void CPropStatusbar::SetData( HWND hwndDlg )
 	return;
 }
 
-/* ダイアログデータの取得 */
+// ダイアログデータの取得
 int CPropStatusbar::GetData( HWND hwndDlg )
 {
 	// 示文字コードの指定

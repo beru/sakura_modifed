@@ -35,7 +35,7 @@
 #include "dlg/CDialog.h"
 #include "recent/CRecentTagjumpKeyword.h"
 
-//タグファイル名	//	@@ 2005.03.31 MIK 定数化
+// タグファイル名	//	@@ 2005.03.31 MIK 定数化
 #define TAG_FILENAME_T        _T("tags")
 
 // 2010.07.22 いくつかcppへ移動
@@ -59,11 +59,11 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示 
 
 	//	@@ 2005.03.31 MIK 階層パラメータを追加
-//	bool AddParamA( const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId );	//登録
-	bool GetSelectedParam( TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3, TCHAR *s4, int *depth, TCHAR* fileBase  );	//取得
+//	bool AddParamA( const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId );	// 登録
+	bool GetSelectedParam( TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3, TCHAR *s4, int *depth, TCHAR* fileBase  );	// 取得
 	void SetFileName( const TCHAR *pszFileName );
 	void SetKeyword( const wchar_t *pszKeyword );	//	@@ 2005.03.31 MIK
 	int  FindDirectTagJump();
@@ -92,15 +92,15 @@ private:
 	void	StopTimer( void );
 	void	StartTimer( int );
 
-	void	SetData( void );	/* ダイアログデータの設定 */
-	int		GetData( void );	/* ダイアログデータの取得 */
+	void	SetData( void );	// ダイアログデータの設定
+	int		GetData( void );	// ダイアログデータの取得
 	void	UpdateData( bool );	//	@@ 2005.03.31 MIK
 
-	TCHAR	*GetNameByType( const TCHAR type, const TCHAR *name );	//タイプを名前に変換する。
-	int		SearchBestTag( void );	//もっとも確率の高そうなインデックスを返す。
+	TCHAR	*GetNameByType( const TCHAR type, const TCHAR *name );	// タイプを名前に変換する。
+	int		SearchBestTag( void );	// もっとも確率の高そうなインデックスを返す。
 	//	@@ 2005.03.31 MIK
 	const TCHAR *GetFileName( void );
-	const TCHAR *GetFilePath( void ){ return m_pszFileName != NULL ? m_pszFileName : _T(""); }
+	const TCHAR *GetFilePath( void ) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
 	void Empty( void );
 	void SetTextDir();
 	void FindNext( bool );
@@ -130,25 +130,25 @@ private:
 	
 	bool	m_bDirectTagJump;
 
-	int		m_nIndex;		//!< 選択された要素番号
-	TCHAR	*m_pszFileName;	//!< 編集中のファイル名
-	wchar_t	*m_pszKeyword;	//!< キーワード(DoModalのlParam!=0を指定した場合に指定できる)
-	int		m_nLoop;		//!< さかのぼれる階層数
+	int		m_nIndex;				//!< 選択された要素番号
+	TCHAR	*m_pszFileName;			//!< 編集中のファイル名
+	wchar_t	*m_pszKeyword;			//!< キーワード(DoModalのlParam!=0を指定した場合に指定できる)
+	int		m_nLoop;				//!< さかのぼれる階層数
 	CSortedTagJumpList*	m_pcList;	//!< タグジャンプ情報
-	UINT	m_nTimerId;		//!< タイマ番号
-	BOOL	m_bTagJumpICase;	//!< 大文字小文字を同一視
-	BOOL	m_bTagJumpAnyWhere;	//!< 文字列の途中にマッチ
-	BOOL	m_bTagJumpExactMatch; //! 完全一致(画面無し)
+	UINT	m_nTimerId;				//!< タイマ番号
+	BOOL	m_bTagJumpICase;		//!< 大文字小文字を同一視
+	BOOL	m_bTagJumpAnyWhere;		//!< 文字列の途中にマッチ
+	BOOL	m_bTagJumpExactMatch;	//! 完全一致(画面無し)
 
 	int 	m_nTop;			//!< ページめくりの表示の先頭(0開始)
 	bool	m_bNextItem;	//!< まだ次にヒットするものがある
 
 	// 絞り込み検索用
-	STagFindState* m_psFindPrev; //<! 前回の最後に検索した状態
-	STagFindState* m_psFind0Match; //<! 前回の1つもHitしなかった最後のtags
+	STagFindState* m_psFindPrev;	//<! 前回の最後に検索した状態
+	STagFindState* m_psFind0Match;	//<! 前回の1つもHitしなかった最後のtags
 
 	CNativeW	m_strOldKeyword;	//!< 前回のキーワード
-	BOOL	m_bOldTagJumpICase;	//!< 前回の大文字小文字を同一視
+	BOOL	m_bOldTagJumpICase;		//!< 前回の大文字小文字を同一視
 	BOOL	m_bOldTagJumpAnyWhere;	//!< 前回の文字列の途中にマッチ
 
 	SComboBoxItemDeleter	m_comboDel;

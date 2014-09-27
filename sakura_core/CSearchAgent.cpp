@@ -18,14 +18,16 @@
 
 // CSearchStringPattern
 // @date 2010.06.22 Moca
-inline int CSearchStringPattern::GetMapIndex( wchar_t c )
+inline
+int CSearchStringPattern::GetMapIndex( wchar_t c )
 {
 	// ASCII    => 0x000 - 0x0ff
 	// それ以外 => 0x100 - 0x1ff
 	return ((c & 0xff00) ? 0x100 : 0 ) | (c & 0xff);
 }
 
-CSearchStringPattern::CSearchStringPattern() : 
+CSearchStringPattern::CSearchStringPattern()
+	: 
 	m_pszKey(NULL),
 	m_psSearchOption(NULL),
 	m_pRegexp(NULL),
@@ -40,7 +42,8 @@ CSearchStringPattern::CSearchStringPattern() :
 {
 }
 
-	CSearchStringPattern::CSearchStringPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* pRegexp) :
+CSearchStringPattern::CSearchStringPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* pRegexp)
+	:
 	m_pszKey(NULL),
 	m_psSearchOption(NULL),
 	m_pRegexp(NULL),
@@ -67,14 +70,14 @@ void CSearchStringPattern::Reset() {
 	m_psSearchOption = NULL;
 	m_pRegexp = NULL;
 
-	delete [] m_pszPatternCase;
+	delete[] m_pszPatternCase;
 	m_pszPatternCase = NULL;
 #ifdef SEARCH_STRING_KMP
-	delete [] m_pnNextPossArr;
+	delete[] m_pnNextPossArr;
 	m_pnNextPossArr = NULL;
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	delete [] m_pnUseCharSkipArr;
+	delete[] m_pnUseCharSkipArr;
 	m_pnUseCharSkipArr = NULL;
 #endif
 }
@@ -94,7 +97,7 @@ bool CSearchStringPattern::SetPattern(HWND hwnd, const wchar_t* pszPattern, int 
 			return false;
 		}
 		int nFlag = (GetLoHiCase() ? CBregexp::optCaseSensitive : CBregexp::optNothing);
-		/* 検索パターンのコンパイル */
+		// 検索パターンのコンパイル
 		if (!m_pRegexp->Compile( pszPattern, nFlag )) {
 			return false;
 		}
@@ -103,7 +106,7 @@ bool CSearchStringPattern::SetPattern(HWND hwnd, const wchar_t* pszPattern, int 
 		if (GetIgnoreCase()) {
 			m_pszPatternCase = new wchar_t[nPatternLen + 1];
 			m_pszCaseKeyRef = m_pszPatternCase;
-			//note: 合成文字,サロゲートの「大文字小文字同一視」未対応
+			// note: 合成文字,サロゲートの「大文字小文字同一視」未対応
 			for (int i = 0; i < m_nPatternLen; i++) {
 				m_pszPatternCase[i] = (wchar_t)skr_towlower(pszPattern[i]);
 			}
@@ -157,7 +160,7 @@ const wchar_t* CSearchAgent::SearchString(
 	int				nLineLen,
 	int				nIdxPos,
 	const CSearchStringPattern& pattern
-)
+	)
 {
 	const int      nPatternLen = pattern.GetLen();
 	const wchar_t* pszPattern  = pattern.GetCaseKey();
@@ -201,8 +204,8 @@ const wchar_t* CSearchAgent::SearchString(
 	}
 #else
 #ifdef SEARCH_STRING_KMP
-	/* 大文字小文字を区別しない、かつ、検索語が5文字以下の場合は通常の検索を行う
-	 * そうでない場合はKMP＋SUNDAY QUICKアルゴリズムを使った検索を行う */
+	// 大文字小文字を区別しない、かつ、検索語が5文字以下の場合は通常の検索を行う
+	// そうでない場合はKMP＋SUNDAY QUICKアルゴリズムを使った検索を行う
 	if (!bLoHiCase || nPatternLen > 5) {
 		const wchar_t pattern0 = pszPattern[0];
 		const int* const nextTable = pattern.GetKMPNextTable();
@@ -250,17 +253,15 @@ const wchar_t* CSearchAgent::SearchString(
 	return NULL;
 }
 
-/* 検索条件の情報(キー文字列の全角か半角かの配列)作成 */
+// 検索条件の情報(キー文字列の全角か半角かの配列)作成
 void CSearchAgent::CreateCharCharsArr(
 	const wchar_t*	pszPattern,
 	int				nSrcLen,
 	int**			ppnCharCharsArr
 )
 {
-	int		i;
-	int*	pnCharCharsArr;
-	pnCharCharsArr = new int[nSrcLen];
-	for (i = 0; i < nSrcLen; /*i++*/) {
+	int* pnCharCharsArr = new int[nSrcLen];
+	for (int i = 0; i < nSrcLen; /*i++*/) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		pnCharCharsArr[i] = CNativeW::GetSizeOfChar( pszPattern, nSrcLen, i );
 		if (0 == pnCharCharsArr[i]) {
@@ -281,7 +282,7 @@ void CSearchAgent::CreateWordList(
 	std::vector<std::pair<const wchar_t*, CLogicInt> >&	searchWords,
 	const wchar_t*	pszPattern,
 	int	nPatternLen
-)
+	)
 {
 	for (CLogicInt pos = CLogicInt(0); pos < nPatternLen;) {
 		CLogicInt begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
@@ -318,7 +319,7 @@ const wchar_t* CSearchAgent::SearchStringWord(
 		size_t nSize = searchWords.size();
 		for (size_t iSW = 0; iSW < nSize; ++iSW) {
 			if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
-				/* 1==大文字小文字の区別 */
+				// 1==大文字小文字の区別
 				if ((!bLoHiCase && 0 == auto_memicmp( &(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second ) ) ||
 					(bLoHiCase && 0 == auto_memcmp( &(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second ) )
 				) {
@@ -336,7 +337,7 @@ const wchar_t* CSearchAgent::SearchStringWord(
 }
 
 
-/* 現在位置の単語の範囲を調べる */
+// 現在位置の単語の範囲を調べる
 // 2001/06/23 N.Nakatani WhereCurrentWord()変更 WhereCurrentWord_2をコールするようにした
 bool CSearchAgent::WhereCurrentWord(
 	CLogicInt	nLineNum,
@@ -345,20 +346,20 @@ bool CSearchAgent::WhereCurrentWord(
 	CLogicInt*	pnIdxTo,
 	CNativeW*	pcmcmWord,
 	CNativeW*	pcmcmWordLeft
-)
+	)
 {
 	*pnIdxFrom = nIdx;
 	*pnIdxTo = nIdx;
-
+	
 	CDocLine*	pDocLine = m_pcDocLineMgr->GetLine( nLineNum );
 	if (!pDocLine) {
 		return false;
 	}
-
+	
 	CLogicInt		nLineLen;
 	const wchar_t*	pLine = pDocLine->GetDocLineStrWithEOL( &nLineLen );
-
-	/* 現在位置の単語の範囲を調べる */
+	
+	// 現在位置の単語の範囲を調べる
 	return CWordParse::WhereCurrentWord_2( pLine, nLineLen, nIdx, pnIdxFrom, pnIdxTo, pcmcmWord, pcmcmWordLeft );
 }
 
@@ -373,15 +374,15 @@ bool CSearchAgent::PrevOrNextWord(
 )
 {
 	using namespace WCODE;
-
-	CDocLine*	pDocLine = m_pcDocLineMgr->GetLine( nLineNum );
+	
+	CDocLine* pDocLine = m_pcDocLineMgr->GetLine( nLineNum );
 	if (!pDocLine) {
 		return false;
 	}
-
+	
 	CLogicInt		nLineLen;
 	const wchar_t*	pLine = pDocLine->GetDocLineStrWithEOL( &nLineLen );
-
+	
 	// ABC D[EOF]となっていたときに、Dの後ろにカーソルを合わせ、単語の左端に移動すると、Aにカーソルがあうバグ修正。YAZAKI
 	if (nIdx >= nLineLen) {
 		if (bLEFT && nIdx == nLineLen) {
@@ -391,20 +392,20 @@ bool CSearchAgent::PrevOrNextWord(
 			return false;
 		}
 	}
-	/* 現在位置の文字の種類によっては選択不能 */
+	// 現在位置の文字の種類によっては選択不能
 	if (!bLEFT && WCODE::IsLineDelimiter(pLine[nIdx])) {
 		return false;
 	}
-	/* 前の単語か？後ろの単語か？ */
+	// 前の単語か？後ろの単語か？
 	if (bLEFT) {
-		/* 現在位置の文字の種類を調べる */
+		// 現在位置の文字の種類を調べる
 		ECharKind	nCharKind = CWordParse::WhatKindOfChar( pLine, nLineLen, nIdx );
 		if (nIdx == 0) {
 			return false;
 		}
 
-		/* 文字種類が変わるまで前方へサーチ */
-		/* 空白とタブは無視する */
+		// 文字種類が変わるまで前方へサーチ
+		// 空白とタブは無視する
 		int		nCount = 0;
 		CLogicInt	nIdxNext = nIdx;
 		CLogicInt	nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nIdxNext] ));
@@ -415,7 +416,7 @@ bool CSearchAgent::PrevOrNextWord(
 
 			ECharKind nCharKindMerge = CWordParse::WhatKindOfTwoChars( nCharKindNext, nCharKind );
 			if (nCharKindMerge == CK_NULL) {
-				/* サーチ開始位置の文字が空白またはタブの場合 */
+				// サーチ開始位置の文字が空白またはタブの場合
 				if (nCharKind == CK_TAB	|| nCharKind == CK_SPACE) {
 					if (bStopsBothEnds && nCount) {
 						nIdxNext = nIdxNextPrev;
@@ -447,7 +448,7 @@ bool CSearchAgent::PrevOrNextWord(
 	@date 2003.05.22 かろと 行頭処理など見直し
 	@date 2005.11.26 かろと \rや.が\r\nにヒットしないように
 */
-/* 見つからない場合は０を返す */
+// 見つからない場合は０を返す
 int CSearchAgent::SearchWord(
 	CLogicPoint				ptSerachBegin,	//!< 検索開始位置
 	ESearchDirection		eDirection,		//!< 検索方向
@@ -473,11 +474,11 @@ int CSearchAgent::SearchWord(
 	clockStart = clock();
 #endif
 
-	//正規表現
+	// 正規表現
 	if (sSearchOption.bRegularExp) {
 		nLinePos = ptSerachBegin.GetY2();		// 検索行＝検索開始行
 		pDocLine = m_pcDocLineMgr->GetLine( nLinePos );
-		//前方検索
+		// 前方検索
 		if (eDirection == SEARCH_BACKWARD) {
 			//
 			// 前方(↑)検索(正規表現)
@@ -563,7 +564,7 @@ int CSearchAgent::SearchWord(
 				pMatchRange->SetFromX( pDocLine->GetLengthWithoutEOL() );
 			}
 		}
-	//単語のみ検索
+	// 単語のみ検索
 	}else if (sSearchOption.bWordOnly) {
 		// 検索語を単語に分割して searchWordsに格納する。
 		const wchar_t* pszPattern = pattern.GetKey();
@@ -593,7 +594,7 @@ int CSearchAgent::SearchWord(
 						for (size_t iSW = 0; iSW < nSize; ++iSW) {
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
-								/* 1==大文字小文字の区別 */
+								// 1==大文字小文字の区別
 								if ( (!sSearchOption.bLoHiCase && 0 == auto_memicmp( &(pData[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second ) ) ||
 									(sSearchOption.bLoHiCase && 0 ==	 auto_memcmp( &(pData[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second ) )
 								) {
@@ -609,7 +610,7 @@ int CSearchAgent::SearchWord(
 						continue;
 					}
 				}
-				/* 前の行を見に行く */
+				// 前の行を見に行く
 				nLinePos--;
 				pDocLine = pDocLine->GetPrevLine();
 				if (pDocLine) {
@@ -636,7 +637,7 @@ int CSearchAgent::SearchWord(
 					nRetVal = 1;
 					goto end_of_func;
 				}
-				/* 次の行を見に行く */
+				// 次の行を見に行く
 				nLinePos++;
 				pDocLine = pDocLine->GetNextLine();
 				nNextWordFrom = CLogicInt(0);
@@ -648,7 +649,7 @@ int CSearchAgent::SearchWord(
 	// 普通の検索 (正規表現でも単語単位でもない)
 	}else {
 		const int	nPatternLen = pattern.GetLen();
-		//前方検索
+		// 前方検索
 		if (eDirection == SEARCH_BACKWARD) {
 			nLinePos = ptSerachBegin.GetY2();
 			nHitTo = ptSerachBegin.x;
@@ -754,11 +755,11 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 {
 //	MY_RUNNINGTIMER( cRunningTimer, "CDocLineMgr::ReplaceData()" );
 
-	/* 挿入によって増えた行の数 */
+	// 挿入によって増えた行の数
 	pArg->nInsLineNum = CLogicInt(0);
-	/* 削除した行の総数 */
+	// 削除した行の総数
 	pArg->nDeletedLineNum = CLogicInt(0);
-	/* 削除されたデータ */
+	// 削除されたデータ
 	if (pArg->pcmemDeleted) {
 		pArg->pcmemDeleted->clear();
 	}
@@ -779,7 +780,7 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 
 	pArg->ptNewPos = pArg->sDelRange.GetFrom();
 
-	/* 大量のデータを操作するとき */
+	// 大量のデータを操作するとき
 	CDlgCancel*	pCDlgCancel = NULL;
 	class CDLgCandelCloser{
 		CDlgCancel*& m_pDlg;
@@ -799,7 +800,7 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 	const CLogicInt nDelLines = pArg->sDelRange.GetTo().y - pArg->sDelRange.GetFrom().y;
 	const CLogicInt nEditLines = std::max<CLogicInt>(CLogicInt(1), nDelLines + CLogicInt(pArg->pInsData ? pArg->pInsData->size(): 0));
 	if (3000 < nEditLines) {
-		/* 進捗ダイアログの表示 */
+		// 進捗ダイアログの表示
 		pCDlgCancel = new CDlgCancel;
 		if (( hwndCancel = pCDlgCancel->DoModeless( ::GetModuleHandle( NULL ), NULL, IDD_OPERATIONRUNNING ) )) {
 			hwndProgress = ::GetDlgItem( hwndCancel, IDC_PROGRESS );
@@ -836,26 +837,26 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 		nSetSeq = pArg->pInsData->back().nSeq;
 	}
 
-	/* 現在行の情報を得る */
+	// 現在行の情報を得る
 	pCDocLine = m_pcDocLineMgr->GetLine( pArg->sDelRange.GetTo().GetY2() );
 	int i = pArg->sDelRange.GetTo().y;
 	if (0 < pArg->sDelRange.GetTo().y && !pCDocLine) {
 		pCDocLine = m_pcDocLineMgr->GetLine( pArg->sDelRange.GetTo().GetY2() - CLogicInt(1) );
 		i--;
 	}
-	/* 後ろから処理していく */
+	// 後ろから処理していく
 	for (; i >= pArg->sDelRange.GetFrom().y && pCDocLine; i--) {
 		pLine = pCDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
 		nLineLen = pCDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
 		pCDocLinePrev = pCDocLine->GetPrevLine();
 		pCDocLineNext = pCDocLine->GetNextLine();
-		/* 現在行の削除開始位置を調べる */
+		// 現在行の削除開始位置を調べる
 		if (i == pArg->sDelRange.GetFrom().y) {
 			nWorkPos = pArg->sDelRange.GetFrom().x;
 		}else {
 			nWorkPos = 0;
 		}
-		/* 現在行の削除データ長を調べる */
+		// 現在行の削除データ長を調べる
 		if (i == pArg->sDelRange.GetTo().y) {
 			nWorkLen = pArg->sDelRange.GetTo().x - nWorkPos;
 		}else {
@@ -863,22 +864,22 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 		}
 
 		if (0 == nWorkLen) {
-			/* 前の行へ */
+			// 前の行へ
 			goto prev_line;
 		}
-		/* 改行も削除するんかぃのぉ・・・？ */
+		// 改行も削除するんかぃのぉ・・・？
 		if (EOL_NONE != pCDocLine->GetEol() &&
 			nWorkPos + nWorkLen > nLineLen - pCDocLine->GetEol().GetLen() // 2002/2/10 aroka CMemory変更
 		) {
-			/* 削除する長さに改行も含める */
+			// 削除する長さに改行も含める
 			nWorkLen = nLineLen - nWorkPos; // 2002/2/10 aroka CMemory変更
 		}
 
-		/* 行全体の削除 */
+		// 行全体の削除
 		if (nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
-			/* 削除した行の総数 */
+			// 削除した行の総数
 			++(pArg->nDeletedLineNum);
-			/* 行オブジェクトの削除、リスト変更、行数-- */
+			// 行オブジェクトの削除、リスト変更、行数--
 			if (pArg->pcmemDeleted) {
 				CLineData tmp;
 				pArg->pcmemDeleted->push_back(tmp);
@@ -888,7 +889,7 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 			}
 			m_pcDocLineMgr->DeleteLine( pCDocLine );
 			pCDocLine = NULL;
-		/* 次の行と連結するような削除 */
+		// 次の行と連結するような削除
 		}else if (nWorkPos + nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
 			if (pArg->pcmemDeleted) {
 				if (pCDocLineNext && 0 == pArg->pcmemDeleted->size()) {
@@ -906,9 +907,9 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 				delLine.nSeq = CModifyVisitor().GetLineModifiedSeq(pCDocLine);
 			}
 
-			/* 次の行がある */
+			// 次の行がある
 			if (pCDocLineNext) {
-				/* 次の行のデータを最後に追加 */
+				// 次の行のデータを最後に追加
 				// 改行を削除するような置換
 				int nNewLen = nWorkPos + pCDocLineNext->GetLengthWithEOL() + nInsLen;
 				if (nWorkLen <= nWorkPos && nLineLen <= nNewLen + 10) {
@@ -960,21 +961,21 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 					markNext = pCDocLineNext->m_sMark;
 				}
 
-				/* 次の行 行オブジェクトの削除 */
+				// 次の行 行オブジェクトの削除
 				m_pcDocLineMgr->DeleteLine( pCDocLineNext );
 				pCDocLineNext = NULL;
 
-				/* 削除した行の総数 */
+				// 削除した行の総数
 				++(pArg->nDeletedLineNum);
 			}else {
-				/* 行内データ削除 */
+				// 行内データ削除
 				CNativeW tmp;
 				tmp.SetString(pLine, nWorkPos);
 				pCDocLine->SetDocLineStringMove(&tmp);
 				CModifyVisitor().SetLineModified(pCDocLine, pArg->nDelSeq);	/* 変更フラグ */
 			}
 		}else {
-			/* 行内だけの削除 */
+			// 行内だけの削除
 			if (pArg->pcmemDeleted) {
 				CLineData tmp;
 				pArg->pcmemDeleted->push_back(tmp);
@@ -1025,9 +1026,9 @@ void CSearchAgent::ReplaceData( DocLineReplaceArg* pArg )
 		}
 
 prev_line:;
-		/* 直前の行のオブジェクトのポインタ */
+		// 直前の行のオブジェクトのポインタ
 		pCDocLine = pCDocLinePrev;
-		/* 最近参照した行番号と行データ */
+		// 最近参照した行番号と行データ
 		--m_pcDocLineMgr->m_nPrevReferLine;
 		m_pcDocLineMgr->m_pCodePrevRefer = pCDocLine;
 
@@ -1053,16 +1054,16 @@ prev_line:;
 		return;
 	}
 
-	/* データ挿入処理 */
+	// データ挿入処理
 	if (!pArg->pInsData || 0 == pArg->pInsData->size()) {
 		pArg->nInsSeq = 0;
 		return;
 	}
 	nAllLinesOld= m_pcDocLineMgr->GetLineCount();
-	pArg->ptNewPos.y = pArg->sDelRange.GetFrom().y;	/* 挿入された部分の次の位置の行 */
-	pArg->ptNewPos.x = 0;	/* 挿入された部分の次の位置のデータ位置 */
+	pArg->ptNewPos.y = pArg->sDelRange.GetFrom().y;	// 挿入された部分の次の位置の行
+	pArg->ptNewPos.x = 0;	// 挿入された部分の次の位置のデータ位置
 
-	/* 挿入データを行終端で区切った行数カウンタ */
+	// 挿入データを行終端で区切った行数カウンタ
 	pCDocLine = m_pcDocLineMgr->GetLine( pArg->sDelRange.GetFrom().GetY2() );
 
 	int nInsSize = pArg->pInsData->size();
@@ -1092,8 +1093,8 @@ prev_line:;
 	CStringRef	cNextLine;
 	CNativeW	cmemCurLine;
 	if (!pCDocLine) {
-		/* ここでNULLが帰ってくるということは、*/
-		/* 全テキストの最後の次の行を追加しようとしていることを示す */
+		// ここでNULLが帰ってくるということは、
+		// 全テキストの最後の次の行を追加しようとしていることを示す
 		pArg->nInsSeq = 0;
 	}else {
 		// 2002/2/10 aroka 何度も GetPtr を呼ばない
@@ -1119,7 +1120,7 @@ prev_line:;
 			if (!pCDocLine) {
 				CDocLine* pCDocLineNew = m_pcDocLineMgr->AddNewLine();
 
-				/* 挿入データを行終端で区切った行数カウンタ */
+				// 挿入データを行終端で区切った行数カウンタ
 				if (0 == nCount) {
 					CNativeW tmp;
 					tmp.AllocStringBuffer(cPrevLine.GetLength() + cmemLine.GetStringLength());
@@ -1131,7 +1132,7 @@ prev_line:;
 				}
 				CModifyVisitor().SetLineModified(pCDocLineNew, (*pArg->pInsData)[nCount].nSeq);
 			}else {
-				/* 挿入データを行終端で区切った行数カウンタ */
+				// 挿入データを行終端で区切った行数カウンタ
 				if (0 == nCount && !bInsertLineMode) {
 					if (cmemCurLine.GetStringLength() - cPrevLine.GetLength() < cmemCurLine.GetStringLength() / 100
 						&& cPrevLine.GetLength() + cmemLine.GetStringLength() <= cmemCurLine.GetStringLength()
@@ -1161,8 +1162,8 @@ prev_line:;
 				}
 			}
 
-			/* 挿入データを行終端で区切った行数カウンタ */
-			++(pArg->ptNewPos.y);	/* 挿入された部分の次の位置の行 */
+			// 挿入データを行終端で区切った行数カウンタ
+			++(pArg->ptNewPos.y);	// 挿入された部分の次の位置の行
 			if (hwndCancel) {
 				if (0 == (nCount % 32)) {
 					nProgress = ::MulDiv(nCount + nDelLines, 100, nEditLines);
@@ -1188,22 +1189,22 @@ prev_line:;
 		tmp.AppendNativeData(cmemLine);
 		tmp.AppendString(cNextLine.GetPtr(), cNextLine.GetLength());
 		if (!pCDocLine) {
-			CDocLine* pCDocLineNew = m_pcDocLineMgr->AddNewLine();	//末尾に追加
+			CDocLine* pCDocLineNew = m_pcDocLineMgr->AddNewLine();	// 末尾に追加
 			pCDocLineNew->SetDocLineStringMove(&tmp);
 			pCDocLineNew->m_sMark = markNext;
 			CModifyVisitor().SetLineModified(pCDocLineNew, nSeq);
-			pArg->ptNewPos.x = nLen;	/* 挿入された部分の次の位置のデータ位置 */
+			pArg->ptNewPos.x = nLen;	// 挿入された部分の次の位置のデータ位置
 		}else {
 			if (0 == nCount) {
 				// 行の中間に挿入(削除データがなかった。1文字入力など)
 			}else {
 				// 複数行挿入の最後の行
-				pCDocLine = m_pcDocLineMgr->InsertNewLine(pCDocLine);	//pCDocLineの前に挿入
+				pCDocLine = m_pcDocLineMgr->InsertNewLine(pCDocLine);	// pCDocLineの前に挿入
 				pCDocLine->m_sMark = markNext;
 			}
 			pCDocLine->SetDocLineStringMove(&tmp);
 			CModifyVisitor().SetLineModified(pCDocLine, nSeq);
-			pArg->ptNewPos.x = cPrevLine2.GetLength() + nLen;	/* 挿入された部分の次の位置のデータ位置 */
+			pArg->ptNewPos.x = cPrevLine2.GetLength() + nLen;	// 挿入された部分の次の位置のデータ位置
 		}
 	}
 	pArg->nInsLineNum = m_pcDocLineMgr->GetLineCount() - nAllLinesOld;

@@ -25,7 +25,6 @@
 
 #include <ObjIdl.h> // LPDATAOBJECT
 
-
 // システム資源
 BOOL GetSystemResources( int*, int*, int* );	// システムリソースを調べる
 BOOL CheckSystemResources( const TCHAR* );		// システムリソースのチェック
@@ -57,14 +56,13 @@ void MyInitCommonControls();				// コモンコントロールを初期化する							// 2006.
 // カレントディレクトリユーティリティ。
 // コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
 // 2008.03.01 kobake 作成
-class CCurrentDirectoryBackupPoint{
+class CCurrentDirectoryBackupPoint {
 public:
 	CCurrentDirectoryBackupPoint();
 	~CCurrentDirectoryBackupPoint();
 private:
 	TCHAR m_szCurDir[_MAX_PATH];
 };
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

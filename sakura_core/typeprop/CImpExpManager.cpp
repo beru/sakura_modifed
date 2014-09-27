@@ -120,7 +120,7 @@ static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar
 // インポート ファイル指定付き
 bool CImpExpManager::ImportUI( HINSTANCE hInstance, HWND hwndParent )
 {
-	/* ファイルオープンダイアログの初期化 */
+	// ファイルオープンダイアログの初期化
 	CDlgOpenFile	cDlgOpenFile;
 	cDlgOpenFile.Create(
 		hInstance,
@@ -167,7 +167,7 @@ bool CImpExpManager::ImportUI( HINSTANCE hInstance, HWND hwndParent )
 // エクスポート ファイル指定付き
 bool CImpExpManager::ExportUI( HINSTANCE hInstance, HWND hwndParent )
 {
-	/* ファイルオープンダイアログの初期化 */
+	// ファイルオープンダイアログの初期化
 	CDlgOpenFile	cDlgOpenFile;
 	cDlgOpenFile.Create(
 		hInstance,
@@ -240,7 +240,7 @@ bool CImpExpType::ImportAscertain( HINSTANCE hInstance, HWND hwndParent, const w
 	m_cProfile.SetReadingMode();
 
 	if (!m_cProfile.ReadProfile( sPath.c_str() )) {
-		/* 設定ファイルが存在しない */
+		// 設定ファイルが存在しない
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
 		return false;
 	}
@@ -552,7 +552,7 @@ bool CImpExpColors::Import( const wstring& sFileName, wstring& sErrMsg )
 		return false;
 	}
 
-	/* ファイル先頭 */
+	// ファイル先頭
 	// ヘッダ読取
 	wstring szHeader = in.ReadLineW();
 	if (szHeader.length() >= 2) {
@@ -571,12 +571,12 @@ bool CImpExpColors::Import( const wstring& sFileName, wstring& sErrMsg )
 	CDataProfile	cProfile;
 	cProfile.SetReadingMode();
 
-	/* 色設定Ver3 */
+	// 色設定Ver3
 	if (!cProfile.ReadProfile( strPath.c_str() )) {
 		return false;
 	}
 
-	/* 色設定 I/O */
+	// 色設定 I/O
 	CShareData_IO::IO_ColorSet( &cProfile, szSecColor, m_ColorInfoArr );
 
 	return true;
@@ -585,7 +585,7 @@ bool CImpExpColors::Import( const wstring& sFileName, wstring& sErrMsg )
 // エクスポート
 bool CImpExpColors::Export( const wstring& sFileName, wstring& sErrMsg )
 {
-	/* 色設定 I/O */
+	// 色設定 I/O
 	CDataProfile	cProfile;
 	cProfile.SetWritingMode();
 	CShareData_IO::IO_ColorSet( &cProfile, szSecColor, m_ColorInfoArr );
@@ -645,7 +645,7 @@ bool CImpExpRegex::Import( const wstring& sFileName, wstring& sErrMsg )
 				// 色指定名に対応する番号を探す
 				int k = GetColorIndexByName( &buff[11] );	//@@@ 2002.04.30
 				if (k == -1) {
-					/* 日本語名からインデックス番号に変換する */
+					// 日本語名からインデックス番号に変換する
 					for (int m = 0; m < COLORIDX_LAST; m++) {
 						if (auto_strcmp(m_Types.m_ColorInfoArr[m].m_szName, &buff[11]) == 0) {
 							k = m;
@@ -653,7 +653,7 @@ bool CImpExpRegex::Import( const wstring& sFileName, wstring& sErrMsg )
 						}
 					}
 				}
-				if (k != -1) {	/* 3文字カラー名からインデックス番号に変換 */
+				if (k != -1) {	// 3文字カラー名からインデックス番号に変換
 					if (0 < MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1) {
 						regexKeyArr[count].m_nColorIndex = k;
 						_tcstowcs(&pKeyword[keywordPos], p, t_min<int>(MAX_REGEX_KEYWORDLEN, MAX_REGEX_KEYWORDLISTLEN - keywordPos - 1));
@@ -728,7 +728,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 		return false;
 	}
 
-	/* データ取得 */
+	// データ取得
 	int invalid_record = 0; // 不正な行
 	int i=0;
 	while (in && i<MAX_KEYHELP_FILE) {
@@ -766,7 +766,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 				*p3 = LTEXT('\0');
 				p3 += 1;			//カンマの次が、次の要素
 			}
-		}/* 結果の確認 */
+		}// 結果の確認
 		if ((p3==NULL) ||			//カンマが1個足りない
 			(p3==p1) //||			//カンマが2個足りない
 			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
@@ -776,7 +776,7 @@ bool CImpExpKeyHelp::Import( const wstring& sFileName, wstring& sErrMsg )
 			++invalid_record;
 			continue;
 		}
-		/* valueのチェック */
+		// valueのチェック
 		//ON/OFF
 		//	2007.02.03 genta 1でなければ1にする
 		unsigned int b_enable_flag = (unsigned int)_wtoi(p1);
@@ -1025,7 +1025,7 @@ bool CImpExpKeybind::Export( const wstring& sFileName, wstring& sErrMsg )
 
 	out.Close();
 
-	/* キー割り当て情報 */
+	// キー割り当て情報
 	CDataProfile cProfile;
 
 	// 書き込みモード設定
@@ -1095,7 +1095,7 @@ bool CImpExpCustMenu::Export( const wstring& sFileName, wstring& sErrMsg )
 
 	out.Close();
 
-	/* カスタムメニュー情報 */
+	// カスタムメニュー情報
 	//ヘッダ
 	CDataProfile	cProfile;
 	CommonSetting_CustomMenu* menu=&m_Common.m_sCustomMenu;
@@ -1152,7 +1152,7 @@ bool CImpExpKeyWord::Import( const wstring& sFileName, wstring& sErrMsg )
 		
 		//解析
 		if (0 < szLine.length()) {
-			/* ｎ番目のセットにキーワードを追加 */
+			// ｎ番目のセットにキーワードを追加
 			int nRetValue = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWord( m_nIdx, szLine.c_str() );
 			if (2 == nRetValue) {
 				bAddError = true;
@@ -1194,10 +1194,10 @@ bool CImpExpKeyWord::Export( const wstring& sFileName, wstring& sErrMsg )
 
 	m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SortKeyWord(m_nIdx);	//MIK 2000.12.01 sort keyword
 
-	/* ｎ番目のセットのキーワードの数を返す */
+	// ｎ番目のセットのキーワードの数を返す
 	nKeyWordNum = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWordNum( m_nIdx );
 	for (i = 0; i < nKeyWordNum; ++i) {
-		/* ｎ番目のセットのｍ番目のキーワードを返す */
+		// ｎ番目のセットのｍ番目のキーワードを返す
 		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
 		out.WriteString( m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWord( m_nIdx, i ) );
 		out.WriteF( L"\n" );

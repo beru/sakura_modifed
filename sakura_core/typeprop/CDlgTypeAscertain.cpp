@@ -68,7 +68,7 @@ BOOL CDlgTypeAscertain::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「タイプ別設定インポート」のヘルプ */
+		// 「タイプ別設定インポート」のヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, HLP000338 );
 		return TRUE;
 	case IDOK:
@@ -92,12 +92,12 @@ BOOL CDlgTypeAscertain::OnBnClicked( int wID )
 		::EndDialog( GetHwnd(), FALSE );
 		return TRUE;
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgTypeAscertain::SetData( void )
 {
 	// タイプ名設定
@@ -111,23 +111,23 @@ void CDlgTypeAscertain::SetData( void )
 	HWND	hwndCombo;
 	TCHAR	szText[130];
 	hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS );
-	/* コンボボックスを空にする */
+	// コンボボックスを空にする
 	Combo_ResetContent( hwndCombo );
-	/* 一行目はそのまま */
+	// 一行目はそのまま
 	Combo_AddString( hwndCombo, LSW(STR_DLGTYPEASC_IMPORT) );
 
 	// エディタ内の設定
 	for (nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
-		if (type->m_szTypeExts[0] != _T('\0')) {		/* タイプ属性：拡張子リスト */
+		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s( szText, _T("%ts (%ts)"),
-				type->m_szTypeName,	/* タイプ属性：名称 */
-				type->m_szTypeExts	/* タイプ属性：拡張子リスト */
+				type->m_szTypeName,	// タイプ属性：名称
+				type->m_szTypeExts	// タイプ属性：拡張子リスト
 			);
 		}else {
 			auto_sprintf_s( szText, _T("%ts"),
-				type->m_szTypeName	/* タイプ属性：拡称 */
+				type->m_szTypeName	// タイプ属性：拡称
 			);
 		}
 		::Combo_AddString( hwndCombo, szText );

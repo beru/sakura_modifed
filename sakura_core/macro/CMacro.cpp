@@ -142,10 +142,10 @@ void CMacro::AddLParam( const LPARAM* lParams, const CEditView* pcEditView )
 			lFlag |= pcEditView->m_sCurSearchOption.bLoHiCase		? 0x02 : 0x00;
 			lFlag |= pcEditView->m_sCurSearchOption.bRegularExp	? 0x04 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND				? 0x08 : 0x00;
-			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bAutoCloseDlgFind				? 0x10 : 0x00;
+			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSearchAll					? 0x20 : 0x00;
 			lFlag |= pcEditView->m_pcEditWnd->m_cDlgReplace.m_nPaste					? 0x40 : 0x00;	//	CShareDataに入れなくていいの？
-			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSelectedArea					? 0x80 : 0x00;	//	置換する時は選べない
+			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSelectedArea				? 0x80 : 0x00;	//	置換する時は選べない
 			lFlag |= pcEditView->m_pcEditWnd->m_cDlgReplace.m_nReplaceTarget << 8;	//	8bitシフト（0x100で掛け算）
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bConsecutiveAll				? 0x0400: 0x00;	// 2007.01.16 ryoji
 			AddIntParam( lFlag );
@@ -244,7 +244,7 @@ void CMacro::AddIntParam( const int nParam )
 	param->m_pNext = NULL;
 
 	// 必要な領域を確保してコピー。
-	param->m_pData = new WCHAR[16];	//	数値格納（最大16桁）用
+	param->m_pData = new WCHAR[16];	// 数値格納（最大16桁）用
 	_itow(nParam, param->m_pData, 10);
 
 	// リストの整合性を保つ

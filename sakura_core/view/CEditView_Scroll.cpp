@@ -35,20 +35,20 @@
 */
 BOOL CEditView::CreateScrollBar()
 {
-	/* スクロールバーの作成 */
+	// スクロールバーの作成
 	m_hwndVScrollBar = ::CreateWindowEx(
-		0L,									/* no extended styles */
-		_T("SCROLLBAR"),					/* scroll bar control class */
-		NULL,								/* text for window title bar */
-		WS_VISIBLE | WS_CHILD | SBS_VERT,	/* scroll bar styles */
-		0,									/* horizontal position */
-		0,									/* vertical position */
-		200,								/* width of the scroll bar */
-		CW_USEDEFAULT,						/* default height */
-		GetHwnd(),								/* handle of main window */
-		(HMENU) NULL,						/* no menu for a scroll bar */
-		G_AppInstance(),						/* instance owning this window */
-		(LPVOID) NULL						/* pointer not needed */
+		0L,									// no extended styles
+		_T("SCROLLBAR"),					// scroll bar control class
+		NULL,								// text for window title bar
+		WS_VISIBLE | WS_CHILD | SBS_VERT,	// scroll bar styles
+		0,									// horizontal position
+		0,									// vertical position
+		200,								// width of the scroll bar
+		CW_USEDEFAULT,						// default height
+		GetHwnd(),							// handle of main window
+		(HMENU) NULL,						// no menu for a scroll bar
+		G_AppInstance(),					// instance owning this window
+		(LPVOID) NULL						// pointer not needed
 	);
 	SCROLLINFO si;
 	si.cbSize = sizeof( si );
@@ -61,22 +61,22 @@ BOOL CEditView::CreateScrollBar()
 	::SetScrollInfo( m_hwndVScrollBar, SB_CTL, &si, TRUE );
 	::ShowScrollBar( m_hwndVScrollBar, SB_CTL, TRUE );
 
-	/* スクロールバーの作成 */
+	// スクロールバーの作成
 	m_hwndHScrollBar = NULL;
-	if (GetDllShareData().m_Common.m_sWindow.m_bScrollBarHorz) {	/* 水平スクロールバーを使う */
+	if (GetDllShareData().m_Common.m_sWindow.m_bScrollBarHorz) {	// 水平スクロールバーを使う
 		m_hwndHScrollBar = ::CreateWindowEx(
-			0L,									/* no extended styles */
-			_T("SCROLLBAR"),					/* scroll bar control class */
-			NULL,								/* text for window title bar */
-			WS_VISIBLE | WS_CHILD | SBS_HORZ,	/* scroll bar styles */
-			0,									/* horizontal position */
-			0,									/* vertical position */
-			200,								/* width of the scroll bar */
-			CW_USEDEFAULT,						/* default height */
-			GetHwnd(),								/* handle of main window */
-			(HMENU) NULL,						/* no menu for a scroll bar */
-			G_AppInstance(),						/* instance owning this window */
-			(LPVOID) NULL						/* pointer not needed */
+			0L,									// no extended styles
+			_T("SCROLLBAR"),					// scroll bar control class
+			NULL,								// text for window title bar
+			WS_VISIBLE | WS_CHILD | SBS_HORZ,	// scroll bar styles
+			0,									// horizontal position
+			0,									// vertical position
+			200,								// width of the scroll bar
+			CW_USEDEFAULT,						// default height
+			GetHwnd(),							// handle of main window
+			(HMENU) NULL,						// no menu for a scroll bar
+			G_AppInstance(),					// instance owning this window
+			(LPVOID) NULL						// pointer not needed
 		);
 		si.cbSize = sizeof( si );
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
@@ -89,36 +89,36 @@ BOOL CEditView::CreateScrollBar()
 		::ShowScrollBar( m_hwndHScrollBar, SB_CTL, TRUE );
 	}
 
-	/* サイズボックス */
-	if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	/* ファンクションキー表示位置／0:上 1:下 */
+	// サイズボックス
+	if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 		m_hwndSizeBox = ::CreateWindowEx(
-			WS_EX_CONTROLPARENT/*0L*/, 			/* no extended styles */
-			_T("SCROLLBAR"),					/* scroll bar control class */
-			NULL,								/* text for window title bar */
-			WS_VISIBLE | WS_CHILD | SBS_SIZEBOX | SBS_SIZEGRIP, /* scroll bar styles */
-			0,									/* horizontal position */
-			0,									/* vertical position */
-			200,								/* width of the scroll bar */
-			CW_USEDEFAULT,						/* default height */
-			GetHwnd(), 							/* handle of main window */
-			(HMENU) NULL,						/* no menu for a scroll bar */
-			G_AppInstance(),						/* instance owning this window */
-			(LPVOID) NULL						/* pointer not needed */
+			WS_EX_CONTROLPARENT/*0L*/, 			// no extended styles
+			_T("SCROLLBAR"),					// scroll bar control class
+			NULL,								// text for window title bar
+			WS_VISIBLE | WS_CHILD | SBS_SIZEBOX | SBS_SIZEGRIP, // scroll bar styles
+			0,									// horizontal position
+			0,									// vertical position
+			200,								// width of the scroll ba
+			CW_USEDEFAULT,						// default height
+			GetHwnd(), 							// handle of main window
+			(HMENU) NULL,						// no menu for a scroll bar
+			G_AppInstance(),					// instance owning this window
+			(LPVOID) NULL						// pointer not needed
 		);
 	}else {
 		m_hwndSizeBox = ::CreateWindowEx(
-			0L, 								/* no extended styles */
-			_T("STATIC"),						/* scroll bar control class */
-			NULL,								/* text for window title bar */
-			WS_VISIBLE | WS_CHILD/* | SBS_SIZEBOX | SBS_SIZEGRIP*/, /* scroll bar styles */
-			0,									/* horizontal position */
-			0,									/* vertical position */
-			200,								/* width of the scroll bar */
-			CW_USEDEFAULT,						/* default height */
-			GetHwnd(), 							/* handle of main window */
-			(HMENU) NULL,						/* no menu for a scroll bar */
-			G_AppInstance(),						/* instance owning this window */
-			(LPVOID) NULL						/* pointer not needed */
+			0L, 								// no extended styles
+			_T("STATIC"),						// scroll bar control class
+			NULL,								// text for window title bar
+			WS_VISIBLE | WS_CHILD/* | SBS_SIZEBOX | SBS_SIZEGRIP*/, // scroll bar styles
+			0,									// horizontal position
+			0,									// vertical position
+			200,								// width of the scroll bar
+			CW_USEDEFAULT,						// default height
+			GetHwnd(), 							// handle of main window
+			(HMENU) NULL,						// no menu for a scroll bar
+			G_AppInstance(),					// instance owning this window
+			(LPVOID) NULL						// pointer not needed
 		);
 	}
 	return TRUE;
@@ -287,12 +287,12 @@ void CEditView::AdjustScrollBars()
 	SCROLLINFO	si;
 
 	if (m_hwndVScrollBar) {
-		/* 垂直スクロールバー */
+		// 垂直スクロールバー
 		const CLayoutInt	nEofMargin = CLayoutInt(2); // EOFとその下のマージン
 		const CLayoutInt	nAllLines = m_pcEditDoc->m_cLayoutMgr.GetLineCount() + nEofMargin;
 		int	nVScrollRate = 1;
 #ifdef _WIN64
-		/* nAllLines / nVScrollRate < INT_MAX となる整数nVScrollRateを求める */
+		// nAllLines / nVScrollRate < INT_MAX となる整数nVScrollRateを求める
 		// 64bit版用スクロール率
 		while (nAllLines / nVScrollRate > INT_MAX) {
 			++nVScrollRate;
@@ -301,12 +301,12 @@ void CEditView::AdjustScrollBars()
 		si.cbSize = sizeof( si );
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
-		si.nMax  = (Int)nAllLines / nVScrollRate - 1;	/* 全行数 */
-		si.nPage = (Int)GetTextArea().m_nViewRowNum / nVScrollRate;	/* 表示域の行数 */
-		si.nPos  = (Int)GetTextArea().GetViewTopLine() / nVScrollRate;	/* 表示域の一番上の行(0開始) */
+		si.nMax  = (Int)nAllLines / nVScrollRate - 1;	// 全行数
+		si.nPage = (Int)GetTextArea().m_nViewRowNum / nVScrollRate;	// 表示域の行数
+		si.nPos  = (Int)GetTextArea().GetViewTopLine() / nVScrollRate;	// 表示域の一番上の行(0開始)
 		si.nTrackPos = 0;
 		::SetScrollInfo( m_hwndVScrollBar, SB_CTL, &si, TRUE );
-		m_nVScrollRate = nVScrollRate;				/* 垂直スクロールバーの縮尺 */
+		m_nVScrollRate = nVScrollRate;				// 垂直スクロールバーの縮尺
 		
 		//	Nov. 16, 2002 genta
 		//	縦スクロールバーがDisableになったときは必ず全体が画面内に収まるように
@@ -326,8 +326,8 @@ void CEditView::AdjustScrollBars()
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
 		si.nMax  = (Int)GetRightEdgeForScrollBar() - 1;		// 2009.08.28 nasukoji	スクロールバー制御用の右端座標を取得
-		si.nPage = (Int)GetTextArea().m_nViewColNum;			/* 表示域の桁数 */
-		si.nPos  = (Int)GetTextArea().GetViewLeftCol();		/* 表示域の一番左の桁(0開始) */
+		si.nPage = (Int)GetTextArea().m_nViewColNum;		// 表示域の桁数
+		si.nPos  = (Int)GetTextArea().GetViewLeftCol();		// 表示域の一番左の桁(0開始)
 		si.nTrackPos = 1;
 		::SetScrollInfo( m_hwndHScrollBar, SB_CTL, &si, TRUE );
 
@@ -363,10 +363,10 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 	if (GetTextArea().GetViewTopLine() == nPos) {
 		return CLayoutInt(0);	//	スクロール無し。
 	}
-	/* 垂直スクロール量（行数）の算出 */
+	// 垂直スクロール量（行数）の算出
 	nScrollRowNum = GetTextArea().GetViewTopLine() - nPos;
 
-	/* スクロール */
+	// スクロール
 	if (t_abs( nScrollRowNum ) >= GetTextArea().m_nViewRowNum) {
 		GetTextArea().SetViewTopLine( CLayoutInt(nPos) );
 		::InvalidateRect( GetHwnd(), NULL, TRUE );
@@ -405,10 +405,10 @@ CLayoutInt CEditView::ScrollAtV( CLayoutInt nPos )
 		}
 	}
 
-	/* スクロールバーの状態を更新する */
+	// スクロールバーの状態を更新する
 	AdjustScrollBars();
 
-	/* キャレットの表示・更新 */
+	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 
 	return -nScrollRowNum;	//方向が逆なので符号反転が必要
@@ -443,10 +443,10 @@ CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 	if (GetTextArea().GetViewLeftCol() == nPos) {
 		return CLayoutInt(0);
 	}
-	/* 水平スクロール量（文字数）の算出 */
+	// 水平スクロール量（文字数）の算出
 	const CLayoutInt	nScrollColNum = GetTextArea().GetViewLeftCol() - nPos;
 
-	/* スクロール */
+	// スクロール
 	if (t_abs( nScrollColNum ) >= GetTextArea().m_nViewColNum /*|| abs( nScrollRowNum ) >= GetTextArea().m_nViewRowNum*/) {
 		GetTextArea().SetViewLeftCol( nPos );
 		::InvalidateRect( GetHwnd(), NULL, TRUE );
@@ -489,10 +489,10 @@ CLayoutInt CEditView::ScrollAtH( CLayoutInt nPos )
 	GetRuler().DispRuler( hdc );
 	::ReleaseDC( GetHwnd(), hdc );
 
-	/* スクロールバーの状態を更新する */
+	// スクロールバーの状態を更新する
 	AdjustScrollBars();
 
-	/* キャレットの表示・更新 */
+	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 
 	return -nScrollColNum;	//方向が逆なので符号反転が必要
@@ -517,7 +517,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 		ScrollWindowEx(
 			nScrollColPxWidth,	// 水平スクロール量
 			(Int)nScrollRowNum * GetTextMetrics().GetHankakuDy(),	// 垂直スクロール量
-			&rcScroll,	/* スクロール長方形の構造体のアドレス */
+			&rcScroll,	// スクロール長方形の構造体のアドレス
 			NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE
 		);
 		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ

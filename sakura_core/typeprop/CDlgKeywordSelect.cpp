@@ -79,8 +79,7 @@ CDlgKeywordSelect::~CDlgKeywordSelect()
 }
 
 
-/* !モーダルダイアログの表示
-*/
+//! モーダルダイアログの表示
 int CDlgKeywordSelect::DoModal( HINSTANCE hInstance, HWND hwndParent, int* pnSet )
 {
 	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
@@ -96,8 +95,7 @@ int CDlgKeywordSelect::DoModal( HINSTANCE hInstance, HWND hwndParent, int* pnSet
 	return TRUE;
 }
 
-/*! 初期化処理
-*/
+//! 初期化処理
 BOOL CDlgKeywordSelect::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	_SetHwnd( hwndDlg );
@@ -118,17 +116,16 @@ BOOL CDlgKeywordSelect::OnBnClicked( int wID )
 	return CDialog::OnBnClicked( wID );
 }
 
-/*! ダイアログデータの設定
-*/
+//! ダイアログデータの設定
 void CDlgKeywordSelect::SetData( void )
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
 		HWND hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
 
-		/* コンボボックスを空にする */
+		// コンボボックスを空にする
 		Combo_ResetContent( hwndCombo );
 		
-		/* 一行目は空白 */
+		// 一行目は空白
 		Combo_AddString( hwndCombo, L" " );
 
 		if (m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0) {
@@ -137,10 +134,10 @@ void CDlgKeywordSelect::SetData( void )
 			}
 
 			if (-1 == m_nSet[ index ]) {
-				/* セット名コンボボックスのデフォルト選択 */
+				// セット名コンボボックスのデフォルト選択
 				Combo_SetCurSel( hwndCombo, 0 );
 			}else {
-				/* セット名コンボボックスのデフォルト選択 */
+				// セット名コンボボックスのデフォルト選択
 				Combo_SetCurSel( hwndCombo, m_nSet[ index ] + 1 );
 			}
 		}
@@ -148,8 +145,7 @@ void CDlgKeywordSelect::SetData( void )
 }
 
 
-/*! ダイアログデータの設定
-*/
+//! ダイアログデータの設定
 int CDlgKeywordSelect::GetData( void )
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {

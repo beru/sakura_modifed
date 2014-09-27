@@ -27,7 +27,7 @@
 
 class CEditWnd;
 
-class CSakuraEnvironment{
+class CSakuraEnvironment {
 public:
 	static CEditWnd* GetMainWindow();
 	static void ExpandParameter(const wchar_t* pszSource, wchar_t* pszBuffer, int nBufferLen);
@@ -41,6 +41,6 @@ private:
 
 
 //ウィンドウ管理
-/* 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる */
+// 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる
 BOOL IsSakuraMainWindow( HWND hWnd );
 

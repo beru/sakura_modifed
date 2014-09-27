@@ -31,7 +31,7 @@ CMRUFolder::CMRUFolder()
 	m_pShareData = &GetDllShareData();
 }
 
-/*	デストラクタ	*/
+// デストラクタ
 CMRUFolder::~CMRUFolder()
 {
 	m_cRecentFolder.Terminate();

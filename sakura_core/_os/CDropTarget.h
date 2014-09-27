@@ -25,8 +25,7 @@ class CEditView;// 2002/2/3 aroka ヘッダ軽量化
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class COleLibrary
-{
+class COleLibrary {
 	friend class CYbInterfaceBase;
 private:
 //	DWORD m_dwCount;	// 2009.01.08 ryoji m_dwCount削除
@@ -40,8 +39,7 @@ private:
 
 
 
-class CYbInterfaceBase
-{
+class CYbInterfaceBase {
 private:
 	static COleLibrary m_olelib;
 protected:
@@ -52,8 +50,7 @@ protected:
 
 
 template<class BASEINTERFACE>
-class CYbInterfaceImpl : public BASEINTERFACE, public CYbInterfaceBase
-{
+class CYbInterfaceImpl : public BASEINTERFACE, public CYbInterfaceBase {
 private:
 	static REFIID m_owniid;
 public:
@@ -67,8 +64,7 @@ public:
 };
 
 
-class CDropTarget : public CYbInterfaceImpl<IDropTarget>
-{
+class CDropTarget : public CYbInterfaceImpl<IDropTarget> {
 public:
 	/*
 	||  Constructors

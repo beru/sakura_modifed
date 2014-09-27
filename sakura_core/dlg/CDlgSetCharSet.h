@@ -26,7 +26,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, ECodeType*, bool* );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, ECodeType*, bool* );	// モーダルダイアログの表示
 
 
 	ECodeType*	m_pnCharSet;			// 文字コードセット
@@ -44,10 +44,9 @@ protected:
 	BOOL	OnCbnSelChange( HWND, int );
 	LPVOID	GetHelpIdTable( void );
 
-	void	SetData( void );	/* ダイアログデータの設定 */
-	int 	GetData( void );	/* ダイアログデータの取得 */
+	void	SetData( void );	// ダイアログデータの設定
+	int 	GetData( void );	// ダイアログデータの取得
 
 	void	SetBOM( void );		// BOM の設定
 };
-
 

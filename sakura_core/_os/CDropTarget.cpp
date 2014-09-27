@@ -190,8 +190,6 @@ STDMETHODIMP CDropSource::GiveFeedback( DWORD dropEffect )
 }
 
 
-
-
 /** “]‘—‘ÎÛ‚Ì•¶š—ñ‚ğİ’è‚·‚é
 	@param lpszText [in] •¶š—ñ
 	@param nTextLen [in] pszText‚Ì’·‚³

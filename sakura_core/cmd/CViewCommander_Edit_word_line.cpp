@@ -136,7 +136,7 @@ void CViewCommander::Command_LineCutToStart( void )
 		Command_CUT();
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );	/* 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す */
+	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;

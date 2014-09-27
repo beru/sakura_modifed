@@ -47,7 +47,7 @@ const DWORD p_helpids[] = {	//13200
 	IDOK,						HIDC_DIFF_IDOK,
 	IDCANCEL,					HIDC_DIFF_IDCANCEL,
 	IDC_BUTTON_HELP,			HIDC_BUTTON_DIFF_HELP,
-	IDC_CHECK_DIFF_EXEC_STATE,	HIDC_CHECK_DIFF_EXEC_STATE,	//DIFF差分が見つからないときにメッセージを表示  2003.05.12 MIK
+	IDC_CHECK_DIFF_EXEC_STATE,	HIDC_CHECK_DIFF_EXEC_STATE,		// DIFF差分が見つからないときにメッセージを表示  2003.05.12 MIK
 	IDC_CHECK_NOTIFYNOTFOUND,	HIDC_CHECK_DIFF_NOTIFYNOTFOUND,	// 見つからないときにメッセージを表示	// 2006.10.10 ryoji
 	IDC_CHECK_SEARCHALL,		HIDC_CHECK_DIFF_SEARCHALL,		// 先頭（末尾）から再検索する	// 2006.10.10 ryoji
 //	IDC_FRAME_SEARCH_MSG,		HIDC_FRAME_DIFF_SEARCH_MSG,
@@ -84,7 +84,7 @@ static const SAnchorList anchorList[] = {
 CDlgDiff::CDlgDiff()
 	: m_nIndexSave( 0 )
 {
-	/* サイズ変更時に位置を制御するコントロール数 */
+	// サイズ変更時に位置を制御するコントロール数
 	assert( _countof(anchorList) == _countof(m_rcItems) );
 
 	m_szFile1[0] = 0;
@@ -98,13 +98,13 @@ CDlgDiff::CDlgDiff()
 	return;
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgDiff::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
 	LPARAM				lParam,
-	const TCHAR*		pszPath,		//自ファイル
-	bool				bIsModified		//自ファイル編集中？
+	const TCHAR*		pszPath,		// 自ファイル
+	bool				bIsModified		// 自ファイル編集中？
 )
 {
 	_tcscpy(m_szFile1, pszPath);
@@ -117,26 +117,26 @@ BOOL CDlgDiff::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* ヘルプ */
+		// ヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_DIFF_DIALOG) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 
-	case IDC_BUTTON_DIFF_DST:	/* 参照 */
+	case IDC_BUTTON_DIFF_DST:	// 参照
 		{
 			CDlgOpenFile	cDlgOpenFile;
 			TCHAR			szPath[_MAX_PATH];
 			_tcscpy_s( szPath, m_szFile2 );
-			/* ファイルオープンダイアログの初期化 */
+			// ファイルオープンダイアログの初期化
 			cDlgOpenFile.Create(
 				m_hInstance,
 				GetHwnd(),
 				_T("*.*"),
-				m_szFile1 /*m_szFile2*/
+				m_szFile1 //m_szFile2
 			);
 			if (cDlgOpenFile.DoModal_GetOpenFileName( szPath )) {
 				_tcscpy( m_szFile2, szPath );
 				::DlgItem_SetText( GetHwnd(), IDC_EDIT_DIFF_DST, m_szFile2 );
-				//外部ファイルを選択状態に
+				// 外部ファイルを選択状態に
 				::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_DST1, TRUE );
 				::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_DST2, FALSE );
 				List_SetCurSel( ::GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES), -1 );
@@ -144,8 +144,8 @@ BOOL CDlgDiff::OnBnClicked( int wID )
 		}
 		return TRUE;
 
-	case IDOK:			/* 左右に表示 */
-		/* ダイアログデータの取得 */
+	case IDOK:			// 左右に表示
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), GetData() );
 		return TRUE;
 
@@ -192,14 +192,14 @@ BOOL CDlgDiff::OnBnClicked( int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgDiff::SetData( void )
 {
-	//オプション
+	// オプション
 	m_nDiffFlgOpt = m_pShareData->m_nDiffFlgOpt;
 	if (m_nDiffFlgOpt & 0x0001) ::CheckDlgButton( GetHwnd(), IDC_CHECK_DIFF_OPT_CASE,   TRUE );
 	if (m_nDiffFlgOpt & 0x0002) ::CheckDlgButton( GetHwnd(), IDC_CHECK_DIFF_OPT_SPACE,  TRUE );
@@ -207,7 +207,7 @@ void CDlgDiff::SetData( void )
 	if (m_nDiffFlgOpt & 0x0008) ::CheckDlgButton( GetHwnd(), IDC_CHECK_DIFF_OPT_BLINE,  TRUE );
 	if (m_nDiffFlgOpt & 0x0010) ::CheckDlgButton( GetHwnd(), IDC_CHECK_DIFF_OPT_TABSPC, TRUE );
 
-	//新旧ファイル
+	// 新旧ファイル
 	if (m_nDiffFlgOpt & 0x0020) {
 		::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_FILE1, FALSE );
 		::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_FILE2, TRUE );
@@ -219,16 +219,16 @@ void CDlgDiff::SetData( void )
 	//::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_DIFF_FILE1 ), FALSE );
 	//::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_DIFF_FILE2 ), FALSE );
 
-	//DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
+	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
 	if (m_nDiffFlgOpt & 0x0040) ::CheckDlgButton( GetHwnd(), IDC_CHECK_DIFF_EXEC_STATE, TRUE );
 
-	/* 見つからないときメッセージを表示 */
+	// 見つからないときメッセージを表示
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND );
 	
-	/* 先頭（末尾）から再検索 */
+	// 先頭（末尾）から再検索
 	::CheckDlgButton( GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll );
 
-	/* 編集中のファイル一覧を作成する */
+	// 編集中のファイル一覧を作成する
 	{
 		HWND		hwndList;
 		int			nRowNum;
@@ -247,10 +247,10 @@ void CDlgDiff::SetData( void )
 		pFileInfo = &m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 		code = pFileInfo->m_nCharCode;
 
-		/* リストのハンドル取得 */
+		// リストのハンドル取得
 		hwndList = :: GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES );
 
-		/* 現在開いている編集窓のリストをメニューにする */
+		// 現在開いている編集窓のリストをメニューにする
 		nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNode, TRUE );
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
@@ -262,11 +262,11 @@ void CDlgDiff::SetData( void )
 			TCHAR		szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(m_szFile1, NULL, szFile1);
 			for (i = 0; i < nRowNum; i++) {
-				/* トレイからエディタへの編集ファイル名要求通知 */
+				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessageAny( pEditNode[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0 );
 				pFileInfo = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
-				/* 自分ならスキップ */
+				// 自分ならスキップ
 				if (pEditNode[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
 					CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1 );
@@ -278,7 +278,7 @@ void CDlgDiff::SetData( void )
 				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, i );
 
 
-				/* リストに登録する */
+				// リストに登録する
 				nItem = ::List_AddString( hwndList, szName );
 				List_SetItemData( hwndList, nItem, pEditNode[i].GetHwnd() );
 				count++;
@@ -311,64 +311,64 @@ void CDlgDiff::SetData( void )
 			::ReleaseDC( hwndList, hDC );
 			List_SetHorizontalExtent( hwndList, nExtent + 8 );
 
-			/* 最初を選択 */
+			// 最初を選択
 			//List_SetCurSel( hwndList, 0 );
 		}
 
 		//	From Here 2004.02.22 じゅうじ
 		//	開いているファイルがある場合には初期状態でそちらを優先
 		if (count == 0) {
-			/* 相手ファイルの選択 */
+			// 相手ファイルの選択
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_DST1, TRUE );
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_DST2, FALSE );
-			/* その他の編集中リストはなし */
+			// その他の編集中リストはなし
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_DIFF_DST2 ), FALSE );
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES ), FALSE );
 		}else {
-			/* 相手ファイルの選択 */
+			// 相手ファイルの選択
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_DST1, FALSE );
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_DIFF_DST2, TRUE );
-			//	ListBoxが選択されていなかったら，先頭のファイルを選択する．
+			// ListBoxが選択されていなかったら，先頭のファイルを選択する．
 			HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES );
 			if (List_GetCurSel( hwndList ) == LB_ERR) {
 			    List_SetCurSel( hwndList, selIndex );
 			}
 		}
-		//	To Here 2004.02.22 じゅうじ
-		//	Feb. 28, 2004 genta 一番上を選択位置とする．
+		// To Here 2004.02.22 じゅうじ
+		// Feb. 28, 2004 genta 一番上を選択位置とする．
 		m_nIndexSave = selIndex;
 	}
 
 	return;
 }
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgDiff::GetData( void )
 {
 	BOOL	ret = TRUE;
 
-	//DIFFオプション
+	// DIFFオプション
 	m_nDiffFlgOpt = 0;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_DIFF_OPT_CASE   ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0001;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_DIFF_OPT_SPACE  ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0002;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_DIFF_OPT_SPCCHG ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0004;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_DIFF_OPT_BLINE  ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0008;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_DIFF_OPT_TABSPC ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0010;
-	//ファイル新旧
+	// ファイル新旧
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_DIFF_FILE2      ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0020;
-	//DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
+	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_DIFF_EXEC_STATE ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0040;
 	m_pShareData->m_nDiffFlgOpt = m_nDiffFlgOpt;
 
-	//相手ファイル名
+	// 相手ファイル名
 	m_szFile2[0] = 0;
 	m_hWnd_Dst = NULL;
 	m_bIsModifiedDst = false;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_DIFF_DST1 ) == BST_CHECKED) {
 		::DlgItem_GetText( GetHwnd(), IDC_EDIT_DIFF_DST, m_szFile2, _countof2(m_szFile2) );
-		//	2004.05.19 MIK 外部ファイルが指定されていない場合はキャンセル
-		//相手ファイルが指定されてなければキャンセル
+		// 2004.05.19 MIK 外部ファイルが指定されていない場合はキャンセル
+		// 相手ファイルが指定されてなければキャンセル
 		if (m_szFile2[0] == '\0') ret = FALSE;
 
 	}else if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_DIFF_DST2 ) == BST_CHECKED) {
@@ -376,13 +376,13 @@ int CDlgDiff::GetData( void )
 		int			nItem;
 		EditInfo*	pFileInfo;
 
-		/* リストから相手のウインドウハンドルを取得 */
+		// リストから相手のウインドウハンドルを取得
 		hwndList = :: GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES );
 		nItem = List_GetCurSel( hwndList );
 		if (nItem != LB_ERR) {
 			m_hWnd_Dst = (HWND)List_GetItemData( hwndList, nItem );
 
-			/* トレイからエディタへの編集ファイル名要求通知 */
+			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessageAny( m_hWnd_Dst, MYWM_GETFILEINFO, 0, 0 );
 			pFileInfo = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
@@ -395,20 +395,20 @@ int CDlgDiff::GetData( void )
 		ret = FALSE;
 	}
 
-	/* 見つからないときメッセージを表示 */
+	// 見つからないときメッセージを表示
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND ) == BST_CHECKED)
 		m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = TRUE;
 	else
 		m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = FALSE;
 
-	/* 先頭（末尾）から再検索 */
+	// 先頭（末尾）から再検索
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_SEARCHALL ) == BST_CHECKED)
 		m_pShareData->m_Common.m_sSearch.m_bSearchAll = TRUE;
 	else
 		m_pShareData->m_Common.m_sSearch.m_bSearchAll = FALSE;
 
-	//相手ファイルが指定されてなければキャンセル
-	//	2004.02.21 MIK 相手が無題だと比較できないので判定削除
+	// 相手ファイルが指定されてなければキャンセル
+	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除
 	//if( m_szFile2[0] == '\0' ) ret = FALSE;
 
 	return ret;
@@ -426,7 +426,7 @@ BOOL CDlgDiff::OnLbnSelChange( HWND hwndCtl, int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnLbnSelChange( hwndCtl, wID );
 }
 
@@ -448,7 +448,7 @@ BOOL CDlgDiff::OnEnChange( HWND hwndCtl, int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnEnChange( hwndCtl, wID );
 }
 
@@ -508,7 +508,7 @@ BOOL CDlgDiff::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 BOOL CDlgDiff::OnSize( WPARAM wParam, LPARAM lParam )
 {
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	CDialog::OnSize( wParam, lParam );
 
 	::GetWindowRect( GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcDiffDialog );

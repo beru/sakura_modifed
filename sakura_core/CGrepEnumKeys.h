@@ -60,8 +60,8 @@ public:
 	}
 
 	int SetFileKeys( LPCTSTR lpKeys ) {
-		const TCHAR* WILDCARD_DELIMITER = _T(" ;,");	//リストの区切り
-		const TCHAR* WILDCARD_ANY = _T("*.*");	//サブフォルダ探索用
+		const TCHAR* WILDCARD_DELIMITER = _T(" ;,");	// リストの区切り
+		const TCHAR* WILDCARD_ANY = _T("*.*");			// サブフォルダ探索用
 		int nWildCardLen = _tcslen( lpKeys );
 		TCHAR* pWildCard = new TCHAR[ nWildCardLen + 1 ];
 		if (!pWildCard) {

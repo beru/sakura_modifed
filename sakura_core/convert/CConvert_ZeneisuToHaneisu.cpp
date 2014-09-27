@@ -6,11 +6,12 @@
 //                     ƒCƒ“ƒ^[ƒtƒF[ƒX                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//!‘SŠp‰p”¨”¼Šp‰p”
+//! ‘SŠp‰p”¨”¼Šp‰p”
 bool CConvert_ZeneisuToHaneisu::DoConvert(CNativeW* pcData)
 {
-	//‘SŠp‰p”¨”¼Šp‰p”
+	// ‘SŠp‰p”¨”¼Šp‰p”
 	Convert_ZeneisuToHaneisu(pcData->GetStringPtr(), pcData->GetStringLength());
 
 	return true;
 }
+

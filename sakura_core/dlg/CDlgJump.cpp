@@ -28,32 +28,32 @@
 
 // ジャンプ CDlgJump.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12800
-	IDC_BUTTON_JUMP,				HIDC_JUMP_BUTTON_JUMP,			//ジャンプ
-	IDCANCEL,						HIDCANCEL_JUMP,					//キャンセル
-	IDC_BUTTON_HELP,				HIDC_JUMP_BUTTON_HELP,			//ヘルプ
-	IDC_CHECK_PLSQL,				HIDC_JUMP_CHECK_PLSQL,			//PL/SQL
-	IDC_COMBO_PLSQLBLOCKS,			HIDC_JUMP_COMBO_PLSQLBLOCKS,	//
-	IDC_EDIT_LINENUM,				HIDC_JUMP_EDIT_LINENUM,			//行番号
-	IDC_EDIT_PLSQL_E1,				HIDC_JUMP_EDIT_PLSQL_E1,		//
-	IDC_RADIO_LINENUM_LAYOUT,		HIDC_JUMP_RADIO_LINENUM_LAYOUT,	//折り返し単位
-	IDC_RADIO_LINENUM_CRLF,			HIDC_JUMP_RADIO_LINENUM_CRLF,	//改行単位
-	IDC_SPIN_LINENUM,				HIDC_JUMP_EDIT_LINENUM,			//12870,	//
-	IDC_SPIN_PLSQL_E1,				HIDC_JUMP_EDIT_PLSQL_E1,		//12871,	//
+	IDC_BUTTON_JUMP,				HIDC_JUMP_BUTTON_JUMP,			// ジャンプ
+	IDCANCEL,						HIDCANCEL_JUMP,					// キャンセル
+	IDC_BUTTON_HELP,				HIDC_JUMP_BUTTON_HELP,			// ヘルプ
+	IDC_CHECK_PLSQL,				HIDC_JUMP_CHECK_PLSQL,			// PL/SQL
+	IDC_COMBO_PLSQLBLOCKS,			HIDC_JUMP_COMBO_PLSQLBLOCKS,	// 
+	IDC_EDIT_LINENUM,				HIDC_JUMP_EDIT_LINENUM,			// 行番号
+	IDC_EDIT_PLSQL_E1,				HIDC_JUMP_EDIT_PLSQL_E1,		// 
+	IDC_RADIO_LINENUM_LAYOUT,		HIDC_JUMP_RADIO_LINENUM_LAYOUT,	// 折り返し単位
+	IDC_RADIO_LINENUM_CRLF,			HIDC_JUMP_RADIO_LINENUM_CRLF,	// 改行単位
+	IDC_SPIN_LINENUM,				HIDC_JUMP_EDIT_LINENUM,			// 12870,	//
+	IDC_SPIN_PLSQL_E1,				HIDC_JUMP_EDIT_PLSQL_E1,		// 12871,	//
 //	IDC_STATIC,						-1,
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
 CDlgJump::CDlgJump()
 {
-	m_nLineNum = 0;			/* 行番号 */
-	m_bPLSQL = FALSE;		/* PL/SQLソースの有効行か */
+	m_nLineNum = 0;			// 行番号
+	m_bPLSQL = FALSE;		// PL/SQLソースの有効行か
 	m_nPLSQL_E1 = 1;
 	m_nPLSQL_E2 = 1;
 
 	return;
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgJump::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
@@ -73,10 +73,10 @@ BOOL CDlgJump::OnNotify( WPARAM wParam, LPARAM lParam )
 	int				nData;
 	idCtrl = (int)wParam;
 	pMNUD  = (NM_UPDOWN*)lParam;
-/* スピンコントロールの処理 */
+	// スピンコントロールの処理
 	switch (idCtrl) {
 	case IDC_SPIN_LINENUM:
-	/* ジャンプしたい行番号の指定 */
+	// ジャンプしたい行番号の指定
 		nData = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_LINENUM, NULL, FALSE );
 		if (pMNUD->iDelta < 0) {
 			++nData;
@@ -126,11 +126,11 @@ BOOL CDlgJump::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「指定行へジャンプ」のヘルプ */
+		//「指定行へジャンプ」のヘルプ
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_JUMP_DIALOG) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
-	case IDC_CHECK_PLSQL:		/* PL/SQLソースの有効行か */
+	case IDC_CHECK_PLSQL:		// PL/SQLソースの有効行か
 		if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_PLSQL )) {
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_LABEL_PLSQL1 ), TRUE );	//Sept. 12, 2000 JEPRO
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_LABEL_PLSQL2 ), TRUE );	//Sept. 12, 2000 JEPRO
@@ -151,7 +151,7 @@ BOOL CDlgJump::OnBnClicked( int wID )
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_LINENUM_LAYOUT ), TRUE );
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_LINENUM_CRLF ), TRUE );
 		}
-		/* 行番号の表示 false=折り返し単位／true=改行単位 */
+		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (m_pShareData->m_bLineNumIsCRLF_ForJump) {
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_LINENUM_LAYOUT, FALSE );
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_LINENUM_CRLF, TRUE );
@@ -160,8 +160,8 @@ BOOL CDlgJump::OnBnClicked( int wID )
 			::CheckDlgButton( GetHwnd(), IDC_RADIO_LINENUM_CRLF, FALSE );
 		}
 		return TRUE;
-	case IDC_BUTTON_JUMP:			/* 指定行へジャンプ */	//Feb. 20, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_JUMP]に変更
-		/* ダイアログデータの取得 */
+	case IDC_BUTTON_JUMP:			// 指定行へジャンプ	//Feb. 20, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_JUMP]に変更
+		// ダイアログデータの取得
 		//From Here Feb. 20, 2001 JEPRO 次行をコメントアウト (CEditView_Command.cpp の Command_JUMP も関係しているので参照のこと)
 //		::EndDialog( GetHwnd(), GetData() );
 //		次行から追加
@@ -180,12 +180,12 @@ BOOL CDlgJump::OnBnClicked( int wID )
 		::EndDialog( GetHwnd(), FALSE );
 		return TRUE;
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgJump::SetData( void )
 {
 	CEditDoc*		pCEditDoc = (CEditDoc*)m_lParam;
@@ -200,19 +200,19 @@ void CDlgJump::SetData( void )
 
 //	GetHwnd() = hwndDlg;
 //From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
-//	::DlgItem_SetText( GetHwnd(), IDC_EDIT_LINENUM, "" );	/* 行番号 */
+//	::DlgItem_SetText( GetHwnd(), IDC_EDIT_LINENUM, "" );	// 行番号
 	if (0 == m_nLineNum) {
-		::DlgItem_SetText( GetHwnd(), IDC_EDIT_LINENUM, _T("") );	/* 行番号 */
+		::DlgItem_SetText( GetHwnd(), IDC_EDIT_LINENUM, _T("") );	// 行番号
 	}else {
-		::SetDlgItemInt( GetHwnd(), IDC_EDIT_LINENUM, m_nLineNum, FALSE );	/* 前回の行番号 */
+		::SetDlgItemInt( GetHwnd(), IDC_EDIT_LINENUM, m_nLineNum, FALSE );	// 前回の行番号
 	}
 //To Here Oct. 7, 2000
 	::SetDlgItemInt( GetHwnd(), IDC_EDIT_PLSQL_E1, m_nPLSQL_E1, FALSE );
 
-	/* PL/SQL関数リスト作成 */
+	// PL/SQL関数リスト作成
 	hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_COMBO_PLSQLBLOCKS );
 
-/* タイプ別に設定されたアウトライン解析方法 */
+	// タイプ別に設定されたアウトライン解析方法
 	if (OUTLINE_PLSQL == pCEditDoc->m_cDocType.GetDocumentAttribute().m_eDefaultOutline) {
 		pCEditDoc->m_cDocOutline.MakeFuncList_PLSQL( &cFuncInfoArr );
 	}
@@ -225,7 +225,7 @@ void CDlgJump::SetData( void )
 		) {
 		}
 		if (31 == cFuncInfoArr.GetAt( i )->m_nInfo) {
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf_s( szText, LSW(STR_DLGJUMP_PSLQL),
 					cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF,
 					cFuncInfoArr.GetAt( i )->m_cmemFuncName.GetStringPtr()
@@ -237,7 +237,7 @@ void CDlgJump::SetData( void )
 				);
 			}
 			nIndex = Combo_AddString( hwndCtrl, szText );
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				Combo_SetItemData( hwndCtrl, nIndex, (Int)cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF );
 			}else {
 				Combo_SetItemData( hwndCtrl, nIndex, (Int)cFuncInfoArr.GetAt( i )->m_nFuncLineLAYOUT );
@@ -245,7 +245,7 @@ void CDlgJump::SetData( void )
 			nPLSQLBlockNum++;
 		}
 		if (41 == cFuncInfoArr.GetAt( i )->m_nInfo) {
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf_s( szText, LSW(STR_DLGJUMP_PSLQL),
 					cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF,
 					cFuncInfoArr.GetAt( i )->m_cmemFuncName.GetStringPtr()
@@ -257,7 +257,7 @@ void CDlgJump::SetData( void )
 				);
 			}
 			nIndexCurSel = nIndex = Combo_AddString( hwndCtrl, szText );
-			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				nWorkLine = (Int)cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF;
 				Combo_SetItemData( hwndCtrl, nIndex, (Int)cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF );
 			}else {
@@ -269,16 +269,16 @@ void CDlgJump::SetData( void )
 	}
 	Combo_SetCurSel( hwndCtrl, nIndexCurSel );
 
-	/* PL/SQLのパッケージ本体が検出された場合 */
+	// PL/SQLのパッケージ本体が検出された場合
 	if (-1 != nWorkLine) {
 		m_nPLSQL_E1 = nWorkLine;
 		::SetDlgItemInt( GetHwnd(), IDC_EDIT_PLSQL_E1, m_nPLSQL_E1, FALSE );
 	}
-	/* PL/SQLのパッケージブロックが検出された場合 */
+	// PL/SQLのパッケージブロックが検出された場合
 	if (0 < nPLSQLBlockNum) {
 		m_bPLSQL = TRUE;
 	}
-	::CheckDlgButton( GetHwnd(), IDC_CHECK_PLSQL, m_bPLSQL );	/* PL/SQLソースの有効行か */
+	::CheckDlgButton( GetHwnd(), IDC_CHECK_PLSQL, m_bPLSQL );	// PL/SQLソースの有効行か
 	if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_PLSQL )) {
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_LABEL_PLSQL1 ), TRUE );	//Sept. 12, 2000 JEPRO
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_LABEL_PLSQL2 ), TRUE );	//Sept. 12, 2000 JEPRO
@@ -299,7 +299,7 @@ void CDlgJump::SetData( void )
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_LINENUM_LAYOUT ), TRUE );
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_RADIO_LINENUM_CRLF ), TRUE );
 	}
-	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (m_pShareData->m_bLineNumIsCRLF_ForJump) {
 		::CheckDlgButton( GetHwnd(), IDC_RADIO_LINENUM_LAYOUT, FALSE );
 		::CheckDlgButton( GetHwnd(), IDC_RADIO_LINENUM_CRLF, TRUE );
@@ -311,20 +311,20 @@ void CDlgJump::SetData( void )
 }
 
 
-/* ダイアログデータの取得 */
-/*   TRUE==正常   FALSE==入力エラー  */
+// ダイアログデータの取得
+// TRUE==正常   FALSE==入力エラー
 int CDlgJump::GetData( void )
 {
 	BOOL	pTranslated;
 
-	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINENUM_LAYOUT )) {
 		m_pShareData->m_bLineNumIsCRLF_ForJump = false;
 	}else {
 		m_pShareData->m_bLineNumIsCRLF_ForJump = true;
 	}
 
-	/* PL/SQLソースの有効行か */
+	// PL/SQLソースの有効行か
 	m_bPLSQL = ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_PLSQL );
 	m_nPLSQL_E1 = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_PLSQL_E1, &pTranslated, FALSE );
 	if (m_nPLSQL_E1 == 0 && !pTranslated) {
@@ -336,7 +336,7 @@ int CDlgJump::GetData( void )
 //		m_nPLSQL_E2 = 1;
 //	}
 
-	/* 行番号 */
+	// 行番号
 	m_nLineNum = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_LINENUM, &pTranslated, FALSE );
 	if (m_nLineNum == 0 && !pTranslated) {
 		return FALSE;

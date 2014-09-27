@@ -139,7 +139,7 @@ void CPropTypesScreen::CPropTypes_Screen()
 	}
 }
 
-/* Screen メッセージ処理 */
+// Screen メッセージ処理
 INT_PTR CPropTypesScreen::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
@@ -157,7 +157,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		m_hwndThis = hwndDlg;
-		/* ダイアログデータの設定 Screen */
+		// ダイアログデータの設定 Screen
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
@@ -176,9 +176,9 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 		return TRUE;
 		
 	case WM_COMMAND:
-		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-//		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
+		wNotifyCode	= HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
+//		hwndCtl		= (HWND) lParam;	// コントロールのハンドル
 		switch (wNotifyCode) {
 		case CBN_SELCHANGE:
 			switch (wID) {
@@ -197,13 +197,13 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 			}
 			break;
 
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			/*	2002.04.01 YAZAKI オートインデントを削除（もともと不要）
 				アウトライン解析にルールファイル関連を追加
 			*/
-			case IDC_RADIO_OUTLINEDEFAULT:	/* アウトライン解析→標準ルール */
+			case IDC_RADIO_OUTLINEDEFAULT:	// アウトライン解析→標準ルール
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES ), TRUE );
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_OUTLINERULEFILE ), FALSE );
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_RULEFILE_REF ), FALSE );
@@ -211,13 +211,13 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 				Combo_SetCurSel( ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES ), 0 );
 
 				return TRUE;
-			case IDC_RADIO_OUTLINERULEFILE:	/* アウトライン解析→ルールファイル */
+			case IDC_RADIO_OUTLINERULEFILE:	// アウトライン解析→ルールファイル
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES ), FALSE );
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_OUTLINERULEFILE ), TRUE );
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_RULEFILE_REF ), TRUE );
 				return TRUE;
 
-			case IDC_BUTTON_RULEFILE_REF:	/* アウトライン解析→ルールファイルの「参照...」ボタン */
+			case IDC_BUTTON_RULEFILE_REF:	// アウトライン解析→ルールファイルの「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
@@ -228,7 +228,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Types.m_szOutlineRuleFilename );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						m_hInstance,
 						hwndDlg,
@@ -292,16 +292,16 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 					::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KINSOKURET ) 
 				 || ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KINSOKUKUTO ) );
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		}
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 	case WM_NOTIFY:
 		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
 		pMNUD  = (NM_UPDOWN*)lParam;
 		switch (idCtrl) {
 		case IDC_SPIN_MAXLINELEN:
-			/* 折り返し桁数 */
+			// 折り返し桁数
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_MAXLINELEN, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
 				++nVal;
@@ -318,7 +318,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_MAXLINELEN, nVal, FALSE );
 			return TRUE;
 		case IDC_SPIN_CHARSPACE:
-			/* 文字の隙間 */
+			// 文字の隙間
 //			MYTRACE( _T("IDC_SPIN_CHARSPACE\n") );
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_CHARSPACE, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
@@ -336,7 +336,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_CHARSPACE, nVal, FALSE );
 			return TRUE;
 		case IDC_SPIN_LINESPACE:
-			/* 行の隙間 */
+			// 行の隙間
 //			MYTRACE( _T("IDC_SPIN_LINESPACE\n") );
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_LINESPACE, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
@@ -360,7 +360,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 			return TRUE;
 		case IDC_SPIN_TABSPACE:
 			//	Sep. 22, 2002 genta
-			/* TAB幅 */
+			// TAB幅
 //			MYTRACE( _T("IDC_SPIN_CHARSPACE\n") );
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
@@ -384,7 +384,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 				OnHelp( hwndDlg, IDD_PROP_SCREEN );
 				return TRUE;
 			case PSN_KILLACTIVE:
-				/* ダイアログデータの取得 Screen */
+				// ダイアログデータの取得 Screen
 				GetData( hwndDlg );
 
 				return TRUE;
@@ -410,7 +410,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids1 );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 //		break;
 //@@@ 2001.02.04 End
 
@@ -433,7 +433,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 }
 
 
-/* ダイアログデータの設定 Screen */
+// ダイアログデータの設定 Screen
 void CPropTypesScreen::SetData( HWND hwndDlg )
 {
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName );	//設定の名前
@@ -477,13 +477,13 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 
 	//インデント
 	{
-		/* 自動インデント */
+		// 自動インデント
 		::CheckDlgButtonBool( hwndDlg, IDC_CHECK_INDENT, m_Types.m_bAutoIndent );
 
-		/* 日本語空白もインデント */
+		// 日本語空白もインデント
 		::CheckDlgButtonBool( hwndDlg, IDC_CHECK_INDENT_WSPACE, m_Types.m_bAutoIndent_ZENSPACE );
 
-		/* スマートインデント種別 */
+		// スマートインデント種別
 		HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_SMARTINDENT );
 		Combo_ResetContent( hwndCombo );
 		int		nSelPos = 0;
@@ -494,7 +494,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 			}else {
 				Combo_InsertString( hwndCombo, i, m_SIndentArr[i].pszName );
 			}
-			if (m_SIndentArr[i].nMethod == m_Types.m_eSmartIndent) {	/* スマートインデント種別 */
+			if (m_SIndentArr[i].nMethod == m_Types.m_eSmartIndent) {	// スマートインデント種別
 				nSelPos = i;
 			}
 		}
@@ -509,7 +509,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		nSelPos = 0;
 		for (int i = 0; i < _countof( IndentTypeArr ); ++i) {
 			Combo_InsertString( hwndCombo, i, LS( IndentTypeArr[i].nNameId ) );
-			if (IndentTypeArr[i].nMethod == m_Types.m_nIndentLayout) {	/* 折り返しインデント種別 */
+			if (IndentTypeArr[i].nMethod == m_Types.m_nIndentLayout) {	// 折り返しインデント種別
 				nSelPos = i;
 			}
 		}
@@ -533,7 +533,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 			}else {
 				Combo_InsertString( hwndCombo, i, m_OlmArr[i].pszName );
 			}
-			if (m_OlmArr[i].nMethod == m_Types.m_eDefaultOutline) {	/* アウトライン解析方法 */
+			if (m_OlmArr[i].nMethod == m_Types.m_eDefaultOutline) {	// アウトライン解析方法
 				nSelPos = i;
 			}
 		}
@@ -571,15 +571,15 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 
 	//その他
 	{
-		/* 英文ワードラップをする */
+		// 英文ワードラップをする
 		::CheckDlgButtonBool( hwndDlg, IDC_CHECK_WORDWRAP, m_Types.m_bWordWrap );
 
-		/* 禁則処理 */
+		// 禁則処理
 		{	//@@@ 2002.04.08 MIK start
 			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKUHEAD, m_Types.m_bKinsokuHead );
 			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKUTAIL, m_Types.m_bKinsokuTail );
-			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKURET,  m_Types.m_bKinsokuRet  );	/* 改行文字をぶら下げる */	//@@@ 2002.04.13 MIK
-			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKUKUTO, m_Types.m_bKinsokuKuto );	/* 句読点をぶら下げる */	//@@@ 2002.04.17 MIK
+			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKURET,  m_Types.m_bKinsokuRet  );	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKUKUTO, m_Types.m_bKinsokuKuto );	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
 			::CheckDlgButtonBool( hwndDlg, IDC_CHECK_KINSOKUHIDE, m_Types.m_bKinsokuHide );	// ぶら下げを隠す			// 2011/11/30 Uchi
 			EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_KINSOKUHEAD ), _countof(m_Types.m_szKinsokuHead) - 1 );
 			EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_KINSOKUTAIL ), _countof(m_Types.m_szKinsokuTail) - 1 );
@@ -593,7 +593,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 }
 
 
-/* ダイアログデータの取得 Screen */
+// ダイアログデータの取得 Screen
 int CPropTypesScreen::GetData( HWND hwndDlg )
 {
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName, _countof( m_Types.m_szTypeName ) );	// 設定の名前
@@ -606,7 +606,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 		int		nSelPos = Combo_GetCurSel( hwndCombo );
 		m_Types.m_nTextWrapMethod = WrapMethodArr[nSelPos].nMethod;		// テキストの折り返し方法
 
-		/* 折り返し桁数 */
+		// 折り返し桁数
 		m_Types.m_nMaxLineKetas = CLayoutInt(::GetDlgItemInt( hwndDlg, IDC_EDIT_MAXLINELEN, NULL, FALSE ));
 		if (m_Types.m_nMaxLineKetas < CLayoutInt(MINLINEKETAS)) {
 			m_Types.m_nMaxLineKetas = CLayoutInt(MINLINEKETAS);
@@ -615,7 +615,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 			m_Types.m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);
 		}
 
-		/* 文字の間隔 */
+		// 文字の間隔
 		m_Types.m_nColumnSpace = ::GetDlgItemInt( hwndDlg, IDC_EDIT_CHARSPACE, NULL, FALSE );
 		if (m_Types.m_nColumnSpace < 0) {
 			m_Types.m_nColumnSpace = 0;
@@ -624,7 +624,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 			m_Types.m_nColumnSpace = COLUMNSPACE_MAX;
 		}
 
-		/* 行の間隔 */
+		// 行の間隔
 		m_Types.m_nLineSpace = ::GetDlgItemInt( hwndDlg, IDC_EDIT_LINESPACE, NULL, FALSE );
 		if (m_Types.m_nLineSpace < 0) {
 			m_Types.m_nLineSpace = 0;
@@ -633,7 +633,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 			m_Types.m_nLineSpace = LINESPACE_MAX;
 		}
 
-		/* TAB幅 */
+		// TAB幅
 		m_Types.m_nTabSpace = CLayoutInt(::GetDlgItemInt( hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE ));
 		if (m_Types.m_nTabSpace < CLayoutInt(1)) {
 			m_Types.m_nTabSpace = CLayoutInt(1);
@@ -642,8 +642,8 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 			m_Types.m_nTabSpace = CLayoutInt(64);
 		}
 
-		/* TAB表示文字列 */
-		WIN_CHAR szTab[8+1]; /* +1. happy */
+		// TAB表示文字列
+		WIN_CHAR szTab[8+1]; // +1. happy
 		::DlgItem_GetText( hwndDlg, IDC_EDIT_TABVIEWSTRING, szTab, _countof( szTab ) );
 		wcscpy_s( m_Types.m_szTabViewString, L"^       " );
 		for (int i = 0; i < 8; i++) {
@@ -664,26 +664,26 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 
 	//インデント
 	{
-		/* 自動インデント */
+		// 自動インデント
 		m_Types.m_bAutoIndent = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INDENT );
 
-		/* 日本語空白もインデント */
+		// 日本語空白もインデント
 		m_Types.m_bAutoIndent_ZENSPACE = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INDENT_WSPACE );
 
-		/* スマートインデント種別 */
+		// スマートインデント種別
 		HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_SMARTINDENT );
 		int		nSelPos = Combo_GetCurSel( hwndCombo );
 		if (nSelPos >= 0) {
-			m_Types.m_eSmartIndent = m_SIndentArr[nSelPos].nMethod;	/* スマートインデント種別 */
+			m_Types.m_eSmartIndent = m_SIndentArr[nSelPos].nMethod;	// スマートインデント種別
 		}
 
-		/* その他のインデント対象文字 */
+		// その他のインデント対象文字
 		::DlgItem_GetText( hwndDlg, IDC_EDIT_INDENTCHARS, m_Types.m_szIndentChars, _countof( m_Types.m_szIndentChars ) );
 
 		// 折り返し行インデント	//	Oct. 1, 2002 genta コンボボックスに変更
 		hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_INDENTLAYOUT );
 		nSelPos = Combo_GetCurSel( hwndCombo );
-		m_Types.m_nIndentLayout = IndentTypeArr[nSelPos].nMethod;	/* 折り返し部インデント種別 */
+		m_Types.m_nIndentLayout = IndentTypeArr[nSelPos].nMethod;	// 折り返し部インデント種別
 
 		// 改行時に末尾の空白を削除	//2005.10.11 ryoji
 		m_Types.m_bRTrimPrevLine = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_RTRIM_PREVLINE );
@@ -697,7 +697,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 			HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES );
 			int		nSelPos = Combo_GetCurSel( hwndCombo );
 			if (nSelPos >= 0) {
-				m_Types.m_eDefaultOutline = m_OlmArr[nSelPos].nMethod;	/* アウトライン解析方法 */
+				m_Types.m_eDefaultOutline = m_OlmArr[nSelPos].nMethod;	// アウトライン解析方法
 			}
 		// ルールファイル
 		}else {
@@ -721,10 +721,10 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 
 	// その他
 	{
-		/* 英文ワードラップをする */
+		// 英文ワードラップをする
 		m_Types.m_bWordWrap = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_WORDWRAP );
 
-		/* 禁則処理 */
+		// 禁則処理
 		{	//@@@ 2002.04.08 MIK start
 			m_Types.m_bKinsokuHead = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_KINSOKUHEAD );
 			m_Types.m_bKinsokuTail = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_KINSOKUTAIL );

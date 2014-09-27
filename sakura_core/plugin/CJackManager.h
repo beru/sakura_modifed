@@ -80,25 +80,25 @@ class CJackManager : public TSingleton<CJackManager>{
 
 	// 操作
 public:
-	ERegisterPlugResult RegisterPlug( wstring pszJack, CPlug* plug );	//プラグをジャックに関連付ける
-	bool UnRegisterPlug( wstring pszJack, CPlug* plug );	//プラグの関連付けを解除する
-	bool GetUsablePlug( EJack jack, PlugId plugId, CPlug::Array* plugs );	//利用可能なプラグを検索する
+	ERegisterPlugResult RegisterPlug( wstring pszJack, CPlug* plug );	// プラグをジャックに関連付ける
+	bool UnRegisterPlug( wstring pszJack, CPlug* plug );	// プラグの関連付けを解除する
+	bool GetUsablePlug( EJack jack, PlugId plugId, CPlug::Array* plugs );	// 利用可能なプラグを検索する
 private:
-	EJack GetJackFromName( wstring sName );	//ジャック名をジャック番号に変換する
+	EJack GetJackFromName( wstring sName );	// ジャック名をジャック番号に変換する
 
-	//属性
+	// 属性
 public:
-	std::vector<JackDef> GetJackDef() const;	//ジャック定義一覧を返す
-	EFunctionCode GetCommandCode( int index ) const;		//プラグインコマンドの機能コードを返す
-	int GetCommandName( int funccode, WCHAR* buf, int size ) const;	//プラグインコマンドの名前を返す
-	int GetCommandCount() const;	//プラグインコマンドの数を返す
-	CPlug* GetCommandById( int id ) const;	//IDに合致するコマンドプラグを返す
-	const CPlug::Array& GetPlugs( EJack jack ) const;	//プラグを返す
+	std::vector<JackDef> GetJackDef() const;	// ジャック定義一覧を返す
+	EFunctionCode GetCommandCode( int index ) const;		// プラグインコマンドの機能コードを返す
+	int GetCommandName( int funccode, WCHAR* buf, int size ) const;	// プラグインコマンドの名前を返す
+	int GetCommandCount() const;	// プラグインコマンドの数を返す
+	CPlug* GetCommandById( int id ) const;	// IDに合致するコマンドプラグを返す
+	const CPlug::Array& GetPlugs( EJack jack ) const;	// プラグを返す
 	//TODO: 作りが一貫してないので整理する syat
 
-	//メンバ変数
+	// メンバ変数
 private:
 	DLLSHAREDATA* m_pShareData;
-	std::vector<JackDef> m_Jacks;	//ジャック定義の一覧
+	std::vector<JackDef> m_Jacks;	// ジャック定義の一覧
 };
 

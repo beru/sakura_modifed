@@ -25,14 +25,14 @@
 static const DWORD p_helpids[] = {	//13000
 	IDOK,					HIDOK_DLG1,
 	IDCANCEL,				HIDCANCEL_DLG1,
-	IDC_EDIT_INPUT1,		HIDC_DLG1_EDIT1,	//入力フィールド	IDC_EDIT1->IDC_EDIT_INPUT1	2008/7/3 Uchi
-	IDC_STATIC_MSG,			HIDC_DLG1_EDIT1,	//メッセージ
+	IDC_EDIT_INPUT1,		HIDC_DLG1_EDIT1,	// 入力フィールド	IDC_EDIT1->IDC_EDIT_INPUT1	2008/7/3 Uchi
+	IDC_STATIC_MSG,			HIDC_DLG1_EDIT1,	// メッセージ
 //	IDC_STATIC,				-1,
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
 
-/* ダイアログプロシージャ */
+// ダイアログプロシージャ
 INT_PTR CALLBACK CDlgInput1Proc(
 	HWND hwndDlg,	// handle to dialog box
 	UINT uMsg,		// message
@@ -76,7 +76,7 @@ CDlgInput1::~CDlgInput1()
 
 
 
-/* モードレスダイアログの表示 */
+// モードレスダイアログの表示
 BOOL CDlgInput1::DoModal(
 	HINSTANCE		hInstApp,
 	HWND			hwndParent,
@@ -87,12 +87,12 @@ BOOL CDlgInput1::DoModal(
 )
 {
 	BOOL bRet;
-	m_hInstance = hInstApp;		/* アプリケーションインスタンスのハンドル */
-	m_hwndParent = hwndParent;	/* オーナーウィンドウのハンドル */
-	m_pszTitle = pszTitle;		/* ダイアログタイトル */
-	m_pszMessage = pszMessage;		/* メッセージ */
-	m_nMaxTextLen = nMaxTextLen;	/* 入力サイズ上限 */
-//	m_pszText = pszText;			/* テキスト */
+	m_hInstance = hInstApp;			// アプリケーションインスタンスのハンドル
+	m_hwndParent = hwndParent;		// オーナーウィンドウのハンドル
+	m_pszTitle = pszTitle;			// ダイアログタイトル
+	m_pszMessage = pszMessage;		// メッセージ
+	m_nMaxTextLen = nMaxTextLen;	// 入力サイズ上限
+//	m_pszText = pszText;			// テキスト
 	m_cmemText.SetString( pszText );
 	bRet = (BOOL)::DialogBoxParam(
 		m_hInstance,
@@ -124,7 +124,7 @@ BOOL CDlgInput1::DoModal(
 }
 
 
-/* ダイアログのメッセージ処理 */
+// ダイアログのメッセージ処理
 INT_PTR CDlgInput1::DispatchEvent(
 	HWND hwndDlg,	// handle to dialog box
 	UINT uMsg,		// message
@@ -137,26 +137,26 @@ INT_PTR CDlgInput1::DispatchEvent(
 //	int		nRet;
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 */
+		// ダイアログデータの設定
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		::SetWindowText( hwndDlg, m_pszTitle );	/* ダイアログタイトル */
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ), m_nMaxTextLen );	/* 入力サイズ上限 */
-		DlgItem_SetText( hwndDlg, IDC_EDIT_INPUT1, m_cmemText.GetStringPtr() );	/* テキスト */
-		::SetWindowText( ::GetDlgItem( hwndDlg, IDC_STATIC_MSG ), m_pszMessage );	/* メッセージ */
+		::SetWindowText( hwndDlg, m_pszTitle );	// ダイアログタイトル
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ), m_nMaxTextLen );	// 入力サイズ上限
+		DlgItem_SetText( hwndDlg, IDC_EDIT_INPUT1, m_cmemText.GetStringPtr() );			// テキスト
+		::SetWindowText( ::GetDlgItem( hwndDlg, IDC_STATIC_MSG ), m_pszMessage );		// メッセージ
 
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			case IDOK:
 				m_cmemText.AllocStringBuffer( ::GetWindowTextLength( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ) ) );
-				::GetWindowText( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ), m_cmemText.GetStringPtr(), m_nMaxTextLen + 1 );	/* テキスト */
+				::GetWindowText( ::GetDlgItem( hwndDlg, IDC_EDIT_INPUT1 ), m_cmemText.GetStringPtr(), m_nMaxTextLen + 1 );	// テキスト
 				::EndDialog( hwndDlg, TRUE );
 				return TRUE;
 			case IDCANCEL:

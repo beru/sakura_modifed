@@ -39,7 +39,7 @@ CKeyMacroMgr::CKeyMacroMgr()
 
 CKeyMacroMgr::~CKeyMacroMgr()
 {
-	/* キーマクロのバッファをクリアする */
+	// キーマクロのバッファをクリアする
 	ClearAll();
 	return;
 }
@@ -377,7 +377,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 				delete macro;
 				break;
 			}
-			/* キーマクロのバッファにデータ追加 */
+			// キーマクロのバッファにデータ追加
 			Append( macro );
 		}else {
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,

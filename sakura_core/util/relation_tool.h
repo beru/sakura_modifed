@@ -31,7 +31,7 @@ class CSubject;
 class CListener;
 
 //! 複数のCListenerからウォッチされる
-class CSubject{
+class CSubject {
 public:
 	// コンストラクタ・デストラクタ
 	CSubject();
@@ -51,7 +51,7 @@ private:
 };
 
 //! 1つのCSubjectをウォッチする
-class CListener{
+class CListener {
 public:
 	CListener();
 	virtual ~CListener();
@@ -65,9 +65,10 @@ private:
 };
 
 
-
-
-template <class LISTENER> class CSubjectT : public CSubject{
+template <class LISTENER>
+class CSubjectT :
+	public CSubject
+{
 public:
 	LISTENER* GetListener(int nIndex) const
 	{
@@ -75,7 +76,10 @@ public:
 	}
 };
 
-template <class SUBJECT> class CListenerT : public CListener{
+template <class SUBJECT>
+class CListenerT :
+	public CListener
+{
 public:
 	SUBJECT* Listen(SUBJECT* pcSubject)
 	{

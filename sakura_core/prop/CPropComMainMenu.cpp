@@ -202,7 +202,7 @@ static LRESULT CALLBACK WindowProcEdit(
 	return CallWindowProc( m_wpEdit, hwndEdit, uMsg, wParam, lParam );
 }
 
-/* Menu メッセージ処理 */
+// Menu メッセージ処理
 INT_PTR CPropMainMenu::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
@@ -244,16 +244,16 @@ INT_PTR CPropMainMenu::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Menu */
+		// ダイアログデータの設定 Menu
 		SetData( hwndDlg );
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* コントロールのハンドルを取得 */
+		// コントロールのハンドルを取得
 		hwndComboFunkKind = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 		hwndListFunk = ::GetDlgItem( hwndDlg, IDC_LIST_FUNC );
 		hwndTreeRes = ::GetDlgItem( hwndDlg, IDC_TREE_RES );
 
-		/* キー選択時の処理 */
+		// キー選択時の処理
 		::SendMessage( hwndDlg, WM_COMMAND, MAKELONG( IDC_COMBO_FUNCKIND, CBN_SELCHANGE ), (LPARAM)hwndComboFunkKind );
 
 		// TreeViewのメッセージ処理（アクセスキー入力用）
@@ -275,7 +275,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 			OnHelp( hwndDlg, IDD_PROP_MAINMENU );
 			return TRUE;
 		case PSN_KILLACTIVE:
-			/* ダイアログデータの取得 Menu */
+			// ダイアログデータの取得 Menu
 			GetData( hwndDlg );
 			return TRUE;
 		case PSN_SETACTIVE:
@@ -386,9 +386,9 @@ INT_PTR CPropMainMenu::DispatchEvent(
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID = LOWORD(wParam);			// 項目ID､ コントロールID､ またはアクセラレータID
+		hwndCtl = (HWND) lParam;		// コントロールのハンドル
 
 		if (hwndComboFunkKind == hwndCtl) {
 			switch (wNotifyCode) {
@@ -402,22 +402,22 @@ INT_PTR CPropMainMenu::DispatchEvent(
 						List_AddString( hwndListFunk, LSW( sSpecialFuncs[i].m_nNameId ) );
 					}
 				}else {
-					/* 機能一覧に文字列をセット（リストボックス）*/
+					// 機能一覧に文字列をセット（リストボックス）
 					m_cLookup.SetListItem( hwndListFunk, nIdxFIdx );
 				}
 				return TRUE;
 			}
 		}else {
 			switch (wNotifyCode) {
-			/* ボタン／チェックボックスがクリックされた */
+			// ボタン／チェックボックスがクリックされた
 			case BN_CLICKED:
 				switch (wID) {
-				case IDC_BUTTON_IMPORT:	/* インポート */
-					/* カスタムメニュー設定をインポートする */
+				case IDC_BUTTON_IMPORT:	// インポート
+					// カスタムメニュー設定をインポートする
 					Import( hwndDlg );
 					return TRUE;
-				case IDC_BUTTON_EXPORT:	/* エクスポート */
-					/* カスタムメニュー設定をエクスポートする */
+				case IDC_BUTTON_EXPORT:	// エクスポート
+					// カスタムメニュー設定をエクスポートする
 					Export( hwndDlg );
 					return TRUE;
 
@@ -841,7 +841,7 @@ static wstring	RemoveAmpersand( wstring sLavel)
 	return sLavel;
 }
 
-/* ダイアログデータの設定 MainMenu */
+// ダイアログデータの設定 MainMenu
 void CPropMainMenu::SetData( HWND hwndDlg )
 {
 	CMainMenu*		pcMenuTBL = m_Common.m_sMainMenu.m_cMainMenuTbl;
@@ -858,14 +858,14 @@ void CPropMainMenu::SetData( HWND hwndDlg )
 	int 			i;
 	int 			j;
 
-	/* 機能種別一覧に文字列をセット（コンボボックス） */
+	// 機能種別一覧に文字列をセット（コンボボックス）
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 	m_cLookup.SetCategory2Combo( hwndCombo );
 
 	// 特別機能追加
 	nSpecialFuncsNum = Combo_AddString( hwndCombo, LS( STR_SPECIAL_FUNC ) );
 
-	/* 種別の先頭の項目を選択（コンボボックス）*/
+	// 種別の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel( hwndCombo, 0 );
 
 	// ワーク、TreeViewの初期化
@@ -879,7 +879,7 @@ void CPropMainMenu::SetData( HWND hwndDlg )
 	hwndCheck = ::GetDlgItem( hwndDlg, IDC_CHECK_KEY_PARENTHESES );
 	BtnCtl_SetCheck( hwndCheck, m_Common.m_sMainMenu.m_bMainMenuKeyParentheses );
 
-	/* メニュー項目一覧と内部データをセット（TreeView）*/
+	// メニュー項目一覧と内部データをセット（TreeView）
 	nCurLevel = 0;
 	htiParent = TVI_ROOT;
 	htiItem = TreeView_GetRoot( hwndTreeRes );
@@ -948,7 +948,7 @@ void CPropMainMenu::SetData( HWND hwndDlg )
 	}
 }
 
-/* ダイアログデータの取得 MainMenu */
+// ダイアログデータの取得 MainMenu
 int CPropMainMenu::GetData( HWND hwndDlg )
 {
 	HWND			hwndTreeRes;
@@ -971,7 +971,7 @@ int CPropMainMenu::GetData( HWND hwndDlg )
 	return TRUE;
 }
 
-/* ダイアログデータの取得 TreeViewの 1 level */
+// ダイアログデータの取得 TreeViewの 1 level
 bool CPropMainMenu::GetDataTree( HWND hwndTree, HTREEITEM htiTrg, int nLevel )
 {
 	static	bool	bOptionOk;
@@ -1087,7 +1087,7 @@ bool CPropMainMenu::GetDataTree( HWND hwndTree, HTREEITEM htiTrg, int nLevel )
 	return true;
 }
 
-/* メインメニュー設定をインポートする */
+// メインメニュー設定をインポートする
 void CPropMainMenu::Import( HWND hwndDlg )
 {
 	CImpExpMainMenu	cImpExp( m_Common );
@@ -1100,7 +1100,7 @@ void CPropMainMenu::Import( HWND hwndDlg )
 	SetData( hwndDlg );
 }
 
-/* メインメニュー設定をエクスポートする */
+// メインメニュー設定をエクスポートする
 void CPropMainMenu::Export( HWND hwndDlg )
 {
 	CImpExpMainMenu	cImpExp( m_Common );

@@ -26,10 +26,14 @@
 #include "view/colors/CColorStrategy.h"
 
 
-
-class CColor_Quote : public CColorStrategy{
+class CColor_Quote : public CColorStrategy {
 public:
-	CColor_Quote(wchar_t cQuote) : m_cQuote(cQuote), m_nCOMMENTEND(-1),m_nColorTypeIndex(0) {
+	CColor_Quote(wchar_t cQuote)
+		:
+		m_cQuote(cQuote),
+		m_nCOMMENTEND(-1),
+		m_nColorTypeIndex(0)
+	{
 		m_szQuote[0] = cQuote;
 		m_szQuote[1] = cQuote;
 		m_szQuote[2] = cQuote;
@@ -60,13 +64,13 @@ protected:
 };
 
 
-class CColor_SingleQuote : public CColor_Quote{
+class CColor_SingleQuote : public CColor_Quote {
 public:
 	CColor_SingleQuote() : CColor_Quote(L'\'') { }
 	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_SSTRING; }
 };
 
-class CColor_DoubleQuote : public CColor_Quote{
+class CColor_DoubleQuote : public CColor_Quote {
 public:
 	CColor_DoubleQuote() : CColor_Quote(L'"') { }
 	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_WSTRING; }

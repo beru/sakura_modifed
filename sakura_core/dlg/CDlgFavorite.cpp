@@ -47,24 +47,24 @@
 #include "sakura.hh"
 
 const DWORD p_helpids[] = {
-	IDC_TAB_FAVORITE,				HIDC_TAB_FAVORITE,				//タブ
-	IDC_LIST_FAVORITE_FILE,			HIDC_LIST_FAVORITE_FILE,		//ファイル
-	IDC_LIST_FAVORITE_FOLDER,		HIDC_LIST_FAVORITE_FOLDER,		//フォルダ
-	IDC_LIST_FAVORITE_EXCEPTMRU,	HIDC_LIST_FAVORITE_EXCEPTMRU,	//MRU除外
-	IDC_LIST_FAVORITE_SEARCH,		HIDC_LIST_FAVORITE_SEARCH,		//検索
-	IDC_LIST_FAVORITE_REPLACE,		HIDC_LIST_FAVORITE_REPLACE,		//置換
-	IDC_LIST_FAVORITE_GREP_FILE,	HIDC_LIST_FAVORITE_GREPFILE,	//GREPファイル
-	IDC_LIST_FAVORITE_GREP_FOLDER,	HIDC_LIST_FAVORITE_GREPFOLDER,	//GREPフォルダ
-	IDC_LIST_FAVORITE_CMD,			HIDC_LIST_FAVORITE_CMD,			//コマンド
-	IDC_LIST_FAVORITE_CUR_DIR,		HIDC_LIST_FAVORITE_CUR_DIR,		//カレントディレクトリ
+	IDC_TAB_FAVORITE,				HIDC_TAB_FAVORITE,				// タブ
+	IDC_LIST_FAVORITE_FILE,			HIDC_LIST_FAVORITE_FILE,		// ファイル
+	IDC_LIST_FAVORITE_FOLDER,		HIDC_LIST_FAVORITE_FOLDER,		// フォルダ
+	IDC_LIST_FAVORITE_EXCEPTMRU,	HIDC_LIST_FAVORITE_EXCEPTMRU,	// MRU除外
+	IDC_LIST_FAVORITE_SEARCH,		HIDC_LIST_FAVORITE_SEARCH,		// 検索
+	IDC_LIST_FAVORITE_REPLACE,		HIDC_LIST_FAVORITE_REPLACE,		// 置換
+	IDC_LIST_FAVORITE_GREP_FILE,	HIDC_LIST_FAVORITE_GREPFILE,	// GREPファイル
+	IDC_LIST_FAVORITE_GREP_FOLDER,	HIDC_LIST_FAVORITE_GREPFOLDER,	// GREPフォルダ
+	IDC_LIST_FAVORITE_CMD,			HIDC_LIST_FAVORITE_CMD,			// コマンド
+	IDC_LIST_FAVORITE_CUR_DIR,		HIDC_LIST_FAVORITE_CUR_DIR,		// カレントディレクトリ
 //	IDC_STATIC_BUTTONS,				-1,
-	IDC_BUTTON_CLEAR,				HIDC_BUTTON_FAVORITE_CLEAR,		//すべて	// 2006.10.10 ryoji
-	IDC_BUTTON_DELETE_NOFAVORATE,   HIDC_BUTTON_FAVORITE_DELETE_NOFAVORATE,  //お気に入り以外
-	IDC_BUTTON_DELETE_NOTFOUND,		HIDC_BUTTON_FAVORITE_DELETE_NOTFOUND		,  //存在しない項目
-	IDC_BUTTON_DELETE_SELECTED,     HIDC_BUTTON_FAVORITE_DELETE_SELECTED,    //選択項目
+	IDC_BUTTON_CLEAR,				HIDC_BUTTON_FAVORITE_CLEAR,		// すべて	// 2006.10.10 ryoji
+	IDC_BUTTON_DELETE_NOFAVORATE,   HIDC_BUTTON_FAVORITE_DELETE_NOFAVORATE,	// お気に入り以外
+	IDC_BUTTON_DELETE_NOTFOUND,		HIDC_BUTTON_FAVORITE_DELETE_NOTFOUND,	// 存在しない項目
+	IDC_BUTTON_DELETE_SELECTED,     HIDC_BUTTON_FAVORITE_DELETE_SELECTED,	// 選択項目
 	IDC_BUTTON_ADD_FAVORITE,        HIDC_BUTTON_ADD_FAVORITE,		// 追加
-	IDOK,							HIDC_FAVORITE_IDOK,				//閉じる
-	IDC_BUTTON_HELP,				HIDC_BUTTON_FAVORITE_HELP,		//ヘルプ
+	IDOK,							HIDC_FAVORITE_IDOK,				// 閉じる
+	IDC_BUTTON_HELP,				HIDC_BUTTON_FAVORITE_HELP,		// ヘルプ
 //	IDC_STATIC_FAVORITE_MSG,		-1,
 	0, 0
 };
@@ -82,7 +82,7 @@ static const SAnchorList anchorList[] = {
 	{IDC_STATIC_FAVORITE_MSG, 		ANCHOR_BOTTOM},
 };
 
-//SDKにしか定義されていない。
+// SDKにしか定義されていない。
 #ifndef	ListView_SetCheckState
 //#if (_WIN32_IE >= 0x0300)
 #define ListView_SetCheckState(hwndLV, i, fCheck) \
@@ -94,8 +94,7 @@ static int FormatFavoriteColumn( TCHAR*, int, int , bool );
 static int ListView_GetLParamInt( HWND, int );
 static int CALLBACK CompareListViewFunc( LPARAM, LPARAM, LPARAM );
 
-struct CompareListViewLParam
-{
+struct CompareListViewLParam {
 	int         nSortColumn;
 	bool        bAbsOrder;
 	HWND        hwndListView;
@@ -118,7 +117,7 @@ CDlgFavorite::CDlgFavorite()
 	m_nCurrentTab = 0;
 	m_szMsg[0] = 0;
 
-	/* サイズ変更時に位置を制御するコントロール数 */
+	// サイズ変更時に位置を制御するコントロール数
 	assert( _countof(anchorList) == _countof(m_rcItems) );
 
 	{
@@ -233,7 +232,7 @@ CDlgFavorite::CDlgFavorite()
 		m_aFavoriteInfo[i].m_bEditable  = false;
 		m_aFavoriteInfo[i].m_bAddExcept = false;
 
-		/* これ以上増やすときはテーブルサイズも書き換えてね */
+		// これ以上増やすときはテーブルサイズも書き換えてね
 		assert( i < _countof(m_aFavoriteInfo) );
 	}
 	for (i = 0; i < FAVORITE_INFO_MAX; i++) {
@@ -252,7 +251,7 @@ CDlgFavorite::~CDlgFavorite()
 	}
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgFavorite::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
@@ -262,7 +261,7 @@ int CDlgFavorite::DoModal(
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_FAVORITE, lParam );
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgFavorite::SetData( void )
 {
 	for (int nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
@@ -287,9 +286,9 @@ void CDlgFavorite::SetDataOne( int nIndex, int nLvItemIndex )
 
 	const CRecent*  pRecent = m_aFavoriteInfo[nIndex].m_pRecent;
 
-	/* リスト */
+	// リスト
 	HWND hwndList = ::GetDlgItem( GetHwnd(), m_aFavoriteInfo[nIndex].m_nId );
-	ListView_DeleteAllItems( hwndList );  /* リストを空にする */
+	ListView_DeleteAllItems( hwndList );  // リストを空にする
 
 	const int nViewCount = pRecent->GetViewCount();
 	const int nItemCount = pRecent->GetItemCount();
@@ -320,7 +319,7 @@ void CDlgFavorite::SetDataOne( int nIndex, int nLvItemIndex )
 	}
 
 	if (-1 != m_aListViewInfo[nIndex].nSortColumn) {
-		//ソートを維持
+		// ソートを維持
 		ListViewSort( m_aListViewInfo[nIndex], pRecent, m_aListViewInfo[nIndex].nSortColumn, false );
 	}
 
@@ -328,7 +327,7 @@ void CDlgFavorite::SetDataOne( int nIndex, int nLvItemIndex )
 		nNewFocus = nLvItemIndex;
 	}
 
-	//アイテムがあってどれも非選択なら、要求に近いアイテム(先頭か末尾)を選択
+	// アイテムがあってどれも非選択なら、要求に近いアイテム(先頭か末尾)を選択
 	if (nItemCount > 0 && -1 != nLvItemIndex && nNewFocus == -1) {
 		nNewFocus = (0 < nLvItemIndex ? nItemCount - 1: 0);
 	}
@@ -391,7 +390,7 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		m_nHeight = rcDialog.bottom - rcDialog.top;
 	}
 
-	//リストビューの表示位置を取得する。
+	// リストビューの表示位置を取得する。
 	m_nCurrentTab = 0;
 	HWND hwndBaseList = ::GetDlgItem( hwndDlg, m_aFavoriteInfo[0].m_nId );
 	{
@@ -423,7 +422,7 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		calc.SetTextWidthIfMax( pszFAVORITE_TEXT, CTextWidthCalc::WIDTH_LV_HEADER );
 		TCHAR szBuf[200];
 		for (int i = 0; i < 40; i++) {
-			// 「M (非表示)」等の幅を求める
+			//「M (非表示)」等の幅を求める
 			FormatFavoriteColumn( szBuf, _countof(szBuf), i, false);
 			calc.SetTextWidthIfMax( szBuf, CTextWidthCalc::WIDTH_LV_ITEM_CHECKBOX );
 		}
@@ -455,13 +454,13 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		col.iSubItem = 1;
 		ListView_InsertColumn( hwndList, 1, &col );
 
-		/* 行選択 */
+		// 行選択
 		long lngStyle = ListView_GetExtendedListViewStyle( hwndList );
 		lngStyle |= LVS_EX_FULLROWSELECT;
 		if( m_aFavoriteInfo[nTab].m_bHaveFavorite ) lngStyle |= LVS_EX_CHECKBOXES;
 		ListView_SetExtendedListViewStyle( hwndList, lngStyle );
 
-		/* タブ項目追加 */
+		// タブ項目追加
 		tcitem.mask = TCIF_TEXT;
 		tcitem.pszText = const_cast<TCHAR*>(m_aFavoriteInfo[nTab].m_pszCaption);
 		TabCtrl_InsertItem( hwndTab, nTab, &tcitem );
@@ -479,12 +478,12 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* ヘルプ */
+		// ヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID( F_FAVORITE ) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 
 	case IDOK:
-		/* ダイアログデータの取得 */
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), (BOOL)GetData() );
 		return TRUE;
 
@@ -496,7 +495,7 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 
 	// 2010.03.20 Moca 「お気に入り以外かすべて削除」選択メッセージボックスを廃止し
 	//     それぞれのボタンに変更
-	//すべて削除
+	// すべて削除
 	case IDC_BUTTON_CLEAR:
 		{
 			::DlgItem_SetText( GetHwnd(), IDC_STATIC_FAVORITE_MSG, _T("") );
@@ -513,7 +512,7 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 			}
 		}
 		return TRUE;
-	//お気に入り以外削除
+	// お気に入り以外削除
 	case IDC_BUTTON_DELETE_NOFAVORATE:
 		{
 			::DlgItem_SetText( GetHwnd(), IDC_STATIC_FAVORITE_MSG, _T("") );
@@ -560,7 +559,7 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 			}
 		}
 		return TRUE;
-	//選択項目の削除
+	// 選択項目の削除
 	case IDC_BUTTON_DELETE_SELECTED:
 		{
 			DeleteSelected();
@@ -573,7 +572,7 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
@@ -658,7 +657,7 @@ BOOL CDlgFavorite::OnNotify( WPARAM wParam, LPARAM lParam )
 		}
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnNotify( wParam, lParam );
 }
 
@@ -668,11 +667,10 @@ void CDlgFavorite::TabSelectChange(bool bSetFocus)
 	HWND hwndTab = GetItemHwnd( IDC_TAB_FAVORITE );
 	int nIndex = TabCtrl_GetCurSel( hwndTab );
 	if (-1 != nIndex) {
-		//新しく表示する。
+		// 新しく表示する。
 		HWND hwndList = GetItemHwnd( m_aFavoriteInfo[nIndex].m_nId );
 		::ShowWindow( hwndList, SW_SHOW );
 
-		//現在表示中のリストを隠す。
 		HWND hwndList2 = GetItemHwnd( m_aFavoriteInfo[m_nCurrentTab].m_nId );
 		::ShowWindow( hwndList2, SW_HIDE );
 
@@ -703,7 +701,7 @@ BOOL CDlgFavorite::OnActivate( WPARAM wParam, LPARAM lParam )
 		break;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnActivate( wParam, lParam );
 }
 
@@ -725,7 +723,7 @@ bool CDlgFavorite::RefreshList( void )
 	msg[0] = 0;
 	m_szMsg[0] = 0;
 
-	//全リストの現在選択中のアイテムを取得する。
+	// 全リストの現在選択中のアイテムを取得する。
 	for (nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		bret = RefreshListOne( nTab );
 		if (bret == true) {
@@ -782,7 +780,7 @@ bool CDlgFavorite::RefreshListOne( int nIndex )
 		bret = ListView_GetItem( hwndList, &lvitem );
 		if (!bret) goto changed;	//エラーなので再構築
 
-		//アイテム内容が変わったので再構築
+		// アイテム内容が変わったので再構築
 		if (lvitem.lParam != pRecent->FindItemByText( szText )) goto changed;
 	}
 
@@ -798,7 +796,7 @@ changed:
 // お気に入りのフラグだけ適用
 void CDlgFavorite::GetFavorite( int nIndex )
 {
-	CRecent * const pRecent  = m_aFavoriteInfo[nIndex].m_pRecent;
+	CRecent* const pRecent  = m_aFavoriteInfo[nIndex].m_pRecent;
 	const HWND      hwndList = m_aListViewInfo[nIndex].hListView;
 	if (m_aFavoriteInfo[nIndex].m_bHaveFavorite) {
 		const int nCount = ListView_GetItemCount( hwndList );
@@ -1098,7 +1096,7 @@ static int ListView_GetLParamInt( HWND hwndList, int lvIndex )
 	
 	@param info [in,out] リストビューのソート状態情報
 	@param pRecent       ソートアイテム
-	@param column          ソートしたい列番号
+	@param column        ソートしたい列番号
 	@param bReverse      ソート済みの場合に降順に切り替える
 */
 // static
@@ -1181,7 +1179,7 @@ INT_PTR CDlgFavorite::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM
 
 BOOL CDlgFavorite::OnSize( WPARAM wParam, LPARAM lParam )
 {
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	CDialog::OnSize( wParam, lParam );
 
 	::GetWindowRect( GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog );

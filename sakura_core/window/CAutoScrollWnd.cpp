@@ -28,7 +28,8 @@
 #include "sakura_rc.h"
 
 CAutoScrollWnd::CAutoScrollWnd()
-: CWnd(_T("::CAutoScrollWnd"))
+	:
+	CWnd(_T("::CAutoScrollWnd"))
 {
 	m_hCenterImg = NULL;
 	return;
@@ -44,17 +45,17 @@ HWND CAutoScrollWnd::Create( HINSTANCE hInstance, HWND hwndParent, bool bVertica
 {
 	m_cView = view;
 	int idb, idc;
-	if( bVertical ){
-		if( bHorizontal ){
+	if (bVertical) {
+		if (bHorizontal) {
 			idb = IDB_SCROLL_CENTER;
 			idc = IDC_CURSOR_AUTOSCROLL_CENTER;
 			m_pszClassName = _T("SakuraAutoScrollCWnd");
-		}else{
+		}else {
 			idb = IDB_SCROLL_VERTICAL;
 			idc = IDC_CURSOR_AUTOSCROLL_VERTICAL;
 			m_pszClassName = _T("SakuraAutoScrollVWnd");
 		}
-	}else{
+	}else {
 		idb = IDB_SCROLL_HORIZONTAL;
 		idc = IDC_CURSOR_AUTOSCROLL_HORIZONTAL;
 		m_pszClassName = _T("SakuraAutoScrollHWnd");
@@ -93,7 +94,7 @@ void CAutoScrollWnd::Close()
 {
 	this->DestroyWindow();
 
-	if( m_hCenterImg ){
+	if (m_hCenterImg) {
 		::DeleteObject( m_hCenterImg );
 		m_hCenterImg = NULL;
 	}
@@ -101,7 +102,7 @@ void CAutoScrollWnd::Close()
 
 LRESULT CAutoScrollWnd::OnLButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
-	if( m_cView->m_nAutoScrollMode ){
+	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
 	}
 	return 0;
@@ -109,7 +110,7 @@ LRESULT CAutoScrollWnd::OnLButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 
 LRESULT CAutoScrollWnd::OnRButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
-	if( m_cView->m_nAutoScrollMode ){
+	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
 	}
 	return 0;
@@ -117,7 +118,7 @@ LRESULT CAutoScrollWnd::OnRButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 
 LRESULT CAutoScrollWnd::OnMButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
-	if( m_cView->m_nAutoScrollMode ){
+	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
 	}
 	return 0;

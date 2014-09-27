@@ -26,9 +26,9 @@
 #include <Windows.h> //RECT
 #include "CMyPoint.h"
 
-class CMyRect : public RECT{
+class CMyRect : public RECT {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CMyRect()
 	{
 		SetLTRB(0, 0, 0, 0);
@@ -43,9 +43,9 @@ public:
 		*p = rc;
 	}
 
-	//演算子
+	// 演算子
 
-	//代入
+	// 代入
 	void SetLTRB(int l, int t, int r, int b)
 	{
 		left	= l;

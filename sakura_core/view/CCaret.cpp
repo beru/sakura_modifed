@@ -79,14 +79,14 @@ inline int CCaret::GetHankakuDy() const
 //                      CCaretUnderLine                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* カーソル行アンダーラインのON */
+// カーソル行アンダーラインのON
 void CCaretUnderLine::CaretUnderLineON( bool bDraw, bool bPaintDraw )
 {
 	if (m_nLockCounter) return;	//	ロックされていたら何もできない。
 	m_pcEditView->CaretUnderLineON( bDraw, bPaintDraw, m_nUnderLineLockCounter != 0 );
 }
 
-/* カーソル行アンダーラインのOFF */
+// カーソル行アンダーラインのOFF
 void CCaretUnderLine::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bResetFlag )
 {
 	if (m_nLockCounter) return;	//	ロックされていたら何もできない。
@@ -99,17 +99,18 @@ void CCaretUnderLine::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bRese
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CCaret::CCaret(CEditView* pEditView, const CEditDoc* pEditDoc)
-: m_pEditView(pEditView)
-, m_pEditDoc(pEditDoc)
-, m_ptCaretPos_Layout(0,0)
-, m_ptCaretPos_Logic(0,0)			// カーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-, m_sizeCaret(0,0)				// キャレットのサイズ
-, m_cUnderLine(pEditView)
+	:
+	m_pEditView(pEditView),
+	m_pEditDoc(pEditDoc),
+	m_ptCaretPos_Layout(0,0),
+	m_ptCaretPos_Logic(0,0),			// カーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	m_sizeCaret(0,0),					// キャレットのサイズ
+	m_cUnderLine(pEditView)
 {
-	m_nCaretPosX_Prev = CLayoutInt(0);		/* ビュー左端からのカーソル桁直前の位置(０オリジン) */
+	m_nCaretPosX_Prev = CLayoutInt(0);	// ビュー左端からのカーソル桁直前の位置(０オリジン)
 
-	m_crCaret = -1;				/* キャレットの色 */			// 2006.12.16 ryoji
-	m_hbmpCaret = NULL;			/* キャレット用ビットマップ */	// 2006.11.28 ryoji
+	m_crCaret = -1;				// キャレットの色				// 2006.12.16 ryoji
+	m_hbmpCaret = NULL;			// キャレット用ビットマップ		// 2006.11.28 ryoji
 	m_bClearStatus = true;
 }
 
@@ -184,11 +185,10 @@ CLayoutInt CCaret::MoveCursor(
 	GetAdjustCursorPos( &ptWk_CaretPos );
 	m_pEditDoc->m_cLayoutMgr.LayoutToLogic(
 		ptWk_CaretPos,
-		&m_ptCaretPos_Logic	//カーソル位置。ロジック単位。
+		&m_ptCaretPos_Logic	// カーソル位置。ロジック単位。
 	);
-	/* キャレット移動 */
+	// キャレット移動
 	SetCaretLayoutPos(ptWk_CaretPos);
-
 
 	// カーソル行アンダーラインのOFF
 	DEBUG_TRACE( _T("%d, %d\n"), (int)(Int)ptWk_CaretPos.GetY2(), (int)(Int)m_pEditView->m_nOldUnderLineYBg );
@@ -238,10 +238,10 @@ CLayoutInt CCaret::MoveCursor(
 	}
 
 	//	From Here 2007.07.28 じゅうじ : 表示行数が3行以下の場合の動作改善
-	/* 垂直スクロール量（行数）の算出 */
-										// 画面が３行以下
+	// 垂直スクロール量（行数）の算出
+	// 画面が３行以下
 	if (textArea.m_nViewRowNum <= 3) {
-							// 移動先は、画面のスクロールラインより上か？（up キー）
+		// 移動先は、画面のスクロールラインより上か？（up キー）
 		if (ptWk_CaretPos.y - textArea.GetViewTopLine() < nCaretMarginY) {
 			if (ptWk_CaretPos.y < nCaretMarginY) {	//１行目に移動
 				nScrollRowNum = textArea.GetViewTopLine();
@@ -290,7 +290,7 @@ CLayoutInt CCaret::MoveCursor(
 	}
 	//	To Here 2007.07.28 じゅうじ
 	if (bScroll) {
-		/* スクロール */
+		// スクロール
 		if (0
 			|| t_abs( nScrollColNum ) >= textArea.m_nViewColNum
 			|| t_abs( nScrollRowNum ) >= textArea.m_nViewRowNum
@@ -329,7 +329,7 @@ CLayoutInt CCaret::MoveCursor(
 			}
 		}
 
-		/* スクロールバーの状態を更新する */
+		// スクロールバーの状態を更新する
 		m_pEditView->AdjustScrollBars(); // 2001/10/20 novice
 	}
 
@@ -339,21 +339,21 @@ CLayoutInt CCaret::MoveCursor(
 		m_pEditView->GetRuler().SetRedrawFlag();
 	}
 
-	/* カーソル行アンダーラインのON */
+	// カーソル行アンダーラインのON
 	//CaretUnderLineON( bDraw ); //2002.02.27 Del By KK アンダーラインのちらつきを低減
 	if (bScroll) {
-		/* キャレットの表示・更新 */
+		// キャレットの表示・更新
 		ShowEditCaret();
 
-		/* ルーラの再描画 */
+		// ルーラの再描画
 		HDC		hdc = m_pEditView->GetDC();
 		m_pEditView->GetRuler().DispRuler( hdc );
 		m_pEditView->ReleaseDC( hdc );
 
-		/* アンダーラインの再描画 */
+		// アンダーラインの再描画
 		m_cUnderLine.CaretUnderLineON(true, bDrawPaint);
 
-		/* キャレットの行桁位置を表示する */
+		// キャレットの行桁位置を表示する
 		ShowCaretPosInfo();
 
 		//	Sep. 11, 2004 genta 同期スクロールの関数化
@@ -455,10 +455,10 @@ BOOL CCaret::GetAdjustCursorPos(
 	return ret;
 }
 
-/* キャレットの表示・更新 */
+// キャレットの表示・更新
 void CCaret::ShowEditCaret()
 {
-	//必要なインターフェース
+	// 必要なインターフェース
 	const CLayoutMgr* pLayoutMgr=&m_pEditDoc->m_cLayoutMgr;
 	CommonSetting* pCommon=&GetDllShareData().m_Common;
 	const STypeConfig* pTypes=&m_pEditDoc->m_cDocType.GetDocumentAttribute();
@@ -485,8 +485,8 @@ void CCaret::ShowEditCaret()
 	}
 
 	// CalcCaretDrawPosのためにCaretサイズを仮設定
-	int				nCaretWidth = 0;
-	int				nCaretHeight = 0;
+	int	nCaretWidth = 0;
+	int	nCaretHeight = 0;
 	if (0 == pCommon->m_sGeneral.GetCaretType()) {
 		nCaretHeight = GetHankakuHeight();
 		if (m_pEditView->IsInsMode()) {
@@ -517,10 +517,10 @@ void CCaret::ShowEditCaret()
 		// キャレットの表示
 		bShowCaret = true;
 	}
-	/* キャレットの幅、高さを決定 */
+	// キャレットの幅、高さを決定
 	// カーソルのタイプ = win
 	if (0 == pCommon->m_sGeneral.GetCaretType()) {
-		nCaretHeight = GetHankakuHeight();					/* キャレットの高さ */
+		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretWidth = 2; //2px
 			// 2011.12.22 システムの設定に従う(けど2px以上)
@@ -540,7 +540,7 @@ void CCaret::ShowEditCaret()
 			}
 
 			if (pLine) {
-				/* 指定された桁に対応する行のデータ内の位置を調べる */
+				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
@@ -559,9 +559,9 @@ void CCaret::ShowEditCaret()
 	// カーソルのタイプ = dos
 	}else if (1 == pCommon->m_sGeneral.GetCaretType()) {
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
-			nCaretHeight = GetHankakuHeight() / 2;			/* キャレットの高さ */
+			nCaretHeight = GetHankakuHeight() / 2;			// キャレットの高さ
 		}else {
-			nCaretHeight = GetHankakuHeight();				/* キャレットの高さ */
+			nCaretHeight = GetHankakuHeight();				// キャレットの高さ
 		}
 		nCaretWidth = GetHankakuDx();
 
@@ -573,7 +573,7 @@ void CCaret::ShowEditCaret()
 		}
 
 		if (pLine) {
-			/* 指定された桁に対応する行のデータ内の位置を調べる */
+			// 指定された桁に対応する行のデータ内の位置を調べる
 			nIdxFrom = m_pEditView->LineColumnToIndex( pcLayout, GetCaretLayoutPos().GetX2() );
 			if (0
 				|| nIdxFrom >= nLineLen
@@ -597,22 +597,22 @@ void CCaret::ShowEditCaret()
 	COLORREF crBack = ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
 
 	if (!ExistCaretFocus()) {
-		/* キャレットがなかった場合 */
-		/* キャレットの作成 */
+		// キャレットがなかった場合
+		// キャレットの作成
 		CreateEditCaret( crCaret, crBack, nCaretWidth, nCaretHeight );	// 2006.12.07 ryoji
 		m_bCaretShowFlag = false; // 2002/07/22 novice
 	}else {
 		if (GetCaretSize() != CMySize(nCaretWidth,nCaretHeight) || m_crCaret != crCaret || m_pEditView->m_crBack != crBack) {
-			/* キャレットはあるが、大きさや色が変わった場合 */
-			/* 現在のキャレットを削除 */
+			// キャレットはあるが、大きさや色が変わった場合
+			// 現在のキャレットを削除
 			::DestroyCaret();
 
-			/* キャレットの作成 */
+			// キャレットの作成
 			CreateEditCaret( crCaret, crBack, nCaretWidth, nCaretHeight );	// 2006.12.07 ryoji
 			m_bCaretShowFlag = false; // 2002/07/22 novice
 		}else {
-			/* キャレットはあるし、大きさも変わっていない場合 */
-			/* キャレットを隠す */
+			// キャレットはあるし、大きさも変わっていない場合
+			// キャレットを隠す
 			HideCaret_( m_pEditView->GetHwnd() ); // 2002/07/22 novice
 		}
 	}
@@ -620,11 +620,11 @@ void CCaret::ShowEditCaret()
 	// キャレットサイズ
 	SetCaretSize(nCaretWidth,nCaretHeight);
 
-	/* キャレットの位置を調整 */
+	// キャレットの位置を調整
 	//2007.08.26 kobake キャレットX座標の計算をUNICODE仕様にした。
 	::SetCaretPos( ptDrawPos.x, ptDrawPos.y );
 	if (bShowCaret) {
-		/* キャレットの表示 */
+		// キャレットの表示
 		ShowCaret_( m_pEditView->GetHwnd() ); // 2002/07/22 novice
 	}
 
@@ -645,7 +645,7 @@ void CCaret::ShowEditCaret()
 //2007.10.17 kobake 重複するコードを整理
 void CCaret::ShowCaretPosInfo()
 {
-	//必要なインターフェース
+	// 必要なインターフェース
 	const CLayoutMgr* pLayoutMgr=&m_pEditDoc->m_cLayoutMgr;
 	const STypeConfig* pTypes=&m_pEditDoc->m_cDocType.GetDocumentAttribute();
 
@@ -688,7 +688,7 @@ void CCaret::ShowCaretPosInfo()
 	// -- -- -- -- キャレット位置 -> ptCaret -- -- -- -- //
 	//
 	CMyPoint ptCaret;
-	//行番号をロジック単位で表示
+	// 行番号をロジック単位で表示
 	if (pTypes->m_bLineNumIsCRLF) {
 		ptCaret.x = 0;
 		ptCaret.y = (Int)GetCaretLogicPos().y;
@@ -705,12 +705,12 @@ void CCaret::ShowCaretPosInfo()
 			);
 			ptCaret.x = (Int)m_pEditView->LineIndexToColumn(&cLayout, GetCaretLogicPos().x - pcLayout->GetLogicPos().x);
 		}
-	//行番号をレイアウト単位で表示
+	// 行番号をレイアウト単位で表示
 	}else {
 		ptCaret.x = (Int)GetCaretLayoutPos().GetX();
 		ptCaret.y = (Int)GetCaretLayoutPos().GetY();
 	}
-	//表示値が1から始まるように補正
+	// 表示値が1から始まるように補正
 	ptCaret.x++;
 	ptCaret.y++;
 
@@ -724,7 +724,7 @@ void CCaret::ShowCaretPosInfo()
 		if (nIdx < nLineLen) {
 			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen()?1:0)) {
 				//auto_sprintf( szCaretChar, _T("%04x"), );
-				//任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
+				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CCodeBase* pCode = CCodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
 				CommonSetting_Statusbar* psStatusbar = &GetDllShareData().m_Common.m_sStatusbar;
 				EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
@@ -828,7 +828,7 @@ void CCaret::ShowCaretPosInfo()
 /* カーソル上下移動処理 */
 CLayoutInt CCaret::Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect )
 {
-	//必要なインターフェース
+	// 必要なインターフェース
 	const CLayoutMgr* const pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
 	const CommonSetting* const pCommon = &GetDllShareData().m_Common;
 
@@ -836,7 +836,7 @@ CLayoutInt CCaret::Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect )
 
 	bool	bVertLineDoNotOFF = true;	// カーソル位置縦線を消去しない
 	if (bSelect) {
-		bVertLineDoNotOFF = false;		//選択状態ならカーソル位置縦線消去を行う
+		bVertLineDoNotOFF = false;		// 選択状態ならカーソル位置縦線消去を行う
 	}
 
 	auto& selInfo = m_pEditView->GetSelectionInfo();
@@ -863,12 +863,12 @@ CLayoutInt CCaret::Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect )
 	}
 
 	if (bSelect && ! selInfo.IsTextSelected()) {
-		/* 現在のカーソル位置から選択を開始する */
+		// 現在のカーソル位置から選択を開始する
 		selInfo.BeginSelectArea();
 	}
 	if (!bSelect) {
 		if (selInfo.IsTextSelected()) {
-			/* 現在の選択範囲を非選択状態に戻す */
+			// 現在の選択範囲を非選択状態に戻す
 			selInfo.DisableSelectArea(true);
 		}else if (selInfo.IsBoxSelecting()) {
 			selInfo.SetBoxSelect(false);
@@ -878,7 +878,7 @@ CLayoutInt CCaret::Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect )
 	// (これから求める)キャレットの移動先。
 	CLayoutPoint ptTo( CLayoutInt(0), ptCaret.y + nMoveLines );
 
-	/* 移動先の行のデータを取得 */
+	// 移動先の行のデータを取得
 	const CLayout* const pLayout = pLayoutMgr->SearchLineByLayoutY( ptTo.y );
 	const CLogicInt nLineLen = pLayout ? pLayout->GetLengthWithEOL() : CLogicInt(0);
 	int i = 0; ///< 何？
@@ -902,7 +902,7 @@ CLayoutInt CCaret::Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect )
 		}
 	}
 	if (i >= nLineLen) {
-		/* フリーカーソルモードと矩形選択中は、キャレットの位置を改行や EOFの前に制限しない */
+		// フリーカーソルモードと矩形選択中は、キャレットの位置を改行や EOFの前に制限しない
 		if (pCommon->m_sGeneral.m_bIsFreeCursorMode
 			|| selInfo.IsBoxSelecting()
 		) {
@@ -914,7 +914,7 @@ CLayoutInt CCaret::Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect )
 	}
 	GetAdjustCursorPos( &ptTo );
 	if (bSelect) {
-		/* 現在のカーソル位置によって選択範囲を変更 */
+		// 現在のカーソル位置によって選択範囲を変更
 		selInfo.ChangeSelectAreaByCurrentCursor( ptTo );
 	}
 	const CLayoutInt nScrollLines = MoveCursor(	ptTo,
@@ -1008,7 +1008,7 @@ void CCaret::CopyCaretStatus(CCaret* pCaret) const
 {
 	pCaret->SetCaretLayoutPos(GetCaretLayoutPos());
 	pCaret->SetCaretLogicPos(GetCaretLogicPos());
-	pCaret->m_nCaretPosX_Prev = m_nCaretPosX_Prev;	/* ビュー左端からのカーソル桁位置（０オリジン）*/
+	pCaret->m_nCaretPosX_Prev = m_nCaretPosX_Prev;	// ビュー左端からのカーソル桁位置（０オリジン
 
 	//※ キャレットのサイズはコピーしない。2002/05/12 YAZAKI
 }
@@ -1075,14 +1075,14 @@ CLayoutInt CCaret::MoveCursorProperly(
 			ptNewXY.y = t_max(CLayoutInt(0), layoutMgr.GetLineCount() - 1);
 		}
 	}
-	/* カーソルがテキスト最下端行にあるか */
+	// カーソルがテキスト最下端行にあるか
 	if (ptNewXY.y >= layoutMgr.GetLineCount()) {
 		// 2004.04.03 Moca EOFより後ろの座標調整は、MoveCursor内でやってもらうので、削除
-	/* カーソルがテキスト最上端行にあるか */
+	// カーソルがテキスト最上端行にあるか
 	}else if (ptNewXY.y < 0) {
 		ptNewXY.Set(CLayoutInt(0), CLayoutInt(0));
 	}else {
-		/* 移動先の行のデータを取得 */
+		// 移動先の行のデータを取得
 		layoutMgr.GetLineStr( ptNewXY.GetY2(), &nLineLen, &pcLayout );
 
 		int nColWidth = m_pEditView->GetTextMetrics().GetHankakuDx();
@@ -1116,7 +1116,7 @@ CLayoutInt CCaret::MoveCursorProperly(
 
 		if (i >= nLineLen) {
 			// 2011.12.26 フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
-			/* フリーカーソルモードか */
+			// フリーカーソルモードか
 			if (0
 				|| GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode
 				|| (selectionInfo.IsMouseSelecting() && selectionInfo.IsBoxSelecting())	/* マウス範囲選択中 && 矩形範囲選択中 */

@@ -83,7 +83,7 @@ INT_PTR CALLBACK CPropHelper::DlgProc_page(
 }
 //	To Here Jun. 2, 2001 genta
 
-/* Helper メッセージ処理 */
+// Helper メッセージ処理
 INT_PTR CPropHelper::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
@@ -97,28 +97,28 @@ INT_PTR CPropHelper::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Helper */
+		// ダイアログデータの設定 Helper
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
-		/* 外部ヘルプ１ */
+		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
+		// 外部ヘルプ１
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_EXTHELP1 ), _MAX_PATH - 1 );
-		/* 外部HTMLヘルプ */
+		// 外部HTMLヘルプ
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_EXTHTMLHELP ), _MAX_PATH - 1 );
 
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
-			/* ダイアログデータの取得 Helper */
+			// ダイアログデータの取得 Helper
 			GetData( hwndDlg );
 			switch (wID) {
-			case IDC_BUTTON_OPENHELP1:	/* 外部ヘルプ１の「参照...」ボタン */
+			case IDC_BUTTON_OPENHELP1:	// 外部ヘルプ１の「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
@@ -129,7 +129,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szExtHelp );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
@@ -142,7 +142,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					}
 				}
 				return TRUE;
-			case IDC_BUTTON_OPENEXTHTMLHELP:	/* 外部HTMLヘルプの「参照...」ボタン */
+			case IDC_BUTTON_OPENEXTHTMLHELP:	// 外部HTMLヘルプの「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
@@ -153,7 +153,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szExtHtmlHelp );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
@@ -167,7 +167,7 @@ INT_PTR CPropHelper::DispatchEvent(
 				}
 				return TRUE;
 			// ai 02/05/21 Add S
-			case IDC_BUTTON_KEYWORDHELPFONT:	/* キーワードヘルプの「フォント」ボタン */
+			case IDC_BUTTON_KEYWORDHELPFONT:	// キーワードヘルプの「フォント」ボタン
 				{
 					LOGFONT   lf = m_Common.m_sHelper.m_lf;
 					INT nPointSize = m_Common.m_sHelper.m_nPointSize;
@@ -185,7 +185,7 @@ INT_PTR CPropHelper::DispatchEvent(
 				}
 				return TRUE;
 			// ai 02/05/21 Add E
-			case IDC_BUTTON_OPENMDLL:	/* MIGEMODLL場所指定「参照...」ボタン */
+			case IDC_BUTTON_OPENMDLL:	// MIGEMODLL場所指定「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH];
@@ -196,7 +196,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Common.m_sHelper.m_szMigemoDll );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						G_AppInstance(),
 						hwndDlg,
@@ -209,10 +209,10 @@ INT_PTR CPropHelper::DispatchEvent(
 					}
 				}
 				return TRUE;
-			case IDC_BUTTON_OPENMDICT:	/* MigemoDict場所指定「参照...」ボタン */
+			case IDC_BUTTON_OPENMDICT:	// MigemoDict場所指定「参照...」ボタン
 				{
 					TCHAR	szPath[_MAX_PATH];
-					/* 検索フォルダ */
+					// 検索フォルダ
 					// 2007.05.27 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH( m_Common.m_sHelper.m_szMigemoDict )) {
 						GetInidirOrExedir( szPath, m_Common.m_sHelper.m_szMigemoDict, TRUE );
@@ -226,9 +226,9 @@ INT_PTR CPropHelper::DispatchEvent(
 				}
 				return TRUE;
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		}
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 	case WM_NOTIFY:
 		pNMHDR = (NMHDR*)lParam;
 //		switch( idCtrl ){
@@ -241,7 +241,7 @@ INT_PTR CPropHelper::DispatchEvent(
 				return TRUE;
 			case PSN_KILLACTIVE:
 //				MYTRACE( _T("Helper PSN_KILLACTIVE\n") );
-				/* ダイアログデータの取得 Helper */
+				// ダイアログデータの取得 Helper
 				GetData( hwndDlg );
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -249,7 +249,7 @@ INT_PTR CPropHelper::DispatchEvent(
 				m_nPageNum = ID_PROPCOM_PAGENUM_HELPER;
 				return TRUE;
 			}
-//			break;	/* default */
+//			break;	// default
 //		}
 
 //		MYTRACE( _T("pNMHDR->hwndFrom=%xh\n"), pNMHDR->hwndFrom );
@@ -257,7 +257,7 @@ INT_PTR CPropHelper::DispatchEvent(
 //		MYTRACE( _T("pNMHDR->code    =%xh\n"), pNMHDR->code );
 //		MYTRACE( _T("pMNUD->iPos    =%d\n"), pMNUD->iPos );
 //		MYTRACE( _T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta );
-		break;	/* WM_NOTIFY */
+		break;	// WM_NOTIFY
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
@@ -266,7 +266,7 @@ INT_PTR CPropHelper::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -288,21 +288,21 @@ INT_PTR CPropHelper::DispatchEvent(
 	return FALSE;
 }
 
-/* ダイアログデータの設定 Helper */
+// ダイアログデータの設定 Helper
 void CPropHelper::SetData( HWND hwndDlg )
 {
-	/* 補完候補決定キー */
+	// 補完候補決定キー
 	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, m_Common.m_sHelper.m_bHokanKey_RETURN );	//VK_RETURN 補完決定キーが有効/無効
 	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_TAB, m_Common.m_sHelper.m_bHokanKey_TAB );		//VK_TAB    補完決定キーが有効/無効
 	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT, m_Common.m_sHelper.m_bHokanKey_RIGHT );	//VK_RIGHT  補完決定キーが有効/無効
 
-	/* 外部ヘルプ１ */
+	// 外部ヘルプ１
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_EXTHELP1, m_Common.m_sHelper.m_szExtHelp );
 
-	/* 外部HTMLヘルプ */
+	// 外部HTMLヘルプ
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_EXTHTMLHELP, m_Common.m_sHelper.m_szExtHtmlHelp );
 
-	/* HtmlHelpビューアはひとつ */
+	// HtmlHelpビューアはひとつ
 	::CheckDlgButton( hwndDlg, IDC_CHECK_HTMLHELPISSINGLE, m_Common.m_sHelper.m_bHtmlHelpIsSingle ? BST_CHECKED : BST_UNCHECKED );
 
 	// キーワードヘルプ フォント	// 2013/4/24 Uchi
@@ -314,21 +314,21 @@ void CPropHelper::SetData( HWND hwndDlg )
 }
 
 
-/* ダイアログデータの取得 Helper */
+// ダイアログデータの取得 Helper
 int CPropHelper::GetData( HWND hwndDlg )
 {
-	/* 補完候補決定キー */
+	// 補完候補決定キー
 	m_Common.m_sHelper.m_bHokanKey_RETURN = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_RETURN );//VK_RETURN 補完決定キーが有効/無効
 	m_Common.m_sHelper.m_bHokanKey_TAB = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_TAB );		//VK_TAB    補完決定キーが有効/無効
 	m_Common.m_sHelper.m_bHokanKey_RIGHT = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT );	//VK_RIGHT  補完決定キーが有効/無効
 
-	/* 外部ヘルプ１ */
+	// 外部ヘルプ１
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHELP1, m_Common.m_sHelper.m_szExtHelp, _countof( m_Common.m_sHelper.m_szExtHelp ));
 
-	/* 外部HTMLヘルプ */
+	// 外部HTMLヘルプ
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHTMLHELP, m_Common.m_sHelper.m_szExtHtmlHelp, _countof( m_Common.m_sHelper.m_szExtHtmlHelp ));
 
-	/* HtmlHelpビューアはひとつ */
+	// HtmlHelpビューアはひとつ
 	m_Common.m_sHelper.m_bHtmlHelpIsSingle = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_HTMLHELPISSINGLE ) != 0;
 
 	//migemo dict

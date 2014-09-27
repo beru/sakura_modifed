@@ -92,7 +92,7 @@ INT_PTR CALLBACK CPropCustmenu::DlgProc_page(
 }
 //	To Here Jun. 2, 2001 genta
 
-/* Custom menu メッセージ処理 */
+// Custom menu メッセージ処理
 INT_PTR CPropCustmenu::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
@@ -123,18 +123,18 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Custom menu */
+		// ダイアログデータの設定 Custom menu
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* コントロールのハンドルを取得 */
+		// コントロールのハンドルを取得
 		hwndCOMBO_FUNCKIND = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 		hwndLIST_FUNC = ::GetDlgItem( hwndDlg, IDC_LIST_FUNC );
 		hwndCOMBO_MENU = ::GetDlgItem( hwndDlg, IDC_COMBO_MENU );
 		hwndLIST_RES = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 
-		/* キー選択時の処理 */
+		// キー選択時の処理
 		::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_COMBO_FUNCKIND, CBN_SELCHANGE ), (LPARAM)hwndCOMBO_FUNCKIND );
 
 		::SetTimer( hwndDlg, 1, 300, NULL );
@@ -149,7 +149,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 			return TRUE;
 		case PSN_KILLACTIVE:
 //			MYTRACE( _T("Custom menu PSN_KILLACTIVE\n") );
-			/* ダイアログデータの取得 Custom menu */
+			// ダイアログデータの取得 Custom menu
 			GetData( hwndDlg );
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -178,20 +178,20 @@ INT_PTR CPropCustmenu::DispatchEvent(
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID = LOWORD(wParam);			// 項目ID､ コントロールID､ またはアクセラレータID
+		hwndCtl = (HWND) lParam;		// コントロールのハンドル
 
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
-			case IDC_BUTTON_IMPORT:	/* インポート */
-				/* カスタムメニュー設定をインポートする */
+			case IDC_BUTTON_IMPORT:	// インポート
+				// カスタムメニュー設定をインポートする
 				Import( hwndDlg );
 				return TRUE;
-			case IDC_BUTTON_EXPORT:	/* エクスポート */
-				/* カスタムメニュー設定をエクスポートする */
+			case IDC_BUTTON_EXPORT:	// エクスポート
+				// カスタムメニュー設定をエクスポートする
 				Export( hwndDlg );
 				return TRUE;
 			case IDC_BUTTON_MENUNAME:
@@ -211,7 +211,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 				Combo_SetCurSel( hwndCOMBO_MENU, nIdx1 );
 				return TRUE;
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		}
 
 		if( hwndCOMBO_MENU == hwndCtl ){
@@ -222,7 +222,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					break;
 				}
 				SetDataMenuList( hwndDlg, nIdx1 );
-				break;	/* CBN_SELCHANGE */
+				break;	// CBN_SELCHANGE
 			}
 		}else
 		if (hwndLIST_RES == hwndCtl) {
@@ -296,13 +296,13 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					break;
 				}
 
-				/* キー */
+				// キー
 				if ('\0' == m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] ||
 					' '  == m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2]
 				) {
 				}else {
 				}
-				break;	/* LBN_SELCHANGE */
+				break;	// LBN_SELCHANGE
 			}
 		}else if (hwndCOMBO_FUNCKIND == hwndCtl) {
 			switch (wNotifyCode) {
@@ -325,7 +325,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 		}else {
 			EFunctionCode	eFuncCode = F_0;
 			switch (wNotifyCode) {
-			/* ボタン／チェックボックスがクリックされた */
+			// ボタン／チェックボックスがクリックされた
 			case BN_CLICKED:
 				switch (wID) {
 				case IDC_BUTTON_INSERTSEPARATOR:
@@ -620,7 +620,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -636,7 +636,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 }
 
 
-/* ダイアログデータの設定 Custom menu */
+// ダイアログデータの設定 Custom menu
 void CPropCustmenu::SetData( HWND hwndDlg )
 {
 	HWND		hwndCOMBO_MENU;
@@ -644,25 +644,25 @@ void CPropCustmenu::SetData( HWND hwndDlg )
 	int			i;
 	WCHAR		buf[ MAX_CUSTOM_MENU_NAME_LEN + 1 ];
 
-	/* 機能種別一覧に文字列をセット（コンボボックス） */
+	// 機能種別一覧に文字列をセット（コンボボックス）
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 	m_cLookup.SetCategory2Combo( hwndCombo );	//	Oct. 3, 2001 genta
 	// 特別機能追加
 	nSpecialFuncsNum = Combo_AddString( hwndCombo, LS( STR_SPECIAL_FUNC ) );
 
-	/* 種別の先頭の項目を選択（コンボボックス）*/
+	// 種別の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel( hwndCombo, 0 );	//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
-	/* メニュー一覧に文字列をセット（コンボボックス）*/
+	// メニュー一覧に文字列をセット（コンボボックス）
 	hwndCOMBO_MENU = ::GetDlgItem( hwndDlg, IDC_COMBO_MENU );
 	for (i = 0; i < MAX_CUSTOM_MENU; ++i) {
 		Combo_AddString( hwndCOMBO_MENU, m_cLookup.Custmenu2Name( i, buf, _countof( buf ) ) );
 	}
-	/* メニュー一覧の先頭の項目を選択（コンボボックス）*/
+	// メニュー一覧の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel( hwndCOMBO_MENU, 0 );
 	SetDataMenuList( hwndDlg, 0 );
 
-//	/* カスタムメニューの先頭の項目を選択（リストボックス）*/	//Oct. 8, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
+//	// カスタムメニューの先頭の項目を選択（リストボックス）	//Oct. 8, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
 	HWND hwndLIST_RES = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 	List_SetCurSel( hwndLIST_RES, 0 );
 }
@@ -672,7 +672,7 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 	WCHAR		szLabel[300];
 	WCHAR		szLabel2[300];
 
-	/* メニュー項目一覧に文字列をセット（リストボックス）*/
+	// メニュー項目一覧に文字列をセット（リストボックス）
 	HWND hwndLIST_RES = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 //	hwndEDIT_KEY = ::GetDlgItem( hwndDlg, IDC_EDIT_KEY );
 	List_ResetContent( hwndLIST_RES );
@@ -686,7 +686,7 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 				SetSpecialFuncName( code, szLabel );
 			}
 		}
-		/* キー */
+		// キー 
 		if ('\0' == m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nIdx][i]) {
 			auto_strcpy( szLabel2, szLabel );
 		}else {
@@ -706,14 +706,14 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 }
 
 
-/* ダイアログデータの取得 Custom menu */
+// ダイアログデータの取得 Custom menu
 int CPropCustmenu::GetData( HWND hwndDlg )
 {
 	return TRUE;
 }
 
 
-/* カスタムメニュー設定をインポートする */
+// カスタムメニュー設定をインポートする
 void CPropCustmenu::Import( HWND hwndDlg )
 {
 	CImpExpCustMenu	cImpExpCustMenu( m_Common );
@@ -729,7 +729,7 @@ void CPropCustmenu::Import( HWND hwndDlg )
 	::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_COMBO_MENU, CBN_SELCHANGE ), (LPARAM)hwndCtrl );
 }
 
-/* カスタムメニュー設定をエクスポートする */
+// カスタムメニュー設定をエクスポートする
 void CPropCustmenu::Export( HWND hwndDlg )
 {
 	CImpExpCustMenu	cImpExpCustMenu( m_Common );

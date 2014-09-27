@@ -15,7 +15,7 @@
 
 CDlgCancel::CDlgCancel()
 {
-	m_bCANCEL = FALSE;	/* IDCANCELボタンが押された */
+	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
 	m_bAutoCleanup = false;
 }
 
@@ -52,16 +52,16 @@ void CDlgCancel::DeleteAsync( void )
 	::PostMessageAny( GetHwnd(), WM_CLOSE, 0, 0 );
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgCancel::DoModal( HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete )
 {
-	m_bCANCEL = FALSE;	/* IDCANCELボタンが押された */
+	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
 	return (int)CDialog::DoModal( hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL );
 }
-/* モードレスダイアログの表示 */
+// モードレスダイアログの表示
 HWND CDlgCancel::DoModeless( HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete )
 {
-	m_bCANCEL = FALSE;	/* IDCANCELボタンが押された */
+	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
 	return CDialog::DoModeless( hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL, SW_SHOW );
 }
 
@@ -78,7 +78,7 @@ BOOL CDlgCancel::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	::SendMessageAny( GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIcon );
 
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 //	CreateSizeBox();
 	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
 }
@@ -87,7 +87,7 @@ BOOL CDlgCancel::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDCANCEL:
-		m_bCANCEL = TRUE;	/* IDCANCELボタンが押された */
+		m_bCANCEL = TRUE;	// IDCANCELボタンが押された
 //		CloseDialog( 0 );
 		return TRUE;
 	}

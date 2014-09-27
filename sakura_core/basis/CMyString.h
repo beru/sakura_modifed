@@ -28,9 +28,9 @@
 
 #define m_delete2(p) { if(p){ delete[] p; p=0; } }
 
-class CMyString{
+class CMyString {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CMyString(WCHAR wc)								: m_wstr(1, wc),		m_str_cache(NULL) { }
 	CMyString(const WCHAR* szData = L"")			: m_wstr(szData),		m_str_cache(NULL) { }
 	CMyString(const WCHAR* pData, size_t nLength)	: m_wstr(pData, nLength), m_str_cache(NULL) { }
@@ -40,38 +40,38 @@ public:
 	CMyString(const CMyString& rhs) : m_wstr(rhs.c_wstr()), m_str_cache(NULL) { }
 	~CMyString();
 
-	//演算子
-	operator const wchar_t* () const{ return c_wstr(); }
-	operator const char* () const{ return c_astr(); }
-	CMyString& operator = (const CMyString& rhs){ set(rhs); return *this; }
+	// 演算子
+	operator const wchar_t* () const { return c_wstr(); }
+	operator const char* () const { return c_astr(); }
+	CMyString& operator = (const CMyString& rhs) { set(rhs); return *this; }
 
-	//設定
-	void set(const wchar_t* wszData){ m_wstr = wszData; m_delete2(m_str_cache); }
-	void set(const wchar_t* wszData, int nLength){ m_wstr.assign(wszData, nLength); m_delete2(m_str_cache); }
+	// 設定
+	void set(const wchar_t* wszData) { m_wstr = wszData; m_delete2(m_str_cache); }
+	void set(const wchar_t* wszData, int nLength) { m_wstr.assign(wszData, nLength); m_delete2(m_str_cache); }
 	void set(const char* szData);
 	void set(const char* szData, int nLength);
-	void set(const CMyString& cszData){ set(cszData.c_wstr()); }
+	void set(const CMyString& cszData) { set(cszData.c_wstr()); }
 
-	//取得
-	const wchar_t* c_wstr() const{ return m_wstr.c_str(); }
+	// 取得
+	const wchar_t* c_wstr() const { return m_wstr.c_str(); }
 	const char* c_astr() const;
-	int wlength() const{ return wcslen(c_wstr()); }
-	int alength() const{ return strlen(c_astr()); }
+	int wlength() const { return wcslen(c_wstr()); }
+	int alength() const { return strlen(c_astr()); }
 
 
-	//TCHAR
+	// TCHAR
 #ifdef _UNICODE
-	const TCHAR* c_tstr() const{ return c_wstr(); }
+	const TCHAR* c_tstr() const { return c_wstr(); }
 #else
-	const TCHAR* c_tstr() const{ return c_astr(); }
+	const TCHAR* c_tstr() const { return c_astr(); }
 #endif
 
 private:
 	std::wstring m_wstr;
-	mutable char* m_str_cache; //c_str用キャッシュ。m_wstrが変更(set)されたらこれを解放し、NULLにしておくのがルール。
+	mutable char* m_str_cache; // c_str用キャッシュ。m_wstrが変更(set)されたらこれを解放し、NULLにしておくのがルール。
 };
 
-//std::string の TCHAR 対応用マクロ定義
+// std::string の TCHAR 対応用マクロ定義
 #ifdef _UNICODE
 #define tstring wstring
 #else
@@ -80,11 +80,11 @@ private:
 #define astring string
 
 
-//共通マクロ
+// 共通マクロ
 #define _FT _T
 #include "util/StaticType.h"
 
-//共通型
+// 共通型
 typedef StaticString<TCHAR, _MAX_PATH> SFilePath;
 class CFilePath : public StaticString<TCHAR, _MAX_PATH>{
 private:
@@ -93,7 +93,7 @@ public:
 	CFilePath() : Super() { }
 	CFilePath(const TCHAR* rhs) : Super(rhs) { }
 
-	bool IsValidPath() const{ return At(0) != _T('\0'); }
+	bool IsValidPath() const { return At(0) != _T('\0'); }
 	std::tstring GetDirPath() const
 	{
 		TCHAR	szDirPath[_MAX_PATH];
@@ -104,7 +104,7 @@ public:
 		_tcscat( szDirPath, szDir );
 		return szDirPath;
 	}
-	//拡張子を取得する
+	// 拡張子を取得する
 	LPCTSTR GetExt( bool bWithoutDot = false ) const
 	{
 		const TCHAR* head = c_str();
@@ -125,7 +125,7 @@ public:
 
 
 //$$ 仮
-class CCommandLineString{
+class CCommandLineString {
 public:
 	CCommandLineString()
 	{

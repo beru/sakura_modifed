@@ -28,8 +28,8 @@
 class CColor_Url : public CColorStrategy {
 public:
 	CColor_Url() : m_nCOMMENTEND(0) { }
-	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_URL; }
-	virtual void InitStrategyStatus(){ m_nCOMMENTEND = 0; }
+	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_URL; }
+	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool EndColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_URL].m_bDisp; }

@@ -6,7 +6,7 @@
 #include "util/string_ex2.h"
 #include "CEol.h"
 
-/* Uudecode (デコード）*/
+// Uudecode (デコード）
 bool CDecode_UuDecode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 {
 	const WCHAR *psrc, *pline;
@@ -77,4 +77,3 @@ bool CDecode_UuDecode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 	return true;
 }
 
-	

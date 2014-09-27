@@ -33,7 +33,8 @@
 
 	2007.11.29 kobake ì¬
 */
-template <class T> class auto_array_ptr{
+template <class T>
+class auto_array_ptr {
 private:
 	typedef auto_array_ptr<T> Me;
 public:

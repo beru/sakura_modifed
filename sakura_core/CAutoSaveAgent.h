@@ -69,7 +69,9 @@ private:
 };
 
 
-class CAutoSaveAgent : public CDocListenerEx{
+class CAutoSaveAgent :
+	public CDocListenerEx
+{
 public:
 	void CheckAutoSave();
 	void ReloadAutoSaveParam();	//!< Ý’è‚ðSharedArea‚©‚ç“Ç‚Ýo‚·

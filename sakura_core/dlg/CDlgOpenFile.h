@@ -54,7 +54,7 @@ struct OPENFILENAMEZ : public OPENFILENAME {
 class CDlgOpenFile
 {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CDlgOpenFile();
 	~CDlgOpenFile();
 	void Create(
@@ -66,23 +66,23 @@ public:
 		const std::vector<LPCTSTR>& vOPENFOLDER		= std::vector<LPCTSTR>()
 	);
 
-	//操作
-	bool DoModal_GetOpenFileName( TCHAR*, bool bSetCurDir = false );	/* 開くダイアログ モーダルダイアログの表示 */	//2002/08/21 moca	引数追加
-	bool DoModal_GetSaveFileName( TCHAR*, bool bSetCurDir = false );	/* 保存ダイアログ モーダルダイアログの表示 */	//2002/08/21 30,2002 moca	引数追加
-	bool DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstring>* );	/* 開くダイアグ モーダルダイアログの表示 */
-	bool DoModalSaveDlg( SSaveInfo*	pSaveInfo, bool bSimpleMode );	/* 保存ダイアログ モーダルダイアログの表示 */
+	// 操作
+	bool DoModal_GetOpenFileName( TCHAR*, bool bSetCurDir = false );	// 開くダイアログ モーダルダイアログの表示	//2002/08/21 moca	引数追加
+	bool DoModal_GetSaveFileName( TCHAR*, bool bSetCurDir = false );	// 保存ダイアログ モーダルダイアログの表示	//2002/08/21 30,2002 moca	引数追加
+	bool DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstring>* );	// 開くダイアグ モーダルダイアログの表示
+	bool DoModalSaveDlg( SSaveInfo*	pSaveInfo, bool bSimpleMode );		// 保存ダイアログ モーダルダイアログの表示
 
 public:
-	HINSTANCE		m_hInstance;	/* アプリケーションインスタンスのハンドル */
-	HWND			m_hwndParent;	/* オーナーウィンドウのハンドル */
-	HWND			m_hWnd;			/* このダイアログのハンドル */
+	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
+	HWND			m_hwndParent;	// オーナーウィンドウのハンドル
+	HWND			m_hWnd;			// このダイアログのハンドル
 
 	DLLSHAREDATA*	m_pShareData;
 
-	SFilePath		m_szDefaultWildCard;	/* 「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される） */
-	SFilePath		m_szInitialDir;			/* 「開く」での初期ディレクトリ */
-	OPENFILENAMEZ	m_ofn;							/* 2005.10.29 ryoji OPENFILENAMEZ「ファイルを開く」ダイアログ用構造体 */
-	ECodeType		m_nCharCode;					/* 文字コード */
+	SFilePath		m_szDefaultWildCard;	//「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される）
+	SFilePath		m_szInitialDir;			//「開く」での初期ディレクトリ
+	OPENFILENAMEZ	m_ofn;					// 2005.10.29 ryoji OPENFILENAMEZ「ファイルを開く」ダイアログ用構造体
+	ECodeType		m_nCharCode;			// 文字コード
 
 	CEol			m_cEol;		//	Feb. 9, 2001 genta
 	bool			m_bUseEol;	//	Feb. 9, 2001 genta

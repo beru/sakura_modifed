@@ -72,7 +72,7 @@ const TCHAR* CFormatManager::MyGetDateFormat(
 }
 
 
-/* 時刻をフォーマット */
+// 時刻をフォーマット
 const TCHAR* CFormatManager::MyGetTimeFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen )
 {
 	return MyGetTimeFormat(
@@ -84,7 +84,7 @@ const TCHAR* CFormatManager::MyGetTimeFormat( const SYSTEMTIME& systime, TCHAR* 
 	);
 }
 
-/* 時刻をフォーマット */
+// 時刻をフォーマット
 const TCHAR* CFormatManager::MyGetTimeFormat(
 	const SYSTEMTIME&	systime,
 	TCHAR*			pszDest,

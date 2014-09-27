@@ -17,7 +17,7 @@
 //	sakura
 #include "_main/global.h"
 
-enum ECommentType{
+enum ECommentType {
 	COMMENT_TYPE_0	= 0,
 	COMMENT_TYPE_1	= 1,
 };
@@ -33,21 +33,21 @@ enum ECommentType{
 #define BLOCKCOMMENT_BUFFERSIZE	16
 
 //	2005.11.10 Moca アクセス関数追加
-class CBlockComment{
+class CBlockComment {
 public:
-	//生成と破棄
+	// 生成と破棄
 	CBlockComment();
 
-	//設定
+	// 設定
 	void SetBlockCommentRule( const wchar_t* pszFrom, const wchar_t* pszTo );	//	行コメントデリミタをコピーする
 
-	//判定
-	bool Match_CommentFrom( int nPos, const CStringRef& cStr ) const;	//	行コメントに値するか確認する
-	int Match_CommentTo( int nPos, const CStringRef& cStr ) const;	//	行コメントに値するか確認する
+	// 判定
+	bool Match_CommentFrom( int nPos, const CStringRef& cStr ) const;			//	行コメントに値するか確認する
+	int Match_CommentTo( int nPos, const CStringRef& cStr ) const;				//	行コメントに値するか確認する
 
-	//取得
-	const wchar_t* getBlockCommentFrom() const{ return m_szBlockCommentFrom; }
-	const wchar_t* getBlockCommentTo() const{ return m_szBlockCommentTo; }
+	// 取得
+	const wchar_t* getBlockCommentFrom() const { return m_szBlockCommentFrom; }
+	const wchar_t* getBlockCommentTo() const { return m_szBlockCommentTo; }
 	int getBlockFromLen() const { return m_nBlockFromLen; }
 	int getBlockToLen() const { return m_nBlockToLen; }
 

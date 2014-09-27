@@ -35,8 +35,7 @@
 /** ミューテックスを扱うクラス
 	@date 2007.07.05 ryoji 新規作成
 */
-class CMutex
-{
+class CMutex {
 public:
 	CMutex( BOOL bInitialOwner, LPCTSTR pszName, LPSECURITY_ATTRIBUTES psa = NULL )
 	{
@@ -52,7 +51,7 @@ public:
 	BOOL Lock( DWORD dwTimeout = INFINITE )
 	{
 		DWORD dwRet = ::WaitForSingleObject( m_hObj, dwTimeout );
-		if( dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED )
+		if (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED)
 			return TRUE;
 		else
 			return FALSE;
@@ -86,15 +85,15 @@ protected:
     }
 	@endcode
 */
-template<class EXCLUSIVE_OBJECT>
+template <class EXCLUSIVE_OBJECT>
 class LockGuard {
 	EXCLUSIVE_OBJECT& o_;
 public:
-	LockGuard(EXCLUSIVE_OBJECT& ex) : o_( ex ){
+	LockGuard(EXCLUSIVE_OBJECT& ex) : o_( ex ) {
 		o_.Lock();
 	}
 	template<class PARAM>
-	LockGuard(EXCLUSIVE_OBJECT& ex, PARAM p) : o_( ex ){
+	LockGuard(EXCLUSIVE_OBJECT& ex, PARAM p) : o_( ex ) {
 		o_.Lock(p);
 	}
 	

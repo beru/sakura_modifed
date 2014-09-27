@@ -33,7 +33,7 @@
 */
 void CEditView::PreprocessCommand_hokan( int nCommand )
 {
-	/* 補完ウィンドウが表示されているとき、特別な場合を除いてウィンドウを非表示にする */
+	// 補完ウィンドウが表示されているとき、特別な場合を除いてウィンドウを非表示にする
 	if (m_bHokan) {
 		if (1
 			&& nCommand != F_HOKAN		//	補完開始・終了コマンド
@@ -54,10 +54,10 @@ void CEditView::PreprocessCommand_hokan( int nCommand )
 */
 void CEditView::PostprocessCommand_hokan(void)
 {
-	if (GetDllShareData().m_Common.m_sHelper.m_bUseHokan && !m_bExecutingKeyMacro) { /* キーボードマクロの実行中 */
+	if (GetDllShareData().m_Common.m_sHelper.m_bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
 		CNativeW cmemData;
 
-		/* カーソル直前の単語を取得 */
+		// カーソル直前の単語を取得
 		if (0 < GetParser().GetLeftWord( &cmemData, 100 )) {
 			ShowHokanMgr( cmemData, FALSE );
 		}else {
@@ -79,12 +79,12 @@ void CEditView::PostprocessCommand_hokan(void)
 */
 void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 {
-	/* 補完対象ワードリストを調べる */
+	// 補完対象ワードリストを調べる
 	CNativeW	cmemHokanWord;
 	POINT		poWin;
 	auto& textArea = GetTextArea();
 	auto& caretLayoutPos = GetCaret().GetCaretLayoutPos();
-	/* 補完ウィンドウの表示位置を算出 */
+	// 補完ウィンドウの表示位置を算出
 	poWin.x = textArea.GetAreaLeft()
 			 + (Int)(caretLayoutPos.GetX2() - textArea.GetViewLeftCol())
 			  * GetTextMetrics().GetHankakuDx();
@@ -108,7 +108,7 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 		pcmemHokanWord = NULL;
 	}
 
-	/* 入力補完ウィンドウ作成 */
+	// 入力補完ウィンドウ作成
 	// 以前はエディタ起動時に作成していたが必要になってからここで作成するようにした。
 	// エディタ起動時だとエディタ可視化の途中になぜか不可視の入力補完ウィンドウが一時的にフォアグラウンドになって、
 	// タブバーに新規タブが追加されるときのタブ切替でタイトルバーがちらつく（一瞬非アクティブ表示になるのがはっきり見える）ことがあった。
@@ -134,7 +134,7 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 		m_pTypeData->m_bUseHokanByKeyword,
 		pcmemHokanWord
 	);
-	/* 補完候補の数によって動作を変える */
+	// 補完候補の数によって動作を変える
 	if (nKouhoNum <= 0) {				//	候補無し
 		if (m_bHokan) {
 			hokanMgr.Hide();

@@ -157,17 +157,17 @@ void CMarkMgr::Flush(void)
 */
 void CAutoMarkMgr::Add(const CMark& m)
 {
-	//	現在位置が途中の時
+	// 現在位置が途中の時
 	if (m_nCurpos < (int)m_cMarkChain.size()) {
-		//	現在位置まで要素を削除
+		// 現在位置まで要素を削除
 		m_cMarkChain.erase( m_cMarkChain.begin() + m_nCurpos, m_cMarkChain.end() );
 	}
 
-	//	要素の追加
+	// 要素の追加
 	m_cMarkChain.push_back(m);
 	++m_nCurpos;
 
-	//	規定数を超えてしまうときの対応
+	// 規定数を超えてしまうときの対応
 	Expire();
 }
 
@@ -183,7 +183,7 @@ void CAutoMarkMgr::Expire(void)
 		return;
 	}
 
-	//	最大値を超えている場合
+	// 最大値を超えている場合
 	m_cMarkChain.erase( m_cMarkChain.begin(), m_cMarkChain.begin() + range );
 	m_nCurpos -= range;
 	if (m_nCurpos < 0) {

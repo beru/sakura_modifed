@@ -25,7 +25,7 @@
 
 #include "view/colors/CColorStrategy.h"
 
-class CColor_Select : public CColorStrategy{
+class CColor_Select : public CColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_SELECT; }
 	// êFë÷Ç¶
@@ -45,7 +45,7 @@ private:
 	CLogicInt		m_nSelectEnd;
 };
 
-class CColor_Found : public CColorStrategy{
+class CColor_Found : public CColorStrategy {
 public:
 	CColor_Found();
 	virtual EColorIndexType GetStrategyColor() const

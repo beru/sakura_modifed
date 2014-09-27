@@ -28,10 +28,9 @@
 #include "EColorIndexType.h"
 #include "uiparts/CGraphics.h"
 
-class	CEditView;
+class CEditView;
 
 bool _IsPosKeywordHead(const CStringRef& cStr, int nPos);
-
 
 //! 正規表現キーワードのEColorIndexType値を作る関数
 inline EColorIndexType ToColorIndexType_RegularExpression(const int nRegexColorIndex)
@@ -182,7 +181,7 @@ class CColor_SingleQuote;
 class CColor_DoubleQuote;
 class CColor_Heredoc;
 
-class CColorStrategyPool : public TSingleton<CColorStrategyPool>{
+class CColorStrategyPool : public TSingleton<CColorStrategyPool> {
 	friend class TSingleton<CColorStrategyPool>;
 	CColorStrategyPool();
 	virtual ~CColorStrategyPool();

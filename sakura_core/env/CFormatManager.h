@@ -29,14 +29,14 @@
 // 要先行定義
 // #include "DLLSHAREDATA.h"
 
-//!書式管理
+//! 書式管理
 class CFormatManager{
 public:
 	CFormatManager()
 	{
 		m_pShareData = &GetDllShareData();
 	}
-	//書式 //@@@ 2002.2.9 YAZAKI
+	// 書式 //@@@ 2002.2.9 YAZAKI
 	// 共有DLLSHAREDATA依存
 	const TCHAR* MyGetDateFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen );
 	const TCHAR* MyGetTimeFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen );

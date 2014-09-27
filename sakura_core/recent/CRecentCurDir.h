@@ -30,12 +30,14 @@
 typedef StaticString<TCHAR, _MAX_PATH> CCurDirString;
 
 //! コマンドの履歴を管理 (RECENT_FOR_CUR_DIR)
-class CRecentCurDir : public CRecentImp<CCurDirString, LPCTSTR>{
+class CRecentCurDir :
+	public CRecentImp<CCurDirString, LPCTSTR>
+{
 public:
-	//生成
+	// 生成
 	CRecentCurDir();
 
-	//オーバーライド
+	// オーバーライド
 	int				CompareItem( const CCurDirString* p1, LPCTSTR p2 ) const;
 	void			CopyItem( CCurDirString* dst, LPCTSTR src ) const;
 	const TCHAR*	GetItemText( int nIndex ) const;

@@ -99,7 +99,7 @@ public:
 	static bool SearchNextWordPosition(
 		const wchar_t*	pLine,
 		CLogicInt		nLineLen,
-		CLogicInt		nIdx,		//	桁数
+		CLogicInt		nIdx,			//	桁数
 		CLogicInt*		pnColumnNew,	//	見つかった位置
 		BOOL			bStopsBothEnds	//	単語の両端で止まる
 	);
@@ -108,7 +108,7 @@ public:
 	static bool SearchNextWordPosition4KW(
 		const wchar_t*	pLine,
 		CLogicInt		nLineLen,
-		CLogicInt		nIdx,		//	桁数
+		CLogicInt		nIdx,			//	桁数
 		CLogicInt*		pnColumnNew,	//	見つかった位置
 		BOOL			bStopsBothEnds	//	単語の両端で止まる
 	);
@@ -124,7 +124,7 @@ protected:
 	static bool _match_charlist( const WCHAR c, const WCHAR *pszList );
 };
 
-BOOL IsURL( const wchar_t*, int, int* );	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
+BOOL IsURL( const wchar_t*, int, int* );			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 BOOL IsMailAddress( const wchar_t*, int, int* );	// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
 
 

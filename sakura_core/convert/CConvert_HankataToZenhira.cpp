@@ -6,11 +6,11 @@
 //                     ƒCƒ“ƒ^[ƒtƒF[ƒX                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//!”¼ŠpƒJƒi¨‘SŠp‚Ð‚ç‚ª‚È
+//! ”¼ŠpƒJƒi¨‘SŠp‚Ð‚ç‚ª‚È
 bool CConvert_HankataToZenhira::DoConvert(CNativeW* pcData)
 {
-	//”¼ŠpƒJƒi¨‘SŠp‚Ð‚ç‚ª‚È
-	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()+1]; //•¶Žš”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
+	// ”¼ŠpƒJƒi¨‘SŠp‚Ð‚ç‚ª‚È
+	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()+1]; // •¶Žš”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
 	int nDstLen = 0;
 	Convert_HankataToZenhira(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nDstLen);
 	pcData->SetString(pBuf, nDstLen);
@@ -18,3 +18,4 @@ bool CConvert_HankataToZenhira::DoConvert(CNativeW* pcData)
 
 	return true;
 }
+

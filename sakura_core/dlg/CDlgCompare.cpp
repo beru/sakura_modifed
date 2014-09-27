@@ -29,12 +29,12 @@
 // ファイル内容比較 CDlgCompare.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12300
 //	IDC_STATIC,						-1,
-	IDOK,							HIDOK_CMP,					//OK
-	IDCANCEL,						HIDCANCEL_CMP,				//キャンセル
-	IDC_BUTTON_HELP,				HIDC_CMP_BUTTON_HELP,		//ヘルプ
-	IDC_CHECK_TILE_H,				HIDC_CMP_CHECK_TILE_H,		//左右に表示
-	IDC_LIST_FILES,					HIDC_CMP_LIST_FILES,		//ファイル一覧
-	IDC_STATIC_COMPARESRC,			HIDC_CMP_STATIC_COMPARESRC,	//ソースファイル
+	IDOK,							HIDOK_CMP,					// OK
+	IDCANCEL,						HIDCANCEL_CMP,				// キャンセル
+	IDC_BUTTON_HELP,				HIDC_CMP_BUTTON_HELP,		// ヘルプ
+	IDC_CHECK_TILE_H,				HIDC_CMP_CHECK_TILE_H,		// 左右に表示
+	IDC_LIST_FILES,					HIDC_CMP_LIST_FILES,		// ファイル一覧
+	IDC_STATIC_COMPARESRC,			HIDC_CMP_STATIC_COMPARESRC,	// ソースファイル
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
@@ -49,10 +49,10 @@ static const SAnchorList anchorList[] = {
 
 CDlgCompare::CDlgCompare()
 {
-	/* サイズ変更時に位置を制御するコントロール数 */
+	// サイズ変更時に位置を制御するコントロール数
 	assert( _countof(anchorList) == _countof(m_rcItems) );
 
-	m_bCompareAndTileHorz = TRUE;	/* 左右に並べて表示 */
+	m_bCompareAndTileHorz = TRUE;	// 左右に並べて表示
 
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -60,7 +60,7 @@ CDlgCompare::CDlgCompare()
 }
 
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgCompare::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
@@ -82,7 +82,7 @@ BOOL CDlgCompare::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「内容比較」のヘルプ */
+		//「内容比較」のヘルプ
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_COMPARE) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -111,20 +111,20 @@ BOOL CDlgCompare::OnBnClicked( int wID )
 //		CloseDialog( 0 );
 //		return TRUE;
 //	To Here Oct. 10, 2000
-	case IDOK:			/* 左右に表示 */
-		/* ダイアログデータの取得 */
+	case IDOK:			// 左右に表示
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), GetData() );
 		return TRUE;
 	case IDCANCEL:
 		::EndDialog( GetHwnd(), FALSE );
 		return TRUE;
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgCompare::SetData( void )
 {
 	HWND			hwndList;
@@ -142,7 +142,7 @@ void CDlgCompare::SetData( void )
 //	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
 //	setlocale ( LC_ALL, "C" );
 
-	/* 現在開いている編集窓のリストをメニューにする */
+	// 現在開いている編集窓のリストをメニューにする
 	nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr( &pEditNodeArr, TRUE );
 	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
@@ -154,7 +154,7 @@ void CDlgCompare::SetData( void )
 		TCHAR		szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
 		for (i = 0; i < nRowNum; ++i) {
-			/* トレイからエディタへの編集ファイル名要求通知 */
+			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessageAny( pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0 );
 			pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
@@ -197,7 +197,7 @@ void CDlgCompare::SetData( void )
 	}
 	List_SetCurSel( hwndList, selIndex );
 
-	/* 左右に並べて表示 */
+	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
 	if (TRUE  == m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
@@ -211,8 +211,8 @@ void CDlgCompare::SetData( void )
 }
 
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgCompare::GetData( void )
 {
 	HWND			hwndList;
@@ -224,15 +224,15 @@ int CDlgCompare::GetData( void )
 		return FALSE;
 	}else {
 		*m_phwndCompareWnd = (HWND)List_GetItemData( hwndList, nItem );
-		/* トレイからエディタへの編集ファイル名要求通知 */
+		// トレイからエディタへの編集ファイル名要求通知
 		::SendMessageAny( *m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0 );
 		pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
 		int nId = CAppNodeManager::getInstance()->GetEditNode( *m_phwndCompareWnd )->GetId();
 		CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1 );
-	
-		/* 左右に並べて表示 */
+
+		// 左右に並べて表示
 		m_bCompareAndTileHorz = ::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_TILE_H );
 
 		return TRUE;
@@ -288,7 +288,7 @@ BOOL CDlgCompare::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 BOOL CDlgCompare::OnSize( WPARAM wParam, LPARAM lParam )
 {
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	CDialog::OnSize( wParam, lParam );
 
 	::GetWindowRect( GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog );

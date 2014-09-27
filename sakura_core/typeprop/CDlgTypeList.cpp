@@ -66,7 +66,7 @@ const DWORD p_helpids[] = {	//12700
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgTypeList::DoModal( HINSTANCE hInstance, HWND hwndParent, SResult* psResult )
 {
 	int	nRet;
@@ -105,7 +105,7 @@ BOOL CDlgTypeList::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「タイプ別設定一覧」のヘルプ */
+		//「タイプ別設定一覧」のヘルプ
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TYPE_LIST) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -150,7 +150,7 @@ BOOL CDlgTypeList::OnBnClicked( int wID )
 		DelType();
 		return TRUE;
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 
 }
@@ -169,7 +169,7 @@ BOOL CDlgTypeList::OnActivate( WPARAM wParam, LPARAM lParam )
 		break;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnActivate( wParam, lParam );
 }
 
@@ -287,7 +287,7 @@ INT_PTR CDlgTypeList::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgTypeList::SetData( void )
 {
 	SetData(m_nSettingType.GetIndex());
@@ -312,18 +312,18 @@ void CDlgTypeList::SetData( int selIdx )
 	if (GetDllShareData().m_nTypesCount <= selIdx) {
 		selIdx = GetDllShareData().m_nTypesCount - 1;
 	}
-	List_ResetContent( hwndList );	/* リストを空にする */
+	List_ResetContent( hwndList );	// リストを空にする
 	for (nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
-		if (type->m_szTypeExts[0] != _T('\0')) {		/* タイプ属性：拡張子リスト */
+		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s( szText, _T("%ts ( %ts )"),
-				type->m_szTypeName,	/* タイプ属性：名称 */
-				type->m_szTypeExts	/* タイプ属性：拡張子リスト */
+				type->m_szTypeName,	// タイプ属性：名称
+				type->m_szTypeExts	// タイプ属性：拡張子リスト
 			);
 		}else {
 			auto_sprintf_s( szText, _T("%ts"),
-				type->m_szTypeName	/* タイプ属性：拡称 */
+				type->m_szTypeName	// タイプ属性：拡称
 			);
 		}
 		::List_AddString( hwndList, szText );
@@ -672,7 +672,7 @@ bool CDlgTypeList::DelType()
 }
 
 
-/*! 再帰的レジストリコピー */
+//! 再帰的レジストリコピー
 int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstring& destPath)
 {
 	int errorCode;
@@ -730,7 +730,7 @@ int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstr
 	return errorCode;
 }
 
-/*! 再帰的レジストリ削除 */
+//! 再帰的レジストリ削除
 int DeleteRegistry(HKEY root, const tstring& path)
 {
 	int errorCode;

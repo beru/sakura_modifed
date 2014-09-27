@@ -53,11 +53,11 @@ CLogicInt CViewCalc::LineColumnToIndex( const CLayout* pcLayout, CLayoutInt nCol
 
 
 
-/* 指定された桁に対応する行のデータ内の位置を調べる Ver0 */
-/* 指定された桁より、行が短い場合はpnLineAllColLenに行全体の表示桁数を返す */
-/* それ以外の場合はpnLineAllColLenに０をセットする
-	
-	@@@ 2002.09.28 YAZAKI CLayoutが必要になりました。
+/*
+  指定された桁に対応する行のデータ内の位置を調べる Ver0
+  指定された桁より、行が短い場合はpnLineAllColLenに行全体の表示桁数を返す
+  それ以外の場合はpnLineAllColLenに０をセットする
+  @@@ 2002.09.28 YAZAKI CLayoutが必要になりました。
 */
 CLogicInt CViewCalc::LineColumnToIndex2( const CLayout* pcLayout, CLayoutInt nColumn, CLayoutInt* pnLineAllColLen ) const
 {

@@ -6,10 +6,9 @@
 #include "CGraphics.h"
 #include "util/std_macro.h"
 
-class CGDIStock
-{
+class CGDIStock {
 public:
-	CGDIStock(){}
+	CGDIStock() {}
 	~CGDIStock()
 	{
 		while (!m_vObjects.empty()) {
@@ -390,7 +389,8 @@ static HRGN CreateDropRectRgn(LPCRECT lpRect, SIZE size)
 }
 
 // ドロップ先矩形描画用のブラシを取得する
-static HBRUSH GetDropRectBrush()
+static
+HBRUSH GetDropRectBrush()
 {
 	static HBRUSH s_hBrush = NULL;
 	if (!s_hBrush) {

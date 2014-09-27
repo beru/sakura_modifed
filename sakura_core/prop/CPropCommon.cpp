@@ -145,11 +145,11 @@ CPropCommon::CPropCommon()
 		assert( sizeof(CPropPlugin)    - sizeof(CPropCommon) == 0 );
 	}
 
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 
-	m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
-	m_hwndThis  = NULL;		/* このダイアログのハンドル */
+	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
+	m_hwndThis  = NULL;		// このダイアログのハンドル
 	m_nPageNum = ID_PROPCOM_PAGENUM_GENERAL;
 	m_nKeywordSet1 = -1;
 
@@ -162,11 +162,11 @@ CPropCommon::~CPropCommon()
 }
 
 
-/* 初期化 */
+// 初期化
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 void CPropCommon::Create( HWND hwndParent, CImageListMgr* pcIcons, CMenuDrawer* pMenuDrawer )
 {
-	m_hwndParent = hwndParent;	/* オーナーウィンドウのハンドル */
+	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_pcIcons = pcIcons;
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
@@ -341,7 +341,7 @@ void CPropCommon::ApplyData( void )
 			STypeConfig type;
 			CDocTypeManager().GetTypeConfig(configIdx, type);
 			//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
-			/* 変更された設定値のコピー */
+			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++) {
 				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];
 			}
@@ -351,7 +351,7 @@ void CPropCommon::ApplyData( void )
 }
 
 
-/* ヘルプ */
+// ヘルプ
 //Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
 void CPropCommon::OnHelp( HWND hwndParent, int nPageID )
 {

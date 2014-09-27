@@ -39,8 +39,8 @@ struct KEYDATAINIT {
 //					m_nFuncCodeArr[7]	// Shift + Ctrl + Alt + Key
 };
 
-//実装補助
-/* KEYDATA配列にデータをセット */
+// 実装補助
+// KEYDATA配列にデータをセット
 static void SetKeyNameArrVal(
 	DLLSHAREDATA*		pShareData,
 	int					nIdx,
@@ -79,7 +79,7 @@ HACCEL CKeyBind::CreateAccerelator(
 	}
 
 	if (nAccelArrNum <= 0) {
-		/* 機能割り当てがゼロ */
+		// 機能割り当てがゼロ
 		return NULL;
 	}
 	ACCEL* pAccelArr = new ACCEL[nAccelArrNum];
@@ -116,7 +116,7 @@ EFunctionCode CKeyBind::GetFuncCode(
 	WORD		nAccelCmd,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
-	BOOL		bGetDefFuncCode /* = TRUE */
+	BOOL		bGetDefFuncCode // = TRUE
 	)
 {
 	int nCmd = (int)LOBYTE(nAccelCmd);
@@ -161,7 +161,7 @@ int CKeyBind::CreateKeyBindList(
 	const WCHAR*	pszCTRL  = LTEXT("Ctrl+");
 	const WCHAR*	pszALT   = LTEXT("Alt+");
 	const WCHAR*	pszTAB   = LTEXT("\t");
-	const WCHAR*	pszCR    = LTEXT("\r\n");	//\r=0x0d=CRを追加
+	const WCHAR*	pszCR    = LTEXT("\r\n");	// \r=0x0d=CRを追加
 
 	cMemList.AppendString( LSW(STR_ERR_DLGKEYBIND1) );
 	cMemList.AppendString( pszCR );
@@ -193,7 +193,7 @@ int CKeyBind::CreateKeyBindList(
 				}
 				auto_strcpy( szFuncName, LTEXT("")/*"---unknown()--"*/ );
 
-//				/* 機能名日本語 */
+//				// 機能名日本語
 //				::LoadString(
 //					hInstance,
 //					pKeyNameArr[i].m_nFuncCodeArr[j],
@@ -202,7 +202,7 @@ int CKeyBind::CreateKeyBindList(
 				cMemList.AppendString( pszTAB );
 				cMemList.AppendString( szFuncNameJapanese );
 
-				/* 機能ID→関数名，機能名日本語 */
+				// 機能ID→関数名，機能名日本語
 				//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 				CSMacroMgr::GetFuncInfoByID(
 					hInstance,
@@ -211,16 +211,16 @@ int CKeyBind::CreateKeyBindList(
 					szFuncNameJapanese
 				);
 
-				/* 関数名 */
+				// 関数名
 				cMemList.AppendString( pszTAB );
 				cMemList.AppendString( szFuncName );
 
-				/* 機能番号 */
+				// 機能番号
 				cMemList.AppendString( pszTAB );
 				auto_sprintf_s( szStr, LTEXT("%d"), iFunc );
 				cMemList.AppendString( szStr );
 
-				/* キーマクロに記録可能な機能かどうかを調べる */
+				// キーマクロに記録可能な機能かどうかを調べる
 				cMemList.AppendString( pszTAB );
 				//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 				if (CSMacroMgr::CanFuncIsKeyMacro( iFunc )) {
@@ -260,7 +260,7 @@ bool CKeyBind::GetKeyStrSub(
 	int			nShiftState,
 	CNativeT&	cMemList,
 	int			nFuncId,
-	BOOL		bGetDefFuncCode /* = TRUE */
+	BOOL		bGetDefFuncCode // = TRUE
 )
 {
 	static const TCHAR*	pszSHIFT = _T("Shift+");
@@ -300,12 +300,12 @@ int CKeyBind::GetKeyStr(
 	KEYDATA*	pKeyNameArr,
 	CNativeT&	cMemList,
 	int			nFuncId,
-	BOOL		bGetDefFuncCode /* = TRUE */
+	BOOL		bGetDefFuncCode // = TRUE
 )
 {
 	cMemList.SetString(_T(""));
 
-	//	先にキー部分を調査する
+	// 先にキー部分を調査する
 	for (int j = 0; j < 8; ++j) {
 		for (int i = MOUSEFUNCTION_KEYBEGIN; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode )) {
@@ -314,7 +314,7 @@ int CKeyBind::GetKeyStr(
 		}
 	}
 
-	//	後にマウス部分を調査する
+	// 後にマウス部分を調査する
 	for (int j = 0; j < 8; ++j) {
 		for (int i = 0; i < MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode )) {
@@ -336,7 +336,7 @@ int CKeyBind::GetKeyStrList(
 	KEYDATA*	pKeyNameArr,
 	CNativeT***	pppcMemList,
 	int			nFuncId,
-	BOOL		bGetDefFuncCode /* = TRUE */
+	BOOL		bGetDefFuncCode // = TRUE
 )
 {
 	int nAssignedKeysNum = 0;
@@ -429,7 +429,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 	TCHAR*      pszLabel,   //!< [in,out] バッファは256以上と仮定
 	const TCHAR*	pszKey,
 	BOOL		bKeyStr,
-	BOOL		bGetDefFuncCode /* = TRUE */
+	BOOL		bGetDefFuncCode // = TRUE
 )
 {
 	const int LABEL_MAX = 256;
@@ -444,12 +444,12 @@ TCHAR* CKeyBind::GetMenuLabel(
 	// アクセスキーの追加	2010/5/17 Uchi
 	_tcsncpy_s( pszLabel, LABEL_MAX, MakeMenuLabel( pszLabel, pszKey ), _TRUNCATE );
 
-	/* 機能に対応するキー名を追加するか */
+	// 機能に対応するキー名を追加するか
 	if (bKeyStr) {
 		CNativeT cMemAccessKey;
 		// 2010.07.11 Moca メニューラベルの「\t」の付加条件変更
 		// [ファイル/フォルダ/ウィンドウ一覧以外]から[アクセスキーがあるときのみ]に付加するように変更
-		/* 機能に対応するキー名の取得 */
+		// 機能に対応するキー名の取得
 		if (GetKeyStr( hInstance, nKeyNameArrNum, pKeyNameArr, cMemAccessKey, nFuncId, bGetDefFuncCode )) {
 			// バッファが足りないときは入れない
 			if (_tcslen( pszLabel ) + cMemAccessKey.GetStringLength() + 1 < LABEL_MAX) {
@@ -640,7 +640,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 	//Feb. 17, 2001 jepro note 2: 順番は2進で下位3ビット[Alt][Ctrl][Shift]の組合せの順(それに2を加えた値)
 	//		0,		1,		 2(000), 3(001),4(010),	5(011),		6(100),	7(101),		8(110),		9(111)
 
-		/* マウスボタン */
+		// マウスボタン
 		//keycode,			keyname,							なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ VKEX_DBL_CLICK,	(LPCTSTR)STR_KEY_BIND_DBL_CLICK,	{ F_SELECTWORD,		F_SELECTWORD,		F_SELECTWORD,			F_SELECTWORD,		F_SELECTWORD,			F_SELECTWORD,		F_SELECTWORD,			F_SELECTWORD }, }, //Feb. 19, 2001 JEPRO Altと右クリックの組合せは効かないので右クリックメニューのキー割り当てをはずした
 		{ VKEX_R_CLICK,		(LPCTSTR)STR_KEY_BIND_R_CLICK,		{ F_MENU_RBUTTON,	F_MENU_RBUTTON,		F_MENU_RBUTTON,			F_MENU_RBUTTON,		F_0,					F_0,				F_0,					F_0 }, },
@@ -654,7 +654,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 		{ VKEX_WHEEL_LEFT,	(LPCTSTR)STR_KEY_BIND_WHEEL_LEFT,	{ F_WHEELLEFT,		F_WHEELLEFT,		F_WHEELLEFT,			F_WHEELLEFT,		F_WHEELLEFT,			F_WHEELLEFT,		F_WHEELLEFT,			F_WHEELLEFT }, },
 		{ VKEX_WHEEL_RIGHT,	(LPCTSTR)STR_KEY_BIND_WHEEL_RIGHT,	{ F_WHEELRIGHT,		F_WHEELRIGHT,		F_WHEELRIGHT,			F_WHEELRIGHT,		F_WHEELRIGHT,			F_WHEELRIGHT,		F_WHEELRIGHT,			F_WHEELRIGHT }, },
 
-		/* ファンクションキー */
+		// ファンクションキー
 		//keycode,	keyname,			なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ VK_F1,	_T("F1" ),			{ F_EXTHTMLHELP,	F_MENU_ALLFUNC,		F_EXTHELP1,				F_ABOUT,			F_HELP_CONTENTS,		F_HELP_SEARCH,		F_0,					F_0 }, },
 		{ VK_F2,	_T("F2" ),			{ F_BOOKMARK_NEXT,	F_BOOKMARK_PREV,	F_BOOKMARK_SET,			F_BOOKMARK_RESET,	F_BOOKMARK_VIEW,		F_0,				F_0,					F_0 }, },
@@ -681,7 +681,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 		{ VK_F23,	_T("F23"),			{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
 		{ VK_F24,	_T("F24"),			{ F_0,				F_0,				F_0,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
 
-		/* 特殊キー */
+		// 特殊キー
 		//keycode,	keyname,			なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ VK_TAB,	_T("Tab"),			{ F_INDENT_TAB,		F_UNINDENT_TAB,		F_NEXTWINDOW,			F_PREVWINDOW,		F_0,					F_0,				F_0,					F_0 }, },
 		{ VK_RETURN,_T("Enter"),		{ F_0,				F_0,				F_COMPARE,				F_0,				F_PROPERTY_FILE,		F_0,				F_0,					F_0 }, },
@@ -699,7 +699,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 		{ VK_PRIOR,	_T("PgUp(RollDn)"),	{ F_1PageUp,		F_1PageUp_Sel,		F_HalfPageUp,			F_HalfPageUp_Sel,	F_1PageUp_BOX,			F_0,				F_HalfPageUp_BOX,		F_0 }, },
 		{ VK_SPACE,	_T("Space"),		{ F_INDENT_SPACE,	F_UNINDENT_SPACE,	F_HOKAN,				F_0,				F_0,					F_0,				F_0,					F_0 }, },
 
-		/* 数字 */
+		// 数字
 		//keycode,	keyname,			なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ '0',		_T("0"),			{ F_0,				F_0,				F_0,					F_0,				F_CUSTMENU_10,			F_CUSTMENU_20,		F_0,					F_0 }, },
 		{ '1',		_T("1"),			{ F_0,				F_0,				F_SHOWTOOLBAR,			F_CUSTMENU_21,		F_CUSTMENU_1,			F_CUSTMENU_11,		F_0,					F_0 }, },
@@ -712,7 +712,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 		{ '8',		_T("8"),			{ F_0,				F_0,				F_0,					F_0,				F_CUSTMENU_8,			F_CUSTMENU_18,		F_0,					F_0 }, },
 		{ '9',		_T("9"),			{ F_0,				F_0,				F_0,					F_0,				F_CUSTMENU_9,			F_CUSTMENU_19,		F_0,					F_0 }, },
 
-		/* アルファベット */
+		// アルファベット
 		//keycode,	keyname,			なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ 'A',		_T("A"),			{ F_0,				F_0,				F_SELECTALL,			F_0,				F_SORT_ASC,				F_0,				F_0,					F_0 }, },
 		{ 'B',		_T("B"),			{ F_0,				F_0,				F_BROWSE,				F_0,				F_0,					F_0,				F_0,					F_0 }, },
@@ -741,7 +741,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 		{ 'Y',		_T("Y"),			{ F_0,				F_0,				F_REDO,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
 		{ 'Z',		_T("Z"),			{ F_0,				F_0,				F_UNDO,					F_0,				F_0,					F_0,				F_0,					F_0 }, },
 
-		/* 記号 */
+		// 記号
 		//keycode,	keyname,			なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
 		{ 0x00bd,	_T("-"),			{ F_0,				F_0,				F_COPYFNAME,			F_SPLIT_V,			F_0,					F_0,				F_0,					F_0 }, },
 		{ 0x00de,	(LPCTSTR)STR_KEY_BIND_HAT_ENG_QT,		{ F_0,				F_0,				F_COPYTAG,				F_0,				F_0,					F_0,				F_0,					F_0 }, },
@@ -837,7 +837,7 @@ void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 //                         実装補助                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/*! KEYDATA配列にデータをセット */
+//! KEYDATA配列にデータをセット
 static void SetKeyNameArrVal(
 	DLLSHAREDATA*		pShareData,
 	int					nIdx,

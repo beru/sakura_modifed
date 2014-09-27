@@ -85,7 +85,7 @@ bool CDllPlugin::InvokePlug( CEditView* view, CPlug& plug_raw, CWSHIfObj::List& 
 
 	CDllPlug& plug = *(static_cast<CDllPlug*>(&plug_raw));
 	if (!plug.m_handler) {
-		//DLL関数の取得
+		// DLL関数の取得
 		ImportTable imp[2] = {
 			{ &plug.m_handler, to_achar( plug.m_sHandler.c_str() ) },
 			{ NULL, 0 }
@@ -182,7 +182,7 @@ BOOL WINAPI CDllPlugin::HandleFunctionCallback(LPCWSTR lpszName, LPVOID lpIfObj,
 	CWSHIfObj* obj = reinterpret_cast<CWSHIfObj*>(lpIfObj);
 	CEditView* view = reinterpret_cast<CEditView*>(lpEditView);
 	if (obj != NULL) {
-		//継承クラスが呼び出される
+		// 継承クラスが呼び出される
 		return obj->HandleFunction(view, (EFunctionCode)ID, Arguments, ArgSize, *Result);
 	}
 	return FALSE;

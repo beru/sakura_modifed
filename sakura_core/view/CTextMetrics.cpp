@@ -194,14 +194,14 @@ int CTextMetrics::CalcTextWidth(
 	return w;
 }
 
-//!文字列のピクセル幅を返す。
+//! 文字列のピクセル幅を返す。
 int CTextMetrics::CalcTextWidth2(
 	const wchar_t* pText, //!< 文字列
 	int nLength,          //!< 文字列長
 	int nHankakuDx        //!< 半角文字の文字間隔
 )
 {
-	//文字間隔配列を生成
+	// 文字間隔配列を生成
 	vector<int> vDxArray;
 	const int* pDxArray = CTextMetrics::GenerateDxArray(
 		&vDxArray,
@@ -210,7 +210,7 @@ int CTextMetrics::CalcTextWidth2(
 		nHankakuDx
 	);
 
-	//ピクセル幅を計算
+	// ピクセル幅を計算
 	return CalcTextWidth(pText, nLength, pDxArray);
 }
 

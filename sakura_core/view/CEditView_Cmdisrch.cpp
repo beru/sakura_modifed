@@ -422,7 +422,7 @@ void CEditView::ISearchExec(bool bNext)
 		m_sSearchPattern
 	);
 	if (nSearchResult == 0) {
-		/*検索結果がない*/
+		// 検索結果がない
 		msg.AppendString(LS(STR_EDITVWISRCH_NOMATCH));
 		SendStatusMessage(msg.GetStringPtr());
 		
@@ -514,7 +514,7 @@ void CEditView::ISearchWordMake(void)
 			//migemoで捜す
 			std::wstring strMigemoWord = m_pcmigemo->migemo_query_w(m_strCurSearchKey.c_str());
 			
-			/* 検索パターンのコンパイル */
+			// 検索パターンのコンパイル
 			const wchar_t* p = strMigemoWord.c_str();
 			m_sSearchPattern.SetPattern(this->GetHwnd(), p, (int)strMigemoWord.size(), m_sCurSearchOption, &m_CurRegexp);
 

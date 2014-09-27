@@ -47,47 +47,47 @@ const DWORD p_helpids[] = {	//13300
 };
 
 struct ctrl_info_t {
-	wchar_t			code;		//入力する文字コード
-	unsigned int	vKey;		//表記
-	TCHAR			name[4];	//名前
-	const TCHAR		*jname;		//説明
+	wchar_t			code;		// 入力する文字コード
+	unsigned int	vKey;		// 表記
+	TCHAR			name[4];	// 名前
+	const TCHAR		*jname;		// 説明
 } static p_ctrl_list[] = {
-	{ 0x0000, 0x00c0, _T("NUL"), _T("")	}, //NULL 空文字
-	{ 0x0001, 'A', _T("SOH"), _T("")	}, //START OF HEADING ヘッダ開始
-	{ 0x0002, 'B', _T("STX"), _T("")	}, //START OF TEXT テキスト開始
-	{ 0x0003, 'C', _T("ETX"), _T("")	}, //END OF TEXT テキスト終了
-	{ 0x0004, 'D', _T("EOT"), _T("")	}, //END OF TRANSMISSION 転送終了
-	{ 0x0005, 'E', _T("ENQ"), _T("")	}, //ENQUIRY 照会
-	{ 0x0006, 'F', _T("ACK"), _T("")	}, //ACKNOWLEDGE 受信OK
-	{ 0x0007, 'G', _T("BEL"), _T("")	}, //BELL 警告(ベル)
-	{ 0x0008, 'H', _T("BS"),  _T("")	}, //BACKSPACE 後退
-	{ 0x0009, 'I', _T("HT"),  _T("")	}, //horizontal tabulation (HT) タブ
-	{ 0x000a, 'J', _T("LF"),  _T("")	},	//LINE FEED (LF); new line (NL); end of line(EOL) 改行
-	{ 0x000b, 'K', _T("VT"),  _T("")	}, //vertical tabulation (VT) 垂直タブ
-	{ 0x000c, 'L', _T("FF"),  _T("")	},	//FORM FEED (FF) 改ページ
-	{ 0x000d, 'M', _T("CR"),  _T("")	}, //CARRIAGE RETURN 復帰
-	{ 0x000e, 'N', _T("SO"),  _T("")	}, //SHIFT OUT シフトアウト
-	{ 0x000f, 'O', _T("SI"),  _T("")	}, //SHIFT IN シフトイン
-	{ 0x0010, 'P', _T("DLE"), _T("")	}, //DATA LINK ESCAPE データリンクエスケープ
-	{ 0x0011, 'Q', _T("DC1"), _T("")    }, //DEVICE CONTROL ONE 装置制御1
-	{ 0x0012, 'R', _T("DC2"), _T("")    }, //DEVICE CONTROL TWO 装置制御2
-	{ 0x0013, 'S', _T("DC3"), _T("")    }, //DEVICE CONTROL THREE 装置制御3
-	{ 0x0014, 'T', _T("DC4"), _T("")    }, //DEVICE CONTROL FOUR 装置制御4
-	{ 0x0015, 'U', _T("NAK"), _T("")	}, //NEGATIVE ACKNOWLEDGE 受信失敗
-	{ 0x0016, 'V', _T("SYN"), _T("")	}, //SYNCHRONOUS IDLE 同期
-	{ 0x0017, 'W', _T("ETB"), _T("")	}, //END OF TRANSMISSION BLOCK 転送ブロック終了
-	{ 0x0018, 'X', _T("CAN"), _T("")	}, //CANCEL キャンセル
-	{ 0x0019, 'Y', _T("EM"),  _T("")	}, //END OF MEDIUM メディア終了
-	{ 0x001a, 'Z', _T("SUB"), _T("")	}, //SUBSTITUTE 置換
-	{ 0x001b, 0x00db, _T("ESC"), _T("")	}, //ESCAPE エスケープ
-	{ 0x001c, 0x00dc, _T("FS"),  _T("") }, //file separator (FS) フォーム区切
-	{ 0x001d, 0x00dd, _T("GS"),  _T("") }, //group separator (GS) グループ区切
-	{ 0x001e, 0x00de, _T("RS"),  _T("") }, //record separator (RS) レコード区切
-	{ 0x001f, 0x00e2, _T("US"),  _T("") }, //unit separator (US) ユニット区切
-	{ 0x007f, 0x00bf, _T("DEL"), _T("")	}, //DELETE 削除
+	{ 0x0000, 0x00c0, _T("NUL"), _T("")	}, // NULL 空文字
+	{ 0x0001, 'A', _T("SOH"), _T("")	}, // START OF HEADING ヘッダ開始
+	{ 0x0002, 'B', _T("STX"), _T("")	}, // START OF TEXT テキスト開始
+	{ 0x0003, 'C', _T("ETX"), _T("")	}, // END OF TEXT テキスト終了
+	{ 0x0004, 'D', _T("EOT"), _T("")	}, // END OF TRANSMISSION 転送終了
+	{ 0x0005, 'E', _T("ENQ"), _T("")	}, // ENQUIRY 照会
+	{ 0x0006, 'F', _T("ACK"), _T("")	}, // ACKNOWLEDGE 受信OK
+	{ 0x0007, 'G', _T("BEL"), _T("")	}, // BELL 警告(ベル)
+	{ 0x0008, 'H', _T("BS"),  _T("")	}, // BACKSPACE 後退
+	{ 0x0009, 'I', _T("HT"),  _T("")	}, // horizontal tabulation (HT) タブ
+	{ 0x000a, 'J', _T("LF"),  _T("")	}, // LINE FEED (LF); new line (NL); end of line(EOL) 改行
+	{ 0x000b, 'K', _T("VT"),  _T("")	}, // vertical tabulation (VT) 垂直タブ
+	{ 0x000c, 'L', _T("FF"),  _T("")	}, // FORM FEED (FF) 改ページ
+	{ 0x000d, 'M', _T("CR"),  _T("")	}, // CARRIAGE RETURN 復帰
+	{ 0x000e, 'N', _T("SO"),  _T("")	}, // SHIFT OUT シフトアウト
+	{ 0x000f, 'O', _T("SI"),  _T("")	}, // SHIFT IN シフトイン
+	{ 0x0010, 'P', _T("DLE"), _T("")	}, // DATA LINK ESCAPE データリンクエスケープ
+	{ 0x0011, 'Q', _T("DC1"), _T("")    }, // DEVICE CONTROL ONE 装置制御1
+	{ 0x0012, 'R', _T("DC2"), _T("")    }, // DEVICE CONTROL TWO 装置制御2
+	{ 0x0013, 'S', _T("DC3"), _T("")    }, // DEVICE CONTROL THREE 装置制御3
+	{ 0x0014, 'T', _T("DC4"), _T("")    }, // DEVICE CONTROL FOUR 装置制御4
+	{ 0x0015, 'U', _T("NAK"), _T("")	}, // NEGATIVE ACKNOWLEDGE 受信失敗
+	{ 0x0016, 'V', _T("SYN"), _T("")	}, // SYNCHRONOUS IDLE 同期
+	{ 0x0017, 'W', _T("ETB"), _T("")	}, // END OF TRANSMISSION BLOCK 転送ブロック終了
+	{ 0x0018, 'X', _T("CAN"), _T("")	}, // CANCEL キャンセル
+	{ 0x0019, 'Y', _T("EM"),  _T("")	}, // END OF MEDIUM メディア終了
+	{ 0x001a, 'Z', _T("SUB"), _T("")	}, // SUBSTITUTE 置換
+	{ 0x001b, 0x00db, _T("ESC"), _T("")	}, // ESCAPE エスケープ
+	{ 0x001c, 0x00dc, _T("FS"),  _T("") }, // file separator (FS) フォーム区切
+	{ 0x001d, 0x00dd, _T("GS"),  _T("") }, // group separator (GS) グループ区切
+	{ 0x001e, 0x00de, _T("RS"),  _T("") }, // record separator (RS) レコード区切
+	{ 0x001f, 0x00e2, _T("US"),  _T("") }, // unit separator (US) ユニット区切
+	{ 0x007f, 0x00bf, _T("DEL"), _T("")	}, // DELETE 削除
 
-	//internal data
-	{ 0x001f, 0x00df, _T("US"),  NULL }	//PC98 "_"  //unit separator (US)
+	// internal data
+	{ 0x001f, 0x00df, _T("US"),  NULL }	// PC98 "_"  //unit separator (US)
 };
 // Feb. 12, 2003 MIK longが抜けていた
 
@@ -99,7 +99,7 @@ CDlgCtrlCode::CDlgCtrlCode()
 	m_nCode = L'\0';
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgCtrlCode::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
@@ -109,7 +109,7 @@ int CDlgCtrlCode::DoModal(
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_CTRLCODE, lParam );
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgCtrlCode::SetData( void )
 {
 	HWND	hwndWork;
@@ -119,7 +119,7 @@ void CDlgCtrlCode::SetData( void )
 
 	// リスト
 	hwndWork = ::GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
-	ListView_DeleteAllItems( hwndWork );  /* リストを空にする */
+	ListView_DeleteAllItems( hwndWork );  // リストを空にする
 
 	// 行選択
 	lngStyle = ListView_GetExtendedListViewStyle( hwndWork );
@@ -231,7 +231,7 @@ BOOL CDlgCtrlCode::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	col.iSubItem = 3;
 	ListView_InsertColumn( hwndList, 3, &col );
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnInitDialog( GetHwnd(), wParam, lParam );
 }
 
@@ -309,7 +309,7 @@ BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
 		}
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnNotify( wParam, lParam );
 }
 

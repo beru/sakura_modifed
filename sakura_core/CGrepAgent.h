@@ -31,7 +31,7 @@ class CGrepEnumKeys;
 class CGrepEnumFiles;
 class CGrepEnumFolders;
 
-struct SGrepOption{
+struct SGrepOption {
 	bool		bGrepSubFolder;			//!< サブフォルダからも検索する
 	ECodeType	nGrepCharSet;			//!< 文字コードセット選択
 	bool		bGrepOutputLine;		//!< true: ヒット行を出力 / false: ヒット部分を出力
@@ -53,7 +53,7 @@ struct SGrepOption{
 
 //	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 //	Mar. 28, 2004 genta DoGrepFileから不要な引数を削除
-class CGrepAgent : public CDocListenerEx{
+class CGrepAgent : public CDocListenerEx {
 public:
 	CGrepAgent();
 
@@ -61,7 +61,8 @@ public:
 	ECallbackResult OnBeforeClose();
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
-	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
+	static
+	void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
 
 	// Grep実行
 	DWORD DoGrep(

@@ -256,7 +256,7 @@ void CViewCommander::Command_RIGHT( bool bSelect, bool bIgnoreCurrentSelection, 
 		// 対応するため、現在行のデータを取得を移動
 		if (!bIgnoreCurrentSelection) {
 			if (bSelect && ! si.IsTextSelected()) {
-				/* 現在のカーソル位置から選択を開始する */
+				// 現在のカーソル位置から選択を開始する 
 				si.BeginSelectArea();
 			}
 			if (!bSelect) {
@@ -513,7 +513,7 @@ try_again:;
 		GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord
 	);
 	if (nResult) {
-		/* 行が変わった */
+		// 行が変わった
 		if (ptLayoutNew.y != nCurLine) {
 			pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( ptLayoutNew.GetY2() );
 			if (!pcLayout) {
@@ -622,7 +622,7 @@ void CViewCommander::Command_GOLINETOP(
 			nPosX_Logic = 0;
 		}
 		
-		if (0 == nPosX_Logic) nPosY_Layout = ptCaretPos.y;	/* 物理行の移動なし */
+		if (0 == nPosX_Logic) nPosY_Layout = ptCaretPos.y;	// 物理行の移動なし
 		
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		CLayoutInt nPosX_Layout = m_pCommanderView->LineIndexToColumn( pcLayout, nPosX_Logic );

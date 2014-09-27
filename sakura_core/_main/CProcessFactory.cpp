@@ -92,7 +92,7 @@ CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPCTSTR lpCmdLine )
 */
 bool CProcessFactory::IsValidVersion()
 {
-	/* Windowsバージョンのチェック */
+	// Windowsバージョンのチェック
 	COsVersionInfo cOsVer(true);	// 初期化を行う
 	if (cOsVer.GetVersion()) {
 		if (!cOsVer.OsIsEnableVersion()) {
@@ -116,7 +116,7 @@ bool CProcessFactory::IsValidVersion()
 		return false;
 	}
 
-	/* 拡張命令セットのチェック */
+	// 拡張命令セットのチェック
 #ifdef USE_SSE2
 	if (cOsVer._SupportSSE2()) {
 	}else {
@@ -176,7 +176,7 @@ bool CProcessFactory::StartControlProcess()
 {
 	MY_RUNNINGTIMER(cRunningTimer,"StartControlProcess" );
 
-	//	プロセスの起動
+	// プロセスの起動
 	PROCESS_INFORMATION p;
 	STARTUPINFO s;
 
@@ -189,13 +189,13 @@ bool CProcessFactory::StartControlProcess()
 	s.cbReserved2 = 0;
 	s.lpReserved2 = NULL;
 
-	TCHAR szCmdLineBuf[1024];	//	コマンドライン
-	TCHAR szEXE[MAX_PATH + 1];	//	アプリケーションパス名
+	TCHAR szCmdLineBuf[1024];	// コマンドライン
+	TCHAR szEXE[MAX_PATH + 1];	// アプリケーションパス名
 
 	::GetModuleFileName( NULL, szEXE, _countof( szEXE ));
 	::auto_sprintf_s( szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE ); // ""付加
 
-	//常駐プロセス起動
+	// 常駐プロセス起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
 #ifdef _DEBUG
 //	dwCreationFlag |= DEBUG_PROCESS; //2007.09.22 kobake デバッグ用フラグ
@@ -213,7 +213,7 @@ bool CProcessFactory::StartControlProcess()
 		&p					// プロセス情報
 	);
 	if (!bCreateResult) {
-		//	失敗
+		// 失敗
 		TCHAR* pMsg;
 		::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
 						FORMAT_MESSAGE_IGNORE_INSERTS |
@@ -226,7 +226,7 @@ bool CProcessFactory::StartControlProcess()
 						NULL
 		);
 		ErrorMessage( NULL, _T("\'%ts\'\nプロセスの起動に失敗しました。\n%ts"), szEXE, pMsg );
-		::LocalFree( (HLOCAL)pMsg );	//	エラーメッセージバッファを解放
+		::LocalFree( (HLOCAL)pMsg );	// エラーメッセージバッファを解放
 		return false;
 	}
 
@@ -235,7 +235,7 @@ bool CProcessFactory::StartControlProcess()
 	// Note: この待ちにより、ここで起動したコントロールプロセスが競争に生き残れなかった場合でも、
 	// 唯一生き残ったコントロールプロセスが多重起動防止用ミューテックスを作成しているはず。
 	//
-	int nResult = ::WaitForInputIdle( p.hProcess, 10000 );	//	最大10秒間待つ
+	int nResult = ::WaitForInputIdle( p.hProcess, 10000 );	// 最大10秒間待つ
 	if (0 != nResult) {
 		ErrorMessage( NULL, _T("\'%ls\'\nコントロールプロセスの起動に失敗しました。"), szEXE );
 		::CloseHandle( p.hThread );

@@ -36,7 +36,9 @@
 #include "window/CEditWnd.h"
 #include "view/CEditView.h"
 
-class CPluginIfObj : public CWSHIfObj {
+class CPluginIfObj :
+	public CWSHIfObj
+{
 	// 型定義
 	enum FuncId {
 		F_PL_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する

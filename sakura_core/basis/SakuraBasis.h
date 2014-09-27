@@ -90,13 +90,13 @@ typedef CLayoutXInt CKetaXInt;
 #include "CStrictRect.h"
 
 // ロジック単位
-struct SLogicPoint{ CLogicInt x; CLogicInt y; }; // 基底構造体
+struct SLogicPoint { CLogicInt x; CLogicInt y; }; // 基底構造体
 typedef CStrictPoint<SLogicPoint, CLogicInt>	CLogicPoint;
 typedef CRangeBase<CLogicPoint>					CLogicRange;
 typedef CStrictRect<CLogicInt, CLogicPoint>		CLogicRect;
 
 // レイアウト単位
-struct SLayoutPoint{ CLayoutInt x; CLayoutInt y; }; // 基底構造体
+struct SLayoutPoint { CLayoutInt x; CLayoutInt y; }; // 基底構造体
 typedef CStrictPoint<SLayoutPoint, CLayoutInt>	CLayoutPoint;
 typedef CRangeBase<CLayoutPoint>				CLayoutRange;
 typedef CStrictRect<CLayoutInt, CLayoutPoint>	CLayoutRect;
@@ -118,7 +118,7 @@ inline void TwoPointToRange(
 	CRangeBase<POINT_T>* prangeDst,
 	POINT_T pt1,
 	POINT_T pt2
-)
+	)
 {
 	CMyRect rc;
 	TwoPointToRect(&rc,pt1,pt2);
@@ -130,10 +130,10 @@ inline void TwoPointToRange(
 //! 2点を対角とする矩形を求める
 template <class T, class INT_TYPE>
 inline void TwoPointToRect(
-	CStrictRect<INT_TYPE, CStrictPoint<T,INT_TYPE> >*	prcRect,
-	CStrictPoint<T,INT_TYPE>							pt1,
-	CStrictPoint<T,INT_TYPE>							pt2
-)
+	CStrictRect<INT_TYPE, CStrictPoint<T, INT_TYPE> >*	prcRect,
+	CStrictPoint<T, INT_TYPE>							pt1,
+	CStrictPoint<T, INT_TYPE>							pt2
+	)
 {
 	if (pt1.y < pt2.y) {
 		prcRect->top	= pt1.GetY2();

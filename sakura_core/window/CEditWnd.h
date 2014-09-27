@@ -93,8 +93,9 @@ struct STabGroupInfo{
 // 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
 class CEditWnd
-: public TSingleton<CEditWnd>
-, public CDocListenerEx
+	:
+	public TSingleton<CEditWnd>,
+	public CDocListenerEx
 {
 	friend class TSingleton<CEditWnd>;
 	CEditWnd();
@@ -122,8 +123,8 @@ public:
 	);
 
 	void SetDocumentTypeWhenCreate(
-		ECodeType		nCharCode,							//!< [in] 漢字コード
-		bool			bViewMode,							//!< [in] ビューモードで開くかどうか
+		ECodeType		nCharCode,					//!< [in] 漢字コード
+		bool			bViewMode,					//!< [in] ビューモードで開くかどうか
 		CTypeConfig	nDocumentType = CTypeConfig(-1)	//!< [in] 文書タイプ．-1のとき強制指定無し．
 	);
 	void UpdateCaption();
@@ -133,13 +134,13 @@ public:
 	//ドキュメントイベント
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
-	//管理
-	void MessageLoop( void );								/* メッセージループ */
-	LRESULT DispatchEvent( HWND, UINT, WPARAM, LPARAM );	/* メッセージ処理 */
+	// 管理
+	void MessageLoop( void );								// メッセージループ
+	LRESULT DispatchEvent( HWND, UINT, WPARAM, LPARAM );	// メッセージ処理
 
-	//各種イベント
-	LRESULT OnPaint( HWND, UINT, WPARAM, LPARAM );	/* 描画処理 */
-	LRESULT OnSize( WPARAM, LPARAM );	/* WM_SIZE 処理 */
+	// 各種イベント
+	LRESULT OnPaint( HWND, UINT, WPARAM, LPARAM );	// 描画処理
+	LRESULT OnSize( WPARAM, LPARAM );	// WM_SIZE 処理
 	LRESULT OnLButtonUp( WPARAM, LPARAM );
 	LRESULT OnLButtonDown( WPARAM, LPARAM );
 	LRESULT OnMouseMove( WPARAM, LPARAM );
@@ -147,11 +148,11 @@ public:
 	BOOL DoMouseWheel( WPARAM wParam, LPARAM lParam );	// マウスホイール処理	// 2007.10.16 ryoji
 	LRESULT OnHScroll( WPARAM, LPARAM );
 	LRESULT OnVScroll( WPARAM, LPARAM );
-	int	OnClose( HWND hWndFrom );	/* 終了時の処理 */
-	void OnDropFiles( HDROP );	/* ファイルがドロップされた */
-	BOOL OnPrintPageSetting( void );/* 印刷ページ設定 */
+	int	OnClose( HWND hWndFrom );		// 終了時の処理
+	void OnDropFiles( HDROP );			// ファイルがドロップされた
+	BOOL OnPrintPageSetting( void );	// 印刷ページ設定
 	LRESULT OnTimer( WPARAM, LPARAM );	// WM_TIMER 処理	// 2007.04.03 ryoji
-	void OnEditTimer( void );	/* タイマーの処理 */
+	void OnEditTimer( void );			// タイマーの処理
 	void OnCaptionTimer( void );
 	void OnSysMenuTimer( void );
 	void OnCommand( WORD, WORD , HWND );
@@ -164,7 +165,7 @@ public:
 	//                           通知                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//ファイル名変更通知
+	// ファイル名変更通知
 	void ChangeFileNameNotify( const TCHAR* pszTabCaption, const TCHAR* pszFilePath, bool bIsGrep );	//@@@ 2003.05.31 MIK, 2006.01.28 ryoji ファイル名、Grepモードパラメータを追加
 
 
@@ -174,11 +175,11 @@ public:
 	void InitMenu( HMENU, UINT, BOOL );
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
-	void InitMenubarMessageFont(void);	//	メニューバーへのメッセージ表示機能をCEditWndより移管	//	Dec. 4, 2002 genta
-	LRESULT WinListMenu( HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, BOOL bFull );	/*!< ウィンドウ一覧メニュー作成処理 */	// 2006.03.23 fon
-	LRESULT PopupWinList( bool bMousePos );	/*!< ウィンドウ一覧ポップアップ表示処理 */	// 2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
-	void RegisterPluginCommand();			//プラグインコマンドをエディタに登録する
-	void RegisterPluginCommand( int id );	//プラグインコマンドをエディタに登録する
+	void InitMenubarMessageFont(void);		//	メニューバーへのメッセージ表示機能をCEditWndより移管	//	Dec. 4, 2002 genta
+	LRESULT WinListMenu( HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, BOOL bFull );	//!< ウィンドウ一覧メニュー作成処理		2006.03.23 fon
+	LRESULT PopupWinList( bool bMousePos );		//!< ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
+	void RegisterPluginCommand();				//プラグインコマンドをエディタに登録する
+	void RegisterPluginCommand( int id );		//プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand( CPlug* id );	//プラグインコマンドをエディタに登録する
 
 	void SetMenuFuncSel( HMENU hMenu, EFunctionCode nFunc, const WCHAR* sKey, bool flag );				// 表示の動的選択	2010/5/19 Uchi
@@ -187,17 +188,17 @@ public:
 	//                           整形                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void LayoutMainMenu( void );		// メインメニュー					// 2010/5/16 Uchi
-	void LayoutToolBar( void );			/* ツールバーの配置処理 */			// 2006.12.19 ryoji
-	void LayoutFuncKey( void );			/* ファンクションキーの配置処理 */	// 2006.12.19 ryoji
-	void LayoutTabBar( void );			/* タブバーの配置処理 */			// 2006.12.19 ryoji
-	void LayoutStatusBar( void );		/* ステータスバーの配置処理 */		// 2006.12.19 ryoji
-	void EndLayoutBars( BOOL bAdjust = TRUE );	/* バーの配置終了処理 */	// 2006.12.19 ryoji
+	void LayoutToolBar( void );			// ツールバーの配置処理				// 2006.12.19 ryoji
+	void LayoutFuncKey( void );			// ファンクションキーの配置処理		// 2006.12.19 ryoji
+	void LayoutTabBar( void );			// タブバーの配置処理				// 2006.12.19 ryoji
+	void LayoutStatusBar( void );		// ステータスバーの配置処理			// 2006.12.19 ryoji
+	void EndLayoutBars( BOOL bAdjust = TRUE );	// バーの配置終了処理		// 2006.12.19 ryoji
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void PrintPreviewModeONOFF( void );	/* 印刷プレビューモードのオン/オフ */
+	void PrintPreviewModeONOFF( void );	// 印刷プレビューモードのオン/オフ
 	
 	//アイコン
 	void SetWindowIcon( HICON, int);	//	Sep. 10, 2002 genta
@@ -215,10 +216,10 @@ public:
 	//! 自アプリがアクティブかどうか	// 2007.03.08 ryoji
 	bool IsActiveApp() const { return m_bIsActiveApp; }
 
-	//!ツールチップのテキストを取得。2007.09.08 kobake 追加
+	//! ツールチップのテキストを取得。2007.09.08 kobake 追加
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 
-	//!印刷プレビュー中かどうか
+	//! 印刷プレビュー中かどうか
 	bool IsInPreviewMode()
 	{
 		return m_pPrintPreview!=NULL;
@@ -247,14 +248,14 @@ public:
 	void InitAllViews();
 	void Views_RedrawAll();
 	void Views_Redraw();
-	void SetActivePane( int );	/* アクティブなペインを設定 */
-	int GetActivePane( void ) const { return m_nActivePaneIndex; }	/* アクティブなペインを取得 */ //2007.08.26 kobake const追加
-	bool SetDrawSwitchOfAllViews( bool bDraw );					/* すべてのペインの描画スイッチを設定する */	// 2008.06.08 ryoji
-	void RedrawAllViews( CEditView* pcViewExclude );				/* すべてのペインをRedrawする */
+	void SetActivePane( int );	// アクティブなペインを設定
+	int GetActivePane( void ) const { return m_nActivePaneIndex; }	// アクティブなペインを取得		2007.08.26 kobake const追加
+	bool SetDrawSwitchOfAllViews( bool bDraw );						// すべてのペインの描画スイッチを設定する	2008.06.08 ryoji
+	void RedrawAllViews( CEditView* pcViewExclude );				// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
-	BOOL DetectWidthOfLineNumberAreaAllPane( bool bRedraw );	/* すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する） */
-	BOOL WrapWindowWidth( int nPane );	/* 右端で折り返す */	// 2008.06.08 ryoji
-	BOOL UpdateTextWrap( void );		/* 折り返し方法関連の更新 */	// 2008.06.10 ryoji
+	BOOL DetectWidthOfLineNumberAreaAllPane( bool bRedraw );	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
+	BOOL WrapWindowWidth( int nPane );	// 右端で折り返す			2008.06.08 ryoji
+	BOOL UpdateTextWrap( void );		// 折り返し方法関連の更新	2008.06.10 ryoji
 	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
 	void ChangeLayoutParam( bool bShowProgress, CLayoutInt nTabSize, CLayoutInt nMaxLineKetas );
 	//	Aug. 14, 2005 genta
@@ -272,7 +273,7 @@ public:
 	CEditDoc*		GetDocument()           { return m_pcEditDoc; }
 	const CEditDoc*	GetDocument() const     { return m_pcEditDoc; }
 
-	//ビュー
+	// ビュー
 	const CEditView&	GetActiveView() const { return *m_pcEditView; }
 	CEditView&			GetActiveView()       { return *m_pcEditView; }
 	const CEditView&    GetView(int n) const { return *m_pcEditViewArr[n]; }
@@ -296,10 +297,10 @@ protected:
 	};
 
 protected:
-	//ドロップダウンメニュー
+	// ドロップダウンメニュー
 	int	CreateFileDropDownMenu( HWND );	//開く(ドロップダウン)	//@@@ 2002.06.15 MIK
 
-	//タイマー
+	// タイマー
 	void Timer_ONOFF( bool ); /* 更新の開始／停止 20060128 aroka */
 
 	// メニュー
@@ -320,19 +321,19 @@ protected:
 	void DeleteAccelTbl( void ); // ウィンドウ毎のアクセラレータテーブル破棄(Wine用)
 
 public:
-	//D&Dフラグ管理
+	// D&Dフラグ管理
 	void SetDragPosOrg(CMyPoint ptDragPosOrg){ m_ptDragPosOrg=ptDragPosOrg; }
 	void SetDragMode(bool bDragMode){ m_bDragMode = bDragMode; }
 	bool GetDragMode() const{ return m_bDragMode; }
 	const CMyPoint& GetDragPosOrg() const{ return m_ptDragPosOrg; }
 
-	/* IDropTarget実装 */	// 2008.06.20 ryoji
+	// IDropTarget実装		2008.06.20 ryoji
 	STDMETHODIMP DragEnter( LPDATAOBJECT, DWORD, POINTL, LPDWORD );
 	STDMETHODIMP DragOver( DWORD, POINTL, LPDWORD );
 	STDMETHODIMP DragLeave( void );
 	STDMETHODIMP Drop( LPDATAOBJECT, DWORD, POINTL, LPDWORD );
 
-	//フォーカス管理
+	// フォーカス管理
 	int GetCurrentFocus() const{ return m_nCurrentFocus; }
 	void SetCurrentFocus(int n){ m_nCurrentFocus = n; }
 
@@ -343,14 +344,14 @@ public:
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 private:
-	//自ウィンドウ
+	// 自ウィンドウ
 	HWND			m_hWnd;
 
-	//親ウィンドウ
+	// 親ウィンドウ
 	HWND			m_hwndParent;
 
 public:
-	//子ウィンドウ
+	// 子ウィンドウ
 	CMainToolBar	m_cToolbar;			//!< ツールバー
 	CTabWnd			m_cTabWnd;			//!< タブウインドウ	//@@@ 2003.05.31 MIK
 	CFuncKeyWnd		m_CFuncKeyWnd;		//!< ファンクションバー
@@ -361,7 +362,7 @@ public:
 	CEditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
 	CViewFont*		m_pcViewFont;		//!< フォント
 
-	//ダイアログ達
+	// ダイアログ達
 	CDlgFind		m_cDlgFind;			// 「検索」ダイアログ
 	CDlgReplace		m_cDlgReplace;		// 「置換」ダイアログ
 	CDlgJump		m_cDlgJump;			// 「指定行へジャンプ」ダイアログ
@@ -380,17 +381,17 @@ private:
 	int				m_nEditViewCount;	//!< 有効なビューの数
 	const int		m_nEditViewMaxCount;//!< ビューの最大数=4
 
-	//共有データ
+	// 共有データ
 	DLLSHAREDATA*	m_pShareData;
 
-	//ヘルパ
+	// ヘルパ
 	CMenuDrawer		m_CMenuDrawer;
 
-	//メッセージID
+	// メッセージID
 	UINT			m_uMSIMEReconvertMsg;
 	UINT			m_uATOKReconvertMsg;
 
-	//状態
+	// 状態
 	bool			m_bIsActiveApp;		//!< 自アプリがアクティブかどうか	// 2007.03.08 ryoji
 	LPTSTR			m_pszLastCaption;
 	LPTSTR			m_pszMenubarMessage; //!< メニューバー右端に表示するメッセージ
@@ -405,17 +406,17 @@ private:
 	HACCEL			m_hAccelWine;		//!< ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
 	HACCEL			m_hAccel;			//!< アクセラレータテーブル(共有 or ウィンドウ毎)
 
-	//フォント・イメージ
+	// フォント・イメージ
 	HFONT			m_hFontCaretPosInfo;		//!< キャレットの行桁位置表示用フォント
 	int				m_nCaretPosInfoCharWidth;	//!< キャレットの行桁位置表示用フォントの幅
 	int				m_nCaretPosInfoCharHeight;	//!< キャレットの行桁位置表示用フォントの高さ
 
-	//D&Dフラグ
+	// D&Dフラグ
 	bool			m_bDragMode;
 	CMyPoint		m_ptDragPosOrg;
 	CDropTarget*	m_pcDropTarget;
 
-	//その他フラグ
+	// その他フラグ
 	BOOL				m_bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
 	EIconClickStatus	m_IconClicked;
 

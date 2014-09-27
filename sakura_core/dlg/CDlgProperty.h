@@ -37,16 +37,15 @@ class CDlgProperty;
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CDlgProperty : public CDialog
-{
+class CDlgProperty : public CDialog {
 public:
-	int DoModal( HINSTANCE, HWND, LPARAM  );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, LPARAM  );	// モーダルダイアログの表示
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
 	BOOL OnBnClicked( int );
-	void SetData( void );	/* ダイアログデータの設定 */
+	void SetData( void );	// ダイアログデータの設定
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 };
 

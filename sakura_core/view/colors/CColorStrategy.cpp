@@ -39,8 +39,6 @@
 #include "types/CTypeSupport.h"
 
 
-
-
 bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
 {
 	return (nPos==0 || !IS_KEYWORD_CHAR(cStr.At(nPos-1)));

@@ -149,7 +149,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 			switch(pNMHDR->code) {
 			case NM_DBLCLK:
 //				MYTRACE( _T("NM_DBLCLK     \n") );
-				/* リスト中で選択されているキーワードを編集する */
+				// リスト中で選択されているキーワードを編集する
 				Edit_List_KeyWord( hwndDlg, hwndLIST_KEYWORD );
 				return TRUE;
 			case LVN_BEGINLABELEDIT:

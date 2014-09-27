@@ -31,11 +31,11 @@ void CViewFont::CreateFont(const LOGFONT *plf)
 {
 	LOGFONT	lf;
 
-	/* フォント作成 */
+	// フォント作成
 	lf = *plf;
 	m_hFont_HAN = CreateFontIndirect( &lf );
 
-	/* 太字フォント作成 */
+	// 太字フォント作成
 	lf = *plf;
 	lf.lfWeight += 300;
 	if (1000 < lf.lfWeight) {
@@ -43,12 +43,12 @@ void CViewFont::CreateFont(const LOGFONT *plf)
 	}
 	m_hFont_HAN_BOLD = CreateFontIndirect( &lf );
 
-	/* 下線フォント作成 */
+	// 下線フォント作成
 	lf = *plf;
 	lf.lfUnderline = TRUE;
 	m_hFont_HAN_UL = CreateFontIndirect( &lf );
 
-	/* 太字下線フォント作成 */
+	// 太字下線フォント作成
 	lf = *plf;
 	lf.lfUnderline = TRUE;
 	lf.lfWeight += 300;
@@ -58,8 +58,7 @@ void CViewFont::CreateFont(const LOGFONT *plf)
 	m_hFont_HAN_BOLD_UL = CreateFontIndirect( &lf );
 }
 
-/*! フォント削除
-*/
+// フォント削除
 void CViewFont::DeleteFont()
 {
 	DeleteObject( m_hFont_HAN );
@@ -74,14 +73,14 @@ void CViewFont::DeleteFont()
 */
 HFONT CViewFont::ChooseFontHandle( SFontAttr sFontAttr ) const
 {
-	if (sFontAttr.m_bBoldFont) {	/* 太字か */
-		if (sFontAttr.m_bUnderLine) {	/* 下線か */
+	if (sFontAttr.m_bBoldFont) {		// 太字か
+		if (sFontAttr.m_bUnderLine) {	// 下線か
 			return m_hFont_HAN_BOLD_UL;
 		}else {
 			return m_hFont_HAN_BOLD;
 		}
 	}else {
-		if (sFontAttr.m_bUnderLine) {	/* 下線か */
+		if (sFontAttr.m_bUnderLine) {	// 下線か
 			return m_hFont_HAN_UL;
 		}else {
 			return m_hFont_HAN;

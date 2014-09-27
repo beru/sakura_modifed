@@ -79,14 +79,16 @@ private:
 class CSearchAgent{
 public:
 	// 文字列検索
-	static const wchar_t* SearchString(
+	static
+	const wchar_t* SearchString(
 		const wchar_t*	pLine,
 		int				nLineLen,
 		int				nIdxPos,
 		const CSearchStringPattern& pattern
 	);
 	// 単語単位で文字列検索
-	static const wchar_t* SearchStringWord(
+	static
+	const wchar_t* SearchStringWord(
 		const wchar_t*	pLine,
 		int				nLineLen,
 		int				nIdxPos,
@@ -96,13 +98,15 @@ public:
 	);
 	
 	// 検索条件の情報
-	static void CreateCharCharsArr(
+	static
+	void CreateCharCharsArr(
 		const wchar_t*	pszPattern,
 		int				nSrcLen,
 		int**			ppnCharCharsArr
 	);
 	
-	static void CreateWordList(
+	static
+	void CreateWordList(
 		std::vector<std::pair<const wchar_t*, CLogicInt> >&	searchWords,
 		const wchar_t*	pszPattern,
 		int	nPatternLen
@@ -111,11 +115,11 @@ public:
 public:
 	CSearchAgent(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
-	bool WhereCurrentWord( CLogicInt , CLogicInt , CLogicInt* , CLogicInt*, CNativeW*, CNativeW* );	/* 現在位置の単語の範囲を調べる */
+	bool WhereCurrentWord( CLogicInt , CLogicInt , CLogicInt* , CLogicInt*, CNativeW*, CNativeW* );	// 現在位置の単語の範囲を調べる
 
-	bool PrevOrNextWord( CLogicInt , CLogicInt , CLogicInt* , BOOL bLEFT, BOOL bStopsBothEnds );	/* 現在位置の左右の単語の先頭位置を調べる */
+	bool PrevOrNextWord( CLogicInt , CLogicInt , CLogicInt* , BOOL bLEFT, BOOL bStopsBothEnds );	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-	int SearchWord( CLogicPoint ptSerachBegin, ESearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern ); /* 単語検索 */
+	int SearchWord( CLogicPoint ptSerachBegin, ESearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern ); // 単語検索
 
 	void ReplaceData( DocLineReplaceArg* );
 private:

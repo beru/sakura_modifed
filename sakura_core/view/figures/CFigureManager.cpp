@@ -70,8 +70,7 @@ CFigure& CFigureManager::GetFigure(const wchar_t* pText)
 	return *m_vFiguresDisp.back();
 }
 
-/*! 設定更新
-*/
+//! 設定更新
 void CFigureManager::OnChangeSetting(void)
 {
 	m_vFiguresDisp.clear();

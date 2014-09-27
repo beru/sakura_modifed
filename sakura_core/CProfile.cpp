@@ -63,14 +63,14 @@ void CProfile::Init( void )
 */
 void CProfile::ReadOneline(
 	const wstring& line
-)
+	)
 {
-	//	空行を読み飛ばす
+	// 空行を読み飛ばす
 	if (line.empty()) {
 		return;
 	}
 
-	//コメント行を読みとばす
+	// コメント行を読みとばす
 	if (0 == line.compare( 0, 2, LTEXT("//") )) {
 		return;
 	}
@@ -192,7 +192,7 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 			CUtf8::UTF8ToUnicode( &cmLine );
 			line = (const wchar_t*)cmLine.GetRawPtr();
 
-			//解析
+			// 解析
 			ReadOneline(line);
 		}
 	}
@@ -227,11 +227,11 @@ bool CProfile::WriteProfile(
 	}
 	auto iterEnd = m_ProfileData.end();
 	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
-		//セクション名を書き込む
+		// セクション名を書き込む
 		vecLine.push_back( LTEXT("[") + iter->strSectionName + LTEXT("]") );
 		auto mapiterEnd = iter->mapEntries.end();
 		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
-			//エントリを書き込む
+			// エントリを書き込む
 			vecLine.push_back( mapiter->first + LTEXT("=") + mapiter->second );
 		}
 		vecLine.push_back( LTEXT("") );

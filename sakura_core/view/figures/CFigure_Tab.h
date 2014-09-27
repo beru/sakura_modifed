@@ -26,7 +26,7 @@
 #include "view/figures/CFigureStrategy.h"
 
 //! ƒ^ƒu•`‰æ
-class CFigure_Tab : public CFigureSpace{
+class CFigure_Tab : public CFigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText) const;

@@ -35,10 +35,11 @@
 	@date 2005.04.23 genta 管理数の最大値を指定する引数追加
 */
 CSortedTagJumpList::CSortedTagJumpList(int max)
-	: m_pTagjump( NULL ),
-	  m_nCount( 0 ),
-	  m_bOverflow( false ),
-	  m_MAX_TAGJUMPLIST( max )
+	:
+	m_pTagjump( NULL ),
+	m_nCount( 0 ),
+	m_bOverflow( false ),
+	m_MAX_TAGJUMPLIST( max )
 {
 	// id==0 を 空文字列にする
 	m_baseDirArr.push_back(_T(""));
@@ -116,7 +117,7 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 	// 3つめはSJIS用保険
 	ACHAR typeStr[] = {type, '\0', '\0'};
 
-	//アイテムを作成する。
+	// アイテムを作成する。
 	item = (TagJumpInfo*)malloc( sizeof( TagJumpInfo ) );
 	if (!item) {
 		return FALSE;
@@ -130,12 +131,12 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 	item->next     = NULL;
 	item->baseDirId = baseDirId;
 
-	//文字列長ガード
+	// 文字列長ガード
 	if (_tcslen( item->keyword  ) >= MAX_TAG_STRING_LENGTH) item->keyword[  MAX_TAG_STRING_LENGTH-1 ] = 0;
 	if (_tcslen( item->filename ) >= MAX_TAG_STRING_LENGTH) item->filename[ MAX_TAG_STRING_LENGTH-1 ] = 0;
 	if (_tcslen( item->note     ) >= MAX_TAG_STRING_LENGTH) item->note[     MAX_TAG_STRING_LENGTH-1 ] = 0;
 
-	//アイテムをリストの適当な位置に追加する。
+	// アイテムをリストの適当な位置に追加する。
 	prev = NULL;
 	for (p = m_pTagjump; p; p = p->next) {
 		if (_tcscmp( p->keyword, item->keyword ) > 0) {

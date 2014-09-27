@@ -41,10 +41,10 @@ typedef int PlugId;
 #define PII_L10NDIR					_T("local")
 #define PII_L10NFILEBASE			_T("plugin_")
 #define PII_L10NFILEEXT				_T(".def")
-//オプションファイル拡張子（オプションファイル＝個別フォルダ名＋拡張子）
+// オプションファイル拡張子（オプションファイル＝個別フォルダ名＋拡張子）
 #define PII_OPTFILEEXT				_T(".ini")
 
-//プラグイン定義ファイル・キー文字列
+// プラグイン定義ファイル・キー文字列
 #define	PII_PLUGIN					L"Plugin"		//共通情報
 #define	PII_PLUGIN_ID				L"Id"			//ID：プラグインID
 #define	PII_PLUGIN_NAME				L"Name"			//名前：プラグイン名
@@ -63,7 +63,7 @@ typedef int PlugId;
 
 class CPlugin;
 
-//プラグ（プラグイン内の処理単位）クラス
+// プラグ（プラグイン内の処理単位）クラス
 class CPlug
 {
 	//型定義

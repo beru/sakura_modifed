@@ -80,7 +80,7 @@ INT_PTR CALLBACK CPropTab::DlgProc_page(
 }
 //	To Here Jun. 2, 2001 genta
 
-/* メッセージ処理 */
+// メッセージ処理
 INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	NMHDR*		pNMHDR;
@@ -88,12 +88,12 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Tab */
+		// ダイアログデータの設定 Tab
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
+		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 		return TRUE;
 		
 	case WM_NOTIFY:
@@ -106,7 +106,7 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 				OnHelp( hwndDlg, IDD_PROP_TAB );
 				return TRUE;
 			case PSN_KILLACTIVE:
-				/* ダイアログデータの取得 Tab */
+				// ダイアログデータの取得 Tab
 				GetData( hwndDlg );
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -114,14 +114,14 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 				m_nPageNum = ID_PROPCOM_PAGENUM_TAB;
 				return TRUE;
 			}
-//			break;	/* default */
+//			break;	// default
 //		}
-		break;	/* WM_NOTIFY */
+		break;	// WM_NOTIFY
 
 	case WM_COMMAND:
 		{
-			WORD wNotifyCode = HIWORD(wParam);	/* 通知コード */
-			WORD wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+			WORD wNotifyCode = HIWORD(wParam);	// 通知コード
+			WORD wID = LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 			if (wNotifyCode == BN_CLICKED) {
 				switch (wID) {
 				case IDC_CHECK_DispTabWnd:
@@ -154,7 +154,7 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -177,7 +177,7 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CPropTab::SetData( HWND hwndDlg )
 {
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
@@ -212,7 +212,7 @@ void CPropTab::SetData( HWND hwndDlg )
 	EnableTabPropInput(hwndDlg);
 }
 
-/* ダイアログデータの取得 */
+// ダイアログデータの取得
 int CPropTab::GetData( HWND hwndDlg )
 {
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動

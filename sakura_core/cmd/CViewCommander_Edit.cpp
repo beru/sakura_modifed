@@ -31,7 +31,7 @@
 void CViewCommander::Command_WCHAR( wchar_t wcChar, bool bConvertEOL )
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	if (selInfo.IsMouseSelecting()) {	/* マウスによる範囲選択中 */
+	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
@@ -83,12 +83,12 @@ void CViewCommander::Command_WCHAR( wchar_t wcChar, bool bConvertEOL )
 						&ptXY
 					);
 
-					/* 指定された桁に対応する行のデータ内の位置を調べる */
+					// 指定された桁に対応する行のデータ内の位置を調べる
 					for (nPos = CLogicInt(0); nPos < nLineLen && nPos < ptXY.GetX2();) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
 						CLogicInt nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nPos );
 
-						/* その他のインデント文字 */
+						// その他のインデント文字
 						if (0 < nCharChars
 						 && pLine[nPos] != L'\0'	// その他のインデント文字に L'\0' は含まれない	// 2009.02.04 ryoji L'\0'がインデントされてしまう問題修正
 						 && typeData->m_szIndentChars[0] != L'\0'
@@ -96,7 +96,7 @@ void CViewCommander::Command_WCHAR( wchar_t wcChar, bool bConvertEOL )
 							wchar_t szCurrent[10];
 							wmemcpy( szCurrent, &pLine[nPos], nCharChars );
 							szCurrent[nCharChars] = L'\0';
-							/* その他のインデント対象文字 */
+							// その他のインデント対象文字
 							if (wcsstr(
 									typeData->m_szIndentChars,
 									szCurrent
@@ -128,9 +128,9 @@ end_of_for:;
 			}
 		}
 	}else {
-		/* テキストが選択されているか */
+		// テキストが選択されているか
 		if (selInfo.IsTextSelected()) {
-			/* 矩形範囲選択中か */
+			// 矩形範囲選択中か
 			if (selInfo.IsBoxSelecting()) {
 				Command_INDENT( wcChar );
 				return;
@@ -223,7 +223,7 @@ end_of_for:;
 void CViewCommander::Command_IME_CHAR( WORD wChar )
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	if (selInfo.IsMouseSelecting()) {	/* マウスによる範囲選択中 */
+	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
@@ -280,11 +280,11 @@ void CViewCommander::Command_IME_CHAR( WORD wChar )
 
 
 //	from CViewCommander_New.cpp
-/* Undo 元に戻す */
+// Undo 元に戻す
 void CViewCommander::Command_UNDO( void )
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	if (selInfo.IsMouseSelecting()) {	/* マウスによる範囲選択中 */
+	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
@@ -302,7 +302,7 @@ void CViewCommander::Command_UNDO( void )
 		}
 	}
 
-	if (!GetDocument()->m_cDocEditor.IsEnableUndo()) {	/* Undo(元に戻す)可能な状態か？ */
+	if (!GetDocument()->m_cDocEditor.IsEnableUndo()) {	// Undo(元に戻す)可能な状態か？
 		return;
 	}
 
@@ -310,13 +310,13 @@ void CViewCommander::Command_UNDO( void )
 
 	COpeBlk*	pcOpeBlk;
 	bool		bIsModified;
-//	int			nNewLine;	/* 挿入された部分の次の位置の行 */
-//	int			nNewPos;	/* 挿入された部分の次の位置のデータ位置 */
+//	int			nNewLine;	// 挿入された部分の次の位置の行
+//	int			nNewPos;	// 挿入された部分の次の位置のデータ位置
 
 	CLayoutPoint ptCaretPos_Before;
 	CLayoutPoint ptCaretPos_After;
 
-	/* 各種モードの取り消し */
+	// 各種モードの取り消し
 	Command_CANCEL_MODE();
 
 	m_pCommanderView->m_bDoing_UndoRedo = TRUE;	// アンドゥ・リドゥの実行中か

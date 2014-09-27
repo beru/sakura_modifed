@@ -25,7 +25,7 @@
 
 #include "mem/CMemory.h"
 
-//※CMemoryをprotect継承することにより、あまり自由にCMemoryを使えないようにしておく
+// ※CMemoryをprotect継承することにより、あまり自由にCMemoryを使えないようにしておく
 class CNative : protected CMemory{
 public:
 	// CMemory*ポインタを得る

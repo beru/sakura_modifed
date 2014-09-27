@@ -48,7 +48,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示
 
 	wchar_t GetCharCode() const{ return m_nCode; } //!< 選択された文字コードを取得
 
@@ -61,8 +61,8 @@ private:
 	BOOL	OnNotify( WPARAM wParam, LPARAM lParam );
 	LPVOID	GetHelpIdTable( void );
 
-	void	SetData( void );	/* ダイアログデータの設定 */
-	int		GetData( void );	/* ダイアログデータの取得 */
+	void	SetData( void );	// ダイアログデータの設定
+	int		GetData( void );	// ダイアログデータの取得
 
 private:
 	/*

@@ -27,18 +27,20 @@
 struct EditNode;
 
 //! EditNode(ウィンドウリスト)の履歴を管理 (RECENT_FOR_EDITNODE)
-class CRecentEditNode : public CRecentImp<EditNode>{
+class CRecentEditNode :
+	public CRecentImp<EditNode>
+{
 public:
-	//生成
+	// 生成
 	CRecentEditNode();
 
-	//オーバーライド
+	// オーバーライド
 	int				CompareItem( const EditNode* p1, const EditNode* p2 ) const;
 	void			CopyItem( EditNode* dst, const EditNode* src ) const;
 	const TCHAR*	GetItemText( int nIndex ) const;
 	bool			DataToReceiveType( const EditNode** dst, const EditNode* src ) const;
 	bool			TextToDataType( EditNode* dst, LPCTSTR pszText ) const;
-	//固有インターフェース
+	// 固有インターフェース
 	int FindItemByHwnd(HWND hwnd) const;
 	void DeleteItemByHwnd(HWND hwnd);
 };

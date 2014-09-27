@@ -22,7 +22,6 @@ void CType_Asm::InitTypeConfigImp(STypeConfig* pType)
 }
 
 
-
 /*! アセンブラ アウトライン解析
 
 	@author MIK

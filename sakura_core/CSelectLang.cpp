@@ -129,7 +129,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 		m_psLangInfo = NULL;
 	}
 
-	//カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
+	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
 	CCurrentDirectoryBackupPoint cCurDirBackup;
 	ChangeCurrentDirectoryToExeDir();
 // ★iniまたはexeフォルダとなるように改造が必要
@@ -140,7 +140,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 	BOOL result = (INVALID_HANDLE_VALUE != handle) ? TRUE : FALSE;
 
 	while (result) {
-		if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {		//フォルダでない
+		if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {		// フォルダでない
 			// バッファに登録する。
 			psLangInfo = new SSelLangInfo();
 			_tcscpy( psLangInfo->szDllName, w32fd.cFileName );
@@ -373,7 +373,7 @@ int CLoadString::CLoadStrBuffer::LoadString( UINT uid )
 
 void CSelectLang::ChangeLang( TCHAR* pszDllName )
 {
-	/* 言語を選択する */
+	// 言語を選択する
 	UINT unIndex;
 	for (unIndex = 0; unIndex < CSelectLang::m_psLangInfoList.size(); unIndex++) {
 		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at( unIndex );
@@ -428,4 +428,4 @@ HINSTANCE CSelectLang::ChangeLang( UINT nIndex )
 	return m_psLangInfo->hInstance;
 }
 
-/*[EOF]*/
+//[EOF]

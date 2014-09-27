@@ -31,31 +31,30 @@
 #include "util/window.h"
 #include "sakura_rc.h"
 
-//GetDllShareData用グローバル変数
+// GetDllShareData用グローバル変数
 DLLSHAREDATA* g_theDLLSHAREDATA = NULL;
 
 static CMutex g_cKeywordMutex( FALSE, GSTR_MUTEX_SAKURA_KEYWORD );
 
-CShareDataLockCounter::CShareDataLockCounter(){
+CShareDataLockCounter::CShareDataLockCounter() {
 	LockGuard<CMutex> guard( g_cKeywordMutex );
 	assert_warning( 0 <= GetDllShareData().m_nLockCount );
 	GetDllShareData().m_nLockCount++;
 }
 
-CShareDataLockCounter::~CShareDataLockCounter(){
+CShareDataLockCounter::~CShareDataLockCounter() {
 	LockGuard<CMutex> guard( g_cKeywordMutex );
 	GetDllShareData().m_nLockCount--;
 	assert_warning( 0 <= GetDllShareData().m_nLockCount );
 }
 
-int CShareDataLockCounter::GetLockCounter(){
+int CShareDataLockCounter::GetLockCounter() {
 	LockGuard<CMutex> guard( g_cKeywordMutex );
 	assert_warning( 0 <= GetDllShareData().m_nLockCount );
 	return GetDllShareData().m_nLockCount;
 }
 
-
-class CLockCancel: public CDlgCancel{
+class CLockCancel: public CDlgCancel {
 public:
 	virtual BOOL OnInitDialog( HWND hwnd, WPARAM wParam, LPARAM lParam ) {
 		BOOL ret = CDlgCancel::OnInitDialog(hwnd, wParam, lParam);
@@ -89,7 +88,8 @@ public:
 };
 
 // countが0だったらLockして返す
-static int GetCountIf0Lock( CShareDataLockCounter** ppLock )
+static
+int GetCountIf0Lock( CShareDataLockCounter** ppLock )
 {
 	LockGuard<CMutex> guard(g_cKeywordMutex);
 	int count = GetDllShareData().m_nLockCount;

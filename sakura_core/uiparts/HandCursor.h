@@ -37,7 +37,8 @@
 #define IDC_HAND	MAKEINTRESOURCE(32649)
 #endif
 
-inline void SetHandCursor ()
+inline
+void SetHandCursor ()
 {
 	{
 		SetCursor( LoadCursor( NULL, IDC_HAND ) );

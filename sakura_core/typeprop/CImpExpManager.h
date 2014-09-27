@@ -62,8 +62,8 @@ protected:
 	// Import Folderの設定
 	inline void SetImportFolder( const TCHAR* szPath ) 
 	{
-		/* ファイルのフルパスをフォルダとファイル名に分割 */
-		/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
+		// ファイルのフルパスをフォルダとファイル名に分割
+		// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
 		::SplitPath_FolderAndFile( szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL );
 		_tcscat( GetDllShareData().m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 	}
@@ -91,7 +91,7 @@ public:
 		, m_Types( types )
 		, m_hwndList( hwndList )
 	{
-		/* 共有データ構造体のアドレスを返す */
+		// 共有データ構造体のアドレスを返す
 		m_pShareData = &GetDllShareData();
 	}
 

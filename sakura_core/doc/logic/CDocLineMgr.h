@@ -44,25 +44,25 @@ struct DocLineReplaceArg {
 //2007.09.30 kobake WhereCurrentWord_2 を CWordParse に移動
 class CDocLineMgr{
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CDocLineMgr();
 	~CDocLineMgr();
 
-	//状態
+	// 状態
 	CLogicInt GetLineCount() const{ return m_nLines; }	//!< 全行数を返す
 
-	//行データへのアクセス
+	// 行データへのアクセス
 	CDocLine* GetLine( CLogicInt nLine ) const;						//!< 指定行を取得
 	CDocLine* GetDocLineTop() const { return m_pDocLineTop; }		//!< 先頭行を取得
 	CDocLine* GetDocLineBottom() const { return m_pDocLineBot; }	//!< 最終行を取得
 
-	//行データの管理
+	// 行データの管理
 	CDocLine* InsertNewLine(CDocLine* pPos);	//!< pPosの直前に新しい行を挿入
 	CDocLine* AddNewLine();						//!< 最下部に新しい行を挿入
 	void DeleteAllLine();						//!< 全ての行を削除する
 	void DeleteLine( CDocLine* );				//!< 行の削除
 
-	//デバッグ
+	// デバッグ
 	void DUMP();
 
 
@@ -72,9 +72,9 @@ public:
 protected:
 	void _Init();
 	// -- -- チェーン関数 -- -- // 2007.10.11 kobake 作成
-	void _PushBottom(CDocLine* pDocLineNew);             //!< 最下部に挿入
-	void _InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos); //!< pPosの直前に挿入
-	void _InsertAfterPos(CDocLine* pDocLineNew, CDocLine* pPos); //!< pPosの直後に挿入
+	void _PushBottom(CDocLine* pDocLineNew);						//!< 最下部に挿入
+	void _InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos);	//!< pPosの直前に挿入
+	void _InsertAfterPos(CDocLine* pDocLineNew, CDocLine* pPos);	//!< pPosの直後に挿入
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        メンバ変数                           //

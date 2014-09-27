@@ -20,14 +20,14 @@
 #include "CSearchAgent.h"
 
 
-/* 文字列置換 */
+// 文字列置換
 void CLayoutMgr::ReplaceData_CLayoutMgr(
 	LayoutReplaceArg* pArg
 )
 {
-	CLayoutInt nWork_nLines = m_nLines;	//変更前の全行数の保存	@@@ 2002.04.19 MIK
+	CLayoutInt nWork_nLines = m_nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
 
-	/* 置換先頭位置のレイアウト情報 */
+	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
 	CLayoutColorInfo*	colorInfo = NULL;
 	CLayoutInt		nLineWork = pArg->sDelRange.GetFrom().GetY2();
@@ -61,8 +61,8 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	  Fromの位置へテキストを挿入する
 	*/
 	DocLineReplaceArg DLRArg;
-	DLRArg.sDelRange.SetFrom(ptFrom);	//削除範囲from
-	DLRArg.sDelRange.SetTo(ptTo);		//削除範囲to
+	DLRArg.sDelRange.SetFrom(ptFrom);	// 削除範囲from
+	DLRArg.sDelRange.SetTo(ptTo);		// 削除範囲to
 	DLRArg.pcmemDeleted = pArg->pcmemDeleted;	// 削除されたデータを保存
 	DLRArg.pInsData = pArg->pInsData;			// 挿入するデータ
 	DLRArg.nDelSeq = pArg->nDelSeq;
@@ -70,7 +70,6 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		&DLRArg
 	);
 	pArg->nInsSeq = DLRArg.nInsSeq;
-
 
 	/*--- 変更された行のレイアウト情報を再生成 ---*/
 	/* 論理行の指定範囲に該当するレイアウト情報を削除して */
@@ -90,9 +89,9 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 			&nModifyLayoutLinesOld
 		);
 
-		/* 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする */
-		/* 論理行が削除された場合は０より小さい行数 */
-		/* 論理行が挿入された場合は０より大きい行数 */
+		// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
+		// 論理行が削除された場合は０より小さい行数
+		// 論理行が挿入された場合は０より大きい行数
 		if (0 != DLRArg.nInsLineNum - DLRArg.nDeletedLineNum) {
 			ShiftLogicalLineNum(
 				pLayoutPrev,
@@ -103,7 +102,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		pLayoutPrev = m_pLayoutBot;
 	}
 
-	/* 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする */
+	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	CLogicInt nRowNum;
 	if (!pLayoutPrev) {
 		if (!m_pLayoutTop) {
@@ -130,7 +129,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	ctwArg.nAllLinesOld = nWork_nLines;								// 編集前のテキスト行数
 	ctwArg.bInsData     = (pArg->pInsData && pArg->pInsData->size()) ? TRUE : FALSE;			// 追加文字列の有無
 
-	/* 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする */
+	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
 	CLayoutInt nAddInsLineNum;
 	pArg->nModLineTo = DoLayout_Range(
 		pLayoutPrev,
@@ -142,12 +141,12 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		&nAddInsLineNum
 	);
 
-	pArg->nAddLineNum = m_nLines - nWork_nLines;	//変更後の全行数との差分	@@@ 2002.04.19 MIK
+	pArg->nAddLineNum = m_nLines - nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
 	if (0 == pArg->nAddLineNum) {
-		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	/* 再描画ヒント レイアウト行の増減 */
+		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}
-	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	/* 再描画ヒント 変更されたレイアウト行From */
-	pArg->nModLineTo += ( pArg->nModLineFrom - CLayoutInt(1) ) ;	/* 再描画ヒント 変更されたレイアウト行To */
+	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From
+	pArg->nModLineTo += ( pArg->nModLineFrom - CLayoutInt(1) ) ;	// 再描画ヒント 変更されたレイアウト行To
 
 	//2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
 	LogicToLayout(DLRArg.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置

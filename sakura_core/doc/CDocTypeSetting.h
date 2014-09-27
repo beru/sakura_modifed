@@ -28,32 +28,32 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! フォント属性
-struct SFontAttr{
+struct SFontAttr {
 	bool		m_bBoldFont;		//!< 太字
 	bool		m_bUnderLine;		//!< 下線
 };
 
 //! 色属性
-struct SColorAttr{
+struct SColorAttr {
 	COLORREF	m_cTEXT;			//!< 文字色
 	COLORREF	m_cBACK;			//!< 背景色
 };
 
 //! 色設定
-struct ColorInfoBase{
+struct ColorInfoBase {
 	bool		m_bDisp;			//!< 表示
 	SFontAttr	m_sFontAttr;		//!< フォント属性
 	SColorAttr	m_sColorAttr;		//!< 色属性
 };
 
 //! 名前とインデックス付き色設定
-struct ColorInfo : public ColorInfoBase{
+struct ColorInfo : public ColorInfoBase {
 	int			m_nColorIdx;		//!< インデックス
 	TCHAR		m_szName[64];		//!< 名前
 };
 
 
-//デフォルト色設定
+// デフォルト色設定
 void GetDefaultColorInfo( ColorInfo* pColorInfo, int nIndex );
 void GetDefaultColorInfoName( ColorInfo* pColorInfo, int nIndex );
 int GetDefaultColorInfoCount();

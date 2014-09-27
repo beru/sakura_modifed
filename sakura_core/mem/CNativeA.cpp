@@ -94,7 +94,7 @@ const CNativeA& CNativeA::operator += ( char ch )
 
 void CNativeA::SetStringNew(const wchar_t* wszData, int nDataLen)
 {
-	std::wstring buf(wszData, nDataLen); //Ø‚èo‚µ
+	std::wstring buf(wszData, nDataLen); // Ø‚èo‚µ
 	char* tmp = wcstombs_new(buf.c_str());
 	SetString(tmp);
 	delete[] tmp;
@@ -214,7 +214,7 @@ void CNativeA::ToLower()
 			uc = (unsigned char)tolower( pBuf[i] );
 			pBuf[i] = uc;
 		}else if (nCharChars == 2) {
-			/* ‘SŠp‰p‘å•¶Žš¨‘SŠp‰p¬•¶Žš */
+			// ‘SŠp‰p‘å•¶Žš¨‘SŠp‰p¬•¶Žš
 			if (pBuf[i] == 0x82 && pBuf[i + 1] >= 0x60 && pBuf[i + 1] <= 0x79) {
 				pBuf[i] = pBuf[i];
 				pBuf[i + 1] = pBuf[i + 1] + 0x21;

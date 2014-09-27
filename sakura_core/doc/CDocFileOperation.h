@@ -28,7 +28,7 @@
 
 class CEditDoc;
 
-class CDocFileOperation{
+class CDocFileOperation {
 public:
 	CDocFileOperation(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 

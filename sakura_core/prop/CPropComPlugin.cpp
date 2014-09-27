@@ -86,7 +86,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Plugin */
+		// ダイアログデータの設定 Plugin
 		InitDialog( hwndDlg );
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
@@ -139,7 +139,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				OnHelp( hwndDlg, IDD_PROP_PLUGIN );
 				return TRUE;
 			case PSN_KILLACTIVE:
-				/* ダイアログデータの取得 Plugin */
+				// ダイアログデータの取得 Plugin
 				GetData( hwndDlg );
 				return TRUE;
 			case PSN_SETACTIVE:
@@ -151,11 +151,11 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID = LOWORD(wParam);			// 項目ID､ コントロールID､ またはアクセラレータID
 
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_PLUGIN_SearchNew:		// 新規プラグインを追加
@@ -259,7 +259,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			//default:
 			//	break;
 			//}
-			break;	/* CBN_DROPDOWN */
+			break;	// CBN_DROPDOWN
 		case EN_KILLFOCUS:
 			//switch( wID ){
 			//default:
@@ -268,7 +268,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			break;
 		}
 
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
@@ -276,7 +276,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 

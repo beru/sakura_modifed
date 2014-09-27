@@ -21,17 +21,17 @@ COpe::COpe(EOpeCode eCode)
 {
 	m_nOpe = eCode;					// 操作種別
 
-	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1),CLogicInt(-1));	//カーソル位置
-	m_ptCaretPos_PHY_After.Set(CLogicInt(-1),CLogicInt(-1));	//カーソル位置
+	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1),CLogicInt(-1));	// カーソル位置
+	m_ptCaretPos_PHY_After.Set(CLogicInt(-1),CLogicInt(-1));	// カーソル位置
 
 }
 
-/* COpeクラス消滅 */
+// COpeクラス消滅
 COpe::~COpe()
 {
 }
 
-/* 編集操作要素のダンプ */
+// 編集操作要素のダンプ
 void COpe::DUMP( void )
 {
 	DEBUG_TRACE( _T("\t\tm_nOpe                  = [%d]\n"), m_nOpe               );
@@ -42,7 +42,7 @@ void COpe::DUMP( void )
 	return;
 }
 
-/* 編集操作要素のダンプ */
+// 編集操作要素のダンプ
 void CDeleteOpe::DUMP( void )
 {
 	COpe::DUMP();
@@ -55,7 +55,7 @@ void CDeleteOpe::DUMP( void )
 	return;
 }
 
-/* 編集操作要素のダンプ */
+// 編集操作要素のダンプ
 void CInsertOpe::DUMP( void )
 {
 	COpe::DUMP();

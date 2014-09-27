@@ -2,14 +2,14 @@
 #include "CConvert_ToLower.h"
 
 // 小文字へ変換
-//	変換できないキリル文字Ёの修正	2010/6/5 Uchi
-//	ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
+// 変換できないキリル文字Ёの修正	2010/6/5 Uchi
+// ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
 bool CConvert_ToLower::DoConvert(CNativeW* pcData)
 {
 	WCHAR* p = pcData->GetStringPtr();
 	WCHAR* end = p + pcData->GetStringLength();
 	while (p < end) {
-		WCHAR& c=*p++;
+		WCHAR& c = *p++;
 		// A-Z → a-z
 		if (c>=0x0041 && c<=0x005A) {
 			c = 0x0061+(c-0x0041);
@@ -52,7 +52,7 @@ bool CConvert_ToLower::DoConvert(CNativeW* pcData)
 			c++;
 		}
 		else if (c == 0x01C4 || c == 0x01C7 || c == 0x01CA || c == 0x01F1) {
-			c+=2;
+			c += 2;
 		}
 		else if (c == 0x01C5 || c == 0x01C8 || c == 0x01CB || c == 0x01F2) {
 			// Title Letter

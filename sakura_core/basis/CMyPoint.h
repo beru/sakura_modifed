@@ -28,41 +28,41 @@
 class CMyPoint : public POINT{
 public:
 	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^EƒfƒXƒgƒ‰ƒNƒ^
-	CMyPoint(){ x = 0; y = 0; }
-	CMyPoint(int _x,int _y){ x = _x; y = _y; }
-	CMyPoint(const POINT& rhs){ x = rhs.x; y = rhs.y; }
+	CMyPoint() { x = 0; y = 0; }
+	CMyPoint(int _x,int _y) { x = _x; y = _y; }
+	CMyPoint(const POINT& rhs) { x = rhs.x; y = rhs.y; }
 
-	//Zp‰‰Zq
-	CMyPoint& operator += (const POINT& rhs){ x += rhs.x; y += rhs.y; return *this; }
-	CMyPoint& operator -= (const POINT& rhs){ x -= rhs.x; y -= rhs.y; return *this; }
-	CMyPoint& operator *= (int n){ x *= n; y *= n; return *this; }
-	CMyPoint& operator /= (int n){ x /= n; y /= n; return *this; }
+	// Zp‰‰Zq
+	CMyPoint& operator += (const POINT& rhs) { x += rhs.x; y += rhs.y; return *this; }
+	CMyPoint& operator -= (const POINT& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
+	CMyPoint& operator *= (int n) { x *= n; y *= n; return *this; }
+	CMyPoint& operator /= (int n) { x /= n; y /= n; return *this; }
 
-	//Zp‰‰Zq‚Q
-	CMyPoint operator + (const POINT& rhs) const{ CMyPoint tmp = *this; tmp += rhs; return tmp; }
-	CMyPoint operator - (const POINT& rhs) const{ CMyPoint tmp = *this; tmp -= rhs; return tmp; }
-	CMyPoint operator * (int n) const{ CMyPoint tmp = *this; tmp *= n; return tmp; }
-	CMyPoint operator / (int n) const{ CMyPoint tmp = *this; tmp /= n; return tmp; }
+	// Zp‰‰Zq‚Q
+	CMyPoint operator + (const POINT& rhs) const { CMyPoint tmp = *this; tmp += rhs; return tmp; }
+	CMyPoint operator - (const POINT& rhs) const { CMyPoint tmp = *this; tmp -= rhs; return tmp; }
+	CMyPoint operator * (int n) const { CMyPoint tmp = *this; tmp *= n; return tmp; }
+	CMyPoint operator / (int n) const { CMyPoint tmp = *this; tmp /= n; return tmp; }
 
-	//‘ã“ü‰‰Zq
-	CMyPoint& operator = (const POINT& rhs){ x = rhs.x; y = rhs.y; return *this; }
+	// ‘ã“ü‰‰Zq
+	CMyPoint& operator = (const POINT& rhs) { x = rhs.x; y = rhs.y; return *this; }
 
-	//”äŠr‰‰Zq
-	bool operator == (const POINT& rhs) const{ return x == rhs.x && y == rhs.y; }
-	bool operator != (const POINT& rhs) const{ return !(this->operator==(rhs)); }
+	// ”äŠr‰‰Zq
+	bool operator == (const POINT& rhs) const { return x == rhs.x && y == rhs.y; }
+	bool operator != (const POINT& rhs) const { return !(this->operator==(rhs)); }
 
-	//İ’è
-	void Set(int _x,int _y){ x = _x; y = _y; }
-	void Set(const CMyPoint& pt){ x = pt.x; y = pt.y; }
-	void SetX(int _x){ x = _x; }
-	void SetY(int _y){ y = _y; }
-	void Offset(int _x,int _y){ x += _x; y += _y; }
-	void Offset(const CMyPoint& pt){ x += pt.x; y += pt.y; }
+	// İ’è
+	void Set(int _x,int _y) { x = _x; y = _y; }
+	void Set(const CMyPoint& pt) { x = pt.x; y = pt.y; }
+	void SetX(int _x) { x = _x; }
+	void SetY(int _y) { y = _y; }
+	void Offset(int _x,int _y) { x += _x; y += _y; }
+	void Offset(const CMyPoint& pt) { x += pt.x; y += pt.y; }
 
-	//æ“¾
-	int GetX() const{ return (int)x; }
-	int GetY() const{ return (int)y; }
-	CMyPoint Get() const{ return *this; }
+	// æ“¾
+	int GetX() const { return (int)x; }
+	int GetY() const { return (int)y; }
+	CMyPoint Get() const { return *this; }
 
 	//! x,y ‚¢‚¸‚ê‚©‚ª 0 ‚æ‚è¬‚³‚¢ê‡‚É true ‚ğ•Ô‚·
 	bool HasNegative() const

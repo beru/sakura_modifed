@@ -128,10 +128,10 @@ ECharKind CWordParse::WhatKindOfChar(
 		}
 		//if( c == CR              )return CK_CR;
 		//if( c == LF              )return CK_LF;
-		//if( c == TAB             )return CK_TAB;	// タブ
-		//if( IsControlCode(c)     )return CK_CTRL;	// 制御文字
+		//if( c == TAB             )return CK_TAB;		// タブ
+		//if( IsControlCode(c)     )return CK_CTRL;		// 制御文字
 		//if( c == SPACE           )return CK_SPACE;	// 半角スペース
-		//if( isCSymbol(c)         )return CK_CSYM;	// 識別子に使用可能な文字 (半角英数字、半角アンダースコア)
+		//if( isCSymbol(c)         )return CK_CSYM;		// 識別子に使用可能な文字 (半角英数字、半角アンダースコア)
 		if (IsHankakuKatakana(c)) return CK_KATA;	// 半角のカタカナ
 		if (0x00C0 <= c && c < 0x0180 && c != 0x00D7 && c != 0x00F7) return CK_LATIN;
 													// ラテン１補助、ラテン拡張のうちアルファベット風のもの（×÷を除く）
@@ -245,7 +245,7 @@ ECharKind CWordParse::WhatKindOfTwoChars4KW( ECharKind kindPre, ECharKind kindCu
 bool CWordParse::SearchNextWordPosition(
 	const wchar_t*	pLine,
 	CLogicInt		nLineLen,
-	CLogicInt		nIdx,		//	桁数
+	CLogicInt		nIdx,			//	桁数
 	CLogicInt*		pnColumnNew,	//	見つかった位置
 	BOOL			bStopsBothEnds	//	単語の両端で止まる
 )
@@ -291,7 +291,7 @@ bool CWordParse::SearchNextWordPosition(
 bool CWordParse::SearchNextWordPosition4KW(
 	const wchar_t*	pLine,
 	CLogicInt		nLineLen,
-	CLogicInt		nIdx,		//	桁数
+	CLogicInt		nIdx,			//	桁数
 	CLogicInt*		pnColumnNew,	//	見つかった位置
 	BOOL			bStopsBothEnds	//	単語の両端で止まる
 )

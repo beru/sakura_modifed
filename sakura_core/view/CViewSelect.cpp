@@ -30,9 +30,9 @@ CViewSelect::CViewSelect(CEditView* pcEditView)
 
 void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
 {
-	pSelect->m_bSelectingLock		= m_bSelectingLock;		/* 選択状態のロック */
-	pSelect->m_bBeginSelect			= m_bBeginSelect;		/* 範囲選択中 */
-	pSelect->m_bBeginBoxSelect		= m_bBeginBoxSelect;	/* 矩形範囲選択中 */
+	pSelect->m_bSelectingLock		= m_bSelectingLock;		// 選択状態のロック
+	pSelect->m_bBeginSelect			= m_bBeginSelect;		// 範囲選択中
+	pSelect->m_bBeginBoxSelect		= m_bBeginBoxSelect;	// 矩形範囲選択中
 
 	pSelect->m_sSelectBgn			= m_sSelectBgn;			//範囲選択(原点)
 	pSelect->m_sSelect				= m_sSelect;			//範囲選択
@@ -564,7 +564,7 @@ void CViewSelect::GetSelectAreaLineFromRange(
 	) {
 		CLayoutInt	nSelectFrom = sRange.GetFrom().GetX2();
 		CLayoutInt	nSelectTo   = sRange.GetTo().GetX2();
-		if (IsBoxSelecting()) {		/* 矩形範囲選択中 */
+		if (IsBoxSelecting()) {		// 矩形範囲選択中
 			nSelectFrom = sRange.GetFrom().GetX2();
 			nSelectTo   = sRange.GetTo().GetX2();
 			// 2006.09.30 Moca From 矩形選択時[EOF]とその右側は反転しないように修正。処理を追加

@@ -23,14 +23,15 @@
 */
 #pragma once
 
-template <class INT_TYPE, class POINT_TYPE> class CStrictRect{
+template <class INT_TYPE, class POINT_TYPE>
+class CStrictRect {
 private:
 	typedef CStrictRect<INT_TYPE, POINT_TYPE> Me;
 public:
 	typedef INT_TYPE	IntType;
 	typedef POINT_TYPE	PointType;
 public:
-	//メンバ変数は公開
+	// メンバ変数は公開
 	IntType left;
 	IntType top;
 	IntType right;

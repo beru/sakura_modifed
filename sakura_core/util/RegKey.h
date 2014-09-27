@@ -23,8 +23,7 @@
 */
 #pragma once
 
-class CRegKey
-{
+class CRegKey {
 protected:
 	HKEY _root;
 	HKEY _key;

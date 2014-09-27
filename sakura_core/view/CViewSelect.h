@@ -57,28 +57,28 @@ public:
 	//!単語選択開始
 	void SelectBeginWord()
 	{
-		m_bBeginSelect     = true;				/* 範囲選択中 */
-		m_bBeginBoxSelect  = false;			/* 矩形範囲選択中でない */
-		m_bBeginLineSelect = false;			/* 行単位選択中 */
-		m_bBeginWordSelect = true;			/* 単語単位選択中 */
+		m_bBeginSelect     = true;			// 範囲選択中
+		m_bBeginBoxSelect  = false;			// 矩形範囲選択中でない
+		m_bBeginLineSelect = false;			// 行単位選択中
+		m_bBeginWordSelect = true;			// 単語単位選択中
 	}
 
 	//!矩形選択開始
 	void SelectBeginBox()
 	{
-		m_bBeginSelect     = true;			/* 範囲選択中 */
-		m_bBeginBoxSelect  = true;		/* 矩形範囲選択中 */
-		m_bBeginLineSelect = false;		/* 行単位選択中 */
-		m_bBeginWordSelect = false;		/* 単語単位選択中 */
+		m_bBeginSelect     = true;		// 範囲選択中
+		m_bBeginBoxSelect  = true;		// 矩形範囲選択中
+		m_bBeginLineSelect = false;		// 行単位選択中
+		m_bBeginWordSelect = false;		// 単語単位選択中
 	}
 
 	//!謎の選択開始
 	void SelectBeginNazo()
 	{
-		m_bBeginSelect     = true;			/* 範囲選択中 */
-//		m_bBeginBoxSelect  = false;		/* 矩形範囲選択中でない */
-		m_bBeginLineSelect = false;		/* 行単位選択中 */
-		m_bBeginWordSelect = false;		/* 単語単位選択中 */
+		m_bBeginSelect     = true;		// 範囲選択中
+//		m_bBeginBoxSelect  = false;		// 矩形範囲選択中でない
+		m_bBeginLineSelect = false;		// 行単位選択中
+		m_bBeginWordSelect = false;		// 単語単位選択中
 	}
 
 	//!範囲選択終了

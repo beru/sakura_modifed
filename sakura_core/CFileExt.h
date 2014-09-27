@@ -33,8 +33,7 @@
 #include "_main/global.h"
 #include "config/maxdata.h"
 
-class CFileExt
-{
+class CFileExt {
 public:
 	CFileExt();
 	~CFileExt();
@@ -44,7 +43,7 @@ public:
 	const TCHAR *GetName( int nIndex );
 	const TCHAR *GetExt( int nIndex );
 
-	//ダイアログに渡す拡張子フィルタを取得する。(lpstrFilterに直接指定可能)
+	// ダイアログに渡す拡張子フィルタを取得する。(lpstrFilterに直接指定可能)
 	const TCHAR *GetExtFilter( void );
 
 	int GetCount( void ) { return m_nCount; }
@@ -55,8 +54,8 @@ protected:
 private:
 
 	typedef struct {
-		TCHAR	m_szName[64];		//名前(64文字以下のはず→m_szTypeName)
-		TCHAR	m_szExt[MAX_TYPES_EXTS*3+1];	//拡張子(64文字以下のはず→m_szTypeExts) なお "*." を追加するのでそれなりに必要
+		TCHAR	m_szName[64];		// 名前(64文字以下のはず→m_szTypeName)
+		TCHAR	m_szExt[MAX_TYPES_EXTS*3+1];	// 拡張子(64文字以下のはず→m_szTypeExts) なお "*." を追加するのでそれなりに必要
 	} FileExtInfoTag;
 
 	int				m_nCount;

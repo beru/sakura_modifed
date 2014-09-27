@@ -59,12 +59,12 @@ public:
 	//  Constructors
 	CDlgTypeAscertain();
 	// モーダルダイアログの表示
-	int DoModal( HINSTANCE, HWND, SAscertainInfo* );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, SAscertainInfo* );	// モーダルダイアログの表示
 
 protected:
 	// 実装ヘルパ関数
 	BOOL OnBnClicked( int );
-	void SetData();	/* ダイアログデータの設定 */
+	void SetData();	// ダイアログデータの設定
 	LPVOID GetHelpIdTable(void);
 
 private:

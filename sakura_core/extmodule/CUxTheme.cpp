@@ -87,7 +87,7 @@ bool CUxTheme::InitDllImp()
 	return true;
 }
 
-/*! IsThemeActive API Wrapper */
+//! IsThemeActive API Wrapper
 BOOL CUxTheme::IsThemeActive( VOID )
 {
 	if (!InitThemeDll())
@@ -95,7 +95,7 @@ BOOL CUxTheme::IsThemeActive( VOID )
 	return m_pfnIsThemeActive();
 }
 
-/*! SetWindowTheme API Wrapper */
+//! SetWindowTheme API Wrapper
 HRESULT CUxTheme::SetWindowTheme( HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList )
 {
 	if (!InitThemeDll())
@@ -103,7 +103,7 @@ HRESULT CUxTheme::SetWindowTheme( HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszS
 	return m_pfnSetWindowTheme( hwnd, pszSubAppName, pszSubIdList );
 }
 
-/*! SetWindowTheme API Wrapper */
+//! SetWindowTheme API Wrapper
 HTHEME CUxTheme::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
 {
 	if (!InitThemeDll())
@@ -111,7 +111,7 @@ HTHEME CUxTheme::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
 	return (HTHEME)m_pfnOpenThemeData( hwnd, pszClassList );
 }
 
-/*! SetWindowTheme API Wrapper */
+//! SetWindowTheme API Wrapper
 HRESULT CUxTheme::DrawThemeBackground( HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip )
 {
 	if (!InitThemeDll())
@@ -119,7 +119,7 @@ HRESULT CUxTheme::DrawThemeBackground( HTHEME htheme, HDC hdc, int iPartId, int 
 	return m_pfnDrawThemeBackground( htheme, hdc, iPartId, iStateId, prc, prcClip );
 }
 
-/*! SetWindowTheme API Wrapper */
+//! SetWindowTheme API Wrapper
 HRESULT CUxTheme::DrawThemeParentBackground( HWND hwnd, HDC hdc, RECT *prc )
 {
 	if (!InitThemeDll())
@@ -127,7 +127,7 @@ HRESULT CUxTheme::DrawThemeParentBackground( HWND hwnd, HDC hdc, RECT *prc )
 	return m_pfnDrawThemeParentBackground( hwnd, hdc, prc );
 }
 
-/*! SetWindowTheme API Wrapper */
+//! SetWindowTheme API Wrapper
 HRESULT CUxTheme::IsThemeBackgroundPartiallyTransparent( HTHEME htheme, int iPartId, int iStateId )
 {
 	if (!InitThemeDll())

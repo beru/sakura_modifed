@@ -6,25 +6,26 @@
 //                     ƒCƒ“ƒ^[ƒtƒF[ƒX                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//!‚Å‚«‚éŒÀ‚è‘SŠp‚Ð‚ç‚ª‚È‚É‚·‚é
+//! ‚Å‚«‚éŒÀ‚è‘SŠp‚Ð‚ç‚ª‚È‚É‚·‚é
 bool CConvert_ToZenhira::DoConvert(CNativeW* pcData)
 {
-	//”¼ƒJƒi¨‘SŠpƒJƒi
-	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()+1]; //•¶Žš”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
+	// ”¼ƒJƒi¨‘SŠpƒJƒi
+	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()+1]; // •¶Žš”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
 	int nBufLen = 0;
 	Convert_HankataToZenkata(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nBufLen);
 
-	//‘SƒJƒi¨‘SŠp‚Ð‚ç‚ª‚È
+	// ‘SƒJƒi¨‘SŠp‚Ð‚ç‚ª‚È
 	Convert_ZenkataToZenhira(pBuf, nBufLen);
 
-	//”¼Šp‰p”¨‘SŠp‰p”
+	// ”¼Šp‰p”¨‘SŠp‰p”
 	Convert_HaneisuToZeneisu(pBuf, nBufLen);
 
-	//Ý’è
+	// Ý’è
 	pcData->SetString(pBuf, nBufLen);
 
-	//ƒoƒbƒtƒ@‰ð•ú
+	// ƒoƒbƒtƒ@‰ð•ú
 	delete[] pBuf;
 
 	return true;
 }
+

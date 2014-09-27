@@ -40,7 +40,6 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 
-
 inline ACHAR _GetHexChar( ACHAR c )
 {
 	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
@@ -93,7 +92,7 @@ int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 	pw = pDst;
 
 	while (pr < pS + nLen) {
-		/* =XX の形式でない部分をデコード */
+		// =XX の形式でない部分をデコード
 		if (sizeof(CHAR_TYPE) == 2) {
 			if (*pr != L'=') {
 				*pw = static_cast<char>( *pr );
@@ -110,7 +109,7 @@ int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 			}
 		}
 
-		/* =XX の部分をデコード */
+		// =XX の部分をデコード
 		ninc_len = 1;   // '=' の部分のインクリメント。
 		if (pr + 2 < pS + nLen) {
 			// デコード実行部分
@@ -444,7 +443,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 	// ヘッダーの構成
 	// begin  755  <filename>
 
-	/* begin を取得 */
+	// begin を取得
 
 	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
 	if (nwlen != 5) {
@@ -463,7 +462,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 		}
 	}
 
-	/* 3桁の8進数（Unix システムのパーミッション）を取得 */
+	// 3桁の8進数（Unix システムのパーミッション）を取得
 
 	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
 	if (nwlen != 3) {
@@ -486,7 +485,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 		}
 	}
 
-	/* 書き出し用のファイル名を取得 */
+	// 書き出し用のファイル名を取得
 
 	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
 	// 末尾の空白・改行文字をスキップ

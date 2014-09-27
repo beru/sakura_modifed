@@ -27,17 +27,17 @@
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//11000
-	IDC_BUTTON_DELETE,				HIDC_BUTTON_DELETE_TOOLBAR,				//ツールバーから機能削除
-	IDC_BUTTON_INSERTSEPARATOR,		HIDC_BUTTON_INSERTSEPARATOR_TOOLBAR,	//セパレータ挿入
-	IDC_BUTTON_INSERT,				HIDC_BUTTON_INSERT_TOOLBAR,				//ツールバーへ機能挿入
-	IDC_BUTTON_ADD,					HIDC_BUTTON_ADD_TOOLBAR,				//ツールバーへ機能追加
-	IDC_BUTTON_UP,					HIDC_BUTTON_UP_TOOLBAR,					//ツールバーの機能を上へ移動
-	IDC_BUTTON_DOWN,				HIDC_BUTTON_DOWN_TOOLBAR,				//ツールバーの機能を下へ移動
-	IDC_CHECK_TOOLBARISFLAT,		HIDC_CHECK_TOOLBARISFLAT,				//フラットなボタン
-	IDC_COMBO_FUNCKIND,				HIDC_COMBO_FUNCKIND_TOOLBAR,			//機能の種別
-	IDC_LIST_FUNC,					HIDC_LIST_FUNC_TOOLBAR,					//機能一覧
-	IDC_LIST_RES,					HIDC_LIST_RES_TOOLBAR,					//ツールバー一覧
-	IDC_BUTTON_INSERTWRAP,			HIDC_BUTTON_INSERTWRAP,					//ツールバー折返	// 2006.08.06 ryoji
+	IDC_BUTTON_DELETE,				HIDC_BUTTON_DELETE_TOOLBAR,				// ツールバーから機能削除
+	IDC_BUTTON_INSERTSEPARATOR,		HIDC_BUTTON_INSERTSEPARATOR_TOOLBAR,	// セパレータ挿入
+	IDC_BUTTON_INSERT,				HIDC_BUTTON_INSERT_TOOLBAR,				// ツールバーへ機能挿入
+	IDC_BUTTON_ADD,					HIDC_BUTTON_ADD_TOOLBAR,				// ツールバーへ機能追加
+	IDC_BUTTON_UP,					HIDC_BUTTON_UP_TOOLBAR,					// ツールバーの機能を上へ移動
+	IDC_BUTTON_DOWN,				HIDC_BUTTON_DOWN_TOOLBAR,				// ツールバーの機能を下へ移動
+	IDC_CHECK_TOOLBARISFLAT,		HIDC_CHECK_TOOLBARISFLAT,				// フラットなボタン
+	IDC_COMBO_FUNCKIND,				HIDC_COMBO_FUNCKIND_TOOLBAR,			// 機能の種別
+	IDC_LIST_FUNC,					HIDC_LIST_FUNC_TOOLBAR,					// 機能一覧
+	IDC_LIST_RES,					HIDC_LIST_RES_TOOLBAR,					// ツールバー一覧
+	IDC_BUTTON_INSERTWRAP,			HIDC_BUTTON_INSERTWRAP,					// ツールバー折返	// 2006.08.06 ryoji
 	IDC_LABEL_MENUFUNCKIND,			(DWORD)-1,
 	IDC_LABEL_MENUFUNC,				(DWORD)-1,
 	IDC_LABEL_TOOLBAR,				(DWORD)-1,
@@ -77,8 +77,8 @@ INT_PTR CALLBACK CPropToolbar::DlgProc_page(
 	@date 2002.04.13 genta 
 */
 int Listbox_INSERTDATA(
-	HWND hWnd,              //!< handle to destination window 
-	int index,          //!< item index
+	HWND hWnd,				//!< handle to destination window 
+	int index,				//!< item index
 	int value
 )
 {
@@ -124,7 +124,7 @@ int Listbox_ADDDATA(
 	return nIndex1;
 }
 
-/* Toolbar メッセージ処理 */
+// Toolbar メッセージ処理
 INT_PTR CPropToolbar::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
@@ -154,12 +154,12 @@ INT_PTR CPropToolbar::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Toolbar */
+		// ダイアログデータの設定 Toolbar
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* コントロールのハンドルを取得 */
+		// コントロールのハンドルを取得
 		hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 		hwndFuncList = ::GetDlgItem( hwndDlg, IDC_LIST_FUNC );
 		hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
@@ -174,7 +174,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 //		nListItemHeight+=2;
 
 //	From Here Oct.14, 2000 JEPRO added	(Ref. CPropComCustmenu.cpp 内のWM_INITDIALOGを参考にした)
-		/* キー選択時の処理 */
+		// キー選択時の処理
 		::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_COMBO_FUNCKIND, CBN_SELCHANGE ), (LPARAM)hwndCombo );
 //	To Here Oct. 14, 2000
 
@@ -183,12 +183,12 @@ INT_PTR CPropToolbar::DispatchEvent(
 		return TRUE;
 
 	case WM_DRAWITEM:
-		idCtrl = (UINT) wParam;	/* コントロールのID */
-		pDis = (LPDRAWITEMSTRUCT) lParam;	/* 項目描画情報 */
+		idCtrl = (UINT) wParam;	// コントロールのID
+		pDis = (LPDRAWITEMSTRUCT) lParam;	// 項目描画情報
 		switch (idCtrl) {
-		case IDC_LIST_RES:	/* ツールバーボタン結果リスト */
-		case IDC_LIST_FUNC:	/* ボタン一覧リスト */
-			DrawToolBarItemList( pDis );	/* ツールバーボタンリストのアイテム描画 */
+		case IDC_LIST_RES:	// ツールバーボタン結果リスト
+		case IDC_LIST_FUNC:	// ボタン一覧リスト
+			DrawToolBarItemList( pDis );	// ツールバーボタンリストのアイテム描画
 			return TRUE;
 		}
 		return TRUE;
@@ -202,7 +202,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 			return TRUE;
 		case PSN_KILLACTIVE:
 //			MYTRACE( _T("PROP_TOOLBAR PSN_KILLACTIVE\n") );
-			/* ダイアログデータの取得 Toolbar */
+			// ダイアログデータの取得 Toolbar
 			GetData( hwndDlg );
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -213,9 +213,9 @@ INT_PTR CPropToolbar::DispatchEvent(
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD( wParam );	/* 通知コード */
-		wID = LOWORD( wParam );			/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
+		wNotifyCode = HIWORD( wParam );	// 通知コード
+		wID = LOWORD( wParam );			// 項目ID､ コントロールID､ またはアクセラレータID
+		hwndCtl = (HWND) lParam;		// コントロールのハンドル
 
 		if (hwndResList == hwndCtl) {
 			switch (wNotifyCode) {
@@ -230,7 +230,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 
 				List_ResetContent( hwndFuncList );
 
-				/* 機能一覧に文字列をセット (リストボックス) */
+				// 機能一覧に文字列をセット (リストボックス)
 				//	From Here Oct. 15, 2001 genta Lookupを使うように変更
 				nNum = m_cLookup.GetItemCount( nIndex2 );
 				for (i = 0; i < nNum; ++i) {
@@ -238,7 +238,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 					int nbarNo = m_pcMenuDrawer->FindToolbarNoFromCommandId( nIndex1 );
 
 					if (nbarNo >= 0) {
-						/* ツールバーボタンの情報をセット (リストボックス) */
+						// ツールバーボタンの情報をセット (リストボックス)
 						lResult = ::Listbox_ADDDATA( hwndFuncList, (LPARAM)nbarNo );
 						if (lResult == LB_ERR || lResult == LB_ERRSPACE) {
 							break;
@@ -251,7 +251,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 			}
 		}else {
 			switch (wNotifyCode) {
-			/* ボタン／チェックボックスがクリックされた */
+			// ボタン／チェックボックスがクリックされた
 			case BN_CLICKED:
 				switch( wID ){
 				case IDC_BUTTON_INSERTSEPARATOR:
@@ -436,7 +436,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -451,7 +451,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 	return FALSE;
 }
 
-/* ダイアログデータの設定 Toolbar */
+// ダイアログデータの設定 Toolbar
 void CPropToolbar::SetData( HWND hwndDlg )
 {
 	HWND		hwndCombo;
@@ -462,15 +462,15 @@ void CPropToolbar::SetData( HWND hwndDlg )
 	LRESULT		lResult;
 	TEXTMETRIC	tm;
 
-	/* 機能種別一覧に文字列をセット(コンボボックス) */
+	// 機能種別一覧に文字列をセット(コンボボックス)
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 	m_cLookup.SetCategory2Combo( hwndCombo );	//	Oct. 15, 2001 genta
 	
-	/* 種別の先頭の項目を選択(コンボボックス) */
+	// 種別の先頭の項目を選択(コンボボックス)
 	Combo_SetCurSel( hwndCombo, 0 );	//Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 	::PostMessageCmd( hwndCombo, WM_COMMAND, MAKELONG( IDC_COMBO_FUNCKIND, CBN_SELCHANGE ), (LPARAM)hwndCombo );
 
-	/* コントロールのハンドルを取得 */
+	// コントロールのハンドルを取得
 	hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 
 	hdc = ::GetDC( hwndDlg );
@@ -483,7 +483,7 @@ void CPropToolbar::SetData( HWND hwndDlg )
 	}
 //	nListItemHeight+=2;
 
-	/* ツールバーボタンの情報をセット(リストボックス)*/
+	// ツールバーボタンの情報をセット(リストボックス)
 	for (i = 0; i < m_Common.m_sToolBar.m_nToolBarButtonNum; ++i) {
 		//	From Here Apr. 13, 2002 genta
 		lResult = ::Listbox_ADDDATA( hwndResList, (LPARAM)m_Common.m_sToolBar.m_nToolBarButtonIdxArr[i] );
@@ -493,16 +493,16 @@ void CPropToolbar::SetData( HWND hwndDlg )
 		//	To Here Apr. 13, 2002 genta
 		lResult = List_SetItemHeight( hwndResList, lResult, nListItemHeight );
 	}
-	/* ツールバーの先頭の項目を選択(リストボックス)*/
+	// ツールバーの先頭の項目を選択(リストボックス)
 	List_SetCurSel( hwndResList, 0 );	//Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
 
-	/* フラットツールバーにする／しない  */
+	// フラットツールバーにする／しない 
 	::CheckDlgButton( hwndDlg, IDC_CHECK_TOOLBARISFLAT, m_Common.m_sToolBar.m_bToolBarIsFlat );
 	return;
 }
 
 
-/* ダイアログデータの取得 Toolbar */
+// ダイアログデータの取得 Toolbar
 int CPropToolbar::GetData( HWND hwndDlg )
 {
 	HWND	hwndResList;
@@ -512,10 +512,10 @@ int CPropToolbar::GetData( HWND hwndDlg )
 
 	hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 
-	/* ツールバーボタンの数 */
+	// ツールバーボタンの数
 	m_Common.m_sToolBar.m_nToolBarButtonNum = List_GetCount( hwndResList );
 
-	/* ツールバーボタンの情報を取得 */
+	// ツールバーボタンの情報を取得
 	k = 0;
 	for (i = 0; i < m_Common.m_sToolBar.m_nToolBarButtonNum; ++i) {
 		j = List_GetItemData( hwndResList, i );
@@ -526,7 +526,7 @@ int CPropToolbar::GetData( HWND hwndDlg )
 	}
 	m_Common.m_sToolBar.m_nToolBarButtonNum = k;
 
-	/* フラットツールバーにする／しない  */
+	// フラットツールバーにする／しない
 	m_Common.m_sToolBar.m_bToolBarIsFlat = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_TOOLBARISFLAT );
 
 	return TRUE;
@@ -587,7 +587,7 @@ void CPropToolbar::DrawToolBarItemList( DRAWITEMSTRUCT* pDis )
 		}
 		//	To Here Oct. 15, 2001 genta
 
-		/* アイテムが選択されている */
+		// アイテムが選択されている
 		if (pDis->itemState & ODS_SELECTED) {
 //			hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_HIGHLIGHT ) );
 			hBrush = ::GetSysColorBrush( COLOR_HIGHLIGHT );
@@ -609,7 +609,7 @@ void CPropToolbar::DrawToolBarItemList( DRAWITEMSTRUCT* pDis )
 
 	}
 
-	/* アイテムにフォーカスがある */
+	// アイテムにフォーカスがある
 	if (pDis->itemState & ODS_FOCUS) {
 		::DrawFocusRect( pDis->hDC, &rc2 );
 	}

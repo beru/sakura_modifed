@@ -4,20 +4,21 @@
 #include "CEditApp.h"
 
 CMainStatusBar::CMainStatusBar(CEditWnd* pOwner)
-: m_pOwner(pOwner)
-, m_hwndStatusBar( NULL )
-, m_hwndProgressBar( NULL )
+	:
+	m_pOwner(pOwner),
+	m_hwndStatusBar( NULL ),
+	m_hwndProgressBar( NULL )
 {
 }
 
 
 //	キーワード：ステータスバー順序
-/* ステータスバー作成 */
+// ステータスバー作成
 void CMainStatusBar::CreateStatusBar()
 {
-	if( m_hwndStatusBar )return;
+	if (m_hwndStatusBar) return;
 
-	/* ステータスバー */
+	// ステータスバー
 	m_hwndStatusBar = ::CreateStatusWindow(
 		WS_CHILD/* | WS_VISIBLE*/ | WS_EX_RIGHT | SBARS_SIZEGRIP,	// 2007.03.08 ryoji WS_VISIBLE 除去
 		_T(""),
@@ -25,7 +26,7 @@ void CMainStatusBar::CreateStatusBar()
 		IDW_STATUSBAR
 	);
 
-	/* プログレスバー */
+	// プログレスバー
 	m_hwndProgressBar = ::CreateWindowEx(
 		WS_EX_TOOLWINDOW,
 		PROGRESS_CLASS,
@@ -41,41 +42,40 @@ void CMainStatusBar::CreateStatusBar()
 		0
 	);
 
-	if( m_pOwner->m_CFuncKeyWnd.GetHwnd() ){
+	if (m_pOwner->m_CFuncKeyWnd.GetHwnd()) {
 		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF( FALSE );
 	}
 
-	//スプリッターの、サイズボックスの位置を変更
+	// スプリッターの、サイズボックスの位置を変更
 	m_pOwner->m_cSplitterWnd.DoSplit( -1, -1);
 }
 
 
-/* ステータスバー破棄 */
+// ステータスバー破棄
 void CMainStatusBar::DestroyStatusBar()
 {
-	if( m_hwndProgressBar ){
+	if (m_hwndProgressBar) {
 		::DestroyWindow( m_hwndProgressBar );
 		m_hwndProgressBar = NULL;
 	}
 	::DestroyWindow( m_hwndStatusBar );
 	m_hwndStatusBar = NULL;
 
-	if( m_pOwner->m_CFuncKeyWnd.GetHwnd() ){
+	if (m_pOwner->m_CFuncKeyWnd.GetHwnd()) {
 		bool bSizeBox;
-		if( GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0 ){	/* ファンクションキー表示位置／0:上 1:下 */
-			/* サイズボックスの表示／非表示切り替え */
+		if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
+			// サイズボックスの表示／非表示切り替え
 			bSizeBox = false;
-		}
-		else{
+		}else {
 			bSizeBox = true;
-			/* ステータスパーを表示している場合はサイズボックスを表示しない */
-			if( m_hwndStatusBar ){
+			// ステータスパーを表示している場合はサイズボックスを表示しない
+			if (m_hwndStatusBar) {
 				bSizeBox = false;
 			}
 		}
 		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF( bSizeBox );
 	}
-	//スプリッターの、サイズボックスの位置を変更
+	// スプリッターの、サイズボックスの位置を変更
 	m_pOwner->m_cSplitterWnd.DoSplit( -1, -1 );
 }
 
@@ -96,9 +96,9 @@ void CMainStatusBar::DestroyStatusBar()
 */
 void CMainStatusBar::SendStatusMessage2( const TCHAR* msg )
 {
-	if( m_hwndStatusBar ){
+	if (m_hwndStatusBar) {
 		// ステータスバーへ
-		StatusBar_SetText( m_hwndStatusBar,0 | SBT_NOBORDERS,msg );
+		StatusBar_SetText( m_hwndStatusBar, 0 | SBT_NOBORDERS, msg );
 	}
 }
 

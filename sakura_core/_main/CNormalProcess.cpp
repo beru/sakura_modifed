@@ -41,8 +41,9 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CNormalProcess::CNormalProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine )
-: CProcess( hInstance, lpCmdLine )
-, m_pcEditApp( NULL )
+	:
+	CProcess( hInstance, lpCmdLine ),
+	m_pcEditApp( NULL )
 {
 }
 
@@ -72,21 +73,21 @@ bool CNormalProcess::InitializeProcess()
 {
 	MY_RUNNINGTIMER( cRunningTimer, "NormalProcess::Init" );
 
-	/* プロセス初期化の目印 */
+	// プロセス初期化の目印
 	HANDLE	hMutex = _GetInitializeMutex();	// 2002/2/8 aroka 込み入っていたので分離
 	if (!hMutex) {
 		return false;
 	}
 
-	/* 共有メモリを初期化する */
+	// 共有メモリを初期化する
 	if (!CProcess::InitializeProcess()) {
 		return false;
 	}
 
-	/* 言語を選択する */
+	// 言語を選択する
 	CSelectLang::ChangeLang( GetDllShareData().m_Common.m_sWindow.m_szLanguageDll );
 
-	/* コマンドラインオプション */
+	// コマンドラインオプション
 	bool			bViewMode = false;
 	bool			bDebugMode;
 	bool			bGrepMode;
@@ -95,15 +96,15 @@ bool CNormalProcess::InitializeProcess()
 	EditInfo		fi;
 	
 	auto& cmdLine = *CCommandLine::getInstance();
-	/* コマンドラインで受け取ったファイルが開かれている場合は */
-	/* その編集ウィンドウをアクティブにする */
+	// コマンドラインで受け取ったファイルが開かれている場合は
+	// その編集ウィンドウをアクティブにする
 	cmdLine.GetEditInfo(&fi); // 2002/2/8 aroka ここに移動
 	if (fi.m_szPath[0] != _T('\0')) {
 		//	Oct. 27, 2000 genta
 		//	MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
 		//	行われるのでここでは必要なし．
 
-		/* 指定ファイルが開かれているか調べる */
+		// 指定ファイルが開かれているか調べる
 		// 2007.03.13 maru 文字コードが異なるときはワーニングを出すように
 		HWND hwndOwner;
 		if (GetShareData().ActiveAlreadyOpenedWindow( fi.m_szPath, &hwndOwner, fi.m_nCharCode )) {
@@ -120,8 +121,8 @@ bool CNormalProcess::InitializeProcess()
 				pt.y = fi.m_ptCursor.y;
 				::SendMessageAny( hwndOwner, MYWM_SETCARETPOS, 0, 0 );
 			}
-			//	To Here Oct. 19, 2001 genta
-			/* アクティブにする */
+			// To Here Oct. 19, 2001 genta
+			// アクティブにする
 			ActivateFrameWindow( hwndOwner );
 			::ReleaseMutex( hMutex );
 			::CloseHandle( hMutex );
@@ -132,12 +133,12 @@ bool CNormalProcess::InitializeProcess()
 
 	// プラグイン読み込み
 	MY_TRACETIME( cRunningTimer, "Before Init Jack" );
-	/* ジャック初期化 */
+	// ジャック初期化
 	CJackManager::getInstance();
 	MY_TRACETIME( cRunningTimer, "After Init Jack" );
 
 	MY_TRACETIME( cRunningTimer, "Before Load Plugins" );
-	/* プラグイン読み込み */
+	// プラグイン読み込み
 	CPluginManager::getInstance()->LoadAllPlugin();
 	MY_TRACETIME( cRunningTimer, "After Load Plugins" );
 
@@ -158,7 +159,7 @@ bool CNormalProcess::InitializeProcess()
 		return false;	// 2009.06.23 ryoji CEditWnd::Create()失敗のため終了
 	}
 
-	/* コマンドラインの解析 */	 // 2002/2/8 aroka ここに移動
+	// コマンドラインの解析		2002/2/8 aroka ここに移動
 	bDebugMode = cmdLine.IsDebugMode();
 	bGrepMode  = cmdLine.IsGrepMode();
 	bGrepDlg   = cmdLine.IsGrepDlg();
@@ -169,7 +170,7 @@ bool CNormalProcess::InitializeProcess()
 	const CTypeConfig nType = (fi.m_szDocType[0] == '\0' ? CTypeConfig(-1) : CDocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
 
 	if (bDebugMode) {
-		/* デバッグモニタモードに設定 */
+		// デバッグモニタモードに設定
 		CAppMode::getInstance()->SetDebugModeON();
 		if( !CAppMode::getInstance()->IsDebugMode() ){
 			// デバッグではなくて(無題)
@@ -182,7 +183,7 @@ bool CNormalProcess::InitializeProcess()
 		pEditWnd->SetDocumentTypeWhenCreate( fi.m_nCharCode, false, nType );
 		pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを表示する
 	}else if (bGrepMode) {
-		/* GREP */
+		// GREP
 		// 2010.06.16 Moca Grepでもオプション指定を適用
 		pEditWnd->SetDocumentTypeWhenCreate( fi.m_nCharCode, false, nType );
 		pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを予め表示しておく
@@ -252,12 +253,12 @@ bool CNormalProcess::InitializeProcess()
 			
 			//	Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
 			//	引数の設定がBOXに反映されない
-			pEditWnd->m_cDlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		/* 検索文字列 */
+			pEditWnd->m_cDlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		// 検索文字列
 			int nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFile);
-			_tcsncpy( pEditWnd->m_cDlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize );	/* 検索ファイル */
+			_tcsncpy( pEditWnd->m_cDlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize );	// 検索ファイル
 			pEditWnd->m_cDlgGrep.m_szFile[nSize-1] = _T('\0');
 			nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFolder);
-			_tcsncpy( pEditWnd->m_cDlgGrep.m_szFolder, cmemGrepFolder.GetStringPtr(), nSize );	/* 検索フォルダ */
+			_tcsncpy( pEditWnd->m_cDlgGrep.m_szFolder, cmemGrepFolder.GetStringPtr(), nSize );	// 検索フォルダ
 			pEditWnd->m_cDlgGrep.m_szFolder[nSize-1] = _T('\0');
 
 			
@@ -270,7 +271,7 @@ bool CNormalProcess::InitializeProcess()
 			//return true; // 2003.06.23 Moca
 		}
 
-		//プラグイン：EditorStartイベント実行
+		// プラグイン：EditorStartイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_EDITOR_START, 0, &plugs );
@@ -278,7 +279,7 @@ bool CNormalProcess::InitializeProcess()
 			(*it)->Invoke(&activeView, params);
 		}
 
-		//プラグイン：DocumentOpenイベント実行
+		// プラグイン：DocumentOpenイベント実行
 		plugs.clear();
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
@@ -313,12 +314,12 @@ bool CNormalProcess::InitializeProcess()
 					nType
 				);
 			}
-			//	Nov. 6, 2000 genta
-			//	キャレット位置の復元のため
-			//	オプション指定がないときは画面移動を行わないようにする
-			//	Oct. 19, 2001 genta
-			//	未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
-			//	移動するようにする． || → &&
+			// ov. 6, 2000 genta
+			// キャレット位置の復元のため
+			// オプション指定がないときは画面移動を行わないようにする
+			// ct. 19, 2001 genta
+			// 未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
+			// 移動するようにする． || → &&
 			if (
 				( CLayoutInt(0) <= fi.m_nViewTopLine && CLayoutInt(0) <= fi.m_nViewLeftCol )
 				&& fi.m_nViewTopLine < pEditWnd->GetDocument()->m_cLayoutMgr.GetLineCount()
@@ -327,9 +328,9 @@ bool CNormalProcess::InitializeProcess()
 				activeView.GetTextArea().SetViewLeftCol( fi.m_nViewLeftCol );
 			}
 
-			//	オプション指定がないときはカーソル位置設定を行わないようにする
-			//	Oct. 19, 2001 genta
-			//	0も位置としては有効な値なので判定に含めなくてはならない
+			// オプション指定がないときはカーソル位置設定を行わないようにする
+			// ct. 19, 2001 genta
+			// も位置としては有効な値なので判定に含めなくてはならない
 			if (0 <= fi.m_ptCursor.x || 0 <= fi.m_ptCursor.y) {
 				/*
 				  カーソル位置変換
@@ -461,7 +462,7 @@ bool CNormalProcess::InitializeProcess()
 bool CNormalProcess::MainLoop()
 {
 	if (GetMainWindow()) {
-		m_pcEditApp->GetEditWindow()->MessageLoop();	/* メッセージループ */
+		m_pcEditApp->GetEditWindow()->MessageLoop();	// メッセージループ
 		return true;
 	}
 	return false;
@@ -479,7 +480,6 @@ void CNormalProcess::OnExitProcess()
 	// プラグイン解放
 	CPluginManager::getInstance()->UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
 }
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -514,5 +514,4 @@ HANDLE CNormalProcess::_GetInitializeMutex() const
 	}
 	return hMutex;
 }
-
 

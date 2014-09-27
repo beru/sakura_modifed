@@ -11,13 +11,13 @@
 	@date 2006.06.17 ryoji 新規
 */
 static DWORD s_dwComctl32Version = PACKVERSION(0, 0);
+
 DWORD GetComctl32Version()
 {
 	if (PACKVERSION(0, 0) == s_dwComctl32Version)
 		s_dwComctl32Version = GetDllVersion(_T("Comctl32.dll"));
 	return s_dwComctl32Version;
 }
-
 
 /*!	自分が現在ビジュアルスタイル表示状態かどうかを示す
 	Win32 API の IsAppThemed() はこれとは一致しない（IsAppThemed() と IsThemeActive() との差異は不明）
@@ -288,10 +288,10 @@ HGLOBAL GetGlobalData( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat )
 	Win16 の GetFreeSystemResources 関数を呼ぶ為の DLL です。これを使いましょう。
 */
 BOOL GetSystemResources(
-	int*	pnSystemResources,
-	int*	pnUserResources,
-	int*	pnGDIResources
-)
+	int* pnSystemResources,
+	int* pnUserResources,
+	int* pnGDIResources
+	)
 {
 	#define GFSR_SYSTEMRESOURCES	0x0000
 	#define GFSR_GDIRESOURCES		0x0001
@@ -342,5 +342,4 @@ CCurrentDirectoryBackupPoint::~CCurrentDirectoryBackupPoint()
 		::SetCurrentDirectory(m_szCurDir);
 	}
 }
-
 

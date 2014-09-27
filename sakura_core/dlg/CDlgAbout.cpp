@@ -121,7 +121,7 @@ INT_PTR CDlgAbout::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lP
 }
 //	To Here Nov. 7, 2000 genta
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgAbout::DoModal( HINSTANCE hInstance, HWND hwndParent )
 {
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_ABOUT, (LPARAM)NULL );
@@ -139,12 +139,12 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	TCHAR			szMsg[2048];
 	TCHAR			szFile[_MAX_PATH];
 
-	/* この実行ファイルの情報 */
+	// この実行ファイルの情報
 	::GetModuleFileName( NULL, szFile, _countof( szFile ) );
 	
-	//	Oct. 22, 2005 genta タイムスタンプ取得の共通関数利用
+	// Oct. 22, 2005 genta タイムスタンプ取得の共通関数利用
 
-	/* バージョン情報 */
+	// バージョン情報
 	//	Nov. 6, 2000 genta	Unofficial Releaseのバージョンとして設定
 	//	Jun. 8, 2001 genta	GPL化に伴い、OfficialなReleaseとしての道を歩み始める
 	//	Feb. 7, 2002 genta コンパイラ情報追加
@@ -152,7 +152,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	//	2010.04.15 Moca コンパイラ情報を分離/WINヘッダ,N_SHAREDATA_VERSION追加
 
 	// 以下の形式で出力
-	//サクラエディタ   Ver. 2.0.0.0 (Rev.9999)
+	// サクラエディタ   Ver. 2.0.0.0 (Rev.9999)
 	//
 	//      Share Ver: 96
 	//      Compile Info: V 1400  WR WIN600/I601/C000/N600
@@ -246,7 +246,7 @@ BOOL CDlgAbout::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	//	Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
 	//m_UrlOrgWnd.SubclassWindow( GetDlgItem( GetHwnd(), IDC_STATIC_URL_ORG ) );
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnInitDialog( GetHwnd(), wParam, lParam );
 }
 
@@ -280,7 +280,7 @@ BOOL CDlgAbout::OnStnClicked( int wID )
 			return TRUE;
 		}
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnStnClicked( wID );
 }
 

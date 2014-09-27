@@ -35,7 +35,7 @@
 #include "convert/convert_util2.h"
 #include "charset/codechecker.h"
 
-/* Base64デコード */
+// Base64デコード
 bool CDecode_Base64Decode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 {
 	using namespace WCODE;

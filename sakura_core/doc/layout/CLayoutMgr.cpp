@@ -35,15 +35,16 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CLayoutMgr::CLayoutMgr()
-: m_getIndentOffset( &CLayoutMgr::getIndentOffset_Normal )	//	Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
+	:
+	m_getIndentOffset( &CLayoutMgr::getIndentOffset_Normal )	//	Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 {
 	m_pcDocLineMgr = NULL;
 	m_pTypeConfig = NULL;
 	m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);
 	m_nTabSpace = CLayoutInt(4);
-	m_pszKinsokuHead_1.clear();						/* 行頭禁則 */	//@@@ 2002.04.08 MIK
-	m_pszKinsokuTail_1.clear();						/* 行末禁則 */	//@@@ 2002.04.08 MIK
-	m_pszKinsokuKuto_1.clear();						/* 句読点ぶらさげ */	//@@@ 2002.04.17 MIK
+	m_pszKinsokuHead_1.clear();						// 行頭禁則	//@@@ 2002.04.08 MIK
+	m_pszKinsokuTail_1.clear();						// 行末禁則	//@@@ 2002.04.08 MIK
+	m_pszKinsokuKuto_1.clear();						// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
 
 	m_nTextWidth = CLayoutInt(0);			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
 	m_nTextWidthMaxLine = CLayoutInt(0);	// 最大幅のレイアウト行		// 2009.08.28 nasukoji
@@ -56,9 +57,9 @@ CLayoutMgr::~CLayoutMgr()
 {
 	_Empty();
 
-	m_pszKinsokuHead_1.clear();	/* 行頭禁則 */
-	m_pszKinsokuTail_1.clear();	/* 行末禁則 */	//@@@ 2002.04.08 MIK
-	m_pszKinsokuKuto_1.clear();	/* 句読点ぶらさげ */	//@@@ 2002.04.17 MIK
+	m_pszKinsokuHead_1.clear();	// 行頭禁則
+	m_pszKinsokuTail_1.clear();	// 行末禁則			//@@@ 2002.04.08 MIK
+	m_pszKinsokuKuto_1.clear();	// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
 }
 
 
@@ -82,7 +83,7 @@ void CLayoutMgr::Init()
 	m_pLayoutBot = NULL;
 	m_nPrevReferLine = CLayoutInt(0);
 	m_pLayoutPrevRefer = NULL;
-	m_nLines = CLayoutInt(0);			/* 全物理行数 */
+	m_nLines = CLayoutInt(0);			// 全物理行数
 	m_nLineTypeBot = COLORIDX_DEFAULT;
 
 	// EOFレイアウト位置記憶	//2006.10.07 Moca
@@ -118,16 +119,16 @@ void CLayoutMgr::SetLayoutInfo(
 	assert_warning( (!bDoLayout && m_nMaxLineKetas == nMaxLineKetas) || bDoLayout );
 	assert_warning( (!bDoLayout && m_nTabSpace == refType.m_nTabSpace) || bDoLayout );
 
-	//タイプ別設定
+	// タイプ別設定
 	m_pTypeConfig = &refType;
 	m_nMaxLineKetas = nMaxLineKetas;
 	m_nTabSpace = nTabSpace;
 
-	//	Oct. 1, 2002 genta タイプによって処理関数を変更する
-	//	数が増えてきたらテーブルにすべき
-	switch (refType.m_nIndentLayout) {	/* 折り返しは2行目以降を字下げ表示 */	//@@@ 2002.09.29 YAZAKI
+	// Oct. 1, 2002 genta タイプによって処理関数を変更する
+	// 数が増えてきたらテーブルにすべき
+	switch (refType.m_nIndentLayout) {	// 折り返しは2行目以降を字下げ表示	//@@@ 2002.09.29 YAZAKI
 	case 1:
-		//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
+		// Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 		m_getIndentOffset = &CLayoutMgr::getIndentOffset_Tx2x;
 		break;
 	case 2:
@@ -138,8 +139,8 @@ void CLayoutMgr::SetLayoutInfo(
 		break;
 	}
 
-	//句読点ぶら下げ文字	// 2009.08.07 ryoji
-	//refType.m_szKinsokuKuto → m_pszKinsokuKuto_1
+	// 句読点ぶら下げ文字	// 2009.08.07 ryoji
+	// refType.m_szKinsokuKuto → m_pszKinsokuKuto_1
 	m_pszKinsokuKuto_1.clear();
 	if (refType.m_bKinsokuKuto) {	// 2009.08.06 ryoji m_bKinsokuKutoで振り分ける(Fix)
 		for (const wchar_t* p = refType.m_szKinsokuKuto; *p; p++) {
@@ -147,8 +148,8 @@ void CLayoutMgr::SetLayoutInfo(
 		}
 	}
 
-	//行頭禁則文字
-	//refType.m_szKinsokuHead → (句読点以外) m_pszKinsokuHead_1
+	// 行頭禁則文字
+	// refType.m_szKinsokuHead → (句読点以外) m_pszKinsokuHead_1
 	m_pszKinsokuHead_1.clear();
 	for (const wchar_t* p = refType.m_szKinsokuHead; *p; p++) {
 		if (m_pszKinsokuKuto_1.exist(*p)) {
@@ -158,14 +159,14 @@ void CLayoutMgr::SetLayoutInfo(
 		}
 	}
 
-	//行末禁則文字
-	//refType.m_szKinsokuTail → m_pszKinsokuTail_1
+	// 行末禁則文字
+	// refType.m_szKinsokuTail → m_pszKinsokuTail_1
 	m_pszKinsokuTail_1.clear();
 	for (const wchar_t* p = refType.m_szKinsokuTail; *p; p++) {
 		m_pszKinsokuTail_1.push_back_unique(*p);
 	}
 
-	//レイアウト
+	// レイアウト
 	if (bDoLayout) {
 		_DoLayout();
 	}
@@ -310,25 +311,25 @@ void CLayoutMgr::AddLineBottom( CLayout* pLayout )
 CLayout* CLayoutMgr::InsertLineNext( CLayout* pLayoutPrev, CLayout* pLayout )
 {
 	if (CLayoutInt(0) == m_nLines) {
-		/* 初 */
+		// 初
 		m_pLayoutBot = m_pLayoutTop = pLayout;
 		m_pLayoutTop->m_pPrev = NULL;
 		m_pLayoutTop->m_pNext = NULL;
 	}else if (!pLayoutPrev) {
-		/* 先頭に挿入 */
+		// 先頭に挿入
 		m_pLayoutTop->m_pPrev = pLayout;
 		pLayout->m_pPrev = NULL;
 		pLayout->m_pNext = m_pLayoutTop;
 		m_pLayoutTop = pLayout;
 	}else
 	if (!pLayoutPrev->GetNextLayout()) {
-		/* 最後に挿入 */
+		// 最後に挿入
 		m_pLayoutBot->m_pNext = pLayout;
 		pLayout->m_pPrev = m_pLayoutBot;
 		pLayout->m_pNext = NULL;
 		m_pLayoutBot = pLayout;
 	}else {
-		/* 途中に挿入 */
+		// 途中に挿入
 		CLayout* pLayoutNext = pLayoutPrev->GetNextLayout();
 		pLayoutPrev->m_pNext = pLayout;
 		pLayoutNext->m_pPrev = pLayout;
@@ -363,14 +364,14 @@ CLayout* CLayoutMgr::CreateLayout(
 	);
 
 	if (EOL_NONE == pCDocLine->GetEol()) {
-		pLayout->m_cEol.SetType( EOL_NONE );/* 改行コードの種類 */
+		pLayout->m_cEol.SetType( EOL_NONE );	// 改行コードの種類
 	}else {
 		if (pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL() >
 			pCDocLine->GetLengthWithEOL() - pCDocLine->GetEol().GetLen()
 		) {
-			pLayout->m_cEol = pCDocLine->GetEol();/* 改行コードの種類 */
+			pLayout->m_cEol = pCDocLine->GetEol();	// 改行コードの種類
 		}else {
-			pLayout->m_cEol = EOL_NONE;/* 改行コードの種類 */
+			pLayout->m_cEol = EOL_NONE;	// 改行コードの種類
 		}
 	}
 
@@ -428,8 +429,8 @@ bool CLayoutMgr::IsEndOfLine(
 	}
 
 	if (EOL_NONE == pLayout->GetLayoutEol().GetType()) {
-		/* この行に改行はない */
-		/* この行の最後か？ */
+		// この行に改行はない
+		// この行の最後か？
 		if (ptLinePos.x == (Int)pLayout->GetLengthWithEOL()) {
 			return true; //$$ 単位混在
 		}
@@ -469,7 +470,7 @@ void CLayoutMgr::GetEndLayoutPos(
 
 	CLayout* btm = m_pLayoutBot;
 	if (btm->m_cEol != EOL_NONE) {
-		//	末尾に改行がある
+		// 末尾に改行がある
 		ptLayoutEnd->Set(CLayoutInt(0), GetLineCount());
 	}else {
 		CMemoryIterator it( btm, GetTabSpace() );
@@ -503,7 +504,7 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 )
 {
 	*pnDeleteLines = CLayoutInt(0);
-	if (CLayoutInt(0) == m_nLines) {	/* 全物理行数 */
+	if (CLayoutInt(0) == m_nLines) {	// 全物理行数
 		return NULL;
 	}
 	if (!pLayoutInThisArea) {
@@ -514,7 +515,7 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 	m_pLayoutPrevRefer = pLayoutInThisArea->GetPrevLayout();
 	m_nPrevReferLine = nLineOf_pLayoutInThisArea - CLayoutInt(1);
 
-	/* 範囲内先頭に該当するレイアウト情報をサーチ */
+	// 範囲内先頭に該当するレイアウト情報をサーチ
 	CLayout* pLayoutWork = pLayoutInThisArea->GetPrevLayout();
 	while (pLayoutWork && nLineFrom <= pLayoutWork->GetLogicLineNo()) {
 		pLayoutWork = pLayoutWork->GetPrevLayout();
@@ -527,7 +528,7 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 		}
 		CLayout* pLayoutNext = pLayout->GetNextLayout();
 		if (!pLayoutWork) {
-			/* 先頭行の処理 */
+			// 先頭行の処理
 			m_pLayoutTop = pLayout->GetNextLayout();
 			if (pLayout->GetNextLayout()) {
 				pLayout->m_pNext->m_pPrev = NULL;
@@ -560,7 +561,7 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 
 		delete pLayout;
 
-		m_nLines--;	/* 全物理行数 */
+		m_nLines--;	// 全物理行数
 		if (!pLayoutNext) {
 			m_pLayoutBot = pLayoutWork;
 		}
@@ -583,9 +584,9 @@ void CLayoutMgr::ShiftLogicalLineNum( CLayout* pLayoutPrev, CLogicInt nShiftLine
 		return;
 	}
 	CLayout* pLayout = pLayoutPrev ? pLayoutPrev->GetNextLayout() : m_pLayoutTop;
-	/* レイアウト情報全体を更新する(なな、なんと!!!) */
+	// レイアウト情報全体を更新する(なな、なんと!!!)
 	while (pLayout) {
-		pLayout->OffsetLogicLineNo(nShiftLines);	/* 対応する論理行番号 */
+		pLayout->OffsetLogicLineNo(nShiftLines);	// 対応する論理行番号
 		pLayout = pLayout->GetNextLayout();
 	}
 	return;
@@ -612,7 +613,7 @@ bool CLayoutMgr::ChangeLayoutParam(
 }
 
 
-/* 現在位置の単語の範囲を調べる */
+// 現在位置の単語の範囲を調べる
 bool CLayoutMgr::WhereCurrentWord(
 	CLayoutInt		nLineNum,
 	CLogicInt		nIdx,
@@ -639,7 +640,7 @@ bool CLayoutMgr::WhereCurrentWord(
 	);
 
 	if (nRetCode) {
-		/* 論理位置→レイアウト位置変換 */
+		// 論理位置→レイアウト位置変換
 		CLayoutPoint ptFrom;
 		LogicToLayout( CLogicPoint(nFromX, pLayout->GetLogicLineNo()), &ptFrom, nLineNum );
 		pSelect->SetFrom(ptFrom);
@@ -653,7 +654,7 @@ bool CLayoutMgr::WhereCurrentWord(
 }
 
 
-/* 現在位置の左右の単語の先頭位置を調べる */
+// 現在位置の左右の単語の先頭位置を調べる
 int CLayoutMgr::PrevOrNextWord(
 	CLayoutInt		nLineNum,
 	CLogicInt		nIdx,
@@ -678,7 +679,7 @@ int CLayoutMgr::PrevOrNextWord(
 	);
 
 	if (nRetCode) {
-		/* 論理位置→レイアウト位置変換 */
+		// 論理位置→レイアウト位置変換
 		LogicToLayout(
 			CLogicPoint(nPosNew,pLayout->GetLogicLineNo()),
 			pptLayoutNew,
@@ -749,7 +750,7 @@ void CLayoutMgr::LogicToLayout(
 	pptLayout->Clear();
 
 	if (GetLineCount()==0) {
-		return; //変換不可
+		return; // 変換不可
 	}
 	// サーチ開始地点 -> pLayout, nCaretPosX, nCaretPosY
 	CLayoutInt		nCaretPosX = CLayoutInt(0);
@@ -777,13 +778,13 @@ void CLayoutMgr::LogicToLayout(
 			return;
 		}
 		
-		//ロジックYがでかすぎる場合は、一致するまでデクリメント (
+		// ロジックYがでかすぎる場合は、一致するまでデクリメント (
 		while (pLayout->GetLogicLineNo() > ptLogic.GetY2()) {
 			pLayout = pLayout->GetPrevLayout();
 			nCaretPosY--;
 		}
 
-		//ロジックYが同じでOffsetが行き過ぎている場合は戻る
+		// ロジックYが同じでOffsetが行き過ぎている場合は戻る
 		if (pLayout->GetLogicLineNo() == ptLogic.GetY2()) {
 			while (1
 				&& pLayout->GetPrevLayout()
@@ -796,7 +797,7 @@ void CLayoutMgr::LogicToLayout(
 		}
 	}
 
-	//	Layoutを１つずつ先に進めながらptLogic.yが物理行に一致するLayoutを探す
+	// Layoutを１つずつ先に進めながらptLogic.yが物理行に一致するLayoutを探す
 	do {
 		if (ptLogic.GetY2() == pLayout->GetLogicLineNo()) {
 			// 2013.05.10 Moca 高速化
@@ -824,13 +825,13 @@ void CLayoutMgr::LogicToLayout(
 					break;
 				}
 
-				//文字ロジック幅 -> nCharChars
+				// 文字ロジック幅 -> nCharChars
 				CLogicInt nCharChars = CNativeW::GetSizeOfChar( pData, nDataLen, i );
 				if (nCharChars == 0) {
 					nCharChars = CLogicInt(1);
 				}
 				
-				//文字レイアウト幅 -> nCharKetas
+				// 文字レイアウト幅 -> nCharKetas
 				CLayoutInt nCharKetas;
 				if (pData[i] ==	WCODE::TAB) {
 					// Sep. 23, 2002 genta メンバー関数を使うように
@@ -838,13 +839,13 @@ void CLayoutMgr::LogicToLayout(
 				}else {
 					nCharKetas = CNativeW::GetKetaOfChar( pData, nDataLen, i );
 				}
-//				if( nCharKetas == 0 )				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//				if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //					nCharKetas = CLayoutInt(1);
 
-				//レイアウト加算
+				// レイアウト加算
 				nCaretPosX += nCharKetas;
 
-				//ロジック加算
+				// ロジック加算
 				if (pData[i] ==	WCODE::TAB) {
 					nCharChars = CLogicInt(1);
 				}
@@ -953,29 +954,29 @@ void CLayoutMgr::LayoutToLogicEx(
 checkloop:;
 	CLogicInt i;
 	for (i = CLogicInt(0); i < nDataLen; ++i) {
-		//文字ロジック幅 -> nCharChars
+		// 文字ロジック幅 -> nCharChars
 		CLogicInt	nCharChars;
 		nCharChars = CNativeW::GetSizeOfChar( pData, nDataLen, i );
 		if (nCharChars == 0)
 			nCharChars = CLogicInt(1);
 		
-		//文字レイアウト幅 -> nCharKetas
+		// 文字レイアウト幅 -> nCharKetas
 		CLayoutInt	nCharKetas;
 		if (pData[i] == WCODE::TAB) {
 			nCharKetas = GetActualTabSpace( nX );
 		}else {
 			nCharKetas = CNativeW::GetKetaOfChar( pData, nDataLen, i );
 		}
-//		if( nCharKetas == 0 )				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//		if (nCharKetas == 0)				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //			nCharKetas = CLayoutInt(1);
 
-		//レイアウト加算
+		// レイアウト加算
 		if (nX + nCharKetas > ptLayout.GetX2() && !bEOF) {
 			break;
 		}
 		nX += nCharKetas;
 
-		//ロジック加算
+		// ロジック加算
 		if (pData[i] ==	WCODE::TAB) {
 			nCharChars = CLogicInt(1);
 		}
@@ -1000,7 +1001,7 @@ void CLayoutMgr::LayoutToLogic( const CLayoutPoint& ptLayout, CLogicPoint* pptLo
 //                         デバッグ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-/* テスト用にレイアウト情報をダンプ */
+// テスト用にレイアウト情報をダンプ
 void CLayoutMgr::DUMP()
 {
 #ifdef _DEBUG

@@ -49,27 +49,27 @@ struct EditNode {
 };
 
 //! 拡張構造体
-struct EditNodeEx{
+struct EditNodeEx {
 	EditNode*	p;			//!< 編集ウィンドウ配列要素へのポインタ
 	int			nGroupMru;	//!< グループ単位のMRU番号
 };
 
 
 //! 共有メモリ内構造体
-struct SShare_Nodes{
-	int					m_nEditArrNum;	//short->intに修正	//@@@ 2003.05.31 MIK
-	EditNode			m_pEditArr[MAX_EDITWINDOWS];	//最大値修正	@@@ 2003.05.31 MIK
-	LONG				m_nSequences;	/* ウィンドウ連番 */
-	LONG				m_nNonameSequences;	/* 無題連番 */
+struct SShare_Nodes {
+	int					m_nEditArrNum;	// short->intに修正	//@@@ 2003.05.31 MIK
+	EditNode			m_pEditArr[MAX_EDITWINDOWS];	// 最大値修正	@@@ 2003.05.31 MIK
+	LONG				m_nSequences;	// ウィンドウ連番
+	LONG				m_nNonameSequences;	// 無題連番
 	LONG				m_nGroupSequences;	// タブグループ連番	// 2007.06.20 ryoji
 };
 
 
 //! ノードアクセサ
-class CAppNodeHandle{
+class CAppNodeHandle {
 public:
 	CAppNodeHandle(HWND hwnd);
-	EditNode* operator->(){ return m_pNodeRef; }
+	EditNode* operator->() { return m_pNodeRef; }
 private:
 	EditNode* m_pNodeRef;
 };
@@ -87,54 +87,54 @@ public:
 	BOOL RequestCloseEditor( EditNode* pWndArr, int nArrCnt, BOOL bExit, BOOL bCheckConfirm, HWND hWndFrom );
 															//!< いくつかのウィンドウへ終了要求を出す	// 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加	// 2007.06.20 ryoji nGroup引数追加
 
-	int GetEditorWindowsNum( bool bExcludeClosing = true );				/* 現在の編集ウィンドウの数を調べる */	// 2007.06.20 ryoji nGroup引数追加	// 2008.04.19 ryoji bExcludeClosing引数追加
+	int GetEditorWindowsNum( bool bExcludeClosing = true );				// 現在の編集ウィンドウの数を調べる		// 2007.06.20 ryoji nGroup引数追加	// 2008.04.19 ryoji bExcludeClosing引数追加
 
-	//全ウィンドウ一括操作
-	BOOL PostMessageToAllEditors( UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast );	/* 全編集ウィンドウへメッセージをポストする */	// 2007.06.20 ryoji nGroup引数追加
-	BOOL SendMessageToAllEditors( UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast );	/* 全編集ウィンドウへメッセージを送るする */	// 2007.06.20 ryoji nGroup引数追加
+	// 全ウィンドウ一括操作
+	BOOL PostMessageToAllEditors( UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast );	// 全編集ウィンドウへメッセージをポストする	// 2007.06.20 ryoji nGroup引数追加
+	BOOL SendMessageToAllEditors( UINT uMsg, WPARAM wParam, LPARAM lParam, HWND hWndLast );	// 全編集ウィンドウへメッセージを送る		// 2007.06.20 ryoji nGroup引数追加
 
 public:
-	bool operator==(const CAppNodeGroupHandle& rhs) const{ return m_nGroup==rhs.m_nGroup; }
-	bool IsValidGroup() const{ return m_nGroup>=0; }
-	operator int() const{ return m_nGroup; }
+	bool operator == (const CAppNodeGroupHandle& rhs) const { return m_nGroup == rhs.m_nGroup; }
+	bool IsValidGroup() const { return m_nGroup >= 0; }
+	operator int() const { return m_nGroup; }
 
 private:
 	int m_nGroup;
 };
 
 
-class CAppNodeManager : public TSingleton<CAppNodeManager>{
+class CAppNodeManager : public TSingleton<CAppNodeManager> {
 	friend class TSingleton<CAppNodeManager>;
-	CAppNodeManager(){}
+	CAppNodeManager() {}
 
 public:
-	//グループ
-	void ResetGroupId();									/* グループをIDリセットする */
+	// グループ
+	void ResetGroupId();									// グループをIDリセットする
 
-	//ウィンドウハンドル → ノード　変換
-	EditNode* GetEditNode( HWND hWnd );							/* 編集ウィンドウ情報を取得する */
+	// ウィンドウハンドル → ノード　変換
+	EditNode* GetEditNode( HWND hWnd );							// 編集ウィンドウ情報を取得する
 	int GetNoNameNumber( HWND );
 
-	//タブ
-	bool ReorderTab( HWND hSrcTab, HWND hDstTab );				/* タブ移動に伴うウィンドウの並び替え 2007.07.07 genta */
-	HWND SeparateGroup( HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[] );/* タブ分離に伴うウィンドウ処理 2007.07.07 genta */
+	// タブ
+	bool ReorderTab( HWND hSrcTab, HWND hDstTab );				// タブ移動に伴うウィンドウの並び替え 2007.07.07 genta
+	HWND SeparateGroup( HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, int notifygroups[] );	// タブ分離に伴うウィンドウ処理 2007.07.07 genta
 
-	//総合情報
-	int GetOpenedWindowArr( EditNode** , BOOL, BOOL bGSort = FALSE );				/* 現在開いている編集ウィンドウの配列を返す */
+	// 総合情報
+	int GetOpenedWindowArr( EditNode** , BOOL, BOOL bGSort = FALSE );				// 現在開いている編集ウィンドウの配列を返す
 
 protected:
-	int _GetOpenedWindowArrCore( EditNode** , BOOL, BOOL bGSort = FALSE );			/* 現在開いている編集ウィンドウの配列を返す（コア処理部） */
+	int _GetOpenedWindowArrCore( EditNode** , BOOL, BOOL bGSort = FALSE );			// 現在開いている編集ウィンドウの配列を返す（コア処理部）
 
 public:
-	static bool IsSameGroup( HWND hWnd1, HWND hWnd2 );					/* 同一グループかどうかを調べる */
-	int GetFreeGroupId( void );											/* 空いているグループ番号を取得する */
+	static bool IsSameGroup( HWND hWnd1, HWND hWnd2 );					// 同一グループかどうかを調べる
+	int GetFreeGroupId( void );											// 空いているグループ番号を取得する
 	HWND GetNextTab(HWND hWndCur);										// Close した時の次のWindowを取得する(タブまとめ表示の場合)	2013/4/10 Uchi
 };
 
 
-inline CAppNodeGroupHandle EditNode::GetGroup() const{ if(this)return m_nGroup; else return 0; }
+inline CAppNodeGroupHandle EditNode::GetGroup() const { if(this)return m_nGroup; else return 0; }
 
-inline bool EditNode::IsTopInGroup() const{ return this && (CAppNodeGroupHandle(m_nGroup).GetEditNodeAt(0) == this); }
+inline bool EditNode::IsTopInGroup() const { return this && (CAppNodeGroupHandle(m_nGroup).GetEditNodeAt(0) == this); }
 
 inline CAppNodeHandle::CAppNodeHandle(HWND hwnd)
 {

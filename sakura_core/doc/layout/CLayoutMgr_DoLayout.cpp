@@ -99,7 +99,7 @@ bool CLayoutMgr::_DoKinsokuSkip(SLayoutWork* pWork, PF_OnLine pfOnLine)
 void CLayoutMgr::_DoWordWrap(SLayoutWork* pWork, PF_OnLine pfOnLine)
 {
 	if (pWork->eKinsokuType == KINSOKU_TYPE_NONE) {
-		/* 英単語の先頭か */
+		// 英単語の先頭か
 		if (1
 			&& pWork->nPos >= pWork->nBgn
 			&& IS_KEYWORD_CHAR(pWork->cLineStr.At(pWork->nPos))
@@ -158,9 +158,9 @@ void CLayoutMgr::_DoGyotoKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine)
 		if (1
 			&& IsKinsokuPosHead( GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3 )
 			&& IsKinsokuHead( pWork->cLineStr.At(pWork->nPos+1) )
-			&& ! IsKinsokuHead( pWork->cLineStr.At(pWork->nPos) )	//1文字前が行頭禁則でない
+			&& ! IsKinsokuHead( pWork->cLineStr.At(pWork->nPos) )	// 1文字前が行頭禁則でない
 			&& ! IsKinsokuKuto( pWork->cLineStr.At(pWork->nPos) )
-		) {	//句読点でない
+		) {	// 句読点でない
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 2;
 			pWork->eKinsokuType = KINSOKU_TYPE_KINSOKU_HEAD;
@@ -177,7 +177,7 @@ void CLayoutMgr::_DoGyomatsuKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
 		&& (pWork->nPosX > pWork->nIndent)	//	2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
-	) {	/* 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう) */
+	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
 		CLayoutInt nCharKetas2 = CNativeW::GetKetaOfChar( pWork->cLineStr, pWork->nPos );
 		CLayoutInt nCharKetas3 = CNativeW::GetKetaOfChar( pWork->cLineStr, pWork->nPos+1 );
 
@@ -194,10 +194,10 @@ void CLayoutMgr::_DoGyomatsuKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine)
 	}
 }
 
-//折り返す場合はtrueを返す
+// 折り返す場合はtrueを返す
 bool CLayoutMgr::_DoTab(SLayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	//	Sep. 23, 2002 genta せっかく作ったので関数を使う
+	// Sep. 23, 2002 genta せっかく作ったので関数を使う
 	CLayoutInt nCharKetas = GetActualTabSpace( pWork->nPosX );
 	if (pWork->nPosX + nCharKetas > GetMaxLineKetas()) {
 		(this->*pfOnLine)(pWork);
@@ -231,7 +231,7 @@ void CLayoutMgr::_MakeOneLine(SLayoutWork* pWork, PF_OnLine pfOnLine)
 	while (pWork->nPos < nLength) {
 		// インデント幅は_OnLineで計算済みなのでここからは削除
 
-		//禁則処理中ならスキップする	@@@ 2002.04.20 MIK
+		// 禁則処理中ならスキップする	@@@ 2002.04.20 MIK
 		if (_DoKinsokuSkip(pWork, pfOnLine)) {
 		}else {
 			// 英文ワードラップをする
@@ -325,7 +325,7 @@ void CLayoutMgr::_DoLayout()
 
 	if (GetListenerCount() != 0) {
 		NotifyProgress(0);
-		/* 処理中のユーザー操作を可能にする */
+		// 処理中のユーザー操作を可能にする
 		if (!::BlockingHook( NULL )) {
 			return;
 		}
@@ -397,7 +397,7 @@ void CLayoutMgr::_DoLayout()
 
 	if (GetListenerCount() != 0) {
 		NotifyProgress(0);
-		/* 処理中のユーザー操作を可能にする */
+		// 処理中のユーザー操作を可能にする
 		if (!::BlockingHook( NULL )) {
 			return;
 		}
@@ -485,7 +485,7 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 	}
 	pWork->pcDocLine				= m_pcDocLineMgr->GetLine( pWork->nCurLine );
 	pWork->nModifyLayoutLinesNew	= CLayoutInt(0);
-	//引数
+	// 引数
 	pWork->ptDelLogicalFrom		= _ptDelLogicalFrom;
 	pWork->pnExtInsLineNum		= _pnExtInsLineNum;
 
@@ -515,12 +515,12 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 		nLineNumWork++;
 		pWork->nCurLine++;
 
-		/* 目的の行数(nLineNum)に達したか、または通り過ぎた（＝行数が増えた）か確認 */
+		// 目的の行数(nLineNum)に達したか、または通り過ぎた（＝行数が増えた）か確認
 		//@@@ 2002.09.23 YAZAKI 最適化
 		if (nLineNumWork >= nLineNum) {
 			if (pWork->pLayout && pWork->pLayout->GetNextLayout()) {
 				if (pWork->colorPrev != pWork->pLayout->GetNextLayout()->GetColorTypePrev()) {
-					//	COMMENTMODEが異なる行が増えましたので、次の行→次の行と更新していきます。
+					// COMMENTMODEが異なる行が増えましたので、次の行→次の行と更新していきます。
 					pWork->bNeedChangeCOMMENTMODE = true;
 				}else if (1
 					&& pWork->exInfoPrev.GetColorInfo()
@@ -614,8 +614,8 @@ void CLayoutMgr::CalculateTextWidth_Range( const CalTextWidthArg* pctwArg )
 			nCalTextWidthLinesFrom = pctwArg->ptLayout.y;
 
 			// 最終的に編集された行数（3行削除2行追加なら2行追加）
-			// 　1行がMAXLINEKETASを超える場合行数が合わなくなるが、超える場合はその先の計算自体が
-			// 　不要なので計算を省くためこのままとする。
+			// 1行がMAXLINEKETASを超える場合行数が合わなくなるが、超える場合はその先の計算自体が
+			// 不要なので計算を省くためこのままとする。
 			CLayoutInt nEditLines = nInsLineNum + ((pctwArg->nDelLines > 0) ? pctwArg->nDelLines : CLayoutInt(0));
 			nCalTextWidthLinesTo   = pctwArg->ptLayout.y + ((nEditLines > 0) ? nEditLines : CLayoutInt(0));
 

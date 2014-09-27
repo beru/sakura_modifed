@@ -357,7 +357,7 @@ bool CEditView::SearchBracket(
 
 	// 02/09/18 ai Start
 	if (0 == ( *mode & 2 )) {
-		/* カーソルの前方を調べない場合 */
+		// カーソルの前方を調べない場合
 		return false;
 	}
 	*mode |= 4;

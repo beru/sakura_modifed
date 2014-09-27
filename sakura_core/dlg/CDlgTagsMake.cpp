@@ -38,11 +38,11 @@
 #include "sakura.hh"
 
 const DWORD p_helpids[] = {	//13700
-	IDC_EDIT_TAG_MAKE_FOLDER,	HIDC_EDIT_TAG_MAKE_FOLDER,	//タグ作成フォルダ
-	IDC_BUTTON_TAG_MAKE_REF,	HIDC_BUTTON_TAG_MAKE_REF,	//参照
+	IDC_EDIT_TAG_MAKE_FOLDER,	HIDC_EDIT_TAG_MAKE_FOLDER,		// タグ作成フォルダ
+	IDC_BUTTON_TAG_MAKE_REF,	HIDC_BUTTON_TAG_MAKE_REF,		// 参照
 	IDC_BUTTON_FOLDER_UP,		HIDC_BUTTON_TAG_MAKE_FOLDER_UP,	// 上
-	IDC_EDIT_TAG_MAKE_CMDLINE,	HIDC_EDIT_TAG_MAKE_CMDLINE,	//コマンドライン
-	IDC_CHECK_TAG_MAKE_RECURSE,	HIDC_CHECK_TAG_MAKE_RECURSE,	//サブフォルダも対象
+	IDC_EDIT_TAG_MAKE_CMDLINE,	HIDC_EDIT_TAG_MAKE_CMDLINE,		// コマンドライン
+	IDC_CHECK_TAG_MAKE_RECURSE,	HIDC_CHECK_TAG_MAKE_RECURSE,	// サブフォルダも対象
 	IDOK,						HIDC_TAG_MAKE_IDOK,
 	IDCANCEL,					HIDC_TAG_MAKE_IDCANCEL,
 	IDC_BUTTON_HELP,			HIDC_BUTTON_TAG_MAKE_HELP,
@@ -58,12 +58,12 @@ CDlgTagsMake::CDlgTagsMake()
 	return;
 }
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgTagsMake::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
 	LPARAM			lParam,
-	const TCHAR*	pszPath		//パス
+	const TCHAR*	pszPath		// パス
 )
 {
 	_tcscpy_s( m_szPath, pszPath );
@@ -75,11 +75,11 @@ BOOL CDlgTagsMake::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* ヘルプ */
+		// ヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TAGS_MAKE) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 
-	case IDC_BUTTON_TAG_MAKE_REF:	/* 参照 */
+	case IDC_BUTTON_TAG_MAKE_REF:	// 参照
 		SelectFolder( GetHwnd() );
 		return TRUE;
 
@@ -95,7 +95,7 @@ BOOL CDlgTagsMake::OnBnClicked( int wID )
 		return TRUE;
 
 	case IDOK:
-		/* ダイアログデータの取得 */
+		// ダイアログデータの取得
 		::EndDialog( GetHwnd(), GetData() );
 		return TRUE;
 
@@ -105,7 +105,7 @@ BOOL CDlgTagsMake::OnBnClicked( int wID )
 
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
@@ -118,11 +118,11 @@ void CDlgTagsMake::SelectFolder( HWND hwndDlg )
 {
 	TCHAR	szPath[_MAX_PATH + 1];
 
-	/* フォルダ */
+	// フォルダ
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_TAG_MAKE_FOLDER, szPath, _MAX_PATH );
 
 	if (SelectDir( hwndDlg, LS(STR_DLGTAGMAK_SELECTDIR), szPath, szPath )) {
-		//末尾に\\マークを追加する．
+		// 末尾に\\マークを追加する．
 		int pos = _tcslen( szPath );
 		if (pos > 0 && szPath[ pos - 1 ] != _T('\\')) {
 			szPath[ pos     ] = _T('\\');
@@ -133,18 +133,18 @@ void CDlgTagsMake::SelectFolder( HWND hwndDlg )
 	}
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgTagsMake::SetData( void )
 {
-	//作成フォルダ
+	// 作成フォルダ
 	Combo_LimitText( ::GetDlgItem( GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER ), _countof( m_szPath ) );
 	::DlgItem_SetText( GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER, m_szPath );
 
-	//オプション
+	// オプション
 	m_nTagsOpt = m_pShareData->m_nTagsOpt;
 	if (m_nTagsOpt & 0x0001) ::CheckDlgButton( GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE, TRUE );
 
-	//コマンドライン
+	// コマンドライン
 	Combo_LimitText( ::GetDlgItem( GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE ), _countof( m_pShareData->m_szTagsCmdLine ) );
 	_tcscpy( m_szTagsCmdLine, m_pShareData->m_szTagsCmdLine );
 	::DlgItem_SetText( GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->m_szTagsCmdLine );
@@ -152,23 +152,23 @@ void CDlgTagsMake::SetData( void )
 	return;
 }
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgTagsMake::GetData( void )
 {
-	//フォルダ
+	// フォルダ
 	::DlgItem_GetText( GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof( m_szPath ) );
 	int length = _tcslen( m_szPath );
 	if (length > 0) {
 		if (m_szPath[ length - 1 ] != _T('\\')) _tcscat( m_szPath, _T("\\") );
 	}
 
-	//CTAGSオプション
+	// CTAGSオプション
 	m_nTagsOpt = 0;
 	if (::IsDlgButtonChecked( GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE ) == BST_CHECKED) m_nTagsOpt |= 0x0001;
 	m_pShareData->m_nTagsOpt = m_nTagsOpt;
 
-	//コマンドライン
+	// コマンドライン
 	::DlgItem_GetText( GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE, m_szTagsCmdLine, _countof( m_szTagsCmdLine ) );
 	_tcscpy( m_pShareData->m_szTagsCmdLine, m_szTagsCmdLine );
 

@@ -111,7 +111,7 @@ const TCHAR* CFileExt::GetExt( int nIndex )
 
 const TCHAR* CFileExt::GetExtFilter( void )
 {
-	/* 拡張子フィルタの作成 */
+	// 拡張子フィルタの作成
 	m_szFilter[0] = 0;
 
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szName) + _countof(m_puFileExtInfo[0].m_szExt)*2 + 10];
@@ -126,7 +126,7 @@ const TCHAR* CFileExt::GetExtFilter( void )
 	}
 	_tcscat( m_szFilter, _T("|") );
 
-	//区切りは０なので置き換える。
+	// 区切りは０なので置き換える。
 	for (int i = 0; m_szFilter[i] != _T('\0'); i++) {
 		if (m_szFilter[i] == _T('|')) {
 			m_szFilter[i] = _T('\0');
@@ -142,7 +142,7 @@ const TCHAR* CFileExt::GetExtFilter( void )
 */
 bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt )
 {
-	//	2003.08.14 MIK NULLじゃなくてfalse
+	// 2003.08.14 MIK NULLじゃなくてfalse
 	if (!pszSrcExt) {
 		return false;
 	}

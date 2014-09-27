@@ -40,9 +40,9 @@
 	今のところDeinitDllが使われている箇所が無いので、このクラスの出番はありませんが。
 	2008.05.10 kobake 作成
 */
-template <class DLLIMP> class CDllHandler{
+template <class DLLIMP> class CDllHandler {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CDllHandler()
 	{
 		m_pcDllImp = new DLLIMP();
@@ -50,12 +50,12 @@ public:
 	}
 	~CDllHandler()
 	{
-		m_pcDllImp->DeinitDll(true); //※終了処理に失敗しても強制的にDLL解放
+		m_pcDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
 		delete m_pcDllImp;
 	}
 
-	//アクセサ
-	DLLIMP* operator->(){ return m_pcDllImp; }
+	// アクセサ
+	DLLIMP* operator -> () { return m_pcDllImp; }
 
 	//! 利用状態のチェック（operator版）
 	bool operator!() const { return m_pcDllImp->IsAvailable(); }
@@ -65,11 +65,11 @@ private:
 };
 
 
-//!結果定数
-enum EDllResult{
-	DLL_SUCCESS,		//成功
-	DLL_LOADFAILURE,	//DLLロード失敗
-	DLL_INITFAILURE,	//初期処理に失敗
+//! 結果定数
+enum EDllResult {
+	DLL_SUCCESS,		// 成功
+	DLL_LOADFAILURE,	// DLLロード失敗
+	DLL_INITFAILURE,	// 初期処理に失敗
 };
 
 //! DLLの動的なLoad/Unloadを行うためのクラス
@@ -94,7 +94,7 @@ public:
 		@author YAZAKI
 		@date 2002.01.26
 	*/
-	struct ImportTable{
+	struct ImportTable {
 		void*		proc;
 		const char*	name;
 	};

@@ -29,7 +29,7 @@
 	2008.01.26 kobake çÏê¨
 */
 
-class CMyWnd{
+class CMyWnd {
 public:
 	CMyWnd() : m_hWnd(NULL) { }
 

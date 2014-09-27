@@ -26,22 +26,22 @@
 #include "CDllHandler.h"
 
 typedef struct bregexp {
-	const WCHAR *outp;		/* result string start ptr  */
-	const WCHAR *outendp;	/* result string end ptr    */
-	const int   splitctr;	/* split result counter     */
-	const WCHAR **splitp;	/* split result pointer ptr     */
-	int rsv1;					/* reserved for external use    */
-	WCHAR *parap;				/* parameter start ptr ie. "s/xxxxx/yy/gi"  */
-	WCHAR *paraendp;			/* parameter end ptr     */
-	WCHAR *transtblp;			/* translate table ptr   */
-	WCHAR **startp;				/* match string start ptr   */
-	WCHAR **endp;				/* match string end ptr     */
-	int nparens;				/* number of parentheses */
+	const WCHAR* outp;		// result string start ptr
+	const WCHAR* outendp;	// result string end ptr
+	const int   splitctr;	// split result counter
+	const WCHAR** splitp;	// split result pointer ptr
+	int rsv1;				// reserved for external use
+	WCHAR* parap;			// parameter start ptr ie. "s/xxxxx/yy/gi"
+	WCHAR* paraendp;		// parameter end ptr
+	WCHAR* transtblp;		// translate table ptr
+	WCHAR** startp;			// match string start ptr
+	WCHAR** endp;			// match string end ptr
+	int nparens;			// number of parentheses
 } BREGEXP_W;
 
-//!BREGONIG.DLLをラップしたもの。
-//2007.09.13 kobake 作成
-class CBregexpDll2 : public CDllImp{
+//! BREGONIG.DLLをラップしたもの。
+// 2007.09.13 kobake 作成
+class CBregexpDll2 : public CDllImp {
 public:
 	CBregexpDll2();
 	virtual ~CBregexpDll2();
@@ -102,7 +102,7 @@ public:
 	bool ExistBSubstEx() const{ return m_BSubstEx!=NULL; }
 
 private:
-	//DLL内関数ポインタ
+	// DLL内関数ポインタ
 	BREGEXP_BMatchW2         m_BMatch;
 	BREGEXP_BSubstW2         m_BSubst;
 	BREGEXP_BTransW2         m_BTrans;

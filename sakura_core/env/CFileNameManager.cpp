@@ -26,7 +26,7 @@
 */
 
 #include "StdAfx.h"
-#include <ShlObj.h> //CSIDL_PROFILE等
+#include <ShlObj.h> // CSIDL_PROFILE等
 
 #include "DLLSHAREDATA.h"
 #include "CFileNameManager.h"
@@ -329,7 +329,8 @@ bool CFileNameManager::ExpandMetaToFolder( LPCTSTR pszSrc, LPTSTR pszDes, int nD
 }
 
 
-/* static */ TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
+// static
+TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
 {
 	if (index < 0) {
 		return 0;
@@ -395,7 +396,7 @@ bool CFileNameManager::GetMenuFullLabel(
 			pszKey = cmemDes.GetStringT();
 		}
 
-		//szMenuを作る
+		// szMenuを作る
 		//	Jan. 19, 2002 genta
 		//	&の重複処理を追加したため継続判定を若干変更
 		//	20100729 ExpandParameterにあわせて、・・・を...に変更

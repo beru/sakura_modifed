@@ -25,7 +25,7 @@
 
 #include "CConvert.h"
 
-class CConvert_ToLower : public CConvert{
+class CConvert_ToLower : public CConvert {
 public:
 	bool DoConvert(CNativeW* pcData);
 };

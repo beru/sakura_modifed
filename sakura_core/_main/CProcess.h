@@ -30,7 +30,7 @@ class CProcess : public TSingleInstance<CProcess> {
 public:
 	CProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine );
 	bool Run();
-	virtual ~CProcess(){}
+	virtual ~CProcess() {}
 	virtual void RefreshString();
 protected:
 	CProcess();
@@ -60,7 +60,7 @@ private:
 		PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
 		PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
 		PMINIDUMP_CALLBACK_INFORMATION CallbackParam
-		);
+	);
 #endif
 	CShareData*		m_pcShareData;
 

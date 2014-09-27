@@ -100,7 +100,7 @@ bool CClipboard::SetText(
 	HGLOBAL hgClipText = NULL;
 	bool bUnicodeText = (uFormat == (UINT)-1 || uFormat == CF_UNICODETEXT);
 	while (bUnicodeText) {
-		//領域確保
+		// 領域確保
 		hgClipText = ::GlobalAlloc(
 			GMEM_MOVEABLE | GMEM_DDESHARE,
 			(nDataLen + 1) * sizeof(wchar_t)
@@ -109,8 +109,8 @@ bool CClipboard::SetText(
 
 		// 確保した領域にデータをコピー
 		wchar_t* pszClip = GlobalLockWChar( hgClipText );
-		wmemcpy( pszClip, pData, nDataLen );	//データ
-		pszClip[nDataLen] = L'\0';				//終端ヌル
+		wmemcpy( pszClip, pData, nDataLen );	// データ
+		pszClip[nDataLen] = L'\0';				// 終端ヌル
 		::GlobalUnlock( hgClipText );
 
 		// クリップボードに設定
@@ -138,9 +138,9 @@ bool CClipboard::SetText(
 
 		// 確保した領域にデータをコピー
 		BYTE* pClip = GlobalLockBYTE( hgClipSakura );
-		*((int*)pClip) = nDataLen; pClip += sizeof(int);								// データの長さ
+		*((int*)pClip) = nDataLen; pClip += sizeof(int);									// データの長さ
 		wmemcpy( (wchar_t*)pClip, pData, nDataLen ); pClip += nDataLen * sizeof(wchar_t);	// データ
-		*((wchar_t*)pClip) = L'\0'; pClip += sizeof(wchar_t);							// 終端ヌル
+		*((wchar_t*)pClip) = L'\0'; pClip += sizeof(wchar_t);								// 終端ヌル
 		::GlobalUnlock( hgClipSakura );
 
 		// クリップボードに設定
@@ -339,7 +339,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 	}
 	if (hText != NULL) {
 		char* szData = GlobalLockChar(hText);
-		//SJIS→UNICODE
+		// SJIS→UNICODE
 		CMemory cmemSjis( szData, GlobalSize(hText) );
 		CShiftJis::SJISToUnicode(&cmemSjis);
 		cmemBuf->SetString( reinterpret_cast<const wchar_t*>(cmemSjis.GetRawPtr()) );
@@ -652,11 +652,11 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 //! クリップボード内に、サクラエディタで扱えるデータがあればtrue
 bool CClipboard::HasValidData()
 {
-	//扱える形式が１つでもあればtrue
+	// 扱える形式が１つでもあればtrue
 	if (::IsClipboardFormatAvailable(CF_OEMTEXT)) return true;
 	if (::IsClipboardFormatAvailable(CF_UNICODETEXT)) return true;
 	if (::IsClipboardFormatAvailable(GetSakuraFormat())) return true;
-	/* 2008.09.10 bosagami パス貼り付け対応 */
+	// 2008.09.10 bosagami パス貼り付け対応
 	if (::IsClipboardFormatAvailable(CF_HDROP)) return true;
 	return false;
 }

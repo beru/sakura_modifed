@@ -54,7 +54,9 @@ typedef struct RegexInfo_t {
 /*!
 	正規表現キーワードを扱う。
 */
-class CRegexKeyword : public CBregexp {
+class CRegexKeyword :
+	public CBregexp
+{
 public:
 	CRegexKeyword(LPCTSTR);
 	~CRegexKeyword();
@@ -68,7 +70,7 @@ public:
 
 	//! 書式(囲み)チェック
 	static BOOL RegexKeyCheckSyntax( const wchar_t *s );
-
+	
 	static DWORD GetNewMagicNumber();
 
 protected:

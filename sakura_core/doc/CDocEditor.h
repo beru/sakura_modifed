@@ -30,18 +30,18 @@
 class CEditDoc;
 class CDocLineMgr;
 
-class CDocEditor : public CDocListenerEx{
+class CDocEditor : public CDocListenerEx {
 public:
 	CDocEditor(CEditDoc* pcDoc);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         イベント                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//ロード前後
+	// ロード前後
 	void OnBeforeLoad(SLoadInfo* sLoadInfo);
 	void OnAfterLoad(const SLoadInfo& sLoadInfo);
 
-	//セーブ前後
+	// セーブ前後
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
 
@@ -49,7 +49,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           状態                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//	Jan. 22, 2002 genta Modified Flagの設定
+	// Jan. 22, 2002 genta Modified Flagの設定
 	void SetModified( bool flag, bool redraw);
 	//! ファイルが修正中かどうか
 	bool IsModified() const { return m_bIsDocModified; }
@@ -68,7 +68,7 @@ public:
 	bool IsInsMode() const { return m_bInsMode; }
 	void SetInsMode(bool mode) { m_bInsMode = mode; }
 
-	//! Undo(元に戻す)可能な状態か？ */
+	//! Undo(元に戻す)可能な状態か？
 	bool IsEnableUndo( void ) const
 	{
 		return m_cOpeBuf.IsEnableUndo();
@@ -96,7 +96,7 @@ public:
 };
 
 
-class CDocEditAgent{
+class CDocEditAgent {
 public:
 	CDocEditAgent(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
@@ -104,7 +104,7 @@ public:
 	//                           操作                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//	May 15, 2000 genta
-	void AddLineStrX( const wchar_t*, int );	/* 末尾に行を追加 Ver1.5 */
+	void AddLineStrX( const wchar_t*, int );	// 末尾に行を追加 Ver1.5
 
 private:
 	CDocLineMgr* m_pcDocLineMgr;

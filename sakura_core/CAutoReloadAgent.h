@@ -33,14 +33,14 @@ enum WatchUpdate {
 	WU_AUTOLOAD,//!< 更新され未編集の場合に再ロード
 };
 
-class CAutoReloadAgent : public CDocListenerEx{
+class CAutoReloadAgent : public CDocListenerEx {
 public:
 	CAutoReloadAgent();
 	void OnBeforeSave(const SSaveInfo& sSaveInfo);
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 	void OnAfterLoad(const SLoadInfo& sLoadInfo);
 
-	//監視の一時停止
+	// 監視の一時停止
 	void PauseWatching(){ m_nPauseCount++; }
 	void ResumeWatching(){ m_nPauseCount--; assert(m_nPauseCount>=0); }
 	bool IsPausing() const{ return m_nPauseCount>=1; }
@@ -54,7 +54,7 @@ public:
 	WatchUpdate		m_eWatchUpdate;	//!< 更新監視方法
 
 private:
-	int m_nPauseCount;	//これが1以上の場合は監視をしない
-	int m_nDelayCount;	//未編集で再ロード時の遅延カウンタ
+	int m_nPauseCount;	// これが1以上の場合は監視をしない
+	int m_nDelayCount;	// 未編集で再ロード時の遅延カウンタ
 };
 

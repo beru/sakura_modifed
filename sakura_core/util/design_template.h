@@ -35,7 +35,7 @@
 	2008.03.03 kobake 作成
 */
 template <class T>
-class TSingleton{
+class TSingleton {
 public:
 	// 公開インターフェース
 	static T* getInstance()
@@ -58,7 +58,7 @@ private:
 	2007.10.23 kobake 作成
 */
 template <class T>
-class TSingleInstance{
+class TSingleInstance {
 public:
 	// 公開インターフェース
 	static T* getInstance() { return gm_instance; } //!< 作成済みのインスタンスを返す。インスタンスが存在しなければ NULL。
@@ -76,7 +76,8 @@ T* TSingleInstance<T>::gm_instance = NULL;
 
 // 記録もする
 #include <vector>
-template <class T> class TInstanceHolder{
+template <class T>
+class TInstanceHolder {
 public:
 	TInstanceHolder()
 	{
@@ -103,5 +104,7 @@ public:
 private:
 	static std::vector<T*> gm_table;
 };
-template <class T> std::vector<T*> TInstanceHolder<T>::gm_table;
+
+template <class T>
+std::vector<T*> TInstanceHolder<T>::gm_table;
 

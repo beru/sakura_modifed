@@ -2,11 +2,11 @@
 #include "DispPos.h"
 #include "doc/layout/CLayout.h"
 
-//$$$高速化
+// $$$高速化
 void DispPos::ForwardLayoutLineRef(int nOffsetLine)
 {
 	m_nLineRef += CLayoutInt(nOffsetLine);
-	//キャッシュ更新
+	// キャッシュ更新
 	int n = nOffsetLine;
 	if (m_pcLayoutRef) {
 		while (n > 0 && m_pcLayoutRef) {

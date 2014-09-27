@@ -37,11 +37,11 @@ class CMacroIfObj : public CWSHIfObj
 		F_MA_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
 		F_MA_SET_MATCH,							//
 		F_MA_FUNCTION_FIRST = F_FUNCTION_FIRST,	//↓関数は以下に追加する
-		F_MA_GET_MODE,							//モードを取得する
-		F_MA_GET_FLAGS,							//flagsを取得する
-		F_MA_GET_EXT,							//Extを取得する
-		F_MA_GET_SOURCE,						//Sourceを取得する
-		F_MA_GET_INDEX,							//マクロインデックス番号を取得する
+		F_MA_GET_MODE,							// モードを取得する
+		F_MA_GET_FLAGS,							// flagsを取得する
+		F_MA_GET_EXT,							// Extを取得する
+		F_MA_GET_SOURCE,						// Sourceを取得する
+		F_MA_GET_INDEX,							// マクロインデックス番号を取得する
 	};
 	typedef std::string string;
 	typedef std::wstring wstring;
@@ -75,10 +75,10 @@ public:
 
 	// 実装
 public:
-	//コマンド情報を取得する
+	// コマンド情報を取得する
 	MacroFuncInfoArray GetMacroCommandInfo() const{
 		static MacroFuncInfo macroFuncInfoArr[] = {
-			//ID									関数名						引数										戻り値の型	m_pszData
+			// ID									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_SET_MATCH),		LTEXT("SetMatch"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//flagsを取得する
 			// 終端
 			{ F_INVALID, NULL, { VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY }, VT_EMPTY, NULL }
@@ -89,7 +89,7 @@ public:
 	// 関数情報を取得する
 	MacroFuncInfoArray GetMacroFuncInfo() const{
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
-			//ID									関数名						引数										戻り値の型	m_pszData
+			// ID									関数名						引数										戻り値の型	m_pszData
 			{ EFunctionCode(F_MA_GET_MODE),			LTEXT("GetMode"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//モードを取得する
 			{ EFunctionCode(F_MA_GET_FLAGS),		LTEXT("GetFlags"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_I4,	NULL },	//flagsを取得する
 			{ EFunctionCode(F_MA_GET_EXT),			LTEXT("GetExt"),			{ VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY },	VT_BSTR,	NULL },	//Extを取得する

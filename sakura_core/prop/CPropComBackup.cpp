@@ -72,7 +72,7 @@ INT_PTR CALLBACK CPropBackup::DlgProc_page(
 //	To Here Jun. 2, 2001 genta
 
 
-/* メッセージ処理 */
+// メッセージ処理
 INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	WORD		wNotifyCode;
@@ -87,12 +87,12 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Backup */
+		// ダイアログデータの設定 Backup
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
+		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 		//	Oct. 5, 2002 genta バックアップフォルダ名の入力サイズを指定
 		//	Oct. 8, 2002 genta 最後に付加される\の領域を残すためバッファサイズ-1しか入力させない
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_BACKUPFOLDER ), _countof2(m_Common.m_sBackup.m_szBackUpFolder) - 1 - 1 );
@@ -111,7 +111,7 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				OnHelp( hwndDlg, IDD_PROP_BACKUP );
 				return TRUE;
 			case PSN_KILLACTIVE:
-				/* ダイアログデータの取得 Backup */
+				// ダイアログデータの取得 Backup
 				GetData( hwndDlg );
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -122,7 +122,7 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			break;
 
 		case IDC_SPIN_BACKUP_GENS:
-			/* バックアップファイルの世代数 */
+			// バックアップファイルの世代数
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_BACKUP_3, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
 				++nVal;
@@ -143,10 +143,10 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode	= HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_RADIO_BACKUP_TYPE1:
@@ -167,9 +167,9 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				UpdateBackupFile( hwndDlg );
 				EnableBackupInput(hwndDlg);
 				return TRUE;
-			case IDC_BUTTON_BACKUP_FOLDER_REF:	/* フォルダ参照 */
+			case IDC_BUTTON_BACKUP_FOLDER_REF:	// フォルダ参照
 				{
-					/* バックアップを作成するフォルダ */
+					// バックアップを作成するフォルダ
 					TCHAR		szFolder[_MAX_PATH];
 					::DlgItem_GetText( hwndDlg, IDC_EDIT_BACKUPFOLDER, szFolder, _countof( szFolder ));
 
@@ -184,7 +184,7 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				GetData( hwndDlg );
 				UpdateBackupFile( hwndDlg );
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		case EN_CHANGE: // 20051107 aroka フォルダが変更されたらリアルタイムにエディットボックス内を更新
 			switch (wID) {
 			case IDC_EDIT_BACKUPFOLDER:
@@ -193,9 +193,9 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				UpdateBackupFile( hwndDlg );
 				break;
 			}
-			break;	/* EN_CHANGE */
+			break;	// EN_CHANGE
 		}
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
@@ -204,7 +204,7 @@ INT_PTR CPropBackup::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -230,17 +230,17 @@ void CPropBackup::SetData( HWND hwndDlg )
 {
 //	BOOL	bRet;
 
-//	BOOL				m_bGrepExitConfirm;	/* Grepモードで保存確認するか */
+//	BOOL				m_bGrepExitConfirm;	// Grepモードで保存確認するか
 
 
-	/* バックアップの作成 */
+	// バックアップの作成
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP, m_Common.m_sBackup.m_bBackUp );
-	/* バックアップの作成前に確認 */
+	// バックアップの作成前に確認
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUPDIALOG, m_Common.m_sBackup.m_bBackUpDialog );
-//	/* 指定フォルダにバックアップを作成する */ //	20051107 aroka 「バックアップの作成」に連動させる
+//	// 指定フォルダにバックアップを作成する //	20051107 aroka 「バックアップの作成」に連動させる
 //	::CheckDlgButton( hwndDlg, IDC_CHECK_BACKUPFOLDER, .m_sBackup.m_bBackUpFolder );
 
-	/* バックアップファイル名のタイプ 1=(.bak) 2=*_日付.* */
+	// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
 	//	Jun.  5, 2004 genta 元の拡張子を残す設定(5,6)を追加．
 	switch (m_Common.m_sBackup.GetBackupType()) {
 	case 2:
@@ -265,36 +265,36 @@ void CPropBackup::SetData( HWND hwndDlg )
 		( m_Common.m_sBackup.GetBackupType() == 5 || m_Common.m_sBackup.GetBackupType() == 6 ) ? 1 : 0
 	 );
 
-	/* バックアップファイル名：日付の年 */
+	// バックアップファイル名：日付の年
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_YEAR, m_Common.m_sBackup.GetBackupOpt(BKUP_YEAR) );
-	/* バックアップファイル名：日付の月 */
+	// バックアップファイル名：日付の月
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_MONTH, m_Common.m_sBackup.GetBackupOpt(BKUP_MONTH) );
-	/* バックアップファイル名：日付の日 */
+	// バックアップファイル名：日付の日
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_DAY, m_Common.m_sBackup.GetBackupOpt(BKUP_DAY) );
-	/* バックアップファイル名：日付の時 */
+	// バックアップファイル名：日付の時
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_HOUR, m_Common.m_sBackup.GetBackupOpt(BKUP_HOUR) );
-	/* バックアップファイル名：日付の分 */
+	// バックアップファイル名：日付の分
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_MIN, m_Common.m_sBackup.GetBackupOpt(BKUP_MIN) );
-	/* バックアップファイル名：日付の秒 */
+	// バックアップファイル名：日付の秒
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_SEC, m_Common.m_sBackup.GetBackupOpt(BKUP_SEC) );
 
-	/* 指定フォルダにバックアップを作成する */ // 20051107 aroka 移動：連動対象にする。
+	// 指定フォルダにバックアップを作成する // 20051107 aroka 移動：連動対象にする。
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUPFOLDER, m_Common.m_sBackup.m_bBackUpFolder );
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM, m_Common.m_sBackup.m_bBackUpFolderRM );	// 2010/5/27 Uchi
 
-	/* バックアップを作成するフォルダ */
+	// バックアップを作成するフォルダ
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_BACKUPFOLDER, m_Common.m_sBackup.m_szBackUpFolder );
 
-	/* バックアップファイルをごみ箱に放り込む */	//@@@ 2001.12.11 add MIK
+	// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
 	::CheckDlgButton( hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, m_Common.m_sBackup.m_bBackUpDustBox?BST_CHECKED:BST_UNCHECKED );	//@@@ 2001.12.11 add MIK
 
-	/* バックアップ先フォルダを詳細設定する */ // 20051107 aroka
+	// バックアップ先フォルダを詳細設定する // 20051107 aroka
 	::CheckDlgButton( hwndDlg, IDC_CHECK_BACKUP_ADVANCED, m_Common.m_sBackup.m_bBackUpPathAdvanced?BST_CHECKED:BST_UNCHECKED );
 
-	/* バックアップを作成するフォルダの詳細設定 */ // 20051107 aroka
+	// バックアップを作成するフォルダの詳細設定 // 20051107 aroka
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_BACKUPFILE, m_Common.m_sBackup.m_szBackUpPathAdvanced );
 
-	/* バックアップを作成するフォルダの詳細設定 */ // 20051128 aroka
+	// バックアップを作成するフォルダの詳細設定 // 20051128 aroka
 	switch (m_Common.m_sBackup.GetBackupTypeAdv()) {
 	case 2:
 		::CheckDlgButton( hwndDlg, IDC_RADIO_BACKUP_DATETYPE1A, 1 );	// 付加する日付のタイプ(現時刻)
@@ -322,17 +322,17 @@ void CPropBackup::SetData( HWND hwndDlg )
 }
 
 
-/* ダイアログデータの取得 */
+// ダイアログデータの取得
 int CPropBackup::GetData( HWND hwndDlg )
 {
-	/* バックアップの作成 */
+	// バックアップの作成
 	m_Common.m_sBackup.m_bBackUp = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_BACKUP );
-	/* バックアップの作成前に確認 */
+	// バックアップの作成前に確認
 	m_Common.m_sBackup.m_bBackUpDialog = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_BACKUPDIALOG );
-//	/* 指定フォルダにバックアップを作成する */ // 20051107 aroka 「バックアップの作成」に連動させる
+//	// 指定フォルダにバックアップを作成する // 20051107 aroka 「バックアップの作成」に連動させる
 //	m_Common.m_sBackup.m_bBackUpFolder = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUPFOLDER );
 
-	/* バックアップファイル名のタイプ 1=(.bak) 2=*_日付.* */
+	// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
 	if (::IsDlgButtonChecked( hwndDlg, IDC_RADIO_BACKUP_TYPE1 )) {
 		//	Jun.  5, 2005 genta 拡張子を残すパターンを追加
 		if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_RETAINEXT )) {
@@ -362,34 +362,34 @@ int CPropBackup::GetData( HWND hwndDlg )
 		}
 	}
 
-	/* バックアップファイル名：日付の年 */
+	// バックアップファイル名：日付の年
 	m_Common.m_sBackup.SetBackupOpt(BKUP_YEAR, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_YEAR ) == BST_CHECKED);
-	/* バックアップファイル名：日付の月 */
+	// バックアップファイル名：日付の月
 	m_Common.m_sBackup.SetBackupOpt(BKUP_MONTH, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_MONTH ) == BST_CHECKED);
-	/* バックアップファイル名：日付の日 */
+	// バックアップファイル名：日付の日
 	m_Common.m_sBackup.SetBackupOpt(BKUP_DAY, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_DAY ) == BST_CHECKED);
-	/* バックアップファイル名：日付の時 */
+	// バックアップファイル名：日付の時
 	m_Common.m_sBackup.SetBackupOpt(BKUP_HOUR, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_HOUR ) == BST_CHECKED);
-	/* バックアップファイル名：日付の分 */
+	// バックアップファイル名：日付の分
 	m_Common.m_sBackup.SetBackupOpt(BKUP_MIN, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_MIN ) == BST_CHECKED);
-	/* バックアップファイル名：日付の秒 */
+	// バックアップファイル名：日付の秒
 	m_Common.m_sBackup.SetBackupOpt(BKUP_SEC, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_SEC ) == BST_CHECKED);
 
-	/* 指定フォルダにバックアップを作成する */ // 20051107 aroka 移動
+	// 指定フォルダにバックアップを作成する // 20051107 aroka 移動
 	m_Common.m_sBackup.m_bBackUpFolder = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_BACKUPFOLDER );
 	m_Common.m_sBackup.m_bBackUpFolderRM = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM );	// 2010/5/27 Uchi
 
-	/* バックアップを作成するフォルダ */
+	// バックアップを作成するフォルダ
 	//	Oct. 5, 2002 genta サイズをsizeof()で指定
 	//	Oct. 8, 2002 genta 後ろに\が追加されるので，1文字余裕を見る必要がある．
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_BACKUPFOLDER, m_Common.m_sBackup.m_szBackUpFolder, _countof2(m_Common.m_sBackup.m_szBackUpFolder) - 1);
 
-	/* バックアップファイルをごみ箱に放り込む */	//@@@ 2001.12.11 add MIK
+	// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
 	m_Common.m_sBackup.m_bBackUpDustBox = (BST_CHECKED==::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_DUSTBOX ));	//@@@ 2001.12.11 add MIK
 
-	/* 指定フォルダにバックアップを作成する詳細設定 */ // 20051107 aroka
+	// 指定フォルダにバックアップを作成する詳細設定 // 20051107 aroka
 	m_Common.m_sBackup.m_bBackUpPathAdvanced = (BST_CHECKED==::IsDlgButtonChecked( hwndDlg, IDC_CHECK_BACKUP_ADVANCED ));
-	/* バックアップを作成するフォルダ */ // 20051107 aroka
+	// バックアップを作成するフォルダ // 20051107 aroka
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_BACKUPFILE, m_Common.m_sBackup.m_szBackUpPathAdvanced, _countof2( m_Common.m_sBackup.m_szBackUpPathAdvanced ) - 1);
 
 	// 20051128 aroka 詳細設定の日付のタイプ
@@ -502,7 +502,7 @@ void CPropBackup::EnableBackupInput(HWND hwndDlg)
 void CPropBackup::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設定
 {
 	wchar_t temp[MAX_PATH];
-	/* バックアップを作成するファイル */ // 20051107 aroka
+	// バックアップを作成するファイル // 20051107 aroka
 	if (!m_Common.m_sBackup.m_bBackUp) {
 		temp[0] = 0;
 	}else {
@@ -531,22 +531,22 @@ void CPropBackup::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設
 		case 4:	//	日付，時刻
 			wcscat( temp, LTEXT("$0_") );
 
-			if (m_Common.m_sBackup.GetBackupOpt(BKUP_YEAR)) {	/* バックアップファイル名：日付の年 */
+			if (m_Common.m_sBackup.GetBackupOpt(BKUP_YEAR)) {	// バックアップファイル名：日付の年
 				wcscat( temp, LTEXT("%Y") );
 			}
-			if (m_Common.m_sBackup.GetBackupOpt(BKUP_MONTH)) {	/* バックアップファイル名：日付の月 */
+			if (m_Common.m_sBackup.GetBackupOpt(BKUP_MONTH)) {	// バックアップファイル名：日付の月
 				wcscat( temp, LTEXT("%m") );
 			}
-			if (m_Common.m_sBackup.GetBackupOpt(BKUP_DAY)) {	/* バックアップファイル名：日付の日 */
+			if (m_Common.m_sBackup.GetBackupOpt(BKUP_DAY)) {	// バックアップファイル名：日付の日
 				wcscat( temp, LTEXT("%d") );
 			}
-			if (m_Common.m_sBackup.GetBackupOpt(BKUP_HOUR)) {	/* バックアップファイル名：日付の時 */
+			if (m_Common.m_sBackup.GetBackupOpt(BKUP_HOUR)) {	// バックアップファイル名：日付の時
 				wcscat( temp, LTEXT("%H") );
 			}
-			if (m_Common.m_sBackup.GetBackupOpt(BKUP_MIN)) {	/* バックアップファイル名：日付の分 */
+			if (m_Common.m_sBackup.GetBackupOpt(BKUP_MIN)) {	// バックアップファイル名：日付の分
 				wcscat( temp, LTEXT("%M") );
 			}
-			if (m_Common.m_sBackup.GetBackupOpt(BKUP_SEC)) {	/* バックアップファイル名：日付の秒 */
+			if (m_Common.m_sBackup.GetBackupOpt(BKUP_SEC)) {	// バックアップファイル名：日付の秒
 				wcscat( temp, LTEXT("%S") );
 			}
 

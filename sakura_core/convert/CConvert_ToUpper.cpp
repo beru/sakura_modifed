@@ -2,14 +2,14 @@
 #include "CConvert_ToUpper.h"
 
 // 大文字へ変換
-//	変換できないキリル文字ёの修正	2010/6/5 Uchi
-//	ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
+// 変換できないキリル文字ёの修正	2010/6/5 Uchi
+// ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
 bool CConvert_ToUpper::DoConvert(CNativeW* pcData)
 {
 	WCHAR* p = pcData->GetStringPtr();
 	WCHAR* end = p + pcData->GetStringLength();
 	while (p < end) {
-		WCHAR& c=*p++;
+		WCHAR& c = *p++;
 		// a-z → A-Z
 		if (c>=0x0061 && c<=0x007A) {
 			c = 0x0041+(c-0x0061);
@@ -74,3 +74,4 @@ bool CConvert_ToUpper::DoConvert(CNativeW* pcData)
 	}
 	return true;
 }
+

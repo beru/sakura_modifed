@@ -31,7 +31,7 @@
 #include "util/window.h"
 
 // COsVersionInfo‚Ì“à•”static•Ï”‚Ì’è‹`
-//	‰Šú‰»‚ÍIsValidVersion()‚Ås‚¤
+// ‰Šú‰»‚ÍIsValidVersion()‚Ås‚¤
 BOOL	 		COsVersionInfo::m_bSuccess;
 OSVERSIONINFO	COsVersionInfo::m_cOsVersionInfo;
 #ifdef USE_SSE2

@@ -149,7 +149,7 @@ void CViewCommander::Command_PASTE( int option )
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
-	if (selInfo.IsMouseSelecting()) {	/* マウスによる範囲選択中 */
+	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}

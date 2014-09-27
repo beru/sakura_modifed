@@ -39,7 +39,7 @@ namespace ApiWrap
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          W系が存在しないAPIのための、新しい関数定義         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//W版が無いので、自作
+	// W版が無いので、自作
 	BOOL MakeSureDirectoryPathExistsW(LPCWSTR wszDirPath);
 #ifdef _UNICODE
 	#define MakeSureDirectoryPathExistsT MakeSureDirectoryPathExistsW

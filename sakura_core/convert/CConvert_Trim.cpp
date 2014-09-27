@@ -30,7 +30,7 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 
 	nBgn = 0;
 	nPosDes = 0;
-	/* 変換後に必要なバイト数を調べる */
+	// 変換後に必要なバイト数を調べる
 	while (( pLine = GetNextLineW( pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol ) )) { // 2002/2/10 aroka CMemory変更
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
@@ -76,7 +76,7 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 					}
 					i += nCharChars;
 				}
-				if (j>0) {
+				if (j > 0) {
 					wmemcpy( &pDes[nPosDes], &pLine[0], j );
 					nPosDes+=j;
 				}

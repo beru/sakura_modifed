@@ -42,7 +42,7 @@ int CALLBACK MYBrowseCallbackProc(
 	UINT uMsg,
 	LPARAM lParam,
 	LPARAM lpData
-)
+	)
 {
 	switch (uMsg) {
 	case BFFM_INITIALIZED:

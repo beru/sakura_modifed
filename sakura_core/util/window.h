@@ -30,7 +30,7 @@
 
 	@date 2009.10.01 ryoji 高DPI対応用に作成
 */
-class CDPI{
+class CDPI {
 	static void Init()
 	{
 		if( !bInitialized )
@@ -77,7 +77,7 @@ inline void DpiUnscaleRect(LPRECT lprc){CDPI::UnscaleRect(lprc);}
 inline int DpiPointsToPixels(int pt, int ptMag = 1){return CDPI::PointsToPixels(pt, ptMag);}
 inline int DpiPixelsToPoints(int px, int ptMag = 1){return CDPI::PixelsToPoints(px, ptMag);}
 
-void ActivateFrameWindow( HWND );	/* アクティブにする */
+void ActivateFrameWindow( HWND );	// アクティブにする
 
 /*
 ||	処理中のユーザー操作を可能にする
@@ -115,8 +115,7 @@ inline bool DlgItem_Enable(HWND hwndDlg, int nIDDlgItem, bool nEnable)
 
 // 幅計算補助クラス
 // 最大の幅を報告します
-class CTextWidthCalc
-{
+class CTextWidthCalc {
 public:
 	CTextWidthCalc(HWND hParentDlg, int nID);
 	CTextWidthCalc(HWND hwndThis);
@@ -151,8 +150,7 @@ private:
 	int nExt;
 };
 
-class CFontAutoDeleter
-{
+class CFontAutoDeleter {
 public:
 	CFontAutoDeleter();
 	~CFontAutoDeleter();

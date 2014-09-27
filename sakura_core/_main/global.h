@@ -36,12 +36,8 @@
 #endif
 
 
-
-
-
-/* ウィンドウのID */
+// ウィンドウのID
 #define IDW_STATUSBAR 123
-
 
 #define IDM_SELWINDOW		10000
 #define IDM_SELMRU			11000
@@ -49,7 +45,7 @@
 
 #include "charset/charset.h"
 
-/* ダイアログ表示方法 */ // アウトラインウィンドウ用に作成 20060201 aroka
+// ダイアログ表示方法	 アウトラインウィンドウ用に作成 20060201 aroka
 enum enumShowDlg {
 	SHOW_NORMAL			= 0,
 	SHOW_RELOAD			= 1,
@@ -57,43 +53,40 @@ enum enumShowDlg {
 };
 
 
-/* 選択領域描画用パラメータ */
+// 選択領域描画用パラメータ
 extern const COLORREF	SELECTEDAREA_RGB;
 extern const int		SELECTEDAREA_ROP2;
 
 
-
-
-
 //@@@ From Here 2003.05.31 MIK
-/*! タブウインドウ用メッセージサブコマンド */
+//! タブウインドウ用メッセージサブコマンド
 enum ETabWndNotifyType {
-	TWNT_REFRESH	= 0,		//再表示
-	TWNT_ADD		= 1,		//ウインドウ登録
-	TWNT_DEL		= 2,		//ウインドウ削除
-	TWNT_ORDER		= 3,		//ウインドウ順序変更
-	TWNT_FILE		= 4,		//ファイル名変更
-	TWNT_MODE_ENABLE= 5,		//タブモード有効化	//2004.07.14 Kazika 追加
-	TWNT_MODE_DISABLE= 6,		//タブモード無効化	//2004.08.27 Kazika 追加
-	TWNT_WNDPL_ADJUST= 7,		//ウィンドウ位置合わせ	// 2007.04.03 ryoji 追加
+	TWNT_REFRESH	= 0,		// 再表示
+	TWNT_ADD		= 1,		// ウインドウ登録
+	TWNT_DEL		= 2,		// ウインドウ削除
+	TWNT_ORDER		= 3,		// ウインドウ順序変更
+	TWNT_FILE		= 4,		// ファイル名変更
+	TWNT_MODE_ENABLE= 5,		// タブモード有効化	//2004.07.14 Kazika 追加
+	TWNT_MODE_DISABLE= 6,		// タブモード無効化	//2004.08.27 Kazika 追加
+	TWNT_WNDPL_ADJUST= 7,		// ウィンドウ位置合わせ	// 2007.04.03 ryoji 追加
 };
 
-/*! バーの表示・非表示 */
+//! バーの表示・非表示
 enum EBarChangeNotifyType {
-	MYBCN_TOOLBAR	= 0,		//ツールバー
-	MYBCN_FUNCKEY	= 1,		//ファンクションキー
-	MYBCN_TAB		= 2,		//タブ
-	MYBCN_STATUSBAR	= 3,		//ステータスバー
+	MYBCN_TOOLBAR	= 0,		// ツールバー
+	MYBCN_FUNCKEY	= 1,		// ファンクションキー
+	MYBCN_TAB		= 2,		// タブ
+	MYBCN_STATUSBAR	= 3,		// ステータスバー
 };
 //@@@ To Here 2003.05.31 MIK
 
-//タブで使うカスタムメニューのインデックス	//@@@ 2003.06.13 MIK
+// タブで使うカスタムメニューのインデックス	//@@@ 2003.06.13 MIK
 #define	CUSTMENU_INDEX_FOR_TABWND		24
-//右クリックメニューで使うカスタムメニューのインデックス	//@@@ 2003.06.13 MIK
+// 右クリックメニューで使うカスタムメニューのインデックス	//@@@ 2003.06.13 MIK
 #define	CUSTMENU_INDEX_FOR_RBUTTONUP	0
 
 
-/*!< 色タイプ */
+//!< 色タイプ
 //@@@ From Here 2006.12.18 ryoji
 #define COLOR_ATTRIB_FORCE_DISP		0x00000001
 #define COLOR_ATTRIB_NO_TEXT		0x00000010
@@ -111,7 +104,7 @@ extern const SColorAttributeData g_ColorAttributeArr[];
 
 //@@@ To Here 2006.12.18 ryoji
 
-/*!< 設定値の上限・下限 */
+//!< 設定値の上限・下限
 //	ルーラの高さ
 const int IDC_SPIN_nRulerHeight_MIN = 2;
 const int IDC_SPIN_nRulerHeight_MAX = 32;
@@ -182,7 +175,7 @@ struct SSearchOption{
 		bWordOnly   = false;
 	}
 
-	//演算子
+	// 演算子
 	bool operator == (const SSearchOption& rhs) const
 	{
 		//とりあえずmemcmpでいいや
@@ -196,11 +189,9 @@ struct SSearchOption{
 };
 
 
-
 //2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
 class CEditWnd;
 extern CEditWnd* g_pcEditWnd;
-
 
 HINSTANCE G_AppInstance();
 

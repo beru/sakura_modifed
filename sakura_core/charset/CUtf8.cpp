@@ -16,9 +16,6 @@ void CUtf8::GetBom(CMemory* pcmemBom)
 }
 
 
-
-
-
 /*!
 	UTF-8 → Unicode 実装
 
@@ -31,7 +28,7 @@ int CUtf8::Utf8ToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool b
 	int nclen;
 	ECharSet echarset;
 
-	if( nSrcLen < 1 ){
+	if (nSrcLen < 1) {
 		return 0;
 	}
 
@@ -39,24 +36,24 @@ int CUtf8::Utf8ToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool b
 	pr_end = reinterpret_cast<const unsigned char*>(pSrc+nSrcLen);
 	pw = reinterpret_cast<unsigned short*>(pDst);
 
-	for( ; ; ){
+	for (;;) {
 
 		// 文字をチェック
-		if( bCESU8Mode != true ){
+		if (bCESU8Mode != true) {
 			nclen = CheckUtf8Char( reinterpret_cast<const char*>(pr), pr_end-pr, &echarset, true, 0 );
-		}else{
+		}else {
 			nclen = CheckCesu8Char( reinterpret_cast<const char*>(pr), pr_end-pr, &echarset, 0 );
 		}
-		if( nclen < 1 ){
+		if (nclen < 1) {
 			break;
 		}
 
 		// 変換
-		if( echarset != CHARSET_BINARY ){
+		if (echarset != CHARSET_BINARY) {
 			pw += _Utf8ToUni_char( pr, nclen, pw, bCESU8Mode );
 			pr += nclen;
-		}else{
-			if( nclen != 1 ){	// 保護コード
+		}else {
+			if (nclen != 1) {	// 保護コード
 				nclen = 1;
 			}
 			pw += BinToText( pr, 1, pw );
@@ -95,9 +92,9 @@ EConvertResult CUtf8::_UTF8ToUnicode( CMemory* pMem, bool bCESU8Mode/*, bool dec
 
 	// 必要なバッファサイズを調べて確保する
 	wchar_t* pDst;
-	try{
+	try {
 		pDst = new wchar_t[nsrclen];
-	}catch( ... ){
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -111,20 +108,14 @@ EConvertResult CUtf8::_UTF8ToUnicode( CMemory* pMem, bool bCESU8Mode/*, bool dec
 	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
 
 	// 後始末
-	delete [] pDst;
+	delete[] pDst;
 
-	if( bError == false ){
+	if (bError == false) {
 		return RESULT_COMPLETE;
 	}else{
 		return RESULT_LOSESOME;
 	}
 }
-
-
-
-
-
-
 
 
 /*!

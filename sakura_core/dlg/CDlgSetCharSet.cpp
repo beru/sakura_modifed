@@ -18,13 +18,13 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//文字コードセット設定 CDlgSetCharSet
+// 文字コードセット設定 CDlgSetCharSet
 const DWORD p_helpids[] = {
-	IDOK,							HIDOK_GREP,							//検索
-	IDCANCEL,						HIDCANCEL_GREP,						//キャンセル
-	IDC_BUTTON_HELP,				HIDC_GREP_BUTTON_HELP,				//ヘルプ
-	IDC_COMBO_CHARSET,				HIDC_OPENDLG_COMBO_CODE,			//文字コードセット
-	IDC_CHECK_BOM,					HIDC_OPENDLG_CHECK_BOM,				//条件
+	IDOK,							HIDOK_GREP,							// 検索
+	IDCANCEL,						HIDCANCEL_GREP,						// キャンセル
+	IDC_BUTTON_HELP,				HIDC_GREP_BUTTON_HELP,				// ヘルプ
+	IDC_COMBO_CHARSET,				HIDC_OPENDLG_COMBO_CODE,			// 文字コードセット
+	IDC_CHECK_BOM,					HIDC_OPENDLG_CHECK_BOM,				// 条件
 	0, 0
 };
 
@@ -36,7 +36,7 @@ CDlgSetCharSet::CDlgSetCharSet()
 }
 
 
-/* モーダルダイアログの表示 */
+// モーダルダイアログの表示
 int CDlgSetCharSet::DoModal( HINSTANCE hInstance, HWND hwndParent, ECodeType* pnCharSet, bool* pbBom)
 {
 	m_pnCharSet = pnCharSet;	// 文字コードセット
@@ -64,7 +64,7 @@ BOOL CDlgSetCharSet::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		Combo_SetItemData( m_hwndCharSet, idx, cCodeTypes.GetCode(i) );
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
 }
 
@@ -73,11 +73,11 @@ BOOL CDlgSetCharSet::OnBnClicked( int wID )
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		/* 「文字コードセット設定」のヘルプ */
+		//「文字コードセット設定」のヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CHG_CHARSET) );
 		return TRUE;
 	case IDOK:
-		/* ダイアログデータの取得 */
+		// ダイアログデータの取得
 		if (GetData()) {
 			CloseDialog( TRUE );
 		}
@@ -87,7 +87,7 @@ BOOL CDlgSetCharSet::OnBnClicked( int wID )
 		return TRUE;
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked( wID );
 }
 
@@ -125,7 +125,7 @@ BOOL CDlgSetCharSet::OnCbnSelChange( HWND hwndCtl, int wID )
 	WPARAM		fCheck;
 
 	switch (wID) {
-	//	文字コードの変更をBOMチェックボックスに反映
+	// 文字コードの変更をBOMチェックボックスに反映
 	case IDC_COMBO_CHARSET:
 		SetBOM();
 		nIdx = Combo_GetCurSel( hwndCtl );
@@ -155,7 +155,7 @@ LPVOID CDlgSetCharSet::GetHelpIdTable(void)
 }
 
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgSetCharSet::SetData( void )
 {
 	// 文字コードセット
@@ -177,8 +177,8 @@ void CDlgSetCharSet::SetData( void )
 }
 
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー  */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgSetCharSet::GetData( void )
 {
 	// 文字コードセット

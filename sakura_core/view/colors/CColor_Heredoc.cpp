@@ -26,7 +26,7 @@
 #include "CColor_Heredoc.h"
 #include "doc/layout/CLayout.h"
 
-class CLayoutColorHeredocInfo : public CLayoutColorInfo{
+class CLayoutColorHeredocInfo : public CLayoutColorInfo {
 public:
 	std::wstring m_id;
 	bool IsEqual(const CLayoutColorInfo* p) const {

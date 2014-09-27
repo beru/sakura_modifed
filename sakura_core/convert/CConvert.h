@@ -27,7 +27,7 @@
 
 #include "Funccode_enum.h"	// EFunctionCode
 
-class CConvertMediator{
+class CConvertMediator {
 public:
 	//! 機能種別によるバッファの変換
 	static void ConvMemory( CNativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn );
@@ -36,11 +36,11 @@ protected:
 	static void Command_TRIM2( CNativeW* pCMemory , BOOL bLeft );
 };
 
-class CConvert{
+class CConvert {
 public:
 	virtual ~CConvert(){}
 
-	//インターフェース
+	// インターフェース
 	void CallConvert( CNativeW* pcData )
 	{
 		bool bRet=DoConvert(pcData);
@@ -49,7 +49,7 @@ public:
 		}
 	}
 
-	//実装
-	virtual bool DoConvert( CNativeW* pcData )=0;
+	// 実装
+	virtual bool DoConvert( CNativeW* pcData ) = 0;
 };
 

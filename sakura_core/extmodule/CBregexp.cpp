@@ -184,7 +184,7 @@ wchar_t* CBregexp::MakePatternSub(
 	}
 	// 2006.01.22 かろと 行単位置換のために、全域オプション追加
 	if ((nOption & optGlobal)) {
-		*pPat++ = L'g';			// 全域(global)オプション、行単位の置換をする時に使用する
+		*pPat++ = L'g';		// 全域(global)オプション、行単位の置換をする時に使用する
 	}
 	if ((nOption & optExtend)) {
 		*pPat++ = L'x';
@@ -236,7 +236,7 @@ wchar_t* CBregexp::MakePattern( const wchar_t* szPattern, const wchar_t* szPatte
 	static const wchar_t szCR[] = {CR,0};		//!< 復帰
 	static const wchar_t szLF[] = {LF,0};		//!< 改行
 	static const wchar_t BOT_SUBST[] = L"s/\\$(\\)*)$/([\\\\r\\\\n]+)\\$$1/k";	//!< 行末パターンの置換用パターン
-	BREGEXP_W* sReg = NULL;					//!< コンパイル構造体
+	BREGEXP_W* sReg = NULL;						//!< コンパイル構造体
 	wchar_t szMsg[80] = L"";					//!< エラーメッセージ
 	wchar_t szAdd2[5] = L"";					//!< 行末あり置換の $数字 格納用
 	int nParens = 0;							//!< 検索パターン(szPattern)中の括弧の数(行末時に使用)
@@ -329,30 +329,30 @@ wchar_t* CBregexp::MakePatternAlternate( const wchar_t* const szSearch, const wc
 
 	// szSearchを strModifiedSearchへ、ところどころ置換しながら順次コピーしていく。
 	enum State {
-		DEF = 0, /* DEFULT 一番外側 */
-		D_E,     /* DEFAULT_ESCAPED 一番外側で \の次 */
-		D_C,     /* DEFAULT_SMALL_C 一番外側で \cの次 */
-		CHA,     /* CHARSET 文字クラスの中 */
-		C_E,     /* CHARSET_ESCAPED 文字クラスの中で \の次 */
-		C_C,     /* CHARSET_SMALL_C 文字クラスの中で \cの次 */
-		QEE,     /* QEESCAPE \Q...\Eの中 */
-		Q_E,     /* QEESCAPE_ESCAPED \Q...\Eの中で \の次 */
+		DEF = 0, // DEFULT 一番外側
+		D_E,     // DEFAULT_ESCAPED 一番外側で \の次
+		D_C,     // DEFAULT_SMALL_C 一番外側で \cの次
+		CHA,     // CHARSET 文字クラスの中
+		C_E,     // CHARSET_ESCAPED 文字クラスの中で \の次
+		C_C,     // CHARSET_SMALL_C 文字クラスの中で \cの次
+		QEE,     // QEESCAPE \Q...\Eの中
+		Q_E,     // QEESCAPE_ESCAPED \Q...\Eの中で \の次
 		NUMBER_OF_STATE,
-		_EC = -1, /* ENTER CHARCLASS charsetLevelをインクリメントして CHAへ */
-		_XC = -2, /* EXIT CHARCLASS charsetLevelをデクリメントして CHAか DEFへ */
-		_DT = -3, /* DOT (特殊文字としての)ドットを置き換える */
-		_DL = -4, /* DOLLAR (特殊文字としての)ドルを置き換える */
+		_EC = -1, // ENTER CHARCLASS charsetLevelをインクリメントして CHAへ
+		_XC = -2, // EXIT CHARCLASS charsetLevelをデクリメントして CHAか DEFへ
+		_DT = -3, // DOT (特殊文字としての)ドットを置き換える
+		_DL = -4, // DOLLAR (特殊文字としての)ドルを置き換える
 	};
 	enum CharClass {
 		OTHER = 0,
-		DOT,    /* . */
-		DOLLAR, /* $ */
-		SMALLC, /* c */
-		LARGEQ, /* Q */
-		LARGEE, /* E */
-		LBRCKT, /* [ */
-		RBRCKT, /* ] */
-		ESCAPE, /* \ */
+		DOT,    // .
+		DOLLAR, // $
+		SMALLC, // c
+		LARGEQ, // Q
+		LARGEE, // E
+		LBRCKT, // [
+		RBRCKT, // ]
+		ESCAPE, // '\\'
 		NUMBER_OF_CHARCLASS
 	};
 	static const State state_transition_table[NUMBER_OF_STATE][NUMBER_OF_CHARCLASS] = {
@@ -427,11 +427,11 @@ wchar_t* CBregexp::MakePatternAlternate( const wchar_t* const szSearch, const wc
 bool CBregexp::Compile( const wchar_t* szPattern0, const wchar_t* szPattern1, int nOption, bool bKakomi )
 {
 
-	//	DLLが利用可能でないときはエラー終了
+	// DLLが利用可能でないときはエラー終了
 	if (!IsAvailable())
 		return false;
 
-	//	BREGEXP_W構造体の解放
+	// BREGEXP_W構造体の解放
 	ReleaseCompileBuffer();
 
 	// ライブラリに渡す検索パターンを作成

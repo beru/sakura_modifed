@@ -84,7 +84,7 @@ bool CPlugin::ReadPluginDefCommon( CDataProfile *cProfile, CDataProfile *cProfil
 	return true;
 }
 
-//プラグイン定義ファイルのPlugセクションを読み込む
+// プラグイン定義ファイルのPlugセクションを読み込む
 // @date 2011.08.20 syat Plugセクションも複数定義可能とする
 bool CPlugin::ReadPluginDefPlug( CDataProfile *cProfile, CDataProfile *cProfileMlang )
 {
@@ -101,7 +101,7 @@ bool CPlugin::ReadPluginDefPlug( CDataProfile *cProfile, CDataProfile *cProfileM
 			}
 			wstring sHandler;
 			if (cProfile->IOProfileData( PII_PLUG, (sKey + szIndex).c_str(), sHandler )) {
-				//ラベルの取得
+				// ラベルの取得
 				wstring sKeyLabel = sKey + szIndex + L".Label";
 				wstring sLabel;
 				cProfile->IOProfileData( PII_PLUG, sKeyLabel.c_str(), sLabel );
@@ -115,7 +115,7 @@ bool CPlugin::ReadPluginDefPlug( CDataProfile *cProfile, CDataProfile *cProfileM
 				CPlug *newPlug = CreatePlug( *this, nCount, jacks[i].szName, sHandler, sLabel );
 				m_plugs.push_back( newPlug );
 			}else {
-				break;		//定義がなければ読み込みを終了
+				break;		// 定義がなければ読み込みを終了
 			}
 		}
 	}
@@ -219,7 +219,7 @@ bool CPlugin::ReadPluginDefOption( CDataProfile *cProfile, CDataProfile *cProfil
 	return true;
 }
 
-//プラグインフォルダ基準の相対パスをフルパスに変換
+// プラグインフォルダ基準の相対パスをフルパスに変換
 CPlugin::tstring CPlugin::GetFilePath( const tstring& sFileName ) const
 {
 	return m_sBaseDir + _T("\\") + to_tchar( sFileName.c_str() );
@@ -230,13 +230,13 @@ CPlugin::tstring CPlugin::GetFolderName() const
 	return tstring(GetFileTitlePointer(m_sBaseDir.c_str()));
 }
 
-//コマンドを追加する
+// コマンドを追加する
 int CPlugin::AddCommand( const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister )
 {
 	if (!handler) { handler = L""; }
 	if (!label) { label = L""; }
 
-	//コマンドプラグIDは1から振る
+	// コマンドプラグIDは1から振る
 	m_nCommandCount++;
 	CPlug* newPlug = CreatePlug( *this, m_nCommandCount, PP_COMMAND_STR, wstring(handler), wstring(label) );
 	if (icon) {

@@ -27,7 +27,7 @@ class CEditDoc;
 class CFuncInfoArr;
 struct SOneRule;
 
-class CDocOutline{
+class CDocOutline {
 public:
 	CDocOutline(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 	void	MakeFuncList_C( CFuncInfoArr*,bool bVisibleMemberFunc = true );					//!< C/C++関数リスト作成
@@ -43,8 +43,8 @@ public:
 	void	MakeTopicList_wztxt(CFuncInfoArr*);												//!< 階層付きテキスト アウトライン解析 // 2003.05.20 zenryaku
 	void	MakeTopicList_html(CFuncInfoArr*);												//!< HTML アウトライン解析 // 2003.05.20 zenryaku
 	void	MakeTopicList_tex(CFuncInfoArr*);												//!< TeX アウトライン解析 // 2003.07.20 naoh
-	void	MakeFuncList_RuleFile( CFuncInfoArr*, std::tstring& );											//!< ルールファイルを使ってリスト作成 2002.04.01 YAZAKI
-	int		ReadRuleFile( const TCHAR*, SOneRule*, int, bool&, std::wstring& );	//!< ルールファイル読込 2002.04.01 YAZAKI
+	void	MakeFuncList_RuleFile( CFuncInfoArr*, std::tstring& );							//!< ルールファイルを使ってリスト作成 2002.04.01 YAZAKI
+	int		ReadRuleFile( const TCHAR*, SOneRule*, int, bool&, std::wstring& );				//!< ルールファイル読込 2002.04.01 YAZAKI
 	void	MakeFuncList_BookMark( CFuncInfoArr* );											//!< ブックマークリスト作成 //2001.12.03 hor
 private:
 	CEditDoc* m_pcDocRef;

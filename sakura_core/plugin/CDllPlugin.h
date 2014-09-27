@@ -30,8 +30,8 @@
 #include "CPlugin.h"
 #include "plugin/SakuraPlugin.h"
 
-#define	PII_DLL							L"Dll"			//DLL情報
-#define	PII_DLL_NAME					L"Name"			//名前
+#define	PII_DLL							L"Dll"			// DLL情報
+#define	PII_DLL_NAME					L"Name"			// 名前
 
 //typedef void (WINAPI *DllPlugHandler)(SAKURA_DLL_PLUGIN_OBJ* obj);
 
@@ -51,16 +51,16 @@ public:
 class CDllPlugin
 	: public CPlugin, public CDllImp
 {
-	//コンストラクタ
+	// コンストラクタ
 public:
 	CDllPlugin( const tstring& sBaseDir ) : CPlugin( sBaseDir ), CDllImp() {
 	}
 
-	//デストラクタ
+	// デストラクタ
 public:
 	~CDllPlugin(void);
 
-	//実装
+	// 実装
 public:
 	bool ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMlang );
 	bool ReadPluginOption( CDataProfile *cProfile ) {
@@ -79,11 +79,11 @@ public:
 		return _T("");
 	}
 
-	//メンバ変数
+	// メンバ変数
 private:
 	wstring m_sDllName;
 
-	//DLLプラグイン
+	// DLLプラグイン
 private:
 	static SAKURA_DLL_PLUGIN_OBJ* CreateIfObj(CEditView* view, CWSHIfObj::List& params);
 	static void EraseIfObj(SAKURA_DLL_PLUGIN_OBJ* obj);

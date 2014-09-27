@@ -91,7 +91,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Macro */
+		// ダイアログデータの設定 Macro
 		InitDialog( hwndDlg );
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
@@ -122,7 +122,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 				OnHelp( hwndDlg, IDD_PROP_MACRO );
 				return TRUE;
 			case PSN_KILLACTIVE:
-				/* ダイアログデータの取得 Macro */
+				// ダイアログデータの取得 Macro
 				GetData( hwndDlg );
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -135,11 +135,11 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID = LOWORD(wParam);			// 項目ID､ コントロールID､ またはアクセラレータID
 
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_MACRODIRREF:	// マクロディレクトリ参照
@@ -156,7 +156,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 				OnFileDropdown_Macro( hwndDlg );
 				break;
 			}
-			break;	/* CBN_DROPDOWN */
+			break;	// CBN_DROPDOWN
 		// From Here 2003.06.23 Moca マクロフォルダの最後の\がなければ付ける
 		case EN_KILLFOCUS:
 			switch (wID) {
@@ -174,7 +174,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		// To Here 2003.06.23 Moca
 		}
 
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
@@ -182,7 +182,7 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -555,7 +555,7 @@ void CPropMacro::SelectBaseDir_Macro( HWND hwndDlg )
 {
 	TCHAR szDir[_MAX_PATH];
 
-	/* 検索フォルダ */
+	// 検索フォルダ
 	::DlgItem_GetText( hwndDlg, IDC_MACRODIR, szDir, _countof(szDir) );
 
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス

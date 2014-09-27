@@ -45,7 +45,8 @@ public:
 	virtual ~CGrepEnumFilterFiles(){
 	}
 
-	virtual BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL  ){
+	virtual
+	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
 		if (CGrepEnumFiles::IsValid( w32fd, pFile )) {
 			if (m_cGrepEnumExceptFiles.IsValid( w32fd, pFile )) {
 				return TRUE;

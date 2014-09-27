@@ -87,7 +87,7 @@ void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConf
 */
 void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
-	/* 強調キーワードのテストデータ */
+	// 強調キーワードのテストデータ
 	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
 
 	int nSetCount = -1;
@@ -98,22 +98,22 @@ void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet( (name), (case_sensitive) );	\
 	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr( ++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname );
 	
-	PopulateKeyword( L"C/C++",			true,	CPP );			/* セット 0の追加 */
-	PopulateKeyword( L"HTML",			false,	HTML );			/* セット 1の追加 */
-	PopulateKeyword( L"PL/SQL",			false,	PLSQL );		/* セット 2の追加 */
-	PopulateKeyword( L"COBOL",			true,	COBOL );		/* セット 3の追加 */
-	PopulateKeyword( L"Java",			true,	JAVA );			/* セット 4の追加 */
-	PopulateKeyword( L"CORBA IDL",		true,	CORBA_IDL );	/* セット 5の追加 */
-	PopulateKeyword( L"AWK",			true,	AWK );			/* セット 6の追加 */
-	PopulateKeyword( L"MS-DOS batch",	false,	BAT );			/* セット 7の追加 */	//Oct. 31, 2000 JEPRO 'バッチファイル'→'batch' に短縮
-	PopulateKeyword( L"Pascal",			false,	PASCAL );		/* セット 8の追加 */	//Nov. 5, 2000 JEPRO 大・小文字の区別を'しない'に変更
-	PopulateKeyword( L"TeX",			true,	TEX );			/* セット 9の追加 */	//Sept. 2, 2000 jepro Tex →TeX に修正 Bool値は大・小文字の区別
-	PopulateKeyword( L"TeX2",			true,	TEX2 );			/* セット10の追加 */	//Jan. 19, 2001 JEPRO 追加
-	PopulateKeyword( L"Perl",			true,	PERL );			/* セット11の追加 */
-	PopulateKeyword( L"Perl2",			true,	PERL2 );		/* セット12の追加 */	//Jul. 10, 2001 JEPRO Perlから変数を分離・独立
-	PopulateKeyword( L"Visual Basic",	false,	VB );			/* セット13の追加 */	//Jul. 10, 2001 JEPRO
-	PopulateKeyword( L"Visual Basic2",	false,	VB2 );			/* セット14の追加 */	//Jul. 10, 2001 JEPRO
-	PopulateKeyword( L"Rich Text",		true,	RTF );			/* セット15の追加 */	//Jul. 10, 2001 JEPRO
+	PopulateKeyword( L"C/C++",			true,	CPP );			// セット 0の追加
+	PopulateKeyword( L"HTML",			false,	HTML );			// セット 1の追加
+	PopulateKeyword( L"PL/SQL",			false,	PLSQL );		// セット 2の追加
+	PopulateKeyword( L"COBOL",			true,	COBOL );		// セット 3の追加
+	PopulateKeyword( L"Java",			true,	JAVA );			// セット 4の追加
+	PopulateKeyword( L"CORBA IDL",		true,	CORBA_IDL );	// セット 5の追加
+	PopulateKeyword( L"AWK",			true,	AWK );			// セット 6の追加
+	PopulateKeyword( L"MS-DOS batch",	false,	BAT );			// セット 7の追加	//Oct. 31, 2000 JEPRO 'バッチファイル'→'batch' に短縮
+	PopulateKeyword( L"Pascal",			false,	PASCAL );		// セット 8の追加	//Nov. 5, 2000 JEPRO 大・小文字の区別を'しない'に変更
+	PopulateKeyword( L"TeX",			true,	TEX );			// セット 9の追加	//Sept. 2, 2000 jepro Tex →TeX に修正 Bool値は大・小文字の区別
+	PopulateKeyword( L"TeX2",			true,	TEX2 );			// セット10の追加	//Jan. 19, 2001 JEPRO 追加
+	PopulateKeyword( L"Perl",			true,	PERL );			// セット11の追加
+	PopulateKeyword( L"Perl2",			true,	PERL2 );		// セット12の追加	//Jul. 10, 2001 JEPRO Perlから変数を分離・独立
+	PopulateKeyword( L"Visual Basic",	false,	VB );			// セット13の追加	//Jul. 10, 2001 JEPRO
+	PopulateKeyword( L"Visual Basic2",	false,	VB2 );			// セット14の追加	//Jul. 10, 2001 JEPRO
+	PopulateKeyword( L"Rich Text",		true,	RTF );			// セット15の追加	//Jul. 10, 2001 JEPRO
 
 #undef PopulateKeyword
 }
@@ -131,34 +131,34 @@ void _DefaultConfig(STypeConfig* pType)
 /************************/
 
 	pType->m_nTextWrapMethod = WRAP_SETTING_WIDTH;	// テキストの折り返し方法		// 2008.05.30 nasukoji
-	pType->m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);	/* 折り返し桁数 */
-	pType->m_nColumnSpace = 0;					/* 文字と文字の隙間 */
-	pType->m_nLineSpace = 1;					/* 行間のすきま */
-	pType->m_nTabSpace = CLayoutInt(4);					/* TABの文字数 */
+	pType->m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);	// 折り返し桁数
+	pType->m_nColumnSpace = 0;					// 文字と文字の隙間
+	pType->m_nLineSpace = 1;					// 行間のすきま
+	pType->m_nTabSpace = CLayoutInt(4);					// TABの文字数
 	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		pType->m_nKeyWordSetIdx[i] = -1;
 	}
-	wcscpy_s( pType->m_szTabViewString, _EDITL("^       ") );	/* TAB表示文字列 */
-	pType->m_bTabArrow = TABARROW_STRING;	/* タブ矢印表示 */	// 2001.12.03 hor	// default on 2013/4/11 Uchi
-	pType->m_bInsSpace = false;				/* スペースの挿入 */	// 2001.12.03 hor
+	wcscpy_s( pType->m_szTabViewString, _EDITL("^       ") );	// TAB表示文字列
+	pType->m_bTabArrow = TABARROW_STRING;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
+	pType->m_bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
 	
 	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_cBlockCommentsを使うように修正
-	pType->m_cLineComment.CopyTo(0, L"", -1);	/* 行コメントデリミタ */
-	pType->m_cLineComment.CopyTo(1, L"", -1);	/* 行コメントデリミタ2 */
-	pType->m_cLineComment.CopyTo(2, L"", -1);	/* 行コメントデリミタ3 */	//Jun. 01, 2001 JEPRO 追加
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"", L"");	/* ブロックコメントデリミタ */
-	pType->m_cBlockComments[1].SetBlockCommentRule(L"", L"");	/* ブロックコメントデリミタ2 */
+	pType->m_cLineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
+	pType->m_cLineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
+	pType->m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
+	pType->m_cBlockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
+	pType->m_cBlockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
-	pType->m_nStringType = STRING_LITERAL_CPP;					/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
+	pType->m_nStringType = STRING_LITERAL_CPP;					// 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""]['']
 	pType->m_bStringLineOnly = false;
 	pType->m_bStringEndLine  = false;
 	pType->m_nHeredocType = HEREDOC_PHP;
-	pType->m_szIndentChars[0] = 0;		/* その他のインデント対象文字 */
+	pType->m_szIndentChars[0] = 0;		// その他のインデント対象文字
 
 	pType->m_nColorInfoArrNum = COLORIDX_LAST;
 
 	// 2001/06/14 Start by asa-o
-	pType->m_szHokanFile[0] = 0;		/* 入力補完 単語ファイル */
+	pType->m_szHokanFile[0] = 0;		// 入力補完 単語ファイル
 	// 2001/06/14 End
 
 	pType->m_nHokanType = 0;
@@ -182,11 +182,11 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_szExtHtmlHelp[0] = L'\0';
 	pType->m_bHtmlHelpIsSingle = true;
 
-	pType->m_bAutoIndent = true;			/* オートインデント */
-	pType->m_bAutoIndent_ZENSPACE = true;	/* 日本語空白もインデント */
+	pType->m_bAutoIndent = true;			// オートインデント
+	pType->m_bAutoIndent_ZENSPACE = true;	// 日本語空白もインデント
 	pType->m_bRTrimPrevLine = false;		// 2005.10.11 ryoji 改行時に末尾の空白を削除
 
-	pType->m_nIndentLayout = 0;	/* 折り返しは2行目以降を字下げ表示 */
+	pType->m_nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
 
 	assert( COLORIDX_LAST <= _countof(pType->m_ColorInfoArr) );
 	for (int i = 0; i < COLORIDX_LAST; ++i) {
@@ -213,12 +213,12 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_cyOutlineDockTop = 0;					// アウトラインの上ドッキング高
 	pType->m_cxOutlineDockRight = 0;				// アウトラインの右ドッキング幅
 	pType->m_cyOutlineDockBottom = 0;				// アウトラインの下ドッキング高
-	pType->m_eDefaultOutline = OUTLINE_TEXT;		/* アウトライン解析方法 */
-	pType->m_nOutlineSortCol = 0;					/* アウトライン解析ソート列番号 */
+	pType->m_eDefaultOutline = OUTLINE_TEXT;		// アウトライン解析方法
+	pType->m_nOutlineSortCol = 0;					// アウトライン解析ソート列番号
 	pType->m_bOutlineSortDesc = false;				// アウトライン解析ソート降順
-	pType->m_nOutlineSortType = 0;					/* アウトライン解析ソート基準 */
-	pType->m_eSmartIndent = SMARTINDENT_NONE;		/* スマートインデント種別 */
-	pType->m_nImeState = IME_CMODE_NOCONVERSION;	/* IME入力 */
+	pType->m_nOutlineSortType = 0;					// アウトライン解析ソート基準
+	pType->m_eSmartIndent = SMARTINDENT_NONE;		// スマートインデント種別
+	pType->m_nImeState = IME_CMODE_NOCONVERSION;	// IME入力
 
 	pType->m_szOutlineRuleFilename[0] = L'\0';		//Dec. 4, 2000 MIK
 	pType->m_bKinsokuHead = false;					// 行頭禁則				//@@@ 2002.04.08 MIK

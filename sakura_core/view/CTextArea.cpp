@@ -12,17 +12,17 @@ CTextArea::CTextArea(CEditView* pEditView)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
-	m_nViewAlignLeft = 0;		/* 表示域の左端座標 */
-	m_nViewAlignLeftCols = 0;	/* 行番号域の桁数 */
-	m_nViewCx = 0;				/* 表示域の幅 */
-	m_nViewCy = 0;				/* 表示域の高さ */
-	m_nViewColNum = CLayoutInt(0);			/* 表示域の桁数 */
-	m_nViewRowNum = CLayoutInt(0);			/* 表示域の行数 */
-	m_nViewTopLine = CLayoutInt(0);			/* 表示域の一番上の行 */
-	m_nViewLeftCol = CLayoutInt(0);			/* 表示域の一番左の桁 */
-	SetTopYohaku( pShareData->m_Common.m_sWindow.m_nRulerBottomSpace ); 	/* ルーラーとテキストの隙間 */
+	m_nViewAlignLeft = 0;					// 表示域の左端座標
+	m_nViewAlignLeftCols = 0;				// 行番号域の桁数
+	m_nViewCx = 0;							// 表示域の幅
+	m_nViewCy = 0;							// 表示域の高さ
+	m_nViewColNum = CLayoutInt(0);			// 表示域の桁数
+	m_nViewRowNum = CLayoutInt(0);			// 表示域の行数
+	m_nViewTopLine = CLayoutInt(0);			// 表示域の一番上の行
+	m_nViewLeftCol = CLayoutInt(0);			// 表示域の一番左の桁
+	SetTopYohaku( pShareData->m_Common.m_sWindow.m_nRulerBottomSpace ); 	// ルーラーとテキストの隙間
 	SetLeftYohaku( pShareData->m_Common.m_sWindow.m_nLineNumRightSpace );
-	m_nViewAlignTop = GetTopYohaku();		/* 表示域の上端座標 */
+	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
 CTextArea::~CTextArea()
@@ -145,9 +145,9 @@ bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 	int				nViewAlignLeftNew;
 
 	if (pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp) {
-		/* 行番号表示に必要な桁数を計算 */
+		// 行番号表示に必要な桁数を計算
 		int i = DetectWidthOfLineNumberArea_calculate();
-		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	/* 表示域の左端座標 */
+		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	// 表示域の左端座標
 		m_nViewAlignLeftCols = i + 1;
 	}else {
 		nViewAlignLeftNew = 8;
@@ -167,10 +167,10 @@ bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 		UpdateViewColRowNums();
 
 		if (bRedraw) {
-			/* 再描画 */
+			// 再描画
 			pView2->GetCaret().m_cUnderLine.Lock();
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-			pView2->Call_OnPaint(PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, false); /* メモリＤＣを使用してちらつきのない再描画 */
+			pView2->Call_OnPaint(PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, false); // メモリＤＣを使用してちらつきのない再描画
 			// To Here 2007.09.09 Moca
 			pView2->GetCaret().m_cUnderLine.UnLock();
 			pView2->GetCaret().ShowEditCaret();
@@ -196,14 +196,14 @@ bool CTextArea::DetectWidthOfLineNumberArea( bool bRedraw )
 }
 
 
-/* 行番号表示に必要な桁数を計算 */
+// 行番号表示に必要な桁数を計算
 int CTextArea::DetectWidthOfLineNumberArea_calculate() const
 {
 	const CEditView* pView = m_pEditView;
 
 	int nAllLines; //$$ 単位混在
 
-	/* 行番号の表示 false=折り返し単位／true=改行単位 */
+	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (pView->m_pTypeData->m_bLineNumIsCRLF) {
 		nAllLines = pView->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	}else {

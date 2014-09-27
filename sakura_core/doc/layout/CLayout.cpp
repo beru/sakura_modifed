@@ -33,17 +33,17 @@ void CLayout::DUMP( void )
 	return;
 }
 
-//!レイアウト幅を計算。改行は含まない。
-//2007.10.11 kobake 作成
-//2007.11.29 kobake タブ幅が計算されていなかったのを修正
-//2011.12.26 Moca インデントは含むように変更(座標変換バグ修正)
+//! レイアウト幅を計算。改行は含まない。
+// 2007.10.11 kobake 作成
+// 2007.11.29 kobake タブ幅が計算されていなかったのを修正
+// 2011.12.26 Moca インデントは含むように変更(座標変換バグ修正)
 CLayoutInt CLayout::CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const
 {
-	//ソース
+	// ソース
 	const wchar_t* pText    = m_pCDocLine->GetPtr();
 	CLogicInt      nTextLen = m_pCDocLine->GetLengthWithoutEOL();
 
-	//計算
+	// 計算
 	CLayoutInt nWidth = GetIndent();
 	for (CLogicInt i=m_ptLogicPos.GetX2();i<m_ptLogicPos.GetX2()+m_nLength;i++) {
 		if (pText[i]==WCODE::TAB) {

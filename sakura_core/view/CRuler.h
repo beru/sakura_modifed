@@ -29,7 +29,7 @@ class CEditDoc;
 class CTextMetrics;
 class CGraphics;
 
-class CRuler{
+class CRuler {
 public:
 	CRuler(const CEditView* pEditView, const CEditDoc* pEditDoc);
 	virtual ~CRuler();

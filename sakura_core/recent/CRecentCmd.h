@@ -32,10 +32,10 @@ typedef StaticString<TCHAR, MAX_CMDLEN> CCmdString;
 //! コマンドの履歴を管理 (RECENT_FOR_CMD)
 class CRecentCmd : public CRecentImp<CCmdString, LPCTSTR>{
 public:
-	//生成
+	// 生成
 	CRecentCmd();
 
-	//オーバーライド
+	// オーバーライド
 	int				CompareItem( const CCmdString* p1, LPCTSTR p2 ) const;
 	void			CopyItem( CCmdString* dst, LPCTSTR src ) const;
 	const TCHAR*	GetItemText( int nIndex ) const;

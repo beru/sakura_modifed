@@ -26,12 +26,11 @@
 #include "CConvert.h"
 
 
-//!”¼Šp‚É‚Å‚«‚é‚à‚Ì‚Í‘S•””¼Šp‚É•ÏŠ·
-class CConvert_ToHankaku : public CConvert{
+//! ”¼Šp‚É‚Å‚«‚é‚à‚Ì‚Í‘S•””¼Šp‚É•ÏŠ·
+class CConvert_ToHankaku : public CConvert {
 public:
 	bool DoConvert(CNativeW* pcData);
 };
-
 
 enum EToHankakuMode{
 	TO_KATAKANA	= 0x01, //!< ƒJƒ^ƒJƒi‚É‰e‹¿ƒAƒŠ

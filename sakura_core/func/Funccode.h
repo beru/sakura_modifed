@@ -176,13 +176,13 @@ namespace nsFuncCode{
 ///////////////////////////////////////////////////////////////////////
 
 
-/*機能番号に対応したヘルプトピックIDを返す*/
+// 機能番号に対応したヘルプトピックIDを返す
 int FuncID_To_HelpContextID( EFunctionCode nFuncID );	//Stonee, 2001/02/23
 
 class CEditDoc;
 struct DLLSHAREDATA;
 
-//2007.10.30 kobake 機能チェックをCEditWndからここへ移動
-bool IsFuncEnable( const CEditDoc*, const DLLSHAREDATA*, EFunctionCode );	/* 機能が利用可能か調べる */
-bool IsFuncChecked( const CEditDoc*, const DLLSHAREDATA*, EFunctionCode );	/* 機能がチェック状態か調べる */
+// 2007.10.30 kobake 機能チェックをCEditWndからここへ移動
+bool IsFuncEnable( const CEditDoc*, const DLLSHAREDATA*, EFunctionCode );	// 機能が利用可能か調べる
+bool IsFuncChecked( const CEditDoc*, const DLLSHAREDATA*, EFunctionCode );	// 機能がチェック状態か調べる
 

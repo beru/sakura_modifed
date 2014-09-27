@@ -67,7 +67,7 @@ INT_PTR CALLBACK CPropKeybind::DlgProc_page(
 }
 //	To Here Jun. 2, 2001 genta
 
-/* From Here Oct. 13, 2000 Studio CでMr.コーヒー氏に教わったやり方ですがうまくいってません */
+// From Here Oct. 13, 2000 Studio CでMr.コーヒー氏に教わったやり方ですがうまくいってません
 // ウィンドウプロシージャの中で・・・
 LRESULT CALLBACK CPropComKeybindWndProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -81,10 +81,10 @@ LRESULT CALLBACK CPropComKeybindWndProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 	}
 	return 0;
 }
-/* To Here Oct. 13, 2000 */
+// To Here Oct. 13, 2000
 
 
-/* Keybind メッセージ処理 */
+// Keybind メッセージ処理
 INT_PTR CPropKeybind::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,	// message
@@ -118,12 +118,12 @@ INT_PTR CPropKeybind::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 Keybind */
+		// ダイアログデータの設定 Keybind
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* コントロールのハンドルを取得 */
+		// コントロールのハンドルを取得
 		hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 		hwndFuncList = ::GetDlgItem( hwndDlg, IDC_LIST_FUNC );
 		hwndAssignedkeyList = ::GetDlgItem( hwndDlg, IDC_LIST_ASSIGNEDKEYS );
@@ -134,9 +134,9 @@ INT_PTR CPropKeybind::DispatchEvent(
 //		hwndLIST_KEYSFUNC = ::GetDlgItem( hwndDlg, IDC_LIST_KEYSFUNC );
 		hwndEDIT_KEYSFUNC = ::GetDlgItem( hwndDlg, IDC_EDIT_KEYSFUNC );
 
-		/* キー選択時の処理 */
+		// キー選択時の処理
 //	From Here Oct. 14, 2000 JEPRO わかりにくいので選択しないように変更	//Oct. 17, 2000 JEPRO 復活！
-//	/* キーリストの先頭の項目を選択（リストボックス）*/
+//	// キーリストの先頭の項目を選択（リストボックス）
 		List_SetCurSel( hwndKeyList, 0 );	//Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
 		::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );	//Oct. 14, 2000 JEPRO ここはどっちでもいい？(わからん)
 //	To Here Oct. 14, 2000
@@ -155,7 +155,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 			return TRUE;
 		case PSN_KILLACTIVE:
 //			MYTRACE( _T("Keybind PSN_KILLACTIVE\n") );
-			/* ダイアログデータの取得 Keybind */
+			// ダイアログデータの取得 Keybind
 			GetData( hwndDlg );
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -180,23 +180,23 @@ INT_PTR CPropKeybind::DispatchEvent(
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;	/* コントロールのハンドル */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID = LOWORD(wParam);		// 項目ID､ コントロールID､ またはアクセラレータID
+		hwndCtl = (HWND) lParam;	// コントロールのハンドル
 
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
-			case IDC_BUTTON_IMPORT:	/* インポート */
-				/* Keybind:キー割り当て設定をインポートする */
+			case IDC_BUTTON_IMPORT:	// インポート
+				// Keybind:キー割り当て設定をインポートする
 				Import( hwndDlg );
 				return TRUE;
-			case IDC_BUTTON_EXPORT:	/* エクスポート */
-				/* Keybind:キー割り当て設定をエクスポートする */
+			case IDC_BUTTON_EXPORT:	// エクスポート
+				// Keybind:キー割り当て設定をエクスポートする
 				Export( hwndDlg );
 				return TRUE;
-			case IDC_BUTTON_ASSIGN:	/* 割付 */
+			case IDC_BUTTON_ASSIGN:	// 割付
 				nIndex = List_GetCurSel( hwndKeyList );
 				nIndex2 = Combo_GetCurSel( hwndCombo );
 				nIndex3 = List_GetCurSel( hwndFuncList );
@@ -218,7 +218,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_FUNC, LBN_SELCHANGE ), (LPARAM)hwndFuncList );
 				return TRUE;
-			case IDC_BUTTON_RELEASE:	/* 解除 */
+			case IDC_BUTTON_RELEASE:	// 解除
 				nIndex = List_GetCurSel( hwndKeyList );
 				if (nIndex == LB_ERR) {
 					return TRUE;
@@ -239,7 +239,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_FUNC, LBN_SELCHANGE ), (LPARAM)hwndFuncList );
 				return TRUE;
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		}
 		if ( hwndCheckShift == hwndCtl
 		 || hwndCheckCtrl == hwndCtl
@@ -284,18 +284,18 @@ INT_PTR CPropKeybind::DispatchEvent(
 				nIndex2 = Combo_GetCurSel( hwndCombo );
 				nIndex3 = List_GetCurSel( hwndFuncList );
 				nFuncCode = m_cLookup.Pos2FuncCode( nIndex2, nIndex3 );	// Oct. 2, 2001 genta
-				/* 機能に対応するキー名の取得(複数) */
+				// 機能に対応するキー名の取得(複数)
 				CNativeT**	ppcAssignedKeyList;
-				nAssignedKeyNum = CKeyBind::GetKeyStrList(	/* 機能に対応するキー名の取得(複数) */
+				nAssignedKeyNum = CKeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
 					G_AppInstance(), m_Common.m_sKeyBind.m_nKeyNameArrNum, (KEYDATA*)m_Common.m_sKeyBind.m_pKeyNameArr,
 					&ppcAssignedKeyList, nFuncCode,
 					FALSE	// 2007.02.22 ryoji デフォルト機能は取得しない
 				);	
-				/* 割り当てキーリストをクリアして値の設定 */
+				// 割り当てキーリストをクリアして値の設定
 				List_ResetContent( hwndAssignedkeyList );
 				if (0 < nAssignedKeyNum) {
 					for (j = 0; j < nAssignedKeyNum; ++j) {
-						/* デバッグモニタに出力 */
+						// デバッグモニタに出力
 						const TCHAR* cpszString = ppcAssignedKeyList[j]->GetStringPtr();
 						::List_AddString( hwndAssignedkeyList, cpszString );
 						delete ppcAssignedKeyList[j];
@@ -309,7 +309,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIndex2 = Combo_GetCurSel( hwndCombo );
-				/* 機能一覧に文字列をセット（リストボックス）*/
+				// 機能一覧に文字列をセット（リストボックス）
 				m_cLookup.SetListItem( hwndFuncList, nIndex2 );	//	Oct. 2, 2001 genta
 				return TRUE;
 			}
@@ -390,7 +390,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 //@@@ 2001.02.04 End
 
@@ -406,21 +406,21 @@ INT_PTR CPropKeybind::DispatchEvent(
 }
 
 
-/* ダイアログデータの設定 Keybind */
+// ダイアログデータの設定 Keybind
 void CPropKeybind::SetData( HWND hwndDlg )
 {
 	HWND		hwndCombo;
 	HWND		hwndKeyList;
 	int			i;
 
-	/* 機能種別一覧に文字列をセット（コンボボックス）*/
+	// 機能種別一覧に文字列をセット（コンボボックス）
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 	m_cLookup.SetCategory2Combo( hwndCombo );	//	Oct. 2, 2001 genta
 
-	/* 種別の先頭の項目を選択（コンボボックス）*/
+	// 種別の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel( hwndCombo, 0 );	//Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
-	/* キー一覧に文字列をセット（リストボックス）*/
+	// キー一覧に文字列をセット（リストボックス）
 	hwndKeyList = ::GetDlgItem( hwndDlg, IDC_LIST_KEY );
 	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
 		::List_AddString( hwndKeyList, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
@@ -430,13 +430,13 @@ void CPropKeybind::SetData( HWND hwndDlg )
 }
 
 
-/* ダイアログデータの取得 Keybind */
+// ダイアログデータの取得 Keybind
 int CPropKeybind::GetData( HWND hwndDlg )
 {
 	return TRUE;
 }
 	
-/*! Keybind: キーリストをチェックボックスの状態に合わせて更新する */
+//! Keybind: キーリストをチェックボックスの状態に合わせて更新する
 void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 	HWND	hwndKeyList;
 	int 	nIndex;
@@ -461,7 +461,7 @@ void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 		i |= _ALT;
 		wcscat( szKeyState, L"Alt+" );
 	}
-	/* キー一覧に文字列をセット（リストボックス）*/
+	// キー一覧に文字列をセット（リストボックス）
 	List_ResetContent( hwndKeyList );
 	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
 		TCHAR	szLabel[256];
@@ -473,7 +473,7 @@ void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 	::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );
 }
 
-/* Keybind:キー割り当て設定をインポートする */
+// Keybind:キー割り当て設定をインポートする
 void CPropKeybind::Import( HWND hwndDlg )
 {
 	CImpExpKeybind	cImpExpKeybind( m_Common );
@@ -495,7 +495,7 @@ void CPropKeybind::Import( HWND hwndDlg )
 }
 
 
-/* Keybind:キー割り当て設定をエクスポートする */
+// Keybind:キー割り当て設定をエクスポートする
 void CPropKeybind::Export( HWND hwndDlg )
 {
 	CImpExpKeybind	cImpExpKeybind( m_Common );

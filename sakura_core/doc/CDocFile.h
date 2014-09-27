@@ -29,7 +29,7 @@
 class CEditDoc;
 
 //####本来はここにあるべきでは無い
-struct SFileInfo{
+struct SFileInfo {
 	friend class CDocFile;
 protected:
 	ECodeType	eCharCode;
@@ -51,7 +51,7 @@ public:
 };
 
 
-class CDocFile : public CFile{
+class CDocFile : public CFile {
 public:
 	CDocFile(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) {}
 
@@ -75,6 +75,6 @@ public:
 public: //####
 	CEditDoc*	m_pcDocRef;
 	SFileInfo	m_sFileInfo;
-	CFilePath	m_szSaveFilePath;	/* 保存時のファイルのパス（マクロ用） */	// 2006.09.04 ryoji
+	CFilePath	m_szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
 };
 

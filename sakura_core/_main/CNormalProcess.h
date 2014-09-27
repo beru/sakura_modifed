@@ -30,21 +30,21 @@ class CEditWnd;
 */
 class CNormalProcess : public CProcess {
 public:
-	//コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 	CNormalProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine );
 	virtual ~CNormalProcess();
 
 protected:
-	//プロセスハンドラ
+	// プロセスハンドラ
 	virtual bool InitializeProcess();
 	virtual bool MainLoop();
 	virtual void OnExitProcess();
 
 protected:
-	//実装補助
+	// 実装補助
 	HANDLE _GetInitializeMutex() const; // 2002/2/8 aroka
 
 private:
-	CEditApp*	m_pcEditApp;	//2007.10.23 kobake
+	CEditApp*	m_pcEditApp;	// 2007.10.23 kobake
 };
 

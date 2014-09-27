@@ -177,7 +177,7 @@ void CViewCommander::Command_BEGIN_BOXSELECT( bool bSelectingLock )
 
 	auto& si = m_pCommanderView->GetSelectionInfo();
 //@@@ 2002.01.03 YAZAKI 範囲選択中にShift+F6を実行すると選択範囲がクリアされない問題に対処
-	if (si.IsTextSelected()) {	/* テキストが選択されているか */
+	if (si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea( true );
 	}

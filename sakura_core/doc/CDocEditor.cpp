@@ -38,10 +38,10 @@ CDocEditor::CDocEditor(CEditDoc* pcDoc)
 , m_cNewLineCode( EOL_CRLF )		//	New Line Type
 , m_pcOpeBlk( NULL )
 , m_bInsMode( true )	// Oct. 2, 2005 genta
-, m_bIsDocModified( false )	/* 変更フラグ */ // Jan. 22, 2002 genta 型変更
+, m_bIsDocModified( false )	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {
 	//	Oct. 2, 2005 genta 挿入モード
-	this->SetInsMode( GetDllShareData().m_Common.m_sGeneral.m_bIsINSMode );
+	this->SetInsMode(GetDllShareData().m_Common.m_sGeneral.m_bIsINSMode);
 }
 
 
@@ -65,7 +65,7 @@ void CDocEditor::SetModified( bool flag, bool redraw)
 
 void CDocEditor::OnBeforeLoad(SLoadInfo* sLoadInfo)
 {
-	//ビューのテキスト選択解除
+	// ビューのテキスト選択解除
 	GetListeningDoc()->m_pcEditWnd->Views_DisableSelectArea(true);
 }
 
@@ -82,7 +82,7 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 		}else {
 			SetNewLineCode( EOL_CRLF );
 		}
-		CDocLine*	pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine( CLogicInt(0) );
+		CDocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine( CLogicInt(0) );
 		if (pFirstlineinfo != NULL) {
 			EEolType t = pFirstlineinfo->GetEol();
 			if (t != EOL_NONE && t != EOL_UNKNOWN) {
@@ -107,7 +107,7 @@ void CDocEditor::OnAfterSave(const SSaveInfo& sSaveInfo)
 
 	this->SetModified(false,false);	//	Jan. 22, 2002 genta 関数化 更新フラグのクリア
 
-	/* 現在位置で無変更な状態になったことを通知 */
+	// 現在位置で無変更な状態になったことを通知
 	this->m_cOpeBuf.SetNoModified();
 
 	// カレントディレクトリの変更
@@ -126,7 +126,7 @@ void CDocEditor::SetImeMode( int mode )
 	HWND hwnd = m_pcDocRef->m_pcEditWnd->GetActiveView().GetHwnd();
 	HIMC hIme = ImmGetContext( hwnd ); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
 
-	//	最下位ビットはIME自身のOn/Off制御
+	// 最下位ビットはIME自身のOn/Off制御
 	if ((mode & 3) == 2) {
 		ImmSetOpenStatus( hIme, FALSE );
 	}
@@ -160,7 +160,6 @@ void CDocEditor::SetImeMode( int mode )
 }
 //	To Here Nov. 20, 2000 genta
 
-
 /*!
 	末尾に行を追加
 
@@ -171,13 +170,12 @@ void CDocEditor::SetImeMode( int mode )
 	@param cEol     [in] 行末コード
 
 */
-void CDocEditAgent::AddLineStrX( const wchar_t* pData, int nDataLen )
+void CDocEditAgent::AddLineStrX(const wchar_t* pData, int nDataLen)
 {
-	//チェーン適用
+	// チェーン適用
 	CDocLine* pDocLine = m_pcDocLineMgr->AddNewLine();
 
-	//インスタンス設定
+	// インスタンス設定
 	pDocLine->SetDocLineString(pData, nDataLen);
 }
-
 

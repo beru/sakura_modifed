@@ -31,7 +31,7 @@
 #include "util/file.h"
 #include "env/CSakuraEnvironment.h"
 
-/* コマンドラインオプション用定数 */
+// コマンドラインオプション用定数
 #define CMDLINEOPT_R			1002
 #define CMDLINEOPT_NOWIN		1003
 #define CMDLINEOPT_WRITEQUIT	1004
@@ -129,10 +129,10 @@ int CCommandLine::CheckCommandLine(
 
 	int len = lstrlen( str );
 
-	//	引数がある場合を先に確認
+	// 引数がある場合を先に確認
 	for (const auto* ptr = _COptWithA; ptr->opt != NULL; ptr++) {
 		if (
-			len >= ptr->len		//	長さが足りているか
+			len >= ptr->len		// 長さが足りているか
 			&& (str[ptr->len] == '=' || str[ptr->len] == ':')	// オプション部分の長さチェック
 			&& auto_memicmp(str, ptr->opt, ptr->len) == 0		// 文字列の比較	// 2006.10.25 ryoji memcmp() -> _memicmp()
 		) {
@@ -147,7 +147,7 @@ int CCommandLine::CheckCommandLine(
 				}
 			}
 			if (*arglen <= 0) {
-				return 0;		//2010.06.12 syat 値なしはオプションとして認めない
+				return 0;		// 2010.06.12 syat 値なしはオプションとして認めない
 			}
 			return ptr->value;
 		}
@@ -213,7 +213,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 	if (pszCmdLineSrc[0] != _T('-')) {
 		for (i = 0; i < _countof( szPath ); ++i) {
 			if (pszCmdLineSrc[i] == _T(' ') || pszCmdLineSrc[i] == _T('\0')) {
-				/* ファイルの存在をチェック */
+				// ファイルの存在をチェック
 				szPath[i] = _T('\0');	// 終端文字
 				if (fexist(szPath)) {
 					bFind = true;
@@ -228,7 +228,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 	}
 	if (bFind) {
 		CSakuraEnvironment::ResolvePath(szPath);
-		_tcscpy( m_fi.m_szPath, szPath );	/* ファイル名 */
+		_tcscpy( m_fi.m_szPath, szPath );	// ファイル名
 		nPos = i + 1;
 	}else {
 		m_fi.m_szPath[0] = _T('\0');
@@ -265,7 +265,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 					szPath[0] = _T('\0');
 				}
 			}else {
-				_tcscpy_s( szPath, pszToken );		/* ファイル名 */
+				_tcscpy_s( szPath, pszToken );		// ファイル名
 			}
 
 			// Nov. 11, 2005 susu
@@ -315,18 +315,18 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				cmResponseFile.SetStringT( arg, nArgLen );
 				break;
 			case CMDLINEOPT_X: //	X
-				/* 行桁指定を1開始にした */
+				// 行桁指定を1開始にした
 				m_fi.m_ptCursor.x = AtoiOptionInt( arg ) - 1;
 				break;
 			case CMDLINEOPT_Y:	//	Y
 				m_fi.m_ptCursor.y = AtoiOptionInt( arg ) - 1;
 				break;
 			case CMDLINEOPT_VX:	// VX
-				/* 行桁指定を1開始にした */
+				// 行桁指定を1開始にした
 				m_fi.m_nViewLeftCol = CLayoutInt( AtoiOptionInt( arg ) - 1 );
 				break;
 			case CMDLINEOPT_VY:	//	VY
-				/* 行桁指定を1開始にした */
+				// 行桁指定を1開始にした
 				m_fi.m_nViewTopLine = CLayoutInt( AtoiOptionInt( arg ) - 1 );
 				break;
 			case CMDLINEOPT_SX: //	SX
@@ -495,10 +495,10 @@ CCommandLine::CCommandLine()
 	m_gi.nGrepCharSet		= CODE_SJIS;
 	m_gi.bGrepOutputLine	= false;
 	m_gi.nGrepOutputStyle	= 1;
-	m_gi.bGrepOutputFileOnly = false;
-	m_gi.bGrepOutputBaseFolder = false;
-	m_gi.bGrepSeparateFolder = false;
-	m_bViewMode			= false;
+	m_gi.bGrepOutputFileOnly	= false;
+	m_gi.bGrepOutputBaseFolder	= false;
+	m_gi.bGrepSeparateFolder	= false;
+	m_bViewMode				= false;
 	m_nGroup				= -1;		// 2007.06.26 ryoji
 }
 

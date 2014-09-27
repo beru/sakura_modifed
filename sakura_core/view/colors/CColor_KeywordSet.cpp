@@ -15,8 +15,9 @@ static int NextWordBreak( const CStringRef& str, const int start );
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CColor_KeywordSet::CColor_KeywordSet()
-: m_nKeywordIndex(0)
-, m_nCOMMENTEND(0)
+	:
+	m_nKeywordIndex(0),
+	m_nCOMMENTEND(0)
 {
 }
 

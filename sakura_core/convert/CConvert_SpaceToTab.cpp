@@ -18,13 +18,13 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 	int			nPosX;
 	CEol		cEol;
 
-	BOOL		bSpace = FALSE;	//スペースの処理中かどうか
+	BOOL		bSpace = FALSE;	// スペースの処理中かどうか
 	int		j;
 	int		nStartPos;
 
 	nBgn = 0;
 	nPosDes = 0;
-	/* 変換後に必要なバイト数を調べる */
+	// 変換後に必要なバイト数を調べる
 	while (( pLine = GetNextLineW( pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
@@ -37,12 +37,12 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 	pDes = new wchar_t[nPosDes + 1];
 	nBgn = 0;
 	nPosDes = 0;
-	/* CRLFで区切られる「行」を返す。CRLFは行長に加えない */
+	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
 	while (( pLine = GetNextLineW( pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pcData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
-			bSpace = FALSE;	//直前がスペースか
+			bSpace = FALSE;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			for (i = 0; i < nLineLen; ++i) {
 				if (SPACE == pLine[i] || TAB == pLine[i]) {
@@ -66,9 +66,9 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 								nPosDes++;
 								nStartPos += m_nTabWidth - ( nStartPos % m_nTabWidth );
 							}
-							//	2003.08.05 Moca
-							//	変換後にTABが1つも入らない場合にスペースを詰めすぎて
-							//	バッファをはみ出すのを修正
+							// 2003.08.05 Moca
+							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
+							// バッファをはみ出すのを修正
 							for (j = nStartPos; j < nPosX; j++) {
 								pDes[nPosDes] = SPACE;
 								nPosDes++;
@@ -76,7 +76,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 						}
 					}
 					nPosX++;
-					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		//全角文字ずれ対応 2008.10.17 matsumo
+					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		// 全角文字ずれ対応 2008.10.17 matsumo
 					pDes[nPosDes] = pLine[i];
 					nPosDes++;
 					bSpace = FALSE;
@@ -97,9 +97,9 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 						nPosDes++;
 						nStartPos += m_nTabWidth - ( nStartPos % m_nTabWidth );
 					}
-					//	2003.08.05 Moca
-					//	変換後にTABが1つも入らない場合にスペースを詰めすぎて
-					//	バッファをはみ出すのを修正
+					// 2003.08.05 Moca
+					// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
+					// バッファをはみ出すのを修正
 					for (j = nStartPos; j < nPosX; j++) {
 						pDes[nPosDes] = SPACE;
 						nPosDes++;
@@ -108,7 +108,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 			}
 		}
 
-		/* 行末の処理 */
+		// 行末の処理
 		auto_memcpy( &pDes[nPosDes], cEol.GetValue2(), cEol.GetLen() );
 		nPosDes += cEol.GetLen();
 	}

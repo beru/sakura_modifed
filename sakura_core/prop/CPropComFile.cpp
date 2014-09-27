@@ -68,7 +68,7 @@ INT_PTR CALLBACK CPropFile::DlgProc_page(
 }
 //	To Here Jun. 2, 2001 genta
 
-/*! ファイルページ メッセージ処理 */
+//! ファイルページ メッセージ処理
 INT_PTR CPropFile::DispatchEvent(
 	HWND	hwndDlg,	//!< handle to dialog box
 	UINT	uMsg,	//!< message
@@ -87,7 +87,7 @@ INT_PTR CPropFile::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 File */
+		// ダイアログデータの設定 File
 		SetData( hwndDlg );
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
@@ -105,7 +105,7 @@ INT_PTR CPropFile::DispatchEvent(
 //				return TRUE;
 //			case PSN_KILLACTIVE:
 ////				MYTRACE( _T("p2 PSN_KILLACTIVE\n") );
-//				/* ダイアログデータの取得 p2 */
+//				// ダイアログデータの取得 p2
 //				GetData_p2( hwndDlg );
 //				return TRUE;
 //			}
@@ -124,7 +124,7 @@ INT_PTR CPropFile::DispatchEvent(
 				return TRUE;
 			case PSN_KILLACTIVE:
 //				MYTRACE( _T("File PSN_KILLACTIVE\n") );
-				/* ダイアログデータの取得 File */
+				// ダイアログデータの取得 File
 				GetData( hwndDlg );
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -148,7 +148,7 @@ INT_PTR CPropFile::DispatchEvent(
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_AUTOLOAD_DELAY, nVal, FALSE );
 			return TRUE;
 		case IDC_SPIN_nDropFileNumMax:
-			/* 一度にドロップ可能なファイル数 */
+			// 一度にドロップ可能なファイル数
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nDropFileNumMax, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
 				++nVal;
@@ -165,10 +165,10 @@ INT_PTR CPropFile::DispatchEvent(
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_nDropFileNumMax, nVal, FALSE );
 			return TRUE;
 //@@@ 2001.03.21 Start by MIK
-			/*NOTREACHED*/
+			// NOTREACHED
 //			break;
 		case IDC_SPIN_AUTOBACKUP_INTERVAL:
-			/* バックアップ間隔 */
+			//  バックアップ間隔
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
 				++nVal;
@@ -185,7 +185,7 @@ INT_PTR CPropFile::DispatchEvent(
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, nVal, FALSE );
 			return TRUE;
 		case IDC_SPIN_ALERT_FILESIZE:
-			/* ファイルの警告サイズ */
+			// ファイルの警告サイズ
 			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_ALERT_FILESIZE, NULL, FALSE );
 			if (pMNUD->iDelta < 0) {
 				++nVal;
@@ -201,7 +201,7 @@ INT_PTR CPropFile::DispatchEvent(
 			}
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_ALERT_FILESIZE, nVal, FALSE );
 			return TRUE;
-			/*NOTREACHED*/
+			// NOTREACHED
 //			break;
 //@@@ 2001.03.21 End by MIK
 		}
@@ -209,8 +209,8 @@ INT_PTR CPropFile::DispatchEvent(
 		break;
 
 	case WM_COMMAND:
-		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode	= HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 
 		if (wID == IDC_COMBO_FILESHAREMODE && wNotifyCode == CBN_SELCHANGE) {	// コンボボックスの選択変更
 			EnableFilePropInput(hwndDlg);
@@ -218,11 +218,11 @@ INT_PTR CPropFile::DispatchEvent(
 		}
 
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_CHECK_bCheckFileTimeStamp:	// 更新の監視
-			case IDC_CHECK_bDropFileAndClose:/* ファイルをドロップしたときは閉じて開く */
+			case IDC_CHECK_bDropFileAndClose:// ファイルをドロップしたときは閉じて開く
 			case IDC_CHECK_AUTOSAVE:
 			case IDC_CHECK_ALERT_IF_LARGEFILE:
 				EnableFilePropInput(hwndDlg);
@@ -239,7 +239,7 @@ INT_PTR CPropFile::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 //		break;
 //@@@ 2001.02.04 End
 
@@ -265,8 +265,8 @@ INT_PTR CPropFile::DispatchEvent(
 */
 void CPropFile::SetData( HWND hwndDlg )
 {
-	/*--- File ---*/
-	/* ファイルの排他制御モード */
+	//--- File ---
+	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FILESHAREMODE );
 	Combo_ResetContent( hwndCombo );
 	int nSelPos = 0;
@@ -278,21 +278,21 @@ void CPropFile::SetData( HWND hwndDlg )
 	}
 	Combo_SetCurSel( hwndCombo, nSelPos );
 
-	/* 更新の監視 */
+	// 更新の監視
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_bCheckFileTimeStamp, m_Common.m_sFile.m_bCheckFileTimeStamp );
 
 	// 自動読込時遅延
 	::SetDlgItemInt( hwndDlg, IDC_EDIT_AUTOLOAD_DELAY, m_Common.m_sFile.m_nAutoloadDelay, FALSE );
 
-	/* 上書き禁止検出時は編集禁止にする */
+	// 上書き禁止検出時は編集禁止にする
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_bUneditableIfUnwritable, m_Common.m_sFile.m_bUneditableIfUnwritable );
 
-	/* 無変更でも上書きするか */
+	// 無変更でも上書きするか
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_ENABLEUNMODIFIEDOVERWRITE, m_Common.m_sFile.m_bEnableUnmodifiedOverwrite );
 
-	/* ファイルをドロップしたときは閉じて開く */
+	// ファイルをドロップしたときは閉じて開く
 	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_bDropFileAndClose, m_Common.m_sFile.m_bDropFileAndClose );
-	/* 一度にドロップ可能なファイル数 */
+	// 一度にドロップ可能なファイル数
 	::SetDlgItemInt( hwndDlg, IDC_EDIT_nDropFileNumMax, m_Common.m_sFile.m_nDropFileNumMax, FALSE );
 
 	//	From Here Aug. 21, 2000 genta
@@ -341,26 +341,26 @@ void CPropFile::SetData( HWND hwndDlg )
 */
 int CPropFile::GetData( HWND hwndDlg )
 {
-	/* ファイルの排他制御モード */
+	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FILESHAREMODE );
 	int nSelPos = Combo_GetCurSel( hwndCombo );
 	m_Common.m_sFile.m_nFileShareMode = ShareModeArr[nSelPos].nMethod;
 
-	/* 更新の監視 */
+	// 更新の監視
 	m_Common.m_sFile.m_bCheckFileTimeStamp = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_bCheckFileTimeStamp );
 
 	// 自動読込時遅延
 	m_Common.m_sFile.m_nAutoloadDelay = ::GetDlgItemInt( hwndDlg, IDC_EDIT_AUTOLOAD_DELAY, NULL, FALSE );
 
-	/* 上書き禁止検出時は編集禁止にする */
+	// 上書き禁止検出時は編集禁止にする
 	m_Common.m_sFile.m_bUneditableIfUnwritable = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_bUneditableIfUnwritable );
 
-	/* 無変更でも上書きするか */
+	// 無変更でも上書きするか
 	m_Common.m_sFile.m_bEnableUnmodifiedOverwrite = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_ENABLEUNMODIFIEDOVERWRITE );
 
-	/* ファイルをドロップしたときは閉じて開く */
+	// ファイルをドロップしたときは閉じて開く
 	m_Common.m_sFile.m_bDropFileAndClose = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_bDropFileAndClose );
-	/* 一度にドロップ可能なファイル数 */
+	// 一度にドロップ可能なファイル数
 	m_Common.m_sFile.m_nDropFileNumMax = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nDropFileNumMax, NULL, FALSE );
 	if (1 > m_Common.m_sFile.m_nDropFileNumMax) {
 		m_Common.m_sFile.m_nDropFileNumMax = 1;

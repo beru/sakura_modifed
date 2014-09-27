@@ -6,11 +6,11 @@
 //                     ƒCƒ“ƒ^[ƒtƒF[ƒX                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//!”¼Šp‚É‚Å‚«‚é‚à‚Ì‚Í‘S•””¼Šp‚É•ÏŠ·
+//! ”¼Šp‚É‚Å‚«‚é‚à‚Ì‚Í‘S•””¼Šp‚É•ÏŠ·
 bool CConvert_ToHankaku::DoConvert(CNativeW* pcData)
 {
-	//‘SŠp¨”¼Šp
-	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()*2+1]; //‘÷“_“™‚Ì‰e‹¿‚ÅAÅ‘å2”{‚É‚Ü‚Å–c‚êã‚ª‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅA2”{‚Ìƒoƒbƒtƒ@‚ðŠm•Û
+	// ‘SŠp¨”¼Šp
+	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()*2+1]; // ‘÷“_“™‚Ì‰e‹¿‚ÅAÅ‘å2”{‚É‚Ü‚Å–c‚êã‚ª‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅA2”{‚Ìƒoƒbƒtƒ@‚ðŠm•Û
 	int nDstLen = 0;
 	Convert_ToHankaku(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nDstLen);
 	pcData->SetString(pBuf, nDstLen);
@@ -18,3 +18,4 @@ bool CConvert_ToHankaku::DoConvert(CNativeW* pcData)
 
 	return true;
 }
+

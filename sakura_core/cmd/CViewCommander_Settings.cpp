@@ -38,7 +38,7 @@ void CViewCommander::Command_SHOWTOOLBAR( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispTOOLBAR = ((!pCEditWnd->m_cToolbar.GetToolbarHwnd())? TRUE: FALSE);	/* ツールバー表示 */
+	GetDllShareData().m_Common.m_sWindow.m_bDispTOOLBAR = ((!pCEditWnd->m_cToolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
 	pCEditWnd->LayoutToolBar();
 	pCEditWnd->EndLayoutBars();
 
@@ -60,7 +60,7 @@ void CViewCommander::Command_SHOWFUNCKEY( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispFUNCKEYWND = ((!pCEditWnd->m_CFuncKeyWnd.GetHwnd())? TRUE: FALSE);	/* ファンクションキー表示 */
+	GetDllShareData().m_Common.m_sWindow.m_bDispFUNCKEYWND = ((!pCEditWnd->m_CFuncKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
 	pCEditWnd->LayoutFuncKey();
 	pCEditWnd->EndLayoutBars();
 
@@ -85,7 +85,7 @@ void CViewCommander::Command_SHOWTAB( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = ((!pCEditWnd->m_cTabWnd.GetHwnd())? TRUE: FALSE);	/* タブバー表示 */
+	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = ((!pCEditWnd->m_cTabWnd.GetHwnd())? TRUE: FALSE);	// タブバー表示
 	pCEditWnd->LayoutTabBar();
 	pCEditWnd->EndLayoutBars();
 
@@ -117,7 +117,7 @@ void CViewCommander::Command_SHOWSTATUSBAR( void )
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispSTATUSBAR = ((!pCEditWnd->m_cStatusBar.GetStatusHwnd())? TRUE: FALSE);	/* ステータスバー表示 */
+	GetDllShareData().m_Common.m_sWindow.m_bDispSTATUSBAR = ((!pCEditWnd->m_cStatusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
 	pCEditWnd->LayoutStatusBar();
 	pCEditWnd->EndLayoutBars();
 
@@ -309,7 +309,7 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 	// 設定変更を反映させる
 	// 新たにタイプ別や一時設定が有効になってもフォント名は変わらないのでSIZEのみの変更通知をする
 	if (mode == 0 || mode == 1) {
-		/* 全編集ウィンドウへメッセージをポストする */
+		// 全編集ウィンドウへメッセージをポストする
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)nTypeIndex,

@@ -22,7 +22,7 @@ Migemo はローマ字のまま日本語をインクリメンタル検索するためのツールです。
 
 #define MIGEMO_VERSION "1.1"
 
-/* for migemo_load() */
+// for migemo_load()
 #define MIGEMO_DICTID_INVALID		0
 #define MIGEMO_DICTID_MIGEMO		1
 #define MIGEMO_DICTID_ROMA2HIRA		2
@@ -30,7 +30,7 @@ Migemo はローマ字のまま日本語をインクリメンタル検索するためのツールです。
 #define MIGEMO_DICTID_HAN2ZEN		4
 #define MIGEMO_DICTID_ZEN2HAN		5
 
-/* for migemo_set_operator()/migemo_get_operator().  see: rxgen.h */
+// for migemo_set_operator()/migemo_get_operator().  see: rxgen.h
 #define MIGEMO_OPINDEX_OR		0
 #define MIGEMO_OPINDEX_NEST_IN		1
 #define MIGEMO_OPINDEX_NEST_OUT		2
@@ -38,7 +38,7 @@ Migemo はローマ字のまま日本語をインクリメンタル検索するためのツールです。
 #define MIGEMO_OPINDEX_SELECT_OUT	4
 #define MIGEMO_OPINDEX_NEWLINE		5
 
-/* see: rxgen.h */
+// see: rxgen.h
 typedef int (__cdecl *MIGEMO_PROC_CHAR2INT)(const unsigned char*, unsigned int*);
 typedef int (__cdecl *MIGEMO_PROC_INT2CHAR)(unsigned int, unsigned char*);
 

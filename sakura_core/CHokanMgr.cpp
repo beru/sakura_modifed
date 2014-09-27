@@ -39,10 +39,10 @@ LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 	switch (uMsg) {
 	case WM_KEYDOWN:
 		nVKey = (int) wParam;	// virtual-key code
-		/* キー操作を偽造しよう */
+		// キー操作を偽造しよう
 		if (nVKey == VK_SPACE) {	//	Space
 // novice 2004/10/10
-			/* Shift,Ctrl,Altキーが押されていたか */
+			// Shift,Ctrl,Altキーが押されていたか
 			int nIdx = getCtrlKeyState();
 			if (nIdx == _SHIFT) {
 				//	Shift + Spaceで↑を偽造
@@ -52,9 +52,9 @@ LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 				wParam = VK_DOWN;
 			}
 		}
-		/* 補完実行キーなら補完する */
+		// 補完実行キーなら補完する
 		if (-1 != pCHokanMgr->KeyProc( wParam, lParam )) {
-			/* キーストロークを親に転送 */
+			// キーストロークを親に転送
 			return ::PostMessageAny( ::GetParent( ::GetParent( pCDialog->m_hwndParent ) ), uMsg, wParam, lParam );
 		}
 		break;
@@ -83,12 +83,12 @@ CHokanMgr::~CHokanMgr()
 {
 }
 
-/* モードレスダイアログの表示 */
+// モードレスダイアログの表示
 HWND CHokanMgr::DoModeless( HINSTANCE hInstance , HWND hwndParent, LPARAM lParam )
 {
 	HWND hwndWork = CDialog::DoModeless( hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE );
 	OnSize( 0, 0 );
-	/* リストをフック */
+	// リストをフック
 	// Modified by KEITA for WIN64 2003.9.6
 	::gm_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr( ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS ), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc  );
 
@@ -96,7 +96,7 @@ HWND CHokanMgr::DoModeless( HINSTANCE hInstance , HWND hwndParent, LPARAM lParam
 	return hwndWork;
 }
 
-/* モードレス時：対象となるビューの変更 */
+// モードレス時：対象となるビューの変更
 void CHokanMgr::ChangeView( LPARAM pcEditView )
 {
 	m_lParam = pcEditView;
@@ -108,7 +108,7 @@ void CHokanMgr::Hide( void )
 
 	::ShowWindow( GetHwnd(), SW_HIDE );
 	m_nCurKouhoIdx = -1;
-	/* 入力フォーカスを受け取ったときの処理 */
+	// 入力フォーカスを受け取ったときの処理
 	CEditView* pcEditView = (CEditView*)m_lParam;
 	pcEditView->OnSetFocus();
 	return;
@@ -136,7 +136,7 @@ int CHokanMgr::Search(
 {
 	CEditView* pcEditView = (CEditView*)m_lParam;
 
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 
 	/*
@@ -191,13 +191,13 @@ int CHokanMgr::Search(
 		}
 
 		for (auto it = plugs.begin(); it != plugs.end(); ++it) {
-			//インタフェースオブジェクト準備
+			// インタフェースオブジェクト準備
 			CWSHIfObj::List params;
 			std::wstring curWord = pszCurWord;
 			CComplementIfObj* objComp = new CComplementIfObj( curWord , this, nOption );
 			objComp->AddRef();
 			params.push_back( objComp );
-			//プラグイン呼び出し
+			// プラグイン呼び出し
 			(*it)->Invoke( pcEditView, params );
 
 			objComp->Release();
@@ -257,22 +257,22 @@ int CHokanMgr::Search(
 	int nCX = m_nWidth;
 	int nCY = m_nHeight;
 
-	/* 下に入るなら */
+	// 下に入るなら
 	if (nY + nCY < rcDesktop.bottom) {
-		/* 何もしない */
+		// 何もしない
 	}else
-	/* 上に入るなら */
+	// 上に入るなら
 	if (rcDesktop.top < m_poWin.y - m_nHeight - 4) {
-		/* 上に出す */
+		// 上に出す
 		nY = m_poWin.y - m_nHeight - 4;
 	}else
-	/* 上に出すか下に出すか(広いほうに出す) */
+	// 上に出すか下に出すか(広いほうに出す)
 	if (rcDesktop.bottom - nY > m_poWin.y) {
-		/* 下に出す */
+		// 下に出す
 //		m_nHeight = rcDesktop.bottom - nY;
 		nCY = rcDesktop.bottom - nY;
 	}else {
-		/* 上に出す */
+		// 上に出す
 		nY = rcDesktop.top;
 		nCY = m_poWin.y - 4 - rcDesktop.top;
 	}
@@ -301,12 +301,12 @@ int CHokanMgr::Search(
 	m_nWidth = nCX;
 //	2001/06/18 End
 
-	/* はみ出すなら小さくする */
+	// はみ出すなら小さくする
 //	if( rcDesktop.bottom < nY + nCY ){
-//		/* 下にはみ出す */
+//		// 下にはみ出す
 //		if( m_poWin.y - 4 - nCY < 0 ){
-//			/* 上にはみ出す */
-//			/* →高さだけ調節 */
+//			// 上にはみ出す
+//			// →高さだけ調節
 //			nCY = rcDesktop.bottom - nY - 4;
 //		}else{
 //
@@ -366,7 +366,7 @@ void CHokanMgr::HokanSearchByKeyword(
 BOOL CHokanMgr::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	_SetHwnd( hwndDlg );
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 //-	CreateSizeBox();
 	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
 
@@ -374,7 +374,7 @@ BOOL CHokanMgr::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 BOOL CHokanMgr::OnDestroy( void )
 {
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	CreateSizeBox();
 	return CDialog::OnDestroy();
 }
@@ -382,7 +382,7 @@ BOOL CHokanMgr::OnDestroy( void )
 
 BOOL CHokanMgr::OnSize( WPARAM wParam, LPARAM lParam )
 {
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	CDialog::OnSize( wParam, lParam );
 
 	int	Controls[] = {
@@ -444,7 +444,7 @@ BOOL CHokanMgr::OnBnClicked( int wID )
 		return TRUE;
 	case IDOK:
 //		CloseDialog( 0 );
-		/* 補完実行 */
+		// 補完実行
 		DoHokan( VK_RETURN );
 		return TRUE;
 	}
@@ -478,7 +478,7 @@ BOOL CHokanMgr::OnLbnSelChange( HWND hwndCtl, int wID )
 
 BOOL CHokanMgr::OnLbnDblclk( int wID )
 {
-	/* 補完実行 */
+	// 補完実行
 	DoHokan( 0 );
 	return TRUE;
 
@@ -492,16 +492,15 @@ BOOL CHokanMgr::OnKillFocus( WPARAM wParam, LPARAM lParam )
 }
 
 
-
-/* 補完実行 */
+// 補完実行
 BOOL CHokanMgr::DoHokan( int nVKey )
 {
 	DEBUG_TRACE( _T("CHokanMgr::DoHokan( nVKey==%xh )\n"), nVKey );
 
-	/* 補完候補決定キー */
-	if (VK_RETURN	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN)	return FALSE;/* VK_RETURN 補完決定キーが有効/無効 */
-	if (VK_TAB		== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE;/* VK_TAB    補完決定キーが有効/無効 */
-	if (VK_RIGHT	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)	return FALSE;/* VK_RIGHT  補完決定キーが有効/無効 */
+	// 補完候補決定キー
+	if (VK_RETURN	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
+	if (VK_TAB		== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
+	if (VK_RIGHT	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)	return FALSE; // VK_RIGHT  補完決定キーが有効/無効
 
 	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
 	int nItem = List_GetCurSel( hwndList );
@@ -511,7 +510,7 @@ BOOL CHokanMgr::DoHokan( int nVKey )
 	wchar_t wszLabel[1024];
 	List_GetText( hwndList, nItem, wszLabel );
 
- 	/* テキストを貼り付け */
+ 	// テキストを貼り付け
 	CEditView* pcEditView = (CEditView*)m_lParam;
 	//	Apr. 28, 2000 genta
 	pcEditView->GetCommander().HandleCommand( F_WordDeleteToStart, false, 0, 0, 0, 0 );
@@ -580,7 +579,7 @@ int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
 	case VK_DOWN:
 	case VK_PRIOR:
 	case VK_NEXT:
-		/* リストボックスのデフォルトの動作をさせる */
+		// リストボックスのデフォルトの動作をさせる
 		return -1;
 	case VK_RETURN:
 	case VK_TAB:
@@ -588,7 +587,7 @@ int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
 #if 0
 	case VK_SPACE:
 #endif
-		/* 補完実行 */
+		// 補完実行
 		if (DoHokan( vkey )) {
 			return -1;
 		}else {

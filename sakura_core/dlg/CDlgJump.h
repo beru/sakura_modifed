@@ -30,10 +30,10 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示
 
-	int			m_nLineNum;		/*!< 行番号 */
-	BOOL		m_bPLSQL;		/*!< PL/SQLソースの有効行か */
+	int			m_nLineNum;		//!< 行番号
+	BOOL		m_bPLSQL;		//!< PL/SQLソースの有効行か
 	int			m_nPLSQL_E1;
 	int			m_nPLSQL_E2;
 protected:
@@ -44,8 +44,8 @@ protected:
 	BOOL OnCbnSelChange( HWND, int );
 	BOOL OnBnClicked( int );
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
-	void SetData( void );	/* ダイアログデータの設定 */
-	int GetData( void );	/* ダイアログデータの取得 */
+	void SetData( void );	// ダイアログデータの設定
+	int GetData( void );	// ダイアログデータの取得
 };
 
 

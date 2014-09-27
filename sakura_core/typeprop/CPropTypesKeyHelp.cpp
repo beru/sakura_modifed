@@ -86,9 +86,9 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 	LV_COLUMN	col;
 	RECT		rc;
 
-	BOOL	bUse;						/* 辞書を 使用する/しない */
-	TCHAR	szAbout[DICT_ABOUT_LEN];	/* 辞書の説明(辞書ファイルの1行目から生成) */
-	TCHAR	szPath[_MAX_PATH];			/* ファイルパス */
+	BOOL	bUse;						// 辞書を 使用する/しない
+	TCHAR	szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
+	TCHAR	szPath[_MAX_PATH];			// ファイルパス
 	DWORD	dwStyle;
 
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
@@ -96,9 +96,9 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
-		/* カラム追加 */
+		// カラム追加
 		::GetWindowRect( hwndList, &rc );
-		/* リストにチェックボックスを追加 */
+		// リストにチェックボックスを追加
 		dwStyle = ListView_GetExtendedListViewStyle(hwndList);
 		dwStyle |= LVS_EX_CHECKBOXES /*| LVS_EX_FULLROWSELECT*/ | LVS_EX_GRIDLINES;
 		ListView_SetExtendedListViewStyle(hwndList, dwStyle);
@@ -106,47 +106,47 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 25 / 100;
-		col.pszText  = const_cast<TCHAR*>(LS(STR_PROPTYPKEYHELP_DIC));	/* 指定辞書ファイルの使用可否 */
+		col.pszText  = const_cast<TCHAR*>(LS(STR_PROPTYPKEYHELP_DIC));	// 指定辞書ファイルの使用可否
 		col.iSubItem = 0;
 		ListView_InsertColumn( hwndList, 0, &col );
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 55 / 100;
-		col.pszText  = const_cast<TCHAR*>(LS(STR_PROPTYPKEYHELP_INFO));		/* 指定辞書の１行目を取得 */
+		col.pszText  = const_cast<TCHAR*>(LS(STR_PROPTYPKEYHELP_INFO));		// 指定辞書の１行目を取得
 		col.iSubItem = 1;
 		ListView_InsertColumn( hwndList, 1, &col );
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 18 / 100;
-		col.pszText  = const_cast<TCHAR*>(LS(STR_PROPTYPKEYHELP_PATH));				/* 指定辞書ファイルパス */
+		col.pszText  = const_cast<TCHAR*>(LS(STR_PROPTYPKEYHELP_PATH));				// 指定辞書ファイルパス
 		col.iSubItem = 2;
 		ListView_InsertColumn( hwndList, 2, &col );
-		SetData( hwndDlg );	/* ダイアログデータの設定 辞書ファイル一覧 */
+		SetData( hwndDlg );	// ダイアログデータの設定 辞書ファイル一覧
 
-		/* リストがあれば先頭をフォーカスする */
+		// リストがあれば先頭をフォーカスする
 		if (ListView_GetItemCount(hwndList) > 0) {
 			ListView_SetItemState( hwndList, 0, LVIS_SELECTED /*| LVIS_FOCUSED*/, LVIS_SELECTED /*| LVIS_FOCUSED*/ );
-		/* リストがなければ初期値として用途を表示 */
+		// リストがなければ初期値として用途を表示
 		}else {
 			::DlgItem_SetText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, LS(STR_PROPTYPKEYHELP_LINE1) );
 			::DlgItem_SetText( hwndDlg, IDC_EDIT_KEYHELP, LS(STR_PROPTYPKEYHELP_DICPATH) );
 		}
 
-		/* 初期状態を設定 */
+		// 初期状態を設定
 		SendMessageCmd(hwndDlg, WM_COMMAND, (WPARAM)MAKELONG(IDC_CHECK_KEYHELP,BN_CLICKED), 0 );
 
 		return TRUE;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID	= LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID	= LOWORD(wParam);			// 項目ID､ コントロールID､ またはアクセラレータID
 
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 
 			switch (wID) {
-			case IDC_CHECK_KEYHELP:	/* キーワードヘルプ機能を使う */
+			case IDC_CHECK_KEYHELP:	// キーワードヘルプ機能を使う
 				if (!IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYHELP )) {
 					//EnableWindow( GetDlgItem( hwndDlg, IDC_CHECK_KEYHELP ), FALSE );			//キーワードヘルプ機能を使う(&K)
 					EnableWindow( GetDlgItem( hwndDlg, IDC_FRAME_KEYHELP ), FALSE );		  	//辞書ファイル一覧(&L)
@@ -191,42 +191,42 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				m_Types.m_nKeyHelpNum = ListView_GetItemCount( hwndList );
 				return TRUE;
 
-			/* 挿入・更新イベントを纏めて処理 */
-			case IDC_BUTTON_KEYHELP_INS:	/* 挿入 */
-			case IDC_BUTTON_KEYHELP_UPD:	/* 更新 */
+			// 挿入・更新イベントを纏めて処理
+			case IDC_BUTTON_KEYHELP_INS:	// 挿入
+			case IDC_BUTTON_KEYHELP_UPD:	// 更新
 				nIndex2 = ListView_GetItemCount(hwndList);
-				/* 選択中のキーを探す。 */
+				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 
-				if (wID == IDC_BUTTON_KEYHELP_INS) {	/* 挿入 */
+				if (wID == IDC_BUTTON_KEYHELP_INS) {	// 挿入
 					if (nIndex2 >= MAX_KEYHELP_FILE) {
 						ErrorMessage( hwndDlg, LS(STR_PROPTYPKEYHELP_ERR_REG1));
 						return FALSE;
 					}
 					if (-1 == nIndex) {
-						/* 選択中でなければ最後にする。 */
+						// 選択中でなければ最後にする。
 						nIndex = nIndex2;
 					}
-				}else {								/* 更新 */
+				}else {								// 更新
 					if (-1 == nIndex) {
 						ErrorMessage( hwndDlg, LS(STR_PROPTYPKEYHELP_SELECT));
 						return FALSE;
 					}
 				}
-				/* 更新するキー情報を取得する。 */
+				// 更新するキー情報を取得する。
 				auto_memset(szPath, 0, _countof(szPath));
 				::DlgItem_GetText( hwndDlg, IDC_EDIT_KEYHELP, szPath, _countof(szPath) );
 				if (szPath[0] == _T('\0')) {
 					return FALSE;
 				}
-				/* 重複検査 */
+				// 重複検査
 				nIndex2 = ListView_GetItemCount(hwndList);
 				TCHAR szPath2[_MAX_PATH];
 				for (int i = 0; i < nIndex2; i++) {
 					auto_memset(szPath2, 0, _countof(szPath2));
 					ListView_GetItemText(hwndList, i, 2, szPath2, _countof(szPath2));
 					if (_tcscmp(szPath, szPath2) == 0) {
-						if ((wID ==IDC_BUTTON_KEYHELP_UPD) && (i == nIndex)) {	/* 更新時、変わっていなかったら何もしない */
+						if ((wID ==IDC_BUTTON_KEYHELP_UPD) && (i == nIndex)) {	// 更新時、変わっていなかったら何もしない
 						}else {
 							ErrorMessage( hwndDlg, LS(STR_PROPTYPKEYHELP_ERR_REG2));
 							return FALSE;
@@ -234,7 +234,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 					}
 				}
 
-				/* 指定したパスに辞書があるかチェックする */
+				// 指定したパスに辞書があるかチェックする
 				{
 					CTextInputStream_AbsIni in(szPath);
 					if (!in) {
@@ -248,146 +248,146 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				}
 				strcnv(szAbout);
 
-				/* ついでに辞書の説明を更新 */
-				::DlgItem_SetText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, szAbout );	/* 辞書ファイルの概要 */
+				// ついでに辞書の説明を更新
+				::DlgItem_SetText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, szAbout );	// 辞書ファイルの概要
 				
-				/* 更新のときは行削除する。 */
-				if (wID == IDC_BUTTON_KEYHELP_UPD) {	/* 更新 */
+				// 更新のときは行削除する。
+				if (wID == IDC_BUTTON_KEYHELP_UPD) {	// 更新
 					ListView_DeleteItem( hwndList, nIndex );
 				}
 				
-				/* ON/OFF ファイル名 */
+				// ON/OFF ファイル名
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex;
 				lvi.iSubItem = 0;
-				lvi.pszText = GetFileName(szPath);	/* ファイル名を表示 */
+				lvi.pszText = GetFileName(szPath);	// ファイル名を表示
 				ListView_InsertItem( hwndList, &lvi );
-				/* 辞書の説明 */
+				// 辞書の説明
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex;
 				lvi.iSubItem = 1;
 				lvi.pszText  = szAbout;
 				ListView_SetItem( hwndList, &lvi );
-				/* 辞書ファイルパス */
+				// 辞書ファイルパス
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex;
 				lvi.iSubItem = 2;
 				lvi.pszText  = szPath;
 				ListView_SetItem( hwndList, &lvi );
 				
-				/* デフォルトでチェックON */
+				// デフォルトでチェックON
 				ListView_SetCheckState(hwndList, nIndex, TRUE);
 
-				/* 更新したキーを選択する。 */
+				// 更新したキーを選択する。
 				ListView_SetItemState( hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_DEL:	/* 削除 */
-				/* 選択中のキー番号を探す。 */
+			case IDC_BUTTON_KEYHELP_DEL:	// 削除
+				// 選択中のキー番号を探す。
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {
 					return FALSE;
 				}
-				/* 削除する。 */
+				// 削除する。
 				ListView_DeleteItem( hwndList, nIndex );
-				/* リストがなくなったら初期値として用途を表示 */
+				// リストがなくなったら初期値として用途を表示
 				if (ListView_GetItemCount(hwndList) == 0) {
 					::DlgItem_SetText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, LS(STR_PROPTYPKEYHELP_LINE1) );
 					::DlgItem_SetText( hwndDlg, IDC_EDIT_KEYHELP, LS(STR_PROPTYPKEYHELP_DICPATH) );
-				/* リストの最後を削除した場合は、削除後のリストの最後を選択する。 */
+				// リストの最後を削除した場合は、削除後のリストの最後を選択する。
 				}else if (nIndex > ListView_GetItemCount(hwndList)-1) {
 					ListView_SetItemState( hwndList, ListView_GetItemCount(hwndList)-1, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
-				/* 同じ位置のキーを選択状態にする。 */
+				// 同じ位置のキーを選択状態にする。
 				}else {
 					ListView_SetItemState( hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 				}
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_TOP:	/* 先頭 */
-				/* 選択中のキーを探す。 */
+			case IDC_BUTTON_KEYHELP_TOP:	// 先頭
+				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {
 					return FALSE;
 				}
 				if (0 == nIndex) {
-					return TRUE;	/* すでに先頭にある。 */
+					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = 0;
 				bUse = ListView_GetCheckState(hwndList, nIndex);
 				ListView_GetItemText(hwndList, nIndex, 1, szAbout, _countof(szAbout));
 				ListView_GetItemText(hwndList, nIndex, 2, szPath, _countof(szPath));
-				ListView_DeleteItem(hwndList, nIndex);	/* 古いキーを削除 */
-				/* ON-OFF */
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
+				// ON-OFF
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
-				lvi.pszText = GetFileName(szPath);	/* ファイル名を表示 */
+				lvi.pszText = GetFileName(szPath);	// ファイル名を表示
 				ListView_InsertItem( hwndList, &lvi );
-				/* 辞書の説明 */
+				// 辞書の説明
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 1;
 				lvi.pszText  = szAbout;
 				ListView_SetItem( hwndList, &lvi );
-				/* 辞書ファイルパス */
+				// 辞書ファイルパス
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 2;
 				lvi.pszText  = szPath;
 				ListView_SetItem( hwndList, &lvi );
 				ListView_SetCheckState(hwndList, nIndex2, bUse);
-				/* 移動したキーを選択状態にする。 */
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState( hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_LAST:	/* 最終 */
+			case IDC_BUTTON_KEYHELP_LAST:	// 最終
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 - 1 == nIndex) {
-					return TRUE;	/* すでに最終にある。 */
+					return TRUE;	// すでに最終にある。
 				}
 				bUse = ListView_GetCheckState(hwndList, nIndex);
 				ListView_GetItemText(hwndList, nIndex, 1, szAbout, _countof(szAbout));
 				ListView_GetItemText(hwndList, nIndex, 2, szPath, _countof(szPath));
-				/* キーを追加する。 */
-				/* ON-OFF */
+				// キーを追加する。
+				// ON-OFF
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
-				lvi.pszText = GetFileName(szPath);	/* ファイル名を表示 */
+				lvi.pszText = GetFileName(szPath);	// ファイル名を表示
 				ListView_InsertItem( hwndList, &lvi );
-				/* 辞書の説明 */
+				// 辞書の説明
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 1;
 				lvi.pszText  = szAbout;
 				ListView_SetItem( hwndList, &lvi );
-				/* 辞書ファイルパス */
+				// 辞書ファイルパス
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 2;
 				lvi.pszText  = szPath;
 				ListView_SetItem( hwndList, &lvi );
 				ListView_SetCheckState(hwndList, nIndex2, bUse);
-				/* 移動したキーを選択状態にする。 */
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState( hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
-				ListView_DeleteItem(hwndList, nIndex);	/* 古いキーを削除 */
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_UP:	/* 上へ */
+			case IDC_BUTTON_KEYHELP_UP:	// 上へ
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {
 					return FALSE;
 				}
 				if (0 == nIndex) {
-					return TRUE;	/* すでに先頭にある。 */
+					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 <= 1) {
@@ -397,40 +397,40 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				bUse = ListView_GetCheckState(hwndList, nIndex);
 				ListView_GetItemText(hwndList, nIndex, 1, szAbout, _countof(szAbout));
 				ListView_GetItemText(hwndList, nIndex, 2, szPath, _countof(szPath));
-				ListView_DeleteItem(hwndList, nIndex);	/* 古いキーを削除 */
-				/* キーを追加する。 */
-				/* ON-OFF */
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
+				// キーを追加する。
+				// ON-OFF
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
-				lvi.pszText = GetFileName(szPath);	/* ファイル名を表示 */
+				lvi.pszText = GetFileName(szPath);	// ファイル名を表示
 				ListView_InsertItem( hwndList, &lvi );
-				/* 辞書の説明 */
+				// 辞書の説明
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 1;
 				lvi.pszText  = szAbout;
 				ListView_SetItem( hwndList, &lvi );
-				/* 辞書ファイルパス */
+				// 辞書ファイルパス
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 2;
 				lvi.pszText  = szPath;
 				ListView_SetItem( hwndList, &lvi );
 				ListView_SetCheckState(hwndList, nIndex2, bUse);
-				/* 移動したキーを選択状態にする。 */
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState( hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_DOWN:	/* 下へ */
+			case IDC_BUTTON_KEYHELP_DOWN:	// 下へ
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 - 1 == nIndex) {
-					return TRUE;	/* すでに最終にある。 */
+					return TRUE;	// すでに最終にある。
 				}
 				if (nIndex2 <= 1) {
 					return TRUE;
@@ -439,36 +439,36 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				bUse = ListView_GetCheckState(hwndList, nIndex);
 				ListView_GetItemText(hwndList, nIndex, 1, szAbout, _countof(szAbout));
 				ListView_GetItemText(hwndList, nIndex, 2, szPath, _countof(szPath));
-				/* キーを追加する。 */
-				/* ON-OFF */
+				// キーを追加する。
+				// ON-OFF
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 0;
-				lvi.pszText = GetFileName(szPath);	/* ファイル名を表示 */
+				lvi.pszText = GetFileName(szPath);	// ファイル名を表示
 				ListView_InsertItem( hwndList, &lvi );
-				/* 辞書の説明 */
+				// 辞書の説明
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 1;
 				lvi.pszText  = szAbout;
 				ListView_SetItem( hwndList, &lvi );
-				/* 辞書ファイルパス */
+				// 辞書ファイルパス
 				lvi.mask     = LVIF_TEXT;
 				lvi.iItem    = nIndex2;
 				lvi.iSubItem = 2;
 				lvi.pszText  = szPath;
 				ListView_SetItem( hwndList, &lvi );
 				ListView_SetCheckState(hwndList, nIndex2, bUse);
-				/* 移動したキーを選択状態にする。 */
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState( hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
-				ListView_DeleteItem(hwndList, nIndex);	/* 古いキーを削除 */
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_REF:	/* キーワードヘルプ 辞書ファイルの「参照...」ボタン */
+			case IDC_BUTTON_KEYHELP_REF:	// キーワードヘルプ 辞書ファイルの「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 					TCHAR szWk[_MAX_PATH];
 					::DlgItem_GetText( hwndDlg, IDC_EDIT_KEYHELP, szWk, _MAX_PATH );
@@ -484,12 +484,12 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				}
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_IMPORT:	/* インポート */
+			case IDC_BUTTON_KEYHELP_IMPORT:	// インポート
 				Import(hwndDlg);
 				m_Types.m_nKeyHelpNum = ListView_GetItemCount( hwndList );
 				return TRUE;
 
-			case IDC_BUTTON_KEYHELP_EXPORT:	/* エクスポート */
+			case IDC_BUTTON_KEYHELP_EXPORT:	// エクスポート
 				Export(hwndDlg);
 				return TRUE;
 			}
@@ -506,7 +506,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 			return TRUE;
 
 		case PSN_KILLACTIVE:
-			/* ダイアログデータの取得 辞書ファイルリスト */
+			// ダイアログデータの取得 辞書ファイルリスト
 			GetData( hwndDlg );
 			return TRUE;
 
@@ -515,7 +515,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 			m_nPageNum = ID_PROPTYPE_PAGENUM_KEYHELP;
 			return TRUE;
 
-		case LVN_ITEMCHANGED:	/*リストの項目が変更された際の処理*/
+		case LVN_ITEMCHANGED:	//リストの項目が変更された際の処理
 			if (pNMHDR->hwndFrom == hwndList) {
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {	//削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
@@ -524,8 +524,8 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				}
 				ListView_GetItemText(hwndList, nIndex, 1, szAbout, _countof(szAbout));
 				ListView_GetItemText(hwndList, nIndex, 2, szPath, _countof(szPath));
-				::DlgItem_SetText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, szAbout );	/* 辞書の説明 */
-				::DlgItem_SetText( hwndDlg, IDC_EDIT_KEYHELP, szPath );			/* ファイルパス */
+				::DlgItem_SetText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, szAbout );	// 辞書の説明
+				::DlgItem_SetText( hwndDlg, IDC_EDIT_KEYHELP, szPath );			// ファイルパス
 			}
 			break;
 		}
@@ -538,7 +538,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 		}
 		return TRUE;
 
-	case WM_CONTEXTMENU:	/* Context Menu */
+	case WM_CONTEXTMENU:	// Context Menu
 		MyWinHelp( hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	}
@@ -560,7 +560,7 @@ void CPropTypesKeyHelp::SetData( HWND hwndDlg )
 	LV_ITEM	lvi;
 	DWORD	dwStyle;
 
-	/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
+	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_KEYHELP ), _countof2( m_Types.m_KeyHelpArr[0].m_szPath ) - 1 );
 
 	// 使用する・使用しない
@@ -569,37 +569,37 @@ void CPropTypesKeyHelp::SetData( HWND hwndDlg )
 	CheckDlgButtonBOOL( hwndDlg, IDC_CHECK_KEYHELP_KEYDISP, m_Types.m_bUseKeyHelpKeyDisp );
 	CheckDlgButtonBOOL( hwndDlg, IDC_CHECK_KEYHELP_PREFIX, m_Types.m_bUseKeyHelpPrefix );
 
-	/* リスト */
+	// リスト
 	hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
-	ListView_DeleteAllItems(hwndWork);  /* リストを空にする */
-	/* 行選択 */
+	ListView_DeleteAllItems(hwndWork);  // リストを空にする
+	// 行選択
 	dwStyle = ListView_GetExtendedListViewStyle( hwndWork );
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	ListView_SetExtendedListViewStyle( hwndWork, dwStyle );
-	/* データ表示 */
+	// データ表示
 	for (i = 0; i < MAX_KEYHELP_FILE; i++) {
 		if (m_Types.m_KeyHelpArr[i].m_szPath[0] == _T('\0')) {
 			break;
 		}
-		/* ON-OFF */
+		// ON-OFF
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 0;
 		lvi.pszText = GetFileName(m_Types.m_KeyHelpArr[i].m_szPath);
 		ListView_InsertItem( hwndWork, &lvi );
-		/* 辞書の説明 */
+		// 辞書の説明
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 1;
 		lvi.pszText  = m_Types.m_KeyHelpArr[i].m_szAbout;
 		ListView_SetItem( hwndWork, &lvi );
-		/* 辞書ファイルパス */
+		// 辞書ファイルパス
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = i;
 		lvi.iSubItem = 2;
 		lvi.pszText  = m_Types.m_KeyHelpArr[i].m_szPath;
 		ListView_SetItem( hwndWork, &lvi );
-		/* ON/OFFを取得してチェックボックスにセット（とりあえず応急処置） */
+		// ON/OFFを取得してチェックボックスにセット（とりあえず応急処置）
 		if (m_Types.m_KeyHelpArr[i].m_bUse) {	// ON
 			ListView_SetCheckState(hwndWork, i, TRUE);
 		}else {
@@ -618,24 +618,24 @@ int CPropTypesKeyHelp::GetData( HWND hwndDlg )
 {
 	HWND	hwndList;
 	int	nIndex, i;
-	TCHAR	szAbout[DICT_ABOUT_LEN];	/* 辞書の説明(辞書ファイルの1行目から生成) */
-	TCHAR	szPath[_MAX_PATH];			/* ファイルパス */
+	TCHAR	szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
+	TCHAR	szPath[_MAX_PATH];			// ファイルパス
 
-	/* 使用する・使用しない */
+	// 使用する・使用しない
 	m_Types.m_bUseKeyWordHelp      = ( BST_CHECKED == IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYHELP ) );
 	m_Types.m_bUseKeyHelpAllSearch = ( BST_CHECKED == IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH ) );
 	m_Types.m_bUseKeyHelpKeyDisp   = ( BST_CHECKED == IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYHELP_KEYDISP ) );
 	m_Types.m_bUseKeyHelpPrefix    = ( BST_CHECKED == IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYHELP_PREFIX ) );
 
-	/* リストに登録されている情報を配列に取り込む */
+	// リストに登録されている情報を配列に取り込む
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
 	nIndex = ListView_GetItemCount( hwndList );
 	for (i = 0; i < MAX_KEYHELP_FILE; i++) {
 		if (i < nIndex) {
-			bool		bUse = false;						/* 辞書ON(1)/OFF(0) */
+			bool		bUse = false;						// 辞書ON(1)/OFF(0)
 			szAbout[0]	= _T('\0');
 			szPath[0]	= _T('\0');
-			/* チェックボックス状態を取得してbUseにセット */
+			// チェックボックス状態を取得してbUseにセット
 			if(ListView_GetCheckState(hwndList, i))
 				bUse = true;
 			ListView_GetItemText( hwndList, i, 1, szAbout, _countof(szAbout) );
@@ -643,11 +643,11 @@ int CPropTypesKeyHelp::GetData( HWND hwndDlg )
 			m_Types.m_KeyHelpArr[i].m_bUse = bUse;
 			_tcscpy(m_Types.m_KeyHelpArr[i].m_szAbout, szAbout);
 			_tcscpy(m_Types.m_KeyHelpArr[i].m_szPath, szPath);
-		}else {	/* 未登録部分はクリアする */
+		}else {	// 未登録部分はクリアする
 			m_Types.m_KeyHelpArr[i].m_szPath[0] = _T('\0');
 		}
 	}
-	/* 辞書の冊数を取得 */
+	// 辞書の冊数を取得
 	m_Types.m_nKeyHelpNum = nIndex;
 	return TRUE;
 }
@@ -693,7 +693,7 @@ bool CPropTypesKeyHelp::Export(HWND hwndDlg)
 static TCHAR* strcnv(TCHAR *str)
 {
 	TCHAR* p=str;
-	/* 改行コードの削除 */
+	// 改行コードの削除
 	if ((p=_tcschr(p,_T('\n')))) {
 		*p = _T('\0');
 	}
@@ -701,7 +701,7 @@ static TCHAR* strcnv(TCHAR *str)
 	if ((p=_tcschr(p,_T('\r')))) {
 		*p = _T('\0');
 	}
-	/* カンマの置換 */
+	// カンマの置換
 	p = str;
 	for (; (p=_tcschr(p,_T(','))) != NULL;) {
 		*p = _T('.');

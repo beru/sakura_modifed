@@ -131,7 +131,7 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	if (nFlgOpt & 0x40) bOutputExtInfo = FALSE;
 	bool	bCurDir = (nFlgOpt & 0x200) == 0x200;
 
-	// 編集中のウィンドウに出力する場合の選択範囲処理用	/* 2007.04.29 maru */
+	// 編集中のウィンドウに出力する場合の選択範囲処理用	// 2007.04.29 maru
 	CLayoutPoint ptFrom( 0, 0 );
 	bool bBeforeTextSelected = GetSelectionInfo().IsTextSelected();
 	if (bBeforeTextSelected) {
@@ -160,7 +160,7 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	// ファイルハンドルを返すタイプのものがないので、一旦書き出してから
 	// 一時ファイル属性でオープンすることに。
 	HANDLE hStdIn = NULL;
-	if (bSendStdin) {	/* 現在編集中のファイルを子プロセスの標準入力へ */
+	if (bSendStdin) {	// 現在編集中のファイルを子プロセスの標準入力へ
 		TCHAR szPathName[MAX_PATH];
 		TCHAR szTempFileName[MAX_PATH];
 
@@ -168,7 +168,7 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 		GetTempFileName( szPathName, TEXT("skr_"), 0, szTempFileName );
 		DEBUG_TRACE( _T("CEditView::ExecCmd() TempFilename=[%ts]\n"), szTempFileName );
 
-		int nFlgOpt = bBeforeTextSelected ? 0x01 : 0x00;		/* 選択範囲を出力 */
+		int nFlgOpt = bBeforeTextSelected ? 0x01 : 0x00;		// 選択範囲を出力
 		if (!GetCommander().Command_PUTFILE( to_wchar(szTempFileName), sendEncoding, nFlgOpt)) {	// 一時ファイル出力
 			hStdIn = NULL;
 		}else {
@@ -186,7 +186,7 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 		}
 	}
 	
-	if (!hStdIn) {	/* 標準入力を制御しない場合、または一時ファイルの生成に失敗した場合 */
+	if (!hStdIn) {	// 標準入力を制御しない場合、または一時ファイルの生成に失敗した場合
 		bSendStdin = FALSE;
 		hStdIn = GetStdHandle( STD_INPUT_HANDLE );
 		if (!hStdIn) {
@@ -565,7 +565,7 @@ user_cancel:
 
 finish:
 	//終了処理
-	if (hStdIn != NULL) CloseHandle( hStdIn );	/* 2007.03.18 maru 標準入力の制御のため */
+	if (hStdIn != NULL) CloseHandle( hStdIn );	// 2007.03.18 maru 標準入力の制御のため
 	if (hStdOutWrite) CloseHandle( hStdOutWrite );
 	CloseHandle( hStdOutRead );
 	if (pi.hProcess) CloseHandle( pi.hProcess );

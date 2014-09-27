@@ -38,7 +38,7 @@ void CPropertyManager::Create( HWND hwndOwner, CImageListMgr* pImageList, CMenuD
 	m_nPropTypePageNum = -1;
 }
 
-/*! 共通設定 プロパティシート */
+//! 共通設定 プロパティシート
 bool CPropertyManager::OpenPropertySheet( HWND hWnd, int nPageNum, bool bTrayProc )
 {
 	bool bRet;
@@ -53,7 +53,7 @@ bool CPropertyManager::OpenPropertySheet( HWND hWnd, int nPageNum, bool bTrayPro
 		m_nPropComPageNum = nPageNum;
 	}
 
-	/* プロパティシートの作成 */
+	// プロパティシートの作成
 	if (pcPropCommon->DoPropertySheet( m_nPropComPageNum, bTrayProc )) {
 
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
@@ -74,11 +74,11 @@ bool CPropertyManager::OpenPropertySheet( HWND hWnd, int nPageNum, bool bTrayPro
 			CAppNodeManager::getInstance()->ResetGroupId();
 		}
 
-		/* アクセラレータテーブルの再作成 */
+		// アクセラレータテーブルの再作成
 		::SendMessageAny( GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL );
 
-		/* 設定変更を反映させる */
-		/* 全編集ウィンドウへメッセージをポストする */
+		// 設定変更を反映させる
+		// 全編集ウィンドウへメッセージをポストする
 		CAppNodeGroupHandle(0).SendMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)0,
@@ -101,7 +101,7 @@ bool CPropertyManager::OpenPropertySheet( HWND hWnd, int nPageNum, bool bTrayPro
 }
 
 
-/*! タイプ別設定 プロパティシート */
+//! タイプ別設定 プロパティシート
 bool CPropertyManager::OpenPropertySheetTypes( HWND hWnd, int nPageNum, CTypeConfig nSettingType )
 {
 	bool bRet;
@@ -117,7 +117,7 @@ bool CPropertyManager::OpenPropertySheetTypes( HWND hWnd, int nPageNum, CTypeCon
 		m_nPropTypePageNum = nPageNum;
 	}
 
-	/* プロパティシートの作成 */
+	// プロパティシートの作成
 	if (pcPropTypes->DoPropertySheet( m_nPropTypePageNum )) {
 		// 2013.06.10 Moca 印刷終了まで待機する
 		CShareDataLockCounter* pLock = NULL;
@@ -127,11 +127,11 @@ bool CPropertyManager::OpenPropertySheetTypes( HWND hWnd, int nPageNum, CTypeCon
 
 		CDocTypeManager().SetTypeConfig(nSettingType, *pType);
 
-		/* アクセラレータテーブルの再作成 */
+		// アクセラレータテーブルの再作成
 		// ::SendMessageAny( GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL );
 
-		/* 設定変更を反映させる */
-		/* 全編集ウィンドウへメッセージをポストする */
+		// 設定変更を反映させる
+		// 全編集ウィンドウへメッセージをポストする
 		CAppNodeGroupHandle(0).SendMessageToAllEditors(
 			MYWM_CHANGESETTING,
 			(WPARAM)nSettingType.GetIndex(),

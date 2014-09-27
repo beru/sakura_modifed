@@ -33,10 +33,10 @@
 
 class CDocType{
 public:
-	//生成と破棄
+	// 生成と破棄
 	CDocType(CEditDoc* pcDoc);
 	
-	//ロック機能	//	Nov. 29, 2000 genta 設定の一時変更時に拡張子による強制的な設定変更を無効にする
+	// ロック機能	//	Nov. 29, 2000 genta 設定の一時変更時に拡張子による強制的な設定変更を無効にする
 	void LockDocumentType(){ m_nSettingTypeLocked = true; }
 	void UnlockDocumentType(){ m_nSettingTypeLocked = false; }
 	bool GetDocumentLockState(){ return m_nSettingTypeLocked; }
@@ -58,7 +58,7 @@ public:
 	}
 
 	// 拡張機能
-	void SetDocumentIcon();	//アイコンの設定	//Sep. 10, 2002 genta
+	void SetDocumentIcon();								// アイコンの設定	//Sep. 10, 2002 genta
 
 private:
 	CEditDoc*				m_pcDocRef;

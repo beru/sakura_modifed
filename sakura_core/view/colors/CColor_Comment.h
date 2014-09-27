@@ -30,10 +30,10 @@
 //                        行コメント                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CColor_LineComment : public CColorStrategy{
+class CColor_LineComment : public CColorStrategy {
 public:
-	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_COMMENT; }
-	virtual void InitStrategyStatus(){}
+	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_COMMENT; }
+	virtual void InitStrategyStatus() {}
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool EndColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }
@@ -44,9 +44,9 @@ public:
 //                    ブロックコメント１                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CColor_BlockComment : public CColorStrategy{
+class CColor_BlockComment : public CColorStrategy {
 public:
-	CColor_BlockComment(EColorIndexType nType) : m_nType(nType), m_nCOMMENTEND(0){}
+	CColor_BlockComment(EColorIndexType nType) : m_nType(nType), m_nCOMMENTEND(0) {}
 	virtual void Update(void)
 	{
 		const CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);

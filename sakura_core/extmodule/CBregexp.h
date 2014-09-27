@@ -101,7 +101,7 @@ public:
 		return Compile(szPattern, NULL, nOption);
 	}
 	bool Compile(const wchar_t *szPattern0, const wchar_t *szPattern1, int nOption = 0, bool bKakomi = false);	//!< Replace用
-	bool Match(const wchar_t *szTarget, int nLen, int nStart = 0);						//!< 検索を実行する
+	bool Match(const wchar_t *szTarget, int nLen, int nStart = 0);					//!< 検索を実行する
 	int Replace(const wchar_t *szTarget, int nLen, int nStart = 0);					//!< 置換を実行する	// 2007.01.16 ryoji 戻り値を置換個数に変更
 
 	//-----------------------------------------

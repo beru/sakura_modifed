@@ -93,7 +93,7 @@ void CEditView::ViewDiffInfo(
 	CWaitCursor	cWaitCursor( this->GetHwnd() );
 	int		nFlgFile12 = 1;
 
-	/* exeのあるフォルダ */
+	// exeのあるフォルダ
 	TCHAR	szExeFolder[_MAX_PATH + 1];
 
 	TCHAR	cmdline[1024];

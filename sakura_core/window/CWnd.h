@@ -32,12 +32,11 @@
 	@li RegisterWC()	ウィンドウクラス登録
 	@li Create()		ウィンドウ作成
 */
-class CWnd
-{
+class CWnd {
 protected:
 	friend LRESULT CALLBACK CWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 public:
-	/* Constructors */
+	// Constructors
 	CWnd(const TCHAR* pszInheritanceAppend = _T(""));
 	virtual ~CWnd();
 	/*
@@ -55,7 +54,7 @@ public:
 		LPCTSTR		lpszClassName	// Pointer to a null-terminated string or is an atom.
 	);
 
-	//ウィンドウ作成
+	// ウィンドウ作成
 	HWND Create(
 		HWND		hwndParent,
 		DWORD		dwExStyle,		// extended window style
@@ -69,15 +68,15 @@ public:
 		HMENU		hMenu			// handle to menu, or child-window identifier
 	);
 
-	virtual LRESULT DispatchEvent( HWND, UINT, WPARAM, LPARAM );/* メッセージ配送 */
+	virtual LRESULT DispatchEvent( HWND, UINT, WPARAM, LPARAM ); // メッセージ配送
 protected:
-	/* 仮想関数 */
-	virtual LRESULT DispatchEvent_WM_APP( HWND, UINT, WPARAM, LPARAM );/* アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF) */
-	virtual void PreviCreateWindow( void ){return;}/* ウィンドウ作成前の処理(クラス登録前) ( virtual )*/
-	virtual void AfterCreateWindow( void ){::ShowWindow( m_hWnd, SW_SHOW );}/* ウィンドウ作成後の処理 ( virtual )*/
+	// 仮想関数
+	virtual LRESULT DispatchEvent_WM_APP( HWND, UINT, WPARAM, LPARAM );	// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
+	virtual void PreviCreateWindow( void ) {return;} // ウィンドウ作成前の処理(クラス登録前) ( virtual )
+	virtual void AfterCreateWindow( void ) {::ShowWindow( m_hWnd, SW_SHOW );} // ウィンドウ作成後の処理 ( virtual )
 
-	/* 仮想関数 メッセージ処理(デフォルト動作) */
-	#define DECLH(method) LRESULT method( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ){return CallDefWndProc( hwnd, msg, wp, lp );}
+	// 仮想関数 メッセージ処理(デフォルト動作)
+	#define DECLH(method) LRESULT method( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) {return CallDefWndProc( hwnd, msg, wp, lp );}
 	virtual DECLH( OnCreate			);	// WM_CREATE
 	virtual DECLH( OnCommand		);	// WM_COMMAND
 	virtual DECLH( OnPaint			);	// WM_PAINT
@@ -106,19 +105,19 @@ protected:
 	virtual DECLH( OnDrawItem		);	// WM_DRAWITEM	// 2006.02.01 ryoji
 	virtual DECLH( OnCaptureChanged	);	// WM_CAPTURECHANGED	// 2006.11.30 ryoji
 
-	/* デフォルトメッセージ処理 */
+	// デフォルトメッセージ処理
 	virtual LRESULT CallDefWndProc( HWND, UINT, WPARAM, LPARAM );
 
 public:
-	//インターフェース
-	HWND GetHwnd() const{ return m_hWnd; }
-	HWND GetParentHwnd() const{ return m_hwndParent; }
-	HINSTANCE GetAppInstance() const{ return m_hInstance; }
+	// インターフェース
+	HWND GetHwnd() const { return m_hWnd; }
+	HWND GetParentHwnd() const { return m_hwndParent; }
+	HINSTANCE GetAppInstance() const { return m_hInstance; }
 
-	//特殊インターフェース (使用は好ましくない)
-	void _SetHwnd(HWND hwnd){ m_hWnd = hwnd; }
+	// 特殊インターフェース (使用は好ましくない)
+	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
 
-	//ウィンドウ標準操作
+	// ウィンドウ標準操作
 	void DestroyWindow();
 
 private: // 2002/2/10 aroka アクセス権変更

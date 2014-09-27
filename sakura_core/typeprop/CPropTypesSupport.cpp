@@ -63,7 +63,7 @@ static std::vector<SHokanMethod>* GetHokanMethodList()
 
 // 2001/06/13 Start By asa-o: タイプ別設定の支援タブに関する処理
 
-/* メッセージ処理 */
+// メッセージ処理
 INT_PTR CPropTypesSupport::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
@@ -77,27 +77,27 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		/* ダイアログデータの設定 p2 */
+		// ダイアログデータの設定 p2
 		SetData( hwndDlg );
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
-		/* 入力補完 単語ファイル */
+		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
+		// 入力補完 単語ファイル
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_HOKANFILE ), _MAX_PATH - 1 );
 
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-//		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
+//		hwndCtl		= (HWND) lParam;	// コントロールのハンドル
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
-			/* ダイアログデータの取得 p2 */
+			// ダイアログデータの取得 p2
 			GetData( hwndDlg );
 			switch (wID) {
-			case IDC_BUTTON_HOKANFILE_REF:	/* 入力補完 単語ファイルの「参照...」ボタン */
+			case IDC_BUTTON_HOKANFILE_REF:	// 入力補完 単語ファイルの「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
@@ -108,7 +108,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Types.m_szHokanFile );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						m_hInstance,
 						hwndDlg,
@@ -121,7 +121,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					}
 				}
 				return TRUE;
-			case IDC_BUTTON_TYPEOPENHELP:	/* 外部ヘルプ１の「参照...」ボタン */
+			case IDC_BUTTON_TYPEOPENHELP:	// 外部ヘルプ１の「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
@@ -132,7 +132,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Types.m_szExtHelp );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						m_hInstance,
 						hwndDlg,
@@ -145,7 +145,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					}
 				}
 				return TRUE;
-			case IDC_BUTTON_TYPEOPENEXTHTMLHELP:	/* 外部HTMLヘルプの「参照...」ボタン */
+			case IDC_BUTTON_TYPEOPENEXTHTMLHELP:	// 外部HTMLヘルプの「参照...」ボタン
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					TCHAR			szPath[_MAX_PATH + 1];
@@ -156,7 +156,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					}else {
 						_tcscpy( szPath, m_Types.m_szExtHtmlHelp );
 					}
-					/* ファイルオープンダイアログの初期化 */
+					// ファイルオープンダイアログの初期化
 					cDlgOpenFile.Create(
 						m_hInstance,
 						hwndDlg,
@@ -170,9 +170,9 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 				}
 				return TRUE;
 			}
-			break;	/* BN_CLICKED */
+			break;	// BN_CLICKED
 		}
-		break;	/* WM_COMMAND */
+		break;	// WM_COMMAND
 	case WM_NOTIFY:
 //		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
@@ -182,7 +182,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 			OnHelp( hwndDlg, IDD_PROP_SUPPORT );
 			return TRUE;
 		case PSN_KILLACTIVE:
-			/* ダイアログデータの取得 p2 */
+			// ダイアログデータの取得 p2
 			GetData( hwndDlg );
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -199,7 +199,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids3 );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 //		break;
 //To Here  Jul. 05, 2001
 
@@ -214,10 +214,10 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 	return FALSE;
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CPropTypesSupport::SetData( HWND hwndDlg )
 {
-	/* 入力補完 単語ファイル */
+	// 入力補完 単語ファイル
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_HOKANFILE, m_Types.m_szHokanFile );
 
 	{
@@ -235,7 +235,7 @@ void CPropTypesSupport::SetData( HWND hwndDlg )
 	}
 
 //	2001/06/19 asa-o
-	/* 入力補完機能：英大文字小文字を同一視する */
+	// 入力補完機能：英大文字小文字を同一視する
 	::CheckDlgButton( hwndDlg, IDC_CHECK_HOKANLOHICASE, m_Types.m_bHokanLoHiCase ? BST_CHECKED : BST_UNCHECKED);
 
 	// 2003.06.25 Moca ファイルからの補完機能
@@ -251,17 +251,17 @@ void CPropTypesSupport::SetData( HWND hwndDlg )
 	::CheckDlgButton( hwndDlg, IDC_CHECK_CHKENTERATEND, m_Types.m_bChkEnterAtEnd ? BST_CHECKED : BST_UNCHECKED);
 }
 
-/* ダイアログデータの取得 */
+// ダイアログデータの取得
 int CPropTypesSupport::GetData( HWND hwndDlg )
 {
 //	2001/06/19	asa-o
-	/* 入力補完機能：英大文字小文字を同一視する */
+	// 入力補完機能：英大文字小文字を同一視する
 	m_Types.m_bHokanLoHiCase = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_HOKANLOHICASE ) != 0;
 
 	m_Types.m_bUseHokanByFile = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_HOKANBYFILE ) != 0;
 	m_Types.m_bUseHokanByKeyword = IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_HOKANBYKEYWORD );
 
-	/* 入力補完 単語ファイル */
+	// 入力補完 単語ファイル
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_HOKANFILE, m_Types.m_szHokanFile, _countof2( m_Types.m_szHokanFile ));
 
 	// 入力補完種別
@@ -288,8 +288,7 @@ int CPropTypesSupport::GetData( HWND hwndDlg )
 
 // 2001/06/13 End
 
-/*! 補完種別の追加
-/*/
+//! 補完種別の追加
 void CPropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
 {
 	SHokanMethod item = { nMethod, std::wstring(szName) };

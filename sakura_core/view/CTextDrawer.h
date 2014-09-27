@@ -33,10 +33,10 @@ class CLayout;
 
 class CGraphics;
 
-class CTextDrawer{
+class CTextDrawer {
 public:
 	CTextDrawer(const CEditView* pEditView) : m_pEditView(pEditView) { }
-	virtual ~CTextDrawer(){}
+	virtual ~CTextDrawer() {}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         ŠO•”ˆË‘¶                            //

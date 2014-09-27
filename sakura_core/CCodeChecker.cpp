@@ -51,7 +51,7 @@ static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECod
 			return e;
 		}
 
-		//次の行へ
+		// 次の行へ
 		pcDocLine = pcDocLine->GetNextLine();
 	}
 	delete pCodeBase;
@@ -63,7 +63,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	//改行コードが混在しているかどうか判定
+	// 改行コードが混在しているかどうか判定
 	bool bTmpResult = false;
 	if (pcDoc->m_cDocType.GetDocumentAttribute().m_bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
@@ -71,7 +71,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 		);
 	}
 
-	//ユーザ問い合わせ
+	// ユーザ問い合わせ
 	if (bTmpResult) {
 		int nDlgResult = MYMESSAGEBOX(
 			CEditWnd::getInstance()->GetHwnd(),
@@ -87,12 +87,12 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 		}
 	}
 
-	//指定文字コードで安全に保存できるかどうか判定
+	// 指定文字コードで安全に保存できるかどうか判定
 	EConvertResult nTmpResult = _CheckSavingCharcode(
 		pcDoc->m_cDocLineMgr, pSaveInfo->eCharCode
 	);
 
-	//ユーザ問い合わせ
+	// ユーザ問い合わせ
 	if (nTmpResult == RESULT_LOSESOME) {
 		int nDlgResult = MYMESSAGEBOX(
 			CEditWnd::getInstance()->GetHwnd(),
@@ -112,7 +112,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 
 void CCodeChecker::OnFinalSave(ESaveResult eSaveResult)
 {
-	//カキコ結果
+	// カキコ結果
 	if (eSaveResult == SAVED_LOSESOME) {
 		ErrorMessage(CEditWnd::getInstance()->GetHwnd(), LS(STR_CODECHECKER_LOSESOME_SAVE));
 	}
