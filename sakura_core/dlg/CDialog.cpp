@@ -499,12 +499,9 @@ BOOL CDialog::OnCbnSelEndOk( HWND hwndCtl, int wID )
 	// リストを非表示にすると前方一致する文字列を選んでしまうので、
 	// 事前に文字列を退避し、リスト非表示後に復元する。
 
-	int nLength;
-	LPTSTR sBuf;
-
 	// 文字列を退避
-	nLength = ::GetWindowTextLength( hwndCtl );
-	sBuf = new TCHAR[nLength + 1];
+	int nLength = ::GetWindowTextLength( hwndCtl );
+	LPTSTR sBuf = new TCHAR[nLength + 1];
 	::GetWindowText( hwndCtl, sBuf, nLength+1 );
 	sBuf[nLength] = _T('\0');
 
@@ -532,26 +529,20 @@ BOOL CDialog::OnCbnSelEndOk( HWND hwndCtl, int wID )
 */
 BOOL CDialog::OnCbnDropDown( HWND hwndCtl, int wID )
 {
-	HDC hDC;
-	HFONT hFont;
-	LONG nWidth;
-	RECT rc;
 	SIZE sizeText;
-	int nTextLen;
-	int iItem;
-	int nItem;
 	int nMargin = 8;
 
-	hDC = ::GetDC( hwndCtl );
+	HDC hDC = ::GetDC( hwndCtl );
 	if (!hDC)
 		return FALSE;
-	hFont = (HFONT)::SendMessageAny( hwndCtl, WM_GETFONT, 0, (LPARAM)NULL );
+	HFONT hFont = (HFONT)::SendMessageAny( hwndCtl, WM_GETFONT, 0, (LPARAM)NULL );
 	hFont = (HFONT)::SelectObject( hDC, hFont );
-	nItem = Combo_GetCount( hwndCtl );
+	int nItem = Combo_GetCount( hwndCtl );
+	RECT rc;
 	::GetWindowRect( hwndCtl, &rc );
-	nWidth = rc.right - rc.left - nMargin;
-	for (iItem = 0; iItem < nItem; iItem++) {
-		nTextLen = Combo_GetLBTextLen( hwndCtl, iItem );
+	LONG nWidth = rc.right - rc.left - nMargin;
+	for (int iItem = 0; iItem < nItem; iItem++) {
+		int nTextLen = Combo_GetLBTextLen( hwndCtl, iItem );
 		if (0 < nTextLen) {
 			TCHAR* pszText = new TCHAR[nTextLen + 1];
 			Combo_GetLBText( hwndCtl, iItem, pszText );
@@ -573,9 +564,9 @@ BOOL CDialog::OnCbnDropDown( HWND hwndCtl, int wID )
 */
 BOOL CDialog::SelectFile(HWND parent, HWND hwndCtl, const TCHAR* filter, bool resolvePath)
 {
-	CDlgOpenFile	cDlgOpenFile;
-	TCHAR			szFilePath[_MAX_PATH + 1];
-	TCHAR			szPath[_MAX_PATH + 1];
+	CDlgOpenFile cDlgOpenFile;
+	TCHAR szFilePath[_MAX_PATH + 1];
+	TCHAR szPath[_MAX_PATH + 1];
 	::GetWindowText( hwndCtl, szFilePath, _countof(szFilePath) );
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
@@ -633,10 +624,9 @@ HFONT CDialog::SetMainFont( HWND hTarget )
 		return NULL;
 	}
 
-	LOGFONT	lf;
-
 	// 設定するフォントの高さを取得
 	HFONT hFont = (HFONT)::SendMessage(hTarget, WM_GETFONT, 0, 0);
+	LOGFONT	lf;
 	GetObject(hFont, sizeof(lf), &lf);
 	LONG nfHeight = lf.lfHeight;
 

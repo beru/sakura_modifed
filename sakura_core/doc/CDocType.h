@@ -37,9 +37,9 @@ public:
 	CDocType(CEditDoc* pcDoc);
 	
 	// ロック機能	//	Nov. 29, 2000 genta 設定の一時変更時に拡張子による強制的な設定変更を無効にする
-	void LockDocumentType(){ m_nSettingTypeLocked = true; }
-	void UnlockDocumentType(){ m_nSettingTypeLocked = false; }
-	bool GetDocumentLockState(){ return m_nSettingTypeLocked; }
+	void LockDocumentType() { m_nSettingTypeLocked = true; }
+	void UnlockDocumentType() { m_nSettingTypeLocked = false; }
+	bool GetDocumentLockState() { return m_nSettingTypeLocked; }
 	
 	// 文書種別の設定と取得		// Nov. 23, 2000 genta
 	void SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly = false);	//!< 文書種別の設定
@@ -55,12 +55,12 @@ public:
 	}
 
 	// 拡張機能
-	void SetDocumentIcon();								// アイコンの設定	//Sep. 10, 2002 genta
+	void SetDocumentIcon();						// アイコンの設定	//Sep. 10, 2002 genta
 
 private:
-	CEditDoc*				m_pcDocRef;
-	CTypeConfig				m_nSettingType;
-	STypeConfig				m_typeConfig;
-	bool					m_nSettingTypeLocked;		//!< 文書種別の一時設定状態
+	CEditDoc*		m_pcDocRef;
+	CTypeConfig		m_nSettingType;
+	STypeConfig		m_typeConfig;
+	bool			m_nSettingTypeLocked;		//!< 文書種別の一時設定状態
 };
 

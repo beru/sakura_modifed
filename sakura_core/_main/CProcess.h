@@ -62,7 +62,7 @@ private:
 		PMINIDUMP_CALLBACK_INFORMATION CallbackParam
 	);
 #endif
-	CShareData*		m_pcShareData;
+	CShareData* m_pcShareData;
 
 private:
 };

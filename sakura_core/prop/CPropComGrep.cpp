@@ -24,16 +24,16 @@
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10500
-	IDC_EDIT_REGEXPLIB,				HIDC_EDIT_REGEXPLIB,			// 正規表現ライブラリ選択	// 2007.09.02 genta
-	IDC_LABEL_REGEXP,				HIDC_EDIT_REGEXPLIB,
-	IDC_LABEL_REGEXP_VER,			HIDC_LABEL_REGEXPVER,			// 正規表現ライブラリバージョン	// 2007.09.02 genta
-	IDC_CHECK_bCaretTextForSearch,	HIDC_CHECK_bCaretTextForSearch,	// カーソル位置の文字列をデフォルトの検索文字列にする	// 2006.08.23 ryoji
-	IDC_CHECK_INHERIT_KEY_OTHER_VIEW, HIDC_CHECK_INHERIT_KEY_OTHER_VIEW,	// 次・前検索で他のビューの検索条件を引き継ぐ	// 2011.12.18 Moca
-	IDC_CHECK_bGrepExitConfirm,		HIDC_CHECK_bGrepExitConfirm,	// GREPの保存確認
-	IDC_CHECK_GTJW_RETURN,			HIDC_CHECK_GTJW_RETURN,			// タグジャンプ（エンターキー）
-	IDC_CHECK_GTJW_LDBLCLK,			HIDC_CHECK_GTJW_LDBLCLK,		// タグジャンプ（ダブルクリック）
-	IDC_CHECK_GREPREALTIME,			HIDC_CHECK_GREPREALTIME,		// リアルタイムで表示する	// 2006.08.08 ryoji
-//	IDC_STATIC,						-1,
+	IDC_EDIT_REGEXPLIB,					HIDC_EDIT_REGEXPLIB,				// 正規表現ライブラリ選択	// 2007.09.02 genta
+	IDC_LABEL_REGEXP,					HIDC_EDIT_REGEXPLIB,
+	IDC_LABEL_REGEXP_VER,				HIDC_LABEL_REGEXPVER,				// 正規表現ライブラリバージョン	// 2007.09.02 genta
+	IDC_CHECK_bCaretTextForSearch,		HIDC_CHECK_bCaretTextForSearch,		// カーソル位置の文字列をデフォルトの検索文字列にする	// 2006.08.23 ryoji
+	IDC_CHECK_INHERIT_KEY_OTHER_VIEW,	HIDC_CHECK_INHERIT_KEY_OTHER_VIEW,	// 次・前検索で他のビューの検索条件を引き継ぐ	// 2011.12.18 Moca
+	IDC_CHECK_bGrepExitConfirm,			HIDC_CHECK_bGrepExitConfirm,		// GREPの保存確認
+	IDC_CHECK_GTJW_RETURN,				HIDC_CHECK_GTJW_RETURN,				// タグジャンプ（エンターキー）
+	IDC_CHECK_GTJW_LDBLCLK,				HIDC_CHECK_GTJW_LDBLCLK,			// タグジャンプ（ダブルクリック）
+	IDC_CHECK_GREPREALTIME,				HIDC_CHECK_GREPREALTIME,			// リアルタイムで表示する	// 2006.08.08 ryoji
+//	IDC_STATIC,							-1,
 	0, 0
 };
 //@@@ 2001.02.04 End
@@ -125,27 +125,28 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 // ダイアログデータの設定
 void CPropGrep::SetData( HWND hwndDlg )
 {
+	auto& csSearch = m_Common.m_sSearch;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	::CheckDlgButton( hwndDlg, IDC_CHECK_bCaretTextForSearch, m_Common.m_sSearch.m_bCaretTextForSearch );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.m_bCaretTextForSearch );
 
-	CheckDlgButtonBool( hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, m_Common.m_sSearch.m_bInheritKeyOtherView );
+	CheckDlgButtonBool( hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.m_bInheritKeyOtherView );
 
 	// Grepモードで保存確認するか
-	::CheckDlgButton( hwndDlg, IDC_CHECK_bGrepExitConfirm, m_Common.m_sSearch.m_bGrepExitConfirm );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.m_bGrepExitConfirm );
 
 	// Grep結果のリアルタイム表示
-	::CheckDlgButton( hwndDlg, IDC_CHECK_GREPREALTIME, m_Common.m_sSearch.m_bGrepRealTimeView );	// 2006.08.08 ryoji ID修正
+	::CheckDlgButton( hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.m_bGrepRealTimeView );	// 2006.08.08 ryoji ID修正
 
 
 	// Grepモード: エンターキーでタグジャンプ
-	::CheckDlgButton( hwndDlg, IDC_CHECK_GTJW_RETURN, m_Common.m_sSearch.m_bGTJW_RETURN );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.m_bGTJW_RETURN );
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	::CheckDlgButton( hwndDlg, IDC_CHECK_GTJW_LDBLCLK, m_Common.m_sSearch.m_bGTJW_LDBLCLK );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.m_bGTJW_LDBLCLK );
 
 	//	2007.08.12 genta 正規表現DLL
-	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_REGEXPLIB ), _countof(m_Common.m_sSearch.m_szRegexpLib ) - 1 );
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEXPLIB, m_Common.m_sSearch.m_szRegexpLib);
+	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_REGEXPLIB ), _countof(csSearch.m_szRegexpLib ) - 1 );
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib);
 	SetRegexpVersion( hwndDlg );
 
 	return;
@@ -155,25 +156,27 @@ void CPropGrep::SetData( HWND hwndDlg )
 // ダイアログデータの取得
 int CPropGrep::GetData( HWND hwndDlg )
 {
-	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	m_Common.m_sSearch.m_bCaretTextForSearch = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bCaretTextForSearch );
+	auto& csSearch = m_Common.m_sSearch;
 
-	m_Common.m_sSearch.m_bInheritKeyOtherView = IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW );
+	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
+	csSearch.m_bCaretTextForSearch = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bCaretTextForSearch );
+
+	csSearch.m_bInheritKeyOtherView = IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW );
 
 	// Grepモードで保存確認するか
-	m_Common.m_sSearch.m_bGrepExitConfirm = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bGrepExitConfirm );
+	csSearch.m_bGrepExitConfirm = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bGrepExitConfirm );
 
 	// Grep結果のリアルタイム表示
-	m_Common.m_sSearch.m_bGrepRealTimeView = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GREPREALTIME );	// 2006.08.08 ryoji ID修正
+	csSearch.m_bGrepRealTimeView = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GREPREALTIME );	// 2006.08.08 ryoji ID修正
 
 	// Grepモード: エンターキーでタグジャンプ
-	m_Common.m_sSearch.m_bGTJW_RETURN = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_RETURN );
+	csSearch.m_bGTJW_RETURN = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_RETURN );
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	m_Common.m_sSearch.m_bGTJW_LDBLCLK = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_LDBLCLK );
+	csSearch.m_bGTJW_LDBLCLK = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_LDBLCLK );
 
 	//	2007.08.12 genta 正規表現DLL
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_REGEXPLIB, m_Common.m_sSearch.m_szRegexpLib, _countof( m_Common.m_sSearch.m_szRegexpLib ));
+	::DlgItem_GetText( hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib, _countof( csSearch.m_szRegexpLib ));
 
 	return TRUE;
 }

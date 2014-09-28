@@ -71,8 +71,6 @@ VOID CALLBACK EditViewTimerProc( HWND, UINT, UINT_PTR, DWORD );
 
 #define IDT_ROLLMOUSE	1
 
-
-
 /*
 || ウィンドウプロシージャ
 ||
@@ -87,7 +85,7 @@ LRESULT CALLBACK EditViewWndProc(
 {
 //	DEBUG_TRACE(_T("EditViewWndProc(0x%08X): %ls\n"), hwnd, GetWindowsMessageName(uMsg));
 
-	CEditView*	pCEdit;
+	CEditView* pCEdit;
 	switch (uMsg) {
 	case WM_CREATE:
 		pCEdit = (CEditView*) g_m_pcEditView;
@@ -432,10 +430,9 @@ LRESULT CEditView::DispatchEvent(
 	LPARAM	lParam 	// second message parameter
 )
 {
-	HDC			hdc;
-//	int			nPosX;
-//	int			nPosY;
-
+	HDC hdc;
+//	int nPosX;
+//	int nPosY;
 	switch (uMsg) {
 	case WM_MOUSEWHEEL:
 		if (m_pcEditWnd->DoMouseWheel( wParam, lParam )) {
@@ -448,7 +445,6 @@ LRESULT CEditView::DispatchEvent(
 
 	case WM_CREATE:
 		::SetWindowLongPtr( hwnd, 0, (LONG_PTR) this );
-
 		return 0L;
 
 		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
@@ -1226,16 +1222,15 @@ bool CEditView::IsCurrentPositionURL(
 		ptCaretPos,
 		&ptXY
 	);
-	CLogicInt		nLineLen;
-	const wchar_t*	pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen); //2007.10.09 kobake レイアウト・ロジック混在バグ修正
+	CLogicInt nLineLen;
+	const wchar_t* pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen); //2007.10.09 kobake レイアウト・ロジック混在バグ修正
 
-	bool		bMatch;
-	int			nMatchColor;
-	int			nUrlLen = 0;
-	CLogicInt	i = CLogicInt(t_max(CLogicInt(0), ptXY.GetX2() - _MAX_PATH));	// 2009.05.22 ryoji 200->_MAX_PATH
+	int nMatchColor;
+	int nUrlLen = 0;
+	CLogicInt i = CLogicInt(t_max(CLogicInt(0), ptXY.GetX2() - _MAX_PATH));	// 2009.05.22 ryoji 200->_MAX_PATH
 	//nLineLen = CLogicInt(__min(nLineLen, ptXY.GetX2() + _MAX_PATH));
 	while (i <= ptXY.GetX2() && i < nLineLen) {
-		bMatch = ( bUseRegexKeyword
+		bool bMatch = ( bUseRegexKeyword
 					&& m_cRegexKeyword->RegexIsKeyword( CStringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor )
 					&& nMatchColor == COLORIDX_URL );
 		if (!bMatch) {
@@ -1274,14 +1269,13 @@ VOID CEditView::OnTimer(
 	DWORD dwTime 	// current system time
 	)
 {
-	POINT		po;
-	RECT		rc;
-
 	if (GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
 		if (IsDragSource()) {
 			return;
 		}
 	}
+	POINT po;
+	RECT rc;
 	// 範囲選択中でない場合
 	if (!GetSelectionInfo().IsMouseSelecting()) {
 		if (TRUE == KeyWordHelpSearchDict( LID_SKH_ONTIMER, &po, &rc )) {	// 2006.04.10 fon
@@ -1304,7 +1298,12 @@ VOID CEditView::OnTimer(
 // 選択エリアのテキストを指定方法で変換
 void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 {
-	CNativeW	cmemBuf;
+	// テキストが選択されているか
+	if (!GetSelectionInfo().IsTextSelected()) {
+		return;
+	}
+
+	CNativeW cmemBuf;
 
 	CLayoutPoint sPos;
 
@@ -1314,15 +1313,9 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 	CLogicInt	nDelLen;
 	CLogicInt	nDelPosNext;
 	CLogicInt	nDelLenNext;
-	const wchar_t*	pLine;
 	CLogicInt		nLineLen;
 	CLogicInt		nLineLen2;
 	CWaitCursor cWaitCursor( GetHwnd() );
-
-	// テキストが選択されているか
-	if (!GetSelectionInfo().IsTextSelected()) {
-		return;
-	}
 
 	CLogicPoint ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
 	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
@@ -1350,7 +1343,7 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 			const CLayout* pcLayout;
 			nDelPosNext = nIdxFrom;
 			nDelLenNext	= nIdxTo - nIdxFrom;
-			pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom	= LineColumnToIndex( pcLayout, rcSelLayout.left );
@@ -1467,23 +1460,19 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 // ポップアップメニュー(右クリック)
 int	CEditView::CreatePopUpMenu_R( void )
 {
-	HMENU		hMenu;
-	POINT		po;
-	RECT		rc;
-	int			nMenuIdx;
-
 	CMenuDrawer& cMenuDrawer = m_pcEditWnd->GetMenuDrawer();
 	cMenuDrawer.ResetContents();
 
 	// 右クリックメニューの定義はカスタムメニュー配列の0番目
-	nMenuIdx = CUSTMENU_INDEX_FOR_RBUTTONUP;	// マジックナンバー排除	//@@@ 2003.06.13 MIK
+	int nMenuIdx = CUSTMENU_INDEX_FOR_RBUTTONUP;	// マジックナンバー排除	//@@@ 2003.06.13 MIK
 
 	// Note: CViewCommander::Command_CUSTMENU と大体同じ
-
-	hMenu = ::CreatePopupMenu();
+	HMENU hMenu = ::CreatePopupMenu();
 
 	// 2010.07.24 Moca オーナードロー対応のために前に移動してCMenuDrawer経由で追加する
 	if (!GetSelectionInfo().IsMouseSelecting()) {
+		POINT po;
+		RECT rc;
 		if (TRUE == KeyWordHelpSearchDict( LID_SKH_POPUPMENU_R, &po, &rc )) {	// 2006.04.10 fon
 			cMenuDrawer.MyAppendMenu( hMenu, 0, IDM_COPYDICINFO, LS(STR_MENU_KEYWORDINFO), _T("K") );	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
 			cMenuDrawer.MyAppendMenu( hMenu, 0, IDM_JUMPDICT, LS(STR_MENU_OPENKEYWORDDIC), _T("L") );	// 2006.04.10 fon
@@ -1499,16 +1488,14 @@ int	CEditView::CreatePopUpMenu_R( void )
 */
 int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus )
 {
-	int			nId;
-	int			i;
-	WCHAR		szLabel[300];
-	int			nParentMenu[MAX_CUSTOM_MENU + 1];
+	WCHAR szLabel[300];
 
 	CMenuDrawer& cMenuDrawer = m_pcEditWnd->GetMenuDrawer();
 	CFuncLookup& FuncLookup = m_pcEditDoc->m_cFuncLookup;
 
 	int nParamIndex = 0;
-	int *pNextParam = nParentMenu;
+	int nParentMenu[MAX_CUSTOM_MENU + 1];
+	int* pNextParam = nParentMenu;
 	{
 		if (pParentMenus) {
 			int k;
@@ -1528,7 +1515,7 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 		pNextParam[nParamIndex] = nThisCode;
 	}
 
-	for (i = 0; i < GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
+	for (int i = 0; i < GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
 		EFunctionCode code = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemFuncArr[nMenuIdx][i];
 		bool bAppend = false;
 		if (F_0 == code) {
@@ -1604,12 +1591,12 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 		}
 	}
 
-	POINT		po;
+	POINT po;
 	po.x = 0;
 	po.y = 0;
 	::GetCursorPos( &po );
 	po.y -= 4;
-	nId = ::TrackPopupMenu(
+	int nId = ::TrackPopupMenu(
 		hMenu,
 		TPM_TOPALIGN
 		| TPM_LEFTALIGN
@@ -1635,8 +1622,6 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 // 設定変更を反映させる
 void CEditView::OnChangeSetting()
 {
-	RECT		rc;
-
 	GetTextArea().SetTopYohaku( GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace ); 	// ルーラーとテキストの隙間
 	GetTextArea().SetAreaTop( GetTextArea().GetTopYohaku() );									// 表示域の上端座標
 
@@ -1663,6 +1648,7 @@ void CEditView::OnChangeSetting()
 	UseCompatibleDC( GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP );
 
 	// ウィンドウサイズの変更処理
+	RECT rc;
 	::GetClientRect( GetHwnd(), &rc );
 	OnSize( rc.right, rc.bottom );
 
@@ -1796,7 +1782,6 @@ bool CEditView::GetSelectedData(
 	EEolType		neweol				// コピー後の改行コード EOL_NONEはコード保存
 )
 {
-	const wchar_t*	pLine;
 	CLogicInt		nLineLen;
 	CLayoutInt		nLineNum;
 	CLogicInt		nIdxFrom;
@@ -1819,9 +1804,8 @@ bool CEditView::GetSelectedData(
 		pszLineNum = new wchar_t[nLineNumCols + 1];
 	}
 
-	CLayoutRect			rcSel;
-
 	if (GetSelectionInfo().IsBoxSelecting()) {	// 矩形範囲選択中
+		CLayoutRect rcSel;
 		// 2点を対角とする矩形を求める
 		TwoPointToRect(
 			&rcSel,
@@ -1839,7 +1823,7 @@ bool CEditView::GetSelectedData(
 		int nBufSize = wcslen(WCODE::CRLF) * (Int)i;
 
 		// 実際の文字量。
-		pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
+		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
 		for (; i != CLayoutInt(0) && pcLayout != NULL; i--, pcLayout = pcLayout->GetNextLayout()) {
 			pLine = pcLayout->GetPtr() + pcLayout->GetLogicOffset();
 			nLineLen = CLogicInt(pcLayout->GetLengthWithEOL());
@@ -1861,7 +1845,7 @@ bool CEditView::GetSelectedData(
 
 		nRowNum = 0;
 		for (nLineNum = rcSel.top; nLineNum <= rcSel.bottom; ++nLineNum) {
-			pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom	= LineColumnToIndex( pcLayout, rcSel.left  );
@@ -1930,7 +1914,7 @@ bool CEditView::GetSelectedData(
 		//>> 2002/04/18 Azumaiya
 
 		for (nLineNum = GetSelectionInfo().m_sSelect.GetFrom().GetY2(); nLineNum <= GetSelectionInfo().m_sSelect.GetTo().y; ++nLineNum) {
-			pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
 			if (!pLine) {
 				break;
 			}
@@ -2001,7 +1985,6 @@ bool CEditView::GetSelectedData(
 */
 bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
 {
-	const wchar_t*	pLine;
 	CLogicInt		nLineLen;
 	CLogicInt		nIdxFrom;
 	CLogicInt		nIdxTo;
@@ -2018,8 +2001,8 @@ bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
 	cmemBuf.SetString(L"");
 	if (selInfo.IsBoxSelecting()) {
 		// 矩形範囲選択(レイアウト処理)
-		const CLayout*	pcLayout;
-		CLayoutRect		rcSel;
+		const CLayout* pcLayout;
+		CLayoutRect rcSel;
 
 		// 2点を対角とする矩形を求める
 		TwoPointToRect(
@@ -2027,8 +2010,7 @@ bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
 			sSelect.GetFrom(),	// 範囲選択開始
 			sSelect.GetTo()	// 範囲選択終了
 		);
-
-		pLine = layoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
+		const wchar_t* pLine = layoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
 		if (pLine && pcLayout) {
 			nLineLen = pcLayout->GetLengthWithoutEOL();
 			if (pLine) {
@@ -2051,7 +2033,7 @@ bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
 
 		const CDocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine( targetY );
 		if (pDocLine) {
-			pLine = pDocLine->GetPtr();
+			const wchar_t* pLine = pDocLine->GetPtr();
 			nLineLen = pDocLine->GetLengthWithoutEOL();
 			nIdxFrom = ptFrom.x;
 			if (targetY == ptTo.y) {

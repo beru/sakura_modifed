@@ -59,12 +59,11 @@ void GetDefaultColorInfoName( ColorInfo* pColorInfo, int nIndex );
 int GetDefaultColorInfoCount();
 
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           辞書                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //@@@ 2006.04.10 fon ADD-start
-const int DICT_ABOUT_LEN = 50; /*!< 辞書の説明の最大長 -1 */
+const int DICT_ABOUT_LEN = 50; //!< 辞書の説明の最大長 -1
 struct KeyHelpInfo {
 	bool		m_bUse;						//!< 辞書を 使用する/しない
 	TCHAR		m_szAbout[DICT_ABOUT_LEN];	//!< 辞書の説明(辞書ファイルの1行目から生成)

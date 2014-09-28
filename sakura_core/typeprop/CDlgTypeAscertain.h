@@ -55,7 +55,7 @@ public:
 	};
 
 public:
-	//  Constructors
+	// Constructors
 	CDlgTypeAscertain();
 	// モーダルダイアログの表示
 	int DoModal( HINSTANCE, HWND, SAscertainInfo* );	// モーダルダイアログの表示

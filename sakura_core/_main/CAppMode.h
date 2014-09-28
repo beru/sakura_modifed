@@ -54,9 +54,9 @@ protected:
 	void _SetDebugMode(bool bDebugMode){ m_bDebugMode = bDebugMode; }
 
 private:
-	bool			m_bViewMode;				//!< ビューモード
-	bool			m_bDebugMode;				//!< デバッグモニタモード
+	bool	m_bViewMode;				//!< ビューモード
+	bool	m_bDebugMode;				//!< デバッグモニタモード
 public:
-	wchar_t			m_szGrepKey[1024];			//!< Grepモードの場合、その検索キー
+	wchar_t	m_szGrepKey[1024];			//!< Grepモードの場合、その検索キー
 };
 

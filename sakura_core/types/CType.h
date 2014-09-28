@@ -28,8 +28,8 @@
 #include "doc/CDocTypeSetting.h"
 #include "doc/CLineComment.h"
 #include "doc/CBlockComment.h"
-#include "charset/charset.h"  // ECodeType
-#include "CRegexKeyword.h"	// RegexKeywordInfo
+#include "charset/charset.h"	// ECodeType
+#include "CRegexKeyword.h"		// RegexKeywordInfo
 
 
 //! タブ表示方法
@@ -48,24 +48,24 @@ enum EOutlineType {
 	OUTLINE_JAVA,
 	OUTLINE_COBOL,
 	OUTLINE_ASM,
-	OUTLINE_PERL,		//	Sep. 8, 2000 genta
-	OUTLINE_VB,			//	June 23, 2001 N.Nakatani
+	OUTLINE_PERL,		// Sep. 8, 2000 genta
+	OUTLINE_VB,			// June 23, 2001 N.Nakatani
 	OUTLINE_WZTXT,		// 2003.05.20 zenryaku 階層付テキストアウトライン解析
 	OUTLINE_HTML,		// 2003.05.20 zenryaku HTMLアウトライン解析
 	OUTLINE_TEX,		// 2003.07.20 naoh TeXアウトライン解析
-	OUTLINE_FILE,		//	2002.04.01 YAZAKI ルールファイル用
-	OUTLINE_PYTHON,		//	2007.02.08 genta Pythonアウトライン解析
-	OUTLINE_ERLANG,		//	2009.08.10 genta Erlangアウトライン解析
+	OUTLINE_FILE,		// 2002.04.01 YAZAKI ルールファイル用
+	OUTLINE_PYTHON,		// 2007.02.08 genta Pythonアウトライン解析
+	OUTLINE_ERLANG,		// 2009.08.10 genta Erlangアウトライン解析
 	//	新しいアウトライン解析は必ずこの直前へ挿入
 	OUTLINE_CODEMAX,
-	OUTLINE_BOOKMARK,	//	2001.12.03 hor
-	OUTLINE_PLUGIN,		//	2009.10.29 syat プラグインによるアウトライン解析
-	OUTLINE_DEFAULT =-1,//	2001.12.03 hor
+	OUTLINE_BOOKMARK,	// 2001.12.03 hor
+	OUTLINE_PLUGIN,		// 2009.10.29 syat プラグインによるアウトライン解析
+	OUTLINE_DEFAULT =-1,// 2001.12.03 hor
 	OUTLINE_UNKNOWN	= 99,
-	OUTLINE_TREE = 100,		// 汎用ツリー 2010.03.28 syat
+	OUTLINE_TREE = 100,			// 汎用ツリー 2010.03.28 syat
 	OUTLINE_TREE_TAGJUMP = 101,	// 汎用ツリー(タグジャンプ付き) 2013.05.01 Moca
-	OUTLINE_CLSTREE = 200,	// 汎用ツリー(クラス) 2010.03.28 syat
-	OUTLINE_LIST = 300,		// 汎用リスト 2010.03.28 syat
+	OUTLINE_CLSTREE = 200,		// 汎用ツリー(クラス) 2010.03.28 syat
+	OUTLINE_LIST = 300,			// 汎用リスト 2010.03.28 syat
 };
 
 // スマートインデント種別

@@ -3611,12 +3611,11 @@ bool CEditWnd::GetRelatedIcon(const TCHAR* szFile, HICON* hIconBig, HICON* hIcon
 void CEditWnd::InitMenubarMessageFont(void)
 {
 	TEXTMETRIC	tm;
-	LOGFONT		lf;
 	HDC			hdc;
 	HFONT		hFontOld;
 
 	// LOGFONTの初期化
-	memset_raw( &lf, 0, sizeof( lf ) );
+	LOGFONT lf = {0};
 	lf.lfHeight			= DpiPointsToPixels(-9);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;

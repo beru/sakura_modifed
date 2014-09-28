@@ -142,8 +142,6 @@ void CDocLineMgr::DeleteLine( CDocLine* pcDocLineDel )
 */
 CDocLine* CDocLineMgr::GetLine( CLogicInt nLine ) const
 {
-	CLogicInt nCounter;
-	CDocLine* pDocLine;
 	if (CLogicInt(0) == m_nLines) {
 		return NULL;
 	}
@@ -151,6 +149,8 @@ CDocLine* CDocLineMgr::GetLine( CLogicInt nLine ) const
 	if (CLogicInt(0) > nLine || nLine >= m_nLines) {
 		return NULL;
 	}
+	CLogicInt nCounter;
+	CDocLine* pDocLine;
 	// 2004.03.28 Moca m_pCodePrevRefer‚æ‚èATop,Bot‚Ì‚Ù‚¤‚ª‹ß‚¢ê‡‚ÍA‚»‚¿‚ç‚ğ—˜—p‚·‚é
 	CLogicInt nPrevToLineNumDiff = t_abs( m_nPrevReferLine - nLine );
 	if ( !m_pCodePrevRefer

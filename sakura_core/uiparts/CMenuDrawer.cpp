@@ -758,8 +758,7 @@ void CMenuDrawer::ResetContents( void )
 	LOGFONT	lf;
 	m_menuItems.clear();
 
-	NONCLIENTMETRICS	ncm;
-	memset_raw(&ncm, 0, sizeof(ncm));
+	NONCLIENTMETRICS ncm = {0};
 
 	// 以前のプラットフォームに WINVER >= 0x0600 で定義される構造体のフルサイズを渡すと失敗する	// 2007.12.21 ryoji
 	ncm.cbSize = CCSIZEOF_STRUCT( NONCLIENTMETRICS, lfMessageFont );
@@ -858,8 +857,7 @@ void CMenuDrawer::MyAppendMenu(
 #endif
 	}
 
-	MENUITEMINFO mii;
-	memset_raw( &mii, 0, sizeof( mii ) );
+	MENUITEMINFO mii = {0};
 	//	Aug. 31, 2001 genta
 	mii.cbSize = SIZEOF_MENUITEMINFO; //Win95対策済みのsizeof(MENUITEMINFO)値
 
@@ -1160,9 +1158,8 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 #ifdef _DEBUG
 	// デバッグ用：メニュー項目に対して、ヘルプがない場合に背景色を青くする
 	TCHAR	szText[1024];
-	MENUITEMINFO mii;
+	MENUITEMINFO mii = {0};
 	// メニュー項目に関する情報を取得します。
-	memset_raw( &mii, 0, sizeof( mii ) );
 
 	mii.cbSize = SIZEOF_MENUITEMINFO; // Win95対策済みのsizeof(MENUITEMINFO)値
 
@@ -1596,8 +1593,7 @@ LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	for (int i = 0; i < ::GetMenuItemCount( hmenu ); i++) {
 		TCHAR	szText[1024];
 		// メニュー項目に関する情報を取得します。
-		MENUITEMINFO		mii;
-		memset_raw( &mii, 0, sizeof( mii ) );
+		MENUITEMINFO mii = {0};
 
 		mii.cbSize = SIZEOF_MENUITEMINFO; //Win95対策済みのsizeof(MENUITEMINFO)値
 

@@ -11,7 +11,8 @@
 #include "debug/CRunningTimer.h"
 
 //2008.07.27 kobake
-static bool _GetKeywordLength(
+static
+bool _GetKeywordLength(
 	const CStringRef&	cLineStr,		//!< [in]
 	CLogicInt			nPos,			//!< [in]
 	CLogicInt*			p_nWordBgn,		//!< [out]

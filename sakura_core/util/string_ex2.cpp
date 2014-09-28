@@ -73,7 +73,7 @@ int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith)
 	@retval -1 バッファが足りず、\を付加できなかった
 	@date 2003.06.24 Moca 新規作成
 */
-int AddLastChar( TCHAR* pszPath, int nMaxLen, TCHAR c ){
+int AddLastChar( TCHAR* pszPath, int nMaxLen, TCHAR c ) {
 	int pos = _tcslen( pszPath );
 	// 何もないときは\を付加
 	if (0 == pos) {

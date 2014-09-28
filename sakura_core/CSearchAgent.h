@@ -57,7 +57,7 @@ public:
 
 private:
 	// ŠO•”ˆË‘¶
-	const wchar_t*	m_pszKey;
+	const wchar_t* m_pszKey;
 	const SSearchOption* m_psSearchOption;
 	mutable CBregexp* m_pRegexp;
 

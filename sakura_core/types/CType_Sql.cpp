@@ -5,7 +5,7 @@
 #include "doc/logic/CDocLine.h"
 #include "outline/CFuncInfoArr.h"
 
-/* PL/SQL */
+// PL/SQL
 void CType_Sql::InitTypeConfigImp(STypeConfig* pType)
 {
 	//名前と拡張子
@@ -13,16 +13,16 @@ void CType_Sql::InitTypeConfigImp(STypeConfig* pType)
 	_tcscpy( pType->m_szTypeExts, _T("sql,plsql") );
 
 	//設定
-	pType->m_cLineComment.CopyTo( 0, L"--", -1 );					/* 行コメントデリミタ */
-	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );	/* ブロックコメントデリミタ */
-	pType->m_nStringType = STRING_LITERAL_PLSQL;					/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-	wcscpy_s(pType->m_szIndentChars, L"|★");						/* その他のインデント対象文字 */
-	pType->m_nKeyWordSetIdx[0] = 2;									/* キーワードセット */
-	pType->m_eDefaultOutline = OUTLINE_PLSQL;						/* アウトライン解析方法 */
+	pType->m_cLineComment.CopyTo( 0, L"--", -1 );					// 行コメントデリミタ
+	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );	// ブロックコメントデリミタ
+	pType->m_nStringType = STRING_LITERAL_PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	wcscpy_s(pType->m_szIndentChars, L"|★");						// その他のインデント対象文字
+	pType->m_nKeyWordSetIdx[0] = 2;									// キーワードセット
+	pType->m_eDefaultOutline = OUTLINE_PLSQL;						// アウトライン解析方法
 }
 
 
-/*! PL/SQL関数リスト作成 */
+//! PL/SQL関数リスト作成
 void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 {
 	const wchar_t*	pLine;
@@ -49,7 +49,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL( &nLineLen );
 		for (i = 0; i < nLineLen; ++i) {
-			/* 1バイト文字だけを処理する */
+			// 1バイト文字だけを処理する
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
 			if (0 == nCharChars) {
@@ -59,7 +59,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 //				i += (nCharChars - 1);
 //				continue;
 //			}
-			/* シングルクォーテーション文字列読み込み中 */
+			// シングルクォーテーション文字列読み込み中
 			if (20 == nMode) {
 				if (L'\'' == pLine[i]) {
 					if (i + 1 < nLineLen && L'\'' == pLine[i + 1]) {
@@ -71,7 +71,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 				}else {
 				}
 			}else
-			/* コメント読み込み中 */
+			// コメント読み込み中
 			if (8 == nMode) {
 				if (i + 1 < nLineLen && L'*' == pLine[i] &&  L'/' == pLine[i + 1]) {
 					++i;
@@ -80,7 +80,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 				}else {
 				}
 			}else
-			/* 単語読み込み中 */
+			// 単語読み込み中
 			if (1 == nMode) {
 				if ((1 == nCharChars && (
 					L'_' == pLine[i] ||
@@ -135,13 +135,13 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 					}else if (2 == nParseCnt) {
 						if (0 == wcsicmp( szWord, L"IS" )) {
 							if (1 == nFuncOrProc) {
-								nFuncId = 11;	/* ファンクション本体 */
+								nFuncId = 11;	// ファンクション本体
 							}else if (2 == nFuncOrProc) {
-								nFuncId = 21;	/* プロシージャ本体 */
+								nFuncId = 21;	// プロシージャ本体
 							}else if (3 == nFuncOrProc) {
-								nFuncId = 31;	/* パッケージ仕様部 */
+								nFuncId = 31;	// パッケージ仕様部
 							}else if (4 == nFuncOrProc) {
-								nFuncId = 41;	/* パッケージ本体 */
+								nFuncId = 41;	// パッケージ本体
 							}
 							++nFuncNum;
 							/*
@@ -160,7 +160,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 						}
 						if (0 == wcsicmp( szWord, L"AS" )) {
 							if (3 == nFuncOrProc) {
-								nFuncId = 31;	/* パッケージ仕様部 */
+								nFuncId = 31;	// パッケージ仕様部
 								++nFuncNum;
 								/*
 								  カーソル位置変換
@@ -176,7 +176,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 								pcFuncInfoArr->AppendData( nFuncLine, ptPos.GetY2() + CLayoutInt(1) , szFuncName, nFuncId );
 								nParseCnt = 0;
 							}else if (4 == nFuncOrProc) {
-								nFuncId = 41;	/* パッケージ本体 */
+								nFuncId = 41;	// パッケージ本体
 								++nFuncNum;
 								/*
 								  カーソル位置変換
@@ -201,7 +201,7 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 					i--;
 					continue;
 				}
-			/* 記号列読み込み中 */
+			// 記号列読み込み中
 			}else if (2 == nMode) {
 				if (L'_' == pLine[i] ||
 					L'~' == pLine[i] ||
@@ -241,9 +241,9 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 						nWordIdx += (nCharChars);
 					}
 				}
-			/* 長過ぎる単語無視中 */
+			// 長過ぎる単語無視中
 			}else if (999 == nMode) {
-				/* 空白やタブ記号等を飛ばす */
+				// 空白やタブ記号等を飛ばす
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i])
@@ -251,9 +251,9 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 					nMode = 0;
 					continue;
 				}
-			/* ノーマルモード */
+			// ノーマルモード
 			}else if (0 == nMode) {
-				/* 空白やタブ記号等を飛ばす */
+				// 空白やタブ記号等を飛ばす
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i])
@@ -271,9 +271,9 @@ void CDocOutline::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 				}else if (L';' == pLine[i]) {
 					if (2 == nParseCnt) {
 						if (1 == nFuncOrProc) {
-							nFuncId = 10;	/* ファンクション宣言 */
+							nFuncId = 10;	// ファンクション宣言
 						}else {
-							nFuncId = 20;	/* プロシージャ宣言 */
+							nFuncId = 20;	// プロシージャ宣言
 						}
 						++nFuncNum;
 						/*

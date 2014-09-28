@@ -6,7 +6,6 @@
 void CAppMode::OnAfterSave(const SSaveInfo& sSaveInfo)
 {
 	m_bViewMode = false;	// ビューモード
-
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
 	if (IsDebugMode()) {
 		SetDebugModeOFF();	// アウトプットウィンドウは通常ウィンドウ化
@@ -17,7 +16,6 @@ void CAppMode::OnAfterSave(const SSaveInfo& sSaveInfo)
 void CAppMode::SetDebugModeON()
 {
 	auto& shared = GetDllShareData();
-	
 	if (shared.m_sHandles.m_hwndDebug) {
 		if (IsSakuraMainWindow(shared.m_sHandles.m_hwndDebug)) {
 			return;

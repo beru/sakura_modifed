@@ -127,6 +127,8 @@ bool CProfile::ReadProfile( const TCHAR* pszProfileName )
 		return false;
 	}
 
+	OutputDebugString(L"test");
+
 	return true;
 }
 

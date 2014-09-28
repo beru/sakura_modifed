@@ -127,7 +127,7 @@ private:
 public:
 	// 2010.01.30 syat アイコンイメージリストをprivate->public
 	//	Oct. 16, 2000 genta
-	CImageListMgr	*m_pcIcons;	//	Image List
+	CImageListMgr* m_pcIcons;	//	Image List
 
 protected:
 	/*

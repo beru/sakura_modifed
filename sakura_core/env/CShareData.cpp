@@ -226,8 +226,7 @@ bool CShareData::InitShareData()
 //	From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
 //	MS ゴシック標準スタイル10ptに設定
 //		// LOGFONTの初期化
-		LOGFONT lf;
-		memset_raw( &lf, 0, sizeof( lf ) );
+		LOGFONT lf = {0};
 		lf.lfHeight			= DpiPointsToPixels(-10);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
 		lf.lfWidth				= 0;
 		lf.lfEscapement		= 0;

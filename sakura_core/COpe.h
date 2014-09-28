@@ -28,7 +28,7 @@ class CLineData {
 public:
 	CNativeW cmemLine;
 	int nSeq;
-	void swap(CLineData& o){
+	void swap(CLineData& o) {
 		std::swap(cmemLine, o.cmemLine);
 		std::swap(nSeq, o.nSeq);
 	}
@@ -36,8 +36,7 @@ public:
 
 namespace std {
 template <>
-	inline void swap(CLineData& n1, CLineData& n2)
-	{
+	inline void swap(CLineData& n1, CLineData& n2) {
 		n1.swap(n2);
 	}
 }
@@ -71,8 +70,7 @@ public:
 //! 削除
 class CDeleteOpe : public COpe {
 public:
-	CDeleteOpe() : COpe(OPE_DELETE)
-	{
+	CDeleteOpe() : COpe(OPE_DELETE) {
 		m_ptCaretPos_PHY_To.Set(CLogicInt(0),CLogicInt(0));
 	}
 	virtual void DUMP( void );	// 編集操作要素のダンプ

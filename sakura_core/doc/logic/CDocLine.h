@@ -45,16 +45,14 @@ public:
 	const wchar_t*	GetPtr() const						{ return m_cLine.GetStringPtr(); }
 	CLogicInt		GetLengthWithEOL() const			{ return m_cLine.GetStringLength(); }	//	CMemoryIterator用
 #ifdef USE_STRICT_INT
-	const wchar_t*	GetDocLineStrWithEOL(int* pnLen) const //###仮の名前、仮の対処
-	{
+	const wchar_t*	GetDocLineStrWithEOL(int* pnLen) const {	//###仮の名前、仮の対処
 		CLogicInt n;
 		const wchar_t* p = GetDocLineStrWithEOL(&n);
 		*pnLen = n;
 		return p;
 	}
 #endif
-	const wchar_t*	GetDocLineStrWithEOL(CLogicInt* pnLen) const //###仮の名前、仮の対処
-	{
+	const wchar_t*	GetDocLineStrWithEOL(CLogicInt* pnLen) const {	//###仮の名前、仮の対処
 		if (this) {
 			*pnLen = GetLengthWithEOL();
 			return GetPtr();
@@ -63,8 +61,7 @@ public:
 			return NULL;
 		}
 	}
-	CStringRef GetStringRefWithEOL() const //###仮の名前、仮の対処
-	{
+	CStringRef GetStringRefWithEOL() const {	//###仮の名前、仮の対処
 		if (this) {
 			return CStringRef(GetPtr(),GetLengthWithEOL());
 		}else {
@@ -91,7 +88,6 @@ public:
 	void _SetPrevLine(CDocLine* pcDocLine) { m_pPrev = pcDocLine; }
 	void _SetNextLine(CDocLine* pcDocLine) { m_pNext = pcDocLine; }
 	
-
 private: //####
 	CDocLine*	m_pPrev;	//!< 一つ前の要素
 	CDocLine*	m_pNext;	//!< 一つ後の要素

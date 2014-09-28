@@ -44,8 +44,6 @@ public:
 	// セーブ前後
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
-
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           状態                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -69,20 +67,17 @@ public:
 	void SetInsMode(bool mode) { m_bInsMode = mode; }
 
 	//! Undo(元に戻す)可能な状態か？
-	bool IsEnableUndo( void ) const
-	{
+	bool IsEnableUndo( void ) const {
 		return m_cOpeBuf.IsEnableUndo();
 	}
 
 	//! Redo(やり直し)可能な状態か？
-	bool IsEnableRedo( void ) const
-	{
+	bool IsEnableRedo( void ) const {
 		return m_cOpeBuf.IsEnableRedo();
 	}
 
 	//! クリップボードから貼り付け可能か？
-	bool IsEnablePaste( void ) const
-	{
+	bool IsEnablePaste( void ) const {
 		return CClipboard::HasValidData();
 	}
 

@@ -39,7 +39,8 @@
 
 
 // "Ç‹Ç≈ÇêÿÇËéÊÇÈ
-static bool GetQuoteFilePath( const wchar_t* pLine, wchar_t* pFile, size_t size ){
+static
+bool GetQuoteFilePath( const wchar_t* pLine, wchar_t* pFile, size_t size ){
 	const wchar_t* pFileEnd = wcschr( pLine, L'\"' );
 	if (pFileEnd) {
 		int nFileLen = pFileEnd - pLine;
@@ -52,8 +53,8 @@ static bool GetQuoteFilePath( const wchar_t* pLine, wchar_t* pFile, size_t size 
 	return false;
 }
 
-
-static bool IsFileExists2( const wchar_t* pszFile )
+static
+bool IsFileExists2( const wchar_t* pszFile )
 {
 	for (int i = 0; pszFile[i]; i++) {
 		if (!WCODE::IsValidFilenameChar(pszFile, i)) {

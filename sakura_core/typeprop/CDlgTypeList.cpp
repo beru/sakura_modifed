@@ -35,33 +35,33 @@ typedef std::basic_string<TCHAR> tstring;
 #define PROGID_BACKUP_NAME	(_T("SakuraEditorBackup"))
 #define ACTION_BACKUP_PATH	(_T("\\ShellBackup"))
 
-//関数プロトタイプ
+// 関数プロトタイプ
 int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstring& destPath);
 int DeleteRegistry(HKEY root, const tstring& path);
 int RegistExt(LPCTSTR sExt, bool bDefProg);
 int UnregistExt(LPCTSTR sExt);
 int CheckExt(LPCTSTR sExt, bool *pbRMenu, bool *pbDblClick);
 
-//内部使用定数
+// 内部使用定数
 static const int PROP_TEMPCHANGE_FLAG = 0x10000;
 
 // タイプ別設定一覧 CDlgTypeList.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12700
-	IDC_BUTTON_TEMPCHANGE,	HIDC_TL_BUTTON_TEMPCHANGE,	//一時適用
-	IDOK,					HIDOK_TL,					//設定
-	IDCANCEL,				HIDCANCEL_TL,				//キャンセル
-	IDC_BUTTON_HELP,		HIDC_TL_BUTTON_HELP,		//ヘルプ
-	IDC_LIST_TYPES,			HIDC_TL_LIST_TYPES,			//リスト
-	IDC_BUTTON_IMPORT,		HIDC_TL_BUTTON_IMPORT,		//インポート
-	IDC_BUTTON_EXPORT,		HIDC_TL_BUTTON_EXPORT,		//エクスポート
-	IDC_BUTTON_INITIALIZE,	HIDC_TL_BUTTON_INIT,		//初期化
-	IDC_BUTTON_COPY_TYPE,	HIDC_BUTTON_COPY_TYPE,		//複製
-	IDC_BUTTON_UP_TYPE,		HIDC_BUTTON_UP_TYPE,		//↑
-	IDC_BUTTON_DOWN_TYPE,	HIDC_BUTTON_DOWN_TYPE,		//↓
-	IDC_BUTTON_ADD_TYPE,	HIDC_BUTTON_ADD_TYPE,		//追加
-	IDC_BUTTON_DEL_TYPE,	HIDC_BUTTON_DEL_TYPE,		//削除
-	IDC_CHECK_EXT_RMENU,	HIDC_TL_CHECK_RMENU,		//右クリックメニューに追加
-	IDC_CHECK_EXT_DBLCLICK,	HIDC_TL_CHECK_DBLCLICK,		//ダブルクリックで開く
+	IDC_BUTTON_TEMPCHANGE,	HIDC_TL_BUTTON_TEMPCHANGE,	// 一時適用
+	IDOK,					HIDOK_TL,					// 設定
+	IDCANCEL,				HIDCANCEL_TL,				// キャンセル
+	IDC_BUTTON_HELP,		HIDC_TL_BUTTON_HELP,		// ヘルプ
+	IDC_LIST_TYPES,			HIDC_TL_LIST_TYPES,			// リスト
+	IDC_BUTTON_IMPORT,		HIDC_TL_BUTTON_IMPORT,		// インポート
+	IDC_BUTTON_EXPORT,		HIDC_TL_BUTTON_EXPORT,		// エクスポート
+	IDC_BUTTON_INITIALIZE,	HIDC_TL_BUTTON_INIT,		// 初期化
+	IDC_BUTTON_COPY_TYPE,	HIDC_BUTTON_COPY_TYPE,		// 複製
+	IDC_BUTTON_UP_TYPE,		HIDC_BUTTON_UP_TYPE,		// ↑
+	IDC_BUTTON_DOWN_TYPE,	HIDC_BUTTON_DOWN_TYPE,		// ↓
+	IDC_BUTTON_ADD_TYPE,	HIDC_BUTTON_ADD_TYPE,		// 追加
+	IDC_BUTTON_DEL_TYPE,	HIDC_BUTTON_DEL_TYPE,		// 削除
+	IDC_CHECK_EXT_RMENU,	HIDC_TL_CHECK_RMENU,		// 右クリックメニューに追加
+	IDC_CHECK_EXT_DBLCLICK,	HIDC_TL_CHECK_DBLCLICK,		// ダブルクリックで開く
 //	IDC_STATIC,				-1,
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
@@ -77,7 +77,7 @@ int CDlgTypeList::DoModal( HINSTANCE hInstance, HWND hwndParent, SResult* psResu
 	if (-1 == nRet) {
 		return FALSE;
 	}else {
-		//結果
+		// 結果
 		psResult->cDocumentType = CTypeConfig(nRet & ~PROP_TEMPCHANGE_FLAG);
 		psResult->bTempChange   = ((nRet & PROP_TEMPCHANGE_FLAG) != 0);
 		return TRUE;

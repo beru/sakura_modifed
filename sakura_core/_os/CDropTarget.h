@@ -49,8 +49,11 @@ protected:
 };
 
 
-template<class BASEINTERFACE>
-class CYbInterfaceImpl : public BASEINTERFACE, public CYbInterfaceBase {
+template <class BASEINTERFACE>
+class CYbInterfaceImpl :
+	public BASEINTERFACE,
+	public CYbInterfaceBase
+{
 private:
 	static REFIID m_owniid;
 public:

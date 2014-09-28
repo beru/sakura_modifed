@@ -6,7 +6,7 @@
 #include "outline/CFuncInfoArr.h"
 #include "view/Colors/EColorIndexType.h"
 
-/* アセンブラ */
+// アセンブラ
 //	2004.05.01 MIK/genta
 //Mar. 10, 2001 JEPRO	半角数値を色分け表示
 void CType_Asm::InitTypeConfigImp(STypeConfig* pType)
@@ -16,8 +16,8 @@ void CType_Asm::InitTypeConfigImp(STypeConfig* pType)
 	_tcscpy( pType->m_szTypeExts, _T("asm") );
 
 	//設定
-	pType->m_cLineComment.CopyTo( 0, L";", -1 );			/* 行コメントデリミタ */
-	pType->m_eDefaultOutline = OUTLINE_ASM;					/* アウトライン解析方法 */
+	pType->m_cLineComment.CopyTo( 0, L";", -1 );			// 行コメントデリミタ
+	pType->m_eDefaultOutline = OUTLINE_ASM;					// アウトライン解析方法
 	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;
 }
 

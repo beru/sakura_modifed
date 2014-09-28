@@ -30,47 +30,47 @@
 #include "sakura.hh"
 
 static const DWORD p_helpids1[] = {	//11300
-	IDC_EDIT_TYPENAME,				HIDC_EDIT_TYPENAME,			//設定の名前
-	IDC_EDIT_TYPEEXTS,				HIDC_EDIT_TYPEEXTS,			//ファイル拡張子
+	IDC_EDIT_TYPENAME,				HIDC_EDIT_TYPENAME,			// 設定の名前
+	IDC_EDIT_TYPEEXTS,				HIDC_EDIT_TYPEEXTS,			// ファイル拡張子
 
-	IDC_COMBO_WRAPMETHOD,			HIDC_COMBO_WRAPMETHOD,		//テキストの折り返し方法		// 2008.05.30 nasukoji
-	IDC_EDIT_MAXLINELEN,			HIDC_EDIT_MAXLINELEN,		//折り返し桁数
+	IDC_COMBO_WRAPMETHOD,			HIDC_COMBO_WRAPMETHOD,		// テキストの折り返し方法		// 2008.05.30 nasukoji
+	IDC_EDIT_MAXLINELEN,			HIDC_EDIT_MAXLINELEN,		// 折り返し桁数
 	IDC_SPIN_MAXLINELEN,			HIDC_EDIT_MAXLINELEN,
-	IDC_EDIT_CHARSPACE,				HIDC_EDIT_CHARSPACE,		//文字の間隔
+	IDC_EDIT_CHARSPACE,				HIDC_EDIT_CHARSPACE,		// 文字の間隔
 	IDC_SPIN_CHARSPACE,				HIDC_EDIT_CHARSPACE,
-	IDC_EDIT_LINESPACE,				HIDC_EDIT_LINESPACE,		//行の間隔
+	IDC_EDIT_LINESPACE,				HIDC_EDIT_LINESPACE,		// 行の間隔
 	IDC_SPIN_LINESPACE,				HIDC_EDIT_LINESPACE,
-	IDC_EDIT_TABSPACE,				HIDC_EDIT_TABSPACE,			//TAB幅 // Sep. 19, 2002 genta
+	IDC_EDIT_TABSPACE,				HIDC_EDIT_TABSPACE,			// TAB幅 // Sep. 19, 2002 genta
 	IDC_SPIN_TABSPACE,				HIDC_EDIT_TABSPACE,
-	IDC_EDIT_TABVIEWSTRING,			HIDC_EDIT_TABVIEWSTRING,	//TAB表示文字列
-	IDC_CHECK_TAB_ARROW,			HIDC_CHECK_TAB_ARROW,		//矢印表示	// 2006.08.06 ryoji
-	IDC_CHECK_INS_SPACE,			HIDC_CHECK_INS_SPACE,		//スペースの挿入
+	IDC_EDIT_TABVIEWSTRING,			HIDC_EDIT_TABVIEWSTRING,	// TAB表示文字列
+	IDC_CHECK_TAB_ARROW,			HIDC_CHECK_TAB_ARROW,		// 矢印表示	// 2006.08.06 ryoji
+	IDC_CHECK_INS_SPACE,			HIDC_CHECK_INS_SPACE,		// スペースの挿入
 
-	IDC_CHECK_INDENT,				HIDC_CHECK_INDENT,			//自動インデント	// 2006.08.19 ryoji
-	IDC_CHECK_INDENT_WSPACE,		HIDC_CHECK_INDENT_WSPACE,	//全角空白もインデント	// 2006.08.19 ryoji
-	IDC_COMBO_SMARTINDENT,			HIDC_COMBO_SMARTINDENT,		//スマートインデント
-	IDC_EDIT_INDENTCHARS,			HIDC_EDIT_INDENTCHARS,		//その他のインデント対象文字
-	IDC_COMBO_INDENTLAYOUT,			HIDC_COMBO_INDENTLAYOUT,	//折り返し行インデント	// 2006.08.06 ryoji
-	IDC_CHECK_RTRIM_PREVLINE,		HIDC_CHECK_RTRIM_PREVLINE,	//改行時に末尾の空白を削除	// 2006.08.06 ryoji
+	IDC_CHECK_INDENT,				HIDC_CHECK_INDENT,			// 自動インデント	// 2006.08.19 ryoji
+	IDC_CHECK_INDENT_WSPACE,		HIDC_CHECK_INDENT_WSPACE,	// 全角空白もインデント	// 2006.08.19 ryoji
+	IDC_COMBO_SMARTINDENT,			HIDC_COMBO_SMARTINDENT,		// スマートインデント
+	IDC_EDIT_INDENTCHARS,			HIDC_EDIT_INDENTCHARS,		// その他のインデント対象文字
+	IDC_COMBO_INDENTLAYOUT,			HIDC_COMBO_INDENTLAYOUT,	// 折り返し行インデント	// 2006.08.06 ryoji
+	IDC_CHECK_RTRIM_PREVLINE,		HIDC_CHECK_RTRIM_PREVLINE,	// 改行時に末尾の空白を削除	// 2006.08.06 ryoji
 
-	IDC_RADIO_OUTLINEDEFAULT,		HIDC_RADIO_OUTLINEDEFAULT,	//標準ルール	// 2006.08.06 ryoji
-	IDC_COMBO_OUTLINES,				HIDC_COMBO_OUTLINES,		//アウトライン解析方法
-	IDC_RADIO_OUTLINERULEFILE,		HIDC_RADIO_OUTLINERULEFILE,	//ルールファイル	// 2006.08.06 ryoji
-	IDC_EDIT_OUTLINERULEFILE,		HIDC_EDIT_OUTLINERULEFILE,	//ルールファイル名	// 2006.08.06 ryoji
-	IDC_BUTTON_RULEFILE_REF,		HIDC_BUTTON_RULEFILE_REF,	//ルールファイル参照	// 2006/09/09 novice
+	IDC_RADIO_OUTLINEDEFAULT,		HIDC_RADIO_OUTLINEDEFAULT,	// 標準ルール	// 2006.08.06 ryoji
+	IDC_COMBO_OUTLINES,				HIDC_COMBO_OUTLINES,		// アウトライン解析方法
+	IDC_RADIO_OUTLINERULEFILE,		HIDC_RADIO_OUTLINERULEFILE,	// ルールファイル	// 2006.08.06 ryoji
+	IDC_EDIT_OUTLINERULEFILE,		HIDC_EDIT_OUTLINERULEFILE,	// ルールファイル名	// 2006.08.06 ryoji
+	IDC_BUTTON_RULEFILE_REF,		HIDC_BUTTON_RULEFILE_REF,	// ルールファイル参照	// 2006/09/09 novice
 
-	IDC_CHECK_USETYPEFONT,			HIDC_CHECK_USETYPEFONT,		//タイプ別フォント使用する
-	IDC_BUTTON_TYPEFONT,			HIDC_BUTTON_TYPEFONT,		//タイプ別フォント
+	IDC_CHECK_USETYPEFONT,			HIDC_CHECK_USETYPEFONT,		// タイプ別フォント使用する
+	IDC_BUTTON_TYPEFONT,			HIDC_BUTTON_TYPEFONT,		// タイプ別フォント
 
-	IDC_CHECK_WORDWRAP,				HIDC_CHECK_WORDWRAP,		//英文ワードラップ
-	IDC_CHECK_KINSOKURET,			HIDC_CHECK_KINSOKURET,		//改行文字をぶら下げる	//@@@ 2002.04.14 MIK
-	IDC_CHECK_KINSOKUHIDE,			HIDC_CHECK_KINSOKUHIDE,		//ぶら下げを隠す		// 2012.11.30 Uchi
-	IDC_CHECK_KINSOKUKUTO,			HIDC_CHECK_KINSOKUKUTO,		//句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	IDC_EDIT_KINSOKUKUTO,			HIDC_EDIT_KINSOKUKUTO,		//句読点ぶら下げ文字	// 2009.08.07 ryoji
-	IDC_CHECK_KINSOKUHEAD,			HIDC_CHECK_KINSOKUHEAD,		//行頭禁則	//@@@ 2002.04.08 MIK
-	IDC_EDIT_KINSOKUHEAD,			HIDC_EDIT_KINSOKUHEAD,		//行頭禁則	//@@@ 2002.04.08 MIK
-	IDC_CHECK_KINSOKUTAIL,			HIDC_CHECK_KINSOKUTAIL,		//行末禁則	//@@@ 2002.04.08 MIK
-	IDC_EDIT_KINSOKUTAIL,			HIDC_EDIT_KINSOKUTAIL,		//行末禁則	//@@@ 2002.04.08 MIK
+	IDC_CHECK_WORDWRAP,				HIDC_CHECK_WORDWRAP,		// 英文ワードラップ
+	IDC_CHECK_KINSOKURET,			HIDC_CHECK_KINSOKURET,		// 改行文字をぶら下げる	//@@@ 2002.04.14 MIK
+	IDC_CHECK_KINSOKUHIDE,			HIDC_CHECK_KINSOKUHIDE,		// ぶら下げを隠す		// 2012.11.30 Uchi
+	IDC_CHECK_KINSOKUKUTO,			HIDC_CHECK_KINSOKUKUTO,		// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	IDC_EDIT_KINSOKUKUTO,			HIDC_EDIT_KINSOKUKUTO,		// 句読点ぶら下げ文字	// 2009.08.07 ryoji
+	IDC_CHECK_KINSOKUHEAD,			HIDC_CHECK_KINSOKUHEAD,		// 行頭禁則	//@@@ 2002.04.08 MIK
+	IDC_EDIT_KINSOKUHEAD,			HIDC_EDIT_KINSOKUHEAD,		// 行頭禁則	//@@@ 2002.04.08 MIK
+	IDC_CHECK_KINSOKUTAIL,			HIDC_CHECK_KINSOKUTAIL,		// 行末禁則	//@@@ 2002.04.08 MIK
+	IDC_EDIT_KINSOKUTAIL,			HIDC_EDIT_KINSOKUTAIL,		// 行末禁則	//@@@ 2002.04.08 MIK
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -83,21 +83,21 @@ TYPE_NAME_ID<EOutlineType> OlmArr[] = {
 	{ OUTLINE_PLSQL,	STR_OUTLINE_PLSQL },
 	{ OUTLINE_JAVA,		STR_OUTLINE_JAVA },
 	{ OUTLINE_COBOL,	STR_OUTLINE_COBOL },
-	{ OUTLINE_PERL,		STR_OUTLINE_PERL },			//Sep. 8, 2000 genta
+	{ OUTLINE_PERL,		STR_OUTLINE_PERL },			// Sep. 8, 2000 genta
 	{ OUTLINE_ASM,		STR_OUTLINE_ASM },
 	{ OUTLINE_VB,		STR_OUTLINE_VB },			// 2001/06/23 N.Nakatani
-	{ OUTLINE_PYTHON,	STR_OUTLINE_PYTHON },		//	2007.02.08 genta
-	{ OUTLINE_ERLANG,	STR_OUTLINE_ERLANG },			//	2009.08.10 genta
+	{ OUTLINE_PYTHON,	STR_OUTLINE_PYTHON },		// 2007.02.08 genta
+	{ OUTLINE_ERLANG,	STR_OUTLINE_ERLANG },		// 2009.08.10 genta
 	{ OUTLINE_WZTXT,	STR_OUTLINE_WZ },			// 2003.05.20 zenryaku, 2003.06.23 Moca 名称変更
 	{ OUTLINE_HTML,		STR_OUTLINE_HTML },			// 2003.05.20 zenryaku
-	{ OUTLINE_TEX,		STR_OUTLINE_TEX },		// 2003.07.20 naoh
-	{ OUTLINE_TEXT,		STR_OUTLINE_TEXT }		//Jul. 08, 2001 JEPRO 常に最後尾におく
+	{ OUTLINE_TEX,		STR_OUTLINE_TEX },			// 2003.07.20 naoh
+	{ OUTLINE_TEXT,		STR_OUTLINE_TEXT }			// Jul. 08, 2001 JEPRO 常に最後尾におく
 };
 
 TYPE_NAME_ID<ETabArrow> TabArrowArr[] = {
-	{ TABARROW_STRING,	STR_TAB_SYMBOL_CHARA },			//_T("文字指定")
-	{ TABARROW_SHORT,	STR_TAB_SYMBOL_SHORT_ARROW },	//_T("短い矢印")
-	{ TABARROW_LONG,	STR_TAB_SYMBOL_LONG_ARROW },	//_T("長い矢印")
+	{ TABARROW_STRING,	STR_TAB_SYMBOL_CHARA },			// _T("文字指定")
+	{ TABARROW_SHORT,	STR_TAB_SYMBOL_SHORT_ARROW },	// _T("短い矢印")
+	{ TABARROW_LONG,	STR_TAB_SYMBOL_LONG_ARROW },	// _T("長い矢印")
 };
 
 TYPE_NAME_ID<ESmartIndentType> SmartIndentArr[] = {
@@ -111,31 +111,31 @@ TYPE_NAME_ID<ESmartIndentType> SmartIndentArr[] = {
 	@date Oct. 1, 2002 genta 
 */
 TYPE_NAME_ID<int> IndentTypeArr[] = {
-	{ 0, STR_WRAP_INDENT_NONE },	//_T("なし")
-	{ 1, STR_WRAP_INDENT_TX2X },	//_T("tx2x")
-	{ 2, STR_WRAP_INDENT_BOL },		//_T("論理行先頭")
+	{ 0, STR_WRAP_INDENT_NONE },	// _T("なし")
+	{ 1, STR_WRAP_INDENT_TX2X },	// _T("tx2x")
+	{ 2, STR_WRAP_INDENT_BOL },		// _T("論理行先頭")
 };
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
 TYPE_NAME_ID<int> WrapMethodArr[] = {
-	{ WRAP_NO_TEXT_WRAP,	STR_WRAP_METHOD_NO_WRAP },	//_T("折り返さない")
-	{ WRAP_SETTING_WIDTH,	STR_WRAP_METHOD_SPEC_WIDTH },	//_T("指定桁で折り返す")
-	{ WRAP_WINDOW_WIDTH,	STR_WRAP_METHOD_WIN_WIDTH },	//_T("右端で折り返す")
+	{ WRAP_NO_TEXT_WRAP,	STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
+	{ WRAP_SETTING_WIDTH,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
+	{ WRAP_WINDOW_WIDTH,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
 };
 
-//静的メンバ
+// 静的メンバ
 std::vector<TYPE_NAME_ID2<EOutlineType> > CPropTypes::m_OlmArr;	//!<アウトライン解析ルール配列
 std::vector<TYPE_NAME_ID2<ESmartIndentType> > CPropTypes::m_SIndentArr;	//!<スマートインデントルール配列
 
-//スクリーンタブの初期化
+// スクリーンタブの初期化
 void CPropTypesScreen::CPropTypes_Screen()
 {
-	//プラグイン無効の場合、ここで静的メンバを初期化する。プラグイン有効の場合はAddXXXMethod内で初期化する。
+	// プラグイン無効の場合、ここで静的メンバを初期化する。プラグイン有効の場合はAddXXXMethod内で初期化する。
 	if (m_OlmArr.empty()) {
-		InitTypeNameId2(m_OlmArr, OlmArr, _countof(OlmArr));	//アウトライン解析ルール
+		InitTypeNameId2(m_OlmArr, OlmArr, _countof(OlmArr));	// アウトライン解析ルール
 	}
 	if (m_SIndentArr.empty()) {
-		InitTypeNameId2(m_SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	//スマートインデントルール
+		InitTypeNameId2(m_SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	// スマートインデントルール
 	}
 }
 
@@ -285,8 +285,8 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 					m_hTypeFont = hFont;
 				}
 				return TRUE;
-			case IDC_CHECK_KINSOKURET:		//改行文字をぶら下げる
-			case IDC_CHECK_KINSOKUKUTO:		//句読点をぶら下げる
+			case IDC_CHECK_KINSOKURET:		// 改行文字をぶら下げる
+			case IDC_CHECK_KINSOKUKUTO:		// 句読点をぶら下げる
 				// ぶら下げを隠すの有効化	2012/11/30 Uchi
 				::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_KINSOKUHIDE ), 
 					::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KINSOKURET ) 
@@ -436,8 +436,8 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 // ダイアログデータの設定 Screen
 void CPropTypesScreen::SetData( HWND hwndDlg )
 {
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName );	//設定の名前
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPEEXTS, m_Types.m_szTypeExts );	//ファイル拡張子
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName );	// 設定の名前
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_TYPEEXTS, m_Types.m_szTypeExts );	// ファイル拡張子
 
 	// レイアウト
 	{
@@ -475,7 +475,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		::CheckDlgButtonBool( hwndDlg, IDC_CHECK_INS_SPACE, m_Types.m_bInsSpace );				// SPACEの挿入 [チェックボックス]	// From Here 2001.12.03 hor
 	}
 
-	//インデント
+	// インデント
 	{
 		// 自動インデント
 		::CheckDlgButtonBool( hwndDlg, IDC_CHECK_INDENT, m_Types.m_bAutoIndent );
@@ -503,7 +503,7 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		// その他のインデント対象文字
 		::DlgItem_SetText( hwndDlg, IDC_EDIT_INDENTCHARS, m_Types.m_szIndentChars );
 
-		//折り返し行インデント	//	Oct. 1, 2002 genta コンボボックスに変更
+		// 折り返し行インデント	//	Oct. 1, 2002 genta コンボボックスに変更
 		hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_INDENTLAYOUT );
 		Combo_ResetContent( hwndCombo );
 		nSelPos = 0;
@@ -519,10 +519,10 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		::CheckDlgButton( hwndDlg, IDC_CHECK_RTRIM_PREVLINE, m_Types.m_bRTrimPrevLine );
 	}
 
-	//アウトライン解析方法
-	//2002.04.01 YAZAKI ルールファイル関連追加
+	// アウトライン解析方法
+	// 2002.04.01 YAZAKI ルールファイル関連追加
 	{
-		//標準ルールのコンボボックス初期化
+		// 標準ルールのコンボボックス初期化
 		HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES );
 		Combo_ResetContent( hwndCombo );
 		int		nSelPos = 0;
@@ -538,11 +538,11 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 			}
 		}
 
-		//ルールファイル	// 2003.06.23 Moca ルールファイル名は使わなくてもセットしておく
+		// ルールファイル	// 2003.06.23 Moca ルールファイル名は使わなくてもセットしておく
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_OUTLINERULEFILE ), TRUE );
 		::DlgItem_SetText( hwndDlg, IDC_EDIT_OUTLINERULEFILE, m_Types.m_szOutlineRuleFilename );
 
-		//標準ルール
+		// 標準ルール
 		if (m_Types.m_eDefaultOutline != OUTLINE_FILE) {
 			::CheckDlgButton( hwndDlg, IDC_RADIO_OUTLINEDEFAULT, TRUE );
 			::CheckDlgButton( hwndDlg, IDC_RADIO_OUTLINERULEFILE, FALSE );
@@ -562,14 +562,14 @@ void CPropTypesScreen::SetData( HWND hwndDlg )
 		}
 	}
 
-	//フォント
+	// フォント
 	{
 		::CheckDlgButton( hwndDlg, IDC_CHECK_USETYPEFONT, m_Types.m_bUseTypeFont );			// タイプ別フォントの使用
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_USETYPEFONT ), m_Types.m_bUseTypeFont );
 		m_hTypeFont = SetFontLabel( hwndDlg, IDC_STATIC_TYPEFONT, m_Types.m_lf, m_Types.m_nPointSize, m_Types.m_bUseTypeFont);
 	}
 
-	//その他
+	// その他
 	{
 		// 英文ワードラップをする
 		::CheckDlgButtonBool( hwndDlg, IDC_CHECK_WORDWRAP, m_Types.m_bWordWrap );
@@ -599,7 +599,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName, _countof( m_Types.m_szTypeName ) );	// 設定の名前
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_TYPEEXTS, m_Types.m_szTypeExts, _countof( m_Types.m_szTypeExts ) );	// ファイル拡張子
 
-	//レイアウト
+	// レイアウト
 	{
 		// 2008.05.30 nasukoji	テキストの折り返し方法
 		HWND	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WRAPMETHOD );
@@ -662,7 +662,7 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 		m_Types.m_bInsSpace = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INS_SPACE );
 	}
 
-	//インデント
+	// インデント
 	{
 		// 自動インデント
 		m_Types.m_bAutoIndent = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INDENT );
@@ -689,8 +689,8 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 		m_Types.m_bRTrimPrevLine = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_RTRIM_PREVLINE );
 	}
 
-	//アウトライン解析方法
-	//2002.04.01 YAZAKI ルールファイル関連追加
+	// アウトライン解析方法
+	// 2002.04.01 YAZAKI ルールファイル関連追加
 	{
 		// 標準ルール
 		if (!::IsDlgButtonChecked( hwndDlg, IDC_RADIO_OUTLINERULEFILE)) {
@@ -741,11 +741,11 @@ int CPropTypesScreen::GetData( HWND hwndDlg )
 	return TRUE;
 }
 
-//アウトライン解析ルールの追加
+// アウトライン解析ルールの追加
 void CPropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
 {
 	if (m_OlmArr.empty()) {
-		InitTypeNameId2(m_OlmArr, OlmArr, _countof(OlmArr));	//アウトライン解析ルール
+		InitTypeNameId2(m_OlmArr, OlmArr, _countof(OlmArr));	// アウトライン解析ルール
 	}
 	TYPE_NAME_ID2<EOutlineType> method;
 	method.nMethod = (EOutlineType)nMethod;
@@ -773,7 +773,7 @@ void CPropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
 void CPropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
 {
 	if (m_SIndentArr.empty()) {
-		InitTypeNameId2(m_SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	//スマートインデントルール
+		InitTypeNameId2(m_SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	// スマートインデントルール
 	}
 	TYPE_NAME_ID2<ESmartIndentType> method;
 	method.nMethod = (ESmartIndentType)nMethod;

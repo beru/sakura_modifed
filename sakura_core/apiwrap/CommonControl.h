@@ -44,15 +44,15 @@ namespace ApiWrap {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                  プログレスバー コントロール                //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline int Progress_SetRange(HWND hwndCtl, int minimum, int maximum)	{ return (int)(DWORD)::SendMessage(hwndCtl, PBM_SETRANGE, 0L, MAKELPARAM(minimum, maximum)); }
-	inline int Progress_SetPos(HWND hwndCtl, int position)					{ return (int)(DWORD)::SendMessage(hwndCtl, PBM_SETPOS, (WPARAM)position, 0L); }
+	inline int Progress_SetRange(HWND hwndCtl, int minimum, int maximum)		{ return (int)(DWORD)::SendMessage(hwndCtl, PBM_SETRANGE, 0L, MAKELPARAM(minimum, maximum)); }
+	inline int Progress_SetPos(HWND hwndCtl, int position)						{ return (int)(DWORD)::SendMessage(hwndCtl, PBM_SETPOS, (WPARAM)position, 0L); }
 	inline void Progress_SetMarquee(HWND hwndCtl, BOOL mode, int updateTime)	{ ::SendMessage(hwndCtl, PBM_SETMARQUEE, mode, updateTime); }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      Up-Down コントロール                   //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	inline LRESULT UpDown_SetRange(HWND hwndCtl, int upper, int lower)	{ return (LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, UDM_SETRANGE, 0L, MAKELPARAM(upper, lower)); }
-	inline LRESULT UpDown_GetPos(HWND hwndCtl)							{ return (LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, UDM_GETPOS, 0L, 0L); }
+	inline LRESULT UpDown_SetRange(HWND hwndCtl, int upper, int lower)			{ return (LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, UDM_SETRANGE, 0L, MAKELPARAM(upper, lower)); }
+	inline LRESULT UpDown_GetPos(HWND hwndCtl)									{ return (LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, UDM_GETPOS, 0L, 0L); }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      Rebar コントロール                     //

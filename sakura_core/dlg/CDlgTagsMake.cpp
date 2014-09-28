@@ -67,7 +67,6 @@ int CDlgTagsMake::DoModal(
 )
 {
 	_tcscpy_s( m_szPath, pszPath );
-
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_TAG_MAKE, lParam );
 }
 
@@ -116,7 +115,7 @@ BOOL CDlgTagsMake::OnBnClicked( int wID )
 */
 void CDlgTagsMake::SelectFolder( HWND hwndDlg )
 {
-	TCHAR	szPath[_MAX_PATH + 1];
+	TCHAR szPath[_MAX_PATH + 1];
 
 	// ƒtƒHƒ‹ƒ_
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_TAG_MAKE_FOLDER, szPath, _MAX_PATH );

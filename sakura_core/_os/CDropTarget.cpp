@@ -20,7 +20,6 @@
 #include "_main/global.h"
 #include "CClipboard.h"
 
-
 COleLibrary CYbInterfaceBase::m_olelib;
 
 CYbInterfaceBase::CYbInterfaceBase()
@@ -85,7 +84,7 @@ void COleLibrary::UnInitialize()
 
 
 #define DECLARE_YB_INTERFACEIMPL( BASEINTERFACE ) \
-template<> REFIID CYbInterfaceImpl<BASEINTERFACE>::m_owniid = IID_##BASEINTERFACE;
+template <> REFIID CYbInterfaceImpl<BASEINTERFACE>::m_owniid = IID_##BASEINTERFACE;
 
 DECLARE_YB_INTERFACEIMPL( IDataObject )
 DECLARE_YB_INTERFACEIMPL( IDropSource )

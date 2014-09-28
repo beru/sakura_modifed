@@ -31,14 +31,15 @@ class CControlTray;
 */
 class CControlProcess : public CProcess {
 public:
-	CControlProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine ) : 
+	CControlProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine ) :
 		CProcess( hInstance, lpCmdLine ),
 		// 2006.04.10 ryoji 同期オブジェクトのハンドルを初期化
 		m_hMutex( NULL ),
 		m_hMutexCP( NULL ),
 		m_hEventCPInitialized( NULL ),
 		m_pcTray( 0 )
-	{}
+	{
+	}
 
 	virtual ~CControlProcess();
 protected:

@@ -17,7 +17,9 @@
 #include "mem/CMemory.h"
 
 CDocLine::CDocLine()
-: m_pPrev( NULL ), m_pNext( NULL )
+	:
+	m_pPrev( NULL ),
+	m_pNext( NULL )
 {
 }
 

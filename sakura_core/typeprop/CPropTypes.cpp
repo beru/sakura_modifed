@@ -131,8 +131,8 @@ struct TypePropSheetInfo {
 // プロパティシートの作成
 INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 {
-	INT_PTR				nRet;
-	int					nIdx;
+	INT_PTR	nRet;
+	int		nIdx;
 
 	// 2001/06/14 Start by asa-o: タイプ別設定に支援タブ追加
 	// 2001.11.17 add start MIK タイプ別設定に正規表現キーワードタブ追加
@@ -151,15 +151,15 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 	m_dwCustColors[0] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
 	m_dwCustColors[1] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
 
-	std::tstring		sTabname[_countof(TypePropSheetInfoList)];
+	std::tstring sTabname[_countof(TypePropSheetInfoList)];
 	m_bChangeKeyWordSet = false;
-	PROPSHEETPAGE		psp[_countof(TypePropSheetInfoList)];
+	PROPSHEETPAGE psp[_countof(TypePropSheetInfoList)];
 	for (nIdx = 0; nIdx < _countof(TypePropSheetInfoList); nIdx++) {
 		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].m_nTabNameId);
 
-		PROPSHEETPAGE *p = &psp[nIdx];
-		memset_raw( p, 0, sizeof_raw( *p ) );
-		p->dwSize      = sizeof_raw( *p );
+		PROPSHEETPAGE* p = &psp[nIdx];
+		memset_raw( p, 0, sizeof_raw(*p) );
+		p->dwSize      = sizeof_raw(*p);
 		p->dwFlags     = PSP_USETITLE | PSP_HASHELP;
 		p->hInstance   = CSelectLang::getLangRsrcInstance();
 		p->pszTemplate = MAKEINTRESOURCE( TypePropSheetInfoList[nIdx].resId );
@@ -170,8 +170,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 		p->pfnCallback = NULL;
 	}
 
-	PROPSHEETHEADER		psh;
-	memset_raw( &psh, 0, sizeof_raw( psh ) );
+	PROPSHEETHEADER	psh = {0};
 
 	//	Jun. 29, 2002 こおり
 	//	Windows 95対策．Property SheetのサイズをWindows95が認識できる物に固定する．

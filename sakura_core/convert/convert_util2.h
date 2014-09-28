@@ -81,7 +81,7 @@ inline int _HexToInt( WCHAR c )
 	}
 }
 
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 {
 	const CHAR_TYPE* pr;
@@ -147,12 +147,12 @@ extern const char TABLE_ValueToBASE64Char[];
 
 
 // BASE64文字 <-> 数値
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 inline uchar_t Base64ToVal( const CHAR_TYPE c ){
 	int c_ = c;
 	return static_cast<uchar_t>((c_ < 0x80)? TABLE_BASE64CharToValue[c_] : -1);
 }
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 inline CHAR_TYPE ValToBase64( const char v ){
 	int v_ = v;
 	return static_cast<CHAR_TYPE>((v_ < 64)? TABLE_ValueToBASE64Char[v_] : -1);
@@ -165,7 +165,7 @@ inline CHAR_TYPE ValToBase64( const char v ){
 	
 	入力：BASE64 文字列。
 */
-template< class CHAR_TYPE >
+template<class CHAR_TYPE>
 bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
 {
 	bool bret = true;
@@ -207,7 +207,7 @@ bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
 	前の実装を参考に。
 	正しい BASE64 入力文字列を仮定している。
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 {
 	long lData;
@@ -260,7 +260,7 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	前の実装を参考に。
 	パッド文字などは付加しない。エラーチェックなし。
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 int _EncodeBase64( const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest )
 {
 	const unsigned char* psrc;
@@ -363,7 +363,7 @@ inline BYTE _UUDECODE_CHAR( ACHAR c )
 	@return 一行分をデコードした結果得られた生データのバイト長
 	        書き込んだデータが戻り値よりも大きいときがあるので注意。
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 {
 	unsigned long lDataDes;
@@ -394,7 +394,7 @@ int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 /*!
 	UUエンコードのヘッダー部分を解析
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 {
 //	using namespace WCODE;
@@ -518,7 +518,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 /*!
 	UU フッターを確認
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 bool CheckUUFooter( const CHAR_TYPE *pS, const int nLen )
 {
 	int nstartidx;
@@ -605,7 +605,7 @@ enum EEncodingMethod {
 
 	@return  CMemory と置き換えられる入力文字列長 (nSkipLen)
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_alt, ECodeType* peCodetype )
 {
 	ECodeType ecode = CODE_NONE;

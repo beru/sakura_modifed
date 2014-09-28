@@ -90,10 +90,10 @@ public:
 	void SetFilePathAndIcon(const TCHAR* szFile);	// Sep. 9, 2002 genta
 
 	// 属性
-	ECodeType	GetDocumentEncoding() const;				//!< ドキュメントの文字コードを取得
-	bool		GetDocumentBomExist() const;				//!< ドキュメントのBOM付加を取得
+	ECodeType	GetDocumentEncoding() const;							//!< ドキュメントの文字コードを取得
+	bool		GetDocumentBomExist() const;							//!< ドキュメントのBOM付加を取得
 	void		SetDocumentEncoding(ECodeType eCharCode, bool bBom);	//!< ドキュメントの文字コードを設定
-	bool IsModificationForbidden( EFunctionCode nCommand ) const;	//!< 指定コマンドによる書き換えが禁止されているかどうか	//Aug. 14, 2000 genta
+	bool IsModificationForbidden( EFunctionCode nCommand ) const;		//!< 指定コマンドによる書き換えが禁止されているかどうか	//Aug. 14, 2000 genta
 	bool IsEditable() const { return !CAppMode::getInstance()->IsViewMode() && !(!m_cDocLocker.IsDocWritable() && GetDllShareData().m_Common.m_sFile.m_bUneditableIfUnwritable); }	//!< 編集可能かどうか
 	void GetSaveInfo(SSaveInfo* pSaveInfo) const;			//!< セーブ情報を取得
 
@@ -104,8 +104,8 @@ public:
 	// イベント
 	BOOL HandleCommand( EFunctionCode );
 	void OnChangeType();
-	void OnChangeSetting(bool bDoLayout = true);		// ビューに設定変更を反映させる
-	BOOL OnFileClose();									// ファイルを閉じるときのMRU登録 & 保存確認 ＆ 保存実行
+	void OnChangeSetting(bool bDoLayout = true);					// ビューに設定変更を反映させる
+	BOOL OnFileClose();												// ファイルを閉じるときのMRU登録 & 保存確認 ＆ 保存実行
 
 	void RunAutoMacro( int idx, LPCTSTR pszSaveFilePath = NULL );	// 2006.09.01 ryoji マクロ自動実行
 

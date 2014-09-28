@@ -114,13 +114,10 @@ void CMemory::_AddData( const void* pData, int nDataLen )
 // 等しい内容か
 int CMemory::IsEqual( CMemory& cmem1, CMemory& cmem2 )
 {
-	const char*	psz1;
-	const char*	psz2;
 	int		nLen1;
 	int		nLen2;
-
-	psz1 = (const char*)cmem1.GetRawPtr( &nLen1 );
-	psz2 = (const char*)cmem2.GetRawPtr( &nLen2 );
+	const char*	psz1 = (const char*)cmem1.GetRawPtr( &nLen1 );
+	const char*	psz2 = (const char*)cmem2.GetRawPtr( &nLen2 );
 	if (nLen1 == nLen2) {
 		if (0 == memcmp( psz1, psz2, nLen1 )) {
 			return TRUE;
@@ -234,7 +231,7 @@ void CMemory::SwapHLByte( void ){
 */
 void CMemory::AllocBuffer( int nNewDataLen )
 {
-	char*	pWork = NULL;
+	char* pWork = NULL;
 
 	// 2バイト多くメモリ確保しておく('\0'またはL'\0'を入れるため) 2007.08.13 kobake 変更
 	int nWorkLen = nNewDataLen + 2;

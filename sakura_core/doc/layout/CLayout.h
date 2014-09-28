@@ -58,25 +58,25 @@ public:
 	void DUMP( void );
 	
 	// m_ptLogicPos.xで補正したあとの文字列を得る
-	const wchar_t* GetPtr() const   { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; }
-	CLogicInt GetLengthWithEOL() const    { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
+	const wchar_t* GetPtr() const { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; }
+	CLogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
 	CLogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	}
-	//CLogicInt GetLength() const {	return m_nLength;	}	//	CMemoryIterator用（EOL含む）
-	CLayoutInt GetIndent() const {	return m_nIndent;	}	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
+	//CLogicInt GetLength() const { return m_nLength; }	//	CMemoryIterator用（EOL含む）
+	CLayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
-	CLogicInt GetLogicLineNo() const{ if(this)return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
-	CLogicInt GetLogicOffset() const{ return m_ptLogicPos.GetX2(); }
-	CLogicPoint GetLogicPos() const{ return m_ptLogicPos; }
-	EColorIndexType GetColorTypePrev() const{ return m_nTypePrev; } //#########汚っ
-	CLayoutInt GetLayoutWidth() const{ return m_nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
+	CLogicInt GetLogicLineNo() const { if(this)return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
+	CLogicInt GetLogicOffset() const { return m_ptLogicPos.GetX2(); }
+	CLogicPoint GetLogicPos() const { return m_ptLogicPos; }
+	EColorIndexType GetColorTypePrev() const { return m_nTypePrev; } //#########汚っ
+	CLayoutInt GetLayoutWidth() const { return m_nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
 
 	// 変更インターフェース
-	void OffsetLogicLineNo(CLogicInt n){ m_ptLogicPos.y+=n; }
+	void OffsetLogicLineNo(CLogicInt n) { m_ptLogicPos.y+=n; }
 	void SetColorTypePrev(EColorIndexType n) {
 		m_nTypePrev = n;
 	}
-	void SetLayoutWidth(CLayoutInt nWidth){ m_nLayoutWidth = nWidth; }
+	void SetLayoutWidth(CLayoutInt nWidth) { m_nLayoutWidth = nWidth; }
 
 	//! レイアウト幅を計算。改行は含まない。2007.10.11 kobake
 	CLayoutInt CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const;
@@ -96,15 +96,15 @@ public:
 	void _SetNextLayout(CLayout* pcLayout) { m_pNext = pcLayout; }
 
 	// 実データ参照
-	const CDocLine* GetDocLineRef() const{ if(this)return m_pCDocLine; else return NULL; } //$$note:高速化
+	const CDocLine* GetDocLineRef() const { if (this) return m_pCDocLine; else return NULL; } //$$note:高速化
 
 	// その他属性参照
 	const CEol& GetLayoutEol() const { return m_cEol; }
 	const CLayoutColorInfo* GetColorInfo() const { return m_cExInfo.GetColorInfo(); }
-	CLayoutExInfo* GetLayoutExInfo(){
+	CLayoutExInfo* GetLayoutExInfo() {
 		return &m_cExInfo;
 	}
-
+	
 private:
 	CLayout*			m_pPrev;
 	CLayout*			m_pNext;

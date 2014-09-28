@@ -47,7 +47,6 @@ CTextInputStream::~CTextInputStream()
 {
 }
 
-
 wstring CTextInputStream::ReadLineW()
 {
 	//$$ ”ñŒø—¦‚¾‚¯‚Ç¡‚Ì‚Æ‚±‚ë‚Í‹–‚µ‚ÄBB

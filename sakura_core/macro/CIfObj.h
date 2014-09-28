@@ -37,7 +37,7 @@ class CEditView;
 
 // COM一般
 
-template<class Base>
+template <class Base>
 class ImplementsIUnknown : public Base {
 private:
 	int m_RefCount;
@@ -60,7 +60,7 @@ public:
 // WSH一般
 
 class CIfObj;
-typedef HRESULT (CIfObj::*CIfObjMethod)(int ID, DISPPARAMS *Arguments, VARIANT* Result, void *Data);
+typedef HRESULT (CIfObj::*CIfObjMethod)(int ID, DISPPARAMS* Arguments, VARIANT* Result, void* Data);
 
 // CIfObjが必要とするWSHClientのインタフェース
 class IWSHClient {

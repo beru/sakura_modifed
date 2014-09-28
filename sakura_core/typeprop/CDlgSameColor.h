@@ -49,10 +49,10 @@ protected:
 
 	virtual LPVOID GetHelpIdTable( void );
 	virtual INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );	//! ダイアログのメッセージ処理
-	virtual BOOL OnInitDialog( HWND, WPARAM, LPARAM );			//!< WM_INITDIALOG 処理
-	virtual BOOL OnBnClicked( int );							//!< BN_CLICKED 処理
-	virtual BOOL OnDrawItem( WPARAM wParam, LPARAM lParam );	//!< WM_DRAWITEM 処理
-	BOOL OnSelChangeListColors( HWND hwndCtl );					//!< 色選択リストの LBN_SELCHANGE 処理
+	virtual BOOL OnInitDialog( HWND, WPARAM, LPARAM );				//!< WM_INITDIALOG 処理
+	virtual BOOL OnBnClicked( int );								//!< BN_CLICKED 処理
+	virtual BOOL OnDrawItem( WPARAM wParam, LPARAM lParam );		//!< WM_DRAWITEM 処理
+	BOOL OnSelChangeListColors( HWND hwndCtl );						//!< 色選択リストの LBN_SELCHANGE 処理
 
 	static LRESULT CALLBACK ColorStatic_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	//!< サブクラス化された指定色スタティックのウィンドウプロシージャ
 	static LRESULT CALLBACK ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	//!< サブクラス化された色選択リストのウィンドウプロシージャ
@@ -60,8 +60,8 @@ protected:
 	WNDPROC m_wpColorStaticProc;	//!< サブクラス化以前の指定色スタティックのウィンドウプロシージャ
 	WNDPROC m_wpColorListProc;		//!< サブクラス化以前の色選択リストのウィンドウプロシージャ
 
-	WORD m_wID;			//!< タイプ別設定ダイアログ（親ダイアログ）で押されたボタンID
+	WORD m_wID;				//!< タイプ別設定ダイアログ（親ダイアログ）で押されたボタンID
 	STypeConfig* m_pTypes;	//!< タイプ別設定データ
-	COLORREF m_cr;		//!< 指定色
+	COLORREF m_cr;			//!< 指定色
 };
 

@@ -4,7 +4,7 @@
 #include "util/std_macro.h"
 #include <limits.h>
 
-int __cdecl my_internal_icmp( const char *s1, const char *s2, unsigned int n, unsigned int dcount, bool flag );
+int __cdecl my_internal_icmp( const char* s1, const char* s2, unsigned int n, unsigned int dcount, bool flag );
 
 
 
@@ -23,7 +23,7 @@ int __cdecl my_internal_icmp( const char *s1, const char *s2, unsigned int n, un
 
 	@retval 0	一致
  */
-int __cdecl my_stricmp( const char *s1, const char *s2 )
+int __cdecl my_stricmp( const char* s1, const char* s2 )
 {
 	// チェックする文字数をuint最大に設定する
 	//return my_internal_icmp( s1, s2, (unsigned int)(~0), 0, true );
@@ -37,17 +37,16 @@ int __cdecl my_stricmp( const char *s1, const char *s2 )
 
 	@retval 0	一致
  */
-int __cdecl my_strnicmp( const char *s1, const char *s2, size_t n )
+int __cdecl my_strnicmp( const char* s1, const char* s2, size_t n )
 {
 	return my_internal_icmp( s1, s2, (unsigned int)n, 1, true );
 }
 
-
-LPWSTR wcscpyn(LPWSTR lpString1,LPCWSTR lpString2,int iMaxLength)
+LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, int iMaxLength)
 {
-	size_t len2=wcslen(lpString2);
-	if ((int)len2>iMaxLength-1) len2 = iMaxLength-1;
-	wmemcpy(lpString1,lpString2,len2);
+	size_t len2 = wcslen(lpString2);
+	if ((int)len2 > iMaxLength-1) len2 = iMaxLength-1;
+	wmemcpy(lpString1, lpString2, len2);
 	lpString1[len2] = L'\0';
 	return lpString1;
 }
@@ -86,6 +85,7 @@ TCHAR* strtotcs( TCHAR* dest, const ACHAR* src, size_t count )
 	}
 	return pw;
 }
+
 TCHAR* strtotcs( TCHAR* dest, const WCHAR* src, size_t count )
 {
 	WCHAR* pr = const_cast<WCHAR*>(src);
@@ -114,7 +114,7 @@ TCHAR* strtotcs( TCHAR* dest, const WCHAR* src, size_t count )
 	@author genta
 	@date 2003.04.03 genta
 */
-char* strncpy_ex(char *dst, size_t dst_count, const char* src, size_t src_count)
+char* strncpy_ex(char* dst, size_t dst_count, const char* src, size_t src_count)
 {
 	if (src_count >= dst_count) {
 		src_count = dst_count - 1;
@@ -214,132 +214,6 @@ const char* stristr_j( const char* s1, const char* s2 )
 	}
 	return NULL;
 }
-
-
-// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                           互換                              //
-// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
-#if (defined(_MSC_VER) && _MSC_VER<1400) || defined(__MINGW32__) //VS2005より前なら
-errno_t wcscat_s(wchar_t* szDst, size_t nDstCount, const wchar_t* szSrc)
-{
-	// 本物は _set_invalid_parameter_handler で設定されたハンドラが起動します
-	if (!szDst) return EINVAL;
-	if (!szSrc) return EINVAL;
-
-	size_t nDstLen = wcslen(szDst);
-	if (nDstLen >= nDstCount) return EINVAL;
-
-	size_t nSrcCount = wcslen(szSrc)+1;
-	wchar_t* p = &szDst[nDstLen];           // 追加場所
-	int nRestCount = nDstCount-(p-szDst); // szDstに追加できる要素数
-
-	// はみ出さない
-	if ((int)nSrcCount <= nRestCount) {
-		wmemmove(p,szSrc,nSrcCount);
-	// はみ出す
-	}else {
-		return ERANGE;
-		//wmemmove(p,szSrc,nRestCount-1); p[nRestCount-1]=L'\0';
-	}
-
-	return 0;
-}
-
-errno_t strcat_s(char *dest, size_t num, const char *src)
-{
-	if (!dest || !src) return EINVAL;
-	size_t size1 = strnlen(dest, num);
-	if (size1 == num) return EINVAL; // destが未終了
-	if (num <= size1+strlen(src)) return ERANGE;
-	strcat(dest, src);
-	return 0;
-}
-
-errno_t strcpy_s(char *dest, size_t num, const char *src)
-{
-	if (!dest || !src) return EINVAL;
-	if (num <= strlen(src)) return ERANGE;
-	strcpy(dest, src);
-	return 0;
-}
-errno_t wcscpy_s(wchar_t *dest, size_t num, const wchar_t *src)
-{
-	if (!dest || !src) return EINVAL;
-	if (num <= wcslen(src)) return ERANGE;
-	wcscpy(dest, src);
-	return 0;
-}
-errno_t strncpy_s(char *dest, size_t num, const char *src, size_t count)
-{
-	if (!dest || !src) return EINVAL;
-	if (num == 0) return EINVAL;
-	if (count == _TRUNCATE) {
-		memcpy(dest, src, t_min(num, strlen(src)+1));
-		dest[num-1] = '\0';
-	}else {
-		if (num <= count) { *dest = '\0'; return EINVAL; }
-		memcpy(dest, src, count+1);
-	}
-	return 0;
-}
-errno_t wcsncpy_s(wchar_t *dest, size_t num, const wchar_t *src, size_t count)
-{
-	if (!dest || !src) return EINVAL;
-	if (num == 0) return EINVAL;
-	if (count == _TRUNCATE) {
-		wmemcpy(dest, src, t_min(num, wcslen(src)+1));
-		dest[num-1] = L'\0';
-	}else {
-		if (num <= count) { *dest = L'\0'; return EINVAL; }
-		wmemcpy(dest, src, count+1);
-	}
-	return 0;
-}
-size_t strnlen(const char *str, size_t num)
-{
-	for (size_t i = 0; i < num; ++i) {
-		if (str[i] == '\0') return i;
-	}
-	return num;
-}
-size_t wcsnlen(const wchar_t *str, size_t num)
-{
-	for (size_t i = 0; i < num; ++i) {
-		if (str[i] == L'\0') return i;
-	}
-	return num;
-}
-int vsprintf_s(char *buf, size_t num, const char *fmt, va_list vaarg)
-{
-	// 手抜き
-	if (!buf || num == 0 || !fmt) { errno = EINVAL; return -1; }
-	buf[num-1] = '\0';
-	return _vsnprintf(buf, num-1, fmt, vaarg);
-}
-int vswprintf_s(wchar_t *buf, size_t num, const wchar_t *fmt, va_list vaarg)
-{
-	// 手抜き
-	if (!buf || num == 0 || !fmt) { errno = EINVAL; return -1; }
-	buf[num-1] = L'\0';
-	return _vsnwprintf(buf, num-1, fmt, vaarg);
-}
-int vsnprintf_s(char *buf, size_t num, size_t count, const char *fmt, va_list vaarg)
-{
-	// 手抜き
-	if (!buf || num == 0 || !fmt) { errno = EINVAL; return -1; }
-	buf[num-1] = L'\0';
-	return _vsnprintf(buf, num-1, fmt, vaarg);
-}
-int _vsnwprintf_s(wchar_t *buf, size_t num, size_t count, const wchar_t *fmt, va_list vaarg)
-{
-	// 手抜き
-	if (!buf || num == 0 || !fmt) { errno = EINVAL; return -1; }
-	buf[num-1] = L'\0';
-	return _vsnwprintf(buf, num-1, fmt, vaarg);
-}
-#endif
-
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      文字コード変換                         //

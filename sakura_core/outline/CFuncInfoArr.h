@@ -47,7 +47,7 @@ public:
 	void DUMP( void );
 	void SetAppendText( int info, std::wstring s, bool overwrite );
 	std::wstring GetAppendText( int info );
-	int AppendTextLenMax(){ return m_nAppendTextLenMax; }
+	int AppendTextLenMax() { return m_nAppendTextLenMax; }
 
 public:
 	SFilePath	m_szFilePath;	//!< ‰ðÍ‘ÎÛƒtƒ@ƒCƒ‹–¼

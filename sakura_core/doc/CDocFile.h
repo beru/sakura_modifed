@@ -39,8 +39,7 @@ protected:
 	CFileTime	cFileTime;
 
 public:
-	SFileInfo()
-	{
+	SFileInfo() {
 		eCharCode = eCharCodeLoad = CODE_DEFAULT;
 		bBomExist = bBomExistLoad = false;
 		cFileTime.ClearFILETIME();
@@ -49,7 +48,6 @@ public:
 	void	SetBomExist(bool bBom)					{ bBomExist = bBomExistLoad = bBom; }	//!< BOM•t‰Á‚ðÝ’è
 	void	SetFileTime( FILETIME& Time )			{ cFileTime.SetFILETIME( Time ); }
 };
-
 
 class CDocFile : public CFile {
 public:

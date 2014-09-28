@@ -15,8 +15,8 @@
 static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
 {
 	bool bMix = false;
-	if (cEolType == EOL_NONE) {	//改行コード変換なし
-		CEol cEolCheck;	//比較対象EOL
+	if (cEolType == EOL_NONE) {	// 改行コード変換なし
+		CEol cEolCheck;	// 比較対象EOL
 		CDocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
 		if (pcDocLine) {
 			cEolCheck = pcDocLine->GetEol();
@@ -81,9 +81,9 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 			pcDoc->m_cDocEditor.GetNewLineCode().GetName()
 		);
 		switch (nDlgResult) {
-		case IDYES:		pSaveInfo->cEol = pcDoc->m_cDocEditor.GetNewLineCode(); break; //統一
-		case IDNO:		break; //続行
-		case IDCANCEL:	return CALLBACK_INTERRUPT; //中断
+		case IDYES:		pSaveInfo->cEol = pcDoc->m_cDocEditor.GetNewLineCode(); break; // 統一
+		case IDNO:		break; // 続行
+		case IDCANCEL:	return CALLBACK_INTERRUPT; // 中断
 		}
 	}
 
@@ -102,9 +102,9 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 			CCodeTypeName(pSaveInfo->eCharCode).Normal()
 		);
 		switch (nDlgResult) {
-		case IDYES:		break; //続行
-		case IDNO:		return CALLBACK_INTERRUPT; //中断
-		case IDCANCEL:	return CALLBACK_INTERRUPT; //中断
+		case IDYES:		break; // 続行
+		case IDNO:		return CALLBACK_INTERRUPT; // 中断
+		case IDCANCEL:	return CALLBACK_INTERRUPT; // 中断
 		}
 	}
 	return CALLBACK_CONTINUE;

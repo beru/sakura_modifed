@@ -51,22 +51,22 @@ protected:
 
 	// ƒCƒ“ƒ^[ƒtƒF[ƒX
 public:
-	void AllocBuffer( int );                               //!< ƒoƒbƒtƒ@ƒTƒCƒY‚Ì’²®B•K—v‚É‰‚¶‚ÄŠg‘å‚·‚éB
-	void SetRawData( const void* pData, int nDataLen );    //!< ƒoƒbƒtƒ@‚Ì“à—e‚ğ’u‚«Š·‚¦‚é
-	void SetRawData( const CMemory& );                     //!< ƒoƒbƒtƒ@‚Ì“à—e‚ğ’u‚«Š·‚¦‚é
-	void AppendRawData( const void* pData, int nDataLen ); //!< ƒoƒbƒtƒ@‚ÌÅŒã‚Éƒf[ƒ^‚ğ’Ç‰Á‚·‚é
-	void AppendRawData( const CMemory* );                  //!< ƒoƒbƒtƒ@‚ÌÅŒã‚Éƒf[ƒ^‚ğ’Ç‰Á‚·‚é
-	void Clean(){ _Empty(); }
-	void Clear(){ _Empty(); }
+	void AllocBuffer( int );								//!< ƒoƒbƒtƒ@ƒTƒCƒY‚Ì’²®B•K—v‚É‰‚¶‚ÄŠg‘å‚·‚éB
+	void SetRawData( const void* pData, int nDataLen );		//!< ƒoƒbƒtƒ@‚Ì“à—e‚ğ’u‚«Š·‚¦‚é
+	void SetRawData( const CMemory& );						//!< ƒoƒbƒtƒ@‚Ì“à—e‚ğ’u‚«Š·‚¦‚é
+	void AppendRawData( const void* pData, int nDataLen );	//!< ƒoƒbƒtƒ@‚ÌÅŒã‚Éƒf[ƒ^‚ğ’Ç‰Á‚·‚é
+	void AppendRawData( const CMemory* );					//!< ƒoƒbƒtƒ@‚ÌÅŒã‚Éƒf[ƒ^‚ğ’Ç‰Á‚·‚é
+	void Clean() { _Empty(); }
+	void Clear() { _Empty(); }
 
-	inline const void* GetRawPtr(int* pnLength) const;      //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚Æ’·‚³•Ô‚·
-	inline void* GetRawPtr(int* pnLength);                  //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚Æ’·‚³•Ô‚·
-	inline const void* GetRawPtr() const{ return m_pRawData; } //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğ•Ô‚·
-	inline void* GetRawPtr(){ return m_pRawData; }             //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğ•Ô‚·
-	int GetRawLength() const { return m_nRawLen; }                //!<ƒf[ƒ^’·‚ğ•Ô‚·BƒoƒCƒg’PˆÊB
+	inline const void* GetRawPtr(int* pnLength) const;		//!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚Æ’·‚³•Ô‚·
+	inline void* GetRawPtr(int* pnLength);					//!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚Æ’·‚³•Ô‚·
+	inline const void* GetRawPtr() const { return m_pRawData; } //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğ•Ô‚·
+	inline void* GetRawPtr() { return m_pRawData; }			//!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğ•Ô‚·
+	int GetRawLength() const { return m_nRawLen; }			//!< ƒf[ƒ^’·‚ğ•Ô‚·BƒoƒCƒg’PˆÊB
 
 	// ‰‰Zq
-	const CMemory& operator=( const CMemory& );
+	const CMemory& operator = ( const CMemory& );
 
 	// ”äŠr
 	static int IsEqual( CMemory&, CMemory& );	// “™‚µ‚¢“à—e‚©
@@ -74,7 +74,6 @@ public:
 	// •ÏŠ·ŠÖ”
 	static void SwapHLByte( char*, const int ); // ‰º‹LŠÖ”‚ÌstaticŠÖ””Å
 	void SwapHLByte();			// Byte‚ğŒğŠ·‚·‚é
-
 
 protected:
 	/*
@@ -85,7 +84,7 @@ protected:
 public:
 	void _AppendSz(const char* str);
 	void _SetRawLength(int nLength);
-	void swap( CMemory& left ){
+	void swap( CMemory& left ) {
 		std::swap( m_nDataBufSize, left.m_nDataBufSize );
 		std::swap( m_pRawData, left.m_pRawData );
 		std::swap( m_nRawLen, left.m_nRawLen );
@@ -95,7 +94,7 @@ public:
 #ifdef _DEBUG
 protected:
 	typedef char* PCHAR;
-	PCHAR& _DebugGetPointerRef(){ return m_pRawData; } // ƒfƒoƒbƒO—pBƒoƒbƒtƒ@ƒ|ƒCƒ“ƒ^‚ÌQÆ‚ğ•Ô‚·B
+	PCHAR& _DebugGetPointerRef() { return m_pRawData; } // ƒfƒoƒbƒO—pBƒoƒbƒtƒ@ƒ|ƒCƒ“ƒ^‚ÌQÆ‚ğ•Ô‚·B
 #endif
 
 private: // 2002/2/10 aroka ƒAƒNƒZƒXŒ •ÏX
@@ -117,6 +116,7 @@ const void* CMemory::GetRawPtr(int* pnLength) const //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚Æ’·‚
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
+
 inline
 void* CMemory::GetRawPtr(int* pnLength) //!< ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚Æ’·‚³•Ô‚·
 {

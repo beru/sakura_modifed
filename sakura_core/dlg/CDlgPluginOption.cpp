@@ -483,7 +483,7 @@ void CDlgPluginOption::ChangeListPosition( void )
 {
 	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PLUGIN_OPTIONS );
 
-	//	åªç›ÇÃFocuséÊìæ
+	// åªç›ÇÃFocuséÊìæ
 	int current = ListView_GetNextItem( hwndList, -1, LVNI_SELECTED);
 
 	if (current == -1 || current == m_Line) {
@@ -491,7 +491,6 @@ void CDlgPluginOption::ChangeListPosition( void )
 	}
 
 	TCHAR	buf[MAX_LENGTH_VALUE+1];
-	LVITEM	lvi;
 
 	// ñﬂÇµ
 	if (m_Line >= 0) {
@@ -503,7 +502,7 @@ void CDlgPluginOption::ChangeListPosition( void )
 	// ï“èWóÃàÊÇ…èëÇ´çûÇ›
 	SetToEdit(current);
 
-	memset_raw( &lvi, 0, sizeof( lvi ));
+	LVITEM lvi = {0};
 	lvi.mask       = LVIF_TEXT;
 	lvi.iItem      = current;
 	lvi.iSubItem   = 1;
@@ -517,9 +516,9 @@ void CDlgPluginOption::ChangeListPosition( void )
 void CDlgPluginOption::MoveFocusToEdit( void )
 {
 	//	åªç›ÇÃFocuséÊìæ
-	int		iLine = ListView_GetNextItem( ::GetDlgItem( GetHwnd(), IDC_LIST_PLUGIN_OPTIONS ), -1, LVNI_SELECTED);
+	int iLine = ListView_GetNextItem( ::GetDlgItem( GetHwnd(), IDC_LIST_PLUGIN_OPTIONS ), -1, LVNI_SELECTED);
 	wstring	sType;
-	HWND	hwndCtrl;
+	HWND hwndCtrl;
 
 	if (iLine >= 0) {
 		// FocusÇÃêÿÇËë÷Ç¶
@@ -550,8 +549,8 @@ void CDlgPluginOption::SetToEdit( int iLine )
 {
 	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PLUGIN_OPTIONS );
 
-	TCHAR	buf[MAX_LENGTH_VALUE+1];
-	LVITEM	lvi;
+	TCHAR buf[MAX_LENGTH_VALUE+1];
+	LVITEM lvi;
 	wstring	sType;
 
 	if (iLine >= 0) {
@@ -678,8 +677,7 @@ void CDlgPluginOption::SetFromEdit( int iLine )
 // ëIëópï∂éöóÒï™â
 void CDlgPluginOption::SepSelect( wstring sTrg, wstring* spView, wstring* spValue )
 {
-	int		ix;
-	ix = sTrg.find(L':');
+	int ix = sTrg.find(L':');
 	if ((std::wstring::size_type)ix == std::wstring::npos) {
 		*spView = *spValue = sTrg;
 	}else {
@@ -707,10 +705,9 @@ void CDlgPluginOption::SelectDirectory( int iLine )
 	}
 
 	// çÄñ⁄ñºÇÃéÊìæ
-	HWND	hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PLUGIN_OPTIONS );
-	LVITEM	lvi;
-	TCHAR	buf[MAX_LENGTH_VALUE+1];
-	memset_raw( &lvi, 0, sizeof( lvi ));
+	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PLUGIN_OPTIONS );
+	TCHAR buf[MAX_LENGTH_VALUE+1];
+	LVITEM lvi = {0};
 	lvi.mask       = LVIF_TEXT;
 	lvi.iItem      = iLine;
 	lvi.iSubItem   = 0;

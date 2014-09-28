@@ -43,7 +43,7 @@ public:
 	virtual ~CRecent() {}
 
 	// インスタンス管理
-	virtual void	Terminate() = 0;
+	virtual void Terminate() = 0;
 
 	// アイテム
 	virtual const TCHAR*	GetItemText( int nIndex ) const = 0;

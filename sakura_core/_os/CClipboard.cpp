@@ -378,8 +378,7 @@ struct SSystemClipFormatNames {
 	const wchar_t* m_pszName;
 };
 
-static const SSystemClipFormatNames sClipFormatNames[] =
-{
+static const SSystemClipFormatNames sClipFormatNames[] = {
 	{CF_TEXT        ,L"CF_TEXT"},
 	{CF_BITMAP      ,L"CF_BITMAP"},
 	{CF_METAFILEPICT,L"CF_METAFILEPICT"},

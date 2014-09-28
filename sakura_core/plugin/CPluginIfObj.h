@@ -158,7 +158,7 @@ public:
 	// コマンドを処理する
 	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		switch (LOWORD(ID)) {
-		case F_PL_SETOPTION:			//オプションファイルに値を書く
+		case F_PL_SETOPTION:			// オプションファイルに値を書く
 			{
 				if (!Arguments[0]) return false;
 				if (!Arguments[1]) return false;
@@ -172,7 +172,7 @@ public:
 				cProfile.WriteProfile( m_cPlugin.GetOptionPath().c_str(), (m_cPlugin.m_sName + L" プラグイン設定ファイル").c_str() );
 			}
 			break;
-		case F_PL_ADDCOMMAND:			//コマンドを追加する
+		case F_PL_ADDCOMMAND:			// コマンドを追加する
 			{
 				int id = m_cPlugin.AddCommand( Arguments[0], Arguments[1], Arguments[2], true );
 				View->m_pcEditWnd->RegisterPluginCommand( id );

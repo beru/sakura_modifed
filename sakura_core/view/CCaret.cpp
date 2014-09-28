@@ -390,20 +390,17 @@ CLayoutInt CCaret::MoveCursorFastMode(
 //2007.09.11 kobake 関数名変更: MoveCursorToPoint→MoveCursorToClientPoint
 CLayoutInt CCaret::MoveCursorToClientPoint( const POINT& ptClientPos, bool test, CLayoutPoint* pCaretPosNew )
 {
-	CLayoutInt		nScrollRowNum;
 	CLayoutPoint	ptLayoutPos;
 	m_pEditView->GetTextArea().ClientToLayout(ptClientPos, &ptLayoutPos);
 
 	int	dx = (ptClientPos.x - m_pEditView->GetTextArea().GetAreaLeft()) % ( m_pEditView->GetTextMetrics().GetHankakuDx() );
-
-	nScrollRowNum = MoveCursorProperly( ptLayoutPos, true, test, pCaretPosNew, 1000, dx );
+	CLayoutInt nScrollRowNum = MoveCursorProperly( ptLayoutPos, true, test, pCaretPosNew, 1000, dx );
 	if (!test) {
 		m_nCaretPosX_Prev = GetCaretLayoutPos().GetX2();
 	}
 	return nScrollRowNum;
 }
 //_CARETMARGINRATE_CARETMARGINRATE_CARETMARGINRATE
-
 
 
 /*! 正しいカーソル位置を算出する(EOF以降のみ)
@@ -464,8 +461,6 @@ void CCaret::ShowEditCaret()
 	const STypeConfig* pTypes=&m_pEditDoc->m_cDocType.GetDocumentAttribute();
 
 	using namespace WCODE;
-
-	int				nIdxFrom;
 
 /*
 	フォーカスが無いときに内部的にキャレット作成すると暗黙的にキャレット破棄（※）されても
@@ -541,7 +536,7 @@ void CCaret::ShowEditCaret()
 
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
+				int nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
 					|| WCODE::IsLineDelimiter(pLine[nIdxFrom])
@@ -574,7 +569,7 @@ void CCaret::ShowEditCaret()
 
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			nIdxFrom = m_pEditView->LineColumnToIndex( pcLayout, GetCaretLayoutPos().GetX2() );
+			int nIdxFrom = m_pEditView->LineColumnToIndex( pcLayout, GetCaretLayoutPos().GetX2() );
 			if (0
 				|| nIdxFrom >= nLineLen
 				|| WCODE::IsLineDelimiter(pLine[nIdxFrom])

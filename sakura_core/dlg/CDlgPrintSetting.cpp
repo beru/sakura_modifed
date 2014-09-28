@@ -44,7 +44,7 @@
 
 // 印刷設定 CDlgPrintSetting.cpp	//@@@ 2002.01.07 add start MIK
 const DWORD p_helpids[] = {	//12500
-	IDC_COMBO_SETTINGNAME,			HIDC_PS_COMBO_SETTINGNAME,	// ページ設定
+	IDC_COMBO_SETTINGNAME,			HIDC_PS_COMBO_SETTINGNAME,		// ページ設定
 	IDC_BUTTON_EDITSETTINGNAME,		HIDC_PS_BUTTON_EDITSETTINGNAME,	// 設定名変更
 	IDC_COMBO_FONT_HAN,				HIDC_PS_COMBO_FONT_HAN,		// 半角フォント
 	IDC_COMBO_FONT_ZEN,				HIDC_PS_COMBO_FONT_ZEN,		// 全角フォント
@@ -99,12 +99,9 @@ int CALLBACK SetData_EnumFontFamProc(
 	LPARAM			lParam 	// address of application-defined data
 )
 {
-	CDlgPrintSetting*	pCDlgPrintSetting;
-	HWND				hwndComboFontHan;
-	HWND				hwndComboFontZen;
-	pCDlgPrintSetting = (CDlgPrintSetting*)lParam;
-	hwndComboFontHan = ::GetDlgItem( pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN );
-	hwndComboFontZen = ::GetDlgItem( pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN );
+	CDlgPrintSetting*	pCDlgPrintSetting = (CDlgPrintSetting*)lParam;
+	HWND hwndComboFontHan = ::GetDlgItem( pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN );
+	HWND hwndComboFontZen = ::GetDlgItem( pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN );
 
 	// LOGFONT
 	if (FIXED_PITCH & pelf->elfLogFont.lfPitchAndFamily) {
@@ -124,18 +121,16 @@ int CDlgPrintSetting::DoModal(
 	int				nLineNumberColumns
 )
 {
-	int		nRet;
-	int		i;
 	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
-	for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+	for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 		m_PrintSettingArr[i] = pPrintSettingArr[i];
 	}
 	m_nLineNumberColumns = nLineNumberColumns;
 
-	nRet = (int)CDialog::DoModal( hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL );
+	int nRet = (int)CDialog::DoModal( hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL );
 	if (TRUE == nRet) {
 		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
-		for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+		for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 			pPrintSettingArr[i] = m_PrintSettingArr[i];
 		}
 	}
@@ -155,7 +150,7 @@ BOOL CDlgPrintSetting::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam 
 	// タイマーでの更新をやめて、能動的に更新要求する 2013.5.5 aroka
 	// CDialog::OnInitDialogの奥でOnChangeSettingTypeが呼ばれるのでここでは更新要求しない
 	//	::SetTimer( GetHwnd(), IDT_PRINTSETTING, 500, NULL );
-	//UpdatePrintableLineAndColumn();
+	// UpdatePrintableLineAndColumn();
 
 	// ダイアログのフォントの取得
 	m_hFontDlg = (HFONT)::SendMessage( GetHwnd(), WM_GETFONT, 0, 0 );	// ダイアログのフォント
@@ -172,7 +167,7 @@ BOOL CDlgPrintSetting::OnDestroy( void )
 	::KillTimer( GetHwnd(), IDT_PRINTSETTING );
 
 	// フォントの破棄
-	HFONT	hFontOld;
+	HFONT hFontOld;
 	hFontOld = (HFONT)::SendMessage(::GetDlgItem( GetHwnd(), IDC_STATIC_FONT_HEAD ), WM_GETFONT, 0, 0 );
 	if (m_hFontDlg != hFontOld) {
 		::DeleteObject( hFontOld );
@@ -189,12 +184,10 @@ BOOL CDlgPrintSetting::OnDestroy( void )
 
 BOOL CDlgPrintSetting::OnNotify( WPARAM wParam, LPARAM lParam )
 {
-	CDlgInput1		cDlgInput1;
-	NM_UPDOWN*		pMNUD;
-	int				idCtrl;
-	BOOL			bSpinDown;
-	idCtrl = (int)wParam;
-	pMNUD  = (NM_UPDOWN*)lParam;
+	CDlgInput1 cDlgInput1;
+	BOOL bSpinDown;
+	int idCtrl = (int)wParam;
+	NM_UPDOWN* pMNUD  = (NM_UPDOWN*)lParam;
 	if (pMNUD->iDelta < 0) {
 		bSpinDown = FALSE;
 	}else {
@@ -238,8 +231,8 @@ BOOL CDlgPrintSetting::OnCbnSelChange( HWND hwndCtl, int wID )
 BOOL CDlgPrintSetting::OnBnClicked( int wID )
 {
 	TCHAR			szWork[256];
-	CDlgInput1		cDlgInput1;
-	HWND			hwndComboSettingName;
+	CDlgInput1 cDlgInput1;
+	HWND hwndComboSettingName;
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「印刷ページ設定」のヘルプ
@@ -249,7 +242,7 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 	case IDC_BUTTON_EDITSETTINGNAME:
 		_tcscpy( szWork, m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName );
 		{
-			BOOL bDlgInputResult=cDlgInput1.DoModal(
+			BOOL bDlgInputResult = cDlgInput1.DoModal(
 				m_hInstance,
 				GetHwnd(),
 				LS(STR_DLGPRNST1),
@@ -442,17 +435,9 @@ BOOL CDlgPrintSetting::OnEnKillFocus( HWND hwndCtl, int wID )
 // ダイアログデータの設定
 void CDlgPrintSetting::SetData( void )
 {
-	HDC		hdc;
-	HWND	hwndComboFont;
-	HWND	hwndComboPaper;
-	HWND	hwndComboSettingName;
-	int	i;
-	int	nItemIdx;
-	int	nSelectIdx;
-
-
 	// フォント一覧
-	hdc = ::GetDC( m_hwndParent );
+	HDC hdc = ::GetDC( m_hwndParent );
+	HWND hwndComboFont;
 	hwndComboFont = ::GetDlgItem( GetHwnd(), IDC_COMBO_FONT_HAN );
 	Combo_ResetContent( hwndComboFont );
 	hwndComboFont = ::GetDlgItem( GetHwnd(), IDC_COMBO_FONT_ZEN );
@@ -466,21 +451,20 @@ void CDlgPrintSetting::SetData( void )
 	::ReleaseDC( m_hwndParent, hdc );
 
 	// 用紙サイズ一覧
-	hwndComboPaper = ::GetDlgItem( GetHwnd(), IDC_COMBO_PAPER );
+	HWND hwndComboPaper = ::GetDlgItem( GetHwnd(), IDC_COMBO_PAPER );
 	Combo_ResetContent( hwndComboPaper );
 	// 2006.08.14 Moca 用紙名一覧の重複削除
-	for (i = 0; i < CPrint::m_nPaperInfoArrNum; ++i) {
-		nItemIdx = Combo_AddString( hwndComboPaper, CPrint::m_paperInfoArr[i].m_pszName );
+	for (int i = 0; i < CPrint::m_nPaperInfoArrNum; ++i) {
+		int nItemIdx = Combo_AddString( hwndComboPaper, CPrint::m_paperInfoArr[i].m_pszName );
 		Combo_SetItemData( hwndComboPaper, nItemIdx, CPrint::m_paperInfoArr[i].m_nId );
 	}
 
-
 	// 印刷設定名一覧
-	hwndComboSettingName = ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME );
+	HWND hwndComboSettingName = ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME );
 	Combo_ResetContent( hwndComboSettingName );
-	nSelectIdx = 0;
-	for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
-		nItemIdx = Combo_AddString( hwndComboSettingName, m_PrintSettingArr[i].m_szPrintSettingName );
+	int nSelectIdx = 0;
+	for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+		int nItemIdx = Combo_AddString( hwndComboSettingName, m_PrintSettingArr[i].m_szPrintSettingName );
 		Combo_SetItemData( hwndComboSettingName, nItemIdx, i );
 		if (i == m_nCurrentPrintSetting) {
 			nSelectIdx = nItemIdx;
@@ -499,11 +483,9 @@ void CDlgPrintSetting::SetData( void )
 // TRUE==正常 FALSE==入力エラー
 int CDlgPrintSetting::GetData( void )
 {
-	HWND	hwndCtrl;
-	int		nIdx1;
-	int		nWork;
-
+	HWND hwndCtrl;
 	// フォント一覧
+	int nIdx1;
 	hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_COMBO_FONT_HAN );
 	nIdx1 = Combo_GetCurSel( hwndCtrl );
 	Combo_GetLBText( hwndCtrl, nIdx1,
@@ -522,6 +504,7 @@ int CDlgPrintSetting::GetData( void )
 	m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintDanSpace = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_DANSPACE, NULL, FALSE ) * 10;
 
 	// 入力値(数値)のエラーチェックをして正しい値を返す
+	int nWork;
 	nWork = DataCheckAndCorrect( IDC_EDIT_FONTHEIGHT, m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight );
 	if (nWork != m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight) {
 		m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintFontHeight = nWork;
@@ -630,18 +613,15 @@ int CDlgPrintSetting::GetData( void )
 // 設定のタイプが変わった
 void CDlgPrintSetting::OnChangeSettingType( BOOL bGetData )
 {
-	HWND	hwndComboSettingName;
-	HWND	hwndCtrl;
-	int		nIdx1;
-	int		nItemNum;
-	int		nItemData;
-	int		i;
-
 	if (bGetData) {
 		GetData();
 	}
 
-	hwndComboSettingName = ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME );
+	HWND	hwndCtrl;
+	int		nIdx1;
+	int		nItemNum;
+
+	HWND hwndComboSettingName = ::GetDlgItem( GetHwnd(), IDC_COMBO_SETTINGNAME );
 	nIdx1 = Combo_GetCurSel( hwndComboSettingName );
 	if (CB_ERR == nIdx1) {
 		return;
@@ -666,8 +646,8 @@ void CDlgPrintSetting::OnChangeSettingType( BOOL bGetData )
 	// 用紙サイズ一覧
 	hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_COMBO_PAPER );
 	nItemNum = Combo_GetCount( hwndCtrl );
-	for (i = 0; i < nItemNum; ++i) {
-		nItemData = Combo_GetItemData( hwndCtrl, i );
+	for (int i = 0; i < nItemNum; ++i) {
+		int nItemData = Combo_GetItemData( hwndCtrl, i );
 		if (m_PrintSettingArr[m_nCurrentPrintSetting].m_nPrintPaperSize == nItemData) {
 			Combo_SetCurSel( hwndCtrl, i );
 			break;

@@ -146,11 +146,11 @@ protected:
 	int  GetData( HWND );											//!< ダイアログデータの取得
 
 public:
-	static void AddOutlineMethod(int nMethod, const WCHAR* szName);	//!<アウトライン解析ルールの追加
-	static void AddSIndentMethod(int nMethod, const WCHAR* szName);	//!<スマートインデントルールの追加
+	static void AddOutlineMethod(int nMethod, const WCHAR* szName);		//!<アウトライン解析ルールの追加
+	static void AddSIndentMethod(int nMethod, const WCHAR* szName);		//!<スマートインデントルールの追加
 	static void RemoveOutlineMethod(int nMethod, const WCHAR* szName);	//!<アウトライン解析ルールの追加
 	static void RemoveSIndentMethod(int nMethod, const WCHAR* szName);	//!<スマートインデントルールの追加
-	void CPropTypes_Screen();										//!<スクリーンタブのコンストラクタ
+	void CPropTypes_Screen();											//!<スクリーンタブのコンストラクタ
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -175,12 +175,12 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 class CPropTypesColor : CPropTypes {
 public:
-	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
+	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );	//!< メッセージ処理
 protected:
-	void SetData( HWND );											//!< ダイアログデータの設定
-	int  GetData( HWND );											//!< ダイアログデータの取得
-	bool Import( HWND );											//!< インポート
-	bool Export( HWND );											//!< エクスポート
+	void SetData( HWND );									//!< ダイアログデータの設定
+	int  GetData( HWND );									//!< ダイアログデータの取得
+	bool Import( HWND );									//!< インポート
+	bool Export( HWND );									//!< エクスポート
 
 protected:
 	void DrawColorListItem( DRAWITEMSTRUCT* );				//!< 色種別リスト オーナー描画
@@ -197,12 +197,12 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 class CPropTypesSupport : CPropTypes {
 public:
-	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );			//!< メッセージ処理
+	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );				//!< メッセージ処理
 protected:
-	void SetData( HWND );											//!< ダイアログデータの設定
-	int  GetData( HWND );											//!< ダイアログデータの取得
+	void SetData( HWND );												//!< ダイアログデータの設定
+	int  GetData( HWND );												//!< ダイアログデータの取得
 public:
-	static void AddHokanMethod(int nMethod, const WCHAR* szName);	//!<補完種別の追加
+	static void AddHokanMethod(int nMethod, const WCHAR* szName);		//!<補完種別の追加
 	static void RemoveHokanMethod(int nMethod, const WCHAR* szName);	//!<補完種別の追加
 };
 
@@ -238,7 +238,7 @@ protected:
 	bool Export( HWND );											//!< エクスポート
 };
 
-template<typename T>
+template <typename T>
 void InitTypeNameId2( std::vector<TYPE_NAME_ID2<T> >& vec, TYPE_NAME_ID<T>* arr, size_t size )
 {
 	for (size_t i = 0; i < size; i++) {

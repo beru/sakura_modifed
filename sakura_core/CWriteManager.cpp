@@ -23,7 +23,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 	const SSaveInfo&	sSaveInfo		//!< [in]
 	)
 {
-	EConvertResult		nRetVal = RESULT_COMPLETE;
+	EConvertResult nRetVal = RESULT_COMPLETE;
 	std::auto_ptr<CCodeBase> pcCodeBase( CCodeFactory::CreateCodeBase(sSaveInfo.eCharCode,0) );
 
 	try {
@@ -31,8 +31,8 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 		CBinaryOutputStream out(sSaveInfo.cFilePath,true);
 
 		// 各行出力
-		int			nLineNumber = 0;
-		CDocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
+		int nLineNumber = 0;
+		CDocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
 		// 1行目
 		{
 			++nLineNumber;

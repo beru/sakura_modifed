@@ -25,7 +25,7 @@
 
 class CLayoutColorInfo {
 public:
-	CLayoutColorInfo(){}
+	CLayoutColorInfo() {}
 	virtual ~CLayoutColorInfo() {};
 	virtual bool IsEqual(const CLayoutColorInfo*) const = 0;
 };

@@ -79,7 +79,6 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 {
 	WORD	wNotifyCode;
 	WORD	wID;
-	HWND	hwndList;
 	NMHDR*	pNMHDR;
 	int		nIndex, nIndex2;
 	LV_ITEM	lvi;
@@ -91,7 +90,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 	TCHAR	szPath[_MAX_PATH];			// ファイルパス
 	DWORD	dwStyle;
 
-	hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
+	HWND hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -555,11 +554,6 @@ void CheckDlgButtonBOOL(HWND hwnd, int id, BOOL bState ) {
 */
 void CPropTypesKeyHelp::SetData( HWND hwndDlg )
 {
-	HWND	hwndWork;
-	int		i;
-	LV_ITEM	lvi;
-	DWORD	dwStyle;
-
 	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_KEYHELP ), _countof2( m_Types.m_KeyHelpArr[0].m_szPath ) - 1 );
 
@@ -570,14 +564,15 @@ void CPropTypesKeyHelp::SetData( HWND hwndDlg )
 	CheckDlgButtonBOOL( hwndDlg, IDC_CHECK_KEYHELP_PREFIX, m_Types.m_bUseKeyHelpPrefix );
 
 	// リスト
-	hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
+	HWND hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
 	ListView_DeleteAllItems(hwndWork);  // リストを空にする
 	// 行選択
-	dwStyle = ListView_GetExtendedListViewStyle( hwndWork );
+	DWORD dwStyle = ListView_GetExtendedListViewStyle( hwndWork );
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	ListView_SetExtendedListViewStyle( hwndWork, dwStyle );
 	// データ表示
-	for (i = 0; i < MAX_KEYHELP_FILE; i++) {
+	LV_ITEM	lvi;
+	for (int i = 0; i < MAX_KEYHELP_FILE; i++) {
 		if (m_Types.m_KeyHelpArr[i].m_szPath[0] == _T('\0')) {
 			break;
 		}
@@ -616,8 +611,6 @@ void CPropTypesKeyHelp::SetData( HWND hwndDlg )
 */
 int CPropTypesKeyHelp::GetData( HWND hwndDlg )
 {
-	HWND	hwndList;
-	int	nIndex, i;
 	TCHAR	szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
 	TCHAR	szPath[_MAX_PATH];			// ファイルパス
 
@@ -628,9 +621,9 @@ int CPropTypesKeyHelp::GetData( HWND hwndDlg )
 	m_Types.m_bUseKeyHelpPrefix    = ( BST_CHECKED == IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYHELP_PREFIX ) );
 
 	// リストに登録されている情報を配列に取り込む
-	hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
-	nIndex = ListView_GetItemCount( hwndList );
-	for (i = 0; i < MAX_KEYHELP_FILE; i++) {
+	HWND hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
+	int	nIndex = ListView_GetItemCount( hwndList );
+	for (int i = 0; i < MAX_KEYHELP_FILE; i++) {
 		if (i < nIndex) {
 			bool		bUse = false;						// 辞書ON(1)/OFF(0)
 			szAbout[0]	= _T('\0');
@@ -692,18 +685,18 @@ bool CPropTypesKeyHelp::Export(HWND hwndDlg)
 */
 static TCHAR* strcnv(TCHAR *str)
 {
-	TCHAR* p=str;
+	TCHAR* p = str;
 	// 改行コードの削除
-	if ((p=_tcschr(p,_T('\n')))) {
+	if ((p = _tcschr(p,_T('\n')))) {
 		*p = _T('\0');
 	}
 	p = str;
-	if ((p=_tcschr(p,_T('\r')))) {
+	if ((p = _tcschr(p,_T('\r')))) {
 		*p = _T('\0');
 	}
 	// カンマの置換
 	p = str;
-	for (; (p=_tcschr(p,_T(','))) != NULL;) {
+	for (; (p =_tcschr(p,_T(','))) != NULL;) {
 		*p = _T('.');
 	}
 	return str;

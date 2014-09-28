@@ -36,7 +36,7 @@
 #include "recent/CRecentTagjumpKeyword.h"
 
 // タグファイル名	//	@@ 2005.03.31 MIK 定数化
-#define TAG_FILENAME_T        _T("tags")
+#define TAG_FILENAME_T _T("tags")
 
 // 2010.07.22 いくつかcppへ移動
 
@@ -139,8 +139,8 @@ private:
 	BOOL	m_bTagJumpAnyWhere;		//!< 文字列の途中にマッチ
 	BOOL	m_bTagJumpExactMatch;	//! 完全一致(画面無し)
 
-	int 	m_nTop;			//!< ページめくりの表示の先頭(0開始)
-	bool	m_bNextItem;	//!< まだ次にヒットするものがある
+	int 	m_nTop;					//!< ページめくりの表示の先頭(0開始)
+	bool	m_bNextItem;			//!< まだ次にヒットするものがある
 
 	// 絞り込み検索用
 	STagFindState* m_psFindPrev;	//<! 前回の最後に検索した状態

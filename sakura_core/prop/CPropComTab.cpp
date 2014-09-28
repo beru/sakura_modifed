@@ -45,18 +45,18 @@
 
 
 static const DWORD p_helpids[] = {
-	IDC_CHECK_DispTabWnd,			HIDC_CHECK_DispTabWnd,			//タブウインドウ表示	//@@@ 2003.05.31 MIK
-	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		//等幅	// 2006.08.06 ryoji
-	IDC_CHECK_DispTabIcon,			HIDC_CHECK_DispTabIcon,			//アイコン表示	// 2006.08.06 ryoji
-	IDC_CHECK_DispTabClose,			HIDC_CHECK_DispTabClose,		//タブを閉じるボタン表示	// 2012.04.14 syat
-	IDC_CHECK_SortTabList,			HIDC_CHECK_SortTabList,			//タブ一覧ソート	// 2006.08.06 ryoji
-	IDC_CHECK_DispTabWndMultiWin,	HIDC_CHECK_DispTabWndMultiWin,	//タブウインドウ表示	//@@@ 2003.05.31 MIK
-	IDC_TABWND_CAPTION,				HIDC_TABWND_CAPTION,			//タブウインドウキャプション	//@@@ 2003.06.15 MIK
-	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	//最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
-	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			//ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
-	IDC_CHECK_ChgWndByWheel,		HIDC_CHECK_ChgWndByWheel,		//マウスホイールでウィンドウ切り替え 2007.04.03 ryoji
-	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			//外部から起動するときは新しいウインドウで開く 2009.06.19
-	IDC_BUTTON_TABFONT,				HIDC_BUTTON_TABFONT,			//タブフォント
+	IDC_CHECK_DispTabWnd,			HIDC_CHECK_DispTabWnd,			// タブウインドウ表示	//@@@ 2003.05.31 MIK
+	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		// 等幅	// 2006.08.06 ryoji
+	IDC_CHECK_DispTabIcon,			HIDC_CHECK_DispTabIcon,			// アイコン表示	// 2006.08.06 ryoji
+	IDC_CHECK_DispTabClose,			HIDC_CHECK_DispTabClose,		// タブを閉じるボタン表示	// 2012.04.14 syat
+	IDC_CHECK_SortTabList,			HIDC_CHECK_SortTabList,			// タブ一覧ソート	// 2006.08.06 ryoji
+	IDC_CHECK_DispTabWndMultiWin,	HIDC_CHECK_DispTabWndMultiWin,	// タブウインドウ表示	//@@@ 2003.05.31 MIK
+	IDC_TABWND_CAPTION,				HIDC_TABWND_CAPTION,			// タブウインドウキャプション	//@@@ 2003.06.15 MIK
+	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	// 最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
+	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			// ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
+	IDC_CHECK_ChgWndByWheel,		HIDC_CHECK_ChgWndByWheel,		// マウスホイールでウィンドウ切り替え 2007.04.03 ryoji
+	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			// 外部から起動するときは新しいウインドウで開く 2009.06.19
+	IDC_BUTTON_TABFONT,				HIDC_BUTTON_TABFONT,			// タブフォント
 	0, 0
 };
 
@@ -129,14 +129,15 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 					EnableTabPropInput( hwndDlg );
 					break;
 				case IDC_BUTTON_TABFONT:
-					LOGFONT   lf = m_Common.m_sTabBar.m_lf;
-					INT nPointSize = m_Common.m_sTabBar.m_nPointSize;
+					auto& csTabBar = m_Common.m_sTabBar;
+					LOGFONT   lf = csTabBar.m_lf;
+					INT nPointSize = csTabBar.m_nPointSize;
 
 					if (MySelectFont( &lf, &nPointSize, hwndDlg, false)) {
-						m_Common.m_sTabBar.m_lf = lf;
-						m_Common.m_sTabBar.m_nPointSize = nPointSize;
+						csTabBar.m_lf = lf;
+						csTabBar.m_nPointSize = nPointSize;
 						// タブ フォント表示	// 2013/4/24 Uchi
-						HFONT hFont = SetFontLabel( hwndDlg, IDC_STATIC_TABFONT, m_Common.m_sTabBar.m_lf, m_Common.m_sTabBar.m_nPointSize);
+						HFONT hFont = SetFontLabel( hwndDlg, IDC_STATIC_TABFONT, csTabBar.m_lf, csTabBar.m_nPointSize);
 						if (m_hTabFont != NULL) {
 							::DeleteObject( m_hTabFont );
 						}
@@ -180,34 +181,36 @@ INT_PTR CPropTab::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 // ダイアログデータの設定
 void CPropTab::SetData( HWND hwndDlg )
 {
+	auto& csTabBar = m_Common.m_sTabBar;
+
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTabWnd, m_Common.m_sTabBar.m_bDispTabWnd );	//@@@ 2003.05.31 MIK
-	::CheckDlgButton( hwndDlg, IDC_CHECK_SameTabWidth, m_Common.m_sTabBar.m_bSameTabWidth );	//@@@ 2006.01.28 ryoji
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTabIcon, m_Common.m_sTabBar.m_bDispTabIcon );	//@@@ 2006.01.28 ryoji
-	::CheckDlgButton( hwndDlg, IDC_CHECK_SortTabList, m_Common.m_sTabBar.m_bSortTabList );			//@@@ 2006.03.23 fon
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTabWndMultiWin, ! m_Common.m_sTabBar.m_bDispTabWndMultiWin ); //@@@ 2003.05.31 MIK
-	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_TABWND_CAPTION ), _countof( m_Common.m_sTabBar.m_szTabWndCaption ) - 1 );
-	::DlgItem_SetText( hwndDlg, IDC_TABWND_CAPTION, m_Common.m_sTabBar.m_szTabWndCaption );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.m_bDispTabWnd );	//@@@ 2003.05.31 MIK
+	::CheckDlgButton( hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.m_bSameTabWidth );	//@@@ 2006.01.28 ryoji
+	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.m_bDispTabIcon );	//@@@ 2006.01.28 ryoji
+	::CheckDlgButton( hwndDlg, IDC_CHECK_SortTabList, csTabBar.m_bSortTabList );			//@@@ 2006.03.23 fon
+	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTabWndMultiWin, ! csTabBar.m_bDispTabWndMultiWin ); //@@@ 2003.05.31 MIK
+	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_TABWND_CAPTION ), _countof( csTabBar.m_szTabWndCaption ) - 1 );
+	::DlgItem_SetText( hwndDlg, IDC_TABWND_CAPTION, csTabBar.m_szTabWndCaption );
 
 	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_CHECK_DispTabClose );
 	Combo_ResetContent( hwndCombo );
 	int nSelPos = 0;
 	for (int i = 0; i < _countof( DispTabCloseArr ); ++i) {
 		Combo_InsertString( hwndCombo, i, LS(DispTabCloseArr[i].nNameId) );
-		if (DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_bDispTabClose) {
+		if (DispTabCloseArr[i].nMethod == csTabBar.m_bDispTabClose) {
 			nSelPos = i;
 		}
 	}
 	Combo_SetCurSel( hwndCombo, nSelPos );
 
 	//	Feb. 11, 2007 genta 新規作成
-	::CheckDlgButton( hwndDlg, IDC_CHECK_RetainEmptyWindow, m_Common.m_sTabBar.m_bTab_RetainEmptyWin );
-	::CheckDlgButton( hwndDlg, IDC_CHECK_CloseOneWin, m_Common.m_sTabBar.m_bTab_CloseOneWin );
-	::CheckDlgButton( hwndDlg, IDC_CHECK_ChgWndByWheel, m_Common.m_sTabBar.m_bChgWndByWheel );	// 2007.04.03 ryoji
-	::CheckDlgButton( hwndDlg, IDC_CHECK_OpenNewWin, m_Common.m_sTabBar.m_bNewWindow ); // 2009.06.17
+	::CheckDlgButton( hwndDlg, IDC_CHECK_RetainEmptyWindow, csTabBar.m_bTab_RetainEmptyWin );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_CloseOneWin, csTabBar.m_bTab_CloseOneWin );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_ChgWndByWheel, csTabBar.m_bChgWndByWheel );	// 2007.04.03 ryoji
+	::CheckDlgButton( hwndDlg, IDC_CHECK_OpenNewWin, csTabBar.m_bNewWindow ); // 2009.06.17
 
 	// タブ フォント	// 2013/4/24 Uchi
-	m_hTabFont = SetFontLabel( hwndDlg, IDC_STATIC_TABFONT, m_Common.m_sTabBar.m_lf, m_Common.m_sTabBar.m_nPointSize);
+	m_hTabFont = SetFontLabel( hwndDlg, IDC_STATIC_TABFONT, csTabBar.m_lf, csTabBar.m_nPointSize);
 
 	EnableTabPropInput(hwndDlg);
 }
@@ -215,24 +218,25 @@ void CPropTab::SetData( HWND hwndDlg )
 // ダイアログデータの取得
 int CPropTab::GetData( HWND hwndDlg )
 {
+	auto& csTabBar = m_Common.m_sTabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
-	m_Common.m_sTabBar.m_bDispTabWnd = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabWnd );
-	m_Common.m_sTabBar.m_bSameTabWidth = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SameTabWidth );		// 2006.01.28 ryoji
-	m_Common.m_sTabBar.m_bDispTabIcon = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabIcon );		// 2006.01.28 ryoji
-	m_Common.m_sTabBar.m_bSortTabList = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SortTabList );		// 2006.03.23 fon
-	m_Common.m_sTabBar.m_bDispTabWndMultiWin =
+	csTabBar.m_bDispTabWnd = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabWnd );
+	csTabBar.m_bSameTabWidth = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SameTabWidth );		// 2006.01.28 ryoji
+	csTabBar.m_bDispTabIcon = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabIcon );		// 2006.01.28 ryoji
+	csTabBar.m_bSortTabList = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SortTabList );		// 2006.03.23 fon
+	csTabBar.m_bDispTabWndMultiWin =
 		( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTabWndMultiWin ) == BST_CHECKED ) ? FALSE : TRUE;
-	::DlgItem_GetText( hwndDlg, IDC_TABWND_CAPTION, m_Common.m_sTabBar.m_szTabWndCaption, _countof( m_Common.m_sTabBar.m_szTabWndCaption ) );
+	::DlgItem_GetText( hwndDlg, IDC_TABWND_CAPTION, csTabBar.m_szTabWndCaption, _countof( csTabBar.m_szTabWndCaption ) );
 
 	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_CHECK_DispTabClose );
 	int nSelPos = Combo_GetCurSel( hwndCombo );
-	m_Common.m_sTabBar.m_bDispTabClose = DispTabCloseArr[nSelPos].nMethod;
+	csTabBar.m_bDispTabClose = DispTabCloseArr[nSelPos].nMethod;
 
 	//	Feb. 11, 2007 genta 新規作成
-	m_Common.m_sTabBar.m_bTab_RetainEmptyWin = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_RetainEmptyWindow );
-	m_Common.m_sTabBar.m_bTab_CloseOneWin = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CloseOneWin );
-	m_Common.m_sTabBar.m_bChgWndByWheel = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ChgWndByWheel );	// 2007.04.03 ryoji
-	m_Common.m_sTabBar.m_bNewWindow = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_OpenNewWin );  // 2009.06.17
+	csTabBar.m_bTab_RetainEmptyWin = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_RetainEmptyWindow );
+	csTabBar.m_bTab_CloseOneWin = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CloseOneWin );
+	csTabBar.m_bChgWndByWheel = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ChgWndByWheel );	// 2007.04.03 ryoji
+	csTabBar.m_bNewWindow = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_OpenNewWin );  // 2009.06.17
 
 	return TRUE;
 }

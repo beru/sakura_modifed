@@ -86,7 +86,7 @@ public:
 	void SetStringNew(const wchar_t* wszData);
 	void AppendStringNew( const wchar_t* pszData );               //!< バッファの最後にデータを追加する
 	void AppendStringNew( const wchar_t* pszData, int nDataLen ); //!< バッファの最後にデータを追加する。nDataLenは文字単位。
-	void SetStringW(const wchar_t* pszData)				{ return SetStringNew(pszData); }
+	void SetStringW(const wchar_t* pszData)					{ return SetStringNew(pszData); }
 	void SetStringW(const wchar_t* pData, int nLength)		{ return SetStringNew(pData,nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendStringNew(pszData); }
 	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendStringNew(pData,nLength); }

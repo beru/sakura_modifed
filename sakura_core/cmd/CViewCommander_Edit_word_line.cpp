@@ -21,10 +21,11 @@
 // 単語の左端まで削除
 void CViewCommander::Command_WordDeleteToStart( void )
 {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	// 矩形選択状態では実行不能(★★もろ手抜き★★)
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (selInfo.IsTextSelected()) {
 		// 矩形範囲選択中か
-		if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
+		if (selInfo.IsBoxSelecting()) {
 			ErrorBeep();
 			return;
 		}
@@ -32,7 +33,7 @@ void CViewCommander::Command_WordDeleteToStart( void )
 
 	// 単語の左端に移動
 	CViewCommander::Command_WORDLEFT( true );
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (!selInfo.IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
@@ -61,18 +62,19 @@ void CViewCommander::Command_WordDeleteToStart( void )
 // 単語の右端まで削除
 void CViewCommander::Command_WordDeleteToEnd( void )
 {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 	// 矩形選択状態では実行不能((★★もろ手抜き★★))
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (selInfo.IsTextSelected()) {
 		// 矩形範囲選択中か
-		if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
+		if (selInfo.IsBoxSelecting()) {
 			ErrorBeep();
 			return;
 		}
 	}
 	// 単語の右端に移動
 	CViewCommander::Command_WORDRIGHT( true );
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (!selInfo.IsTextSelected()) {
 		ErrorBeep();
 		return;
 	}
@@ -94,7 +96,8 @@ void CViewCommander::Command_WordDeleteToEnd( void )
 // 単語切り取り
 void CViewCommander::Command_WordCut( void )
 {
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	if (selInfo.IsTextSelected()) {
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
 		Command_CUT();
 		return;
@@ -102,7 +105,7 @@ void CViewCommander::Command_WordCut( void )
 	// 現在位置の単語選択
 	Command_SELECTWORD();
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
-	if (!m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+	if (!selInfo.IsTextSelected()) {
 		// 単語選択で選択できなかったら、次の文字を選ぶことに挑戦。
 		Command_RIGHT( true, false, false );
 	}
@@ -130,8 +133,9 @@ void CViewCommander::Command_WordDelete( void )
 // 行頭まで切り取り(改行単位)
 void CViewCommander::Command_LineCutToStart( void )
 {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	CLayout* pCLayout;
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
 		Command_CUT();
 		return;
@@ -152,7 +156,7 @@ void CViewCommander::Command_LineCutToStart( void )
 	// 選択範囲の変更
 	//	2005.06.24 Moca
 	CLayoutRange sRange(ptPos,GetCaret().GetCaretLayoutPos());
-	m_pCommanderView->GetSelectionInfo().SetSelectArea( sRange );
+	selInfo.SetSelectArea( sRange );
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	Command_CUT();
@@ -163,8 +167,9 @@ void CViewCommander::Command_LineCutToStart( void )
 // 行末まで切り取り(改行単位)
 void CViewCommander::Command_LineCutToEnd( void )
 {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	CLayout* pCLayout;
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
 		Command_CUT();
 		return;
@@ -203,7 +208,7 @@ void CViewCommander::Command_LineCutToEnd( void )
 	// 選択範囲の変更
 	//	2005.06.24 Moca
 	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(),ptPos);
-	m_pCommanderView->GetSelectionInfo().SetSelectArea( sRange );
+	selInfo.SetSelectArea( sRange );
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
 	Command_CUT();
@@ -213,8 +218,9 @@ void CViewCommander::Command_LineCutToEnd( void )
 // 行頭まで削除(改行単位)
 void CViewCommander::Command_LineDeleteToStart( void )
 {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	CLayout* pCLayout;
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		m_pCommanderView->DeleteData( true );
 		return;
 	}
@@ -235,7 +241,7 @@ void CViewCommander::Command_LineDeleteToStart( void )
 	// 選択範囲の変更
 	//	2005.06.24 Moca
 	CLayoutRange sRange(ptPos,GetCaret().GetCaretLayoutPos());
-	m_pCommanderView->GetSelectionInfo().SetSelectArea( sRange );
+	selInfo.SetSelectArea( sRange );
 
 	// 選択領域削除
 	m_pCommanderView->DeleteData( true );
@@ -245,8 +251,9 @@ void CViewCommander::Command_LineDeleteToStart( void )
 // 行末まで削除(改行単位)
 void CViewCommander::Command_LineDeleteToEnd( void )
 {
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	CLayout* pCLayout;
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		m_pCommanderView->DeleteData( true );
 		return;
 	}
@@ -284,7 +291,7 @@ void CViewCommander::Command_LineDeleteToEnd( void )
 	// 選択範囲の変更
 	//	2005.06.24 Moca
 	CLayoutRange sRange( GetCaret().GetCaretLayoutPos(), ptPos );
-	m_pCommanderView->GetSelectionInfo().SetSelectArea( sRange );
+	selInfo.SetSelectArea( sRange );
 
 	// 選択領域削除
 	m_pCommanderView->DeleteData( true );
@@ -294,12 +301,13 @@ void CViewCommander::Command_LineDeleteToEnd( void )
 // 行切り取り(折り返し単位)
 void CViewCommander::Command_CUT_LINE( void )
 {
-	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
 
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		ErrorBeep();
 		return;
 	}
@@ -324,12 +332,13 @@ void CViewCommander::Command_CUT_LINE( void )
 // 行削除(折り返し単位)
 void CViewCommander::Command_DELETE_LINE( void )
 {
-	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
 		return;
 	}
 
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		ErrorBeep();
 		return;
 	}
@@ -386,9 +395,10 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	int				bAddCRLF;
 	CNativeW		cmemBuf;
 
-	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
+	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
-		m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+		selInfo.DisableSelectArea( true );
 	}
 
 	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );
@@ -410,7 +420,7 @@ void CViewCommander::Command_DUPLICATELINE( void )
 	CLayoutPoint ptCaretPosOld = GetCaret().GetCaretLayoutPos() + CLayoutPoint(0,1);
 
 	// 行頭に移動(折り返し単位)
-	Command_GOLINETOP( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */ );
+	Command_GOLINETOP( selInfo.m_bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */ );
 
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		// 操作の追加

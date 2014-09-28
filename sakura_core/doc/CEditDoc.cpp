@@ -261,8 +261,8 @@ void CEditDoc::SetBackgroundImage()
 		::GlobalUnlock(hGlobal);
 		{
 			IPicture* iPicture = NULL;
-			IStream*  iStream = NULL;
-			//hGlobalの管理を移譲
+			IStream* iStream = NULL;
+			// hGlobalの管理を移譲
 			if (S_OK != ::CreateStreamOnHGlobal(hGlobal, TRUE, &iStream)) {
 				GlobalFree(hGlobal);
 			}else {
@@ -300,25 +300,24 @@ void CEditDoc::SetBackgroundImage()
 void CEditDoc::InitAllView( void )
 {
 	m_nCommandExecNum = 0;	// コマンド実行回数
-
+	
 	// 2008.05.30 nasukoji	テキストの折り返し方法を初期化
 	m_nTextWrapMethodCur = m_cDocType.GetDocumentAttribute().m_nTextWrapMethod;	// 折り返し方法
-	m_bTextWrapMethodCurTemp = false;									// 一時設定適用中を解除
+	m_bTextWrapMethodCurTemp = false;											// 一時設定適用中を解除
 	m_blfCurTemp = false;
 	m_bTabSpaceCurTemp = false;
-
+	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP)
 		m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	else
 		m_cLayoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
-
+	
 	// CEditWndに引越し
 	m_pcEditWnd->InitAllViews();
-
+	
 	return;
 }
-
 
 /*! ウィンドウの作成等
 

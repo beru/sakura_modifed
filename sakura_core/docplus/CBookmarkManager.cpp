@@ -33,7 +33,7 @@ bool CBookmarkManager::SearchBookMark(
 	CLogicInt*			pnLineNum 		// マッチ行
 	)
 {
-	CLogicInt	nLinePos = nLineNum;
+	CLogicInt nLinePos = nLineNum;
 
 	// 前方検索
 	if (bPrevOrNext == SEARCH_BACKWARD) {

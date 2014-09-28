@@ -87,7 +87,7 @@ public:
 	static void TerminateApplication( HWND hWndFrom );	// サクラエディタの全終了		2006.12.25 ryoji 引数追加
 
 public:
-	HWND GetTrayHwnd() const{ return m_hWnd; }
+	HWND GetTrayHwnd() const { return m_hWnd; }
 
 	/*
 	|| 実装ヘルパ系
@@ -106,14 +106,13 @@ protected:
 		LPARAM	lParam		// second message parameter
 	);
 
-
 	/*
 	|| メンバ変数
 	*/
 private:
 	CMenuDrawer		m_CMenuDrawer;
 	CPropertyManager*	m_pcPropertyManager;
-	bool			m_bUseTrayMenu;			//トレイメニュー表示中
+	bool			m_bUseTrayMenu;			// トレイメニュー表示中
 	HINSTANCE		m_hInstance;
 	HWND			m_hWnd;
 	BOOL			m_bCreatedTrayIcon;		//!< トレイにアイコンを作った

@@ -90,8 +90,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	CTypeSupport cRulerType(m_pEditView,COLORIDX_RULER);
 
 	// フォント設定 (ルーラー上の数字用)
-	LOGFONT	lf;
-	memset_raw( &lf, 0, sizeof(lf) );
+	LOGFONT	lf = {0};
 	lf.lfHeight			= 1 - pCommon->m_sWindow.m_nRulerHeight;	//	2002/05/13 ai
 	lf.lfWidth			= 5;
 	lf.lfEscapement		= 0;

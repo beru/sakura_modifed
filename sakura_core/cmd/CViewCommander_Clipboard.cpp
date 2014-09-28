@@ -1133,10 +1133,11 @@ void CViewCommander::Command_COPYTAG( void )
 void CViewCommander::Command_CREATEKEYBINDLIST( void )
 {
 	CNativeW cMemKeyList;
+	auto& csKeyBind = GetDllShareData().m_Common.m_sKeyBind;
 	CKeyBind::CreateKeyBindList(
 		G_AppInstance(),
-		GetDllShareData().m_Common.m_sKeyBind.m_nKeyNameArrNum,
-		GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr,
+		csKeyBind.m_nKeyNameArrNum,
+		csKeyBind.m_pKeyNameArr,
 		cMemKeyList,
 		&GetDocument()->m_cFuncLookup,	//	Oct. 31, 2001 genta ’Ç‰Á
 		FALSE	// 2007.02.22 ryoji ’Ç‰Á

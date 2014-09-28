@@ -266,7 +266,7 @@ BOOL CDlgSameColor::OnDrawItem( WPARAM wParam, LPARAM lParam )
 		return TRUE;
 	}
 
-	//描画対象
+	// 描画対象
 	CGraphics gr(pDis->hDC);
 
 	//
@@ -329,17 +329,15 @@ BOOL CDlgSameColor::OnSelChangeListColors( HWND hwndCtl )
 {
 	// 色選択リストで現在フォーカスのある色について
 	// タイプ別設定から同色の項目を取り出して項目リストに表示する
-	HWND hwndListInfo;
-	COLORREF cr;
-	WCHAR szText[30];
-	LPWSTR pszStop;
-	hwndListInfo = ::GetDlgItem( GetHwnd(), IDC_LIST_ITEMINFO );
+	HWND hwndListInfo = ::GetDlgItem( GetHwnd(), IDC_LIST_ITEMINFO );
 	List_ResetContent( hwndListInfo );
 
 	int i = List_GetCaretIndex( hwndCtl );
 	if (LB_ERR != i) {
+		WCHAR szText[30];
 		List_GetText( hwndCtl, i, szText );
-		cr = wcstoul( szText, &pszStop, 10 );
+		LPWSTR pszStop;
+		COLORREF cr = wcstoul( szText, &pszStop, 10 );
 
 		switch (m_wID) {
 		case IDC_BUTTON_SAMETEXTCOLOR:
@@ -377,11 +375,10 @@ BOOL CDlgSameColor::OnSelChangeListColors( HWND hwndCtl )
 */
 LRESULT CALLBACK CDlgSameColor::ColorStatic_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	HDC			hDC;
-	RECT		rc;
+	HDC		hDC;
+	RECT	rc;
 
-	CDlgSameColor* pCDlgSameColor;
-	pCDlgSameColor = (CDlgSameColor*)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
+	CDlgSameColor* pCDlgSameColor = (CDlgSameColor*)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
 
 	switch (uMsg) {
 	case WM_PAINT:
@@ -442,8 +439,7 @@ LRESULT CALLBACK CDlgSameColor::ColorList_SubclassProc( HWND hwnd, UINT uMsg, WP
 	RECT rc;
 	int nItemNum;
 
-	CDlgSameColor* pCDlgSameColor;
-	pCDlgSameColor = (CDlgSameColor*)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
+	CDlgSameColor* pCDlgSameColor = (CDlgSameColor*)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
 
 	switch (uMsg) {
 	case WM_LBUTTONUP:

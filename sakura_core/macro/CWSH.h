@@ -23,7 +23,7 @@
 #include "macro/CIfObj.h"
 
 /* 2009.10.29 syat インタフェースオブジェクト部分をCWSHIfObj.hに分離
-template<class Base>
+template <class Base>
 class ImplementsIUnknown: public Base
 
 class CInterfaceObject: public ImplementsIUnknown<IDispatch>

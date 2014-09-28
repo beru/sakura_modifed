@@ -459,8 +459,8 @@ BOOL CPrint::PrintOpen(
 	TCHAR*		pszErrMsg		// エラーメッセージ格納場所
 )
 {
-	BOOL		bRet;
-	bRet = TRUE;
+	BOOL bRet = TRUE;
+	DOCINFO di = {0};
 	// 
 	// hdcを取得
 	//
@@ -476,8 +476,6 @@ BOOL CPrint::PrintOpen(
 	//
 	//  印刷ジョブ開始
 	//
-	DOCINFO di;
-	memset_raw( &di, 0, sizeof( di ) );
 	di.cbSize = sizeof(di);
 	di.lpszDocName = pszJobName;
 	di.lpszOutput  = NULL;

@@ -46,18 +46,18 @@
 //! Popup Help用ID
 //@@@ 2001.12.22 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//11700
-	IDC_MACRODIRREF,	HIDC_MACRODIRREF,	//マクロディレクトリ参照
-	IDC_MACRO_REG,		HIDC_MACRO_REG,		//マクロ設定
-	IDC_COMBO_MACROID,	HIDC_COMBO_MACROID,	//ID
-	IDC_MACROPATH,		HIDC_MACROPATH,		//File
-	IDC_MACRONAME,		HIDC_MACRONAME,		//マクロ名
-	IDC_MACROLIST,		HIDC_MACROLIST,		//マクロリスト
-	IDC_MACRODIR,		HIDC_MACRODIR,		//マクロ一覧
-	IDC_CHECK_RELOADWHENEXECUTE,	HIDC_CHECK_RELOADWHENEXECUTE,	//マクロを実行するたびにファイルを読み込みなおす	// 2006.08.06 ryoji
-	IDC_CHECK_MacroOnOpened,		HIDC_CHECK_MacroOnOpened,		//オープン後自動実行マクロ	// 2006.09.01 ryoji
-	IDC_CHECK_MacroOnTypeChanged,	HIDC_CHECK_MacroOnTypeChanged,	//タイプ変更後自動実行マクロ	// 2006.09.01 ryoji
-	IDC_CHECK_MacroOnSave,			HIDC_CHECK_MacroOnSave,			//保存前自動実行マクロ	// 2006.09.01 ryoji
-	IDC_MACROCANCELTIMER,			HIDC_MACROCANCELTIMER,			//マクロ停止ダイアログ表示待ち時間	// 2011.08.04 syat
+	IDC_MACRODIRREF,	HIDC_MACRODIRREF,	// マクロディレクトリ参照
+	IDC_MACRO_REG,		HIDC_MACRO_REG,		// マクロ設定
+	IDC_COMBO_MACROID,	HIDC_COMBO_MACROID,	// ID
+	IDC_MACROPATH,		HIDC_MACROPATH,		// File
+	IDC_MACRONAME,		HIDC_MACRONAME,		// マクロ名
+	IDC_MACROLIST,		HIDC_MACROLIST,		// マクロリスト
+	IDC_MACRODIR,		HIDC_MACRODIR,		// マクロ一覧
+	IDC_CHECK_RELOADWHENEXECUTE,	HIDC_CHECK_RELOADWHENEXECUTE,	// マクロを実行するたびにファイルを読み込みなおす	// 2006.08.06 ryoji
+	IDC_CHECK_MacroOnOpened,		HIDC_CHECK_MacroOnOpened,		// オープン後自動実行マクロ	// 2006.09.01 ryoji
+	IDC_CHECK_MacroOnTypeChanged,	HIDC_CHECK_MacroOnTypeChanged,	// タイプ変更後自動実行マクロ	// 2006.09.01 ryoji
+	IDC_CHECK_MacroOnSave,			HIDC_CHECK_MacroOnSave,			// 保存前自動実行マクロ	// 2006.09.01 ryoji
+	IDC_MACROCANCELTIMER,			HIDC_MACROCANCELTIMER,			// マクロ停止ダイアログ表示待ち時間	// 2011.08.04 syat
 //	IDC_STATIC,			-1,
 	0, 0
 };
@@ -89,6 +89,8 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	WORD		wNotifyCode;
 	WORD		wID;
 
+	auto& csMacro = m_Common.m_sMacro;
+
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// ダイアログデータの設定 Macro
@@ -98,10 +100,10 @@ INT_PTR CPropMacro::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
 		//	Oct. 5, 2002 genta エディット コントロールに入力できるテキストの長さを制限する
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACRONAME ), _countof( m_Common.m_sMacro.m_MacroTable[0].m_szName ) - 1 );
-		Combo_LimitText( ::GetDlgItem( hwndDlg, IDC_MACROPATH ), _countof( m_Common.m_sMacro.m_MacroTable[0].m_szFile ) - 1 );
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACRONAME ), _countof( csMacro.m_MacroTable[0].m_szName ) - 1 );
+		Combo_LimitText( ::GetDlgItem( hwndDlg, IDC_MACROPATH ), _countof( csMacro.m_MacroTable[0].m_szFile ) - 1 );
 		// 2003.06.23 Moca
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACRODIR ), _countof2( m_Common.m_sMacro.m_szMACROFOLDER ) - 1 );
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACRODIR ), _countof2( csMacro.m_szMACROFOLDER ) - 1 );
 		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_MACROCANCELTIMER ), 4 );
 		return TRUE;
 		
@@ -208,41 +210,43 @@ void CPropMacro::SetData( HWND hwndDlg )
 	int index;
 	LVITEM sItem;
 
-	//	マクロデータ
+	// マクロデータ
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
+	auto& csMacro = m_pShareData->m_Common.m_sMacro;
 	
 	for (index = 0; index < MAX_CUSTMACRO; ++index) {
+		auto& macroRec = csMacro.m_MacroTable[index];
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 1;
-		sItem.pszText = m_pShareData->m_Common.m_sMacro.m_MacroTable[index].m_szName;
+		sItem.pszText = macroRec.m_szName;
 		ListView_SetItem( hListView, &sItem );
 
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 2;
-		sItem.pszText = m_pShareData->m_Common.m_sMacro.m_MacroTable[index].m_szFile;
+		sItem.pszText = macroRec.m_szFile;
 		ListView_SetItem( hListView, &sItem );
 
 		memset_raw( &sItem, 0, sizeof( sItem ));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 3;
-		sItem.pszText = const_cast<TCHAR*>(m_pShareData->m_Common.m_sMacro.m_MacroTable[index].m_bReloadWhenExecute ? _T("on") : _T("off"));
+		sItem.pszText = const_cast<TCHAR*>(macroRec.m_bReloadWhenExecute ? _T("on") : _T("off"));
 		ListView_SetItem( hListView, &sItem );
 
 		// 自動実行マクロ	// 2006.09.01 ryoji
 		TCHAR szText[8];
 		szText[0] = _T('\0');
-		if (index == m_pShareData->m_Common.m_sMacro.m_nMacroOnOpened) {
+		if (index == csMacro.m_nMacroOnOpened) {
 			::lstrcat(szText, _T("O"));
 		}
-		if (index == m_pShareData->m_Common.m_sMacro.m_nMacroOnTypeChanged) {
+		if (index == csMacro.m_nMacroOnTypeChanged) {
 			::lstrcat(szText, _T("T"));
 		}
-		if (index == m_pShareData->m_Common.m_sMacro.m_nMacroOnSave) {
+		if (index == csMacro.m_nMacroOnSave) {
 			::lstrcat(szText, _T("S"));
 		}
 		memset_raw( &sItem, 0, sizeof( sItem ));
@@ -284,10 +288,12 @@ int CPropMacro::GetData( HWND hwndDlg )
 	int index;
 	LVITEM sItem;
 
+	auto& csMacro = m_Common.m_sMacro;
+
 	// 自動実行マクロ変数初期化	// 2006.09.01 ryoji
-	m_Common.m_sMacro.m_nMacroOnOpened = -1;
-	m_Common.m_sMacro.m_nMacroOnTypeChanged = -1;
-	m_Common.m_sMacro.m_nMacroOnSave = -1;
+	csMacro.m_nMacroOnOpened = -1;
+	csMacro.m_nMacroOnTypeChanged = -1;
+	csMacro.m_nMacroOnSave = -1;
 
 	//	マクロデータ
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
@@ -299,7 +305,7 @@ int CPropMacro::GetData( HWND hwndDlg )
 		sItem.iSubItem = 1;
 		sItem.cchTextMax = MACRONAME_MAX - 1;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		sItem.pszText = /*m_pShareData->*/m_Common.m_sMacro.m_MacroTable[index].m_szName;
+		sItem.pszText = /*m_pShareData->*/csMacro.m_MacroTable[index].m_szName;
 		ListView_GetItem( hListView, &sItem );
 
 		memset_raw( &sItem, 0, sizeof( sItem ));
@@ -308,7 +314,7 @@ int CPropMacro::GetData( HWND hwndDlg )
 		sItem.iSubItem = 2;
 		sItem.cchTextMax = _MAX_PATH;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		sItem.pszText = /*m_pShareData->*/m_Common.m_sMacro.m_MacroTable[index].m_szFile;
+		sItem.pszText = /*m_pShareData->*/csMacro.m_MacroTable[index].m_szFile;
 		ListView_GetItem( hListView, &sItem );
 
 		memset_raw( &sItem, 0, sizeof( sItem ));
@@ -320,9 +326,9 @@ int CPropMacro::GetData( HWND hwndDlg )
 		sItem.cchTextMax = MAX_PATH;
 		ListView_GetItem( hListView, &sItem );
 		if (_tcscmp(buf, _T("on")) == 0) {
-			m_Common.m_sMacro.m_MacroTable[index].m_bReloadWhenExecute = true;
+			csMacro.m_MacroTable[index].m_bReloadWhenExecute = true;
 		}else {
-			m_Common.m_sMacro.m_MacroTable[index].m_bReloadWhenExecute = false;
+			csMacro.m_MacroTable[index].m_bReloadWhenExecute = false;
 		}
 
 		// 自動実行マクロ	// 2006.09.01 ryoji
@@ -337,27 +343,27 @@ int CPropMacro::GetData( HWND hwndDlg )
 		int nLen = ::lstrlen(szText);
 		for (int i = 0; i < nLen; i++) {
 			if (szText[i] == _T('O')) {
-				m_Common.m_sMacro.m_nMacroOnOpened = index;
+				csMacro.m_nMacroOnOpened = index;
 			}
 			if (szText[i] == _T('T')) {
-				m_Common.m_sMacro.m_nMacroOnTypeChanged = index;
+				csMacro.m_nMacroOnTypeChanged = index;
 			}
 			if (szText[i] == _T('S')) {
-				m_Common.m_sMacro.m_nMacroOnSave = index;
+				csMacro.m_nMacroOnSave = index;
 			}
 		}
 	}
 
 	//	マクロディレクトリ
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-	::DlgItem_GetText( hwndDlg, IDC_MACRODIR, m_Common.m_sMacro.m_szMACROFOLDER, _MAX_PATH );
+	::DlgItem_GetText( hwndDlg, IDC_MACRODIR, csMacro.m_szMACROFOLDER, _MAX_PATH );
 	// 2003.06.23 Moca マクロフォルダの最後の\がなければ付ける
-	AddLastChar( m_Common.m_sMacro.m_szMACROFOLDER, _MAX_PATH, _T('\\') );
+	AddLastChar( csMacro.m_szMACROFOLDER, _MAX_PATH, _T('\\') );
 	
 	//	マクロ停止ダイアログ表示待ち時間
 	TCHAR szCancelTimer[16] = {0};
 	::DlgItem_GetText( hwndDlg, IDC_MACROCANCELTIMER, szCancelTimer, _countof(szCancelTimer) );
-	m_Common.m_sMacro.m_nMacroCancelTimer = _ttoi(szCancelTimer);
+	csMacro.m_nMacroCancelTimer = _ttoi(szCancelTimer);
 
 	return TRUE;
 }
@@ -641,9 +647,7 @@ void CPropMacro::CheckListPosition_Macro( HWND hwndDlg )
 	Combo_SetCurSel( hNum, nLastPos_Macro );
 	
 	TCHAR buf[MAX_PATH + MACRONAME_MAX];	// MAX_PATHとMACRONAME_MAXの両方より大きい値
-	LVITEM sItem;
-
-	memset_raw( &sItem, 0, sizeof( sItem ));
+	LVITEM sItem = {0};
 	sItem.iItem = current;
 	sItem.mask = LVIF_TEXT;
 	sItem.iSubItem = 1;

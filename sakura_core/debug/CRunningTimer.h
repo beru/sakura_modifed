@@ -49,8 +49,7 @@
 
 	@date 2002/10/16  genta WriteTraceãyÇ—É}ÉNÉçí«â¡
 */
-class CRunningTimer
-{
+class CRunningTimer {
 public:
 	/*
 	||  Constructors

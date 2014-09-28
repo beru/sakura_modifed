@@ -31,18 +31,18 @@
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10700
-	IDC_BUTTON_IMPORT,				HIDC_BUTTON_IMPORT_KEYBIND,		//インポート
-	IDC_BUTTON_EXPORT,				HIDC_BUTTON_EXPORT_KEYBIND,		//エクスポート
-	IDC_BUTTON_ASSIGN,				HIDC_BUTTON_ASSIGN,				//キー割り当て
-	IDC_BUTTON_RELEASE,				HIDC_BUTTON_RELEASE,			//キー解除
-	IDC_CHECK_SHIFT,				HIDC_CHECK_SHIFT,				//Shiftキー
-	IDC_CHECK_CTRL,					HIDC_CHECK_CTRL,				//Ctrlキー
-	IDC_CHECK_ALT,					HIDC_CHECK_ALT,					//Altキー
-	IDC_COMBO_FUNCKIND,				HIDC_COMBO_FUNCKIND_KEYBIND,	//機能の種別
-	IDC_EDIT_KEYSFUNC,				HIDC_EDIT_KEYSFUNC,				//キーに割り当てられている機能
-	IDC_LIST_FUNC,					HIDC_LIST_FUNC_KEYBIND,			//機能一覧
-	IDC_LIST_KEY,					HIDC_LIST_KEY,					//キー一覧
-	IDC_LIST_ASSIGNEDKEYS,			HIDC_LIST_ASSIGNEDKEYS,			//機能に割り当てられているキー
+	IDC_BUTTON_IMPORT,				HIDC_BUTTON_IMPORT_KEYBIND,		// インポート
+	IDC_BUTTON_EXPORT,				HIDC_BUTTON_EXPORT_KEYBIND,		// エクスポート
+	IDC_BUTTON_ASSIGN,				HIDC_BUTTON_ASSIGN,				// キー割り当て
+	IDC_BUTTON_RELEASE,				HIDC_BUTTON_RELEASE,			// キー解除
+	IDC_CHECK_SHIFT,				HIDC_CHECK_SHIFT,				// Shiftキー
+	IDC_CHECK_CTRL,					HIDC_CHECK_CTRL,				// Ctrlキー
+	IDC_CHECK_ALT,					HIDC_CHECK_ALT,					// Altキー
+	IDC_COMBO_FUNCKIND,				HIDC_COMBO_FUNCKIND_KEYBIND,	// 機能の種別
+	IDC_EDIT_KEYSFUNC,				HIDC_EDIT_KEYSFUNC,				// キーに割り当てられている機能
+	IDC_LIST_FUNC,					HIDC_LIST_FUNC_KEYBIND,			// 機能一覧
+	IDC_LIST_KEY,					HIDC_LIST_KEY,					// キー一覧
+	IDC_LIST_ASSIGNEDKEYS,			HIDC_LIST_ASSIGNEDKEYS,			// 機能に割り当てられているキー
 	IDC_LABEL_MENUFUNCKIND,			(DWORD)-1,
 	IDC_LABEL_MENUFUNC,				(DWORD)-1,
 	IDC_LABEL_KEYKIND,				(DWORD)-1,
@@ -115,6 +115,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 	int			j;
 	EFunctionCode	nFuncCode;
 	static WCHAR szLabel[256];
+	auto& csKeybind = m_Common.m_sKeyBind;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -214,7 +215,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 					i |= _ALT;
 				}
-				m_Common.m_sKeyBind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
+				csKeybind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_FUNC, LBN_SELCHANGE ), (LPARAM)hwndFuncList );
 				return TRUE;
@@ -234,7 +235,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 					i |= _ALT;
 				}
-				m_Common.m_sKeyBind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
+				csKeybind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_KEY, LBN_SELCHANGE ), (LPARAM)hwndKeyList );
 				::SendMessageCmd( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_FUNC, LBN_SELCHANGE ), (LPARAM)hwndFuncList );
 				return TRUE;
@@ -265,7 +266,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_ALT )) {
 					i |= _ALT;
 				}
-				nFuncCode = m_Common.m_sKeyBind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i];
+				nFuncCode = csKeybind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i];
 				// Oct. 2, 2001 genta
 				// 2007.11.02 ryoji F_DISABLEなら未割付
 				if (nFuncCode == F_DISABLE) {
@@ -287,7 +288,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				// 機能に対応するキー名の取得(複数)
 				CNativeT**	ppcAssignedKeyList;
 				nAssignedKeyNum = CKeyBind::GetKeyStrList(	// 機能に対応するキー名の取得(複数)
-					G_AppInstance(), m_Common.m_sKeyBind.m_nKeyNameArrNum, (KEYDATA*)m_Common.m_sKeyBind.m_pKeyNameArr,
+					G_AppInstance(), csKeybind.m_nKeyNameArrNum, (KEYDATA*)csKeybind.m_pKeyNameArr,
 					&ppcAssignedKeyList, nFuncCode,
 					FALSE	// 2007.02.22 ryoji デフォルト機能は取得しない
 				);	
@@ -345,8 +346,8 @@ INT_PTR CPropKeybind::DispatchEvent(
 							p += _tcslen(STR_ALT_PLUS);
 							i |= _ALT;
 						}
-						for (j = 0; j < m_Common.m_sKeyBind.m_nKeyNameArrNum; j++) {
-							if (_tcscmp(m_Common.m_sKeyBind.m_pKeyNameArr[j].m_szKeyName, p) == 0) {
+						for (j = 0; j < csKeybind.m_nKeyNameArrNum; j++) {
+							if (_tcscmp(csKeybind.m_pKeyNameArr[j].m_szKeyName, p) == 0) {
 								List_SetCurSel( hwndKeyList, j);
 								if (i & _SHIFT) ::CheckDlgButton( hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED );  //チェック
 								else            ::CheckDlgButton( hwndDlg, IDC_CHECK_SHIFT, BST_UNCHECKED );  //チェックをはずす
@@ -409,21 +410,18 @@ INT_PTR CPropKeybind::DispatchEvent(
 // ダイアログデータの設定 Keybind
 void CPropKeybind::SetData( HWND hwndDlg )
 {
-	HWND		hwndCombo;
-	HWND		hwndKeyList;
-	int			i;
-
 	// 機能種別一覧に文字列をセット（コンボボックス）
-	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
+	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 	m_cLookup.SetCategory2Combo( hwndCombo );	//	Oct. 2, 2001 genta
 
 	// 種別の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel( hwndCombo, 0 );	//Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
 	// キー一覧に文字列をセット（リストボックス）
-	hwndKeyList = ::GetDlgItem( hwndDlg, IDC_LIST_KEY );
-	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
-		::List_AddString( hwndKeyList, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
+	HWND hwndKeyList = ::GetDlgItem( hwndDlg, IDC_LIST_KEY );
+	auto& csKeybind = m_Common.m_sKeyBind;
+	for (int i = 0; i < csKeybind.m_nKeyNameArrNum; ++i) {
+		::List_AddString( hwndKeyList, csKeybind.m_pKeyNameArr[i].m_szKeyName );
 	}
 
 	return;
@@ -463,9 +461,10 @@ void CPropKeybind::ChangeKeyList( HWND hwndDlg){
 	}
 	// キー一覧に文字列をセット（リストボックス）
 	List_ResetContent( hwndKeyList );
-	for (i = 0; i < m_Common.m_sKeyBind.m_nKeyNameArrNum; ++i) {
+	auto& csKeybind = m_Common.m_sKeyBind;
+	for (i = 0; i < csKeybind.m_nKeyNameArrNum; ++i) {
 		TCHAR	szLabel[256];
-		auto_sprintf( szLabel, _T("%ls%ts"), szKeyState, m_Common.m_sKeyBind.m_pKeyNameArr[i].m_szKeyName );
+		auto_sprintf( szLabel, _T("%ls%ts"), szKeyState, csKeybind.m_pKeyNameArr[i].m_szKeyName );
 		::List_AddString( hwndKeyList, szLabel );
 	}
 	List_SetCurSel( hwndKeyList, nIndex );

@@ -34,7 +34,8 @@
 #include "CUxTheme.h"
 
 CUxTheme::CUxTheme()
- : m_bInitialized(false)
+	:
+	m_bInitialized(false)
 {
 }
 

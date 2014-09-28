@@ -37,7 +37,8 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CDllImp::CDllImp()
-	: m_hInstance( NULL )
+	:
+	m_hInstance( NULL )
 {
 }
 

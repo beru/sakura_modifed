@@ -38,7 +38,8 @@ void CViewCommander::Command_WCHAR( wchar_t wcChar, bool bConvertEOL )
 
 	CLogicInt nPos;
 
-	GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	auto* pDoc = GetDocument();
+	pDoc->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
 
 	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -54,7 +55,7 @@ void CViewCommander::Command_WCHAR( wchar_t wcChar, bool bConvertEOL )
 	if (WCODE::IsLineDelimiter(wcChar)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
-			CEol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
+			CEol cWork = pDoc->m_cDocEditor.GetNewLineCode();
 			cmemDataW2.SetString( cWork.GetValue2(), cWork.GetLen() );
 		}
 
@@ -65,10 +66,10 @@ void CViewCommander::Command_WCHAR( wchar_t wcChar, bool bConvertEOL )
 		if (typeData->m_bAutoIndent) {	// オートインデント
 			const CLayout* pCLayout;
 			CLogicInt nLineLen;
-			auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+			auto& layoutMgr = pDoc->m_cLayoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr( caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout );
 			if (pCLayout) {
-				const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine( pCLayout->GetLogicLineNo() );
+				const CDocLine* pcDocLine = pDoc->m_cDocLineMgr.GetLine( pCLayout->GetLogicLineNo() );
 				pLine = pcDocLine->GetDocLineStrWithEOL( &nLineLen );
 				if (pLine) {
 					/*
@@ -323,7 +324,8 @@ void CViewCommander::Command_UNDO( void )
 
 	// 現在のUndo対象の操作ブロックを返す
 	auto& caret = GetCaret();
-	if (( pcOpeBlk = GetDocument()->m_cDocEditor.m_cOpeBuf.DoUndo( &bIsModified ) )) {
+	auto& docEditor = GetDocument()->m_cDocEditor;
+	if (( pcOpeBlk = docEditor.m_cOpeBuf.DoUndo( &bIsModified ) )) {
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	//	hor
 		int nOpeBlkNum = pcOpeBlk->GetNum();
 
@@ -496,7 +498,7 @@ void CViewCommander::Command_UNDO( void )
 		m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
 
 		// Undo後の変更フラグ
-		GetDocument()->m_cDocEditor.SetModified(bIsModified,true);	//	Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified,true);	//	Jan. 22, 2002 genta
 
 		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
 

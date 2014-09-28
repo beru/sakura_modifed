@@ -83,13 +83,12 @@ bool CShareData_IO::ShareData_IO_2( bool bRead )
 		cProfile.SetWritingMode();
 	}
 
-	TCHAR	szIniFileName[_MAX_PATH + 1];
-	CFileNameManager::getInstance()->GetIniFileName( szIniFileName, bRead );	// 2007.05.19 ryoji iniファイル名を取得する
+	LPCTSTR pszIniFileName = CFileNameManager::getInstance()->GetIniFileName( bRead );	// 2007.05.19 ryoji iniファイル名を取得する
 
 //	MYTRACE( _T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read() );
 
 	if (bRead) {
-		if (!cProfile.ReadProfile( szIniFileName )) {
+		if (!cProfile.ReadProfile( pszIniFileName )) {
 			// 設定ファイルが存在しない
 			return false;
 		}
@@ -110,10 +109,10 @@ bool CShareData_IO::ShareData_IO_2( bool bRead )
 				&& pShareData->m_sVersion.m_dwProductVersionLS > dwLS
 			)
 		) {
-			TCHAR szBkFileName[_countof(szIniFileName) + 4];
-			::lstrcpy(szBkFileName, szIniFileName);
+			TCHAR szBkFileName[_MAX_PATH + 4];
+			::lstrcpy(szBkFileName, pszIniFileName);
 			::lstrcat(szBkFileName, _T(".bak"));
-			::CopyFile(szIniFileName, szBkFileName, FALSE);
+			::CopyFile(pszIniFileName, szBkFileName, FALSE);
 		}
 	}
 //	MYTRACE( _T("Iniファイル処理 0 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read() );
@@ -152,7 +151,7 @@ bool CShareData_IO::ShareData_IO_2( bool bRead )
 	pcMenuDrawer = NULL;
 
 	if (!bRead) {
-		cProfile.WriteProfile( szIniFileName, LTEXT(" sakura.ini テキストエディタ設定ファイル") );
+		cProfile.WriteProfile( pszIniFileName, LTEXT(" sakura.ini テキストエディタ設定ファイル") );
 	}
 
 //	MYTRACE( _T("Iniファイル処理 8 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read() );

@@ -120,15 +120,8 @@ void CViewCommander::Command_HELP_SEARCH( void )
 // コマンド一覧
 void CViewCommander::Command_MENU_ALLFUNC( void )
 {
-
-	UINT	uFlags;
 	POINT	po;
 	RECT	rc;
-	HMENU	hMenu;
-	HMENU	hMenuPopUp;
-	int		i;
-	int		j;
-	int		nId;
 
 //	From Here Sept. 15, 2000 JEPRO
 //	サブメニュー、特に「その他」のコマンドに対してステータスバーに表示されるキーアサイン情報が
@@ -139,7 +132,7 @@ void CViewCommander::Command_MENU_ALLFUNC( void )
 //	To Here Sept. 15, 2000 (Oct. 7, 2000 300→500; Nov. 3, 2000 500→540)
 	po.y = 0;
 
-	CEditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 	::GetClientRect( pCEditWnd->GetHwnd(), &rc );
 	po.x = t_min( po.x, rc.right );
 	::ClientToScreen( pCEditWnd->GetHwnd(), &po );
@@ -150,19 +143,18 @@ void CViewCommander::Command_MENU_ALLFUNC( void )
 
 	//	Oct. 3, 2001 genta
 	CFuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
-
-	hMenu = ::CreatePopupMenu();
+	HMENU hMenu = ::CreatePopupMenu();
 //Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
 	//	Oct. 3, 2001 genta
-	for (i = 0; i < FuncLookup.GetCategoryCount(); i++) {
-		hMenuPopUp = ::CreatePopupMenu();
-		for (j = 0; j < FuncLookup.GetItemCount(i); j++) {
+	for (int i = 0; i < FuncLookup.GetCategoryCount(); i++) {
+		HMENU hMenuPopUp = ::CreatePopupMenu();
+		for (int j = 0; j < FuncLookup.GetItemCount(i); j++) {
 			//	Oct. 3, 2001 genta
 			int code = FuncLookup.Pos2FuncCode( i, j, false );	// 2007.11.02 ryoji 未登録マクロ非表示を明示指定
 			if (code != 0) {
 				WCHAR	szLabel[300];
 				FuncLookup.Pos2FuncName( i, j, szLabel, 256 );
-				uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
+				UINT uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
 				//	Oct. 3, 2001 genta
 				pCEditWnd->GetMenuDrawer().MyAppendMenu( hMenuPopUp, uFlags, code, szLabel, L"" );
 			}
@@ -171,8 +163,7 @@ void CViewCommander::Command_MENU_ALLFUNC( void )
 		pCEditWnd->GetMenuDrawer().MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , FuncLookup.Category2Name(i) , _T(""));
 //		pCEditWnd->GetMenuDrawer().MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , nsFuncCode::ppszFuncKind[i] );
 	}
-
-	nId = ::TrackPopupMenu(
+	int nId = ::TrackPopupMenu(
 		hMenu,
 		TPM_TOPALIGN
 		| TPM_LEFTALIGN
@@ -225,8 +216,8 @@ retry:;
 		}
 	}
 
-	CNativeW		cmemCurText;
-	const TCHAR*	helpfile = CHelpManager().GetExtWinHelp( &(GetDocument()->m_cDocType.GetDocumentAttribute()) );
+	CNativeW cmemCurText;
+	const TCHAR* helpfile = CHelpManager().GetExtWinHelp( &(GetDocument()->m_cDocType.GetDocumentAttribute()) );
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	m_pCommanderView->GetCurrentTextForSearch( cmemCurText, false );
@@ -265,8 +256,7 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 		helpfile = to_tchar(_helpfile);
 	}
 
-	HWND		hwndHtmlHelp;
-	int			nLen;
+	HWND hwndHtmlHelp;
 
 	DEBUG_TRACE( _T("helpfile=%ts\n"), helpfile.c_str() );
 
@@ -313,13 +303,13 @@ void CViewCommander::Command_EXTHTMLHELP( const WCHAR* _helpfile, const WCHAR* k
 		// タスクトレイのプロセスにHtmlHelpを起動させる
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 		// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
-		TCHAR* pWork=GetDllShareData().m_sWorkBuffer.GetWorkBuffer<TCHAR>();
+		TCHAR* pWork = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<TCHAR>();
 		if (_IS_REL_PATH( filename )) {
 			GetInidirOrExedir( pWork, filename );
 		}else {
 			_tcscpy( pWork, filename ); //	Jul. 5, 2002 genta
 		}
-		nLen = _tcslen( pWork );
+		int nLen = _tcslen( pWork );
 		_tcscpy( &pWork[nLen + 1], cmemCurText.GetStringT() );
 		hwndHtmlHelp = (HWND)::SendMessageAny(
 			GetDllShareData().m_sHandles.m_hwndTray,

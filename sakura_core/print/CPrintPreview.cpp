@@ -1015,8 +1015,7 @@ void CPrintPreview::OnPrint( void )
 
 	// 印刷範囲を指定できるプリンタダイアログを作成
 	//	2003.05.02 かろと
-	PRINTDLG pd;
-	memset_raw( &pd, 0, sizeof(pd) );
+	PRINTDLG pd = {0};
 #ifndef _DEBUG
 // Debugモードで、hwndOwnerを指定すると、Win2000では落ちるので・・・
 	pd.hwndOwner = m_pParentWnd->GetHwnd();
@@ -2076,24 +2075,25 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 			switch (wID) {
 			case IDC_BUTTON_PRINTERSELECT:
 				// From Here 2003.05.03 かろと
-				// PRINTDLGを初期化
-				PRINTDLG	pd;
-				memset_raw( &pd, 0, sizeof(pd) );
-				pd.Flags = PD_PRINTSETUP | PD_NONETWORKBUTTON;
-				pd.hwndOwner = m_pParentWnd->GetHwnd();
-				if (m_cPrint.PrintDlg( &pd, &m_pPrintSettingOrg->m_mdmDevMode )) {
-					// 用紙サイズと用紙方向を反映させる 2003.05.03 かろと
-					m_pPrintSettingOrg->m_nPrintPaperSize = m_pPrintSettingOrg->m_mdmDevMode.dmPaperSize;
-					m_pPrintSettingOrg->m_nPrintPaperOrientation = m_pPrintSettingOrg->m_mdmDevMode.dmOrientation;
-					// 印刷プレビュー スクロールバー初期化
-					CAppNodeGroupHandle(0).SendMessageToAllEditors(
-						MYWM_CHANGESETTING,
-						(WPARAM)0,
-						(LPARAM)PM_PRINTSETTING,
-						CEditWnd::getInstance()->GetHwnd()
-					);
-					// OnChangePrintSetting();
-					// ::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
+				{
+					// PRINTDLGを初期化
+					PRINTDLG pd = {0};
+					pd.Flags = PD_PRINTSETUP | PD_NONETWORKBUTTON;
+					pd.hwndOwner = m_pParentWnd->GetHwnd();
+					if (m_cPrint.PrintDlg( &pd, &m_pPrintSettingOrg->m_mdmDevMode )) {
+						// 用紙サイズと用紙方向を反映させる 2003.05.03 かろと
+						m_pPrintSettingOrg->m_nPrintPaperSize = m_pPrintSettingOrg->m_mdmDevMode.dmPaperSize;
+						m_pPrintSettingOrg->m_nPrintPaperOrientation = m_pPrintSettingOrg->m_mdmDevMode.dmOrientation;
+						// 印刷プレビュー スクロールバー初期化
+						CAppNodeGroupHandle(0).SendMessageToAllEditors(
+							MYWM_CHANGESETTING,
+							(WPARAM)0,
+							(LPARAM)PM_PRINTSETTING,
+							CEditWnd::getInstance()->GetHwnd()
+						);
+						// OnChangePrintSetting();
+						// ::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
+					}
 				}
 				// To Here 2003.05.03 かろと
 				break;

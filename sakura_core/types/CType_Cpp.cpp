@@ -8,7 +8,7 @@
 #include "view/CEditView.h"
 #include "view/colors/EColorIndexType.h"
 
-//!CPPキーワードで始まっていれば true
+//! CPPキーワードで始まっていれば true
 inline
 bool IsHeadCppKeyword(const wchar_t* pData)
 {
@@ -21,26 +21,26 @@ bool IsHeadCppKeyword(const wchar_t* pData)
 	return false;
 }
 
-/* C/C++ */
-// Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読めるようにする
-// Jan. 24, 2004 genta 関連づけ上好ましくないのでdsw,dsp,dep,makははずす
-//	2003.06.23 Moca ファイル内からの入力補完機能
+// C/C++
+// VC++の生成するテキストファイルも読めるようにする			Oct. 31, 2000 JEPRO
+// 関連づけ上好ましくないのでdsw,dsp,dep,makははずす		Jan. 24, 2004 genta
+// ファイル内からの入力補完機能								2003.06.23 Moca
 void CType_Cpp::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy( pType->m_szTypeName, _T("C/C++") );
 	_tcscpy( pType->m_szTypeExts, _T("c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,hm") );
 
-	//設定
-	pType->m_cLineComment.CopyTo( 0, L"//", -1 );							/* 行コメントデリミタ */
-	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );			/* ブロックコメントデリミタ */
-	pType->m_cBlockComments[1].SetBlockCommentRule( L"#if 0", L"#endif" );	/* ブロックコメントデリミタ2 */	//Jul. 11, 2001 JEPRO
-	pType->m_nKeyWordSetIdx[0] = 0;											/* キーワードセット */
-	pType->m_eDefaultOutline = OUTLINE_CPP;									/* アウトライン解析方法 */
-	pType->m_eSmartIndent = SMARTINDENT_CPP;								/* スマートインデント種別 */
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;					//半角数値を色分け表示	//Mar. 10, 2001 JEPRO
-	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;			//	Sep. 21, 2002 genta 対括弧の強調をデフォルトONに
-	pType->m_bUseHokanByFile = true;										/*! 入力補完 開いているファイル内から候補を探す */
+	// 設定
+	pType->m_cLineComment.CopyTo( 0, L"//", -1 );							// 行コメントデリミタ
+	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );			// ブロックコメントデリミタ
+	pType->m_cBlockComments[1].SetBlockCommentRule( L"#if 0", L"#endif" );	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
+	pType->m_nKeyWordSetIdx[0] = 0;											// キーワードセット
+	pType->m_eDefaultOutline = OUTLINE_CPP;									// アウトライン解析方法
+	pType->m_eSmartIndent = SMARTINDENT_CPP;								// スマートインデント種別
+	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
+	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
+	pType->m_bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -427,7 +427,7 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
 		//	コメント中でなければプリプロセッサ指令を先に判定させる
-		if (8 != nMode && 10 != nMode) {	/* chg 2005/12/6 じゅうじ 次の行が空白でもよい	*/
+		if (8 != nMode && 10 != nMode) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
 			i = cCppPMng.ScanLine( pLine, nLineLen );
 		}else {
 			i = CLogicInt(0);
@@ -443,13 +443,13 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 			DEBUG_TRACE(_T("%2d [%lc] %d %x %d %d %d wd[%ls] pre[%ls] tmp[%ls] til[%ls] %d\n"), int((Int)i), pLine[i], nMode, nMode2,
 				nNestLevel_global, nNestLevel_func, nNestLevel_fparam, szWord, szWordPrev, szTemplateName, szItemName, nWordIdx );
 #endif
-/* del start 2005/12/6 じゅうじ	*/
-			/* エスケープシーケンスは常に取り除く */
-			/* シングルクォーテーション文字列読み込み中 */
-			/* ダブルクォーテーション文字列読み込み中 */
+// del start 2005/12/6 じゅうじ
+			// エスケープシーケンスは常に取り除く
+			// シングルクォーテーション文字列読み込み中
+			// ダブルクォーテーション文字列読み込み中
 			// いずれもコメント処理の後へ移動
-/* del end 2005/12/6 じゅうじ	*/
-			/* コメント読み込み中 */
+// del end 2005/12/6 じゅうじ
+			// コメント読み込み中
 			if (8 == nMode) {
 				if (i < nLineLen - 1 && '*' == pLine[i] &&  '/' == pLine[i + 1]) {
 					++i;
@@ -458,7 +458,7 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 				}else {
 				}
 			}else if (10 == nMode) {
-				/* ラインコメント読み込み中 */
+				// ラインコメント読み込み中
 				// 2003/06/24 zenryaku
 				if (!C_IsLineEsc(pLine, nLineLen)) {
 					nMode = 0;
@@ -466,18 +466,18 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 				i = nLineLen;
 				continue;
 			}else if ('\\' == pLine[i] && nRawStringTagLen == 0) {
-				/* add start 2005/12/6 じゅうじ	*/
-				/* エスケープシーケンスは常に取り除く */
+				// add start 2005/12/6 じゅうじ
+				// エスケープシーケンスは常に取り除く
 				++i;
 			}else if (20 == nMode) {
-				/* シングルクォーテーション文字列読み込み中 */
+				// シングルクォーテーション文字列読み込み中
 				if ('\'' == pLine[i]) {
 					nMode = 0;
 					continue;
 				}else {
 				}
 			}else if (21 == nMode) {
-				/* ダブルクォーテーション文字列読み込み中 */
+				// ダブルクォーテーション文字列読み込み中
 				// operator "" _userliteral
 				if (nMode2 == M2_OPERATOR_WORD) {
 					int nLen = wcslen(szWordPrev);
@@ -502,8 +502,8 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 				}else {
 				}
 			}else if (1 == nMode) {
-				/* add end 2005/12/6 じゅうじ	*/
-				/* 単語読み込み中 */
+				// add end 2005/12/6 じゅうじ
+				// 単語読み込み中
 				if (C_IsWordChar( pLine[i] )) {
 					++nWordIdx;
 					if (nWordIdx >= nMaxWordLeng) {
@@ -576,7 +576,7 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 							wcscpy_s(szItemName, LSW(STR_OUTLINE_CPP_NONAME));
 						}
 					}
-					/*else*/
+					// else
 					if (nMode2 == M2_FUNC_NAME_END) {	// 2010.07.08 ryoji 上で条件変更したので行頭の else を除去
 						nMode2 = M2_KR_FUNC;
 					}
@@ -597,7 +597,7 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 					continue;
 				}
 			}else if (2 == nMode) {
-				/* 記号列読み込み中 */
+				// 記号列読み込み中
 				if (C_IsWordChar( pLine[i] ) ||
 					C_IsSpace( pLine[i] ) ||
 					 '{' == pLine[i] ||
@@ -668,15 +668,15 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 					}
 				}
 			}else if (999 == nMode) {
-				/* 長過ぎる単語無視中 */
-				/* 空白やタブ記号等を飛ばす */
+				// 長過ぎる単語無視中
+				// 空白やタブ記号等を飛ばす
 				if (C_IsSpace( pLine[i] )) {
 					nMode = 0;
 					continue;
 				}
 			}else if (0 == nMode) {
-				/* ノーマルモード */
-				/* 空白やタブ記号等を飛ばす */
+				// ノーマルモード
+				// 空白やタブ記号等を飛ばす
 				if (C_IsSpace( pLine[i] ))
 					continue;
 				if (i < nLineLen - 1 && '/' == pLine[i] &&  '/' == pLine[i + 1]) {
@@ -1160,7 +1160,7 @@ void CDocOutline::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemb
 }
 
 
-/* C/C++スマートインデント処理 */
+// C/C++スマートインデント処理
 void CEditView::SmartIndent_CPP( wchar_t wcChar )
 {
 	const wchar_t*	pLine;
@@ -1172,7 +1172,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 	int			nLevel;
 	CLogicInt j;
 
-	/* 調整によって置換される箇所 */
+	// 調整によって置換される箇所
 	CLogicRange sRangeA;
 	sRangeA.Clear(-1);
 
@@ -1208,7 +1208,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 			if (WCODE::CR != wcChar) {
 				return;
 			}
-			/* 調整によって置換される箇所 */
+			// 調整によって置換される箇所
 			sRangeA.Set(CLogicPoint(0,GetCaret().GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
@@ -1259,13 +1259,13 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 					return;
 				}
 			}
-			/* 調整によって置換される箇所 */
+			// 調整によって置換される箇所
 			sRangeA.SetFrom(CLogicPoint(0, GetCaret().GetCaretLogicPos().GetY2()));
 			sRangeA.SetTo(CLogicPoint(i, GetCaret().GetCaretLogicPos().GetY2()));
 		}
 		
-		/* 対応する括弧をさがす */
-		nLevel = 0;	/* {}の入れ子レベル */
+		// 対応する括弧をさがす
+		nLevel = 0;	// {}の入れ子レベル
 		
 		nDataLen = CLogicInt(0);
 		for (j = GetCaret().GetCaretLogicPos().GetY2(); j >= CLogicInt(0); --j) {
@@ -1300,15 +1300,15 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 						if (j == GetCaret().GetCaretLogicPos().y) {
 							if (L'{' == wcChar && L'}' == pLine2[k]) {
 								wcChar = L'}';
-								nLevel--;	/* {}の入れ子レベル */
+								nLevel--;	// {}の入れ子レベル
 							}
 							if (L'(' == wcChar && L')' == pLine2[k]) {
 								wcChar = L')';
-								nLevel--;	/* {}の入れ子レベル */
+								nLevel--;	// {}の入れ子レベル
 							}
 						}
 
-						nLevel++;	/* {}の入れ子レベル */
+						nLevel++;	// {}の入れ子レベル
 					}
 				}
 				if (1 == nCharChars && (L'{' == pLine2[k] || L'(' == pLine2[k])){
@@ -1332,7 +1332,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 						if (0 == nLevel) {
 							break;
 						}else {
-							nLevel--;	/* {}の入れ子レベル */
+							nLevel--;	// {}の入れ子レベル
 						}
 					}
 				}
@@ -1343,7 +1343,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 				k -= nCharChars;
 			}
 			if (k < 0) {
-				/* この行にはない */
+				// この行にはない
 				continue;
 			}
 
@@ -1387,7 +1387,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 			break;
 		}
 		if (j < 0) {
-			/* 対応する括弧が見つからなかった */
+			// 対応する括弧が見つからなかった
 			if (WCODE::CR == wcChar) {
 				return;
 			}else {
@@ -1397,7 +1397,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 			}
 		}
 
-		/* 調整後のカーソル位置を計算しておく */
+		// 調整後のカーソル位置を計算しておく
 		ptCP.x = nCaretPosX_PHY - sRangeA.GetTo().x + nDataLen;
 		ptCP.y = GetCaret().GetCaretLogicPos().y;
 
@@ -1414,7 +1414,7 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 			pszSrc[nSrcLen] = L'\0';
 		}
 		
-		/* 調整によって置換される箇所 */
+		// 調整によって置換される箇所
 		CLayoutRange sRangeLayout;
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout( sRangeA, &sRangeLayout );
 
@@ -1426,26 +1426,26 @@ void CEditView::SmartIndent_CPP( wchar_t wcChar )
 		}else {
 			bChange = TRUE;
 
-			/* データ置換 削除&挿入にも使える */
+			// データ置換 削除&挿入にも使える
 			ReplaceData_CEditView(
 				sRangeLayout,
-				pszData,	/* 挿入するデータ */
-				nDataLen,	/* 挿入するデータの長さ */
+				pszData,	// 挿入するデータ
+				nDataLen,	// 挿入するデータの長さ
 				true,
 				m_bDoing_UndoRedo?NULL:m_cCommander.GetOpeBlk()
 			);
 		}
 
-		/* カーソル位置調整 */
+		// カーソル位置調整
 		CLayoutPoint ptCP_Layout;
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout( ptCP, &ptCP_Layout );
 
-		/* 選択エリアの先頭へカーソルを移動 */
+		// 選択エリアの先頭へカーソルを移動
 		GetCaret().MoveCursor( ptCP_Layout, true );
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
 
-		if (bChange && !m_bDoing_UndoRedo) {	/* アンドゥ・リドゥの実行中か */
-			/* 操作の追加 */
+		if (bChange && !m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
+			// 操作の追加
 			m_cCommander.GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(
 					GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置

@@ -114,7 +114,7 @@ public:
 	);
 
 
-	template< class CHAR_TYPE >
+	template <class CHAR_TYPE>
 	static int GetWord( const CHAR_TYPE*, const int, const CHAR_TYPE *pszSplitCharList,
 		CHAR_TYPE **ppWordStart, int *pnWordLen );
 
@@ -158,7 +158,7 @@ inline bool CWordParse::_match_charlist( const WCHAR c, const WCHAR *pszList )
 
 	@return 読んだデータの長さ。
 */
-template< class CHAR_TYPE >
+template <class CHAR_TYPE>
 int CWordParse::GetWord( const CHAR_TYPE *pS, const int nLen, const CHAR_TYPE *pszSplitCharList,
 	CHAR_TYPE **ppWordStart, int *pnWordLen )
 {

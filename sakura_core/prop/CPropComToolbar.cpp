@@ -454,16 +454,8 @@ INT_PTR CPropToolbar::DispatchEvent(
 // ダイアログデータの設定 Toolbar
 void CPropToolbar::SetData( HWND hwndDlg )
 {
-	HWND		hwndCombo;
-	HWND		hwndResList;
-	HDC			hdc;
-	int			i;
-	int			nListItemHeight;
-	LRESULT		lResult;
-	TEXTMETRIC	tm;
-
 	// 機能種別一覧に文字列をセット(コンボボックス)
-	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
+	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_FUNCKIND );
 	m_cLookup.SetCategory2Combo( hwndCombo );	//	Oct. 15, 2001 genta
 	
 	// 種別の先頭の項目を選択(コンボボックス)
@@ -471,22 +463,24 @@ void CPropToolbar::SetData( HWND hwndDlg )
 	::PostMessageCmd( hwndCombo, WM_COMMAND, MAKELONG( IDC_COMBO_FUNCKIND, CBN_SELCHANGE ), (LPARAM)hwndCombo );
 
 	// コントロールのハンドルを取得
-	hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
+	HWND hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
 
-	hdc = ::GetDC( hwndDlg );
+	HDC hdc = ::GetDC( hwndDlg );
+	TEXTMETRIC tm;
 	::GetTextMetrics( hdc, &tm );
 	::ReleaseDC( hwndDlg, hdc );
 
-	nListItemHeight = 18; //Oct. 18, 2000 JEPRO 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
+	int nListItemHeight = 18; //Oct. 18, 2000 JEPRO 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
 	if (nListItemHeight < tm.tmHeight) {
 		nListItemHeight = tm.tmHeight;
 	}
 //	nListItemHeight+=2;
 
+	auto& csToolBar = m_Common.m_sToolBar;
 	// ツールバーボタンの情報をセット(リストボックス)
-	for (i = 0; i < m_Common.m_sToolBar.m_nToolBarButtonNum; ++i) {
+	for (int i = 0; i < csToolBar.m_nToolBarButtonNum; ++i) {
 		//	From Here Apr. 13, 2002 genta
-		lResult = ::Listbox_ADDDATA( hwndResList, (LPARAM)m_Common.m_sToolBar.m_nToolBarButtonIdxArr[i] );
+		LRESULT lResult = ::Listbox_ADDDATA( hwndResList, (LPARAM)csToolBar.m_nToolBarButtonIdxArr[i] );
 		if (lResult == LB_ERR || lResult == LB_ERRSPACE) {
 			break;
 		}
@@ -497,7 +491,7 @@ void CPropToolbar::SetData( HWND hwndDlg )
 	List_SetCurSel( hwndResList, 0 );	//Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
 
 	// フラットツールバーにする／しない 
-	::CheckDlgButton( hwndDlg, IDC_CHECK_TOOLBARISFLAT, m_Common.m_sToolBar.m_bToolBarIsFlat );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_TOOLBARISFLAT, csToolBar.m_bToolBarIsFlat );
 	return;
 }
 
@@ -505,30 +499,25 @@ void CPropToolbar::SetData( HWND hwndDlg )
 // ダイアログデータの取得 Toolbar
 int CPropToolbar::GetData( HWND hwndDlg )
 {
-	HWND	hwndResList;
-	int		i;
-	int		j;
-	int		k;
-
-	hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
+	HWND hwndResList = ::GetDlgItem( hwndDlg, IDC_LIST_RES );
+	auto& csToolBar = m_Common.m_sToolBar;
 
 	// ツールバーボタンの数
-	m_Common.m_sToolBar.m_nToolBarButtonNum = List_GetCount( hwndResList );
+	csToolBar.m_nToolBarButtonNum = List_GetCount( hwndResList );
 
 	// ツールバーボタンの情報を取得
-	k = 0;
-	for (i = 0; i < m_Common.m_sToolBar.m_nToolBarButtonNum; ++i) {
-		j = List_GetItemData( hwndResList, i );
+	int k = 0;
+	for (int i = 0; i < csToolBar.m_nToolBarButtonNum; ++i) {
+		int j = List_GetItemData( hwndResList, i );
 		if (LB_ERR != j) {
-			m_Common.m_sToolBar.m_nToolBarButtonIdxArr[k] = j;
+			csToolBar.m_nToolBarButtonIdxArr[k] = j;
 			k++;
 		}
 	}
-	m_Common.m_sToolBar.m_nToolBarButtonNum = k;
+	csToolBar.m_nToolBarButtonNum = k;
 
 	// フラットツールバーにする／しない
-	m_Common.m_sToolBar.m_bToolBarIsFlat = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_TOOLBARISFLAT );
-
+	csToolBar.m_bToolBarIsFlat = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_TOOLBARISFLAT );
 	return TRUE;
 }
 
@@ -540,23 +529,17 @@ int CPropToolbar::GetData( HWND hwndDlg )
 void CPropToolbar::DrawToolBarItemList( DRAWITEMSTRUCT* pDis )
 {
 	TBBUTTON	tbb;
-	HBRUSH		hBrush;
-	RECT		rc;
-	RECT		rc0;
-	RECT		rc1;
-	RECT		rc2;
 
-
-//	hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_WINDOW ) );
-	hBrush = ::GetSysColorBrush( COLOR_WINDOW );
+//	HBRUSH hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_WINDOW ) );
+	HBRUSH hBrush = ::GetSysColorBrush( COLOR_WINDOW );
 	::FillRect( pDis->hDC, &pDis->rcItem, hBrush );
 //	::DeleteObject( hBrush );
 
-	rc  = pDis->rcItem;
-	rc0 = pDis->rcItem;
+	RECT rc  = pDis->rcItem;
+	RECT rc0 = pDis->rcItem;
 	rc0.left += 18;//20 //Oct. 18, 2000 JEPRO 行先頭のアイコンとそれに続くキャプションとの間を少し詰めた(20→18)
-	rc1 = rc0;
-	rc2 = rc0;
+	RECT rc1 = rc0;
+	RECT rc2 = rc0;
 
 	if ((int)pDis->itemID < 0) {
 	}else {

@@ -1081,8 +1081,7 @@ int FormatFavoriteColumn(TCHAR* buf, int size, int index, bool view)
 */
 static int ListView_GetLParamInt( HWND hwndList, int lvIndex )
 {
-	LV_ITEM	lvitem;
-	memset_raw( &lvitem, 0, sizeof(lvitem) );
+	LV_ITEM	lvitem = {0};
 	lvitem.mask = LVIF_PARAM;
 	lvitem.iItem = lvIndex;
 	lvitem.iSubItem = 0;

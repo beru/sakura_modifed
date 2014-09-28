@@ -373,7 +373,7 @@ BOOL IsURL(
 		int		length;
 		bool	is_mail;
 	};
-	static const struct _url_table_t	url_table[] = {
+	static const struct _url_table_t url_table[] = {
 		// アルファベット順
 		{ L"file://",		7,	false }, // 1
 		{ L"ftp://",		6,	false }, // 2
@@ -401,7 +401,7 @@ BOOL IsURL(
 	const char urT = 10;
 	const char urW = 13;	//2004.02.02
 
-	static const char	url_char[] = {
+	static const char url_char[] = {
 	  /* +0  +1  +2  +3  +4  +5  +6  +7  +8  +9  +A  +B  +C  +D  +E  +F */
 		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,	// +00: 
 		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,	// +10: 
@@ -420,15 +420,14 @@ BOOL IsURL(
 
 	const wchar_t* p = pszLine;
 	const struct _url_table_t* urlp;
-	int	i;
-
+	
 	if (wc_to_c(*p) == 0) {
 		return FALSE;	// 2バイト文字
 	}
 	if (0 < url_char[wc_to_c(*p)]) {	// URL開始文字
 		for (urlp = &url_table[url_char[wc_to_c(*p)]-1]; urlp->name[0] == wc_to_c(*p); urlp++) {	// URLテーブルを探索
 			if ((urlp->length <= nLineLen) && (auto_memcmp(urlp->name, pszLine, urlp->length) == 0)) {	// URLヘッダは一致した
-				p += urlp->length;	// URLヘッダ分をスキップする
+				p += urlp->length;		// URLヘッダ分をスキップする
 				if (urlp->is_mail) {	// メール専用の解析へ
 					if (IsMailAddress(p, nLineLen - urlp->length, pnMatchLen)) {
 						*pnMatchLen = *pnMatchLen + urlp->length;
@@ -436,6 +435,7 @@ BOOL IsURL(
 					}
 					return FALSE;
 				}
+				int i;
 				for (i = urlp->length; i < nLineLen; i++, p++) {	// 通常の解析へ
 					if (wc_to_c(*p)==0 || (!(url_char[wc_to_c(*p)]))) {
 						break;	// 終端に達した
@@ -455,8 +455,6 @@ BOOL IsURL(
 // 現在位置がメールアドレスならば、NULL以外と、その長さを返す
 BOOL IsMailAddress( const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth )
 {
-	int		nBgn;
-
 	int j = 0;
 	if ( (pszBuf[j] >= L'a' && pszBuf[j] <= L'z')
 	 || (pszBuf[j] >= L'A' && pszBuf[j] <= L'Z')
@@ -491,7 +489,7 @@ BOOL IsMailAddress( const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth )
 //	nAlphaCount = 0;
 	
 	for (;;) {
-		nBgn = j;
+		int nBgn = j;
 		while (
 			j < nBufLen
 			&& (

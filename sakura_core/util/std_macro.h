@@ -24,7 +24,7 @@
 */
 #pragma once
 
-#define SAFE_DELETE(p) { delete p; p=0; }
+#define SAFE_DELETE(p) { delete p; p = 0; }
 
 
 /*
@@ -38,34 +38,29 @@
 */
 
 template <class T>
-inline T t_min(T t1,T t2)
-{
+inline T t_min(T t1,T t2) {
 	return t1 < t2 ? t1 : t2;
 }
 
 template <class T>
-inline T t_max(T t1,T t2)
-{
+inline T t_max(T t1,T t2) {
 	return t1 > t2 ? t1 : t2;
 }
 
 template <class T>
-T t_abs(T t)
-{
+T t_abs(T t) {
 	return t >= T(0) ? t : T(-t);
 }
 
 template <class T>
-void t_swap(T& t1, T& t2)
-{
+void t_swap(T& t1, T& t2) {
 	T tmp = t1;
 	t1 = t2;
 	t2 = tmp;
 }
 
 template <class T>
-T t_unit(T t)
-{
+T t_unit(T t) {
 	return
 		t > T(0) ? 1:
 		t <T(0) ? -1:
@@ -93,8 +88,7 @@ T t_unit(T t)
 
 // http://bits.stephan-brumme.com/roundUpToNextPowerOfTwo.html
 static inline
-unsigned int roundUpToNextPowerOfTwo(unsigned int x)
-{
+unsigned int roundUpToNextPowerOfTwo(unsigned int x) {
 	x--;
 	x |= x >> 1;  // handle  2 bit numbers
 	x |= x >> 2;  // handle  4 bit numbers

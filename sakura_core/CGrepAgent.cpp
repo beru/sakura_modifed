@@ -494,10 +494,7 @@ int CGrepAgent::DoGrepTree(
 {
 	::DlgItem_SetText( pcDlgCancel->GetHwnd(), IDC_STATIC_CURPATH, pszPath );
 
-	int			i;
-	int			count;
 	CNativeW	cmemMessage;
-	LPCTSTR		lpFileName;
 	int			nWork = 0;
 	int			nHitCountOld = -100;
 	bool		bOutputFolderName = false;
@@ -508,9 +505,9 @@ int CGrepAgent::DoGrepTree(
 	/*
 	 * カレントフォルダのファイルを探索する。
 	 */
-	count = cGrepEnumFilterFiles.GetCount();
-	for (i = 0; i < count; i++) {
-		lpFileName = cGrepEnumFilterFiles.GetFileName( i );
+	int count = cGrepEnumFilterFiles.GetCount();
+	for (int i = 0; i < count; i++) {
+		LPCTSTR lpFileName = cGrepEnumFilterFiles.GetFileName( i );
 
 		// 処理中のユーザー操作を可能にする
 		if (!::BlockingHook( pcDlgCancel->GetHwnd() )) {
@@ -604,9 +601,9 @@ int CGrepAgent::DoGrepTree(
 		CGrepEnumFilterFolders cGrepEnumFilterFolders;
 		cGrepEnumFilterFolders.Enumerates( pszPath, cGrepEnumKeys, cGrepExceptAbsFolders );
 
-		count = cGrepEnumFilterFolders.GetCount();
-		for (i = 0; i < count; i++) {
-			lpFileName = cGrepEnumFilterFolders.GetFileName( i );
+		int count = cGrepEnumFilterFolders.GetCount();
+		for (int i = 0; i < count; i++) {
+			LPCTSTR lpFileName = cGrepEnumFilterFolders.GetFileName( i );
 
 			//サブフォルダの探索を再帰呼び出し。
 			// 処理中のユーザー操作を可能にする

@@ -70,8 +70,7 @@ CFuncKeyWnd::CFuncKeyWnd()
 
 	// 表示用フォント
 	// LOGFONTの初期化
-	LOGFONT	lf;
-	memset_raw( &lf, 0, sizeof(lf) );
+	LOGFONT	lf = {0};
 	lf.lfHeight			= DpiPointsToPixels(-9);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;

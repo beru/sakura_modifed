@@ -9,15 +9,13 @@
 class CGDIStock {
 public:
 	CGDIStock() {}
-	~CGDIStock()
-	{
+	~CGDIStock() {
 		while (!m_vObjects.empty()) {
 			::DeleteObject(m_vObjects.back());
 			m_vObjects.pop_back();
 		}
 	}
-	bool Register(HGDIOBJ hObject)
-	{
+	bool Register(HGDIOBJ hObject) {
 		if (hObject) {
 			m_vObjects.push_back(hObject);
 			return true;
@@ -372,9 +370,9 @@ void CGraphics::DrawDotLine(int x1, int y1, int x2, int y2)
 	}
 }
 
-
 // ドロップ先矩形描画用のリージョンを作成する
-static HRGN CreateDropRectRgn(LPCRECT lpRect, SIZE size)
+static
+HRGN CreateDropRectRgn(LPCRECT lpRect, SIZE size)
 {
 	HRGN hRgnOutside = ::CreateRectRgnIndirect(lpRect);
 	RECT rc = *lpRect;

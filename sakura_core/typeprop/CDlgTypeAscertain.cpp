@@ -49,7 +49,8 @@ const DWORD p_helpids[] = {
 
 //  Constructors
 CDlgTypeAscertain::CDlgTypeAscertain()
-	: m_psi(NULL)
+	:
+	m_psi(NULL)
 {
 }
 
@@ -107,17 +108,15 @@ void CDlgTypeAscertain::SetData( void )
 
 	::CheckDlgButton( GetHwnd(), IDC_RADIO_TYPE_ADD, TRUE );
 
-	int		nIdx;
-	HWND	hwndCombo;
-	TCHAR	szText[130];
-	hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS );
+	TCHAR szText[130];
+	HWND hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS );
 	// コンボボックスを空にする
 	Combo_ResetContent( hwndCombo );
 	// 一行目はそのまま
 	Combo_AddString( hwndCombo, LSW(STR_DLGTYPEASC_IMPORT) );
 
 	// エディタ内の設定
-	for (nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
+	for (int nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト

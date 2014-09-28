@@ -46,7 +46,7 @@ struct SShare_TagJump {
 	typedef StaticVector<
 		StaticString<WCHAR, _MAX_PATH>,
 		MAX_TAGJUMP_KEYWORD
-	>					ATagJumpKeywords;
+	> ATagJumpKeywords;
 
 	// データ
 	int					m_TagJumpNum;					//!< タグジャンプ情報の有効データ数
@@ -60,8 +60,7 @@ struct SShare_TagJump {
 
 class CTagJumpManager {
 public:
-	CTagJumpManager()
-	{
+	CTagJumpManager() {
 		m_pShareData = &GetDllShareData();
 	}
 	// タグジャンプ関連	// 2004/06/21 novice タグジャンプ機能追加

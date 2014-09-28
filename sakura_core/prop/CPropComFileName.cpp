@@ -271,10 +271,11 @@ void CPropFileName::SetData( HWND hwndDlg )
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_LIST_FNAME );
 	ListView_DeleteAllItems( hListView ); // リストを空にする
 
+	auto& csFileName = m_Common.m_sFileName;
 	// リストにデータをセット
 	int nIndex = 0;
-	for (int i = 0; i < m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
-		if ('\0' == m_Common.m_sFileName.m_szTransformFileNameFrom[i][0]) {
+	for (int i = 0; i < csFileName.m_nTransformFileNameArrNum; i++) {
+		if ('\0' == csFileName.m_szTransformFileNameFrom[i][0]) {
 			continue;
 		}
 
@@ -283,14 +284,14 @@ void CPropFileName::SetData( HWND hwndDlg )
 		lvItem.mask     = LVIF_TEXT;
 		lvItem.iItem    = nIndex;
 		lvItem.iSubItem = 0;
-		lvItem.pszText  = m_Common.m_sFileName.m_szTransformFileNameFrom[i];
+		lvItem.pszText  = csFileName.m_szTransformFileNameFrom[i];
 		ListView_InsertItem( hListView, &lvItem );
 
 		::ZeroMemory( &lvItem, sizeof_raw( lvItem ));
 		lvItem.mask     = LVIF_TEXT;
 		lvItem.iItem    = nIndex;
 		lvItem.iSubItem = 1;
-		lvItem.pszText  = m_Common.m_sFileName.m_szTransformFileNameTo[i];
+		lvItem.pszText  = csFileName.m_szTransformFileNameTo[i];
 		ListView_SetItem( hListView, &lvItem );
 
 		nIndex++;
@@ -317,24 +318,26 @@ void CPropFileName::SetData( HWND hwndDlg )
 
 int CPropFileName::GetData( HWND hwndDlg )
 {
+	auto& csFileName = m_Common.m_sFileName;
+	
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_LIST_FNAME );
-	m_Common.m_sFileName.m_nTransformFileNameArrNum = ListView_GetItemCount( hListView );
+	csFileName.m_nTransformFileNameArrNum = ListView_GetItemCount( hListView );
 
 	for (int nIndex = 0, nCount = 0; nIndex < MAX_TRANSFORM_FILENAME ; ++nIndex) {
-		if (nIndex < m_Common.m_sFileName.m_nTransformFileNameArrNum) {
-			ListView_GetItemText( hListView, nIndex, 0, m_Common.m_sFileName.m_szTransformFileNameFrom[nCount], _MAX_PATH );
+		if (nIndex < csFileName.m_nTransformFileNameArrNum) {
+			ListView_GetItemText( hListView, nIndex, 0, csFileName.m_szTransformFileNameFrom[nCount], _MAX_PATH );
 
 			// 置換前文字列がNULLだったら捨てる
-			if (L'\0' == m_Common.m_sFileName.m_szTransformFileNameFrom[nCount][0]) {
-				m_Common.m_sFileName.m_szTransformFileNameTo[nIndex][0] = L'\0';
+			if (L'\0' == csFileName.m_szTransformFileNameFrom[nCount][0]) {
+				csFileName.m_szTransformFileNameTo[nIndex][0] = L'\0';
 			}else {
-				ListView_GetItemText( hListView, nIndex, 1, m_Common.m_sFileName.m_szTransformFileNameTo[nCount], _MAX_PATH );
+				ListView_GetItemText( hListView, nIndex, 1, csFileName.m_szTransformFileNameTo[nCount], _MAX_PATH );
 				nCount++;
 			}
 		}else {
-			m_Common.m_sFileName.m_szTransformFileNameFrom[nIndex][0] = L'\0';
-			m_Common.m_sFileName.m_szTransformFileNameTo[nIndex][0] = L'\0';
+			csFileName.m_szTransformFileNameFrom[nIndex][0] = L'\0';
+			csFileName.m_szTransformFileNameTo[nIndex][0] = L'\0';
 		}
 	}
 

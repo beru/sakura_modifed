@@ -34,7 +34,8 @@
 #include "CHtmlHelp.h"
 
 CHtmlHelp::~CHtmlHelp(void)
-{}
+{
+}
 
 /*!
 	HTML Help ‚Ìƒtƒ@ƒCƒ‹–¼‚ð“n‚·

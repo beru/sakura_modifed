@@ -46,14 +46,14 @@ static void LoadPluginTemp(CommonSetting& common, CMenuDrawer& cMenuDrawer);
 
 //! Popup Help用ID
 static const DWORD p_helpids[] = {	//11700
-	IDC_CHECK_PluginEnable,	HIDC_CHECK_PluginEnable,	//プラグインを有効にする
-	IDC_PLUGINLIST,			HIDC_PLUGINLIST,			//プラグインリスト
-	IDC_PLUGIN_INST_ZIP,	HIDC_PLUGIN_INST_ZIP,		//Zipプラグインを追加	// 2011/11/2 Uchi
-	IDC_PLUGIN_SearchNew,	HIDC_PLUGIN_SearchNew,		//新規プラグインを追加
-	IDC_PLUGIN_OpenFolder,	HIDC_PLUGIN_OpenFolder,		//フォルダを開く
-	IDC_PLUGIN_Remove,		HIDC_PLUGIN_Remove,			//プラグインを削除
-	IDC_PLUGIN_OPTION,		HIDC_PLUGIN_OPTION,			//プラグイン設定	// 2010/3/22 Uchi
-	IDC_PLUGIN_README,		HIDC_PLUGIN_README,			//ReadMe表示		// 2011/11/2 Uchi
+	IDC_CHECK_PluginEnable,	HIDC_CHECK_PluginEnable,	// プラグインを有効にする
+	IDC_PLUGINLIST,			HIDC_PLUGINLIST,			// プラグインリスト
+	IDC_PLUGIN_INST_ZIP,	HIDC_PLUGIN_INST_ZIP,		// Zipプラグインを追加	// 2011/11/2 Uchi
+	IDC_PLUGIN_SearchNew,	HIDC_PLUGIN_SearchNew,		// 新規プラグインを追加
+	IDC_PLUGIN_OpenFolder,	HIDC_PLUGIN_OpenFolder,		// フォルダを開く
+	IDC_PLUGIN_Remove,		HIDC_PLUGIN_Remove,			// プラグインを削除
+	IDC_PLUGIN_OPTION,		HIDC_PLUGIN_OPTION,			// プラグイン設定	// 2010/3/22 Uchi
+	IDC_PLUGIN_README,		HIDC_PLUGIN_README,			// ReadMe表示		// 2011/11/2 Uchi
 //	IDC_STATIC,			-1,
 	0, 0
 };
@@ -83,6 +83,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 	WORD		wNotifyCode;
 	WORD		wID;
+	PluginRec* pluginTable = m_Common.m_sPlugin.m_PluginTable;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -115,13 +116,13 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 							::SetWindowText( ::GetDlgItem( hwndDlg, IDC_LABEL_PLUGIN_Version ), _T("") );
 						}
 						// 2010.08.21 明らかに使えないときはDisableにする
-						EPluginState state = m_Common.m_sPlugin.m_PluginTable[sel].m_state;
+						EPluginState state = pluginTable[sel].m_state;
 						BOOL bEdit = (state != PLS_DELETED && state != PLS_NONE);
 						::EnableWindow( ::GetDlgItem( hwndDlg, IDC_PLUGIN_Remove ), bEdit );
 						::EnableWindow( ::GetDlgItem( hwndDlg, IDC_PLUGIN_OPTION ), state == PLS_LOADED && plugin && plugin->m_options.size() > 0 );
 						::EnableWindow( ::GetDlgItem( hwndDlg, IDC_PLUGIN_README ), 
 							(state == PLS_INSTALLED || state == PLS_UPDATED || state == PLS_LOADED || state == PLS_DELETED)
-							&& !GetReadMeFile(to_tchar(m_Common.m_sPlugin.m_PluginTable[sel].m_szName)).empty());
+							&& !GetReadMeFile(to_tchar(pluginTable[sel].m_szName)).empty());
 					}
 				}
 				break;
@@ -202,7 +203,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 					HWND hListView = ::GetDlgItem( hwndDlg, IDC_PLUGINLIST );
 					int sel = ListView_GetNextItem( hListView, -1, LVNI_SELECTED );
 					if (sel >= 0) {
-						if (MYMESSAGEBOX( hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), m_Common.m_sPlugin.m_PluginTable[sel].m_szName ) == IDYES) {
+						if (MYMESSAGEBOX( hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), pluginTable[sel].m_szName ) == IDYES) {
 							CPluginManager::getInstance()->UninstallPlugin( m_Common, sel );
 							SetData_LIST( hwndDlg );
 						}
@@ -213,11 +214,11 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				{
 					HWND hListView = ::GetDlgItem( hwndDlg, IDC_PLUGINLIST );
 					int sel = ListView_GetNextItem( hListView, -1, LVNI_SELECTED );
-					if (sel >= 0 && m_Common.m_sPlugin.m_PluginTable[sel].m_state == PLS_LOADED) {
+					if (sel >= 0 && pluginTable[sel].m_state == PLS_LOADED) {
 						// 2010.08.21 プラグイン名(フォルダ名)の同一性の確認
 						CPlugin* plugin = CPluginManager::getInstance()->GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
-						if (plugin && 0 == auto_stricmp(sDirName.c_str(), m_Common.m_sPlugin.m_PluginTable[sel].m_szName )) {
+						if (plugin && 0 == auto_stricmp(sDirName.c_str(), pluginTable[sel].m_szName )) {
 							CDlgPluginOption cDlgPluginOption;
 							cDlgPluginOption.DoModal( ::GetModuleHandle(NULL), hwndDlg, this, sel );
 						}else {
@@ -241,7 +242,7 @@ INT_PTR CPropPlugin::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				{
 					HWND hListView = ::GetDlgItem( hwndDlg, IDC_PLUGINLIST );
 					int sel = ListView_GetNextItem( hListView, -1, LVNI_SELECTED );
-					std::tstring sName = to_tchar(m_Common.m_sPlugin.m_PluginTable[sel].m_szName);	// 個別フォルダ名
+					std::tstring sName = to_tchar(pluginTable[sel].m_szName);	// 個別フォルダ名
 					std::tstring sReadMeName = GetReadMeFile(sName);
 					if (!sReadMeName.empty()) {
 						if (!BrowseReadMe(sReadMeName)) {
@@ -318,7 +319,7 @@ void CPropPlugin::SetData_LIST( HWND hwndDlg )
 {
 	int index;
 	LVITEM sItem;
-	PluginRec* plugin_table = m_Common.m_sPlugin.m_PluginTable;
+	PluginRec* pluginTable = m_Common.m_sPlugin.m_PluginTable;
 
 	::EnableWindow( ::GetDlgItem( hwndDlg, IDC_PLUGIN_Remove ), FALSE );
 	::EnableWindow( ::GetDlgItem( hwndDlg, IDC_PLUGIN_OPTION ), FALSE );
@@ -361,7 +362,7 @@ void CPropPlugin::SetData_LIST( HWND hwndDlg )
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 2;
-		switch (plugin_table[index].m_state) {
+		switch (pluginTable[index].m_state) {
 		case PLS_INSTALLED: sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE1)); break;
 		case PLS_UPDATED:   sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE2)); break;
 		case PLS_STOPPED:   sItem.pszText = const_cast<TCHAR*>(LS(STR_PROPCOMPLG_STATE3)); break;
@@ -376,7 +377,7 @@ void CPropPlugin::SetData_LIST( HWND hwndDlg )
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 3;
-		if (plugin_table[index].m_state != PLS_NONE) {
+		if (pluginTable[index].m_state != PLS_NONE) {
 			sItem.pszText = const_cast<TCHAR*>(plugin ? LS(STR_PROPCOMPLG_LOAD) : _T(""));
 		}else {
 			sItem.pszText = const_cast<TCHAR*>(_T(""));
@@ -388,7 +389,7 @@ void CPropPlugin::SetData_LIST( HWND hwndDlg )
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 4;
-		switch (plugin_table[index].m_state) {
+		switch (pluginTable[index].m_state) {
 		case PLS_INSTALLED:
 		case PLS_UPDATED:
 		case PLS_STOPPED:
@@ -397,7 +398,7 @@ void CPropPlugin::SetData_LIST( HWND hwndDlg )
 				sDirName = plugin->GetFolderName();
 				sItem.pszText = const_cast<LPTSTR>( sDirName.c_str() );
 			}else {
-				sItem.pszText = const_cast<LPTSTR>( to_tchar(plugin_table[index].m_szName) );
+				sItem.pszText = const_cast<LPTSTR>( to_tchar(pluginTable[index].m_szName) );
 			}
 			break;
 		default:

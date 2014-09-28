@@ -505,14 +505,13 @@ void GetInidir(
 	if (!pDir)
 		return;
 	
-	TCHAR szPath[_MAX_PATH];
 	// sakura.ini ‚ÌƒpƒX‚ðŽæ“¾
-	CFileNameManager::getInstance()->GetIniFileName( szPath );
+	LPCTSTR pszPath = CFileNameManager::getInstance()->GetIniFileName();
 	if (!szFile) {
-		SplitPath_FolderAndFile( szPath, pDir, NULL );
+		SplitPath_FolderAndFile( pszPath, pDir, NULL );
 	}else {
 		TCHAR szDir[_MAX_PATH];
-		SplitPath_FolderAndFile( szPath, szDir, NULL );
+		SplitPath_FolderAndFile( pszPath, szDir, NULL );
 		auto_snprintf_s( pDir, _MAX_PATH, _T("%ts\\%ts"), szDir, szFile );
 	}
 }

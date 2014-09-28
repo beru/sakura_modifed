@@ -77,16 +77,15 @@ protected:
 	// 文字列リソース読み込み用バッファクラス
 	class CLoadStrBuffer {
 	public:
-		CLoadStrBuffer()
-		{
+		CLoadStrBuffer() {
 			m_pszString   = m_szString;				// 変数内に準備したバッファを接続
 			m_nBufferSize = _countof(m_szString);	// 配列個数
 			m_nLength     = 0;
 			m_szString[0] = 0;
 		}
 
-		/*virtual*/ ~CLoadStrBuffer()
-		{
+		/*virtual*/
+		~CLoadStrBuffer() {
 			// バッファを取得していた場合は解放する。
 			if( m_pszString && m_pszString != m_szString ){
 				delete[] m_pszString;

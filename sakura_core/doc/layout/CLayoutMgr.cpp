@@ -42,9 +42,9 @@ CLayoutMgr::CLayoutMgr()
 	m_pTypeConfig = NULL;
 	m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);
 	m_nTabSpace = CLayoutInt(4);
-	m_pszKinsokuHead_1.clear();						// 行頭禁則	//@@@ 2002.04.08 MIK
-	m_pszKinsokuTail_1.clear();						// 行末禁則	//@@@ 2002.04.08 MIK
-	m_pszKinsokuKuto_1.clear();						// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
+	m_pszKinsokuHead_1.clear();				// 行頭禁則	//@@@ 2002.04.08 MIK
+	m_pszKinsokuTail_1.clear();				// 行末禁則	//@@@ 2002.04.08 MIK
+	m_pszKinsokuKuto_1.clear();				// 句読点ぶらさげ	//@@@ 2002.04.17 MIK
 
 	m_nTextWidth = CLayoutInt(0);			// テキスト最大幅の記憶		// 2009.08.28 nasukoji
 	m_nTextWidthMaxLine = CLayoutInt(0);	// 最大幅のレイアウト行		// 2009.08.28 nasukoji

@@ -63,15 +63,15 @@ int WINAPI _tWinMain(
 		// 2010.08.28 Moca DLLインジェクション対策
 		CCurrentDirectoryBackupPoint dirBack;
 		ChangeCurrentDirectoryToExeDir();
-
-		setlocale( LC_ALL, "Japanese" ); //2007.08.16 kobake 追加
-		::OleInitialize( NULL );	// 2009.01.07 ryoji 追加
+		
+		setlocale( LC_ALL, "Japanese" );	// 2007.08.16 kobake 追加
+		::OleInitialize( NULL );			// 2009.01.07 ryoji 追加
 	}
 	
 	// 開発情報
 	DEBUG_TRACE(_T("-- -- WinMain -- --\n"));
 	DEBUG_TRACE(_T("sizeof(DLLSHAREDATA) = %d\n"), sizeof(DLLSHAREDATA));
-
+	
 	// プロセスの生成とメッセージループ
 	CProcessFactory aFactory;
 	CProcess* process = 0;
@@ -117,5 +117,4 @@ int WINAPI _tWinMain(
 	::OleUninitialize();	// 2009.01.07 ryoji 追加
 	return 0;
 }
-
 

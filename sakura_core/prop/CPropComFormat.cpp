@@ -26,23 +26,23 @@
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//10400
-	IDC_EDIT_DFORM,						HIDC_EDIT_DFORM,		//日付書式
-	IDC_EDIT_TFORM,						HIDC_EDIT_TFORM,		//時刻書式
-	IDC_EDIT_DFORM_EX,					HIDC_EDIT_DFORM_EX,		//日付書式（表示例）
-	IDC_EDIT_TFORM_EX,					HIDC_EDIT_TFORM_EX,		//時刻書式（表示例）
-	IDC_EDIT_MIDASHIKIGOU,				HIDC_EDIT_MIDASHIKIGOU,	//見出し記号
-	IDC_EDIT_INYOUKIGOU,				HIDC_EDIT_INYOUKIGOU,	//引用符
-	IDC_RADIO_DFORM_0,					HIDC_RADIO_DFORM_0,		//日付書式（標準）
-	IDC_RADIO_DFORM_1,					HIDC_RADIO_DFORM_1,		//日付書式（カスタム）
-	IDC_RADIO_TFORM_0,					HIDC_RADIO_TFORM_0,		//時刻書式（標準）
-	IDC_RADIO_TFORM_1,					HIDC_RADIO_TFORM_1,		//時刻書式（カスタム）
+	IDC_EDIT_DFORM,						HIDC_EDIT_DFORM,		// 日付書式
+	IDC_EDIT_TFORM,						HIDC_EDIT_TFORM,		// 時刻書式
+	IDC_EDIT_DFORM_EX,					HIDC_EDIT_DFORM_EX,		// 日付書式（表示例）
+	IDC_EDIT_TFORM_EX,					HIDC_EDIT_TFORM_EX,		// 時刻書式（表示例）
+	IDC_EDIT_MIDASHIKIGOU,				HIDC_EDIT_MIDASHIKIGOU,	// 見出し記号
+	IDC_EDIT_INYOUKIGOU,				HIDC_EDIT_INYOUKIGOU,	// 引用符
+	IDC_RADIO_DFORM_0,					HIDC_RADIO_DFORM_0,		// 日付書式（標準）
+	IDC_RADIO_DFORM_1,					HIDC_RADIO_DFORM_1,		// 日付書式（カスタム）
+	IDC_RADIO_TFORM_0,					HIDC_RADIO_TFORM_0,		// 時刻書式（標準）
+	IDC_RADIO_TFORM_1,					HIDC_RADIO_TFORM_1,		// 時刻書式（カスタム）
 //	IDC_STATIC,							-1,
 	0, 0
 };
 //@@@ 2001.02.04 End
 
 //@@@ 2002.01.12 add start
-static const char *p_date_form[] = {
+static const char* p_date_form[] = {
 	"yyyy'年'M'月'd'日'",
 	"yyyy'年'M'月'd'日('dddd')'",
 	"yyyy'年'MM'月'dd'日'",
@@ -60,7 +60,7 @@ static const char *p_date_form[] = {
 	NULL
 };
 
-static const char *p_time_form[] = {
+static const char* p_time_form[] = {
 	"hh:mm:ss",
 	"tthh'時'mm'分'ss'秒'",
 	"H:mm:ss",
@@ -87,6 +87,7 @@ INT_PTR CALLBACK CPropFormat::DlgProc_page(
 
 void CPropFormat::ChangeDateExample( HWND hwndDlg )
 {
+	auto& csFormat = m_Common.m_sFormat;
 	// ダイアログデータの取得 Format
 	GetData( hwndDlg );
 
@@ -94,13 +95,14 @@ void CPropFormat::ChangeDateExample( HWND hwndDlg )
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime( &systime );
-	CFormatManager().MyGetDateFormat( systime, szText, _countof( szText ) - 1, m_Common.m_sFormat.m_nDateFormatType, m_Common.m_sFormat.m_szDateFormat );
+	CFormatManager().MyGetDateFormat( systime, szText, _countof( szText ) - 1, csFormat.m_nDateFormatType, csFormat.m_szDateFormat );
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_DFORM_EX, szText );
 	return;
 }
 
 void CPropFormat::ChangeTimeExample( HWND hwndDlg )
 {
+	auto& csFormat = m_Common.m_sFormat;
 	// ダイアログデータの取得 Format
 	GetData( hwndDlg );
 
@@ -108,7 +110,7 @@ void CPropFormat::ChangeTimeExample( HWND hwndDlg )
 	TCHAR szText[1024];
 	SYSTEMTIME systime;
 	::GetLocalTime( &systime );
-	CFormatManager().MyGetTimeFormat( systime, szText, _countof( szText ) - 1, m_Common.m_sFormat.m_nTimeFormatType, m_Common.m_sFormat.m_szTimeFormat );
+	CFormatManager().MyGetTimeFormat( systime, szText, _countof( szText ) - 1, csFormat.m_nTimeFormatType, csFormat.m_szTimeFormat );
 	::DlgItem_SetText( hwndDlg, IDC_EDIT_TFORM_EX, szText );
 	return;
 }
@@ -128,6 +130,7 @@ INT_PTR CPropFormat::DispatchEvent(
 //	NM_UPDOWN*	pMNUD;
 //	int			idCtrl;
 //	int			nVal;
+	auto& csFormat = m_Common.m_sFormat;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -140,16 +143,16 @@ INT_PTR CPropFormat::DispatchEvent(
 		ChangeTimeExample( hwndDlg );
 
 		// 見出し記号
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_MIDASHIKIGOU ), _countof(m_Common.m_sFormat.m_szMidashiKigou) - 1 );
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_MIDASHIKIGOU ), _countof(csFormat.m_szMidashiKigou) - 1 );
 
 		// 引用符
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_INYOUKIGOU ), _countof(m_Common.m_sFormat.m_szInyouKigou) - 1 );
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_INYOUKIGOU ), _countof(csFormat.m_szInyouKigou) - 1 );
 
 		// 日付書式
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_DFORM ), _countof(m_Common.m_sFormat.m_szDateFormat) - 1 );
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_DFORM ), _countof(csFormat.m_szDateFormat) - 1 );
 
 		// 時刻書式
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_TFORM ), _countof(m_Common.m_sFormat.m_szTimeFormat) - 1 );
+		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_TFORM ), _countof(csFormat.m_szTimeFormat) - 1 );
 
 		return TRUE;
 	case WM_COMMAND:
@@ -250,29 +253,31 @@ INT_PTR CPropFormat::DispatchEvent(
 // ダイアログデータの設定 Format
 void CPropFormat::SetData( HWND hwndDlg )
 {
+	auto& csFormat = m_Common.m_sFormat;
+	
 	// 見出し記号
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_MIDASHIKIGOU, m_Common.m_sFormat.m_szMidashiKigou );
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_MIDASHIKIGOU, csFormat.m_szMidashiKigou );
 
 	// 引用符
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_INYOUKIGOU, m_Common.m_sFormat.m_szInyouKigou );
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_INYOUKIGOU, csFormat.m_szInyouKigou );
 
 	//日付書式のタイプ
-	if (0 == m_Common.m_sFormat.m_nDateFormatType) {
+	if (0 == csFormat.m_nDateFormatType) {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_DFORM_0, BST_CHECKED );
 	}else {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_DFORM_1, BST_CHECKED );
 	}
 	//日付書式
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_DFORM, m_Common.m_sFormat.m_szDateFormat );
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_DFORM, csFormat.m_szDateFormat );
 
 	//時刻書式のタイプ
-	if (0 == m_Common.m_sFormat.m_nTimeFormatType) {
+	if (0 == csFormat.m_nTimeFormatType) {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_TFORM_0, BST_CHECKED );
 	}else {
 		::CheckDlgButton( hwndDlg, IDC_RADIO_TFORM_1, BST_CHECKED );
 	}
 	//時刻書式
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_TFORM, m_Common.m_sFormat.m_szTimeFormat );
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_TFORM, csFormat.m_szTimeFormat );
 
 	//	From Here Sept. 10, 2000 JEPRO
 	//	日付/時刻書式 0=標準 1=カスタム
@@ -287,37 +292,38 @@ void CPropFormat::SetData( HWND hwndDlg )
 // ダイアログデータの取得 Format
 int CPropFormat::GetData( HWND hwndDlg )
 {
+	auto& csFormat = m_Common.m_sFormat;
 	// 見出し記号
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_MIDASHIKIGOU, m_Common.m_sFormat.m_szMidashiKigou, _countof(m_Common.m_sFormat.m_szMidashiKigou) );
+	::DlgItem_GetText( hwndDlg, IDC_EDIT_MIDASHIKIGOU, csFormat.m_szMidashiKigou, _countof(csFormat.m_szMidashiKigou) );
 
 //	// 外部ヘルプ１
-//	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHELP1, m_Common.m_sFormat.m_szExtHelp1, MAX_PATH - 1 );
+//	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHELP1, csFormat.m_szExtHelp1, MAX_PATH - 1 );
 //
 //	// 外部HTMLヘルプ
-//	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHTMLHELP, m_Common.m_sFormat.m_szExtHtmlHelp, MAX_PATH - 1 );
+//	::DlgItem_GetText( hwndDlg, IDC_EDIT_EXTHTMLHELP, csFormat.m_szExtHtmlHelp, MAX_PATH - 1 );
 
 	// 引用符
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_INYOUKIGOU, m_Common.m_sFormat.m_szInyouKigou, _countof(m_Common.m_sFormat.m_szInyouKigou) );
+	::DlgItem_GetText( hwndDlg, IDC_EDIT_INYOUKIGOU, csFormat.m_szInyouKigou, _countof(csFormat.m_szInyouKigou) );
 
 
-	//日付書式のタイプ
+	// 日付書式のタイプ
 	if (BST_CHECKED == ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_DFORM_0 )) {
-		m_Common.m_sFormat.m_nDateFormatType = 0;
+		csFormat.m_nDateFormatType = 0;
 	}else {
-		m_Common.m_sFormat.m_nDateFormatType = 1;
+		csFormat.m_nDateFormatType = 1;
 	}
-	//日付書式
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_DFORM, m_Common.m_sFormat.m_szDateFormat, _countof( m_Common.m_sFormat.m_szDateFormat ));
+	// 日付書式
+	::DlgItem_GetText( hwndDlg, IDC_EDIT_DFORM, csFormat.m_szDateFormat, _countof( csFormat.m_szDateFormat ));
 
-	//時刻書式のタイプ
+	// 時刻書式のタイプ
 	if (BST_CHECKED == ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_TFORM_0 )) {
-		m_Common.m_sFormat.m_nTimeFormatType = 0;
+		csFormat.m_nTimeFormatType = 0;
 	}else {
-		m_Common.m_sFormat.m_nTimeFormatType = 1;
+		csFormat.m_nTimeFormatType = 1;
 	}
 
-	//時刻書式
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_TFORM, m_Common.m_sFormat.m_szTimeFormat, _countof( m_Common.m_sFormat.m_szTimeFormat ));
+	// 時刻書式
+	::DlgItem_GetText( hwndDlg, IDC_EDIT_TFORM, csFormat.m_szTimeFormat, _countof( csFormat.m_szTimeFormat ));
 
 	return TRUE;
 }

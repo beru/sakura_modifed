@@ -43,21 +43,22 @@ void CViewCommander::Command_RECKEYMACRO( void )
 		TCHAR szInitDir[MAX_PATH];
 		int nRet;
 		// 2003.06.23 Moca 記録用キーマクロのフルパスをCShareData経由で取得
-		nRet = CShareData::getInstance()->GetMacroFilename( -1, szInitDir, MAX_PATH ); 
+		nRet = CShareData::getInstance()->GetMacroFilename( -1, szInitDir, MAX_PATH );
+		auto& csMacro = GetDllShareData().m_Common.m_sMacro;
 		if (nRet <= 0) {
 			ErrorMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet );
 			return;
 		}else {
-			_tcscpy( GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName, szInitDir );
+			_tcscpy( csMacro.m_szKeyMacroFileName, szInitDir );
 		}
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		int nSaveResult = m_pcSMacroMgr->Save(
 			STAND_KEYMACRO,
 			G_AppInstance(),
-			GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName
+			csMacro.m_szKeyMacroFileName
 		);
 		if (!nSaveResult) {
-			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName );
+			ErrorMessage(	m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD25), csMacro.m_szKeyMacroFileName );
 		}
 	}else {
 		sFlags.m_bRecordingKeyMacro = TRUE;
@@ -183,17 +184,18 @@ void CViewCommander::Command_EXECKEYMACRO( void )
 
 	// キーボードマクロの実行
 	//@@@ 2002.1.24 YAZAKI
-	if (GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName[0]) {
+	auto& csMacro = GetDllShareData().m_Common.m_sMacro;
+	if (csMacro.m_szKeyMacroFileName[0]) {
 		//	ファイルが保存されていたら
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		BOOL bLoadResult = m_pcSMacroMgr->Load(
 			STAND_KEYMACRO,
 			G_AppInstance(),
-			GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName,
+			csMacro.m_szKeyMacroFileName,
 			NULL
 		);
 		if (!bLoadResult) {
-			ErrorMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName );
+			ErrorMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.m_szKeyMacroFileName );
 		}else {
 			//	2007.07.20 genta : flagsオプション追加
 			m_pcSMacroMgr->Exec( STAND_KEYMACRO, G_AppInstance(), m_pCommanderView, 0 );

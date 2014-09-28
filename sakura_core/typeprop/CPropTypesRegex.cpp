@@ -29,7 +29,6 @@
 
 using namespace std;
 
-
 static const DWORD p_helpids[] = {	//11600
 	IDC_BUTTON_REGEX_IMPORT,	HIDC_BUTTON_REGEX_IMPORT,	// インポート
 	IDC_BUTTON_REGEX_EXPORT,	HIDC_BUTTON_REGEX_EXPORT,	// エクスポート
@@ -53,12 +52,11 @@ static const DWORD p_helpids[] = {	//11600
 	0, 0
 };
 
-
 // Import
 // 2010/4/23 Uchi Importの外出し
 bool CPropTypesRegex::Import(HWND hwndDlg)
 {
-	CImpExpRegex	cImpExpRegex(m_Types);
+	CImpExpRegex cImpExpRegex(m_Types);
 
 	// インポート
 	bool bImport = cImpExpRegex.ImportUI(m_hInstance, hwndDlg);
@@ -73,13 +71,13 @@ bool CPropTypesRegex::Import(HWND hwndDlg)
 bool CPropTypesRegex::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
-	CImpExpRegex	cImpExpRegex(m_Types);
+	CImpExpRegex cImpExpRegex(m_Types);
 
 	// エクスポート
 	return cImpExpRegex.ExportUI(m_hInstance, hwndDlg);
 }
 
-/* 正規表現キーワード メッセージ処理 */
+// 正規表現キーワード メッセージ処理
 INT_PTR CPropTypesRegex::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
@@ -89,7 +87,6 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 {
 	WORD	wNotifyCode;
 	WORD	wID;
-	HWND	hwndList;
 	NMHDR*	pNMHDR;
 	int	nIndex, nIndex2, i, j, nRet;
 	LV_ITEM	lvi;
@@ -97,19 +94,18 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 	RECT		rc;
 	static int nPrevIndex = -1;	//更新時におかしくなるバグ修正 @@@ 2003.03.26 MIK
 
-
-	hwndList = GetDlgItem( hwndDlg, IDC_LIST_REGEX );
+	HWND hwndList = GetDlgItem( hwndDlg, IDC_LIST_REGEX );
 
 	// ANSIビルドではCP932だと2倍程度必要
 	const int nKeyWordSize = MAX_REGEX_KEYWORDLEN;
-	TCHAR	szColorIndex[256];
+	TCHAR szColorIndex[256];
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* カラム追加 */
+		// カラム追加
 		//ListView_DeleteColumn( hwndList, 1 );
 		//ListView_DeleteColumn( hwndList, 0 );
 		::GetWindowRect( hwndList, &rc );
@@ -127,7 +123,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 		ListView_InsertColumn( hwndList, 1, &col );
 
 		nPrevIndex = -1;	//@@@ 2003.05.12 MIK
-		SetData( hwndDlg );	/* ダイアログデータの設定 正規表現キーワード */
+		SetData( hwndDlg );	// ダイアログデータの設定 正規表現キーワード
 		if (CheckRegexpVersion( hwndDlg, IDC_LABEL_REGEX_VERSION, false ) == false) {	//@@@ 2001.11.17 add MIK
 			::DlgItem_SetText( hwndDlg, IDC_LABEL_REGEX_VERSION, LS(STR_PROPTYPEREGEX_NOUSE) );
 			//ライブラリがなくて、使用しないになっている場合は、無効にする。
@@ -142,13 +138,13 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 		return TRUE;
 
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID	= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		wNotifyCode = HIWORD(wParam);	// 通知コード
+		wID	= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
-		/* ボタン／チェックボックスがクリックされた */
+		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
 			switch (wID) {
-			case IDC_CHECK_REGEX:	/* 正規表現キーワードを使う */
+			case IDC_CHECK_REGEX:	// 正規表現キーワードを使う
 				if (IsDlgButtonChecked( hwndDlg, IDC_CHECK_REGEX )) {
 					if (CheckRegexpVersion( NULL, 0, false ) == false) {
 						nRet = ::MYMESSAGEBOX(
@@ -172,7 +168,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	//Need Compile
 				return TRUE;
 
-			case IDC_BUTTON_REGEX_INS:	/* 挿入 */
+			case IDC_BUTTON_REGEX_INS:	// 挿入
 			{
 				//挿入するキー情報を取得する。
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
@@ -218,7 +214,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_ADD:	/* 追加 */
+			case IDC_BUTTON_REGEX_ADD:	// 追加
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
 				//最後のキー番号を取得する。
@@ -258,7 +254,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_UPD:	/* 更新 */
+			case IDC_BUTTON_REGEX_UPD:	// 更新
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
 				//選択中のキーを探す。
@@ -299,7 +295,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_DEL:	/* 削除 */
+			case IDC_BUTTON_REGEX_DEL:	// 削除
 				//選択中のキー番号を探す。
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if (-1 == nIndex) {
@@ -312,7 +308,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				GetData( hwndDlg );
 				return TRUE;
 
-			case IDC_BUTTON_REGEX_TOP:	/* 先頭 */
+			case IDC_BUTTON_REGEX_TOP:	// 先頭
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
 				szKeyWord[0] = _T('\0');
@@ -346,7 +342,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_LAST:	/* 最終 */
+			case IDC_BUTTON_REGEX_LAST:	// 最終
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
 				szKeyWord[0] = _T('\0');
@@ -379,7 +375,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_UP:	/* 上へ */
+			case IDC_BUTTON_REGEX_UP:	// 上へ
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
 				szKeyWord[0] = _T('\0');
@@ -416,7 +412,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_DOWN:	/* 下へ */
+			case IDC_BUTTON_REGEX_DOWN:	// 下へ
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
 				szKeyWord[0] = _T('\0');
@@ -453,12 +449,12 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				return TRUE;
 			}
 
-			case IDC_BUTTON_REGEX_IMPORT:	/* インポート */
+			case IDC_BUTTON_REGEX_IMPORT:	// インポート
 				Import(hwndDlg);
 				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	//Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
-			case IDC_BUTTON_REGEX_EXPORT:	/* エクスポート */
+			case IDC_BUTTON_REGEX_EXPORT:	// エクスポート
 				Export(hwndDlg);
 				return TRUE;
 			}
@@ -473,7 +469,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			OnHelp( hwndDlg, IDD_PROP_REGEX );
 			return TRUE;
 		case PSN_KILLACTIVE:
-			/* ダイアログデータの取得 正規表現キーワード */
+			// ダイアログデータの取得 正規表現キーワード
 			GetData( hwndDlg );
 			return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
@@ -488,15 +484,15 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_FOCUSED );
 				}
 				if (-1 == nIndex) {
-					/* 初期値を設定する */
-					::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEX, _T("//k") );	/* 正規表現 */
+					// 初期値を設定する
+					::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEX, _T("//k") );	// 正規表現
 					hwndCombo = GetDlgItem( hwndDlg, IDC_COMBO_REGEX_COLOR );
 					for (i = 0, j = 0; i < COLORIDX_LAST; i++) {
 						if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
 							0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
 							if (m_Types.m_ColorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
-								Combo_SetCurSel( hwndCombo, j );	/* コンボボックスのデフォルト選択 */
+								Combo_SetCurSel( hwndCombo, j );	// コンボボックスのデフォルト選択
 								break;
 							}
 							j++;
@@ -510,7 +506,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					szKeyWord[0] = _T('\0');
 					ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
 					ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
-					::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0] );	/* 正規表現 */
+					::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0] );	// 正規表現
 					hwndCombo = GetDlgItem( hwndDlg, IDC_COMBO_REGEX_COLOR );
 					for (i = 0, j = 0; i < COLORIDX_LAST; i++) {
 						if ( 0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
@@ -536,7 +532,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		/*NOTREACHED*/
+		// NOTREACHED
 		//break;
 
 	//Context Menu
@@ -548,27 +544,24 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 	return FALSE;
 }
 
-/* ダイアログデータの設定 正規表現キーワード */
+// ダイアログデータの設定 正規表現キーワード
 void CPropTypesRegex::SetData( HWND hwndDlg )
 {
-	HWND		hwndWork;
-	int			i, j;
-
-	/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
+	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_REGEX ), MAX_REGEX_KEYWORDLEN - 1 );
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEX, _T("//k") );	/* 正規表現 */
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEX, _T("//k") );	// 正規表現
 
-	/* 色種類のリスト */
-	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_REGEX_COLOR );
-	Combo_ResetContent( hwndWork );  /* コンボボックスを空にする */
-	for (i = 0; i < COLORIDX_LAST; i++) {
+	// 色種類のリスト
+	HWND hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_REGEX_COLOR );
+	Combo_ResetContent( hwndWork );  // コンボボックスを空にする
+	for (int i = 0; i < COLORIDX_LAST; i++) {
 		GetDefaultColorInfoName( &m_Types.m_ColorInfoArr[i], i );
 		if ( 0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
 			0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
 		) {	// 2006.12.18 ryoji フラグ利用で簡素化
-			j = Combo_AddString( hwndWork, m_Types.m_ColorInfoArr[i].m_szName );
+			int j = Combo_AddString( hwndWork, m_Types.m_ColorInfoArr[i].m_szName );
 			if (m_Types.m_ColorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
-				Combo_SetCurSel( hwndWork, j );	/* コンボボックスのデフォルト選択 */
+				Combo_SetCurSel( hwndWork, j );	// コンボボックスのデフォルト選択
 			}
 		}
 	}
@@ -579,7 +572,7 @@ void CPropTypesRegex::SetData( HWND hwndDlg )
 		CheckDlgButton( hwndDlg, IDC_CHECK_REGEX, BST_UNCHECKED );
 	}
 
-	/* 行選択 */
+	// 行選択
 	hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_REGEX );
 	DWORD		dwStyle;
 	dwStyle = ListView_GetExtendedListViewStyle( hwndWork );
@@ -589,16 +582,16 @@ void CPropTypesRegex::SetData( HWND hwndDlg )
 	SetDataKeywordList( hwndDlg );
 }
 
-/* ダイアログデータの設定 正規表現キーワードの一覧部分 */
+// ダイアログデータの設定 正規表現キーワードの一覧部分
 void CPropTypesRegex::SetDataKeywordList( HWND hwndDlg )
 {
 	LV_ITEM		lvi;
 
-	/* リスト */
+	// リスト
 	HWND hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_REGEX );
-	ListView_DeleteAllItems(hwndWork);  /* リストを空にする */
+	ListView_DeleteAllItems(hwndWork);  // リストを空にする
 
-	/* データ表示 */
+	// データ表示
 	wchar_t* pKeyword = &m_Types.m_RegexKeywordList[0];
 	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
 		if (*pKeyword == L'\0') {
@@ -626,7 +619,7 @@ void CPropTypesRegex::SetDataKeywordList( HWND hwndDlg )
 	return;
 }
 
-/* ダイアログデータの取得 正規表現キーワード */
+// ダイアログデータの取得 正規表現キーワード
 int CPropTypesRegex::GetData( HWND hwndDlg )
 {
 	HWND	hwndList;

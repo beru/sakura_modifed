@@ -92,19 +92,20 @@ int CViewCommander::Command_UP( bool bSelect, bool bRepeat, int lines )
 	int nRepeat = 0;
 
 	// キーリピート時のスクロールを滑らかにするか
-	if (!GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScroll_Smooth) {
+	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;
+	if (!csGeneral.m_nRepeatedScroll_Smooth) {
 		CLayoutInt i;
 		if (!bRepeat) {
 			i = CLayoutInt(-1);
 		}else {
-			i = -1 * GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
+			i = -1 * csGeneral.m_nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
 		}
 		caret.Cursor_UPDOWN( i, bSelect );
 		nRepeat = -1 * (Int)i;
 	}else {
 		++nRepeat;
 		if (caret.Cursor_UPDOWN( CLayoutInt(-1), bSelect )!=0 && bRepeat) {
-			for (int i = 0; i < GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum - 1; ++i) {		// キーリピート時のスクロール行数
+			for (int i = 0; i < csGeneral.m_nRepeatedScrollLineNum - 1; ++i) {		// キーリピート時のスクロール行数
 				::UpdateWindow( m_pCommanderView->GetHwnd() );	//	YAZAKI
 				caret.Cursor_UPDOWN( CLayoutInt(-1), bSelect );
 				++nRepeat;
@@ -120,20 +121,21 @@ int CViewCommander::Command_DOWN( bool bSelect, bool bRepeat )
 {
 	auto& caret = GetCaret();
 	int nRepeat = 0;
+	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;
 	// キーリピート時のスクロールを滑らかにするか
-	if (!GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScroll_Smooth) {
+	if (!csGeneral.m_nRepeatedScroll_Smooth) {
 		CLayoutInt i;
 		if (!bRepeat) {
 			i = CLayoutInt(1);
 		}else {
-			i = GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
+			i = csGeneral.m_nRepeatedScrollLineNum;	// キーリピート時のスクロール行数
 		}
 		caret.Cursor_UPDOWN( i, bSelect );
 		nRepeat = (Int)i;
 	}else {
 		++nRepeat;
 		if (caret.Cursor_UPDOWN(CLayoutInt(1),bSelect)!=0 && bRepeat) {
-			for (int i = 0; i < GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum - 1; ++i) {	// キーリピート時のスクロール行数
+			for (int i = 0; i < csGeneral.m_nRepeatedScrollLineNum - 1; ++i) {	// キーリピート時のスクロール行数
 				// ここで再描画。
 				::UpdateWindow( m_pCommanderView->GetHwnd() );	//	YAZAKI
 				caret.Cursor_UPDOWN( CLayoutInt(1), bSelect );
@@ -407,13 +409,15 @@ void CViewCommander::Command_WORDLEFT( bool bSelect )
 	}
 
 	auto& caret = GetCaret();
+	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;
+
 	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( caret.GetCaretLayoutPos().GetY2() );
 	if (!pcLayout) {
-		bool bIsFreeCursorModeOld = GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode;	// フリーカーソルモードか
-		GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode = false;
+		bool bIsFreeCursorModeOld = csGeneral.m_bIsFreeCursorMode;	// フリーカーソルモードか
+		csGeneral.m_bIsFreeCursorMode = false;
 		// カーソル左移動
 		Command_LEFT( bSelect, false );
-		GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
+		csGeneral.m_bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
 		return;
 	}
 
@@ -426,7 +430,7 @@ void CViewCommander::Command_WORDLEFT( bool bSelect )
 		caret.GetCaretLayoutPos().GetY2(),
 		nIdx,
 		&ptLayoutNew,
-		GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord
+		csGeneral.m_bStopsBothEndsWhenSearchWord
 	);
 	if (nResult) {
 		// 行が変わった
@@ -453,11 +457,11 @@ void CViewCommander::Command_WORDLEFT( bool bSelect )
 		caret.MoveCursor( ptLayoutNew, true, _CARETMARGINRATE, bUnderlineDoNotOFF );
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 	}else {
-		bool bIsFreeCursorModeOld = GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode;	// フリーカーソルモードか
-		GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode = false;
+		bool bIsFreeCursorModeOld = csGeneral.m_bIsFreeCursorMode;	// フリーカーソルモードか
+		csGeneral.m_bIsFreeCursorMode = false;
 		// カーソル左移動
 		Command_LEFT( bSelect, false );
-		GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
+		csGeneral.m_bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
 	}
 	return;
 }
@@ -504,13 +508,14 @@ try_again:;
 	// 指定された桁に対応する行のデータ内の位置を調べる
 	nIdx = m_pCommanderView->LineColumnToIndex( pcLayout, caret.GetCaretLayoutPos().GetX2() );
 
+	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;	
 	// 現在位置の右の単語の先頭位置を調べる
 	CLayoutPoint ptLayoutNew;
 	int nResult = GetDocument()->m_cLayoutMgr.NextWord(
 		nCurLine,
 		nIdx,
 		&ptLayoutNew,
-		GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord
+		csGeneral.m_bStopsBothEndsWhenSearchWord
 	);
 	if (nResult) {
 		// 行が変わった
@@ -535,11 +540,11 @@ try_again:;
 		caret.MoveCursor( ptLayoutNew, true, _CARETMARGINRATE, bUnderlineDoNotOFF );
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 	}else {
-		bool bIsFreeCursorModeOld = GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode;	// フリーカーソルモードか
-		GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode = false;
+		bool bIsFreeCursorModeOld = csGeneral.m_bIsFreeCursorMode;	// フリーカーソルモードか
+		csGeneral.m_bIsFreeCursorMode = false;
 		// カーソル右移動
 		Command_RIGHT( bSelect, false, false );
-		GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
+		csGeneral.m_bIsFreeCursorMode = bIsFreeCursorModeOld;	// フリーカーソルモードか
 		if (!bTryAgain) {
 			bTryAgain = true;
 			goto try_again;
@@ -1090,9 +1095,10 @@ void CViewCommander::Command_GOPREVPARAGRAPH( bool bSelect )
 	/*	nFirstLineIsEmptyLineが空行だったら、今見ているところは非空行。すなわちおしまい。
 		nFirstLineIsEmptyLineが非空行だったら、今見ているところは空行。
 	*/
+	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;	
 	if (nFirstLineIsEmptyLine == true) {
 		//	おしまい。
-		if (GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph) {	//	段落の両端で止まる
+		if (csGeneral.m_bStopsBothEndsWhenSearchParagraph) {	//	段落の両端で止まる
 			nCaretPointer++;	//	空行の最上行（段落の末端の次の行）で止まる。
 		}else {
 			// 仕上げに、空行じゃないところまで進む
@@ -1107,7 +1113,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH( bool bSelect )
 		}
 	}else {
 		//	いま見ているところは空行の1行目
-		if (GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph) {	//	段落の両端で止まる
+		if (csGeneral.m_bStopsBothEndsWhenSearchParagraph) {	//	段落の両端で止まる
 			nCaretPointer++;
 		}else {
 			nCaretPointer++;

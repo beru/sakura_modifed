@@ -584,13 +584,13 @@ enum e_PM_CHANGESETTING_SELECT {
 
 
 
-/*! トレイからエディタへの終了要求 */
+//! トレイからエディタへの終了要求
 #define	MYWM_CLOSE			(WM_APP+200)
 
-/*! トレイからエディタへの編集ファイル情報 要求通知 */
+//! トレイからエディタへの編集ファイル情報 要求通知
 #define	MYWM_GETFILEINFO	(WM_APP+203)
 
-/*! カーソル位置変更通知 */
+//! カーソル位置変更通知
 #define	MYWM_SETCARETPOS	(WM_APP+204)
 //! MYWM_SETCARETPOSメッセージのlParam
 enum e_PM_SETCARETPOS_SELECTSTATE {
@@ -599,7 +599,7 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 	PM_SETCARETPOS_KEEPSELECT	= 2, //!< 現在の選択状態を保って移動
 };
 
-/*! カーソル位置取得要求 */
+//! カーソル位置取得要求
 #define	MYWM_GETCARETPOS	(WM_APP+205)
 
 //! 未使用
@@ -607,38 +607,38 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 //lParam:未使用
 #define	MYWM_ADDSTRING		(WM_APP+206)
 
-/*! タグジャンプ元通知 */
+//! タグジャンプ元通知
 #define	MYWM_SETREFERER		(WM_APP+207)
 
-/*! 行(改行単位)データの要求 */
+//! 行(改行単位)データの要求
 #define	MYWM_GETLINEDATA	(WM_APP+208)
 
 
-/*! 編集ウィンドウオブジェクトからのオブジェクト削除要求 */
+//! 編集ウィンドウオブジェクトからのオブジェクト削除要求
 #define	MYWM_DELETE_ME		(WM_APP+209)
 
-/*! 新しい編集ウィンドウの作成依頼(コマンドラインを渡す) */
+//! 新しい編集ウィンドウの作成依頼(コマンドラインを渡す)
 #define	MYWM_OPENNEWEDITOR	(WM_APP+210)
 
 //ヘルプっぽい何か
 #define	MYWM_HTMLHELP			(WM_APP+212)
 
-/*! タブウインドウ用メッセージ */
+//! タブウインドウ用メッセージ
 #define	MYWM_TAB_WINDOW_NOTIFY	(WM_APP+213)	//@@@ 2003.05.31 MIK
 
-/*! バーの表示・非表示変更メッセージ */
+//! バーの表示・非表示変更メッセージ
 #define	MYWM_BAR_CHANGE_NOTIFY	(WM_APP+214)	//@@@ 2003.06.10 MIK
 
-/*! エディタ－トレイ間でのUI特権分離の確認メッセージ */
+//! エディタ－トレイ間でのUI特権分離の確認メッセージ
 #define	MYWM_UIPI_CHECK	(WM_APP+215)	//@@@ 2007.06.07 ryoji
 
-/*! ポップアップウィンドウの表示切替指示 */
+//! ポップアップウィンドウの表示切替指示
 #define MYWM_SHOWOWNEDPOPUPS (WM_APP+216)	//@@@ 2007.10.22 ryoji
 
-/*! プロセスの初回アイドリング通知 */
+//! プロセスの初回アイドリング通知
 #define MYWM_FIRST_IDLE (WM_APP+217)	//@@@ 2008.04.19 ryoji
 
-/*! 独自のドロップファイル通知 */
+//! 独自のドロップファイル通知
 #define MYWM_DROPFILES (WM_APP+218)	//@@@ 2008.06.18 ryoji
 
 //! テキスト追加通知(共有データ経由)
@@ -647,7 +647,7 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 // @2010.05.11 Moca メッセージ追加
 #define	MYWM_ADDSTRINGLEN_W (WM_APP+219)
 
-/*! アウトライン解析画面の通知 */
+//! アウトライン解析画面の通知
 #define MYWM_OUTLINE_NOTIFY (WM_APP+220)	//@@@ 2010.06.06 ryoji
 
 //! タイプ別を設定
@@ -661,7 +661,7 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 //! タイプ別を削除
 #define MYWM_DEL_TYPESETTING (WM_APP+224)
 
-/* 再変換対応 */ // 20020331 aroka
+// 再変換対応 // 20020331 aroka
 #ifndef WM_IME_REQUEST
 #define MYWM_IME_REQUEST 0x288  // ==WM_IME_REQUEST
 #else

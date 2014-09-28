@@ -36,7 +36,7 @@ struct RegexKeywordInfo {
 
 //!	正規表現キーワード検索情報構造体
 typedef struct RegexInfo_t {
-	BREGEXP_W	*pBregexp;	//BREGEXP_W構造体
+	BREGEXP_W* pBregexp;	//BREGEXP_W構造体
 #ifdef USE_PARENT
 #else
 	struct RegexKeywordInfo	sRegexKey;	//コンパイルパターンを保持

@@ -45,26 +45,32 @@ class CComplementIfObj : public CWSHIfObj {
 	// コンストラクタ
 public:
 	CComplementIfObj( std::wstring& curWord, CHokanMgr* pMgr, int option )
-		: CWSHIfObj( L"Complement", false )
-		, m_sCurrentWord( curWord )
-		, m_pHokanMgr( pMgr )
-		, m_nOption( option )
+		:
+		CWSHIfObj( L"Complement", false ),
+		m_sCurrentWord( curWord ),
+		m_pHokanMgr( pMgr ),
+		m_nOption( option )
 	{
 	}
 
 	// デストラクタ
 public:
-	~CComplementIfObj(){}
+	~CComplementIfObj() {}
 
 	// 実装
 public:
 	// コマンド情報を取得する
-	MacroFuncInfoArray GetMacroCommandInfo() const{ return m_MacroFuncInfoCommandArr; }
+	MacroFuncInfoArray GetMacroCommandInfo() const { return m_MacroFuncInfoCommandArr; }
 	// 関数情報を取得する
-	MacroFuncInfoArray GetMacroFuncInfo() const{ return m_MacroFuncInfoArr; };
+	MacroFuncInfoArray GetMacroFuncInfo() const { return m_MacroFuncInfoArr; };
 	// 関数を処理する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result)
-	{
+	bool HandleFunction(
+		CEditView*		View,
+		EFunctionCode	ID,
+		const VARIANT*	Arguments,
+		const int		ArgSize,
+		VARIANT&		Result
+	) {
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
 		switch (LOWORD(ID)) {
@@ -103,8 +109,7 @@ public:
 	}
 	
 	// コマンドを処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
-	{
+	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		return false;
 	}
 
@@ -116,20 +121,18 @@ private:
 
 private:
 	static MacroFuncInfo m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
-	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
+	static MacroFuncInfo m_MacroFuncInfoArr[];			// 関数情報(戻り値あり)
 };
 
 //コマンド情報
-MacroFuncInfo CComplementIfObj::m_MacroFuncInfoCommandArr[] = 
-{
+MacroFuncInfo CComplementIfObj::m_MacroFuncInfoCommandArr[] = {
 	//ID									関数名							引数										戻り値の型	m_pszData
 	//	終端
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
 //関数情報
-MacroFuncInfo CComplementIfObj::m_MacroFuncInfoArr[] = 
-{
+MacroFuncInfo CComplementIfObj::m_MacroFuncInfoArr[] = {
 	//ID								関数名				引数										戻り値の型	m_pszData
 	{EFunctionCode(F_CM_GETCURRENTWORD),L"GetCurrentWord",	{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, //補完対象の文字列を取得
 	{EFunctionCode(F_CM_GETOPTION),		L"GetOption",		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_I4,		NULL }, //補完対象の文字列を取得

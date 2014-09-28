@@ -47,9 +47,10 @@ class COutlineIfObj : public CWSHIfObj {
 	// コンストラクタ
 public:
 	COutlineIfObj( CFuncInfoArr& cFuncInfoArr )
-		: CWSHIfObj( L"Outline", false )
-		, m_nListType( OUTLINE_PLUGIN )
-		, m_cFuncInfoArr( cFuncInfoArr )
+		:
+		CWSHIfObj( L"Outline", false ),
+		m_nListType( OUTLINE_PLUGIN ),
+		m_cFuncInfoArr( cFuncInfoArr )
 	{
 	}
 
@@ -60,17 +61,15 @@ public:
 	// 実装
 public:
 	// コマンド情報を取得する
-	MacroFuncInfoArray GetMacroCommandInfo() const{ return m_MacroFuncInfoCommandArr; }
+	MacroFuncInfoArray GetMacroCommandInfo() const { return m_MacroFuncInfoCommandArr; }
 	// 関数情報を取得する
-	MacroFuncInfoArray GetMacroFuncInfo() const{ return m_MacroFuncInfoArr; }
+	MacroFuncInfoArray GetMacroFuncInfo() const { return m_MacroFuncInfoArr; }
 	// 関数を処理する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result)
-	{
+	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result) {
 		return false;
 	}
 	// コマンドを処理する
-	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
-	{
+	bool HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize) {
 		switch (LOWORD(ID)) {
 		case F_OL_ADDFUNCINFO:			// アウトライン解析に追加する
 		case F_OL_ADDFUNCINFO2:			// アウトライン解析に追加する（深さ指定）
@@ -128,8 +127,7 @@ private:
 };
 
 // コマンド情報
-MacroFuncInfo COutlineIfObj::m_MacroFuncInfoCommandArr[] = 
-{
+MacroFuncInfo COutlineIfObj::m_MacroFuncInfoCommandArr[] = {
 	// ID									関数名							引数										戻り値の型	m_pszData
 	{EFunctionCode(F_OL_ADDFUNCINFO),		LTEXT("AddFuncInfo"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, //アウトライン解析に追加する
 	{EFunctionCode(F_OL_ADDFUNCINFO2),		LTEXT("AddFuncInfo2"),			{VT_I4, VT_I4, VT_BSTR, VT_I4},				VT_EMPTY,	NULL }, //アウトライン解析に追加する（深さ指定）
@@ -141,8 +139,7 @@ MacroFuncInfo COutlineIfObj::m_MacroFuncInfoCommandArr[] =
 };
 
 // 関数情報
-MacroFuncInfo COutlineIfObj::m_MacroFuncInfoArr[] = 
-{
+MacroFuncInfo COutlineIfObj::m_MacroFuncInfoArr[] = {
 	//ID									関数名							引数										戻り値の型	m_pszData
 	//	終端
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}

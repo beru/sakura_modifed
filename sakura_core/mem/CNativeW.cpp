@@ -120,7 +120,6 @@ void CNativeW::AppendStringOld( const char* pszData )
 	AppendStringOld(pszData,strlen(pszData));
 }
 
-
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //              ネイティブ取得インターフェース                 //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

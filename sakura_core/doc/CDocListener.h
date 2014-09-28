@@ -128,7 +128,8 @@ struct SSaveInfo {
 		bChgCodeSet(false),
 		cEol(EOL_NONE),
 		bOverwriteMode(false)
-	{}
+	{
+	}
 
 	SSaveInfo(
 		const CFilePath& _cFilePath,
@@ -143,7 +144,8 @@ struct SSaveInfo {
 		bChgCodeSet(false),
 		cEol(_cEol),
 		bOverwriteMode(false)
-	{}
+	{
+	}
 
 	//! ファイルパスの比較
 	bool IsSamePath(LPCTSTR pszPath) const;

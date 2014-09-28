@@ -47,8 +47,7 @@ class CCodeBase;
 	@note 明示的にFileOpenメンバを呼び出さないと使えない
 		ファイルポインタを共有すると困るので、クラスのコピー禁止
 */
-class CFileLoad
-{
+class CFileLoad {
 public:
 
 	CFileLoad( const SEncodingConfig& encode );
@@ -74,7 +73,7 @@ public:
 
 	//	Jun. 08, 2003 Moca
 	//! 開いたファイルにはBOMがあるか？
-	bool IsBomExist( void ){ return m_bBomExist; }
+	bool IsBomExist( void ) { return m_bBomExist; }
 
 	//! 現在の進行率を取得する(0% - 100%) 若干誤差が出る
 	int GetPercent( void );
@@ -142,8 +141,7 @@ inline BOOL CFileLoad::GetFileTime( FILETIME* pftCreate, FILETIME* pftLastAccess
 }
 
 // protected
-inline int CFileLoad::Read( void* pBuf, size_t nSize )
-{
+inline int CFileLoad::Read( void* pBuf, size_t nSize ) {
 	DWORD ReadSize;
 	if (!::ReadFile( m_hFile, pBuf, nSize, &ReadSize, NULL )) {
 		throw CError_FileRead();
@@ -152,8 +150,7 @@ inline int CFileLoad::Read( void* pBuf, size_t nSize )
 }
 
 // protected
-inline DWORD CFileLoad::FilePointer( DWORD offset, DWORD origin )
-{
+inline DWORD CFileLoad::FilePointer( DWORD offset, DWORD origin ) {
 	DWORD fp;
 	if (INVALID_SET_FILE_POINTER == ( fp = ::SetFilePointer( m_hFile, offset, NULL, FILE_BEGIN ) )) {
 		throw CError_FileRead();

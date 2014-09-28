@@ -13,18 +13,18 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 	CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
 	int nDataLen = 0;
 	while (pDocLine) {
-		//	Oct. 7, 2002 YAZAKI
+		// Oct. 7, 2002 YAZAKI
 		nDataLen += pDocLine->GetLengthWithoutEOL() + 2;	//	\r\nを追加して返すため+2する。
 		pDocLine = pDocLine->GetNextLine();
 	}
-
+	
 	wchar_t* pData = (wchar_t*)malloc( (nDataLen + 1) * sizeof(wchar_t) );
 	if (!pData) {
 		TopErrorMessage( NULL, LS(STR_ERR_DLGDOCLM6), nDataLen + 1 );
 		return NULL;
 	}
 	pDocLine = m_pcDocLineMgr->GetDocLineTop();
-
+	
 	nDataLen = 0;
 	while (pDocLine) {
 		//	Oct. 7, 2002 YAZAKI
@@ -42,7 +42,6 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 	return pData;
 }
 
-
 const wchar_t* CDocReader::GetLineStr( CLogicInt nLine, CLogicInt* pnLineLen )
 {
 	CDocLine* pDocLine = m_pcDocLineMgr->GetLine( nLine );
@@ -53,7 +52,6 @@ const wchar_t* CDocReader::GetLineStr( CLogicInt nLine, CLogicInt* pnLineLen )
 	// 2002/2/10 aroka CMemory のメンバ変数に直接アクセスしない(inline化されているので速度的な問題はない)
 	return pDocLine->GetDocLineStrWithEOL( pnLineLen );
 }
-
 
 /*!
 	指定された行番号の文字列と改行コードを除く長さを取得

@@ -36,9 +36,9 @@ void CViewCommander::Command_COMPARE( void )
 	CDlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
 	auto& commonSetting = GetDllShareData().m_Common;
-
+	auto& csCompare = commonSetting.m_sCompare;
 	// 比較後、左右に並べて表示
-	cDlgCompare.m_bCompareAndTileHorz = commonSetting.m_sCompare.m_bCompareAndTileHorz;
+	cDlgCompare.m_bCompareAndTileHorz = csCompare.m_bCompareAndTileHorz;
 	BOOL bDlgCompareResult = cDlgCompare.DoModal(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -52,14 +52,14 @@ void CViewCommander::Command_COMPARE( void )
 		return;
 	}
 	// 比較後、左右に並べて表示
-	commonSetting.m_sCompare.m_bCompareAndTileHorz = cDlgCompare.m_bCompareAndTileHorz;
+	csCompare.m_bCompareAndTileHorz = cDlgCompare.m_bCompareAndTileHorz;
 
-	//タブウインドウ時は禁止	//@@@ 2003.06.12 MIK
+	// タブウインドウ時は禁止	//@@@ 2003.06.12 MIK
 	if (commonSetting.m_sTabBar.m_bDispTabWnd
 		&& !commonSetting.m_sTabBar.m_bDispTabWndMultiWin
 	) {
 		hwndMsgBox = m_pCommanderView->GetHwnd();
-		commonSetting.m_sCompare.m_bCompareAndTileHorz = FALSE;
+		csCompare.m_bCompareAndTileHorz = FALSE;
 	}else {
 		hwndMsgBox = hwndCompareWnd;
 	}
@@ -132,30 +132,29 @@ end_of_compare:;
 //From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 //	うまくいかなかったので元に戻してある…
 	if (GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz) {
-		HWND* phwndArr = new HWND[2];
-		phwndArr[0] = GetMainWindow();
-		phwndArr[1] = hwndCompareWnd;
+		HWND hWnds[2];
+		hWnds[0] = GetMainWindow();
+		hWnds[1] = hwndCompareWnd;
 		
 		for (int i = 0; i < 2; ++i) {
-			if (::IsZoomed( phwndArr[i] )) {
-				::ShowWindow( phwndArr[i], SW_RESTORE );
+			if (::IsZoomed( hWnds[i] )) {
+				::ShowWindow( hWnds[i], SW_RESTORE );
 			}
 		}
 		// デスクトップサイズを得る 2002.1.24 YAZAKI
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect( phwndArr[0], &rcDesktop );
+		::GetMonitorWorkRect( hWnds[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left ) / 2;
 		for (int i = 1; i >= 0; i--) {
 			::SetWindowPos(
-				phwndArr[i], 0,
+				hWnds[i], 0,
 				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
 				width, rcDesktop.bottom - rcDesktop.top,
 				SWP_NOOWNERZORDER | SWP_NOZORDER
 			);
 		}
-//		::TileWindows( NULL, MDITILE_VERTICAL, NULL, 2, phwndArr );
-		delete [] phwndArr;
+//		::TileWindows( NULL, MDITILE_VERTICAL, NULL, 2, hWnds );
 	}
 //To Here Oct. 10, 2000
 
@@ -181,7 +180,6 @@ end_of_compare:;
 	ActivateFrameWindow( GetMainWindow() );
 	return;
 }
-
 
 
 /*!	差分表示
@@ -228,13 +226,15 @@ void CViewCommander::Command_Diff_Dialog( void )
 	CDlgDiff cDlgDiff;
 	bool bTmpFile1 = false, bTmpFile2 = false;
 
+	auto& docFile = GetDocument()->m_cDocFile;
+	auto& docEditor = GetDocument()->m_cDocEditor;
 	// DIFF差分表示ダイアログを表示する
 	int nDiffDlgResult = cDlgDiff.DoModal(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 		(LPARAM)GetDocument(),
-		GetDocument()->m_cDocFile.GetFilePath(),
-		GetDocument()->m_cDocEditor.IsModified()
+		docFile.GetFilePath(),
+		docEditor.IsModified()
 	);
 	if (!nDiffDlgResult) {
 		return;
@@ -242,7 +242,7 @@ void CViewCommander::Command_Diff_Dialog( void )
 	
 	// 自ファイル
 	TCHAR szTmpFile1[_MAX_PATH * 2];
-	if (!GetDocument()->m_cDocEditor.IsModified()) _tcscpy_s( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
+	if (!docEditor.IsModified()) _tcscpy_s( szTmpFile1, docFile.GetFilePath());
 	else if (m_pCommanderView->MakeDiffTmpFile ( szTmpFile1, NULL )) bTmpFile1 = true;
 	else return;
 		

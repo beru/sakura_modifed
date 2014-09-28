@@ -37,7 +37,11 @@
 */
 class CMutex {
 public:
-	CMutex( BOOL bInitialOwner, LPCTSTR pszName, LPSECURITY_ATTRIBUTES psa = NULL ) {
+	CMutex(
+		BOOL bInitialOwner,
+		LPCTSTR pszName,
+		LPSECURITY_ATTRIBUTES psa = NULL
+	) {
 		m_hObj = ::CreateMutex( psa, bInitialOwner, pszName );
 	}
 	~CMutex() {
@@ -88,7 +92,7 @@ public:
 	LockGuard(EXCLUSIVE_OBJECT& ex) : o_( ex ) {
 		o_.Lock();
 	}
-	template<class PARAM>
+	template <class PARAM>
 	LockGuard(EXCLUSIVE_OBJECT& ex, PARAM p) : o_( ex ) {
 		o_.Lock(p);
 	}

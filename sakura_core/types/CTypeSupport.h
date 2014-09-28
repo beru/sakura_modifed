@@ -130,11 +130,11 @@ public:
 	}
 
 private:
-	const CViewFont*		m_pFontset;
-	const STypeConfig*		m_pTypes;
-	int						m_nColorIdx;
-	const ColorInfo*		m_pColorInfoArr;
+	const CViewFont*	m_pFontset;
+	const STypeConfig*	m_pTypes;
+	int					m_nColorIdx;
+	const ColorInfo*	m_pColorInfoArr;
 
-	CGraphics* m_gr;        // İ’è‚ğ•ÏX‚µ‚½HDC
+	CGraphics* m_gr;    // İ’è‚ğ•ÏX‚µ‚½HDC
 };
 

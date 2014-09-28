@@ -72,7 +72,7 @@ public:
 	bool operator != ( EEolType t ) const { return GetType() != t; }
 
 	// 代入
-	const CEol& operator = ( const CEol& t ){ m_eEolType = t.m_eEolType; return *this; }
+	const CEol& operator = ( const CEol& t ) { m_eEolType = t.m_eEolType; return *this; }
 
 	// 型変換
 	operator EEolType() const { return GetType(); }
@@ -83,12 +83,12 @@ public:
 	void SetTypeByString( const char* pszData, int nDataLen );
 
 	// 設定（ファイル読み込み時に使用）
-	void SetTypeByStringForFile( const char* pszData, int nDataLen ){ SetTypeByString( pszData, nDataLen ); }
+	void SetTypeByStringForFile( const char* pszData, int nDataLen ) { SetTypeByString( pszData, nDataLen ); }
 	void SetTypeByStringForFile_uni( const char* pszData, int nDataLen );
 	void SetTypeByStringForFile_unibe( const char* pszData, int nDataLen );
 
 	// 取得
-	EEolType		GetType()	const{ return m_eEolType; }		//!< 現在のTypeを取得
+	EEolType		GetType()	const { return m_eEolType; }		//!< 現在のTypeを取得
 	CLogicInt		GetLen()	const;	//!< 現在のEOL長を取得。文字単位。
 	const TCHAR*	GetName()	const;	//!< 現在のEOLの名称取得
 	const wchar_t*	GetValue2()	const;	//!< 現在のEOL文字列先頭へのポインタを取得
