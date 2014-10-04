@@ -70,7 +70,7 @@ public:
 	void DUMP( void );
 
 protected:
-	void ReadOneline( const wstring& line );
+	void ReadOneline( const wchar_t* line, size_t length );
 	bool _WriteFile( const tstring& strFilename, const std::vector< wstring >& vecLine);
 
 

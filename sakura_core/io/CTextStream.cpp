@@ -14,7 +14,8 @@ using namespace std;
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CTextInputStream::CTextInputStream(const TCHAR* tszPath)
-: CStream(tszPath,_T("rb"))
+	:
+	CStream(tszPath,_T("rb"))
 {
 	m_bIsUtf8 = false;
 
@@ -22,13 +23,13 @@ CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 		// BOM確認 -> m_bIsUtf8
 		static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 		BYTE buf[3];
-		if (sizeof(UTF8_BOM) == fread(&buf,1, sizeof(UTF8_BOM), GetFp())) {
+		if (sizeof(UTF8_BOM) == fread(&buf, 1, sizeof(UTF8_BOM), GetFp())) {
 			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM))==0);
 		}
 
 		// UTF-8じゃなければ、ファイルポインタを元に戻す
 		if (!m_bIsUtf8) {
-			fseek(GetFp(),0,SEEK_SET);
+			fseek(GetFp(), 0, SEEK_SET);
 		}
 	}else {
 		m_bIsUtf8 = false;
@@ -47,6 +48,8 @@ CTextInputStream::~CTextInputStream()
 {
 }
 
+#if 0 // no mercy
+
 wstring CTextInputStream::ReadLineW()
 {
 	//$$ 非効率だけど今のところは許して。。
@@ -61,7 +64,7 @@ wstring CTextInputStream::ReadLineW()
 		if (c == '\r') {
 			c = getc(GetFp());
 			if (c != '\n') {
-				ungetc(c,GetFp());
+				ungetc(c, GetFp());
 			}
 			break;
 		}
@@ -82,6 +85,59 @@ wstring CTextInputStream::ReadLineW()
 
 	return wstring().assign( (wchar_t*)line.GetRawPtr(), line.GetRawLength()/sizeof(wchar_t) );	// EOL まで NULL 文字も含める
 }
+
+#else
+
+wstring CTextInputStream::ReadLineW()
+{
+	std::vector<wchar_t> lineBuff;
+	ReadLineW(lineBuff);
+	const wchar_t* ret = lineBuff.empty() ? L"" : &lineBuff[0];
+//	OutputDebugStringW(ret);
+	return ret;
+}
+
+void CTextInputStream::ReadLineW(std::vector<wchar_t>& line) //!< 1行読込。改行は削る
+{
+	m_rawLine.clear();
+	FILE* fp = GetFp();
+	for (;;) {
+		int c = getc(fp);
+		// EOFで終了
+		if (c == EOF) {
+			break;
+		// "\r" または "\r\n" で終了
+		}else if (c == '\r') {
+			c = getc(fp);
+			if (c != '\n') {
+				ungetc(c, fp);
+			}
+			break;
+		// "\n" で終了
+		}else if (c == '\n') {
+			break;
+		}else {
+			m_rawLine.push_back(c);
+		}
+	}
+	m_rawLine.push_back(0);
+
+	static const UINT cp_sjis = 932;
+	UINT codePage = m_bIsUtf8 ? CP_UTF8 : cp_sjis;
+//	OutputDebugStringA(&m_rawLine[0]);
+	int wLen = MultiByteToWideChar(codePage, 0, &m_rawLine[0], m_rawLine.size(), 0, 0);
+#if 0
+	char buff[32];
+	sprintf(buff, "wLen %d", wLen);
+	OutputDebugStringA(buff);
+#endif
+	line.resize(wLen);
+	int ret = MultiByteToWideChar(codePage, 0, &m_rawLine[0], m_rawLine.size(), &line[0], wLen);
+//	OutputDebugStringW(&line[0]);
+}
+
+
+#endif
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

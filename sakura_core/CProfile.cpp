@@ -62,33 +62,35 @@ void CProfile::Init( void )
 	@param line [in] 読み込んだ行
 */
 void CProfile::ReadOneline(
-	const wstring& line
+	const wchar_t* line,
+	size_t len
 	)
 {
 	// 空行を読み飛ばす
-	if (line.empty()) {
+	if (len == 0) {
 		return;
 	}
 
+	wchar_t fl = line[0];
 	// コメント行を読みとばす
-	if (0 == line.compare( 0, 2, LTEXT("//") )) {
+	if (len >= 2 && fl == '/' && line[1] == '/') {
 		return;
 	}
 
 	// セクション取得
 	//	Jan. 29, 2004 genta compare使用
-	if (line.compare( 0, 1, LTEXT("[") ) == 0 
-			&& line.find( LTEXT("=") ) == line.npos
-			&& line.find( LTEXT("]") ) == ( line.size() - 1 )
+	if (fl == '['
+		&& wcschr(line+1, '=') == NULL
+		&& wcschr(line+1, ']') == (line + len - 1)
 	) {
 		Section Buffer;
-		Buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
+		Buffer.strSectionName = std::wstring(line+1, len - 1 - 1);
 		m_ProfileData.push_back( Buffer );
 	// エントリ取得
 	}else if (!m_ProfileData.empty()) {	// 最初のセクション以前の行のエントリは無視
-		wstring::size_type idx = line.find( LTEXT("=") );
-		if (line.npos != idx) {
-			m_ProfileData.back().mapEntries.insert( PAIR_STR_STR( line.substr(0,idx), line.substr(idx+1) ) );
+		const wchar_t* pos = wcschr(line, '=');
+		if (pos != nullptr) {
+			m_ProfileData.back().mapEntries.emplace(std::wstring(line, pos-line), std::wstring(pos+1));
 		}
 	}
 }
@@ -110,24 +112,35 @@ bool CProfile::ReadProfile( const TCHAR* pszProfileName )
 {
 	m_strProfileName = pszProfileName;
 
+//	LARGE_INTEGER start;
+//	QueryPerformanceCounter(&start);
+
 	CTextInputStream in(m_strProfileName.c_str());
 	if (!in) {
 		return false;
 	}
 
 	try {
+		std::vector<wchar_t> line;
 		while (in) {
 			// 1行読込
-			wstring line = in.ReadLineW();
+			in.ReadLineW(line);
 
 			// 解析
-			ReadOneline(line);
+			ReadOneline(&line[0], line.size() - 1);
 		}
 	}catch (...) {
 		return false;
 	}
 
-	OutputDebugString(L"test");
+//	LARGE_INTEGER now;
+//	QueryPerformanceCounter(&now);
+//	LARGE_INTEGER freq;
+//	QueryPerformanceFrequency(&freq);
+//	LONGLONG diff = now.QuadPart - start.QuadPart;
+//	TCHAR buff[32];
+//	swprintf(buff, L"load time %f", diff / (double)freq.QuadPart);
+//	OutputDebugString(buff);
 
 	return true;
 }
@@ -192,10 +205,11 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 			// UTF-8 -> UNICODE
 			CMemory cmLine( sLine, lnsz );
 			CUtf8::UTF8ToUnicode( &cmLine );
-			line = (const wchar_t*)cmLine.GetRawPtr();
-
 			// 解析
-			ReadOneline(line);
+			ReadOneline(
+				(const wchar_t*)cmLine.GetRawPtr(),
+				cmLine.GetRawLength() / 2
+			);
 		}
 	}
 	return true;
@@ -330,7 +344,7 @@ bool CProfile::GetProfileDataImp(
 {
 	wstring strWork;
 	auto iterEnd = m_ProfileData.end();
-	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
+	for (auto iter = m_ProfileData.begin(); iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			auto mapiter = iter->mapEntries.find( strEntryKey );
 			if (iter->mapEntries.end() != mapiter) {
@@ -357,7 +371,7 @@ bool CProfile::SetProfileDataImp(
 {
 	auto iterEnd = m_ProfileData.end();
 	auto iter = m_ProfileData.begin();
-	for (; iter != iterEnd; iter++) {
+	for (; iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			// 既存のセクションの場合
 			auto mapiter = iter->mapEntries.find( strEntryKey );

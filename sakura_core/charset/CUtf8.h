@@ -59,7 +59,7 @@ public:
 	inline static EConvertResult UnicodeToCESU8( CMemory* pmem ) { return _UnicodeToUTF8(pmem,true); }	// Unicode → CESU-8コード変換
 
 protected:
-	//変換の実装
+	// 変換の実装
 	// 2008.11.10 変換ロジックを書き直す
 	inline static int _Utf8ToUni_char( const unsigned char*, const int, unsigned short*, bool bCESU8Mode );
 	static int Utf8ToUni( const char*, const int, wchar_t*, bool bCESU8Mode );

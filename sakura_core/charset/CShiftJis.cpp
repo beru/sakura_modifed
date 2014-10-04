@@ -24,20 +24,19 @@
 */
 int CShiftJis::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
 {
-	if( nIdx >= nDataLen ){
+	if (nIdx >= nDataLen) {
 		return 0;
-	}else if( nIdx == (nDataLen - 1) ){
+	}else if (nIdx == (nDataLen - 1)) {
 		return 1;
 	}
 	
-	if( _IS_SJIS_1( reinterpret_cast<const unsigned char*>(pData)[nIdx] )
-			&& _IS_SJIS_2( reinterpret_cast<const unsigned char*>(pData)[nIdx+1] ) ){
+	if (_IS_SJIS_1( reinterpret_cast<const unsigned char*>(pData)[nIdx] )
+		&& _IS_SJIS_2( reinterpret_cast<const unsigned char*>(pData)[nIdx+1] )
+	) {
 		return 2;
 	}
 	return 1;
 }
-
-
 
 
 /*!
@@ -51,8 +50,8 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 	unsigned short *pw;
 	bool berror_tmp, berror=false;
 
-	if( nSrcLen < 1 ){
-		if( pbError ){
+	if (nSrcLen < 1) {
+		if (pbError) {
 			*pbError = false;
 		}
 		return 0;
@@ -62,11 +61,11 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 	pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	pw = reinterpret_cast<unsigned short*>(pDst);
 
-	for( ; (nclen = CheckSjisChar(reinterpret_cast<const char*>(pr), pr_end-pr, &echarset)) != 0; pr += nclen ){
-		switch( echarset ){
+	for (; (nclen = CheckSjisChar(reinterpret_cast<const char*>(pr), pr_end - pr, &echarset)) != 0; pr += nclen) {
+		switch (echarset) {
 		case CHARSET_ASCII7:
 			// 保護コード
-			if( nclen != 1 ){
+			if (nclen != 1) {
 				nclen = 1;
 			}
 			// 7-bit ASCII 文字を変換
@@ -76,20 +75,20 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 		case CHARSET_JIS_ZENKAKU:
 		case CHARSET_JIS_HANKATA:
 			// 保護コード
-			if( echarset == CHARSET_JIS_ZENKAKU && nclen != 2 ){
+			if (echarset == CHARSET_JIS_ZENKAKU && nclen != 2) {
 				nclen = 2;
 			}
-			if( echarset == CHARSET_JIS_HANKATA && nclen != 1 ){
+			if (echarset == CHARSET_JIS_HANKATA && nclen != 1) {
 				nclen = 1;
 			}
 			// 全角文字または半角カタカナ文字を変換
 			pw += _SjisToUni_char( pr, pw, echarset, &berror_tmp );
-			if( berror_tmp == true ){
+			if (berror_tmp == true) {
 				berror = true;
 			}
 			break;
-		default:/* CHARSET_BINARY:*/
-			if( nclen != 1 ){	// 保護コード
+		default:// CHARSET_BINARY:
+			if (nclen != 1) {	// 保護コード
 				nclen = 1;
 			}
 			// エラーが見つかった
@@ -97,7 +96,7 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 		}
 	}
 
-	if( pbError ){
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -105,22 +104,21 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 }
 
 
-
-/* コード変換 SJIS→Unicode */
+// コード変換 SJIS→Unicode
 EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
 {
 	// エラー状態
 	bool bError;
 
-	//ソース取得
+	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( pMem->GetRawPtr(&nSrcLen) );
 
 	// 変換先バッファサイズを設定してメモリ領域確保
 	wchar_t* pDst;
-	try{
+	try {
 		pDst = new wchar_t[nSrcLen];
-	}catch( ... ){
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -136,16 +134,12 @@ EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
 	// 後始末
 	delete [] pDst;
 
-	if( bError == false ){
+	if (bError == false) {
 		return RESULT_COMPLETE;
-	}else{
+	}else {
 		return RESULT_LOSESOME;
 	}
 }
-
-
-
-
 
 
 
@@ -160,8 +154,8 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 	ECharSet echarset;
 	bool berror=false, berror_tmp;
 
-	if( nSrcLen < 1 ){
-		if( pbError ){
+	if (nSrcLen < 1) {
+		if (pbError) {
 			*pbError = false;
 		}
 		return 0;
@@ -171,9 +165,9 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 	pr_end = reinterpret_cast<const unsigned short*>(pSrc+nSrcLen);
 	pw = reinterpret_cast<unsigned char*>(pDst);
 
-	while( (nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0 ){
+	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0) {
 		// 保護コード
-		switch( echarset ){
+		switch (echarset) {
 		case CHARSET_UNI_NORMAL:
 			nclen = 1;
 			break;
@@ -184,17 +178,17 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 			echarset = CHARSET_BINARY;
 			nclen = 1;
 		}
-		if( echarset != CHARSET_BINARY ){
+		if (echarset != CHARSET_BINARY) {
 			pw += _UniToSjis_char( pr, pw, echarset, &berror_tmp );
-			if( berror_tmp == true ){
+			if (berror_tmp == true) {
 				berror = true;
 			}
 			pr += nclen;
-		}else{
-			if( nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr)) ){
+		}else {
+			if (nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr))) {
 				*pw = static_cast<unsigned char>(TextToBin(*pr) & 0x000000ff);
 				++pw;
-			}else{
+			}else {
 				berror = true;
 				*pw = '?';
 				++pw;
@@ -203,7 +197,7 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 		}
 	}
 
-	if( pbError ){
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -212,8 +206,7 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 
 
 
-
-/* コード変換 Unicode→SJIS */
+// コード変換 Unicode→SJIS
 EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 {
 	// 状態
@@ -225,9 +218,9 @@ EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 
 	// 変換先バッファサイズを設定してバッファを確保
 	char* pDst;
-	try{
+	try {
 		pDst = new char[ nSrcLen * 2 ];
-	}catch( ... ){
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -244,9 +237,9 @@ EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 	delete[] pDst;
 
 	// 結果
-	if( berror == true ){
+	if (berror == true) {
 		return RESULT_LOSESOME;
-	}else{
+	}else {
 		return RESULT_COMPLETE;
 	}
 }
@@ -270,7 +263,7 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 	cCharBuffer.SetRawData("",0);
 	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
 
-	if( IsBinaryOnSurrogate(cSrc[0]) ){
+	if (IsBinaryOnSurrogate(cSrc[0])) {
 		bbinary = true;
 	}
 
@@ -283,11 +276,11 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 	// Hex変換
 	ps = reinterpret_cast<unsigned char*>( cCharBuffer.GetRawPtr() );
 	pd = pDst;
-	if( bbinary == false ){
+	if (bbinary == false) {
 		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf( pd, _T("%02X"), *ps);
 		}
-	}else{
+	}else {
 		auto_sprintf( pd, _T("?%02X"), *ps );
 	}
 

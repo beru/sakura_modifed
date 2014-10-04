@@ -611,8 +611,8 @@ bool CImpExpRegex::Import( const wstring& sFileName, wstring& sErrMsg )
 	int count = 0;
 	while (in) {
 		// 1s“Ç‚Ýž‚Ý
-		wstring line=in.ReadLineW();
-		_wcstotcs(buff,line.c_str(),_countof(buff));
+		wstring line = in.ReadLineW();
+		_wcstotcs(buff, line.c_str(), _countof(buff));
 
 		if (count >= MAX_REGEX_KEYWORD) {
 			sErrMsg = LSW(STR_IMPEXP_REGEX1);

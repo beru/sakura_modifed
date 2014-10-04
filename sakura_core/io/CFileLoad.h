@@ -87,8 +87,8 @@ public:
 protected:
 
 	// コピーの禁止
-	CFileLoad( const CFileLoad& ){}
-	CFileLoad& operator= ( const CFileLoad& ){ return *this; }
+	CFileLoad( const CFileLoad& ) {}
+	CFileLoad& operator = ( const CFileLoad& ) { return *this; }
 
 	// Oct. 19, 2002 genta スペルミス修正
 //	void SeekBegin( void );		// ファイルの先頭位置に移動する(BOMを考慮する)

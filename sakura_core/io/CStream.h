@@ -55,10 +55,10 @@ public:
 
 	// 状態
 	virtual bool Good() const{ return m_fp!=NULL && !Eof(); }
-	bool Eof() const{ return m_fp==NULL || feof(m_fp); }
+	bool Eof() const { return m_fp == NULL || feof(m_fp); }
 
 	// ファイルハンドル
-	FILE* GetFp() const{ return m_fp; }
+	FILE* GetFp() const { return m_fp; }
 
 	// モード
 	bool IsExceptionMode() const{ return m_bExceptionMode; }
