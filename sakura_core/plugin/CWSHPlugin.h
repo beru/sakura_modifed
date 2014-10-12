@@ -35,8 +35,8 @@
 
 class CWSHPlug : public CPlug {
 public:
-	CWSHPlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel ) :
-		CPlug( plugin, id, sJack, sHandler, sLabel )
+	CWSHPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) :
+		CPlug(plugin, id, sJack, sHandler, sLabel)
 	{
 		m_Wsh = NULL;
 	}
@@ -52,7 +52,7 @@ public:
 class CWSHPlugin : public CPlugin {
 	// コンストラクタ
 public:
-	CWSHPlugin( const tstring& sBaseDir ) : CPlugin( sBaseDir ) {
+	CWSHPlugin(const tstring& sBaseDir) : CPlugin(sBaseDir) {
 		m_bUseCache = false;
 	}
 
@@ -62,18 +62,18 @@ public:
 
 	// 操作
 	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
-	virtual CPlug* CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel ) {
-		return new CWSHPlug( plugin, id, sJack, sHandler, sLabel );
+	virtual CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
+		return new CWSHPlug(plugin, id, sJack, sHandler, sLabel);
 	}
 
 	// 実装
 public:
-	bool ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMlang );
-	bool ReadPluginOption( CDataProfile *cProfile );
+	bool ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang);
+	bool ReadPluginOption(CDataProfile *cProfile);
 	CPlug::Array GetPlugs() const {
 		return m_plugs;
 	}
-	bool InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& params );
+	bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& params);
 
 	// メンバ変数
 private:

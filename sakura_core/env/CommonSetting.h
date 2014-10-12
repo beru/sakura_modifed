@@ -55,7 +55,7 @@ struct CommonSetting_General {
 	//	intをビット単位に分割して使う
 	//	下4bitをCaretTypeに当てておく(将来の予約で多めに取っておく)
 	int		GetCaretType(void) const { return m_nCaretType & 0xf; }
-	void	SetCaretType(const int f){ m_nCaretType &= ~0xf; m_nCaretType |= f & 0xf; }
+	void	SetCaretType(const int f) { m_nCaretType &= ~0xf; m_nCaretType |= f & 0xf; }
 
 	// カーソル
 	int		m_nCaretType;							// カーソルのタイプ 0=win 1=dos 
@@ -285,28 +285,28 @@ public:
 	int		GetBackupType(void) const			{ return m_nBackUpType; }
 	void	SetBackupType(int n)				{ m_nBackUpType = n; }
 
-	bool	GetBackupOpt(EBackupOptionFlag flag) const			{ return ( flag & m_nBackUpType_Opt1 ) == flag; }
-	void	SetBackupOpt(EBackupOptionFlag flag, bool value)	{ m_nBackUpType_Opt1 = value ? ( flag | m_nBackUpType_Opt1) :  ((~flag) & m_nBackUpType_Opt1 ); }
+	bool	GetBackupOpt(EBackupOptionFlag flag) const			{ return (flag & m_nBackUpType_Opt1) == flag; }
+	void	SetBackupOpt(EBackupOptionFlag flag, bool value)	{ m_nBackUpType_Opt1 = value ? (flag | m_nBackUpType_Opt1) :  ((~flag) & m_nBackUpType_Opt1); }
 
 	//	バックアップ数
 	int		GetBackupCount(void) const			{ return m_nBackUpType_Opt2 & 0xffff; }
-	void	SetBackupCount(int value)			{ m_nBackUpType_Opt2 = (m_nBackUpType_Opt2 & 0xffff0000) | ( value & 0xffff ); }
+	void	SetBackupCount(int value)			{ m_nBackUpType_Opt2 = (m_nBackUpType_Opt2 & 0xffff0000) | (value & 0xffff); }
 
 	//	バックアップの拡張子先頭文字(1文字)
-	TCHAR	GetBackupExtChar(void) const		{ return (TCHAR)(( m_nBackUpType_Opt2 >> 16 ) & 0xff) ; }
-	void	SetBackupExtChar(int value)			{ m_nBackUpType_Opt2 = (m_nBackUpType_Opt2 & 0xff00ffff) | (( value & 0xff ) << 16 ); }
+	TCHAR	GetBackupExtChar(void) const		{ return (TCHAR)((m_nBackUpType_Opt2 >> 16) & 0xff) ; }
+	void	SetBackupExtChar(int value)			{ m_nBackUpType_Opt2 = (m_nBackUpType_Opt2 & 0xff00ffff) | ((value & 0xff) << 16); }
 
 	//	Aug. 21, 2000 genta
 	//	自動Backup
-	bool	IsAutoBackupEnabled(void) const		{ return GetBackupOpt( BKUP_AUTO ); }
-	void	EnableAutoBackup(bool flag)			{ SetBackupOpt( BKUP_AUTO, flag ); }
+	bool	IsAutoBackupEnabled(void) const		{ return GetBackupOpt(BKUP_AUTO); }
+	void	EnableAutoBackup(bool flag)			{ SetBackupOpt(BKUP_AUTO, flag); }
 
 	int		GetAutoBackupInterval(void) const	{ return m_nBackUpType_Opt3; }
 	void	SetAutoBackupInterval(int i)		{ m_nBackUpType_Opt3 = i; }
 
 	//	Backup詳細設定のアクセス関数
 	int		GetBackupTypeAdv(void) const { return m_nBackUpType_Opt4; }
-	void	SetBackupTypeAdv(int n){ m_nBackUpType_Opt4 = n; }
+	void	SetBackupTypeAdv(int n) { m_nBackUpType_Opt4 = n; }
 
 public:
 	bool		m_bBackUp;					// 保存時にバックアップを作成する
@@ -611,7 +611,7 @@ struct CommonSetting_MainMenu {
 	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	//!< メインメニュートップレベル
 	int 			m_nMainMenuNum;
 	CMainMenu		m_cMainMenuTbl[MAX_MAINMENU];		//!< メインメニューデータ
-	bool 			m_bMainMenuKeyParentheses;			//!< アクセスキーを( )付で表示
+	bool 			m_bMainMenuKeyParentheses;			//!< アクセスキーを()付で表示
 };
 
 

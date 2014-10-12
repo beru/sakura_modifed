@@ -16,7 +16,7 @@ CBregexpDll2::~CBregexpDll2()
 		@li w’è—L‚è‚Ìê‡‚Í‚»‚ê‚Ì‚İ‚ğ•Ô‚·
 		@li w’è–³‚µ(NULL‚Ü‚½‚Í‹ó•¶š—ñ)‚Ìê‡‚ÍBREGONIG, BREGEXP‚Ì‡‚Å‚İ‚é
 */
-LPCTSTR CBregexpDll2::GetDllNameImp( int index )
+LPCTSTR CBregexpDll2::GetDllNameImp(int index)
 {
 	return _T("bregonig.dll");
 }
@@ -45,7 +45,7 @@ bool CBregexpDll2::InitDllImp()
 		{ NULL, 0 }
 	};
 	
-	if (!RegisterEntries( table )) {
+	if (!RegisterEntries(table)) {
 		return false;
 	}
 	

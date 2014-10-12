@@ -6,10 +6,10 @@
 #include "extmodule/CBregexp.h"
 
 
-bool CBookmarkGetter::IsBookmarked() const{ return m_pcDocLine->m_sMark.m_cBookmarked; }
-void CBookmarkSetter::SetBookmark(bool bFlag){ m_pcDocLine->m_sMark.m_cBookmarked = bFlag; }
+bool CBookmarkGetter::IsBookmarked() const { return m_pcDocLine->m_sMark.m_cBookmarked; }
+void CBookmarkSetter::SetBookmark(bool bFlag) { m_pcDocLine->m_sMark.m_cBookmarked = bFlag; }
 
-//!ブックマークの全解除
+//! ブックマークの全解除
 /*
 	@date 2001.12.03 hor
 */
@@ -34,7 +34,7 @@ bool CBookmarkManager::SearchBookMark(
 	)
 {
 	CLogicInt nLinePos = nLineNum;
-
+	
 	// 前方検索
 	if (bPrevOrNext == SEARCH_BACKWARD) {
 		nLinePos--;
@@ -98,7 +98,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 	while (pCDocLine) {
 		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
 			auto_sprintf_s( szBuff, L"%d,",nLinePos );
-			if (wcslen(szBuff)+wcslen(szText)>MAX_MARKLINES_LEN) break;	//2002.01.17
+			if (wcslen(szBuff) + wcslen(szText) > MAX_MARKLINES_LEN) break;	//2002.01.17
 			wcscat( szText, szBuff);
 		}
 		nLinePos++;

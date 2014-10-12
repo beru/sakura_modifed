@@ -8,7 +8,7 @@ wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t sr
 	if (src_count >= dst_count) {
 		src_count = dst_count - 1;
 	}
-	auto_memcpy( dst, src, src_count );
+	auto_memcpy(dst, src, src_count);
 	return dst + src_count;
 }
 wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src)
@@ -73,8 +73,8 @@ int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith)
 	@retval -1 バッファが足りず、\を付加できなかった
 	@date 2003.06.24 Moca 新規作成
 */
-int AddLastChar( TCHAR* pszPath, int nMaxLen, TCHAR c ) {
-	int pos = _tcslen( pszPath );
+int AddLastChar(TCHAR* pszPath, int nMaxLen, TCHAR c) {
+	int pos = _tcslen(pszPath);
 	// 何もないときは\を付加
 	if (0 == pos) {
 		if (nMaxLen <= pos + 1) {
@@ -84,7 +84,7 @@ int AddLastChar( TCHAR* pszPath, int nMaxLen, TCHAR c ) {
 		pszPath[1] = _T('\0');
 		return 1;
 	// 最後が\でないときも\を付加(日本語を考慮)
-	}else if (*::CharPrev( pszPath, &pszPath[pos] ) != c) {
+	}else if (*::CharPrev(pszPath, &pszPath[pos]) != c) {
 		if (nMaxLen <= pos + 1) {
 			return -1;
 		}
@@ -107,7 +107,7 @@ const char* GetNextLine(
 	int nBgn = *pnBgn;
 
 	//	May 15, 2000 genta
-	pcEol->SetType( EOL_NONE );
+	pcEol->SetType(EOL_NONE);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -116,7 +116,7 @@ const char* GetNextLine(
 		// 改行コードがあった
 		if (pData[i] == '\n' || pData[i] == '\r') {
 			// 行終端子の種類を調べる
-			pcEol->SetTypeByString( &pData[i], nDataLen - i );
+			pcEol->SetTypeByString(&pData[i], nDataLen - i);
 			break;
 		}
 	}
@@ -140,7 +140,7 @@ const wchar_t* GetNextLineW(
 {
 	int nBgn = *pnBgn;
 
-	pcEol->SetType( EOL_NONE );
+	pcEol->SetType(EOL_NONE);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -164,7 +164,7 @@ const wchar_t* GetNextLineW(
 	@param nDataLen 調査対象文字列の長さ(wchar_tの長さ)
 	@return 改行コードの種類。終端子が見つからなかったときはEOL_NONEを返す。
 */
-static EEolType GetEOLTypeUniBE( const wchar_t* pszData, int nDataLen )
+static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 {
 	//! 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca
 	static const wchar_t* aEolTable[EOL_TYPE_NUM] = {
@@ -199,7 +199,7 @@ const wchar_t* GetNextLineWB(
 {
 	int nBgn = *pnBgn;
 
-	pcEol->SetType( EOL_NONE );
+	pcEol->SetType(EOL_NONE);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -208,7 +208,7 @@ const wchar_t* GetNextLineWB(
 		// 改行コードがあった
 		if (pData[i] == (wchar_t)0x0a00 || pData[i] == (wchar_t)0x0d00) {
 			// 行終端子の種類を調べる
-			pcEol->SetType( GetEOLTypeUniBE( &pData[i], nDataLen - i ) );
+			pcEol->SetType(GetEOLTypeUniBE(&pData[i], nDataLen - i));
 			break;
 		}
 	}
@@ -228,7 +228,7 @@ const wchar_t* GetNextLineWB(
 
 	@note 2003.05.25 未使用のようだ
 */
-const char* GetNextLimitedLengthText( const char* pText, int nTextLen, int nLimitLen, int* pnLineLen, int* pnBgn )
+const char* GetNextLimitedLengthText(const char* pText, int nTextLen, int nLimitLen, int* pnLineLen, int* pnBgn)
 {
 	int nBgn = *pnBgn;
 	if (nBgn >= nTextLen) {
@@ -237,14 +237,14 @@ const char* GetNextLimitedLengthText( const char* pText, int nTextLen, int nLimi
 	int i;
 	for (i = nBgn; i + 1 < nTextLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CNativeA::GetSizeOfChar( pText, nTextLen, i );
+		int nCharChars = CNativeA::GetSizeOfChar(pText, nTextLen, i);
 		if (0 == nCharChars) {
 			nCharChars = 1;
 		}
 		if (i + nCharChars - nBgn >= nLimitLen) {
 			break;
 		}
-		i += ( nCharChars - 1 );
+		i += (nCharChars - 1);
 	}
 	*pnBgn = i;
 	*pnLineLen = i - nBgn;
@@ -275,9 +275,9 @@ int LimitStringLengthW(
 }
 
 
-void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn )
+void GetLineColumn(const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn)
 {
-	int nLineLen = wcslen( pLine );
+	int nLineLen = wcslen(pLine);
 	int i = 0;
 	for (; i < nLineLen; ++i) {
 		if (pLine[i] >= L'0' &&
@@ -287,12 +287,12 @@ void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn
 		}
 	}
 	wchar_t	szNumber[32];
-	wmemset( szNumber, 0, _countof( szNumber ) );
+	wmemset(szNumber, 0, _countof(szNumber));
 	if (i >= nLineLen) {
 	}else {
 		// 行位置 改行単位行番号(1起点)の抽出
 		int j = 0;
-		for (; i < nLineLen && j + 1 < _countof( szNumber );) {
+		for (; i < nLineLen && j + 1 < _countof(szNumber);) {
 			szNumber[j] = pLine[i];
 			j++;
 			++i;
@@ -303,14 +303,14 @@ void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn
 			}
 			break;
 		}
-		*pnJumpToLine = _wtoi( szNumber );
+		*pnJumpToLine = _wtoi(szNumber);
 
 		// 桁位置 改行単位行先頭からのバイト数(1起点)の抽出
 		if (i < nLineLen && pLine[i] == ',') {
-			wmemset( szNumber, 0, _countof( szNumber ) );
+			wmemset(szNumber, 0, _countof(szNumber));
 			int j = 0;
 			++i;
-			for (; i < nLineLen && j + 1 < _countof( szNumber );) {
+			for (; i < nLineLen && j + 1 < _countof(szNumber);) {
 				szNumber[j] = pLine[i];
 				j++;
 				++i;
@@ -321,7 +321,7 @@ void GetLineColumn( const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn
 				}
 				break;
 			}
-			*pnJumpToColumn = _wtoi( szNumber );
+			*pnJumpToColumn = _wtoi(szNumber);
 		}
 	}
 	return;

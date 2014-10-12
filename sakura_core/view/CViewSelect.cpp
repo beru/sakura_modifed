@@ -42,7 +42,7 @@ void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
 }
 
 //! 現在のカーソル位置から選択を開始する
-void CViewSelect::BeginSelectArea( const CLayoutPoint* po )
+void CViewSelect::BeginSelectArea(const CLayoutPoint* po)
 {
 	const CEditView* pView=GetEditView();
 	CLayoutPoint temp;
@@ -56,7 +56,7 @@ void CViewSelect::BeginSelectArea( const CLayoutPoint* po )
 
 
 // 現在の選択範囲を非選択状態に戻す
-void CViewSelect::DisableSelectArea( bool bDraw, bool bDrawBracketCursorLine )
+void CViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 {
 	const CEditView* pView = GetEditView();
 	CEditView* pView2 = GetEditView();
@@ -66,7 +66,7 @@ void CViewSelect::DisableSelectArea( bool bDraw, bool bDrawBracketCursorLine )
 	m_bSelectingLock	 = false;	// 選択状態のロック
 
 	if (bDraw) {
-		DrawSelectArea( bDrawBracketCursorLine );
+		DrawSelectArea(bDrawBracketCursorLine);
 	}
 	m_bDrawSelectArea = false;	// 02/12/13 ai // 2011.12.24 bDraw括弧内から移動
 
@@ -83,7 +83,7 @@ void CViewSelect::DisableSelectArea( bool bDraw, bool bDrawBracketCursorLine )
 
 
 // 現在のカーソル位置によって選択範囲を変更
-void CViewSelect::ChangeSelectAreaByCurrentCursor( const CLayoutPoint& ptCaretPos )
+void CViewSelect::ChangeSelectAreaByCurrentCursor(const CLayoutPoint& ptCaretPos)
 {
 	m_sSelectOld = m_sSelect; // 範囲選択(Old)
 
@@ -111,7 +111,7 @@ void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 			// 選択解除
 			pSelect->Clear(-1);
 			m_nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
-		}else if (PointCompare(ptCaretPos,m_sSelectBgn.GetFrom() ) < 0) { //キャレット位置がm_sSelectBgnのfromより小さかったら
+		}else if (PointCompare(ptCaretPos,m_sSelectBgn.GetFrom()) < 0) { //キャレット位置がm_sSelectBgnのfromより小さかったら
 			 pSelect->SetFrom(ptCaretPos);
 			 pSelect->SetTo(m_sSelectBgn.GetFrom());
 		}else {
@@ -165,9 +165,9 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			const int nCharHeight = pView->GetTextMetrics().GetHankakuDy();
 			const CTextArea& area =  pView->GetTextArea();
 			CLayoutRect rcOld; // CLayoutRect
-			TwoPointToRect( &rcOld, m_sSelectOld.GetFrom(), m_sSelectOld.GetTo() );
+			TwoPointToRect(&rcOld, m_sSelectOld.GetFrom(), m_sSelectOld.GetTo());
 			CLayoutRect rcNew; // CLayoutRect
-			TwoPointToRect( &rcNew, m_sSelect.GetFrom(), m_sSelect.GetTo() );
+			TwoPointToRect(&rcNew, m_sSelect.GetFrom(), m_sSelect.GetTo());
 			CLayoutRect rc; // CLayoutRect ただしtop,bottomだけ使う
 			CLayoutInt drawLeft = CLayoutInt(0);
 			CLayoutInt drawRight = CLayoutInt(-1);
@@ -230,7 +230,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				view.GetCaret().m_cUnderLine.Lock();
 				view.OnPaint(hdc, &ps, false);
 				view.GetCaret().m_cUnderLine.UnLock();
-				view.ReleaseDC( hdc );
+				view.ReleaseDC(hdc);
 			}
 			// 2010.10.10 0幅選択(解除)状態での、カーソル位置ライン復帰(リージョン外)
 			if (bDrawBracketCursorLine) {
@@ -239,12 +239,12 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		}
 	}else {
 		HDC hdc = pView->GetDC();
-		DrawSelectArea2( hdc );
+		DrawSelectArea2(hdc);
 		// 2011.12.02 選択解除状態での、カーソル位置ライン復帰
 		if (bDrawBracketCursorLine) {
 			pView->GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
 		}
-		pView->ReleaseDC( hdc );
+		pView->ReleaseDC(hdc);
 	}
 
 	// 2011.12.02 選択解除状態になると対括弧強調ができなくなるバグ対策
@@ -252,8 +252,8 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		// ただし選択ロック中はここでは強調表示されない
 		m_bDrawSelectArea = false;
 		if (bDrawBracketCursorLine) {
-			pView->SetBracketPairPos( true );
-			pView->DrawBracketPair( true );
+			pView->SetBracketPairPos(true);
+			pView->DrawBracketPair(true);
 		}
 	}
 
@@ -264,32 +264,32 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 /*!
 	反転用再作画処理本体
 */
-void CViewSelect::DrawSelectArea2( HDC hdc ) const
+void CViewSelect::DrawSelectArea2(HDC hdc) const
 {
 	CEditView const * const pView = GetEditView();
 
 	// 2006.10.01 Moca 重複コード統合
-	HBRUSH      hBrush = ::CreateSolidBrush( SELECTEDAREA_RGB );
-	HBRUSH      hBrushOld = (HBRUSH)::SelectObject( hdc, hBrush );
-	int         nROP_Old = ::SetROP2( hdc, SELECTEDAREA_ROP2 );
+	HBRUSH      hBrush = ::CreateSolidBrush(SELECTEDAREA_RGB);
+	HBRUSH      hBrushOld = (HBRUSH)::SelectObject(hdc, hBrush);
+	int         nROP_Old = ::SetROP2(hdc, SELECTEDAREA_ROP2);
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	HBRUSH		hBrushCompatOld = 0;
 	int			nROPCompatOld = 0;
 	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
 	if (bCompatBMP) {
-		hBrushCompatOld = (HBRUSH)::SelectObject( pView->m_hdcCompatDC, hBrush );
-		nROPCompatOld = ::SetROP2( pView->m_hdcCompatDC, SELECTEDAREA_ROP2 );
+		hBrushCompatOld = (HBRUSH)::SelectObject(pView->m_hdcCompatDC, hBrush);
+		nROPCompatOld = ::SetROP2(pView->m_hdcCompatDC, SELECTEDAREA_ROP2);
 	}
 	// To Here 2007.09.09 Moca
 
-//	MYTRACE( _T("DrawSelectArea()  m_bBeginBoxSelect=%hs\n", m_bBeginBoxSelect?"true":"false") );
+//	MYTRACE(_T("DrawSelectArea()  m_bBeginBoxSelect=%hs\n", m_bBeginBoxSelect?"true":"false"));
 	if (IsBoxSelecting()) {		// 矩形範囲選択中
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
 		// 2002.02.16 hor ちらつきを抑止するためEOF以降のエリアが反転したらもう一度反転して元に戻すことにする
 		//if((GetTextArea().GetViewTopLine()+m_nViewRowNum+1>=m_pcEditDoc->m_cLayoutMgr.GetLineCount()) &&
 		//   (m_sSelect.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount() ||
-		//	m_sSelectOld.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount() ) ) {
+		//	m_sSelectOld.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount())) {
 		//	Redraw();
 		//	return;
 		//}
@@ -304,19 +304,19 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 			m_sSelectOld.GetFrom(),	// 範囲選択開始
 			m_sSelectOld.GetTo()	// 範囲選択終了
 		);
-		rcOld.left   = t_max(rcOld.left  , pView->GetTextArea().GetViewLeftCol()  );
-		rcOld.right  = t_max(rcOld.right , pView->GetTextArea().GetViewLeftCol()  );
-		rcOld.right  = t_min(rcOld.right , pView->GetTextArea().GetRightCol() + 1 );
-		rcOld.top    = t_max(rcOld.top   , pView->GetTextArea().GetViewTopLine()  );
+		rcOld.left   = t_max(rcOld.left  , pView->GetTextArea().GetViewLeftCol() );
+		rcOld.right  = t_max(rcOld.right , pView->GetTextArea().GetViewLeftCol() );
+		rcOld.right  = t_min(rcOld.right , pView->GetTextArea().GetRightCol() + 1);
+		rcOld.top    = t_max(rcOld.top   , pView->GetTextArea().GetViewTopLine() );
 		rcOld.bottom = t_max(rcOld.bottom, pView->GetTextArea().GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcOld.bottom = t_min(rcOld.bottom, pView->GetTextArea().GetBottomLine()   );
+		rcOld.bottom = t_min(rcOld.bottom, pView->GetTextArea().GetBottomLine()  );
 
 		RECT rcOld2;
 		rcOld2.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcOld.left  * nCharWidth;
 		rcOld2.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcOld.right * nCharWidth;
-		rcOld2.top		= (Int)( rcOld.top - pView->GetTextArea().GetViewTopLine() ) * nCharHeight + pView->GetTextArea().GetAreaTop();
-		rcOld2.bottom	= (Int)( rcOld.bottom + 1 - pView->GetTextArea().GetViewTopLine() ) * nCharHeight + pView->GetTextArea().GetAreaTop();
-		HRGN hrgnOld = ::CreateRectRgnIndirect( &rcOld2 );
+		rcOld2.top		= (Int)(rcOld.top - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
+		rcOld2.bottom	= (Int)(rcOld.bottom + 1 - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
+		HRGN hrgnOld = ::CreateRectRgnIndirect(&rcOld2);
 
 		// 2点を対角とする矩形を求める
 		CLayoutRect  rcNew;
@@ -325,12 +325,12 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 			m_sSelect.GetFrom(),	// 範囲選択開始
 			m_sSelect.GetTo()		// 範囲選択終了
 		);
-		rcNew.left   = t_max(rcNew.left  , pView->GetTextArea().GetViewLeftCol() );
-		rcNew.right  = t_max(rcNew.right , pView->GetTextArea().GetViewLeftCol() );
+		rcNew.left   = t_max(rcNew.left  , pView->GetTextArea().GetViewLeftCol());
+		rcNew.right  = t_max(rcNew.right , pView->GetTextArea().GetViewLeftCol());
 		rcNew.right  = t_min(rcNew.right , pView->GetTextArea().GetRightCol() + 1);
-		rcNew.top    = t_max(rcNew.top   , pView->GetTextArea().GetViewTopLine() );
+		rcNew.top    = t_max(rcNew.top   , pView->GetTextArea().GetViewTopLine());
 		rcNew.bottom = t_max(rcNew.bottom, pView->GetTextArea().GetViewTopLine() - 1);	// 2010.11.02 ryoji 追加（画面上端よりも上にある矩形選択を解除するとルーラーが反転表示になる問題の修正）
-		rcNew.bottom = t_min(rcNew.bottom, pView->GetTextArea().GetBottomLine()  );
+		rcNew.bottom = t_min(rcNew.bottom, pView->GetTextArea().GetBottomLine() );
 
 		RECT rcNew2;
 		rcNew2.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcNew.left  * nCharWidth;
@@ -338,14 +338,14 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 		rcNew2.top		= (Int)(rcNew.top - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
 		rcNew2.bottom	= (Int)(rcNew.bottom + 1 - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
 
-		HRGN hrgnNew = ::CreateRectRgnIndirect( &rcNew2 );
+		HRGN hrgnNew = ::CreateRectRgnIndirect(&rcNew2);
 
 		// 矩形作画。
 		// ::CombineRgn()の結果を受け取るために、適当なリージョンを作る
-		HRGN hrgnDraw = ::CreateRectRgnIndirect( &rcNew2 );
+		HRGN hrgnDraw = ::CreateRectRgnIndirect(&rcNew2);
 		{
 			// 旧選択矩形と新選択矩形のリージョンを結合し､ 重なりあう部分だけを除去します
-			if (NULLREGION != ::CombineRgn( hrgnDraw, hrgnOld, hrgnNew, RGN_XOR )) {
+			if (NULLREGION != ::CombineRgn(hrgnDraw, hrgnOld, hrgnNew, RGN_XOR)) {
 
 				// 2002.02.16 hor
 				// 結合後のエリアにEOFが含まれる場合はEOF以降の部分を除去します
@@ -354,7 +354,7 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 
 				// 2006.10.01 Moca Start EOF位置計算をGetEndLayoutPosに書き換え。
 				CLayoutPoint ptLast;
-				pView->m_pcEditDoc->m_cLayoutMgr.GetEndLayoutPos( &ptLast );
+				pView->m_pcEditDoc->m_cLayoutMgr.GetEndLayoutPos(&ptLast);
 				// 2006.10.01 Moca End
 				// 2011.12.26 EOFのぶら下がり行は反転し、EOFのみの行は反転しない
 				const CLayout* pBottom = pView->m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
@@ -378,14 +378,14 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 					rcNew.bottom = rcNew.top + nCharHeight;
 					
 					// 2006.10.01 Moca GDI(リージョン)リソースリーク修正
-					HRGN hrgnEOFNew = ::CreateRectRgnIndirect( &rcNew );
-					::CombineRgn( hrgnDraw, hrgnDraw, hrgnEOFNew, RGN_DIFF );
-					::DeleteObject( hrgnEOFNew );
+					HRGN hrgnEOFNew = ::CreateRectRgnIndirect(&rcNew);
+					::CombineRgn(hrgnDraw, hrgnDraw, hrgnEOFNew, RGN_DIFF);
+					::DeleteObject(hrgnEOFNew);
 				}
-				::PaintRgn( hdc, hrgnDraw );
+				::PaintRgn(hdc, hrgnDraw);
 				// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 				if (bCompatBMP) {
-					::PaintRgn( pView->m_hdcCompatDC, hrgnDraw );
+					::PaintRgn(pView->m_hdcCompatDC, hrgnDraw);
 				}
 				// To Here 2007.09.09 Moca
 			}
@@ -393,17 +393,17 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 
 		//////////////////////////////////////////
 		// デバッグ用 リージョン矩形のダンプ
-//@@		TraceRgn( hrgnDraw );
+//@@		TraceRgn(hrgnDraw);
 
 
 		if (hrgnDraw) {
-			::DeleteObject( hrgnDraw );
+			::DeleteObject(hrgnDraw);
 		}
 		if (hrgnNew) {
-			::DeleteObject( hrgnNew );
+			::DeleteObject(hrgnNew);
 		}
 		if (hrgnOld) {
-			::DeleteObject( hrgnOld );
+			::DeleteObject(hrgnOld);
 		}
 	}else {
 		CLayoutRange sRangeA;
@@ -435,20 +435,20 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 			}
 			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
-					DrawSelectAreaLine( hdc, nLineNum, sRangeA );
+					DrawSelectAreaLine(hdc, nLineNum, sRangeA);
 				}
 			}
 		}else {
 			sRangeA = m_sSelectOld;
 			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
-					DrawSelectAreaLine( hdc, nLineNum, sRangeA );
+					DrawSelectAreaLine(hdc, nLineNum, sRangeA);
 				}
 			}
 			sRangeA = m_sSelect;
 			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
-					DrawSelectAreaLine( hdc, nLineNum, sRangeA );
+					DrawSelectAreaLine(hdc, nLineNum, sRangeA);
 				}
 			}
 		}
@@ -456,15 +456,15 @@ void CViewSelect::DrawSelectArea2( HDC hdc ) const
 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (bCompatBMP) {
-		::SetROP2( pView->m_hdcCompatDC, nROPCompatOld );
-		::SelectObject( pView->m_hdcCompatDC, hBrushCompatOld );
+		::SetROP2(pView->m_hdcCompatDC, nROPCompatOld);
+		::SelectObject(pView->m_hdcCompatDC, hBrushCompatOld);
 	}
 	// To Here 2007.09.09 Moca
 
 	// 2006.10.01 Moca 重複コード統合
-	::SetROP2( hdc, nROP_Old );
-	::SelectObject( hdc, hBrushOld );
-	::DeleteObject( hBrush );
+	::SetROP2(hdc, nROP_Old);
+	::SelectObject(hdc, hBrushOld);
+	::DeleteObject(hBrush);
 }
 
 
@@ -485,7 +485,7 @@ void CViewSelect::DrawSelectAreaLine(
 	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
 
 	const CLayoutMgr& layoutMgr = pView->m_pcEditDoc->m_cLayoutMgr;
-	const CLayout* pcLayout = layoutMgr.SearchLineByLayoutY( nLineNum );
+	const CLayout* pcLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	CLayoutRange lineArea;
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pcLayout, sRange);
 	CLayoutInt nSelectFrom = lineArea.GetFrom().GetX2();
@@ -539,14 +539,14 @@ void CViewSelect::DrawSelectAreaLine(
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
 		if (nSelectFrom <=pView->GetTextArea().GetRightCol() && pView->GetTextArea().GetViewLeftCol() < nSelectTo) {
-			HRGN hrgnDraw = ::CreateRectRgn( rcClip.left, rcClip.top, rcClip.right, rcClip.bottom );
-			::PaintRgn( hdc, hrgnDraw );
+			HRGN hrgnDraw = ::CreateRectRgn(rcClip.left, rcClip.top, rcClip.right, rcClip.bottom);
+			::PaintRgn(hdc, hrgnDraw);
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 			if (bCompatBMP) {
-				::PaintRgn( pView->m_hdcCompatDC, hrgnDraw );
+				::PaintRgn(pView->m_hdcCompatDC, hrgnDraw);
 			}
 			// To Here 2007.09.09 Moca
-			::DeleteObject( hrgnDraw );
+			::DeleteObject(hrgnDraw);
 		}
 	}
 }
@@ -624,11 +624,11 @@ void CViewSelect::PrintSelectionInfoMsg() const
 	if (!IsTextSelected() || m_sSelect.GetFrom().y >= nLineCount) { // 先頭行が実在しない
 		const_cast<CEditView*>(pView)->GetCaret().m_bClearStatus = false;
 		if (IsBoxSelecting()) {
-			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2( _T("box selecting") );
+			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T("box selecting"));
 		}else if (m_bSelectingLock) {
-			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2( _T("selecting") );
+			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T("selecting"));
 		}else {
-			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2( _T("") );
+			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T(""));
 		}
 		return;
 	}
@@ -650,8 +650,8 @@ void CViewSelect::PrintSelectionInfoMsg() const
 		if (select_col < 0) {
 			select_col = -select_col;
 		}
-		auto_sprintf_s( msg, _T("%d Columns * %d lines selected."),
-			select_col, select_line );
+		auto_sprintf_s(msg, _T("%d Columns * %d lines selected."),
+			select_col, select_line);
 			
 	}else {
 		//	通常の選択では選択範囲の中身を数える
@@ -659,16 +659,16 @@ void CViewSelect::PrintSelectionInfoMsg() const
 		const wchar_t *pLine;	//	データを受け取る
 		CLogicInt	nLineLen;		//	行の長さ
 		const CLayout*	pcLayout;
-		CViewSelect* thiz = const_cast<CViewSelect*>( this );	// const外しthis
+		CViewSelect* thiz = const_cast<CViewSelect*>(this);	// const外しthis
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
 		BOOL bCountByByteCommon = GetDllShareData().m_Common.m_sStatusbar.m_bDispSelCountByByte;
-		BOOL bCountByByte = ( pView->m_pcEditWnd->m_nSelectCountMode == SELECT_COUNT_TOGGLE ?
+		BOOL bCountByByte = (pView->m_pcEditWnd->m_nSelectCountMode == SELECT_COUNT_TOGGLE ?
 								bCountByByteCommon :
-								pView->m_pcEditWnd->m_nSelectCountMode == SELECT_COUNT_BY_BYTE );
+								pView->m_pcEditWnd->m_nSelectCountMode == SELECT_COUNT_BY_BYTE);
 
 		//	1行目
-		pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout );
+		pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout);
 		if (pLine) {
 			if (bCountByByte) {
 				//  バイト数でカウント
@@ -684,9 +684,9 @@ void CViewSelect::PrintSelectionInfoMsg() const
 				bool bSelExtend;						// 選択領域拡大フラグ
 
 				// 最終行の処理
-				pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( m_sSelect.GetTo().y, &nLineLen, &pcLayout );
+				pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_sSelect.GetTo().y, &nLineLen, &pcLayout);
 				if (pLine) {
-					if (pView->LineColumnToIndex( pcLayout, m_sSelect.GetTo().GetX2() ) == 0) {
+					if (pView->LineColumnToIndex(pcLayout, m_sSelect.GetTo().GetX2()) == 0) {
 						//	最終行の先頭にキャレットがある場合は
 						//	その行を行数に含めない
 						--select_line;
@@ -701,37 +701,37 @@ void CViewSelect::PrintSelectionInfoMsg() const
 
 				if (m_bSelectAreaChanging && m_nLastSelectedByteLen && m_sSelect.GetFrom() == m_sSelectOld.GetFrom()) {
 					// 範囲が後方に拡大された
-					if (PointCompare( m_sSelect.GetTo(), m_sSelectOld.GetTo() ) < 0) {
+					if (PointCompare(m_sSelect.GetTo(), m_sSelectOld.GetTo()) < 0) {
 						bSelExtend = false;				// 縮小
-						thiz->m_sSelect = CLayoutRange( m_sSelect.GetTo(), m_sSelectOld.GetTo() );
+						thiz->m_sSelect = CLayoutRange(m_sSelect.GetTo(), m_sSelectOld.GetTo());
 					}else {
 						bSelExtend = true;				// 拡大
-						thiz->m_sSelect = CLayoutRange( m_sSelectOld.GetTo(), m_sSelect.GetTo() );
+						thiz->m_sSelect = CLayoutRange(m_sSelectOld.GetTo(), m_sSelect.GetTo());
 					}
 
-					const_cast<CEditView*>( pView )->GetSelectedDataSimple(cmemW);
+					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
 					thiz->m_sSelect = rngSelect;		// m_sSelectを元に戻す
 				}else if (m_bSelectAreaChanging && m_nLastSelectedByteLen && m_sSelect.GetTo() == m_sSelectOld.GetTo()) {
 					// 範囲が前方に拡大された
-					if (PointCompare( m_sSelect.GetFrom(), m_sSelectOld.GetFrom() ) < 0) {
+					if (PointCompare(m_sSelect.GetFrom(), m_sSelectOld.GetFrom()) < 0) {
 						bSelExtend = true;				// 拡大
-						thiz->m_sSelect = CLayoutRange( m_sSelect.GetFrom(), m_sSelectOld.GetFrom() );
+						thiz->m_sSelect = CLayoutRange(m_sSelect.GetFrom(), m_sSelectOld.GetFrom());
 					}else {
 						bSelExtend = false;				// 縮小
-						thiz->m_sSelect = CLayoutRange( m_sSelectOld.GetFrom(), m_sSelect.GetFrom() );
+						thiz->m_sSelect = CLayoutRange(m_sSelectOld.GetFrom(), m_sSelect.GetFrom());
 					}
 
-					const_cast<CEditView*>( pView )->GetSelectedDataSimple(cmemW);
+					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
 					thiz->m_sSelect = rngSelect;		// m_sSelectを元に戻す
 				}else {
 					// 選択領域全体をコード変換対象にする
-					const_cast<CEditView*>( pView )->GetSelectedDataSimple(cmemW);
+					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
 					bSelExtend = true;
 					thiz->m_nLastSelectedByteLen = 0;
 				}
 				//  現在の文字コードに変換し、バイト長を取得する
 				CCodeBase* pCode = CCodeFactory::CreateCodeBase(pView->m_pcEditDoc->GetDocumentEncoding(), false);
-				pCode->UnicodeToCode( cmemW, &cmemCode );
+				pCode->UnicodeToCode(cmemW, &cmemCode);
 				delete pCode;
 
 				if (bSelExtend) {
@@ -751,13 +751,13 @@ void CViewSelect::PrintSelectionInfoMsg() const
 				//	1行だけ選択されている場合
 				if (m_sSelect.IsLineOne()) {
 					select_sum =
-						pView->LineColumnToIndex( pcLayout, m_sSelect.GetTo().GetX2() )
-						- pView->LineColumnToIndex( pcLayout, m_sSelect.GetFrom().GetX2() );
+						pView->LineColumnToIndex(pcLayout, m_sSelect.GetTo().GetX2())
+						- pView->LineColumnToIndex(pcLayout, m_sSelect.GetFrom().GetX2());
 				}else {	//	2行以上選択されている場合
 					select_sum =
 						pcLayout->GetLengthWithoutEOL()
 						+ pcLayout->GetLayoutEol().GetLen()
-						- pView->LineColumnToIndex( pcLayout, m_sSelect.GetFrom().GetX2() );
+						- pView->LineColumnToIndex(pcLayout, m_sSelect.GetFrom().GetX2());
 
 					//	GetSelectedDataと似ているが，先頭行と最終行は排除している
 					//	Aug. 16, 2005 aroka nLineNumはfor以降でも使われるのでforの前で宣言する
@@ -766,7 +766,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 					for (nLineNum = m_sSelect.GetFrom().GetY2() + CLayoutInt(1);
 						nLineNum < m_sSelect.GetTo().GetY2(); ++nLineNum
 					) {
-						pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+						pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
 						if (!pLine)
 							break;
@@ -774,9 +774,9 @@ void CViewSelect::PrintSelectionInfoMsg() const
 					}
 
 					//	最終行の処理
-					pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+					pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 					if (pLine) {
-						int last_line_chars = pView->LineColumnToIndex( pcLayout, m_sSelect.GetTo().GetX2() );
+						int last_line_chars = pView->LineColumnToIndex(pcLayout, m_sSelect.GetTo().GetX2());
 						select_sum += last_line_chars;
 						if (last_line_chars == 0) {
 							//	最終行の先頭にキャレットがある場合は
@@ -793,17 +793,17 @@ void CViewSelect::PrintSelectionInfoMsg() const
 		}
 
 #ifdef _DEBUG
-		auto_sprintf_s( msg, _T("%d %ts (%d lines) selected. [%d:%d]-[%d:%d]"),
+		auto_sprintf_s(msg, _T("%d %ts (%d lines) selected. [%d:%d]-[%d:%d]"),
 			select_sum,
-			( bCountByByte ? _T("bytes") : _T("chars") ),
+			(bCountByByte ? _T("bytes") : _T("chars")),
 			select_line,
 			m_sSelect.GetFrom().x, m_sSelect.GetFrom().y,
-			m_sSelect.GetTo().x, m_sSelect.GetTo().y );
+			m_sSelect.GetTo().x, m_sSelect.GetTo().y);
 #else
-		auto_sprintf_s( msg, _T("%d %ts (%d lines) selected."), select_sum, ( bCountByByte ? _T("bytes") : _T("chars") ), select_line );
+		auto_sprintf_s(msg, _T("%d %ts (%d lines) selected."), select_sum, (bCountByByte ? _T("bytes") : _T("chars")), select_line);
 #endif
 	}
 	const_cast<CEditView*>(pView)->GetCaret().m_bClearStatus = false;
-	pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2( msg );
+	pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(msg);
 }
 

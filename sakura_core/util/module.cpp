@@ -12,15 +12,15 @@ void ChangeCurrentDirectoryToExeDir()
 {
 	TCHAR szExeDir[_MAX_PATH];
 	szExeDir[0] = _T('\0');
-	GetExedir( szExeDir, NULL );
+	GetExedir(szExeDir, NULL);
 	if (szExeDir[0]) {
-		::SetCurrentDirectory( szExeDir );
+		::SetCurrentDirectory(szExeDir);
 	}else {
 		// 移動できないときはSYSTEM32(9xではSYSTEM)に移動
 		szExeDir[0] = _T('\0');
-		int n = ::GetSystemDirectory( szExeDir, _MAX_PATH );
+		int n = ::GetSystemDirectory(szExeDir, _MAX_PATH);
 		if (n && n < _MAX_PATH) {
-			::SetCurrentDirectory( szExeDir );
+			::SetCurrentDirectory(szExeDir);
 		}
 	}
 }
@@ -33,7 +33,7 @@ HMODULE LoadLibraryExedir(LPCTSTR pszDll)
 	CCurrentDirectoryBackupPoint dirBack;
 	// DLL インジェクション対策としてEXEのフォルダに移動する
 	ChangeCurrentDirectoryToExeDir();
-	return ::LoadLibrary( pszDll );
+	return ::LoadLibrary(pszDll);
 }
 
 /*!	シェルやコモンコントロール DLL のバージョン番号を取得
@@ -98,15 +98,15 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 	@date 2007.05.20 ryoji iniファイルパスを優先
 	@author genta
 */
-HICON GetAppIcon( HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSmall )
+HICON GetAppIcon(HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSmall)
 {
 	// サイズの設定
-	int size = ( bSmall ? 16 : 32 );
+	int size = (bSmall ? 16 : 32);
 
 	TCHAR szPath[_MAX_PATH];
 
 	// ファイルからの読み込みをまず試みる
-	GetInidirOrExedir( szPath, szFile );
+	GetInidirOrExedir(szPath, szFile);
 
 	HICON hIcon = (HICON)::LoadImage(
 		NULL,
@@ -166,9 +166,9 @@ void GetAppVersionInfo(
 	HRSRC hRSRC;
 	HGLOBAL hgRSRC;
 	VS_VERSION_INFO_HEAD* pVVIH;
-	if (( hRSRC = ::FindResource( hInstance, MAKEINTRESOURCE(nVersionResourceID), RT_VERSION ) )
-	 && ( hgRSRC = ::LoadResource( hInstance, hRSRC ) )
-	 && ( pVVIH = (VS_VERSION_INFO_HEAD*)::LockResource( hgRSRC ) )
+	if ((hRSRC = ::FindResource(hInstance, MAKEINTRESOURCE(nVersionResourceID), RT_VERSION))
+	 && (hgRSRC = ::LoadResource(hInstance, hRSRC))
+	 && (pVVIH = (VS_VERSION_INFO_HEAD*)::LockResource(hgRSRC))
 	) {
 		*pdwProductVersionMS = pVVIH->Value.dwProductVersionMS;
 		*pdwProductVersionLS = pVVIH->Value.dwProductVersionLS;

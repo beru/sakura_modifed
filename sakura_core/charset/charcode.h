@@ -263,7 +263,7 @@ namespace ACODE
 		char c = pData[nIndex];
 
 		//table“à‚Ì•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ä
-		if(strchr(table,c)!=NULL){
+		if(strchr(table,c)!=NULL) {
 			// 2013.06.01 ”»’èŠÔˆá‚¢‚ğíœ
 			return false;
 		}

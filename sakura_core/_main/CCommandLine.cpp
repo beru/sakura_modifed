@@ -127,7 +127,7 @@ int CCommandLine::CheckCommandLine(
 		{NULL, 0, 0}
 	};
 
-	int len = lstrlen( str );
+	int len = lstrlen(str);
 
 	// 引数がある場合を先に確認
 	for (const auto* ptr = _COptWithA; ptr->opt != NULL; ptr++) {
@@ -181,17 +181,17 @@ int CCommandLine::CheckCommandLine(
 	これが呼び出された時点では共有メモリの初期化が完了していないため，
 	共有メモリにアクセスしてはならない．
 */
-void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
+void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 {
-	MY_RUNNINGTIMER( cRunningTimer, "CCommandLine::Parse" );
+	MY_RUNNINGTIMER(cRunningTimer, "CCommandLine::Parse");
 
 	//	May 30, 2000 genta
 	//	実行ファイル名をもとに漢字コードを固定する．
 	{
 		TCHAR exename[512];
-		::GetModuleFileName( NULL, exename, _countof(exename) );
+		::GetModuleFileName(NULL, exename, _countof(exename));
 
-		int len = _tcslen( exename );
+		int len = _tcslen(exename);
 
 		for (TCHAR* p = exename + len - 1; p > exename; p--) {
 			if (*p == _T('.')) {
@@ -211,7 +211,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 	int		nPos;
 	int		i = 0;
 	if (pszCmdLineSrc[0] != _T('-')) {
-		for (i = 0; i < _countof( szPath ); ++i) {
+		for (i = 0; i < _countof(szPath); ++i) {
 			if (pszCmdLineSrc[i] == _T(' ') || pszCmdLineSrc[i] == _T('\0')) {
 				// ファイルの存在をチェック
 				szPath[i] = _T('\0');	// 終端文字
@@ -228,7 +228,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 	}
 	if (bFind) {
 		CSakuraEnvironment::ResolvePath(szPath);
-		_tcscpy( m_fi.m_szPath, szPath );	// ファイル名
+		_tcscpy(m_fi.m_szPath, szPath);	// ファイル名
 		nPos = i + 1;
 	}else {
 		m_fi.m_szPath[0] = _T('\0');
@@ -236,12 +236,12 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 	}
 
 	CNativeT cmResponseFile = _T("");
-	LPTSTR pszCmdLineWork = new TCHAR[lstrlen( pszCmdLineSrc ) + 1];
-	_tcscpy( pszCmdLineWork, pszCmdLineSrc );
-	int nCmdLineWorkLen = lstrlen( pszCmdLineWork );
-	LPTSTR pszToken = my_strtok<TCHAR>( pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" ") );
+	LPTSTR pszCmdLineWork = new TCHAR[lstrlen(pszCmdLineSrc) + 1];
+	_tcscpy(pszCmdLineWork, pszCmdLineSrc);
+	int nCmdLineWorkLen = lstrlen(pszCmdLineWork);
+	LPTSTR pszToken = my_strtok<TCHAR>(pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" "));
 	while (pszToken != NULL) {
-		DEBUG_TRACE( _T("OPT=[%ts]\n"), pszToken );
+		DEBUG_TRACE(_T("OPT=[%ts]\n"), pszToken);
 
 		//	2007.09.09 genta オプション判定ルール変更．オプション解析停止と""で囲まれたオプションを考慮
 		if (bParseOptDisabled || !(pszToken[0] == '-' || pszToken[0] == '"' && pszToken[1] == '-' )) {
@@ -256,16 +256,16 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				//	引数がダブルクォート1つの場合に，その1つを最初と最後の1つずつと
 				//	見間違えて，インデックス-1にアクセスしてしまうのを防ぐために長さをチェックする
 				//	ファイル名の後ろにあるOptionを解析するため，ループは継続
-				int len = lstrlen( pszToken + 1 );
+				int len = lstrlen(pszToken + 1);
 				if (len > 0) {
-					cmWork.SetString( &pszToken[1], len - ( pszToken[len] == _T('"') ? 1 : 0 ));
-					cmWork.Replace( _T("\"\""), _T("\"") );
-					_tcscpy_s( szPath, cmWork.GetStringPtr() );	/* ファイル名 */
+					cmWork.SetString(&pszToken[1], len - (pszToken[len] == _T('"') ? 1 : 0));
+					cmWork.Replace(_T("\"\""), _T("\""));
+					_tcscpy_s(szPath, cmWork.GetStringPtr());	// ファイル名
 				}else {
 					szPath[0] = _T('\0');
 				}
 			}else {
-				_tcscpy_s( szPath, pszToken );		// ファイル名
+				_tcscpy_s(szPath, pszToken);		// ファイル名
 			}
 
 			// Nov. 11, 2005 susu
@@ -276,18 +276,18 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 			}
 			int len = _tcslen(szPath);
 			for (int i = 0; i < len ; ) {
-				if (!TCODE::IsValidFilenameChar(szPath,i)) {
+				if (!TCODE::IsValidFilenameChar(szPath, i)) {
 					TCHAR msg_str[_MAX_PATH + 1];
 					_stprintf(
 						msg_str,
 						LS(STR_CMDLINE_PARSECMD1),
 						szPath
 					);
-					MessageBox( NULL, msg_str, _T("FileNameError"), MB_OK);
+					MessageBox(NULL, msg_str, _T("FileNameError"), MB_OK);
 					szPath[0] = _T('\0');
 					break;
 				}
-				int nChars = t_max(1, int(CNativeT::GetCharNext( szPath, len, szPath + i ) - (szPath + i)));
+				int nChars = t_max(1, int(CNativeT::GetCharNext(szPath, len, szPath + i) - (szPath + i)));
 				i += nChars;
 			}
 
@@ -296,13 +296,13 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				if (m_fi.m_szPath[0] == _T('\0')) {
 					_tcscpy(m_fi.m_szPath, szPath );
 				}else {
-					m_vFiles.push_back( szPath );
+					m_vFiles.push_back(szPath);
 				}
 			}
 		}else {
 			if (*pszToken == '"') {
 				++pszToken;	// 2007.09.09 genta 先頭の"はスキップ
-				int tokenlen = _tcslen( pszToken );
+				int tokenlen = _tcslen(pszToken);
 				if (pszToken[ tokenlen-1 ] == '"') {	// 2009.06.14 syat 末尾の"を取り除く
 					pszToken[ tokenlen-1 ] = '\0';
 				}
@@ -312,45 +312,45 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 			int nArgLen;
 			switch (CheckCommandLine(pszToken, &arg, &nArgLen)) {
 			case CMDLINEOPT_AT:
-				cmResponseFile.SetStringT( arg, nArgLen );
+				cmResponseFile.SetStringT(arg, nArgLen);
 				break;
 			case CMDLINEOPT_X: //	X
 				// 行桁指定を1開始にした
-				m_fi.m_ptCursor.x = AtoiOptionInt( arg ) - 1;
+				m_fi.m_ptCursor.x = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_Y:	//	Y
-				m_fi.m_ptCursor.y = AtoiOptionInt( arg ) - 1;
+				m_fi.m_ptCursor.y = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_VX:	// VX
 				// 行桁指定を1開始にした
-				m_fi.m_nViewLeftCol = CLayoutInt( AtoiOptionInt( arg ) - 1 );
+				m_fi.m_nViewLeftCol = CLayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_VY:	//	VY
 				// 行桁指定を1開始にした
-				m_fi.m_nViewTopLine = CLayoutInt( AtoiOptionInt( arg ) - 1 );
+				m_fi.m_nViewTopLine = CLayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_SX: //	SX
-				m_fi.m_nWindowSizeX = AtoiOptionInt( arg ) - 1;
+				m_fi.m_nWindowSizeX = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_SY:	//	SY
-				m_fi.m_nWindowSizeY = AtoiOptionInt( arg ) - 1;
+				m_fi.m_nWindowSizeY = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_WX: //	WX
-				m_fi.m_nWindowOriginX = AtoiOptionInt( arg );
+				m_fi.m_nWindowOriginX = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_WY:	//	WY
-				m_fi.m_nWindowOriginY = AtoiOptionInt( arg );
+				m_fi.m_nWindowOriginY = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_TYPE:	//	TYPE
 				//	Mar. 7, 2002 genta
 				//	ファイルタイプの強制指定
 				{
-					_tcsncpy( m_fi.m_szDocType, arg, MAX_DOCTYPE_LEN );
+					_tcsncpy(m_fi.m_szDocType, arg, MAX_DOCTYPE_LEN);
 					m_fi.m_szDocType[ nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN ] = L'\0';
 				}
 				break;
 			case CMDLINEOPT_CODE:	//	CODE
-				m_fi.m_nCharCode = (ECodeType)AtoiOptionInt( arg );
+				m_fi.m_nCharCode = (ECodeType)AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_R:	//	R
 				m_bViewMode = true;
@@ -365,7 +365,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 			case CMDLINEOPT_GREPMODE:	//	GREPMODE
 				m_bGrepMode = true;
 				if (_T('\0') == m_fi.m_szDocType[0]) {
-					auto_strcpy( m_fi.m_szDocType , _T("grepout") );
+					auto_strcpy(m_fi.m_szDocType , _T("grepout"));
 				}
 				break;
 			case CMDLINEOPT_GREPDLG:	//	GREPDLG
@@ -373,17 +373,17 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				break;
 			case CMDLINEOPT_GKEY:	//	GKEY
 				//	前後の""を取り除く
-				m_gi.cmGrepKey.SetStringT( arg,  lstrlen( arg ) );
-				m_gi.cmGrepKey.Replace( L"\"\"", L"\"" );
+				m_gi.cmGrepKey.SetStringT(arg,  lstrlen(arg));
+				m_gi.cmGrepKey.Replace(L"\"\"", L"\"");
 				break;
 			case CMDLINEOPT_GFILE:	//	GFILE
 				//	前後の""を取り除く
-				m_gi.cmGrepFile.SetStringT( arg,  lstrlen( arg ) );
-				m_gi.cmGrepFile.Replace( _T("\"\""), _T("\"") );
+				m_gi.cmGrepFile.SetStringT(arg,  lstrlen(arg));
+				m_gi.cmGrepFile.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GFOLDER:	//	GFOLDER
-				m_gi.cmGrepFolder.SetString( arg,  lstrlen( arg ) );
-				m_gi.cmGrepFolder.Replace( _T("\"\""), _T("\"") );
+				m_gi.cmGrepFolder.SetString(arg,  lstrlen(arg));
+				m_gi.cmGrepFolder.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GOPT:	//	GOPT
 				for (; *arg != '\0' ; ++arg) {
@@ -429,30 +429,30 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 				break;
 			// 2002/09/21 Moca Grepでの文字コードセット 追加
 			case CMDLINEOPT_GCODE:
-				m_gi.nGrepCharSet = (ECodeType)AtoiOptionInt( arg );	break;
+				m_gi.nGrepCharSet = (ECodeType)AtoiOptionInt(arg);	break;
 			case CMDLINEOPT_GROUP:	// GROUP	// 2007.06.26 ryoji
-				m_nGroup = AtoiOptionInt( arg );
+				m_nGroup = AtoiOptionInt(arg);
 				break;
 			case CMDLINEOPT_DEBUGMODE:
 				m_bDebugMode = true;
 				// 2010.06.16 Moca -TYPE=output 扱いとする
 				if (_T('\0') == m_fi.m_szDocType[0]) {
-					auto_strcpy( m_fi.m_szDocType , _T("output") );
+					auto_strcpy(m_fi.m_szDocType , _T("output"));
 				}
 				break;
 			case CMDLINEOPT_NOMOREOPT:	// 2007.09.09 genta これ以降引数無効
 				bParseOptDisabled = true;
 				break;
 			case CMDLINEOPT_M:			// 2009.06.14 syat 追加
-				m_cmMacro.SetStringT( arg );
-				m_cmMacro.Replace( L"\"\"", L"\"" );
+				m_cmMacro.SetStringT(arg);
+				m_cmMacro.Replace(L"\"\"", L"\"");
 				break;
 			case CMDLINEOPT_MTYPE:		// 2009.06.14 syat 追加
-				m_cmMacroType.SetStringT( arg );
+				m_cmMacroType.SetStringT(arg);
 				break;
 			}
 		}
-		pszToken = my_strtok<TCHAR>( pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" ") );
+		pszToken = my_strtok<TCHAR>(pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" "));
 	}
 	delete [] pszCmdLineWork;
 
@@ -466,7 +466,7 @@ void CCommandLine::ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse )
 		while (input) {
 			responseData += to_tchar(input.ReadLineW().c_str());
 		}
-		ParseCommandLine( responseData.c_str(), false );
+		ParseCommandLine(responseData.c_str(), false);
 	}
 
 	return;

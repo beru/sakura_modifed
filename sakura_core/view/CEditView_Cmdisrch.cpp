@@ -41,7 +41,7 @@ void CEditView::TranslateCommand_isearch(
 	LPARAM&			lparam4
 )
 {
-	if (m_nISearchMode <= 0 )
+	if (m_nISearchMode <= 0)
 		return;
 
 	switch (nCommand) {
@@ -145,7 +145,7 @@ bool CEditView::ProcessCommand_isearch(
 	@date 2012.10.11 novice m_sCurSearchOption/m_sSearchOptionの同期をswitchの前に変更
 	@date 2012.10.11 novice MIGEMOの処理をcase内に移動
 */
-void CEditView::ISearchEnter( int mode, ESearchDirection direction)
+void CEditView::ISearchEnter(int mode, ESearchDirection direction)
 {
 
 	if (m_nISearchMode == mode) {
@@ -163,7 +163,7 @@ void CEditView::ISearchEnter( int mode, ESearchDirection direction)
 		//インクリメンタルサーチモードに入るだけ.		
 		//選択範囲の解除
 		if (selInfo.IsTextSelected())	
-			selInfo.DisableSelectArea( true );
+			selInfo.DisableSelectArea(true);
 
 		m_sCurSearchOption = GetDllShareData().m_Common.m_sSearch.m_sSearchOption;
 		switch (mode) {
@@ -239,9 +239,9 @@ void CEditView::ISearchEnter( int mode, ESearchDirection direction)
 
 	//マウスカーソル変更
 	if (direction == 1) {
-		::SetCursor( ::LoadCursor( G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
+		::SetCursor(::LoadCursor(G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
 	}else {
-		::SetCursor( ::LoadCursor( G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
+		::SetCursor(::LoadCursor(G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
 	}
 }
 
@@ -250,7 +250,7 @@ void CEditView::ISearchExit()
 {
 	// シーケンスを上書きして現在の検索キーを維持する
 	if (m_strCurSearchKey.size() < _MAX_PATH) {
-		CSearchKeywordManager().AddToSearchKeyArr( m_strCurSearchKey.c_str() );
+		CSearchKeywordManager().AddToSearchKeyArr(m_strCurSearchKey.c_str());
 	}
 	m_nCurSearchKeySequence = GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence;
 	GetDllShareData().m_Common.m_sSearch.m_sSearchOption = m_sCurSearchOption;
@@ -320,7 +320,7 @@ void CEditView::ISearchExec(LPCWSTR pszText)
 	
 	while (*p!=L'\0') {
 		if (IsUtf16SurrogHi(*p) && IsUtf16SurrogLow(*(p+1))) {
-			c = ( ((WORD)*p)<<16 ) | ( (WORD)*(p+1) );
+			c = (((WORD)*p)<<16) | ((WORD)*(p+1));
 			p++;
 		}else {
 			c = *p;
@@ -365,7 +365,7 @@ void CEditView::ISearchExec(bool bNext)
 			int nIdxP;
 			auto& docLineMgr = m_pcEditDoc->m_cDocLineMgr;
 			nLineP =  docLineMgr.GetLineCount() - CLogicInt(1);
-			CDocLine* pDocLine = docLineMgr.GetLine( nLineP );
+			CDocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
 			CLayoutPoint ptTmp;
 			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nIdxP,nLineP),&ptTmp);
@@ -395,8 +395,8 @@ void CEditView::ISearchExec(bool bNext)
 	}
 
 	//桁位置からindexに変換
-	CLayout* pCLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( nLine );
-	CLogicInt nIdx = LineColumnToIndex( pCLayout, nIdx1 );
+	CLayout* pCLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLine);
+	CLogicInt nIdx = LineColumnToIndex(pCLayout, nIdx1);
 
 	m_nISearchHistoryCount ++ ;
 
@@ -435,10 +435,10 @@ void CEditView::ISearchExec(bool bNext)
 	}else {
 		//検索結果あり
 		//キャレット移動
-		GetCaret().MoveCursor( sMatchRange.GetFrom(), true, _CARETMARGINRATE / 3 );
+		GetCaret().MoveCursor(sMatchRange.GetFrom(), true, _CARETMARGINRATE / 3);
 		
 		//	2005.06.24 Moca
-		GetSelectionInfo().SetSelectArea( sMatchRange );
+		GetSelectionInfo().SetSelectArea(sMatchRange);
 
 		m_bISearchWrap = false;
 		m_sISearchHistory[m_nISearchHistoryCount] = sMatchRange;
@@ -463,9 +463,9 @@ void CEditView::ISearchBack(void) {
 		size_t l = m_strCurSearchKey.size();
 		if (l > 0) {
 			//最後の文字の一つ前
-			wchar_t* p = (wchar_t*)CNativeW::GetCharPrev( m_strCurSearchKey.c_str(), l, &m_strCurSearchKey.c_str()[l] );
+			wchar_t* p = (wchar_t*)CNativeW::GetCharPrev(m_strCurSearchKey.c_str(), l, &m_strCurSearchKey.c_str()[l]);
 			size_t new_len = p - m_strCurSearchKey.c_str();
-			m_strCurSearchKey.resize( new_len );
+			m_strCurSearchKey.resize(new_len);
 			//m_szCurSrchKey[l-1] = '\0';
 
 			if (new_len > 0) 
@@ -482,14 +482,14 @@ void CEditView::ISearchBack(void) {
 	CLayoutRange sRange = m_sISearchHistory[m_nISearchHistoryCount];
 
 	if (m_nISearchHistoryCount == 0) {
-		GetSelectionInfo().DisableSelectArea( true );
-		sRange.SetToX( sRange.GetFrom().x );
+		GetSelectionInfo().DisableSelectArea(true);
+		sRange.SetToX(sRange.GetFrom().x);
 	}
 
-	GetCaret().MoveCursor( sRange.GetFrom(), true, _CARETMARGINRATE / 3 );
+	GetCaret().MoveCursor(sRange.GetFrom(), true, _CARETMARGINRATE / 3);
 	if (m_nISearchHistoryCount != 0) {
 		//	2005.06.24 Moca
-		GetSelectionInfo().SetSelectArea( sRange );
+		GetSelectionInfo().SetSelectArea(sRange);
 	}
 
 	Redraw();
@@ -539,13 +539,13 @@ void CEditView::ISearchSetStatusMsg(CNativeT* msg) const
 
 	switch (m_nISearchMode) {
 	case 1 :
-		msg->SetString(_T("I-Search") );
+		msg->SetString(_T("I-Search"));
 		break;
 	case 2 :
-		msg->SetString(_T("[RegExp] I-Search") );
+		msg->SetString(_T("[RegExp] I-Search"));
 		break;
 	case 3 :
-		msg->SetString(_T("[Migemo] I-Search") );
+		msg->SetString(_T("[Migemo] I-Search"));
 		break;
 	default:
 		msg->SetString(_T(""));

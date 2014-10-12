@@ -38,18 +38,18 @@ public:
 	CFileExt();
 	~CFileExt();
 
-	bool AppendExt( const TCHAR *pszName, const TCHAR *pszExt );
-	bool AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt );
-	const TCHAR* GetName( int nIndex );
-	const TCHAR* GetExt( int nIndex );
+	bool AppendExt(const TCHAR *pszName, const TCHAR *pszExt);
+	bool AppendExtRaw(const TCHAR *pszName, const TCHAR *pszExt);
+	const TCHAR* GetName(int nIndex);
+	const TCHAR* GetExt(int nIndex);
 
 	// ダイアログに渡す拡張子フィルタを取得する。(lpstrFilterに直接指定可能)
-	const TCHAR* GetExtFilter( void );
+	const TCHAR* GetExtFilter(void);
 
-	int GetCount( void ) { return m_nCount; }
+	int GetCount(void) { return m_nCount; }
 
 protected:
-	bool ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt );
+	bool ConvertTypesExtToDlgExt(const TCHAR *pszSrcExt, TCHAR *pszDstExt);
 
 private:
 	typedef struct {

@@ -34,29 +34,29 @@
 // GetDllShareData用グローバル変数
 DLLSHAREDATA* g_theDLLSHAREDATA = NULL;
 
-static CMutex g_cKeywordMutex( FALSE, GSTR_MUTEX_SAKURA_KEYWORD );
+static CMutex g_cKeywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
 
 CShareDataLockCounter::CShareDataLockCounter() {
-	LockGuard<CMutex> guard( g_cKeywordMutex );
-	assert_warning( 0 <= GetDllShareData().m_nLockCount );
+	LockGuard<CMutex> guard(g_cKeywordMutex);
+	assert_warning(0 <= GetDllShareData().m_nLockCount);
 	GetDllShareData().m_nLockCount++;
 }
 
 CShareDataLockCounter::~CShareDataLockCounter() {
-	LockGuard<CMutex> guard( g_cKeywordMutex );
+	LockGuard<CMutex> guard(g_cKeywordMutex);
 	GetDllShareData().m_nLockCount--;
-	assert_warning( 0 <= GetDllShareData().m_nLockCount );
+	assert_warning(0 <= GetDllShareData().m_nLockCount);
 }
 
 int CShareDataLockCounter::GetLockCounter() {
-	LockGuard<CMutex> guard( g_cKeywordMutex );
-	assert_warning( 0 <= GetDllShareData().m_nLockCount );
+	LockGuard<CMutex> guard(g_cKeywordMutex);
+	assert_warning(0 <= GetDllShareData().m_nLockCount);
 	return GetDllShareData().m_nLockCount;
 }
 
 class CLockCancel: public CDlgCancel {
 public:
-	virtual BOOL OnInitDialog( HWND hwnd, WPARAM wParam, LPARAM lParam ) {
+	virtual BOOL OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam) {
 		BOOL ret = CDlgCancel::OnInitDialog(hwnd, wParam, lParam);
 		HWND hwndCancel = GetHwnd();
 		HWND hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_MSG);
@@ -89,7 +89,7 @@ public:
 
 // countが0だったらLockして返す
 static
-int GetCountIf0Lock( CShareDataLockCounter** ppLock )
+int GetCountIf0Lock(CShareDataLockCounter** ppLock)
 {
 	LockGuard<CMutex> guard(g_cKeywordMutex);
 	int count = GetDllShareData().m_nLockCount;
@@ -101,7 +101,7 @@ int GetCountIf0Lock( CShareDataLockCounter** ppLock )
 	return count;
 }
 
-void CShareDataLockCounter::WaitLock( HWND hwndParent, CShareDataLockCounter** ppLock ) {
+void CShareDataLockCounter::WaitLock(HWND hwndParent, CShareDataLockCounter** ppLock) {
 	if (0 < GetCountIf0Lock(ppLock)) {
 		DWORD dwTime = ::GetTickCount();
 		CWaitCursor cWaitCursor(hwndParent);
@@ -113,14 +113,14 @@ void CShareDataLockCounter::WaitLock( HWND hwndParent, CShareDataLockCounter** p
 			if (dwResult == 0xFFFFFFFF) {
 				break;
 			}
-			if (!BlockingHook( hwndCancel )) {
+			if (!BlockingHook(hwndCancel)) {
 				break;
 			}
 			if (!pDlg) {
 				DWORD dwTimeNow = ::GetTickCount();
 				if (2000 < dwTimeNow - dwTime) {
 					pDlg = new CLockCancel();
-					hwndCancel = pDlg->DoModeless(::GetModuleHandle( NULL ), hwndParent, IDD_OPERATIONRUNNING);
+					hwndCancel = pDlg->DoModeless(::GetModuleHandle(NULL), hwndParent, IDD_OPERATIONRUNNING);
 				}
 			}
 		}

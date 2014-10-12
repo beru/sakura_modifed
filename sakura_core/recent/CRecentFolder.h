@@ -37,10 +37,10 @@ public:
 	CRecentFolder();
 
 	// オーバーライド
-	int				CompareItem( const CPathString* p1, LPCTSTR p2 ) const;
-	void			CopyItem( CPathString* dst, LPCTSTR src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( LPCTSTR* dst, const CPathString* src ) const;
-	bool			TextToDataType( CPathString* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const CPathString* p1, LPCTSTR p2) const;
+	void			CopyItem(CPathString* dst, LPCTSTR src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CPathString* src) const;
+	bool			TextToDataType(CPathString* dst, LPCTSTR pszText) const;
 };
 

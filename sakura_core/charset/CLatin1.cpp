@@ -51,7 +51,7 @@
 */
 int CLatin1::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
 {
-	if( nIdx >= nDataLen ){
+	if( nIdx >= nDataLen ) {
 		return 0;
 	}
 	return 1;
@@ -69,10 +69,10 @@ int CLatin1::Latin1ToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 	const unsigned char *pr, *pr_end;
 	unsigned short *pw;
 
-	if( pbError ){
+	if( pbError ) {
 		*pbError = false;
 	}
-	if( nSrcLen < 1 ){
+	if( nSrcLen < 1 ) {
 		return 0;
 	}
 
@@ -80,11 +80,11 @@ int CLatin1::Latin1ToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 	pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	pw = reinterpret_cast<unsigned short*>(pDst);
 
-	for( ; pr < pr_end; pr++ ){
+	for( ; pr < pr_end; pr++ ) {
 		if (*pr >= 0x80 && *pr <=0x9f) {
 			// Windows 拡張部
 			nret = ::MultiByteToWideChar( 1252, 0, reinterpret_cast<const char*>(pr), 1, reinterpret_cast<wchar_t*>(pw), 4 );
-			if( nret == 0 ){
+			if( nret == 0 ) {
 				*pw = static_cast<unsigned short>( *pr );
 			}
 			pw++;
@@ -113,7 +113,7 @@ EConvertResult CLatin1::Latin1ToUnicode( CMemory* pMem )
 	wchar_t* pDst;
 	try{
 		pDst = new wchar_t[nSrcLen];
-	}catch( ... ){
+	}catch( ... ) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -129,7 +129,7 @@ EConvertResult CLatin1::Latin1ToUnicode( CMemory* pMem )
 	// 後始末
 	delete [] pDst;
 
-	if( bError == false ){
+	if( bError == false ) {
 		return RESULT_COMPLETE;
 	}else{
 		return RESULT_LOSESOME;
@@ -153,8 +153,8 @@ int CLatin1::UniToLatin1( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 	ECharSet echarset;
 	bool berror=false, berror_tmp;
 
-	if( nSrcLen < 1 ){
-		if( pbError ){
+	if( nSrcLen < 1 ) {
+		if( pbError ) {
 			*pbError = false;
 		}
 		return 0;
@@ -164,9 +164,9 @@ int CLatin1::UniToLatin1( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 	pr_end = reinterpret_cast<const unsigned short*>(pSrc+nSrcLen);
 	pw = reinterpret_cast<unsigned char*>(pDst);
 
-	while( (nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0 ){
+	while( (nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0 ) {
 		// 保護コード
-		switch( echarset ){
+		switch( echarset ) {
 		case CHARSET_UNI_NORMAL:
 			nclen = 1;
 			break;
@@ -177,14 +177,14 @@ int CLatin1::UniToLatin1( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 			echarset = CHARSET_BINARY;
 			nclen = 1;
 		}
-		if( echarset != CHARSET_BINARY ){
+		if( echarset != CHARSET_BINARY ) {
 			pw += _UniToLatin1_char( pr, pw, echarset, &berror_tmp );
-			if( berror_tmp == true ){
+			if( berror_tmp == true ) {
 				berror = true;
 			}
 			pr += nclen;
 		}else{
-			if( nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr)) ){
+			if( nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr)) ) {
 				*pw = static_cast<unsigned char>(TextToBin(*pr) & 0x000000ff);
 				++pw;
 			}else{
@@ -196,7 +196,7 @@ int CLatin1::UniToLatin1( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 		}
 	}
 
-	if( pbError ){
+	if( pbError ) {
 		*pbError = berror;
 	}
 
@@ -220,7 +220,7 @@ EConvertResult CLatin1::UnicodeToLatin1( CMemory* pMem )
 	char* pDst;
 	try{
 		pDst = new char[ nSrcLen * 2 ];
-	}catch( ... ){
+	}catch( ... ) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -237,7 +237,7 @@ EConvertResult CLatin1::UnicodeToLatin1( CMemory* pMem )
 	delete[] pDst;
 
 	// 結果
-	if( berror == true ){
+	if( berror == true ) {
 		return RESULT_LOSESOME;
 	}else{
 		return RESULT_COMPLETE;
@@ -263,7 +263,7 @@ EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR
 	cCharBuffer.SetRawData("", 0);
 	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
 
-	if( IsBinaryOnSurrogate(cSrc[0]) ){
+	if( IsBinaryOnSurrogate(cSrc[0]) ) {
 		bbinary = true;
 	}
 
@@ -276,7 +276,7 @@ EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR
 	// Hex変換
 	ps = reinterpret_cast<unsigned char*>( cCharBuffer.GetRawPtr() );
 	pd = pDst;
-	if( bbinary == false ){
+	if( bbinary == false ) {
 		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf( pd, _T("%02x"), *ps);
 		}

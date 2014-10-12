@@ -43,19 +43,19 @@ class CDlgSameColor : public CDialog {
 public:
 	CDlgSameColor();
 	~CDlgSameColor();
-	int DoModal( HINSTANCE, HWND, WORD, STypeConfig*, COLORREF );		//!< モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, WORD, STypeConfig*, COLORREF);		//!< モーダルダイアログの表示
 
 protected:
 
-	virtual LPVOID GetHelpIdTable( void );
-	virtual INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );	//! ダイアログのメッセージ処理
-	virtual BOOL OnInitDialog( HWND, WPARAM, LPARAM );				//!< WM_INITDIALOG 処理
-	virtual BOOL OnBnClicked( int );								//!< BN_CLICKED 処理
-	virtual BOOL OnDrawItem( WPARAM wParam, LPARAM lParam );		//!< WM_DRAWITEM 処理
-	BOOL OnSelChangeListColors( HWND hwndCtl );						//!< 色選択リストの LBN_SELCHANGE 処理
+	virtual LPVOID GetHelpIdTable(void);
+	virtual INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);	//! ダイアログのメッセージ処理
+	virtual BOOL OnInitDialog(HWND, WPARAM, LPARAM);				//!< WM_INITDIALOG 処理
+	virtual BOOL OnBnClicked(int);								//!< BN_CLICKED 処理
+	virtual BOOL OnDrawItem(WPARAM wParam, LPARAM lParam);		//!< WM_DRAWITEM 処理
+	BOOL OnSelChangeListColors(HWND hwndCtl);						//!< 色選択リストの LBN_SELCHANGE 処理
 
-	static LRESULT CALLBACK ColorStatic_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	//!< サブクラス化された指定色スタティックのウィンドウプロシージャ
-	static LRESULT CALLBACK ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	//!< サブクラス化された色選択リストのウィンドウプロシージャ
+	static LRESULT CALLBACK ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	//!< サブクラス化された指定色スタティックのウィンドウプロシージャ
+	static LRESULT CALLBACK ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	//!< サブクラス化された色選択リストのウィンドウプロシージャ
 
 	WNDPROC m_wpColorStaticProc;	//!< サブクラス化以前の指定色スタティックのウィンドウプロシージャ
 	WNDPROC m_wpColorListProc;		//!< サブクラス化以前の色選択リストのウィンドウプロシージャ

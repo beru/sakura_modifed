@@ -38,17 +38,17 @@
 
 	@date  2006.12.04 ryoji 新規作成（関数化）
 */
-bool CEditView::IsImeON( void )
+bool CEditView::IsImeON(void)
 {
 	bool bRet;
 	HIMC	hIme;
 	DWORD	conv, sent;
 
 	//	From here Nov. 26, 2006 genta
-	hIme = ImmGetContext( GetHwnd() );
-	if (ImmGetOpenStatus( hIme ) != FALSE) {
-		ImmGetConversionStatus( hIme, &conv, &sent );
-		if (( conv & IME_CMODE_NOCONVERSION ) == 0) {
+	hIme = ImmGetContext(GetHwnd());
+	if (ImmGetOpenStatus(hIme) != FALSE) {
+		ImmGetConversionStatus(hIme, &conv, &sent);
+		if ((conv & IME_CMODE_NOCONVERSION) == 0) {
 			bRet = true;
 		}else {
 			bRet = false;
@@ -56,14 +56,14 @@ bool CEditView::IsImeON( void )
 	}else {
 		bRet = false;
 	}
-	ImmReleaseContext( GetHwnd(), hIme );
+	ImmReleaseContext(GetHwnd(), hIme);
 	//	To here Nov. 26, 2006 genta
 
 	return bRet;
 }
 
 /* IME編集エリアの位置を変更 */
-void CEditView::SetIMECompFormPos( void )
+void CEditView::SetIMECompFormPos(void)
 {
 	//
 	// If current composition form mode is near caret operation,
@@ -73,23 +73,23 @@ void CEditView::SetIMECompFormPos( void )
 	//
 	//
 	COMPOSITIONFORM	CompForm;
-	HIMC			hIMC = ::ImmGetContext( GetHwnd() );
+	HIMC			hIMC = ::ImmGetContext(GetHwnd());
 	POINT			point;
 
-	::GetCaretPos( &point );
+	::GetCaretPos(&point);
 	CompForm.dwStyle = CFS_POINT;
 	CompForm.ptCurrentPos.x = (long) point.x;
 	CompForm.ptCurrentPos.y = (long) point.y + GetCaret().GetCaretSize().cy - GetTextMetrics().GetHankakuHeight();
 
 	if (hIMC) {
-		::ImmSetCompositionWindow( hIMC, &CompForm );
+		::ImmSetCompositionWindow(hIMC, &CompForm);
 	}
-	::ImmReleaseContext( GetHwnd() , hIMC );
+	::ImmReleaseContext(GetHwnd() , hIMC);
 }
 
 
 /* IME編集エリアの表示フォントを変更 */
-void CEditView::SetIMECompFormFont( void )
+void CEditView::SetIMECompFormFont(void)
 {
 	//
 	// If current composition form mode is near caret operation,
@@ -98,11 +98,11 @@ void CEditView::SetIMECompFormFont( void )
 	// composition window position.
 	//
 	//
-	HIMC	hIMC = ::ImmGetContext( GetHwnd() );
+	HIMC	hIMC = ::ImmGetContext(GetHwnd());
 	if (hIMC) {
-		::ImmSetCompositionFont( hIMC, const_cast<LOGFONT *>(&(m_pcEditWnd->GetLogfont())) );
+		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_pcEditWnd->GetLogfont())));
 	}
-	::ImmReleaseContext( GetHwnd() , hIMC );
+	::ImmReleaseContext(GetHwnd() , hIMC);
 }
 
 
@@ -260,7 +260,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		if (0 == nInsertCompLen) {
 			// 2回呼ばれるので、m_szCompositionに覚えておく
 			HWND hwnd = GetHwnd();
-			HIMC hIMC = ::ImmGetContext( hwnd );
+			HIMC hIMC = ::ImmGetContext(hwnd);
 			if (!hIMC) {
 				return 0;
 			}
@@ -269,7 +269,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			if (immRet == IMM_ERROR_NODATA || immRet == IMM_ERROR_GENERAL) {
 				m_szComposition[0] = _T('\0');
 			}
-			::ImmReleaseContext( hwnd, hIMC );
+			::ImmReleaseContext(hwnd, hIMC);
 			nInsertCompLen = auto_strlen(m_szComposition);
 		}
 	}
@@ -294,8 +294,8 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		const WCHAR* pszCompInsStr = L"";
 		int nCompInsStr   = 0;
 		if (nInsertCompLen) {
-			pszCompInsStr = to_wchar( m_szComposition );
-			nCompInsStr   = wcslen( pszCompInsStr );
+			pszCompInsStr = to_wchar(m_szComposition);
+			nCompInsStr   = wcslen(pszCompInsStr);
 		}
 		dwInsByteCount      = nCompInsStr * sizeof(wchar_t);
 		dwReconvTextLen     = nReconvLen;
@@ -328,14 +328,14 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			// nSelectedLen と nInsertCompLen が両方指定されることはないはず
 			const ACHAR* pComp = to_achar(m_szComposition);
 			pszInsBuffer = pComp;
-			dwInsByteCount = strlen( pComp );
+			dwInsByteCount = strlen(pComp);
 			dwCompStrLen = dwInsByteCount;
 		}else {
 			dwCompStrLen = 0;
 		}
 		
 		//考慮文字列すべて
-		cmemBuf1.SetString(pszReconvSrc , nReconvLen );
+		cmemBuf1.SetString(pszReconvSrc , nReconvLen);
 		CShiftJis::UnicodeToSJIS(cmemBuf1._GetMemory());
 		
 		dwReconvTextLen    = cmemBuf1._GetMemory()->GetRawLength();				//reconv文字列長。文字単位。
@@ -425,14 +425,14 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 }
 
 // 再変換用 エディタ上の選択範囲を変更する 2002.04.09 minfu
-LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode){
+LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool bUnicode) {
 	
 	// 再変換情報が保存されているか
 	if ((m_nLastReconvIndex < 0) || (m_nLastReconvLine < 0))
 		return 0;
 
 	if (GetSelectionInfo().IsTextSelected()) 
-		GetSelectionInfo().DisableSelectArea( true );
+		GetSelectionInfo().DisableSelectArea(true);
 
 	if (0 != pReconv->dwVersion) {
 		return 0;
@@ -455,7 +455,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 			}
 			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p=((const char*)(pReconv)) + pReconv->dwStrOffset;
-			cmemBuf.SetString(p, pReconv->dwCompStrOffset ); 
+			cmemBuf.SetString(p, pReconv->dwCompStrOffset); 
 			CShiftJis::SJISToUnicode(cmemBuf._GetMemory());
 			dwOffset = cmemBuf._GetMemory()->GetRawLength()/sizeof(WCHAR);
 		}else {
@@ -492,7 +492,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 	);
 
 	// 単語の先頭にカーソルを移動
-	GetCaret().MoveCursor( GetSelectionInfo().m_sSelect.GetFrom(), true );
+	GetCaret().MoveCursor(GetSelectionInfo().m_sSelect.GetFrom(), true);
 
 	//選択範囲再描画 
 	GetSelectionInfo().DrawSelectArea();

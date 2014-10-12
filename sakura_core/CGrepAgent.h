@@ -62,7 +62,7 @@ public:
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
 	static
-	void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
+	void CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& vPaths);
 
 	// Grepé¿çs
 	DWORD DoGrep(

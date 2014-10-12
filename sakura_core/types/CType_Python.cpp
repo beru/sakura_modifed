@@ -44,11 +44,11 @@
 		それは実行してみれば明らかにわかることなので
 		そこまで厳密にチェックしない
 */
-inline bool Python_IsWordChar( wchar_t c ){
-	return ( L'_' == c ||
-			(L'a' <= c && c <= L'z' )||
-			(L'A' <= c && c <= L'Z' )||
-			(L'0' <= c && c <= L'9' )
+inline bool Python_IsWordChar(wchar_t c) {
+	return (L'_' == c ||
+			(L'a' <= c && c <= L'z')||
+			(L'A' <= c && c <= L'Z')||
+			(L'0' <= c && c <= L'9')
 		);
 }
 
@@ -97,10 +97,10 @@ struct COutlinePython {
 		ある状態から別の状態に移るところまでを扱う．
 		別の状態に移る判定がややこしいばあいは，Enter*として関数にする．
 	*/	
-	int ScanNormal( const wchar_t* data, int linelen, int start_offset );
-	int ScanString( const wchar_t* data, int linelen, int start_offset );
-	int EnterString( const wchar_t* data, int linelen, int start_offset );
-	void DoScanLine( const wchar_t* data, int linelen, int start_offset );
+	int ScanNormal(const wchar_t* data, int linelen, int start_offset);
+	int ScanString(const wchar_t* data, int linelen, int start_offset);
+	int EnterString(const wchar_t* data, int linelen, int start_offset);
+	void DoScanLine(const wchar_t* data, int linelen, int start_offset);
 	
 	bool IsLogicalLineTop(void) const { return STATE_NORMAL == m_state; }
 };
@@ -110,9 +110,9 @@ struct COutlinePython {
 	初期状態をSTATE_NORMALに設定する．
 */
 COutlinePython::COutlinePython()
-	: m_state( STATE_NORMAL ),
-	m_raw_string( false ),
-	m_long_string( false )
+	: m_state(STATE_NORMAL),
+	m_raw_string(false),
+	m_long_string(false)
 {
 }
 
@@ -137,9 +137,9 @@ COutlinePython::COutlinePython()
 	@note 引用符の位置で呼びだせば，抜けた後は必ずSTATE_STRINGになっているはず．
 		引用符以外の位置で呼びだした場合は何もしないで抜ける．
 */
-int COutlinePython::EnterString( const wchar_t* data, int linelen, int start_offset )
+int COutlinePython::EnterString(const wchar_t* data, int linelen, int start_offset)
 {
-	assert( m_state != STATE_STRING );
+	assert(m_state != STATE_STRING);
 
 	int col = start_offset;
 	//	文字列開始チェック
@@ -191,12 +191,12 @@ int COutlinePython::EnterString( const wchar_t* data, int linelen, int start_off
 	
 	@return 調査後の位置
 */
-int COutlinePython::ScanNormal( const wchar_t* data, int linelen, int start_offset )
+int COutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
 {
-	assert( m_state == STATE_NORMAL || m_state == STATE_CONTINUE );
+	assert(m_state == STATE_NORMAL || m_state == STATE_CONTINUE);
 
 	for (int col = start_offset; col < linelen; ++col) {
-		int nCharChars = CNativeW::GetSizeOfChar( data, linelen, col );
+		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
 			continue;
@@ -210,16 +210,16 @@ int COutlinePython::ScanNormal( const wchar_t* data, int linelen, int start_offs
 			break;
 		//	文字列
 		}else if (data[col] == '\"' || data[col] == '\'') {
-			return EnterString( data, linelen, col );
+			return EnterString(data, linelen, col);
 		//	継続行かもしれない
 		}else if (data[col] == '\\') {
 			//	CRかCRLFかLFで行末
 			//	最終行には改行コードがないことがあるが，それ以降には何もないので影響しない
 			if (
-				( linelen - 2 == col && 
-				( data[ col + 1 ] == WCODE::CR && data[ col + 2 ] == WCODE::LF )) ||
-				( linelen - 1 == col && 
-				( WCODE::IsLineDelimiter(data[ col + 1 ]) ))
+				(linelen - 2 == col && 
+				(data[ col + 1 ] == WCODE::CR && data[ col + 2 ] == WCODE::LF)) ||
+				(linelen - 1 == col && 
+				(WCODE::IsLineDelimiter(data[ col + 1 ])))
 			) {
 				m_state = STATE_CONTINUE;
 				break;
@@ -255,13 +255,13 @@ int COutlinePython::ScanNormal( const wchar_t* data, int linelen, int start_offs
 	@date 2007.03.23 genta 文字列の継続行の処理を追加
 
 */
-int COutlinePython::ScanString( const wchar_t* data, int linelen, int start_offset )
+int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
 {
-	assert( m_state == STATE_STRING );
+	assert(m_state == STATE_STRING);
 
 	int quote_char = m_quote_char;
 	for (int col = start_offset; col < linelen; ++col) {
-		int nCharChars = CNativeW::GetSizeOfChar( data, linelen, col );
+		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
 			continue;
@@ -336,14 +336,14 @@ int COutlinePython::ScanString( const wchar_t* data, int linelen, int start_offs
 	@param[in] start_offset 調査開始位置
 
 */
-void COutlinePython::DoScanLine( const wchar_t* data, int linelen, int start_offset )
+void COutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offset)
 {
 	int col = start_offset;
 	while (col < linelen) {
 		if (STATE_NORMAL == m_state || STATE_CONTINUE == m_state) {
-			col = ScanNormal( data, linelen, col );
+			col = ScanNormal(data, linelen, col);
 		}else if (STATE_STRING == m_state) {
-			col = ScanString( data, linelen, col );
+			col = ScanString(data, linelen, col);
 		}else {
 			//	ありえないエラー
 			return;
@@ -356,8 +356,8 @@ void COutlinePython::DoScanLine( const wchar_t* data, int linelen, int start_off
 
 	class, def で始まる行から名前を抜き出す．
 	
-	class CLASS_NAME( superclass ):
-	def FUNCTION_NAME( parameters ):
+	class CLASS_NAME(superclass):
+	def FUNCTION_NAME(parameters):
 
 	文字列とコメントを除外する必要がある．
 
@@ -379,7 +379,7 @@ void COutlinePython::DoScanLine( const wchar_t* data, int linelen, int start_off
 
 	@date 2007.02.08 genta 新規作成
 */
-void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
+void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 {
 	CLogicInt	nLineLen;
 	CLogicInt	nLineCount;
@@ -408,7 +408,7 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 				if (pLine[col] == L' ') {
 					++depth;
 				}else if (pLine[col] == L'\t') {
-					depth = ( depth + 8 ) & ~7;
+					depth = (depth + 8) & ~7;
 				}else {
 					break;
 				}
@@ -422,16 +422,16 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 			}
 			
 			int nItemFuncId = 0;	// topic type
-			if (nLineLen - col > CLogicInt(3 + 1) && wcsncmp_literal( pLine + col, L"def" ) == 0) {
+			if (nLineLen - col > CLogicInt(3 + 1) && wcsncmp_literal(pLine + col, L"def") == 0) {
 				//	"def"
 				nItemFuncId = 1;
-				col += CLogicInt(3); // strlen( def )
-			}else if (nLineLen - col > CLogicInt(5 + 1) && wcsncmp_literal( pLine + col, L"class" ) == 0) {
+				col += CLogicInt(3); // strlen(def)
+			}else if (nLineLen - col > CLogicInt(5 + 1) && wcsncmp_literal(pLine + col, L"class") == 0) {
 				// class
 				nItemFuncId = 4;
-				col += CLogicInt(5); // strlen( class )
+				col += CLogicInt(5); // strlen(class)
 			}else {
-				python_analyze_state.DoScanLine( pLine, nLineLen, col );
+				python_analyze_state.DoScanLine(pLine, nLineLen, col);
 				continue;
 			}
 
@@ -442,7 +442,7 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 			//	複雑になるので対応しない．
 			int c = pLine[col];
 			if (c != L' ' && c != L'\t') {
-				python_analyze_state.DoScanLine( pLine, nLineLen, col );
+				python_analyze_state.DoScanLine(pLine, nLineLen, col);
 				continue;
 			}
 
@@ -466,12 +466,12 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 			//	そんなレアなケースは考慮しない
 			
 			//	skip whitespace
-			while (col < nLineLen && C_IsSpace( pLine[col] ))
+			while (col < nLineLen && C_IsSpace(pLine[col]))
 				++col;
 
 			int w_end;
 			for (w_end = col; w_end < nLineLen
-					&& Python_IsWordChar( pLine[w_end] ); ++w_end)
+					&& Python_IsWordChar(pLine[w_end]); ++w_end)
 				;
 			
 			//	2007.02.08 genta 手抜きコメント
@@ -487,19 +487,19 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 			int len = w_end - col;
 			
 			if (len > 0) {
-				if (len > _countof( szWord ) - 1) {
-					len = _countof( szWord ) - 1;
+				if (len > _countof(szWord) - 1) {
+					len = _countof(szWord) - 1;
 				}
-				wcsncpy( szWord, pLine + col, len );
+				wcsncpy(szWord, pLine + col, len);
 				szWord[ len ] = L'\0';
 			}else {
 				wcscpy_s(szWord, LSW(STR_OUTLINE_PYTHON_UNDEFINED));
 				len = 8;
 			}
 			if (nItemFuncId == 4) {
-				if (_countof( szWord ) - 8  < len) {
+				if (_countof(szWord) - 8  < len) {
 					//	後ろを削って入れる
-					len = _countof( szWord ) - 8;
+					len = _countof(szWord) - 8;
 				}
 				// class
 				wcscpy(szWord + len, LSW(STR_OUTLINE_PYTHON_CLASS));
@@ -525,7 +525,7 @@ void CDocOutline::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 			);
 			col = CLogicInt(w_end); // クラス・関数定義の続きはここから
 		}
-		python_analyze_state.DoScanLine( pLine, nLineLen, col );
+		python_analyze_state.DoScanLine(pLine, nLineLen, col);
 	}
 }
 

@@ -36,10 +36,10 @@ public:
 	CRecentCurDir();
 
 	// オーバーライド
-	int				CompareItem( const CCurDirString* p1, LPCTSTR p2 ) const;
-	void			CopyItem( CCurDirString* dst, LPCTSTR src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( LPCTSTR* dst, const CCurDirString* src ) const;
-	bool			TextToDataType( CCurDirString* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const CCurDirString* p1, LPCTSTR p2) const;
+	void			CopyItem(CCurDirString* dst, LPCTSTR src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CCurDirString* src) const;
+	bool			TextToDataType(CCurDirString* dst, LPCTSTR pszText) const;
 };
 

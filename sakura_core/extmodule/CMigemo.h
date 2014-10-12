@@ -56,7 +56,7 @@ class CMigemo :
 	public CDllImp
 {
 	friend class TSingleton<CMigemo>;
-	CMigemo(){}
+	CMigemo() {}
 
 public:
 	virtual ~CMigemo();

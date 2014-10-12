@@ -199,7 +199,7 @@ namespace ApiWrap {
 	#endif
 
 	// Jan. 29, 2002 genta
-	// Win95/NT‚ª”[“¾‚·‚ésizeof( MENUITEMINFO )
+	// Win95/NT‚ª”[“¾‚·‚ésizeof(MENUITEMINFO)
 	// ‚±‚êˆÈŠO‚Ì’l‚ğ—^‚¦‚é‚ÆŒÃ‚¢OS‚Å‚¿‚á‚ñ‚Æ“®‚¢‚Ä‚­‚ê‚È‚¢D
 	#if defined(_WIN64) || defined(_UNICODE)
 		static const int SIZEOF_MENUITEMINFO = sizeof(MENUITEMINFO);

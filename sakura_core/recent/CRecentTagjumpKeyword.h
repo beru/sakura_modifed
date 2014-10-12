@@ -35,10 +35,10 @@ public:
 	CRecentTagjumpKeyword();
 
 	// オーバーライド
-	int				CompareItem( const CTagjumpKeywordString* p1, LPCWSTR p2 ) const;
-	void			CopyItem( CTagjumpKeywordString* dst, LPCWSTR src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( LPCWSTR* dst, const CTagjumpKeywordString* src ) const;
-	bool			TextToDataType( CTagjumpKeywordString* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const CTagjumpKeywordString* p1, LPCWSTR p2) const;
+	void			CopyItem(CTagjumpKeywordString* dst, LPCWSTR src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(LPCWSTR* dst, const CTagjumpKeywordString* src) const;
+	bool			TextToDataType(CTagjumpKeywordString* dst, LPCTSTR pszText) const;
 };
 

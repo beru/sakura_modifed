@@ -13,7 +13,7 @@ EConvertResult CIoBridge::FileToImpl(
 )
 {
 	// ”CˆÓ‚Ì•¶ŽšƒR[ƒh‚©‚çUnicode‚Ö•ÏŠ·‚·‚é
-	EConvertResult ret = pCode->CodeToUnicode(cSrc,pDst);
+	EConvertResult ret = pCode->CodeToUnicode(cSrc, pDst);
 
 	// Œ‹‰Ê
 	return ret;

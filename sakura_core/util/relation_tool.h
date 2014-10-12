@@ -38,8 +38,8 @@ public:
 	virtual ~CSubject();
 
 	// 公開インターフェース
-	int GetListenerCount() const{ return (int)m_vListenersRef.size(); }
-	CListener* GetListener(int nIndex) const{ return m_vListenersRef[nIndex]; }
+	int GetListenerCount() const { return (int)m_vListenersRef.size(); }
+	CListener* GetListener(int nIndex) const { return m_vListenersRef[nIndex]; }
 
 public:
 	// 管理用
@@ -58,7 +58,7 @@ public:
 
 	// 公開インターフェース
 	CSubject* Listen(CSubject* pcSubject); //!< 直前にウォッチしていたサブジェクトを返す
-	CSubject* GetListeningSubject() const{ return m_pcSubjectRef; }
+	CSubject* GetListeningSubject() const { return m_pcSubjectRef; }
 
 private:
 	CSubject* m_pcSubjectRef;

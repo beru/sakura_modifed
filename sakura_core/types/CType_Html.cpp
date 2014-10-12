@@ -13,11 +13,11 @@
 //2012.01.03 シングルクォートの色分けをする
 void CType_Html::InitTypeConfigImp(STypeConfig* pType)
 {
-	_tcscpy( pType->m_szTypeName, _T("HTML") );
-	_tcscpy( pType->m_szTypeExts, _T("html,htm,shtml,plg") );
+	_tcscpy(pType->m_szTypeName, _T("HTML"));
+	_tcscpy(pType->m_szTypeExts, _T("html,htm,shtml,plg"));
 
 	//設定
-	pType->m_cBlockComments[0].SetBlockCommentRule( L"<!--", L"-->" );	/* ブロックコメントデリミタ */
+	pType->m_cBlockComments[0].SetBlockCommentRule(L"<!--", L"-->");	/* ブロックコメントデリミタ */
 	pType->m_nStringType = STRING_LITERAL_HTML;							/* 文字列区切り記号エスケープ方法 */
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 	pType->m_nKeyWordSetIdx[0] = 1;										/* キーワードセット */
@@ -78,7 +78,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 			pLine = &pLineBuf[i];
 			// 2004.04.20 Moca コメントを処理する
 			if (bCommentTag) {
-				if (i < nLineLen - 3 && 0 == wmemcmp( L"-->", pLine, 3 )) {
+				if (i < nLineLen - 3 && 0 == wmemcmp(L"-->", pLine, 3)) {
 					bCommentTag = false;
 					i += 2;
 					pLine += 2;
@@ -98,9 +98,9 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 			for (j=0;i+j<nLineLen && j<_countof(szTitle)-1;) {
 				// タグ名を切り出す
 				// スペース、タブ、「_:-.英数」以外の半角文字、１文字目の「-.数字」は認めない。
-				if ( (pLine[j]==L' ' || pLine[j]==L'\t') ||
+				if ((pLine[j]==L' ' || pLine[j]==L'\t') ||
 					(pLine[j]<0x80 && !wcschr(L"_:-.",pLine[j]) && !isalnum(pLine[j])) ||
-					(j==0 &&( (pLine[j]>=L'0' && pLine[j]<=L'9') || pLine[j]==L'-' || pLine[j]==L'.' ))
+					(j==0 &&((pLine[j]>=L'0' && pLine[j]<=L'9') || pLine[j]==L'-' || pLine[j]==L'.'))
 				) {
 					break;
 				}
@@ -110,7 +110,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 			}
 			if (j==0) {
 				// 2004.04.20 Moca From Here コメントを処理する
-				if (i < nLineLen - 3 && 0 == wmemcmp( L"!--", pLine, 3 )) {
+				if (i < nLineLen - 3 && 0 == wmemcmp(L"!--", pLine, 3)) {
 					bCommentTag = true;
 					i += 3;
 					pLine += 3;
@@ -124,11 +124,11 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				比較の回数が多いため、小文字に変換しておいてstrcmpを使う。
 			*/
 			wcscpy_s(szTag, szTitle);
-			_wcslwr( szTag );
+			_wcslwr(szTag);
 			
 			nLabelType = LT_DEFAULT;
 			// 物理要素（見た目を変えるためのタグ）は構造解析しない。
-			if ( !wcscmp(szTag,L"b") || !wcscmp(szTag,L"big") || !wcscmp(szTag,L"blink")
+			if (!wcscmp(szTag,L"b") || !wcscmp(szTag,L"big") || !wcscmp(szTag,L"blink")
 			 || !wcscmp(szTag,L"font") || !wcscmp(szTag,L"i") || !wcscmp(szTag,L"marquee")
 			 || !wcscmp(szTag,L"nobr") || !wcscmp(szTag,L"s") || !wcscmp(szTag,L"small")
 			 || !wcscmp(szTag,L"strike") || !wcscmp(szTag,L"tt") || !wcscmp(szTag,L"u")
@@ -137,7 +137,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				nLabelType = LT_INLINE;
 			}
 			// インラインテキスト要素（テキストを修飾するタグ）は構造解析しない?
-//			if ( !wcscmp(szTag,L"abbr") || !wcscmp(szTag,L"acronym") || !wcscmp(szTag,L"dfn")
+//			if (!wcscmp(szTag,L"abbr") || !wcscmp(szTag,L"acronym") || !wcscmp(szTag,L"dfn")
 //			 || !wcscmp(szTag,L"em") || !wcscmp(szTag,L"strong") || !wcscmp(szTag,L"span")
 //			 || !wcscmp(szTag,L"code") || !wcscmp(szTag,L"samp") || !wcscmp(szTag,L"kbd")
 //			 || !wcscmp(szTag,L"var") || !wcscmp(szTag,L"cite") || !wcscmp(szTag,L"q")
@@ -145,7 +145,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 //				nLabelType = LT_INLINE;
 //			}
 			// ルビ要素（XHTML1.1）は構造解析しない。
-			if ( !wcscmp(szTag,L"rbc") || !wcscmp(szTag,L"rtc") || !wcscmp(szTag,L"ruby")
+			if (!wcscmp(szTag,L"rbc") || !wcscmp(szTag,L"rtc") || !wcscmp(szTag,L"ruby")
 			 || !wcscmp(szTag,L"rb") || !wcscmp(szTag,L"rt") || !wcscmp(szTag,L"rp")
 			) {
 				nLabelType = LT_INLINE;
@@ -237,7 +237,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							}
 						}
 						szTitle[k] = L'\0';
-						pcFuncInfoArr->AppendData( nLineCount+CLogicInt(1), ptPos.GetY2()+CLayoutInt(1), szTitle, 0, nDepth++ );
+						pcFuncInfoArr->AppendData(nLineCount+CLogicInt(1), ptPos.GetY2()+CLayoutInt(1), szTitle, 0, nDepth++);
 					}else {
 						for (;i+j<nLineLen && j<_countof(szTitle)-1;j++) {
 							if (pLine[j]==L'>') {

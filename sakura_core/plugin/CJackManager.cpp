@@ -59,15 +59,15 @@ CJackManager::CJackManager()
 
 	m_pShareData = &GetDllShareData();
 
-	m_Jacks.reserve( PP_BUILTIN_JACK_COUNT );
+	m_Jacks.reserve(PP_BUILTIN_JACK_COUNT);
 	for (int i=0; i<PP_BUILTIN_JACK_COUNT; i++) {
-		assert( i == jackNames[i].id );
+		assert(i == jackNames[i].id);
 
 		JackDef jack;
 		jack.ppId = jackNames[i].id;
 		jack.szName = jackNames[i].name;
 
-		m_Jacks.push_back( jack );
+		m_Jacks.push_back(jack);
 	}
 	
 }
@@ -79,9 +79,9 @@ std::vector<JackDef> CJackManager::GetJackDef() const
 }
 
 // プラグをジャックに関連付ける
-ERegisterPlugResult CJackManager::RegisterPlug( wstring pszJack, CPlug* plug )
+ERegisterPlugResult CJackManager::RegisterPlug(wstring pszJack, CPlug* plug)
 {
-	EJack ppId = GetJackFromName( pszJack );
+	EJack ppId = GetJackFromName(pszJack);
 	if (ppId == PP_NONE) {
 		return PPMGR_INVALID_NAME;
 	}
@@ -90,11 +90,11 @@ ERegisterPlugResult CJackManager::RegisterPlug( wstring pszJack, CPlug* plug )
 	CPlug::Array& plugs = m_Jacks[ ppId ].plugs;
 	int plugid = plug->GetFunctionCode();
 	if (plugs.empty()  ||  (*(plugs.end() - 1))->GetFunctionCode() < plugid) {
-		plugs.push_back( plug );
+		plugs.push_back(plug);
 	}else {
 		for (unsigned int index=0; index<plugs.size(); index++) {
 			if (plugid < plugs[index]->GetFunctionCode()) {
-				plugs.insert( plugs.begin() + index, plug );
+				plugs.insert(plugs.begin() + index, plug);
 				break;
 			}
 		}
@@ -103,20 +103,20 @@ ERegisterPlugResult CJackManager::RegisterPlug( wstring pszJack, CPlug* plug )
 	switch (ppId) {
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
-			int nMethod = CPlug::GetOutlineType( plug->GetFunctionCode() );	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
-			CPropTypesScreen::AddOutlineMethod( nMethod, plug->m_sLabel.c_str() );
+			int nMethod = CPlug::GetOutlineType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
+			CPropTypesScreen::AddOutlineMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
-			int nMethod = CPlug::GetSmartIndentType( plug->GetFunctionCode() );	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
-			CPropTypesScreen::AddSIndentMethod( nMethod, plug->m_sLabel.c_str() );
+			int nMethod = CPlug::GetSmartIndentType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
+			CPropTypesScreen::AddSIndentMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_COMPLEMENT:
 		{
-			int nMethod = CPlug::GetPluginFunctionCode( plug->m_cPlugin.m_id, 0 );
-			CPropTypesSupport::AddHokanMethod( nMethod, plug->m_sLabel.c_str() );
+			int nMethod = CPlug::GetPluginFunctionCode(plug->m_cPlugin.m_id, 0);
+			CPropTypesSupport::AddHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	}
@@ -124,34 +124,34 @@ ERegisterPlugResult CJackManager::RegisterPlug( wstring pszJack, CPlug* plug )
 }
 
 // プラグの関連付けを解除する
-bool CJackManager::UnRegisterPlug( wstring pszJack, CPlug* plug )
+bool CJackManager::UnRegisterPlug(wstring pszJack, CPlug* plug)
 {
-	EJack ppId = GetJackFromName( pszJack );
+	EJack ppId = GetJackFromName(pszJack);
 
 	switch (ppId) {
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
-			int nMethod = CPlug::GetOutlineType( plug->GetFunctionCode() );
-			CPropTypesScreen::RemoveOutlineMethod( nMethod, plug->m_sLabel.c_str() );
+			int nMethod = CPlug::GetOutlineType(plug->GetFunctionCode());
+			CPropTypesScreen::RemoveOutlineMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
-			int nMethod = CPlug::GetSmartIndentType( plug->GetFunctionCode() );
-			CPropTypesScreen::RemoveSIndentMethod( nMethod, plug->m_sLabel.c_str() );
+			int nMethod = CPlug::GetSmartIndentType(plug->GetFunctionCode());
+			CPropTypesScreen::RemoveSIndentMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_COMPLEMENT:
 		{
-			int nMethod = CPlug::GetPluginFunctionCode( plug->m_cPlugin.m_id, 0 );
-			CPropTypesSupport::RemoveHokanMethod( nMethod, plug->m_sLabel.c_str() );
+			int nMethod = CPlug::GetPluginFunctionCode(plug->m_cPlugin.m_id, 0);
+			CPropTypesSupport::RemoveHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	}
 
 	for (unsigned int index=0; index<m_Jacks[ ppId ].plugs.size(); index++) {
 		if (m_Jacks[ ppId ].plugs[index] == plug) {
-			m_Jacks[ ppId ].plugs.erase( m_Jacks[ ppId ].plugs.begin() + index );
+			m_Jacks[ ppId ].plugs.erase(m_Jacks[ ppId ].plugs.begin() + index);
 			break;
 		}
 	}
@@ -160,12 +160,12 @@ bool CJackManager::UnRegisterPlug( wstring pszJack, CPlug* plug )
 }
 
 // ジャック名をジャック番号に変換する
-EJack CJackManager::GetJackFromName( wstring sName )
+EJack CJackManager::GetJackFromName(wstring sName)
 {
 	const WCHAR* szName = sName.c_str();
 
 	for (size_t i=0; i < m_Jacks.size(); i++) {
-		if (wcscmp( m_Jacks[i].szName, szName ) == 0) {
+		if (wcscmp(m_Jacks[i].szName, szName) == 0) {
 			return m_Jacks[i].ppId;
 		}
 	}
@@ -183,30 +183,30 @@ bool CJackManager::GetUsablePlug(
 {
 	for (auto it = m_Jacks[jack].plugs.begin(); it != m_Jacks[jack].plugs.end(); it++) {
 		if (plugId == 0 || plugId == (*it)->GetFunctionCode()) {
-			plugs->push_back( *it );
+			plugs->push_back(*it);
 		}
 	}
 	return true;
 }
 
 // プラグインコマンドの機能番号を返す
-EFunctionCode CJackManager::GetCommandCode( int index ) const
+EFunctionCode CJackManager::GetCommandCode(int index) const
 {
 	CPlug::Array commands = m_Jacks[ PP_COMMAND ].plugs;
 
 	if ((unsigned int)index < commands.size()) {
-		return ( commands[index] )->GetFunctionCode();
+		return (commands[index])->GetFunctionCode();
 	}else {
 		return F_INVALID;
 	}
 }
 
 // プラグインコマンドの名前を返す
-int CJackManager::GetCommandName( int funccode, WCHAR* buf, int size ) const
+int CJackManager::GetCommandName(int funccode, WCHAR* buf, int size) const
 {
 	for (auto it = m_Jacks[ PP_COMMAND ].plugs.begin(); it != m_Jacks[ PP_COMMAND ].plugs.end(); it++) {
 		if (((CPlug*)(*it))->GetFunctionCode() == funccode) {
-			wcsncpy( buf, ((CPlug*)(*it))->m_sLabel.c_str(), size );
+			wcsncpy(buf, ((CPlug*)(*it))->m_sLabel.c_str(), size);
 			buf[ size-1 ] = L'\0';
 			return 1;
 		}
@@ -221,9 +221,9 @@ int CJackManager::GetCommandCount() const
 }
 
 // IDに合致するコマンドプラグを返す
-CPlug* CJackManager::GetCommandById( int id ) const
+CPlug* CJackManager::GetCommandById(int id) const
 {
-	const CPlug::Array& plugs = GetPlugs( PP_COMMAND );
+	const CPlug::Array& plugs = GetPlugs(PP_COMMAND);
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		if ((*it)->GetFunctionCode() == id) {
 			return (*it);
@@ -234,7 +234,7 @@ CPlug* CJackManager::GetCommandById( int id ) const
 }
 
 // プラグを返す
-const CPlug::Array& CJackManager::GetPlugs( EJack jack ) const
+const CPlug::Array& CJackManager::GetPlugs(EJack jack) const
 {
 	return m_Jacks[ jack ].plugs;	
 }

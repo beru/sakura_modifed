@@ -59,7 +59,7 @@ public:
 	{
 	}
 
-	virtual void ReadyMethods( CEditView* pView, int flags );
+	virtual void ReadyMethods(CEditView* pView, int flags);
 
 protected:
 	// ëÄçÏ

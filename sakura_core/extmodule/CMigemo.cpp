@@ -74,7 +74,7 @@ bool CMigemo::InitDllImp()
 
 	// ver 1.3 à»ç~ÇÕ stdcall
 	DWORD dwVersionMS, dwVersionLS;
-	GetAppVersionInfo( GetInstance(), VS_VERSION_INFO, &dwVersionMS, &dwVersionLS );
+	GetAppVersionInfo(GetInstance(), VS_VERSION_INFO, &dwVersionMS, &dwVersionLS);
 	
 	DWORD dwver103 = (1 << 16) | 3;
 	if (dwver103 <= dwVersionMS) {
@@ -105,7 +105,7 @@ LPCTSTR CMigemo::GetDllNameImp(int nIndex)
 		szDll = GetDllShareData().m_Common.m_sHelper.m_szMigemoDll;
 
 		if (szDll[0] == _T('\0')) {
-			GetInidir( szDllName, _T("migemo.dll") );
+			GetInidir(szDllName, _T("migemo.dll"));
 			return fexist(szDllName) ? szDllName : _T("migemo.dll");
 		}else {
 			if (_IS_REL_PATH(szDll)) {
@@ -184,7 +184,7 @@ std::wstring CMigemo::migemo_query_w(const wchar_t* query)
 	return retVal;
 }
 
-void CMigemo::migemo_release( unsigned char* str)
+void CMigemo::migemo_release(unsigned char* str)
 {
 	if (!IsAvailable() || !m_migemo)
 		return;
@@ -451,7 +451,7 @@ int __cdecl pcre_int2char_utf8(unsigned int in, unsigned char* out)
 		if (out) {
 			out[0] = static_cast<unsigned char>((in & 0xf000) >> 12) | 0xe0;
 			out[1] = static_cast<unsigned char>((in & 0x0fc0) >> 6)  | 0x80;
-			out[2] = static_cast<unsigned char>( in & 0x003f) | 0x80;
+			out[2] = static_cast<unsigned char>(in & 0x003f) | 0x80;
 		}
 		len = 3;
 	}else {
@@ -459,7 +459,7 @@ int __cdecl pcre_int2char_utf8(unsigned int in, unsigned char* out)
 			out[0] = static_cast<unsigned char>((in & 0x001c0000) >> 18) | 0xf0;
 			out[1] = static_cast<unsigned char>((in & 0x0003f000) >> 12) | 0x80;
 			out[2] = static_cast<unsigned char>((in & 0x00000fc0) >> 6)  | 0x80;
-			out[3] = static_cast<unsigned char>( in & 0x0000003f) | 0x80;
+			out[3] = static_cast<unsigned char>(in & 0x0000003f) | 0x80;
 		}
 		len = 4;
 	}

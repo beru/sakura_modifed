@@ -235,9 +235,10 @@ EConvertResult CFileLoad::ReadLine(
 		return RESULT_FAILURE;
 	}
 #endif
-	// 行データバッファ (文字コード変換無しの生のデータ)
-	/*static */CMemory cLineBuffer;
-	cLineBuffer.SetRawData("",0);
+//	CMemory m_cLineBuffer;
+//	m_cLineBuffer.SetRawData("",0);
+	m_cLineBuffer.AllocBuffer(4096);
+	m_cLineBuffer._SetRawLength(0);
 
 	// 1行取り出し ReadBuf -> m_memLine
 	// Oct. 19, 2002 genta while条件を整理
@@ -252,24 +253,24 @@ EConvertResult CFileLoad::ReadLine(
 			pcEol,
 			&nEolLen
 		);
-		if (pLine==NULL) break;
+		if (pLine == NULL) break;
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
 		if (m_nReadDataLen <= m_nReadBufOffSet && FLMODE_READY == m_eMode) {// From Here Jun. 13, 2003 Moca
-			cLineBuffer.AppendRawData( pLine, nBufLineLen );
+			m_cLineBuffer.AppendRawData( pLine, nBufLineLen );
 			m_nReadBufOffSet -= nEolLen;
 			// バッファロード   File -> ReadBuf
 			Buffering();
 		}else {
-			cLineBuffer.AppendRawData( pLine, nBufLineLen );
+			m_cLineBuffer.AppendRawData( pLine, nBufLineLen );
 			break;
 		}
 	}
-	m_nReadLength += ( nBufLineLen = cLineBuffer.GetRawLength() );
+	m_nReadLength += ( nBufLineLen = m_cLineBuffer.GetRawLength() );
 
 	// 文字コード変換 cLineBuffer -> pUnicodeBuffer
-	EConvertResult eConvertResult = CIoBridge::FileToImpl(cLineBuffer,pUnicodeBuffer,m_pCodeBase,m_nFlag);
-	if (eConvertResult==RESULT_LOSESOME) {
+	EConvertResult eConvertResult = CIoBridge::FileToImpl(m_cLineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
+	if (eConvertResult == RESULT_LOSESOME) {
 		eRet = RESULT_LOSESOME;
 	}
 
@@ -353,7 +354,7 @@ void CFileLoad::ReadBufEmpty( void )
 	 現在の進行率を取得する
 	 @return 0% - 100%  若干誤差が出る
 */
-int CFileLoad::GetPercent( void ){
+int CFileLoad::GetPercent( void ) {
 	int nRet;
 	if (0 == m_nFileDataLen || m_nReadLength > m_nFileDataLen) {
 		nRet = 100;
@@ -375,7 +376,7 @@ const char* CFileLoad::GetNextLineCharCode(
 	int*		pnBgn,		//!< [i/o]	検索文字列のバイト単位のオフセット位置
 	CEol*		pcEol,		//!< [i/o]	EOL
 	int*		pnEolLen	//!< [out]	EOLのバイト数 (Unicodeで困らないように)
-){
+) {
 	int nbgn = *pnBgn;
 	int i;
 

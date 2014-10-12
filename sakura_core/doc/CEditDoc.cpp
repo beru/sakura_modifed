@@ -102,10 +102,10 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	m_hBackImg(NULL)
 {
 	MY_RUNNINGTIMER( cRunningTimer, "CEditDoc::CEditDoc" );
-
+	
 	// レイアウト管理情報の初期化
 	m_cLayoutMgr.Create( this, &m_cDocLineMgr );
-
+	
 	// レイアウト情報の変更
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する

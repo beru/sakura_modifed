@@ -47,37 +47,37 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL	OnInitDialog( HWND, WPARAM wParam, LPARAM lParam );
-	BOOL	OnBnClicked( int );
-	BOOL	OnNotify( WPARAM wParam, LPARAM lParam );
-	BOOL	OnActivate( WPARAM wParam, LPARAM lParam );
-	LPVOID	GetHelpIdTable( void );
-	INT_PTR DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam );	// 標準以外のメッセージを捕捉する
-	BOOL	OnSize( WPARAM wParam, LPARAM lParam );
-	BOOL	OnMove( WPARAM wParam, LPARAM lParam );
-	BOOL	OnMinMaxInfo( LPARAM lParam );
+	BOOL	OnInitDialog(HWND, WPARAM wParam, LPARAM lParam);
+	BOOL	OnBnClicked(int);
+	BOOL	OnNotify(WPARAM wParam, LPARAM lParam);
+	BOOL	OnActivate(WPARAM wParam, LPARAM lParam);
+	LPVOID	GetHelpIdTable(void);
+	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 標準以外のメッセージを捕捉する
+	BOOL	OnSize(WPARAM wParam, LPARAM lParam);
+	BOOL	OnMove(WPARAM wParam, LPARAM lParam);
+	BOOL	OnMinMaxInfo(LPARAM lParam);
 
-	void	SetData( void );	// ダイアログデータの設定
-	int		GetData( void );	// ダイアログデータの取得
+	void	SetData(void);	// ダイアログデータの設定
+	int		GetData(void);	// ダイアログデータの取得
 
-	void	TabSelectChange( bool );
-	bool	RefreshList( void );
-	void	SetDataOne( int nIndex, int nLvItemIndex );	// ダイアログデータの設定
-	bool	RefreshListOne( int nIndex );
-	//void	ChangeSlider( int nIndex );
+	void	TabSelectChange(bool);
+	bool	RefreshList(void);
+	void	SetDataOne(int nIndex, int nLvItemIndex);	// ダイアログデータの設定
+	bool	RefreshListOne(int nIndex);
+	//void	ChangeSlider(int nIndex);
 	void	UpdateUIState();
 	
-	void    GetFavorite( int nIndex );
+	void    GetFavorite(int nIndex);
 	int     DeleteSelected();
 	void	AddItem();
 	void	EditItem();
-	void	RightMenu( POINT& );
+	void	RightMenu(POINT&);
 
 private:
 	CRecentFile			m_cRecentFile;

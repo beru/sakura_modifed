@@ -98,18 +98,18 @@ public:
 	Me& operator %= (const Me& rhs)	{ m_value %= rhs.m_value; return *this; }
 
 	// Zp‰‰Zq‚Q (‰ÁZAŒ¸Z‚Í“¯ƒNƒ‰ƒX“¯m‚Å‚µ‚©‹–‚³‚È‚¢)
-	Me operator + (const Me& rhs)	const{ Me ret = *this; return ret += rhs; }
-	Me operator - (const Me& rhs)	const{ Me ret = *this; return ret -= rhs; }
-	Me operator * (int n)			const{ Me ret = *this; return ret *= n; }
-	Me operator / (int n)			const{ Me ret = *this; return ret /= n; }
-	Me operator % (int n)			const{ Me ret = *this; return ret %= n; }
-	Me operator % (const Me& rhs)	const{ Me ret = *this; return ret %= rhs; }
+	Me operator + (const Me& rhs)	const { Me ret = *this; return ret += rhs; }
+	Me operator - (const Me& rhs)	const { Me ret = *this; return ret -= rhs; }
+	Me operator * (int n)			const { Me ret = *this; return ret *= n; }
+	Me operator / (int n)			const { Me ret = *this; return ret /= n; }
+	Me operator % (int n)			const { Me ret = *this; return ret %= n; }
+	Me operator % (const Me& rhs)	const { Me ret = *this; return ret %= rhs; }
 
 	// Zp‰‰Zq‚R
 	int operator ++ ()   { return ++m_value; }	//++c;
-	int operator ++ (int){ return m_value++; }	//c++;
+	int operator ++ (int) { return m_value++; }	//c++;
 	int operator -- ()   { return --m_value; }	//--c;
-	int operator -- (int){ return m_value--; }	//c--;
+	int operator -- (int) { return m_value--; }	//c--;
 
 	// Zp‰‰Zq‚S
 	Me operator - () const { return Me(-m_value); }

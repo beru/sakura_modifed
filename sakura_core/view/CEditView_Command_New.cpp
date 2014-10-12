@@ -77,7 +77,7 @@ void CEditView::InsertData_CEditView(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER( cRunningTimer, "CEditView::InsertData_CEditView" );
+	MY_RUNNINGTIMER(cRunningTimer, "CEditView::InsertData_CEditView");
 #endif
 
 	//2007.10.18 kobake COpe処理をここにまとめる
@@ -99,7 +99,7 @@ void CEditView::InsertData_CEditView(
 
 	// テキストが選択されているか
 	if (GetSelectionInfo().IsTextSelected()) {
-		DeleteData( bRedraw );
+		DeleteData(bRedraw);
 		ptInsertPos = GetCaret().GetCaretLayoutPos();
 	}
 
@@ -108,18 +108,18 @@ void CEditView::InsertData_CEditView(
 	bool			bHintNext = false;	// 更新が次行からになる可能性があることを示唆する
 	CLogicInt		nLineLen;
 	const CLayout*	pcLayout;
-	const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( ptInsertPos.GetY2(), &nLineLen, &pcLayout );
+	const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptInsertPos.GetY2(), &nLineLen, &pcLayout);
 	bool			bLineModifiedChange = (pLine)? !CModifyVisitor().IsLineModified(pcLayout->GetDocLineRef(),
 		GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()): true;
 
 	// 禁則の有無
 	// 禁則がある場合は1行前から再描画を行う	@@@ 2002.04.19 MIK
 	bool bKinsoku = 0
-			|| ( m_pTypeData->m_bWordWrap
+			|| (m_pTypeData->m_bWordWrap
 			|| m_pTypeData->m_bKinsokuHead	//@@@ 2002.04.19 MIK
 			|| m_pTypeData->m_bKinsokuTail	//@@@ 2002.04.19 MIK
 			|| m_pTypeData->m_bKinsokuRet	//@@@ 2002.04.19 MIK
-			|| m_pTypeData->m_bKinsokuKuto );	//@@@ 2002.04.19 MIK
+			|| m_pTypeData->m_bKinsokuKuto);	//@@@ 2002.04.19 MIK
 
 	CLayoutInt	nLineAllColLen;
 	CLogicInt	nIdxFrom = CLogicInt(0);
@@ -138,7 +138,7 @@ void CEditView::InsertData_CEditView(
 		// 更新が次行からになる可能性を調べる	// 2009.02.17 ryoji
 		// ※折り返し行末への文字入力や文字列貼り付けで現在行は更新されず次行以後が更新される場合もある
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		nIdxFrom = LineColumnToIndex2( pcLayout, ptInsertPos.GetX2(), &nLineAllColLen );
+		nIdxFrom = LineColumnToIndex2(pcLayout, ptInsertPos.GetX2(), &nLineAllColLen);
 
 		// 行終端より右に挿入しようとした
 		if (nLineAllColLen > 0) {
@@ -146,27 +146,27 @@ void CEditView::InsertData_CEditView(
 			// 行終端が何らかの改行コードか?
 			if (EOL_NONE != pcLayout->GetLayoutEol()) {
 				nIdxFrom = nLineLen - CLogicInt(1);
-				cMem.AllocStringBuffer( (Int)(ptInsertPos.GetX2() - nLineAllColLen + 1) + nDataLen );
+				cMem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen + 1) + nDataLen);
 				for (int i = 0; i < ptInsertPos.GetX2() - nLineAllColLen + 1; ++i) {
 					cMem += L' ';
 				}
-				cMem.AppendString( pData, nDataLen );
+				cMem.AppendString(pData, nDataLen);
 			}else {
 				nIdxFrom = nLineLen;
-				cMem.AllocStringBuffer( (Int)(ptInsertPos.GetX2() - nLineAllColLen) + nDataLen );
+				cMem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen) + nDataLen);
 				for (int i = 0; i < ptInsertPos.GetX2() - nLineAllColLen; ++i) {
 					cMem += L' ';
 				}
-				cMem.AppendString( pData, nDataLen );
+				cMem.AppendString(pData, nDataLen);
 				if (0 < nDataLen && WCODE::IsLineDelimiter(pData[nDataLen-1])) {
 					bHintNext = true;	// 更新が次行からになる可能性がある
 				}
 			}
-			StringToOpeLineData( cMem.GetStringPtr(), cMem.GetStringLength(), insData, opeSeq );
+			StringToOpeLineData(cMem.GetStringPtr(), cMem.GetStringLength(), insData, opeSeq);
 			cMem.Clear();
-			nColumnFrom = LineIndexToColumn( pcLayout, nIdxFrom );
+			nColumnFrom = LineIndexToColumn(pcLayout, nIdxFrom);
 		}else {
-			StringToOpeLineData( pData, nDataLen, insData, opeSeq );
+			StringToOpeLineData(pData, nDataLen, insData, opeSeq);
 		}
 	}else {
 		// 更新が前行からになる可能性を調べる	// 2009.02.17 ryoji
@@ -175,15 +175,15 @@ void CEditView::InsertData_CEditView(
 			bHintPrev = true;	// 更新が前行からになる可能性がある
 		}
 		if (0 < ptInsertPos.GetX2()) {
-			cMem.AllocStringBuffer( (Int)ptInsertPos.GetX2() + nDataLen );
+			cMem.AllocStringBuffer((Int)ptInsertPos.GetX2() + nDataLen);
 			for (CLayoutInt i = CLayoutInt(0); i < ptInsertPos.GetX2(); ++i) {
 				cMem += L' ';
 			}
-			cMem.AppendString( pData, nDataLen );
-			StringToOpeLineData( cMem.GetStringPtr(), cMem.GetStringLength(), insData, opeSeq );
+			cMem.AppendString(pData, nDataLen);
+			StringToOpeLineData(cMem.GetStringPtr(), cMem.GetStringLength(), insData, opeSeq);
 			cMem.Clear();
 		}else {
-			StringToOpeLineData( pData, nDataLen, insData, opeSeq );
+			StringToOpeLineData(pData, nDataLen, insData, opeSeq);
 		}
 		nColumnFrom = 0;
 	}
@@ -206,7 +206,7 @@ void CEditView::InsertData_CEditView(
 		arg.pcmemDeleted = NULL;
 		arg.pInsData = &insData;
 		arg.nDelSeq = opeSeq;
-		m_pcEditDoc->m_cLayoutMgr.ReplaceData_CLayoutMgr( &arg );
+		m_pcEditDoc->m_cLayoutMgr.ReplaceData_CLayoutMgr(&arg);
 		nInsLineNum = arg.nAddLineNum;
 		nModifyLayoutLinesOld = arg.nModLineTo - arg.nModLineFrom + 1;
 		*pptNewPos = arg.ptLayoutNew;
@@ -215,10 +215,10 @@ void CEditView::InsertData_CEditView(
 
 	// 指定された行のデータ内の位置に対応する桁の位置を調べる
 	CLogicInt nLineLen2;
-	const wchar_t* pLine2 = m_pcEditDoc->m_cLayoutMgr.GetLineStr( pptNewPos->GetY2(), &nLineLen2, &pcLayout );
+	const wchar_t* pLine2 = m_pcEditDoc->m_cLayoutMgr.GetLineStr(pptNewPos->GetY2(), &nLineLen2, &pcLayout);
 	if (pLine2) {
 		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
-		pptNewPos->x = pptNewPos->GetX2(); //LineIndexToColumn( pcLayout, pptNewPos->GetX2() );
+		pptNewPos->x = pptNewPos->GetX2(); //LineIndexToColumn(pcLayout, pptNewPos->GetX2());
 	}
 
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
@@ -226,7 +226,7 @@ void CEditView::InsertData_CEditView(
 		if (m_pTypeData->m_bKinsokuRet
 		 || m_pTypeData->m_bKinsokuKuto
 		) {	//@@@ 2002.04.16 MIK
-			if (m_pcEditDoc->m_cLayoutMgr.IsEndOfLine( *pptNewPos )) {	//@@@ 2002.04.18
+			if (m_pcEditDoc->m_cLayoutMgr.IsEndOfLine(*pptNewPos)) {	//@@@ 2002.04.18
 				pptNewPos->x = 0;
 				pptNewPos->y++;
 			}
@@ -244,7 +244,7 @@ void CEditView::InsertData_CEditView(
 
 	// 再描画
 	// 行番号表示に必要な幅を設定
-	if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane( bRedraw )) {
+	if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
 		// キャレットの表示・更新
 		GetCaret().ShowEditCaret();
 	}else {
@@ -258,7 +258,7 @@ void CEditView::InsertData_CEditView(
 			}
 			// 2011.12.26 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
 			{
-				const CLayout* pcLayoutLineFirst = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( ptInsertPos.GetY2() );
+				const CLayout* pcLayoutLineFirst = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(ptInsertPos.GetY2());
 				while (pcLayoutLineFirst && 0 != pcLayoutLineFirst->GetLogicOffset()) {
 					pcLayoutLineFirst = pcLayoutLineFirst->GetPrevLayout();
 					if (bHintPrev) {
@@ -307,14 +307,14 @@ void CEditView::InsertData_CEditView(
 				}
 			}
 			HDC hdc = this->GetDC();
-			OnPaint( hdc, &ps, FALSE );
-			this->ReleaseDC( hdc );
+			OnPaint(hdc, &ps, FALSE);
+			this->ReleaseDC(hdc);
 
 			// 行番号（変更行）表示は改行単位の行頭から更新する必要がある	// 2009.03.26 ryoji
 			if (bLineModifiedChange) {	// 無変更だった行が変更された
-				const CLayout* pcLayoutWk = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( nStartLine );
+				const CLayout* pcLayoutWk = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nStartLine);
 				if (pcLayoutWk && pcLayoutWk->GetLogicOffset()) {	// 折り返しレイアウト行か？
-					Call_OnPaint( PAINT_LINENUMBER, false );
+					Call_OnPaint(PAINT_LINENUMBER, false);
 				}
 			}
 		}
@@ -333,7 +333,7 @@ void CEditView::InsertData_CEditView(
 		pcOpe->m_nOrgSeq = nInsSeq;
 
 		// 操作の追加
-		m_cCommander.GetOpeBlk()->AppendOpe( pcOpe );
+		m_cCommander.GetOpeBlk()->AppendOpe(pcOpe);
 	}
 }
 
@@ -352,28 +352,28 @@ void CEditView::DeleteData2(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER( cRunningTimer, "CEditView::DeleteData(1)" );
+	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DeleteData(1)");
 #endif
 	CLogicInt nLineLen;
 	const CLayout* pcLayout;
-	const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( _ptCaretPos.GetY2(), &nLineLen, &pcLayout );
+	const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(_ptCaretPos.GetY2(), &nLineLen, &pcLayout);
 	if (!pLine) {
 		return;
 	}
-	CLogicInt nIdxFrom = LineColumnToIndex( pcLayout, _ptCaretPos.GetX2() );
+	CLogicInt nIdxFrom = LineColumnToIndex(pcLayout, _ptCaretPos.GetX2());
 
 	//2007.10.18 kobake COpeの生成をここにまとめる
 	CDeleteOpe*	pcOpe = NULL;
-	CLayoutInt columnFrom = LineIndexToColumn( pcLayout, nIdxFrom );
-	CLayoutInt columnTo = LineIndexToColumn( pcLayout, nIdxFrom + nDelLen );
+	CLayoutInt columnFrom = LineIndexToColumn(pcLayout, nIdxFrom);
+	CLayoutInt columnTo = LineIndexToColumn(pcLayout, nIdxFrom + nDelLen);
 	if (!m_bDoing_UndoRedo) {
 		pcOpe = new CDeleteOpe();
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
-			CLayoutPoint( columnFrom, _ptCaretPos.GetY2() ),
+			CLayoutPoint(columnFrom, _ptCaretPos.GetY2()),
 			&pcOpe->m_ptCaretPos_PHY_Before
 		);
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
-			CLayoutPoint( columnTo, _ptCaretPos.GetY2() ),
+			CLayoutPoint(columnTo, _ptCaretPos.GetY2()),
 			&pcOpe->m_ptCaretPos_PHY_To
 		);
 	}
@@ -391,11 +391,11 @@ void CEditView::DeleteData2(
 		arg.pcmemDeleted = pmemDeleted;
 		arg.pInsData = NULL;
 		arg.nDelSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNextSeq();
-		m_pcEditDoc->m_cLayoutMgr.ReplaceData_CLayoutMgr( &arg );
+		m_pcEditDoc->m_cLayoutMgr.ReplaceData_CLayoutMgr(&arg);
 	}
 
 	// 選択エリアの先頭へカーソルを移動
-	GetCaret().MoveCursor( _ptCaretPos, false );
+	GetCaret().MoveCursor(_ptCaretPos, false);
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
 
 	if (pcMem) {
@@ -405,7 +405,7 @@ void CEditView::DeleteData2(
 			bufSize += memDeleted[i].cmemLine.GetStringLength();
 		}
 		pcMem->SetString(L"");
-		pcMem->AllocStringBuffer( bufSize );
+		pcMem->AllocStringBuffer(bufSize);
 		for (int i = 0; i < size; i++) {
 			pcMem->AppendNativeData(memDeleted[i].cmemLine);
 		}
@@ -418,7 +418,7 @@ void CEditView::DeleteData2(
 			&pcOpe->m_ptCaretPos_PHY_After
 		);
 		// 操作の追加
-		m_cCommander.GetOpeBlk()->AppendOpe( pcOpe );
+		m_cCommander.GetOpeBlk()->AppendOpe(pcOpe);
 	}
 
 }
@@ -434,9 +434,9 @@ void CEditView::DeleteData(
 )
 {
 #ifdef _DEBUG
-	MY_RUNNINGTIMER( cRunningTimer, "CEditView::DeleteData(2)" );
+	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DeleteData(2)");
 #endif
-	CLogicInt		nLineLen;
+	CLogicInt	nLineLen;
 	CLayoutInt	nLineNum;
 	CLogicInt	nCurIdx;
 	CLogicInt	nIdxFrom;
@@ -450,7 +450,7 @@ void CEditView::DeleteData(
 	auto& selInfo = GetSelectionInfo();
 	// テキストの存在しないエリアの削除は、選択範囲のキャンセルとカーソル移動のみとする	// 2008.08.05 ryoji
 	if (selInfo.IsTextSelected()) {		// テキストが選択されているか
-		if (IsEmptyArea( selInfo.m_sSelect.GetFrom(), selInfo.m_sSelect.GetTo(), true, selInfo.IsBoxSelecting() )) {
+		if (IsEmptyArea(selInfo.m_sSelect.GetFrom(), selInfo.m_sSelect.GetTo(), true, selInfo.IsBoxSelecting())) {
 			// カーソルを選択範囲の左上に移動
 			GetCaret().MoveCursor(
 				CLayoutPoint(
@@ -459,11 +459,11 @@ void CEditView::DeleteData(
 				), bRedraw
 			);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
-			selInfo.DisableSelectArea( bRedraw );
+			selInfo.DisableSelectArea(bRedraw);
 			return;
 		}
 	}else {
-		if (IsEmptyArea( GetCaret().GetCaretLayoutPos() )) {
+		if (IsEmptyArea(GetCaret().GetCaretLayoutPos())) {
 			return;
 		}
 	}
@@ -472,7 +472,7 @@ void CEditView::DeleteData(
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
-		CWaitCursor cWaitCursor( this->GetHwnd() );  // 2002.02.05 hor
+		CWaitCursor cWaitCursor(this->GetHwnd());  // 2002.02.05 hor
 		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			// 操作の追加
 			m_cCommander.GetOpeBlk()->AppendOpe(
@@ -497,20 +497,20 @@ void CEditView::DeleteData(
 				selInfo.m_sSelect.GetTo()		// 範囲選択終了
 			);
 			// 現在の選択範囲を非選択状態に戻す
-			selInfo.DisableSelectArea( bRedraw );
+			selInfo.DisableSelectArea(bRedraw);
 
 			nIdxFrom = CLogicInt(0);
 			nIdxTo = CLogicInt(0);
 			for (nLineNum = rcSel.bottom; nLineNum >= rcSel.top - 1; nLineNum--) {
 				nDelPosNext = nIdxFrom;
 				nDelLenNext	= nIdxTo - nIdxFrom;
-				const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+				const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 				if (pLine) {
 					using namespace WCODE;
 
 					// 指定された桁に対応する行のデータ内の位置を調べる
-					nIdxFrom = LineColumnToIndex( pcLayout, rcSel.left  );
-					nIdxTo	 = LineColumnToIndex( pcLayout, rcSel.right );
+					nIdxFrom = LineColumnToIndex(pcLayout, rcSel.left);
+					nIdxTo	 = LineColumnToIndex(pcLayout, rcSel.right);
 
 					for (CLogicInt i = nIdxFrom; i <= nIdxTo; ++i) {
 						if (WCODE::IsLineDelimiter(pLine[i])) {
@@ -535,7 +535,7 @@ void CEditView::DeleteData(
 			SetDrawSwitch(true);	// 2002.01.25 hor
 
 			// 行番号表示に必要な幅を設定
-			if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane( true )) {
+			if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane(true)) {
 				// キャレットの表示・更新
 				GetCaret().ShowEditCaret();
 			}
@@ -550,13 +550,13 @@ void CEditView::DeleteData(
 			this->UpdateWindow();
 			
 			CLayoutPoint caretOld = CLayoutPoint(rcSel.left, rcSel.top);
-			m_pcEditDoc->m_cLayoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
-			if (rcSel.left <= pcLayout->CalcLayoutWidth( m_pcEditDoc->m_cLayoutMgr )) {
+			m_pcEditDoc->m_cLayoutMgr.GetLineStr(rcSel.top, &nLineLen, &pcLayout);
+			if (rcSel.left <= pcLayout->CalcLayoutWidth(m_pcEditDoc->m_cLayoutMgr)) {
 				// EOLより左なら文字の単位にそろえる
-				CLogicInt nIdxCaret = LineColumnToIndex( pcLayout, rcSel.left );
-				caretOld.SetX( LineIndexToColumn( pcLayout, nIdxCaret ) );
+				CLogicInt nIdxCaret = LineColumnToIndex(pcLayout, rcSel.left);
+				caretOld.SetX(LineIndexToColumn(pcLayout, nIdxCaret));
 			}
-			GetCaret().MoveCursor( caretOld, bRedraw );
+			GetCaret().MoveCursor(caretOld, bRedraw);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX();
 			if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 				CMoveCaretOpe*		pcOpe = new CMoveCaretOpe();
@@ -567,7 +567,7 @@ void CEditView::DeleteData(
 
 				pcOpe->m_ptCaretPos_PHY_After = GetCaret().GetCaretLogicPos();	// 操作後のキャレット位置
 				// 操作の追加
-				m_cCommander.GetOpeBlk()->AppendOpe( pcOpe );
+				m_cCommander.GetOpeBlk()->AppendOpe(pcOpe);
 			}
 		}else {
 			// データ置換 削除&挿入にも使える
@@ -581,17 +581,17 @@ void CEditView::DeleteData(
 		}
 	}else {
 		// 現在行のデータを取得
-		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout );
+		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
 		if (!pLine) {
 			goto end_of_func;
 //			return;
 		}
 		// 最後の行にカーソルがあるかどうか
-		bool bLastLine = ( GetCaret().GetCaretLayoutPos().GetY() == m_pcEditDoc->m_cLayoutMgr.GetLineCount() - 1 );
+		bool bLastLine = (GetCaret().GetCaretLayoutPos().GetY() == m_pcEditDoc->m_cLayoutMgr.GetLineCount() - 1);
 
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		nCurIdx = LineColumnToIndex( pcLayout, GetCaret().GetCaretLayoutPos().GetX2() );
-//		MYTRACE( _T("nLineLen=%d nCurIdx=%d \n"), nLineLen, nCurIdx);
+		nCurIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
+//		MYTRACE(_T("nLineLen=%d nCurIdx=%d \n"), nLineLen, nCurIdx);
 		if (nCurIdx == nLineLen && bLastLine) {	// 全テキストの最後
 			goto end_of_func;
 //			return;
@@ -605,9 +605,9 @@ void CEditView::DeleteData(
 			nNxtIdx = nCurIdx + pcLayout->GetLayoutEol().GetLen();
 			nNxtPos = GetCaret().GetCaretLayoutPos().GetX() + CLayoutInt((Int)pcLayout->GetLayoutEol().GetLen()); //※改行コードの文字数を文字幅と見なす
 		}else {
-			nNxtIdx = CLogicInt(CNativeW::GetCharNext( pLine, nLineLen, &pLine[nCurIdx] ) - pLine);
+			nNxtIdx = CLogicInt(CNativeW::GetCharNext(pLine, nLineLen, &pLine[nCurIdx]) - pLine);
 			// 指定された行のデータ内の位置に対応する桁の位置を調べる
-			nNxtPos = LineIndexToColumn( pcLayout, nNxtIdx );
+			nNxtPos = LineIndexToColumn(pcLayout, nNxtIdx);
 		}
 
 		// データ置換 削除&挿入にも使える
@@ -634,7 +634,7 @@ void CEditView::DeleteData(
 		if (GetCaret().GetCaretLayoutPos().GetY() > m_pcEditDoc->m_cLayoutMgr.GetLineCount() - 1) {
 			// 現在行のデータを取得
 			const CLayout*	pcLayout;
-			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( m_pcEditDoc->m_cLayoutMgr.GetLineCount() - CLayoutInt(1), &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_pcEditDoc->m_cLayoutMgr.GetLineCount() - CLayoutInt(1), &nLineLen, &pcLayout);
 			if (!pLine) {
 				goto end_of_func;
 			}
@@ -643,7 +643,7 @@ void CEditView::DeleteData(
 				goto end_of_func;
 			}
 			//ファイルの最後に移動
-			GetCommander().Command_GOFILEEND( false );
+			GetCommander().Command_GOFILEEND(false);
 		}
 	}
 end_of_func:;
@@ -662,12 +662,8 @@ void CEditView::ReplaceData_CEditView(
 	const CLogicRange*	psDelRangeLogicFast
 )
 {
-	int opeSeq;
-	if (!m_bDoing_UndoRedo) {
-		opeSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNextSeq();
-	}else {
-		opeSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetCurrentPointer();
-	}
+	auto& opeBuf = GetDocument()->m_cDocEditor.m_cOpeBuf;
+	int opeSeq = m_bDoing_UndoRedo ? opeBuf.GetCurrentPointer() : opeBuf.GetNextSeq();
 	if (0 == nInsDataLen) {
 		ReplaceData_CEditView3(sDelRange, NULL, NULL, bRedraw, pcOpeBlk, opeSeq, NULL, bFastMode, psDelRangeLogicFast);
 	}else {
@@ -709,7 +705,7 @@ void CEditView::ReplaceData_CEditView3(
 	const CLogicRange*	psDelRangeLogicFast
 )
 {
-	assert( (bFastMode && bRedraw == false) || (!bFastMode) ); // bFastModeのときは bReadraw == false
+	assert((bFastMode && bRedraw == false) || (!bFastMode)); // bFastModeのときは bReadraw == false
 	bool bLineModifiedChange;
 	auto& layoutMgr = m_pcEditDoc->m_cLayoutMgr;
 	bool bDelRangeUpdate = false;
@@ -724,11 +720,11 @@ void CEditView::ReplaceData_CEditView3(
 		CLogicInt len;
 		const wchar_t* line = NULL;
 		if (!bFastMode) {
-			line = layoutMgr.GetLineStr( sDelRange.GetFrom().GetY2(), &len, &pcLayout );
+			line = layoutMgr.GetLineStr(sDelRange.GetFrom().GetY2(), &len, &pcLayout);
 		}
 		bLineModifiedChange = (line)? !CModifyVisitor().IsLineModified(pcLayout->GetDocLineRef(), GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()): true;
 		if (line) {
-			CLogicInt pos = LineColumnToIndex( pcLayout, sDelRange.GetFrom().GetX2() );
+			CLogicInt pos = LineColumnToIndex(pcLayout, sDelRange.GetFrom().GetX2());
 			//	Jun. 1, 2000 genta
 			//	同一行の行末以降のみが選択されている場合を考慮する
 
@@ -752,12 +748,12 @@ void CEditView::ReplaceData_CEditView3(
 
 		//	末尾
 		if (!bFastMode) {
-			line = layoutMgr.GetLineStr( sDelRange.GetTo().GetY2(), &len, &pcLayout );
+			line = layoutMgr.GetLineStr(sDelRange.GetTo().GetY2(), &len, &pcLayout);
 			if (line) {
-				CLayoutInt p = LineIndexToColumn( pcLayout, len );
+				CLayoutInt p = LineIndexToColumn(pcLayout, len);
 
 				if (sDelRange.GetTo().x > p) {
-					sDelRange.SetToX( p );
+					sDelRange.SetToX(p);
 					bDelRangeUpdate = true;
 				}
 			}
@@ -806,7 +802,7 @@ void CEditView::ReplaceData_CEditView3(
 
 	// 現在の選択範囲を非選択状態に戻す
 	// 2009.07.18 ryoji 置換後→置換前に位置を変更（置換後だと反転が不正になって汚い Wiki BugReport/43）
-	GetSelectionInfo().DisableSelectArea( bRedraw );
+	GetSelectionInfo().DisableSelectArea(bRedraw);
 
 	// 文字列置換
 	LayoutReplaceArg LRArg;
@@ -817,13 +813,13 @@ void CEditView::ReplaceData_CEditView3(
 		DLRArg.pInsData = pInsData;
 		DLRArg.nDelSeq = nDelSeq;
 		// DLRArg.ptNewPos;
-		CSearchAgent(&GetDocument()->m_cDocLineMgr).ReplaceData( &DLRArg );
+		CSearchAgent(&GetDocument()->m_cDocLineMgr).ReplaceData(&DLRArg);
 	}else {
 		LRArg.sDelRange    = sDelRange;		//!< 削除範囲レイアウト
 		LRArg.pcmemDeleted = pcMemDeleted;	//!< [out] 削除されたデータ
 		LRArg.pInsData     = pInsData;		//!< 挿入するデータ
 		LRArg.nDelSeq      = nDelSeq;	//!< 挿入するデータの長さ
-		layoutMgr.ReplaceData_CLayoutMgr( &LRArg );
+		layoutMgr.ReplaceData_CLayoutMgr(&LRArg);
 	}
 
 	//	Jan. 30, 2001 genta
@@ -835,7 +831,7 @@ void CEditView::ReplaceData_CEditView3(
 	}
 
 	// 行番号表示に必要な幅を設定
-	if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane( bRedraw )) {
+	if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
 		// キャレットの表示・更新
 		GetCaret().ShowEditCaret();
 	}else {
@@ -844,12 +840,12 @@ void CEditView::ReplaceData_CEditView3(
 			// 再描画ヒント レイアウト行の増減
 			//	Jan. 30, 2001 genta	貼り付けで行数が減る場合の考慮が抜けていた
 			if (0 != LRArg.nAddLineNum) {
-				Call_OnPaint( PAINT_LINENUMBER | PAINT_BODY, false);
+				Call_OnPaint(PAINT_LINENUMBER | PAINT_BODY, false);
 			}else {
 				// 文書末が改行なし→ありに変化したら				// 2009.11.11 ryoji
 				// EOFのみ行が追加になるので、1行余分に描画する。
 				// （文書末が改行あり→なしに変化する場合の末尾EOF消去は描画関数側で行われる）
-				int nAddLine = ( LRArg.ptLayoutNew.GetY2() > LRArg.sDelRange.GetTo().GetY2() )? 1: 0;
+				int nAddLine = (LRArg.ptLayoutNew.GetY2() > LRArg.sDelRange.GetTo().GetY2())? 1: 0;
 
 				PAINTSTRUCT ps;
 
@@ -860,7 +856,7 @@ void CEditView::ReplaceData_CEditView3(
 				ps.rcPaint.top = GetTextArea().GetAreaTop() + (Int)(LRArg.nModLineFrom - GetTextArea().GetViewTopLine())* GetTextMetrics().GetHankakuDy();
 				// 2011.12.26 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
 				{
-					const CLayout* pcLayoutLineFirst = layoutMgr.SearchLineByLayoutY( LRArg.nModLineFrom );
+					const CLayout* pcLayoutLineFirst = layoutMgr.SearchLineByLayoutY(LRArg.nModLineFrom);
 					while (pcLayoutLineFirst && 0 != pcLayoutLineFirst->GetLogicOffset()) {
 						pcLayoutLineFirst = pcLayoutLineFirst->GetPrevLayout();
 						ps.rcPaint.top -= GetTextMetrics().GetHankakuDy();
@@ -875,14 +871,14 @@ void CEditView::ReplaceData_CEditView3(
 				}
 
 				HDC hdc = this->GetDC();
-				OnPaint( hdc, &ps, FALSE );
-				this->ReleaseDC( hdc );
+				OnPaint(hdc, &ps, FALSE);
+				this->ReleaseDC(hdc);
 
 				// 行番号（変更行）表示は改行単位の行頭から更新する必要がある	// 2009.03.26 ryoji
 				if (bLineModifiedChange) {	// 無変更だった行が変更された
-					const CLayout* pcLayoutWk = layoutMgr.SearchLineByLayoutY( LRArg.nModLineFrom );
+					const CLayout* pcLayoutWk = layoutMgr.SearchLineByLayoutY(LRArg.nModLineFrom);
 					if (pcLayoutWk && pcLayoutWk->GetLogicOffset()) {	// 折り返しレイアウト行か？
-						Call_OnPaint( PAINT_LINENUMBER, false );
+						Call_OnPaint(PAINT_LINENUMBER, false);
 					}
 				}
 			}
@@ -910,7 +906,7 @@ void CEditView::ReplaceData_CEditView3(
 			pcReplaceOpe->m_nOrgInsSeq = LRArg.nInsSeq;
 		}
 		// 操作の追加
-		pcOpeBlk->AppendOpe( pcReplaceOpe );
+		pcOpeBlk->AppendOpe(pcReplaceOpe);
 	}
 
 	// 挿入直後位置へカーソルを移動
@@ -926,11 +922,7 @@ void CEditView::ReplaceData_CEditView3(
 
 // 2013.06.29 CMoveCaretOpeは不要。ReplaceOpeのみにする
 	if (pnInsSeq) {
-		if (bFastMode) {
-			*pnInsSeq = DLRArg.nInsSeq;
-		}else {
-			*pnInsSeq = LRArg.nInsSeq;
-		}
+		*pnInsSeq = bFastMode ? DLRArg.nInsSeq : LRArg.nInsSeq;
 	}
 
 	//	Jan. 30, 2001 genta
@@ -940,18 +932,18 @@ void CEditView::ReplaceData_CEditView3(
 
 
 // 2005.10.11 ryoji 前の行にある末尾の空白を削除
-void CEditView::RTrimPrevLine( void )
+void CEditView::RTrimPrevLine(void)
 {
 	CLogicPoint ptCaretPos_PHY = GetCaret().GetCaretLogicPos();
 
 	if (GetCaret().GetCaretLogicPos().y > 0) {
-		int				nLineLen;
-		const wchar_t*	pLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL( GetCaret().GetCaretLogicPos().GetY2() - CLogicInt(1), &nLineLen );
+		int nLineLen;
+		const wchar_t*	pLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(GetCaret().GetCaretLogicPos().GetY2() - CLogicInt(1), &nLineLen);
 		if (pLine && nLineLen > 0) {
-			int i=0;
-			int j=0;
+			int i = 0;
+			int j = 0;
 			while (i < nLineLen) {
-				int nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
+				int nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
 				if (!WCODE::IsBlank(pLine[i])) {
 					j = i + nCharChars;
 				}
@@ -960,9 +952,9 @@ void CEditView::RTrimPrevLine( void )
 			auto& layoutMgr = m_pcEditDoc->m_cLayoutMgr;
 			if (j < nLineLen) {
 				CLayoutRange sRangeA;
-				layoutMgr.LogicToLayout( CLogicPoint(j, GetCaret().GetCaretLogicPos().y - 1), sRangeA.GetFromPointer() );
-				layoutMgr.LogicToLayout( CLogicPoint(nLineLen, GetCaret().GetCaretLogicPos().y - 1), sRangeA.GetToPointer() );
-				if (!( sRangeA.GetFrom().x >= sRangeA.GetTo().x && sRangeA.GetFrom().y == sRangeA.GetTo().y)) {
+				layoutMgr.LogicToLayout(CLogicPoint(j, GetCaret().GetCaretLogicPos().y - 1), sRangeA.GetFromPointer());
+				layoutMgr.LogicToLayout(CLogicPoint(nLineLen, GetCaret().GetCaretLogicPos().y - 1), sRangeA.GetToPointer());
+				if (!(sRangeA.GetFrom().x >= sRangeA.GetTo().x && sRangeA.GetFrom().y == sRangeA.GetTo().y)) {
 					ReplaceData_CEditView(
 						sRangeA,
 						NULL,		// 挿入するデータ
@@ -971,8 +963,8 @@ void CEditView::RTrimPrevLine( void )
 						m_bDoing_UndoRedo ? NULL : m_cCommander.GetOpeBlk()
 					);
 					CLayoutPoint ptCP;
-					layoutMgr.LogicToLayout( ptCaretPos_PHY, &ptCP );
-					GetCaret().MoveCursor( ptCP, true );
+					layoutMgr.LogicToLayout(ptCaretPos_PHY, &ptCP);
+					GetCaret().MoveCursor(ptCP, true);
 
 					if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 						// 操作の追加

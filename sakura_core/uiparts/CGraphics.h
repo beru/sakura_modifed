@@ -70,12 +70,12 @@ struct SFONT {
 // 最新実装：ブラシ
 class CGraphics {
 public:
-	CGraphics(const CGraphics& rhs){ Init(rhs.m_hdc); }
-	CGraphics(HDC hdc = NULL){ Init(hdc); }
+	CGraphics(const CGraphics& rhs) { Init(rhs.m_hdc); }
+	CGraphics(HDC hdc = NULL) { Init(hdc); }
 	~CGraphics();
 	void Init(HDC hdc);
 
-	operator HDC() const{ return m_hdc; }
+	operator HDC() const { return m_hdc; }
 
 	// クリッピング
 private:
@@ -120,7 +120,7 @@ public:
 	// テキストモード
 public:
 	void SetTextBackTransparent(bool b) {
-		m_nTextModeOrg.AssignOnce( ::SetBkMode(m_hdc,b?TRANSPARENT:OPAQUE) );
+		m_nTextModeOrg.AssignOnce(::SetBkMode(m_hdc,b?TRANSPARENT:OPAQUE));
 	}
 
 	// テキスト
@@ -170,7 +170,7 @@ public:
 		ClearBrush();
 		PushBrushColor(color);
 	}
-	HBRUSH GetCurrentBrush() const{ return m_vBrushes.size()?m_vBrushes.back():NULL; }
+	HBRUSH GetCurrentBrush() const { return m_vBrushes.size()?m_vBrushes.back():NULL; }
 
 	// 描画
 public:

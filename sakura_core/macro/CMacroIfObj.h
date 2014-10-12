@@ -54,7 +54,7 @@ public:
 	// コンストラクタ
 public:
 	CMacroIfObj(tagModeID nMode, LPCWSTR Ext, int flags, LPCWSTR Source)
-		: CWSHIfObj( L"Macro", false)
+		: CWSHIfObj(L"Macro", false)
 	{
 		m_nMode = nMode;
 		m_Ext = Ext;
@@ -70,7 +70,7 @@ public:
 
 	// デストラクタ
 public:
-	virtual ~CMacroIfObj(){}
+	virtual ~CMacroIfObj() {}
 
 	// 実装
 public:
@@ -167,7 +167,7 @@ public:
 		return (m_nIsMatch != 0) ? TRUE : FALSE;
 	}
 
-	void SetMatch(const int nMatch){
+	void SetMatch(const int nMatch) {
 		m_nIsMatch = nMatch;
 	}
 

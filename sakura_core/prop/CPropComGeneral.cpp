@@ -68,9 +68,9 @@ static const DWORD p_helpids[] = {	//10900
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropGeneral::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return DlgProc( reinterpret_cast<pDispatchPage>(&CPropGeneral::DispatchEvent), hwndDlg, uMsg, wParam, lParam );
+	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropGeneral::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 
@@ -94,9 +94,9 @@ INT_PTR CPropGeneral::DispatchEvent(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// ダイアログデータの設定 General
-		SetData( hwndDlg );
+		SetData(hwndDlg);
 		// Modified by KEITA for WIN64 2003.9.6
-		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
+		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 		return TRUE;
 		
@@ -112,10 +112,10 @@ INT_PTR CPropGeneral::DispatchEvent(
 			// From Here 2001.12.03 hor
 			//		操作しにくいって評判だったのでタスクトレイ関係のEnable制御をやめました
 			//@@@ YAZAKI 2001.12.31 IDC_CHECKSTAYTASKTRAYのアクティブ、非アクティブのみ制御。
-				if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_USETRAYICON )) {
-					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), TRUE );
+				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETRAYICON)) {
+					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 				}else {
-					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), FALSE );
+					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
 				}
 			// To Here 2001.12.03 hor
 				return TRUE;
@@ -125,8 +125,8 @@ INT_PTR CPropGeneral::DispatchEvent(
 
 			case IDC_BUTTON_CLEAR_MRU_FILE:
 				// ファイルの履歴をクリア
-				if (IDCANCEL == ::MYMESSAGEBOX( hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					LS(STR_PROPCOMGEN_FILE1) )
+				if (IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					LS(STR_PROPCOMGEN_FILE1))
 				) {
 					return TRUE;
 				}
@@ -136,12 +136,12 @@ INT_PTR CPropGeneral::DispatchEvent(
 					CMRUFile cMRU;
 					cMRU.ClearAll();
 				}
-				InfoMessage( hwndDlg, LS(STR_PROPCOMGEN_FILE2) );
+				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_FILE2));
 				return TRUE;
 			case IDC_BUTTON_CLEAR_MRU_FOLDER:
 				// フォルダの履歴をクリア
-				if (IDCANCEL == ::MYMESSAGEBOX( hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					LS(STR_PROPCOMGEN_DIR1) )
+				if (IDCANCEL == ::MYMESSAGEBOX(hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					LS(STR_PROPCOMGEN_DIR1))
 				) {
 					return TRUE;
 				}
@@ -151,7 +151,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 					CMRUFolder cMRUFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
 					cMRUFolder.ClearAll();
 				}
-				InfoMessage( hwndDlg, LS(STR_PROPCOMGEN_DIR2) );
+				InfoMessage(hwndDlg, LS(STR_PROPCOMGEN_DIR2));
 				return TRUE;
 			}
 			break;	// BN_CLICKED
@@ -163,20 +163,20 @@ INT_PTR CPropGeneral::DispatchEvent(
 			switch (wID) {
 			// 組み合わせてホイール操作した時ページスクロールする
 			case IDC_COMBO_WHEEL_PAGESCROLL:
-				hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL );
-				nSelPos = Combo_GetCurSel( hwndCombo );
-				hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_HSCROLL );
-				if (nSelPos && nSelPos == Combo_GetCurSel( hwndCombo )) {
-					Combo_SetCurSel( hwndCombo, 0 );
+				hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
+				nSelPos = Combo_GetCurSel(hwndCombo);
+				hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
+				if (nSelPos && nSelPos == Combo_GetCurSel(hwndCombo)) {
+					Combo_SetCurSel(hwndCombo, 0);
 				}
 				return TRUE;
 			// 組み合わせてホイール操作した時横スクロールする
 			case IDC_COMBO_WHEEL_HSCROLL:
-				hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_HSCROLL );
-				nSelPos = Combo_GetCurSel( hwndCombo );
-				hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL );
-				if (nSelPos && nSelPos == Combo_GetCurSel( hwndCombo )) {
-					Combo_SetCurSel( hwndCombo, 0 );
+				hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
+				nSelPos = Combo_GetCurSel(hwndCombo);
+				hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
+				if (nSelPos && nSelPos == Combo_GetCurSel(hwndCombo)) {
+					Combo_SetCurSel(hwndCombo, 0);
 				}
 				return TRUE;
 			}
@@ -190,8 +190,8 @@ INT_PTR CPropGeneral::DispatchEvent(
 		switch (idCtrl) {
 		case IDC_SPIN_REPEATEDSCROLLLINENUM:
 			// キーリピート時のスクロール行数
-//			MYTRACE( _T("IDC_SPIN_REPEATEDSCROLLLINENUM\n") );
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE );
+//			MYTRACE(_T("IDC_SPIN_REPEATEDSCROLLLINENUM\n"));
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -204,12 +204,12 @@ INT_PTR CPropGeneral::DispatchEvent(
 			if (nVal > 10) {
 				nVal = 10;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, nVal, FALSE);
 			return TRUE;
 		case IDC_SPIN_MAX_MRU_FILE:
 			// ファイルの履歴MAX
-//			MYTRACE( _T("IDC_SPIN_MAX_MRU_FILE\n") );
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FILE, NULL, FALSE );
+//			MYTRACE(_T("IDC_SPIN_MAX_MRU_FILE\n"));
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FILE, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -222,12 +222,12 @@ INT_PTR CPropGeneral::DispatchEvent(
 			if (nVal > MAX_MRU) {
 				nVal = MAX_MRU;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FILE, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FILE, nVal, FALSE);
 			return TRUE;
 		case IDC_SPIN_MAX_MRU_FOLDER:
 			// フォルダの履歴MAX
-//			MYTRACE( _T("IDC_SPIN_MAX_MRU_FOLDER\n") );
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, NULL, FALSE );
+//			MYTRACE(_T("IDC_SPIN_MAX_MRU_FOLDER\n"));
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -240,17 +240,17 @@ INT_PTR CPropGeneral::DispatchEvent(
 			if (nVal > MAX_OPENFOLDER) {
 				nVal = MAX_OPENFOLDER;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, nVal, FALSE);
 			return TRUE;
 		default:
 			switch (pNMHDR->code) {
 			case PSN_HELP:
-				OnHelp( hwndDlg, IDD_PROP_GENERAL );
+				OnHelp(hwndDlg, IDD_PROP_GENERAL);
 				return TRUE;
 			case PSN_KILLACTIVE:
-//				MYTRACE( _T("General PSN_KILLACTIVE\n") );
+//				MYTRACE(_T("General PSN_KILLACTIVE\n"));
 				// ダイアログデータの取得 General
-				GetData( hwndDlg );
+				GetData(hwndDlg);
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
@@ -260,18 +260,18 @@ INT_PTR CPropGeneral::DispatchEvent(
 			break;
 		}
 
-//		MYTRACE( _T("pNMHDR->hwndFrom=%xh\n"), pNMHDR->hwndFrom );
-//		MYTRACE( _T("pNMHDR->idFrom  =%xh\n"), pNMHDR->idFrom );
-//		MYTRACE( _T("pNMHDR->code    =%xh\n"), pNMHDR->code );
-//		MYTRACE( _T("pMNUD->iPos    =%d\n"), pMNUD->iPos );
-//		MYTRACE( _T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta );
+//		MYTRACE(_T("pNMHDR->hwndFrom=%xh\n"), pNMHDR->hwndFrom);
+//		MYTRACE(_T("pNMHDR->idFrom  =%xh\n"), pNMHDR->idFrom);
+//		MYTRACE(_T("pNMHDR->code    =%xh\n"), pNMHDR->code);
+//		MYTRACE(_T("pMNUD->iPos    =%d\n"), pMNUD->iPos);
+//		MYTRACE(_T("pMNUD->iDelta  =%d\n"), pMNUD->iDelta);
 		break;
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
 		//NOTREACHED
@@ -281,7 +281,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
 	//Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp( hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 //@@@ 2001.12.22 End
 
@@ -291,133 +291,133 @@ INT_PTR CPropGeneral::DispatchEvent(
 
 
 // ダイアログデータの設定 General
-void CPropGeneral::SetData( HWND hwndDlg )
+void CPropGeneral::SetData(HWND hwndDlg)
 {
 	auto& csGeneral = m_Common.m_sGeneral;
 
 	// カーソルのタイプ 0=win 1=dos 
 	if (0 == csGeneral.GetCaretType()) {
-		::CheckDlgButton( hwndDlg, IDC_RADIO_CARETTYPE0, TRUE );
-		::CheckDlgButton( hwndDlg, IDC_RADIO_CARETTYPE1, FALSE );
+		::CheckDlgButton(hwndDlg, IDC_RADIO_CARETTYPE0, TRUE);
+		::CheckDlgButton(hwndDlg, IDC_RADIO_CARETTYPE1, FALSE);
 	}else {
-		::CheckDlgButton( hwndDlg, IDC_RADIO_CARETTYPE0, FALSE );
-		::CheckDlgButton( hwndDlg, IDC_RADIO_CARETTYPE1, TRUE );
+		::CheckDlgButton(hwndDlg, IDC_RADIO_CARETTYPE0, FALSE);
+		::CheckDlgButton(hwndDlg, IDC_RADIO_CARETTYPE1, TRUE);
 	}
 
 	// フリーカーソルモード
-	::CheckDlgButton( hwndDlg, IDC_CHECK_FREECARET, csGeneral.m_bIsFreeCursorMode ? 1 : 0 );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_FREECARET, csGeneral.m_bIsFreeCursorMode ? 1 : 0);
 
 	// 単語単位で移動するときに、単語の両端で止まるか
-	::CheckDlgButton( hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD, csGeneral.m_bStopsBothEndsWhenSearchWord );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD, csGeneral.m_bStopsBothEndsWhenSearchWord);
 
 	// 段落単位で移動するときに、段落の両端で止まるか
-	::CheckDlgButton( hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH, csGeneral.m_bStopsBothEndsWhenSearchParagraph );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH, csGeneral.m_bStopsBothEndsWhenSearchParagraph);
 
 	//	2007.10.08 genta マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない (2007.10.02 by nasukoji)
-	::CheckDlgButton( hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE, csGeneral.m_bNoCaretMoveByActivation );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE, csGeneral.m_bNoCaretMoveByActivation);
 
 	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
-	::CheckDlgButton( hwndDlg, IDC_CHECK_CLOSEALLCONFIRM, csGeneral.m_bCloseAllConfirm );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_CLOSEALLCONFIRM, csGeneral.m_bCloseAllConfirm);
 
 	// 終了時の確認をする
-	::CheckDlgButton( hwndDlg, IDC_CHECK_EXITCONFIRM, csGeneral.m_bExitConfirm );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_EXITCONFIRM, csGeneral.m_bExitConfirm);
 
 	// キーリピート時のスクロール行数
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, (Int)csGeneral.m_nRepeatedScrollLineNum, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, (Int)csGeneral.m_nRepeatedScrollLineNum, FALSE);
 
 	// キーリピート時のスクロールを滑らかにするか
-	::CheckDlgButton( hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH, csGeneral.m_nRepeatedScroll_Smooth );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH, csGeneral.m_nRepeatedScroll_Smooth);
 
 	// 2009.01.17 nasukoji	組み合わせてホイール操作した時ページスクロールする
 	HWND	hwndCombo;
 	int		nSelPos;
 	int		i;
 
-	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL );
-	Combo_ResetContent( hwndCombo );
+	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
+	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (i = 0; i < _countof( SpecialScrollModeArr ); ++i) {
-		Combo_InsertString( hwndCombo, i, LS( SpecialScrollModeArr[i].nNameId ) );
+	for (i = 0; i < _countof(SpecialScrollModeArr); ++i) {
+		Combo_InsertString(hwndCombo, i, LS(SpecialScrollModeArr[i].nNameId));
 		if (SpecialScrollModeArr[i].nMethod == csGeneral.m_nPageScrollByWheel) {	// ページスクロールとする組み合わせ操作
 			nSelPos = i;
 		}
 	}
-	Combo_SetCurSel( hwndCombo, nSelPos );
+	Combo_SetCurSel(hwndCombo, nSelPos);
 
 	// 2009.01.12 nasukoji	組み合わせてホイール操作した時横スクロールする
-	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_HSCROLL );
-	Combo_ResetContent( hwndCombo );
+	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
+	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (i = 0; i < _countof( SpecialScrollModeArr ); ++i) {
-		Combo_InsertString( hwndCombo, i, LS( SpecialScrollModeArr[i].nNameId ) );
+	for (i = 0; i < _countof(SpecialScrollModeArr); ++i) {
+		Combo_InsertString(hwndCombo, i, LS(SpecialScrollModeArr[i].nNameId));
 		if (SpecialScrollModeArr[i].nMethod == csGeneral.m_nHorizontalScrollByWheel) {	// 横スクロールとする組み合わせ操作
 			nSelPos = i;
 		}
 	}
-	Combo_SetCurSel( hwndCombo, nSelPos );
+	Combo_SetCurSel(hwndCombo, nSelPos);
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	::CheckDlgButton( hwndDlg, IDC_CHECK_MEMDC, m_Common.m_sWindow.m_bUseCompatibleBMP );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_MEMDC, m_Common.m_sWindow.m_bUseCompatibleBMP);
 
 	// ファイルの履歴MAX
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FILE, csGeneral.m_nMRUArrNum_MAX, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FILE, csGeneral.m_nMRUArrNum_MAX, FALSE);
 
 	// フォルダの履歴MAX
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, csGeneral.m_nOPENFOLDERArrNum_MAX, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, csGeneral.m_nOPENFOLDERArrNum_MAX, FALSE);
 
 	// タスクトレイを使う
-	::CheckDlgButton( hwndDlg, IDC_CHECK_USETRAYICON, csGeneral.m_bUseTaskTray );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_USETRAYICON, csGeneral.m_bUseTaskTray);
 // From Here 2001.12.03 hor
 //@@@ YAZAKI 2001.12.31 ここは制御する。
 	if (csGeneral.m_bUseTaskTray) {
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), TRUE );
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 	}else {
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), FALSE );
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
 	}
 // To Here 2001.12.03 hor
 	// タスクトレイに常駐
-	::CheckDlgButton( hwndDlg, IDC_CHECK_STAYTASKTRAY, csGeneral.m_bStayTaskTray );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_STAYTASKTRAY, csGeneral.m_bStayTaskTray);
 
 	// タスクトレイ左クリックメニューのショートカット
-	HotKey_SetHotKey( ::GetDlgItem( hwndDlg, IDC_HOTKEY_TRAYMENU ), csGeneral.m_wTrayMenuHotKeyCode, csGeneral.m_wTrayMenuHotKeyMods );
+	HotKey_SetHotKey(::GetDlgItem(hwndDlg, IDC_HOTKEY_TRAYMENU), csGeneral.m_wTrayMenuHotKeyCode, csGeneral.m_wTrayMenuHotKeyMods);
 
 	return;
 }
 
 
 // ダイアログデータの取得 General
-int CPropGeneral::GetData( HWND hwndDlg )
+int CPropGeneral::GetData(HWND hwndDlg)
 {
 	auto& csGeneral = m_Common.m_sGeneral;
 	
 	// カーソルのタイプ 0=win 1=dos 
-	if (::IsDlgButtonChecked( hwndDlg, IDC_RADIO_CARETTYPE0 )) {
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CARETTYPE0)) {
 		csGeneral.SetCaretType(0);
 	}
-	if (::IsDlgButtonChecked( hwndDlg, IDC_RADIO_CARETTYPE1 )) {
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CARETTYPE1)) {
 		csGeneral.SetCaretType(1);
 	}
 
 	// フリーカーソルモード
-	csGeneral.m_bIsFreeCursorMode = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_FREECARET ) != 0;
+	csGeneral.m_bIsFreeCursorMode = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_FREECARET) != 0;
 
 	// 単語単位で移動するときに、単語の両端で止まるか
-	csGeneral.m_bStopsBothEndsWhenSearchWord = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD );
+	csGeneral.m_bStopsBothEndsWhenSearchWord = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD);
 	//	2007.10.08 genta マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない (2007.10.02 by nasukoji)
-	csGeneral.m_bNoCaretMoveByActivation = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE );
+	csGeneral.m_bNoCaretMoveByActivation = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE);
 
 	// 段落単位で移動するときに、段落の両端で止まるか
-	csGeneral.m_bStopsBothEndsWhenSearchParagraph = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH );
+	csGeneral.m_bStopsBothEndsWhenSearchParagraph = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH);
 
 	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
-	csGeneral.m_bCloseAllConfirm = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_CLOSEALLCONFIRM );
+	csGeneral.m_bCloseAllConfirm = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CLOSEALLCONFIRM);
 
 	// 終了時の確認をする
-	csGeneral.m_bExitConfirm = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_EXITCONFIRM );
+	csGeneral.m_bExitConfirm = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_EXITCONFIRM);
 
 	// キーリピート時のスクロール行数
-	csGeneral.m_nRepeatedScrollLineNum = (CLayoutInt)::GetDlgItemInt( hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE );
+	csGeneral.m_nRepeatedScrollLineNum = (CLayoutInt)::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
 	if (csGeneral.m_nRepeatedScrollLineNum < CLayoutInt(1)) {
 		csGeneral.m_nRepeatedScrollLineNum = CLayoutInt(1);
 	}
@@ -426,7 +426,7 @@ int CPropGeneral::GetData( HWND hwndDlg )
 	}
 
 	// キーリピート時のスクロールを滑らかにするか
-	csGeneral.m_nRepeatedScroll_Smooth = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH );
+	csGeneral.m_nRepeatedScroll_Smooth = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH);
 
 	// 2009.01.17 nasukoji	組み合わせてホイール操作した時ページスクロールする
 	HWND	hwndCombo;
@@ -434,19 +434,19 @@ int CPropGeneral::GetData( HWND hwndDlg )
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	m_Common.m_sWindow.m_bUseCompatibleBMP = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_MEMDC );
+	m_Common.m_sWindow.m_bUseCompatibleBMP = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_MEMDC);
 
-	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL );
-	nSelPos = Combo_GetCurSel( hwndCombo );
+	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
+	nSelPos = Combo_GetCurSel(hwndCombo);
 	csGeneral.m_nPageScrollByWheel = SpecialScrollModeArr[nSelPos].nMethod;		// ページスクロールとする組み合わせ操作
 
 	// 2009.01.17 nasukoji	組み合わせてホイール操作した時横スクロールする
-	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_WHEEL_HSCROLL );
-	nSelPos = Combo_GetCurSel( hwndCombo );
+	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
+	nSelPos = Combo_GetCurSel(hwndCombo);
 	csGeneral.m_nHorizontalScrollByWheel = SpecialScrollModeArr[nSelPos].nMethod;	// 横スクロールとする組み合わせ操作
 
 	// ファイルの履歴MAX
-	csGeneral.m_nMRUArrNum_MAX = ::GetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FILE, NULL, FALSE );
+	csGeneral.m_nMRUArrNum_MAX = ::GetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FILE, NULL, FALSE);
 	if (csGeneral.m_nMRUArrNum_MAX < 0) {
 		csGeneral.m_nMRUArrNum_MAX = 0;
 	}
@@ -461,7 +461,7 @@ int CPropGeneral::GetData( HWND hwndDlg )
 	}
 
 	// フォルダの履歴MAX
-	csGeneral.m_nOPENFOLDERArrNum_MAX = ::GetDlgItemInt( hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, NULL, FALSE );
+	csGeneral.m_nOPENFOLDERArrNum_MAX = ::GetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FOLDER, NULL, FALSE);
 	if (csGeneral.m_nOPENFOLDERArrNum_MAX < 0) {
 		csGeneral.m_nOPENFOLDERArrNum_MAX = 0;
 	}
@@ -476,21 +476,21 @@ int CPropGeneral::GetData( HWND hwndDlg )
 	}
 
 	// タスクトレイを使う
-	csGeneral.m_bUseTaskTray = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_USETRAYICON );
+	csGeneral.m_bUseTaskTray = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETRAYICON);
 //@@@ YAZAKI 2001.12.31 m_bUseTaskTrayに引きづられるように。
 	if (csGeneral.m_bUseTaskTray) {
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), TRUE );
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 	}else {
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), FALSE );
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
 	}
 	// タスクトレイに常駐
-	csGeneral.m_bStayTaskTray = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_STAYTASKTRAY );
+	csGeneral.m_bStayTaskTray = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_STAYTASKTRAY);
 
 	// タスクトレイ左クリックメニューのショートカット
 	LRESULT	lResult;
-	lResult = HotKey_GetHotKey( ::GetDlgItem( hwndDlg, IDC_HOTKEY_TRAYMENU ) );
-	csGeneral.m_wTrayMenuHotKeyCode = LOBYTE( lResult );
-	csGeneral.m_wTrayMenuHotKeyMods = HIBYTE( lResult );
+	lResult = HotKey_GetHotKey(::GetDlgItem(hwndDlg, IDC_HOTKEY_TRAYMENU));
+	csGeneral.m_wTrayMenuHotKeyCode = LOBYTE(lResult);
+	csGeneral.m_wTrayMenuHotKeyMods = HIBYTE(lResult);
 
 	return TRUE;
 }

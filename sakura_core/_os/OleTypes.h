@@ -60,11 +60,11 @@ struct SysString {
 		str->assign(Data, Len);
 	}
 #ifdef _UNICODE
-	void GetT(TCHAR **S, int *L){GetW(S, L);}
-	void GetT(std::wstring* str){GetW(str);}
+	void GetT(TCHAR **S, int *L) {GetW(S, L);}
+	void GetT(std::wstring* str) {GetW(str);}
 #else
-	void GetT(TCHAR **S, int *L){Get(S, L);}
-	void GetT(std::string* str){Get(str);}
+	void GetT(TCHAR **S, int *L) {Get(S, L);}
+	void GetT(std::string* str) {Get(str);}
 #endif
 };
 

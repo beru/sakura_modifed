@@ -127,7 +127,7 @@ bool CFigureSpace::DrawImp_StyleSelect(SColorStrategyInfo* pInfo)
 	SFONT sFont;
 	sFont.m_sFontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || bBold;
 	sFont.m_sFontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
-	sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle( sFont.m_sFontAttr );
+	sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
 	pInfo->m_gr.PushMyFont(sFont);
 	bool bTrans = pcView->IsBkBitmap() && cTextType.GetBackColor() == crBack;
 	return bTrans;
@@ -155,7 +155,7 @@ void CFigureSpace::DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos& sPo
 		SFONT sFont;
 		sFont.m_sFontAttr.m_bBoldFont = false;
 		sFont.m_sFontAttr.m_bUnderLine = true;
-		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle( sFont.m_sFontAttr );
+		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 
 		int nLength = (Int)(pInfo->m_pDispPos->GetDrawCol() - sPos.GetDrawCol());

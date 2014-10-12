@@ -48,12 +48,12 @@ public:
 	/*!
 		初期値は間隔1msecでタイマーは無効。
 	*/
-	CPassiveTimer() : nInterval(1), bEnabled(false){ Reset(); }
+	CPassiveTimer() : nInterval(1), bEnabled(false) { Reset(); }
 
 	// 時間間隔
 	void SetInterval(int m);	//!	時間間隔の設定
 	int GetInterval(void) const {return nInterval / MSec2Min; }	//!< 時間間隔の取得
-	void Reset(void){ nLastTick = ::GetTickCount(); }			//!< 基準時刻のリセット
+	void Reset(void) { nLastTick = ::GetTickCount(); }			//!< 基準時刻のリセット
 
 	// 有効／無効
 	void Enable(bool flag);							//!< 有効／無効の設定

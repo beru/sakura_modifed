@@ -33,8 +33,8 @@ class CAppMode :
 	friend class TSingleton<CAppMode>;
 	CAppMode()
 		:
-		m_bViewMode( false ),	// ビューモード
-		m_bDebugMode( false )	// デバッグモニタモード
+		m_bViewMode(false),	// ビューモード
+		m_bDebugMode(false)	// デバッグモニタモード
 	{
 		m_szGrepKey[0] = 0;
 	}
@@ -51,7 +51,7 @@ public:
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
 protected:
-	void _SetDebugMode(bool bDebugMode){ m_bDebugMode = bDebugMode; }
+	void _SetDebugMode(bool bDebugMode) { m_bDebugMode = bDebugMode; }
 
 private:
 	bool	m_bViewMode;				//!< ビューモード

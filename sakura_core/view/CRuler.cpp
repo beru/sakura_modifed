@@ -18,7 +18,7 @@ CRuler::~CRuler()
 }
 
 //2007.08.26 kobake UNICODE用にX位置を変更
-void CRuler::_DrawRulerCaret( CGraphics& gr, int nCaretDrawPosX, int nCaretWidth )
+void CRuler::_DrawRulerCaret(CGraphics& gr, int nCaretDrawPosX, int nCaretWidth)
 {
 	//描画領域 -> hRgn
 	RECT rc;
@@ -26,27 +26,27 @@ void CRuler::_DrawRulerCaret( CGraphics& gr, int nCaretDrawPosX, int nCaretWidth
 	rc.right = rc.left + m_pEditView->GetTextMetrics().GetHankakuDx() - 1;
 	rc.top = 0;
 	rc.bottom = m_pEditView->GetTextArea().GetAreaTop() - m_pEditView->GetTextArea().GetTopYohaku() - 1;
-	HRGN hRgn = ::CreateRectRgnIndirect( &rc );
+	HRGN hRgn = ::CreateRectRgnIndirect(&rc);
 
 	//ブラシ作成 -> hBrush
 	HBRUSH hBrush;
 	if (0 == nCaretWidth) {
-		hBrush = ::CreateSolidBrush( RGB( 128, 128, 128 ) );
+		hBrush = ::CreateSolidBrush(RGB(128, 128, 128));
 	}else {
-		hBrush = ::CreateSolidBrush( RGB( 0, 0, 0 ) );
+		hBrush = ::CreateSolidBrush(RGB(0, 0, 0));
 	}
 
 	//領域を描画 (色を反転させる)
-	int    nROP_Old  = ::SetROP2( gr, R2_NOTXORPEN );
-	HBRUSH hBrushOld = (HBRUSH)::SelectObject( gr, hBrush );
-	::SelectObject( gr, hBrush );
-	::PaintRgn( gr, hRgn );
-	::SelectObject( gr, hBrushOld );
-	::SetROP2( gr, nROP_Old );
+	int    nROP_Old  = ::SetROP2(gr, R2_NOTXORPEN);
+	HBRUSH hBrushOld = (HBRUSH)::SelectObject(gr, hBrush);
+	::SelectObject(gr, hBrush);
+	::PaintRgn(gr, hRgn);
+	::SelectObject(gr, hBrushOld);
+	::SetROP2(gr, nROP_Old);
 
 	//描画オブジェクト破棄
-	::DeleteObject( hRgn );
-	::DeleteObject( hBrush );
+	::DeleteObject(hRgn);
+	::DeleteObject(hBrush);
 }
 
 /*! 
@@ -54,7 +54,7 @@ void CRuler::_DrawRulerCaret( CGraphics& gr, int nCaretDrawPosX, int nCaretWidth
 	@param hdc [in] デバイスコンテキスト
 	DispRulerの内容を元に作成
 */
-void CRuler::DrawRulerCaret( CGraphics& gr )
+void CRuler::DrawRulerCaret(CGraphics& gr)
 {
 	if (1
 		&& m_pEditView->GetTextArea().GetViewLeftCol() <= m_pEditView->GetCaret().GetCaretLayoutPos().GetX()
@@ -69,7 +69,7 @@ void CRuler::DrawRulerCaret( CGraphics& gr )
 		}
 
 		//元位置をクリア m_nOldRulerWidth
-		this->_DrawRulerCaret( gr, m_nOldRulerDrawX, m_nOldRulerWidth );
+		this->_DrawRulerCaret(gr, m_nOldRulerDrawX, m_nOldRulerWidth);
 
 		//新しい位置で描画   2007.08.26 kobake UNICODE用にX位置を変更
 		this->_DrawRulerCaret(
@@ -104,10 +104,10 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	lf.lfClipPrecision	= 2;
 	lf.lfQuality		= 1;
 	lf.lfPitchAndFamily	= 34;
-	_tcscpy( lf.lfFaceName, _T("Arial") );
-	HFONT hFont = ::CreateFontIndirect( &lf );
-	HFONT hFontOld = (HFONT)::SelectObject( gr, hFont );
-	::SetBkMode( gr, TRANSPARENT );
+	_tcscpy(lf.lfFaceName, _T("Arial"));
+	HFONT hFont = ::CreateFontIndirect(&lf);
+	HFONT hFontOld = (HFONT)::SelectObject(gr, hFont);
+	::SetBkMode(gr, TRANSPARENT);
 	
 	//背景塗りつぶし
 	RECT rc;
@@ -133,31 +133,31 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	if (nToX > m_pEditView->GetTextArea().GetAreaRight()) {
 		nToX = m_pEditView->GetTextArea().GetAreaRight();
 	}
-	::MoveToEx( gr, m_pEditView->GetTextArea().GetAreaLeft(), nY + 1, NULL );
-	::LineTo( gr, nToX, nY + 1 );
+	::MoveToEx(gr, m_pEditView->GetTextArea().GetAreaLeft(), nY + 1, NULL);
+	::LineTo(gr, nToX, nY + 1);
 
 	//目盛を描画
 	CLayoutInt i = m_pEditView->GetTextArea().GetViewLeftCol();
 	while (i <= m_pEditView->GetTextArea().GetRightCol() + 1 && i <= nMaxLineKetas) {
 		//ルーラー終端の区切り(大)
 		if (i == nMaxLineKetas) {
-			::MoveToEx( gr, nX, nY, NULL );
-			::LineTo( gr, nX, 0 );
+			::MoveToEx(gr, nX, nY, NULL);
+			::LineTo(gr, nX, 0);
 		//10目盛おきの区切り(大)と数字
 		}else if (0 == i % 10) {
 			wchar_t szColumn[32];
-			::MoveToEx( gr, nX, nY, NULL );
-			::LineTo( gr, nX, 0 );
-			_itow( ((Int)i) / 10, szColumn, 10 );
-			::TextOutW_AnyBuild( gr, nX + 2 + 0, -1 + 0, szColumn, wcslen( szColumn ) );
+			::MoveToEx(gr, nX, nY, NULL);
+			::LineTo(gr, nX, 0);
+			_itow(((Int)i) / 10, szColumn, 10);
+			::TextOutW_AnyBuild(gr, nX + 2 + 0, -1 + 0, szColumn, wcslen(szColumn));
 		//5目盛おきの区切り(中)
 		}else if (0 == i % 5) {
-			::MoveToEx( gr, nX, nY, NULL );
-			::LineTo( gr, nX, nY - 6 );
+			::MoveToEx(gr, nX, nY, NULL);
+			::LineTo(gr, nX, nY - 6);
 		//毎目盛の区切り(小)
 		}else {
-			::MoveToEx( gr, nX, nY, NULL );
-			::LineTo( gr, nX, nY - 3 );
+			::MoveToEx(gr, nX, nY, NULL);
+			::LineTo(gr, nX, nY - 3);
 		}
 
 		nX += m_pEditView->GetTextMetrics().GetHankakuDx();
@@ -169,15 +169,15 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	gr.PopPen();
 
 	//フォント戻す
-	::SelectObject( gr, hFontOld );
-	::DeleteObject( hFont );
+	::SelectObject(gr, hFontOld);
+	::DeleteObject(hFont);
 }
 
 /*! ルーラー描画
 
 	@date 2005.08.14 genta 折り返し幅をLayoutMgrから取得するように
 */
-void CRuler::DispRuler( HDC hdc )
+void CRuler::DispRuler(HDC hdc)
 {
 	//サポート
 	CTypeSupport cRulerType(m_pEditView,COLORIDX_RULER);
@@ -194,7 +194,7 @@ void CRuler::DispRuler( HDC hdc )
 
 	// 2002.02.25 Add By KK ルーラー全体を描き直す必要がない場合は、ルーラ上のキャレットのみ描きなおす 
 	if (!m_bRedrawRuler) {
-		DrawRulerCaret( gr );
+		DrawRulerCaret(gr);
 	}else {
 		// 背景描画
 		DrawRulerBg(gr);

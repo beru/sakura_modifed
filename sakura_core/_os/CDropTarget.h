@@ -45,7 +45,7 @@ private:
 protected:
 	CYbInterfaceBase();
 	~CYbInterfaceBase();
-	static HRESULT QueryInterfaceImpl( IUnknown*, REFIID, REFIID, void** );
+	static HRESULT QueryInterfaceImpl(IUnknown*, REFIID, REFIID, void**);
 };
 
 
@@ -57,12 +57,12 @@ class CYbInterfaceImpl :
 private:
 	static REFIID m_owniid;
 public:
-	CYbInterfaceImpl(){AddRef();}
-	STDMETHOD( QueryInterface )( REFIID riid, void** ppvObj )
-	{return QueryInterfaceImpl( this, m_owniid, riid, ppvObj );}
-	STDMETHOD_( ULONG, AddRef )( void )
+	CYbInterfaceImpl() {AddRef();}
+	STDMETHOD(QueryInterface)(REFIID riid, void** ppvObj)
+	{return QueryInterfaceImpl(this, m_owniid, riid, ppvObj);}
+	STDMETHOD_(ULONG, AddRef)(void)
 	{return 1;}
-	STDMETHOD_( ULONG, Release )( void )
+	STDMETHOD_(ULONG, Release)(void)
 	{return 0;}
 };
 
@@ -72,8 +72,8 @@ public:
 	/*
 	||  Constructors
 	*/
-	CDropTarget( CEditWnd* );	// 2008.06.20 ryoji
-	CDropTarget( CEditView* );
+	CDropTarget(CEditWnd*);	// 2008.06.20 ryoji
+	CDropTarget(CEditView*);
 	~CDropTarget();
 	/*
 	||  Attributes & Operations
@@ -85,12 +85,12 @@ private: // 2002/2/10 aroka アクセス権変更
 //	void*			m_pCEditView;
 	//	static REFIID	m_owniid;
 public:
-	BOOL			Register_DropTarget( HWND );
-	BOOL			Revoke_DropTarget( void );
-	STDMETHODIMP	DragEnter( LPDATAOBJECT, DWORD, POINTL , LPDWORD );
-	STDMETHODIMP	DragOver( DWORD, POINTL, LPDWORD );
-	STDMETHODIMP	DragLeave( void );
-	STDMETHODIMP	Drop( LPDATAOBJECT, DWORD, POINTL, LPDWORD );
+	BOOL			Register_DropTarget(HWND);
+	BOOL			Revoke_DropTarget(void);
+	STDMETHODIMP	DragEnter(LPDATAOBJECT, DWORD, POINTL , LPDWORD);
+	STDMETHODIMP	DragOver(DWORD, POINTL, LPDWORD);
+	STDMETHODIMP	DragLeave(void);
+	STDMETHODIMP	Drop(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
 protected:
 	/*
 	||  実装ヘルパ関数
@@ -102,10 +102,10 @@ class CDropSource : public CYbInterfaceImpl<IDropSource> {
 private:
 	BOOL m_bLeft;
 public:
-	CDropSource( BOOL bLeft ):m_bLeft( bLeft ){}
+	CDropSource(BOOL bLeft):m_bLeft(bLeft) {}
 
-	STDMETHOD( QueryContinueDrag )( BOOL bEscapePressed, DWORD dwKeyState );
-	STDMETHOD( GiveFeedback )( DWORD dropEffect );
+	STDMETHOD(QueryContinueDrag)(BOOL bEscapePressed, DWORD dwKeyState);
+	STDMETHOD(GiveFeedback)(DWORD dropEffect);
 };
 
 
@@ -128,21 +128,21 @@ public:
 		m_nFormat(0),
 		m_pData(NULL)
 	{
-		SetText( lpszText, nTextLen, bColumnSelect );
+		SetText(lpszText, nTextLen, bColumnSelect);
 	}
-	~CDataObject(){SetText( NULL, 0, FALSE );}
-	void	SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect );
-	DWORD	DragDrop( BOOL bLeft, DWORD dwEffects );
+	~CDataObject() { SetText(NULL, 0, FALSE); }
+	void	SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect);
+	DWORD	DragDrop(BOOL bLeft, DWORD dwEffects);
 
-	STDMETHOD( GetData )( LPFORMATETC, LPSTGMEDIUM );
-	STDMETHOD( GetDataHere )( LPFORMATETC, LPSTGMEDIUM );
-	STDMETHOD( QueryGetData )( LPFORMATETC );
-	STDMETHOD( GetCanonicalFormatEtc )( LPFORMATETC, LPFORMATETC );
-	STDMETHOD( SetData )( LPFORMATETC, LPSTGMEDIUM, BOOL );
-	STDMETHOD( EnumFormatEtc )( DWORD, IEnumFORMATETC** );
-	STDMETHOD( DAdvise )( LPFORMATETC, DWORD, LPADVISESINK, LPDWORD );
-	STDMETHOD( DUnadvise )( DWORD );
-	STDMETHOD( EnumDAdvise )( LPENUMSTATDATA* );
+	STDMETHOD(GetData)(LPFORMATETC, LPSTGMEDIUM);
+	STDMETHOD(GetDataHere)(LPFORMATETC, LPSTGMEDIUM);
+	STDMETHOD(QueryGetData)(LPFORMATETC);
+	STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC, LPFORMATETC);
+	STDMETHOD(SetData)(LPFORMATETC, LPSTGMEDIUM, BOOL);
+	STDMETHOD(EnumFormatEtc)(DWORD, IEnumFORMATETC**);
+	STDMETHOD(DAdvise)(LPFORMATETC, DWORD, LPADVISESINK, LPDWORD);
+	STDMETHOD(DUnadvise)(DWORD);
+	STDMETHOD(EnumDAdvise)(LPENUMSTATDATA*);
 };
 
 
@@ -155,19 +155,19 @@ private:
 	CDataObject* m_pcDataObject;
 public:
 	CEnumFORMATETC(CDataObject* pcDataObject) : m_lRef(1), m_nIndex(0), m_pcDataObject(pcDataObject) {}
-	STDMETHOD_( ULONG, AddRef )( void )
+	STDMETHOD_(ULONG, AddRef)(void)
 	{return ::InterlockedIncrement(&m_lRef);}
-	STDMETHOD_( ULONG, Release )( void )
+	STDMETHOD_(ULONG, Release)(void)
 	{
-		if( ::InterlockedDecrement(&m_lRef) == 0 ){
+		if (::InterlockedDecrement(&m_lRef) == 0) {
 			delete this;
 			return 0;	// 削除後なので m_lRef は使わない
 		}
 		return m_lRef;
 	}
-	STDMETHOD( Next )(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched);
-	STDMETHOD( Skip )(ULONG celt);
-	STDMETHOD( Reset )(void);
-	STDMETHOD( Clone )(IEnumFORMATETC** ppenum);
+	STDMETHOD(Next)(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched);
+	STDMETHOD(Skip)(ULONG celt);
+	STDMETHOD(Reset)(void);
+	STDMETHOD(Clone)(IEnumFORMATETC** ppenum);
 };
 

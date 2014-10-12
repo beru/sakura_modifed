@@ -27,7 +27,7 @@
 #include "window/CEditWnd.h"
 
 // 機能種別によるバッファの変換
-void CConvertMediator::ConvMemory( CNativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn )
+void CConvertMediator::ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn)
 {
 	// コード変換はできるだけANSI版のsakuraと互換の結果が得られるように実装する	// 2009.03.26 ryoji
 	// xxx2SJIS:
@@ -57,10 +57,10 @@ void CConvertMediator::ConvMemory( CNativeW* pCMemory, EFunctionCode nFuncCode, 
 
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
 		ECodeType ecode;
-		CCodeMediator ccode( CEditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding );
+		CCodeMediator ccode(CEditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding);
 		ecode = ccode.CheckKanjiCode(
 			reinterpret_cast<const char*>(pCMemory->_GetMemory()->GetRawPtr()),
-			pCMemory->_GetMemory()->GetRawLength() );
+			pCMemory->_GetMemory()->GetRawLength());
 		switch (ecode) {
 		case CODE_JIS:			nFuncCode = F_CODECNV_EMAIL;			break;
 		case CODE_EUC:			nFuncCode = F_CODECNV_EUC2SJIS;			break;
@@ -106,5 +106,4 @@ void CConvertMediator::ConvMemory( CNativeW* pCMemory, EFunctionCode nFuncCode, 
 
 	return;
 }
-
 

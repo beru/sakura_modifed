@@ -33,11 +33,11 @@ public:
 	CRecentEditNode();
 
 	// オーバーライド
-	int				CompareItem( const EditNode* p1, const EditNode* p2 ) const;
-	void			CopyItem( EditNode* dst, const EditNode* src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( const EditNode** dst, const EditNode* src ) const;
-	bool			TextToDataType( EditNode* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const EditNode* p1, const EditNode* p2) const;
+	void			CopyItem(EditNode* dst, const EditNode* src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(const EditNode** dst, const EditNode* src) const;
+	bool			TextToDataType(EditNode* dst, LPCTSTR pszText) const;
 	// 固有インターフェース
 	int FindItemByHwnd(HWND hwnd) const;
 	void DeleteItemByHwnd(HWND hwnd);

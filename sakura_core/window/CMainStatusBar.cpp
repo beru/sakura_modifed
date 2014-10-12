@@ -6,8 +6,8 @@
 CMainStatusBar::CMainStatusBar(CEditWnd* pOwner)
 	:
 	m_pOwner(pOwner),
-	m_hwndStatusBar( NULL ),
-	m_hwndProgressBar( NULL )
+	m_hwndStatusBar(NULL),
+	m_hwndProgressBar(NULL)
 {
 }
 
@@ -43,11 +43,11 @@ void CMainStatusBar::CreateStatusBar()
 	);
 
 	if (m_pOwner->m_CFuncKeyWnd.GetHwnd()) {
-		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF( FALSE );
+		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF(FALSE);
 	}
 
 	// スプリッターの、サイズボックスの位置を変更
-	m_pOwner->m_cSplitterWnd.DoSplit( -1, -1);
+	m_pOwner->m_cSplitterWnd.DoSplit(-1, -1);
 }
 
 
@@ -55,10 +55,10 @@ void CMainStatusBar::CreateStatusBar()
 void CMainStatusBar::DestroyStatusBar()
 {
 	if (m_hwndProgressBar) {
-		::DestroyWindow( m_hwndProgressBar );
+		::DestroyWindow(m_hwndProgressBar);
 		m_hwndProgressBar = NULL;
 	}
-	::DestroyWindow( m_hwndStatusBar );
+	::DestroyWindow(m_hwndStatusBar);
 	m_hwndStatusBar = NULL;
 
 	if (m_pOwner->m_CFuncKeyWnd.GetHwnd()) {
@@ -73,10 +73,10 @@ void CMainStatusBar::DestroyStatusBar()
 				bSizeBox = false;
 			}
 		}
-		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF( bSizeBox );
+		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF(bSizeBox);
 	}
 	// スプリッターの、サイズボックスの位置を変更
-	m_pOwner->m_cSplitterWnd.DoSplit( -1, -1 );
+	m_pOwner->m_cSplitterWnd.DoSplit(-1, -1);
 }
 
 
@@ -94,18 +94,17 @@ void CMainStatusBar::DestroyStatusBar()
 	
 	@sa SendStatusMessage2IsEffective
 */
-void CMainStatusBar::SendStatusMessage2( const TCHAR* msg )
+void CMainStatusBar::SendStatusMessage2(const TCHAR* msg)
 {
 	if (m_hwndStatusBar) {
 		// ステータスバーへ
-		StatusBar_SetText( m_hwndStatusBar, 0 | SBT_NOBORDERS, msg );
+		StatusBar_SetText(m_hwndStatusBar, 0 | SBT_NOBORDERS, msg);
 	}
 }
 
 
 void CMainStatusBar::SetStatusText(int nIndex, int nOption, const TCHAR* pszText)
 {
-	StatusBar_SetText( m_hwndStatusBar, nIndex | nOption, pszText );
+	StatusBar_SetText(m_hwndStatusBar, nIndex | nOption, pszText);
 }
-
 

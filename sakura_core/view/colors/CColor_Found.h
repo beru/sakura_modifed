@@ -27,9 +27,9 @@
 
 class CColor_Select : public CColorStrategy {
 public:
-	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_SELECT; }
+	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_SELECT; }
 	// 色替え
-	virtual void InitStrategyStatus(){ }
+	virtual void InitStrategyStatus() { }
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return true; }
 	virtual bool EndColor(const CStringRef& cStr, int nPos);
@@ -40,9 +40,9 @@ public:
 	virtual void OnStartScanLogic();
 
 private:
-	CLayoutInt		m_nSelectLine;
-	CLogicInt		m_nSelectStart;
-	CLogicInt		m_nSelectEnd;
+	CLayoutInt	m_nSelectLine;
+	CLogicInt	m_nSelectStart;
+	CLogicInt	m_nSelectEnd;
 };
 
 class CColor_Found : public CColorStrategy {
@@ -56,7 +56,7 @@ public:
 		;
 	}
 	// 色替え
-	virtual void InitStrategyStatus(){ } //############要検証
+	virtual void InitStrategyStatus() { } //############要検証
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return true; }
 	virtual bool EndColor(const CStringRef& cStr, int nPos);

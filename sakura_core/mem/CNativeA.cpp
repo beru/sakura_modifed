@@ -528,7 +528,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 			bSpace = FALSE;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			int i;
-			for(i = 0; i < nLineLen; ++i ){
+			for(i = 0; i < nLineLen; ++i ) {
 				if (SPACE == pLine[i] || TAB == pLine[i]) {
 					if (bSpace == FALSE) {
 						nStartPos = nPosX;
@@ -576,7 +576,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 					nPosDes++;
 				}else {
 					int j;
-					//for( j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j+=nTabSpace ){
+					//for( j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j+=nTabSpace ) {
 					for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); j++) {
 						pDes[nPosDes] = TAB;
 						nPosDes++;

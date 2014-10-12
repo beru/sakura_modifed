@@ -48,45 +48,45 @@ public:
 	/*
 	||  コンストラクタ
 	*/
-	CPrintPreview( class CEditWnd* pParentWnd );
+	CPrintPreview(class CEditWnd* pParentWnd);
 	~CPrintPreview();
 	
 	/*
 	||	イベント
 	*/
 	//	Window Messages
-	LRESULT OnPaint( HWND, UINT, WPARAM, LPARAM );	// 描画処理
-	LRESULT OnSize( WPARAM, LPARAM );				// WM_SIZE 処理
-	LRESULT OnVScroll( WPARAM wParam, LPARAM lParam );
-	LRESULT OnHScroll( WPARAM wParam, LPARAM lParam );
-	LRESULT OnMouseMove( WPARAM wParam, LPARAM lParam );
-	LRESULT OnMouseWheel( WPARAM wParam, LPARAM lParam );
+	LRESULT OnPaint(HWND, UINT, WPARAM, LPARAM);	// 描画処理
+	LRESULT OnSize(WPARAM, LPARAM);				// WM_SIZE 処理
+	LRESULT OnVScroll(WPARAM wParam, LPARAM lParam);
+	LRESULT OnHScroll(WPARAM wParam, LPARAM lParam);
+	LRESULT OnMouseMove(WPARAM wParam, LPARAM lParam);
+	LRESULT OnMouseWheel(WPARAM wParam, LPARAM lParam);
 
 	//	User Messages
 	void OnChangeSetting();
-	void OnChangePrintSetting( void );
-	void OnPreviewGoPage( int nPage );	// プレビュー ページ指定
-	void OnPreviewGoPreviousPage(){ OnPreviewGoPage( m_nCurPageNum - 1 ); }		//	前のページへ
-	void OnPreviewGoNextPage(){ OnPreviewGoPage( m_nCurPageNum + 1 ); }		//	前のページへ
-	void OnPreviewGoDirectPage( void );
-	void OnPreviewZoom( BOOL bZoomUp );
-	void OnPrint( void );	// 印刷実行
-	BOOL OnPrintPageSetting( void );
-	void OnCheckAntialias( void );
+	void OnChangePrintSetting(void);
+	void OnPreviewGoPage(int nPage);	// プレビュー ページ指定
+	void OnPreviewGoPreviousPage() { OnPreviewGoPage(m_nCurPageNum - 1); }		//	前のページへ
+	void OnPreviewGoNextPage() { OnPreviewGoPage(m_nCurPageNum + 1); }		//	前のページへ
+	void OnPreviewGoDirectPage(void);
+	void OnPreviewZoom(BOOL bZoomUp);
+	void OnPrint(void);	// 印刷実行
+	BOOL OnPrintPageSetting(void);
+	void OnCheckAntialias(void);
 
 	/*
 	||	コントロール
 	*/
 	//	スクロールバー
-	void InitPreviewScrollBar( void );
+	void InitPreviewScrollBar(void);
 	
 	//	PrintPreviewバー（画面上部のコントロール）
-	void CreatePrintPreviewControls( void );
-	void DestroyPrintPreviewControls( void );
+	void CreatePrintPreviewControls(void);
+	void DestroyPrintPreviewControls(void);
 
-	void SetFocusToPrintPreviewBar( void );
-	HWND GetPrintPreviewBarHANDLE( void ){ return m_hwndPrintPreviewBar;	}
-	HWND GetPrintPreviewBarHANDLE_Safe() const{ if(!this)return NULL; else return m_hwndPrintPreviewBar; } //!< thisがNULLでも実行できる版。2007.10.29 kobake
+	void SetFocusToPrintPreviewBar(void);
+	HWND GetPrintPreviewBarHANDLE(void) { return m_hwndPrintPreviewBar;	}
+	HWND GetPrintPreviewBarHANDLE_Safe() const { if(!this)return NULL; else return m_hwndPrintPreviewBar; } //!< thisがNULLでも実行できる版。2007.10.29 kobake
 	
 	//	PrintPreviewバーのメッセージ処理。
 	//	まずPrintPreviewBar_DlgProcにメッセージが届き、DispatchEvent_PPBに転送する仕組み
@@ -110,9 +110,9 @@ protected:
 	||	また、DrawXXXXX()から抜けてきたときは、半角フォントに設定されていることを期待してよい。
 	||	フォントは、半角フォントと全角フォントしかないことも期待してよい。
 	*/
-	void DrawHeaderFooter( HDC hdc, const CMyRect& rect , bool bHeader );
-	CColorStrategy* DrawPageTextFirst( int nPageNum );
-	CColorStrategy* DrawPageText( HDC, int, int, int nPageNum, CDlgCancel*, CColorStrategy* pStrategyStart );
+	void DrawHeaderFooter(HDC hdc, const CMyRect& rect , bool bHeader);
+	CColorStrategy* DrawPageTextFirst(int nPageNum);
+	CColorStrategy* DrawPageText(HDC, int, int, int nPageNum, CDlgCancel*, CColorStrategy* pStrategyStart);
 
 	// 印刷／プレビュー 行描画
 	CColorStrategy* Print_DrawLine(
@@ -166,14 +166,14 @@ public:
 	/*
 	||	アクセサ
 	*/
-	void SetPrintSetting( PRINTSETTING* pPrintSetting ){
+	void SetPrintSetting(PRINTSETTING* pPrintSetting) {
 		m_sPrintSetting = *pPrintSetting;
 		m_pPrintSetting = &m_sPrintSetting;
 		m_pPrintSettingOrg = pPrintSetting;
 	}
-	BOOL GetDefaultPrinterInfo(){ return m_cPrint.GetDefaultPrinter( &m_pPrintSetting->m_mdmDevMode ); }
-	int  GetCurPageNum(){ return m_nCurPageNum; }	// 現在のページ
-	int  GetAllPageNum(){ return m_nAllPageNum; }	// 現在のページ
+	BOOL GetDefaultPrinterInfo() { return m_cPrint.GetDefaultPrinter(&m_pPrintSetting->m_mdmDevMode); }
+	int  GetCurPageNum() { return m_nCurPageNum; }	// 現在のページ
+	int  GetAllPageNum() { return m_nAllPageNum; }	// 現在のページ
 
 	
 	/*
@@ -183,8 +183,8 @@ public:
 	void SetFooter(char* pszWork[]);	//	&p/&Pなどを登録
 
 protected:
-	void SetPreviewFontHan( const LOGFONT* lf );
-	void SetPreviewFontZen( const LOGFONT* lf );
+	void SetPreviewFontHan(const LOGFONT* lf);
+	void SetPreviewFontZen(const LOGFONT* lf);
 
 // メンバ変数宣言
 public:

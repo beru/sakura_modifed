@@ -98,7 +98,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		CNativeW		cUnicodeBuffer;
 		EConvertResult	eRead;
 		while (RESULT_FAILURE != (eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol ))) {
-			if (eRead==RESULT_LOSESOME) {
+			if (eRead == RESULT_LOSESOME) {
 				eRet = RESULT_LOSESOME;
 			}
 			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
@@ -106,7 +106,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 			++nLineNum;
 			CDocEditAgent(pcDocLineMgr).AddLineStrX( pLine, nLineLen );
 			// 経過通知
-			if (nLineNum%512 == 0) {
+			if (nLineNum % 512 == 0) {
 				NotifyProgress(cfl.GetPercent());
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook( NULL )) {

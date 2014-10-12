@@ -60,30 +60,30 @@ public:
 	/*
 	||  Constructors
 	*/
-	CMacro( EFunctionCode nFuncID );	//	機能IDを指定して初期化
+	CMacro(EFunctionCode nFuncID);	//	機能IDを指定して初期化
 	~CMacro();
 
 	void SetNext(CMacro* pNext) { m_pNext = pNext; }
 	CMacro* GetNext() { return m_pNext; }
 	// 2007.07.20 genta : flags追加
-	bool Exec( CEditView* pcEditView, int flags ) const; //2007.09.30 kobake const追加
-	void Save( HINSTANCE hInstance, CTextOutputStream& out ) const; //2007.09.30 kobake const追加
+	bool Exec(CEditView* pcEditView, int flags) const; //2007.09.30 kobake const追加
+	void Save(HINSTANCE hInstance, CTextOutputStream& out) const; //2007.09.30 kobake const追加
 	
-	void AddLParam( const LPARAM* lParam, const CEditView* pcEditView  );	//@@@ 2002.2.2 YAZAKI pcEditViewも渡す
-	void AddStringParam( const WCHAR* lParam );
-	void AddStringParam( const ACHAR* lParam ) { return AddStringParam(to_wchar(lParam)); }
-	void AddIntParam( const int lParam );
+	void AddLParam(const LPARAM* lParam, const CEditView* pcEditView );	//@@@ 2002.2.2 YAZAKI pcEditViewも渡す
+	void AddStringParam(const WCHAR* lParam);
+	void AddStringParam(const ACHAR* lParam) { return AddStringParam(to_wchar(lParam)); }
+	void AddIntParam(const int lParam);
 
-	static bool HandleCommand( CEditView *View, EFunctionCode ID, const WCHAR* Argument[], const int ArgLengths[], const int ArgSize );
-	static bool HandleFunction( CEditView *View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result);
+	static bool HandleCommand(CEditView *View, EFunctionCode ID, const WCHAR* Argument[], const int ArgLengths[], const int ArgSize);
+	static bool HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result);
 	//2009.10.29 syat HandleCommandとHandleFunctionの引数を少しそろえた
 #if 0
 	/*
 	||  Attributes & Operations
 	*/
-	static char* GetFuncInfoByID( HINSTANCE , int , char* , char* );	// 機能ID→関数名，機能名日本語
-	static int GetFuncInfoByName( HINSTANCE , const char* , char* );	// 関数名→機能ID，機能名日本語
-	static BOOL CanFuncIsKeyMacro( int );	// キーマクロに記録可能な機能かどうかを調べる
+	static char* GetFuncInfoByID(HINSTANCE , int , char* , char*);	// 機能ID→関数名，機能名日本語
+	static int GetFuncInfoByName(HINSTANCE , const char* , char*);	// 関数名→機能ID，機能名日本語
+	static BOOL CanFuncIsKeyMacro(int);	// キーマクロに記録可能な機能かどうかを調べる
 #endif
 
 protected:

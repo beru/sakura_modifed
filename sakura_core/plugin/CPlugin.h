@@ -80,13 +80,13 @@ public:
 
 	//コンストラクタ
 public:
-	CPlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel )
+	CPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel)
 		:
-		m_id( id ),
-		m_sJack( sJack ),
-		m_sHandler( sHandler ),
-		m_sLabel( sLabel ),
-		m_cPlugin( plugin )
+		m_id(id),
+		m_sJack(sJack),
+		m_sHandler(sHandler),
+		m_sLabel(sLabel),
+		m_cPlugin(plugin)
 	{
 	}
 	//デストラクタ
@@ -95,7 +95,7 @@ public:
 
 	//操作
 public:
-	bool Invoke( CEditView* view, CWSHIfObj::List& params );	//プラグを実行する
+	bool Invoke(CEditView* view, CWSHIfObj::List& params);	//プラグを実行する
 
 	//属性
 public:
@@ -106,16 +106,16 @@ public:
 	// Plug Function番号の計算(クラス外でも使えるバージョン)
 	// 2010/4/19 Uchi
 	// 2011/8/20 syat 関数コードの割り当て直し
-	static inline EFunctionCode GetPluginFunctionCode( PluginId nPluginId, PlugId nPlugId ) {
-		return static_cast<EFunctionCode>( (nPluginId%20 * 100) + (nPluginId/20 * 50) + nPlugId + F_PLUGCOMMAND_FIRST );
+	static inline EFunctionCode GetPluginFunctionCode(PluginId nPluginId, PlugId nPlugId) {
+		return static_cast<EFunctionCode>((nPluginId%20 * 100) + (nPluginId/20 * 50) + nPlugId + F_PLUGCOMMAND_FIRST);
 	}
 
 	// PluginId番号の計算(クラス外でも使えるバージョン)
 	// 2010/4/19 Uchi
 	// 2011/8/20 syat 関数コードの割り当て直し
-	static inline PluginId GetPluginId( EFunctionCode nFunctionCode ) {
+	static inline PluginId GetPluginId(EFunctionCode nFunctionCode) {
 		if (nFunctionCode >= F_PLUGCOMMAND_FIRST && nFunctionCode < F_PLUGCOMMAND_LAST) {
-			return PluginId( (nFunctionCode - F_PLUGCOMMAND_FIRST)/100 + (nFunctionCode%100/50 * 20) );
+			return PluginId((nFunctionCode - F_PLUGCOMMAND_FIRST)/100 + (nFunctionCode%100/50 * 20));
 		}
 		return PluginId(-1);
 	}
@@ -123,9 +123,9 @@ public:
 	// PluginNo番号の計算(クラス外でも使えるバージョン)
 	// 2010/6/24 Uchi
 	// 2011/8/20 syat 関数コードの割り当て直し
-	static inline PlugId GetPlugId( EFunctionCode nFunctionCode ) {
+	static inline PlugId GetPlugId(EFunctionCode nFunctionCode) {
 		if (nFunctionCode >= F_PLUGCOMMAND_FIRST && nFunctionCode < F_PLUGCOMMAND_LAST) {
-			return PlugId( nFunctionCode%100 - (nFunctionCode%100/50 * 50) );
+			return PlugId(nFunctionCode%100 - (nFunctionCode%100/50 * 50));
 		}
 		return PlugId(-1);
 	}
@@ -146,11 +146,11 @@ public:
 	 *   +------------+------------+----+------------+
 	 *   もし足りなければ、22000～23999を払い出して食いつぶす
 	 *************************************************************************/
-	static EOutlineType GetOutlineType( EFunctionCode nFunctionCode ){
+	static EOutlineType GetOutlineType(EFunctionCode nFunctionCode) {
 		return static_cast<EOutlineType>(nFunctionCode);
 	}
 
-	static ESmartIndentType GetSmartIndentType( EFunctionCode nFunctionCode ){
+	static ESmartIndentType GetSmartIndentType(EFunctionCode nFunctionCode) {
 		return static_cast<ESmartIndentType>(nFunctionCode);
 	}
 
@@ -165,7 +165,7 @@ public:
 };
 
 // オプション定義	// 2010/3/24 Uchi
-std::vector<std::wstring> wstring_split( std::wstring, wchar_t );
+std::vector<std::wstring> wstring_split(std::wstring, wchar_t);
 
 class CPluginOption {
 	// 型定義
@@ -177,13 +177,13 @@ public:
 
 	// コンストラクタ
 public:
-	CPluginOption( CPlugin* parent, wstring sLabel, wstring sSection, wstring sKey, wstring sType, wstring sSelects, wstring sDefaultVal, int index) {
+	CPluginOption(CPlugin* parent, wstring sLabel, wstring sSection, wstring sKey, wstring sType, wstring sSelects, wstring sDefaultVal, int index) {
 		m_parent	= parent;
 		m_sLabel	= sLabel;
 		m_sSection	= sSection;
 		m_sKey		= sKey;
 		// 小文字変換
-		std::transform( sType.begin (), sType.end (), sType.begin (), tolower );
+		std::transform(sType.begin (), sType.end (), sType.begin (), tolower);
 		m_sType		= sType;
 		m_sSelects	= sSelects;
 		m_sDefaultVal = sDefaultVal;
@@ -196,17 +196,17 @@ public:
 
 	// 操作
 public:
-	wstring	GetLabel( void )	{ return m_sLabel; }
-	void	GetKey( wstring* sectin, wstring* key )	{ 
+	wstring	GetLabel(void)	{ return m_sLabel; }
+	void	GetKey(wstring* sectin, wstring* key)	{ 
 		*sectin = m_sSection; 
 		*key = m_sKey;
 	}
-	wstring	GetType( void )		{ return m_sType; }
-	int 	GetIndex( void )	{ return m_index; }
+	wstring	GetType(void)	{ return m_sType; }
+	int 	GetIndex(void)	{ return m_index; }
 	std::vector<wstring> GetSelects() {
 		return (wstring_split(m_sSelects, L'|'));
 	}
-	wstring	GetDefaultVal(){ return m_sDefaultVal; }
+	wstring	GetDefaultVal() { return m_sDefaultVal; }
 
 protected:
 	CPlugin*	m_parent;
@@ -234,7 +234,7 @@ public:
 
 	//コンストラクタ
 public:
-	CPlugin( const tstring& sBaseDir );
+	CPlugin(const tstring& sBaseDir);
 
 	//デストラクタ
 public:
@@ -242,28 +242,28 @@ public:
 
 	//操作
 public:
-	virtual int AddCommand( const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister );//コマンドを追加する
+	virtual int AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister);	//コマンドを追加する
 	int 	GetCommandCount()	{ return m_nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
 
 protected:
-	bool ReadPluginDefCommon( CDataProfile *cProfile, CDataProfile *cProfileMlang );	// プラグイン定義ファイルのCommonセクションを読み込む
-	bool ReadPluginDefPlug( CDataProfile *cProfile, CDataProfile *cProfileMlang );		// プラグイン定義ファイルのPlugセクションを読み込む
-	bool ReadPluginDefCommand( CDataProfile *cProfile, CDataProfile *cProfileMlang );	// プラグイン定義ファイルのCommandセクションを読み込む
-	bool ReadPluginDefOption( CDataProfile *cProfile, CDataProfile *cProfileMlang );	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
-	bool ReadPluginDefString( CDataProfile *cProfile, CDataProfile *cProfileMlang );	// プラグイン定義ファイルのStringセクションを読み込む
+	bool ReadPluginDefCommon(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
+	bool ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのPlugセクションを読み込む
+	bool ReadPluginDefCommand(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのCommandセクションを読み込む
+	bool ReadPluginDefOption(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
+	bool ReadPluginDefString(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
 
 	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
-	virtual CPlug* CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel ) {
-		return new CPlug( plugin, id, sJack, sHandler, sLabel );
+	virtual CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
+		return new CPlug(plugin, id, sJack, sHandler, sLabel);
 	}
 
-//	void NormalizeExtList( const wstring& sExtList, wstring& sOut );	//カンマ区切り拡張子リストを正規化する
+//	void NormalizeExtList(const wstring& sExtList, wstring& sOut);	//カンマ区切り拡張子リストを正規化する
 
 	// 属性
 public:
-	tstring GetFilePath( const tstring& sFileName ) const;					// プラグインフォルダ基準の相対パスをフルパスに変換
-	tstring GetPluginDefPath() const{ return GetFilePath( PII_FILENAME ); }	// プラグイン定義ファイルのパス
-	tstring GetOptionPath() const{ return m_sOptionDir + PII_OPTFILEEXT; }	// オプションファイルのパス
+	tstring GetFilePath(const tstring& sFileName) const;					// プラグインフォルダ基準の相対パスをフルパスに変換
+	tstring GetPluginDefPath() const { return GetFilePath(PII_FILENAME); }	// プラグイン定義ファイルのパス
+	tstring GetOptionPath() const { return m_sOptionDir + PII_OPTFILEEXT; }	// オプションファイルのパス
 	tstring GetFolderName() const;	// プラグインのフォルダ名を取得
 	virtual CPlug::Array GetPlugs() const = 0;								// プラグの一覧
 
@@ -289,8 +289,8 @@ protected:
 
 	// 非実装提供
 public:
-	virtual bool InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& param ) =0;			// プラグを実行する
-	virtual bool ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMlang ) =0;		// プラグイン定義ファイルを読み込む
-	virtual bool ReadPluginOption( CDataProfile *cProfile ) =0;									// オプションファイルを読み込む
+	virtual bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& param) = 0;			// プラグを実行する
+	virtual bool ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang) = 0;		// プラグイン定義ファイルを読み込む
+	virtual bool ReadPluginOption(CDataProfile *cProfile) = 0;									// オプションファイルを読み込む
 };
 

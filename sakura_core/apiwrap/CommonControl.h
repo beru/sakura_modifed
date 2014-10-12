@@ -30,7 +30,7 @@ namespace ApiWrap {
 	//                      ステータスバー                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	inline LRESULT StatusBar_SetText(HWND hwndStatus, WPARAM opt, const TCHAR* str) {
-		return ::SendMessage( hwndStatus, SB_SETTEXT, opt, (LPARAM)str );
+		return ::SendMessage(hwndStatus, SB_SETTEXT, opt, (LPARAM)str);
 	}
 
 	inline int StatusBar_SetParts(HWND hwndCtl, int num, int* positions)		{ return (int)(DWORD)::SendMessage(hwndCtl, SB_SETPARTS, (WPARAM)num, (LPARAM)positions); }

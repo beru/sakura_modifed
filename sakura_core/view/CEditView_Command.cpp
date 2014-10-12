@@ -53,8 +53,6 @@ bool CEditView::TagJumpSub(
 	bool			bRelFromIni
 	)
 {
-	HWND	hwndOwner;
-	POINT	poCaret;
 	// 2004/06/21 novice タグジャンプ機能追加
 	TagJump	tagJump;
 
@@ -65,16 +63,16 @@ bool CEditView::TagJumpSub(
 	//	予め絶対パスに変換する．(キーワードヘルプジャンプで用いる)
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 	TCHAR szJumpToFile[1024];
-	if (bRelFromIni && _IS_REL_PATH( pszFileName )) {
-		GetInidirOrExedir( szJumpToFile, pszFileName );
+	if (bRelFromIni && _IS_REL_PATH(pszFileName)) {
+		GetInidirOrExedir(szJumpToFile, pszFileName);
 	}else {
-		_tcscpy_s( szJumpToFile, pszFileName );
+		_tcscpy_s(szJumpToFile, pszFileName);
 	}
 
 	// ロングファイル名を取得する
 	TCHAR szWork[1024];
-	if (::GetLongFileName( szJumpToFile, szWork )) {
-		_tcscpy( szJumpToFile, szWork );
+	if (::GetLongFileName(szJumpToFile, szWork)) {
+		_tcscpy(szJumpToFile, szWork);
 	}
 
 // 2004/06/21 novice タグジャンプ機能追加
@@ -92,13 +90,14 @@ bool CEditView::TagJumpSub(
 	// タグジャンプ情報の保存
 	CTagJumpManager().PushTagJump(&tagJump);
 
-
 	// 指定ファイルが開かれているか調べる
 	// 開かれている場合は開いているウィンドウのハンドルも返す
 	// ファイルを開いているか
-	if (CShareData::getInstance()->IsPathOpened( szJumpToFile, &hwndOwner )) {
+	HWND hwndOwner;
+	if (CShareData::getInstance()->IsPathOpened(szJumpToFile, &hwndOwner)) {
 		// 2004.05.13 Moca マイナス値は無効
 		if (0 < ptJumpTo.y) {
+			POINT poCaret;
 			// カーソルを移動させる
 			poCaret.y = ptJumpTo.y - 1;
 			if (0 < ptJumpTo.x) {
@@ -106,23 +105,21 @@ bool CEditView::TagJumpSub(
 			}else {
 				poCaret.x = 0;
 			}
-			memcpy_raw( GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &poCaret, sizeof(poCaret) );
-			::SendMessageAny( hwndOwner, MYWM_SETCARETPOS, 0, 0 );
+			memcpy_raw(GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &poCaret, sizeof(poCaret));
+			::SendMessageAny(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 		}
 		// アクティブにする
-		ActivateFrameWindow( hwndOwner );
+		ActivateFrameWindow(hwndOwner);
 	}else {
 		// 新しく開く
-		EditInfo	inf;
-		bool		bSuccess;
-
-		_tcscpy( inf.m_szPath, szJumpToFile );
+		EditInfo inf;
+		_tcscpy(inf.m_szPath, szJumpToFile);
 		inf.m_ptCursor.Set(CLogicInt(ptJumpTo.x - 1), CLogicInt(ptJumpTo.y - 1));
 		inf.m_nViewLeftCol = CLayoutInt(-1);
 		inf.m_nViewTopLine = CLayoutInt(-1);
 		inf.m_nCharCode    = CODE_AUTODETECT;
 
-		bSuccess = CControlTray::OpenNewEditor2(
+		bool bSuccess = CControlTray::OpenNewEditor2(
 			G_AppInstance(),
 			this->GetHwnd(),
 			&inf,
@@ -136,7 +133,7 @@ bool CEditView::TagJumpSub(
 		//	Apr. 23, 2001 genta
 		//	hwndOwnerに値が入らなくなってしまったために
 		//	Tag Jump Backが動作しなくなっていたのを修正
-		if (!CShareData::getInstance()->IsPathOpened( szJumpToFile, &hwndOwner ))
+		if (!CShareData::getInstance()->IsPathOpened(szJumpToFile, &hwndOwner))
 			return false;
 	}
 
@@ -169,7 +166,7 @@ BOOL CEditView::OPEN_ExtFromtoExt(
 {
 	// 編集中ファイルの拡張子を調べる
 	for (int i = 0; i < file_extno; i++) {
-		if (CheckEXT( GetDocument()->m_cDocFile.GetFilePath(), file_ext[i] )) {
+		if (CheckEXT(GetDocument()->m_cDocFile.GetFilePath(), file_ext[i])) {
 			goto open_c;
 		}
 	}
@@ -187,10 +184,10 @@ open_c:;
 	TCHAR	szExt[_MAX_EXT];
 	HWND	hwndOwner;
 
-	_tsplitpath( GetDocument()->m_cDocFile.GetFilePath(), szDrive, szDir, szFname, szExt );
+	_tsplitpath(GetDocument()->m_cDocFile.GetFilePath(), szDrive, szDir, szFname, szExt);
 
 	for (int i = 0; i < open_extno; i++) {
-		_tmakepath( szPath, szDrive, szDir, szFname, open_ext[i] );
+		_tmakepath(szPath, szDrive, szDir, szFname, open_ext[i]);
 		if (!fexist(szPath)) {
 			if (i < open_extno - 1)
 				continue;
@@ -208,7 +205,7 @@ open_c:;
 	// 指定ファイルが開かれているか調べる
 	// 開かれている場合は開いているウィンドウのハンドルも返す
 	// ファイルを開いているか
-	if (CShareData::getInstance()->IsPathOpened( szPath, &hwndOwner )) {
+	if (CShareData::getInstance()->IsPathOpened(szPath, &hwndOwner)) {
 	}else {
 		// 文字コードはこのファイルに合わせる
 		SLoadInfo sLoadInfo;
@@ -223,18 +220,18 @@ open_c:;
 			true
 		);
 		// ファイルを開いているか
-		if (CShareData::getInstance()->IsPathOpened( szPath, &hwndOwner )) {
+		if (CShareData::getInstance()->IsPathOpened(szPath, &hwndOwner)) {
 		}else {
 			// 2011.01.12 ryoji エラーは表示しないでおく
 			// ファイルサイズが大きすぎて読むかどうか問い合わせているような場合でもエラー表示になるのは変
 			// OpenNewEditor()または起動された側のメッセージ表示で十分と思われる
 
-			//ErrorMessage( this->GetHwnd(), _T("%ts\n\n%ts\n\n"), errmes, szPath );
+			//ErrorMessage(this->GetHwnd(), _T("%ts\n\n%ts\n\n"), errmes, szPath);
 			return FALSE;
 		}
 	}
 	// アクティブにする
-	ActivateFrameWindow( hwndOwner );
+	ActivateFrameWindow(hwndOwner);
 
 // 2004/06/21 novice タグジャンプ機能追加
 // 2004/07/09 genta/Moca タグジャンプバックの登録が取り除かれていたが、
@@ -270,7 +267,7 @@ open_c:;
 	@date 2006.01.08 genta 判定条件を見直し
 	@date 2008.06.08 ryoji ウィンドウ幅設定にぶら下げ余白を追加
 */
-CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
+CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode(CLayoutInt* _newKetas)
 {
 	CLayoutInt& newKetas = *_newKetas;
 	//@@@ 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするコマンド。
@@ -304,7 +301,7 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 	*/
 	
 	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
-	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum( GetTextArea().m_nViewColNum )) {
+	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().m_nViewColNum)) {
 		// a)
 		newKetas = CLayoutInt(MAXLINEKETAS);
 		return TGWRAP_FULL;
@@ -332,17 +329,17 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 			
 		}else {	// b) c)
 			//	現在のウィンドウ幅
-			newKetas = ViewColNumToWrapColNum( GetTextArea().m_nViewColNum );
+			newKetas = ViewColNumToWrapColNum(GetTextArea().m_nViewColNum);
 			return TGWRAP_WINDOW;
 		}
 	}
 }
 
 
-void CEditView::AddToCmdArr( const TCHAR* szCmd )
+void CEditView::AddToCmdArr(const TCHAR* szCmd)
 {
 	CRecentCmd cRecentCmd;
-	cRecentCmd.AppendItem( szCmd );
+	cRecentCmd.AppendItem(szCmd);
 	cRecentCmd.Terminate();
 }
 
@@ -350,7 +347,7 @@ void CEditView::AddToCmdArr( const TCHAR* szCmd )
 	@date 2002.01.16 hor 共通ロジックを関数にしただけ・・・
 	@date 2011.12.18 Moca シーケンス導入。viewの検索文字列長の撤廃。他のビューの検索条件を引き継ぐフラグを追加
 */
-BOOL CEditView::ChangeCurRegexp( bool bRedrawIfChanged )
+BOOL CEditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
@@ -399,31 +396,31 @@ BOOL CEditView::ChangeCurRegexp( bool bRedrawIfChanged )
 	@date 2007.10.08 ryoji 新規（Command_COPY()から処理抜き出し）
 */
 void CEditView::CopyCurLine(
-	bool			bAddCRLFWhenCopy,		//!< [in] 折り返し位置に改行コードを挿入するか？
-	EEolType		neweol,					//!< [in] コピーするときのEOL。
-	bool			bEnableLineModePaste	//!< [in] ラインモード貼り付けを可能にする
+	bool		bAddCRLFWhenCopy,		//!< [in] 折り返し位置に改行コードを挿入するか？
+	EEolType	neweol,					//!< [in] コピーするときのEOL。
+	bool		bEnableLineModePaste	//!< [in] ラインモード貼り付けを可能にする
 )
 {
 	if (GetSelectionInfo().IsTextSelected()) {
 		return;
 	}
 
-	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().y );
+	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
 	if (!pcLayout) {
 		return;
 	}
 
 	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
 	CNativeW cmemBuf;
-	cmemBuf.SetString( pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() );
+	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL());
 	if (pcLayout->GetLayoutEol().GetLen() != 0) {
 		cmemBuf.AppendString(
-			( neweol == EOL_UNKNOWN ) ?
+			(neweol == EOL_UNKNOWN) ?
 				pcLayout->GetLayoutEol().GetValue2() : CEol(neweol).GetValue2()
 		);
 	}else if (bAddCRLFWhenCopy) {	// 2007.10.08 ryoji bAddCRLFWhenCopy対応処理追加
 		cmemBuf.AppendString(
-			( neweol == EOL_UNKNOWN ) ?
+			(neweol == EOL_UNKNOWN) ?
 				WCODE::CRLF : CEol(neweol).GetValue2()
 		);
 	}
@@ -454,9 +451,9 @@ HWND CEditView::StartProgress()
 {
 	HWND hwndProgress = m_pcEditWnd->m_cStatusBar.GetProgressHwnd();
 	if (hwndProgress) {
-		::ShowWindow( hwndProgress, SW_SHOW );
-		Progress_SetRange( hwndProgress, 0, 101 );
-		Progress_SetPos( hwndProgress, 0 );
+		::ShowWindow(hwndProgress, SW_SHOW);
+		Progress_SetRange(hwndProgress, 0, 101);
+		Progress_SetPos(hwndProgress, 0);
 	}
 	return hwndProgress;
 }

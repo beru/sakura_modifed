@@ -105,8 +105,8 @@ protected:
 
 	// int式入出力実装マクロ
 	#define AS_INT(TYPE) \
-		void profile_to_value(const wstring& profile, TYPE* value){ *value = (TYPE)_wtoi(profile.c_str()); } \
-		void value_to_profile(const TYPE& value, wstring* profile){ *profile = _work_itow(value);    }
+		void profile_to_value(const wstring& profile, TYPE* value) { *value = (TYPE)_wtoi(profile.c_str()); } \
+		void value_to_profile(const TYPE& value, wstring* profile) { *profile = _work_itow(value);    }
 
 	// int式
 // CType.hをincludeしないといけないから廃止
@@ -115,11 +115,11 @@ protected:
 
 #ifdef USE_STRICT_INT
 	// CLayoutInt
-	void profile_to_value(const wstring& profile, CLayoutInt* value){ *value = (CLayoutInt)_wtoi(profile.c_str()); }
-	void value_to_profile(const CLayoutInt& value, wstring* profile){ *profile = _work_itow((Int)value);    }
+	void profile_to_value(const wstring& profile, CLayoutInt* value) { *value = (CLayoutInt)_wtoi(profile.c_str()); }
+	void value_to_profile(const CLayoutInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
 	// CLogicInt
-	void profile_to_value(const wstring& profile, CLogicInt* value){ *value = (CLogicInt)_wtoi(profile.c_str()); }
-	void value_to_profile(const CLogicInt& value, wstring* profile){ *profile = _work_itow((Int)value);    }
+	void profile_to_value(const wstring& profile, CLogicInt* value) { *value = (CLogicInt)_wtoi(profile.c_str()); }
+	void value_to_profile(const CLogicInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
 #endif
 	// ACHAR
 	void profile_to_value(const wstring& profile, ACHAR* value) {
@@ -191,12 +191,12 @@ protected:
 public:
 	// 注意：StringBuffer系はバッファが足りないとabortします
 	template <class T> //T=={bool, int, WORD, wchar_t, char, wstring, StringBufferA, StringBufferW, StaticString}
-	bool IOProfileData( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue ) {
+	bool IOProfileData(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& tEntryValue) {
 		// 読み込み
 		if (m_bRead) {
 			// 文字列読み込み
 			wstring buf;
-			bool ret=GetProfileDataImp( pszSectionName, pszEntryKey, buf);
+			bool ret=GetProfileDataImp(pszSectionName, pszEntryKey, buf);
 			if (ret) {
 				// Tに変換
 				profile_to_value(buf, &tEntryValue);
@@ -208,16 +208,16 @@ public:
 			wstring buf;
 			value_to_profile(tEntryValue, &buf);
 			// 文字列書き込み
-			return SetProfileDataImp( pszSectionName, pszEntryKey, buf);
+			return SetProfileDataImp(pszSectionName, pszEntryKey, buf);
 		}
 	}
 
 	//2007.08.14 kobake 追加
 	//! intを介して任意型の入出力を行う
 	template <class T>
-	bool IOProfileData_WrapInt( const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {
+	bool IOProfileData_WrapInt(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {
 		int n = nEntryValue;
-		bool ret = this->IOProfileData( pszSectionName, pszEntryKey, n );
+		bool ret = this->IOProfileData(pszSectionName, pszEntryKey, n);
 		nEntryValue = (T)n;
 		return ret;
 	}

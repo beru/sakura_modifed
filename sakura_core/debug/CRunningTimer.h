@@ -54,7 +54,7 @@ public:
 	/*
 	||  Constructors
 	*/
-	CRunningTimer( const char* Text = NULL);
+	CRunningTimer(const char* Text = NULL);
 	~CRunningTimer();
 
 	/*
@@ -78,10 +78,10 @@ protected:
 //	Oct. 16, 2002 genta
 //	#ifdef _DEBUG～#endifで逐一囲まなくても簡単にタイマーのON/OFFを行うためのマクロ
 #if defined(_DEBUG) && defined(TIME_MEASURE)
-  #define MY_TRACETIME(c,m) (c).WriteTrace(m)
-  #define MY_RUNNINGTIMER(c,m) CRunningTimer c(m)
+  #define MY_TRACETIME(c, m) (c).WriteTrace(m)
+  #define MY_RUNNINGTIMER(c, m) CRunningTimer c(m)
 #else
-  #define MY_TRACETIME(c,m)
-  #define MY_RUNNINGTIMER(c,m)
+  #define MY_TRACETIME(c, m)
+  #define MY_RUNNINGTIMER(c, m)
 #endif
 

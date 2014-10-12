@@ -62,9 +62,9 @@ static const DWORD p_helpids[] = {	//11200
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropWin::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return DlgProc( reinterpret_cast<pDispatchPage>(&CPropWin::DispatchEvent), hwndDlg, uMsg, wParam, lParam );
+	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropWin::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 	}
 //	To Here Jun. 2, 2001 genta
 
@@ -90,15 +90,15 @@ INT_PTR CPropWin::DispatchEvent(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// ダイアログデータの設定 Window
-		SetData( hwndDlg );
+		SetData(hwndDlg);
 		// Modified by KEITA for WIN64 2003.9.6
-		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
+		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 		// ルーラー高さ
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_nRulerHeight ), 2 );
+		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_nRulerHeight), 2);
 		// ルーラーとテキストの隙間
-		EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_nRulerBottomSpace ), 2 );
+		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_nRulerBottomSpace), 2);
 
 		return TRUE;
 
@@ -110,12 +110,12 @@ INT_PTR CPropWin::DispatchEvent(
 		default:
 			switch (pNMHDR->code) {
 			case PSN_HELP:
-				OnHelp( hwndDlg, IDD_PROP_WIN );
+				OnHelp(hwndDlg, IDD_PROP_WIN);
 				return TRUE;
 			case PSN_KILLACTIVE:
-//				MYTRACE( _T("Window PSN_KILLACTIVE\n") );
+//				MYTRACE(_T("Window PSN_KILLACTIVE\n"));
 				// ダイアログデータの取得 Window
-				GetData( hwndDlg );
+				GetData(hwndDlg);
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
@@ -125,7 +125,7 @@ INT_PTR CPropWin::DispatchEvent(
 			break;
 		case IDC_SPIN_nRulerHeight:
 			// ルーラ－の高さ
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nRulerHeight, NULL, FALSE );
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nRulerHeight, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -138,11 +138,11 @@ INT_PTR CPropWin::DispatchEvent(
 			if (nVal > IDC_SPIN_nRulerHeight_MAX) {
 				nVal = IDC_SPIN_nRulerHeight_MAX;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_nRulerHeight, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_nRulerHeight, nVal, FALSE);
 			return TRUE;
 		case IDC_SPIN_nRulerBottomSpace:
 			// ルーラーとテキストの隙間
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nRulerBottomSpace, NULL, FALSE );
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nRulerBottomSpace, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -155,11 +155,11 @@ INT_PTR CPropWin::DispatchEvent(
 			if (nVal > 32) {
 				nVal = 32;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_nRulerBottomSpace, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_nRulerBottomSpace, nVal, FALSE);
 			return TRUE;
 		case IDC_SPIN_nLineNumberRightSpace:
 			// ルーラーとテキストの隙間
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nLineNumberRightSpace, NULL, FALSE );
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -172,10 +172,10 @@ INT_PTR CPropWin::DispatchEvent(
 			if (nVal > 32) {
 				nVal = 32;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_nLineNumberRightSpace, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, nVal, FALSE);
 			return TRUE;
 		case IDC_SPIN_FUNCKEYWND_GROUPNUM:
-			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, NULL, FALSE );
+			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {
 				++nVal;
 			}else
@@ -188,7 +188,7 @@ INT_PTR CPropWin::DispatchEvent(
 			if (nVal > 12) {
 				nVal = 12;
 			}
-			::SetDlgItemInt( hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, nVal, FALSE );
+			::SetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, nVal, FALSE);
 			return TRUE;
 		}
 		break;
@@ -203,7 +203,7 @@ INT_PTR CPropWin::DispatchEvent(
 			switch (wID) {
 			//	ファンクションキーを表示する時だけその位置指定をEnableに設定
 			case IDC_CHECK_DispFUNCKEYWND:
-				EnableWinPropInput( hwndDlg );
+				EnableWinPropInput(hwndDlg);
 				break;
 
 			// From Here 2004.05.13 Moca 「位置と大きさの設定」ボタン
@@ -242,7 +242,7 @@ INT_PTR CPropWin::DispatchEvent(
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
 		// NOTREACHED
@@ -252,7 +252,7 @@ INT_PTR CPropWin::DispatchEvent(
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
 	//Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp( hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 //@@@ 2001.12.22 End
 
@@ -261,27 +261,27 @@ INT_PTR CPropWin::DispatchEvent(
 }
 
 // ダイアログデータの設定
-void CPropWin::SetData( HWND hwndDlg )
+void CPropWin::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
 	auto& csWindow = m_Common.m_sWindow;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DispTOOLBAR, csWindow.m_bDispTOOLBAR );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DispTOOLBAR, csWindow.m_bDispTOOLBAR);
 
 	// 次回ウィンドウを開いたときファンクションキーを表示する
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DispFUNCKEYWND, csWindow.m_bDispFUNCKEYWND );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DispFUNCKEYWND, csWindow.m_bDispFUNCKEYWND);
 
 	// ファンクションキー表示位置／0:上 1:下
 	if (0 == csWindow.m_nFUNCKEYWND_Place) {
-		::CheckDlgButton( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1, TRUE );
-		::CheckDlgButton( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2, FALSE );
+		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1, TRUE);
+		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2, FALSE);
 	}else {
-		::CheckDlgButton( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1, FALSE );
-		::CheckDlgButton( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2, TRUE );
+		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1, FALSE);
+		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2, TRUE);
 	}
 	// 2002/11/04 Moca ファンクションキーのグループボタン数
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, csWindow.m_nFUNCKEYWND_GroupNum, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, csWindow.m_nFUNCKEYWND_GroupNum, FALSE);
 
 	//From Here@@@ 2003.06.13 MIK
 	//	Feb. 12, 2007 genta TAB関連は「タブバー」シートへ移動
@@ -290,85 +290,85 @@ void CPropWin::SetData( HWND hwndDlg )
 	//	Feb. 11, 2007 genta TAB関連は「タブバー」シートへ移動
 
 	// 次回ウィンドウを開いたときステータスバーを表示する
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DispSTATUSBAR, csWindow.m_bDispSTATUSBAR );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_DispSTATUSBAR, csWindow.m_bDispSTATUSBAR);
 
 	// ルーラー高さ
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_nRulerHeight, csWindow.m_nRulerHeight, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_nRulerHeight, csWindow.m_nRulerHeight, FALSE);
 	// ルーラーとテキストの隙間
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_nRulerBottomSpace, csWindow.m_nRulerBottomSpace, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_nRulerBottomSpace, csWindow.m_nRulerBottomSpace, FALSE);
 	//	Sep. 18. 2002 genta 行番号とテキストの隙間
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_nLineNumberRightSpace, csWindow.m_nLineNumRightSpace, FALSE );
+	::SetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, csWindow.m_nLineNumRightSpace, FALSE);
 
 	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if( 0 == csWindow.m_nRulerType ){
-//		::CheckDlgButton( hwndDlg, IDC_RADIO_nRulerType_0, TRUE );
-//		::CheckDlgButton( hwndDlg, IDC_RADIO_nRulerType_1, FALSE );
+//	if(0 == csWindow.m_nRulerType) {
+//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, TRUE);
+//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, FALSE);
 //	}else{
-//		::CheckDlgButton( hwndDlg, IDC_RADIO_nRulerType_0, FALSE );
-//		::CheckDlgButton( hwndDlg, IDC_RADIO_nRulerType_1, TRUE );
+//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, FALSE);
+//		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, TRUE);
 //	}
 
 	// 水平スクロールバー
-	::CheckDlgButton( hwndDlg, IDC_CHECK_bScrollBarHorz, csWindow.m_bScrollBarHorz );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_bScrollBarHorz, csWindow.m_bScrollBarHorz);
 
 	// アイコン付きメニュー
-	::CheckDlgButton( hwndDlg, IDC_CHECK_bMenuIcon, csWindow.m_bMenuIcon );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_bMenuIcon, csWindow.m_bMenuIcon);
 
 	//	2001/06/20 Start by asa-o:	スクロールの同期
-	::CheckDlgButton( hwndDlg, IDC_CHECK_SplitterWndVScroll, csWindow.m_bSplitterWndVScroll );
-	::CheckDlgButton( hwndDlg, IDC_CHECK_SplitterWndHScroll, csWindow.m_bSplitterWndHScroll );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_SplitterWndVScroll, csWindow.m_bSplitterWndVScroll);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_SplitterWndHScroll, csWindow.m_bSplitterWndHScroll);
 	//	2001/06/20 End
 
 	//	Apr. 05, 2003 genta ウィンドウキャプションのカスタマイズ
-	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_WINCAPTION_ACTIVE   ), _countof( csWindow.m_szWindowCaptionActive   ) - 1 );	//@@@ 2003.06.13 MIK
-	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_WINCAPTION_INACTIVE ), _countof( csWindow.m_szWindowCaptionInactive ) - 1 );	//@@@ 2003.06.13 MIK
-	::DlgItem_SetText( hwndDlg, IDC_WINCAPTION_ACTIVE, csWindow.m_szWindowCaptionActive );
-	::DlgItem_SetText( hwndDlg, IDC_WINCAPTION_INACTIVE, csWindow.m_szWindowCaptionInactive );
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_WINCAPTION_ACTIVE  ), _countof(csWindow.m_szWindowCaptionActive  ) - 1);	//@@@ 2003.06.13 MIK
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_WINCAPTION_INACTIVE), _countof(csWindow.m_szWindowCaptionInactive) - 1);	//@@@ 2003.06.13 MIK
+	::DlgItem_SetText(hwndDlg, IDC_WINCAPTION_ACTIVE, csWindow.m_szWindowCaptionActive);
+	::DlgItem_SetText(hwndDlg, IDC_WINCAPTION_INACTIVE, csWindow.m_szWindowCaptionInactive);
 
 	//	Fronm Here Sept. 9, 2000 JEPRO
 	//	ファンクションキーを表示する時だけその位置指定をEnableに設定
-	EnableWinPropInput( hwndDlg );
+	EnableWinPropInput(hwndDlg);
 	//	To Here Sept. 9, 2000
 
 	// 言語選択
-	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_LANGUAGE );
-	Combo_ResetContent( hwndCombo );
+	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_LANGUAGE);
+	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
 	UINT uiIndex = 0;
 	for (uiIndex = 0; uiIndex < CSelectLang::m_psLangInfoList.size(); uiIndex++) {
-		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at( uiIndex );
-		Combo_InsertString( hwndCombo, uiIndex, psLangInfo->szLangName );
-		if (_tcscmp( csWindow.m_szLanguageDll, psLangInfo->szDllName ) == 0) {
+		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(uiIndex);
+		Combo_InsertString(hwndCombo, uiIndex, psLangInfo->szLangName);
+		if (_tcscmp(csWindow.m_szLanguageDll, psLangInfo->szDllName) == 0) {
 			nSelPos = uiIndex;
 		}
 	}
-	Combo_SetCurSel( hwndCombo, nSelPos );
+	Combo_SetCurSel(hwndCombo, nSelPos);
 
 	return;
 }
 
 
 // ダイアログデータの取得
-int CPropWin::GetData( HWND hwndDlg )
+int CPropWin::GetData(HWND hwndDlg)
 {
 	auto& csWindow = m_Common.m_sWindow;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
-	csWindow.m_bDispTOOLBAR = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispTOOLBAR );
+	csWindow.m_bDispTOOLBAR = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTOOLBAR);
 
 	// 次回ウィンドウを開いたときファンクションキーを表示する
-	csWindow.m_bDispFUNCKEYWND = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispFUNCKEYWND );
+	csWindow.m_bDispFUNCKEYWND = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND);
 
 	// ファンクションキー表示位置／0:上 1:下
-	if (::IsDlgButtonChecked( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1 )) {
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1)) {
 		csWindow.m_nFUNCKEYWND_Place = 0;
 	}
-	if (::IsDlgButtonChecked( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2)) {
+	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2)) {
 		csWindow.m_nFUNCKEYWND_Place = 1;
 	}
 
 	// 2002/11/04 Moca ファンクションキーのグループボタン数
-	csWindow.m_nFUNCKEYWND_GroupNum = ::GetDlgItemInt( hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, NULL, FALSE );
+	csWindow.m_nFUNCKEYWND_GroupNum = ::GetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, NULL, FALSE);
 	if (csWindow.m_nFUNCKEYWND_GroupNum < 1) {
 		csWindow.m_nFUNCKEYWND_GroupNum = 1;
 	}
@@ -381,18 +381,18 @@ int CPropWin::GetData( HWND hwndDlg )
 	//To Here@@@ 2003.06.13 MIK
 
 	// 次回ウィンドウを開いたときステータスバーを表示する 
-	csWindow.m_bDispSTATUSBAR = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispSTATUSBAR );
+	csWindow.m_bDispSTATUSBAR = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispSTATUSBAR);
 
 	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_nRulerType_0 ) ){
+//	if(::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_0)) {
 //		csWindow.m_nRulerType = 0;
 //	}
-//	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_nRulerType_1 ) ){
+//	if(::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_1)) {
 //		csWindow.m_nRulerType = 1;
 //	}
 
 	// ルーラー高さ
-	csWindow.m_nRulerHeight = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nRulerHeight, NULL, FALSE );
+	csWindow.m_nRulerHeight = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nRulerHeight, NULL, FALSE);
 	if (csWindow.m_nRulerHeight < IDC_SPIN_nRulerHeight_MIN) {
 		csWindow.m_nRulerHeight = IDC_SPIN_nRulerHeight_MIN;
 	}
@@ -400,7 +400,7 @@ int CPropWin::GetData( HWND hwndDlg )
 		csWindow.m_nRulerHeight = IDC_SPIN_nRulerHeight_MAX;
 	}
 	// ルーラーとテキストの隙間
-	csWindow.m_nRulerBottomSpace = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nRulerBottomSpace, NULL, FALSE );
+	csWindow.m_nRulerBottomSpace = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nRulerBottomSpace, NULL, FALSE);
 	if (csWindow.m_nRulerBottomSpace < 0) {
 		csWindow.m_nRulerBottomSpace = 0;
 	}
@@ -409,7 +409,7 @@ int CPropWin::GetData( HWND hwndDlg )
 	}
 
 	//	Sep. 18. 2002 genta 行番号とテキストの隙間
-	csWindow.m_nLineNumRightSpace = ::GetDlgItemInt( hwndDlg, IDC_EDIT_nLineNumberRightSpace, NULL, FALSE );
+	csWindow.m_nLineNumRightSpace = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, NULL, FALSE);
 	if (csWindow.m_nLineNumRightSpace < 0) {
 		csWindow.m_nLineNumRightSpace = 0;
 	}
@@ -418,28 +418,28 @@ int CPropWin::GetData( HWND hwndDlg )
 	}
 
 	// 水平スクロールバー
-	csWindow.m_bScrollBarHorz = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bScrollBarHorz );
+	csWindow.m_bScrollBarHorz = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bScrollBarHorz);
 
 	// アイコン付きメニュー
-	csWindow.m_bMenuIcon = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bMenuIcon );
+	csWindow.m_bMenuIcon = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bMenuIcon);
 
 	//	2001/06/20 Start by asa-o:	スクロールの同期
-	csWindow.m_bSplitterWndVScroll = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SplitterWndVScroll );
-	csWindow.m_bSplitterWndHScroll = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SplitterWndHScroll );
+	csWindow.m_bSplitterWndVScroll = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SplitterWndVScroll);
+	csWindow.m_bSplitterWndHScroll = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SplitterWndHScroll);
 	//	2001/06/20 End
 
 	//	Apr. 05, 2003 genta ウィンドウキャプションのカスタマイズ
-	::DlgItem_GetText( hwndDlg, IDC_WINCAPTION_ACTIVE, csWindow.m_szWindowCaptionActive,
-		_countof( csWindow.m_szWindowCaptionActive ) );
-	::DlgItem_GetText( hwndDlg, IDC_WINCAPTION_INACTIVE, csWindow.m_szWindowCaptionInactive,
-		_countof( csWindow.m_szWindowCaptionInactive ) );
+	::DlgItem_GetText(hwndDlg, IDC_WINCAPTION_ACTIVE, csWindow.m_szWindowCaptionActive,
+		_countof(csWindow.m_szWindowCaptionActive));
+	::DlgItem_GetText(hwndDlg, IDC_WINCAPTION_INACTIVE, csWindow.m_szWindowCaptionInactive,
+		_countof(csWindow.m_szWindowCaptionInactive));
 
 	// 言語選択
-	HWND hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_LANGUAGE );
-	int nSelPos = Combo_GetCurSel( hwndCombo );
-	CSelectLang::SSelLangInfo *psLangInfo = CSelectLang::m_psLangInfoList.at( nSelPos );
-	if (_tcscmp( csWindow.m_szLanguageDll, psLangInfo->szDllName ) != 0) {
-		_tcsncpy( csWindow.m_szLanguageDll, psLangInfo->szDllName, _countof(csWindow.m_szLanguageDll) );
+	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_LANGUAGE);
+	int nSelPos = Combo_GetCurSel(hwndCombo);
+	CSelectLang::SSelLangInfo *psLangInfo = CSelectLang::m_psLangInfoList.at(nSelPos);
+	if (_tcscmp(csWindow.m_szLanguageDll, psLangInfo->szDllName) != 0) {
+		_tcsncpy(csWindow.m_szLanguageDll, psLangInfo->szDllName, _countof(csWindow.m_szLanguageDll));
 	}
 	return TRUE;
 }
@@ -448,17 +448,17 @@ int CPropWin::GetData( HWND hwndDlg )
 //	From Here Sept. 9, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
-void CPropWin::EnableWinPropInput( HWND hwndDlg )
+void CPropWin::EnableWinPropInput(HWND hwndDlg)
 {
 	//	ファクションキーを表示するかどうか
-	if (::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DispFUNCKEYWND )) {
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM ), TRUE );	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1 ), TRUE );
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2 ), TRUE );
+	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND)) {
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), TRUE);	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1), TRUE);
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2), TRUE);
 	}else {
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM ), FALSE );	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1 ), FALSE );
-		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2 ), FALSE );
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), FALSE);	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1), FALSE);
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2), FALSE);
 	}
 }
 //	To Here Sept. 9, 2000

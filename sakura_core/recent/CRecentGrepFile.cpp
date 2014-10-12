@@ -52,29 +52,29 @@ CRecentGrepFile::CRecentGrepFile()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentGrepFile::GetItemText( int nIndex ) const
+const TCHAR* CRecentGrepFile::GetItemText(int nIndex) const
 {
 	return *GetItem(nIndex);
 }
 
-bool CRecentGrepFile::DataToReceiveType( LPCTSTR* dst, const CGrepFileString* src ) const
+bool CRecentGrepFile::DataToReceiveType(LPCTSTR* dst, const CGrepFileString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentGrepFile::TextToDataType( CGrepFileString* dst, LPCTSTR pszText ) const
+bool CRecentGrepFile::TextToDataType(CGrepFileString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, pszText);
 	return true;
 }
 
-int CRecentGrepFile::CompareItem( const CGrepFileString* p1, LPCTSTR p2 ) const
+int CRecentGrepFile::CompareItem(const CGrepFileString* p1, LPCTSTR p2) const
 {
 	return _tcsicmp(*p1,p2);
 }
 
-void CRecentGrepFile::CopyItem( CGrepFileString* dst, LPCTSTR src ) const
+void CRecentGrepFile::CopyItem(CGrepFileString* dst, LPCTSTR src) const
 {
 	_tcscpy(*dst, src);
 }

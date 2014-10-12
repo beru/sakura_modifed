@@ -129,7 +129,7 @@ bool CFile::FileLock( EShareMode eShareMode, bool bMsg )
 	// Œ‹‰Ê
 	if (INVALID_HANDLE_VALUE == m_hLockedFile && bMsg) {
 		const TCHAR* pszMode;
-		switch( eShareMode ){
+		switch( eShareMode ) {
 		case SHAREMODE_DENY_READWRITE:	pszMode = LS(STR_EXCLU_DENY_READWRITE); break;
 		case SHAREMODE_DENY_WRITE:		pszMode = LS(STR_EXCLU_DENY_WRITE); break;
 		default:						pszMode = LS(STR_EXCLU_UNDEFINED); break;

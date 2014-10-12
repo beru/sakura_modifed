@@ -61,11 +61,11 @@ CPPA::~CPPA()
 }
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-bool CPPA::Execute(CEditView* pcEditView, int flags )
+bool CPPA::Execute(CEditView* pcEditView, int flags)
 {
 	// PPAの多重起動禁止 2008.10.22 syat
 	if (CPPA::m_bIsRunning) {
-		MYMESSAGEBOX( pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1) );
+		MYMESSAGEBOX(pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
 		m_fnAbort();
 		CPPA::m_bIsRunning = false;
 		return false;
@@ -175,8 +175,8 @@ bool CPPA::InitDllImp()
 	SetFinishProc((void *)CPPA::stdFinishProc);
 #endif
 
-	SetDefine( "sakura-editor" );	// 2003.06.01 Moca SAKURAエディタ用独自関数を準備
-	AddStrObj( "UserErrorMes", "", FALSE, 2 ); // 2003.06.01 デバッグ用文字列変数を用意
+	SetDefine("sakura-editor");	// 2003.06.01 Moca SAKURAエディタ用独自関数を準備
+	AddStrObj("UserErrorMes", "", FALSE, 2); // 2003.06.01 デバッグ用文字列変数を用意
 
 	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
@@ -185,8 +185,8 @@ bool CPPA::InitDllImp()
 		//	2003.06.08 Moca メモリーリークの修正
 		//	2003.06.16 genta バッファを外から与えるように
 		//	関数登録用文字列を作成する
-		GetDeclarations( CSMacroMgr::m_MacroFuncInfoArr[i], buf );
-		SetDefProc( buf );
+		GetDeclarations(CSMacroMgr::m_MacroFuncInfoArr[i], buf);
+		SetDefProc(buf);
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
@@ -194,8 +194,8 @@ bool CPPA::InitDllImp()
 		//	2003.06.08 Moca メモリーリークの修正
 		//	2003.06.16 genta バッファを外から与えるように
 		//	関数登録用文字列を作成する
-		GetDeclarations( CSMacroMgr::m_MacroFuncInfoCommandArr[i], buf );
-		SetDefProc( buf );
+		GetDeclarations(CSMacroMgr::m_MacroFuncInfoCommandArr[i], buf);
+		SetDefProc(buf);
 	}
 	return true; 
 }
@@ -213,19 +213,19 @@ bool CPPA::InitDllImp()
 
 	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
-char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer )
+char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer)
 {
 	char szType[20];	// procedure/function用バッファ
 	char szReturn[20];	// 戻り値型用バッファ
 	if (cMacroFuncInfo.m_varResult == VT_EMPTY) {
-		strcpy( szType, "procedure" );
+		strcpy(szType, "procedure");
 		szReturn[0] = '\0';
 	}else {
-		strcpy( szType, "function" );
+		strcpy(szType, "function");
 		if (cMacroFuncInfo.m_varResult == VT_BSTR) {
-			strcpy( szReturn, ": string" );
+			strcpy(szReturn, ": string");
 		}else if (cMacroFuncInfo.m_varResult == VT_I4) {
-			strcpy( szReturn, ": Integer" );
+			strcpy(szReturn, ": Integer");
 		}else {
 			szReturn[0] = '\0';
 		}
@@ -246,24 +246,24 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* pszBuffe
 			break;
 		}
 		if (type == VT_BSTR) {
-			strcpy( szArguments[i], "s0: string" );
+			strcpy(szArguments[i], "s0: string");
 			szArguments[i][1] = '0' + (char)i;
 		}else if (type == VT_I4) {
-			strcpy( szArguments[i], "i0: Integer" );
+			strcpy(szArguments[i], "i0: Integer");
 			szArguments[i][1] = '0' + (char)i;
 		}else {
-			strcpy( szArguments[i], "u0: Unknown" );
+			strcpy(szArguments[i], "u0: Unknown");
 		}
 	}
 	if (i > 0) {	//	引数があったとき
 		char szArgument[8*20];
 		// 2002.12.06 Moca 原因不明だが，strcatがVC6Proでうまく動かなかったため，strcpyにしてみたら動いた
-		strcpy( szArgument, szArguments[0] );
+		strcpy(szArgument, szArguments[0]);
 		for (int j=1; j<i; j++) {
-			strcat( szArgument, "; " );
-			strcat( szArgument, szArguments[j] );
+			strcat(szArgument, "; ");
+			strcat(szArgument, szArguments[j]);
 		}
-		auto_sprintf( pszBuffer, "%hs S_%ls(%hs)%hs; index %d;",
+		auto_sprintf(pszBuffer, "%hs S_%ls(%hs)%hs; index %d;",
 			szType,
 			cMacroFuncInfo.m_pszFuncName,
 			szArgument,
@@ -271,7 +271,7 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* pszBuffe
 			cMacroFuncInfo.m_nFuncID
 		);
 	}else {
-		auto_sprintf( pszBuffer, "%hs S_%ls%hs; index %d;",
+		auto_sprintf(pszBuffer, "%hs S_%ls%hs; index %d;",
 			szType,
 			cMacroFuncInfo.m_pszFuncName,
 			szReturn,
@@ -319,7 +319,7 @@ void __stdcall CPPA::stdStrObj(const char* ObjName, int Index, BYTE GS_Mode, int
 
 	@date 2003.06.01 Moca
 */
-void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
+void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 {
 	if (false != m_CurInstance->m_bError) {
 		return;
@@ -336,27 +336,27 @@ void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
 		szFuncDec[0] = '\0';
 		for (i = 0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID != -1; i++) {
 			if (CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID == FuncID) {
-				GetDeclarations( CSMacroMgr::m_MacroFuncInfoCommandArr[i], szFuncDec );
+				GetDeclarations(CSMacroMgr::m_MacroFuncInfoCommandArr[i], szFuncDec);
 				break;
 			}
 		}
 		if (CSMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID != -1) {
 			for (i = 0; CSMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID != -1; i++) {
 				if (CSMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID == FuncID) {
-					GetDeclarations( CSMacroMgr::m_MacroFuncInfoArr[i], szFuncDec );
+					GetDeclarations(CSMacroMgr::m_MacroFuncInfoArr[i], szFuncDec);
 					break;
 				}
 			}
 		}
 		if (szFuncDec[0] != '\0') {
-			auto_sprintf_s( szMes, LS(STR_ERR_DLGPPA2), szFuncDec );
+			auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA2), szFuncDec);
 		}else {
-			auto_sprintf_s( szMes, LS(STR_ERR_DLGPPA3), FuncID );
+			auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA3), FuncID);
 		}
 	}else {
 		//	2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
 		//	実際には不正なエラーは全てPPA.DLL内部でトラップされるようだが念のため．
-		if (IsBadStringPtrA( Err_Mes, 256 )) {
+		if (IsBadStringPtrA(Err_Mes, 256)) {
 			pszErr = LS(STR_ERR_DLGPPA6);
 		}else {
 			switch (Err_CD) {
@@ -368,14 +368,14 @@ void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
 				}
 				break;
 			default:
-				auto_sprintf_s( szMes, LS(STR_ERR_DLGPPA5), Err_CD, to_tchar(Err_Mes) );
+				auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA5), Err_CD, to_tchar(Err_Mes));
 			}
 		}
 	}
 	if (0 == m_CurInstance->m_cMemDebug.GetStringLength()) {
-		MYMESSAGEBOX( m_CurInstance->m_pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts"), pszErr );
+		MYMESSAGEBOX(m_CurInstance->m_pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts"), pszErr);
 	}else {
-		MYMESSAGEBOX( m_CurInstance->m_pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts\n%hs"), pszErr, m_CurInstance->m_cMemDebug.GetStringPtr() );
+		MYMESSAGEBOX(m_CurInstance->m_pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts\n%hs"), pszErr, m_CurInstance->m_cMemDebug.GetStringPtr());
 	}
 }
 
@@ -412,7 +412,7 @@ void __stdcall CPPA::stdProc(
 	const WCHAR** tmpArguments=(const WCHAR**)tmpArguments2;
 
 	// 処理
-	bool bRet = CMacro::HandleCommand( m_CurInstance->m_pcEditView, (EFunctionCode)(Index | m_CurInstance->m_commandflags), tmpArguments,tmpArgLengths, ArgSize );
+	bool bRet = CMacro::HandleCommand(m_CurInstance->m_pcEditView, (EFunctionCode)(Index | m_CurInstance->m_commandflags), tmpArguments,tmpArgLengths, ArgSize);
 	if (!bRet) {
 		*Err_CD = Index + 1;
 	}
@@ -512,7 +512,7 @@ void __stdcall CPPA::stdStrFunc(
 */
 bool CPPA::CallHandleFunction(
 	const int Index, const char* Arg[],
-	int ArgSize, VARIANT* Result )
+	int ArgSize, VARIANT* Result)
 {
 	int ArgCnt;
 	const int maxArgSize = 8;
@@ -520,7 +520,7 @@ bool CPPA::CallHandleFunction(
 	
 	const MacroFuncInfo* mfi = CSMacroMgr::GetFuncInfoByID(Index);
 	for (int i=0; i<maxArgSize && i<ArgSize; i++) {
-		::VariantInit( &vtArg[i] );
+		::VariantInit(&vtArg[i]);
 	}
 	ArgCnt = 0;
 	for (int i=0; i<maxArgSize && i<ArgSize; i++) {
@@ -539,7 +539,7 @@ bool CPPA::CallHandleFunction(
 		case VT_I4:
 		{
 			vtArg[i].vt = VT_I4;
-			vtArg[i].lVal = atoi( Arg[i] );
+			vtArg[i].lVal = atoi(Arg[i]);
 			break;
 		}
 		case VT_BSTR:
@@ -550,7 +550,7 @@ bool CPPA::CallHandleFunction(
 		}
 		default:
 			for (int i=0; i<maxArgSize && i<ArgSize; i++) {
-				::VariantClear( &vtArg[i] );
+				::VariantClear(&vtArg[i]);
 			}
 			return false;
 		}
@@ -560,12 +560,12 @@ bool CPPA::CallHandleFunction(
 	if (Index >= F_FUNCTION_FIRST) {
 		bool Ret = CMacro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
 		for (int i=0; i<maxArgSize && i<ArgSize; i++) {
-			::VariantClear( &vtArg[i] );
+			::VariantClear(&vtArg[i]);
 		}
 		return Ret;
 	}else {
 		for (int i=0; i<maxArgSize && i<ArgSize; i++) {
-			::VariantClear( &vtArg[i] );
+			::VariantClear(&vtArg[i]);
 		}
 		return false;
 	}

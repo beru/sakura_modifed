@@ -13,17 +13,17 @@ EConvertResult CUnicode::_UnicodeToUnicode_in( CMemory* pMem, const bool bBigEnd
 	unsigned char* pSrc = reinterpret_cast<unsigned char*>( pMem->GetRawPtr(&nSrcLen) );
 
 	EConvertResult res = RESULT_COMPLETE;
-	if( nSrcLen % 2 == 1 ){
+	if( nSrcLen % 2 == 1 ) {
 		// 不足分の最終1バイトとして 0x00 を補う。
 		pMem->AllocBuffer( nSrcLen + 1 );
-		if( pMem->GetRawPtr() != NULL ){
+		if( pMem->GetRawPtr() != NULL ) {
 			pSrc[nSrcLen] = 0;
 			pMem->_SetRawLength( nSrcLen + 1 );
 		}
 		res = RESULT_LOSESOME;
 	}
 
-	if( bBigEndian ){
+	if( bBigEndian ) {
 		pMem->SwapHLByte();  // UnicodeBe -> Unicode
 	}
 	return res;
@@ -32,7 +32,7 @@ EConvertResult CUnicode::_UnicodeToUnicode_in( CMemory* pMem, const bool bBigEnd
 
 EConvertResult CUnicode::_UnicodeToUnicode_out( CMemory* pMem, const bool bBigEndian )
 {
-	if( bBigEndian == true ){
+	if( bBigEndian == true ) {
 		pMem->SwapHLByte();   // Unicode -> UnicodeBe
 	}
 

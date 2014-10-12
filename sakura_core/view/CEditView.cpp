@@ -66,8 +66,8 @@
 #endif
 
 CEditView*	g_m_pcEditView;
-LRESULT CALLBACK EditViewWndProc( HWND, UINT, WPARAM, LPARAM );
-VOID CALLBACK EditViewTimerProc( HWND, UINT, UINT_PTR, DWORD );
+LRESULT CALLBACK EditViewWndProc(HWND, UINT, WPARAM, LPARAM);
+VOID CALLBACK EditViewTimerProc(HWND, UINT, UINT_PTR, DWORD);
 
 #define IDT_ROLLMOUSE	1
 
@@ -89,20 +89,20 @@ LRESULT CALLBACK EditViewWndProc(
 	switch (uMsg) {
 	case WM_CREATE:
 		pCEdit = (CEditView*) g_m_pcEditView;
-		return pCEdit->DispatchEvent( hwnd, uMsg, wParam, lParam );
+		return pCEdit->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	default:
-		pCEdit = (CEditView*) ::GetWindowLongPtr( hwnd, 0 );
+		pCEdit = (CEditView*) ::GetWindowLongPtr(hwnd, 0);
 		if (pCEdit) {
 			//	May 16, 2000 genta
 			//	From Here
 			if (uMsg == WM_COMMAND) {
-				::SendMessage( ::GetParent( pCEdit->m_hwndParent ), WM_COMMAND, wParam,  lParam );
+				::SendMessage(::GetParent(pCEdit->m_hwndParent), WM_COMMAND, wParam,  lParam);
 			}else {
-				return pCEdit->DispatchEvent( hwnd, uMsg, wParam, lParam );
+				return pCEdit->DispatchEvent(hwnd, uMsg, wParam, lParam);
 			}
 			//	To Here
 		}
-		return ::DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 }
 
@@ -119,9 +119,9 @@ VOID CALLBACK EditViewTimerProc(
 	DWORD dwTime 	// current system time
 )
 {
-	CEditView* pCEditView = ( CEditView* )::GetWindowLongPtr( hwnd, 0 );
+	CEditView* pCEditView = (CEditView*)::GetWindowLongPtr(hwnd, 0);
 	if (pCEditView) {
-		pCEditView->OnTimer( hwnd, uMsg, idEvent, dwTime );
+		pCEditView->OnTimer(hwnd, uMsg, idEvent, dwTime);
 	}
 	return;
 }
@@ -140,7 +140,7 @@ CEditView::CEditView(CEditWnd* pcEditWnd)
 	m_cParser(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_cTextDrawer(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_cCommander(this),				// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
-	m_bActivateByMouse( FALSE ),	// 2007.10.02 nasukoji
+	m_bActivateByMouse(FALSE),	// 2007.10.02 nasukoji
 	m_nWheelDelta(0),
 	m_eWheelScroll(F_0),
 	m_nMousePouse(0),
@@ -167,7 +167,7 @@ BOOL CEditView::Create(
 	m_cRegexKeyword = NULL;				// 2007.04.08 ryoji
 
 	SetDrawSwitch(true);
-	m_pcDropTarget = new CDropTarget( this );
+	m_pcDropTarget = new CDropTarget(this);
 	_SetDragMode(FALSE);					// 選択テキストのドラッグ中か
 	m_bCurSrchKeyMark = false;				// 検索文字列
 	//	Jun. 27, 2001 genta
@@ -223,29 +223,29 @@ BOOL CEditView::Create(
 
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	//	2007.08.12 genta 初期化にShareDataの値が必要になった
-	m_CurRegexp.InitDll(GetDllShareData().m_Common.m_sSearch.m_szRegexpLib );
+	m_CurRegexp.InitDll(GetDllShareData().m_Common.m_sSearch.m_szRegexpLib);
 
 	// 2004.02.08 m_hFont_ZENは未使用により削除
 	m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 	m_bInMenuLoop = FALSE;				// メニュー モーダル ループに入っています
-//	MYTRACE( _T("CEditView::CEditView()おわり\n") );
+//	MYTRACE(_T("CEditView::CEditView()おわり\n"));
 	m_bHokan = FALSE;
 
 	//	Aug. 31, 2000 genta
-	m_cHistory->SetMax( 30 );
+	m_cHistory->SetMax(30);
 
 	// from here  2002.04.09 minfu OSによって再変換の方式を変える
 	//	YAZAKI COsVersionInfoのカプセル化は守りましょ。
 	if (!OsSupportReconvert()) {
 		// 95 or NTならば
-		m_uMSIMEReconvertMsg = ::RegisterWindowMessage( RWM_RECONVERT );
-		m_uATOKReconvertMsg = ::RegisterWindowMessage( MSGNAME_ATOK_RECONVERT ) ;
+		m_uMSIMEReconvertMsg = ::RegisterWindowMessage(RWM_RECONVERT);
+		m_uATOKReconvertMsg = ::RegisterWindowMessage(MSGNAME_ATOK_RECONVERT) ;
 		m_uWM_MSIME_RECONVERTREQUEST = ::RegisterWindowMessage(_T("MSIMEReconvertRequest"));
 		
 		m_hAtokModule = LoadLibraryExedir(_T("ATOK10WC.DLL"));
 		m_AT_ImmSetReconvertString = NULL;
 		if (m_hAtokModule) {
-			m_AT_ImmSetReconvertString =(BOOL (WINAPI *)( HIMC , int ,PRECONVERTSTRING , DWORD  ) ) GetProcAddress(m_hAtokModule,"AT_ImmSetReconvertString");
+			m_AT_ImmSetReconvertString =(BOOL (WINAPI *)(HIMC , int ,PRECONVERTSTRING , DWORD )) GetProcAddress(m_hAtokModule,"AT_ImmSetReconvertString");
 		}
 	}else { 
 		// それ以外のOSのときはOS標準を使用する
@@ -277,14 +277,14 @@ BOOL CEditView::Create(
 	m_nMyIndex = nMyIndex;
 
 	//	2007.08.18 genta 初期化にShareDataの値が必要になった
-	m_cRegexKeyword = new CRegexKeyword( GetDllShareData().m_Common.m_sSearch.m_szRegexpLib );	//@@@ 2001.11.17 add MIK
+	m_cRegexKeyword = new CRegexKeyword(GetDllShareData().m_Common.m_sSearch.m_szRegexpLib);	//@@@ 2001.11.17 add MIK
 	m_cRegexKeyword->RegexKeySetTypes(m_pTypeData);	//@@@ 2001.11.17 add MIK
 
-	textArea.SetTopYohaku( GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace ); 	// ルーラーとテキストの隙間
-	textArea.SetAreaTop( textArea.GetTopYohaku() );								// 表示域の上端座標
+	textArea.SetTopYohaku(GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	textArea.SetAreaTop(textArea.GetTopYohaku());								// 表示域の上端座標
 	// ルーラー表示
 	if (m_pTypeData->m_ColorInfoArr[COLORIDX_RULER].m_bDisp) {
-		textArea.SetAreaTop( textArea.GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
+		textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
 	}
 
 	// ウィンドウクラスの登録
@@ -293,14 +293,14 @@ BOOL CEditView::Create(
 	wc.style			= CS_DBLCLKS | CS_BYTEALIGNCLIENT | CS_BYTEALIGNWINDOW;
 	wc.lpfnWndProc		= EditViewWndProc;
 	wc.cbClsExtra		= 0;
-	wc.cbWndExtra		= sizeof( LONG_PTR );
+	wc.cbWndExtra		= sizeof(LONG_PTR);
 	wc.hInstance		= G_AppInstance();
-	wc.hIcon			= LoadIcon( NULL, IDI_APPLICATION );
-	wc.hCursor			= NULL/*LoadCursor( NULL, IDC_IBEAM )*/;
+	wc.hIcon			= LoadIcon(NULL, IDI_APPLICATION);
+	wc.hCursor			= NULL/*LoadCursor(NULL, IDC_IBEAM)*/;
 	wc.hbrBackground	= (HBRUSH)NULL/*(COLOR_WINDOW + 1)*/;
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= GSTR_VIEWNAME;
-	if (0 == ::RegisterClass( &wc )) {
+	if (0 == ::RegisterClass(&wc)) {
 	}
 
 	// エディタウィンドウの作成
@@ -329,22 +329,22 @@ BOOL CEditView::Create(
 		return FALSE;
 	}
 
-	m_pcDropTarget->Register_DropTarget( GetHwnd() );
+	m_pcDropTarget->Register_DropTarget(GetHwnd());
 
 	// 辞書Tip表示ウィンドウ作成
-	m_cTipWnd.Create( G_AppInstance(), GetHwnd()/*GetDllShareData().m_sHandles.m_hwndTray*/ );
+	m_cTipWnd.Create(G_AppInstance(), GetHwnd()/*GetDllShareData().m_sHandles.m_hwndTray*/);
 
 	// 再描画用コンパチブルＤＣ
 	// 2007.09.09 Moca 互換BMPによる画面バッファ
 	// 2007.09.30 genta 関数化
-	UseCompatibleDC( GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP );
+	UseCompatibleDC(GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP);
 
 	// 垂直分割ボックス
 	m_pcsbwVSplitBox = new CSplitBoxWnd;
-	m_pcsbwVSplitBox->Create( G_AppInstance(), GetHwnd(), TRUE );
+	m_pcsbwVSplitBox->Create(G_AppInstance(), GetHwnd(), TRUE);
 	// 水平分割ボックス
 	m_pcsbwHSplitBox = new CSplitBoxWnd;
-	m_pcsbwHSplitBox->Create( G_AppInstance(), GetHwnd(), FALSE );
+	m_pcsbwHSplitBox->Create(G_AppInstance(), GetHwnd(), FALSE);
 
 	// スクロールバー作成
 	CreateScrollBar();		// 2006.12.19 ryoji
@@ -352,23 +352,23 @@ BOOL CEditView::Create(
 	SetFont();
 
 	if (bShow) {
-		ShowWindow( GetHwnd(), SW_SHOW );
+		ShowWindow(GetHwnd(), SW_SHOW);
 	}
 
 	// キーボードの現在のリピート間隔を取得
 	int nKeyBoardSpeed;
-	SystemParametersInfo( SPI_GETKEYBOARDSPEED, 0, &nKeyBoardSpeed, 0 );
+	SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &nKeyBoardSpeed, 0);
 
 	// タイマー起動
-	if (0 == ::SetTimer( GetHwnd(), IDT_ROLLMOUSE, nKeyBoardSpeed, EditViewTimerProc )) {
-		WarningMessage( GetHwnd(), LS(STR_VIEW_TIMER) );
+	if (0 == ::SetTimer(GetHwnd(), IDT_ROLLMOUSE, nKeyBoardSpeed, EditViewTimerProc)) {
+		WarningMessage(GetHwnd(), LS(STR_VIEW_TIMER));
 	}
 
 	m_bHideMouse = false;
 	CRegKey reg;
 	BYTE bUserPref[8] = {0};
-	reg.Open(HKEY_CURRENT_USER, _T("Control Panel\\Desktop") );
-	reg.GetValueBINARY( _T("UserPreferencesMask"), bUserPref, sizeof(bUserPref) );
+	reg.Open(HKEY_CURRENT_USER, _T("Control Panel\\Desktop"));
+	reg.GetValueBINARY(_T("UserPreferencesMask"), bUserPref, sizeof(bUserPref));
 	if ((bUserPref[2] & 0x01) == 1) {
 		m_bHideMouse = true;
 	}
@@ -379,7 +379,7 @@ BOOL CEditView::Create(
 CEditView::~CEditView()
 {
 	if (GetHwnd() != NULL) {
-		::DestroyWindow( GetHwnd() );
+		::DestroyWindow(GetHwnd());
 	}
 
 	// 再描画用コンパチブルＤＣ
@@ -435,16 +435,16 @@ LRESULT CEditView::DispatchEvent(
 //	int nPosY;
 	switch (uMsg) {
 	case WM_MOUSEWHEEL:
-		if (m_pcEditWnd->DoMouseWheel( wParam, lParam )) {
+		if (m_pcEditWnd->DoMouseWheel(wParam, lParam)) {
 			return 0L;
 		}
-		return OnMOUSEWHEEL( wParam, lParam );
+		return OnMOUSEWHEEL(wParam, lParam);
 
 	case WM_MOUSEHWHEEL:
-		return OnMOUSEHWHEEL( wParam, lParam );
+		return OnMOUSEHWHEEL(wParam, lParam);
 
 	case WM_CREATE:
-		::SetWindowLongPtr( hwnd, 0, (LONG_PTR) this );
+		::SetWindowLongPtr(hwnd, 0, (LONG_PTR) this);
 		return 0L;
 
 		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
@@ -457,7 +457,7 @@ LRESULT CEditView::DispatchEvent(
 	// To Here 2007.09.09 Moca
 
 	case WM_SIZE:
-		OnSize( LOWORD( lParam ), HIWORD( lParam ) );
+		OnSize(LOWORD(lParam), HIWORD(lParam));
 		return 0L;
 
 	case WM_SETFOCUS:
@@ -480,7 +480,7 @@ LRESULT CEditView::DispatchEvent(
 		if (WCODE::IsControlCode((wchar_t)wParam)) {
 			ErrorBeep();
 		}else {
-			GetCommander().HandleCommand( F_WCHAR, true, WCHAR(wParam), 0, 0, 0 );
+			GetCommander().HandleCommand(F_WCHAR, true, WCHAR(wParam), 0, 0, 0);
 		}
 #else
 		// SJIS固有
@@ -491,12 +491,12 @@ LRESULT CEditView::DispatchEvent(
 				if (ACODE::IsControlCode((char)wParam)) {
 					ErrorBeep();
 				}else {
-					GetCommander().HandleCommand( F_WCHAR, true, tchar_to_wchar((ACHAR)wParam), 0, 0, 0 );
+					GetCommander().HandleCommand(F_WCHAR, true, tchar_to_wchar((ACHAR)wParam), 0, 0, 0);
 				}
 			}else {
 				if (preChar) {
 					WORD wordData = MAKEWORD((BYTE)wParam, preChar);
-					GetCommander().HandleCommand( F_IME_CHAR, true, wordData, 0, 0, 0 );
+					GetCommander().HandleCommand(F_IME_CHAR, true, wordData, 0, 0, 0);
 					preChar = 0;
 				}else {
 					preChar = (BYTE)wParam;
@@ -510,20 +510,20 @@ LRESULT CEditView::DispatchEvent(
 		if (wParam == IMN_SETCONVERSIONMODE || wParam == IMN_SETOPENSTATUS) {
 			GetCaret().ShowEditCaret();
 		}
-		return DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 	case WM_IME_COMPOSITION:
 		if (IsInsMode() && (lParam & GCS_RESULTSTR)) {
 			HIMC hIMC;
 			DWORD dwSize;
 			HGLOBAL hstr;
-			hIMC = ImmGetContext( hwnd );
+			hIMC = ImmGetContext(hwnd);
 
 			m_szComposition[0] = _T('\0');
 
 			if (!hIMC) {
 				return 0;
-//				MyError( ERROR_NULLCONTEXT );
+//				MyError(ERROR_NULLCONTEXT);
 			}
 
 			// Get the size of the result string.
@@ -531,18 +531,18 @@ LRESULT CEditView::DispatchEvent(
 
 			// increase buffer size for NULL terminator,
 			//	maybe it is in Unicode
-			dwSize += sizeof( WCHAR );
+			dwSize += sizeof(WCHAR);
 
-			hstr = GlobalAlloc( GHND, dwSize );
+			hstr = GlobalAlloc(GHND, dwSize);
 			if (!hstr) {
 				return 0;
-//				 MyError( ERROR_GLOBALALLOC );
+//				 MyError(ERROR_GLOBALALLOC);
 			}
 
-			LPTSTR lptstr = (LPTSTR)GlobalLock( hstr );
+			LPTSTR lptstr = (LPTSTR)GlobalLock(hstr);
 			if (!lptstr) {
 				return 0;
-//				 MyError( ERROR_GLOBALLOCK );
+//				 MyError(ERROR_GLOBALLOCK);
 			}
 
 			// Get the result strings that is generated by IME into lptstr.
@@ -551,40 +551,40 @@ LRESULT CEditView::DispatchEvent(
 			// テキストを貼り付け
 			if (m_bHideMouse && 0 <= m_nMousePouse) {
 				m_nMousePouse = -1;
-				::SetCursor( NULL );
+				::SetCursor(NULL);
 			}
 #ifdef _UNICODE
-			GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)lptstr, wcslen(lptstr), TRUE, 0 );
+			GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)lptstr, wcslen(lptstr), TRUE, 0);
 #else
 			std::wstring wstr = to_wchar(lptstr);
-			GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)wstr.c_str(), wstr.length(), TRUE, 0 );
+			GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)wstr.c_str(), wstr.length(), TRUE, 0);
 #endif
-			ImmReleaseContext( hwnd, hIMC );
+			ImmReleaseContext(hwnd, hIMC);
 
 			// add this string into text buffer of application
 
-			GlobalUnlock( hstr );
-			GlobalFree( hstr );
-			return DefWindowProc( hwnd, uMsg, wParam, lParam );
+			GlobalUnlock(hstr);
+			GlobalFree(hstr);
+			return DefWindowProc(hwnd, uMsg, wParam, lParam);
 		}
-		return DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 	case WM_IME_ENDCOMPOSITION:
 		m_szComposition[0] = _T('\0');
-		return DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 	case WM_IME_CHAR:
 		if (!IsInsMode() /* Oct. 2, 2005 genta */) { /* 上書きモードか？ */
-			GetCommander().HandleCommand( F_IME_CHAR, true, wParam, 0, 0, 0 );
+			GetCommander().HandleCommand(F_IME_CHAR, true, wParam, 0, 0, 0);
 		}
 		return 0L;
 
 	// From Here 2008.03.24 Moca ATOK等の要求にこたえる
 	case WM_PASTE:
-		return GetCommander().HandleCommand( F_PASTE, true, 0, 0, 0, 0 );
+		return GetCommander().HandleCommand(F_PASTE, true, 0, 0, 0, 0);
 
 	case WM_COPY:
-		return GetCommander().HandleCommand( F_COPY, true, 0, 0, 0, 0 );
+		return GetCommander().HandleCommand(F_COPY, true, 0, 0, 0, 0);
 	// To Here 2008.03.24 Moca
 
 	case WM_KEYUP:
@@ -596,7 +596,7 @@ LRESULT CEditView::DispatchEvent(
 	case WM_SYSKEYUP:
 		GetCommander().m_bPrevCommand = 0;
 		// 念のため呼ぶ
-		return ::DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 	// 2004.04.27 To Here
 
 	case WM_LBUTTONDBLCLK:
@@ -605,67 +605,67 @@ LRESULT CEditView::DispatchEvent(
 		// 2007.10.12 genta フォーカス移動のため，OnLBUTTONDBLCLKより移動
 		if (m_bActivateByMouse) {
 			// アクティブなペインを設定
-			m_pcEditWnd->SetActivePane( m_nMyIndex );
+			m_pcEditWnd->SetActivePane(m_nMyIndex);
 			// カーソルをクリック位置へ移動する
-			OnLBUTTONDOWN( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );	
+			OnLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));	
 			// 2007.10.02 nasukoji
 			m_bActivateByMouse = FALSE;		// マウスによるアクティベートを示すフラグをOFF
 		}
-		//		MYTRACE( _T(" WM_LBUTTONDBLCLK wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD( lParam ), HIWORD( lParam ) );
-		OnLBUTTONDBLCLK( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+		//		MYTRACE(_T(" WM_LBUTTONDBLCLK wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
+		OnLBUTTONDBLCLK(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
 // novice 2004/10/11 マウス中ボタン対応
 	case WM_MBUTTONDOWN:
-		OnMBUTTONDOWN( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+		OnMBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 
 		return 0L;
 
 	case WM_MBUTTONUP:
 		// 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
-		OnMBUTTONUP( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+		OnMBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
 	case WM_LBUTTONDOWN:
 		// 2007.10.02 nasukoji
 		m_bActivateByMouse = FALSE;		// マウスによるアクティベートを示すフラグをOFF
-//		MYTRACE( _T(" WM_LBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD( lParam ), HIWORD( lParam ) );
-		OnLBUTTONDOWN( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+//		MYTRACE(_T(" WM_LBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
+		OnLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
 	case WM_LBUTTONUP:
 
-//		MYTRACE( _T(" WM_LBUTTONUP wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD( lParam ), HIWORD( lParam ) );
-		OnLBUTTONUP( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+//		MYTRACE(_T(" WM_LBUTTONUP wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
+		OnLBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 	case WM_MOUSEMOVE:
-		OnMOUSEMOVE( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+		OnMOUSEMOVE(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
 	case WM_RBUTTONDBLCLK:
-//		MYTRACE( _T(" WM_RBUTTONDBLCLK wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD( lParam ), HIWORD( lParam ) );
+//		MYTRACE(_T(" WM_RBUTTONDBLCLK wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
 		return 0L;
 //	case WM_RBUTTONDOWN:
-//		MYTRACE( _T(" WM_RBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD( lParam ), HIWORD( lParam ) );
-//		OnRBUTTONDOWN( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
-//		if( m_nMyIndex != m_pcEditWnd->GetActivePane() ){
+//		MYTRACE(_T(" WM_RBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
+//		OnRBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
+//		if(m_nMyIndex != m_pcEditWnd->GetActivePane()) {
 //			// アクティブなペインを設定
-//			m_pcEditWnd->SetActivePane( m_nMyIndex );
+//			m_pcEditWnd->SetActivePane(m_nMyIndex);
 //		}
 //		return 0L;
 	case WM_RBUTTONUP:
-//		MYTRACE( _T(" WM_RBUTTONUP wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD( lParam ), HIWORD( lParam ) );
-		OnRBUTTONUP( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+//		MYTRACE(_T(" WM_RBUTTONUP wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
+		OnRBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 		return 0L;
 
 // novice 2004/10/10 マウスサイドボタン対応
 	case WM_XBUTTONDOWN:
 		switch (HIWORD(wParam)) {
 		case XBUTTON1:
-			OnXLBUTTONDOWN( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+			OnXLBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 			break;
 		case XBUTTON2:
-			OnXRBUTTONDOWN( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+			OnXRBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 			break;
 		}
 
@@ -675,40 +675,40 @@ LRESULT CEditView::DispatchEvent(
 		// 2009.01.17 nasukoji	ボタンUPでコマンドを起動するように変更
 		switch (HIWORD(wParam)) {
 		case XBUTTON1:
-			OnXLBUTTONUP( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+			OnXLBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 			break;
 		case XBUTTON2:
-			OnXRBUTTONUP( wParam, (short)LOWORD( lParam ), (short)HIWORD( lParam ) );
+			OnXRBUTTONUP(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
 			break;
 		}
 
 		return TRUE;
 
 	case WM_VSCROLL:
-//		MYTRACE( _T("	WM_VSCROLL nPos=%d\n"), GetScrollPos( m_hwndVScrollBar, SB_CTL ) );
+//		MYTRACE(_T("	WM_VSCROLL nPos=%d\n"), GetScrollPos(m_hwndVScrollBar, SB_CTL));
 		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		{
 			CLayoutInt Scroll = OnVScroll(
-				(int) LOWORD( wParam ), ((int) HIWORD( wParam )) * m_nVScrollRate );
+				(int) LOWORD(wParam), ((int) HIWORD(wParam)) * m_nVScrollRate);
 
 			//	シフトキーが押されていないときだけ同期スクロール
 			if (!GetKeyState_Shift()) {
-				SyncScrollV( Scroll );
+				SyncScrollV(Scroll);
 			}
 		}
 
 		return 0L;
 
 	case WM_HSCROLL:
-//		MYTRACE( _T("	WM_HSCROLL nPos=%d\n"), GetScrollPos( m_hwndHScrollBar, SB_CTL ) );
+//		MYTRACE(_T("	WM_HSCROLL nPos=%d\n"), GetScrollPos(m_hwndHScrollBar, SB_CTL));
 		//	Sep. 11, 2004 genta 同期スクロールの関数化
 		{
 			CLayoutInt Scroll = OnHScroll(
-				(int) LOWORD( wParam ), ((int) HIWORD( wParam )) );
+				(int) LOWORD(wParam), ((int) HIWORD(wParam)));
 
 			//	シフトキーが押されていないときだけ同期スクロール
 			if (!GetKeyState_Shift()) {
-				SyncScrollH( Scroll );
+				SyncScrollH(Scroll);
 			}
 		}
 
@@ -737,37 +737,37 @@ LRESULT CEditView::DispatchEvent(
 	case WM_PAINT:
 		{
 			PAINTSTRUCT	ps;
-			hdc = ::BeginPaint( hwnd, &ps );
-			OnPaint( hdc, &ps, FALSE );
+			hdc = ::BeginPaint(hwnd, &ps);
+			OnPaint(hdc, &ps, FALSE);
 			::EndPaint(hwnd, &ps);
 		}
 		return 0L;
 
 	case WM_CLOSE:
-//		MYTRACE( _T("	WM_CLOSE\n") );
-		::DestroyWindow( hwnd );
+//		MYTRACE(_T("	WM_CLOSE\n"));
+		::DestroyWindow(hwnd);
 		return 0L;
 	case WM_DESTROY:
 		m_pcDropTarget->Revoke_DropTarget();
 
 		// タイマー終了
-		::KillTimer( GetHwnd(), IDT_ROLLMOUSE );
+		::KillTimer(GetHwnd(), IDT_ROLLMOUSE);
 
 
-//		MYTRACE( _T("	WM_DESTROY\n") );
+//		MYTRACE(_T("	WM_DESTROY\n"));
 		/*
 		||子ウィンドウの破棄
 		*/
 		if (m_hwndVScrollBar) {	// Aug. 20, 2005 Aroka
-			::DestroyWindow( m_hwndVScrollBar );
+			::DestroyWindow(m_hwndVScrollBar);
 			m_hwndVScrollBar = NULL;
 		}
 		if (m_hwndHScrollBar) {
-			::DestroyWindow( m_hwndHScrollBar );
+			::DestroyWindow(m_hwndHScrollBar);
 			m_hwndHScrollBar = NULL;
 		}
 		if (m_hwndSizeBox) {
-			::DestroyWindow( m_hwndSizeBox );
+			::DestroyWindow(m_hwndSizeBox);
 			m_hwndSizeBox = NULL;
 		}
 		SAFE_DELETE(m_pcsbwVSplitBox);	// 垂直分割ボックス
@@ -779,13 +779,13 @@ LRESULT CEditView::DispatchEvent(
 	case MYWM_DOSPLIT:
 //		nPosX = (int)wParam;
 //		nPosY = (int)lParam;
-//		MYTRACE( _T("MYWM_DOSPLIT nPosX=%d nPosY=%d\n"), nPosX, nPosY );
-		::SendMessage( m_hwndParent, MYWM_DOSPLIT, wParam, lParam );
+//		MYTRACE(_T("MYWM_DOSPLIT nPosX=%d nPosY=%d\n"), nPosX, nPosY);
+		::SendMessage(m_hwndParent, MYWM_DOSPLIT, wParam, lParam);
 		return 0L;
 
 	case MYWM_SETACTIVEPANE:
-		m_pcEditWnd->SetActivePane( m_nMyIndex );
-		::PostMessageAny( m_hwndParent, MYWM_SETACTIVEPANE, (WPARAM)m_nMyIndex, 0 );
+		m_pcEditWnd->SetActivePane(m_nMyIndex);
+		::PostMessageAny(m_hwndParent, MYWM_SETACTIVEPANE, (WPARAM)m_nMyIndex, 0);
 		return 0L;
 
 	case MYWM_IME_REQUEST:  // 再変換  by minfu 2002.03.27 // 20020331 aroka
@@ -805,16 +805,16 @@ LRESULT CEditView::DispatchEvent(
 		//default:
 		}
 		// 2010.03.16 0LではなくTSFが何かするかもしれないのでDefにまかせる
-		return ::DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 	
 	case MYWM_DROPFILES:	// 独自のドロップファイル通知	// 2008.06.20 ryoji
-		OnMyDropFiles( (HDROP)wParam );
+		OnMyDropFiles((HDROP)wParam);
 		return 0L;
 
 	// 2007.10.02 nasukoji	マウスクリックにてアクティベートされた時はカーソル位置を移動しない
 	case WM_MOUSEACTIVATE:
 		LRESULT nRes;
-		nRes = ::DefWindowProc( hwnd, uMsg, wParam, lParam );	// 親に先に処理させる
+		nRes = ::DefWindowProc(hwnd, uMsg, wParam, lParam);	// 親に先に処理させる
 		if (nRes == MA_NOACTIVATE || nRes == MA_NOACTIVATEANDEAT) {
 			return nRes;
 		}
@@ -832,12 +832,12 @@ LRESULT CEditView::DispatchEvent(
 		// アクティブなペインを設定
 		if (::GetFocus() != GetHwnd()) {
 			POINT ptCursor;
-			::GetCursorPos( &ptCursor );
-			HWND hwndCursorPos = ::WindowFromPoint( ptCursor );
+			::GetCursorPos(&ptCursor);
+			HWND hwndCursorPos = ::WindowFromPoint(ptCursor);
 			if (hwndCursorPos == GetHwnd()) {
 				// ビュー上にマウスがあるので SetActivePane() を直接呼び出す
 				// （個別のマウスメッセージが届く前にアクティブペインを設定しておく）
-				m_pcEditWnd->SetActivePane( m_nMyIndex );
+				m_pcEditWnd->SetActivePane(m_nMyIndex);
 			}else if (0
 				|| (m_pcsbwVSplitBox && hwndCursorPos == m_pcsbwVSplitBox->GetHwnd())
 				|| (m_pcsbwHSplitBox && hwndCursorPos == m_pcsbwHSplitBox->GetHwnd())
@@ -852,7 +852,7 @@ LRESULT CEditView::DispatchEvent(
 				// このタイミング（WM_MOUSEACTIVATE）でスクロール範囲を変更するのはまずい。
 				// 例えば Win XP/Vista だとスクロール範囲が小さくなってスクロールバーが有効から
 				// 無効に切り替わるとそれ以後スクロールバーが機能しなくなる。
-				::PostMessageAny( GetHwnd(), MYWM_SETACTIVEPANE, (WPARAM)m_nMyIndex, 0 );
+				::PostMessageAny(GetHwnd(), MYWM_SETACTIVEPANE, (WPARAM)m_nMyIndex, 0);
 			}
 		}
 
@@ -865,10 +865,10 @@ LRESULT CEditView::DispatchEvent(
 		// wParam RedoUndoフラグは無視する
 		if (lParam) {
 #ifdef _UNICODE
-			GetCommander().HandleCommand( F_INSTEXT_W, true, lParam, wcslen((wchar_t*)lParam), TRUE, 0 );
+			GetCommander().HandleCommand(F_INSTEXT_W, true, lParam, wcslen((wchar_t*)lParam), TRUE, 0);
 #else
 			std::wstring text = to_wchar((LPCTSTR)lParam);
-			GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)text.c_str(), text.length(), TRUE, 0 );
+			GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)text.c_str(), text.length(), TRUE, 0);
 #endif
 		}
 		return 0L; // not use.
@@ -892,7 +892,7 @@ LRESULT CEditView::DispatchEvent(
 		}
 // >> by aroka
 
-		return DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 }
 
@@ -901,18 +901,18 @@ LRESULT CEditView::DispatchEvent(
 //                    ウィンドウイベント                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CEditView::OnMove( int x, int y, int nWidth, int nHeight )
+void CEditView::OnMove(int x, int y, int nWidth, int nHeight)
 {
-	MoveWindow( GetHwnd(), x, y, nWidth, nHeight, TRUE );
+	MoveWindow(GetHwnd(), x, y, nWidth, nHeight, TRUE);
 	return;
 }
 
 
 // ウィンドウサイズの変更処理
-void CEditView::OnSize( int cx, int cy )
+void CEditView::OnSize(int cx, int cy)
 {
 	if (!GetHwnd() 
-		|| ( cx == 0 && cy == 0 )
+		|| (cx == 0 && cy == 0)
 	) {
 		// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 		// ウィンドウ無効時にも互換BMPを破棄する
@@ -925,33 +925,33 @@ void CEditView::OnSize( int cx, int cy )
 	int	nHSplitWidth  = 0;	// 水平分割ボックスの幅
 
 	// スクロールバーのサイズ基準値を取得
-	int nCxHScroll = ::GetSystemMetrics( SM_CXHSCROLL );
-	int nCyHScroll = ::GetSystemMetrics( SM_CYHSCROLL );
-	int nCxVScroll = ::GetSystemMetrics( SM_CXVSCROLL );
-	int nCyVScroll = ::GetSystemMetrics( SM_CYVSCROLL );
+	int nCxHScroll = ::GetSystemMetrics(SM_CXHSCROLL);
+	int nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);
+	int nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);
+	int nCyVScroll = ::GetSystemMetrics(SM_CYVSCROLL);
 
 	// 垂直分割ボックス
 	if (m_pcsbwVSplitBox) {
 		nVSplitHeight = 7;
-		::MoveWindow( m_pcsbwVSplitBox->GetHwnd(), cx - nCxVScroll , 0, nCxVScroll, nVSplitHeight, TRUE );
+		::MoveWindow(m_pcsbwVSplitBox->GetHwnd(), cx - nCxVScroll , 0, nCxVScroll, nVSplitHeight, TRUE);
 	}
 	// 水平分割ボックス
 	if (m_pcsbwHSplitBox) {
 		nHSplitWidth = 7;
-		::MoveWindow( m_pcsbwHSplitBox->GetHwnd(),0, cy - nCyHScroll, nHSplitWidth, nCyHScroll, TRUE );
+		::MoveWindow(m_pcsbwHSplitBox->GetHwnd(),0, cy - nCyHScroll, nHSplitWidth, nCyHScroll, TRUE);
 	}
 	// 垂直スクロールバー
 	if (m_hwndVScrollBar) {
-		::MoveWindow( m_hwndVScrollBar, cx - nCxVScroll , 0 + nVSplitHeight, nCxVScroll, cy - nCyVScroll - nVSplitHeight, TRUE );
+		::MoveWindow(m_hwndVScrollBar, cx - nCxVScroll , 0 + nVSplitHeight, nCxVScroll, cy - nCyVScroll - nVSplitHeight, TRUE);
 	}
 	// 水平スクロールバー
 	if (m_hwndHScrollBar) {
-		::MoveWindow( m_hwndHScrollBar, 0 + nHSplitWidth, cy - nCyHScroll, cx - nCxVScroll - nHSplitWidth, nCyHScroll, TRUE );
+		::MoveWindow(m_hwndHScrollBar, 0 + nHSplitWidth, cy - nCyHScroll, cx - nCxVScroll - nHSplitWidth, nCyHScroll, TRUE);
 	}
 
 	// サイズボックス
 	if (m_hwndSizeBox) {
-		::MoveWindow( m_hwndSizeBox, cx - nCxVScroll, cy - nCyHScroll, nCxHScroll, nCyVScroll, TRUE );
+		::MoveWindow(m_hwndSizeBox, cx - nCxVScroll, cy - nCyHScroll, nCxHScroll, nCyVScroll, TRUE);
 	}
 	int nAreaWidthOld  = GetTextArea().GetAreaWidth();
 	int nAreaHeightOld = GetTextArea().GetAreaHeight();
@@ -966,7 +966,7 @@ void CEditView::OnSize( int cx, int cy )
 	// 再描画用メモリＢＭＰ
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	if (m_hdcCompatDC != NULL) {
-		CreateOrUpdateCompatibleBitmap( cx, cy );
+		CreateOrUpdateCompatibleBitmap(cx, cy);
  	}
 	// To Here 2007.09.09 Moca
 
@@ -975,7 +975,7 @@ void CEditView::OnSize( int cx, int cy )
 	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_WINDOW_WIDTH) {
 		if (m_nMyIndex == 0) {	// 左上隅のビューのサイズ変更時のみ処理する
 			// 右端で折り返すモードなら右端で折り返す	// 2008.06.08 ryoji
-			wrapChanged = m_pcEditWnd->WrapWindowWidth( 0 );
+			wrapChanged = m_pcEditWnd->WrapWindowWidth(0);
 		}
 	}
 
@@ -1026,13 +1026,13 @@ void CEditView::OnSize( int cx, int cy )
 
 
 // 入力フォーカスを受け取ったときの処理
-void CEditView::OnSetFocus( void )
+void CEditView::OnSetFocus(void)
 {
 	// 2004.04.02 Moca EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
 	{
 		CLayoutPoint ptPos = GetCaret().GetCaretLayoutPos();
-		if (GetCaret().GetAdjustCursorPos( &ptPos )) {
-			GetCaret().MoveCursor( ptPos, false );
+		if (GetCaret().GetAdjustCursorPos(&ptPos)) {
+			GetCaret().MoveCursor(ptPos, false);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 		}
 	}
@@ -1042,32 +1042,32 @@ void CEditView::OnSetFocus( void )
 	SetIMECompFormFont();
 
 	// ルーラのカーソルをグレーから黒に変更する
-	HDC hdc = ::GetDC( GetHwnd() );
-	GetRuler().DispRuler( hdc );
-	::ReleaseDC( GetHwnd(), hdc );
+	HDC hdc = ::GetDC(GetHwnd());
+	GetRuler().DispRuler(hdc);
+	::ReleaseDC(GetHwnd(), hdc);
 
 	// 03/02/18 対括弧の強調表示(描画) ai
 	m_bDrawBracketPairFlag = TRUE;
-	DrawBracketPair( true );
+	DrawBracketPair(true);
 
 	m_pcEditWnd->m_cToolbar.AcceptSharedSearchKey();
 }
 
 
 // 入力フォーカスを失ったときの処理
-void CEditView::OnKillFocus( void )
+void CEditView::OnKillFocus(void)
 {
 	// 03/02/18 対括弧の強調表示(消去) ai
-	DrawBracketPair( false );
+	DrawBracketPair(false);
 	m_bDrawBracketPairFlag = FALSE;
 
 	GetCaret().DestroyCaret();
 
 	// ルーラー描画
 	// ルーラのカーソルを黒からグレーに変更する
-	HDC	hdc = ::GetDC( GetHwnd() );
-	GetRuler().DispRuler( hdc );
-	::ReleaseDC( GetHwnd(), hdc );
+	HDC	hdc = ::GetDC(GetHwnd());
+	GetRuler().DispRuler(hdc);
+	::ReleaseDC(GetHwnd(), hdc);
 
 	// 辞書Tipが起動されている
 	if (0 == m_dwTipTimer) {
@@ -1093,21 +1093,21 @@ void CEditView::OnKillFocus( void )
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // フォントの変更
-void CEditView::SetFont( void )
+void CEditView::SetFont(void)
 {
 	// メトリクス更新
 	GetTextMetrics().Update(GetFontset().GetFontHan());
 
 	// エリア情報を更新
-	HDC hdc = ::GetDC( GetHwnd() );
+	HDC hdc = ::GetDC(GetHwnd());
 	GetTextArea().UpdateAreaMetrics(hdc);
-	::ReleaseDC( GetHwnd(), hdc );
+	::ReleaseDC(GetHwnd(), hdc);
 
 	// 行番号表示に必要な幅を設定
-	GetTextArea().DetectWidthOfLineNumberArea( false );
+	GetTextArea().DetectWidthOfLineNumberArea(false);
 
 	// ぜんぶ再描画
-	::InvalidateRect( GetHwnd(), NULL, TRUE );
+	::InvalidateRect(GetHwnd(), NULL, TRUE);
 
 	//	Oct. 11, 2002 genta IMEのフォントも変更
 	SetIMECompFormFont();
@@ -1147,7 +1147,7 @@ void CEditView::MoveCursorSelecting(
 	}else {
 		if (GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
 			// 現在の選択範囲を非選択状態に戻す
-			GetSelectionInfo().DisableSelectArea( true );
+			GetSelectionInfo().DisableSelectArea(true);
 		}
 	}
 	GetCaret().GetAdjustCursorPos(&ptWk_CaretPos);
@@ -1159,9 +1159,9 @@ void CEditView::MoveCursorSelecting(
 			引数で与えた座標とは異なることがあるため，
 			nPosX, nPosYの代わりに実際の移動結果を使うように．
 		*/
-		GetSelectionInfo().ChangeSelectAreaByCurrentCursor( ptWk_CaretPos );
+		GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptWk_CaretPos);
 	}
-	GetCaret().MoveCursor( ptWk_CaretPos, true, nCaretMarginRate );	// 2007.08.22 ryoji nCaretMarginRateが使われていなかった
+	GetCaret().MoveCursor(ptWk_CaretPos, true, nCaretMarginRate);	// 2007.08.22 ryoji nCaretMarginRateが使われていなかった
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 }
 
@@ -1184,7 +1184,7 @@ bool CEditView::IsCurrentPositionURL(
 	std::wstring*		pwstrURL		//!< [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
 )
 {
-	MY_RUNNINGTIMER( cRunningTimer, "CEditView::IsCurrentPositionURL" );
+	MY_RUNNINGTIMER(cRunningTimer, "CEditView::IsCurrentPositionURL");
 
 	// URLを強調表示するかどうかチェックする	// 2009.05.27 ryoji
 	bool bDispUrl = CTypeSupport(this,COLORIDX_URL).IsDisp();
@@ -1230,13 +1230,13 @@ bool CEditView::IsCurrentPositionURL(
 	CLogicInt i = CLogicInt(t_max(CLogicInt(0), ptXY.GetX2() - _MAX_PATH));	// 2009.05.22 ryoji 200->_MAX_PATH
 	//nLineLen = CLogicInt(__min(nLineLen, ptXY.GetX2() + _MAX_PATH));
 	while (i <= ptXY.GetX2() && i < nLineLen) {
-		bool bMatch = ( bUseRegexKeyword
-					&& m_cRegexKeyword->RegexIsKeyword( CStringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor )
-					&& nMatchColor == COLORIDX_URL );
+		bool bMatch = (bUseRegexKeyword
+					&& m_cRegexKeyword->RegexIsKeyword(CStringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor)
+					&& nMatchColor == COLORIDX_URL);
 		if (!bMatch) {
-			bMatch = ( bDispUrl
+			bMatch = (bDispUrl
 						&& (i == 0 || !IS_KEYWORD_CHAR(pLine[i - 1]))	// 2009.05.22 ryoji CColor_Url::BeginColor()と同条件に
-						&& IsURL(&pLine[i], (Int)(nLineLen - i), &nUrlLen) );	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
+						&& IsURL(&pLine[i], (Int)(nLineLen - i), &nUrlLen));	// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
 		}
 		if (bMatch) {
 			if (i <= ptXY.GetX2() && ptXY.GetX2() < i + CLogicInt(nUrlLen)) {
@@ -1278,15 +1278,15 @@ VOID CEditView::OnTimer(
 	RECT rc;
 	// 範囲選択中でない場合
 	if (!GetSelectionInfo().IsMouseSelecting()) {
-		if (TRUE == KeyWordHelpSearchDict( LID_SKH_ONTIMER, &po, &rc )) {	// 2006.04.10 fon
+		if (TRUE == KeyWordHelpSearchDict(LID_SKH_ONTIMER, &po, &rc)) {	// 2006.04.10 fon
 			// 辞書Tipを表示
-			m_cTipWnd.Show( po.x, po.y + GetTextMetrics().GetHankakuHeight(), NULL );
+			m_cTipWnd.Show(po.x, po.y + GetTextMetrics().GetHankakuHeight(), NULL);
 		}
 	}else {
-		::GetCursorPos( &po );
-		::GetWindowRect(GetHwnd(), &rc );
-		if (!PtInRect( &rc, po )) {
-			OnMOUSEMOVE( 0, GetSelectionInfo().m_ptMouseRollPosOld.x, GetSelectionInfo().m_ptMouseRollPosOld.y );
+		::GetCursorPos(&po);
+		::GetWindowRect(GetHwnd(), &rc);
+		if (!PtInRect(&rc, po)) {
+			OnMOUSEMOVE(0, GetSelectionInfo().m_ptMouseRollPosOld.x, GetSelectionInfo().m_ptMouseRollPosOld.y);
 		}
 	}
 }
@@ -1296,7 +1296,7 @@ VOID CEditView::OnTimer(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 選択エリアのテキストを指定方法で変換
-void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
+void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 {
 	// テキストが選択されているか
 	if (!GetSelectionInfo().IsTextSelected()) {
@@ -1315,7 +1315,7 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 	CLogicInt	nDelLenNext;
 	CLogicInt		nLineLen;
 	CLogicInt		nLineLen2;
-	CWaitCursor cWaitCursor( GetHwnd() );
+	CWaitCursor cWaitCursor(GetHwnd());
 
 	CLogicPoint ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
 	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
@@ -1335,7 +1335,7 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 		);
 
 		// 現在の選択範囲を非選択状態に戻す
-		GetSelectionInfo().DisableSelectArea( false );	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
+		GetSelectionInfo().DisableSelectArea(false);	// 2009.07.18 ryoji true -> false 各行にアンダーラインが残る問題の修正
 
 		nIdxFrom = CLogicInt(0);
 		nIdxTo = CLogicInt(0);
@@ -1343,11 +1343,11 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 			const CLayout* pcLayout;
 			nDelPosNext = nIdxFrom;
 			nDelLenNext	= nIdxTo - nIdxFrom;
-			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom	= LineColumnToIndex( pcLayout, rcSelLayout.left );
-				nIdxTo		= LineColumnToIndex( pcLayout, rcSelLayout.right );
+				nIdxFrom	= LineColumnToIndex(pcLayout, rcSelLayout.left);
+				nIdxTo		= LineColumnToIndex(pcLayout, rcSelLayout.right);
 
 				for (CLogicInt i = nIdxFrom; i <= nIdxTo; ++i) {
 					if (WCODE::IsLineDelimiter(pLine[i])) {
@@ -1362,9 +1362,9 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 			CLogicInt	nDelPos = nDelPosNext;
 			nDelLen	= nDelLenNext;
 			if (nLineNum < rcSelLayout.bottom && 0 < nDelLen) {
-				m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum + CLayoutInt(1), &nLineLen2, &pcLayout );
+				m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum + CLayoutInt(1), &nLineLen2, &pcLayout);
 				sPos.Set(
-					LineIndexToColumn( pcLayout, nDelPos ),
+					LineIndexToColumn(pcLayout, nDelPos),
 					nLineNum + 1
 				);
 
@@ -1378,7 +1378,7 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 				
 				{
 					// 機能種別によるバッファの変換
-					CConvertMediator::ConvMemory( &cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)sPos.GetX2() );
+					CConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)sPos.GetX2());
 
 					// 現在位置にデータを挿入
 					CLayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
@@ -1391,13 +1391,13 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 					);
 
 					// カーソルを移動
-					GetCaret().MoveCursor( ptLayoutNew, false );
+					GetCaret().MoveCursor(ptLayoutNew, false);
 					GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 				}
 			}
 		}
 		// 挿入データの先頭位置へカーソルを移動
-		GetCaret().MoveCursor( rcSelLayout.UpperLeft(), true );
+		GetCaret().MoveCursor(rcSelLayout.UpperLeft(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
 		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
@@ -1412,10 +1412,10 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 	}else {
 		// 選択範囲のデータを取得
 		// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-		GetSelectedDataSimple( cmemBuf );
+		GetSelectedDataSimple(cmemBuf);
 
 		// 機能種別によるバッファの変換
-		CConvertMediator::ConvMemory( &cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)GetSelectionInfo().m_sSelect.GetFrom().GetX2() );
+		CConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)GetSelectionInfo().m_sSelect.GetFrom().GetX2());
 
 		// データ置換 削除&挿入にも使える
 		ReplaceData_CEditView(
@@ -1433,8 +1433,8 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 			ptFromLogic,
 			&ptFrom
 		);
-		GetSelectionInfo().SetSelectArea( CLayoutRange(ptFrom, GetCaret().GetCaretLayoutPos()) );	// 2009.07.25 ryoji
-		GetCaret().MoveCursor( GetSelectionInfo().m_sSelect.GetTo(), true );
+		GetSelectionInfo().SetSelectArea(CLayoutRange(ptFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetCaret().MoveCursor(GetSelectionInfo().m_sSelect.GetTo(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
 		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
@@ -1458,7 +1458,7 @@ void CEditView::ConvSelectedArea( EFunctionCode nFuncCode )
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ポップアップメニュー(右クリック)
-int	CEditView::CreatePopUpMenu_R( void )
+int	CEditView::CreatePopUpMenu_R(void)
 {
 	CMenuDrawer& cMenuDrawer = m_pcEditWnd->GetMenuDrawer();
 	cMenuDrawer.ResetContents();
@@ -1473,20 +1473,20 @@ int	CEditView::CreatePopUpMenu_R( void )
 	if (!GetSelectionInfo().IsMouseSelecting()) {
 		POINT po;
 		RECT rc;
-		if (TRUE == KeyWordHelpSearchDict( LID_SKH_POPUPMENU_R, &po, &rc )) {	// 2006.04.10 fon
-			cMenuDrawer.MyAppendMenu( hMenu, 0, IDM_COPYDICINFO, LS(STR_MENU_KEYWORDINFO), _T("K") );	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
-			cMenuDrawer.MyAppendMenu( hMenu, 0, IDM_JUMPDICT, LS(STR_MENU_OPENKEYWORDDIC), _T("L") );	// 2006.04.10 fon
-			cMenuDrawer.MyAppendMenuSep( hMenu, MF_SEPARATOR, F_0, _T("") );
+		if (TRUE == KeyWordHelpSearchDict(LID_SKH_POPUPMENU_R, &po, &rc)) {	// 2006.04.10 fon
+			cMenuDrawer.MyAppendMenu(hMenu, 0, IDM_COPYDICINFO, LS(STR_MENU_KEYWORDINFO), _T("K"));	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
+			cMenuDrawer.MyAppendMenu(hMenu, 0, IDM_JUMPDICT, LS(STR_MENU_OPENKEYWORDDIC), _T("L"));	// 2006.04.10 fon
+			cMenuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
 		}
 	}
-	return CreatePopUpMenuSub( hMenu, nMenuIdx, NULL );
+	return CreatePopUpMenuSub(hMenu, nMenuIdx, NULL);
 }
 
 /*! ポップアップメニューの作成(Sub)
 	hMenuは作成済み
 	@date 2013.06.15 新規作成 ポップアップメニューとメインメニューの表示方法を統合
 */
-int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus )
+int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 {
 	WCHAR szLabel[300];
 
@@ -1504,7 +1504,7 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 			nParamIndex = k;
 			pNextParam = pParentMenus;
 		}else {
-			memset_raw( nParentMenu, 0, sizeof(nParentMenu) );
+			memset_raw(nParentMenu, 0, sizeof(nParentMenu));
 		}
 		EFunctionCode nThisCode = F_0;
 		if (nMenuIdx == CUSTMENU_INDEX_FOR_RBUTTONUP) {
@@ -1520,7 +1520,7 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 		bool bAppend = false;
 		if (F_0 == code) {
 			// 2010.07.24 メニュー配列に入れる
-			cMenuDrawer.MyAppendMenuSep( hMenu, MF_SEPARATOR, F_0, _T("") );
+			cMenuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
 			bAppend = true;
 		}else if (F_MENU_RBUTTON == code || (F_CUSTMENU_1 <= code && code <= F_CUSTMENU_LAST)) {
 			int nCustIdx = 0;
@@ -1540,13 +1540,13 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 			}
 			if (!bMenuLoop) {
 				WCHAR buf[ MAX_CUSTOM_MENU_NAME_LEN + 1 ];
-				LPCWSTR p = GetDocument()->m_cFuncLookup.Custmenu2Name( nCustIdx, buf, _countof(buf) );
+				LPCWSTR p = GetDocument()->m_cFuncLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
 				wchar_t keys[2];
 				keys[0] = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
 				HMENU hMenuPopUp = ::CreatePopupMenu();
-				cMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , p, keys );
-				CreatePopUpMenuSub( hMenuPopUp, nCustIdx, pNextParam );
+				cMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , p, keys);
+				CreatePopUpMenuSub(hMenuPopUp, nCustIdx, pNextParam);
 				bAppend = true;
 			}else {
 				// ループしているときは、従来同様別で表示
@@ -1554,15 +1554,15 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 		}
 		if (!bAppend) {
 			//	Oct. 3, 2001 genta
-			FuncLookup.Funccode2Name( code, szLabel, 256 );
+			FuncLookup.Funccode2Name(code, szLabel, 256);
 			// キー
 			if (F_SPECIAL_FIRST <= code && code <= F_SPECIAL_LAST) {
-				m_pcEditWnd->InitMenu_Special( hMenu, code );
+				m_pcEditWnd->InitMenu_Special(hMenu, code);
 			}else {
 				wchar_t keys[2];
 				keys[0] = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
-				m_pcEditWnd->InitMenu_Function( hMenu, code, szLabel, keys );
+				m_pcEditWnd->InitMenu_Function(hMenu, code, szLabel, keys);
 			}
 		}
 	}
@@ -1573,19 +1573,19 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 		return -1;
 	}
 
-	int cMenuItems = ::GetMenuItemCount( hMenu );
+	int cMenuItems = ::GetMenuItemCount(hMenu);
 	for (int nPos = 0; nPos < cMenuItems; nPos++) {
 		EFunctionCode	id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
 		UINT		fuFlags;
 		// 機能が利用可能か調べる
 		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
-		if (!IsFuncEnable( GetDocument(), &GetDllShareData(), id )) {
+		if (!IsFuncEnable(GetDocument(), &GetDllShareData(), id)) {
 			fuFlags = MF_BYCOMMAND | MF_GRAYED;
 			::EnableMenuItem(hMenu, id, fuFlags);
 		}
 
 		// 機能がチェック状態か調べる
-		if (IsFuncChecked( GetDocument(), &GetDllShareData(), id )) {
+		if (IsFuncChecked(GetDocument(), &GetDllShareData(), id)) {
 			fuFlags = MF_BYCOMMAND | MF_CHECKED;
 			::CheckMenuItem(hMenu, id, fuFlags);
 		}
@@ -1594,7 +1594,7 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 	POINT po;
 	po.x = 0;
 	po.y = 0;
-	::GetCursorPos( &po );
+	::GetCursorPos(&po);
 	po.y -= 4;
 	int nId = ::TrackPopupMenu(
 		hMenu,
@@ -1607,10 +1607,10 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 		po.x,
 		po.y,
 		0,
-		::GetParent( m_hwndParent )/*GetHwnd()*/,
+		::GetParent(m_hwndParent)/*GetHwnd()*/,
 		NULL
 	);
-	::DestroyMenu( hMenu );
+	::DestroyMenu(hMenu);
 	return nId;
 }
 
@@ -1622,8 +1622,8 @@ int	CEditView::CreatePopUpMenuSub( HMENU hMenu, int nMenuIdx, int* pParentMenus 
 // 設定変更を反映させる
 void CEditView::OnChangeSetting()
 {
-	GetTextArea().SetTopYohaku( GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace ); 	// ルーラーとテキストの隙間
-	GetTextArea().SetAreaTop( GetTextArea().GetTopYohaku() );									// 表示域の上端座標
+	GetTextArea().SetTopYohaku(GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	GetTextArea().SetAreaTop(GetTextArea().GetTopYohaku());									// 表示域の上端座標
 
 	// 文書種別更新
 	m_pTypeData = &m_pcEditDoc->m_cDocType.GetDocumentAttribute();
@@ -1632,38 +1632,38 @@ void CEditView::OnChangeSetting()
 	if (m_pTypeData->m_ColorInfoArr[COLORIDX_RULER].m_bDisp) {
 		GetTextArea().SetAreaTop(GetTextArea().GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
 	}
-	GetTextArea().SetLeftYohaku( GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace );
+	GetTextArea().SetLeftYohaku(GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace);
 
 	// フォントの変更
 	SetFont();
 
 	// フォントが変わっているかもしれないので、カーソル移動
 	// スクロールバーが移動するので呼び出し元でやる
-	// GetCaret().MoveCursor( GetCaret().GetCaretLayoutPos(), true );
+	// GetCaret().MoveCursor(GetCaret().GetCaretLayoutPos(), true);
 
 	// スクロールバーの状態を更新する
 	// AdjustScrollBars();
 
 	//	2007.09.30 genta 画面キャッシュ用CompatibleDCを用意する
-	UseCompatibleDC( GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP );
+	UseCompatibleDC(GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP);
 
 	// ウィンドウサイズの変更処理
 	RECT rc;
-	::GetClientRect( GetHwnd(), &rc );
-	OnSize( rc.right, rc.bottom );
+	::GetClientRect(GetHwnd(), &rc);
+	OnSize(rc.right, rc.bottom);
 
 	// フォントが変わった
-	m_cTipWnd.ChangeFont( &(GetDllShareData().m_Common.m_sHelper.m_lf) );
+	m_cTipWnd.ChangeFont(&(GetDllShareData().m_Common.m_sHelper.m_lf));
 	
 	// 再描画
 	if (!m_pcEditWnd->m_pPrintPreview) {
-		::InvalidateRect( GetHwnd(), NULL, TRUE );
+		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}
 }
 
 
 // 自分の表示状態を他のビューにコピー
-void CEditView::CopyViewStatus( CEditView* pView ) const
+void CEditView::CopyViewStatus(CEditView* pView) const
 {
 	if (!pView) {
 		return;
@@ -1691,13 +1691,13 @@ void CEditView::CopyViewStatus( CEditView* pView ) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 縦・横の分割ボックス・サイズボックスのＯＮ／ＯＦＦ
-void CEditView::SplitBoxOnOff( BOOL bVert, BOOL bHorz, BOOL bSizeBox )
+void CEditView::SplitBoxOnOff(BOOL bVert, BOOL bHorz, BOOL bSizeBox)
 {
 	RECT	rc;
 	if (bVert) {
 		if (!m_pcsbwVSplitBox) {	// 垂直分割ボックス
 			m_pcsbwVSplitBox = new CSplitBoxWnd;
-			m_pcsbwVSplitBox->Create( G_AppInstance(), GetHwnd(), TRUE );
+			m_pcsbwVSplitBox->Create(G_AppInstance(), GetHwnd(), TRUE);
 		}
 	}else {
 		SAFE_DELETE(m_pcsbwVSplitBox);	// 垂直分割ボックス
@@ -1705,7 +1705,7 @@ void CEditView::SplitBoxOnOff( BOOL bVert, BOOL bHorz, BOOL bSizeBox )
 	if (bHorz) {
 		if (!m_pcsbwHSplitBox) {	// 水平分割ボックス
 			m_pcsbwHSplitBox = new CSplitBoxWnd;
-			m_pcsbwHSplitBox->Create( G_AppInstance(), GetHwnd(), FALSE );
+			m_pcsbwHSplitBox->Create(G_AppInstance(), GetHwnd(), FALSE);
 		}
 	}else {
 		SAFE_DELETE(m_pcsbwHSplitBox);	// 水平分割ボックス
@@ -1713,7 +1713,7 @@ void CEditView::SplitBoxOnOff( BOOL bVert, BOOL bHorz, BOOL bSizeBox )
 
 	if (bSizeBox) {
 		if (m_hwndSizeBox) {
-			::DestroyWindow( m_hwndSizeBox );
+			::DestroyWindow(m_hwndSizeBox);
 			m_hwndSizeBox = NULL;
 		}
 		m_hwndSizeBox = ::CreateWindowEx(
@@ -1732,7 +1732,7 @@ void CEditView::SplitBoxOnOff( BOOL bVert, BOOL bHorz, BOOL bSizeBox )
 		);
 	}else {
 		if (m_hwndSizeBox) {
-			::DestroyWindow( m_hwndSizeBox );
+			::DestroyWindow(m_hwndSizeBox);
 			m_hwndSizeBox = NULL;
 		}
 		m_hwndSizeBox = ::CreateWindowEx(
@@ -1750,10 +1750,10 @@ void CEditView::SplitBoxOnOff( BOOL bVert, BOOL bHorz, BOOL bSizeBox )
 			(LPVOID) NULL											// pointer not needed
 		);
 	}
-	::ShowWindow( m_hwndSizeBox, SW_SHOW );
+	::ShowWindow(m_hwndSizeBox, SW_SHOW);
 
-	::GetClientRect( GetHwnd(), &rc );
-	OnSize( rc.right, rc.bottom );
+	::GetClientRect(GetHwnd(), &rc);
+	OnSize(rc.right, rc.bottom);
 }
 
 
@@ -1765,7 +1765,7 @@ void CEditView::SplitBoxOnOff( BOOL bVert, BOOL bHorz, BOOL bSizeBox )
 /* 選択範囲のデータを取得
 	正常時はTRUE,範囲未選択の場合はFALSEを返す
 */
-bool CEditView::GetSelectedDataSimple( CNativeW &cmemBuf )
+bool CEditView::GetSelectedDataSimple(CNativeW &cmemBuf)
 {
 	return GetSelectedData(&cmemBuf, FALSE, NULL, FALSE, false, EOL_UNKNOWN);
 }
@@ -1791,7 +1791,7 @@ bool CEditView::GetSelectedData(
 	wchar_t*		pszLineNum = NULL;
 	const wchar_t*	pszSpaces = L"                    ";
 	const CLayout*	pcLayout;
-	CEol			appendEol( neweol );
+	CEol			appendEol(neweol);
 
 	// 範囲選択がされていない
 	if (!GetSelectionInfo().IsTextSelected()) {
@@ -1823,14 +1823,14 @@ bool CEditView::GetSelectedData(
 		int nBufSize = wcslen(WCODE::CRLF) * (Int)i;
 
 		// 実際の文字量。
-		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
+		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(rcSel.top, &nLineLen, &pcLayout);
 		for (; i != CLayoutInt(0) && pcLayout != NULL; i--, pcLayout = pcLayout->GetNextLayout()) {
 			pLine = pcLayout->GetPtr() + pcLayout->GetLogicOffset();
 			nLineLen = CLogicInt(pcLayout->GetLengthWithEOL());
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom	= LineColumnToIndex( pcLayout, rcSel.left  );
-				nIdxTo		= LineColumnToIndex( pcLayout, rcSel.right );
+				nIdxFrom	= LineColumnToIndex(pcLayout, rcSel.left );
+				nIdxTo		= LineColumnToIndex(pcLayout, rcSel.right);
 
 				nBufSize += nIdxTo - nIdxFrom;
 			}
@@ -1845,23 +1845,23 @@ bool CEditView::GetSelectedData(
 
 		nRowNum = 0;
 		for (nLineNum = rcSel.top; nLineNum <= rcSel.bottom; ++nLineNum) {
-			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom	= LineColumnToIndex( pcLayout, rcSel.left  );
-				nIdxTo		= LineColumnToIndex( pcLayout, rcSel.right );
+				nIdxFrom	= LineColumnToIndex(pcLayout, rcSel.left );
+				nIdxTo		= LineColumnToIndex(pcLayout, rcSel.right);
 				//2002.02.08 hor
 				// pLineがNULLのとき(矩形エリアの端がEOFのみの行を含むとき)は以下を処理しない
 				if (nIdxTo - nIdxFrom > 0) {
 					if (WCODE::IsLineDelimiter(pLine[nIdxTo - 1])) {
-						cmemBuf->AppendString( &pLine[nIdxFrom], nIdxTo - nIdxFrom - 1 );
+						cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom - 1);
 					}else {
-						cmemBuf->AppendString( &pLine[nIdxFrom], nIdxTo - nIdxFrom );
+						cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
 					}
 				}
 			}
 			++nRowNum;
-			cmemBuf->AppendString( WCODE::CRLF );
+			cmemBuf->AppendString(WCODE::CRLF);
 			if (bLineOnly) {	// 複数行選択の場合は先頭の行のみ
 				break;
 			}
@@ -1876,7 +1876,7 @@ bool CEditView::GetSelectedData(
 		//  無駄な容量確保が出ていますので、もう少し精度を上げたいところですが・・・。
 		//  とはいえ、逆に小さく見積もることになってしまうと、かなり速度をとられる要因になってしまうので
 		// 困ってしまうところですが・・・。
-		m_pcEditDoc->m_cLayoutMgr.GetLineStr( GetSelectionInfo().m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout );
+		m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetSelectionInfo().m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout);
 		int nBufSize = 0;
 
 		int i = (Int)(GetSelectionInfo().m_sSelect.GetTo().y - GetSelectionInfo().m_sSelect.GetFrom().y);
@@ -1914,19 +1914,19 @@ bool CEditView::GetSelectedData(
 		//>> 2002/04/18 Azumaiya
 
 		for (nLineNum = GetSelectionInfo().m_sSelect.GetFrom().GetY2(); nLineNum <= GetSelectionInfo().m_sSelect.GetTo().y; ++nLineNum) {
-			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( nLineNum, &nLineLen, &pcLayout );
+			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 			if (!pLine) {
 				break;
 			}
 			if (nLineNum == GetSelectionInfo().m_sSelect.GetFrom().y) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom = LineColumnToIndex( pcLayout, GetSelectionInfo().m_sSelect.GetFrom().GetX2() );
+				nIdxFrom = LineColumnToIndex(pcLayout, GetSelectionInfo().m_sSelect.GetFrom().GetX2());
 			}else {
 				nIdxFrom = CLogicInt(0);
 			}
 			if (nLineNum == GetSelectionInfo().m_sSelect.GetTo().y) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxTo = LineColumnToIndex( pcLayout, GetSelectionInfo().m_sSelect.GetTo().GetX2() );
+				nIdxTo = LineColumnToIndex(pcLayout, GetSelectionInfo().m_sSelect.GetTo().GetX2());
 			}else {
 				nIdxTo = nLineLen;
 			}
@@ -1935,35 +1935,35 @@ bool CEditView::GetSelectedData(
 			}
 
 			if (pszQuote && pszQuote[0] != L'\0') {	// 先頭に付ける引用符
-				cmemBuf->AppendString( pszQuote );
+				cmemBuf->AppendString(pszQuote);
 			}
 			if (bWithLineNumber) {	// 行番号を付与する
-				auto_sprintf( pszLineNum, L" %d:" , nLineNum + 1 );
-				cmemBuf->AppendString( pszSpaces, nLineNumCols - wcslen( pszLineNum ) );
-				cmemBuf->AppendString( pszLineNum );
+				auto_sprintf(pszLineNum, L" %d:" , nLineNum + 1);
+				cmemBuf->AppendString(pszSpaces, nLineNumCols - wcslen(pszLineNum));
+				cmemBuf->AppendString(pszLineNum);
 			}
 
 			if (EOL_NONE != pcLayout->GetLayoutEol()) {
 				if (nIdxTo >= nLineLen) {
-					cmemBuf->AppendString( &pLine[nIdxFrom], nLineLen - 1 - nIdxFrom );
+					cmemBuf->AppendString(&pLine[nIdxFrom], nLineLen - 1 - nIdxFrom);
 					//	Jul. 25, 2000 genta
-					cmemBuf->AppendString( ( neweol == EOL_UNKNOWN ) ?
+					cmemBuf->AppendString((neweol == EOL_UNKNOWN) ?
 						(pcLayout->GetLayoutEol()).GetValue2() :	//	コード保存
-						appendEol.GetValue2() );			//	新規改行コード
+						appendEol.GetValue2());			//	新規改行コード
 				}else {
-					cmemBuf->AppendString( &pLine[nIdxFrom], nIdxTo - nIdxFrom );
+					cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
 				}
 			}else {
-				cmemBuf->AppendString( &pLine[nIdxFrom], nIdxTo - nIdxFrom );
+				cmemBuf->AppendString(&pLine[nIdxFrom], nIdxTo - nIdxFrom);
 				if (nIdxTo >= nLineLen) {
 					if (bAddCRLFWhenCopy ||  // 折り返し行に改行を付けてコピー
 						pszQuote || // 先頭に付ける引用符
 						bWithLineNumber 	// 行番号を付与する
 					) {
 						//	Jul. 25, 2000 genta
-						cmemBuf->AppendString(( neweol == EOL_UNKNOWN ) ?
+						cmemBuf->AppendString((neweol == EOL_UNKNOWN) ?
 							m_pcEditDoc->m_cDocEditor.GetNewLineCode().GetValue2() :	//	コード保存
-							appendEol.GetValue2() );		//	新規改行コード
+							appendEol.GetValue2());		//	新規改行コード
 					}
 				}
 			}
@@ -1983,7 +1983,7 @@ bool CEditView::GetSelectedData(
 	通常選択ならロジック行、矩形なら選択範囲内のレイアウト行１行を選択
 	2010.09.04 Moca 新規作成
 */
-bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
+bool CEditView::GetSelectedDataOne(CNativeW& cmemBuf, int nMaxLen)
 {
 	CLogicInt		nLineLen;
 	CLogicInt		nIdxFrom;
@@ -2010,13 +2010,13 @@ bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
 			sSelect.GetFrom(),	// 範囲選択開始
 			sSelect.GetTo()	// 範囲選択終了
 		);
-		const wchar_t* pLine = layoutMgr.GetLineStr( rcSel.top, &nLineLen, &pcLayout );
+		const wchar_t* pLine = layoutMgr.GetLineStr(rcSel.top, &nLineLen, &pcLayout);
 		if (pLine && pcLayout) {
 			nLineLen = pcLayout->GetLengthWithoutEOL();
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				nIdxFrom	= LineColumnToIndex( pcLayout, rcSel.left  );
-				nIdxTo		= LineColumnToIndex( pcLayout, rcSel.right );
+				nIdxFrom	= LineColumnToIndex(pcLayout, rcSel.left );
+				nIdxTo		= LineColumnToIndex(pcLayout, rcSel.right);
 			}
 			nSelectLen = nIdxTo - nIdxFrom;
 			if (0 < nSelectLen) {
@@ -2031,7 +2031,7 @@ bool CEditView::GetSelectedDataOne( CNativeW& cmemBuf, int nMaxLen )
 		layoutMgr.LayoutToLogic(sSelect.GetTo(),   &ptTo);
 		CLogicInt targetY = ptFrom.y;
 
-		const CDocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine( targetY );
+		const CDocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(targetY);
 		if (pDocLine) {
 			const wchar_t* pLine = pDocLine->GetPtr();
 			nLineLen = pDocLine->GetLengthWithoutEOL();
@@ -2085,7 +2085,7 @@ int CEditView::IsCurrentPositionSelected(
 				++rcSel.right;
 			}
 		}
-		if (rcSel.PtInRect( po )) {
+		if (rcSel.PtInRect(po)) {
 			return 0;
 		}
 		if (rcSel.top > ptCaretPos.y) {
@@ -2158,8 +2158,8 @@ int CEditView::IsCurrentPositionSelectedTEST(
 		return -1;
 	}
 
-	if (PointCompare( ptCaretPos, sSelect.GetFrom() ) < 0) return -1;
-	if (PointCompare( ptCaretPos, sSelect.GetTo() ) >= 0) return 1;
+	if (PointCompare(ptCaretPos, sSelect.GetFrom()) < 0) return -1;
+	if (PointCompare(ptCaretPos, sSelect.GetTo()) >= 0) return 1;
 
 	return 0;
 }
@@ -2182,23 +2182,23 @@ void CEditView::CopySelectedAllLines(
 		return;
 	}
 	{	// 選択範囲内の全行を選択状態にする
-		CLayoutRange sSelect( GetSelectionInfo().m_sSelect );
-		const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( sSelect.GetFrom().y );
+		CLayoutRange sSelect(GetSelectionInfo().m_sSelect);
+		const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(sSelect.GetFrom().y);
 		if (!pcLayout) return;
-		sSelect.SetFromX( pcLayout->GetIndent() );
-		pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( sSelect.GetTo().y );
+		sSelect.SetFromX(pcLayout->GetIndent());
+		pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(sSelect.GetTo().y);
 		if (pcLayout && (GetSelectionInfo().IsBoxSelecting() || sSelect.GetTo().x > pcLayout->GetIndent())) {
 			// 選択範囲を次行頭まで拡大する
-			sSelect.SetToY( sSelect.GetTo().y + 1 );
+			sSelect.SetToY(sSelect.GetTo().y + 1);
 			pcLayout = pcLayout->GetNextLayout();
 		}
-		sSelect.SetToX( pcLayout? pcLayout->GetIndent(): CLayoutInt(0) );
-		GetCaret().GetAdjustCursorPos( sSelect.GetToPointer() );	// EOF行を超えていたら座標修正
+		sSelect.SetToX(pcLayout? pcLayout->GetIndent(): CLayoutInt(0));
+		GetCaret().GetAdjustCursorPos(sSelect.GetToPointer());	// EOF行を超えていたら座標修正
 
-		GetSelectionInfo().DisableSelectArea( false ); // 2011.06.03 true →false
-		GetSelectionInfo().SetSelectArea( sSelect );
+		GetSelectionInfo().DisableSelectArea(false); // 2011.06.03 true →false
+		GetSelectionInfo().SetSelectArea(sSelect);
 
-		GetCaret().MoveCursor( GetSelectionInfo().m_sSelect.GetTo(), false );
+		GetCaret().MoveCursor(GetSelectionInfo().m_sSelect.GetTo(), false);
 		GetCaret().ShowEditCaret();
 	}
 	// 再描画
@@ -2221,7 +2221,7 @@ void CEditView::CopySelectedAllLines(
 		return;
 	}
 	// クリップボードにデータを設定
-	MySetClipboardData( cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), false );
+	MySetClipboardData(cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), false);
 }
 
 
@@ -2230,7 +2230,7 @@ void CEditView::CopySelectedAllLines(
 	@date 2007.10.04 ryoji MSDEVLineSelect対応処理を追加
 	@date 2008.09.10 bosagami パス貼り付け対応
 */
-bool CEditView::MyGetClipboardData( CNativeW& cmemBuf, bool* pbColumnSelect, bool* pbLineSelect /*= NULL*/ )
+bool CEditView::MyGetClipboardData(CNativeW& cmemBuf, bool* pbColumnSelect, bool* pbLineSelect /*= NULL*/)
 {
 	if (pbColumnSelect)
 		*pbColumnSelect = false;
@@ -2256,7 +2256,7 @@ bool CEditView::MyGetClipboardData( CNativeW& cmemBuf, bool* pbColumnSelect, boo
 /* クリップボードにデータを設定
 	@date 2004.02.17 Moca エラーチェックするように
  */
-bool CEditView::MySetClipboardData( const ACHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/ )
+bool CEditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
 {
 	//WCHARに変換
 	std::vector<wchar_t> buf;
@@ -2264,7 +2264,7 @@ bool CEditView::MySetClipboardData( const ACHAR* pszText, int nTextLen, bool bCo
 	return MySetClipboardData(&buf[0],buf.size()-1,bColumnSelect,bLineSelect);
 }
 
-bool CEditView::MySetClipboardData( const WCHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/ )
+bool CEditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
 {
 	// Windowsクリップボードにコピー
 	CClipboard cClipboard(GetHwnd());
@@ -2282,7 +2282,7 @@ bool CEditView::MySetClipboardData( const WCHAR* pszText, int nTextLen, bool bCo
 /*! カーソルの縦線の座標で作画範囲か
 	@2010.08.21 関数に分離。太線対応
 */
-inline bool CEditView::IsDrawCursorVLinePos( int posX )
+inline bool CEditView::IsDrawCursorVLinePos(int posX)
 {
 	return posX >= GetTextArea().GetAreaLeft() - 2	// 2010.08.10 ryoji テキストと行番号の隙間が半角文字幅より大きいと隙間位置にあるカーソルの縦線が描画される問題修正
 		&& posX >  GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
@@ -2290,7 +2290,7 @@ inline bool CEditView::IsDrawCursorVLinePos( int posX )
 }
 
 // カーソル行アンダーラインのON
-void CEditView::CaretUnderLineON( bool bDraw, bool bDrawPaint, bool DisalbeUnderLine )
+void CEditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderLine)
 {
 	bool bUnderLine = m_pTypeData->m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp;
 	bool bCursorVLine = m_pTypeData->m_ColorInfoArr[COLORIDX_CURSORVLINE].m_bDisp;
@@ -2330,8 +2330,8 @@ void CEditView::CaretUnderLineON( bool bDraw, bool bDrawPaint, bool DisalbeUnder
 
 			// 描画
 			HDC hdc = this->GetDC();
-			OnPaint( hdc, &ps, FALSE );
-			this->ReleaseDC( hdc );
+			OnPaint(hdc, &ps, FALSE);
+			this->ReleaseDC(hdc);
 
 			GetCaret().m_cUnderLine.UnLock();
 		}
@@ -2342,7 +2342,7 @@ void CEditView::CaretUnderLineON( bool bDraw, bool bDrawPaint, bool DisalbeUnder
 	if (bCursorVLine) {
 		// カーソル位置縦線。-1してキャレットの左に来るように。
 		nCursorVLineX = GetTextArea().GetAreaLeft() + (Int)(GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol())
-			* (m_pTypeData->m_nColumnSpace + GetTextMetrics().GetHankakuWidth() ) - 1;
+			* (m_pTypeData->m_nColumnSpace + GetTextMetrics().GetHankakuWidth()) - 1;
 	}
 
 	if (1
@@ -2356,26 +2356,26 @@ void CEditView::CaretUnderLineON( bool bDraw, bool bDrawPaint, bool DisalbeUnder
 		m_nOldCursorLineX = nCursorVLineX;
 		// カーソル位置縦線の描画
 		// アンダーラインと縦線の交点で、下線が上になるように先に縦線を引く。
-		HDC hdc = ::GetDC( GetHwnd() );
+		HDC hdc = ::GetDC(GetHwnd());
 		{
 			CGraphics gr(hdc);
-			gr.SetPen( m_pTypeData->m_ColorInfoArr[COLORIDX_CURSORVLINE].m_sColorAttr.m_cTEXT );
-			::MoveToEx( gr, m_nOldCursorLineX, GetTextArea().GetAreaTop(), NULL );
-			::LineTo(   gr, m_nOldCursorLineX, GetTextArea().GetAreaBottom() );
+			gr.SetPen(m_pTypeData->m_ColorInfoArr[COLORIDX_CURSORVLINE].m_sColorAttr.m_cTEXT);
+			::MoveToEx(gr, m_nOldCursorLineX, GetTextArea().GetAreaTop(), NULL);
+			::LineTo(  gr, m_nOldCursorLineX, GetTextArea().GetAreaBottom());
 			int nBoldX = m_nOldCursorLineX - 1;
 			// 「太字」のときは2dotの線にする。その際カーソルに掛からないように左側を太くする
 			if (1
 				&& m_pTypeData->m_ColorInfoArr[COLORIDX_CURSORVLINE].m_sFontAttr.m_bBoldFont
 				&& IsDrawCursorVLinePos(nBoldX)
 			) {
-				::MoveToEx( gr, nBoldX, GetTextArea().GetAreaTop(), NULL );
-				::LineTo(   gr, nBoldX, GetTextArea().GetAreaBottom() );
+				::MoveToEx(gr, nBoldX, GetTextArea().GetAreaTop(), NULL);
+				::LineTo(  gr, nBoldX, GetTextArea().GetAreaBottom());
 				m_nOldCursorVLineWidth = 2;
 			}else {
 				m_nOldCursorVLineWidth = 1;
 			}
 		}	// ReleaseDC の前に gr デストラクト
-		::ReleaseDC( GetHwnd(), hdc );
+		::ReleaseDC(GetHwnd(), hdc);
 	}
 	
 	int nUnderLineY = -1;
@@ -2399,12 +2399,12 @@ void CEditView::CaretUnderLineON( bool bDraw, bool bDrawPaint, bool DisalbeUnder
 		}
 		m_nOldUnderLineYMargin = GetTextMetrics().GetHankakuHeight();
 		m_nOldUnderLineYHeightReal = 1;
-//		MYTRACE( _T("★カーソル行アンダーラインの描画\n") );
+//		MYTRACE(_T("★カーソル行アンダーラインの描画\n"));
 		// ★カーソル行アンダーラインの描画
-		HDC		hdc = ::GetDC( GetHwnd() );
+		HDC		hdc = ::GetDC(GetHwnd());
 		{
 			CGraphics gr(hdc);
-			gr.SetPen( m_pTypeData->m_ColorInfoArr[COLORIDX_UNDERLINE].m_sColorAttr.m_cTEXT );
+			gr.SetPen(m_pTypeData->m_ColorInfoArr[COLORIDX_UNDERLINE].m_sColorAttr.m_cTEXT);
 			::MoveToEx(
 				gr,
 				GetTextArea().GetAreaLeft(),
@@ -2417,12 +2417,12 @@ void CEditView::CaretUnderLineON( bool bDraw, bool bDrawPaint, bool DisalbeUnder
 				nUnderLineY
 			);
 		}	// ReleaseDC の前に gr デストラクト
-		::ReleaseDC( GetHwnd(), hdc );
+		::ReleaseDC(GetHwnd(), hdc);
 	}
 }
 
 // カーソル行アンダーラインのOFF
-void CEditView::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bResetFlag, bool DisalbeUnderLine )
+void CEditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, bool DisalbeUnderLine)
 {
 	if (1
 		&& !m_pTypeData->m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp
@@ -2466,8 +2466,8 @@ void CEditView::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bResetFlag,
 				// 描画
 				HDC hdc = this->GetDC();
 				// 可能なら互換BMPからコピーして再作画
-				OnPaint( hdc, &ps, (ps.rcPaint.bottom - ps.rcPaint.top) == 1 );
-				this->ReleaseDC( hdc );
+				OnPaint(hdc, &ps, (ps.rcPaint.bottom - ps.rcPaint.top) == 1);
+				this->ReleaseDC(hdc);
 			}
 			m_nOldUnderLineYHeight = 0;
 
@@ -2491,7 +2491,7 @@ void CEditView::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bResetFlag,
 		if (1
 			&& bDraw
 			&& GetDrawSwitch()
-			&& IsDrawCursorVLinePos( m_nOldCursorLineX )
+			&& IsDrawCursorVLinePos(m_nOldCursorLineX)
 			&& m_bDoing_UndoRedo == FALSE
 			&& !GetCaret().m_cUnderLine.GetVertLineDoNotOFF()	// カーソル位置縦線を消去するか
 			&& !DisalbeUnderLine
@@ -2501,17 +2501,17 @@ void CEditView::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bResetFlag,
 			ps.rcPaint.right = m_nOldCursorLineX + 1;
 			ps.rcPaint.top = GetTextArea().GetAreaTop();
 			ps.rcPaint.bottom = GetTextArea().GetAreaBottom();
-			HDC hdc = ::GetDC( GetHwnd() );
+			HDC hdc = ::GetDC(GetHwnd());
 			GetCaret().m_cUnderLine.Lock();
 			//	不本意ながら選択情報をバックアップ。
 			CLayoutRange sSelectBackup = this->GetSelectionInfo().m_sSelect;
 			this->GetSelectionInfo().m_sSelect.Clear(-1);
 			// 可能なら互換BMPからコピーして再作画
-			OnPaint( hdc, &ps, TRUE );
+			OnPaint(hdc, &ps, TRUE);
 			//	選択情報を復元
 			this->GetSelectionInfo().m_sSelect = sSelectBackup;
 			GetCaret().m_cUnderLine.UnLock();
-			ReleaseDC( hdc );
+			ReleaseDC(hdc);
 		}
 		m_nOldCursorLineX = -1;
 	}
@@ -2529,9 +2529,9 @@ void CEditView::CaretUnderLineOFF( bool bDraw, bool bDrawPaint, bool bResetFlag,
 	@date 2002.01.26 hor 新規作成
 	@date 2002.12.04 genta 実体をCEditWndへ移動
 */
-void CEditView::SendStatusMessage( const TCHAR* msg )
+void CEditView::SendStatusMessage(const TCHAR* msg)
 {
-	m_pcEditWnd->SendStatusMessage( msg );
+	m_pcEditWnd->SendStatusMessage(msg);
 }
 
 
@@ -2551,7 +2551,7 @@ bool CEditView::IsInsMode(void) const
 
 void CEditView::SetInsMode(bool mode)
 {
-	m_pcEditDoc->m_cDocEditor.SetInsMode( mode );
+	m_pcEditDoc->m_cDocEditor.SetInsMode(mode);
 }
 
 
@@ -2566,10 +2566,10 @@ void CEditView::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	m_cHistory->Flush();
 
 	// 現在の選択範囲を非選択状態に戻す
-	GetSelectionInfo().DisableSelectArea( false );
+	GetSelectionInfo().DisableSelectArea(false);
 
 	OnChangeSetting();
-	GetCaret().MoveCursor( CLayoutPoint(0, 0), true );
+	GetCaret().MoveCursor(CLayoutPoint(0, 0), true);
 	GetCaret().m_nCaretPosX_Prev = CLayoutInt(0);
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
@@ -2586,19 +2586,19 @@ void CEditView::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 
 //!	現在のカーソル行位置を履歴に登録する
-void CEditView::AddCurrentLineToHistory( void )
+void CEditView::AddCurrentLineToHistory(void)
 {
 	CLogicPoint ptPos;
 
-	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic( GetCaret().GetCaretLayoutPos(), &ptPos );
+	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptPos);
 
-	CMarkMgr::CMark m( ptPos );
-	m_cHistory->Add( m );
+	CMarkMgr::CMark m(ptPos);
+	m_cHistory->Add(m);
 }
 
 
 //	2001/06/18 Start by asa-o: 補完ウィンドウ用のキーワードヘルプ表示
-bool  CEditView::ShowKeywordHelp( POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
+bool  CEditView::ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 {
 	CNativeW	cmemCurText;
 	RECT		rcTipWin,
@@ -2608,10 +2608,10 @@ bool  CEditView::ShowKeywordHelp( POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 		if (m_bInMenuLoop == FALSE	&&	// メニュー モーダル ループに入っていない
 			0 != m_dwTipTimer			// 辞書Tipを表示していない
 		) {
-			cmemCurText.SetString( pszHelp );
+			cmemCurText.SetString(pszHelp);
 
 			// 既に検索済みか
-			if (CNativeW::IsEqual( cmemCurText, m_cTipWnd.m_cKey )) {
+			if (CNativeW::IsEqual(cmemCurText, m_cTipWnd.m_cKey)) {
 				// 該当するキーがなかった
 				if (!m_cTipWnd.m_KeyWasHit) {
 					return false;
@@ -2629,7 +2629,7 @@ bool  CEditView::ShowKeywordHelp( POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 			m_cTipWnd.GetWindowSize(&rcTipWin);
 
 			//	May 01, 2004 genta マルチモニタ対応
-			::GetMonitorWorkRect( m_cTipWnd.GetHwnd(), &rcDesktop );
+			::GetMonitorWorkRect(m_cTipWnd.GetHwnd(), &rcDesktop);
 
 			// 右に入る
 			if (prcHokanWin->right + rcTipWin.right < rcDesktop.right) {
@@ -2648,7 +2648,7 @@ bool  CEditView::ShowKeywordHelp( POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 		// 2001/06/19 End
 
 			// 辞書Tipを表示
-			m_cTipWnd.Show( po.x, po.y , NULL , &rcTipWin);
+			m_cTipWnd.Show(po.x, po.y , NULL , &rcTipWin);
 			return true;
 		}
 	}
@@ -2669,7 +2669,7 @@ bool  CEditView::ShowKeywordHelp( POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin)
 
 	@date 2008.08.03 nasukoji	新規作成
 */
-bool CEditView::IsEmptyArea( CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelect, bool bBoxSelect ) const
+bool CEditView::IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelect, bool bBoxSelect) const
 {
 	bool result;
 
@@ -2685,11 +2685,11 @@ bool CEditView::IsEmptyArea( CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelec
 		if (bSelect) {
 			// 範囲の調整
 			if (nLineFrom > nLineTo) {
-				std::swap( nLineFrom, nLineTo );
+				std::swap(nLineFrom, nLineTo);
 			}
 
 			if (nColumnFrom > nColumnTo) {
-				std::swap( nColumnFrom, nColumnTo );
+				std::swap(nColumnFrom, nColumnTo);
 			}
 		}else {
 			nLineTo = nLineFrom;
@@ -2700,9 +2700,9 @@ bool CEditView::IsEmptyArea( CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelec
 
 		result = true;
 		for (CLayoutInt nLineNum = nLineFrom; nLineNum <= nLineTo; nLineNum++) {
-			if ((pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( nLineNum )) != NULL) {
+			if ((pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum)) != NULL) {
 				// 指定位置に対応する行のデータ内の位置
-				LineColumnToIndex2( pcLayout, nColumnFrom, &nLineLen );
+				LineColumnToIndex2(pcLayout, nColumnFrom, &nLineLen);
 				if (nLineLen == 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
 					result = false;		// 指定位置または指定範囲内にテキストがある
 					break;
@@ -2717,21 +2717,22 @@ bool CEditView::IsEmptyArea( CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelec
 //! アンドゥバッファの処理
 void CEditView::SetUndoBuffer(bool bPaintLineNumber)
 {
-	
-	if (m_cCommander.GetOpeBlk() && m_cCommander.GetOpeBlk()->Release() == 0) {
-		if (0 < m_cCommander.GetOpeBlk()->GetNum()) {	// 操作の数を返す
+	COpeBlk* pOpe = m_cCommander.GetOpeBlk();
+	if (pOpe && pOpe->Release() == 0) {
+		if (0 < pOpe->GetNum()) {	// 操作の数を返す
 			// 操作の追加
-			GetDocument()->m_cDocEditor.m_cOpeBuf.AppendOpeBlk( m_cCommander.GetOpeBlk() );
+			GetDocument()->m_cDocEditor.m_cOpeBuf.AppendOpeBlk(pOpe);
 
 			// 2013.05.01 Moca 正確に変更行を表示するようになったので不要
-			//  if( bPaintLineNumber
-			//   &&	m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer() == 1 )	// 全Undo状態からの変更か？	// 2009.03.26 ryoji
-			//  	Call_OnPaint( PAINT_LINENUMBER, false );	// 自ペインの行番号（変更行）表示を更新 ← 変更行のみの表示更新で済ませている場合があるため
+			//  if (bPaintLineNumber
+			//   &&	m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer() == 1)	// 全Undo状態からの変更か？	// 2009.03.26 ryoji
+			//  	Call_OnPaint(PAINT_LINENUMBER, false);	// 自ペインの行番号（変更行）表示を更新 ← 変更行のみの表示更新で済ませている場合があるため
 
-			if (!m_pcEditWnd->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-				m_pcEditWnd->RedrawAllViews( this );	//	他のペインの表示を更新
+			if (!m_pcEditWnd->UpdateTextWrap())	{	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+				m_pcEditWnd->RedrawAllViews(this);	//	他のペインの表示を更新
+			}
 		}else {
-			delete m_cCommander.GetOpeBlk();
+			delete pOpe;
 		}
 		m_cCommander.SetOpeBlk(NULL);
 	}

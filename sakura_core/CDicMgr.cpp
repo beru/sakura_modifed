@@ -51,7 +51,7 @@ BOOL CDicMgr::Search(
 )
 {
 #ifdef _DEBUG
-	CRunningTimer cRunningTimer( "CDicMgr::Search" );
+	CRunningTimer cRunningTimer("CDicMgr::Search");
 #endif
 	const wchar_t*	pszDelimit = L" /// ";
 	const wchar_t*	pszKeySeps = L",\0";
@@ -71,20 +71,20 @@ BOOL CDicMgr::Search(
 	for (int line=1 ; in; line++) {	// 2006.04.10 fon
 		// 1行読み込み
 		{
-			wstring tmp = in.ReadLineW(); //NULL != fgetws( szLine, _countof(szLine), pFile );
+			wstring tmp = in.ReadLineW(); //NULL != fgetws(szLine, _countof(szLine), pFile);
 			wcsncpy_s(szLine, _countof(szLine), tmp.c_str(), _TRUNCATE);
 			// auto_strlcpy(szLine,tmp.c_str(), _countof(szLine));
 		}
 
-		wchar_t* pszWork = wcsstr( szLine, pszDelimit );
+		wchar_t* pszWork = wcsstr(szLine, pszDelimit);
 		if (pszWork && szLine[0] != L';') {
 			*pszWork = L'\0';
-			pszWork += wcslen( pszDelimit );
+			pszWork += wcslen(pszDelimit);
 
 			// 最初のトークンを取得します。
-			wchar_t* pszToken = wcstok( szLine, pszKeySeps );
+			wchar_t* pszToken = wcstok(szLine, pszKeySeps);
 			while (pszToken) {
-				int nRes = _wcsnicmp( pszKey, pszToken, nCmpLen );	// 2006.04.10 fon
+				int nRes = _wcsnicmp(pszKey, pszToken, nCmpLen);	// 2006.04.10 fon
 				if (0 == nRes) {
 					int nLen = (int)wcslen(pszWork);
 					for (INT i = 0; i < nLen; ++i) {
@@ -95,15 +95,15 @@ BOOL CDicMgr::Search(
 					}
 					// キーワードのセット
 					*ppcmemKey = new CNativeW;	// 2006.04.10 fon
-					(*ppcmemKey)->SetString( pszToken );
+					(*ppcmemKey)->SetString(pszToken);
 					// 意味のセット
 					*ppcmemMean = new CNativeW;
-					(*ppcmemMean)->SetString( pszWork );
+					(*ppcmemMean)->SetString(pszWork);
 
 					*pLine = line;	// 2006.04.10 fon
 					return TRUE;
 				}
-				pszToken = wcstok( NULL, pszKeySeps );
+				pszToken = wcstok(NULL, pszKeySeps);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ int CDicMgr::HokanSearch(
 	if (!in) {
 		return 0;
 	}
-	int nKeyLen = wcslen( pszKey );
+	int nKeyLen = wcslen(pszKey);
 	while (in) {
 		wstring szLine = in.ReadLineW();
 		if (nKeyLen > (int)szLine.length()) {
@@ -153,12 +153,12 @@ int CDicMgr::HokanSearch(
 
 		int nRet;
 		if (bHokanLoHiCase) {	// 英大文字小文字を同一視する
-			nRet = auto_memicmp( pszKey, szLine.c_str(), nKeyLen );
+			nRet = auto_memicmp(pszKey, szLine.c_str(), nKeyLen);
 		}else {
-			nRet = auto_memcmp( pszKey, szLine.c_str(), nKeyLen );
+			nRet = auto_memcmp(pszKey, szLine.c_str(), nKeyLen);
 		}
 		if (0 == nRet) {
-			vKouho.push_back( szLine );
+			vKouho.push_back(szLine);
 			if (0 != nMaxKouho && nMaxKouho <= (int)vKouho.size()) {
 				break;
 			}

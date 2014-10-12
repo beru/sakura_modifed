@@ -31,7 +31,7 @@ class CEditWnd;
 class CNormalProcess : public CProcess {
 public:
 	// コンストラクタ・デストラクタ
-	CNormalProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine );
+	CNormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine);
 	virtual ~CNormalProcess();
 
 protected:

@@ -65,7 +65,7 @@ namespace WCODE
 		// Š¿Žš‚Í‚·‚×‚Ä“¯ˆê•‚Æ‚Ý‚È‚·	// 2013.04.07 aroka
 		if ( wc>=0x4E00 && wc<=0x9FBB		// Unified Ideographs, CJK
 		  || wc>=0x3400 && wc<=0x4DB5		// Unified Ideographs Extension A, CJK
-		){
+		) {
 			wc = 0x4E00; // 'ˆê'(0x4E00)‚Ì•‚Å‘ã—p
 		}
 		else
@@ -117,7 +117,7 @@ namespace WCODE
 		;
 
 		const wchar_t* p;
-		for(p=KUTOTEN;*p;p++){
+		for(p=KUTOTEN;*p;p++) {
 			if(*p==wc)return true;
 		}
 		return false;
@@ -231,14 +231,14 @@ namespace WCODE
 		LocalCacheSelector()
 		{
 			pcache = &m_localcache[0];
-			for( int i=0; i<CWM_FONT_MAX; i++ ){
+			for( int i=0; i<CWM_FONT_MAX; i++ ) {
 				m_parCache[i] = 0;
 			}
 			m_eLastEditCacheMode = CWM_CACHE_NEUTRAL;
 		}
 		~LocalCacheSelector()
 		{
-			for( int i=0; i<CWM_FONT_MAX; i++ ){
+			for( int i=0; i<CWM_FONT_MAX; i++ ) {
 				delete m_parCache[i];
 				m_parCache[i] = 0;
 			}
@@ -257,17 +257,17 @@ namespace WCODE
 			ECharWidthCacheMode cmode = (cMode==CWM_CACHE_NEUTRAL)?m_eLastEditCacheMode:cMode;
 
 			pcache = &m_localcache[fMode];
-			if( cmode == CWM_CACHE_SHARE ){
+			if( cmode == CWM_CACHE_SHARE ) {
 				pcache->SelectCache( &(GetDllShareData().m_sCharWidth) );
 			}else{
-				if( m_parCache[fMode] == 0 ){
+				if( m_parCache[fMode] == 0 ) {
 					m_parCache[fMode] = new SCharWidthCache;
 				}
 				pcache->SelectCache( m_parCache[fMode] );
 			}
-			if( fMode==CWM_FONT_EDIT ){ m_eLastEditCacheMode = cmode; }
+			if( fMode==CWM_FONT_EDIT ) { m_eLastEditCacheMode = cmode; }
 		}
-		LocalCache* GetCache(){ return pcache; }
+		LocalCache* GetCache() { return pcache; }
 	private:
 		LocalCache* pcache;
 		LocalCache m_localcache[2];

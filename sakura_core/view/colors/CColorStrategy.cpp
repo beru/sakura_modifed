@@ -299,7 +299,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
 	{_T("IME"), COLOR_ATTRIB_NO_BACK | COLOR_ATTRIB_NO_EFFECTS},	// IMEキャレット	// 2006.12.07 ryoji
 	{_T("CBK"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("UND"), COLOR_ATTRIB_NO_BACK | COLOR_ATTRIB_NO_EFFECTS},
-	{_T("CVL"), COLOR_ATTRIB_NO_BACK | ( COLOR_ATTRIB_NO_EFFECTS & ~COLOR_ATTRIB_NO_BOLD )}, // 2007.09.09 Moca カーソル位置縦線
+	{_T("CVL"), COLOR_ATTRIB_NO_BACK | (COLOR_ATTRIB_NO_EFFECTS & ~COLOR_ATTRIB_NO_BOLD)}, // 2007.09.09 Moca カーソル位置縦線
 	{_T("LNO"), 0},
 	{_T("MOD"), 0},
 	{_T("EBK"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
@@ -355,10 +355,10 @@ const SColorAttributeData g_ColorAttributeArr[] =
 /*
  * カラー名からインデックス番号に変換する
  */
-int GetColorIndexByName( const TCHAR *name )
+int GetColorIndexByName(const TCHAR *name)
 {
 	for (int i=0; i<COLORIDX_LAST; i++) {
-		if (_tcscmp( name, g_ColorAttributeArr[i].szName ) == 0) return i;
+		if (_tcscmp(name, g_ColorAttributeArr[i].szName) == 0) return i;
 	}
 	return -1;
 }
@@ -366,7 +366,7 @@ int GetColorIndexByName( const TCHAR *name )
 /*
  * インデックス番号からカラー名に変換する
  */
-const TCHAR* GetColorNameByIndex( int index )
+const TCHAR* GetColorNameByIndex(int index)
 {
 	return g_ColorAttributeArr[index].szName;
 }

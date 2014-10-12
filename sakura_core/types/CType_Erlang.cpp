@@ -55,44 +55,44 @@ struct COutlineErlang {
 	int m_parenthesis_ptr;	//!< 括弧のネストレベル
 	
 	COutlineErlang();
-	bool parse( const wchar_t* buf, int linelen, CLogicInt linenum );
+	bool parse(const wchar_t* buf, int linelen, CLogicInt linenum);
 	
-	const wchar_t* ScanFuncName( const wchar_t* buf, const wchar_t* end, const wchar_t* p );
-	const wchar_t* EnterArgs( const wchar_t* end, const wchar_t* p );
-	const wchar_t* ScanArgs1( const wchar_t* end, const wchar_t* p );
-	const wchar_t* ScanArgs( const wchar_t* end, const wchar_t* p );
-	const wchar_t* EnterCond( const wchar_t* end, const wchar_t* p );
+	const wchar_t* ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p);
+	const wchar_t* EnterArgs(const wchar_t* end, const wchar_t* p);
+	const wchar_t* ScanArgs1(const wchar_t* end, const wchar_t* p);
+	const wchar_t* ScanArgs(const wchar_t* end, const wchar_t* p);
+	const wchar_t* EnterCond(const wchar_t* end, const wchar_t* p);
 	const wchar_t* GetFuncName() const { return m_func; }
 	CLogicInt GetFuncLine() const { return m_lnum; }
 
 private:
 	// helper functions
-	bool IS_ATOM_HEAD( wchar_t wc )
+	bool IS_ATOM_HEAD(wchar_t wc)
 	{
-		return ( L'a' <= wc && wc <= L'z' )
-			|| ( wc == L'_' ) || ( wc == L'@' );
+		return (L'a' <= wc && wc <= L'z')
+			|| (wc == L'_') || (wc == L'@');
 	}
 
-	bool IS_ALNUM( wchar_t wc )
+	bool IS_ALNUM(wchar_t wc)
 	{
-		return IS_ATOM_HEAD(wc) || ( L'A' <= wc && wc <= L'Z' ) || ( L'0' <= wc && wc <= L'9' );
+		return IS_ATOM_HEAD(wc) || (L'A' <= wc && wc <= L'Z') || (L'0' <= wc && wc <= L'9');
 	}
 
-	bool IS_COMMENT( wchar_t wc )
+	bool IS_COMMENT(wchar_t wc)
 	{
-		return ( wc == L'%' );
+		return (wc == L'%');
 	}
 
-	bool IS_SPACE( wchar_t wc )
+	bool IS_SPACE(wchar_t wc)
 	{
-		return ( wcschr( L" \t\r\n", wc ) != 0 );
+		return (wcschr(L" \t\r\n", wc) != 0);
 	}
 	
 	void build_arity(int);
 };
 
 COutlineErlang::COutlineErlang() :
-	m_state( STATE_NORMAL ), m_lnum( 0 ), m_argcount( 0 )
+	m_state(STATE_NORMAL), m_lnum(0), m_argcount(0)
 {
 }
 
@@ -105,11 +105,11 @@ COutlineErlang::COutlineErlang() :
 	関数名はatom．atomは 小文字アルファベット，_, @ のいずれかから始まる
 	英数文字列か，あるいはシングルクォーテーションで囲まれた文字列．
 */
-const wchar_t* COutlineErlang::ScanFuncName( const wchar_t* buf, const wchar_t* end, const wchar_t* p )
+const wchar_t* COutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p)
 {
-	assert( m_state == STATE_NORMAL );
+	assert(m_state == STATE_NORMAL);
 
-	if (p > buf || ! ( IS_ATOM_HEAD( *p ) || *p == L'\'' )) {
+	if (p > buf || ! (IS_ATOM_HEAD(*p) || *p == L'\'')) {
 		return end;
 	}
 	
@@ -125,10 +125,10 @@ const wchar_t* COutlineErlang::ScanFuncName( const wchar_t* buf, const wchar_t* 
 	}else {
 		do {
 			++p;
-		}while (IS_ALNUM( *p ) && p < end);
+		}while (IS_ALNUM(*p) && p < end);
 	}
 	
-	int buf_len = _countof( m_func );
+	int buf_len = _countof(m_func);
 	int len = p - buf;
 	if (buf[0] == L'\'') {
 		++buf;
@@ -136,7 +136,7 @@ const wchar_t* COutlineErlang::ScanFuncName( const wchar_t* buf, const wchar_t* 
 		--buf_len;
 	}
 	len = len < buf_len - 1 ? len : buf_len - 1;
-	wcsncpy( m_func, buf, len );
+	wcsncpy(m_func, buf, len);
 	m_func[len] = L'\0';
 	m_state = STATE_FUNC_CANDIDATE_FIN;
 	return p;
@@ -149,11 +149,11 @@ const wchar_t* COutlineErlang::ScanFuncName( const wchar_t* buf, const wchar_t* 
 	
 	関数名の取得が完了し，パラメータ先頭の括弧を探す．
 */
-const wchar_t* COutlineErlang::EnterArgs( const wchar_t* end, const wchar_t* p )
+const wchar_t* COutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 {
-	assert( m_state == STATE_FUNC_CANDIDATE_FIN );
+	assert(m_state == STATE_FUNC_CANDIDATE_FIN);
 
-	while (IS_SPACE( *p ) && p < end)
+	while (IS_SPACE(*p) && p < end)
 		p++;
 	
 	if (p >= end)
@@ -161,7 +161,7 @@ const wchar_t* COutlineErlang::EnterArgs( const wchar_t* end, const wchar_t* p )
 
 	if (IS_COMMENT(*p)) {
 		return end;
-	}else if (*p == L'(') { // )
+	}else if (*p == L'(') { //)
 		m_state = STATE_FUNC_ARGS1;
 		m_argcount = 0;
 		m_parenthesis_ptr = 1;
@@ -181,21 +181,21 @@ const wchar_t* COutlineErlang::EnterArgs( const wchar_t* end, const wchar_t* p )
 	
 	パラメータが0個と1個以上の判別のために状態を設けている．
 */
-const wchar_t* COutlineErlang::ScanArgs1( const wchar_t* end, const wchar_t* p )
+const wchar_t* COutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 {
-	assert( m_state == STATE_FUNC_ARGS1 );
+	assert(m_state == STATE_FUNC_ARGS1);
 	
-	while (IS_SPACE( *p ) && p < end)
+	while (IS_SPACE(*p) && p < end)
 		p++;
 
 	if (p >= end)
 		return end;
 
-	if (*p == /* ( */ L')') {
+	if (*p == /* (*/ L')') {
 		// no argument
 		m_state = STATE_FUNC_ARGS_FIN;
 		p++;
-	}else if (IS_COMMENT( *p )) {
+	}else if (IS_COMMENT(*p)) {
 		return end;
 	}else {
 		// argument found
@@ -214,11 +214,11 @@ const wchar_t* COutlineErlang::ScanArgs1( const wchar_t* end, const wchar_t* p )
 	引用符，括弧，パラメータの区切りのカンマに着目する．
 	引用符は改行を含むことができない．
 */
-const wchar_t* COutlineErlang::ScanArgs( const wchar_t* end, const wchar_t* p )
+const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 {
-	assert( m_state == STATE_FUNC_ARGS );
+	assert(m_state == STATE_FUNC_ARGS);
 
-	const int parptr_max = _countof( m_parenthesis );
+	const int parptr_max = _countof(m_parenthesis);
 	wchar_t quote = L'\0'; // 先頭位置を保存
 	for (const wchar_t* head = p ; p < end ; p++) {
 		if (quote) {
@@ -231,7 +231,7 @@ const wchar_t* COutlineErlang::ScanArgs( const wchar_t* end, const wchar_t* p )
 					m_parenthesis[ m_parenthesis_ptr ] = *p;
 				}
 				m_parenthesis_ptr++;
-			}else if (wcschr( L")]}", *p)) {	//)
+			}else if (wcschr(L")]}", *p)) {	//)
 				wchar_t op;
 				switch (*p) {
 				case L')': op = L'('; break;
@@ -269,7 +269,7 @@ const wchar_t* COutlineErlang::ScanArgs( const wchar_t* end, const wchar_t* p )
 				return end;
 			}else if (*p == L'.') {
 				//	ピリオドは式の末尾か，小数点として使われる．
-				if (p > head && ( L'0' <= p[-1] && p[-1] <= L'9' )) {
+				if (p > head && (L'0' <= p[-1] && p[-1] <= L'9')) {
 					//	小数点かもしれないので，そのままにする
 				}else {
 					//	引数の途中で文末が現れたのは解析が失敗している
@@ -281,7 +281,7 @@ const wchar_t* COutlineErlang::ScanArgs( const wchar_t* end, const wchar_t* p )
 				quote = L'"';
 			}else if (*p == L'\'') {
 				quote = L'\'';
-			}else if (IS_COMMENT( *p )) {
+			}else if (IS_COMMENT(*p)) {
 				return end;
 			}
 		}
@@ -298,7 +298,7 @@ const wchar_t* COutlineErlang::ScanArgs( const wchar_t* end, const wchar_t* p )
 	見つけたら，関数発見とする．
 	それ以外の場合は関数ではなかったと考える．
 */
-const wchar_t* COutlineErlang::EnterCond( const wchar_t* end, const wchar_t* p )
+const wchar_t* COutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 {
 	while (IS_SPACE(*p) && p < end)
 		p++;
@@ -306,10 +306,10 @@ const wchar_t* COutlineErlang::EnterCond( const wchar_t* end, const wchar_t* p )
 	if (p >= end)
 		return end;
 
-	if (p + 1 < end && wcsncmp( p, L"->", 2 ) == 0) {
+	if (p + 1 < end && wcsncmp(p, L"->", 2) == 0) {
 		p += 2;
 		m_state = STATE_FUNC_FOUND;
-	}else if (p + 3 < end && wcsncmp( p, L"when", 4 ) == 0) {
+	}else if (p + 3 < end && wcsncmp(p, L"when", 4) == 0) {
 		m_state = STATE_FUNC_FOUND;
 		p += 4;
 	}else if (IS_COMMENT(*p)) {
@@ -326,7 +326,7 @@ const wchar_t* COutlineErlang::EnterCond( const wchar_t* end, const wchar_t* p )
 	@param[in] linelen 行の長さ
 	@param[in] linenum 行番号
 */
-bool COutlineErlang::parse( const wchar_t* buf, int linelen, CLogicInt linenum )
+bool COutlineErlang::parse(const wchar_t* buf, int linelen, CLogicInt linenum)
 {
 	const wchar_t* pos = buf;
 	const wchar_t* const end = buf + linelen;
@@ -334,7 +334,7 @@ bool COutlineErlang::parse( const wchar_t* buf, int linelen, CLogicInt linenum )
 		m_state = STATE_NORMAL;
 	}
 	if (m_state == STATE_NORMAL) {
-		pos = ScanFuncName( buf, end, pos );
+		pos = ScanFuncName(buf, end, pos);
 		if (m_state != STATE_NORMAL) {
 			m_lnum = linenum;
 		}
@@ -342,19 +342,19 @@ bool COutlineErlang::parse( const wchar_t* buf, int linelen, CLogicInt linenum )
 	while (pos < end) {
 		switch (m_state) {
 		case STATE_FUNC_CANDIDATE_FIN:
-			pos = EnterArgs( end, pos ); break;
+			pos = EnterArgs(end, pos); break;
 		case STATE_FUNC_ARGS1:
-			pos = ScanArgs1( end, pos ); break;
+			pos = ScanArgs1(end, pos); break;
 		case STATE_FUNC_ARGS:
-			pos = ScanArgs( end, pos ); break;
+			pos = ScanArgs(end, pos); break;
 		case STATE_FUNC_ARGS_FIN:
-			pos = EnterCond( end, pos ); break;
+			pos = EnterCond(end, pos); break;
 		default:
-			PleaseReportToAuthor(NULL, _T("COutlineErlang::parse Unknown State: %d"), m_state );
+			PleaseReportToAuthor(NULL, _T("COutlineErlang::parse Unknown State: %d"), m_state);
 			break;
 		}
 		if (m_state == STATE_FUNC_FOUND) {
-			build_arity( m_argcount );
+			build_arity(m_argcount);
 			break;
 		}
 	}
@@ -369,10 +369,10 @@ bool COutlineErlang::parse( const wchar_t* buf, int linelen, CLogicInt linenum )
 	バッファが不足する場合はできるところまで書き込む．
 	そのため，10個以上の引数がある場合に，引数の数の下位桁が欠けることがある．
 */ 
-void COutlineErlang::build_arity( int arity )
+void COutlineErlang::build_arity(int arity)
 {
-	int len = wcslen( m_func );
-	const int buf_size = _countof( m_func );
+	int len = wcslen(m_func);
+	const int buf_size = _countof(m_func);
 	wchar_t* p = &m_func[len];
 	wchar_t numstr[12];
 	
@@ -380,8 +380,8 @@ void COutlineErlang::build_arity( int arity )
 		return; // no room
 
 	numstr[0] = L'/';
-	_itow( arity, numstr + 1, 10 );
-	wcsncpy( p, numstr, buf_size - len - 1 );
+	_itow(arity, numstr + 1, 10);
+	wcsncpy(p, numstr, buf_size - len - 1);
 	m_func[ buf_size - 1 ] = L'\0';
 }
 
@@ -394,11 +394,11 @@ void COutlineErlang::build_arity( int arity )
 	@par 解析アルゴリズム
 	1カラム目がアルファベットの場合: 関数らしいとして解析開始 / 関数名を保存
 	スペースは読み飛ばす
-	( を発見したら ) まで引数を数える．その場合入れ子の括弧と文字列を考慮
+	(を発見したら) まで引数を数える．その場合入れ子の括弧と文字列を考慮
 	-> または when があれば関数定義と見なす(次の行にまたがっても良い)
 	途中 % (コメント) が現れたら行末まで読み飛ばす
 */
-void CDocOutline::MakeFuncList_Erlang( CFuncInfoArr* pcFuncInfoArr )
+void CDocOutline::MakeFuncList_Erlang(CFuncInfoArr* pcFuncInfoArr)
 {
 
 	COutlineErlang erl_state_machine;

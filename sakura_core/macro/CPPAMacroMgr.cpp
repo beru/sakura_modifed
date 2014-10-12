@@ -35,18 +35,18 @@ CPPAMacroMgr::~CPPAMacroMgr()
 
 	@date 2007.07.20 genta flags追加
 */
-bool CPPAMacroMgr::ExecKeyMacro( CEditView* pcEditView, int flags ) const
+bool CPPAMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
 {
-	m_cPPA.SetSource( to_achar(m_cBuffer.GetStringPtr()) );
+	m_cPPA.SetSource(to_achar(m_cBuffer.GetStringPtr()));
 	return m_cPPA.Execute(pcEditView, flags);
 }
 
 /*! キーボードマクロの読み込み（ファイルから）
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CPPAMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
+BOOL CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
-	CTextInputStream in( pszPath );
+	CTextInputStream in(pszPath);
 	if (!in) {
 		m_nReady = false;
 		return FALSE;
@@ -62,7 +62,7 @@ BOOL CPPAMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 	}
 	in.Close();
 
-	m_cBuffer.SetNativeData( cmemWork );	//	m_cBufferにコピー
+	m_cBuffer.SetNativeData(cmemWork);	//	m_cBufferにコピー
 
 	m_nReady = true;
 	return TRUE;
@@ -71,9 +71,9 @@ BOOL CPPAMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 /*! キーボードマクロの読み込み（文字列から）
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CPPAMacroMgr::LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode )
+BOOL CPPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
-	m_cBuffer.SetNativeData( to_wchar( pszCode ) );	//	m_cBufferにコピー
+	m_cBuffer.SetNativeData(to_wchar(pszCode));	//	m_cBufferにコピー
 
 	m_nReady = true;
 	return TRUE;
@@ -91,7 +91,7 @@ BOOL CPPAMacroMgr::LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode )
 */
 CMacroManagerBase* CPPAMacroMgr::Creator(const TCHAR* ext)
 {
-	if (_tcscmp( ext, _T("ppa") ) == 0) {
+	if (_tcscmp(ext, _T("ppa")) == 0) {
 		return new CPPAMacroMgr;
 	}
 	return NULL;
@@ -106,7 +106,7 @@ CMacroManagerBase* CPPAMacroMgr::Creator(const TCHAR* ext)
 void CPPAMacroMgr::declare (void)
 {
 	if (DLL_SUCCESS == m_cPPA.InitDll()) {
-		CMacroFactory::getInstance()->RegisterCreator( Creator );
+		CMacroFactory::getInstance()->RegisterCreator(Creator);
 	}
 }
 //	To Here Apr. 29, 2002 genta

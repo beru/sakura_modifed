@@ -27,11 +27,11 @@
 const WCHAR* to_wchar(const ACHAR* src);
 const WCHAR* to_wchar(const ACHAR* pSrcData, int nSrcLength);
 inline
-const WCHAR* to_wchar(const WCHAR* src){ return src; }
+const WCHAR* to_wchar(const WCHAR* src) { return src; }
 
 // ACHAR‚É•ÏŠ·
 inline
-const ACHAR* to_achar(const ACHAR* src){ return src; }
+const ACHAR* to_achar(const ACHAR* src) { return src; }
 const ACHAR* to_achar(const WCHAR* src);
 const ACHAR* to_achar(const WCHAR* pSrc, int nSrcLength);
 

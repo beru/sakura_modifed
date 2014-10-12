@@ -26,20 +26,20 @@
 	@date 2005.01.10 genta CEditView_Commandより移動
 	@author Yazaki
 */
-void CViewCommander::Command_GREP_DIALOG( void )
+void CViewCommander::Command_GREP_DIALOG(void)
 {
 	CNativeW cmemCurText;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
-	m_pCommanderView->GetCurrentTextForSearchDlg( cmemCurText );	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	if (0 < cmemCurText.GetStringLength()) {
 		GetEditWindow()->m_cDlgGrep.m_strText = cmemCurText.GetStringPtr();
 	}
 
 	// Grepダイアログの表示
-	int nRet = GetEditWindow()->m_cDlgGrep.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_cDocFile.GetFilePath() );
-//	MYTRACE( _T("nRet=%d\n"), nRet );
+	int nRet = GetEditWindow()->m_cDlgGrep.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), GetDocument()->m_cDocFile.GetFilePath());
+//	MYTRACE(_T("nRet=%d\n"), nRet);
 	if (!nRet) {
 		return;
 	}
@@ -50,16 +50,16 @@ void CViewCommander::Command_GREP_DIALOG( void )
 
 	@date 2005.01.10 genta CEditView_Commandより移動
 */
-void CViewCommander::Command_GREP( void )
+void CViewCommander::Command_GREP(void)
 {
 	CNativeW cmWork1;
 	CNativeT cmWork2;
 	CNativeT cmWork3;
 
 	auto& dlgGrep = GetEditWindow()->m_cDlgGrep;
-	cmWork1.SetString( dlgGrep.m_strText.c_str() );
-	cmWork2.SetString( dlgGrep.m_szFile );
-	cmWork3.SetString( dlgGrep.m_szFolder );
+	cmWork1.SetString(dlgGrep.m_strText.c_str());
+	cmWork2.SetString(dlgGrep.m_szFile);
+	cmWork3.SetString(dlgGrep.m_szFolder);
 
 	auto& grepAgent = *CEditApp::getInstance()->m_pcGrepAgent;
 	auto& doc = *GetDocument();
@@ -80,10 +80,10 @@ void CViewCommander::Command_GREP( void )
 	) {
 		// 2011.01.23 Grepタイプ別適用
 		if (!doc.m_cDocEditor.IsModified() && doc.m_cDocLineMgr.GetLineCount() == 0) {
-			CTypeConfig cTypeGrep = CDocTypeManager().GetDocumentTypeOfExt( _T("grepout") );
+			CTypeConfig cTypeGrep = CDocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const STypeConfigMini* pConfig;
-			CDocTypeManager().GetTypeConfigMini( cTypeGrep, &pConfig );
-			doc.m_cDocType.SetDocumentTypeIdx( pConfig->m_id );
+			CDocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);
+			doc.m_cDocType.SetDocumentTypeIdx(pConfig->m_id);
 			doc.m_cDocType.LockDocumentType();
 			doc.OnChangeType();
 		}
@@ -107,14 +107,14 @@ void CViewCommander::Command_GREP( void )
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 		}
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	//最大値修正	//@@@ 2003.05.31 MIK
-			OkMessage( m_pCommanderView->GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS );
+		if (GetDllShareData().m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+			OkMessage(m_pCommanderView->GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 			return;
 		}
 

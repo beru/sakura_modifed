@@ -6,7 +6,7 @@
 #include "doc/layout/CLayout.h"
 #include "types/CTypeSupport.h"
 
-static int IsNumber( const CStringRef& cStr, int offset );	// 数値ならその長さを返す	//@@@ 2001.02.17 by MIK
+static int IsNumber(const CStringRef& cStr, int offset);	// 数値ならその長さを返す	//@@@ 2001.02.17 by MIK
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         半角数値                            //
@@ -81,13 +81,13 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 
 	if (*p == L'0') {  // 10進数,Cの16進数
 		p++; i++;
-		if (( p < q ) && ( *p == L'x' )) {  // Cの16進数
+		if ((p < q) && (*p == L'x')) {  // Cの16進数
 			p++; i++;
 			while (p < q) {
 				if (0
-					|| ( *p >= L'0' && *p <= L'9' )
-					|| ( *p >= L'A' && *p <= L'F' )
-					|| ( *p >= L'a' && *p <= L'f' )
+					|| (*p >= L'0' && *p <= L'9')
+					|| (*p >= L'A' && *p <= L'F')
+					|| (*p >= L'a' && *p <= L'f')
 				) {
 					p++; i++;
 				}else {
@@ -118,8 +118,8 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 						if (f == 1) break;  // 指数部に入っている
 						if (p + 2 < q) {
 							if (1
-								&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-								&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+								&& (*(p + 1) == L'+' || *(p + 1) == L'-')
+								&& (*(p + 2) >= L'0' && *(p + 2) <= L'9')
 							) {
 								p++; i++;
 								p++; i++;
@@ -150,7 +150,7 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 			// 接尾語
 			if (p < q) {
 				if (0
-					|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+					|| ((d == 0) && (*p == L'L' || *p == L'l'))
 					|| *p == L'F'
 					|| *p == L'f'
 				) {
@@ -171,8 +171,8 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 						if (f == 1) break;  // 指数部に入っている
 						if (p + 2 < q) {
 							if (1
-								&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-								&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+								&& (*(p + 1) == L'+' || *(p + 1) == L'-')
+								&& (*(p + 2) >= L'0' && *(p + 2) <= L'9')
 							) {
 								p++; i++;
 								p++; i++;
@@ -211,7 +211,7 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 			p++; i++;
 			while (p < q) {
 				if (*p < L'0' || *p > L'9') {
-					if (( *p == L'+' || *p == L'-' ) && ( *(p - 1) == L'E' || *(p - 1) == L'e' )) {
+					if ((*p == L'+' || *p == L'-') && (*(p - 1) == L'E' || *(p - 1) == L'e')) {
 						if (p + 1 < q) {
 							if (*(p + 1) < L'0' || *(p + 1) > L'9') {
 								// "0E+", "0E-"
@@ -231,7 +231,7 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 			// 接尾語
 			if (p < q) {
 				if (0
-					|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+					|| ((d == 0) && (*p == L'L' || *p == L'l'))
 					|| *p == L'F' || *p == L'f'
 				) {
 					p++; i++;
@@ -240,10 +240,10 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 			return i;
 		}else {
 			// "0" だけが数値
-			//if( *p == L'.' ) return i - 1;  // 最後が "." なら含めない
+			//if(*p == L'.') return i - 1;  // 最後が "." なら含めない
 			if (p < q) {
 				if (0
-					|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+					|| ((d == 0) && (*p == L'L' || *p == L'l'))
 					|| *p == L'F' || *p == L'f'
 				) {
 					p++; i++;
@@ -297,7 +297,7 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 		// 接尾語
 		if (p < q) {
 			if (0
-				|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+				|| ((d == 0) && (*p == L'L' || *p == L'l'))
 				|| *p == L'F'
 				|| *p == L'f'
 			) {
@@ -319,8 +319,8 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 					if (f == 1) break;  // 指数部に入っている
 					if (p + 2 < q) {
 						if (1
-							&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-							&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+							&& (*(p + 1) == L'+' || *(p + 1) == L'-')
+							&& (*(p + 2) >= L'0' && *(p + 2) <= L'9')
 						) {
 							p++; i++;
 							p++; i++;
@@ -349,8 +349,8 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 		}
 		// "-", "-." だけなら数値でない
 		//@@@ 2001.11.09 start MIK
-		//if( i <= 2 ) return 0;
-		//if( *(p - 1)  == L'.' ) return i - 1;  // 最後が "." なら含めない
+		//if(i <= 2) return 0;
+		//if(*(p - 1)  == L'.') return i - 1;  // 最後が "." なら含めない
 		if (i == 1) return 0;
 		if (*(p - 1) == L'.') {
 			i--;
@@ -360,7 +360,7 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 		// 接尾語
 		if (p < q) {
 			if (0
-				|| (( d == 0 ) && ( *p == L'L' || *p == L'l' ))
+				|| ((d == 0) && (*p == L'L' || *p == L'l'))
 				|| *p == L'F'
 				|| *p == L'f'
 			) {
@@ -383,8 +383,8 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 					if (f == 1) break;  // 指数部に入っている
 					if (p + 2 < q) {
 						if (1
-							&& ( *(p + 1) == L'+' || *(p + 1) == L'-' )
-							&& ( *(p + 2) >= L'0' && *(p + 2) <= L'9' )
+							&& (*(p + 1) == L'+' || *(p + 1) == L'-')
+							&& (*(p + 2) >= L'0' && *(p + 2) <= L'9')
 						) {
 							p++; i++;
 							p++; i++;
@@ -426,13 +426,13 @@ static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*,
 #if 0
 	else if (*p == L'&') {  // VBの16進数
 		p++; i++;
-		if (( p < q ) && ( *p == L'H' )) {
+		if ((p < q) && (*p == L'H')) {
 			p++; i++;
 			while (p < q) {
 				if (0
-					|| ( *p >= L'0' && *p <= L'9' )
-					|| ( *p >= L'A' && *p <= L'F' )
-					|| ( *p >= L'a' && *p <= L'f' )
+					|| (*p >= L'0' && *p <= L'9')
+					|| (*p >= L'A' && *p <= L'F')
+					|| (*p >= L'a' && *p <= L'f')
 				) {
 					p++; i++;
 				}else {

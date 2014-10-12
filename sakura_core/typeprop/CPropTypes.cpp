@@ -43,17 +43,17 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
-		pCPropTypes = ( CPropTypes* )(pPsp->lParam);
+		pCPropTypes = (CPropTypes*)(pPsp->lParam);
 		if (pCPropTypes) {
-			return (pCPropTypes->*pDispatch)( hwndDlg, uMsg, wParam, pPsp->lParam );
+			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, pPsp->lParam);
 		}else {
 			return FALSE;
 		}
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPropTypes = ( CPropTypes* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
+		pCPropTypes = (CPropTypes*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCPropTypes) {
-			return (pCPropTypes->*pDispatch)( hwndDlg, uMsg, wParam, lParam );
+			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}
@@ -61,7 +61,7 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 }
 
 // 各種ダイアログプロシージャ
-typedef	INT_PTR (CPropTypes::*pDispatchPage)( HWND, UINT, WPARAM, LPARAM );
+typedef	INT_PTR (CPropTypes::*pDispatchPage)(HWND, UINT, WPARAM, LPARAM);
 #define GEN_PROPTYPES_CALLBACK(FUNC,CLASS) \
 INT_PTR CALLBACK FUNC(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) \
 { \
@@ -83,12 +83,12 @@ GEN_PROPTYPES_CALLBACK(PropTypesKeyHelp,	CPropTypesKeyHelp)
 CPropTypes::CPropTypes()
 {
 	{
-		assert( sizeof(CPropTypesScreen)  - sizeof(CPropTypes) == 0 );
-		assert( sizeof(CPropTypesWindow)  - sizeof(CPropTypes) == 0 );
-		assert( sizeof(CPropTypesColor)   - sizeof(CPropTypes) == 0 );
-		assert( sizeof(CPropTypesSupport) - sizeof(CPropTypes) == 0 );
-		assert( sizeof(CPropTypesRegex)   - sizeof(CPropTypes) == 0 );
-		assert( sizeof(CPropTypesKeyHelp) - sizeof(CPropTypes) == 0 );
+		assert(sizeof(CPropTypesScreen)  - sizeof(CPropTypes) == 0);
+		assert(sizeof(CPropTypesWindow)  - sizeof(CPropTypes) == 0);
+		assert(sizeof(CPropTypesColor)   - sizeof(CPropTypes) == 0);
+		assert(sizeof(CPropTypesSupport) - sizeof(CPropTypes) == 0);
+		assert(sizeof(CPropTypesRegex)   - sizeof(CPropTypes) == 0);
+		assert(sizeof(CPropTypesKeyHelp) - sizeof(CPropTypes) == 0);
 	}
 
 	// 共有データ構造体のアドレスを返す
@@ -104,7 +104,7 @@ CPropTypes::CPropTypes()
 
 	// 2005.11.30 Moca カスタム色を設定・保持
 	for (int i = 0; i < _countof(m_dwCustColors); i++) {
-		m_dwCustColors[i] = RGB( 255, 255, 255 );
+		m_dwCustColors[i] = RGB(255, 255, 255);
 	}
 
 	((CPropTypesScreen*)(this))->CPropTypes_Screen();
@@ -115,7 +115,7 @@ CPropTypes::~CPropTypes()
 }
 
 // 初期化
-void CPropTypes::Create( HINSTANCE hInstApp, HWND hwndParent )
+void CPropTypes::Create(HINSTANCE hInstApp, HWND hwndParent)
 {
 	m_hInstance = hInstApp;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
@@ -129,7 +129,7 @@ struct TypePropSheetInfo {
 
 // キーワード：タイプ別設定タブ順序(プロパティシート)
 // プロパティシートの作成
-INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
+INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 {
 	INT_PTR	nRet;
 	int		nIdx;
@@ -158,11 +158,11 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].m_nTabNameId);
 
 		PROPSHEETPAGE* p = &psp[nIdx];
-		memset_raw( p, 0, sizeof_raw(*p) );
+		memset_raw(p, 0, sizeof_raw(*p));
 		p->dwSize      = sizeof_raw(*p);
 		p->dwFlags     = PSP_USETITLE | PSP_HASHELP;
 		p->hInstance   = CSelectLang::getLangRsrcInstance();
-		p->pszTemplate = MAKEINTRESOURCE( TypePropSheetInfoList[nIdx].resId );
+		p->pszTemplate = MAKEINTRESOURCE(TypePropSheetInfoList[nIdx].resId);
 		p->pszIcon     = NULL;
 		p->pfnDlgProc  = TypePropSheetInfoList[nIdx].DProc;
 		p->pszTitle    = sTabname[nIdx].c_str();
@@ -181,7 +181,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 	psh.hwndParent = m_hwndParent;
 	psh.hInstance  = CSelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
-	psh.pszCaption = LS( STR_PROPTYPE );	//_T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
+	psh.pszCaption = LS(STR_PROPTYPE);	//_T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
 	psh.nPages     = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
@@ -199,7 +199,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 	psh.ppsp = psp;
 	psh.pfnCallback = NULL;
 
-	nRet = MyPropertySheet( &psh );	// 2007.05.24 ryoji 独自拡張プロパティシート
+	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
 
 	if (-1 == nRet) {
 		TCHAR*	pszMsgBuf;
@@ -209,7 +209,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			::GetLastError(),
-			MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // デフォルト言語
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
 			(LPTSTR)&pszMsgBuf,
 			0,
 			NULL
@@ -220,7 +220,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 			psh.nStartPage,
 			pszMsgBuf
 		);
-		::LocalFree( pszMsgBuf );
+		::LocalFree(pszMsgBuf);
 	}
 
 	return nRet;
@@ -235,7 +235,7 @@ INT_PTR CPropTypes::DoPropertySheet( int nPageNum )
 //2001.05.18 Stonee 機能番号からヘルプトピック番号を調べるようにした
 //2001.07.03 JEPRO  支援タブのヘルプを有効化
 //2001.11.17 MIK    IDD_PROP_REGEX
-void CPropTypes::OnHelp( HWND hwndParent, int nPageID )
+void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
 {
 	int		nContextID;
 	switch (nPageID) {
@@ -248,7 +248,7 @@ void CPropTypes::OnHelp( HWND hwndParent, int nPageID )
 	default:				nContextID = -1;												break;
 	}
 	if (-1 != nContextID) {
-		MyWinHelp( hwndParent, HELP_CONTEXT, nContextID );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	}
 }
 
@@ -256,17 +256,17 @@ void CPropTypes::OnHelp( HWND hwndParent, int nPageID )
 /*!	コントロールにフォント設定する
 	@date 2013.04.24 Uchi
 */
-HFONT CPropTypes::SetCtrlFont( HWND hwndDlg, int idc_ctrl, const LOGFONT& lf )
+HFONT CPropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 {
 	HFONT	hFont;
 	HWND	hCtrl;
 
 	// 論理フォントを作成
-	hCtrl = ::GetDlgItem( hwndDlg, idc_ctrl );
-	hFont = ::CreateFontIndirect( &lf );
+	hCtrl = ::GetDlgItem(hwndDlg, idc_ctrl);
+	hFont = ::CreateFontIndirect(&lf);
 	if (hFont) {
 		// フォントの設定
-		::SendMessage( hCtrl, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(FALSE, 0) );
+		::SendMessage(hCtrl, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(FALSE, 0));
 	}
 
 	return hFont;
@@ -276,7 +276,7 @@ HFONT CPropTypes::SetCtrlFont( HWND hwndDlg, int idc_ctrl, const LOGFONT& lf )
 /*!	フォントラベルにフォントとフォント名設定する
 	@date 2013.04.24 Uchi
 */
-HFONT CPropTypes::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse)
+HFONT CPropTypes::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse)
 {
 	HFONT	hFont;
 	TCHAR	szFontName[80];
@@ -288,15 +288,15 @@ HFONT CPropTypes::SetFontLabel( HWND hwndDlg, int idc_static, const LOGFONT& lf,
 	}
 
 	if (bUse) {
-		hFont = SetCtrlFont( hwndDlg, idc_static, lfTemp );
+		hFont = SetCtrlFont(hwndDlg, idc_static, lfTemp);
 
 		// フォント名の設定
-		auto_sprintf_s( szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
-			lf.lfFaceName, double(nps)/10 );
-		::DlgItem_SetText( hwndDlg, idc_static, szFontName );
+		auto_sprintf_s(szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
+			lf.lfFaceName, double(nps)/10);
+		::DlgItem_SetText(hwndDlg, idc_static, szFontName);
 	}else {
 		hFont = NULL;
-		::DlgItem_SetText( hwndDlg, idc_static, _T("") );
+		::DlgItem_SetText(hwndDlg, idc_static, _T(""));
 	}
 
 	return hFont;

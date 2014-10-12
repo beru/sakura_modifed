@@ -327,12 +327,10 @@ void CDocLineMgr::DUMP()
 {
 #ifdef _DEBUG
 	MYTRACE( _T("------------------------\n") );
-
-	CDocLine* pDocLine;
+	
 	CDocLine* pDocLineNext;
 	CDocLine* pDocLineEnd = NULL;
-	pDocLine = m_pDocLineTop;
-
+	
 	// ³“–«‚ð’²‚×‚é
 	bool bIncludeCurrent = false;
 	bool bIncludePrevRefer = false;
@@ -343,6 +341,7 @@ void CDocLineMgr::DUMP()
 	if (m_pDocLineBot->m_pNext) {
 		MYTRACE( _T("error: m_pDocLineBot->m_pNext != NULL\n") );
 	}
+	CDocLine* pDocLine = m_pDocLineTop;
 	while (pDocLine) {
 		if (m_pDocLineCurrent == pDocLine) {
 			bIncludeCurrent = true;

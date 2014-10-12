@@ -42,17 +42,17 @@ class CDlgWinSize : public CDialog {
 public:
 	CDlgWinSize();
 	~CDlgWinSize();
-	int DoModal( HINSTANCE, HWND, EWinSizeMode&, EWinSizeMode&, int&, RECT& );	//!< モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, EWinSizeMode&, EWinSizeMode&, int&, RECT&);	//!< モーダルダイアログの表示
 
 protected:
 
-	BOOL OnInitDialog( HWND, WPARAM, LPARAM );
-	BOOL OnBnClicked( int );
-	int  GetData( void );
-	void SetData( void );
-	LPVOID GetHelpIdTable( void );
+	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
+	BOOL OnBnClicked(int);
+	int  GetData(void);
+	void SetData(void);
+	LPVOID GetHelpIdTable(void);
 
-	void RenewItemState( void );
+	void RenewItemState(void);
 
 private:
 	EWinSizeMode	m_eSaveWinSize;	//!< ウィンドウサイズの保存: 0/デフォルト，1/継承，2/指定

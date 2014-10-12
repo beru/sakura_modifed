@@ -58,19 +58,19 @@ namespace ApiWrap {
 	//                      コンボボックス                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	inline LRESULT Combo_AddString(HWND hwndCombo, const ACHAR* str) {
-		return ::SendMessage( hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
+		return ::SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str));
 	}
 
 	inline LRESULT Combo_AddString(HWND hwndCombo, const WCHAR* str) {
-		return ::SendMessage( hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
+		return ::SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)to_tchar(str));
 	}
 
 	inline LRESULT Combo_GetLBText(HWND hwndCombo, int nIndex, TCHAR* str) {
-		return ::SendMessage( hwndCombo, CB_GETLBTEXT, nIndex, (LPARAM)str );
+		return ::SendMessage(hwndCombo, CB_GETLBTEXT, nIndex, (LPARAM)str);
 	}
 
 	inline LRESULT Combo_GetText(HWND hwndCombo, TCHAR* str, int cchMax) {
-		return ::GetWindowText( hwndCombo, str, cchMax );
+		return ::GetWindowText(hwndCombo, str, cchMax);
 	}
 
 	inline int Combo_DeleteString(HWND hwndCtl, int index)				{ return (int)(DWORD)::SendMessage(hwndCtl, CB_DELETESTRING, (WPARAM)index, 0L); }
@@ -101,10 +101,10 @@ namespace ApiWrap {
 	LRESULT List_GetText(HWND hwndList, int nIndex, WCHAR* str);
 
 	inline LRESULT List_AddString(HWND hwndList, const ACHAR* str) {
-		return ::SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
+		return ::SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)to_tchar(str));
 	}
 	inline LRESULT List_AddString(HWND hwndList, const WCHAR* str) {
-		return ::SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)to_tchar(str) );
+		return ::SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)to_tchar(str));
 	}
 	inline int List_AddItemData(HWND hwndCtl, int data)					{ return (int)(DWORD)::SendMessage(hwndCtl, LB_ADDSTRING, 0L, (LPARAM)data); }
 	inline int List_AddItemData(HWND hwndCtl, void* data)				{ return (int)(DWORD)::SendMessage(hwndCtl, LB_ADDSTRING, 0L, (LPARAM)data); }

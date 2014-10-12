@@ -57,29 +57,29 @@ public:
 	*/
 	CMenuDrawer();
 	~CMenuDrawer();
-	void Create( HINSTANCE, HWND, CImageListMgr* );
+	void Create(HINSTANCE, HWND, CImageListMgr*);
 
 	/*
 	||  Attributes & Operations
 	*/
-	void ResetContents( void );
-	//void MyAppendMenu( HMENU , int , int , const char*, BOOL = TRUE );	/* メニュー項目を追加 */
-	void MyAppendMenu( HMENU hMenu, int nFlag, UINT_PTR nFuncId, const TCHAR*     pszLabel, const TCHAR*     pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1 );	/* メニュー項目を追加 */	//お気に入り	//@@@ 2003.04.08 MIK	// add pszKey	2010/5/17 Uchi
-	void MyAppendMenu( HMENU hMenu, int nFlag, UINT_PTR nFuncId, const NOT_TCHAR* pszLabel, const NOT_TCHAR* pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1 ) {
+	void ResetContents(void);
+	//void MyAppendMenu(HMENU , int , int , const char*, BOOL = TRUE);	/* メニュー項目を追加 */
+	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const TCHAR*     pszLabel, const TCHAR*     pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1);	/* メニュー項目を追加 */	//お気に入り	//@@@ 2003.04.08 MIK	// add pszKey	2010/5/17 Uchi
+	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const NOT_TCHAR* pszLabel, const NOT_TCHAR* pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1) {
 		MyAppendMenu(hMenu,nFlag,nFuncId,to_tchar(pszLabel),to_tchar(pszKey),bAddKeyStr,nForceIconId);
 	}
-	void MyAppendMenuSep( HMENU hMenu, int nFlag, int nFuncId, const TCHAR* pszLabel, BOOL bAddKeyStr = TRUE, int nForceIconId = -1 ) {
+	void MyAppendMenuSep(HMENU hMenu, int nFlag, int nFuncId, const TCHAR* pszLabel, BOOL bAddKeyStr = TRUE, int nForceIconId = -1) {
 		MyAppendMenu(hMenu,nFlag,nFuncId,pszLabel,_T(""),bAddKeyStr,nForceIconId);
 	}
-	int MeasureItem( int, int* );	/* メニューアイテムの描画サイズを計算 */
-	void DrawItem( DRAWITEMSTRUCT* );	/* メニューアイテム描画 */
+	int MeasureItem(int, int*);	/* メニューアイテムの描画サイズを計算 */
+	void DrawItem(DRAWITEMSTRUCT*);	/* メニューアイテム描画 */
 	void EndDrawMenu();
-	LRESULT OnMenuChar( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
-	int FindToolbarNoFromCommandId( int idCommand, bool bOnlyFunc = true )const; // ツールバーNoの取得
-	int GetIconIdByFuncId( int nIndex ) const;
+	LRESULT OnMenuChar(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	int FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc = true)const; // ツールバーNoの取得
+	int GetIconIdByFuncId(int nIndex) const;
 
-	TBBUTTON getButton( int nToolBarNo ) const; // 20050809 aroka
-	void AddToolButton( int iBitmap, int iCommand );	//ツールバーボタンを追加する 2009.11.14 syat
+	TBBUTTON getButton(int nToolBarNo) const; // 20050809 aroka
+	void AddToolButton(int iBitmap, int iCommand);	//ツールバーボタンを追加する 2009.11.14 syat
 	
 	// iBitmapに対応する定数
 	static const int TOOLBAR_ICON_MACRO_INTERNAL = 384;		//外部マクロ既定アイコン
@@ -90,11 +90,11 @@ public:
 
 private:
 	void DeleteCompDC();
-	int FindIndexFromCommandId( int idCommand, bool bOnlyFunc = true ) const;  /* ツールバーIndexの取得 */// 20050809 aroka
-	int Find( int nFuncID );
-	const TCHAR* GetLabel( int nFuncID );
-	TCHAR GetAccelCharFromLabel( const TCHAR* pszLabel );
-	int ToolbarNoToIndex( int nToolbarNo ) const;
+	int FindIndexFromCommandId(int idCommand, bool bOnlyFunc = true) const;  /* ツールバーIndexの取得 */// 20050809 aroka
+	int Find(int nFuncID);
+	const TCHAR* GetLabel(int nFuncID);
+	TCHAR GetAccelCharFromLabel(const TCHAR* pszLabel);
+	int ToolbarNoToIndex(int nToolbarNo) const;
 
 private:
 	DLLSHAREDATA*	m_pShareData;
@@ -133,9 +133,9 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	int GetData( void );	/* ダイアログデータの取得 */
+	int GetData(void);	/* ダイアログデータの取得 */
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-	void SetTBBUTTONVal( TBBUTTON*, int, int, BYTE, BYTE, DWORD_PTR, INT_PTR ) const;	/* TBBUTTON構造体にデータをセット */
+	void SetTBBUTTONVal(TBBUTTON*, int, int, BYTE, BYTE, DWORD_PTR, INT_PTR) const;	/* TBBUTTON構造体にデータをセット */
 };
 

@@ -33,6 +33,6 @@ public:
 
 	// action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool trans) const;
-	EColorIndexType GetColorIdx(void) const{ return COLORIDX_SPACE; }
+	EColorIndexType GetColorIdx(void) const { return COLORIDX_SPACE; }
 };
 

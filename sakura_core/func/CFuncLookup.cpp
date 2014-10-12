@@ -51,7 +51,7 @@ const int LUOFFSET_PLUGIN = 2;
 
 	@date 2007.11.02 ryoji bGetUnavailableパラメータ追加
 */
-EFunctionCode CFuncLookup::Pos2FuncCode( int category, int position, bool bGetUnavailable ) const
+EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUnavailable) const
 {
 	if (category < 0 || position < 0)
 		return F_DISABLE;
@@ -73,7 +73,7 @@ EFunctionCode CFuncLookup::Pos2FuncCode( int category, int position, bool bGetUn
 			return (EFunctionCode)(F_CUSTMENU_BASE + position);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
 		//	プラグイン
-		return CJackManager::getInstance()->GetCommandCode( position );
+		return CJackManager::getInstance()->GetCommandCode(position);
 	}
 	return F_DISABLE;
 }
@@ -92,8 +92,8 @@ bool CFuncLookup::Pos2FuncName(
 	int		bufsize		//!< [in]  文字列を格納するバッファのサイズ
 ) const
 {
-	int funccode = Pos2FuncCode( category, position );
-	return Funccode2Name( funccode, ptr, bufsize );
+	int funccode = Pos2FuncCode(category, position);
+	return Funccode2Name(funccode, ptr, bufsize);
 }
 
 /*!	@brief 機能番号に対応する機能名称を返す．
@@ -107,7 +107,7 @@ bool CFuncLookup::Pos2FuncName(
 
 	@date 2007.11.02 ryoji 未登録マクロも文字列を格納．戻り値の意味を変更（文字列は必ず格納）．
 */
-bool CFuncLookup::Funccode2Name( int funccode, WCHAR* ptr, int bufsize ) const
+bool CFuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 {
 	LPCWSTR pszStr = NULL;
 
@@ -115,36 +115,36 @@ bool CFuncLookup::Funccode2Name( int funccode, WCHAR* ptr, int bufsize ) const
 		int position = funccode - F_USERMACRO_0;
 		if (m_pMacroRec[position].IsEnabled()) {
 			const TCHAR* p = m_pMacroRec[position].GetTitle();
-			_tcstowcs( ptr, p, bufsize - 1 );
+			_tcstowcs(ptr, p, bufsize - 1);
 			ptr[ bufsize - 1 ] = LTEXT('\0');
 		}else {
-			_snwprintf( ptr, bufsize, LSW(STR_ERR_DLGFUNCLKUP03), position );
+			_snwprintf(ptr, bufsize, LSW(STR_ERR_DLGFUNCLKUP03), position);
 			ptr[ bufsize - 1 ] = LTEXT('\0');
 		}
 		return true;
 	}else if (funccode == F_MENU_RBUTTON) {
-		Custmenu2Name( 0, ptr, bufsize );
+		Custmenu2Name(0, ptr, bufsize);
 		ptr[bufsize-1] = LTEXT('\0');
 		return true;
 	}else if (F_CUSTMENU_1 <= funccode && funccode < F_CUSTMENU_BASE + MAX_CUSTOM_MENU) {	// MAX_CUSTMACRO->MAX_CUSTOM_MENU	2010/3/14 Uchi
-		Custmenu2Name( funccode - F_CUSTMENU_BASE, ptr, bufsize );
+		Custmenu2Name(funccode - F_CUSTMENU_BASE, ptr, bufsize);
 		ptr[bufsize-1] = LTEXT('\0');
 		return true;
 	}else if (F_MENU_FIRST <= funccode && funccode < F_MENU_NOT_USED_FIRST) {
-		if (( pszStr = LSW( funccode ))[0] != L'\0') {
-			wcsncpy( ptr, pszStr, bufsize );
+		if ((pszStr = LSW(funccode))[0] != L'\0') {
+			wcsncpy(ptr, pszStr, bufsize);
 			ptr[bufsize-1] = LTEXT('\0');
 			return true;	// 定義されたコマンド
 		}
 	}else if (F_PLUGCOMMAND_FIRST <= funccode && funccode < F_PLUGCOMMAND_LAST) {
-		if (CJackManager::getInstance()->GetCommandName( funccode, ptr, bufsize ) > 0) {
+		if (CJackManager::getInstance()->GetCommandName(funccode, ptr, bufsize) > 0) {
 			return true;	// プラグインコマンド
 		}
 	}
 
 	// 未定義コマンド
-	if (( pszStr = LSW( funccode ) )[0] != L'\0') {
-		wcsncpy( ptr, pszStr, bufsize );
+	if ((pszStr = LSW(funccode))[0] != L'\0') {
+		wcsncpy(ptr, pszStr, bufsize);
 		ptr[bufsize-1] = LTEXT('\0');
 		return false;
 	}
@@ -157,19 +157,19 @@ bool CFuncLookup::Funccode2Name( int funccode, WCHAR* ptr, int bufsize ) const
 	
 	@return NULL 分類名称．取得に失敗したらNULL．
 */
-const TCHAR* CFuncLookup::Category2Name( int category ) const
+const TCHAR* CFuncLookup::Category2Name(int category) const
 {
 	if (category < 0)
 		return NULL;
 
 	if (category < nsFuncCode::nFuncKindNum) {
-		return LS( nsFuncCode::ppszFuncKind[category] );
+		return LS(nsFuncCode::ppszFuncKind[category]);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
-		return LS( STR_ERR_DLGFUNCLKUP01 );
+		return LS(STR_ERR_DLGFUNCLKUP01);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_CUSTMENU) {
-		return LS( STR_ERR_DLGFUNCLKUP02 );
+		return LS(STR_ERR_DLGFUNCLKUP02);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
-		return LS( STR_ERR_DLGFUNCLKUP19 );
+		return LS(STR_ERR_DLGFUNCLKUP19);
 	}
 	return NULL;
 }
@@ -178,22 +178,22 @@ const TCHAR* CFuncLookup::Category2Name( int category ) const
 
 	@param hComboBox [in(out)] データを設定するコンボボックス
 */
-void CFuncLookup::SetCategory2Combo( HWND hComboBox ) const
+void CFuncLookup::SetCategory2Combo(HWND hComboBox) const
 {
 	//	コンボボックスを初期化する
-	Combo_ResetContent( hComboBox );
+	Combo_ResetContent(hComboBox);
 
 	//	固定機能リスト
 	for (int i = 0; i < nsFuncCode::nFuncKindNum; ++i) {
-		Combo_AddString( hComboBox, LS( nsFuncCode::ppszFuncKind[i] ) );
+		Combo_AddString(hComboBox, LS(nsFuncCode::ppszFuncKind[i]));
 	}
 
 	//	ユーザマクロ
-	Combo_AddString( hComboBox, LS( STR_ERR_DLGFUNCLKUP01 ) );
+	Combo_AddString(hComboBox, LS(STR_ERR_DLGFUNCLKUP01));
 	//	カスタムメニュー
-	Combo_AddString( hComboBox, LS( STR_ERR_DLGFUNCLKUP02 ) );
+	Combo_AddString(hComboBox, LS(STR_ERR_DLGFUNCLKUP02));
 	//	プラグイン
-	Combo_AddString( hComboBox, LS( STR_ERR_DLGFUNCLKUP19 ) );
+	Combo_AddString(hComboBox, LS(STR_ERR_DLGFUNCLKUP19));
 }
 
 /*!	@brief 指定された分類に属する機能リストをListBoxに登録する．
@@ -203,18 +203,18 @@ void CFuncLookup::SetCategory2Combo( HWND hComboBox ) const
 
 	@date 2007.11.02 ryoji 未定義コマンドは除外．処理も簡素化．
 */
-void CFuncLookup::SetListItem( HWND hListBox, int category ) const
+void CFuncLookup::SetListItem(HWND hListBox, int category) const
 {
 	WCHAR pszLabel[256];
 	//	リストを初期化する
-	List_ResetContent( hListBox );
+	List_ResetContent(hListBox);
 
-	int n = GetItemCount( category );
+	int n = GetItemCount(category);
 	for (int i = 0; i < n; i++) {
-		if (Pos2FuncCode( category, i ) == F_DISABLE)
+		if (Pos2FuncCode(category, i) == F_DISABLE)
 			continue;
-		Pos2FuncName( category, i, pszLabel, _countof(pszLabel) );
-		List_AddString( hListBox, pszLabel );
+		Pos2FuncName(category, i, pszLabel, _countof(pszLabel));
+		List_AddString(hListBox, pszLabel);
 	}
 }
 
@@ -249,26 +249,26 @@ int CFuncLookup::GetItemCount(int category) const
 	
 	@return NULL 分類名称．取得に失敗したらNULL．
 */
-const WCHAR* CFuncLookup::Custmenu2Name( int index, WCHAR buf[], int bufSize ) const
+const WCHAR* CFuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) const
 {
 	if (index < 0 || CUSTMENU_INDEX_FOR_TABWND < index)
 		return NULL;
 
 	// 共通設定で名称を設定していればそれを返す
 	if (m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ][0] != '\0') {
-		wcscpyn( buf, m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ], bufSize );
+		wcscpyn(buf, m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ], bufSize);
 		return m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ];
 	}
 
 	// 共通設定で未設定の場合、リソースのデフォルト名を返す
 	if (index == 0) {
-		wcscpyn( buf, LSW( STR_CUSTMENU_RIGHT_CLICK ), bufSize );
+		wcscpyn(buf, LSW(STR_CUSTMENU_RIGHT_CLICK), bufSize);
 		return buf;
 	}else if (index == CUSTMENU_INDEX_FOR_TABWND) {
-		wcscpyn( buf, LSW( STR_CUSTMENU_TAB ), bufSize );
+		wcscpyn(buf, LSW(STR_CUSTMENU_TAB), bufSize);
 		return buf;
 	}else {
-		swprintf( buf, LSW( STR_CUSTMENU_CUSTOM ), index );
+		swprintf(buf, LSW(STR_CUSTMENU_CUSTOM), index);
 		return buf;
 	}
 

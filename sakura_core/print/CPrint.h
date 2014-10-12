@@ -132,9 +132,9 @@ public:
 	/*
 	||	static関数群
 	*/
-	static void SettingInitialize( PRINTSETTING&, const TCHAR* settingName );
+	static void SettingInitialize(PRINTSETTING&, const TCHAR* settingName);
 
-	static TCHAR* GetPaperName( int , TCHAR* );	// 用紙の名前を取得
+	static TCHAR* GetPaperName(int , TCHAR*);	// 用紙の名前を取得
 	// 用紙の幅、高さ
 	static BOOL GetPaperSize(
 		short*		pnPaperAllWidth,
@@ -142,12 +142,12 @@ public:
 		MYDEVMODE*	pDEVMODE
 	);
 	// 印字可能桁・行の計算
-	static int CalculatePrintableColumns( PRINTSETTING*, int width, int nLineNumberColumns );
-	static int CalculatePrintableLines( PRINTSETTING*, int height );
+	static int CalculatePrintableColumns(PRINTSETTING*, int width, int nLineNumberColumns);
+	static int CalculatePrintableLines(PRINTSETTING*, int height);
 
 	// ヘッダ・フッタの高さ計算
-	static int CalcHeaderHeight( PRINTSETTING* );
-	static int CalcFooterHeight( PRINTSETTING* );
+	static int CalcHeaderHeight(PRINTSETTING*);
+	static int CalcFooterHeight(PRINTSETTING*);
 public:
 	/*
 	||  Constructors
@@ -158,8 +158,8 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	BOOL GetDefaultPrinter( MYDEVMODE *pMYDEVMODE );		// デフォルトのプリンタ情報を取得
-	BOOL PrintDlg( PRINTDLG *pd, MYDEVMODE *pMYDEVMODE );	// プリンタ情報を取得
+	BOOL GetDefaultPrinter(MYDEVMODE *pMYDEVMODE);		// デフォルトのプリンタ情報を取得
+	BOOL PrintDlg(PRINTDLG *pd, MYDEVMODE *pMYDEVMODE);	// プリンタ情報を取得
 	// 印刷/プレビューに必要な情報を取得
 	BOOL GetPrintMetrics(
 		MYDEVMODE*	pMYDEVMODE,
@@ -179,18 +179,18 @@ public:
 		HDC*		phdc,
 		TCHAR*		pszErrMsg		// エラーメッセージ格納場所
 	);
-	void PrintStartPage( HDC );		// 印刷 ページ開始
-	void PrintEndPage( HDC );		// 印刷 ページ終了
-	void PrintClose( HDC );			// 印刷 ジョブ終了 // 2003.05.02 かろと 不要なhPrinter削除
+	void PrintStartPage(HDC);		// 印刷 ページ開始
+	void PrintEndPage(HDC);		// 印刷 ページ終了
+	void PrintClose(HDC);			// 印刷 ジョブ終了 // 2003.05.02 かろと 不要なhPrinter削除
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
 	// DC作成する(処理をまとめた) 2003.05.02 かろと
-	HDC CreateDC( MYDEVMODE *pMYDEVMODE, TCHAR *pszErrMsg);
+	HDC CreateDC(MYDEVMODE *pMYDEVMODE, TCHAR *pszErrMsg);
 	
-	static const PAPER_INFO* FindPaperInfo( int id );
+	static const PAPER_INFO* FindPaperInfo(int id);
 private:
 	/*
 	||  メンバ変数

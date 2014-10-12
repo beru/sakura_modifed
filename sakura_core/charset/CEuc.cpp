@@ -25,11 +25,11 @@ int CEuc::EucjpToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* 
 	auto pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	auto pw = reinterpret_cast<unsigned short*>(pDst);
 
-	for( ; (nclen = CheckEucjpChar(reinterpret_cast<const char*>(pr), pr_end-pr, &echarset)) != 0; pr += nclen ){
-		switch( echarset ){
+	for( ; (nclen = CheckEucjpChar(reinterpret_cast<const char*>(pr), pr_end-pr, &echarset)) != 0; pr += nclen ) {
+		switch( echarset ) {
 		case CHARSET_ASCII7:
 			// 保護コード
-			if( nclen != 1 ){
+			if( nclen != 1 ) {
 				nclen = 1;
 			}
 			// 7-bit ASCII の変換
@@ -39,21 +39,21 @@ int CEuc::EucjpToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* 
 		case CHARSET_JIS_HANKATA:
 		case CHARSET_JIS_ZENKAKU:
 			// 保護コード
-			if( echarset == CHARSET_JIS_HANKATA && nclen != 2 ){
+			if( echarset == CHARSET_JIS_HANKATA && nclen != 2 ) {
 				nclen = 2;
 			}
-			if( echarset == CHARSET_JIS_ZENKAKU && nclen != 2 ){
+			if( echarset == CHARSET_JIS_ZENKAKU && nclen != 2 ) {
 				nclen = 2;
 			}
 			// 全角文字・半角カタカナ文字の変換
 			pw += _EucjpToUni_char( pr, pw, echarset, &berror_tmp );
-			if( berror_tmp == true ){
+			if( berror_tmp == true ) {
 				berror = true;
 			}
 			break;
 		default:// case CHARSET_BINARY:
 			// 保護コード
-			if( nclen != 1 ){
+			if( nclen != 1 ) {
 				nclen = 1;
 			}
 			// 読み込みエラーになった文字を PUA に対応づける
@@ -61,7 +61,7 @@ int CEuc::EucjpToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* 
 		}
 	}
 
-	if( pbError ){
+	if( pbError ) {
 		*pbError = berror;
 	}
 
@@ -84,7 +84,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 	wchar_t* pDst;
 	try{
 		pDst = new wchar_t[nSrcLen];
-	}catch( ... ){
+	}catch( ... ) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -102,7 +102,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 
 	//$$ SJISを介しているので無駄にデータを失うかも？
 	// エラーを返すようにする。	2008/5/12 Uchi
-	if( bError == false ){
+	if( bError == false ) {
 		return RESULT_COMPLETE;
 	}else{
 		return RESULT_LOSESOME;
@@ -120,9 +120,9 @@ int CEuc::UniToEucjp( const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* 
 	auto pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
 	auto pw = reinterpret_cast<unsigned char*>(pDst);
 
-	while( (nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0 ){
+	while( (nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0 ) {
 		// 保護コード
-		switch( echarset ){
+		switch( echarset ) {
 		case CHARSET_UNI_NORMAL:
 			nclen = 1;
 			break;
@@ -133,15 +133,15 @@ int CEuc::UniToEucjp( const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* 
 			echarset = CHARSET_BINARY;
 			nclen = 1;
 		}
-		if( echarset != CHARSET_BINARY ){
+		if( echarset != CHARSET_BINARY ) {
 			pw += _UniToEucjp_char( pr, pw, echarset, &berror_tmp );
 			// 保護コード
-			if( berror_tmp == true ){
+			if( berror_tmp == true ) {
 				berror = true;
 			}
 			pr += nclen;
 		}else{
-			if( nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr)) ){
+			if( nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr)) ) {
 				*pw = static_cast<unsigned char>( TextToBin(*pr) & 0x00ff );
 				++pw;
 			}else{
@@ -154,7 +154,7 @@ int CEuc::UniToEucjp( const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* 
 		}
 	}
 
-	if( pbError ){
+	if( pbError ) {
 		*pbError = berror;
 	}
 
@@ -174,7 +174,7 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 	char* pDst;
 	try{
 		pDst = new char[nSrcLen * 2];
-	}catch( ... ){
+	}catch( ... ) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -190,7 +190,7 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 	// 後始末
 	delete [] pDst;
 
-	if( bError == false ){
+	if( bError == false ) {
 		return RESULT_COMPLETE;
 	}else{
 		return RESULT_LOSESOME;

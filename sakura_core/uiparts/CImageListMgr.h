@@ -69,7 +69,7 @@ public:
 		
 		@date 2003.09.06 genta 背景の透過処理に伴い背景色指定削除
 	*/
-	bool Draw(int index, HDC dc, int x, int y, int fstyle ) const	//	描画
+	bool Draw(int index, HDC dc, int x, int y, int fstyle) const	//	描画
 	;
 	
 	//! アイコン数を返す
@@ -116,11 +116,11 @@ protected:
 
 	//	オリジナルテキストエディタからの描画関数
 	//	2003.08.27 Moca 背景を透過処理するので背景色の指定は不要に
-	void MyBitBlt( HDC drawdc, int nXDest, int nYDest, 
+	void MyBitBlt(HDC drawdc, int nXDest, int nYDest, 
 					int nWidth, int nHeight, HBITMAP bmp,
-					int nXSrc, int nYSrc, COLORREF colToTransParent ) const;
-	void DitherBlt2( HDC drawdc, int nXDest, int nYDest, int nWidth, 
-                        int nHeight, HBITMAP bmp, int nXSrc, int nYSrc ) const;
+					int nXSrc, int nYSrc, COLORREF colToTransParent) const;
+	void DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth, 
+                        int nHeight, HBITMAP bmp, int nXSrc, int nYSrc) const;
 
 	//! ビットマップを一行拡張する
 	void Extend(bool = true);

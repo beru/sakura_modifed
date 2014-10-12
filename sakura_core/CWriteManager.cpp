@@ -24,7 +24,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 	)
 {
 	EConvertResult nRetVal = RESULT_COMPLETE;
-	std::auto_ptr<CCodeBase> pcCodeBase( CCodeFactory::CreateCodeBase(sSaveInfo.eCharCode,0) );
+	std::auto_ptr<CCodeBase> pcCodeBase(CCodeFactory::CreateCodeBase(sSaveInfo.eCharCode, 0));
 
 	try {
 		//ファイルオープン
@@ -40,15 +40,15 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 			{
 				CNativeW cstrSrc;
 				CMemory cstrBomCheck;
-				pcCodeBase->GetBom( &cstrBomCheck );
+				pcCodeBase->GetBom(&cstrBomCheck);
 				if (sSaveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
-					CUnicode().GetBom( cstrSrc._GetMemory() );
+					CUnicode().GetBom(cstrSrc._GetMemory());
 				}
 				if (pcDocLine) {
-					cstrSrc.AppendNativeData( pcDocLine->_GetDocLineDataWithEOL() );
+					cstrSrc.AppendNativeData(pcDocLine->_GetDocLineDataWithEOL());
 				}
-				EConvertResult e = pcCodeBase->UnicodeToCode( cstrSrc, &cmemOutputBuffer );
+				EConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
 				if (e==RESULT_LOSESOME) {
 					nRetVal=RESULT_LOSESOME;
 				}
@@ -62,10 +62,10 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 			++nLineNumber;
 
 			// 経過通知
-			if (pcDocLineMgr.GetLineCount()>0 && nLineNumber%1024==0) {
+			if (pcDocLineMgr.GetLineCount() > 0 && nLineNumber%1024 == 0) {
 				NotifyProgress(nLineNumber * 100 / pcDocLineMgr.GetLineCount());
 				// 処理中のユーザー操作を可能にする
-				if (!::BlockingHook( NULL )) {
+				if (!::BlockingHook(NULL)) {
 					throw CAppExitException(); //中断検出
 				}
 			}

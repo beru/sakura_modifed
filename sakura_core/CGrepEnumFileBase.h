@@ -53,7 +53,7 @@ public:
 		ClearItems();
 	}
 
-	void ClearItems( void ) {
+	void ClearItems(void) {
 		for (int i = 0; i < GetCount(); i++) {
 			LPTSTR lp = m_vpItems[ i ].first;
 			m_vpItems[ i ].first = NULL;
@@ -63,9 +63,9 @@ public:
 		return;
 	}
 
-	BOOL IsExist( LPCTSTR lpFileName ) {
+	BOOL IsExist(LPCTSTR lpFileName) {
 		for (int i = 0; i < GetCount(); i++) {
-			if (_tcscmp( m_vpItems[ i ].first, lpFileName ) == 0) {
+			if (_tcscmp(m_vpItems[ i ].first, lpFileName) == 0) {
 				return TRUE;
 			}
 		}
@@ -73,25 +73,25 @@ public:
 	}
 
 	virtual
-	BOOL IsValid( WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL ) {
-		if (!IsExist( pFile ? pFile : w32fd.cFileName )) {
+	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
+		if (!IsExist(pFile ? pFile : w32fd.cFileName)) {
 			return TRUE;
 		}
 		return FALSE;
 	}
 
-	int GetCount( void ) {
+	int GetCount(void) {
 		return (int)m_vpItems.size();
 	}
 
-	LPCTSTR GetFileName( int i ) {
+	LPCTSTR GetFileName(int i) {
 		if (i < 0 || i >= GetCount()) {
 			return NULL;
 		}
 		return m_vpItems[ i ].first;
 	}
 
-	DWORD GetFileSizeLow( int i ) {
+	DWORD GetFileSizeLow(int i) {
 		if (i < 0 || i >= GetCount()) {
 			return 0;
 		}
@@ -106,17 +106,17 @@ public:
 		int found = 0;
 
 		for (int i = 0; i < (int)vecKeys.size(); i++) {
-			int baseLen = _tcslen( lpBaseFolder );
-			LPTSTR lpPath = new TCHAR[ baseLen + _tcslen( vecKeys[ i ] ) + 2 ];
+			int baseLen = _tcslen(lpBaseFolder);
+			LPTSTR lpPath = new TCHAR[ baseLen + _tcslen(vecKeys[ i ]) + 2 ];
 			if (!lpPath) {
 				break;
 			}
-			auto_strcpy( lpPath, lpBaseFolder );
-			auto_strcpy( lpPath + baseLen, _T("\\") );
-			auto_strcpy( lpPath + baseLen + 1, vecKeys[ i ] );
+			auto_strcpy(lpPath, lpBaseFolder);
+			auto_strcpy(lpPath + baseLen, _T("\\"));
+			auto_strcpy(lpPath + baseLen + 1, vecKeys[ i ]);
 			// vecKeys[ i ] ==> "subdir\*.h" 等の場合に後で(ファイル|フォルダ)名に "subdir\" を連結する
-			const TCHAR* keyDirYen = _tcsrchr( vecKeys[ i ], _T('\\') );
-			const TCHAR* keyDirSlash = _tcsrchr( vecKeys[ i ], _T('/') );
+			const TCHAR* keyDirYen = _tcsrchr(vecKeys[ i ], _T('\\'));
+			const TCHAR* keyDirSlash = _tcsrchr(vecKeys[ i ], _T('/'));
 			const TCHAR* keyDir;
 			if (!keyDirYen) {
 				keyDir = keyDirSlash;
@@ -130,34 +130,34 @@ public:
 			int nKeyDirLen = keyDir ? keyDir - vecKeys[ i ] + 1 : 0;
 
 			WIN32_FIND_DATA w32fd;
-			HANDLE handle = ::FindFirstFile( lpPath, &w32fd );
+			HANDLE handle = ::FindFirstFile(lpPath, &w32fd);
 			if (INVALID_HANDLE_VALUE != handle) {
 				do {
-					LPTSTR lpName = new TCHAR[ nKeyDirLen + _tcslen( w32fd.cFileName ) + 1 ];
-					_tcsncpy( lpName, vecKeys[ i ], nKeyDirLen );
-					_tcscpy( lpName + nKeyDirLen, w32fd.cFileName );
+					LPTSTR lpName = new TCHAR[ nKeyDirLen + _tcslen(w32fd.cFileName) + 1 ];
+					_tcsncpy(lpName, vecKeys[ i ], nKeyDirLen);
+					_tcscpy(lpName + nKeyDirLen, w32fd.cFileName);
 					LPTSTR lpFullPath = new TCHAR[ baseLen + _tcslen(lpName) + 2 ];
-					auto_strcpy( lpFullPath, lpBaseFolder );
-					auto_strcpy( lpFullPath + baseLen, _T("\\") );
-					auto_strcpy( lpFullPath + baseLen + 1, lpName );
-					if (IsValid( w32fd, lpName )) {
-						if (pExceptItems && pExceptItems->IsExist( lpFullPath )) {
+					auto_strcpy(lpFullPath, lpBaseFolder);
+					auto_strcpy(lpFullPath + baseLen, _T("\\"));
+					auto_strcpy(lpFullPath + baseLen + 1, lpName);
+					if (IsValid(w32fd, lpName)) {
+						if (pExceptItems && pExceptItems->IsExist(lpFullPath)) {
 						}else {
-							m_vpItems.push_back( PairGrepEnumItem( lpName, w32fd.nFileSizeLow ) );
+							m_vpItems.push_back(PairGrepEnumItem(lpName, w32fd.nFileSizeLow));
 							found++; // 2011.11.19
 							if (pExceptItems && nKeyDirLen) {
 								// フォルダを含んだパスなら検索済みとして除外指定に追加する
-								pExceptItems->m_vpItems.push_back( PairGrepEnumItem( lpFullPath, w32fd.nFileSizeLow ) );
+								pExceptItems->m_vpItems.push_back(PairGrepEnumItem(lpFullPath, w32fd.nFileSizeLow));
 							}else {
-								delete [] lpFullPath;
+								delete[] lpFullPath;
 							}
 							continue;
 						}
 					}
-					delete [] lpName;
-					delete [] lpFullPath;
-				}while (::FindNextFile( handle, &w32fd ));
-				::FindClose( handle );
+					delete[] lpName;
+					delete[] lpFullPath;
+				}while (::FindNextFile(handle, &w32fd));
+				::FindClose(handle);
 			}
 			delete [] lpPath;
 		}

@@ -7,7 +7,7 @@
 //                     CDiffLineGetter                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EDiffMark CDiffLineGetter::GetLineDiffMark() const{ return (EDiffMark)m_pcDocLine->m_sMark.m_cDiffmarked; }
+EDiffMark CDiffLineGetter::GetLineDiffMark() const { return (EDiffMark)m_pcDocLine->m_sMark.m_cDiffmarked; }
 
 /*! 行の差分マークに対応した色を返す -> pnColorIndex
 	

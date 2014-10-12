@@ -34,13 +34,13 @@
 #include "dlg/CDlgFileUpdateQuery.h"
 #include "sakura_rc.h"
 
-BOOL CDlgFileUpdateQuery::OnInitDialog( HWND hWnd, WPARAM wParam, LPARAM lParam )
+BOOL CDlgFileUpdateQuery::OnInitDialog(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
-	::DlgItem_SetText( hWnd, IDC_UPDATEDFILENAME, m_pFilename );
-	::DlgItem_SetText( hWnd, IDC_QUERYRELOADMSG, m_bModified ?
-		LS(STR_ERR_DLGUPQRY1):LS(STR_ERR_DLGUPQRY2) );
+	::DlgItem_SetText(hWnd, IDC_UPDATEDFILENAME, m_pFilename);
+	::DlgItem_SetText(hWnd, IDC_QUERYRELOADMSG, m_bModified ?
+		LS(STR_ERR_DLGUPQRY1):LS(STR_ERR_DLGUPQRY2));
 
-	return CDialog::OnInitDialog( hWnd, wParam, lParam );
+	return CDialog::OnInitDialog(hWnd, wParam, lParam);
 }
 
 /*!
@@ -69,7 +69,7 @@ BOOL CDlgFileUpdateQuery::OnBnClicked(int id)
 		result = 0;
 		break;
 	}
-	CloseDialog( result );
+	CloseDialog(result);
 
 	return 0;
 }

@@ -36,17 +36,17 @@ class CFuncInfoArr {
 public:
 	CFuncInfoArr();		// CFuncInfoArrクラス構築
 	~CFuncInfoArr();	// CFuncInfoArrクラス消滅
-	CFuncInfo* GetAt( int );		// 0<=の指定番号のデータを返す
-	void AppendData( CFuncInfo* );	// 配列の最後にデータを追加する
-	void AppendData( CLogicInt, CLayoutInt, const TCHAR*, int, int nDepth = 0 );		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData( CLogicInt, CLayoutInt, const NOT_TCHAR*, int, int nDepth = 0 );	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData( CLogicInt nLogicLine, CLogicInt nLogicCol, CLayoutInt nLayoutLine, CLayoutInt nLayoutCol, const TCHAR*, int, int nDepth = 0 );	// 配列の最後にデータを追加する 2010.03.01 syat 桁導入
-	void AppendData( CLogicInt nLogicLine, CLogicInt nLogicCol, CLayoutInt nLayoutLine, CLayoutInt nLayoutCol, const NOT_TCHAR*, int, int nDepth = 0 );	// 配列の最後にデータを追加する 2010.03.01 syat 桁導入
-	int	GetNum( void ){	return m_nFuncInfoArrNum; }	// 配列要素数を返す
-	void Empty( void );
-	void DUMP( void );
-	void SetAppendText( int info, std::wstring s, bool overwrite );
-	std::wstring GetAppendText( int info );
+	CFuncInfo* GetAt(int);		// 0<=の指定番号のデータを返す
+	void AppendData(CFuncInfo*);	// 配列の最後にデータを追加する
+	void AppendData(CLogicInt, CLayoutInt, const TCHAR*, int, int nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(CLogicInt, CLayoutInt, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(CLogicInt nLogicLine, CLogicInt nLogicCol, CLayoutInt nLayoutLine, CLayoutInt nLayoutCol, const TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2010.03.01 syat 桁導入
+	void AppendData(CLogicInt nLogicLine, CLogicInt nLogicCol, CLayoutInt nLayoutLine, CLayoutInt nLayoutCol, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2010.03.01 syat 桁導入
+	int	GetNum(void) {	return m_nFuncInfoArrNum; }	// 配列要素数を返す
+	void Empty(void);
+	void DUMP(void);
+	void SetAppendText(int info, std::wstring s, bool overwrite);
+	std::wstring GetAppendText(int info);
 	int AppendTextLenMax() { return m_nAppendTextLenMax; }
 
 public:

@@ -31,7 +31,7 @@
 
 	@date 2005.01.10 genta 関数化
 */
-void CEditView::PreprocessCommand_hokan( int nCommand )
+void CEditView::PreprocessCommand_hokan(int nCommand)
 {
 	// 補完ウィンドウが表示されているとき、特別な場合を除いてウィンドウを非表示にする
 	if (m_bHokan) {
@@ -58,8 +58,8 @@ void CEditView::PostprocessCommand_hokan(void)
 		CNativeW cmemData;
 
 		// カーソル直前の単語を取得
-		if (0 < GetParser().GetLeftWord( &cmemData, 100 )) {
-			ShowHokanMgr( cmemData, FALSE );
+		if (0 < GetParser().GetLeftWord(&cmemData, 100)) {
+			ShowHokanMgr(cmemData, FALSE);
 		}else {
 			if (m_bHokan) {
 				m_pcEditWnd->m_cHokanMgr.Hide();
@@ -77,7 +77,7 @@ void CEditView::PostprocessCommand_hokan(void)
 
 	@date 2005.01.10 genta CEditView_Commandから移動
 */
-void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
+void CEditView::ShowHokanMgr(CNativeW& cmemData, BOOL bAutoDecided)
 {
 	// 補完対象ワードリストを調べる
 	CNativeW	cmemHokanWord;
@@ -91,7 +91,7 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 	poWin.y = textArea.GetAreaTop()
 			 + (Int)(caretLayoutPos.GetY2() - textArea.GetViewTopLine())
 			  * GetTextMetrics().GetHankakuDy();
-	this->ClientToScreen( &poWin );
+	this->ClientToScreen(&poWin);
 	poWin.x -= (
 		cmemData.GetStringLength()
 		 * GetTextMetrics().GetHankakuDx()
@@ -120,7 +120,7 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 			GetHwnd(),
 			(LPARAM)this
 		);
-		::SetFocus( GetHwnd() );	//エディタにフォーカスを戻す
+		::SetFocus(GetHwnd());	//エディタにフォーカスを戻す
 	}
 	int nKouhoNum = hokanMgr.CHokanMgr::Search(
 		&poWin,
@@ -150,7 +150,7 @@ void CEditView::ShowHokanMgr( CNativeW& cmemData, BOOL bAutoDecided )
 		// 2004.05.14 Moca CHokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
 
 		GetCommander().Command_WordDeleteToStart();
-		GetCommander().Command_INSTEXT( true, cmemHokanWord.GetStringPtr(), cmemHokanWord.GetStringLength(), TRUE );
+		GetCommander().Command_INSTEXT(true, cmemHokanWord.GetStringPtr(), cmemHokanWord.GetStringLength(), TRUE);
 	}else {
 		m_bHokan = TRUE;
 	}
@@ -182,8 +182,8 @@ int CEditView::HokanSearchByFile(
 	bool			bHokanLoHiCase,	//!< [in] 英大文字小文字を同一視する
 	vector_ex<std::wstring>& 	vKouho,	//!< [in,out] 候補
 	int				nMaxKouho		//!< [in] Max候補数(0==無制限)
-){
-	const int nKeyLen = wcslen( pszKey );
+) {
+	const int nKeyLen = wcslen(pszKey);
 	int nLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
@@ -191,22 +191,22 @@ int CEditView::HokanSearchByFile(
 
 	// キーが記号で始まるか
 	// キーの先頭が記号(#$@\)かどうか判定
-	bool bKeyStartWithMark = ( wcschr( L"$@#\\", pszKey[0] ) != NULL ? true : false );
+	bool bKeyStartWithMark = (wcschr(L"$@#\\", pszKey[0]) != NULL ? true : false);
 
 	for (CLogicInt i = CLogicInt(0); i < nLines; i++) {
-		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL( i, &nLineLen );
+		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
 		for (j = 0; j < nLineLen; j += nCharSize) {
-			nCharSize = CNativeW::GetSizeOfChar( pszLine, nLineLen, j );
+			nCharSize = CNativeW::GetSizeOfChar(pszLine, nLineLen, j);
 
 			// 半角記号は候補に含めない
-			if (pszLine[j] < 0x00C0 && !IS_KEYWORD_CHAR( pszLine[j] )) continue;
+			if (pszLine[j] < 0x00C0 && !IS_KEYWORD_CHAR(pszLine[j])) continue;
 
 			// キーの先頭が記号以外の場合、記号で始まる単語は候補からはずす
-			if (!bKeyStartWithMark && wcschr( L"$@#\\", pszLine[j] ) != NULL) continue;
+			if (!bKeyStartWithMark && wcschr(L"$@#\\", pszLine[j]) != NULL) continue;
 
 			// 文字種類取得
-			ECharKind kindPre = CWordParse::WhatKindOfChar( pszLine, nLineLen, j );	// 文字種類取得
+			ECharKind kindPre = CWordParse::WhatKindOfChar(pszLine, nLineLen, j);	// 文字種類取得
 
 			// 全角記号は候補に含めない
 			if (0
@@ -219,27 +219,27 @@ int CEditView::HokanSearchByFile(
 				continue;
 
 			// 候補が記号で始まるか
-			bool bWordStartWithMark = ( wcschr( L"$@#\\", pszLine[j] ) != NULL ? true : false );
+			bool bWordStartWithMark = (wcschr(L"$@#\\", pszLine[j]) != NULL ? true : false);
 
 			nWordBegin = j;
 			// 候補単語の終了位置を求める
 			nWordLen = nCharSize;
 			nWordLenStop = -1; // 送り仮名無視用単語の終わり。-1は無効
 			for (j += nCharSize; j < nLineLen; j += nCharSize) {
-				nCharSize = CNativeW::GetSizeOfChar( pszLine, nLineLen, j );
+				nCharSize = CNativeW::GetSizeOfChar(pszLine, nLineLen, j);
 
 				// 半角記号は含めない
-				if (pszLine[j] < 0x00C0 && !IS_KEYWORD_CHAR( pszLine[j] )) break;
+				if (pszLine[j] < 0x00C0 && !IS_KEYWORD_CHAR(pszLine[j])) break;
 
 				// 文字種類取得
-				ECharKind kindCur = CWordParse::WhatKindOfChar( pszLine, nLineLen, j );
+				ECharKind kindCur = CWordParse::WhatKindOfChar(pszLine, nLineLen, j);
 				// 全角記号は候補に含めない
 				if (kindCur == CK_ZEN_SPACE || kindCur == CK_ZEN_KIGO || kindCur == CK_ZEN_SKIGO) {
 					break;
 				}
 
 				// 文字種類が変わったら単語の切れ目とする
-				ECharKind kindMerge = CWordParse::WhatKindOfTwoChars( kindPre, kindCur );
+				ECharKind kindMerge = CWordParse::WhatKindOfTwoChars(kindPre, kindCur);
 				if (kindMerge == CK_NULL) {	// kindPreとkindCurが別種
 					if (kindCur == CK_HIRA) {
 						kindMerge = kindCur;		// ひらがななら続行
@@ -275,9 +275,9 @@ int CEditView::HokanSearchByFile(
 
 			// キーと比較する
 			if (bHokanLoHiCase) {
-				nRet = auto_memicmp( pszKey, word, nKeyLen );
+				nRet = auto_memicmp(pszKey, word, nKeyLen);
 			}else {
-				nRet = auto_memcmp( pszKey, word, nKeyLen );
+				nRet = auto_memcmp(pszKey, word, nKeyLen);
 			}
 			if (nRet != 0) continue;
 

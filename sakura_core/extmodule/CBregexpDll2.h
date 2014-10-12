@@ -98,8 +98,8 @@ public:
 	}
 
 	// ŠÖ”‚ª‚ ‚é‚©‚Ç‚¤‚©
-	bool ExistBMatchEx() const{ return m_BMatchEx!=NULL; }
-	bool ExistBSubstEx() const{ return m_BSubstEx!=NULL; }
+	bool ExistBMatchEx() const { return m_BMatchEx!=NULL; }
+	bool ExistBSubstEx() const { return m_BSubstEx!=NULL; }
 
 private:
 	// DLL“àŠÖ”ƒ|ƒCƒ“ƒ^

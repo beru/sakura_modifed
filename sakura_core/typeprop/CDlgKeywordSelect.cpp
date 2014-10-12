@@ -80,13 +80,13 @@ CDlgKeywordSelect::~CDlgKeywordSelect()
 
 
 //! モーダルダイアログの表示
-int CDlgKeywordSelect::DoModal( HINSTANCE hInstance, HWND hwndParent, int* pnSet )
+int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
 	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
 		m_nSet[ i ] = pnSet[ i ];
 	}
 
-	(void)CDialog::DoModal( hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL );
+	(void)CDialog::DoModal(hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL);
 
 	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
 		pnSet[ i ] = m_nSet[ i ];
@@ -96,15 +96,15 @@ int CDlgKeywordSelect::DoModal( HINSTANCE hInstance, HWND hwndParent, int* pnSet
 }
 
 //! 初期化処理
-BOOL CDlgKeywordSelect::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
+BOOL CDlgKeywordSelect::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
-	_SetHwnd( hwndDlg );
+	_SetHwnd(hwndDlg);
 
-	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
+	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 
-BOOL CDlgKeywordSelect::OnBnClicked( int wID )
+BOOL CDlgKeywordSelect::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDOK:
@@ -113,32 +113,32 @@ BOOL CDlgKeywordSelect::OnBnClicked( int wID )
 	case IDCANCEL:
 		break;
 	}
-	return CDialog::OnBnClicked( wID );
+	return CDialog::OnBnClicked(wID);
 }
 
 //! ダイアログデータの設定
-void CDlgKeywordSelect::SetData( void )
+void CDlgKeywordSelect::SetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		HWND hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
+		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[ index ]);
 
 		// コンボボックスを空にする
-		Combo_ResetContent( hwndCombo );
+		Combo_ResetContent(hwndCombo);
 		
 		// 一行目は空白
-		Combo_AddString( hwndCombo, L" " );
+		Combo_AddString(hwndCombo, L" ");
 
 		if (m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0) {
 			for (int i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; i++) {
-				Combo_AddString( hwndCombo, m_pCKeyWordSetMgr->GetTypeName( i ) );
+				Combo_AddString(hwndCombo, m_pCKeyWordSetMgr->GetTypeName(i));
 			}
 
 			if (-1 == m_nSet[ index ]) {
 				// セット名コンボボックスのデフォルト選択
-				Combo_SetCurSel( hwndCombo, 0 );
+				Combo_SetCurSel(hwndCombo, 0);
 			}else {
 				// セット名コンボボックスのデフォルト選択
-				Combo_SetCurSel( hwndCombo, m_nSet[ index ] + 1 );
+				Combo_SetCurSel(hwndCombo, m_nSet[ index ] + 1);
 			}
 		}
 	}
@@ -146,12 +146,12 @@ void CDlgKeywordSelect::SetData( void )
 
 
 //! ダイアログデータの設定
-int CDlgKeywordSelect::GetData( void )
+int CDlgKeywordSelect::GetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		HWND hwndCombo = ::GetDlgItem( GetHwnd(), keyword_select_target_combo[ index ] );
+		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[ index ]);
 
-		int n = Combo_GetCurSel( hwndCombo );
+		int n = Combo_GetCurSel(hwndCombo);
 		if (CB_ERR == n || 0 == n) {
 			m_nSet[ index ] = -1;
 		}else {
@@ -162,7 +162,7 @@ int CDlgKeywordSelect::GetData( void )
 	return TRUE;
 }
 
-LPVOID CDlgKeywordSelect::GetHelpIdTable( void )
+LPVOID CDlgKeywordSelect::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

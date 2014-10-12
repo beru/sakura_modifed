@@ -38,7 +38,7 @@
 
 CDllImp::CDllImp()
 	:
-	m_hInstance( NULL )
+	m_hInstance(NULL)
 {
 }
 
@@ -97,7 +97,7 @@ EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 		// ‰Šúˆ—‚É¸”s‚µ‚½ê‡‚ÍDLL‚ğ‰ğ•ú‚µAŸ‚Ì–¼‘OŒó•â‚ğ‚·B
 		if (!ret) {
 			bInitImpFailure = true;
-			::FreeLibrary( m_hInstance );
+			::FreeLibrary(m_hInstance);
 			m_hInstance = NULL;
 			continue;
 		}
@@ -137,7 +137,7 @@ bool CDllImp::DeinitDll(bool force)
 		m_strLoadedDllName = _T("");
 
 		// DLL‰ğ•ú
-		::FreeLibrary( m_hInstance );
+		::FreeLibrary(m_hInstance);
 		m_hInstance = NULL;
 
 		return true;

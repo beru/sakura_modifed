@@ -46,7 +46,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM, const TCHAR* );	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*);	// モーダルダイアログの表示
 
 	TCHAR	m_szPath[_MAX_PATH+1];		// フォルダ
 	TCHAR	m_szTagsCmdLine[_MAX_PATH];	// コマンドラインオプション(個別)
@@ -56,14 +56,14 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL	OnBnClicked( int );
+	BOOL	OnBnClicked(int);
 	LPVOID	GetHelpIdTable(void);
 
-	void	SetData( void );	// ダイアログデータの設定
-	int		GetData( void );	// ダイアログデータの取得
+	void	SetData(void);	// ダイアログデータの設定
+	int		GetData(void);	// ダイアログデータの取得
 
 private:
-	void SelectFolder( HWND hwndDlg );
+	void SelectFolder(HWND hwndDlg);
 
 };
 

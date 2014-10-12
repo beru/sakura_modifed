@@ -37,7 +37,7 @@
 #include "macro/CIfObj.h"
 
 // トレースメッセージ有無
-#if defined( _DEBUG ) && defined( _UNICODE )
+#if defined(_DEBUG) && defined(_UNICODE)
 #define TEST
 #endif
 
@@ -54,53 +54,53 @@ public:
 					/* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr)
 	{
 #ifdef TEST
-		DEBUG_TRACE( _T("GetTypeAttr\n") );
+		DEBUG_TRACE(_T("GetTypeAttr\n"));
 #endif
 		*ppTypeAttr = &m_TypeAttr;
 		return S_OK;
 	}
         
-	virtual HRESULT STDMETHODCALLTYPE GetTypeComp( 
+	virtual HRESULT STDMETHODCALLTYPE GetTypeComp(
 					/* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp)
 	{
 #ifdef TEST
-		DEBUG_TRACE( _T("GetTypeComp\n") );
+		DEBUG_TRACE(_T("GetTypeComp\n"));
 #endif
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetFuncDesc( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetFuncDesc(
 				/* [in] */ UINT index,
 				/* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc);
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetVarDesc( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetVarDesc(
 	    /* [in] */ UINT index,
 	    /* [out] */ VARDESC __RPC_FAR *__RPC_FAR *ppVarDesc)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetNames( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetNames(
 	    /* [in] */ MEMBERID memid,
 	    /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
 	    /* [in] */ UINT cMaxNames,
 	    /* [out] */ UINT __RPC_FAR *pcNames);
 
-	virtual HRESULT STDMETHODCALLTYPE GetRefTypeOfImplType( 
+	virtual HRESULT STDMETHODCALLTYPE GetRefTypeOfImplType(
 	    /* [in] */ UINT index,
 	    /* [out] */ HREFTYPE __RPC_FAR *pRefType)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE GetImplTypeFlags( 
+	virtual HRESULT STDMETHODCALLTYPE GetImplTypeFlags(
 	    /* [in] */ UINT index,
 	    /* [out] */ INT __RPC_FAR *pImplTypeFlags)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetIDsOfNames( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetIDsOfNames(
 	    /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
 	    /* [in] */ UINT cNames,
 	    /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId)
@@ -108,7 +108,7 @@ public:
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE Invoke( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE Invoke(
 	    /* [in] */ PVOID pvInstance,
 	    /* [in] */ MEMBERID memid,
 	    /* [in] */ WORD wFlags,
@@ -120,7 +120,7 @@ public:
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDocumentation( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDocumentation(
 	    /* [in] */ MEMBERID memid,
 	    /* [out] */ BSTR __RPC_FAR *pBstrName,
 	    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
@@ -136,7 +136,7 @@ public:
 		return S_OK ;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDllEntry( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDllEntry(
 	    /* [in] */ MEMBERID memid,
 	    /* [in] */ INVOKEKIND invKind,
 	    /* [out] */ BSTR __RPC_FAR *pBstrDllName,
@@ -146,14 +146,14 @@ public:
 		return E_NOTIMPL;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE GetRefTypeInfo( 
+	virtual HRESULT STDMETHODCALLTYPE GetRefTypeInfo(
 	    /* [in] */ HREFTYPE hRefType,
 	    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddressOfMember( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddressOfMember(
 	    /* [in] */ MEMBERID memid,
 	    /* [in] */ INVOKEKIND invKind,
 	    /* [out] */ PVOID __RPC_FAR *ppv)
@@ -161,7 +161,7 @@ public:
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateInstance( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateInstance(
 	    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
 	    /* [in] */ REFIID riid,
 	    /* [iid_is][out] */ PVOID __RPC_FAR *ppvObj)
@@ -169,26 +169,26 @@ public:
 		return E_NOTIMPL;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE GetMops( 
+	virtual HRESULT STDMETHODCALLTYPE GetMops(
 	    /* [in] */ MEMBERID memid,
 	    /* [out] */ BSTR __RPC_FAR *pBstrMops)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetContainingTypeLib( 
+	virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetContainingTypeLib(
 	    /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
 	    /* [out] */ UINT __RPC_FAR *pIndex)
 	{
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ void STDMETHODCALLTYPE ReleaseTypeAttr( 
+	virtual /* [local] */ void STDMETHODCALLTYPE ReleaseTypeAttr(
 					/* [in] */ TYPEATTR __RPC_FAR *pTypeAttr)
 	{
 	}
 
-	virtual /* [local] */ void STDMETHODCALLTYPE ReleaseFuncDesc( 
+	virtual /* [local] */ void STDMETHODCALLTYPE ReleaseFuncDesc(
 					/* [in] */ FUNCDESC __RPC_FAR *pFuncDesc)
 	{
 	}
@@ -207,25 +207,25 @@ CIfObjTypeInfo::CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods)
 	m_TypeAttr.cFuncs = (WORD)m_MethodsRef.size();
 }
 
-HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetFuncDesc( 
+HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetFuncDesc(
 			/* [in] */ UINT index,
 			/* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc)
 {
 #ifdef TEST
-	DEBUG_TRACE( _T("GetFuncDesc\n") );
+	DEBUG_TRACE(_T("GetFuncDesc\n"));
 #endif
 	*ppFuncDesc = const_cast<FUNCDESC __RPC_FAR *>(&(m_MethodsRef[index].Desc));
 	return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames( 
+HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames(
     /* [in] */ MEMBERID memid,
     /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
     /* [in] */ UINT cMaxNames,
     /* [out] */ UINT __RPC_FAR *pcNames)
 {
 #ifdef TEST
-		DEBUG_TRACE( _T("GetNames\n") );
+		DEBUG_TRACE(_T("GetNames\n"));
 #endif
 	*pcNames = 1;
 	if(cMaxNames > 0)
@@ -277,13 +277,13 @@ HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
 	UINT FAR* puArgErr)
 {
 	if ((unsigned)dispidMember < m_Methods.size()) {
-		return (this->* (m_Methods[dispidMember].Method))( m_Methods[dispidMember].ID, pdispparams, pvarResult, m_Owner->GetData() );
+		return (this->* (m_Methods[dispidMember].Method))(m_Methods[dispidMember].ID, pdispparams, pvarResult, m_Owner->GetData());
 	}else {
 		return E_UNEXPECTED;
 	}
 }
 
-HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo( 
+HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
 	/* [in] */ UINT iTInfo,
 	/* [in] */ LCID lcid,
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
@@ -297,7 +297,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
 	return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfoCount( 
+HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfoCount(
 	/* [out] */ UINT __RPC_FAR *pctinfo)
 {
 	*pctinfo = 1;
@@ -317,7 +317,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
 	for (unsigned i = 0; i < cNames; ++i) {
 #ifdef TEST
 		// 大量にメッセージが出るので注意。
-		//DEBUG_TRACE( _T("GetIDsOfNames: %ls\n"), rgszNames[i] );
+		//DEBUG_TRACE(_T("GetIDsOfNames: %ls\n"), rgszNames[i]);
 #endif
 		size_t nSize = m_Methods.size();
 		for (size_t j = 0; j < nSize; ++j) {

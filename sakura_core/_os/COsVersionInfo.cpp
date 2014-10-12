@@ -43,11 +43,11 @@ bool			COsVersionInfo::m_bWine;
 	初期化を行う(引数はダミー)
 	呼出は基本1回のみ
 */
-COsVersionInfo::COsVersionInfo( bool pbStart )
+COsVersionInfo::COsVersionInfo(bool pbStart)
 {
-	memset_raw( &m_cOsVersionInfo, 0, sizeof( m_cOsVersionInfo ) );
-	m_cOsVersionInfo.dwOSVersionInfoSize = sizeof( m_cOsVersionInfo );
-	m_bSuccess = ::GetVersionEx( &m_cOsVersionInfo );
+	memset_raw(&m_cOsVersionInfo, 0, sizeof(m_cOsVersionInfo));
+	m_cOsVersionInfo.dwOSVersionInfoSize = sizeof(m_cOsVersionInfo);
+	m_bSuccess = ::GetVersionEx(&m_cOsVersionInfo);
 
 #ifdef USE_SSE2
  		int data[4];

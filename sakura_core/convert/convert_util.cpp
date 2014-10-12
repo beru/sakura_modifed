@@ -65,7 +65,7 @@ static const wchar_t tableHanKigo[] =
 	L" ,."
 	L"+-*/%=|&"
 	L"^\\@;:"
-	L"\"`'<>(){}[]"
+	L"\"`'<>() {}[]"
 	L"!?#$~_"
 ;
 

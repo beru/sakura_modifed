@@ -134,7 +134,7 @@ int CMemory::IsEqual( CMemory& cmem1, CMemory& cmem2 )
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void CMemory::SwapHLByte( char* pData, const int nDataLen ){
+void CMemory::SwapHLByte( char* pData, const int nDataLen ) {
 	unsigned char ctemp;
 
 	//pBuf = (unsigned char*)GetRawPtr( &nBufLen );
@@ -179,7 +179,7 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ){
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void CMemory::SwapHLByte( void ){
+void CMemory::SwapHLByte( void ) {
 	int nBufLen;
 	char* pBuf = reinterpret_cast<char*>( GetRawPtr(&nBufLen) );
 	SwapHLByte( pBuf, nBufLen );

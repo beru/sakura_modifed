@@ -114,7 +114,7 @@ bool CControlProcess::InitializeProcess()
 	GetDllShareData().m_sHandles.m_hwndTray = hwnd;
 
 	// 初期化完了イベントをシグナル状態にする
-	if (!::SetEvent( m_hEventCPInitialized )) {
+	if (!::SetEvent(m_hEventCPInitialized)) {
 		ErrorBeep();
 		TopErrorMessage(NULL, LS(STR_ERR_CTRLMTX4));
 		return false;

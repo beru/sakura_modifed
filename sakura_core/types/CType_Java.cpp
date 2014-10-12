@@ -10,12 +10,12 @@
 void CType_Java::InitTypeConfigImp(STypeConfig* pType)
 {
 	//名前と拡張子
-	_tcscpy( pType->m_szTypeName, _T("Java") );
-	_tcscpy( pType->m_szTypeExts, _T("java,jav") );
+	_tcscpy(pType->m_szTypeName, _T("Java"));
+	_tcscpy(pType->m_szTypeExts, _T("java,jav"));
 
 	//設定
-	pType->m_cLineComment.CopyTo( 0, L"//", -1 );					/* 行コメントデリミタ */
-	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );	/* ブロックコメントデリミタ */
+	pType->m_cLineComment.CopyTo(0, L"//", -1);					/* 行コメントデリミタ */
+	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	/* ブロックコメントデリミタ */
 	pType->m_nKeyWordSetIdx[0] = 4;									/* キーワードセット */
 	pType->m_eDefaultOutline = OUTLINE_JAVA;						/* アウトライン解析方法 */
 	pType->m_eSmartIndent = SMARTINDENT_CPP;						/* スマートインデント種別 */
@@ -37,7 +37,7 @@ enum EFuncListJavaMode {
 };
 
 /* Java関数リスト作成 */
-void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
+void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	CLogicInt	nLineLen;
@@ -73,7 +73,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i = 0; i < nLineLen; i += nCharChars) {
-			nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
+			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
 
 			/* エスケープシーケンスは常に取り除く */
 			if (L'\\' == pLine[i]) {
@@ -106,7 +106,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 				if (! WCODE::IsBlank(pLine[i]) &&
 					! WCODE::IsLineDelimiter(pLine[i]) &&
 					! WCODE::IsControlCode(pLine[i]) &&
-					! wcschr( szJavaKigou, pLine[i] )
+					! wcschr(szJavaKigou, pLine[i])
 				) {
 					if (nWordIdx + nCharChars >= nMaxWordLeng) {
 						nMode = FL_JAVA_MODE_TOO_LONG_WORD;
@@ -119,16 +119,16 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 				}else {
 					/* クラス宣言部分を見つけた */
 					//	Oct. 10, 2002 genta interfaceも対象に
-					if (0 == wcscmp( L"class", szWordPrev ) ||
-						0 == wcscmp( L"interface", szWordPrev )
+					if (0 == wcscmp(L"class", szWordPrev) ||
+						0 == wcscmp(L"interface", szWordPrev)
 					) {
-						nClassNestArr.push_back( nNestLevel );
-						nNestLevel2Arr.push_back( 0 );
+						nClassNestArr.push_back(nNestLevel);
+						nNestLevel2Arr.push_back(0);
 						++nClassNestArrNum;
 						if (0 < nNestLevel) {
-							wcscat( szClass, L"\\" );
+							wcscat(szClass, L"\\");
 						}
-						wcscat( szClass, szWord );
+						wcscat(szClass, szWord);
 
 						nFuncId = FL_OBJ_DEFINITION;
 						++nFuncNum;
@@ -145,8 +145,8 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 							&ptPosXY_Layout
 						);
 						wchar_t szWork[256];
-						if (0 < auto_snprintf_s( szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS) )) {
-							pcFuncInfoArr->AppendData( ptPosXY_Logic.GetY2() + CLogicInt(1), ptPosXY_Layout.GetY2() + CLayoutInt(1), szWork, nFuncId ); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
+						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
+							pcFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + CLogicInt(1), ptPosXY_Layout.GetY2() + CLayoutInt(1), szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
 						}
 					}
 
@@ -159,9 +159,9 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 				if (L'_' == pLine[i] ||
 					L':' == pLine[i] ||
 					L'~' == pLine[i] ||
-					(L'a' <= pLine[i] &&	pLine[i] <= L'z' )||
-					(L'A' <= pLine[i] &&	pLine[i] <= L'Z' )||
-					(L'0' <= pLine[i] &&	pLine[i] <= L'9' )||
+					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
+					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
+					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
 					L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i]) ||
@@ -216,14 +216,14 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 						//	メソッド中でさらにメソッドを定義することはないので
 						//	ネストレベル判定追加 class/interfaceの直下の場合のみ判定する
 						if (nClassNestArr[nClassNestArrNum - 1] == nNestLevel - 1
-						 && 0 != wcscmp( L"sizeof", szFuncName )
-						 && 0 != wcscmp( L"if", szFuncName )
-						 && 0 != wcscmp( L"for", szFuncName )
-						 && 0 != wcscmp( L"do", szFuncName )
-						 && 0 != wcscmp( L"while", szFuncName )
-						 && 0 != wcscmp( L"catch", szFuncName )
-						 && 0 != wcscmp( L"switch", szFuncName )
-						 && 0 != wcscmp( L"return", szFuncName )
+						 && 0 != wcscmp(L"sizeof", szFuncName)
+						 && 0 != wcscmp(L"if", szFuncName)
+						 && 0 != wcscmp(L"for", szFuncName)
+						 && 0 != wcscmp(L"do", szFuncName)
+						 && 0 != wcscmp(L"while", szFuncName)
+						 && 0 != wcscmp(L"catch", szFuncName)
+						 && 0 != wcscmp(L"switch", szFuncName)
+						 && 0 != wcscmp(L"return", szFuncName)
 						) {
 							nFuncId = FL_OBJ_FUNCTION;
 							++nFuncNum;
@@ -239,8 +239,8 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 								&ptPosXY
 							);
 							wchar_t szWork[256];
-							if (0 < auto_snprintf_s( szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName )) {
-								pcFuncInfoArr->AppendData( nFuncLine, ptPosXY.GetY2() + CLayoutInt(1), szWork, nFuncId );
+							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
+								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + CLayoutInt(1), szWork, nFuncId);
 							}
 						}
 					}
@@ -262,7 +262,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 						nNestLevel2Arr.pop_back();
 						nClassNestArrNum--;
 						int k;
-						for (k = wcslen( szClass ) - 1; k >= 0; k--) {
+						for (k = wcslen(szClass) - 1; k >= 0; k--) {
 							if (L'\\' == szClass[k]) {
 								break;
 							}
@@ -276,7 +276,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 					continue;
 				}else if (L'(' == pLine[i]) {
 					if (0 < nClassNestArrNum /*nNestLevel == 1*/ &&
-						0 != wcscmp( L"new", szWordPrev )
+						0 != wcscmp(L"new", szWordPrev)
 					) {
 						wcscpy_s(szFuncName, szWord);
 						nFuncLine = nLineCount + CLogicInt(1);
@@ -301,7 +301,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 					for (; k < nLineLen2; ++k) {
 						if (!bCommentLoop) {
 							if (pLine2[k] != L' ' && pLine2[k] != WCODE::TAB && !WCODE::IsLineDelimiter(pLine2[k])) {
-								if( k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'*' ){
+								if(k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'*') {
 									bCommentLoop = TRUE;
 									++k;
 								}else if (k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'/') {
@@ -332,7 +332,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 						//	Oct. 10, 2002 genta
 						//	abstract にも対応
 						if (pLine2[k] == L'{' || pLine2[k] == L';' ||
-							__iscsym( pLine2[k] )
+							__iscsym(pLine2[k])
 						) {
 							if (0 < nClassNestArrNum) {
 								if (1 == nNestLevel2Arr[nClassNestArrNum - 1]) {
@@ -353,14 +353,14 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 						// 関数の中で別の関数の宣言部を使うことって，Javaであるの？
 						if (1
 							&& nClassNestArr[nClassNestArrNum - 1] == nNestLevel - 1
-							&& 0 != wcscmp( L"sizeof", szFuncName )
-							&& 0 != wcscmp( L"if", szFuncName )
-							&& 0 != wcscmp( L"for", szFuncName )
-							&& 0 != wcscmp( L"do", szFuncName )
-							&& 0 != wcscmp( L"while", szFuncName )
-							&& 0 != wcscmp( L"catch", szFuncName )
-							&& 0 != wcscmp( L"switch", szFuncName )
-							&& 0 != wcscmp( L"return", szFuncName )
+							&& 0 != wcscmp(L"sizeof", szFuncName)
+							&& 0 != wcscmp(L"if", szFuncName)
+							&& 0 != wcscmp(L"for", szFuncName)
+							&& 0 != wcscmp(L"do", szFuncName)
+							&& 0 != wcscmp(L"while", szFuncName)
+							&& 0 != wcscmp(L"catch", szFuncName)
+							&& 0 != wcscmp(L"switch", szFuncName)
+							&& 0 != wcscmp(L"return", szFuncName)
 						) {
 							nFuncId = FL_OBJ_DECLARE;
 							++nFuncNum;
@@ -376,8 +376,8 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 								&ptPosXY
 							);
 							wchar_t szWork[256];
-							if (0 < auto_snprintf_s( szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName )) {
-								pcFuncInfoArr->AppendData( nFuncLine, ptPosXY.GetY2() + CLayoutInt(1), szWork, nFuncId );
+							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
+								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + CLayoutInt(1), szWork, nFuncId);
 							}
 						}
 					}
@@ -390,7 +390,7 @@ void CDocOutline::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 					if (! WCODE::IsBlank(pLine[i]) &&
 						! WCODE::IsLineDelimiter(pLine[i]) &&
 						! WCODE::IsControlCode(pLine[i]) &&
-						! wcschr( szJavaKigou, pLine[i] )
+						! wcschr(szJavaKigou, pLine[i])
 					) {
 						wcscpy_s(szWordPrev, szWord);
 						nWordIdx = 0;

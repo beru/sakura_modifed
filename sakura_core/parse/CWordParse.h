@@ -115,21 +115,21 @@ public:
 
 
 	template <class CHAR_TYPE>
-	static int GetWord( const CHAR_TYPE*, const int, const CHAR_TYPE *pszSplitCharList,
-		CHAR_TYPE **ppWordStart, int *pnWordLen );
+	static int GetWord(const CHAR_TYPE*, const int, const CHAR_TYPE *pszSplitCharList,
+		CHAR_TYPE **ppWordStart, int *pnWordLen);
 
 protected:
 
-	static bool _match_charlist( const ACHAR c, const ACHAR *pszList );
-	static bool _match_charlist( const WCHAR c, const WCHAR *pszList );
+	static bool _match_charlist(const ACHAR c, const ACHAR *pszList);
+	static bool _match_charlist(const WCHAR c, const WCHAR *pszList);
 };
 
-BOOL IsURL( const wchar_t*, int, int* );			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
-BOOL IsMailAddress( const wchar_t*, int, int* );	// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
+BOOL IsURL(const wchar_t*, int, int*);			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
+BOOL IsMailAddress(const wchar_t*, int, int*);	// 現在位置がメールアドレスならば、NULL以外と、その長さを返す
 
 
 // ACHAR 版
-inline bool CWordParse::_match_charlist( const ACHAR c, const ACHAR *pszList )
+inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR *pszList)
 {
 	for (int i = 0; pszList[i] != '\0'; i++) {
 		if (pszList[i] == c) {
@@ -139,7 +139,7 @@ inline bool CWordParse::_match_charlist( const ACHAR c, const ACHAR *pszList )
 	return false;
 }
 // WCHAR 版
-inline bool CWordParse::_match_charlist( const WCHAR c, const WCHAR *pszList )
+inline bool CWordParse::_match_charlist(const WCHAR c, const WCHAR *pszList)
 {
 	for (int i = 0; pszList[i] != L'\0'; i++) {
 		if (pszList[i] == c) {
@@ -159,8 +159,12 @@ inline bool CWordParse::_match_charlist( const WCHAR c, const WCHAR *pszList )
 	@return 読んだデータの長さ。
 */
 template <class CHAR_TYPE>
-int CWordParse::GetWord( const CHAR_TYPE *pS, const int nLen, const CHAR_TYPE *pszSplitCharList,
-	CHAR_TYPE **ppWordStart, int *pnWordLen )
+int CWordParse::GetWord(
+	const CHAR_TYPE* pS,
+	const int nLen,
+	const CHAR_TYPE* pszSplitCharList,
+	CHAR_TYPE** ppWordStart,
+	int* pnWordLen)
 {
 	const CHAR_TYPE* pr = pS;
 	CHAR_TYPE* pwordstart;

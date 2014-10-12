@@ -58,52 +58,52 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示 
+	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示 
 
 	//	@@ 2005.03.31 MIK 階層パラメータを追加
-//	bool AddParamA( const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId );	// 登録
-	bool GetSelectedParam( TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3, TCHAR *s4, int *depth, TCHAR* fileBase  );	// 取得
-	void SetFileName( const TCHAR *pszFileName );
-	void SetKeyword( const wchar_t *pszKeyword );	//	@@ 2005.03.31 MIK
+//	bool AddParamA(const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId);	// 登録
+	bool GetSelectedParam(TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3, TCHAR *s4, int *depth, TCHAR* fileBase );	// 取得
+	void SetFileName(const TCHAR *pszFileName);
+	void SetKeyword(const wchar_t *pszKeyword);	//	@@ 2005.03.31 MIK
 	int  FindDirectTagJump();
 
-	bool GetSelectedFullPathAndLine( TCHAR* fullPath, int count, int* lineNum, int* depth );
+	bool GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int* lineNum, int* depth);
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL	OnInitDialog( HWND, WPARAM wParam, LPARAM lParam );
-	BOOL	OnBnClicked( int );
-	INT_PTR DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam );
-	BOOL	OnSize( WPARAM wParam, LPARAM lParam );
-	BOOL	OnMove( WPARAM wParam, LPARAM lParam );
-	BOOL	OnMinMaxInfo( LPARAM lParam );
-	BOOL	OnNotify( WPARAM wParam, LPARAM lParam );
+	BOOL	OnInitDialog(HWND, WPARAM wParam, LPARAM lParam);
+	BOOL	OnBnClicked(int);
+	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);
+	BOOL	OnSize(WPARAM wParam, LPARAM lParam);
+	BOOL	OnMove(WPARAM wParam, LPARAM lParam);
+	BOOL	OnMinMaxInfo(LPARAM lParam);
+	BOOL	OnNotify(WPARAM wParam, LPARAM lParam);
 	//	@@ 2005.03.31 MIK キーワード入力エリアのイベント処理
-	BOOL	OnCbnSelChange( HWND hwndCtl, int wID );
-	BOOL	OnCbnEditChange( HWND hwndCtl, int wID );
-	//BOOL	OnEnChange( HWND hwndCtl, int wID );
-	BOOL	OnTimer( WPARAM wParam );
-	LPVOID	GetHelpIdTable( void );
+	BOOL	OnCbnSelChange(HWND hwndCtl, int wID);
+	BOOL	OnCbnEditChange(HWND hwndCtl, int wID);
+	//BOOL	OnEnChange(HWND hwndCtl, int wID);
+	BOOL	OnTimer(WPARAM wParam);
+	LPVOID	GetHelpIdTable(void);
 
 private:
-	void	StopTimer( void );
-	void	StartTimer( int );
+	void	StopTimer(void);
+	void	StartTimer(int);
 
-	void	SetData( void );	// ダイアログデータの設定
-	int		GetData( void );	// ダイアログデータの取得
-	void	UpdateData( bool );	//	@@ 2005.03.31 MIK
+	void	SetData(void);	// ダイアログデータの設定
+	int		GetData(void);	// ダイアログデータの取得
+	void	UpdateData(bool);	//	@@ 2005.03.31 MIK
 
-	TCHAR	*GetNameByType( const TCHAR type, const TCHAR *name );	// タイプを名前に変換する。
-	int		SearchBestTag( void );	// もっとも確率の高そうなインデックスを返す。
+	TCHAR	*GetNameByType(const TCHAR type, const TCHAR *name);	// タイプを名前に変換する。
+	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
 	//	@@ 2005.03.31 MIK
-	const TCHAR *GetFileName( void );
-	const TCHAR *GetFilePath( void ) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
-	void Empty( void );
+	const TCHAR *GetFileName(void);
+	const TCHAR *GetFilePath(void) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
+	void Empty(void);
 	void SetTextDir();
-	void FindNext( bool );
-	void find_key( const wchar_t* keyword );
+	void FindNext(bool);
+	void find_key(const wchar_t* keyword);
 	int find_key_core(int, const wchar_t*, bool, bool, bool, bool, int);
 	
 	bool IsDirectTagJump();
@@ -111,10 +111,10 @@ private:
 	void ClearPrevFindInfo();
 
 	//! depthから完全パス名(相対パス/絶対パス)を作成する
-	static TCHAR* GetFullPathFromDepth( TCHAR*, int, TCHAR*, const TCHAR*, int );
-	static int CalcMaxUpDirectory( const TCHAR* );
-	static TCHAR* CopyDirDir( TCHAR* dest, const TCHAR* target, const TCHAR* base );
-	static TCHAR* DirUp( TCHAR* dir );
+	static TCHAR* GetFullPathFromDepth(TCHAR*, int, TCHAR*, const TCHAR*, int);
+	static int CalcMaxUpDirectory(const TCHAR*);
+	static TCHAR* CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR* base);
+	static TCHAR* DirUp(TCHAR* dir);
 
 private:
 

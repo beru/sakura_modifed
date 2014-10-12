@@ -40,30 +40,30 @@ CFileExt::CFileExt()
 	m_szFilter[0] = 0;
 
 //	//テキストエディタとして、既定でリストに載ってほしい拡張子
-//	AppendExt( "すべてのファイル", "*" );
-//	AppendExt( "テキストファイル", "txt" );
+//	AppendExt("すべてのファイル", "*");
+//	AppendExt("テキストファイル", "txt");
 }
 
 CFileExt::~CFileExt()
 {
 	if (m_puFileExtInfo) {
-		free( m_puFileExtInfo );
+		free(m_puFileExtInfo);
 	}
 	m_puFileExtInfo = NULL;
 	m_nCount = 0;
 }
 
-bool CFileExt::AppendExt( const TCHAR *pszName, const TCHAR *pszExt )
+bool CFileExt::AppendExt(const TCHAR *pszName, const TCHAR *pszExt)
 {
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
-	if (!ConvertTypesExtToDlgExt( pszExt, szWork )) {
+	if (!ConvertTypesExtToDlgExt(pszExt, szWork)) {
 		return false;
 	}
-	return AppendExtRaw( pszName, szWork );
+	return AppendExtRaw(pszName, szWork);
 }
 
-bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
+bool CFileExt::AppendExtRaw(const TCHAR *pszName, const TCHAR *pszExt)
 {
 	if (!pszName || pszName[0] == _T('\0')) {
 		return false;
@@ -74,26 +74,26 @@ bool CFileExt::AppendExtRaw( const TCHAR *pszName, const TCHAR *pszExt )
 
 	FileExtInfoTag* p;
 	if (!m_puFileExtInfo) {
-		p = (FileExtInfoTag*)malloc( sizeof( FileExtInfoTag ) * 1 );
+		p = (FileExtInfoTag*)malloc(sizeof(FileExtInfoTag) * 1);
 		if (!p) {
 			return false;
 		}
 	}else {
-		p = (FileExtInfoTag*)realloc( m_puFileExtInfo, sizeof( FileExtInfoTag ) * ( m_nCount + 1 ) );
+		p = (FileExtInfoTag*)realloc(m_puFileExtInfo, sizeof(FileExtInfoTag) * (m_nCount + 1));
 		if (!p) {
 			return false;
 		}
 	}
 	m_puFileExtInfo = p;
 
-	_tcscpy_s( m_puFileExtInfo[m_nCount].m_szName, pszName );
-	_tcscpy_s( m_puFileExtInfo[m_nCount].m_szExt, pszExt );
+	_tcscpy_s(m_puFileExtInfo[m_nCount].m_szName, pszName);
+	_tcscpy_s(m_puFileExtInfo[m_nCount].m_szExt, pszExt);
 	m_nCount++;
 
 	return true;
 }
 
-const TCHAR* CFileExt::GetName( int nIndex )
+const TCHAR* CFileExt::GetName(int nIndex)
 {
 	if (nIndex < 0 || nIndex >= m_nCount) {
 		return NULL;
@@ -101,7 +101,7 @@ const TCHAR* CFileExt::GetName( int nIndex )
 	return m_puFileExtInfo[nIndex].m_szName;
 }
 
-const TCHAR* CFileExt::GetExt( int nIndex )
+const TCHAR* CFileExt::GetExt(int nIndex)
 {
 	if (nIndex < 0 || nIndex >= m_nCount) {
 		return NULL;
@@ -109,22 +109,22 @@ const TCHAR* CFileExt::GetExt( int nIndex )
 	return m_puFileExtInfo[nIndex].m_szExt;
 }
 
-const TCHAR* CFileExt::GetExtFilter( void )
+const TCHAR* CFileExt::GetExtFilter(void)
 {
 	// 拡張子フィルタの作成
 	m_szFilter[0] = 0;
 
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szName) + _countof(m_puFileExtInfo[0].m_szExt)*2 + 10];
 	for (int i = 0; i < m_nCount; i++) {
-		auto_sprintf_s( szWork,
+		auto_sprintf_s(szWork,
 			_T("%ts (%ts)|%ts|"),
 			m_puFileExtInfo[i].m_szName,
 			m_puFileExtInfo[i].m_szExt,
-			m_puFileExtInfo[i].m_szExt );
+			m_puFileExtInfo[i].m_szExt);
 
-		_tcscat( m_szFilter, szWork );
+		_tcscat(m_szFilter, szWork);
 	}
-	_tcscat( m_szFilter, _T("|") );
+	_tcscat(m_szFilter, _T("|"));
 
 	// 区切りは０なので置き換える。
 	for (int i = 0; m_szFilter[i] != _T('\0'); i++) {
@@ -140,7 +140,7 @@ const TCHAR* CFileExt::GetExtFilter( void )
 	@param pszSrcExt [in]  拡張子リスト 例「.c .cpp;.h」
 	@param pszDstExt [out] 拡張子リスト 例「*.c;*.cpp;*.h」
 */
-bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt )
+bool CFileExt::ConvertTypesExtToDlgExt(const TCHAR *pszSrcExt, TCHAR *pszDstExt)
 {
 	// 2003.08.14 MIK NULLじゃなくてfalse
 	if (!pszSrcExt) {
@@ -150,24 +150,24 @@ bool CFileExt::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, TCHAR *pszDstExt
 		return false;
 	}
 
-	TCHAR* p = _tcsdup( pszSrcExt );
+	TCHAR* p = _tcsdup(pszSrcExt);
 	pszDstExt[0] = 0;
 
-	TCHAR* token = _tcstok( p, _T(" ;,") );
+	TCHAR* token = _tcstok(p, _T(" ;,"));
 	while (token) {
 		if (_T('.') == *token) {
-			_tcscat( pszDstExt, _T("*") );
+			_tcscat(pszDstExt, _T("*"));
 		}else {
-			_tcscat( pszDstExt, _T("*.") );
+			_tcscat(pszDstExt, _T("*."));
 		}
-		_tcscat( pszDstExt, token );
+		_tcscat(pszDstExt, token);
 
-		token = _tcstok( NULL, _T(" ;,") );
+		token = _tcstok(NULL, _T(" ;,"));
 		if (token) {
-			_tcscat( pszDstExt, _T(";") );
+			_tcscat(pszDstExt, _T(";"));
 		}
 	}
-	free( p );	// 2003.05.20 MIK メモリ解放漏れ
+	free(p);	// 2003.05.20 MIK メモリ解放漏れ
 	return true;
 }
 

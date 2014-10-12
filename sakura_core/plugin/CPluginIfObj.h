@@ -54,10 +54,10 @@ class CPluginIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	CPluginIfObj( CPlugin& cPlugin )
+	CPluginIfObj(CPlugin& cPlugin)
 		:
-		CWSHIfObj( L"Plugin", false ),
-		m_cPlugin( cPlugin )
+		CWSHIfObj(L"Plugin", false),
+		m_cPlugin(cPlugin)
 	{
 		m_nPlugIndex = -1;
 	}
@@ -97,20 +97,20 @@ public:
 				wstring sSection;
 				wstring sKey;
 				wstring sValue;
-				if (variant_to_wstr( Arguments[0], sSection ) != true) {
+				if (variant_to_wstr(Arguments[0], sSection) != true) {
 					return false;
 				}
-				if (variant_to_wstr( Arguments[1], sKey ) != true) {
+				if (variant_to_wstr(Arguments[1], sKey) != true) {
 					return false;
 				}
 
 				cProfile.SetReadingMode();
 				if (LOWORD(ID) == F_PL_GETDEF) {
-					cProfile.ReadProfile( m_cPlugin.GetPluginDefPath().c_str() );
+					cProfile.ReadProfile(m_cPlugin.GetPluginDefPath().c_str());
 				}else {
-					cProfile.ReadProfile( m_cPlugin.GetOptionPath().c_str() );
+					cProfile.ReadProfile(m_cPlugin.GetOptionPath().c_str());
 				}
-				if (!cProfile.IOProfileData( sSection.c_str(), sKey.c_str(), sValue )
+				if (!cProfile.IOProfileData(sSection.c_str(), sKey.c_str(), sValue)
 					&& LOWORD(ID) == F_PL_GETOPTION
 				) {
 					// 設定されていなければデフォルトを取得 
@@ -137,7 +137,7 @@ public:
 		case F_PL_GETSTRING:
 			{
 				int num;
-				if (variant_to_int( Arguments[0], num ) == false) {
+				if (variant_to_int(Arguments[0], num) == false) {
 					return false;
 				}
 				if (0 < num && num < MAX_PLUG_STRING) {
@@ -165,17 +165,17 @@ public:
 				if (!Arguments[2]) return false;
 				CDataProfile cProfile;
 
-				cProfile.ReadProfile( m_cPlugin.GetOptionPath().c_str() );
+				cProfile.ReadProfile(m_cPlugin.GetOptionPath().c_str());
 				cProfile.SetWritingMode();
 				wstring tmp(Arguments[2]);
-				cProfile.IOProfileData( Arguments[0], Arguments[1], tmp );
-				cProfile.WriteProfile( m_cPlugin.GetOptionPath().c_str(), (m_cPlugin.m_sName + L" プラグイン設定ファイル").c_str() );
+				cProfile.IOProfileData(Arguments[0], Arguments[1], tmp);
+				cProfile.WriteProfile(m_cPlugin.GetOptionPath().c_str(), (m_cPlugin.m_sName + L" プラグイン設定ファイル").c_str());
 			}
 			break;
 		case F_PL_ADDCOMMAND:			// コマンドを追加する
 			{
-				int id = m_cPlugin.AddCommand( Arguments[0], Arguments[1], Arguments[2], true );
-				View->m_pcEditWnd->RegisterPluginCommand( id );
+				int id = m_cPlugin.AddCommand(Arguments[0], Arguments[1], Arguments[2], true);
+				View->m_pcEditWnd->RegisterPluginCommand(id);
 			}
 			break;
 		}

@@ -60,14 +60,14 @@ public:
 	~CRegexKeyword();
 
 	//! 行検索開始
-	BOOL RegexKeyLineStart( void );
+	BOOL RegexKeyLineStart(void);
 	//! 行検索
-	BOOL RegexIsKeyword( const CStringRef& cStr, int nPos, int *nMatchLen, int *nMatchColor );
+	BOOL RegexIsKeyword(const CStringRef& cStr, int nPos, int *nMatchLen, int *nMatchColor);
 	//! タイプ設定
-	BOOL RegexKeySetTypes( const STypeConfig *pTypesPtr );
+	BOOL RegexKeySetTypes(const STypeConfig *pTypesPtr);
 
 	//! 書式(囲み)チェック
-	static BOOL RegexKeyCheckSyntax( const wchar_t *s );
+	static BOOL RegexKeyCheckSyntax(const wchar_t *s);
 	
 	static DWORD GetNewMagicNumber();
 
@@ -75,7 +75,7 @@ protected:
 	//! コンパイル
 	BOOL RegexKeyCompile(void);
 	//! 変数初期化
-	BOOL RegexKeyInit( void );
+	BOOL RegexKeyInit(void);
 
 public:
 	int				m_nTypeIndex;				//!< 現在のタイプ設定番号

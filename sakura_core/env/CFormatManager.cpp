@@ -39,7 +39,7 @@
 	pszDateFormat：
 		カスタムのときのフォーマット
 */
-const TCHAR* CFormatManager::MyGetDateFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen )
+const TCHAR* CFormatManager::MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen)
 {
 	return MyGetDateFormat(
 		systime,
@@ -67,13 +67,13 @@ const TCHAR* CFormatManager::MyGetDateFormat(
 		dwFlags = 0;
 		pszForm = szDateFormat;
 	}
-	::GetDateFormat( LOCALE_USER_DEFAULT, dwFlags, &systime, pszForm, pszDest, nDestLen );
+	::GetDateFormat(LOCALE_USER_DEFAULT, dwFlags, &systime, pszForm, pszDest, nDestLen);
 	return pszDest;
 }
 
 
 // 時刻をフォーマット
-const TCHAR* CFormatManager::MyGetTimeFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen )
+const TCHAR* CFormatManager::MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen)
 {
 	return MyGetTimeFormat(
 		systime,
@@ -102,7 +102,7 @@ const TCHAR* CFormatManager::MyGetTimeFormat(
 		dwFlags = 0;
 		pszForm = szTimeFormat;
 	}
-	::GetTimeFormat( LOCALE_USER_DEFAULT, dwFlags, &systime, pszForm, pszDest, nDestLen );
+	::GetTimeFormat(LOCALE_USER_DEFAULT, dwFlags, &systime, pszForm, pszDest, nDestLen);
 	return pszDest;
 }
 

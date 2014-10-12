@@ -49,14 +49,14 @@ ECallbackResult CSaveAgent::OnCheckSave(SSaveInfo* pSaveInfo)
 	//	同名で上書きされるのを防ぐ
 	if (CAppMode::getInstance()->IsViewMode() && pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())) {
 		ErrorBeep();
-		TopErrorMessage( CEditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE) );
+		TopErrorMessage(CEditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
 		return CALLBACK_INTERRUPT;
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
 	if (!pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())) {
 		HWND hwndOwner;
-		if (CShareData::getInstance()->IsPathOpened( pSaveInfo->cFilePath, &hwndOwner )) {
+		if (CShareData::getInstance()->IsPathOpened(pSaveInfo->cFilePath, &hwndOwner)) {
 			ErrorMessage(
 				CEditWnd::getInstance()->GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER),
@@ -121,8 +121,8 @@ void CSaveAgent::OnSave(const SSaveInfo& sSaveInfo)
 	);
 
 	// セーブ情報の確定
-	pcDoc->SetFilePathAndIcon( sSaveInfo.cFilePath );
-	pcDoc->m_cDocFile.SetCodeSet( sSaveInfo.eCharCode, sSaveInfo.bBomExist );
+	pcDoc->SetFilePathAndIcon(sSaveInfo.cFilePath);
+	pcDoc->m_cDocFile.SetCodeSet(sSaveInfo.eCharCode, sSaveInfo.bBomExist);
 	if (sSaveInfo.cEol.IsValid()) {
 		pcDoc->m_cDocEditor.SetNewLineCode(sSaveInfo.cEol);
 	}
@@ -136,7 +136,7 @@ void CSaveAgent::OnAfterSave(const SSaveInfo& sSaveInfo)
 	 * CloseHandle前ではFlushFileBuffersを呼んでもタイムスタンプが更新
 	 * されないことがある。
 	 */
-	GetLastWriteTimestamp( pcDoc->m_cDocFile.GetFilePath(), &pcDoc->m_cDocFile.GetFileTime() );
+	GetLastWriteTimestamp(pcDoc->m_cDocFile.GetFilePath(), &pcDoc->m_cDocFile.GetFileTime());
 
 	// タイプ別設定の変更を指示。
 	// 上書き（明示的な上書きや自動保存）では変更しない

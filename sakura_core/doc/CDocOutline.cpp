@@ -145,7 +145,7 @@ int CDocOutline::ReadRuleFile(
 					int nCaseFlag = CBregexp::optCaseSensitive;
 					regexOption = 0;
 					for (int i = 13; i < (int)strLine.length(); i++) {
-						if( strLine[i] == L'i' ){
+						if( strLine[i] == L'i' ) {
 							nCaseFlag = 0;
 						}else if (strLine[i] == L'g') {
 							regexOption |= CBregexp::optGlobal;

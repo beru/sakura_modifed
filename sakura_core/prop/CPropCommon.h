@@ -101,7 +101,7 @@ public:
 	// 2002.12.11 Moca 追加
 	void InitData( void );		//!< DLLSHAREDATAから一時データ領域に設定を複製する
 	void ApplyData( void );		//!< 一時データ領域からにDLLSHAREDATA設定をコピーする
-	int GetPageNum(){ return m_nPageNum; }
+	int GetPageNum() { return m_nPageNum; }
 
 	//
 	static INT_PTR CALLBACK DlgProc_page(

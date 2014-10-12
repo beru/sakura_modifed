@@ -120,12 +120,12 @@ protected:
 public:
 
 	// m_dwStatus のセッター／ゲッター
-	void SetStatus( DWORD inf ){ m_dwStatus |= inf; }
+	void SetStatus( DWORD inf ) { m_dwStatus |= inf; }
 	DWORD GetStatus( void ) const { return m_dwStatus; }
 
 	// m_nTargetDataLen のセッター／ゲッター
 protected:
-	void SetDataLen( const int n ){ if( n < 1 ){ m_nTargetDataLen = 0; }else{ m_nTargetDataLen = n; } }
+	void SetDataLen( const int n ) { if( n < 1 ) { m_nTargetDataLen = 0; }else{ m_nTargetDataLen = n; } }
 public:
 	int GetDataLen( void ) const { return m_nTargetDataLen; }
 
@@ -146,8 +146,8 @@ protected:
 
 
 	bool _CheckUtf16Eol( const char* pS, const int nLen, const bool bbig_endian );
-	inline bool _CheckUtf16EolLE( const char* p, const int n ){ return _CheckUtf16Eol( p, n, false ); }
-	inline bool _CheckUtf16EolBE( const char* p, const int n ){ return _CheckUtf16Eol( p, n, true ); }
+	inline bool _CheckUtf16EolLE( const char* p, const int n ) { return _CheckUtf16Eol( p, n, false ); }
+	inline bool _CheckUtf16EolBE( const char* p, const int n ) { return _CheckUtf16Eol( p, n, true ); }
 
 public:
 	//
@@ -170,7 +170,7 @@ public:
 		if( (m_apMbcInfo[0]->eCodeID == CODE_SJIS && m_apMbcInfo[1]->eCodeID == CODE_EUC
 		     || m_apMbcInfo[1]->eCodeID == CODE_SJIS && m_apMbcInfo[0]->eCodeID == CODE_EUC)
 		 && m_apMbcInfo[0]->nPoints == m_apMbcInfo[1]->nPoints
-		){
+		) {
 			return true;
 		}
 		return false;
@@ -183,7 +183,7 @@ public:
 		if( (m_apMbcInfo[0]->eCodeID == CODE_UTF8 && m_apMbcInfo[1]->eCodeID == CODE_CESU8
 		     || m_apMbcInfo[1]->eCodeID == CODE_UTF8 && m_apMbcInfo[0]->eCodeID == CODE_CESU8)
 		 && m_apMbcInfo[0]->nPoints == m_apMbcInfo[1]->nPoints
-		){
+		) {
 			return true;
 		}
 		return false;

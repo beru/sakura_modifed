@@ -57,29 +57,29 @@ const DWORD p_helpids[] = {	//12600
 };	//@@@ 2002.01.07 add end MIK
 
 // モーダルダイアログの表示
-int CDlgProperty::DoModal( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
+int CDlgProperty::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 {
-	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_PROPERTY_FILE, lParam );
+	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_PROPERTY_FILE, lParam);
 }
 
-BOOL CDlgProperty::OnBnClicked( int wID )
+BOOL CDlgProperty::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「ファイルのプロパティ」のヘルプ
 		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDOK:			// 下検索
 		// ダイアログデータの取得
-		::EndDialog( GetHwnd(), FALSE );
+		::EndDialog(GetHwnd(), FALSE);
 		return TRUE;
 //	case IDCANCEL:							// 未使用 del 2008/7/4 Uchi
-//		::EndDialog( GetHwnd(), FALSE );
+//		::EndDialog(GetHwnd(), FALSE);
 //		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked( wID );
+	return CDialog::OnBnClicked(wID);
 }
 
 
@@ -87,103 +87,102 @@ BOOL CDlgProperty::OnBnClicked( int wID )
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-void CDlgProperty::SetData( void )
+void CDlgProperty::SetData(void)
 {
-	CEditDoc*		pCEditDoc = (CEditDoc*)m_lParam;
-	CNativeT		cmemProp;
-	TCHAR			szWork[500];
-
-	HANDLE			nFind;
-	WIN32_FIND_DATA	wfd;
+	CEditDoc* pCEditDoc = (CEditDoc*)m_lParam;
+	CNativeT cmemProp;
+	TCHAR szWork[500];
 
 	//	Aug. 16, 2000 genta	全角化
-	cmemProp.AppendString( LS(STR_DLGFLPROP_FILENAME) );
-	cmemProp.AppendString( pCEditDoc->m_cDocFile.GetFilePath() );
-	cmemProp.AppendString( _T("\r\n") );
+	cmemProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
+	cmemProp.AppendString(pCEditDoc->m_cDocFile.GetFilePath());
+	cmemProp.AppendString(_T("\r\n"));
 
-	cmemProp.AppendString( LS(STR_DLGFLPROP_FILETYPE) );
-	cmemProp.AppendString( pCEditDoc->m_cDocType.GetDocumentAttribute().m_szTypeName );
-	cmemProp.AppendString( _T("\r\n") );
+	cmemProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
+	cmemProp.AppendString(pCEditDoc->m_cDocType.GetDocumentAttribute().m_szTypeName);
+	cmemProp.AppendString(_T("\r\n"));
 
-	cmemProp.AppendString( LS(STR_DLGFLPROP_ENCODING) );
-	cmemProp.AppendString( CCodeTypeName(pCEditDoc->GetDocumentEncoding()).Normal() );
+	cmemProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
+	cmemProp.AppendString(CCodeTypeName(pCEditDoc->GetDocumentEncoding()).Normal());
 	//	From Here  2008/4/27 Uchi
 	if (pCEditDoc->GetDocumentBomExist()) {
-		cmemProp.AppendString( LS(STR_DLGFLPROP_WITH_BOM) );
+		cmemProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
 	}
 	//	To Here  2008/4/27 Uchi
-	cmemProp.AppendString( _T("\r\n") );
+	cmemProp.AppendString(_T("\r\n"));
 
-	auto_sprintf_s( szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_cDocLineMgr.GetLineCount() );
-	cmemProp.AppendString( szWork );
+	auto_sprintf_s(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_cDocLineMgr.GetLineCount());
+	cmemProp.AppendString(szWork);
 
-	auto_sprintf_s( szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount() );
-	cmemProp.AppendString( szWork );
+	auto_sprintf_s(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount());
+	cmemProp.AppendString(szWork);
 
 	if (CAppMode::getInstance()->IsViewMode()) {
-		cmemProp.AppendString( LS(STR_DLGFLPROP_VIEW_MODE) );	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
+		cmemProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
 	if (pCEditDoc->m_cDocEditor.IsModified()) {
-		cmemProp.AppendString( LS(STR_DLGFLPROP_MODIFIED) );
+		cmemProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
 	}else {
-		cmemProp.AppendString( LS(STR_DLGFLPROP_NOT_MODIFIED) );
+		cmemProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
 	}
 
-	auto_sprintf_s( szWork, LS(STR_DLGFLPROP_CMD_COUNT), pCEditDoc->m_nCommandExecNum );
-	cmemProp.AppendString( szWork );
+	auto_sprintf_s(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pCEditDoc->m_nCommandExecNum);
+	cmemProp.AppendString(szWork);
 
-	auto_sprintf_s( szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_cDocLineMgr.GetLineCount() );
-	cmemProp.AppendString( szWork );
+	auto_sprintf_s(szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_cDocLineMgr.GetLineCount());
+	cmemProp.AppendString(szWork);
 
-	if (INVALID_HANDLE_VALUE != ( nFind = ::FindFirstFile( pCEditDoc->m_cDocFile.GetFilePath(), &wfd ) )){
+	HANDLE nFind;
+	WIN32_FIND_DATA	wfd;
+	if (INVALID_HANDLE_VALUE != (nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd))) {
 		if (pCEditDoc->m_cDocFile.IsFileLocking()) {
 			if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
-				auto_sprintf_s( szWork, LS(STR_DLGFLPROP_W_LOCK) );
+				auto_sprintf_s(szWork, LS(STR_DLGFLPROP_W_LOCK));
 			}else if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
-				auto_sprintf_s( szWork, LS(STR_DLGFLPROP_RW_LOCK) );
+				auto_sprintf_s(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
-				auto_sprintf_s( szWork, LS(STR_DLGFLPROP_LOCK) );
+				auto_sprintf_s(szWork, LS(STR_DLGFLPROP_LOCK));
 			}
-			cmemProp.AppendString( szWork );
+			cmemProp.AppendString(szWork);
 		}else {
-			auto_sprintf_s( szWork, LS(STR_DLGFLPROP_NOT_LOCK) );
-			cmemProp.AppendString( szWork );
+			auto_sprintf_s(szWork, LS(STR_DLGFLPROP_NOT_LOCK));
+			cmemProp.AppendString(szWork);
 		}
 
-		auto_sprintf_s( szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pCEditDoc->m_cDocLineMgr.GetLineCount() );
-		cmemProp.AppendString( szWork );
+		auto_sprintf_s(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pCEditDoc->m_cDocLineMgr.GetLineCount());
+		cmemProp.AppendString(szWork);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_ARCHIVE) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_ARCHIVE));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_COMPRESS) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_COMPRESS));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_FOLDER) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_FOLDER));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_HIDDEN) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_HIDDEN));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_NORMAL) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_NORMAL));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_OFFLINE) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_OFFLINE));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_READONLY) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_READONLY));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_SYSTEM) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_SYSTEM));
 		}
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY) {
-			cmemProp.AppendString( LS(STR_DLGFLPROP_AT_TEMP) );
+			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_TEMP));
 		}
-		cmemProp.AppendString( _T("\r\n") );
+		cmemProp.AppendString(_T("\r\n"));
 
-		cmemProp.AppendString( LS(STR_DLGFLPROP_CREATE_DT) );
+		cmemProp.AppendString(LS(STR_DLGFLPROP_CREATE_DT));
 		CFileTime ctimeCreation = wfd.ftCreationTime;
-		auto_sprintf_s( szWork, LS(STR_DLGFLPROP_YMDHMS),
+		auto_sprintf_s(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeCreation->wYear,
 			ctimeCreation->wMonth,
 			ctimeCreation->wDay,
@@ -191,12 +190,12 @@ void CDlgProperty::SetData( void )
 			ctimeCreation->wMinute,
 			ctimeCreation->wSecond
 		);
-		cmemProp.AppendString( szWork );
-		cmemProp.AppendString( _T("\r\n") );
+		cmemProp.AppendString(szWork);
+		cmemProp.AppendString(_T("\r\n"));
 
-		cmemProp.AppendString( LS(STR_DLGFLPROP_UPDATE_DT) );
+		cmemProp.AppendString(LS(STR_DLGFLPROP_UPDATE_DT));
 		CFileTime ctimeLastWrite = wfd.ftLastWriteTime;
-		auto_sprintf_s( szWork, LS(STR_DLGFLPROP_YMDHMS),
+		auto_sprintf_s(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeLastWrite->wYear,
 			ctimeLastWrite->wMonth,
 			ctimeLastWrite->wDay,
@@ -204,13 +203,13 @@ void CDlgProperty::SetData( void )
 			ctimeLastWrite->wMinute,
 			ctimeLastWrite->wSecond
 		);
-		cmemProp.AppendString( szWork );
-		cmemProp.AppendString( _T("\r\n") );
+		cmemProp.AppendString(szWork);
+		cmemProp.AppendString(_T("\r\n"));
 
 
-		cmemProp.AppendString( LS(STR_DLGFLPROP_ACCESS_DT) );
+		cmemProp.AppendString(LS(STR_DLGFLPROP_ACCESS_DT));
 		CFileTime ctimeLastAccess = wfd.ftLastAccessTime;
-		auto_sprintf_s( szWork, LS(STR_DLGFLPROP_YMDHMS),
+		auto_sprintf_s(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeLastAccess->wYear,
 			ctimeLastAccess->wMonth,
 			ctimeLastAccess->wDay,
@@ -218,16 +217,16 @@ void CDlgProperty::SetData( void )
 			ctimeLastAccess->wMinute,
 			ctimeLastAccess->wSecond
 		);
-		cmemProp.AppendString( szWork );
-		cmemProp.AppendString( _T("\r\n") );
+		cmemProp.AppendString(szWork);
+		cmemProp.AppendString(_T("\r\n"));
 
-		auto_sprintf_s( szWork, LS(STR_DLGFLPROP_DOS_NAME), wfd.cAlternateFileName );
-		cmemProp.AppendString( szWork );
+		auto_sprintf_s(szWork, LS(STR_DLGFLPROP_DOS_NAME), wfd.cAlternateFileName);
+		cmemProp.AppendString(szWork);
 
-		auto_sprintf_s( szWork, LS(STR_DLGFLPROP_FILE_SIZE), wfd.nFileSizeLow );
-		cmemProp.AppendString( szWork );
+		auto_sprintf_s(szWork, LS(STR_DLGFLPROP_FILE_SIZE), wfd.nFileSizeLow);
+		cmemProp.AppendString(szWork);
 
-		::FindClose( nFind );
+		::FindClose(nFind);
 	}
 
 
@@ -246,13 +245,13 @@ void CDlgProperty::SetData( void )
 	if (nBufLen > CheckKanjiCode_MAXREADLENGTH) {
 		nBufLen = CheckKanjiCode_MAXREADLENGTH;
 	}
-	hgData = ::GlobalAlloc( GHND, nBufLen + 1 );
+	hgData = ::GlobalAlloc(GHND, nBufLen + 1);
 	if (!hgData) {
 		in.Close();
 		goto end_of_CodeTest;
 	}
-	pBuf = GlobalLockChar( hgData );
-	in.Read( pBuf, nBufLen );
+	pBuf = GlobalLockChar(hgData);
+	in.Read(pBuf, nBufLen);
 	in.Close();
 
 	// CESIのデバッグ情報
@@ -260,13 +259,13 @@ void CDlgProperty::SetData( void )
 	cmemProp.AppendNativeData(ctext);
 
 	if (hgData) {
-		::GlobalUnlock( hgData );
-		::GlobalFree( hgData );
+		::GlobalUnlock(hgData);
+		::GlobalFree(hgData);
 		hgData = NULL;
 	}
 end_of_CodeTest:;
 #endif //ifdef _DEBUG/////////////////////////////////////////////////////
-	::DlgItem_SetText( GetHwnd(), IDC_EDIT_PROPERTY, cmemProp.GetStringPtr() );
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_PROPERTY, cmemProp.GetStringPtr());
 
 	return;
 }

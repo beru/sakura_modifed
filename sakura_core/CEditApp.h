@@ -57,8 +57,8 @@ public:
 	CEditDoc*		GetDocument() { return m_pcEditDoc; }
 	CImageListMgr&	GetIcons() { return m_cIcons; }
 
-	bool OpenPropertySheet( int nPageNum );
-	bool OpenPropertySheetTypes( int nPageNum, CTypeConfig nSettingType );
+	bool OpenPropertySheet(int nPageNum);
+	bool OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType);
 
 public:
 	HINSTANCE			m_hInst;

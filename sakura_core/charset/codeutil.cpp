@@ -29,7 +29,7 @@ unsigned int _mbcjmstojis_ex( unsigned int nSrc, bool* pbNonroundtrip )
 
 	if(	IsSjisZen1( static_cast<char>(c0) )	/* Shift_JIS ‘SŠp•¶Žš‚Ì 1ƒoƒCƒg–Ú */
 	 && IsSjisZen2( static_cast<char>(c1) )	/* Shift_JIS ‘SŠp•¶Žš‚Ì 2ƒoƒCƒg–Ú */
-	){	/* Shift_JIS‘SŠp•¶Žš‚Å‚ ‚é */
+	) {	/* Shift_JIS‘SŠp•¶Žš‚Å‚ ‚é */
 		tmpw = static_cast<unsigned int>(c0 << 8) | static_cast<unsigned int>(c1);
 		//tmpw = ( ((unsigned int)*pszSrc) << 8 ) | ( (unsigned int)*(pszSrc + 1) );
 		if(
@@ -241,19 +241,19 @@ unsigned int __fastcall SjisFilter_basis( const unsigned int uCode )
 	/* “ñ•ªŒŸõŠJŽn */
 	nleft = 0;
 	nright = TABLESIZE_SjisPoorcodeIndex -1;
-	while( nleft <= nright ){
+	while( nleft <= nright ) {
 		ni = (nright + nleft) / 2;
 		code_tmp = TABLE_SjisPoorcodeIndex[ni][0];
-		if( uCode < code_tmp ){
+		if( uCode < code_tmp ) {
 			nright = ni - 1;
-		}else if( code_tmp < uCode ){
+		}else if( code_tmp < uCode ) {
 			nleft = ni + 1;
 		}else{
 			break; // ”­Œ©
 		}
 	}
 
-	if( nleft <= nright ){
+	if( nleft <= nright ) {
 		return TABLE_SjisPoorcodeDef[ TABLE_SjisPoorcodeIndex[ni][1] ];
 	}
 	return uCode;
@@ -280,7 +280,7 @@ unsigned int __fastcall SjisFilter_ibm2nec( const unsigned int uCode )
 	*/
 	c1 = static_cast<unsigned char>( (code >> 8) & 0x000000ff );
 	c2 = static_cast<unsigned char>( code & 0x000000ff );
-	if( c1 == 0xfa || c1 == 0xfb || (c1 == 0xfc && c2 <= 0x4b) ){
+	if( c1 == 0xfa || c1 == 0xfb || (c1 == 0xfc && c2 <= 0x4b) ) {
 		if     ( code <= 0xfa49 ) { code -= 0x0b51; }	/* fa40`fa49 ¨ eeef`eef8 (ú@`úI) */
 		else if( code <= 0xfa54 ) { ; }
 		else if( code <= 0xfa57 ) { code -= 0x0b5b; }	/* fa55`fa57 ¨ eefa`eefc (úU`úW) */
@@ -317,7 +317,7 @@ unsigned int __fastcall SjisFilter_nec2ibm( const unsigned int uCode )
 		ee40 ` ee7e, ee80 ` eefc
 	*/
 	c1 = static_cast<unsigned char>( (code >> 8) & 0x000000ff );
-	if( c1 == 0xed || c1 == 0xee ){
+	if( c1 == 0xed || c1 == 0xee ) {
 		if     ( code <= 0xed62 ) { code += 0x0d1c; }	/* ed40`ed62 ¨ fa5c`fa7e (ú\`ú~) */
 		else if( code <= 0xed7e ) { code += 0x0d1d; }	/* ed63`ed7e ¨ fa80`fa9b (ú€`ú›) */
 		else if( code <= 0xede0 ) { code += 0x0d1c; }	/* ed80`ede0 ¨ fa9c`fafc (úœ`úü) */

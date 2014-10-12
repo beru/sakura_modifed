@@ -125,7 +125,7 @@ bool CColor_Heredoc::EndColor(const CStringRef& cStr, int nPos)
 			&& nPos == 0 && m_nSize <= cStr.GetLength()
 			&& wmemcmp(cStr.GetPtr(), m_pszId, m_nSize) == 0
 		) {
-			if (m_nSize== cStr.GetLength()) {
+			if (m_nSize == cStr.GetLength()) {
 				this->m_nCOMMENTEND = m_nSize;
 				return false;
 			}else {

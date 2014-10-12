@@ -29,13 +29,13 @@ class CFuncInfo;
 //@date 2002.04.01 YAZAKI 深さ導入
 class CFuncInfo {
 	public:
-		CFuncInfo( CLogicInt, CLogicInt, CLayoutInt, CLayoutInt, const TCHAR*, int );	// CFuncInfoクラス構築
+		CFuncInfo(CLogicInt, CLogicInt, CLayoutInt, CLayoutInt, const TCHAR*, int);	// CFuncInfoクラス構築
 		~CFuncInfo();	// CFuncInfoクラス消滅
 
 		//! クリップボードに追加する要素か？
 		//	2003.06.27 Moca
-		inline bool IsAddClipText( void ) const{
-			return ( FUNCINFO_NOCLIPTEXT != ( m_nInfo & FUNCINFO_NOCLIPTEXT ) );
+		inline bool IsAddClipText(void) const {
+			return (FUNCINFO_NOCLIPTEXT != (m_nInfo & FUNCINFO_NOCLIPTEXT));
 		}
 
 //	private:

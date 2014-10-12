@@ -19,16 +19,16 @@
 
 
 // CWndウィンドウメッセージのコールバック関数
-LRESULT CALLBACK CWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK CWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	CWnd* pCWnd = (CWnd*)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
+	CWnd* pCWnd = (CWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 	if (pCWnd) {
 		// クラスオブジェクトのポインタを使ってメッセージを配送する
-		return pCWnd->DispatchEvent( hwnd, uMsg, wParam, lParam );
+		return pCWnd->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	}else {
 		// ふつうはここには来ない
-		return ::DefWindowProc( hwnd, uMsg, wParam, lParam );
+		return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 }
 
@@ -85,18 +85,18 @@ CWnd::CWnd(const TCHAR* pszInheritanceAppend)
 	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
 	m_hWnd = NULL;			// このウィンドウのハンドル
 #ifdef _DEBUG
-	_tcscpy( m_szClassInheritances, _T("CWnd") );
-	_tcscat( m_szClassInheritances, pszInheritanceAppend );
+	_tcscpy(m_szClassInheritances, _T("CWnd"));
+	_tcscat(m_szClassInheritances, pszInheritanceAppend);
 #endif
 }
 
 CWnd::~CWnd()
 {
-	if (::IsWindow( m_hWnd )) {
+	if (::IsWindow(m_hWnd)) {
 		// クラスオブジェクトのポインタをNULLにして拡張ウィンドウメモリに格納しておく
 		// Modified by KEITA for WIN64 2003.9.6
-		::SetWindowLongPtr( m_hWnd, GWLP_USERDATA, (LONG_PTR)NULL );
-		::DestroyWindow( m_hWnd );
+		::SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (LONG_PTR)NULL);
+		::DestroyWindow(m_hWnd);
 	}
 	m_hWnd = NULL;
 	return;
@@ -133,7 +133,7 @@ ATOM CWnd::RegisterWC(
 	wc.lpszMenuName  = lpszMenuName;
 	wc.lpszClassName = lpszClassName;
 	wc.hIconSm       = hIconSm;
-	return ::RegisterClassEx( &wc );
+	return ::RegisterClassEx(&wc);
 }
 
 // 作成
@@ -153,7 +153,7 @@ HWND CWnd::Create(
 {
 	m_hwndParent = hwndParent;
 
-	// ウィンドウ作成前の処理(クラス登録前) ( virtual )
+	// ウィンドウ作成前の処理(クラス登録前) (virtual)
 	PreviCreateWindow();
 
 	// 初期ウィンドウサイズ
@@ -181,7 +181,7 @@ HWND CWnd::Create(
 	CWindowCreationHook::Unuse();
 
 	if (!m_hWnd) {
-		::MessageBox( m_hwndParent, _T("CWnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK );
+		::MessageBox(m_hwndParent, _T("CWnd::Create()\n\n::CreateWindowEx failed."), _T("error"), MB_OK);
 		return NULL;
 	}
 
@@ -192,58 +192,58 @@ HWND CWnd::Create(
 
 
 // メッセージ配送
-LRESULT CWnd::DispatchEvent( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
+LRESULT CWnd::DispatchEvent(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-	#define CALLH(message, method) case message: return method( hwnd, msg, wp, lp )
+	#define CALLH(message, method) case message: return method(hwnd, msg, wp, lp)
 	switch (msg) {
-	CALLH( WM_CREATE			, OnCreate			);
-	CALLH( WM_CLOSE				, OnClose			);
-	CALLH( WM_DESTROY			, OnDestroy			);
-	CALLH( WM_SIZE				, OnSize			);
-	CALLH( WM_MOVE				, OnMove			);
-	CALLH( WM_COMMAND			, OnCommand			);
-	CALLH( WM_LBUTTONDOWN		, OnLButtonDown		);
-	CALLH( WM_LBUTTONUP			, OnLButtonUp		);
-	CALLH( WM_LBUTTONDBLCLK		, OnLButtonDblClk	);
-	CALLH( WM_RBUTTONDOWN		, OnRButtonDown		);
-	CALLH( WM_RBUTTONUP			, OnRButtonUp		);
-	CALLH( WM_RBUTTONDBLCLK		, OnRButtonDblClk	);
-	CALLH( WM_MBUTTONDOWN		, OnMButtonDown		);
-	CALLH( WM_MBUTTONUP			, OnMButtonUp		);
-	CALLH( WM_MBUTTONDBLCLK		, OnMButtonDblClk	);
-	CALLH( WM_MOUSEMOVE			, OnMouseMove		);
-	CALLH( WM_MOUSEWHEEL		, OnMouseWheel		);
-	CALLH( WM_MOUSEHWHEEL		, OnMouseHWheel		);
-	CALLH( WM_PAINT				, OnPaint			);
-	CALLH( WM_TIMER				, OnTimer			);
-	CALLH( WM_QUERYENDSESSION	, OnQueryEndSession	);
+	CALLH(WM_CREATE				, OnCreate			);
+	CALLH(WM_CLOSE				, OnClose			);
+	CALLH(WM_DESTROY			, OnDestroy			);
+	CALLH(WM_SIZE				, OnSize			);
+	CALLH(WM_MOVE				, OnMove			);
+	CALLH(WM_COMMAND			, OnCommand			);
+	CALLH(WM_LBUTTONDOWN		, OnLButtonDown		);
+	CALLH(WM_LBUTTONUP			, OnLButtonUp		);
+	CALLH(WM_LBUTTONDBLCLK		, OnLButtonDblClk	);
+	CALLH(WM_RBUTTONDOWN		, OnRButtonDown		);
+	CALLH(WM_RBUTTONUP			, OnRButtonUp		);
+	CALLH(WM_RBUTTONDBLCLK		, OnRButtonDblClk	);
+	CALLH(WM_MBUTTONDOWN		, OnMButtonDown		);
+	CALLH(WM_MBUTTONUP			, OnMButtonUp		);
+	CALLH(WM_MBUTTONDBLCLK		, OnMButtonDblClk	);
+	CALLH(WM_MOUSEMOVE			, OnMouseMove		);
+	CALLH(WM_MOUSEWHEEL			, OnMouseWheel		);
+	CALLH(WM_MOUSEHWHEEL		, OnMouseHWheel		);
+	CALLH(WM_PAINT				, OnPaint			);
+	CALLH(WM_TIMER				, OnTimer			);
+	CALLH(WM_QUERYENDSESSION	, OnQueryEndSession	);
 
-	CALLH( WM_MEASUREITEM		, OnMeasureItem		);
-	CALLH( WM_MENUCHAR			, OnMenuChar		);
-	CALLH( WM_NOTIFY			, OnNotify			);	//@@@ 2003.05.31 MIK
-	CALLH( WM_DRAWITEM			, OnDrawItem		);	// 2006.02.01 ryoji
-	CALLH( WM_CAPTURECHANGED	, OnCaptureChanged	);	// 2006.11.30 ryoji
+	CALLH(WM_MEASUREITEM		, OnMeasureItem		);
+	CALLH(WM_MENUCHAR			, OnMenuChar		);
+	CALLH(WM_NOTIFY				, OnNotify			);	//@@@ 2003.05.31 MIK
+	CALLH(WM_DRAWITEM			, OnDrawItem		);	// 2006.02.01 ryoji
+	CALLH(WM_CAPTURECHANGED		, OnCaptureChanged	);	// 2006.11.30 ryoji
 
 	default:
 		if (WM_APP <= msg && msg <= 0xBFFF) {
 			// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
-			return DispatchEvent_WM_APP( hwnd, msg, wp, lp );
+			return DispatchEvent_WM_APP(hwnd, msg, wp, lp);
 		}
 		break;	// default
 	}
-	return CallDefWndProc( hwnd, msg, wp, lp );
+	return CallDefWndProc(hwnd, msg, wp, lp);
 }
 
 // アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
-LRESULT CWnd::DispatchEvent_WM_APP( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
+LRESULT CWnd::DispatchEvent_WM_APP(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-	return CallDefWndProc( hwnd, msg, wp, lp );
+	return CallDefWndProc(hwnd, msg, wp, lp);
 }
 
 // デフォルトメッセージ処理
-LRESULT CWnd::CallDefWndProc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
+LRESULT CWnd::CallDefWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-	return ::DefWindowProc( hwnd, msg, wp, lp );
+	return ::DefWindowProc(hwnd, msg, wp, lp);
 }
 
 
@@ -251,7 +251,7 @@ LRESULT CWnd::CallDefWndProc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
 void CWnd::DestroyWindow()
 {
 	if (m_hWnd) {
-		::DestroyWindow( m_hWnd );
+		::DestroyWindow(m_hWnd);
 		m_hWnd = NULL;
 	}
 }

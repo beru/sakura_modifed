@@ -46,14 +46,14 @@ static const DWORD p_helpids[] = {	//10500
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropGrep::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return DlgProc( reinterpret_cast<pDispatchPage>(&CPropGrep::DispatchEvent), hwndDlg, uMsg, wParam, lParam );
+	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropGrep::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
-INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
+INT_PTR CPropGrep::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 //	WORD		wNotifyCode;
 //	WORD		wID;
@@ -65,24 +65,24 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// ダイアログデータの設定 Grep
-		SetData( hwndDlg );
+		SetData(hwndDlg);
 		// Modified by KEITA for WIN64 2003.9.6
-		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
+		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 
 		return TRUE;
 	case WM_NOTIFY:
 		pNMHDR = (NMHDR*)lParam;
-//		switch( idCtrl ){
+//		switch(idCtrl) {
 //		default:
 			switch (pNMHDR->code) {
 			case PSN_HELP:
-				OnHelp( hwndDlg, IDD_PROP_GREP );
+				OnHelp(hwndDlg, IDD_PROP_GREP);
 				return TRUE;
 			case PSN_KILLACTIVE:
 				// ダイアログデータの取得 Grep
-				GetData( hwndDlg );
+				GetData(hwndDlg);
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
@@ -94,8 +94,8 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 		break;	// WM_NOTIFY
 	case WM_COMMAND:
 		//	2007.08.12 genta 正規表現DLLの変更に応じてVersionを再取得する
-		if (wParam == MAKEWPARAM( IDC_EDIT_REGEXPLIB, EN_KILLFOCUS )) {
-			SetRegexpVersion( hwndDlg );
+		if (wParam == MAKEWPARAM(IDC_EDIT_REGEXPLIB, EN_KILLFOCUS)) {
+			SetRegexpVersion(hwndDlg);
 		}
 		break;
 
@@ -103,7 +103,7 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
-			MyWinHelp( (HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
 		// NOTREACHED
@@ -113,7 +113,7 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
 	//Context Menu
 	case WM_CONTEXTMENU:
-		MyWinHelp( hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 //@@@ 2001.12.22 End
 
@@ -123,74 +123,74 @@ INT_PTR CPropGrep::DispatchEvent( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 
 
 // ダイアログデータの設定
-void CPropGrep::SetData( HWND hwndDlg )
+void CPropGrep::SetData(HWND hwndDlg)
 {
 	auto& csSearch = m_Common.m_sSearch;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	::CheckDlgButton( hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.m_bCaretTextForSearch );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.m_bCaretTextForSearch);
 
-	CheckDlgButtonBool( hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.m_bInheritKeyOtherView );
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW, csSearch.m_bInheritKeyOtherView);
 
 	// Grepモードで保存確認するか
-	::CheckDlgButton( hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.m_bGrepExitConfirm );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_bGrepExitConfirm, csSearch.m_bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	::CheckDlgButton( hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.m_bGrepRealTimeView );	// 2006.08.08 ryoji ID修正
+	::CheckDlgButton(hwndDlg, IDC_CHECK_GREPREALTIME, csSearch.m_bGrepRealTimeView);	// 2006.08.08 ryoji ID修正
 
 
 	// Grepモード: エンターキーでタグジャンプ
-	::CheckDlgButton( hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.m_bGTJW_RETURN );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_RETURN, csSearch.m_bGTJW_RETURN);
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	::CheckDlgButton( hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.m_bGTJW_LDBLCLK );
+	::CheckDlgButton(hwndDlg, IDC_CHECK_GTJW_LDBLCLK, csSearch.m_bGTJW_LDBLCLK);
 
 	//	2007.08.12 genta 正規表現DLL
-	EditCtl_LimitText( ::GetDlgItem( hwndDlg, IDC_EDIT_REGEXPLIB ), _countof(csSearch.m_szRegexpLib ) - 1 );
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib);
-	SetRegexpVersion( hwndDlg );
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_REGEXPLIB), _countof(csSearch.m_szRegexpLib) - 1);
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib);
+	SetRegexpVersion(hwndDlg);
 
 	return;
 }
 
 
 // ダイアログデータの取得
-int CPropGrep::GetData( HWND hwndDlg )
+int CPropGrep::GetData(HWND hwndDlg)
 {
 	auto& csSearch = m_Common.m_sSearch;
 
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
-	csSearch.m_bCaretTextForSearch = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bCaretTextForSearch );
+	csSearch.m_bCaretTextForSearch = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
 
-	csSearch.m_bInheritKeyOtherView = IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW );
+	csSearch.m_bInheritKeyOtherView = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_INHERIT_KEY_OTHER_VIEW);
 
 	// Grepモードで保存確認するか
-	csSearch.m_bGrepExitConfirm = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bGrepExitConfirm );
+	csSearch.m_bGrepExitConfirm = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bGrepExitConfirm);
 
 	// Grep結果のリアルタイム表示
-	csSearch.m_bGrepRealTimeView = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GREPREALTIME );	// 2006.08.08 ryoji ID修正
+	csSearch.m_bGrepRealTimeView = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_GREPREALTIME);	// 2006.08.08 ryoji ID修正
 
 	// Grepモード: エンターキーでタグジャンプ
-	csSearch.m_bGTJW_RETURN = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_RETURN );
+	csSearch.m_bGTJW_RETURN = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_GTJW_RETURN);
 
 	// Grepモード: ダブルクリックでタグジャンプ
-	csSearch.m_bGTJW_LDBLCLK = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_LDBLCLK );
+	csSearch.m_bGTJW_LDBLCLK = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_GTJW_LDBLCLK);
 
 	//	2007.08.12 genta 正規表現DLL
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib, _countof( csSearch.m_szRegexpLib ));
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, csSearch.m_szRegexpLib, _countof(csSearch.m_szRegexpLib));
 
 	return TRUE;
 }
 
-void CPropGrep::SetRegexpVersion( HWND hwndDlg )
+void CPropGrep::SetRegexpVersion(HWND hwndDlg)
 {
 	TCHAR regexp_dll[_MAX_PATH];
 	
-	::DlgItem_GetText( hwndDlg, IDC_EDIT_REGEXPLIB, regexp_dll, _countof( regexp_dll ));
+	::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEXPLIB, regexp_dll, _countof(regexp_dll));
 	CBregexp breg;
-	if (DLL_SUCCESS != breg.InitDll( regexp_dll )) {
-		::DlgItem_SetText( hwndDlg, IDC_LABEL_REGEXP_VER, LS(STR_PROPCOMGREP_DLL) );
+	if (DLL_SUCCESS != breg.InitDll(regexp_dll)) {
+		::DlgItem_SetText(hwndDlg, IDC_LABEL_REGEXP_VER, LS(STR_PROPCOMGREP_DLL));
 		return;
 	}
-	::DlgItem_SetText( hwndDlg, IDC_LABEL_REGEXP_VER, breg.GetVersionT() );
+	::DlgItem_SetText(hwndDlg, IDC_LABEL_REGEXP_VER, breg.GetVersionT());
 }
 

@@ -47,7 +47,7 @@ public:
 	// 表示非表示を切り替えられるようにする
 	void UnLock() {
 		m_nLockCounter--;
-		if (m_nLockCounter < 0){
+		if (m_nLockCounter < 0) {
 			m_nLockCounter = 0;
 		}
 	}
@@ -57,16 +57,16 @@ public:
 	// 表示非表示を切り替えられるようにする
 	void UnderLineUnLock() {
 		m_nUnderLineLockCounter--;
-		if (m_nUnderLineLockCounter < 0){
+		if (m_nUnderLineLockCounter < 0) {
 			m_nUnderLineLockCounter = 0;
 		}
 	}
-	void CaretUnderLineON( bool, bool );	// カーソル行アンダーラインのON
-	void CaretUnderLineOFF( bool, bool = true, bool = false );	// カーソル行アンダーラインのOFF
-	void SetUnderLineDoNotOFF( bool flag ){ if( !m_nLockCounter )m_bUnderLineDoNotOFF = flag; }
-	void SetVertLineDoNotOFF( bool flag ){ if( !m_nLockCounter )m_bVertLineDoNotOFF = flag; }
-	inline bool GetUnderLineDoNotOFF( )const { return m_bUnderLineDoNotOFF; }
-	inline bool GetVertLineDoNotOFF( )const { return m_bVertLineDoNotOFF; }
+	void CaretUnderLineON(bool, bool);	// カーソル行アンダーラインのON
+	void CaretUnderLineOFF(bool, bool = true, bool = false);	// カーソル行アンダーラインのOFF
+	void SetUnderLineDoNotOFF(bool flag) { if(!m_nLockCounter)m_bUnderLineDoNotOFF = flag; }
+	void SetVertLineDoNotOFF(bool flag) { if(!m_nLockCounter)m_bVertLineDoNotOFF = flag; }
+	inline bool GetUnderLineDoNotOFF()const { return m_bUnderLineDoNotOFF; }
+	inline bool GetVertLineDoNotOFF()const { return m_bVertLineDoNotOFF; }
 private:
 	// ロックカウンタ。0のときは、ロックされていない。UnLockが呼ばれすぎても負にはならない
 	int m_nLockCounter;
@@ -93,7 +93,7 @@ public:
 	int GetHankakuHeight() const;
 
 	// ドキュメントのインスタンスを求める
-	const CEditDoc* GetDocument() const{ return m_pEditDoc; }
+	const CEditDoc* GetDocument() const { return m_pEditDoc; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
@@ -127,8 +127,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 設定
-	CLayoutInt MoveCursorToClientPoint( const POINT& ptClientPos, bool = false, CLayoutPoint* = NULL );		//!< マウス等による座標指定によるカーソル移動
-	CLayoutInt Cursor_UPDOWN( CLayoutInt nMoveLines, bool bSelect );	//!< カーソル上下移動処理
+	CLayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, CLayoutPoint* = NULL);		//!< マウス等による座標指定によるカーソル移動
+	CLayoutInt Cursor_UPDOWN(CLayoutInt nMoveLines, bool bSelect);	//!< カーソル上下移動処理
 	CLayoutInt MoveCursor(												//!< 行桁指定によるカーソル移動
 		CLayoutPoint	ptWk_CaretPos,									//!< [in] 移動先レイアウト位置
 		bool			bScroll,										//!< [in] true: 画面位置調整有り  false: 画面位置調整無し
@@ -139,24 +139,24 @@ public:
 	CLayoutInt MoveCursorFastMode(
 		const CLogicPoint&	pptWk_CaretPosLogic							//!< [in] 移動先ロジック位置
 	);
-	CLayoutInt MoveCursorProperly( CLayoutPoint ptNewXY, bool, bool = false, CLayoutPoint* = NULL, int = _CARETMARGINRATE, int = 0 );	// 行桁指定によるカーソル移動（座標調整付き）
+	CLayoutInt MoveCursorProperly(CLayoutPoint ptNewXY, bool, bool = false, CLayoutPoint* = NULL, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
 
 	//$ 設計思想的に微妙
-	void SetCaretLayoutPos(const CLayoutPoint& pt){ m_ptCaretPos_Layout = pt; }	//!< キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const CLogicPoint pt){ m_ptCaretPos_Logic=pt; }		//!< キャレット位置(ロジック)を設定
+	void SetCaretLayoutPos(const CLayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	//!< キャレット位置(レイアウト)を設定
+	void SetCaretLogicPos(const CLogicPoint pt) { m_ptCaretPos_Logic=pt; }		//!< キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        サイズ変更                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void SetCaretSize(int nW, int nH){ m_sizeCaret.Set(nW,nH); }						//!< キャレットサイズを設定
+	void SetCaretSize(int nW, int nH) { m_sizeCaret.Set(nW,nH); }						//!< キャレットサイズを設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           計算                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 計算
-	BOOL GetAdjustCursorPos( CLayoutPoint* pptPosXY ); //!< 正しいカーソル位置を算出する
+	BOOL GetAdjustCursorPos(CLayoutPoint* pptPosXY); //!< 正しいカーソル位置を算出する
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -168,8 +168,8 @@ public:
 	void ShowCaretPosInfo(); //!< キャレットの行桁位置を表示する
 
 	// API呼び出し
-	void ShowCaret_( HWND hwnd );
-	void HideCaret_( HWND hwnd );
+	void ShowCaret_(HWND hwnd);
+	void HideCaret_(HWND hwnd);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -185,7 +185,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                  低頻度インターフェース                     //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	bool GetCaretShowFlag() const{ return m_bCaretShowFlag; }
+	bool GetCaretShowFlag() const { return m_bCaretShowFlag; }
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

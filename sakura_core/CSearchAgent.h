@@ -39,20 +39,20 @@ public:
 	~CSearchStringPattern();
 	void Reset();
 	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* m_pRegexp);
-	const wchar_t* GetKey() const{ return m_pszKey; }
-	const wchar_t* GetCaseKey() const{ return m_pszCaseKeyRef; }
-	int GetLen() const{ return m_nPatternLen; }
-	bool GetIgnoreCase() const{ return !m_psSearchOption->bLoHiCase; }
-	bool GetLoHiCase() const{ return m_psSearchOption->bLoHiCase; }
-	const SSearchOption& GetSearchOption() const{ return *m_psSearchOption; }
-	CBregexp* GetRegexp() const{ return m_pRegexp; }
+	const wchar_t* GetKey() const { return m_pszKey; }
+	const wchar_t* GetCaseKey() const { return m_pszCaseKeyRef; }
+	int GetLen() const { return m_nPatternLen; }
+	bool GetIgnoreCase() const { return !m_psSearchOption->bLoHiCase; }
+	bool GetLoHiCase() const { return m_psSearchOption->bLoHiCase; }
+	const SSearchOption& GetSearchOption() const { return *m_psSearchOption; }
+	CBregexp* GetRegexp() const { return m_pRegexp; }
 #ifdef SEARCH_STRING_KMP
-	const int* GetKMPNextTable() const{ return m_pnNextPossArr; }
+	const int* GetKMPNextTable() const { return m_pnNextPossArr; }
 #endif
 #ifdef SEARCH_STRING_SUNDAY_QUICK
-	const int* GetUseCharSkipMap() const{ return m_pnUseCharSkipArr; }
+	const int* GetUseCharSkipMap() const { return m_pnUseCharSkipArr; }
 
-	static int GetMapIndex( wchar_t c );
+	static int GetMapIndex(wchar_t c);
 #endif
 
 private:
@@ -113,13 +113,13 @@ public:
 public:
 	CSearchAgent(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
-	bool WhereCurrentWord( CLogicInt , CLogicInt , CLogicInt* , CLogicInt*, CNativeW*, CNativeW* );	// 現在位置の単語の範囲を調べる
+	bool WhereCurrentWord(CLogicInt , CLogicInt , CLogicInt* , CLogicInt*, CNativeW*, CNativeW*);	// 現在位置の単語の範囲を調べる
 
-	bool PrevOrNextWord( CLogicInt , CLogicInt , CLogicInt* , BOOL bLEFT, BOOL bStopsBothEnds );	// 現在位置の左右の単語の先頭位置を調べる
+	bool PrevOrNextWord(CLogicInt , CLogicInt , CLogicInt* , BOOL bLEFT, BOOL bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-	int SearchWord( CLogicPoint ptSerachBegin, ESearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern ); // 単語検索
+	int SearchWord(CLogicPoint ptSerachBegin, ESearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern); // 単語検索
 
-	void ReplaceData( DocLineReplaceArg* );
+	void ReplaceData(DocLineReplaceArg*);
 private:
 	CDocLineMgr* m_pcDocLineMgr;
 };

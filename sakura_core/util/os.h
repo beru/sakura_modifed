@@ -26,14 +26,14 @@
 #include <ObjIdl.h> // LPDATAOBJECT
 
 // システム資源
-BOOL GetSystemResources( int*, int*, int* );	// システムリソースを調べる
-BOOL CheckSystemResources( const TCHAR* );		// システムリソースのチェック
+BOOL GetSystemResources(int*, int*, int*);	// システムリソースを調べる
+BOOL CheckSystemResources(const TCHAR*);		// システムリソースのチェック
 
 // クリップボード
-bool SetClipboardText( HWND hwnd, const ACHAR* pszText, int nLength );	//!< クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
-bool SetClipboardText( HWND hwnd, const WCHAR* pszText, int nLength );	//!< クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
-BOOL IsDataAvailable( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat );
-HGLOBAL GetGlobalData( LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat );
+bool SetClipboardText(HWND hwnd, const ACHAR* pszText, int nLength);	//!< クリープボードにText形式でコピーする。ANSI版。nLengthは文字単位。
+bool SetClipboardText(HWND hwnd, const WCHAR* pszText, int nLength);	//!< クリープボードにText形式でコピーする。UNICODE版。nLengthは文字単位。
+BOOL IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
+HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat);
 
 //	Sep. 10, 2002 genta CWSH.cppからの移動に伴う追加
 bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer, unsigned BufferCount);
@@ -46,10 +46,10 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor = NULL)
 
 
 // 2006.06.17 ryoji
-#define PACKVERSION( major, minor ) MAKELONG( minor, major )
+#define PACKVERSION(major, minor) MAKELONG(minor, major)
 DWORD GetComctl32Version();					// Comctl32.dll のバージョン番号を取得						// 2006.06.17 ryoji
 BOOL IsVisualStyle();						// 自分が現在ビジュアルスタイル表示状態かどうかを示す		// 2006.06.17 ryoji
-void PreventVisualStyle( HWND hWnd );		// 指定ウィンドウでビジュアルスタイルを使わないようにする	// 2006.06.23 ryoji
+void PreventVisualStyle(HWND hWnd);		// 指定ウィンドウでビジュアルスタイルを使わないようにする	// 2006.06.23 ryoji
 void MyInitCommonControls();				// コモンコントロールを初期化する							// 2006.06.21 ryoji
 
 

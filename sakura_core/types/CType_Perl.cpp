@@ -12,11 +12,11 @@
 void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 {
 	// 名前と拡張子
-	_tcscpy( pType->m_szTypeName, _T("Perl") );
-	_tcscpy( pType->m_szTypeExts, _T("cgi,pl,pm") );
+	_tcscpy(pType->m_szTypeName, _T("Perl"));
+	_tcscpy(pType->m_szTypeExts, _T("cgi,pl,pm"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo( 0, L"#", -1 );					/* 行コメントデリミタ */
+	pType->m_cLineComment.CopyTo(0, L"#", -1);					/* 行コメントデリミタ */
 	pType->m_eDefaultOutline = OUTLINE_PERL;						/* アウトライン解析方法 */
 	pType->m_nKeyWordSetIdx[0]  = 11;								/* キーワードセット */
 	pType->m_nKeyWordSetIdx[1] = 12;								/* キーワードセット2 */
@@ -41,7 +41,7 @@ void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 
 	@date 2005.06.18 genta パッケージ区切りを表す ::と'を考慮するように
 */
-void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
+void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	CLogicInt		nLineLen;
@@ -59,7 +59,7 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 		for (i = 0; i < nLineLen; ++i) {
 			/* 1バイト文字だけを処理する */
 			// 2005-09-02 D.S.Koba GetSizeOfChar
-			nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, i );
+			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
 			if (1 < nCharChars) {
 				break;
 			}
@@ -78,7 +78,7 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 				//	sub の一文字目かもしれない
 				if (nLineLen - i < 4)
 					break;
-				if (wcsncmp_literal( pLine + i, L"sub" ))
+				if (wcsncmp_literal(pLine + i, L"sub"))
 					break;
 				int c = pLine[ i + 3 ];
 				if (c == L' ' || c == L'\t') {
@@ -94,9 +94,9 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 					continue;
 				}
 				if (L'_' == pLine[i] ||
-					(L'a' <= pLine[i] &&	pLine[i] <= L'z' )||
-					(L'A' <= pLine[i] &&	pLine[i] <= L'Z' )||
-					(L'0' <= pLine[i] &&	pLine[i] <= L'9' )
+					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
+					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
+					(L'0' <= pLine[i] &&	pLine[i] <= L'9')
 				) {
 					//	関数名の始まり
 					nWordIdx = 0;
@@ -109,9 +109,9 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 				}
 			}else if (1 == nMode) {
 				if (L'_' == pLine[i] ||
-					(L'a' <= pLine[i] &&	pLine[i] <= L'z' )||
-					(L'A' <= pLine[i] &&	pLine[i] <= L'Z' )||
-					(L'0' <= pLine[i] &&	pLine[i] <= L'9' )||
+					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
+					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
+					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
 					//	Jun. 18, 2005 genta パッケージ修飾子を考慮
 					//	コロンは2つ連続しないといけないのだが，そこは手抜き
 					L':' == pLine[i] || L'\'' == pLine[i]
@@ -137,7 +137,7 @@ void CDocOutline::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 						&ptPosXY
 					);
 					//	Mar. 9, 2001
-					pcFuncInfoArr->AppendData( nLineCount + CLogicInt(1), ptPosXY.GetY2() + CLayoutInt(1), szWord, 0 );
+					pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPosXY.GetY2() + CLayoutInt(1), szWord, 0);
 
 					break;
 				}

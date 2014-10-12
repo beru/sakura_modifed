@@ -29,11 +29,11 @@ CSelectLang::PSSelLangInfoList CSelectLang::m_psLangInfoList;
 
 	@date 2011.04.10 nasukoji	V‹Kì¬
 */
-CSelectLang::~CSelectLang( void )
+CSelectLang::~CSelectLang(void)
 {
 	for (auto it = m_psLangInfoList.begin(); it != m_psLangInfoList.end(); it++) {
 		if ((*it)->hInstance) {
-			FreeLibrary( (*it)->hInstance );
+			FreeLibrary((*it)->hInstance);
 			(*it)->hInstance = NULL;
 		}
 		delete *it;
@@ -50,7 +50,7 @@ CSelectLang::~CSelectLang( void )
 
 	@date 2011.04.10 nasukoji	V‹Kì¬
 */
-HINSTANCE CSelectLang::getLangRsrcInstance( void )
+HINSTANCE CSelectLang::getLangRsrcInstance(void)
 {
 	return m_psLangInfo->hInstance;
 }
@@ -64,13 +64,13 @@ HINSTANCE CSelectLang::getLangRsrcInstance( void )
 
 	@date 2011.04.10 nasukoji	V‹Kì¬
 */
-LPCTSTR CSelectLang::getDefaultLangString( void )
+LPCTSTR CSelectLang::getDefaultLangString(void)
 {
 	return m_psLangInfo->szLangName;
 }
 
 // Œ¾ŒêID‚ğ•Ô‚·
-WORD CSelectLang::getDefaultLangId( void )
+WORD CSelectLang::getDefaultLangId(void)
 {
 	if (!m_psLangInfo) {
 		return ::GetUserDefaultLangID();
@@ -90,7 +90,7 @@ WORD CSelectLang::getDefaultLangId( void )
 
 	@date 2011.04.10 nasukoji	V‹Kì¬
 */
-HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
+HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 {
 	int nCount;
 	SSelLangInfo* psLangInfo;
@@ -101,7 +101,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 		psLangInfo->hInstance = GetModuleHandle(NULL);
 
 		// Œ¾Œêî•ñƒ_ƒCƒAƒƒO‚Å "System default" ‚É•\¦‚·‚é•¶š—ñ‚ğì¬‚·‚é
-		nCount = ::LoadString( GetModuleHandle(NULL), STR_SELLANG_NAME, psLangInfo->szLangName, _countof(psLangInfo->szLangName) );
+		nCount = ::LoadString(GetModuleHandle(NULL), STR_SELLANG_NAME, psLangInfo->szLangName, _countof(psLangInfo->szLangName));
 
 		TCHAR szExePath[_MAX_PATH] = { 0 };
 		::GetModuleFileName(NULL, szExePath, _countof(szExePath));
@@ -119,12 +119,12 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 			psLangInfo->bValid = FALSE;
 		}
 
-		m_psLangInfoList.push_back( psLangInfo );
+		m_psLangInfoList.push_back(psLangInfo);
 	}
 
 	if (m_psLangInfo != NULL && m_psLangInfo->hInstance && m_psLangInfo->hInstance != GetModuleHandle(NULL)) {
 		// “Ç‚İ‚İÏ‚İ‚ÌDLL‚ğ‰ğ•ú‚·‚é
-		::FreeLibrary( m_psLangInfo->hInstance );
+		::FreeLibrary(m_psLangInfo->hInstance);
 		m_psLangInfo->hInstance = NULL;
 		m_psLangInfo = NULL;
 	}
@@ -136,37 +136,37 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 
 	WIN32_FIND_DATA w32fd;
 	TCHAR szPath[] = _T("sakura_lang_*.dll");			// ƒT[ƒ`‚·‚éƒƒbƒZ[ƒWƒŠƒ\[ƒXDLL
-	HANDLE handle = FindFirstFile( szPath, &w32fd );
+	HANDLE handle = FindFirstFile(szPath, &w32fd);
 	BOOL result = (INVALID_HANDLE_VALUE != handle) ? TRUE : FALSE;
 
 	while (result) {
 		if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {		// ƒtƒHƒ‹ƒ_‚Å‚È‚¢
 			// ƒoƒbƒtƒ@‚É“o˜^‚·‚éB
 			psLangInfo = new SSelLangInfo();
-			_tcscpy( psLangInfo->szDllName, w32fd.cFileName );
-			psLangInfo->hInstance = CSelectLang::LoadLangRsrcLibrary( *psLangInfo );
+			_tcscpy(psLangInfo->szDllName, w32fd.cFileName);
+			psLangInfo->hInstance = CSelectLang::LoadLangRsrcLibrary(*psLangInfo);
 
 			if (psLangInfo->hInstance) {
 				if (!psLangInfo->bValid) {
 					// ƒƒbƒZ[ƒWƒŠƒ\[ƒXDLL‚Æ‚µ‚Ä‚Í–³Œø
-					::FreeLibrary( psLangInfo->hInstance );
+					::FreeLibrary(psLangInfo->hInstance);
 					psLangInfo->hInstance = NULL;
 					delete psLangInfo;
 				}else {
 					// —LŒø‚ÈƒƒbƒZ[ƒWƒŠƒ\[ƒXDLL
 					// ˆê’UDLL‚ğ‰ğ•ú‚µAŒã‚ÅChangeLang‚ÅÄ“Ç‚İ‚İ‚·‚é
-					m_psLangInfoList.push_back( psLangInfo );
-					::FreeLibrary( psLangInfo->hInstance );
+					m_psLangInfoList.push_back(psLangInfo);
+					::FreeLibrary(psLangInfo->hInstance);
 					psLangInfo->hInstance = NULL;
 				}
 			}
 		}
 
-		result = FindNextFile( handle, &w32fd );
+		result = FindNextFile(handle, &w32fd);
 	}
 
 	if (INVALID_HANDLE_VALUE != handle) {
-		FindClose( handle );
+		FindClose(handle);
 		handle = INVALID_HANDLE_VALUE;
 	}
 
@@ -185,7 +185,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment( void )
 
 	@date 2011.04.10 nasukoji	V‹Kì¬
 */
-HINSTANCE CSelectLang::LoadLangRsrcLibrary( SSelLangInfo& lang )
+HINSTANCE CSelectLang::LoadLangRsrcLibrary(SSelLangInfo& lang)
 {
 	if (lang.szDllName[0] == _T('\0')) {
 		return NULL;		// DLL‚ªw’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎNULL‚ğ•Ô‚·
@@ -197,20 +197,20 @@ HINSTANCE CSelectLang::LoadLangRsrcLibrary( SSelLangInfo& lang )
 	lang.szLangName[0] = _T('\0');
 	lang.wLangId = 0;
 
-	HINSTANCE hInstance = LoadLibraryExedir( lang.szDllName );
+	HINSTANCE hInstance = LoadLibraryExedir(lang.szDllName);
 
 	if (hInstance) {
 		// Œ¾Œê–¼‚ğæ“¾
-		nCount = ::LoadString( hInstance, STR_SELLANG_NAME, lang.szLangName, _countof(lang.szLangName) );
+		nCount = ::LoadString(hInstance, STR_SELLANG_NAME, lang.szLangName, _countof(lang.szLangName));
 
 		if (nCount > 0) {
 			// Œ¾ŒêID‚ğæ“¾
 			TCHAR szBuf[7];		// "0x" + 4Œ… + ”Ô•º
-			nCount = ::LoadString( hInstance, STR_SELLANG_LANGID, szBuf, _countof(szBuf) );
+			nCount = ::LoadString(hInstance, STR_SELLANG_LANGID, szBuf, _countof(szBuf));
 			szBuf[_countof(szBuf) - 1] = _T('\0');
 
 			if (nCount > 0) {
-				lang.wLangId = (WORD)_tcstoul( szBuf, NULL, 16 );		// Œ¾ŒêID‚ğ”’l‰»
+				lang.wLangId = (WORD)_tcstoul(szBuf, NULL, 16);		// Œ¾ŒêID‚ğ”’l‰»
 
 				if (lang.wLangId > 0) {
 					lang.bValid = TRUE;		// ƒƒbƒZ[ƒWƒŠƒ\[ƒXDLL‚Æ‚µ‚Ä—LŒø
@@ -240,20 +240,20 @@ int CLoadString::m_nDataTempArrayIndex = 0;							// ÅŒã‚Ég—p‚µ‚½ƒoƒbƒtƒ@‚ÌƒCƒ
 	@note ’´‚¦‚ÄŒÄ‚Ño‚·‚Æ‡Ÿ“à—e‚ª¸‚í‚ê‚Ä‚¢‚­B
 	@note ŒÄ‚Ño‚µ’¼Œã‚Å‚Ìg—p‚âŠÖ”‚Ìˆø”‚È‚Ç‚Å‚Ìg—p‚ğ‘z’è‚µ‚Ä‚¨‚èA‘O‰ñ’l‚ğ
 	@note æ‚èo‚·‚±‚Æ‚Í‚Å‚«‚È‚¢B
-	@note g—p—áj::SetWindowText( m_hWnd, CLoadString::LoadStringSt(STR_ERR_DLGSMCLR1) );
+	@note g—p—áj::SetWindowText(m_hWnd, CLoadString::LoadStringSt(STR_ERR_DLGSMCLR1));
 	@note ƒAƒvƒŠƒP[ƒVƒ‡ƒ““à‚ÌŠÖ”‚Ö‚Ìˆø”‚Æ‚·‚éê‡A‚»‚ÌŠÖ”‚ª–{ŠÖ”‚ğg—p
 	@note ‚µ‚Ä‚¢‚é‚©ˆÓ¯‚·‚é•K—v‚ª‚ ‚éiãŒÀ‚ğ’´‚¦‚ê‚Î“à—e‚ªXV‚³‚ê‚é‚½‚ßj
 	@note “à—e‚ğ•Û‚µ‚½‚¢ê‡‚Í CLoadString::LoadString() ‚ğg—p‚·‚éB
 
 	@date 2011.06.01 nasukoji	V‹Kì¬
 */
-LPCTSTR CLoadString::LoadStringSt( UINT uid )
+LPCTSTR CLoadString::LoadStringSt(UINT uid)
 {
 	// g—p‚·‚éƒoƒbƒtƒ@‚ÌŒ»İˆÊ’u‚ği‚ß‚é
-	m_nDataTempArrayIndex = ( m_nDataTempArrayIndex >= _countof(m_acLoadStrBufferTemp) - 1) ?
-															0 : ( m_nDataTempArrayIndex + 1 );
+	m_nDataTempArrayIndex = (m_nDataTempArrayIndex >= _countof(m_acLoadStrBufferTemp) - 1) ?
+															0 : (m_nDataTempArrayIndex + 1);
 
-	m_acLoadStrBufferTemp[m_nDataTempArrayIndex].LoadString( uid );
+	m_acLoadStrBufferTemp[m_nDataTempArrayIndex].LoadString(uid);
 
 	return /* CLoadString:: */ m_acLoadStrBufferTemp[m_nDataTempArrayIndex].GetStringPtr();
 }
@@ -270,16 +270,16 @@ LPCTSTR CLoadString::LoadStringSt( UINT uid )
 	@note ‚½‚¾‚µA•Ï”‚ğ€”õ‚·‚é•K—v‚ª‚ ‚é‚Ì‚ª•s•ÖB
 	@note g—p—áj
 	@note   CLoadString cStr[2];
-	@note   cDlgInput1.DoModal( m_hInstance, m_hWnd,
+	@note   cDlgInput1.DoModal(m_hInstance, m_hWnd,
 	@note       cStr[0].LoadString(STR_ERR_DLGPRNST1),
 	@note       cStr[1].LoadString(STR_ERR_DLGPRNST2),
-	@note       sizeof( m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName ) - 1, szWork ) )
+	@note       sizeof(m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName) - 1, szWork) )
 
 	@date 2011.06.01 nasukoji	V‹Kì¬
 */
-LPCTSTR CLoadString::LoadString( UINT uid )
+LPCTSTR CLoadString::LoadString(UINT uid)
 {
-	m_cLoadStrBuffer.LoadString( uid );
+	m_cLoadStrBuffer.LoadString(uid);
 
 	return /* this-> */ m_cLoadStrBuffer.GetStringPtr();
 }
@@ -302,7 +302,7 @@ LPCTSTR CLoadString::LoadString( UINT uid )
 
 	@date 2011.06.01 nasukoji	V‹Kì¬
 */
-int CLoadString::CLoadStrBuffer::LoadString( UINT uid )
+int CLoadString::CLoadStrBuffer::LoadString(UINT uid)
 {
 	if (!m_pszString) {
 		// ƒoƒbƒtƒ@ƒ|ƒCƒ“ƒ^‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‰Šú‰»‚·‚éi•’Ê‚Í‚ ‚è“¾‚È‚¢j
@@ -322,7 +322,7 @@ int CLoadString::CLoadStrBuffer::LoadString( UINT uid )
 	int nRet = 0;
 
 	while (1) {
-		nRet = ::LoadString( hRsrc, uid, m_pszString, m_nBufferSize );
+		nRet = ::LoadString(hRsrc, uid, m_pszString, m_nBufferSize);
 
 		// ƒŠƒ\[ƒX‚ª–³‚¢
 		if (nRet == 0) {
@@ -358,7 +358,7 @@ int CLoadString::CLoadStrBuffer::LoadString( UINT uid )
 				m_nBufferSize = nTemp;
 			}else {
 				// ƒƒ‚ƒŠæ“¾‚É¸”s‚µ‚½ê‡‚Í’¼‘O‚Ì“à—e‚Å’ú‚ß‚é
-				nRet = _tcslen( m_pszString );
+				nRet = _tcslen(m_pszString);
 				break;
 			}
 		}else {
@@ -371,39 +371,39 @@ int CLoadString::CLoadStrBuffer::LoadString( UINT uid )
 	return nRet;
 }
 
-void CSelectLang::ChangeLang( TCHAR* pszDllName )
+void CSelectLang::ChangeLang(TCHAR* pszDllName)
 {
 	// Œ¾Œê‚ğ‘I‘ğ‚·‚é
 	UINT unIndex;
 	for (unIndex = 0; unIndex < CSelectLang::m_psLangInfoList.size(); unIndex++) {
-		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at( unIndex );
-		if (_tcsncmp( pszDllName, psLangInfo->szDllName, MAX_PATH ) == 0) {
-			CSelectLang::ChangeLang( unIndex );
+		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(unIndex);
+		if (_tcsncmp(pszDllName, psLangInfo->szDllName, MAX_PATH) == 0) {
+			CSelectLang::ChangeLang(unIndex);
 			break;
 		}
 	}
 }
 
-HINSTANCE CSelectLang::ChangeLang( UINT nIndex )
+HINSTANCE CSelectLang::ChangeLang(UINT nIndex)
 {
-	if (m_psLangInfoList.size() <= nIndex || m_psLangInfoList.at( nIndex ) == m_psLangInfo) {
+	if (m_psLangInfoList.size() <= nIndex || m_psLangInfoList.at(nIndex) == m_psLangInfo) {
 		return m_psLangInfo->hInstance;
 	}
 
-	SSelLangInfo *psLangInfo = m_psLangInfoList.at( nIndex );
+	SSelLangInfo *psLangInfo = m_psLangInfoList.at(nIndex);
 	if (psLangInfo->hInstance != GetModuleHandle(NULL)) {
-		psLangInfo->hInstance = LoadLangRsrcLibrary( *psLangInfo );
+		psLangInfo->hInstance = LoadLangRsrcLibrary(*psLangInfo);
 		if (!psLangInfo->hInstance) {
 			return m_psLangInfo->hInstance;
 		}else if (!psLangInfo->bValid) {
-			::FreeLibrary( psLangInfo->hInstance );
+			::FreeLibrary(psLangInfo->hInstance);
 			psLangInfo->hInstance = NULL;
 			return m_psLangInfo->hInstance;
 		}
 	}
 
 	if (m_psLangInfo->hInstance != GetModuleHandle(NULL)) {
-		::FreeLibrary( m_psLangInfo->hInstance );
+		::FreeLibrary(m_psLangInfo->hInstance);
 		m_psLangInfo->hInstance = NULL;
 	}
 	m_psLangInfo = psLangInfo;
@@ -412,17 +412,17 @@ HINSTANCE CSelectLang::ChangeLang( UINT nIndex )
 	// SetThreadUILanguage‚ÌŒÄ‚Ño‚µ‚ğ‚İ‚é
 	bool isSuccess = false;
 	if (COsVersionInfo()._IsWinVista_or_later()) {
-		HMODULE hDll = LoadLibrary( _T("kernel32") );
+		HMODULE hDll = LoadLibrary(_T("kernel32"));
 		if (hDll) {
 			typedef short (CALLBACK* SetThreadUILanguageType)(LANGID);
 			SetThreadUILanguageType _SetThreadUILanguage = (SetThreadUILanguageType)
 					GetProcAddress(hDll, "SetThreadUILanguage");
-			isSuccess = _SetThreadUILanguage && _SetThreadUILanguage( m_psLangInfo->wLangId );
-			FreeLibrary( hDll );
+			isSuccess = _SetThreadUILanguage && _SetThreadUILanguage(m_psLangInfo->wLangId);
+			FreeLibrary(hDll);
 		}
 	}
 	if (!isSuccess) {
-		SetThreadLocale(MAKELCID( m_psLangInfo->wLangId, SORT_DEFAULT ));
+		SetThreadLocale(MAKELCID(m_psLangInfo->wLangId, SORT_DEFAULT));
 	}
 
 	return m_psLangInfo->hInstance;

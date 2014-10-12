@@ -172,7 +172,7 @@ public:
 	~CShareDataLockCounter();
 
 	static int GetLockCounter();
-	static void WaitLock( HWND, CShareDataLockCounter** = NULL );
+	static void WaitLock(HWND, CShareDataLockCounter** = NULL);
 private:
 };
 

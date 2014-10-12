@@ -54,7 +54,7 @@ public:
 	virtual ULONG STDMETHODCALLTYPE Release() { -- m_RefCount; int R = m_RefCount; if(m_RefCount == 0) delete this; return R; }
 public:
 	ImplementsIUnknown(): m_RefCount(0) {}
-	virtual ~ImplementsIUnknown(){}
+	virtual ~ImplementsIUnknown() {}
 };
 
 // WSHˆê”Ê
@@ -118,11 +118,11 @@ public:
 					VARIANT FAR* pvarResult,
 					EXCEPINFO FAR* pexcepinfo,
 					UINT FAR* puArgErr);
-	virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
+	virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(
 					/* [in] */ UINT iTInfo,
 					/* [in] */ LCID lcid,
 					/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
-	virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount( 
+	virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(
 					/* [out] */ UINT __RPC_FAR *pctinfo);
 
 private:

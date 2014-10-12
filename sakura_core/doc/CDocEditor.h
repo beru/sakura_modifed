@@ -48,7 +48,7 @@ public:
 	//                           状態                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// Jan. 22, 2002 genta Modified Flagの設定
-	void SetModified( bool flag, bool redraw);
+	void SetModified(bool flag, bool redraw);
 	//! ファイルが修正中かどうか
 	bool IsModified() const { return m_bIsDocModified; }
 
@@ -60,24 +60,24 @@ public:
 
 	//	May 15, 2000 genta
 	CEol  GetNewLineCode() const { return m_cNewLineCode; }
-	void  SetNewLineCode(const CEol& t){ m_cNewLineCode = t; }
+	void  SetNewLineCode(const CEol& t) { m_cNewLineCode = t; }
 
 	//	Oct. 2, 2005 genta 挿入モードの設定
 	bool IsInsMode() const { return m_bInsMode; }
 	void SetInsMode(bool mode) { m_bInsMode = mode; }
 
 	//! Undo(元に戻す)可能な状態か？
-	bool IsEnableUndo( void ) const {
+	bool IsEnableUndo(void) const {
 		return m_cOpeBuf.IsEnableUndo();
 	}
 
 	//! Redo(やり直し)可能な状態か？
-	bool IsEnableRedo( void ) const {
+	bool IsEnableRedo(void) const {
 		return m_cOpeBuf.IsEnableRedo();
 	}
 
 	//! クリップボードから貼り付け可能か？
-	bool IsEnablePaste( void ) const {
+	bool IsEnablePaste(void) const {
 		return CClipboard::HasValidData();
 	}
 
@@ -99,7 +99,7 @@ public:
 	//                           操作                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//	May 15, 2000 genta
-	void AddLineStrX( const wchar_t*, int );	// 末尾に行を追加 Ver1.5
+	void AddLineStrX(const wchar_t*, int);	// 末尾に行を追加 Ver1.5
 
 private:
 	CDocLineMgr* m_pcDocLineMgr;

@@ -148,12 +148,12 @@ extern const char TABLE_ValueToBASE64Char[];
 
 // BASE64ï∂éö <-> êîíl
 template <class CHAR_TYPE>
-inline uchar_t Base64ToVal( const CHAR_TYPE c ){
+inline uchar_t Base64ToVal( const CHAR_TYPE c ) {
 	int c_ = c;
 	return static_cast<uchar_t>((c_ < 0x80)? TABLE_BASE64CharToValue[c_] : -1);
 }
 template <class CHAR_TYPE>
-inline CHAR_TYPE ValToBase64( const char v ){
+inline CHAR_TYPE ValToBase64( const char v ) {
 	int v_ = v;
 	return static_cast<CHAR_TYPE>((v_ < 64)? TABLE_ValueToBASE64Char[v_] : -1);
 }

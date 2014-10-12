@@ -39,13 +39,13 @@ private:
 	typedef auto_array_ptr<T> Me;
 public:
 	// ‘ã“ü
-	auto_array_ptr (T*  rhs){ m_array = rhs;          }
-	auto_array_ptr (Me& rhs){ m_array = rhs.detach(); }
-	Me& operator = (T*  rhs){ reset(rhs         ); return *this; }
-	Me& operator = (Me& rhs){ reset(rhs.detach()); return *this; }
+	auto_array_ptr (T*  rhs) { m_array = rhs;          }
+	auto_array_ptr (Me& rhs) { m_array = rhs.detach(); }
+	Me& operator = (T*  rhs) { reset(rhs        ); return *this; }
+	Me& operator = (Me& rhs) { reset(rhs.detach()); return *this; }
 
 	// ”jŠü
-	~auto_array_ptr(){ delete[] m_array; }
+	~auto_array_ptr() { delete[] m_array; }
 
 	// è•ú‚· (‰ğ•ú‚Í‚µ‚È‚¢)
 	T* detach() {

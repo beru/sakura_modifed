@@ -55,7 +55,7 @@ public:
 		m_cExInfo.SetColorInfo(pColorInfo);
 	}
 	~CLayout();
-	void DUMP( void );
+	void DUMP(void);
 	
 	// m_ptLogicPos.x‚Å•â³‚µ‚½‚ ‚Æ‚Ì•¶Žš—ñ‚ð“¾‚é
 	const wchar_t* GetPtr() const { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; }

@@ -35,10 +35,10 @@ public:
 	CRecentExceptMRU();
 
 	// オーバーライド
-	int				CompareItem( const CMetaPath* p1, LPCTSTR p2 ) const;
-	void			CopyItem( CMetaPath* dst, LPCTSTR src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( LPCTSTR* dst, const CMetaPath* src ) const;
-	bool			TextToDataType( CMetaPath* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const CMetaPath* p1, LPCTSTR p2) const;
+	void			CopyItem(CMetaPath* dst, LPCTSTR src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CMetaPath* src) const;
+	bool			TextToDataType(CMetaPath* dst, LPCTSTR pszText) const;
 };
 

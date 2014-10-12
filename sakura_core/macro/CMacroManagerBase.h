@@ -35,10 +35,10 @@ class CEditView;
 
 class CMacroBeforeAfter {
 public:
-	CMacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true){};
-	virtual ~CMacroBeforeAfter(){};
-	virtual void ExecKeyMacroBefore( class CEditView* pcEditView, int flags );
-	virtual void ExecKeyMacroAfter( class CEditView* pcEditView, int flags, bool bRet );
+	CMacroBeforeAfter() : m_nOpeBlkCount(0), m_bDrawSwitchOld(true) {};
+	virtual ~CMacroBeforeAfter() {};
+	virtual void ExecKeyMacroBefore(class CEditView* pcEditView, int flags);
+	virtual void ExecKeyMacroAfter(class CEditView* pcEditView, int flags, bool bRet);
 private:
 	int m_nOpeBlkCount;
 	bool m_bDrawSwitchOld;
@@ -58,24 +58,24 @@ public:
 		
 		@date 2007.07.20 genta マクロ実行属性を渡すためにflagsを追加
 	*/
-	virtual bool ExecKeyMacro( class CEditView* pcEditView, int flags ) const = 0;
-	virtual void ExecKeyMacro2( class CEditView* pcEditView, int flags );
+	virtual bool ExecKeyMacro(class CEditView* pcEditView, int flags) const = 0;
+	virtual void ExecKeyMacro2(class CEditView* pcEditView, int flags);
 	
 	/*! キーボードマクロをファイルから読み込む
 
 		@param hInstance [in]
 		@param pszPath [in] ファイル名
 	*/
-	virtual BOOL LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath) = 0;
+	virtual BOOL LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) = 0;
 
 	/*! キーボードマクロを文字列から読み込む
 
 		@param hInstance [in]
 		@param pszCode [in] マクロコード
 	*/
-	virtual BOOL LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode ) = 0;
+	virtual BOOL LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode) = 0;
 
-	//static CMacroManagerBase* Creator( const char* str );
+	//static CMacroManagerBase* Creator(const char* str);
 	//純粋仮想クラスは実体化できないのでFactoryは不要。
 	//継承先クラスでは必要。
 	
@@ -93,7 +93,7 @@ public:
 		@retval true Load済み
 		@retval false 未Load
 	*/
-	bool IsReady(){ return m_nReady; }
+	bool IsReady() { return m_nReady; }
 
 	// Constructor
 	CMacroManagerBase();

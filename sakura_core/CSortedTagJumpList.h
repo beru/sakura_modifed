@@ -40,12 +40,12 @@ public:
 	CSortedTagJumpList(int max);
 	~CSortedTagJumpList();
 
-	int AddBaseDir( const TCHAR* baseDir );
-	BOOL AddParamA( const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId );
-	BOOL GetParam( int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir );
-	int GetCount( void ) { return m_nCount; }
-	void Empty( void );
-	bool IsOverflow( void ) { return m_bOverflow; }
+	int AddBaseDir(const TCHAR* baseDir);
+	BOOL AddParamA(const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId);
+	BOOL GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir);
+	int GetCount(void) { return m_nCount; }
+	void Empty(void);
+	bool IsOverflow(void) { return m_bOverflow; }
 
 	typedef struct tagjump_info_t {
 		struct tagjump_info_t*	next;	//!< 次のリスト
@@ -58,7 +58,7 @@ public:
 		int		baseDirId;	//!< ファイル名のベースディレクトリ
 	} TagJumpInfo;
 
-	TagJumpInfo* GetPtr( int index );
+	TagJumpInfo* GetPtr(int index);
 
 	/*!	@brief 管理数の最大値を取得する
 
@@ -75,6 +75,6 @@ private:
 	//	2005.04.22 genta 最大値を可変に
 	const int	m_MAX_TAGJUMPLIST;	//!< 管理する情報の最大数
 
-	void Free( TagJumpInfo* item );
+	void Free(TagJumpInfo* item);
 };
 

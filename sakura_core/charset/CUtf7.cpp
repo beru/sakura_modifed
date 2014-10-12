@@ -19,8 +19,8 @@ int CUtf7::_Utf7SetDToUni_block( const char* pSrc, const int nSrcLen, wchar_t* p
 	const char* pr = pSrc;
 	wchar_t* pw = pDst;
 
-	for( ; pr < pSrc+nSrcLen; ++pr ){
-		if( IsUtf7Direct(*pr) ){
+	for( ; pr < pSrc+nSrcLen; ++pr ) {
+		if( IsUtf7Direct(*pr) ) {
 			*pw = *pr;
 		}else{
 			BinToText(reinterpret_cast<const unsigned char*>(pr), 1, reinterpret_cast<unsigned short*>(pw));
@@ -41,18 +41,18 @@ int CUtf7::_Utf7SetBToUni_block( const char* pSrc, const int nSrcLen, wchar_t* p
 
 	try{
 		pbuf = new char[nSrcLen];
-	}catch( ... ){
+	}catch( ... ) {
 		pbuf = NULL;
 		bError = true;
 	}
 
-	if( pbuf != NULL ){
+	if( pbuf != NULL ) {
 		ndecoded_len = _DecodeBase64( pSrc, nSrcLen, pbuf );
 		int nModLen = ndecoded_len % sizeof(wchar_t);
 		ndecoded_len = ndecoded_len - nModLen;
 		CMemory::SwapHLByte( pbuf, ndecoded_len );  // UTF-16 BE を UTF-16 LE に直す
 		memcpy( reinterpret_cast<char*>(pDst), pbuf, ndecoded_len );
-		if( nModLen ){
+		if( nModLen ) {
 			ndecoded_len += BinToText( reinterpret_cast<const unsigned char *>(pbuf) + ndecoded_len,
 				nModLen, &reinterpret_cast<unsigned short*>(pDst)[ndecoded_len / sizeof(wchar_t)]) * sizeof(wchar_t);
 			bError = true;
@@ -63,7 +63,7 @@ int CUtf7::_Utf7SetBToUni_block( const char* pSrc, const int nSrcLen, wchar_t* p
 
 	delete [] pbuf;
 
-	if( pbError ){
+	if( pbError ) {
 		*pbError = bError;
 	}
 
@@ -85,13 +85,13 @@ int CUtf7::Utf7ToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* 
 	do{
 		// UTF-7 Set D 部分のチェック
 		nblocklen = CheckUtf7DPart( pr, pr_end-pr, &pr_next, &berror_tmp );
-		if( berror_tmp == true ){
+		if( berror_tmp == true ) {
 			berror = true;
 		}
 		pw += _Utf7SetDToUni_block( pr, nblocklen, pw );
 
 		pr = pr_next;  // 次の読み込み位置を取得
-		if( pr_next >= pr_end ){
+		if( pr_next >= pr_end ) {
 			break;
 		}
 
@@ -99,16 +99,16 @@ int CUtf7::Utf7ToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* 
 		nblocklen = CheckUtf7BPart( pr, pr_end-pr, &pr_next, &berror_tmp, UC_LOOSE );
 		{
 			// エラーがあってもできるところまでデコード
-			if( berror_tmp ){
+			if( berror_tmp ) {
 				berror = true;
 			}
-			if( nblocklen < 1 && *(pr_next-1) == '-' ){
+			if( nblocklen < 1 && *(pr_next-1) == '-' ) {
 				// +- → + 変換
 				*pw = L'+';
 				++pw;
 			}else{
 				pw += _Utf7SetBToUni_block( pr, nblocklen, pw, &berror_tmp );
-				if( berror_tmp != false ){
+				if( berror_tmp != false ) {
 					berror = true;
 				}
 			}
@@ -116,7 +116,7 @@ int CUtf7::Utf7ToUni( const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* 
 		pr = pr_next;  // 次の読み込み位置を取得
 	}while( pr_next < pr_end );
 
-	if( pbError ){
+	if( pbError ) {
 		*pbError = berror;
 	}
 
@@ -142,7 +142,7 @@ EConvertResult CUtf7::UTF7ToUnicode( CMemory* pMem )
 		if (!pDst) {
 			return RESULT_FAILURE;
 		}
-	}catch( ... ){
+	}catch( ... ) {
 		return RESULT_FAILURE;
 	}
 
@@ -154,7 +154,7 @@ EConvertResult CUtf7::UTF7ToUnicode( CMemory* pMem )
 
 	delete [] pDst;
 
-	if( bError == false ){
+	if( bError == false ) {
 		return RESULT_COMPLETE;
 	}else{
 		return RESULT_LOSESOME;
@@ -165,12 +165,12 @@ EConvertResult CUtf7::UTF7ToUnicode( CMemory* pMem )
 
 int CUtf7::_UniToUtf7SetD_block( const wchar_t* pSrc, const int nSrcLen, char* pDst )
 {
-	if( nSrcLen < 1 ){
+	if( nSrcLen < 1 ) {
 		return 0;
 	}
 
 	int i;
-	for( i = 0; i < nSrcLen; ++i ){
+	for( i = 0; i < nSrcLen; ++i ) {
 		pDst[i] = static_cast<char>( pSrc[i] & 0x00ff );
 	}
 
@@ -184,13 +184,13 @@ int CUtf7::_UniToUtf7SetB_block( const wchar_t* pSrc, const int nSrcLen, char* p
 	wchar_t* psrc;
 	char* pw;
 
-	if( nSrcLen < 1 ){
+	if( nSrcLen < 1 ) {
 		return 0;
 	}
 
 	try{
 		psrc = new wchar_t[nSrcLen];
-	}catch( ... ){
+	}catch( ... ) {
 		psrc = NULL;
 	}
 	if (!psrc) {
@@ -229,23 +229,23 @@ int CUtf7::UniToUtf7( const wchar_t* pSrc, const int nSrcLen, char* pDst )
 	pw = pDst;
 
 	do{
-		for( ; pr < pr_end; ++pr ){
-			if( !IsUtf7SetD(*pr) ){
+		for( ; pr < pr_end; ++pr ) {
+			if( !IsUtf7SetD(*pr) ) {
 				break;
 			}
 		}
 		pw += _UniToUtf7SetD_block( pr_base, pr-pr_base, pw );
 		pr_base = pr;
 
-		if( *pr == L'+' ){
+		if( *pr == L'+' ) {
 			// '+' → "+-"
 			pw[0] = '+';
 			pw[1] = '-';
 			++pr;
 			pw += 2;
 		}else{
-			for( ; pr < pr_end; ++pr ){
-				if( IsUtf7SetD(*pr) ){
+			for( ; pr < pr_end; ++pr ) {
+				if( IsUtf7SetD(*pr) ) {
 					break;
 				}
 			}
@@ -274,7 +274,7 @@ EConvertResult CUtf7::UnicodeToUTF7( CMemory* pMem )
 	try{
 		// 最大で、変換元のデータ長の５倍。
 		pDst = new char[ nSrcLen * 5 + 1 ];  // * → +ACo-
-	}catch( ... ){
+	}catch( ... ) {
 		pDst = NULL;
 	}
 	if (!pDst) {

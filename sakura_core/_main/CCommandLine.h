@@ -64,9 +64,9 @@ class CCommandLine : public TSingleton<CCommandLine> {
 		à¯ópïÑÇ≈àÕÇ‹ÇÍÇƒÇ¢ÇÈêîílÇîFéØÇ∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
 		@date 2002.12.05 genta
 	*/
-	static int AtoiOptionInt(const TCHAR* arg){
-		return ( arg[0] == _T('"') || arg[0] == _T('\'') ) ?
-			_ttoi( arg + 1 ) : _ttoi( arg );
+	static int AtoiOptionInt(const TCHAR* arg) {
+		return (arg[0] == _T('"') || arg[0] == _T('\'')) ?
+			_ttoi(arg + 1) : _ttoi(arg);
 	}
 
 // member accessor method
@@ -80,12 +80,12 @@ public:
 	bool GetEditInfo(EditInfo* fi) const { *fi = m_fi; return true; }
 	bool GetGrepInfo(GrepInfo* gi) const { *gi = m_gi; return true; }
 	int GetGroupId() const {return m_nGroup;}	// 2007.06.26 ryoji
-	LPCWSTR GetMacro() const{ return m_cmMacro.GetStringPtr(); }
-	LPCWSTR GetMacroType() const{ return m_cmMacroType.GetStringPtr(); }
+	LPCWSTR GetMacro() const { return m_cmMacro.GetStringPtr(); }
+	LPCWSTR GetMacroType() const { return m_cmMacroType.GetStringPtr(); }
 	int GetFileNum(void) { return m_vFiles.size(); }
 	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? m_vFiles[i].c_str() : NULL; }
 	void ClearFile(void) { m_vFiles.clear(); }
-	void ParseCommandLine( LPCTSTR pszCmdLineSrc, bool bResponse = true );
+	void ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse = true);
 
 // member valiables
 private:

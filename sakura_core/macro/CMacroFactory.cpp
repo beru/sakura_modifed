@@ -54,7 +54,7 @@ std::tstring CMacroFactory::Ext2Key(const TCHAR *ext)
 	}
 	
 	std::tstring key = ext;
-	std::transform( key.begin(), key.end(), key.begin(), _totlower);
+	std::transform(key.begin(), key.end(), key.begin(), _totlower);
 
 	return key;
 }
@@ -71,13 +71,13 @@ std::tstring CMacroFactory::Ext2Key(const TCHAR *ext)
 
 	@date 2002.08.25 genta 追加
 */
-bool CMacroFactory::RegisterCreator( Creator f )
+bool CMacroFactory::RegisterCreator(Creator f)
 {
 	if (!f) {
 		return false;
 	}
 
-	m_mMacroCreators.push_back( f );
+	m_mMacroCreators.push_back(f);
 	return true;
 }
 
@@ -86,7 +86,7 @@ bool CMacroFactory::RegisterCreator( Creator f )
 	
 	@param f [in] 登録解除するCreator
 */
-bool CMacroFactory::Unregister( Creator f )
+bool CMacroFactory::Unregister(Creator f)
 {
 	//	Creator Listからの削除
 	auto c_it = m_mMacroCreators.begin();
@@ -95,7 +95,7 @@ bool CMacroFactory::Unregister( Creator f )
 			//	いきなり削除するとiteratorが無効になるので，
 			//	iteratorを1つ進めてから現在位置を削除する．
 			auto tmp_it = c_it++;
-			m_mMacroCreators.erase( tmp_it );
+			m_mMacroCreators.erase(tmp_it);
 			//	重複登録されている場合を考慮して，
 			//	1つ見つかっても最後までチェックする
 		}else {
@@ -117,13 +117,13 @@ bool CMacroFactory::Unregister( Creator f )
 */
 CMacroManagerBase* CMacroFactory::Create(const TCHAR* ext)
 {
-	std::tstring key = Ext2Key( ext );
+	std::tstring key = Ext2Key(ext);
 
 	//	Creatorを順に試す
 	for (auto c_it = m_mMacroCreators.begin(); c_it != m_mMacroCreators.end(); ++ c_it) {
 		CMacroManagerBase* pobj = (*c_it)(key.c_str());
 		if (pobj != NULL) {
-			DEBUG_TRACE( _T("CMacroFactory::Create/ Answered for (%ts)\n"), key.c_str() );
+			DEBUG_TRACE(_T("CMacroFactory::Create/ Answered for (%ts)\n"), key.c_str());
 			return pobj;
 		}
 	}

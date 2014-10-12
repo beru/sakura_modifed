@@ -47,24 +47,24 @@ public:
 	// コンストラクタ・デストラクタ
 	CDocLineMgr();
 	~CDocLineMgr();
-
+	
 	// 状態
 	CLogicInt GetLineCount() const { return m_nLines; }	//!< 全行数を返す
-
+	
 	// 行データへのアクセス
-	CDocLine* GetLine( CLogicInt nLine ) const;						//!< 指定行を取得
+	CDocLine* GetLine(CLogicInt nLine) const;						//!< 指定行を取得
 	CDocLine* GetDocLineTop() const { return m_pDocLineTop; }		//!< 先頭行を取得
 	CDocLine* GetDocLineBottom() const { return m_pDocLineBot; }	//!< 最終行を取得
-
+	
 	// 行データの管理
 	CDocLine* InsertNewLine(CDocLine* pPos);	//!< pPosの直前に新しい行を挿入
 	CDocLine* AddNewLine();						//!< 最下部に新しい行を挿入
 	void DeleteAllLine();						//!< 全ての行を削除する
-	void DeleteLine( CDocLine* );				//!< 行の削除
-
+	void DeleteLine(CDocLine*);				//!< 行の削除
+	
 	// デバッグ
 	void DUMP();
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -74,7 +74,7 @@ protected:
 	void _PushBottom(CDocLine* pDocLineNew);						//!< 最下部に挿入
 	void _InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos);	//!< pPosの直前に挿入
 	void _InsertAfterPos(CDocLine* pDocLineNew, CDocLine* pPos);	//!< pPosの直後に挿入
-
+	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -82,7 +82,7 @@ private:
 	CDocLine*	m_pDocLineTop;		//!< 最初の行
 	CDocLine*	m_pDocLineBot;		//!< 最後の行(※1行しかない場合はm_pDocLineTopと等しくなる)
 	CLogicInt	m_nLines;			//!< 全行数
-
+	
 public:
 	//$$ kobake注: 以下、絶対に切り離したい（最低切り離せなくても、変数の意味をコメントで明確に記すべき）変数群
 	mutable CDocLine*	m_pDocLineCurrent;	//!< 順アクセス時の現在位置

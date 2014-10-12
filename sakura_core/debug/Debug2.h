@@ -39,7 +39,7 @@
 
 	#define assert(exp) \
 	{ \
-		if(!(exp)){ \
+		if (!(exp)) { \
 			debug_output("!assert: %hs(%d): %hs\n", __FILE__, __LINE__, #exp); \
 			debug_exit(); \
 		} \
@@ -47,7 +47,7 @@
 
 	#define assert_warning(exp) \
 	{ \
-		if(!(exp)){ \
+		if (!(exp)) { \
 			debug_output("!warning: %hs(%d): %hs\n", __FILE__, __LINE__, #exp); \
 			warning_point(); \
 		} \

@@ -43,7 +43,7 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_hInst = hInst;
 
 	// ヘルパ作成
-	m_cIcons.Create( m_hInst );	//	CreateImage List
+	m_cIcons.Create(m_hInst);	//	CreateImage List
 
 	// ドキュメントの作成
 	m_pcEditDoc = new CEditDoc(this);
@@ -65,8 +65,8 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	// ウィンドウの作成
 	m_pcEditWnd = CEditWnd::getInstance();
 
-	m_pcEditDoc->Create( m_pcEditWnd );
-	m_pcEditWnd->Create( m_pcEditDoc, &m_cIcons, nGroupId );
+	m_pcEditDoc->Create(m_pcEditWnd);
+	m_pcEditWnd->Create(m_pcEditDoc, &m_cIcons, nGroupId);
 
 	// MRU管理
 	m_pcMruListener = new CMruListener();
@@ -93,10 +93,10 @@ CEditApp::~CEditApp()
 }
 
 //! 共通設定 プロパティシート
-bool CEditApp::OpenPropertySheet( int nPageNum )
+bool CEditApp::OpenPropertySheet(int nPageNum)
 {
 	// プロパティシートの作成
-	bool bRet = m_pcPropertyManager->OpenPropertySheet( m_pcEditWnd->GetHwnd(), nPageNum, false );
+	bool bRet = m_pcPropertyManager->OpenPropertySheet(m_pcEditWnd->GetHwnd(), nPageNum, false);
 	if (bRet) {
 		// 2007.10.19 genta マクロ登録変更を反映するため，読み込み済みのマクロを破棄する
 		m_pcSMacroMgr->UnloadAll();
@@ -105,9 +105,9 @@ bool CEditApp::OpenPropertySheet( int nPageNum )
 }
 
 //! タイプ別設定 プロパティシート
-bool CEditApp::OpenPropertySheetTypes( int nPageNum, CTypeConfig nSettingType )
+bool CEditApp::OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType)
 {
-	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes( m_pcEditWnd->GetHwnd(), nPageNum, nSettingType );
+	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes(m_pcEditWnd->GetHwnd(), nPageNum, nSettingType);
 
 	return bRet;
 }

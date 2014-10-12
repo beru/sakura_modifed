@@ -42,7 +42,7 @@ public:
 	const CFilePath& GetFilePathClass() const { return m_szFilePath; }
 	LPCTSTR GetFilePath() const { return m_szFilePath; }
 	// 設定
-	void SetFilePath(LPCTSTR pszPath){ m_szFilePath.Assign(pszPath); }
+	void SetFilePath(LPCTSTR pszPath) { m_szFilePath.Assign(pszPath); }
 	// 各種判定
 	bool IsFileExist() const;
 	bool HasWritablePermission() const;
@@ -51,8 +51,8 @@ public:
 	// ロック
 	bool FileLock(EShareMode eShareMode, bool bMsg);	//!< ファイルの排他ロック
 	void FileUnlock();						//!< ファイルの排他ロック解除
-	bool IsFileLocking() const{ return m_hLockedFile!=INVALID_HANDLE_VALUE; }
-	EShareMode GetShareMode() const{ return m_nFileShareModeOld; }
+	bool IsFileLocking() const { return m_hLockedFile!=INVALID_HANDLE_VALUE; }
+	EShareMode GetShareMode() const { return m_nFileShareModeOld; }
 	void SetShareMode(EShareMode eShareMode) { m_nFileShareModeOld = eShareMode; }
 private:
 	CFilePath	m_szFilePath;				//!< ファイルパス
@@ -64,9 +64,9 @@ private:
 //! 一時ファイル
 class CTmpFile {
 public:
-	CTmpFile(){ m_fp = tmpfile(); }
-	~CTmpFile(){ fclose(m_fp); }
-	FILE* GetFilePointer() const{ return m_fp; }
+	CTmpFile() { m_fp = tmpfile(); }
+	~CTmpFile() { fclose(m_fp); }
+	FILE* GetFilePointer() const { return m_fp; }
 private:
 	FILE* m_fp;
 };

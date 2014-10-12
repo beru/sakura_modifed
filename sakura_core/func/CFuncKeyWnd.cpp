@@ -297,10 +297,10 @@ LRESULT CFuncKeyWnd::OnTimer( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		// ファンクションキーの機能名を取得
 		for (int i = 0; i < _countof( m_szFuncNameArr ); ++i) {
 			// 2007.02.22 ryoji CKeyBind::GetFuncCode()を使う
-			EFunctionCode	nFuncCode = CKeyBind::GetFuncCode(
-					(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
-					m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-					m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
+			EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
+				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
+				m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
+				m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
 			);
 			if (nFuncCode != m_nFuncCodeArr[i]) {
 				m_nFuncCodeArr[i] = nFuncCode;
@@ -342,7 +342,7 @@ LRESULT CFuncKeyWnd::OnDestroy( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 {
 	// タイマーを削除
 	Timer_ONOFF( false ); // 20060126 aroka
-
+	
 	// ボタンを削除
 	for (int i = 0; i < _countof( m_hwndButtonArr ); ++i) {
 		if (m_hwndButtonArr[i]) {
@@ -350,15 +350,15 @@ LRESULT CFuncKeyWnd::OnDestroy( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			m_hwndButtonArr[i] = NULL;
 		}
 	}
-
+	
 	// サイズボックスを削除
 	if (m_hwndSizeBox) {
 		::DestroyWindow( m_hwndSizeBox );
 		m_hwndSizeBox = NULL;
 	}
-
+	
 	_SetHwnd(NULL);
-
+	
 	return 0L;
 }
 
@@ -368,7 +368,7 @@ int CFuncKeyWnd::CalcButtonSize( void )
 {
 	RECT rc;
 	::GetWindowRect( GetHwnd(), &rc );
-
+	
 	int nButtonNum = _countof( m_hwndButtonArr );
 	int nCxVScroll;
 	if (!m_hwndSizeBox) {
@@ -380,11 +380,10 @@ int CFuncKeyWnd::CalcButtonSize( void )
 		nCxVScroll = ::GetSystemMetrics( SM_CXVSCROLL );
 		::MoveWindow( m_hwndSizeBox,  rc.right - rc.left - nCxVScroll, rc.bottom - rc.top - nCyHScroll, nCxVScroll, nCyHScroll, TRUE );
 //		::MoveWindow( m_hwndSizeBox,  0, 0, nCxVScroll, nCyHScroll, TRUE );
-
+		
 //		return ( rc.right - rc.left - nCxVScroll = - nButtonNum -  ( (nButtonNum + m_nButtonGroupNum - 1) / m_nButtonGroupNum - 1 ) * 12 ) / nButtonNum;
 	}
 	return ( rc.right - rc.left - nCxVScroll - nButtonNum -  ( (nButtonNum + m_nButtonGroupNum - 1) / m_nButtonGroupNum - 1 ) * 12 ) / nButtonNum;
-
 }
 
 

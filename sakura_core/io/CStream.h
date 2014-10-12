@@ -49,19 +49,19 @@ public:
 	void SeekSet(	//!< シーク
 		long offset	//!< ストリーム先頭からのオフセット 
 	);
-	void SeekEnd(   //!< シーク
+	void SeekEnd(  //!< シーク
 		long offset //!< ストリーム終端からのオフセット
 	);
 
 	// 状態
-	virtual bool Good() const{ return m_fp!=NULL && !Eof(); }
+	virtual bool Good() const { return m_fp!=NULL && !Eof(); }
 	bool Eof() const { return m_fp == NULL || feof(m_fp); }
 
 	// ファイルハンドル
 	FILE* GetFp() const { return m_fp; }
 
 	// モード
-	bool IsExceptionMode() const{ return m_bExceptionMode; }
+	bool IsExceptionMode() const { return m_bExceptionMode; }
 private:
 	FILE*			m_fp;
 	CFileAttribute*	m_pcFileAttribute;

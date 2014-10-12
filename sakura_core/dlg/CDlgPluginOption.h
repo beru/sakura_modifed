@@ -46,10 +46,10 @@ class CPropPlugin;
 typedef std::wstring wstring;
 
 // 型 
-static const wstring	OPTION_TYPE_BOOL = wstring( L"bool" );
-static const wstring	OPTION_TYPE_INT  = wstring( L"int" );
-static const wstring	OPTION_TYPE_SEL  = wstring( L"sel" );
-static const wstring	OPTION_TYPE_DIR  = wstring( L"dir" );
+static const wstring	OPTION_TYPE_BOOL = wstring(L"bool");
+static const wstring	OPTION_TYPE_INT  = wstring(L"int");
+static const wstring	OPTION_TYPE_SEL  = wstring(L"sel");
+static const wstring	OPTION_TYPE_DIR  = wstring(L"dir");
 
 class CDlgPluginOption : public CDialog {
 public:
@@ -62,30 +62,30 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, CPropPlugin*, int );	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, CPropPlugin*, int);	// モーダルダイアログの表示
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL	OnInitDialog( HWND, WPARAM wParam, LPARAM lParam );
-	BOOL	OnBnClicked( int );
-	BOOL	OnNotify( WPARAM wParam, LPARAM lParam );
-	BOOL	OnCbnSelChange( HWND hwndCtl, int wID );
-	BOOL	OnEnChange( HWND hwndCtl, int wID );
-	BOOL	OnActivate( WPARAM wParam, LPARAM lParam );
-	LPVOID	GetHelpIdTable( void );
+	BOOL	OnInitDialog(HWND, WPARAM wParam, LPARAM lParam);
+	BOOL	OnBnClicked(int);
+	BOOL	OnNotify(WPARAM wParam, LPARAM lParam);
+	BOOL	OnCbnSelChange(HWND hwndCtl, int wID);
+	BOOL	OnEnChange(HWND hwndCtl, int wID);
+	BOOL	OnActivate(WPARAM wParam, LPARAM lParam);
+	LPVOID	GetHelpIdTable(void);
 
-	void	SetData( void );	// ダイアログデータの設定
-	int		GetData( void );	// ダイアログデータの取得
+	void	SetData(void);	// ダイアログデータの設定
+	int		GetData(void);	// ダイアログデータの取得
 
-	void	ChangeListPosition( void );					// 編集領域をリストビューに合せて切替える
-	void	MoveFocusToEdit( void );					// 編集領域にフォーカスを移す
-	void	SetToEdit( int );
-	void	SetFromEdit( int );
-	void	SelectEdit( int );							// 編集領域の切り替え
-	void	SepSelect( wstring, wstring*, wstring* );	// 選択用文字列分解
-	void	SelectDirectory( int iLine );				// ディレクトリを選択する
+	void	ChangeListPosition(void);				// 編集領域をリストビューに合せて切替える
+	void	MoveFocusToEdit(void);					// 編集領域にフォーカスを移す
+	void	SetToEdit(int);
+	void	SetFromEdit(int);
+	void	SelectEdit(int);						// 編集領域の切り替え
+	void	SepSelect(wstring, wstring*, wstring*);	// 選択用文字列分解
+	void	SelectDirectory(int iLine);				// ディレクトリを選択する
 
 private:
 	CPlugin*		m_cPlugin;

@@ -70,18 +70,18 @@ CPrint CPrintPreview::m_cPrint;		//!< 現在のプリンタ情報 2003.05.02 かろと
 	印刷プレビューを表示するために必要な情報を初期化、領域確保。
 	コントロールも作成する。
 */
-CPrintPreview::CPrintPreview(CEditWnd* pParentWnd ) :
-	m_pParentWnd( pParentWnd ),
-	m_hdcCompatDC( NULL ),			// 再描画用コンパチブルDC
-	m_hbmpCompatBMP( NULL ),		// 再描画用メモリBMP
-	m_hbmpCompatBMPOld( NULL ),		// 再描画用メモリBMP(OLD)
-	m_nbmpCompatScale( COMPAT_BMP_BASE ),
-	m_nPreviewVScrollPos( 0 ),
-	m_nPreviewHScrollPos( 0 ),
-	m_nPreview_Zoom( 100 ),			// 印刷プレビュー倍率
-	m_nCurPageNum( 0 ),				// 現在のページ
-	m_bLockSetting( false ),
-	m_bDemandUpdateSetting( false )
+CPrintPreview::CPrintPreview(CEditWnd* pParentWnd) :
+	m_pParentWnd(pParentWnd),
+	m_hdcCompatDC(NULL),			// 再描画用コンパチブルDC
+	m_hbmpCompatBMP(NULL),		// 再描画用メモリBMP
+	m_hbmpCompatBMPOld(NULL),		// 再描画用メモリBMP(OLD)
+	m_nbmpCompatScale(COMPAT_BMP_BASE),
+	m_nPreviewVScrollPos(0),
+	m_nPreviewHScrollPos(0),
+	m_nPreview_Zoom(100),			// 印刷プレビュー倍率
+	m_nCurPageNum(0),				// 現在のページ
+	m_bLockSetting(false),
+	m_bDemandUpdateSetting(false)
 {
 	// 印刷用のレイアウト情報の作成
 	m_pLayoutMgr_Print = new CLayoutMgr;
@@ -90,9 +90,9 @@ CPrintPreview::CPrintPreview(CEditWnd* pParentWnd ) :
 	CreatePrintPreviewControls();
 
 	// 再描画用コンパチブルDC
-	HDC hdc = ::GetDC( pParentWnd->GetHwnd() );
-	m_hdcCompatDC = ::CreateCompatibleDC( hdc );
-	::ReleaseDC( pParentWnd->GetHwnd(), hdc );
+	HDC hdc = ::GetDC(pParentWnd->GetHwnd());
+	m_hdcCompatDC = ::CreateCompatibleDC(hdc);
+	::ReleaseDC(pParentWnd->GetHwnd(), hdc);
 }
 
 CPrintPreview::~CPrintPreview()
@@ -104,18 +104,18 @@ CPrintPreview::~CPrintPreview()
 	delete m_pLayoutMgr_Print;
 	
 	// フォント幅キャッシュを編集モードに戻す
-	SelectCharWidthCache( CWM_FONT_EDIT, CWM_CACHE_NEUTRAL );
+	SelectCharWidthCache(CWM_FONT_EDIT, CWM_CACHE_NEUTRAL);
 
 	// 2006.08.17 Moca CompatDC削除。CEditWndから移設
 	// 再描画用メモリBMP
 	if (m_hbmpCompatBMP != NULL) {
 		// 再描画用メモリBMP(OLD)
-		::SelectObject( m_hdcCompatDC, m_hbmpCompatBMPOld );
-		::DeleteObject( m_hbmpCompatBMP );
+		::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);
+		::DeleteObject(m_hbmpCompatBMP);
 	}
 	// 再描画用コンパチブルDC
 	if (m_hdcCompatDC != NULL) {
-		::DeleteDC( m_hdcCompatDC );
+		::DeleteDC(m_hdcCompatDC);
 	}
 }
 
@@ -132,7 +132,7 @@ LRESULT CPrintPreview::OnPaint(
 )
 {
 	PAINTSTRUCT		ps;
-	HDC				hdcOld = ::BeginPaint( hwnd, &ps );
+	HDC				hdcOld = ::BeginPaint(hwnd, &ps);
 	HDC				hdc = m_hdcCompatDC;	//	親ウィンドウのComatibleDCに描く
 
 	// 印刷プレビュー 操作バー
@@ -142,17 +142,17 @@ LRESULT CPrintPreview::OnPaint(
 	// クライアント領域全体をグレーで塗りつぶす
 	{
 		RECT bmpRc;
-		::GetClientRect( hwnd, &bmpRc );
+		::GetClientRect(hwnd, &bmpRc);
 		bmpRc.right  = (bmpRc.right  * m_nbmpCompatScale) / COMPAT_BMP_BASE;
 		bmpRc.bottom = (bmpRc.bottom * m_nbmpCompatScale) / COMPAT_BMP_BASE;
-		::FillRect( hdc, &bmpRc, (HBRUSH)::GetStockObject( GRAY_BRUSH ) );
+		::FillRect(hdc, &bmpRc, (HBRUSH)::GetStockObject(GRAY_BRUSH));
 	}
 
 	// ツールバー高さ -> nToolBarHeight
 	int nToolBarHeight = 0;
 	if (m_hwndPrintPreviewBar) {
 		RECT rc;
-		::GetWindowRect( m_hwndPrintPreviewBar, &rc );
+		::GetWindowRect(m_hwndPrintPreviewBar, &rc);
 		nToolBarHeight = rc.bottom - rc.top;
 	}
 
@@ -166,45 +166,45 @@ LRESULT CPrintPreview::OnPaint(
 
 	// 要素情報の表示 -> IDD_PRINTPREVIEWBAR右下のSTATICへ
 	TCHAR	szPaperName[256];
-	CPrint::GetPaperName( m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperName );
+	CPrint::GetPaperName(m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperName);
 	auto_sprintf_s(
 		szText,
 		_T("%ts  %ts"),
 		szPaperName,
 		(m_pPrintSetting->m_mdmDevMode.dmOrientation & DMORIENT_LANDSCAPE) ? LS(STR_ERR_DLGPRNPRVW1) : LS(STR_ERR_DLGPRNPRVW2)
 	);
-	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_PAPER, szText );
+	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_PAPER, szText);
 
 	// バックグラウンド モードを変更
-	::SetBkMode( hdc, TRANSPARENT );
+	::SetBkMode(hdc, TRANSPARENT);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        マッピング                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// マッピングモードの変更
 	int nMapModeOld =
-	::SetMapMode( hdc, MM_LOMETRIC );
-	::SetMapMode( hdc, MM_ANISOTROPIC );
+	::SetMapMode(hdc, MM_LOMETRIC);
+	::SetMapMode(hdc, MM_ANISOTROPIC);
 
 	// 出力倍率の変更
 	SIZE sz;
-	::GetWindowExtEx( hdc, &sz );
+	::GetWindowExtEx(hdc, &sz);
 	int nCx = sz.cx;
 	int nCy = sz.cy;
-	nCx = (int)( ((long)nCx) * 100L / ((long)m_nPreview_Zoom) );
-	nCy = (int)( ((long)nCy) * 100L / ((long)m_nPreview_Zoom) );
+	nCx = (int)(((long)nCx) * 100L / ((long)m_nPreview_Zoom));
+	nCy = (int)(((long)nCy) * 100L / ((long)m_nPreview_Zoom));
 	// 作画時は、 COMPAT_BMP_SCALE/COMPAT_BMP_BASE倍の座標 (SetWindowExtExは逆なので反対になる)
 	nCx = (nCx * COMPAT_BMP_BASE) / m_nbmpCompatScale;
 	nCy = (nCy * COMPAT_BMP_BASE) / m_nbmpCompatScale;
-	::SetWindowExtEx( hdc, nCx, nCy, &sz );
+	::SetWindowExtEx(hdc, nCx, nCy, &sz);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         フォント                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// フォント作成
-	CreateFonts( hdc );
+	CreateFonts(hdc);
 	// 印刷用半角フォントに設定し、以前のフォントを保持
-	HFONT hFontOld = (HFONT)::SelectObject( hdc, m_hFontHan );
+	HFONT hFontOld = (HFONT)::SelectObject(hdc, m_hFontHan);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           原点                              //
@@ -226,44 +226,44 @@ LRESULT CPrintPreview::OnPaint(
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 用紙の描画
 	int	nDirectY = -1;	//	Y座標の下をプラス方向にするため？
-	::Rectangle( hdc,
+	::Rectangle(hdc,
 		m_nPreview_ViewMarginLeft,
-		nDirectY * ( m_nPreview_ViewMarginTop ),
+		nDirectY * (m_nPreview_ViewMarginTop),
 		m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth + 1,
-		nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight + 1 )
+		nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight + 1)
 	);
 
 	// マージン枠の表示
 	CGraphics gr(hdc);
-	gr.SetPen( RGB(128,128,128) ); // 2006.08.14 Moca 127を128に変更
-	::Rectangle( hdc,
+	gr.SetPen(RGB(128,128,128)); // 2006.08.14 Moca 127を128に変更
+	::Rectangle(hdc,
 		m_nPreview_ViewMarginLeft + m_pPrintSetting->m_nPrintMarginLX,
-		nDirectY * ( m_nPreview_ViewMarginTop + m_pPrintSetting->m_nPrintMarginTY ),
+		nDirectY * (m_nPreview_ViewMarginTop + m_pPrintSetting->m_nPrintMarginTY),
 		m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - m_pPrintSetting->m_nPrintMarginRX + 1,
-		nDirectY * ( m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - m_pPrintSetting->m_nPrintMarginBY )
+		nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - m_pPrintSetting->m_nPrintMarginBY)
 	);
 	gr.ClearPen();
 
-	::SetTextColor( hdc, RGB( 0, 0, 0 ) );
+	::SetTextColor(hdc, RGB(0, 0, 0));
 
 	RECT cRect;	// 紙の大きさをあらわすRECT
 	cRect.left   = m_nPreview_ViewMarginLeft +                             m_pPrintSetting->m_nPrintMarginLX + 5;
 	cRect.right  = m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + 5);
-	cRect.top    = nDirectY * ( m_nPreview_ViewMarginTop +                              m_pPrintSetting->m_nPrintMarginTY + 5);
-	cRect.bottom = nDirectY * ( m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + 5));
+	cRect.top    = nDirectY * (m_nPreview_ViewMarginTop +                              m_pPrintSetting->m_nPrintMarginTY + 5);
+	cRect.bottom = nDirectY * (m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + 5));
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         テキスト                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	int nHeaderHeight = CPrint::CalcHeaderHeight( m_pPrintSetting );
+	int nHeaderHeight = CPrint::CalcHeaderHeight(m_pPrintSetting);
 
 	// ヘッダ
 	if (nHeaderHeight) {
-		DrawHeaderFooter( hdc, cRect, true );
+		DrawHeaderFooter(hdc, cRect, true);
 	}
 
-	CColorStrategy* pStrategyStart = DrawPageTextFirst( m_nCurPageNum );
+	CColorStrategy* pStrategyStart = DrawPageTextFirst(m_nCurPageNum);
 
 	// 印刷/印刷プレビュー ページテキストの描画
 	DrawPageText(
@@ -276,31 +276,31 @@ LRESULT CPrintPreview::OnPaint(
 	);
 
 	// フッタ
-	if (CPrint::CalcFooterHeight( m_pPrintSetting )) {
-		DrawHeaderFooter( hdc, cRect, false );
+	if (CPrint::CalcFooterHeight(m_pPrintSetting)) {
+		DrawHeaderFooter(hdc, cRect, false);
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                          後始末                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//	印刷前のフォントに戻す
-	::SelectObject( hdc, hFontOld );
+	::SelectObject(hdc, hFontOld);
 
 	// マッピングモードの変更
-	::SetMapMode( hdc, nMapModeOld );
+	::SetMapMode(hdc, nMapModeOld);
 
 	//	印刷用フォント破棄
 	DestroyFonts();
 
 	// 物理座標原点をもとに戻す
-	::SetViewportOrgEx( hdc, poViewPortOld.x, poViewPortOld.y, NULL );
+	::SetViewportOrgEx(hdc, poViewPortOld.x, poViewPortOld.y, NULL);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       実画面へ転送                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// メモリＤＣを利用した再描画の場合はメモリＤＣに描画した内容を画面へコピーする
 	RECT rc = ps.rcPaint;
-	::DPtoLP( hdc, (POINT*)&rc, 2 );
+	::DPtoLP(hdc, (POINT*)&rc, 2);
 	if (1 == (m_nbmpCompatScale / COMPAT_BMP_BASE)) {
 		::BitBlt(
 			hdcOld,
@@ -314,7 +314,7 @@ LRESULT CPrintPreview::OnPaint(
 			SRCCOPY
 		);
 	}else {
-		int stretchModeOld = SetStretchBltMode( hdcOld, STRETCH_HALFTONE );
+		int stretchModeOld = SetStretchBltMode(hdcOld, STRETCH_HALFTONE);
 		::StretchBlt(
 			hdcOld,
 			ps.rcPaint.left,
@@ -328,88 +328,88 @@ LRESULT CPrintPreview::OnPaint(
 			((ps.rcPaint.bottom - ps.rcPaint.top) * m_nbmpCompatScale) / COMPAT_BMP_BASE,
 			SRCCOPY
 		);
-		SetStretchBltMode( hdcOld, stretchModeOld );
+		SetStretchBltMode(hdcOld, stretchModeOld);
 	}
-	::EndPaint( hwnd, &ps );
+	::EndPaint(hwnd, &ps);
 	return 0L;
 }
 
-LRESULT CPrintPreview::OnSize( WPARAM wParam, LPARAM lParam )
+LRESULT CPrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 {
-	int	cx = LOWORD( lParam );
-	int	cy = HIWORD( lParam );
+	int	cx = LOWORD(lParam);
+	int	cy = HIWORD(lParam);
 
 	// 印刷プレビュー 操作バー
 	int nToolBarHeight = 0;
 	if (m_hwndPrintPreviewBar) {
 		RECT			rc;
-		::GetWindowRect( m_hwndPrintPreviewBar, &rc );
+		::GetWindowRect(m_hwndPrintPreviewBar, &rc);
 		nToolBarHeight = rc.bottom - rc.top;
-		::MoveWindow( m_hwndPrintPreviewBar, 0, 0, cx, nToolBarHeight, TRUE );
+		::MoveWindow(m_hwndPrintPreviewBar, 0, 0, cx, nToolBarHeight, TRUE);
 	}
 
 	// 印刷プレビュー 垂直スクロールバーウィンドウ
-	int	nCxVScroll = ::GetSystemMetrics( SM_CXVSCROLL );
-	int	nCyVScroll = ::GetSystemMetrics( SM_CYVSCROLL );
+	int	nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);
+	int	nCyVScroll = ::GetSystemMetrics(SM_CYVSCROLL);
 	if (m_hwndVScrollBar) {
-		::MoveWindow( m_hwndVScrollBar, cx - nCxVScroll, nToolBarHeight, nCxVScroll, cy - nCyVScroll - nToolBarHeight, TRUE );
+		::MoveWindow(m_hwndVScrollBar, cx - nCxVScroll, nToolBarHeight, nCxVScroll, cy - nCyVScroll - nToolBarHeight, TRUE);
 	}
 	
 	// 印刷プレビュー 水平スクロールバーウィンドウ
-	int	nCxHScroll = ::GetSystemMetrics( SM_CXHSCROLL );
-	int	nCyHScroll = ::GetSystemMetrics( SM_CYHSCROLL );
+	int	nCxHScroll = ::GetSystemMetrics(SM_CXHSCROLL);
+	int	nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);
 	if (m_hwndHScrollBar) {
-		::MoveWindow( m_hwndHScrollBar, 0, cy - nCyHScroll, cx - nCxVScroll, nCyHScroll, TRUE );
+		::MoveWindow(m_hwndHScrollBar, 0, cy - nCyHScroll, cx - nCxVScroll, nCyHScroll, TRUE);
 	}
 	
 	// 印刷プレビュー サイズボックスウィンドウ
 	if (m_hwndSizeBox) {
-		::MoveWindow( m_hwndSizeBox, cx - nCxVScroll, cy - nCyHScroll, nCxHScroll, nCyVScroll, TRUE );
+		::MoveWindow(m_hwndSizeBox, cx - nCxVScroll, cy - nCyHScroll, nCxHScroll, nCyVScroll, TRUE);
 	}
 
-	HDC hdc = ::GetDC( m_pParentWnd->GetHwnd() );
-	int nMapModeOld = ::SetMapMode( hdc, MM_LOMETRIC );
-	::SetMapMode( hdc, MM_ANISOTROPIC );
+	HDC hdc = ::GetDC(m_pParentWnd->GetHwnd());
+	int nMapModeOld = ::SetMapMode(hdc, MM_LOMETRIC);
+	::SetMapMode(hdc, MM_ANISOTROPIC);
 
 	// 出力倍率の変更
 	SIZE sz;
-	::GetWindowExtEx( hdc, &sz );
+	::GetWindowExtEx(hdc, &sz);
 	int nCx = sz.cx;
 	int nCy = sz.cy;
-	nCx = (int)( ((long)nCx) * 100L / ((long)m_nPreview_Zoom) );
-	nCy = (int)( ((long)nCy) * 100L / ((long)m_nPreview_Zoom) );
-	::SetWindowExtEx( hdc, nCx, nCy, &sz );
+	nCx = (int)(((long)nCx) * 100L / ((long)m_nPreview_Zoom));
+	nCy = (int)(((long)nCy) * 100L / ((long)m_nPreview_Zoom));
+	::SetWindowExtEx(hdc, nCx, nCy, &sz);
 
 	// ビューのサイズ
 	POINT po;
 	po.x = m_nPreview_PaperAllWidth + m_nPreview_ViewMarginLeft * 2;
 	po.y = m_nPreview_PaperAllHeight + m_nPreview_ViewMarginTop * 2;
-	::LPtoDP( hdc, &po, 1 );
+	::LPtoDP(hdc, &po, 1);
 
 	// 再描画用メモリＢＭＰ
 	if (m_hbmpCompatBMP != NULL) {
-		::SelectObject( m_hdcCompatDC, m_hbmpCompatBMPOld );	// 再描画用メモリＢＭＰ(OLD)
-		::DeleteObject( m_hbmpCompatBMP );
+		::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);	// 再描画用メモリＢＭＰ(OLD)
+		::DeleteObject(m_hbmpCompatBMP);
 	}
 	// 2007.02.11 Moca プレビューを滑らかにする
-	if (BST_CHECKED == ::IsDlgButtonChecked( m_hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS )) {
+	if (BST_CHECKED == ::IsDlgButtonChecked(m_hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS)) {
 		m_nbmpCompatScale = COMPAT_BMP_SCALE;
 	}else {
 		m_nbmpCompatScale = COMPAT_BMP_BASE;
 	}
-	m_hbmpCompatBMP = ::CreateCompatibleBitmap( hdc, (cx * m_nbmpCompatScale + COMPAT_BMP_BASE - 1) / COMPAT_BMP_BASE,
+	m_hbmpCompatBMP = ::CreateCompatibleBitmap(hdc, (cx * m_nbmpCompatScale + COMPAT_BMP_BASE - 1) / COMPAT_BMP_BASE,
 		(cy * m_nbmpCompatScale + COMPAT_BMP_BASE - 1) / COMPAT_BMP_BASE);
-	m_hbmpCompatBMPOld = (HBITMAP)::SelectObject( m_hdcCompatDC, m_hbmpCompatBMP );
+	m_hbmpCompatBMPOld = (HBITMAP)::SelectObject(m_hdcCompatDC, m_hbmpCompatBMP);
 
-	::SetMapMode( hdc, nMapModeOld );
+	::SetMapMode(hdc, nMapModeOld);
 
-	::ReleaseDC( m_pParentWnd->GetHwnd(), hdc );
+	::ReleaseDC(m_pParentWnd->GetHwnd(), hdc);
 
 	// 印刷プレビュー：ビュー幅(ピクセル)
-	m_nPreview_ViewWidth = abs( po.x );
+	m_nPreview_ViewWidth = abs(po.x);
 	
 	// 印刷プレビュー：ビュー高さ(ピクセル)
-	m_nPreview_ViewHeight = abs( po.y );
+	m_nPreview_ViewHeight = abs(po.y);
 	
 	// 印刷プレビュー スクロールバー初期化
 	InitPreviewScrollBar();
@@ -418,39 +418,39 @@ LRESULT CPrintPreview::OnSize( WPARAM wParam, LPARAM lParam )
 	
 	m_pParentWnd->SetDragPosOrg(CMyPoint(0,0));
 	m_pParentWnd->SetDragMode(true);
-	OnMouseMove( 0, MAKELONG( 0, 0 ) );
+	OnMouseMove(0, MAKELONG(0, 0));
 	m_pParentWnd->SetDragMode(false);
 	//	SizeBox問題テスト
 	if (m_hwndSizeBox) {
 		if (wParam == SIZE_MAXIMIZED) {
-			::ShowWindow( m_hwndSizeBox, SW_HIDE );
+			::ShowWindow(m_hwndSizeBox, SW_HIDE);
 		}else
 		if (wParam == SIZE_RESTORED) {
-			if (::IsZoomed( m_pParentWnd->GetHwnd() )) {
-				::ShowWindow( m_hwndSizeBox, SW_HIDE );
+			if (::IsZoomed(m_pParentWnd->GetHwnd())) {
+				::ShowWindow(m_hwndSizeBox, SW_HIDE);
 			}else {
-				::ShowWindow( m_hwndSizeBox, SW_SHOW );
+				::ShowWindow(m_hwndSizeBox, SW_SHOW);
 			}
 		}else {
-			::ShowWindow( m_hwndSizeBox, SW_SHOW );
+			::ShowWindow(m_hwndSizeBox, SW_SHOW);
 		}
 	}
-	::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
+	::InvalidateRect(m_pParentWnd->GetHwnd(), NULL, TRUE);
 	return 0L;
 }
 
 /*!
 	@date 2006.08.14 Moca SB_TOP, SB_BOTTOMへの対応
 */
-LRESULT CPrintPreview::OnVScroll( WPARAM wParam, LPARAM lParam )
+LRESULT CPrintPreview::OnVScroll(WPARAM wParam, LPARAM lParam)
 {
 	int nScrollCode = (int) LOWORD(wParam);
 	//nPos = (int) HIWORD(wParam);
 	HWND hwndScrollBar = (HWND) lParam;
 	SCROLLINFO si;
-	si.cbSize = sizeof( si );
+	si.cbSize = sizeof(si);
 	si.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
-	::GetScrollInfo( hwndScrollBar, SB_CTL, &si );
+	::GetScrollInfo(hwndScrollBar, SB_CTL, &si);
 	int nPos = si.nTrackPos; // 2013.05.30 32bit対応
 	int nNowPos = -1 * m_nPreviewVScrollPos;
 	int nNewPos = 0;
@@ -494,10 +494,10 @@ LRESULT CPrintPreview::OnVScroll( WPARAM wParam, LPARAM lParam )
 	if (nPreviewVScrollPos != m_nPreviewVScrollPos) {
 		si.fMask = SIF_POS;
 		si.nPos = nNewPos;
-		::SetScrollInfo( hwndScrollBar, SB_CTL, &si, TRUE);
+		::SetScrollInfo(hwndScrollBar, SB_CTL, &si, TRUE);
 		m_nPreviewVScrollPos = nPreviewVScrollPos;
 		// 描画
-		::ScrollWindowEx( m_pParentWnd->GetHwnd(), 0, nMove, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE );
+		::ScrollWindowEx(m_pParentWnd->GetHwnd(), 0, nMove, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	}
 	return 0;
 }
@@ -505,15 +505,15 @@ LRESULT CPrintPreview::OnVScroll( WPARAM wParam, LPARAM lParam )
 /*!
 	@date 2006.08.14 Moca SB_LEFT, SB_RIGHTへの対応
 */
-LRESULT CPrintPreview::OnHScroll( WPARAM wParam, LPARAM lParam )
+LRESULT CPrintPreview::OnHScroll(WPARAM wParam, LPARAM lParam)
 {
 	int nScrollCode = (int) LOWORD(wParam);
 	//nPos = (int) HIWORD(wParam);
 	HWND hwndScrollBar = (HWND) lParam;
 	SCROLLINFO si;
-	si.cbSize = sizeof( si );
+	si.cbSize = sizeof(si);
 	si.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
-	::GetScrollInfo( hwndScrollBar, SB_CTL, &si );
+	::GetScrollInfo(hwndScrollBar, SB_CTL, &si);
 	int nPos = si.nTrackPos; // 2013.05.30 32bit対応
 	//nNowPos = GetScrollPosだとロジクールのSetPointで不具合があり、nPos == nNowPosになってしまう
 	int nNowPos = m_nPreviewHScrollPos;
@@ -557,15 +557,15 @@ LRESULT CPrintPreview::OnHScroll( WPARAM wParam, LPARAM lParam )
 	if (nPreviewHScrollPos != m_nPreviewHScrollPos) {
 		si.fMask = SIF_POS;
 		si.nPos = nNewPos;
-		::SetScrollInfo( hwndScrollBar, SB_CTL, &si, TRUE);
+		::SetScrollInfo(hwndScrollBar, SB_CTL, &si, TRUE);
 		m_nPreviewHScrollPos = nPreviewHScrollPos;
 		// 描画
-		::ScrollWindowEx( m_pParentWnd->GetHwnd(), nMove, 0, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE );
+		::ScrollWindowEx(m_pParentWnd->GetHwnd(), nMove, 0, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	}
 	return 0;
 }
 
-LRESULT CPrintPreview::OnMouseMove( WPARAM wParam, LPARAM lParam )
+LRESULT CPrintPreview::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	// 手カーソル
 	SetHandCursor();		// Hand Cursorを設定 2013/1/29 Uchi
@@ -573,22 +573,22 @@ LRESULT CPrintPreview::OnMouseMove( WPARAM wParam, LPARAM lParam )
 		return 0;
 	}
 //	WPARAM fwKeys = wParam;			// key flags
-	int xPos = LOWORD( lParam );	// horizontal position of cursor
-	int yPos = HIWORD( lParam );	// vertical position of cursor
+	int xPos = LOWORD(lParam);	// horizontal position of cursor
+	int yPos = HIWORD(lParam);	// vertical position of cursor
 	RECT rc;
-	GetClientRect( m_pParentWnd->GetHwnd(), &rc );
+	GetClientRect(m_pParentWnd->GetHwnd(), &rc);
 	POINT po;
 	po.x = xPos;
 	po.y = yPos;
-	if (!PtInRect( &rc, po )) {	//	プレビュー内かチェック。
+	if (!PtInRect(&rc, po)) {	//	プレビュー内かチェック。
 		return 0;
 	}
 
 	//	Y軸
 	SCROLLINFO siV;
-	siV.cbSize = sizeof( siV );
+	siV.cbSize = sizeof(siV);
 	siV.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
-	GetScrollInfo( m_hwndVScrollBar, SB_CTL, &siV );
+	GetScrollInfo(m_hwndVScrollBar, SB_CTL, &siV);
 	int nMoveY;
 	if (m_SCROLLBAR_VERT) {
 		int nNowPosY = siV.nTrackPos;
@@ -604,7 +604,7 @@ LRESULT CPrintPreview::OnMouseMove( WPARAM wParam, LPARAM lParam )
 		nMoveY = nNowPosY - nNewPosY;
 		siV.fMask = SIF_POS;
 		siV.nPos = nNewPosY;
-		SetScrollInfo( m_hwndVScrollBar, SB_CTL, &siV, TRUE );
+		SetScrollInfo(m_hwndVScrollBar, SB_CTL, &siV, TRUE);
 		m_nPreviewVScrollPos = -1 * nNewPosY;
 	}else {
 		nMoveY = 0;
@@ -612,9 +612,9 @@ LRESULT CPrintPreview::OnMouseMove( WPARAM wParam, LPARAM lParam )
 
 	//	X軸
 	SCROLLINFO siH;
-	siH.cbSize = sizeof( siH );
+	siH.cbSize = sizeof(siH);
 	siH.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
-	GetScrollInfo( m_hwndHScrollBar, SB_CTL, &siH );
+	GetScrollInfo(m_hwndHScrollBar, SB_CTL, &siH);
 	int nMoveX;
 	if (m_SCROLLBAR_HORZ) {
 		int nNowPosX = siH.nTrackPos;
@@ -630,7 +630,7 @@ LRESULT CPrintPreview::OnMouseMove( WPARAM wParam, LPARAM lParam )
 		nMoveX = nNowPosX - nNewPosX;
 		siH.fMask = SIF_POS;
 		siH.nPos = nNewPosX;
-		SetScrollInfo( m_hwndHScrollBar, SB_CTL, &siH, TRUE );
+		SetScrollInfo(m_hwndHScrollBar, SB_CTL, &siH, TRUE);
 		m_nPreviewHScrollPos = nNewPosX;
 	}else {
 		nMoveX = 0;
@@ -638,11 +638,11 @@ LRESULT CPrintPreview::OnMouseMove( WPARAM wParam, LPARAM lParam )
 
 	m_pParentWnd->SetDragPosOrg(CMyPoint(xPos,yPos));
 	// 描画
-	ScrollWindowEx( m_pParentWnd->GetHwnd(), nMoveX, nMoveY, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE );
+	ScrollWindowEx(m_pParentWnd->GetHwnd(), nMoveX, nMoveY, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	return 0;
 }
 
-LRESULT CPrintPreview::OnMouseWheel( WPARAM wParam, LPARAM lParam )
+LRESULT CPrintPreview::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 //	WORD	fwKeys = LOWORD(wParam);			// key flags
 	short	zDelta = (short) HIWORD(wParam);	// wheel rotation
@@ -658,10 +658,10 @@ LRESULT CPrintPreview::OnMouseWheel( WPARAM wParam, LPARAM lParam )
 
 	for (int i = 0; i < 3; ++i) {
 		// 印刷プレビュー 垂直スクロールバーメッセージ処理 WM_VSCROLL
-		::PostMessageAny( m_pParentWnd->GetHwnd(), WM_VSCROLL, MAKELONG( nScrollCode, 0 ), (LPARAM)m_hwndVScrollBar );
+		::PostMessageAny(m_pParentWnd->GetHwnd(), WM_VSCROLL, MAKELONG(nScrollCode, 0), (LPARAM)m_hwndVScrollBar);
 
 		// 処理中のユーザー操作を可能にする
-		if (!::BlockingHook( NULL )) {
+		if (!::BlockingHook(NULL)) {
 			return -1;
 		}
 	}
@@ -679,11 +679,11 @@ void CPrintPreview::OnChangeSetting()
 	OnChangePrintSetting();
 }
 
-void CPrintPreview::OnChangePrintSetting( void )
+void CPrintPreview::OnChangePrintSetting(void)
 {
-	HDC hdc = ::GetDC( m_pParentWnd->GetHwnd() );
-	::SetMapMode( hdc, MM_LOMETRIC ); //MM_HIMETRIC それぞれの論理単位は、0.01 mm にマップされます
-	::SetMapMode( hdc, MM_ANISOTROPIC );
+	HDC hdc = ::GetDC(m_pParentWnd->GetHwnd());
+	::SetMapMode(hdc, MM_LOMETRIC); //MM_HIMETRIC それぞれの論理単位は、0.01 mm にマップされます
+	::SetMapMode(hdc, MM_ANISOTROPIC);
 
 	::EnumFontFamilies(
 		hdc,
@@ -713,9 +713,9 @@ void CPrintPreview::OnChangePrintSetting( void )
 	m_pPrintSetting->m_mdmDevMode.dmPaperSize = m_pPrintSetting->m_nPrintPaperSize;
 	m_pPrintSetting->m_mdmDevMode.dmOrientation = m_pPrintSetting->m_nPrintPaperOrientation;
 	// 用紙サイズ、用紙方向は変更したのでビットを立てる
-	m_pPrintSetting->m_mdmDevMode.dmFields |= ( DM_ORIENTATION | DM_PAPERSIZE );
+	m_pPrintSetting->m_mdmDevMode.dmFields |= (DM_ORIENTATION | DM_PAPERSIZE);
 	// 用紙の長さ、幅は決まっていないので、ビットを下ろす
-	m_pPrintSetting->m_mdmDevMode.dmFields &= (~DM_PAPERLENGTH );
+	m_pPrintSetting->m_mdmDevMode.dmFields &= (~DM_PAPERLENGTH);
 	m_pPrintSetting->m_mdmDevMode.dmFields &= (~DM_PAPERWIDTH);
 
 	// 印刷/プレビューに必要な情報を取得
@@ -743,14 +743,14 @@ void CPrintPreview::OnChangePrintSetting( void )
 		m_pPrintSetting->m_mdmDevMode.dmOrientation = DMORIENT_PORTRAIT;
 		m_pPrintSetting->m_mdmDevMode.dmPaperLength = m_nPreview_PaperHeight;
 		m_pPrintSetting->m_mdmDevMode.dmPaperWidth = m_nPreview_PaperWidth;
-		m_pPrintSetting->m_mdmDevMode.dmFields |= ( DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
+		m_pPrintSetting->m_mdmDevMode.dmFields |= (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
 	}else {
 		if (m_pPrintSetting->m_nPrintPaperSize != m_pPrintSetting->m_mdmDevMode.dmPaperSize) {
 			TCHAR szPaperNameOld[256];
 			TCHAR szPaperNameNew[256];
 			// 用紙の名前を取得
-			CPrint::GetPaperName( m_pPrintSetting->m_nPrintPaperSize , szPaperNameOld );
-			CPrint::GetPaperName( m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperNameNew );
+			CPrint::GetPaperName(m_pPrintSetting->m_nPrintPaperSize , szPaperNameOld);
+			CPrint::GetPaperName(m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperNameNew);
 
 			TopWarningMessage(
 				m_pParentWnd->GetHwnd(),
@@ -772,20 +772,20 @@ void CPrintPreview::OnChangePrintSetting( void )
 	m_nPreview_ViewMarginTop = 8 * 10;		// 印刷プレビュー：ビュー左端と用紙の間隔(1/10mm単位)
 
 	// 行あたりの文字数(行番号込み)
-	m_bPreview_EnableColumns = CLayoutInt( CPrint::CalculatePrintableColumns( m_pPrintSetting, m_nPreview_PaperAllWidth, m_nPreview_LineNumberColumns ) );	// 印字可能桁数/ページ
+	m_bPreview_EnableColumns = CLayoutInt(CPrint::CalculatePrintableColumns(m_pPrintSetting, m_nPreview_PaperAllWidth, m_nPreview_LineNumberColumns));	// 印字可能桁数/ページ
 	// 縦方向の行数
-	m_bPreview_EnableLines = CPrint::CalculatePrintableLines( m_pPrintSetting, m_nPreview_PaperAllHeight );			// 印字可能行数/ページ
+	m_bPreview_EnableLines = CPrint::CalculatePrintableLines(m_pPrintSetting, m_nPreview_PaperAllHeight);			// 印字可能行数/ページ
 
 	// 印字可能領域がない場合は印刷プレビューを終了する 2013.5.10 aroka
 	if (m_bPreview_EnableColumns == 0 || m_bPreview_EnableLines == 0) {
 		CEditWnd* pcEditWnd = m_pParentWnd;
 		pcEditWnd->PrintPreviewModeONOFF();
-		pcEditWnd->SendStatusMessage( LS(STR_ERR_DLGPRNPRVW3_1) );
+		pcEditWnd->SendStatusMessage(LS(STR_ERR_DLGPRNPRVW3_1));
 		return;
 	}
 
 	// 印刷用のレイアウト管理情報の初期化
-	m_pLayoutMgr_Print->Create( m_pParentWnd->GetDocument(), &m_pParentWnd->GetDocument()->m_cDocLineMgr );
+	m_pLayoutMgr_Print->Create(m_pParentWnd->GetDocument(), &m_pParentWnd->GetDocument()->m_cDocLineMgr);
 
 	// 印刷用のレイアウト情報の変更
 	// タイプ別設定をコピー
@@ -812,9 +812,9 @@ void CPrintPreview::OnChangePrintSetting( void )
 	ref.m_bKinsokuTail = m_pPrintSetting->m_bPrintKinsokuTail,	// 行末禁則する	//@@@ 2002.04.08 MIK
 	ref.m_bKinsokuRet = m_pPrintSetting->m_bPrintKinsokuRet,	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
 	ref.m_bKinsokuKuto = m_pPrintSetting->m_bPrintKinsokuKuto,	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	m_pLayoutMgr_Print->SetLayoutInfo( true, ref, ref.m_nTabSpace, ref.m_nMaxLineKetas );
-	m_nAllPageNum = (WORD)((Int)m_pLayoutMgr_Print->GetLineCount() / ( m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu ));		// 全ページ数
-	if (0 < m_pLayoutMgr_Print->GetLineCount() % ( m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu )) {
+	m_pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.m_nTabSpace, ref.m_nMaxLineKetas);
+	m_nAllPageNum = (WORD)((Int)m_pLayoutMgr_Print->GetLineCount() / (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu));		// 全ページ数
+	if (0 < m_pLayoutMgr_Print->GetLineCount() % (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu)) {
 		m_nAllPageNum++;
 	}
 	if (m_nAllPageNum <= m_nCurPageNum) {	// 現在のページ
@@ -823,11 +823,11 @@ void CPrintPreview::OnChangePrintSetting( void )
 
 	// WM_SIZE 処理
 	RECT rc;
-	::GetClientRect( m_pParentWnd->GetHwnd(), &rc );
-	OnSize( SIZE_RESTORED, MAKELONG( rc.right - rc.left, rc.bottom - rc.top ) );
-	::ReleaseDC( m_pParentWnd->GetHwnd(), hdc );
+	::GetClientRect(m_pParentWnd->GetHwnd(), &rc);
+	OnSize(SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
+	::ReleaseDC(m_pParentWnd->GetHwnd(), hdc);
 	// プレビュー ページ指定
-	OnPreviewGoPage( m_nCurPageNum );
+	OnPreviewGoPage(m_nCurPageNum);
 	m_bLockSetting = bLockOld;
 	if (m_bDemandUpdateSetting) {
 		// やりなおし
@@ -840,7 +840,7 @@ void CPrintPreview::OnChangePrintSetting( void )
 
 	@author Moca
 **/
-void CPrintPreview::OnPreviewGoDirectPage( void )
+void CPrintPreview::OnPreviewGoDirectPage(void)
 {
 	const int INPUT_PAGE_NUM_LEN = 12;
 
@@ -848,8 +848,8 @@ void CPrintPreview::OnPreviewGoDirectPage( void )
 	TCHAR szMessage[512];
 	TCHAR szPageNum[INPUT_PAGE_NUM_LEN];
 	
-	auto_sprintf_s( szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum );
-	auto_sprintf_s( szPageNum, _T("%d"), m_nCurPageNum + 1 );
+	auto_sprintf_s(szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum);
+	auto_sprintf_s(szPageNum, _T("%d"), m_nCurPageNum + 1);
 
 	BOOL bDlgInputPageResult=cDlgInputPage.DoModal(
 		CEditApp::getInstance()->GetAppInstance(),
@@ -860,18 +860,18 @@ void CPrintPreview::OnPreviewGoDirectPage( void )
 		szPageNum
 	);
 	if (FALSE != bDlgInputPageResult) {
-		int nPageNumLen = _tcslen( szPageNum );
+		int nPageNumLen = _tcslen(szPageNum);
 		for (int i = 0; i < nPageNumLen;  i++) {
 			if (!(_T('0') <= szPageNum[i] &&  szPageNum[i] <= _T('9'))) {
 				return;
 			}
 		}
-		int nPage = _ttoi( szPageNum );
-		OnPreviewGoPage( nPage - 1 );
+		int nPage = _ttoi(szPageNum);
+		OnPreviewGoPage(nPage - 1);
 	}
 }
 
-void CPrintPreview::OnPreviewGoPage( int nPage )
+void CPrintPreview::OnPreviewGoPage(int nPage)
 {
 	if (m_nAllPageNum <= nPage) {	// 現在のページ
 		nPage = m_nAllPageNum - 1;
@@ -888,7 +888,7 @@ void CPrintPreview::OnPreviewGoPage( int nPage )
 	//		次・前どちらも，ボタン有効化→フォーカス移動→ボタン無効化の順にした
 	if (0 < m_nCurPageNum) {
 		//	前のページボタンをオン
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE ), TRUE );
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE), TRUE);
 	}
 
 	if (m_nAllPageNum <= m_nCurPageNum + 1) {
@@ -896,31 +896,31 @@ void CPrintPreview::OnPreviewGoPage( int nPage )
 		//	Jul. 18, 2001 genta FocusのあるWindowをDisableにすると操作できなくなるのを回避
 		//	Mar. 9, 2003 genta 1ページしか無いときは「前へ」ボタンもDisableされているので、
 		//	最後のページまで達したら「戻る」にフォーカスを移すように
-		::SetFocus( ::GetDlgItem( m_hwndPrintPreviewBar, IDCANCEL ));
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE ), FALSE );
+		::SetFocus(::GetDlgItem(m_hwndPrintPreviewBar, IDCANCEL));
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE), FALSE);
 	}else {
 		//	次のページボタンをオン。
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE ), TRUE );
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE), TRUE);
 	}
 
 	if (0 == m_nCurPageNum) {
 		//	最初のページのときは、前のページボタンをオフ。
 		//	Jul. 18, 2001 genta FocusのあるWindowをDisableにすると操作できなくなるのを回避
-		::SetFocus( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE ));
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE ), FALSE );
+		::SetFocus(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE));
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE), FALSE);
 	}
 	wchar_t	szEdit[1024];
-	auto_sprintf_s( szEdit, LSW(STR_ERR_DLGPRNPRVW6), m_nCurPageNum + 1, m_nAllPageNum );
-	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_PAGENUM, szEdit );
+	auto_sprintf_s(szEdit, LSW(STR_ERR_DLGPRNPRVW6), m_nCurPageNum + 1, m_nAllPageNum);
+	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_PAGENUM, szEdit);
 
-	auto_sprintf_s( szEdit, L"%d %%", m_nPreview_Zoom );
-	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit );
+	auto_sprintf_s(szEdit, L"%d %%", m_nPreview_Zoom);
+	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit);
 
-	::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
+	::InvalidateRect(m_pParentWnd->GetHwnd(), NULL, TRUE);
 	return;
 }
 
-void CPrintPreview::OnPreviewZoom( BOOL bZoomUp )
+void CPrintPreview::OnPreviewZoom(BOOL bZoomUp)
 {
 	if (bZoomUp) {
 		m_nPreview_Zoom += 10;	// 印刷プレビュー倍率
@@ -942,39 +942,39 @@ void CPrintPreview::OnPreviewZoom( BOOL bZoomUp )
 	if (MIN_PREVIEW_ZOOM == m_nPreview_Zoom) {
 		// 2013.05.30 FocusがDisableなウィンドウだとマウススクロールできない対策
 		HWND focus = ::GetFocus();
-		if (focus == GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN )) {
-			::SetFocus( m_pParentWnd->GetHwnd() );
+		if (focus == GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN)) {
+			::SetFocus(m_pParentWnd->GetHwnd());
 		}
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN ), FALSE );
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN), FALSE);
 	}else {
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN ), TRUE );
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMDOWN), TRUE);
 	}
 	//	拡大ボタンのON/OFF
 	if (MAX_PREVIEW_ZOOM == m_nPreview_Zoom) {
 		// 2013.05.30 FocusがDisableなウィンドウだとマウススクロールできない対策
 		HWND focus = ::GetFocus();
-		if (focus == GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP )) {
-			::SetFocus( m_pParentWnd->GetHwnd() );
+		if (focus == GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP)) {
+			::SetFocus(m_pParentWnd->GetHwnd());
 		}
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP ), FALSE );
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP), FALSE);
 	}else {
-		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP ), TRUE );
+		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_ZOOMUP), TRUE);
 	}
 
 	wchar_t	szEdit[1024];
-	auto_sprintf_s( szEdit, L"%d %%", m_nPreview_Zoom );
-	::DlgItem_SetText( m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit );
+	auto_sprintf_s(szEdit, L"%d %%", m_nPreview_Zoom);
+	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit);
 
 	// WM_SIZE 処理
 	RECT rc1;
-	::GetClientRect( m_pParentWnd->GetHwnd(), &rc1 );
-	OnSize( SIZE_RESTORED, MAKELONG( rc1.right - rc1.left, rc1.bottom - rc1.top ) );
+	::GetClientRect(m_pParentWnd->GetHwnd(), &rc1);
+	OnSize(SIZE_RESTORED, MAKELONG(rc1.right - rc1.left, rc1.bottom - rc1.top));
 
 	// 印刷プレビュー スクロールバー初期化
 	InitPreviewScrollBar();
 
 	// 再描画
-	::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
+	::InvalidateRect(m_pParentWnd->GetHwnd(), NULL, TRUE);
 	return;
 }
 
@@ -983,34 +983,34 @@ void CPrintPreview::OnPreviewZoom( BOOL bZoomUp )
 	滑らか
 	チェック時、2倍(COMPAT_BMP_SCALE/COMPAT_BMP_BASE)サイズでレンダリングする
 */
-void CPrintPreview::OnCheckAntialias( void )
+void CPrintPreview::OnCheckAntialias(void)
 {
 	// WM_SIZE 処理
 	RECT	rc;
-	::GetClientRect( m_pParentWnd->GetHwnd(), &rc );
-	OnSize( SIZE_RESTORED, MAKELONG( rc.right - rc.left, rc.bottom - rc.top ) );
+	::GetClientRect(m_pParentWnd->GetHwnd(), &rc);
+	OnSize(SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 }
 
 
 /*!
 	印刷
 */
-void CPrintPreview::OnPrint( void )
+void CPrintPreview::OnPrint(void)
 {
 	if (0 == m_nAllPageNum) {
-		TopWarningMessage( m_pParentWnd->GetHwnd(), LS(STR_ERR_DLGPRNPRVW7) );
+		TopWarningMessage(m_pParentWnd->GetHwnd(), LS(STR_ERR_DLGPRNPRVW7));
 		return;
 	}
 
 	// プリンタに渡すジョブ名を生成
 	TCHAR szJobName[256 + 1];
 	if (!m_pParentWnd->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {	// 現在編集中のファイルのパス
-		_tcscpy_s( szJobName, LS(STR_NO_TITLE2) );
+		_tcscpy_s(szJobName, LS(STR_NO_TITLE2));
 	}else {
 		TCHAR szFileName[_MAX_FNAME];
 		TCHAR szExt[_MAX_EXT];
-		_tsplitpath( m_pParentWnd->GetDocument()->m_cDocFile.GetFilePath(), NULL, NULL, szFileName, szExt );
-		auto_snprintf_s( szJobName, _countof(szJobName), _T("%ts%ts"), szFileName, szExt );
+		_tsplitpath(m_pParentWnd->GetDocument()->m_cDocFile.GetFilePath(), NULL, NULL, szFileName, szExt);
+		auto_snprintf_s(szJobName, _countof(szJobName), _T("%ts%ts"), szFileName, szExt);
 	}
 
 	// 印刷範囲を指定できるプリンタダイアログを作成
@@ -1059,12 +1059,12 @@ void CPrintPreview::OnPrint( void )
 
 	// 印刷過程を表示して、キャンセルするためのダイアログを作成
 	CDlgCancel	cDlgPrinting;
-	cDlgPrinting.DoModeless( CEditApp::getInstance()->GetAppInstance(), m_pParentWnd->GetHwnd(), IDD_PRINTING );
-	::DlgItem_SetText( cDlgPrinting.GetHwnd(), IDC_STATIC_JOBNAME, szJobName );
-	::DlgItem_SetText( cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, _T("") );	// XPS対応 2013/5/8 Uchi
+	cDlgPrinting.DoModeless(CEditApp::getInstance()->GetAppInstance(), m_pParentWnd->GetHwnd(), IDD_PRINTING);
+	::DlgItem_SetText(cDlgPrinting.GetHwnd(), IDC_STATIC_JOBNAME, szJobName);
+	::DlgItem_SetText(cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, _T(""));	// XPS対応 2013/5/8 Uchi
 
 	// 親ウィンドウを無効化
-	::EnableWindow( m_pParentWnd->GetHwnd(), FALSE );
+	::EnableWindow(m_pParentWnd->GetHwnd(), FALSE);
 
 	// 2013.06.10 Moca キーワード強調設定をロックして、印刷中に共通設定を更新されないようにする
 	CShareDataLockCounter lock;
@@ -1079,37 +1079,37 @@ void CPrintPreview::OnPrint( void )
 		szErrMsg						// エラーメッセージ格納場所
 		)
 	) {
-//		MYTRACE( _T("%ts\n"), szErrMsg );
+//		MYTRACE(_T("%ts\n"), szErrMsg);
 	}
 
 	// 印刷用半角フォントと、印刷用全角フォントを作成
-	CreateFonts( hdc );
+	CreateFonts(hdc);
 	// 現在のフォントを印刷用半角フォントに設定＆以前のフォントを保持
 	// OnPrint以前のフォント
-	HFONT hFontOld = (HFONT)::SelectObject( hdc, m_hFontHan );
+	HFONT hFontOld = (HFONT)::SelectObject(hdc, m_hFontHan);
 
 	// 紙の大きさをあらわすRECTを設定
 	int nDirectY = -1;
 	RECT cRect;
 	cRect.left   =                             m_pPrintSetting->m_nPrintMarginLX - m_nPreview_PaperOffsetLeft + 5;
 	cRect.right  = m_nPreview_PaperAllWidth - (m_pPrintSetting->m_nPrintMarginRX + m_nPreview_PaperOffsetLeft + 5);
-	cRect.top    = nDirectY * (                              m_pPrintSetting->m_nPrintMarginTY - m_nPreview_PaperOffsetTop + 5 );
-	cRect.bottom = nDirectY * ( m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + m_nPreview_PaperOffsetTop + 5) );
+	cRect.top    = nDirectY * (                             m_pPrintSetting->m_nPrintMarginTY - m_nPreview_PaperOffsetTop + 5);
+	cRect.bottom = nDirectY * (m_nPreview_PaperAllHeight - (m_pPrintSetting->m_nPrintMarginBY + m_nPreview_PaperOffsetTop + 5));
 
 	// ヘッダ・フッタの$pを展開するために、m_nCurPageNumを保持
 	WORD nCurPageNumOld = m_nCurPageNum;
-	CColorStrategy* pStrategy = DrawPageTextFirst( m_nCurPageNum );
+	CColorStrategy* pStrategy = DrawPageTextFirst(m_nCurPageNum);
 	TCHAR szProgress[100];
 	for (int i = 0; i < nNum; ++i) {
 		m_nCurPageNum = nFrom + (WORD)i;
 
 		// 印刷過程を表示
 		//	Jun. 18, 2001 genta ページ番号表示の計算ミス修正
-		auto_sprintf_s( szProgress, _T("%d/%d"), i + 1, nNum );
-		::DlgItem_SetText( cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, szProgress );
+		auto_sprintf_s(szProgress, _T("%d/%d"), i + 1, nNum);
+		::DlgItem_SetText(cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, szProgress);
 
 		// 印刷 ページ開始
-		m_cPrint.PrintStartPage( hdc );
+		m_cPrint.PrintStartPage(hdc);
 
 		//	From Here Jun. 26, 2003 かろと / おきた
 		//	Windows 95/98ではStartPage()関数の呼び出し時に、属性はリセットされて既定値へ戻ります．
@@ -1118,22 +1118,22 @@ void CPrintPreview::OnPrint( void )
 		//	Windows NT/2000ではStartPageでも属性はリセットされません．
 
 		// マッピングモードの変更
-		::SetMapMode( hdc, MM_LOMETRIC );		//それぞれの論理単位は、0.1 mm にマップされます
-		::SetMapMode( hdc, MM_ANISOTROPIC );	//論理単位は、任意にスケーリングされた軸上の任意の単位にマップされます
+		::SetMapMode(hdc, MM_LOMETRIC);		//それぞれの論理単位は、0.1 mm にマップされます
+		::SetMapMode(hdc, MM_ANISOTROPIC);	//論理単位は、任意にスケーリングされた軸上の任意の単位にマップされます
 
 		// 現在のフォントを印刷用半角フォントに設定
-		::SelectObject( hdc, m_hFontHan );
+		::SelectObject(hdc, m_hFontHan);
 		//	To Here Jun. 26, 2003 かろと / おきた
 
-		int nHeaderHeight = CPrint::CalcHeaderHeight( m_pPrintSetting );
+		int nHeaderHeight = CPrint::CalcHeaderHeight(m_pPrintSetting);
 
 		// ヘッダ印刷
 		if (nHeaderHeight) {
-			DrawHeaderFooter( hdc, cRect, true );
+			DrawHeaderFooter(hdc, cRect, true);
 		}
 
-		const CLayoutInt	nPageTopLineNum = CLayoutInt( ((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines );
-		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY( nPageTopLineNum );
+		const CLayoutInt	nPageTopLineNum = CLayoutInt(((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
+		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 		if (m_pPrintSetting->m_bColorPrint
 			&& !(i == 0)
 			&& pcPageTopLayout->GetLogicOffset() == 0
@@ -1156,12 +1156,12 @@ void CPrintPreview::OnPrint( void )
 		);
 
 		// フッタ印刷
-		if (CPrint::CalcFooterHeight( m_pPrintSetting )) {
-			DrawHeaderFooter( hdc, cRect, false );
+		if (CPrint::CalcFooterHeight(m_pPrintSetting)) {
+			DrawHeaderFooter(hdc, cRect, false);
 		}
 
 		// 印刷 ページ終了
-		m_cPrint.PrintEndPage( hdc );
+		m_cPrint.PrintEndPage(hdc);
 
 		// 中断ボタン押下チェック
 		if (cDlgPrinting.IsCanceled()) {
@@ -1169,16 +1169,16 @@ void CPrintPreview::OnPrint( void )
 		}
 	}
 	//	印刷前のフォントに戻す 2003.05.02 かろと hdc解放の前に処理順序を変更
-	::SelectObject( hdc, hFontOld );
+	::SelectObject(hdc, hFontOld);
 
 	// 印刷 ジョブ終了
-	m_cPrint.PrintClose( hdc );
+	m_cPrint.PrintClose(hdc);
 
 	//	印刷用フォント破棄
 	DestroyFonts();
 
-	::EnableWindow( m_pParentWnd->GetHwnd(), TRUE );
-	cDlgPrinting.CloseDialog( 0 );
+	::EnableWindow(m_pParentWnd->GetHwnd(), TRUE);
+	cDlgPrinting.CloseDialog(0);
 
 	m_nCurPageNum = nCurPageNumOld;
 
@@ -1203,7 +1203,7 @@ static void Tab2Space(wchar_t* pTrg)
 
 /*! 印刷/印刷プレビュー ヘッダ･フッタの描画
 */
-void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader )
+void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 {
 	bool		bFontSetting = (bHeader ? m_pPrintSetting->m_lfHeader.lfFaceName[0] : m_pPrintSetting->m_lfFooter.lfFaceName[0]) != _T('\0');
 	const int	nWorkLen = 1024;
@@ -1213,15 +1213,15 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 	if (bFontSetting) {
 		// フォント作成
 		LOGFONT	lf = (bHeader ? m_pPrintSetting->m_lfHeader : m_pPrintSetting->m_lfFooter);
-		lf.lfHeight = -( bHeader ? m_pPrintSetting->m_nHeaderPointSize : m_pPrintSetting->m_nFooterPointSize) * 254 / 720;	// フォントのサイズ計算(pt->1/10mm)
-		HFONT hFontForce = ::CreateFontIndirect( &lf );
+		lf.lfHeight = -(bHeader ? m_pPrintSetting->m_nHeaderPointSize : m_pPrintSetting->m_nFooterPointSize) * 254 / 720;	// フォントのサイズ計算(pt->1/10mm)
+		HFONT hFontForce = ::CreateFontIndirect(&lf);
 
 		// フォント設定
-		HFONT hFontOld = (HFONT)::SelectObject( hdc, hFontForce );
+		HFONT hFontOld = (HFONT)::SelectObject(hdc, hFontForce);
 
 		// TextMetricの取得
 		TEXTMETRIC	tm;
-		::GetTextMetrics( hdc, &tm );
+		::GetTextMetrics(hdc, &tm);
 
 		// Y座標基準
 		int nY = bHeader ? rect.top : rect.bottom + tm.tmHeight;
@@ -1230,7 +1230,7 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 		CSakuraEnvironment::ExpandParameter(
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_LEFT] : m_pPrintSetting->m_szFooterForm[POS_LEFT],
 			szWork, nWorkLen);
-		Tab2Space( szWork );
+		Tab2Space(szWork);
 		::ExtTextOutW_AnyBuild(
 			hdc,
 			rect.left,
@@ -1238,7 +1238,7 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 			0,
 			NULL,
 			szWork,
-			wcslen( szWork ),
+			wcslen(szWork),
 			NULL
 		);
 
@@ -1246,13 +1246,13 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 		CSakuraEnvironment::ExpandParameter(
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_CENTER] : m_pPrintSetting->m_szFooterForm[POS_CENTER],
 			szWork, nWorkLen);
-		Tab2Space( szWork );
+		Tab2Space(szWork);
 		SIZE	Size;
 		nLen = wcslen(szWork);
-		::GetTextExtentPoint32W( hdc, szWork, nLen, &Size);		//テキスト幅
+		::GetTextExtentPoint32W(hdc, szWork, nLen, &Size);		//テキスト幅
 		::ExtTextOutW_AnyBuild(
 			hdc,
-			( rect.right + rect.left - Size.cx) / 2,
+			(rect.right + rect.left - Size.cx) / 2,
 			nY,
 			0,
 			NULL,
@@ -1265,9 +1265,9 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 		CSakuraEnvironment::ExpandParameter(
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_RIGHT] : m_pPrintSetting->m_szFooterForm[POS_RIGHT],
 			szWork, nWorkLen);
-		Tab2Space( szWork );
+		Tab2Space(szWork);
 		nLen = wcslen(szWork);
-		::GetTextExtentPoint32W( hdc, szWork, nLen, &Size);		//テキスト幅
+		::GetTextExtentPoint32W(hdc, szWork, nLen, &Size);		//テキスト幅
 		::ExtTextOutW_AnyBuild(
 			hdc,
 			rect.right - Size.cx,
@@ -1279,8 +1279,8 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 			NULL
 		);
 		// フォントの戻し
-		::SelectObject( hdc, hFontOld );
-		::DeleteObject( hFontForce );
+		::SelectObject(hdc, hFontOld);
+		::DeleteObject(hFontForce);
 	}else {
 		// 文字間隔
 		int nDx = m_pPrintSetting->m_nPrintFontWidth;
@@ -1292,7 +1292,7 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 		CSakuraEnvironment::ExpandParameter(
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_LEFT] : m_pPrintSetting->m_szFooterForm[POS_LEFT],
 			szWork, nWorkLen);
-		nLen = wcslen( szWork );
+		nLen = wcslen(szWork);
 		Print_DrawLine(
 			hdc,
 			CMyPoint(
@@ -1310,12 +1310,12 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 		CSakuraEnvironment::ExpandParameter(
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_CENTER] : m_pPrintSetting->m_szFooterForm[POS_CENTER],
 			szWork, nWorkLen);
-		nLen = wcslen( szWork );
+		nLen = wcslen(szWork);
 		int nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); //テキスト幅
 		Print_DrawLine(
 			hdc,
 			CMyPoint(
-				( rect.right + rect.left - nTextWidth) / 2,
+				(rect.right + rect.left - nTextWidth) / 2,
 				nY
 			),
 			szWork,
@@ -1329,7 +1329,7 @@ void CPrintPreview::DrawHeaderFooter( HDC hdc, const CMyRect& rect, bool bHeader
 		CSakuraEnvironment::ExpandParameter(
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_RIGHT] : m_pPrintSetting->m_szFooterForm[POS_RIGHT],
 			szWork, nWorkLen);
-		nLen = wcslen( szWork );
+		nLen = wcslen(szWork);
 		nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); //テキスト幅
 		Print_DrawLine(
 			hdc,
@@ -1358,8 +1358,8 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 		m_pool = CColorStrategyPool::getInstance();
 		m_pool->SetCurrentView(&(m_pParentWnd->GetActiveView()));
 
-		const CLayoutInt	nPageTopLineNum = CLayoutInt( (nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines );
-		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY( nPageTopLineNum );
+		const CLayoutInt	nPageTopLineNum = CLayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
+		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 
 		if (pcPageTopLayout != NULL) {
 			const CLogicInt		nPageTopOff = pcPageTopLayout->GetLogicOffset();
@@ -1370,7 +1370,7 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 			}
 
 			// 論理行先頭のCColorStrategy取得
-			pStrategy = m_pool->GetStrategyByColor( pcPageTopLayout->GetColorTypePrev() );
+			pStrategy = m_pool->GetStrategyByColor(pcPageTopLayout->GetColorTypePrev());
 			m_pool->NotifyOnStartScanLogic();
 			if (pStrategy) {
 				pStrategy->InitStrategyStatus();
@@ -1380,7 +1380,7 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 				CStringRef	csr = pcPageTopLayout->GetDocLineRef()->GetStringRefWithEOL();
 				CLogicInt	iLogic;
 				for (iLogic = 0; iLogic < nPageTopOff; ++iLogic) {
-					pStrategy = GetColorStrategy( csr, iLogic, pStrategy );
+					pStrategy = GetColorStrategy(csr, iLogic, pStrategy);
 				}
 			}
 		}
@@ -1406,7 +1406,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 {
 	int				nDirectY = -1;
 
-	const int		nLineHeight = m_pPrintSetting->m_nPrintFontHeight + ( m_pPrintSetting->m_nPrintFontHeight * m_pPrintSetting->m_nPrintLineSpacing / 100 );
+	const int		nLineHeight = m_pPrintSetting->m_nPrintFontHeight + (m_pPrintSetting->m_nPrintFontHeight * m_pPrintSetting->m_nPrintLineSpacing / 100);
 	// 段と段の間隔の幅
 	const int		nDanWidth = (Int)m_bPreview_EnableColumns * m_pPrintSetting->m_nPrintFontWidth + m_pPrintSetting->m_nPrintDanSpace;
 	// 行番号の幅
@@ -1426,7 +1426,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 		for (i = 0; i < m_bPreview_EnableLines; ++i) {
 			if (pCDlgCancel) {
 				// 処理中のユーザー操作を可能にする
-				if (!::BlockingHook( pCDlgCancel->GetHwnd() )) {
+				if (!::BlockingHook(pCDlgCancel->GetHwnd())) {
 					return NULL;
 				}
 			}
@@ -1437,8 +1437,8 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				「段数（m_pPrintSetting->m_nPrintDansuu）」
 				「段数が1のときに、1ページあたりに何行入るか（m_bPreview_EnableLines）」
 			*/
-			const CLayoutInt nLineNum = CLayoutInt( (nPageNum * m_pPrintSetting->m_nPrintDansuu + nDan) * m_bPreview_EnableLines + i );
-			const CLayout* pcLayout = m_pLayoutMgr_Print->SearchLineByLayoutY( nLineNum );
+			const CLayoutInt nLineNum = CLayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu + nDan) * m_bPreview_EnableLines + i);
+			const CLayout* pcLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nLineNum);
 			if (!pcLayout) {
 				break;
 			}
@@ -1449,13 +1449,13 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				if (m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_bLineNumIsCRLF) {
 					// 論理行番号表示モード
 					if (0 != pcLayout->GetLogicOffset()) { //折り返しレイアウト行
-						wcscpy_s( szLineNum, L" " );
+						wcscpy_s(szLineNum, L" ");
 					}else {
-						_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	// 対応する論理行番号
+						_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
 					}
 				}else {
 					// 物理行(レイアウト行)番号表示モード
-					_itow( (Int)nLineNum + 1, szLineNum, 10 );
+					_itow((Int)nLineNum + 1, szLineNum, 10);
 				}
 
 				// 行番号区切り  0=なし 1=縦線 2=任意
@@ -1463,13 +1463,13 @@ CColorStrategy* CPrintPreview::DrawPageText(
 					wchar_t szLineTerm[2];
 					szLineTerm[0] = m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_cLineTermChar;	// 行番号区切り文字
 					szLineTerm[1] = L'\0';
-					wcscat( szLineNum, szLineTerm );
+					wcscat(szLineNum, szLineTerm);
 				}else {
-					wcscat( szLineNum, L" " );
+					wcscat(szLineNum, L" ");
 				}
 
 				//文字列長
-				const int nLineCols = wcslen( szLineNum );
+				const int nLineCols = wcslen(szLineNum);
 
 				//文字間隔配列を生成
 				vector<int> vDxArray;
@@ -1478,7 +1478,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				ApiWrap::ExtTextOutW_AnyBuild(
 					hdc,
 					nBasePosX - nLineCols * m_pPrintSetting->m_nPrintFontWidth,
-					nDirectY * ( nOffY + nLineHeight * i + ( m_pPrintSetting->m_nPrintFontHeight - m_nAscentHan ) ),
+					nDirectY * (nOffY + nLineHeight * i + (m_pPrintSetting->m_nPrintFontHeight - m_nAscentHan)),
 					0,
 					NULL,
 					szLineNum,
@@ -1509,7 +1509,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				hdc,
 				CMyPoint(
 					nBasePosX,
-					nDirectY * ( nOffY + nLineHeight * i )
+					nDirectY * (nOffY + nLineHeight * i)
 				),
 				pcLayout->GetDocLineRef()->GetPtr(),	// pcLayout->GetPtr(),
 				(Int)pcLayout->GetDocLineRef()->GetLengthWithEOL(),
@@ -1526,13 +1526,13 @@ CColorStrategy* CPrintPreview::DrawPageText(
 			&& 1 == m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_nLineTermType
 		) {
 			// 縦線は本文と行番号の隙間1桁の中心に作画する(画面作画では、右詰め)
-			::MoveToEx( hdc,
-				nBasePosX - (m_pPrintSetting->m_nPrintFontWidth / 2 ),
+			::MoveToEx(hdc,
+				nBasePosX - (m_pPrintSetting->m_nPrintFontWidth / 2),
 				nDirectY * nOffY,
-				NULL );
-			::LineTo( hdc,
-				nBasePosX - (m_pPrintSetting->m_nPrintFontWidth / 2 ),
-				nDirectY * ( nOffY + nLineHeight * i )
+				NULL);
+			::LineTo(hdc,
+				nBasePosX - (m_pPrintSetting->m_nPrintFontWidth / 2),
+				nDirectY * (nOffY + nLineHeight * i)
 			);
 		}
 	}
@@ -1541,22 +1541,22 @@ CColorStrategy* CPrintPreview::DrawPageText(
 
 
 // 印刷プレビュー スクロールバー初期化
-void CPrintPreview::InitPreviewScrollBar( void )
+void CPrintPreview::InitPreviewScrollBar(void)
 {
 	RECT rc;
 	int nToolBarHeight = 0;
 	if (m_hwndPrintPreviewBar) {
-		::GetWindowRect( m_hwndPrintPreviewBar, &rc );
+		::GetWindowRect(m_hwndPrintPreviewBar, &rc);
 		nToolBarHeight = rc.bottom - rc.top;
 	}
-	::GetClientRect( m_pParentWnd->GetHwnd(), &rc );
+	::GetClientRect(m_pParentWnd->GetHwnd(), &rc);
 	int cx = rc.right - rc.left;
 	int cy = rc.bottom - rc.top - nToolBarHeight;
 	
 	SCROLLINFO si;
 	if (m_hwndVScrollBar) {
 		// 垂直スクロールバー
-		si.cbSize = sizeof( si );
+		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		si.nMin  = 0;
 		if (m_nPreview_ViewHeight <= cy - nToolBarHeight) {
@@ -1572,14 +1572,14 @@ void CPrintPreview::InitPreviewScrollBar( void )
 			si.nTrackPos = 100;
 			m_SCROLLBAR_VERT = TRUE;
 		}
-		::SetScrollInfo( m_hwndVScrollBar, SB_CTL, &si, TRUE );
+		::SetScrollInfo(m_hwndVScrollBar, SB_CTL, &si, TRUE);
 	}
 	// 印刷プレビュー 水平スクロールバーウィンドウハンドル
 	if (m_hwndHScrollBar) {
-		si.cbSize = sizeof( si );
+		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 		// 水平スクロールバー
-//		si.cbSize = sizeof( si );
+//		si.cbSize = sizeof(si);
 //		si.fMask = SIF_ALL;
 		si.nMin  = 0;
 		if (m_nPreview_ViewWidth <= cx) {
@@ -1595,7 +1595,7 @@ void CPrintPreview::InitPreviewScrollBar( void )
 			si.nTrackPos = 100;
 			m_SCROLLBAR_HORZ = TRUE;
 		}
-		::SetScrollInfo( m_hwndHScrollBar, SB_CTL, &si, TRUE );
+		::SetScrollInfo(m_hwndHScrollBar, SB_CTL, &si, TRUE);
 	}
 	return;
 }
@@ -1652,7 +1652,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	int nKindLast = 2; //直前のnKind状態
 
 	// 色設定	2012-03-07 ossan
-	CStringRef cStringLine( pLine, nDocLineLen );
+	CStringRef cStringLine(pLine, nDocLineLen);
 	CColorStrategy* pStrategy = pStrategyStart;
 	CColorStrategy*	pStrategyLast = (CColorStrategy*)-1;
 
@@ -1692,7 +1692,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 
 				//桁進め
 				if (nKindLast == 2) {
-					nLayoutX += ( nTabSpace - nLayoutX % nTabSpace )
+					nLayoutX += (nTabSpace - nLayoutX % nTabSpace)
 						+ nTabSpace * (iLogic - nBgnLogic - 1);
 				}else {
 					int		nIncrement = 0;
@@ -1725,7 +1725,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	}
 
 	//フォントを元 (半角) に戻す
-	::SelectObject( hdc, m_hFontHan );
+	::SelectObject(hdc, m_hFontHan);
 
 	//色を元に戻す	2012-03-07 ossan
 	if (pcLayout) {
@@ -1766,7 +1766,7 @@ void CPrintPreview::Print_DrawBlock(
 	HFONT hFont = (nKind == 1 ? m_hFontZen : m_hFontHan);
 	// 色設定
 	if (pcLayout) {
-		int nColorIdx = ToColorInfoArrIndex( pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT );
+		int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 		if (-1 != nColorIdx) {
 			const ColorInfo& info = m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
 			if (nKind == 2 && !info.m_sFontAttr.m_bUnderLine) {
@@ -1785,15 +1785,15 @@ void CPrintPreview::Print_DrawBlock(
 				}
 			}
 			//	else					hFont = (nKind == 1 ? m_hFontZen   : m_hFontHan);		// 標準
-			::SetTextColor( hdc, info.m_sColorAttr.m_cTEXT);
-//			::SetBkColor( hdc, info.m_colBACK);
+			::SetTextColor(hdc, info.m_sColorAttr.m_cTEXT);
+//			::SetBkColor(hdc, info.m_colBACK);
 		}
 	}
-	::SelectObject( hdc, hFont );
+	::SelectObject(hdc, hFont);
 	::ExtTextOutW_AnyBuild(
 		hdc,
 		ptDraw.x + (Int)nLayoutX * nDx,
-		ptDraw.y - ( m_pPrintSetting->m_nPrintFontHeight - (nKind == 1 ? m_nAscentZen : m_nAscentHan) ),
+		ptDraw.y - (m_pPrintSetting->m_nPrintFontHeight - (nKind == 1 ? m_nAscentZen : m_nAscentHan)),
 		0,
 		NULL,
 		&pPhysicalLine[nBgnPhysical],
@@ -1849,7 +1849,7 @@ CColorStrategy* CPrintPreview::GetColorStrategy(
 	   TCHAR lfFaceName[LF_FACESIZE]; 
 	} LOGFONT;
 */
-void CPrintPreview::SetPreviewFontHan( const LOGFONT* lf )
+void CPrintPreview::SetPreviewFontHan(const LOGFONT* lf)
 {
 	m_lfPreviewHan = *lf;
 
@@ -1858,17 +1858,17 @@ void CPrintPreview::SetPreviewFontHan( const LOGFONT* lf )
 	m_lfPreviewHan.lfWidth			= m_pPrintSetting->m_nPrintFontWidth;
 	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan);
 
-	SelectCharWidthCache( CWM_FONT_PRINT, CWM_CACHE_LOCAL );
-	InitCharWidthCache( m_lfPreviewHan, CWM_FONT_PRINT );
+	SelectCharWidthCache(CWM_FONT_PRINT, CWM_CACHE_LOCAL);
+	InitCharWidthCache(m_lfPreviewHan, CWM_FONT_PRINT);
 }
 
-void CPrintPreview::SetPreviewFontZen( const LOGFONT* lf )
+void CPrintPreview::SetPreviewFontZen(const LOGFONT* lf)
 {
 	m_lfPreviewZen = *lf;
 	//	PrintSettingからコピー
 	m_lfPreviewZen.lfHeight	= m_pPrintSetting->m_nPrintFontHeight;
 	m_lfPreviewZen.lfWidth	= m_pPrintSetting->m_nPrintFontWidth;
-	_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->m_szPrintFontFaceZen );
+	_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->m_szPrintFontFaceZen);
 }
 
 int CALLBACK CPrintPreview::MyEnumFontFamProc(
@@ -1879,10 +1879,10 @@ int CALLBACK CPrintPreview::MyEnumFontFamProc(
 )
 {
 	CPrintPreview* pCPrintPreview = (CPrintPreview*)lParam;
-	if (0 == _tcscmp( pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan )) {
+	if (0 == _tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan)) {
 		pCPrintPreview->SetPreviewFontHan(&pelf->elfLogFont);
 	}
-	if (0 == _tcscmp( pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen )) {
+	if (0 == _tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen)) {
 		pCPrintPreview->SetPreviewFontZen(&pelf->elfLogFont);
 	}
 
@@ -1892,12 +1892,12 @@ int CALLBACK CPrintPreview::MyEnumFontFamProc(
 /*!
 	印刷プレビューに必要なコントロールを作成する
 */
-void CPrintPreview::CreatePrintPreviewControls( void )
+void CPrintPreview::CreatePrintPreviewControls(void)
 {
 	// 印刷プレビュー 操作バー
 	m_hwndPrintPreviewBar = ::CreateDialogParam(
 		CSelectLang::getLangRsrcInstance(),					// handle to application instance
-		MAKEINTRESOURCE( IDD_PRINTPREVIEWBAR ),				// identifies dialog box template name
+		MAKEINTRESOURCE(IDD_PRINTPREVIEWBAR),				// identifies dialog box template name
 		m_pParentWnd->GetHwnd(),							// handle to owner window
 		CPrintPreview::PrintPreviewBar_DlgProc,	// pointer to dialog box procedure
 		(LPARAM)this
@@ -1919,15 +1919,15 @@ void CPrintPreview::CreatePrintPreviewControls( void )
 		(LPVOID) NULL						// pointer not needed
 	);
 	SCROLLINFO si;
-	si.cbSize = sizeof( si );
+	si.cbSize = sizeof(si);
 	si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 	si.nMin	 = 0;
 	si.nMax	 = 29;
 	si.nPage = 10;
 	si.nPos	 = 0;
 	si.nTrackPos = 1;
-	::SetScrollInfo( m_hwndVScrollBar, SB_CTL, &si, TRUE );
-	::ShowScrollBar( m_hwndVScrollBar, SB_CTL, TRUE );
+	::SetScrollInfo(m_hwndVScrollBar, SB_CTL, &si, TRUE);
+	::ShowScrollBar(m_hwndVScrollBar, SB_CTL, TRUE);
 
 	// 横スクロールバーの作成
 	m_hwndHScrollBar = ::CreateWindowEx(
@@ -1944,15 +1944,15 @@ void CPrintPreview::CreatePrintPreviewControls( void )
 		CEditApp::getInstance()->GetAppInstance(),	// instance owning this window
 		(LPVOID) NULL						// pointer not needed
 	);
-	si.cbSize = sizeof( si );
+	si.cbSize = sizeof(si);
 	si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
 	si.nMin	 = 0;
 	si.nMax	 = 29;
 	si.nPage = 10;
 	si.nPos	 = 0;
 	si.nTrackPos = 1;
-	::SetScrollInfo( m_hwndHScrollBar, SB_CTL, &si, TRUE );
-	::ShowScrollBar( m_hwndHScrollBar, SB_CTL, TRUE );
+	::SetScrollInfo(m_hwndHScrollBar, SB_CTL, &si, TRUE);
+	::ShowScrollBar(m_hwndHScrollBar, SB_CTL, TRUE);
 
 	// サイズボックスの作成
 	m_hwndSizeBox = ::CreateWindowEx(
@@ -1969,12 +1969,12 @@ void CPrintPreview::CreatePrintPreviewControls( void )
 		CEditApp::getInstance()->GetAppInstance(),			// instance owning this window
 		(LPVOID) NULL										// pointer not needed
 	);
-	::ShowWindow( m_hwndPrintPreviewBar, SW_SHOW );
+	::ShowWindow(m_hwndPrintPreviewBar, SW_SHOW);
 
 	// WM_SIZE 処理
 	RECT rc1;
-	::GetClientRect( m_pParentWnd->GetHwnd(), &rc1 );
-	OnSize( SIZE_RESTORED, MAKELONG( rc1.right - rc1.left, rc1.bottom - rc1.top ) );
+	::GetClientRect(m_pParentWnd->GetHwnd(), &rc1);
+	OnSize(SIZE_RESTORED, MAKELONG(rc1.right - rc1.left, rc1.bottom - rc1.top));
 	return;
 }
 
@@ -1982,27 +1982,27 @@ void CPrintPreview::CreatePrintPreviewControls( void )
 /*!
 	印刷プレビューに必要だったコントロールを破棄する
 */
-void CPrintPreview::DestroyPrintPreviewControls( void )
+void CPrintPreview::DestroyPrintPreviewControls(void)
 {
 	// 印刷プレビュー 操作バー 削除
 	if (m_hwndPrintPreviewBar) {
-		::DestroyWindow( m_hwndPrintPreviewBar );
+		::DestroyWindow(m_hwndPrintPreviewBar);
 		m_hwndPrintPreviewBar = NULL;
 	}
 
 	// 印刷プレビュー 垂直スクロールバーウィンドウ 削除
 	if (m_hwndVScrollBar) {
-		::DestroyWindow( m_hwndVScrollBar );
+		::DestroyWindow(m_hwndVScrollBar);
 		m_hwndVScrollBar = NULL;
 	}
 	// 印刷プレビュー 水平スクロールバーウィンドウ 削除
 	if (m_hwndHScrollBar) {
-		::DestroyWindow( m_hwndHScrollBar );
+		::DestroyWindow(m_hwndHScrollBar);
 		m_hwndHScrollBar = NULL;
 	}
 	// 印刷プレビュー サイズボックスウィンドウ 削除
 	if (m_hwndSizeBox) {
-		::DestroyWindow( m_hwndSizeBox );
+		::DestroyWindow(m_hwndSizeBox);
 		m_hwndSizeBox = NULL;
 	}
 }
@@ -2019,18 +2019,18 @@ INT_PTR CALLBACK CPrintPreview::PrintPreviewBar_DlgProc(
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		// Modified by KEITA for WIN64 2003.9.6
-		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
+		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		// 2007.02.11 Moca WM_INITもDispatchEvent_PPBを呼ぶように
-		pCPrintPreview = ( CPrintPreview* )lParam;
+		pCPrintPreview = (CPrintPreview*)lParam;
 		if (pCPrintPreview) {
-			return pCPrintPreview->DispatchEvent_PPB( hwndDlg, uMsg, wParam, lParam );
+			return pCPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
 		}
 		return TRUE;
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
-		pCPrintPreview = ( CPrintPreview* )::GetWindowLongPtr( hwndDlg, DWLP_USER );
+		pCPrintPreview = (CPrintPreview*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
 		if (pCPrintPreview) {
-			return pCPrintPreview->DispatchEvent_PPB( hwndDlg, uMsg, wParam, lParam );
+			return pCPrintPreview->DispatchEvent_PPB(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;
 		}
@@ -2038,10 +2038,10 @@ INT_PTR CALLBACK CPrintPreview::PrintPreviewBar_DlgProc(
 }
 
 // 印刷プレビュー 操作バーにフォーカスを当てる
-void CPrintPreview::SetFocusToPrintPreviewBar( void )
+void CPrintPreview::SetFocusToPrintPreviewBar(void)
 {
 	if (m_hwndPrintPreviewBar) {
-		::SetFocus( m_hwndPrintPreviewBar );
+		::SetFocus(m_hwndPrintPreviewBar);
 	}
 }
 
@@ -2061,9 +2061,9 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 	case WM_INITDIALOG:
 		// 2007.02.11 Moca DWLP_USER設定は不要
 		//// Modified by KEITA for WIN64 2003.9.6
-		//::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
+		//::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		{
-			::EnableWindow( ::GetDlgItem(hwndDlg, IDC_CHECK_ANTIALIAS), TRUE );
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_ANTIALIAS), TRUE);
 		}
 		return TRUE;
 	case WM_COMMAND:
@@ -2080,7 +2080,7 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 					PRINTDLG pd = {0};
 					pd.Flags = PD_PRINTSETUP | PD_NONETWORKBUTTON;
 					pd.hwndOwner = m_pParentWnd->GetHwnd();
-					if (m_cPrint.PrintDlg( &pd, &m_pPrintSettingOrg->m_mdmDevMode )) {
+					if (m_cPrint.PrintDlg(&pd, &m_pPrintSettingOrg->m_mdmDevMode)) {
 						// 用紙サイズと用紙方向を反映させる 2003.05.03 かろと
 						m_pPrintSettingOrg->m_nPrintPaperSize = m_pPrintSettingOrg->m_mdmDevMode.dmPaperSize;
 						m_pPrintSettingOrg->m_nPrintPaperOrientation = m_pPrintSettingOrg->m_mdmDevMode.dmOrientation;
@@ -2092,7 +2092,7 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 							CEditWnd::getInstance()->GetHwnd()
 						);
 						// OnChangePrintSetting();
-						// ::InvalidateRect( m_pParentWnd->GetHwnd(), NULL, TRUE );
+						// ::InvalidateRect(m_pParentWnd->GetHwnd(), NULL, TRUE);
 					}
 				}
 				// To Here 2003.05.03 かろと
@@ -2102,23 +2102,23 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 				break;
 			case IDC_BUTTON_ZOOMUP:
 				// プレビュー拡大縮小
-				OnPreviewZoom( TRUE );
+				OnPreviewZoom(TRUE);
 				break;
 			case IDC_BUTTON_ZOOMDOWN:
 				// プレビュー拡大縮小
-				OnPreviewZoom( FALSE );
+				OnPreviewZoom(FALSE);
 				break;
 			case IDC_BUTTON_PREVPAGE:
 				// 前ページ
-				OnPreviewGoPreviousPage( );
+				OnPreviewGoPreviousPage();
 				break;
 			case IDC_BUTTON_NEXTPAGE:
 				// 次ページ
-				OnPreviewGoNextPage( );
+				OnPreviewGoNextPage();
 				break;
 			//From Here 2007.02.11 Moca ダイレクトジャンプおよびアンチエイリアス
 			case IDC_BUTTON_DIRECTPAGE:
-				OnPreviewGoDirectPage( );
+				OnPreviewGoDirectPage();
 				break;
 			case IDC_CHECK_ANTIALIAS:
 				OnCheckAntialias();
@@ -2127,7 +2127,7 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 			case IDC_BUTTON_HELP:
 				// 印刷プレビューのヘルプ
 				//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-				MyWinHelp( hwndDlg, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PREVIEW) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+				MyWinHelp(hwndDlg, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PREVIEW));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 				break;
 			case IDOK:
 				// 印刷実行
@@ -2147,21 +2147,21 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 
 
 // 印刷用フォントを作成する
-void CPrintPreview::CreateFonts( HDC hdc )
+void CPrintPreview::CreateFonts(HDC hdc)
 {
 	LOGFONT	lf;
 	// 印刷用半角フォントを作成 -> m_hFontHan
 	m_lfPreviewHan.lfHeight	= m_pPrintSetting->m_nPrintFontHeight;
 	m_lfPreviewHan.lfWidth	= m_pPrintSetting->m_nPrintFontWidth;
-	_tcscpy( m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan );
-	m_hFontHan	= CreateFontIndirect( &m_lfPreviewHan );
+	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan);
+	m_hFontHan	= CreateFontIndirect(&m_lfPreviewHan);
 	if (m_pPrintSetting->m_bColorPrint) {
 		lf = m_lfPreviewHan;	lf.lfWeight = FW_BOLD;
-		m_hFontHan_b	= CreateFontIndirect( &lf );		// 太字
+		m_hFontHan_b	= CreateFontIndirect(&lf);		// 太字
 		lf = m_lfPreviewHan;							lf.lfUnderline = true;
-		m_hFontHan_u	= CreateFontIndirect( &lf );		// 下線
+		m_hFontHan_u	= CreateFontIndirect(&lf);		// 下線
 		lf = m_lfPreviewHan;	lf.lfWeight = FW_BOLD;	lf.lfUnderline = true;
-		m_hFontHan_bu	= CreateFontIndirect( &lf );		// 太字、下線
+		m_hFontHan_bu	= CreateFontIndirect(&lf);		// 太字、下線
 	}
 #ifdef _DEEBUG
 	else {
@@ -2169,24 +2169,24 @@ void CPrintPreview::CreateFonts( HDC hdc )
 	}
 #endif
 	// 半角文字のアセント（文字高）を取得
-	::SelectObject( hdc, m_hFontHan );
+	::SelectObject(hdc, m_hFontHan);
 	TEXTMETRIC tm;
-	::GetTextMetrics( hdc, &tm );
+	::GetTextMetrics(hdc, &tm);
 	m_nAscentHan = tm.tmAscent;
 
 	// 印刷用全角フォントを作成 -> m_hFontZen
 	if (auto_strcmp(m_pPrintSetting->m_szPrintFontFaceHan, m_pPrintSetting->m_szPrintFontFaceZen)) {
 		m_lfPreviewZen.lfHeight	= m_pPrintSetting->m_nPrintFontHeight;
 		m_lfPreviewZen.lfWidth	= m_pPrintSetting->m_nPrintFontWidth;
-		_tcscpy( m_lfPreviewZen.lfFaceName, m_pPrintSetting->m_szPrintFontFaceZen );
-		m_hFontZen	= CreateFontIndirect( &m_lfPreviewZen );
+		_tcscpy(m_lfPreviewZen.lfFaceName, m_pPrintSetting->m_szPrintFontFaceZen);
+		m_hFontZen	= CreateFontIndirect(&m_lfPreviewZen);
 		if (m_pPrintSetting->m_bColorPrint) {
 			lf = m_lfPreviewZen;	lf.lfWeight = FW_BOLD;
-			m_hFontZen_b	= CreateFontIndirect( &lf );		// 太字
+			m_hFontZen_b	= CreateFontIndirect(&lf);		// 太字
 			lf = m_lfPreviewZen;							lf.lfUnderline = true;
-			m_hFontZen_u	= CreateFontIndirect( &lf );		// 下線
+			m_hFontZen_u	= CreateFontIndirect(&lf);		// 下線
 			lf = m_lfPreviewZen;	lf.lfWeight = FW_BOLD;	lf.lfUnderline = true;
-			m_hFontZen_bu	= CreateFontIndirect( &lf );		// 太字、下線
+			m_hFontZen_bu	= CreateFontIndirect(&lf);		// 太字、下線
 		}
 #ifdef _DEEBUG
 		else {
@@ -2194,8 +2194,8 @@ void CPrintPreview::CreateFonts( HDC hdc )
 		}
 #endif
 		// 全角文字のアセント（文字高）を取得
-		::SelectObject( hdc, m_hFontZen );
-		::GetTextMetrics( hdc, &tm );
+		::SelectObject(hdc, m_hFontZen);
+		::GetTextMetrics(hdc, &tm);
 		m_nAscentZen = tm.tmAscent;
 	}else {
 		// 半角全角同じフォント
@@ -2211,18 +2211,18 @@ void CPrintPreview::CreateFonts( HDC hdc )
 void CPrintPreview::DestroyFonts()
 {
 	if (m_hFontZen != m_hFontHan) {
-		::DeleteObject( m_hFontZen );
+		::DeleteObject(m_hFontZen);
 		if (m_hFontZen_b) {
-			::DeleteObject( m_hFontZen_b );
-			::DeleteObject( m_hFontZen_u );
-			::DeleteObject( m_hFontZen_bu );
+			::DeleteObject(m_hFontZen_b);
+			::DeleteObject(m_hFontZen_u);
+			::DeleteObject(m_hFontZen_bu);
 		}
 	}
-	::DeleteObject( m_hFontHan );
+	::DeleteObject(m_hFontHan);
 	if (m_hFontHan_b) {
-		::DeleteObject( m_hFontHan_b );
-		::DeleteObject( m_hFontHan_u );
-		::DeleteObject( m_hFontHan_bu );
+		::DeleteObject(m_hFontHan_b);
+		::DeleteObject(m_hFontHan_u);
+		::DeleteObject(m_hFontHan_bu);
 	}
 #ifdef _DEEBUG
 	m_hFontHan = m_hFontHan_b = m_hFontHan_u = m_hFontHan_bu =

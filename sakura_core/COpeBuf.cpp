@@ -58,7 +58,7 @@ bool COpeBuf::IsEnableRedo() const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 操作の追加
-bool COpeBuf::AppendOpeBlk( COpeBlk* pcOpeBlk )
+bool COpeBuf::AppendOpeBlk(COpeBlk* pcOpeBlk)
 {
 	// 現在位置より後ろ（アンドゥ対象）がある場合は、消去
 	int size = (int)m_vCOpeBlkArr.size();
@@ -99,7 +99,7 @@ void COpeBuf::SetNoModified()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 現在のUndo対象の操作ブロックを返す
-COpeBlk* COpeBuf::DoUndo( bool* pbModified )
+COpeBlk* COpeBuf::DoUndo(bool* pbModified)
 {
 	// Undo可能な状態か
 	if (!IsEnableUndo()) {
@@ -115,7 +115,7 @@ COpeBlk* COpeBuf::DoUndo( bool* pbModified )
 }
 
 // 現在のRedo対象の操作ブロックを返す
-COpeBlk* COpeBuf::DoRedo( bool* pbModified )
+COpeBlk* COpeBuf::DoRedo(bool* pbModified)
 {
 	// Redo可能な状態か
 	if (!IsEnableRedo()) {
@@ -140,13 +140,13 @@ COpeBlk* COpeBuf::DoRedo( bool* pbModified )
 void COpeBuf::DUMP()
 {
 #ifdef _DEBUG
-	MYTRACE( _T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer );
+	MYTRACE(_T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
 	int size = (int)m_vCOpeBlkArr.size();
 	for (int i = 0; i < size; ++i) {
-		MYTRACE( _T("COpeBuf.m_vCOpeBlkArr[%d]----\n"), i );
+		MYTRACE(_T("COpeBuf.m_vCOpeBlkArr[%d]----\n"), i);
 		m_vCOpeBlkArr[i]->DUMP();
 	}
-	MYTRACE( _T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer );
+	MYTRACE(_T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
 #endif
 }
 

@@ -99,7 +99,7 @@ ECodeType CCodeMediator::DetectUnicode( CESI* pcesi )
 	// 1行の平均桁数が200を超えている場合はUnicode未検出とする
 	int ndatalen = pcesi->GetDataLen();
 	int nlinebreak = pcesi->m_aWcInfo[ebom_type].nSpecific;  // 改行数を nlinebreakに取得
-	if( static_cast<double>(ndatalen) / nlinebreak > 200 ){
+	if( static_cast<double>(ndatalen) / nlinebreak > 200 ) {
 		pcesi->SetStatus( ESI_NODETECTED );
 		return CODE_NONE;
 	}
@@ -188,7 +188,7 @@ ECodeType CCodeMediator::CheckKanjiCodeOfFile( const TCHAR* pszFile )
 
 	// データ長取得
 	int nBufLen = in.GetLength();
-	if( nBufLen > CheckKanjiCode_MAXREADLENGTH ){
+	if( nBufLen > CheckKanjiCode_MAXREADLENGTH ) {
 		nBufLen = CheckKanjiCode_MAXREADLENGTH;
 	}
 
@@ -210,7 +210,7 @@ ECodeType CCodeMediator::CheckKanjiCodeOfFile( const TCHAR* pszFile )
 
 	// 日本語コードセット判別
 	ECodeType nCodeType = DetectUnicodeBom( reinterpret_cast<const char*>(pBuf), nBufLen );
-	if( nCodeType == CODE_NONE ){
+	if( nCodeType == CODE_NONE ) {
 		// Unicode BOM は検出されませんでした．
 		nCodeType = CheckKanjiCode( reinterpret_cast<const char*>(pBuf), nBufLen );
 	}

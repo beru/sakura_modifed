@@ -35,8 +35,8 @@ public:
 
 public:
 	// 属性
-	int size() const{ return m_nCount; }
-	int max_size() const{ return MAX_SIZE; }
+	int size() const { return m_nCount; }
+	int max_size() const { return MAX_SIZE; }
 
 	// 要素アクセス
 	ElementType&       operator[](int nIndex)		{ assert(nIndex<MAX_SIZE); assert_warning(nIndex<m_nCount); return m_aElements[nIndex]; }
@@ -56,7 +56,7 @@ public:
 	}
 	
 	//! 要素数が0でも要素へのポインタを取得
-	ElementType*  dataPtr(){ return m_aElements;}
+	ElementType*  dataPtr() { return m_aElements;}
 
 	// 特殊
 	int& _GetSizeRef() { return m_nCount; }

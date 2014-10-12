@@ -40,12 +40,12 @@
 
 // "までを切り取る
 static
-bool GetQuoteFilePath( const wchar_t* pLine, wchar_t* pFile, size_t size ){
-	const wchar_t* pFileEnd = wcschr( pLine, L'\"' );
+bool GetQuoteFilePath(const wchar_t* pLine, wchar_t* pFile, size_t size) {
+	const wchar_t* pFileEnd = wcschr(pLine, L'\"');
 	if (pFileEnd) {
 		int nFileLen = pFileEnd - pLine;
 		if (0 < nFileLen && nFileLen < (int)size) {
-			wmemcpy( pFile, pLine, nFileLen );
+			wmemcpy(pFile, pLine, nFileLen);
 			pFile[nFileLen] = L'\0';
 			return true;
 		}
@@ -54,7 +54,7 @@ bool GetQuoteFilePath( const wchar_t* pLine, wchar_t* pFile, size_t size ){
 }
 
 static
-bool IsFileExists2( const wchar_t* pszFile )
+bool IsFileExists2(const wchar_t* pszFile)
 {
 	for (int i = 0; pszFile[i]; i++) {
 		if (!WCODE::IsValidFilenameChar(pszFile, i)) {
@@ -75,7 +75,7 @@ bool IsFileExists2( const wchar_t* pszFile )
 	@date 2004.05.13 Moca 行桁位置の指定が無い場合は、行桁を移動しない
 	@date 2011.11.24 Moca Grepフォルダ毎表示対応
 */
-bool CViewCommander::Command_TAGJUMP( bool bClose )
+bool CViewCommander::Command_TAGJUMP(bool bClose)
 {
 	//	2004.05.13 Moca 初期値を1ではなく元の位置を継承するように
 	// 0以下は未指定扱い。(1開始)
@@ -89,7 +89,7 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 	wchar_t		szFile[_MAX_PATH] = {L'\0'};
 	int			nBgn;
 	int			nPathLen;
-	wmemset( szJumpToFile, 0, _countof(szJumpToFile) );
+	wmemset(szJumpToFile, 0, _countof(szJumpToFile));
 
 	/*
 	  カーソル位置変換
@@ -133,34 +133,34 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 
 	// ファイル毎(WZ風)
 	// ■"C:\RootFolder\FileName.ext"
-	// ・(  5395,11   ): str
+	// ・( 5395,11  ): str
 	// ■"C:\RootFolder\SubFolders\FileName2.ext"
-	// ・(  5395,11   ): str
-	// ・(  5396,11   ): str
+	// ・( 5395,11  ): str
+	// ・( 5396,11  ): str
 	// ■"C:\RootFolder\SubFolders\FileName3.ext"
-	// ・(   123,12   ): str
+	// ・(  123,12  ): str
 
 	// ファイル毎/ベースフォルダ
 	// ◎"C:\RootFolder"
 	// ■"FileName.ext"
-	// ・(  5395,11   ): str
+	// ・( 5395,11  ): str
 	// ■"SubFolders\FileName2.ext"
-	// ・(  5395,11   ): str
-	// ・(  5396,11   ): str
+	// ・( 5395,11  ): str
+	// ・( 5396,11  ): str
 	// ■"SubFolders\FileName3.ext"
-	// ・(   123,12   ): str
+	// ・(  123,12  ): str
 
 	// ファイル毎/ベースフォルダ/フォルダ毎
 	// ◎"C:\RootFolder"
 	// ■
 	// ◆"FileName.ext"
-	// ・(  5395,11   ): str
+	// ・( 5395,11  ): str
 	// ■"SubFolders"
 	// ◆"FileName2.ext"
-	// ・(  5395,11   ): str
-	// ・(  5396,11   ): str
+	// ・( 5395,11  ): str
+	// ・( 5396,11  ): str
 	// ◆"FileName3.ext"
-	// ・(   123,12   ): str
+	// ・(  123,12  ): str
 
 	// Grep結果のタグジャンプ検索
 	// ・→◆→■→◎ の順に検索してパスを結合する
@@ -170,39 +170,39 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 			TAGLIST_SUBPATH,
 			TAGLIST_ROOT,
 		} searchMode = TAGLIST_FILEPATH;
-		if (0 == wmemcmp( pLine, L"■\"", 2 )) {
+		if (0 == wmemcmp(pLine, L"■\"", 2)) {
 			// WZ風のタグリストか
-			if (IsFilePath( &pLine[2], &nBgn, &nPathLen ) && !_IS_REL_PATH( to_tchar(&pLine[2]) )) {
-				wmemcpy( szJumpToFile, &pLine[2 + nBgn], nPathLen );
-				GetLineColumn( &pLine[2] + nPathLen, &nJumpToLine, &nJumpToColumn );
+			if (IsFilePath(&pLine[2], &nBgn, &nPathLen) && !_IS_REL_PATH(to_tchar(&pLine[2]))) {
+				wmemcpy(szJumpToFile, &pLine[2 + nBgn], nPathLen);
+				GetLineColumn(&pLine[2] + nPathLen, &nJumpToLine, &nJumpToColumn);
 				break;
-			}else if (!GetQuoteFilePath( &pLine[2], szFile, _countof(szFile) )) {
+			}else if (!GetQuoteFilePath(&pLine[2], szFile, _countof(szFile))) {
 				break;
 			}
 			searchMode = TAGLIST_ROOT;
-		}else if (0 == wmemcmp( pLine, L"◆\"", 2 )) {
-			if (!GetQuoteFilePath( &pLine[2], szFile, _countof(szFile) )) {
+		}else if (0 == wmemcmp(pLine, L"◆\"", 2)) {
+			if (!GetQuoteFilePath(&pLine[2], szFile, _countof(szFile))) {
 				break;
 			}
 			searchMode = TAGLIST_SUBPATH;
-		}else if (0 == wmemcmp( pLine, L"・", 1 )) {
+		}else if (0 == wmemcmp(pLine, L"・", 1)) {
 			if (pLine[1] == L'"') {
 				// ・"FileName.ext"
-				if (!GetQuoteFilePath( &pLine[2], szFile, _countof(szFile) )) {
+				if (!GetQuoteFilePath(&pLine[2], szFile, _countof(szFile))) {
 					break;
 				}
 				searchMode = TAGLIST_SUBPATH;
 			}else if (pLine[1] == L'(') {
 				// ファイル毎(WZ風)
-				GetLineColumn( &pLine[1], &nJumpToLine, &nJumpToColumn );
+				GetLineColumn(&pLine[1], &nJumpToLine, &nJumpToColumn);
 				searchMode = TAGLIST_FILEPATH;
 			}else {
 				// ノーマル/ファイル相対パス
 				// ･FileName.ext(123,45): str
 				// ･FileName.ext(123,45)  [SJIS]: str
-				const wchar_t* pTagEnd = wcsstr( pLine, L"): " );
+				const wchar_t* pTagEnd = wcsstr(pLine, L"): ");
 				if (!pTagEnd) {
-					pTagEnd = wcsstr( pLine, L"]: " );
+					pTagEnd = wcsstr(pLine, L"]: ");
 					if (pTagEnd) {
 						int fileEnd = pTagEnd - pLine - 1;
 						for (; 1 < fileEnd; fileEnd--) {
@@ -225,9 +225,9 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 					if (1 < fileEnd && (L',' == pLine[fileEnd])) { fileEnd--; }
 					for (; 1 < fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); fileEnd--) {}
 					if (1 < fileEnd && L'(' == pLine[fileEnd] && fileEnd - 1 < (int)_countof(szFile)) {
-						wmemcpy( szFile, pLine + 1, fileEnd - 1 );
+						wmemcpy(szFile, pLine + 1, fileEnd - 1);
 						szFile[fileEnd - 1] = L'\0';
-						GetLineColumn( &pLine[fileEnd + 1], &nJumpToLine, &nJumpToColumn );
+						GetLineColumn(&pLine[fileEnd + 1], &nJumpToLine, &nJumpToColumn);
 						searchMode = TAGLIST_SUBPATH;
 					}else {
 						break;
@@ -244,9 +244,9 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 			if (!pLine) {
 				break;
 			}
-			if (0 == wmemcmp( pLine, L"・", 1 )) {
+			if (0 == wmemcmp(pLine, L"・", 1)) {
 				continue;
-			}else if (3 <= nLineLen && 0 == wmemcmp( pLine, L"◆\"", 2 )) {
+			}else if (3 <= nLineLen && 0 == wmemcmp(pLine, L"◆\"", 2)) {
 				if (searchMode == TAGLIST_SUBPATH || searchMode == TAGLIST_ROOT) {
 					continue;
 				}
@@ -262,37 +262,37 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 					continue;
 				}
 				searchMode = TAGLIST_ROOT;
-			}else if (3 <= nLineLen && 0 == wmemcmp( pLine, L"■\"", 2 )) {
+			}else if (3 <= nLineLen && 0 == wmemcmp(pLine, L"■\"", 2)) {
 				if (searchMode == TAGLIST_ROOT) {
 					continue;
 				}
 				// ファイル毎(WZ風)：フルパス
-				if (IsFilePath( &pLine[2], &nBgn, &nPathLen ) && !_IS_REL_PATH( to_tchar(&pLine[2]) )) {
-					wmemcpy( szJumpToFile, &pLine[2 + nBgn], nPathLen );
+				if (IsFilePath(&pLine[2], &nBgn, &nPathLen) && !_IS_REL_PATH(to_tchar(&pLine[2]))) {
+					wmemcpy(szJumpToFile, &pLine[2 + nBgn], nPathLen);
 					break;
 				}
 				// 相対フォルダorファイル名
 				wchar_t		szPath[_MAX_PATH];
-				if (GetQuoteFilePath( &pLine[2], szPath, _countof(szPath) )) {
+				if (GetQuoteFilePath(&pLine[2], szPath, _countof(szPath))) {
 					if (szFile[0]) {
-						AddLastYenFromDirectoryPath( szPath );
+						AddLastYenFromDirectoryPath(szPath);
 					}
-					auto_strcat( szPath, szFile );
-					if (IsFileExists2( szPath )) {
-						auto_strcpy( szJumpToFile, szPath );
+					auto_strcat(szPath, szFile);
+					if (IsFileExists2(szPath)) {
+						auto_strcpy(szJumpToFile, szPath);
 						break;
 					}
 					// 相対パスだった→◎”を探す
-					auto_strcpy( szFile, szPath );
+					auto_strcpy(szFile, szPath);
 					searchMode = TAGLIST_ROOT;
 					continue;
 				}
 				break;
-			}else if (3 <= nLineLen && 0 == wmemcmp( pLine, L"◎\"", 2 )) {
-				if (GetQuoteFilePath( &pLine[2], szJumpToFile, _countof(szJumpToFile) )) {
-					AddLastYenFromDirectoryPath( szJumpToFile );
-					auto_strcat( szJumpToFile, szFile );
-					if (IsFileExists2( szJumpToFile )) {
+			}else if (3 <= nLineLen && 0 == wmemcmp(pLine, L"◎\"", 2)) {
+				if (GetQuoteFilePath(&pLine[2], szJumpToFile, _countof(szJumpToFile))) {
+					AddLastYenFromDirectoryPath(szJumpToFile);
+					auto_strcat(szJumpToFile, szFile);
+					if (IsFileExists2(szJumpToFile)) {
 						break;
 					}
 				}
@@ -316,21 +316,21 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 		//	Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			//	skip space
-			for (; p < p_end && ( *p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p) ); ++p)
+			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p)); ++p)
 				;
 			if (p >= p_end)
 				break;
 		
 			//	Check Path
-			if (IsFilePath( p, &nBgn, &nPathLen )) {
-				wmemcpy( szJumpToFile, &p[nBgn], nPathLen );
-				GetLineColumn( &p[nBgn + nPathLen], &nJumpToLine, &nJumpToColumn );
+			if (IsFilePath(p, &nBgn, &nPathLen)) {
+				wmemcpy(szJumpToFile, &p[nBgn], nPathLen);
+				GetLineColumn(&p[nBgn + nPathLen], &nJumpToLine, &nJumpToColumn);
 				break;
 			}
 			//	Jan. 04, 2001 genta Directoryを対象外にしたので文字列には柔軟に対応
 			//	break;	//@@@ 2001.12.31 YAZAKI 「working ...」問題に対処
 			//	skip non-space
-			for (; p < p_end && ( *p != L' ' && *p != L'\t' ); ++p)
+			for (; p < p_end && (*p != L' ' && *p != L'\t'); ++p)
 				;
 		}
 	}
@@ -345,7 +345,7 @@ bool CViewCommander::Command_TAGJUMP( bool bClose )
 
 	//	Apr. 21, 2003 genta bClose追加
 	if (szJumpToFile[0]) {
-		if (m_pCommanderView->TagJumpSub( to_tchar(szJumpToFile), CMyPoint(nJumpToColumn, nJumpToLine), bClose )) {	//@@@ 2003.04.13
+		if (m_pCommanderView->TagJumpSub(to_tchar(szJumpToFile), CMyPoint(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
 			return true;
 		}
 	}
@@ -357,7 +357,7 @@ can_not_tagjump:;
 
 
 // タグジャンプバック
-void CViewCommander::Command_TAGJUMPBACK( void )
+void CViewCommander::Command_TAGJUMPBACK(void)
 {
 // 2004/06/21 novice タグジャンプ機能追加
 	TagJump tagJump;
@@ -371,11 +371,11 @@ void CViewCommander::Command_TAGJUMPBACK( void )
 	}
 
 	// アクティブにする
-	ActivateFrameWindow( tagJump.hwndReferer );
+	ActivateFrameWindow(tagJump.hwndReferer);
 
 	// カーソルを移動させる
-	memcpy_raw( GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof( tagJump.point ) );
-	::SendMessageAny( tagJump.hwndReferer, MYWM_SETCARETPOS, 0, 0 );
+	memcpy_raw(GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof(tagJump.point));
+	::SendMessageAny(tagJump.hwndReferer, MYWM_SETCARETPOS, 0, 0);
 
 	return;
 }
@@ -389,87 +389,87 @@ void CViewCommander::Command_TAGJUMPBACK( void )
 	@date	2003.05.12	ダイアログ表示でフォルダ等を細かく指定できるようにした。
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
-bool CViewCommander::Command_TagsMake( void )
+bool CViewCommander::Command_TagsMake(void)
 {
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
 	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/ ];
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		_tcscpy_s( szTargetPath, GetDocument()->m_cDocFile.GetFilePath() );
-		szTargetPath[ _tcslen( szTargetPath ) - _tcslen( GetDocument()->m_cDocFile.GetFileName() ) ] = _T('\0');
+		_tcscpy_s(szTargetPath, GetDocument()->m_cDocFile.GetFilePath());
+		szTargetPath[ _tcslen(szTargetPath) - _tcslen(GetDocument()->m_cDocFile.GetFileName()) ] = _T('\0');
 	}else {
 		// 20100722 Moca サクラのフォルダからカレントディレクトリに変更
-		::GetCurrentDirectory( _countof(szTargetPath), szTargetPath );
+		::GetCurrentDirectory(_countof(szTargetPath), szTargetPath);
 	}
 
 	// ダイアログを表示する
 	CDlgTagsMake	cDlgTagsMake;
-	if (!cDlgTagsMake.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath )) return false;
+	if (!cDlgTagsMake.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0, szTargetPath)) return false;
 
 	TCHAR	cmdline[1024];
 	// exeのあるフォルダ
 	TCHAR	szExeFolder[_MAX_PATH + 1];
 
-	GetExedir( cmdline, CTAGS_COMMAND );
-	SplitPath_FolderAndFile( cmdline, szExeFolder, NULL );
+	GetExedir(cmdline, CTAGS_COMMAND);
+	SplitPath_FolderAndFile(cmdline, szExeFolder, NULL);
 
 	// ctags.exeの存在チェック
-	if ((DWORD)-1 == ::GetFileAttributes( cmdline )) {
-		WarningMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD03) );
+	if ((DWORD)-1 == ::GetFileAttributes(cmdline)) {
+		WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD03));
 		return false;
 	}
 
 	HANDLE	hStdOutWrite, hStdOutRead;
 	CDlgCancel	cDlgCancel;
-	CWaitCursor	cWaitCursor( m_pCommanderView->GetHwnd() );
+	CWaitCursor	cWaitCursor(m_pCommanderView->GetHwnd());
 
 	PROCESS_INFORMATION	pi;
-	ZeroMemory( &pi, sizeof(pi) );
+	ZeroMemory(&pi, sizeof(pi));
 
 	// 子プロセスの標準出力と接続するパイプを作成
 	SECURITY_ATTRIBUTES	sa;
-	ZeroMemory( &sa, sizeof(sa) );
+	ZeroMemory(&sa, sizeof(sa));
 	sa.nLength              = sizeof(sa);
 	sa.bInheritHandle       = TRUE;
 	sa.lpSecurityDescriptor = NULL;
 	hStdOutRead = hStdOutWrite = 0;
-	if (CreatePipe( &hStdOutRead, &hStdOutWrite, &sa, 1000 ) == FALSE) {
+	if (CreatePipe(&hStdOutRead, &hStdOutWrite, &sa, 1000) == FALSE) {
 		// エラー
 		return false;
 	}
 
 	// 継承不能にする
-	DuplicateHandle( GetCurrentProcess(), hStdOutRead,
+	DuplicateHandle(GetCurrentProcess(), hStdOutRead,
 				GetCurrentProcess(), NULL,
-				0, FALSE, DUPLICATE_SAME_ACCESS );
+				0, FALSE, DUPLICATE_SAME_ACCESS);
 
 	// CreateProcessに渡すSTARTUPINFOを作成
 	STARTUPINFO	sui;
-	ZeroMemory( &sui, sizeof(sui) );
+	ZeroMemory(&sui, sizeof(sui));
 	sui.cb          = sizeof(sui);
 	sui.dwFlags     = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 	sui.wShowWindow = SW_HIDE;
-	sui.hStdInput   = GetStdHandle( STD_INPUT_HANDLE );
+	sui.hStdInput   = GetStdHandle(STD_INPUT_HANDLE);
 	sui.hStdOutput  = hStdOutWrite;
 	sui.hStdError   = hStdOutWrite;
 
 	//	To Here Dec. 28, 2002 MIK
 
 	TCHAR	options[1024];
-	_tcscpy( options, _T("--excmd=n") );	// デフォルトのオプション
-	if (cDlgTagsMake.m_nTagsOpt & 0x0001) _tcscat( options, _T(" -R") );	// サブフォルダも対象
+	_tcscpy(options, _T("--excmd=n"));	// デフォルトのオプション
+	if (cDlgTagsMake.m_nTagsOpt & 0x0001) _tcscat(options, _T(" -R"));	// サブフォルダも対象
 	if (cDlgTagsMake.m_szTagsCmdLine[0] != _T('\0')) {	// 個別指定のコマンドライン
-		_tcscat( options, _T(" ") );
-		_tcscat( options, cDlgTagsMake.m_szTagsCmdLine );
+		_tcscat(options, _T(" "));
+		_tcscat(options, cDlgTagsMake.m_szTagsCmdLine);
 	}
-	_tcscat( options, _T(" *") );	// 配下のすべてのファイル
+	_tcscat(options, _T(" *"));	// 配下のすべてのファイル
 
 	// コマンドライン文字列作成(MAX:1024)
 	// 2010.08.28 Moca システムディレクトリ付加
 	TCHAR szCmdDir[_MAX_PATH];
 	::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
 	// 2006.08.04 genta add /D to disable autorun
-	auto_sprintf_s( cmdline, _T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
+	auto_sprintf_s(cmdline, _T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
 			szCmdDir,
 			szExeFolder,	// sakura.exeパス
 			CTAGS_COMMAND,	// ctags.exe
@@ -482,7 +482,7 @@ bool CViewCommander::Command_TagsMake( void )
 		CREATE_NEW_CONSOLE, NULL, cDlgTagsMake.m_szPath, &sui, &pi
 	);
 	if (!bProcessResult) {
-		WarningMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD04), cmdline );
+		WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD04), cmdline);
 		goto finish;
 	}
 
@@ -492,16 +492,16 @@ bool CViewCommander::Command_TagsMake( void )
 		bool	bLoopFlag = true;
 
 		// 中断ダイアログ表示
-		HWND	hwndCancel = cDlgCancel.DoModeless( G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING );
-		HWND	hwndMsg = ::GetDlgItem( hwndCancel, IDC_STATIC_CMD );
-		SetWindowText( hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05) );
+		HWND	hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING);
+		HWND	hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_CMD);
+		SetWindowText(hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05));
 
 		// 実行結果の取り込み
 		do {
 			// Jun. 04, 2003 genta CPU消費を減らすために200msec待つ
 			// その間メッセージ処理が滞らないように待ち方をWaitForSingleObjectから
 			// MsgWaitForMultipleObjectに変更
-			switch (MsgWaitForMultipleObjects( 1, &pi.hProcess, FALSE, 200, QS_ALLEVENTS )) {
+			switch (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, 200, QS_ALLEVENTS)) {
 			case WAIT_OBJECT_0:
 				// 終了していればループフラグをFALSEとする
 				// ただしループの終了条件は プロセス終了 && パイプが空
@@ -509,7 +509,7 @@ bool CViewCommander::Command_TagsMake( void )
 				break;
 			case WAIT_OBJECT_0 + 1:
 				// 処理中のユーザー操作を可能にする
-				if( !::BlockingHook( cDlgCancel.GetHwnd() ) ){
+				if(!::BlockingHook(cDlgCancel.GetHwnd())) {
 					break;
 				}
 				break;
@@ -520,18 +520,18 @@ bool CViewCommander::Command_TagsMake( void )
 			// 中断ボタン押下チェック
 			if (cDlgCancel.IsCanceled()) {
 				// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
-				::TerminateProcess( pi.hProcess, 0 );
+				::TerminateProcess(pi.hProcess, 0);
 				break;
 			}
 
 			new_cnt = 0;
-			if (PeekNamedPipe( hStdOutRead, NULL, 0, NULL, &new_cnt, NULL )) {	// パイプの中の読み出し待機中の文字数を取得
+			if (PeekNamedPipe(hStdOutRead, NULL, 0, NULL, &new_cnt, NULL)) {	// パイプの中の読み出し待機中の文字数を取得
 				if (new_cnt > 0) {												// 待機中のものがある
 					if (new_cnt >= _countof(work) - 2) {						// パイプから読み出す量を調整
 						new_cnt = _countof(work) - 2;
 					}
 					DWORD read_cnt;
-					::ReadFile( hStdOutRead, &work[0], new_cnt, &read_cnt, NULL );	// パイプから読み出し
+					::ReadFile(hStdOutRead, &work[0], new_cnt, &read_cnt, NULL);	// パイプから読み出し
 					if (read_cnt == 0) {
 						continue;
 					}else {
@@ -540,15 +540,15 @@ bool CViewCommander::Command_TagsMake( void )
 						// 何か出力されたらエラーメッセージと見なす．
 					
 						// 終了処理
-						CloseHandle( hStdOutWrite );
-						CloseHandle( hStdOutRead  );
-						if (pi.hProcess) CloseHandle( pi.hProcess );
-						if (pi.hThread) CloseHandle( pi.hThread  );
+						CloseHandle(hStdOutWrite);
+						CloseHandle(hStdOutRead);
+						if (pi.hProcess) CloseHandle(pi.hProcess);
+						if (pi.hThread) CloseHandle(pi.hThread);
 
-						cDlgCancel.CloseDialog( TRUE );
+						cDlgCancel.CloseDialog(TRUE);
 
 						work[ read_cnt ] = L'\0';	// Nov. 15, 2003 genta 表示用に0終端する
-						WarningMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work ); // 2003.11.09 じゅうじ
+						WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work); // 2003.11.09 じゅうじ
 
 						return true;
 					}
@@ -562,12 +562,12 @@ bool CViewCommander::Command_TagsMake( void )
 
 finish:
 	// 終了処理
-	CloseHandle( hStdOutWrite );
-	CloseHandle( hStdOutRead  );
-	if (pi.hProcess) CloseHandle( pi.hProcess );
-	if (pi.hThread) CloseHandle( pi.hThread  );
+	CloseHandle(hStdOutWrite);
+	CloseHandle(hStdOutRead);
+	if (pi.hProcess) CloseHandle(pi.hProcess);
+	if (pi.hThread) CloseHandle(pi.hThread);
 
-	cDlgCancel.CloseDialog( TRUE );
+	cDlgCancel.CloseDialog(TRUE);
 
 	InfoMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD07));
 
@@ -580,7 +580,7 @@ finish:
 
 	@date	2010.07.22	新規作成
 */
-bool CViewCommander::Command_TagJumpByTagsFileMsg( bool bMsg )
+bool CViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 {
 	bool ret = Command_TagJumpByTagsFile(false);
 	if (!ret && bMsg) {
@@ -598,28 +598,28 @@ bool CViewCommander::Command_TagJumpByTagsFileMsg( bool bMsg )
 	@date	2003.05.12	フォルダ階層も考慮して探す
 	@date	
 */
-bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
+bool CViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
 	CNativeW cmemKeyW;
-	m_pCommanderView->GetCurrentTextForSearch( cmemKeyW, true, true );
+	m_pCommanderView->GetCurrentTextForSearch(cmemKeyW, true, true);
 	if (0 == cmemKeyW.GetStringLength()) {
 		return false;
 	}
 	
 	TCHAR szDirFile[1024];
-	if (!Sub_PreProcTagJumpByTagsFile( szDirFile, _countof(szDirFile) )) {
+	if (!Sub_PreProcTagJumpByTagsFile(szDirFile, _countof(szDirFile))) {
 		return false;
 	}
 	CDlgTagJumpList	cDlgTagJumpList(true);	//タグジャンプリスト
 	
-	cDlgTagJumpList.SetFileName( szDirFile );
+	cDlgTagJumpList.SetFileName(szDirFile);
 	cDlgTagJumpList.SetKeyword(cmemKeyW.GetStringPtr());
 
 	int nMatchAll = cDlgTagJumpList.FindDirectTagJump();
 
 	//複数あれば選択してもらう。
 	if (1 < nMatchAll) {
-		if (! cDlgTagJumpList.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)0 )) {
+		if (! cDlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)0)) {
 			nMatchAll = 0;
 			return true;	//キャンセル
 		}
@@ -631,10 +631,10 @@ bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
 		TCHAR fileName[1024];
 		int   fileLine;
 
-		if (!cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine , NULL )) {
+		if (!cDlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine , NULL)) {
 			return false;
 		}
-		return m_pCommanderView->TagJumpSub( fileName, CMyPoint(0, fileLine), bClose );
+		return m_pCommanderView->TagJumpSub(fileName, CMyPoint(0, fileLine), bClose);
 	}
 
 	return false;
@@ -648,30 +648,30 @@ bool CViewCommander::Command_TagJumpByTagsFile( bool bClose )
 	@date 2005.03.31 新規作成
 	@date 2010.04.02 Moca 無題でも使えるように
 */
-bool CViewCommander::Command_TagJumpByTagsFileKeyword( const wchar_t* keyword )
+bool CViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 {
 	TCHAR szCurrentPath[1024];
 
-	if (!Sub_PreProcTagJumpByTagsFile( szCurrentPath, _countof(szCurrentPath) )) {
+	if (!Sub_PreProcTagJumpByTagsFile(szCurrentPath, _countof(szCurrentPath))) {
 		return false;
 	}
 
 	CDlgTagJumpList	cDlgTagJumpList(false);
-	cDlgTagJumpList.SetFileName( szCurrentPath );
-	cDlgTagJumpList.SetKeyword( keyword );
+	cDlgTagJumpList.SetFileName(szCurrentPath);
+	cDlgTagJumpList.SetKeyword(keyword);
 
-	if (!cDlgTagJumpList.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
+	if (!cDlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 0)) {
 		return true;	// キャンセル
 	}
 
 	// タグジャンプする。
 	TCHAR fileName[1024];
 	int	 fileLine;	// 行番号
-	if (!cDlgTagJumpList.GetSelectedFullPathAndLine( fileName, _countof(fileName), &fileLine, NULL )) {
+	if (!cDlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine, NULL)) {
 		return false;
 	}
 
-	return m_pCommanderView->TagJumpSub( fileName, CMyPoint(0, fileLine) );
+	return m_pCommanderView->TagJumpSub(fileName, CMyPoint(0, fileLine));
 }
 
 
@@ -679,7 +679,7 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword( const wchar_t* keyword )
 	タグジャンプの前処理
 	実行可能確認と、基準ファイル名の設定
 */
-bool CViewCommander::Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int count )
+bool CViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count)
 {
 	if (count) szCurrentPath[0] = _T('\0');
 
@@ -697,28 +697,28 @@ bool CViewCommander::Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int cou
 	
 	// 基準ファイル名の設定
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		auto_strcpy( szCurrentPath, GetDocument()->m_cDocFile.GetFilePath() );
+		auto_strcpy(szCurrentPath, GetDocument()->m_cDocFile.GetFilePath());
 	}else {
-		if (0 == ::GetCurrentDirectory( count - _countof(_T("\\dmy")) - MAX_TYPES_EXTS, szCurrentPath )) {
+		if (0 == ::GetCurrentDirectory(count - _countof(_T("\\dmy")) - MAX_TYPES_EXTS, szCurrentPath)) {
 			return false;
 		}
 		// (無題)でもファイル名を要求してくるのでダミーをつける
 		// 現在のタイプ別の1番目の拡張子を拝借
 		TCHAR szExts[MAX_TYPES_EXTS];
 		TCHAR* pszExt = szExts;
-		auto_strcpy( szExts, m_pCommanderView->m_pTypeData->m_szTypeExts );
+		auto_strcpy(szExts, m_pCommanderView->m_pTypeData->m_szTypeExts);
 		if (szExts[0] != '\0') {
 			// strtok 注意
-			pszExt = _tcstok( szExts, _T(" ;,") );
+			pszExt = _tcstok(szExts, _T(" ;,"));
 		}
 		int nExtLen = 0;
 		if (pszExt) {
-			nExtLen = auto_strlen( pszExt );
+			nExtLen = auto_strlen(pszExt);
 		}
-		_tcscat( szCurrentPath, _T("\\dmy") );
+		_tcscat(szCurrentPath, _T("\\dmy"));
 		if (nExtLen) {
-			_tcscat( szCurrentPath, _T(".") );
-			_tcscat( szCurrentPath, pszExt );
+			_tcscat(szCurrentPath, _T("."));
+			_tcscat(szCurrentPath, pszExt);
 		}
 	}
 	return true;

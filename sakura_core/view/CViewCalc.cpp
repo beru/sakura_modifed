@@ -16,10 +16,10 @@ CLayoutInt CViewCalc::GetTabSpace() const
 	
 	@@@ 2002.09.28 YAZAKI CDocLine版
 */
-CLogicInt CViewCalc::LineColumnToIndex( const CDocLine* pcDocLine, CLayoutInt nColumn ) const
+CLogicInt CViewCalc::LineColumnToIndex(const CDocLine* pcDocLine, CLayoutInt nColumn) const
 {
 	CLogicInt i2 = CLogicInt(0);
-	CMemoryIterator it( pcDocLine, GetTabSpace() );
+	CMemoryIterator it(pcDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -36,10 +36,10 @@ CLogicInt CViewCalc::LineColumnToIndex( const CDocLine* pcDocLine, CLayoutInt nC
 	
 	@@@ 2002.09.28 YAZAKI CLayoutが必要になりました。
 */
-CLogicInt CViewCalc::LineColumnToIndex( const CLayout* pcLayout, CLayoutInt nColumn ) const
+CLogicInt CViewCalc::LineColumnToIndex(const CLayout* pcLayout, CLayoutInt nColumn) const
 {
 	CLogicInt i2 = CLogicInt(0);
-	CMemoryIterator it( pcLayout, GetTabSpace() );
+	CMemoryIterator it(pcLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -59,13 +59,13 @@ CLogicInt CViewCalc::LineColumnToIndex( const CLayout* pcLayout, CLayoutInt nCol
   それ以外の場合はpnLineAllColLenに０をセットする
   @@@ 2002.09.28 YAZAKI CLayoutが必要になりました。
 */
-CLogicInt CViewCalc::LineColumnToIndex2( const CLayout* pcLayout, CLayoutInt nColumn, CLayoutInt* pnLineAllColLen ) const
+CLogicInt CViewCalc::LineColumnToIndex2(const CLayout* pcLayout, CLayoutInt nColumn, CLayoutInt* pnLineAllColLen) const
 {
 	*pnLineAllColLen = CLayoutInt(0);
 
 	CLogicInt i2 = CLogicInt(0);
 	CLayoutInt nPosX2 = CLayoutInt(0);
-	CMemoryIterator it( pcLayout, GetTabSpace() );
+	CMemoryIterator it(pcLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -87,11 +87,11 @@ CLogicInt CViewCalc::LineColumnToIndex2( const CLayout* pcLayout, CLayoutInt nCo
 ||
 ||	@@@ 2002.09.28 YAZAKI CLayoutが必要になりました。
 */
-CLayoutInt CViewCalc::LineIndexToColumn( const CLayout* pcLayout, CLogicInt nIndex ) const
+CLayoutInt CViewCalc::LineIndexToColumn(const CLayout* pcLayout, CLogicInt nIndex) const
 {
 	//	以下、iterator版
 	CLayoutInt nPosX2 = CLayoutInt(0);
-	CMemoryIterator it( pcLayout, GetTabSpace() );
+	CMemoryIterator it(pcLayout, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndex() + it.getIndexDelta() > nIndex) {
@@ -109,10 +109,10 @@ CLayoutInt CViewCalc::LineIndexToColumn( const CLayout* pcLayout, CLogicInt nInd
 ||
 ||	@@@ 2002.09.28 YAZAKI CDocLine版
 */
-CLayoutInt CViewCalc::LineIndexToColumn( const CDocLine* pcDocLine, CLogicInt nIndex ) const
+CLayoutInt CViewCalc::LineIndexToColumn(const CDocLine* pcDocLine, CLogicInt nIndex) const
 {
 	CLayoutInt nPosX2 = CLayoutInt(0);
-	CMemoryIterator it( pcDocLine, GetTabSpace() );
+	CMemoryIterator it(pcDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndex() + it.getIndexDelta() > nIndex) {

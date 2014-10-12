@@ -38,7 +38,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 //2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 //2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
 //2007.08.28 kobake 引数 fuOptions を削除
-//void _DispEOF( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, bool bTrans);
+//void _DispEOF(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, bool bTrans);
 
 // 改行記号描画
 // 2007.08.30 kobake 追加
@@ -106,7 +106,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		SFONT sFont;
 		sFont.m_sFontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || currentStyle.IsBoldFont();
 		sFont.m_sFontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
-		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle( sFont.m_sFontAttr );
+		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 
 		DispPos sPos(*pInfo->m_pDispPos);	// 現在位置を覚えておく
@@ -125,7 +125,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 折り返し描画
-void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum )
+void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum)
 {
 	RECT rcClip2;
 	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos,1)) {
@@ -159,7 +159,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 			cWrapType.SetGraphicsState_WhileThisObj(gr);
 			if (eBgcolorOverwrite != COLORIDX_WRAP) {
 				bChangeColor = true;
-				gr.PushTextBackColor( CTypeSupport(pcView, eBgcolorOverwrite).GetBackColor() );
+				gr.PushTextBackColor(CTypeSupport(pcView, eBgcolorOverwrite).GetBackColor());
 			}
 		}else {
 			szText = L" ";
@@ -320,13 +320,13 @@ void _DrawEOL(
 )
 {
 	int sx, sy;	// 矢印の先頭
-	gr.SetPen( pColor );
+	gr.SetPen(pColor);
 
 	switch (cEol.GetType()) {
 	case EOL_CRLF:	// 下左矢印
 		{
 			sx = rcEol.left;						// X左端
-			sy = rcEol.top + ( rcEol.Height() / 2);	// Y中心
+			sy = rcEol.top + (rcEol.Height() / 2);	// Y中心
 			DWORD pp[] = { 3, 3 };
 			POINT pt[6];
 			pt[0].x = sx + rcEol.Width();	// 上へ
@@ -341,7 +341,7 @@ void _DrawEOL(
 			pt[4].y = sy;
 			pt[5].x = sx + rcEol.Height() / 4;	// 先頭から上へ
 			pt[5].y = sy - rcEol.Height() / 4;
-			::PolyPolyline( gr, pt, pp, _countof(pp));
+			::PolyPolyline(gr, pt, pp, _countof(pp));
 
 			if (bBold) {
 				pt[0].x += 1;	// 上へ（右へずらす）
@@ -356,14 +356,14 @@ void _DrawEOL(
 				pt[4].y += 1;
 				pt[5].x += 0;	// 先頭から上へ
 				pt[5].y += 1;
-				::PolyPolyline( gr, pt, pp, _countof(pp));
+				::PolyPolyline(gr, pt, pp, _countof(pp));
 			}
 		}
 		break;
 	case EOL_CR:	// 左向き矢印	// 2007.08.17 ryoji EOL_LF -> EOL_CR
 		{
 			sx = rcEol.left;
-			sy = rcEol.top + ( rcEol.Height() / 2 );
+			sy = rcEol.top + (rcEol.Height() / 2);
 			DWORD pp[] = { 3, 2 };
 			POINT pt[5];
 			pt[0].x = sx + rcEol.Width();	// 右へ
@@ -376,7 +376,7 @@ void _DrawEOL(
 			pt[3].y = sy;
 			pt[4].x = sx + rcEol.Height() / 4;	// 先頭から上へ
 			pt[4].y = sy - rcEol.Height() / 4;
-			::PolyPolyline( gr, pt, pp, _countof(pp));
+			::PolyPolyline(gr, pt, pp, _countof(pp));
 
 			if (bBold) {
 				pt[0].x += 0;	// 右へ
@@ -389,7 +389,7 @@ void _DrawEOL(
 				pt[3].y += 1;
 				pt[4].x += 0;	// 先頭から上へ
 				pt[4].y += 1;
-				::PolyPolyline( gr, pt, pp, _countof(pp));
+				::PolyPolyline(gr, pt, pp, _countof(pp));
 			}
 		}
 		break;
@@ -399,8 +399,8 @@ void _DrawEOL(
 	case EOL_LS:
 	case EOL_PS:
 		{
-			sx = rcEol.left + ( rcEol.Width() / 2 );
-			sy = rcEol.top + ( rcEol.Height() * 3 / 4 );
+			sx = rcEol.left + (rcEol.Width() / 2);
+			sy = rcEol.top + (rcEol.Height() * 3 / 4);
 			DWORD pp[] = { 3, 2 };
 			POINT pt[5];
 			pt[0].x = sx;	// 上へ
@@ -413,7 +413,7 @@ void _DrawEOL(
 			pt[3].y = sy;
 			pt[4].x = sx + rcEol.Height() / 4;	// そして右上へ
 			pt[4].y = sy - rcEol.Height() / 4;
-			::PolyPolyline( gr, pt, pp, _countof(pp));
+			::PolyPolyline(gr, pt, pp, _countof(pp));
 
 			if (bBold) {
 				pt[0].x += 1;	// 上へ
@@ -426,7 +426,7 @@ void _DrawEOL(
 				pt[3].y += 0;
 				pt[4].x += 1;	// そして右上へ
 				pt[4].y += 0;
-				::PolyPolyline( gr, pt, pp, _countof(pp));
+				::PolyPolyline(gr, pt, pp, _countof(pp));
 			}
 		}
 		break;

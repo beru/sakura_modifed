@@ -52,30 +52,30 @@ CRecentReplace::CRecentReplace()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentReplace::GetItemText( int nIndex ) const
+const TCHAR* CRecentReplace::GetItemText(int nIndex) const
 {
 	return to_tchar(*GetItem(nIndex));
 }
 
-bool CRecentReplace::DataToReceiveType( LPCWSTR* dst, const CReplaceString* src ) const
+bool CRecentReplace::DataToReceiveType(LPCWSTR* dst, const CReplaceString* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentReplace::TextToDataType( CReplaceString* dst, LPCTSTR pszText ) const
+bool CRecentReplace::TextToDataType(CReplaceString* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, to_wchar(pszText));
 	return true;
 }
 
 
-int CRecentReplace::CompareItem( const CReplaceString* p1, LPCWSTR p2 ) const
+int CRecentReplace::CompareItem(const CReplaceString* p1, LPCWSTR p2) const
 {
 	return wcscmp(*p1,p2);
 }
 
-void CRecentReplace::CopyItem( CReplaceString* dst, LPCWSTR src ) const
+void CRecentReplace::CopyItem(CReplaceString* dst, LPCWSTR src) const
 {
 	wcscpy(*dst, src);
 }

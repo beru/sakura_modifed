@@ -61,16 +61,16 @@ void CTextMetrics::Update(HFONT hFont)
 {
 	HDC hdc = GetDC(NULL);
 	{
-		HFONT hFontOld = (HFONT)::SelectObject( hdc, hFont );
+		HFONT hFontOld = (HFONT)::SelectObject(hdc, hFont);
 		SIZE  sz;
 #ifdef _UNICODE
-		::GetTextExtentPoint32( hdc, L"xx", 2, &sz );
+		::GetTextExtentPoint32(hdc, L"xx", 2, &sz);
 #else
-		::GetTextExtentPoint32( hdc, LS(STR_ERR_DLGEDITVW2), 2, &sz );
+		::GetTextExtentPoint32(hdc, LS(STR_ERR_DLGEDITVW2), 2, &sz);
 #endif
 		this->SetHankakuHeight(sz.cy);
 		this->SetHankakuWidth(sz.cx / 2);
-		::SelectObject( hdc, hFontOld );
+		::SelectObject(hdc, hFontOld);
 	}
 	ReleaseDC(NULL,hdc);
 }
@@ -95,9 +95,9 @@ void CTextMetrics::SetHankakuHeight(int nHankakuHeight)
 //!文字間隔基準設定。nDxBasisは半角文字の基準ピクセル幅。SetHankakuDx
 void CTextMetrics::SetHankakuDx(int nDxBasis)
 {
-	m_nDxBasis=nDxBasis;
-	for (int i=0;i<_countof(m_anHankakuDx);i++) m_anHankakuDx[i]=GetHankakuDx();
-	for (int i=0;i<_countof(m_anZenkakuDx);i++) m_anZenkakuDx[i]=GetZenkakuDx();
+	m_nDxBasis = nDxBasis;
+	for (int i=0; i<_countof(m_anHankakuDx); i++) m_anHankakuDx[i]=GetHankakuDx();
+	for (int i=0; i<_countof(m_anZenkakuDx); i++) m_anZenkakuDx[i]=GetZenkakuDx();
 }
 
 void CTextMetrics::SetHankakuDy(int nDyBasis)

@@ -80,7 +80,7 @@
 */
 CRegexKeyword::CRegexKeyword(LPCTSTR regexp_dll )
 {
-	InitDll( regexp_dll );	// 2007.08.12 genta 引数追加
+	InitDll(regexp_dll);	// 2007.08.12 genta 引数追加
 	MYDBGMSG("CRegexKeyword")
 
 	m_pTypes    = NULL;
@@ -119,7 +119,7 @@ CRegexKeyword::~CRegexKeyword()
 
 	@retval TRUE 成功
 */
-BOOL CRegexKeyword::RegexKeyInit( void )
+BOOL CRegexKeyword::RegexKeyInit(void)
 {
 	MYDBGMSG("RegexKeyInit")
 	m_nTypeIndex = -1;
@@ -136,7 +136,7 @@ BOOL CRegexKeyword::RegexKeyInit( void )
 	}
 #ifdef USE_PARENT
 #else
-	wmemset( m_keywordList, _countof(m_keywordList), L'\0' );
+	wmemset(m_keywordList, _countof(m_keywordList), L'\0');
 #endif
 
 	return TRUE;
@@ -154,7 +154,7 @@ BOOL CRegexKeyword::RegexKeyInit( void )
 
 	@note タイプ設定が変わったら再ロードしコンパイルする。
 */
-BOOL CRegexKeyword::RegexKeySetTypes( const STypeConfig *pTypesPtr )
+BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 {
 	MYDBGMSG("RegexKeySetTypes")
 	if (!pTypesPtr)  {
@@ -198,7 +198,7 @@ BOOL CRegexKeyword::RegexKeySetTypes( const STypeConfig *pTypesPtr )
 	キーワードはコンパイルデータとして内部変数にコピーする。
 	先頭指定、色指定側の使用・未使用をチェックする。
 */
-BOOL CRegexKeyword::RegexKeyCompile( void )
+BOOL CRegexKeyword::RegexKeyCompile(void)
 {
 	static const wchar_t dummy[2] = L"\0";
 	const struct RegexKeywordInfo	*rp;
@@ -217,7 +217,7 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 	const wchar_t* pKeyword = &m_pTypes->m_RegexKeywordList[0];
 #ifdef USE_PARENT
 #else
-	wmemcpy( m_keywordList,  m_pTypes->m_RegexKeywordList, _countof(m_RegexKeywordList) );
+	wmemcpy(m_keywordList,  m_pTypes->m_RegexKeywordList, _countof(m_RegexKeywordList));
 #endif
 	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
 		if (pKeyword[0] == L'\0') {
@@ -258,15 +258,15 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 		rp = &m_sInfo[i].sRegexKey;
 #endif
 
-		if (RegexKeyCheckSyntax( pKeyword ) == TRUE) {
+		if (RegexKeyCheckSyntax(pKeyword) == TRUE) {
 			m_szMsg[0] = '\0';
 			BMatch(pKeyword, dummy, dummy+1, &m_sInfo[i].pBregexp, m_szMsg);
 
 			if (m_szMsg[0] == '\0') {	// エラーがないかチェックする
 				// 先頭以外は検索しなくてよい
-				if ( wcsncmp( RK_HEAD_STR1, pKeyword, RK_HEAD_STR1_LEN ) == 0
-				 || wcsncmp( RK_HEAD_STR2, pKeyword, RK_HEAD_STR2_LEN ) == 0
-				 || wcsncmp( RK_HEAD_STR3, pKeyword, RK_HEAD_STR3_LEN ) == 0
+				if (wcsncmp(RK_HEAD_STR1, pKeyword, RK_HEAD_STR1_LEN) == 0
+				 || wcsncmp(RK_HEAD_STR2, pKeyword, RK_HEAD_STR2_LEN) == 0
+				 || wcsncmp(RK_HEAD_STR3, pKeyword, RK_HEAD_STR3_LEN) == 0
 				) {
 					m_sInfo[i].nHead = 1;
 				}else {
@@ -316,7 +316,7 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 	@note それぞれの行検索の最初に実行する。
 	タイプ設定等が変更されている場合はリロードする。
 */
-BOOL CRegexKeyword::RegexKeyLineStart( void )
+BOOL CRegexKeyword::RegexKeyLineStart(void)
 {
 	MYDBGMSG("RegexKeyLineStart")
 
@@ -371,7 +371,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 #ifdef USE_PARENT
 	 || !m_pTypes
 #endif
-	 /* || ( !pLine ) */
+	 /* || (!pLine) */
 	) {
 		return FALSE;
 	}

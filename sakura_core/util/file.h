@@ -26,7 +26,7 @@
 
 bool fexist(LPCTSTR pszPath); //!< ファイルまたはディレクトリが存在すればtrue
 
-bool IsFilePath( const wchar_t*, int*, int*, bool = true );
+bool IsFilePath(const wchar_t*, int*, int*, bool = true);
 bool IsFileExists(const TCHAR* path, bool bFileOnly = false);
 bool IsDirectory(LPCTSTR pszPath);	// 2009.08.20 ryoji
 
@@ -35,29 +35,29 @@ bool IsDirectory(LPCTSTR pszPath);	// 2009.08.20 ryoji
 int CalcDirectoryDepth(const TCHAR* path);
 
 // 2005.11.26 aroka
-bool IsLocalDrive( const TCHAR* pszDrive );
+bool IsLocalDrive(const TCHAR* pszDrive);
 
 // ※サクラ依存
 FILE *_tfopen_absexe(LPCTSTR fname, LPCTSTR mode); // 2003.06.23 Moca
 FILE *_tfopen_absini(LPCTSTR fname, LPCTSTR mode, BOOL bOrExedir = TRUE); // 2007.05.19 ryoji
 
 // パス文字列処理
-void CutLastYenFromDirectoryPath( TCHAR* );						// フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない
-void AddLastYenFromDirectoryPath(  CHAR* );						// フォルダの最後が半角かつ'\\'でない場合は、付加する
-void AddLastYenFromDirectoryPath( WCHAR* );						// フォルダの最後が半角かつ'\\'でない場合は、付加する
-void SplitPath_FolderAndFile( const TCHAR*, TCHAR*, TCHAR* );	// ファイルのフルパスを、フォルダとファイル名に分割
-void Concat_FolderAndFile( const TCHAR*, const TCHAR*, TCHAR* );// フォルダ、ファイル名から、結合したパスを作成
-BOOL GetLongFileName( const TCHAR*, TCHAR* );					// ロングファイル名を取得する
-BOOL CheckEXT( const TCHAR*, const TCHAR* );					// 拡張子を調べる
+void CutLastYenFromDirectoryPath(TCHAR*);						// フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない
+void AddLastYenFromDirectoryPath( CHAR*);						// フォルダの最後が半角かつ'\\'でない場合は、付加する
+void AddLastYenFromDirectoryPath(WCHAR*);						// フォルダの最後が半角かつ'\\'でない場合は、付加する
+void SplitPath_FolderAndFile(const TCHAR*, TCHAR*, TCHAR*);	// ファイルのフルパスを、フォルダとファイル名に分割
+void Concat_FolderAndFile(const TCHAR*, const TCHAR*, TCHAR*);// フォルダ、ファイル名から、結合したパスを作成
+BOOL GetLongFileName(const TCHAR*, TCHAR*);					// ロングファイル名を取得する
+BOOL CheckEXT(const TCHAR*, const TCHAR*);					// 拡張子を調べる
 const TCHAR* GetFileTitlePointer(const TCHAR* tszPath);			//!< ファイルフルパス内のファイル名を指すポインタを取得。2007.09.20 kobake 作成
 bool _IS_REL_PATH(const TCHAR* path);							//!< 相対パスか判定する。2003.06.23 Moca
 
 // ※サクラ依存
-void GetExedir( LPTSTR pDir, LPCTSTR szFile = NULL );
-void GetInidir( LPTSTR pDir, LPCTSTR szFile = NULL ); // 2007.05.19 ryoji
-void GetInidirOrExedir( LPTSTR pDir, LPCTSTR szFile = NULL, BOOL bRetExedirIfFileEmpty = FALSE ); // 2007.05.22 ryoji
+void GetExedir(LPTSTR pDir, LPCTSTR szFile = NULL);
+void GetInidir(LPTSTR pDir, LPCTSTR szFile = NULL); // 2007.05.19 ryoji
+void GetInidirOrExedir(LPTSTR pDir, LPCTSTR szFile = NULL, BOOL bRetExedirIfFileEmpty = FALSE); // 2007.05.22 ryoji
 
-LPCTSTR GetRelPath( LPCTSTR pszPath );
+LPCTSTR GetRelPath(LPCTSTR pszPath);
 
 // ファイル時刻
 class CFileTime {
@@ -74,7 +74,7 @@ public:
 		if (m_bModified) {
 			m_bModified = false;
 			FILETIME ftimeLocal;
-			if (!::FileTimeToLocalFileTime( &m_ftime, &ftimeLocal ) || !::FileTimeToSystemTime( &ftimeLocal, &m_systime )) {
+			if (!::FileTimeToLocalFileTime(&m_ftime, &ftimeLocal) || !::FileTimeToSystemTime(&ftimeLocal, &m_systime)) {
 				memset(&m_systime,0,sizeof(m_systime)); // 失敗時ゼロクリア
 			}
 		}
@@ -93,17 +93,17 @@ private:
 	mutable bool		m_bModified;
 };
 
-bool GetLastWriteTimestamp( const TCHAR* filename, CFileTime* pcFileTime ); //	Oct. 22, 2005 genta
+bool GetLastWriteTimestamp(const TCHAR* filename, CFileTime* pcFileTime); //	Oct. 22, 2005 genta
 
 // 文字列分割
-void my_splitpath ( const char *comln , char *drv,char *dir,char *fnm,char *ext );
-void my_splitpath_w ( const wchar_t *comln , wchar_t *drv,wchar_t *dir,wchar_t *fnm,wchar_t *ext );
-void my_splitpath_t ( const TCHAR *comln , TCHAR *drv,TCHAR *dir,TCHAR *fnm,TCHAR *ext );
+void my_splitpath (const char *comln , char *drv,char *dir,char *fnm,char *ext);
+void my_splitpath_w (const wchar_t *comln , wchar_t *drv,wchar_t *dir,wchar_t *fnm,wchar_t *ext);
+void my_splitpath_t (const TCHAR *comln , TCHAR *drv,TCHAR *dir,TCHAR *fnm,TCHAR *ext);
 #ifdef _UNICODE
 #define my_splitpath_t my_splitpath_w
 #else
 #define my_splitpath_t my_splitpath
 #endif
 
-int FileMatchScoreSepExt( const TCHAR *file1, const TCHAR *file2 );
+int FileMatchScoreSepExt(const TCHAR *file1, const TCHAR *file2);
 

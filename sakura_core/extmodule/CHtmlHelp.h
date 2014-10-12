@@ -42,7 +42,7 @@
 */
 class CHtmlHelp : public CDllImp {
 public:
-	CHtmlHelp(){}
+	CHtmlHelp() {}
 	virtual ~CHtmlHelp();
 
 	//	HtmlHelp ‚ÌEntry Point

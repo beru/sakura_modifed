@@ -117,7 +117,7 @@ public:
 	);
 
 	//! 行番号表示に必要な幅を設定
-	bool DetectWidthOfLineNumberArea( bool bRedraw );
+	bool DetectWidthOfLineNumberArea(bool bRedraw);
 
 	//! 行番号表示に必要な桁数を計算
 	int  DetectWidthOfLineNumberArea_calculate() const;
@@ -183,8 +183,8 @@ public:
 
 	void GenerateTopRect   (RECT* rc, CLayoutInt nLineCount) const;
 	void GenerateBottomRect(RECT* rc, CLayoutInt nLineCount) const;
-	void GenerateLeftRect  (RECT* rc, CLayoutInt nColCount ) const;
-	void GenerateRightRect (RECT* rc, CLayoutInt nColCount ) const;
+	void GenerateLeftRect  (RECT* rc, CLayoutInt nColCount) const;
+	void GenerateRightRect (RECT* rc, CLayoutInt nColCount) const;
 
 	void GenerateLineNumberRect(RECT* rc) const;
 

@@ -37,18 +37,18 @@
 ツールバーの検索ボックスにフォーカスを移動する.
 	@date 2006.06.04 yukihane 新規作成
 */
-void CViewCommander::Command_SEARCH_BOX( void )
+void CViewCommander::Command_SEARCH_BOX(void)
 {
 	GetEditWindow()->m_cToolbar.SetFocusSearchBox();
 }
 
 
 // 検索(単語検索ダイアログ)
-void CViewCommander::Command_SEARCH_DIALOG( void )
+void CViewCommander::Command_SEARCH_DIALOG(void)
 {
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	CNativeW cmemCurText;
-	m_pCommanderView->GetCurrentTextForSearchDlg( cmemCurText );	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	auto& dlgFind = GetEditWindow()->m_cDlgFind;
 	// 検索文字列を初期化
@@ -57,11 +57,11 @@ void CViewCommander::Command_SEARCH_DIALOG( void )
 	}
 	// 検索ダイアログの表示
 	if (!dlgFind.GetHwnd()) {
-		dlgFind.DoModeless( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)&GetEditWindow()->GetActiveView() );
+		dlgFind.DoModeless(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)&GetEditWindow()->GetActiveView());
 	}else {
 		// アクティブにする
-		ActivateFrameWindow( dlgFind.GetHwnd() );
-		::DlgItem_SetText( dlgFind.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT() );
+		ActivateFrameWindow(dlgFind.GetHwnd());
+		::DlgItem_SetText(dlgFind.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT());
 	}
 	return;
 }
@@ -114,7 +114,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 	// 共通部分のくくりだし
 	// 2004.05.30 Moca CEditViewの現在設定されている検索パターンを使えるように
 	if (bChangeCurRegexp && !m_pCommanderView->ChangeCurRegexp()) return;
-	if (0 == m_pCommanderView->m_strCurSearchKey.size() ) {
+	if (0 == m_pCommanderView->m_strCurSearchKey.size()) {
 		goto end_of_func;
 	}
 
@@ -156,7 +156,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 			}
 
 			// 現在の選択範囲を非選択状態に戻す
-			si.DisableSelectArea( bRedraw, false );
+			si.DisableSelectArea(bRedraw, false);
 			bDisableSelect = true;
 		}
 	}
@@ -168,7 +168,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		// 2002.02.08 hor EOFのみの行からも次検索しても再検索可能に (2/2)
-		nIdx = pcLayout ? m_pCommanderView->LineColumnToIndex( pcLayout, caret.GetCaretLayoutPos().GetX2() ) : CLogicInt(0);
+		nIdx = pcLayout ? m_pCommanderView->LineColumnToIndex(pcLayout, caret.GetCaretLayoutPos().GetX2()) : CLogicInt(0);
 		if (b0Match) {
 			// 現在、長さ０でマッチしている場合は物理行で１文字進める(無限マッチ対策)
 			if (nIdx < nLineLen) {
@@ -223,12 +223,12 @@ re_do:;
 
 		if (bSelecting) {
 			// 現在のカーソル位置によって選択範囲を変更
-			si.ChangeSelectAreaByCurrentCursor( sRangeA.GetTo() );
+			si.ChangeSelectAreaByCurrentCursor(sRangeA.GetTo());
 			si.m_bSelectingLock = bSelectingLock_Old;	// 選択状態のロック
 		}else if (!pcSelectLogic) {
 			// 選択範囲の変更
 			// 2005.06.24 Moca
-			si.SetSelectArea( sRangeA );
+			si.SetSelectArea(sRangeA);
 
 			if (bRedraw) {
 				// 選択領域描画
@@ -240,10 +240,10 @@ re_do:;
 		// Sep. 8, 2000 genta
 		if (!bReplaceAll) m_pCommanderView->AddCurrentLineToHistory();	// 2002.02.16 hor すべて置換のときは不要
 		if (!pcSelectLogic) {
-			caret.MoveCursor( sRangeA.GetFrom(), bRedraw );
+			caret.MoveCursor(sRangeA.GetFrom(), bRedraw);
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}else {
-			caret.MoveCursorFastMode( pcSelectLogic->GetFrom() );
+			caret.MoveCursorFastMode(pcSelectLogic->GetFrom());
 		}
 		bFound = TRUE;
 	}else {
@@ -257,7 +257,7 @@ re_do:;
 			GetSelect().SetTo(sRangeA.GetFrom());
 
 			// カーソル移動
-			caret.MoveCursor( sRangeA.GetFrom(), bRedraw );
+			caret.MoveCursor(sRangeA.GetFrom(), bRedraw);
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 			if (bRedraw) {
@@ -305,7 +305,7 @@ end_of_func:;
 			CNativeW KeyName;
 			LimitStringLengthW(m_pCommanderView->m_strCurSearchKey.c_str(), m_pCommanderView->m_strCurSearchKey.size(), _MAX_PATH, KeyName);
 			if ((size_t)KeyName.GetStringLength() < m_pCommanderView->m_strCurSearchKey.size()) {
-				KeyName.AppendString( L"..." );
+				KeyName.AppendString(L"...");
 			}
 			AlertNotFound(
 				hwndParent,
@@ -321,7 +321,7 @@ end_of_func:;
 
 
 // 前を検索
-void CViewCommander::Command_SEARCH_PREV( bool bReDraw, HWND hwndParent )
+void CViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 {
 	bool		bSelectingLock_Old = false;
 	bool		bFound = false;
@@ -362,13 +362,13 @@ void CViewCommander::Command_SEARCH_PREV( bool bReDraw, HWND hwndParent )
 			bSelecting = true;
 		}else {
 			// 現在の選択範囲を非選択状態に戻す
-			si.DisableSelectArea( bReDraw, false );
+			si.DisableSelectArea(bReDraw, false);
 			bDisableSelect = true;
 		}
 	}
 
 	nLineNum = caret.GetCaretLayoutPos().GetY2();
-	const CLayout* pcLayout = layoutMgr.SearchLineByLayoutY( nLineNum );
+	const CLayout* pcLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	if (!pcLayout) {
 		// pcLayoutはNULLとなるのは、[EOF]から前検索した場合
 		// １行前に移動する処理
@@ -376,16 +376,16 @@ void CViewCommander::Command_SEARCH_PREV( bool bReDraw, HWND hwndParent )
 		if (nLineNum < 0) {
 			goto end_of_func;
 		}
-		pcLayout = layoutMgr.SearchLineByLayoutY( nLineNum );
+		pcLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 		if (!pcLayout) {
 			goto end_of_func;
 		}
 		// カーソル左移動はやめて nIdxは行の長さとしないと[EOF]から改行を前検索した時に最後の改行を検索できない 2003.05.04 かろと
-		CLayout* pCLayout = layoutMgr.SearchLineByLayoutY( nLineNum );
+		CLayout* pCLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 		nIdx = CLogicInt(pCLayout->GetDocLineRef()->GetLengthWithEOL() + 1);		// 行末のヌル文字(\0)にマッチさせるために+1 2003.05.16 かろと
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		nIdx = m_pCommanderView->LineColumnToIndex( pcLayout, caret.GetCaretLayoutPos().GetX2() );
+		nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, caret.GetCaretLayoutPos().GetX2());
 	}
 
 	bRedo		=	true;		//	hor
@@ -403,12 +403,12 @@ re_do:;							//	hor
 	) {
 		if (bSelecting) {
 			// 現在のカーソル位置によって選択範囲を変更
-			si.ChangeSelectAreaByCurrentCursor( sRangeA.GetFrom() );
+			si.ChangeSelectAreaByCurrentCursor(sRangeA.GetFrom());
 			si.m_bSelectingLock = bSelectingLock_Old;	// 選択状態のロック
 		}else {
 			// 選択範囲の変更
 			// 2005.06.24 Moca
-			si.SetSelectArea( sRangeA );
+			si.SetSelectArea(sRangeA);
 
 			if (bReDraw) {
 				// 選択領域描画
@@ -418,7 +418,7 @@ re_do:;							//	hor
 		// カーソル移動
 		// Sep. 8, 2000 genta
 		m_pCommanderView->AddCurrentLineToHistory();
-		caret.MoveCursor( sRangeA.GetFrom(), bReDraw );
+		caret.MoveCursor(sRangeA.GetFrom(), bReDraw);
 		caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		bFound = TRUE;
 	}else {
@@ -429,7 +429,7 @@ re_do:;							//	hor
 			GetSelect() = sSelect_Old;
 
 			// カーソル移動
-			caret.MoveCursor( sRangeA.GetFrom(), bReDraw );
+			caret.MoveCursor(sRangeA.GetFrom(), bReDraw);
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 			// 選択領域描画
 			si.DrawSelectArea();
@@ -463,7 +463,7 @@ end_of_func:;
 		LimitStringLengthW(m_pCommanderView->m_strCurSearchKey.c_str(), m_pCommanderView->m_strCurSearchKey.size(),
 			_MAX_PATH, KeyName);
 		if ((size_t)KeyName.GetStringLength() < m_pCommanderView->m_strCurSearchKey.size()) {
-			KeyName.AppendString( L"..." );
+			KeyName.AppendString(L"...");
 		}
 		AlertNotFound(
 			hwndParent,
@@ -477,13 +477,13 @@ end_of_func:;
 
 
 // 置換(置換ダイアログ)
-void CViewCommander::Command_REPLACE_DIALOG( void )
+void CViewCommander::Command_REPLACE_DIALOG(void)
 {
 	BOOL bSelected = FALSE;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	CNativeW cmemCurText;
-	m_pCommanderView->GetCurrentTextForSearchDlg( cmemCurText );	// 2006.08.23 ryoji ダイアログ専用関数に変更
+	m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
 	auto& dlgReplace = GetEditWindow()->m_cDlgReplace;
 
@@ -509,12 +509,12 @@ void CViewCommander::Command_REPLACE_DIALOG( void )
 
 	// 置換ダイアログの表示
 	// From Here Jul. 2, 2001 genta 置換ウィンドウの2重開きを抑止
-	if (!::IsWindow( dlgReplace.GetHwnd() )) {
-		dlgReplace.DoModeless( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)m_pCommanderView, bSelected );
+	if (!::IsWindow(dlgReplace.GetHwnd())) {
+		dlgReplace.DoModeless(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)m_pCommanderView, bSelected);
 	}else {
 		// アクティブにする
-		ActivateFrameWindow( dlgReplace.GetHwnd() );
-		::DlgItem_SetText( dlgReplace.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT() );
+		ActivateFrameWindow(dlgReplace.GetHwnd());
+		::DlgItem_SetText(dlgReplace.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT());
 	}
 	//	To Here Jul. 2, 2001 genta 置換ウィンドウの2重開きを抑止
 	return;
@@ -527,7 +527,7 @@ void CViewCommander::Command_REPLACE_DIALOG( void )
 	@date 2003.05.17 かろと 長さ０マッチの無限置換回避など
 	@date 2011.12.18 Moca オプション・検索キーをDllShareDataからm_cDlgReplace/EditViewベースに変更。文字列長制限の撤廃
 */
-void CViewCommander::Command_REPLACE( HWND hwndParent )
+void CViewCommander::Command_REPLACE(HWND hwndParent)
 {
 	if (!hwndParent) {	//	親ウィンドウが指定されていなければ、CEditViewが親。
 		hwndParent = m_pCommanderView->GetHwnd();
@@ -539,9 +539,9 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 
 	// From Here 2001.12.03 hor
 	if (nPaste && !GetDocument()->m_cDocEditor.IsEnablePaste()) {
-		OkMessage( hwndParent, LS(STR_ERR_CEDITVIEW_CMD10) );
-		::CheckDlgButton( dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE );
-		::EnableWindow( ::GetDlgItem( dlgReplace.GetHwnd(), IDC_COMBO_TEXT2 ), TRUE );
+		OkMessage(hwndParent, LS(STR_ERR_CEDITVIEW_CMD10));
+		::CheckDlgButton(dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE);
+		::EnableWindow(::GetDlgItem(dlgReplace.GetHwnd(), IDC_COMBO_TEXT2), TRUE);
 		return;	//	失敗return;
 	}
 
@@ -549,9 +549,9 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 	// 選択エリアがあれば、その先頭にカーソルを移す
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
-			GetCaret().MoveCursor( GetSelect().GetFrom(), true );
+			GetCaret().MoveCursor(GetSelect().GetFrom(), true);
 		}else {
-			Command_LEFT( false, false );
+			Command_LEFT(false, false);
 		}
 	}
 	// To Here 2002.01.09 hor
@@ -560,18 +560,18 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 //			bBeginBoxSelect = m_pCommanderView->GetSelectionInfo().IsBoxSelecting();
 
 	// カーソル左移動
-	//HandleCommand( F_LEFT, true, 0, 0, 0, 0 );	//？？？
+	//HandleCommand(F_LEFT, true, 0, 0, 0, 0);	//？？？
 	// To Here 2001.12.03 hor
 
 	// テキスト選択解除
 	// 現在の選択範囲を非選択状態に戻す
-	m_pCommanderView->GetSelectionInfo().DisableSelectArea( true );
+	m_pCommanderView->GetSelectionInfo().DisableSelectArea(true);
 
 	// 2004.06.01 Moca 検索中に、他のプロセスによってm_aReplaceKeysが書き換えられても大丈夫なように
-	const CNativeW	cMemRepKey( dlgReplace.m_strText2.c_str() );
+	const CNativeW	cMemRepKey(dlgReplace.m_strText2.c_str());
 
 	// 次を検索
-	Command_SEARCH_NEXT( true, true, false, hwndParent, NULL );
+	Command_SEARCH_NEXT(true, true, false, hwndParent, NULL);
 
 	BOOL	bRegularExp = m_pCommanderView->m_sCurSearchOption.bRegularExp;
 	int 	nFlag       = m_pCommanderView->m_sCurSearchOption.bLoHiCase ? 0x01 : 0x00;
@@ -602,14 +602,14 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 			// 2002/01/19 novice 正規表現による文字列置換
 			CBregexp cRegexp;
 
-			if (!InitRegexp( m_pCommanderView->GetHwnd(), cRegexp, true )) {
+			if (!InitRegexp(m_pCommanderView->GetHwnd(), cRegexp, true)) {
 				return;	//	失敗return;
 			}
 
 			// 物理行、物理行長、物理行での検索マッチ位置
 			const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetSelect().GetFrom().GetY2());
 			const wchar_t* pLine = pcLayout->GetDocLineRef()->GetPtr();
-			CLogicInt nIdx = m_pCommanderView->LineColumnToIndex( pcLayout, GetSelect().GetFrom().GetX2() ) + pcLayout->GetLogicOffset();
+			CLogicInt nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, GetSelect().GetFrom().GetX2()) + pcLayout->GetLogicOffset();
 			CLogicInt nLen = pcLayout->GetDocLineRef()->GetLengthWithEOL();
 			// 正規表現で選択始点・終点への挿入を記述
 			//	Jun. 6, 2005 かろと
@@ -627,7 +627,7 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 			}else {
 				cMemRepKey2 = cMemRepKey;
 			}
-			cRegexp.Compile( m_pCommanderView->m_strCurSearchKey.c_str(), cMemRepKey2.GetStringPtr(), nFlag);
+			cRegexp.Compile(m_pCommanderView->m_strCurSearchKey.c_str(), cMemRepKey2.GetStringPtr(), nFlag);
 			if (cRegexp.Replace(pLine, nLen, nIdx)) {
 				// From Here Jun. 6, 2005 かろと
 				// 物理行末までINSTEXTする方法は、キャレット位置を調整する必要があり、
@@ -644,7 +644,7 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 					}
 					// 無限置換しないように、１文字増やしたので１文字選択に変更
 					// 選択始点・終点への挿入の場合も０文字マッチ時は動作は同じになるので
-					rLayoutMgr.LogicToLayout( CLogicPoint(nIdxTo, pcLayout->GetLogicLineNo()), GetSelect().GetToPointer() );	// 2007.01.19 ryoji 行位置も取得する
+					rLayoutMgr.LogicToLayout(CLogicPoint(nIdxTo, pcLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
 				}
 				// 行末から検索文字列末尾までの文字数
 				CLogicInt colDiff = nLen - nIdxTo;
@@ -653,14 +653,14 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 				if (colDiff < pcLayout->GetDocLineRef()->GetEol().GetLen()) {
 					// 改行にかかっていたら、行全体をINSTEXTする。
 					colDiff = CLogicInt(0);
-					rLayoutMgr.LogicToLayout( CLogicPoint(nLen, pcLayout->GetLogicLineNo()), GetSelect().GetToPointer() );	// 2007.01.19 ryoji 追加
+					rLayoutMgr.LogicToLayout(CLogicPoint(nLen, pcLayout->GetLogicLineNo()), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
-				Command_INSTEXT( false, cRegexp.GetString(), cRegexp.GetStringLen() - colDiff, TRUE );
+				Command_INSTEXT(false, cRegexp.GetString(), cRegexp.GetStringLen() - colDiff, TRUE);
 				// To Here Jun. 6, 2005 かろと
 			}
 		}else {
-			Command_INSTEXT( false, cMemRepKey.GetStringPtr(), cMemRepKey.GetStringLength(), TRUE );
+			Command_INSTEXT(false, cMemRepKey.GetStringPtr(), cMemRepKey.GetStringLength(), TRUE);
 		}
 
 		// 挿入後の検索開始位置を調整
@@ -675,7 +675,7 @@ void CViewCommander::Command_REPLACE( HWND hwndParent )
 		m_pCommanderView->Redraw();
 
 		// 次を検索
-		Command_SEARCH_NEXT( true, true, false, hwndParent, LSW(STR_ERR_CEDITVIEW_CMD11) );
+		Command_SEARCH_NEXT(true, true, false, hwndParent, LSW(STR_ERR_CEDITVIEW_CMD11));
 	}
 }
 
@@ -711,9 +711,9 @@ void CViewCommander::Command_REPLACE_ALL()
 
 	// From Here 2001.12.03 hor
 	if (nPaste && !GetDocument()->m_cDocEditor.IsEnablePaste()) {
-		OkMessage( m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD10) );
-		::CheckDlgButton( dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE );
-		::EnableWindow( ::GetDlgItem( dlgReplace.GetHwnd(), IDC_COMBO_TEXT2 ), TRUE );
+		OkMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD10));
+		::CheckDlgButton(dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE);
+		::EnableWindow(::GetDlgItem(dlgReplace.GetHwnd(), IDC_COMBO_TEXT2), TRUE);
 		return;	// TRUE;
 	}
 	// To Here 2001.12.03 hor
@@ -749,10 +749,10 @@ void CViewCommander::Command_REPLACE_ALL()
 
 	// 進捗表示&中止ダイアログの作成
 	CDlgCancel	cDlgCancel;
-	HWND		hwndCancel = cDlgCancel.DoModeless( G_AppInstance(), m_pCommanderView->GetHwnd(), IDD_REPLACERUNNING );
-	::EnableWindow( m_pCommanderView->GetHwnd(), FALSE );
-	::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), FALSE );
-	::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), FALSE );
+	HWND		hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->GetHwnd(), IDD_REPLACERUNNING);
+	::EnableWindow(m_pCommanderView->GetHwnd(), FALSE);
+	::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), FALSE);
+	::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), FALSE);
 	//<< 2002/03/26 Azumaiya
 	// 割り算掛け算をせずに進歩状況を表せるように、シフト演算をする。
 	int nShiftCount;
@@ -762,18 +762,18 @@ void CViewCommander::Command_REPLACE_ALL()
 	//>> 2002/03/26 Azumaiya
 
 	// プログレスバー初期化
-	HWND		hwndProgress = ::GetDlgItem( hwndCancel, IDC_PROGRESS_REPLACE );
-	Progress_SetRange( hwndProgress, 0, nAllLineNum + 1 );
+	HWND		hwndProgress = ::GetDlgItem(hwndCancel, IDC_PROGRESS_REPLACE);
+	Progress_SetRange(hwndProgress, 0, nAllLineNum + 1);
 	int			nNewPos = 0;
 	int			nOldPos = -1;
-	Progress_SetPos( hwndProgress, nNewPos);
+	Progress_SetPos(hwndProgress, nNewPos);
 
 	// 置換個数初期化
 	int			nReplaceNum = 0;
-	HWND		hwndStatic = ::GetDlgItem( hwndCancel, IDC_STATIC_KENSUU );
+	HWND		hwndStatic = ::GetDlgItem(hwndCancel, IDC_STATIC_KENSUU);
 	TCHAR szLabel[64];
-	_itot( nReplaceNum, szLabel, 10 );
-	::SendMessage( hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel );
+	_itot(nReplaceNum, szLabel, 10);
+	::SendMessage(hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel);
 
 	CLayoutRange sRangeA;	// 選択範囲
 	CLogicPoint ptColLineP;
@@ -797,11 +797,11 @@ void CViewCommander::Command_REPLACE_ALL()
 			&ptColLineP
 		);
 		// 選択範囲開始位置へ移動
-		GetCaret().MoveCursor( sRangeA.GetFrom(), bDisplayUpdate );
+		GetCaret().MoveCursor(sRangeA.GetFrom(), bDisplayUpdate);
 	}else {
 		// ファイル全体置換
 		// ファイルの先頭に移動
-	//	HandleCommand( F_GOFILETOP, bDisplayUpdate, 0, 0, 0, 0 );
+	//	HandleCommand(F_GOFILETOP, bDisplayUpdate, 0, 0, 0, 0);
 		Command_GOFILETOP(bDisplayUpdate);
 	}
 
@@ -810,11 +810,11 @@ void CViewCommander::Command_REPLACE_ALL()
 
 	// テキスト選択解除
 	// 現在の選択範囲を非選択状態に戻す
-	m_pCommanderView->GetSelectionInfo().DisableSelectArea( bDisplayUpdate );
+	m_pCommanderView->GetSelectionInfo().DisableSelectArea(bDisplayUpdate);
 
 	CLogicRange cSelectLogic;	// 置換文字列GetSelect()のLogic単位版
 	// 次を検索
-	Command_SEARCH_NEXT( true, bDisplayUpdate, true, 0, NULL, bFastMode ? &cSelectLogic : NULL );
+	Command_SEARCH_NEXT(true, bDisplayUpdate, true, 0, NULL, bFastMode ? &cSelectLogic : NULL);
 	// To Here 2001.12.03 hor
 
 	//<< 2002/03/26 Azumaiya
@@ -828,13 +828,13 @@ void CViewCommander::Command_REPLACE_ALL()
 	// クリップボードからのデータ貼り付けかどうか。
 	if (nPaste != 0) {
 		// クリップボードからデータを取得。
-		if (!m_pCommanderView->MyGetClipboardData( cmemClip, &bColumnSelect, GetDllShareData().m_Common.m_sEdit.m_bEnableLineModePaste? &bLineSelect: NULL )) {
+		if (!m_pCommanderView->MyGetClipboardData(cmemClip, &bColumnSelect, GetDllShareData().m_Common.m_sEdit.m_bEnableLineModePaste? &bLineSelect: NULL)) {
 			ErrorBeep();
 			m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 
-			::EnableWindow( m_pCommanderView->GetHwnd(), TRUE );
-			::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), TRUE );
-			::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), TRUE );
+			::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
+			::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
+			::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), TRUE);
 			return;
 		}
 
@@ -844,18 +844,18 @@ void CViewCommander::Command_REPLACE_ALL()
 			if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {
 				ErrorBeep();
 				m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
-				::EnableWindow( m_pCommanderView->GetHwnd(), TRUE );
-				::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), TRUE );
-				::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), TRUE );
+				::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
+				::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
+				::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), TRUE);
 				return;
 			}
 
 			// 現在のフォントは固定幅フォントである
 			if (!GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {
 				m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
-				::EnableWindow( m_pCommanderView->GetHwnd(), TRUE );
-				::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), TRUE );
-				::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), TRUE );
+				::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
+				::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
+				::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), TRUE);
 				return;
 			}
 		}else { // クリップボードからのデータは普通に扱う。
@@ -863,7 +863,7 @@ void CViewCommander::Command_REPLACE_ALL()
 		}
 	}else {
 		// 2004.05.14 Moca 全置換の途中で他のウィンドウで置換されるとまずいのでコピーする
-		cmemClip.SetString( dlgReplace.m_strText2.c_str() );
+		cmemClip.SetString(dlgReplace.m_strText2.c_str());
 	}
 
 	CLogicInt nREPLACEKEY;			// 置換後文字列の長さ。
@@ -874,7 +874,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	if (bLineSelect) {
 		if (!WCODE::IsLineDelimiter(szREPLACEKEY[nREPLACEKEY - 1])) {
 			cmemClip.AppendString(GetDocument()->m_cDocEditor.GetNewLineCode().GetValue2());
-			szREPLACEKEY = cmemClip.GetStringPtr( &nREPLACEKEY );
+			szREPLACEKEY = cmemClip.GetStringPtr(&nREPLACEKEY);
 		}
 	}
 
@@ -897,11 +897,11 @@ void CViewCommander::Command_REPLACE_ALL()
 	CBregexp cRegexp;
 	// 初期化も同様に毎ループごとにやると遅いので、最初に済ましてしまう。
 	if (bRegularExp && nPaste == 0) {
-		if (!InitRegexp( m_pCommanderView->GetHwnd(), cRegexp, true )) {
+		if (!InitRegexp(m_pCommanderView->GetHwnd(), cRegexp, true)) {
 			m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
-			::EnableWindow( m_pCommanderView->GetHwnd(), TRUE );
-			::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), TRUE );
-			::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), TRUE );
+			::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
+			::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
+			::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), TRUE);
 			return;
 		}
 
@@ -938,7 +938,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	// テキストが選択されているか
 	while (
 		(!bFastMode && m_pCommanderView->GetSelectionInfo().IsTextSelected())
-		|| ( bFastMode && cSelectLogic.IsValid() )
+		|| (bFastMode && cSelectLogic.IsValid())
 	) {
 		// キャンセルされたか
 		if (bCANCEL) {
@@ -946,17 +946,17 @@ void CViewCommander::Command_REPLACE_ALL()
 		}
 
 		// 処理中のユーザー操作を可能にする
-		if (!::BlockingHook( hwndCancel )) {
+		if (!::BlockingHook(hwndCancel)) {
 			m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
-			::EnableWindow( m_pCommanderView->GetHwnd(), TRUE );
-			::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), TRUE );
-			::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), TRUE );
+			::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
+			::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
+			::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), TRUE);
 			return;// -1;
 		}
 
 		nLoopCnt++;
 		// 128 ごとに表示。
-		if (0 == (nLoopCnt & 0x7F )) {
+		if (0 == (nLoopCnt & 0x7F)) {
 			// 時間ごとに進歩状況描画だと時間取得分遅くなると思うが、そちらの方が自然だと思うので・・・。
 			// と思ったけど、逆にこちらの方が自然ではないので、やめる。
 		
@@ -976,12 +976,12 @@ void CViewCommander::Command_REPLACE_ALL()
 				}
 			}
 			if (nOldPos != nNewPos) {
-				Progress_SetPos( hwndProgress, nNewPos +1 );
-				Progress_SetPos( hwndProgress, nNewPos );
+				Progress_SetPos(hwndProgress, nNewPos +1);
+				Progress_SetPos(hwndProgress, nNewPos);
 				nOldPos = nNewPos;
 			}
-			_itot( nReplaceNum, szLabel, 10 );
-			::SendMessage( hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel );
+			_itot(nReplaceNum, szLabel, 10);
+			::SendMessage(hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel);
 		}
 
 		// From Here 2001.12.03 hor
@@ -1018,7 +1018,7 @@ void CViewCommander::Command_REPLACE_ALL()
 					// 次の検索開始位置へシフト
 					GetCaret().SetCaretLayoutPos(CLayoutPoint(sRangeA.GetFrom().x,CLayoutInt(linNext)));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
-					Command_SEARCH_NEXT( false, bDisplayUpdate, true, 0, NULL );
+					Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL);
 					colDif=(0);
 					continue;
 				}
@@ -1105,7 +1105,7 @@ void CViewCommander::Command_REPLACE_ALL()
 				** →m_nSelectXXXが-1の時に m_pCommanderView->ReplaceData_CEditViewを直接たたくと動作不良となるため
 				**   直接たたくのやめた。2003.05.18 by かろと
 				*/
-				Command_INSTEXT( false, szREPLACEKEY, nREPLACEKEY, TRUE, bLineSelect );
+				Command_INSTEXT(false, szREPLACEKEY, nREPLACEKEY, TRUE, bLineSelect);
 			}else {
 				Command_PASTEBOX(szREPLACEKEY, nREPLACEKEY);
 				// 2013.06.11 再描画しないように
@@ -1133,7 +1133,7 @@ void CViewCommander::Command_REPLACE_ALL()
 				pcDocLine = pcLayout->GetDocLineRef();
 				pLine = pcDocLine->GetPtr();
 				nLogicLineNum = pcLayout->GetLogicLineNo();
-				nIdx = m_pCommanderView->LineColumnToIndex( pcLayout, GetSelect().GetFrom().GetX2() ) + pcLayout->GetLogicOffset();
+				nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, GetSelect().GetFrom().GetX2()) + pcLayout->GetLogicOffset();
 				nLen = pcDocLine->GetLengthWithEOL();
 			}
 			CLogicInt colDiff = CLogicInt(0);
@@ -1149,7 +1149,7 @@ void CViewCommander::Command_REPLACE_ALL()
 							&ptWork
 						);
 						ptColLineP.x = ptWork.x;
-						if( nLen - pcDocLine->GetEol().GetLen() > ptColLineP.x + colDif )
+						if(nLen - pcDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
 							nLen = ptColLineP.GetX2() + CLogicInt(colDif);
 					}else {	// 通常の選択
 						if (ptColLineP.y+linDif == (Int)ptOld.y) { //$$ 単位混在
@@ -1173,7 +1173,7 @@ void CViewCommander::Command_REPLACE_ALL()
 					if (bFastMode) {
 						cSelectLogic.SetTo(CLogicPoint(nLen, nLogicLineNum));
 					}else {
-						layoutMgr.LogicToLayout( CLogicPoint(nLen, nLogicLineNum), GetSelect().GetToPointer() );
+						layoutMgr.LogicToLayout(CLogicPoint(nLen, nLogicLineNum), GetSelect().GetToPointer());
 					}
 				}else {
 				    // From Here Jun. 6, 2005 かろと
@@ -1193,7 +1193,7 @@ void CViewCommander::Command_REPLACE_ALL()
 						if (bFastMode) {
 							cSelectLogic.SetTo(CLogicPoint(nIdxTo, nLogicLineNum));
 						}else {
-							layoutMgr.LogicToLayout( CLogicPoint(nIdxTo, nLogicLineNum), GetSelect().GetToPointer() );	// 2007.01.19 ryoji 行位置も取得する
+							layoutMgr.LogicToLayout(CLogicPoint(nIdxTo, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 行位置も取得する
 						}
 				    }
 				    // 行末から検索文字列末尾までの文字数
@@ -1207,20 +1207,20 @@ void CViewCommander::Command_REPLACE_ALL()
 						if (bFastMode) {
 							cSelectLogic.SetTo(CLogicPoint(nLen, nLogicLineNum));
 						}else {
-							layoutMgr.LogicToLayout( CLogicPoint(nLen, nLogicLineNum), GetSelect().GetToPointer() );	// 2007.01.19 ryoji 追加
+							layoutMgr.LogicToLayout(CLogicPoint(nLen, nLogicLineNum), GetSelect().GetToPointer());	// 2007.01.19 ryoji 追加
 						}
 						ptOld.x = (CLayoutInt)(Int)pcDocLine->GetLengthWithoutEOL() + 1;	// 2007.01.19 ryoji 追加 //$$ 単位混在
 				    }
 				}
 				// 置換後文字列への書き換え(行末から検索文字列末尾までの文字を除く)
-				Command_INSTEXT( false, cRegexp.GetString(), cRegexp.GetStringLen() - colDiff, true, false, bFastMode, bFastMode ? &cSelectLogic : NULL );
+				Command_INSTEXT(false, cRegexp.GetString(), cRegexp.GetStringLen() - colDiff, true, false, bFastMode, bFastMode ? &cSelectLogic : NULL);
 				// To Here Jun. 6, 2005 かろと
 			}
 		}else {
 			/* 本当は元コードを使うべきなんでしょうが、無駄な処理を避けるために直接たたく。
 			** →m_nSelectXXXが-1の時に m_pCommanderView->ReplaceData_CEditViewを直接たたくと動作不良となるため直接たたくのやめた。2003.05.18 かろと
 			*/
-			Command_INSTEXT( false, szREPLACEKEY, nREPLACEKEY, true, false, bFastMode, bFastMode ? &cSelectLogic : NULL );
+			Command_INSTEXT(false, szREPLACEKEY, nREPLACEKEY, true, false, bFastMode, bFastMode ? &cSelectLogic : NULL);
 			++nReplaceNum;
 		}
 
@@ -1286,7 +1286,7 @@ void CViewCommander::Command_REPLACE_ALL()
 
 		// 次を検索
 		// 2004.05.30 Moca 現在の検索文字列を使って検索する
-		Command_SEARCH_NEXT( false, bDisplayUpdate, true, 0, NULL, bFastMode ? &cSelectLogic : NULL );
+		Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL, bFastMode ? &cSelectLogic : NULL);
 	}
 
 	if (bFastMode) {
@@ -1297,29 +1297,29 @@ void CViewCommander::Command_REPLACE_ALL()
 				layoutMgr.CalculateTextWidth();
 			}
 		}
-		layoutMgr.LogicToLayout( ptLastLogic, &ptLast );
-		GetCaret().MoveCursor( ptLast, true );
+		layoutMgr.LogicToLayout(ptLastLogic, &ptLast);
+		GetCaret().MoveCursor(ptLast, true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();	// 2009.07.25 ryoji
 	}
 	//>> 2002/03/26 Azumaiya
 
-	_itot( nReplaceNum, szLabel, 10 );
-	::SendMessage( hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel );
+	_itot(nReplaceNum, szLabel, 10);
+	::SendMessage(hwndStatic, WM_SETTEXT, 0, (LPARAM)szLabel);
 
 	if (!cDlgCancel.IsCanceled()) {
 		nNewPos = nAllLineNum;
-		Progress_SetPos( hwndProgress, nNewPos + 1 );
-		Progress_SetPos( hwndProgress, nNewPos);
+		Progress_SetPos(hwndProgress, nNewPos + 1);
+		Progress_SetPos(hwndProgress, nNewPos);
 	}
-	cDlgCancel.CloseDialog( 0 );
-	::EnableWindow( m_pCommanderView->GetHwnd(), TRUE );
-	::EnableWindow( ::GetParent( m_pCommanderView->GetHwnd() ), TRUE );
-	::EnableWindow( ::GetParent( ::GetParent( m_pCommanderView->GetHwnd() ) ), TRUE );
+	cDlgCancel.CloseDialog(0);
+	::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
+	::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
+	::EnableWindow(::GetParent(::GetParent(m_pCommanderView->GetHwnd())), TRUE);
 
 	// From Here 2001.12.03 hor
 
 	// テキスト選択解除
-	m_pCommanderView->GetSelectionInfo().DisableSelectArea( false );
+	m_pCommanderView->GetSelectionInfo().DisableSelectArea(false);
 
 	// カーソル・選択範囲復元
 	if (
@@ -1328,7 +1328,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	) {		// キャンセルされた
 		// 最後に置換した文字列の右へ
 		if (!bFastMode) {
-			GetCaret().MoveCursor( ptLast, true );
+			GetCaret().MoveCursor(ptLast, true);
 		}
 	}else {
 		if (bBeginBoxSelect) {
@@ -1348,9 +1348,9 @@ void CViewCommander::Command_REPLACE_ALL()
 			);
 		}
 		if (sRangeA.GetFrom().y<sRangeA.GetTo().y || sRangeA.GetFrom().x<sRangeA.GetTo().x) {
-			m_pCommanderView->GetSelectionInfo().SetSelectArea( sRangeA );	// 2009.07.25 ryoji
+			m_pCommanderView->GetSelectionInfo().SetSelectArea(sRangeA);	// 2009.07.25 ryoji
 		}
-		GetCaret().MoveCursor( sRangeA.GetTo(), true );
+		GetCaret().MoveCursor(sRangeA.GetTo(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();	// 2009.07.25 ryoji
 	}
 	// To Here 2001.12.03 hor
@@ -1358,12 +1358,12 @@ void CViewCommander::Command_REPLACE_ALL()
 	dlgReplace.m_bCanceled = (cDlgCancel.IsCanceled() != FALSE);
 	dlgReplace.m_nReplaceCnt=nReplaceNum;
 	m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
-	ActivateFrameWindow( GetMainWindow() );
+	ActivateFrameWindow(GetMainWindow());
 }
 
 
 // 検索マークの切替え	// 2001.12.03 hor クリア を 切替え に変更
-void CViewCommander::Command_SEARCH_CLEARMARK( void )
+void CViewCommander::Command_SEARCH_CLEARMARK(void)
 {
 // From Here 2001.12.03 hor
 
@@ -1373,7 +1373,7 @@ void CViewCommander::Command_SEARCH_CLEARMARK( void )
 
 		// 検索文字列取得
 		CNativeW	cmemCurText;
-		m_pCommanderView->GetCurrentTextForSearch( cmemCurText, false );
+		m_pCommanderView->GetCurrentTextForSearch(cmemCurText, false);
 		auto& csSearch = GetDllShareData().m_Common.m_sSearch;
 
 		m_pCommanderView->m_strCurSearchKey = cmemCurText.GetStringPtr();
@@ -1385,7 +1385,7 @@ void CViewCommander::Command_SEARCH_CLEARMARK( void )
 
 		// 共有データへ登録
 		if (cmemCurText.GetStringLength() < _MAX_PATH) {
-			CSearchKeywordManager().AddToSearchKeyArr( cmemCurText.GetStringPtr() );
+			CSearchKeywordManager().AddToSearchKeyArr(cmemCurText.GetStringPtr());
 			csSearch.m_sSearchOption = m_pCommanderView->m_sCurSearchOption;
 		}
 		m_pCommanderView->m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;
@@ -1409,7 +1409,7 @@ void CViewCommander::Command_SEARCH_CLEARMARK( void )
 
 //	Jun. 16, 2000 genta
 //	対括弧の検索
-void CViewCommander::Command_BRACKETPAIR( void )
+void CViewCommander::Command_BRACKETPAIR(void)
 {
 	CLayoutPoint ptColLine;
 	//int nLine, nCol;
@@ -1420,10 +1420,10 @@ void CViewCommander::Command_BRACKETPAIR( void )
 	bit1(in)  : 前方文字を調べるか？   0:調べない  1:調べる
 	bit2(out) : 見つかった位置         0:後ろ      1:前
 	*/
-	if (m_pCommanderView->SearchBracket( GetCaret().GetCaretLayoutPos(), &ptColLine, &mode )) {	// 02/09/18 ai
+	if (m_pCommanderView->SearchBracket(GetCaret().GetCaretLayoutPos(), &ptColLine, &mode)) {	// 02/09/18 ai
 		//	2005.06.24 Moca
 		//	2006.07.09 genta 表示更新漏れ：新規関数にて対応
-		m_pCommanderView->MoveCursorSelecting( ptColLine, m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
+		m_pCommanderView->MoveCursorSelecting(ptColLine, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}else {
 		//	失敗した場合は nCol/nLineには有効な値が入っていない.
 		//	何もしない

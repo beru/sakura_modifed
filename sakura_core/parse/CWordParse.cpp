@@ -38,48 +38,48 @@ bool CWordParse::WhereCurrentWord_2(
 	}
 
 	// 現在位置の文字の種類を調べる
-	ECharKind nCharKind = WhatKindOfChar( pLine, nLineLen, nIdx );
+	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
 	// 文字種類が変わるまで前方へサーチ
 	CLogicInt nIdxNext = nIdx;
-	CLogicInt nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nIdxNext] ));
+	CLogicInt nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
 	while (nCharChars > 0) {
 		CLogicInt nIdxNextPrev = nIdxNext;
 		nIdxNext -= nCharChars;
-		ECharKind nCharKindNext = WhatKindOfChar( pLine, nLineLen, nIdxNext );
+		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
 
-		ECharKind nCharKindMerge = WhatKindOfTwoChars( nCharKindNext, nCharKind );
+		ECharKind nCharKindMerge = WhatKindOfTwoChars(nCharKindNext, nCharKind);
 		if (nCharKindMerge == CK_NULL) {
 			nIdxNext = nIdxNextPrev;
 			break;
 		}
 		nCharKind = nCharKindMerge;
-		nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev( pLine, nLineLen, &pLine[nIdxNext] ));
+		nCharChars = CLogicInt(&pLine[nIdxNext] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxNext]));
 	}
 	*pnIdxFrom = nIdxNext;
 
 	if (pcmcmWordLeft) {
-		pcmcmWordLeft->SetString( &pLine[*pnIdxFrom], nIdx - *pnIdxFrom );
+		pcmcmWordLeft->SetString(&pLine[*pnIdxFrom], nIdx - *pnIdxFrom);
 	}
 
 	// 文字種類が変わるまで後方へサーチ
 	nIdxNext = nIdx;
-	nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nIdxNext ); // 2005-09-02 D.S.Koba GetSizeOfChar
+	nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
-		ECharKind	nCharKindNext = WhatKindOfChar( pLine, nLineLen, nIdxNext );
+		ECharKind	nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
 
-		ECharKind nCharKindMerge = WhatKindOfTwoChars( nCharKindNext, nCharKind );
+		ECharKind nCharKindMerge = WhatKindOfTwoChars(nCharKindNext, nCharKind);
 		if (nCharKindMerge == CK_NULL) {
 			break;
 		}
 		nCharKind = nCharKindMerge;
-		nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nIdxNext ); // 2005-09-02 D.S.Koba GetSizeOfChar
+		nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext); // 2005-09-02 D.S.Koba GetSizeOfChar
 	}
 	*pnIdxTo = nIdxNext;
 
 	if (pcmcmWord) {
-		pcmcmWord->SetString( &pLine[*pnIdxFrom], *pnIdxTo - *pnIdxFrom );
+		pcmcmWord->SetString(&pLine[*pnIdxFrom], *pnIdxTo - *pnIdxFrom);
 	}
 	return true;
 }
@@ -116,7 +116,7 @@ ECharKind CWordParse::WhatKindOfChar(
 {
 	using namespace WCODE;
 
-	int nCharChars = CNativeW::GetSizeOfChar( pData, pDataLen, nIdx );
+	int nCharChars = CNativeW::GetSizeOfChar(pData, pDataLen, nIdx);
 	if (nCharChars == 0) {
 		return CK_NULL;	// NULL
 	}else if (nCharChars == 1) {
@@ -126,16 +126,16 @@ ECharKind CWordParse::WhatKindOfChar(
 		if (c < 128) {
 			return (ECharKind)gm_keyword_char[c];
 		}
-		//if( c == CR              )return CK_CR;
-		//if( c == LF              )return CK_LF;
-		//if( c == TAB             )return CK_TAB;		// タブ
-		//if( IsControlCode(c)     )return CK_CTRL;		// 制御文字
-		//if( c == SPACE           )return CK_SPACE;	// 半角スペース
-		//if( isCSymbol(c)         )return CK_CSYM;		// 識別子に使用可能な文字 (半角英数字、半角アンダースコア)
+		//if (c == CR              ) return CK_CR;
+		//if (c == LF              ) return CK_LF;
+		//if (c == TAB             ) return CK_TAB;		// タブ
+		//if (IsControlCode(c)     ) return CK_CTRL;		// 制御文字
+		//if (c == SPACE           ) return CK_SPACE;	// 半角スペース
+		//if (isCSymbol(c)         ) return CK_CSYM;		// 識別子に使用可能な文字 (半角英数字、半角アンダースコア)
 		if (IsHankakuKatakana(c)) return CK_KATA;	// 半角のカタカナ
 		if (0x00C0 <= c && c < 0x0180 && c != 0x00D7 && c != 0x00F7) return CK_LATIN;
 													// ラテン１補助、ラテン拡張のうちアルファベット風のもの（×÷を除く）
-		//if( c == L'#'|| c == L'$' || c == L'@'|| c == L'\\' )return CK_UDEF;	// ユーザ定義
+		//if (c == L'#'|| c == L'$' || c == L'@'|| c == L'\\') return CK_UDEF;	// ユーザ定義
 
 		// その他
 		if (IsZenkakuSpace(c)    ) return CK_ZEN_SPACE;	// 全角スペース
@@ -168,7 +168,7 @@ ECharKind CWordParse::WhatKindOfChar(
 
 
 //! 二つの文字を結合したものの種類を調べる
-ECharKind CWordParse::WhatKindOfTwoChars( ECharKind kindPre, ECharKind kindCur )
+ECharKind CWordParse::WhatKindOfTwoChars(ECharKind kindPre, ECharKind kindCur)
 {
 	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
 
@@ -178,14 +178,14 @@ ECharKind CWordParse::WhatKindOfTwoChars( ECharKind kindPre, ECharKind kindCur )
 	) {
 		return kindCur;
 	}
-	if ( ( kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU ) &&
-		( kindPre == CK_ZEN_KATA   || kindPre == CK_HIRA     )
+	if ((kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU) &&
+		(kindPre == CK_ZEN_KATA   || kindPre == CK_HIRA)
 	) {
 		return kindPre;
 	}
 	// 全角濁点、全角長音の連続は、とりあえず同種の文字とみなす
-	if ( ( kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU ) &&
-		( kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU )
+	if ((kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU) &&
+		(kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU)
 	) {
 		return kindCur;
 	}
@@ -203,24 +203,24 @@ ECharKind CWordParse::WhatKindOfTwoChars( ECharKind kindPre, ECharKind kindCur )
 
 
 //! 二つの文字を結合したものの種類を調べる
-ECharKind CWordParse::WhatKindOfTwoChars4KW( ECharKind kindPre, ECharKind kindCur )
+ECharKind CWordParse::WhatKindOfTwoChars4KW(ECharKind kindPre, ECharKind kindCur)
 {
 	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
 
 	// 全角長音・全角濁点は前後の全角ひらがな・全角カタカナに引きずられる
-	if (( kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU ) &&
-		( kindCur == CK_ZEN_KATA   || kindCur == CK_HIRA     )
+	if ((kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU) &&
+		(kindCur == CK_ZEN_KATA   || kindCur == CK_HIRA)
 	) {
 		return kindCur;
 	}
-	if (( kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU ) &&
-		( kindPre == CK_ZEN_KATA   || kindPre == CK_HIRA     )
+	if ((kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU) &&
+		(kindPre == CK_ZEN_KATA   || kindPre == CK_HIRA)
 	) {
 		return kindPre;
 	}
 	// 全角濁点、全角長音の連続は、とりあえず同種の文字とみなす
-	if (( kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU ) &&
-		( kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU )
+	if ((kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU) &&
+		(kindCur == CK_ZEN_NOBASU || kindCur == CK_ZEN_DAKU)
 	) {
 		return kindCur;
 	}
@@ -254,14 +254,14 @@ bool CWordParse::SearchNextWordPosition(
 	// 空白とタブは無視する
 
 	// 現在位置の文字の種類を調べる
-	ECharKind nCharKind = WhatKindOfChar( pLine, nLineLen, nIdx );
+	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
 	CLogicInt nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
-	CLogicInt nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nIdxNext );
+	CLogicInt nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
-		ECharKind nCharKindNext = WhatKindOfChar( pLine, nLineLen, nIdxNext );
+		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
 		// 空白とタブは無視する
 		if (nCharKindNext == CK_TAB || nCharKindNext == CK_SPACE) {
 			if (bStopsBothEnds && nCharKind != nCharKindNext) {
@@ -270,7 +270,7 @@ bool CWordParse::SearchNextWordPosition(
 			}
 			nCharKind = nCharKindNext;
 		}else {
-			ECharKind nCharKindMerge = WhatKindOfTwoChars( nCharKind, nCharKindNext );
+			ECharKind nCharKindMerge = WhatKindOfTwoChars(nCharKind, nCharKindNext);
 			if (nCharKindMerge == CK_NULL) {
 				*pnColumnNew = nIdxNext;
 				return true;
@@ -278,7 +278,7 @@ bool CWordParse::SearchNextWordPosition(
 			nCharKind = nCharKindMerge;
 		}
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nIdxNext );
+		nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	return false;
 }
@@ -300,14 +300,14 @@ bool CWordParse::SearchNextWordPosition4KW(
 	// 空白とタブは無視する
 
 	// 現在位置の文字の種類を調べる
-	ECharKind nCharKind = WhatKindOfChar( pLine, nLineLen, nIdx );
+	ECharKind nCharKind = WhatKindOfChar(pLine, nLineLen, nIdx);
 
 	CLogicInt nIdxNext = nIdx;
 	// 2005-09-02 D.S.Koba GetSizeOfChar
-	CLogicInt nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nIdxNext );
+	CLogicInt nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	while (nCharChars > 0) {
 		nIdxNext += nCharChars;
-		ECharKind nCharKindNext = WhatKindOfChar( pLine, nLineLen, nIdxNext );
+		ECharKind nCharKindNext = WhatKindOfChar(pLine, nLineLen, nIdxNext);
 		// 空白とタブは無視する
 		if (nCharKindNext == CK_TAB || nCharKindNext == CK_SPACE) {
 			if (bStopsBothEnds && nCharKind != nCharKindNext) {
@@ -316,7 +316,7 @@ bool CWordParse::SearchNextWordPosition4KW(
 			}
 			nCharKind = nCharKindNext;
 		}else {
-			ECharKind nCharKindMerge = WhatKindOfTwoChars4KW( nCharKind, nCharKindNext );
+			ECharKind nCharKindMerge = WhatKindOfTwoChars4KW(nCharKind, nCharKindNext);
 			if (nCharKindMerge == CK_NULL) {
 				*pnColumnNew = nIdxNext;
 				return true;
@@ -324,7 +324,7 @@ bool CWordParse::SearchNextWordPosition4KW(
 			nCharKind = nCharKindMerge;
 		}
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CNativeW::GetSizeOfChar( pLine, nLineLen, nIdxNext );
+		nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxNext);
 	}
 	return false;
 }
@@ -453,10 +453,10 @@ BOOL IsURL(
 }
 
 // 現在位置がメールアドレスならば、NULL以外と、その長さを返す
-BOOL IsMailAddress( const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth )
+BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
 {
 	int j = 0;
-	if ( (pszBuf[j] >= L'a' && pszBuf[j] <= L'z')
+	if ((pszBuf[j] >= L'a' && pszBuf[j] <= L'z')
 	 || (pszBuf[j] >= L'A' && pszBuf[j] <= L'Z')
 	 || (pszBuf[j] >= L'0' && pszBuf[j] <= L'9')
 	) {

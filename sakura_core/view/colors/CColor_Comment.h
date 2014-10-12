@@ -53,8 +53,8 @@ public:
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 		m_pcBlockComment = &m_pTypeData->m_cBlockComments[m_nType - COLORIDX_BLOCK1];
 	}
-	virtual EColorIndexType GetStrategyColor() const{ return m_nType; }
-	virtual void InitStrategyStatus(){ m_nCOMMENTEND = 0; }
+	virtual EColorIndexType GetStrategyColor() const { return m_nType; }
+	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool EndColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }

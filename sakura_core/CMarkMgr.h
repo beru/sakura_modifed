@@ -59,7 +59,7 @@ public:
 	class CMark {
 	public:
 		//	constructor
-		CMark( const CLogicPoint& pt ) : m_ptLogic(pt) { }
+		CMark(const CLogicPoint& pt) : m_ptLogic(pt) { }
 
 		CLogicPoint GetPosition() const { return m_ptLogic; }
 		void SetPosition(const CLogicPoint& pt) { m_ptLogic = pt; }
@@ -81,7 +81,7 @@ public:
 
 	//	Interface
 	//	constructor
-	CMarkMgr() : m_nCurpos(0), m_nMaxitem(10){}
+	CMarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
 	// CMarkMgr(const CDocLineMgr *p) : doc(p) {}
 
 	int Count(void) const { return (int)m_cMarkChain.size(); }	//!<	€–Ú”‚ð•Ô‚·
@@ -124,7 +124,7 @@ protected:
 
 	int m_nMaxitem;	//	•ÛŠÇ‰Â”\ƒAƒCƒeƒ€‚ÌÅ‘å”
 private:
-	//CMarkMgr( const CMarkMgr& );	//	Copy‹ÖŽ~
+	//CMarkMgr(const CMarkMgr&);	//	Copy‹ÖŽ~
 
 };
 

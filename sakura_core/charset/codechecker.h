@@ -179,10 +179,10 @@ inline bool IsUnicodeNoncharacter( const wchar32_t wc )
 {
 	wchar32_t wc_ = wc & 0xffff;
 
-	if( wc_ == 0xfffe || wc_ == 0xffff ){
+	if( wc_ == 0xfffe || wc_ == 0xffff ) {
 		return true;
 	}
-	if( wc >= 0xfdd0 && wc <= 0xfdef ){
+	if( wc >= 0xfdd0 && wc <= 0xfdef ) {
 		return true;
 	}
 	return false;
@@ -206,20 +206,20 @@ inline bool IsUnicodeNoncharacter( const wchar32_t wc )
 
 //! 7bit ASCII か
 template < typename Tchar >
-inline bool IsAscii7( const Tchar c ){
+inline bool IsAscii7( const Tchar c ) {
 	unsigned int c_ = c;
 	return ( c_ < 0x80 );
 }
 //! SJIS 全角文字 1 バイト目か
-inline bool IsSjisZen1( const char c ){
+inline bool IsSjisZen1( const char c ) {
 	return CHARCODE__IS_SJIS_ZEN1(static_cast<unsigned char>(c));
 }
 //! SJIS 全角文字 2 バイト目か
-inline bool IsSjisZen2( const char c ){
+inline bool IsSjisZen2( const char c ) {
 	return CHARCODE__IS_SJIS_ZEN2(static_cast<unsigned char>(c));
 }
 //! SJIS 全角文字か
-inline bool IsSjisZen( const char* pC ){
+inline bool IsSjisZen( const char* pC ) {
 	return ( CHARCODE__IS_SJIS_ZEN1(static_cast<unsigned char>(pC[0]))
 		&& CHARCODE__IS_SJIS_ZEN2(static_cast<unsigned char>(pC[1])) );
 }
@@ -250,52 +250,52 @@ inline int my_iskanji2( int c )
 }
 
 //! SJIS 半角カタカナか
-inline bool IsSjisHankata( const char c ){
+inline bool IsSjisHankata( const char c ) {
 	return ( 0xa1 <= static_cast<unsigned char>(c) && static_cast<unsigned char>(c) <= 0xdf );
 }
 //! EUCJP 全角文字 1 バイト目か
-inline bool IsEucjpZen1( const char c ){
+inline bool IsEucjpZen1( const char c ) {
 	return CHARCODE__IS_EUCJP_ZEN1(static_cast<unsigned char>(c));
 }
 //! EUCJP 全角文字 2 バイト目か
-inline bool IsEucjpZen2( const char c ){
+inline bool IsEucjpZen2( const char c ) {
 	return CHARCODE__IS_EUCJP_ZEN2(static_cast<unsigned char>(c));
 }
 //! EUCJP 全角文字か
-inline bool IsEucjpZen( const char* pC ){
+inline bool IsEucjpZen( const char* pC ) {
 	return ( CHARCODE__IS_EUCJP_ZEN1(static_cast<unsigned char>(pC[0]))
 		&& CHARCODE__IS_EUCJP_ZEN2(static_cast<unsigned char>(pC[1])) );
 }
-inline bool IsEucZen_hirakata( const char* pC ){
+inline bool IsEucZen_hirakata( const char* pC ) {
 	unsigned char c0 = pC[0];
 	unsigned char c1 = pC[1];
 	return ( (c0 == 0xa4 && (c1 >= 0xa1 && c1 <= 0xf3))
 	      || (c0 == 0xa5 && (c1 >= 0xa1 && c1 <= 0xf6)) );
 }
 //! EUCJP 全角文字　補助漢字か
-inline bool IsEucjpSupplemtal( const char* pC){
+inline bool IsEucjpSupplemtal( const char* pC) {
 	return ( static_cast<unsigned char>(pC[0]) == 0x8f
 	      && CHARCODE__IS_EUCJP_ZEN1(static_cast<unsigned char>(pC[1]))
 	      && CHARCODE__IS_EUCJP_ZEN2(static_cast<unsigned char>(pC[2])) );
 }
 //! EUCJP 半角カタカナ文字 2 バイト目か  added by genta
-inline bool IsEucjpHankata2( const char c ){
+inline bool IsEucjpHankata2( const char c ) {
 	return CHARCODE__IS_EUCJP_HANKATA2(static_cast<unsigned char>(c));
 }
 //! EUCJP 半角カタカナ文字か
-inline bool IsEucjpHankata( const char *pC ){
+inline bool IsEucjpHankata( const char *pC ) {
 	return ( static_cast<unsigned char>(pC[0]) == 0x8e && CHARCODE__IS_EUCJP_HANKATA2(static_cast<unsigned char>(pC[1])) );
 }
 //! ISO-2022-JP(JIS) か
-inline bool IsJis( const char c ){
+inline bool IsJis( const char c ) {
 	return CHARCODE__IS_JIS(static_cast<unsigned char>(c));
 }
 //! ISO-2022-JP(JIS) 半角カタカナ文字か
-inline bool IsJisHankata( const char c ){
+inline bool IsJisHankata( const char c ) {
 	return ( 0x21 <= static_cast<unsigned char>(c) && static_cast<unsigned char>(c) <= 0x7e );
 }
 //! ISO-2022-JP(JIS) 全角文字か
-inline bool IsJisZen( const char* pC ){
+inline bool IsJisZen( const char* pC ) {
 	return ( CHARCODE__IS_JIS(static_cast<unsigned char>(pC[0]))
 		&& CHARCODE__IS_JIS(static_cast<unsigned char>(pC[1])) );
 }
@@ -310,19 +310,19 @@ inline bool IsJisZen( const char* pC ){
 
 
 //! UTF16 上位サロゲートか
-inline bool IsUtf16SurrogHi( const wchar_t wc ){
+inline bool IsUtf16SurrogHi( const wchar_t wc ) {
 //	return ( 0xd800 <= wc && wc <= 0xdbff );
 	return ( (static_cast<unsigned short>(wc) & 0xfc00) == 0xd800 );
 }
 //! UTF16 下位サロゲート文字か
-inline bool IsUtf16SurrogLow( const wchar_t wc ){
+inline bool IsUtf16SurrogLow( const wchar_t wc ) {
 //	return ( 0xdc00 <= wc && wc <= 0xdfff );
 	return ( (static_cast<unsigned short>(wc) & 0xfc00) == 0xdc00 );
 }
 //! UtF-8版 上位サロゲートか
 inline bool IsUtf8SurrogHi( const char* pS ) {
 	const unsigned char* ps = reinterpret_cast<const unsigned char*>( pS );
-	if( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xa0 ){
+	if( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xa0 ) {
 		return true;
 	}
 	return false;
@@ -330,54 +330,54 @@ inline bool IsUtf8SurrogHi( const char* pS ) {
 //! UtF-8版 下位サロゲートか
 inline bool IsUtf8SurrogLow( const char* pS ) {
 	const unsigned char* ps = reinterpret_cast<const unsigned char*>( pS );
-	if( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xb0 ){
+	if( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xb0 ) {
 		return true;
 	}
 	return false;
 }
 //! UTF-7 Set D の文字か
 template < typename CHAR_TYPE >
-inline bool IsUtf7SetD( const CHAR_TYPE c ){
+inline bool IsUtf7SetD( const CHAR_TYPE c ) {
 	unsigned int c_ = c;
 	return ( c_ < 0x80 && TABLE_IsUtf7Direct[c_] == 1 );
 }
 //! UTF-7 Set O の文字か
 template < typename CHAR_TYPE >
-inline bool IsUtf7SetO( const CHAR_TYPE c ){
+inline bool IsUtf7SetO( const CHAR_TYPE c ) {
 	unsigned int c_ = c;
 	return ( c_ < 0x80 && TABLE_IsUtf7Direct[c_] == 2 );
 }
 //! UTF-7 で直接エンコードされ得る文字か
 template < typename CHAR_TYPE >
-inline bool IsUtf7Direct( const CHAR_TYPE c ){
+inline bool IsUtf7Direct( const CHAR_TYPE c ) {
 	return IsUtf7SetD( c ) || IsUtf7SetO( c );
 	// 2012.11.08 Set O も読み込めるように
 }
 
 //! UTF-7 Set B (Modified BASE64) の文字か
 template < class CHAR_TYPE >
-inline bool IsBase64( const CHAR_TYPE c ){
+inline bool IsBase64( const CHAR_TYPE c ) {
 	unsigned int c_ = c;
 	return (c_ < 0x80 && (int)TABLE_BASE64CharToValue[c_] < 64)? true : false;
 }
 
-inline bool IsBinaryOnSurrogate( const wchar_t wc ){
+inline bool IsBinaryOnSurrogate( const wchar_t wc ) {
 	int wc_ = wc;
 	return ( 0xdc00 <= wc_ && wc_ <= 0xdcff );
 }
 
 //! 高位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
-inline bool IsUTF16High( wchar_t c ){
+inline bool IsUTF16High( wchar_t c ) {
 	return IsUtf16SurrogHi(c);
 }
 //! 下位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
-inline bool IsUTF16Low( wchar_t c ){
+inline bool IsUTF16Low( wchar_t c ) {
 	return IsUtf16SurrogLow(c);
 }
 
 
 //! 上位バイトと下位バイトを交換 (主に UTF-16 LE/BE 向け)
-inline unsigned short _SwapHLByte( const unsigned short wc ){
+inline unsigned short _SwapHLByte( const unsigned short wc ) {
 	unsigned short wc1 = static_cast<unsigned short>( (static_cast<unsigned int>(wc) << 8) & 0x0000ffff );
 	unsigned short wc2 = static_cast<unsigned short>( (static_cast<unsigned int>(wc) >> 8) & 0x0000ffff );
 	return (wc1 | wc2);
@@ -390,35 +390,35 @@ inline unsigned short _SwapHLByte( const unsigned short wc ){
 // ---- データ入力用
 //
 //! SJIS の文字長を推測
-inline int GuessSjisCharsz( const char uc ){
-	if( IsSjisZen1(uc) ){ return 2; }
+inline int GuessSjisCharsz( const char uc ) {
+	if( IsSjisZen1(uc) ) { return 2; }
 	return 1;
 }
 //! UTF-16 の文字長を推測（組み合わせ文字列の考慮なし）
-inline int GuessUtf16Charsz( const wchar_t wc ){
-	if( IsUtf16SurrogHi(wc) ){ return 2; }
+inline int GuessUtf16Charsz( const wchar_t wc ) {
+	if( IsUtf16SurrogHi(wc) ) { return 2; }
 	return 1;
 }
 //! UTF-8 の文字長を推測（組み合わせ文字列の考慮なし）
-inline int GuessUtf8Charsz( const char uc_ ){
+inline int GuessUtf8Charsz( const char uc_ ) {
 	unsigned char uc = uc_;
-	if( (uc & 0xe0) == 0xc0 ){ return 2; }
-	if( (uc & 0xf0) == 0xe0 ){ return 3; }
-	if( (uc & 0xf8) == 0xf0 ){ return 4; }
+	if( (uc & 0xe0) == 0xc0 ) { return 2; }
+	if( (uc & 0xf0) == 0xe0 ) { return 3; }
+	if( (uc & 0xf8) == 0xf0 ) { return 4; }
 	return 1;
 }
 //! CESU-8 の文字長を推測
-inline int GuessCesu8Charsz( const char uc_ ){
+inline int GuessCesu8Charsz( const char uc_ ) {
 	unsigned char uc = uc_;
-	if( (uc & 0xe0) == 0xc0 ){ return 2; }
-	if( (uc & 0xf0) == 0xe0 ){ return 6; }
+	if( (uc & 0xe0) == 0xc0 ) { return 2; }
+	if( (uc & 0xf0) == 0xe0 ) { return 6; }
 	return 1;
 }
 //! EUCJP の文字長を推測
-inline int GuessEucjpCharsz( const char uc_ ){
+inline int GuessEucjpCharsz( const char uc_ ) {
 	unsigned char uc = uc_;
-	if( uc == 0x8f ){ return 3; }
-	if( uc == 0x8e || IsEucjpZen1(static_cast<char>(uc)) ){ return 2; }
+	if( uc == 0x8f ) { return 3; }
+	if( uc == 0x8e || IsEucjpZen1(static_cast<char>(uc)) ) { return 2; }
 	return 1;
 }
 

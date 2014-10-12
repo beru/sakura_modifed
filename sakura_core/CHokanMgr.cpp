@@ -28,11 +28,11 @@
 WNDPROC gm_wpHokanListProc;
 
 
-LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+LRESULT APIENTRY HokanList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// Modified by KEITA for WIN64 2003.9.6
-	CDialog* pCDialog = ( CDialog* )::GetWindowLongPtr( ::GetParent( hwnd ), DWLP_USER );
-	CHokanMgr* pCHokanMgr = (CHokanMgr*)::GetWindowLongPtr( ::GetParent( hwnd ), DWLP_USER );
+	CDialog* pCDialog = (CDialog*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
+	CHokanMgr* pCHokanMgr = (CHokanMgr*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
 	MSG* pMsg;
 	int nVKey;
 
@@ -53,21 +53,21 @@ LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			}
 		}
 		// 補完実行キーなら補完する
-		if (-1 != pCHokanMgr->KeyProc( wParam, lParam )) {
+		if (-1 != pCHokanMgr->KeyProc(wParam, lParam)) {
 			// キーストロークを親に転送
-			return ::PostMessageAny( ::GetParent( ::GetParent( pCDialog->m_hwndParent ) ), uMsg, wParam, lParam );
+			return ::PostMessageAny(::GetParent(::GetParent(pCDialog->m_hwndParent)), uMsg, wParam, lParam);
 		}
 		break;
 	case WM_GETDLGCODE:
 		pMsg = (MSG*) lParam; // pointer to an MSG structure
 		if (!pMsg) {
-//			MYTRACE( _T("WM_GETDLGCODE  pMsg==NULL\n") );
+//			MYTRACE(_T("WM_GETDLGCODE  pMsg==NULL\n"));
 			return 0;
 		}
-//		MYTRACE( _T("WM_GETDLGCODE  pMsg->message = %xh\n"), pMsg->message );
+//		MYTRACE(_T("WM_GETDLGCODE  pMsg->message = %xh\n"), pMsg->message);
 		return DLGC_WANTALLKEYS; // すべてのキーストロークを私に下さい	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 	}
-	return CallWindowProc( gm_wpHokanListProc, hwnd, uMsg, wParam, lParam);
+	return CallWindowProc(gm_wpHokanListProc, hwnd, uMsg, wParam, lParam);
 }
 
 
@@ -84,29 +84,29 @@ CHokanMgr::~CHokanMgr()
 }
 
 // モードレスダイアログの表示
-HWND CHokanMgr::DoModeless( HINSTANCE hInstance , HWND hwndParent, LPARAM lParam )
+HWND CHokanMgr::DoModeless(HINSTANCE hInstance , HWND hwndParent, LPARAM lParam)
 {
-	HWND hwndWork = CDialog::DoModeless( hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE );
-	OnSize( 0, 0 );
+	HWND hwndWork = CDialog::DoModeless(hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE);
+	OnSize(0, 0);
 	// リストをフック
 	// Modified by KEITA for WIN64 2003.9.6
-	::gm_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr( ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS ), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc  );
+	::gm_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr(::GetDlgItem(GetHwnd(), IDC_LIST_WORDS), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc);
 
-	::ShowWindow( GetHwnd(), SW_HIDE );
+	::ShowWindow(GetHwnd(), SW_HIDE);
 	return hwndWork;
 }
 
 // モードレス時：対象となるビューの変更
-void CHokanMgr::ChangeView( LPARAM pcEditView )
+void CHokanMgr::ChangeView(LPARAM pcEditView)
 {
 	m_lParam = pcEditView;
 	return;
 }
 
-void CHokanMgr::Hide( void )
+void CHokanMgr::Hide(void)
 {
 
-	::ShowWindow( GetHwnd(), SW_HIDE );
+	::ShowWindow(GetHwnd(), SW_HIDE);
 	m_nCurKouhoIdx = -1;
 	// 入力フォーカスを受け取ったときの処理
 	CEditView* pcEditView = (CEditView*)m_lParam;
@@ -182,11 +182,11 @@ int CHokanMgr::Search(
 		
 		CPlug::Array plugs;
 		CPlug::Array plugType;
-		CJackManager::getInstance()->GetUsablePlug( PP_COMPLEMENTGLOBAL, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_COMPLEMENTGLOBAL, 0, &plugs);
 		if (nHokanType != 0) {
-			CJackManager::getInstance()->GetUsablePlug( PP_COMPLEMENT, nHokanType, &plugType );
+			CJackManager::getInstance()->GetUsablePlug(PP_COMPLEMENT, nHokanType, &plugType);
 			if (0 < plugType.size()) {
-				plugs.push_back( plugType[0] );
+				plugs.push_back(plugType[0]);
 			}
 		}
 
@@ -194,11 +194,11 @@ int CHokanMgr::Search(
 			// インタフェースオブジェクト準備
 			CWSHIfObj::List params;
 			std::wstring curWord = pszCurWord;
-			CComplementIfObj* objComp = new CComplementIfObj( curWord , this, nOption );
+			CComplementIfObj* objComp = new CComplementIfObj(curWord , this, nOption);
 			objComp->AddRef();
-			params.push_back( objComp );
+			params.push_back(objComp);
 			// プラグイン呼び出し
-			(*it)->Invoke( pcEditView, params );
+			(*it)->Invoke(pcEditView, params);
 
 			objComp->Release();
 		}
@@ -213,7 +213,7 @@ int CHokanMgr::Search(
 	if (1 == m_vKouho.size()) {
 		if (pcmemHokanWord != NULL) {
 			m_nCurKouhoIdx = -1;
-			pcmemHokanWord->SetString( m_vKouho[0].c_str() );
+			pcmemHokanWord->SetString(m_vKouho[0].c_str());
 			return 1;
 		}
 	}
@@ -224,33 +224,33 @@ int CHokanMgr::Search(
 	m_poWin.y = ppoWin->y;
 	m_nWinHeight = nWinHeight;
 	m_nColumnWidth = nColumnWidth;
-//	m_cmemCurWord.SetData( pszCurWord, lstrlen( pszCurWord ) );
-	m_cmemCurWord.SetString( pszCurWord );
+//	m_cmemCurWord.SetData(pszCurWord, lstrlen(pszCurWord));
+	m_cmemCurWord.SetString(pszCurWord);
 
 
 	m_nCurKouhoIdx = 0;
 //	SetCurKouhoStr();
 
-//	::ShowWindow( GetHwnd(), SW_SHOWNA );
+//	::ShowWindow(GetHwnd(), SW_SHOWNA);
 
 	HWND hwndList;
-	hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
-	List_ResetContent( hwndList );
+	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_WORDS);
+	List_ResetContent(hwndList);
 	{
 		size_t kouhoNum = m_vKouho.size();
 		for (size_t i = 0; i < kouhoNum; ++i) {
-			::List_AddString( hwndList, m_vKouho[i].c_str() );
+			::List_AddString(hwndList, m_vKouho[i].c_str());
 		}
 	}
-	List_SetCurSel( hwndList, 0 );
+	List_SetCurSel(hwndList, 0);
 
 
-//@@	::EnableWindow( ::GetParent( ::GetParent( m_hwndParent ) ), FALSE );
+//@@	::EnableWindow(::GetParent(::GetParent(m_hwndParent)), FALSE);
 
 
 	RECT rcDesktop;
 	//	May 01, 2004 genta マルチモニタ対応
-	::GetMonitorWorkRect( GetHwnd(), &rcDesktop );
+	::GetMonitorWorkRect(GetHwnd(), &rcDesktop );
 
 	int nX = m_poWin.x - m_nColumnWidth;
 	int nY = m_poWin.y + m_nWinHeight + 4;
@@ -302,9 +302,9 @@ int CHokanMgr::Search(
 //	2001/06/18 End
 
 	// はみ出すなら小さくする
-//	if( rcDesktop.bottom < nY + nCY ){
+//	if (rcDesktop.bottom < nY + nCY) {
 //		// 下にはみ出す
-//		if( m_poWin.y - 4 - nCY < 0 ){
+//		if (m_poWin.y - 4 - nCY < 0) {
 //			// 上にはみ出す
 //			// →高さだけ調節
 //			nCY = rcDesktop.bottom - nY - 4;
@@ -313,12 +313,12 @@ int CHokanMgr::Search(
 //		}
 //
 //	}
-	::MoveWindow( GetHwnd(), nX, nY, nCX, nCY, TRUE );
-	::ShowWindow( GetHwnd(), SW_SHOW );
-//	::ShowWindow( GetHwnd(), SW_SHOWNA );
-	::SetFocus( GetHwnd() );
-//	::SetFocus( ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS ) );
-//	::SetFocus( ::GetParent( ::GetParent( m_hwndParent ) ) );
+	::MoveWindow(GetHwnd(), nX, nY, nCX, nCY, TRUE);
+	::ShowWindow(GetHwnd(), SW_SHOW);
+//	::ShowWindow(GetHwnd(), SW_SHOWNA);
+	::SetFocus(GetHwnd());
+//	::SetFocus(::GetDlgItem(GetHwnd(), IDC_LIST_WORDS));
+//	::SetFocus(::GetParent(::GetParent(m_hwndParent)));
 
 
 //	2001/06/18 asa-o:
@@ -334,7 +334,7 @@ void CHokanMgr::HokanSearchByKeyword(
 	const wchar_t*	pszCurWord,
 	bool 			bHokanLoHiCase,
 	vector_ex<std::wstring>& 	vKouho
-){
+) {
 	const CEditView* pcEditView = (const CEditView*)m_lParam;
 	const STypeConfig& type = pcEditView->GetDocument()->m_cDocType.GetDocumentAttribute();
 	CKeyWordSetMgr& keywordMgr = m_pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr;
@@ -363,16 +363,16 @@ void CHokanMgr::HokanSearchByKeyword(
 }
 
 
-BOOL CHokanMgr::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
+BOOL CHokanMgr::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
-	_SetHwnd( hwndDlg );
+	_SetHwnd(hwndDlg);
 	// 基底クラスメンバ
 //-	CreateSizeBox();
-	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
+	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
 
 }
 
-BOOL CHokanMgr::OnDestroy( void )
+BOOL CHokanMgr::OnDestroy(void)
 {
 	// 基底クラスメンバ
 	CreateSizeBox();
@@ -380,16 +380,16 @@ BOOL CHokanMgr::OnDestroy( void )
 }
 
 
-BOOL CHokanMgr::OnSize( WPARAM wParam, LPARAM lParam )
+BOOL CHokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	// 基底クラスメンバ
-	CDialog::OnSize( wParam, lParam );
+	CDialog::OnSize(wParam, lParam);
 
 	int	Controls[] = {
 		IDC_LIST_WORDS
 	};
 	RECT	rcDlg;
-	::GetClientRect( GetHwnd(), &rcDlg );
+	::GetClientRect(GetHwnd(), &rcDlg);
 	int nWidth = rcDlg.right - rcDlg.left;  // width of client area
 	int nHeight = rcDlg.bottom - rcDlg.top; // height of client area
 
@@ -399,20 +399,20 @@ BOOL CHokanMgr::OnSize( WPARAM wParam, LPARAM lParam )
 	::ClientToScreen(GetHwnd(),&m_poWin);
 //	2001/06/18 End
 
-	int nControls = _countof( Controls );
+	int nControls = _countof(Controls);
 	for (int i = 0; i < nControls; ++i) {
-		HWND hwndCtrl = ::GetDlgItem( GetHwnd(), Controls[i] );
+		HWND hwndCtrl = ::GetDlgItem(GetHwnd(), Controls[i]);
 		RECT rc;
-		::GetWindowRect( hwndCtrl, &rc );
+		::GetWindowRect(hwndCtrl, &rc);
 		POINT po;
 		po.x = rc.left;
 		po.y = rc.top;
-		::ScreenToClient( GetHwnd(), &po );
+		::ScreenToClient(GetHwnd(), &po);
 		rc.left = po.x;
 		rc.top  = po.y;
 		po.x = rc.right;
 		po.y = rc.bottom;
-		::ScreenToClient( GetHwnd(), &po );
+		::ScreenToClient(GetHwnd(), &po);
 		rc.right = po.x;
 		rc.bottom  = po.y;
 		if (Controls[i] == IDC_LIST_WORDS) {
@@ -435,24 +435,24 @@ BOOL CHokanMgr::OnSize( WPARAM wParam, LPARAM lParam )
 
 }
 
-BOOL CHokanMgr::OnBnClicked( int wID )
+BOOL CHokanMgr::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDCANCEL:
-//		CloseDialog( 0 );
+//		CloseDialog(0);
 		Hide();
 		return TRUE;
 	case IDOK:
-//		CloseDialog( 0 );
+//		CloseDialog(0);
 		// 補完実行
-		DoHokan( VK_RETURN );
+		DoHokan(VK_RETURN);
 		return TRUE;
 	}
 	return FALSE;
 }
 
 
-BOOL CHokanMgr::OnKeyDown( WPARAM wParam, LPARAM lParam )
+BOOL CHokanMgr::OnKeyDown(WPARAM wParam, LPARAM lParam)
 {
 	int nVKey = (int) wParam;	// virtual-key code
 //	lKeyData = lParam;			// key data
@@ -469,23 +469,23 @@ BOOL CHokanMgr::OnKeyDown( WPARAM wParam, LPARAM lParam )
 }
 
 
-BOOL CHokanMgr::OnLbnSelChange( HWND hwndCtl, int wID )
+BOOL CHokanMgr::OnLbnSelChange(HWND hwndCtl, int wID)
 {
 //	2001/06/18 asa-o:
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 	return TRUE;
 }
 
-BOOL CHokanMgr::OnLbnDblclk( int wID )
+BOOL CHokanMgr::OnLbnDblclk(int wID)
 {
 	// 補完実行
-	DoHokan( 0 );
+	DoHokan(0);
 	return TRUE;
 
 }
 
 
-BOOL CHokanMgr::OnKillFocus( WPARAM wParam, LPARAM lParam )
+BOOL CHokanMgr::OnKillFocus(WPARAM wParam, LPARAM lParam)
 {
 //	Hide();
 	return TRUE;
@@ -493,31 +493,31 @@ BOOL CHokanMgr::OnKillFocus( WPARAM wParam, LPARAM lParam )
 
 
 // 補完実行
-BOOL CHokanMgr::DoHokan( int nVKey )
+BOOL CHokanMgr::DoHokan(int nVKey)
 {
-	DEBUG_TRACE( _T("CHokanMgr::DoHokan( nVKey==%xh )\n"), nVKey );
+	DEBUG_TRACE(_T("CHokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
 	if (VK_RETURN	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
 	if (VK_TAB		== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
 	if (VK_RIGHT	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)	return FALSE; // VK_RIGHT  補完決定キーが有効/無効
 
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
-	int nItem = List_GetCurSel( hwndList );
+	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_WORDS);
+	int nItem = List_GetCurSel(hwndList);
 	if (LB_ERR == nItem) {
 		return FALSE;
 	}
 	wchar_t wszLabel[1024];
-	List_GetText( hwndList, nItem, wszLabel );
+	List_GetText(hwndList, nItem, wszLabel);
 
  	// テキストを貼り付け
 	CEditView* pcEditView = (CEditView*)m_lParam;
 	//	Apr. 28, 2000 genta
-	pcEditView->GetCommander().HandleCommand( F_WordDeleteToStart, false, 0, 0, 0, 0 );
-	pcEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)wszLabel, wcslen(wszLabel), TRUE, 0 );
+	pcEditView->GetCommander().HandleCommand(F_WordDeleteToStart, false, 0, 0, 0, 0);
+	pcEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)wszLabel, wcslen(wszLabel), TRUE, 0);
 
 	// Until here
-//	pcEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)(wszLabel + m_cmemCurWord.GetLength()), TRUE, 0, 0 );
+//	pcEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_cmemCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
 	m_pShareData->m_Common.m_sHelper.m_bUseHokan = FALSE;	//	補完したら
@@ -536,9 +536,9 @@ BOOL CHokanMgr::DoHokan( int nVKey )
 キーストロークに応じてデフォルトの動作を実行することを示します。
 
 */
-//	int CHokanMgr::OnVKeyToItem( WPARAM wParam, LPARAM lParam )
+//	int CHokanMgr::OnVKeyToItem(WPARAM wParam, LPARAM lParam)
 //	{
-//		return KeyProc( wParam, lParam );
+//		return KeyProc(wParam, lParam);
 //	}
 
 /*
@@ -553,7 +553,7 @@ BOOL CHokanMgr::DoHokan( int nVKey )
 キーストロークに応じてデフォルトの動作を実行することを示します。
 
 */
-//	int CHokanMgr::OnCharToItem( WPARAM wParam, LPARAM lParam )
+//	int CHokanMgr::OnCharToItem(WPARAM wParam, LPARAM lParam)
 //	{
 //		WORD vkey;
 //		WORD nCaretPos;
@@ -561,17 +561,17 @@ BOOL CHokanMgr::DoHokan( int nVKey )
 //		vkey = LOWORD(wParam);		// virtual-key code
 //		nCaretPos = HIWORD(wParam);	// caret position
 //		hwndLB = lParam;			// handle to list box
-//	//	switch( vkey ){
+//	//	switch (vkey) {
 //	//	}
 //
-//		MYTRACE( _T("CHokanMgr::OnCharToItem vkey=%xh\n"), vkey );
+//		MYTRACE(_T("CHokanMgr::OnCharToItem vkey=%xh\n"), vkey);
 //		return -1;
 //	}
 
-int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
+int CHokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 {
 	WORD vkey = LOWORD(wParam);		// virtual-key code
-//	MYTRACE( _T("CHokanMgr::OnVKeyToItem vkey=%xh\n"), vkey );
+//	MYTRACE(_T("CHokanMgr::OnVKeyToItem vkey=%xh\n"), vkey);
 	switch (vkey) {
 	case VK_HOME:
 	case VK_END:
@@ -588,7 +588,7 @@ int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
 	case VK_SPACE:
 #endif
 		// 補完実行
-		if (DoHokan( vkey )) {
+		if (DoHokan(vkey)) {
 			return -1;
 		}else {
 			return -2;
@@ -604,14 +604,14 @@ int CHokanMgr::KeyProc( WPARAM wParam, LPARAM lParam )
 //	2001/06/18 Start by asa-o: 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 void CHokanMgr::ShowTip()
 {
-	HWND hwndCtrl = ::GetDlgItem( GetHwnd(), IDC_LIST_WORDS );
-	int nItem = List_GetCurSel( hwndCtrl );
+	HWND hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_LIST_WORDS);
+	int nItem = List_GetCurSel(hwndCtrl);
 	if (LB_ERR == nItem) {
 		return ;
 	}
 
 	WCHAR szLabel[1024];
-	List_GetText( hwndCtrl, nItem, szLabel );	// 選択中の単語を取得
+	List_GetText(hwndCtrl, nItem, szLabel);	// 選択中の単語を取得
 
 	CEditView* pcEditView = (CEditView*)m_lParam;
 	// すでに辞書Tipが表示されていたら
@@ -622,16 +622,16 @@ void CHokanMgr::ShowTip()
 	}
 
 	// 表示する位置を決定
-	int nTopItem = List_GetTopIndex( hwndCtrl );
-	int nItemHeight = List_GetItemHeight( hwndCtrl, 0 );
+	int nTopItem = List_GetTopIndex(hwndCtrl);
+	int nItemHeight = List_GetItemHeight(hwndCtrl, 0);
 	POINT point;
 	point.x = m_poWin.x + m_nWidth;
 	point.y = m_poWin.y + 4 + (nItem - nTopItem) * nItemHeight;
 	// 2001/06/19 asa-o 選択中の単語が補完ウィンドウに表示されているなら辞書Tipを表示
 	if (point.y > m_poWin.y && point.y < m_poWin.y + m_nHeight) {
 		RECT rcHokanWin;
-		::SetRect( &rcHokanWin , m_poWin.x, m_poWin.y, m_poWin.x + m_nWidth, m_poWin.y + m_nHeight );
-		if (!pcEditView -> ShowKeywordHelp( point,szLabel, &rcHokanWin )) {
+		::SetRect(&rcHokanWin , m_poWin.x, m_poWin.y, m_poWin.x + m_nWidth, m_poWin.y + m_nHeight);
+		if (!pcEditView -> ShowKeywordHelp(point,szLabel, &rcHokanWin)) {
 			pcEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
 		}
 	}

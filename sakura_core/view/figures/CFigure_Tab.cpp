@@ -6,9 +6,9 @@
 #include "types/CTypeSupport.h"
 
 //2007.08.28 kobake 追加
-void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView );
+void _DispTab(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 // タブ矢印描画関数	//@@@ 2003.03.26 MIK
-void _DrawTabArrow( CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor );
+void _DrawTabArrow(CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         CFigure_Tab                         //
@@ -48,7 +48,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 	CTypeSupport cTabType(pcView,COLORIDX_TAB);
 
 	// これから描画するタブ幅
-	int tabDispWidth = (Int)pcView->m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace( sPos.GetDrawCol() );
+	int tabDispWidth = (Int)pcView->m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(sPos.GetDrawCol());
 
 	// タブ記号領域
 	RECT rcClip2;
@@ -141,11 +141,11 @@ void _DrawTabArrow(
 )
 {
 	// ペン設定
-	gr.PushPen( pColor, 0 );
+	gr.PushPen(pColor, 0);
 
 	// 矢印の先頭
 	int sx = nPosX + nWidth - 2;
-	int sy = nPosY + ( nHeight / 2 );
+	int sy = nPosY + (nHeight / 2);
 	int sa = nHeight / 4;								// 鏃のsize
 
 	DWORD pp[] = { 3, 2 };
@@ -160,7 +160,7 @@ void _DrawTabArrow(
 	pt[3].y = sy;
 	pt[4].x = sx - sa;
 	pt[4].y = sy - sa;
-	::PolyPolyline( gr, pt, pp, _countof(pp));
+	::PolyPolyline(gr, pt, pp, _countof(pp));
 
 	if (bBold) {
 		pt[0].x += 0;	//「─」左端から右端
@@ -173,7 +173,7 @@ void _DrawTabArrow(
 		pt[3].y += 1;
 		pt[4].x += 0;
 		pt[4].y += 1;
-		::PolyPolyline( gr, pt, pp, _countof(pp));
+		::PolyPolyline(gr, pt, pp, _countof(pp));
 	}
 
 	gr.PopPen();

@@ -51,11 +51,11 @@ protected:
 
 	// インターフェース
 public:
-	void AllocBuffer( int );								//!< バッファサイズの調整。必要に応じて拡大する。
-	void SetRawData( const void* pData, int nDataLen );		//!< バッファの内容を置き換える
-	void SetRawData( const CMemory& );						//!< バッファの内容を置き換える
-	void AppendRawData( const void* pData, int nDataLen );	//!< バッファの最後にデータを追加する
-	void AppendRawData( const CMemory* );					//!< バッファの最後にデータを追加する
+	void AllocBuffer(int);								//!< バッファサイズの調整。必要に応じて拡大する。
+	void SetRawData(const void* pData, int nDataLen);		//!< バッファの内容を置き換える
+	void SetRawData(const CMemory&);						//!< バッファの内容を置き換える
+	void AppendRawData(const void* pData, int nDataLen);	//!< バッファの最後にデータを追加する
+	void AppendRawData(const CMemory*);					//!< バッファの最後にデータを追加する
 	void Clean() { _Empty(); }
 	void Clear() { _Empty(); }
 
@@ -66,28 +66,28 @@ public:
 	int GetRawLength() const { return m_nRawLen; }			//!< データ長を返す。バイト単位。
 
 	// 演算子
-	const CMemory& operator = ( const CMemory& );
+	const CMemory& operator = (const CMemory&);
 
 	// 比較
-	static int IsEqual( CMemory&, CMemory& );	// 等しい内容か
+	static int IsEqual(CMemory&, CMemory&);	// 等しい内容か
 
 	// 変換関数
-	static void SwapHLByte( char*, const int ); // 下記関数のstatic関数版
+	static void SwapHLByte(char*, const int); // 下記関数のstatic関数版
 	void SwapHLByte();			// Byteを交換する
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	void _Empty( void ); //!< 解放する。m_pRawDataはNULLになる。
-	void _AddData( const void*, int );
+	void _Empty(void); //!< 解放する。m_pRawDataはNULLになる。
+	void _AddData(const void*, int);
 public:
 	void _AppendSz(const char* str);
 	void _SetRawLength(int nLength);
-	void swap( CMemory& left ) {
-		std::swap( m_nDataBufSize, left.m_nDataBufSize );
-		std::swap( m_pRawData, left.m_pRawData );
-		std::swap( m_nRawLen, left.m_nRawLen );
+	void swap(CMemory& left) {
+		std::swap(m_nDataBufSize, left.m_nDataBufSize);
+		std::swap(m_pRawData, left.m_pRawData);
+		std::swap(m_nRawLen, left.m_nRawLen);
 	}
 	int capacity() const { return m_nDataBufSize ? m_nDataBufSize - 2: 0; }
 

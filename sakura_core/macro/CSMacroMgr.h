@@ -90,27 +90,27 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	void Clear( int idx );
-	void ClearAll( void );	// キーマクロのバッファをクリアする
+	void Clear(int idx);
+	void ClearAll(void);	// キーマクロのバッファをクリアする
 
 	//! キーボードマクロの実行
-	BOOL Exec( int idx, HINSTANCE hInstance, CEditView* pcEditView, int flags );
+	BOOL Exec(int idx, HINSTANCE hInstance, CEditView* pcEditView, int flags);
 	
 	//!	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
-		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
+		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].IsEnabled() : false;
 	}
 	
 	//!	表示する名前の取得
 	const TCHAR* GetTitle(int idx) const {
-		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
+		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
 	}
 	
 	//!	表示名の取得
 	const TCHAR* GetName(int idx) const {
-		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
+		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szName : NULL;
 	}
 	
@@ -118,44 +118,44 @@ public:
 		@param idx [in] マクロ番号
 	*/
 	const TCHAR* GetFile(int idx) const {
-		return ( 0 <= idx && idx < MAX_CUSTMACRO ) ?
+		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szFile : 
-		( (idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && m_sMacroPath != _T("") ) ?
+		((idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) && m_sMacroPath != _T("")) ?
 		m_sMacroPath.c_str() : NULL;
 	}
 
 	//! キーボードマクロの読み込み
-	BOOL Load( int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType );
-	BOOL Save( int idx, HINSTANCE hInstance, const TCHAR* pszPath );
+	BOOL Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType);
+	BOOL Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath);
 	void UnloadAll(void);
 
 	//! キーマクロのバッファにデータ追加
-	int Append( int idx, EFunctionCode nFuncID, const LPARAM* lParams, CEditView* pcEditView );
+	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, CEditView* pcEditView);
 
 	/*
 	||  Attributes & Operations
 	*/
-	static WCHAR* GetFuncInfoByID( HINSTANCE , int , WCHAR* , WCHAR* );	// 機能ID→関数名，機能名日本語
-	static EFunctionCode GetFuncInfoByName( HINSTANCE , const WCHAR* , WCHAR* );	// 関数名→機能ID，機能名日本語
-	static BOOL CanFuncIsKeyMacro( int );	// キーマクロに記録可能な機能かどうかを調べる
+	static WCHAR* GetFuncInfoByID(HINSTANCE , int , WCHAR* , WCHAR*);	// 機能ID→関数名，機能名日本語
+	static EFunctionCode GetFuncInfoByName(HINSTANCE , const WCHAR* , WCHAR*);	// 関数名→機能ID，機能名日本語
+	static BOOL CanFuncIsKeyMacro(int);	// キーマクロに記録可能な機能かどうかを調べる
 	
 	// Jun. 16, 2002 genta
-	static const MacroFuncInfo* GetFuncInfoByID( int );
+	static const MacroFuncInfo* GetFuncInfoByID(int);
 	
 	bool IsSaveOk(void);
 
 	// Sep. 15, 2005 FILE	実行中マクロのインデックス番号操作 (INVALID_MACRO_IDX:無効)
-	int GetCurrentIdx( void ) const {
+	int GetCurrentIdx(void) const {
 		return m_CurrentIdx;
 	}
-	int SetCurrentIdx( int idx ) {
+	int SetCurrentIdx(int idx) {
 		int oldIdx = m_CurrentIdx;
 		m_CurrentIdx = idx;
 		return oldIdx;
 	}
 
 	// Oct. 22, 2008 syat 一時マクロ導入
-	CMacroManagerBase* SetTempMacro( CMacroManagerBase *newMacro );
+	CMacroManagerBase* SetTempMacro(CMacroManagerBase *newMacro);
 
 private:
 	DLLSHAREDATA*	m_pShareData;

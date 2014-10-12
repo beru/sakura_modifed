@@ -48,12 +48,12 @@ BOOL CViewCommander::Command_FUNCLIST(
 	// 自プロセスが前面にいるかどうか調べる
 	DWORD dwPid2;
 	DWORD dwPid1 = ::GetCurrentProcessId();
-	::GetWindowThreadProcessId( ::GetForegroundWindow(), &dwPid2 );
+	::GetWindowThreadProcessId(::GetForegroundWindow(), &dwPid2);
 	bool bForeground = (dwPid1 == dwPid2);
 
 	EOutlineType nOutlineType = (EOutlineType)_nOutlineType; //2007.11.29 kobake
 
-//	if( bCheckOnly ){
+//	if(bCheckOnly) {
 //		return TRUE;
 //	}
 
@@ -67,7 +67,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 		// タイプ別に設定されたアウトライン解析方法
 		nOutlineType = m_pCommanderView->m_pTypeData->m_eDefaultOutline;
 		if (nOutlineType == OUTLINE_CPP) {
-			if (CheckEXT( GetDocument()->m_cDocFile.GetFilePath(), _T("c") )) {
+			if (CheckEXT(GetDocument()->m_cDocFile.GetFilePath(), _T("c"))) {
 				nOutlineType = OUTLINE_C;	// これでC関数一覧リストビューになる
 			}
 		}
@@ -79,9 +79,9 @@ BOOL CViewCommander::Command_FUNCLIST(
 		case SHOW_NORMAL: // アクティブにする
 			// 開いているものと種別が同じならActiveにするだけ．異なれば再解析
 			dlgFuncList.SyncColor();
-			if (dlgFuncList.CheckListType( nOutlineType )) {
+			if (dlgFuncList.CheckListType(nOutlineType)) {
 				if (bForeground) {
-					::SetFocus( dlgFuncList.GetHwnd() );
+					::SetFocus(dlgFuncList.GetHwnd());
 				}
 				bIsProcessing = false;
 				return TRUE;
@@ -89,11 +89,11 @@ BOOL CViewCommander::Command_FUNCLIST(
 			break;
 		case SHOW_TOGGLE: // 閉じる
 			//	開いているものと種別が同じなら閉じる．異なれば再解析
-			if (dlgFuncList.CheckListType( nOutlineType )) {
+			if (dlgFuncList.CheckListType(nOutlineType)) {
 				if (dlgFuncList.IsDocking())
-					::DestroyWindow( dlgFuncList.GetHwnd() );
+					::DestroyWindow(dlgFuncList.GetHwnd());
 				else
-					::SendMessageAny( dlgFuncList.GetHwnd(), WM_CLOSE, 0, 0 );
+					::SendMessageAny(dlgFuncList.GetHwnd(), WM_CLOSE, 0, 0);
 				bIsProcessing = false;
 				return TRUE;
 			}
@@ -110,18 +110,18 @@ BOOL CViewCommander::Command_FUNCLIST(
 	auto& cDocOutline = GetDocument()->m_cDocOutline;
 	switch (nOutlineType) {
 	case OUTLINE_C:			// C/C++ は MakeFuncList_C
-	case OUTLINE_CPP:		cDocOutline.MakeFuncList_C( &cFuncInfoArr );break;
-	case OUTLINE_PLSQL:		cDocOutline.MakeFuncList_PLSQL( &cFuncInfoArr );break;
-	case OUTLINE_JAVA:		cDocOutline.MakeFuncList_Java( &cFuncInfoArr );break;
-	case OUTLINE_COBOL:		cDocOutline.MakeTopicList_cobol( &cFuncInfoArr );break;
-	case OUTLINE_ASM:		cDocOutline.MakeTopicList_asm( &cFuncInfoArr );break;
-	case OUTLINE_PERL:		cDocOutline.MakeFuncList_Perl( &cFuncInfoArr );break;	//	Sep. 8, 2000 genta
-	case OUTLINE_VB:		cDocOutline.MakeFuncList_VisualBasic( &cFuncInfoArr );break;	//	June 23, 2001 N.Nakatani
+	case OUTLINE_CPP:		cDocOutline.MakeFuncList_C(&cFuncInfoArr);break;
+	case OUTLINE_PLSQL:		cDocOutline.MakeFuncList_PLSQL(&cFuncInfoArr);break;
+	case OUTLINE_JAVA:		cDocOutline.MakeFuncList_Java(&cFuncInfoArr);break;
+	case OUTLINE_COBOL:		cDocOutline.MakeTopicList_cobol(&cFuncInfoArr);break;
+	case OUTLINE_ASM:		cDocOutline.MakeTopicList_asm(&cFuncInfoArr);break;
+	case OUTLINE_PERL:		cDocOutline.MakeFuncList_Perl(&cFuncInfoArr);break;	//	Sep. 8, 2000 genta
+	case OUTLINE_VB:		cDocOutline.MakeFuncList_VisualBasic(&cFuncInfoArr);break;	//	June 23, 2001 N.Nakatani
 	case OUTLINE_WZTXT:		cDocOutline.MakeTopicList_wztxt(&cFuncInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
 	case OUTLINE_HTML:		cDocOutline.MakeTopicList_html(&cFuncInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
 	case OUTLINE_TEX:		cDocOutline.MakeTopicList_tex(&cFuncInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
-	case OUTLINE_BOOKMARK:	cDocOutline.MakeFuncList_BookMark( &cFuncInfoArr );break;	//	2001.12.03 hor
-	case OUTLINE_FILE:		cDocOutline.MakeFuncList_RuleFile( &cFuncInfoArr, sTitleOverride );break;	//	2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
+	case OUTLINE_BOOKMARK:	cDocOutline.MakeFuncList_BookMark(&cFuncInfoArr);break;	//	2001.12.03 hor
+	case OUTLINE_FILE:		cDocOutline.MakeFuncList_RuleFile(&cFuncInfoArr, sTitleOverride);break;	//	2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
 //	case OUTLINE_UNKNOWN:	//Jul. 08, 2001 JEPRO 使わないように変更
 	case OUTLINE_PYTHON:	cDocOutline.MakeFuncList_python(&cFuncInfoArr);break;		// 2007.02.08 genta
 	case OUTLINE_ERLANG:	cDocOutline.MakeFuncList_Erlang(&cFuncInfoArr);break;		// 2009.08.10 genta
@@ -132,17 +132,17 @@ BOOL CViewCommander::Command_FUNCLIST(
 		// プラグインから検索する
 		{
 			CPlug::Array plugs;
-			CJackManager::getInstance()->GetUsablePlug( PP_OUTLINE, nOutlineType, &plugs );
+			CJackManager::getInstance()->GetUsablePlug(PP_OUTLINE, nOutlineType, &plugs);
 
 			if (plugs.size() > 0) {
-				assert_warning( 1 == plugs.size() );
+				assert_warning(1 == plugs.size());
 				// インタフェースオブジェクト準備
 				CWSHIfObj::List params;
-				COutlineIfObj* objOutline = new COutlineIfObj( cFuncInfoArr );
+				COutlineIfObj* objOutline = new COutlineIfObj(cFuncInfoArr);
 				objOutline->AddRef();
-				params.push_back( objOutline );
+				params.push_back(objOutline);
 				// プラグイン呼び出し
-				( *plugs.begin() )->Invoke( m_pCommanderView, params );
+				(*plugs.begin())->Invoke(m_pCommanderView, params);
 
 				nListType = objOutline->m_nListType;			//ダイアログの表示方法をを上書き
 				sTitleOverride = objOutline->m_sOutlineTitle;	//ダイアログタイトルを上書き
@@ -153,12 +153,12 @@ BOOL CViewCommander::Command_FUNCLIST(
 		}
 
 		// それ以外
-		cDocOutline.MakeTopicList_txt( &cFuncInfoArr );
+		cDocOutline.MakeTopicList_txt(&cFuncInfoArr);
 		break;
 	}
 
 	// 解析対象ファイル名
-	_tcscpy( cFuncInfoArr.m_szFilePath, GetDocument()->m_cDocFile.GetFilePath() );
+	_tcscpy(cFuncInfoArr.m_szFilePath, GetDocument()->m_cDocFile.GetFilePath());
 
 	// アウトライン ダイアログの表示
 	CLayoutPoint poCaret = GetCaret().GetCaretLayoutPos();
@@ -176,15 +176,15 @@ BOOL CViewCommander::Command_FUNCLIST(
 		);
 	}else {
 		// アクティブにする
-		dlgFuncList.Redraw( nOutlineType, nListType, &cFuncInfoArr, poCaret.GetY2() + 1, poCaret.GetX2() + 1 );
+		dlgFuncList.Redraw(nOutlineType, nListType, &cFuncInfoArr, poCaret.GetY2() + 1, poCaret.GetX2() + 1);
 		if (bForeground) {
-			::SetFocus( dlgFuncList.GetHwnd() );
+			::SetFocus(dlgFuncList.GetHwnd());
 		}
 	}
 
 	// ダイアログタイトルを上書き
 	if (!sTitleOverride.empty()) {
-		dlgFuncList.SetWindowText( sTitleOverride.c_str() );
+		dlgFuncList.SetWindowText(sTitleOverride.c_str());
 	}
 
 	bIsProcessing = false;

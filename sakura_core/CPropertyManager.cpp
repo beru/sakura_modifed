@@ -51,7 +51,7 @@ bool CPropertyManager::OpenPropertySheet(
 {
 	bool bRet;
 	CPropCommon* pcPropCommon = new CPropCommon();
-	pcPropCommon->Create( m_hwndOwner, m_pImageList, m_pMenuDrawer );
+	pcPropCommon->Create(m_hwndOwner, m_pImageList, m_pMenuDrawer);
 
 	// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
 	// 共通設定の一時設定領域にSharaDataをコピーする
@@ -62,7 +62,7 @@ bool CPropertyManager::OpenPropertySheet(
 	}
 
 	// プロパティシートの作成
-	if (pcPropCommon->DoPropertySheet( m_nPropComPageNum, bTrayProc )) {
+	if (pcPropCommon->DoPropertySheet(m_nPropComPageNum, bTrayProc)) {
 
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
@@ -71,7 +71,7 @@ bool CPropertyManager::OpenPropertySheet(
 
 		// 印刷中にキーワードを上書きしないように
 		CShareDataLockCounter* pLock = NULL;
-		CShareDataLockCounter::WaitLock( pcPropCommon->m_hwndParent, &pLock );
+		CShareDataLockCounter::WaitLock(pcPropCommon->m_hwndParent, &pLock);
 
 		pcPropCommon->ApplyData();
 		// note: 基本的にここで適用しないで、MYWM_CHANGESETTINGからたどって適用してください。
@@ -83,7 +83,7 @@ bool CPropertyManager::OpenPropertySheet(
 		}
 
 		// アクセラレータテーブルの再作成
-		::SendMessageAny( GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL );
+		::SendMessageAny(GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
@@ -118,7 +118,7 @@ bool CPropertyManager::OpenPropertySheetTypes(
 {
 	bool bRet;
 	CPropTypes* pcPropTypes = new CPropTypes();
-	pcPropTypes->Create( G_AppInstance(), m_hwndOwner );
+	pcPropTypes->Create(G_AppInstance(), m_hwndOwner);
 
 	std::auto_ptr<STypeConfig> pType(new STypeConfig());
 	CDocTypeManager().GetTypeConfig(nSettingType, *pType);
@@ -130,17 +130,17 @@ bool CPropertyManager::OpenPropertySheetTypes(
 	}
 
 	// プロパティシートの作成
-	if (pcPropTypes->DoPropertySheet( m_nPropTypePageNum )) {
+	if (pcPropTypes->DoPropertySheet(m_nPropTypePageNum)) {
 		// 2013.06.10 Moca 印刷終了まで待機する
 		CShareDataLockCounter* pLock = NULL;
-		CShareDataLockCounter::WaitLock( pcPropTypes->GetHwndParent(), &pLock );
+		CShareDataLockCounter::WaitLock(pcPropTypes->GetHwndParent(), &pLock);
 
 		pcPropTypes->GetTypeData(*pType);
 
 		CDocTypeManager().SetTypeConfig(nSettingType, *pType);
 
 		// アクセラレータテーブルの再作成
-		// ::SendMessageAny( GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL );
+		// ::SendMessageAny(GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
@@ -153,7 +153,7 @@ bool CPropertyManager::OpenPropertySheetTypes(
 		if (pcPropTypes->GetChangeKeyWordSet()) {
 			CAppNodeGroupHandle(0).SendMessageToAllEditors(
 				WM_COMMAND,
-				(WPARAM)MAKELONG( F_REDRAW, 0 ),
+				(WPARAM)MAKELONG(F_REDRAW, 0),
 				(LPARAM)0,
 				hWnd
 			);

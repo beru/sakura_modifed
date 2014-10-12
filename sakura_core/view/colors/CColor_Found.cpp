@@ -68,7 +68,7 @@ bool CColor_Select::EndColor(const CStringRef& cStr, int nPos)
 
 CColor_Found::CColor_Found()
 	:
-	validColorNum( 0 )
+	validColorNum(0)
 {
 }
 
@@ -81,7 +81,7 @@ void CColor_Found::OnStartScanLogic()
 	this->validColorNum = 0;
 	for (int color = COLORIDX_SEARCH; color <= COLORIDX_SEARCHTAIL; ++color) {
 		if (m_pTypeData->m_ColorInfoArr[ color ].m_bDisp) {
-			this->highlightColors[ this->validColorNum++ ] = EColorIndexType( color );
+			this->highlightColors[ this->validColorNum++ ] = EColorIndexType(color);
 		}
 	}
 }

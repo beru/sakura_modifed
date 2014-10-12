@@ -139,7 +139,7 @@ bool CMarkMgr::NextValid(void)
 */
 void CMarkMgr::Flush(void)
 {
-	m_cMarkChain.erase( m_cMarkChain.begin(), m_cMarkChain.end() );
+	m_cMarkChain.erase(m_cMarkChain.begin(), m_cMarkChain.end());
 	m_nCurpos = 0;
 }
 
@@ -160,7 +160,7 @@ void CAutoMarkMgr::Add(const CMark& m)
 	// Œ»İˆÊ’u‚ª“r’†‚Ì
 	if (m_nCurpos < (int)m_cMarkChain.size()) {
 		// Œ»İˆÊ’u‚Ü‚Å—v‘f‚ğíœ
-		m_cMarkChain.erase( m_cMarkChain.begin() + m_nCurpos, m_cMarkChain.end() );
+		m_cMarkChain.erase(m_cMarkChain.begin() + m_nCurpos, m_cMarkChain.end());
 	}
 
 	// —v‘f‚Ì’Ç‰Á
@@ -184,7 +184,7 @@ void CAutoMarkMgr::Expire(void)
 	}
 
 	// Å‘å’l‚ğ’´‚¦‚Ä‚¢‚éê‡
-	m_cMarkChain.erase( m_cMarkChain.begin(), m_cMarkChain.begin() + range );
+	m_cMarkChain.erase(m_cMarkChain.begin(), m_cMarkChain.begin() + range);
 	m_nCurpos -= range;
 	if (m_nCurpos < 0) {
 		m_nCurpos = 0;

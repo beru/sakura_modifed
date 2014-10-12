@@ -28,7 +28,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
 	TCHAR	m_szCommand[1024 + 1];	// コマンドライン
 	SFilePath	m_szCurDir;			// カレントディレクトリ
@@ -42,10 +42,10 @@ protected:
 	CRecentCurDir m_cRecentCur;
 
 	// オーバーライド?
-	int GetData( void );	// ダイアログデータの取得
-	void SetData( void );	// ダイアログデータの設定
-	BOOL OnInitDialog( HWND, WPARAM, LPARAM );
-	BOOL OnBnClicked( int );
+	int GetData(void);	// ダイアログデータの取得
+	void SetData(void);	// ダイアログデータの設定
+	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
+	BOOL OnBnClicked(int);
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 
 

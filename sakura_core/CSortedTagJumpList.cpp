@@ -36,10 +36,10 @@
 */
 CSortedTagJumpList::CSortedTagJumpList(int max)
 	:
-	m_pTagjump( NULL ),
-	m_nCount( 0 ),
-	m_bOverflow( false ),
-	m_MAX_TAGJUMPLIST( max )
+	m_pTagjump(NULL),
+	m_nCount(0),
+	m_bOverflow(false),
+	m_MAX_TAGJUMPLIST(max)
 {
 	// id==0 を 空文字列にする
 	m_baseDirArr.push_back(_T(""));
@@ -55,25 +55,25 @@ CSortedTagJumpList::~CSortedTagJumpList()
 
 	@param[in] item 削除するアイテム
 */
-void CSortedTagJumpList::Free( TagJumpInfo* item )
+void CSortedTagJumpList::Free(TagJumpInfo* item)
 {
-	free( item->keyword );
-	free( item->filename );
-	free( item->note );
-	free( item );
+	free(item->keyword);
+	free(item->filename);
+	free(item->note);
+	free(item);
 	return;
 }
 
 /*
 	リストをすべて解放する。
 */
-void CSortedTagJumpList::Empty( void )
+void CSortedTagJumpList::Empty(void)
 {
 	TagJumpInfo*	p;
 	TagJumpInfo*	next;
 	for (p = m_pTagjump; p; p = next) {
 		next = p->next;
-		Free( p );
+		Free(p);
 	}
 	m_pTagjump = NULL;
 	m_nCount = 0;
@@ -86,9 +86,9 @@ void CSortedTagJumpList::Empty( void )
 	基準フォルダを登録し、基準フォルダIDを取得
 	@date 2010.07.23 Moca 新規追加
 */
-int CSortedTagJumpList::AddBaseDir( const TCHAR* baseDir )
+int CSortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 {
-	m_baseDirArr.push_back( baseDir );
+	m_baseDirArr.push_back(baseDir);
 	return m_baseDirArr.size() -1;
 }
 
@@ -108,8 +108,9 @@ int CSortedTagJumpList::AddBaseDir( const TCHAR* baseDir )
 	@retval FALSE 追加失敗
 	@date 2010.07.23 Moca baseDirId 追加
 */
-BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename, int no,
-	ACHAR type, const ACHAR* note, int depth, int baseDirId )
+BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, int no,
+	ACHAR type, const ACHAR* note, int depth, int baseDirId
+)
 {
 	TagJumpInfo*	p;
 	TagJumpInfo*	prev;
@@ -118,28 +119,28 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 	ACHAR typeStr[] = {type, '\0', '\0'};
 
 	// アイテムを作成する。
-	item = (TagJumpInfo*)malloc( sizeof( TagJumpInfo ) );
+	item = (TagJumpInfo*)malloc(sizeof(TagJumpInfo));
 	if (!item) {
 		return FALSE;
 	}
-	item->keyword  = _tcsdup( to_tchar(keyword) );
-	item->filename = _tcsdup( to_tchar(filename) );
+	item->keyword  = _tcsdup(to_tchar(keyword));
+	item->filename = _tcsdup(to_tchar(filename));
 	item->no       = no;
 	item->type     = to_tchar(typeStr)[0];
-	item->note     = _tcsdup( to_tchar(note) );
+	item->note     = _tcsdup(to_tchar(note));
 	item->depth    = depth;
 	item->next     = NULL;
 	item->baseDirId = baseDirId;
 
 	// 文字列長ガード
-	if (_tcslen( item->keyword  ) >= MAX_TAG_STRING_LENGTH) item->keyword[  MAX_TAG_STRING_LENGTH-1 ] = 0;
-	if (_tcslen( item->filename ) >= MAX_TAG_STRING_LENGTH) item->filename[ MAX_TAG_STRING_LENGTH-1 ] = 0;
-	if (_tcslen( item->note     ) >= MAX_TAG_STRING_LENGTH) item->note[     MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen(item->keyword	) >= MAX_TAG_STRING_LENGTH) item->keyword[  MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen(item->filename	) >= MAX_TAG_STRING_LENGTH) item->filename[ MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen(item->note		) >= MAX_TAG_STRING_LENGTH) item->note[     MAX_TAG_STRING_LENGTH-1 ] = 0;
 
 	// アイテムをリストの適当な位置に追加する。
 	prev = NULL;
 	for (p = m_pTagjump; p; p = p->next) {
-		if (_tcscmp( p->keyword, item->keyword ) > 0) {
+		if (_tcscmp(p->keyword, item->keyword) > 0) {
 			break;
 		}
 		prev = p;
@@ -157,7 +158,7 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 		}
 		if (prev) prev->next = NULL;
 		else      m_pTagjump = NULL;
-		Free( p );
+		Free(p);
 		m_nCount--;
 		m_bOverflow = true;
 	}
@@ -178,7 +179,7 @@ BOOL CSortedTagJumpList::AddParamA( const ACHAR* keyword, const ACHAR* filename,
 
 	@note 不要な情報の場合は引数に NULL を指定する。
 */
-BOOL CSortedTagJumpList::GetParam( int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir )
+BOOL CSortedTagJumpList::GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir)
 {
 	if (keyword ) keyword[0] = 0;
 	if (filename) filename[0] = 0;
@@ -189,17 +190,17 @@ BOOL CSortedTagJumpList::GetParam( int index, TCHAR* keyword, TCHAR* filename, i
 	if (baseDir ) baseDir[0] = 0;
 
 	CSortedTagJumpList::TagJumpInfo* p;
-	p = GetPtr( index );
+	p = GetPtr(index);
 	if (p) {
-		if (keyword ) _tcscpy( keyword, p->keyword );
-		if (filename) _tcscpy( filename, p->filename );
+		if (keyword ) _tcscpy(keyword, p->keyword);
+		if (filename) _tcscpy(filename, p->filename);
 		if (no      ) *no    = p->no;
 		if (type    ) *type  = p->type;
-		if (note    ) _tcscpy( note, p->note );
+		if (note    ) _tcscpy(note, p->note);
 		if (depth   ) *depth = p->depth;
 		if (baseDir) {
 			if (0 <= p->baseDirId && (size_t)p->baseDirId < m_baseDirArr.size()) {
-				auto_strcpy( baseDir, m_baseDirArr[p->baseDirId].c_str() );
+				auto_strcpy(baseDir, m_baseDirArr[p->baseDirId].c_str());
 			}
 		}
 		return TRUE;
@@ -214,7 +215,7 @@ BOOL CSortedTagJumpList::GetParam( int index, TCHAR* keyword, TCHAR* filename, i
 	@param[in] index 要素番号
 	@return タグジャンプ情報
 */
-CSortedTagJumpList::TagJumpInfo* CSortedTagJumpList::GetPtr( int index )
+CSortedTagJumpList::TagJumpInfo* CSortedTagJumpList::GetPtr(int index)
 {
 	TagJumpInfo* p;
 	int	i;

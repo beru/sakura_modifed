@@ -48,15 +48,15 @@ class CDlgKeywordSelect : public CDialog {
 public:
 	CDlgKeywordSelect();
 	~CDlgKeywordSelect();
-	int DoModal( HINSTANCE, HWND, int* pnSet );
+	int DoModal(HINSTANCE, HWND, int* pnSet);
 
 protected:
 
-	BOOL OnInitDialog( HWND, WPARAM, LPARAM );
-	BOOL OnBnClicked( int );
-	int  GetData( void );
-	void SetData( void );
-	LPVOID GetHelpIdTable( void );
+	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
+	BOOL OnBnClicked(int);
+	int  GetData(void);
+	void SetData(void);
+	LPVOID GetHelpIdTable(void);
 
 	int m_nSet[ KEYWORD_SELECT_NUM ];
 	CKeyWordSetMgr*	m_pCKeyWordSetMgr;

@@ -35,10 +35,10 @@ public:
 	CRecentGrepFolder();
 
 	// オーバーライド
-	int				CompareItem( const CGrepFolderString* p1, LPCTSTR p2 ) const;
-	void			CopyItem( CGrepFolderString* dst, LPCTSTR src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( LPCTSTR* dst, const CGrepFolderString* src ) const;
-	bool			TextToDataType( CGrepFolderString* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const CGrepFolderString* p1, LPCTSTR p2) const;
+	void			CopyItem(CGrepFolderString* dst, LPCTSTR src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CGrepFolderString* src) const;
+	bool			TextToDataType(CGrepFolderString* dst, LPCTSTR pszText) const;
 };
 

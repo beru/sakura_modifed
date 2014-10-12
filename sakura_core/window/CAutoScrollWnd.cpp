@@ -41,7 +41,7 @@ CAutoScrollWnd::~CAutoScrollWnd()
 }
 
 
-HWND CAutoScrollWnd::Create( HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const CMyPoint& point, CEditView* view )
+HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const CMyPoint& point, CEditView* view)
 {
 	m_cView = view;
 	int idb, idc;
@@ -82,8 +82,8 @@ HWND CAutoScrollWnd::Create( HINSTANCE hInstance, HWND hwndParent, bool bVertica
 		m_pszClassName,	// Pointer to a null-terminated string or is an atom.
 		m_pszClassName, // pointer to window name
 		WS_CHILD | WS_VISIBLE, // window style
-		point.x-16, // horizontal position of window
-		point.y-16, // vertical position of window
+		point.x - 16, // horizontal position of window
+		point.y - 16, // vertical position of window
 		32, // window width
 		32, // window height
 		NULL // handle to menu, or child-window identifier
@@ -95,12 +95,12 @@ void CAutoScrollWnd::Close()
 	this->DestroyWindow();
 
 	if (m_hCenterImg) {
-		::DeleteObject( m_hCenterImg );
+		::DeleteObject(m_hCenterImg);
 		m_hCenterImg = NULL;
 	}
 }
 
-LRESULT CAutoScrollWnd::OnLButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
+LRESULT CAutoScrollWnd::OnLButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
@@ -108,7 +108,7 @@ LRESULT CAutoScrollWnd::OnLButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 	return 0;
 }
 
-LRESULT CAutoScrollWnd::OnRButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
+LRESULT CAutoScrollWnd::OnRButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
@@ -116,7 +116,7 @@ LRESULT CAutoScrollWnd::OnRButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 	return 0;
 }
 
-LRESULT CAutoScrollWnd::OnMButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
+LRESULT CAutoScrollWnd::OnMButtonDown(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_cView->m_nAutoScrollMode) {
 		m_cView->AutoScrollExit();
@@ -125,15 +125,15 @@ LRESULT CAutoScrollWnd::OnMButtonDown( HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 }
 
 
-LRESULT CAutoScrollWnd::OnPaint( HWND hwnd, UINT, WPARAM, LPARAM )
+LRESULT CAutoScrollWnd::OnPaint(HWND hwnd, UINT, WPARAM, LPARAM)
 {
 	PAINTSTRUCT ps;
-	HDC hdc = ::BeginPaint( hwnd, &ps );
-	HDC hdcBmp = ::CreateCompatibleDC( hdc );
-	HBITMAP hBbmpOld = (HBITMAP)::SelectObject( hdcBmp, m_hCenterImg );
-	::BitBlt( hdc, 0, 0, 32, 32, hdcBmp, 0, 0, SRCCOPY );
-	::SelectObject( hdcBmp, hBbmpOld );
-	::DeleteObject( hdcBmp );
+	HDC hdc = ::BeginPaint(hwnd, &ps);
+	HDC hdcBmp = ::CreateCompatibleDC(hdc);
+	HBITMAP hBbmpOld = (HBITMAP)::SelectObject(hdcBmp, m_hCenterImg);
+	::BitBlt(hdc, 0, 0, 32, 32, hdcBmp, 0, 0, SRCCOPY);
+	::SelectObject(hdcBmp, hBbmpOld);
+	::DeleteObject(hdcBmp);
 	::EndPaint(hwnd, &ps);
 	return 0;
 }

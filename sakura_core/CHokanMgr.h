@@ -31,8 +31,8 @@ public:
 	CHokanMgr();
 	~CHokanMgr();
 
-	HWND DoModeless( HINSTANCE, HWND, LPARAM ); // モードレスダイアログの表示
-	void Hide( void );
+	HWND DoModeless(HINSTANCE, HWND, LPARAM); // モードレスダイアログの表示
+	void Hide(void);
 	// 初期化
 	int Search(
 		POINT*			ppoWin,
@@ -51,23 +51,23 @@ public:
 		bool 			bHokanLoHiCase,
 		vector_ex<std::wstring>& 	vKouho
 	);
-//	void SetCurKouhoStr( void );
-	BOOL DoHokan( int );
-	void ChangeView( LPARAM ); // モードレス時：対象となるビューの変更
+//	void SetCurKouhoStr(void);
+	BOOL DoHokan(int);
+	void ChangeView(LPARAM); // モードレス時：対象となるビューの変更
 
 
-	BOOL OnInitDialog( HWND, WPARAM wParam, LPARAM lParam );
-	BOOL OnDestroy( void );
-	BOOL OnSize( WPARAM wParam, LPARAM lParam );
-	BOOL OnBnClicked( int wID );
-	BOOL OnKeyDown( WPARAM wParam, LPARAM lParam );
-	BOOL OnLbnSelChange( HWND hwndCtl, int wID );
-	BOOL OnLbnDblclk( int wID );
-	BOOL OnKillFocus( WPARAM wParam, LPARAM lParam );
-//	int OnVKeyToItem( WPARAM wParam, LPARAM lParam );
-//	int OnCharToItem( WPARAM wParam, LPARAM lParam );
+	BOOL OnInitDialog(HWND, WPARAM wParam, LPARAM lParam);
+	BOOL OnDestroy(void);
+	BOOL OnSize(WPARAM wParam, LPARAM lParam);
+	BOOL OnBnClicked(int wID);
+	BOOL OnKeyDown(WPARAM wParam, LPARAM lParam);
+	BOOL OnLbnSelChange(HWND hwndCtl, int wID);
+	BOOL OnLbnDblclk(int wID);
+	BOOL OnKillFocus(WPARAM wParam, LPARAM lParam);
+//	int OnVKeyToItem(WPARAM wParam, LPARAM lParam);
+//	int OnCharToItem(WPARAM wParam, LPARAM lParam);
 
-	int KeyProc( WPARAM, LPARAM );
+	int KeyProc(WPARAM, LPARAM);
 
 //	2001/06/18 asa-o
 	void ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプの表示

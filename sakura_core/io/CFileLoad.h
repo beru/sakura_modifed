@@ -50,12 +50,12 @@ class CCodeBase;
 class CFileLoad {
 public:
 
-	CFileLoad( const SEncodingConfig& encode );
-	~CFileLoad( void );
+	CFileLoad(const SEncodingConfig& encode);
+	~CFileLoad(void);
 
 	//	Jul. 26, 2003 ryoji BOM引数追加
-	ECodeType FileOpen( LPCTSTR, ECodeType, int, bool* pbBomExist = NULL );		// 指定文字コードでファイルをオープンする
-	void FileClose( void );					// 明示的にファイルをクローズする
+	ECodeType FileOpen(LPCTSTR, ECodeType, int, bool* pbBomExist = NULL);		// 指定文字コードでファイルをオープンする
+	void FileClose(void);					// 明示的にファイルをクローズする
 
 	//! 1行データをロードする 順アクセス用
 	EConvertResult ReadLine(
@@ -64,22 +64,22 @@ public:
 	);
 
 //	未実装関数郡
-//	cosnt char* ReadAtLine( int, int*, CEol* ); // 指定行目をロードする
-//	cosnt wchar_t* ReadAtLineW( int, int*, CEol* ); // 指定行目をロードする(Unicode版)
-//	bool ReadIgnoreLine( void ); // 1行読み飛ばす
+//	cosnt char* ReadAtLine(int, int*, CEol*); // 指定行目をロードする
+//	cosnt wchar_t* ReadAtLineW(int, int*, CEol*); // 指定行目をロードする(Unicode版)
+//	bool ReadIgnoreLine(void); // 1行読み飛ばす
 
 	//! ファイルの日時を取得する
-	BOOL GetFileTime( FILETIME*, FILETIME*, FILETIME* ); // inline
+	BOOL GetFileTime(FILETIME*, FILETIME*, FILETIME*); // inline
 
 	//	Jun. 08, 2003 Moca
 	//! 開いたファイルにはBOMがあるか？
-	bool IsBomExist( void ) { return m_bBomExist; }
+	bool IsBomExist(void) { return m_bBomExist; }
 
 	//! 現在の進行率を取得する(0% - 100%) 若干誤差が出る
-	int GetPercent( void );
+	int GetPercent(void);
 
 	//! ファイルサイズを取得する
-	inline int GetFileSize( void ){ return m_nFileSize; }
+	inline int GetFileSize(void) { return m_nFileSize; }
 
 	static const int gm_nBufSizeDef; // ロード用バッファサイズの初期値
 //	static const int gm_nBufSizeMin; // ロード用バッファサイズの設定可能な最低値
@@ -87,19 +87,19 @@ public:
 protected:
 
 	// コピーの禁止
-	CFileLoad( const CFileLoad& ) {}
-	CFileLoad& operator = ( const CFileLoad& ) { return *this; }
+	CFileLoad(const CFileLoad&) {}
+	CFileLoad& operator = (const CFileLoad&) { return *this; }
 
 	// Oct. 19, 2002 genta スペルミス修正
-//	void SeekBegin( void );		// ファイルの先頭位置に移動する(BOMを考慮する)
-	void Buffering( void );		// バッファにデータをロードする
-	void ReadBufEmpty( void );	// バッファを空にする
+//	void SeekBegin(void);		// ファイルの先頭位置に移動する(BOMを考慮する)
+	void Buffering(void);		// バッファにデータをロードする
+	void ReadBufEmpty(void);	// バッファを空にする
 
 	// GetLextLine の 文字コード考慮版
-	const char* GetNextLineCharCode( const char*, int, int*, int*, CEol*, int* );
+	const char* GetNextLineCharCode(const char*, int, int*, int*, CEol*, int*);
 
-	int Read( void*, size_t ); // inline
-	DWORD FilePointer( DWORD, DWORD ); // inline
+	int Read(void*, size_t); // inline
+	DWORD FilePointer(DWORD, DWORD); // inline
 
 	// メンバオブジェクト
 	const SEncodingConfig* m_pEencoding;
@@ -130,29 +130,31 @@ protected:
 	int		m_nReadDataLen;		// 読み込みバッファの有効データサイズ
 	int		m_nReadBufOffSet;	// 読み込みバッファ中のオフセット(次の行頭位置)
 //	int		m_nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
+	// 行データバッファ (文字コード変換無しの生のデータ)
+	CMemory m_cLineBuffer;
 
 }; // class CFileLoad
 
 // インライン関数郡
 
 // public
-inline BOOL CFileLoad::GetFileTime( FILETIME* pftCreate, FILETIME* pftLastAccess, FILETIME* pftLastWrite ){
-	return ::GetFileTime( m_hFile, pftCreate, pftLastAccess, pftLastWrite );
+inline BOOL CFileLoad::GetFileTime(FILETIME* pftCreate, FILETIME* pftLastAccess, FILETIME* pftLastWrite) {
+	return ::GetFileTime(m_hFile, pftCreate, pftLastAccess, pftLastWrite);
 }
 
 // protected
-inline int CFileLoad::Read( void* pBuf, size_t nSize ) {
+inline int CFileLoad::Read(void* pBuf, size_t nSize) {
 	DWORD ReadSize;
-	if (!::ReadFile( m_hFile, pBuf, nSize, &ReadSize, NULL )) {
+	if (!::ReadFile(m_hFile, pBuf, nSize, &ReadSize, NULL)) {
 		throw CError_FileRead();
 	}
 	return (int)ReadSize;
 }
 
 // protected
-inline DWORD CFileLoad::FilePointer( DWORD offset, DWORD origin ) {
+inline DWORD CFileLoad::FilePointer(DWORD offset, DWORD origin) {
 	DWORD fp;
-	if (INVALID_SET_FILE_POINTER == ( fp = ::SetFilePointer( m_hFile, offset, NULL, FILE_BEGIN ) )) {
+	if (INVALID_SET_FILE_POINTER == (fp = ::SetFilePointer(m_hFile, offset, NULL, FILE_BEGIN))) {
 		throw CError_FileRead();
 	}
 	return fp;

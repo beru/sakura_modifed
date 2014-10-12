@@ -39,10 +39,10 @@
 
 	@date 2005.10.02 genta InsMode関数化
 */
-void CViewCommander::Command_CHGMOD_INS( void )
+void CViewCommander::Command_CHGMOD_INS(void)
 {
 	// 挿入モードか？
-	m_pCommanderView->SetInsMode( !m_pCommanderView->IsInsMode() );
+	m_pCommanderView->SetInsMode(!m_pCommanderView->IsInsMode());
 	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 	// キャレットの行桁位置を表示する
@@ -56,10 +56,10 @@ void CViewCommander::Command_CHGMOD_INS( void )
 	@author moca
 	@date 2003.06.23 新規作成
 */
-void CViewCommander::Command_CHGMOD_EOL( EEolType e )
+void CViewCommander::Command_CHGMOD_EOL(EEolType e)
 {
 	if (EOL_NONE < e && e < EOL_CODEMAX) {
-		GetDocument()->m_cDocEditor.SetNewLineCode( e );
+		GetDocument()->m_cDocEditor.SetNewLineCode(e);
 		// ステータスバーを更新するため
 		// キャレットの行桁位置を表示する関数を呼び出す
 		GetCaret().ShowCaretPosInfo();
@@ -78,15 +78,15 @@ void CViewCommander::Command_CHG_CHARSET(
 		// 文字コードの確認
 		eCharSet = GetDocument()->GetDocumentEncoding();	// 設定する文字コードセット
 		bBom     = GetDocument()->GetDocumentBomExist();	// 設定するBOM
-		int nRet = GetEditWindow()->m_cDlgSetCharSet.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 
-						&eCharSet, &bBom );
+		int nRet = GetEditWindow()->m_cDlgSetCharSet.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 
+						&eCharSet, &bBom);
 		if (!nRet) {
 			return;
 		}
 	}
 
 	// 文字コードの設定
-	GetDocument()->m_cDocFile.SetCodeSetChg( eCharSet, CCodeTypeName( eCharSet ).UseBom() & bBom );
+	GetDocument()->m_cDocFile.SetCodeSetChg(eCharSet, CCodeTypeName(eCharSet).UseBom() & bBom);
 
 	// ステータス表示
 	GetCaret().ShowCaretPosInfo();
@@ -96,7 +96,7 @@ void CViewCommander::Command_CHG_CHARSET(
 /** 各種モードの取り消し
 	@param whereCursorIs 選択をキャンセルした後、キャレットをどこに置くか。0=動かさない。1=左上。2=右下。
 */
-void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
+void CViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 {
 	bool bBoxSelect = false;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -126,7 +126,7 @@ void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
 		}
 
 		// 現在の選択範囲を非選択状態に戻す
-		selInfo.DisableSelectArea( true );
+		selInfo.DisableSelectArea(true);
 
 		// カーソルを移動
 		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
@@ -136,13 +136,13 @@ void CViewCommander::Command_CANCEL_MODE( int whereCursorIs )
 		}else {
 			if (!GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
-				const CLayout*	pcLayout = layoutMgr.SearchLineByLayoutY( ptTo.y );
+				const CLayout*	pcLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pcLayout) {
 					ptTo.x = t_min(ptTo.x, pcLayout->CalcLayoutWidth(layoutMgr));
 				}
 			}
 
-			caret.MoveCursor( ptTo, true );
+			caret.MoveCursor(ptTo, true);
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}
 	}else {

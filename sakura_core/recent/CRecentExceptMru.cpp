@@ -52,29 +52,29 @@ CRecentExceptMRU::CRecentExceptMRU()
 
 	@note	取得後のポインタはユーザ管理の構造体にキャストして参照してください。
 */
-const TCHAR* CRecentExceptMRU::GetItemText( int nIndex ) const
+const TCHAR* CRecentExceptMRU::GetItemText(int nIndex) const
 {
 	return *GetItem(nIndex);
 }
 
-bool CRecentExceptMRU::DataToReceiveType( LPCTSTR* dst, const CMetaPath* src ) const
+bool CRecentExceptMRU::DataToReceiveType(LPCTSTR* dst, const CMetaPath* src) const
 {
 	*dst = *src;
 	return true;
 }
 
-bool CRecentExceptMRU::TextToDataType( CMetaPath* dst, LPCTSTR pszText ) const
+bool CRecentExceptMRU::TextToDataType(CMetaPath* dst, LPCTSTR pszText) const
 {
 	CopyItem(dst, pszText);
 	return true;
 }
 
-int CRecentExceptMRU::CompareItem( const CMetaPath* p1, LPCTSTR p2 ) const
+int CRecentExceptMRU::CompareItem(const CMetaPath* p1, LPCTSTR p2) const
 {
 	return _tcsicmp(*p1,p2);
 }
 
-void CRecentExceptMRU::CopyItem( CMetaPath* dst, LPCTSTR src ) const
+void CRecentExceptMRU::CopyItem(CMetaPath* dst, LPCTSTR src) const
 {
 	_tcscpy(*dst, src);
 }

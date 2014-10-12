@@ -89,7 +89,7 @@ public:
 	};
 
 	//! DLLのバージョン情報を取得
-	const TCHAR* GetVersionT(){ return IsAvailable() ? to_tchar(BRegexpVersion()) : _T(""); }
+	const TCHAR* GetVersionT() { return IsAvailable() ? to_tchar(BRegexpVersion()) : _T(""); }
 
 	//	CJreエミュレーション関数
 	//!	検索パターンのコンパイル
@@ -190,7 +190,7 @@ protected:
 		m_pcRegをBRegfree()に渡して解放する．解放後はNULLにセットする．
 		元々NULLなら何もしない
 	*/
-	void ReleaseCompileBuffer(void){
+	void ReleaseCompileBuffer(void) {
 		if (m_pRegExp) {
 			BRegfree( m_pRegExp );
 			m_pRegExp = NULL;

@@ -39,10 +39,10 @@ COpeBlk::~COpeBlk()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 操作の追加
-bool COpeBlk::AppendOpe( COpe* pcOpe )
+bool COpeBlk::AppendOpe(COpe* pcOpe)
 {
 	if (pcOpe->m_ptCaretPos_PHY_Before.HasNegative() || pcOpe->m_ptCaretPos_PHY_After.HasNegative()) {
-		TopErrorMessage( NULL,
+		TopErrorMessage(NULL,
 			_T("COpeBlk::AppendOpe() error.\n")
 			_T("Bug.\n")
 			_T("pcOpe->m_ptCaretPos_PHY_Before = %d,%d\n")
@@ -61,7 +61,7 @@ bool COpeBlk::AppendOpe( COpe* pcOpe )
 
 
 // 操作を返す
-COpe* COpeBlk::GetOpe( int nIndex )
+COpe* COpeBlk::GetOpe(int nIndex)
 {
 	if (GetNum() <= nIndex) {
 		return NULL;
@@ -74,12 +74,12 @@ COpe* COpeBlk::GetOpe( int nIndex )
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 編集操作要素ブロックのダンプ
-void COpeBlk::DUMP( void )
+void COpeBlk::DUMP(void)
 {
 #ifdef _DEBUG
 	int size = GetNum();
 	for (int i = 0; i < size; ++i) {
-		MYTRACE( _T("\tCOpeBlk.m_ppCOpeArr[%d]----\n"), i );
+		MYTRACE(_T("\tCOpeBlk.m_ppCOpeArr[%d]----\n"), i);
 		m_ppCOpeArr[i]->DUMP();
 	}
 #endif

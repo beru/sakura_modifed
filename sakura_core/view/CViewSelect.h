@@ -40,15 +40,15 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      選択範囲の変更                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void DisableSelectArea( bool bDraw, bool bDrawBracketCursorLine = true ); //!< 現在の選択範囲を非選択状態に戻す
+	void DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine = true); //!< 現在の選択範囲を非選択状態に戻す
 
-	void BeginSelectArea( const CLayoutPoint* po = NULL );								// 現在のカーソル位置から選択を開始する
-	void ChangeSelectAreaByCurrentCursor( const CLayoutPoint& ptCaretPos );			// 現在のカーソル位置によって選択範囲を変更
-	void ChangeSelectAreaByCurrentCursorTEST( const CLayoutPoint& ptCaretPos, CLayoutRange* pSelect );// 現在のカーソル位置によって選択範囲を変更
+	void BeginSelectArea(const CLayoutPoint* po = NULL);								// 現在のカーソル位置から選択を開始する
+	void ChangeSelectAreaByCurrentCursor(const CLayoutPoint& ptCaretPos);			// 現在のカーソル位置によって選択範囲を変更
+	void ChangeSelectAreaByCurrentCursorTEST(const CLayoutPoint& ptCaretPos, CLayoutRange* pSelect);// 現在のカーソル位置によって選択範囲を変更
 
 	//! 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
-	void SetSelectArea( const CLayoutRange& sRange ) {
+	void SetSelectArea(const CLayoutRange& sRange) {
 		m_sSelectBgn.Set(sRange.GetFrom());
 		m_sSelect = sRange;
 	}
@@ -103,7 +103,7 @@ public:
 	void GetSelectAreaLine(CLayoutRange& ret, CLayoutInt nLineNum, const CLayout* pcLayout) const {
 		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_sSelect);
 	}
-	CLayoutRange GetSelectAreaLine(CLayoutInt nLineNum, const CLayout* pcLayout) const{
+	CLayoutRange GetSelectAreaLine(CLayoutInt nLineNum, const CLayout* pcLayout) const {
 		CLayoutRange ret;
 		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_sSelect);
 		return ret;
@@ -162,9 +162,9 @@ public:
 
 	// 選択範囲を保持するための変数群
 	// これらはすべて折り返し行と、折り返し桁を保持している。
-	CLayoutRange m_sSelectBgn; //範囲選択(原点)
-	CLayoutRange m_sSelect;    //範囲選択
-	CLayoutRange m_sSelectOld; //範囲選択Old
+	CLayoutRange m_sSelectBgn; // 範囲選択(原点)
+	CLayoutRange m_sSelect;    // 範囲選択
+	CLayoutRange m_sSelectOld; // 範囲選択Old
 
 	CMyPoint	m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 };

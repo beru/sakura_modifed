@@ -101,7 +101,7 @@ public:
 		return E_NOTIMPL;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE GetLCID( 
+	virtual HRESULT STDMETHODCALLTYPE GetLCID(
 	    /* [out] */ LCID *plcid) 
 	{ 
 #ifdef TEST
@@ -110,7 +110,7 @@ public:
 		return E_NOTIMPL; // システムデフォルトを使用
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE GetItemInfo( 
+	virtual HRESULT STDMETHODCALLTYPE GetItemInfo(
 	    /* [in] */ LPCOLESTR pstrName,
 	    /* [in] */ DWORD dwReturnMask,
 	    /* [out] */ IUnknown **ppiunkItem,
@@ -123,7 +123,7 @@ public:
 		const CWSHClient::List& objects = m_Client->GetInterfaceObjects();
 		for (auto it = objects.begin(); it != objects.end(); it++) {
 			//	Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
-			if (_wcsicmp( pstrName, (*it)->m_sName.c_str() ) == 0) {
+			if (_wcsicmp(pstrName, (*it)->m_sName.c_str()) == 0) {
 				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
 					(*ppiunkItem) = *it;
 					(*ppiunkItem)->AddRef();
@@ -137,7 +137,7 @@ public:
 		return TYPE_E_ELEMENTNOTFOUND;
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE GetDocVersionString( 
+	virtual HRESULT STDMETHODCALLTYPE GetDocVersionString(
 	    /* [out] */ BSTR *pbstrVersion) 
 	{ 
 #ifdef TEST
@@ -146,7 +146,7 @@ public:
 		return E_NOTIMPL; 
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE OnScriptTerminate( 
+	virtual HRESULT STDMETHODCALLTYPE OnScriptTerminate(
 	    /* [in] */ const VARIANT *pvarResult,
 	    /* [in] */ const EXCEPINFO *pexcepinfo) 
 	{ 
@@ -156,7 +156,7 @@ public:
 		return S_OK; 
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE OnStateChange( 
+	virtual HRESULT STDMETHODCALLTYPE OnStateChange(
 	    /* [in] */ SCRIPTSTATE ssScriptState) 
 	{ 
 #ifdef TEST
@@ -272,7 +272,7 @@ typedef struct {
 } SAbortMacroParam;
 
 // WSHマクロ実行を中止するスレッド
-static unsigned __stdcall AbortMacroProc( LPVOID lpParameter )
+static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 {
 	SAbortMacroParam* pParam = (SAbortMacroParam*) lpParameter;
 
@@ -291,11 +291,11 @@ static unsigned __stdcall AbortMacroProc( LPVOID lpParameter )
 		
 		bool bCanceled = false;
 		for (;;) {
-			DWORD dwResult = MsgWaitForMultipleObjects( 1, &pParam->hEvent, FALSE, INFINITE, QS_ALLINPUT );
+			DWORD dwResult = MsgWaitForMultipleObjects(1, &pParam->hEvent, FALSE, INFINITE, QS_ALLINPUT);
 			if (dwResult == WAIT_OBJECT_0) {
-				::SendMessage( cDlgCancel.GetHwnd(), WM_CLOSE, 0, 0 );
+				::SendMessage(cDlgCancel.GetHwnd(), WM_CLOSE, 0, 0);
 			}else if (dwResult == WAIT_OBJECT_0+1) {
-				while (::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE )) {
+				while (::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE)) {
 					if (cDlgCancel.GetHwnd() != NULL && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)) {
 					}else {
 						::TranslateMessage(&msg);
@@ -309,7 +309,7 @@ static unsigned __stdcall AbortMacroProc( LPVOID lpParameter )
 			if (!bCanceled && cDlgCancel.IsCanceled()) {
 				DEBUG_TRACE(_T("Canceld\n"));
 				bCanceled = true;
-				cDlgCancel.CloseDialog( 0 );
+				cDlgCancel.CloseDialog(0);
 			}
 			if (!cDlgCancel.GetHwnd()) {
 				DEBUG_TRACE(_T("Close\n"));
@@ -344,7 +344,7 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 
 				if ((*it)->IsGlobal()) { dwFlag |= SCRIPTITEM_GLOBALMEMBERS; }
 
-				if (m_Engine->AddNamedItem( (*it)->Name(), dwFlag ) != S_OK) {
+				if (m_Engine->AddNamedItem((*it)->Name(), dwFlag) != S_OK) {
 					bAddNamedItemError = true;
 					Error(LSW(STR_ERR_CWSH06));
 					break;
@@ -361,7 +361,7 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 				unsigned int nThreadId = 0;
 				if (0 < sThreadParam.nCancelTimer) {
 					sThreadParam.hEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
-					hThread = (HANDLE)_beginthreadex( NULL, 0, AbortMacroProc, (LPVOID)&sThreadParam, 0, &nThreadId );
+					hThread = (HANDLE)_beginthreadex(NULL, 0, AbortMacroProc, (LPVOID)&sThreadParam, 0, &nThreadId);
 					DEBUG_TRACE(_T("Start AbortMacroProc 0x%08x\n"), nThreadId);
 				}
 
@@ -416,10 +416,10 @@ void CWSHClient::Error(const wchar_t* Description)
 }
 
 // インタフェースオブジェクトの追加
-void CWSHClient::AddInterfaceObject( CIfObj* obj )
+void CWSHClient::AddInterfaceObject(CIfObj* obj)
 {
 	if (!obj) return;
-	m_IfObjArr.push_back( obj );
+	m_IfObjArr.push_back(obj);
 	obj->m_Owner = this;
 	obj->AddRef();
 }

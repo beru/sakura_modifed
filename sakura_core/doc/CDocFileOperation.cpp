@@ -114,7 +114,7 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 
 	try {
 		// ロード前チェック
-		if (CALLBACK_INTERRUPT==m_pcDocRef->NotifyCheckLoad(pLoadInfo)) throw CFlowInterruption();
+		if (CALLBACK_INTERRUPT == m_pcDocRef->NotifyCheckLoad(pLoadInfo)) throw CFlowInterruption();
 
 		// ロード処理
 		m_pcDocRef->NotifyBeforeLoad(pLoadInfo);			// 前処理
@@ -139,12 +139,15 @@ bool CDocFileOperation::FileLoad(
 	SLoadInfo*	pLoadInfo		//!< [in/out]
 )
 {
+	LARGE_INTEGER start;
+	QueryPerformanceCounter(&start);
+
 	bool bRet = DoLoadFlow(pLoadInfo);
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
 		m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened );
 
-		//プラグイン：DocumentOpenイベント実行
+		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
@@ -152,6 +155,16 @@ bool CDocFileOperation::FileLoad(
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
 	}
+
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+	LARGE_INTEGER freq;
+	QueryPerformanceFrequency(&freq);
+	LONGLONG diff = now.QuadPart - start.QuadPart;
+	TCHAR buff[32];
+	swprintf(buff, L"load time %f\n", diff / (double)freq.QuadPart);
+	OutputDebugString(buff);
+
 	return bRet;
 }
 

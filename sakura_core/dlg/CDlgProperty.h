@@ -39,13 +39,13 @@ class CDlgProperty;
 -----------------------------------------------------------------------*/
 class CDlgProperty : public CDialog {
 public:
-	int DoModal( HINSTANCE, HWND, LPARAM  );	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL OnBnClicked( int );
-	void SetData( void );	// ダイアログデータの設定
+	BOOL OnBnClicked(int);
+	void SetData(void);	// ダイアログデータの設定
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 };
 

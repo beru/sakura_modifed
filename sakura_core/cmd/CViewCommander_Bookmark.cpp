@@ -33,7 +33,7 @@ void CViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 			&pt
 		);
 		// 2006.07.09 genta 選択状態を保つ
-		m_pCommanderView->MoveCursorSelecting( pt, m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
+		m_pCommanderView->MoveCursorSelecting(pt, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}else {
 		ErrorBeep();
 	}
@@ -45,7 +45,7 @@ void CViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 /*! 指定行へジャンプダイアログの表示
 	2002.2.2 YAZAKI
 */
-void CViewCommander::Command_JUMP_DIALOG( void )
+void CViewCommander::Command_JUMP_DIALOG(void)
 {
 	if (!GetEditWindow()->m_cDlgJump.DoModal(
 			G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument()
@@ -58,7 +58,7 @@ void CViewCommander::Command_JUMP_DIALOG( void )
 
 
 // 指定行ヘジャンプ
-void CViewCommander::Command_JUMP( void )
+void CViewCommander::Command_JUMP(void)
 {
 	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 	if (0 == layoutMgr.GetLineCount()) {
@@ -160,7 +160,7 @@ void CViewCommander::Command_JUMP( void )
 			// シングルクォーテーション文字列読み込み中
 			prevLet = let;
 			let = pLine[i];
-			if( 20 == nMode ){
+			if (20 == nMode) {
 				bValidLine = TRUE;
 				if (let == L'\'') {
 					if (i > 0 && L'\\' == prevLet) {
@@ -201,7 +201,7 @@ void CViewCommander::Command_JUMP( void )
 				if (0
 					|| let == L'\t'
 					|| let == L' '
-					|| WCODE::IsLineDelimiter( let )
+					|| WCODE::IsLineDelimiter(let)
 				) {
 					continue;
 				}else
@@ -258,7 +258,7 @@ void CViewCommander::Command_JUMP( void )
 	// Sep. 8, 2000 genta
 	m_pCommanderView->AddCurrentLineToHistory();
 	// 2006.07.09 genta 選択状態を解除しないように
-	m_pCommanderView->MoveCursorSelecting( ptPos, m_pCommanderView->GetSelectionInfo().m_bSelectingLock, _CARETMARGINRATE / 3 );
+	m_pCommanderView->MoveCursorSelecting(ptPos, m_pCommanderView->GetSelectionInfo().m_bSelectingLock, _CARETMARGINRATE / 3);
 }
 
 
@@ -286,12 +286,12 @@ void CViewCommander::Command_BOOKMARK_SET(void)
 			&ptTo
 		);
 		for (CLogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; nY++) {
-			pCDocLine = lineMgr.GetLine( nY );
+			pCDocLine = lineMgr.GetLine(nY);
 			CBookmarkSetter cBookmark(pCDocLine);
 			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 		}
 	}else {
-		pCDocLine = lineMgr.GetLine( GetCaret().GetCaretLogicPos().GetY2() );
+		pCDocLine = lineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2());
 		CBookmarkSetter cBookmark(pCDocLine);
 		if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
 	}
@@ -321,7 +321,7 @@ re_do:;								// hor
 		CLayoutPoint ptLayout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
 		//	2006.07.09 genta 新規関数にまとめた
-		m_pCommanderView->MoveCursorSelecting( ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
+		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
 	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
@@ -337,7 +337,7 @@ re_do:;								// hor
 		if (nYOld >= ptXY.y) m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT1));
 	}else {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT2));
-		AlertNotFound( m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_NEXT_NOT_FOUND));
+		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_NEXT_NOT_FOUND));
 	}
 	return;
 }
@@ -382,7 +382,7 @@ re_do:;								// hor
 		}
 	}else {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV2));
-		AlertNotFound( m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_PREV_NOT_FOUND) );
+		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_PREV_NOT_FOUND));
 	}
 	return;
 }
@@ -401,7 +401,7 @@ void CViewCommander::Command_BOOKMARK_RESET(void)
 //	from CViewCommander_New.cpp
 //指定パターンに一致する行をマーク 2002.01.16 hor
 //キーマクロで記録できるように	2002.02.08 hor
-void CViewCommander::Command_BOOKMARK_PATTERN( void )
+void CViewCommander::Command_BOOKMARK_PATTERN(void)
 {
 	// 検索or置換ダイアログから呼び出された
 	if (!m_pCommanderView->ChangeCurRegexp(false)) {

@@ -28,7 +28,7 @@
 */
 class CProcess : public TSingleInstance<CProcess> {
 public:
-	CProcess( HINSTANCE hInstance, LPCTSTR lpCmdLine );
+	CProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine);
 	bool Run();
 	virtual ~CProcess() {}
 	virtual void RefreshString();
@@ -39,14 +39,14 @@ protected:
 	virtual void OnExitProcess() = 0;
 
 protected:
-	void			SetMainWindow(HWND hwnd){ m_hWnd = hwnd; }
+	void			SetMainWindow(HWND hwnd) { m_hWnd = hwnd; }
 #ifdef USE_CRASHDUMP
-	int				WriteDump( PEXCEPTION_POINTERS pExceptPtrs );
+	int				WriteDump(PEXCEPTION_POINTERS pExceptPtrs);
 #endif
 public:
-	HINSTANCE		GetProcessInstance() const{ return m_hInstance; }
+	HINSTANCE		GetProcessInstance() const { return m_hInstance; }
 	CShareData&		GetShareData()   { return *m_pcShareData; }
-	HWND			GetMainWindow() const{ return m_hWnd; }
+	HWND			GetMainWindow() const { return m_hWnd; }
 
 private:
 	HINSTANCE	m_hInstance;

@@ -39,51 +39,51 @@ CWSHPlugin::~CWSHPlugin(void)
 }
 
 //プラグイン定義ファイルを読み込む
-bool CWSHPlugin::ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMlang )
+bool CWSHPlugin::ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang)
 {
-	ReadPluginDefCommon( cProfile, cProfileMlang );
+	ReadPluginDefCommon(cProfile, cProfileMlang);
 
 	//WSHセクションの読み込み
-	cProfile->IOProfileData<bool>( PII_WSH, PII_WSH_USECACHE, m_bUseCache );
+	cProfile->IOProfileData<bool>(PII_WSH, PII_WSH_USECACHE, m_bUseCache);
 
 	//プラグの読み込み
-	ReadPluginDefPlug( cProfile, cProfileMlang );
+	ReadPluginDefPlug(cProfile, cProfileMlang);
 
 	//コマンドの読み込み
-	ReadPluginDefCommand( cProfile, cProfileMlang );
+	ReadPluginDefCommand(cProfile, cProfileMlang);
 
 	//オプション定義の読み込み	// 2010/3/24 Uchi
-	ReadPluginDefOption( cProfile, cProfileMlang );
+	ReadPluginDefOption(cProfile, cProfileMlang);
 
 	//文字列定義の読み込み
-	ReadPluginDefString( cProfile, cProfileMlang );
+	ReadPluginDefString(cProfile, cProfileMlang);
 
 	return true;
 }
 
 //オプションファイルを読み込む
-bool CWSHPlugin::ReadPluginOption( CDataProfile *cProfile )
+bool CWSHPlugin::ReadPluginOption(CDataProfile *cProfile)
 {
 	return true;
 }
 
 //プラグを実行する
-bool CWSHPlugin::InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& params )
+bool CWSHPlugin::InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& params)
 {
-	CWSHPlug& wshPlug = static_cast<CWSHPlug&>( plug );
+	CWSHPlug& wshPlug = static_cast<CWSHPlug&>(plug);
 	CWSHMacroManager* pWsh = NULL;
 
 	if (!m_bUseCache || !wshPlug.m_Wsh) {
-		CFilePath path( plug.m_cPlugin.GetFilePath( to_tchar(plug.m_sHandler.c_str()) ).c_str() );
+		CFilePath path(plug.m_cPlugin.GetFilePath(to_tchar(plug.m_sHandler.c_str())).c_str());
 
-		pWsh = (CWSHMacroManager*)CWSHMacroManager::Creator( path.GetExt( true ) );
+		pWsh = (CWSHMacroManager*)CWSHMacroManager::Creator(path.GetExt(true));
 		if (!pWsh) {
 			return false;
 		}
 
-		BOOL bLoadResult = pWsh->LoadKeyMacro( G_AppInstance(), path );
+		BOOL bLoadResult = pWsh->LoadKeyMacro(G_AppInstance(), path);
 		if (!bLoadResult) {
-			ErrorMessage( NULL, LS(STR_WSHPLUG_LOADMACRO), static_cast<const TCHAR*>(path) );
+			ErrorMessage(NULL, LS(STR_WSHPLUG_LOADMACRO), static_cast<const TCHAR*>(path));
 			delete pWsh;
 			return false;
 		}
@@ -94,12 +94,12 @@ bool CWSHPlugin::InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& para
 
 	CPluginIfObj cPluginIfo(*this);		//Pluginオブジェクトを追加
 	cPluginIfo.AddRef();
-	cPluginIfo.SetPlugIndex( plug.m_id );	//実行中プラグ番号を提供
-	pWsh->AddParam( &cPluginIfo );
+	cPluginIfo.SetPlugIndex(plug.m_id);	//実行中プラグ番号を提供
+	pWsh->AddParam(&cPluginIfo);
 
-	pWsh->AddParam( params );			//パラメータを追加
+	pWsh->AddParam(params);			//パラメータを追加
 
-	pWsh->ExecKeyMacro2( view, FA_NONRECORD | FA_FROMMACRO );
+	pWsh->ExecKeyMacro2(view, FA_NONRECORD | FA_FROMMACRO);
 
 	pWsh->ClearParam();
 

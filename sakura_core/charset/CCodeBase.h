@@ -43,21 +43,21 @@ enum EEolType;
 */
 class CCodeBase {
 public:
-	virtual ~CCodeBase(){}
-//	virtual bool IsCode(const CMemory* pMem){return false;}  //!< 特定コードであればtrue
+	virtual ~CCodeBase() {}
+//	virtual bool IsCode(const CMemory* pMem) {return false;}  //!< 特定コードであればtrue
 
 	//文字コード変換
 	virtual EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst)=0;	//!< 特定コード → UNICODE    変換
 	virtual EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst)=0;	//!< UNICODE    → 特定コード 変換
 	//! UNICODE    → 特定コード 変換
-	virtual EConvertResult UnicodeToCode(const CStringRef& cSrc, CMemory* pDst){
+	virtual EConvertResult UnicodeToCode(const CStringRef& cSrc, CMemory* pDst) {
 		CNativeW mem(cSrc.GetPtr(), cSrc.GetLength());
 		return UnicodeToCode(mem, pDst);
 	}
 
 	//ファイル形式
 	virtual void GetBom(CMemory* pcmemBom);											//!< BOMデータ取得
-	void GetEol(CMemory* pcmemEol, EEolType eEolType){ S_GetEol(pcmemEol,eEolType); }	//!< 改行データ取得 virtualから実体へ	2010/6/13 Uchi
+	void GetEol(CMemory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol,eEolType); }	//!< 改行データ取得 virtualから実体へ	2010/6/13 Uchi
 
 	// 文字コード表示用		2008/6/9 Uchi
 	virtual EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換

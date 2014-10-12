@@ -45,12 +45,12 @@ MacroFuncInfoArray CEditorIfObj::GetMacroFuncInfo() const
 // ŠÖ”‚ğˆ—‚·‚é
 bool CEditorIfObj::HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result)
 {
-	return CMacro::HandleFunction( View, ID, Arguments, ArgSize, Result );
+	return CMacro::HandleFunction(View, ID, Arguments, ArgSize, Result);
 }
 
 // ƒRƒ}ƒ“ƒh‚ğˆ—‚·‚é
 bool CEditorIfObj::HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
 {
-	return CMacro::HandleCommand( View, ID, Arguments, ArgLengths, ArgSize );
+	return CMacro::HandleCommand(View, ID, Arguments, ArgLengths, ArgSize);
 }
 

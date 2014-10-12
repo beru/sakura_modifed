@@ -45,10 +45,10 @@ public:
 		m_pShareData = &GetDllShareData();
 	}
 	//@@@ 2002.2.2 YAZAKI
-	void AddToSearchKeyArr( const wchar_t* pszSearchKey );	//	m_aSearchKeys‚ÉpszSearchKey‚ð’Ç‰Á‚·‚é
-	void AddToReplaceKeyArr( const wchar_t* pszReplaceKey );	//	m_aReplaceKeys‚ÉpszReplaceKey‚ð’Ç‰Á‚·‚é
-	void AddToGrepFileArr( const TCHAR* pszGrepFile );		//	m_aGrepFiles‚ÉpszGrepFile‚ð’Ç‰Á‚·‚é
-	void AddToGrepFolderArr( const TCHAR* pszGrepFolder );	//	m_aGrepFolders.size()‚ÉpszGrepFolder‚ð’Ç‰Á‚·‚é
+	void AddToSearchKeyArr(const wchar_t* pszSearchKey);	//	m_aSearchKeys‚ÉpszSearchKey‚ð’Ç‰Á‚·‚é
+	void AddToReplaceKeyArr(const wchar_t* pszReplaceKey);	//	m_aReplaceKeys‚ÉpszReplaceKey‚ð’Ç‰Á‚·‚é
+	void AddToGrepFileArr(const TCHAR* pszGrepFile);		//	m_aGrepFiles‚ÉpszGrepFile‚ð’Ç‰Á‚·‚é
+	void AddToGrepFolderArr(const TCHAR* pszGrepFolder);	//	m_aGrepFolders.size()‚ÉpszGrepFolder‚ð’Ç‰Á‚·‚é
 private:
 	DLLSHAREDATA* m_pShareData;
 };

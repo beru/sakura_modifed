@@ -37,15 +37,15 @@ wchar_t* wcs_pushA(wchar_t *dst, size_t dst_count, const char* src);
 #define wcs_pushT wcs_pushA
 #endif
 
-int AddLastChar( TCHAR*, int, TCHAR ); // 2003.06.24 Moca 最後の文字が指定された文字でないときは付加する
-int LimitStringLengthA( const ACHAR*, int, int, CNativeA& ); // データを指定「文字数」以内に切り詰める
-int LimitStringLengthW( const WCHAR*, int, int, CNativeW& ); // データを指定「文字数」以内に切り詰める
-int LimitStringLengthT( const TCHAR*, int, int, CNativeT& ); // データを指定「文字数」以内に切り詰める
-const char* GetNextLimitedLengthText( const char*, int, int, int*, int* ); // 指定長以下のテキストに切り分ける
-const char* GetNextLine( const char*   , int, int*, int*, CEol* ); // CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない
-const wchar_t* GetNextLineW( const wchar_t*, int, int*, int*, CEol* ); // GetNextLineのwchar_t版
-//wchar_t* GetNextLineWB( const wchar_t*, int, int*, int*, CEol* ); // GetNextLineのwchar_t版(ビックエンディアン用)  // 未使用
-void GetLineColumn( const wchar_t*, int*, int* );
+int AddLastChar(TCHAR*, int, TCHAR); // 2003.06.24 Moca 最後の文字が指定された文字でないときは付加する
+int LimitStringLengthA(const ACHAR*, int, int, CNativeA&); // データを指定「文字数」以内に切り詰める
+int LimitStringLengthW(const WCHAR*, int, int, CNativeW&); // データを指定「文字数」以内に切り詰める
+int LimitStringLengthT(const TCHAR*, int, int, CNativeT&); // データを指定「文字数」以内に切り詰める
+const char* GetNextLimitedLengthText(const char*, int, int, int*, int*); // 指定長以下のテキストに切り分ける
+const char* GetNextLine(const char*   , int, int*, int*, CEol*); // CR0LF0,CRLF,LF,CRで区切られる「行」を返す。改行コードは行長に加えない
+const wchar_t* GetNextLineW(const wchar_t*, int, int*, int*, CEol*); // GetNextLineのwchar_t版
+//wchar_t* GetNextLineWB(const wchar_t*, int, int*, int*, CEol*); // GetNextLineのwchar_t版(ビックエンディアン用)  // 未使用
+void GetLineColumn(const wchar_t*, int*, int*);
 
 int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith);
 
@@ -56,7 +56,7 @@ int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith);
 	@date 2004/06/19 genta Generic mapping
 */
 inline void dupamp(const TCHAR* org, TCHAR* out)
-{ cescape( org, out, _T('&'), _T('&') ); }
+{ cescape(org, out, _T('&'), _T('&')); }
 
 
 /*

@@ -37,31 +37,31 @@ using std::wstring;
 
 class CImpExpManager {
 public:
-	bool ImportUI( HINSTANCE, HWND );
-	bool ExportUI( HINSTANCE, HWND );
-	virtual bool ImportAscertain( HINSTANCE, HWND, const wstring&, wstring& );
-	virtual bool Import( const wstring&, wstring& ) = 0;
-	virtual bool Export( const wstring&, wstring& ) = 0;
+	bool ImportUI(HINSTANCE, HWND);
+	bool ExportUI(HINSTANCE, HWND);
+	virtual bool ImportAscertain(HINSTANCE, HWND, const wstring&, wstring&);
+	virtual bool Import(const wstring&, wstring&) = 0;
+	virtual bool Export(const wstring&, wstring&) = 0;
 	// ファイル名の初期値を設定
-	void SetBaseName( const wstring& );
+	void SetBaseName(const wstring&);
 	// フルパス名を取得
 	inline wstring GetFullPath() {
-		return to_wchar( GetDllShareData().m_sHistory.m_szIMPORTFOLDER ) + m_sOriginName;
+		return to_wchar(GetDllShareData().m_sHistory.m_szIMPORTFOLDER) + m_sOriginName;
 	}
 	// フルパス名を取得
-	inline wstring MakeFullPath( wstring sFileName ) {
-		return to_wchar( GetDllShareData().m_sHistory.m_szIMPORTFOLDER ) + sFileName;
+	inline wstring MakeFullPath(wstring sFileName) {
+		return to_wchar(GetDllShareData().m_sHistory.m_szIMPORTFOLDER) + sFileName;
 	}
 	// ファイル名を取得
 	inline wstring GetFileName()	{ return m_sOriginName; }
 
 protected:
 	// Import Folderの設定
-	inline void SetImportFolder( const TCHAR* szPath ) {
+	inline void SetImportFolder(const TCHAR* szPath) {
 		// ファイルのフルパスをフォルダとファイル名に分割
 		// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
-		::SplitPath_FolderAndFile( szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL );
-		_tcscat( GetDllShareData().m_sHistory.m_szIMPORTFOLDER, _T("\\") );
+		::SplitPath_FolderAndFile(szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL);
+		_tcscat(GetDllShareData().m_sHistory.m_szIMPORTFOLDER, _T("\\"));
 	}
 
 	// デフォルト拡張子の取得(「*.txt」形式)
@@ -81,25 +81,25 @@ protected:
 class CImpExpType : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpType( int nIdx, STypeConfig& types, HWND hwndList )
-		: m_nIdx( nIdx )
-		, m_Types( types )
-		, m_hwndList( hwndList )
+	CImpExpType(int nIdx, STypeConfig& types, HWND hwndList)
+		: m_nIdx(nIdx)
+		, m_Types(types)
+		, m_hwndList(hwndList)
 	{
 		// 共有データ構造体のアドレスを返す
 		m_pShareData = &GetDllShareData();
 	}
 
 public:
-	bool ImportAscertain( HINSTANCE, HWND, const wstring&, wstring& );
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool ImportAscertain(HINSTANCE, HWND, const wstring&, wstring&);
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
 	const TCHAR* GetDefaultExtension()	{ return _T("*.ini"); }
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
-	bool IsAddType(){ return m_bAddType; }
+	bool IsAddType() { return m_bAddType; }
 
 private:
 	// インターフェース用
@@ -122,15 +122,15 @@ private:
 class CImpExpColors : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpColors( ColorInfo * psColorInfoArr )
+	CImpExpColors(ColorInfo * psColorInfoArr)
 		:
-		m_ColorInfoArr( psColorInfoArr )
+		m_ColorInfoArr(psColorInfoArr)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
@@ -148,15 +148,15 @@ private:
 class CImpExpRegex : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpRegex( STypeConfig& types )
+	CImpExpRegex(STypeConfig& types)
 		:
-		m_Types( types )
+		m_Types(types)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
@@ -174,15 +174,15 @@ private:
 class CImpExpKeyHelp : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpKeyHelp( STypeConfig& types )
+	CImpExpKeyHelp(STypeConfig& types)
 		:
-		m_Types( types )
+		m_Types(types)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
@@ -200,15 +200,15 @@ private:
 class CImpExpKeybind : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpKeybind( CommonSetting& common )
+	CImpExpKeybind(CommonSetting& common)
 		:
-		m_Common( common )
+		m_Common(common)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
@@ -226,15 +226,15 @@ private:
 class CImpExpCustMenu : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpCustMenu( CommonSetting& common )
+	CImpExpCustMenu(CommonSetting& common)
 		:
-		m_Common( common )
+		m_Common(common)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
@@ -252,17 +252,17 @@ private:
 class CImpExpKeyWord : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpKeyWord( CommonSetting& common, int nKeyWordSetIdx, bool& bCase )
+	CImpExpKeyWord(CommonSetting& common, int nKeyWordSetIdx, bool& bCase)
 		:
-		m_Common( common ),
-		m_nIdx( nKeyWordSetIdx ),
-		m_bCase( bCase )
+		m_Common(common),
+		m_nIdx(nKeyWordSetIdx),
+		m_bCase(bCase)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得
@@ -282,15 +282,15 @@ private:
 class CImpExpMainMenu : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpMainMenu( CommonSetting& common )
+	CImpExpMainMenu(CommonSetting& common)
 		:
-		m_Common( common )
+		m_Common(common)
 	{
 	}
 
 public:
-	bool Import( const wstring&, wstring& );
-	bool Export( const wstring&, wstring& );
+	bool Import(const wstring&, wstring&);
+	bool Export(const wstring&, wstring&);
 
 public:
 	// デフォルト拡張子の取得

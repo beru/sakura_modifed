@@ -46,7 +46,7 @@ CKeyMacroMgr::~CKeyMacroMgr()
 
 
 //! キーマクロのバッファをクリアする
-void CKeyMacroMgr::ClearAll( void )
+void CKeyMacroMgr::ClearAll(void)
 {
 	CMacro* p = m_pTop;
 	CMacro* del_p;
@@ -72,15 +72,15 @@ void CKeyMacroMgr::Append(
 	CEditView*		pcEditView
 )
 {
-	auto macro = new CMacro( nFuncID );
-	macro->AddLParam( lParams, pcEditView );
+	auto macro = new CMacro(nFuncID);
+	macro->AddLParam(lParams, pcEditView);
 	Append(macro);
 }
 
 /*! キーマクロのバッファにデータ追加
 	CMacroを指定して追加する版
 */
-void CKeyMacroMgr::Append( CMacro* macro )
+void CKeyMacroMgr::Append(CMacro* macro)
 {
 	if (m_pTop) {
 		m_pBot->SetNext(macro);
@@ -98,7 +98,7 @@ void CKeyMacroMgr::Append( CMacro* macro )
 /*! キーボードマクロの保存
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CKeyMacroMgr::SaveKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath ) const
+BOOL CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 {
 	CTextOutputStream out(pszPath);
 	if (!out) {
@@ -111,7 +111,7 @@ BOOL CKeyMacroMgr::SaveKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath ) con
 	// マクロ内容
 	CMacro* p = m_pTop;
 	while (p) {
-		p->Save( hInstance, out );
+		p->Save(hInstance, out);
 		p = p->GetNext();
 	}
 
@@ -127,7 +127,7 @@ BOOL CKeyMacroMgr::SaveKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath ) con
 	@date 2007.07.20 genta flags追加．CMacro::Exec()に
 		FA_FROMMACROを含めた値を渡す．
 */
-bool CKeyMacroMgr::ExecKeyMacro( CEditView* pcEditView, int flags ) const
+bool CKeyMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
 {
 	CMacro* p = m_pTop;
 	int macroflag = flags | FA_FROMMACRO;
@@ -145,12 +145,12 @@ bool CKeyMacroMgr::ExecKeyMacro( CEditView* pcEditView, int flags ) const
 /*! キーボードマクロの読み込み
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
+BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	// キーマクロのバッファをクリアする
 	ClearAll();
 
-	CTextInputStream in( pszPath );
+	CTextInputStream in(pszPath);
 	if (!in) {
 		m_nReady = false;
 		return FALSE;
@@ -197,7 +197,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 		for (; i < nLineLen; ++i) {
 			//# バッファオーバーランチェック
 			if (szLine[i] == LTEXT('(') && (i - nBgn)< _countof(szFuncName)) {
-				auto_memcpy( szFuncName, &szLine[nBgn], i - nBgn );
+				auto_memcpy(szFuncName, &szLine[nBgn], i - nBgn);
 				szFuncName[i - nBgn] = L'\0';
 				++i;
 				nBgn = i;
@@ -208,14 +208,14 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 
 		// 関数名→機能ID，機能名日本語
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-		nFuncID = CSMacroMgr::GetFuncInfoByName( hInstance, szFuncName, szFuncNameJapanese );
+		nFuncID = CSMacroMgr::GetFuncInfoByName(hInstance, szFuncName, szFuncNameJapanese);
 		if (-1 != nFuncID) {
-			macro = new CMacro( nFuncID );
+			macro = new CMacro(nFuncID);
 			// Jun. 16, 2002 genta プロトタイプチェック用に追加
 			int nArgs;
-			const MacroFuncInfo* mInfo= CSMacroMgr::GetFuncInfoByID( nFuncID );
+			const MacroFuncInfo* mInfo= CSMacroMgr::GetFuncInfoByID(nFuncID);
 			VARTYPE type = VT_EMPTY;
-			int nArgSizeMax = _countof( mInfo->m_varArguments );
+			int nArgSizeMax = _countof(mInfo->m_varArguments);
 			if (mInfo->m_pData) {
 				nArgSizeMax = mInfo->m_pData->m_nArgSize;
 			}
@@ -302,13 +302,13 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 					}
 
 					CNativeW cmemWork;
-					cmemWork.SetString( strLine.c_str() + nBgn, nEnd - nBgn );
-					cmemWork.Replace( LTEXT("\\\'"), LTEXT("\'") );
+					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
+					cmemWork.Replace(LTEXT("\\\'"), LTEXT("\'"));
 
 					//	Jun. 16, 2002 genta double quotationもエスケープ解除
-					cmemWork.Replace( LTEXT("\\\""), LTEXT("\"") );
-					cmemWork.Replace( LTEXT("\\\\"), LTEXT("\\") );
-					macro->AddStringParam( cmemWork.GetStringPtr() );	//	引数を文字列として追加
+					cmemWork.Replace(LTEXT("\\\""), LTEXT("\""));
+					cmemWork.Replace(LTEXT("\\\\"), LTEXT("\\"));
+					macro->AddStringParam(cmemWork.GetStringPtr());	//	引数を文字列として追加
 				}else if (Is09(szLine[i]) || szLine[i] == L'-') {	//	数字で始まったら数字列だ(-記号も含む)。
 					// Jun. 16, 2002 genta プロトタイプチェック
 					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
@@ -342,12 +342,12 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 					}
 
 					CNativeW cmemWork;
-					cmemWork.SetString( strLine.c_str() + nBgn, nEnd - nBgn );
+					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					// Jun. 16, 2002 genta
 					//	数字の中にquotationは入っていないよ
-					//cmemWork.Replace( L"\\\'", L"\'" );
-					//cmemWork.Replace( L"\\\\", L"\\" );
-					macro->AddStringParam( cmemWork.GetStringPtr() );	//	引数を文字列として追加
+					//cmemWork.Replace(L"\\\'", L"\'");
+					//cmemWork.Replace(L"\\\\", L"\\");
+					macro->AddStringParam(cmemWork.GetStringPtr());	//	引数を文字列として追加
 				//	Jun. 16, 2002 genta
 				}else if (szLine[i] == LTEXT(')')) {
 					//	引数無し
@@ -356,8 +356,8 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 					//	Parse Error:文法エラーっぽい。
 					//	Jun. 16, 2002 genta
 					nBgn = nEnd = i;
-					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-						LS(STR_ERR_DLGKEYMACMGR7), line, i + 1 );
+					::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
+						LS(STR_ERR_DLGKEYMACMGR7), line, i + 1);
 					m_nReady = false;
 					break;
 				}
@@ -378,10 +378,10 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 				break;
 			}
 			// キーマクロのバッファにデータ追加
-			Append( macro );
+			Append(macro);
 		}else {
-			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-				LS(STR_ERR_DLGKEYMACMGR8), line, szFuncName );
+			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
+				LS(STR_ERR_DLGKEYMACMGR8), line, szFuncName);
 			//	Jun. 16, 2002 genta
 			m_nReady = false;
 			break;
@@ -395,22 +395,22 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const TCHAR* pszPath )
 }
 
 //! キーボードマクロを文字列から読み込み
-BOOL CKeyMacroMgr::LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode )
+BOOL CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	// 一時ファイル名を作成
 	TCHAR szTempDir[_MAX_PATH];
 	TCHAR szTempFile[_MAX_PATH];
-	if (0 == ::GetTempPath( _MAX_PATH, szTempDir )) return FALSE;
-	if (0 == ::GetTempFileName( szTempDir, _T("mac"), 0, szTempFile )) return FALSE;
+	if (0 == ::GetTempPath(_MAX_PATH, szTempDir)) return FALSE;
+	if (0 == ::GetTempFileName(szTempDir, _T("mac"), 0, szTempFile)) return FALSE;
 	// 一時ファイルに書き込む
-	CTextOutputStream out = CTextOutputStream( szTempFile );
-	out.WriteString( to_wchar( pszCode ) );
+	CTextOutputStream out = CTextOutputStream(szTempFile);
+	out.WriteString(to_wchar(pszCode));
 	out.Close();
 
 	// マクロ読み込み
-	BOOL bRet = LoadKeyMacro( hInstance, szTempFile );
+	BOOL bRet = LoadKeyMacro(hInstance, szTempFile);
 
-	::DeleteFile( szTempFile );			// 一時ファイル削除
+	::DeleteFile(szTempFile);			// 一時ファイル削除
 
 	return bRet;
 }
@@ -426,7 +426,7 @@ BOOL CKeyMacroMgr::LoadKeyMacroStr( HINSTANCE hInstance, const TCHAR* pszCode )
 */
 CMacroManagerBase* CKeyMacroMgr::Creator(const TCHAR* ext)
 {
-	if (_tcscmp( ext, _T("mac") ) == 0) {
+	if (_tcscmp(ext, _T("mac")) == 0) {
 		return new CKeyMacroMgr;
 	}
 	return NULL;
@@ -439,7 +439,7 @@ CMacroManagerBase* CKeyMacroMgr::Creator(const TCHAR* ext)
 void CKeyMacroMgr::declare (void)
 {
 	//	常に実行
-	CMacroFactory::getInstance()->RegisterCreator( Creator );
+	CMacroFactory::getInstance()->RegisterCreator(Creator);
 }
 //	To Here Apr. 29, 2002 genta
 

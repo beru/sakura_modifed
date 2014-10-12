@@ -46,17 +46,17 @@ class COutlineIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	COutlineIfObj( CFuncInfoArr& cFuncInfoArr )
+	COutlineIfObj(CFuncInfoArr& cFuncInfoArr)
 		:
-		CWSHIfObj( L"Outline", false ),
-		m_nListType( OUTLINE_PLUGIN ),
-		m_cFuncInfoArr( cFuncInfoArr )
+		CWSHIfObj(L"Outline", false),
+		m_nListType(OUTLINE_PLUGIN),
+		m_cFuncInfoArr(cFuncInfoArr)
 	{
 	}
 
 	// デストラクタ
 public:
-	~COutlineIfObj(){}
+	~COutlineIfObj() {}
 
 	// 実装
 public:
@@ -78,24 +78,24 @@ public:
 				if (!Arguments[1]) return false;
 				if (!Arguments[2]) return false;
 				if (!Arguments[3]) return false;
-				CLogicPoint ptLogic( _wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1 );
+				CLogicPoint ptLogic(_wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1);
 				if (ptLogic.x < 0) ptLogic.x = 0;
 				if (ptLogic.y < 0) ptLogic.y = 0;
 				CLayoutPoint ptLayout;
-				View->GetDocument()->m_cLayoutMgr.LogicToLayout( ptLogic, &ptLayout );
+				View->GetDocument()->m_cLayoutMgr.LogicToLayout(ptLogic, &ptLayout);
 				int nParam = _wtoi(Arguments[3]);
 				if (LOWORD(ID) == F_OL_ADDFUNCINFO) {
-					m_cFuncInfoArr.AppendData( ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam );
+					m_cFuncInfoArr.AppendData(ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam);
 				}else {
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
-					m_cFuncInfoArr.AppendData( ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam, nDepth );
+					m_cFuncInfoArr.AppendData(ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam, nDepth);
 				}
 			}
 			break;
 		case F_OL_SETTITLE:				// アウトラインダイアログタイトルを指定
 			if (!Arguments[0]) return false;
-			m_sOutlineTitle = to_tchar( Arguments[0] );
+			m_sOutlineTitle = to_tchar(Arguments[0]);
 			break;
 		case F_OL_SETLISTTYPE:			// アウトラインリスト種別を指定
 			if (!Arguments[0]) return false;
@@ -107,7 +107,7 @@ public:
 			}
 			{
 				std::wstring sLabel = Arguments[1];
-				m_cFuncInfoArr.SetAppendText( _wtol(Arguments[0]), sLabel, true );
+				m_cFuncInfoArr.SetAppendText(_wtol(Arguments[0]), sLabel, true);
 			}
 			break;
 		default:

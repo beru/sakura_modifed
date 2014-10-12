@@ -9,7 +9,7 @@ class CLayoutColorQuoteInfo : public CLayoutColorInfo {
 public:
 	std::wstring m_tag;
 	int m_nColorTypeIndex;
-	bool IsEqual(const CLayoutColorInfo* p) const{
+	bool IsEqual(const CLayoutColorInfo* p) const {
 		if (!p) {
 			return false;
 		}
@@ -87,12 +87,12 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 					if (cStr.At(i) == '(') {
 						if (nPos + 1 < i) {
 							m_tag = L')';
-							m_tag.append( cStr.GetPtr()+nPos+1, i - (nPos + 1) );
+							m_tag.append(cStr.GetPtr()+nPos+1, i - (nPos + 1));
 							m_tag += L'"';
 						}else {
 							m_tag.assign(L")\"", 2);
 						}
-						m_nCOMMENTEND = Match_QuoteStr( m_tag.c_str(), m_tag.size(), i + 1, cStr, false );
+						m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), i + 1, cStr, false);
 						m_nColorTypeIndex = 1;
 						return true;
 					}
@@ -114,7 +114,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 			break;
 		case STRING_LITERAL_CSHARP:
 			if (0 < nPos && cStr.At(nPos - 1) == L'@' && m_cQuote == L'"') {
-				m_nCOMMENTEND = Match_Quote( m_cQuote, nPos + 1, cStr, STRING_LITERAL_PLSQL );
+				m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, cStr, STRING_LITERAL_PLSQL);
 				m_nColorTypeIndex = 2;
 				return true;
 			}
@@ -123,7 +123,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 			if (nPos + 2 < cStr.GetLength()
 			 && cStr.At(nPos+1) == m_cQuote && cStr.At(nPos+2) == m_cQuote
 			) {
-				m_nCOMMENTEND = Match_QuoteStr( m_szQuote, 3, nPos + 3, cStr, true );
+				m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos + 3, cStr, true);
 				m_nColorTypeIndex = 3;
 				return true;
 			}
@@ -131,7 +131,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 		}
 		m_bEscapeEnd = false;
 		if (bPreString) {
-			m_nCOMMENTEND = Match_Quote( m_cQuote, nPos + 1, cStr, m_nEscapeType, m_pbEscapeEnd );
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, cStr, m_nEscapeType, m_pbEscapeEnd);
 			m_nColorTypeIndex = 0;
 		}
 
@@ -170,20 +170,20 @@ bool CColor_Quote::EndColor(const CStringRef& cStr, int nPos)
 {
 	if (-1 == m_nCOMMENTEND) {
 		// ここにくるのは行頭のはず
-		assert_warning( 0 == nPos );
+		assert_warning(0 == nPos);
 		// クォーテーション文字列の終端があるか
 		switch (m_nColorTypeIndex) {
 		case 0:
-			m_nCOMMENTEND = Match_Quote( m_cQuote, nPos, cStr, m_nEscapeType );
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, cStr, m_nEscapeType);
 			break;
 		case 1:
-			m_nCOMMENTEND = Match_QuoteStr( m_tag.c_str(), m_tag.size(), nPos, cStr, false );
+			m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), nPos, cStr, false);
 			break;
 		case 2:
-			m_nCOMMENTEND = Match_Quote( m_cQuote, nPos, cStr, STRING_LITERAL_PLSQL );
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, cStr, STRING_LITERAL_PLSQL);
 			break;
 		case 3:
-			m_nCOMMENTEND = Match_QuoteStr( m_szQuote, 3, nPos, cStr, true );
+			m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos, cStr, true);
 			break;
 		}
 		// -1でEndColorが呼び出されるのは行を超えてきたからなので行内チェックは不要
@@ -194,12 +194,12 @@ bool CColor_Quote::EndColor(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-int CColor_Quote::Match_Quote( wchar_t wcQuote, int nPos, const CStringRef& cLineStr, int escapeType, bool* pbEscapeEnd )
+int CColor_Quote::Match_Quote(wchar_t wcQuote, int nPos, const CStringRef& cLineStr, int escapeType, bool* pbEscapeEnd)
 {
 	int nCharChars;
 	for (int i = nPos; i < cLineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar( cLineStr.GetPtr(), cLineStr.GetLength(), i ));
+		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
 		if (escapeType == STRING_LITERAL_CPP) {
 			// エスケープ \"
 			if (1 == nCharChars && cLineStr.At(i) == L'\\') {
@@ -234,19 +234,19 @@ int CColor_Quote::Match_Quote( wchar_t wcQuote, int nPos, const CStringRef& cLin
 	return cLineStr.GetLength();
 }
 
-int CColor_Quote::Match_QuoteStr( const wchar_t* pszQuote, int nQuoteLen, int nPos, const CStringRef& cLineStr, bool bEscape )
+int CColor_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPos, const CStringRef& cLineStr, bool bEscape)
 {
 	int nCharChars;
 	const int nCompLen = cLineStr.GetLength() - nQuoteLen + 1;
 	const WCHAR quote1 = pszQuote[0];
 	const WCHAR* pLine = cLineStr.GetPtr();
 	for (int i = nPos; i < nCompLen; i += nCharChars) {
-		if (quote1 == pLine[i] && wmemcmp( pszQuote + 1, pLine + i + 1, nQuoteLen - 1 ) == 0) {
+		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;
 		}
-		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar( pLine, cLineStr.GetLength(), i ));
+		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i));
 		if (bEscape && pLine[i] == L'\\') {
-			i += (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar( pLine, cLineStr.GetLength(), i + nCharChars ));
+			i += (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i + nCharChars));
 		}
 	}
 	return cLineStr.GetLength();

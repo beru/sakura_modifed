@@ -41,7 +41,7 @@ inline
 void SetHandCursor ()
 {
 	{
-		SetCursor( LoadCursor( NULL, IDC_HAND ) );
+		SetCursor(LoadCursor(NULL, IDC_HAND));
 	}
 }
 

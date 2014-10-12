@@ -41,7 +41,7 @@ void CType::InitTypeConfig(int nIdx, STypeConfig& type)
 
 	@date 2005.01.30 genta CShareData::Init()から分離．
 */
-void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConfig*>& types )
+void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConfig*>& types)
 {
 	CType* table[] = {
 		new CType_Basis(),	// 基本
@@ -62,7 +62,7 @@ void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData, std::vector<STypeConf
 		new CType_Ini(),	// 設定ファイル
 	};
 	types.clear();
-	assert( _countof(table) <= MAX_TYPES );
+	assert(_countof(table) <= MAX_TYPES);
 	for (int i = 0; i < _countof(table) && i < MAX_TYPES; i++) {
 		STypeConfig* type = new STypeConfig;
 		types.push_back(type);
@@ -95,25 +95,25 @@ void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 #define PopulateKeyword(name,case_sensitive,aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet( (name), (case_sensitive) );	\
-	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr( ++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname );
+	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
+	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
-	PopulateKeyword( L"C/C++",			true,	CPP );			// セット 0の追加
-	PopulateKeyword( L"HTML",			false,	HTML );			// セット 1の追加
-	PopulateKeyword( L"PL/SQL",			false,	PLSQL );		// セット 2の追加
-	PopulateKeyword( L"COBOL",			true,	COBOL );		// セット 3の追加
-	PopulateKeyword( L"Java",			true,	JAVA );			// セット 4の追加
-	PopulateKeyword( L"CORBA IDL",		true,	CORBA_IDL );	// セット 5の追加
-	PopulateKeyword( L"AWK",			true,	AWK );			// セット 6の追加
-	PopulateKeyword( L"MS-DOS batch",	false,	BAT );			// セット 7の追加	//Oct. 31, 2000 JEPRO 'バッチファイル'→'batch' に短縮
-	PopulateKeyword( L"Pascal",			false,	PASCAL );		// セット 8の追加	//Nov. 5, 2000 JEPRO 大・小文字の区別を'しない'に変更
-	PopulateKeyword( L"TeX",			true,	TEX );			// セット 9の追加	//Sept. 2, 2000 jepro Tex →TeX に修正 Bool値は大・小文字の区別
-	PopulateKeyword( L"TeX2",			true,	TEX2 );			// セット10の追加	//Jan. 19, 2001 JEPRO 追加
-	PopulateKeyword( L"Perl",			true,	PERL );			// セット11の追加
-	PopulateKeyword( L"Perl2",			true,	PERL2 );		// セット12の追加	//Jul. 10, 2001 JEPRO Perlから変数を分離・独立
-	PopulateKeyword( L"Visual Basic",	false,	VB );			// セット13の追加	//Jul. 10, 2001 JEPRO
-	PopulateKeyword( L"Visual Basic2",	false,	VB2 );			// セット14の追加	//Jul. 10, 2001 JEPRO
-	PopulateKeyword( L"Rich Text",		true,	RTF );			// セット15の追加	//Jul. 10, 2001 JEPRO
+	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
+	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
+	PopulateKeyword(L"PL/SQL",			false,	PLSQL);		// セット 2の追加
+	PopulateKeyword(L"COBOL",			true,	COBOL);		// セット 3の追加
+	PopulateKeyword(L"Java",			true,	JAVA);			// セット 4の追加
+	PopulateKeyword(L"CORBA IDL",		true,	CORBA_IDL);	// セット 5の追加
+	PopulateKeyword(L"AWK",			true,	AWK);			// セット 6の追加
+	PopulateKeyword(L"MS-DOS batch",	false,	BAT);			// セット 7の追加	//Oct. 31, 2000 JEPRO 'バッチファイル'→'batch' に短縮
+	PopulateKeyword(L"Pascal",			false,	PASCAL);		// セット 8の追加	//Nov. 5, 2000 JEPRO 大・小文字の区別を'しない'に変更
+	PopulateKeyword(L"TeX",			true,	TEX);			// セット 9の追加	//Sept. 2, 2000 jepro Tex →TeX に修正 Bool値は大・小文字の区別
+	PopulateKeyword(L"TeX2",			true,	TEX2);			// セット10の追加	//Jan. 19, 2001 JEPRO 追加
+	PopulateKeyword(L"Perl",			true,	PERL);			// セット11の追加
+	PopulateKeyword(L"Perl2",			true,	PERL2);		// セット12の追加	//Jul. 10, 2001 JEPRO Perlから変数を分離・独立
+	PopulateKeyword(L"Visual Basic",	false,	VB);			// セット13の追加	//Jul. 10, 2001 JEPRO
+	PopulateKeyword(L"Visual Basic2",	false,	VB2);			// セット14の追加	//Jul. 10, 2001 JEPRO
+	PopulateKeyword(L"Rich Text",		true,	RTF);			// セット15の追加	//Jul. 10, 2001 JEPRO
 
 #undef PopulateKeyword
 }
@@ -138,7 +138,7 @@ void _DefaultConfig(STypeConfig* pType)
 	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		pType->m_nKeyWordSetIdx[i] = -1;
 	}
-	wcscpy_s( pType->m_szTabViewString, _EDITL("^       ") );	// TAB表示文字列
+	wcscpy_s(pType->m_szTabViewString, _EDITL("^       "));	// TAB表示文字列
 	pType->m_bTabArrow = TABARROW_STRING;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
 	pType->m_bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
 	
@@ -188,7 +188,7 @@ void _DefaultConfig(STypeConfig* pType)
 
 	pType->m_nIndentLayout = 0;	// 折り返しは2行目以降を字下げ表示
 
-	assert( COLORIDX_LAST <= _countof(pType->m_ColorInfoArr) );
+	assert(COLORIDX_LAST <= _countof(pType->m_ColorInfoArr));
 	for (int i = 0; i < COLORIDX_LAST; ++i) {
 		GetDefaultColorInfo(&pType->m_ColorInfoArr[i],i);
 	}

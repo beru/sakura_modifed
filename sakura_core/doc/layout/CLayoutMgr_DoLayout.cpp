@@ -269,7 +269,7 @@ void CLayoutMgr::_MakeOneLine(SLayoutWork* pWork, PF_OnLine pfOnLine)
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
 			CLayoutInt nCharKetas = CNativeW::GetKetaOfChar( pWork->cLineStr, pWork->nPos );
-//			if( 0 == nCharKetas ){				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//			if( 0 == nCharKetas ) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				nCharKetas = CLayoutInt(1);
 //			}
 

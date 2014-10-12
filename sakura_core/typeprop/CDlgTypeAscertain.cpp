@@ -55,81 +55,81 @@ CDlgTypeAscertain::CDlgTypeAscertain()
 }
 
 // モーダルダイアログの表示
-int CDlgTypeAscertain::DoModal( HINSTANCE hInstance, HWND hwndParent, SAscertainInfo* psAscertainInfo )
+int CDlgTypeAscertain::DoModal(HINSTANCE hInstance, HWND hwndParent, SAscertainInfo* psAscertainInfo)
 {
 	m_psi = psAscertainInfo;
 
 	m_psi->nColorType = -1;
 
-	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL );
+	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_TYPE_ASCERTAIN, (LPARAM)NULL);
 }
 
 // ボタンクリック
-BOOL CDlgTypeAscertain::OnBnClicked( int wID )
+BOOL CDlgTypeAscertain::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// 「タイプ別設定インポート」のヘルプ
-		MyWinHelp( GetHwnd(), HELP_CONTEXT, HLP000338 );
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000338);
 		return TRUE;
 	case IDOK:
 		TCHAR	buff1[_MAX_PATH + 20];
 		wchar_t	buff2[_MAX_PATH + 20];
 
-		m_psi->bAddType = IsDlgButtonCheckedBool( GetHwnd(), IDC_RADIO_TYPE_ADD );
+		m_psi->bAddType = IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_TYPE_ADD);
 		m_psi->sColorFile = L"";
-		m_psi->nColorType = Combo_GetCurSel( GetDlgItem( GetHwnd(), IDC_COMBO_COLORS ) ) - 1;
+		m_psi->nColorType = Combo_GetCurSel(GetDlgItem(GetHwnd(), IDC_COMBO_COLORS)) - 1;
 		if (m_psi->nColorType >= MAX_TYPES
-			&& Combo_GetLBText( ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS ), m_psi->nColorType + 1, buff1)
+			&& Combo_GetLBText(::GetDlgItem(GetHwnd(), IDC_COMBO_COLORS), m_psi->nColorType + 1, buff1)
 		) {
-			if (_stscanf( buff1, _T("File -- %ls"), buff2 ) > 0) {
+			if (_stscanf(buff1, _T("File -- %ls"), buff2) > 0) {
 				m_psi->sColorFile = buff2;
 				m_psi->nColorType = MAX_TYPES;
 			}
 		}
-		::EndDialog( GetHwnd(), TRUE );
+		::EndDialog(GetHwnd(), TRUE);
 		return TRUE;
 	case IDCANCEL:
-		::EndDialog( GetHwnd(), FALSE );
+		::EndDialog(GetHwnd(), FALSE);
 		return TRUE;
 	}
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked( wID );
+	return CDialog::OnBnClicked(wID);
 }
 
 
 // ダイアログデータの設定
-void CDlgTypeAscertain::SetData( void )
+void CDlgTypeAscertain::SetData(void)
 {
 	// タイプ名設定
 	std::wstring typeNameTo = m_psi->sTypeNameTo + L"(&B)";
-	::SetWindowText( ::GetDlgItem( GetHwnd(), IDC_RADIO_TYPE_TO    ), to_tchar(typeNameTo.c_str()) );
-	::SetWindowText( ::GetDlgItem( GetHwnd(), IDC_STATIC_TYPE_FILE ), to_tchar(m_psi->sTypeNameFile.c_str()) );
+	::SetWindowText(::GetDlgItem(GetHwnd(), IDC_RADIO_TYPE_TO   ), to_tchar(typeNameTo.c_str()));
+	::SetWindowText(::GetDlgItem(GetHwnd(), IDC_STATIC_TYPE_FILE), to_tchar(m_psi->sTypeNameFile.c_str()));
 
-	::CheckDlgButton( GetHwnd(), IDC_RADIO_TYPE_ADD, TRUE );
+	::CheckDlgButton(GetHwnd(), IDC_RADIO_TYPE_ADD, TRUE);
 
 	TCHAR szText[130];
-	HWND hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_COLORS );
+	HWND hwndCombo = ::GetDlgItem(GetHwnd(), IDC_COMBO_COLORS);
 	// コンボボックスを空にする
-	Combo_ResetContent( hwndCombo );
+	Combo_ResetContent(hwndCombo);
 	// 一行目はそのまま
-	Combo_AddString( hwndCombo, LSW(STR_DLGTYPEASC_IMPORT) );
+	Combo_AddString(hwndCombo, LSW(STR_DLGTYPEASC_IMPORT));
 
 	// エディタ内の設定
 	for (int nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
-			auto_sprintf_s( szText, _T("%ts (%ts)"),
+			auto_sprintf_s(szText, _T("%ts (%ts)"),
 				type->m_szTypeName,	// タイプ属性：名称
 				type->m_szTypeExts	// タイプ属性：拡張子リスト
 			);
 		}else {
-			auto_sprintf_s( szText, _T("%ts"),
+			auto_sprintf_s(szText, _T("%ts"),
 				type->m_szTypeName	// タイプ属性：拡称
 			);
 		}
-		::Combo_AddString( hwndCombo, szText );
+		::Combo_AddString(hwndCombo, szText);
 	}
 	// 読込色設定ファイル設定
 	HANDLE	hFind;
@@ -137,22 +137,22 @@ void CDlgTypeAscertain::SetData( void )
 	BOOL	bFind;
 	TCHAR	sTrgCol[_MAX_PATH + 1];
 
-	::SplitPath_FolderAndFile( m_psi->sImportFile.c_str(), sTrgCol, NULL );
-	_tcscat( sTrgCol, _T("\\*.col") );
-	for (bFind = ( ( hFind = FindFirstFile( sTrgCol, &wf ) ) != INVALID_HANDLE_VALUE );
+	::SplitPath_FolderAndFile(m_psi->sImportFile.c_str(), sTrgCol, NULL);
+	_tcscat(sTrgCol, _T("\\*.col"));
+	for (bFind = ((hFind = FindFirstFile(sTrgCol, &wf)) != INVALID_HANDLE_VALUE);
 		bFind;
-		bFind = FindNextFile( hFind, &wf )
+		bFind = FindNextFile(hFind, &wf)
 	) {
 		if ((wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 			// 読込色設定ファイル発見
-			auto_sprintf_s( szText, _T("File -- %ts"), wf.cFileName );
-			::Combo_AddString( hwndCombo, szText );
+			auto_sprintf_s(szText, _T("File -- %ts"), wf.cFileName);
+			::Combo_AddString(hwndCombo, szText);
 		}
 	}
-	FindClose( hFind );
+	FindClose(hFind);
 
 	// コンボボックスのデフォルト選択
-	Combo_SetCurSel( hwndCombo, 0 );
+	Combo_SetCurSel(hwndCombo, 0);
 	return;
 }
 

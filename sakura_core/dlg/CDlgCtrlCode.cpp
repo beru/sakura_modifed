@@ -106,30 +106,28 @@ int CDlgCtrlCode::DoModal(
 	LPARAM		lParam
 )
 {
-	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_CTRLCODE, lParam );
+	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_CTRLCODE, lParam);
 }
 
 // ダイアログデータの設定
-void CDlgCtrlCode::SetData( void )
+void CDlgCtrlCode::SetData(void)
 {
-	HWND	hwndWork;
-	int		i, count;
-	long	lngStyle;
 	LV_ITEM	lvi;
 
 	// リスト
-	hwndWork = ::GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
-	ListView_DeleteAllItems( hwndWork );  // リストを空にする
+	HWND hwndWork = ::GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
+	ListView_DeleteAllItems(hwndWork);  // リストを空にする
 
 	// 行選択
-	lngStyle = ListView_GetExtendedListViewStyle( hwndWork );
+	long lngStyle;
+	lngStyle = ListView_GetExtendedListViewStyle(hwndWork);
 	lngStyle |= LVS_EX_FULLROWSELECT;
-	ListView_SetExtendedListViewStyle( hwndWork, lngStyle );
+	ListView_SetExtendedListViewStyle(hwndWork, lngStyle);
 
 	// データ表示
 	TCHAR tmp[10];
-	count = 0;
-	for (i = 0; i < _countof(p_ctrl_list); i++) {
+	int count = 0;
+	for (int i = 0; i < _countof(p_ctrl_list); i++) {
 		if (!p_ctrl_list[i].jname) {
 			continue;
 		}
@@ -139,52 +137,52 @@ void CDlgCtrlCode::SetData( void )
 			p_ctrl_list[i].jname = (LPTSTR)cLabel_jname[i].LoadString(STR_ERR_DLGCTL5 + i);
 		}
 
-		auto_sprintf_s( tmp, _T("0x%02X"), p_ctrl_list[i].code );
+		auto_sprintf_s(tmp, _T("0x%02X"), p_ctrl_list[i].code);
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText  = tmp;
 		lvi.iItem    = count;
 		lvi.iSubItem = 0;
 		lvi.lParam   = 0;
-		ListView_InsertItem( hwndWork, &lvi );
+		ListView_InsertItem(hwndWork, &lvi);
 		
 		if (p_ctrl_list[i].code <= 0x1f)
-			auto_sprintf_s( tmp, _T("^%tc"), _T('@') + p_ctrl_list[i].code );
+			auto_sprintf_s(tmp, _T("^%tc"), _T('@') + p_ctrl_list[i].code);
 		else if (p_ctrl_list[i].code == 0x7f)
-			_tcscpy( tmp, _T("^?") );
+			_tcscpy(tmp, _T("^?"));
 		else
-			_tcscpy( tmp, _T("･") );
+			_tcscpy(tmp, _T("･"));
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = count;
 		lvi.iSubItem = 1;
 		lvi.pszText  = tmp;
-		ListView_SetItem( hwndWork, &lvi );
+		ListView_SetItem(hwndWork, &lvi);
 		
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = count;
 		lvi.iSubItem = 2;
 		lvi.pszText  = const_cast<TCHAR*>(p_ctrl_list[i].name);
-		ListView_SetItem( hwndWork, &lvi );
+		ListView_SetItem(hwndWork, &lvi);
 		
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = count;
 		lvi.iSubItem = 3;
 		lvi.pszText  = const_cast<TCHAR*>(p_ctrl_list[i].jname);
-		ListView_SetItem( hwndWork, &lvi );
+		ListView_SetItem(hwndWork, &lvi);
 		
 		count++;
 	}
-	ListView_SetItemState( hwndWork, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
+	ListView_SetItemState(hwndWork, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
 	return;
 }
 
 // ダイアログデータの取得
 // TRUE==正常  FALSE==入力エラー
-int CDlgCtrlCode::GetData( void )
+int CDlgCtrlCode::GetData(void)
 {
-	HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
+	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
 	// 選択中のキー番号を探す。
-	int nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
+	int nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 	if (nIndex == -1) {
 		return FALSE;
 	}
@@ -193,69 +191,68 @@ int CDlgCtrlCode::GetData( void )
 	return TRUE;
 }
 
-BOOL CDlgCtrlCode::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
+BOOL CDlgCtrlCode::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
+	_SetHwnd(hwndDlg);
 
-	_SetHwnd( hwndDlg );
-
-	HWND hwndList = GetDlgItem( hwndDlg, IDC_LIST_CTRLCODE );
+	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_CTRLCODE);
 	RECT rc;
-	::GetWindowRect( hwndList, &rc );
+	::GetWindowRect(hwndList, &rc);
 
 	LV_COLUMN col;
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
-	col.pszText  = const_cast<TCHAR*>( LS( STR_DLGCTRLCODE_CODE ) );	// "コード"
+	col.pszText  = const_cast<TCHAR*>(LS(STR_DLGCTRLCODE_CODE));	// "コード"
 	col.iSubItem = 0;
-	ListView_InsertColumn( hwndList, 0, &col );
+	ListView_InsertColumn(hwndList, 0, &col);
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
-	col.pszText  = const_cast<TCHAR*>( LS( STR_DLGCTRLCODE_SYMBOL ) );	// "表記"
+	col.pszText  = const_cast<TCHAR*>(LS(STR_DLGCTRLCODE_SYMBOL));	// "表記"
 	col.iSubItem = 1;
-	ListView_InsertColumn( hwndList, 1, &col );
+	ListView_InsertColumn(hwndList, 1, &col);
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
-	col.pszText  = const_cast<TCHAR*>( LS( STR_DLGCTRLCODE_NAME ) );	// "名前"
+	col.pszText  = const_cast<TCHAR*>(LS(STR_DLGCTRLCODE_NAME));	// "名前"
 	col.iSubItem = 2;
-	ListView_InsertColumn( hwndList, 2, &col );
+	ListView_InsertColumn(hwndList, 2, &col);
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 46 / 100;
-	col.pszText  = const_cast<TCHAR*>( LS( STR_DLGCTRLCODE_DESC ) );	// "説明"
+	col.pszText  = const_cast<TCHAR*>(LS(STR_DLGCTRLCODE_DESC));	// "説明"
 	col.iSubItem = 3;
-	ListView_InsertColumn( hwndList, 3, &col );
+	ListView_InsertColumn(hwndList, 3, &col);
 
 	// 基底クラスメンバ
-	return CDialog::OnInitDialog( GetHwnd(), wParam, lParam );
+	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
-BOOL CDlgCtrlCode::OnBnClicked( int wID )
+BOOL CDlgCtrlCode::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		// ヘルプ
-		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CTRL_CODE_DIALOG) );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_CTRL_CODE_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 
 	case IDOK:			// 左右に表示
 		// ダイアログデータの取得
-		::EndDialog( GetHwnd(), GetData() );
+		::EndDialog(GetHwnd(), GetData());
 		return TRUE;
 
 	case IDCANCEL:
-		::EndDialog( GetHwnd(), FALSE );
+		::EndDialog(GetHwnd(), FALSE);
 		return TRUE;
 
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnBnClicked( wID );
+	return CDialog::OnBnClicked(wID);
 }
 
 #ifdef __MINGW32__
@@ -268,19 +265,14 @@ typedef struct tagNMKEY {
 #endif
 #endif
 
-BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
+BOOL CDlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
 {
-	NMHDR*	pNMHDR;
-	HWND	hwndList;
-
-	pNMHDR = (NMHDR*) lParam;
-
-	hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
-
+	NMHDR* pNMHDR = (NMHDR*) lParam;
+	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
 	if (hwndList == pNMHDR->hwndFrom) {
 		switch (pNMHDR->code) {
 		case NM_DBLCLK:
-			::EndDialog( GetHwnd(), GetData() );
+			::EndDialog(GetHwnd(), GetData());
 			return TRUE;
 
 		case LVN_KEYDOWN:
@@ -292,12 +284,12 @@ BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
 					if (c == (p->nVKey & 0xffff)) {
 						for (int j = 0; j < _countof(p_ctrl_list); j++) {
 							if (p_ctrl_list[i].code == p_ctrl_list[j].code) {
-								HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_CTRLCODE );
-								ListView_SetItemState( hwndList, j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
-								ListView_EnsureVisible( hwndList, j, FALSE );
+								HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
+								ListView_SetItemState(hwndList, j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+								ListView_EnsureVisible(hwndList, j, FALSE);
 						
 								// ダイアログデータの取得
-								::EndDialog( GetHwnd(), GetData() );
+								::EndDialog(GetHwnd(), GetData());
 								return TRUE;
 							}
 						}
@@ -310,10 +302,10 @@ BOOL CDlgCtrlCode::OnNotify( WPARAM wParam, LPARAM lParam )
 	}
 
 	// 基底クラスメンバ
-	return CDialog::OnNotify( wParam, lParam );
+	return CDialog::OnNotify(wParam, lParam);
 }
 
-LPVOID CDlgCtrlCode::GetHelpIdTable( void )
+LPVOID CDlgCtrlCode::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

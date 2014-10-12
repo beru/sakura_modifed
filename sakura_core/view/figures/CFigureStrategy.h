@@ -85,7 +85,7 @@ protected:
 		}
 	}
 
-	EColorIndexType GetDispColorIdx(void) const{ return m_nDispColorIndex; }
+	EColorIndexType GetDispColorIdx(void) const { return m_nDispColorIndex; }
 
 	// é¿ëïï‚èï
 	bool DrawImp_StyleSelect(SColorStrategyInfo* pInfo);

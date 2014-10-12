@@ -30,20 +30,20 @@ public:
 	*/
 	CTipWnd();
 	~CTipWnd();
-	void Create( HINSTANCE, HWND );	/* 初期化 */
+	void Create(HINSTANCE, HWND);	/* 初期化 */
 
 	/*
 	||  Attributes & Operations
 	*/
-	void Show( int, int, const TCHAR*, RECT* pRect = NULL );	// Tipを表示
-	void Hide( void );	// Tipを消す
+	void Show(int, int, const TCHAR*, RECT* pRect = NULL);	// Tipを表示
+	void Hide(void);	// Tipを消す
 	void GetWindowSize(LPRECT pRect);		// 2001/06/19 asa-o ウィンドウのサイズを得る
 
-	void ChangeFont( LOGFONT* lf ) {
+	void ChangeFont(LOGFONT* lf) {
 		if (m_hFont) {
-			::DeleteObject( m_hFont );
+			::DeleteObject(m_hFont);
 		}
-		m_hFont = ::CreateFontIndirect( lf );
+		m_hFont = ::CreateFontIndirect(lf);
 	}
 
 protected: // 2002/2/10 aroka アクセス権変更
@@ -62,15 +62,15 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	void ComputeWindowSize( HDC, HFONT, const TCHAR*, RECT* );	// ウィンドウのサイズを決める
-	void DrawTipText( HDC, HFONT, const TCHAR* );	// ウィンドウのテキストを表示
+	void ComputeWindowSize(HDC, HFONT, const TCHAR*, RECT*);	// ウィンドウのサイズを決める
+	void DrawTipText(HDC, HFONT, const TCHAR*);	// ウィンドウのテキストを表示
 
 	// 仮想関数
 	//	Jan. 9, 2006 genta
-	virtual void AfterCreateWindow( void );
+	virtual void AfterCreateWindow(void);
 
 	// 仮想関数 メッセージ処理 詳しくは実装を参照
-	LRESULT OnPaint( HWND, UINT, WPARAM, LPARAM );	// 描画処理
+	LRESULT OnPaint(HWND, UINT, WPARAM, LPARAM);	// 描画処理
 };
 
 

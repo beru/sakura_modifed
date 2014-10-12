@@ -21,7 +21,7 @@
 #include "CViewCommander_inline.h"
 
 // 右クリックメニュー
-void CViewCommander::Command_MENU_RBUTTON( void )
+void CViewCommander::Command_MENU_RBUTTON(void)
 {
 //	HGLOBAL		hgClip;
 //	char*		pszClip;
@@ -34,9 +34,9 @@ void CViewCommander::Command_MENU_RBUTTON( void )
 	case IDM_COPYDICINFO:
 		{
 			int nLength;
-			const TCHAR* pszStr = m_pCommanderView->m_cTipWnd.m_cInfo.GetStringPtr( &nLength );
+			const TCHAR* pszStr = m_pCommanderView->m_cTipWnd.m_cInfo.GetStringPtr(&nLength);
 			TCHAR* pszWork = new TCHAR[nLength + 1];
-			auto_memcpy( pszWork, pszStr, nLength );
+			auto_memcpy(pszWork, pszStr, nLength);
 			pszWork[nLength] = _T('\0');
 
 			// 見た目と同じように、\n を CR+LFへ変換する
@@ -47,7 +47,7 @@ void CViewCommander::Command_MENU_RBUTTON( void )
 				}
 			}
 			// クリップボードにデータを設定
-			m_pCommanderView->MySetClipboardData( pszWork, nLength, false );
+			m_pCommanderView->MySetClipboardData(pszWork, nLength, false);
 			delete[] pszWork;
 		}
 		break;
@@ -66,8 +66,8 @@ void CViewCommander::Command_MENU_RBUTTON( void )
 
 	default:
 		// コマンドコードによる処理振り分け
-//		HandleCommand( nId, true, 0, 0, 0, 0 );
-		::PostMessageCmd( GetMainWindow(), WM_COMMAND, MAKELONG( nId, 0 ),  (LPARAM)NULL );
+//		HandleCommand(nId, true, 0, 0, 0, 0);
+		::PostMessageCmd(GetMainWindow(), WM_COMMAND, MAKELONG(nId, 0),  (LPARAM)NULL);
 		break;
 	}
 	return;
@@ -75,7 +75,7 @@ void CViewCommander::Command_MENU_RBUTTON( void )
 
 
 // カスタムメニュー表示
-int CViewCommander::Command_CUSTMENU( int nMenuIdx )
+int CViewCommander::Command_CUSTMENU(int nMenuIdx)
 {
 	GetEditWindow()->GetMenuDrawer().ResetContents();
 
@@ -89,6 +89,6 @@ int CViewCommander::Command_CUSTMENU( int nMenuIdx )
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();
-	return m_pCommanderView->CreatePopUpMenuSub( hMenu, nMenuIdx, NULL );
+	return m_pCommanderView->CreatePopUpMenuSub(hMenu, nMenuIdx, NULL);
 }
 

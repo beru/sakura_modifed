@@ -44,7 +44,7 @@ class CProcess;
 	@date 2002/01/08
 	@date 2006/04/10 ryoji
 */
-CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPCTSTR lpCmdLine )
+CProcess* CProcessFactory::Create(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 {
 	CCommandLine::getInstance()->ParseCommandLine(lpCmdLine);
 
@@ -67,14 +67,14 @@ CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPCTSTR lpCmdLine )
 			return 0;
 		}
 		if (!IsExistControlProcess()) {
-			process = new CControlProcess( hInstance, lpCmdLine );
+			process = new CControlProcess(hInstance, lpCmdLine);
 		}
 	}else {
 		if (!IsExistControlProcess()) {
 			StartControlProcess();
 		}
 		if (WaitForInitializedControlProcess()) {	// 2006.04.10 ryoji コントロールプロセスの初期化完了待ち
-			process = new CNormalProcess( hInstance, lpCmdLine );
+			process = new CNormalProcess(hInstance, lpCmdLine);
 		}
 	}
 	return process;
@@ -96,7 +96,7 @@ bool CProcessFactory::IsValidVersion()
 	COsVersionInfo cOsVer(true);	// 初期化を行う
 	if (cOsVer.GetVersion()) {
 		if (!cOsVer.OsIsEnableVersion()) {
-			InfoMessage( NULL,
+			InfoMessage(NULL,
 				_T("このアプリケーションを実行するには、\n")
 #if (WINVER >= _WIN32_WINNT_WIN7)
 				_T("Windows7以降のOSが必要です。\n")
@@ -112,7 +112,7 @@ bool CProcessFactory::IsValidVersion()
 			return false;
 		}
 	}else {
-		InfoMessage( NULL, _T("OSのバージョンが取得できません。\nアプリケーションを終了します。") );
+		InfoMessage(NULL, _T("OSのバージョンが取得できません。\nアプリケーションを終了します。"));
 		return false;
 	}
 
@@ -120,7 +120,7 @@ bool CProcessFactory::IsValidVersion()
 #ifdef USE_SSE2
 	if (cOsVer._SupportSSE2()) {
 	}else {
-		InfoMessage( NULL,
+		InfoMessage(NULL,
 			_T("このアプリケーションを実行するには、\n")
 			_T("SSE2命令セットをサポートしたCPUが必要です。\n")
 			_T("アプリケーションを終了します。")
@@ -153,9 +153,9 @@ bool CProcessFactory::IsStartingControlProcess()
 */
 bool CProcessFactory::IsExistControlProcess()
 {
- 	HANDLE hMutexCP = ::OpenMutex( MUTEX_ALL_ACCESS, FALSE, GSTR_MUTEX_SAKURA_CP );	// 2006.04.10 ryoji ::CreateMutex() を ::OpenMutex()に変更
+ 	HANDLE hMutexCP = ::OpenMutex(MUTEX_ALL_ACCESS, FALSE, GSTR_MUTEX_SAKURA_CP);	// 2006.04.10 ryoji ::CreateMutex() を ::OpenMutex()に変更
 	if (hMutexCP) {
-		::CloseHandle( hMutexCP );
+		::CloseHandle(hMutexCP);
 		return true;	// コントロールプロセスが見つかった
 	}
 	return false;	// コントロールプロセスは存在していないか、まだ CreateMutex() してない
@@ -180,7 +180,7 @@ bool CProcessFactory::StartControlProcess()
 	PROCESS_INFORMATION p;
 	STARTUPINFO s;
 
-	s.cb          = sizeof( s );
+	s.cb          = sizeof(s);
 	s.lpReserved  = NULL;
 	s.lpDesktop   = NULL;
 	s.lpTitle     = const_cast<TCHAR*>(_T("sakura control process")); //2007.09.21 kobake デバッグしやすいように、名前を付ける
@@ -192,8 +192,8 @@ bool CProcessFactory::StartControlProcess()
 	TCHAR szCmdLineBuf[1024];	// コマンドライン
 	TCHAR szEXE[MAX_PATH + 1];	// アプリケーションパス名
 
-	::GetModuleFileName( NULL, szEXE, _countof( szEXE ));
-	::auto_sprintf_s( szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE ); // ""付加
+	::GetModuleFileName(NULL, szEXE, _countof(szEXE));
+	::auto_sprintf_s(szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE); // ""付加
 
 	// 常駐プロセス起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
@@ -215,7 +215,7 @@ bool CProcessFactory::StartControlProcess()
 	if (!bCreateResult) {
 		// 失敗
 		TCHAR* pMsg;
-		::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
 						FORMAT_MESSAGE_IGNORE_INSERTS |
 						FORMAT_MESSAGE_FROM_SYSTEM,
 						NULL,
@@ -225,8 +225,8 @@ bool CProcessFactory::StartControlProcess()
 						0,
 						NULL
 		);
-		ErrorMessage( NULL, _T("\'%ts\'\nプロセスの起動に失敗しました。\n%ts"), szEXE, pMsg );
-		::LocalFree( (HLOCAL)pMsg );	// エラーメッセージバッファを解放
+		ErrorMessage(NULL, _T("\'%ts\'\nプロセスの起動に失敗しました。\n%ts"), szEXE, pMsg);
+		::LocalFree((HLOCAL)pMsg);	// エラーメッセージバッファを解放
 		return false;
 	}
 
@@ -235,16 +235,16 @@ bool CProcessFactory::StartControlProcess()
 	// Note: この待ちにより、ここで起動したコントロールプロセスが競争に生き残れなかった場合でも、
 	// 唯一生き残ったコントロールプロセスが多重起動防止用ミューテックスを作成しているはず。
 	//
-	int nResult = ::WaitForInputIdle( p.hProcess, 10000 );	// 最大10秒間待つ
+	int nResult = ::WaitForInputIdle(p.hProcess, 10000);	// 最大10秒間待つ
 	if (0 != nResult) {
-		ErrorMessage( NULL, _T("\'%ls\'\nコントロールプロセスの起動に失敗しました。"), szEXE );
-		::CloseHandle( p.hThread );
-		::CloseHandle( p.hProcess );
+		ErrorMessage(NULL, _T("\'%ls\'\nコントロールプロセスの起動に失敗しました。"), szEXE);
+		::CloseHandle(p.hThread);
+		::CloseHandle(p.hProcess);
 		return false;
 	}
 
-	::CloseHandle( p.hThread );
-	::CloseHandle( p.hProcess );
+	::CloseHandle(p.hThread);
+	::CloseHandle(p.hProcess);
 	
 	return true;
 }
@@ -268,7 +268,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 		return false;
 	}
 
-	HANDLE hEvent = ::OpenEvent( EVENT_ALL_ACCESS, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED );
+	HANDLE hEvent = ::OpenEvent(EVENT_ALL_ACCESS, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED);
 	if (!hEvent) {
 		// 動作中のコントロールプロセスを旧バージョンとみなし、イベントを待たずに処理を進める
 		//
@@ -281,13 +281,13 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 		//
 		return true;
 	}
-	DWORD dwRet = ::WaitForSingleObject( hEvent, 10000 );	// 最大10秒間待つ
+	DWORD dwRet = ::WaitForSingleObject(hEvent, 10000);	// 最大10秒間待つ
 	if (WAIT_TIMEOUT == dwRet) {	// コントロールプロセスの初期化が終了しない
-		::CloseHandle( hEvent );
-		TopErrorMessage( NULL, _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。") );
+		::CloseHandle(hEvent);
+		TopErrorMessage(NULL, _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。"));
 		return false;
 	}
-	::CloseHandle( hEvent );
+	::CloseHandle(hEvent);
 	return true;
 }
 
@@ -302,11 +302,11 @@ bool CProcessFactory::TestWriteQuit()
 	if (CCommandLine::getInstance()->IsWriteQuit()) {
 		TCHAR szIniFileIn[_MAX_PATH];
 		TCHAR szIniFileOut[_MAX_PATH];
-		CFileNameManager::getInstance()->GetIniFileNameDirect( szIniFileIn, szIniFileOut );
+		CFileNameManager::getInstance()->GetIniFileNameDirect(szIniFileIn, szIniFileOut);
 		if (szIniFileIn[0] != _T('\0')) {	// マルチユーザ用設定か
 			// 既にマルチユーザ用のiniファイルがあればEXE基準のiniファイルに上書き更新して終了
 			if (fexist(szIniFileIn)) {
-				if (::CopyFile( szIniFileIn, szIniFileOut, FALSE )) {
+				if (::CopyFile(szIniFileIn, szIniFileOut, FALSE)) {
 					return true;
 				}
 			}

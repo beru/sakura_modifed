@@ -272,7 +272,7 @@ public:
 	int GetIndex() const { /*assert(IsValid());*/ return m_nType; }
 
 	//共有データへの簡易アクセサ
-//	STypeConfig* operator->(){ return GetTypeConfig(); }
+//	STypeConfig* operator->() { return GetTypeConfig(); }
 //	STypeConfig* GetTypeConfig();
 private:
 	int m_nType;

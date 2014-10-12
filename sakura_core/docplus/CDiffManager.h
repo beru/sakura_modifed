@@ -44,7 +44,7 @@ enum EDiffMark{
 //! DIFFãììÆÇÃä«óù
 class CDiffManager : public TSingleton<CDiffManager> {
 	friend class TSingleton<CDiffManager>;
-	CDiffManager(){}
+	CDiffManager() {}
 
 public:
 	void SetDiffUse(bool b) { m_bIsDiffUse = b; }
@@ -89,8 +89,8 @@ class CDiffLineMgr {
 public:
 	CDiffLineMgr(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 	void ResetAllDiffMark();															//!< ç∑ï™ï\é¶ÇÃëSâèú
-	bool SearchDiffMark( CLogicInt , ESearchDirection , CLogicInt* );					//!< ç∑ï™åüçı
-	void SetDiffMarkRange( EDiffMark nMode, CLogicInt nStartLine, CLogicInt nEndLine );	//!< ç∑ï™îÕàÕÇÃìoò^
+	bool SearchDiffMark(CLogicInt , ESearchDirection , CLogicInt*);					//!< ç∑ï™åüçı
+	void SetDiffMarkRange(EDiffMark nMode, CLogicInt nStartLine, CLogicInt nEndLine);	//!< ç∑ï™îÕàÕÇÃìoò^
 private:
 	CDocLineMgr* m_pcDocLineMgr;
 };

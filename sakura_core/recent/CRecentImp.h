@@ -37,8 +37,8 @@ private:
 	typedef RECEIVE_TYPE						ReceiveType;
 
 public:
-	CRecentImp(){ Terminate(); }
-	virtual ~CRecentImp(){ Terminate(); }
+	CRecentImp() { Terminate(); }
+	virtual ~CRecentImp() { Terminate(); }
 
 protected:
 	// 生成
@@ -55,51 +55,51 @@ public:
 	void _Recovery();
 
 	// 更新
-	bool ChangeViewCount( int nViewCount );	//表示数の変更
+	bool ChangeViewCount(int nViewCount);	//表示数の変更
 	bool UpdateView();
 
 	// プロパティ取得系
 	int GetArrayCount() const { return m_nArrayCount; }	// 最大要素数
-	int GetItemCount() const { return ( IsAvailable() ? *m_pnUserItemCount : 0); }	// 登録アイテム数
-	int GetViewCount() const { return ( IsAvailable() ? (m_pnUserViewCount ? *m_pnUserViewCount : m_nArrayCount) : 0); }	// 表示数
+	int GetItemCount() const { return (IsAvailable() ? *m_pnUserItemCount : 0); }	// 登録アイテム数
+	int GetViewCount() const { return (IsAvailable() ? (m_pnUserViewCount ? *m_pnUserViewCount : m_nArrayCount) : 0); }	// 表示数
 
 	// お気に入り制御系
-	bool SetFavorite( int nIndex, bool bFavorite = true);	// お気に入りに設定
-	bool ResetFavorite( int nIndex ) { return SetFavorite( nIndex, false ); }	// お気に入りを解除
+	bool SetFavorite(int nIndex, bool bFavorite = true);	// お気に入りに設定
+	bool ResetFavorite(int nIndex) { return SetFavorite(nIndex, false); }	// お気に入りを解除
 	void ResetAllFavorite();				// お気に入りをすべて解除
-	bool IsFavorite( int nIndex ) const;	// お気に入りか調べる
+	bool IsFavorite(int nIndex) const;	// お気に入りか調べる
 
 	// アイテム制御
-	bool AppendItem( ReceiveType pItemData );	// アイテムを先頭に追加
-	bool AppendItemText( LPCTSTR pszText );
-	bool EditItemText( int nIndex, LPCTSTR pszText );
-	bool DeleteItem( int nIndex );				// アイテムをクリア
-	bool DeleteItem( ReceiveType pItemData ) {
-		return DeleteItem( FindItem( pItemData ) );
+	bool AppendItem(ReceiveType pItemData);	// アイテムを先頭に追加
+	bool AppendItemText(LPCTSTR pszText);
+	bool EditItemText(int nIndex, LPCTSTR pszText);
+	bool DeleteItem(int nIndex);				// アイテムをクリア
+	bool DeleteItem(ReceiveType pItemData) {
+		return DeleteItem(FindItem(pItemData));
 	}
 	bool DeleteItemsNoFavorite();			// お気に入り以外のアイテムをクリア
 	void DeleteAllItem();					// アイテムをすべてクリア
 
 	// アイテム取得
-	const DataType* GetItem( int nIndex ) const;
-	DataType* GetItem( int nIndex ) { return const_cast<DataType*>(static_cast<const Me*>(this)->GetItem(nIndex)); }
-	int FindItem( ReceiveType pItemData ) const;
-	bool MoveItem( int nSrcIndex, int nDstIndex );	// アイテムを移動
+	const DataType* GetItem(int nIndex) const;
+	DataType* GetItem(int nIndex) { return const_cast<DataType*>(static_cast<const Me*>(this)->GetItem(nIndex)); }
+	int FindItem(ReceiveType pItemData) const;
+	bool MoveItem(int nSrcIndex, int nDstIndex);	// アイテムを移動
 
 
 	// オーバーライド用インターフェース
-	virtual int  CompareItem( const DataType* p1, ReceiveType p2 ) const = 0;
-	virtual void CopyItem( DataType* dst, ReceiveType src ) const = 0;
-	virtual bool DataToReceiveType( ReceiveType* dst, const DataType* src ) const = 0;
-	virtual bool TextToDataType( DataType* dst, LPCTSTR pszText ) const = 0;
+	virtual int  CompareItem(const DataType* p1, ReceiveType p2) const = 0;
+	virtual void CopyItem(DataType* dst, ReceiveType src) const = 0;
+	virtual bool DataToReceiveType(ReceiveType* dst, const DataType* src) const = 0;
+	virtual bool TextToDataType(DataType* dst, LPCTSTR pszText) const = 0;
 
 	// 実装補助
 private:
 	const DataType* GetItemPointer(int nIndex) const;
 	DataType* GetItemPointer(int nIndex) { return const_cast<DataType*>(static_cast<const Me*>(this)->GetItemPointer(nIndex)); }
-	void   ZeroItem( int nIndex );	// アイテムをゼロクリアする
-	int    GetOldestItem( int nIndex, bool bFavorite );	// 最古のアイテムを探す
-	bool   CopyItem( int nSrcIndex, int nDstIndex );
+	void   ZeroItem(int nIndex);	// アイテムをゼロクリアする
+	int    GetOldestItem(int nIndex, bool bFavorite);	// 最古のアイテムを探す
+	bool   CopyItem(int nSrcIndex, int nDstIndex);
 
 protected:
 	// 内部フラグ

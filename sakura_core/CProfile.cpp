@@ -46,7 +46,7 @@ using namespace std;
 	
 	@date 2003-10-21 D.S.Koba STLで書き直す
 */
-void CProfile::Init( void )
+void CProfile::Init(void)
 {
 	m_strProfileName = _T("");
 	m_ProfileData.clear();
@@ -85,7 +85,7 @@ void CProfile::ReadOneline(
 	) {
 		Section Buffer;
 		Buffer.strSectionName = std::wstring(line+1, len - 1 - 1);
-		m_ProfileData.push_back( Buffer );
+		m_ProfileData.push_back(Buffer);
 	// エントリ取得
 	}else if (!m_ProfileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		const wchar_t* pos = wcschr(line, '=');
@@ -108,7 +108,7 @@ void CProfile::ReadOneline(
 	@date 2004-01-31 genta 行の解析の方を別関数にしてReadFileをReadProfileに
 		
 */
-bool CProfile::ReadProfile( const TCHAR* pszProfileName )
+bool CProfile::ReadProfile(const TCHAR* pszProfileName)
 {
 	m_strProfileName = pszProfileName;
 
@@ -158,7 +158,7 @@ bool CProfile::ReadProfile( const TCHAR* pszProfileName )
 
 	1行300文字までに制限
 */
-bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
+bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 {
 	static const BYTE UTF8_BOM[] = {0xEF,0xBB,0xBF};
 	HRSRC		hRsrc;
@@ -173,13 +173,13 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 
 	m_strProfileName = _T("-Res-");
 
-	if (( hRsrc = ::FindResource( 0, pName, pType )) != NULL
-	 && ( hGlobal = ::LoadResource( 0, hRsrc )) != NULL
-	 && ( psMMres = (char *)::LockResource(hGlobal)) != NULL
-	 && ( nSize = (size_t)::SizeofResource( 0, hRsrc )) != 0
+	if ((hRsrc = ::FindResource(0, pName, pType)) != NULL
+	 && (hGlobal = ::LoadResource(0, hRsrc)) != NULL
+	 && (psMMres = (char *)::LockResource(hGlobal)) != NULL
+	 && (nSize = (size_t)::SizeofResource(0, hRsrc)) != 0
 	) {
 		p = psMMres;
-		if (nSize >= sizeof(UTF8_BOM) && memcmp( p, UTF8_BOM, sizeof(UTF8_BOM) )==0) {
+		if (nSize >= sizeof(UTF8_BOM) && memcmp(p, UTF8_BOM, sizeof(UTF8_BOM)) == 0) {
 			// Skip BOM
 			p += sizeof(UTF8_BOM);
 		}
@@ -203,8 +203,8 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType )
 			}
 			
 			// UTF-8 -> UNICODE
-			CMemory cmLine( sLine, lnsz );
-			CUtf8::UTF8ToUnicode( &cmLine );
+			CMemory cmLine(sLine, lnsz);
+			CUtf8::UTF8ToUnicode(&cmLine);
 			// 解析
 			ReadOneline(
 				(const wchar_t*)cmLine.GetRawPtr(),
@@ -238,19 +238,19 @@ bool CProfile::WriteProfile(
     
 	std::vector< wstring > vecLine;
 	if (pszComment) {
-		vecLine.push_back( LTEXT(";") + wstring( pszComment ) );		// //->;	2008/5/24 Uchi
-		vecLine.push_back( LTEXT("") );
+		vecLine.push_back(LTEXT(";") + wstring(pszComment));		// //->;	2008/5/24 Uchi
+		vecLine.push_back(LTEXT(""));
 	}
 	auto iterEnd = m_ProfileData.end();
 	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
 		// セクション名を書き込む
-		vecLine.push_back( LTEXT("[") + iter->strSectionName + LTEXT("]") );
+		vecLine.push_back(LTEXT("[") + iter->strSectionName + LTEXT("]"));
 		auto mapiterEnd = iter->mapEntries.end();
 		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
 			// エントリを書き込む
-			vecLine.push_back( mapiter->first + LTEXT("=") + mapiter->second );
+			vecLine.push_back(mapiter->first + LTEXT("=") + mapiter->second);
 		}
-		vecLine.push_back( LTEXT("") );
+		vecLine.push_back(LTEXT(""));
 	}
 
 	// 別ファイルに書き込んでから置き換える（プロセス強制終了などへの安全対策）
@@ -346,7 +346,7 @@ bool CProfile::GetProfileDataImp(
 	auto iterEnd = m_ProfileData.end();
 	for (auto iter = m_ProfileData.begin(); iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
-			auto mapiter = iter->mapEntries.find( strEntryKey );
+			auto mapiter = iter->mapEntries.find(strEntryKey);
 			if (iter->mapEntries.end() != mapiter) {
 				strEntryValue = mapiter->second;
 				return true;
@@ -374,14 +374,14 @@ bool CProfile::SetProfileDataImp(
 	for (; iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {
 			// 既存のセクションの場合
-			auto mapiter = iter->mapEntries.find( strEntryKey );
+			auto mapiter = iter->mapEntries.find(strEntryKey);
 			if (iter->mapEntries.end() != mapiter) {
 				// 既存のエントリの場合は値を上書き
 				mapiter->second = strEntryValue;
 				break;
 			}else {
 				// 既存のエントリが見つからない場合は追加
-				iter->mapEntries.insert( PAIR_STR_STR( strEntryKey, strEntryValue ) );
+				iter->mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));
 				break;
 			}
 		}
@@ -390,27 +390,27 @@ bool CProfile::SetProfileDataImp(
 	if (iterEnd == iter) {
 		Section Buffer;
 		Buffer.strSectionName = strSectionName;
-		Buffer.mapEntries.insert( PAIR_STR_STR( strEntryKey, strEntryValue ) );
-		m_ProfileData.push_back( Buffer );
+		Buffer.mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));
+		m_ProfileData.push_back(Buffer);
 	}
 	return true;
 }
 
 
-void CProfile::DUMP( void )
+void CProfile::DUMP(void)
 {
 #ifdef _DEBUG
 	auto iterEnd = m_ProfileData.end();
 	// 2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
-	MYTRACE( _T("\n\nCProfile::DUMP()======================") );
+	MYTRACE(_T("\n\nCProfile::DUMP()======================"));
 	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
-		MYTRACE( _T("\n■strSectionName=%ls"), iter->strSectionName.c_str() );
+		MYTRACE(_T("\n■strSectionName=%ls"), iter->strSectionName.c_str());
 		auto mapiterEnd = iter->mapEntries.end();
 		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
-			MYTRACE( _T("\"%ls\" = \"%ls\"\n"), mapiter->first.c_str(), mapiter->second.c_str() );
+			MYTRACE(_T("\"%ls\" = \"%ls\"\n"), mapiter->first.c_str(), mapiter->second.c_str());
 		}
 	}
-	MYTRACE( _T("========================================\n") );
+	MYTRACE(_T("========================================\n"));
 #endif
 	return;
 }

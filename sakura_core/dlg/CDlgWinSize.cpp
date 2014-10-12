@@ -78,7 +78,7 @@ int CDlgWinSize::DoModal(
 	m_eSaveWinPos  = eSaveWinPos;
 	m_nWinSizeType = nWinSizeType;
 	m_rc = rc;
-	(void)CDialog::DoModal( hInstance, hwndParent, IDD_WINPOSSIZE, (LPARAM)NULL );
+	(void)CDialog::DoModal(hInstance, hwndParent, IDD_WINPOSSIZE, (LPARAM)NULL);
 	eSaveWinSize = m_eSaveWinSize;
 	eSaveWinPos  = m_eSaveWinPos;
 	nWinSizeType = m_nWinSizeType;
@@ -88,29 +88,29 @@ int CDlgWinSize::DoModal(
 
 /*! 初期化処理
 */
-BOOL CDlgWinSize::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
+BOOL CDlgWinSize::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
-	_SetHwnd( hwndDlg );
+	_SetHwnd(hwndDlg);
 
-	Combo_AddString( ::GetDlgItem( GetHwnd(), IDC_COMBO_WINTYPE ), LSW( STR_DLGWINSZ_NORMAL ) );	// L"普通"
-	Combo_AddString( ::GetDlgItem( GetHwnd(), IDC_COMBO_WINTYPE ), LSW( STR_DLGWINSZ_MAXIMIZE ) );	// L"最大化"
-	Combo_AddString( ::GetDlgItem( GetHwnd(), IDC_COMBO_WINTYPE ), LSW( STR_DLGWINSZ_MINIMIZE ) );	// L"(最小化)"
+	Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_NORMAL));	// L"普通"
+	Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_MAXIMIZE));	// L"最大化"
+	Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_MINIMIZE));	// L"(最小化)"
 
-	UpDown_SetRange( ::GetDlgItem( GetHwnd(), IDC_SPIN_SX ), 30000, 0 );
-	UpDown_SetRange( ::GetDlgItem( GetHwnd(), IDC_SPIN_SY ), 30000, 0 );
+	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_SX), 30000, 0);
+	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_SY), 30000, 0);
 	// ウィンドウの座標は、マイナス値も有効。
-	UpDown_SetRange( ::GetDlgItem( GetHwnd(), IDC_SPIN_WX ), 30000, -30000 );
-	UpDown_SetRange( ::GetDlgItem( GetHwnd(), IDC_SPIN_WY ), 30000, -30000 );
+	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_WX), 30000, -30000);
+	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_WY), 30000, -30000);
 
-	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
+	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
 
 
-BOOL CDlgWinSize::OnBnClicked( int wID )
+BOOL CDlgWinSize::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:	// 2006/09/09 novice id修正
-		MyWinHelp( GetHwnd(), HELP_CONTEXT, HLP000286 );	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000286);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDC_RADIO_WINPOS_DEF:
 	case IDC_RADIO_WINPOS_SAVE:
@@ -124,33 +124,33 @@ BOOL CDlgWinSize::OnBnClicked( int wID )
 	case IDCANCEL:
 		GetData();
 	}
-	return CDialog::OnBnClicked( wID );
+	return CDialog::OnBnClicked(wID);
 }
 
 /*! @brief ダイアログボックスにデータを設定
 */
-void CDlgWinSize::SetData( void )
+void CDlgWinSize::SetData(void)
 {
 	switch (m_eSaveWinSize) {
 	case 1:
-		::CheckDlgButton( GetHwnd(), IDC_RADIO_WINSIZE_SAVE, TRUE );
+		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINSIZE_SAVE, TRUE);
 		break;
 	case 2:
-		::CheckDlgButton( GetHwnd(), IDC_RADIO_WINSIZE_SET, TRUE );
+		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINSIZE_SET, TRUE);
 		break;
 	default:
-		::CheckDlgButton( GetHwnd(), IDC_RADIO_WINSIZE_DEF, TRUE );
+		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINSIZE_DEF, TRUE);
 	}
 
 	switch (m_eSaveWinPos) {
 	case 1:
-		::CheckDlgButton( GetHwnd(), IDC_RADIO_WINPOS_SAVE, TRUE );
+		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINPOS_SAVE, TRUE);
 		break;
 	case 2:
-		::CheckDlgButton( GetHwnd(), IDC_RADIO_WINPOS_SET, TRUE );
+		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINPOS_SET, TRUE);
 		break;
 	default:
-		::CheckDlgButton( GetHwnd(), IDC_RADIO_WINPOS_DEF, TRUE );
+		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINPOS_DEF, TRUE);
 	}
 
 	int nCurIdx = 0;
@@ -164,37 +164,37 @@ void CDlgWinSize::SetData( void )
 	default:
 		nCurIdx = 0;
 	}
-	Combo_SetCurSel( ::GetDlgItem( GetHwnd(), IDC_COMBO_WINTYPE ), nCurIdx );
-	::SetDlgItemInt( GetHwnd(), IDC_EDIT_SX, m_rc.right,  TRUE );
-	::SetDlgItemInt( GetHwnd(), IDC_EDIT_SY, m_rc.bottom, TRUE );
-	::SetDlgItemInt( GetHwnd(), IDC_EDIT_WX, m_rc.top,  TRUE );
-	::SetDlgItemInt( GetHwnd(), IDC_EDIT_WY, m_rc.left, TRUE );
+	Combo_SetCurSel(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), nCurIdx);
+	::SetDlgItemInt(GetHwnd(), IDC_EDIT_SX, m_rc.right,  TRUE);
+	::SetDlgItemInt(GetHwnd(), IDC_EDIT_SY, m_rc.bottom, TRUE);
+	::SetDlgItemInt(GetHwnd(), IDC_EDIT_WX, m_rc.top,  TRUE);
+	::SetDlgItemInt(GetHwnd(), IDC_EDIT_WY, m_rc.left, TRUE);
 	RenewItemState();
 }
 
 
 /*! ダイアログボックスのデータを読み出す
 */
-int CDlgWinSize::GetData( void )
+int CDlgWinSize::GetData(void)
 {
-	if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINSIZE_DEF )) {
+	if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINSIZE_DEF)) {
 		m_eSaveWinSize = WINSIZEMODE_DEF;
-	}else if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINSIZE_SAVE )) {
+	}else if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINSIZE_SAVE)) {
 		m_eSaveWinSize = WINSIZEMODE_SAVE;
-	}else if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINSIZE_SET )) {
+	}else if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINSIZE_SET)) {
 		m_eSaveWinSize = WINSIZEMODE_SET;
 	}
 	
-	if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINPOS_DEF )) {
+	if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINPOS_DEF)) {
 		m_eSaveWinPos = WINSIZEMODE_DEF;
-	}else if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINPOS_SAVE )) {
+	}else if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINPOS_SAVE)) {
 		m_eSaveWinPos = WINSIZEMODE_SAVE;
-	}else if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINPOS_SET )) {
+	}else if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINPOS_SET)) {
 		m_eSaveWinPos = WINSIZEMODE_SET;
 	}
 
 	int nCurIdx;
-	nCurIdx = Combo_GetCurSel( ::GetDlgItem( GetHwnd(), IDC_COMBO_WINTYPE ) );
+	nCurIdx = Combo_GetCurSel(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE));
 	switch (nCurIdx) {
 	case 2:
 		m_nWinSizeType = SIZE_MINIMIZED;
@@ -205,38 +205,38 @@ int CDlgWinSize::GetData( void )
 	default:
 		m_nWinSizeType = SIZE_RESTORED;
 	}
-	m_rc.right  = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_SX, NULL, TRUE );
-	m_rc.bottom = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_SY, NULL, TRUE );
-	m_rc.top    = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_WX, NULL, TRUE );
-	m_rc.left   = ::GetDlgItemInt( GetHwnd(), IDC_EDIT_WY, NULL, TRUE );
+	m_rc.right  = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_SX, NULL, TRUE);
+	m_rc.bottom = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_SY, NULL, TRUE);
+	m_rc.top    = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_WX, NULL, TRUE);
+	m_rc.left   = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_WY, NULL, TRUE);
 	return TRUE;
 }
 
 
 /*! 利用可能・不可の状態を更新する
 */
-void CDlgWinSize::RenewItemState( void )
+void CDlgWinSize::RenewItemState(void)
 {
 	BOOL state;
-	if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINPOS_SET )) {
+	if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINPOS_SET)) {
 		state = TRUE;
 	}else {
 		state = FALSE;
 	}
-	::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_EDIT_WX ), state );
-	::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_EDIT_WY ), state );
+	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_WX), state);
+	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_WY), state);
 
-	if (BST_CHECKED == ::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_WINSIZE_SET )) {
+	if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_WINSIZE_SET)) {
 		state = TRUE;
 	}else {
 		state = FALSE;
 	}
-	::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_COMBO_WINTYPE ), state );
-	::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_EDIT_SX ), state );
-	::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_EDIT_SY ), state );
+	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), state);
+	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_SX), state);
+	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_SY), state);
 }
 
-LPVOID CDlgWinSize::GetHelpIdTable( void )
+LPVOID CDlgWinSize::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

@@ -59,7 +59,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 	EditInfo	fi;
 	ECodeType ePrevCode = CODE_NONE;
 	int nPrevTypeId = -1;
-	if (CMRUFile().GetEditInfo( pLoadInfo->cFilePath, &fi )) {
+	if (CMRUFile().GetEditInfo(pLoadInfo->cFilePath, &fi)) {
 		ePrevCode = fi.m_nCharCode;
 		nPrevTypeId = fi.m_nTypeId;
 	}
@@ -70,7 +70,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 			pLoadInfo->nType = CDocTypeManager().GetDocumentTypeOfId(nPrevTypeId);
 		}
 		if (!pLoadInfo->nType.IsValidType()) {
-			pLoadInfo->nType = CDocTypeManager().GetDocumentTypeOfPath( pLoadInfo->cFilePath );
+			pLoadInfo->nType = CDocTypeManager().GetDocumentTypeOfPath(pLoadInfo->cFilePath);
 		}
 	}
 
@@ -80,8 +80,8 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
 			const STypeConfigMini* type;
 			CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
-			CCodeMediator cmediator( type->m_encoding );
-			pLoadInfo->eCharCode = cmediator.CheckKanjiCodeOfFile( pLoadInfo->cFilePath );
+			CCodeMediator cmediator(type->m_encoding);
+			pLoadInfo->eCharCode = cmediator.CheckKanjiCodeOfFile(pLoadInfo->cFilePath);
 		}else {
 			pLoadInfo->eCharCode = ePrevCode;
 		}
@@ -157,20 +157,20 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 		if (ptCaretPos.GetY2() >= pcDoc->m_cLayoutMgr.GetLineCount()) {
 			//ファイルの最後に移動
-			cView.GetCommander().HandleCommand( F_GOFILEEND, false, 0, 0, 0, 0 );
+			cView.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
-			cView.GetTextArea().SetViewTopLine( eiOld.m_nViewTopLine ); // 2001/10/20 novice
-			cView.GetTextArea().SetViewLeftCol( eiOld.m_nViewLeftCol ); // 2001/10/20 novice
+			cView.GetTextArea().SetViewTopLine(eiOld.m_nViewTopLine); // 2001/10/20 novice
+			cView.GetTextArea().SetViewLeftCol(eiOld.m_nViewLeftCol); // 2001/10/20 novice
 			// From Here Mar. 28, 2003 MIK
 			// 改行の真ん中にカーソルが来ないように。
-			const CDocLine *pTmpDocLine = pcDoc->m_cDocLineMgr.GetLine( eiOld.m_ptCursor.GetY2() );	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const CDocLine *pTmpDocLine = pcDoc->m_cDocLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
 				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.m_ptCursor.x) {
 					ptCaretPos.x--;
 				}
 			}
 			// To Here Mar. 28, 2003 MIK
-			cView.GetCaret().MoveCursor( ptCaretPos, true );
+			cView.GetCaret().MoveCursor(ptCaretPos, true);
 			cView.GetCaret().m_nCaretPosX_Prev = cView.GetCaret().GetCaretLayoutPos().GetX2();
 		}
 	}
@@ -187,7 +187,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	// MRUリストへの登録
 	EditInfo	eiNew;
 	pcDoc->GetEditInfo(&eiNew);
-	cMRU.Add( &eiNew );
+	cMRU.Add(&eiNew);
 }
 
 
@@ -220,13 +220,13 @@ void CMruListener::_HoldBookmarks_And_AddToMRU()
 	//EditInfo取得
 	CEditDoc* pcDoc = GetListeningDoc();
 	EditInfo	fi;
-	pcDoc->GetEditInfo( &fi );
+	pcDoc->GetEditInfo(&fi);
 
 	//ブックマーク情報の保存
-	wcscpy_s( fi.m_szMarkLines, CBookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks() );
+	wcscpy_s(fi.m_szMarkLines, CBookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks());
 
 	//MRUリストに登録
 	CMRUFile	cMRU;
-	cMRU.Add( &fi );
+	cMRU.Add(&fi);
 }
 

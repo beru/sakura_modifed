@@ -17,7 +17,7 @@
 	
 	@todo 出力バッファのサイズチェックを行う
 */
-bool GetDateTimeFormat( TCHAR* szResult, int size, const TCHAR* format, const SYSTEMTIME& systime )
+bool GetDateTimeFormat(TCHAR* szResult, int size, const TCHAR* format, const SYSTEMTIME& systime)
 {
 	TCHAR szTime[10];
 	const TCHAR* p = format;
@@ -30,31 +30,31 @@ bool GetDateTimeFormat( TCHAR* szResult, int size, const TCHAR* format, const SY
 			switch (*p) {
 			case _T('Y'):
 				len = wsprintf(szTime,_T("%d"),systime.wYear);
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 			case _T('y'):
 				len = wsprintf(szTime,_T("%02d"),(systime.wYear%100));
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 			case _T('m'):
 				len = wsprintf(szTime,_T("%02d"),systime.wMonth);
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 			case _T('d'):
 				len = wsprintf(szTime,_T("%02d"),systime.wDay);
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 			case _T('H'):
 				len = wsprintf(szTime,_T("%02d"),systime.wHour);
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 			case _T('M'):
 				len = wsprintf(szTime,_T("%02d"),systime.wMinute);
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 			case _T('S'):
 				len = wsprintf(szTime,_T("%02d"),systime.wSecond);
-				_tcscpy( q, szTime );
+				_tcscpy(q, szTime);
 				break;
 				// A Z
 			case _T('%'):
@@ -85,7 +85,7 @@ bool GetDateTimeFormat( TCHAR* szResult, int size, const TCHAR* format, const SY
 	@date 2011.03.18 新規
 	@note 参考 PHP version_compare http://php.s3.to/man/function.version-compare.html
 */
-UINT32 ParseVersion( const TCHAR* sVer )
+UINT32 ParseVersion(const TCHAR* sVer)
 {
 	int nVer;
 	int nShift = 0;	// 特別な文字列による下駄
@@ -98,19 +98,19 @@ UINT32 ParseVersion( const TCHAR* sVer )
 	for (i=0; *p && i<4; i++) {
 		// 特別な文字列の処理
 		if (*p == _T('a')) {
-			if (_tcsncmp( _T("alpha"), p, 5 ) == 0) p += 5;
+			if (_tcsncmp(_T("alpha"), p, 5) == 0) p += 5;
 			else p++;
 			nShift = -0x60;
 		}else if (*p == _T('b')) {
-			if (_tcsncmp( _T("beta"), p, 4 ) == 0) p += 4;
+			if (_tcsncmp(_T("beta"), p, 4) == 0) p += 4;
 			else p++;
 			nShift = -0x40;
 		}else if (*p == _T('r') || *p == _T('R')) {
-			if (_tcsnicmp( _T("rc"), p, 2 ) == 0) p += 2;
+			if (_tcsnicmp(_T("rc"), p, 2) == 0) p += 2;
 			else p++;
 			nShift = -0x20;
 		}else if (*p == _T('p')) {
-			if (_tcsncmp( _T("pl"), p, 2 ) == 0) p += 2;
+			if (_tcsncmp(_T("pl"), p, 2) == 0) p += 2;
 			else p++;
 			nShift = 0x20;
 		}else if (!_istdigit(*p)) {
@@ -125,13 +125,13 @@ UINT32 ParseVersion( const TCHAR* sVer )
 			nVer = nVer * 10 + *p - _T('0');
 		}
 		// 区切り文字の処理
-		while (*p && _tcschr( _T(".-_+"), *p )) { p++; }
+		while (*p && _tcschr(_T(".-_+"), *p)) { p++; }
 
 		DEBUG_TRACE(_T("  VersionPart%d: ver=%d,shift=%d\n"), i, nVer, nShift);
-		ret |= ( (nShift + nVer + 128) << (24-8*i) );
+		ret |= ((nShift + nVer + 128) << (24-8*i));
 	}
 	for (; i<4; i++) {	// 残りの部分はsigned 0 (=0x80)を埋める
-		ret |= ( 128 << (24-8*i) );
+		ret |= (128 << (24-8*i));
 	}
 
 #ifdef _UNICODE
@@ -149,7 +149,7 @@ UINT32 ParseVersion( const TCHAR* sVer )
 	@author syat
 	@date 2011.03.18 新規
 */
-int CompareVersion( const TCHAR* verA, const TCHAR* verB )
+int CompareVersion(const TCHAR* verA, const TCHAR* verB)
 {
 	UINT32 nVerA = ParseVersion(verA);
 	UINT32 nVerB = ParseVersion(verB);

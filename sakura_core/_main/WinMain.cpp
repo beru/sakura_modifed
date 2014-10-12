@@ -64,8 +64,8 @@ int WINAPI _tWinMain(
 		CCurrentDirectoryBackupPoint dirBack;
 		ChangeCurrentDirectoryToExeDir();
 		
-		setlocale( LC_ALL, "Japanese" );	// 2007.08.16 kobake ’Ç‰Á
-		::OleInitialize( NULL );			// 2009.01.07 ryoji ’Ç‰Á
+		setlocale(LC_ALL, "Japanese");	// 2007.08.16 kobake ’Ç‰Á
+		::OleInitialize(NULL);			// 2009.01.07 ryoji ’Ç‰Á
 	}
 	
 	// ŠJ”­î•ñ
@@ -101,11 +101,11 @@ int WINAPI _tWinMain(
 		while (_T(' ') == *pszCommandLine || _T('\t') == *pszCommandLine) {
 			pszCommandLine++;
 		}
-		process = aFactory.Create( hInstance, pszCommandLine );
+		process = aFactory.Create(hInstance, pszCommandLine);
 #else
-		process = aFactory.Create( hInstance, lpCmdLine );
+		process = aFactory.Create(hInstance, lpCmdLine);
 #endif
-		MY_TRACETIME( cRunningTimer, "ProcessObject Created" );
+		MY_TRACETIME(cRunningTimer, "ProcessObject Created");
 	}catch (...) {
 		;
 	}

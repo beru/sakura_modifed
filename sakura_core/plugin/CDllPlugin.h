@@ -37,10 +37,10 @@
 
 class CDllPlug : public CPlug {
 public:
-	CDllPlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel )
+	CDllPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel)
 		:
-		CPlug( plugin, id, sJack, sHandler, sLabel ),
-		m_handler( NULL )
+		CPlug(plugin, id, sJack, sHandler, sLabel),
+		m_handler(NULL)
 	{
 	}
 public:
@@ -53,9 +53,9 @@ class CDllPlugin :
 {
 	// コンストラクタ
 public:
-	CDllPlugin( const tstring& sBaseDir )
+	CDllPlugin(const tstring& sBaseDir)
 		:
-		CPlugin( sBaseDir ),
+		CPlugin(sBaseDir),
 		CDllImp()
 	{
 	}
@@ -66,15 +66,15 @@ public:
 
 	// 実装
 public:
-	bool ReadPluginDef( CDataProfile *cProfile, CDataProfile *cProfileMlang );
-	bool ReadPluginOption( CDataProfile *cProfile ) {
+	bool ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang);
+	bool ReadPluginOption(CDataProfile *cProfile) {
 		return true;
 	}
-	CPlug* CreatePlug( CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel );
-	CPlug::Array GetPlugs() const{
+	CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel);
+	CPlug::Array GetPlugs() const {
 		return m_plugs;
 	}
-	bool InvokePlug( CEditView* view, CPlug& plug, CWSHIfObj::List& params );
+	bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& params);
 
 	bool InitDllImp() {
 		return true;

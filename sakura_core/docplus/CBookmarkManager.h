@@ -65,10 +65,10 @@ public:
 	CBookmarkManager(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
 	void ResetAllBookMark();															//!< ブックマークの全解除
-	bool SearchBookMark( CLogicInt nLineNum, ESearchDirection , CLogicInt* pnLineNum );	//!< ブックマーク検索
-	void SetBookMarks( wchar_t* );														//!< 物理行番号のリストからまとめて行マーク
+	bool SearchBookMark(CLogicInt nLineNum, ESearchDirection , CLogicInt* pnLineNum);	//!< ブックマーク検索
+	void SetBookMarks(wchar_t*);														//!< 物理行番号のリストからまとめて行マーク
 	LPCWSTR GetBookMarks();																//!< 行マークされてる物理行番号のリストを作る
-	void MarkSearchWord( const CSearchStringPattern& );			//!< 検索条件に該当する行にブックマークをセットする
+	void MarkSearchWord(const CSearchStringPattern&);			//!< 検索条件に該当する行にブックマークをセットする
 
 private:
 	CDocLineMgr* m_pcDocLineMgr;

@@ -29,8 +29,8 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 
 	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
-	CLayoutColorInfo*	colorInfo = NULL;
-	CLayoutInt		nLineWork = pArg->sDelRange.GetFrom().GetY2();
+	CLayoutColorInfo* colorInfo = NULL;
+	CLayoutInt nLineWork = pArg->sDelRange.GetFrom().GetY2();
 
 	CLayout* pLayoutWork = SearchLineByLayoutY( pArg->sDelRange.GetFrom().GetY2() );
 	if (pLayoutWork) {

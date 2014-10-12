@@ -28,12 +28,12 @@ public:
 	*/
 	CDlgInput1();
 	~CDlgInput1();
-	BOOL DoModal( HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, TCHAR*  );		// モードレスダイアログの表示
-	BOOL DoModal( HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, NOT_TCHAR*  );	// モードレスダイアログの表示
+	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, TCHAR*);		// モードレスダイアログの表示
+	BOOL DoModal(HINSTANCE, HWND, const TCHAR*, const TCHAR*, int, NOT_TCHAR*);	// モードレスダイアログの表示
 	/*
 	||  Attributes & Operations
 	*/
-	INT_PTR DispatchEvent( HWND, UINT, WPARAM, LPARAM );	// ダイアログのメッセージ処理
+	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// ダイアログのメッセージ処理
 
 	HINSTANCE	m_hInstance;	// アプリケーションインスタンスのハンドル
 	HWND		m_hwndParent;	// オーナーウィンドウのハンドル

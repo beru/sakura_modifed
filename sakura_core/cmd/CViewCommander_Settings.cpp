@@ -34,7 +34,7 @@
 
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutToolBar(), CEditWnd::EndLayoutBars() で行うように変更
 */
-void CViewCommander::Command_SHOWTOOLBAR( void )
+void CViewCommander::Command_SHOWTOOLBAR(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
@@ -56,7 +56,7 @@ void CViewCommander::Command_SHOWTOOLBAR( void )
 
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutFuncKey(), CEditWnd::EndLayoutBars() で行うように変更
 */
-void CViewCommander::Command_SHOWFUNCKEY( void )
+void CViewCommander::Command_SHOWFUNCKEY(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
@@ -81,7 +81,7 @@ void CViewCommander::Command_SHOWFUNCKEY( void )
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutTabBar(), CEditWnd::EndLayoutBars() で行うように変更
 	@date 2007.06.20 ryoji グループIDリセット
  */
-void CViewCommander::Command_SHOWTAB( void )
+void CViewCommander::Command_SHOWTAB(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
@@ -94,7 +94,7 @@ void CViewCommander::Command_SHOWTAB( void )
 		&& !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin
 	) {
 		GetEditWindow()->WindowTopMost(
-			( (DWORD)::GetWindowLongPtr( GetEditWindow()->GetHwnd(), GWL_EXSTYLE ) & WS_EX_TOPMOST )? 1: 2
+			((DWORD)::GetWindowLongPtr(GetEditWindow()->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2
 		);
 	}
 
@@ -113,7 +113,7 @@ void CViewCommander::Command_SHOWTAB( void )
 
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutStatusBar(), CEditWnd::EndLayoutBars() で行うように変更
 */
-void CViewCommander::Command_SHOWSTATUSBAR( void )
+void CViewCommander::Command_SHOWSTATUSBAR(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
@@ -132,20 +132,20 @@ void CViewCommander::Command_SHOWSTATUSBAR( void )
 
 
 // タイプ別設定一覧
-void CViewCommander::Command_TYPE_LIST( void )
+void CViewCommander::Command_TYPE_LIST(void)
 {
 	CDlgTypeList cDlgTypeList;
 	CDlgTypeList::SResult sResult;
 	sResult.cDocumentType = GetDocument()->m_cDocType.GetDocumentType();
 	sResult.bTempChange = true;
-	if (cDlgTypeList.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), &sResult )) {
+	if (cDlgTypeList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), &sResult)) {
 		//	Nov. 29, 2000 genta
 		//	一時的な設定適用機能を無理矢理追加
 		if (sResult.bTempChange) {
-			HandleCommand( F_CHANGETYPE, true, (LPARAM)sResult.cDocumentType.GetIndex() + 1, 0, 0, 0 );
+			HandleCommand(F_CHANGETYPE, true, (LPARAM)sResult.cDocumentType.GetIndex() + 1, 0, 0, 0);
 		}else {
 			// タイプ別設定
-			CEditApp::getInstance()->OpenPropertySheetTypes( -1, sResult.cDocumentType );
+			CEditApp::getInstance()->OpenPropertySheetTypes(-1, sResult.cDocumentType);
 		}
 	}
 	return;
@@ -153,7 +153,7 @@ void CViewCommander::Command_TYPE_LIST( void )
 
 
 //! タイプ別設定一時適用
-void CViewCommander::Command_CHANGETYPE( int nTypePlusOne )
+void CViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 {
 	CTypeConfig type = CTypeConfig(nTypePlusOne - 1);
 	if (nTypePlusOne == 0) {
@@ -170,22 +170,22 @@ void CViewCommander::Command_CHANGETYPE( int nTypePlusOne )
 
 
 // タイプ別設定
-void CViewCommander::Command_OPTION_TYPE( void )
+void CViewCommander::Command_OPTION_TYPE(void)
 {
-	CEditApp::getInstance()->OpenPropertySheetTypes( -1, GetDocument()->m_cDocType.GetDocumentType() );
+	CEditApp::getInstance()->OpenPropertySheetTypes(-1, GetDocument()->m_cDocType.GetDocumentType());
 }
 
 
 // 共通設定
-void CViewCommander::Command_OPTION( void )
+void CViewCommander::Command_OPTION(void)
 {
 	// 設定プロパティシート テスト用
-	CEditApp::getInstance()->OpenPropertySheet( -1 );
+	CEditApp::getInstance()->OpenPropertySheet(-1);
 }
 
 
 // フォント設定
-void CViewCommander::Command_FONT( void )
+void CViewCommander::Command_FONT(void)
 {
 	HWND hwndFrame = GetMainWindow();
 
@@ -198,7 +198,7 @@ void CViewCommander::Command_FONT( void )
 #else
 	bool bFixedFont = true;
 #endif
-	if (MySelectFont( &lf, &nPointSize, CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(), bFixedFont )) {
+	if (MySelectFont(&lf, &nPointSize, CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(), bFixedFont)) {
 		csView.m_lf = lf;
 		csView.m_nPointSize = nPointSize;
 
@@ -219,12 +219,12 @@ void CViewCommander::Command_FONT( void )
 		);
 
 		// キャレットの表示
-//		::HideCaret( GetHwnd() );
-//		::ShowCaret( GetHwnd() );
+//		::HideCaret(GetHwnd());
+//		::ShowCaret(GetHwnd());
 
 //		// アクティブにする
 //		// アクティブにする
-//		ActivateFrameWindow( hwndFrame );
+//		ActivateFrameWindow(hwndFrame);
 	}
 	return;
 }
@@ -238,13 +238,13 @@ void CViewCommander::Command_FONT( void )
 
 	@date 2013.04.10 novice 新規作成
 */
-void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
+void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 {
 	// The point sizes recommended by "The Windows Interface: An Application Design Guide", 1/10ポイント単位
 	static const INT sizeTable[] = { 8*10, 9*10, 10*10, (INT)(10.5*10), 11*10, 12*10, 14*10, 16*10, 18*10, 20*10, 22*10, 24*10, 26*10, 28*10, 36*10, 48*10, 72*10 };
 	auto& csView = GetDllShareData().m_Common.m_sView;
 	const LOGFONT& lf = (mode == 0 ? csView.m_lf
-		: GetEditWindow()->GetLogfont( mode == 2 ));
+		: GetEditWindow()->GetLogfont(mode == 2));
 	INT nPointSize;
 
 	// TrueTypeのみ対応
@@ -262,7 +262,7 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 	}else if (0 != shift) {
 		// 現在のフォントに対して、縮小or拡大したフォント選択する場合
 		nPointSize = (mode == 0 ? csView.m_nPointSize
-			: GetEditWindow()->GetFontPointSize( mode == 2 ));
+			: GetEditWindow()->GetFontPointSize(mode == 2));
 
 		// フォントの拡大or縮小するためのサイズ検索
 		for (int i = 0; i < _countof(sizeTable); i++) {
@@ -285,7 +285,7 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 	}else if (mode == 1) {
 		CTypeConfig nDocType = GetDocument()->m_cDocType.GetDocumentType();
 		STypeConfig* type = new STypeConfig();
-		if (!CDocTypeManager().GetTypeConfig( nDocType, *type )) {
+		if (!CDocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// 謎のエラー
 			return;
 		}
@@ -293,7 +293,7 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 		type->m_lf = lf;
 		type->m_lf.lfHeight = lfHeight;
 		type->m_nPointSize = nPointSize;
-		CDocTypeManager().SetTypeConfig( nDocType, *type );
+		CDocTypeManager().SetTypeConfig(nDocType, *type);
 		delete type;
 		nTypeIndex = nDocType.GetIndex();
 	}else if (mode == 2) {
@@ -318,7 +318,7 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 		);
 	}else if (mode == 2) {
 		// 自分だけ更新
-		GetDocument()->OnChangeSetting( false );
+		GetDocument()->OnChangeSetting(false);
 	}
 }
 
@@ -333,26 +333,26 @@ void CViewCommander::Command_SETFONTSIZE( int fontSize, int shift, int mode )
 	@note 変更する順序を変更したときはCEditWnd::InitMenu()も変更すること
 	@sa CEditWnd::InitMenu()
 */
-void CViewCommander::Command_WRAPWINDOWWIDTH( void )	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+void CViewCommander::Command_WRAPWINDOWWIDTH(void)	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
 	// Jan. 8, 2006 genta 判定処理をm_pCommanderView->GetWrapMode()へ移動
 	CEditView::TOGGLE_WRAP_ACTION nWrapMode;
 	CLayoutInt newKetas;
 	
-	nWrapMode = m_pCommanderView->GetWrapMode( &newKetas );
+	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
 	GetDocument()->m_nTextWrapMethodCur = WRAP_SETTING_WIDTH;
-	GetDocument()->m_bTextWrapMethodCurTemp = !( GetDocument()->m_nTextWrapMethodCur == m_pCommanderView->m_pTypeData->m_nTextWrapMethod );
+	GetDocument()->m_bTextWrapMethodCurTemp = !(GetDocument()->m_nTextWrapMethodCur == m_pCommanderView->m_pTypeData->m_nTextWrapMethod);
 	if (nWrapMode == CEditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
 	}
 
-	GetEditWindow()->ChangeLayoutParam( true, GetDocument()->m_cLayoutMgr.GetTabSpace(), newKetas );
+	GetEditWindow()->ChangeLayoutParam(true, GetDocument()->m_cLayoutMgr.GetTabSpace(), newKetas);
 	
 	//	Aug. 14, 2005 genta 共通設定へは反映させない
 //	m_pCommanderView->m_pTypeData->m_nMaxLineKetas = m_nViewColNum;
 
 //	2013.12.30 左隅に移動しないように
-//	m_pCommanderView->GetTextArea().SetViewLeftCol( CLayoutInt(0) );		// 表示域の一番左の桁(0開始)
+//	m_pCommanderView->GetTextArea().SetViewLeftCol(CLayoutInt(0));		// 表示域の一番左の桁(0開始)
 
 	// フォーカス移動時の再描画
 	m_pCommanderView->RedrawAll();
@@ -365,12 +365,12 @@ void CViewCommander::Command_WRAPWINDOWWIDTH( void )	//	Oct. 7, 2000 JEPRO WRAPW
 	@author	MIK
 	@date	2003/04/07
 */
-void CViewCommander::Command_Favorite( void )
+void CViewCommander::Command_Favorite(void)
 {
 	CDlgFavorite	cDlgFavorite;
 
 	// ダイアログを表示する
-	if (!cDlgFavorite.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument() )) {
+	if (!cDlgFavorite.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {
 		return;
 	}
 
@@ -391,7 +391,7 @@ void CViewCommander::Command_Favorite( void )
 	@date 2008.05.31 nasukoji	新規作成
 	@date 2009.08.28 nasukoji	テキストの最大幅を算出する
 */
-void CViewCommander::Command_TEXTWRAPMETHOD( int nWrapMethod )
+void CViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 {
 	CEditDoc* pcDoc = GetDocument();
 
@@ -412,7 +412,7 @@ void CViewCommander::Command_TEXTWRAPMETHOD( int nWrapMethod )
 
 	case WRAP_WINDOW_WIDTH:		// 右端で折り返す
 		// ウィンドウが左右に分割されている場合は左側のウィンドウ幅を使用する
-		nWidth = (Int)m_pCommanderView->ViewColNumToWrapColNum( GetEditWindow()->GetView(0).GetTextArea().m_nViewColNum );
+		nWidth = (Int)m_pCommanderView->ViewColNumToWrapColNum(GetEditWindow()->GetView(0).GetTextArea().m_nViewColNum);
 		break;
 
 	default:
@@ -422,15 +422,15 @@ void CViewCommander::Command_TEXTWRAPMETHOD( int nWrapMethod )
 	pcDoc->m_nTextWrapMethodCur = nWrapMethod;	// 設定を記憶
 
 	// 折り返し方法の一時設定適用／一時設定適用解除	// 2008.06.08 ryoji
-	pcDoc->m_bTextWrapMethodCurTemp = !( pcDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod == nWrapMethod );
+	pcDoc->m_bTextWrapMethodCurTemp = !(pcDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod == nWrapMethod);
 
 	// 折り返し位置を変更
-	GetEditWindow()->ChangeLayoutParam( false, pcDoc->m_cLayoutMgr.GetTabSpace(), (CLayoutInt)nWidth );
+	GetEditWindow()->ChangeLayoutParam(false, pcDoc->m_cLayoutMgr.GetTabSpace(), (CLayoutInt)nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (pcDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 		pcDoc->m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
-		GetEditWindow()->RedrawAllViews( NULL );		// スクロールバーの更新が必要なので再表示を実行する
+		GetEditWindow()->RedrawAllViews(NULL);		// スクロールバーの更新が必要なので再表示を実行する
 	}else {
 		pcDoc->m_cLayoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
 	}
@@ -445,7 +445,7 @@ void CViewCommander::Command_TEXTWRAPMETHOD( int nWrapMethod )
 		SELECT_COUNT_BY_CHAR ; 文字数でカウント
 		SELECT_COUNT_BY_BYTE ; バイト数でカウント
 */
-void CViewCommander::Command_SELECT_COUNT_MODE( int nMode )
+void CViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
 	//設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().m_Common.m_sStatusbar.m_bDispSelCountByByte;
@@ -455,17 +455,17 @@ void CViewCommander::Command_SELECT_COUNT_MODE( int nMode )
 		// 文字数⇔バイト数トグル
 		ESelectCountMode nCurrentMode;
 		if (*pnSelectCountMode == SELECT_COUNT_TOGGLE) {
-			nCurrentMode = ( GetDllShareData().m_Common.m_sStatusbar.m_bDispSelCountByByte ?
+			nCurrentMode = (GetDllShareData().m_Common.m_sStatusbar.m_bDispSelCountByByte ?
 								SELECT_COUNT_BY_BYTE :
-								SELECT_COUNT_BY_CHAR );
+								SELECT_COUNT_BY_CHAR);
 		}else {
 			nCurrentMode = *pnSelectCountMode;
 		}
-		*pnSelectCountMode = ( nCurrentMode == SELECT_COUNT_BY_BYTE ?
+		*pnSelectCountMode = (nCurrentMode == SELECT_COUNT_BY_BYTE ?
 								SELECT_COUNT_BY_CHAR :
-								SELECT_COUNT_BY_BYTE );
+								SELECT_COUNT_BY_BYTE);
 	}else if (nMode == SELECT_COUNT_BY_BYTE || nMode == SELECT_COUNT_BY_CHAR) {
-		*pnSelectCountMode = ( ESelectCountMode )nMode;
+		*pnSelectCountMode = (ESelectCountMode)nMode;
 	}
 }
 
@@ -473,14 +473,14 @@ void CViewCommander::Command_SELECT_COUNT_MODE( int nMode )
 /*!	@brief 引用符の設定
 	@date Jan. 29, 2005 genta 新規作成
 */
-void CViewCommander::Command_SET_QUOTESTRING( const wchar_t* quotestr )
+void CViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
 {
 	if (!quotestr)
 		return;
 
-	wcsncpy( GetDllShareData().m_Common.m_sFormat.m_szInyouKigou, quotestr,
-		_countof( GetDllShareData().m_Common.m_sFormat.m_szInyouKigou ));
+	wcsncpy(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou, quotestr,
+		_countof(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou));
 	
-	GetDllShareData().m_Common.m_sFormat.m_szInyouKigou[ _countof( GetDllShareData().m_Common.m_sFormat.m_szInyouKigou ) - 1 ] = L'\0';
+	GetDllShareData().m_Common.m_sFormat.m_szInyouKigou[ _countof(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou) - 1 ] = L'\0';
 }
 

@@ -43,9 +43,9 @@ class CSmartIndentIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	CSmartIndentIfObj( wchar_t ch )
-		: CWSHIfObj( L"Indent", false )
-		, m_wcChar( ch )
+	CSmartIndentIfObj(wchar_t ch)
+		: CWSHIfObj(L"Indent", false)
+		, m_wcChar(ch)
 	{
 	}
 
@@ -64,7 +64,7 @@ public:
 		return macroFuncInfoArr;
 	}
 	// 関数情報を取得する
-	MacroFuncInfoArray GetMacroFuncInfo() const{
+	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
 			//ID									関数名							引数										戻り値の型	m_pszData
 			{EFunctionCode(F_SI_GETCHAR),			LTEXT("GetChar"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, //押下したキーを取得する

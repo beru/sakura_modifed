@@ -58,15 +58,15 @@ int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 	else if (eColorIndex & COLORIDX_BLOCK_BIT)
 		return COLORIDX_COMMENT;
 	else if (eColorIndex & COLORIDX_REGEX_BIT)
-		return ToColorInfoArrIndex_RegularExpression( eColorIndex );
+		return ToColorInfoArrIndex_RegularExpression(eColorIndex);
 
 	assert(0); // ここには来ない
 	return COLORIDX_TEXT;
 }
 
 // カラー名＜＞インデックス番号の変換	//@@@ 2002.04.30
-int GetColorIndexByName( const TCHAR *name );
-const TCHAR* GetColorNameByIndex( int index );
+int GetColorIndexByName(const TCHAR *name);
+const TCHAR* GetColorNameByIndex(int index);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -157,7 +157,7 @@ public:
 	virtual bool EndColor(const CStringRef& cStr, int nPos) { return true; }
 	virtual bool Disp() const = 0;
 	// イベント
-	virtual void OnStartScanLogic(){}
+	virtual void OnStartScanLogic() {}
 
 	//! 設定更新
 	virtual void Update(void) {
@@ -167,7 +167,7 @@ public:
 
 	//#######ラップ
 	EColorIndexType GetStrategyColorSafe() const { if (this) return GetStrategyColor(); else return COLORIDX_TEXT; }
-	CLayoutColorInfo* GetStrategyColorInfoSafe() const{
+	CLayoutColorInfo* GetStrategyColorInfoSafe() const {
 		if (this) {
 			return GetStrategyColorInfo();
 		}
@@ -211,7 +211,7 @@ public:
 	*/
 	//@@@ 2002.09.22 YAZAKI
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
-	void CheckColorMODE( CColorStrategy** ppcColorStrategy, int nPos, const CStringRef& cLineStr );
+	void CheckColorMODE(CColorStrategy** ppcColorStrategy, int nPos, const CStringRef& cLineStr);
 
 	// 設定変更
 	void OnChangeSetting(void);

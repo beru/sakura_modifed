@@ -60,7 +60,7 @@ COleLibrary::COleLibrary()//:m_dwCount(0)	// 2009.01.08 ryoji m_dwCount削除
 COleLibrary::~COleLibrary()
 {
 // 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if( m_dwCount > 0 )
+//	if (m_dwCount > 0)
 //		::OleUninitialize();
 	return;
 }
@@ -69,30 +69,30 @@ COleLibrary::~COleLibrary()
 void COleLibrary::Initialize()
 {
 // 2009.01.08 ryoji OleInitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if( m_dwCount++ == 0 )
-//		::OleInitialize( NULL );
+//	if (m_dwCount++ == 0)
+//		::OleInitialize(NULL);
 	return;
 }
 
 void COleLibrary::UnInitialize()
 {
 // 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
-//	if( m_dwCount > 0 && --m_dwCount == 0 )
+//	if (m_dwCount > 0 && --m_dwCount == 0)
 //		::OleUninitialize();
 	return;
 }
 
 
-#define DECLARE_YB_INTERFACEIMPL( BASEINTERFACE ) \
+#define DECLARE_YB_INTERFACEIMPL(BASEINTERFACE) \
 template <> REFIID CYbInterfaceImpl<BASEINTERFACE>::m_owniid = IID_##BASEINTERFACE;
 
-DECLARE_YB_INTERFACEIMPL( IDataObject )
-DECLARE_YB_INTERFACEIMPL( IDropSource )
-DECLARE_YB_INTERFACEIMPL( IDropTarget )
-DECLARE_YB_INTERFACEIMPL( IEnumFORMATETC )
+DECLARE_YB_INTERFACEIMPL(IDataObject)
+DECLARE_YB_INTERFACEIMPL(IDropSource)
+DECLARE_YB_INTERFACEIMPL(IDropTarget)
+DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 
 
-CDropTarget::CDropTarget( CEditWnd* pCEditWnd )
+CDropTarget::CDropTarget(CEditWnd* pCEditWnd)
 {
 	m_pCEditWnd = pCEditWnd;	// 2008.06.20 ryoji
 	m_pCEditView = NULL;
@@ -100,7 +100,7 @@ CDropTarget::CDropTarget( CEditWnd* pCEditWnd )
 	return;
 }
 
-CDropTarget::CDropTarget( CEditView* pCEditView )
+CDropTarget::CDropTarget(CEditView* pCEditView)
 {
 	m_pCEditWnd = NULL;	// 2008.06.20 ryoji
 	m_pCEditView = pCEditView;
@@ -116,10 +116,10 @@ CDropTarget::~CDropTarget()
 }
 
 
-BOOL CDropTarget::Register_DropTarget( HWND hWnd )
+BOOL CDropTarget::Register_DropTarget(HWND hWnd)
 {
-	if (FAILED( ::RegisterDragDrop( hWnd, this ) )) {
-		TopWarningMessage( hWnd, LS(STR_ERR_DLGDRPTGT1) );
+	if (FAILED(::RegisterDragDrop(hWnd, this))) {
+		TopWarningMessage(hWnd, LS(STR_ERR_DLGDRPTGT1));
 		return FALSE;
 	}
 	m_hWnd_DropTarget = hWnd;
@@ -127,34 +127,34 @@ BOOL CDropTarget::Register_DropTarget( HWND hWnd )
 }
 
 
-BOOL CDropTarget::Revoke_DropTarget( void )
+BOOL CDropTarget::Revoke_DropTarget(void)
 {
 	BOOL bResult = TRUE;
 	if (m_hWnd_DropTarget != NULL) {
-		bResult = SUCCEEDED( ::RevokeDragDrop( m_hWnd_DropTarget ) );
+		bResult = SUCCEEDED(::RevokeDragDrop(m_hWnd_DropTarget));
 		m_hWnd_DropTarget = NULL;
 	}
 	return bResult;
 }
 
-STDMETHODIMP CDropTarget::DragEnter( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect )
+STDMETHODIMP CDropTarget::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	DEBUG_TRACE( _T("CDropTarget::DragEnter()\n") );
+	DEBUG_TRACE(_T("CDropTarget::DragEnter()\n"));
 	if (m_pCEditWnd) {	// 2008.06.20 ryoji
-		return m_pCEditWnd->DragEnter( pDataObject, dwKeyState, pt, pdwEffect );
+		return m_pCEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 	}
-	return m_pCEditView->DragEnter( pDataObject, dwKeyState, pt, pdwEffect );
+	return m_pCEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
-STDMETHODIMP CDropTarget::DragOver( DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect )
+STDMETHODIMP CDropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
 	if (m_pCEditWnd) {	// 2008.06.20 ryoji
-		return m_pCEditWnd->DragOver( dwKeyState, pt, pdwEffect );
+		return m_pCEditWnd->DragOver(dwKeyState, pt, pdwEffect);
 	}
-	return m_pCEditView->DragOver( dwKeyState, pt, pdwEffect );
+	return m_pCEditView->DragOver(dwKeyState, pt, pdwEffect);
 }
 
-STDMETHODIMP CDropTarget::DragLeave( void )
+STDMETHODIMP CDropTarget::DragLeave(void)
 {
 	if (m_pCEditWnd) {	// 2008.06.20 ryoji
 		return m_pCEditWnd->DragLeave();
@@ -163,16 +163,16 @@ STDMETHODIMP CDropTarget::DragLeave( void )
 }
 
 
-STDMETHODIMP CDropTarget::Drop( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect )
+STDMETHODIMP CDropTarget::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
 	if (m_pCEditWnd) {	// 2008.06.20 ryoji
-		return m_pCEditWnd->Drop( pDataObject, dwKeyState, pt, pdwEffect );
+		return m_pCEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 	}
-	return m_pCEditView->Drop( pDataObject, dwKeyState, pt, pdwEffect );
+	return m_pCEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
 
-STDMETHODIMP CDropSource::QueryContinueDrag( BOOL bEscapePressed, DWORD dwKeyState )
+STDMETHODIMP CDropSource::QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyState)
 {
 	if (bEscapePressed || (dwKeyState & (m_bLeft ? MK_RBUTTON : MK_LBUTTON))) {
 		return DRAGDROP_S_CANCEL;
@@ -183,7 +183,7 @@ STDMETHODIMP CDropSource::QueryContinueDrag( BOOL bEscapePressed, DWORD dwKeySta
 	return S_OK;
 }
 
-STDMETHODIMP CDropSource::GiveFeedback( DWORD dropEffect )
+STDMETHODIMP CDropSource::GiveFeedback(DWORD dropEffect)
 {
 	return DRAGDROP_S_USEDEFAULTCURSORS;
 }
@@ -196,7 +196,7 @@ STDMETHODIMP CDropSource::GiveFeedback( DWORD dropEffect )
 
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-void CDataObject::SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect )
+void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (m_pData != NULL) {
@@ -215,25 +215,25 @@ void CDataObject::SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect )
 		m_pData[0].cfFormat = CF_UNICODETEXT;
 		m_pData[0].size = (nTextLen + 1) * sizeof(wchar_t);
 		m_pData[0].data = new BYTE[m_pData[0].size];
-		memcpy_raw( m_pData[0].data, lpszText, nTextLen * sizeof(wchar_t) );
+		memcpy_raw(m_pData[0].data, lpszText, nTextLen * sizeof(wchar_t));
 		*((wchar_t*)m_pData[0].data + nTextLen) = L'\0';
 
 		i++;
 		m_pData[i].cfFormat = CF_TEXT;
-		m_pData[i].size = ::WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), NULL, 0, NULL, NULL );
+		m_pData[i].size = ::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), NULL, 0, NULL, NULL);
 		m_pData[i].data = new BYTE[m_pData[i].size];
-		::WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), (LPSTR)m_pData[i].data, m_pData[i].size, NULL, NULL );
+		::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), (LPSTR)m_pData[i].data, m_pData[i].size, NULL, NULL);
 
 		i++;
 		m_pData[i].cfFormat = CClipboard::GetSakuraFormat();
-		m_pData[i].size = sizeof(int) + nTextLen * sizeof( wchar_t );
+		m_pData[i].size = sizeof(int) + nTextLen * sizeof(wchar_t);
 		m_pData[i].data = new BYTE[m_pData[i].size];
 		*(int*)m_pData[i].data = nTextLen;
-		memcpy_raw( m_pData[i].data + sizeof(int), lpszText, nTextLen * sizeof( wchar_t ) );
+		memcpy_raw(m_pData[i].data + sizeof(int), lpszText, nTextLen * sizeof(wchar_t));
 
 		i++;
 		if (bColumnSelect) {
-			m_pData[i].cfFormat = (CLIPFORMAT)::RegisterClipboardFormat( _T("MSDEVColumnSelect") );
+			m_pData[i].cfFormat = (CLIPFORMAT)::RegisterClipboardFormat(_T("MSDEVColumnSelect"));
 			m_pData[i].size = 1;
 			m_pData[i].data = new BYTE[1];
 			m_pData[i].data[0] = '\0';
@@ -241,11 +241,11 @@ void CDataObject::SetText( LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect )
 	}
 }
 
-DWORD CDataObject::DragDrop( BOOL bLeft, DWORD dwEffects )
+DWORD CDataObject::DragDrop(BOOL bLeft, DWORD dwEffects)
 {
 	DWORD dwEffect;
-	CDropSource drop( bLeft );
-	if (SUCCEEDED( ::DoDragDrop( this, &drop, dwEffects, &dwEffect ) )) {
+	CDropSource drop(bLeft);
+	if (SUCCEEDED(::DoDragDrop(this, &drop, dwEffects, &dwEffect))) {
 		return dwEffect;
 	}
 	return DROPEFFECT_NONE;
@@ -254,7 +254,7 @@ DWORD CDataObject::DragDrop( BOOL bLeft, DWORD dwEffects )
 /** IDataObject::GetData
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-STDMETHODIMP CDataObject::GetData( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
+STDMETHODIMP CDataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm)
@@ -281,9 +281,9 @@ STDMETHODIMP CDataObject::GetData( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 		return DV_E_FORMATETC;
 
 	lpsm->tymed = TYMED_HGLOBAL;
-	lpsm->hGlobal = ::GlobalAlloc( GHND | GMEM_DDESHARE, m_pData[i].size );
-	memcpy_raw( ::GlobalLock( lpsm->hGlobal ), m_pData[i].data, m_pData[i].size );
-	::GlobalUnlock( lpsm->hGlobal );
+	lpsm->hGlobal = ::GlobalAlloc(GHND | GMEM_DDESHARE, m_pData[i].size);
+	memcpy_raw(::GlobalLock(lpsm->hGlobal), m_pData[i].data, m_pData[i].size);
+	::GlobalUnlock(lpsm->hGlobal);
 	lpsm->pUnkForRelease = NULL;
 
 	return S_OK;
@@ -292,7 +292,7 @@ STDMETHODIMP CDataObject::GetData( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 /** IDataObject::GetDataHere
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-STDMETHODIMP CDataObject::GetDataHere( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
+STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
 	//Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm || !lpsm->hGlobal)
@@ -315,11 +315,11 @@ STDMETHODIMP CDataObject::GetDataHere( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 	}
 	if (i == m_nFormat)
 		return DV_E_FORMATETC;
-	if (m_pData[i].size > ::GlobalSize( lpsm->hGlobal ))
+	if (m_pData[i].size > ::GlobalSize(lpsm->hGlobal))
 		return STG_E_MEDIUMFULL;
 
-	memcpy_raw( ::GlobalLock( lpsm->hGlobal ), m_pData[i].data, m_pData[i].size );
-	::GlobalUnlock( lpsm->hGlobal );
+	memcpy_raw(::GlobalLock(lpsm->hGlobal), m_pData[i].data, m_pData[i].size);
+	::GlobalUnlock(lpsm->hGlobal);
 
 	return S_OK;
 }
@@ -327,7 +327,7 @@ STDMETHODIMP CDataObject::GetDataHere( LPFORMATETC lpfe, LPSTGMEDIUM lpsm )
 /** IDataObject::QueryGetData
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-STDMETHODIMP CDataObject::QueryGetData( LPFORMATETC lpfe )
+STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpfe)
 {
 	if (!lpfe)
 		return E_INVALIDARG;
@@ -351,12 +351,12 @@ STDMETHODIMP CDataObject::QueryGetData( LPFORMATETC lpfe )
 	return S_OK;
 }
 
-STDMETHODIMP CDataObject::GetCanonicalFormatEtc( LPFORMATETC, LPFORMATETC )
+STDMETHODIMP CDataObject::GetCanonicalFormatEtc(LPFORMATETC, LPFORMATETC)
 {
 	return DATA_S_SAMEFORMATETC;
 }
 
-STDMETHODIMP CDataObject::SetData( LPFORMATETC, LPSTGMEDIUM, BOOL )
+STDMETHODIMP CDataObject::SetData(LPFORMATETC, LPSTGMEDIUM, BOOL)
 {
 	return E_NOTIMPL;
 }
@@ -364,7 +364,7 @@ STDMETHODIMP CDataObject::SetData( LPFORMATETC, LPSTGMEDIUM, BOOL )
 /** IDataObject::EnumFormatEtc
 	@date 2008.03.26 ryoji IEnumFORMATETCをサポート
 */
-STDMETHODIMP CDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
+STDMETHODIMP CDataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc)
 {
 	if (dwDirection != DATADIR_GET)
 		return S_FALSE;
@@ -372,17 +372,17 @@ STDMETHODIMP CDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppe
 	return *ppenumFormatetc? S_OK: S_FALSE;
 }
 
-STDMETHODIMP CDataObject::DAdvise( LPFORMATETC, DWORD, LPADVISESINK, LPDWORD )
+STDMETHODIMP CDataObject::DAdvise(LPFORMATETC, DWORD, LPADVISESINK, LPDWORD)
 {
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-STDMETHODIMP CDataObject::DUnadvise( DWORD )
+STDMETHODIMP CDataObject::DUnadvise(DWORD)
 {
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-STDMETHODIMP CDataObject::EnumDAdvise( LPENUMSTATDATA* )
+STDMETHODIMP CDataObject::EnumDAdvise(LPENUMSTATDATA*)
 {
 	return OLE_E_ADVISENOTSUPPORTED;
 }

@@ -39,7 +39,7 @@ inline CEditWnd* CViewCommander::GetEditWindow()
 }
 inline HWND CViewCommander::GetMainWindow()
 {
-	return ::GetParent( m_pCommanderView->m_hwndParent );
+	return ::GetParent(m_pCommanderView->m_hwndParent);
 }
 inline COpeBlk* CViewCommander::GetOpeBlk()
 {

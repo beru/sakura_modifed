@@ -36,10 +36,10 @@ public:
 	CRecentCmd();
 
 	// オーバーライド
-	int				CompareItem( const CCmdString* p1, LPCTSTR p2 ) const;
-	void			CopyItem( CCmdString* dst, LPCTSTR src ) const;
-	const TCHAR*	GetItemText( int nIndex ) const;
-	bool			DataToReceiveType( LPCTSTR* dst, const CCmdString* src ) const;
-	bool			TextToDataType( CCmdString* dst, LPCTSTR pszText ) const;
+	int				CompareItem(const CCmdString* p1, LPCTSTR p2) const;
+	void			CopyItem(CCmdString* dst, LPCTSTR src) const;
+	const TCHAR*	GetItemText(int nIndex) const;
+	bool			DataToReceiveType(LPCTSTR* dst, const CCmdString* src) const;
+	bool			TextToDataType(CCmdString* dst, LPCTSTR pszText) const;
 };
 

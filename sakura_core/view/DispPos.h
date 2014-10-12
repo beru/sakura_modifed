@@ -61,7 +61,7 @@ public:
 	}
 
 	// 進む
-	void ForwardDrawCol (int nColOffset ) { m_ptDrawLayout.x += nColOffset; }
+	void ForwardDrawCol (int nColOffset) { m_ptDrawLayout.x += nColOffset; }
 	void ForwardDrawLine(int nOffsetLine) { m_ptDrawLayout.y += nOffsetLine; }
 
 	// リセット
@@ -79,7 +79,7 @@ public:
 	void SetLayoutLineRef(CLayoutInt nOffsetLine) {
 		m_nLineRef = nOffsetLine;
 		// キャッシュ更新
-		m_pcLayoutRef = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( m_nLineRef );
+		m_pcLayoutRef = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(m_nLineRef);
 	}
 	void ForwardLayoutLineRef(int nOffsetLine);
 

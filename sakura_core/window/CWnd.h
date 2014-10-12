@@ -34,7 +34,7 @@
 */
 class CWnd {
 protected:
-	friend LRESULT CALLBACK CWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+	friend LRESULT CALLBACK CWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 public:
 	// Constructors
 	CWnd(const TCHAR* pszInheritanceAppend = _T(""));
@@ -68,45 +68,45 @@ public:
 		HMENU		hMenu			// handle to menu, or child-window identifier
 	);
 
-	virtual LRESULT DispatchEvent( HWND, UINT, WPARAM, LPARAM ); // メッセージ配送
+	virtual LRESULT DispatchEvent(HWND, UINT, WPARAM, LPARAM); // メッセージ配送
 protected:
 	// 仮想関数
-	virtual LRESULT DispatchEvent_WM_APP( HWND, UINT, WPARAM, LPARAM );	// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
-	virtual void PreviCreateWindow( void ) {return;} // ウィンドウ作成前の処理(クラス登録前) ( virtual )
-	virtual void AfterCreateWindow( void ) {::ShowWindow( m_hWnd, SW_SHOW );} // ウィンドウ作成後の処理 ( virtual )
+	virtual LRESULT DispatchEvent_WM_APP(HWND, UINT, WPARAM, LPARAM);	// アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
+	virtual void PreviCreateWindow(void) {return;} // ウィンドウ作成前の処理(クラス登録前) (virtual)
+	virtual void AfterCreateWindow(void) {::ShowWindow(m_hWnd, SW_SHOW);} // ウィンドウ作成後の処理 (virtual)
 
 	// 仮想関数 メッセージ処理(デフォルト動作)
-	#define DECLH(method) LRESULT method( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) {return CallDefWndProc( hwnd, msg, wp, lp );}
-	virtual DECLH( OnCreate			);	// WM_CREATE
-	virtual DECLH( OnCommand		);	// WM_COMMAND
-	virtual DECLH( OnPaint			);	// WM_PAINT
-	virtual DECLH( OnLButtonDown	);	// WM_LBUTTONDOWN
-	virtual DECLH( OnLButtonUp		);	// WM_LBUTTONUP
-	virtual DECLH( OnLButtonDblClk	);	// WM_LBUTTONDBLCLK
-	virtual DECLH( OnRButtonDown	);	// WM_RBUTTONDOWN
-	virtual DECLH( OnRButtonUp		);	// WM_RBUTTONUP
-	virtual DECLH( OnRButtonDblClk	);	// WM_RBUTTONDBLCLK
-	virtual DECLH( OnMButtonDown	);	// WM_MBUTTONDOWN
-	virtual DECLH( OnMButtonUp		);	// WM_MBUTTONUP
-	virtual DECLH( OnMButtonDblClk	);	// WM_MBUTTONDBLCLK
-	virtual DECLH( OnMouseMove		);	// WM_MOUSEMOVE
-	virtual DECLH( OnMouseWheel		);	// WM_MOUSEWHEEL
-	virtual DECLH( OnMouseHWheel	);	// WM_MOUSEHWHEEL
-	virtual DECLH( OnTimer			);	// WM_TIMER
-	virtual DECLH( OnSize			);	// WM_SIZE
-	virtual DECLH( OnMove			);	// WM_MOVE
-	virtual DECLH( OnClose			);	// WM_CLOSE
-	virtual DECLH( OnDestroy		);	// WM_DSESTROY
-	virtual DECLH( OnQueryEndSession);	// WM_QUERYENDSESSION
+	#define DECLH(method) LRESULT method(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {return CallDefWndProc(hwnd, msg, wp, lp);}
+	virtual DECLH(OnCreate			);	// WM_CREATE
+	virtual DECLH(OnCommand			);	// WM_COMMAND
+	virtual DECLH(OnPaint			);	// WM_PAINT
+	virtual DECLH(OnLButtonDown		);	// WM_LBUTTONDOWN
+	virtual DECLH(OnLButtonUp		);	// WM_LBUTTONUP
+	virtual DECLH(OnLButtonDblClk	);	// WM_LBUTTONDBLCLK
+	virtual DECLH(OnRButtonDown		);	// WM_RBUTTONDOWN
+	virtual DECLH(OnRButtonUp		);	// WM_RBUTTONUP
+	virtual DECLH(OnRButtonDblClk	);	// WM_RBUTTONDBLCLK
+	virtual DECLH(OnMButtonDown		);	// WM_MBUTTONDOWN
+	virtual DECLH(OnMButtonUp		);	// WM_MBUTTONUP
+	virtual DECLH(OnMButtonDblClk	);	// WM_MBUTTONDBLCLK
+	virtual DECLH(OnMouseMove		);	// WM_MOUSEMOVE
+	virtual DECLH(OnMouseWheel		);	// WM_MOUSEWHEEL
+	virtual DECLH(OnMouseHWheel		);	// WM_MOUSEHWHEEL
+	virtual DECLH(OnTimer			);	// WM_TIMER
+	virtual DECLH(OnSize			);	// WM_SIZE
+	virtual DECLH(OnMove			);	// WM_MOVE
+	virtual DECLH(OnClose			);	// WM_CLOSE
+	virtual DECLH(OnDestroy			);	// WM_DSESTROY
+	virtual DECLH(OnQueryEndSession);	// WM_QUERYENDSESSION
 
-	virtual DECLH( OnMeasureItem	);	// WM_MEASUREITEM
-	virtual DECLH( OnMenuChar		);	// WM_MENUCHAR
-	virtual DECLH( OnNotify			);	// WM_NOTIFY	//@@@ 2003.05.31 MIK
-	virtual DECLH( OnDrawItem		);	// WM_DRAWITEM	// 2006.02.01 ryoji
-	virtual DECLH( OnCaptureChanged	);	// WM_CAPTURECHANGED	// 2006.11.30 ryoji
+	virtual DECLH(OnMeasureItem		);	// WM_MEASUREITEM
+	virtual DECLH(OnMenuChar		);	// WM_MENUCHAR
+	virtual DECLH(OnNotify			);	// WM_NOTIFY	//@@@ 2003.05.31 MIK
+	virtual DECLH(OnDrawItem		);	// WM_DRAWITEM	// 2006.02.01 ryoji
+	virtual DECLH(OnCaptureChanged	);	// WM_CAPTURECHANGED	// 2006.11.30 ryoji
 
 	// デフォルトメッセージ処理
-	virtual LRESULT CallDefWndProc( HWND, UINT, WPARAM, LPARAM );
+	virtual LRESULT CallDefWndProc(HWND, UINT, WPARAM, LPARAM);
 
 public:
 	// インターフェース

@@ -28,10 +28,10 @@ public:
 	/*
 	||  Constructors
 	*/
-	CWaitCursor( HWND, bool bEnable = true );
+	CWaitCursor(HWND, bool bEnable = true);
 	~CWaitCursor();
 
-	bool IsEnable(){ return m_bEnable; }
+	bool IsEnable() { return m_bEnable; }
 private: // 2002/2/10 aroka
 	HCURSOR	m_hCursor;
 	HCURSOR	m_hCursorOld;

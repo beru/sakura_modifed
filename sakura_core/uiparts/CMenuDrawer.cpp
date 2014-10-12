@@ -43,15 +43,15 @@
 
 
 #if 0 // 未使用
-void FillSolidRect( HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
+void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 {
 //	ASSERT_VALID(this);
 //	ASSERT(m_hDC != NULL);
 
 	RECT rect;
-	::SetBkColor( hdc, clr );
-	::SetRect( &rect, x, y, x + cx, y + cy );
-	::ExtTextOutW_AnyBuild( hdc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL );
+	::SetBkColor(hdc, clr);
+	::SetRect(&rect, x, y, x + cx, y + cy);
+	::ExtTextOutW_AnyBuild(hdc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 }
 #endif
 
@@ -651,19 +651,19 @@ CMenuDrawer::CMenuDrawer()
 /* 481 */		F_DISABLE			/*, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */	//最終行用ダミー(Jepro note: 最終行末にはカンマを付けないこと)
 
 	};
-	int tbd_num = _countof( tbd );
+	int tbd_num = _countof(tbd);
 
 	// m_tbMyButton[0]にはセパレータが入っているため、アイコン番号とボタン番号は１つずれる
 	const int INDEX_GAP = 1;
 	const int myButtonEnd = tbd_num + INDEX_GAP;
 	// 定数の整合性確認
 	// アイコン番号
-	assert_warning( tbd[TOOLBAR_ICON_MACRO_INTERNAL      - INDEX_GAP] == F_MACRO_EXTRA );
-	assert_warning( tbd[TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - INDEX_GAP] == F_PLUGCOMMAND );
+	assert_warning(tbd[TOOLBAR_ICON_MACRO_INTERNAL      - INDEX_GAP] == F_MACRO_EXTRA);
+	assert_warning(tbd[TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - INDEX_GAP] == F_PLUGCOMMAND);
 	// コマンド番号
-	assert_warning( tbd[TOOLBAR_BUTTON_F_TOOLBARWRAP     - INDEX_GAP] == F_TOOLBARWRAP );
-	m_tbMyButton.resize( tbd_num + INDEX_GAP );
-	SetTBBUTTONVal( &m_tbMyButton[0], -1, F_SEPARATOR, 0, TBSTYLE_SEP, 0, 0 );	//セパレータ	// 2007.11.02 ryoji アイコンの未定義化(-1)
+	assert_warning(tbd[TOOLBAR_BUTTON_F_TOOLBARWRAP     - INDEX_GAP] == F_TOOLBARWRAP);
+	m_tbMyButton.resize(tbd_num + INDEX_GAP);
+	SetTBBUTTONVal(&m_tbMyButton[0], -1, F_SEPARATOR, 0, TBSTYLE_SEP, 0, 0);	//セパレータ	// 2007.11.02 ryoji アイコンの未定義化(-1)
 
 	// 2010.06.23 Moca ループインデックスの基準をm_tbMyButtonに変更
 	for (int i = INDEX_GAP; i < myButtonEnd; i++) {
@@ -717,7 +717,7 @@ CMenuDrawer::CMenuDrawer()
 	if (MAX_CUSTMACRO_ICO < MAX_CUSTMACRO) {
 		const int nAddFuncs = MAX_CUSTMACRO - MAX_CUSTMACRO_ICO;
 		const int nBaseIndex = m_tbMyButton.size();
-		m_tbMyButton.resize( m_tbMyButton.size() + nAddFuncs );
+		m_tbMyButton.resize(m_tbMyButton.size() + nAddFuncs);
 		for (int k = 0; k < nAddFuncs; k++) {
 			const int macroFuncCode = F_USERMACRO_0 + MAX_CUSTMACRO_ICO + k;
 			SetTBBUTTONVal(
@@ -736,14 +736,14 @@ CMenuDrawer::CMenuDrawer()
 CMenuDrawer::~CMenuDrawer()
 {
 	if (m_hFontMenu) {
-		::DeleteObject( m_hFontMenu );
+		::DeleteObject(m_hFontMenu);
 		m_hFontMenu = NULL;
 	}
 	DeleteCompDC();
 	return;
 }
 
-void CMenuDrawer::Create( HINSTANCE hInstance, HWND hWndOwner, CImageListMgr* pcIcons )
+void CMenuDrawer::Create(HINSTANCE hInstance, HWND hWndOwner, CImageListMgr* pcIcons)
 {
 	m_hInstance = hInstance;
 	m_hWndOwner = hWndOwner;
@@ -753,7 +753,7 @@ void CMenuDrawer::Create( HINSTANCE hInstance, HWND hWndOwner, CImageListMgr* pc
 }
 
 
-void CMenuDrawer::ResetContents( void )
+void CMenuDrawer::ResetContents(void)
 {
 	LOGFONT	lf;
 	m_menuItems.clear();
@@ -761,15 +761,15 @@ void CMenuDrawer::ResetContents( void )
 	NONCLIENTMETRICS ncm = {0};
 
 	// 以前のプラットフォームに WINVER >= 0x0600 で定義される構造体のフルサイズを渡すと失敗する	// 2007.12.21 ryoji
-	ncm.cbSize = CCSIZEOF_STRUCT( NONCLIENTMETRICS, lfMessageFont );
-	::SystemParametersInfo( SPI_GETNONCLIENTMETRICS, ncm.cbSize, (PVOID)&ncm, 0 );
+	ncm.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
+	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm.cbSize, (PVOID)&ncm, 0);
 
 	if (m_hFontMenu) {
-		::DeleteObject( m_hFontMenu );
+		::DeleteObject(m_hFontMenu);
 		m_hFontMenu = NULL;
 	}
 	lf = ncm.lfMenuFont;
-	m_hFontMenu = ::CreateFontIndirect( &lf );
+	m_hFontMenu = ::CreateFontIndirect(&lf);
 	m_nMenuFontHeight = lf.lfHeight;
 	if (m_nMenuFontHeight < 0) {
 		m_nMenuFontHeight = -m_nMenuFontHeight;
@@ -814,10 +814,10 @@ void CMenuDrawer::MyAppendMenu(
 
 	szLabel[0] = _T('\0');
 	if (pszLabel) {
-		_tcsncpy( szLabel, pszLabel, _countof( szLabel ) - 1 );
-		szLabel[ _countof( szLabel ) - 1 ] = _T('\0');
+		_tcsncpy(szLabel, pszLabel, _countof(szLabel) - 1);
+		szLabel[ _countof(szLabel) - 1 ] = _T('\0');
 	}
-	auto_strcpy( szKey, pszKey); 
+	auto_strcpy(szKey, pszKey); 
 	if (nFuncId != 0) {
 		/* メニューラベルの作成 */
 		CKeyBind::GetMenuLabel(
@@ -828,14 +828,14 @@ void CMenuDrawer::MyAppendMenu(
 			szLabel,
 			szKey,
 			bAddKeyStr
-		 );
+		);
 
 		/* アイコン用ビットマップを持つものは、オーナードロウにする */
 		{
 			MyMenuItemInfo item;
 			item.m_nBitmapIdx = -1;
 			item.m_nFuncId = nFuncId;
-			item.m_cmemLabel.SetString( szLabel );
+			item.m_cmemLabel.SetString(szLabel);
 			// メニュー項目をオーナー描画にして、アイコンを表示する
 			// 2010.03.29 アクセスキーの分を詰めるためいつもオーナードローにする。ただしVista未満限定
 			// Vista以上ではメニューもテーマが適用されるので、オーナードローにすると見た目がXP風になってしまう。
@@ -843,8 +843,8 @@ void CMenuDrawer::MyAppendMenu(
 				nFlagAdd = MF_OWNERDRAW;
 			}
 			/* 機能のビットマップの情報を覚えておく */
-			item.m_nBitmapIdx = GetIconIdByFuncId( nForceIconId );
-			m_menuItems.push_back( item );
+			item.m_nBitmapIdx = GetIconIdByFuncId(nForceIconId);
+			m_menuItems.push_back(item);
 		}
 	}else {
 #ifdef DRAW_MENU_ICON_BACKGROUND_3DFACE
@@ -863,15 +863,15 @@ void CMenuDrawer::MyAppendMenu(
 
 	mii.fMask = MIIM_CHECKMARKS | MIIM_DATA | MIIM_ID | MIIM_STATE | MIIM_SUBMENU | MIIM_TYPE;
 	mii.fType = 0;
-	if (MF_OWNERDRAW	& ( nFlag | nFlagAdd )) mii.fType |= MFT_OWNERDRAW;
-	if (MF_SEPARATOR	& ( nFlag | nFlagAdd )) mii.fType |= MFT_SEPARATOR;
-	if (MF_STRING		& ( nFlag | nFlagAdd )) mii.fType |= MFT_STRING;
-	if (MF_MENUBREAK	& ( nFlag | nFlagAdd )) mii.fType |= MFT_MENUBREAK;
-	if (MF_MENUBARBREAK	& ( nFlag | nFlagAdd )) mii.fType |= MFT_MENUBARBREAK;
+	if (MF_OWNERDRAW	& (nFlag | nFlagAdd)) mii.fType |= MFT_OWNERDRAW;
+	if (MF_SEPARATOR	& (nFlag | nFlagAdd)) mii.fType |= MFT_SEPARATOR;
+	if (MF_STRING		& (nFlag | nFlagAdd)) mii.fType |= MFT_STRING;
+	if (MF_MENUBREAK	& (nFlag | nFlagAdd)) mii.fType |= MFT_MENUBREAK;
+	if (MF_MENUBARBREAK	& (nFlag | nFlagAdd)) mii.fType |= MFT_MENUBARBREAK;
 
 	mii.fState = 0;
-	if (MF_GRAYED		& ( nFlag | nFlagAdd )) mii.fState |= MFS_GRAYED;
-	if (MF_CHECKED		& ( nFlag | nFlagAdd )) mii.fState |= MFS_CHECKED;
+	if (MF_GRAYED		& (nFlag | nFlagAdd)) mii.fState |= MFS_GRAYED;
+	if (MF_CHECKED		& (nFlag | nFlagAdd)) mii.fState |= MFS_CHECKED;
 
 	mii.wID = nFuncId;
 	mii.hSubMenu = (nFlag&MF_POPUP)?((HMENU)nFuncId):NULL;
@@ -882,7 +882,7 @@ void CMenuDrawer::MyAppendMenu(
 	mii.cch = 0;
 
 	// メニュー内の指定された位置に、新しいメニュー項目を挿入します。
-	::InsertMenuItem( hMenu, 0xFFFFFFFF, TRUE, &mii );
+	::InsertMenuItem(hMenu, 0xFFFFFFFF, TRUE, &mii);
 	return;
 }
 
@@ -890,7 +890,7 @@ void CMenuDrawer::MyAppendMenu(
 /*
 	ツールバー番号をボタン配列のindexに変換する
 */
-inline int CMenuDrawer::ToolbarNoToIndex( int nToolbarNo ) const
+inline int CMenuDrawer::ToolbarNoToIndex(int nToolbarNo) const
 {
 	if (nToolbarNo < 0) {
 		return -1;
@@ -900,15 +900,15 @@ inline int CMenuDrawer::ToolbarNoToIndex( int nToolbarNo ) const
 		return nToolbarNo;
 	}
 	int nFuncID = nToolbarNo;
-	return FindIndexFromCommandId( nFuncID, false );
+	return FindIndexFromCommandId(nFuncID, false);
 }
  
 /*
 	ツールバー番号からアイコン番号を取得
 */
-inline int CMenuDrawer::GetIconIdByFuncId( int nFuncID ) const
+inline int CMenuDrawer::GetIconIdByFuncId(int nFuncID) const
 {
-	int index = FindIndexFromCommandId( nFuncID, false );
+	int index = FindIndexFromCommandId(nFuncID, false);
 	if (index < 0) {
 		return -1;
 	}
@@ -921,7 +921,7 @@ inline int CMenuDrawer::GetIconIdByFuncId( int nFuncID ) const
 	@retval 0  機能がない場合
 	@retval 1 <= val 機能のメニュー幅/セパレータの場合はダミーの値
 */
-int CMenuDrawer::MeasureItem( int nFuncID, int* pnItemHeight )
+int CMenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 {
 	const TCHAR* pszLabel;
 	CMyRect rc, rcSp;
@@ -932,18 +932,18 @@ int CMenuDrawer::MeasureItem( int nFuncID, int* pnItemHeight )
 		// セパレータ。フォントの方の通常項目の半分の高さ
 		*pnItemHeight = m_nMenuFontHeight / 2;
 		return 30; // ダミーの幅
-	}else if (!( pszLabel = GetLabel( nFuncID ) )) {
+	}else if (!(pszLabel = GetLabel(nFuncID))) {
 		*pnItemHeight = m_nMenuHeight;
 		return 0;
 	}
 	*pnItemHeight = m_nMenuHeight;
 
-	hdc = ::GetDC( m_hWndOwner );
-	hFontOld = (HFONT)::SelectObject( hdc, m_hFontMenu );
+	hdc = ::GetDC(m_hWndOwner);
+	hFontOld = (HFONT)::SelectObject(hdc, m_hFontMenu);
 	// DT_EXPANDTABSをやめる
-	::DrawText( hdc, pszLabel, -1, &rc, DT_SINGLELINE | DT_VCENTER | DT_CALCRECT );
-	::SelectObject( hdc, hFontOld );
-	::ReleaseDC( m_hWndOwner, hdc );
+	::DrawText(hdc, pszLabel, -1, &rc, DT_SINGLELINE | DT_VCENTER | DT_CALCRECT);
+	::SelectObject(hdc, hFontOld);
+	::ReleaseDC(m_hWndOwner, hdc);
 
 //	*pnItemHeight = 20;
 //	*pnItemHeight = 2 + 15 + 1;
@@ -966,7 +966,7 @@ int CMenuDrawer::MeasureItem( int nFuncID, int* pnItemHeight )
 	@date 2010.07.24 Moca アイコン部分をボタン色にしてフラット表示にするなどの変更
 		大きいフォント、黒背景対応
 */
-void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
+void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 {
 	int			j;
 	int			nItemStrLen;
@@ -1003,13 +1003,13 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			if (m_hCompDC) {
 				DeleteCompDC();
 			}
-			hdc = m_hCompDC  = ::CreateCompatibleDC( hdcOrg );
-			m_hCompBitmap    = ::CreateCompatibleBitmap( hdcOrg, nTargetWidth + 20, nTargetHeight + 4 );
-			m_hCompBitmapOld = (HBITMAP)::SelectObject( hdc, m_hCompBitmap );
+			hdc = m_hCompDC  = ::CreateCompatibleDC(hdcOrg);
+			m_hCompBitmap    = ::CreateCompatibleBitmap(hdcOrg, nTargetWidth + 20, nTargetHeight + 4);
+			m_hCompBitmapOld = (HBITMAP)::SelectObject(hdc, m_hCompBitmap);
 			m_nCompBitmapWidth  = nTargetWidth + 20;
 			m_nCompBitmapHeight = nTargetHeight + 4;
 		}
-		::SetWindowOrgEx( hdc, lpdis->rcItem.left, lpdis->rcItem.top, NULL );
+		::SetWindowOrgEx(hdc, lpdis->rcItem.left, lpdis->rcItem.top, NULL);
 	}else {
 		hdc = lpdis->hDC;
 	}
@@ -1019,17 +1019,17 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 	// アイコン部分の背景を灰色にする
 	if (bMenuIconDraw) {
 		const int nXIconMenu = lpdis->rcItem.left + nIndentLeft - 3 - 3;
-		hBrush = ::GetSysColorBrush( COLOR_MENU );
+		hBrush = ::GetSysColorBrush(COLOR_MENU);
 		RECT rcFillMenuBack = lpdis->rcItem;
 		rcFillMenuBack.left = nXIconMenu;
-		::FillRect( hdc, &rcFillMenuBack, hBrush );
+		::FillRect(hdc, &rcFillMenuBack, hBrush);
 
-//		hBrush = ::GetSysColorBrush( COLOR_3DFACE );
-		COLORREF colMenu   = ::GetSysColor( COLOR_MENU );
-		COLORREF colFace = ::GetSysColor( COLOR_3DFACE );
+//		hBrush = ::GetSysColorBrush(COLOR_3DFACE);
+		COLORREF colMenu   = ::GetSysColor(COLOR_MENU);
+		COLORREF colFace = ::GetSysColor(COLOR_3DFACE);
 		COLORREF colIconBack;
 		// 明度らしきもの
-		if ( 64 < t_abs(t_max(t_max(GetRValue(colFace),GetGValue(colFace)),GetBValue(colFace))
+		if (64 < t_abs(t_max(t_max(GetRValue(colFace),GetGValue(colFace)),GetBValue(colFace))
 			         - t_max(t_max(GetRValue(colMenu),GetGValue(colMenu)),GetBValue(colMenu)))
 		) {
 			colIconBack = colFace;
@@ -1040,26 +1040,26 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			BYTE valB = ((GetBValue(colFace) * 7 + GetBValue(colMenu) * 3) / 10);
 			colIconBack = RGB(valR, valG, valB);
 		}
-		HBRUSH hbr = ::CreateSolidBrush( colIconBack );
+		HBRUSH hbr = ::CreateSolidBrush(colIconBack);
 		
 		RECT rcIconBk = lpdis->rcItem;
 		rcIconBk.right = nXIconMenu;
-		::FillRect( hdc, &rcIconBk, hbr );
-		::DeleteObject( hbr );
+		::FillRect(hdc, &rcIconBk, hbr);
+		::DeleteObject(hbr);
 
 		// アイコンとテキストの間に縦線を描画する
 		int nSepColor = (::GetSysColor(COLOR_3DSHADOW) != ::GetSysColor(COLOR_MENU) ? COLOR_3DSHADOW : COLOR_3DHIGHLIGHT);
-		HPEN hPen = ::CreatePen( PS_SOLID, 1, ::GetSysColor(nSepColor) );
-		HPEN hPenOld = (HPEN)::SelectObject( hdc, hPen );
-		::MoveToEx( hdc, lpdis->rcItem.left + nIndentLeft - 3 - 3, lpdis->rcItem.top, NULL );
-		::LineTo(   hdc, lpdis->rcItem.left + nIndentLeft - 3 - 3, lpdis->rcItem.bottom );
-		::SelectObject( hdc, hPenOld );
-		::DeleteObject( hPen );
+		HPEN hPen = ::CreatePen(PS_SOLID, 1, ::GetSysColor(nSepColor));
+		HPEN hPenOld = (HPEN)::SelectObject(hdc, hPen);
+		::MoveToEx(hdc, lpdis->rcItem.left + nIndentLeft - 3 - 3, lpdis->rcItem.top, NULL);
+		::LineTo(  hdc, lpdis->rcItem.left + nIndentLeft - 3 - 3, lpdis->rcItem.bottom);
+		::SelectObject(hdc, hPenOld);
+		::DeleteObject(hPen);
 
 	}else {
 		// アイテム矩形塗りつぶし
-		hBrush = ::GetSysColorBrush( COLOR_MENU );
-		::FillRect( hdc, &lpdis->rcItem, hBrush );
+		hBrush = ::GetSysColorBrush(COLOR_MENU);
+		::FillRect(hdc, &lpdis->rcItem, hBrush);
 	}
 	
 	if (lpdis->itemID == F_0) {
@@ -1070,36 +1070,36 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 #else
 		int nSepColor = (::GetSysColor(COLOR_3DSHADOW) != ::GetSysColor(COLOR_MENU) ? COLOR_3DSHADOW : COLOR_3DHIGHLIGHT);
 #endif
-		HPEN hPen = ::CreatePen( PS_SOLID, 1, ::GetSysColor(nSepColor) );
-		HPEN hPenOld = (HPEN)::SelectObject( hdc, hPen );
-		::MoveToEx( hdc, lpdis->rcItem.left + (bMenuIconDraw ? nIndentLeft : 3), y, NULL );
-		::LineTo(   hdc, lpdis->rcItem.right - 2, y );
+		HPEN hPen = ::CreatePen(PS_SOLID, 1, ::GetSysColor(nSepColor));
+		HPEN hPenOld = (HPEN)::SelectObject(hdc, hPen);
+		::MoveToEx(hdc, lpdis->rcItem.left + (bMenuIconDraw ? nIndentLeft : 3), y, NULL);
+		::LineTo(  hdc, lpdis->rcItem.right - 2, y);
 #ifdef DRAW_MENU_3DSTYLE
-		HPEN hPen3d = ::CreatePen( PS_SOLID, 1, ::GetSysColor(COLOR_3DHIGHLIGHT) );
-		(void)::SelectObject( hdc, hPen3d );
-		::MoveToEx( hdc, lpdis->rcItem.left + (bMenuIconDraw ? nIndentLeft - 3: 3), y + 1, NULL );
-		::LineTo(   hdc, lpdis->rcItem.right - 2, y + 1 );
+		HPEN hPen3d = ::CreatePen(PS_SOLID, 1, ::GetSysColor(COLOR_3DHIGHLIGHT));
+		(void)::SelectObject(hdc, hPen3d);
+		::MoveToEx(hdc, lpdis->rcItem.left + (bMenuIconDraw ? nIndentLeft - 3: 3), y + 1, NULL);
+		::LineTo(  hdc, lpdis->rcItem.right - 2, y + 1);
 #endif
-		::SelectObject( hdc, hPenOld );
-		::DeleteObject( hPen );
+		::SelectObject(hdc, hPenOld);
+		::DeleteObject(hPen);
 		
 		if (bBackSurface) {
-			::BitBlt( hdcOrg, lpdis->rcItem.left, lpdis->rcItem.top, nTargetWidth, nTargetHeight,
-				hdc, lpdis->rcItem.left, lpdis->rcItem.top, SRCCOPY );
+			::BitBlt(hdcOrg, lpdis->rcItem.left, lpdis->rcItem.top, nTargetWidth, nTargetHeight,
+				hdc, lpdis->rcItem.left, lpdis->rcItem.top, SRCCOPY);
 		}
 		return; // セパレータ。作画終了
 	}
 
 #else // DRAW_MENU_ICON_BACKGROUND_3DFACE
-	hBrush = ::GetSysColorBrush( COLOR_MENU );
-	::FillRect( hdc, &lpdis->rcItem, hBrush );
+	hBrush = ::GetSysColorBrush(COLOR_MENU);
+	::FillRect(hdc, &lpdis->rcItem, hBrush);
 #endif
 
-	const int    nItemIndex = Find( (int)lpdis->itemID );
-	const TCHAR* pszItemStr = m_menuItems[nItemIndex].m_cmemLabel.GetStringPtr( &nItemStrLen );
-	HFONT hFontOld = (HFONT)::SelectObject( hdc, m_hFontMenu );
+	const int    nItemIndex = Find((int)lpdis->itemID);
+	const TCHAR* pszItemStr = m_menuItems[nItemIndex].m_cmemLabel.GetStringPtr(&nItemStrLen);
+	HFONT hFontOld = (HFONT)::SelectObject(hdc, m_hFontMenu);
 
-	nBkModeOld = ::SetBkMode( hdc, TRANSPARENT );
+	nBkModeOld = ::SetBkMode(hdc, TRANSPARENT);
 	if (lpdis->itemState & ODS_SELECTED) {
 		// アイテムが選択されている
 		RECT rc1 = lpdis->rcItem;
@@ -1112,24 +1112,24 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			//rc1.left += (nIndentLeft - 3);
 		}
 #ifdef DRAW_MENU_SELECTION_LIGHT
-		HPEN hPenBorder = ::CreatePen( PS_SOLID, 1, ::GetSysColor( COLOR_HIGHLIGHT ) );
-		HPEN hOldPen = (HPEN)::SelectObject( hdc, hPenBorder );
-		COLORREF colHilight = ::GetSysColor( COLOR_HIGHLIGHT );
-		COLORREF colMenu = ::GetSysColor( COLOR_MENU );
+		HPEN hPenBorder = ::CreatePen(PS_SOLID, 1, ::GetSysColor(COLOR_HIGHLIGHT));
+		HPEN hOldPen = (HPEN)::SelectObject(hdc, hPenBorder);
+		COLORREF colHilight = ::GetSysColor(COLOR_HIGHLIGHT);
+		COLORREF colMenu = ::GetSysColor(COLOR_MENU);
 		BYTE valR = ((GetRValue(colHilight) * 4 + GetRValue(colMenu) * 6) / 10) | 0x18;
 		BYTE valG = ((GetGValue(colHilight) * 4 + GetGValue(colMenu) * 6) / 10) | 0x18;
 		BYTE valB = ((GetBValue(colHilight) * 4 + GetBValue(colMenu) * 6) / 10) | 0x18;
-		hBrush = ::CreateSolidBrush( RGB(valR, valG, valB) );
-		HBRUSH hOldBrush = (HBRUSH)::SelectObject( hdc, hBrush );
-		::Rectangle( hdc, rc1.left, rc1.top, rc1.right, rc1.bottom );
-		::SelectObject( hdc, hOldPen );
-		::SelectObject( hdc, hOldBrush );
-		::DeleteObject( hPenBorder );
-		::DeleteObject( hBrush );
+		hBrush = ::CreateSolidBrush(RGB(valR, valG, valB));
+		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hdc, hBrush);
+		::Rectangle(hdc, rc1.left, rc1.top, rc1.right, rc1.bottom);
+		::SelectObject(hdc, hOldPen);
+		::SelectObject(hdc, hOldBrush);
+		::DeleteObject(hPenBorder);
+		::DeleteObject(hBrush);
 #else
-		hBrush = ::GetSysColorBrush( COLOR_HIGHLIGHT );
+		hBrush = ::GetSysColorBrush(COLOR_HIGHLIGHT);
 		/* 選択ハイライト矩形 */
-		::FillRect( hdc, &rc1, hBrush );
+		::FillRect(hdc, &rc1, hBrush);
 #endif
 
 		if (lpdis->itemState & ODS_DISABLED) {
@@ -1153,7 +1153,7 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			nTxSysColor = COLOR_MENUTEXT;
 		}
 	}
-	::SetTextColor( hdc, ::GetSysColor(nTxSysColor) );
+	::SetTextColor(hdc, ::GetSysColor(nTxSysColor));
 
 #ifdef _DEBUG
 	// デバッグ用：メニュー項目に対して、ヘルプがない場合に背景色を青くする
@@ -1165,20 +1165,20 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 
 	mii.fMask = MIIM_CHECKMARKS | MIIM_DATA | MIIM_ID | MIIM_STATE | MIIM_SUBMENU | MIIM_TYPE;
 	mii.fType = MFT_STRING;
-	_tcscpy( szText, _T("--unknown--") );
+	_tcscpy(szText, _T("--unknown--"));
 	mii.dwTypeData = szText;
-	mii.cch = _countof( szText ) - 1;
+	mii.cch = _countof(szText) - 1;
 	if (0 != ::GetMenuItemInfo((HMENU)lpdis->hwndItem, lpdis->itemID, FALSE, &mii)
 		&& !mii.hSubMenu
-		&& 0 == /* CEditWnd */::FuncID_To_HelpContextID( (EFunctionCode)lpdis->itemID ) 	/* 機能IDに対応するメニューコンテキスト番号を返す */
+		&& 0 == /* CEditWnd */::FuncID_To_HelpContextID((EFunctionCode)lpdis->itemID) 	/* 機能IDに対応するメニューコンテキスト番号を返す */
 	) {
 		//@@@ 2001.12.21 YAZAKI
 		if (lpdis->itemState & ODS_SELECTED) {
-			::SetTextColor( hdc, ::GetSysColor( COLOR_HIGHLIGHTTEXT ) );	//	ハイライトカラー
+			::SetTextColor(hdc, ::GetSysColor(COLOR_HIGHLIGHTTEXT));	//	ハイライトカラー
 		}else {
-			::SetTextColor( hdc, RGB( 0, 0, 255 ) );	//	青くしてる。
+			::SetTextColor(hdc, RGB(0, 0, 255));	//	青くしてる。
 		}
-//		::SetTextColor( hdc, RGB( 0, 0, 255 ) );
+//		::SetTextColor(hdc, RGB(0, 0, 255));
 	}
 #endif
 
@@ -1197,7 +1197,7 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 #ifdef DRAW_MENU_3DSTYLE
 		/* アイテムが使用不可 */
 		if (lpdis->itemState & ODS_DISABLED && !(lpdis->itemState & ODS_SELECTED)) {
-			COLORREF colOld = ::SetTextColor( hdc, ::GetSysColor( COLOR_3DHIGHLIGHT ) );
+			COLORREF colOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_3DHIGHLIGHT));
 			rcText.left++;
 			rcText.top++;
 			rcText.right++;
@@ -1213,7 +1213,7 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			rcText.top--;
 			rcText.right--;
 			rcText.bottom--;
-			::SetTextColor( hdc, colOld );
+			::SetTextColor(hdc, colOld);
 		}
 #endif
 		::DrawText(
@@ -1228,19 +1228,19 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 #ifdef DRAW_MENU_3DSTYLE
 	/* アイテムが使用不可 */
 	if (lpdis->itemState & ODS_DISABLED && !(lpdis->itemState & ODS_SELECTED)) {
-		COLORREF colOld = ::SetTextColor( hdc, ::GetSysColor( COLOR_3DHIGHLIGHT ) );
+		COLORREF colOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_3DHIGHLIGHT));
 
 		rcText.left++;
 		rcText.top++;
 		rcText.right++;
 		rcText.bottom++;
-		::DrawText( hdc, pszItemStr, j, &rcText, DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_LEFT );
+		::DrawText(hdc, pszItemStr, j, &rcText, DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_LEFT);
 
 		rcText.left--;
 		rcText.top--;
 		rcText.right--;
 		rcText.bottom--;
-		::SetTextColor( hdc, colOld );
+		::SetTextColor(hdc, colOld);
 	}
 #endif
 	::DrawText(
@@ -1250,8 +1250,8 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 		&rcText,
 		DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_LEFT
 	);
-	::SelectObject( hdc, hFontOld  );
-	::SetBkMode( hdc, nBkModeOld );
+	::SelectObject(hdc, hFontOld );
+	::SetBkMode(hdc, nBkModeOld);
 
 	// 16*16のアイコンを上下中央へ置いたときの上の座標
 	int nIconTop = lpdis->rcItem.top + (lpdis->rcItem.bottom - lpdis->rcItem.top) / 2 - (16/2);
@@ -1266,13 +1266,13 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 		CSplitBoxWnd::Draw3dRect(
 			hdc, lpdis->rcItem.left + 1, lpdis->rcItem.top,
 			2 + 16 + 2, lpdis->rcItem.bottom - lpdis->rcItem.top,
-			::GetSysColor( COLOR_3DSHADOW ),
-			::GetSysColor( COLOR_3DHIGHLIGHT )
+			::GetSysColor(COLOR_3DSHADOW),
+			::GetSysColor(COLOR_3DHIGHLIGHT)
 		);
 #else
 		{
 			// フラットな枠 + 半透明の背景色
-			HBRUSH hBrush = ::GetSysColorBrush( COLOR_HIGHLIGHT );
+			HBRUSH hBrush = ::GetSysColorBrush(COLOR_HIGHLIGHT);
 			const int MENUICO_PADDING = 0;
 			const int MENUICO_BORDER  = 1;
 			const int MENUICO_PB  = MENUICO_PADDING + MENUICO_BORDER;
@@ -1280,11 +1280,11 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			const int left = lpdis->rcItem.left + 2 - MENUICO_PB;
 			const int top = nIconTop - MENUICO_PB;
 			RECT rc;
-			::SetRect( &rc, left-1, top-1, left + MENUICO_SIZE+2, top + MENUICO_SIZE+1 );
-			::FillRect( hdc, &rc, hBrush );
+			::SetRect(&rc, left-1, top-1, left + MENUICO_SIZE+2, top + MENUICO_SIZE+1);
+			::FillRect(hdc, &rc, hBrush);
 
-			COLORREF colHilight = ::GetSysColor( COLOR_HIGHLIGHT );
-			COLORREF colMenu = ::GetSysColor( COLOR_MENU );
+			COLORREF colHilight = ::GetSysColor(COLOR_HIGHLIGHT);
+			COLORREF colMenu = ::GetSysColor(COLOR_MENU);
 			// 16bitカラーの黒色でも少し明るくするように or 0x18 する
 			BYTE valR;
 			BYTE valG;
@@ -1298,11 +1298,11 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 				valG = ((GetGValue(colHilight) * 2 + GetGValue(colMenu) * 8) / 10) | 0x18;
 				valB = ((GetBValue(colHilight) * 2 + GetBValue(colMenu) * 8) / 10) | 0x18;
 			}
-			HBRUSH hbr = ::CreateSolidBrush( RGB(valR, valG, valB) );
-			::SetRect( &rc, left + MENUICO_BORDER-1, top + MENUICO_BORDER-1,
-				left + MENUICO_SIZE - MENUICO_BORDER+2, top + MENUICO_SIZE - MENUICO_BORDER+1 );
-			::FillRect( hdc, &rc, hbr );
-			::DeleteObject( hbr );
+			HBRUSH hbr = ::CreateSolidBrush(RGB(valR, valG, valB));
+			::SetRect(&rc, left + MENUICO_BORDER-1, top + MENUICO_BORDER-1,
+				left + MENUICO_SIZE - MENUICO_BORDER+2, top + MENUICO_SIZE - MENUICO_BORDER+1);
+			::FillRect(hdc, &rc, hbr);
+			::DeleteObject(hbr);
 		}
 #endif
 
@@ -1311,11 +1311,11 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 		/* アイテムが選択されていない場合は3D枠の中を明るく塗りつぶす */
 		if (lpdis->itemState & ODS_SELECTED) {
 		}else {
-			HBRUSH hbr = ::GetSysColorBrush( COLOR_3DLIGHT );
+			HBRUSH hbr = ::GetSysColorBrush(COLOR_3DLIGHT);
 			RECT rc;
-			::SetRect( &rc, lpdis->rcItem.left + 2 + 1, lpdis->rcItem.top + 1,
-				lpdis->rcItem.left + 1 + 2 + 16 + 2 - 1, lpdis->rcItem.bottom - 1 );
-			::FillRect( hdc, &rc, hbr );
+			::SetRect(&rc, lpdis->rcItem.left + 2 + 1, lpdis->rcItem.top + 1,
+				lpdis->rcItem.left + 1 + 2 + 16 + 2 - 1, lpdis->rcItem.bottom - 1);
+			::FillRect(hdc, &rc, hbr);
 		}
 #endif
 	}
@@ -1336,8 +1336,8 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 					CSplitBoxWnd::Draw3dRect(
 						hdc, lpdis->rcItem.left + 1, lpdis->rcItem.top,
 						2 + 16 + 2, lpdis->rcItem.bottom - lpdis->rcItem.top,
-						::GetSysColor( COLOR_3DHIGHLIGHT ),
-						::GetSysColor( COLOR_3DSHADOW )
+						::GetSysColor(COLOR_3DHIGHLIGHT),
+						::GetSysColor(COLOR_3DSHADOW)
 					);
 #endif
 				}
@@ -1347,7 +1347,7 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 		/* アイテムが使用不可 */
 		if (lpdis->itemState & ODS_DISABLED) {
 			/* 淡色アイコン */
-			m_pcIcons->Draw( m_menuItems[nItemIndex].m_nBitmapIdx,
+			m_pcIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
 				//@@@ 2002.1.29 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
@@ -1356,7 +1356,7 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 			);
 		}else {
 			/* 通常のアイコン */
-			m_pcIcons->Draw( m_menuItems[nItemIndex].m_nBitmapIdx,
+			m_pcIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
 				//@@@ 2002.1.29 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
@@ -1375,8 +1375,8 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 				HPEN hPen   = NULL;
 				HPEN hPenOld = NULL;
 				// 2010.05.31 チェックの色を黒(未指定)からテキスト色に変更
-				hPen = ::CreatePen( PS_SOLID, 1, ::GetSysColor(COLOR_MENUTEXT) );
-				hPenOld = (HPEN)::SelectObject( hdc, hPen );
+				hPen = ::CreatePen(PS_SOLID, 1, ::GetSysColor(COLOR_MENUTEXT));
+				hPenOld = (HPEN)::SelectObject(hdc, hPen);
 #if 0
 // チェックマークも自分で書く場合
 				if (!bMenuIconDraw) {
@@ -1385,41 +1385,41 @@ void CMenuDrawer::DrawItem( DRAWITEMSTRUCT* lpdis )
 #endif
 				const int nBASE = 100*100; // 座標,nScale共に0.01単位
 				// 16dot幅しかないので 1.0倍から2.1倍までスケールする(10-23)
-				const int nScale = t_max(100, t_min(210, int((lpdis->rcItem.bottom - lpdis->rcItem.top - 2) * 100) / (16-2) ));
+				const int nScale = t_max(100, t_min(210, int((lpdis->rcItem.bottom - lpdis->rcItem.top - 2) * 100) / (16-2)));
 				for (int nBold = 1; nBold <= (281*nScale)/nBASE; nBold++) {
-					::MoveToEx( hdc, nX - (187*nScale)/nBASE, nY - (187*nScale)/nBASE, NULL );
-					::LineTo(   hdc, nX -   (0*nScale)/nBASE, nY -   (0*nScale)/nBASE );
-					::LineTo(   hdc, nX + (468*nScale)/nBASE, nY - (468*nScale)/nBASE );
+					::MoveToEx(hdc, nX - (187*nScale)/nBASE, nY - (187*nScale)/nBASE, NULL);
+					::LineTo(  hdc, nX -   (0*nScale)/nBASE, nY -   (0*nScale)/nBASE);
+					::LineTo(  hdc, nX + (468*nScale)/nBASE, nY - (468*nScale)/nBASE);
 					nY++;
 				}
 				if (hPen) {
-					::SelectObject( hdc, hPenOld );
-					::DeleteObject( hPen );
+					::SelectObject(hdc, hPenOld);
+					::DeleteObject(hPen);
 				}
 			}else {
 				// OSにアイコン作画をしてもらう(黒背景等対応)
-				HDC hdcMem = ::CreateCompatibleDC( hdc );
-				HBITMAP hBmpMono = ::CreateBitmap( nCxCheck, nCyCheck, 1, 1, NULL );
-				HBITMAP hOld = (HBITMAP)::SelectObject( hdcMem, hBmpMono );
+				HDC hdcMem = ::CreateCompatibleDC(hdc);
+				HBITMAP hBmpMono = ::CreateBitmap(nCxCheck, nCyCheck, 1, 1, NULL);
+				HBITMAP hOld = (HBITMAP)::SelectObject(hdcMem, hBmpMono);
 				RECT rcCheck = {0,0, nCxCheck, nCyCheck};
-				::DrawFrameControl( hdcMem, &rcCheck, DFC_MENU, DFCS_MENUCHECK );
-				COLORREF colTextOld = ::SetTextColor(hdc, RGB(0,0,0) );
-				COLORREF colBackOld = ::SetBkColor(hdc,   RGB(255,255,255) );
-				::BitBlt( hdc, lpdis->rcItem.left+2, lpdis->rcItem.top+2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCAND );
-				::SetTextColor( hdc, ::GetSysColor(nTxSysColor) );
-				::SetBkColor( hdc, RGB(0,0,0) );
-				::BitBlt( hdc, lpdis->rcItem.left+2, lpdis->rcItem.top+2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCPAINT );
-				::SetTextColor( hdc, colTextOld );
-				::SetBkColor( hdc, colBackOld );
-				::SelectObject( hdcMem, hOld );
-				::DeleteObject( hBmpMono );
-				::DeleteDC( hdcMem );
+				::DrawFrameControl(hdcMem, &rcCheck, DFC_MENU, DFCS_MENUCHECK);
+				COLORREF colTextOld = ::SetTextColor(hdc, RGB(0,0,0));
+				COLORREF colBackOld = ::SetBkColor(hdc,   RGB(255,255,255));
+				::BitBlt(hdc, lpdis->rcItem.left+2, lpdis->rcItem.top+2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCAND);
+				::SetTextColor(hdc, ::GetSysColor(nTxSysColor));
+				::SetBkColor(hdc, RGB(0,0,0));
+				::BitBlt(hdc, lpdis->rcItem.left+2, lpdis->rcItem.top+2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCPAINT);
+				::SetTextColor(hdc, colTextOld);
+				::SetBkColor(hdc, colBackOld);
+				::SelectObject(hdcMem, hOld);
+				::DeleteObject(hBmpMono);
+				::DeleteDC(hdcMem);
 			}
 		}
 	}
 	if (bBackSurface) {
-		::BitBlt( hdcOrg, lpdis->rcItem.left, lpdis->rcItem.top, nTargetWidth, nTargetHeight,
-			hdc, lpdis->rcItem.left, lpdis->rcItem.top, SRCCOPY );
+		::BitBlt(hdcOrg, lpdis->rcItem.left, lpdis->rcItem.top, nTargetWidth, nTargetHeight,
+			hdc, lpdis->rcItem.left, lpdis->rcItem.top, SRCCOPY);
 	}
 	return;
 }
@@ -1439,10 +1439,10 @@ void CMenuDrawer::EndDrawMenu()
 void CMenuDrawer::DeleteCompDC()
 {
 	if (m_hCompDC) {
-		::SelectObject( m_hCompDC, m_hCompBitmapOld );
-		::DeleteObject( m_hCompBitmap );
-		::DeleteObject( m_hCompDC );
-//		DEBUG_TRACE( _T("CMenuDrawer::DeleteCompDC %x\n"), m_hCompDC );
+		::SelectObject(m_hCompDC, m_hCompBitmapOld);
+		::DeleteObject(m_hCompBitmap);
+		::DeleteObject(m_hCompDC);
+//		DEBUG_TRACE(_T("CMenuDrawer::DeleteCompDC %x\n"), m_hCompDC);
 		m_hCompDC = NULL;
 		m_hCompBitmap = NULL;
 		m_hCompBitmapOld = NULL;
@@ -1455,15 +1455,15 @@ void CMenuDrawer::DeleteCompDC()
 	@date 2010.06.24 Moca 新規作成
 	@note この値がiniのツールバーアイテムの記録に使われる
 */
-int CMenuDrawer::FindToolbarNoFromCommandId( int idCommand, bool bOnlyFunc ) const
+int CMenuDrawer::FindToolbarNoFromCommandId(int idCommand, bool bOnlyFunc) const
 {
 	// 先に存在確認をする
-	int index = FindIndexFromCommandId( idCommand, bOnlyFunc );
+	int index = FindIndexFromCommandId(idCommand, bOnlyFunc);
 	if (-1 < index) {
 		// 固定部分以外(プラグインなど)はindexではなくidCommandのままにする
 		if (m_nMyButtonFixSize <= index) {
 			// もし コマンド番号が明らかに小さいと区別がつかない
-			assert_warning( idCommand < m_nMyButtonFixSize );
+			assert_warning(idCommand < m_nMyButtonFixSize);
 			return idCommand;
 		}
 	}
@@ -1480,12 +1480,12 @@ int CMenuDrawer::FindToolbarNoFromCommandId( int idCommand, bool bOnlyFunc ) con
 	@date 2005.08.09 aroka m_nMyButtonNum隠蔽のため追加
 	@date 2005.11.02 ryoji bOnlyFuncパラメータを追加
  */
-int CMenuDrawer::FindIndexFromCommandId( int idCommand, bool bOnlyFunc ) const
+int CMenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 {
 	if (bOnlyFunc) {
 		// 機能の範囲外（セパレータや折り返しなど特別なもの）は除外する
-		if (!( F_MENU_FIRST <= idCommand && idCommand < F_MENU_NOT_USED_FIRST )
-			&& !( F_PLUGCOMMAND_FIRST <= idCommand && idCommand < F_PLUGCOMMAND_LAST )
+		if (!(F_MENU_FIRST <= idCommand && idCommand < F_MENU_NOT_USED_FIRST)
+			&& !(F_PLUGCOMMAND_FIRST <= idCommand && idCommand < F_PLUGCOMMAND_LAST)
 		) {
 			return -1;
 		}
@@ -1510,9 +1510,9 @@ int CMenuDrawer::FindIndexFromCommandId( int idCommand, bool bOnlyFunc ) const
 	@date 2007.11.02 ryoji 範囲外の場合は未定義のボタン情報を返すように
 	@date 2010.06.24 Moca 引数をツールバー番号に変更
  */
-TBBUTTON CMenuDrawer::getButton( int nToolbarNo ) const
+TBBUTTON CMenuDrawer::getButton(int nToolbarNo) const
 {
-	int index = ToolbarNoToIndex( nToolbarNo );
+	int index = ToolbarNoToIndex(nToolbarNo);
 	if (0 <= index && index < m_nMyButtonNum) {
 		return m_tbMyButton[index];
 	}
@@ -1520,12 +1520,12 @@ TBBUTTON CMenuDrawer::getButton( int nToolbarNo ) const
 	// 範囲外なら未定義のボタン情報を作成して返す
 	// （sakura.iniに範囲外インデックスが指定があった場合など、堅牢性のため）
 	static TBBUTTON tbb;
-	SetTBBUTTONVal( &tbb, -1, F_DISABLE, 0, TBSTYLE_BUTTON, 0, 0 );
+	SetTBBUTTONVal(&tbb, -1, F_DISABLE, 0, TBSTYLE_BUTTON, 0, 0);
 	return tbb;
 }
 
 
-int CMenuDrawer::Find( int nFuncID )
+int CMenuDrawer::Find(int nFuncID)
 {
 	int i;
 	int nItemNum = (int)m_menuItems.size();
@@ -1542,24 +1542,24 @@ int CMenuDrawer::Find( int nFuncID )
 }
 
 
-const TCHAR* CMenuDrawer::GetLabel( int nFuncID )
+const TCHAR* CMenuDrawer::GetLabel(int nFuncID)
 {
 	int i;
-	if (-1 == ( i = Find( nFuncID ) )) {
+	if (-1 == (i = Find(nFuncID))) {
 		return NULL;
 	}
 	return m_menuItems[i].m_cmemLabel.GetStringPtr();
 }
 
-TCHAR CMenuDrawer::GetAccelCharFromLabel( const TCHAR* pszLabel )
+TCHAR CMenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)
 {
-	int nLen = (int)_tcslen( pszLabel );
+	int nLen = (int)_tcslen(pszLabel);
 	for (int i = 0; i + 1 < nLen; ++i) {
 		if (_T('&') == pszLabel[i]) {
 			if (_T('&') == pszLabel[i + 1]) {
 				i++;
 			}else {
-				return (TCHAR)_totupper( pszLabel[i + 1] );
+				return (TCHAR)_totupper(pszLabel[i + 1]);
 			}
 		}
 	}
@@ -1572,25 +1572,25 @@ struct WorkData {
 };
 
 //! メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
-LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR chUser;
 	HMENU hmenu;
 	chUser = (TCHAR) LOWORD(wParam);	// character code
 	hmenu = (HMENU) lParam;				// handle to menu
-//	MYTRACE( _T("::GetMenuItemCount( %xh )==%d\n"), hmenu, ::GetMenuItemCount( hmenu ) );
+//	MYTRACE(_T("::GetMenuItemCount(%xh)==%d\n"), hmenu, ::GetMenuItemCount(hmenu));
 
 	//	Oct. 27, 2000 genta
 	if (0 <= chUser && chUser < ' ') {
 		chUser += '@';
 	}else {
-		chUser = (TCHAR)_totupper( chUser );
+		chUser = (TCHAR)_totupper(chUser);
 	}
 
 	// 2011.11.18 vector化
 	std::vector<WorkData> vecAccel;
 	size_t nAccelSel = 99999;
-	for (int i = 0; i < ::GetMenuItemCount( hmenu ); i++) {
+	for (int i = 0; i < ::GetMenuItemCount(hmenu); i++) {
 		TCHAR	szText[1024];
 		// メニュー項目に関する情報を取得します。
 		MENUITEMINFO mii = {0};
@@ -1599,40 +1599,40 @@ LRESULT CMenuDrawer::OnMenuChar( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 		mii.fMask = MIIM_CHECKMARKS | MIIM_DATA | MIIM_ID | MIIM_STATE | MIIM_SUBMENU | MIIM_TYPE;
 		mii.fType = MFT_STRING;
-		_tcscpy( szText, _T("--unknown--") );
+		_tcscpy(szText, _T("--unknown--"));
 		mii.dwTypeData = szText;
-		mii.cch = _countof( szText ) - 1;
-		if (0 == ::GetMenuItemInfo( hmenu, i, TRUE, &mii )) {
+		mii.cch = _countof(szText) - 1;
+		if (0 == ::GetMenuItemInfo(hmenu, i, TRUE, &mii)) {
 			continue;
 		}
 		const TCHAR* pszLabel;
-		if (!( pszLabel = GetLabel( mii.wID ) )) {
+		if (!(pszLabel = GetLabel(mii.wID))) {
 			continue;
 		}
-		if (chUser == GetAccelCharFromLabel( pszLabel )) {
+		if (chUser == GetAccelCharFromLabel(pszLabel)) {
 			WorkData work;
 			work.idx = i;
 			work.mii = mii;
 			if (/*-1 == nAccelSel ||*/ MFS_HILITE & mii.fState) {
 				nAccelSel = vecAccel.size();
 			}
-			vecAccel.push_back( work );
+			vecAccel.push_back(work);
 		}
 	}
-//	MYTRACE( _T("%d\n"), (int)mapAccel.size() );
+//	MYTRACE(_T("%d\n"), (int)mapAccel.size());
 	if (0 == vecAccel.size()) {
-		return  MAKELONG( 0, MNC_IGNORE );
+		return  MAKELONG(0, MNC_IGNORE);
 	}
 	if (1 == vecAccel.size()) {
-		return  MAKELONG( vecAccel[0].idx, MNC_EXECUTE );
+		return  MAKELONG(vecAccel[0].idx, MNC_EXECUTE);
 	}
-//	MYTRACE( _T("nAccelSel=%d vecAccel.size()=%d\n"), nAccelSel, vecAccel.size() );
+//	MYTRACE(_T("nAccelSel=%d vecAccel.size()=%d\n"), nAccelSel, vecAccel.size());
 	if (nAccelSel + 1 >= vecAccel.size()) {
-//		MYTRACE( _T("vecAccel[0].idx=%d\n"), vecAccel[0].idx );
-		return  MAKELONG( vecAccel[0].idx, MNC_SELECT );
+//		MYTRACE(_T("vecAccel[0].idx=%d\n"), vecAccel[0].idx);
+		return  MAKELONG(vecAccel[0].idx, MNC_SELECT);
 	}else {
-//		MYTRACE( _T("vecAccel[nAccelSel + 1].idx=%d\n"), vecAccel[nAccelSel + 1].idx );
-		return  MAKELONG( vecAccel[nAccelSel + 1].idx, MNC_SELECT );
+//		MYTRACE(_T("vecAccel[nAccelSel + 1].idx=%d\n"), vecAccel[nAccelSel + 1].idx);
+		return  MAKELONG(vecAccel[nAccelSel + 1].idx, MNC_SELECT);
 	}
 }
 
@@ -1674,7 +1674,7 @@ typedef struct _TBBUTTON {
 //ツールバーボタンを追加する
 //	マネージメント機能追加	2010/7/3 Uchi 
 //		全ウィンドウで同じ機能番号の場合、同じICON番号を持つように調整
-void CMenuDrawer::AddToolButton( int iBitmap, int iCommand )
+void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 {
 	TBBUTTON tbb;
 	int 	iCmdNo;
@@ -1690,39 +1690,39 @@ void CMenuDrawer::AddToolButton( int iBitmap, int iCommand )
 			if (m_tbMyButton.size() <= (size_t)(int)m_pShareData->m_PlugCmdIcon[iCmdNo]) {
 				// このウィンドウで未登録
 				// 空きを詰め込む
-				SetTBBUTTONVal( &tbb,TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0 );
+				SetTBBUTTONVal(&tbb,TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
 				for (i = m_tbMyButton.size(); i < m_pShareData->m_PlugCmdIcon[iCmdNo]; i++) {
-					m_tbMyButton.push_back( tbb );
+					m_tbMyButton.push_back(tbb);
 					m_nMyButtonNum++;
 				}
 
 				// 未登録
-				SetTBBUTTONVal( &tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 );
+				SetTBBUTTONVal(&tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 				// 最後に追加に変更
-				m_tbMyButton.push_back( tbb );
+				m_tbMyButton.push_back(tbb);
 				m_nMyButtonNum++;
 			}else {
 				// 再設定
-				SetTBBUTTONVal( &m_tbMyButton[m_pShareData->m_PlugCmdIcon[iCmdNo]],
-					iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 );
+				SetTBBUTTONVal(&m_tbMyButton[m_pShareData->m_PlugCmdIcon[iCmdNo]],
+					iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 			}
 		}else {
 			// 全体で未登録
 			if (m_tbMyButton.size() < (size_t)m_pShareData->m_maxTBNum) {
 				// 空きを詰め込む
-				SetTBBUTTONVal( &tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0 );
+				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
 				for (i = m_tbMyButton.size(); i < m_pShareData->m_maxTBNum; i++) {
-					m_tbMyButton.push_back( tbb );
+					m_tbMyButton.push_back(tbb);
 					m_nMyButtonNum++;
 				}
 			}
 			// 新規登録
-			SetTBBUTTONVal( &tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 );
+			SetTBBUTTONVal(&tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 
 			m_pShareData->m_PlugCmdIcon[iCmdNo] = (short)m_tbMyButton.size();
 			// 最後から２番目に挿入する。一番最後は番兵で固定。
 			// 2010.06.23 Moca 最後に追加に変更
-			m_tbMyButton.push_back( tbb );
+			m_tbMyButton.push_back(tbb);
 			m_nMyButtonNum++;
 		}
 	}

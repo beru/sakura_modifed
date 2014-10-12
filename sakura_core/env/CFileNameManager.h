@@ -60,25 +60,25 @@ class CFileNameManager : public TSingleton<CFileNameManager> {
 
 public:
 	// ファイル名関連
-	LPTSTR GetTransformFileNameFast( LPCTSTR, LPTSTR, int );	// 2002.11.24 Moca Add
-	int TransformFileName_MakeCache( void );
-	static LPCTSTR GetFilePathFormat( LPCTSTR, LPTSTR, int, LPCTSTR, LPCTSTR );
-	static bool ExpandMetaToFolder( LPCTSTR, LPTSTR, int );
+	LPTSTR GetTransformFileNameFast(LPCTSTR, LPTSTR, int);	// 2002.11.24 Moca Add
+	int TransformFileName_MakeCache(void);
+	static LPCTSTR GetFilePathFormat(LPCTSTR, LPTSTR, int, LPCTSTR, LPCTSTR);
+	static bool ExpandMetaToFolder(LPCTSTR, LPTSTR, int);
 
 	// メニュー類のファイル名作成
-	bool GetMenuFullLabel_WinList(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, int index){
+	bool GetMenuFullLabel_WinList(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, int index) {
 		return GetMenuFullLabel(pszOutput, nBuffSize, true, editInfo, id, false, index, false);
 	}
-	bool GetMenuFullLabel_MRU(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, bool bFavorite, int index){
+	bool GetMenuFullLabel_MRU(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, bool bFavorite, int index) {
 		return GetMenuFullLabel(pszOutput, nBuffSize, true, editInfo, id, bFavorite, index, true);
 	}
-	bool GetMenuFullLabel_WinListNoEscape(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, int index){
+	bool GetMenuFullLabel_WinListNoEscape(TCHAR* pszOutput, int nBuffSize, const EditInfo* editInfo, int id, int index) {
 		return GetMenuFullLabel(pszOutput, nBuffSize, false, editInfo, id, false, index, false);
 	}
-	bool GetMenuFullLabel_File(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, bool bModified = false, ECodeType nCharCode = CODE_NONE){
+	bool GetMenuFullLabel_File(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, bool bModified = false, ECodeType nCharCode = CODE_NONE) {
 		return GetMenuFullLabel(pszOutput, nBuffSize, true, pszFile, id, false, nCharCode, false, -1, false);
 	}
-	bool GetMenuFullLabel_FileNoEscape(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, bool bModified = false, ECodeType nCharCode = CODE_NONE){
+	bool GetMenuFullLabel_FileNoEscape(TCHAR* pszOutput, int nBuffSize, const TCHAR* pszFile, int id, bool bModified = false, ECodeType nCharCode = CODE_NONE) {
 		return GetMenuFullLabel(pszOutput, nBuffSize, false, pszFile, id, false, nCharCode, false, -1, false);
 	}
 
@@ -87,8 +87,8 @@ public:
 	
 	static TCHAR GetAccessKeyByIndex(int index, bool bZeroOrigin);
 
-	static void GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile );	// 構成設定ファイルからiniファイル名を取得する	// 2007.09.04 ryoji
-	LPCTSTR GetIniFileName( BOOL bRead = FALSE );	// iniファイル名の取得	// 2007.05.19 ryoji
+	static void GetIniFileNameDirect(LPTSTR pszPrivateIniFile, LPTSTR pszIniFile);	// 構成設定ファイルからiniファイル名を取得する	// 2007.09.04 ryoji
+	LPCTSTR GetIniFileName(BOOL bRead = FALSE);	// iniファイル名の取得	// 2007.05.19 ryoji
 
 private:
 	DLLSHAREDATA* m_pShareData;

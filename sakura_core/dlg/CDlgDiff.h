@@ -48,24 +48,24 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, LPARAM, const TCHAR*, bool );	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*, bool);	// モーダルダイアログの表示
 
 protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	BOOL	OnBnClicked( int );
-	BOOL	OnLbnSelChange( HWND hwndCtl, int wID );
-	BOOL	OnEnChange( HWND hwndCtl, int wID );
+	BOOL	OnBnClicked(int);
+	BOOL	OnLbnSelChange(HWND hwndCtl, int wID);
+	BOOL	OnEnChange(HWND hwndCtl, int wID);
 	LPVOID	GetHelpIdTable(void);
-	INT_PTR DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam );	// 標準以外のメッセージを捕捉する
-	BOOL OnInitDialog( HWND, WPARAM, LPARAM );
-	BOOL OnSize( WPARAM wParam, LPARAM lParam );
-	BOOL OnMove( WPARAM wParam, LPARAM lParam );
-	BOOL OnMinMaxInfo( LPARAM lParam );
+	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 標準以外のメッセージを捕捉する
+	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
+	BOOL OnSize(WPARAM wParam, LPARAM lParam);
+	BOOL OnMove(WPARAM wParam, LPARAM lParam);
+	BOOL OnMinMaxInfo(LPARAM lParam);
 
-	void	SetData( void );	// ダイアログデータの設定
-	int		GetData( void );	// ダイアログデータの取得
+	void	SetData(void);	// ダイアログデータの設定
+	int		GetData(void);	// ダイアログデータの取得
 
 private:
 	int			m_nIndexSave;		// 最後に選択されていた番号

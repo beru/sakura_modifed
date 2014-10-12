@@ -37,12 +37,12 @@ public:
 	}
 	// èëéÆ //@@@ 2002.2.9 YAZAKI
 	// ã§óLDLLSHAREDATAàÀë∂
-	const TCHAR* MyGetDateFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen );
-	const TCHAR* MyGetTimeFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen );
+	const TCHAR* MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen);
+	const TCHAR* MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen);
 
 	// ã§óLDLLSHAREDATAîÒàÀë∂
-	const TCHAR* MyGetDateFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen, int nDateFormatType, const TCHAR* szDateFormat );
-	const TCHAR* MyGetTimeFormat( const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen, int nTimeFormatType, const TCHAR* szTimeFormat );
+	const TCHAR* MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen, int nDateFormatType, const TCHAR* szDateFormat);
+	const TCHAR* MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* pszDest, int nDestLen, int nTimeFormatType, const TCHAR* szTimeFormat);
 private:
 	DLLSHAREDATA* m_pShareData;
 };

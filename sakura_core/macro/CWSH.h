@@ -48,7 +48,7 @@ public:
 	const List& GetInterfaceObjects() {	return this->m_IfObjArr; }
 
 	// 操作
-	void AddInterfaceObject( CIfObj* obj );
+	void AddInterfaceObject(CIfObj* obj);
 	bool Execute(const wchar_t *AScript);
 	void Error(BSTR Description, BSTR Source); ///< ScriptErrorHandlerを呼び出す。
 	void Error(const wchar_t* Description);          ///< ScriptErrorHandlerを呼び出す。

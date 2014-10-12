@@ -44,12 +44,12 @@ class CComplementIfObj : public CWSHIfObj {
 
 	// コンストラクタ
 public:
-	CComplementIfObj( std::wstring& curWord, CHokanMgr* pMgr, int option )
+	CComplementIfObj(std::wstring& curWord, CHokanMgr* pMgr, int option)
 		:
-		CWSHIfObj( L"Complement", false ),
-		m_sCurrentWord( curWord ),
-		m_pHokanMgr( pMgr ),
-		m_nOption( option )
+		CWSHIfObj(L"Complement", false),
+		m_sCurrentWord(curWord),
+		m_pHokanMgr(pMgr),
+		m_nOption(option)
 	{
 	}
 
@@ -76,19 +76,19 @@ public:
 		switch (LOWORD(ID)) {
 		case F_CM_GETCURRENTWORD:	// 補完対象の文字列を取得
 			{
-				SysString s( m_sCurrentWord.c_str(), m_sCurrentWord.length() );
-				Wrap( &Result )->Receive( s );
+				SysString s(m_sCurrentWord.c_str(), m_sCurrentWord.length());
+				Wrap(&Result)->Receive(s);
 			}
 			return true;
 		case F_CM_GETOPTION:	// オプションを取得
 			{
-				Wrap( &Result )->Receive( m_nOption );
+				Wrap(&Result)->Receive(m_nOption);
 			}
 			return true;
 		case F_CM_ADDLIST:		// 候補に追加する
 			{
 				std::wstring keyword;
-				if (variant_to_wstr( Arguments[0], keyword ) != true) {
+				if (variant_to_wstr(Arguments[0], keyword) != true) {
 					return false;
 				}
 				const wchar_t* word = keyword.c_str();
@@ -97,10 +97,10 @@ public:
 					return false;
 				}
 				std::wstring strWord = std::wstring(word, nWordLen);
-				if (CHokanMgr::AddKouhoUnique( m_pHokanMgr->m_vKouho, strWord )) {
-					Wrap( &Result )->Receive( m_pHokanMgr->m_vKouho.size() );
+				if (CHokanMgr::AddKouhoUnique(m_pHokanMgr->m_vKouho, strWord)) {
+					Wrap(&Result)->Receive(m_pHokanMgr->m_vKouho.size());
 				}else {
-					Wrap( &Result )->Receive( -1 );
+					Wrap(&Result)->Receive(-1);
 				}
 				return true;
 			}

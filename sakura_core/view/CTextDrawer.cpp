@@ -48,13 +48,13 @@ using namespace std;
 @@@ 2002.09.22 YAZAKI    const unsigned char* pDataを、const char* pDataに変更
 @@@ 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 */
-void CTextDrawer::DispText( HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent ) const
+void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent) const
 {
 	if (0 >= nLength) {
 		return;
 	}
-	int x=pDispPos->GetDrawPos().x;
-	int y=pDispPos->GetDrawPos().y;
+	int x = pDispPos->GetDrawPos().x;
+	int y = pDispPos->GetDrawPos().y;
 
 	// 必要なインターフェースを取得
 	const CTextMetrics* pMetrics = &m_pEditView->GetTextMetrics();
@@ -93,10 +93,10 @@ void CTextDrawer::DispText( HDC hdc, DispPos* pDispPos, const wchar_t* pData, in
 		int nBeforeLogic = 0;
 		CLayoutInt nBeforeLayout = CLayoutInt(0);
 		if (x < 0) {
-			int nLeftLayout = ( 0 - x ) / nDx - 1;
+			int nLeftLayout = (0 - x) / nDx - 1;
 			while (nBeforeLayout < nLeftLayout) {
-				nBeforeLayout += CNativeW::GetKetaOfChar( pData, nLength, nBeforeLogic );
-				nBeforeLogic  += CNativeW::GetSizeOfChar( pData, nLength, nBeforeLogic );
+				nBeforeLayout += CNativeW::GetKetaOfChar(pData, nLength, nBeforeLogic);
+				nBeforeLogic  += CNativeW::GetSizeOfChar(pData, nLength, nBeforeLogic);
 			}
 		}
 
@@ -113,19 +113,23 @@ void CTextDrawer::DispText( HDC hdc, DispPos* pDispPos, const wchar_t* pData, in
 		int nDrawX = x + (Int)nBeforeLayout * nDx;
 
 		// 実際の描画文字列ポインタ
-		const wchar_t* pDrawData          = &pData[nBeforeLogic];
-		int            nDrawDataMaxLength = nLength - nBeforeLogic;
+		const wchar_t*	pDrawData			= &pData[nBeforeLogic];
+		int				nDrawDataMaxLength	= nLength - nBeforeLogic;
 
 		// 実際の文字間隔配列
 		const int* pDrawDxArray = &pDxArray[nBeforeLogic];
 
 		// 描画する文字列長を求める -> nDrawLength
 		int nRequiredWidth = rcClip.right - nDrawX; //埋めるべきピクセル幅
-		if (nRequiredWidth <= 0) goto end;
+		if (nRequiredWidth <= 0) {
+			goto end;
+		}
 		int nWorkWidth = 0;
 		int nDrawLength = 0;
 		while (nWorkWidth < nRequiredWidth) {
-			if (nDrawLength >= nDrawDataMaxLength) break;
+			if (nDrawLength >= nDrawDataMaxLength) {
+				break;
+			}
 			nWorkWidth += pDrawDxArray[nDrawLength++];
 		}
 		// サロゲートペア対策	2008/7/5 Uchi	Update 7/8 Uchi
@@ -170,24 +174,26 @@ void CTextDrawer::DispVerticalLines(
 ) const
 {
 	const CEditView* pView = m_pEditView;
-
-	const STypeConfig&	typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
-
+	
+	const STypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
+	
 	CTypeSupport cVertType(pView,COLORIDX_VERTLINE);
 	CTypeSupport cTextType(pView,COLORIDX_TEXT);
-
-	if (!cVertType.IsDisp()) return;
-
-	nLeftCol = t_max( pView->GetTextArea().GetViewLeftCol(), nLeftCol );
-
+	
+	if (!cVertType.IsDisp()) {
+		return;
+	}
+	
+	nLeftCol = t_max(pView->GetTextArea().GetViewLeftCol(), nLeftCol);
+	
 	const CLayoutInt nWrapKetas  = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
 	const int nCharDx  = pView->GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
 	const int nPosXOffset = GetDllShareData().m_Common.m_sWindow.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
-	const int nPosXLeft   = t_max( pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft() );
-	const int nPosXRight  = t_min( pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight() );
+	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
+	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	bool bOddLine = ((((nLineHeight % 2) ? (Int)pView->GetTextArea().GetViewTopLine() : 0) + pView->GetTextArea().GetAreaTop() + nTop) % 2 == 1);
 
@@ -195,13 +201,13 @@ void CTextDrawer::DispVerticalLines(
 	const bool bBold = cVertType.IsBoldFont();
 	// ドット線(下線属性を転用/テスト用)
 	const bool bDot = cVertType.HasUnderLine();
-	const bool bExorPen = ( cVertType.GetTextColor() == cTextType.GetBackColor() );
+	const bool bExorPen = (cVertType.GetTextColor() == cTextType.GetBackColor());
 	int nROP_Old = 0;
 	if (bExorPen) {
-		gr.SetPen( cVertType.GetBackColor() );
-		nROP_Old = ::SetROP2( gr, R2_NOTXORPEN );
+		gr.SetPen(cVertType.GetBackColor());
+		nROP_Old = ::SetROP2(gr, R2_NOTXORPEN);
 	}else {
-		gr.SetPen( cVertType.GetTextColor() );
+		gr.SetPen(cVertType.GetTextColor());
 	}
 
 	for (int k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; k++) {
@@ -231,7 +237,7 @@ void CTextDrawer::DispVerticalLines(
 			if (nWrapKetas < nXCol) {
 				break;
 			}
-			int nPosX = nPosXOffset + (Int)( nXCol - 1 - pView->GetTextArea().GetViewLeftCol() ) * nCharDx;
+			int nPosX = nPosXOffset + (Int)(nXCol - 1 - pView->GetTextArea().GetViewLeftCol()) * nCharDx;
 			// 2006.04.30 Moca 線の引く範囲・方法を変更
 			// 太線の場合、半分だけ作画する可能性がある。
 			int nPosXBold = nPosX;
@@ -251,29 +257,29 @@ void CTextDrawer::DispVerticalLines(
 					}
 					for (; y < nBottom; y += 2) {
 						if (nPosX < nPosXRight) {
-							::MoveToEx( gr, nPosX, y, NULL );
-							::LineTo( gr, nPosX, y + 1 );
+							::MoveToEx(gr, nPosX, y, NULL);
+							::LineTo(gr, nPosX, y + 1);
 						}
 						if (bBold && nPosXLeft <= nPosXBold) {
-							::MoveToEx( gr, nPosXBold, y, NULL );
-							::LineTo( gr, nPosXBold, y + 1 );
+							::MoveToEx(gr, nPosXBold, y, NULL);
+							::LineTo(gr, nPosXBold, y + 1);
 						}
 					}
 				}else {
 					if (nPosX < nPosXRight) {
-						::MoveToEx( gr, nPosX, nTop, NULL );
-						::LineTo( gr, nPosX, nBottom );
+						::MoveToEx(gr, nPosX, nTop, NULL);
+						::LineTo(gr, nPosX, nBottom);
 					}
 					if (bBold && nPosXLeft <= nPosXBold) {
-						::MoveToEx( gr, nPosXBold, nTop, NULL );
-						::LineTo( gr, nPosXBold, nBottom );
+						::MoveToEx(gr, nPosXBold, nTop, NULL);
+						::LineTo(gr, nPosXBold, nBottom);
 					}
 				}
 			}
 		}
 	}
 	if (bExorPen) {
-		::SetROP2( gr, nROP_Old );
+		::SetROP2(gr, nROP_Old);
 	}
 }
 
@@ -297,14 +303,14 @@ void CTextDrawer::DispWrapLine(
 	const CTextArea& rArea = *GetTextArea();
 	const CLayoutInt nWrapKetas = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
 	const int nCharDx = pView->GetTextMetrics().GetHankakuDx();
-	int nXPos = rArea.GetAreaLeft() + (Int)( nWrapKetas - rArea.GetViewLeftCol() ) * nCharDx;
+	int nXPos = rArea.GetAreaLeft() + (Int)(nWrapKetas - rArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca 作画条件変更
 	if (rArea.GetAreaLeft() < nXPos && nXPos < rArea.GetAreaRight()) {
 		/// 折り返し記号の色のペンを設定
 		gr.PushPen(cWrapType.GetTextColor(), 0);
 
-		::MoveToEx( gr, nXPos, nTop, NULL );
-		::LineTo( gr, nXPos, nBottom );
+		::MoveToEx(gr, nXPos, nTop, NULL);
+		::LineTo(gr, nXPos, nBottom);
 
 		gr.PopPen();
 	}
@@ -322,7 +328,7 @@ void CTextDrawer::DispLineNumber(
 ) const
 {
 	//$$ 高速化：SearchLineByLayoutYにキャッシュを持たせる
-	const CLayout*	pcLayout = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( nLineNum );
+	const CLayout*	pcLayout = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 
 	const CEditView* pView = m_pEditView;
 	const STypeConfig* pTypes = &pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
@@ -419,7 +425,7 @@ void CTextDrawer::DispLineNumber(
 				bChange = true;
 			}
 			if (bChange) {
-				sFont.m_hFont = pView->GetFontset().ChooseFontHandle( sFont.m_sFontAttr );
+				sFont.m_hFont = pView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
 			}
 		}
 		gr.PushTextForeColor(fgcolor);	// テキスト：行番号の色
@@ -435,17 +441,17 @@ void CTextDrawer::DispLineNumber(
 			if (pTypes->m_bLineNumIsCRLF) {
 				// 論理行番号表示モード
 				if (!pcLayout || 0 != pcLayout->GetLogicOffset()) { //折り返しレイアウト行
-					wcscpy( szLineNum, L" " );
+					wcscpy(szLineNum, L" ");
 				}else {
-					_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	// 対応する論理行番号
+					_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
 //###デバッグ用
-//					_itow( CModifyVisitor().GetLineModifiedSeq(pCDocLine), szLineNum, 10 );	// 行の変更番号
+//					_itow(CModifyVisitor().GetLineModifiedSeq(pCDocLine), szLineNum, 10);	// 行の変更番号
 				}
 			}else {
 				// 物理行（レイアウト行）番号表示モード
-				_itow( (Int)nLineNum + 1, szLineNum, 10 );
+				_itow((Int)nLineNum + 1, szLineNum, 10);
 			}
-			nLineCols = wcslen( szLineNum );
+			nLineCols = wcslen(szLineNum);
 			nLineNumCols = nLineCols; // 2010.08.17 Moca 位置決定に行番号区切りは含めない
 
 			// 行番号区切り 0=なし 1=縦線 2=任意
@@ -457,8 +463,8 @@ void CTextDrawer::DispLineNumber(
 		}
 
 		//	Sep. 23, 2002 genta
-		int drawNumTop = (pView->GetTextArea().m_nViewAlignLeftCols - nLineNumCols - 1) * ( nCharWidth );
-		::ExtTextOutW_AnyBuild( gr,
+		int drawNumTop = (pView->GetTextArea().m_nViewAlignLeftCols - nLineNumCols - 1) * (nCharWidth);
+		::ExtTextOutW_AnyBuild(gr,
 			drawNumTop,
 			y,
 			ExtTextOutOption() & ~(bTrans? ETO_OPAQUE: 0),
@@ -494,8 +500,8 @@ void CTextDrawer::DispLineNumber(
 		// とりあえずブックマークに縦線
 		if (CBookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp()) {
 			gr.PushPen(cColorType.GetTextColor(),2);
-			::MoveToEx( gr, 1, y, NULL );
-			::LineTo( gr, 1, y + nLineHeight );
+			::MoveToEx(gr, 1, y, NULL);
+			::LineTo(gr, 1, y + nLineHeight);
 			gr.PopPen();
 		}
 

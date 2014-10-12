@@ -42,23 +42,23 @@ public:
 		LPCTSTR pszName,
 		LPSECURITY_ATTRIBUTES psa = NULL
 	) {
-		m_hObj = ::CreateMutex( psa, bInitialOwner, pszName );
+		m_hObj = ::CreateMutex(psa, bInitialOwner, pszName);
 	}
 	~CMutex() {
 		if (m_hObj) {
-			::CloseHandle( m_hObj );
+			::CloseHandle(m_hObj);
 			m_hObj = NULL;
 		}
 	}
-	BOOL Lock( DWORD dwTimeout = INFINITE ) {
-		DWORD dwRet = ::WaitForSingleObject( m_hObj, dwTimeout );
+	BOOL Lock(DWORD dwTimeout = INFINITE) {
+		DWORD dwRet = ::WaitForSingleObject(m_hObj, dwTimeout);
 		if (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED)
 			return TRUE;
 		else
 			return FALSE;
 	}
 	BOOL Unlock() {
-		return ::ReleaseMutex( m_hObj );
+		return ::ReleaseMutex(m_hObj);
 	}
 	operator HANDLE() const { return m_hObj; }
 protected:
@@ -89,11 +89,11 @@ template <class EXCLUSIVE_OBJECT>
 class LockGuard {
 	EXCLUSIVE_OBJECT& o_;
 public:
-	LockGuard(EXCLUSIVE_OBJECT& ex) : o_( ex ) {
+	LockGuard(EXCLUSIVE_OBJECT& ex) : o_(ex) {
 		o_.Lock();
 	}
 	template <class PARAM>
-	LockGuard(EXCLUSIVE_OBJECT& ex, PARAM p) : o_( ex ) {
+	LockGuard(EXCLUSIVE_OBJECT& ex, PARAM p) : o_(ex) {
 		o_.Lock(p);
 	}
 	

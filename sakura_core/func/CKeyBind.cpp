@@ -92,7 +92,6 @@ HACCEL CKeyBind::CreateAccerelator(
 					pAccelArr[k].fVirt |= ( j & _SHIFT ) ? FSHIFT   : 0;
 					pAccelArr[k].fVirt |= ( j & _CTRL  ) ? FCONTROL : 0;
 					pAccelArr[k].fVirt |= ( j & _ALT   ) ? FALT     : 0;
-
 					pAccelArr[k].key = pKeyNameArr[i].m_nKeyCode;
 					pAccelArr[k].cmd = pKeyNameArr[i].m_nKeyCode | (((WORD)j)<<8) ;
 
@@ -102,7 +101,7 @@ HACCEL CKeyBind::CreateAccerelator(
 		}
 	}
 	HACCEL hAccel = ::CreateAcceleratorTable( pAccelArr, nAccelArrNum );
-	delete [] pAccelArr;
+	delete[] pAccelArr;
 	return hAccel;
 }
 
