@@ -131,7 +131,7 @@ private:
 
 	int		m_nIndex;				//!< 選択された要素番号
 	TCHAR	*m_pszFileName;			//!< 編集中のファイル名
-	wchar_t	*m_pszKeyword;			//!< キーワード(DoModalのlParam!=0を指定した場合に指定できる)
+	wchar_t	*m_pszKeyword;			//!< キーワード(DoModalのlParam != 0を指定した場合に指定できる)
 	int		m_nLoop;				//!< さかのぼれる階層数
 	CSortedTagJumpList*	m_pcList;	//!< タグジャンプ情報
 	UINT	m_nTimerId;				//!< タイマ番号

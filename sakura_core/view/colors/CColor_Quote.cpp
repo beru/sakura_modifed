@@ -80,14 +80,14 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 		// クォーテーション文字列の終端があるか
 		switch (nStringType) {
 		case STRING_LITERAL_CPP:
-			if (0 < nPos && cStr.At(nPos-1) == 'R' && cStr.At(nPos) == '"'
+			if (0 < nPos && cStr.At(nPos - 1) == 'R' && cStr.At(nPos) == '"'
 				&& nPos + 1 < cStr.GetLength()
 			) {
 				for (int i = nPos + 1; i < cStr.GetLength(); i++) {
 					if (cStr.At(i) == '(') {
 						if (nPos + 1 < i) {
 							m_tag = L')';
-							m_tag.append(cStr.GetPtr()+nPos+1, i - (nPos + 1));
+							m_tag.append(cStr.GetPtr() + nPos + 1, i - (nPos + 1));
 							m_tag += L'"';
 						}else {
 							m_tag.assign(L")\"", 2);
@@ -121,7 +121,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 			break;
 		case STRING_LITERAL_PYTHON:
 			if (nPos + 2 < cStr.GetLength()
-			 && cStr.At(nPos+1) == m_cQuote && cStr.At(nPos+2) == m_cQuote
+			 && cStr.At(nPos + 1) == m_cQuote && cStr.At(nPos + 2) == m_cQuote
 			) {
 				m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos + 3, cStr, true);
 				m_nColorTypeIndex = 3;
@@ -142,11 +142,11 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 			// 終了文字列がない場合は行末までを色分け
 			if (m_pTypeData->m_bStringEndLine) {
 				// 改行コードを除く
-				if (0 < cStr.GetLength() && WCODE::IsLineDelimiter(cStr.At(cStr.GetLength()-1))) {
+				if (0 < cStr.GetLength() && WCODE::IsLineDelimiter(cStr.At(cStr.GetLength() - 1))) {
 					if (1 &&
 						1 < cStr.GetLength()
-						&& cStr.At(cStr.GetLength()-2) == WCODE::CR
-						&& cStr.At(cStr.GetLength()-1) == WCODE::LF
+						&& cStr.At(cStr.GetLength() - 2) == WCODE::CR
+						&& cStr.At(cStr.GetLength() - 1) == WCODE::LF
 					) {
 						m_nCOMMENTEND = cStr.GetLength() - 2;
 					}else {

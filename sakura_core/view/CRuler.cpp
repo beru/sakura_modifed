@@ -87,7 +87,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	CommonSetting* pCommon = &GetDllShareData().m_Common;
 
 	//サポート
-	CTypeSupport cRulerType(m_pEditView,COLORIDX_RULER);
+	CTypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
@@ -115,10 +115,10 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	rc.top = 0;
 	rc.right = m_pEditView->GetTextArea().GetAreaRight();
 	rc.bottom = m_pEditView->GetTextArea().GetAreaTop() - m_pEditView->GetTextArea().GetTopYohaku();
-	cRulerType.FillBack(gr,rc);
+	cRulerType.FillBack(gr, rc);
 	
 	//ルーラー色設定
-	gr.PushPen(cRulerType.GetTextColor(),0);
+	gr.PushPen(cRulerType.GetTextColor(), 0);
 	gr.PushTextForeColor(cRulerType.GetTextColor());
 	
 	//描画開始位置
@@ -180,7 +180,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 void CRuler::DispRuler(HDC hdc)
 {
 	//サポート
-	CTypeSupport cRulerType(m_pEditView,COLORIDX_RULER);
+	CTypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
 
 	if (!m_pEditView->GetDrawSwitch()) {
 		return;
@@ -204,7 +204,7 @@ void CRuler::DispRuler(HDC hdc)
 			&& m_pEditView->GetTextArea().GetViewLeftCol() <= m_pEditView->GetCaret().GetCaretLayoutPos().GetX()
 			&& m_pEditView->GetTextArea().GetRightCol() + 2 >= m_pEditView->GetCaret().GetCaretLayoutPos().GetX()
 		) {
-			_DrawRulerCaret(gr,m_pEditView->GetCaret().CalcCaretDrawPos(m_pEditView->GetCaret().GetCaretLayoutPos()).x,m_pEditView->GetCaret().GetCaretSize().cx);
+			_DrawRulerCaret(gr, m_pEditView->GetCaret().CalcCaretDrawPos(m_pEditView->GetCaret().GetCaretLayoutPos()).x, m_pEditView->GetCaret().GetCaretSize().cx);
 		}
 
 		m_bRedrawRuler = false;	//m_bRedrawRuler = true で指定されるまで、ルーラのキャレットのみを再描画 2002.02.25 Add By KK

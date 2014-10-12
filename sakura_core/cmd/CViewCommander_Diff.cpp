@@ -145,7 +145,7 @@ end_of_compare:;
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(hWnds[0], &rcDesktop);
-		int width = (rcDesktop.right - rcDesktop.left ) / 2;
+		int width = (rcDesktop.right - rcDesktop.left) / 2;
 		for (int i = 1; i >= 0; i--) {
 			::SetWindowPos(
 				hWnds[i], 0,
@@ -252,7 +252,7 @@ void CViewCommander::Command_Diff_Dialog(void)
 		
 	// 相手ファイル
 	TCHAR szTmpFile2[_MAX_PATH * 2];
-	if (!cDlgDiff.m_bIsModifiedDst ) _tcscpy_s(szTmpFile2, cDlgDiff.m_szFile2);
+	if (!cDlgDiff.m_bIsModifiedDst) _tcscpy_s(szTmpFile2, cDlgDiff.m_szFile2);
 	else if (m_pCommanderView->MakeDiffTmpFile (szTmpFile2, cDlgDiff.m_hWnd_Dst)) bTmpFile2 = true;
 	else {
 		if (bTmpFile1) _tunlink(szTmpFile1);
@@ -329,7 +329,7 @@ void CViewCommander::Command_Diff_Prev(void)
 	BOOL bFound = FALSE;
 	BOOL bRedo = TRUE;
 
-	CLogicPoint	ptXY(0,GetCaret().GetCaretLogicPos().y);
+	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int			nYOld_Logic = ptXY.y;
 	CLogicInt tmp_y;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();

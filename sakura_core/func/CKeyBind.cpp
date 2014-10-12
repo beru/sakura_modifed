@@ -806,7 +806,7 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	for (int ii = 0; ii< _countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ii++) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
-	for (int i=nKeyDataInitNum-1; i>=0; i--) {
+	for (int i=nKeyDataInitNum-1; i >= 0; i--) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
 	}
 

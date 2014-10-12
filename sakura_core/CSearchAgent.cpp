@@ -319,7 +319,7 @@ const wchar_t* CSearchAgent::SearchStringWord(
 		size_t nSize = searchWords.size();
 		for (size_t iSW = 0; iSW < nSize; ++iSW) {
 			if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
-				// 1==‘å•¶š¬•¶š‚Ì‹æ•Ê
+				// 1 == ‘å•¶š¬•¶š‚Ì‹æ•Ê
 				if ((!bLoHiCase && 0 == auto_memicmp(&(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second) ) ||
 					(bLoHiCase && 0 == auto_memcmp(&(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second) )
 				) {
@@ -594,7 +594,7 @@ int CSearchAgent::SearchWord(
 						for (size_t iSW = 0; iSW < nSize; ++iSW) {
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory•ÏX
-								// 1==‘å•¶š¬•¶š‚Ì‹æ•Ê
+								// 1 == ‘å•¶š¬•¶š‚Ì‹æ•Ê
 								if ((!sSearchOption.bLoHiCase && 0 == auto_memicmp(&(pData[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second)) ||
 									(sSearchOption.bLoHiCase && 0 ==	 auto_memcmp(&(pData[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second))
 								) {

@@ -54,7 +54,7 @@ public:
 	);
 
 	// 状態
-	virtual bool Good() const { return m_fp!=NULL && !Eof(); }
+	virtual bool Good() const { return m_fp != NULL && !Eof(); }
 	bool Eof() const { return m_fp == NULL || feof(m_fp); }
 
 	// ファイルハンドル
@@ -79,7 +79,7 @@ public:
 
 	//! データを無変換で書き込む。戻り値は書き込んだバイト数。
 	int Write(const void* pBuffer, int nSizeInBytes) {
-		int nRet = fwrite(pBuffer,1,nSizeInBytes,GetFp());
+		int nRet = fwrite(pBuffer, 1, nSizeInBytes, GetFp());
 		if (nRet != nSizeInBytes && IsExceptionMode()) {
 			throw CError_FileWrite();
 		}

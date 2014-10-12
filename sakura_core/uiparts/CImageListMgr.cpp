@@ -217,7 +217,7 @@ void CImageListMgr::MyBitBlt(
 //	2003.09.04 Moca bmpMaskとbmpの転送する大きさが同じなので不要
 //	PatBlt(hdcMask, 0, 0, nWidth, nHeight, WHITENESS);
 	SetBkColor(hdcMem, colToTransParent);
-	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc,nYSrc, SRCCOPY);
+	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCCOPY);
 
 	/* マスク描画(透明にしない部分だけ黒く描画) */
 	::SetBkColor(drawdc, RGB(255, 255, 255) /* colBkColor */); // 2003.08.27 Moca 作画方法変更
@@ -229,7 +229,7 @@ void CImageListMgr::MyBitBlt(
 	::SetBkColor(hdcMem2, colToTransParent/*RGB(0, 0, 0)*/);
 	::SetTextColor(hdcMem2, RGB(0, 0, 0));
 	::BitBlt(hdcMem2, 0, 0, nWidth, nHeight, hdcMask, 0, 0, SRCCOPY);
-	::BitBlt(hdcMem2, 0, 0, nWidth, nHeight, hdcMem, nXSrc,nYSrc, SRCINVERT/*SRCPAINT*/);
+	::BitBlt(hdcMem2, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCINVERT/*SRCPAINT*/);
 	::BitBlt(drawdc, nXDest, nYDest, nWidth, nHeight, hdcMem2,  0, 0, /*SRCCOPY*/SRCPAINT);
 
 	::SelectObject(hdcMask, bmpMaskOld);
@@ -283,9 +283,9 @@ void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth,
 	//	2003.09.04 Moca bmpMaskとbmpの転送する大きさが同じなので不要
 	//PatBlt(hdcMask, 0, 0, nWidth, nHeight, WHITENESS);
 	SetBkColor(hdcMem, colToTransParent);
-	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc,nYSrc, SRCCOPY);
+	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCCOPY);
 	SetBkColor(hdcMem, RGB(255, 255, 255));
-	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc,nYSrc, SRCPAINT);
+	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCPAINT);
 
 	// Copy the image from the toolbar into the memory DC
 	// and draw it (grayed) back into the toolbar.
@@ -297,8 +297,8 @@ void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth,
 #if 0
 	::SetTextColor(hdcMem2, ::GetSysColor(COLOR_BTNHILIGHT));
 	::BitBlt(hdcMem2, 0, 0, nWidth, nHeight, hdcMask, 0, 0, SRCCOPY);
-	::BitBlt(drawdc, nXDest+1, nYDest+1, nWidth, nHeight, hdcMask, 0, 0, SRCAND);
-	::BitBlt(drawdc, nXDest+1, nYDest+1, nWidth, nHeight, hdcMem2, 0, 0, SRCPAINT);
+	::BitBlt(drawdc, nXDest + 1, nYDest + 1, nWidth, nHeight, hdcMask, 0, 0, SRCAND);
+	::BitBlt(drawdc, nXDest + 1, nYDest + 1, nWidth, nHeight, hdcMem2, 0, 0, SRCPAINT);
 	::SetTextColor(hdcMem2, ::GetSysColor(COLOR_BTNSHADOW));
 #else
 	::SetTextColor(hdcMem2, (::GetSysColor(COLOR_BTNSHADOW) != ::GetSysColor(COLOR_BTNFACE) ? ::GetSysColor(COLOR_3DSHADOW) : ::GetSysColor(COLOR_BTNHILIGHT)));

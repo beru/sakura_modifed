@@ -32,17 +32,17 @@ void CBlockComment::SetBlockCommentRule(
 	const wchar_t*	pszTo		//!< [in] コメント終了文字列
 	)
 {
-	int nStrLen = wcslen( pszFrom );
+	int nStrLen = wcslen(pszFrom);
 	if (0 < nStrLen && nStrLen < BLOCKCOMMENT_BUFFERSIZE) {
-		wcscpy_s( m_szBlockCommentFrom, pszFrom );
+		wcscpy_s(m_szBlockCommentFrom, pszFrom);
 		m_nBlockFromLen = nStrLen;
 	}else {
 		m_szBlockCommentFrom[0] = L'\0';
 		m_nBlockFromLen = 0;
 	}
-	nStrLen = wcslen( pszTo );
+	nStrLen = wcslen(pszTo);
 	if (0 < nStrLen && nStrLen < BLOCKCOMMENT_BUFFERSIZE) {
-		wcscpy_s( m_szBlockCommentTo, pszTo );
+		wcscpy_s(m_szBlockCommentTo, pszTo);
 		m_nBlockToLen = nStrLen;
 	}else {
 		m_szBlockCommentTo[0] = L'\0';
@@ -89,7 +89,7 @@ int CBlockComment::Match_CommentTo(
 ) const
 {
 	for (int i = nPos; i <= cStr.GetLength() - m_nBlockToLen; ++i) {
-		//if (0 == auto_memicmp( &cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen )) {	//非ASCIIも大文字小文字を区別しない	//###locale 依存
+		//if (0 == auto_memicmp(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	//非ASCIIも大文字小文字を区別しない	//###locale 依存
 		if (0 == wmemicmp_ascii(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	//ASCIIのみ大文字小文字を区別しない（高速）
 			return i + m_nBlockToLen;
 		}

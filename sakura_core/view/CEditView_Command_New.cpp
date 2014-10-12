@@ -239,7 +239,7 @@ void CEditView::InsertData_CEditView(
 
 	// 状態遷移
 	if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
-		m_pcEditDoc->m_cDocEditor.SetModified(true,bRedraw);	//	Jan. 22, 2002 genta
+		m_pcEditDoc->m_cDocEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 	}
 
 	// 再描画
@@ -485,7 +485,7 @@ void CEditView::DeleteData(
 
 		// 矩形範囲選択中か
 		if (selInfo.IsBoxSelecting()) {
-			m_pcEditDoc->m_cDocEditor.SetModified(true,bRedraw);	//	2002/06/04 YAZAKI 矩形選択を削除したときに変更マークがつかない。
+			m_pcEditDoc->m_cDocEditor.SetModified(true, bRedraw);	//	2002/06/04 YAZAKI 矩形選択を削除したときに変更マークがつかない。
 
 			SetDrawSwitch(false);	// 2002.01.25 hor
 			// 選択範囲のデータを取得
@@ -613,10 +613,10 @@ void CEditView::DeleteData(
 		// データ置換 削除&挿入にも使える
 		CLayoutRange sDelRange;
 		sDelRange.SetFrom(GetCaret().GetCaretLayoutPos());
-		sDelRange.SetTo(CLayoutPoint(nNxtPos,GetCaret().GetCaretLayoutPos().GetY()));
+		sDelRange.SetTo(CLayoutPoint(nNxtPos, GetCaret().GetCaretLayoutPos().GetY()));
 		CLogicRange sDelRangeLogic;
 		sDelRangeLogic.SetFrom(GetCaret().GetCaretLogicPos());
-		sDelRangeLogic.SetTo(CLogicPoint(nNxtIdx,GetCaret().GetCaretLogicPos().GetY()));
+		sDelRangeLogic.SetTo(CLogicPoint(nNxtIdx, GetCaret().GetCaretLogicPos().GetY()));
 		ReplaceData_CEditView(
 			sDelRange,
 			L"",				// 挿入するデータ
@@ -628,7 +628,7 @@ void CEditView::DeleteData(
 		);
 	}
 
-	m_pcEditDoc->m_cDocEditor.SetModified(true,bRedraw);	//	Jan. 22, 2002 genta
+	m_pcEditDoc->m_cDocEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 
 	if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() > 0) {
 		if (GetCaret().GetCaretLayoutPos().GetY() > m_pcEditDoc->m_cLayoutMgr.GetLineCount() - 1) {
@@ -684,9 +684,9 @@ void CEditView::ReplaceData_CEditView2(
 {
 	CLayoutRange sDelRangeLayout;
 	if (!bFastMode) {
-		this->m_pcEditDoc->m_cLayoutMgr.LogicToLayout(sDelRange,&sDelRangeLayout);
+		this->m_pcEditDoc->m_cLayoutMgr.LogicToLayout(sDelRange, &sDelRangeLayout);
 	}
-	ReplaceData_CEditView(sDelRangeLayout,pInsData,nInsDataLen,bRedraw,pcOpeBlk,bFastMode,&sDelRange);
+	ReplaceData_CEditView(sDelRangeLayout, pInsData, nInsDataLen, bRedraw, pcOpeBlk, bFastMode, &sDelRange);
 }
 
 
@@ -827,7 +827,7 @@ void CEditView::ReplaceData_CEditView3(
 	//	関数の末尾からここへ移動
 	// 状態遷移
 	if (pcOpeBlk) {	// アンドゥ・リドゥの実行中か
-		m_pcEditDoc->m_cDocEditor.SetModified(true,bRedraw);	//	Jan. 22, 2002 genta
+		m_pcEditDoc->m_cDocEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 	}
 
 	// 行番号表示に必要な幅を設定

@@ -36,10 +36,10 @@ void CDocVisitor::SetAllEol(CEol cEol)
 			CDocLine* pcDocLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLine); //#######非効率
 			if (!pcDocLine) break;
 			// 改行を置換
-			if (pcDocLine->GetEol()!=EOL_NONE && pcDocLine->GetEol()!=cEol) {
+			if (pcDocLine->GetEol() != EOL_NONE && pcDocLine->GetEol() != cEol) {
 				CLogicRange sRange;
-				sRange.SetFrom(CLogicPoint(pcDocLine->GetLengthWithoutEOL(),nLine));
-				sRange.SetTo(CLogicPoint(pcDocLine->GetLengthWithEOL(),nLine));
+				sRange.SetFrom(CLogicPoint(pcDocLine->GetLengthWithoutEOL(), nLine));
+				sRange.SetTo(CLogicPoint(pcDocLine->GetLengthWithEOL(), nLine));
 				pcView->ReplaceData_CEditView2(
 					sRange,
 					cEol.GetValue2(),
@@ -70,7 +70,7 @@ void CDocVisitor::SetAllEol(CEol cEol)
 			// カーソル位置復元
 			pcView->GetTextArea().SetViewTopLine(nViewTopLine);
 			pcView->GetTextArea().SetViewLeftCol(nViewLeftCol);
-			pcView->GetCaret().MoveCursor( ptCaretPosXY, true );
+			pcView->GetCaret().MoveCursor(ptCaretPosXY, true);
 			pcView->GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
 			pcView->m_cCommander.GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(

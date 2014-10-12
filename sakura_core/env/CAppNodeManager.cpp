@@ -724,7 +724,7 @@ bool CAppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 	auto* pNodeMgr = CAppNodeManager::getInstance();
 	CAppNodeGroupHandle cGroup1 = pNodeMgr->GetEditNode(hWnd1)->GetGroup();
 	CAppNodeGroupHandle cGroup2 = pNodeMgr->GetEditNode(hWnd2)->GetGroup();
-	if (cGroup1.IsValidGroup() && cGroup1==cGroup2) {
+	if (cGroup1.IsValidGroup() && cGroup1 == cGroup2) {
 		return true;
 	}
 

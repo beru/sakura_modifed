@@ -75,7 +75,7 @@ public:
 		if (GetComctl32Version() >= PACKVERSION(6, 0)) {
 			// マーキーにする(CommCtrl 6.0以上)
 			HWND hwndProgress = GetItemHwnd(IDC_PROGRESS);
-			// スタイル変更+メッセージでないと機能しない
+			// スタイル変更 + メッセージでないと機能しない
 			LONG_PTR style = ::GetWindowLongPtr(hwndProgress, GWL_STYLE);
 			::SetWindowLongPtr(hwndProgress, GWL_STYLE, style | PBS_MARQUEE);
 			Progress_SetMarquee(hwndProgress, TRUE, 100);

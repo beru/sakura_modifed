@@ -361,11 +361,11 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 				L"S_%ls(%d",
 				szFuncName,
 				_wtoi(m_pParamTop->m_pData));
-			if (GetParamAt(m_pParamTop,1)) {
-				out.WriteF(L", %d", wtoi_def(GetParamAt(m_pParamTop,1), 0));
+			if (GetParamAt(m_pParamTop, 1)) {
+				out.WriteF(L", %d", wtoi_def(GetParamAt(m_pParamTop, 1), 0));
 			}
-			if (GetParamAt(m_pParamTop,2)) {
-				out.WriteF(L", %d", wtoi_def(GetParamAt(m_pParamTop,2), 0));
+			if (GetParamAt(m_pParamTop, 2)) {
+				out.WriteF(L", %d", wtoi_def(GetParamAt(m_pParamTop, 2), 0));
 			}
 			out.WriteF(L");\t// %ls\r\n", szFuncNameJapanese);
 			break;
@@ -627,7 +627,7 @@ bool CMacro::HandleCommand(
 		{
 			pcEditView->m_pcEditWnd->m_cDlgJump.m_nLineNum = _wtoi(Argument[0]);	//ジャンプ先
 			LPARAM lFlag = Argument[1] != NULL ? _wtoi(Argument[1]) : 1; // デフォルト1
-			GetDllShareData().m_bLineNumIsCRLF_ForJump = ((lFlag & 0x01)!=0);
+			GetDllShareData().m_bLineNumIsCRLF_ForJump = ((lFlag & 0x01) != 0);
 			pcEditView->m_pcEditWnd->m_cDlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
 			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	//	標準
 		}
@@ -1555,8 +1555,8 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				}
 			}
 
-			TCHAR* Buffer = new TCHAR[ nMaxLen+1 ];
-			_tcscpy_s(Buffer, nMaxLen+1, sDefaultValue.c_str());
+			TCHAR* Buffer = new TCHAR[ nMaxLen + 1 ];
+			_tcscpy_s(Buffer, nMaxLen + 1, sDefaultValue.c_str());
 			CDlgInput1 cDlgInput1;
 			if (cDlgInput1.DoModal(G_AppInstance(), View->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, Buffer)) {
 				SysString S(Buffer, _tcslen(Buffer));
@@ -1843,7 +1843,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			}
 
 			CLogicPoint nLogicPos(nLineIdx, nLineNum);
-			CLayoutPoint nLayoutPos(CLayoutInt(0),CLayoutInt(0));
+			CLayoutPoint nLayoutPos(CLayoutInt(0), CLayoutInt(0));
 			View->m_pcEditDoc->m_cLayoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
 			int ret = ((LOWORD(ID) == F_LOGICTOLAYOUTLINENUM) ? (Int)nLayoutPos.GetY2() : (Int)nLayoutPos.GetX2()) + 1;
 			Wrap(&Result)->Receive(ret);
@@ -1983,7 +1983,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				const CLayoutXInt offset(varCopy2.Data.lVal - 1);
 				const CLayout tmpLayout(
 					&tmpDocLine,
-					CLogicPoint(0,0),
+					CLogicPoint(0, 0),
 					CLogicXInt(tmpLenWithEol1),
 					COLORIDX_TEXT,
 					offset,

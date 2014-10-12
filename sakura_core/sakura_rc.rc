@@ -3906,7 +3906,7 @@ BEGIN
 	// CMarkMgr.cpp
 
 	// CMemory.cpp
-	STR_ERR_DLGMEM1				"CMemory::AllocBuffer(nNewDataLen==%d)\nメモリ確保に失敗しました。\n"
+	STR_ERR_DLGMEM1				"CMemory::AllocBuffer(nNewDataLen == %d)\nメモリ確保に失敗しました。\n"
 
 	// CMenuDrawer.cpp
 

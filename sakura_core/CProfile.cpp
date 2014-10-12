@@ -80,17 +80,17 @@ void CProfile::ReadOneline(
 	// セクション取得
 	//	Jan. 29, 2004 genta compare使用
 	if (fl == '['
-		&& wcschr(line+1, '=') == NULL
-		&& wcschr(line+1, ']') == (line + len - 1)
+		&& wcschr(line + 1, '=') == NULL
+		&& wcschr(line + 1, ']') == (line + len - 1)
 	) {
 		Section Buffer;
-		Buffer.strSectionName = std::wstring(line+1, len - 1 - 1);
+		Buffer.strSectionName = std::wstring(line + 1, len - 1 - 1);
 		m_ProfileData.push_back(Buffer);
 	// エントリ取得
 	}else if (!m_ProfileData.empty()) {	// 最初のセクション以前の行のエントリは無視
 		const wchar_t* pos = wcschr(line, '=');
 		if (pos != nullptr) {
-			m_ProfileData.back().mapEntries.emplace(std::wstring(line, pos-line), std::wstring(pos+1));
+			m_ProfileData.back().mapEntries.emplace(std::wstring(line, pos - line), std::wstring(pos + 1));
 		}
 	}
 }
@@ -166,7 +166,7 @@ bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 	size_t		nSize;
 	char*		psMMres;
 	char*		p;
-	char		sLine[300+1];
+	char		sLine[300 + 1];
 	char*		pn;
 	size_t		lnsz;
 	wstring		line;
@@ -232,7 +232,7 @@ bool CProfile::WriteProfile(
 	const WCHAR* pszComment
 	)
 {
-	if (pszProfileName!=NULL) {
+	if (pszProfileName != NULL) {
 		m_strProfileName = pszProfileName;
 	}
     

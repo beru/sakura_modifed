@@ -71,7 +71,7 @@ bool CRecentExceptMRU::TextToDataType(CMetaPath* dst, LPCTSTR pszText) const
 
 int CRecentExceptMRU::CompareItem(const CMetaPath* p1, LPCTSTR p2) const
 {
-	return _tcsicmp(*p1,p2);
+	return _tcsicmp(*p1, p2);
 }
 
 void CRecentExceptMRU::CopyItem(CMetaPath* dst, LPCTSTR src) const

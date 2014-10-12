@@ -74,7 +74,7 @@ bool IsValidCodeType(int code);
 //!有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
 inline bool IsValidCodeTypeExceptSJIS(int code)
 {
-	return IsValidCodeType(code) && code!=CODE_SJIS;
+	return IsValidCodeType(code) && code != CODE_SJIS;
 }
 
 // 2010/6/21 Uchi 削除
@@ -82,7 +82,7 @@ inline bool IsValidCodeTypeExceptSJIS(int code)
 //!ECodeType型で表せる値ならtrue
 //inline bool IsInECodeType(int code)
 //{
-//	return (code>=0 && code<CODE_CODEMAX) || code==CODE_ERROR || code==CODE_AUTODETECT;
+//	return (code >= 0 && code < CODE_CODEMAX) || code == CODE_ERROR || code == CODE_AUTODETECT;
 //}
 
 // 2010/6/21 Uchi 削除

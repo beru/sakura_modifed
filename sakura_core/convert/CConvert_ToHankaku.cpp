@@ -10,7 +10,7 @@
 bool CConvert_ToHankaku::DoConvert(CNativeW* pcData)
 {
 	// ‘SŠp¨”¼Šp
-	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()*2+1]; // ‘÷“_“™‚Ì‰e‹¿‚ÅAÅ‘å2”{‚É‚Ü‚Å–c‚êã‚ª‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅA2”{‚Ìƒoƒbƒtƒ@‚ðŠm•Û
+	wchar_t* pBuf = new wchar_t[pcData->GetStringLength() * 2 + 1]; // ‘÷“_“™‚Ì‰e‹¿‚ÅAÅ‘å2”{‚É‚Ü‚Å–c‚êã‚ª‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅA2”{‚Ìƒoƒbƒtƒ@‚ðŠm•Û
 	int nDstLen = 0;
 	Convert_ToHankaku(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nDstLen);
 	pcData->SetString(pBuf, nDstLen);

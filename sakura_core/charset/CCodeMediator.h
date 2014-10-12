@@ -29,21 +29,21 @@ class CEditDoc;
 class CCodeMediator {
 protected:
 	// CESI.cpp の判定関数をここに移す
-	static ECodeType DetectMBCode( CESI* );
-	static ECodeType DetectUnicode( CESI* );
+	static ECodeType DetectMBCode(CESI*);
+	static ECodeType DetectUnicode(CESI*);
 
 public:
 
-	explicit CCodeMediator( const SEncodingConfig &ref ) : m_pEncodingConfig(&ref) { }
+	explicit CCodeMediator(const SEncodingConfig& ref) : m_pEncodingConfig(&ref) { }
 
-	static ECodeType DetectUnicodeBom( const char* pS, const int nLen );
+	static ECodeType DetectUnicodeBom(const char* pS, const int nLen);
 
 	// 日本語コードセット判別
-	ECodeType CheckKanjiCode( const char*, int );
+	ECodeType CheckKanjiCode(const char*, int);
 	// ファイルの日本語コードセット判別
-	ECodeType CheckKanjiCodeOfFile( const TCHAR* );
+	ECodeType CheckKanjiCodeOfFile(const TCHAR*);
 
-	static ECodeType CheckKanjiCode( CESI* );  // CESI 構造体（？）を外部で構築した場合に使用
+	static ECodeType CheckKanjiCode(CESI*);  // CESI 構造体（？）を外部で構築した場合に使用
 
 private:
 	const SEncodingConfig* m_pEncodingConfig;

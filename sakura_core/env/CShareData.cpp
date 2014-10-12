@@ -95,7 +95,7 @@ CShareData::~CShareData()
 */
 bool CShareData::InitShareData()
 {
-	MY_RUNNINGTIMER(cRunningTimer,"CShareData::InitShareData");
+	MY_RUNNINGTIMER(cRunningTimer, "CShareData::InitShareData");
 
 	m_hwndTraceOutSource = NULL;	// 2006.06.26 ryoji
 
@@ -483,7 +483,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sFormat.m_nDateFormatType = 0;		// 日付書式のタイプ
 		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szDateFormat, _T("yyyy\'年\'M\'月\'d\'日(\'dddd\')\'"));	//日付書式
 		m_pShareData->m_Common.m_sFormat.m_nTimeFormatType = 0;		// 時刻書式のタイプ
-		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szTimeFormat, _T("tthh\'時\'mm\'分\'ss\'秒\'") );			//時刻書式
+		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szTimeFormat, _T("tthh\'時\'mm\'分\'ss\'秒\'"));			//時刻書式
 
 		m_pShareData->m_Common.m_sWindow.m_bMenuIcon = TRUE;		// メニューにアイコンを表示する */
 
@@ -826,9 +826,9 @@ BOOL CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 					LS(STR_ERR_CSHAREDATA21),
 					pszPath,
 					pfi->m_nCharCode,
-					NULL==pszCodeNameCur?LS(STR_ERR_CSHAREDATA22):pszCodeNameCur,
+					NULL == pszCodeNameCur?LS(STR_ERR_CSHAREDATA22):pszCodeNameCur,
 					nCharCode,
-					NULL==pszCodeNameNew?LS(STR_ERR_CSHAREDATA22):pszCodeNameNew
+					NULL == pszCodeNameNew?LS(STR_ERR_CSHAREDATA22):pszCodeNameNew
 				);
 			}
 		}

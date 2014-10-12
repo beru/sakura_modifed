@@ -133,34 +133,34 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 
 	// ファイル毎(WZ風)
 	// ■"C:\RootFolder\FileName.ext"
-	// ・( 5395,11  ): str
+	// ・(5395,11 ): str
 	// ■"C:\RootFolder\SubFolders\FileName2.ext"
-	// ・( 5395,11  ): str
-	// ・( 5396,11  ): str
+	// ・(5395,11 ): str
+	// ・(5396,11 ): str
 	// ■"C:\RootFolder\SubFolders\FileName3.ext"
-	// ・(  123,12  ): str
+	// ・( 123,12 ): str
 
 	// ファイル毎/ベースフォルダ
 	// ◎"C:\RootFolder"
 	// ■"FileName.ext"
-	// ・( 5395,11  ): str
+	// ・(5395,11 ): str
 	// ■"SubFolders\FileName2.ext"
-	// ・( 5395,11  ): str
-	// ・( 5396,11  ): str
+	// ・(5395,11 ): str
+	// ・(5396,11 ): str
 	// ■"SubFolders\FileName3.ext"
-	// ・(  123,12  ): str
+	// ・( 123,12 ): str
 
 	// ファイル毎/ベースフォルダ/フォルダ毎
 	// ◎"C:\RootFolder"
 	// ■
 	// ◆"FileName.ext"
-	// ・( 5395,11  ): str
+	// ・(5395,11 ): str
 	// ■"SubFolders"
 	// ◆"FileName2.ext"
-	// ・( 5395,11  ): str
-	// ・( 5396,11  ): str
+	// ・(5395,11 ): str
+	// ・(5396,11 ): str
 	// ◆"FileName3.ext"
-	// ・(  123,12  ): str
+	// ・( 123,12 ): str
 
 	// Grep結果のタグジャンプ検索
 	// ・→◆→■→◎ の順に検索してパスを結合する

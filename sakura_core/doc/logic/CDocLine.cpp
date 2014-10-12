@@ -18,8 +18,8 @@
 
 CDocLine::CDocLine()
 	:
-	m_pPrev( NULL ),
-	m_pNext( NULL )
+	m_pPrev(NULL),
+	m_pNext(NULL)
 {
 }
 
@@ -51,10 +51,10 @@ void CDocLine::SetEol()
 	int nLength = m_cLine.GetStringLength();
 	// 改行コード設定
 	const wchar_t* p = &pData[nLength] - 1;
-	while (p>=pData && WCODE::IsLineDelimiter(*p)) p--;
+	while (p >= pData && WCODE::IsLineDelimiter(*p)) p--;
 	p++;
-	if (p>=pData) {
-		m_cEol.SetTypeByString(p, &pData[nLength]-p);
+	if (p >= pData) {
+		m_cEol.SetTypeByString(p, &pData[nLength] - p);
 	}else {
 		m_cEol = EOL_NONE;
 	}

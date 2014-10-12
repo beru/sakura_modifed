@@ -35,7 +35,7 @@ struct StringBufferW_ {
 	StringBufferW_(WCHAR* _pData, int _nDataCount) : pData(_pData), nDataCount(_nDataCount) { }
 
 	StringBufferW_& operator = (const StringBufferW_& rhs) {
-		auto_strcpy_s(pData,nDataCount,rhs.pData);
+		auto_strcpy_s(pData, nDataCount, rhs.pData);
 		return *this;
 	}
 };
@@ -47,7 +47,7 @@ struct StringBufferA_ {
 	StringBufferA_(ACHAR* _pData, int _nDataCount) : pData(_pData), nDataCount(_nDataCount) { }
 
 	StringBufferA_& operator = (const StringBufferA_& rhs) {
-		auto_strcpy_s(pData,nDataCount,rhs.pData);
+		auto_strcpy_s(pData, nDataCount, rhs.pData);
 		return *this;
 	}
 };
@@ -60,11 +60,11 @@ typedef const StringBufferW_ StringBufferW;
 #endif
 
 // 文字列バッファ型インスタンスの生成マクロ
-#define MakeStringBufferW(S) StringBufferW(S,_countof(S))
-#define MakeStringBufferA(S) StringBufferA(S,_countof(S))
-#define MakeStringBufferT(S) StringBufferT(S,_countof(S))
-#define MakeStringBufferW0(S) StringBufferW(S,0)
-#define MakeStringBufferT0(S) StringBufferT(S,0)
+#define MakeStringBufferW(S) StringBufferW(S, _countof(S))
+#define MakeStringBufferA(S) StringBufferA(S, _countof(S))
+#define MakeStringBufferT(S) StringBufferT(S, _countof(S))
+#define MakeStringBufferW0(S) StringBufferW(S, 0)
+#define MakeStringBufferT0(S) StringBufferT(S, 0)
 
 
 // 2007.09.24 kobake データ変換部を子クラスに分離
@@ -80,7 +80,7 @@ private:
 protected:
 	static const wchar_t* _work_itow(int n) {
 		static wchar_t buf[32];
-		_itow(n,buf,10);
+		_itow(n, buf, 10);
 		return buf;
 	}
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -125,7 +125,7 @@ protected:
 	void profile_to_value(const wstring& profile, ACHAR* value) {
 		if (profile.length() > 0) {
 			ACHAR buf[2] = {0};
-			int ret = wctomb(buf,profile[0]);
+			int ret = wctomb(buf, profile[0]);
 			assert_warning(ret == 1);
 			(void)ret;
 			*value = buf[0];
@@ -159,7 +159,7 @@ protected:
 	void value_to_profile(const StringBufferA& value, wstring* profile) {
 		*profile = to_wchar(value. pData);
 	}
-	// StaticString<WCHAR,N>
+	// StaticString<WCHAR, N>
 	template <int N>
 	void profile_to_value(const wstring& profile, StaticString<WCHAR, N>* value) {
 		wcscpy_s(value->GetBufferPointer(), value->GetBufferCount(), profile.c_str());
@@ -168,7 +168,7 @@ protected:
 	void value_to_profile(const StaticString<WCHAR, N>& value, wstring* profile) {
 		*profile = value.GetBufferPointer();
 	}
-	// StaticString<ACHAR,N>
+	// StaticString<ACHAR, N>
 	template <int N>
 	void profile_to_value(const wstring& profile, StaticString<ACHAR, N>* value) {
 		strcpy_s(value->GetBufferPointer(), value->GetBufferCount(), to_achar(profile.c_str()));

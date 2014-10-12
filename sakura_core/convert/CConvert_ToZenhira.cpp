@@ -10,7 +10,7 @@
 bool CConvert_ToZenhira::DoConvert(CNativeW* pcData)
 {
 	// ”¼ƒJƒi¨‘SŠpƒJƒi
-	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()+1]; // •¶Žš”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
+	wchar_t* pBuf = new wchar_t[pcData->GetStringLength() + 1]; // •¶Žš”‚ªŒ¸‚é‚±‚Æ‚Í‚ ‚Á‚Ä‚à‘‚¦‚é‚±‚Æ‚Í–³‚¢‚Ì‚ÅA‚±‚ê‚Å‚n‚j
 	int nBufLen = 0;
 	Convert_HankataToZenkata(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nBufLen);
 

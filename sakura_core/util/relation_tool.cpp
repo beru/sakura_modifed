@@ -36,7 +36,7 @@ void CSubject::_RemoveListener(CListener* pcListener)
 	// ”z—ñ‚©‚çíœ
 	for (int i=0; i<(int)m_vListenersRef.size(); i++) {
 		if (m_vListenersRef[i] == pcListener) {
-			m_vListenersRef.erase(m_vListenersRef.begin()+i);
+			m_vListenersRef.erase(m_vListenersRef.begin() + i);
 			break;
 		}
 	}

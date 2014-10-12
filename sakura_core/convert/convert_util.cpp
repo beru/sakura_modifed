@@ -80,8 +80,8 @@ static const wchar_t tableHanKigo[] =
 */
 bool wcschr_idx(const wchar_t* str, wchar_t c, int* idx)
 {
-	const wchar_t* p = wcschr(str,c);
-	if (p) *idx = (int)(p-str);
+	const wchar_t* p = wcschr(str, c);
+	if (p) *idx = (int)(p - str);
 	return p != NULL;
 }
 
@@ -92,11 +92,11 @@ bool wcschr_idx(const wchar_t* str, wchar_t c, int* idx)
 
 
 //! 全角ひらがな→全角カタカナ (文字数は不変)
-inline wchar_t ZenhiraToZenkata_(wchar_t c) { return ((c>=L'ぁ' && c<=L'\u3096') || (c>=L'ゝ' && c<=L'ゞ'))? L'ァ'+(c-L'ぁ'): c; }
+inline wchar_t ZenhiraToZenkata_(wchar_t c) { return ((c >= L'ぁ' && c <= L'\u3096') || (c >= L'ゝ' && c <= L'ゞ')) ? L'ァ' + (c - L'ぁ') : c; }
 void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
 {
 	wchar_t* p = pData;
-	wchar_t* q = p+nLength;
+	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = ZenhiraToZenkata_(*p);
 		p++;
@@ -105,11 +105,11 @@ void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
 
 //! 全角カタカナ→全角ひらがな (文字数は不変)
 // 2012.06.17 syat 「ヵ」「ヶ」を「か」「け」に変換しない
-inline wchar_t ZenkataToZenhira_(wchar_t c) { return ((c>=L'ァ' && c<=L'ヴ') || (c>=L'ヽ' && c<=L'ヾ'))? L'ぁ'+(c-L'ァ'): c; }
+inline wchar_t ZenkataToZenhira_(wchar_t c) { return ((c >= L'ァ' && c <= L'ヴ') || (c >= L'ヽ' && c <= L'ヾ')) ? L'ぁ' + (c - L'ァ') : c; }
 void Convert_ZenkataToZenhira(wchar_t* pData, int nLength)
 {
 	wchar_t* p = pData;
-	wchar_t* q = p+nLength;
+	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = ZenkataToZenhira_(*p);
 		p++;
@@ -122,18 +122,18 @@ inline wchar_t ZeneisuToHaneisu_(wchar_t c)
 {
 	int n;
 
-	     if (c>=L'Ａ' && c<=L'Ｚ') { c = L'A'+(c-L'Ａ'); }
-	else if (c>=L'ａ' && c<=L'ｚ') { c = L'a'+(c-L'ａ'); }
-	else if (c>=L'０' && c<=L'９') { c = L'0'+(c-L'０'); }
+	     if (c >= L'Ａ' && c <= L'Ｚ') { c = L'A' + (c - L'Ａ'); }
+	else if (c >= L'ａ' && c <= L'ｚ') { c = L'a' + (c - L'ａ'); }
+	else if (c >= L'０' && c <= L'９') { c = L'0' + (c - L'０'); }
 	//一部の記号も変換する
-	else if (wcschr_idx(tableZenKigo,c,&n)) { c = tableHanKigo[n]; }
+	else if (wcschr_idx(tableZenKigo, c, &n)) { c = tableHanKigo[n]; }
 
 	return c;
 }
 void Convert_ZeneisuToHaneisu(wchar_t* pData, int nLength)
 {
-	wchar_t* p=pData;
-	wchar_t* q=p+nLength;
+	wchar_t* p = pData;
+	wchar_t* q = p +nLength;
 	while (p < q) {
 		*p = ZeneisuToHaneisu_(*p);
 		p++;
@@ -145,18 +145,18 @@ inline wchar_t HaneisuToZeneisu_(wchar_t c)
 {
 	int n;
 
-	     if (c>=L'A' && c<=L'Z') { c = L'Ａ'+(c-L'A'); }
-	else if (c>=L'a' && c<=L'z') { c = L'ａ'+(c-L'a'); }
-	else if (c>=L'0' && c<=L'9') { c = L'０'+(c-L'0'); }
+	     if (c >= L'A' && c <= L'Z') { c = L'Ａ' + (c - L'A'); }
+	else if (c >= L'a' && c <= L'z') { c = L'ａ' + (c - L'a'); }
+	else if (c >= L'0' && c <= L'9') { c = L'０' + (c - L'0'); }
 	// 一部の記号も変換する
-	else if (wcschr_idx(tableHanKigo,c,&n)) { c = tableZenKigo[n]; }
+	else if (wcschr_idx(tableHanKigo, c, &n)) { c = tableZenKigo[n]; }
 
 	return c;
 }
 void Convert_HaneisuToZeneisu(wchar_t* pData, int nLength)
 {
 	wchar_t* p = pData;
-	wchar_t* q = p+nLength;
+	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = HaneisuToZeneisu_(*p);
 		p++;
@@ -218,7 +218,7 @@ void Convert_ToHankaku(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* 
 		else {
 			// 小さい「ゝ」「ゞ」は全角カタカナ（「ヽ」「ヾ」）には変換できても半角カタカナまでは変換できないので無変換
 			// 小さい「か」「け」、「結合゛(u3099)」「結合゜(u309A)」「゛(u309B)」「゜(u309C)」は変換可能  //2012.06.09 syat
-			if ((c>=L'\u3097' && c<=L'\u3098') || (c>=L'\u309D' && c<=L'\u309F')) { *dst++ = c; }
+			if ((c >= L'\u3097' && c <= L'\u3098') || (c >= L'\u309D' && c <= L'\u309F')) { *dst++ = c; }
 			else {
 				// 全角ひらがなを全角カタカナにしてから半角カタカナに変換する
 				c = ZenhiraToZenkata_(c);
@@ -253,15 +253,15 @@ void Convert_HankataToZenkata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 
 	while (src < src_end) {
 		wchar_t c = *src;
-		wchar_t next = (src+1<src_end) ? *(src+1) : 0; // 次の1文字を先読み
+		wchar_t next = (src + 1 < src_end) ? *(src + 1) : 0; // 次の1文字を先読み
 		// 濁点、半濁点のチェックを先行して行う
-		     if (next==L'ﾞ' && wcschr_idx(tableHankata_Dakuten   ,c,&n)) { *dst++ = tableZenkata_Dakuten[n];    src++; }
-		else if (next==L'ﾟ' && wcschr_idx(tableHankata_HanDakuten,c,&n)) { *dst++ = tableZenkata_HanDakuten[n]; src++; }
+		     if (next == L'ﾞ' && wcschr_idx(tableHankata_Dakuten, c, &n)) { *dst++ = tableZenkata_Dakuten[n];    src++; }
+		else if (next == L'ﾟ' && wcschr_idx(tableHankata_HanDakuten, c, &n)) { *dst++ = tableZenkata_HanDakuten[n]; src++; }
 		// それ以外の文字チェックを行う
-		else if (              wcschr_idx(tableHankata_Normal    ,c,&n)) { *dst++ = tableZenkata_Normal[n];            }
-		else if (              wcschr_idx(tableHankata_Cho       ,c,&n)) { *dst++ = tableZenkata_Cho[n];               }
-		else if (              wcschr_idx(tableHankata_Daku      ,c,&n)) { *dst++ = tableZenkata_Daku[n];              }
-		else if (              wcschr_idx(tableHankata_Kigo      ,c,&n)) { *dst++ = tableZenkata_Kigo[n];              }
+		else if (             wcschr_idx(tableHankata_Normal    ,c,&n)) { *dst++ = tableZenkata_Normal[n];            }
+		else if (             wcschr_idx(tableHankata_Cho       ,c,&n)) { *dst++ = tableZenkata_Cho[n];               }
+		else if (             wcschr_idx(tableHankata_Daku      ,c,&n)) { *dst++ = tableZenkata_Daku[n];              }
+		else if (             wcschr_idx(tableHankata_Kigo      ,c,&n)) { *dst++ = tableZenkata_Kigo[n];              }
 		// 無変換
 		else { *dst++ = c; }
 		src++;
@@ -284,21 +284,21 @@ void Convert_HankataToZenhira(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 
 	while (src < src_end) {
 		wchar_t c = *src;
-		wchar_t next = (src+1 < src_end) ? *(src+1) : 0; // 次の1文字を先読み
+		wchar_t next = (src + 1 < src_end) ? *(src + 1) : 0; // 次の1文字を先読み
 		bool hit = true;	// 半角カタカナ→全角カタカナ変換を実施したかどうかを示すフラグ
 		// 濁点、半濁点のチェックを先行して行う
 		// ※「ﾜﾞ」「ｦﾞ」は１字の全角カタカナには変換できても全角ひらがなまでは変換できないので濁点を切り離して変換
-		     if (              wcschr_idx(L"ﾜｦ"                  ,c,&n)) { *dst++ = L"ワヲ"[n];            }
-		else if (next==L'ﾞ' && wcschr_idx(tableHankata_Dakuten   ,c,&n)) { *dst++ = tableZenkata_Dakuten[n];    src++; }
-		else if (next==L'ﾟ' && wcschr_idx(tableHankata_HanDakuten,c,&n)) { *dst++ = tableZenkata_HanDakuten[n]; src++; }
+		     if (             wcschr_idx(L"ﾜｦ"                  ,c,&n)) { *dst++ = L"ワヲ"[n];            }
+		else if (next == L'ﾞ' && wcschr_idx(tableHankata_Dakuten   ,c,&n)) { *dst++ = tableZenkata_Dakuten[n];    src++; }
+		else if (next == L'ﾟ' && wcschr_idx(tableHankata_HanDakuten,c,&n)) { *dst++ = tableZenkata_HanDakuten[n]; src++; }
 		// それ以外の文字チェックを行う
-		else if (              wcschr_idx(tableHankata_Normal    ,c,&n)) { *dst++ = tableZenkata_Normal[n];            }
-		else if (              wcschr_idx(tableHankata_Cho       ,c,&n)) { *dst++ = tableZenkata_Cho[n];               }
-		else if (              wcschr_idx(tableHankata_Daku      ,c,&n)) { *dst++ = tableZenkata_Daku[n];              }
-		else if (              wcschr_idx(tableHankata_Kigo      ,c,&n)) { *dst++ = tableZenkata_Kigo[n];              }
+		else if (             wcschr_idx(tableHankata_Normal    ,c,&n)) { *dst++ = tableZenkata_Normal[n];            }
+		else if (             wcschr_idx(tableHankata_Cho       ,c,&n)) { *dst++ = tableZenkata_Cho[n];               }
+		else if (             wcschr_idx(tableHankata_Daku      ,c,&n)) { *dst++ = tableZenkata_Daku[n];              }
+		else if (             wcschr_idx(tableHankata_Kigo      ,c,&n)) { *dst++ = tableZenkata_Kigo[n];              }
 		// 無変換
 		else { *dst++ = c; hit = false; }
-		if (hit) { *(dst-1) = ZenkataToZenhira_(*(dst-1)); }	// 半角カタカナから変換した全角カタカナを全角ひらがなに変換（※もともと全角だったカタカナは無変換）
+		if (hit) { *(dst - 1) = ZenkataToZenhira_(*(dst - 1)); }	// 半角カタカナから変換した全角カタカナを全角ひらがなに変換（※もともと全角だったカタカナは無変換）
 		src++;
 	}
 	*dst = L'\0';

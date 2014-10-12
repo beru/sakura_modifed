@@ -91,7 +91,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           •`‰æ                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void FillBack(CGraphics& gr,const RECT& rc) {
+	void FillBack(CGraphics& gr, const RECT& rc) {
 		gr.FillSolidMyRect(rc, m_pColorInfoArr->m_sColorAttr.m_cBACK);
 	}
 

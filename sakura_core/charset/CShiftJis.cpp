@@ -22,7 +22,7 @@
 	@note nIdxは予め文字の先頭位置とわかっていなければならない．
 	2バイト文字の2バイト目をnIdxに与えると正しい結果が得られない．
 */
-int CShiftJis::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
+int CShiftJis::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 {
 	if (nIdx >= nDataLen) {
 		return 0;
@@ -30,8 +30,8 @@ int CShiftJis::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
 		return 1;
 	}
 	
-	if (_IS_SJIS_1( reinterpret_cast<const unsigned char*>(pData)[nIdx] )
-		&& _IS_SJIS_2( reinterpret_cast<const unsigned char*>(pData)[nIdx+1] )
+	if (_IS_SJIS_1(reinterpret_cast<const unsigned char*>(pData)[nIdx])
+		&& _IS_SJIS_2(reinterpret_cast<const unsigned char*>(pData)[nIdx + 1])
 	) {
 		return 2;
 	}
@@ -42,7 +42,7 @@ int CShiftJis::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
 /*!
 	SJIS → Unicode 変換
 */
-int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bool* pbError )
+int CShiftJis::SjisToUni(const char *pSrc, const int nSrcLen, wchar_t *pDst, bool* pbError)
 {
 	ECharSet echarset;
 	int nclen;
@@ -57,7 +57,7 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 		return 0;
 	}
 
-	pr = reinterpret_cast<const unsigned char*>( pSrc );
+	pr = reinterpret_cast<const unsigned char*>(pSrc);
 	pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	pw = reinterpret_cast<unsigned short*>(pDst);
 
@@ -69,7 +69,7 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 				nclen = 1;
 			}
 			// 7-bit ASCII 文字を変換
-			*pw = static_cast<unsigned short>( *pr );
+			*pw = static_cast<unsigned short>(*pr);
 			pw += 1;
 			break;
 		case CHARSET_JIS_ZENKAKU:
@@ -82,7 +82,7 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 				nclen = 1;
 			}
 			// 全角文字または半角カタカナ文字を変換
-			pw += _SjisToUni_char( pr, pw, echarset, &berror_tmp );
+			pw += _SjisToUni_char(pr, pw, echarset, &berror_tmp);
 			if (berror_tmp == true) {
 				berror = true;
 			}
@@ -92,7 +92,7 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 				nclen = 1;
 			}
 			// エラーが見つかった
-			pw += BinToText( pr, nclen, pw );
+			pw += BinToText(pr, nclen, pw);
 		}
 	}
 
@@ -105,14 +105,14 @@ int CShiftJis::SjisToUni( const char *pSrc, const int nSrcLen, wchar_t *pDst, bo
 
 
 // コード変換 SJIS→Unicode
-EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
+EConvertResult CShiftJis::SJISToUnicode(CMemory* pMem)
 {
 	// エラー状態
 	bool bError;
 
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( pMem->GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>(pMem->GetRawPtr(&nSrcLen));
 
 	// 変換先バッファサイズを設定してメモリ領域確保
 	wchar_t* pDst;
@@ -126,10 +126,10 @@ EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
 	}
 
 	// 変換
-	int nDstLen = SjisToUni( pSrc, nSrcLen, pDst, &bError );
+	int nDstLen = SjisToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pMemを更新
-	pMem->SetRawData( pDst, nDstLen * sizeof(wchar_t) );
+	pMem->SetRawData(pDst, nDstLen * sizeof(wchar_t));
 
 	// 後始末
 	delete [] pDst;
@@ -146,7 +146,7 @@ EConvertResult CShiftJis::SJISToUnicode( CMemory* pMem )
 /*
 	Unicode -> SJIS
 */
-int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bool *pbError )
+int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool *pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;
@@ -162,10 +162,10 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 	}
 
 	pr = reinterpret_cast<const unsigned short*>(pSrc);
-	pr_end = reinterpret_cast<const unsigned short*>(pSrc+nSrcLen);
+	pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
 	pw = reinterpret_cast<unsigned char*>(pDst);
 
-	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end-pr, &echarset, 0)) > 0) {
+	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
 		switch (echarset) {
 		case CHARSET_UNI_NORMAL:
@@ -179,7 +179,7 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 			nclen = 1;
 		}
 		if (echarset != CHARSET_BINARY) {
-			pw += _UniToSjis_char( pr, pw, echarset, &berror_tmp );
+			pw += _UniToSjis_char(pr, pw, echarset, &berror_tmp);
 			if (berror_tmp == true) {
 				berror = true;
 			}
@@ -207,13 +207,13 @@ int CShiftJis::UniToSjis( const wchar_t* pSrc, const int nSrcLen, char* pDst, bo
 
 
 // コード変換 Unicode→SJIS
-EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
+EConvertResult CShiftJis::UnicodeToSJIS(CMemory* pMem)
 {
 	// 状態
 	bool berror;
 
 	// ソース取得
-	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>( pMem->GetRawPtr() );
+	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
 	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
 
 	// 変換先バッファサイズを設定してバッファを確保
@@ -228,10 +228,10 @@ EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 	}
 
 	// 変換
-	int nDstLen = UniToSjis( pSrc, nSrcLen, pDst, &berror );
+	int nDstLen = UniToSjis(pSrc, nSrcLen, pDst, &berror);
 
 	// pMemを更新
-	pMem->SetRawData( pDst, nDstLen );
+	pMem->SetRawData(pDst, nDstLen);
 
 	// 後始末
 	delete[] pDst;
@@ -260,7 +260,7 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
-	cCharBuffer.SetRawData("",0);
+	cCharBuffer.SetRawData("", 0);
 	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
 
 	if (IsBinaryOnSurrogate(cSrc[0])) {
@@ -274,14 +274,14 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 	}
 
 	// Hex変換
-	ps = reinterpret_cast<unsigned char*>( cCharBuffer.GetRawPtr() );
+	ps = reinterpret_cast<unsigned char*>(cCharBuffer.GetRawPtr());
 	pd = pDst;
 	if (bbinary == false) {
 		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
-			auto_sprintf( pd, _T("%02X"), *ps);
+			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {
-		auto_sprintf( pd, _T("?%02X"), *ps );
+		auto_sprintf(pd, _T("?%02X"), *ps);
 	}
 
 	return RESULT_COMPLETE;

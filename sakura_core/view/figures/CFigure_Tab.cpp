@@ -45,7 +45,7 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 	int nLineHeight = pMetrics->GetHankakuDy();
 	int nCharWidth = pMetrics->GetHankakuDx();
 
-	CTypeSupport cTabType(pcView,COLORIDX_TAB);
+	CTypeSupport cTabType(pcView, COLORIDX_TAB);
 
 	// ‚±‚ê‚©‚ç•`‰æ‚·‚éƒ^ƒu•
 	int tabDispWidth = (Int)pcView->m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(sPos.GetDrawCol());

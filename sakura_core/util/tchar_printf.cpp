@@ -17,7 +17,7 @@ inline const T* skip_field_flag(const T* p)
 {
 	while (*p) {
 		T c = *p;
-		if (c==_T2(T,'-') || c==_T2(T,'+') || c==_T2(T,'0') || c==_T2(T,' ') || c==_T2(T,'#')) { p++; continue; }
+		if (c == _T2(T,'-') || c == _T2(T, '+') || c == _T2(T,'0') || c == _T2(T,' ') || c == _T2(T,'#')) { p++; continue; }
 		break;
 	}
 	return p;
@@ -45,13 +45,13 @@ inline const T* skip_field_precision(const T* p)
 template <class T>
 inline const T* skip_field_prefix(const T* p)
 {
-	if (*p == _T2(T,'t')) return p+1; // “Æ©Šg’£
-	if (*p == _T2(T,'h')) return p+1;
-	if (p[0] == _T2(T,'l') && p[1] == _T2(T,'l')) return p+2;
-	if (*p == _T2(T,'l')) return p+1;
-	if (p[0] == _T2(T,'I') && p[1] == _T2(T,'3') && p[2] == _T2(T,'2')) return p+3;
-	if (p[0] == _T2(T,'I') && p[1] == _T2(T,'6') && p[2] == _T2(T,'4')) return p+3;
-	if (*p == _T2(T,'I')) return p+1;
+	if (*p == _T2(T,'t')) return p + 1; // “Æ©Šg’£
+	if (*p == _T2(T,'h')) return p + 1;
+	if (p[0] == _T2(T,'l') && p[1] == _T2(T,'l')) return p + 2;
+	if (*p == _T2(T,'l')) return p + 1;
+	if (p[0] == _T2(T,'I') && p[1] == _T2(T,'3') && p[2] == _T2(T,'2')) return p + 3;
+	if (p[0] == _T2(T,'I') && p[1] == _T2(T,'6') && p[2] == _T2(T,'4')) return p + 3;
+	if (*p == _T2(T,'I')) return p + 1;
 	return p;
 }
 

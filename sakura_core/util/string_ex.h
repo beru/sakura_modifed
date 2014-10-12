@@ -51,18 +51,18 @@
 //    文字とみなして処理を行う、ということで)
 
 // メモリ比較
-inline int amemcmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return ::memcmp(p1,p2,count); }
+inline int amemcmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return ::memcmp(p1, p2, count); }
 
 // 大文字小文字を区別せずにメモリ比較
-inline int amemicmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return ::memicmp(p1,p2,count); }
+inline int amemicmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return ::memicmp(p1, p2, count); }
        int wmemicmp(const WCHAR* p1, const WCHAR* p2, size_t count);
        int wmemicmp(const WCHAR* p1, const WCHAR* p2);
        int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count);
 
 // 元の関数と同じシグニチャ版。
 // 文字列以外のメモリ処理でmem～系関数を使う場面では、この関数を使っておくと、意味合いがはっきりして良い。
-inline void* memset_raw(void* dest, int c, size_t size) { return ::memset(dest,c,size); }
-inline void* memcpy_raw(void* dest, const void* src, size_t size) { return ::memcpy(dest,src,size); }
+inline void* memset_raw(void* dest, int c, size_t size) { return ::memset(dest, c, size); }
+inline void* memcpy_raw(void* dest, const void* src, size_t size) { return ::memcpy(dest, src, size); }
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -89,7 +89,7 @@ int skr_towlower(int c);
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字数の上限付きコピー
-LPWSTR wcscpyn(LPWSTR lpString1,LPCWSTR lpString2,int iMaxLength); // iMaxLengthは文字単位。
+LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, int iMaxLength); // iMaxLengthは文字単位。
 
 // Apr. 03, 2003 genta
 char* strncpy_ex(char* dst, size_t dst_count, const char* src, size_t src_count);
@@ -97,8 +97,8 @@ char* strncpy_ex(char* dst, size_t dst_count, const char* src, size_t src_count)
 // 大文字小文字を区別せずに文字列を検索
 const WCHAR* wcsistr(const WCHAR* s1, const WCHAR* s2);
 const ACHAR* stristr(const ACHAR* s1, const ACHAR* s2);
-inline WCHAR* wcsistr(WCHAR* s1, const WCHAR* s2) { return const_cast<WCHAR*>(wcsistr(static_cast<const WCHAR*>(s1),s2)); }
-inline ACHAR* stristr(ACHAR* s1, const ACHAR* s2) { return const_cast<ACHAR*>(stristr(static_cast<const ACHAR*>(s1),s2)); }
+inline WCHAR* wcsistr(WCHAR* s1, const WCHAR* s2) { return const_cast<WCHAR*>(wcsistr(static_cast<const WCHAR*>(s1), s2)); }
+inline ACHAR* stristr(ACHAR* s1, const ACHAR* s2) { return const_cast<ACHAR*>(stristr(static_cast<const ACHAR*>(s1), s2)); }
 #ifdef _UNICODE
 #define _tcsistr wcsistr
 #else
@@ -149,38 +149,38 @@ int my_strnicmp(const char *s1, const char *s2, size_t n);
 
 
 // 転送系
-inline ACHAR* auto_memcpy(ACHAR* dest, const ACHAR* src, size_t count) {        ::memcpy (dest,src,count); return dest; }
-inline WCHAR* auto_memcpy(WCHAR* dest, const WCHAR* src, size_t count) { return ::wmemcpy(dest,src,count);              }
-inline ACHAR* auto_strcpy(ACHAR* dst, const ACHAR* src) { return strcpy(dst,src); }
-inline WCHAR* auto_strcpy(WCHAR* dst, const WCHAR* src) { return wcscpy(dst,src); }
-inline errno_t auto_strcpy_s(ACHAR* dst, size_t nDstCount, const ACHAR* src) { return strcpy_s(dst,nDstCount,src); }
-inline errno_t auto_strcpy_s(WCHAR* dst, size_t nDstCount, const WCHAR* src) { return wcscpy_s(dst,nDstCount,src); }
-inline ACHAR* auto_strncpy(ACHAR* dst,const ACHAR* src,size_t count) { return strncpy(dst,src,count); }
-inline WCHAR* auto_strncpy(WCHAR* dst,const WCHAR* src,size_t count) { return wcsncpy(dst,src,count); }
-inline ACHAR* auto_memset(ACHAR* dest, ACHAR c, size_t count) {        memset (dest,c,count); return dest; }
-inline WCHAR* auto_memset(WCHAR* dest, WCHAR c, size_t count) { return wmemset(dest,c,count);              }
-inline ACHAR* auto_strcat(ACHAR* dst, const ACHAR* src) { return strcat(dst,src); }
-inline WCHAR* auto_strcat(WCHAR* dst, const WCHAR* src) { return wcscat(dst,src); }
-inline errno_t auto_strcat_s(ACHAR* dst, size_t nDstCount, const ACHAR* src) { return strcat_s(dst,nDstCount,src); }
-inline errno_t auto_strcat_s(WCHAR* dst, size_t nDstCount, const WCHAR* src) { return wcscat_s(dst,nDstCount,src); }
+inline ACHAR* auto_memcpy(ACHAR* dest, const ACHAR* src, size_t count) {        ::memcpy (dest, src, count); return dest; }
+inline WCHAR* auto_memcpy(WCHAR* dest, const WCHAR* src, size_t count) { return ::wmemcpy(dest, src, count);              }
+inline ACHAR* auto_strcpy(ACHAR* dst, const ACHAR* src) { return strcpy(dst, src); }
+inline WCHAR* auto_strcpy(WCHAR* dst, const WCHAR* src) { return wcscpy(dst, src); }
+inline errno_t auto_strcpy_s(ACHAR* dst, size_t nDstCount, const ACHAR* src) { return strcpy_s(dst, nDstCount, src); }
+inline errno_t auto_strcpy_s(WCHAR* dst, size_t nDstCount, const WCHAR* src) { return wcscpy_s(dst, nDstCount, src); }
+inline ACHAR* auto_strncpy(ACHAR* dst, const ACHAR* src, size_t count) { return strncpy(dst, src, count); }
+inline WCHAR* auto_strncpy(WCHAR* dst, const WCHAR* src, size_t count) { return wcsncpy(dst, src, count); }
+inline ACHAR* auto_memset(ACHAR* dest, ACHAR c, size_t count) {        memset(dest, c, count); return dest; }
+inline WCHAR* auto_memset(WCHAR* dest, WCHAR c, size_t count) { return wmemset(dest, c, count);              }
+inline ACHAR* auto_strcat(ACHAR* dst, const ACHAR* src) { return strcat(dst, src); }
+inline WCHAR* auto_strcat(WCHAR* dst, const WCHAR* src) { return wcscat(dst, src); }
+inline errno_t auto_strcat_s(ACHAR* dst, size_t nDstCount, const ACHAR* src) { return strcat_s(dst, nDstCount, src); }
+inline errno_t auto_strcat_s(WCHAR* dst, size_t nDstCount, const WCHAR* src) { return wcscat_s(dst, nDstCount, src); }
 
 // 比較系
-inline int auto_memcmp (const ACHAR* p1, const ACHAR* p2, size_t count) { return amemcmp(p1,p2,count); }
-inline int auto_memcmp (const WCHAR* p1, const WCHAR* p2, size_t count) { return wmemcmp(p1,p2,count); }
-inline int auto_strcmp (const ACHAR* p1, const ACHAR* p2) { return strcmp(p1,p2); }
-inline int auto_strcmp (const WCHAR* p1, const WCHAR* p2) { return wcscmp(p1,p2); }
-inline int auto_strncmp(const ACHAR* str1, const ACHAR* str2, size_t count) { return strncmp(str1,str2,count); }
-inline int auto_strncmp(const WCHAR* str1, const WCHAR* str2, size_t count) { return wcsncmp(str1,str2,count); }
+inline int auto_memcmp (const ACHAR* p1, const ACHAR* p2, size_t count) { return amemcmp(p1, p2, count); }
+inline int auto_memcmp (const WCHAR* p1, const WCHAR* p2, size_t count) { return wmemcmp(p1, p2, count); }
+inline int auto_strcmp (const ACHAR* p1, const ACHAR* p2) { return strcmp(p1, p2); }
+inline int auto_strcmp (const WCHAR* p1, const WCHAR* p2) { return wcscmp(p1, p2); }
+inline int auto_strncmp(const ACHAR* str1, const ACHAR* str2, size_t count) { return strncmp(str1, str2, count); }
+inline int auto_strncmp(const WCHAR* str1, const WCHAR* str2, size_t count) { return wcsncmp(str1, str2, count); }
 
 // 比較系（ASCII, UCS2 専用）
-inline int auto_memicmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return amemicmp(p1,p2,count); }
-inline int auto_memicmp(const WCHAR* p1, const WCHAR* p2, size_t count) { return wmemicmp(p1,p2,count); }
+inline int auto_memicmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return amemicmp(p1, p2, count); }
+inline int auto_memicmp(const WCHAR* p1, const WCHAR* p2, size_t count) { return wmemicmp(p1, p2, count); }
 
 // 比較系（SJIS, UTF-16 専用)
-inline int auto_strnicmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return my_strnicmp(p1,p2,count); }
-inline int auto_strnicmp(const WCHAR* p1, const WCHAR* p2, size_t count) { return wmemicmp(p1,p2,count); } // Stub.
-inline int auto_stricmp(const ACHAR* p1, const ACHAR* p2) { return my_stricmp(p1,p2); }
-inline int auto_stricmp(const WCHAR* p1, const WCHAR* p2) { return wmemicmp(p1,p2); } // Stub.
+inline int auto_strnicmp(const ACHAR* p1, const ACHAR* p2, size_t count) { return my_strnicmp(p1, p2, count); }
+inline int auto_strnicmp(const WCHAR* p1, const WCHAR* p2, size_t count) { return wmemicmp(p1, p2, count); } // Stub.
+inline int auto_stricmp(const ACHAR* p1, const ACHAR* p2) { return my_stricmp(p1, p2); }
+inline int auto_stricmp(const WCHAR* p1, const WCHAR* p2) { return wmemicmp(p1, p2); } // Stub.
 
 // 長さ計算系
 inline size_t auto_strlen(const ACHAR* str) { return strlen(str); }
@@ -189,14 +189,14 @@ inline size_t auto_strnlen(const ACHAR* str, size_t count) { return strnlen(str,
 inline size_t auto_strnlen(const WCHAR* str, size_t count) { return wcsnlen(str, count); }
 
 // 検索系（SJIS, UCS2 専用）
-inline const ACHAR* auto_strstr(const ACHAR* str, const ACHAR* strSearch) { return ::strstr_j(str,strSearch); }
-inline const WCHAR* auto_strstr(const WCHAR* str, const WCHAR* strSearch) { return ::wcsstr  (str,strSearch); }
-inline       ACHAR* auto_strstr(     ACHAR* str, const ACHAR* strSearch) { return ::strstr_j(str,strSearch); }
-inline       WCHAR* auto_strstr(     WCHAR* str, const WCHAR* strSearch) { return ::wcsstr  (str,strSearch); }
-inline const ACHAR* auto_strchr(const ACHAR* str, ACHAR c) { return ::strchr_j(str,c); }
-inline const WCHAR* auto_strchr(const WCHAR* str, WCHAR c) { return ::wcschr  (str,c); }
-inline       ACHAR* auto_strchr(     ACHAR* str, ACHAR c) { return ::strchr_j(str,c); }
-inline       WCHAR* auto_strchr(     WCHAR* str, WCHAR c) { return ::wcschr  (str,c); }
+inline const ACHAR* auto_strstr(const ACHAR* str, const ACHAR* strSearch) { return ::strstr_j(str, strSearch); }
+inline const WCHAR* auto_strstr(const WCHAR* str, const WCHAR* strSearch) { return ::wcsstr  (str, strSearch); }
+inline       ACHAR* auto_strstr(     ACHAR* str, const ACHAR* strSearch) { return ::strstr_j(str, strSearch); }
+inline       WCHAR* auto_strstr(     WCHAR* str, const WCHAR* strSearch) { return ::wcsstr  (str, strSearch); }
+inline const ACHAR* auto_strchr(const ACHAR* str, ACHAR c) { return ::strchr_j(str, c); }
+inline const WCHAR* auto_strchr(const WCHAR* str, WCHAR c) { return ::wcschr  (str, c); }
+inline       ACHAR* auto_strchr(     ACHAR* str, ACHAR c) { return ::strchr_j(str, c); }
+inline       WCHAR* auto_strchr(     WCHAR* str, WCHAR c) { return ::wcschr  (str, c); }
 
 // 変換系
 inline long auto_atol(const ACHAR* str) { return atol(str);  }
@@ -234,19 +234,19 @@ inline
 int auto_sprintf(WCHAR* buf, const WCHAR* format, ...)
 {
 	va_list v;
-	va_start(v,format);
+	va_start(v, format);
 	int ret = tchar_vswprintf(buf, format, v);
 	va_end(v);
 	return ret;
 }
 
-inline int auto_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...)   { va_list v; va_start(v,format); int ret=tchar_vsnprintf_s (buf,count,format,v); va_end(v); return ret; }
-inline int auto_snprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)   { va_list v; va_start(v,format); int ret=tchar_vsnwprintf_s(buf,count,format,v); va_end(v); return ret; }
-inline int auto_sprintf(ACHAR* buf, const ACHAR* format, ...)                    { va_list v; va_start(v,format); int ret=tchar_vsprintf (buf,format,v); va_end(v); return ret; }
-inline int auto_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...) { va_list v; va_start(v,format); int ret=tchar_vsprintf_s (buf,nBufCount,format,v); va_end(v); return ret; }
-inline int auto_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...) { va_list v; va_start(v,format); int ret=tchar_vswprintf_s(buf,nBufCount,format,v); va_end(v); return ret; }
-inline int auto_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v) { return tchar_vsprintf (buf,format,v); }
-inline int auto_vsprintf(WCHAR* buf, const WCHAR* format, va_list& v) { return tchar_vswprintf(buf,format,v); }
+inline int auto_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...)   { va_list v; va_start(v, format); int ret = tchar_vsnprintf_s (buf, count, format, v); va_end(v); return ret; }
+inline int auto_snprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)   { va_list v; va_start(v, format); int ret = tchar_vsnwprintf_s(buf, count, format, v); va_end(v); return ret; }
+inline int auto_sprintf(ACHAR* buf, const ACHAR* format, ...)                    { va_list v; va_start(v, format); int ret = tchar_vsprintf (buf, format, v); va_end(v); return ret; }
+inline int auto_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...) { va_list v; va_start(v, format); int ret = tchar_vsprintf_s (buf, nBufCount, format, v); va_end(v); return ret; }
+inline int auto_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...) { va_list v; va_start(v, format); int ret = tchar_vswprintf_s(buf, nBufCount, format, v); va_end(v); return ret; }
+inline int auto_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v) { return tchar_vsprintf (buf, format, v); }
+inline int auto_vsprintf(WCHAR* buf, const WCHAR* format, va_list& v) { return tchar_vswprintf(buf, format, v); }
 inline int auto_vsprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list& v) { return tchar_vsprintf_s (buf, nBufCount, format, v); }
 inline int auto_vsprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v) { return tchar_vswprintf_s(buf, nBufCount, format, v); }
 
@@ -257,7 +257,7 @@ inline int auto_vsprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va
 #include <vector>
 
 // SJIS→UNICODE。終端にL'\0'を付けてくれる版。
-size_t mbstowcs2(wchar_t* dst,const char* src,size_t dst_count);
+size_t mbstowcs2(wchar_t* dst, const char* src, size_t dst_count);
 size_t mbstowcs2(wchar_t* pDst, int nDstCount, const char* pSrc, int nSrcCount);
 
 // UNICODE→SJIS。終端に'\0'を付けてくれる版。
@@ -271,7 +271,7 @@ void		mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret);
 
 // UNICODE→SJIS
 char*	wcstombs_new(const wchar_t* src); // 戻り値はnew[]で確保して返す。
-char*	wcstombs_new(const wchar_t* pSrc,int nSrcLen); // 戻り値はnew[]で確保して返す。
+char*	wcstombs_new(const wchar_t* pSrc, int nSrcLen); // 戻り値はnew[]で確保して返す。
 void	wcstombs_vector(const wchar_t* pSrc, std::vector<char>* ret); // 戻り値はvectorとして返す。
 void	wcstombs_vector(const wchar_t* pSrc, int nSrcLen, std::vector<char>* ret); // 戻り値はvectorとして返す。
 
@@ -280,8 +280,8 @@ size_t _tcstowcs(WCHAR* wszDst, const TCHAR* tszSrc, size_t nDstCount);
 size_t _tcstombs(CHAR*  szDst,  const TCHAR* tszSrc, size_t nDstCount);
 size_t _wcstotcs(TCHAR* tszDst, const WCHAR* wszSrc, size_t nDstCount);
 size_t _mbstotcs(TCHAR* tszDst, const CHAR*  szSrc,  size_t nDstCount);
-int _tctomb(const TCHAR* p,ACHAR* mb);
-int _tctowc(const TCHAR* p,WCHAR* wc);
+int _tctomb(const TCHAR* p, ACHAR* mb);
+int _tctowc(const TCHAR* p, WCHAR* wc);
 
 
 
@@ -295,7 +295,7 @@ int _tctowc(const TCHAR* p,WCHAR* wc);
 // wcsncmpの文字数指定をszData2からwcslenで取得してくれる版
 inline int wcsncmp_auto(const wchar_t* strData1, const wchar_t* szData2)
 {
-	return wcsncmp(strData1,szData2,wcslen(szData2));
+	return wcsncmp(strData1, szData2, wcslen(szData2));
 }
 
 // wcsncmpの文字数指定をliteralData2の大きさで取得してくれる版

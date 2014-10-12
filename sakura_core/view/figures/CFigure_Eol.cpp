@@ -51,8 +51,8 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 
 bool CFigure_Eol::Match(const wchar_t* pText) const
 {
-	if (pText[0]==L'\r' && pText[1]==L'\n' && pText[2]==L'\0') return true;
-	if (WCODE::IsLineDelimiter(pText[0]) && pText[1]==L'\0') return true;
+	if (pText[0] == L'\r' && pText[1] == L'\n' && pText[2] == L'\0') return true;
+	if (WCODE::IsLineDelimiter(pText[0]) && pText[1] == L'\0') return true;
 	return false;
 }
 
@@ -114,7 +114,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		DrawImp_StylePop(pInfo);
 		DrawImp_DrawUnderline(pInfo, sPos);
 
-		pInfo->m_nPosInLogic+=cEol.GetLen();
+		pInfo->m_nPosInLogic += cEol.GetLen();
 	}
 
 	return true;
@@ -128,12 +128,12 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum)
 {
 	RECT rcClip2;
-	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos,1)) {
+	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {
 		// サポートクラス
-		CTypeSupport cWrapType(pcView,COLORIDX_WRAP);
-		CTypeSupport cTextType(pcView,COLORIDX_TEXT);
-		CTypeSupport cBgLineType(pcView,COLORIDX_CARETLINEBG);
-		CTypeSupport cEvenBgLineType(pcView,COLORIDX_EVENLINEBG);
+		CTypeSupport cWrapType(pcView, COLORIDX_WRAP);
+		CTypeSupport cTextType(pcView, COLORIDX_TEXT);
+		CTypeSupport cBgLineType(pcView, COLORIDX_CARETLINEBG);
+		CTypeSupport cEvenBgLineType(pcView, COLORIDX_EVENLINEBG);
 		bool bBgcolor = cWrapType.GetBackColor() == cTextType.GetBackColor();
 		EColorIndexType eBgcolorOverwrite = COLORIDX_WRAP;
 		bool bTrans = pcView->IsBkBitmap();
@@ -200,10 +200,10 @@ void _DispEOF(
 )
 {
 	// 描画に使う色情報
-	CTypeSupport cEofType(pcView,COLORIDX_EOF);
+	CTypeSupport cEofType(pcView, COLORIDX_EOF);
 	if (!cEofType.IsDisp())
 		return;
-	CTypeSupport cTextType(pcView,COLORIDX_TEXT);
+	CTypeSupport cTextType(pcView, COLORIDX_TEXT);
 	bool bTrans = pcView->IsBkBitmap() && cEofType.GetBackColor() == cTextType.GetBackColor();
 
 	// 必要なインターフェースを取得
@@ -216,7 +216,7 @@ void _DispEOF(
 
 	// クリッピング領域を計算
 	RECT rcClip;
-	if (pArea->GenerateClipRect(&rcClip,*pDispPos,nEofLen)) {
+	if (pArea->GenerateClipRect(&rcClip, *pDispPos, nEofLen)) {
 		// 色設定
 		cEofType.SetGraphicsState_WhileThisObj(gr);
 
@@ -271,7 +271,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 		);
 
 		// 改行記号の表示
-		if (CTypeSupport(pcView,COLORIDX_EOL).IsDisp()) {
+		if (CTypeSupport(pcView, COLORIDX_EOL).IsDisp()) {
 			// From Here 2003.08.17 ryoji 改行文字が欠けないように
 
 			// リージョン作成、選択。

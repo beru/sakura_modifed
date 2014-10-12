@@ -36,12 +36,12 @@
 #include "charset/codechecker.h"
 
 // Base64デコード
-bool CDecode_Base64Decode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
+bool CDecode_Base64Decode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 {
 	using namespace WCODE;
 
 	const int BUFFER_SIZE = 1024;  // バッファサイズ。１以上の整数かつ４の倍数で。
-	const int _BUFSIZE = ((BUFFER_SIZE+3)/4)*4;
+	const int _BUFSIZE = ((BUFFER_SIZE + 3) / 4) * 4;
 
 	const wchar_t *pSrc;
 	int nSrcLen;
@@ -52,7 +52,7 @@ bool CDecode_Base64Decode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 
 	pSrc = pcSrc.GetStringPtr();
 	nSrcLen = pcSrc.GetStringLength();
-	pcDst->AllocBuffer( nSrcLen );  // 書き込みバッファを確保
+	pcDst->AllocBuffer(nSrcLen);  // 書き込みバッファを確保
 	pw_base = pw = reinterpret_cast<char *>(pcDst->GetRawPtr());
 
 	i = 0;  // pcSrc の添え字
@@ -73,14 +73,14 @@ bool CDecode_Base64Decode::DoDecode( const CNativeW& pcSrc, CMemory* pcDst )
 			buffer[j] = static_cast<char>(c & 0xff);
 			++j;
 		}
-		pw += _DecodeBase64( &buffer[0], j, pw );
+		pw += _DecodeBase64(&buffer[0], j, pw);
 	}while (i < nSrcLen && c != LTEXT('='));
 
-	//if( CheckBase64Padbit(&buffer[0], j) == false ) {
+	//if(CheckBase64Padbit(&buffer[0], j) == false) {
 	//	return false;
 	//}
 
-	pcDst->_SetRawLength( pw - pw_base );
+	pcDst->_SetRawLength(pw - pw_base);
 	return true;
 }
 

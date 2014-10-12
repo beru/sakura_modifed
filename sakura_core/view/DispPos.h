@@ -29,7 +29,7 @@
 
 struct DispPos {
 public:
-	DispPos(int nDx,int nDy)
+	DispPos(int nDx, int nDy)
 		:
 		m_nDx(nDx),
 		m_nDy(nDy)

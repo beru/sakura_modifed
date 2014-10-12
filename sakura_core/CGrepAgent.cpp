@@ -442,7 +442,7 @@ DWORD CGrepAgent::DoGrep(
 
 	// Apr. 13, 2001 genta
 	// Grep実行後はファイルを変更無しの状態にする．
-	pcViewDst->m_pcEditDoc->m_cDocEditor.SetModified(false,false);
+	pcViewDst->m_pcEditDoc->m_cDocEditor.SetModified(false, false);
 
 	this->m_bGrepRunning = false;
 	pcViewDst->m_bDoing_UndoRedo = false;

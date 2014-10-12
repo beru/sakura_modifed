@@ -48,9 +48,9 @@ public:
 	using SUPER::y;
 	// コンストラクタ・デストラクタ
 	CStrictPoint() { x = SuperIntType(0); y = SuperIntType(0); }
-	CStrictPoint(int _x,int _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
+	CStrictPoint(int _x, int _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
 #ifdef USE_STRICT_INT
-	CStrictPoint(IntType _x,IntType _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
+	CStrictPoint(IntType _x, IntType _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
 #endif
 	CStrictPoint(const SUPER& rhs) { x = rhs.x; y = rhs.y; }
 
@@ -75,7 +75,7 @@ public:
 
 	// 比較演算子
 	bool operator == (const SUPER& rhs) const { return x == rhs.x && y == rhs.y; }
-	bool operator != (const SUPER& rhs) const { return !(this->operator==(rhs)); }
+	bool operator != (const SUPER& rhs) const { return !(this->operator == (rhs)); }
 
 	// 設定
 	void Clear() { x = SuperIntType(0); y = SuperIntType(0); }
@@ -105,7 +105,7 @@ public:
 
 	// 特殊
 	POINT GetPOINT() const {
-		POINT pt = {(Int)x,(Int)y};
+		POINT pt = {(Int)x, (Int)y};
 		return pt;
 	}
 };

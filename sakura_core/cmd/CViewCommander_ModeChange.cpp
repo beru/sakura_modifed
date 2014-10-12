@@ -151,7 +151,7 @@ void CViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			|| selInfo.IsBoxSelecting()
 		) {
 			selInfo.DisableSelectArea(true);
-			caret.m_cUnderLine.CaretUnderLineON(true,false);
+			caret.m_cUnderLine.CaretUnderLineON(true, false);
 			selInfo.PrintSelectionInfoMsg();
 		}
 	}

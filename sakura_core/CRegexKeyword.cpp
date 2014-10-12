@@ -260,7 +260,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 
 		if (RegexKeyCheckSyntax(pKeyword) == TRUE) {
 			m_szMsg[0] = '\0';
-			BMatch(pKeyword, dummy, dummy+1, &m_sInfo[i].pBregexp, m_szMsg);
+			BMatch(pKeyword, dummy, dummy + 1, &m_sInfo[i].pBregexp, m_szMsg);
 
 			if (m_szMsg[0] == '\0') {	// エラーがないかチェックする
 				// 先頭以外は検索しなくてよい
@@ -321,7 +321,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 	MYDBGMSG("RegexKeyLineStart")
 
 	// 動作に必要なチェックをする。
-	if (!m_bUseRegexKeyword || !IsAvailable() || m_pTypes==NULL) {
+	if (!m_bUseRegexKeyword || !IsAvailable() || m_pTypes == NULL) {
 		return FALSE;
 	}
 
@@ -392,12 +392,12 @@ BOOL CRegexKeyword::RegexIsKeyword(
 			if (m_sInfo[i].nOffset < nPos) {
 #ifdef USE_PARENT
 				int matched = ExistBMatchEx()
-					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg)
-					: BMatch(NULL,                  cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg)
+					: BMatch(NULL,                  cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 #else
 				int matched = ExistBMatchEx()
-					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
-					: BMatch(NULL,                  cStr.GetPtr()+nPos, cStr.GetPtr()+cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					? BMatchEx(NULL, cStr.GetPtr(), cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
+					: BMatch(NULL,                  cStr.GetPtr() + nPos, cStr.GetPtr() + cStr.GetLength(), &m_sInfo[i].pBregexp, m_szMsg);
 #endif
 				if (matched) {
 					m_sInfo[i].nOffset = m_sInfo[i].pBregexp->startp[0] - cStr.GetPtr();
@@ -447,12 +447,12 @@ BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t *s)
 	int	length = wcslen(s);
 	for (int i = 0; kakomi[i] != NULL; i += 2) {
 		// 文字長を確かめる
-		if (length > (int)wcslen(kakomi[i]) + (int)wcslen(kakomi[i+1])) {
+		if (length > (int)wcslen(kakomi[i]) + (int)wcslen(kakomi[i + 1])) {
 			// 始まりを確かめる
 			if (wcsncmp(kakomi[i], s, wcslen(kakomi[i])) == 0) {
 				// 終わりを確かめる
-				const wchar_t* p = &s[length - wcslen(kakomi[i+1])];
-				if (wcscmp(p, kakomi[i+1]) == 0) {
+				const wchar_t* p = &s[length - wcslen(kakomi[i + 1])];
+				if (wcscmp(p, kakomi[i + 1]) == 0) {
 					// 正常
 					return TRUE;
 				}

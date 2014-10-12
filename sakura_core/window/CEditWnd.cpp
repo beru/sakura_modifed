@@ -359,7 +359,7 @@ void CEditWnd::_GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGr
 	}
 
 	// 結果
-	rcResult->SetXYWH(nWinOX,nWinOY,nWinCX,nWinCY);
+	rcResult->SetXYWH(nWinOX, nWinOY, nWinCX, nWinCY);
 }
 
 HWND CEditWnd::_CreateMainWindow(int nGroup, const STabGroupInfo& sTabGroupInfo)
@@ -837,7 +837,7 @@ void CEditWnd::LayoutMainMenu()
 
 	hMenu = ::CreateMenu();
 	for (int i = 0; i < MAX_MAINMENU_TOP && pcMenu->m_nMenuTopIdx[i] >= 0; i++) {
-		nCount = (i >= MAX_MAINMENU_TOP || pcMenu->m_nMenuTopIdx[i+1] < 0 ? pcMenu->m_nMainMenuNum : pcMenu->m_nMenuTopIdx[i+1])
+		nCount = (i >= MAX_MAINMENU_TOP || pcMenu->m_nMenuTopIdx[i + 1] < 0 ? pcMenu->m_nMainMenuNum : pcMenu->m_nMenuTopIdx[i+1])
 				- pcMenu->m_nMenuTopIdx[i];		// メニュー項目数
 		cMainMenu = &pcMenu->m_cMainMenuTbl[pcMenu->m_nMenuTopIdx[i]];
 		switch (cMainMenu->m_nType) {
@@ -1049,9 +1049,9 @@ void CEditWnd::MessageLoop(void)
 	MSG	msg;
 	while (GetHwnd()) {
 		// メッセージ取得
-		int ret = GetMessage(&msg,NULL,0,0);
-		if (ret== 0) break; // WM_QUIT
-		if (ret==-1) break; // GetMessage失敗
+		int ret = GetMessage(&msg, NULL, 0, 0);
+		if (ret == 0) break; // WM_QUIT
+		if (ret == -1) break; // GetMessage失敗
 
 		//ダイアログメッセージ
 		     if (MyIsDialogMessage(m_pPrintPreview->GetPrintPreviewBarHANDLE_Safe(),	&msg)) {}	//!< 印刷プレビュー 操作バー
@@ -1674,7 +1674,7 @@ LRESULT CEditWnd::DispatchEvent(
 				if (CAppNodeManager::getInstance()->GetEditNode(GetHwnd())->IsTopInGroup()) {
 					if (!::IsWindowVisible(GetHwnd())) {
 						// ::ShowWindow(GetHwnd(), SW_SHOWNA) だと非表示から表示に切り替わるときに Z-order がおかしくなることがあるので ::SetWindowPos を使う
-						::SetWindowPos(GetHwnd(), NULL,0,0,0,0,
+						::SetWindowPos(GetHwnd(), NULL, 0,0,0,0,
 										SWP_SHOWWINDOW | SWP_NOACTIVATE
 										| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 
@@ -1689,7 +1689,7 @@ LRESULT CEditWnd::DispatchEvent(
 			}else {
 				if (!::IsWindowVisible(GetHwnd())) {
 					// ::ShowWindow(GetHwnd(), SW_SHOWNA) だと非表示から表示に切り替わるときに Z-order がおかしくなることがあるので ::SetWindowPos を使う
-					::SetWindowPos(GetHwnd(), NULL,0,0,0,0,
+					::SetWindowPos(GetHwnd(), NULL, 0,0,0,0,
 									SWP_SHOWWINDOW | SWP_NOACTIVATE
 									| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 				}
@@ -1886,7 +1886,7 @@ LRESULT CEditWnd::DispatchEvent(
 					::ShowWindow(GetHwnd(), SW_HIDE);
 				}else {
 					// ::ShowWindow(hwnd, SW_SHOWNA) だと非表示から表示に切り替わるときに Z-order がおかしくなることがあるので ::SetWindowPos を使う
-					::SetWindowPos(hwnd, NULL,0,0,0,0,
+					::SetWindowPos(hwnd, NULL, 0,0,0,0,
 									SWP_SHOWWINDOW | SWP_NOACTIVATE
 									| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 				}
@@ -2164,7 +2164,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		const wchar_t *pMenuName;
 
 		nIdxStr = pcMenu->m_nMenuTopIdx[uPos];
-		nIdxEnd = (uPos < MAX_MAINMENU_TOP) ? pcMenu->m_nMenuTopIdx[uPos+1] : -1;
+		nIdxEnd = (uPos < MAX_MAINMENU_TOP) ? pcMenu->m_nMenuTopIdx[uPos + 1] : -1;
 		if (nIdxEnd < 0) {
 			nIdxEnd = pcMenu->m_nMainMenuNum;
 		}
@@ -2228,11 +2228,11 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 				if (!bInList) {
 					//分割線に囲まれ、かつリストなし ならば 次の分割線をスキップ
 					if ((i == nIdxStr + 1
-						  || (pcMenu->m_cMainMenuTbl[i-1].m_nType == T_SEPARATOR 
-							&& pcMenu->m_cMainMenuTbl[i-1].m_nLevel == cMainMenu->m_nLevel))
+						  || (pcMenu->m_cMainMenuTbl[i - 1].m_nType == T_SEPARATOR 
+							&& pcMenu->m_cMainMenuTbl[i - 1].m_nLevel == cMainMenu->m_nLevel))
 						&& i + 1 < nIdxEnd
-						&& pcMenu->m_cMainMenuTbl[i+1].m_nType == T_SEPARATOR 
-						&& pcMenu->m_cMainMenuTbl[i+1].m_nLevel == cMainMenu->m_nLevel) {
+						&& pcMenu->m_cMainMenuTbl[i + 1].m_nType == T_SEPARATOR 
+						&& pcMenu->m_cMainMenuTbl[i + 1].m_nLevel == cMainMenu->m_nLevel) {
 						i++;		// スキップ
 					}
 				}
@@ -2304,7 +2304,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 			eFunc, GetDocument()->m_cFuncLookup.Custmenu2Name(j, buf, _countof(buf)), pszKey);
 	}
 	// マクロ
-	else if (eFunc >= F_USERMACRO_0 && eFunc < F_USERMACRO_0+MAX_CUSTMACRO) {
+	else if (eFunc >= F_USERMACRO_0 && eFunc < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		MacroRec *mp = &m_pShareData->m_Common.m_sMacro.m_MacroTable[eFunc - F_USERMACRO_0];
 		if (mp->IsEnabled()) {
 			psName = to_wchar(mp->m_szName[0] ? mp->m_szName : mp->m_szFile);
@@ -3207,9 +3207,9 @@ LRESULT CEditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 								int Len = wcslen(pFilePath);
 								M.tymed          = TYMED_HGLOBAL;
 								M.pUnkForRelease = NULL;
-								M.hGlobal        = GlobalAlloc(GMEM_MOVEABLE, (Len+1)*sizeof(wchar_t));
+								M.hGlobal        = GlobalAlloc(GMEM_MOVEABLE, (Len + 1) * sizeof(wchar_t));
 								void* p = GlobalLock(M.hGlobal);
-								CopyMemory(p, pFilePath, (Len+1)*sizeof(wchar_t));
+								CopyMemory(p, pFilePath, (Len + 1) * sizeof(wchar_t));
 								GlobalUnlock(M.hGlobal);
 
 								DataObject->SetData(&F, &M, TRUE);
@@ -3655,8 +3655,8 @@ void CEditWnd::PrintMenubarMessage(const TCHAR* msg)
 	if (!::GetMenu(GetHwnd()))	// 2007.03.08 ryoji 追加
 		return;
 
-	POINT	po,poFrame;
-	RECT	rc,rcFrame;
+	POINT	po, poFrame;
+	RECT	rc, rcFrame;
 	HFONT	hFontOld;
 	int		nStrLen;
 
@@ -3693,7 +3693,7 @@ void CEditWnd::PrintMenubarMessage(const TCHAR* msg)
 		m_pnCaretPosInfoDx[i] = (m_nCaretPosInfoCharWidth);
 	}
 	*/
-	::ExtTextOut(hdc,rc.left,rc.top,ETO_CLIPPED | ETO_OPAQUE,&rc,m_pszMenubarMessage,nStrLen,NULL/*m_pnCaretPosInfoDx*/); //2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
+	::ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED | ETO_OPAQUE,&rc,m_pszMenubarMessage,nStrLen,NULL/*m_pnCaretPosInfoDx*/); //2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
 	::SelectObject(hdc, hFontOld);
 	::ReleaseDC(GetHwnd(), hdc);
 }

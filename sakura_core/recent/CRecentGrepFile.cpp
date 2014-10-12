@@ -71,7 +71,7 @@ bool CRecentGrepFile::TextToDataType(CGrepFileString* dst, LPCTSTR pszText) cons
 
 int CRecentGrepFile::CompareItem(const CGrepFileString* p1, LPCTSTR p2) const
 {
-	return _tcsicmp(*p1,p2);
+	return _tcsicmp(*p1, p2);
 }
 
 void CRecentGrepFile::CopyItem(CGrepFileString* dst, LPCTSTR src) const

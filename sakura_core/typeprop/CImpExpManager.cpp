@@ -97,7 +97,7 @@ static       wchar_t	WSTR_MAINMENU_HEAD_V1[]	= L"SakuraEditorMainMenu Ver1";
 //		2010/4/12 Uchi
 static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar_t* ext)
 {
-	wchar_t		conv[_MAX_PATH+1];
+	wchar_t		conv[_MAX_PATH + 1];
 	wchar_t*	p;
 
 	auto_strcpy(conv, trg);
@@ -341,7 +341,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	int		nPlug = 0;
 	int		nDataLen;
 	wchar_t* pSlashPos;
-	wchar_t	szFileName[_MAX_PATH+1];
+	wchar_t	szFileName[_MAX_PATH + 1];
 	bool	bCase;
 	wstring	sErrMag;
 	CommonSetting& common = m_pShareData->m_Common;
@@ -350,7 +350,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	CKeyWordSetMgr&	cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 	for (int i=0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		//types.m_nKeyWordSetIdx[i] = -1;
-		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i+1);
+		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
 			nIdx = cKeyWordSetMgr.SearchKeyWordSet(szKeyData);
 			if (nIdx < 0) {
@@ -359,14 +359,14 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 				nIdx = cKeyWordSetMgr.SearchKeyWordSet(szKeyData);
 			}
 			if (nIdx >= 0) {
-				auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i+1);
+				auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i + 1);
 				bCase = false;		// 大文字小文字区別しない (Defaule)
 				m_cProfile.IOProfileData(szSecTypeEx, szKeyName, bCase);
 
 				// キーワード定義ファイル入力
 				CImpExpKeyWord	cImpExpKeyWord(common, nIdx, bCase);
 
-				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i+1);
+				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
 				szFileName[0] = L'\0';
 				if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
 					if (cImpExpKeyWord.Import(cImpExpKeyWord.MakeFullPath(szFileName), TmpMsg)) {
@@ -443,7 +443,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	// 共通設定との連結部
 	wchar_t	szKeyName[64];
 	wchar_t buff[64];
-	wchar_t	szFileName[_MAX_PATH+1];
+	wchar_t	szFileName[_MAX_PATH + 1];
 	wstring	files = L"";
 	wstring	sTmpMsg;
 	CommonSetting& common = m_pShareData->m_Common;
@@ -453,7 +453,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	for (int i=0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		if (m_Types.m_nKeyWordSetIdx[i] >= 0) {
 			int nIdx = m_Types.m_nKeyWordSetIdx[i];
-			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i+1);
+			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 			auto_strcpy(buff, cKeyWordSetMgr.GetTypeName(nIdx));
 			cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(buff));
 
@@ -466,13 +466,13 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 
 			if (cImpExpKeyWord.Export(cImpExpKeyWord.GetFullPath(), sTmpMsg)) {
 				auto_strcpy(szFileName, cImpExpKeyWord.GetFileName().c_str());
-				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i+1);
+				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
 				if (cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szFileName))) {
 					files += wstring(L"\n") + cImpExpKeyWord.GetFileName();
 				}
 			}
 
-			auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i+1);
+			auto_sprintf_s(szKeyName, szKeyKeywordCaseTemp, i + 1);
 			cProfile.IOProfileData(szSecTypeEx, szKeyName, bCase);
 		}
 	}
@@ -750,18 +750,18 @@ bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		WCHAR *p1, *p2, *p3;
 		p1 = &buff[9];
 		p3 = p1;					//結果確認用に初期化
-		if ((p2=wcsstr(p1,LTEXT(",")))) {
+		if ((p2 = wcsstr(p1, LTEXT(",")))) {
 			*p2 = LTEXT('\0');
 			p2 += 1;				//カンマの次が、次の要素
-			if ((p3=wcsstr(p2,LTEXT(",")))) {
+			if ((p3=wcsstr(p2, LTEXT(",")))) {
 				*p3 = LTEXT('\0');
 				p3 += 1;			//カンマの次が、次の要素
 			}
 		}// 結果の確認
-		if ((p3==NULL) ||			//カンマが1個足りない
-			(p3==p1) //||			//カンマが2個足りない
+		if ((p3 == NULL) ||			//カンマが1個足りない
+			(p3 == p1) //||			//カンマが2個足りない
 			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
-			//(NULL!=wcsstr(p3,","))	//カンマが多すぎる
+			//(NULL != wcsstr(p3,","))	//カンマが多すぎる
 		) {
 			//	2007.02.03 genta 処理を継続
 			++invalid_record;
@@ -777,7 +777,7 @@ bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		// Path
 		FILE* fp2;
 		const WCHAR* p4 = p2;
-		if (!(fp2=_tfopen_absini(to_tchar(p3),_T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
+		if (!(fp2=_tfopen_absini(to_tchar(p3), _T("r")))) {	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
 			p4 = LSW(STR_IMPEXP_DIC_NOTFOUND);
 			b_enable_flag = 0;
@@ -794,7 +794,7 @@ bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 
 		// 良さそうなら
-		m_Types.m_KeyHelpArr[i].m_bUse = (b_enable_flag!=0);	// 2007.02.03 genta
+		m_Types.m_KeyHelpArr[i].m_bUse = (b_enable_flag != 0);	// 2007.02.03 genta
 		_tcscpy_s(m_Types.m_KeyHelpArr[i].m_szAbout, to_tchar(p4));
 		_tcscpy(m_Types.m_KeyHelpArr[i].m_szPath,  to_tchar(p3));
 		i++;
@@ -871,9 +871,9 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	bVer3 = false;
 	bVer2 = false;
 	in.IOProfileData(szSecInfo, L"KEYBIND_VERSION", MakeStringBufferW(szHeader));
-	if (wcscmp(szHeader,WSTR_KEYBIND_HEAD4)==0) {
+	if (wcscmp(szHeader, WSTR_KEYBIND_HEAD4) == 0) {
 		bVer4 = true;
-	}else if (wcscmp(szHeader,WSTR_KEYBIND_HEAD3)==0) {
+	}else if (wcscmp(szHeader, WSTR_KEYBIND_HEAD3) == 0) {
 		bVer3 = true;
 	}
 
@@ -934,7 +934,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 
 				//後に続くトークン
 				for (int j=0;j<8;j++) {
-					wchar_t* q = auto_strchr(p,L',');
+					wchar_t* q = auto_strchr(p, L',');
 					if (!q) {
 						bVer2 = false;
 						break;
@@ -969,7 +969,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	//m_Common.m_sKeyBind.m_nKeyNameArrNum = nKeyNameArrNum;
 	//memcpy_raw(m_Common.m_sKeyBind.m_pKeyNameArr, pKeyNameArr, sizeof_raw(pKeyNameArr));
 	int nKeyNameArrUsed = m_Common.m_sKeyBind.m_nKeyNameArrNum; // 使用済み領域
-	for (int j=sKeyBind.m_nKeyNameArrNum-1; j>=0; j--) {
+	for (int j=sKeyBind.m_nKeyNameArrNum-1; j >= 0; j--) {
 		if ((bVer2 || bVer3) && sKeyBind.m_pKeyNameArr[j].m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
 			for (int im=0; im< MOUSEFUNCTION_KEYBEGIN; im++) {
 				if (_tcscmp(sKeyBind.m_pKeyNameArr[j].m_szKeyName, m_Common.m_sKeyBind.m_pKeyNameArr[im].m_szKeyName) == 0) {
@@ -1021,7 +1021,7 @@ bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 	cProfile.SetWritingMode();
 
 	// ヘッダ
-	StaticString<wchar_t,256> szKeydataHead = WSTR_KEYBIND_HEAD4;
+	StaticString<wchar_t, 256> szKeydataHead = WSTR_KEYBIND_HEAD4;
 	cProfile.IOProfileData(szSecInfo, L"KEYBIND_VERSION", szKeydataHead);
 	cProfile.IOProfileData_WrapInt(szSecInfo, L"KEYBIND_COUNT", m_Common.m_sKeyBind.m_nKeyNameArrNum);
 
@@ -1065,7 +1065,7 @@ bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	CShareData_IO::IO_CustMenu(cProfile,m_Common.m_sCustomMenu, true);			// 2008/5/24 Uchi
+	CShareData_IO::IO_CustMenu(cProfile, m_Common.m_sCustomMenu, true);			// 2008/5/24 Uchi
 
 	return true;
 }
@@ -1224,7 +1224,7 @@ bool CImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	CShareData_IO::IO_MainMenu(cProfile,m_Common.m_sMainMenu, true);
+	CShareData_IO::IO_MainMenu(cProfile, m_Common.m_sMainMenu, true);
 
 	return true;
 }

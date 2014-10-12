@@ -120,7 +120,7 @@ public:
 	// テキストモード
 public:
 	void SetTextBackTransparent(bool b) {
-		m_nTextModeOrg.AssignOnce(::SetBkMode(m_hdc,b?TRANSPARENT:OPAQUE));
+		m_nTextModeOrg.AssignOnce(::SetBkMode(m_hdc, b ? TRANSPARENT : OPAQUE));
 	}
 
 	// テキスト
@@ -152,7 +152,7 @@ public:
 	void PopPen();
 	void SetPen(COLORREF color) {
 		ClearPen();
-		PushPen(color,1);
+		PushPen(color, 1);
 	}
 	void ClearPen();
 	COLORREF GetPenColor() const;
@@ -176,15 +176,15 @@ public:
 public:
 	//! 直線
 	void DrawLine(int x1, int y1, int x2, int y2) {
-		::MoveToEx(m_hdc,x1,y1,NULL);
-		::LineTo(m_hdc,x2,y2);
+		::MoveToEx(m_hdc, x1, y1, NULL);
+		::LineTo(m_hdc, x2, y2);
 	}
 	void DrawDotLine(int x1, int y1, int x2, int y2);	//点線
 	//! 矩形塗り潰し
 	void FillMyRect(const RECT& rc) {
-		::FillRect(m_hdc,&rc,GetCurrentBrush());
+		::FillRect(m_hdc, &rc, GetCurrentBrush());
 #ifdef _DEBUG
-		::SetPixel(m_hdc,-1,-1,0); //###########実験
+		::SetPixel(m_hdc, -1, -1, 0); //###########実験
 #endif
 	}
 	//! 矩形塗り潰し

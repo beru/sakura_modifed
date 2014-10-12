@@ -177,11 +177,11 @@ void CDlgReplace::SetData(void)
 	// クリップボードから貼り付ける？
 	::CheckDlgButton(GetHwnd(), IDC_CHK_PASTE, m_nPaste);
 	// 置換対象
-	if (m_nReplaceTarget==0) {
+	if (m_nReplaceTarget == 0) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_REPLACE, TRUE);
-	}else if (m_nReplaceTarget==1) {
+	}else if (m_nReplaceTarget == 1) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_INSERT, TRUE);
-	}else if (m_nReplaceTarget==2) {
+	}else if (m_nReplaceTarget == 2) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_ADD, TRUE);
 	}
 	// To Here 2001.12.03 hor
@@ -226,17 +226,17 @@ void CDlgReplace::SetCombosList(void)
 int CDlgReplace::GetData(void)
 {
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = (0!=IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
+	m_sSearchOption.bLoHiCase = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で探す
-	m_sSearchOption.bWordOnly = (0!=IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
+	m_sSearchOption.bWordOnly = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
 
 	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
 	m_bConsecutiveAll = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_CONSECUTIVEALL);
 
 	// 正規表現
-	m_sSearchOption.bRegularExp = (0!=IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
+	m_sSearchOption.bRegularExp = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
 	// 選択範囲内置換
 	m_bSelectedArea = ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_SELECTEDAREA);
 	// 検索／置換  見つからないときメッセージを表示
@@ -527,7 +527,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 			pcEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);
-			::SendMessage(GetHwnd(),WM_NEXTDLGCTL,(WPARAM)::GetDlgItem(GetHwnd(),IDC_COMBO_TEXT),TRUE);
+			::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), TRUE);
 		}
 		return TRUE;
 

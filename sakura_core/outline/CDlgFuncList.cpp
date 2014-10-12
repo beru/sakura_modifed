@@ -716,7 +716,7 @@ void CDlgFuncList::SetData()
 		::ShowWindow(GetDlgItem(GetHwnd(), IDC_STATIC_nSortType), SW_SHOW);
 		// 2002.11.10 Moca 追加 ソートする
 		if (1 == m_nSortType) {
-			SortTree(::GetDlgItem(GetHwnd() , IDC_TREE_FL),TVI_ROOT);
+			SortTree(::GetDlgItem(GetHwnd() , IDC_TREE_FL), TVI_ROOT);
 		}
 	}else {
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_nSortType), FALSE);
@@ -782,7 +782,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 	CLayoutInt		nFuncColTop(INT_MAX);
 	TV_INSERTSTRUCT	tvis;
 	const TCHAR*	pPos;
-    TCHAR           szLabel[64+6];  // Jan. 07, 2001 genta クラス名エリアの拡大
+    TCHAR           szLabel[64 + 6];  // Jan. 07, 2001 genta クラス名エリアの拡大
 	HTREEITEM		htiGlobal = NULL;	// Jan. 04, 2001 genta C++と統合
 	HTREEITEM		htiClass;
 	HTREEITEM		htiItem;
@@ -847,7 +847,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 				if (1 == nCharChars && 0 == nNestTemplate && _T(':') == pWork[k]) {
 					//	Jan. 04, 2001 genta
 					//	C++の統合のため、\に加えて::をクラス区切りとみなすように
-					if (k < nWorkLen - 1 && _T(':') == pWork[k+1]) {
+					if (k < nWorkLen - 1 && _T(':') == pWork[k + 1]) {
 						auto_memcpy(szClassArr[nClassNest], &pWork[m], k - m);
 						szClassArr[nClassNest][k - m] = _T('\0');
 						++nClassNest;
@@ -905,16 +905,16 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 					tvi.pszText = szLabel;
 					tvi.cchTextMax = _countof(szLabel);
 					if (TreeView_GetItem(hwndTree, &tvi)) {
-						if (0 == _tcsncmp(szClassArr[k],szLabel,nClassNameLen)) {
+						if (0 == _tcsncmp(szClassArr[k], szLabel, nClassNameLen)) {
 							if (_countof(szLabel) < (nClassNameLen +1)) {
 								break;// バッファ不足では無条件にマッチする
 							}else {
 								if (bAddClass) {
-									if (szLabel[nClassNameLen]==L' ') {
+									if (szLabel[nClassNameLen] == L' ') {
 										break;
 									}
 								}else {
-									if (szLabel[nClassNameLen]==L'\0') {
+									if (szLabel[nClassNameLen] == L'\0') {
 										break;
 									}
 								}
@@ -1399,7 +1399,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 			cTVInsertStruct.hParent = phParentStack[ nStackPointer ];
 		}
 		hItem = TreeView_InsertItem(hwndTree, &cTVInsertStruct);
-		phParentStack[ nStackPointer+1 ] = hItem;
+		phParentStack[ nStackPointer + 1 ] = hItem;
 
 		// pcFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
 		if (!bSelected) {
@@ -1724,7 +1724,7 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 		}else {
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_bFunclistSetFocusOnJump), TRUE);
 		}
-		if (wID==IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType==OUTLINE_BOOKMARK) {
+		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OUTLINE_BOOKMARK) {
 			CEditView* pcEditView=(CEditView*)m_lParam;
 			pcEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
 			m_nCurLine=pcEditView->GetCaret().GetCaretLayoutPos().GetY2() + CLayoutInt(1);
@@ -2101,17 +2101,17 @@ BOOL CDlgFuncList::OnCbnSelChange(HWND hwndCtl, int wID)
 			type->m_nOutlineSortType = m_nSortType;
 			SetTypeConfig(CTypeConfig(m_nDocType), *type);
 			delete type;
-			SortTree(::GetDlgItem(GetHwnd() , IDC_TREE_FL),TVI_ROOT);
+			SortTree(::GetDlgItem(GetHwnd(), IDC_TREE_FL), TVI_ROOT);
 		}
 		return TRUE;
 	}
 	return FALSE;
 
 }
-void  CDlgFuncList::SortTree(HWND hWndTree,HTREEITEM htiParent)
+void  CDlgFuncList::SortTree(HWND hWndTree, HTREEITEM htiParent)
 {
 	if (m_nSortType == 1) {
-		TreeView_SortChildren(hWndTree,htiParent,TRUE);
+		TreeView_SortChildren(hWndTree, htiParent, TRUE);
 	}else {
 		TVSORTCB sort;
 		sort.hParent =  htiParent;
@@ -2120,7 +2120,7 @@ void  CDlgFuncList::SortTree(HWND hWndTree,HTREEITEM htiParent)
 		TreeView_SortChildrenCB(hWndTree , &sort , TRUE);
 	}
 	for (HTREEITEM htiItem = TreeView_GetChild(hWndTree, htiParent); NULL != htiItem ; htiItem = TreeView_GetNextSibling(hWndTree, htiItem)) {
-		SortTree(hWndTree,htiItem);
+		SortTree(hWndTree, htiItem);
 	}
 }
 

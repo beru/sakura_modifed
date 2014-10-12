@@ -51,7 +51,7 @@ public:
 	// ロック
 	bool FileLock(EShareMode eShareMode, bool bMsg);	//!< ファイルの排他ロック
 	void FileUnlock();						//!< ファイルの排他ロック解除
-	bool IsFileLocking() const { return m_hLockedFile!=INVALID_HANDLE_VALUE; }
+	bool IsFileLocking() const { return m_hLockedFile != INVALID_HANDLE_VALUE; }
 	EShareMode GetShareMode() const { return m_nFileShareModeOld; }
 	void SetShareMode(EShareMode eShareMode) { m_nFileShareModeOld = eShareMode; }
 private:

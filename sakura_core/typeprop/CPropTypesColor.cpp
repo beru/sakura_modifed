@@ -142,7 +142,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 	int			yPos;
 	int			nIndex = -1;
 	int			nItemNum;
-	RECT		rcItem = {0,0,0,0};
+	RECT		rcItem = {0, 0, 0, 0};
 	int			i;
 	POINT		poMouse;
 	ColorInfo*	pColorInfo;
@@ -160,7 +160,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		for (i = 0; i < nItemNum; ++i) {
 			List_GetItemRect(hwnd, i, &rcItem);
 			if (::PtInRect(&rcItem, poMouse)) {
-//				MYTRACE(_T("hit at i==%d\n"), i);
+//				MYTRACE(_T("hit at i == %d\n"), i);
 //				MYTRACE(_T("\n"));
 				nIndex = i;
 				break;
@@ -693,7 +693,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 				}
 				if (offset) {
 					szVertLine[offset] = ',';
-					szVertLine[offset+1] = '\0';
+					szVertLine[offset + 1] = '\0';
 					offset += 1;
 				}
 				offset += auto_sprintf(&szVertLine[offset], L"%d(%d,%d)", nXColAdd, nXCol, nXColEnd);
@@ -701,7 +701,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 		}else {
 			if (offset) {
 				szVertLine[offset] = ',';
-				szVertLine[offset+1] = '\0';
+				szVertLine[offset + 1] = '\0';
 				offset += 1;
 			}
 			offset += auto_sprintf(&szVertLine[offset], L"%d", nXCol);
@@ -1068,7 +1068,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 		gr.SetTextForeColor(::GetSysColor(COLOR_WINDOWTEXT));
 	}
 
-	rc1.left+= (2 + 16);
+	rc1.left += (2 + 16);
 	rc1.top += 2;
 	rc1.right -= (2 + 27);
 	rc1.bottom -= 2;

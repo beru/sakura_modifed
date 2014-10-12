@@ -72,7 +72,7 @@ public:
 	CLayoutInt GetLayoutWidth() const { return m_nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
 
 	// 変更インターフェース
-	void OffsetLogicLineNo(CLogicInt n) { m_ptLogicPos.y+=n; }
+	void OffsetLogicLineNo(CLogicInt n) { m_ptLogicPos.y += n; }
 	void SetColorTypePrev(EColorIndexType n) {
 		m_nTypePrev = n;
 	}

@@ -38,11 +38,11 @@ public:
 	const char* operator += (size_t n) { while(n-->0)_forward(); return this->m_p; } //!< p+=n;
 	
 	//進んだ値
-	const char* operator + (size_t n) const { CharPointerA tmp=*this; return tmp+=n; }
-	WORD operator[](size_t n) const { CharPointerA tmp=*this; tmp+=n; return *tmp; }
+	const char* operator + (size_t n) const { CharPointerA tmp = *this; return tmp += n; }
+	WORD operator[](size_t n) const { CharPointerA tmp = *this; tmp += n; return *tmp; }
 
 	//代入
-	const char* operator = (const char* p) { m_p=p; return this->m_p; }
+	const char* operator = (const char* p) { m_p = p; return this->m_p; }
 
 	//文字取得
 	WORD operator * () const { return _get(); }
@@ -53,8 +53,8 @@ public:
 
 protected:
 	void _forward() { //!< 1文字進む
-		if(_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1]))m_p+=2;
-		else m_p+=1;
+		if (_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1])) m_p += 2;
+		else m_p += 1;
 	}
 	WORD _get() const { //!< 1文字取得する
 		if(_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1]))return *((WORD*)m_p);
@@ -78,11 +78,11 @@ public:
 	const wchar_t* operator += (size_t n) { while(n-->0)_forward(); return this->m_p;  } //!< p+=n;
 	
 	//進んだ値
-	const wchar_t* operator + (size_t n) const { CharPointerW tmp=*this; return tmp+=n; }
-	WORD operator[](size_t n) const { CharPointerW tmp=*this; tmp+=n; return *tmp; }
+	const wchar_t* operator + (size_t n) const { CharPointerW tmp = *this; return tmp += n; }
+	WORD operator[](size_t n) const { CharPointerW tmp = *this; tmp += n; return *tmp; }
 
 	//代入
-	const wchar_t* operator = (const wchar_t* p) { m_p=p; return this->m_p; }
+	const wchar_t* operator = (const wchar_t* p) { m_p = p; return this->m_p; }
 
 	//文字取得
 	WORD operator * () const { return _get(); }

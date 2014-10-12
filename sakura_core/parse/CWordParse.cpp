@@ -89,10 +89,10 @@ bool CWordParse::WhereCurrentWord_2(
 inline bool isCSymbol(wchar_t c)
 {
 	//return
-	//	(c==L'_') ||
-	//	(c>=L'0' && c<=L'9') ||
-	//	(c>=L'A' && c<=L'Z') ||
-	//	(c>=L'a' && c<=L'z');
+	//	(c == L'_') ||
+	//	(c >= L'0' && c <= L'9') ||
+	//	(c >= L'A' && c <= L'Z') ||
+	//	(c >= L'a' && c <= L'z');
 	return (c<128 && gm_keyword_char[c] == CK_CSYM);
 }
 
@@ -100,10 +100,10 @@ inline bool isCSymbol(wchar_t c)
 inline bool isCSymbolZen(wchar_t c)
 {
 	return
-		(c==L'＿') ||
-		(c>=L'０' && c<=L'９') ||
-		(c>=L'Ａ' && c<=L'Ｚ') ||
-		(c>=L'ａ' && c<=L'ｚ');
+		(c == L'＿') ||
+		(c >= L'０' && c <= L'９') ||
+		(c >= L'Ａ' && c <= L'Ｚ') ||
+		(c >= L'ａ' && c <= L'ｚ');
 }
 
 
@@ -138,9 +138,9 @@ ECharKind CWordParse::WhatKindOfChar(
 		//if (c == L'#'|| c == L'$' || c == L'@'|| c == L'\\') return CK_UDEF;	// ユーザ定義
 
 		// その他
-		if (IsZenkakuSpace(c)    ) return CK_ZEN_SPACE;	// 全角スペース
-		if (c==L'ー'             ) return CK_ZEN_NOBASU;	// 伸ばす記号 'ー'
-		if (c==L'゛' || c==L'゜' ) return CK_ZEN_DAKU;	// 全角濁点 「゛゜」
+		if (IsZenkakuSpace(c)		) return CK_ZEN_SPACE;	// 全角スペース
+		if (c == L'ー'				) return CK_ZEN_NOBASU;	// 伸ばす記号 'ー'
+		if (c == L'゛' || c == L'゜') return CK_ZEN_DAKU;	// 全角濁点 「゛゜」
 		if (isCSymbolZen(c)      ) return CK_ZEN_CSYM;	// 全角版、識別子に使用可能な文字 
 		if (IsZenkakuKigou(c)    ) return CK_ZEN_KIGO;	// 全角の記号
 		if (IsHiragana(c)        ) return CK_HIRA;		// ひらがな
@@ -154,8 +154,8 @@ ECharKind CWordParse::WhatKindOfChar(
 		else return CK_ZEN_ETC;				// 全角のその他(漢字など)
 	}else if (nCharChars == 2) {
 		// サロゲートペア 2008/7/8 Uchi
-		if (IsUTF16High(pData[nIdx]) && IsUTF16Low(pData[nIdx+1])) {
-			int		nCode = 0x10000 + ((pData[nIdx] & 0x3FF)<<10) + (pData[nIdx+1] & 0x3FF);	// コードポイント
+		if (IsUTF16High(pData[nIdx]) && IsUTF16Low(pData[nIdx + 1])) {
+			int		nCode = 0x10000 + ((pData[nIdx] & 0x3FF)<<10) + (pData[nIdx + 1] & 0x3FF);	// コードポイント
 			if (nCode >= 0x20000 && nCode <= 0x2FFFF) {	// CJKV 拡張予約域 Ext-B/Ext-C...
 				return CK_ZEN_ETC;				// 全角のその他(漢字など)
 			}
@@ -335,10 +335,10 @@ uchar_t wc_to_c(wchar_t wc)
 {
 #if 0
 //! wcがSJIS1バイト文字ならcharに変換して0～255を返す。SJIS2バイト文字なら0を返す。
-	char buf[3]={0,0,0};
-	int ret=wctomb(buf,wc);
-	if (ret==-1) return 0;   //エラー
-	if (buf[1]!=0) return 0; //エラー扱い
+	char buf[3]={0, 0, 0};
+	int ret=wctomb(buf, wc);
+	if (ret == -1) return 0;   //エラー
+	if (buf[1] != 0) return 0; //エラー扱い
 	return buf[0] <= 0x7F ? buf[0]: 0; //1バイトで表せたので、これを返す  2011.12.17 バッファオーバーランの修正
 #endif
 	// 2011.12.15 wctombを使わない版
@@ -437,7 +437,7 @@ BOOL IsURL(
 				}
 				int i;
 				for (i = urlp->length; i < nLineLen; i++, p++) {	// 通常の解析へ
-					if (wc_to_c(*p)==0 || (!(url_char[wc_to_c(*p)]))) {
+					if (wc_to_c(*p) == 0 || (!(url_char[wc_to_c(*p)]))) {
 						break;	// 終端に達した
 					}
 				}

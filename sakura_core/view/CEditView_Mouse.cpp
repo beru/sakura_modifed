@@ -46,7 +46,7 @@
 // マウス左ボタン押下
 void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 {
-	CMyPoint ptMouse(_xPos,_yPos);
+	CMyPoint ptMouse(_xPos, _yPos);
 
 	if (m_bHokan) {
 		m_pcEditWnd->m_cHokanMgr.Hide();
@@ -565,7 +565,7 @@ void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	// 現在のマウスカーソル位置→レイアウト位置
 
 	CLayoutPoint ptNew;
-	GetTextArea().ClientToLayout(CMyPoint(xPos,yPos), &ptNew);
+	GetTextArea().ClientToLayout(CMyPoint(xPos, yPos), &ptNew);
 	/*
 	ptNew.x = GetTextArea().GetViewLeftCol() + (xPos - GetTextArea().GetAreaLeft()) / GetTextMetrics().GetHankakuDx();
 	ptNew.y = GetTextArea().GetViewTopLine() + (yPos - GetTextArea().GetAreaTop()) / GetTextMetrics().GetHankakuDy();
@@ -996,9 +996,9 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				//migemo isearch 2004.10.22
 				if (m_nISearchMode > 0) {
 					if (m_nISearchDirection == 1) {
-						::SetCursor(::LoadCursor(G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
+						::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
 					}else {
-						::SetCursor(::LoadCursor(G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
+						::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
 					}
 				// アイビーム
 				}else if (0 <= m_nMousePouse) {
@@ -1155,7 +1155,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 						// 始点が無変更＝前方に縮小された
 						// 現在のカーソル位置によって選択範囲を変更
 						GetSelectionInfo().ChangeSelectAreaByCurrentCursor(sRange.GetTo());
-					}else if (sSelect_Old.GetTo()==sSelect.GetTo()) {
+					}else if (sSelect_Old.GetTo() == sSelect.GetTo()) {
 						// 終点が無変更＝後方に縮小された
 						// 現在のカーソル位置によって選択範囲を変更
 						GetSelectionInfo().ChangeSelectAreaByCurrentCursor(sRange.GetFrom());
@@ -1483,7 +1483,7 @@ static unsigned __stdcall ShellExecuteProc(LPVOID lpParameter)
 // 2007.01.18 kobake IsCurrentPositionURL仕様変更に伴い、処理の書き換え
 void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 {
-	CMyPoint ptMouse(_xPos,_yPos);
+	CMyPoint ptMouse(_xPos, _yPos);
 
 	CLogicRange		cUrlRange;	// URL範囲
 	std::wstring	wstrURL;

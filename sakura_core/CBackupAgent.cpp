@@ -252,7 +252,7 @@ int CBackupAgent::MakeBackUp(
 		// 正常終了
 		//@@@ 2001.12.11 start MIK
 		if (bup_setting.m_bBackUpDustBox && !dustflag) {	//@@@ 2002.03.23 ネットワーク・リムーバブルドライブでない
-			TCHAR	szDustPath[_MAX_PATH+1];
+			TCHAR	szDustPath[_MAX_PATH + 1];
 			_tcscpy(szDustPath, szPath);
 			szDustPath[_tcslen(szDustPath) + 1] = _T('\0');
 			SHFILEOPSTRUCT	fos;
@@ -486,7 +486,7 @@ bool CBackupAgent::FormatBackUpPath(
 				for (idx=1; idx<10; ++idx) {
 					TCHAR* cp = _tcsrchr(keybuff, _T('\\'));
 					if (cp != NULL) {
-						folders[idx] = cp+1;
+						folders[idx] = cp + 1;
 						*cp = _T('\0');
 					}else {
 						break;
@@ -499,7 +499,7 @@ bool CBackupAgent::FormatBackUpPath(
 				TCHAR* q = szFormat;
 				TCHAR* q2 = szFormat;
 				while (*q) {
-					if (*q==_T('$')) {
+					if (*q == _T('$')) {
 						++q;
 						if (isdigit(*q)) {
 							q[-1] = _T('\0');
@@ -513,7 +513,7 @@ bool CBackupAgent::FormatBackUpPath(
 //									return false;
 //								}
 							}
-							q2 = q+1;
+							q2 = q + 1;
 						}
 					}
 					++q;
@@ -528,7 +528,7 @@ bool CBackupAgent::FormatBackUpPath(
 			TCHAR temp[1024];
 			TCHAR* cp;
 			//	2006.03.25 Aroka szExt[0] == '\0'のときのオーバラン問題を修正
-			TCHAR* ep = (szExt[0]!=0) ? &szExt[1] : &szExt[0];
+			TCHAR* ep = (szExt[0] != 0) ? &szExt[1] : &szExt[0];
 			assert(newPathCount <= _countof(temp));
 
 			// * を拡張子にする
@@ -536,7 +536,7 @@ bool CBackupAgent::FormatBackUpPath(
 				_tcscpy_s(temp, szNewPath);
 				cp = _tcschr(temp, _T('*'));
 				*cp = 0;
-				if (-1 == auto_snprintf_s(szNewPath, newPathCount, _T("%ts%ts%ts"), temp, ep, cp+1)) {
+				if (-1 == auto_snprintf_s(szNewPath, newPathCount, _T("%ts%ts%ts"), temp, ep, cp + 1)) {
 					return false;
 				}
 			}

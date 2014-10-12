@@ -260,7 +260,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize)
 	}
 	*/
 
-	GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 
 	bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	// 2002.01.25 hor
 
@@ -285,7 +285,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize)
 	//	データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
 	//for (nPos = 0; nPos < nPasteSize;)
 	int				nPos;
-	CLayoutPoint	ptLayoutNew;	//挿入された部分の次の位置
+	CLayoutPoint	ptLayoutNew;	// 挿入された部分の次の位置
 	for (int nBgn = nPos = 0; nBgn < nPasteSize;) {
 		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
 		//	最終行のPaste処理が動かないので，
@@ -334,7 +334,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize)
 			}
 
 			if (
-				(nPos + 1 < nPasteSize ) &&
+				(nPos + 1 < nPasteSize) &&
 				(szPaste[nPos] == L'\r' && szPaste[nPos + 1] == L'\n')
 			) {
 				nBgn = nPos + 2;
@@ -459,7 +459,7 @@ void CViewCommander::Command_INSTEXT(
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(),
 		10000 < nTextLen && !selInfo.IsBoxSelecting());
 
-	GetDocument()->m_cDocEditor.SetModified(true,bRedraw);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected() || bFastMode) {
@@ -585,9 +585,9 @@ void CViewCommander::Command_ADDTAIL(
 )
 {
 	// テキスト長自動計算
-	if (nDataLen==-1 && pszData!=NULL) nDataLen=wcslen(pszData);
+	if (nDataLen == -1 && pszData != NULL) nDataLen = wcslen(pszData);
 
-	GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 
 	// ファイルの最後に移動
 	Command_GOFILEEND(false);
@@ -702,7 +702,7 @@ static bool AppendHTMLColor(
 	cmemBuf.Replace(L">", L"&gt;");
 	cmemClip.AppendNativeData(cmemBuf);
 	if (0 < nLen) {
-		return WCODE::IsLineDelimiter(pAppendStr[nLen-1]);
+		return WCODE::IsLineDelimiter(pAppendStr[nLen - 1]);
 	}
 	return false;
 }
@@ -744,7 +744,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			CLogicInt nIdxFrom;
 			CLogicInt nIdxTo;
 			if (selInfo.IsBoxSelecting()) {
-				nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left );
+				nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left);
 				nIdxTo   = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.right);
 				// 改行は除く
 				if (nIdxTo - nIdxFrom > 0) {
@@ -870,7 +870,10 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 		}
 		const WCHAR* pLine = pcDocLine->GetPtr();
-		for (;pcLayout->GetLogicLineNo() == nLineNum; nLayoutLineNum++, pcLayout = pcLayout->GetNextLayout()) {
+		for (;
+			pcLayout->GetLogicLineNo() == nLineNum;
+			nLayoutLineNum++, pcLayout = pcLayout->GetNextLayout()
+		) {
 			CLogicInt nIdxFrom;
 			CLogicInt nIdxTo;
 			const int nLineLen = pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen();
@@ -878,7 +881,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				nIdxTo = nIdxFrom = CLogicInt(-1);
 			}else {
 				if (selInfo.IsBoxSelecting()) {
-					nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left );
+					nIdxFrom = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.left);
 					nIdxTo   = m_pCommanderView->LineColumnToIndex(pcLayout, rcSel.right);
 					// 改行は除く
 					if (nIdxTo - nIdxFrom > 0) {
@@ -1031,7 +1034,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 	int					iLogic,
 	const CColorStrategyPool*	pool,
 	CColorStrategy**	ppStrategy,
-	CColorStrategy**	ppStrategyFound		// [in,out]
+	CColorStrategy**	ppStrategyFound		// [in, out]
 )
 {
 	// 検索色終了
@@ -1087,7 +1090,7 @@ void CViewCommander::Command_COPYFILENAME(void)
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
 		const WCHAR* pszFile = to_wchar(GetDocument()->m_cDocFile.GetFileName());
-		m_pCommanderView->MySetClipboardData(pszFile , wcslen( pszFile ), false);
+		m_pCommanderView->MySetClipboardData(pszFile , wcslen(pszFile), false);
 	}else {
 		ErrorBeep();
 	}
@@ -1120,7 +1123,7 @@ void CViewCommander::Command_COPYTAG(void)
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptColLine);
 
 		// クリップボードにデータを設定
-		auto_sprintf_s(buf, L"%ts (%d,%d): ", GetDocument()->m_cDocFile.GetFilePath(), ptColLine.y+1, ptColLine.x+1);
+		auto_sprintf_s(buf, L"%ts (%d,%d): ", GetDocument()->m_cDocFile.GetFilePath(), ptColLine.y + 1, ptColLine.x + 1);
 		m_pCommanderView->MySetClipboardData(buf, wcslen(buf), false);
 	}else {
 		ErrorBeep();

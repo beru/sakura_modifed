@@ -32,7 +32,7 @@
 
 #pragma once
 
-#if defined(_MSC_VER) && _MSC_VER>=1500
+#if defined(_MSC_VER) && _MSC_VER >= 1500
 #include <vsstyle.h>
 #else
 typedef HANDLE HTHEME;

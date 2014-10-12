@@ -33,7 +33,7 @@
 //                      メッセージ処理                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-typedef INT_PTR (CPropTypes::*DISPATCH_EVENT_TYPE)(HWND,UINT,WPARAM,LPARAM);
+typedef INT_PTR (CPropTypes::*DISPATCH_EVENT_TYPE)(HWND, UINT, WPARAM, LPARAM);
 
 // 共通ダイアログプロシージャ
 INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, DISPATCH_EVENT_TYPE pDispatch)
@@ -62,10 +62,10 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 
 // 各種ダイアログプロシージャ
 typedef	INT_PTR (CPropTypes::*pDispatchPage)(HWND, UINT, WPARAM, LPARAM);
-#define GEN_PROPTYPES_CALLBACK(FUNC,CLASS) \
+#define GEN_PROPTYPES_CALLBACK(FUNC, CLASS) \
 INT_PTR CALLBACK FUNC(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) \
 { \
-	return PropTypesCommonProc(hwndDlg,uMsg,wParam,lParam,reinterpret_cast<pDispatchPage>(&CLASS::DispatchEvent)); \
+	return PropTypesCommonProc(hwndDlg, uMsg, wParam, lParam, reinterpret_cast<pDispatchPage>(&CLASS::DispatchEvent)); \
 }
 GEN_PROPTYPES_CALLBACK(PropTypesScreen,		CPropTypesScreen)
 GEN_PROPTYPES_CALLBACK(PropTypesWindow,		CPropTypesWindow)

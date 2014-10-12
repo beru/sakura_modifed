@@ -21,8 +21,8 @@ COpe::COpe(EOpeCode eCode)
 {
 	m_nOpe = eCode;		// 操作種別
 
-	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1),CLogicInt(-1));	// カーソル位置
-	m_ptCaretPos_PHY_After.Set(CLogicInt(-1),CLogicInt(-1));	// カーソル位置
+	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1), CLogicInt(-1));	// カーソル位置
+	m_ptCaretPos_PHY_After.Set(CLogicInt(-1), CLogicInt(-1));	// カーソル位置
 
 }
 

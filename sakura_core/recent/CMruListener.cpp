@@ -88,7 +88,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 	}else if (CODE_NONE == pLoadInfo->eCharCode) {
 		pLoadInfo->eCharCode = ePrevCode;
 	}
-	if (CODE_NONE==pLoadInfo->eCharCode) {
+	if (CODE_NONE == pLoadInfo->eCharCode) {
 		const STypeConfigMini* type;
 		if (CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
 			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	//無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
@@ -98,7 +98,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 	}
 
 	// 食い違う場合
-	if (IsValidCodeType(ePrevCode) && pLoadInfo->eCharCode!=ePrevCode) {
+	if (IsValidCodeType(ePrevCode) && pLoadInfo->eCharCode != ePrevCode) {
 		//オプション：前回と文字コードが異なるときに問い合わせを行う
 		if (GetDllShareData().m_Common.m_sFile.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			const TCHAR* pszCodeNameOld = CCodeTypeName(ePrevCode).Normal();
@@ -144,7 +144,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	CMRUFile		cMRU;
 
 	EditInfo	eiOld;
-	bool bIsExistInMRU = cMRU.GetEditInfo(pcDoc->m_cDocFile.GetFilePath(),&eiOld);
+	bool bIsExistInMRU = cMRU.GetEditInfo(pcDoc->m_cDocFile.GetFilePath(), &eiOld);
 
 	//キャレット位置の復元
 	if (bIsExistInMRU && GetDllShareData().m_Common.m_sFile.GetRestoreCurPosition()) {

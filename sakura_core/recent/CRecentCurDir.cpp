@@ -72,7 +72,7 @@ bool CRecentCurDir::TextToDataType(CCurDirString* dst, LPCTSTR pszText) const
 
 int CRecentCurDir::CompareItem(const CCurDirString* p1, LPCTSTR p2) const
 {
-	return _tcscmp(*p1,p2);
+	return _tcscmp(*p1, p2);
 }
 
 void CRecentCurDir::CopyItem(CCurDirString* dst, LPCTSTR src) const

@@ -38,9 +38,9 @@ public:
 public:
 
 	inline static EConvertResult UnicodeBEToUnicode(CMemory* pMem)
-		{ return CUnicode::_UnicodeToUnicode_in(pMem,true); }	// UnicodeBE → Unicodeコード変換 //2007.08.13 kobake 追加
+		{ return CUnicode::_UnicodeToUnicode_in(pMem, true); }	// UnicodeBE → Unicodeコード変換 //2007.08.13 kobake 追加
 	inline static EConvertResult UnicodeToUnicodeBE(CMemory* pMem)
-		{ return CUnicode::_UnicodeToUnicode_out(pMem,true); }	// Unicode   → UnicodeBEコード変換
+		{ return CUnicode::_UnicodeToUnicode_out(pMem, true); }	// Unicode   → UnicodeBEコード変換
 
 };
 

@@ -44,7 +44,7 @@ struct CommonSetting;// 2002/2/10 aroka
 //! マクロ情報
 struct MacroRec {
 	TCHAR	m_szName[MACRONAME_MAX];	//!< 表示名
-	TCHAR	m_szFile[_MAX_PATH+1];		//!< ファイル名(ディレクトリを含まない)
+	TCHAR	m_szFile[_MAX_PATH + 1];	//!< ファイル名(ディレクトリを含まない)
 	bool	m_bReloadWhenExecute;		// 実行時に読み込みなおすか（デフォルトon）
 	
 	bool IsEnabled() const { return m_szFile[0] != _T('\0'); }

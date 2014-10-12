@@ -96,7 +96,7 @@ int CRecentEditNode::FindItemByHwnd(HWND hwnd) const
 void CRecentEditNode::DeleteItemByHwnd(HWND hwnd)
 {
 	int n = FindItemByHwnd(hwnd);
-	if (n!=-1) {
+	if (n != -1) {
 		DeleteItem(n);
 	}else {
 		DEBUG_TRACE(_T("DeleteItemByHwndé∏îs\n"));

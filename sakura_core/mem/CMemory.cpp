@@ -106,7 +106,7 @@ void CMemory::_AddData( const void* pData, int nDataLen )
 	memcpy( &m_pRawData[m_nRawLen], pData, nDataLen );
 	m_nRawLen += nDataLen;
 	m_pRawData[m_nRawLen]   = '\0';
-	m_pRawData[m_nRawLen+1] = '\0'; // 終端'\0'を2つ付加する('\0''\0'==L'\0')。 2007.08.13 kobake 追加
+	m_pRawData[m_nRawLen + 1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
 	return;
 }
 
@@ -163,7 +163,7 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ) {
 	unsigned char* p = (unsigned char*)pdwchar;
 	unsigned char* p_end = pBuf + nBufLen - 2;
 	
-	for (; p <= p_end ; p+=2) {
+	for (; p <= p_end ; p += 2) {
 		ctemp = p[0];
 		p[0]  = p[1];
 		p[1]  = ctemp;
@@ -218,7 +218,7 @@ void CMemory::SwapHLByte( void ) {
 	p = (unsigned char*)pdwchar;
 	p_end = pBuf + nBufLen - 2;
 	
-	for (; p <= p_end ; p+=2) {
+	for (; p <= p_end ; p += 2) {
 		ctemp = p[0];
 		p[0]  = p[1];
 		p[1]  = ctemp;
@@ -322,7 +322,7 @@ void CMemory::_AppendSz(const char* str)
 {
 	int len = strlen(str);
 	AllocBuffer( m_nRawLen + len );
-	_AddData(str,len);
+	_AddData(str, len);
 }
 
 
@@ -332,6 +332,6 @@ void CMemory::_SetRawLength(int nLength)
 	m_nRawLen = nLength;
 	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_pRawData[m_nRawLen  ] = 0;
-	m_pRawData[m_nRawLen+1] = 0; // 終端'\0'を2つ付加する('\0''\0'==L'\0')。
+	m_pRawData[m_nRawLen + 1] = 0; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。
 }
 

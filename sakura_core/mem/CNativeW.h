@@ -77,8 +77,8 @@ public:
 	void AppendNativeData(const CNativeW&);                  //!< バッファの最後にデータを追加する
 
 	// 演算子
-	const CNativeW& operator += (wchar_t wch)				{ AppendString(&wch,1);   return *this; }
-	const CNativeW& operator = (wchar_t wch)				{ SetString(&wch,1);      return *this; }
+	const CNativeW& operator += (wchar_t wch)				{ AppendString(&wch, 1);   return *this; }
+	const CNativeW& operator = (wchar_t wch)				{ SetString(&wch, 1);      return *this; }
 	const CNativeW& operator += (const CNativeW& rhs)		{ AppendNativeData(rhs); return *this; }
 	const CNativeW& operator = (const CNativeW& rhs)		{ SetNativeData(rhs);    return *this; }
 	CNativeW operator + (const CNativeW& rhs) const			{ CNativeW tmp = *this; return tmp += rhs; }
@@ -157,24 +157,24 @@ public:
 
 	// WCHAR
 	void SetStringW(const wchar_t* pszData)					{ return SetString(pszData); }
-	void SetStringW(const wchar_t* pData, int nLength)		{ return SetString(pData,nLength); }
+	void SetStringW(const wchar_t* pData, int nLength)		{ return SetString(pData, nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendString(pszData); }
-	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendString(pData,nLength); }
+	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendString(pData, nLength); }
 	const wchar_t* GetStringW() const						{ return GetStringPtr(); }
 
 	// TCHAR
 #ifdef _UNICODE
-	void SetStringT(const TCHAR* pData, int nDataLen)	{ return SetString(pData,nDataLen); }
+	void SetStringT(const TCHAR* pData, int nDataLen)	{ return SetString(pData, nDataLen); }
 	void SetStringT(const TCHAR* pszData)				{ return SetString(pszData); }
 	void AppendStringT(const TCHAR* pszData)			{ return AppendString(pszData); }
-	void AppendStringT(const TCHAR* pData, int nLength)	{ return AppendString(pData,nLength); }
+	void AppendStringT(const TCHAR* pData, int nLength)	{ return AppendString(pData, nLength); }
 	void AppendNativeDataT(const CNativeT& rhs)			{ return AppendNativeData(rhs); }
 	const TCHAR* GetStringT() const						{ return GetStringPtr(); }
 #else
-	void SetStringT(const TCHAR* pData, int nDataLen)	{ return SetStringOld(pData,nDataLen); }
+	void SetStringT(const TCHAR* pData, int nDataLen)	{ return SetStringOld(pData, nDataLen); }
 	void SetStringT(const TCHAR* pszData)				{ return SetStringOld(pszData); }
 	void AppendStringT(const TCHAR* pszData)			{ return AppendStringOld(pszData); }
-	void AppendStringT(const TCHAR* pData, int nLength)	{ return AppendStringOld(pData,nLength); }
+	void AppendStringT(const TCHAR* pData, int nLength)	{ return AppendStringOld(pData, nLength); }
 	void AppendNativeDataT(const CNativeT& rhs)			{ return AppendStringOld(rhs.GetStringPtr(), rhs.GetStringLength()); }
 	const TCHAR* GetStringT() const						{ return GetStringPtrOld(); }
 #endif

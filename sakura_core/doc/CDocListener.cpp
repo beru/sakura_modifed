@@ -37,11 +37,11 @@
 
 bool SLoadInfo::IsSamePath(LPCTSTR pszPath) const
 {
-	return _tcsicmp(this->cFilePath,pszPath)==0;
+	return _tcsicmp(this->cFilePath, pszPath) == 0;
 }
 bool SSaveInfo::IsSamePath(LPCTSTR pszPath) const
 {
-	return _tcsicmp(this->cFilePath,pszPath)==0;
+	return _tcsicmp(this->cFilePath, pszPath) == 0;
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -59,17 +59,17 @@ CDocSubject::~CDocSubject()
 	int n = GetListenerCount(); \
 	for (int i=0;i<n;i++) { \
 		ECallbackResult eRet = GetListener(i)->On##NAME(); \
-		if (eRet!=CALLBACK_CONTINUE) return eRet; \
+		if (eRet != CALLBACK_CONTINUE) return eRet; \
 	} \
 	return CALLBACK_CONTINUE; \
 }
 
-#define DEF_NOTIFY2(NAME,ARGTYPE) ECallbackResult CDocSubject::Notify##NAME(ARGTYPE a) \
+#define DEF_NOTIFY2(NAME, ARGTYPE) ECallbackResult CDocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0;i<n;i++) { \
 		ECallbackResult eRet = GetListener(i)->On##NAME(a); \
-		if (eRet!=CALLBACK_CONTINUE) return eRet; \
+		if (eRet != CALLBACK_CONTINUE) return eRet; \
 	} \
 	return CALLBACK_CONTINUE; \
 }
@@ -82,7 +82,7 @@ CDocSubject::~CDocSubject()
 	} \
 }
 
-#define VOID_NOTIFY2(NAME,ARGTYPE) void CDocSubject::Notify##NAME(ARGTYPE a) \
+#define VOID_NOTIFY2(NAME, ARGTYPE) void CDocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0;i<n;i++) { \
@@ -91,33 +91,33 @@ CDocSubject::~CDocSubject()
 }
 
 //######‰¼
-#define CORE_NOTIFY2(NAME,ARGTYPE) ELoadResult CDocSubject::Notify##NAME(ARGTYPE a) \
+#define CORE_NOTIFY2(NAME, ARGTYPE) ELoadResult CDocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	ELoadResult eRet = LOADED_FAILURE; \
 	for (int i=0;i<n;i++) { \
 		ELoadResult e = GetListener(i)->On##NAME(a); \
-		if (e==LOADED_NOIMPLEMENT) continue; \
-		if (e==LOADED_FAILURE) return e; \
+		if (e == LOADED_NOIMPLEMENT) continue; \
+		if (e == LOADED_FAILURE) return e; \
 		eRet = e; \
 	} \
 	return eRet; \
 }
 
-DEF_NOTIFY2(CheckLoad,SLoadInfo*)
-VOID_NOTIFY2(BeforeLoad,SLoadInfo*)
-CORE_NOTIFY2(Load,const SLoadInfo&)
-VOID_NOTIFY2(Loading,int)
-VOID_NOTIFY2(AfterLoad,const SLoadInfo&)
-VOID_NOTIFY2(FinalLoad,ELoadResult)
+DEF_NOTIFY2(CheckLoad, SLoadInfo*)
+VOID_NOTIFY2(BeforeLoad, SLoadInfo*)
+CORE_NOTIFY2(Load, const SLoadInfo&)
+VOID_NOTIFY2(Loading, int)
+VOID_NOTIFY2(AfterLoad, const SLoadInfo&)
+VOID_NOTIFY2(FinalLoad, ELoadResult)
 
-DEF_NOTIFY2(CheckSave,SSaveInfo*)
-DEF_NOTIFY2(PreBeforeSave,SSaveInfo*)
-VOID_NOTIFY2(BeforeSave,const SSaveInfo&)
-VOID_NOTIFY2(Save,const SSaveInfo&)
-VOID_NOTIFY2(Saving,int)
-VOID_NOTIFY2(AfterSave,const SSaveInfo&)
-VOID_NOTIFY2(FinalSave,ESaveResult)
+DEF_NOTIFY2(CheckSave, SSaveInfo*)
+DEF_NOTIFY2(PreBeforeSave, SSaveInfo*)
+VOID_NOTIFY2(BeforeSave, const SSaveInfo&)
+VOID_NOTIFY2(Save, const SSaveInfo&)
+VOID_NOTIFY2(Saving, int)
+VOID_NOTIFY2(AfterSave, const SSaveInfo&)
+VOID_NOTIFY2(FinalSave, ESaveResult)
 
 DEF_NOTIFY(BeforeClose)
 
@@ -132,7 +132,7 @@ CDocListener::CDocListener(CDocSubject* pcDoc)
 	if (!pcDoc) {
 		pcDoc = CEditDoc::GetInstance(0); //$$ ƒCƒ“ƒ`ƒL
 	}
-	assert( pcDoc );
+	assert(pcDoc);
 	Listen(pcDoc);
 }
 

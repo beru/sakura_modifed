@@ -708,7 +708,7 @@ EFunctionCode GetPlugCmdInfoByName(
 		return F_INVALID;
 	}
 	size_t nLen = MAX_PLUGIN_ID < (psCmdName - pszFuncName) ? MAX_PLUGIN_ID : (psCmdName - pszFuncName);
-	WCHAR sPluginName[MAX_PLUGIN_ID+1];
+	WCHAR sPluginName[MAX_PLUGIN_ID + 1];
 	wcsncpy(sPluginName, pszFuncName, nLen);
 	sPluginName[nLen] = L'\0'; 
 	psCmdName++;
@@ -770,7 +770,7 @@ void CShareData_IO::ShareData_IO_Toolbar(CDataProfile& cProfile, CMenuDrawer* pc
 	CommonSetting_ToolBar& toolbar = pShare->m_Common.m_sToolBar;
 
 	EFunctionCode	eFunc;
-	WCHAR			szText[MAX_PLUGIN_ID+20];
+	WCHAR			szText[MAX_PLUGIN_ID + 20];
 	int				nInvalid = -1;
 
 	cProfile.IOProfileData(pszSecName, LTEXT("bToolBarIsFlat"), toolbar.m_bToolBarIsFlat);
@@ -948,7 +948,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 	WCHAR	szKeyName[64];
 	WCHAR	szKeyData[1024];
 //	int		nSize = m_pShareData->m_nKeyNameArrNum;
-	WCHAR	szWork[MAX_PLUGIN_ID+20+4];
+	WCHAR	szWork[MAX_PLUGIN_ID + 20 + 4];
 	bool	bOldVer = false;
 	const int KEYNAME_SIZE = _countof(sKeyBind.m_pKeyNameArr)-1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
 	int nKeyNameArrUsed = sKeyBind.m_nKeyNameArrNum; // 使用済み領域
@@ -995,20 +995,20 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 					p = szKeyData;
 					// keycode取得
 					int keycode;
-					pn = auto_strchr(p,',');
+					pn = auto_strchr(p, ',');
 					if (!pn)	continue;
 					*pn = 0;
 					nRes = scan_ints(p, L"%04x", &keycode);
-					if (nRes!=1)	continue;
+					if (nRes != 1)	continue;
 					tmpKeydata.m_nKeyCode = (short)keycode;
-					p = pn+1;
+					p = pn + 1;
 
 					// 後に続くトークン 
 					for (int j = 0; j < 8; j++) {
 						EFunctionCode n;
 						// 機能名を数値に置き換える。(数値の機能名もあるかも)
 						// @@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-						pn = auto_strchr(p,',');
+						pn = auto_strchr(p, ',');
 						if (!pn)	break;
 						*pn = 0;
 						if (wcschr(p, L'/') != NULL) {
@@ -1023,7 +1023,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 							n = F_DEFAULT;
 						}
 						tmpKeydata.m_nFuncCodeArr[j] = n;
-						p = pn+1;
+						p = pn + 1;
 					}
 					// KeyName
 					auto_strncpy(tmpKeydata.m_szKeyName, to_tchar(p), _countof(tmpKeydata.m_szKeyName)-1);
@@ -1147,8 +1147,8 @@ void CShareData_IO::ShareData_IO_Print(CDataProfile& cProfile)
 				printsetting.m_nPrintMarginRX			= buf[ 8];
 				printsetting.m_nPrintPaperOrientation	= (short)buf[ 9];
 				printsetting.m_nPrintPaperSize			= (short)buf[10];
-				printsetting.m_bPrintWordWrap			= (buf[11]!=0);
-				printsetting.m_bPrintLineNumber			= (buf[12]!=0);
+				printsetting.m_bPrintWordWrap			= (buf[11] != 0);
+				printsetting.m_bPrintLineNumber			= (buf[12] != 0);
 				printsetting.m_bHeaderUse[0]			= buf[13];
 				printsetting.m_bHeaderUse[1]			= buf[14];
 				printsetting.m_bHeaderUse[2]			= buf[15];
@@ -1200,12 +1200,12 @@ void CShareData_IO::ShareData_IO_Print(CDataProfile& cProfile)
 			auto_sprintf_s(szKeyName,  LTEXT("PS[%02d].lfHeader"),			i);
 			auto_sprintf_s(szKeyName2, LTEXT("PS[%02d].nHeaderPointSize"),	i);
 			auto_sprintf_s(szKeyName3, LTEXT("PS[%02d].lfHeaderFaceName"),	i);
-			ShareData_IO_Sub_LogFont(cProfile, pszSecName, szKeyName,szKeyName2, szKeyName3,
+			ShareData_IO_Sub_LogFont(cProfile, pszSecName, szKeyName, szKeyName2, szKeyName3,
 				printsetting.m_lfHeader, printsetting.m_nHeaderPointSize);
 			auto_sprintf_s(szKeyName,  LTEXT("PS[%02d].lfFooter"),			i);
 			auto_sprintf_s(szKeyName2, LTEXT("PS[%02d].nFooterPointSize"),	i);
 			auto_sprintf_s(szKeyName3, LTEXT("PS[%02d].lfFooterFaceName"),	i);
-			ShareData_IO_Sub_LogFont(cProfile, pszSecName, szKeyName,szKeyName2, szKeyName3,
+			ShareData_IO_Sub_LogFont(cProfile, pszSecName, szKeyName, szKeyName2, szKeyName3,
 				printsetting.m_lfFooter, printsetting.m_nFooterPointSize);
 		}
 
@@ -1217,8 +1217,8 @@ void CShareData_IO::ShareData_IO_Print(CDataProfile& cProfile)
 		cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferT(printsetting.m_mdmDevMode.m_szPrinterOutputName));
 
 		// 2002.02.16 hor とりあえず旧設定を変換しとく
-		if (0==wcscmp(printsetting.m_szHeaderForm[0],_EDITL("&f")) &&
-			0==wcscmp(printsetting.m_szFooterForm[0],_EDITL("&C- &P -"))
+		if (0 == wcscmp(printsetting.m_szHeaderForm[0], _EDITL("&f")) &&
+			0 == wcscmp(printsetting.m_szFooterForm[0], _EDITL("&C- &P -"))
 		) {
 			auto_strcpy(printsetting.m_szHeaderForm[0], _EDITL("$f"));
 			auto_strcpy(printsetting.m_szFooterForm[0], _EDITL(""));
@@ -1325,9 +1325,9 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 			types.m_nKeyWordSetIdx[0]		= buf[ 4];
 			types.m_nKeyWordSetIdx[1]		= buf[ 5];
 			types.m_nStringType				= buf[ 6];
-			types.m_bLineNumIsCRLF			= (buf[ 7]!=0);
+			types.m_bLineNumIsCRLF			= (buf[ 7] != 0);
 			types.m_nLineTermType			= buf[ 8];
-			types.m_bWordWrap				= (buf[ 9]!=0);
+			types.m_bWordWrap				= (buf[ 9] != 0);
 			types.m_nCurrentPrintSetting	= buf[10];
 		}
 		// 折り返し幅の最小値は10。少なくとも４ないとハングアップする。 // 20050818 aroka
@@ -1527,7 +1527,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 	cProfile.IOProfileData(pszSecName, LTEXT("nIndentLayout")			, types.m_nIndentLayout);
 
 	// 色設定 I/O
-	IO_ColorSet(&cProfile, pszSecName, types.m_ColorInfoArr );
+	IO_ColorSet(&cProfile, pszSecName, types.m_ColorInfoArr);
 
 	// 2010.09.17 背景画像
 	cProfile.IOProfileData(pszSecName, L"bgImgPath", types.m_szBackImgPath);
@@ -1629,15 +1629,15 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 					pH = szKeyData;
 					if (pT = wcschr(pH, L',')) {
 						*pT = L'\0';
-						types.m_KeyHelpArr[j].m_bUse = (_wtoi(pH)!=0);
-						pH = pT+1;
+						types.m_KeyHelpArr[j].m_bUse = (_wtoi(pH) != 0);
+						pH = pT + 1;
 						if (pT = wcschr(pH, L',')) {
 							*pT = L'\0';
 							_wcstotcs(types.m_KeyHelpArr[j].m_szAbout, pH, _countof(types.m_KeyHelpArr[j].m_szAbout));
-							pH = pT+1;
+							pH = pT + 1;
 							if (L'\0' != (*pH)) {
 								_wcstotcs(types.m_KeyHelpArr[j].m_szPath, pH, _countof2(types.m_KeyHelpArr[j].m_szPath));
-								types.m_nKeyHelpNum = j+1;	// iniに保存せずに、読み出せたファイル分を辞書数とする
+								types.m_nKeyHelpNum = j + 1;	// iniに保存せずに、読み出せたファイル分を辞書数とする
 							}
 						}
 					}
@@ -1748,7 +1748,7 @@ void CShareData_IO::ShareData_IO_KeyWords(CDataProfile& cProfile)
 			}
 			*pMem = L'\0';
 			auto_sprintf_s(szKeyName, LTEXT("szKW[%02d]"), i);
-			cProfile.IOProfileData(pszSecName, szKeyName, StringBufferW(pszMem,nMemLen));
+			cProfile.IOProfileData(pszSecName, szKeyName, StringBufferW(pszMem, nMemLen));
 			delete [] pszMem;
 		}
 	}
@@ -1862,7 +1862,7 @@ void CShareData_IO::IO_MainMenu(CDataProfile& cProfile, CommonSetting_MainMenu& 
 {
 	static const WCHAR* pszSecName = LTEXT("MainMenu");
 	WCHAR	szKeyName[64];
-	WCHAR	szFuncName[MAX_PLUGIN_ID+20];
+	WCHAR	szFuncName[MAX_PLUGIN_ID + 20];
 	EFunctionCode n;
 	WCHAR	szLine[1024];
 	WCHAR*	p = NULL;
@@ -1961,7 +1961,7 @@ void CShareData_IO::IO_MainMenu(CDataProfile& cProfile, CommonSetting_MainMenu& 
 
 			// 表示名
 			p++;
-			auto_strcpy_s(pcMenu->m_sName, MAX_MAIN_MENU_NAME_LEN+1, p);
+			auto_strcpy_s(pcMenu->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, p);
 		}else {
 			if (GetPlugCmdInfoByFuncCode(pcMenu->m_nFunc, szFuncName)) {
 				// Plugin
@@ -2081,11 +2081,11 @@ void CShareData_IO::IO_ColorSet(CDataProfile* pcProfile, const WCHAR* pszSecName
 			if (pcProfile->IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData))) {
 				int buf[5];
 				scan_ints(szKeyData, pszForm, buf);
-				pColorInfoArr[j].m_bDisp                  = (buf[0]!=0);
-				pColorInfoArr[j].m_sFontAttr.m_bBoldFont  = (buf[1]!=0);
+				pColorInfoArr[j].m_bDisp                  = (buf[0] != 0);
+				pColorInfoArr[j].m_sFontAttr.m_bBoldFont  = (buf[1] != 0);
 				pColorInfoArr[j].m_sColorAttr.m_cTEXT     = buf[2];
 				pColorInfoArr[j].m_sColorAttr.m_cBACK     = buf[3];
-				pColorInfoArr[j].m_sFontAttr.m_bUnderLine = (buf[4]!=0);
+				pColorInfoArr[j].m_sFontAttr.m_bUnderLine = (buf[4] != 0);
 			}else {
 				// 2006.12.07 ryoji
 				// sakura Ver1.5.13.1 以前のiniファイルを読んだときにキャレットがテキスト背景色と同じになると

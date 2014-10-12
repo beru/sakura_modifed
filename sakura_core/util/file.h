@@ -75,7 +75,7 @@ public:
 			m_bModified = false;
 			FILETIME ftimeLocal;
 			if (!::FileTimeToLocalFileTime(&m_ftime, &ftimeLocal) || !::FileTimeToSystemTime(&ftimeLocal, &m_systime)) {
-				memset(&m_systime,0,sizeof(m_systime)); // ¸”sƒ[ƒƒNƒŠƒA
+				memset(&m_systime, 0, sizeof(m_systime)); // ¸”sƒ[ƒƒNƒŠƒA
 			}
 		}
 		return m_systime;
@@ -96,9 +96,9 @@ private:
 bool GetLastWriteTimestamp(const TCHAR* filename, CFileTime* pcFileTime); //	Oct. 22, 2005 genta
 
 // •¶š—ñ•ªŠ„
-void my_splitpath (const char *comln , char *drv,char *dir,char *fnm,char *ext);
-void my_splitpath_w (const wchar_t *comln , wchar_t *drv,wchar_t *dir,wchar_t *fnm,wchar_t *ext);
-void my_splitpath_t (const TCHAR *comln , TCHAR *drv,TCHAR *dir,TCHAR *fnm,TCHAR *ext);
+void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ext);
+void my_splitpath_w (const wchar_t* comln, wchar_t* drv, wchar_t* dir, wchar_t* fnm, wchar_t* ext);
+void my_splitpath_t (const TCHAR* comln, TCHAR* drv, TCHAR* dir, TCHAR* fnm, TCHAR* ext);
 #ifdef _UNICODE
 #define my_splitpath_t my_splitpath_w
 #else

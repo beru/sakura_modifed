@@ -412,7 +412,7 @@ void __stdcall CPPA::stdProc(
 	const WCHAR** tmpArguments=(const WCHAR**)tmpArguments2;
 
 	// ˆ—
-	bool bRet = CMacro::HandleCommand(m_CurInstance->m_pcEditView, (EFunctionCode)(Index | m_CurInstance->m_commandflags), tmpArguments,tmpArgLengths, ArgSize);
+	bool bRet = CMacro::HandleCommand(m_CurInstance->m_pcEditView, (EFunctionCode)(Index | m_CurInstance->m_commandflags), tmpArguments, tmpArgLengths, ArgSize);
 	if (!bRet) {
 		*Err_CD = Index + 1;
 	}
@@ -490,8 +490,8 @@ void __stdcall CPPA::stdStrFunc(
 		if (VT_BSTR == Ret.vt) {
 			int len;
 			char* buf;
-			Wrap(&Ret.bstrVal)->Get(&buf,&len);
-			m_CurInstance->m_cMemRet.SetString(buf,len); // Mar. 9, 2003 genta
+			Wrap(&Ret.bstrVal)->Get(&buf, &len);
+			m_CurInstance->m_cMemRet.SetString(buf, len); // Mar. 9, 2003 genta
 			delete[] buf;
 			*ResultValue = m_CurInstance->m_cMemRet.GetStringPtr();
 			::VariantClear(&Ret);
@@ -544,7 +544,7 @@ bool CPPA::CallHandleFunction(
 		}
 		case VT_BSTR:
 		{
-			SysString S(Arg[i],lstrlenA(Arg[i]));
+			SysString S(Arg[i], lstrlenA(Arg[i]));
 			Wrap(&vtArg[i])->Receive(S);
 			break;
 		}

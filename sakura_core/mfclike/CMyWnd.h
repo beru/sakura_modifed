@@ -53,10 +53,10 @@ public:
 		return ::GetDC(m_hWnd);
 	}
 	int ReleaseDC(HDC hdc) const {
-		return ::ReleaseDC(m_hWnd,hdc);
+		return ::ReleaseDC(m_hWnd, hdc);
 	}
 	HWND GetAncestor(UINT gaFlags) const {
-		return ::GetAncestor(m_hWnd,gaFlags);
+		return ::GetAncestor(m_hWnd, gaFlags);
 	}
 	BOOL CreateCaret(HBITMAP hBitmap, int nWidth, int nHeight) {
 		return ::CreateCaret(m_hWnd, hBitmap, nWidth, nHeight);

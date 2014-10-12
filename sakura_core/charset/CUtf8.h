@@ -56,7 +56,7 @@ public:
 	inline static EConvertResult UTF8ToUnicode( CMemory* pmem ) { return _UTF8ToUnicode(pmem, false); }	// UTF-8 -> Unicodeコード変換
 	inline static EConvertResult CESU8ToUnicode( CMemory* pmem ) { return _UTF8ToUnicode(pmem, true); }	// CESU-8 -> Unicodeコード変換
 	inline static EConvertResult UnicodeToUTF8( CMemory* pmem ) { return  _UnicodeToUTF8(pmem, false); }	// Unicode → UTF-8コード変換
-	inline static EConvertResult UnicodeToCESU8( CMemory* pmem ) { return _UnicodeToUTF8(pmem,true); }	// Unicode → CESU-8コード変換
+	inline static EConvertResult UnicodeToCESU8( CMemory* pmem ) { return _UnicodeToUTF8(pmem, true); }	// Unicode → CESU-8コード変換
 
 protected:
 	// 変換の実装

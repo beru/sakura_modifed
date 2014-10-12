@@ -69,7 +69,7 @@ EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 	for (int i = -1; ;i++) {
 		// 名前候補
 		LPCTSTR pszName = NULL;
-		if (i==-1) { // まずは引数で指定された名前から。
+		if (i == -1) { // まずは引数で指定された名前から。
 			pszName = pszSpecifiedDllName;
 		}else { // クラス定義のDLL名
 			pszName = GetDllNameImp(i);
@@ -78,7 +78,7 @@ EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 				break;
 			}
 			// GetDllNameImpから取得した名前が前回候補と同じならループを抜ける
-			if (pszLastName && _tcsicmp(pszLastName,pszName)==0) {
+			if (pszLastName && _tcsicmp(pszLastName, pszName) == 0) {
 				break;
 			}
 		}
@@ -187,7 +187,7 @@ bool CDllImp::RegisterEntries(const ImportTable table[])
 	if (!IsAvailable()) {
 		return false;
 	}
-	for (int i = 0; table[i].proc!=NULL; i++) {
+	for (int i = 0; table[i].proc != NULL; i++) {
 		FARPROC proc;
 		if (!(proc = ::GetProcAddress(GetInstance(), table[i].name))) {
 			return false;

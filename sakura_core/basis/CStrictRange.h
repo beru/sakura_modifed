@@ -51,7 +51,7 @@ public:
 		return m_ptFrom == rhs.m_ptFrom && m_ptTo == rhs.m_ptTo;
 	}
 	bool operator != (const CRangeBase& rhs) const {
-		return !(operator==(rhs));
+		return !(operator == (rhs));
 	}
 
 	// ”»’è

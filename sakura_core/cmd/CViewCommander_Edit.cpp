@@ -39,7 +39,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 	CLogicInt nPos;
 
 	auto* pDoc = GetDocument();
-	pDoc->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	pDoc->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 
 	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -109,7 +109,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 						
 						{
 							bool bZenSpace = typeData->m_bAutoIndent_ZENSPACE;
-							if (nCharChars==1 && WCODE::IsIndentChar(pLine[nPos],bZenSpace)) {
+							if (nCharChars == 1 && WCODE::IsIndentChar(pLine[nPos], bZenSpace)) {
 								//下へ進む
 							}
 							else break;
@@ -234,7 +234,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 		Command_WCHAR(wChar & 0xff);
 		return;
 	}
-	GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 
  	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -248,7 +248,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 #else
 	ACHAR szAnsiWord[3]={(wChar >> 8) & 0xff, wChar & 0xff, 0};
 	const wchar_t* pUniData = to_wchar(szAnsiWord);
-	wchar_t szWord[2]={pUniData[0],0};
+	wchar_t szWord[2] = {pUniData[0], 0};
 #endif
 	CLogicInt nWord = CLogicInt(1);
 
@@ -493,7 +493,7 @@ void CViewCommander::Command_UNDO(void)
 		m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
 
 		// Undo後の変更フラグ
-		docEditor.SetModified(bIsModified,true);	//	Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified, true);	//	Jan. 22, 2002 genta
 
 		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
 
@@ -657,7 +657,7 @@ void CViewCommander::Command_REDO(void)
 
 					// データ置換 削除&挿入にも使える
 					m_pCommanderView->ReplaceData_CEditView3(
-						CLayoutRange(ptCaretPos_Before,ptCaretPos_To),
+						CLayoutRange(ptCaretPos_Before, ptCaretPos_To),
 						&pcDeleteOpe->m_pcmemData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
 						false,
@@ -686,7 +686,7 @@ void CViewCommander::Command_REDO(void)
 
 					// データ置換 削除&挿入にも使える
 					m_pCommanderView->ReplaceData_CEditView3(
-						CLayoutRange(ptCaretPos_Before,ptCaretPos_To),
+						CLayoutRange(ptCaretPos_Before, ptCaretPos_To),
 						&pcReplaceOpe->m_pcmemDataDel,	// 削除されたデータのコピー(NULL可能)
 						&pcReplaceOpe->m_pcmemDataIns,	// 挿入するデータ
 						false,
@@ -709,7 +709,7 @@ void CViewCommander::Command_REDO(void)
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
-						pcOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After );
+						pcOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After);
 					caret.MoveCursor(ptCaretPos_After, true);
 					// 通常モードではReplaceData_CEditViewの中で設定される
 					caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX();
@@ -718,7 +718,7 @@ void CViewCommander::Command_REDO(void)
 				}
 			}else {
 				layoutMgr.LogicToLayout(
-					pcOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After );
+					pcOpe->m_ptCaretPos_PHY_After, &ptCaretPos_After);
 				caret.MoveCursor(ptCaretPos_After, (i == nOpeBlkNum - 1));
 			}
 			if (hwndProgress && (i % 100) == 0) {
@@ -734,7 +734,7 @@ void CViewCommander::Command_REDO(void)
 		m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
 
 		// Redo後の変更フラグ
-		docEditor.SetModified(bIsModified,true);	//	Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified, true);	//	Jan. 22, 2002 genta
 
 		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
 
@@ -833,7 +833,7 @@ void CViewCommander::Command_DELETE_BACK(void)
 	}
 
 	//	May 29, 2004 genta 実際に削除された文字がないときはフラグをたてないように
-	//GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	//GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 	if (selInfo.IsTextSelected()) {				// テキストが選択されているか
 		m_pCommanderView->DeleteData(true);
 	}else {

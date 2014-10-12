@@ -97,7 +97,7 @@ public:
 		:
 		COpe(OPE_REPLACE)
 	{
-		m_ptCaretPos_PHY_To.Set(CLogicInt(0),CLogicInt(0));
+		m_ptCaretPos_PHY_To.Set(CLogicInt(0), CLogicInt(0));
 	}
 public:
 	CLogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]

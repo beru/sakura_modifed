@@ -101,7 +101,7 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 	} stabData(GetDocument()->m_cLayoutMgr.GetTabSpace());
 
 	const bool bSoftTab = (eIndent == INDENT_TAB && m_pCommanderView->m_pTypeData->m_bInsSpace);
-	GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 
 	auto& caret = GetCaret();
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -331,8 +331,8 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 		}
 	}else {	// 通常選択(複数行)
-		sSelectOld.SetFrom(CLayoutPoint(CLayoutInt(0),GetSelect().GetFrom().y));
-		sSelectOld.SetTo  (CLayoutPoint(CLayoutInt(0),GetSelect().GetTo().y  ));
+		sSelectOld.SetFrom(CLayoutPoint(CLayoutInt(0), GetSelect().GetFrom().y));
+		sSelectOld.SetTo  (CLayoutPoint(CLayoutInt(0), GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
 			sSelectOld.GetToPointer()->y++;
 		}
@@ -363,7 +363,7 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 
 			// 現在位置にデータを挿入
 			m_pCommanderView->InsertData_CEditView(
-				CLayoutPoint(CLayoutInt(0),i),
+				CLayoutPoint(CLayoutInt(0), i),
 				!bSoftTab? pData: stabData,
 				!bSoftTab? nDataLen: stabData.Len(CLayoutInt(0)),
 				&ptInserted,
@@ -444,11 +444,11 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 //	 箱型逆インデントについては、保留とする (1998.10.22)
 //**********************************************
 	}else {
-		GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+		GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 
 		CLayoutRange sSelectOld;	// 範囲選択
-		sSelectOld.SetFrom(CLayoutPoint(CLayoutInt(0),GetSelect().GetFrom().y));
-		sSelectOld.SetTo  (CLayoutPoint(CLayoutInt(0),GetSelect().GetTo().y  ));
+		sSelectOld.SetFrom(CLayoutPoint(CLayoutInt(0), GetSelect().GetFrom().y));
+		sSelectOld.SetTo  (CLayoutPoint(CLayoutInt(0), GetSelect().GetTo().y ));
 		if (GetSelect().GetTo().x > 0) {
 			sSelectOld.GetToPointer()->y++;
 		}
@@ -510,7 +510,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 			CNativeW pcMemDeleted;
 			// 指定位置の指定長データ削除
 			m_pCommanderView->DeleteData2(
-				CLayoutPoint(CLayoutInt(0),i),
+				CLayoutPoint(CLayoutInt(0), i),
 				nDelLen,	// 2001.12.03 hor
 				&pcMemDeleted
 			);
@@ -599,7 +599,7 @@ struct SORTDATA {
 	CStringRef sKey;
 };
 
-inline int CNativeW_comp(const CNativeW& lhs, const CNativeW& rhs )
+inline int CNativeW_comp(const CNativeW& lhs, const CNativeW& rhs)
 {
 	// 比較長には終端NULを含めないといけない
 	return wmemcmp(lhs.GetStringPtr(), rhs.GetStringPtr(),
@@ -698,7 +698,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 		return;
 	}
 	
-	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2() );
+	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
 	int nStrDataLength = 0;
 	for (CLogicInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().y; i++) {
 		const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(i);
@@ -714,11 +714,11 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 			nColumnTo   = m_pCommanderView->LineColumnToIndex(pcDocLine, nCT);
 			if (nColumnTo < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行内に収まっている場合
 				// 2006.03.31 genta std::string::assignを使って一時変数削除
-				pst->sKey = CStringRef(&pLine[nColumnFrom], nColumnTo-nColumnFrom);
+				pst->sKey = CStringRef(&pLine[nColumnFrom], nColumnTo - nColumnFrom);
 			}else if (nColumnFrom < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行末より右にはみ出している場合
-				pst->sKey = CStringRef(&pLine[nColumnFrom], nLineLenWithoutEOL-nColumnFrom);
+				pst->sKey = CStringRef(&pLine[nColumnFrom], nLineLenWithoutEOL - nColumnFrom);
 			}else {
-				// 選択範囲の左端もはみ出している==データなし
+				// 選択範囲の左端もはみ出している == データなし
 				pst->sKey = CStringRef(L"", 0);
 			}
 		}
@@ -727,10 +727,10 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 	}
 	const wchar_t* pStrLast = NULL; // 最後の行に改行がなければそのポインタ
 	if (0 < sta.size()) {
-		pStrLast = sta[sta.size()-1]->pCmemLine->GetStringPtr();
-		int nlen = sta[sta.size()-1]->pCmemLine->GetStringLength();
+		pStrLast = sta[sta.size() - 1]->pCmemLine->GetStringPtr();
+		int nlen = sta[sta.size() - 1]->pCmemLine->GetStringLength();
 		if (0 < nlen) {
-			if (WCODE::IsLineDelimiter(pStrLast[nlen-1])) {
+			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1])) {
 				pStrLast = NULL;
 			}
 		}
@@ -757,7 +757,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 	}
 	if (pStrLast) {
 		// 最終行の改行を削除
-		CLineData& lastData = repData[repData.size()-1];
+		CLineData& lastData = repData[repData.size() - 1];
 		int nLen = lastData.cmemLine.GetStringLength();
 		while (0 < nLen && WCODE::IsLineDelimiter(lastData.cmemLine[nLen - 1])) {
 			nLen--;
@@ -958,7 +958,7 @@ void CViewCommander::Command_Reconvert(void)
 	const int ATRECONVERTSTRING_SET = 1;
 
 	// サイズを取得
-	int nSize = m_pCommanderView->SetReconvertStruct(NULL,UNICODE_BOOL);
+	int nSize = m_pCommanderView->SetReconvertStruct(NULL, UNICODE_BOOL);
 	if (0 == nSize)  // サイズ０の時は何もしない
 		return ;
 
@@ -976,7 +976,7 @@ void CViewCommander::Command_Reconvert(void)
 		// ATOKが使えるかどうか
 		TCHAR sz[256];
 		ImmGetDescription(GetKeyboardLayout(0), sz, _countof(sz)); // 説明の取得
-		if ((_tcsncmp(sz,_T("ATOK"),4) == 0) && m_pCommanderView->m_AT_ImmSetReconvertString) {
+		if ((_tcsncmp(sz, _T("ATOK"),4) == 0) && m_pCommanderView->m_AT_ImmSetReconvertString) {
 			bUseUnicodeATOK = true;
 		}else {
 			// 対応IMEなし

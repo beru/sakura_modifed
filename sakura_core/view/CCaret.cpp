@@ -102,9 +102,9 @@ CCaret::CCaret(CEditView* pEditView, const CEditDoc* pEditDoc)
 	:
 	m_pEditView(pEditView),
 	m_pEditDoc(pEditDoc),
-	m_ptCaretPos_Layout(0,0),
-	m_ptCaretPos_Logic(0,0),			// カーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	m_sizeCaret(0,0),					// キャレットのサイズ
+	m_ptCaretPos_Layout(0, 0),
+	m_ptCaretPos_Logic(0, 0),			// カーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	m_sizeCaret(0, 0),					// キャレットのサイズ
 	m_cUnderLine(pEditView)
 {
 	m_nCaretPosX_Prev = CLayoutInt(0);	// ビュー左端からのカーソル桁直前の位置(０オリジン)
@@ -308,11 +308,11 @@ CLayoutInt CCaret::MoveCursor(
 			if (nScrollRowNum > 0) {
 				rcScroll.bottom = textArea.GetAreaBottom() - (Int)nScrollRowNum * m_pEditView->GetTextMetrics().GetHankakuDy();
 				textArea.OffsetViewTopLine(-nScrollRowNum);
-				textArea.GenerateTopRect(&rcClip,nScrollRowNum);
+				textArea.GenerateTopRect(&rcClip, nScrollRowNum);
 			}else if (nScrollRowNum < 0) {
 				rcScroll.top = textArea.GetAreaTop() - (Int)nScrollRowNum * m_pEditView->GetTextMetrics().GetHankakuDy();
 				textArea.OffsetViewTopLine(-nScrollRowNum);
-				textArea.GenerateBottomRect(&rcClip,-nScrollRowNum);
+				textArea.GenerateBottomRect(&rcClip, -nScrollRowNum);
 			}
 
 			if (nScrollColNum > 0) {
@@ -498,7 +498,7 @@ void CCaret::ShowEditCaret()
 		nCaretWidth = GetHankakuDx();
 	}
 	CMySize caretSizeOld = GetCaretSize();
-	SetCaretSize(nCaretWidth,nCaretHeight);
+	SetCaretSize(nCaretWidth, nCaretHeight);
 	POINT ptDrawPos=CalcCaretDrawPos(GetCaretLayoutPos());
 	SetCaretSize(caretSizeOld.cx, caretSizeOld.cy); // 後で比較するので戻す
 	bool bShowCaret = false;
@@ -597,7 +597,7 @@ void CCaret::ShowEditCaret()
 		CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);	// 2006.12.07 ryoji
 		m_bCaretShowFlag = false; // 2002/07/22 novice
 	}else {
-		if (GetCaretSize() != CMySize(nCaretWidth,nCaretHeight) || m_crCaret != crCaret || m_pEditView->m_crBack != crBack) {
+		if (GetCaretSize() != CMySize(nCaretWidth, nCaretHeight) || m_crCaret != crCaret || m_pEditView->m_crBack != crBack) {
 			// キャレットはあるが、大きさや色が変わった場合
 			// 現在のキャレットを削除
 			::DestroyCaret();
@@ -613,7 +613,7 @@ void CCaret::ShowEditCaret()
 	}
 
 	// キャレットサイズ
-	SetCaretSize(nCaretWidth,nCaretHeight);
+	SetCaretSize(nCaretWidth, nCaretHeight);
 
 	// キャレットの位置を調整
 	//2007.08.26 kobake キャレットX座標の計算をUNICODE仕様にした。
@@ -1019,7 +1019,7 @@ POINT CCaret::CalcCaretDrawPos(const CLayoutPoint& ptCaretPos) const
 		+ (Int)(ptCaretPos.y - textArea.GetViewTopLine()) * m_pEditView->GetTextMetrics().GetHankakuDy()
 		+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; //下寄せ
 
-	return CMyPoint(nPosX,nPosY);
+	return CMyPoint(nPosX, nPosY);
 }
 
 

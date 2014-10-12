@@ -95,7 +95,7 @@ public:
 	//#####
 
 	bool IsValid() const {
-		return m_eEolType>=EOL_CRLF && m_eEolType<EOL_CODEMAX;
+		return m_eEolType >= EOL_CRLF && m_eEolType < EOL_CODEMAX;
 	}
 
 private:

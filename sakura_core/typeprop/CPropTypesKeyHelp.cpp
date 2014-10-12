@@ -132,7 +132,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 		}
 
 		// 初期状態を設定
-		SendMessageCmd(hwndDlg, WM_COMMAND, (WPARAM)MAKELONG(IDC_CHECK_KEYHELP,BN_CLICKED), 0);
+		SendMessageCmd(hwndDlg, WM_COMMAND, (WPARAM)MAKELONG(IDC_CHECK_KEYHELP, BN_CLICKED), 0);
 
 		return TRUE;
 
@@ -242,7 +242,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 					}
 					// 開けたなら1行目を取得してから閉じる -> szAbout
 					std::wstring line=in.ReadLineW();
-					_wcstotcs(szAbout,line.c_str(),_countof(szAbout));
+					_wcstotcs(szAbout, line.c_str(), _countof(szAbout));
 					in.Close();
 				}
 				strcnv(szAbout);
@@ -687,16 +687,16 @@ static TCHAR* strcnv(TCHAR *str)
 {
 	TCHAR* p = str;
 	// 改行コードの削除
-	if ((p = _tcschr(p,_T('\n')))) {
+	if ((p = _tcschr(p, _T('\n')))) {
 		*p = _T('\0');
 	}
 	p = str;
-	if ((p = _tcschr(p,_T('\r')))) {
+	if ((p = _tcschr(p, _T('\r')))) {
 		*p = _T('\0');
 	}
 	// カンマの置換
 	p = str;
-	for (; (p =_tcschr(p,_T(','))) != NULL;) {
+	for (; (p =_tcschr(p, _T(','))) != NULL;) {
 		*p = _T('.');
 	}
 	return str;

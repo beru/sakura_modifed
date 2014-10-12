@@ -235,7 +235,7 @@ LRESULT CPrintPreview::OnPaint(
 
 	// マージン枠の表示
 	CGraphics gr(hdc);
-	gr.SetPen(RGB(128,128,128)); // 2006.08.14 Moca 127を128に変更
+	gr.SetPen(RGB(128, 128, 128)); // 2006.08.14 Moca 127を128に変更
 	::Rectangle(hdc,
 		m_nPreview_ViewMarginLeft + m_pPrintSetting->m_nPrintMarginLX,
 		nDirectY * (m_nPreview_ViewMarginTop + m_pPrintSetting->m_nPrintMarginTY),
@@ -416,7 +416,7 @@ LRESULT CPrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 	
 	// 印刷プレビュー スクロールバーの初期化
 	
-	m_pParentWnd->SetDragPosOrg(CMyPoint(0,0));
+	m_pParentWnd->SetDragPosOrg(CMyPoint(0, 0));
 	m_pParentWnd->SetDragMode(true);
 	OnMouseMove(0, MAKELONG(0, 0));
 	m_pParentWnd->SetDragMode(false);
@@ -636,7 +636,7 @@ LRESULT CPrintPreview::OnMouseMove(WPARAM wParam, LPARAM lParam)
 		nMoveX = 0;
 	}
 
-	m_pParentWnd->SetDragPosOrg(CMyPoint(xPos,yPos));
+	m_pParentWnd->SetDragPosOrg(CMyPoint(xPos, yPos));
 	// 描画
 	ScrollWindowEx(m_pParentWnd->GetHwnd(), nMoveX, nMoveY, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	return 0;

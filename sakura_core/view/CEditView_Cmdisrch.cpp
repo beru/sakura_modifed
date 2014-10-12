@@ -113,22 +113,22 @@ bool CEditView::ProcessCommand_isearch(
 
 	//	検索モードへの移行
 	case F_ISEARCH_NEXT:
-		ISearchEnter(1,SEARCH_FORWARD);	//前方インクリメンタルサーチ //2004.10.13 isearch
+		ISearchEnter(1, SEARCH_FORWARD);	//前方インクリメンタルサーチ //2004.10.13 isearch
 		return true;
 	case F_ISEARCH_PREV:
-		ISearchEnter(1,SEARCH_BACKWARD); //後方インクリメンタルサーチ //2004.10.13 isearch
+		ISearchEnter(1, SEARCH_BACKWARD); //後方インクリメンタルサーチ //2004.10.13 isearch
 		return true;
 	case F_ISEARCH_REGEXP_NEXT:
-		ISearchEnter(2,SEARCH_FORWARD);	//前方正規表現インクリメンタルサーチ  //2004.10.13 isearch
+		ISearchEnter(2, SEARCH_FORWARD);	//前方正規表現インクリメンタルサーチ  //2004.10.13 isearch
 		return true;
 	case F_ISEARCH_REGEXP_PREV:
-		ISearchEnter(2,SEARCH_BACKWARD);	//後方正規表現インクリメンタルサーチ  //2004.10.13 isearch
+		ISearchEnter(2, SEARCH_BACKWARD);	//後方正規表現インクリメンタルサーチ  //2004.10.13 isearch
 		return true;
 	case F_ISEARCH_MIGEMO_NEXT:
-		ISearchEnter(3,SEARCH_FORWARD);	//前方MIGEMOインクリメンタルサーチ    //2004.10.13 isearch
+		ISearchEnter(3, SEARCH_FORWARD);	//前方MIGEMOインクリメンタルサーチ    //2004.10.13 isearch
 		return true;
 	case F_ISEARCH_MIGEMO_PREV:
-		ISearchEnter(3,SEARCH_BACKWARD); //後方MIGEMOインクリメンタルサーチ    //2004.10.13 isearch
+		ISearchEnter(3, SEARCH_BACKWARD); //後方MIGEMOインクリメンタルサーチ    //2004.10.13 isearch
 		return true;
 	}
 	return false;
@@ -189,7 +189,7 @@ void CEditView::ISearchEnter(int mode, ESearchDirection direction)
 				SendStatusMessage(LS(STR_EDITVWISRCH_REGEX));
 				return;
 			}
-			if (m_pcmigemo==NULL) {
+			if (m_pcmigemo == NULL) {
 				m_pcmigemo = CMigemo::getInstance();
 				m_pcmigemo->InitDll();
 			}
@@ -239,9 +239,9 @@ void CEditView::ISearchEnter(int mode, ESearchDirection direction)
 
 	//マウスカーソル変更
 	if (direction == 1) {
-		::SetCursor(::LoadCursor(G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
+		::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
 	}else {
-		::SetCursor(::LoadCursor(G_AppInstance(),MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
+		::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
 	}
 }
 
@@ -265,7 +265,7 @@ void CEditView::ISearchExit()
 	//マウスカーソルを元に戻す
 	POINT point1;
 	GetCursorPos(&point1);
-	OnMOUSEMOVE(0,point1.x,point1.y);
+	OnMOUSEMOVE(0, point1.x, point1.y);
 
 	//ステータス表示エリアをクリア
 	SendStatusMessage(_T(""));
@@ -318,9 +318,9 @@ void CEditView::ISearchExec(LPCWSTR pszText)
 	DWORD c;
 	p = pszText;
 	
-	while (*p!=L'\0') {
-		if (IsUtf16SurrogHi(*p) && IsUtf16SurrogLow(*(p+1))) {
-			c = (((WORD)*p)<<16) | ((WORD)*(p+1));
+	while (*p != L'\0') {
+		if (IsUtf16SurrogHi(*p) && IsUtf16SurrogLow(*(p + 1))) {
+			c = (((WORD)*p) << 16) | ((WORD)*(p + 1));
 			p++;
 		}else {
 			c = *p;
@@ -368,7 +368,7 @@ void CEditView::ISearchExec(bool bNext)
 			CDocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
 			CLayoutPoint ptTmp;
-			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nIdxP,nLineP),&ptTmp);
+			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nIdxP, nLineP), &ptTmp);
 			nIdx1 = ptTmp.GetX2();
 			nLine = ptTmp.GetY2();
 		}
@@ -453,9 +453,9 @@ void CEditView::ISearchExec(bool bNext)
 
 //!	バックスペースを押されたときの処理
 void CEditView::ISearchBack(void) {
-	if (m_nISearchHistoryCount==0) return;
+	if (m_nISearchHistoryCount == 0) return;
 	
-	if (m_nISearchHistoryCount==1) {
+	if (m_nISearchHistoryCount == 1) {
 		m_bCurSrchKeyMark = false;
 		m_bISearchFirst = true;
 	}else if (m_bISearchFlagHistory[m_nISearchHistoryCount] == false) {

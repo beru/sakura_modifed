@@ -72,7 +72,7 @@ bool CRecentCmd::TextToDataType(CCmdString* dst, LPCTSTR pszText) const
 
 int CRecentCmd::CompareItem(const CCmdString* p1, LPCTSTR p2) const
 {
-	return _tcscmp(*p1,p2);
+	return _tcscmp(*p1, p2);
 }
 
 void CRecentCmd::CopyItem(CCmdString* dst, LPCTSTR src) const

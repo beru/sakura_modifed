@@ -87,10 +87,10 @@ bool CAutoReloadAgent::_ToDoChecking() const
 	if (!setting.m_bCheckFileTimeStamp) {
 		return false;	// 更新の監視設定
 	}
-	if (m_eWatchUpdate==WU_NONE) {
+	if (m_eWatchUpdate == WU_NONE) {
 		return false;
 	}
-	if (setting.m_nFileShareMode!=SHAREMODE_NOT_EXCLUSIVE) {
+	if (setting.m_nFileShareMode != SHAREMODE_NOT_EXCLUSIVE) {
 		return false; // ファイルの排他制御モード
 	}
 	HWND hwndActive = ::GetActiveWindow();

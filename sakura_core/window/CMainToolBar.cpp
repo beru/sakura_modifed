@@ -211,7 +211,7 @@ void CMainToolBar::CreateToolBar(void)
 			// セパレータが続くときはひとつにまとめる
 			// 折り返しボタンもTBSTYLE_SEP属性を持っているので
 			// 折り返しの前のセパレータは全て削除される．
-			if ((pTbbArr[nToolBarButtonNum].fsStyle & TBSTYLE_SEP) && (nToolBarButtonNum!=0)) {
+			if ((pTbbArr[nToolBarButtonNum].fsStyle & TBSTYLE_SEP) && (nToolBarButtonNum != 0)) {
 				if ((pTbbArr[nToolBarButtonNum-1].fsStyle & TBSTYLE_SEP)) {
 					pTbbArr[nToolBarButtonNum-1] = pTbbArr[nToolBarButtonNum];
 					nToolBarButtonNum--;

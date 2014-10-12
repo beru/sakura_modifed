@@ -121,7 +121,7 @@ inline void TwoPointToRange(
 	)
 {
 	CMyRect rc;
-	TwoPointToRect(&rc,pt1,pt2);
+	TwoPointToRect(&rc, pt1, pt2);
 	prangeDst->SetFrom(POINT_T(rc.UpperLeft()));
 	prangeDst->SetTo(POINT_T(rc.LowerRight()));
 }

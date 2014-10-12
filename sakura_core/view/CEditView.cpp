@@ -206,7 +206,7 @@ BOOL CEditView::Create(
 
 	auto& textArea = GetTextArea();
 	// ルーラー表示
-	textArea.SetAreaTop(textArea.GetAreaTop()+GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
+	textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
 	GetRuler().SetRedrawFlag();	// ルーラー全体を描き直す時=true   2002.02.25 Add By KK
 	m_hdcCompatDC = NULL;		// 再描画用コンパチブルＤＣ
 	m_hbmpCompatBMP = NULL;		// 再描画用メモリＢＭＰ
@@ -245,7 +245,7 @@ BOOL CEditView::Create(
 		m_hAtokModule = LoadLibraryExedir(_T("ATOK10WC.DLL"));
 		m_AT_ImmSetReconvertString = NULL;
 		if (m_hAtokModule) {
-			m_AT_ImmSetReconvertString =(BOOL (WINAPI *)(HIMC , int ,PRECONVERTSTRING , DWORD )) GetProcAddress(m_hAtokModule,"AT_ImmSetReconvertString");
+			m_AT_ImmSetReconvertString =(BOOL (WINAPI *)(HIMC, int, PRECONVERTSTRING, DWORD )) GetProcAddress(m_hAtokModule,"AT_ImmSetReconvertString");
 		}
 	}else { 
 		// それ以外のOSのときはOS標準を使用する
@@ -415,7 +415,7 @@ inline wchar_t tchar_to_wchar(TCHAR tc)
 	return tc;
 #else
 	WCHAR wc=0;
-	mbtowc(&wc,&tc,sizeof(tc));
+	mbtowc(&wc, &tc, sizeof(tc));
 	return wc;
 #endif
 }
@@ -938,7 +938,7 @@ void CEditView::OnSize(int cx, int cy)
 	// 水平分割ボックス
 	if (m_pcsbwHSplitBox) {
 		nHSplitWidth = 7;
-		::MoveWindow(m_pcsbwHSplitBox->GetHwnd(),0, cy - nCyHScroll, nHSplitWidth, nCyHScroll, TRUE);
+		::MoveWindow(m_pcsbwHSplitBox->GetHwnd(), 0, cy - nCyHScroll, nHSplitWidth, nCyHScroll, TRUE);
 	}
 	// 垂直スクロールバー
 	if (m_hwndVScrollBar) {
@@ -958,7 +958,7 @@ void CEditView::OnSize(int cx, int cy)
 
 	// エリア情報更新
 	GetTextArea().TextArea_OnSize(
-		CMySize(cx,cy),
+		CMySize(cx, cy),
 		nCxVScroll,
 		m_hwndHScrollBar?nCyHScroll:0
 	);
@@ -1187,7 +1187,7 @@ bool CEditView::IsCurrentPositionURL(
 	MY_RUNNINGTIMER(cRunningTimer, "CEditView::IsCurrentPositionURL");
 
 	// URLを強調表示するかどうかチェックする	// 2009.05.27 ryoji
-	bool bDispUrl = CTypeSupport(this,COLORIDX_URL).IsDisp();
+	bool bDispUrl = CTypeSupport(this, COLORIDX_URL).IsDisp();
 	bool bUseRegexKeyword = false;
 	if (m_pTypeData->m_bUseRegexKeyword) {
 		const wchar_t* pKeyword = m_pTypeData->m_RegexKeywordList;
@@ -1242,10 +1242,10 @@ bool CEditView::IsCurrentPositionURL(
 			if (i <= ptXY.GetX2() && ptXY.GetX2() < i + CLogicInt(nUrlLen)) {
 				// URLを返す場合
 				if (pwstrURL) {
-					pwstrURL->assign(&pLine[i],nUrlLen);
+					pwstrURL->assign(&pLine[i], nUrlLen);
 				}
 				pUrlRange->SetLine(ptXY.GetY2());
-				pUrlRange->SetXs(i, i+CLogicInt(nUrlLen));
+				pUrlRange->SetXs(i, i + CLogicInt(nUrlLen));
 				return true;
 			}else {
 				i += CLogicInt(nUrlLen);
@@ -2246,7 +2246,7 @@ bool CEditView::MyGetClipboardData(CNativeW& cmemBuf, bool* pbColumnSelect, bool
 		return false;
 
 	CEol cEol = m_pcEditDoc->m_cDocEditor.GetNewLineCode();
-	if (!cClipboard.GetText(&cmemBuf,pbColumnSelect,pbLineSelect,cEol)) {
+	if (!cClipboard.GetText(&cmemBuf, pbColumnSelect, pbLineSelect, cEol)) {
 		return false;
 	}
 
@@ -2260,8 +2260,8 @@ bool CEditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bCol
 {
 	//WCHARに変換
 	std::vector<wchar_t> buf;
-	mbstowcs_vector(pszText,nTextLen,&buf);
-	return MySetClipboardData(&buf[0],buf.size()-1,bColumnSelect,bLineSelect);
+	mbstowcs_vector(pszText, nTextLen, &buf);
+	return MySetClipboardData(&buf[0], buf.size()-1, bColumnSelect, bLineSelect);
 }
 
 bool CEditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
@@ -2272,7 +2272,7 @@ bool CEditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bCol
 		return false;
 	}
 	cClipboard.Empty();
-	return cClipboard.SetText(pszText,nTextLen,bColumnSelect,bLineSelect);
+	return cClipboard.SetText(pszText, nTextLen, bColumnSelect, bLineSelect);
 }
 
 

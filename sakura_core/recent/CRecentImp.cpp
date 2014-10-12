@@ -433,14 +433,14 @@ bool CRecentImp<T, S>::CopyItem(int nSrcIndex, int nDstIndex)
 template <class T, class S>
 const T* CRecentImp<T, S>::GetItem(int nIndex) const
 {
-	if (!IsAvailable() || nIndex<0 || nIndex>=*m_pnUserItemCount) return NULL;
+	if (!IsAvailable() || nIndex<0 || nIndex >= *m_pnUserItemCount) return NULL;
 	return &m_puUserItemData[nIndex];
 }
 
 template <class T, class S>
 const T* CRecentImp<T, S>::GetItemPointer(int nIndex) const
 {
-	if (!IsAvailable() || nIndex<0 || nIndex>=m_nArrayCount) return NULL;
+	if (!IsAvailable() || nIndex < 0 || nIndex >= m_nArrayCount) return NULL;
 	return &m_puUserItemData[nIndex];
 }
 

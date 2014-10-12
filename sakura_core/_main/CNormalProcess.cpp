@@ -255,10 +255,10 @@ bool CNormalProcess::InitializeProcess()
 			pEditWnd->m_cDlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		// 検索文字列
 			int nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFile);
 			_tcsncpy(pEditWnd->m_cDlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize);	// 検索ファイル
-			pEditWnd->m_cDlgGrep.m_szFile[nSize-1] = _T('\0');
+			pEditWnd->m_cDlgGrep.m_szFile[nSize - 1] = _T('\0');
 			nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFolder);
 			_tcsncpy(pEditWnd->m_cDlgGrep.m_szFolder, cmemGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
-			pEditWnd->m_cDlgGrep.m_szFolder[nSize-1] = _T('\0');
+			pEditWnd->m_cDlgGrep.m_szFolder[nSize - 1] = _T('\0');
 
 			
 			// Feb. 23, 2003 Moca Owner windowが正しく指定されていなかった

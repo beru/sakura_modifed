@@ -294,7 +294,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 			DWORD dwResult = MsgWaitForMultipleObjects(1, &pParam->hEvent, FALSE, INFINITE, QS_ALLINPUT);
 			if (dwResult == WAIT_OBJECT_0) {
 				::SendMessage(cDlgCancel.GetHwnd(), WM_CLOSE, 0, 0);
-			}else if (dwResult == WAIT_OBJECT_0+1) {
+			}else if (dwResult == WAIT_OBJECT_0 + 1) {
 				while (::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE)) {
 					if (cDlgCancel.GetHwnd() != NULL && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)) {
 					}else {

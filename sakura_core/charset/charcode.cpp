@@ -52,32 +52,30 @@ namespace WCODE
 
 		//参考：http://www.swanq.co.jp/blog/archives/000783.html
 		if(
-			   wc<=0x007E //ACODEとか
-//			|| wc==0x00A5 //円マーク
-//			|| wc==0x203E //にょろ
-			|| (wc>=0xFF61 && wc<=0xFF9f)	// 半角カタカナ
+			   wc <= 0x007E //ACODEとか
+//			|| wc == 0x00A5 //円マーク
+//			|| wc == 0x203E //にょろ
+			|| (wc >= 0xFF61 && wc <= 0xFF9f)	// 半角カタカナ
 		)return true;
 
 		//0x7F ～ 0xA0 も半角とみなす
 		//http://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF を見て、なんとなく
-		if(wc>=0x007F && wc<=0x00A0)return true;	// Control Code ISO/IEC 6429
+		if (wc >= 0x007F && wc <= 0x00A0) return true;	// Control Code ISO/IEC 6429
 
 		// 漢字はすべて同一幅とみなす	// 2013.04.07 aroka
-		if ( wc>=0x4E00 && wc<=0x9FBB		// Unified Ideographs, CJK
-		  || wc>=0x3400 && wc<=0x4DB5		// Unified Ideographs Extension A, CJK
+		if (wc >= 0x4E00 && wc <= 0x9FBB		// Unified Ideographs, CJK
+		  || wc>= 0x3400 && wc <= 0x4DB5		// Unified Ideographs Extension A, CJK
 		) {
 			wc = 0x4E00; // '一'(0x4E00)の幅で代用
 		}
 		else
 		// ハングルはすべて同一幅とみなす	// 2013.04.08 aroka
-		if ( wc>=0xAC00 && wc<=0xD7A3 )		// Hangul Syllables
-		{
+		if (wc >= 0xAC00 && wc <= 0xD7A3) {		// Hangul Syllables
 			wc = 0xAC00; // (0xAC00)の幅で代用
 		}
 		else
 		// 外字はすべて同一幅とみなす	// 2013.04.08 aroka
-		if (wc>=0xE000 && wc<=0xE8FF) // Private Use Area
-		{
+		if (wc >= 0xE000 && wc <= 0xE8FF) { // Private Use Area
 			wc = 0xE000; // (0xE000)の幅で代用
 		}
 
@@ -89,13 +87,13 @@ namespace WCODE
 	bool IsControlCode(wchar_t wc)
 	{
 		////改行は制御文字とみなさない
-		//if(IsLineDelimiter(wc))return false;
+		//if (IsLineDelimiter(wc)) return false;
 
 		////タブは制御文字とみなさない
-		//if(wc==TAB)return false;
+		//if (wc == TAB) return false;
 
-		//return iswcntrl(wc)!=0;
-		return (wc<128 && gm_keyword_char[wc]==CK_CTRL);
+		//return iswcntrl(wc) != 0;
+		return (wc < 128 && gm_keyword_char[wc] == CK_CTRL);
 	}
 
 #if 0
@@ -108,7 +106,7 @@ namespace WCODE
 		@retval true 句読点である
 		@retval false 句読点でない
 	*/
-	bool IsKutoten( wchar_t wc )
+	bool IsKutoten(wchar_t wc)
 	{
 		//句読点定義
 		static const wchar_t *KUTOTEN=
@@ -117,8 +115,8 @@ namespace WCODE
 		;
 
 		const wchar_t* p;
-		for(p=KUTOTEN;*p;p++) {
-			if(*p==wc)return true;
+		for (p = KUTOTEN; *p; p++) {
+			if (*p == wc) return true;
 		}
 		return false;
 	}
@@ -138,15 +136,15 @@ namespace WCODE
 		LocalCache()
 		{
 			/* LOGFONTの初期化 */
-			memset( &m_lf, 0, sizeof(m_lf) );
+			memset(&m_lf, 0, sizeof(m_lf));
 
 			// HDC の初期化
-			HDC hdc=GetDC(NULL);
+			HDC hdc = GetDC(NULL);
 			m_hdc = CreateCompatibleDC(hdc);
 			ReleaseDC(NULL, hdc);
 
-			m_hFont =NULL;
-			m_hFontOld =NULL;
+			m_hFont = NULL;
+			m_hFontOld = NULL;
 			m_pCache = 0;
 		}
 		~LocalCache()
@@ -159,7 +157,7 @@ namespace WCODE
 			DeleteDC(m_hdc);
 		}
 		// 再初期化
-		void Init( const LOGFONT &lf )
+		void Init(const LOGFONT &lf)
 		{
 			if (m_hFontOld != NULL) {
 				m_hFontOld = (HFONT)SelectObject(m_hdc, m_hFontOld);
@@ -168,49 +166,49 @@ namespace WCODE
 
 			m_lf = lf;
 
-			m_hFont = ::CreateFontIndirect( &lf );
-			m_hFontOld = (HFONT)SelectObject(m_hdc,m_hFont);
+			m_hFont = ::CreateFontIndirect(&lf);
+			m_hFontOld = (HFONT)SelectObject(m_hdc, m_hFont);
 
 			// -- -- 半角基準 -- -- //
-			GetTextExtentPoint32W_AnyBuild(m_hdc,L"x",1,&m_han_size);
+			GetTextExtentPoint32W_AnyBuild(m_hdc, L"x", 1, &m_han_size);
 		}
-		void SelectCache( SCharWidthCache* pCache )
+		void SelectCache(SCharWidthCache* pCache)
 		{
 			m_pCache = pCache;
 		}
 		void Clear()
 		{
-			assert(m_pCache!=0);
+			assert(m_pCache != 0);
 			// キャッシュのクリア
 			memcpy(m_pCache->m_lfFaceName, m_lf.lfFaceName, sizeof(m_lf.lfFaceName));
 			memset(m_pCache->m_bCharWidthCache, 0, sizeof(m_pCache->m_bCharWidthCache));
-			m_pCache->m_nCharWidthCacheTest=0x12345678;
+			m_pCache->m_nCharWidthCacheTest = 0x12345678;
 		}
-		bool IsSameFontFace( const LOGFONT &lf )
+		bool IsSameFontFace(const LOGFONT &lf)
 		{
-			assert(m_pCache!=0);
-			return ( memcmp(m_pCache->m_lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0 );
+			assert(m_pCache != 0);
+			return (memcmp(m_pCache->m_lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0);
 		}
 		void SetCache(wchar_t c, bool cache_value)
 		{
-			int v=cache_value?0x1:0x2;
-			m_pCache->m_bCharWidthCache[c/4] &= ~( 0x3<< ((c%4)*2) ); //該当箇所クリア
-			m_pCache->m_bCharWidthCache[c/4] |=  ( v  << ((c%4)*2) ); //該当箇所セット
+			int v = cache_value ? 0x1 : 0x2;
+			m_pCache->m_bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); //該当箇所クリア
+			m_pCache->m_bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); //該当箇所セット
 		}
 		bool GetCache(wchar_t c) const
 		{
-			return _GetRaw(c)==0x1?true:false;
+			return _GetRaw(c) == 0x1 ? true:false;
 		}
 		bool ExistCache(wchar_t c) const
 		{
-			assert(m_pCache->m_nCharWidthCacheTest==0x12345678);
-			return _GetRaw(c)!=0x0;
+			assert(m_pCache->m_nCharWidthCacheTest == 0x12345678);
+			return _GetRaw(c) != 0x0;
 		}
 		bool CalcHankakuByFont(wchar_t c)
 		{
-			SIZE size={m_han_size.cx*2,0}; //関数が失敗したときのことを考え、全角幅で初期化しておく
-			GetTextExtentPoint32W_AnyBuild(m_hdc,&c,1,&size);
-			return (size.cx<=m_han_size.cx);
+			SIZE size={m_han_size.cx * 2, 0}; //関数が失敗したときのことを考え、全角幅で初期化しておく
+			GetTextExtentPoint32W_AnyBuild(m_hdc, &c, 1, &size);
+			return (size.cx <= m_han_size.cx);
 		}
 	protected:
 		int _GetRaw(wchar_t c) const
@@ -231,41 +229,40 @@ namespace WCODE
 		LocalCacheSelector()
 		{
 			pcache = &m_localcache[0];
-			for( int i=0; i<CWM_FONT_MAX; i++ ) {
+			for (int i=0; i<CWM_FONT_MAX; i++) {
 				m_parCache[i] = 0;
 			}
 			m_eLastEditCacheMode = CWM_CACHE_NEUTRAL;
 		}
 		~LocalCacheSelector()
 		{
-			for( int i=0; i<CWM_FONT_MAX; i++ ) {
+			for (int i=0; i<CWM_FONT_MAX; i++) {
 				delete m_parCache[i];
 				m_parCache[i] = 0;
 			}
 		}
-		void Init( const LOGFONT &lf, ECharWidthFontMode fMode )
+		void Init(const LOGFONT &lf, ECharWidthFontMode fMode)
 	 	{
 			//	Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
 			m_localcache[fMode].Init(lf);
-			if( !m_localcache[fMode].IsSameFontFace(lf) )
-			{
+			if (!m_localcache[fMode].IsSameFontFace(lf)) {
 				m_localcache[fMode].Clear();
 			}
 		}
-		void Select( ECharWidthFontMode fMode, ECharWidthCacheMode cMode )
+		void Select(ECharWidthFontMode fMode, ECharWidthCacheMode cMode)
 		{
-			ECharWidthCacheMode cmode = (cMode==CWM_CACHE_NEUTRAL)?m_eLastEditCacheMode:cMode;
+			ECharWidthCacheMode cmode = (cMode == CWM_CACHE_NEUTRAL) ? m_eLastEditCacheMode : cMode;
 
 			pcache = &m_localcache[fMode];
-			if( cmode == CWM_CACHE_SHARE ) {
-				pcache->SelectCache( &(GetDllShareData().m_sCharWidth) );
-			}else{
-				if( m_parCache[fMode] == 0 ) {
+			if (cmode == CWM_CACHE_SHARE) {
+				pcache->SelectCache(&(GetDllShareData().m_sCharWidth));
+			}else {
+				if (m_parCache[fMode] == 0) {
 					m_parCache[fMode] = new SCharWidthCache;
 				}
-				pcache->SelectCache( m_parCache[fMode] );
+				pcache->SelectCache(m_parCache[fMode]);
 			}
-			if( fMode==CWM_FONT_EDIT ) { m_eLastEditCacheMode = cmode; }
+			if (fMode == CWM_FONT_EDIT) { m_eLastEditCacheMode = cmode; }
 		}
 		LocalCache* GetCache() { return pcache; }
 	private:
@@ -283,29 +280,29 @@ namespace WCODE
 	{
 		LocalCache* pcache = selector.GetCache();
 		// -- -- キャッシュが存在すれば、それをそのまま返す -- -- //
-		if(pcache->ExistCache(c))return pcache->GetCache(c);
+		if (pcache->ExistCache(c)) return pcache->GetCache(c);
 
 		// -- -- 相対比較 -- -- //
 		bool value;
 		value = pcache->CalcHankakuByFont(c);
 
 		// -- -- キャッシュ更新 -- -- //
-		pcache->SetCache(c,value);
+		pcache->SetCache(c, value);
 
 		return pcache->GetCache(c);
 	}
 }
 
 //	文字幅の動的計算用キャッシュの初期化。	2007/5/18 Uchi
-void InitCharWidthCache( const LOGFONT &lf, ECharWidthFontMode fMode )
+void InitCharWidthCache(const LOGFONT &lf, ECharWidthFontMode fMode)
 {
-	WCODE::selector.Init( lf, fMode );
+	WCODE::selector.Init(lf, fMode);
 }
 
 //	文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
-void SelectCharWidthCache( ECharWidthFontMode fMode, ECharWidthCacheMode cMode  )
+void SelectCharWidthCache(ECharWidthFontMode fMode, ECharWidthCacheMode cMode )
 {
-	assert( fMode==CWM_FONT_EDIT || cMode==CWM_CACHE_LOCAL );
+	assert(fMode == CWM_FONT_EDIT || cMode == CWM_CACHE_LOCAL);
 
-	WCODE::selector.Select( fMode, cMode );
+	WCODE::selector.Select(fMode, cMode);
 }

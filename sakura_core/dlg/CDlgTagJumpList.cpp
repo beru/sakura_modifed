@@ -802,7 +802,7 @@ TCHAR *CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR *name)
 		token = _tcstok(tmp, _T(","));
 		while (token) {
 			if (_tcsicmp(p, token) == 0) {
-				_tcscpy(tmp, p_extentions[i+1]);
+				_tcscpy(tmp, p_extentions[i + 1]);
 				token = _tcstok(tmp, _T(","));
 				while (token) {
 					if (token[0] == type) {

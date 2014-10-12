@@ -221,7 +221,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				}
 				if (pEnd != NULL) {
 					// 最後の\の後で終端
-					*(pEnd+1) = '\0';
+					*(pEnd + 1) = '\0';
 				}
 
 				// 簡易表示に変換
@@ -586,7 +586,7 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 			return 2;
 		}
 	case L'M': // $M キーボードマクロの記録中
-		if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro && GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro==CEditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
+		if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro && GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
 			return 0;
 		}else {
 			return 1;

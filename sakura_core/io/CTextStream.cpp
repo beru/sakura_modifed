@@ -15,7 +15,7 @@ using namespace std;
 
 CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 	:
-	CStream(tszPath,_T("rb"))
+	CStream(tszPath, _T("rb"))
 {
 	m_bIsUtf8 = false;
 
@@ -24,7 +24,7 @@ CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 		static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 		BYTE buf[3];
 		if (sizeof(UTF8_BOM) == fread(&buf, 1, sizeof(UTF8_BOM), GetFp())) {
-			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM))==0);
+			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM)) == 0);
 		}
 
 		// UTF-8Ç∂Ç·Ç»ÇØÇÍÇŒÅAÉtÉ@ÉCÉãÉ|ÉCÉìÉ^Çå≥Ç…ñﬂÇ∑
@@ -145,15 +145,15 @@ void CTextInputStream::ReadLineW(std::vector<wchar_t>& line) //!< 1çsì«çûÅBâ¸çsÇ
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CTextOutputStream::CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType, bool bExceptionMode)
-: COutputStream(tszPath,_T("wb"),bExceptionMode)
+: COutputStream(tszPath, _T("wb"), bExceptionMode)
 {
-	m_pcCodeBase = CCodeFactory::CreateCodeBase(eCodeType,0);
+	m_pcCodeBase = CCodeFactory::CreateCodeBase(eCodeType, 0);
 	if (Good()) {
 		// BOMïtâ¡
 		CMemory cmemBom;
 		m_pcCodeBase->GetBom(&cmemBom);
 		if (cmemBom.GetRawLength() > 0) {
-			fwrite(cmemBom.GetRawPtr(),cmemBom.GetRawLength(),1,GetFp());
+			fwrite(cmemBom.GetRawPtr(), cmemBom.GetRawLength(), 1, GetFp());
 		}
 	}
 }
@@ -183,7 +183,7 @@ void CTextOutputStream::WriteString(
 		// \nÇåüèoÅBÇΩÇæÇµ\r\nÇÕèúäOÅB
 		const wchar_t* q = p;
 		while (q < pEnd) {
-			if (*q==L'\n' && !((q-1)>=p && *(q-1)==L'\r')) {
+			if (*q == L'\n' && !((q-1) >= p && *(q-1) == L'\r')) {
 				break;
 			}
 			q++;
@@ -191,24 +191,24 @@ void CTextOutputStream::WriteString(
 		const wchar_t* lf = (q < pEnd) ? q : NULL;
 		if (lf) {
 			// \nÇÃëOÇ‹Ç≈(pÅ`lf)èoóÕ
-			CNativeW cSrc(p,lf-p);
+			CNativeW cSrc(p, lf-p);
 			CMemory cDst;
-			m_pcCodeBase->UnicodeToCode(cSrc,&cDst); // ÉRÅ[Éhïœä∑
-			fwrite(cDst.GetRawPtr(),1,cDst.GetRawLength(),GetFp());
+			m_pcCodeBase->UnicodeToCode(cSrc, &cDst); // ÉRÅ[Éhïœä∑
+			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 
 			// \r\nÇèoóÕ
 			cSrc.SetString(L"\r\n");
-			m_pcCodeBase->UnicodeToCode(cSrc,&cDst);
-			fwrite(cDst.GetRawPtr(),1,cDst.GetRawLength(),GetFp());
+			m_pcCodeBase->UnicodeToCode(cSrc, &cDst);
+			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 
 			// éüÇ÷
 			p = lf+1;
 		}else {
 			// écÇËÇ∫ÇÒÇ‘èoóÕ
-			CNativeW cSrc(p,pEnd-p);
+			CNativeW cSrc(p, pEnd - p);
 			CMemory cDst;
-			m_pcCodeBase->UnicodeToCode(cSrc,&cDst); // ÉRÅ[Éhïœä∑
-			fwrite(cDst.GetRawPtr(),1,cDst.GetRawLength(),GetFp());
+			m_pcCodeBase->UnicodeToCode(cSrc, &cDst); // ÉRÅ[Éhïœä∑
+			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 			break;
 		}
 	}
@@ -219,8 +219,8 @@ void CTextOutputStream::WriteF(const wchar_t* format, ...)
 	// ÉeÉLÉXÉgêÆå` -> buf
 	static wchar_t buf[16*1024]; //$$ ämï€ÇµÇ∑Ç¨Ç©Ç‡ÅH
 	va_list v;
-	va_start(v,format);
-	auto_vsprintf_s(buf,_countof(buf),format,v);
+	va_start(v, format);
+	auto_vsprintf_s(buf, _countof(buf), format, v);
 	va_end(v);
 
 	// èoóÕ
@@ -247,7 +247,7 @@ static const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
 }
 
 CTextInputStream_AbsIni::CTextInputStream_AbsIni(const TCHAR* fname, bool bOrExedir )
-: CTextInputStream(_Resolve(fname,bOrExedir))
+: CTextInputStream(_Resolve(fname, bOrExedir))
 {
 }
 

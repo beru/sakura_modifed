@@ -110,7 +110,7 @@ protected:
 	void SetListVB(void);			// リストビューコントロールの初期化：VisualBasic		// Jul 10, 2003  little YOSHI
 
 	// 2002/11/1 frozen 
-	void SortTree(HWND hWndTree,HTREEITEM htiParent);//!< ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
+	void SortTree(HWND hWndTree, HTREEITEM htiParent);//!< ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
 #if 0
 2002.04.01 YAZAKI SetTreeTxt()、SetTreeTxtNest()は廃止。GetTreeTextNextはもともと使用されていなかった。
 	void SetTreeTxt(HWND);	// ツリーコントロールの初期化：テキストトピックツリー

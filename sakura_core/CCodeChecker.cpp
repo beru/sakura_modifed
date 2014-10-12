@@ -37,7 +37,7 @@ static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
 static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECodeType eCodeType)
 {
 	CDocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
-	CCodeBase* pCodeBase = CCodeFactory::CreateCodeBase(eCodeType,0);
+	CCodeBase* pCodeBase = CCodeFactory::CreateCodeBase(eCodeType, 0);
 	while (pcDocLine) {
 		// ƒR[ƒh•ÏŠ· pcDocLine -> cmemTmp
 		CMemory cmemTmp;

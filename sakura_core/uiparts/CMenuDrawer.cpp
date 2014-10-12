@@ -1029,8 +1029,8 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		COLORREF colFace = ::GetSysColor(COLOR_3DFACE);
 		COLORREF colIconBack;
 		// 明度らしきもの
-		if (64 < t_abs(t_max(t_max(GetRValue(colFace),GetGValue(colFace)),GetBValue(colFace))
-			         - t_max(t_max(GetRValue(colMenu),GetGValue(colMenu)),GetBValue(colMenu)))
+		if (64 < t_abs(t_max(t_max(GetRValue(colFace), GetGValue(colFace)), GetBValue(colFace))
+			         - t_max(t_max(GetRValue(colMenu), GetGValue(colMenu)), GetBValue(colMenu)))
 		) {
 			colIconBack = colFace;
 		}else {
@@ -1280,7 +1280,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			const int left = lpdis->rcItem.left + 2 - MENUICO_PB;
 			const int top = nIconTop - MENUICO_PB;
 			RECT rc;
-			::SetRect(&rc, left-1, top-1, left + MENUICO_SIZE+2, top + MENUICO_SIZE+1);
+			::SetRect(&rc, left - 1, top - 1, left + MENUICO_SIZE + 2, top + MENUICO_SIZE + 1);
 			::FillRect(hdc, &rc, hBrush);
 
 			COLORREF colHilight = ::GetSysColor(COLOR_HIGHLIGHT);
@@ -1299,8 +1299,8 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 				valB = ((GetBValue(colHilight) * 2 + GetBValue(colMenu) * 8) / 10) | 0x18;
 			}
 			HBRUSH hbr = ::CreateSolidBrush(RGB(valR, valG, valB));
-			::SetRect(&rc, left + MENUICO_BORDER-1, top + MENUICO_BORDER-1,
-				left + MENUICO_SIZE - MENUICO_BORDER+2, top + MENUICO_SIZE - MENUICO_BORDER+1);
+			::SetRect(&rc, left + MENUICO_BORDER - 1, top + MENUICO_BORDER-1,
+				left + MENUICO_SIZE - MENUICO_BORDER + 2, top + MENUICO_SIZE - MENUICO_BORDER + 1);
 			::FillRect(hdc, &rc, hbr);
 			::DeleteObject(hbr);
 		}
@@ -1383,7 +1383,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 					nX -= 4; // iconがない場合、左マージン=2アイコン枠=2分がない
 				}
 #endif
-				const int nBASE = 100*100; // 座標,nScale共に0.01単位
+				const int nBASE = 100 * 100; // 座標,nScale共に0.01単位
 				// 16dot幅しかないので 1.0倍から2.1倍までスケールする(10-23)
 				const int nScale = t_max(100, t_min(210, int((lpdis->rcItem.bottom - lpdis->rcItem.top - 2) * 100) / (16-2)));
 				for (int nBold = 1; nBold <= (281*nScale)/nBASE; nBold++) {
@@ -1401,14 +1401,14 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 				HDC hdcMem = ::CreateCompatibleDC(hdc);
 				HBITMAP hBmpMono = ::CreateBitmap(nCxCheck, nCyCheck, 1, 1, NULL);
 				HBITMAP hOld = (HBITMAP)::SelectObject(hdcMem, hBmpMono);
-				RECT rcCheck = {0,0, nCxCheck, nCyCheck};
+				RECT rcCheck = {0, 0, nCxCheck, nCyCheck};
 				::DrawFrameControl(hdcMem, &rcCheck, DFC_MENU, DFCS_MENUCHECK);
-				COLORREF colTextOld = ::SetTextColor(hdc, RGB(0,0,0));
-				COLORREF colBackOld = ::SetBkColor(hdc,   RGB(255,255,255));
-				::BitBlt(hdc, lpdis->rcItem.left+2, lpdis->rcItem.top+2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCAND);
+				COLORREF colTextOld = ::SetTextColor(hdc, RGB(0, 0, 0));
+				COLORREF colBackOld = ::SetBkColor(hdc,   RGB(255, 255, 255));
+				::BitBlt(hdc, lpdis->rcItem.left + 2, lpdis->rcItem.top + 2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCAND);
 				::SetTextColor(hdc, ::GetSysColor(nTxSysColor));
-				::SetBkColor(hdc, RGB(0,0,0));
-				::BitBlt(hdc, lpdis->rcItem.left+2, lpdis->rcItem.top+2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCPAINT);
+				::SetBkColor(hdc, RGB(0, 0, 0));
+				::BitBlt(hdc, lpdis->rcItem.left + 2, lpdis->rcItem.top + 2, nCxCheck, nCyCheck, hdcMem, 0, 0, SRCPAINT);
 				::SetTextColor(hdc, colTextOld);
 				::SetBkColor(hdc, colBackOld);
 				::SelectObject(hdcMem, hOld);
@@ -1690,7 +1690,7 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			if (m_tbMyButton.size() <= (size_t)(int)m_pShareData->m_PlugCmdIcon[iCmdNo]) {
 				// このウィンドウで未登録
 				// 空きを詰め込む
-				SetTBBUTTONVal(&tbb,TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
+				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1, 0, 0, TBSTYLE_BUTTON, 0, 0);
 				for (i = m_tbMyButton.size(); i < m_pShareData->m_PlugCmdIcon[iCmdNo]; i++) {
 					m_tbMyButton.push_back(tbb);
 					m_nMyButtonNum++;

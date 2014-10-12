@@ -236,7 +236,7 @@ EConvertResult CFileLoad::ReadLine(
 	}
 #endif
 //	CMemory m_cLineBuffer;
-//	m_cLineBuffer.SetRawData("",0);
+//	m_cLineBuffer.SetRawData("", 0);
 	m_cLineBuffer.AllocBuffer(4096);
 	m_cLineBuffer._SetRawLength(0);
 

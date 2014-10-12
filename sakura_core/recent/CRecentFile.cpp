@@ -76,7 +76,7 @@ int CRecentFile::CompareItem(const EditInfo* p1, const EditInfo* p2) const
 
 void CRecentFile::CopyItem(EditInfo* dst, const EditInfo* src) const
 {
-	memcpy_raw(dst,src,sizeof(*dst));
+	memcpy_raw(dst, src, sizeof(*dst));
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -87,7 +87,7 @@ int CRecentFile::FindItemByPath(const TCHAR* pszPath) const
 {
 	int n = GetItemCount();
 	for (int i=0;i<n;i++) {
-		if (_tcsicmp(GetItem(i)->m_szPath,pszPath) == 0) {
+		if (_tcsicmp(GetItem(i)->m_szPath, pszPath) == 0) {
 			return i;
 		}
 	}

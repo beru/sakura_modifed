@@ -390,10 +390,10 @@ int CPropBackup::GetData(HWND hwndDlg)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder, _countof2(csBackup.m_szBackUpFolder) - 1);
 
 	// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
-	csBackup.m_bBackUpDustBox = (BST_CHECKED==::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX));	//@@@ 2001.12.11 add MIK
+	csBackup.m_bBackUpDustBox = (BST_CHECKED == ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX));	//@@@ 2001.12.11 add MIK
 
 	// 指定フォルダにバックアップを作成する詳細設定 // 20051107 aroka
-	csBackup.m_bBackUpPathAdvanced = (BST_CHECKED==::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED));
+	csBackup.m_bBackUpPathAdvanced = (BST_CHECKED == ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED));
 	// バックアップを作成するフォルダ // 20051107 aroka
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.m_szBackUpPathAdvanced, _countof2(csBackup.m_szBackUpPathAdvanced) - 1);
 

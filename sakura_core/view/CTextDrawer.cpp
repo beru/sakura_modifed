@@ -62,10 +62,10 @@ void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int
 
 	// 文字間隔配列を生成
 	static vector<int> vDxArray(1);
-	const int* pDxArray = pMetrics->GenerateDxArray(&vDxArray,pData,nLength,this->m_pEditView->GetTextMetrics().GetHankakuDx());
+	const int* pDxArray = pMetrics->GenerateDxArray(&vDxArray, pData, nLength, this->m_pEditView->GetTextMetrics().GetHankakuDx());
 
 	// 文字列のピクセル幅
-	int nTextWidth = pMetrics->CalcTextWidth(pData,nLength,pDxArray);
+	int nTextWidth = pMetrics->CalcTextWidth(pData, nLength, pDxArray);
 
 	// テキストの描画範囲の矩形を求める -> rcClip
 	CMyRect rcClip;
@@ -177,8 +177,8 @@ void CTextDrawer::DispVerticalLines(
 	
 	const STypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 	
-	CTypeSupport cVertType(pView,COLORIDX_VERTLINE);
-	CTypeSupport cTextType(pView,COLORIDX_TEXT);
+	CTypeSupport cVertType(pView, COLORIDX_VERTLINE);
+	CTypeSupport cTextType(pView, COLORIDX_TEXT);
 	
 	if (!cVertType.IsDisp()) {
 		return;
@@ -339,7 +339,7 @@ void CTextDrawer::DispLineNumber(
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
 	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace;	// 2009.03.26 ryoji
 
-	CTypeSupport cTextType(pView,COLORIDX_TEXT);
+	CTypeSupport cTextType(pView, COLORIDX_TEXT);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -356,7 +356,7 @@ void CTextDrawer::DispLineNumber(
 			&& CModifyVisitor().IsLineModified(pCDocLine, pView->GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq())
 		) {
 			// 変更フラグ
-			if (CTypeSupport(pView,COLORIDX_GYOU_MOD).IsDisp()) {	// 2006.12.12 ryoji
+			if (CTypeSupport(pView, COLORIDX_GYOU_MOD).IsDisp()) {	// 2006.12.12 ryoji
 				nColorIndex = COLORIDX_GYOU_MOD;	// 行番号（変更行）
 				bGyouMod = true;
 			}
@@ -370,7 +370,7 @@ void CTextDrawer::DispLineNumber(
 		// 02/10/16 ai
 		// ブックマークの表示
 		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
-			if (CTypeSupport(pView,COLORIDX_MARK).IsDisp()) {
+			if (CTypeSupport(pView, COLORIDX_MARK).IsDisp()) {
 				nColorIndex = COLORIDX_MARK;
 			}
 		}
@@ -380,8 +380,8 @@ void CTextDrawer::DispLineNumber(
 	//             決定されたnColorIndexを使って描画               //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	CTypeSupport cColorType(pView,nColorIndex);
-	CTypeSupport cMarkType(pView,COLORIDX_MARK);
+	CTypeSupport cColorType(pView, nColorIndex);
+	CTypeSupport cMarkType(pView, COLORIDX_MARK);
 
 	// 該当行の行番号エリア矩形
 	RECT	rcLineNum;
@@ -395,8 +395,8 @@ void CTextDrawer::DispLineNumber(
 
 	COLORREF fgcolor = cColorType.GetTextColor();
 	COLORREF bgcolor = cColorType.GetBackColor();
-	CTypeSupport cGyouType(pView,COLORIDX_GYOU);
-	CTypeSupport cGyouModType(pView,COLORIDX_GYOU_MOD);
+	CTypeSupport cGyouType(pView, COLORIDX_GYOU);
+	CTypeSupport cGyouModType(pView, COLORIDX_GYOU_MOD);
 	if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 		if (cGyouType.GetTextColor() == cColorType.GetTextColor()) {
 			fgcolor = cGyouModType.GetTextColor();
@@ -409,9 +409,9 @@ void CTextDrawer::DispLineNumber(
 	if (!pcLayout) {
 		// 行が存在しない場合は、テキスト描画色で塗りつぶし
 		if (!bTransText) {
-			cTextType.FillBack(gr,rcLineNum);
+			cTextType.FillBack(gr, rcLineNum);
 		}
-	}else if (CTypeSupport(pView,COLORIDX_GYOU).IsDisp()) { // 行番号表示／非表示
+	}else if (CTypeSupport(pView, COLORIDX_GYOU).IsDisp()) { // 行番号表示／非表示
 		SFONT sFont = cColorType.GetTypeFont();
 	 	// 2013.12.30 変更行の色・フォント属性をDIFFブックマーク行に継承するように
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
@@ -499,14 +499,14 @@ void CTextDrawer::DispLineNumber(
 		// 2001.12.03 hor
 		// とりあえずブックマークに縦線
 		if (CBookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp()) {
-			gr.PushPen(cColorType.GetTextColor(),2);
+			gr.PushPen(cColorType.GetTextColor(), 2);
 			::MoveToEx(gr, 1, y, NULL);
 			::LineTo(gr, 1, y + nLineHeight);
 			gr.PopPen();
 		}
 
 		// DIFFマーク描画
-		CDiffLineGetter(pCDocLine).DrawDiffMark(gr,y,nLineHeight,fgcolor);
+		CDiffLineGetter(pCDocLine).DrawDiffMark(gr, y, nLineHeight, fgcolor);
 	}
 
 	// 行番号とテキストの隙間の描画
@@ -516,7 +516,7 @@ void CTextDrawer::DispLineNumber(
 		rcRest.right  = pView->GetTextArea().GetAreaLeft();
 		rcRest.top    = y;
 		rcRest.bottom = y + nLineHeight;
-		cTextType.FillBack(gr,rcRest);
+		cTextType.FillBack(gr, rcRest);
 	}
 }
 

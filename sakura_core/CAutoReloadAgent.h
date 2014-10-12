@@ -42,8 +42,8 @@ public:
 	
 	// ŠÄŽ‹‚ÌˆêŽž’âŽ~
 	void PauseWatching() { m_nPauseCount++; }
-	void ResumeWatching() { m_nPauseCount--; assert(m_nPauseCount>=0); }
-	bool IsPausing() const { return m_nPauseCount>=1; }
+	void ResumeWatching() { m_nPauseCount--; assert(m_nPauseCount >= 0); }
+	bool IsPausing() const { return m_nPauseCount >= 1; }
 	
 public://#####‰¼
 	bool _ToDoChecking() const;

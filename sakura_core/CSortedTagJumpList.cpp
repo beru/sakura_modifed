@@ -41,7 +41,7 @@ CSortedTagJumpList::CSortedTagJumpList(int max)
 	m_bOverflow(false),
 	m_MAX_TAGJUMPLIST(max)
 {
-	// id==0 ‚ð ‹ó•¶Žš—ñ‚É‚·‚é
+	// id == 0 ‚ð ‹ó•¶Žš—ñ‚É‚·‚é
 	m_baseDirArr.push_back(_T(""));
 }
 

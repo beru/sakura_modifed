@@ -72,7 +72,7 @@ void CTextMetrics::Update(HFONT hFont)
 		this->SetHankakuWidth(sz.cx / 2);
 		::SelectObject(hdc, hFontOld);
 	}
-	ReleaseDC(NULL,hdc);
+	ReleaseDC(NULL, hdc);
 }
 
 

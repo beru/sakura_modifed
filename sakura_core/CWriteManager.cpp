@@ -28,7 +28,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 
 	try {
 		//ファイルオープン
-		CBinaryOutputStream out(sSaveInfo.cFilePath,true);
+		CBinaryOutputStream out(sSaveInfo.cFilePath, true);
 
 		// 各行出力
 		int nLineNumber = 0;
@@ -49,7 +49,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 					cstrSrc.AppendNativeData(pcDocLine->_GetDocLineDataWithEOL());
 				}
 				EConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
-				if (e==RESULT_LOSESOME) {
+				if (e == RESULT_LOSESOME) {
 					nRetVal=RESULT_LOSESOME;
 				}
 			}

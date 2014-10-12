@@ -92,7 +92,7 @@ void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 
 	int nSetCount = -1;
 
-#define PopulateKeyword(name,case_sensitive,aryname) \
+#define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
 	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
@@ -190,7 +190,7 @@ void _DefaultConfig(STypeConfig* pType)
 
 	assert(COLORIDX_LAST <= _countof(pType->m_ColorInfoArr));
 	for (int i = 0; i < COLORIDX_LAST; ++i) {
-		GetDefaultColorInfo(&pType->m_ColorInfoArr[i],i);
+		GetDefaultColorInfo(&pType->m_ColorInfoArr[i], i);
 	}
 	pType->m_szBackImgPath[0] = '\0';
 	pType->m_backImgPos = BGIMAGE_TOP_LEFT;

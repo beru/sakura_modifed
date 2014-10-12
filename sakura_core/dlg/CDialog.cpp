@@ -502,7 +502,7 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 	// •¶Žš—ñ‚ð‘Þ”ð
 	int nLength = ::GetWindowTextLength(hwndCtl);
 	LPTSTR sBuf = new TCHAR[nLength + 1];
-	::GetWindowText(hwndCtl, sBuf, nLength+1);
+	::GetWindowText(hwndCtl, sBuf, nLength + 1);
 	sBuf[nLength] = _T('\0');
 
 	// ƒŠƒXƒg‚ð”ñ•\Ž¦‚É‚·‚é

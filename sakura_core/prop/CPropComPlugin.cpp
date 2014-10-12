@@ -546,7 +546,7 @@ bool CPropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 	// ƒOƒ‹[ƒvID
 	int nGroup = GetDllShareData().m_sNodes.m_nGroupSequences;
 	if (nGroup > 0) {
-		cCmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup+1);
+		cCmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup + 1);
 	}
 
 	//CreateProcess‚É“n‚·STARTUPINFO‚ğì¬

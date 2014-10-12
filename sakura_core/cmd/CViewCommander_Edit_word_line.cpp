@@ -155,7 +155,7 @@ void CViewCommander::Command_LineCutToStart(void)
 
 	// 選択範囲の変更
 	//	2005.06.24 Moca
-	CLayoutRange sRange(ptPos,GetCaret().GetCaretLayoutPos());
+	CLayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
 	selInfo.SetSelectArea(sRange);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
@@ -207,7 +207,7 @@ void CViewCommander::Command_LineCutToEnd(void)
 
 	// 選択範囲の変更
 	//	2005.06.24 Moca
-	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(),ptPos);
+	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
 	selInfo.SetSelectArea(sRange);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
@@ -240,7 +240,7 @@ void CViewCommander::Command_LineDeleteToStart(void)
 
 	// 選択範囲の変更
 	//	2005.06.24 Moca
-	CLayoutRange sRange(ptPos,GetCaret().GetCaretLayoutPos());
+	CLayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
 	selInfo.SetSelectArea(sRange);
 
 	// 選択領域削除
@@ -347,8 +347,8 @@ void CViewCommander::Command_DELETE_LINE(void)
 		ErrorBeep();
 		return;
 	}
-	GetSelect().SetFrom(CLayoutPoint(CLayoutInt(0),GetCaret().GetCaretLayoutPos().GetY2()   ));	// 範囲選択開始位置
-	GetSelect().SetTo  (CLayoutPoint(CLayoutInt(0),GetCaret().GetCaretLayoutPos().GetY2() + 1));	// 範囲選択終了位置
+	GetSelect().SetFrom(CLayoutPoint(CLayoutInt(0), GetCaret().GetCaretLayoutPos().GetY2()  ));	// 範囲選択開始位置
+	GetSelect().SetTo  (CLayoutPoint(CLayoutInt(0), GetCaret().GetCaretLayoutPos().GetY2() + 1));	// 範囲選択終了位置
 
 	CLayoutPoint ptCaretPos_OLD = GetCaret().GetCaretLayoutPos();
 
@@ -417,7 +417,7 @@ void CViewCommander::Command_DUPLICATELINE(void)
 		);
 	}
 
-	CLayoutPoint ptCaretPosOld = GetCaret().GetCaretLayoutPos() + CLayoutPoint(0,1);
+	CLayoutPoint ptCaretPosOld = GetCaret().GetCaretLayoutPos() + CLayoutPoint(0, 1);
 
 	// 行頭に移動(折り返し単位)
 	Command_GOLINETOP(selInfo.m_bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */);

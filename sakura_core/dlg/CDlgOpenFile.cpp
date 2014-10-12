@@ -1101,7 +1101,7 @@ bool CDlgOpenFile::_GetOpenFileNameRecover(OPENFILENAMEZ* ofn)
 			bRet = ::GetOpenFileName(ofn);
 		}
 	}
-	return bRet!=FALSE;
+	return bRet != FALSE;
 }
 
 /*! リトライ機能付き GetSaveFileName
@@ -1118,6 +1118,6 @@ bool CDlgOpenFile::GetSaveFileNameRecover(OPENFILENAMEZ* ofn)
 			bRet = ::GetSaveFileName(ofn);
 		}
 	}
-	return bRet!=FALSE;
+	return bRet != FALSE;
 }
 

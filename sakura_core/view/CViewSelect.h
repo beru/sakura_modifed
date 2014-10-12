@@ -118,7 +118,7 @@ public:
 	// 2002/03/29 Azumaiya ƒCƒ“ƒ‰ƒCƒ“ŠÖ”‰»
 	bool IsTextSelected() const {
 		return m_sSelect.IsValid();
-//		return 0!=(
+//		return 0 != (
 //			~((DWORD)(m_sSelect.nLineFrom | m_sSelect.nLineTo | m_sSelect.nColumnFrom | m_sSelect.nColumnTo)) >> 31
 //			);
 	}

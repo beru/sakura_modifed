@@ -643,7 +643,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		}
 
 		// TAB•\Ž¦•¶Žš—ñ
-		WIN_CHAR szTab[8+1]; // +1. happy
+		WIN_CHAR szTab[8 + 1]; // +1. happy
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, szTab, _countof(szTab));
 		wcscpy_s(m_Types.m_szTabViewString, L"^       ");
 		for (int i = 0; i < 8; i++) {

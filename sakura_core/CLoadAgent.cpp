@@ -210,7 +210,7 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 			sLoadInfo,
 			&pcDoc->m_cDocFile.m_sFileInfo
 		);
-		if (eReadResult==RESULT_LOSESOME) {
+		if (eReadResult == RESULT_LOSESOME) {
 			eRet = LOADED_LOSESOME;
 		}
 		CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(pOld);

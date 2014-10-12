@@ -110,7 +110,7 @@ void CDlgPluginOption::SetData(void)
 	HWND	hwndList;
 	int		i;
 	LV_ITEM	lvi;
-	TCHAR	buf[MAX_LENGTH_VALUE+1];
+	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	bool bLoadDefault = false;
 
 	// タイトル
@@ -193,13 +193,13 @@ void CDlgPluginOption::SetData(void)
 
 	if (bLoadDefault) {
 		cProfile->SetWritingMode();
-		cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str() ,(m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+		cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str(), (m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
 
 	if (i ==0) {
 		// オプションが無い
-		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS   ), FALSE);
-		::EnableWindow(::GetDlgItem(GetHwnd(), IDOK                      ), FALSE);
+		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS  ), FALSE);
+		::EnableWindow(::GetDlgItem(GetHwnd(), IDOK                     ), FALSE);
 	
 		::DlgItem_SetText(GetHwnd(), IDC_STATIC_MSG, LS(STR_DLGPLUGINOPT_OPTION));
 	}
@@ -228,7 +228,7 @@ int CDlgPluginOption::GetData(void)
 	cProfile->SetWritingMode();
 
 	CPluginOption* cOpt;
-	TCHAR	buf[MAX_LENGTH_VALUE+1];
+	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	CPluginOption::ArrayIter it;
 	for (i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
 		cOpt = *it;
@@ -238,7 +238,7 @@ int CDlgPluginOption::GetData(void)
 		lvi.iItem      = i;
 		lvi.iSubItem   = 1;
 		lvi.pszText    = buf;
-		lvi.cchTextMax = MAX_LENGTH_VALUE+1;
+		lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 		ListView_GetItem(hwndList, &lvi);
 
 		if (cOpt->GetType() == OPTION_TYPE_BOOL) {
@@ -278,7 +278,7 @@ int CDlgPluginOption::GetData(void)
 		cProfile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue);
 	}
 
-	cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str() ,(m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+	cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str(), (m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 
 	return TRUE;
 }
@@ -324,7 +324,7 @@ BOOL CDlgPluginOption::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	CtrlShow(hwndDlg, IDC_COMBO_PLUGIN_OPTION,     FALSE);
 
 	// 桁数制限
-	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_PLUGIN_OPTION    ), MAX_LENGTH_VALUE);
+	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_PLUGIN_OPTION   ), MAX_LENGTH_VALUE);
 	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_PLUGIN_OPTION_DIR), _MAX_PATH);
 	EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_PLUGIN_OPTION_NUM), 11);
 
@@ -490,7 +490,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 		return;
 	}
 
-	TCHAR	buf[MAX_LENGTH_VALUE+1];
+	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 
 	// 戻し
 	if (m_Line >= 0) {
@@ -507,7 +507,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 	lvi.iItem      = current;
 	lvi.iSubItem   = 1;
 	lvi.pszText    = buf;
-	lvi.cchTextMax = MAX_LENGTH_VALUE+1;
+	lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 
 	ListView_GetItem(hwndList, &lvi);
 	::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf);
@@ -549,18 +549,18 @@ void CDlgPluginOption::SetToEdit(int iLine)
 {
 	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS);
 
-	TCHAR buf[MAX_LENGTH_VALUE+1];
+	TCHAR buf[MAX_LENGTH_VALUE + 1];
 	LVITEM lvi;
 	wstring	sType;
 
 	if (iLine >= 0) {
-		::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE+1);
+		::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE + 1);
 		memset_raw(&lvi, 0, sizeof(lvi));
 		lvi.mask       = LVIF_TEXT;
 		lvi.iItem      = iLine;
 		lvi.iSubItem   = 1;
 		lvi.pszText    = buf;
-		lvi.cchTextMax = MAX_LENGTH_VALUE+1;
+		lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 		ListView_GetItem(hwndList, &lvi);
 
 		sType = m_cPlugin->m_options[iLine]->GetType();
@@ -627,8 +627,8 @@ void CDlgPluginOption::SelectEdit(int IDCenable)
 	CtrlShow(GetHwnd(), IDC_BUTTON_PLUGIN_OPTION_DIR,  (IDCenable == IDC_EDIT_PLUGIN_OPTION_DIR));
 	CtrlShow(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM,    (IDCenable == IDC_EDIT_PLUGIN_OPTION_NUM));
 	CtrlShow(GetHwnd(), IDC_SPIN_PLUGIN_OPTION,        (IDCenable == IDC_EDIT_PLUGIN_OPTION_NUM));
-	CtrlShow(GetHwnd(), IDC_CHECK_PLUGIN_OPTION,       (IDCenable == IDC_CHECK_PLUGIN_OPTION) );
-	CtrlShow(GetHwnd(), IDC_COMBO_PLUGIN_OPTION,       (IDCenable == IDC_COMBO_PLUGIN_OPTION) );
+	CtrlShow(GetHwnd(), IDC_CHECK_PLUGIN_OPTION,       (IDCenable == IDC_CHECK_PLUGIN_OPTION));
+	CtrlShow(GetHwnd(), IDC_COMBO_PLUGIN_OPTION,       (IDCenable == IDC_COMBO_PLUGIN_OPTION));
 }
 
 // 編集領域から戻し
@@ -636,7 +636,7 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 {
 	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS);
 
-	TCHAR	buf[MAX_LENGTH_VALUE+1];
+	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	int		nVal;
 	LVITEM	lvi;
 	wstring	sType;
@@ -659,11 +659,11 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 			nVal = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, NULL, TRUE);
 			auto_sprintf_s(buf, _T("%d"), nVal);
 		}else if (sType == OPTION_TYPE_SEL) {
-			::DlgItem_GetText(GetHwnd(), IDC_COMBO_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE+1);
+			::DlgItem_GetText(GetHwnd(), IDC_COMBO_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE + 1);
 		}else if (sType == OPTION_TYPE_DIR) {
-			::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, buf, MAX_LENGTH_VALUE+1);
+			::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, buf, MAX_LENGTH_VALUE + 1);
 		}else {
-			::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE+1);
+			::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE + 1);
 		}
 		memset_raw(&lvi, 0, sizeof(lvi));
 		lvi.mask     = LVIF_TEXT;
@@ -693,29 +693,29 @@ void CDlgPluginOption::SepSelect(wstring sTrg, wstring* spView, wstring* spValue
 // ディレクトリを選択する
 void CDlgPluginOption::SelectDirectory(int iLine)
 {
-	TCHAR szDir[_MAX_PATH+1];
+	TCHAR szDir[_MAX_PATH + 1];
 
 	// 検索フォルダ
 	::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, szDir, _countof(szDir));
 
 	if (_IS_REL_PATH(szDir)) {
-		TCHAR	folder[_MAX_PATH+1];
+		TCHAR	folder[_MAX_PATH + 1];
 		_tcscpy(folder, szDir);
 		GetInidirOrExedir(szDir, folder);
 	}
 
 	// 項目名の取得
 	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS);
-	TCHAR buf[MAX_LENGTH_VALUE+1];
+	TCHAR buf[MAX_LENGTH_VALUE + 1];
 	LVITEM lvi = {0};
 	lvi.mask       = LVIF_TEXT;
 	lvi.iItem      = iLine;
 	lvi.iSubItem   = 0;
 	lvi.pszText    = buf;
-	lvi.cchTextMax = MAX_LENGTH_VALUE+1;
+	lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 	ListView_GetItem(hwndList, &lvi);
 
-	TCHAR	sTitle[MAX_LENGTH_VALUE+10];
+	TCHAR	sTitle[MAX_LENGTH_VALUE + 10];
 	auto_sprintf_s(sTitle, LS(STR_DLGPLUGINOPT_SELECT), buf);
 	if (SelectDir(GetHwnd(), (const TCHAR*)sTitle /*_T("ディレクトリの選択")*/, szDir, szDir)) {
 		//	末尾に\マークを追加する．

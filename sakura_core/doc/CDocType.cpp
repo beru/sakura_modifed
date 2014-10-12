@@ -35,35 +35,35 @@
 CDocType::CDocType(CEditDoc* pcDoc)
 	:
 	m_pcDocRef(pcDoc),
-	m_nSettingType( 0 ),			// Sep. 11, 2002 genta
-	m_nSettingTypeLocked( false ),	// 設定値変更可能フラグ
-	m_typeConfig( GetDllShareData().m_TypeBasis )
+	m_nSettingType(0),			// Sep. 11, 2002 genta
+	m_nSettingTypeLocked(false),	// 設定値変更可能フラグ
+	m_typeConfig(GetDllShareData().m_TypeBasis)
 {
 }
 
 //! 文書種別の設定
-void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly )
+void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 {
 	if (!m_nSettingTypeLocked || force) {
 		m_nSettingType = type;
-		if (!CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
+		if (!CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
 			// 削除されてる/不正
 			m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
-			CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
+			CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 		}
 		if (bTypeOnly) return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
 		UnlockDocumentType();
 	}else {
 		// データは更新しておく
-		CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId( m_typeConfig.m_id );
+		CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId(m_typeConfig.m_id);
 		if (temp.IsValidType()) {
 			m_nSettingType = temp;
-			CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
+			CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 		}else {
 			m_nSettingType = type;
-			if (!CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig )) {
+			if (!CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
 				m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
-				CDocTypeManager().GetTypeConfig( m_nSettingType, m_typeConfig );
+				CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 			}
 		}
 		if (bTypeOnly) return;
@@ -76,7 +76,7 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly )
 	m_pcDocRef->SetBackgroundImage();
 }
 
-void CDocType::SetDocumentTypeIdx( int id, bool force )
+void CDocType::SetDocumentTypeIdx(int id, bool force)
 {
 	int setId = m_typeConfig.m_id;
 	if (!m_nSettingTypeLocked || force) {
@@ -84,7 +84,7 @@ void CDocType::SetDocumentTypeIdx( int id, bool force )
 			setId = id;
 		}
 	}
-	CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId( setId );
+	CTypeConfig temp = CDocTypeManager().GetDocumentTypeOfId(setId);
 	if (temp.IsValidType()) {
 		m_nSettingType = temp;
 		m_typeConfig.m_nIdx = temp.GetIndex();
@@ -108,11 +108,11 @@ void CDocType::SetDocumentIcon()
 	
 	HICON hIconBig, hIconSmall;
 	if (this->GetDocumentAttribute().m_bUseDocumentIcon)
-		m_pcDocRef->m_pcEditWnd->GetRelatedIcon( m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall );
+		m_pcDocRef->m_pcEditWnd->GetRelatedIcon(m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall);
 	else
-		m_pcDocRef->m_pcEditWnd->GetDefaultIcon( &hIconBig, &hIconSmall );
+		m_pcDocRef->m_pcEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
 
-	m_pcDocRef->m_pcEditWnd->SetWindowIcon( hIconBig, ICON_BIG );
-	m_pcDocRef->m_pcEditWnd->SetWindowIcon( hIconSmall, ICON_SMALL );
+	m_pcDocRef->m_pcEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
+	m_pcDocRef->m_pcEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 }
 

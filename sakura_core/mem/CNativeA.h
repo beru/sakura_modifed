@@ -53,8 +53,8 @@ public:
 	const char* GetStringPtr(int* pnLength) const; // [out]pnLengthは文字単位。
 
 	// 演算子
-	const CNativeA& operator=(char);
-	const CNativeA& operator+=(char);
+	const CNativeA& operator = (char);
+	const CNativeA& operator += (char);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           変換                              //
@@ -87,18 +87,18 @@ public:
 	void AppendStringNew(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
 	void AppendStringNew(const wchar_t* pszData, int nDataLen); //!< バッファの最後にデータを追加する。nDataLenは文字単位。
 	void SetStringW(const wchar_t* pszData)					{ return SetStringNew(pszData); }
-	void SetStringW(const wchar_t* pData, int nLength)		{ return SetStringNew(pData,nLength); }
+	void SetStringW(const wchar_t* pData, int nLength)		{ return SetStringNew(pData, nLength); }
 	void AppendStringW(const wchar_t* pszData)				{ return AppendStringNew(pszData); }
-	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendStringNew(pData,nLength); }
+	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendStringNew(pData, nLength); }
 	const wchar_t* GetStringW() const;
 
 	//TCHAR
 #ifdef _UNICODE
 	void SetStringT(const TCHAR* pszData)				{ return SetStringNew(pszData); }
-	void SetStringT(const TCHAR* pData, int nLength)	{ return SetStringNew(pData,nLength); }
+	void SetStringT(const TCHAR* pData, int nLength)	{ return SetStringNew(pData, nLength); }
 #else
 	void SetStringT(const TCHAR* pszData)				{ return SetString(pszData); }
-	void SetStringT(const TCHAR* pData, int nLength)	{ return SetString(pData,nLength); }
+	void SetStringT(const TCHAR* pData, int nLength)	{ return SetString(pData, nLength); }
 #endif
 
 public:

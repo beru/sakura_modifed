@@ -127,7 +127,7 @@ void CViewCommander::Command_FILEOPEN(const WCHAR* filename, ECodeType nCharCode
 		}
 		bool bDlgResult = GetDocument()->m_cDocFileOperation.OpenFileDialog(
 			CEditWnd::getInstance()->GetHwnd(),	//[in]  オーナーウィンドウ
-			defName.length()==0 ? NULL : defName.c_str(),	//[in]  フォルダ
+			defName.length() == 0 ? NULL : defName.c_str(),	//[in]  フォルダ
 			&sLoadInfo,							//[out] ロード情報受け取り
 			files								//[out] ファイル名
 		);
@@ -191,7 +191,7 @@ bool CViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 
 
 // 名前を付けて保存ダイアログ
-bool CViewCommander::Command_FILESAVEAS_DIALOG(const WCHAR* fileNameDef,ECodeType eCodeType, EEolType eEolType)
+bool CViewCommander::Command_FILESAVEAS_DIALOG(const WCHAR* fileNameDef, ECodeType eCodeType, EEolType eEolType)
 {
 	return GetDocument()->m_cDocFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
 }
@@ -573,7 +573,7 @@ BOOL CViewCommander::Command_PUTFILE(
 	//	2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
-	std::auto_ptr<CCodeBase> pcSaveCode(CCodeFactory::CreateCodeBase(nSaveCharCode,0));
+	std::auto_ptr<CCodeBase> pcSaveCode(CCodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
 	bool bBom = false;
 	if (CCodeTypeName(nSaveCharCode).UseBom()) {
@@ -582,7 +582,7 @@ BOOL CViewCommander::Command_PUTFILE(
 
 	if (nFlgOpt & 0x01) {	// 選択範囲を出力
 		try {
-			CBinaryOutputStream out(to_tchar(filename),true);
+			CBinaryOutputStream out(to_tchar(filename), true);
 
 			// 選択範囲の取得 -> cMem
 			CNativeW cMem;
@@ -593,7 +593,7 @@ BOOL CViewCommander::Command_PUTFILE(
 			const CNativeW* pConvBuffer;
 			if (bBom) {
 				CNativeW cmemBom;
-				std::auto_ptr<CCodeBase> pcUtf16(CCodeFactory::CreateCodeBase(CODE_UNICODE,0));
+				std::auto_ptr<CCodeBase> pcUtf16(CCodeFactory::CreateCodeBase(CODE_UNICODE, 0));
 				pcUtf16->GetBom(cmemBom._GetMemory());
 				cMem2.AppendNativeData(cmemBom);
 				cMem2.AppendNativeData(cMem);
@@ -609,7 +609,7 @@ BOOL CViewCommander::Command_PUTFILE(
 
 			// 書込
 			if(0 < cDst.GetRawLength())
-				out.Write(cDst.GetRawPtr(),cDst.GetRawLength());
+				out.Write(cDst.GetRawPtr(), cDst.GetRawLength());
 		}catch (CError_FileOpen) {
 			WarningMessage(
 				NULL,

@@ -214,15 +214,15 @@ int CDlgFind::GetData(void)
 //	MYTRACE(_T("CDlgFind::GetData()"));
 
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = (0!=IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
+	m_sSearchOption.bLoHiCase = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
 
 	// 2001/06/23 Norio Nakatani
 	// 単語単位で検索
-	m_sSearchOption.bWordOnly = (0!=IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
+	m_sSearchOption.bWordOnly = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
 
 	// 一致する単語のみ検索する
 	// 正規表現
-	m_sSearchOption.bRegularExp = (0!=IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
+	m_sSearchOption.bRegularExp = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
 
 	// 検索／置換  見つからないときメッセージを表示
 	m_bNOTIFYNOTFOUND = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND);
@@ -260,7 +260,7 @@ int CDlgFind::GetData(void)
 			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
 			m_pShareData->m_Common.m_sSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
 		}
-		CEditView*	pcEditView = (CEditView*)m_lParam;
+		CEditView* pcEditView = (CEditView*)m_lParam;
 		if (1
 			&& pcEditView->m_strCurSearchKey == m_strText
 			&& pcEditView->m_sCurSearchOption == m_sSearchOption
@@ -395,7 +395,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 				if (m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}else {
-					::SendMessage(GetHwnd(),WM_NEXTDLGCTL,(WPARAM)::GetDlgItem(GetHwnd(),IDC_COMBO_TEXT),TRUE);
+					::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), TRUE);
 				}
 			}
 		}

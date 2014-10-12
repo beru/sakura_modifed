@@ -22,14 +22,14 @@ CLayout::~CLayout()
 	return;
 }
 
-void CLayout::DUMP( void )
+void CLayout::DUMP(void)
 {
-	DEBUG_TRACE( _T("\n\n■CLayout::DUMP()======================\n") );
-	DEBUG_TRACE( _T("m_ptLogicPos.y=%d\t\t対応する論理行番号\n"), m_ptLogicPos.y );
-	DEBUG_TRACE( _T("m_ptLogicPos.x=%d\t\t対応する論理行の先頭からのオフセット\n"), m_ptLogicPos.x );
-	DEBUG_TRACE( _T("m_nLength=%d\t\t対応する論理行のハイト数\n"), (int)m_nLength );
-	DEBUG_TRACE( _T("m_nTypePrev=%d\t\tタイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列 \n"), m_nTypePrev );
-	DEBUG_TRACE( _T("======================\n") );
+	DEBUG_TRACE(_T("\n\n■CLayout::DUMP()======================\n"));
+	DEBUG_TRACE(_T("m_ptLogicPos.y=%d\t\t対応する論理行番号\n"), m_ptLogicPos.y);
+	DEBUG_TRACE(_T("m_ptLogicPos.x=%d\t\t対応する論理行の先頭からのオフセット\n"), m_ptLogicPos.x);
+	DEBUG_TRACE(_T("m_nLength=%d\t\t対応する論理行のハイト数\n"), (int)m_nLength);
+	DEBUG_TRACE(_T("m_nTypePrev=%d\t\tタイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列 \n"), m_nTypePrev);
+	DEBUG_TRACE(_T("======================\n"));
 	return;
 }
 
@@ -45,11 +45,11 @@ CLayoutInt CLayout::CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const
 
 	// 計算
 	CLayoutInt nWidth = GetIndent();
-	for (CLogicInt i=m_ptLogicPos.GetX2();i<m_ptLogicPos.GetX2()+m_nLength;i++) {
-		if (pText[i]==WCODE::TAB) {
+	for (CLogicInt i = m_ptLogicPos.GetX2(); i < m_ptLogicPos.GetX2() + m_nLength; i++) {
+		if (pText[i] == WCODE::TAB) {
 			nWidth += cLayoutMgr.GetActualTabSpace(nWidth);
 		}else {
-			nWidth += CNativeW::GetKetaOfChar(pText,nTextLen,i);
+			nWidth += CNativeW::GetKetaOfChar(pText, nTextLen, i);
 		}
 	}
 	return nWidth;
@@ -62,11 +62,11 @@ CLayoutInt CLayout::CalcLayoutOffset(const CLayoutMgr& cLayoutMgr) const
 	if (this->GetLogicOffset()) {
 		const wchar_t* pLine = this->m_pCDocLine->GetPtr();
 		int nLineLen = this->m_pCDocLine->GetLengthWithEOL();
-		for (int i=0;i<GetLogicOffset();i++) {
-			if (pLine[i]==WCODE::TAB) {
+		for (int i=0; i<GetLogicOffset(); i++) {
+			if (pLine[i] == WCODE::TAB) {
 				nRet += cLayoutMgr.GetActualTabSpace(nRet);
 			}else {
-				nRet += CNativeW::GetKetaOfChar(pLine,nLineLen,i);
+				nRet += CNativeW::GetKetaOfChar(pLine, nLineLen, i);
 			}
 		}
 	}

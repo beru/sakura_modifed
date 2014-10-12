@@ -43,7 +43,7 @@ public:
 	void RestoreAttribute()
 	{
 		if (m_bAttributeChanged) {
-			::SetFileAttributes(m_strPath.c_str(),m_dwAttribute);
+			::SetFileAttributes(m_strPath.c_str(), m_dwAttribute);
 		}
 		m_bAttributeChanged = false;
 		m_dwAttribute = 0;
@@ -63,7 +63,7 @@ CStream::CStream(const TCHAR* tszPath, const TCHAR* tszMode, bool bExceptionMode
 	m_fp = NULL;
 	m_pcFileAttribute = NULL;
 	m_bExceptionMode = bExceptionMode;
-	Open(tszPath,tszMode);
+	Open(tszPath, tszMode);
 }
 
 /*
@@ -93,7 +93,7 @@ void CStream::Open(const TCHAR* tszPath, const TCHAR* tszMode)
 	m_pcFileAttribute->PopAttribute(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
 	// オープン
-	m_fp = _tfopen(tszPath,tszMode);
+	m_fp = _tfopen(tszPath, tszMode);
 	if (!m_fp) {
 		Close(); // 属性復元
 	}
@@ -128,13 +128,13 @@ void CStream::SeekSet(	//!< シーク
 	long offset	//!< ストリーム先頭からのオフセット 
 )
 {
-	fseek(m_fp,offset,SEEK_SET);
+	fseek(m_fp, offset, SEEK_SET);
 }
 
 void CStream::SeekEnd(   //!< シーク
 	long offset //!< ストリーム終端からのオフセット
 )
 {
-	fseek(m_fp,offset,SEEK_END);
+	fseek(m_fp, offset, SEEK_END);
 }
 

@@ -106,12 +106,12 @@ void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 	CLayoutRange* pSelect
 )
 {
-	if (m_sSelectBgn.GetFrom()==m_sSelectBgn.GetTo()) {
-		if (ptCaretPos==m_sSelectBgn.GetFrom()) {
+	if (m_sSelectBgn.GetFrom() == m_sSelectBgn.GetTo()) {
+		if (ptCaretPos == m_sSelectBgn.GetFrom()) {
 			// 選択解除
 			pSelect->Clear(-1);
 			m_nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
-		}else if (PointCompare(ptCaretPos,m_sSelectBgn.GetFrom()) < 0) { //キャレット位置がm_sSelectBgnのfromより小さかったら
+		}else if (PointCompare(ptCaretPos, m_sSelectBgn.GetFrom()) < 0) { //キャレット位置がm_sSelectBgnのfromより小さかったら
 			 pSelect->SetFrom(ptCaretPos);
 			 pSelect->SetTo(m_sSelectBgn.GetFrom());
 		}else {
@@ -121,15 +121,15 @@ void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 	}else {
 		// 常時選択範囲の範囲内
 		// キャレット位置が m_sSelectBgn の from以上で、toより小さい場合
-		if (PointCompare(ptCaretPos,m_sSelectBgn.GetFrom()) >= 0 && PointCompare(ptCaretPos,m_sSelectBgn.GetTo()) < 0) {
+		if (PointCompare(ptCaretPos, m_sSelectBgn.GetFrom()) >= 0 && PointCompare(ptCaretPos,m_sSelectBgn.GetTo()) < 0) {
 			pSelect->SetFrom(m_sSelectBgn.GetFrom());
-			if (ptCaretPos==m_sSelectBgn.GetFrom()) {
+			if (ptCaretPos == m_sSelectBgn.GetFrom()) {
 				pSelect->SetTo(m_sSelectBgn.GetTo());
 			}else {
 				pSelect->SetTo(ptCaretPos);
 			}
 		//キャレット位置がm_sSelectBgnのfromより小さかったら
-		}else if (PointCompare(ptCaretPos,m_sSelectBgn.GetFrom()) < 0) {
+		}else if (PointCompare(ptCaretPos, m_sSelectBgn.GetFrom()) < 0) {
 			// 常時選択範囲の前方向
 			pSelect->SetFrom(ptCaretPos);
 			pSelect->SetTo(m_sSelectBgn.GetTo());
@@ -157,7 +157,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	}
 	m_bDrawSelectArea = true;
 	
-	bool bDispText = CTypeSupport(pView,COLORIDX_SELECT).IsDisp();
+	bool bDispText = CTypeSupport(pView, COLORIDX_SELECT).IsDisp();
 	if (bDispText) {
 		if (m_sSelect != m_sSelectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
@@ -287,7 +287,7 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
 		// 2002.02.16 hor ちらつきを抑止するためEOF以降のエリアが反転したらもう一度反転して元に戻すことにする
-		//if((GetTextArea().GetViewTopLine()+m_nViewRowNum+1>=m_pcEditDoc->m_cLayoutMgr.GetLineCount()) &&
+		//if((GetTextArea().GetViewTopLine()+m_nViewRowNum+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount()) &&
 		//   (m_sSelect.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount() ||
 		//	m_sSelectOld.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount())) {
 		//	Redraw();
@@ -363,10 +363,10 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 					ptLast.y++;
 				}
 				if (0
-					|| m_sSelect.GetFrom().y>=ptLast.y
-					|| m_sSelect.GetTo().y>=ptLast.y
-					|| m_sSelectOld.GetFrom().y>=ptLast.y
-					|| m_sSelectOld.GetTo().y>=ptLast.y
+					|| m_sSelect.GetFrom().y >= ptLast.y
+					|| m_sSelect.GetTo().y >= ptLast.y
+					|| m_sSelectOld.GetFrom().y >= ptLast.y
+					|| m_sSelectOld.GetTo().y >= ptLast.y
 				) {
 					//	Jan. 24, 2004 genta nLastLenは物理桁なので変換必要
 					//	最終行にTABが入っていると反転範囲が不足する．
@@ -412,7 +412,7 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 		// 現在描画されている範囲と始点が同じ
 		if (m_sSelect.GetFrom() == m_sSelectOld.GetFrom()) {
 			// 範囲が後方に拡大された
-			if (PointCompare(m_sSelect.GetTo(),m_sSelectOld.GetTo()) > 0) {
+			if (PointCompare(m_sSelect.GetTo(), m_sSelectOld.GetTo()) > 0) {
 				sRangeA.SetFrom(m_sSelectOld.GetTo());
 				sRangeA.SetTo  (m_sSelect.GetTo());
 			}else {
@@ -426,7 +426,7 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 			}
 		}else if (m_sSelect.GetTo() == m_sSelectOld.GetTo()) {
 			// 範囲が前方に拡大された
-			if (PointCompare(m_sSelect.GetFrom(),m_sSelectOld.GetFrom()) < 0) {
+			if (PointCompare(m_sSelect.GetFrom(), m_sSelectOld.GetFrom()) < 0) {
 				sRangeA.SetFrom(m_sSelect.GetFrom());
 				sRangeA.SetTo  (m_sSelectOld.GetFrom());
 			}else {

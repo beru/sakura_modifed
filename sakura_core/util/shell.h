@@ -31,7 +31,7 @@ BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData);	// WinHelp ‚Ì‚
 BOOL SelectDir(HWND, const TCHAR*, const TCHAR*, TCHAR*);	// ƒtƒHƒ‹ƒ_‘I‘ğƒ_ƒCƒAƒƒO
 BOOL ResolveShortcutLink(HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath);	// ƒVƒ‡[ƒgƒJƒbƒg(.lnk)‚Ì‰ğŒˆ
 
-HWND OpenHtmlHelp(HWND hWnd, LPCTSTR szFile, UINT uCmd, DWORD_PTR data,bool msgflag = true);
+HWND OpenHtmlHelp(HWND hWnd, LPCTSTR szFile, UINT uCmd, DWORD_PTR data, bool msgflag = true);
 DWORD NetConnect (const TCHAR strNetWorkPass[]);
 
 // ƒwƒ‹ƒv‚Ì–ÚŸ‚ğ•\¦

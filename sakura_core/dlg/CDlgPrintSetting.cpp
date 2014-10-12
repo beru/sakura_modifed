@@ -106,8 +106,8 @@ int CALLBACK SetData_EnumFontFamProc(
 	// LOGFONT
 	if (FIXED_PITCH & pelf->elfLogFont.lfPitchAndFamily) {
 //		MYTRACE(_T("%ls\n\n"), pelf->elfLogFont.lfFaceName);
-		Combo_AddString(hwndComboFontHan, pelf->elfLogFont.lfFaceName );
-		Combo_AddString(hwndComboFontZen, pelf->elfLogFont.lfFaceName );
+		Combo_AddString(hwndComboFontHan, pelf->elfLogFont.lfFaceName);
+		Combo_AddString(hwndComboFontZen, pelf->elfLogFont.lfFaceName);
 	}
 	return 1;
 }
@@ -513,7 +513,7 @@ int CDlgPrintSetting::GetData(void)
 		curPS.m_nPrintFontHeight = nWork;
 		::SetDlgItemInt(GetHwnd(), IDC_EDIT_FONTHEIGHT, curPS.m_nPrintFontHeight, FALSE);
 	}
-	curPS.m_nPrintFontWidth = (curPS.m_nPrintFontHeight+1) / 2;
+	curPS.m_nPrintFontWidth = (curPS.m_nPrintFontHeight + 1) / 2;
 
 	nWork = DataCheckAndCorrect(IDC_EDIT_LINESPACE, curPS.m_nPrintLineSpacing);
 	if (nWork != curPS.m_nPrintLineSpacing) {

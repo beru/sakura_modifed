@@ -134,7 +134,7 @@ int CViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 		nRepeat = (Int)i;
 	}else {
 		++nRepeat;
-		if (caret.Cursor_UPDOWN(CLayoutInt(1),bSelect)!=0 && bRepeat) {
+		if (caret.Cursor_UPDOWN(CLayoutInt(1), bSelect) != 0 && bRepeat) {
 			for (int i = 0; i < csGeneral.m_nRepeatedScrollLineNum - 1; ++i) {	// キーリピート時のスクロール行数
 				// ここで再描画。
 				::UpdateWindow(m_pCommanderView->GetHwnd());	//	YAZAKI
@@ -611,7 +611,7 @@ void CViewCommander::Command_GOLINETOP(
 				return;
 			}
 			for (nPosX_Logic = 0; nPosX_Logic < nLineLen; ++nPosX_Logic) {
-				if (WCODE::IsIndentChar(pLine[nPosX_Logic],bZenSpace!=0)) continue;
+				if (WCODE::IsIndentChar(pLine[nPosX_Logic], bZenSpace != 0)) continue;
 				
 				if (WCODE::IsLineDelimiter(pLine[nPosX_Logic])) {
 					nPosX_Logic = 0;	// 空白またはタブおよび改行だけの行だった
@@ -933,7 +933,7 @@ void CViewCommander::Command_WndScrollDown(void)
 		// カーソルが画面外に出た
 		if (caret.GetCaretLayoutPos().GetY() > textArea.m_nViewRowNum + textArea.GetViewTopLine() - nCaretMarginY) {
 			if (caret.GetCaretLayoutPos().GetY() > GetDocument()->m_cLayoutMgr.GetLineCount() - nCaretMarginY) {
-				caret.Cursor_UPDOWN((GetDocument()->m_cLayoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().GetY2(), FALSE );
+				caret.Cursor_UPDOWN((GetDocument()->m_cLayoutMgr.GetLineCount() - nCaretMarginY) - caret.GetCaretLayoutPos().GetY2(), FALSE);
 			}else {
 				caret.Cursor_UPDOWN(CLayoutInt(-1), FALSE);
 			}
@@ -1054,7 +1054,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	CLayoutPoint ptCaretPos_Layo_CaretPointer;
 	//int nCaretPosY_Layo_CaretPointer;
 	GetDocument()->m_cLayoutMgr.LogicToLayout(
-		GetCaret().GetCaretLogicPos() + CLogicPoint(0,nCaretPointer),
+		GetCaret().GetCaretLogicPos() + CLogicPoint(0, nCaretPointer),
 		&ptCaretPos_Layo_CaretPointer
 	);
 

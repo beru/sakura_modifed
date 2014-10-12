@@ -107,7 +107,7 @@ bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 			}
 		}
 		if (i < length && WCODE::IsLineDelimiter(cStr.At(i))) {
-			m_id = std::wstring(cStr.GetPtr()+nPosIdStart, k - nPosIdStart);
+			m_id = std::wstring(cStr.GetPtr() + nPosIdStart, k - nPosIdStart);
 			m_pszId = m_id.c_str();
 			m_nSize = m_id.size();
 			this->m_nCOMMENTEND = length;
@@ -130,7 +130,7 @@ bool CColor_Heredoc::EndColor(const CStringRef& cStr, int nPos)
 				return false;
 			}else {
 				int i = m_nSize;
-				if (i + 1 < cStr.GetLength() && cStr.At(i) == L';' && WCODE::IsLineDelimiter(cStr.At(i+1))) {
+				if (i + 1 < cStr.GetLength() && cStr.At(i) == L';' && WCODE::IsLineDelimiter(cStr.At(i + 1))) {
 					// ID;
 					this->m_nCOMMENTEND = i;
 					return false;

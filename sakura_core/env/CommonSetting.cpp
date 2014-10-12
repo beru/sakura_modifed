@@ -51,20 +51,20 @@ struct CommonValueInfo {
 		m_nValueSize(nValueSize),
 		m_eType(eType)
 	{
-		strcpy_s(m_szEntryKey,_countof(m_szEntryKey),szEntryKey);
+		strcpy_s(m_szEntryKey, _countof(m_szEntryKey), szEntryKey);
 	}
 
 	void Save()
 	{
-		printf("%hs=",m_szEntryKey);
+		printf("%hs=", m_szEntryKey);
 
 		// intと同じサイズならintとして出力
 		if (m_nValueSize == sizeof(int)) {
-			printf("%d\n",*((int*)m_pValue));
+			printf("%d\n", *((int*)m_pValue));
 		// それ以外ならバイナリ出力
 		}else {
-			for (int i=0;i<m_nValueSize;i++) {
-				printf("%%%02X",((BYTE*)m_pValue)[i]);
+			for (int i=0; i < m_nValueSize; i++) {
+				printf("%%%02X", ((BYTE*)m_pValue)[i]);
 			}
 		}
 	}
@@ -110,7 +110,7 @@ void sample()
 	strvalue.Regist("strvalue");
 
 	intvalue = 3;
-	strcpy(strvalue,"hage");
+	strcpy(strvalue, "hage");
 
 	CommonValue_AllSave();
 }

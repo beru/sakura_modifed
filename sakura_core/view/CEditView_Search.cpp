@@ -124,7 +124,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	m_cTipWnd.m_KeyWasHit = FALSE;
 	for (int i =0 ; i < m_pTypeData->m_nKeyHelpNum; i++) {	//Å‘å”FMAX_KEYHELP_FILE
 		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
-			// 2006.04.10 fon (nCmpLen,pcmemRefKey,nSearchLine)ˆø”‚ð’Ç‰Á
+			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)ˆø”‚ð’Ç‰Á
 			CNativeW* pcmemRefText;
 			int nSearchResult=m_cDicMgr.CDicMgr::Search(
 				pcmemCurText->GetStringPtr(),

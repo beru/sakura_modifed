@@ -61,21 +61,21 @@ void CEditView_Paint::Call_OnPaint(
 {
 	CEditView* pView = GetEditView();
 
-	//各要素
-	CMyRect rcLineNumber(0,pView->GetTextArea().GetAreaTop(),pView->GetTextArea().GetAreaLeft(),pView->GetTextArea().GetAreaBottom());
-	CMyRect rcRuler(pView->GetTextArea().GetAreaLeft(),0,pView->GetTextArea().GetAreaRight(),pView->GetTextArea().GetAreaTop());
-	CMyRect rcBody(pView->GetTextArea().GetAreaLeft(),pView->GetTextArea().GetAreaTop(),pView->GetTextArea().GetAreaRight(),pView->GetTextArea().GetAreaBottom());
+	// 各要素
+	CMyRect rcLineNumber(0, pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaBottom());
+	CMyRect rcRuler(pView->GetTextArea().GetAreaLeft(), 0, pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaTop());
+	CMyRect rcBody(pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaBottom());
 
-	//領域を作成 -> rc
+	// 領域を作成 -> rc
 	std::vector<CMyRect> rcs;
 	if (nPaintFlag & PAINT_LINENUMBER) rcs.push_back(rcLineNumber);
 	if (nPaintFlag & PAINT_RULER) rcs.push_back(rcRuler);
 	if (nPaintFlag & PAINT_BODY) rcs.push_back(rcBody);
-	if (rcs.size()==0) return;
-	CMyRect rc=rcs[0];
+	if (rcs.size() == 0) return;
+	CMyRect rc = rcs[0];
 	int nSize = (int)rcs.size();
 	for (int i=1;i<nSize;i++)
-		rc=MergeRect(rc,rcs[i]);
+		rc=MergeRect(rc, rcs[i]);
 
 	//描画
 	PAINTSTRUCT	ps;
@@ -158,7 +158,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	::SetBkColor(hdc, colorOld);
 	testColorIndex++;
 #else
-	CTypeSupport cTextType(this,COLORIDX_TEXT);
+	CTypeSupport cTextType(this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
 	const CTextArea& area = GetTextArea();
 	const CEditDoc& doc  = *m_pcEditDoc;
@@ -378,7 +378,7 @@ CColor3Setting CEditView::GetColorIndex(
 
 	//文字列参照
 	const CDocLine* pcDocLine = pcLayout->GetDocLineRef();
-	CStringRef cLineStr(pcDocLine->GetPtr(),pcDocLine->GetLengthWithEOL());
+	CStringRef cLineStr(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 
 	//color strategy
 	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
@@ -582,7 +582,7 @@ void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	int				nCharDx = GetTextMetrics().GetHankakuDx();
 
 	//サポート
-	CTypeSupport cTextType(this,COLORIDX_TEXT);
+	CTypeSupport cTextType(this, COLORIDX_TEXT);
 
 //@@@ 2001.11.17 add start MIK
 	//変更があればタイプ設定を行う。
@@ -634,7 +634,7 @@ void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 			rc.top    = GetTextArea().GetRulerHeight();
 			rc.right  = GetTextArea().GetAreaRight();
 			rc.bottom = GetTextArea().GetAreaTop();
-			cTextType.FillBack(gr,rc);
+			cTextType.FillBack(gr, rc);
 		}
 	}
 
@@ -688,7 +688,7 @@ void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         描画座標                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	DispPos sPos(GetTextMetrics().GetHankakuDx(),GetTextMetrics().GetHankakuDy());
+	DispPos sPos(GetTextMetrics().GetHankakuDx(), GetTextMetrics().GetHankakuDy());
 	sPos.InitDrawPos(CMyPoint(
 		GetTextArea().GetAreaLeft() - (Int)GetTextArea().GetViewLeftCol() * nCharDx,
 		GetTextArea().GetAreaTop() + (Int)(nLayoutLine - GetTextArea().GetViewTopLine()) * nLineHeight
@@ -746,7 +746,7 @@ void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		rcBack.top    = sPos.GetDrawPos().y;
 		rcBack.bottom = pPs->rcPaint.bottom;
 
-		cTextType.FillBack(gr,rcBack);
+		cTextType.FillBack(gr, rcBack);
 	}
 	
 	{
@@ -874,7 +874,7 @@ bool CEditView::DrawLogicLine(
 		pInfo->m_pDispPos->ForwardLayoutLineRef(1);	//レイアウト行＋＋
 
 		// ロジック行を描画し終わったら抜ける
-		if (pInfo->m_pDispPos->GetLayoutRef()->GetLogicLineNo()!=nOldLogicLineNo) {
+		if (pInfo->m_pDispPos->GetLayoutRef()->GetLogicLineNo() != nOldLogicLineNo) {
 			break;
 		}
 
@@ -894,7 +894,7 @@ bool CEditView::DrawLogicLine(
 bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 {
 	bool bDispEOF = false;
-	CTypeSupport cTextType(this,COLORIDX_TEXT);
+	CTypeSupport cTextType(this, COLORIDX_TEXT);
 
 	const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef(); //m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
 
@@ -968,8 +968,8 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	if (pcLayout && pcLayout->GetIndent() != 0) {
 		RECT rcClip;
-		if (!bTransText && GetTextArea().GenerateClipRect(&rcClip,*pInfo->m_pDispPos,(Int)pcLayout->GetIndent())) {
-			cBackType.FillBack(pInfo->m_gr,rcClip);
+		if (!bTransText && GetTextArea().GenerateClipRect(&rcClip, *pInfo->m_pDispPos,(Int)pcLayout->GetIndent())) {
+			cBackType.FillBack(pInfo->m_gr, rcClip);
 		}
 		//描画位置進める
 		pInfo->m_pDispPos->ForwardDrawCol((Int)pcLayout->GetIndent());
@@ -1000,30 +1000,30 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 
 	// 必要ならEOF描画
 	void _DispEOF(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
-	if (pcLayout && pcLayout->GetNextLayout()==NULL && pcLayout->GetLayoutEol().GetLen()==0) {
+	if (pcLayout && pcLayout->GetNextLayout() == NULL && pcLayout->GetLayoutEol().GetLen() == 0) {
 		// 有文字行のEOF
-		_DispEOF(pInfo->m_gr,pInfo->m_pDispPos,this);
+		_DispEOF(pInfo->m_gr, pInfo->m_pDispPos, this);
 		bDispEOF = true;
-	}else if (!pcLayout && pInfo->m_pDispPos->GetLayoutLineRef()==m_pcEditDoc->m_cLayoutMgr.GetLineCount()) {
+	}else if (!pcLayout && pInfo->m_pDispPos->GetLayoutLineRef() == m_pcEditDoc->m_cLayoutMgr.GetLineCount()) {
 		// 空行のEOF
 		CLayout* pBottom = m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
-		if (pBottom==NULL || (pBottom && pBottom->GetLayoutEol().GetLen())) {
+		if (pBottom == NULL || (pBottom && pBottom->GetLayoutEol().GetLen())) {
 			_DispEOF(pInfo->m_gr,pInfo->m_pDispPos,this);
 			bDispEOF = true;
 		}
 	}
 
 	// 必要なら折り返し記号描画
-	if (pcLayout && pcLayout->GetLayoutEol().GetLen()==0 && pcLayout->GetNextLayout()!=NULL) {
-		_DispWrap(pInfo->m_gr,pInfo->m_pDispPos,this,pInfo->m_pDispPos->GetLayoutLineRef());
+	if (pcLayout && pcLayout->GetLayoutEol().GetLen() == 0 && pcLayout->GetNextLayout() != NULL) {
+		_DispWrap(pInfo->m_gr, pInfo->m_pDispPos, this, pInfo->m_pDispPos->GetLayoutLineRef());
 	}
 
 	// 行末背景描画
 	RECT rcClip;
-	bool rcClipRet = GetTextArea().GenerateClipRectRight(&rcClip,*pInfo->m_pDispPos);
+	bool rcClipRet = GetTextArea().GenerateClipRectRight(&rcClip, *pInfo->m_pDispPos);
 	if (rcClipRet) {
 		if (!bTransText) {
-			cBackType.FillBack(pInfo->m_gr,rcClip);
+			cBackType.FillBack(pInfo->m_gr, rcClip);
 		}
 		CTypeSupport cSelectType(this, COLORIDX_SELECT);
 		if (GetSelectionInfo().IsTextSelected() && cSelectType.IsDisp()) {
@@ -1228,7 +1228,7 @@ bool CEditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 				HBITMAP hBitmapOld = (HBITMAP)::SelectObject(hdcTemp, hBitmapNew);
 				// 前の画面内容をコピーする
 				::BitBlt(hdcTemp, 0, 0,
-					t_min(nBmpWidthNew,m_nCompatBMPWidth),
+					t_min(nBmpWidthNew, m_nCompatBMPWidth),
 					t_min(nBmpHeightNew, m_nCompatBMPHeight),
 					m_hdcCompatDC, 0, 0, SRCCOPY);
 				::SelectObject(hdcTemp, hBitmapOld);

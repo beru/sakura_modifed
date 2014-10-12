@@ -12,7 +12,7 @@
 inline
 bool IsHeadCppKeyword(const wchar_t* pData)
 {
-	#define HEAD_EQ(DATA,LITERAL) (wcsncmp(DATA,LITERAL,_countof(LITERAL)-1)==0)
+	#define HEAD_EQ(DATA, LITERAL) (wcsncmp(DATA, LITERAL, _countof(LITERAL)-1) == 0)
 	if (HEAD_EQ(pData, L"case"     )) return true;
 	if (HEAD_EQ(pData, L"default:" )) return true;
 	if (HEAD_EQ(pData, L"public:"  )) return true;
@@ -310,7 +310,7 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 	@param pcFuncInfoArr [out] 関数一覧を返すためのクラス。
 	ここに関数のリストを登録する。
 */
-void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemberFunc)
+void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMemberFunc)
 {
 #ifdef _DEBUG
 // #define TRACE_OUTLINE
@@ -387,7 +387,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 	bool  bNoFunction = true; // fparamだけど関数定義でない可能性の場合
 
 	const int	nNamespaceNestMax	= 32;			//!< ネスト可能なネームスペース、クラス等の最大数
-	int			nNamespaceLen[nNamespaceNestMax+1];	//!< ネームスペース全体の長さ
+	int			nNamespaceLen[nNamespaceNestMax + 1];	//!< ネームスペース全体の長さ
 	const int	nNamespaceLenMax 	= 512;			//!< 最大のネームスペース全体の長さ
 	wchar_t		szNamespace[nNamespaceLenMax];		//!< 現在のネームスペース(終端が\0になっているとは限らないので注意)
 	const int 	nItemNameLenMax	 	= 256;
@@ -556,19 +556,19 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 					}else if (nNestLevel_func == 0 && (nMode2 == M2_NORMAL || nMode2 == M2_FUNC_NAME_END)) {	// 2010.07.08 ryoji 関数型マクロ呼出しを関数と誤認することがある問題対策として nMode2 == M2_FUNC_NAME_END 条件を追加し、補正がかかるようにした。
 						if (nMode2 == M2_NORMAL)
 							nItemFuncId = 0;
-						if (wcscmp(szWord,L"class")==0)
+						if (wcscmp(szWord, L"class") == 0)
 							nItemFuncId = FL_OBJ_CLASS;
-						else if (wcscmp(szWord,L"struct")==0)
+						else if (wcscmp(szWord, L"struct") == 0)
 							nItemFuncId = FL_OBJ_STRUCT;
-						else if (wcscmp(szWord,L"namespace")==0)
+						else if (wcscmp(szWord, L"namespace") == 0)
 							nItemFuncId = FL_OBJ_NAMESPACE;
-						else if (wcscmp(szWord,L"enum")==0)
+						else if (wcscmp(szWord, L"enum") == 0)
 							nItemFuncId = FL_OBJ_ENUM;
-						else if (wcscmp(szWord,L"union")==0)
+						else if (wcscmp(szWord, L"union") == 0)
 							nItemFuncId = FL_OBJ_UNION;
-						else if (wcscmp(szWord,L"__interface")==0) // 2007.05.26 genta "__interface" をクラスに類する扱いにする
+						else if (wcscmp(szWord, L"__interface") == 0) // 2007.05.26 genta "__interface" をクラスに類する扱いにする
 							nItemFuncId = FL_OBJ_INTERFACE;
-						else if (wcscmp(szWord,L"typedef") == 0)
+						else if (wcscmp(szWord, L"typedef") == 0)
 							bDefinedTypedef = true;
 						if (nItemFuncId != 0 && nItemFuncId != FL_OBJ_FUNCTION) {	//  2010.07.08 ryoji nMode2 == M2_FUNC_NAME_END のときは nItemFuncId == 2 のはず
 							nMode2 = M2_NAMESPACE_SAVE;
@@ -588,7 +588,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 
 					//	To Here Mar. 31, 2001 genta
 					// 2004/03/12 zenryaku キーワードに _ と PARAMS を使わせない (GNUのコードが見にくくなるから)
-					if (!(wcscmp(L"PARAMS",szWord) == 0 || wcscmp(L"_",szWord) == 0))
+					if (!(wcscmp(L"PARAMS", szWord) == 0 || wcscmp(L"_", szWord) == 0))
 						wcscpy_s(szWordPrev, szWord);
 					nWordIdx = 0;
 					szWord[0] = L'\0';
@@ -607,7 +607,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 					 ';' == pLine[i] ||
 					'\'' == pLine[i] ||
 					 '"' == pLine[i] ||
-					 (L'/' == pLine[i] && (L'*' == pLine[i+1] || L'/' == pLine[i+1]))
+					 (L'/' == pLine[i] && (L'*' == pLine[i + 1] || L'/' == pLine[i+1]))
 				) {
 					wcscpy_s(szWordPrev, szWord);
 					nWordIdx = 0;
@@ -714,7 +714,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 									CLogicInt tagLen = t_min(k - i - 1, CLogicInt(_countof(szRawStringTag) - 1));
 									nRawStringTagLen = tagLen + 1;
 									szRawStringTag[0] = L')';
-									wcsncpy(szRawStringTag + 1, &pLine[i+1], tagLen);
+									wcsncpy(szRawStringTag + 1, &pLine[i + 1], tagLen);
 									szRawStringTag[nRawStringTagLen] = L'\0';
 									nRawStringTagCompLen = auto_strlen(szRawStringTag);
 									break;
@@ -759,7 +759,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 								wcscpy(&szNamespace[nNamespaceLen[nNestLevel_global]], LSW(STR_OUTLINE_CPP_DEFPOS));
 							}else {
 								szNamespace[nNamespaceLen[nNestLevel_global]] = L'\0';
-								szNamespace[nNamespaceLen[nNestLevel_global]+1] = L':';
+								szNamespace[nNamespaceLen[nNestLevel_global] + 1] = L':';
 								if (bVisibleMemberFunc == false && nNestPoint_class == 0)
 									nNestPoint_class = nNestLevel_global;
 							}
@@ -808,7 +808,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 					//  2002/10/27 frozen ここから
 //					nNestLevel2 = 0;
 					if (nNestLevel_func == 0) {
-						if (nNestLevel_global!=0) {
+						if (nNestLevel_global != 0) {
 							if (nNestLevel_global == nNestPoint_class)
 								nNestPoint_class = 0;
 							--nNestLevel_global;
@@ -856,7 +856,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 						&& nNestLevel_func == 0
 						&& (nMode2 == M2_NORMAL || nMode2 == M2_NAMESPACE_SAVE || nMode2 == M2_OPERATOR_WORD || nMode2 == M2_KR_FUNC)
 					) {
-						if (nNestLevel_fparam==0) {
+						if (nNestLevel_fparam == 0) {
 							bool bAdd = true;
 							if (wcscmp(szWordPrev, L"__declspec") == 0
 									|| wcscmp(szWordPrev, L"alignas") == 0
@@ -1025,7 +1025,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 								szWordPrev[pos + 1] == L':') ||
 								//	次の文字列の先頭チェック
 								(i < nLineLen - 1 && pLine[i] == L':' &&
-									pLine[i+1] == L':')
+									pLine[i + 1] == L':')
 							) {
 								//	前の文字列に続ける
 								if (nMode2 == M2_NORMAL || nMode2 == M2_OPERATOR_WORD) {
@@ -1066,9 +1066,9 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 						}
 						//	wcscpy_s(szWordPrev, szWord);	不要？
 						//	To Here
-						if (pLine[i] == L':' && pLine[i+1] != L':') {
+						if (pLine[i] == L':' && pLine[i + 1] != L':') {
 							if (nMode2 == M2_NAMESPACE_SAVE) {
-								if (szWord[0]!='\0')
+								if (szWord[0] != '\0')
 									wcscpy_s(szItemName, szWord);
 								nMode2 = M2_NAMESPACE_END;
 							}else if (nMode2 == M2_TEMPLATE_SAVE) {
@@ -1118,7 +1118,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMembe
 						//	operatorで無ければ=は代入なのでここは宣言文ではない．
 						int nLen = (int)wcslen(szWordPrev);
 						if (pLine[i] == L'=' && nNestLevel_func == 0
-							&& nMode2 == M2_NORMAL && ! C_IsOperator(szWordPrev,nLen)
+							&& nMode2 == M2_NORMAL && ! C_IsOperator(szWordPrev, nLen)
 						) {
 							nMode2 = M2_AFTER_EQUAL;
 						}else if (nMode2 == M2_NORMAL && C_IsOperator(szWordPrev, nLen)) {
@@ -1189,7 +1189,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 
 	CLogicPoint	ptCP;
 
-	if (wcChar==WCODE::CR || wcschr(L":{}()",wcChar)!=NULL) {
+	if (wcChar == WCODE::CR || wcschr(L":{}()", wcChar) != NULL) {
 		//次へ進む
 	}else return;
 
@@ -1209,7 +1209,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				return;
 			}
 			// 調整によって置換される箇所
-			sRangeA.Set(CLogicPoint(0,GetCaret().GetCaretLogicPos().y));
+			sRangeA.Set(CLogicPoint(0, GetCaret().GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
 			if (WCODE::CR != wcChar) {

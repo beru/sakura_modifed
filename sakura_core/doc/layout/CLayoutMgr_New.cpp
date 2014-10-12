@@ -33,7 +33,7 @@
 	@retval true 禁則文字に該当
 	@retval false 禁則文字に該当しない
 */
-bool CLayoutMgr::IsKinsokuHead( wchar_t wc )
+bool CLayoutMgr::IsKinsokuHead(wchar_t wc)
 {
 	return m_pszKinsokuHead_1.exist(wc);
 }
@@ -46,7 +46,7 @@ bool CLayoutMgr::IsKinsokuHead( wchar_t wc )
 	@retval true 禁則文字に該当
 	@retval false 禁則文字に該当しない
 */
-bool CLayoutMgr::IsKinsokuTail( wchar_t wc )
+bool CLayoutMgr::IsKinsokuTail(wchar_t wc)
 {
 	return m_pszKinsokuTail_1.exist(wc);
 }
@@ -60,7 +60,7 @@ bool CLayoutMgr::IsKinsokuTail( wchar_t wc )
 	@retval true 禁則文字に該当
 	@retval false 禁則文字に該当しない
 */
-bool CLayoutMgr::IsKinsokuKuto( wchar_t wc )
+bool CLayoutMgr::IsKinsokuKuto(wchar_t wc)
 {
 	return m_pszKinsokuKuto_1.exist(wc);
 }
@@ -152,7 +152,7 @@ bool CLayoutMgr::IsKinsokuPosTail(
 	@author genta
 	@date 2002.10.01
 */
-CLayoutInt CLayoutMgr::getIndentOffset_Normal( CLayout* )
+CLayoutInt CLayoutMgr::getIndentOffset_Normal(CLayout*)
 {
 	return CLayoutInt(0);
 }
@@ -169,7 +169,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_Normal( CLayout* )
 	@date 2002.10.01 
 	@date 2002.10.07 YAZAKI 名称変更, 処理見直し
 */
-CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
+CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
 {
 	//	前の行が無いときは、インデント不要。
 	if (!pLayoutPrev) {
@@ -182,7 +182,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
 		return nIpos;
 	}
 	
-	CMemoryIterator it( pLayoutPrev, GetTabSpace() );
+	CMemoryIterator it(pLayoutPrev, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndexDelta() == 1 && it.getCurrentChar() == WCODE::TAB) {
@@ -208,7 +208,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x( CLayout* pLayoutPrev )
 	
 	@date 2002.10.01 
 */
-CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
+CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
 {
 	//	前の行が無いときは、インデント不要。
 	if (!pLayoutPrev) {
@@ -224,19 +224,19 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
 	}
 	
 	//	2002.10.07 YAZAKI インデントの計算
-	CMemoryIterator it( pLayoutPrev, GetTabSpace() );
+	CMemoryIterator it(pLayoutPrev, GetTabSpace());
 
 	//	Jul. 20, 2003 genta 自動インデントに準じた動作にする
 	bool bZenSpace = m_pTypeConfig->m_bAutoIndent_ZENSPACE;
 	const wchar_t* szSpecialIndentChar = m_pTypeConfig->m_szIndentChars;
 	while (!it.end()) {
 		it.scanNext();
-		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(),bZenSpace)) {
+		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(), bZenSpace)) {
 			//	インデントのカウントを継続する
 		//	Jul. 20, 2003 genta インデント対象文字
 		}else if (szSpecialIndentChar[0] != L'\0') {
 			wchar_t buf[3]; // 文字の長さは1 or 2
-			wmemcpy( buf, it.getCurrentPos(), it.getIndexDelta() );
+			wmemcpy(buf, it.getCurrentPos(), it.getIndexDelta());
 			buf[ it.getIndexDelta() ] = L'\0';
 			if (wcsstr(szSpecialIndentChar, buf)) {
 				//	インデントのカウントを継続する
@@ -278,7 +278,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace( CLayout* pLayoutPrev )
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayoutInt nEnd )
+BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayoutInt nEnd)
 {
 	BOOL bRet = FALSE;
 	BOOL bOnlyExpansion = TRUE;		// 最大幅の拡大のみをチェックする
@@ -323,7 +323,7 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 		}
 	}else {
 		// 後方からサーチ
-		CLayoutInt nCount = CLayoutInt( m_nLines - 1 );
+		CLayoutInt nCount = CLayoutInt(m_nLines - 1);
 		pLayout = m_pLayoutBot;
 		while (pLayout) {
 			if (nStart == nCount) {
@@ -343,7 +343,7 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 		// レイアウト行の長さを算出する
 		if (bCalLineLen) {
 			CLayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen()>0?1:0);
-			pLayout->SetLayoutWidth( nWidth );
+			pLayout->SetLayoutWidth(nWidth);
 		}
 
 		// 最大幅を更新
@@ -393,7 +393,7 @@ BOOL CLayoutMgr::CalculateTextWidth( BOOL bCalLineLen, CLayoutInt nStart, CLayou
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-void CLayoutMgr::ClearLayoutLineWidth( void )
+void CLayoutMgr::ClearLayoutLineWidth(void)
 {
 	CLayout* pLayout = m_pLayoutTop;
 	while (pLayout) {

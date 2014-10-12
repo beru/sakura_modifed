@@ -44,8 +44,8 @@ public:
 	//é¿ëï
 	static EConvertResult _UnicodeToUnicode_in(CMemory* pMem, const bool bBigEndian);		// Unicode   Å® Unicode (ì¸óÕë§)
 	static EConvertResult _UnicodeToUnicode_out(CMemory* pMem, const bool bBigEndian);	// Unicode   Å® Unicode (èoóÕë§)
-	inline static EConvertResult UnicodeToUnicode_in(CMemory* pMem) { return _UnicodeToUnicode_in(pMem,false); }
-	inline static EConvertResult UnicodeToUnicode_out(CMemory* pMem) { return _UnicodeToUnicode_out(pMem,false); }
+	inline static EConvertResult UnicodeToUnicode_in(CMemory* pMem) { return _UnicodeToUnicode_in(pMem, false); }
+	inline static EConvertResult UnicodeToUnicode_out(CMemory* pMem) { return _UnicodeToUnicode_out(pMem, false); }
 
 };
 

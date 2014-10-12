@@ -26,7 +26,7 @@ EConvertResult CIoBridge::ImplToFile(
 )
 {
 	// Unicode‚©‚ç”CˆÓ‚Ì•¶ŽšƒR[ƒh‚Ö•ÏŠ·‚·‚é
-	EConvertResult ret = pCode->UnicodeToCode(cSrc,pDst);
+	EConvertResult ret = pCode->UnicodeToCode(cSrc, pDst);
 
 	// Œ‹‰Ê
 	return ret;

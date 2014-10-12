@@ -41,7 +41,7 @@ public:
 	void GetBom(CMemory* pcmemBom);	//!< BOMƒf[ƒ^Žæ“¾
 	// GetEol‚ÍCCodeBase‚ÉˆÚ“®	2010/6/13 Uchi
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar) {			//!< UNICODE ¨ Hex •ÏŠ·
-		return CUtf8()._UnicodeToHex( cSrc, iSLen, pDst, psStatusbar, true );
+		return CUtf8()._UnicodeToHex(cSrc, iSLen, pDst, psStatusbar, true);
 	}
 
 };

@@ -175,7 +175,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 					nColorIndex = COLORIDX_BRACKET_PAIR;
 				}else {
 					if (IsBracket(pLine, OutputX, CLogicInt(1))) {
-						DispPos _sPos(0,0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
+						DispPos _sPos(0, 0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
 						SColorStrategyInfo _sInfo;
 						SColorStrategyInfo* pInfo = &_sInfo;
 						pInfo->m_pDispPos = &_sPos;
@@ -190,10 +190,10 @@ void CEditView::DrawBracketPair(bool bDraw)
 						break;
 					}
 				}
-				CTypeSupport    cCuretLineBg(this,COLORIDX_CARETLINEBG);
+				CTypeSupport    cCuretLineBg(this, COLORIDX_CARETLINEBG);
 				EColorIndexType nColorIndexBg = (cCuretLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
 					? COLORIDX_CARETLINEBG
-					: CTypeSupport(this,COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
+					: CTypeSupport(this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
 						? COLORIDX_EVENLINEBG
 						: COLORIDX_TEXT);
 				// 03/03/03 ai カーソルの左に括弧があり括弧が強調表示されている状態でShift+←で選択開始すると
@@ -213,11 +213,11 @@ void CEditView::DrawBracketPair(bool bDraw)
 					CLayoutInt charsWidth = CNativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					//色設定
-					CTypeSupport cTextType(this,COLORIDX_TEXT);
+					CTypeSupport cTextType(this, COLORIDX_TEXT);
 					cTextType.SetGraphicsState_WhileThisObj(gr);
 					// 2013.05.24 背景色がテキストの背景色と同じならカーソル行の背景色を適用
-					CTypeSupport cColorIndexType(this,nColorIndex);
-					CTypeSupport cColorIndexBgType(this,nColorIndexBg);
+					CTypeSupport cColorIndexType(this, nColorIndex);
+					CTypeSupport cColorIndexBgType(this, nColorIndexBg);
 					CTypeSupport* pcColorBack = &cColorIndexType;
 					if (cColorIndexType.GetBackColor() == cTextType.GetBackColor() && nColorIndexBg != COLORIDX_TEXT) {
 						pcColorBack = &cColorIndexBgType;
@@ -372,7 +372,7 @@ bool CEditView::SearchBracket(
 	const wchar_t* bPos = CNativeW::GetCharPrev(cline, ptPos.x, cline + ptPos.x);
 	int nCharSize = cline + ptPos.x - bPos;
 	// 括弧処理 2007.10.16 kobake
-	if (nCharSize==1) {
+	if (nCharSize == 1) {
 		ptPos.x = bPos - cline;
 		for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL; p++) {
 			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {

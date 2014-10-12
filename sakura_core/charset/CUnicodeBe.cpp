@@ -9,7 +9,7 @@
 
 void CUnicodeBe::GetBom(CMemory* pcmemBom)
 {
-	static const BYTE UTF16BE_BOM[]={0xFE,0xFF};
+	static const BYTE UTF16BE_BOM[] = {0xFE, 0xFF};
 	pcmemBom->SetRawData(UTF16BE_BOM, sizeof(UTF16BE_BOM));
 }
 
@@ -28,5 +28,5 @@ void CUnicodeBe::GetEol(CMemory* pcmemEol, EEolType eEolType)
 		{ "\x20\x28",			1 * sizeof(wchar_t) },	// EOL_LS
 		{ "\x20\x29",			1 * sizeof(wchar_t) },	// EOL_PS
 	};
-	pcmemEol->SetRawData(aEolTable[eEolType].pData,aEolTable[eEolType].nLen);
+	pcmemEol->SetRawData(aEolTable[eEolType].pData, aEolTable[eEolType].nLen);
 }

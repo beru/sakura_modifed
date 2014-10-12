@@ -57,17 +57,17 @@ public:
 
 	//ファイル形式
 	virtual void GetBom(CMemory* pcmemBom);											//!< BOMデータ取得
-	void GetEol(CMemory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol,eEolType); }	//!< 改行データ取得 virtualから実体へ	2010/6/13 Uchi
+	void GetEol(CMemory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol, eEolType); }	//!< 改行データ取得 virtualから実体へ	2010/6/13 Uchi
 
 	// 文字コード表示用		2008/6/9 Uchi
 	virtual EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
 
 	// 変換エラー処理（１バイト <-> U+D800 から U+D8FF）
-	static int BinToText( const unsigned char*, const int, unsigned short* );
-	static int TextToBin( const unsigned short );
+	static int BinToText(const unsigned char*, const int, unsigned short*);
+	static int TextToBin(const unsigned short);
 
 	// MIME Header デコーダ
-	static bool MIMEHeaderDecode( const char*, const int, CMemory*, const ECodeType );
+	static bool MIMEHeaderDecode(const char*, const int, CMemory*, const ECodeType);
 
 	// CShiftJisより移動 2010/6/13 Uchi
 	static void S_GetEol(CMemory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
@@ -76,7 +76,7 @@ public:
 /*!
 	バイナリ１バイトを U+DC00 から U+DCFF までに対応付ける
 */
-inline int CCodeBase::BinToText( const unsigned char *pSrc, const int nLen, unsigned short *pDst )
+inline int CCodeBase::BinToText(const unsigned char *pSrc, const int nLen, unsigned short *pDst)
 {
 	int i;
 
@@ -91,7 +91,7 @@ inline int CCodeBase::BinToText( const unsigned char *pSrc, const int nLen, unsi
 /*!
 	U+DC00 から U+DCFF からバイナリ1バイトを復元
 */
-inline int CCodeBase::TextToBin( const unsigned short cSrc )
+inline int CCodeBase::TextToBin(const unsigned short cSrc)
 {
 	return static_cast<int>((cSrc - 0xdc00) & 0x00ff);
 }

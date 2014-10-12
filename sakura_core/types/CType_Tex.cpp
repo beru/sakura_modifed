@@ -55,19 +55,19 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 		// 一文字ずつ
 		for (i=0;i<nLineLen-1;i++) {
 			if (pLine[i] == L'%') break;	// コメントなら以降はいらない
-			if (nDepth>=nMaxStack) continue;
+			if (nDepth >= nMaxStack) continue;
 			if (pLine[i] != L'\\') continue;	// 「\」がないなら次の文字へ
 			++i;
 			// 見つかった「\」以降の文字列チェック
-			for (j=0;i+j<nLineLen && j<_countof(szTag)-1;j++) {
-				if (pLine[i+j] == L'{') { // }
-					bNoNumber = (pLine[i+j-1] == '*');
-					nStartTitlePos = j+i+1;
+			for (j = 0; i + j < nLineLen && j < _countof(szTag) - 1; j++) {
+				if (pLine[i + j] == L'{') { // }
+					bNoNumber = (pLine[i + j - 1] == '*');
+					nStartTitlePos = j + i + 1;
 					break;
 				}
-				szTag[j] = pLine[i+j];
+				szTag[j] = pLine[i + j];
 			}
-			if (j==0) continue;
+			if (j == 0) continue;
 			if (bNoNumber) {
 				szTag[j-1] = L'\0';
 			}else {
@@ -75,20 +75,20 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 			}
 
 			thisSection = 0;
-			if (!wcscmp(szTag,L"subsubsection")) thisSection = 4;
-			else if (!wcscmp(szTag,L"subsection")) thisSection = 3;
-			else if (!wcscmp(szTag,L"section")) thisSection = 2;
-			else if (!wcscmp(szTag,L"chapter")) thisSection = 1;
-			else if (!wcscmp(szTag,L"begin")) {		// beginなら prosperのslideの可能性も考慮
+			if (!wcscmp(szTag, L"subsubsection")) thisSection = 4;
+			else if (!wcscmp(szTag, L"subsection")) thisSection = 3;
+			else if (!wcscmp(szTag, L"section")) thisSection = 2;
+			else if (!wcscmp(szTag, L"chapter")) thisSection = 1;
+			else if (!wcscmp(szTag, L"begin")) {		// beginなら prosperのslideの可能性も考慮
 				// さらに{slide}{}まで読みとっておく
 				if (wcsstr(pLine, L"{slide}")) {
 					k = 0;
-					for (j=nStartTitlePos+1;i+j<nLineLen && j<_countof(szTag)-1;j++) {
-						if (pLine[i+j] == L'{') { // }
-							nStartTitlePos = j+i+1;
+					for (j = nStartTitlePos + 1; i + j < nLineLen && j < _countof(szTag) - 1; j++) {
+						if (pLine[i + j] == L'{') { // }
+							nStartTitlePos = j + i + 1;
 							break;
 						}
-						szTag[k++]	=	pLine[i+j];
+						szTag[k++]	=	pLine[i + j];
 					}
 					szTag[k] = '\0';
 					thisSection = 1;
@@ -97,12 +97,12 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 
 			if (thisSection > 0) {
 				// sectionの中身取得
-				for (k=0; nStartTitlePos+k<nLineLen && k<_countof(szTitle)-1; k++) {
+				for (k = 0; nStartTitlePos + k < nLineLen && k < _countof(szTitle) - 1; k++) {
 					// {
-					if (pLine[k+nStartTitlePos] == L'}') {
+					if (pLine[k + nStartTitlePos] == L'}') {
 						break;
 					}
-					szTitle[k] = pLine[k+nStartTitlePos];
+					szTitle[k] = pLine[k + nStartTitlePos];
 				}
 				szTitle[k] = '\0';
 
@@ -139,10 +139,10 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 					wcscat(tmpstr, L" ");
 				}
 				wcscat(tmpstr, szTitle);
-				pcFuncInfoArr->AppendData(nLineCount+CLogicInt(1),ptPos.GetY2()+CLayoutInt(1), tmpstr, 0, nDepth);
+				pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), tmpstr, 0, nDepth);
 				if (!bNoNumber) lastSection = thisSection;
 			}
-			i	+=	j;
+			i += j;
 		}
 	}
 }

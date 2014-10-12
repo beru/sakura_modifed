@@ -187,12 +187,12 @@ bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
 		bret = false;
 		break;
 	case 2:
-		if ((Base64ToVal(pSrc[nSrcLen-1]) & 0x0f) != 0) {
+		if ((Base64ToVal(pSrc[nSrcLen - 1]) & 0x0f) != 0) {
 			bret = false;
 		}
 		break;
 	case 3:
-		if ((Base64ToVal(pSrc[nSrcLen-1]) & 0x03) != 0) {
+		if ((Base64ToVal(pSrc[nSrcLen - 1]) & 0x03) != 0) {
 			bret = false;
 		}
 		break;
@@ -221,9 +221,9 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 		bool bret;
 		for (; i < nsrclen; i++) {
 			if (sizeof(CHAR_TYPE) == 2) {
-				bret = ( pSrc[nsrclen-1-i] == L'=' );
+				bret = ( pSrc[nsrclen - 1 - i] == L'=' );
 			}else {
-				bret = ( pSrc[nsrclen-1-i] == '=' );
+				bret = ( pSrc[nsrclen - 1 - i] == '=' );
 			}
 			if (bret != true) {
 				break;
@@ -373,14 +373,14 @@ int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 		return 0;
 	}
 
-	pr = pSrc+1;  // 先頭の文字（M(0x20+45)など）を飛ばす
+	pr = pSrc + 1;  // 先頭の文字（M(0x20+45)など）を飛ばす
 	int i = 0;
 	int j = 0;
 	int k = 0;
 	for (; i < nSrcLen; i += 4) {
 		lDataDes = 0;
 		for (j = 0; j < 4; ++j) {
-			lDataDes |= _UUDECODE_CHAR(pr[i+j]) << ((4 - j - 1) * 6);
+			lDataDes |= _UUDECODE_CHAR(pr[i + j]) << ((4 - j - 1) * 6);
 		}
 		for (j = 0; j < 3; ++j) {
 			pDest[k + j] = (char)((lDataDes >> ((3 - j - 1) * 8)) & 0x000000ff);
@@ -445,7 +445,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	// begin を取得
 
-	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
+	pr += CWordParse::GetWord( pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen );
 	if (nwlen != 5) {
 		// error.
 		return false;
@@ -464,7 +464,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	// 3桁の8進数（Unix システムのパーミッション）を取得
 
-	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
+	pr += CWordParse::GetWord( pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen );
 	if (nwlen != 3) {
 		// error.
 		return false;
@@ -487,10 +487,10 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	// 書き出し用のファイル名を取得
 
-	pr += CWordParse::GetWord( pr, pr_end-pr, pszSplitChars, &pwstart, &nwlen );
+	pr += CWordParse::GetWord( pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen );
 	// 末尾の空白・改行文字をスキップ
 	for (; nwlen > 0; --nwlen) {
-		CHAR_TYPE c = pwstart[nwlen-1];
+		CHAR_TYPE c = pwstart[nwlen - 1];
 		if (sizeof(CHAR_TYPE) == 2) {
 			if (!WCODE::IsLineDelimiter(c) && c != L' ' && c != L'\t') {
 				break;
@@ -627,7 +627,7 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 	//   "=?ISO-2022-JP?", "=?UTF-8?" などの部分を検出
 	//
 
-	if (pSrc+14 < pSrc+nSrcLen) {
+	if (pSrc + 14 < pSrc + nSrcLen) {
 		// JIS の場合
 		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?ISO-2022-JP?", 14 );
@@ -640,7 +640,7 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 			goto finish_first_detect;
 		}
 	}
-	if (pSrc+8 < pSrc+nSrcLen) {
+	if (pSrc + 8 < pSrc + nSrcLen) {
 		// UTF-8 の場合
 		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?UTF-8?", 8 );
@@ -672,7 +672,7 @@ finish_first_detect:;
 	//   "B?" または "Q?" の部分を検出
 	//
 
-	if (pSrc+nLen_part1+2 >= pSrc+nSrcLen) {
+	if (pSrc + nLen_part1 + 2 >= pSrc + nSrcLen) {
 		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
@@ -699,7 +699,7 @@ finish_first_detect:;
 
 	pr_base = pSrc + nLen_part1 + nLen_part2;
 	pr = pSrc + nLen_part1 + nLen_part2;
-	for (; pr < pSrc+nSrcLen-1; ++pr) {
+	for (; pr < pSrc + nSrcLen - 1; ++pr) {
 		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsncmp( reinterpret_cast<const wchar_t*>(pr), L"?=", 2 );
 		}else {
@@ -709,7 +709,7 @@ finish_first_detect:;
 			break;
 		}
 	}
-	if (pr == pSrc+nSrcLen-1) {
+	if (pr == pSrc + nSrcLen - 1) {
 		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
@@ -727,9 +727,9 @@ finish_first_detect:;
 	}
 
 	if (emethod == EM_BASE64) {
-		ndecoded_len = _DecodeBase64( pr_base, pr-pr_base, pdst );
+		ndecoded_len = _DecodeBase64( pr_base, pr - pr_base, pdst );
 	}else {
-		ndecoded_len = _DecodeQP( pr_base, pr-pr_base, pdst );
+		ndecoded_len = _DecodeQP( pr_base, pr - pr_base, pdst );
 	}
 
 	pcMem_alt->_SetRawLength( ndecoded_len );

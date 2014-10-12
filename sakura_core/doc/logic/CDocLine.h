@@ -63,9 +63,9 @@ public:
 	}
 	CStringRef GetStringRefWithEOL() const {	//###‰¼‚Ì–¼‘OA‰¼‚Ì‘Îˆ
 		if (this) {
-			return CStringRef(GetPtr(),GetLengthWithEOL());
+			return CStringRef(GetPtr(), GetLengthWithEOL());
 		}else {
-			return CStringRef(NULL,0);
+			return CStringRef(NULL, 0);
 		}
 	}
 	const CEol& GetEol() const { return m_cEol; }

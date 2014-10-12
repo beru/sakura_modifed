@@ -62,7 +62,7 @@ bool CFigureSpace::DrawImp(SColorStrategyInfo* pInfo)
 {
 	bool bTrans = DrawImp_StyleSelect(pInfo);
 	DispPos sPos(*pInfo->m_pDispPos);	// Œ»ÝˆÊ’u‚ðŠo‚¦‚Ä‚¨‚­
-	DispSpace(pInfo->m_gr, pInfo->m_pDispPos,pInfo->m_pcView, bTrans);	// ‹ó”’•`‰æ
+	DispSpace(pInfo->m_gr, pInfo->m_pDispPos, pInfo->m_pcView, bTrans);	// ‹ó”’•`‰æ
 	DrawImp_StylePop(pInfo);
 	DrawImp_DrawUnderline(pInfo, sPos);
 	// 1•¶Žš‘O’ñ

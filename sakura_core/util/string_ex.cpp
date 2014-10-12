@@ -59,7 +59,7 @@ LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, int iMaxLength)
 ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
 	TCHAR* pr = const_cast<TCHAR*>(src);
 	ACHAR* pw = dest;
-	for (; pr < src+count; ++pr) {
+	for (; pr < src + count; ++pr) {
 		*pw = static_cast<ACHAR>(*pr);
 		++pw;
 	}
@@ -68,7 +68,7 @@ ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
 WCHAR* tcstostr(WCHAR* dest, const TCHAR* src, size_t count) {
 	TCHAR* pr = const_cast<TCHAR*>(src);
 	WCHAR* pw = dest;
-	for (; pr < src+count; ++pr) {
+	for (; pr < src + count; ++pr) {
 		*pw = static_cast<WCHAR>(*pr);
 		++pw;
 	}
@@ -79,7 +79,7 @@ TCHAR* strtotcs(TCHAR* dest, const ACHAR* src, size_t count)
 {
 	ACHAR* pr = const_cast<ACHAR*>(src);
 	TCHAR* pw = dest;
-	for (; pr < src+count; ++pr) {
+	for (; pr < src + count; ++pr) {
 		*pw = static_cast<TCHAR>(*pr);
 		++pw;
 	}
@@ -90,7 +90,7 @@ TCHAR* strtotcs(TCHAR* dest, const WCHAR* src, size_t count)
 {
 	WCHAR* pr = const_cast<WCHAR*>(src);
 	TCHAR* pw = dest;
-	for (; pr < src+count; ++pr) {
+	for (; pr < src + count; ++pr) {
 		*pw = static_cast<TCHAR>(*pr);
 		++pw;
 	}
@@ -127,9 +127,9 @@ const wchar_t* wcsistr(const wchar_t* s1, const wchar_t* s2)
 {
 	size_t len2 = wcslen(s2);
 	const wchar_t* p = s1;
-	const wchar_t* q = wcschr(s1,L'\0')-len2;
+	const wchar_t* q = wcschr(s1, L'\0') - len2;
 	while (p <= q) {
-		if (auto_memicmp(p,s2,len2)==0) return p;
+		if (auto_memicmp(p, s2, len2) == 0) return p;
 		p++;
 	}
 	return NULL;
@@ -140,9 +140,9 @@ const char* stristr(const char* s1, const char* s2)
 	//$ 日本語考慮してないので、あんまり役に立たない版。stristr_jを使うのが望ましい。
 	size_t len2 = strlen(s2);
 	const char* p = s1;
-	const char* q = strchr(s1,L'\0')-len2;
+	const char* q = strchr(s1, L'\0')-len2;
 	while (p <= q) {
-		if (auto_memicmp(p,s2,len2) == 0) return p;
+		if (auto_memicmp(p, s2, len2) == 0) return p;
 		p++;
 	}
 	return NULL;
@@ -154,12 +154,12 @@ const char* stristr(const char* s1, const char* s2)
 */
 const char* strichr_j(const char* s1, char c2)
 {
-	if (c2==0) return ::strchr(s1,0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
+	if (c2 == 0) return ::strchr(s1, 0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
 
 	int C2 = my_toupper(c2);
 	for (const char* p1 = s1; *p1; p1++) {
 		if (my_toupper(*p1) == C2) return p1;
-		if (my_iskanji1(*(const unsigned char*)p1) && *(p1+1) != 0) p1++;
+		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) p1++;
 	}
 	return NULL;
 }
@@ -170,11 +170,11 @@ const char* strichr_j(const char* s1, char c2)
 */
 const char* strchr_j(const char* str, char c)
 {
-	if (c==0) return ::strchr(str,0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
+	if (c == 0) return ::strchr(str, 0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
 
 	for (const char* p1 = str; *p1; p1++) {
 		if (*p1 == c) return p1;
-		if (my_iskanji1(*(const unsigned char*)p1) && *(p1+1) != 0) p1++;
+		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) p1++;
 	}
 	return NULL;
 }
@@ -190,7 +190,7 @@ const char* strstr_j(const char* s1, const char* s2)
 	size_t n = strlen(s2);
 	for (const char* p1 = s1; *p1; p1++) {
 		if (strncmp(p1, s2, n) == 0) return p1;
-		if (my_iskanji1(*(const unsigned char*)p1) && *(p1+1) != 0) p1++;
+		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) p1++;
 	}
 	return NULL;
 }
@@ -210,7 +210,7 @@ const char* stristr_j(const char* s1, const char* s2)
 	size_t n = strlen(s2);
 	for (const char* p1 = s1; *p1; p1++) {
 		if (my_strnicmp(p1, s2, n) == 0) return p1;
-		if (my_iskanji1(*(const unsigned char*)p1) && *(p1+1) != 0) p1++;
+		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) p1++;
 	}
 	return NULL;
 }
@@ -252,8 +252,8 @@ size_t wcstombs2(char* dst, const wchar_t* src, size_t dst_count)
 // SJIS→UNICODE。戻り値はnew[]で確保して返す。
 wchar_t* mbstowcs_new(const char* src)
 {
-	size_t new_length = mbstowcs(NULL,src,0);
-	wchar_t* ret = new wchar_t[new_length+1];
+	size_t new_length = mbstowcs(NULL, src, 0);
+	wchar_t* ret = new wchar_t[new_length + 1];
 	mbstowcs(ret, src, new_length);
 	ret[new_length] = L'\0';
 	return ret;
@@ -271,7 +271,7 @@ wchar_t* mbstowcs_new(const char* pSrc, int nSrcLen, int* pnDstLen)
 	);
 	
 	// 確保
-	wchar_t* pNew = new wchar_t[nNewLength+1];
+	wchar_t* pNew = new wchar_t[nNewLength + 1];
 
 	// 変換
 	nNewLength = MultiByteToWideChar(
@@ -292,7 +292,7 @@ wchar_t* mbstowcs_new(const char* pSrc, int nSrcLen, int* pnDstLen)
 // UNICODE→SJIS。戻り値はnew[]で確保して返す。
 char* wcstombs_new(const wchar_t* src)
 {
-	return wcstombs_new(src,wcslen(src));
+	return wcstombs_new(src, wcslen(src));
 }
 // 戻り値はnew[]で確保して返す。
 char* wcstombs_new(const wchar_t* pSrc, int nSrcLen)
@@ -310,7 +310,7 @@ char* wcstombs_new(const wchar_t* pSrc, int nSrcLen)
 	);
 
 	// 確保
-	char* pNew = new char[nNewLength+1];
+	char* pNew = new char[nNewLength + 1];
 
 	// 変換
 	nNewLength = WideCharToMultiByte(
@@ -348,7 +348,7 @@ void mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret)
 	);
 
 	// 確保
-	ret->resize(nNewLen+1);
+	ret->resize(nNewLen + 1);
 
 	// 変換
 	nNewLen = MultiByteToWideChar(
@@ -421,7 +421,7 @@ size_t _mbstotcs(TCHAR* tszDst, const CHAR*  szSrc,  size_t nDstCount)
 }
 int _tctomb(const TCHAR* p, ACHAR* mb)
 {
-	return wctomb(mb,*p);
+	return wctomb(mb, *p);
 }
 int _tctowc(const TCHAR* p, WCHAR* wc)
 {
@@ -538,8 +538,8 @@ CHAR_TYPE* my_strtok(
 	return p;
 }
 // インスタンス化
-template ACHAR* my_strtok(ACHAR*,int,int*,const ACHAR*);
-template WCHAR* my_strtok(WCHAR*,int,int*,const WCHAR*);
+template ACHAR* my_strtok(ACHAR*, int, int*, const ACHAR*);
+template WCHAR* my_strtok(WCHAR*, int, int*, const WCHAR*);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -712,7 +712,7 @@ int __cdecl my_internal_icmp(const char *s1, const char *s2, unsigned int n, uns
 // ※ ランタイムの towupper(c)/tolower(c) が将来期待する動作になったとしてもこの方法を使い続けて問題無いはず
 int skr_towupper(int c)
 {
-#if defined(_MSC_VER) && _MSC_VER>=1400 // VS2005以降なら
+#if defined(_MSC_VER) && _MSC_VER >= 1400 // VS2005以降なら
 	static wchar_t szMap[256];	// c < 256 用の変換テーブル
 	static bool bInit = false;
 	if (!bInit) {
@@ -733,7 +733,7 @@ int skr_towupper(int c)
 
 int skr_towlower(int c)
 {
-#if defined(_MSC_VER) && _MSC_VER>=1400 // VS2005以降なら
+#if defined(_MSC_VER) && _MSC_VER >= 1400 // VS2005以降なら
 	static wchar_t szMap[256];	// c < 256 用の変換テーブル
 	static bool bInit = false;
 	if (!bInit) {

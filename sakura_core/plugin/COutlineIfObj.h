@@ -85,11 +85,26 @@ public:
 				View->GetDocument()->m_cLayoutMgr.LogicToLayout(ptLogic, &ptLayout);
 				int nParam = _wtoi(Arguments[3]);
 				if (LOWORD(ID) == F_OL_ADDFUNCINFO) {
-					m_cFuncInfoArr.AppendData(ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam);
+					m_cFuncInfoArr.AppendData(
+						ptLogic.GetY() + 1,
+						ptLogic.GetX() + 1, 
+						ptLayout.GetY() + 1,
+						ptLayout.GetX() + 1,
+						Arguments[2],
+						nParam
+					);
 				}else {
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
-					m_cFuncInfoArr.AppendData(ptLogic.GetY()+1, ptLogic.GetX()+1, ptLayout.GetY()+1, ptLayout.GetX()+1, Arguments[2], nParam, nDepth);
+					m_cFuncInfoArr.AppendData(
+						ptLogic.GetY() + 1,
+						ptLogic.GetX() + 1,
+						ptLayout.GetY() + 1,
+						ptLayout.GetX() + 1,
+						Arguments[2],
+						nParam,
+						nDepth
+					);
 				}
 			}
 			break;

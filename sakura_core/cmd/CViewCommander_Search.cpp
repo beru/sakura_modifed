@@ -211,7 +211,7 @@ re_do:;
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		if (bFlag1 && sRangeA.GetFrom() == caret.GetCaretLayoutPos()) {
 			CLogicRange sRange_Logic;
-			layoutMgr.LayoutToLogic(sRangeA,&sRange_Logic);
+			layoutMgr.LayoutToLogic(sRangeA, &sRange_Logic);
 
 			nLineNum = sRangeA.GetTo().GetY2();
 			nIdx     = sRange_Logic.GetTo().GetX2();
@@ -445,7 +445,7 @@ end_of_func:;
 		if (!bFound	&&	// 見つからなかった
 			bRedo		// 最初の検索
 		) {
-			nLineNum	= layoutMgr.GetLineCount()-CLayoutInt(1);
+			nLineNum	= layoutMgr.GetLineCount() - CLayoutInt(1);
 			nIdx		= CLogicInt(MAXLINEKETAS);
 			bRedo		= false;
 			goto re_do;	// 末尾から再検索
@@ -579,7 +579,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 	// テキストが選択されているか
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		// From Here 2001.12.03 hor
-		CLayoutPoint ptTmp(0,0);
+		CLayoutPoint ptTmp(0, 0);
 		if (nPaste || !bRegularExp) {
 			// 正規表現時は 後方参照($&)で実現するので、正規表現は除外
 			if (nReplaceTarget == 1) {	// 挿入位置へ移動
@@ -665,7 +665,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 
 		// 挿入後の検索開始位置を調整
 		if (nReplaceTarget == 1) {
-			GetCaret().SetCaretLayoutPos(GetCaret().GetCaretLayoutPos()+ptTmp);
+			GetCaret().SetCaretLayoutPos(GetCaret().GetCaretLayoutPos() + ptTmp);
 		}
 
 		// To Here 2001.12.03 hor
@@ -789,7 +789,7 @@ void CViewCommander::Command_REPLACE_ALL()
 		//	範囲チェックで colFrom < colTo を仮定しているので，
 		//	矩形選択の場合は左上～右下指定になるよう桁を入れ換える．
 		if (bBeginBoxSelect && sRangeA.GetTo().x < sRangeA.GetFrom().x)
-			t_swap(sRangeA.GetFromPointer()->x,sRangeA.GetToPointer()->x);
+			t_swap(sRangeA.GetFromPointer()->x, sRangeA.GetToPointer()->x);
 		//	To Here 2007.09.20 genta 矩形範囲の選択置換ができない
 
 		layoutMgr.LayoutToLogic(
@@ -997,26 +997,26 @@ void CViewCommander::Command_REPLACE_ALL()
 				// 検索後の範囲終端
 				ptOld = GetSelect().GetTo();
 				// 前回の検索行と違う？
-				if (ptOld.y!=linPrev) {
+				if (ptOld.y != linPrev) {
 					colDif = (0);
 				}
 				linPrev = (Int)ptOld.GetY2();
 				// 行は範囲内？
 				if (
-					(sRangeA.GetTo().y+linDif == ptOld.y && sRangeA.GetTo().GetX2()+colDif < ptOld.x)
-					|| (sRangeA.GetTo().y+linDif <  ptOld.y)
+					(sRangeA.GetTo().y + linDif == ptOld.y && sRangeA.GetTo().GetX2() + colDif < ptOld.x)
+					|| (sRangeA.GetTo().y + linDif <  ptOld.y)
 				) {
 					break;
 				}
 				// 桁は範囲内？
-				if (!(sRangeA.GetFrom().x<=GetSelect().GetFrom().x && ptOld.GetX2()<=sRangeA.GetTo().GetX2()+colDif)) {
-					if (ptOld.x < sRangeA.GetTo().GetX2()+colDif) {
+				if (!(sRangeA.GetFrom().x <= GetSelect().GetFrom().x && ptOld.GetX2() <= sRangeA.GetTo().GetX2() + colDif)) {
+					if (ptOld.x < sRangeA.GetTo().GetX2() + colDif) {
 						linNext = (Int)GetSelect().GetTo().GetY2();
 					}else{
-						linNext = (Int)GetSelect().GetTo().GetY2()+1;
+						linNext = (Int)GetSelect().GetTo().GetY2() + 1;
 					}
 					// 次の検索開始位置へシフト
-					GetCaret().SetCaretLayoutPos(CLayoutPoint(sRangeA.GetFrom().x,CLayoutInt(linNext)));
+					GetCaret().SetCaretLayoutPos(CLayoutPoint(sRangeA.GetFrom().x, CLayoutInt(linNext)));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
 					Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL);
 					colDif=(0);
@@ -1055,21 +1055,21 @@ void CViewCommander::Command_REPLACE_ALL()
 				// $$ 単位混在しまくりだけど、大丈夫？？
 				if (
 					(
-						ptColLineP.y+linDif == (Int)ptOld.y
+						ptColLineP.y + linDif == (Int)ptOld.y
 						&& (
-							ptColLineP.x+colDif < (Int)ptOld.x
+							ptColLineP.x + colDif < (Int)ptOld.x
 							|| ptColLineP.x == 0
 						)
 					)
-					|| ptColLineP.y+linDif < (Int)ptOld.y
+					|| ptColLineP.y + linDif < (Int)ptOld.y
 				) {
 					break;
 				}
 			}
 		}
 
-		CLayoutPoint ptTmp(0,0);
-		CLogicPoint  ptTmpLogic(0,0);
+		CLayoutPoint ptTmp(0, 0);
+		CLogicPoint  ptTmpLogic(0, 0);
 
 		if (nPaste || !bRegularExp) {
 			// 正規表現時は 後方参照($&)で実現するので、正規表現は除外
@@ -1145,14 +1145,14 @@ void CViewCommander::Command_REPLACE_ALL()
 					if (bBeginBoxSelect) {	// 矩形選択
 						CLogicPoint ptWork;
 						layoutMgr.LayoutToLogic(
-							CLayoutPoint(sRangeA.GetTo().x,ptOld.y),
+							CLayoutPoint(sRangeA.GetTo().x, ptOld.y),
 							&ptWork
 						);
 						ptColLineP.x = ptWork.x;
 						if(nLen - pcDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
 							nLen = ptColLineP.GetX2() + CLogicInt(colDif);
 					}else {	// 通常の選択
-						if (ptColLineP.y+linDif == (Int)ptOld.y) { //$$ 単位混在
+						if (ptColLineP.y + linDif == (Int)ptOld.y) { //$$ 単位混在
 							if (nLen - pcDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
 								nLen = ptColLineP.GetX2() + CLogicInt(colDif);
 						}
@@ -1227,9 +1227,9 @@ void CViewCommander::Command_REPLACE_ALL()
 		// 挿入後の位置調整
 		if (nReplaceTarget == 1) {
 			if (bFastMode) {
-				GetCaret().SetCaretLogicPos(GetCaret().GetCaretLogicPos()+ptTmpLogic);
+				GetCaret().SetCaretLogicPos(GetCaret().GetCaretLogicPos() + ptTmpLogic);
 			}else {
-				GetCaret().SetCaretLayoutPos(GetCaret().GetCaretLayoutPos()+ptTmp);
+				GetCaret().SetCaretLayoutPos(GetCaret().GetCaretLayoutPos() + ptTmp);
 				if (!bBeginBoxSelect) {
 					CLogicPoint p;
 					layoutMgr.LayoutToLogic(
@@ -1262,7 +1262,7 @@ void CViewCommander::Command_REPLACE_ALL()
 					// １）最終行直前で行連結が起こり、行が減っている場合（行連結なので、桁位置は置換後のカーソル桁位置分増加する）
 					// 　　ptTmp2.x-ptOld.xだと、\r\n → "" 置換で行連結した場合に、桁位置が負になり失敗する（負とは前行の後ろの方になることなので補正する）
 					// 　　今回置換での行数の変化(linDif_thistime)で、最終行が行連結されたかどうかを見ることにする
-					// ２）改行を置換した（ptTmp2.y!=ptOld.y）場合、改行を置換すると置換後の桁位置が次行の桁位置になっているため
+					// ２）改行を置換した（ptTmp2.y != ptOld.y）場合、改行を置換すると置換後の桁位置が次行の桁位置になっているため
 					//     ptTmp2.x-ptOld.xだと、負の数となり、\r\n → \n や \n → "abc" などで桁位置がずれる
 					//     これも前行の長さで調整する必要がある
 					if (linDif_thistime < 0 || ptTmp2.y != (Int)ptOld.y) { //$$ 単位混在

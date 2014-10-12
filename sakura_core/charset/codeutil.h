@@ -144,7 +144,7 @@ inline bool IsWctombcNonroundtrip( const unsigned int wc ) {
 	if( wc == 0x3094/* ©•½‰¼–¼‚Ì ‚¤ ‚É‘÷“_‚ğ‚Â‚¯‚½‚â‚ÂB */ ) {
 		return true;
 	}
-	if( 0x00a0 <= wc && wc <= 0x00ff && TABLE_WctombSpec[wc-0x00a0] ) {
+	if( 0x00a0 <= wc && wc <= 0x00ff && TABLE_WctombSpec[wc - 0x00a0] ) {
 		return true;
 	}
 	return false;

@@ -89,7 +89,7 @@ class CESI {
 public:
 
 	virtual ~CESI() { ; }
-	explicit CESI( const SEncodingConfig& ref ) : m_pEncodingConfig(&ref) {
+	explicit CESI(const SEncodingConfig& ref) : m_pEncodingConfig(&ref) {
 		m_dwStatus = ESI_NOINFORMATION;
 		m_nTargetDataLen = -1;
 	}

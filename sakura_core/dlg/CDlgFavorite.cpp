@@ -836,7 +836,7 @@ int CDlgFavorite::DeleteSelected()
 					}
 				}
 			}
-			std::sort(selRecIndexs.rbegin(),selRecIndexs.rend());
+			std::sort(selRecIndexs.rbegin(), selRecIndexs.rend());
 			// ‘å‚«‚¢‚Ù‚¤‚©‚çíœ‚µ‚È‚¢‚ÆACRecent‘¤‚Ìindex‚ª‚¸‚ê‚é
 			size_t nSize = selRecIndexs.size();
 			for (size_t n = 0; n < nSize; n++) {
@@ -1195,7 +1195,7 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 
 	for (int i = 0; i < FAVORITE_INFO_MAX; i++) {
 		HWND hwndList = GetItemHwnd(m_aFavoriteInfo[i].m_nId);
-		ResizeItem(hwndList, m_ptDefaultSize, ptNew, m_rcListDefault, ANCHOR_ALL, (i==m_nCurrentTab));
+		ResizeItem(hwndList, m_ptDefaultSize, ptNew, m_rcListDefault, ANCHOR_ALL, (i == m_nCurrentTab));
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
 	return TRUE;
@@ -1216,8 +1216,8 @@ BOOL CDlgFavorite::OnMinMaxInfo(LPARAM lParam)
 	}
 	lpmmi->ptMinTrackSize.x = m_ptDefaultSize.x;
 	lpmmi->ptMinTrackSize.y = m_ptDefaultSize.y;
-	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x*2;
-	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y*2;
+	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x * 2;
+	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y * 2;
 	return 0;
 }
 

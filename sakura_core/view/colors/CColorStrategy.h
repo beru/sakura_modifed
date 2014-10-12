@@ -53,7 +53,7 @@ int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexColorIndex
 inline
 int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 {
-	if (eColorIndex>=0 && eColorIndex<COLORIDX_LAST)
+	if (eColorIndex >= 0 && eColorIndex < COLORIDX_LAST)
 		return eColorIndex;
 	else if (eColorIndex & COLORIDX_BLOCK_BIT)
 		return COLORIDX_COMMENT;
@@ -90,7 +90,7 @@ struct CColor3Setting {
 struct SColorStrategyInfo {
 	SColorStrategyInfo()
 		:
-		m_sDispPosBegin(0,0),
+		m_sDispPosBegin(0, 0),
 		m_pStrategy(NULL),
 		m_pStrategyFound(NULL),
 		m_pStrategySelect(NULL),

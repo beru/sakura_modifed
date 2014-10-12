@@ -50,7 +50,7 @@ public:
 		if (nCount) {
 			*nCount = BLOCK_SIZE / sizeof(T);
 		}
-		m_current = (m_current+1) % CHAIN_COUNT;
+		m_current = (m_current + 1) % CHAIN_COUNT;
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}
 
@@ -94,7 +94,7 @@ public:
 		size_t nCount //!< [in] 確保する要素数。T単位。
 	)
 	{
-		m_current = (m_current+1) % CHAIN_COUNT;
+		m_current = (m_current + 1) % CHAIN_COUNT;
 
 		// メモリ確保
 		if (m_buf[m_current]) {

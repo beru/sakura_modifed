@@ -95,10 +95,10 @@ HWND MyGetAncestor(HWND hWnd, UINT gaFlags);	// 指定したウィンドウの祖先のハンド
 
 // チェックボックス
 inline void CheckDlgButtonBool(HWND hDlg, int nIDButton, bool bCheck) {
-	CheckDlgButton(hDlg,nIDButton,bCheck?BST_CHECKED:BST_UNCHECKED);
+	CheckDlgButton(hDlg, nIDButton, bCheck ? BST_CHECKED : BST_UNCHECKED);
 }
 inline bool IsDlgButtonCheckedBool(HWND hDlg, int nIDButton) {
-	return (IsDlgButtonChecked(hDlg,nIDButton) & BST_CHECKED) != 0;
+	return (IsDlgButtonChecked(hDlg, nIDButton) & BST_CHECKED) != 0;
 }
 
 // ダイアログアイテムの有効化

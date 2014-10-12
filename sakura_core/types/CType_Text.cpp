@@ -259,8 +259,8 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 				//	‚½‚¾‚µCTAGˆê——‚É‚Ío—Í‚³‚ê‚È‚¢‚æ‚¤‚É
 				for (dummyLevel = levelPrev + 1; dummyLevel < level; dummyLevel++) {
 					pcFuncInfoArr->AppendData(
-						nLineCount+CLogicInt(1),
-						ptPos.GetY2()+CLayoutInt(1),
+						nLineCount + CLogicInt(1),
+						ptPos.GetY2() + CLayoutInt(1),
 						LSW(STR_NO_TITLE1),
 						FUNCINFO_NOCLIPTEXT,
 						dummyLevel - 1
@@ -282,7 +282,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 				}
 			}
 			*pDest = L'\0';
-			pcFuncInfoArr->AppendData(nLineCount+CLogicInt(1),ptPos.GetY2()+CLayoutInt(1),szTitle, 0, level - 1);
+			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, level - 1);
 		}
 	}
 }

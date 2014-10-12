@@ -30,7 +30,7 @@ CNativeW::CNativeW( const wchar_t* pData, int nDataLen )
 	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
-	SetString(pData,nDataLen);
+	SetString(pData, nDataLen);
 }
 
 CNativeW::CNativeW( const wchar_t* pData)
@@ -39,7 +39,7 @@ CNativeW::CNativeW( const wchar_t* pData)
 	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
 #endif
 {
-	SetString(pData,wcslen(pData));
+	SetString(pData, wcslen(pData));
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -50,13 +50,13 @@ CNativeW::CNativeW( const wchar_t* pData)
 // バッファの内容を置き換える
 void CNativeW::SetString( const wchar_t* pData, int nDataLen )
 {
-	CNative::SetRawData(pData,nDataLen * sizeof(wchar_t));
+	CNative::SetRawData(pData, nDataLen * sizeof(wchar_t));
 }
 
 // バッファの内容を置き換える
 void CNativeW::SetString( const wchar_t* pszData )
 {
-	SetString(pszData,wcslen(pszData));
+	SetString(pszData, wcslen(pszData));
 }
 
 // バッファの内容を置き換える
@@ -74,7 +74,7 @@ void CNativeW::AllocStringBuffer( int nDataLen )
 //! バッファの最後にデータを追加する
 void CNativeW::AppendString( const wchar_t* pszData )
 {
-	AppendString(pszData,wcslen(pszData));
+	AppendString(pszData, wcslen(pszData));
 }
 
 //! バッファの最後にデータを追加する。nLengthは文字単位。
@@ -95,29 +95,29 @@ void CNativeW::AppendNativeData( const CNativeW& cmemData )
 void CNativeW::SetStringOld( const char* pData, int nDataLen )
 {
 	int nLen;
-	wchar_t* szTmp=mbstowcs_new(pData,nDataLen,&nLen);
-	SetString(szTmp,nLen);
+	wchar_t* szTmp = mbstowcs_new(pData, nDataLen, &nLen);
+	SetString(szTmp, nLen);
 	delete[] szTmp;
 }
 
 //! バッファの内容を置き換える
 void CNativeW::SetStringOld( const char* pszData )
 {
-	SetStringOld(pszData,strlen(pszData));
+	SetStringOld(pszData, strlen(pszData));
 }
 
 void CNativeW::AppendStringOld( const char* pData, int nDataLen )
 {
 	int nLen;
-	wchar_t* szTmp=mbstowcs_new(pData,nDataLen,&nLen);
-	AppendString(szTmp,nLen);
+	wchar_t* szTmp=mbstowcs_new(pData, nDataLen, &nLen);
+	AppendString(szTmp, nLen);
 	delete[] szTmp;
 }
 
 //! バッファの最後にデータを追加する。pszDataはSJIS。
 void CNativeW::AppendStringOld( const char* pszData )
 {
-	AppendStringOld(pszData,strlen(pszData));
+	AppendStringOld(pszData, strlen(pszData));
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -297,6 +297,6 @@ const wchar_t* CNativeW::GetCharPrev( const wchar_t* pData, int nDataLen, const 
 // ShiftJISに変換して返す
 const char* CNativeW::GetStringPtrOld() const
 {
-	return to_achar(GetStringPtr(),GetStringLength());
+	return to_achar(GetStringPtr(), GetStringLength());
 }
 

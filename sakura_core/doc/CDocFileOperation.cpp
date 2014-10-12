@@ -90,7 +90,7 @@ bool CDocFileOperation::OpenFileDialog(
 )
 {
 	// アクティブにする
-	ActivateFrameWindow( hwndParent );
+	ActivateFrameWindow(hwndParent);
 
 	// ファイルオープンダイアログを表示
 	m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.Create(
@@ -101,7 +101,7 @@ bool CDocFileOperation::OpenFileDialog(
 		CMRUFile().GetPathList(),														// MRUリストのファイルのリスト
 		CMRUFolder().GetPathList()														// OPENFOLDERリストのファイルのリスト
 	);
-	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalOpenDlg( pLoadInfo, &files );
+	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalOpenDlg(pLoadInfo, &files);
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -145,12 +145,12 @@ bool CDocFileOperation::FileLoad(
 	bool bRet = DoLoadFlow(pLoadInfo);
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
-		m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened );
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
@@ -187,7 +187,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	// プラグイン：DocumentCloseイベント実行
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
-	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
+	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&activeView, params);
 	}
@@ -196,7 +196,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	if (!fexist(m_pcDocRef->m_cDocFile.GetFilePath())) {
 		// ファイルが存在しない
 		//	Jul. 26, 2003 ryoji BOMを標準設定に	// IsBomDefOn使用 2013/5/17	Uchi
-		m_pcDocRef->m_cDocFile.SetCodeSet( nCharCode,  CCodeTypeName( nCharCode ).IsBomDefOn() );
+		m_pcDocRef->m_cDocFile.SetCodeSet(nCharCode,  CCodeTypeName(nCharCode).IsBomDefOn());
 		// カーソル位置表示を更新する	// 2008.07.22 ryoji
 		caret.ShowCaretPosInfo();
 		return;
@@ -222,17 +222,17 @@ void CDocFileOperation::ReloadCurrentFile(
 		textArea.SetViewTopLine(nViewTopLine);
 		textArea.SetViewLeftCol(nViewLeftCol);
 	}
-	caret.MoveCursorProperly( ptCaretPosXY, true );	// 2007.08.23 ryoji MoveCursor()->MoveCursorProperly()
+	caret.MoveCursorProperly(ptCaretPosXY, true);	// 2007.08.23 ryoji MoveCursor()->MoveCursorProperly()
 	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
-		m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened );
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
@@ -319,7 +319,7 @@ bool CDocFileOperation::SaveFileDialog(
 	}
 	// 無題に、無題番号を付ける
 	if (pSaveInfo->cFilePath[0] == _T('\0')) {
-		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode( m_pcDocRef->m_pcEditWnd->GetHwnd() );
+		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode(m_pcDocRef->m_pcEditWnd->GetHwnd());
 		if (0 < node->m_nId) {
 			TCHAR szText[16];
 			auto_sprintf_s(szText, _T("%d"), node->m_nId);
@@ -337,7 +337,7 @@ bool CDocFileOperation::SaveFileDialog(
 		CMRUFile().GetPathList(),	//	最近のファイル
 		CMRUFolder().GetPathList()	//	最近のフォルダ
 	);
-	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );
+	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalSaveDlg(pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX);
 }
 
 //!「ファイル名を付けて保存」ダイアログ
@@ -371,7 +371,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 			if (pSaveInfo->bOverwriteMode) {
 				// 無変更の場合は警告音を出し、終了
 				if (!m_pcDocRef->m_cDocEditor.IsModified() &&
-					pSaveInfo->cEol==EOL_NONE &&	// ※改行コード指定保存がリクエストされた場合は、「変更があったもの」とみなす
+					pSaveInfo->cEol == EOL_NONE &&	// ※改行コード指定保存がリクエストされた場合は、「変更があったもの」とみなす
 					!pSaveInfo->bChgCodeSet
 				) {		// 文字コードセットの変更が有った場合は、「変更があったもの」とみなす
 					CEditApp::getInstance()->m_cSoundSet.NeedlessToSaveBeep();
@@ -381,18 +381,18 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		}
 
 		// セーブ前チェック
-		if (CALLBACK_INTERRUPT==m_pcDocRef->NotifyCheckSave(pSaveInfo)) throw CFlowInterruption();
+		if (CALLBACK_INTERRUPT == m_pcDocRef->NotifyCheckSave(pSaveInfo)) throw CFlowInterruption();
 
 		// セーブ前おまけ処理
-		if (CALLBACK_INTERRUPT==m_pcDocRef->NotifyPreBeforeSave(pSaveInfo)) throw CFlowInterruption();
+		if (CALLBACK_INTERRUPT == m_pcDocRef->NotifyPreBeforeSave(pSaveInfo)) throw CFlowInterruption();
 
 		// 2006.09.01 ryoji 保存前自動実行マクロを実行する
-		m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnSave, pSaveInfo->cFilePath );
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnSave, pSaveInfo->cFilePath);
 
 		// プラグイン：DocumentBeforeSaveイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_BEFORE_SAVE, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_BEFORE_SAVE, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
@@ -400,7 +400,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		if (!pSaveInfo->bOverwriteMode) {	// 上書きでなければ前文書のクローズイベントを呼ぶ
 			// プラグイン：DocumentCloseイベント実行
 			plugs.clear();
-			CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
+			CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 			for (auto it = plugs.begin(); it != plugs.end(); it++) {
 				(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 			}
@@ -413,7 +413,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 
 		// プラグイン：DocumentAfterSaveイベント実行
 		plugs.clear();
-		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_AFTER_SAVE, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_AFTER_SAVE, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
@@ -466,7 +466,7 @@ bool CDocFileOperation::FileSave()
 
 	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS_DIALOG()から処理本体を切り出し
 */
-bool CDocFileOperation::FileSaveAs( const WCHAR* filename,ECodeType eCodeType, EEolType eEolType, bool bDialog )
+bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, EEolType eEolType, bool bDialog)
 {
 	// セーブ情報
 	SSaveInfo sSaveInfo;
@@ -497,12 +497,12 @@ bool CDocFileOperation::FileSaveAs( const WCHAR* filename,ECodeType eCodeType, E
 		// オープン後自動実行マクロを実行する（ANSI版ではここで再ロード実行→自動実行マクロが実行される）
 		// 提案時の Patches#1550557 に、「名前を付けて保存」でオープン後自動実行マクロが実行されることの是非について議論の経緯あり
 		//   →”ファイル名に応じて表示を変化させるマクロとかを想定すると、これはこれでいいように思います。”
-		m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened );
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
-		CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
+		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 		}
@@ -535,7 +535,7 @@ bool CDocFileOperation::FileClose()
 	// プラグイン：DocumentCloseイベント実行
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
-	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
+	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}
@@ -547,13 +547,13 @@ bool CDocFileOperation::FileClose()
 	m_pcDocRef->InitAllView();
 
 	// 無題番号取得
-	CAppNodeManager::getInstance()->GetNoNameNumber( m_pcDocRef->m_pcEditWnd->GetHwnd() );
+	CAppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
 
 	// 親ウィンドウのタイトルを更新
 	m_pcDocRef->m_pcEditWnd->UpdateCaption();
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
-	m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened );
+	m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
 
 	return true;
 }
@@ -566,7 +566,7 @@ bool CDocFileOperation::FileClose()
 /* 閉じて開く
 	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS()から処理本体を切り出し
 */
-void CDocFileOperation::FileCloseOpen( const SLoadInfo& _sLoadInfo )
+void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
 {
 	// ファイルを閉じるときのMRU登録 & 保存確認 & 保存実行
 	if (!m_pcDocRef->OnFileClose()) {
@@ -576,16 +576,16 @@ void CDocFileOperation::FileCloseOpen( const SLoadInfo& _sLoadInfo )
 	// プラグイン：DocumentCloseイベント実行
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
-	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_CLOSE, 0, &plugs );
+	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}
 
 	// ファイル名指定が無い場合はダイアログで入力させる
 	SLoadInfo sLoadInfo = _sLoadInfo;
-	if (sLoadInfo.cFilePath.Length()==0) {
+	if (sLoadInfo.cFilePath.Length() == 0) {
 		std::vector<std::tstring> files;
-		if (!OpenFileDialog( CEditWnd::getInstance()->GetHwnd(), NULL, &sLoadInfo, files )) {
+		if (!OpenFileDialog(CEditWnd::getInstance()->GetHwnd(), NULL, &sLoadInfo, files)) {
 			return;
 		}
 		sLoadInfo.cFilePath = files[0].c_str();
@@ -617,17 +617,17 @@ void CDocFileOperation::FileCloseOpen( const SLoadInfo& _sLoadInfo )
 	FileLoadWithoutAutoMacro(&sLoadInfo);
 
 	if (!m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		CAppNodeManager::getInstance()->GetNoNameNumber( m_pcDocRef->m_pcEditWnd->GetHwnd() );
+		CAppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
 		m_pcDocRef->m_pcEditWnd->UpdateCaption();
 	}
 
 	// オープン後自動実行マクロを実行する
 	// ※ロードしてなくても(無題)には変更済み
-	m_pcDocRef->RunAutoMacro( GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened );
+	m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
 
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();
-	CJackManager::getInstance()->GetUsablePlug( PP_DOCUMENT_OPEN, 0, &plugs );
+	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
 		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
 	}

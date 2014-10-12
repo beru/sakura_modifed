@@ -106,7 +106,7 @@ void CFuncInfoArr::AppendData(
 	int					nDepth				//!< [‚³
 )
 {
-	AppendData(nFuncLineCRLF,nFuncColCRLF,nFuncLineLAYOUT,nFuncColLAYOUT,to_tchar(pszFuncName),nInfo,nDepth);
+	AppendData(nFuncLineCRLF, nFuncColCRLF, nFuncLineLAYOUT, nFuncColLAYOUT, to_tchar(pszFuncName), nInfo, nDepth);
 }
 
 
@@ -118,7 +118,7 @@ void CFuncInfoArr::AppendData(
 	int				nDepth				//!< [‚³
 )
 {
-	AppendData(nFuncLineCRLF,CLogicInt(1),nFuncLineLAYOUT,CLayoutInt(1),pszFuncName,nInfo,nDepth);
+	AppendData(nFuncLineCRLF, CLogicInt(1), nFuncLineLAYOUT, CLayoutInt(1), pszFuncName, nInfo, nDepth);
 	return;
 }
 
@@ -130,7 +130,7 @@ void CFuncInfoArr::AppendData(
 	int					nDepth				//!< [‚³
 )
 {
-	AppendData(nFuncLineCRLF,nFuncLineLAYOUT,to_tchar(pszFuncName),nInfo,nDepth);
+	AppendData(nFuncLineCRLF, nFuncLineLAYOUT, to_tchar(pszFuncName), nInfo, nDepth);
 }
 
 

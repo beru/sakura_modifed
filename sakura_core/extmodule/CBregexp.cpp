@@ -233,8 +233,8 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 {
 	using namespace WCODE;
 	static const wchar_t* szCRLF = CRLF;		//!< 復帰・改行
-	static const wchar_t szCR[] = {CR,0};		//!< 復帰
-	static const wchar_t szLF[] = {LF,0};		//!< 改行
+	static const wchar_t szCR[] = {CR, 0};		//!< 復帰
+	static const wchar_t szLF[] = {LF, 0};		//!< 改行
 	static const wchar_t BOT_SUBST[] = L"s/\\$(\\)*)$/([\\\\r\\\\n]+)\\$$1/k";	//!< 行末パターンの置換用パターン
 	BREGEXP_W* sReg = NULL;						//!< コンパイル構造体
 	wchar_t szMsg[80] = L"";					//!< エラーメッセージ
@@ -247,23 +247,23 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 		bool bJustDollar = false;			// 行末指定の$のみであるフラグ($の前に \r\nが指定されていない)
 		//!< 検索パターン
 		wchar_t* szNPattern = MakePatternSub(szPattern, NULL, NULL, nOption);
-		int matched = BMatch(szNPattern, szCRLF, szCRLF+wcslen(szCRLF), &sReg, szMsg);
+		int matched = BMatch(szNPattern, szCRLF, szCRLF + wcslen(szCRLF), &sReg, szMsg);
 		if (matched >= 0) {
 			// szNPatternが不正なパターン等のエラーでなかった
 			// エラー時には sRegがNULLのままなので、sReg->nparensへのアクセスは不正
 			nParens = sReg->nparens;			// オリジナルの検索文字列中の()の数を記憶
 			if (matched > 0) {
 				if (sReg->startp[0] == &szCRLF[1] && sReg->endp[0] == &szCRLF[1]) {
-					if (BMatch(NULL, szCR, szCR+wcslen(szCR), &sReg, szMsg) > 0 && sReg->startp[0] == &szCR[1] && sReg->endp[0] == &szCR[1]) {
-						if (BMatch(NULL, szLF, szLF+wcslen(szLF), &sReg, szMsg) > 0 && sReg->startp[0] == &szLF[0] && sReg->endp[0] == &szLF[0]) {
+					if (BMatch(NULL, szCR, szCR + wcslen(szCR), &sReg, szMsg) > 0 && sReg->startp[0] == &szCR[1] && sReg->endp[0] == &szCR[1]) {
+						if (BMatch(NULL, szLF, szLF + wcslen(szLF), &sReg, szMsg) > 0 && sReg->startp[0] == &szLF[0] && sReg->endp[0] == &szLF[0]) {
 							// 検索文字列は 行末($)のみだった
 							bJustDollar = true;
 						}
 					}
 				}
 			}else {
-				if (BMatch(NULL, szCR, szCR+wcslen(szCR), &sReg, szMsg) <= 0) {
-					if (BMatch(NULL, szLF, szLF+wcslen(szLF), &sReg, szMsg) <= 0) {
+				if (BMatch(NULL, szCR, szCR + wcslen(szCR), &sReg, szMsg) <= 0) {
+					if (BMatch(NULL, szLF, szLF + wcslen(szLF), &sReg, szMsg) <= 0) {
 						// 検索文字列は、文字＋行末($)だった
 						bJustDollar = true;
 					}
@@ -447,10 +447,10 @@ bool CBregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int
 	m_szMsg[0] = L'\0';		//!< エラー解除
 	if (!szPattern1) {
 		// 検索実行
-		BMatch(pszNPattern, m_tmpBuf, m_tmpBuf+1, &m_pRegExp, m_szMsg);
+		BMatch(pszNPattern, m_tmpBuf, m_tmpBuf + 1, &m_pRegExp, m_szMsg);
 	}else {
 		// 置換実行
-		BSubst(pszNPattern, m_tmpBuf, m_tmpBuf+1, &m_pRegExp, m_szMsg);
+		BSubst(pszNPattern, m_tmpBuf, m_tmpBuf + 1, &m_pRegExp, m_szMsg);
 	}
 	delete [] szNPattern;
 
@@ -494,7 +494,7 @@ bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 		** 行頭(^)とマッチするのは、nStart=0の時だけなので、それ以外は false
 		*/
 		if ((m_ePatType & PAT_TOP) != 0 && nStart != 0) {
-			// nStart!=0でも、BMatch()にとっては行頭になるので、ここでfalseにする必要がある
+			// nStart != 0でも、BMatch()にとっては行頭になるので、ここでfalseにする必要がある
 			return false;
 		}
 		//	検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
@@ -507,7 +507,7 @@ bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 			
 	if (matched < 0 || m_szMsg[0]) {
 		// BMatchエラー
-		// エラー処理をしていなかったので、nStart>=lenのような場合に、マッチ扱いになり
+		// エラー処理をしていなかったので、nStart >= lenのような場合に、マッチ扱いになり
 		// 無限置換等の不具合になっていた 2003.05.03 by かろと
 		return false;
 	}else if (matched == 0) {
@@ -611,9 +611,9 @@ bool InitRegexp(
 	if (DLL_SUCCESS != eDllResult) {
 		if (bShowMessage) {
 			LPCTSTR pszMsg = _T("");
-			if (eDllResult==DLL_LOADFAILURE) {
+			if (eDllResult == DLL_LOADFAILURE) {
 				pszMsg = LS(STR_BREGONIG_LOAD);
-			}else if (eDllResult==DLL_INITFAILURE) {
+			}else if (eDllResult == DLL_INITFAILURE) {
 				pszMsg = LS(STR_BREGONIG_INIT);
 			}else {
 				pszMsg = LS(STR_BREGONIG_ERROR);

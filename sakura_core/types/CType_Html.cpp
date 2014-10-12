@@ -65,7 +65,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 		このため、見出しの深さを記憶しておきます。
 		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
 	*/
-	int nHeadDepth[6+1];		// [0]は 空けておく
+	int nHeadDepth[6 + 1];		// [0]は 空けておく
 	for (k=0; k<=6; k++) {
 		nHeadDepth[k] = -1;
 	}
@@ -86,21 +86,21 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				continue;
 			}
 			// 2004.04.20 Moca To Here
-			if (*pLine!=L'<' || nDepth>=nMaxStack) {
+			if (*pLine != L'<' || nDepth >= nMaxStack) {
 				continue;
 			}
 			bEndTag = false;
 			pLine++; i++;
-			if (*pLine==L'/') {
+			if (*pLine == L'/') {
 				pLine++; i++;
 				bEndTag = true;
 			}
-			for (j=0;i+j<nLineLen && j<_countof(szTitle)-1;) {
+			for (j=0; i + j < nLineLen && j < _countof(szTitle) - 1;) {
 				// タグ名を切り出す
 				// スペース、タブ、「_:-.英数」以外の半角文字、１文字目の「-.数字」は認めない。
-				if ((pLine[j]==L' ' || pLine[j]==L'\t') ||
-					(pLine[j]<0x80 && !wcschr(L"_:-.",pLine[j]) && !isalnum(pLine[j])) ||
-					(j==0 &&((pLine[j]>=L'0' && pLine[j]<=L'9') || pLine[j]==L'-' || pLine[j]==L'.'))
+				if ((pLine[j] == L' ' || pLine[j] == L'\t') ||
+					(pLine[j] < 0x80 && !wcschr(L"_:-.", pLine[j]) && !isalnum(pLine[j])) ||
+					(j == 0 && ((pLine[j] >= L'0' && pLine[j] <= L'9') || pLine[j] == L'-' || pLine[j] == L'.'))
 				) {
 					break;
 				}
@@ -108,7 +108,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				memcpy(szTitle + j, pLine + j, nCharSize * sizeof(wchar_t));
 				j += nCharSize;
 			}
-			if (j==0) {
+			if (j == 0) {
 				// 2004.04.20 Moca From Here コメントを処理する
 				if (i < nLineLen - 3 && 0 == wmemcmp(L"!--", pLine, 3)) {
 					bCommentTag = true;
@@ -157,35 +157,35 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				nLabelType = LT_IGNORE;
 			}
 			// 空要素（内容を持たないタグ）のうち構造に関係するもの。
-			if (!wcscmp(szTag,L"area") || !wcscmp(szTag,L"hr") || !wcscmp(szTag,L"img")
-			 || !wcscmp(szTag,L"input") || !wcscmp(szTag,L"link") || !wcscmp(szTag,L"meta")
-			 || !wcscmp(szTag,L"param")
+			if (!wcscmp(szTag, L"area") || !wcscmp(szTag, L"hr") || !wcscmp(szTag, L"img")
+			 || !wcscmp(szTag, L"input") || !wcscmp(szTag, L"link") || !wcscmp(szTag, L"meta")
+			 || !wcscmp(szTag, L"param")
 			) {
 				nLabelType = LT_EMPTY;
 			}
-			if (!wcscmp(szTag,L"div") || !wcscmp(szTag,L"center")
-			 || !wcscmp(szTag,L"address") || !wcscmp(szTag,L"blockquote")
-			 || !wcscmp(szTag,L"noscript") || !wcscmp(szTag,L"noframes")
-			 || !wcscmp(szTag,L"ol") || !wcscmp(szTag,L"ul") || !wcscmp(szTag,L"dl")
-			 || !wcscmp(szTag,L"dir") || !wcscmp(szTag,L"menu")
-			 || !wcscmp(szTag,L"pre") || !wcscmp(szTag,L"table")
-			 || !wcscmp(szTag,L"form") || !wcscmp(szTag,L"fieldset") || !wcscmp(szTag,L"isindex")
+			if (!wcscmp(szTag, L"div") || !wcscmp(szTag, L"center")
+			 || !wcscmp(szTag, L"address") || !wcscmp(szTag, L"blockquote")
+			 || !wcscmp(szTag, L"noscript") || !wcscmp(szTag, L"noframes")
+			 || !wcscmp(szTag, L"ol") || !wcscmp(szTag, L"ul") || !wcscmp(szTag, L"dl")
+			 || !wcscmp(szTag, L"dir") || !wcscmp(szTag, L"menu")
+			 || !wcscmp(szTag, L"pre") || !wcscmp(szTag, L"table")
+			 || !wcscmp(szTag, L"form") || !wcscmp(szTag, L"fieldset") || !wcscmp(szTag, L"isindex")
 			) {
 				nLabelType = LT_BLOCK;
 			}
 			if (!wcscmp(szTag,L"p")) {
 				nLabelType = LT_PARAGRAPH;
 			}
-			if ((szTag[0]==L'h') && (L'1'<=szTitle[1]&&szTitle[1]<=L'6')) {
+			if ((szTag[0] == L'h') && (L'1' <= szTitle[1] && szTitle[1] <= L'6')) {
 				nLabelType = LT_HEADING;
 			}
 			// 2009.08.13 syat 「/>」で終わるタグの判定のため、終了タグ処理を開始タグ処理の後にした。
 			//                  （開始タグ処理の中で、bEndTagをtrueにしている所がある。）
 			if (!bEndTag) { // 開始タグ
-				if (nLabelType!=LT_INLINE && nLabelType!=LT_IGNORE) {
+				if (nLabelType != LT_INLINE && nLabelType != LT_IGNORE) {
 					// pの中でブロック要素がきたら、自動的にpを閉じる。 2008.09.07 aroka
 					if (bParaTag) {
-						if (nLabelType==LT_HEADING || nLabelType==LT_PARAGRAPH || nLabelType==LT_BLOCK) {
+						if (nLabelType == LT_HEADING || nLabelType == LT_PARAGRAPH || nLabelType == LT_BLOCK) {
 							nDepth--;
 						}
 					}
@@ -212,13 +212,13 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						&ptPos
 					);
 
-					if (nLabelType!=LT_EMPTY) {
+					if (nLabelType != LT_EMPTY) {
 						// 終了タグなしを除く全てのタグらしきものを判定
 						wcscpy_s(pszStack[nDepth], szTitle);
 						k = j;
 						if (j < _countof(szTitle)-3) {
-							for (;i+j<nLineLen;j++) {
-								if (pLine[j]==L'/' && pLine[j+1]==L'>') {
+							for (; i + j < nLineLen; j++) {
+								if (pLine[j] == L'/' && pLine[j + 1] == L'>') {
 									bEndTag = true;
 									break;
 								}else if (pLine[j] == L'>') {
@@ -227,26 +227,26 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							}
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
-								for (j-=k-1; i+j+k<nLineLen && k<_countof(szTitle)-1; k++) {
-									if (pLine[j+k]==L'<' || WCODE::IsLineDelimiter(pLine[j+k])) {
+								for (j -= k-1; i + j + k < nLineLen && k < _countof(szTitle) - 1; k++) {
+									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k])) {
 										break;
 									}
-									szTitle[k] = pLine[j+k];
+									szTitle[k] = pLine[j + k];
 								}
 								j += k-1;
 							}
 						}
 						szTitle[k] = L'\0';
-						pcFuncInfoArr->AppendData(nLineCount+CLogicInt(1), ptPos.GetY2()+CLayoutInt(1), szTitle, 0, nDepth++);
+						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, nDepth++);
 					}else {
-						for (;i+j<nLineLen && j<_countof(szTitle)-1;j++) {
-							if (pLine[j]==L'>') {
+						for (; i + j < nLineLen && j < _countof(szTitle) - 1; j++) {
+							if (pLine[j] == L'>') {
 								break;
 							}
 							szTitle[j] = pLine[j];
 						}
 						szTitle[j]	=	L'\0';
-						pcFuncInfoArr->AppendData(nLineCount+CLogicInt(1),ptPos.GetY2()+CLayoutInt(1),szTitle,0,nDepth);
+						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, nDepth);
 					}
 				}
 			}
@@ -264,11 +264,11 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						nDepth = nDepthOrg;
 					}
 				}else {
-					if (nLabelType==LT_HEADING) {	//	見出しの終わり
+					if (nLabelType == LT_HEADING) {	//	見出しの終わり
 						nHeadDepth[szTitle[1]-L'0'] = nDepth;
 						nDepth++;
 					}
-					if (nLabelType==LT_PARAGRAPH) {
+					if (nLabelType == LT_PARAGRAPH) {
 						bParaTag = false;
 					}
 				}

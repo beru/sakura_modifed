@@ -35,7 +35,7 @@ public:
 	CMyString(const WCHAR* szData = L"")			: m_wstr(szData),		m_str_cache(NULL) { }
 	CMyString(const WCHAR* pData, size_t nLength)	: m_wstr(pData, nLength), m_str_cache(NULL) { }
 	CMyString(const ACHAR* szData)					: m_wstr(L""), m_str_cache(NULL) { set(szData); }
-	CMyString(const ACHAR* pData, size_t nLength)	: m_wstr(L""), m_str_cache(NULL) { set(pData,nLength); }
+	CMyString(const ACHAR* pData, size_t nLength)	: m_wstr(L""), m_str_cache(NULL) { set(pData, nLength); }
 	CMyString(ACHAR wc)								: m_wstr(L""), m_str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
 	CMyString(const CMyString& rhs) : m_wstr(rhs.c_wstr()), m_str_cache(NULL) { }
 	~CMyString();
@@ -98,13 +98,13 @@ public:
 		TCHAR	szDirPath[_MAX_PATH];
 		TCHAR	szDrive[_MAX_DRIVE];
 		TCHAR	szDir[_MAX_DIR];
-		_tsplitpath( this->c_str(), szDrive, szDir, NULL, NULL );
-		_tcscpy( szDirPath, szDrive);
-		_tcscat( szDirPath, szDir );
+		_tsplitpath(this->c_str(), szDrive, szDir, NULL, NULL);
+		_tcscpy(szDirPath, szDrive);
+		_tcscat(szDirPath, szDir);
 		return szDirPath;
 	}
 	// 拡張子を取得する
-	LPCTSTR GetExt( bool bWithoutDot = false ) const {
+	LPCTSTR GetExt(bool bWithoutDot = false) const {
 		const TCHAR* head = c_str();
 		const TCHAR* p = auto_strchr(head, _T('\0')) - 1;
 		while (p >= head) {
@@ -114,7 +114,7 @@ public:
 			p--;
 		}
 		if (p >= head && *p == _T('.')) {
-			return bWithoutDot ? p+1 : p;	//bWithoutDot==trueならドットなしを返す
+			return bWithoutDot ? p + 1 : p;	//bWithoutDot == trueならドットなしを返す
 		}else {
 			return auto_strchr(head, _T('\0'));
 		}
@@ -132,7 +132,7 @@ public:
 	void AppendF(const TCHAR* szFormat, ...) {
 		va_list v;
 		va_start(v, szFormat);
-		m_pHead += auto_vsprintf_s(m_pHead, _countof(m_szCmdLine)-(m_pHead-m_szCmdLine), szFormat, v);
+		m_pHead += auto_vsprintf_s(m_pHead, _countof(m_szCmdLine) - (m_pHead - m_szCmdLine), szFormat, v);
 		va_end(v);
 	}
 	const TCHAR* c_str() const {

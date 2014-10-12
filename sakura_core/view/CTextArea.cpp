@@ -68,7 +68,7 @@ void CTextArea::UpdateAreaMetrics(HDC hdc)
 	UpdateViewColRowNums();
 }
 
-void CTextArea::GenerateCharRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const
+void CTextArea::GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
 {
 	const CEditView* pView = m_pEditView;
 
@@ -94,14 +94,14 @@ bool CTextArea::TrimRectByArea(RECT* rc) const
 	return true;
 }
 
-bool CTextArea::GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const
+bool CTextArea::GenerateClipRect(RECT* rc, const DispPos& sPos, int nHankakuNum) const
 {
-	GenerateCharRect(rc,sPos,nHankakuNum);
+	GenerateCharRect(rc, sPos, nHankakuNum);
 	return TrimRectByArea(rc);
 }
 
 //!右の残りを表す矩形を生成する
-bool CTextArea::GenerateClipRectRight(RECT* rc,const DispPos& sPos) const
+bool CTextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
 {
 	const CEditView* pView = m_pEditView;
 
@@ -124,7 +124,7 @@ bool CTextArea::GenerateClipRectRight(RECT* rc,const DispPos& sPos) const
 	return true;
 }
 
-bool CTextArea::GenerateClipRectLine(RECT* rc,const DispPos& sPos) const
+bool CTextArea::GenerateClipRectLine(RECT* rc, const DispPos& sPos) const
 {
 	rc->left   = 0;
 	rc->right  = GetAreaRight();

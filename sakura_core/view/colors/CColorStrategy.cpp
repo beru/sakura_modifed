@@ -41,7 +41,7 @@
 
 bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
 {
-	return (nPos==0 || !IS_KEYWORD_CHAR(cStr.At(nPos-1)));
+	return (nPos == 0 || !IS_KEYWORD_CHAR(cStr.At(nPos - 1)));
 }
 
 /*! 色の切り替え判定
@@ -58,14 +58,14 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 
 	// 選択範囲色終了
 	if (m_pStrategySelect) {
-		if (m_pStrategySelect->EndColor(cLineStr,this->GetPosInLogic())) {
+		if (m_pStrategySelect->EndColor(cLineStr, this->GetPosInLogic())) {
 			m_pStrategySelect = NULL;
 			bChange = true;
 		}
 	}
 	// 選択範囲色開始
 	if (!m_pStrategySelect) {
-		if (pcSelect->BeginColorEx(cLineStr,this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
+		if (pcSelect->BeginColorEx(cLineStr, this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
 			m_pStrategySelect = pcSelect;
 			bChange = true;
 		}
@@ -73,7 +73,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 
 	// 検索色終了
 	if (m_pStrategyFound) {
-		if (m_pStrategyFound->EndColor(cLineStr,this->GetPosInLogic())) {
+		if (m_pStrategyFound->EndColor(cLineStr, this->GetPosInLogic())) {
 			m_pStrategyFound = NULL;
 			bChange = true;
 		}
@@ -81,7 +81,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 
 	// 検索色開始
 	if (!m_pStrategyFound) {
-		if (pcFound->BeginColor(cLineStr,this->GetPosInLogic())) {
+		if (pcFound->BeginColor(cLineStr, this->GetPosInLogic())) {
 			m_pStrategyFound = pcFound;
 			bChange = true;
 		}
@@ -89,7 +89,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 
 	// 色終了
 	if (m_pStrategy) {
-		if (m_pStrategy->EndColor(cLineStr,this->GetPosInLogic())) {
+		if (m_pStrategy->EndColor(cLineStr, this->GetPosInLogic())) {
 			m_pStrategy = NULL;
 			bChange = true;
 		}
@@ -99,7 +99,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	if (!m_pStrategy) {
 		int size = pool->GetStrategyCount();
 		for (int i = 0; i < size; i++) {
-			if (pool->GetStrategy(i)->BeginColor(cLineStr,this->GetPosInLogic())) {
+			if (pool->GetStrategy(i)->BeginColor(cLineStr, this->GetPosInLogic())) {
 				m_pStrategy = pool->GetStrategy(i);
 				bChange = true;
 				break;
@@ -110,7 +110,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	// カーソル行背景色
 	CTypeSupport cCaretLineBg(m_pcView, COLORIDX_CARETLINEBG);
 	if (cCaretLineBg.IsDisp()) {
-		if (m_colorIdxBackLine==COLORIDX_CARETLINEBG) {
+		if (m_colorIdxBackLine == COLORIDX_CARETLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() != m_pcView->GetCaret().GetCaretLayoutPos().GetY2()) {
 				m_colorIdxBackLine = COLORIDX_TEXT;
 				bChange = true;
@@ -211,7 +211,7 @@ CColorStrategy*	CColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) c
 	}
 	int size = (int)m_vStrategiesDisp.size();
 	for (int i = 0; i < size; i++) {
-		if (m_vStrategiesDisp[i]->GetStrategyColor()==eColor) {
+		if (m_vStrategiesDisp[i]->GetStrategyColor() == eColor) {
 			return m_vStrategiesDisp[i];
 		}
 	}
@@ -237,7 +237,7 @@ void CColorStrategyPool::CheckColorMODE(
 {
 	//色終了
 	if (*ppcColorStrategy) {
-		if ((*ppcColorStrategy)->EndColor(cLineStr,nPos)) {
+		if ((*ppcColorStrategy)->EndColor(cLineStr, nPos)) {
 			*ppcColorStrategy = NULL;
 		}
 	}
@@ -247,12 +247,12 @@ void CColorStrategyPool::CheckColorMODE(
 		// CheckColorMODE はレイアウト処理全体のボトルネックになるくらい頻繁に呼び出される
 		// 基本クラスからの動的仮想関数呼び出しを使用すると無視できないほどのオーバヘッドになる模様
 		// ここはエレガントさよりも性能優先で個々の派生クラスから BeginColor() を呼び出す
-		if (m_pcHeredoc && m_pcHeredoc->BeginColor(cLineStr,nPos)) { *ppcColorStrategy = m_pcHeredoc; return; }
-		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(cLineStr,nPos)) { *ppcColorStrategy = m_pcBlockComment1; return; }
-		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(cLineStr,nPos)) { *ppcColorStrategy = m_pcBlockComment2; return; }
-		if (m_pcLineComment && m_pcLineComment->BeginColor(cLineStr,nPos)) { *ppcColorStrategy = m_pcLineComment; return; }
-		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(cLineStr,nPos)) { *ppcColorStrategy = m_pcSingleQuote; return; }
-		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(cLineStr,nPos)) { *ppcColorStrategy = m_pcDoubleQuote; return; }
+		if (m_pcHeredoc && m_pcHeredoc->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcHeredoc; return; }
+		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment1; return; }
+		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment2; return; }
+		if (m_pcLineComment && m_pcLineComment->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcLineComment; return; }
+		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcSingleQuote; return; }
+		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcDoubleQuote; return; }
 	}
 }
 

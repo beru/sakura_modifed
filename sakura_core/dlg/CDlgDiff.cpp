@@ -350,13 +350,13 @@ int CDlgDiff::GetData(void)
 
 	// DIFFオプション
 	m_nDiffFlgOpt = 0;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_CASE  ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0001;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_SPACE ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0002;
+	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_CASE ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0001;
+	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_SPACE) == BST_CHECKED) m_nDiffFlgOpt |= 0x0002;
 	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_SPCCHG) == BST_CHECKED) m_nDiffFlgOpt |= 0x0004;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_BLINE ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0008;
+	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_BLINE) == BST_CHECKED) m_nDiffFlgOpt |= 0x0008;
 	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_TABSPC) == BST_CHECKED) m_nDiffFlgOpt |= 0x0010;
 	// ファイル新旧
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_DIFF_FILE2     ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0020;
+	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_DIFF_FILE2    ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0020;
 	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
 	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_EXEC_STATE) == BST_CHECKED) m_nDiffFlgOpt |= 0x0040;
 	m_pShareData->m_nDiffFlgOpt = m_nDiffFlgOpt;

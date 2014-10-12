@@ -337,7 +337,7 @@ void CViewCommander::Command_UUDECODE(void)
 	// ÉJÉLÉR
 	CBinaryOutputStream out(szPath);
 	if (!out) goto err;
-	if (nDataLen != out.Write(pData,nDataLen)) goto err;
+	if (nDataLen != out.Write(pData, nDataLen)) goto err;
 
 	// äÆóπ
 	return;

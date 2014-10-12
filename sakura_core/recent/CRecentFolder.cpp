@@ -71,7 +71,7 @@ bool CRecentFolder::TextToDataType(CPathString* dst, LPCTSTR pszText) const
 
 int CRecentFolder::CompareItem(const CPathString* p1, LPCTSTR p2) const
 {
-	return _tcsicmp(*p1,p2);
+	return _tcsicmp(*p1, p2);
 }
 
 void CRecentFolder::CopyItem(CPathString* dst, LPCTSTR src) const

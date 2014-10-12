@@ -2101,7 +2101,7 @@ void CTabWnd::TabWnd_ActivateFrameWindow(HWND hwnd, bool bForeground)
 		::BringWindowToTop(hwndActivate);
 	}else {
 		// 2005.09.01 ryoji ::ShowWindow(hwnd, SW_SHOWNA) ‚¾‚Æ”ñ•\¦‚©‚ç•\¦‚ÉØ‚è‘Ö‚í‚é‚Æ‚«‚É Z-order ‚ª‚¨‚©‚µ‚­‚È‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å ::SetWindowPos ‚É•ÏX
-		::SetWindowPos(hwnd, NULL,0,0,0,0,
+		::SetWindowPos(hwnd, NULL, 0,0,0,0,
 						SWP_SHOWWINDOW | SWP_NOACTIVATE
 						| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 	}

@@ -198,9 +198,9 @@ bool SetClipboardTextImp(HWND hwnd, const T* pszText, int nLength)
 		return false;
 	}
 	::EmptyClipboard();
-	if (sizeof(T)==sizeof(char)) {
+	if (sizeof(T) == sizeof(char)) {
 		::SetClipboardData(CF_OEMTEXT, hgClip);
-	}else if (sizeof(T)==sizeof(wchar_t)) {
+	}else if (sizeof(T) == sizeof(wchar_t)) {
 		::SetClipboardData(CF_UNICODETEXT, hgClip);
 	}else {
 		assert(0); // Å¶Ç±Ç±Ç…ÇÕóàÇ»Ç¢
@@ -212,12 +212,12 @@ bool SetClipboardTextImp(HWND hwnd, const T* pszText, int nLength)
 
 bool SetClipboardText(HWND hwnd, const ACHAR* pszText, int nLength)
 {
-	return SetClipboardTextImp<ACHAR>(hwnd,pszText,nLength);
+	return SetClipboardTextImp<ACHAR>(hwnd, pszText, nLength);
 }
 
 bool SetClipboardText(HWND hwnd, const WCHAR* pszText, int nLength)
 {
-	return SetClipboardTextImp<WCHAR>(hwnd,pszText,nLength);
+	return SetClipboardTextImp<WCHAR>(hwnd, pszText, nLength);
 }
 
 /*
@@ -327,7 +327,7 @@ BOOL GetSystemResources(
 
 CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
 {
-	int n = ::GetCurrentDirectory(_countof(m_szCurDir),m_szCurDir);
+	int n = ::GetCurrentDirectory(_countof(m_szCurDir), m_szCurDir);
 	if (n>0 && n<_countof(m_szCurDir)) {
 		// ok
 	}else {

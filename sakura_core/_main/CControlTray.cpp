@@ -486,7 +486,7 @@ LRESULT CControlTray::DispatchEvent(
 			HH_AKLINK link;
 			link.cbStruct		= sizeof_raw(link);
 			link.fReserved		= FALSE;
-			link.pszKeywords	= to_tchar(&pWork[nLen+1]);
+			link.pszKeywords	= to_tchar(&pWork[nLen + 1]);
 			link.pszUrl			= NULL;
 			link.pszMsgText		= NULL;
 			link.pszMsgTitle	= NULL;
@@ -679,9 +679,9 @@ LRESULT CControlTray::DispatchEvent(
 				int nTypeSizeOld = m_pShareData->m_nTypesCount;
 				m_pShareData->m_nTypesCount++;
 				for (int i = nTypeSizeOld; nInsert < i; i--) {
-					types[i] = types[i-1];
+					types[i] = types[i - 1];
 					types[i]->m_nIdx = i;
-					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i-1];
+					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i - 1];
 				}
 				types[nInsert] = type;
 				auto_strcpy(m_pShareData->m_TypeMini[nInsert].m_szTypeName, type->m_szTypeName);
@@ -701,15 +701,15 @@ LRESULT CControlTray::DispatchEvent(
 				auto& types = CShareData::getInstance()->GetTypeSettings();
 				delete types[nDelPos];
 				for (int i = nDelPos; i < nTypeSizeOld - 1; i++) {
-					types[i] = types[i+1];
+					types[i] = types[i + 1];
 					types[i]->m_nIdx = i;
-					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i+1];
+					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i + 1];
 				}
 				types.resize(m_pShareData->m_nTypesCount - 1);
 				m_pShareData->m_nTypesCount--;
-				m_pShareData->m_TypeMini[nTypeSizeOld-1].m_szTypeName[0] = 0;
-				m_pShareData->m_TypeMini[nTypeSizeOld-1].m_szTypeExts[0] = 0;
-				m_pShareData->m_TypeMini[nTypeSizeOld-1].m_id = 0;
+				m_pShareData->m_TypeMini[nTypeSizeOld - 1].m_szTypeName[0] = 0;
+				m_pShareData->m_TypeMini[nTypeSizeOld - 1].m_szTypeExts[0] = 0;
+				m_pShareData->m_TypeMini[nTypeSizeOld - 1].m_id = 0;
 			}else {
 				return FALSE;
 			}
@@ -890,7 +890,7 @@ LRESULT CControlTray::DispatchEvent(
 
 					// アクティブにする
 					ActivateFrameWindow(hwndWork);
-				}else if (nId-IDM_SELMRU >= 0 && nId-IDM_SELMRU < 999) {
+				}else if (nId - IDM_SELMRU >= 0 && nId-IDM_SELMRU < 999) {
 
 					// 新しい編集ウィンドウを開く
 					// From Here Oct. 27, 2000 genta	カーソル位置を復元しない機能
@@ -1354,7 +1354,7 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 			HWND	hwndWork = pEditNodeArr[j].GetHwnd();
 			ActivateFrameWindow(hwndWork);
 			// 最後のペインをアクティブにする
-			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM)-1, 1);
+			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 1);
 		}
 		delete [] pEditNodeArr;
 	}
@@ -1394,7 +1394,7 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 			HWND	hwndWork = pEditNodeArr[j].GetHwnd();
 			ActivateFrameWindow(hwndWork);
 			// 最初のペインをアクティブにする
-			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM)-1, 0);
+			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 0);
 		}
 		delete [] pEditNodeArr;
 	}

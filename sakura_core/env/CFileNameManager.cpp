@@ -335,7 +335,7 @@ TCHAR CFileNameManager::GetAccessKeyByIndex(int index, bool bZeroOrigin)
 	if (index < 0) {
 		return 0;
 	}
-	int accKeyIndex = ((bZeroOrigin? index: index+1) % 36);
+	int accKeyIndex = ((bZeroOrigin? index: index + 1) % 36);
 	TCHAR c = (TCHAR)((accKeyIndex < 10) ? (_T('0') + accKeyIndex) : (_T('A') + accKeyIndex - 10));
 	return c;
 }
@@ -388,7 +388,7 @@ bool CFileNameManager::GetMenuFullLabel(
 		LimitStringLengthW(pfi->m_szGrepKey, nGrepKeyLen, GREPKEY_LIMIT_LEN, cmemDes);
 		
 		const TCHAR* pszKey;
-		TCHAR szMenu2[GREPKEY_LIMIT_LEN*2*2+1]; // WCHAR=>ACHARÇ≈2î{ÅA&Ç≈2î{
+		TCHAR szMenu2[GREPKEY_LIMIT_LEN * 2 * 2 + 1]; // WCHAR=>ACHARÇ≈2î{ÅA&Ç≈2î{
 		if (bEspaceAmp) {
 			dupamp(cmemDes.GetStringT(), szMenu2);
 			pszKey = szMenu2;

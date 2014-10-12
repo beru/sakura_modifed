@@ -29,31 +29,31 @@ bool GetDateTimeFormat(TCHAR* szResult, int size, const TCHAR* format, const SYS
 			++p;
 			switch (*p) {
 			case _T('Y'):
-				len = wsprintf(szTime,_T("%d"),systime.wYear);
+				len = wsprintf(szTime, _T("%d"), systime.wYear);
 				_tcscpy(q, szTime);
 				break;
 			case _T('y'):
-				len = wsprintf(szTime,_T("%02d"),(systime.wYear%100));
+				len = wsprintf(szTime, _T("%02d"), (systime.wYear%100));
 				_tcscpy(q, szTime);
 				break;
 			case _T('m'):
-				len = wsprintf(szTime,_T("%02d"),systime.wMonth);
+				len = wsprintf(szTime, _T("%02d"), systime.wMonth);
 				_tcscpy(q, szTime);
 				break;
 			case _T('d'):
-				len = wsprintf(szTime,_T("%02d"),systime.wDay);
+				len = wsprintf(szTime, _T("%02d"), systime.wDay);
 				_tcscpy(q, szTime);
 				break;
 			case _T('H'):
-				len = wsprintf(szTime,_T("%02d"),systime.wHour);
+				len = wsprintf(szTime, _T("%02d"), systime.wHour);
 				_tcscpy(q, szTime);
 				break;
 			case _T('M'):
-				len = wsprintf(szTime,_T("%02d"),systime.wMinute);
+				len = wsprintf(szTime, _T("%02d"), systime.wMinute);
 				_tcscpy(q, szTime);
 				break;
 			case _T('S'):
-				len = wsprintf(szTime,_T("%02d"),systime.wSecond);
+				len = wsprintf(szTime, _T("%02d"), systime.wSecond);
 				_tcscpy(q, szTime);
 				break;
 				// A Z

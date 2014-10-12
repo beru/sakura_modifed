@@ -24,7 +24,7 @@ CNativeA::CNativeA(const CNativeA& rhs)
 	:
 	CNative()
 {
-	SetString(rhs.GetStringPtr(),rhs.GetStringLength());
+	SetString(rhs.GetStringPtr(), rhs.GetStringLength());
 }
 
 
@@ -35,7 +35,7 @@ CNativeA::CNativeA(const CNativeA& rhs)
 // バッファの内容を置き換える
 void CNativeA::SetString( const char* pszData )
 {
-	SetString(pszData,strlen(pszData));
+	SetString(pszData, strlen(pszData));
 }
 
 // バッファの内容を置き換える。nLenは文字単位。
@@ -105,7 +105,7 @@ void CNativeA::SetStringNew(const wchar_t* wszData, int nDataLen)
 
 void CNativeA::SetStringNew(const wchar_t* wszData)
 {
-	SetStringNew(wszData,wcslen(wszData));
+	SetStringNew(wszData, wcslen(wszData));
 }
 
 
@@ -471,7 +471,7 @@ void CNativeA::TABToSPACE( int nTabSpace	/* TABの文字数 */ )
 				}
 			}
 		}
-		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem,cEol.GetType());
+		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem, cEol.GetType());
 		auto_memcpy( &pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength() );
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -576,7 +576,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 					nPosDes++;
 				}else {
 					int j;
-					//for( j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j+=nTabSpace ) {
+					//for( j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j += nTabSpace ) {
 					for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); j++) {
 						pDes[nPosDes] = TAB;
 						nPosDes++;
@@ -594,7 +594,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 		}
 
 		// 行末の処理
-		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem,cEol.GetType());
+		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem, cEol.GetType());
 		auto_memcpy( &pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength() );
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -614,7 +614,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 //! 指定した位置の文字が何バイト文字かを返す
 int CNativeA::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
 {
-	return CShiftJis::GetSizeOfChar(pData,nDataLen,nIdx);
+	return CShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);
 }
 
 // ポインタで示した文字の次にある文字の位置を返します
@@ -690,18 +690,18 @@ const char* CNativeA::GetCharPrev( const char* pData, int nDataLen, const char* 
 
 void CNativeA::AppendStringNew( const wchar_t* pszData )
 {
-	AppendStringNew(pszData,wcslen(pszData));
+	AppendStringNew(pszData, wcslen(pszData));
 }
 
 void CNativeA::AppendStringNew( const wchar_t* pData, int nDataLen )
 {
-	char* buf = wcstombs_new(pData,nDataLen);
+	char* buf = wcstombs_new(pData, nDataLen);
 	AppendString(buf);
 	delete[] buf;
 }
 
 const wchar_t* CNativeA::GetStringW() const
 {
-	return to_wchar(GetStringPtr(),GetStringLength());
+	return to_wchar(GetStringPtr(), GetStringLength());
 }
 

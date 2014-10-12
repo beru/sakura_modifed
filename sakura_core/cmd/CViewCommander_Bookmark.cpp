@@ -132,7 +132,7 @@ void CViewCommander::Command_JUMP(void)
 		*/
 		CLogicPoint ptPosXY;
 		layoutMgr.LayoutToLogic(
-			CLayoutPoint(0,nLineCount),
+			CLayoutPoint(0, nLineCount),
 			&ptPosXY
 		);
 		nLineCount = ptPosXY.y;
@@ -282,10 +282,10 @@ void CViewCommander::Command_BOOKMARK_SET(void)
 			&ptFrom
 		);
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
-			CLayoutPoint(CLayoutInt(0), sSelect.GetTo().y  ),
+			CLayoutPoint(CLayoutInt(0), sSelect.GetTo().y),
 			&ptTo
 		);
-		for (CLogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; nY++) {
+		for (CLogicInt nY = ptFrom.GetY2(); nY <= ptTo.y; nY++) {
 			pCDocLine = lineMgr.GetLine(nY);
 			CBookmarkSetter cBookmark(pCDocLine);
 			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
@@ -319,7 +319,7 @@ re_do:;								// hor
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		CLayoutPoint ptLayout;
-		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
+		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
 		//	2006.07.09 genta êVãKä÷êîÇ…Ç‹Ç∆ÇﬂÇΩ
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
@@ -328,7 +328,7 @@ re_do:;								// hor
 		if (!bFound	&&		// å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩ
 			bRedo			// ç≈èâÇÃåüçı
 		) {
-			ptXY.y=-1;	//	2002/06/01 MIK
+			ptXY.y = -1;	//	2002/06/01 MIK
 			bRedo=FALSE;
 			goto re_do;		// êÊì™Ç©ÇÁçƒåüçı
 		}

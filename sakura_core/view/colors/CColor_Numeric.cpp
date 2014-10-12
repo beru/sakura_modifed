@@ -19,7 +19,7 @@ bool CColor_Numeric::BeginColor(const CStringRef& cStr, int nPos)
 	int	nnn;
 
 	if (1
-		&& _IsPosKeywordHead(cStr,nPos)
+		&& _IsPosKeywordHead(cStr, nPos)
 		&& (nnn = IsNumber(cStr, nPos)) > 0
 	) {		// 半角数字を表示する
 		// キーワード文字列の終端をセットする
@@ -68,7 +68,7 @@ bool CColor_Numeric::EndColor(const CStringRef& cStr, int nPos)
  *   10進数, 16進数, LF接尾語, 浮動小数点数, 負符号
  *   IPアドレスのドット連結(本当は数値じゃないんだよね)
  */
-static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*, int length*/)
+static int IsNumber(const CStringRef& cStr, /*const wchar_t *buf,*/ int offset/*, int length*/)
 {
 	register const wchar_t* p;
 	register const wchar_t* q;

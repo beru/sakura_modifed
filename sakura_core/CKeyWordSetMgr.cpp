@@ -76,7 +76,7 @@ CKeyWordSetMgr::~CKeyWordSetMgr(void)
 void CKeyWordSetMgr::ResetAllKeyWordSet(void)
 {
 	m_nKeyWordSetNum = 0;
-	for (int i = 0; i < MAX_SETNUM+1; i++) {
+	for (int i = 0; i < MAX_SETNUM + 1; i++) {
 		m_nStartIdx[i] = 0;
 	}
 	for (int i = 0; i < MAX_SETNUM; i++) {
@@ -153,7 +153,7 @@ bool CKeyWordSetMgr::DelKeyWordSet(int nIdx)
 		m_bKEYWORDCASEArr[i] = m_bKEYWORDCASEArr[i + 1];
 		m_nKeyWordNumArr[i] = m_nKeyWordNumArr[i + 1];
 		m_nStartIdx[i] = m_nStartIdx[i + 1];	//	2004.07.29 Moca 可変長記憶
-		m_IsSorted[i] = m_IsSorted[i+1];	//MIK 2000.12.01 binary search
+		m_IsSorted[i] = m_IsSorted[i + 1];	//MIK 2000.12.01 binary search
 	}
 	m_nStartIdx[m_nKeyWordSetNum - 1] = m_nStartIdx[m_nKeyWordSetNum];	// 2007.07.14 ryoji これが無いと末尾＝最終セットの先頭になってしまう
 	m_nKeyWordSetNum--;
@@ -331,22 +331,13 @@ int CKeyWordSetMgr::DelKeyWord(int nIdx, int nIdx2)
 typedef int (__cdecl *qsort_callback)(const void *, const void *);
 void CKeyWordSetMgr::SortKeyWord(int nIdx)
 {
-	//nIdxのセットをソートする。
-	if (m_bKEYWORDCASEArr[nIdx]) {
-		qsort(
-			m_szKeyWordArr[m_nStartIdx[nIdx]],
-			m_nKeyWordNumArr[nIdx],
-			sizeof(m_szKeyWordArr[0]),
-			(qsort_callback)wcscmp
-		);
-	}else {
-		qsort(
-			m_szKeyWordArr[m_nStartIdx[nIdx]],
-			m_nKeyWordNumArr[nIdx],
-			sizeof(m_szKeyWordArr[0]),
-			(qsort_callback)wcsicmp
-		);
-	}
+	// nIdxのセットをソートする。
+	qsort(
+		m_szKeyWordArr[m_nStartIdx[nIdx]],
+		m_nKeyWordNumArr[nIdx],
+		sizeof(m_szKeyWordArr[0]),
+		(qsort_callback)(m_bKEYWORDCASEArr[nIdx] ? wcscmp : wcsicmp)
+	);
 
 	{
 		m_nKeyWordMaxLenArr[nIdx] = 0;
@@ -370,7 +361,7 @@ void CKeyWordSetMgr::SortKeyWord(int nIdx)
 */
 int CKeyWordSetMgr::SearchKeyWord2(int nIdx, const wchar_t* pszKeyWord, int nKeyWordLen)
 {
-	//sort
+	// sort
 	if (m_IsSorted[nIdx] == 0) {
 		SortKeyWord(nIdx);
 	}
@@ -571,7 +562,7 @@ bool CKeyWordSetMgr::CanAddKeyWord(int nIdx)
 
 #if 0
 /*!	新しいキーワードセットのキーワード領域を確保する
-	m_nKeyWordSetNumは、呼び出し側が、呼び出した後に+1する
+	m_nKeyWordSetNumは、呼び出し側が、呼び出した後に + 1する
 */
 bool CKeyWordSetMgr::KeyWordAlloc(int nSize)
 {

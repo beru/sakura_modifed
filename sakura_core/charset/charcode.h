@@ -106,13 +106,13 @@ inline bool IS_KEYWORD_CHAR(wchar_t wc)
 // UNICODE判定関数群
 namespace WCODE {
 	inline bool IsAZ(wchar_t wc) {
-		return (wc>=L'A' && wc<=L'Z') || (wc>=L'a' && wc<=L'z');
+		return (wc >= L'A' && wc <= L'Z') || (wc >= L'a' && wc <= L'z');
 	}
 	inline bool Is09(wchar_t wc) {
-		return (wc>=L'0' && wc<=L'9');
+		return (wc >= L'0' && wc <= L'9');
 	}
 	inline bool IsInRange(wchar_t c, wchar_t front, wchar_t back) {
-		return c>=front && c<=back;
+		return c >= front && c <= back;
 	}
 
 	//! 半角文字(縦長長方形)かどうか判定
@@ -133,24 +133,24 @@ namespace WCODE {
 
 	//! 改行文字であるかどうか
 	inline bool IsLineDelimiter(wchar_t wc) {
-		return wc==CR || wc==LF || wc==0x85 || wc==0x2028 || wc==0x2029;
+		return wc == CR || wc == LF || wc == 0x85 || wc == 0x2028 || wc == 0x2029;
 	}
 
 	//! 単語の区切り文字であるかどうか
 	inline bool IsWordDelimiter(wchar_t wc) {
-		return wc==SPACE || wc==TAB || IsZenkakuSpace(wc);
+		return wc == SPACE || wc == TAB || IsZenkakuSpace(wc);
 	}
 
 	//!インデント構成要素であるかどうか。bAcceptZenSpace: 全角スペースを含めるかどうか
-	inline bool IsIndentChar(wchar_t wc,bool bAcceptZenSpace) {
-		if(wc==TAB || wc==SPACE)return true;
-		if(bAcceptZenSpace && IsZenkakuSpace(wc))return true;
+	inline bool IsIndentChar(wchar_t wc, bool bAcceptZenSpace) {
+		if (wc == TAB || wc == SPACE) return true;
+		if (bAcceptZenSpace && IsZenkakuSpace(wc))return true;
 		return false;
 	}
 
 	//!空白かどうか
 	inline bool IsBlank(wchar_t wc) {
-		return wc==TAB || wc==SPACE || IsZenkakuSpace(wc);
+		return wc == TAB || wc == SPACE || IsZenkakuSpace(wc);
 	}
 
 	//!ファイル名に使える文字であるかどうか
@@ -158,24 +158,24 @@ namespace WCODE {
 		static const wchar_t* table = L"<>?\"|*";
 
 		wchar_t wc = pData[nIndex];
-		if(wcschr(table,wc)!=NULL)return false; //table内の文字が含まれていたら、ダメ。
+		if (wcschr(table, wc) != NULL) return false; //table内の文字が含まれていたら、ダメ。
 		else return true;
 	}
 
 	//!タブ表示に使える文字かどうか
 	inline bool IsTabAvailableCode(wchar_t wc) {
 		//$$要検証
-		if(wc==L'\0')return false;
-		if(wc==L'\r')return false;
-		if(wc==L'\n')return false;
-		if(wc==L'\t')return false;
+		if (wc == L'\0') return false;
+		if (wc == L'\r') return false;
+		if (wc == L'\n') return false;
+		if (wc == L'\t') return false;
 		return true;
 	}
 
 	//! 半角カナかどうか
 	inline bool IsHankakuKatakana(wchar_t c) {
 		//参考: http://ash.jp/code/unitbl1.htm
-		return c>=0xFF61 && c<=0xFF9F;
+		return c >= 0xFF61 && c <= 0xFF9F;
 	}
 
 	//! 全角記号かどうか
@@ -184,34 +184,34 @@ namespace WCODE {
 		// 2009.06.26 syat 「ゝゞ（ひらがな）」「ヽヾ（カタカナ）」「゛゜（全角濁点）」「仝々〇（漢字）」「ー（長音）」を除外
 		// 2009.10.10 syat ANSI版の修正にあわせて「〆」を記号→漢字にする
 		static const wchar_t* table=L"　、。，．・：；？！´｀¨＾￣＿〃―‐／＼～∥｜…‥‘’“”（）〔〕［］｛｝〈〉《》「」『』【】＋－±×÷＝≠＜＞≦≧∞∴♂♀°′″℃￥＄￠￡％＃＆＊＠§☆★○●◎◇◆□■△▲▽▼※〒→←↑↓〓∈∋⊆⊇⊂⊃∪∩∧∨￢⇒⇔∀∃∠⊥⌒∂∇≡≒≪≫√∽∝∵∫∬Å‰♯♭♪†‡¶◯";
-		return wcschr(table,c)!=NULL;
+		return wcschr(table, c) != NULL;
 	}
 
 	//! ひらがなかどうか
 	inline bool IsHiragana(wchar_t c) {
 		// 2009.06.26 syat 「ゝゞ」を追加
-		return (c>=0x3041 && c<=0x3096) || (c>=0x309D && c<=0x309E);
+		return (c >= 0x3041 && c <= 0x3096) || (c >= 0x309D && c <= 0x309E);
 	}
 
 	//! カタカナかどうか
 	inline bool IsZenkakuKatakana(wchar_t c) {
 		// 2009.06.26 syat 「ヽヾ」を追加
-		return (c>=0x30A1 && c<=0x30FA) || (c>=0x30FD && c<=0x30FE);
+		return (c >= 0x30A1 && c <= 0x30FA) || (c >= 0x30FD && c <= 0x30FE);
 	}
 
 	//! ギリシャ文字かどうか
 	inline bool IsGreek(wchar_t c) {
-		return c>=0x0391 && c<=0x03C9;
+		return c >= 0x0391 && c <= 0x03C9;
 	}
 
 	//! キリル文字かどうか
 	inline bool IsCyrillic(wchar_t c) {
-		return c>=0x0410 && c<=0x044F;
+		return c >= 0x0410 && c <= 0x044F;
 	}
 
 	//! BOX DRAWING 文字 かどうか
 	inline bool IsBoxDrawing(wchar_t c) {
-		return c>=0x2500 && c<=0x257F;
+		return c >= 0x2500 && c <= 0x257F;
 	}
 
 	//! 句読点か
@@ -234,26 +234,26 @@ namespace WCODE {
 namespace ACODE
 {
 	inline bool IsAZ(char c) {
-		return (c>='A' && c<='Z') || (c>='a' && c<='z');
+		return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 	}
 
 	//!制御文字であるかどうか
 	inline bool IsControlCode(char c) {
-		unsigned char n=(unsigned char)c;
-		if(c==TAB)return false;
-		if(c==CR )return false;
-		if(c==LF )return false;
-		if(n<=0x1F)return true;
-		if(n>=0x7F && n<=0x9F)return true;
-		if(n>=0xE0)return true;
+		unsigned char n = (unsigned char)c;
+		if (c == TAB) return false;
+		if (c == CR) return false;
+		if (c == LF) return false;
+		if (n <= 0x1F) return true;
+		if (n >= 0x7F && n <= 0x9F) return true;
+		if (n >= 0xE0) return true;
 		return false;
 	}
 
 	//!タブ表示に使える文字かどうか
 	inline bool IsTabAvailableCode(char c) {
-		if(c=='\0')return false;
-		if(c<=0x1f)return false;
-		if(c>=0x7f)return false;
+		if (c == '\0') return false;
+		if (c <= 0x1f) return false;
+		if (c >= 0x7f) return false;
 		return true;
 	}
 
@@ -263,7 +263,7 @@ namespace ACODE
 		char c = pData[nIndex];
 
 		//table内の文字が含まれていて
-		if(strchr(table,c)!=NULL) {
+		if (strchr(table, c) != NULL) {
 			// 2013.06.01 判定間違いを削除
 			return false;
 		}

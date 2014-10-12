@@ -346,7 +346,7 @@ void CHokanMgr::HokanSearchByKeyword(
 		}
 		const int keyCount = keywordMgr.GetKeyWordNum(kwdset);
 		for (int i = 0; i < keyCount; i++) {
-			const wchar_t* word = keywordMgr.GetKeyWord(kwdset,i);
+			const wchar_t* word = keywordMgr.GetKeyWord(kwdset, i);
 			int nRet;
 			if (bHokanLoHiCase) {
 				nRet = auto_memicmp(pszCurWord, word, nKeyLen );
@@ -396,7 +396,7 @@ BOOL CHokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 //	2001/06/18 Start by asa-o: サイズ変更後の位置を保存
 	m_poWin.x = rcDlg.left - 4;
 	m_poWin.y = rcDlg.top - 3;
-	::ClientToScreen(GetHwnd(),&m_poWin);
+	::ClientToScreen(GetHwnd(), &m_poWin);
 //	2001/06/18 End
 
 	int nControls = _countof(Controls);
@@ -631,7 +631,7 @@ void CHokanMgr::ShowTip()
 	if (point.y > m_poWin.y && point.y < m_poWin.y + m_nHeight) {
 		RECT rcHokanWin;
 		::SetRect(&rcHokanWin , m_poWin.x, m_poWin.y, m_poWin.x + m_nWidth, m_poWin.y + m_nHeight);
-		if (!pcEditView -> ShowKeywordHelp(point,szLabel, &rcHokanWin)) {
+		if (!pcEditView -> ShowKeywordHelp(point, szLabel, &rcHokanWin)) {
 			pcEditView -> m_dwTipTimer = ::GetTickCount();	// 表示するべきキーワードヘルプが無い
 		}
 	}

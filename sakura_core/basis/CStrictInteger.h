@@ -61,7 +61,7 @@ private:
 		ALLOW_CAST_INT,
 		ALLOW_ASSIGNOP_INT
 	> Me;
-	static const int NOT_STRICT_ID = (1-STRICT_ID);
+	static const int NOT_STRICT_ID = (1 - STRICT_ID);
 
 private:
 	//!ÉSÉ~ÉNÉâÉX

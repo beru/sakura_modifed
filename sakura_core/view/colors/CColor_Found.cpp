@@ -24,7 +24,7 @@ bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nL
 	if (!cStr.IsValid()) return false;
 
 	const CEditView& view = *(CColorStrategyPool::getInstance()->GetCurrentView());
-	if (!view.GetSelectionInfo().IsTextSelected() || !CTypeSupport(&view,COLORIDX_SELECT).IsDisp()) {
+	if (!view.GetSelectionInfo().IsTextSelected() || !CTypeSupport(&view, COLORIDX_SELECT).IsDisp()) {
 		return false;
 	}
 
@@ -107,7 +107,7 @@ bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 		);
 	}
 	// マッチ文字列検出
-	if (m_nSearchResult && m_nSearchStart==nPos) {
+	if (m_nSearchResult && m_nSearchStart == nPos) {
 		return true;
 	}
 	return false;

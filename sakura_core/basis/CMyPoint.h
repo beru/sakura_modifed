@@ -29,7 +29,7 @@ class CMyPoint : public POINT {
 public:
 	// コンストラクタ・デストラクタ
 	CMyPoint() { x = 0; y = 0; }
-	CMyPoint(int _x,int _y) { x = _x; y = _y; }
+	CMyPoint(int _x, int _y) { x = _x; y = _y; }
 	CMyPoint(const POINT& rhs) { x = rhs.x; y = rhs.y; }
 
 	// 算術演算子
@@ -49,14 +49,14 @@ public:
 
 	// 比較演算子
 	bool operator == (const POINT& rhs) const { return x == rhs.x && y == rhs.y; }
-	bool operator != (const POINT& rhs) const { return !(this->operator==(rhs)); }
+	bool operator != (const POINT& rhs) const { return !(this->operator == (rhs)); }
 
 	// 設定
-	void Set(int _x,int _y) { x = _x; y = _y; }
+	void Set(int _x, int _y) { x = _x; y = _y; }
 	void Set(const CMyPoint& pt) { x = pt.x; y = pt.y; }
 	void SetX(int _x) { x = _x; }
 	void SetY(int _y) { y = _y; }
-	void Offset(int _x,int _y) { x += _x; y += _y; }
+	void Offset(int _x, int _y) { x += _x; y += _y; }
 	void Offset(const CMyPoint& pt) { x += pt.x; y += pt.y; }
 
 	// 取得
@@ -87,7 +87,7 @@ public:
 	@return >0 pt1 >  pt2
 */
 template <class POINT_T>
-inline int PointCompare(const POINT_T& pt1,const POINT_T& pt2)
+inline int PointCompare(const POINT_T& pt1, const POINT_T& pt2)
 {
 	if (pt1.y != pt2.y) return (Int)(pt1.y - pt2.y);
 	return (Int)(pt1.x - pt2.x);

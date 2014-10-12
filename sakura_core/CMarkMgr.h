@@ -66,14 +66,14 @@ public:
 
 		bool IsValid(void) const { return true; }
 
-		bool operator==(CMark &r) const { return m_ptLogic.y == r.m_ptLogic.y; }
-		bool operator!=(CMark &r) const { return m_ptLogic.y != r.m_ptLogic.y; }
+		bool operator == (CMark &r) const { return m_ptLogic.y == r.m_ptLogic.y; }
+		bool operator != (CMark &r) const { return m_ptLogic.y != r.m_ptLogic.y; }
 
 	private:
 		CLogicPoint m_ptLogic;
 	};
 
-	// GENERATE_FACTORY(CMark,CMarkFactory);	//	CMarkópFactory class
+	// GENERATE_FACTORY(CMark, CMarkFactory);	//	CMarkópFactory class
 
 	//	å^êÈåæ
 	typedef std::vector<CMark> CMarkChain;

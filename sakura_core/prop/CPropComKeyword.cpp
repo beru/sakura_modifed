@@ -107,7 +107,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 			i = rc.bottom; // OK,CANCELƒ{ƒ^ƒ“‚Ì‰º’[
 
 			GetWindowRect(hwndDlg, &rc);
-			SetWindowPos(hwndDlg, NULL, 0, 0, rc.right-rc.left, i-rc.top+10, SWP_NOZORDER|SWP_NOMOVE);
+			SetWindowPos(hwndDlg, NULL, 0, 0, rc.right - rc.left, i - rc.top + 10, SWP_NOZORDER|SWP_NOMOVE);
 			std::tstring title = LS(STR_PROPCOMMON);
 			title += _T(" - ");
 			title += LS(STR_PROPCOMMON_KEYWORD);

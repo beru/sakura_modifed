@@ -133,7 +133,7 @@ public:
 	void Command_LineDeleteToStart(void);	// 行頭まで削除(改行単位)
 	void Command_LineDeleteToEnd(void);  	// 行末まで削除(改行単位)
 	void Command_CUT_LINE(void);			// 行切り取り(折り返し単位)
-	void Command_DELETE_LINE(void);		// 行削除(折り返し単位)
+	void Command_DELETE_LINE(void);			// 行削除(折り返し単位)
 	void Command_DUPLICATELINE(void);		// 行の二重化(折り返し単位)
 	void Command_INDENT(wchar_t cChar, EIndentType = INDENT_NONE); // インデント ver 1
 // From Here 2001.12.03 hor

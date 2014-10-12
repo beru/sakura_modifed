@@ -223,7 +223,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 	HTREEITEM	nIdxMenu;
 	int			nIdxFIdx;
 	int			nIdxFunc;
-	WCHAR		szLabel[MAX_MAIN_MENU_NAME_LEN+10];
+	WCHAR		szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 
 	EFunctionCode	eFuncCode;
 	SMainMenuWork*	pFuncWk;	// 機能
@@ -618,7 +618,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 					case IDC_BUTTON_INSERT:				// 挿入
 					case IDC_BUTTON_INSERT_A:			// 挿入
 					case IDC_BUTTON_ADD:				// 追加
-						List_SetCurSel(hwndListFunk, nIdxFunc+1);
+						List_SetCurSel(hwndListFunk, nIdxFunc + 1);
 						break;
 					}
 					break;
@@ -818,7 +818,7 @@ static wstring	SupplementAmpersand(wstring sLavel)
 {
 	size_t	nPos =0;
 	while ((nPos = sLavel.find(L"&", nPos)) != wstring::npos) {
-		if (sLavel[nPos+1] != L'&') {
+		if (sLavel[nPos + 1] != L'&') {
 			// &&でない
 			sLavel.replace(nPos, 1, L"&&");
 		}
@@ -832,7 +832,7 @@ static wstring	RemoveAmpersand(wstring sLavel)
 {
 	size_t	nPos =0;
 	while ((nPos = sLavel.find(L"&", nPos)) != wstring::npos) {
-		if (sLavel[nPos+1] == L'&') {
+		if (sLavel[nPos + 1] == L'&') {
 			// &&
 			sLavel.replace(nPos, 1, L"");
 		}
@@ -849,7 +849,7 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 	HWND			hwndCombo;
 	HWND			hwndCheck;
 	HWND			hwndTreeRes;
-	WCHAR			szLabel[MAX_MAIN_MENU_NAME_LEN+10];
+	WCHAR			szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 	int				nCurLevel;
 	HTREEITEM		htiItem;
 	HTREEITEM		htiParent;
@@ -1013,7 +1013,7 @@ bool CPropMainMenu::GetDataTree(HWND hwndTree, HTREEITEM htiTrg, int nLevel)
 		switch (pFuncWk->m_nFunc) {
 		case F_NODE:
 			pcFunc->m_nType = T_NODE;
-			auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN+1, SupplementAmpersand(pFuncWk->m_sName).c_str());
+			auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
 			break;
 		case F_SEPARATOR:
 			pcFunc->m_nType = T_SEPARATOR;
@@ -1029,7 +1029,7 @@ bool CPropMainMenu::GetDataTree(HWND hwndTree, HTREEITEM htiTrg, int nLevel)
 			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
 				pcFunc->m_nType = T_SPECIAL;
 				if (nLevel == 0) {
-					auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN+1, SupplementAmpersand(pFuncWk->m_sName).c_str());
+					auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
 				}else {
 					pcFunc->m_sName[0] = L'\0';
 				}
@@ -1049,7 +1049,7 @@ bool CPropMainMenu::GetDataTree(HWND hwndTree, HTREEITEM htiTrg, int nLevel)
 		if (tvi.cChildren) {
 			ts = TreeView_GetChild(hwndTree, s);	//	子の取得
 			if (ts != NULL) {
-				if (!GetDataTree(hwndTree, ts, nLevel+1)) {
+				if (!GetDataTree(hwndTree, ts, nLevel + 1)) {
 					return false;
 				}
 			}
@@ -1057,7 +1057,7 @@ bool CPropMainMenu::GetDataTree(HWND hwndTree, HTREEITEM htiTrg, int nLevel)
 	}
 	if (nLevel == 0 && !bOptionOk) {
 		// 共通設定が無い
-		if (nTopCount < MAX_MAINMENU_TOP && m_Common.m_sMainMenu.m_nMainMenuNum+1 < MAX_MAINMENU) {
+		if (nTopCount < MAX_MAINMENU_TOP && m_Common.m_sMainMenu.m_nMainMenuNum + 1 < MAX_MAINMENU) {
 			// Top Levelの記録
 			m_Common.m_sMainMenu.m_nMenuTopIdx[nTopCount++] = m_Common.m_sMainMenu.m_nMainMenuNum;
 			// Top Levelの追加（ダミー）
@@ -1375,7 +1375,7 @@ bool CPropMainMenu::Check_MainMenu_Sub(
 		if (tvi.cChildren) {
 			ts = TreeView_GetChild(hwndTree, s);	//	子の取得
 			if (ts != NULL) {
-				if (!Check_MainMenu_Sub(hwndTree, ts, nLevel+1, sErrMsg)) {
+				if (!Check_MainMenu_Sub(hwndTree, ts, nLevel + 1, sErrMsg)) {
 					// 内部エラー
 					return false;
 				}

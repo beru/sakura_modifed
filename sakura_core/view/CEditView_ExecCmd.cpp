@@ -296,7 +296,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 			::GetLocalTime(&systime);
 			CFormatManager().MyGetDateFormat(systime, szTextDate, _countof(szTextDate) - 1);
 			CFormatManager().MyGetTimeFormat(systime, szTextTime, _countof(szTextTime) - 1);
-			WCHAR szOutTemp[1024*2+100];
+			WCHAR szOutTemp[1024 * 2 + 100];
 			oa.OutputW(L"\r\n");
 			oa.OutputW(L"#============================================================\r\n");
 			int len = auto_snprintf_s(szOutTemp, _countof(szOutTemp),
@@ -411,7 +411,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 							if (CNativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
 								j++;
 							}else {
-								if (work[j] == _T2(PIPE_CHAR,'\r') && work[j+1] == _T2(PIPE_CHAR,'\n')) {
+								if (work[j] == _T2(PIPE_CHAR, '\r') && work[j + 1] == _T2(PIPE_CHAR,'\n')) {
 									j++;
 								}
 							}
@@ -421,7 +421,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 						if ((DWORD)j == read_cnt - 1) {
 							if (_IS_SJIS_1(work[j])) {
 								j = read_cnt + 1; // ぴったり出力できないことを主張
-							}else if (work[j] == _T2(PIPE_CHAR,'\r')) {
+							}else if (work[j] == _T2(PIPE_CHAR, '\r')) {
 								// CRLFの一部ではない改行が末尾にある
 								// 次の読み込みで、CRLFの一部になる可能性がある
 								j = read_cnt + 1;
@@ -451,7 +451,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 							int checklen = CheckUtf8Char2(work + j , read_cnt - j, &echarset, true, 0);
 							if (echarset == CHARSET_BINARY2) {
 								break;
-							}else if (read_cnt - 1 == j && work[j] == _T2(PIPE_CHAR,'\r')) {
+							}else if (read_cnt - 1 == j && work[j] == _T2(PIPE_CHAR, '\r')) {
 								// CRLFの一部ではない改行が末尾にある
 								// 次の読み込みで、CRLFの一部になる可能性がある
 								break;
@@ -599,7 +599,7 @@ void OutputAdapter::OutputA(const ACHAR* pBuf, int size)
 		if (-1 == size) {
 			buf.SetStringOld(pBuf);
 		}else {
-			buf.SetStringOld(pBuf,size);
+			buf.SetStringOld(pBuf, size);
 		}
 		m_pCommander->Command_INSTEXT(false, buf.GetStringPtr(), buf.GetStringLength(), TRUE);
 	}else {
@@ -608,7 +608,7 @@ void OutputAdapter::OutputA(const ACHAR* pBuf, int size)
 		if (-1 == size) {
 			buf.SetStringOld(pBuf);
 		}else {
-			buf.SetStringOld(pBuf,size);
+			buf.SetStringOld(pBuf, size);
 		}
 		m_pCShareData->TraceOutString(buf.GetStringPtr(), (int)buf.GetStringLength());
 	}

@@ -41,14 +41,14 @@ namespace CWindowCreationHook {
 	static
 	LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
-		if (nCode==HCBT_CREATEWND) {
+		if (nCode == HCBT_CREATEWND) {
 			HWND hwnd = (HWND)wParam;
 			CBT_CREATEWND* pCreateWnd = (CBT_CREATEWND*)lParam;
 			CWnd* pcWnd = (CWnd*)pCreateWnd->lpcs->lpCreateParams;
 
 			// CWnd以外のウィンドウ生成イベントは無視する
 			WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
-			if (wndproc!=CWndProc) goto next;
+			if (wndproc != CWndProc) goto next;
 
 			// ウィンドウにCWndを関連付ける
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pcWnd);
@@ -71,7 +71,7 @@ next:
 	//! フック終了
 	void Unuse()
 	{
-		if (--g_nCnt<=0 && g_hHook!=NULL) {
+		if (--g_nCnt<=0 && g_hHook != NULL) {
 			::UnhookWindowsHookEx(g_hHook);
 			g_hHook=NULL;
 		}

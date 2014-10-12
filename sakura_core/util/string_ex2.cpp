@@ -13,15 +13,15 @@ wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t sr
 }
 wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src)
 {
-	return wcs_pushW(dst,dst_count,src,wcslen(src));
+	return wcs_pushW(dst, dst_count, src, wcslen(src));
 }
 wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src, size_t src_count)
 {
-	return wcs_pushW(dst,dst_count,to_wchar(src));
+	return wcs_pushW(dst, dst_count, to_wchar(src));
 }
 wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src)
 {
-	return wcs_pushA(dst,dst_count,src,strlen(src));
+	return wcs_pushA(dst, dst_count, src, strlen(src));
 }
 
 
@@ -177,7 +177,7 @@ static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 	// 改行コードの長さを調べる
 	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
 		CEol cEol((EEolType)i);
-		if (cEol.GetLen()<=nDataLen && 0==auto_memcmp(pszData,aEolTable[i],cEol.GetLen())) {
+		if (cEol.GetLen() <= nDataLen && 0 == auto_memcmp(pszData, aEolTable[i], cEol.GetLen())) {
 			return gm_pnEolTypeArr[i];
 		}
 	}
@@ -346,7 +346,7 @@ int scan_ints(
 	int num = 0;
 	const wchar_t* p = pszFormat;
 	while (*p) {
-		if (*p==L'%') num++;
+		if (*p == L'%') num++;
 		p++;
 	}
 

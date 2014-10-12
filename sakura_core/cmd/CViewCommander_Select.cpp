@@ -84,7 +84,7 @@ void CViewCommander::Command_SELECTALL(void)
 	//	ƒ}ƒNƒ‚©‚çŽæ“¾‚µ‚½ê‡‚É³‚µ‚¢”ÍˆÍ‚ªŽæ“¾‚Å‚«‚È‚¢‚½‚ß
 	//int nX, nY;
 	CLayoutRange sRange;
-	sRange.SetFrom(CLayoutPoint(0,0));
+	sRange.SetFrom(CLayoutPoint(0, 0));
 	GetDocument()->m_cLayoutMgr.GetEndLayoutPos(sRange.GetToPointer());
 	si.SetSelectArea(sRange);
 

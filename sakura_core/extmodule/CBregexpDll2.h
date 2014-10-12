@@ -64,21 +64,21 @@ protected:
 
 public:
 	// UNICODEインターフェースを提供する
-	int BMatch(const wchar_t* str, const wchar_t* target,const wchar_t* targetendp,BREGEXP_W** rxp,wchar_t* msg)
+	int BMatch(const wchar_t* str, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BMatch(str,target,targetendp,rxp,msg);
+		return m_BMatch(str, target, targetendp, rxp, msg);
 	}
-	int BSubst(const wchar_t* str, const wchar_t* target,const wchar_t* targetendp,BREGEXP_W** rxp,wchar_t* msg)
+	int BSubst(const wchar_t* str, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BSubst(str,target,targetendp,rxp,msg);
+		return m_BSubst(str, target, targetendp, rxp, msg);
 	}
-	int BTrans(const wchar_t* str, wchar_t* target,wchar_t* targetendp,BREGEXP_W** rxp,wchar_t* msg)
+	int BTrans(const wchar_t* str, wchar_t* target, wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BTrans(str,target,targetendp,rxp,msg);
+		return m_BTrans(str, target, targetendp, rxp, msg);
 	}
-	int BSplit(const wchar_t* str, wchar_t* target,wchar_t* targetendp,int limit,BREGEXP_W** rxp,wchar_t* msg)
+	int BSplit(const wchar_t* str, wchar_t* target, wchar_t* targetendp, int limit, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BSplit(str,target,targetendp,limit,rxp,msg);
+		return m_BSplit(str, target, targetendp, limit, rxp, msg);
 	}
 	void BRegfree(BREGEXP_W* rx)
 	{
@@ -90,16 +90,16 @@ public:
 	}
 	int BMatchEx(const wchar_t* str, const wchar_t* targetbeg, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BMatchEx(str,targetbeg,target,targetendp,rxp,msg);
+		return m_BMatchEx(str, targetbeg, target, targetendp, rxp, msg);
 	}
 	int BSubstEx(const wchar_t* str, const wchar_t* targetbeg, const wchar_t* target, const wchar_t* targetendp, BREGEXP_W** rxp, wchar_t* msg)
 	{
-		return m_BSubstEx(str,targetbeg,target,targetendp,rxp,msg);
+		return m_BSubstEx(str, targetbeg, target, targetendp, rxp, msg);
 	}
 
 	// 関数があるかどうか
-	bool ExistBMatchEx() const { return m_BMatchEx!=NULL; }
-	bool ExistBSubstEx() const { return m_BSubstEx!=NULL; }
+	bool ExistBMatchEx() const { return m_BMatchEx != NULL; }
+	bool ExistBSubstEx() const { return m_BSubstEx != NULL; }
 
 private:
 	// DLL内関数ポインタ

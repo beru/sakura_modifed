@@ -6,33 +6,33 @@
 #include "mem/CMemory.h"
 #include "CEol.h"
 
-EConvertResult CUnicode::_UnicodeToUnicode_in( CMemory* pMem, const bool bBigEndian )
+EConvertResult CUnicode::_UnicodeToUnicode_in(CMemory* pMem, const bool bBigEndian)
 {
 	// ソース取得
 	int nSrcLen;
-	unsigned char* pSrc = reinterpret_cast<unsigned char*>( pMem->GetRawPtr(&nSrcLen) );
+	unsigned char* pSrc = reinterpret_cast<unsigned char*>(pMem->GetRawPtr(&nSrcLen));
 
 	EConvertResult res = RESULT_COMPLETE;
-	if( nSrcLen % 2 == 1 ) {
+	if(nSrcLen % 2 == 1) {
 		// 不足分の最終1バイトとして 0x00 を補う。
-		pMem->AllocBuffer( nSrcLen + 1 );
-		if( pMem->GetRawPtr() != NULL ) {
+		pMem->AllocBuffer(nSrcLen + 1);
+		if(pMem->GetRawPtr() != NULL) {
 			pSrc[nSrcLen] = 0;
-			pMem->_SetRawLength( nSrcLen + 1 );
+			pMem->_SetRawLength(nSrcLen + 1);
 		}
 		res = RESULT_LOSESOME;
 	}
 
-	if( bBigEndian ) {
+	if(bBigEndian) {
 		pMem->SwapHLByte();  // UnicodeBe -> Unicode
 	}
 	return res;
 }
 
 
-EConvertResult CUnicode::_UnicodeToUnicode_out( CMemory* pMem, const bool bBigEndian )
+EConvertResult CUnicode::_UnicodeToUnicode_out(CMemory* pMem, const bool bBigEndian)
 {
-	if( bBigEndian == true ) {
+	if(bBigEndian == true) {
 		pMem->SwapHLByte();   // Unicode -> UnicodeBe
 	}
 
@@ -44,7 +44,7 @@ EConvertResult CUnicode::_UnicodeToUnicode_out( CMemory* pMem, const bool bBigEn
 
 void CUnicode::GetBom(CMemory* pcmemBom)
 {
-	static const BYTE UTF16LE_BOM[]={0xFF,0xFE};
+	static const BYTE UTF16LE_BOM[] = {0xFF, 0xFE};
 	pcmemBom->SetRawData(UTF16LE_BOM, sizeof(UTF16LE_BOM));
 }
 

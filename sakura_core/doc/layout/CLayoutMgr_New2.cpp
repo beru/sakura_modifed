@@ -32,7 +32,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	CLayoutColorInfo* colorInfo = NULL;
 	CLayoutInt nLineWork = pArg->sDelRange.GetFrom().GetY2();
 
-	CLayout* pLayoutWork = SearchLineByLayoutY( pArg->sDelRange.GetFrom().GetY2() );
+	CLayout* pLayoutWork = SearchLineByLayoutY(pArg->sDelRange.GetFrom().GetY2());
 	if (pLayoutWork) {
 		while (0 != pLayoutWork->GetLogicOffset()) {
 			pLayoutWork = pLayoutWork->GetPrevLayout();
@@ -53,8 +53,8 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	*/
 	CLogicPoint ptFrom;
 	CLogicPoint ptTo;
-	LayoutToLogic( pArg->sDelRange.GetFrom(), &ptFrom );
-	LayoutToLogic( pArg->sDelRange.GetTo(), &ptTo );
+	LayoutToLogic(pArg->sDelRange.GetFrom(), &ptFrom);
+	LayoutToLogic(pArg->sDelRange.GetTo(), &ptTo);
 
 	/* 指定範囲のデータを置換(削除 & データを挿入)
 	  Fromを含む位置からToの直前を含むデータを削除する
@@ -77,7 +77,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 
 	CLayoutInt	nModifyLayoutLinesOld = CLayoutInt(0);
 	CLayout* pLayoutPrev;
-	CLogicInt nWork = t_max( DLRArg.nDeletedLineNum, DLRArg.nInsLineNum );
+	CLogicInt nWork = t_max(DLRArg.nDeletedLineNum, DLRArg.nInsLineNum);
 
 	if (pLayoutWork) {
 		pLayoutPrev = DeleteLayoutAsLogical(
@@ -146,7 +146,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}
 	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From
-	pArg->nModLineTo += ( pArg->nModLineFrom - CLayoutInt(1) ) ;	// 再描画ヒント 変更されたレイアウト行To
+	pArg->nModLineTo += (pArg->nModLineFrom - CLayoutInt(1)) ;	// 再描画ヒント 変更されたレイアウト行To
 
 	//2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
 	LogicToLayout(DLRArg.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置

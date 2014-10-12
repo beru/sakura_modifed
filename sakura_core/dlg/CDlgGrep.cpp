@@ -162,7 +162,7 @@ int CDlgGrep::DoModal(HINSTANCE hInstance, HWND hwndParent, const TCHAR* pszCurr
 }
 
 //	2007.02.09 bosagami
-LRESULT CALLBACK OnFolderProc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam);
+LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 WNDPROC g_pOnFolderProc;
 
 BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
@@ -225,7 +225,7 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	@date 2007.02.09 bosagami 新規作成
 	@date 2007.09.02 genta ディレクトリチェックを強化
 */
-LRESULT CALLBACK OnFolderProc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
+LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	if (msg == WM_DROPFILES) do {
 		//	From Here 2007.09.02 genta 
@@ -250,7 +250,7 @@ LRESULT CALLBACK OnFolderProc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 		SetGrepFolder(hwnd, sPath);
 	}while (0);	//	1回しか通らない. breakでここまで飛ぶ
 
-	return  CallWindowProc(g_pOnFolderProc,hwnd,msg,wparam,lparam);
+	return  CallWindowProc(g_pOnFolderProc, hwnd, msg, wparam, lparam);
 }
 
 BOOL CDlgGrep::OnDestroy()
@@ -383,14 +383,14 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 	case IDC_RADIO_OUTPUTSTYLE3:
 		{
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_BASE_PATH), FALSE);
-			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER),FALSE);
+			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER), FALSE);
 		}
 		break;
 	case IDC_RADIO_OUTPUTSTYLE1:
 	case IDC_RADIO_OUTPUTSTYLE2:
 		{
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_BASE_PATH), TRUE);
-			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER),TRUE);
+			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER), TRUE);
 		}
 		break;
 	case IDOK:
@@ -478,7 +478,7 @@ void CDlgGrep::SetData(void)
 	}
 
 	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_BASE_PATH), TRUE);
-	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER),TRUE);
+	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER), TRUE);
 	// Grep: 出力形式
 	if (1 == m_nGrepOutputStyle) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_OUTPUTSTYLE1, TRUE);
@@ -487,7 +487,7 @@ void CDlgGrep::SetData(void)
 	}else if (3 == m_nGrepOutputStyle) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_OUTPUTSTYLE3, TRUE);
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_BASE_PATH), FALSE);
-		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER),FALSE);
+		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_SEP_FOLDER), FALSE);
 	}else {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_OUTPUTSTYLE1, TRUE);
 	}
@@ -570,14 +570,14 @@ int CDlgGrep::GetData(void)
 	// この編集中のテキストから検索する
 	m_bFromThisText = ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_FROMTHISTEXT);
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = (0!=::IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
+	m_sSearchOption.bLoHiCase = (0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で検索
-	m_sSearchOption.bWordOnly = (0!=::IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
+	m_sSearchOption.bWordOnly = (0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
 
 	// 正規表現
-	m_sSearchOption.bRegularExp = (0!=::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
+	m_sSearchOption.bRegularExp = (0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
 
 	// 文字コード自動判別
 //	m_bKanjiCode_AutoDetect = ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_KANJICODEAUTODETECT);

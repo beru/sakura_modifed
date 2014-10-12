@@ -44,7 +44,7 @@ public:
 	}
 	//! 右下座標 (BottomRight)
 	PointType LowerRight() const {
-		return PointType(right,bottom);
+		return PointType(right, bottom);
 	}
 
 	//! ヒットチェック

@@ -64,7 +64,7 @@ public:
 
 protected:
 	// ※2個以上のインスタンスは想定していません。assertが破綻を検出します。
-	TSingleInstance() { assert(gm_instance==NULL); gm_instance = static_cast<T*>(this); }
+	TSingleInstance() { assert(gm_instance == NULL); gm_instance = static_cast<T*>(this); }
 	~TSingleInstance() { assert(gm_instance); gm_instance = NULL; }
 private:
 	static T* gm_instance;
@@ -83,8 +83,8 @@ public:
 	}
 	virtual ~TInstanceHolder() {
 		for (size_t i=0;i<gm_table.size();i++) {
-			if (gm_table[i]==static_cast<T*>(this)) {
-				gm_table.erase(gm_table.begin()+i);
+			if (gm_table[i] == static_cast<T*>(this)) {
+				gm_table.erase(gm_table.begin() + i);
 				break;
 			}
 		}
