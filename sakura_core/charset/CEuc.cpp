@@ -70,7 +70,7 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 
 
 /* EUC→Unicodeコード変換 */
-//2007.08.13 kobake 追加
+// 2007.08.13 kobake 追加
 EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 {
 	// エラー状態
@@ -120,7 +120,7 @@ int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 	auto pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
 	auto pw = reinterpret_cast<unsigned char*>(pDst);
 
-	while((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
+	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
 		switch(echarset) {
 		case CHARSET_UNI_NORMAL:

@@ -20,13 +20,13 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
-//2007.09.23 kobake m_nSEARCHKEYArrNum,      m_szSEARCHKEYArr      を m_aSearchKeys      にまとめました
-//2007.09.23 kobake m_nREPLACEKEYArrNum,     m_szREPLACEKEYArr     を m_aReplaceKeys     にまとめました
-//2007.09.23 kobake m_nGREPFILEArrNum,       m_szGREPFILEArr       を m_aGrepFiles       にまとめました
-//2007.09.23 kobake m_nGREPFOLDERArrNum,     m_szGREPFOLDERArr     を m_aGrepFolders     にまとめました
-//2007.09.23 kobake m_szCmdArr,              m_nCmdArrNum          を m_aCommands        にまとめました
-//2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を m_aTagJumpKeywords にまとめました
-//2007.12.13 kobake DLLSHAREDATAへの簡易アクセサを用意
+// 2007.09.23 kobake m_nSEARCHKEYArrNum,      m_szSEARCHKEYArr      を m_aSearchKeys      にまとめました
+// 2007.09.23 kobake m_nREPLACEKEYArrNum,     m_szREPLACEKEYArr     を m_aReplaceKeys     にまとめました
+// 2007.09.23 kobake m_nGREPFILEArrNum,       m_szGREPFILEArr       を m_aGrepFiles       にまとめました
+// 2007.09.23 kobake m_nGREPFOLDERArrNum,     m_szGREPFOLDERArr     を m_aGrepFolders     にまとめました
+// 2007.09.23 kobake m_szCmdArr,              m_nCmdArrNum          を m_aCommands        にまとめました
+// 2007.09.23 kobake m_nTagJumpKeywordArrNum, m_szTagJumpKeywordArr を m_aTagJumpKeywords にまとめました
+// 2007.12.13 kobake DLLSHAREDATAへの簡易アクセサを用意
 
 #pragma once
 
@@ -78,8 +78,8 @@ public:
 	BOOL IsPrivateSettings(void);
 
 	// マクロ関連
-	int	 GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen); // idxで指定したマクロファイル名（フルパス）を取得する	//	Jun. 14, 2003 genta 引数追加．書式変更
-	bool BeReloadWhenExecuteMacro(int idx);	//	idxで指定したマクロは、実行するたびにファイルを読み込む設定か？
+	int	 GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen); // idxで指定したマクロファイル名（フルパス）を取得する	// Jun. 14, 2003 genta 引数追加．書式変更
+	bool BeReloadWhenExecuteMacro(int idx);	// idxで指定したマクロは、実行するたびにファイルを読み込む設定か？
 
 	// タイプ別設定(コントロールプロセス専用)
 	void CreateTypeSettings();
@@ -93,7 +93,7 @@ protected:
 	||  実装ヘルパ関数
 	*/
 
-	//	Jan. 30, 2005 genta 初期化関数の分割
+	// Jan. 30, 2005 genta 初期化関数の分割
 	void InitKeyword(DLLSHAREDATA*);
 	bool InitKeyAssign(DLLSHAREDATA*); // 2007.11.04 genta 起動中止のため値を返す
 	void RefreshKeyAssignString(DLLSHAREDATA*);
@@ -105,7 +105,7 @@ private:
 	CSelectLang		m_cSelectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
 	HANDLE			m_hFileMap;
 	DLLSHAREDATA*	m_pShareData;
-	std::vector<STypeConfig*>* 	m_pvTypeSettings;	//	(コントロールプロセスのみ)
+	std::vector<STypeConfig*>* 	m_pvTypeSettings;	// (コントロールプロセスのみ)
 	HWND			m_hwndTraceOutSource;	// TraceOutA()起動元ウィンドウ（いちいち起動元を指定しなくてすむように）
 
 };

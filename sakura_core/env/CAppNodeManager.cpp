@@ -350,7 +350,7 @@ BOOL CAppNodeGroupHandle::PostMessageToAllEditors(
 
 	// hWndLast以外へのメッセージ
 	for (int i = 0; i < n; ++i) {
-		//	Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
+		// Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
 		if (!hWndLast || hWndLast != pWndArr[i].m_hWnd) {
 			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 				if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
@@ -397,7 +397,7 @@ BOOL CAppNodeGroupHandle::SendMessageToAllEditors(
 
 	// hWndLast以外へのメッセージ
 	for (int i = 0; i < n; ++i) {
-		//	Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
+		// Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
 		if (hWndLast == NULL || hWndLast != pWndArr[i].m_hWnd) {
 			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 				if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
@@ -741,12 +741,12 @@ int CAppNodeManager::GetFreeGroupId(void)
 // Close した時の次のWindowを取得する
 //  (タブまとめ表示の場合)
 //
-//	@param hWndCur [in] Close対象のウィンドウハンドル
-//	@retval クローズ後移動するウィンドウ
+// @param hWndCur [in] Close対象のウィンドウハンドル
+// @retval クローズ後移動するウィンドウ
 //			NULLはタブまとめ表示で無いかグループに他にウィンドウが無い場合
 //
-//	@date 2013.04.10 Uchi
-//	@date 2013.10.25 Moca 次のウィンドウは「1つ前のアクティブなタブ」にする
+// @date 2013.04.10 Uchi
+// @date 2013.10.25 Moca 次のウィンドウは「1つ前のアクティブなタブ」にする
 //
 HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 {

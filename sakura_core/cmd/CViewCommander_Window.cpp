@@ -30,7 +30,7 @@
 #include "env/CShareData.h"
 
 
-// 上下に分割	//Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
+// 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
 void CViewCommander::Command_SPLIT_V(void)
 {
 	GetEditWindow()->m_cSplitterWnd.VSplitOnOff();
@@ -38,7 +38,7 @@ void CViewCommander::Command_SPLIT_V(void)
 }
 
 
-// 左右に分割	//Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
+// 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
 void CViewCommander::Command_SPLIT_H(void)
 {
 	GetEditWindow()->m_cSplitterWnd.HSplitOnOff();
@@ -46,7 +46,7 @@ void CViewCommander::Command_SPLIT_H(void)
 }
 
 
-// 縦横に分割	//Sept. 17, 2000 jepro 説明に「に」を追加
+// 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 void CViewCommander::Command_SPLIT_VH(void)
 {
 	GetEditWindow()->m_cSplitterWnd.VHSplitOnOff();
@@ -64,7 +64,7 @@ void CViewCommander::Command_WINCLOSE(void)
 }
 
 
-// すべてのウィンドウを閉じる	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
+// すべてのウィンドウを閉じる	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 void CViewCommander::Command_FILECLOSEALL(void)
 {
 	int nGroup = CAppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
@@ -135,23 +135,23 @@ void CViewCommander::Command_CASCADE(void)
 		};
 
 		WNDARR*	pWndArr = new WNDARR[nRowNum];
-		int		count = 0;	//	処理対象ウィンドウカウント
+		int		count = 0;	// 処理対象ウィンドウカウント
 		// Mar. 20, 2004 genta 現在のウィンドウを末尾に持っていくのに使う
 		int		current_win_index = -1;
 
 		// -----------------------------------------
-		//	ウィンドウ(ハンドル)リストの作成
+		// ウィンドウ(ハンドル)リストの作成
 		// -----------------------------------------
 
 		for (int i = 0; i < nRowNum; ++i) {
-			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	//	最小化しているウィンドウは無視。
+			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	// 最小化しているウィンドウは無視。
 				continue;
 			}
-			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	//	不可視ウィンドウは無視。
+			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	// 不可視ウィンドウは無視。
 				continue;
 			}
-			//	Mar. 20, 2004 genta
-			//	現在のウィンドウを末尾に持っていくためここではスキップ
+			// Mar. 20, 2004 genta
+			// 現在のウィンドウを末尾に持っていくためここではスキップ
 			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 				current_win_index = i;
 				continue;
@@ -160,8 +160,8 @@ void CViewCommander::Command_CASCADE(void)
 			count++;
 		}
 
-		//	Mar. 20, 2004 genta
-		//	現在のウィンドウを末尾に挿入 inspired by crayonzen
+		// Mar. 20, 2004 genta
+		// 現在のウィンドウを末尾に挿入 inspired by crayonzen
 		if (current_win_index >= 0) {
 			pWndArr[count].hWnd = pEditNodeArr[current_win_index].GetHwnd();
 			count++;
@@ -169,39 +169,39 @@ void CViewCommander::Command_CASCADE(void)
 
 		// デスクトップサイズを得る
 		RECT rcDesktop;
-		//	May 01, 2004 genta マルチモニタ対応
+		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
 		
 		int width = (rcDesktop.right - rcDesktop.left) * 4 / 5; // Mar. 9, 2003 genta 整数演算のみにする
 		int height = (rcDesktop.bottom - rcDesktop.top) * 4 / 5;
 		int w_delta = ::GetSystemMetrics(SM_CXSIZEFRAME) + ::GetSystemMetrics(SM_CXSIZE);
 		int h_delta = ::GetSystemMetrics(SM_CYSIZEFRAME) + ::GetSystemMetrics(SM_CYSIZE);
-		int w_offset = rcDesktop.left; //Mar. 19, 2004 crayonzen 絶対値だとエクスプローラーのウィンドウに重なるので
-		int h_offset = rcDesktop.top; //初期値をデスクトップ内に収める。
+		int w_offset = rcDesktop.left; // Mar. 19, 2004 crayonzen 絶対値だとエクスプローラーのウィンドウに重なるので
+		int h_offset = rcDesktop.top; // 初期値をデスクトップ内に収める。
 
 		// -----------------------------------------
-		//	座標計算
+		// 座標計算
 		//
-		//	Mar. 19, 2004 crayonzen
+		// Mar. 19, 2004 crayonzen
 		//		左上をデスクトップ領域に合わせる(タスクバーが上・左にある場合のため)．
 		//		ウィンドウが右下からはみ出たら左上に戻るが，
 		//		2周目以降は開始位置を右にずらしてアイコンが見えるようにする．
 		//
-		//	Mar. 20, 2004 genta ここでは計算値を保管するだけでウィンドウの再配置は行わない
+		// Mar. 20, 2004 genta ここでは計算値を保管するだけでウィンドウの再配置は行わない
 		// -----------------------------------------
 
-		int roundtrip = 0; //２度目の描画以降で使用するカウント
-		int sw_offset = w_delta; //右スライドの幅
+		int roundtrip = 0; // ２度目の描画以降で使用するカウント
+		int sw_offset = w_delta; // 右スライドの幅
 
 		for (int i = 0; i < count; ++i) {
 			if (w_offset + width > rcDesktop.right || h_offset + height > rcDesktop.bottom) {
 				++roundtrip;
 				if ((rcDesktop.right - rcDesktop.left) - sw_offset * roundtrip < width) {
-					//	これ以上右にずらせないときはしょうがないから左上に戻る
+					// これ以上右にずらせないときはしょうがないから左上に戻る
 					roundtrip = 0;
 				}
-				//	ウィンドウ領域の左上にセット
-				//	craonzen 初期値修正(２度目以降の描画で少しづつスライド)
+				// ウィンドウ領域の左上にセット
+				// craonzen 初期値修正(２度目以降の描画で少しづつスライド)
 				w_offset = rcDesktop.left + sw_offset * roundtrip;
 				h_offset = rcDesktop.top;
 			}
@@ -214,20 +214,20 @@ void CViewCommander::Command_CASCADE(void)
 		}
 
 		// -----------------------------------------
-		//	最大化/非表示解除
-		//	最大化されたウィンドウを元に戻す．これがないと，最大化ウィンドウが
-		//	最大化状態のまま並び替えられてしまい，その後最大化動作が変になる．
+		// 最大化/非表示解除
+		// 最大化されたウィンドウを元に戻す．これがないと，最大化ウィンドウが
+		// 最大化状態のまま並び替えられてしまい，その後最大化動作が変になる．
 		//
-		//	Sep. 04, 2004 genta
+		// Sep. 04, 2004 genta
 		// -----------------------------------------
 		for (int i = 0; i < count; i++) {
 			::ShowWindow(pWndArr[i].hWnd, SW_RESTORE | SW_SHOWNA);
 		}
 
 		// -----------------------------------------
-		//	ウィンドウ配置
+		// ウィンドウ配置
 		//
-		//	Mar. 20, 2004 genta APIを素直に使ってZ-Orderの上から下の順で並べる．
+		// Mar. 20, 2004 genta APIを素直に使ってZ-Orderの上から下の順で並べる．
 		// -----------------------------------------
 
 		// まずカレントを最前面に
@@ -269,13 +269,13 @@ void CViewCommander::Command_TILE_V(void)
 		int count = 0;
 		// デスクトップサイズを得る
 		RECT rcDesktop;
-		//	May 01, 2004 genta マルチモニタ対応
+		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
 		for (int i = 0; i < nRowNum; ++i) {
-			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	//	最小化しているウィンドウは無視。
+			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	// 最小化しているウィンドウは無視。
 				continue;
 			}
-			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	//	不可視ウィンドウは無視。
+			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	// 不可視ウィンドウは無視。
 				continue;
 			}
 			// From Here Jul. 28, 2002 genta
@@ -295,7 +295,7 @@ void CViewCommander::Command_TILE_V(void)
 			::ShowWindow(phwndArr[i], SW_RESTORE);
 			::SetWindowPos(
 				phwndArr[i], 0,
-				rcDesktop.left, rcDesktop.top + height * i, //Mar. 19, 2004 crayonzen 上端調整
+				rcDesktop.left, rcDesktop.top + height * i, // Mar. 19, 2004 crayonzen 上端調整
 				rcDesktop.right - rcDesktop.left, height,
 				SWP_NOOWNERZORDER | SWP_NOZORDER
 			);
@@ -321,29 +321,29 @@ void CViewCommander::Command_TILE_H(void)
 		int count = 0;
 		// デスクトップサイズを得る
 		RECT	rcDesktop;
-		//	May 01, 2004 genta マルチモニタ対応
+		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
 		for (int i = 0; i < nRowNum; ++i) {
-			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	//	最小化しているウィンドウは無視。
+			if (::IsIconic(pEditNodeArr[i].GetHwnd())) {	// 最小化しているウィンドウは無視。
 				continue;
 			}
-			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	//	不可視ウィンドウは無視。
+			if (!::IsWindowVisible(pEditNodeArr[i].GetHwnd())) {	// 不可視ウィンドウは無視。
 				continue;
 			}
-			//	From Here Jul. 28, 2002 genta
-			//	現在のウィンドウを先頭に持ってくる
+			// From Here Jul. 28, 2002 genta
+			// 現在のウィンドウを先頭に持ってくる
 			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 				phwndArr[count] = phwndArr[0];
 				phwndArr[0] = CEditWnd::getInstance()->GetHwnd();
 			}else {
 				phwndArr[count] = pEditNodeArr[i].GetHwnd();
 			}
-			//	To Here Jul. 28, 2002 genta
+			// To Here Jul. 28, 2002 genta
 			count++;
 		}
 		int width = (rcDesktop.right - rcDesktop.left) / count;
 		for (int i = 0; i < count; ++i) {
-			//	Jul. 21, 2002 genta
+			// Jul. 21, 2002 genta
 			::ShowWindow(phwndArr[i], SW_RESTORE);
 			::SetWindowPos(
 				phwndArr[i], 0,
@@ -360,7 +360,7 @@ void CViewCommander::Command_TILE_H(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*! 常に手前に表示
 	@date 2004.09.21 Moca
 */
@@ -370,7 +370,7 @@ void CViewCommander::Command_WINTOPMOST(LPARAM lparam)
 }
 
 
-//Start 2004.07.14 Kazika 追加
+// Start 2004.07.14 Kazika 追加
 /*!	@brief 結合して表示
 
 	タブウィンドウの結合、非結合を切り替えるコマンドです。
@@ -398,13 +398,13 @@ void CViewCommander::Command_BIND_WINDOW(void)
 		CAppNodeManager::getInstance()->ResetGroupId();
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
-			(WPARAM)((GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin) ? TWNT_MODE_DISABLE : TWNT_MODE_ENABLE),//タブモード有効/無効化イベント
+			(WPARAM)((GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin) ? TWNT_MODE_DISABLE : TWNT_MODE_ENABLE), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow()->GetHwnd(),	// CEditWndのウィンドウハンドル
 			m_pCommanderView->GetHwnd());									// 自分自身
-		//End 2004.08.27 Kazika
+		// End 2004.08.27 Kazika
 	}
 }
-//End 2004.07.14 Kazika
+// End 2004.07.14 Kazika
 
 
 // グループを閉じる		// 2007.06.20 ryoji 追加
@@ -581,7 +581,7 @@ void CViewCommander::Command_MAXIMIZE_H(void)
 
 	hwndFrame = GetMainWindow();
 	::GetWindowRect(hwndFrame, &rcOrg);
-	//	May 01, 2004 genta マルチモニタ対応
+	// May 01, 2004 genta マルチモニタ対応
 	::GetMonitorWorkRect(hwndFrame, &rcDesktop);
 	::SetWindowPos(
 		hwndFrame, 0,
@@ -591,10 +591,10 @@ void CViewCommander::Command_MAXIMIZE_H(void)
 	);
 	return;
 }
-//2001.02.10 End: 横方向に最大化
+// 2001.02.10 End: 横方向に最大化
 
 
-// すべて最小化		//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+// すべて最小化		// Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 void CViewCommander::Command_MINIMIZE_ALL(void)
 {
 	int j = GetDllShareData().m_sNodes.m_nEditArrNum;
@@ -624,7 +624,7 @@ void CViewCommander::Command_REDRAW(void)
 }
 
 
-//アウトプットウィンドウ表示
+// アウトプットウィンドウ表示
 void CViewCommander::Command_WIN_OUTPUT(void)
 {
 	// 2010.05.11 Moca CShareData::OpenDebugWindow()に統合
@@ -635,7 +635,7 @@ void CViewCommander::Command_WIN_OUTPUT(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*!	@brief マクロ用アウトプットウインドウに表示
 	@date 2006.04.26 maru 新規作成
 */

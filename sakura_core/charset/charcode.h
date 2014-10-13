@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//2007.09.13 kobake 作成
+// 2007.09.13 kobake 作成
 #include "parse/CWordParse.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -90,10 +90,10 @@ namespace WCODE {
 //! キーワードキャラクタ
 extern const unsigned char gm_keyword_char[128];
 
-//Oct. 31, 2000 JEPRO  TeX Keyword のために'\'を追加
-//Nov.  9, 2000 JEPRO  HSP Keyword のために'@'を追加
-//Oct. 18, 2007 kobake UNICODE用に書き直し
-//Nov. 27, 2010 syat   速度改善のためテーブルに変更
+// Oct. 31, 2000 JEPRO  TeX Keyword のために'\'を追加
+// Nov.  9, 2000 JEPRO  HSP Keyword のために'@'を追加
+// Oct. 18, 2007 kobake UNICODE用に書き直し
+// Nov. 27, 2010 syat   速度改善のためテーブルに変更
 inline bool IS_KEYWORD_CHAR(wchar_t wc)
 {
 	if (0 <= wc && wc < _countof(gm_keyword_char) && (gm_keyword_char[wc] == CK_CSYM||gm_keyword_char[wc] == CK_UDEF))
@@ -125,7 +125,7 @@ namespace WCODE {
 
 	//! 全角スペースかどうか判定
 	inline bool IsZenkakuSpace(wchar_t wc) {
-		return wc == 0x3000; //L'　'
+		return wc == 0x3000; // L'　'
 	}
 
 	//! 制御文字であるかどうか
@@ -144,7 +144,7 @@ namespace WCODE {
 	//!インデント構成要素であるかどうか。bAcceptZenSpace: 全角スペースを含めるかどうか
 	inline bool IsIndentChar(wchar_t wc, bool bAcceptZenSpace) {
 		if (wc == TAB || wc == SPACE) return true;
-		if (bAcceptZenSpace && IsZenkakuSpace(wc))return true;
+		if (bAcceptZenSpace && IsZenkakuSpace(wc)) return true;
 		return false;
 	}
 
@@ -158,7 +158,7 @@ namespace WCODE {
 		static const wchar_t* table = L"<>?\"|*";
 
 		wchar_t wc = pData[nIndex];
-		if (wcschr(table, wc) != NULL) return false; //table内の文字が含まれていたら、ダメ。
+		if (wcschr(table, wc) != NULL) return false; // table内の文字が含まれていたら、ダメ。
 		else return true;
 	}
 
@@ -174,7 +174,7 @@ namespace WCODE {
 
 	//! 半角カナかどうか
 	inline bool IsHankakuKatakana(wchar_t c) {
-		//参考: http://ash.jp/code/unitbl1.htm
+		// 参考: http://ash.jp/code/unitbl1.htm
 		return c >= 0xFF61 && c <= 0xFF9F;
 	}
 
@@ -215,22 +215,22 @@ namespace WCODE {
 	}
 
 	//! 句読点か
-	//bool IsKutoten( wchar_t wc );
+	//bool IsKutoten(wchar_t wc);
 
 /* codechecker.h へ移動
 	//! 高位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
-	inline bool IsUTF16High( wchar_t c ) {
-		return ( 0xd800 == (0xfc00 & c ));
+	inline bool IsUTF16High(wchar_t c) {
+		return (0xd800 == (0xfc00 & c));
 	}
 	//! 下位サロゲートエリアか？	from ssrc_2004-06-05wchar00703b	2008/5/15 Uchi
-	inline bool IsUTF16Low( wchar_t c ) {
-		return ( 0xdc00 == (0xfc00 & c ));
+	inline bool IsUTF16Low(wchar_t c) {
+		return (0xdc00 == (0xfc00 & c));
 	}
 */
 }
 
 
-//ANSI判定関数群
+// ANSI判定関数群
 namespace ACODE
 {
 	inline bool IsAZ(char c) {
@@ -262,7 +262,7 @@ namespace ACODE
 		static const char* table = "<>?\"|*";
 		char c = pData[nIndex];
 
-		//table内の文字が含まれていて
+		// table内の文字が含まれていて
 		if (strchr(table, c) != NULL) {
 			// 2013.06.01 判定間違いを削除
 			return false;
@@ -285,8 +285,8 @@ namespace TCODE {
 struct SCharWidthCache {
 	// 文字半角全角キャッシュ
 	TCHAR		m_lfFaceName[LF_FACESIZE];
-	BYTE		m_bCharWidthCache[0x10000/4];		//16KB 文字半角全角キャッシュ 2008/5/16 Uchi
-	int			m_nCharWidthCacheTest;				//cache溢れ検出
+	BYTE		m_bCharWidthCache[0x10000/4];		// 16KB 文字半角全角キャッシュ 2008/5/16 Uchi
+	int			m_nCharWidthCacheTest;				// cache溢れ検出
 };
 
 enum ECharWidthFontMode {

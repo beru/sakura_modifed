@@ -114,7 +114,7 @@ public:
 			p--;
 		}
 		if (p >= head && *p == _T('.')) {
-			return bWithoutDot ? p + 1 : p;	//bWithoutDot == trueならドットなしを返す
+			return bWithoutDot ? p + 1 : p;	// bWithoutDot == trueならドットなしを返す
 		}else {
 			return auto_strchr(head, _T('\0'));
 		}

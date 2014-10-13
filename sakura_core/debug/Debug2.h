@@ -27,7 +27,7 @@
 */
 #pragma once
 
-//2007.08.30 kobake ’Ç‰Á
+// 2007.08.30 kobake ’Ç‰Á
 #ifdef assert
 #undef assert
 #endif

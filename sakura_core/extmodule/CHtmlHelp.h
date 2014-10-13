@@ -45,7 +45,7 @@ public:
 	CHtmlHelp() {}
 	virtual ~CHtmlHelp();
 
-	//	HtmlHelp ‚ÌEntry Point
+	// HtmlHelp ‚ÌEntry Point
 	typedef HWND (WINAPI* Proc_HtmlHelp)(HWND, LPCTSTR, UINT, DWORD_PTR);
 	Proc_HtmlHelp HtmlHelp;
 

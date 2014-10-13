@@ -122,8 +122,8 @@ bool CClipboard::SetText(
 	// 1回しか通らない. breakでここまで飛ぶ
 
 	// バイナリ形式のデータ
-	//	(int) 「データ」の長さ
-	//	「データ」
+	// (int) 「データ」の長さ
+	//「データ」
 	HGLOBAL hgClipSakura = NULL;
 	// サクラエディタ専用フォーマットを取得
 	CLIPFORMAT	uFormatSakuraClip = CClipboard::GetSakuraFormat();
@@ -254,9 +254,9 @@ bool CClipboard::SetHtmlText(const CNativeW& cmemBUf)
 
 	// 確保した領域にデータをコピー
 	char* pszClip = GlobalLockChar(hgClipText);
-	memcpy_raw(pszClip, cmemHeader.GetStringPtr(), cmemHeader.GetStringLength());	//データ
-	memcpy_raw(pszClip + cmemHeader.GetStringLength(), cmemUtf8.GetStringPtr(), cmemUtf8.GetStringLength());	//データ
-	memcpy_raw(pszClip + cmemHeader.GetStringLength() + cmemUtf8.GetStringLength(), cmemFooter.GetStringPtr(), cmemFooter.GetStringLength());	//データ
+	memcpy_raw(pszClip, cmemHeader.GetStringPtr(), cmemHeader.GetStringLength());	// データ
+	memcpy_raw(pszClip + cmemHeader.GetStringLength(), cmemUtf8.GetStringPtr(), cmemUtf8.GetStringLength());	// データ
+	memcpy_raw(pszClip + cmemHeader.GetStringLength() + cmemUtf8.GetStringLength(), cmemFooter.GetStringPtr(), cmemFooter.GetStringLength());	// データ
 	pszClip[nLen] = '\0';				// 終端ヌル
 	::GlobalUnlock(hgClipText);
 
@@ -382,7 +382,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 
 
 struct SSystemClipFormatNames {
-	CLIPFORMAT	m_nClipFormat;
+	CLIPFORMAT m_nClipFormat;
 	const wchar_t* m_pszName;
 };
 
@@ -543,9 +543,9 @@ static int GetLengthByMode(HGLOBAL hClipData, const BYTE* pData, int nMode, int 
 	nEndMode = GetEndModeByMode(nMode, nEndMode);
 	size_t nLength;
 	if (nEndMode == 1) {
-		nLength = strnlen((const char *)pData, nMemLength);
+		nLength = strnlen((const char*)pData, nMemLength);
 	}else if (nEndMode == 2) {
-		nLength = wcsnlen((const wchar_t *)pData, nMemLength / 2) * 2;
+		nLength = wcsnlen((const wchar_t*)pData, nMemLength / 2) * 2;
 	}else if (nEndMode == 4) {
 		const wchar32_t* pData32 = (const wchar32_t*)pData;
 		const size_t len = nMemLength / 4;
@@ -603,7 +603,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 			// バイナリモード。1byteをU+00-U+ffにマッピング
 			mem.AllocStringBuffer(nLength);
 			mem._SetStringLength(nLength);
-			wchar_t* pBuf = (wchar_t *)mem.GetStringPtr();
+			wchar_t* pBuf = (wchar_t*)mem.GetStringPtr();
 			for (size_t i = 0; i < nLength; i++) {
 				pBuf[i] = (unsigned char)pData[i];
 			}
@@ -628,7 +628,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 				}
 			}
 			if (eMode == CODE_UNICODE) {
-				mem.SetString((wchar_t *)pData, nLength / sizeof(wchar_t));
+				mem.SetString((wchar_t*)pData, nLength / sizeof(wchar_t));
 			}else {
 				CMemory cmem;
 				cmem.SetRawData(pData, nLength);

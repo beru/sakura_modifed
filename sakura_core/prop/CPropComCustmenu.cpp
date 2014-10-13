@@ -66,7 +66,7 @@ static const DWORD p_helpids[] = {	//10100
 //@@@ 2001.02.04 End
 
 static
-bool SetSpecialFuncName(EFunctionCode code, wchar_t *ptr)
+bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
 {
 	if (F_SPECIAL_FIRST <= code && code <= F_SPECIAL_LAST) {
 		for (int k = 0; k < nSpecialFuncsCount; k++) {

@@ -63,9 +63,9 @@ BOOL CViewCommander::HandleCommand(
 	bool	bRepeat = false;
 	int		nFuncID;
 
-	//	May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
-	//	下位16ビットのみを取り出す
-	//	Jul.  7, 2007 genta 定数と比較するためにシフトしないで使う
+	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
+	// 下位16ビットのみを取り出す
+	// Jul.  7, 2007 genta 定数と比較するためにシフトしないで使う
 	int nCommandFrom = nCommand & ~0xffff;
 	nCommand = (EFunctionCode)LOWORD(nCommand);
 
@@ -75,8 +75,8 @@ BOOL CViewCommander::HandleCommand(
 	}
 	m_pCommanderView->GetCaret().m_bClearStatus = true;
 	// -------------------------------------
-	//	Jan. 10, 2005 genta
-	//	Call message translators
+	// Jan. 10, 2005 genta
+	// Call message translators
 	// -------------------------------------
 	m_pCommanderView->TranslateCommand_grep(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
 	m_pCommanderView->TranslateCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4);
@@ -113,7 +113,7 @@ BOOL CViewCommander::HandleCommand(
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		//F_EXECEXTMACROコマンドはファイルを選択した後にマクロ文が確定するため個別に記録する。
 		if (CSMacroMgr::CanFuncIsKeyMacro(nCommand) &&
-			nCommand != F_EXECEXTMACRO	//F_EXECEXTMACROは個別で記録します
+			nCommand != F_EXECEXTMACRO	// F_EXECEXTMACROは個別で記録します
 		) {
 			// キーマクロのバッファにデータ追加
 			//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
@@ -122,9 +122,9 @@ BOOL CViewCommander::HandleCommand(
 		}
 	}
 
-	//	2007.07.07 genta マクロ実行中フラグの設定
-	//	マクロからのコマンドかどうかはnCommandFromでわかるが
-	//	nCommandFromを引数で浸透させるのが大変なので，従来のフラグにも値をコピーする
+	// 2007.07.07 genta マクロ実行中フラグの設定
+	// マクロからのコマンドかどうかはnCommandFromでわかるが
+	// nCommandFromを引数で浸透させるのが大変なので，従来のフラグにも値をコピーする
 	m_pCommanderView->m_bExecutingKeyMacro = (nCommandFrom & FA_FROMMACRO) ? true : false;
 
 	// キーボードマクロの実行中
@@ -133,7 +133,7 @@ BOOL CViewCommander::HandleCommand(
 		bRepeat = false;
 	}
 
-	//	From Here Sep. 29, 2001 genta マクロの実行機能追加
+	// From Here Sep. 29, 2001 genta マクロの実行機能追加
 	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一（インターフェースの変更）
 		if (!m_pcSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
@@ -148,29 +148,29 @@ BOOL CViewCommander::HandleCommand(
 		}
 		return TRUE;
 	}
-	//	To Here Sep. 29, 2001 genta マクロの実行機能追加
+	// To Here Sep. 29, 2001 genta マクロの実行機能追加
 
 	// -------------------------------------
-	//	Jan. 10, 2005 genta
-	//	Call mode basis message handler
+	// Jan. 10, 2005 genta
+	// Call mode basis message handler
 	// -------------------------------------
 	m_pCommanderView->PreprocessCommand_hokan(nCommand);
 	if (m_pCommanderView->ProcessCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4))
 		return TRUE;
 
 	// -------------------------------------
-	//	Jan. 10, 2005 genta コメント
-	//	ここより前ではUndoバッファの準備ができていないので
-	//	文書の操作を行ってはいけない
+	// Jan. 10, 2005 genta コメント
+	// ここより前ではUndoバッファの準備ができていないので
+	// 文書の操作を行ってはいけない
 	//@@@ 2002.2.2 YAZAKI HandleCommand内でHandleCommandを呼び出せない問題に対処（何か副作用がある？）
 	if (!GetOpeBlk()) {	// 操作ブロック
 		SetOpeBlk(new COpeBlk);
 	}
-	GetOpeBlk()->AddRef();	//参照カウンタ増加
+	GetOpeBlk()->AddRef();	// 参照カウンタ増加
 
-	//	Jan. 10, 2005 genta コメント
-	//	ここより後ではswitchの後ろでUndoを正しく登録するため，
-	//	途中で処理の打ち切りを行ってはいけない
+	// Jan. 10, 2005 genta コメント
+	// ここより後ではswitchの後ろでUndoを正しく登録するため，
+	// 途中で処理の打ち切りを行ってはいけない
 	// -------------------------------------
 
 	switch (nCommand) {
@@ -183,7 +183,7 @@ BOOL CViewCommander::HandleCommand(
 	// ファイル操作系
 	case F_FILENEW:				Command_FILENEW(); break;			// 新規作成
 	case F_FILENEW_NEWWINDOW:	Command_FILENEW_NEWWINDOW(); break;
-	//	Oct. 2, 2001 genta マクロ用機能拡張
+	// Oct. 2, 2001 genta マクロ用機能拡張
 	case F_FILEOPEN:			Command_FILEOPEN((const WCHAR*)lparam1); break;			// ファイルを開く
 	case F_FILEOPEN2:			Command_FILEOPEN((const WCHAR*)lparam1, (ECodeType)lparam2, lparam3 != 0, (const WCHAR*)lparam4); break;	// ファイルを開く2
 	case F_FILEOPEN_DROPDOWN:	Command_FILEOPEN((const WCHAR*)lparam1); break;			// ファイルを開く(ドロップダウン)	//@@@ 2002.06.15 MIK
@@ -193,8 +193,8 @@ BOOL CViewCommander::HandleCommand(
 	case F_FILESAVEALL:			bRet = Command_FILESAVEALL(); break;	// 全ての編集ウィンドウで上書き保存 // Jan. 23, 2005 genta
 	case F_FILESAVE_QUIET:		bRet = Command_FILESAVE(false, false); break;	// 静かに上書き保存 // Jan. 24, 2005 genta
 	case F_FILESAVECLOSE:
-		//	Feb. 28, 2004 genta 保存＆閉じる
-		//	保存が不要なら単に閉じる
+		// Feb. 28, 2004 genta 保存＆閉じる
+		// 保存が不要なら単に閉じる
 		{	// Command_FILESAVE()とは別に保存不要をチェック	//### Command_FILESAVE() は実際に保存した場合だけ true を返すようになった（仕様変更？）
 			if (!GetDllShareData().m_Common.m_sFile.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_cDocEditor.IsModified()) {
 				Command_WINCLOSE();
@@ -205,13 +205,13 @@ BOOL CViewCommander::HandleCommand(
 			Command_WINCLOSE();
 		}
 		break;
-	case F_FILECLOSE:										// 閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+	case F_FILECLOSE:										// 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 		Command_FILECLOSE();
 		break;
 	case F_FILECLOSE_OPEN:	// 閉じて開く
 		Command_FILECLOSE_OPEN();
 		break;
-	case F_FILE_REOPEN:				Command_FILE_REOPEN(GetDocument()->GetDocumentEncoding(), lparam1 != 0); break;//	Dec. 4, 2002 genta
+	case F_FILE_REOPEN:				Command_FILE_REOPEN(GetDocument()->GetDocumentEncoding(), lparam1 != 0); break;// Dec. 4, 2002 genta
 	case F_FILE_REOPEN_SJIS:		Command_FILE_REOPEN(CODE_SJIS, lparam1 != 0); break;		// SJISで開き直す
 	case F_FILE_REOPEN_JIS:			Command_FILE_REOPEN(CODE_JIS, lparam1 != 0); break;			// JISで開き直す
 	case F_FILE_REOPEN_EUC:			Command_FILE_REOPEN(CODE_EUC, lparam1 != 0); break;			// EUCで開き直す
@@ -223,19 +223,19 @@ BOOL CViewCommander::HandleCommand(
 	case F_FILE_REOPEN_UTF7:		Command_FILE_REOPEN(CODE_UTF7, lparam1 != 0); break;		// UTF-7で開き直す
 	case F_PRINT:					Command_PRINT(); break;					// 印刷
 	case F_PRINT_PREVIEW:			Command_PRINT_PREVIEW(); break;			// 印刷プレビュー
-	case F_PRINT_PAGESETUP:			Command_PRINT_PAGESETUP(); break;		// 印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	case F_OPEN_HfromtoC:			bRet = Command_OPEN_HfromtoC((BOOL)lparam1); break;			// 同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
-//	case F_OPEN_HHPP:				bRet = Command_OPEN_HHPP((BOOL)lparam1, TRUE); break;		// 同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
-//	case F_OPEN_CCPP:				bRet = Command_OPEN_CCPP((BOOL)lparam1, TRUE); break;		// 同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更	del 2008/6/23 Uchi
+	case F_PRINT_PAGESETUP:			Command_PRINT_PAGESETUP(); break;		// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
+	case F_OPEN_HfromtoC:			bRet = Command_OPEN_HfromtoC((BOOL)lparam1); break;			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
+//	case F_OPEN_HHPP:				bRet = Command_OPEN_HHPP((BOOL)lparam1, TRUE); break;		// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
+//	case F_OPEN_CCPP:				bRet = Command_OPEN_CCPP((BOOL)lparam1, TRUE); break;		// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更	del 2008/6/23 Uchi
 	case F_ACTIVATE_SQLPLUS:		Command_ACTIVATE_SQLPLUS(); break;		// Oracle SQL*Plusをアクティブ表示
 	case F_PLSQL_COMPILE_ON_SQLPLUS:									// Oracle SQL*Plusで実行
 		Command_PLSQL_COMPILE_ON_SQLPLUS();
 		break;
-	case F_BROWSE:				Command_BROWSE(); break;				// ブラウズ
+	case F_BROWSE:				Command_BROWSE(); break;			// ブラウズ
 	case F_VIEWMODE:			Command_VIEWMODE(); break;			// ビューモード
 	case F_PROPERTY_FILE:		Command_PROPERTY_FILE(); break;		// ファイルのプロパティ
-	case F_EXITALLEDITORS:		Command_EXITALLEDITORS(); break;		// 編集の全終了	// 2007.02.13 ryoji 追加
-	case F_EXITALL:				Command_EXITALL(); break;			// サクラエディタの全終了	//Dec. 26, 2000 JEPRO 追加
+	case F_EXITALLEDITORS:		Command_EXITALLEDITORS(); break;	// 編集の全終了	// 2007.02.13 ryoji 追加
+	case F_EXITALL:				Command_EXITALL(); break;			// サクラエディタの全終了	// Dec. 26, 2000 JEPRO 追加
 	case F_PUTFILE:				Command_PUTFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// 作業中ファイルの一時出力 //maru 2006.12.10
 	case F_INSFILE:				Command_INSFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// キャレット位置にファイル挿入 //maru 2006.12.10
 
@@ -271,23 +271,23 @@ BOOL CViewCommander::HandleCommand(
 	case F_IME_CHAR:		Command_IME_CHAR((WORD)lparam1); break;					// 全角文字入力
 	case F_MOVECURSOR:			Command_MOVECURSOR(CLogicPoint(CLogicInt((int)lparam2), CLogicInt((int)lparam1)), (int)lparam3); break;
 	case F_MOVECURSORLAYOUT:	Command_MOVECURSORLAYOUT(CLayoutPoint(CLayoutInt((int)lparam2), CLayoutInt((int)lparam1)), (int)lparam3); break;
-	case F_UP:				Command_UP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル上移動
+	case F_UP:				Command_UP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;				// カーソル上移動
 	case F_DOWN:			Command_DOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル下移動
 	case F_LEFT:			Command_LEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル左移動
 	case F_RIGHT:			Command_RIGHT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, false, bRepeat); break;	// カーソル右移動
-	case F_UP2:				Command_UP2(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// カーソル上移動(２行づつ)
+	case F_UP2:				Command_UP2(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;						// カーソル上移動(２行づつ)
 	case F_DOWN2:			Command_DOWN2(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// カーソル下移動(２行づつ)
-	case F_WORDLEFT:		Command_WORDLEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 単語の左端に移動
+	case F_WORDLEFT:		Command_WORDLEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// 単語の左端に移動
 	case F_WORDRIGHT:		Command_WORDRIGHT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 単語の右端に移動
-	//	0ct. 29, 2001 genta マクロ向け機能拡張
+	// 0ct. 29, 2001 genta マクロ向け機能拡張
 	case F_GOLINETOP:		Command_GOLINETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, lparam1); break;	// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:		Command_GOLINEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
 //	case F_ROLLDOWN:		Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// スクロールダウン
 //	case F_ROLLUP:			Command_ROLLUP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールアップ
-	case F_HalfPageUp:		Command_HalfPageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_HalfPageDown:	Command_HalfPageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_1PageUp:			Command_1PageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	case F_1PageDown:		Command_1PageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	case F_HalfPageUp:		Command_HalfPageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 半ページアップ	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_HalfPageDown:	Command_HalfPageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 半ページダウン	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_1PageUp:			Command_1PageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// １ページアップ	// Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	case F_1PageDown:		Command_1PageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// １ページダウン	// Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	case F_GOFILETOP:		Command_GOFILETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの先頭に移動
 	case F_GOFILEEND:		Command_GOFILEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの最後に移動
 	case F_CURLINECENTER:	Command_CURLINECENTER(); break;								// カーソル行をウィンドウ中央へ
@@ -368,14 +368,14 @@ BOOL CViewCommander::HandleCommand(
 	case F_ADDTAIL_W:				Command_ADDTAIL((const wchar_t*)lparam1, (int)lparam2); break;	// 最後にテキストを追加
 	case F_COPYFNAME:				Command_COPYFILENAME(); break;						// このファイル名をクリップボードにコピー / /2002/2/3 aroka
 	case F_COPYPATH:				Command_COPYPATH(); break;							// このファイルのパス名をクリップボードにコピー
-	case F_COPYTAG:					Command_COPYTAG(); break;							// このファイルのパス名とカーソル位置をコピー	//Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
+	case F_COPYTAG:					Command_COPYTAG(); break;							// このファイルのパス名とカーソル位置をコピー	// Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
 	case F_COPYLINES:				Command_COPYLINES(); break;							// 選択範囲内全行コピー
 	case F_COPYLINESASPASSAGE:		Command_COPYLINESASPASSAGE(); break;				// 選択範囲内全行引用符付きコピー
 	case F_COPYLINESWITHLINENUMBER:	Command_COPYLINESWITHLINENUMBER(); break;			// 選択範囲内全行行番号付きコピー
 	case F_COPY_COLOR_HTML:				Command_COPY_COLOR_HTML(); break;				// 選択範囲内色付きHTMLコピー
 	case F_COPY_COLOR_HTML_LINENUMBER:	Command_COPY_COLOR_HTML_LINENUMBER(); break;	// 選択範囲内行番号色付きHTMLコピー
 
-	case F_CREATEKEYBINDLIST:		Command_CREATEKEYBINDLIST(); break;		// キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO 追加 //Dec. 25, 2000 復活
+	case F_CREATEKEYBINDLIST:		Command_CREATEKEYBINDLIST(); break;		// キー割り当て一覧をコピー // Sept. 15, 2000 JEPRO 追加 //Dec. 25, 2000 復活
 
 	// 挿入系
 	case F_INS_DATE:				Command_INS_DATE(); break;				// 日付挿入
@@ -387,11 +387,11 @@ BOOL CViewCommander::HandleCommand(
 	case F_TOLOWER:					Command_TOLOWER(); break;				// 小文字
 	case F_TOUPPER:					Command_TOUPPER(); break;				// 大文字
 	case F_TOHANKAKU:				Command_TOHANKAKU(); break;				// 全角→半角
-	case F_TOHANKATA:				Command_TOHANKATA(); break;				// 全角カタカナ→半角カタカナ	//Aug. 29, 2002 ai
-	case F_TOZENEI:					Command_TOZENEI(); break;				// 全角→半角					//July. 30, 2001 Misaka
+	case F_TOHANKATA:				Command_TOHANKATA(); break;				// 全角カタカナ→半角カタカナ	// Aug. 29, 2002 ai
+	case F_TOZENEI:					Command_TOZENEI(); break;				// 全角→半角					// July. 30, 2001 Misaka
 	case F_TOHANEI:					Command_TOHANEI(); break;				// 半角→全角
-	case F_TOZENKAKUKATA:			Command_TOZENKAKUKATA(); break;			// 半角＋全ひら→全角・カタカナ	//Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
-	case F_TOZENKAKUHIRA:			Command_TOZENKAKUHIRA(); break;			// 半角＋全カタ→全角・ひらがな	//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
+	case F_TOZENKAKUKATA:			Command_TOZENKAKUKATA(); break;			// 半角＋全ひら→全角・カタカナ	// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
+	case F_TOZENKAKUHIRA:			Command_TOZENKAKUHIRA(); break;			// 半角＋全カタ→全角・ひらがな	// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
 	case F_HANKATATOZENKATA:		Command_HANKATATOZENKAKUKATA(); break;	// 半角カタカナ→全角カタカナ
 	case F_HANKATATOZENHIRA:		Command_HANKATATOZENKAKUHIRA(); break;	// 半角カタカナ→全角ひらがな
 	case F_TABTOSPACE:				Command_TABTOSPACE(); break;			// TAB→空白
@@ -408,7 +408,7 @@ BOOL CViewCommander::HandleCommand(
 	case F_CODECNV_SJIS2UTF8:		Command_CODECNV_SJIS2UTF8(); break;		// SJIS→UTF-8コード変換
 	case F_CODECNV_SJIS2UTF7:		Command_CODECNV_SJIS2UTF7(); break;		// SJIS→UTF-7コード変換
 	case F_BASE64DECODE:			Command_BASE64DECODE(); break;			// Base64デコードして保存
-	case F_UUDECODE:				Command_UUDECODE(); break;				// uudecodeして保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
+	case F_UUDECODE:				Command_UUDECODE(); break;				// uudecodeして保存	// Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 
 	// 検索系
 	case F_SEARCH_DIALOG:		Command_SEARCH_DIALOG(); break;				// 検索(単語検索ダイアログ)
@@ -431,8 +431,8 @@ BOOL CViewCommander::HandleCommand(
 	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
 	case F_OUTLINE:			bRet = Command_FUNCLIST((int)lparam1, OUTLINE_DEFAULT); break;	// アウトライン解析
 	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(SHOW_TOGGLE, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
-	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 //	Apr. 03, 2003 genta 引数追加
-	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	//	Apr. 03, 2003 genta
+	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
+	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
 	case F_TAGJUMPBACK:		Command_TAGJUMPBACK(); break;					// タグジャンプバック機能
 	case F_TAGS_MAKE:		Command_TagsMake(); break;						// タグファイルの作成	//@@@ 2003.04.13 MIK
 	case F_DIRECT_TAGJUMP:	Command_TagJumpByTagsFileMsg(true); break;		// ダイレクトタグジャンプ機能	//@@@ 2003.04.15 MIK
@@ -481,7 +481,7 @@ BOOL CViewCommander::HandleCommand(
 	case F_SETFONTSIZE:		Command_SETFONTSIZE((int)lparam1, (int)lparam2, (int)lparam3); break;	// フォントサイズ設定
 	case F_SETFONTSIZEUP:	HandleCommand(F_SETFONTSIZE, bRedraw, 0, 1, 2, 0); break;	// フォントサイズ拡大
 	case F_SETFONTSIZEDOWN:	HandleCommand(F_SETFONTSIZE, bRedraw, 0, -1, 2, 0); break;	// フォントサイズ縮小
-	case F_WRAPWINDOWWIDTH:	Command_WRAPWINDOWWIDTH(); break;// 現在のウィンドウ幅で折り返し	//Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+	case F_WRAPWINDOWWIDTH:	Command_WRAPWINDOWWIDTH(); break;// 現在のウィンドウ幅で折り返し	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 	case F_FAVORITE:		Command_Favorite(); break;		// 履歴の管理	//@@@ 2003.04.08 MIK
 	// Jan. 29, 2005 genta 引用符の設定
 	case F_SET_QUOTESTRING:	Command_SET_QUOTESTRING((const WCHAR*)lparam1);	break;
@@ -509,12 +509,12 @@ BOOL CViewCommander::HandleCommand(
 	//	case F_EXECCMMAND:		Command_EXECCMMAND(); break;	// 外部コマンド実行
 	case F_EXECMD_DIALOG:
 		//Command_EXECCOMMAND_DIALOG((const char*)lparam1);	// 外部コマンド実行
-		Command_EXECCOMMAND_DIALOG();	// 外部コマンド実行	//	引数つかってないみたいなので
+		Command_EXECCOMMAND_DIALOG();	// 外部コマンド実行	// 引数つかってないみたいなので
 		break;
-	//	To Here Sept. 20, 2000
+	// To Here Sept. 20, 2000
 	case F_EXECMD:
 		//Command_EXECCOMMAND((const char*)lparam1);
-		Command_EXECCOMMAND((LPCWSTR)lparam1, (int)lparam2, (LPCWSTR)lparam3);	//	2006.12.03 maru 引数の拡張のため
+		Command_EXECCOMMAND((LPCWSTR)lparam1, (int)lparam2, (LPCWSTR)lparam3);	// 2006.12.03 maru 引数の拡張のため
 		break;
 
 	// カスタムメニュー
@@ -558,12 +558,12 @@ BOOL CViewCommander::HandleCommand(
 		return bRet;
 
 	// ウィンドウ系
-	case F_SPLIT_V:			Command_SPLIT_V(); break;	// 上下に分割	//Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
-	case F_SPLIT_H:			Command_SPLIT_H(); break;	// 左右に分割	//Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
-	case F_SPLIT_VH:		Command_SPLIT_VH(); break;	// 縦横に分割	//Sept. 17, 2000 jepro 説明に「に」を追加
+	case F_SPLIT_V:			Command_SPLIT_V(); break;	// 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
+	case F_SPLIT_H:			Command_SPLIT_H(); break;	// 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
+	case F_SPLIT_VH:		Command_SPLIT_VH(); break;	// 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 	case F_WINCLOSE:		Command_WINCLOSE(); break;	// ウィンドウを閉じる
-	case F_WIN_CLOSEALL:	// すべてのウィンドウを閉じる	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」を左記のように変更
-		//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)
+	case F_WIN_CLOSEALL:	// すべてのウィンドウを閉じる	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」を左記のように変更
+		// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)
 		Command_FILECLOSEALL();
 		break;
 	case F_BIND_WINDOW:		Command_BIND_WINDOW(); break;	// 結合して表示 2004.07.14 Kazika 新規追加
@@ -571,8 +571,8 @@ BOOL CViewCommander::HandleCommand(
 	case F_TILE_V:			Command_TILE_V(); break;		// 上下に並べて表示
 	case F_TILE_H:			Command_TILE_H(); break;		// 左右に並べて表示
 	case F_MAXIMIZE_V:		Command_MAXIMIZE_V(); break;	// 縦方向に最大化
-	case F_MAXIMIZE_H:		Command_MAXIMIZE_H(); break;	// 横方向に最大化 //2001.02.10 by MIK
-	case F_MINIMIZE_ALL:	Command_MINIMIZE_ALL(); break;	// すべて最小化	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+	case F_MAXIMIZE_H:		Command_MAXIMIZE_H(); break;	// 横方向に最大化 // 2001.02.10 by MIK
+	case F_MINIMIZE_ALL:	Command_MINIMIZE_ALL(); break;	// すべて最小化	// Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 	case F_REDRAW:			Command_REDRAW(); break;		// 再描画
 	case F_WIN_OUTPUT:		Command_WIN_OUTPUT(); break;	// アウトプットウィンドウ表示
 	case F_TRACEOUT:		Command_TRACEOUT((const wchar_t*)lparam1, (int)lparam2, (int)lparam3); break;		// マクロ用アウトプットウィンドウに表示 maru 2006.04.26
@@ -592,8 +592,8 @@ BOOL CViewCommander::HandleCommand(
 
 	// 支援
 	case F_HOKAN:			Command_HOKAN(); break;			// 入力補完
-	case F_HELP_CONTENTS:	Command_HELP_CONTENTS(); break;	// ヘルプ目次 					//Nov. 25, 2000 JEPRO 追加
-	case F_HELP_SEARCH:		Command_HELP_SEARCH(); break;	// ヘルプトキーワード検索 		//Nov. 25, 2000 JEPRO 追加
+	case F_HELP_CONTENTS:	Command_HELP_CONTENTS(); break;	// ヘルプ目次 					// Nov. 25, 2000 JEPRO 追加
+	case F_HELP_SEARCH:		Command_HELP_SEARCH(); break;	// ヘルプトキーワード検索 		// Nov. 25, 2000 JEPRO 追加
 	case F_TOGGLE_KEY_SEARCH:	Command_ToggleKeySearch((int)lparam1); break;	// キャレット位置の単語を辞書検索する機能ON-OFF		// 2006.03.24 fon
 	case F_MENU_ALLFUNC:									// コマンド一覧
 		// 再帰処理対策
@@ -602,10 +602,10 @@ BOOL CViewCommander::HandleCommand(
 		return bRet;
 	case F_EXTHELP1:	Command_EXTHELP1(); break;		// 外部ヘルプ１
 	case F_EXTHTMLHELP:	// 外部HTMLヘルプ
-		//	Jul. 5, 2002 genta
+		// Jul. 5, 2002 genta
 		Command_EXTHTMLHELP((const WCHAR*)lparam1, (const WCHAR*)lparam2);
 		break;
-	case F_ABOUT:	Command_ABOUT(); break;				// バージョン情報	//Dec. 24, 2000 JEPRO 追加
+	case F_ABOUT:	Command_ABOUT(); break;				// バージョン情報	// Dec. 24, 2000 JEPRO 追加
 
 	// その他
 

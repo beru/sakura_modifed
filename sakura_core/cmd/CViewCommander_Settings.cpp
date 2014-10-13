@@ -23,7 +23,7 @@
 #include "CViewCommander_inline.h"
 
 #include "typeprop/CDlgTypeList.h"
-#include "dlg/CDlgFavorite.h"	//履歴の管理	//@@@ 2003.04.08 MIK
+#include "dlg/CDlgFavorite.h"	// 履歴の管理	//@@@ 2003.04.08 MIK
 #include "CEditApp.h"
 #include "util/shell.h"
 #include "CPropertyManager.h"
@@ -36,7 +36,7 @@
 */
 void CViewCommander::Command_SHOWTOOLBAR(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_Common.m_sWindow.m_bDispTOOLBAR = ((!pCEditWnd->m_cToolbar.GetToolbarHwnd())? TRUE: FALSE);	// ツールバー表示
 	pCEditWnd->LayoutToolBar();
@@ -58,7 +58,7 @@ void CViewCommander::Command_SHOWTOOLBAR(void)
 */
 void CViewCommander::Command_SHOWFUNCKEY(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_Common.m_sWindow.m_bDispFUNCKEYWND = ((!pCEditWnd->m_CFuncKeyWnd.GetHwnd())? TRUE: FALSE);	// ファンクションキー表示
 	pCEditWnd->LayoutFuncKey();
@@ -83,7 +83,7 @@ void CViewCommander::Command_SHOWFUNCKEY(void)
  */
 void CViewCommander::Command_SHOWTAB(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = ((!pCEditWnd->m_cTabWnd.GetHwnd())? TRUE: FALSE);	// タブバー表示
 	pCEditWnd->LayoutTabBar();
@@ -115,7 +115,7 @@ void CViewCommander::Command_SHOWTAB(void)
 */
 void CViewCommander::Command_SHOWSTATUSBAR(void)
 {
-	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
 	GetDllShareData().m_Common.m_sWindow.m_bDispSTATUSBAR = ((!pCEditWnd->m_cStatusBar.GetStatusHwnd())? TRUE: FALSE);	// ステータスバー表示
 	pCEditWnd->LayoutStatusBar();
@@ -139,8 +139,8 @@ void CViewCommander::Command_TYPE_LIST(void)
 	sResult.cDocumentType = GetDocument()->m_cDocType.GetDocumentType();
 	sResult.bTempChange = true;
 	if (cDlgTypeList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), &sResult)) {
-		//	Nov. 29, 2000 genta
-		//	一時的な設定適用機能を無理矢理追加
+		// Nov. 29, 2000 genta
+		// 一時的な設定適用機能を無理矢理追加
 		if (sResult.bTempChange) {
 			HandleCommand(F_CHANGETYPE, true, (LPARAM)sResult.cDocumentType.GetIndex() + 1, 0, 0, 0);
 		}else {
@@ -333,7 +333,7 @@ void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	@note 変更する順序を変更したときはCEditWnd::InitMenu()も変更すること
 	@sa CEditWnd::InitMenu()
 */
-void CViewCommander::Command_WRAPWINDOWWIDTH(void)	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+void CViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
 	// Jan. 8, 2006 genta 判定処理をm_pCommanderView->GetWrapMode()へ移動
 	CEditView::TOGGLE_WRAP_ACTION nWrapMode;
@@ -348,10 +348,10 @@ void CViewCommander::Command_WRAPWINDOWWIDTH(void)	//	Oct. 7, 2000 JEPRO WRAPWIN
 
 	GetEditWindow()->ChangeLayoutParam(true, GetDocument()->m_cLayoutMgr.GetTabSpace(), newKetas);
 	
-	//	Aug. 14, 2005 genta 共通設定へは反映させない
+	// Aug. 14, 2005 genta 共通設定へは反映させない
 //	m_pCommanderView->m_pTypeData->m_nMaxLineKetas = m_nViewColNum;
 
-//	2013.12.30 左隅に移動しないように
+// 2013.12.30 左隅に移動しないように
 //	m_pCommanderView->GetTextArea().SetViewLeftCol(CLayoutInt(0));		// 表示域の一番左の桁(0開始)
 
 	// フォーカス移動時の再描画
@@ -360,7 +360,7 @@ void CViewCommander::Command_WRAPWINDOWWIDTH(void)	//	Oct. 7, 2000 JEPRO WRAPWIN
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*!	履歴の管理(ダイアログ)
 	@author	MIK
 	@date	2003/04/07
@@ -447,7 +447,7 @@ void CViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 */
 void CViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
-	//設定には保存せず、View毎に持つフラグを設定
+	// 設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().m_Common.m_sStatusbar.m_bDispSelCountByByte;
 	ESelectCountMode* pnSelectCountMode = &GetEditWindow()->m_nSelectCountMode;
 

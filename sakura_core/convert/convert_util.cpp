@@ -125,7 +125,7 @@ inline wchar_t ZeneisuToHaneisu_(wchar_t c)
 	     if (c >= L'Ａ' && c <= L'Ｚ') { c = L'A' + (c - L'Ａ'); }
 	else if (c >= L'ａ' && c <= L'ｚ') { c = L'a' + (c - L'ａ'); }
 	else if (c >= L'０' && c <= L'９') { c = L'0' + (c - L'０'); }
-	//一部の記号も変換する
+	// 一部の記号も変換する
 	else if (wcschr_idx(tableZenKigo, c, &n)) { c = tableHanKigo[n]; }
 
 	return c;
@@ -217,7 +217,7 @@ void Convert_ToHankaku(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* 
 		if (d != c) { *dst++ = d; }
 		else {
 			// 小さい「ゝ」「ゞ」は全角カタカナ（「ヽ」「ヾ」）には変換できても半角カタカナまでは変換できないので無変換
-			// 小さい「か」「け」、「結合゛(u3099)」「結合゜(u309A)」「゛(u309B)」「゜(u309C)」は変換可能  //2012.06.09 syat
+			// 小さい「か」「け」、「結合゛(u3099)」「結合゜(u309A)」「゛(u309B)」「゜(u309C)」は変換可能  // 2012.06.09 syat
 			if ((c >= L'\u3097' && c <= L'\u3098') || (c >= L'\u309D' && c <= L'\u309F')) { *dst++ = c; }
 			else {
 				// 全角ひらがなを全角カタカナにしてから半角カタカナに変換する

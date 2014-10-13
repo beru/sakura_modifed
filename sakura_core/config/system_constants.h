@@ -37,7 +37,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       ’è”–½–¼•â•                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//”’l’è”‚Ì•¶Žš—ñ‰» 2009.02.11 ryoji
+// ”’l’è”‚Ì•¶Žš—ñ‰» 2009.02.11 ryoji
 #define _NUM_TO_STR(n) #n
 #define NUM_TO_STR(n) _NUM_TO_STR(n)
 
@@ -496,7 +496,7 @@
 //! ‹­’²ƒL[ƒ[ƒhƒƒbƒN
 #define	GSTR_MUTEX_SAKURA_KEYWORD			(_T("MutexSakuraEditorKeyword")			_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
-//ƒ^ƒCƒv•ÊÝ’è“]‘——p
+// ƒ^ƒCƒv•ÊÝ’è“]‘——p
 #define	GSTR_MUTEX_SAKURA_DOCTYPE			(_T("MutexSakuraEditorDocType")			_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -524,13 +524,13 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         ƒŠƒ\[ƒX                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//	Dec. 2, 2002 genta
-//	ŒÅ’èƒtƒ@ƒCƒ‹–¼
+// Dec. 2, 2002 genta
+// ŒÅ’èƒtƒ@ƒCƒ‹–¼
 #define FN_APP_ICON  _T("my_appicon.ico")
 #define FN_GREP_ICON _T("my_grepicon.ico")
 #define FN_TOOL_BMP  _T("my_icons.bmp")
 
-//	•W€ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒAƒCƒRƒ“ƒŠƒ\[ƒX–¼
+// •W€ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒAƒCƒRƒ“ƒŠƒ\[ƒX–¼
 #define ICON_DEFAULT_APP IDI_ICON_STD
 #define ICON_DEFAULT_GREP IDI_ICON_GREP
 
@@ -538,7 +538,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      ƒpƒtƒH[ƒ}ƒ“ƒX                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//ƒoƒbƒtƒ@ƒTƒCƒY
+// ƒoƒbƒtƒ@ƒTƒCƒY
 const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒoƒbƒtƒ@ƒTƒCƒY
 
 
@@ -556,16 +556,16 @@ const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒ
 //                        ƒƒbƒZ[ƒW                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//wParam: X
-//lParam: Y
+// wParam: X
+// lParam: Y
 #define MYWM_DOSPLIT        (WM_APP+1500)	
 
-//wParam: ‚È‚ñ‚©‚ÌƒCƒ“ƒfƒbƒNƒX
-//lParam: bool‚Á‚Û‚¢‰½‚©
+// wParam: ‚È‚ñ‚©‚ÌƒCƒ“ƒfƒbƒNƒX
+// lParam: bool‚Á‚Û‚¢‰½‚©
 #define MYWM_SETACTIVEPANE  (WM_APP+1510)
 
-//!Ý’è‚ª•ÏX‚³‚ê‚½‚±‚Æ‚Ì’Ê’mƒƒbƒZ[ƒW
-//wParam:PM_CHANGESETTING_TYPE‚Ì‚Æ‚«Aƒ^ƒCƒv•ÊÝ’èIndexB‚»‚êˆÈŠO‚È‚µB
+//! Ý’è‚ª•ÏX‚³‚ê‚½‚±‚Æ‚Ì’Ê’mƒƒbƒZ[ƒW
+// wParam:PM_CHANGESETTING_TYPE‚Ì‚Æ‚«Aƒ^ƒCƒv•ÊÝ’èIndexB‚»‚êˆÈŠO‚È‚µB
 #define MYWM_CHANGESETTING  (WM_APP+1520)
 //! MYWM_CHANGESETTINGƒƒbƒZ[ƒW‚ÌlParam
 enum e_PM_CHANGESETTING_SELECT {
@@ -603,8 +603,8 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 #define	MYWM_GETCARETPOS	(WM_APP+205)
 
 //! –¢Žg—p
-//wParam:–¢Žg—p
-//lParam:–¢Žg—p
+// wParam:–¢Žg—p
+// lParam:–¢Žg—p
 #define	MYWM_ADDSTRING		(WM_APP+206)
 
 //! ƒ^ƒOƒWƒƒƒ“ƒvŒ³’Ê’m
@@ -620,7 +620,7 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 //! V‚µ‚¢•ÒWƒEƒBƒ“ƒhƒE‚Ìì¬ˆË—Š(ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ð“n‚·)
 #define	MYWM_OPENNEWEDITOR	(WM_APP+210)
 
-//ƒwƒ‹ƒv‚Á‚Û‚¢‰½‚©
+// ƒwƒ‹ƒv‚Á‚Û‚¢‰½‚©
 #define	MYWM_HTMLHELP			(WM_APP+212)
 
 //! ƒ^ƒuƒEƒCƒ“ƒhƒE—pƒƒbƒZ[ƒW

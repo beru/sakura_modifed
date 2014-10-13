@@ -90,7 +90,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 */
 LPCWSTR CBookmarkManager::GetBookMarks()
 {
-	static wchar_t szText[MAX_MARKLINES_LEN + 1];	//2002.01.17 // Feb. 17, 2003 genta static‚É
+	static wchar_t szText[MAX_MARKLINES_LEN + 1];	// 2002.01.17 // Feb. 17, 2003 genta static‚É
 	wchar_t szBuff[10];
 	CLogicInt nLinePos = CLogicInt(0);
 	CDocLine* pCDocLine = m_pcDocLineMgr->GetLine(nLinePos);
@@ -98,7 +98,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 	while (pCDocLine) {
 		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
 			auto_sprintf_s(szBuff, L"%d,", nLinePos);
-			if (wcslen(szBuff) + wcslen(szText) > MAX_MARKLINES_LEN) break;	//2002.01.17
+			if (wcslen(szBuff) + wcslen(szText) > MAX_MARKLINES_LEN) break;	// 2002.01.17
 			wcscat(szText, szBuff);
 		}
 		nLinePos++;

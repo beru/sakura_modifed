@@ -174,7 +174,7 @@ INT_PTR CDlgInput1::DispatchEvent(
 		}
 		return TRUE;
 
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelp�ɕύX�ɕύX
 		return TRUE;

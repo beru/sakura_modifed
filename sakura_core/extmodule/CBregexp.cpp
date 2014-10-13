@@ -55,7 +55,7 @@ const wchar_t CBregexp::m_tmpBuf[2] = L"\0";
 
 CBregexp::CBregexp()
 : m_pRegExp(NULL)
-, m_ePatType(PAT_NORMAL)	//	Jul, 25, 2002 genta
+, m_ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
 {
 	m_szMsg[0] = L'\0';
 }
@@ -85,7 +85,7 @@ int CBregexp::CheckPattern(const wchar_t* szPattern)
 	BREGEXP_W* sReg = NULL;						//!< コンパイル構造体
 	wchar_t szMsg[80] = L"";					//!< エラーメッセージ
 	int nLen;									//!< 検索パターンの長さ
-	const wchar_t *szPatternEnd;				//!< 検索パターンの終端
+	const wchar_t* szPatternEnd;				//!< 検索パターンの終端
 
 	m_ePatType = PAT_NORMAL;	//!<　ノーマルは確定
 	nLen = wcslen(szPattern);
@@ -155,7 +155,7 @@ wchar_t* CBregexp::MakePatternSub(
 	int nLen = wcslen(szPattern);
 	if (!szPattern2) {
 		// 検索(BMatch)時
-		szNPattern = new wchar_t[ nLen + 15 ];	//	15：「s///option」が余裕ではいるように。
+		szNPattern = new wchar_t[ nLen + 15 ];	// 15：「s///option」が余裕ではいるように。
 		pPat = szNPattern;
 		*pPat++ = L'm';
 	}else {
@@ -454,8 +454,8 @@ bool CBregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int
 	}
 	delete [] szNPattern;
 
-	//	メッセージが空文字列でなければ何らかのエラー発生。
-	//	サンプルソース参照
+	// メッセージが空文字列でなければ何らかのエラー発生。
+	// サンプルソース参照
 	if (m_szMsg[0]) {
 		ReleaseCompileBuffer();
 		return false;
@@ -482,7 +482,7 @@ bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 {
 	int matched;		//!< 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
-	//	DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
+	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
 	if ((!IsAvailable() || !m_pRegExp)) {
 		return false;
 	}
@@ -497,10 +497,10 @@ bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 			// nStart != 0でも、BMatch()にとっては行頭になるので、ここでfalseにする必要がある
 			return false;
 		}
-		//	検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
+		// 検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
 		matched = BMatch(NULL, target + nStart, target + len, &m_pRegExp, m_szMsg);
 	}else {
-		//	検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
+		// 検索文字列＝NULLを指定すると前回と同一の文字列と見なされる
 		matched = BMatchEx(NULL, target, target + nStart, target + len, &m_pRegExp, m_szMsg);
 	}
 	m_szTarget = target;
@@ -533,14 +533,14 @@ bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 
 	@date	2007.01.16 ryoji 戻り値を置換個数に変更
 */
-int CBregexp::Replace(const wchar_t *szTarget, int nLen, int nStart)
+int CBregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 {
-	//	DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
+	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
 	if (!IsAvailable() || !m_pRegExp) {
 		return false;
 	}
 
-	//	From Here 2003.05.03 かろと
+	// From Here 2003.05.03 かろと
 	// nLenが０だと、BSubst()が置換に失敗してしまうので、代用データ(m_tmpBuf)を使う
 	//
 	// 2007.01.19 ryoji 代用データ使用をコメントアウト
@@ -551,7 +551,7 @@ int CBregexp::Replace(const wchar_t *szTarget, int nLen, int nStart)
 	//	szTarget = m_tmpBuf;
 	//	nLen = 1;
 	//}
-	//	To Here 2003.05.03 かろと
+	// To Here 2003.05.03 かろと
 
 	int result;
 	m_szMsg[0] = '\0';		//!< エラー解除
@@ -562,8 +562,8 @@ int CBregexp::Replace(const wchar_t *szTarget, int nLen, int nStart)
 	}
 	m_szTarget = szTarget;
 
-	//	メッセージが空文字列でなければ何らかのエラー発生。
-	//	サンプルソース参照
+	// メッセージが空文字列でなければ何らかのエラー発生。
+	// サンプルソース参照
 	if (m_szMsg[0]) {
 		return 0;
 	}
@@ -583,7 +583,7 @@ const TCHAR* CBregexp::GetLastMessage() const
 }
 
 
-//	From Here Jun. 26, 2001 genta
+// From Here Jun. 26, 2001 genta
 /*!
 	与えられた正規表現ライブラリの初期化を行う．
 	メッセージフラグがONで初期化に失敗したときはメッセージを表示する．
@@ -599,13 +599,13 @@ bool InitRegexp(
 	bool		bShowMessage	//!< [in] 初期化失敗時にエラーメッセージを出すフラグ
 )
 {
-	//	From Here 2007.08.12 genta
+	// From Here 2007.08.12 genta
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
 	LPCTSTR RegexpDll = _T("");
 
 	RegexpDll = pShareData->m_Common.m_sSearch.m_szRegexpLib;
-	//	To Here 2007.08.12 genta
+	// To Here 2007.08.12 genta
 
 	EDllResult eDllResult = rRegexp.InitDll(RegexpDll);
 	if (DLL_SUCCESS != eDllResult) {
@@ -688,5 +688,5 @@ bool CheckRegexpSyntax(
 	}
 	return true;
 }
-//	To Here Jun. 26, 2001 genta
+// To Here Jun. 26, 2001 genta
 

@@ -117,7 +117,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	}
 	m_cLayoutMgr.SetLayoutInfo(true, ref, ref.m_nTabSpace, nMaxLineKetas);
 
-	// 自動保存の設定	//	Aug, 21, 2000 genta
+	// 自動保存の設定	// Aug, 21, 2000 genta
 	m_cAutoSaveAgent.ReloadAutoSaveParam();
 
 	//$$ CModifyManager インスタンスを生成
@@ -210,14 +210,14 @@ void CEditDoc::InitDoc()
 	Clear();
 
 	// 変更フラグ
-	m_cDocEditor.SetModified(false, false);	//	Jan. 22, 2002 genta
+	m_cDocEditor.SetModified(false, false);	// Jan. 22, 2002 genta
 
 	// 文字コード種別
 	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
 	m_cDocFile.SetCodeSet(ref.m_encoding.m_eDefaultCodetype, ref.m_encoding.m_bDefaultBom);
 	m_cDocEditor.m_cNewLineCode = ref.m_encoding.m_eDefaultEoltype;
 
-	//	Oct. 2, 2005 genta 挿入モード
+	// Oct. 2, 2005 genta 挿入モード
 	m_cDocEditor.SetInsMode(GetDllShareData().m_Common.m_sGeneral.m_bIsINSMode);
 
 	m_cCookie.DeleteAll(L"document");
@@ -330,7 +330,7 @@ BOOL CEditDoc::Create(CEditWnd* pcEditWnd)
 
 	m_pcEditWnd = pcEditWnd;
 
-	//	Oct. 2, 2001 genta
+	// Oct. 2, 2001 genta
 	m_cFuncLookup.Init(GetDllShareData().m_Common.m_sMacro.m_MacroTable, &GetDllShareData().m_Common);
 
 	SetBackgroundImage();
@@ -430,10 +430,10 @@ void CEditDoc::GetEditInfo(
 }
 
 
-//	From Here Aug. 14, 2000 genta
+// From Here Aug. 14, 2000 genta
 //
-//	書き換えが禁止されているかどうか
-//	戻り値: true: 禁止 / false: 許可
+// 書き換えが禁止されているかどうか
+// 戻り値: true: 禁止 / false: 許可
 //
 bool CEditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 {
@@ -509,9 +509,9 @@ bool CEditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 	case F_REDO:		// 2007.10.12 genta
 		return true;
 	}
-	return false;	//	デフォルトで書き換え許可
+	return false;	// デフォルトで書き換え許可
 }
-//	To Here Aug. 14, 2000 genta
+// To Here Aug. 14, 2000 genta
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -618,7 +618,7 @@ void CEditDoc::OnChangeSetting(
 )
 {
 	HWND hwndProgress = NULL;
-	CEditWnd* pCEditWnd = m_pcEditWnd;	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = m_pcEditWnd;	// Sep. 10, 2002 genta
 
 	if (pCEditWnd) {
 		hwndProgress = pCEditWnd->m_cStatusBar.GetProgressHwnd();
@@ -834,7 +834,7 @@ BOOL CEditDoc::OnFileClose()
 	}
 	if (!pszTitle) {
 		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode(CEditWnd::getInstance()->GetHwnd());
-		auto_sprintf_s(szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->m_nId);	//(無題)
+		auto_sprintf_s(szGrepTitle, _T("%s%d"), LS(STR_NO_TITLE1), node->m_nId);	// (無題)
 		pszTitle = szGrepTitle;
 	}
 	// ウィンドウをアクティブにする
@@ -926,7 +926,7 @@ void CEditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 		if (!(::GetAsyncKeyState(VK_SHIFT) & 0x8000)) {	// Shift キーが押されていなければ実行
 			if (pszSaveFilePath)
 				m_cDocFile.SetSaveFilePath(pszSaveFilePath);
-			//	2007.07.20 genta 自動実行マクロで発行したコマンドはキーマクロに保存しない
+			// 2007.07.20 genta 自動実行マクロで発行したコマンドはキーマクロに保存しない
 			HandleCommand((EFunctionCode)((F_USERMACRO_0 + idx) | FA_NONRECORD));
 			m_cDocFile.SetSaveFilePath(_T(""));
 		}

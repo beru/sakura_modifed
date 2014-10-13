@@ -28,7 +28,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字コードセット種別
-//2007.08.14 kobake CODE_ERROR, CODE_DEFAULT 追加
+// 2007.08.14 kobake CODE_ERROR, CODE_DEFAULT 追加
 enum ECodeType {
 	CODE_SJIS,						//!< SJIS				(MS-CP932(Windows-31J), シフトJIS(Shift_JIS))
 	CODE_JIS,						//!< JIS				(MS-CP5022x(ISO-2022-JP-MS)ではない)
@@ -50,7 +50,7 @@ enum ECodeType {
 			JIS X 0201 片仮名は JIS X 0208 の片仮名に置換される
 		- MS-CP50221
 			Unicode から cp50221 への変換時に、
-			JIS X 0201 片仮名は、G0 集合への指示のエスケープシーケンス ESC ( I を用いてエンコードされる
+			JIS X 0201 片仮名は、G0 集合への指示のエスケープシーケンス ESC (I を用いてエンコードされる
 		- MS-CP50222
 			Unicode から cp50222 への変換時に、
 			JIS X 0201 片仮名は、SO/SI を用いてエンコードされる
@@ -65,12 +65,12 @@ enum ECodeType {
 //                           判定                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//2007.08.14 kobake 追加
+// 2007.08.14 kobake 追加
 //!有効な文字コードセットならtrue
-//	2010/6/21	inlineをはずす
+// 2010/6/21	inlineをはずす
 bool IsValidCodeType(int code);
 
-//2007.08.14 kobake 追加
+// 2007.08.14 kobake 追加
 //!有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
 inline bool IsValidCodeTypeExceptSJIS(int code)
 {
@@ -78,7 +78,7 @@ inline bool IsValidCodeTypeExceptSJIS(int code)
 }
 
 // 2010/6/21 Uchi 削除
-//2007.08.14 kobake 追加
+// 2007.08.14 kobake 追加
 //!ECodeType型で表せる値ならtrue
 //inline bool IsInECodeType(int code)
 //{

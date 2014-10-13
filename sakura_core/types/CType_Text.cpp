@@ -271,8 +271,8 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 
 			nLength = auto_sprintf_s(szTitle, L"%d - ", level);
 			
-			wchar_t *pDest = szTitle + nLength; // ‘‚«‚İæ
-			wchar_t *pDestEnd = szTitle + _countof(szTitle) - 2;
+			wchar_t* pDest = szTitle + nLength; // ‘‚«‚İæ
+			wchar_t* pDestEnd = szTitle + _countof(szTitle) - 2;
 			
 			while (pDest < pDestEnd) {
 				if (WCODE::IsLineDelimiter(*pPos) || *pPos == L'\0') {

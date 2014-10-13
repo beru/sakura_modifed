@@ -35,7 +35,7 @@
 #include "dlg/CDialog.h"
 #include "recent/CRecentTagjumpKeyword.h"
 
-// タグファイル名	//	@@ 2005.03.31 MIK 定数化
+// タグファイル名	// @@ 2005.03.31 MIK 定数化
 #define TAG_FILENAME_T _T("tags")
 
 // 2010.07.22 いくつかcppへ移動
@@ -60,11 +60,11 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示 
 
-	//	@@ 2005.03.31 MIK 階層パラメータを追加
+	// @@ 2005.03.31 MIK 階層パラメータを追加
 //	bool AddParamA(const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId);	// 登録
 	bool GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* fileBase );	// 取得
 	void SetFileName(const TCHAR* pszFileName);
-	void SetKeyword(const wchar_t* pszKeyword);	//	@@ 2005.03.31 MIK
+	void SetKeyword(const wchar_t* pszKeyword);	// @@ 2005.03.31 MIK
 	int  FindDirectTagJump();
 
 	bool GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int* lineNum, int* depth);
@@ -80,7 +80,7 @@ protected:
 	BOOL	OnMove(WPARAM wParam, LPARAM lParam);
 	BOOL	OnMinMaxInfo(LPARAM lParam);
 	BOOL	OnNotify(WPARAM wParam, LPARAM lParam);
-	//	@@ 2005.03.31 MIK キーワード入力エリアのイベント処理
+	// @@ 2005.03.31 MIK キーワード入力エリアのイベント処理
 	BOOL	OnCbnSelChange(HWND hwndCtl, int wID);
 	BOOL	OnCbnEditChange(HWND hwndCtl, int wID);
 	//BOOL	OnEnChange(HWND hwndCtl, int wID);
@@ -93,11 +93,11 @@ private:
 
 	void	SetData(void);	// ダイアログデータの設定
 	int		GetData(void);	// ダイアログデータの取得
-	void	UpdateData(bool);	//	@@ 2005.03.31 MIK
+	void	UpdateData(bool);	// @@ 2005.03.31 MIK
 
 	TCHAR	*GetNameByType(const TCHAR type, const TCHAR* name);	// タイプを名前に変換する。
 	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
-	//	@@ 2005.03.31 MIK
+	// @@ 2005.03.31 MIK
 	const TCHAR* GetFileName(void);
 	const TCHAR* GetFilePath(void) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
 	void Empty(void);

@@ -678,7 +678,7 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 /*!
 	@date 2010.07.11 Moca ¡‚Ì‚Æ‚±‚ëCRegexKeyword::RegexKeyCheckSyntax‚Æ“¯ˆê‚È‚Ì‚ÅA’†g‚ğíœ‚µ‚Ä“]‘—ŠÖ”‚É•ÏX
 */
-BOOL CPropTypesRegex::RegexKakomiCheck(const wchar_t *s)
+BOOL CPropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 {
 	return CRegexKeyword::RegexKeyCheckSyntax(s);
 }

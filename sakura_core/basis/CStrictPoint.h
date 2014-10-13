@@ -32,7 +32,7 @@ public:
 	CStrictPoint(int _x, int _y) : CMyPoint(_x, _y) { }
 	CStrictPoint(const CStrictPoint& rhs) : CMyPoint(rhs) { }
 
-	//※POINTからの変換は、「明示的に指定されたときのみ」許可する。
+	// ※POINTからの変換は、「明示的に指定されたときのみ」許可する。
 	explicit CStrictPoint(const POINT& rhs) : CMyPoint(rhs) { }
 };
 */

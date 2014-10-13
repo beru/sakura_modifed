@@ -126,10 +126,10 @@ void CViewCommander::Command_FILEOPEN(const WCHAR* filename, ECodeType nCharCode
 			}
 		}
 		bool bDlgResult = GetDocument()->m_cDocFileOperation.OpenFileDialog(
-			CEditWnd::getInstance()->GetHwnd(),	//[in]  オーナーウィンドウ
-			defName.length() == 0 ? NULL : defName.c_str(),	//[in]  フォルダ
-			&sLoadInfo,							//[out] ロード情報受け取り
-			files								//[out] ファイル名
+			CEditWnd::getInstance()->GetHwnd(),	// [in]  オーナーウィンドウ
+			defName.length() == 0 ? NULL : defName.c_str(),	// [in]  フォルダ
+			&sLoadInfo,							// [out] ロード情報受け取り
+			files								// [out] ファイル名
 		);
 		if (!bDlgResult) return;
 
@@ -227,7 +227,7 @@ BOOL CViewCommander::Command_FILESAVEALL(void)
 }
 
 
-// 閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+// 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 void CViewCommander::Command_FILECLOSE(void)
 {
 	GetDocument()->m_cDocFileOperation.FileClose();
@@ -309,7 +309,7 @@ void CViewCommander::Command_PRINT_PAGESETUP(void)
 }
 
 
-//From Here Feb. 10, 2001 JEPRO 追加
+// From Here Feb. 10, 2001 JEPRO 追加
 // C/C++ヘッダファイルまたはソースファイル オープン機能
 BOOL CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
 {
@@ -322,7 +322,7 @@ BOOL CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
 }
 
 
-// C/C++ヘッダファイル オープン機能		//Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
+// C/C++ヘッダファイル オープン機能		// Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
 //BOOL CViewCommander::Command_OPENINCLUDEFILE(BOOL bCheckOnly)
 BOOL CViewCommander::Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
 {
@@ -355,7 +355,7 @@ void CViewCommander::Command_ACTIVATE_SQLPLUS(void)
 {
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_SQLERR_ACTV_BUT_NOT_RUN));	//"Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_SQLERR_ACTV_BUT_NOT_RUN));	// "Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		return;
 	}
 	// Oracle SQL*Plusをアクティブにする
@@ -377,7 +377,7 @@ void CViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
-		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_SQLERR_EXEC_BUT_NOT_RUN));	//"Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_SQLERR_EXEC_BUT_NOT_RUN));	// "Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		return;
 	}
 	// テキストが変更されている場合
@@ -411,7 +411,7 @@ void CViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 	}
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		// ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む
-		//	2003.10.20 MIK コード簡略化
+		// 2003.10.20 MIK コード簡略化
 		if (_tcschr(GetDocument()->m_cDocFile.GetFilePath(), TCODE::SPACE) ? TRUE : FALSE) {
 			auto_sprintf_s(szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_cDocFile.GetFilePath());
 		}else {
@@ -534,7 +534,7 @@ void CViewCommander::Command_EXITALLEDITORS(void)
 }
 
 
-// サクラエディタの全終了	//Dec. 27, 2000 JEPRO 追加
+// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
 void CViewCommander::Command_EXITALL(void)
 {
 	CControlTray::TerminateApplication(GetMainWindow());	// 2006.12.25 ryoji 引数追加
@@ -570,7 +570,7 @@ BOOL CViewCommander::Command_PUTFILE(
 
 	if (nSaveCharCode == CODE_AUTODETECT) nSaveCharCode = GetDocument()->GetDocumentEncoding();
 
-	//	2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
+	// 2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
 	std::auto_ptr<CCodeBase> pcSaveCode(CCodeFactory::CreateCodeBase(nSaveCharCode, 0));

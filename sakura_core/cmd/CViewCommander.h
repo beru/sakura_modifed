@@ -93,32 +93,32 @@ public:
 	bool Command_FILESAVEAS_DIALOG(const WCHAR*, ECodeType, EEolType);		// 名前を付けて保存
 	BOOL Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType);		// 名前を付けて保存
 	BOOL Command_FILESAVEALL(void);				// 全て上書き保存 // Jan. 23, 2005 genta
-	void Command_FILECLOSE(void);				// 開じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+	void Command_FILECLOSE(void);				// 開じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 	// 閉じて開く
 	// Mar. 30, 2003 genta 引数追加
 	void Command_FILECLOSE_OPEN(LPCWSTR filename = NULL,
 		ECodeType nCharCode = CODE_AUTODETECT, bool bViewMode = false);
 
-	void Command_FILE_REOPEN(ECodeType nCharCode, bool bNoConfirm);		// 再オープン	//Dec. 4, 2002 genta 引数追加
+	void Command_FILE_REOPEN(ECodeType nCharCode, bool bNoConfirm);		// 再オープン	// Dec. 4, 2002 genta 引数追加
 
 	void Command_PRINT(void);					// 印刷
 	void Command_PRINT_PREVIEW(void);			// 印刷プレビュー
-	void Command_PRINT_PAGESETUP(void);			// 印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	BOOL Command_OPEN_HfromtoC(BOOL);			// 同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
-	BOOL Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
-	BOOL Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+	void Command_PRINT_PAGESETUP(void);			// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
+	BOOL Command_OPEN_HfromtoC(BOOL);			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
+	BOOL Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	BOOL Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	void Command_ACTIVATE_SQLPLUS(void);			// Oracle SQL*Plusをアクティブ表示
 	void Command_PLSQL_COMPILE_ON_SQLPLUS(void);	// Oracle SQL*Plusで実行
 	void Command_BROWSE(void);					// ブラウズ
 	void Command_VIEWMODE(void);				// ビューモード
 	void Command_PROPERTY_FILE(void);			// ファイルのプロパティ
 	void Command_EXITALLEDITORS(void);			// 編集の全終了	// 2007.02.13 ryoji 追加
-	void Command_EXITALL(void);					// サクラエディタの全終了	//Dec. 27, 2000 JEPRO 追加
+	void Command_EXITALL(void);					// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
 	BOOL Command_PUTFILE(LPCWSTR, ECodeType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
 	BOOL Command_INSFILE(LPCWSTR, ECodeType, int);	// キャレット位置にファイル挿入 maru 2006.12.10
 
 	// 編集系
-	void Command_WCHAR(wchar_t, bool bConvertEOL = true);			// 文字入力 //2007.09.02 kobake Command_CHAR(char)→Command_WCHAR(wchar_t)に変更
+	void Command_WCHAR(wchar_t, bool bConvertEOL = true);			// 文字入力 // 2007.09.02 kobake Command_CHAR(char)→Command_WCHAR(wchar_t)に変更
 	void Command_IME_CHAR(WORD);			// 全角文字入力
 	void Command_UNDO(void);				// 元に戻す(Undo)
 	void Command_REDO(void);				// やり直し(Redo)
@@ -150,7 +150,7 @@ public:
 
 
 	// カーソル移動系
-	//	Oct. 24, 2001 genta 機能拡張のため引数追加
+	// Oct. 24, 2001 genta 機能拡張のため引数追加
 	void Command_MOVECURSOR(CLogicPoint pos, int option);
 	void Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option);
 	int Command_UP(bool bSelect, bool bRepeat, int line = 0);			// カーソル上移動
@@ -161,15 +161,15 @@ public:
 	void Command_DOWN2(bool bSelect);				// カーソル下移動（２行づつ）
 	void Command_WORDLEFT(bool bSelect);			// 単語の左端に移動
 	void Command_WORDRIGHT(bool bSelect);			// 単語の右端に移動
-	//	Oct. 29, 2001 genta マクロ向け機能拡張
+	// Oct. 29, 2001 genta マクロ向け機能拡張
 	void Command_GOLINETOP(bool bSelect, int lparam);	// 行頭に移動（折り返し単位）
 	void Command_GOLINEEND(bool bSelect, int , int);	// 行末に移動（折り返し単位）
 //	void Command_ROLLDOWN(int);						// スクロールダウン
 //	void Command_ROLLUP(int);						// スクロールアップ
-	void Command_HalfPageUp(bool bSelect);			// 半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_HalfPageDown(bool bSelect);		// 半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_1PageUp(bool bSelect);				// １ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	void Command_1PageDown(bool bSelect);			// １ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	void Command_HalfPageUp(bool bSelect);			// 半ページアップ	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_HalfPageDown(bool bSelect);		// 半ページダウン	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_1PageUp(bool bSelect);				// １ページアップ	// Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	void Command_1PageDown(bool bSelect);			// １ページダウン	// Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	void Command_GOFILETOP(bool bSelect);			// ファイルの先頭に移動
 	void Command_GOFILEEND(bool bSelect);			// ファイルの最後に移動
 	void Command_CURLINECENTER(void);				// カーソル行をウィンドウ中央へ
@@ -208,22 +208,22 @@ public:
 	void Command_PASTEBOX(int option);			// 矩形貼り付け（クリップボードから矩形貼り付け
 	//<< 2002/03/29 Azumaiya
 	// 矩形貼り付け（引数渡しでの張り付け）
-	void Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize);
+	void Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize);
 	//>> 2002/03/29 Azumaiya
-	void Command_INSBOXTEXT(const wchar_t *, int); // 矩形貼り付け
+	void Command_INSBOXTEXT(const wchar_t*, int); // 矩形貼り付け
 	void Command_INSTEXT(bool bRedraw, const wchar_t*, CLogicInt, bool bNoWaitCursor,
 		bool bLinePaste = false, bool bFastMode = false, const CLogicRange*	psDelRangeLogicFast = NULL); // 2004.05.14 Moca テキストを貼り付け '\0'対応
 	void Command_ADDTAIL(const wchar_t* pszData, int nDataLen);	// 最後にテキストを追加
-	void Command_COPYFILENAME(void);				// このファイル名をクリップボードにコピー //2002/2/3 aroka
+	void Command_COPYFILENAME(void);				// このファイル名をクリップボードにコピー // 2002/2/3 aroka
 	void Command_COPYPATH(void);					// このファイルのパス名をクリップボードにコピー
 	void Command_COPYTAG(void);						// このファイルのパス名とカーソル位置をコピー
 	void Command_COPYLINES(void);					// 選択範囲内全行コピー
 	void Command_COPYLINESASPASSAGE(void);			// 選択範囲内全行引用符付きコピー
 	void Command_COPYLINESWITHLINENUMBER(void);		// 選択範囲内全行行番号付きコピー
-	void Command_COPY_COLOR_HTML(bool bLineNumber = false);	//選択範囲内全行行番号付きコピー
-	void Command_COPY_COLOR_HTML_LINENUMBER(void);		//選択範囲内色付きHTMLコピー
+	void Command_COPY_COLOR_HTML(bool bLineNumber = false);	// 選択範囲内全行行番号付きコピー
+	void Command_COPY_COLOR_HTML_LINENUMBER(void);		// 選択範囲内色付きHTMLコピー
 	CColorStrategy* GetColorStrategyHTML(const CStringRef&, int, const CColorStrategyPool*, CColorStrategy**, CColorStrategy**);
-	void Command_CREATEKEYBINDLIST(void);				// キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO	Command_の作り方がわからないので殺してある
+	void Command_CREATEKEYBINDLIST(void);				// キー割り当て一覧をコピー // Sept. 15, 2000 JEPRO	Command_の作り方がわからないので殺してある
 
 
 	// 挿入系
@@ -233,11 +233,11 @@ public:
 	// 変換系
 	void Command_TOLOWER(void);					// 小文字
 	void Command_TOUPPER(void);					// 大文字
-	void Command_TOZENKAKUKATA(void);			// 半角＋全ひら→全角・カタカナ	//Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
-	void Command_TOZENKAKUHIRA(void);			// 半角＋全カタ→全角・ひらがな	//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
+	void Command_TOZENKAKUKATA(void);			// 半角＋全ひら→全角・カタカナ	// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
+	void Command_TOZENKAKUHIRA(void);			// 半角＋全カタ→全角・ひらがな	// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
 	void Command_TOHANKAKU(void);				// 全角→半角
-	void Command_TOHANKATA(void);				// 全角カタカナ→半角カタカナ	//Aug. 29, 2002 ai
-	void Command_TOZENEI(void);					// 半角英数→全角英数 //July. 30, 2001 Misaka
+	void Command_TOHANKATA(void);				// 全角カタカナ→半角カタカナ	// Aug. 29, 2002 ai
+	void Command_TOZENEI(void);					// 半角英数→全角英数 // July. 30, 2001 Misaka
 	void Command_TOHANEI(void);					// 全角英数→半角英数 //@@@ 2002.2.11 YAZAKI
 	void Command_HANKATATOZENKAKUKATA(void);	// 半角カタカナ→全角カタカナ
 	void Command_HANKATATOZENKAKUHIRA(void);	// 半角カタカナ→全角ひらがな
@@ -255,7 +255,7 @@ public:
 	void Command_CODECNV_SJIS2UTF8(void);		// SJIS→UTF-8コード変換
 	void Command_CODECNV_SJIS2UTF7(void);		// SJIS→UTF-7コード変換
 	void Command_BASE64DECODE(void);			// Base64デコードして保存
-	void Command_UUDECODE(void);				// uudecodeして保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
+	void Command_UUDECODE(void);				// uudecodeして保存	// Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 
 	// 検索系
 	void Command_SEARCH_BOX(void);						// 検索(ボックス)	// 2006.06.04 yukihane
@@ -279,10 +279,10 @@ public:
 	// Apr. 03, 2003 genta 引数追加
 	bool Command_TAGJUMP(bool bClose = false);			// タグジャンプ機能
 	void Command_TAGJUMPBACK(void);						// タグジャンプバック機能
-	bool Command_TagJumpByTagsFileMsg(bool);			//ダイレクトタグジャンプ(通知つき)
-	bool Command_TagJumpByTagsFile(bool);				//ダイレクトタグジャンプ	//@@@ 2003.04.13 MIK
+	bool Command_TagJumpByTagsFileMsg(bool);			// ダイレクトタグジャンプ(通知つき)
+	bool Command_TagJumpByTagsFile(bool);				// ダイレクトタグジャンプ	//@@@ 2003.04.13 MIK
 
-	bool Command_TagsMake(void);						//タグファイルの作成	//@@@ 2003.04.13 MIK
+	bool Command_TagsMake(void);						// タグファイルの作成	//@@@ 2003.04.13 MIK
 	bool Command_TagJumpByTagsFileKeyword(const wchar_t* keyword);	//	@@ 2005.03.31 MIK
 	void Command_COMPARE(void);							// ファイル内容比較
 	void Command_Diff_Dialog(void);						// DIFF差分表示ダイアログ	//@@@ 2002.05.25 MIK
@@ -298,7 +298,7 @@ public:
 	void Command_BOOKMARK_RESET(void);					// ブックマークの全解除
 // To Here 2001.12.03 hor
 	void Command_BOOKMARK_PATTERN(void);				// 2002.01.16 hor 指定パターンに一致する行をマーク
-	bool Command_TagJumpEx(const TCHAR* szFileName, const int nLine, const int nColumn, const int nOption);	//拡張タグジャンプ
+	bool Command_TagJumpEx(const TCHAR* szFileName, const int nLine, const int nColumn, const int nOption);	// 拡張タグジャンプ
 
 
 
@@ -319,11 +319,11 @@ public:
 	void Command_OPTION(void);						// 共通設定
 	void Command_FONT(void);						// フォント設定
 	void Command_SETFONTSIZE(int, int, int);		// フォントサイズ設定
-	void Command_WRAPWINDOWWIDTH(void);				// 現在のウィンドウ幅で折り返し	//Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+	void Command_WRAPWINDOWWIDTH(void);				// 現在のウィンドウ幅で折り返し	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 	void Command_Favorite(void);					// 履歴の管理	//@@@ 2003.04.08 MIK
-	void Command_SET_QUOTESTRING(const wchar_t*);	//	Jan. 29, 2005 genta 引用符の設定
+	void Command_SET_QUOTESTRING(const wchar_t*);	// Jan. 29, 2005 genta 引用符の設定
 	void Command_TEXTWRAPMETHOD(int);				// テキストの折り返し方法を変更する		// 2008.05.30 nasukoji
-	void Command_SELECT_COUNT_MODE(int nMode);		// 文字カウント方法	//2009.07.06 syat
+	void Command_SELECT_COUNT_MODE(int nMode);		// 文字カウント方法	// 2009.07.06 syat
 
 	// マクロ系
 	void Command_RECKEYMACRO(void);		// キーマクロの記録開始／終了
@@ -331,38 +331,38 @@ public:
 	void Command_LOADKEYMACRO(void);	// キーマクロの読み込み
 	void Command_EXECKEYMACRO(void);	// キーマクロの実行
 	void Command_EXECEXTMACRO(const WCHAR* path, const WCHAR* type);	// 名前を指定してマクロ実行
-//	From Here 2006.12.03 maru 引数の拡張．
-//	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
+// From Here 2006.12.03 maru 引数の拡張．
+// From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 //	void Command_EXECCMMAND(void);	// 外部コマンド実行
-	//	Oct. 9, 2001 genta マクロ対応のため機能拡張
+	// Oct. 9, 2001 genta マクロ対応のため機能拡張
 //	void Command_EXECCOMMAND_DIALOG(const WCHAR* cmd);	// 外部コマンド実行ダイアログ表示
 //	void Command_EXECCOMMAND(const WCHAR* cmd);	// 外部コマンド実行
-	void Command_EXECCOMMAND_DIALOG(void);		// 外部コマンド実行ダイアログ表示	//	引数使ってないみたいなので
-	//	マクロからの呼び出しではオプションを保存させないため、Command_EXECCOMMAND_DIALOG内で処理しておく．
+	void Command_EXECCOMMAND_DIALOG(void);		// 外部コマンド実行ダイアログ表示	// 引数使ってないみたいなので
+	// マクロからの呼び出しではオプションを保存させないため、Command_EXECCOMMAND_DIALOG内で処理しておく．
 	void Command_EXECCOMMAND(LPCWSTR cmd, const int nFlgOpt, LPCWSTR);	// 外部コマンド実行
-//	To Here Sept. 20, 2000
-//	To Here 2006.12.03 maru 引数の拡張
+// To Here Sept. 20, 2000
+// To Here 2006.12.03 maru 引数の拡張
 
 	// カスタムメニュー
 	void Command_MENU_RBUTTON(void);	// 右クリックメニュー
 	int Command_CUSTMENU(int);			// カスタムメニュー表示
 
 	// ウィンドウ系
-	void Command_SPLIT_V(void);			// 上下に分割	//Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
-	void Command_SPLIT_H(void);			// 左右に分割	//Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
-	void Command_SPLIT_VH(void);		// 縦横に分割	//Sept. 17, 2000 jepro 説明に「に」を追加
+	void Command_SPLIT_V(void);			// 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
+	void Command_SPLIT_H(void);			// 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
+	void Command_SPLIT_VH(void);		// 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 	void Command_WINCLOSE(void);		// ウィンドウを閉じる
-	void Command_FILECLOSEALL(void);	// すべてのウィンドウを閉じる	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	void Command_BIND_WINDOW(void);		// 結合して表示	//2004.07.14 Kazika 新規追加
+	void Command_FILECLOSEALL(void);	// すべてのウィンドウを閉じる	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
+	void Command_BIND_WINDOW(void);		// 結合して表示	// 2004.07.14 Kazika 新規追加
 	void Command_CASCADE(void);			// 重ねて表示
 	void Command_TILE_V(void);			// 上下に並べて表示
 	void Command_TILE_H(void);			// 左右に並べて表示
 	void Command_MAXIMIZE_V(void);		// 縦方向に最大化
-	void Command_MAXIMIZE_H(void);		// 横方向に最大化  //2001.02.10 by MIK
+	void Command_MAXIMIZE_H(void);		// 横方向に最大化  // 2001.02.10 by MIK
 	void Command_MINIMIZE_ALL(void);	// すべて最小化
 	void Command_REDRAW(void);			// 再描画
 	void Command_WIN_OUTPUT(void);		// アウトプットウィンドウ表示
-	void Command_TRACEOUT(const wchar_t* outputstr , int, int);	//マクロ用アウトプットウィンドウに表示 maru 2006.04.26
+	void Command_TRACEOUT(const wchar_t* outputstr , int, int);	// マクロ用アウトプットウィンドウに表示 maru 2006.04.26
 	void Command_WINTOPMOST(LPARAM);	// 常に手前に表示 2004.09.21 Moca
 	void Command_WINLIST(int nCommandFrom);		// ウィンドウ一覧ポップアップ表示処理	// 2006.03.23 fon // 2006.05.19 genta 引数追加
 	void Command_GROUPCLOSE(void);		// グループを閉じる		// 2007.06.20 ryoji
@@ -381,13 +381,13 @@ public:
 	void Command_ToggleKeySearch(int);	// キャレット位置の単語を辞書検索する機能ON-OFF	// 2006.03.24 fon
 
 	void Command_HOKAN(void);			// 入力補完
-	void Command_HELP_CONTENTS(void);	// ヘルプ目次			//Nov. 25, 2000 JEPRO added
-	void Command_HELP_SEARCH(void);		// ヘルプキーワード検索	//Nov. 25, 2000 JEPRO added
+	void Command_HELP_CONTENTS(void);	// ヘルプ目次			// Nov. 25, 2000 JEPRO added
+	void Command_HELP_SEARCH(void);		// ヘルプキーワード検索	// Nov. 25, 2000 JEPRO added
 	void Command_MENU_ALLFUNC(void);	// コマンド一覧
 	void Command_EXTHELP1(void);		// 外部ヘルプ１
-	//	Jul. 5, 2002 genta
+	// Jul. 5, 2002 genta
 	void Command_EXTHTMLHELP(const WCHAR* helpfile = NULL, const WCHAR* kwd = NULL);	// 外部HTMLヘルプ
-	void Command_ABOUT(void);			// バージョン情報	//Dec. 24, 2000 JEPRO 追加
+	void Command_ABOUT(void);			// バージョン情報	// Dec. 24, 2000 JEPRO 追加
 
 	// その他
 

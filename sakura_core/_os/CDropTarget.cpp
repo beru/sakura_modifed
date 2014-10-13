@@ -294,7 +294,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 */
 STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
-	//Feb. 26, 2001, fixed by yebisuya sugoroku
+	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm || !lpsm->hGlobal)
 		return E_INVALIDARG;
 	if (!m_pData)
@@ -331,7 +331,7 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpfe)
 {
 	if (!lpfe)
 		return E_INVALIDARG;
-	//Feb. 26, 2001, fixed by yebisuya sugoroku
+	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!m_pData)
 		return OLE_E_NOTRUNNING;
 

@@ -54,7 +54,7 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 	case IDM_JUMPDICT:
 		// キーワード辞書ファイルを開く
 		if (m_pCommanderView->m_pTypeData->m_bUseKeyWordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
-			//	Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
+			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
 			m_pCommanderView->TagJumpSub(
 				m_pCommanderView->m_pTypeData->m_KeyHelpArr[m_pCommanderView->m_cTipWnd.m_nSearchDict].m_szPath,
 				CMyPoint(1, m_pCommanderView->m_cTipWnd.m_nSearchLine),
@@ -79,7 +79,7 @@ int CViewCommander::Command_CUSTMENU(int nMenuIdx)
 {
 	GetEditWindow()->GetMenuDrawer().ResetContents();
 
-	//	Oct. 3, 2001 genta
+	// Oct. 3, 2001 genta
 	CFuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
 
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {

@@ -238,7 +238,7 @@ BOOL CDlgPrintSetting::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「印刷ページ設定」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PAGESETUP));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDC_BUTTON_EDITSETTINGNAME:
@@ -577,13 +577,13 @@ int CDlgPrintSetting::GetData(void)
 	// 英文ワードラップ
 	curPS.m_bPrintWordWrap = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_WORDWRAP);
 
-	//行頭禁則	//@@@ 2002.04.09 MIK
+	// 行頭禁則	//@@@ 2002.04.09 MIK
 	curPS.m_bPrintKinsokuHead = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUHEAD);
-	//行末禁則	//@@@ 2002.04.09 MIK
+	// 行末禁則	//@@@ 2002.04.09 MIK
 	curPS.m_bPrintKinsokuTail = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUTAIL);
-	//改行文字をぶら下げる	//@@@ 2002.04.13 MIK
+	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
 	curPS.m_bPrintKinsokuRet = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKURET);
-	//句読点をぶら下げる	//@@@ 2002.04.17 MIK
+	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
 	curPS.m_bPrintKinsokuKuto = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUKUTO);
 
 	// カラー印刷
@@ -592,14 +592,14 @@ int CDlgPrintSetting::GetData(void)
 
 	//@@@ 2002.2.4 YAZAKI
 	// ヘッダー
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_HEAD1, curPS.m_szHeaderForm[0], HEADER_MAX);	//	100文字で制限しないと。。。
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_HEAD2, curPS.m_szHeaderForm[1], HEADER_MAX);	//	100文字で制限しないと。。。
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_HEAD3, curPS.m_szHeaderForm[2], HEADER_MAX);	//	100文字で制限しないと。。。
+	::DlgItem_GetText(GetHwnd(), IDC_EDIT_HEAD1, curPS.m_szHeaderForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
+	::DlgItem_GetText(GetHwnd(), IDC_EDIT_HEAD2, curPS.m_szHeaderForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
+	::DlgItem_GetText(GetHwnd(), IDC_EDIT_HEAD3, curPS.m_szHeaderForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
 
 	// フッター
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_FOOT1, curPS.m_szFooterForm[0], HEADER_MAX);	//	100文字で制限しないと。。。
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_FOOT2, curPS.m_szFooterForm[1], HEADER_MAX);	//	100文字で制限しないと。。。
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_FOOT3, curPS.m_szFooterForm[2], HEADER_MAX);	//	100文字で制限しないと。。。
+	::DlgItem_GetText(GetHwnd(), IDC_EDIT_FOOT1, curPS.m_szFooterForm[0], HEADER_MAX);	// 100文字で制限しないと。。。
+	::DlgItem_GetText(GetHwnd(), IDC_EDIT_FOOT2, curPS.m_szFooterForm[1], HEADER_MAX);	// 100文字で制限しないと。。。
+	::DlgItem_GetText(GetHwnd(), IDC_EDIT_FOOT3, curPS.m_szFooterForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
 
 	// ヘッダフォント
 	if (!IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_USE_FONT_HEAD)) {
@@ -690,14 +690,14 @@ void CDlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 		curPS.m_bColorPrint ? BST_CHECKED : BST_UNCHECKED);
 
 	// ヘッダー
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD1, curPS.m_szHeaderForm[POS_LEFT]);	//	100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD2, curPS.m_szHeaderForm[POS_CENTER]);	//	100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD3, curPS.m_szHeaderForm[POS_RIGHT]);	//	100文字で制限しないと。。。
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD1, curPS.m_szHeaderForm[POS_LEFT]);	// 100文字で制限しないと。。。
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD2, curPS.m_szHeaderForm[POS_CENTER]);	// 100文字で制限しないと。。。
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD3, curPS.m_szHeaderForm[POS_RIGHT]);	// 100文字で制限しないと。。。
 
 	// フッター
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT1, curPS.m_szFooterForm[POS_LEFT]);	//	100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT2, curPS.m_szFooterForm[POS_CENTER]);	//	100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT3, curPS.m_szFooterForm[POS_RIGHT]);	//	100文字で制限しないと。。。
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT1, curPS.m_szFooterForm[POS_LEFT]);	// 100文字で制限しないと。。。
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT2, curPS.m_szFooterForm[POS_CENTER]);	// 100文字で制限しないと。。。
+	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT3, curPS.m_szFooterForm[POS_RIGHT]);	// 100文字で制限しないと。。。
 
 	// ヘッダフォント
 	SetFontName(IDC_STATIC_FONT_HEAD, IDC_CHECK_USE_FONT_HEAD,
@@ -815,8 +815,8 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 		)
 	) {
 	// 2001.12.21 hor GetPaperSize失敗時はそのまま終了
-	//	nPaperAllWidth = 210 * 10;		/* 用紙幅 */
-	//	nPaperAllHeight = 297 * 10;		/* 用紙高さ */
+	// nPaperAllWidth = 210 * 10;		/* 用紙幅 */
+	// nPaperAllHeight = 297 * 10;		/* 用紙高さ */
 		return FALSE;
 	}
 	// 行あたりの文字数(行番号込み)

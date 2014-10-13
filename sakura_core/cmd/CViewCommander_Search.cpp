@@ -100,8 +100,8 @@ void CViewCommander::Command_SEARCH_NEXT(
 	// bFastMode
 	CLogicInt nLineNumLogic(0);
 
-	bool	bRedo = false;	//	hor
-	int		nIdxOld = 0;	//	hor
+	bool	bRedo = false;	// hor
+	int		nIdxOld = 0;	// hor
 	int		nSearchResult;
 	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 
@@ -184,9 +184,9 @@ void CViewCommander::Command_SEARCH_NEXT(
 		nIdx = caret.GetCaretLogicPos().GetX2();
 	}
 
-	nLineNumOld = nLineNum;	//	hor
-	bRedo		= true;		//	hor
-	nIdxOld		= nIdx;		//	hor
+	nLineNumOld = nLineNum;	// hor
+	bRedo		= true;		// hor
+	nIdxOld		= nIdx;		// hor
 
 re_do:;
 	// 現在位置より後ろの位置を検索する
@@ -325,7 +325,7 @@ void CViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 {
 	bool		bSelectingLock_Old = false;
 	bool		bFound = false;
-	bool		bRedo = false;			//	hor
+	bool		bRedo = false;			// hor
 	bool		bDisableSelect = false;
 	CLayoutInt	nLineNumOld(0);
 	CLogicInt	nIdxOld(0);
@@ -388,10 +388,10 @@ void CViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 		nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, caret.GetCaretLayoutPos().GetX2());
 	}
 
-	bRedo		=	true;		//	hor
-	nLineNumOld	=	nLineNum;	//	hor
-	nIdxOld		=	nIdx;		//	hor
-re_do:;							//	hor
+	bRedo		=	true;		// hor
+	nLineNumOld	=	nLineNum;	// hor
+	nIdxOld		=	nIdx;		// hor
+re_do:;							// hor
 	// 現在位置より前の位置を検索する
 	if (layoutMgr.SearchWord(
 			nLineNum,								// 検索開始レイアウト行
@@ -468,7 +468,7 @@ end_of_func:;
 		AlertNotFound(
 			hwndParent,
 			false,
-			LS(STR_ERR_SRPREV3),	//Jan. 25, 2001 jepro メッセージを若干変更
+			LS(STR_ERR_SRPREV3),	// Jan. 25, 2001 jepro メッセージを若干変更
 			KeyName.GetStringPtr()
 		);
 	}
@@ -516,7 +516,7 @@ void CViewCommander::Command_REPLACE_DIALOG(void)
 		ActivateFrameWindow(dlgReplace.GetHwnd());
 		::DlgItem_SetText(dlgReplace.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT());
 	}
-	//	To Here Jul. 2, 2001 genta 置換ウィンドウの2重開きを抑止
+	// To Here Jul. 2, 2001 genta 置換ウィンドウの2重開きを抑止
 	return;
 }
 
@@ -529,11 +529,11 @@ void CViewCommander::Command_REPLACE_DIALOG(void)
 */
 void CViewCommander::Command_REPLACE(HWND hwndParent)
 {
-	if (!hwndParent) {	//	親ウィンドウが指定されていなければ、CEditViewが親。
+	if (!hwndParent) {	// 親ウィンドウが指定されていなければ、CEditViewが親。
 		hwndParent = m_pCommanderView->GetHwnd();
 	}
 	auto& dlgReplace = GetEditWindow()->m_cDlgReplace;
-	//2002.02.10 hor
+	// 2002.02.10 hor
 	int nPaste			=	dlgReplace.m_nPaste;
 	int nReplaceTarget	=	dlgReplace.m_nReplaceTarget;
 
@@ -542,7 +542,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 		OkMessage(hwndParent, LS(STR_ERR_CEDITVIEW_CMD10));
 		::CheckDlgButton(dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE);
 		::EnableWindow(::GetDlgItem(dlgReplace.GetHwnd(), IDC_COMBO_TEXT2), TRUE);
-		return;	//	失敗return;
+		return;	// 失敗return;
 	}
 
 	// 2002.01.09 hor
@@ -603,7 +603,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 			CBregexp cRegexp;
 
 			if (!InitRegexp(m_pCommanderView->GetHwnd(), cRegexp, true)) {
-				return;	//	失敗return;
+				return;	// 失敗return;
 			}
 
 			// 物理行、物理行長、物理行での検索マッチ位置
@@ -612,7 +612,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 			CLogicInt nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, GetSelect().GetFrom().GetX2()) + pcLayout->GetLogicOffset();
 			CLogicInt nLen = pcLayout->GetDocLineRef()->GetLengthWithEOL();
 			// 正規表現で選択始点・終点への挿入を記述
-			//	Jun. 6, 2005 かろと
+			// Jun. 6, 2005 かろと
 			// →これでは「検索の後ろの文字が改行だったら次の行頭へ移動」が処理できない
 			// → Oct. 30, 「検索の後ろの文字が改行だったら・・」の処理をやめる（誰もしらないみたいなので）
 			// Nov. 9, 2005 かろと 正規表現で選択始点・終点への挿入方法を変更(再)
@@ -648,8 +648,8 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 				}
 				// 行末から検索文字列末尾までの文字数
 				CLogicInt colDiff = nLen - nIdxTo;
-				//	Oct. 22, 2005 Karoto
-				//	\rを置換するとその後ろの\nが消えてしまう問題の対応
+				// Oct. 22, 2005 Karoto
+				// \rを置換するとその後ろの\nが消えてしまう問題の対応
 				if (colDiff < pcLayout->GetDocLineRef()->GetEol().GetLen()) {
 					// 改行にかかっていたら、行全体をINSTEXTする。
 					colDiff = CLogicInt(0);
@@ -784,13 +784,13 @@ void CViewCommander::Command_REPLACE_ALL()
 		// 選択範囲開始位置の取得
 		sRangeA = GetSelect();
 
-		//	From Here 2007.09.20 genta 矩形範囲の選択置換ができない
-		//	左下～右上と選択した場合，m_nSelectColumnTo < m_nSelectColumnFrom となるが，
-		//	範囲チェックで colFrom < colTo を仮定しているので，
-		//	矩形選択の場合は左上～右下指定になるよう桁を入れ換える．
+		// From Here 2007.09.20 genta 矩形範囲の選択置換ができない
+		// 左下～右上と選択した場合，m_nSelectColumnTo < m_nSelectColumnFrom となるが，
+		// 範囲チェックで colFrom < colTo を仮定しているので，
+		// 矩形選択の場合は左上～右下指定になるよう桁を入れ換える．
 		if (bBeginBoxSelect && sRangeA.GetTo().x < sRangeA.GetFrom().x)
 			t_swap(sRangeA.GetFromPointer()->x, sRangeA.GetToPointer()->x);
-		//	To Here 2007.09.20 genta 矩形範囲の選択置換ができない
+		// To Here 2007.09.20 genta 矩形範囲の選択置換ができない
 
 		layoutMgr.LayoutToLogic(
 			sRangeA.GetTo(),
@@ -988,8 +988,8 @@ void CViewCommander::Command_REPLACE_ALL()
 		// 検索後の位置を確認
 		if (bSelectedArea) {
 			// 矩形選択
-			//	o レイアウト座標をチェックしながら置換する
-			//	o 折り返しがあると変になるかも・・・
+			// o レイアウト座標をチェックしながら置換する
+			// o 折り返しがあると変になるかも・・・
 			//
 			if (bBeginBoxSelect) {
 				// 検索時の行数を記憶
@@ -1024,7 +1024,7 @@ void CViewCommander::Command_REPLACE_ALL()
 				}
 			}else {
 				// 普通の選択
-				//	o 物理座標をチェックしながら置換する
+				// o 物理座標をチェックしながら置換する
 				//
 			
 				// 検索時の行数を記憶
@@ -1199,8 +1199,8 @@ void CViewCommander::Command_REPLACE_ALL()
 				    // 行末から検索文字列末尾までの文字数
 					colDiff =  nLen - nIdxTo;
 					ptOld.x = (CLayoutInt)(Int)nIdxTo;	// 2007.01.19 ryoji 追加  // $$ 単位混在
-				    //	Oct. 22, 2005 Karoto
-				    //	\rを置換するとその後ろの\nが消えてしまう問題の対応
+				    // Oct. 22, 2005 Karoto
+				    // \rを置換するとその後ろの\nが消えてしまう問題の対応
 				    if (colDiff < pcDocLine->GetEol().GetLen()) {
 					    // 改行にかかっていたら、行全体をINSTEXTする。
 					    colDiff = CLogicInt(0);
@@ -1367,7 +1367,7 @@ void CViewCommander::Command_SEARCH_CLEARMARK(void)
 {
 // From Here 2001.12.03 hor
 
-	//検索マークのセット
+	// 検索マークのセット
 
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 
@@ -1407,8 +1407,8 @@ void CViewCommander::Command_SEARCH_CLEARMARK(void)
 	return;
 }
 
-//	Jun. 16, 2000 genta
-//	対括弧の検索
+// Jun. 16, 2000 genta
+// 対括弧の検索
 void CViewCommander::Command_BRACKETPAIR(void)
 {
 	CLayoutPoint ptColLine;
@@ -1421,12 +1421,12 @@ void CViewCommander::Command_BRACKETPAIR(void)
 	bit2(out) : 見つかった位置         0:後ろ      1:前
 	*/
 	if (m_pCommanderView->SearchBracket(GetCaret().GetCaretLayoutPos(), &ptColLine, &mode)) {	// 02/09/18 ai
-		//	2005.06.24 Moca
-		//	2006.07.09 genta 表示更新漏れ：新規関数にて対応
+		// 2005.06.24 Moca
+		// 2006.07.09 genta 表示更新漏れ：新規関数にて対応
 		m_pCommanderView->MoveCursorSelecting(ptColLine, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}else {
-		//	失敗した場合は nCol/nLineには有効な値が入っていない.
-		//	何もしない
+		// 失敗した場合は nCol/nLineには有効な値が入っていない.
+		// 何もしない
 	}
 }
 

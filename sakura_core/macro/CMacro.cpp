@@ -43,10 +43,10 @@
 #include "CMacro.h"
 #include "_main/CControlTray.h"
 #include "cmd/CViewCommander_inline.h"
-#include "view/CEditView.h" //2002/2/10 aroka
-#include "macro/CSMacroMgr.h" //2002/2/10 aroka
-#include "doc/CEditDoc.h"	//	2002/5/13 YAZAKI ヘッダ整理
-#include "_os/OleTypes.h" //2003-02-21 鬼
+#include "view/CEditView.h"		// 2002/2/10 aroka
+#include "macro/CSMacroMgr.h"	// 2002/2/10 aroka
+#include "doc/CEditDoc.h"		// 2002/5/13 YAZAKI ヘッダ整理
+#include "_os/OleTypes.h"		// 2003-02-21 鬼
 #include "io/CTextStream.h"
 #include "window/CEditWnd.h"
 #include "env/CSakuraEnvironment.h"
@@ -91,13 +91,13 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 	case F_FILEOPEN:
 	case F_EXECEXTMACRO:
 		{
-			AddStringParam((const wchar_t*)lParam);	//	lParamを追加。
+			AddStringParam((const wchar_t*)lParam);	// lParamを追加。
 		}
 		break;
 
 	case F_EXECMD:
 		{
-			AddStringParam((const wchar_t*)lParam);	//	lParamを追加。
+			AddStringParam((const wchar_t*)lParam);	// lParamを追加。
 			AddIntParam((int)lParams[1]);
 			if (lParams[2] != 0) {
 				AddStringParam((const wchar_t*)lParams[2]);
@@ -105,7 +105,7 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 		}
 		break;
 
-	case F_JUMP:	//	指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
+	case F_JUMP:	// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
 		{
 			AddIntParam(pcEditView->m_pcEditWnd->m_cDlgJump.m_nLineNum);
 			LPARAM lFlag = 0x00;
@@ -119,14 +119,14 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
 		{
-			AddStringParam(pcEditView->m_strCurSearchKey.c_str());	//	lParamを追加。
+			AddStringParam(pcEditView->m_strCurSearchKey.c_str());	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= pcEditView->m_sCurSearchOption.bWordOnly		? 0x01 : 0x00;
 			lFlag |= pcEditView->m_sCurSearchOption.bLoHiCase		? 0x02 : 0x00;
 			lFlag |= pcEditView->m_sCurSearchOption.bRegularExp		? 0x04 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND				? 0x08 : 0x00;
-			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bAutoCloseDlgFind				? 0x10 : 0x00;
+			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSearchAll					? 0x20 : 0x00;
 			AddIntParam(lFlag);
 		}
@@ -134,8 +134,8 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 	case F_REPLACE:
 	case F_REPLACE_ALL:
 		{
-			AddStringParam(pcEditView->m_strCurSearchKey.c_str());	//	lParamを追加。
-			AddStringParam(pcEditView->m_pcEditWnd->m_cDlgReplace.m_strText2.c_str());	//	lParamを追加。
+			AddStringParam(pcEditView->m_strCurSearchKey.c_str());	// lParamを追加。
+			AddStringParam(pcEditView->m_pcEditWnd->m_cDlgReplace.m_strText2.c_str());	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= pcEditView->m_sCurSearchOption.bWordOnly		? 0x01 : 0x00;
@@ -144,27 +144,27 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND				? 0x08 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bAutoCloseDlgFind			? 0x10 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSearchAll					? 0x20 : 0x00;
-			lFlag |= pcEditView->m_pcEditWnd->m_cDlgReplace.m_nPaste					? 0x40 : 0x00;	//	CShareDataに入れなくていいの？
-			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSelectedArea				? 0x80 : 0x00;	//	置換する時は選べない
-			lFlag |= pcEditView->m_pcEditWnd->m_cDlgReplace.m_nReplaceTarget << 8;	//	8bitシフト（0x100で掛け算）
+			lFlag |= pcEditView->m_pcEditWnd->m_cDlgReplace.m_nPaste					? 0x40 : 0x00;	// CShareDataに入れなくていいの？
+			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bSelectedArea				? 0x80 : 0x00;	// 置換する時は選べない
+			lFlag |= pcEditView->m_pcEditWnd->m_cDlgReplace.m_nReplaceTarget << 8;	// 8bitシフト（0x100で掛け算）
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bConsecutiveAll				? 0x0400: 0x00;	// 2007.01.16 ryoji
 			AddIntParam(lFlag);
 		}
 		break;
 	case F_GREP:
 		{
-			AddStringParam(pcEditView->m_pcEditWnd->m_cDlgGrep.m_strText.c_str());	//	lParamを追加。
-			AddStringParam(GetDllShareData().m_sSearchKeywords.m_aGrepFiles[0]);		//	lParamを追加。
-			AddStringParam(GetDllShareData().m_sSearchKeywords.m_aGrepFolders[0]);	//	lParamを追加。
+			AddStringParam(pcEditView->m_pcEditWnd->m_cDlgGrep.m_strText.c_str());	// lParamを追加。
+			AddStringParam(GetDllShareData().m_sSearchKeywords.m_aGrepFiles[0]);	// lParamを追加。
+			AddStringParam(GetDllShareData().m_sSearchKeywords.m_aGrepFolders[0]);	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepSubFolder				? 0x01 : 0x00;
 			// この編集中のテキストから検索する(0x02.未実装)
 			lFlag |= pcEditView->m_pcEditWnd->m_cDlgGrep.m_sSearchOption.bLoHiCase		? 0x04 : 0x00;
 			lFlag |= pcEditView->m_pcEditWnd->m_cDlgGrep.m_sSearchOption.bRegularExp	? 0x08 : 0x00;
-			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepCharSet == CODE_AUTODETECT) ? 0x10 : 0x00;	//	2002/09/21 Moca 下位互換性のための処理
+			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepCharSet == CODE_AUTODETECT) ? 0x10 : 0x00;	// 2002/09/21 Moca 下位互換性のための処理
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepOutputLine				? 0x20 : 0x00;
-			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepOutputStyle == 2)		? 0x40 : 0x00;	//	CShareDataに入れなくていいの？
+			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepOutputStyle == 2)		? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepOutputStyle == 3)		? 0x80 : 0x00;
 			ECodeType code = GetDllShareData().m_Common.m_sSearch.m_nGrepCharSet;
 			if (IsValidCodeType(code) || CODE_AUTODETECT == code) {
@@ -280,7 +280,7 @@ bool CMacro::Exec(CEditView* pcEditView, int flags) const
 	CMacroParam* p = m_pParamTop;
 	int i = 0;
 	for (i = 0; i < maxArg; i++) {
-		if (!p) break;	//	pが無ければbreak;
+		if (!p) break;	// pが無ければbreak;
 		paramArr[i] = p->m_pData;
 		paramLenArr[i] = wcslen(paramArr[i]);
 		p = p->m_pNext;
@@ -335,7 +335,7 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 		case F_INSTEXT_W:
 		case F_FILEOPEN:
 		case F_EXECEXTMACRO:
-			//	引数ひとつ分だけ保存
+			// 引数ひとつ分だけ保存
 			pText = m_pParamTop->m_pData;
 			nTextLen = wcslen(pText);
 			cmemWork.SetString(pText, nTextLen);
@@ -347,7 +347,7 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 				szFuncNameJapanese
 			);
 			break;
-		case F_JUMP:		//	指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
+		case F_JUMP:		// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
 			out.WriteF(
 				LTEXT("S_%ls(%d, %d);\t// %ls\r\n"),
 				szFuncName,
@@ -498,10 +498,10 @@ bool CMacro::HandleCommand(
 	const TCHAR* EXEC_ERROR_TITLE = EXEC_ERROR_TITLE_string.c_str();
 
 	switch (LOWORD(Index)) {
-	case F_WCHAR:		//	文字入力。数値は文字コード
-	case F_IME_CHAR:	//	日本語入力
+	case F_WCHAR:		// 文字入力。数値は文字コード
+	case F_IME_CHAR:	// 日本語入力
 	case F_CTRL_CODE:
-		//	Jun. 16, 2002 genta
+		// Jun. 16, 2002 genta
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -513,19 +513,19 @@ bool CMacro::HandleCommand(
 		}
 	case F_PASTE:	// 2011.06.26 Moca
 	case F_PASTEBOX:	// 2011.06.26 Moca
-	case F_TEXTWRAPMETHOD:	//	テキストの折り返し方法の指定。数値は、0x0（折り返さない）、0x1（指定桁で折り返す）、0x2（右端で折り返す）	// 2008.05.30 nasukoji
-	case F_GOLINETOP:	//	行頭に移動。数値は、0x0（デフォルト）、0x1（空白を無視して先頭に移動）、0x2（未定義）、0x4（選択して移動）、0x8（改行単位で先頭に移動）
+	case F_TEXTWRAPMETHOD:	// テキストの折り返し方法の指定。数値は、0x0（折り返さない）、0x1（指定桁で折り返す）、0x2（右端で折り返す）	// 2008.05.30 nasukoji
+	case F_GOLINETOP:	// 行頭に移動。数値は、0x0（デフォルト）、0x1（空白を無視して先頭に移動）、0x2（未定義）、0x4（選択して移動）、0x8（改行単位で先頭に移動）
 	case F_GOLINETOP_SEL:
 	case F_GOLOGICALLINETOP_BOX:
 	case F_GOLINETOP_BOX:
-	case F_GOLINEEND:	//	行末に移動
+	case F_GOLINEEND:	// 行末に移動
 	case F_GOLINEEND_SEL:
 	case F_GOLINEEND_BOX:
-	case F_SELECT_COUNT_MODE:	//	文字カウントの方法を指定。数値は、0x0（変更せず取得のみ）、0x1（文字数）、0x2（バイト数）、0x3（文字数⇔バイト数トグル）	// 2009.07.06 syat
-	case F_OUTLINE:	//	アウトライン解析のアクションを指定。数値は、0x0（画面表示）、0x1（画面表示＆再解析）、0x2（画面表示トグル）
+	case F_SELECT_COUNT_MODE:	// 文字カウントの方法を指定。数値は、0x0（変更せず取得のみ）、0x1（文字数）、0x2（バイト数）、0x3（文字数⇔バイト数トグル）	// 2009.07.06 syat
+	case F_OUTLINE:	// アウトライン解析のアクションを指定。数値は、0x0（画面表示）、0x1（画面表示＆再解析）、0x2（画面表示トグル）
 	case F_CHANGETYPE:
 	case F_TOGGLE_KEY_SEARCH:
-		//	一つ目の引数が数値。
+		// 一つ目の引数が数値。
 	case F_WHEELUP:
 	case F_WHEELDOWN:
 	case F_WHEELLEFT:
@@ -536,8 +536,8 @@ bool CMacro::HandleCommand(
 	case F_WHEELPAGERIGHT:
 		pcEditView->GetCommander().HandleCommand(Index, true, (Argument[0] != NULL ? _wtoi(Argument[0]) : 0), 0, 0, 0);
 		break;
-	case F_CHGMOD_EOL:	//	入力改行コード指定。EEolTypeの数値を指定。2003.06.23 Moca
-		//	Jun. 16, 2002 genta
+	case F_CHGMOD_EOL:	// 入力改行コード指定。EEolTypeの数値を指定。2003.06.23 Moca
+		// Jun. 16, 2002 genta
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -576,14 +576,14 @@ bool CMacro::HandleCommand(
 				);
 				return false;
 			} {
-				pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], 0, 0, 0);	//	標準
+				pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], 0, 0, 0);	// 標準
 			}
 		}
 		break;
-	case F_INSTEXT_W:		//	テキスト挿入
-	case F_ADDTAIL_W:		//	この操作はキーボード操作では存在しないので保存することができない？
+	case F_INSTEXT_W:		// テキスト挿入
+	case F_ADDTAIL_W:		// この操作はキーボード操作では存在しないので保存することができない？
 	case F_INSBOXTEXT:
-		//	一つ目の引数が文字列。
+		// 一つ目の引数が文字列。
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -595,7 +595,7 @@ bool CMacro::HandleCommand(
 		}
 		{
 			int len = ArgLengths[0];
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], len, 0, 0);	//	標準
+			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], len, 0, 0);	// 標準
 		}
 		break;
 	// 一つ目、二つ目とも引数は数値
@@ -606,8 +606,8 @@ bool CMacro::HandleCommand(
 			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)nCharSet, (LPARAM)bBOM, 0, 0);
 		}
 		break;
-	case F_JUMP:		//	指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
-		//	Argument[0]へジャンプ。オプションはArgument[1]に。
+	case F_JUMP:		// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
+		// Argument[0]へジャンプ。オプションはArgument[1]に。
 		//		******** 以下「行番号の単位」 ********
 		//		0x00	折り返し単位の行番号
 		//		0x01	改行単位の行番号
@@ -629,10 +629,10 @@ bool CMacro::HandleCommand(
 			LPARAM lFlag = Argument[1] != NULL ? _wtoi(Argument[1]) : 1; // デフォルト1
 			GetDllShareData().m_bLineNumIsCRLF_ForJump = ((lFlag & 0x01) != 0);
 			pcEditView->m_pcEditWnd->m_cDlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
-			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	//	標準
+			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
 		}
 		break;
-	//	一つ目の引数は文字列、二つ目の引数は数値
+	// 一つ目の引数は文字列、二つ目の引数は数値
 	case F_BOOKMARK_PATTERN:	//2002.02.08 hor
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
@@ -646,8 +646,8 @@ bool CMacro::HandleCommand(
 		// NO BREAK
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
-		//	Argument[0]を検索。オプションはArgument[1]に。
-		//	Argument[1]:
+		// Argument[0]を検索。オプションはArgument[1]に。
+		// Argument[1]:
 		//		0x01	単語単位で探す
 		//		0x02	英大文字と小文字を区別する
 		//		0x04	正規表現
@@ -692,8 +692,8 @@ bool CMacro::HandleCommand(
 		}
 		break;
 	case F_DIFF:
-		//	Argument[0]とDiff差分表示。オプションはArgument[1]に。
-		//	Argument[1]:
+		// Argument[0]とDiff差分表示。オプションはArgument[1]に。
+		// Argument[1]:
 		//		次の数値の和。
 		//		0x0001 -i ignore-case         大文字小文字同一視
 		//		0x0002 -w ignore-all-space    空白無視
@@ -705,13 +705,13 @@ bool CMacro::HandleCommand(
 		// NO BREAK
 
 	case F_EXECMD:
-		//	Argument[0]を実行。オプションはArgument[1]に。
-		//	Argument[1]:
+		// Argument[0]を実行。オプションはArgument[1]に。
+		// Argument[1]:
 		//		次の数値の和。
 		//		0x01	標準出力を得る
-		//		0x02	標準出力をキャレット位置に	//	2007.01.02 maru 引数の拡張
-		//		0x04	編集中ファイルを標準入力へ	//	2007.01.02 maru 引数の拡張
-		//	Argument[2]:カレントディレクトリ
+		//		0x02	標準出力をキャレット位置に	// 2007.01.02 maru 引数の拡張
+		//		0x04	編集中ファイルを標準入力へ	// 2007.01.02 maru 引数の拡張
+		// Argument[2]:カレントディレクトリ
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -729,8 +729,8 @@ bool CMacro::HandleCommand(
 		break;
 
 	case F_TRACEOUT:		// 2006.05.01 マクロ用アウトプットウインドウに出力
-		//	Argument[0]を出力。オプションはArgument[1]に。
-		//	Argument[1]:
+		// Argument[0]を出力。オプションはArgument[1]に。
+		// Argument[1]:
 		//		次の数値の和。
 		//		0x01	ExpandParameterによる文字列展開を行う
 		//		0x02	テキスト末尾に改行コードを付加しない
@@ -750,15 +750,15 @@ bool CMacro::HandleCommand(
 
 	// はじめの引数は文字列。２つ目と３つ目は数値
 	case F_PUTFILE:		// 2006.12.10 作業中ファイルの一時出力
-		//	Argument[0]に出力。Argument[1]に文字コード。オプションはArgument[2]に。
-		//	Argument[2]:
+		// Argument[0]に出力。Argument[1]に文字コード。オプションはArgument[2]に。
+		// Argument[2]:
 		//		次の値の和
 		//		0x01	選択範囲を出力（非選択状態なら空ファイルを生成）
 		// no break
 
 	case F_INSFILE:		// 2006.12.10 キャレット位置にファイル挿入
-		//	Argument[0]に出力。Argument[1]に文字コード。オプションはArgument[2]に。
-		//	Argument[2]:
+		// Argument[0]に出力。Argument[1]に文字コード。オプションはArgument[2]に。
+		// Argument[2]:
 		//		現在は特になし
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
@@ -780,8 +780,8 @@ bool CMacro::HandleCommand(
 	// はじめの2つの引数は文字列。3つ目は数値
 	case F_REPLACE:
 	case F_REPLACE_ALL:
-		//	Argument[0]を、Argument[1]に置換。オプションはArgument[2]に（入れる予定）
-		//	Argument[2]:
+		// Argument[0]を、Argument[1]に置換。オプションはArgument[2]に（入れる予定）
+		// Argument[2]:
 		//		次の数値の和。
 		//		0x001	単語単位で探す
 		//		0x002	英大文字と小文字を区別する
@@ -845,29 +845,29 @@ bool CMacro::HandleCommand(
 			GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND	= lFlag & 0x08 ? 1 : 0;
 			GetDllShareData().m_Common.m_sSearch.m_bAutoCloseDlgFind	= lFlag & 0x10 ? 1 : 0;
 			GetDllShareData().m_Common.m_sSearch.m_bSearchAll			= lFlag & 0x20 ? 1 : 0;
-			cDlgReplace.m_nPaste			= lFlag & 0x40 ? 1 : 0;	//	CShareDataに入れなくていいの？
+			cDlgReplace.m_nPaste			= lFlag & 0x40 ? 1 : 0;	// CShareDataに入れなくていいの？
 			cDlgReplace.m_bConsecutiveAll = lFlag & 0x0400 ? 1 : 0;	// 2007.01.16 ryoji
 			if (LOWORD(Index) == F_REPLACE) {	// 2007.07.08 genta コマンドは下位ワード
-				//	置換する時は選べない
+				// 置換する時は選べない
 				cDlgReplace.m_bSelectedArea = 0;
 			}else if (LOWORD(Index) == F_REPLACE_ALL) {	// 2007.07.08 genta コマンドは下位ワード
-				//	全置換の時は選べる？
+				// 全置換の時は選べる？
 				cDlgReplace.m_bSelectedArea	= lFlag & 0x80 ? 1 : 0;
 			}
-			cDlgReplace.m_nReplaceTarget	= (lFlag >> 8) & 0x03;	//	8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
+			cDlgReplace.m_nReplaceTarget	= (lFlag >> 8) & 0x03;	// 8bitシフト（0x100で割り算）	// 2007.01.16 ryoji 下位 2bitだけ取り出す
 			if (bAddHistory) {
 				GetDllShareData().m_Common.m_sSearch.m_bConsecutiveAll = cDlgReplace.m_bConsecutiveAll;
 				GetDllShareData().m_Common.m_sSearch.m_bSelectedArea = cDlgReplace.m_bSelectedArea;
 			}
-			//	コマンド発行
+			// コマンド発行
 			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
 		}
 		break;
 	case F_GREP:
-		//	Argument[0]	検索文字列
-		//	Argument[1]	検索対象にするファイル名
-		//	Argument[2]	検索対象にするフォルダ名
-		//	Argument[3]:
+		// Argument[0]	検索文字列
+		// Argument[1]	検索対象にするファイル名
+		// Argument[2]	検索対象にするフォルダ名
+		// Argument[3]:
 		//		次の数値の和。
 		//		0x01	サブフォルダからも検索する
 		//		0x02	この編集中のテキストから検索する（未実装）
@@ -905,12 +905,12 @@ bool CMacro::HandleCommand(
 			return false;
 		}
 		{
-			//	常に外部ウィンドウに。
+			// 常に外部ウィンドウに。
 			/*======= Grepの実行 =============*/
 			/* Grep結果ウィンドウの表示 */
-			CNativeW cmWork1;	cmWork1.SetString(Argument[0]);	cmWork1.Replace(L"\"", L"\"\"");			//	検索文字列
-			CNativeT cmWork2;	cmWork2.SetStringW(Argument[1]);	cmWork2.Replace(_T("\""), _T("\"\""));	//	ファイル名
-			CNativeT cmWork3;	cmWork3.SetStringW(Argument[2]);	cmWork3.Replace(_T("\""), _T("\"\""));	//	フォルダ名
+			CNativeW cmWork1;	cmWork1.SetString(Argument[0]);	cmWork1.Replace(L"\"", L"\"\"");			// 検索文字列
+			CNativeT cmWork2;	cmWork2.SetStringW(Argument[1]);	cmWork2.Replace(_T("\""), _T("\"\""));	// ファイル名
+			CNativeT cmWork3;	cmWork3.SetStringW(Argument[2]);	cmWork3.Replace(_T("\""), _T("\"\""));	// フォルダ名
 
 			LPARAM lFlag = Argument[3] != NULL ? _wtoi(Argument[3]) : 5;
 
@@ -994,7 +994,7 @@ bool CMacro::HandleCommand(
 		break;
 	case F_FILESAVEAS_DIALOG:
 	case F_FILESAVEAS:
-		//	Argument[0]を別名で保存。
+		// Argument[0]を別名で保存。
 		if (LOWORD(Index) == F_FILESAVEAS && (!Argument[0] ||  L'\0' == Argument[0][0])) {
 			// F_FILESAVEAS_DIALOGの場合は空文字列を許容
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
@@ -1009,9 +1009,9 @@ bool CMacro::HandleCommand(
 				nCharCode = (ECodeType)_wtoi(Argument[1]);
 			}
 			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeType(nCharCode) && nCharCode != pcEditView->m_pcEditDoc->GetDocumentEncoding()) {
-				//	From Here Jul. 26, 2003 ryoji BOM状態を初期化
+				// From Here Jul. 26, 2003 ryoji BOM状態を初期化
 				pcEditView->m_pcEditDoc->SetDocumentEncoding(nCharCode, CCodeTypeName(pcEditView->m_pcEditDoc->GetDocumentEncoding()).IsBomDefOn());
-				//	To Here Jul. 26, 2003 ryoji BOM状態を初期化
+				// To Here Jul. 26, 2003 ryoji BOM状態を初期化
 			}
 
 			// 改行コード
@@ -1037,7 +1037,7 @@ bool CMacro::HandleCommand(
 	case F_EXECEXTMACRO:				// 2009.06.14 syat
 		pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], (LPARAM)Argument[1], 0, 0);
 		break;
-	//	From Here Dec. 4, 2002 genta
+	// From Here Dec. 4, 2002 genta
 	case F_FILE_REOPEN				: // 開き直す
 	case F_FILE_REOPEN_SJIS			: // SJISで開き直す
 	case F_FILE_REOPEN_JIS			: // JISで開き直す
@@ -1054,7 +1054,7 @@ bool CMacro::HandleCommand(
 			pcEditView->GetCommander().HandleCommand(Index, true, noconfirm, 0, 0, 0);
 		}
 		break;
-	//	To Here Dec. 4, 2002 genta
+	// To Here Dec. 4, 2002 genta
 	case F_TOPMOST:
 		{
 			int lparam1;
@@ -1063,7 +1063,7 @@ bool CMacro::HandleCommand(
 				pcEditView->GetCommander().HandleCommand(Index, true, lparam1, 0, 0, 0);
 			}
 		}
-		break;	//	Jan. 29, 2005 genta 抜けていた
+		break;	// Jan. 29, 2005 genta 抜けていた
 	case F_TAGJUMP_KEYWORD:	// @@ 2005.03.31 MIK
 		{
 			// 引数はNULLでもOK
@@ -1119,7 +1119,7 @@ bool CMacro::HandleCommand(
 		{
 			VARIANT vArg[1];			// HandleFunctionに渡す引数
 			VARIANT vResult;			// HandleFunctionから返る値
-			//	一つ目の引数が数値。
+			// 一つ目の引数が数値。
 			vArg[0].vt = VT_I4;
 			vArg[0].intVal = (Argument[0] != NULL ? _wtoi(Argument[0]) : 0);
 			return HandleFunction(pcEditView, Index, vArg, 1, vResult);
@@ -1229,7 +1229,7 @@ bool CMacro::HandleCommand(
 		}
 		break;
 	default:
-		//	引数なし。
+		// 引数なし。
 		pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);	// 標準
 		break;
 	}
@@ -1277,7 +1277,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_GETSAVEFILENAME:
-		//	2006.09.04 ryoji 保存時のファイルのパス
+		// 2006.09.04 ryoji 保存時のファイルのパス
 		{
 			const TCHAR* FileName = View->m_pcEditDoc->m_cDocFile.GetSaveFilePath();
 			SysString S(FileName, lstrlen(FileName));
@@ -1315,12 +1315,12 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_GETLINESTR:
-		//	2003.06.01 Moca マクロ追加
+		// 2003.06.01 Moca マクロ追加
 		{
 			if (ArgSize != 1) return false;
 			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
 			if (-1 < varCopy.Data.lVal) {
-				const wchar_t *Buffer;
+				const wchar_t* Buffer;
 				CLogicInt nLength;
 				CLogicInt nLine;
 				if (0 == varCopy.Data.lVal) {
@@ -1342,7 +1342,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_GETLINECOUNT:
-		//	2003.06.01 Moca マクロ追加
+		// 2003.06.01 Moca マクロ追加
 		{
 			if (ArgSize != 1) return false;
 			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
@@ -1356,7 +1356,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_CHGTABWIDTH:
-		//	2004.03.16 zenryaku マクロ追加
+		// 2004.03.16 zenryaku マクロ追加
 		{
 			if (ArgSize != 1) return false;
 			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
@@ -1381,7 +1381,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_ISTEXTSELECTED:
-		//	2005.07.30 maru マクロ追加
+		// 2005.07.30 maru マクロ追加
 		{
 			if (View->GetSelectionInfo().IsTextSelected()) {
 				if (View->GetSelectionInfo().IsBoxSelecting()) {
@@ -1395,43 +1395,43 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_GETSELLINEFROM:
-		//	2005.07.30 maru マクロ追加
+		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetFrom().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNFROM:
-		//	2005.07.30 maru マクロ追加
+		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetFrom().x + 1);
 		}
 		return true;
 	case F_GETSELLINETO:
-		//	2005.07.30 maru マクロ追加
+		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetTo().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNTO:
-		//	2005.07.30 maru マクロ追加
+		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetTo().x + 1);
 		}
 		return true;
 	case F_ISINSMODE:
-		//	2005.07.30 maru マクロ追加
+		// 2005.07.30 maru マクロ追加
 		{
 			Wrap(&Result)->Receive(View->IsInsMode() /* Oct. 2, 2005 genta */);
 		}
 		return true;
 	case F_GETCHARCODE:
-		//	2005.07.31 maru マクロ追加
+		// 2005.07.31 maru マクロ追加
 		{
 			Wrap(&Result)->Receive(View->m_pcEditDoc->GetDocumentEncoding());
 		}
 		return true;
 	case F_GETLINECODE:
-		//	2005.08.04 maru マクロ追加
+		// 2005.08.04 maru マクロ追加
 		{
 			int n = 0;
 			switch (View->m_pcEditDoc->m_cDocEditor.GetNewLineCode()) {
@@ -1458,19 +1458,19 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_ISPOSSIBLEUNDO:
-		//	2005.08.04 maru マクロ追加
+		// 2005.08.04 maru マクロ追加
 		{
 			Wrap(&Result)->Receive(View->m_pcEditDoc->m_cDocEditor.IsEnableUndo());
 		}
 		return true;
 	case F_ISPOSSIBLEREDO:
-		//	2005.08.04 maru マクロ追加
+		// 2005.08.04 maru マクロ追加
 		{
 			Wrap(&Result)->Receive(View->m_pcEditDoc->m_cDocEditor.IsEnableRedo());
 		}
 		return true;
 	case F_CHGWRAPCOLUMN:
-		//	2008.06.19 ryoji マクロ追加
+		// 2008.06.19 ryoji マクロ追加
 		{
 			if (ArgSize != 1) return false;
 			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
@@ -1488,7 +1488,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_ISCURTYPEEXT:
-		//	2006.09.04 ryoji 指定した拡張子が現在のタイプ別設定に含まれているかどうかを調べる
+		// 2006.09.04 ryoji 指定した拡張子が現在のタイプ別設定に含まれているかどうかを調べる
 		{
 			if (ArgSize != 1) return false;
 
@@ -1506,7 +1506,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_ISSAMETYPEEXT:
-		//	2006.09.04 ryoji ２つの拡張子が同じタイプ別設定に含まれているかどうかを調べる
+		// 2006.09.04 ryoji ２つの拡張子が同じタイプ別設定に含まれているかどうかを調べる
 		{
 			if (ArgSize != 2) return false;
 
@@ -1527,7 +1527,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_INPUTBOX:
-		//	2011.03.18 syat テキスト入力ダイアログの表示
+		// 2011.03.18 syat テキスト入力ダイアログの表示
 		{
 			if (ArgSize < 1) return false;
 			TCHAR* Source;
@@ -1574,7 +1574,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 	case F_INFOMSG:		// メッセージボックス（情報）の表示
 	case F_OKCANCELBOX:	// メッセージボックス（確認：OK／キャンセル）の表示
 	case F_YESNOBOX:	// メッセージボックス（確認：はい／いいえ）の表示
-		//	2011.03.18 syat メッセージボックスの表示
+		// 2011.03.18 syat メッセージボックスの表示
 		{
 			if (ArgSize < 1) return false;
 			TCHAR* Source;
@@ -1616,7 +1616,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_COMPAREVERSION:
-		//	2011.03.18 syat バージョン番号の比較
+		// 2011.03.18 syat バージョン番号の比較
 		{
 			if (ArgSize != 2) return false;
 			TCHAR* Source;
@@ -1636,7 +1636,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_MACROSLEEP:
-		//	2011.03.18 syat 指定した時間（ミリ秒）停止する
+		// 2011.03.18 syat 指定した時間（ミリ秒）停止する
 		{
 			if (ArgSize != 1) return false;
 
@@ -1648,7 +1648,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		return true;
 	case F_FILEOPENDIALOG:
 	case F_FILESAVEDIALOG:
-		//	2011.03.18 syat ファイルダイアログの表示
+		// 2011.03.18 syat ファイルダイアログの表示
 		{
 			TCHAR* Source;
 			int SourceLength;
@@ -1693,7 +1693,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_FOLDERDIALOG:
-		//	2011.03.18 syat フォルダダイアログの表示
+		// 2011.03.18 syat フォルダダイアログの表示
 		{
 			TCHAR* Source;
 			int SourceLength;
@@ -1726,7 +1726,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_GETCLIPBOARD:
-		//	2011.03.18 syat クリップボードの文字列を取得
+		// 2011.03.18 syat クリップボードの文字列を取得
 		{
 			int nOpt = 0;
 
@@ -1749,7 +1749,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		}
 		return true;
 	case F_SETCLIPBOARD:
-		//	2011.03.18 syat クリップボードに文字列を設定
+		// 2011.03.18 syat クリップボードに文字列を設定
 		{
 			std::tstring sValue;
 			int nOpt = 0;

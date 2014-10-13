@@ -42,7 +42,7 @@ int CShiftJis::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 /*!
 	SJIS ¨ Unicode •ÏŠ·
 */
-int CShiftJis::SjisToUni(const char *pSrc, const int nSrcLen, wchar_t *pDst, bool* pbError)
+int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	ECharSet echarset;
 	int nclen;
@@ -146,7 +146,7 @@ EConvertResult CShiftJis::SJISToUnicode(CMemory* pMem)
 /*
 	Unicode -> SJIS
 */
-int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool *pbError)
+int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;

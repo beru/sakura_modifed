@@ -567,7 +567,7 @@ bool CEditView::SearchBracketBackward(
 	@retval true Š‡ŒÊ
 	@retval false ”ñŠ‡ŒÊ
 */
-bool CEditView::IsBracket(const wchar_t *pLine, CLogicInt x, CLogicInt size)
+bool CEditView::IsBracket(const wchar_t* pLine, CLogicInt x, CLogicInt size)
 {
 	// Š‡ŒÊˆ— 2007.10.16 kobake
 	if (size == 1) {

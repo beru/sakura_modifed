@@ -51,20 +51,20 @@ public:
 	// UTF-8 / CESU-8 <-> Unicodeコード変換
 	// 2007.08.13 kobake 追加
 	// 2009.01.08        CESU-8 に対応
-	static EConvertResult _UTF8ToUnicode( CMemory* pMem, bool bCESU8Mode );
-	static EConvertResult _UnicodeToUTF8( CMemory* pMem, bool bCESU8Mode );
-	inline static EConvertResult UTF8ToUnicode( CMemory* pmem ) { return _UTF8ToUnicode(pmem, false); }	// UTF-8 -> Unicodeコード変換
-	inline static EConvertResult CESU8ToUnicode( CMemory* pmem ) { return _UTF8ToUnicode(pmem, true); }	// CESU-8 -> Unicodeコード変換
-	inline static EConvertResult UnicodeToUTF8( CMemory* pmem ) { return  _UnicodeToUTF8(pmem, false); }	// Unicode → UTF-8コード変換
-	inline static EConvertResult UnicodeToCESU8( CMemory* pmem ) { return _UnicodeToUTF8(pmem, true); }	// Unicode → CESU-8コード変換
+	static EConvertResult _UTF8ToUnicode(CMemory* pMem, bool bCESU8Mode);
+	static EConvertResult _UnicodeToUTF8(CMemory* pMem, bool bCESU8Mode);
+	inline static EConvertResult UTF8ToUnicode(CMemory* pmem) { return _UTF8ToUnicode(pmem, false); }	// UTF-8 -> Unicodeコード変換
+	inline static EConvertResult CESU8ToUnicode(CMemory* pmem) { return _UTF8ToUnicode(pmem, true); }	// CESU-8 -> Unicodeコード変換
+	inline static EConvertResult UnicodeToUTF8(CMemory* pmem) { return  _UnicodeToUTF8(pmem, false); }	// Unicode → UTF-8コード変換
+	inline static EConvertResult UnicodeToCESU8(CMemory* pmem) { return _UnicodeToUTF8(pmem, true); }	// Unicode → CESU-8コード変換
 
 protected:
 	// 変換の実装
 	// 2008.11.10 変換ロジックを書き直す
-	inline static int _Utf8ToUni_char( const unsigned char*, const int, unsigned short*, bool bCESU8Mode );
-	static int Utf8ToUni( const char*, const int, wchar_t*, bool bCESU8Mode );
-	inline static int _UniToUtf8_char( const unsigned short*, const int, unsigned char*, const bool bCSU8Mode );
-	static int UniToUtf8( const wchar_t*, const int, char*, bool* pbError, bool bCSU8Mode );
+	inline static int _Utf8ToUni_char(const unsigned char*, const int, unsigned short*, bool bCESU8Mode);
+	static int Utf8ToUni(const char*, const int, wchar_t*, bool bCESU8Mode);
+	inline static int _UniToUtf8_char(const unsigned short*, const int, unsigned char*, const bool bCSU8Mode);
+	static int UniToUtf8(const wchar_t*, const int, char*, bool* pbError, bool bCSU8Mode);
 };
 
 /*!
@@ -76,7 +76,7 @@ protected:
 
 */
 inline
-int CUtf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, bool bCESUMode )
+int CUtf8::_Utf8ToUni_char(const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, bool bCESUMode)
 {
 	int nret;
 
@@ -91,8 +91,8 @@ int CUtf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsign
 			nret = 1;
 		}else if (nSrcLen == 4) {
 			// UTF-8 サロゲート領域の処理
-			wchar32_t wc32 = DecodeUtf8( pSrc, 4 );
-			EncodeUtf16Surrog( wc32, pDst );
+			wchar32_t wc32 = DecodeUtf8(pSrc, 4);
+			EncodeUtf16Surrog(wc32, pDst);
 			nret = 2;
 		}else {
 			// 保護コード
@@ -106,8 +106,8 @@ int CUtf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsign
 			nret = 1;
 		}else if (nSrcLen == 6) {
 			// CESU-8 サロゲート領域の処理
-			pDst[0] = static_cast<unsigned short>( DecodeUtf8(&pSrc[0], 3) & 0x0000ffff );
-			pDst[1] = static_cast<unsigned short>( DecodeUtf8(&pSrc[3], 3) & 0x0000ffff );
+			pDst[0] = static_cast<unsigned short>(DecodeUtf8(&pSrc[0], 3) & 0x0000ffff);
+			pDst[1] = static_cast<unsigned short>(DecodeUtf8(&pSrc[3], 3) & 0x0000ffff);
 			nret = 2;
 		}else {
 			// 保護コード
@@ -129,7 +129,7 @@ int CUtf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsign
 	高速化のため、インライン化
 */
 inline
-int CUtf8::_UniToUtf8_char( const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst, bool bCESU8Mode )
+int CUtf8::_UniToUtf8_char(const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst, bool bCESU8Mode)
 {
 	int nret;
 
@@ -141,19 +141,19 @@ int CUtf8::_UniToUtf8_char( const unsigned short* pSrc, const int nSrcLen, unsig
 		// UTF-8 の処理
 		wchar32_t wc32;
 		if (nSrcLen == 2) {
-			wc32 = DecodeUtf16Surrog( pSrc[0], pSrc[1] );
+			wc32 = DecodeUtf16Surrog(pSrc[0], pSrc[1]);
 		}else if (nSrcLen == 1) {	// nSrcLen == 1
 			wc32 = pSrc[0];
 		}else {
 			wc32 = L'?';
 		}
-		nret = EncodeUtf8( wc32, &pDst[0] );
+		nret = EncodeUtf8(wc32, &pDst[0]);
 	}else {
 		// CESU-8 の処理
 		int nclen = 0;
-		nclen += EncodeUtf8( pSrc[0], &pDst[0] );
+		nclen += EncodeUtf8(pSrc[0], &pDst[0]);
 		if (nSrcLen == 2) {
-			nclen += EncodeUtf8( pSrc[1], &pDst[nclen] );
+			nclen += EncodeUtf8(pSrc[1], &pDst[nclen]);
 		}else {
 			;
 		}

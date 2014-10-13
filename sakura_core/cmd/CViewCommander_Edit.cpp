@@ -39,7 +39,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 	CLogicInt nPos;
 
 	auto* pDoc = GetDocument();
-	pDoc->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+	pDoc->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -110,7 +110,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 						{
 							bool bZenSpace = typeData->m_bAutoIndent_ZENSPACE;
 							if (nCharChars == 1 && WCODE::IsIndentChar(pLine[nPos], bZenSpace)) {
-								//下へ進む
+								// 下へ進む
 							}
 							else break;
 						}
@@ -119,11 +119,11 @@ end_of_for:;
 						nPos += nCharChars;
 					}
 
-					//インデント取得
+					// インデント取得
 					//CNativeW cmemIndent;
 					//cmemIndent.SetString(pLine, nPos);
 
-					//インデント付加
+					// インデント付加
 					cmemDataW2.AppendString(pLine, nPos);
 				}
 			}
@@ -145,7 +145,7 @@ end_of_for:;
 		}
 	}
 
-	//本文に挿入する
+	// 本文に挿入する
 	CLayoutPoint ptLayoutNew;
 	m_pCommanderView->InsertData_CEditView(
 		caret.GetCaretLayoutPos(),
@@ -178,7 +178,7 @@ end_of_for:;
 				assert_warning(1 == plugs.size());
 				// インタフェースオブジェクト準備
 				CWSHIfObj::List params;
-				CSmartIndentIfObj* objIndent = new CSmartIndentIfObj(wcChar);	//スマートインデントオブジェクト
+				CSmartIndentIfObj* objIndent = new CSmartIndentIfObj(wcChar);	// スマートインデントオブジェクト
 				objIndent->AddRef();
 				params.push_back(objIndent);
 
@@ -205,7 +205,7 @@ end_of_for:;
 		m_pCommanderView->RTrimPrevLine();
 	}
 
-	m_pCommanderView->PostprocessCommand_hokan();	//	Jan. 10, 2005 genta 関数化
+	m_pCommanderView->PostprocessCommand_hokan();	// Jan. 10, 2005 genta 関数化
 }
 
 
@@ -229,12 +229,12 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 		return;
 	}
 
-	//	Oct. 6 ,2002 genta 上下逆転
+	// Oct. 6 ,2002 genta 上下逆転
 	if (0 == (wChar & 0xff00)) {
 		Command_WCHAR(wChar & 0xff);
 		return;
 	}
-	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
  	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -256,7 +256,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 	if (selInfo.IsTextSelected()) {
 		// 矩形範囲選択中か
 		if (selInfo.IsBoxSelecting()) {
-			Command_INDENT(szWord, nWord);	//	Oct. 6 ,2002 genta 
+			Command_INDENT(szWord, nWord);	// Oct. 6 ,2002 genta 
 			return;
 		}else {
 			m_pCommanderView->DeleteData(true);
@@ -267,7 +267,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 		}
 	}
 
-	//	Oct. 6 ,2002 genta 
+	// Oct. 6 ,2002 genta 
 	CLayoutPoint ptLayoutNew;
 	auto& caret = GetCaret();
 	m_pCommanderView->InsertData_CEditView(caret.GetCaretLayoutPos(), szWord, nWord, &ptLayoutNew, true);
@@ -276,11 +276,11 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 	caret.MoveCursor(ptLayoutNew, true);
 	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
-	m_pCommanderView->PostprocessCommand_hokan();	//	Jan. 10, 2005 genta 関数化
+	m_pCommanderView->PostprocessCommand_hokan();	// Jan. 10, 2005 genta 関数化
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 // Undo 元に戻す
 void CViewCommander::Command_UNDO(void)
 {
@@ -326,7 +326,7 @@ void CViewCommander::Command_UNDO(void)
 	auto& caret = GetCaret();
 	auto& docEditor = GetDocument()->m_cDocEditor;
 	if ((pcOpeBlk = docEditor.m_cOpeBuf.DoUndo(&bIsModified))) {
-		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	//	hor
+		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	// hor
 		int nOpeBlkNum = pcOpeBlk->GetNum();
 
 		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
@@ -398,7 +398,7 @@ void CViewCommander::Command_UNDO(void)
 				{
 					CDeleteOpe* pcDeleteOpe = static_cast<CDeleteOpe*>(pcOpe);
 
-					//2007.10.17 kobake メモリリークしてました。修正。
+					// 2007.10.17 kobake メモリリークしてました。修正。
 					if (0 < pcDeleteOpe->m_pcmemData.size()) {
 						// データ置換 削除&挿入にも使える
 						CLayoutRange sRange;
@@ -489,11 +489,11 @@ void CViewCommander::Command_UNDO(void)
 				}
 			}
 		}
-		m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);	//	hor
+		m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);	// hor
 		m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
 
 		// Undo後の変更フラグ
-		docEditor.SetModified(bIsModified, true);	//	Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
 
 		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
 
@@ -516,7 +516,7 @@ void CViewCommander::Command_UNDO(void)
 		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
 
 		if (!GetEditWindow()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-			GetEditWindow()->RedrawAllViews(m_pCommanderView);	//	他のペインの表示を更新
+			GetEditWindow()->RedrawAllViews(m_pCommanderView);	// 他のペインの表示を更新
 		}
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);
@@ -734,7 +734,7 @@ void CViewCommander::Command_REDO(void)
 		m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
 
 		// Redo後の変更フラグ
-		docEditor.SetModified(bIsModified, true);	//	Jan. 22, 2002 genta
+		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
 
 		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
 
@@ -757,7 +757,7 @@ void CViewCommander::Command_REDO(void)
 		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
 
 		if (!GetEditWindow()->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-			GetEditWindow()->RedrawAllViews(m_pCommanderView);	//	他のペインの表示を更新
+			GetEditWindow()->RedrawAllViews(m_pCommanderView);	// 他のペインの表示を更新
 
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);
@@ -832,8 +832,8 @@ void CViewCommander::Command_DELETE_BACK(void)
 		return;
 	}
 
-	//	May 29, 2004 genta 実際に削除された文字がないときはフラグをたてないように
-	//GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+	// May 29, 2004 genta 実際に削除された文字がないときはフラグをたてないように
+	//GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 	if (selInfo.IsTextSelected()) {				// テキストが選択されているか
 		m_pCommanderView->DeleteData(true);
 	}else {
@@ -865,7 +865,7 @@ void CViewCommander::Command_DELETE_BACK(void)
 			}
 		}
 	}
-	m_pCommanderView->PostprocessCommand_hokan();	//	Jan. 10, 2005 genta 関数化
+	m_pCommanderView->PostprocessCommand_hokan();	// Jan. 10, 2005 genta 関数化
 }
 
 

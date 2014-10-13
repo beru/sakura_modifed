@@ -67,7 +67,7 @@ BOOL CDlgProperty::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「ファイルのプロパティ」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDOK:			// 下検索
@@ -93,7 +93,7 @@ void CDlgProperty::SetData(void)
 	CNativeT cmemProp;
 	TCHAR szWork[500];
 
-	//	Aug. 16, 2000 genta	全角化
+	// Aug. 16, 2000 genta	全角化
 	cmemProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
 	cmemProp.AppendString(pCEditDoc->m_cDocFile.GetFilePath());
 	cmemProp.AppendString(_T("\r\n"));
@@ -104,11 +104,11 @@ void CDlgProperty::SetData(void)
 
 	cmemProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
 	cmemProp.AppendString(CCodeTypeName(pCEditDoc->GetDocumentEncoding()).Normal());
-	//	From Here  2008/4/27 Uchi
+	// From Here  2008/4/27 Uchi
 	if (pCEditDoc->GetDocumentBomExist()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_WITH_BOM));
 	}
-	//	To Here  2008/4/27 Uchi
+	// To Here  2008/4/27 Uchi
 	cmemProp.AppendString(_T("\r\n"));
 
 	auto_sprintf_s(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_cDocLineMgr.GetLineCount());

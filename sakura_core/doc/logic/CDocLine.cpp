@@ -39,10 +39,10 @@ bool CDocLine::IsEmptyLine() const
 	int nLineLen = GetLengthWithoutEOL();
 	for (int i = 0; i < nLineLen; i++) {
 		if (pLine[i] != L' ' && pLine[i] != L'\t') {
-			return false;	//	スペースでもタブでもない文字があったらfalse。
+			return false;	// スペースでもタブでもない文字があったらfalse。
 		}
 	}
-	return true;	//	すべてスペースかタブだけだったらtrue。
+	return true;	// すべてスペースかタブだけだったらtrue。
 }
 
 void CDocLine::SetEol()

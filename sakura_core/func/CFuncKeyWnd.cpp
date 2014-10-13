@@ -48,7 +48,7 @@ LRESULT CALLBACK CFuncKeyWndProc(
 ***/
 
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 CFuncKeyWnd::CFuncKeyWnd()
 	:
 	CWnd(_T("::CFuncKeyWnd"))
@@ -61,7 +61,7 @@ CFuncKeyWnd::CFuncKeyWnd()
 	for (int i = 0; i < _countof(m_szFuncNameArr); ++i) {
 		m_szFuncNameArr[i][0] = 0;
 	}
-//	2002.11.04 Moca Open()側で設定
+// 2002.11.04 Moca Open()側で設定
 //	m_nButtonGroupNum = 4;
 
 	for (int i = 0; i < _countof(m_hwndButtonArr); ++i) {
@@ -281,7 +281,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-	if (::GetActiveWindow() != GetParentHwnd() && m_nCurrentKeyState != -1) {	//	2002/06/02 MIK	// 2006.12.20 ryoji 初回更新は処理する
+	if (::GetActiveWindow() != GetParentHwnd() && m_nCurrentKeyState != -1) {	// 2002/06/02 MIK	// 2006.12.20 ryoji 初回更新は処理する
 		return 0;
 	}
 
@@ -307,7 +307,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				if (0 == m_nFuncCodeArr[i]) {
 					m_szFuncNameArr[i][0] = 0;
 				}else {
-					//	Oct. 2, 2001 genta
+					// Oct. 2, 2001 genta
 					m_pcEditDoc->m_cFuncLookup.Funccode2Name(
 						m_nFuncCodeArr[i],
 						m_szFuncNameArr[i],
@@ -463,7 +463,7 @@ void CFuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
 // タイマーの更新を開始／停止する。 20060126 aroka
 // ファンクションキー表示はタイマーにより更新しているが、
 // アプリのフォーカスが外れたときに親ウィンドウからON/OFFを
-//	呼び出してもらうことにより、余計な負荷を停止したい。
+// 呼び出してもらうことにより、余計な負荷を停止したい。
 void CFuncKeyWnd::Timer_ONOFF(bool bStart)
 {
 	if (GetHwnd()) {

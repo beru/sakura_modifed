@@ -29,7 +29,7 @@
 // 要先行定義
 // #include "DLLSHAREDATA.h"
 
-//共有メモリ内構造体
+// 共有メモリ内構造体
 struct SShare_SearchKeywords {
 	// -- -- 検索キー -- -- //
 	StaticVector< StaticString<WCHAR, _MAX_PATH>, MAX_SEARCHKEY,  const WCHAR*>	m_aSearchKeys;
@@ -45,10 +45,10 @@ public:
 		m_pShareData = &GetDllShareData();
 	}
 	//@@@ 2002.2.2 YAZAKI
-	void AddToSearchKeyArr(const wchar_t* pszSearchKey);	//	m_aSearchKeysにpszSearchKeyを追加する
-	void AddToReplaceKeyArr(const wchar_t* pszReplaceKey);	//	m_aReplaceKeysにpszReplaceKeyを追加する
-	void AddToGrepFileArr(const TCHAR* pszGrepFile);		//	m_aGrepFilesにpszGrepFileを追加する
-	void AddToGrepFolderArr(const TCHAR* pszGrepFolder);	//	m_aGrepFolders.size()にpszGrepFolderを追加する
+	void AddToSearchKeyArr(const wchar_t* pszSearchKey);	// m_aSearchKeysにpszSearchKeyを追加する
+	void AddToReplaceKeyArr(const wchar_t* pszReplaceKey);	// m_aReplaceKeysにpszReplaceKeyを追加する
+	void AddToGrepFileArr(const TCHAR* pszGrepFile);		// m_aGrepFilesにpszGrepFileを追加する
+	void AddToGrepFolderArr(const TCHAR* pszGrepFolder);	// m_aGrepFolders.size()にpszGrepFolderを追加する
 private:
 	DLLSHAREDATA* m_pShareData;
 };

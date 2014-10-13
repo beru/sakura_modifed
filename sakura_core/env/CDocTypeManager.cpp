@@ -87,7 +87,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 		TCHAR* pszToken = _tcstok(szText, pszSeps);
 		while (pszToken) {
 			if (0 == _tcsicmp(pszExt, pszToken)) {
-				return CTypeConfig(i);	//	番号
+				return CTypeConfig(i);	// 番号
 			}
 			pszToken = _tcstok(NULL, pszSeps);
 		}
@@ -96,7 +96,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 	if (pFileExt && pFileExt[1]) {
 		return GetDocumentTypeOfExt(pFileExt + 1);
 	}
-	return CTypeConfig(0);	//	ハズレ
+	return CTypeConfig(0);	// ハズレ
 }
 
 CTypeConfig CDocTypeManager::GetDocumentTypeOfId(int id)
@@ -108,7 +108,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfId(int id)
 			return CTypeConfig(i);
 		}
 	}
-	return CTypeConfig(-1);	//	ハズレ
+	return CTypeConfig(-1);	// ハズレ
 }
 
 bool CDocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, STypeConfig& type)

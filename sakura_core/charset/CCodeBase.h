@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//定数
+// 定数
 enum EConvertResult{
 	RESULT_COMPLETE, //!< データを失うことなく変換が完了した。
 	RESULT_LOSESOME, //!< 変換が完了したが、一部のデータが失われた。
@@ -46,7 +46,7 @@ public:
 	virtual ~CCodeBase() {}
 //	virtual bool IsCode(const CMemory* pMem) {return false;}  //!< 特定コードであればtrue
 
-	//文字コード変換
+	// 文字コード変換
 	virtual EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) = 0;	//!< 特定コード → UNICODE    変換
 	virtual EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) = 0;	//!< UNICODE    → 特定コード 変換
 	//! UNICODE    → 特定コード 変換
@@ -55,7 +55,7 @@ public:
 		return UnicodeToCode(mem, pDst);
 	}
 
-	//ファイル形式
+	// ファイル形式
 	virtual void GetBom(CMemory* pcmemBom);											//!< BOMデータ取得
 	void GetEol(CMemory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol, eEolType); }	//!< 改行データ取得 virtualから実体へ	2010/6/13 Uchi
 
@@ -76,7 +76,7 @@ public:
 /*!
 	バイナリ１バイトを U+DC00 から U+DCFF までに対応付ける
 */
-inline int CCodeBase::BinToText(const unsigned char *pSrc, const int nLen, unsigned short *pDst)
+inline int CCodeBase::BinToText(const unsigned char* pSrc, const int nLen, unsigned short* pDst)
 {
 	int i;
 

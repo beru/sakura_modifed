@@ -51,7 +51,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 	::GetWindowThreadProcessId(::GetForegroundWindow(), &dwPid2);
 	bool bForeground = (dwPid1 == dwPid2);
 
-	EOutlineType nOutlineType = (EOutlineType)_nOutlineType; //2007.11.29 kobake
+	EOutlineType nOutlineType = (EOutlineType)_nOutlineType; // 2007.11.29 kobake
 
 //	if (bCheckOnly) {
 //		return TRUE;
@@ -62,7 +62,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 //	int		nListType;
 	std::tstring sTitleOverride;				// プラグインによるダイアログタイトル上書き
 
-	//	2001.12.03 hor & 2002.3.13 YAZAKI
+	// 2001.12.03 hor & 2002.3.13 YAZAKI
 	if (nOutlineType == OUTLINE_DEFAULT) {
 		// タイプ別に設定されたアウトライン解析方法
 		nOutlineType = m_pCommanderView->m_pTypeData->m_eDefaultOutline;
@@ -88,7 +88,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 			}
 			break;
 		case SHOW_TOGGLE: // 閉じる
-			//	開いているものと種別が同じなら閉じる．異なれば再解析
+			// 開いているものと種別が同じなら閉じる．異なれば再解析
 			if (dlgFuncList.CheckListType(nOutlineType)) {
 				if (dlgFuncList.IsDocking())
 					::DestroyWindow(dlgFuncList.GetHwnd());
@@ -115,14 +115,14 @@ BOOL CViewCommander::Command_FUNCLIST(
 	case OUTLINE_JAVA:		cDocOutline.MakeFuncList_Java(&cFuncInfoArr);break;
 	case OUTLINE_COBOL:		cDocOutline.MakeTopicList_cobol(&cFuncInfoArr);break;
 	case OUTLINE_ASM:		cDocOutline.MakeTopicList_asm(&cFuncInfoArr);break;
-	case OUTLINE_PERL:		cDocOutline.MakeFuncList_Perl(&cFuncInfoArr);break;	//	Sep. 8, 2000 genta
-	case OUTLINE_VB:		cDocOutline.MakeFuncList_VisualBasic(&cFuncInfoArr);break;	//	June 23, 2001 N.Nakatani
+	case OUTLINE_PERL:		cDocOutline.MakeFuncList_Perl(&cFuncInfoArr);break;	// Sep. 8, 2000 genta
+	case OUTLINE_VB:		cDocOutline.MakeFuncList_VisualBasic(&cFuncInfoArr);break;	// June 23, 2001 N.Nakatani
 	case OUTLINE_WZTXT:		cDocOutline.MakeTopicList_wztxt(&cFuncInfoArr);break;		// 2003.05.20 zenryaku 階層付テキスト アウトライン解析
 	case OUTLINE_HTML:		cDocOutline.MakeTopicList_html(&cFuncInfoArr);break;		// 2003.05.20 zenryaku HTML アウトライン解析
 	case OUTLINE_TEX:		cDocOutline.MakeTopicList_tex(&cFuncInfoArr);break;		// 2003.07.20 naoh TeX アウトライン解析
-	case OUTLINE_BOOKMARK:	cDocOutline.MakeFuncList_BookMark(&cFuncInfoArr);break;	//	2001.12.03 hor
-	case OUTLINE_FILE:		cDocOutline.MakeFuncList_RuleFile(&cFuncInfoArr, sTitleOverride);break;	//	2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
-//	case OUTLINE_UNKNOWN:	//Jul. 08, 2001 JEPRO 使わないように変更
+	case OUTLINE_BOOKMARK:	cDocOutline.MakeFuncList_BookMark(&cFuncInfoArr);break;	// 2001.12.03 hor
+	case OUTLINE_FILE:		cDocOutline.MakeFuncList_RuleFile(&cFuncInfoArr, sTitleOverride);break;	// 2002.04.01 YAZAKI アウトライン解析にルールファイルを導入
+//	case OUTLINE_UNKNOWN:	// Jul. 08, 2001 JEPRO 使わないように変更
 	case OUTLINE_PYTHON:	cDocOutline.MakeFuncList_python(&cFuncInfoArr);break;		// 2007.02.08 genta
 	case OUTLINE_ERLANG:	cDocOutline.MakeFuncList_Erlang(&cFuncInfoArr);break;		// 2009.08.10 genta
 	case OUTLINE_TEXT:
@@ -144,8 +144,8 @@ BOOL CViewCommander::Command_FUNCLIST(
 				// プラグイン呼び出し
 				(*plugs.begin())->Invoke(m_pCommanderView, params);
 
-				nListType = objOutline->m_nListType;			//ダイアログの表示方法をを上書き
-				sTitleOverride = objOutline->m_sOutlineTitle;	//ダイアログタイトルを上書き
+				nListType = objOutline->m_nListType;			// ダイアログの表示方法をを上書き
+				sTitleOverride = objOutline->m_sOutlineTitle;	// ダイアログタイトルを上書き
 
 				objOutline->Release();
 				break;

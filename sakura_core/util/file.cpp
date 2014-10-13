@@ -675,7 +675,7 @@ bool GetLastWriteTimestamp(
 
 
 /* ============================================================================
-my_splitpath(const char *CommandLine, char *drive, char *dir, char *fname, char *ext);
+my_splitpath(const char* CommandLine, char* drive, char* dir, char* fname, char* ext);
 
 ★ 概要
 CommandLine に与えられたコマンドライン文字列の先頭から、実在するファイル・ディ
@@ -725,7 +725,7 @@ CommandLine に文字列として D:\Test.ext が与えられた場合、
 
 /* Shift_JIS 対応で検索対象文字を２個指定できる strrchr() みたいなもの。
 / 指定された２つの文字のうち、見つかった方(より後方の方)の位置を返す。
-/ # strrchr(char *s , char c) とは、文字列 s 中の最後尾の c を探し出す関数。
+/ # strrchr(char* s , char c) とは、文字列 s 中の最後尾の c を探し出す関数。
 / # 文字 c が見つかったら、その位置を返す。
 / # 文字 c が見つからない場合は NULL を返す。 */
 char* sjis_strrchr2(const char* pt , const char ch1 , const char ch2) {
@@ -743,14 +743,14 @@ wchar_t* wcsrchr2(const wchar_t* pt , const wchar_t ch1 , const wchar_t ch2) {
 		if ((*pt == ch1) || (*pt == ch2))	pf = pt;	// pf = 検索文字の位置
 		if (*pt != '\0')		pt++;	// 次の文字へ
 	}
-	return (wchar_t *)pf;
+	return (wchar_t*)pf;
 }
 
 #define		GetExistPath_NO_DriveLetter	0	// ドライブレターが無い
 #define		GetExistPath_IV_Drive		1	// ドライブが無効
 #define		GetExistPath_AV_Drive		2	// ドライブが有効
 
-void GetExistPath(char *po , const char *pi)
+void GetExistPath(char* po , const char* pi)
 {
 	char*	pw;
 	int		cnt;
@@ -827,7 +827,7 @@ void GetExistPath(char *po , const char *pi)
 	return;
 }
 
-void GetExistPathW(wchar_t *po , const wchar_t *pi)
+void GetExistPathW(wchar_t* po , const wchar_t* pi)
 {
 	wchar_t* pw;
 	int		cnt;

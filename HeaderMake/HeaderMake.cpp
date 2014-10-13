@@ -82,8 +82,8 @@ using namespace std;
 
 void fopen_s( 
    FILE** pFile,
-   const char *filename,
-   const char *mode 
+   const char* filename,
+   const char* mode 
 )
 {
 	*pFile = fopen(filename, mode);

@@ -120,8 +120,8 @@ public:
 
 protected:
 
-	static bool _match_charlist(const ACHAR c, const ACHAR *pszList);
-	static bool _match_charlist(const WCHAR c, const WCHAR *pszList);
+	static bool _match_charlist(const ACHAR c, const ACHAR* pszList);
+	static bool _match_charlist(const WCHAR c, const WCHAR* pszList);
 };
 
 BOOL IsURL(const wchar_t*, int, int*);			// 指定アドレスがURLの先頭ならばTRUEとその長さを返す
@@ -129,7 +129,7 @@ BOOL IsMailAddress(const wchar_t*, int, int*);	// 現在位置がメールアドレスならば
 
 
 // ACHAR 版
-inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR *pszList)
+inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 {
 	for (int i = 0; pszList[i] != '\0'; i++) {
 		if (pszList[i] == c) {
@@ -139,7 +139,7 @@ inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR *pszList)
 	return false;
 }
 // WCHAR 版
-inline bool CWordParse::_match_charlist(const WCHAR c, const WCHAR *pszList)
+inline bool CWordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
 {
 	for (int i = 0; pszList[i] != L'\0'; i++) {
 		if (pszList[i] == c) {

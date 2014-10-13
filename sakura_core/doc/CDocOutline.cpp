@@ -196,11 +196,11 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 	/*	ネストの深さは、32レベルまで、ひとつのヘッダは、最長256文字まで区別
 		（256文字まで同じだったら同じものとして扱います）
 	*/
-	const int	nMaxStack = 32;	//	ネストの最深
-	int			nDepth = 0;				//	いまのアイテムの深さを表す数値。
+	const int	nMaxStack = 32;	// ネストの最深
+	int			nDepth = 0;				// いまのアイテムの深さを表す数値。
 	wchar_t		pszStack[nMaxStack][256];
 	wchar_t		nLvStack[nMaxStack];
-	wchar_t		szTitle[256];			//	一時領域
+	wchar_t		szTitle[256];			// 一時領域
 	CBregexp* pRegex = NULL;
 	if (bRegex) {
 		pRegex = new CBregexp[nCount];
@@ -228,7 +228,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		const wchar_t* g = test[0].szGroupName;
 		wcscpy_s(pszStack[0], g);
 		nLvStack[0] = test[0].nLv;
-		const wchar_t *p = wcschr(g, L',');
+		const wchar_t* p = wcschr(g, L',');
 		int len;
 		if (p != NULL) {
 			len = p - g;
@@ -317,12 +317,12 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 			}
 		}
 		if (k < nDepth) {
-			//	ループ途中でbreak;してきた。＝今までに同じ見出しが存在していた。
-			//	ので、同じレベルに合わせてAppendData.
+			// ループ途中でbreak;してきた。＝今までに同じ見出しが存在していた。
+			// ので、同じレベルに合わせてAppendData.
 			nDepth = k;
 		}else if (nMaxStack> k) {
-			//	いままでに同じ見出しが存在しなかった。
-			//	Lvが高い場合は、一致するまでさかのぼる
+			// いままでに同じ見出しが存在しなかった。
+			// Lvが高い場合は、一致するまでさかのぼる
 			for (k = nDepth - 1; 0 <= k ; k--) {
 				if (nLvStack[k] <= test[j].nLv) {
 					k++;
@@ -414,7 +414,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 			}
 			k += nCharChars;
 		}
-		//	Nov. 3, 2005 genta 文字列長計算式の修正
+		// Nov. 3, 2005 genta 文字列長計算式の修正
 		wchar_t* pszText;
 		{
 			int nLen = pos_wo_space - leftspace;

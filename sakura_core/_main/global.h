@@ -66,8 +66,8 @@ enum ETabWndNotifyType {
 	TWNT_DEL		= 2,		// ウインドウ削除
 	TWNT_ORDER		= 3,		// ウインドウ順序変更
 	TWNT_FILE		= 4,		// ファイル名変更
-	TWNT_MODE_ENABLE= 5,		// タブモード有効化	//2004.07.14 Kazika 追加
-	TWNT_MODE_DISABLE= 6,		// タブモード無効化	//2004.08.27 Kazika 追加
+	TWNT_MODE_ENABLE= 5,		// タブモード有効化	// 2004.07.14 Kazika 追加
+	TWNT_MODE_DISABLE= 6,		// タブモード無効化	// 2004.08.27 Kazika 追加
 	TWNT_WNDPL_ADJUST= 7,		// ウィンドウ位置合わせ	// 2007.04.03 ryoji 追加
 };
 
@@ -105,7 +105,7 @@ extern const SColorAttributeData g_ColorAttributeArr[];
 //@@@ To Here 2006.12.18 ryoji
 
 //!< 設定値の上限・下限
-//	ルーラの高さ
+// ルーラの高さ
 const int IDC_SPIN_nRulerHeight_MIN = 2;
 const int IDC_SPIN_nRulerHeight_MAX = 32;
 
@@ -142,14 +142,14 @@ enum ESelectCountMode {
 	SELECT_COUNT_BY_BYTE	= 2		// バイト数でカウント
 };
 
-//2007.09.06 kobake 追加
+// 2007.09.06 kobake 追加
 //!検索方向
 enum ESearchDirection{
-	SEARCH_BACKWARD = 0, //前方検索 (前を検索)
-	SEARCH_FORWARD  = 1, //後方検索 (次を検索) (普通)
+	SEARCH_BACKWARD = 0, // 前方検索 (前を検索)
+	SEARCH_FORWARD  = 1, // 後方検索 (次を検索) (普通)
 };
 
-//2007.09.06 kobake 追加
+// 2007.09.06 kobake 追加
 struct SSearchOption {
 //	ESearchDirection	eDirection;
 //	bool	bPrevOrNext;	//!< false==前方検索 true==後方検索
@@ -192,7 +192,7 @@ struct SSearchOption {
 
 };
 
-//2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
+// 2007.10.02 kobake CEditWndのインスタンスへのポインタをここに保存しておく
 class CEditWnd;
 extern CEditWnd* g_pcEditWnd;
 

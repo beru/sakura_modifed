@@ -163,7 +163,7 @@ int CCommandLine::CheckCommandLine(
 			return ptr->value;
 		}
 	}
-	return 0;	//	該当無し
+	return 0;	// 該当無し
 }
 
 /*! コマンドラインの解析
@@ -185,8 +185,8 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CCommandLine::Parse");
 
-	//	May 30, 2000 genta
-	//	実行ファイル名をもとに漢字コードを固定する．
+	// May 30, 2000 genta
+	// 実行ファイル名をもとに漢字コードを固定する．
 	{
 		TCHAR exename[512];
 		::GetModuleFileName(NULL, exename, _countof(exename));
@@ -243,19 +243,19 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	while (pszToken != NULL) {
 		DEBUG_TRACE(_T("OPT=[%ts]\n"), pszToken);
 
-		//	2007.09.09 genta オプション判定ルール変更．オプション解析停止と""で囲まれたオプションを考慮
+		// 2007.09.09 genta オプション判定ルール変更．オプション解析停止と""で囲まれたオプションを考慮
 		if (bParseOptDisabled || !(pszToken[0] == '-' || pszToken[0] == '"' && pszToken[1] == '-' )) {
 			if (pszToken[0] == _T('\"')) {
 				CNativeT cmWork;
-				//	Nov. 3, 2005 genta
-				//	末尾のクォーテーションが無い場合を考慮して，
-				//	最後がダブルクォートの場合のみ取り除く
-				//	ファイル名には使えない文字なのでファイル名に含まれている場合は考慮不要
-				//	またSHIFT-JISの2バイト目の考慮も不要
-				//	Nov. 27, 2005 genta
-				//	引数がダブルクォート1つの場合に，その1つを最初と最後の1つずつと
-				//	見間違えて，インデックス-1にアクセスしてしまうのを防ぐために長さをチェックする
-				//	ファイル名の後ろにあるOptionを解析するため，ループは継続
+				// Nov. 3, 2005 genta
+				// 末尾のクォーテーションが無い場合を考慮して，
+				// 最後がダブルクォートの場合のみ取り除く
+				// ファイル名には使えない文字なのでファイル名に含まれている場合は考慮不要
+				// またSHIFT-JISの2バイト目の考慮も不要
+				// Nov. 27, 2005 genta
+				// 引数がダブルクォート1つの場合に，その1つを最初と最後の1つずつと
+				// 見間違えて，インデックス-1にアクセスしてしまうのを防ぐために長さをチェックする
+				// ファイル名の後ろにあるOptionを解析するため，ループは継続
 				int len = lstrlen(pszToken + 1);
 				if (len > 0) {
 					cmWork.SetString(&pszToken[1], len - (pszToken[len] == _T('"') ? 1 : 0));
@@ -307,85 +307,85 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 					pszToken[tokenlen - 1] = '\0';
 				}
 			}
-			++pszToken;	//	先頭の'-'はskip
+			++pszToken;	// 先頭の'-'はskip
 			TCHAR* arg = NULL;
 			int nArgLen;
 			switch (CheckCommandLine(pszToken, &arg, &nArgLen)) {
 			case CMDLINEOPT_AT:
 				cmResponseFile.SetStringT(arg, nArgLen);
 				break;
-			case CMDLINEOPT_X: //	X
+			case CMDLINEOPT_X: // X
 				// 行桁指定を1開始にした
 				m_fi.m_ptCursor.x = AtoiOptionInt(arg) - 1;
 				break;
-			case CMDLINEOPT_Y:	//	Y
+			case CMDLINEOPT_Y:	// Y
 				m_fi.m_ptCursor.y = AtoiOptionInt(arg) - 1;
 				break;
 			case CMDLINEOPT_VX:	// VX
 				// 行桁指定を1開始にした
 				m_fi.m_nViewLeftCol = CLayoutInt(AtoiOptionInt(arg) - 1);
 				break;
-			case CMDLINEOPT_VY:	//	VY
+			case CMDLINEOPT_VY:	// VY
 				// 行桁指定を1開始にした
 				m_fi.m_nViewTopLine = CLayoutInt(AtoiOptionInt(arg) - 1);
 				break;
-			case CMDLINEOPT_SX: //	SX
+			case CMDLINEOPT_SX: // SX
 				m_fi.m_nWindowSizeX = AtoiOptionInt(arg) - 1;
 				break;
-			case CMDLINEOPT_SY:	//	SY
+			case CMDLINEOPT_SY:	// SY
 				m_fi.m_nWindowSizeY = AtoiOptionInt(arg) - 1;
 				break;
-			case CMDLINEOPT_WX: //	WX
+			case CMDLINEOPT_WX: // WX
 				m_fi.m_nWindowOriginX = AtoiOptionInt(arg);
 				break;
-			case CMDLINEOPT_WY:	//	WY
+			case CMDLINEOPT_WY:	// WY
 				m_fi.m_nWindowOriginY = AtoiOptionInt(arg);
 				break;
-			case CMDLINEOPT_TYPE:	//	TYPE
-				//	Mar. 7, 2002 genta
-				//	ファイルタイプの強制指定
+			case CMDLINEOPT_TYPE:	// TYPE
+				// Mar. 7, 2002 genta
+				// ファイルタイプの強制指定
 				{
 					_tcsncpy(m_fi.m_szDocType, arg, MAX_DOCTYPE_LEN);
 					m_fi.m_szDocType[ nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN ] = L'\0';
 				}
 				break;
-			case CMDLINEOPT_CODE:	//	CODE
+			case CMDLINEOPT_CODE:	// CODE
 				m_fi.m_nCharCode = (ECodeType)AtoiOptionInt(arg);
 				break;
-			case CMDLINEOPT_R:	//	R
+			case CMDLINEOPT_R:	// R
 				m_bViewMode = true;
 				break;
-			case CMDLINEOPT_NOWIN:	//	NOWIN
+			case CMDLINEOPT_NOWIN:	// NOWIN
 				m_bNoWindow = true;
 				break;
-			case CMDLINEOPT_WRITEQUIT:	//	WRITEQUIT	// 2007.05.19 ryoji sakuext用に追加
+			case CMDLINEOPT_WRITEQUIT:	// WRITEQUIT	// 2007.05.19 ryoji sakuext用に追加
 				m_bWriteQuit = true;
 				m_bNoWindow = true;	// 2007.09.05 ryoji -WQを指定されたら-NOWINも指定されたとして扱う
 				break;
-			case CMDLINEOPT_GREPMODE:	//	GREPMODE
+			case CMDLINEOPT_GREPMODE:	// GREPMODE
 				m_bGrepMode = true;
 				if (_T('\0') == m_fi.m_szDocType[0]) {
 					auto_strcpy(m_fi.m_szDocType , _T("grepout"));
 				}
 				break;
-			case CMDLINEOPT_GREPDLG:	//	GREPDLG
+			case CMDLINEOPT_GREPDLG:	// GREPDLG
 				m_bGrepDlg = true;
 				break;
-			case CMDLINEOPT_GKEY:	//	GKEY
-				//	前後の""を取り除く
+			case CMDLINEOPT_GKEY:	// GKEY
+				// 前後の""を取り除く
 				m_gi.cmGrepKey.SetStringT(arg,  lstrlen(arg));
 				m_gi.cmGrepKey.Replace(L"\"\"", L"\"");
 				break;
-			case CMDLINEOPT_GFILE:	//	GFILE
-				//	前後の""を取り除く
+			case CMDLINEOPT_GFILE:	// GFILE
+				// 前後の""を取り除く
 				m_gi.cmGrepFile.SetStringT(arg,  lstrlen(arg));
 				m_gi.cmGrepFile.Replace(_T("\"\""), _T("\""));
 				break;
-			case CMDLINEOPT_GFOLDER:	//	GFOLDER
+			case CMDLINEOPT_GFOLDER:	// GFOLDER
 				m_gi.cmGrepFolder.SetString(arg,  lstrlen(arg));
 				m_gi.cmGrepFolder.Replace(_T("\"\""), _T("\""));
 				break;
-			case CMDLINEOPT_GOPT:	//	GOPT
+			case CMDLINEOPT_GOPT:	// GOPT
 				for (; *arg != '\0' ; ++arg) {
 					switch (*arg) {
 					case 'X':

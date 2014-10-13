@@ -29,7 +29,7 @@
 class CAppMode :
 	public TSingleton<CAppMode>,
 	public CDocListenerEx
-{ //###‰¼
+{ // ###‰¼
 	friend class TSingleton<CAppMode>;
 	CAppMode()
 		:

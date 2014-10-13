@@ -48,7 +48,7 @@
 
 // -- -- -- -- 文字 -- -- -- -- //
 
-//char,wchar_t の変わりに、別名の ACHAR,WCHAR を使うと、ソース整形がしやすいケースがある。
+// char,wchar_t の変わりに、別名の ACHAR,WCHAR を使うと、ソース整形がしやすいケースがある。
 typedef char ACHAR;
 
 // TCHAR追加機能

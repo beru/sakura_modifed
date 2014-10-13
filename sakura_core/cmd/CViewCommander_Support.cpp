@@ -26,7 +26,7 @@
 
 #include "CPropertyManager.h"
 #include "CEditApp.h"
-#include "dlg/CDlgAbout.h"	//Dec. 24, 2000 JEPRO 追加
+#include "dlg/CDlgAbout.h"	// Dec. 24, 2000 JEPRO 追加
 #include "env/CHelpManager.h"
 #include "util/module.h"
 #include "util/shell.h"
@@ -76,9 +76,9 @@ retry:;
 	if (0 < m_pCommanderView->GetParser().GetLeftWord(&cmemData, 100)) {
 		m_pCommanderView->ShowHokanMgr(cmemData, TRUE);
 	}else {
-		InfoBeep(); //2010.04.03 Error→Info
+		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
-		GetDllShareData().m_Common.m_sHelper.m_bUseHokan = FALSE;	//	入力補完終了のお知らせ
+		GetDllShareData().m_Common.m_sHelper.m_bUseHokan = FALSE;	// 入力補完終了のお知らせ
 	}
 	return;
 }
@@ -104,7 +104,7 @@ void CViewCommander::Command_ToggleKeySearch(int option)
 // ヘルプ目次
 void CViewCommander::Command_HELP_CONTENTS(void)
 {
-	ShowWinHelpContents(m_pCommanderView->GetHwnd());	//	目次を表示する
+	ShowWinHelpContents(m_pCommanderView->GetHwnd());	// 目次を表示する
 	return;
 }
 
@@ -123,16 +123,16 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 	POINT	po;
 	RECT	rc;
 
-//	From Here Sept. 15, 2000 JEPRO
-//	サブメニュー、特に「その他」のコマンドに対してステータスバーに表示されるキーアサイン情報が
-//	メニューで隠れないように右にずらした
-//	(本当はこの「コマンド一覧」メニューをダイアログに変更しバーをつまんで自由に移動できるようにしたい)
+// From Here Sept. 15, 2000 JEPRO
+// サブメニュー、特に「その他」のコマンドに対してステータスバーに表示されるキーアサイン情報が
+// メニューで隠れないように右にずらした
+// (本当はこの「コマンド一覧」メニューをダイアログに変更しバーをつまんで自由に移動できるようにしたい)
 //	po.x = 0;
 	po.x = 540;
 //	To Here Sept. 15, 2000 (Oct. 7, 2000 300→500; Nov. 3, 2000 500→540)
 	po.y = 0;
 
-	CEditWnd* pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
+	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 	::GetClientRect(pCEditWnd->GetHwnd(), &rc);
 	po.x = t_min(po.x, rc.right);
 	::ClientToScreen(pCEditWnd->GetHwnd(), &po);
@@ -141,25 +141,25 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 
 	pCEditWnd->GetMenuDrawer().ResetContents();
 
-	//	Oct. 3, 2001 genta
+	// Oct. 3, 2001 genta
 	CFuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
 	HMENU hMenu = ::CreatePopupMenu();
-//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
-	//	Oct. 3, 2001 genta
+// Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
+	// Oct. 3, 2001 genta
 	for (int i = 0; i < FuncLookup.GetCategoryCount(); i++) {
 		HMENU hMenuPopUp = ::CreatePopupMenu();
 		for (int j = 0; j < FuncLookup.GetItemCount(i); j++) {
-			//	Oct. 3, 2001 genta
+			// Oct. 3, 2001 genta
 			int code = FuncLookup.Pos2FuncCode(i, j, false);	// 2007.11.02 ryoji 未登録マクロ非表示を明示指定
 			if (code != 0) {
 				WCHAR	szLabel[300];
 				FuncLookup.Pos2FuncName(i, j, szLabel, 256);
 				UINT uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
-				//	Oct. 3, 2001 genta
+				// Oct. 3, 2001 genta
 				pCEditWnd->GetMenuDrawer().MyAppendMenu(hMenuPopUp, uFlags, code, szLabel, L"");
 			}
 		}
-		//	Oct. 3, 2001 genta
+		// Oct. 3, 2001 genta
 		pCEditWnd->GetMenuDrawer().MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , FuncLookup.Category2Name(i) , _T(""));
 //		pCEditWnd->GetMenuDrawer().MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , nsFuncCode::ppszFuncKind[i]);
 	}
@@ -195,13 +195,13 @@ retry:;
 	if (CHelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute())) == false) {
 //	if (0 == wcslen(GetDllShareData().m_Common.m_szExtHelp1)) {
 		ErrorBeep();
-//From Here Sept. 15, 2000 JEPRO
+// From Here Sept. 15, 2000 JEPRO
 //		[Esc]キーと[x]ボタンでも中止できるように変更
 		if (IDYES == ::MYMESSAGEBOX(
 				NULL,
 				MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
 				GSTR_APPNAME,
-//To Here Sept. 15, 2000
+// To Here Sept. 15, 2000
 				LS(STR_ERR_CEDITVIEW_CMD01)
 			)
 		) {
@@ -211,7 +211,7 @@ retry:;
 			}
 			goto retry;
 		}else {
-		//	Jun. 15, 2000 genta
+		// Jun. 15, 2000 genta
 			return;
 		}
 	}
@@ -260,18 +260,18 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 
 	DEBUG_TRACE(_T("helpfile=%ts\n"), helpfile.c_str());
 
-	//	From Here Jul. 5, 2002 genta
+	// From Here Jul. 5, 2002 genta
 	const TCHAR* filename = NULL;
 	if (0 == helpfile.length()) {
 		while (!CHelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 			ErrorBeep();
-	//	From Here Sept. 15, 2000 JEPRO
+	// From Here Sept. 15, 2000 JEPRO
 	//		[Esc]キーと[x]ボタンでも中止できるように変更
 			if (IDYES != ::MYMESSAGEBOX(
 					NULL,
 					MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
 					GSTR_APPNAME,
-	//	To Here Sept. 15, 2000
+	// To Here Sept. 15, 2000
 					LS(STR_ERR_CEDITVIEW_CMD02)
 				)
 			) {
@@ -286,10 +286,10 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 	}else {
 		filename = helpfile.c_str();
 	}
-	//	To Here Jul. 5, 2002 genta
+	// To Here Jul. 5, 2002 genta
 
-	//	Jul. 5, 2002 genta
-	//	キーワードの外部指定を可能に
+	// Jul. 5, 2002 genta
+	// キーワードの外部指定を可能に
 	CNativeW	cmemCurText;
 	if (kwd != NULL && kwd[0] != _T('\0')) {
 		cmemCurText.SetString(kwd);
@@ -307,7 +307,7 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 		if (_IS_REL_PATH(filename)) {
 			GetInidirOrExedir(pWork, filename);
 		}else {
-			_tcscpy(pWork, filename); //	Jul. 5, 2002 genta
+			_tcscpy(pWork, filename); // Jul. 5, 2002 genta
 		}
 		int nLen = _tcslen(pWork);
 		_tcscpy(&pWork[nLen + 1], cmemCurText.GetStringT());
@@ -334,25 +334,25 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 		if (_IS_REL_PATH(filename)) {
 			TCHAR path[_MAX_PATH];
 			GetInidirOrExedir(path, filename);
-			//	Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
+			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL/*GetDllShareData().m_sHandles.m_hwndTray*/,
-				path, //	Jul. 5, 2002 genta
+				path, // Jul. 5, 2002 genta
 				HH_KEYWORD_LOOKUP,
 				(DWORD_PTR)&link
 			);
 		}else {
-			//	Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
+			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL/*GetDllShareData().m_sHandles.m_hwndTray*/,
-				filename, //	Jul. 5, 2002 genta
+				filename, // Jul. 5, 2002 genta
 				HH_KEYWORD_LOOKUP,
 				(DWORD_PTR)&link
 			);
 		}
 	}
 
-	//	Jul. 6, 2001 genta hwndHtmlHelpのチェックを追加
+	// Jul. 6, 2001 genta hwndHtmlHelpのチェックを追加
 	if (hwndHtmlHelp != NULL) {
 		::BringWindowToTop(hwndHtmlHelp);
 	}

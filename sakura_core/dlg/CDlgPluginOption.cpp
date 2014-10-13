@@ -515,7 +515,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 
 void CDlgPluginOption::MoveFocusToEdit(void)
 {
-	//	現在のFocus取得
+	// 現在のFocus取得
 	int iLine = ListView_GetNextItem(::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS), -1, LVNI_SELECTED);
 	wstring	sType;
 	HWND hwndCtrl;
@@ -718,7 +718,7 @@ void CDlgPluginOption::SelectDirectory(int iLine)
 	TCHAR	sTitle[MAX_LENGTH_VALUE + 10];
 	auto_sprintf_s(sTitle, LS(STR_DLGPLUGINOPT_SELECT), buf);
 	if (SelectDir(GetHwnd(), (const TCHAR*)sTitle /*_T("ディレクトリの選択")*/, szDir, szDir)) {
-		//	末尾に\マークを追加する．
+		// 末尾に\マークを追加する．
 		AddLastChar(szDir, _countof(szDir), _T('\\'));
 		::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, szDir);
 	}

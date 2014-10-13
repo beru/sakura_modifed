@@ -36,7 +36,7 @@
 #include "func/CFuncLookup.h"
 #include "plugin/CJackManager.h"
 
-//	オフセット値
+// オフセット値
 const int LUOFFSET_MACRO = 0;
 const int LUOFFSET_CUSTMENU = 1;
 const int LUOFFSET_PLUGIN = 2;
@@ -60,19 +60,19 @@ EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUna
 		if (position < nsFuncCode::pnFuncListNumArr[category])
 			return nsFuncCode::ppnFuncListArr[category][position];
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
-		//	キー割り当てマクロ
+		// キー割り当てマクロ
 		if (position < MAX_CUSTMACRO) {
 			if (bGetUnavailable || m_pMacroRec[position].IsEnabled())
 				return (EFunctionCode)(F_USERMACRO_0 + position);
 		}
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_CUSTMENU) {
-		//	カスタムメニュー
+		// カスタムメニュー
 		if (position == 0)
 			return F_MENU_RBUTTON;
 		else if (position < MAX_CUSTOM_MENU)
 			return (EFunctionCode)(F_CUSTMENU_BASE + position);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
-		//	プラグイン
+		// プラグイン
 		return CJackManager::getInstance()->GetCommandCode(position);
 	}
 	return F_DISABLE;
@@ -180,19 +180,19 @@ const TCHAR* CFuncLookup::Category2Name(int category) const
 */
 void CFuncLookup::SetCategory2Combo(HWND hComboBox) const
 {
-	//	コンボボックスを初期化する
+	// コンボボックスを初期化する
 	Combo_ResetContent(hComboBox);
 
-	//	固定機能リスト
+	// 固定機能リスト
 	for (int i = 0; i < nsFuncCode::nFuncKindNum; ++i) {
 		Combo_AddString(hComboBox, LS(nsFuncCode::ppszFuncKind[i]));
 	}
 
-	//	ユーザマクロ
+	// ユーザマクロ
 	Combo_AddString(hComboBox, LS(STR_ERR_DLGFUNCLKUP01));
-	//	カスタムメニュー
+	// カスタムメニュー
 	Combo_AddString(hComboBox, LS(STR_ERR_DLGFUNCLKUP02));
-	//	プラグイン
+	// プラグイン
 	Combo_AddString(hComboBox, LS(STR_ERR_DLGFUNCLKUP19));
 }
 
@@ -206,7 +206,7 @@ void CFuncLookup::SetCategory2Combo(HWND hComboBox) const
 void CFuncLookup::SetListItem(HWND hListBox, int category) const
 {
 	WCHAR pszLabel[256];
-	//	リストを初期化する
+	// リストを初期化する
 	List_ResetContent(hListBox);
 
 	int n = GetItemCount(category);
@@ -231,13 +231,13 @@ int CFuncLookup::GetItemCount(int category) const
 	if (category < nsFuncCode::nFuncKindNum) {
 		return nsFuncCode::pnFuncListNumArr[category];
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
-		//	マクロ
+		// マクロ
 		return MAX_CUSTMACRO;
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_CUSTMENU) {
-		//	カスタムメニュー
+		// カスタムメニュー
 		return MAX_CUSTOM_MENU;
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
-		//	プラグインコマンド
+		// プラグインコマンド
 		return CJackManager::getInstance()->GetCommandCount();
 	}
 	return 0;

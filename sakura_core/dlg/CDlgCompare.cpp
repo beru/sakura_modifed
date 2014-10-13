@@ -83,13 +83,13 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「内容比較」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_COMPARE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
-//	From Here Oct. 10, 2000 JEPRO added  Ref. code はCDlgFind.cpp の OnBnClicked
-//	チェックボックスをボタン化してCDlgCompare.cppに直接書き込んでみたが失敗
-//	ダイアログのボタンは下に不可視化しておいてあります。
-//	以下の追加コードは全部消して結構ですから誰か作ってください。水平スクロールも入れてくれるとなおうれしいです。
+// From Here Oct. 10, 2000 JEPRO added  Ref. code はCDlgFind.cpp の OnBnClicked
+// チェックボックスをボタン化してCDlgCompare.cppに直接書き込んでみたが失敗
+// ダイアログのボタンは下に不可視化しておいてあります。
+// 以下の追加コードは全部消して結構ですから誰か作ってください。水平スクロールも入れてくれるとなおうれしいです。
 //	case IDC_BUTTON1:	/* 上下に表示 */
 //		/* ダイアログデータの取得 */
 //		return TRUE;
@@ -110,7 +110,7 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 //		delete [] phwndArr;
 //		CloseDialog(0);
 //		return TRUE;
-//	To Here Oct. 10, 2000
+// To Here Oct. 10, 2000
 	case IDOK:			// 左右に表示
 		// ダイアログデータの取得
 		::EndDialog(GetHwnd(), GetData());
@@ -138,7 +138,7 @@ void CDlgCompare::SetData(void)
 
 	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_FILES);
 
-//	2002/2/10 aroka ファイル名で比較しないため不用 (2001.12.26 YAZAKIさん)
+// 2002/2/10 aroka ファイル名で比較しないため不用 (2001.12.26 YAZAKIさん)
 //	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
 //	setlocale (LC_ALL, "C");
 

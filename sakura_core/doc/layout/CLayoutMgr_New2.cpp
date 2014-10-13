@@ -148,7 +148,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From
 	pArg->nModLineTo += (pArg->nModLineFrom - CLayoutInt(1)) ;	// 再描画ヒント 変更されたレイアウト行To
 
-	//2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
+	// 2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
 	LogicToLayout(DLRArg.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置
 }
 

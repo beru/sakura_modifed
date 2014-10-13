@@ -61,11 +61,11 @@ public:
 	const wchar_t* GetPtr() const { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; }
 	CLogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
 	CLogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	}
-	//CLogicInt GetLength() const { return m_nLength; }	//	CMemoryIterator用（EOL含む）
+	//CLogicInt GetLength() const { return m_nLength; }	// CMemoryIterator用（EOL含む）
 	CLayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
-	CLogicInt GetLogicLineNo() const { if (this)return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
+	CLogicInt GetLogicLineNo() const { if (this) return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
 	CLogicInt GetLogicOffset() const { return m_ptLogicPos.GetX2(); }
 	CLogicPoint GetLogicPos() const { return m_ptLogicPos; }
 	EColorIndexType GetColorTypePrev() const { return m_nTypePrev; } //#########汚っ

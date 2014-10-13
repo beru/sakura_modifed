@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//2007.10.19 kobake
+// 2007.10.19 kobake
 
 enum maxdata{
 	MAX_EDITWINDOWS				= 256,
@@ -31,11 +31,11 @@ enum maxdata{
 	MAX_REPLACEKEY				=  30,
 	MAX_GREPFILE				=  30,
 	MAX_GREPFOLDER				=  30,
-	MAX_TYPES					=  60,	//Jul. 12, 2001 JEPRO タイプ別設定の最大設定数を16から増やした
+	MAX_TYPES					=  60,	// Jul. 12, 2001 JEPRO タイプ別設定の最大設定数を16から増やした
 	MAX_TYPES_EXTS				=  64,
 	MAX_PRINTSETTINGARR			=   8,
 
-	//	From Here Sep. 14, 2001 genta
+	// From Here Sep. 14, 2001 genta
 	MACRONAME_MAX				= 64,
 	MAX_EXTCMDLEN				= 1024,
 	MAX_EXTCMDMRUNUM			= 32,
@@ -60,13 +60,13 @@ enum maxdata{
 
 	// 2004/06/21 novice タグジャンプ機能追加
 	MAX_TAGJUMPNUM				= 100,	// タブジャンプ情報最大値
-	MAX_TAGJUMP_KEYWORD			= 30,	//タグジャンプ用キーワード最大登録数2005.04.04 MIK
+	MAX_TAGJUMP_KEYWORD			= 30,	// タグジャンプ用キーワード最大登録数2005.04.04 MIK
 	MAX_KEYWORDSET_PER_TYPE		= 10,	// 2004.01.23 genta (for MIK) タイプ別設定毎のキーワードセット数
 	MAX_VERTLINES = 10,	// 2005.11.08 Moca 指定桁縦線
 
-	//	MRUリストに関係するmaxdata
-	MAX_MRU						=  36,	//Sept. 27, 2000 JEPRO 0-9, A-Z で36個になるのでそれに合わせて30→36に変更。2007.10.23 kobake maxdataに移動。
-	MAX_OPENFOLDER				=  36,	//Sept. 27, 2000 JEPRO 0-9, A-Z で36個になるのでそれに合わせて30→36に変更
+	// MRUリストに関係するmaxdata
+	MAX_MRU						=  36,	// Sept. 27, 2000 JEPRO 0-9, A-Z で36個になるのでそれに合わせて30→36に変更。2007.10.23 kobake maxdataに移動。
+	MAX_OPENFOLDER				=  36,	// Sept. 27, 2000 JEPRO 0-9, A-Z で36個になるのでそれに合わせて30→36に変更
 
 	MAX_PLUGIN					= 40,	// 登録できるプラグインの数
 	MAX_PLUG_CMD				= 50,	// 登録できるプラグイン コマンドの数+1(1 origin分)

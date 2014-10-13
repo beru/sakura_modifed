@@ -122,7 +122,7 @@ public:
 		// 指定された名前のインタフェースオブジェクトを検索
 		const CWSHClient::List& objects = m_Client->GetInterfaceObjects();
 		for (auto it = objects.begin(); it != objects.end(); it++) {
-			//	Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
+			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
 			if (_wcsicmp(pstrName, (*it)->m_sName.c_str()) == 0) {
 				if (dwReturnMask & SCRIPTINFO_IUNKNOWN) {
 					(*ppiunkItem) = *it;
@@ -165,8 +165,8 @@ public:
 		return S_OK; 
 	}
 
-	//	Nov. 3, 2002 鬼
-	//	エラー行番号表示対応
+	// Nov. 3, 2002 鬼
+	// エラー行番号表示対応
 	virtual HRESULT STDMETHODCALLTYPE OnScriptError(
 	  /* [in] */ IActiveScriptError *pscripterror)
 	{ 
@@ -180,7 +180,7 @@ public:
 			}
 			if (pscripterror->GetSourcePosition(&Context, &Line, &Pos) == S_OK) {
 				wchar_t* Message = new wchar_t[SysStringLen(Info.bstrDescription) + 128];
-				//	Nov. 10, 2003 FILE Win9Xでは、[wsprintfW]が無効のため、[auto_sprintf]に修正
+				// Nov. 10, 2003 FILE Win9Xでは、[wsprintfW]が無効のため、[auto_sprintf]に修正
 				const wchar_t* szDesc = Info.bstrDescription;
 				auto_sprintf(Message, L"[Line %d] %ls", Line + 1, szDesc);
 				SysReAllocString(&Info.bstrDescription, Message);
@@ -208,7 +208,7 @@ public:
 		return S_OK; 
 	}
 
-	//	Sep. 15, 2005 FILE IActiveScriptSiteWindow実装
+	// Sep. 15, 2005 FILE IActiveScriptSiteWindow実装
 	virtual HRESULT __stdcall GetWindow(
 	    /* [out] */ HWND *phwnd)
 	{
@@ -216,7 +216,7 @@ public:
 		return S_OK;
 	}
 
-	//	Sep. 15, 2005 FILE IActiveScriptSiteWindow実装
+	// Sep. 15, 2005 FILE IActiveScriptSiteWindow実装
 	virtual HRESULT __stdcall EnableModeless(
 	    /* [in] */ BOOL fEnable)
 	{
@@ -226,7 +226,7 @@ public:
 
 //implementation
 
-CWSHClient::CWSHClient(const wchar_t *AEngine, ScriptErrorHandler AErrorHandler, void *AData): 
+CWSHClient::CWSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler, void *AData): 
 				m_OnError(AErrorHandler), m_Data(AData), m_Valid(false), m_Engine(NULL)
 { 
 	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
@@ -327,7 +327,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 }
 
 
-bool CWSHClient::Execute(const wchar_t *AScript)
+bool CWSHClient::Execute(const wchar_t* AScript)
 {
 	bool bRet = false;
 	IActiveScriptParse *Parser;

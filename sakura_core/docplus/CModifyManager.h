@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include "util/design_template.h" //TSingleton
+#include "util/design_template.h" // TSingleton
 #include "doc/CDocListener.h" // CDocListenerEx
 
 class CDocLine;

@@ -99,20 +99,20 @@ bool CNormalProcess::InitializeProcess()
 	// その編集ウィンドウをアクティブにする
 	cmdLine.GetEditInfo(&fi); // 2002/2/8 aroka ここに移動
 	if (fi.m_szPath[0] != _T('\0')) {
-		//	Oct. 27, 2000 genta
-		//	MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
-		//	行われるのでここでは必要なし．
+		// Oct. 27, 2000 genta
+		// MRUからカーソル位置を復元する操作はCEditDoc::FileLoadで
+		// 行われるのでここでは必要なし．
 
 		// 指定ファイルが開かれているか調べる
 		// 2007.03.13 maru 文字コードが異なるときはワーニングを出すように
 		HWND hwndOwner;
 		if (GetShareData().ActiveAlreadyOpenedWindow(fi.m_szPath, &hwndOwner, fi.m_nCharCode)) {
-			//	From Here Oct. 19, 2001 genta
-			//	カーソル位置が引数に指定されていたら指定位置にジャンプ
-			if (fi.m_ptCursor.y >= 0) {	//	行の指定があるか
+			// From Here Oct. 19, 2001 genta
+			// カーソル位置が引数に指定されていたら指定位置にジャンプ
+			if (fi.m_ptCursor.y >= 0) {	// 行の指定があるか
 				CLogicPoint& pt = *GetDllShareData().m_sWorkBuffer.GetWorkBuffer<CLogicPoint>();
 				if (fi.m_ptCursor.x < 0) {
-					//	桁の指定が無い場合
+					// 桁の指定が無い場合
 					::SendMessageAny(hwndOwner, MYWM_GETCARETPOS, 0, 0);
 				}else {
 					pt.x = fi.m_ptCursor.x;
@@ -195,7 +195,7 @@ bool CNormalProcess::InitializeProcess()
 		cmdLine.GetGrepInfo(&gi); // 2002/2/8 aroka ここに移動
 		if (!bGrepDlg) {
 			// 2003.06.23 Moca GREP実行前にMutexを開放
-			//	こうしないとGrepが終わるまで新しいウィンドウを開けない
+			// こうしないとGrepが終わるまで新しいウィンドウを開けない
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
@@ -207,7 +207,7 @@ bool CNormalProcess::InitializeProcess()
 				gi.bGrepCurFolder,
 				gi.bGrepSubFolder,
 				gi.sGrepSearchOption,
-				gi.nGrepCharSet,	//	2002/09/21 Moca
+				gi.nGrepCharSet,	// 2002/09/21 Moca
 				gi.bGrepOutputLine,
 				gi.nGrepOutputStyle,
 				gi.bGrepOutputFileOnly,
@@ -244,14 +244,14 @@ bool CNormalProcess::InitializeProcess()
 			csSearch.m_bGrepOutputLine = gi.bGrepOutputLine;
 			csSearch.m_nGrepOutputStyle = gi.nGrepOutputStyle;
 			// 2003.06.23 Moca GREPダイアログ表示前にMutexを開放
-			//	こうしないとGrepが終わるまで新しいウィンドウを開けない
+			// こうしないとGrepが終わるまで新しいウィンドウを開けない
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
 			hMutex = NULL;
 			
-			//	Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
-			//	引数の設定がBOXに反映されない
+			// Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
+			// 引数の設定がBOXに反映されない
 			pEditWnd->m_cDlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		// 検索文字列
 			int nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFile);
 			_tcsncpy(pEditWnd->m_cDlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize);	// 検索ファイル
@@ -291,7 +291,7 @@ bool CNormalProcess::InitializeProcess()
 		// ファイル名が与えられなくてもReadOnly指定を有効にするため．
 		bViewMode = cmdLine.IsViewMode(); // 2002/2/8 aroka ここに移動
 		if (fi.m_szPath[0] != _T('\0')) {
-			//	Mar. 9, 2002 genta 文書タイプ指定
+			// Mar. 9, 2002 genta 文書タイプ指定
 			pEditWnd->OpenDocumentWhenStart(
 				SLoadInfo(
 					fi.m_szPath,

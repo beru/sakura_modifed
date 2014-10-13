@@ -63,11 +63,11 @@ int CLatin1::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 /*!
 	Latin1 → Unicode 変換
 */
-int CLatin1::Latin1ToUni(const char *pSrc, const int nSrcLen, wchar_t *pDst, bool* pbError)
+int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	int nret;
 	const unsigned char *pr, *pr_end;
-	unsigned short *pw;
+	unsigned short* pw;
 
 	if (pbError) {
 		*pbError = false;
@@ -105,7 +105,7 @@ EConvertResult CLatin1::Latin1ToUnicode(CMemory* pMem)
 	// エラー状態
 	bool bError;
 
-	//ソース取得
+	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>(pMem->GetRawPtr(&nSrcLen));
 
@@ -145,7 +145,7 @@ EConvertResult CLatin1::Latin1ToUnicode(CMemory* pMem)
 /*
 	Unicode -> Latin1
 */
-int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool *pbError)
+int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;
@@ -164,7 +164,7 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 	pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
 	pw = reinterpret_cast<unsigned char*>(pDst);
 
-	while((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
+	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
 		switch(echarset) {
 		case CHARSET_UNI_NORMAL:

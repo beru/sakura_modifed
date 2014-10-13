@@ -28,8 +28,8 @@ CBlockComment::CBlockComment()
 	ブロックコメントデリミタをコピーする
 */
 void CBlockComment::SetBlockCommentRule(
-	const wchar_t*	pszFrom,	//!< [in] コメント開始文字列
-	const wchar_t*	pszTo		//!< [in] コメント終了文字列
+	const wchar_t* pszFrom,	//!< [in] コメント開始文字列
+	const wchar_t* pszTo	//!< [in] コメント終了文字列
 	)
 {
 	int nStrLen = wcslen(pszFrom);
@@ -89,8 +89,8 @@ int CBlockComment::Match_CommentTo(
 ) const
 {
 	for (int i = nPos; i <= cStr.GetLength() - m_nBlockToLen; ++i) {
-		//if (0 == auto_memicmp(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	//非ASCIIも大文字小文字を区別しない	//###locale 依存
-		if (0 == wmemicmp_ascii(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	//ASCIIのみ大文字小文字を区別しない（高速）
+		//if (0 == auto_memicmp(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+		if (0 == wmemicmp_ascii(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	// ASCIIのみ大文字小文字を区別しない（高速）
 			return i + m_nBlockToLen;
 		}
 	}

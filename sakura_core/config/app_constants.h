@@ -40,7 +40,7 @@
 	#define _APP_NAME_2_(TYPE) TYPE("")
 #endif
 
-#define _GSTR_APPNAME_(TYPE)  _APP_NAME_(TYPE) _APP_NAME_2_(TYPE) //例:UNICODEデバッグ→_T("sakura(デバッグ版)")
+#define _GSTR_APPNAME_(TYPE)  _APP_NAME_(TYPE) _APP_NAME_2_(TYPE) // 例:UNICODEデバッグ→_T("sakura(デバッグ版)")
 
 #define GSTR_APPNAME    (_GSTR_APPNAME_(_T)   )
 #define GSTR_APPNAME_A  (_GSTR_APPNAME_(ATEXT))
@@ -55,7 +55,7 @@
 const int LINESPACE_MAX = 128;
 const int COLUMNSPACE_MAX = 64;
 
-//	Aug. 14, 2005 genta 定数定義追加
+// Aug. 14, 2005 genta 定数定義追加
 // 2007.09.07 kobake 定数名変更: MAXLINESIZE→MAXLINEKETAS
 // 2007.09.07 kobake 定数名変更: MINLINESIZE→MINLINEKETAS
 const int MAXLINEKETAS		= 10240;	//!< 1行の桁数の最大値

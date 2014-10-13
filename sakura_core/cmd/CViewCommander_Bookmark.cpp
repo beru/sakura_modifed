@@ -18,7 +18,7 @@
 #include "CViewCommander_inline.h"
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*!	検索開始位置へ戻る
 	@author	ai
 	@date	02/06/26
@@ -101,9 +101,9 @@ void CViewCommander::Command_JUMP(void)
 				nLineNum = (Int)layoutMgr.GetLineCount();
 			}
 		}
-		//	Sep. 8, 2000 genta
+		// Sep. 8, 2000 genta
 		m_pCommanderView->AddCurrentLineToHistory();
-		//	2006.07.09 genta 選択状態を解除しないように
+		// 2006.07.09 genta 選択状態を解除しないように
 		m_pCommanderView->MoveCursorSelecting(
 			CLayoutPoint(0, nLineNum - 1),
 			m_pCommanderView->GetSelectionInfo().m_bSelectingLock,
@@ -260,7 +260,7 @@ void CViewCommander::Command_JUMP(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 //! ブックマークの設定・解除を行う(トグル動作)
 void CViewCommander::Command_BOOKMARK_SET(void)
 {
@@ -298,7 +298,7 @@ void CViewCommander::Command_BOOKMARK_SET(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 //! 次のブックマークを探し，見つかったら移動する
 void CViewCommander::Command_BOOKMARK_NEXT(void)
 {
@@ -317,7 +317,7 @@ re_do:;								// hor
 		bFound = TRUE;
 		CLayoutPoint ptLayout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
-		//	2006.07.09 genta 新規関数にまとめた
+		// 2006.07.09 genta 新規関数にまとめた
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
@@ -325,7 +325,7 @@ re_do:;								// hor
 		if (!bFound	&&		// 見つからなかった
 			bRedo			// 最初の検索
 		) {
-			ptXY.y = -1;	//	2002/06/01 MIK
+			ptXY.y = -1;	// 2002/06/01 MIK
 			bRedo = FALSE;
 			goto re_do;		// 先頭から再検索
 		}
@@ -340,7 +340,7 @@ re_do:;								// hor
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 //! 前のブックマークを探し，見つかったら移動する．
 void CViewCommander::Command_BOOKMARK_PREV(void)
 {
@@ -385,7 +385,7 @@ re_do:;								// hor
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 //! ブックマークをクリアする
 void CViewCommander::Command_BOOKMARK_RESET(void)
 {
@@ -395,9 +395,9 @@ void CViewCommander::Command_BOOKMARK_RESET(void)
 }
 
 
-//	from CViewCommander_New.cpp
-//指定パターンに一致する行をマーク 2002.01.16 hor
-//キーマクロで記録できるように	2002.02.08 hor
+// from CViewCommander_New.cpp
+// 指定パターンに一致する行をマーク 2002.01.16 hor
+// キーマクロで記録できるように	2002.02.08 hor
 void CViewCommander::Command_BOOKMARK_PATTERN(void)
 {
 	// 検索or置換ダイアログから呼び出された

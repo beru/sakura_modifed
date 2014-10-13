@@ -28,7 +28,7 @@
 #include "macro/CWSHIfObj.h"
 class CEditView;
 
-typedef void (*EngineCallback)(wchar_t *Ext, char *EngineName);
+typedef void (*EngineCallback)(wchar_t* Ext, char* EngineName);
 
 class CWSHMacroManager : public CMacroManagerBase {
 public:

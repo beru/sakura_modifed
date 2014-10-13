@@ -41,7 +41,7 @@ CDocEditor::CDocEditor(CEditDoc* pcDoc)
 	m_bInsMode(true),			// Oct. 2, 2005 genta
 	m_bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {
-	//	Oct. 2, 2005 genta 挿入モード
+	// Oct. 2, 2005 genta 挿入モード
 	this->SetInsMode(GetDllShareData().m_Common.m_sGeneral.m_bIsINSMode);
 }
 
@@ -56,7 +56,7 @@ CDocEditor::CDocEditor(CEditDoc* pcDoc)
 */
 void CDocEditor::SetModified(bool flag, bool redraw)
 {
-	if (m_bIsDocModified == flag)	//	変更がなければ何もしない
+	if (m_bIsDocModified == flag)	// 変更がなければ何もしない
 		return;
 
 	m_bIsDocModified = flag;
@@ -74,8 +74,8 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	//	May 12, 2000 genta
-	//	編集用改行コードの設定
+	// May 12, 2000 genta
+	// 編集用改行コードの設定
 	{
 		const STypeConfig& type = pcDoc->m_cDocType.GetDocumentAttribute();
 		if (pcDoc->m_cDocFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype) {
@@ -92,8 +92,8 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 		}
 	}
 
-	//	Nov. 20, 2000 genta
-	//	IME状態の設定
+	// Nov. 20, 2000 genta
+	// IME状態の設定
 	this->SetImeMode(pcDoc->m_cDocType.GetDocumentAttribute().m_nImeState);
 
 	// カレントディレクトリの変更
@@ -106,7 +106,7 @@ void CDocEditor::OnAfterSave(const SSaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	this->SetModified(false, false);	//	Jan. 22, 2002 genta 関数化 更新フラグのクリア
+	this->SetModified(false, false);	// Jan. 22, 2002 genta 関数化 更新フラグのクリア
 
 	// 現在位置で無変更な状態になったことを通知
 	this->m_cOpeBuf.SetNoModified();
@@ -115,7 +115,7 @@ void CDocEditor::OnAfterSave(const SSaveInfo& sSaveInfo)
 	::SetCurrentDirectory(pcDoc->m_cDocFile.GetFilePathClass().GetDirPath().c_str());
 }
 
-//	From Here Nov. 20, 2000 genta
+// From Here Nov. 20, 2000 genta
 /*!	IME状態の設定
 	
 	@param mode [in] IMEのモード
@@ -136,19 +136,19 @@ void CDocEditor::SetImeMode(int mode)
 		ImmGetConversionStatus(hIme, &conv, &sent);
 
 		switch (mode >> 2) {
-		case 1:	//	FullShape
+		case 1:	// FullShape
 			conv |= IME_CMODE_FULLSHAPE;
 			conv &= ~IME_CMODE_NOCONVERSION;
 			break;
-		case 2:	//	FullShape & Hiragana
+		case 2:	// FullShape & Hiragana
 			conv |= IME_CMODE_FULLSHAPE | IME_CMODE_NATIVE;
 			conv &= ~(IME_CMODE_KATAKANA | IME_CMODE_NOCONVERSION);
 			break;
-		case 3:	//	FullShape & Katakana
+		case 3:	// FullShape & Katakana
 			conv |= IME_CMODE_FULLSHAPE | IME_CMODE_NATIVE | IME_CMODE_KATAKANA;
 			conv &= ~IME_CMODE_NOCONVERSION;
 			break;
-		case 4: //	Non-Conversion
+		case 4: // Non-Conversion
 			conv |= IME_CMODE_NOCONVERSION;
 			break;
 		}
@@ -159,7 +159,7 @@ void CDocEditor::SetImeMode(int mode)
 	}
 	ImmReleaseContext(hwnd, hIme); //######大丈夫？
 }
-//	To Here Nov. 20, 2000 genta
+// To Here Nov. 20, 2000 genta
 
 /*!
 	末尾に行を追加

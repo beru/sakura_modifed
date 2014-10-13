@@ -10,7 +10,7 @@
 #include "util/window.h"
 #include "debug/CRunningTimer.h"
 
-//2008.07.27 kobake
+// 2008.07.27 kobake
 static
 bool _GetKeywordLength(
 	const CStringRef&	cLineStr,		//!< [in]
@@ -149,7 +149,7 @@ void CLayoutMgr::_DoGyotoKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine)
 	if (1
 		&& (pWork->nPos + 1 < pWork->cLineStr.GetLength())	// 2007.02.17 ryoji 追加
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
-		&& (pWork->nPosX > pWork->nIndent)	//	2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
+		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
@@ -176,7 +176,7 @@ void CLayoutMgr::_DoGyomatsuKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine)
 	if (1
 		&& (pWork->nPos + 1 < pWork->cLineStr.GetLength())	// 2007.02.17 ryoji 追加
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
-		&& (pWork->nPosX > pWork->nIndent)	//	2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
+		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
 	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
 		CLayoutInt nCharKetas2 = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
@@ -335,10 +335,10 @@ void CLayoutMgr::_DoLayout()
 	_Empty();
 	Init();
 	
-	//	Nov. 16, 2002 genta
-	//	折り返し幅 <= TAB幅のとき無限ループするのを避けるため，
-	//	TABが折り返し幅以上の時はTAB=4としてしまう
-	//	折り返し幅の最小値=10なのでこの値は問題ない
+	// Nov. 16, 2002 genta
+	// 折り返し幅 <= TAB幅のとき無限ループするのを避けるため，
+	// TABが折り返し幅以上の時はTAB=4としてしまう
+	// 折り返し幅の最小値=10なのでこの値は問題ない
 	if (GetTabSpace() >= GetMaxLineKetas()) {
 		m_nTabSpace = CLayoutInt(4);
 	}
@@ -383,7 +383,7 @@ void CLayoutMgr::_DoLayout()
 			&& 0 == (pWork->nCurLine % 1024)
 		) {
 			NotifyProgress(pWork->nCurLine * 100 / nAllLineNum);
-			if (!::BlockingHook(NULL))return;
+			if (!::BlockingHook(NULL)) return;
 		}
 
 // 2002/03/13 novice
@@ -418,7 +418,7 @@ void CLayoutMgr::_OnLine2(SLayoutWork* pWork)
 		pWork->pLayout = pWork->pLayout->GetNextLayout();
 		pWork->pLayout->SetColorTypePrev(pWork->colorPrev);
 		pWork->pLayout->GetLayoutExInfo()->SetColorInfo(pWork->exInfoPrev.DetachColorInfo());
-		(*pWork->pnExtInsLineNum)++;								//	再描画してほしい行数 + 1
+		(*pWork->pnExtInsLineNum)++;								// 再描画してほしい行数 + 1
 	}else {
 		pWork->pLayout = InsertLineNext(pWork->pLayout, pWork->_CreateLayout(this));
 	}
@@ -454,13 +454,13 @@ void CLayoutMgr::_OnLine2(SLayoutWork* pWork)
 		代わりに最終行のコメントモードを終了間際に確認している．
 */
 CLayoutInt CLayoutMgr::DoLayout_Range(
-	CLayout*		pLayoutPrev,
-	CLogicInt		nLineNum,
-	CLogicPoint		_ptDelLogicalFrom,
-	EColorIndexType	nCurrentLineType,
+	CLayout*			pLayoutPrev,
+	CLogicInt			nLineNum,
+	CLogicPoint			_ptDelLogicalFrom,
+	EColorIndexType		nCurrentLineType,
 	CLayoutColorInfo*	colorInfo,
 	const CalTextWidthArg*	pctwArg,
-	CLayoutInt*		_pnExtInsLineNum
+	CLayoutInt*			_pnExtInsLineNum
 )
 {
 	*_pnExtInsLineNum = CLayoutInt(0);
@@ -468,7 +468,7 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 	CLogicInt nLineNumWork = CLogicInt(0);
 
 	// 2006.12.01 Moca 途中にまで再構築した場合にEOF位置がずれたまま
-	//	更新されないので，範囲にかかわらず必ずリセットする．
+	// 更新されないので，範囲にかかわらず必ずリセットする．
 	m_nEOFColumn = CLayoutInt(-1);
 	m_nEOFLine = CLayoutInt(-1);
 
@@ -543,7 +543,7 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 					break;
 				}
 			}else {
-				break;	//	while(pWork->pcDocLine) 終了
+				break;	// while (pWork->pcDocLine) 終了
 			}
 		}
 		pWork->pcDocLine = pWork->pcDocLine->GetNextLine();
@@ -560,9 +560,9 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 	CalculateTextWidth_Range(pctwArg);
 
 // 1999.12.22 レイアウト情報がなくなる訳ではないので
-//	m_nPrevReferLine = 0;
-//	m_pLayoutPrevRefer = NULL;
-//	m_pLayoutCurrent = NULL;
+// m_nPrevReferLine = 0;
+// m_pLayoutPrevRefer = NULL;
+// m_pLayoutCurrent = NULL;
 
 	return pWork->nModifyLayoutLinesNew;
 }
@@ -583,8 +583,8 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 {
 	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {	// 「折り返さない」
-		CLayoutInt	nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
-		CLayoutInt	nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
+		CLayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
+		CLayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
 		BOOL bCalTextWidth        = TRUE;		// テキスト最大幅の算出要求をON
 		CLayoutInt nInsLineNum    = m_nLines - pctwArg->nAllLinesOld;		// 追加削除行数
 

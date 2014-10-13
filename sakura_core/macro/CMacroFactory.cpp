@@ -88,16 +88,16 @@ bool CMacroFactory::RegisterCreator(Creator f)
 */
 bool CMacroFactory::Unregister(Creator f)
 {
-	//	Creator Listからの削除
+	// Creator Listからの削除
 	auto c_it = m_mMacroCreators.begin();
 	while (c_it != m_mMacroCreators.end()) {
 		if (*c_it == f) {
-			//	いきなり削除するとiteratorが無効になるので，
-			//	iteratorを1つ進めてから現在位置を削除する．
+			// いきなり削除するとiteratorが無効になるので，
+			// iteratorを1つ進めてから現在位置を削除する．
 			auto tmp_it = c_it++;
 			m_mMacroCreators.erase(tmp_it);
-			//	重複登録されている場合を考慮して，
-			//	1つ見つかっても最後までチェックする
+			// 重複登録されている場合を考慮して，
+			// 1つ見つかっても最後までチェックする
 		}else {
 			++ c_it;
 		}
@@ -119,7 +119,7 @@ CMacroManagerBase* CMacroFactory::Create(const TCHAR* ext)
 {
 	std::tstring key = Ext2Key(ext);
 
-	//	Creatorを順に試す
+	// Creatorを順に試す
 	for (auto c_it = m_mMacroCreators.begin(); c_it != m_mMacroCreators.end(); ++ c_it) {
 		CMacroManagerBase* pobj = (*c_it)(key.c_str());
 		if (pobj != NULL) {

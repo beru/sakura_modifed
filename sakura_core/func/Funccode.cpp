@@ -37,11 +37,11 @@
 		   distribution.
 */
 
-//	Sept. 14, 2000 Jepro note: functions & commands list
-//	キーワード：コマンド一覧順序
-//	ここに登録されているコマンドが共通設定の機能種別に表示され、キー割り当てにも設定できるようになる
-//	このファイルは「コマンド一覧」のメニューの順番や表示にも使われている
-//	sakura_rc.rcファイルの下のほうにあるString Tableも参照のこと
+// Sept. 14, 2000 Jepro note: functions & commands list
+// キーワード：コマンド一覧順序
+// ここに登録されているコマンドが共通設定の機能種別に表示され、キー割り当てにも設定できるようになる
+// このファイルは「コマンド一覧」のメニューの順番や表示にも使われている
+// sakura_rc.rcファイルの下のほうにあるString Tableも参照のこと
 
 #include "StdAfx.h"
 #include "func/Funccode.h"
@@ -61,8 +61,8 @@
 //using namespace nsFuncCode;
 
 const uint16_t nsFuncCode::ppszFuncKind[] = {
-//	"--未定義--",	//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更
-//	Oct. 16, 2000 JEPRO 表示の順番をメニューバーのそれに合わせるように少し入れ替えた(下の個別のものも全部)
+// "--未定義--",	//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更
+// Oct. 16, 2000 JEPRO 表示の順番をメニューバーのそれに合わせるように少し入れ替えた(下の個別のものも全部)
 	STR_ERR_DLGFUNCLKUP04,	// _T("ファイル操作系"),
 	STR_ERR_DLGFUNCLKUP05,	// _T("編集系"),
 	STR_ERR_DLGFUNCLKUP06,	// _T("カーソル移動系"),
@@ -75,8 +75,8 @@ const uint16_t nsFuncCode::ppszFuncKind[] = {
 	STR_ERR_DLGFUNCLKUP13,	// _T("モード切り替え系"),
 	STR_ERR_DLGFUNCLKUP14,	// _T("設定系"),
 	STR_ERR_DLGFUNCLKUP15,	// ("マクロ系"),
-	//	Oct. 15, 2001 genta カスタムメニューの文字列をは動的に変更可能にするためここからは外す．
-	//	_T("カスタムメニュー"),	//Oct. 21, 2000 JEPRO 「その他」から独立分離化
+	// Oct. 15, 2001 genta カスタムメニューの文字列をは動的に変更可能にするためここからは外す．
+	// _T("カスタムメニュー"),	//Oct. 21, 2000 JEPRO 「その他」から独立分離化
 	STR_ERR_DLGFUNCLKUP16,	// _T("ウィンドウ系"),
 	STR_ERR_DLGFUNCLKUP17,	// _T("支援"),
 	STR_ERR_DLGFUNCLKUP18	// _T("その他")
@@ -402,10 +402,10 @@ const EFunctionCode pnFuncList_Macro[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List
 	F_LOADKEYMACRO	,	// キーマクロの読み込み
 	F_EXECKEYMACRO	,	// キーマクロの実行
 	F_EXECEXTMACRO	,	// 名前を指定してマクロ実行
-//	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
+// From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 //	F_EXECCMMAND		// 外部コマンド実行
 	F_EXECMD_DIALOG		// 外部コマンド実行
-//	To Here Sept. 20, 2000
+// To Here Sept. 20, 2000
 
 };
 const int nFincList_Macro_Num = _countof(pnFuncList_Macro);	//Oct. 16, 2000 JEPRO 変数名変更(List10→List_Macro)
@@ -413,8 +413,8 @@ const int nFincList_Macro_Num = _countof(pnFuncList_Macro);	//Oct. 16, 2000 JEPR
 
 // カスタムメニュー		//Oct. 21, 2000 JEPRO 「その他」から分離独立化
 #if 0
-//	From Here Oct. 15, 2001 genta
-//	カスタムメニューの文字列を動的に変更可能にするためこれは削除．
+// From Here Oct. 15, 2001 genta
+// カスタムメニューの文字列を動的に変更可能にするためこれは削除．
 const EFunctionCode pnFuncList_Menu[] = {
 	F_MENU_RBUTTON				,	// 右クリックメニュー
 	F_CUSTMENU_1				,	// カスタムメニュー1
@@ -516,7 +516,7 @@ const int nsFuncCode::pnFuncListNumArr[] = {
 	nFincList_Mode_Num,		// モード切り替え系 	//Oct. 16, 2000 JEPRO 変数名変更(List8→List_Mode)
 	nFincList_Set_Num,		// 設定系 				//Oct. 16, 2000 JEPRO 変数名変更(List9→List_Set)
 	nFincList_Macro_Num,	// マクロ系 			//Oct. 16, 2000 JEPRO 変数名変更(List10→List_Macro)
-//	カスタムメニューの文字列を動的に変更可能にするためこれは削除
+// カスタムメニューの文字列を動的に変更可能にするためこれは削除
 //	nFincList_Menu_Num,		// カスタムメニュー		//Oct. 21, 2000 JEPRO 「その他」から分離独立化
 	nFincList_Win_Num,		// ウィンドウ系 		//Oct. 16, 2000 JEPRO 変数名変更(List7→List_Win)
 	nFincList_Support_Num,	// 支援 				//Oct. 16, 2000 JEPRO 変数名変更(List11→List_Support)
@@ -536,7 +536,7 @@ const EFunctionCode* nsFuncCode::ppnFuncListArr[] = {
 	pnFuncList_Mode,	// モード切り替え系		//Oct. 16, 2000 JEPRO 変数名変更(List8→List_Mode)
 	pnFuncList_Set,		// 設定系				//Oct. 16, 2000 JEPRO 変数名変更(List9→List_Set)
 	pnFuncList_Macro,	// マクロ系				//Oct. 16, 2000 JEPRO 変数名変更(List10→List_Macro)
-//	カスタムメニューの文字列を動的に変更可能にするためこれは削除
+// カスタムメニューの文字列を動的に変更可能にするためこれは削除
 //	pnFuncList_Menu,	// カスタムメニュー		//Oct. 21, 2000 JEPRO「その他」から分離独立化
 	pnFuncList_Win,		// ウィンドウ系			//Oct. 16, 2000 JEPRO 変数名変更(List7→List_Win)
 	pnFuncList_Support,	// 支援 				//Oct. 16, 2000 JEPRO 変数名変更(List11→List_Support)
@@ -859,10 +859,10 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_LOADKEYMACRO:	return HLP000128;	// キーマクロ読み込み
 	case F_EXECKEYMACRO:	return HLP000126;	// キーマクロ実行
 	case F_EXECEXTMACRO:	return HLP000332;	// 名前を指定してマクロ実行
-//	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
+// From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 //	case F_EXECCMMAND:		return 103; // 外部コマンド実行
 	case F_EXECMD_DIALOG:	return HLP000103;	// 外部コマンド実行
-//	To Here Sept. 20, 2000
+// To Here Sept. 20, 2000
 
 
 	// カスタムメニュー
@@ -974,9 +974,9 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 			return true;
 		}
 	case F_SAVEKEYMACRO:	// キーマクロの保存
-		//	Jun. 16, 2002 genta
-		//	キーマクロエンジン以外のマクロを読み込んでいるときは
-		//	実行はできるが保存はできない．
+		// Jun. 16, 2002 genta
+		// キーマクロエンジン以外のマクロを読み込んでいるときは
+		// 実行はできるが保存はできない．
 		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
 			if (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) {	// キーボードマクロを記録中のウィンドウ
 				return true;
@@ -1165,22 +1165,22 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	//case F_PROPERTY_FILE:				// ファイルのプロパティ	// 2009.04.11 ryoji コメントアウト
 		return pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
 
-	case F_JUMPHIST_PREV:	//	移動履歴: 前へ
+	case F_JUMPHIST_PREV:	// 移動履歴: 前へ
 		if (pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckPrev())
 			return true;
 		else
 			return false;
-	case F_JUMPHIST_NEXT:	//	移動履歴: 次へ
+	case F_JUMPHIST_NEXT:	// 移動履歴: 次へ
 		if (pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckNext())
 			return true;
 		else
 			return false;
-	case F_JUMPHIST_SET:	//	現在位置を移動履歴に登録
+	case F_JUMPHIST_SET:	// 現在位置を移動履歴に登録
 		return true;
 	// 20100402 Moca (無題)もダイレクトタグジャンプできるように
 	case F_DIRECT_TAGJUMP:	// ダイレクトタグジャンプ	//@@@ 2003.04.15 MIK
 	case F_TAGJUMP_KEYWORD:	// キーワードを指定してダイレクトタグジャンプ	//@@@ 2005.03.31 MIK
-	//	2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
+	// 2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	// タグファイルの作成	//@@@ 2003.04.13 MIK
 		if (!CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
 			&& pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()
@@ -1260,14 +1260,14 @@ bool IsFuncChecked(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 											pCEditWnd->m_nSelectCountMode == SELECT_COUNT_BY_BYTE);
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return CAppMode::getInstance()->IsViewMode(); // ビューモード
-	//	From Here 2003.06.23 Moca
+	// From Here 2003.06.23 Moca
 	case F_CHGMOD_EOL_CRLF:		return EOL_CRLF == pcEditDoc->m_cDocEditor.GetNewLineCode();
 	case F_CHGMOD_EOL_LF:		return EOL_LF == pcEditDoc->m_cDocEditor.GetNewLineCode();
 	case F_CHGMOD_EOL_CR:		return EOL_CR == pcEditDoc->m_cDocEditor.GetNewLineCode();
-	//	To Here 2003.06.23 Moca
-	//	2003.07.21 genta
-	case F_CHGMOD_INS:			return pcEditDoc->m_cDocEditor.IsInsMode();	//	Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
-	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_Common.m_sSearch.m_bUseCaretKeyWord != FALSE;	//	2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
+	// To Here 2003.06.23 Moca
+	// 2003.07.21 genta
+	case F_CHGMOD_INS:			return pcEditDoc->m_cDocEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
+	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_Common.m_sSearch.m_bUseCaretKeyWord != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
 	case F_BIND_WINDOW:			return ((pShareData->m_Common.m_sTabBar.m_bDispTabWnd) && !(pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
 	case F_TOPMOST:				return ((DWORD)::GetWindowLongPtr(pCEditWnd->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST) != 0;	// 2004.09.21 Moca
 	// Jan. 10, 2004 genta インクリメンタルサーチ

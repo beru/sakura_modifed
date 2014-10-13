@@ -23,10 +23,10 @@ struct SysString {
 	BSTR Data;
 
 	SysString()                         { Data = NULL; }
-	SysString(const SysString &Source)  { Data = ::SysAllocStringLen(Source.Data, SysStringLen(Source.Data)); }
+	SysString(const SysString& Source)  { Data = ::SysAllocStringLen(Source.Data, SysStringLen(Source.Data)); }
 	SysString(BSTR &Source)             { Data = ::SysAllocStringLen(Source, SysStringLen(Source)); }
-	SysString(const wchar_t *S, int L)  { Data = ::SysAllocStringLen(S, L); }
-	SysString(const char *S, int L) { 
+	SysString(const wchar_t* S, int L)  { Data = ::SysAllocStringLen(S, L); }
+	SysString(const char* S, int L) { 
 		wchar_t* buf = new wchar_t[L + 1];
 		int L2 = ::MultiByteToWideChar(CP_ACP, 0, S, L, buf, L);
 		Data = ::SysAllocStringLen(buf, L2); 

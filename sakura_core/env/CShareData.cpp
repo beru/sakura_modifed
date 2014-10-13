@@ -47,7 +47,7 @@ struct ARRHEAD {
 
 const unsigned int uShareDataVersion = N_SHAREDATA_VERSION;
 
-//	CShareData_new2.cppと統合
+// CShareData_new2.cppと統合
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動
 CShareData::CShareData()
 {
@@ -101,7 +101,7 @@ bool CShareData::InitShareData()
 
 	// ファイルマッピングオブジェクト
 	m_hFileMap = ::CreateFileMapping(
-		INVALID_HANDLE_VALUE,	//	Sep. 6, 2003 wmlhq
+		INVALID_HANDLE_VALUE,	// Sep. 6, 2003 wmlhq
 		NULL,
 		PAGE_READWRITE | SEC_COMMIT,
 		0,
@@ -159,11 +159,11 @@ bool CShareData::InitShareData()
 
 		m_pShareData->m_sFlags.m_bEditWndChanging = FALSE;	// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 
-		m_pShareData->m_Common.m_sGeneral.m_nMRUArrNum_MAX = 15;	// ファイルの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+		m_pShareData->m_Common.m_sGeneral.m_nMRUArrNum_MAX = 15;	// ファイルの履歴MAX	// Oct. 14, 2000 JEPRO 少し増やした(10→15)
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 		CMRUFile cMRU;
 		cMRU.ClearAll();
-		m_pShareData->m_Common.m_sGeneral.m_nOPENFOLDERArrNum_MAX = 15;	// フォルダの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+		m_pShareData->m_Common.m_sGeneral.m_nOPENFOLDERArrNum_MAX = 15;	// フォルダの履歴MAX	// Oct. 14, 2000 JEPRO 少し増やした(10→15)
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、CMRUFolderにすべて依頼する
 		CMRUFolder cMRUFolder;
 		cMRUFolder.ClearAll();
@@ -210,21 +210,21 @@ bool CShareData::InitShareData()
 			TCHAR szSettingName[64];
 			int i = 0;
 			auto_sprintf_s(szSettingName, _T("印刷設定 %d"), i + 1);
-			CPrint::SettingInitialize(m_pShareData->m_PrintSettingArr[0], szSettingName);	//	初期化命令。
+			CPrint::SettingInitialize(m_pShareData->m_PrintSettingArr[0], szSettingName);	// 初期化命令。
 		}
 		for (int i = 1; i < MAX_PRINTSETTINGARR; ++i) {
 			m_pShareData->m_PrintSettingArr[i] = m_pShareData->m_PrintSettingArr[0];
 			auto_sprintf_s(m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1);	// 印刷設定の名前
 		}
 
-		//	Jan. 30, 2005 genta 関数として独立
-		//	2007.11.04 genta 戻り値チェック．falseなら起動中断．
+		// Jan. 30, 2005 genta 関数として独立
+		// 2007.11.04 genta 戻り値チェック．falseなら起動中断．
 		if (!InitKeyAssign(m_pShareData)) {
 			return false;
 		}
 
-//	From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
-//	MS ゴシック標準スタイル10ptに設定
+// From Here Sept. 19, 2000 JEPRO コメントアウトになっていた初めのブロックを復活しその下をコメントアウト
+// MS ゴシック標準スタイル10ptに設定
 //		// LOGFONTの初期化
 		LOGFONT lf = {0};
 		lf.lfHeight			= DpiPointsToPixels(-10);	// 2009.10.01 ryoji 高DPI対応（ポイント数から算出）
@@ -260,7 +260,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sHelper.m_lf = lfIconTitle;
 		m_pShareData->m_Common.m_sHelper.m_nPointSize = nIconPointSize;	// フォントサイズ（1/10ポイント単位） ※古いバージョンからの移行を考慮して無効値で初期化	// 2009.10.01 ryoji
 
-//	To Here Sept. 19,2000
+// To Here Sept. 19,2000
 
 		m_pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH = TRUE;				// 現在のフォントは固定幅フォントである
 
@@ -286,7 +286,7 @@ bool CShareData::InitShareData()
 
 		m_pShareData->m_Common.m_sGeneral.m_nCaretType = 0;					// カーソルのタイプ 0=win 1=dos
 		m_pShareData->m_Common.m_sGeneral.m_bIsINSMode = true;				// 挿入／上書きモード
-		m_pShareData->m_Common.m_sGeneral.m_bIsFreeCursorMode = false;		// フリーカーソルモードか	//Oct. 29, 2000 JEPRO 「なし」に変更
+		m_pShareData->m_Common.m_sGeneral.m_bIsFreeCursorMode = false;		// フリーカーソルモードか	// Oct. 29, 2000 JEPRO 「なし」に変更
 
 		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord = FALSE;	// 単語単位で移動するときに、単語の両端で止まるか
 		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph = FALSE;	// 単語単位で移動するときに、単語の両端で止まるか
@@ -327,7 +327,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sSearch.m_bGTJW_LDBLCLK = TRUE;			// ダブルクリックでタグジャンプ
 
 		// キーワード：ツールバー順序
-		//	Jan. 30, 2005 genta 関数として独立
+		// Jan. 30, 2005 genta 関数として独立
 		InitToolButtons(m_pShareData);
 
 		m_pShareData->m_Common.m_sWindow.m_bDispTOOLBAR = TRUE;				// 次回ウィンドウを開いたときツールバーを表示する
@@ -401,12 +401,12 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sEdit.m_bUseOLE_DropSource = TRUE;			// OLEによるドラッグ元にするか
 		m_pShareData->m_Common.m_sGeneral.m_bDispExitingDialog = FALSE;		// 終了ダイアログを表示する
 		m_pShareData->m_Common.m_sEdit.m_bSelectClickedURL = TRUE;			// URLがクリックされたら選択するか
-		m_pShareData->m_Common.m_sSearch.m_bGrepExitConfirm = FALSE;			// Grepモードで保存確認するか
+		m_pShareData->m_Common.m_sSearch.m_bGrepExitConfirm = FALSE;		// Grepモードで保存確認するか
 //		m_pShareData->m_Common.m_bRulerDisp = TRUE;							// ルーラー表示
-		m_pShareData->m_Common.m_sWindow.m_nRulerHeight = 13;					// ルーラーの高さ
-		m_pShareData->m_Common.m_sWindow.m_nRulerBottomSpace = 0;				// ルーラーとテキストの隙間
+		m_pShareData->m_Common.m_sWindow.m_nRulerHeight = 13;				// ルーラーの高さ
+		m_pShareData->m_Common.m_sWindow.m_nRulerBottomSpace = 0;			// ルーラーとテキストの隙間
 		m_pShareData->m_Common.m_sWindow.m_nRulerType = 0;					// ルーラーのタイプ
-		//	Sep. 18, 2002 genta
+		// Sep. 18, 2002 genta
 		m_pShareData->m_Common.m_sWindow.m_nLineNumRightSpace = 0;			// 行番号の右の隙間
 		m_pShareData->m_Common.m_sWindow.m_nVertLineOffset = -1;			// 2005.11.10 Moca 指定桁縦線
 		m_pShareData->m_Common.m_sWindow.m_bUseCompatibleBMP = TRUE;		// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji FALSE->TRUE
@@ -435,9 +435,9 @@ bool CShareData::InitShareData()
 			// ファイルオープン
 			m_pShareData->m_Common.m_sFile.m_bDropFileAndClose = false;		// ファイルをドロップしたときは閉じて開く
 			m_pShareData->m_Common.m_sFile.m_nDropFileNumMax = 8;			// 一度にドロップ可能なファイル数
-			m_pShareData->m_Common.m_sFile.m_bRestoreCurPosition = true;	// カーソル位置復元	//	Oct. 27, 2000 genta
-			m_pShareData->m_Common.m_sFile.m_bRestoreBookmarks = true;		// ブックマーク復元	//2002.01.16 hor
-			m_pShareData->m_Common.m_sFile.m_bAutoMIMEdecode = false;		// ファイル読み込み時にMIMEのデコードを行うか	//Jul. 13, 2001 JEPRO
+			m_pShareData->m_Common.m_sFile.m_bRestoreCurPosition = true;	// カーソル位置復元	// Oct. 27, 2000 genta
+			m_pShareData->m_Common.m_sFile.m_bRestoreBookmarks = true;		// ブックマーク復元	// 2002.01.16 hor
+			m_pShareData->m_Common.m_sFile.m_bAutoMIMEdecode = false;		// ファイル読み込み時にMIMEのデコードを行うか	// Jul. 13, 2001 JEPRO
 			m_pShareData->m_Common.m_sFile.m_bQueryIfCodeChange = true;		// 前回と異なる文字コードの時に問い合わせを行うか	Oct. 03, 2004 genta
 			m_pShareData->m_Common.m_sFile.m_bAlertIfFileNotExist = false;	// 開こうとしたファイルが存在しないとき警告する	Oct. 09, 2004 genta
 			m_pShareData->m_Common.m_sFile.m_bAlertIfLargeFile = false;		// 開こうとしたファイルが大きい場合に警告する
@@ -456,7 +456,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind = TRUE;			// 検索ダイアログを自動的に閉じる
 		m_pShareData->m_Common.m_sSearch.m_bSearchAll		 = FALSE;			// 検索／置換／ブックマーク  先頭（末尾）から再検索 2002.01.26 hor
 		m_pShareData->m_Common.m_sWindow.m_bScrollBarHorz = TRUE;				// 水平スクロールバーを使う
-		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = FALSE;		// アウトライン ダイアログを自動的に閉じる	//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
+		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = FALSE;		// アウトライン ダイアログを自動的に閉じる	// Nov. 18, 2000 JEPRO TRUE→FALSE に変更
 		m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = TRUE;			// 置換 ダイアログを自動的に閉じる
 		m_pShareData->m_Common.m_sEdit.m_bAutoColumnPaste = TRUE;				// 矩形コピーのテキストは常に矩形貼り付け
 		m_pShareData->m_Common.m_sGeneral.m_bNoCaretMoveByActivation = FALSE;	// マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta)
@@ -481,9 +481,9 @@ bool CShareData::InitShareData()
 		// 書式指定子の意味はWindows SDKのGetDateFormat(), GetTimeFormat()を参照のこと
 
 		m_pShareData->m_Common.m_sFormat.m_nDateFormatType = 0;		// 日付書式のタイプ
-		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szDateFormat, _T("yyyy\'年\'M\'月\'d\'日(\'dddd\')\'"));	//日付書式
+		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szDateFormat, _T("yyyy\'年\'M\'月\'d\'日(\'dddd\')\'"));	// 日付書式
 		m_pShareData->m_Common.m_sFormat.m_nTimeFormatType = 0;		// 時刻書式のタイプ
-		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szTimeFormat, _T("tthh\'時\'mm\'分\'ss\'秒\'"));			//時刻書式
+		_tcscpy(m_pShareData->m_Common.m_sFormat.m_szTimeFormat, _T("tthh\'時\'mm\'分\'ss\'秒\'"));			// 時刻書式
 
 		m_pShareData->m_Common.m_sWindow.m_bMenuIcon = TRUE;		// メニューにアイコンを表示する */
 
@@ -520,8 +520,8 @@ bool CShareData::InitShareData()
 		InitTypeConfigs(m_pShareData, *m_pvTypeSettings);
 		InitPopupMenu(m_pShareData);
 
-		//	Apr. 05, 2003 genta ウィンドウキャプションの初期値
-		//	Aug. 16, 2003 genta $N(ファイル名省略表示)をデフォルトに変更
+		// Apr. 05, 2003 genta ウィンドウキャプションの初期値
+		// Aug. 16, 2003 genta $N(ファイル名省略表示)をデフォルトに変更
 		_tcscpy(m_pShareData->m_Common.m_sWindow.m_szWindowCaptionActive, 
 			_T("${w?$h$:アウトプット$:${I?$f$n$:$N$n$}$}${U?(更新)$} -")
 			_T(" $A $V ${R?(ビューモード)$:(上書き禁止)$}${M?  【キーマクロの記録中】$}"));
@@ -529,15 +529,15 @@ bool CShareData::InitShareData()
 			_T("${w?$h$:アウトプット$:$f$n$}${U?(更新)$} -")
 			_T(" $A $V ${R?(ビューモード)$:(上書き禁止)$}${M?  【キーマクロの記録中】$}"));
 
-		//	From Here Sep. 14, 2001 genta
-		//	Macro登録の初期化
+		// From Here Sep. 14, 2001 genta
+		// Macro登録の初期化
 		MacroRec *mptr = m_pShareData->m_Common.m_sMacro.m_MacroTable;
 		for (int i = 0; i < MAX_CUSTMACRO; ++i, ++mptr) {
 			mptr->m_szName[0] = L'\0';
 			mptr->m_szFile[0] = L'\0';
 			mptr->m_bReloadWhenExecute = false;
 		}
-		//	To Here Sep. 14, 2001 genta
+		// To Here Sep. 14, 2001 genta
 		m_pShareData->m_Common.m_sMacro.m_nMacroOnOpened = -1;		// オープン後自動実行マクロ番号		//@@@ 2006.09.01 ryoji
 		m_pShareData->m_Common.m_sMacro.m_nMacroOnTypeChanged = -1;	// タイプ変更後自動実行マクロ番号	//@@@ 2006.09.01 ryoji
 		m_pShareData->m_Common.m_sMacro.m_nMacroOnSave = -1;		// 保存前自動実行マクロ番号			//@@@ 2006.09.01 ryoji
@@ -575,16 +575,16 @@ bool CShareData::InitShareData()
 		SelectCharWidthCache(CWM_FONT_EDIT, CWM_CACHE_SHARE);
 		InitCharWidthCache(m_pShareData->m_Common.m_sView.m_lf);	// 2008/5/15 Uchi
 
-		//	From Here Oct. 27, 2000 genta
+		// From Here Oct. 27, 2000 genta
 		if (m_pShareData->m_vStructureVersion != uShareDataVersion) {
-			//	この共有データ領域は使えない．
-			//	ハンドルを解放する
+			// この共有データ領域は使えない．
+			// ハンドルを解放する
 			SetDllShareData(NULL);
 			::UnmapViewOfFile(m_pShareData);
 			m_pShareData = NULL;
 			return false;
 		}
-		//	To Here Oct. 27, 2000 genta
+		// To Here Oct. 27, 2000 genta
 
 		// 2011.04.10 nasukoji	メッセージリソースDLLをロードする
 		HINSTANCE hLangRsrc = m_cSelectLang.InitializeLanguageEnvironment();
@@ -754,9 +754,9 @@ BOOL CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 {
 	*phwndOwner = NULL;
 
-	//	2007.10.01 genta 相対パスを絶対パスに変換
-	//	変換しないとIsPathOpenedで正しい結果が得られず，
-	//	同一ファイルを複数開くことがある．
+	// 2007.10.01 genta 相対パスを絶対パスに変換
+	// 変換しないとIsPathOpenedで正しい結果が得られず，
+	// 同一ファイルを複数開くことがある．
 	TCHAR szBuf[_MAX_PATH];
 	if (GetLongFileName(pszPath, szBuf)) {
 		pszPath = szBuf;
@@ -958,9 +958,9 @@ bool CShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 		sLoadInfo.eCharCode = CODE_NONE;
 		sLoadInfo.bViewMode = false;
 		ret = CControlTray::OpenNewEditor(NULL, hwnd, sLoadInfo, _T("-DEBUGMODE"), true);
-		//	2001/06/23 N.Nakatani 窓が出るまでウエイトをかけるように修正
-		//アウトプットウインドウが出来るまで5秒ぐらい待つ。
-		//	Jun. 25, 2001 genta OpenNewEditorの同期機能を利用するように変更
+		// 2001/06/23 N.Nakatani 窓が出るまでウエイトをかけるように修正
+		// アウトプットウインドウが出来るまで5秒ぐらい待つ。
+		// Jun. 25, 2001 genta OpenNewEditorの同期機能を利用するように変更
 		bAllwaysActive = true; // 新しく作ったときはactive
 	}
 	// 開いているウィンドウをアクティブにする
@@ -1014,7 +1014,7 @@ int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 	}else {
 		pszFile = m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szFile;
 	}
-	if (pszFile[0] == _T('\0')) {	//	ファイル名が無い
+	if (pszFile[0] == _T('\0')) {	// ファイル名が無い
 		if (pszPath != NULL) {
 			pszPath[0] = _T('\0');
 		}
@@ -1025,14 +1025,14 @@ int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 
 	if (!_IS_REL_PATH(pszFile)	// 絶対パス
 		|| m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER[0] == _T('\0')
-	) {	//	フォルダ指定なし
+	) {	// フォルダ指定なし
 		if (pszPath == NULL || nBufLen <= nLen) {
 			return -nLen;
 		}
 		_tcscpy(pszPath, pszFile);
 		return nLen;
-	}else {	//	フォルダ指定あり
-		//	相対パス→絶対パス
+	}else {	// フォルダ指定あり
+		// 相対パス→絶対パス
 		int nFolderSep = AddLastChar(m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER, _countof2(m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER), _T('\\'));
 		TCHAR* pszDir;
 
@@ -1093,36 +1093,36 @@ void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 	static const int DEFAULT_TOOL_BUTTONS[] = {
 		1,	// 新規作成
 		25,		// ファイルを開く(DropDown)
-		3,		// 上書き保存		//Sept. 16, 2000 JEPRO 3→11に変更	//Oct. 25, 2000 11→3
-		4,		// 名前を付けて保存	//Sept. 19, 2000 JEPRO 追加
+		3,		// 上書き保存		// Sept. 16, 2000 JEPRO 3→11に変更	//Oct. 25, 2000 11→3
+		4,		// 名前を付けて保存	// Sept. 19, 2000 JEPRO 追加
 		0,
 
-		33,	// 元に戻す(Undo)	//Sept. 16, 2000 JEPRO 7→19に変更	//Oct. 25, 2000 19→33
-		34,	// やり直し(Redo)	//Sept. 16, 2000 JEPRO 8→20に変更	//Oct. 25, 2000 20→34
+		33,	// 元に戻す(Undo)	// Sept. 16, 2000 JEPRO 7→19に変更	//Oct. 25, 2000 19→33
+		34,	// やり直し(Redo)	// Sept. 16, 2000 JEPRO 8→20に変更	//Oct. 25, 2000 20→34
 		0,
 
-		87,	// 移動履歴: 前へ	//Dec. 24, 2000 JEPRO 追加
-		88,	// 移動履歴: 次へ	//Dec. 24, 2000 JEPRO 追加
+		87,	// 移動履歴: 前へ	// Dec. 24, 2000 JEPRO 追加
+		88,	// 移動履歴: 次へ	// Dec. 24, 2000 JEPRO 追加
 		0,
 
-		225,	// 検索		//Sept. 16, 2000 JEPRO 9→22に変更	//Oct. 25, 2000 22→225
-		226,	// 次を検索	//Sept. 16, 2000 JEPRO 16→23に変更	//Oct. 25, 2000 23→226
-		227,	// 前を検索	//Sept. 16, 2000 JEPRO 17→24に変更	//Oct. 25, 2000 24→227
+		225,	// 検索		// Sept. 16, 2000 JEPRO 9→22に変更	//Oct. 25, 2000 22→225
+		226,	// 次を検索	// Sept. 16, 2000 JEPRO 16→23に変更	//Oct. 25, 2000 23→226
+		227,	// 前を検索	// Sept. 16, 2000 JEPRO 17→24に変更	//Oct. 25, 2000 24→227
 		228,	// 置換		// Oct. 7, 2000 JEPRO 追加
-		229,	// 検索マークのクリア	//Sept. 16, 2000 JEPRO 41→25に変更(Oct. 7, 2000 25→26)	//Oct. 25, 2000 25→229
-		230,	// Grep		//Sept. 16, 2000 JEPRO 14→31に変更	//Oct. 25, 2000 31→230
-		232,	// アウトライン解析	//Dec. 24, 2000 JEPRO 追加
+		229,	// 検索マークのクリア	// Sept. 16, 2000 JEPRO 41→25に変更(Oct. 7, 2000 25→26)	//Oct. 25, 2000 25→229
+		230,	// Grep		// Sept. 16, 2000 JEPRO 14→31に変更	//Oct. 25, 2000 31→230
+		232,	// アウトライン解析	// Dec. 24, 2000 JEPRO 追加
 		0,
 
-		264,	// タイプ別設定一覧	//Sept. 16, 2000 JEPRO 追加
-		265,	// タイプ別設定		//Sept. 16, 2000 JEPRO 18→36に変更	//Oct. 25, 2000 36→265
-		266,	// 共通設定			//Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更	//Oct. 25, 2000 37→266
+		264,	// タイプ別設定一覧	// Sept. 16, 2000 JEPRO 追加
+		265,	// タイプ別設定		// Sept. 16, 2000 JEPRO 18→36に変更	//Oct. 25, 2000 36→265
+		266,	// 共通設定			// Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更	//Oct. 25, 2000 37→266
 		0,		// Oct. 8, 2000 jepro 次行のために追加
-		346,	// コマンド一覧	//Oct. 8, 2000 JEPRO 追加
+		346,	// コマンド一覧	// Oct. 8, 2000 JEPRO 追加
 	};
 
-	//	ツールバーアイコン数の最大値を超えないためのおまじない
-	//	最大値を超えて定義しようとするとここでコンパイルエラーになります．
+	// ツールバーアイコン数の最大値を超えないためのおまじない
+	// 最大値を超えて定義しようとするとここでコンパイルエラーになります．
 	char dummy[ _countof(DEFAULT_TOOL_BUTTONS) < MAX_TOOLBAR_BUTTON_ITEMS ? 1:0 ];
 	dummy[0] = 0;
 
@@ -1177,13 +1177,13 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
 	n++;
-	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPY_CRLF;	//Nov. 9, 2000 JEPRO 「CRLF改行でコピー」を追加
+	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPY_CRLF;	// Nov. 9, 2000 JEPRO 「CRLF改行でコピー」を追加
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'L';
 	n++;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPY_ADDCRLF;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'H';
 	n++;
-	rMenu.m_nCustMenuItemFuncArr[0][n] = F_PASTEBOX;	//Nov. 9, 2000 JEPRO 「矩形貼り付け」を復活
+	rMenu.m_nCustMenuItemFuncArr[0][n] = F_PASTEBOX;	// Nov. 9, 2000 JEPRO 「矩形貼り付け」を復活
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'X';
 	n++;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;
@@ -1193,16 +1193,16 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'A';
 	n++;
 
-	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;		//Oct. 3, 2000 JEPRO 以下に「タグジャンプ」と「タグジャンプバック」を追加
+	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;		// Oct. 3, 2000 JEPRO 以下に「タグジャンプ」と「タグジャンプバック」を追加
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
 	n++;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_TAGJUMP;
-	rMenu.m_nCustMenuItemKeyArr [0][n] = 'G';		//Nov. 9, 2000 JEPRO 「コピー」とバッティングしていたアクセスキーを変更(T→G)
+	rMenu.m_nCustMenuItemKeyArr [0][n] = 'G';		// Nov. 9, 2000 JEPRO 「コピー」とバッティングしていたアクセスキーを変更(T→G)
 	n++;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_TAGJUMPBACK;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'B';
 	n++;
-	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;		//Oct. 15, 2000 JEPRO 以下に「選択範囲内全行コピー」と「引用符付きコピー」を追加
+	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;		// Oct. 15, 2000 JEPRO 以下に「選択範囲内全行コピー」と「引用符付きコピー」を追加
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
 	n++;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPYLINES;
@@ -1218,18 +1218,18 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\\';
 	n++;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_PROPERTY_FILE;
-	rMenu.m_nCustMenuItemKeyArr [0][n] = 'F';		//Nov. 9, 2000 JEPRO 「やり直し」とバッティングしていたアクセスキーを変更(R→F)
+	rMenu.m_nCustMenuItemKeyArr [0][n] = 'F';		// Nov. 9, 2000 JEPRO 「やり直し」とバッティングしていたアクセスキーを変更(R→F)
 	n++;
 	rMenu.m_nCustMenuItemNumArr[0] = n;
 
 	// カスタムメニュー１
 	rMenu.m_nCustMenuItemNumArr[1] = 7;
 	rMenu.m_nCustMenuItemFuncArr[1][0] = F_FILEOPEN;
-	rMenu.m_nCustMenuItemKeyArr [1][0] = 'O';		//Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (F→O)
+	rMenu.m_nCustMenuItemKeyArr [1][0] = 'O';		// Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (F→O)
 	rMenu.m_nCustMenuItemFuncArr[1][1] = F_FILESAVE;
 	rMenu.m_nCustMenuItemKeyArr [1][1] = 'S';
 	rMenu.m_nCustMenuItemFuncArr[1][2] = F_NEXTWINDOW;
-	rMenu.m_nCustMenuItemKeyArr [1][2] = 'N';		//Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (O→N)
+	rMenu.m_nCustMenuItemKeyArr [1][2] = 'N';		// Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (O→N)
 	rMenu.m_nCustMenuItemFuncArr[1][3] = F_TOLOWER;
 	rMenu.m_nCustMenuItemKeyArr [1][3] = 'L';
 	rMenu.m_nCustMenuItemFuncArr[1][4] = F_TOUPPER;

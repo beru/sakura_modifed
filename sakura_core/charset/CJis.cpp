@@ -16,8 +16,8 @@
 //                       各種判定定数                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//	@author D. S. Koba
-//	星マークを添えてあるものは、書き込みで使われる。
+// @author D. S. Koba
+// 星マークを添えてあるものは、書き込みで使われる。
 const char CJis::JISESCDATA_ASCII7[]			= "\x1b" "(B";  // ☆
 const char CJis::JISESCDATA_JISX0201Latin[]		= "\x1b" "(J";
 const char CJis::JISESCDATA_JISX0201Latin_OLD[]	= "\x1b" "(H";
@@ -227,7 +227,7 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 		}
 		esctype = next_esctype;
 		pr = pr_next;
-	}while(pr_next < pr_end);
+	} while (pr_next < pr_end);
 
 	if (pbError) {
 		*pbError = berror;
@@ -244,7 +244,7 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 
 
 /* E-Mail(JIS→Unicode)コード変換 */
-//2007.08.13 kobake 追加
+// 2007.08.13 kobake 追加
 EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 {
 	// エラー状態
@@ -371,7 +371,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 	pw = reinterpret_cast<unsigned char*>(pDst);
 	echarset_cur = CHARSET_ASCII7;
 
-	while((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset_tmp, 0)) > 0) {
+	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset_tmp, 0)) > 0) {
 		// Unicode -> SJIS
 		nlen = MyWideCharToMultiByte_JP(pr, nclen, &cbuf[0]);
 		if (nlen < 1) {

@@ -39,7 +39,7 @@ protected:
 	/*
 	||  é¿ëïÉwÉãÉpä÷êî
 	*/
-	BOOL OnNotify(WPARAM,  LPARAM);	//	Oct. 6, 2000 JEPRO added for Spin control
+	BOOL OnNotify(WPARAM,  LPARAM);	// Oct. 6, 2000 JEPRO added for Spin control
 	BOOL OnCbnSelChange(HWND, int);
 	BOOL OnBnClicked(int);
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add

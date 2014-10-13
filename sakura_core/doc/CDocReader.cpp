@@ -14,7 +14,7 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 	int nDataLen = 0;
 	while (pDocLine) {
 		// Oct. 7, 2002 YAZAKI
-		nDataLen += pDocLine->GetLengthWithoutEOL() + 2;	//	\r\n‚ð’Ç‰Á‚µ‚Ä•Ô‚·‚½‚ß + 2‚·‚éB
+		nDataLen += pDocLine->GetLengthWithoutEOL() + 2;	// \r\n‚ð’Ç‰Á‚µ‚Ä•Ô‚·‚½‚ß + 2‚·‚éB
 		pDocLine = pDocLine->GetNextLine();
 	}
 	
@@ -27,7 +27,7 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 	
 	nDataLen = 0;
 	while (pDocLine) {
-		//	Oct. 7, 2002 YAZAKI
+		// Oct. 7, 2002 YAZAKI
 		int nLineLen = pDocLine->GetLengthWithoutEOL();
 		if (0 < nLineLen) {
 			wmemcpy(&pData[nDataLen], pDocLine->GetPtr(), nLineLen);

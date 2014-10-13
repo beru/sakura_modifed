@@ -1,4 +1,4 @@
-//	この行は文字化け対策用です．消さないでください
+// この行は文字化け対策用です．消さないでください
 /*!	@file
 	@brief プロセス生成クラス
 
@@ -161,7 +161,7 @@ bool CProcessFactory::IsExistControlProcess()
 	return false;	// コントロールプロセスは存在していないか、まだ CreateMutex() してない
 }
 
-//	From Here Aug. 28, 2001 genta
+// From Here Aug. 28, 2001 genta
 /*!
 	@brief コントロールプロセスを起動する
 	
@@ -183,7 +183,7 @@ bool CProcessFactory::StartControlProcess()
 	s.cb          = sizeof(s);
 	s.lpReserved  = NULL;
 	s.lpDesktop   = NULL;
-	s.lpTitle     = const_cast<TCHAR*>(_T("sakura control process")); //2007.09.21 kobake デバッグしやすいように、名前を付ける
+	s.lpTitle     = const_cast<TCHAR*>(_T("sakura control process")); // 2007.09.21 kobake デバッグしやすいように、名前を付ける
 	s.dwFlags     = STARTF_USESHOWWINDOW;
 	s.wShowWindow = SW_SHOWDEFAULT;
 	s.cbReserved2 = 0;
@@ -198,7 +198,7 @@ bool CProcessFactory::StartControlProcess()
 	// 常駐プロセス起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
 #ifdef _DEBUG
-//	dwCreationFlag |= DEBUG_PROCESS; //2007.09.22 kobake デバッグ用フラグ
+//	dwCreationFlag |= DEBUG_PROCESS; // 2007.09.22 kobake デバッグ用フラグ
 #endif
 	BOOL bCreateResult = ::CreateProcess(
 		szEXE,				// 実行可能モジュールの名前
@@ -248,7 +248,7 @@ bool CProcessFactory::StartControlProcess()
 	
 	return true;
 }
-//	To Here Aug. 28, 2001 genta
+// To Here Aug. 28, 2001 genta
 
 /*!
 	@brief コントロールプロセスの初期化完了イベントを待つ。

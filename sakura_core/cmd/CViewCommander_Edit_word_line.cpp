@@ -154,7 +154,7 @@ void CViewCommander::Command_LineCutToStart(void)
 	}
 
 	// 選択範囲の変更
-	//	2005.06.24 Moca
+	// 2005.06.24 Moca
 	CLayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
 	selInfo.SetSelectArea(sRange);
 
@@ -206,7 +206,7 @@ void CViewCommander::Command_LineCutToEnd(void)
 	}
 
 	// 選択範囲の変更
-	//	2005.06.24 Moca
+	// 2005.06.24 Moca
 	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
 	selInfo.SetSelectArea(sRange);
 
@@ -239,7 +239,7 @@ void CViewCommander::Command_LineDeleteToStart(void)
 	}
 
 	// 選択範囲の変更
-	//	2005.06.24 Moca
+	// 2005.06.24 Moca
 	CLayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
 	selInfo.SetSelectArea(sRange);
 
@@ -289,7 +289,7 @@ void CViewCommander::Command_LineDeleteToEnd(void)
 	}
 
 	// 選択範囲の変更
-	//	2005.06.24 Moca
+	// 2005.06.24 Moca
 	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
 	selInfo.SetSelectArea(sRange);
 
@@ -450,7 +450,7 @@ void CViewCommander::Command_DUPLICATELINE(void)
 		}
 	}
 
-	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen());	//	※pcLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
+	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen());	// ※pcLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
 	if (bAddCRLF) {
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		CEol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();

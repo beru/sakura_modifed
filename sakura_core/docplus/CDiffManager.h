@@ -1,5 +1,5 @@
 //@@@ 2002.05.25 MIK
-//2008.02.23 kobake ‘å®—
+// 2008.02.23 kobake ‘å®—
 /*
 	Copyright (C) 2008, kobake
 

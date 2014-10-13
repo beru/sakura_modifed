@@ -31,11 +31,11 @@
 #include "charset/CCodeFactory.h"
 #include "charset/CCodeBase.h"
 #include "charset/CCodeMediator.h"
-//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
+// Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 #include "extmodule/CBregexp.h"
 #include "_main/global.h"
 
-//	May 15, 2000 genta
+// May 15, 2000 genta
 #include "CEol.h"
 #include "mem/CMemory.h"// 2002/2/10 aroka
 

@@ -80,8 +80,8 @@ void CDocFileOperation::DoFileUnlock()
 //                         ロードUI                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// 「ファイルを開く」ダイアログ
-//	Mar. 30, 2003 genta	ファイル名未定時の初期ディレクトリをカレントフォルダに
+//「ファイルを開く」ダイアログ
+// Mar. 30, 2003 genta	ファイル名未定時の初期ディレクトリをカレントフォルダに
 bool CDocFileOperation::OpenFileDialog(
 	HWND			hwndParent,		//!< [in]
 	const TCHAR*	pszOpenFolder,	//!< [in]     NULL以外を指定すると初期フォルダを指定できる
@@ -169,7 +169,7 @@ bool CDocFileOperation::FileLoad(
 }
 
 //! ファイルを開く（自動実行マクロを実行しない）
-//	2009.08.11 ryoji FileLoadへのパラメータ追加にしてもいいがANSI版と整合がとりやすいので当面は別関数にしておく
+// 2009.08.11 ryoji FileLoadへのパラメータ追加にしてもいいがANSI版と整合がとりやすいので当面は別関数にしておく
 bool CDocFileOperation::FileLoadWithoutAutoMacro(
 	SLoadInfo*	pLoadInfo		//!< [in/out]
 )
@@ -195,7 +195,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	auto& caret = activeView.GetCaret();
 	if (!fexist(m_pcDocRef->m_cDocFile.GetFilePath())) {
 		// ファイルが存在しない
-		//	Jul. 26, 2003 ryoji BOMを標準設定に	// IsBomDefOn使用 2013/5/17	Uchi
+		// Jul. 26, 2003 ryoji BOMを標準設定に	// IsBomDefOn使用 2013/5/17	Uchi
 		m_pcDocRef->m_cDocFile.SetCodeSet(nCharCode,  CCodeTypeName(nCharCode).IsBomDefOn());
 		// カーソル位置表示を更新する	// 2008.07.22 ryoji
 		caret.ShowCaretPosInfo();
@@ -334,8 +334,8 @@ bool CDocFileOperation::SaveFileDialog(
 		CEditWnd::getInstance()->GetHwnd(),
 		szDefaultWildCard,
 		CSakuraEnvironment::GetDlgInitialDir().c_str(),	// 初期フォルダ
-		CMRUFile().GetPathList(),	//	最近のファイル
-		CMRUFolder().GetPathList()	//	最近のフォルダ
+		CMRUFile().GetPathList(),	// 最近のファイル
+		CMRUFolder().GetPathList()	// 最近のフォルダ
 	);
 	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalSaveDlg(pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX);
 }

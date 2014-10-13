@@ -51,7 +51,7 @@ void CViewCommander::Command_TOHANKAKU(void)
 
 
 
-// 半角＋全ひら→全角・カタカナ		//Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
+// 半角＋全ひら→全角・カタカナ		// Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
 void CViewCommander::Command_TOZENKAKUKATA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -61,7 +61,7 @@ void CViewCommander::Command_TOZENKAKUKATA(void)
 
 
 
-// 半角＋全カタ→全角・ひらがな		//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
+// 半角＋全カタ→全角・ひらがな		// Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
 void CViewCommander::Command_TOZENKAKUHIRA(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -71,7 +71,7 @@ void CViewCommander::Command_TOZENKAKUHIRA(void)
 
 
 
-//! 半角英数→全角英数				//July. 30, 2001 Misaka
+//! 半角英数→全角英数				// July. 30, 2001 Misaka
 void CViewCommander::Command_TOZENEI(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -91,7 +91,7 @@ void CViewCommander::Command_TOHANEI(void)
 
 
 
-// 全角カタカナ→半角カタカナ		//Aug. 29, 2002 ai
+// 全角カタカナ→半角カタカナ		// Aug. 29, 2002 ai
 void CViewCommander::Command_TOHANKATA(void)
 {
 	// 選択エリアのテキストを指定方法で変換

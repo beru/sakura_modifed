@@ -91,18 +91,18 @@ public:
 	//! DLLのバージョン情報を取得
 	const TCHAR* GetVersionT() { return IsAvailable() ? to_tchar(BRegexpVersion()) : _T(""); }
 
-	//	CJreエミュレーション関数
+	// CJreエミュレーション関数
 	//!	検索パターンのコンパイル
 	// 2002/01/19 novice 正規表現による文字列置換
 	// 2002.01.26 hor    置換後文字列を別引数に
 	// 2002.02.01 hor    大文字小文字を無視するオプション追加
 	//>> 2002/03/27 Azumaiya 正規表現置換にコンパイル関数を使う形式を追加
-	bool Compile(const wchar_t *szPattern, int nOption = 0) {
+	bool Compile(const wchar_t* szPattern, int nOption = 0) {
 		return Compile(szPattern, NULL, nOption);
 	}
-	bool Compile(const wchar_t *szPattern0, const wchar_t *szPattern1, int nOption = 0, bool bKakomi = false);	//!< Replace用
-	bool Match(const wchar_t *szTarget, int nLen, int nStart = 0);					//!< 検索を実行する
-	int Replace(const wchar_t *szTarget, int nLen, int nStart = 0);					//!< 置換を実行する	// 2007.01.16 ryoji 戻り値を置換個数に変更
+	bool Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int nOption = 0, bool bKakomi = false);	//!< Replace用
+	bool Match(const wchar_t* szTarget, int nLen, int nStart = 0);					//!< 検索を実行する
+	int Replace(const wchar_t* szTarget, int nLen, int nStart = 0);					//!< 置換を実行する	// 2007.01.16 ryoji 戻り値を置換個数に変更
 
 	//-----------------------------------------
 	// 2005.03.19 かろと クラス内部を隠蔽
@@ -140,8 +140,8 @@ public:
 		// outendpは '\0'なので、文字列長は +1不要
 
 		// Jun. 03, 2005 Karoto
-		//	置換後文字列が0幅の場合にoutpがNULLでもoutendpがNULLでない場合があるので，
-		//	outpのNULLチェックが必要
+		// 置換後文字列が0幅の場合にoutpがNULLでもoutendpがNULLでない場合があるので，
+		// outpのNULLチェックが必要
 
 		if (!m_pRegExp->outp) {
 			return CLogicInt(0);
@@ -153,7 +153,7 @@ public:
 		置換された文字列を返す
 		@retval 置換された文字列へのポインタ
 	*/
-	const wchar_t *GetString(void) {
+	const wchar_t* GetString(void) {
 		return m_pRegExp->outp;
 	}
 	/*! @} */
@@ -177,7 +177,7 @@ public:
 		@retval true 先読みがある
 		@retval false 先読みがない
 	*/
-	bool IsLookAhead(const wchar_t *pattern) {
+	bool IsLookAhead(const wchar_t* pattern) {
 		CheckPattern(pattern);
 		return IsLookAhead();
 	}
@@ -199,7 +199,7 @@ protected:
 	}
 
 private:
-	//	内部関数
+	// 内部関数
 
 	//! 検索パターン作成
 	int CheckPattern( const wchar_t* szPattern );
@@ -207,7 +207,7 @@ private:
 	wchar_t* MakePattern( const wchar_t* szPattern, const wchar_t* szPattern2, int nOption );
 	wchar_t* MakePatternAlternate( const wchar_t* const szSearch, const wchar_t* const szReplace, int nOption );
 
-	//	メンバ変数
+	// メンバ変数
 	BREGEXP_W*			m_pRegExp;			//!< コンパイル構造体
 	int					m_ePatType;			//!< 検索文字列パターン種別
 	const wchar_t*		m_szTarget;			//!< 対象文字列へのポインタ
@@ -218,7 +218,7 @@ private:
 };
 
 
-//	Jun. 26, 2001 genta
+// Jun. 26, 2001 genta
 //!	正規表現ライブラリのバージョン取得
 bool CheckRegexpVersion( HWND hWnd, int nCmpId, bool bShowMsg = false );
 bool CheckRegexpSyntax( const wchar_t* szPattern, HWND hWnd, bool bShowMessage, int nOption = -1, bool bKakomi = false );// 2002/2/1 hor追加

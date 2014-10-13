@@ -21,7 +21,7 @@
 #include <CdErr.h>
 #include <Dlgs.h>
 #include "dlg/CDlgOpenFile.h"
-#include "func/Funccode.h"	//Stonee, 2001/05/18
+#include "func/Funccode.h"	// Stonee, 2001/05/18
 #include "CFileExt.h"
 #include "env/CDocTypeManager.h"
 #include "env/CShareData.h"
@@ -132,8 +132,8 @@ UINT_PTR CALLBACK OFNHookProc(
 	static HWND				hwndComboMRU;
 	static HWND				hwndComboOPENFOLDER;
 	static HWND				hwndComboCODES;
-	static HWND				hwndComboEOL;	//	Feb. 9, 2001 genta
-	static HWND				hwndCheckBOM;	//	Jul. 26, 2003 ryoji BOMチェックボックス
+	static HWND				hwndComboEOL;	// Feb. 9, 2001 genta
+	static HWND				hwndCheckBOM;	// Jul. 26, 2003 ryoji BOMチェックボックス
 	static CDlgOpenFile*	pcDlgOpenFile;
 	int						i;
 	int						nSize;
@@ -146,7 +146,7 @@ UINT_PTR CALLBACK OFNHookProc(
 	int						nIdx;
 	int						nIdxSel;
 	int						nWidth;
-	WPARAM					fCheck;	//	Jul. 26, 2003 ryoji BOM状態用
+	WPARAM					fCheck;	// Jul. 26, 2003 ryoji BOM状態用
 
 	// From Here	Feb. 9, 2001 genta
 	static const int			nEolValueArr[] = {
@@ -164,7 +164,7 @@ UINT_PTR CALLBACK OFNHookProc(
 	};
 	int nEolNameArrNum = (int)_countof(pEolNameArr);
 
-//	To Here	Feb. 9, 2001 genta
+// To Here	Feb. 9, 2001 genta
 	int	nRightMargin = 24;
 	HWND hwndFrame;
 
@@ -203,7 +203,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			hwndComboMRU = ::GetDlgItem(hdlg, IDC_COMBO_MRU);
 			hwndComboOPENFOLDER = ::GetDlgItem(hdlg, IDC_COMBO_OPENFOLDER);
 			hwndComboEOL = ::GetDlgItem(hdlg, IDC_COMBO_EOL);
-			hwndCheckBOM = ::GetDlgItem(hdlg, IDC_CHECK_BOM);//	Jul. 26, 2003 ryoji BOMチェックボックス
+			hwndCheckBOM = ::GetDlgItem(hdlg, IDC_CHECK_BOM);// Jul. 26, 2003 ryoji BOMチェックボックス
 
 			// 2005.11.02 ryoji 初期レイアウト設定
 			CDlgOpenFile::InitLayout(hwndOpenDlg, hdlg, hwndComboCODES);
@@ -390,19 +390,19 @@ UINT_PTR CALLBACK OFNHookProc(
 			nIdx = Combo_GetCurSel(hwndComboCODES);
 			lRes = Combo_GetItemData(hwndComboCODES, nIdx);
 			pcDlgOpenFile->m_nCharCode = (ECodeType)lRes;	// 文字コード
-			//	Feb. 9, 2001 genta
+			// Feb. 9, 2001 genta
 			if (pcDlgOpenFile->m_bUseEol) {
 				nIdx = Combo_GetCurSel(hwndComboEOL);
 				lRes = Combo_GetItemData(hwndComboEOL, nIdx);
 				pcDlgOpenFile->m_cEol = (EEolType)lRes;	// 文字コード
 			}
-			//	From Here Jul. 26, 2003 ryoji
-			//	BOMチェックボックスの状態を取得
+			// From Here Jul. 26, 2003 ryoji
+			// BOMチェックボックスの状態を取得
 			if (pcDlgOpenFile->m_bUseBom) {
 				lRes = BtnCtl_GetCheck(hwndCheckBOM);
 				pcDlgOpenFile->m_bBom = (lRes == BST_CHECKED);	// BOM
 			}
-			//	To Here Jul. 26, 2003 ryoji
+			// To Here Jul. 26, 2003 ryoji
 
 //			MYTRACE(_T("文字コード  lRes=%d\n"), lRes);
 //			MYTRACE(_T("pofn->hdr.code=CDN_FILEOK        \n"));break;
@@ -456,8 +456,8 @@ UINT_PTR CALLBACK OFNHookProc(
 		switch (wNotifyCode) {
 		case CBN_SELCHANGE:
 			switch ((int) LOWORD(wParam)) {
-			//	From Here Jul. 26, 2003 ryoji
-			//	文字コードの変更をBOMチェックボックスに反映
+			// From Here Jul. 26, 2003 ryoji
+			// 文字コードの変更をBOMチェックボックスに反映
 			case IDC_COMBO_CODE:
 				{
 					nIdx = Combo_GetCurSel((HWND) lParam);
@@ -477,7 +477,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					BtnCtl_SetCheck(hwndCheckBOM, fCheck);
 				}
 				break;
-			//	To Here Jul. 26, 2003 ryoji
+			// To Here Jul. 26, 2003 ryoji
 			case IDC_COMBO_MRU:
 			case IDC_COMBO_OPENFOLDER:
 				{
@@ -550,7 +550,7 @@ CDlgOpenFile::CDlgOpenFile()
 
 	// OPENFILENAMEの初期化
 	InitOfn(&m_ofn);		// 2005.10.29 ryoji
-	m_ofn.nFilterIndex = 1;	//Jul. 09, 2001 JEPRO	「開く」での最初のワイルドカード
+	m_ofn.nFilterIndex = 1;	// Jul. 09, 2001 JEPRO	「開く」での最初のワイルドカード
 	
 	TCHAR	szFile[_MAX_PATH + 1];
 	TCHAR	szDrive[_MAX_DRIVE];
@@ -733,7 +733,7 @@ bool CDlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 	if (GetSaveFileNameRecover(&m_ofn)) {
 		return true;
 	}else {
-		//	May 29, 2004 genta 関数にまとめた
+		// May 29, 2004 genta 関数にまとめた
 		DlgOpenFail();
 		return false;
 	}
@@ -764,9 +764,9 @@ bool CDlgOpenFile::DoModalOpenDlg(SLoadInfo* pLoadInfo, std::vector<std::tstring
 	// メンバの初期化
 	m_bViewMode = pLoadInfo->bViewMode;
 	m_nCharCode = pLoadInfo->eCharCode;	// 文字コード自動判別
-	m_nHelpTopicID = ::FuncID_To_HelpContextID(F_FILEOPEN);	//Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
-	m_bUseEol = false;	//	Feb. 9, 2001 genta
-	m_bUseBom = false;	//	Jul. 26, 2003 ryoji
+	m_nHelpTopicID = ::FuncID_To_HelpContextID(F_FILEOPEN);	// Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
+	m_bUseEol = false;	// Feb. 9, 2001 genta
+	m_bUseBom = false;	// Jul. 26, 2003 ryoji
 
 	// ファイルパス受け取りバッファ
 	TCHAR* pszPathBuf = new TCHAR[2000];
@@ -894,7 +894,7 @@ bool CDlgOpenFile::DoModalSaveDlg(SSaveInfo* pSaveInfo, bool bSimpleMode)
 		m_bUseBom = false;
 	}
 
-	m_nHelpTopicID = ::FuncID_To_HelpContextID(F_FILESAVEAS_DIALOG);	//Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
+	m_nHelpTopicID = ::FuncID_To_HelpContextID(F_FILESAVEAS_DIALOG);	// Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
 	if (GetSaveFileNameRecover(&m_ofn)) {
 		pSaveInfo->cFilePath = m_ofn.lpstrFile;
 		if (m_ofn.Flags & OFN_ENABLEHOOK)
@@ -902,17 +902,17 @@ bool CDlgOpenFile::DoModalSaveDlg(SSaveInfo* pSaveInfo, bool bSimpleMode)
 
 		pSaveInfo->eCharCode = m_nCharCode;
 
-		//	Feb. 9, 2001 genta
+		// Feb. 9, 2001 genta
 		if (m_bUseEol) {
 			pSaveInfo->cEol = m_cEol;
 		}
-		//	Jul. 26, 2003 ryoji BOM設定
+		// Jul. 26, 2003 ryoji BOM設定
 		if (m_bUseBom) {
 			pSaveInfo->bBomExist = m_bBom;
 		}
 		return true;
 	}else {
-		//	May 29, 2004 genta 関数にまとめた
+		// May 29, 2004 genta 関数にまとめた
 		DlgOpenFail();
 		return false;
 	}

@@ -129,8 +129,8 @@ void CViewCommander::Command_COMPARE(void)
 	}
 end_of_compare:;
 	// 比較後、左右に並べて表示
-//From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
-//	うまくいかなかったので元に戻してある…
+// From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
+// うまくいかなかったので元に戻してある…
 	if (GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz) {
 		HWND hWnds[2];
 		hWnds[0] = GetMainWindow();
@@ -156,9 +156,9 @@ end_of_compare:;
 		}
 //		::TileWindows(NULL, MDITILE_VERTICAL, NULL, 2, hWnds);
 	}
-//To Here Oct. 10, 2000
+// To Here Oct. 10, 2000
 
-	//	2002/05/11 YAZAKI 親ウィンドウをうまく設定してみる。
+	// 2002/05/11 YAZAKI 親ウィンドウをうまく設定してみる。
 	if (!bDefferent) {
 		TopInfoMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD22));
 	}else {

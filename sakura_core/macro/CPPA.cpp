@@ -60,7 +60,7 @@ CPPA::~CPPA()
 {
 }
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 bool CPPA::Execute(CEditView* pcEditView, int flags)
 {
 	// PPAの多重起動禁止 2008.10.22 syat
@@ -75,9 +75,9 @@ bool CPPA::Execute(CEditView* pcEditView, int flags)
 	PpaExecInfo info;
 	info.m_pcEditView = pcEditView;
 	info.m_pShareData = &GetDllShareData();
-	info.m_bError = false;			//	2003.06.01 Moca
-	info.m_cMemDebug.SetString("");	//	2003.06.01 Moca
-	info.m_commandflags = flags | FA_FROMMACRO;	//	2007.07.22 genta
+	info.m_bError = false;			// 2003.06.01 Moca
+	info.m_cMemDebug.SetString("");	// 2003.06.01 Moca
+	info.m_commandflags = flags | FA_FROMMACRO;	// 2007.07.22 genta
 	
 	// 実行前にインスタンスを待避する
 	PpaExecInfo* old_instance = m_CurInstance;
@@ -182,18 +182,18 @@ bool CPPA::InitDllImp()
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
 	for (int i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName != NULL; i++) {
-		//	2003.06.08 Moca メモリーリークの修正
-		//	2003.06.16 genta バッファを外から与えるように
-		//	関数登録用文字列を作成する
+		// 2003.06.08 Moca メモリーリークの修正
+		// 2003.06.16 genta バッファを外から与えるように
+		// 関数登録用文字列を作成する
 		GetDeclarations(CSMacroMgr::m_MacroFuncInfoArr[i], buf);
 		SetDefProc(buf);
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
 	for (int i=0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; i++) {
-		//	2003.06.08 Moca メモリーリークの修正
-		//	2003.06.16 genta バッファを外から与えるように
-		//	関数登録用文字列を作成する
+		// 2003.06.08 Moca メモリーリークの修正
+		// 2003.06.16 genta バッファを外から与えるように
+		// 関数登録用文字列を作成する
 		GetDeclarations(CSMacroMgr::m_MacroFuncInfoCommandArr[i], buf);
 		SetDefProc(buf);
 	}
@@ -255,7 +255,7 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 			strcpy(szArguments[i], "u0: Unknown");
 		}
 	}
-	if (i > 0) {	//	引数があったとき
+	if (i > 0) {	// 引数があったとき
 		char szArgument[8*20];
 		// 2002.12.06 Moca 原因不明だが，strcatがVC6Proでうまく動かなかったため，strcpyにしてみたら動いた
 		strcpy(szArgument, szArguments[0]);
@@ -278,7 +278,7 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 			cMacroFuncInfo.m_nFuncID
 		);
 	}
-	//	Jun. 01, 2003 Moca / Jun. 16, 2003 genta
+	// Jun. 01, 2003 Moca / Jun. 16, 2003 genta
 	return pszBuffer;
 }
 
@@ -354,8 +354,8 @@ void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 			auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA3), FuncID);
 		}
 	}else {
-		//	2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
-		//	実際には不正なエラーは全てPPA.DLL内部でトラップされるようだが念のため．
+		// 2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
+		// 実際には不正なエラーは全てPPA.DLL内部でトラップされるようだが念のため．
 		if (IsBadStringPtrA(Err_Mes, 256)) {
 			pszErr = LS(STR_ERR_DLGPPA6);
 		}else {

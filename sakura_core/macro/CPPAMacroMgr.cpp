@@ -62,7 +62,7 @@ BOOL CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	}
 	in.Close();
 
-	m_cBuffer.SetNativeData(cmemWork);	//	m_cBufferにコピー
+	m_cBuffer.SetNativeData(cmemWork);	// m_cBufferにコピー
 
 	m_nReady = true;
 	return TRUE;
@@ -73,13 +73,13 @@ BOOL CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 */
 BOOL CPPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
-	m_cBuffer.SetNativeData(to_wchar(pszCode));	//	m_cBufferにコピー
+	m_cBuffer.SetNativeData(to_wchar(pszCode));	// m_cBufferにコピー
 
 	m_nReady = true;
 	return TRUE;
 }
 
-//	From Here Apr. 29, 2002 genta
+// From Here Apr. 29, 2002 genta
 /*!
 	@brief Factory
 
@@ -109,6 +109,6 @@ void CPPAMacroMgr::declare (void)
 		CMacroFactory::getInstance()->RegisterCreator(Creator);
 	}
 }
-//	To Here Apr. 29, 2002 genta
+// To Here Apr. 29, 2002 genta
 
 

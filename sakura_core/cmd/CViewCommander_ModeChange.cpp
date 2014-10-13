@@ -50,7 +50,7 @@ void CViewCommander::Command_CHGMOD_INS(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*! 入力する改行コードを設定
 
 	@author moca

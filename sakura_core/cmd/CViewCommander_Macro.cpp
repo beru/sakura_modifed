@@ -85,7 +85,7 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
 	sFlags.m_bRecordingKeyMacro = FALSE;
 	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
-	//	Jun. 16, 2002 genta
+	// Jun. 16, 2002 genta
 	if (!m_pcSMacroMgr->IsSaveOk()) {
 		// 保存不可
 		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD26));
@@ -186,7 +186,7 @@ void CViewCommander::Command_EXECKEYMACRO(void)
 	//@@@ 2002.1.24 YAZAKI
 	auto& csMacro = GetDllShareData().m_Common.m_sMacro;
 	if (csMacro.m_szKeyMacroFileName[0]) {
-		//	ファイルが保存されていたら
+		// ファイルが保存されていたら
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		BOOL bLoadResult = m_pcSMacroMgr->Load(
 			STAND_KEYMACRO,
@@ -197,7 +197,7 @@ void CViewCommander::Command_EXECKEYMACRO(void)
 		if (!bLoadResult) {
 			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD28), csMacro.m_szKeyMacroFileName);
 		}else {
-			//	2007.07.20 genta : flagsオプション追加
+			// 2007.07.20 genta : flagsオプション追加
 			m_pcSMacroMgr->Exec(STAND_KEYMACRO, G_AppInstance(), m_pCommanderView, 0);
 		}
 	}
@@ -220,7 +220,7 @@ void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* ps
 	HWND			hwndRecordingKeyMacro = NULL;
 
 	if (pszPathW != NULL) {
-		//to_tchar()で取得した文字列はdeleteしないこと。
+		// to_tchar()で取得した文字列はdeleteしないこと。
 		pszPath = to_tchar(pszPathW);
 		pszType = to_tchar(pszTypeW);
 
@@ -320,20 +320,20 @@ void CViewCommander::Command_EXECCOMMAND_DIALOG(void)
 		cRecentCurDir.Terminate();
 	}
 
-	//HandleCommand(F_EXECMD, true, (LPARAM)cmd_string, 0, 0, 0);	//	外部コマンド実行コマンドの発行
-	HandleCommand(F_EXECMD, true, (LPARAM)cmd_string, (LPARAM)(GetDllShareData().m_nExecFlgOpt), (LPARAM)pszDir, 0);	//	外部コマンド実行コマンドの発行
+	//HandleCommand(F_EXECMD, true, (LPARAM)cmd_string, 0, 0, 0);	// 外部コマンド実行コマンドの発行
+	HandleCommand(F_EXECMD, true, (LPARAM)cmd_string, (LPARAM)(GetDllShareData().m_nExecFlgOpt), (LPARAM)pszDir, 0);	// 外部コマンド実行コマンドの発行
 }
 
 
-//外部コマンド実行
-//	Sept. 20, 2000 JEPRO  名称CMMANDをCOMMANDに変更
-//	Oct. 9, 2001   genta  マクロ対応のため引数追加
-//  2002.2.2       YAZAKI ダイアログ呼び出し部とコマンド実行部を分離
-//void CEditView::Command_EXECCOMMAND(const char *cmd_string)
-void CViewCommander::Command_EXECCOMMAND(LPCWSTR cmd_string, const int nFlgOpt, LPCWSTR pszCurDir)	//	2006.12.03 maru 引数の拡張
+// 外部コマンド実行
+// Sept. 20, 2000 JEPRO  名称CMMANDをCOMMANDに変更
+// Oct. 9, 2001   genta  マクロ対応のため引数追加
+// 2002.2.2       YAZAKI ダイアログ呼び出し部とコマンド実行部を分離
+//void CEditView::Command_EXECCOMMAND(const char* cmd_string)
+void CViewCommander::Command_EXECCOMMAND(LPCWSTR cmd_string, const int nFlgOpt, LPCWSTR pszCurDir)	// 2006.12.03 maru 引数の拡張
 {
-	//	From Here Aug. 21, 2001 genta
-	//	パラメータ置換 (超暫定)
+	// From Here Aug. 21, 2001 genta
+	// パラメータ置換 (超暫定)
 	const int bufmax = 1024;
 	wchar_t buf[bufmax + 1];
 	CSakuraEnvironment::ExpandParameter(cmd_string, buf, bufmax);
@@ -345,7 +345,7 @@ void CViewCommander::Command_EXECCOMMAND(LPCWSTR cmd_string, const int nFlgOpt, 
 		buf3 = to_tchar(pszCurDir);
 	}
 	m_pCommanderView->ExecCmd(buf2.c_str(), nFlgOpt, (pszCurDir ? buf3.c_str() : NULL));
-	//	To Here Aug. 21, 2001 genta
+	// To Here Aug. 21, 2001 genta
 	return;
 }
 

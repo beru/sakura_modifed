@@ -87,9 +87,9 @@ const bool TABLE_WctombSpec[] = {
 
 
 //
-//	判別・変換テーブル   SJIS の重複符号化されている文字を解決する補助的な表
+// 判別・変換テーブル   SJIS の重複符号化されている文字を解決する補助的な表
 //
-//	参考資料一覧：
+// 参考資料一覧：
 //		Windows-31J の文字セット，森山 将之
 //		    http://www2d.biglobe.ne.jp/~msyk/charcode/cp932/Windows-31J-charset.html
 //		JIS 基本漢字，Cyber Librarian
@@ -101,7 +101,7 @@ const bool TABLE_WctombSpec[] = {
 //
 
 //
-//	2区と13区にある重複文字の既定コードポイントを与える表
+// 2区と13区にある重複文字の既定コードポイントを与える表
 //
 static const unsigned short TABLE_SjisPoorcodeDef[] = {
 	0x81be, // ∪
@@ -130,7 +130,7 @@ static const unsigned short TABLE_SjisPoorcodeDef[] = {
 };
 
 //
-//	2区と13区の重複文字を既定コードポイントへ変換する表
+// 2区と13区の重複文字を既定コードポイントへ変換する表
 //
 static const unsigned  short TABLE_SjisPoorcodeIndex[][2] = {
 //  { 重複文字値, 対応する TABLE_SjisPoorcodeDef 内の位置 }
@@ -170,9 +170,9 @@ static const int TABLESIZE_SjisPoorcodeIndex = 23;
 //	} SJIS_POORCODE_RESOLV_TABLE;
 //
 //
-//	JIS X 0208 により第2区にて定義された記号について
+// JIS X 0208 により第2区にて定義された記号について
 //
-//	2区で定義されている文字に対しては、2区のコードポイントを使う。
+// 2区で定義されている文字に対しては、2区のコードポイントを使う。
 //
 //	const SJIS_POORCODE_RESOLV_TABLE TABLE_cSPCR_block2[] = {
 //		{ 0x81be, { 0x879c, 0      } }, // 00. ∪
@@ -188,10 +188,10 @@ static const int TABLESIZE_SjisPoorcodeIndex = 23;
 //	};
 //
 //
-//	NEC の都合により第13区に定義された文字について
+// NEC の都合により第13区に定義された文字について
 //
-//	2区で定義済みの文字を除いて、
-//	残った文字に対してこの13区（NEC特殊文字）のコードポイントを使う。
+// 2区で定義済みの文字を除いて、
+// 残った文字に対してこの13区（NEC特殊文字）のコードポイントを使う。
 //
 //	const SJIS_POORCODE_RESOLV_TABLE TABLE_cSPCR_block13 = {
 //		{ 0x8754, { 0xfa4a, 0 } }, // 10. Ⅰ
@@ -211,18 +211,18 @@ static const int TABLESIZE_SjisPoorcodeIndex = 23;
 //
 //
 //
-//	IBM の都合により第115区～119区に定義された文字について
+// IBM の都合により第115区～119区に定義された文字について
 //
-//	2区と 13区で定義済みの文字を除いて残った文字に対しては、
-//	<del>89区から92区にある、それと等価な NEC選定IBM拡張文字コードポイントを使う。</del>
-//  115区から 119区にある IBM拡張文字のコードポイントを使う。
-//	0xfa5c から 0xfc4b、
-//	0xfa40 から 0xfa49、
-//	0xfa55 から 0xfa57 の SJIS コードポイントを規定とする。
-//	それらのコードポイントのエイリアスは、それぞれ、
-//	0xed40 から 0xeeec、
-//	0xeeef から 0xeef8、
-//	0xeefa から 0xeefc の SJIS コードポイントである。
+// 2区と 13区で定義済みの文字を除いて残った文字に対しては、
+// <del>89区から92区にある、それと等価な NEC選定IBM拡張文字コードポイントを使う。</del>
+// 115区から 119区にある IBM拡張文字のコードポイントを使う。
+// 0xfa5c から 0xfc4b、
+// 0xfa40 から 0xfa49、
+// 0xfa55 から 0xfa57 の SJIS コードポイントを規定とする。
+// それらのコードポイントのエイリアスは、それぞれ、
+// 0xed40 から 0xeeec、
+// 0xeeef から 0xeef8、
+// 0xeefa から 0xeefc の SJIS コードポイントである。
 //
 
 
@@ -241,7 +241,7 @@ unsigned int __fastcall SjisFilter_basis(const unsigned int uCode)
 	/* 二分検索開始 */
 	nleft = 0;
 	nright = TABLESIZE_SjisPoorcodeIndex -1;
-	while(nleft <= nright) {
+	while (nleft <= nright) {
 		ni = (nright + nleft) / 2;
 		code_tmp = TABLE_SjisPoorcodeIndex[ni][0];
 		if (uCode < code_tmp) {

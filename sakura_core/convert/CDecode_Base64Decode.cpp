@@ -43,7 +43,7 @@ bool CDecode_Base64Decode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	const int BUFFER_SIZE = 1024;  // バッファサイズ。１以上の整数かつ４の倍数で。
 	const int _BUFSIZE = ((BUFFER_SIZE + 3) / 4) * 4;
 
-	const wchar_t *pSrc;
+	const wchar_t* pSrc;
 	int nSrcLen;
 	char *pw, *pw_base;
 	wchar_t buffer[_BUFSIZE];
@@ -53,7 +53,7 @@ bool CDecode_Base64Decode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	pSrc = pcSrc.GetStringPtr();
 	nSrcLen = pcSrc.GetStringLength();
 	pcDst->AllocBuffer(nSrcLen);  // 書き込みバッファを確保
-	pw_base = pw = reinterpret_cast<char *>(pcDst->GetRawPtr());
+	pw_base = pw = reinterpret_cast<char*>(pcDst->GetRawPtr());
 
 	i = 0;  // pcSrc の添え字
 	do {

@@ -363,7 +363,7 @@ int CEditView::IsSearchString(
 			return 0; // 指定位置は単語の始まりではなかった。
 		}
 		const CLogicInt wordLength = posWordEnd - posWordHead;
-		const wchar_t *const pWordHead = cStr.GetPtr() + posWordHead;
+		const wchar_t* const pWordHead = cStr.GetPtr() + posWordHead;
 
 		// 比較関数
 		int (*const fcmp)(const wchar_t*, const wchar_t*, size_t) = m_sCurSearchOption.bLoHiCase ? wcsncmp : wcsnicmp;

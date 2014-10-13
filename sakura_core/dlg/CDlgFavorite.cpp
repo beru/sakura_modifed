@@ -349,7 +349,7 @@ int CDlgFavorite::GetData(void)
 	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		if (m_aFavoriteInfo[nTab].m_bHaveFavorite) {
 			GetFavorite(nTab);
-			//リストを更新する。
+			// リストを更新する。
 			CRecent* pRecent = m_aFavoriteInfo[nTab].m_pRecent;
 			pRecent->UpdateView();
 		}
@@ -763,9 +763,9 @@ bool CDlgFavorite::RefreshListOne(int nIndex)
 	nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
 	if (-1 == nCurrentIndex) nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED);
 
-	if (nItemCount != nCount) goto changed;	//個数が変わったので再構築
+	if (nItemCount != nCount) goto changed;	// 個数が変わったので再構築
 
-	//お気に入り数が変わったので再構築
+	// お気に入り数が変わったので再構築
 	if (m_aFavoriteInfo[nIndex].m_nViewCount != pRecent->GetViewCount()) goto changed;
 
 	for (i = 0; i < nCount; i++) {
@@ -778,7 +778,7 @@ bool CDlgFavorite::RefreshListOne(int nIndex)
 		lvitem.iItem      = i;
 		lvitem.iSubItem   = 1;
 		bret = ListView_GetItem(hwndList, &lvitem);
-		if (!bret) goto changed;	//エラーなので再構築
+		if (!bret) goto changed;	// エラーなので再構築
 
 		// アイテム内容が変わったので再構築
 		if (lvitem.lParam != pRecent->FindItemByText(szText)) goto changed;

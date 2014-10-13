@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//2007.10.18 kobake
+// 2007.10.18 kobake
 
 //! 全角ひらがな→全角カタカナ (文字数は不変)
 void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength);

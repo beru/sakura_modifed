@@ -132,8 +132,8 @@ CHAR_TYPE* my_strtok(
 // ▽ シグニチャおよび動作仕様は変わらないけど、
 // コンパイラと言語指定によって不正動作をしてしまうことを回避するために
 // 独自に実装し直したもの。
-int my_stricmp(const char *s1, const char *s2);
-int my_strnicmp(const char *s1, const char *s2, size_t n);
+int my_stricmp(const char* s1, const char* s2);
+int my_strnicmp(const char* s1, const char* s2, size_t n);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //        auto系（_UNICODE 定義に依存しない関数）              //

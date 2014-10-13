@@ -191,7 +191,7 @@ void CDlgReplace::SetData(void)
 
 
 // 検索文字列/置換後文字列リストの設定
-//	2010/5/26 Uchi
+// 2010/5/26 Uchi
 void CDlgReplace::SetCombosList(void)
 {
 	// 検索文字列
@@ -266,7 +266,7 @@ int CDlgReplace::GetData(void)
 	if (0 < m_strText.size()) {
 		// 正規表現？
 		// From Here Jun. 26, 2001 genta
-		//	正規表現ライブラリの差し替えに伴う処理の見直し
+		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
 		nFlag |= m_sSearchOption.bLoHiCase ? 0x01 : 0x00;
 		if (m_sSearchOption.bRegularExp
@@ -425,7 +425,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 // To Here 2001.12.03 hor
 	case IDC_BUTTON_HELP:
 		//「置換」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_REPLACE_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 //	case IDC_CHK_LOHICASE:	// 大文字と小文字を区別する
@@ -438,15 +438,15 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 //		MYTRACE(_T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP) = %d\n"), ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
 		if (::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP)) {
 			// From Here Jun. 26, 2001 genta
-			//	正規表現ライブラリの差し替えに伴う処理の見直し
+			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {
 				::CheckDlgButton(GetHwnd(), IDC_CHK_REGULAREXP, 0);
 			}else {
 			// To Here Jun. 26, 2001 genta
 
 				// 英大文字と英小文字を区別する
-				//	Jan. 31, 2002 genta
-				//	大文字・小文字の区別は正規表現の設定に関わらず保存する
+				// Jan. 31, 2002 genta
+				// 大文字・小文字の区別は正規表現の設定に関わらず保存する
 				//::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 1);
 				//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), FALSE);
 
@@ -460,8 +460,8 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		}else {
 			// 英大文字と英小文字を区別する
 			//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), TRUE);
-			//	Jan. 31, 2002 genta
-			//	大文字・小文字の区別は正規表現の設定に関わらず保存する
+			// Jan. 31, 2002 genta
+			// 大文字・小文字の区別は正規表現の設定に関わらず保存する
 			//::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 0);
 
 			// 2001/06/23 N.Nakatani
@@ -523,7 +523,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		}
 		return TRUE;
 
-	case IDC_BUTTON_SETMARK:	//2002.01.16 hor 該当行マーク
+	case IDC_BUTTON_SETMARK:	// 2002.01.16 hor 該当行マーク
 		nRet = GetData();
 		if (0 < nRet) {
 			pcEditView->GetCommander().HandleCommand(F_BOOKMARK_PATTERN, false, 0, 0, 0, 0);

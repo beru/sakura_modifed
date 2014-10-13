@@ -79,7 +79,7 @@ public:
 	//純粋仮想クラスは実体化できないのでFactoryは不要。
 	//継承先クラスでは必要。
 	
-	//	デストラクタのvirtualを忘れずに
+	// デストラクタのvirtualを忘れずに
 	virtual ~CMacroManagerBase();
 	
 

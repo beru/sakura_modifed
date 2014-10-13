@@ -95,7 +95,7 @@ namespace ApiWrap {
 		const wchar_t* p = szDirPath - 1;
 		for (;;) {
 			p = wcschr(p + 1, L'\\');
-			if (!p) break; //'\\'を走査し終わったので終了
+			if (!p) break; // '\\'を走査し終わったので終了
 
 			// 先頭からpまでの部分文字列 -> szBuf
 			wchar_t szBuf[_MAX_PATH];

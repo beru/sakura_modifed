@@ -45,21 +45,21 @@ namespace WCODE
 {
 	bool CalcHankakuByFont(wchar_t);
 
-	//2007.08.30 kobake 追加
+	// 2007.08.30 kobake 追加
 	bool IsHankaku(wchar_t wc)
 	{
-		//※ほぼ未検証。ロジックが確定したらインライン化すると良い。
+		// ※ほぼ未検証。ロジックが確定したらインライン化すると良い。
 
-		//参考：http://www.swanq.co.jp/blog/archives/000783.html
+		// 参考：http://www.swanq.co.jp/blog/archives/000783.html
 		if (
-			   wc <= 0x007E //ACODEとか
-//			|| wc == 0x00A5 //円マーク
-//			|| wc == 0x203E //にょろ
+			   wc <= 0x007E // ACODEとか
+//			|| wc == 0x00A5 // 円マーク
+//			|| wc == 0x203E // にょろ
 			|| (wc >= 0xFF61 && wc <= 0xFF9f)	// 半角カタカナ
-		)return true;
+		) return true;
 
-		//0x7F ～ 0xA0 も半角とみなす
-		//http://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF を見て、なんとなく
+		// 0x7F ～ 0xA0 も半角とみなす
+		// http://ja.wikipedia.org/wiki/Unicode%E4%B8%80%E8%A6%A7_0000-0FFF を見て、なんとなく
 		if (wc >= 0x007F && wc <= 0x00A0) return true;	// Control Code ISO/IEC 6429
 
 		// 漢字はすべて同一幅とみなす	// 2013.04.07 aroka
@@ -86,10 +86,10 @@ namespace WCODE
 	//!制御文字であるかどうか
 	bool IsControlCode(wchar_t wc)
 	{
-		////改行は制御文字とみなさない
+		//// 改行は制御文字とみなさない
 		//if (IsLineDelimiter(wc)) return false;
 
-		////タブは制御文字とみなさない
+		//// タブは制御文字とみなさない
 		//if (wc == TAB) return false;
 
 		//return iswcntrl(wc) != 0;
@@ -108,7 +108,7 @@ namespace WCODE
 	*/
 	bool IsKutoten(wchar_t wc)
 	{
-		//句読点定義
+		// 句読点定義
 		static const wchar_t* KUTOTEN =
 			L"｡､,."
 			L"。、，．"
@@ -192,8 +192,8 @@ namespace WCODE
 		void SetCache(wchar_t c, bool cache_value)
 		{
 			int v = cache_value ? 0x1 : 0x2;
-			m_pCache->m_bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); //該当箇所クリア
-			m_pCache->m_bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); //該当箇所セット
+			m_pCache->m_bCharWidthCache[c/4] &= ~(0x3<< ((c%4)*2)); // 該当箇所クリア
+			m_pCache->m_bCharWidthCache[c/4] |=  (v  << ((c%4)*2)); // 該当箇所セット
 		}
 		bool GetCache(wchar_t c) const
 		{
@@ -243,7 +243,7 @@ namespace WCODE
 		}
 		void Init(const LOGFONT &lf, ECharWidthFontMode fMode)
 	 	{
-			//	Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
+			// Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
 			m_localcache[fMode].Init(lf);
 			if (!m_localcache[fMode].IsSameFontFace(lf)) {
 				m_localcache[fMode].Clear();
@@ -275,7 +275,7 @@ namespace WCODE
 	static LocalCacheSelector selector;
 
 
-	//文字幅の動的計算。半角ならtrue。
+	// 文字幅の動的計算。半角ならtrue。
 	bool CalcHankakuByFont(wchar_t c)
 	{
 		LocalCache* pcache = selector.GetCache();
@@ -293,13 +293,13 @@ namespace WCODE
 	}
 }
 
-//	文字幅の動的計算用キャッシュの初期化。	2007/5/18 Uchi
+// 文字幅の動的計算用キャッシュの初期化。	2007/5/18 Uchi
 void InitCharWidthCache(const LOGFONT &lf, ECharWidthFontMode fMode)
 {
 	WCODE::selector.Init(lf, fMode);
 }
 
-//	文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
+// 文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
 void SelectCharWidthCache(ECharWidthFontMode fMode, ECharWidthCacheMode cMode)
 {
 	assert(fMode == CWM_FONT_EDIT || cMode == CWM_CACHE_LOCAL);

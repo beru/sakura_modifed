@@ -2729,7 +2729,7 @@ LRESULT CTabWnd::TabListMenu(POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FALS
 
 		delete []pData;
 
-	} while(bRepeat);
+	} while (bRepeat);
 
 	if (bSel)
 		m_pShareData->m_Common.m_sTabBar.m_bTab_ListFull = bFull;

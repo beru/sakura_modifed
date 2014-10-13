@@ -99,7 +99,7 @@ bool C_IsOperator(wchar_t* szStr, int nLen	)
 	@date 2005.12.06 じゅうじ 最後の1文字しか見ないと2バイトコードの後半がバックスラッシュの場合に誤認する
 */
 static
-bool C_IsLineEsc(const wchar_t *s, int len)
+bool C_IsLineEsc(const wchar_t* s, int len)
 {
 	if (len > 0 && WCODE::IsLineDelimiter(s[len-1])) len--;
 	if (len > 0 && s[len-1] == L'\r') len--;

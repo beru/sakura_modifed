@@ -212,7 +212,7 @@ void CNativeA::ToLower()
 	unsigned char	uc;
 	for (i = 0; i < nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CShiftJis::GetSizeOfChar((const char *)pBuf, nBufLen, i);
+		nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			uc = (unsigned char)tolower(pBuf[i]);
 			pBuf[i] = uc;
@@ -255,7 +255,7 @@ void CNativeA::ToUpper()
 	int				nBufLen = GetStringLength();
 	for (int i = 0; i < nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar((const char *)pBuf, nBufLen, i);
+		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			unsigned char uc = (unsigned char)toupper(pBuf[i]);
 			pBuf[i] = uc;
@@ -315,11 +315,11 @@ void CNativeA::ToZenkaku(
 	int nBufDesLen = 0;
 	for (int i = 0; i < nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar((const char *)pBuf, nBufLen, i);
+		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			bHenkanOK = FALSE;
 			if (bHanKataOnly) {	// 1== 半角カタカナにのみ作用する
-				if (strchr((const char *)pszHanKataSet, pBuf[i])) {
+				if (strchr((const char*)pszHanKataSet, pBuf[i])) {
 					bHenkanOK = TRUE;
 				}
 			}else {
@@ -345,7 +345,7 @@ void CNativeA::ToZenkaku(
 					if (1
 						&& bHiragana != 2
 						&& pBuf[i + 1] == (unsigned char)'ﾞ'
-						&& strchr((const char *)pszDakuSet, pBuf[i])
+						&& strchr((const char*)pszDakuSet, pBuf[i])
 					) {
 						usDes++;
 						nCharChars = 2;
@@ -356,7 +356,7 @@ void CNativeA::ToZenkaku(
 					if (1
 						&& bHiragana != 2
 						&& pBuf[i + 1] == (unsigned char)'ﾟ'
-						&& strchr((const char *)pszYouSet, pBuf[i])
+						&& strchr((const char*)pszYouSet, pBuf[i])
 					) {
 						usDes += 2;
 						nCharChars = 2;

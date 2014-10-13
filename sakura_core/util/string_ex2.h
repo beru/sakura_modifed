@@ -26,11 +26,11 @@
 class CEol;
 
 // Aug. 16, 2007 kobake
-wchar_t* wcsncpy_ex(wchar_t *dst, size_t dst_count, const wchar_t* src, size_t src_count);
-wchar_t* wcs_pushW(wchar_t *dst, size_t dst_count, const wchar_t* src, size_t src_count);
-wchar_t* wcs_pushW(wchar_t *dst, size_t dst_count, const wchar_t* src);
-wchar_t* wcs_pushA(wchar_t *dst, size_t dst_count, const char* src, size_t src_count);
-wchar_t* wcs_pushA(wchar_t *dst, size_t dst_count, const char* src);
+wchar_t* wcsncpy_ex(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t src_count);
+wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src, size_t src_count);
+wchar_t* wcs_pushW(wchar_t* dst, size_t dst_count, const wchar_t* src);
+wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src, size_t src_count);
+wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src);
 #ifdef _UNICODE
 #define wcs_pushT wcs_pushW
 #else

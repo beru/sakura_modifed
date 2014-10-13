@@ -230,7 +230,7 @@ void CViewCommander::Command_PASTE(int option)
 //<< 2002/03/28 Azumaiya
 // メモリデータを矩形貼り付け用のデータと解釈して処理する。
 //  なお、この関数は Command_PASTEBOX(void) と、
-// 2769 : GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+// 2769 : GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 // から、
 // 3057 : m_pCommanderView->SetDrawSwitch(true);	// 2002.01.25 hor
 // 間まで、一緒です。
@@ -246,7 +246,7 @@ void CViewCommander::Command_PASTE(int option)
 //  なお、これらを呼び出し側に期待するわけは、「すべて置換」のような何回も連続で呼び出す
 // ときに、最初に一回チェックすればよいものを何回もチェックするのは無駄と判断したためです。
 // @note 2004.06.30 現在、すべて置換では使用していない
-void CViewCommander::Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize)
+void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 {
 	/* これらの動作は残しておきたいのだが、呼び出し側で責任を持ってやってもらうことに変更。
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting())	// マウスによる範囲選択中
@@ -260,7 +260,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize)
 	}
 	*/
 
-	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	// 2002.01.25 hor
 
@@ -282,14 +282,14 @@ void CViewCommander::Command_PASTEBOX(const wchar_t *szPaste, int nPasteSize)
 	CLayoutInt nCount = CLayoutInt(0);
 
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
-	//	データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
+	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
 	//for (nPos = 0; nPos < nPasteSize;)
 	int				nPos;
 	CLayoutPoint	ptLayoutNew;	// 挿入された部分の次の位置
 	for (int nBgn = nPos = 0; nBgn < nPasteSize;) {
 		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
-		//	最終行のPaste処理が動かないので，
-		//	データの末尾に来た場合は強制的に処理するようにする
+		// 最終行のPaste処理が動かないので，
+		// データの末尾に来た場合は強制的に処理するようにする
 		if (WCODE::IsLineDelimiter(szPaste[nPos]) || nPos == nPasteSize) {
 			// 現在位置にデータを挿入
 			if (nPos - nBgn > 0) {
@@ -414,7 +414,7 @@ void CViewCommander::Command_PASTEBOX(int option)
 
 
 //! 矩形文字列挿入
-void CViewCommander::Command_INSBOXTEXT(const wchar_t *pszPaste, int nPasteSize)
+void CViewCommander::Command_INSBOXTEXT(const wchar_t* pszPaste, int nPasteSize)
 {
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -459,7 +459,7 @@ void CViewCommander::Command_INSTEXT(
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(),
 		10000 < nTextLen && !selInfo.IsBoxSelecting());
 
-	GetDocument()->m_cDocEditor.SetModified(true, bRedraw);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, bRedraw);	// Jan. 22, 2002 genta
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected() || bFastMode) {
@@ -586,7 +586,7 @@ void CViewCommander::Command_ADDTAIL(
 		nDataLen = wcslen(pszData);
 	}
 
-	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	// ファイルの最後に移動
 	Command_GOFILEEND(false);
@@ -1109,7 +1109,7 @@ void CViewCommander::Command_COPYPATH(void)
 }
 
 
-//	May 9, 2000 genta
+// May 9, 2000 genta
 // 現在編集中のファイルのパス名とカーソル位置をクリップボードにコピー
 void CViewCommander::Command_COPYTAG(void)
 {
@@ -1130,8 +1130,8 @@ void CViewCommander::Command_COPYTAG(void)
 }
 
 
-////キー割り当て一覧をコピー
-//Dec. 26, 2000 JEPRO //Jan. 24, 2001 JEPRO debug version (directed by genta)
+//// キー割り当て一覧をコピー
+// Dec. 26, 2000 JEPRO //Jan. 24, 2001 JEPRO debug version (directed by genta)
 void CViewCommander::Command_CREATEKEYBINDLIST(void)
 {
 	CNativeW cMemKeyList;
@@ -1141,12 +1141,12 @@ void CViewCommander::Command_CREATEKEYBINDLIST(void)
 		csKeyBind.m_nKeyNameArrNum,
 		csKeyBind.m_pKeyNameArr,
 		cMemKeyList,
-		&GetDocument()->m_cFuncLookup,	//	Oct. 31, 2001 genta 追加
+		&GetDocument()->m_cFuncLookup,	// Oct. 31, 2001 genta 追加
 		FALSE	// 2007.02.22 ryoji 追加
 	);
 
 	// Windowsクリップボードにコピー
-	//2004.02.17 Moca 関数化
+	// 2004.02.17 Moca 関数化
 	SetClipboardText(CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(), cMemKeyList.GetStringPtr(), cMemKeyList.GetStringLength());
 }
 

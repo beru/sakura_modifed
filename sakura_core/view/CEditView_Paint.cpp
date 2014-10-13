@@ -364,7 +364,7 @@ CColor3Setting CEditView::GetColorIndex(
 		//	static int CalcLayoutIndex(const CLayout* pcLayout)
 		//	{
 		//		int n = -1;
-		//		while(pcLayout) {
+		//		while (pcLayout) {
 		//			pcLayout = pcLayout->GetPrevLayout(); //prev or null
 		//			n++;
 		//		}

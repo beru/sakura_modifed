@@ -116,8 +116,8 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, ECodeType CharCode, int nFlag,
 	HANDLE hFile = ::CreateFile(
 		pFileName,
 		GENERIC_READ,
-		//	Oct. 18, 2002 genta FILE_SHARE_WRITE 追加
-		//	他プロセスが書き込み中のファイルを開けるように
+		// Oct. 18, 2002 genta FILE_SHARE_WRITE 追加
+		// 他プロセスが書き込み中のファイルを開けるように
 		FILE_SHARE_READ | FILE_SHARE_WRITE,	// 共有
 		NULL,						// セキュリティ記述子
 		OPEN_EXISTING,				// 作成方法
@@ -172,13 +172,13 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, ECodeType CharCode, int nFlag,
 		}
 	}
 	if (bBom) {
-		//	Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
+		// Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
 		m_bBomExist = true;
 		if (pbBomExist != NULL) {
 			*pbBomExist = true;
 		}
 	}else {
-		//	Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
+		// Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
 		if (pbBomExist != NULL) {
 			*pbBomExist = false;
 		}

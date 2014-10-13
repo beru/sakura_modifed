@@ -76,7 +76,7 @@ static const SAnchorList anchorList[] = {
 
 
 // タグファイルのフォーマット	//	@@ 2005.03.31 MIK 定数化
-//	@@ 2005.04.03 MIK キーワードに空白が含まれる場合の考慮
+// @@ 2005.04.03 MIK キーワードに空白が含まれる場合の考慮
 #define TAG_FORMAT_2_A       "%[^\t\r\n]\t%[^\t\r\n]\t%d;\"\t%s\t%s"
 #define TAG_FORMAT_1_A       "%[^\t\r\n]\t%[^\t\r\n]\t%d"
 #define TAG_FILE_INFO_A      "%[^\t\r\n]\t%[^\t\r\n]\t%[^\t\r\n]"
@@ -251,7 +251,7 @@ void CDlgTagJumpList::SetData(void)
 			::DlgItem_SetText(GetHwnd(), IDC_KEYWORD, m_pszKeyword);
 		}
 	}else {
-		//	From Here 2005.04.03 MIK 設定値の読み込み
+		// From Here 2005.04.03 MIK 設定値の読み込み
 		HWND hwndKey;
 		hwndKey = ::GetDlgItem(GetHwnd(), IDC_KEYWORD);
 
@@ -272,7 +272,7 @@ void CDlgTagJumpList::SetData(void)
 		}
 		cRecentTagJump.Terminate();
 	}
-	//	To Here 2005.04.03 MIK 設定値の読み込み
+	// To Here 2005.04.03 MIK 設定値の読み込み
 	
 	SetTextDir();
 
@@ -337,7 +337,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 
 	const TCHAR* pszMsgText = NULL;
 
-	//	数が多すぎる場合は切り捨てた旨を末尾に挿入
+	// 数が多すぎる場合は切り捨てた旨を末尾に挿入
 //	if (m_pcList->IsOverflow()) {
 		// 2010.04.03 「次」「前」ボタン追加して Overflowしなくなった
 //		pszMsgText = _T("(これ以降は切り捨てました)");
@@ -390,7 +390,7 @@ int CDlgTagJumpList::GetData(void)
 	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_TAGJUMP);
 	m_nIndex = ListView_GetNextItem(hwndList, -1, LVIS_SELECTED);
 
-	//	From Here 2005.04.03 MIK 設定値の保存
+	// From Here 2005.04.03 MIK 設定値の保存
 	if (!IsDirectTagJump()) {
 		m_pShareData->m_sTagJump.m_bTagJumpICase = m_bTagJumpICase;
 		m_pShareData->m_sTagJump.m_bTagJumpAnyWhere = m_bTagJumpAnyWhere;
@@ -408,7 +408,7 @@ int CDlgTagJumpList::GetData(void)
 		cRecentTagJumpKeyword.AppendItem(m_pszKeyword);
 		cRecentTagJumpKeyword.Terminate();
 	}
-	//	To Here 2005.04.03 MIK
+	// To Here 2005.04.03 MIK
 	if (m_nIndex == -1 || m_nIndex >= m_pcList->GetCapacity()) return FALSE;
 
 	return TRUE;
@@ -522,7 +522,7 @@ BOOL CDlgTagJumpList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	}else {
 		// キーワード指定
 		::SetFocus(hwndKey);
-		bRet = FALSE;	//for set focus
+		bRet = FALSE;	// for set focus
 	}
 
 	m_comboDel = SComboBoxItemDeleter();
@@ -647,7 +647,7 @@ BOOL CDlgTagJumpList::OnNotify(WPARAM wParam, LPARAM lParam)
 
 	hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TAGJUMP);
 
-	//	候補一覧リストボックス
+	// 候補一覧リストボックス
 	if (hwndList == pNMHDR->hwndFrom) {
 		switch (pNMHDR->code) {
 		case NM_DBLCLK:
@@ -712,9 +712,9 @@ LPVOID CDlgTagJumpList::GetHelpIdTable(void)
 }
 
 #if 0
-bool CDlgTagJumpList::AddParamA(const ACHAR *s0, const ACHAR *s1, int n2, const ACHAR *s3, const ACHAR *s4, int depth, int fileBase)
+bool CDlgTagJumpList::AddParamA(const ACHAR* s0, const ACHAR* s1, int n2, const ACHAR* s3, const ACHAR* s4, int depth, int fileBase)
 {
-	if (-1 == m_nIndex) m_nIndex = 0;	//規定値
+	if (-1 == m_nIndex) m_nIndex = 0;	// 規定値
 
 	ClearPrevFindInfo();
 	m_bNextItem = false;
@@ -790,11 +790,11 @@ TCHAR* CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 	const TCHAR* p;
 	TCHAR*	token;
 	int		i;
-	//	2005.03.31 MIK
+	// 2005.03.31 MIK
 	TCHAR	tmp[MAX_TAG_STRING_LENGTH];
 
 	p = _tcsrchr(name, _T('.'));
-	if (!p) p = _T(".c");	//見つからないときは ".c" と想定する。
+	if (!p) p = _T(".c");	// 見つからないときは ".c" と想定する。
 	p++;
 
 	for (i = 0; p_extentions[i]; i += 2) {
@@ -837,7 +837,7 @@ void CDlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 	検索キーワードの設定
 
 */
-void CDlgTagJumpList::SetKeyword(const wchar_t *pszKeyword)
+void CDlgTagJumpList::SetKeyword(const wchar_t* pszKeyword)
 {
 	if (!pszKeyword) return;
 
@@ -1149,7 +1149,7 @@ int CDlgTagJumpList::find_key_core(
 
 				s[0][0] = s[1][0] = s[2][0] = s[3][0] = '\0';
 				n2 = 0;
-				//	@@ 2005.03.31 MIK TAG_FORMAT定数化
+				// @@ 2005.03.31 MIK TAG_FORMAT定数化
 				if (2 == nTagFormat) {
 					nRet = sscanf(
 						szLineData, 

@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "debug/Debug2.h"
 
-//2007.08.30 kobake 追加
+// 2007.08.30 kobake 追加
 
 #ifdef _DEBUG
 //! デバッグメッセージ出力
@@ -28,6 +28,6 @@ void debug_exit()
 void warning_point()
 {
 	int n;
-	n = 0; //※←ここにブレークポイントを設けておくと、任意ワーニングでブレークできる
+	n = 0; // ※←ここにブレークポイントを設けておくと、任意ワーニングでブレークできる
 }
 #endif	// _DEBUG

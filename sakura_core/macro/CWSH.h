@@ -37,7 +37,7 @@ public:
 	typedef List::const_iterator ListIter;	// そのイテレータ
 
 	// コンストラクタ・デストラクタ
-	CWSHClient(const wchar_t *AEngine, ScriptErrorHandler AErrorHandler, void *AData);
+	CWSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler, void* AData);
 	~CWSHClient();
 
 	// フィールド・アクセサ
@@ -49,7 +49,7 @@ public:
 
 	// 操作
 	void AddInterfaceObject(CIfObj* obj);
-	bool Execute(const wchar_t *AScript);
+	bool Execute(const wchar_t* AScript);
 	void Error(BSTR Description, BSTR Source); ///< ScriptErrorHandlerを呼び出す。
 	void Error(const wchar_t* Description);          ///< ScriptErrorHandlerを呼び出す。
 

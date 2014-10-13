@@ -3,10 +3,10 @@
 #include <string>
 
 //	::fflush(m_hFile);
-//  ネットワーク上のファイルを扱っている場合、
-//	書き込み後にFlushを行うとデットロックが発生することがあるので、
-//	Close時に::fflushを呼び出してはいけません。
-//  詳細：http://www.microsoft.com/japan/support/faq/KBArticles2.asp?URL=/japan/support/kb/articles/jp288/7/94.asp
+// ネットワーク上のファイルを扱っている場合、
+// 書き込み後にFlushを行うとデットロックが発生することがあるので、
+// Close時に::fflushを呼び出してはいけません。
+// 詳細：http://www.microsoft.com/japan/support/faq/KBArticles2.asp?URL=/japan/support/kb/articles/jp288/7/94.asp
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

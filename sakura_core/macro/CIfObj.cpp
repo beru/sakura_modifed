@@ -127,8 +127,8 @@ public:
 	    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
 	    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile)
 	{
-		//	Feb. 08, 2004 genta
-		//	とりあえず全部NULLを返す (情報無し)
+		// Feb. 08, 2004 genta
+		// とりあえず全部NULLを返す (情報無し)
 		pBstrName = NULL;
 		pBstrDocString = NULL;
 		pdwHelpContext = NULL;
@@ -321,7 +321,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
 #endif
 		size_t nSize = m_Methods.size();
 		for (size_t j = 0; j < nSize; ++j) {
-			//	Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
+			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
 			if (_wcsicmp(rgszNames[i], m_Methods[j].Name) == 0) {
 				rgdispid[i] = j;
 				goto Found;
@@ -351,7 +351,7 @@ void CIfObj::AddMethod(
 	Info->Desc.invkind = INVOKE_FUNC;
 	Info->Desc.cParams = (SHORT)ArgumentCount + 1; // 戻り値の分
 	Info->Desc.lprgelemdescParam = Info->Arguments;
-	//	Nov. 10, 2003 FILE Win9Xでは、[lstrcpyW]が無効のため、[wcscpy]に修正
+	// Nov. 10, 2003 FILE Win9Xでは、[lstrcpyW]が無効のため、[wcscpy]に修正
 	wcscpy_s(Info->Name, Name);
 	Info->Method = Method;
 	Info->ID = ID;

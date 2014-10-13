@@ -219,7 +219,7 @@ protected:
 	bool Import(HWND);											//!< インポート
 	bool Export(HWND);											//!< エクスポート
 private:
-	BOOL RegexKakomiCheck(const wchar_t *s);	//@@@ 2001.11.17 add MIK
+	BOOL RegexKakomiCheck(const wchar_t* s);	//@@@ 2001.11.17 add MIK
 
 	bool CheckKeywordList(HWND, const TCHAR*, int);
 

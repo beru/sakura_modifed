@@ -41,7 +41,7 @@ public:
 	void GetEol(CMemory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
 
 public:
-	//実装
+	// 実装
 	static EConvertResult _UnicodeToUnicode_in(CMemory* pMem, const bool bBigEndian);		// Unicode   → Unicode (入力側)
 	static EConvertResult _UnicodeToUnicode_out(CMemory* pMem, const bool bBigEndian);	// Unicode   → Unicode (出力側)
 	inline static EConvertResult UnicodeToUnicode_in(CMemory* pMem) { return _UnicodeToUnicode_in(pMem, false); }

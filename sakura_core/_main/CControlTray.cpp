@@ -34,7 +34,7 @@
 #include "typeprop/CDlgTypeList.h"
 #include "debug/CRunningTimer.h"
 #include "dlg/CDlgOpenFile.h"
-#include "dlg/CDlgAbout.h"		//Nov. 21, 2000 JEPROtest
+#include "dlg/CDlgAbout.h"		// Nov. 21, 2000 JEPROtest
 #include "plugin/CPluginManager.h"
 #include "plugin/CJackManager.h"
 #include "io/CTextStream.h"
@@ -59,8 +59,8 @@ static LRESULT CALLBACK CControlTrayWndProc(HWND, UINT, WPARAM, LPARAM);
 
 static CControlTray* g_m_pCControlTray;
 
-//Stonee, 2001/03/21
-//Stonee, 2001/07/01  多重起動された場合は前回のダイアログを前面に出すようにした。
+// Stonee, 2001/03/21
+// Stonee, 2001/07/01  多重起動された場合は前回のダイアログを前面に出すようにした。
 void CControlTray::DoGrep()
 {
 	// Stonee, 2001/06/30
@@ -96,7 +96,7 @@ void CControlTray::DoGrep()
 void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep& cDlgGrep)
 {
 
-	//======= Grepの実行 =============
+	// ======= Grepの実行 =============
 	// Grep結果ウィンドウの表示
 
 	CNativeW		cmWork1;
@@ -177,13 +177,13 @@ static LRESULT CALLBACK CControlTrayWndProc(
 
 /////////////////////////////////////////////////////////////////////////////
 // CControlTray
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 CControlTray::CControlTray()
-//	Apr. 24, 2001 genta
+// Apr. 24, 2001 genta
 : m_pcPropertyManager(NULL)
 , m_hInstance(NULL)
 , m_hWnd(NULL)
-, m_bCreatedTrayIcon(FALSE)	//トレイにアイコンを作った
+, m_bCreatedTrayIcon(FALSE)	// トレイにアイコンを作った
 , m_nCurSearchKeySequence(-1)
 , m_uCreateTaskBarMsg(::RegisterWindowMessage(TEXT("TaskbarCreated")))
 {
@@ -264,7 +264,7 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 	::SetWindowPos(GetTrayHwnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	
 	// タスクトレイアイコン作成
-	m_hIcons.Create(m_hInstance);	//	Oct. 16, 2000 genta
+	m_hIcons.Create(m_hInstance);	// Oct. 16, 2000 genta
 	m_CMenuDrawer.Create(CSelectLang::getLangRsrcInstance(), GetTrayHwnd(), &m_hIcons);
 	if (GetTrayHwnd()) {
 		CreateTrayIcon(GetTrayHwnd());
@@ -283,19 +283,19 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 {
 	// タスクトレイのアイコンを作る
 	if (m_pShareData->m_Common.m_sGeneral.m_bUseTaskTray) {	// タスクトレイのアイコンを使う
-		//	Dec. 02, 2002 genta
+		// Dec. 02, 2002 genta
 		HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, true);
-//From Here Jan. 12, 2001 JEPRO トレイアイコンにポイントするとバージョンno.が表示されるように修正
+// From Here Jan. 12, 2001 JEPRO トレイアイコンにポイントするとバージョンno.が表示されるように修正
 //			TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, GSTR_APPNAME);
 		// バージョン情報
-		//	UR version no.を設定 (cf. cDlgAbout.cpp)
+		// UR version no.を設定 (cf. cDlgAbout.cpp)
 		TCHAR pszTips[64];
-		//	2004.05.13 Moca バージョン番号は、プロセスごとに取得する
+		// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
 		DWORD dwVersionMS, dwVersionLS;
 		GetAppVersionInfo(NULL, VS_VERSION_INFO,
 			&dwVersionMS, &dwVersionLS);
 
-		auto_snprintf_s(pszTips, _countof(pszTips), _T("%ts %d.%d.%d.%d"),		//Jul. 06, 2001 jepro UR はもう付けなくなったのを忘れていた
+		auto_snprintf_s(pszTips, _countof(pszTips), _T("%ts %d.%d.%d.%d"),		// Jul. 06, 2001 jepro UR はもう付けなくなったのを忘れていた
 			GSTR_APPNAME,
 			HIWORD(dwVersionMS),
 			LOWORD(dwVersionMS),
@@ -303,7 +303,7 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 			LOWORD(dwVersionLS)
 		);
 		TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, pszTips);
-//To Here Jan. 12, 2001
+// To Here Jan. 12, 2001
 		m_bCreatedTrayIcon = TRUE;	/* トレイにアイコンを作った */
 	}
 	return true;
@@ -317,7 +317,7 @@ void CControlTray::MessageLoop(void)
 	MSG	msg;
 	int ret;
 	
-	//2004.02.17 Moca GetMessageのエラーチェック
+	// 2004.02.17 Moca GetMessageのエラーチェック
 	while (GetTrayHwnd() != NULL && (ret = ::GetMessage(&msg, NULL, 0, 0 )) != 0) {
 		if (ret == -1) {
 			break;
@@ -354,7 +354,7 @@ BOOL CControlTray::TrayMessage(HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon
 
 
 // メッセージ処理
-//@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
+// @@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 LRESULT CControlTray::DispatchEvent(
 	HWND	hwnd,	// handle of window
 	UINT	uMsg,	// message identifier
@@ -474,7 +474,7 @@ LRESULT CControlTray::DispatchEvent(
 			_tcscpy_s(szHtmlHelpFile, pWork);
 			int nLen = _tcslen(szHtmlHelpFile);
 
-			//	Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
+			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,
 				szHtmlHelpFile,
@@ -493,7 +493,7 @@ LRESULT CControlTray::DispatchEvent(
 			link.pszWindow		= NULL;
 			link.fIndexOnFail	= TRUE;
 
-			//	Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
+			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,
 				szHtmlHelpFile,
@@ -719,8 +719,8 @@ LRESULT CControlTray::DispatchEvent(
 	case MYWM_NOTIFYICON:
 //			MYTRACE(_T("MYWM_NOTIFYICON\n"));
 		switch (lParam) {
-//キーワード：トレイ右クリックメニュー設定
-//	From Here Oct. 12, 2000 JEPRO 左右とも同一処理になっていたのを別々に処理するように変更
+// キーワード：トレイ右クリックメニュー設定
+// From Here Oct. 12, 2000 JEPRO 左右とも同一処理になっていたのを別々に処理するように変更
 		case WM_RBUTTONUP:	// Dec. 24, 2002 towest UPに変更
 			::SetActiveWindow(GetTrayHwnd());
 			::SetForegroundWindow(GetTrayHwnd());
@@ -729,7 +729,7 @@ LRESULT CControlTray::DispatchEvent(
 			switch (nId) {
 			case F_HELP_CONTENTS:
 				// ヘルプ目次
-				ShowWinHelpContents(GetTrayHwnd());	//	目次を表示する
+				ShowWinHelpContents(GetTrayHwnd());	// 目次を表示する
 				break;
 			case F_HELP_SEARCH:
 				// ヘルプキーワード検索
@@ -738,7 +738,7 @@ LRESULT CControlTray::DispatchEvent(
 			case F_EXTHELP1:
 				// 外部ヘルプ１
 				do {
-					if (CHelpManager().ExtWinHelpIsSet()) {	//	共通設定のみ確認
+					if (CHelpManager().ExtWinHelpIsSet()) {	// 共通設定のみ確認
 						break;
 					}else {
 						ErrorBeep();
@@ -799,7 +799,7 @@ LRESULT CControlTray::DispatchEvent(
 				}
 				break;
 //				case IDM_EXITALL:
-			case F_EXITALL:	//Dec. 26, 2000 JEPRO F_に変更
+			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
 				// サクラエディタの全終了
 				CControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
 				break;
@@ -807,10 +807,10 @@ LRESULT CControlTray::DispatchEvent(
 				break;
 			}
 			return 0L;
-//	To Here Oct. 12, 2000
+// To Here Oct. 12, 2000
 
 		case WM_LBUTTONDOWN:
-			//	Mar. 29, 2003 genta 念のためフラグクリア
+			// Mar. 29, 2003 genta 念のためフラグクリア
 			bLDClick = false;
 			return 0L;
 		case WM_LBUTTONUP:	// Dec. 24, 2002 towest UPに変更
@@ -866,7 +866,7 @@ LRESULT CControlTray::DispatchEvent(
 				break;
 			case F_GREP_DIALOG:
 				// Grep
-				DoGrep();  //Stonee, 2001/03/21  Grepを別関数に
+				DoGrep();  // Stonee, 2001/03/21  Grepを別関数に
 				break;
 			case F_FILESAVEALL:	// Jan. 24, 2005 genta 全て上書き保存
 				CAppNodeGroupHandle(0).PostMessageToAllEditors(
@@ -876,11 +876,11 @@ LRESULT CControlTray::DispatchEvent(
 					NULL
 				);
 				break;
-			case F_EXITALLEDITORS:	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
+			case F_EXITALLEDITORS:	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
 				// 編集の全終了
 				CControlTray::CloseAllEditor(TRUE, GetTrayHwnd(), TRUE, 0);	// 2006.12.25, 2007.02.13 ryoji 引数追加
 				break;
-			case F_EXITALL:	//Dec. 26, 2000 JEPRO F_に変更
+			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
 				// サクラエディタの全終了
 				CControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
 				break;
@@ -916,7 +916,7 @@ LRESULT CControlTray::DispatchEvent(
 						);
 
 					}
-					//	To Here Oct. 27, 2000 genta
+					// To Here Oct. 27, 2000 genta
 				}else if (nId - IDM_SELOPENFOLDER  >= 0 && nId - IDM_SELOPENFOLDER  < 999) {
 					// MRUリストのファイルのリスト
 					const CMRUFile cMRU;
@@ -926,7 +926,7 @@ LRESULT CControlTray::DispatchEvent(
 					const CMRUFolder cMRUFolder;
 					std::vector<LPCTSTR> vOPENFOLDER = cMRUFolder.GetPathList();
 
-					//Stonee, 2001/12/21 UNCであれば接続を試みる
+					// Stonee, 2001/12/21 UNCであれば接続を試みる
 					NetConnect(cMRUFolder.GetPath(nId - IDM_SELOPENFOLDER));
 
 					// ファイルオープンダイアログの初期化
@@ -972,11 +972,11 @@ LRESULT CControlTray::DispatchEvent(
 		break;
 
 	case WM_QUERYENDSESSION:
-		// すべてのウィンドウを閉じる //Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
+		// すべてのウィンドウを閉じる // Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 		if (CloseAllEditor(FALSE, GetTrayHwnd(), TRUE, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
-			//	Jan. 31, 2000 genta
-			//	この時点ではWindowsの終了が確定していないので常駐解除すべきではない．
-			//	::DestroyWindow(hwnd);
+			// Jan. 31, 2000 genta
+			// この時点ではWindowsの終了が確定していないので常駐解除すべきではない．
+			//::DestroyWindow(hwnd);
 			return TRUE;
 		}else {
 			return FALSE;
@@ -988,17 +988,17 @@ LRESULT CControlTray::DispatchEvent(
 		}
 		return 0L;
 
-	//	From Here Jan. 31, 2000 genta	Windows終了時の後処理．
-	//	Windows終了時はWM_CLOSEが呼ばれない上，DestroyWindowを
-	//	呼び出す必要もない．また，メッセージループに戻らないので
-	//	メッセージループの後ろの処理をここで完了させる必要がある．
+	// From Here Jan. 31, 2000 genta	Windows終了時の後処理．
+	// Windows終了時はWM_CLOSEが呼ばれない上，DestroyWindowを
+	// 呼び出す必要もない．また，メッセージループに戻らないので
+	// メッセージループの後ろの処理をここで完了させる必要がある．
 	case WM_ENDSESSION:
-		//	もしWindowsの終了が中断されたのなら何もしない
+		// もしWindowsの終了が中断されたのなら何もしない
 		if (wParam == TRUE) {
 			OnDestroy();	// 2006.07.09 ryoji WM_DESTROY と同じ処理をする（トレイアイコンの破棄などもNT系では必要）
 		}
-		return 0;	//	もうこのプロセスに制御が戻ることはない
-	//	To Here Jan. 31, 2000 genta
+		return 0;	// もうこのプロセスに制御が戻ることはない
+	// To Here Jan. 31, 2000 genta
 	case WM_DESTROY:
 		OnDestroy();
 
@@ -1007,7 +1007,7 @@ LRESULT CControlTray::DispatchEvent(
 		return 0L;
 	default:
 // << 20010412 by aroka
-//	Apr. 24, 2001 genta RegisterWindowMessageを使うように修正
+// Apr. 24, 2001 genta RegisterWindowMessageを使うように修正
 		if (uMsg == m_uCreateTaskBarMsg) {
 			/* TaskTray Iconの再登録を要求するメッセージ．
 				Explorerが再起動したときに送出される．*/
@@ -1188,7 +1188,7 @@ bool CControlTray::OpenNewEditor(
 	// エディタプロセスを起動
 	DWORD dwCreationFlag = CREATE_DEFAULT_ERROR_MODE;
 #ifdef _DEBUG
-//	dwCreationFlag |= DEBUG_PROCESS; //2007.09.22 kobake デバッグ用フラグ
+//	dwCreationFlag |= DEBUG_PROCESS; // 2007.09.22 kobake デバッグ用フラグ
 #endif
 	TCHAR szCmdLine[1024]; _tcscpy_s(szCmdLine, cCmdLineBuf.c_str());
 	BOOL bCreateResult = CreateProcess(
@@ -1222,7 +1222,7 @@ bool CControlTray::OpenNewEditor(
 			szEXE,
 			pMsg
 		);
-		::LocalFree((HLOCAL)pMsg);	//	エラーメッセージバッファを解放
+		::LocalFree((HLOCAL)pMsg);	// エラーメッセージバッファを解放
 		return false;
 	}
 
@@ -1316,7 +1316,7 @@ bool CControlTray::OpenNewEditor2(
 	sLoadInfo.bViewMode = bViewMode;
 	return OpenNewEditor(hInstance, hWndParent, sLoadInfo, cCmdLine.c_str(), sync, NULL, bNewWindow);
 }
-//	To Here Oct. 24, 2000 genta
+// To Here Oct. 24, 2000 genta
 
 
 
@@ -1427,7 +1427,7 @@ void CControlTray::TerminateApplication(
 			}
 		}
 	}
-	// 「すべてのウィンドウを閉じる」要求	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
+	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 	BOOL bCheckConfirm = (pShareData->m_Common.m_sGeneral.m_bExitConfirm)? FALSE: TRUE;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
 	if (CloseAllEditor(bCheckConfirm, hWndFrom, TRUE, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
 		::PostMessageAny(pShareData->m_sHandles.m_hwndTray, WM_CLOSE, 0, 0);
@@ -1490,7 +1490,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 	// MRUリストのファイルのリストをメニューにする
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 	const CMRUFile cMRU;
-	HMENU hMenuPopUp = cMRU.CreateMenu(&m_CMenuDrawer);	//	ファイルメニュー
+	HMENU hMenuPopUp = cMRU.CreateMenu(&m_CMenuDrawer);	// ファイルメニュー
 	int nEnable = (cMRU.MenuLength() > 0 ? 0 : MF_GRAYED);
 	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP | nEnable, (UINT_PTR)hMenuPopUp , LS(F_FILE_RCNTFILE_SUBMENU), _T("F"));
 
@@ -1515,7 +1515,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 	if (j > 0) {
 		m_CMenuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
 		j = 0;
-		TCHAR szMenu[100 + MAX_PATH * 2];	//	Jan. 19, 2001 genta
+		TCHAR szMenu[100 + MAX_PATH * 2];	// Jan. 19, 2001 genta
 		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 			if (IsSakuraMainWindow(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd())) {
 				// トレイからエディタへの編集ファイル名要求通知
@@ -1530,14 +1530,14 @@ int	CControlTray::CreatePopUpMenu_L(void)
 		}
 	}
 	m_CMenuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), FALSE);	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)	// 2006.10.21 ryoji 表示文字列変更	// 2007.02.13 ryoji →F_EXITALLEDITORS
+	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALLEDITORS, _T(""), _T("Q"), FALSE);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)	// 2006.10.21 ryoji 表示文字列変更	// 2007.02.13 ryoji →F_EXITALLEDITORS
 	if (j == 0) {
-		::EnableMenuItem(hMenu, F_EXITALLEDITORS, MF_BYCOMMAND | MF_GRAYED);	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
+		::EnableMenuItem(hMenu, F_EXITALLEDITORS, MF_BYCOMMAND | MF_GRAYED);	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
 		::EnableMenuItem(hMenu, F_FILESAVEALL, MF_BYCOMMAND | MF_GRAYED);	// Jan. 24, 2005 genta
 	}
 
-	//	Jun. 9, 2001 genta ソフトウェア名改称
-	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), FALSE);	//Dec. 26, 2000 JEPRO F_に変更
+	// Jun. 9, 2001 genta ソフトウェア名改称
+	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), FALSE);	// Dec. 26, 2000 JEPRO F_に変更
 
 	POINT po;
 	po.x = 0;
@@ -1575,8 +1575,8 @@ int	CControlTray::CreatePopUpMenu_L(void)
 	return nId;
 }
 
-//キーワード：トレイ右クリックメニュー順序
-//	Oct. 12, 2000 JEPRO ポップアップメニュー(トレイ左ボタン) を参考にして新たに追加した部分
+// キーワード：トレイ右クリックメニュー順序
+// Oct. 12, 2000 JEPRO ポップアップメニュー(トレイ左ボタン) を参考にして新たに追加した部分
 
 //! ポップアップメニュー(トレイ右ボタン)
 int	CControlTray::CreatePopUpMenu_R(void)
@@ -1596,14 +1596,14 @@ int	CControlTray::CreatePopUpMenu_R(void)
 
 	// トレイ右クリックの「ヘルプ」メニュー
 	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_CONTENTS , _T(""), _T("O"), FALSE);
-	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , _T(""), _T("S"), FALSE);	//Nov. 25, 2000 JEPRO 「トピックの」→「キーワード」に変更
+	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , _T(""), _T("S"), FALSE);	// Nov. 25, 2000 JEPRO 「トピックの」→「キーワード」に変更
 	m_CMenuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
 	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_TYPE_LIST, _T(""), _T("L"), FALSE);
 	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_OPTION, _T(""), _T("C"), FALSE);
 	m_CMenuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), FALSE);	//Dec. 25, 2000 JEPRO F_に変更
+	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, _T(""), _T("A"), FALSE);	// Dec. 25, 2000 JEPRO F_に変更
 	m_CMenuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE);
-	//	Jun. 18, 2001 genta ソフトウェア名改称
+	// Jun. 18, 2001 genta ソフトウェア名改称
 	m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, _T(""), _T("X"), FALSE);
 
 	POINT po;

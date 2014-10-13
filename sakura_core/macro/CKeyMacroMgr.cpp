@@ -32,8 +32,8 @@ CKeyMacroMgr::CKeyMacroMgr()
 	m_pTop = NULL;
 	m_pBot = NULL;
 //	m_nKeyMacroDataArrNum = 0;	2002.2.2 YAZAKI
-	//	Apr. 29, 2002 genta
-	//	m_nReadyはCMacroManagerBaseへ
+	// Apr. 29, 2002 genta
+	// m_nReadyはCMacroManagerBaseへ
 	return;
 }
 
@@ -163,12 +163,12 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	int		nBgn, nEnd;
 	CMacro* macro = NULL;
 
-	//	Jun. 16, 2002 genta
-	m_nReady = true;	//	エラーがあればfalseになる
+	// Jun. 16, 2002 genta
+	m_nReady = true;	// エラーがあればfalseになる
 	std::tstring MACRO_ERROR_TITLE_string = LS(STR_ERR_DLGKEYMACMGR2);
 	const TCHAR* MACRO_ERROR_TITLE = MACRO_ERROR_TITLE_string.c_str();
 
-	int line = 1;	//	エラー時に行番号を通知するため．1始まり．
+	int line = 1;	// エラー時に行番号を通知するため．1始まり．
 	for (; in.Good() ; ++line) {
 		std::wstring strLine = in.ReadLineW();
 		const WCHAR* szLine = strLine.c_str(); // '\0'終端文字列を取得
@@ -182,7 +182,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 			}
 		}
 		nBgn = i;
-		//	Jun. 16, 2002 genta 空行を無視する
+		// Jun. 16, 2002 genta 空行を無視する
 		if (nBgn == nLineLen || szLine[nBgn] == LTEXT('\0')) {
 			continue;
 		}
@@ -241,13 +241,13 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					}
 				}
 
-				//	Skip Space
+				// Skip Space
 				while (szLine[i] == LTEXT(' ') || szLine[i] == LTEXT('\t')) {
 					i++;
 				}
 				//@@@ 2002.2.2 YAZAKI PPA.DLLマクロにあわせて仕様変更。文字列は''で囲む。
-				//	Jun. 16, 2002 genta double quotationも許容する
-				if (LTEXT('\'') == szLine[i] || LTEXT('\"') == szLine[i]) {	//	'で始まったら文字列だよきっと。
+				// Jun. 16, 2002 genta double quotationも許容する
+				if (LTEXT('\'') == szLine[i] || LTEXT('\"') == szLine[i]) {	// 'で始まったら文字列だよきっと。
 					// Jun. 16, 2002 genta プロトタイプチェック
 					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
 					if (type != VT_BSTR && 
@@ -268,19 +268,19 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					}
 					WCHAR cQuote = szLine[i];
 					++i;
-					nBgn = nEnd = i;	//	nBgnは引数の先頭の文字
-					//	Jun. 16, 2002 genta
-					//	行末の検出のため，ループ回数を1増やした
-					for (; i <= nLineLen; ++i) {		//	最後の文字+1までスキャン
+					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
+					// Jun. 16, 2002 genta
+					// 行末の検出のため，ループ回数を1増やした
+					for (; i <= nLineLen; ++i) {		// 最後の文字+1までスキャン
 						if (szLine[i] == LTEXT('\\')) {	// エスケープのスキップ
 							++i;
 							continue;
 						}
-						if (szLine[i] == cQuote) {	//	始まりと同じquotationで終了。
-							nEnd = i;	//	nEndは終わりの次の文字（'）
+						if (szLine[i] == cQuote) {	// 始まりと同じquotationで終了。
+							nEnd = i;	// nEndは終わりの次の文字（'）
 							break;
 						}
-						if (szLine[i] == LTEXT('\0')) {	//	行末に来てしまった
+						if (szLine[i] == LTEXT('\0')) {	// 行末に来てしまった
 							::MYMESSAGEBOX(
 								NULL,
 								MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -292,11 +292,11 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 								cQuote
 							);
 							m_nReady = false;
-							nEnd = i - 1;	//	nEndは終わりの次の文字（'）
+							nEnd = i - 1;	// nEndは終わりの次の文字（'）
 							break;
 						}
 					}
-					//	Jun. 16, 2002 genta
+					// Jun. 16, 2002 genta
 					if (!m_nReady) {
 						break;
 					}
@@ -305,11 +305,11 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					cmemWork.Replace(LTEXT("\\\'"), LTEXT("\'"));
 
-					//	Jun. 16, 2002 genta double quotationもエスケープ解除
+					// Jun. 16, 2002 genta double quotationもエスケープ解除
 					cmemWork.Replace(LTEXT("\\\""), LTEXT("\""));
 					cmemWork.Replace(LTEXT("\\\\"), LTEXT("\\"));
-					macro->AddStringParam(cmemWork.GetStringPtr());	//	引数を文字列として追加
-				}else if (Is09(szLine[i]) || szLine[i] == L'-') {	//	数字で始まったら数字列だ(-記号も含む)。
+					macro->AddStringParam(cmemWork.GetStringPtr());	// 引数を文字列として追加
+				}else if (Is09(szLine[i]) || szLine[i] == L'-') {	// 数字で始まったら数字列だ(-記号も含む)。
 					// Jun. 16, 2002 genta プロトタイプチェック
 					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
 					if (type != VT_I4 &&
@@ -328,14 +328,14 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						m_nReady = false;
 						break;
 					}
-					nBgn = nEnd = i;	//	nBgnは引数の先頭の文字
-					//	行末の検出のため，ループ回数を1増やした
-					for (i = nBgn + 1; i <= nLineLen; ++i) {		//	最後の文字+1までスキャン
+					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
+					// 行末の検出のため，ループ回数を1増やした
+					for (i = nBgn + 1; i <= nLineLen; ++i) {		// 最後の文字+1までスキャン
 						if (Is09(szLine[i])) {	// まだ数値
 //							++i;
 							continue;
 						}else {
-							nEnd = i;	//	数字の最後の文字
+							nEnd = i;	// 数字の最後の文字
 							i--;
 							break;
 						}
@@ -344,25 +344,25 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					CNativeW cmemWork;
 					cmemWork.SetString(strLine.c_str() + nBgn, nEnd - nBgn);
 					// Jun. 16, 2002 genta
-					//	数字の中にquotationは入っていないよ
+					// 数字の中にquotationは入っていないよ
 					//cmemWork.Replace(L"\\\'", L"\'");
 					//cmemWork.Replace(L"\\\\", L"\\");
-					macro->AddStringParam(cmemWork.GetStringPtr());	//	引数を文字列として追加
-				//	Jun. 16, 2002 genta
+					macro->AddStringParam(cmemWork.GetStringPtr());	// 引数を文字列として追加
+				// Jun. 16, 2002 genta
 				}else if (szLine[i] == LTEXT(')')) {
-					//	引数無し
+					// 引数無し
 					break;
 				}else {
-					//	Parse Error:文法エラーっぽい。
-					//	Jun. 16, 2002 genta
+					// Parse Error:文法エラーっぽい。
+					// Jun. 16, 2002 genta
 					nBgn = nEnd = i;
 					::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
 						LS(STR_ERR_DLGKEYMACMGR7), line, i + 1);
 					m_nReady = false;
 					break;
 				}
-				for (; i < nLineLen; ++i) {		//	最後の文字までスキャン
-					if (szLine[i] == LTEXT(')') || szLine[i] == LTEXT(',')) {	//	,もしくは)を読み飛ばす
+				for (; i < nLineLen; ++i) {		// 最後の文字までスキャン
+					if (szLine[i] == LTEXT(')') || szLine[i] == LTEXT(',')) {	// ,もしくは)を読み飛ばす
 						i++;
 						break;
 					}
@@ -371,9 +371,9 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					break;
 				}
 			}
-			//	Jun. 16, 2002 genta
+			// Jun. 16, 2002 genta
 			if (!m_nReady) {
-				//	どこかでエラーがあったらしい
+				// どこかでエラーがあったらしい
 				delete macro;
 				break;
 			}
@@ -382,15 +382,15 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		}else {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
 				LS(STR_ERR_DLGKEYMACMGR8), line, szFuncName);
-			//	Jun. 16, 2002 genta
+			// Jun. 16, 2002 genta
 			m_nReady = false;
 			break;
 		}
 	}
 	in.Close();
 
-	//	Jun. 16, 2002 genta
-	//	マクロ中にエラーがあったら異常終了できるようにする．
+	// Jun. 16, 2002 genta
+	// マクロ中にエラーがあったら異常終了できるようにする．
 	return m_nReady ? TRUE : FALSE;
 }
 
@@ -415,7 +415,7 @@ BOOL CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	return bRet;
 }
 
-//	From Here Apr. 29, 2002 genta
+// From Here Apr. 29, 2002 genta
 /*!
 	Factory
 
@@ -438,8 +438,8 @@ CMacroManagerBase* CKeyMacroMgr::Creator(const TCHAR* ext)
 */
 void CKeyMacroMgr::declare (void)
 {
-	//	常に実行
+	// 常に実行
 	CMacroFactory::getInstance()->RegisterCreator(Creator);
 }
-//	To Here Apr. 29, 2002 genta
+// To Here Apr. 29, 2002 genta
 

@@ -397,9 +397,9 @@ bool CFileNameManager::GetMenuFullLabel(
 		}
 
 		// szMenuを作る
-		//	Jan. 19, 2002 genta
-		//	&の重複処理を追加したため継続判定を若干変更
-		//	20100729 ExpandParameterにあわせて、・・・を...に変更
+		// Jan. 19, 2002 genta
+		// &の重複処理を追加したため継続判定を若干変更
+		// 20100729 ExpandParameterにあわせて、・・・を...に変更
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_GREP),
 			szAccKey, pszKey,
 			(nGrepKeyLen > cmemDes.GetStringLength()) ? _T("..."):_T("")
@@ -429,8 +429,8 @@ bool CFileNameManager::GetMenuFullLabel(
 		this->GetTransformFileNameFast(pszFile, szFileName, _MAX_PATH);
 
 		// szFileName → szMenu2
-		//	Jan. 19, 2002 genta
-		//	メニュー文字列の&を考慮
+		// Jan. 19, 2002 genta
+		// メニュー文字列の&を考慮
 		if (bEspaceAmp) {
 			dupamp(szFileName, szMenu2);
 			pszName = szMenu2;

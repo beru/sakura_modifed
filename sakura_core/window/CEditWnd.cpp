@@ -2016,7 +2016,7 @@ int	CEditWnd::OnClose(HWND hWndFrom)
 						// 以前のウィンドウが消えるよりも先に一気にここまで処理が進んでしまうと
 						// あとで画面がちらつくので、以前のウィンドウが消えるのをちょっとだけ待つ
 						int iWait = 0;
-						while(::IsWindowVisible(hwnd) && iWait++ < 20)
+						while (::IsWindowVisible(hwnd) && iWait++ < 20)
 							::Sleep(1);
 					}
 					if (!::IsWindowVisible(hwnd)) {
@@ -2161,7 +2161,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		int		nLv;
 		std::vector<HMENU>	hSubMenu;
 		std::wstring tmpMenuName;
-		const wchar_t *pMenuName;
+		const wchar_t* pMenuName;
 
 		nIdxStr = pcMenu->m_nMenuTopIdx[uPos];
 		nIdxEnd = (uPos < MAX_MAINMENU_TOP) ? pcMenu->m_nMenuTopIdx[uPos + 1] : -1;

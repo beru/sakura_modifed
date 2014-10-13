@@ -166,7 +166,7 @@ void CDlgFind::SetData(void)
 	) {
 		// 英大文字と英小文字を区別する
 		::CheckDlgButton(GetHwnd(), IDC_CHK_REGULAREXP, 1);
-//正規表現がONでも、大文字小文字を区別する／しないを選択できるように。
+// 正規表現がONでも、大文字小文字を区別する／しないを選択できるように。
 //		::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 1);
 //		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), FALSE);
 
@@ -189,7 +189,7 @@ void CDlgFind::SetData(void)
 
 
 // 検索文字列リストの設定
-//	2010/5/28 Uchi
+// 2010/5/28 Uchi
 void CDlgFind::SetCombosList(void)
 {
 	HWND	hwndCombo;
@@ -244,7 +244,7 @@ int CDlgFind::GetData(void)
 	if (0 < m_strText.length()) {
 		// 正規表現？
 		// From Here Jun. 26, 2001 genta
-		//	正規表現ライブラリの差し替えに伴う処理の見直し
+		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0x00;
 		nFlag |= m_sSearchOption.bLoHiCase ? 0x01 : 0x00;
 		if (m_sSearchOption.bRegularExp
@@ -274,7 +274,7 @@ int CDlgFind::GetData(void)
 		if (!m_bModal) {
 			// ダイアログデータの設定
 			//SetData();
-			SetCombosList();		//	コンボのみの初期化	2010/5/28 Uchi
+			SetCombosList();		// コンボのみの初期化	2010/5/28 Uchi
 		}
 		return 1;
 	}else {
@@ -290,8 +290,8 @@ BOOL CDlgFind::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「検索」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_SEARCH_DIALOG));	//Apr. 5, 2001 JEPRO 修正漏れを追加	// 2006.10.10 ryoji MyWinHelpに変更に変更
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_SEARCH_DIALOG));	// Apr. 5, 2001 JEPRO 修正漏れを追加	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		break;
 	case IDC_CHK_REGULAREXP:	// 正規表現
 //		MYTRACE(_T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP) = %d\n"), ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
@@ -304,8 +304,8 @@ BOOL CDlgFind::OnBnClicked(int wID)
 			// To Here Jun. 26, 2001 genta
 
 				// 英大文字と英小文字を区別する
-				//	Jan. 31, 2002 genta
-				//	大文字・小文字の区別は正規表現の設定に関わらず保存する
+				// Jan. 31, 2002 genta
+				// 大文字・小文字の区別は正規表現の設定に関わらず保存する
 				//::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 1);
 				//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), FALSE);
 
@@ -316,8 +316,8 @@ BOOL CDlgFind::OnBnClicked(int wID)
 		}else {
 			// 英大文字と英小文字を区別する
 			//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), TRUE);
-			//	Jan. 31, 2002 genta
-			//	大文字・小文字の区別は正規表現の設定に関わらず保存する
+			// Jan. 31, 2002 genta
+			// 大文字・小文字の区別は正規表現の設定に関わらず保存する
 			//::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 0);
 
 			// 2001/06/23 Norio Nakatani
@@ -325,7 +325,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD), TRUE);
 		}
 		break;
-	case IDC_BUTTON_SEARCHPREV:	// 上検索	//Feb. 13, 2001 JEPRO ボタン名を[IDC_BUTTON1]→[IDC_BUTTON_SERACHPREV]に変更
+	case IDC_BUTTON_SEARCHPREV:	// 上検索	// Feb. 13, 2001 JEPRO ボタン名を[IDC_BUTTON1]→[IDC_BUTTON_SERACHPREV]に変更
 		// ダイアログデータの取得
 		nRet = GetData();
 		if (0 < nRet) {
@@ -356,7 +356,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 			OkMessage(GetHwnd(), LS(STR_DLGFIND1));	// 検索条件を指定してください。
 		}
 		return TRUE;
-	case IDC_BUTTON_SEARCHNEXT:		// 下検索	//Feb. 13, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_SERACHNEXT]に変更
+	case IDC_BUTTON_SEARCHNEXT:		// 下検索	// Feb. 13, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_SERACHNEXT]に変更
 		// ダイアログデータの取得
 		nRet = GetData();
 		if (0 < nRet) {

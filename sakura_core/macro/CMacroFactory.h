@@ -72,7 +72,7 @@ private:
 
 	// Jan. 31, 2004 genta
 	// バイナリサイズ削減のため拡張子保持用mapを削除
-	//	typedef std::map<std::string, Creator> MacroTypeRep;
+	// typedef std::map<std::string, Creator> MacroTypeRep;
 	typedef std::list<Creator> MacroEngineRep;
 
 	// Jan. 31, 2004 genta

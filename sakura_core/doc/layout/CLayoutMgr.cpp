@@ -36,7 +36,7 @@
 
 CLayoutMgr::CLayoutMgr()
 	:
-	m_getIndentOffset(&CLayoutMgr::getIndentOffset_Normal)	//	Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
+	m_getIndentOffset(&CLayoutMgr::getIndentOffset_Normal)	// Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 {
 	m_pcDocLineMgr = NULL;
 	m_pTypeConfig = NULL;
@@ -71,7 +71,7 @@ CLayoutMgr::~CLayoutMgr()
 void CLayoutMgr::Create(CEditDoc* pcEditDoc, CDocLineMgr* pcDocLineMgr)
 {
 	Init();
-	//	Jun. 20, 2003 genta EditDocへのポインタ追加
+	// Jun. 20, 2003 genta EditDocへのポインタ追加
 	m_pcEditDoc = pcEditDoc;
 	m_pcDocLineMgr = pcDocLineMgr;
 }
@@ -86,7 +86,7 @@ void CLayoutMgr::Init()
 	m_nLines = CLayoutInt(0);			// 全物理行数
 	m_nLineTypeBot = COLORIDX_DEFAULT;
 
-	// EOFレイアウト位置記憶	//2006.10.07 Moca
+	// EOFレイアウト位置記憶	// 2006.10.07 Moca
 	m_nEOFLine = CLayoutInt(-1);
 	m_nEOFColumn = CLayoutInt(-1);
 }
@@ -190,7 +190,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 		return NULL;
 	}
 
-	//	Mar. 19, 2003 Moca nLineNumが負の場合のチェックを追加
+	// Mar. 19, 2003 Moca nLineNumが負の場合のチェックを追加
 	if (CLayoutInt(0) > nLineNum || nLineNum >= m_nLines) {
 		if (CLayoutInt(0) > nLineNum) {
 			DEBUG_TRACE(_T("CLayoutMgr::SearchLineByLayoutY() nLineNum = %d\n"), nLineNum);
@@ -450,7 +450,7 @@ bool CLayoutMgr::IsEndOfLine(
 	@date 2006.10.01 Moca メンバで保持するように。データ変更時には、_DoLayout/DoLayout_Rangeで無効にする。
 */
 void CLayoutMgr::GetEndLayoutPos(
-	CLayoutPoint* ptLayoutEnd //[out]
+	CLayoutPoint* ptLayoutEnd // [out]
 )
 {
 	if (-1 != m_nEOFLine) {
@@ -812,8 +812,8 @@ void CLayoutMgr::LogicToLayout(
 				continue;
 			}
 
-			//	2004.06.16 Moca インデント表示の際に位置がずれる(TAB位置ずれによる)
-			//	TAB幅を正確に計算するには当初からインデント分を加えておく必要がある．
+			// 2004.06.16 Moca インデント表示の際に位置がずれる(TAB位置ずれによる)
+			// TAB幅を正確に計算するには当初からインデント分を加えておく必要がある．
 			nCaretPosX = pLayout->GetIndent();
 			const wchar_t*	pData;
 			pData = pLayout->GetDocLineRef()->GetPtr() + pLayout->GetLogicOffset(); // 2002/2/10 aroka CMemory変更
@@ -852,34 +852,34 @@ void CLayoutMgr::LogicToLayout(
 				i += nCharChars - CLogicInt(1);
 			}
 			if (i < nDataLen) {
-				//	ptLogic.x, ptLogic.yがこの行の中に見つかったらループ打ち切り
+				// ptLogic.x, ptLogic.yがこの行の中に見つかったらループ打ち切り
 				break;
 			}
 
 			if (!pLayout->GetNextLayout()) {
-				//	当該位置に達していなくても，レイアウト末尾ならデータ末尾のレイアウト位置を返す．
+				// 当該位置に達していなくても，レイアウト末尾ならデータ末尾のレイアウト位置を返す．
 				nCaretPosX = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen()>0?1:0);
 				break;
 			}
 
 			if (ptLogic.y < pLayout->m_pNext->GetLogicLineNo()) {
-				//	次のLayoutが当該物理行を過ぎてしまう場合はデータ末尾のレイアウト位置を返す．
+				// 次のLayoutが当該物理行を過ぎてしまう場合はデータ末尾のレイアウト位置を返す．
 				nCaretPosX = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen()>0?1:0);
 				break;
 			}
 		}
 		if (ptLogic.GetY2() < pLayout->GetLogicLineNo()) {
-			//	ふつうはここには来ないと思うが... (genta)
-			//	Layoutの指す物理行が探している行より先を指していたら打ち切り
+			// ふつうはここには来ないと思うが... (genta)
+			// Layoutの指す物理行が探している行より先を指していたら打ち切り
 			break;
 		}
 
-		//	次の行へ進む
+		// 次の行へ進む
 		nCaretPosY++;
 		pLayout = pLayout->GetNextLayout();
 	} while (pLayout);
 
-	//	2004.06.16 Moca インデント表示の際の位置ずれ修正
+	// 2004.06.16 Moca インデント表示の際の位置ずれ修正
 	pptLayout->Set(
 		pLayout ? nCaretPosX : CLayoutInt(0),
 		nCaretPosY
@@ -902,7 +902,7 @@ void CLayoutMgr::LayoutToLogicEx(
 	pptLogic->Set(CLogicInt(0), CLogicInt(0));
 	pptLogic->ext = 0;
 	if (ptLayout.GetY2() > m_nLines) {
-		//2007.10.11 kobake Y値が間違っていたので修正
+		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, m_nLines);
 		pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
 		return;
@@ -937,7 +937,7 @@ void CLayoutMgr::LayoutToLogicEx(
 				}
 			}
 		}
-		//2007.10.11 kobake Y値が間違っていたので修正
+		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, m_nLines);
 		pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
 		return;

@@ -71,8 +71,8 @@
 
 void fopen_s( 
    FILE** pFile,
-   const char *filename,
-   const char *mode 
+   const char* filename,
+   const char* mode 
 )
 {
 	*pFile = fopen(filename, mode);
@@ -171,7 +171,7 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 				//add to list
 				file_list.push_back( fl_nm );
 			}
-		} while(::FindNextFileA(hFind, &ffData));
+		} while (::FindNextFileA(hFind, &ffData));
 		::FindClose(hFind);
 	}
 	return 0;

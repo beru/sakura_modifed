@@ -24,7 +24,7 @@ void CUtf8::GetBom(CMemory* pcmemBom)
 int CUtf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCESU8Mode)
 {
 	const unsigned char *pr, *pr_end;
-	unsigned short *pw;
+	unsigned short* pw;
 	int nclen;
 	ECharSet echarset;
 
@@ -132,7 +132,7 @@ int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 	bool berror=false;
 	ECharSet echarset;
 
-	while((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
+	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// ï€åÏÉRÅ[Éh
 		switch(echarset) {
 		case CHARSET_UNI_NORMAL:

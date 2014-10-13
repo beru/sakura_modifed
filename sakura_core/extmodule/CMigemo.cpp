@@ -38,7 +38,7 @@ int __cdecl pcre_char2int_utf8(const unsigned char*, unsigned int*);
 int __cdecl pcre_int2char_utf8(unsigned int, unsigned char*);
 
 //-----------------------------------------
-//	DLL ‰Šú‰»ŠÖ”
+// DLL ‰Šú‰»ŠÖ”
 //-----------------------------------------
 bool CMigemo::InitDllImp()
 {

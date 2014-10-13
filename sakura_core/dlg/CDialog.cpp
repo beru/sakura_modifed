@@ -250,7 +250,7 @@ void CDialog::SetDialogPosSize()
 
 		WINDOWPLACEMENT cWindowPlacement;
 		cWindowPlacement.length = sizeof(cWindowPlacement);
-		cWindowPlacement.showCmd = m_nShowCmd;	//	最大化・最小化
+		cWindowPlacement.showCmd = m_nShowCmd;	// 最大化・最小化
 		cWindowPlacement.rcNormalPosition.left = m_xPos;
 		cWindowPlacement.rcNormalPosition.top = m_yPos;
 		cWindowPlacement.rcNormalPosition.right = m_nWidth + m_xPos;
@@ -265,7 +265,7 @@ BOOL CDialog::OnDestroy(void)
 	WINDOWPLACEMENT cWindowPlacement;
 	cWindowPlacement.length = sizeof(cWindowPlacement);
 	if (::GetWindowPlacement(m_hWnd, &cWindowPlacement)) {
-		m_nShowCmd = cWindowPlacement.showCmd;	//	最大化・最小化
+		m_nShowCmd = cWindowPlacement.showCmd;	// 最大化・最小化
 		m_xPos = cWindowPlacement.rcNormalPosition.left;
 		m_yPos = cWindowPlacement.rcNormalPosition.top;
 		m_nWidth = cWindowPlacement.rcNormalPosition.right - cWindowPlacement.rcNormalPosition.left;
@@ -312,16 +312,16 @@ BOOL CDialog::OnSize(WPARAM wParam, LPARAM lParam)
 	if (m_hwndSizeBox) {
 		::GetClientRect(m_hWnd, &rc);
 //		::SetWindowPos(m_hwndSizeBox, NULL,
-//	Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
-//	Jan. 12, 2001 JEPRO (directed by stonee) 15を16に変更するとアウトライン解析のダイアログの右下にある
-//	グリップサイズに`遊び'ができてしまい(移動する！)、ダイアログを大きくできないという障害が発生するので
-//	変更しないことにした(要するに原作版に戻しただけ)
+// Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
+// Jan. 12, 2001 JEPRO (directed by stonee) 15を16に変更するとアウトライン解析のダイアログの右下にある
+// グリップサイズに`遊び'ができてしまい(移動する！)、ダイアログを大きくできないという障害が発生するので
+// 変更しないことにした(要するに原作版に戻しただけ)
 //			rc.right - rc.left - 15, rc.bottom - rc.top - 15,
 //			13, 13,
 //			SWP_NOOWNERZORDER | SWP_NOZORDER
 //		);
 
-//	Jan. 12, 2001 Stonee (suggested by genta)
+// Jan. 12, 2001 Stonee (suggested by genta)
 //		"13"という固定値ではなくシステムから取得したスクロールバーサイズを使うように修正
 		::SetWindowPos(m_hwndSizeBox, NULL,
 			rc.right - rc.left - GetSystemMetrics(SM_CXVSCROLL), //<-- stonee
@@ -331,7 +331,7 @@ BOOL CDialog::OnSize(WPARAM wParam, LPARAM lParam)
 			SWP_NOOWNERZORDER | SWP_NOZORDER
 		);
 
-		//	SizeBox問題テスト
+		// SizeBox問題テスト
 		if (wParam == SIZE_MAXIMIZED) {
 			::ShowWindow(m_hwndSizeBox, SW_HIDE);
 		}else {

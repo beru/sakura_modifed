@@ -67,7 +67,7 @@ void CMacroBeforeAfter::ExecKeyMacroAfter(class CEditView* pcEditView, int flags
 }
 
 // CMacroManagerBase
-//	デフォルトのコンストラクタ・デストラクタ
+// デフォルトのコンストラクタ・デストラクタ
 
 CMacroManagerBase::CMacroManagerBase()
  : m_nReady(false)

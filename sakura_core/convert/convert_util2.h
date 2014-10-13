@@ -208,7 +208,7 @@ bool CheckBase64Padbit(const CHAR_TYPE *pSrc, const int nSrcLen)
 	正しい BASE64 入力文字列を仮定している。
 */
 template <class CHAR_TYPE>
-int _DecodeBase64(const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest)
+int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 {
 	long lData;
 	int nDesLen;
@@ -261,7 +261,7 @@ int _DecodeBase64(const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest)
 	パッド文字などは付加しない。エラーチェックなし。
 */
 template <class CHAR_TYPE>
-int _EncodeBase64(const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest)
+int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
 {
 	const unsigned char* psrc;
 	unsigned long lDataSrc;
@@ -269,7 +269,7 @@ int _EncodeBase64(const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest)
 	char v;
 	int nDesLen;
 
-	psrc = reinterpret_cast<const unsigned char *>(pSrc);
+	psrc = reinterpret_cast<const unsigned char*>(pSrc);
 	nDesLen = 0;
 	for (i = 0; i < nSrcLen; i += 3) {
 		lDataSrc = 0;
@@ -364,7 +364,7 @@ inline BYTE _UUDECODE_CHAR(ACHAR c)
 	        書き込んだデータが戻り値よりも大きいときがあるので注意。
 */
 template <class CHAR_TYPE>
-int _DecodeUU_line(const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest)
+int _DecodeUU_line(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 {
 	unsigned long lDataDes;
 	const CHAR_TYPE *pr;

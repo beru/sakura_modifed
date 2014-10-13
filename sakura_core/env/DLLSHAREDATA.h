@@ -56,17 +56,17 @@ void SetDllShareData(DLLSHAREDATA* pShareData)
 
 #include "config/maxdata.h"
 
-#include "env/CAppNodeManager.h"	//SShare_Nodes
-//2007.09.28 kobake Common構造体をCShareData.hから分離
+#include "env/CAppNodeManager.h"	// SShare_Nodes
+// 2007.09.28 kobake Common構造体をCShareData.hから分離
 #include "env/CommonSetting.h"
-#include "env/CSearchKeywordManager.h"	//SShare_SearchKeywords
-#include "env/CTagJumpManager.h"		//SShare_TagJump
-#include "env/CFileNameManager.h"		//SShare_FileNameManagement
+#include "env/CSearchKeywordManager.h"	// SShare_SearchKeywords
+#include "env/CTagJumpManager.h"		// SShare_TagJump
+#include "env/CFileNameManager.h"		// SShare_FileNameManagement
 
 #include "EditInfo.h"
 #include "types/CType.h" // STypeConfig
-#include "print/CPrint.h" //PRINTSETTING
-#include "recent/SShare_History.h"	//SShare_History
+#include "print/CPrint.h" // PRINTSETTING
+#include "recent/SShare_History.h"	// SShare_History
 
 
 // 共有フラグ
@@ -82,7 +82,7 @@ struct SShare_Flags {
 
 // 共有ワークバッファ
 struct SShare_WorkBuffer {
-	//2007.09.16 kobake char型だと、常に文字列であるという誤解を招くので、BYTE型に変更。変数名も変更。
+	// 2007.09.16 kobake char型だと、常に文字列であるという誤解を招くので、BYTE型に変更。変数名も変更。
 	//           UNICODE版では、余分に領域を使うことが予想されるため、ANSI版の2倍確保。
 private:
 	BYTE m_pWork[32000 * sizeof(TCHAR)];
@@ -119,7 +119,7 @@ struct SShare_Version {
 struct DLLSHAREDATA {
 	// -- -- バージョン -- -- //
 	/*!
-		データ構造 Version	//	Oct. 27, 2000 genta
+		データ構造 Version	// Oct. 27, 2000 genta
 		データ構造の異なるバージョンの同時起動を防ぐため
 		必ず先頭になくてはならない．
 	*/
@@ -154,7 +154,7 @@ struct DLLSHAREDATA {
 	SShare_History				m_sHistory;
 
 	// 外部コマンド実行ダイアログのオプション
-	int							m_nExecFlgOpt;				// 外部コマンド実行オプション	//	2006.12.03 maru オプションの拡張のため
+	int							m_nExecFlgOpt;				// 外部コマンド実行オプション	// 2006.12.03 maru オプションの拡張のため
 	// DIFF差分表示ダイアログのオプション
 	int							m_nDiffFlgOpt;				// DIFF差分表示	//@@@ 2002.05.27 MIK
 	// タグファイルの作成ダイアログのオプション

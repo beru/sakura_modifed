@@ -61,10 +61,10 @@ class CMigemo :
 public:
 	virtual ~CMigemo();
 
-	//	Entry Point
+	// Entry Point
 protected:
-	//	Aug. 20, 2005 Aroka : 最適化オプションでデフォルトを__fastcallに変更しても
-	//	影響を受けないようにする．
+	// Aug. 20, 2005 Aroka : 最適化オプションでデフォルトを__fastcallに変更しても
+	// 影響を受けないようにする．
 	typedef migemo*        (__cdecl *Proc_migemo_open)            (char* dict);
 	typedef void           (__cdecl *Proc_migemo_close)           (migemo* object);
 	typedef unsigned char* (__cdecl *Proc_migemo_query)           (migemo* object, unsigned char* query);

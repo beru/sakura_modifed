@@ -77,14 +77,14 @@ bool IsFileExists2(const wchar_t* pszFile)
 */
 bool CViewCommander::Command_TAGJUMP(bool bClose)
 {
-	//	2004.05.13 Moca 初期値を1ではなく元の位置を継承するように
+	// 2004.05.13 Moca 初期値を1ではなく元の位置を継承するように
 	// 0以下は未指定扱い。(1開始)
 	int			nJumpToLine;
 	int			nJumpToColumn;
 	nJumpToLine = 0;
 	nJumpToColumn = 0;
 
-	//ファイル名バッファ
+	// ファイル名バッファ
 	wchar_t		szJumpToFile[1024];
 	wchar_t		szFile[_MAX_PATH] = {L'\0'};
 	int			nBgn;
@@ -312,24 +312,24 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 		const wchar_t* p = pLine;
 		const wchar_t* p_end = p + nLineLen;
 
-		//	From Here Aug. 27, 2001 genta
-		//	Borland 形式のメッセージからのTAG JUMP
+		// From Here Aug. 27, 2001 genta
+		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
-			//	skip space
+			// skip space
 			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p)); ++p)
 				;
 			if (p >= p_end)
 				break;
 		
-			//	Check Path
+			// Check Path
 			if (IsFilePath(p, &nBgn, &nPathLen)) {
 				wmemcpy(szJumpToFile, &p[nBgn], nPathLen);
 				GetLineColumn(&p[nBgn + nPathLen], &nJumpToLine, &nJumpToColumn);
 				break;
 			}
-			//	Jan. 04, 2001 genta Directoryを対象外にしたので文字列には柔軟に対応
-			//	break;	//@@@ 2001.12.31 YAZAKI 「working ...」問題に対処
-			//	skip non-space
+			// Jan. 04, 2001 genta Directoryを対象外にしたので文字列には柔軟に対応
+			// break;	//@@@ 2001.12.31 YAZAKI 「working ...」問題に対処
+			// skip non-space
 			for (; p < p_end && (*p != L' ' && *p != L'\t'); ++p)
 				;
 		}
@@ -340,10 +340,10 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 		if (Command_TagJumpByTagsFile(bClose)) {	//@@@ 2003.04.13
 			return true;
 		}
-		//	From Here Aug. 27, 2001 genta
+		// From Here Aug. 27, 2001 genta
 	}
 
-	//	Apr. 21, 2003 genta bClose追加
+	// Apr. 21, 2003 genta bClose追加
 	if (szJumpToFile[0]) {
 		if (m_pCommanderView->TagJumpSub(to_tchar(szJumpToFile), CMyPoint(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
 			return true;
@@ -453,7 +453,7 @@ bool CViewCommander::Command_TagsMake(void)
 	sui.hStdOutput  = hStdOutWrite;
 	sui.hStdError   = hStdOutWrite;
 
-	//	To Here Dec. 28, 2002 MIK
+	// To Here Dec. 28, 2002 MIK
 
 	TCHAR	options[1024];
 	_tcscpy(options, _T("--excmd=n"));	// デフォルトのオプション
@@ -610,24 +610,24 @@ bool CViewCommander::Command_TagJumpByTagsFile(bool bClose)
 	if (!Sub_PreProcTagJumpByTagsFile(szDirFile, _countof(szDirFile))) {
 		return false;
 	}
-	CDlgTagJumpList	cDlgTagJumpList(true);	//タグジャンプリスト
+	CDlgTagJumpList	cDlgTagJumpList(true);	// タグジャンプリスト
 	
 	cDlgTagJumpList.SetFileName(szDirFile);
 	cDlgTagJumpList.SetKeyword(cmemKeyW.GetStringPtr());
 
 	int nMatchAll = cDlgTagJumpList.FindDirectTagJump();
 
-	//複数あれば選択してもらう。
+	// 複数あれば選択してもらう。
 	if (1 < nMatchAll) {
 		if (! cDlgTagJumpList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)0)) {
 			nMatchAll = 0;
-			return true;	//キャンセル
+			return true;	// キャンセル
 		}
 	}
 
-	//タグジャンプする。
+	// タグジャンプする。
 	if (0 < nMatchAll) {
-		//	@@ 2005.03.31 MIK 階層パラメータ追加
+		//@@ 2005.03.31 MIK 階層パラメータ追加
 		TCHAR fileName[1024];
 		int   fileLine;
 

@@ -125,7 +125,7 @@ DEF_NOTIFY(BeforeClose)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       CDocListener                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//(‘½)
+// (‘½)
 
 CDocListener::CDocListener(CDocSubject* pcDoc)
 {

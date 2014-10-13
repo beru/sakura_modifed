@@ -62,15 +62,15 @@
 */
 static const int gm_aMbcPriority[] =
 {
-	2,			//CODE_SJIS
-	4,			//CODE_JIS
-	3,			//CODE_EUC
-	INT_MAX,	//CODE_UNICODE
-	0,			//CODE_UTF8
-	5,			//CODE_UTF7
-	INT_MAX,	//CODE_UNICODEBE
-	1,			//CODE_CESU8
-	6,			//CODE_LATIN1
+	2,			// CODE_SJIS
+	4,			// CODE_JIS
+	3,			// CODE_EUC
+	INT_MAX,	// CODE_UNICODE
+	0,			// CODE_UTF8
+	5,			// CODE_UTF7
+	INT_MAX,	// CODE_UNICODEBE
+	1,			// CODE_CESU8
+	6,			// CODE_LATIN1
 };
 
 
@@ -263,7 +263,7 @@ void CESI::GetEncodingInfo_jis(const char* pS, const int nLen)
 		case MYJISESC_ZENKAKU:
 			nlen = CheckJisZenkakuPart(pr, pr_end - pr, &pr_next, &emyjisesc, &nerror);
 			break;
-		//case MYJISESC_UNKNOWN:
+		// case MYJISESC_UNKNOWN:
 		default:
 			nlen = CheckJisUnknownPart(pr, pr_end - pr, &pr_next, &emyjisesc, &nerror);
 		}
@@ -760,7 +760,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	ECodeType ecode_result = CCodeMediator::CheckKanjiCode(&cesi);
 
 	//
-	//	”»•ÊŒ‹‰Ê‚ð•ªÍ
+	// ”»•ÊŒ‹‰Ê‚ð•ªÍ
 	//
 
 	pcmtxtOut->AppendString(LS(STR_ESI_CHARCODE_DETECT));	// "--•¶ŽšƒR[ƒh’²¸Œ‹‰Ê-----------\r\n"

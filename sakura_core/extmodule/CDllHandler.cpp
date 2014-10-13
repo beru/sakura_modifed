@@ -59,7 +59,7 @@ CDllImp::~CDllImp()
 EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 {
 	if (IsAvailable()) {
-		//	既に利用可能で有れば何もしない．
+		// 既に利用可能で有れば何もしない．
 		return DLL_SUCCESS;
 	}
 

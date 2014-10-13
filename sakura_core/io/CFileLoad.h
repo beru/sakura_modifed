@@ -53,7 +53,7 @@ public:
 	CFileLoad(const SEncodingConfig& encode);
 	~CFileLoad(void);
 
-	//	Jul. 26, 2003 ryoji BOM引数追加
+	// Jul. 26, 2003 ryoji BOM引数追加
 	ECodeType FileOpen(LPCTSTR, ECodeType, int, bool* pbBomExist = NULL);		// 指定文字コードでファイルをオープンする
 	void FileClose(void);					// 明示的にファイルをクローズする
 
@@ -63,7 +63,7 @@ public:
 		CEol*		pcEol			//!< [i/o]
 	);
 
-//	未実装関数郡
+// 未実装関数郡
 //	cosnt char* ReadAtLine(int, int*, CEol*); // 指定行目をロードする
 //	cosnt wchar_t* ReadAtLineW(int, int*, CEol*); // 指定行目をロードする(Unicode版)
 //	bool ReadIgnoreLine(void); // 1行読み飛ばす
@@ -71,7 +71,7 @@ public:
 	//! ファイルの日時を取得する
 	BOOL GetFileTime(FILETIME*, FILETIME*, FILETIME*); // inline
 
-	//	Jun. 08, 2003 Moca
+	// Jun. 08, 2003 Moca
 	//! 開いたファイルにはBOMがあるか？
 	bool IsBomExist(void) { return m_bBomExist; }
 
@@ -114,8 +114,8 @@ protected:
 	CCodeBase*	m_pCodeBase;	////
 	bool	m_bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
 	int		m_nFlag;		// 文字コードの変換オプション
-	//	Jun. 13, 2003 Moca
-	//	状態をenumとしてわかりやすく．
+	// Jun. 13, 2003 Moca
+	// 状態をenumとしてわかりやすく．
 	enum enumFileLoadMode{
 		FLMODE_CLOSE = 0,	//!< 初期状態
 		FLMODE_OPEN,		//!< ファイルオープンのみ

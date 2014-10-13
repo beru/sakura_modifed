@@ -175,7 +175,7 @@ bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 
 	if ((hRsrc = ::FindResource(0, pName, pType)) != NULL
 	 && (hGlobal = ::LoadResource(0, hRsrc)) != NULL
-	 && (psMMres = (char *)::LockResource(hGlobal)) != NULL
+	 && (psMMres = (char*)::LockResource(hGlobal)) != NULL
 	 && (nSize = (size_t)::SizeofResource(0, hRsrc)) != 0
 	) {
 		p = psMMres;

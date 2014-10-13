@@ -50,17 +50,17 @@ static ColorInfoIni ColorInfo_DEFAULT[] = {
 	{ STR_COLOR_LINE_NO,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0, 255),	RGB(239, 239, 239) } } },
 	{ STR_COLOR_LINE_NO_CHANGE,				{ TRUE,		{ TRUE,		FALSE },	{ RGB(  0,   0, 255),	RGB(239, 239, 239) } } },
 	{ STR_COLOR_EVEN_LINE_BG,				{ FALSE,	{ FALSE,	FALSE },	{ RGB(  0,   0,   0),	RGB(243, 243, 243) } } },	// 2013.12.30 Moca
-	{ STR_COLOR_TAB,						{ TRUE,		{ FALSE,	FALSE },	{ RGB(128, 128, 128),	RGB(255, 251, 240) } } },	//Jan. 19, 2001 JEPRO RGB(192,192,192)より濃いグレーに変更
-	{ STR_COLOR_HALF_SPACE,					{ FALSE,	{ FALSE,	FALSE },	{ RGB(192, 192, 192),	RGB(255, 251, 240) } } }, //2002.04.28 Add by KK
+	{ STR_COLOR_TAB,						{ TRUE,		{ FALSE,	FALSE },	{ RGB(128, 128, 128),	RGB(255, 251, 240) } } },	// Jan. 19, 2001 JEPRO RGB(192,192,192)より濃いグレーに変更
+	{ STR_COLOR_HALF_SPACE,					{ FALSE,	{ FALSE,	FALSE },	{ RGB(192, 192, 192),	RGB(255, 251, 240) } } },	// 2002.04.28 Add by KK
 	{ STR_COLOR_FULL_SPACE,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(192, 192, 192),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_CTRL_CODE,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 255,   0),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_CR,							{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0, 128, 255),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_WRAP_MARK,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255,   0, 255),	RGB(255, 251, 240) } } },
-	{ STR_COLOR_VERT_LINE,					{ FALSE,	{ FALSE,	FALSE },	{ RGB(192, 192, 192),	RGB(255, 251, 240) } } }, //2005.11.08 Moca
+	{ STR_COLOR_VERT_LINE,					{ FALSE,	{ FALSE,	FALSE },	{ RGB(192, 192, 192),	RGB(255, 251, 240) } } },	// 2005.11.08 Moca
 	{ STR_COLOR_EOF,						{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0, 255, 255),	RGB(  0,   0,   0) } } },
-	{ STR_COLOR_NUMBER,						{ FALSE,	{ FALSE,	FALSE },	{ RGB(235,   0,   0),	RGB(255, 251, 240) } } },	//@@@ 2001.02.17 by MIK		//Mar. 7, 2001 JEPRO RGB(0,0,255)を変更  Mar.10, 2001 標準は色なしに
+	{ STR_COLOR_NUMBER,						{ FALSE,	{ FALSE,	FALSE },	{ RGB(235,   0,   0),	RGB(255, 251, 240) } } },	//@@@ 2001.02.17 by MIK		// Mar. 7, 2001 JEPRO RGB(0,0,255)を変更  Mar.10, 2001 標準は色なしに
 	{ STR_COLOR_BRACKET,					{ FALSE,	{ TRUE,		FALSE },	{ RGB(128,   0,   0),	RGB(255, 251, 240) } } },	// 02/09/18 ai
-	{ STR_COLOR_SELECTED_AREA,				{ TRUE,		{ FALSE,	FALSE },	{ RGB( 49, 106, 197),	RGB( 49, 106, 197) } } },	//2011.05.18
+	{ STR_COLOR_SELECTED_AREA,				{ TRUE,		{ FALSE,	FALSE },	{ RGB( 49, 106, 197),	RGB( 49, 106, 197) } } },	// 2011.05.18
 	{ STR_COLOR_SEARCH_WORD1,				{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0,   0),	RGB(255, 255,   0) } } },
 	{ STR_COLOR_SEARCH_WORD2,				{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0,   0),	RGB(160, 255, 255) } } },
 	{ STR_COLOR_SEARCH_WORD3,				{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0,   0),	RGB(153, 255, 153) } } },
@@ -72,8 +72,8 @@ static ColorInfoIni ColorInfo_DEFAULT[] = {
 	{ STR_COLOR_HERE_DOCUMENT,				{ FALSE,	{ FALSE,	FALSE },	{ RGB(128,   0,  64),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_URL,						{ TRUE,		{ FALSE,	TRUE  },	{ RGB(  0,   0, 255),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_KEYWORD1,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0, 255),	RGB(255, 251, 240) } } },
-	{ STR_COLOR_KEYWORD2,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
-	{ STR_COLOR_KEYWORD3,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
+	{ STR_COLOR_KEYWORD2,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },	// Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
+	{ STR_COLOR_KEYWORD3,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },	// Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
 	{ STR_COLOR_KEYWORD4,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_KEYWORD5,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_KEYWORD6,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(255, 128,   0),	RGB(255, 251, 240) } } },

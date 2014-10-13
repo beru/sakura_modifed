@@ -82,7 +82,7 @@ public:
 
 	@date 2005.11.21 Moca 色分け情報をメンバーへ移動．不要となった引数をメンバ関数から削除．
 */
-//2007.10.15 XYLogicalToLayoutを廃止。LogicToLayoutに統合。
+// 2007.10.15 XYLogicalToLayoutを廃止。LogicToLayoutに統合。
 class CLayoutMgr : public CProgressSubject {
 private:
 	typedef CLayoutInt (CLayoutMgr::*CalcIndentProc)(CLayout*);
@@ -292,7 +292,7 @@ private:
 	bool IsKinsokuHead(wchar_t wc);	//!< 行頭禁則文字をチェックする	//@@@ 2002.04.08 MIK
 	bool IsKinsokuTail(wchar_t wc);	//!< 行末禁則文字をチェックする	//@@@ 2002.04.08 MIK
 	bool IsKinsokuKuto(wchar_t wc);	//!< 句読点文字をチェックする	//@@@ 2002.04.17 MIK
-	//	2005-08-20 D.S.Koba 禁則関連処理の関数化
+	// 2005-08-20 D.S.Koba 禁則関連処理の関数化
 	/*! 句読点ぶら下げの処理位置か
 		@date 2005-08-20 D.S.Koba
 		@date Sep. 3, 2005 genta 最適化
@@ -303,7 +303,7 @@ private:
 	bool IsKinsokuPosHead(CLayoutInt, CLayoutInt, CLayoutInt);	//!< 行頭禁則の処理位置か
 	bool IsKinsokuPosTail(CLayoutInt, CLayoutInt, CLayoutInt);	//!< 行末禁則の処理位置か
 private:
-	//	Oct. 1, 2002 genta インデント幅計算関数群
+	// Oct. 1, 2002 genta インデント幅計算関数群
 	CLayoutInt getIndentOffset_Normal(CLayout* pLayoutPrev);
 	CLayoutInt getIndentOffset_Tx2x(CLayout* pLayoutPrev);
 	CLayoutInt getIndentOffset_LeftSpace(CLayout* pLayoutPrev);
@@ -343,7 +343,7 @@ protected:
 	vector_ex<wchar_t>		m_pszKinsokuHead_1;			// 行頭禁則文字	//@@@ 2002.04.08 MIK
 	vector_ex<wchar_t>		m_pszKinsokuTail_1;			// 行末禁則文字	//@@@ 2002.04.08 MIK
 	vector_ex<wchar_t>		m_pszKinsokuKuto_1;			// 句読点ぶらさげ文字	//@@@ 2002.04.17 MIK
-	CalcIndentProc			m_getIndentOffset;			//	Oct. 1, 2002 genta インデント幅計算関数を保持
+	CalcIndentProc			m_getIndentOffset;			// Oct. 1, 2002 genta インデント幅計算関数を保持
 
 	// フラグ等
 	EColorIndexType			m_nLineTypeBot;				//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列

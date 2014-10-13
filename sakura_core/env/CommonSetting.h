@@ -1,4 +1,4 @@
-//2007.09.28 kobake Common整理
+// 2007.09.28 kobake Common整理
 /*
 	Copyright (C) 2008, kobake
 
@@ -26,8 +26,8 @@
 
 #include "CKeyWordSetMgr.h"
 #include "func/CKeyBind.h"
-#include "func/CFuncLookup.h" //MacroRec
-#include "io/CFile.h" //EShareMode
+#include "func/CFuncLookup.h" // MacroRec
+#include "io/CFile.h" // EShareMode
 
 // Apr. 05, 2003 genta WindowCaption用領域（変換前）の長さ
 static const int MAX_CAPTION_CONF_LEN = 256;
@@ -50,10 +50,10 @@ static const int MAX_TOOLBAR_ICON_COUNT		= MAX_TOOLBAR_ICON_X * MAX_TOOLBAR_ICON
 //                           全般                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_General {
-	//	Jul. 3, 2000 genta
-	//	アクセス関数(簡易)
-	//	intをビット単位に分割して使う
-	//	下4bitをCaretTypeに当てておく(将来の予約で多めに取っておく)
+	// Jul. 3, 2000 genta
+	// アクセス関数(簡易)
+	// intをビット単位に分割して使う
+	// 下4bitをCaretTypeに当てておく(将来の予約で多めに取っておく)
 	int		GetCaretType(void) const { return m_nCaretType & 0xf; }
 	void	SetCaretType(const int f) { m_nCaretType &= ~0xf; m_nCaretType |= f & 0xf; }
 
@@ -92,7 +92,7 @@ struct CommonSetting_General {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        ウィンドウ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//	2004.05.13 Moca
+// 2004.05.13 Moca
 //! ウィンドウサイズ・位置の制御方法
 enum EWinSizeMode {
 	WINSIZEMODE_DEF		= 0,	//!< 指定なし
@@ -264,8 +264,8 @@ public:
 //                       バックアップ                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//	Aug. 15, 2000 genta
-//	Backup Flags
+// Aug. 15, 2000 genta
+// Backup Flags
 enum EBackupOptionFlag {
 	BKUP_YEAR		= 32,
 	BKUP_MONTH		= 16,
@@ -274,37 +274,37 @@ enum EBackupOptionFlag {
 	BKUP_MIN		= 2,
 	BKUP_SEC		= 1,
 
-	//	Aug. 21, 2000 genta
+	// Aug. 21, 2000 genta
 	BKUP_AUTO		= 64,
 };
 
 struct CommonSetting_Backup {
 public:
-	//	Aug. 15, 2000 genta
-	//	Backup設定のアクセス関数
+	// Aug. 15, 2000 genta
+	// Backup設定のアクセス関数
 	int		GetBackupType(void) const			{ return m_nBackUpType; }
 	void	SetBackupType(int n)				{ m_nBackUpType = n; }
 
 	bool	GetBackupOpt(EBackupOptionFlag flag) const			{ return (flag & m_nBackUpType_Opt1) == flag; }
 	void	SetBackupOpt(EBackupOptionFlag flag, bool value)	{ m_nBackUpType_Opt1 = value ? (flag | m_nBackUpType_Opt1) :  ((~flag) & m_nBackUpType_Opt1); }
 
-	//	バックアップ数
+	// バックアップ数
 	int		GetBackupCount(void) const			{ return m_nBackUpType_Opt2 & 0xffff; }
 	void	SetBackupCount(int value)			{ m_nBackUpType_Opt2 = (m_nBackUpType_Opt2 & 0xffff0000) | (value & 0xffff); }
 
-	//	バックアップの拡張子先頭文字(1文字)
+	// バックアップの拡張子先頭文字(1文字)
 	TCHAR	GetBackupExtChar(void) const		{ return (TCHAR)((m_nBackUpType_Opt2 >> 16) & 0xff) ; }
 	void	SetBackupExtChar(int value)			{ m_nBackUpType_Opt2 = (m_nBackUpType_Opt2 & 0xff00ffff) | ((value & 0xff) << 16); }
 
-	//	Aug. 21, 2000 genta
-	//	自動Backup
+	// Aug. 21, 2000 genta
+	// 自動Backup
 	bool	IsAutoBackupEnabled(void) const		{ return GetBackupOpt(BKUP_AUTO); }
 	void	EnableAutoBackup(bool flag)			{ SetBackupOpt(BKUP_AUTO, flag); }
 
 	int		GetAutoBackupInterval(void) const	{ return m_nBackUpType_Opt3; }
 	void	SetAutoBackupInterval(int i)		{ m_nBackUpType_Opt3 = i; }
 
-	//	Backup詳細設定のアクセス関数
+	// Backup詳細設定のアクセス関数
 	int		GetBackupTypeAdv(void) const { return m_nBackUpType_Opt4; }
 	void	SetBackupTypeAdv(int n) { m_nBackUpType_Opt4 = n; }
 
@@ -370,19 +370,19 @@ struct CommonSetting_Search {
 	bool			m_bInheritKeyOtherView;		// 次・前検索で他のビューの検索条件を引き継ぐ
 	TCHAR			m_szRegexpLib[_MAX_PATH];	// 使用する正規表現DLL  2007.08.22 genta
 
-	//Grep
+	// Grep
 	BOOL			m_bGrepExitConfirm;			// Grepモードで保存確認するか
 	BOOL			m_bGrepRealTimeView;		// Grep結果のリアルタイム表示 2003.06.16 Moca
 
 	BOOL			m_bGTJW_RETURN;				// エンターキーでタグジャンプ
 	BOOL			m_bGTJW_LDBLCLK;			// ダブルクリックでタグジャンプ
 
-	//検索・置換ダイアログ
+	// 検索・置換ダイアログ
 	BOOL			m_bAutoCloseDlgFind;		// 検索ダイアログを自動的に閉じる
 	BOOL			m_bAutoCloseDlgReplace;		// 置換 ダイアログを自動的に閉じる
 	BOOL			m_bSearchAll;				// 先頭（末尾）から再検索 2002.01.26 hor
 
-	//INI内設定のみ
+	// INI内設定のみ
 	BOOL			m_bUseCaretKeyWord;			// キャレット位置の単語を辞書検索		// 2006.03.24 fon
 };
 
@@ -461,7 +461,7 @@ struct CommonSetting_Helper {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_Macro {
 	TCHAR		m_szKeyMacroFileName[MAX_PATH];	//!< キーボードマクロのファイル名
-	MacroRec	m_MacroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	//	Sep. 14, 2001 genta
+	MacroRec	m_MacroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	// Sep. 14, 2001 genta
 	SFilePath	m_szMACROFOLDER;				// マクロ用フォルダ
 	int			m_nMacroOnOpened;				// オープン後自動実行マクロ番号		//@@@ 2006.09.01 ryoji
 	int			m_nMacroOnTypeChanged;			// タイプ変更後自動実行マクロ番号	//@@@ 2006.09.01 ryoji
@@ -550,7 +550,7 @@ struct CommonSetting_Others {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ステータスバー                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//	2008/6/21	Uchi
+// 2008/6/21	Uchi
 struct CommonSetting_Statusbar {
 	// 表示文字コードの指定
 	BOOL		m_bDispUniInSjis;				// SJISで文字コード値をUnicodeで表示する

@@ -161,7 +161,7 @@ int CDlgGrep::DoModal(HINSTANCE hInstance, HWND hwndParent, const TCHAR* pszCurr
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_GREP, (LPARAM)NULL);
 }
 
-//	2007.02.09 bosagami
+// 2007.02.09 bosagami
 LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 WNDPROC g_pOnFolderProc;
 
@@ -170,7 +170,7 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	_SetHwnd(hwndDlg);
 
 	// ユーザーがコンボボックスのエディット コントロールに入力できるテキストの長さを制限する
-	//	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), _MAX_PATH - 1);
+	// Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), _MAX_PATH - 1);
 	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_COMBO_FILE), _MAX_PATH - 1);
 	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_COMBO_FOLDER), _MAX_PATH - 1);
 	
@@ -180,9 +180,9 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	Combo_SetExtendedUI(::GetDlgItem(GetHwnd(), IDC_COMBO_FOLDER), TRUE);
 
 	// ダイアログのアイコン
-//2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
+// 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
 	HICON	hIconBig, hIconSmall;
-	//	Dec, 2, 2002 genta アイコン読み込み方法変更
+	// Dec, 2, 2002 genta アイコン読み込み方法変更
 	hIconBig   = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, false);
 	hIconSmall = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 	::SendMessageAny(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall);
@@ -194,7 +194,7 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		int idx = Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_CHARSET), cCodeTypes.GetName(i));
 		Combo_SetItemData(::GetDlgItem(GetHwnd(), IDC_COMBO_CHARSET), idx, cCodeTypes.GetCode(i));
 	}
-	//	2007.02.09 bosagami
+	// 2007.02.09 bosagami
 	HWND hFolder = ::GetDlgItem(GetHwnd(), IDC_COMBO_FOLDER);
 	DragAcceptFiles(hFolder, true);
 	g_pOnFolderProc = (WNDPROC)GetWindowLongPtr(hFolder, GWLP_WNDPROC);
@@ -228,7 +228,7 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	if (msg == WM_DROPFILES) do {
-		//	From Here 2007.09.02 genta 
+		// From Here 2007.09.02 genta 
 		SFilePath sPath;
 		if (DragQueryFile((HDROP)wparam, 0, NULL, 0) > _countof2(sPath) - 1) {
 			// skip if the length of the path exceeds buffer capacity
@@ -241,14 +241,14 @@ LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		
 		// ファイルがドロップされた場合はフォルダを切り出す
 		// フォルダの場合は最後が失われるのでsplitしてはいけない．
-		if (IsFileExists(sPath, true)) {	//	第2引数がtrueだとディレクトリは対象外
+		if (IsFileExists(sPath, true)) {	// 第2引数がtrueだとディレクトリは対象外
 			SFilePath szWork;
 			SplitPath_FolderAndFile(sPath, szWork, NULL);
 			_tcscpy(sPath, szWork);
 		}
 
 		SetGrepFolder(hwnd, sPath);
-	}while (0);	//	1回しか通らない. breakでここまで飛ぶ
+	}while (0);	// 1回しか通らない. breakでここまで飛ぶ
 
 	return  CallWindowProc(g_pOnFolderProc, hwnd, msg, wparam, lparam);
 }
@@ -264,7 +264,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「Grep」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_GREP_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDC_CHK_FROMTHISTEXT:	/* この編集中のテキストから検索する */
@@ -351,9 +351,9 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 //			::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 0);
 
 
-//2001/06/23 N.Nakatani
-//単語単位のgrepが実装されたらコメントを外すと思います
-//2002/03/07実装してみた。
+// 2001/06/23 N.Nakatani
+// 単語単位のgrepが実装されたらコメントを外すと思います
+// 2002/03/07実装してみた。
 			// 単語単位で検索
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD), TRUE);
 		}
@@ -448,7 +448,7 @@ void CDlgGrep::SetData(void)
 	// 2002/03/07 テストサポート
 	// 一致する単語のみ検索する
 	::CheckDlgButton(GetHwnd(), IDC_CHK_WORD, m_sSearchOption.bWordOnly);
-//	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD) , false);	//チェックボックスを使用不可にすも
+//	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD) , false);	// チェックボックスを使用不可にすも
 
 	// 文字コード自動判別
 //	::CheckDlgButton(GetHwnd(), IDC_CHK_KANJICODEAUTODETECT, m_bKanjiCode_AutoDetect);
@@ -625,7 +625,7 @@ int CDlgGrep::GetData(void)
 	m_pShareData->m_Common.m_sSearch.m_bGrepOutputBaseFolder = m_bGrepOutputBaseFolder;
 	m_pShareData->m_Common.m_sSearch.m_bGrepSeparateFolder = m_bGrepSeparateFolder;
 
-//やめました
+// やめました
 //	if (0 == wcslen(m_szText)) {
 //		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
 //		return FALSE;

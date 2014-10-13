@@ -53,7 +53,7 @@ int CUtf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 		CMemory::SwapHLByte(pbuf, ndecoded_len);  // UTF-16 BE を UTF-16 LE に直す
 		memcpy(reinterpret_cast<char*>(pDst), pbuf, ndecoded_len);
 		if (nModLen) {
-			ndecoded_len += BinToText(reinterpret_cast<const unsigned char *>(pbuf) + ndecoded_len,
+			ndecoded_len += BinToText(reinterpret_cast<const unsigned char*>(pbuf) + ndecoded_len,
 				nModLen, &reinterpret_cast<unsigned short*>(pDst)[ndecoded_len / sizeof(wchar_t)]) * sizeof(wchar_t);
 			bError = true;
 		}
@@ -114,7 +114,7 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 			}
 		}
 		pr = pr_next;  // 次の読み込み位置を取得
-	}while(pr_next < pr_end);
+	} while (pr_next < pr_end);
 
 	if (pbError) {
 		*pbError = berror;
@@ -252,7 +252,7 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 			pw += _UniToUtf7SetB_block(pr_base, pr - pr_base, pw);
 		}
 		pr_base = pr;
-	}while(pr_base < pr_end);
+	} while (pr_base < pr_end);
 
 	return pw - pDst;
 }
@@ -270,7 +270,7 @@ EConvertResult CUtf7::UnicodeToUTF7(CMemory* pMem)
 	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
 
 	// 出力先バッファの確保
-	char *pDst;
+	char* pDst;
 	try{
 		// 最大で、変換元のデータ長の５倍。
 		pDst = new char[ nSrcLen * 5 + 1 ];  // * → +ACo-

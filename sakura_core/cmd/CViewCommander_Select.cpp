@@ -32,7 +32,7 @@ bool CViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
 	CLayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
 	const CLayout*	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
 	if (!pcLayout) {
-		return false;	//	単語選択に失敗
+		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
 	nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, ptCaretPos.GetX2());
@@ -50,7 +50,7 @@ bool CViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
 		*/
 
 		// 選択範囲の変更
-		//	2005.06.24 Moca
+		// 2005.06.24 Moca
 		si.SetSelectArea(sRange);
 		// 選択領域描画
 		si.DrawSelectArea();
@@ -59,9 +59,9 @@ bool CViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
 		GetCaret().MoveCursor(sRange.GetTo(), true);
 		GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-		return true;	//	単語選択に成功。
+		return true;	// 単語選択に成功。
 	}else {
-		return false;	//	単語選択に失敗
+		return false;	// 単語選択に失敗
 	}
 }
 
@@ -76,12 +76,12 @@ void CViewCommander::Command_SELECTALL(void)
 	}
 
 	// 先頭へカーソルを移動
-	//	Sep. 8, 2000 genta
+	// Sep. 8, 2000 genta
 	m_pCommanderView->AddCurrentLineToHistory();
 	GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
-	//	Jul. 29, 2006 genta 選択位置の末尾を正確に取得する
-	//	マクロから取得した場合に正しい範囲が取得できないため
+	// Jul. 29, 2006 genta 選択位置の末尾を正確に取得する
+	// マクロから取得した場合に正しい範囲が取得できないため
 	//int nX, nY;
 	CLayoutRange sRange;
 	sRange.SetFrom(CLayoutPoint(0, 0));

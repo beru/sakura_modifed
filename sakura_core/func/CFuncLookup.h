@@ -59,7 +59,7 @@ struct MacroRec {
 class CFuncLookup {
 
 public:
-	//	Oct. 15, 2001 genta à¯êîí«â¡
+	// Oct. 15, 2001 genta à¯êîí«â¡
 	// 2007.11.02 ryoji à¯êîïœçXÅiCSMacroMgr->MacroRecÅj
 //	CFuncLookup(HINSTANCE hInst, MacroRec* pMacroRec, CommonSetting* pCom)
 //		: m_pMacroRec(pMacroRec), m_pCommon(pCom) {}

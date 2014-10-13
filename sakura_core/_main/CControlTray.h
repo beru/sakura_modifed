@@ -94,7 +94,7 @@ public:
 	*/
 	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, CDlgGrep& cDlgGrep);
 protected:
-	void	DoGrep();	//Stonee, 2001/03/21
+	void	DoGrep();	// Stonee, 2001/03/21
 	BOOL TrayMessage(HWND , DWORD , UINT , HICON , const TCHAR* );	//!< タスクトレイのアイコンに関する処理
 	void OnCommand(WORD , WORD  , HWND);	//!< WM_COMMANDメッセージ処理
 	void OnNewEditor(bool); //!< 2003.05.30 genta 新規ウィンドウ作成処理を切り出し

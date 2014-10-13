@@ -432,7 +432,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 	return FALSE;
 }
 
-BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t *s)
+BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 {
 	static const wchar_t* kakomi[7 * 2] = {
 		L"/",  L"/k",

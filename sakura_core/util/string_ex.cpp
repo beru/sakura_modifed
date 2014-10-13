@@ -609,7 +609,7 @@ int my_mbisalpha2(int c)
 	@retval 0	一致
 	@date 2002.11.29 Moca 0以外の時の戻り値を，「元の値の差」から「大文字としたときの差」に変更
  */
-int __cdecl my_internal_icmp(const char *s1, const char *s2, unsigned int n, unsigned int dcount, bool flag)
+int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, unsigned int dcount, bool flag)
 {
 //	2002.11.29 Moca 元の値を保持する必要がなくなったため *_lo, *_upを削除
 //	int	c1, c1_lo, c1_up;

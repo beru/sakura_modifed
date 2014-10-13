@@ -15,7 +15,7 @@
 #include "CViewCommander.h"
 #include "CViewCommander_inline.h"
 
-#include "dlg/CDlgCtrlCode.h"	//コントロールコードの入力(ダイアログ)
+#include "dlg/CDlgCtrlCode.h"	// コントロールコードの入力(ダイアログ)
 #include "env/CFormatManager.h"
 
 // 日付挿入
@@ -46,7 +46,7 @@ void CViewCommander::Command_INS_TIME(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*!	コントロールコードの入力(ダイアログ)
 	@author	MIK
 	@date	2002/06/02

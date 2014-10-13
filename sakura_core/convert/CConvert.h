@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//2007.10.02 kobake CEditView‚©‚ç•ª—£
+// 2007.10.02 kobake CEditView‚©‚ç•ª—£
 
 #include "Funccode_enum.h"	// EFunctionCode
 

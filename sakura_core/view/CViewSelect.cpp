@@ -656,7 +656,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 	}else {
 		//	通常の選択では選択範囲の中身を数える
 		int select_sum = 0;	//	バイト数合計
-		const wchar_t *pLine;	//	データを受け取る
+		const wchar_t* pLine;	//	データを受け取る
 		CLogicInt	nLineLen;		//	行の長さ
 		const CLayout*	pcLayout;
 		CViewSelect* thiz = const_cast<CViewSelect*>(this);	// const外しthis

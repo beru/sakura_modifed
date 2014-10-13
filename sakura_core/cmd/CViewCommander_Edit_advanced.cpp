@@ -53,7 +53,7 @@ void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 #if 1	// ↓ここを残せば選択幅ゼロを最大にする（従来互換挙動）。無くても Command_INDENT() ver0 が適切に動作するように変更されたので、削除しても特に不都合にはならない。
 	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
-	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
+	// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	if (INDENT_NONE != eIndent && selInfo.IsBoxSelecting() && GetSelect().GetFrom().x == GetSelect().GetTo().x) {
 		GetSelect().SetToX(GetDocument()->m_cLayoutMgr.GetMaxLineKetas());
 		m_pCommanderView->RedrawAll();
@@ -101,7 +101,7 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 	} stabData(GetDocument()->m_cLayoutMgr.GetTabSpace());
 
 	const bool bSoftTab = (eIndent == INDENT_TAB && m_pCommanderView->m_pTypeData->m_bInsSpace);
-	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+	GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	auto& caret = GetCaret();
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -187,8 +187,8 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 			minOffset = CLayoutInt(-1);
 			for (CLayoutInt nLineNum = rcSel.GetFrom().y; nLineNum <= rcSel.GetTo().y; ++nLineNum) {
 				const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
-				//	Nov. 6, 2002 genta NULLチェック追加
-				//	これがないとEOF行を含む矩形選択中の文字列入力で落ちる
+				// Nov. 6, 2002 genta NULLチェック追加
+				// これがないとEOF行を含む矩形選択中の文字列入力で落ちる
 				CLogicInt nIdxFrom, nIdxTo;
 				CLayoutInt xLayoutFrom, xLayoutTo;
 				bool reachEndOfLayout = false;
@@ -350,10 +350,10 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 		for (CLayoutInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().GetY2(); i++) {
 			CLayoutInt nLineCountPrev = GetDocument()->m_cLayoutMgr.GetLineCount();
 			const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(i);
-			if (!pcLayout ||						//	テキストが無いEOLの行は無視
-				pcLayout->GetLogicOffset() > 0 ||				//	折り返し行は無視
+			if (!pcLayout ||						// テキストが無いEOLの行は無視
+				pcLayout->GetLogicOffset() > 0 ||				// 折り返し行は無視
 				pcLayout->GetLengthWithoutEOL() == 0
-			) {	//	改行のみの行は無視する。
+			) {	// 改行のみの行は無視する。
 				continue;
 			}
 
@@ -416,9 +416,9 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 // 逆インデント
 void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 {
-	//	Aug. 9, 2003 genta
-	//	選択されていない場合に逆インデントした場合に
-	//	注意メッセージを出す
+	// Aug. 9, 2003 genta
+	// 選択されていない場合に逆インデントした場合に
+	// 注意メッセージを出す
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
 		EIndentType eIndent;
@@ -441,10 +441,10 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 	if (selInfo.IsBoxSelecting()) {
 		ErrorBeep();
 //**********************************************
-//	 箱型逆インデントについては、保留とする (1998.10.22)
+// 箱型逆インデントについては、保留とする (1998.10.22)
 //**********************************************
 	}else {
-		GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
+		GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 		CLayoutRange sSelectOld;	// 範囲選択
 		sSelectOld.SetFrom(CLayoutPoint(CLayoutInt(0), GetSelect().GetFrom().y));
@@ -471,7 +471,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 			const CLayout*	pcLayout;
 			CLogicInt		nLineLen;
 			const wchar_t*	pLine = GetDocument()->m_cLayoutMgr.GetLineStr(i, &nLineLen, &pcLayout);
-			if (!pcLayout || pcLayout->GetLogicOffset() > 0) { //折り返し以降の行はインデント処理を行わない
+			if (!pcLayout || pcLayout->GetLogicOffset() > 0) { // 折り返し以降の行はインデント処理を行わない
 				continue;
 			}
 
@@ -479,14 +479,14 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 				if (pLine[0] == wcChar) {
 					nDelLen = CLogicInt(1);
 				}else {
-					//削り取る半角スペース数 (1～タブ幅分) -> nDelLen
+					// 削り取る半角スペース数 (1～タブ幅分) -> nDelLen
 					CLogicInt i;
 					CLogicInt nTabSpaces = CLogicInt((Int)GetDocument()->m_cLayoutMgr.GetTabSpace());
 					for (i = CLogicInt(0); i < nLineLen; i++) {
 						if (WCODE::SPACE != pLine[i]) {
 							break;
 						}
-						//	Sep. 23, 2002 genta LayoutMgrの値を使う
+						// Sep. 23, 2002 genta LayoutMgrの値を使う
 						if (i >= nTabSpaces) {
 							break;
 						}
@@ -515,7 +515,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 				&pcMemDeleted
 			);
 			if (nLineCountPrev != GetDocument()->m_cLayoutMgr.GetLineCount()) {
-				//	行数が変化した!!
+				// 行数が変化した!!
 				sSelectOld.GetToPointer()->y += GetDocument()->m_cLayoutMgr.GetLineCount() - nLineCountPrev;
 			}
 			if (hwndProgress) {
@@ -530,7 +530,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);
 		}
-		GetSelect() = sSelectOld;	//範囲選択
+		GetSelect() = sSelectOld;	// 範囲選択
 
 		// From Here 2001.12.03 hor
 		caret.MoveCursor(GetSelect().GetTo(), true);
@@ -551,7 +551,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*! TRIM Step1
 	非選択時はカレント行を選択して m_pCommanderView->ConvSelectedArea → ConvMemory へ
 	@author hor
@@ -564,7 +564,7 @@ void CViewCommander::Command_TRIM(
 	bool bBeDisableSelectArea = false;
 	CViewSelect& cViewSelect = m_pCommanderView->GetSelectionInfo();
 
-	if (!cViewSelect.IsTextSelected()) {	//	非選択時は行選択に変更
+	if (!cViewSelect.IsTextSelected()) {	// 非選択時は行選択に変更
 		cViewSelect.m_sSelect.SetFrom(
 			CLayoutPoint(
 				CLayoutInt(0),
@@ -592,7 +592,7 @@ void CViewCommander::Command_TRIM(
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 //!	物理行のソートに使う構造体
 struct SORTDATA {
 	const CNativeW* pCmemLine;
@@ -639,7 +639,7 @@ bool SortByKeyDesc(SORTDATA* pst1, SORTDATA* pst2) {return CStringRef_comp(pst1-
 	@date 2010.07.27 行ソートでコピーを減らす/NULより後ろも比較対照に
 	@date 2013.06.19 Moca 矩形選択時最終行に改行がない場合は付加+ソート後の最終行の改行を削除
 */
-void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
+void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 {
 	CLayoutRange sRangeA;
 	CLogicRange sSelectOld;
@@ -782,7 +782,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 		NULL
 	);
 
-	//	選択エリアの復元
+	// 選択エリアの復元
 	if (bBeginBoxSelectOld) {
 		selInfo.SetBoxSelect(bBeginBoxSelectOld);
 		selInfo.m_sSelect = sRangeA;
@@ -807,7 +807,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /*! @brief 物理行のマージ
 
 	連続する物理行で内容が同一の物を1行にまとめます．
@@ -835,7 +835,7 @@ void CViewCommander::Command_MERGE(void)
 	}
 
 	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
-	CLogicRange sSelectOld; //範囲選択
+	CLogicRange sSelectOld; // 範囲選択
 	GetDocument()->m_cLayoutMgr.LayoutToLogic(
 		selInfo.m_sSelect,
 		&sSelectOld
@@ -846,7 +846,7 @@ void CViewCommander::Command_MERGE(void)
 	// その行も選択範囲に加える
 	if (sSelectOld.GetTo().x > 0) {
 #if 0
-		const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(selInfo.m_sSelect.GetTo().GetY2()); //2007.10.09 kobake 単位混在バグ修正
+		const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(selInfo.m_sSelect.GetTo().GetY2()); // 2007.10.09 kobake 単位混在バグ修正
 		if (pcLayout && EOL_NONE != pcLayout->GetLayoutEol()) {
 			sSelectOld.GetToPointer()->y++;
 			//sSelectOld.GetTo().y++;
@@ -946,7 +946,7 @@ void CViewCommander::Command_MERGE(void)
 }
 
 
-//	from CViewCommander_New.cpp
+// from CViewCommander_New.cpp
 /* メニューからの再変換対応 minfu 2002.04.09
 
 	@date 2002.04.11 YAZAKI COsVersionInfoのカプセル化を守りましょう。

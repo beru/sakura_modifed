@@ -95,21 +95,21 @@ public:
 	}
 
 	//! 調査結果の情報を格納
-	void SetInformation( const char*, const int );
+	void SetInformation(const char*, const int);
 
 protected:
 
 	//! 添え字に使われる優先順位表を作成
-	void InitPriorityTable( void );
+	void InitPriorityTable(void);
 
-	//	**** 全般
+	// **** 全般
 	// マルチバイト系とUNICODE系とでそれぞれ情報の格納先が違う。
 	// 以下の関数で吸収する
-	int GetIndexById( const ECodeType ) const; //!< 文字コードID から情報格納先インデックスを生成
+	int GetIndexById(const ECodeType) const; //!< 文字コードID から情報格納先インデックスを生成
 
 	// データセッタ/ゲッター
-	void SetEvaluation( const ECodeType, const int, const int );
-	void GetEvaluation( const ECodeType, int *, int * ) const;
+	void SetEvaluation(const ECodeType, const int, const int);
+	void GetEvaluation(const ECodeType, int*, int *) const;
 
 	//! 調査対象となったデータの長さ（8bit 単位）
 	int m_nTargetDataLen;
@@ -120,38 +120,38 @@ protected:
 public:
 
 	// m_dwStatus のセッター／ゲッター
-	void SetStatus( DWORD inf ) { m_dwStatus |= inf; }
-	DWORD GetStatus( void ) const { return m_dwStatus; }
+	void SetStatus(DWORD inf) { m_dwStatus |= inf; }
+	DWORD GetStatus(void) const { return m_dwStatus; }
 
 	// m_nTargetDataLen のセッター／ゲッター
 protected:
-	void SetDataLen( const int n ) { if (n < 1) { m_nTargetDataLen = 0; }else { m_nTargetDataLen = n; } }
+	void SetDataLen(const int n) { if (n < 1) { m_nTargetDataLen = 0; }else { m_nTargetDataLen = n; } }
 public:
-	int GetDataLen( void ) const { return m_nTargetDataLen; }
+	int GetDataLen(void) const { return m_nTargetDataLen; }
 
 protected:
 	/*
 		文字列の文字コード情報を収集する
 	*/
-	void ScanCode( const char *, const int );
+	void ScanCode(const char*, const int);
 
-	void GetEncodingInfo_sjis( const char *, const int );
-	void GetEncodingInfo_jis( const char *, const int );
-	void GetEncodingInfo_eucjp( const char *, const int );
-	void GetEncodingInfo_utf8( const char *, const int );
-	void GetEncodingInfo_utf7( const char *, const int );
-	void GetEncodingInfo_cesu8( const char *, const int );
-	void GetEncodingInfo_uni( const char *, const int );
-	void GetEncodingInfo_latin1( const char *, const int );
+	void GetEncodingInfo_sjis(const char*, const int);
+	void GetEncodingInfo_jis(const char*, const int);
+	void GetEncodingInfo_eucjp(const char*, const int);
+	void GetEncodingInfo_utf8(const char*, const int);
+	void GetEncodingInfo_utf7(const char*, const int);
+	void GetEncodingInfo_cesu8(const char*, const int);
+	void GetEncodingInfo_uni(const char*, const int);
+	void GetEncodingInfo_latin1(const char*, const int);
 
 
-	bool _CheckUtf16Eol( const char* pS, const int nLen, const bool bbig_endian );
-	inline bool _CheckUtf16EolLE( const char* p, const int n ) { return _CheckUtf16Eol( p, n, false ); }
-	inline bool _CheckUtf16EolBE( const char* p, const int n ) { return _CheckUtf16Eol( p, n, true ); }
+	bool _CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian);
+	inline bool _CheckUtf16EolLE(const char* p, const int n) { return _CheckUtf16Eol(p, n, false); }
+	inline bool _CheckUtf16EolBE(const char* p, const int n) { return _CheckUtf16Eol(p, n, true); }
 
 public:
 	//
-	//	**** マルチバイト判定関係の変数その他
+	// **** マルチバイト判定関係の変数その他
 	//
 	static const int NUM_OF_MBCODE = (CODE_CODEMAX - 2);
 	MBCODE_INFO m_aMbcInfo[NUM_OF_MBCODE];   //!< SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
@@ -161,10 +161,10 @@ public:
 	int m_nMbcEucZen;                        //!< EUC 全角のバイト数
 
 	//! マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
-	void SortMBCInfo( void );
+	void SortMBCInfo(void);
 
 	//! EUC と SJIS が候補のトップ２に上がっているかどうか
-	bool IsAmbiguousEucAndSjis( void ) {
+	bool IsAmbiguousEucAndSjis(void) {
 		// EUC と SJIS がトップ2に上がった時
 		// かつ、EUC と SJIS のポイント数が同数のとき
 		if ((m_apMbcInfo[0]->eCodeID == CODE_SJIS && m_apMbcInfo[1]->eCodeID == CODE_EUC
@@ -178,7 +178,7 @@ public:
 	}
 
 	//! SJIS と UTF-8 が候補のトップ2に上がっているかどうか
-	bool IsAmbiguousUtf8AndCesu8( void ) {
+	bool IsAmbiguousUtf8AndCesu8(void) {
 		// UTF-8 と SJIS がトップ2に上がった時
 		// かつ、UTF-8 と SJIS のポイント数が同数のとき
 		if ((m_apMbcInfo[0]->eCodeID == CODE_UTF8 && m_apMbcInfo[1]->eCodeID == CODE_CESU8
@@ -192,8 +192,8 @@ public:
 	}
 
 protected:
-	void GuessEucOrSjis( void );	//!< EUC か SJIS かを判定
-	void GuessUtf8OrCesu8( void );	//!< UTF-8 か CESU-8 かを判定
+	void GuessEucOrSjis(void);	//!< EUC か SJIS かを判定
+	void GuessUtf8OrCesu8(void);	//!< UTF-8 か CESU-8 かを判定
 public:
 	//
 	// 	**** UTF-16 判定関係の変数その他
@@ -205,7 +205,7 @@ public:
 
 protected:
 	//! BOMの種類を推測して m_eWcBomType を設定
-	void GuessUtf16Bom( void );
+	void GuessUtf16Bom(void);
 
 
 public:
@@ -213,7 +213,7 @@ public:
 
 #ifdef _DEBUG
 public:
-	static void GetDebugInfo( const char*, const int, CNativeT* );
+	static void GetDebugInfo(const char*, const int, CNativeT*);
 #endif
 };
 

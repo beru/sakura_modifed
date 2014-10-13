@@ -586,7 +586,7 @@ UTF-8のエンコーディング
 
 	@date 2008/11/01 syat UTF8ファイルで欧米の特殊文字が読み込めない不具合を修正
 */
-int CheckUtf8Char(const char *pS, const int nLen, ECharSet *peCharset, const bool bAllow4byteCode, const int nOption)
+int CheckUtf8Char(const char* pS, const int nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
 {
 	unsigned char c0, c1, c2, c3;
 	int ncwidth;
@@ -697,7 +697,7 @@ EndFunc:
 	return ncwidth;
 }
 
-int CheckUtf8Char2(const char *pS, const int nLen, ECharSet *peCharset, const bool bAllow4byteCode, const int nOption)
+int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bool bAllow4byteCode, const int nOption)
 {
 	unsigned char c0, c1, c2;
 	int ncwidth;
@@ -933,7 +933,7 @@ EndFunc:;
 	戻り値と ppNextChar に格納されるポインタは使えない。
 	1つ以上のエラーが見つかれば候補から外れるのでそういう適当な仕様に。
 */
-int CheckUtf7DPart(const char *pS, const int nLen, char **ppNextChar, bool *pbError)
+int CheckUtf7DPart(const char* pS, const int nLen, char** ppNextChar, bool* pbError)
 {
 	const char *pr, *pr_end;
 	bool berror = false;
@@ -985,7 +985,7 @@ int CheckUtf7DPart(const char *pS, const int nLen, char **ppNextChar, bool *pbEr
 
 	@note この関数の前に CheckUtf7DPart() が実行される必要がある。
 */
-int CheckUtf7BPart(const char *pS, const int nLen, char **ppNextChar, bool *pbError, const int nOption)
+int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbError, const int nOption)
 {
 	const char *pr, *pr_end;
 	bool berror_found, bminus_found;
@@ -1044,7 +1044,7 @@ int CheckUtf7BPart(const char *pS, const int nLen, char **ppNextChar, bool *pbEr
 
 	上記３通りのいづれにも当てはまらない場合は全データを落とす（不正バイトとする）.
 	*/
-	const char *pr_ = pr - 1;
+	const char* pr_ = pr - 1;
 	switch(nchecklen % 8) {
 	case 0:
 		break;

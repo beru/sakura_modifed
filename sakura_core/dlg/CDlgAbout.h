@@ -41,7 +41,7 @@ protected:
 class CDlgAbout : public CDialog {
 public:
 	int DoModal(HINSTANCE, HWND);	// モーダルダイアログの表示
-	//	Nov. 7, 2000 genta	標準以外のメッセージを捕捉する
+	// Nov. 7, 2000 genta	標準以外のメッセージを捕捉する
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);
 protected:
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);

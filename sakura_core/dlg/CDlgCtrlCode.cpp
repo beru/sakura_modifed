@@ -87,7 +87,7 @@ struct ctrl_info_t {
 	{ 0x007f, 0x00bf, _T("DEL"), _T("")	}, // DELETE íœ
 
 	// internal data
-	{ 0x001f, 0x00df, _T("US"),  NULL }	// PC98 "_"  //unit separator (US)
+	{ 0x001f, 0x00df, _T("US"),  NULL }	// PC98 "_"  // unit separator (US)
 };
 // Feb. 12, 2003 MIK long‚ª”²‚¯‚Ä‚¢‚½
 

@@ -40,7 +40,7 @@ const DWORD p_helpids[] = {	//12900
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-//	From Here Feb. 7, 2002 genta
+// From Here Feb. 7, 2002 genta
 // 2006.01.17 Moca COMPILER_VERを追加
 // 2010.04.15 Moca icc/dmcを追加しCPUを分離
 #if defined(_M_IA64)
@@ -70,7 +70,7 @@ const DWORD p_helpids[] = {	//12900
 #  define COMPILER_TYPE "U"
 #  define COMPILER_VER 0
 #endif
-//	To Here Feb. 7, 2002 genta
+// To Here Feb. 7, 2002 genta
 
 #ifdef _UNICODE
 	#define TARGET_STRING_MODEL "W"
@@ -98,7 +98,7 @@ const DWORD p_helpids[] = {	//12900
 	#define MY_WIN32_WINNT 0
 #endif
 
-//	From Here Nov. 7, 2000 genta
+// From Here Nov. 7, 2000 genta
 /*!
 	標準以外のメッセージを捕捉する
 */
@@ -118,7 +118,7 @@ INT_PTR CDlgAbout::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
 	}
 	return result;
 }
-//	To Here Nov. 7, 2000 genta
+// To Here Nov. 7, 2000 genta
 
 // モーダルダイアログの表示
 int CDlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
@@ -144,11 +144,11 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	// Oct. 22, 2005 genta タイムスタンプ取得の共通関数利用
 
 	// バージョン情報
-	//	Nov. 6, 2000 genta	Unofficial Releaseのバージョンとして設定
-	//	Jun. 8, 2001 genta	GPL化に伴い、OfficialなReleaseとしての道を歩み始める
-	//	Feb. 7, 2002 genta コンパイラ情報追加
-	//	2004.05.13 Moca バージョン番号は、プロセスごとに取得する
-	//	2010.04.15 Moca コンパイラ情報を分離/WINヘッダ,N_SHAREDATA_VERSION追加
+	// Nov. 6, 2000 genta	Unofficial Releaseのバージョンとして設定
+	// Jun. 8, 2001 genta	GPL化に伴い、OfficialなReleaseとしての道を歩み始める
+	// Feb. 7, 2002 genta コンパイラ情報追加
+	// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
+	// 2010.04.15 Moca コンパイラ情報を分離/WINヘッダ,N_SHAREDATA_VERSION追加
 
 	// 以下の形式で出力
 	// サクラエディタ   Ver. 2.0.0.0 (Rev.9999)
@@ -218,8 +218,8 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	::DlgItem_SetText(GetHwnd(), IDC_EDIT_VER, cmemMsg.GetStringPtr());
 
-	//	From Here Jun. 8, 2001 genta
-	//	Edit Boxにメッセージを追加する．
+	// From Here Jun. 8, 2001 genta
+	// Edit Boxにメッセージを追加する．
 	// 2011.06.01 nasukoji	各国語メッセージリソース対応
 	LPCTSTR pszDesc = LS(IDS_ABOUT_DESCRIPTION);
 	if (_tcslen(pszDesc) > 0) {
@@ -227,22 +227,22 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		szMsg[_countof(szMsg) - 1] = 0;
 		::DlgItem_SetText(GetHwnd(), IDC_EDIT_ABOUT, szMsg);
 	}
-	//	To Here Jun. 8, 2001 genta
+	// To Here Jun. 8, 2001 genta
 
-	//	From Here Dec. 2, 2002 genta
-	//	アイコンをカスタマイズアイコンに合わせる
+	// From Here Dec. 2, 2002 genta
+	// アイコンをカスタマイズアイコンに合わせる
 	HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false);
 	HWND hIconWnd = GetDlgItem(GetHwnd(), IDC_STATIC_MYICON);
 	
 	if (hIconWnd != NULL && hIcon != NULL) {
 		StCtl_SetIcon(hIconWnd, hIcon);
 	}
-	//	To Here Dec. 2, 2002 genta
+	// To Here Dec. 2, 2002 genta
 
 	// URLウィンドウをサブクラス化する
 	m_UrlUrWnd.SetSubclassWindow(GetDlgItem(GetHwnd(), IDC_STATIC_URL_UR));
 
-	//	Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
+	// Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
 	//m_UrlOrgWnd.SubclassWindow(GetDlgItem(GetHwnd(), IDC_STATIC_URL_ORG));
 
 	// 基底クラスメンバ
@@ -268,10 +268,10 @@ BOOL CDlgAbout::OnBnClicked(int wID)
 BOOL CDlgAbout::OnStnClicked(int wID)
 {
 	switch (wID) {
-	//	2006.07.27 genta 原作者連絡先のボタンを削除 (ヘルプから削除されているため)
+	// 2006.07.27 genta 原作者連絡先のボタンを削除 (ヘルプから削除されているため)
 	case IDC_STATIC_URL_UR:
 //	case IDC_STATIC_URL_ORG:	del 2008/7/4 Uchi
-		//	Web Browserの起動
+		// Web Browserの起動
 		{
 			TCHAR buf[512];
 			::GetWindowText(::GetDlgItem(GetHwnd(), wID), buf, _countof(buf));

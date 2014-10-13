@@ -60,7 +60,7 @@ public:
 	/*
 	||  Constructors
 	*/
-	CMacro(EFunctionCode nFuncID);	//	機能IDを指定して初期化
+	CMacro(EFunctionCode nFuncID);	// 機能IDを指定して初期化
 	~CMacro();
 
 	void SetNext(CMacro* pNext) { m_pNext = pNext; }
@@ -96,9 +96,9 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	EFunctionCode	m_nFuncID;		//	機能ID
-	CMacroParam*	m_pParamTop;	//	パラメータ
+	EFunctionCode	m_nFuncID;		// 機能ID
+	CMacroParam*	m_pParamTop;	// パラメータ
 	CMacroParam*	m_pParamBot;
-	CMacro*			m_pNext;		//	次のマクロへのポインタ
+	CMacro*			m_pNext;		// 次のマクロへのポインタ
 };
 

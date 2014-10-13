@@ -311,7 +311,7 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoCommandArr[] =
 	{F_TEXTWRAPMETHOD,			LTEXT("TextWrapMethod"),	{VT_I4,    VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // テキストの折り返し方法	// 2008.05.30 nasukoji
 	{F_SELECT_COUNT_MODE,		LTEXT("SelectCountMode"),	{VT_I4,    VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // テキストの折り返し方法	// 2008.05.30 nasukoji
 
-	//	Oct. 9, 2001 genta 追加
+	// Oct. 9, 2001 genta 追加
 	{F_EXECMD,					LTEXT("ExecCommand"),		{VT_BSTR,  VT_I4,    VT_BSTR,  VT_EMPTY},	VT_EMPTY,	NULL}, // 外部コマンド実行
 	{F_EXECMD_DIALOG,		LTEXT("ExecCommandDialog"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部コマンド実行(ダイアログ)
 
@@ -380,7 +380,7 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoCommandArr[] =
 	{F_HELP_SEARCH,				LTEXT("HelpSearch"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // ヘルプキーワード検索	//Nov. 25, 2000 JEPRO 追加
 	{F_MENU_ALLFUNC,			LTEXT("CommandList"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // コマンド一覧
 	{F_EXTHELP1,				LTEXT("ExtHelp1"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部ヘルプ１
-	//	Jul. 5, 2002 genta 引数追加
+	// Jul. 5, 2002 genta 引数追加
 	{F_EXTHTMLHELP,				LTEXT("ExtHtmlHelp"),		{VT_BSTR,  VT_BSTR,  VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部HTMLヘルプ
 	{F_ABOUT,					LTEXT("About"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // バージョン情報	//Dec. 24, 2000 JEPRO 追加
 
@@ -393,10 +393,10 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoCommandArr[] =
 	{F_APPENDUNDOBUFFERCURSOR,	L"AppendUndoBufferCursor",	{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // OpeBlK にカーソル位置を追加
 	{F_CLIPBOARDEMPTY,			LTEXT("ClipboardEmpty"),	{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL},
 
-	//	終端
-	//	Jun. 27, 2002 genta
-	//	終端としては決して現れないものを使うべきなので，
-	//	FuncIDを-1に変更．(0は使われる)
+	// 終端
+	// Jun. 27, 2002 genta
+	// 終端としては決して現れないものを使うべきなので，
+	// FuncIDを-1に変更．(0は使われる)
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
@@ -459,10 +459,10 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoArr[] =
 	{F_GETCLIPBOARDBYFORMAT,	L"GetClipboardByFormat",	{VT_BSTR,  VT_I4,    VT_I4,    VT_EMPTY},	VT_BSTR,	NULL }, // クリップボードの指定形式で取得
 	{F_SETCLIPBOARDBYFORMAT,	L"SetClipboardByFormat",	{VT_BSTR,  VT_BSTR,  VT_I4,    VT_I4,    },	VT_I4,		NULL }, // クリップボードの指定形式で設定
 
-	//	終端
-	//	Jun. 27, 2002 genta
-	//	終端としては決して現れないものを使うべきなので，
-	//	FuncIDを-1に変更．(0は使われる)
+	// 終端
+	// Jun. 27, 2002 genta
+	// 終端としては決して現れないものを使うべきなので，
+	// FuncIDを-1に変更．(0は使われる)
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
@@ -484,11 +484,11 @@ CSMacroMgr::CSMacroMgr()
 	for (int i = 0 ; i < MAX_CUSTMACRO ; i++) {
 		m_cSavedKeyMacro[i] = NULL;
 	}
-	//	Jun. 16, 2002 genta
+	// Jun. 16, 2002 genta
 	m_pKeyMacro = NULL;
 	m_pTempMacro = NULL;
 
-	//	Sep. 15, 2005 FILE
+	// Sep. 15, 2005 FILE
 	SetCurrentIdx(INVALID_MACRO_IDX);
 }
 
@@ -497,19 +497,19 @@ CSMacroMgr::~CSMacroMgr()
 	//- 20011229 add by aroka
 	ClearAll();
 	
-	//	Jun. 16, 2002 genta
-	//	ClearAllと同じ処理だったので削除
+	// Jun. 16, 2002 genta
+	// ClearAllと同じ処理だったので削除
 }
 
 //! キーマクロのバッファをクリアする
 void CSMacroMgr::ClearAll(void)
 {
 	for (int i = 0; i < MAX_CUSTMACRO; i++) {
-		//	Apr. 29, 2002 genta
+		// Apr. 29, 2002 genta
 		delete m_cSavedKeyMacro[i];
 		m_cSavedKeyMacro[i] = NULL;
 	}
-	//	Jun. 16, 2002 genta
+	// Jun. 16, 2002 genta
 	delete m_pKeyMacro;
 	m_pKeyMacro = NULL;
 	delete m_pTempMacro;
@@ -533,9 +533,9 @@ int CSMacroMgr::Append(
 	if (idx == STAND_KEYMACRO) {
 		CKeyMacroMgr* pKeyMacro = dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro);
 		if (!pKeyMacro) {
-			//	1. 実体がまだ無い場合
-			//	2. CKeyMacroMgr以外の物が入っていた場合
-			//	いずれにしても再生成する．
+			// 1. 実体がまだ無い場合
+			// 2. CKeyMacroMgr以外の物が入っていた場合
+			// いずれにしても再生成する．
 			delete m_pKeyMacro;
 			m_pKeyMacro = new CKeyMacroMgr;
 			pKeyMacro = dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro);
@@ -561,11 +561,11 @@ int CSMacroMgr::Append(
 BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int flags)
 {
 	if (idx == STAND_KEYMACRO) {
-		//	Jun. 16, 2002 genta
-		//	キーマクロ以外のサポートによりNULLの可能性が出てきたので判定追加
+		// Jun. 16, 2002 genta
+		// キーマクロ以外のサポートによりNULLの可能性が出てきたので判定追加
 		if (m_pKeyMacro != NULL) {
-			//	Sep. 15, 2005 FILE
-			//	Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
+			// Sep. 15, 2005 FILE
+			// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 			int prevmacro = SetCurrentIdx(idx);
 			m_pKeyMacro->ExecKeyMacro2(pcEditView, flags);
 			SetCurrentIdx(prevmacro);
@@ -584,15 +584,15 @@ BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int 
 			return FALSE;
 		}
 	}
-	if (idx < 0 || MAX_CUSTMACRO <= idx)	//	範囲チェック
+	if (idx < 0 || MAX_CUSTMACRO <= idx)	// 範囲チェック
 		return FALSE;
 
 	// 読み込み前か、毎回読み込む設定の場合は、ファイルを読み込みなおす
-	//	Apr. 29, 2002 genta
+	// Apr. 29, 2002 genta
 	if (!m_cSavedKeyMacro[idx] || CShareData::getInstance()->BeReloadWhenExecuteMacro(idx)) {
-		//	CShareDataから、マクロファイル名を取得
-		//	Jun. 08, 2003 Moca 呼び出し側でパス名を用意
-		//	Jun. 16, 2003 genta 書式をちょっと変更
+		// CShareDataから、マクロファイル名を取得
+		// Jun. 08, 2003 Moca 呼び出し側でパス名を用意
+		// Jun. 16, 2003 genta 書式をちょっと変更
 		TCHAR ptr[_MAX_PATH * 2];
 		int n = CShareData::getInstance()->GetMacroFilename(idx, ptr, _countof(ptr));
 		if  (n <= 0) {
@@ -604,8 +604,8 @@ BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int 
 		}
 	}
 
-	//	Sep. 15, 2005 FILE
-	//	Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
+	// Sep. 15, 2005 FILE
+	// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 	int prevmacro = SetCurrentIdx(idx);
 	SetCurrentIdx(idx);
 	m_cSavedKeyMacro[idx]->ExecKeyMacro2(pcEditView, flags);
@@ -644,8 +644,8 @@ BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const 
 		// Feb. 02, 2004 genta .が無い場合にext==NULLとなるのでNULLチェック追加
 		if (ext != NULL) {
 			const TCHAR* chk = _tcsrchr(ext, _T('\\'));
-			if (chk != NULL) {	//	.のあとに\があったらそれは拡張子の区切りではない
-								//	\が漢字の2バイト目の場合も拡張子ではない。
+			if (chk != NULL) {	// .のあとに\があったらそれは拡張子の区切りではない
+								// \が漢字の2バイト目の場合も拡張子ではない。
 				ext = NULL;
 			}
 		}
@@ -679,7 +679,7 @@ BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const 
 		delete *ppMacro;
 		*ppMacro = NULL;
 	}
-	//	To Here Jun. 16, 2002 genta
+	// To Here Jun. 16, 2002 genta
 	return FALSE;
 }
 
@@ -715,8 +715,8 @@ BOOL CSMacroMgr::Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath)
 		if (pKeyMacro != NULL) {
 			return pKeyMacro->SaveKeyMacro(hInstance, pszPath);
 		}
-		//	Jun. 27, 2002 genta
-		//	空マクロの場合は正常終了と見なす．
+		// Jun. 27, 2002 genta
+		// 空マクロの場合は正常終了と見なす．
 		if (!m_pKeyMacro) {
 			return TRUE;
 		}
@@ -806,7 +806,7 @@ WCHAR* CSMacroMgr::GetFuncInfoByID(
 				p++;
 			}
 		}
-		//	Jun. 16, 2002 genta NULLのときは何もしない．
+		// Jun. 16, 2002 genta NULLのときは何もしない．
 		if (pszFuncNameJapanese != NULL) {
 			wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 		}
@@ -832,10 +832,10 @@ EFunctionCode CSMacroMgr::GetFuncInfoByName(
 	WCHAR*			pszFuncNameJapanese		//!< [out] 機能名日本語．この先には256バイトのメモリが必要．
 )
 {
-	//	Jun. 16, 2002 genta
+	// Jun. 16, 2002 genta
 	const WCHAR* normalizedFuncName;
 	
-	//	S_で始まっているか
+	// S_で始まっているか
 	if (!pszFuncName) {
 		return F_INVALID;
 	}

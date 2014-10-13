@@ -158,7 +158,7 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 		//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_DIFF_DST), TRUE);
 		//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_DIFF_DST), TRUE);
 		//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LIST_DIFF_FILES), FALSE);
-		//	Feb. 28, 2004 genta 選択解除前に前回の位置を記憶
+		// Feb. 28, 2004 genta 選択解除前に前回の位置を記憶
 		{
 			int n = List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_DIFF_FILES));
 			if (n != LB_ERR) {
@@ -174,8 +174,8 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 		//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_DIFF_DST), FALSE);
 		//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LIST_DIFF_FILES), TRUE);
 		{
-			//	Aug. 9, 2003 genta
-			//	ListBoxが選択されていなかったら，先頭のファイルを選択する．
+			// Aug. 9, 2003 genta
+			// ListBoxが選択されていなかったら，先頭のファイルを選択する．
 			HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_DIFF_FILES);
 			if (List_GetCurSel(hwndList) == LB_ERR) {
 				List_SetCurSel(hwndList, m_nIndexSave);
@@ -315,8 +315,8 @@ void CDlgDiff::SetData(void)
 			//List_SetCurSel(hwndList, 0);
 		}
 
-		//	From Here 2004.02.22 じゅうじ
-		//	開いているファイルがある場合には初期状態でそちらを優先
+		// From Here 2004.02.22 じゅうじ
+		// 開いているファイルがある場合には初期状態でそちらを優先
 		if (count == 0) {
 			// 相手ファイルの選択
 			::CheckDlgButton(GetHwnd(), IDC_RADIO_DIFF_DST1, TRUE);
@@ -433,7 +433,7 @@ BOOL CDlgDiff::OnEnChange(HWND hwndCtl, int wID)
 	if (hwndEdit == hwndCtl) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_DIFF_DST1, TRUE);
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_DIFF_DST2, FALSE);
-		//	Feb. 28, 2004 genta 選択解除前に前回の位置を記憶して選択解除
+		// Feb. 28, 2004 genta 選択解除前に前回の位置を記憶して選択解除
 		int n = List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_DIFF_FILES));
 		if (n != LB_ERR) {
 			m_nIndexSave = n;

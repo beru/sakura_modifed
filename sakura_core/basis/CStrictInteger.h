@@ -106,10 +106,10 @@ public:
 	Me operator % (const Me& rhs)	const { Me ret = *this; return ret %= rhs; }
 
 	// 算術演算子３
-	int operator ++ ()   { return ++m_value; }	//++c;
-	int operator ++ (int) { return m_value++; }	//c++;
-	int operator -- ()   { return --m_value; }	//--c;
-	int operator -- (int) { return m_value--; }	//c--;
+	int operator ++ ()   { return ++m_value; }	// ++c;
+	int operator ++ (int) { return m_value++; }	// c++;
+	int operator -- ()   { return --m_value; }	// --c;
+	int operator -- (int) { return m_value--; }	// c--;
 
 	// 算術演算子４
 	Me operator - () const { return Me(-m_value); }
@@ -196,7 +196,7 @@ private:
 public:
 	operator CastIntegerType() const { return m_value; }
 private:
-	//※ALLOW_CAST_INTがfalseの場合は、privateメンバを置くことにより、「明示的に」暗黙変換を禁止する。
+	// ※ALLOW_CAST_INTがfalseの場合は、privateメンバを置くことにより、「明示的に」暗黙変換を禁止する。
 	operator NotCastIntegerType() const;
 
 

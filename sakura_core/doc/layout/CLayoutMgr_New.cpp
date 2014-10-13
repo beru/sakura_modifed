@@ -82,7 +82,7 @@ bool CLayoutMgr::IsKinsokuPosHead(
 	// 2  "る)" : 21 ")"で折り返しのとき
 	// 1   "Z）": 12 "）"で折り返しのとき
 	// 1   "Z)" : 11 ")"で折り返しのとき
-	//↑何文字前か？
+	// ↑何文字前か？
 	// ※ただし、"るZ"部分が禁則なら処理しない。
 	case 3:	// 3文字前
 		if (nCharKetas == 2 && nCharKetas2 == 2) {
@@ -171,13 +171,13 @@ CLayoutInt CLayoutMgr::getIndentOffset_Normal(CLayout*)
 */
 CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
 {
-	//	前の行が無いときは、インデント不要。
+	// 前の行が無いときは、インデント不要。
 	if (!pLayoutPrev) {
 		return CLayoutInt(0);
 	}
 	CLayoutInt nIpos = pLayoutPrev->GetIndent();
 
-	//	前の行が折り返し行ならばそれに合わせる
+	// 前の行が折り返し行ならばそれに合わせる
 	if (pLayoutPrev->GetLogicOffset() > 0) {
 		return nIpos;
 	}
@@ -194,7 +194,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
 		nIpos = t_max(CLayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
-	return nIpos;	//	インデント
+	return nIpos;	// インデント
 }
 
 /*!
@@ -210,54 +210,54 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
 */
 CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
 {
-	//	前の行が無いときは、インデント不要。
+	// 前の行が無いときは、インデント不要。
 	if (!pLayoutPrev) {
 		return CLayoutInt(0);
 	}
-	//	インデントの計算
+	// インデントの計算
 	CLayoutInt nIpos = pLayoutPrev->GetIndent();
 	
-	//	Oct. 5, 2002 genta
-	//	折り返しの3行目以降は1つ前の行のインデントに合わせる．
+	// Oct. 5, 2002 genta
+	// 折り返しの3行目以降は1つ前の行のインデントに合わせる．
 	if (pLayoutPrev->GetLogicOffset() > 0) {
 		return nIpos;
 	}
 	
-	//	2002.10.07 YAZAKI インデントの計算
+	// 2002.10.07 YAZAKI インデントの計算
 	CMemoryIterator it(pLayoutPrev, GetTabSpace());
 
-	//	Jul. 20, 2003 genta 自動インデントに準じた動作にする
+	// Jul. 20, 2003 genta 自動インデントに準じた動作にする
 	bool bZenSpace = m_pTypeConfig->m_bAutoIndent_ZENSPACE;
 	const wchar_t* szSpecialIndentChar = m_pTypeConfig->m_szIndentChars;
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndexDelta() == 1 && WCODE::IsIndentChar(it.getCurrentChar(), bZenSpace)) {
-			//	インデントのカウントを継続する
-		//	Jul. 20, 2003 genta インデント対象文字
+			// インデントのカウントを継続する
+		// Jul. 20, 2003 genta インデント対象文字
 		}else if (szSpecialIndentChar[0] != L'\0') {
 			wchar_t buf[3]; // 文字の長さは1 or 2
 			wmemcpy(buf, it.getCurrentPos(), it.getIndexDelta());
 			buf[ it.getIndexDelta() ] = L'\0';
 			if (wcsstr(szSpecialIndentChar, buf)) {
-				//	インデントのカウントを継続する
+				// インデントのカウントを継続する
 			}else {
-				nIpos = it.getColumn();	//	終了
+				nIpos = it.getColumn();	// 終了
 				break;
 			}
 		}else {
-			nIpos = it.getColumn();	//	終了
+			nIpos = it.getColumn();	// 終了
 			break;
 		}
 		it.addDelta();
 	}
 	if (it.end()) {
-		nIpos = it.getColumn();	//	終了
+		nIpos = it.getColumn();	// 終了
 	}
 	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
 		nIpos = t_max(CLayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
-	return nIpos;	//	インデント
+	return nIpos;	// インデント
 }
 
 /*!
