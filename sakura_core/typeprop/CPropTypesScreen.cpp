@@ -751,7 +751,7 @@ void CPropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
 	method.nMethod = (EOutlineType)nMethod;
 	method.nNameId = 0;
 	const TCHAR* tszName = to_tchar(szName);
-	TCHAR* pszName = new TCHAR[ _tcslen(tszName) + 1 ];
+	TCHAR* pszName = new TCHAR[_tcslen(tszName) + 1];
 	_tcscpy(pszName, tszName);
 	method.pszName = pszName;
 	m_OlmArr.push_back(method);
@@ -779,7 +779,7 @@ void CPropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
 	method.nMethod = (ESmartIndentType)nMethod;
 	method.nNameId = 0;
 	const TCHAR* tszName = to_tchar(szName);
-	TCHAR* pszName = new TCHAR[ _tcslen(tszName) + 1 ];
+	TCHAR* pszName = new TCHAR[_tcslen(tszName) + 1];
 	_tcscpy(pszName, tszName);
 	method.pszName = pszName;
 	m_SIndentArr.push_back(method);

@@ -41,9 +41,9 @@ static CMutex g_cDocTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 CTypeConfig CDocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 {
 	if (pszFilePath && pszFilePath[0]) {
-		TCHAR	szExt[_MAX_EXT];
-		TCHAR	szName[_MAX_FNAME];
-		TCHAR*	pszExt = szExt;
+		TCHAR szExt[_MAX_EXT];
+		TCHAR szName[_MAX_FNAME];
+		TCHAR* pszExt = szExt;
 		_tsplitpath(pszFilePath, NULL, NULL, szName, szExt);
 		// 2èdägí£éqíTçı
 		TCHAR* pFileExt = _tcschr(szName, '.');
@@ -76,9 +76,9 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 */
 CTypeConfig CDocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 {
-	static const TCHAR	pszSeps[] = _T(" ;,");	// separator
+	static const TCHAR pszSeps[] = _T(" ;,");	// separator
 
-	TCHAR	szText[MAX_TYPES_EXTS];
+	TCHAR szText[MAX_TYPES_EXTS];
 
 	for (int i = 0; i < m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;

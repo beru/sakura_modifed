@@ -308,7 +308,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 			return TRUE;
 		case TVN_ENDLABELEDIT:		//	アイテムの編集が終了
  			if (pNMHDR->hwndFrom == hwndTreeRes 
-			  && msMenu[ ptdi->item.lParam ].m_bIsNode) {
+			  && msMenu[ptdi->item.lParam].m_bIsNode) {
 				// ノード有効
 				pFuncWk = &msMenu[ptdi->item.lParam];
 				std::wstring strNameOld = pFuncWk->m_sName;

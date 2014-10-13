@@ -171,7 +171,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_INS:	// 挿入
 			{
 				//挿入するキー情報を取得する。
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
 				if (szKeyWord[0] == _T('\0')) {
@@ -216,7 +216,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_ADD:	// 追加
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				//最後のキー番号を取得する。
 				nIndex = ListView_GetItemCount(hwndList);
 				//追加するキー情報を取得する。
@@ -256,7 +256,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_UPD:	// 更新
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				//選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
@@ -310,7 +310,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_TOP:	// 先頭
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				//選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
@@ -344,7 +344,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_LAST:	// 最終
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
@@ -377,7 +377,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_UP:	// 上へ
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
@@ -414,7 +414,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 
 			case IDC_BUTTON_REGEX_DOWN:	// 下へ
 			{
-				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
@@ -502,7 +502,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				}
 				if (nPrevIndex != nIndex) {	//@@@ 2003.03.26 MIK
 					//更新時にListViewのSubItemを正しく取得できないので、その対策
-					auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+					auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 					szKeyWord[0] = _T('\0');
 					ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
 					ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
@@ -625,7 +625,7 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 	HWND	hwndList;
 	int	nIndex, i, j;
 	const int szKeyWordSize = _countof(m_Types.m_RegexKeywordList) * 2 + 1;
-	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ szKeyWordSize ]);
+	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [szKeyWordSize]);
 	TCHAR	szColorIndex[256];
 
 	//使用する・使用しない
@@ -710,7 +710,7 @@ bool CPropTypesRegex::CheckKeywordList(HWND hwndDlg, const TCHAR* szNewKeyWord, 
 	const int nKeyWordSize = MAX_REGEX_KEYWORDLEN;
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 	int  nIndex  = ListView_GetItemCount(hwndList);
-	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [ nKeyWordSize ]);
+	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 	int nKeywordLen = auto_strlen(to_wchar(szNewKeyWord)) + 1;
 	for (int i = 0; i < nIndex; i++) {
 		if (i != nUpdateItem) {

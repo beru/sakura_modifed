@@ -357,7 +357,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
  */
 int GetColorIndexByName(const TCHAR* name)
 {
-	for (int i=0; i < COLORIDX_LAST; i++) {
+	for (int i = 0; i < COLORIDX_LAST; i++) {
 		if (_tcscmp(name, g_ColorAttributeArr[i].szName) == 0) return i;
 	}
 	return -1;

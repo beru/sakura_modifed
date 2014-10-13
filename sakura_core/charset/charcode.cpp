@@ -157,7 +157,7 @@ namespace WCODE
 			DeleteDC(m_hdc);
 		}
 		// 再初期化
-		void Init(const LOGFONT &lf)
+		void Init(const LOGFONT& lf)
 		{
 			if (m_hFontOld != NULL) {
 				m_hFontOld = (HFONT)SelectObject(m_hdc, m_hFontOld);
@@ -184,7 +184,7 @@ namespace WCODE
 			memset(m_pCache->m_bCharWidthCache, 0, sizeof(m_pCache->m_bCharWidthCache));
 			m_pCache->m_nCharWidthCacheTest = 0x12345678;
 		}
-		bool IsSameFontFace(const LOGFONT &lf)
+		bool IsSameFontFace(const LOGFONT& lf)
 		{
 			assert(m_pCache != 0);
 			return (memcmp(m_pCache->m_lfFaceName, lf.lfFaceName, sizeof(lf.lfFaceName)) == 0);
@@ -241,7 +241,7 @@ namespace WCODE
 				m_parCache[i] = 0;
 			}
 		}
-		void Init(const LOGFONT &lf, ECharWidthFontMode fMode)
+		void Init(const LOGFONT& lf, ECharWidthFontMode fMode)
 	 	{
 			// Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
 			m_localcache[fMode].Init(lf);
@@ -294,7 +294,7 @@ namespace WCODE
 }
 
 // 文字幅の動的計算用キャッシュの初期化。	2007/5/18 Uchi
-void InitCharWidthCache(const LOGFONT &lf, ECharWidthFontMode fMode)
+void InitCharWidthCache(const LOGFONT& lf, ECharWidthFontMode fMode)
 {
 	WCODE::selector.Init(lf, fMode);
 }

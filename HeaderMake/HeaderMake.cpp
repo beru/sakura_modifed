@@ -150,7 +150,7 @@ int main(int argc,char* argv[])
 	const char* out_file = NULL;
 	const char* mode_name = NULL;
 	const char* enum_name = "";
-	for(int i=1; i<argc; i++){
+	for (int i=1; i<argc; i++){
 		char* p = argv[i];
 		if (*p == '/') *p = '-';
 		if (strncmp(p, "-in", 3) == 0) {

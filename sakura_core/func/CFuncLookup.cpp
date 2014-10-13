@@ -116,10 +116,10 @@ bool CFuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 		if (m_pMacroRec[position].IsEnabled()) {
 			const TCHAR* p = m_pMacroRec[position].GetTitle();
 			_tcstowcs(ptr, p, bufsize - 1);
-			ptr[ bufsize - 1 ] = LTEXT('\0');
+			ptr[bufsize - 1] = LTEXT('\0');
 		}else {
 			_snwprintf(ptr, bufsize, LSW(STR_ERR_DLGFUNCLKUP03), position);
-			ptr[ bufsize - 1 ] = LTEXT('\0');
+			ptr[bufsize - 1] = LTEXT('\0');
 		}
 		return true;
 	}else if (funccode == F_MENU_RBUTTON) {
@@ -255,9 +255,9 @@ const WCHAR* CFuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) con
 		return NULL;
 
 	// 共通設定で名称を設定していればそれを返す
-	if (m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ][0] != '\0') {
-		wcscpyn(buf, m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ], bufSize);
-		return m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[ index ];
+	if (m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[index][0] != '\0') {
+		wcscpyn(buf, m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[index], bufSize);
+		return m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[index];
 	}
 
 	// 共通設定で未設定の場合、リソースのデフォルト名を返す

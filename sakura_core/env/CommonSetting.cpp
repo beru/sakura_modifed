@@ -29,7 +29,7 @@ using namespace std;
 
 // CommonValue管理
 struct CommonValueInfo {
-	enum EType{
+	enum EType {
 		TYPE_UNKNOWN,
 		TYPE_ASTR,    // char文字列 (終端NULL)
 		TYPE_WSTR,    // wchar_t文字列 (終端NULL)
@@ -87,8 +87,7 @@ public:
 	CommonValue()
 	{
 	}
-	void Regist(const char* szEntryKey)
-	{
+	void Regist(const char* szEntryKey) {
 		// CommonValueリストに自分を追加
 		g_commonvalues.push_back(CommonValueInfo(&m_value, sizeof(m_value), szEntryKey));
 	}

@@ -34,9 +34,10 @@
 
 CRecentExceptMRU::CRecentExceptMRU()
 {
+	auto& exceptMRU = GetShareData()->m_sHistory.m_aExceptMRU;
 	Create(
-		GetShareData()->m_sHistory.m_aExceptMRU.dataPtr(),
-		&GetShareData()->m_sHistory.m_aExceptMRU._GetSizeRef(),
+		exceptMRU.dataPtr(),
+		&exceptMRU._GetSizeRef(),
 		NULL,
 		MAX_MRU,
 		NULL

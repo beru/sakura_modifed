@@ -102,9 +102,9 @@ void CViewCommander::Command_FILEOPEN(const WCHAR* filename, ECodeType nCharCode
 		nCharCode = CODE_AUTODETECT;
 	}
 	// ロード情報
-	SLoadInfo sLoadInfo(filename?to_tchar(filename):_T(""), nCharCode, bViewMode);
+	SLoadInfo sLoadInfo(filename ? to_tchar(filename) : _T(""), nCharCode, bViewMode);
 	std::vector<std::tstring> files;
-	std::tstring defName = (defaultName?to_tchar(defaultName):_T(""));
+	std::tstring defName = (defaultName ? to_tchar(defaultName) : _T(""));
 
 	// 必要であれば「ファイルを開く」ダイアログ
 	if (!sLoadInfo.cFilePath.IsValidPath()) {

@@ -289,10 +289,10 @@ void CPropBackup::SetData(HWND hwndDlg)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder);
 
 	// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
-	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, csBackup.m_bBackUpDustBox?BST_CHECKED:BST_UNCHECKED);	//@@@ 2001.12.11 add MIK
+	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX, csBackup.m_bBackUpDustBox ? BST_CHECKED : BST_UNCHECKED);	//@@@ 2001.12.11 add MIK
 
 	// バックアップ先フォルダを詳細設定する // 20051107 aroka
-	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_ADVANCED, csBackup.m_bBackUpPathAdvanced?BST_CHECKED:BST_UNCHECKED);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUP_ADVANCED, csBackup.m_bBackUpPathAdvanced ? BST_CHECKED : BST_UNCHECKED);
 
 	// バックアップを作成するフォルダの詳細設定 // 20051107 aroka
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.m_szBackUpPathAdvanced);

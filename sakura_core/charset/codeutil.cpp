@@ -254,7 +254,7 @@ unsigned int __fastcall SjisFilter_basis(const unsigned int uCode)
 	}
 
 	if (nleft <= nright) {
-		return TABLE_SjisPoorcodeDef[ TABLE_SjisPoorcodeIndex[ni][1] ];
+		return TABLE_SjisPoorcodeDef[TABLE_SjisPoorcodeIndex[ni][1]];
 	}
 	return uCode;
 }

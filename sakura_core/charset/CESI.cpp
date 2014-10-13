@@ -253,7 +253,7 @@ void CESI::GetEncodingInfo_jis(const char* pS, const int nLen)
 	const char* pr_next;
 	int nlen, nerror;
 	do {
-		switch(emyjisesc) {
+		switch (emyjisesc) {
 		case MYJISESC_ASCII7:
 			nlen = CheckJisAscii7Part(pr, pr_end - pr, &pr_next, &emyjisesc, &nerror);
 			break;

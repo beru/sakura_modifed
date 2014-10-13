@@ -25,7 +25,7 @@
 
 #include "CRecentImp.h"
 #include "util/StaticType.h"
-#include "config/maxdata.h" //MAX_CMDLEN
+#include "config/maxdata.h" // MAX_CMDLEN
 
 typedef StaticString<TCHAR, MAX_CMDLEN> CCmdString;
 

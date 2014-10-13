@@ -80,7 +80,7 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 	pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	pw = reinterpret_cast<unsigned short*>(pDst);
 
-	for(; pr < pr_end; pr++) {
+	for (; pr < pr_end; pr++) {
 		if (*pr >= 0x80 && *pr <= 0x9f) {
 			// Windows 拡張部
 			nret = ::MultiByteToWideChar(1252, 0, reinterpret_cast<const char*>(pr), 1, reinterpret_cast<wchar_t*>(pw), 4);
@@ -111,9 +111,9 @@ EConvertResult CLatin1::Latin1ToUnicode(CMemory* pMem)
 
 	// 変換先バッファサイズを設定してメモリ領域確保
 	wchar_t* pDst;
-	try{
+	try {
 		pDst = new wchar_t[nSrcLen];
-	}catch(...) {
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {
@@ -166,7 +166,7 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
-		switch(echarset) {
+		switch (echarset) {
 		case CHARSET_UNI_NORMAL:
 			nclen = 1;
 			break;
@@ -218,9 +218,9 @@ EConvertResult CLatin1::UnicodeToLatin1(CMemory* pMem)
 
 	// 変換先バッファサイズを設定してバッファを確保
 	char* pDst;
-	try{
-		pDst = new char[ nSrcLen * 2 ];
-	}catch(...) {
+	try {
+		pDst = new char[nSrcLen * 2];
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {

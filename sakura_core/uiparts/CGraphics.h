@@ -170,7 +170,7 @@ public:
 		ClearBrush();
 		PushBrushColor(color);
 	}
-	HBRUSH GetCurrentBrush() const { return m_vBrushes.size()?m_vBrushes.back():NULL; }
+	HBRUSH GetCurrentBrush() const { return m_vBrushes.size() ? m_vBrushes.back() : NULL; }
 
 	// •`‰æ
 public:

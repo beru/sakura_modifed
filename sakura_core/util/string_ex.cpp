@@ -460,7 +460,7 @@ int _tctomb(const TCHAR* tc, ACHAR* mb)
 }
 int _tctowc(const TCHAR* tc, WCHAR* wc)
 {
-	return mbtowc(wc, tc, _IS_SJIS_1(tc[0])?2:1);
+	return mbtowc(wc, tc, _IS_SJIS_1(tc[0]) ? 2 : 1);
 }
 
 #endif

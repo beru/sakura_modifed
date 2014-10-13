@@ -528,13 +528,13 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 		return 0;
 
 	// 編集ウインドウリスト格納領域を作成する。
-	*ppEditNode = new EditNode[ sNodes.m_nEditArrNum ];
+	*ppEditNode = new EditNode[sNodes.m_nEditArrNum];
 	if (!(*ppEditNode))
 		return 0;
 
 	// 拡張リストを作成する
 	// ソート処理用の拡張リスト
-	EditNodeEx*	pNode = new EditNodeEx[ sNodes.m_nEditArrNum ];
+	EditNodeEx*	pNode = new EditNodeEx[sNodes.m_nEditArrNum];
 	if (!pNode) {
 		delete [](*ppEditNode);
 		*ppEditNode = NULL;
@@ -544,9 +544,9 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	int nRowNum = 0;	// 編集ウインドウ数
 	for (int i = 0; i < sNodes.m_nEditArrNum; i++) {
-		if (IsSakuraMainWindow(sNodes.m_pEditArr[ i ].m_hWnd)) {
-			pNode[ nRowNum ].p = &sNodes.m_pEditArr[ i ];	// ポインタ格納
-			pNode[ nRowNum ].nGroupMru = -1;	// グループ単位のMRU番号初期化
+		if (IsSakuraMainWindow(sNodes.m_pEditArr[i].m_hWnd)) {
+			pNode[nRowNum].p = &sNodes.m_pEditArr[i];	// ポインタ格納
+			pNode[nRowNum].nGroupMru = -1;	// グループ単位のMRU番号初期化
 			nRowNum++;
 		}
 	}
@@ -562,15 +562,15 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 		int iGroupMru = 0;	// グループ単位のMRU番号
 		int nGroup = -1;
 		for (int i = 0; i < nRowNum; i++) {
-			if (pNode[ i ].nGroupMru == -1 && nGroup != pNode[ i ].p->m_nGroup) {
-				nGroup = pNode[ i ].p->m_nGroup;
+			if (pNode[i].nGroupMru == -1 && nGroup != pNode[i].p->m_nGroup) {
+				nGroup = pNode[i].p->m_nGroup;
 				iGroupMru++;
-				pNode[ i ].nGroupMru = iGroupMru;	// MRU番号付与
+				pNode[i].nGroupMru = iGroupMru;	// MRU番号付与
 
 				// 同一グループのウィンドウに同じMRU番号をつける
 				for (int j = i + 1; j < nRowNum; j++) {
-					if (pNode[ j ].p->m_nGroup == nGroup)
-						pNode[ j ].nGroupMru = iGroupMru;
+					if (pNode[j].p->m_nGroup == nGroup)
+						pNode[j].nGroupMru = iGroupMru;
 				}
 			}
 		}
@@ -632,25 +632,25 @@ bool CAppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	int nArr0, nArr1;
 	int	nIndex;
 
-	nArr0 = p[ nDstTab ].m_nIndex;
+	nArr0 = p[nDstTab].m_nIndex;
 	auto& sNodes = pShare->m_sNodes;
-	nIndex = sNodes.m_pEditArr[ nArr0 ].m_nIndex;
+	nIndex = sNodes.m_pEditArr[nArr0].m_nIndex;
 	if (nSrcTab < nDstTab) {
 		// タブ左方向ローテート
 		for (int i = nDstTab - 1; i >= nSrcTab; i--) {
-			nArr1 = p[ i ].m_nIndex;
-			sNodes.m_pEditArr[ nArr0 ].m_nIndex = sNodes.m_pEditArr[ nArr1 ].m_nIndex;
+			nArr1 = p[i].m_nIndex;
+			sNodes.m_pEditArr[nArr0].m_nIndex = sNodes.m_pEditArr[nArr1].m_nIndex;
 			nArr0 = nArr1;
 		}
 	}else {
 		// タブ右方向ローテート
 		for (int i = nDstTab + 1; i <= nSrcTab; i++) {
-			nArr1 = p[ i ].m_nIndex;
-			sNodes.m_pEditArr[ nArr0 ].m_nIndex = sNodes.m_pEditArr[ nArr1 ].m_nIndex;
+			nArr1 = p[i].m_nIndex;
+			sNodes.m_pEditArr[nArr0].m_nIndex = sNodes.m_pEditArr[nArr1].m_nIndex;
 			nArr0 = nArr1;
 		}
 	}
-	sNodes.m_pEditArr[ nArr0 ].m_nIndex = nIndex;
+	sNodes.m_pEditArr[nArr0].m_nIndex = nIndex;
 
 	if (p) {
 		delete[] p;

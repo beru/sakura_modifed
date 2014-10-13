@@ -960,7 +960,7 @@ void CEditView::OnSize(int cx, int cy)
 	GetTextArea().TextArea_OnSize(
 		CMySize(cx, cy),
 		nCxVScroll,
-		m_hwndHScrollBar?nCyHScroll:0
+		m_hwndHScrollBar ? nCyHScroll : 0
 	);
 
 	// Ä•`‰æ—pƒƒ‚ƒŠ‚a‚l‚o
@@ -1423,7 +1423,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 			cmemBuf.GetStringPtr(),		// ‘}“ü‚·‚éƒf[ƒ^	 // 2002/2/10 aroka CMemory•ÏX
 			cmemBuf.GetStringLength(),	// ‘}“ü‚·‚éƒf[ƒ^‚Ì’·‚³ // 2002/2/10 aroka CMemory•ÏX
 			false,
-			m_bDoing_UndoRedo?NULL:m_cCommander.GetOpeBlk()
+			m_bDoing_UndoRedo ? NULL : m_cCommander.GetOpeBlk()
 		);
 
 		// From Here 2001.12.03 hor
@@ -1539,7 +1539,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 				}
 			}
 			if (!bMenuLoop) {
-				WCHAR buf[ MAX_CUSTOM_MENU_NAME_LEN + 1 ];
+				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 				LPCWSTR p = GetDocument()->m_cFuncLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
 				wchar_t keys[2];
 				keys[0] = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];

@@ -167,7 +167,7 @@ void CFuncInfoArr::SetAppendText(int info, std::wstring s, bool overwrite)
 	}else {
 		// キーが存在する場合、値を書き換える
 		if (overwrite) {
-			m_AppendTextArr[ info ] = s;
+			m_AppendTextArr[info] = s;
 		}
 	}
 }
@@ -179,7 +179,7 @@ std::wstring CFuncInfoArr::GetAppendText(int info)
 		return std::wstring();
 	}else {
 		// キーが存在する場合、値を返す
-		return m_AppendTextArr[ info ];
+		return m_AppendTextArr[info];
 	}
 }
 

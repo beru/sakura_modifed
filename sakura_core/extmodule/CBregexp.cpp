@@ -155,14 +155,14 @@ wchar_t* CBregexp::MakePatternSub(
 	int nLen = wcslen(szPattern);
 	if (!szPattern2) {
 		// 検索(BMatch)時
-		szNPattern = new wchar_t[ nLen + 15 ];	// 15：「s///option」が余裕ではいるように。
+		szNPattern = new wchar_t[nLen + 15];	// 15：「s///option」が余裕ではいるように。
 		pPat = szNPattern;
 		*pPat++ = L'm';
 	}else {
 		// 置換(BSubst)時
 		//!< szPattern2 + szAdd2 の長さ
 		int nLen2 = wcslen(szPattern2) + wcslen(szAdd2);
-		szNPattern = new wchar_t[ nLen + nLen2 + 15 ];
+		szNPattern = new wchar_t[nLen + nLen2 + 15];
 		pPat = szNPattern;
 		*pPat++ = L's';
 	}
@@ -351,7 +351,7 @@ wchar_t* CBregexp::MakePatternAlternate(const wchar_t* const szSearch, const wch
 		LARGEQ, // Q
 		LARGEE, // E
 		LBRCKT, // [
-		RBRCKT, // ]
+		RBRCKT, //]
 		ESCAPE, // '\\'
 		NUMBER_OF_CHARCLASS
 	};

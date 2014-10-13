@@ -25,8 +25,8 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 	auto pr_end = reinterpret_cast<const unsigned char*>(pSrc + nSrcLen);
 	auto pw = reinterpret_cast<unsigned short*>(pDst);
 
-	for(; (nclen = CheckEucjpChar(reinterpret_cast<const char*>(pr), pr_end - pr, &echarset)) != 0; pr += nclen) {
-		switch(echarset) {
+	for (; (nclen = CheckEucjpChar(reinterpret_cast<const char*>(pr), pr_end - pr, &echarset)) != 0; pr += nclen) {
+		switch (echarset) {
 		case CHARSET_ASCII7:
 			// 保護コード
 			if (nclen != 1) {
@@ -82,7 +82,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 
 	// 変換先バッファサイズとその確保
 	wchar_t* pDst;
-	try{
+	try {
 		pDst = new wchar_t[nSrcLen];
 	}catch(...) {
 		pDst = NULL;
@@ -122,7 +122,7 @@ int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 
 	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
-		switch(echarset) {
+		switch (echarset) {
 		case CHARSET_UNI_NORMAL:
 			nclen = 1;
 			break;
@@ -172,9 +172,9 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 
 	// 必要なバッファサイズを調べてメモリを確保
 	char* pDst;
-	try{
+	try {
 		pDst = new char[nSrcLen * 2];
-	}catch(...) {
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {

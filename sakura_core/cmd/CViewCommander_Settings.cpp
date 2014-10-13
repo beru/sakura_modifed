@@ -481,6 +481,6 @@ void CViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
 	wcsncpy(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou, quotestr,
 		_countof(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou));
 	
-	GetDllShareData().m_Common.m_sFormat.m_szInyouKigou[ _countof(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou) - 1 ] = L'\0';
+	GetDllShareData().m_Common.m_sFormat.m_szInyouKigou[_countof(GetDllShareData().m_Common.m_sFormat.m_szInyouKigou) - 1] = L'\0';
 }
 

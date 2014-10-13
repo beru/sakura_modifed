@@ -133,7 +133,7 @@ struct CommonSetting_Window {
 	BOOL			m_bSplitterWndVScroll;		// 分割ウィンドウの垂直スクロールの同期をとる 2001/06/20 asa-o
 
 	// タイトルバー
-	TCHAR			m_szWindowCaptionActive  [MAX_CAPTION_CONF_LEN];
+	TCHAR			m_szWindowCaptionActive[MAX_CAPTION_CONF_LEN];
 	TCHAR			m_szWindowCaptionInactive[MAX_CAPTION_CONF_LEN];
 
 	// INI内設定のみ
@@ -354,7 +354,7 @@ struct CommonSetting_Search {
 	SSearchOption	m_sSearchOption;			// 検索／置換  条件
 
 	int				m_nReplaceKeySequence;		// 置換後シーケンス(未保存)
-	int				m_bConsecutiveAll;			// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	int				m_bConsecutiveAll;			//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	int				m_bNOTIFYNOTFOUND;			// 検索／置換  見つからないときメッセージを表示
 	int				m_bSelectedArea;			// 置換  選択範囲内置換
 
@@ -391,8 +391,8 @@ struct CommonSetting_Search {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_KeyBind {
 	// キー割り当て
-	int					m_nKeyNameArrNum;			// キー割り当て表の有効データ数
-	KEYDATA				m_pKeyNameArr[100 + 1];		// キー割り当て表 // 未割り当てキーコード用にダミーを追加
+	int					m_nKeyNameArrNum;				// キー割り当て表の有効データ数
+	KEYDATA				m_pKeyNameArr[100 + 1];			// キー割り当て表 // 未割り当てキーコード用にダミーを追加
 	BYTE				m_VKeyToKeyNameArr[256 + 10];	// キーコード→割り当て表インデックス // 2012.11.25 aroka
 };
 

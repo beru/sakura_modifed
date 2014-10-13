@@ -43,7 +43,7 @@
 	@date 2004/06/21 V‹Kì¬
 	@date 2004/06/22 Moca ˆê”t‚É‚È‚Á‚½‚çˆê”ÔŒÃ‚¢î•ñ‚ðíœ‚µ‚»‚±‚ÉV‚µ‚¢î•ñ‚ð“ü‚ê‚é
 */
-void CTagJumpManager::PushTagJump(const TagJump *pTagJump)
+void CTagJumpManager::PushTagJump(const TagJump* pTagJump)
 {
 	int i = m_pShareData->m_sTagJump.m_TagJumpTop + 1;
 	if (MAX_TAGJUMPNUM <= i) {

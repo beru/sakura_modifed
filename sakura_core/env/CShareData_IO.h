@@ -25,9 +25,9 @@
 
 class CDataProfile;
 class CMenuDrawer;
-struct CommonSetting_CustomMenu; // defined CommonSetting.h
-struct CommonSetting_MainMenu; // defined CommonSetting.h
-struct CommonSetting_KeyBind;	// defined CommonSetting.h
+struct CommonSetting_CustomMenu;	// defined CommonSetting.h
+struct CommonSetting_MainMenu;		// defined CommonSetting.h
+struct CommonSetting_KeyBind;		// defined CommonSetting.h
 struct ColorInfo; // defined doc/CDocTypeSetting.h
 
 // 2008.XX.XX kobake CShareDataÇ©ÇÁï™ó£
@@ -58,9 +58,9 @@ protected:
 	static void ShareData_IO_Types(CDataProfile&);
 	static void ShareData_IO_KeyWords(CDataProfile&);
 	static void ShareData_IO_Macro(CDataProfile&);
-	static void ShareData_IO_Statusbar(CDataProfile&);	// 2008/6/21 Uchi
-	static void ShareData_IO_Plugin(CDataProfile&, CMenuDrawer*);		// 2009/11/30 syat
-	static void ShareData_IO_MainMenu(CDataProfile&);		// 2010/5/15 Uchi
+	static void ShareData_IO_Statusbar(CDataProfile&);				// 2008/6/21 Uchi
+	static void ShareData_IO_Plugin(CDataProfile&, CMenuDrawer*);	// 2009/11/30 syat
+	static void ShareData_IO_MainMenu(CDataProfile&);				// 2010/5/15 Uchi
 	static void ShareData_IO_Other(CDataProfile&);
 
 public:
@@ -68,8 +68,8 @@ public:
 
 public:
 	static void IO_CustMenu(CDataProfile&, CommonSetting_CustomMenu&, bool);
-	static void IO_KeyBind(CDataProfile&, CommonSetting_KeyBind&, bool);		// 2012.11.22 aroka
+	static void IO_KeyBind(CDataProfile&, CommonSetting_KeyBind&, bool);	// 2012.11.22 aroka
 	static void IO_MainMenu(CDataProfile&, CommonSetting_MainMenu&, bool);	// 2010/5/15 Uchi
-	static void IO_ColorSet(CDataProfile* , const WCHAR* , ColorInfo*);		// êFê›íË I/O // Feb. 12, 2006 D.S.Koba
+	static void IO_ColorSet(CDataProfile*, const WCHAR*, ColorInfo*);		// êFê›íË I/O // Feb. 12, 2006 D.S.Koba
 };
 

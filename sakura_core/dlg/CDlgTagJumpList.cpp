@@ -898,7 +898,7 @@ int CDlgTagJumpList::SearchBestTag(void)
 */
 void CDlgTagJumpList::FindNext(bool bNewFind)
 {
-	wchar_t	szKey[ MAX_TAG_STRING_LENGTH ];
+	wchar_t	szKey[MAX_TAG_STRING_LENGTH];
 	szKey[0] = 0;
 	::DlgItem_GetText(GetHwnd(), IDC_KEYWORD, szKey, _countof(szKey));
 	if (bNewFind) {
@@ -1018,7 +1018,7 @@ int CDlgTagJumpList::find_key_core(
 		ClearPrevFindInfo();
 		// ファイル名をコピーしたあと、ディレクトリ(最後\)のみにする
 		_tcscpy_s(state.m_szCurPath, GetFilePath());
-		state.m_szCurPath[ GetFileName() - GetFilePath() ] = _T('\0');
+		state.m_szCurPath[GetFileName() - GetFilePath()] = _T('\0');
 		state.m_nLoop = m_nLoop;
 	}
 	
@@ -1269,7 +1269,7 @@ void CDlgTagJumpList::SetTextDir()
 		DlgItem_SetText(GetHwnd(), IDC_STATIC_BASEDIR, _T(""));
 		if (GetFileName()) {
 			std::tstring strPath = GetFilePath();
-			strPath[ GetFileName() - GetFilePath() ] = _T('\0');
+			strPath[GetFileName() - GetFilePath()] = _T('\0');
 			DlgItem_SetText(GetHwnd(), IDC_STATIC_BASEDIR, strPath.c_str());
 		}
 	}

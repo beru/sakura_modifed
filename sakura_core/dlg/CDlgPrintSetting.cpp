@@ -388,7 +388,7 @@ BOOL CDlgPrintSetting::OnStnClicked(int wID)
 
 BOOL CDlgPrintSetting::OnEnChange(HWND hwndCtl, int wID)
 {
-	switch(wID) {
+	switch (wID) {
 	case IDC_EDIT_FONTHEIGHT:	// フォント幅の最小値が非０のため'12'と入力すると'1'のところで蹴られてしまう 2013.5.5 aroka
 		if (::GetDlgItemInt(GetHwnd(), IDC_EDIT_FONTHEIGHT, NULL, FALSE) >= 10) {	// 二桁以上の場合は領域チェック 2013.5.20 aroka
 			UpdatePrintableLineAndColumn();
@@ -820,7 +820,7 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 		return FALSE;
 	}
 	// 行あたりの文字数(行番号込み)
-	nEnableColumns = CPrint::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->m_bPrintLineNumber?m_nLineNumberColumns:0);	// 印字可能桁数/ページ
+	nEnableColumns = CPrint::CalculatePrintableColumns(pPS, nPaperAllWidth, pPS->m_bPrintLineNumber ? m_nLineNumberColumns : 0);	// 印字可能桁数/ページ
 	// 縦方向の行数
 	nEnableLines = CPrint::CalculatePrintableLines(pPS, nPaperAllHeight);			// 印字可能行数/ページ
 

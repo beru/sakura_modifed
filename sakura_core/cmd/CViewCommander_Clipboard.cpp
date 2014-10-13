@@ -499,7 +499,7 @@ void CViewCommander::Command_INSTEXT(
 					bLinePaste? L"": pszText,	// 挿入するデータ
 					bLinePaste? CLogicInt(0): nTextLen,	// 挿入するデータの長さ
 					bRedraw,
-					m_pCommanderView->m_bDoing_UndoRedo?NULL:GetOpeBlk(),
+					m_pCommanderView->m_bDoing_UndoRedo ? NULL : GetOpeBlk(),
 					bFastMode,
 					pcSelectLogic
 				);
@@ -1114,7 +1114,7 @@ void CViewCommander::Command_COPYPATH(void)
 void CViewCommander::Command_COPYTAG(void)
 {
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		wchar_t	buf[ MAX_PATH + 20 ];
+		wchar_t	buf[MAX_PATH + 20];
 
 		CLogicPoint ptColLine;
 

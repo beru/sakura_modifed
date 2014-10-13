@@ -62,7 +62,7 @@ CLayoutInt CLayout::CalcLayoutOffset(const CLayoutMgr& cLayoutMgr) const
 	if (this->GetLogicOffset()) {
 		const wchar_t* pLine = this->m_pCDocLine->GetPtr();
 		int nLineLen = this->m_pCDocLine->GetLengthWithEOL();
-		for (int i=0; i<GetLogicOffset(); i++) {
+		for (int i = 0; i < GetLogicOffset(); i++) {
 			if (pLine[i] == WCODE::TAB) {
 				nRet += cLayoutMgr.GetActualTabSpace(nRet);
 			}else {

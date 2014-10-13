@@ -99,7 +99,7 @@ INT_PTR CPropTab::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	case WM_NOTIFY:
 //		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
-//		switch(idCtrl) {
+//		switch (idCtrl) {
 //		default:
 			switch (pNMHDR->code) {
 			case PSN_HELP:

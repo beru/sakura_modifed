@@ -92,7 +92,7 @@ static const bool UNICODE_BOOL = false;
 	{
 		char* s = (char*)p;
 		size_t i;
-		for(i = 0; i < nSize; i++)
+		for (i = 0; i < nSize; i++)
 		{
 			*s++ = pSrc[i%nSrcLen];
 		}

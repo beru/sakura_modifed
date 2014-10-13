@@ -342,7 +342,7 @@ int DetectJisEscseq(const char* pS, const int nLen, EMyJisEscseq* peEscType)
 
 	// 検出されたJIS エスケープシーケンス識別ＩＤを
 	// 内部の JIS エスケープシーケンス識別ＩＤに変換
-	switch(ejisesc) {
+	switch (ejisesc) {
 	case JISESC_ASCII:
 	case JISESC_JISX0201Latin_OLD:
 	case JISESC_JISX0201Latin:
@@ -948,7 +948,7 @@ int CheckUtf7DPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 
 	pr = pS;
 	pr_end = pS + nLen;
-	for(; pr < pr_end; ++pr) {
+	for (; pr < pr_end; ++pr) {
 		if (*pr == '+') {
 			break;
 		}
@@ -1010,7 +1010,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 	pr = pS;
 	pr_end = pS + nLen;
 
-	for(; pr < pr_end; ++pr) {
+	for (; pr < pr_end; ++pr) {
 		// セットＢの文字でなくなるまでループ
 		if (!IsBase64(*pr)) {
 			if (*pr == '-') {
@@ -1045,7 +1045,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 	上記３通りのいづれにも当てはまらない場合は全データを落とす（不正バイトとする）.
 	*/
 	const char* pr_ = pr - 1;
-	switch(nchecklen % 8) {
+	switch (nchecklen % 8) {
 	case 0:
 		break;
 	case 3:
@@ -1091,7 +1091,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 	}
 	ndatalen = _DecodeBase64(pS, nchecklen, reinterpret_cast<char*>(pdata)) / sizeof(wchar_t);
 	CMemory::SwapHLByte(reinterpret_cast<char*>(pdata), ndatalen * sizeof(wchar_t));
-	for(int i = 0; i < ndatalen; i += nret) {
+	for (int i = 0; i < ndatalen; i += nret) {
 		nret = CheckUtf16leChar(&pdata[i], ndatalen - i, &echarset, nOption & UC_NONCHARACTER);
 		if (echarset == CHARSET_BINARY) {
 			berror_found = true;

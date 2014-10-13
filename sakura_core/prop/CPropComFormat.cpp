@@ -199,7 +199,7 @@ INT_PTR CPropFormat::DispatchEvent(
 //		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
 //		pMNUD  = (NM_UPDOWN*)lParam;
-//		switch(idCtrl) {
+//		switch (idCtrl) {
 //		case ???????:
 //			return 0L;
 //		default:

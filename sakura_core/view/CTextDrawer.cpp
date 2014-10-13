@@ -457,8 +457,8 @@ void CTextDrawer::DispLineNumber(
 			// s”Ô†‹æØ‚è 0=‚È‚µ 1=cü 2=”CˆÓ
 			if (2 == pTypes->m_nLineTermType) {
 				//	Sep. 22, 2002 genta
-				szLineNum[ nLineCols ] = pTypes->m_cLineTermChar;
-				szLineNum[ ++nLineCols ] = '\0';
+				szLineNum[nLineCols] = pTypes->m_cLineTermChar;
+				szLineNum[++nLineCols] = '\0';
 			}
 		}
 

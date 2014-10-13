@@ -114,9 +114,9 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	m_cTipWnd.m_cInfo.SetString(_T(""));	// tooltipバッファ初期化
 	// 1行目にキーワード表示の場合
 	if (m_pTypeData->m_bUseKeyHelpKeyDisp) {	// キーワードも表示する	// 2006.04.10 fon
-		m_cTipWnd.m_cInfo.AppendString(_T("[ "));
+		m_cTipWnd.m_cInfo.AppendString(_T("["));
 		m_cTipWnd.m_cInfo.AppendString(pcmemCurText->GetStringT());
-		m_cTipWnd.m_cInfo.AppendString(_T(" ]"));
+		m_cTipWnd.m_cInfo.AppendString(_T("]"));
 	}
 	// 途中まで一致を使う場合
 	if (m_pTypeData->m_bUseKeyHelpPrefix)

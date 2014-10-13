@@ -38,33 +38,33 @@
 
 class CMenuDrawer;
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+// @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 class CMRUFolder {
 public:
-	//	コンストラクタ
+	// コンストラクタ
 	CMRUFolder();
 	~CMRUFolder();
 
-	//	メニューを取得する
-	HMENU CreateMenu(CMenuDrawer* pCMenuDrawer) const;	//	うーん。pCMenuDrawerが必要なくなるといいなぁ。
-	HMENU CreateMenu(HMENU hMenu, CMenuDrawer* pCMenuDrawer) const;	//	2010/5/21 Uchi
+	// メニューを取得する
+	HMENU CreateMenu(CMenuDrawer* pCMenuDrawer) const;	// うーん。pCMenuDrawerが必要なくなるといいなぁ。
+	HMENU CreateMenu(HMENU hMenu, CMenuDrawer* pCMenuDrawer) const;	// 2010/5/21 Uchi
 	BOOL DestroyMenu(HMENU hMenu) const;
 	
-	//	フォルダ名の一覧を教えて
+	// フォルダ名の一覧を教えて
 	std::vector<LPCTSTR> GetPathList() const;
 
-	//	アクセス関数
-	int Length() const;	//	アイテムの数。
-	int MenuLength(void) const { return t_min(Length(), m_cRecentFolder.GetViewCount()); }	//	メニューに表示されるアイテムの数
-	void ClearAll();					//	アイテムを削除～。
-	void Add(const TCHAR* pszFolder);	//	pszFolderを追加する。
+	// アクセス関数
+	int Length() const;	// アイテムの数。
+	int MenuLength(void) const { return t_min(Length(), m_cRecentFolder.GetViewCount()); }	// メニューに表示されるアイテムの数
+	void ClearAll();					// アイテムを削除～。
+	void Add(const TCHAR* pszFolder);	// pszFolderを追加する。
 	const TCHAR* GetPath(int num) const;
 
 protected:
-	//	共有メモリアクセス用。
-	struct DLLSHAREDATA*	m_pShareData;			//	共有メモリを参照するよ。
+	// 共有メモリアクセス用。
+	struct DLLSHAREDATA* m_pShareData;			// 共有メモリを参照するよ。
 
 private:
-	CRecentFolder	m_cRecentFolder;	//履歴	//@@@ 2003.04.08 MIK
+	CRecentFolder m_cRecentFolder;	// 履歴	//@@@ 2003.04.08 MIK
 };
 

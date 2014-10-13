@@ -133,9 +133,9 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 	item->baseDirId = baseDirId;
 
 	// 文字列長ガード
-	if (_tcslen(item->keyword	) >= MAX_TAG_STRING_LENGTH) item->keyword[  MAX_TAG_STRING_LENGTH-1 ] = 0;
-	if (_tcslen(item->filename	) >= MAX_TAG_STRING_LENGTH) item->filename[ MAX_TAG_STRING_LENGTH-1 ] = 0;
-	if (_tcslen(item->note		) >= MAX_TAG_STRING_LENGTH) item->note[     MAX_TAG_STRING_LENGTH-1 ] = 0;
+	if (_tcslen(item->keyword	) >= MAX_TAG_STRING_LENGTH) item->keyword[ MAX_TAG_STRING_LENGTH-1] = 0;
+	if (_tcslen(item->filename	) >= MAX_TAG_STRING_LENGTH) item->filename[MAX_TAG_STRING_LENGTH-1] = 0;
+	if (_tcslen(item->note		) >= MAX_TAG_STRING_LENGTH) item->note[    MAX_TAG_STRING_LENGTH-1] = 0;
 
 	// アイテムをリストの適当な位置に追加する。
 	prev = NULL;

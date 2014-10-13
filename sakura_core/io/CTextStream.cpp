@@ -83,7 +83,7 @@ wstring CTextInputStream::ReadLineW()
 		CShiftJis::SJISToUnicode(&line);
 	}
 
-	return wstring().assign( (wchar_t*)line.GetRawPtr(), line.GetRawLength()/sizeof(wchar_t) );	// EOL ‚Ü‚Å NULL •¶Žš‚àŠÜ‚ß‚é
+	return wstring().assign((wchar_t*)line.GetRawPtr(), line.GetRawLength()/sizeof(wchar_t));	// EOL ‚Ü‚Å NULL •¶Žš‚àŠÜ‚ß‚é
 }
 
 #else
@@ -234,19 +234,19 @@ void CTextOutputStream::WriteF(const wchar_t* format, ...)
 
 static const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
 {
-	if (_IS_REL_PATH( fname )) {
+	if (_IS_REL_PATH(fname)) {
 		static TCHAR path[_MAX_PATH];
 		if (bOrExedir) {
-			GetInidirOrExedir( path, fname );
+			GetInidirOrExedir(path, fname);
 		}else {
-			GetInidir( path, fname );
+			GetInidir(path, fname);
 		}
 		return path;
 	}
 	return fname;
 }
 
-CTextInputStream_AbsIni::CTextInputStream_AbsIni(const TCHAR* fname, bool bOrExedir )
+CTextInputStream_AbsIni::CTextInputStream_AbsIni(const TCHAR* fname, bool bOrExedir)
 : CTextInputStream(_Resolve(fname, bOrExedir))
 {
 }

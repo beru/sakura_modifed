@@ -422,9 +422,9 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 	}
 
 	wcsncpy(plugin_table[nEmpty].m_szName, to_wchar(pszPluginName), MAX_PLUGIN_NAME);
-	plugin_table[nEmpty].m_szName[ MAX_PLUGIN_NAME-1 ] = '\0';
+	plugin_table[nEmpty].m_szName[MAX_PLUGIN_NAME-1] = '\0';
 	wcsncpy(plugin_table[nEmpty].m_szId, sId.c_str(), MAX_PLUGIN_ID);
-	plugin_table[nEmpty].m_szId[ MAX_PLUGIN_ID-1 ] = '\0';
+	plugin_table[nEmpty].m_szId[MAX_PLUGIN_ID-1] = '\0';
 	plugin_table[nEmpty].m_state = isDuplicate ? PLS_UPDATED : PLS_INSTALLED;
 
 	// コマンド数の設定	2010/7/11 Uchi
@@ -517,10 +517,10 @@ CPlugin* CPluginManager::LoadPlugin(const TCHAR* pszPluginDir, const TCHAR* pszP
 	TCHAR pszBasePath[_MAX_PATH];
 	TCHAR pszPath[_MAX_PATH];
 	std::tstring strMlang;
-	CDataProfile cProfDef;				//プラグイン定義ファイル
-	CDataProfile cProfDefMLang;			//プラグイン定義ファイル(L10N)
+	CDataProfile cProfDef;				// プラグイン定義ファイル
+	CDataProfile cProfDefMLang;			// プラグイン定義ファイル(L10N)
 	CDataProfile* pcProfDefMLang = &cProfDefMLang; 
-	CDataProfile cProfOption;			//オプションファイル
+	CDataProfile cProfOption;			// オプションファイル
 	CPlugin* plugin = NULL;
 
 #ifdef _UNICODE

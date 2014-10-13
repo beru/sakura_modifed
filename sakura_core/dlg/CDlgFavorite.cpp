@@ -86,7 +86,7 @@ static const SAnchorList anchorList[] = {
 #ifndef	ListView_SetCheckState
 //#if (_WIN32_IE >= 0x0300)
 #define ListView_SetCheckState(hwndLV, i, fCheck) \
-  ListView_SetItemState(hwndLV, i, INDEXTOSTATEIMAGEMASK((fCheck)?2:1), LVIS_STATEIMAGEMASK)
+  ListView_SetItemState(hwndLV, i, INDEXTOSTATEIMAGEMASK((fCheck) ? 2 : 1), LVIS_STATEIMAGEMASK)
 //#endif
 #endif
 
@@ -972,7 +972,7 @@ void CDlgFavorite::EditItem()
 	}
 }
 
-void CDlgFavorite::RightMenu(POINT &menuPos)
+void CDlgFavorite::RightMenu(POINT& menuPos)
 {
 	HMENU hMenu = ::CreatePopupMenu();
 	const int MENU_EDIT = 100;
@@ -1071,7 +1071,7 @@ int FormatFavoriteColumn(TCHAR* buf, int size, int index, bool view)
 	// 2010.03.21 Moca Textに連番を設定することによってアクセスキーにする
 	// 0 - 9 A - Z
 	const int mod = index % 36;
-	const TCHAR c = (TCHAR)(((mod) <= 9)?(_T('0') + mod):(_T('A') + mod - 10));
+	const TCHAR c = (TCHAR)(((mod) <= 9) ? (_T('0') + mod) : (_T('A') + mod - 10));
 	return auto_snprintf_s(buf, size, _T("%tc %ts"), c, (view ? _T("  ") : LS(STR_DLGFAV_HIDDEN)));
 }
 

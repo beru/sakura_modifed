@@ -9,8 +9,8 @@
 
 CFile::CFile(LPCTSTR pszPath)
 	:
-	m_hLockedFile( INVALID_HANDLE_VALUE ),
-	m_nFileShareModeOld( SHAREMODE_NOT_EXCLUSIVE )
+	m_hLockedFile(INVALID_HANDLE_VALUE),
+	m_nFileShareModeOld(SHAREMODE_NOT_EXCLUSIVE)
 {
 	if (pszPath) {
 		SetFilePath(pszPath);
@@ -33,7 +33,7 @@ bool CFile::IsFileExist() const
 
 bool CFile::HasWritablePermission() const
 {
-	return -1 != _taccess( GetFilePath(), 2 );
+	return -1 != _taccess(GetFilePath(), 2);
 }
 
 bool CFile::IsFileWritable() const
@@ -73,7 +73,7 @@ bool CFile::IsFileReadable() const
 		// 読み込みアクセス権がない
 		return false;
 	}
-	CloseHandle( hTest );
+	CloseHandle(hTest);
 	return true;
 }
 
@@ -86,13 +86,13 @@ void CFile::FileUnlock()
 {
 	// クローズ
 	if (m_hLockedFile != INVALID_HANDLE_VALUE) {
-		::CloseHandle( m_hLockedFile );
+		::CloseHandle(m_hLockedFile);
 		m_hLockedFile = INVALID_HANDLE_VALUE;
 	}
 }
 
 //! ファイルの排他ロック
-bool CFile::FileLock( EShareMode eShareMode, bool bMsg )
+bool CFile::FileLock(EShareMode eShareMode, bool bMsg)
 {
 	// ロック解除
 	FileUnlock();
@@ -129,7 +129,7 @@ bool CFile::FileLock( EShareMode eShareMode, bool bMsg )
 	// 結果
 	if (INVALID_HANDLE_VALUE == m_hLockedFile && bMsg) {
 		const TCHAR* pszMode;
-		switch( eShareMode ) {
+		switch (eShareMode) {
 		case SHAREMODE_DENY_READWRITE:	pszMode = LS(STR_EXCLU_DENY_READWRITE); break;
 		case SHAREMODE_DENY_WRITE:		pszMode = LS(STR_EXCLU_DENY_WRITE); break;
 		default:						pszMode = LS(STR_EXCLU_UNDEFINED); break;

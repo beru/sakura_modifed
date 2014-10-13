@@ -91,7 +91,7 @@ bool CPlugin::ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMl
 	std::vector<JackDef> jacks = CJackManager::getInstance()->GetJackDef();
 	wchar_t szIndex[8];
 
-	for (size_t i=0; i<jacks.size(); i++) {
+	for (size_t i = 0; i < jacks.size(); i++) {
 		const wstring sKey = jacks[i].szName;
 		for (int nCount = 0; nCount < MAX_PLUG_CMD; nCount++) {
 			if (nCount == 0) {

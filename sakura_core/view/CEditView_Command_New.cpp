@@ -576,7 +576,7 @@ void CEditView::DeleteData(
 				L"",					// 挿入するデータ
 				CLogicInt(0),			// 挿入するデータの長さ
 				bRedraw,
-				m_bDoing_UndoRedo?NULL:m_cCommander.GetOpeBlk()
+				m_bDoing_UndoRedo ? NULL : m_cCommander.GetOpeBlk()
 			);
 		}
 	}else {
@@ -622,7 +622,7 @@ void CEditView::DeleteData(
 			L"",				// 挿入するデータ
 			CLogicInt(0),		// 挿入するデータの長さ
 			bRedraw,
-			m_bDoing_UndoRedo?NULL:m_cCommander.GetOpeBlk(),
+			m_bDoing_UndoRedo ? NULL : m_cCommander.GetOpeBlk(),
 			false,
 			&sDelRangeLogic
 		);

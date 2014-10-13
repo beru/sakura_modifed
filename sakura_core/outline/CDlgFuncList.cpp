@@ -483,7 +483,6 @@ void CDlgFuncList::SetData()
 		//	Windowがいなくなると後で都合が悪いので、表示しないだけにしておく
 		//::DestroyWindow(hwndTree);
 //		::ShowWindow(hwndTree, SW_HIDE);
-		int				i;
 		TCHAR			szText[2048];
 		const CFuncInfo*	pcFuncInfo;
 		LV_ITEM			item;
@@ -510,7 +509,7 @@ void CDlgFuncList::SetData()
 
 		::EnableWindow(::GetDlgItem(GetHwnd() , IDC_BUTTON_COPY), TRUE);
 		bSelected = false;
-		for (i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+		for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
 			pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			if (!bSelected) {
 				if (pcFuncInfo->m_nFuncLineLAYOUT < nFuncLineTop
@@ -543,7 +542,7 @@ void CDlgFuncList::SetData()
 			bSelected = true;
 			nSelectedLine =  nSelectedLineTop;
 		}
-		for (i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+		for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
 			// 現在の解析結果要素
 			pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
@@ -926,7 +925,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 				// クラス名のアイテムが登録されていないので登録
 				if (!htiClass) {
 					// 2002/10/28 frozen 上からここへ移動
-					TCHAR* pClassName = new TCHAR[ _tcslen(szClassArr[k]) + 1 + m_pcFuncInfoArr->AppendTextLenMax() ]; // 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）// 2011.09.25 syat プラグインによる拡張対応
+					TCHAR* pClassName = new TCHAR[_tcslen(szClassArr[k]) + 1 + m_pcFuncInfoArr->AppendTextLenMax()]; // 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）// 2011.09.25 syat プラグインによる拡張対応
 					_tcscpy(pClassName, szClassArr[k]);
 
 					tvis.item.lParam = -1;
@@ -991,7 +990,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 				htiClass = htiGlobal;
 			}
 		}
-		TCHAR* pFuncName = new TCHAR[ _tcslen(pWork) + m_pcFuncInfoArr->AppendTextLenMax() ];	// ↓で追加する文字列が収まるだけ確保
+		TCHAR* pFuncName = new TCHAR[_tcslen(pWork) + m_pcFuncInfoArr->AppendTextLenMax()];	// ↓で追加する文字列が収まるだけ確保
 		_tcscpy(pFuncName, pWork);
 
 		// 2002/10/27 frozen 追加文字列の種類を増やした
@@ -1339,7 +1338,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 	int nStackDepth = 32; // phParentStack の確保している数
 	HTREEITEM* phParentStack;
 	phParentStack = (HTREEITEM*)malloc(nStackDepth * sizeof(HTREEITEM));
-	phParentStack[ nStackPointer ] = TVI_ROOT;
+	phParentStack[nStackPointer] = TVI_ROOT;
 	CLayoutInt nFuncLineOld(-1);
 	CLayoutInt nFuncColOld(-1);
 	CLayoutInt nFuncLineTop(INT_MAX);
@@ -1372,7 +1371,7 @@ void CDlgFuncList::SetTree(bool tagjump)
 		*/
 		HTREEITEM hItem;
 		TV_INSERTSTRUCT cTVInsertStruct;
-		cTVInsertStruct.hParent = phParentStack[ nStackPointer ];
+		cTVInsertStruct.hParent = phParentStack[nStackPointer];
 		cTVInsertStruct.hInsertAfter = TVI_LAST;	//	必ず最後に追加。
 		cTVInsertStruct.item.mask = TVIF_TEXT | TVIF_PARAM;
 		cTVInsertStruct.item.pszText = pcFuncInfo->m_cmemFuncName.GetStringPtr();
@@ -1396,10 +1395,10 @@ void CDlgFuncList::SetTree(bool tagjump)
 				}
 			}
 			nStackPointer = pcFuncInfo->m_nDepth;
-			cTVInsertStruct.hParent = phParentStack[ nStackPointer ];
+			cTVInsertStruct.hParent = phParentStack[nStackPointer];
 		}
 		hItem = TreeView_InsertItem(hwndTree, &cTVInsertStruct);
-		phParentStack[ nStackPointer + 1 ] = hItem;
+		phParentStack[nStackPointer + 1] = hItem;
 
 		// pcFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
 		if (!bSelected) {
@@ -3349,7 +3348,7 @@ BOOL CDlgFuncList::Track(POINT ptDrag)
 				// ドロップ先矩形を描画する
 				EDockSide eDockSide = GetDropRect(ptDrag, pt, &rc, GetKeyState_Control());
 				SIZE sizeNew = (eDockSide <= DOCKSIDE_FLOAT)? sizeFull: sizeHalf;
-				CGraphics::DrawDropRect(&rc, sizeNew, bStart? NULL: &rcDragLast, sizeLast);
+				CGraphics::DrawDropRect(&rc, sizeNew, bStart? NULL : &rcDragLast, sizeLast);
 				rcDragLast = rc;
 				sizeLast = sizeNew;
 			}

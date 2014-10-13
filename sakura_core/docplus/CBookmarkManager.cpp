@@ -98,7 +98,9 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 	while (pCDocLine) {
 		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
 			auto_sprintf_s(szBuff, L"%d,", nLinePos);
-			if (wcslen(szBuff) + wcslen(szText) > MAX_MARKLINES_LEN) break;	// 2002.01.17
+			if (wcslen(szBuff) + wcslen(szText) > MAX_MARKLINES_LEN) {
+				break;	// 2002.01.17
+			}
 			wcscat(szText, szBuff);
 		}
 		nLinePos++;

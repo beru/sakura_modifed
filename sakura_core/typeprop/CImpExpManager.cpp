@@ -348,7 +348,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 
 	// 強調キーワード
 	CKeyWordSetMgr&	cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
-	for (int i=0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
+	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		//types.m_nKeyWordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
@@ -450,7 +450,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	// 強調キーワード
 	auto& cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
-	for (int i=0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
+	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
 		if (m_Types.m_nKeyWordSetIdx[i] >= 0) {
 			int nIdx = m_Types.m_nKeyWordSetIdx[i];
 			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
@@ -482,7 +482,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting_Plugin& plugin = common.m_sPlugin;
 	int		nPIdx;
 	int		nPlug;
-	wchar_t szId[ MAX_PLUGIN_ID + 1 + 2 ];
+	wchar_t szId[MAX_PLUGIN_ID + 1 + 2];
 	if ((nPIdx = CPlug::GetPluginId(static_cast<EFunctionCode>(m_Types.m_eDefaultOutline))) >= 0) {
 		cProfile.IOProfileData(szSecTypeEx, szKeyPluginOutlineName, MakeStringBufferW(plugin.m_PluginTable[nPIdx].m_szName));
 		wcscpyn(szId, plugin.m_PluginTable[nPIdx].m_szId, _countof(szId));
@@ -550,7 +550,7 @@ bool CImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 	wstring szHeader = in.ReadLineW();
 	if (szHeader.length() >= 2) {
 		// コメントを抜く
-		szHeader = &szHeader.c_str()[ szHeader.c_str()[0] == _T(';') ? 1 : 2];
+		szHeader = &szHeader.c_str()[szHeader.c_str()[0] == _T(';') ? 1 : 2];
 	}
 	// 比較
 	if (szHeader != WSTR_COLORDATA_HEAD3) {
@@ -604,7 +604,7 @@ bool CImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	RegexKeywordInfo regexKeyArr[MAX_REGEX_KEYWORD];
-	auto_array_ptr<wchar_t> szKeyWordList(new wchar_t [ MAX_REGEX_KEYWORDLISTLEN ]);
+	auto_array_ptr<wchar_t> szKeyWordList(new wchar_t [MAX_REGEX_KEYWORDLISTLEN]);
 	wchar_t* pKeyword = &szKeyWordList[0];
 	int	keywordPos = 0;
 	TCHAR buff[MAX_REGEX_KEYWORDLEN + 20];
@@ -834,7 +834,7 @@ bool CImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 		out.WriteF(
 			L"KDct[%02d]=%d,%ts,%ts\n",
 			i,
-			m_Types.m_KeyHelpArr[i].m_bUse?1:0,
+			m_Types.m_KeyHelpArr[i].m_bUse ? 1 : 0,
 			m_Types.m_KeyHelpArr[i].m_szAbout,
 			m_Types.m_KeyHelpArr[i].m_szPath.c_str()
 		);
@@ -851,7 +851,7 @@ bool CImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
-	const int KEYNAME_SIZE = _countof(m_Common.m_sKeyBind.m_pKeyNameArr)-1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int KEYNAME_SIZE = _countof(m_Common.m_sKeyBind.m_pKeyNameArr) - 1; // 最後の１要素はダミー用に予約 2012.11.25 aroka
 	CommonSetting_KeyBind sKeyBind = m_Common.m_sKeyBind;
 
 	// オープン
@@ -933,7 +933,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 				wchar_t* p = szData + nc;
 
 				//後に続くトークン
-				for (int j=0;j<8;j++) {
+				for (int j = 0; j < 8; j++) {
 					wchar_t* q = auto_strchr(p, L',');
 					if (!q) {
 						bVer2 = false;
@@ -955,8 +955,8 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 					p = q + 1;
 				}
 
-				auto_strncpy(sKeyBind.m_pKeyNameArr[i].m_szKeyName, to_tchar(p), _countof(sKeyBind.m_pKeyNameArr[i].m_szKeyName)-1);
-				sKeyBind.m_pKeyNameArr[i].m_szKeyName[_countof(sKeyBind.m_pKeyNameArr[i].m_szKeyName)-1] = '\0';
+				auto_strncpy(sKeyBind.m_pKeyNameArr[i].m_szKeyName, to_tchar(p), _countof(sKeyBind.m_pKeyNameArr[i].m_szKeyName) - 1);
+				sKeyBind.m_pKeyNameArr[i].m_szKeyName[_countof(sKeyBind.m_pKeyNameArr[i].m_szKeyName) - 1] = '\0';
 			}
 		}
 	}

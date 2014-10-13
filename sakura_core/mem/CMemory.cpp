@@ -331,7 +331,7 @@ void CMemory::_SetRawLength(int nLength)
 	assert(m_nRawLen <= m_nDataBufSize-2);
 	m_nRawLen = nLength;
 	assert(m_nRawLen <= m_nDataBufSize-2);
-	m_pRawData[m_nRawLen  ] = 0;
+	m_pRawData[m_nRawLen ] = 0;
 	m_pRawData[m_nRawLen + 1] = 0; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。
 }
 

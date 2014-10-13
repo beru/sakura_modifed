@@ -41,8 +41,8 @@
 #include "sakura_rc.h"
 
 struct ARRHEAD {
-	int		nLength;
-	int		nItemNum;
+	int nLength;
+	int nItemNum;
 };
 
 const unsigned int uShareDataVersion = N_SHAREDATA_VERSION;
@@ -136,15 +136,15 @@ bool CShareData::InitShareData()
 		HINSTANCE hLangRsrc = m_cSelectLang.InitializeLanguageEnvironment();
 
 		// 2007.05.19 ryoji 実行ファイルフォルダ->設定ファイルフォルダに変更
-		TCHAR	szIniFolder[_MAX_PATH];
+		TCHAR szIniFolder[_MAX_PATH];
 		m_pShareData->m_sFileNameManagement.m_IniFolder.m_bInit = false;
 		GetInidir(szIniFolder);
 		AddLastChar(szIniFolder, _MAX_PATH, _T('\\'));
 
 		m_pShareData->m_vStructureVersion = uShareDataVersion;
 		m_pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0] = 0;	// キーワードマクロのファイル名 //@@@ 2002.1.24 YAZAKI
-		m_pShareData->m_sFlags.m_bRecordingKeyMacro = FALSE;		// キーボードマクロの記録中
-		m_pShareData->m_sFlags.m_hwndRecordingKeyMacro = NULL;		// キーボードマクロを記録中のウィンドウ
+		m_pShareData->m_sFlags.m_bRecordingKeyMacro = FALSE;			// キーボードマクロの記録中
+		m_pShareData->m_sFlags.m_hwndRecordingKeyMacro = NULL;			// キーボードマクロを記録中のウィンドウ
 
 		// 2004.05.13 Moca リソースから製品バージョンの取得
 		GetAppVersionInfo(NULL, VS_VERSION_INFO,
@@ -154,7 +154,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_sHandles.m_hwndDebug = NULL;
 		m_pShareData->m_sNodes.m_nSequences = 0;					// ウィンドウ連番
 		m_pShareData->m_sNodes.m_nNonameSequences = 0;
-		m_pShareData->m_sNodes.m_nGroupSequences = 0;			// タブグループ連番	// 2007.06.20 ryoji
+		m_pShareData->m_sNodes.m_nGroupSequences = 0;				// タブグループ連番	// 2007.06.20 ryoji
 		m_pShareData->m_sNodes.m_nEditArrNum = 0;
 
 		m_pShareData->m_sFlags.m_bEditWndChanging = FALSE;	// 編集ウィンドウ切替中	// 2007.04.03 ryoji
@@ -176,7 +176,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_sSearchKeywords.m_aGrepFolders.clear();
 
 		_tcscpy(m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER, szIniFolder);	// マクロ用フォルダ
-		_tcscpy(m_pShareData->m_sHistory.m_szIMPORTFOLDER, szIniFolder);	// 設定インポート用フォルダ
+		_tcscpy(m_pShareData->m_sHistory.m_szIMPORTFOLDER, szIniFolder);		// 設定インポート用フォルダ
 
 		auto& csFileName = m_pShareData->m_Common.m_sFileName;
 		for (int i = 0; i < MAX_TRANSFORM_FILENAME; ++i) {
@@ -262,7 +262,7 @@ bool CShareData::InitShareData()
 
 // To Here Sept. 19,2000
 
-		m_pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH = TRUE;				// 現在のフォントは固定幅フォントである
+		m_pShareData->m_Common.m_sView.m_bFontIs_FIXED_PITCH = TRUE;	// 現在のフォントは固定幅フォントである
 
 //		m_pShareData->m_Common.m_bUseCaretKeyWord = FALSE;		// キャレット位置の単語を辞書検索-機能OFF	// 2006.03.24 fon sakura起動ごとFALSEとし、初期化しない
 
@@ -288,7 +288,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sGeneral.m_bIsINSMode = true;				// 挿入／上書きモード
 		m_pShareData->m_Common.m_sGeneral.m_bIsFreeCursorMode = false;		// フリーカーソルモードか	// Oct. 29, 2000 JEPRO 「なし」に変更
 
-		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord = FALSE;	// 単語単位で移動するときに、単語の両端で止まるか
+		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchWord = FALSE;		// 単語単位で移動するときに、単語の両端で止まるか
 		m_pShareData->m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph = FALSE;	// 単語単位で移動するときに、単語の両端で止まるか
 
 		m_pShareData->m_Common.m_sSearch.m_sSearchOption.Reset();			// 検索オプション
@@ -826,9 +826,9 @@ BOOL CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 					LS(STR_ERR_CSHAREDATA21),
 					pszPath,
 					pfi->m_nCharCode,
-					NULL == pszCodeNameCur?LS(STR_ERR_CSHAREDATA22):pszCodeNameCur,
+					NULL == pszCodeNameCur ? LS(STR_ERR_CSHAREDATA22) : pszCodeNameCur,
 					nCharCode,
-					NULL == pszCodeNameNew?LS(STR_ERR_CSHAREDATA22):pszCodeNameNew
+					NULL == pszCodeNameNew ? LS(STR_ERR_CSHAREDATA22) : pszCodeNameNew
 				);
 			}
 		}
@@ -1123,7 +1123,7 @@ void CShareData::InitToolButtons(DLLSHAREDATA* pShareData)
 
 	// ツールバーアイコン数の最大値を超えないためのおまじない
 	// 最大値を超えて定義しようとするとここでコンパイルエラーになります．
-	char dummy[ _countof(DEFAULT_TOOL_BUTTONS) < MAX_TOOLBAR_BUTTON_ITEMS ? 1:0 ];
+	char dummy[_countof(DEFAULT_TOOL_BUTTONS) < MAX_TOOLBAR_BUTTON_ITEMS ? 1 : 0];
 	dummy[0] = 0;
 
 	memcpy_raw(

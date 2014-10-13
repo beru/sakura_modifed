@@ -39,35 +39,35 @@ using namespace std;
 WNDPROC	m_wpColorListProc;
 
 static const DWORD p_helpids2[] = {	//11400
-	IDC_LIST_COLORS,				HIDC_LIST_COLORS,				//色指定
-	IDC_CHECK_DISP,					HIDC_CHECK_DISP,				//色分け表示
-	IDC_CHECK_BOLD,					HIDC_CHECK_BOLD,				//太字
-	IDC_CHECK_UNDERLINE,			HIDC_CHECK_UNDERLINE,			//下線
-	IDC_BUTTON_TEXTCOLOR,			HIDC_BUTTON_TEXTCOLOR,			//文字色
-	IDC_BUTTON_BACKCOLOR,			HIDC_BUTTON_BACKCOLOR,			//背景色
-	IDC_BUTTON_SAMETEXTCOLOR,		HIDC_BUTTON_SAMETEXTCOLOR,		//文字色統一
-	IDC_BUTTON_SAMEBKCOLOR,			HIDC_BUTTON_SAMEBKCOLOR,		//背景色統一
-	IDC_BUTTON_IMPORT,				HIDC_BUTTON_IMPORT_COLOR,		//インポート
-	IDC_BUTTON_EXPORT,				HIDC_BUTTON_EXPORT_COLOR,		//エクスポート
-	IDC_COMBO_SET,					HIDC_COMBO_SET_COLOR,			//強調キーワード１セット名
-	IDC_BUTTON_KEYWORD_SELECT,		HIDC_BUTTON_KEYWORD_SELECT,		//強調キーワード2～10	// 2006.08.06 ryoji
-	IDC_EDIT_BLOCKCOMMENT_FROM,		HIDC_EDIT_BLOCKCOMMENT_FROM,	//ブロックコメント１開始
-	IDC_EDIT_BLOCKCOMMENT_TO,		HIDC_EDIT_BLOCKCOMMENT_TO,		//ブロックコメント１終了
-	IDC_EDIT_BLOCKCOMMENT_FROM2,	HIDC_EDIT_BLOCKCOMMENT_FROM2,	//ブロックコメント２開始
-	IDC_EDIT_BLOCKCOMMENT_TO2,		HIDC_EDIT_BLOCKCOMMENT_TO2,		//ブロックコメント２終了
-	IDC_EDIT_LINECOMMENT,			HIDC_EDIT_LINECOMMENT,			//行コメント１
-	IDC_EDIT_LINECOMMENT2,			HIDC_EDIT_LINECOMMENT2,			//行コメント２
-	IDC_EDIT_LINECOMMENT3,			HIDC_EDIT_LINECOMMENT3,			//行コメント３
-	IDC_EDIT_LINECOMMENTPOS,		HIDC_EDIT_LINECOMMENTPOS,		//桁数１
-	IDC_EDIT_LINECOMMENTPOS2,		HIDC_EDIT_LINECOMMENTPOS2,		//桁数２
-	IDC_EDIT_LINECOMMENTPOS3,		HIDC_EDIT_LINECOMMENTPOS3,		//桁数３
-	IDC_CHECK_LCPOS,				HIDC_CHECK_LCPOS,				//桁指定１
-	IDC_CHECK_LCPOS2,				HIDC_CHECK_LCPOS2,				//桁指定２
-	IDC_CHECK_LCPOS3,				HIDC_CHECK_LCPOS3,				//桁指定３
-	IDC_COMBO_STRINGLITERAL,		HIDC_COMBO_STRINGLITERAL,		//文字列エスケープ
-	IDC_CHECK_STRINGLINEONLY,		HIDC_CHECK_STRINGLINEONLY,		//文字列は行内のみ
-	IDC_CHECK_STRINGENDLINE,		HIDC_CHECK_STRINGENDLINE,		//終了文字がない場合行末まで色分け
-	IDC_EDIT_VERTLINE,				HIDC_EDIT_VERTLINE,				//縦線の桁指定	// 2006.08.06 ryoji
+	IDC_LIST_COLORS,				HIDC_LIST_COLORS,				// 色指定
+	IDC_CHECK_DISP,					HIDC_CHECK_DISP,				// 色分け表示
+	IDC_CHECK_BOLD,					HIDC_CHECK_BOLD,				// 太字
+	IDC_CHECK_UNDERLINE,			HIDC_CHECK_UNDERLINE,			// 下線
+	IDC_BUTTON_TEXTCOLOR,			HIDC_BUTTON_TEXTCOLOR,			// 文字色
+	IDC_BUTTON_BACKCOLOR,			HIDC_BUTTON_BACKCOLOR,			// 背景色
+	IDC_BUTTON_SAMETEXTCOLOR,		HIDC_BUTTON_SAMETEXTCOLOR,		// 文字色統一
+	IDC_BUTTON_SAMEBKCOLOR,			HIDC_BUTTON_SAMEBKCOLOR,		// 背景色統一
+	IDC_BUTTON_IMPORT,				HIDC_BUTTON_IMPORT_COLOR,		// インポート
+	IDC_BUTTON_EXPORT,				HIDC_BUTTON_EXPORT_COLOR,		// エクスポート
+	IDC_COMBO_SET,					HIDC_COMBO_SET_COLOR,			// 強調キーワード１セット名
+	IDC_BUTTON_KEYWORD_SELECT,		HIDC_BUTTON_KEYWORD_SELECT,		// 強調キーワード2～10	// 2006.08.06 ryoji
+	IDC_EDIT_BLOCKCOMMENT_FROM,		HIDC_EDIT_BLOCKCOMMENT_FROM,	// ブロックコメント１開始
+	IDC_EDIT_BLOCKCOMMENT_TO,		HIDC_EDIT_BLOCKCOMMENT_TO,		// ブロックコメント１終了
+	IDC_EDIT_BLOCKCOMMENT_FROM2,	HIDC_EDIT_BLOCKCOMMENT_FROM2,	// ブロックコメント２開始
+	IDC_EDIT_BLOCKCOMMENT_TO2,		HIDC_EDIT_BLOCKCOMMENT_TO2,		// ブロックコメント２終了
+	IDC_EDIT_LINECOMMENT,			HIDC_EDIT_LINECOMMENT,			// 行コメント１
+	IDC_EDIT_LINECOMMENT2,			HIDC_EDIT_LINECOMMENT2,			// 行コメント２
+	IDC_EDIT_LINECOMMENT3,			HIDC_EDIT_LINECOMMENT3,			// 行コメント３
+	IDC_EDIT_LINECOMMENTPOS,		HIDC_EDIT_LINECOMMENTPOS,		// 桁数１
+	IDC_EDIT_LINECOMMENTPOS2,		HIDC_EDIT_LINECOMMENTPOS2,		// 桁数２
+	IDC_EDIT_LINECOMMENTPOS3,		HIDC_EDIT_LINECOMMENTPOS3,		// 桁数３
+	IDC_CHECK_LCPOS,				HIDC_CHECK_LCPOS,				// 桁指定１
+	IDC_CHECK_LCPOS2,				HIDC_CHECK_LCPOS2,				// 桁指定２
+	IDC_CHECK_LCPOS3,				HIDC_CHECK_LCPOS3,				// 桁指定３
+	IDC_COMBO_STRINGLITERAL,		HIDC_COMBO_STRINGLITERAL,		// 文字列エスケープ
+	IDC_CHECK_STRINGLINEONLY,		HIDC_CHECK_STRINGLINEONLY,		// 文字列は行内のみ
+	IDC_CHECK_STRINGENDLINE,		HIDC_CHECK_STRINGENDLINE,		// 終了文字がない場合行末まで色分け
+	IDC_EDIT_VERTLINE,				HIDC_EDIT_VERTLINE,				// 縦線の桁指定	// 2006.08.06 ryoji
 //	IDC_STATIC,						-1,
 	0, 0
 };
@@ -81,7 +81,7 @@ TYPE_NAME_ID<EStringLiteralType> StringLitteralArr[] = {
 };
 
 
-//	行コメントに関する情報
+// 行コメントに関する情報
 struct {
 	int nEditID;
 	int nCheckBoxID;
@@ -396,39 +396,39 @@ INT_PTR CPropTypesColor::DispatchEvent(
 				Export(hwndDlg);
 				return TRUE;
 
-			//	From Here Jun. 6, 2001 genta
-			//	行コメント開始桁指定のON/OFF
+			// From Here Jun. 6, 2001 genta
+			// 行コメント開始桁指定のON/OFF
 			case IDC_CHECK_LCPOS:
 			case IDC_CHECK_LCPOS2:
 			case IDC_CHECK_LCPOS3:
-			//	To Here Jun. 6, 2001 genta
+			// To Here Jun. 6, 2001 genta
 				EnableTypesPropInput(hwndDlg);
 				return TRUE;
-			//	To Here Sept. 10, 2000
+			// To Here Sept. 10, 2000
 
-			//強調キーワードの選択
+			// 強調キーワードの選択
 			case IDC_BUTTON_KEYWORD_SELECT:
 				{
 					CDlgKeywordSelect cDlgKeywordSelect;
-					//強調キーワード1を取得する。
+					// 強調キーワード1を取得する。
 					HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_SET);
 					int nIdx = Combo_GetCurSel(hwndCombo);
 					if (CB_ERR == nIdx || 0 == nIdx) {
-						m_nSet[ 0 ] = -1;
+						m_nSet[0] = -1;
 					}else {
-						m_nSet[ 0 ] = nIdx - 1;
+						m_nSet[0] = nIdx - 1;
 					}
 					cDlgKeywordSelect.DoModal(::GetModuleHandle(NULL), hwndDlg, m_nSet);
-					RearrangeKeywordSet(hwndDlg);	//	Jan. 23, 2005 genta キーワードセット再配置
-					//強調キーワード1を反映する。
-					if (-1 == m_nSet[ 0 ]) {
+					RearrangeKeywordSet(hwndDlg);	// Jan. 23, 2005 genta キーワードセット再配置
+					// 強調キーワード1を反映する。
+					if (-1 == m_nSet[0]) {
 						Combo_SetCurSel(hwndCombo, 0);
 					}else {
-						Combo_SetCurSel(hwndCombo, m_nSet[ 0 ] + 1);
+						Combo_SetCurSel(hwndCombo, m_nSet[0] + 1);
 					}
 				}
 				break;
-			//強調キーワードの選択
+			// 強調キーワードの選択
 			case IDC_BUTTON_EDITKEYWORD:
 				{
 					CPropKeyword* pPropKeyword = new CPropKeyword;
@@ -467,7 +467,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 		pNMHDR = (NMHDR*)lParam;
 		pMNUD  = (NM_UPDOWN*)lParam;
 		switch (idCtrl) {
-		//	From Here May 21, 2001 genta activate spin control
+		// From Here May 21, 2001 genta activate spin control
 		case IDC_SPIN_LCColNum:
 			// 行コメント桁位置
 			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_LINECOMMENTPOS, NULL, FALSE);
@@ -502,9 +502,9 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			}
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_LINECOMMENTPOS2, nVal, FALSE);
 			return TRUE;
-		//	To Here May 21, 2001 genta activate spin control
+		// To Here May 21, 2001 genta activate spin control
 
-		//	From Here Jun. 01, 2001 JEPRO 3つ目を追加
+		// From Here Jun. 01, 2001 JEPRO 3つ目を追加
 		case IDC_SPIN_LCColNum3:
 			// 行コメント桁位置
 			nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_LINECOMMENTPOS3, NULL, FALSE);
@@ -522,11 +522,11 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			}
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_LINECOMMENTPOS3, nVal, FALSE);
 			return TRUE;
-		//	To Here Jun. 01, 2001
+		// To Here Jun. 01, 2001
 		default:
 			switch (pNMHDR->code) {
 			case PSN_HELP:
-//	Sept. 10, 2000 JEPRO ID名を実際の名前に変更するため以下の行はコメントアウト
+// Sept. 10, 2000 JEPRO ID名を実際の名前に変更するため以下の行はコメントアウト
 //				OnHelp(hwndDlg, IDD_PROP1P3);
 				OnHelp(hwndDlg, IDD_PROP_COLOR);
 				return TRUE;
@@ -607,14 +607,14 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_cBlockComments[1].getBlockCommentTo());	// ブロックコメントデリミタ2(To)
 
 	// 行コメントデリミタ @@@ 2002.09.22 YAZAKI
-	//	From Here May 12, 2001 genta
-	//	行コメントの開始桁位置設定
-	//	May 21, 2001 genta 桁位置を1から数えるように
-	for (i=0; i<COMMENT_DELIMITER_NUM; i++) {
-		//	テキスト
+	// From Here May 12, 2001 genta
+	// 行コメントの開始桁位置設定
+	// May 21, 2001 genta 桁位置を1から数えるように
+	for (i = 0; i < COMMENT_DELIMITER_NUM; i++) {
+		// テキスト
 		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_Types.m_cLineComment.getLineComment(i));	
 
-		//	桁数チェックと、数値
+		// 桁数チェックと、数値
 		int nPos = m_Types.m_cLineComment.getLineCommentPos(i);
 		if (nPos >= 0) {
 			::CheckDlgButton(hwndDlg, cLineComment[i].nCheckBoxID, TRUE);
@@ -661,7 +661,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 
 	// 強調キーワード1～10の設定
 	for (i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
-		m_nSet[ i ] = m_Types.m_nKeyWordSetIdx[i];
+		m_nSet[i] = m_Types.m_nKeyWordSetIdx[i];
 	}
 
 	// 色をつける文字種類のリスト
@@ -724,15 +724,15 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 	int		nIdx;
 	HWND	hwndWork;
 
-	//	From Here May 12, 2001 genta
-	//	コメントの開始桁位置の取得
-	//	May 21, 2001 genta 桁位置を1から数えるように
+	// From Here May 12, 2001 genta
+	// コメントの開始桁位置の取得
+	// May 21, 2001 genta 桁位置を1から数えるように
 	wchar_t buffer[COMMENT_DELIMITER_BUFFERSIZE];	//@@@ 2002.09.22 YAZAKI LineCommentを取得するためのバッファ
 	int pos;
 	UINT en;
 	BOOL bTranslated;
 
-	for (int i=0; i<COMMENT_DELIMITER_NUM; i++) {
+	for (int i = 0; i < COMMENT_DELIMITER_NUM; i++) {
 		en = ::IsDlgButtonChecked(hwndDlg, cLineComment[i].nCheckBoxID);
 		pos = ::GetDlgItemInt(hwndDlg, cLineComment[i].nTextID, &bTranslated, FALSE);
 		if (bTranslated != TRUE) {
@@ -997,21 +997,21 @@ void CPropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 {
 	int i, j;
 	for (i = 0; i < MAX_KEYWORDSET_PER_TYPE; i++) {
-		if (m_nSet[ i ] != -1) {
+		if (m_nSet[i] != -1) {
 			continue;
 		}
 
-		//	未設定の場合
+		// 未設定の場合
 		for (j = i; j < MAX_KEYWORDSET_PER_TYPE; j++) {
-			if (m_nSet[ j ] != -1) {
-				//	後ろに設定済み項目があった場合
-				m_nSet[ i ] = m_nSet[ j ];
-				m_nSet[ j ] = -1;
+			if (m_nSet[j] != -1) {
+				// 後ろに設定済み項目があった場合
+				m_nSet[i] = m_nSet[j];
+				m_nSet[j] = -1;
 
-				//	色設定を入れ替える
-				//	構造体ごと入れ替えると名前が変わってしまうので注意
-				ColorInfo &col1 = m_Types.m_ColorInfoArr[ COLORIDX_KEYWORD1 + i ];
-				ColorInfo &col2   = m_Types.m_ColorInfoArr[ COLORIDX_KEYWORD1 + j ];
+				// 色設定を入れ替える
+				// 構造体ごと入れ替えると名前が変わってしまうので注意
+				ColorInfo &col1 = m_Types.m_ColorInfoArr[COLORIDX_KEYWORD1 + i];
+				ColorInfo &col2   = m_Types.m_ColorInfoArr[COLORIDX_KEYWORD1 + j];
 
 				std::swap(col1.m_bDisp, col2.m_bDisp);
 				std::swap(col1.m_sFontAttr, col2.m_sFontAttr);
@@ -1021,12 +1021,12 @@ void CPropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 			}
 		}
 		if (j == MAX_KEYWORDSET_PER_TYPE) {
-			//	後ろには設定済み項目がなかった
+			// 後ろには設定済み項目がなかった
 			break;
 		}
 	}
 	
-	//	リストボックス及び色設定ボタンを再描画
+	// リストボックス及び色設定ボタンを再描画
 	::InvalidateRect(::GetDlgItem(hwndDlg, IDC_BUTTON_TEXTCOLOR), NULL, TRUE);
 	::InvalidateRect(::GetDlgItem(hwndDlg, IDC_BUTTON_BACKCOLOR), NULL, TRUE);
 	::InvalidateRect(::GetDlgItem(hwndDlg, IDC_LIST_COLORS), NULL, TRUE);
@@ -1045,7 +1045,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 		return;
 	}
 
-	//描画対象
+	// 描画対象
 	CGraphics gr(pDis->hDC);
 
 //	rc0 = pDis->rcItem;
@@ -1094,7 +1094,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 		::DrawFocusRect(gr, &pDis->rcItem);
 	}
 
-	// 「色分け/表示する」のチェック
+	//「色分け/表示する」のチェック
 	rc1 = pDis->rcItem;
 	rc1.left += 2;
 	rc1.top += 3;

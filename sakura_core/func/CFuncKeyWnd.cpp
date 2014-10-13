@@ -126,7 +126,7 @@ HWND CFuncKeyWnd::Open(
 		hInstance,
 		NULL,							// Handle to the class icon.
 		NULL,							// Handle to a small icon
-		::LoadCursor(NULL, IDC_ARROW),// Handle to the class cursor.
+		::LoadCursor(NULL, IDC_ARROW),	// Handle to the class cursor.
 		(HBRUSH)(COLOR_3DFACE + 1),		// Handle to the class background brush.
 		NULL/*MAKEINTRESOURCE(MYDOCUMENT)*/,// Pointer to a null-terminated character string that specifies the resource name of the class menu, as the name appears in the resource file.
 		m_pszClassName					// Pointer to a null-terminated string or is an atom.
@@ -142,7 +142,7 @@ HWND CFuncKeyWnd::Open(
 		CW_USEDEFAULT,					// horizontal position of window
 		0,								// vertical position of window
 		0,								// window width	// 2007.02.05 ryoji 100->0（半端なサイズで一瞬表示されるより見えないほうがいい）
-		::GetSystemMetrics(SM_CYMENU),// window height
+		::GetSystemMetrics(SM_CYMENU),	// window height
 		NULL							// handle to menu, or child-window identifier
 	);
 

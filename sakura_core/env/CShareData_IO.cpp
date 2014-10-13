@@ -950,7 +950,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 //	int		nSize = m_pShareData->m_nKeyNameArrNum;
 	WCHAR	szWork[MAX_PLUGIN_ID + 20 + 4];
 	bool	bOldVer = false;
-	const int KEYNAME_SIZE = _countof(sKeyBind.m_pKeyNameArr)-1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int KEYNAME_SIZE = _countof(sKeyBind.m_pKeyNameArr) - 1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
 	int nKeyNameArrUsed = sKeyBind.m_nKeyNameArrNum; // 使用済み領域
 
 	if (cProfile.IsReadingMode()) { 
@@ -1026,8 +1026,8 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 						p = pn + 1;
 					}
 					// KeyName
-					auto_strncpy(tmpKeydata.m_szKeyName, to_tchar(p), _countof(tmpKeydata.m_szKeyName)-1);
-					tmpKeydata.m_szKeyName[_countof(tmpKeydata.m_szKeyName)-1] = '\0';
+					auto_strncpy(tmpKeydata.m_szKeyName, to_tchar(p), _countof(tmpKeydata.m_szKeyName) - 1);
+					tmpKeydata.m_szKeyName[_countof(tmpKeydata.m_szKeyName) - 1] = '\0';
 
 					if (tmpKeydata.m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
 						// 2013.10.23 syat マウスのキーコードを拡張仮想キーコードに変更。以下は互換性のため残す。
@@ -1099,7 +1099,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 			}
 
 			if (0x0100 <= keydata.m_nKeyCode) {
-				auto_sprintf_s(szWork, L",%ts", jpVKEXNames[ keydata.m_nKeyCode - 0x0100 ]);
+				auto_sprintf_s(szWork, L",%ts", jpVKEXNames[keydata.m_nKeyCode - 0x0100]);
 			}else {
 				auto_sprintf_s(szWork, L",%ts", keydata.m_szKeyName);
 			}
@@ -1136,16 +1136,16 @@ void CShareData_IO::ShareData_IO_Print(CDataProfile& cProfile)
 			if (cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData))) {
 				int buf[19];
 				scan_ints(szKeyData, pszForm, buf);
-				printsetting.m_nPrintFontWidth			= buf[ 0];
-				printsetting.m_nPrintFontHeight			= buf[ 1];
-				printsetting.m_nPrintDansuu				= buf[ 2];
-				printsetting.m_nPrintDanSpace			= buf[ 3];
-				printsetting.m_nPrintLineSpacing		= buf[ 4];
-				printsetting.m_nPrintMarginTY			= buf[ 5];
-				printsetting.m_nPrintMarginBY			= buf[ 6];
-				printsetting.m_nPrintMarginLX			= buf[ 7];
-				printsetting.m_nPrintMarginRX			= buf[ 8];
-				printsetting.m_nPrintPaperOrientation	= (short)buf[ 9];
+				printsetting.m_nPrintFontWidth			= buf[0];
+				printsetting.m_nPrintFontHeight			= buf[1];
+				printsetting.m_nPrintDansuu				= buf[2];
+				printsetting.m_nPrintDanSpace			= buf[3];
+				printsetting.m_nPrintLineSpacing		= buf[4];
+				printsetting.m_nPrintMarginTY			= buf[5];
+				printsetting.m_nPrintMarginBY			= buf[6];
+				printsetting.m_nPrintMarginLX			= buf[7];
+				printsetting.m_nPrintMarginRX			= buf[8];
+				printsetting.m_nPrintPaperOrientation	= (short)buf[9];
 				printsetting.m_nPrintPaperSize			= (short)buf[10];
 				printsetting.m_bPrintWordWrap			= (buf[11] != 0);
 				printsetting.m_bPrintLineNumber			= (buf[12] != 0);
@@ -1169,14 +1169,14 @@ void CShareData_IO::ShareData_IO_Print(CDataProfile& cProfile)
 				printsetting.m_nPrintMarginRX			,
 				printsetting.m_nPrintPaperOrientation	,
 				printsetting.m_nPrintPaperSize		,
-				printsetting.m_bPrintWordWrap?1:0,
-				printsetting.m_bPrintLineNumber?1:0,
-				printsetting.m_bHeaderUse[0]?1:0,
-				printsetting.m_bHeaderUse[1]?1:0,
-				printsetting.m_bHeaderUse[2]?1:0,
-				printsetting.m_bFooterUse[0]?1:0,
-				printsetting.m_bFooterUse[1]?1:0,
-				printsetting.m_bFooterUse[2]?1:0
+				printsetting.m_bPrintWordWrap ? 1 : 0,
+				printsetting.m_bPrintLineNumber ? 1 : 0,
+				printsetting.m_bHeaderUse[0] ? 1 : 0,
+				printsetting.m_bHeaderUse[1] ? 1 : 0,
+				printsetting.m_bHeaderUse[2] ? 1 : 0,
+				printsetting.m_bFooterUse[0] ? 1 : 0,
+				printsetting.m_bFooterUse[1] ? 1 : 0,
+				printsetting.m_bFooterUse[2] ? 1 : 0
 			);
 			cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData));
 		}
@@ -1318,16 +1318,16 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 		if (cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData))) {
 			int buf[11];
 			scan_ints(szKeyData, pszForm, buf);
-			types.m_nIdx					= buf[ 0];
-			types.m_nMaxLineKetas			= buf[ 1];
-			types.m_nColumnSpace			= buf[ 2];
-			types.m_nTabSpace				= buf[ 3];
-			types.m_nKeyWordSetIdx[0]		= buf[ 4];
-			types.m_nKeyWordSetIdx[1]		= buf[ 5];
-			types.m_nStringType				= buf[ 6];
-			types.m_bLineNumIsCRLF			= (buf[ 7] != 0);
-			types.m_nLineTermType			= buf[ 8];
-			types.m_bWordWrap				= (buf[ 9] != 0);
+			types.m_nIdx					= buf[0];
+			types.m_nMaxLineKetas			= buf[1];
+			types.m_nColumnSpace			= buf[2];
+			types.m_nTabSpace				= buf[3];
+			types.m_nKeyWordSetIdx[0]		= buf[4];
+			types.m_nKeyWordSetIdx[1]		= buf[5];
+			types.m_nStringType				= buf[6];
+			types.m_bLineNumIsCRLF			= (buf[7] != 0);
+			types.m_nLineTermType			= buf[8];
+			types.m_bWordWrap				= (buf[9] != 0);
 			types.m_nCurrentPrintSetting	= buf[10];
 		}
 		// 折り返し幅の最小値は10。少なくとも４ないとハングアップする。 // 20050818 aroka
@@ -1343,9 +1343,9 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 			types.m_nKeyWordSetIdx[0],
 			types.m_nKeyWordSetIdx[1],
 			types.m_nStringType,
-			types.m_bLineNumIsCRLF?1:0,
+			types.m_bLineNumIsCRLF ? 1 : 0,
 			types.m_nLineTermType,
-			types.m_bWordWrap?1:0,
+			types.m_bWordWrap ? 1 : 0,
 			types.m_nCurrentPrintSetting
 		);
 		cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData));
@@ -1390,7 +1390,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 	// From Here Sep. 28, 2002 genta / YAZAKI
 	if (cProfile.IsReadingMode()) {
 		// Block Comment
-		wchar_t buffer[2][ BLOCKCOMMENT_BUFFERSIZE ];
+		wchar_t buffer[2][BLOCKCOMMENT_BUFFERSIZE];
 		// 2004.10.02 Moca 対になるコメント設定がともに読み込まれたときだけ有効な設定と見なす．
 		// ブロックコメントの始まりと終わり．行コメントの記号と桁位置
 		bool bRet1, bRet2;
@@ -1406,7 +1406,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 		if (bRet1 && bRet2) types.m_cBlockComments[1].SetBlockCommentRule(buffer[0], buffer[1]);
 		
 		// Line Comment
-		wchar_t lbuf[ COMMENT_DELIMITER_BUFFERSIZE ];
+		wchar_t lbuf[COMMENT_DELIMITER_BUFFERSIZE];
 		int  pos;
 
 		lbuf[0] = L'\0'; pos = -1;
@@ -1646,7 +1646,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 			}else {
 				if (types.m_KeyHelpArr[j].m_szPath[0] != _T('\0')) {
 					auto_sprintf_s(szKeyData, LTEXT("%d,%ts,%ts"),
-						types.m_KeyHelpArr[j].m_bUse?1:0,
+						types.m_KeyHelpArr[j].m_bUse ? 1 : 0,
 						types.m_KeyHelpArr[j].m_szAbout,
 						types.m_KeyHelpArr[j].m_szPath.c_str()
 					);
@@ -2104,11 +2104,11 @@ void CShareData_IO::IO_ColorSet(CDataProfile* pcProfile, const WCHAR* pszSecName
 				pColorInfoArr[j].m_sFontAttr.m_bUnderLine = false;
 		}else {
 			auto_sprintf_s(szKeyData, pszForm,
-				pColorInfoArr[j].m_bDisp?1:0,
-				pColorInfoArr[j].m_sFontAttr.m_bBoldFont?1:0,
+				pColorInfoArr[j].m_bDisp ? 1 : 0,
+				pColorInfoArr[j].m_sFontAttr.m_bBoldFont ? 1 : 0,
 				pColorInfoArr[j].m_sColorAttr.m_cTEXT,
 				pColorInfoArr[j].m_sColorAttr.m_cBACK,
-				pColorInfoArr[j].m_sFontAttr.m_bUnderLine?1:0
+				pColorInfoArr[j].m_sFontAttr.m_bUnderLine ? 1 : 0
 			);
 			pcProfile->IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szKeyData));
 		}
@@ -2130,16 +2130,16 @@ void ShareData_IO_Sub_LogFont(CDataProfile& cProfile, const WCHAR* pszSecName,
 		if (cProfile.IOProfileData(pszSecName, pszKeyLf, MakeStringBufferW(szKeyData))) {
 			int buf[13];
 			scan_ints(szKeyData, pszForm, buf);
-			lf.lfHeight			= buf[ 0];
-			lf.lfWidth			= buf[ 1];
-			lf.lfEscapement		= buf[ 2];
-			lf.lfOrientation	= buf[ 3];
-			lf.lfWeight			= buf[ 4];
-			lf.lfItalic			= (BYTE)buf[ 5];
-			lf.lfUnderline		= (BYTE)buf[ 6];
-			lf.lfStrikeOut		= (BYTE)buf[ 7];
-			lf.lfCharSet		= (BYTE)buf[ 8];
-			lf.lfOutPrecision	= (BYTE)buf[ 9];
+			lf.lfHeight			= buf[0];
+			lf.lfWidth			= buf[1];
+			lf.lfEscapement		= buf[2];
+			lf.lfOrientation	= buf[3];
+			lf.lfWeight			= buf[4];
+			lf.lfItalic			= (BYTE)buf[5];
+			lf.lfUnderline		= (BYTE)buf[6];
+			lf.lfStrikeOut		= (BYTE)buf[7];
+			lf.lfCharSet		= (BYTE)buf[8];
+			lf.lfOutPrecision	= (BYTE)buf[9];
 			lf.lfClipPrecision	= (BYTE)buf[10];
 			lf.lfQuality		= (BYTE)buf[11];
 			lf.lfPitchAndFamily	= (BYTE)buf[12];

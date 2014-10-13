@@ -141,7 +141,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 				// 選択範囲のデータを取得
 				if (GetSelectedData(&cmemCurText, FALSE, NULL, FALSE, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
 					DWORD dwEffects;
-					DWORD dwEffectsSrc = (!m_pcEditDoc->IsEditable())?
+					DWORD dwEffectsSrc = (!m_pcEditDoc->IsEditable()) ?
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
 					int nOpe = m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer();
 					m_pcEditWnd->SetDragSourceView(this);

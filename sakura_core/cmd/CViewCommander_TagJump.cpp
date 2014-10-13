@@ -393,10 +393,10 @@ bool CViewCommander::Command_TagsMake(void)
 {
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
-	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/ ];
+	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/];
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		_tcscpy_s(szTargetPath, GetDocument()->m_cDocFile.GetFilePath());
-		szTargetPath[ _tcslen(szTargetPath) - _tcslen(GetDocument()->m_cDocFile.GetFileName()) ] = _T('\0');
+		szTargetPath[_tcslen(szTargetPath) - _tcslen(GetDocument()->m_cDocFile.GetFileName())] = _T('\0');
 	}else {
 		// 20100722 Moca サクラのフォルダからカレントディレクトリに変更
 		::GetCurrentDirectory(_countof(szTargetPath), szTargetPath);
@@ -547,7 +547,7 @@ bool CViewCommander::Command_TagsMake(void)
 
 						cDlgCancel.CloseDialog(TRUE);
 
-						work[ read_cnt ] = L'\0';	// Nov. 15, 2003 genta 表示用に0終端する
+						work[read_cnt] = L'\0';	// Nov. 15, 2003 genta 表示用に0終端する
 						WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD06), work); // 2003.11.09 じゅうじ
 
 						return true;

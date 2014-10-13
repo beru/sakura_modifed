@@ -27,7 +27,7 @@
 */
 CMRUFolder::CMRUFolder()
 {
-	//	初期化。
+	// 初期化。
 	m_pShareData = &GetDllShareData();
 }
 
@@ -77,9 +77,16 @@ HMENU CMRUFolder::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 		bool bFavoriteLabel = bFavorite && !m_pShareData->m_Common.m_sWindow.m_bMenuIcon;
 		CFileNameManager::getInstance()->GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true);
 
-		//	メニューに追加
-		pCMenuDrawer->MyAppendMenu(hMenuPopUp, MF_BYPOSITION | MF_STRING, IDM_SELOPENFOLDER + i, szMenu, _T(""), TRUE,
-			bFavorite ? F_FAVORITE : -1);
+		// メニューに追加
+		pCMenuDrawer->MyAppendMenu(
+			hMenuPopUp,
+			MF_BYPOSITION | MF_STRING,
+			IDM_SELOPENFOLDER + i,
+			szMenu,
+			_T(""),
+			TRUE,
+			bFavorite ? F_FAVORITE : -1
+		);
 	}
 	return hMenuPopUp;
 }

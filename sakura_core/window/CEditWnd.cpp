@@ -136,7 +136,7 @@ static void ShowCodeBox(HWND hWnd, CEditDoc* pcEditDoc)
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		CLogicInt nIdx = pcView->LineColumnToIndex(pcLayout, pcCaret->GetCaretLayoutPos().GetX2());
 		if (nIdx < nLineLen) {
-			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen()?1:0)) {
+			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				// 一時的に表示方法の設定を変更する
 				CommonSetting_Statusbar sStatusbar;
 				sStatusbar.m_bDispUniInSjis		= false;
@@ -1941,7 +1941,7 @@ LRESULT CEditWnd::DispatchEvent(
 		// タイマーを使用してタイトルの変更を遅延する
 		if (m_pShareData->m_sFlags.m_bEditWndChanging) {
 			delete[] m_pszLastCaption;
-			m_pszLastCaption = new TCHAR[ ::_tcslen((LPCTSTR)lParam) + 1 ];
+			m_pszLastCaption = new TCHAR[::_tcslen((LPCTSTR)lParam) + 1];
 			::_tcscpy(m_pszLastCaption, (LPCTSTR)lParam);	// 変更後のタイトルを記憶しておく
 			::SetTimer(GetHwnd(), IDT_CAPTION, 50, NULL);
 			return 0L;
@@ -1994,22 +1994,22 @@ int	CEditWnd::OnClose(HWND hWndFrom)
 		int nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr(&p, FALSE);
 		if (nCount > 1) {
 			for (i = 0; i < nCount; i++) {
-				if (p[ i ].GetHwnd() == GetHwnd())
+				if (p[i].GetHwnd() == GetHwnd())
 					break;
 			}
 			if (i < nCount) {
 				for (j = i + 1; j < nCount; j++) {
-					if (p[ j ].m_nGroup == p[ i ].m_nGroup)
+					if (p[j].m_nGroup == p[i].m_nGroup)
 						break;
 				}
 				if (j >= nCount) {
 					for (j = 0; j < i; j++) {
-						if (p[ j ].m_nGroup == p[ i ].m_nGroup)
+						if (p[j].m_nGroup == p[i].m_nGroup)
 							break;
 					}
 				}
 				if (j != i) {
-					HWND hwnd = p[ j ].GetHwnd();
+					HWND hwnd = p[j].GetHwnd();
 					{
 						// 2006.01.28 ryoji
 						// タブまとめ表示でこの画面が非表示から表示に変わってすぐ閉じる場合(タブの中クリック時等)、
@@ -2299,7 +2299,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 		if (m_pShareData->m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[j] > 0) {
 			nFlag = MF_BYPOSITION | MF_STRING;
 		}
-		WCHAR buf[ MAX_CUSTOM_MENU_NAME_LEN + 1 ];
+		WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 		m_CMenuDrawer.MyAppendMenu(hMenu, nFlag,
 			eFunc, GetDocument()->m_cFuncLookup.Custmenu2Name(j, buf, _countof(buf)), pszKey);
 	}
@@ -2469,7 +2469,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		}
 		break;
 	case F_CUSTMENU_LIST:			// カスタムメニューリスト
-		WCHAR buf[ MAX_CUSTOM_MENU_NAME_LEN + 1 ];
+		WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 		//	右クリックメニュー
 		if (m_pShareData->m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[0] > 0) {
 			 m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING,
@@ -3742,12 +3742,12 @@ void CEditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _ps
 		if (p) {
 			int	size = _countof(p->m_szTabCaption) - 1;
 			_tcsncpy(p->m_szTabCaption, pszTabCaption, size);
-			p->m_szTabCaption[ size ] = _T('\0');
+			p->m_szTabCaption[size] = _T('\0');
 
 			// 2006.01.28 ryoji ファイル名、Grepモード追加
 			size = _countof2(p->m_szFilePath) - 1;
 			_tcsncpy(p->m_szFilePath, pszFilePath, size);
-			p->m_szFilePath[ size ] = _T('\0');
+			p->m_szFilePath[size] = _T('\0');
 
 			p->m_bIsGrep = bIsGrep;
 		}

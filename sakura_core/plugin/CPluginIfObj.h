@@ -80,7 +80,7 @@ public:
 		return m_MacroFuncInfoArr;
 	}
 	// 関数を処理する
-	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT *Arguments, const int ArgSize, VARIANT &Result) {
+	bool HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result) {
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
 		switch (LOWORD(ID)) {

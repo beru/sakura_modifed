@@ -74,7 +74,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 		if (!pLineBuf) {
 			break;
 		}
-		for (i=0; i<nLineLen-1; i++) {
+		for (i = 0; i < nLineLen - 1; i++) {
 			pLine = &pLineBuf[i];
 			// 2004.04.20 Moca コメントを処理する
 			if (bCommentTag) {
@@ -95,7 +95,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				pLine++; i++;
 				bEndTag = true;
 			}
-			for (j=0; i + j < nLineLen && j < _countof(szTitle) - 1;) {
+			for (j = 0; i + j < nLineLen && j < _countof(szTitle) - 1;) {
 				// タグ名を切り出す
 				// スペース、タブ、「_:-.英数」以外の半角文字、１文字目の「-.数字」は認めない。
 				if ((pLine[j] == L' ' || pLine[j] == L'\t') ||
@@ -216,7 +216,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						// 終了タグなしを除く全てのタグらしきものを判定
 						wcscpy_s(pszStack[nDepth], szTitle);
 						k = j;
-						if (j < _countof(szTitle)-3) {
+						if (j < _countof(szTitle) - 3) {
 							for (; i + j < nLineLen; j++) {
 								if (pLine[j] == L'/' && pLine[j + 1] == L'>') {
 									bEndTag = true;
@@ -227,7 +227,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							}
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
-								for (j -= k-1; i + j + k < nLineLen && k < _countof(szTitle) - 1; k++) {
+								for (j -= k - 1; i + j + k < nLineLen && k < _countof(szTitle) - 1; k++) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k])) {
 										break;
 									}
@@ -254,18 +254,18 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				int nDepthOrg = nDepth; // 2004.04.20 Moca 追加
 				while (nDepth > 0) {
 					nDepth--;
-					if (!wcsicmp(pszStack[nDepth],szTitle)) {
+					if (!wcsicmp(pszStack[nDepth], szTitle)) {
 						break;
 					}
 				}
 				// 2004.04.20 Moca ツリー中と一致しないときは、この終了タグは無視
 				if (nDepth == 0) {
-					if (wcsicmp(pszStack[nDepth],szTitle)) {
+					if (wcsicmp(pszStack[nDepth], szTitle)) {
 						nDepth = nDepthOrg;
 					}
 				}else {
 					if (nLabelType == LT_HEADING) {	//	見出しの終わり
-						nHeadDepth[szTitle[1]-L'0'] = nDepth;
+						nHeadDepth[szTitle[1] - L'0'] = nDepth;
 						nDepth++;
 					}
 					if (nLabelType == LT_PARAGRAPH) {

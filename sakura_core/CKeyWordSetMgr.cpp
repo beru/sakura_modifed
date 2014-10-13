@@ -123,7 +123,7 @@ bool CKeyWordSetMgr::AddKeyWordSet(
 		return false;
 	}
 	int nIdx = m_nKeyWordSetNum;	//追加位置
-	m_nStartIdx[ ++m_nKeyWordSetNum ] = m_nStartIdx[ nIdx ];// サイズ0でセット追加
+	m_nStartIdx[++m_nKeyWordSetNum] = m_nStartIdx[nIdx];// サイズ0でセット追加
 
 	if (!KeyWordReAlloc(nIdx, nSize)) {
 		--m_nKeyWordSetNum;	//	キーワードセットの追加をキャンセルする
@@ -621,7 +621,7 @@ bool CKeyWordSetMgr::KeyWordReAlloc(int nIdx, int nSize)
 		);
 	}
 	for (int i = nIdx + 1; i <= m_nKeyWordSetNum; i++) {
-		m_nStartIdx[ i ] += nDiffSize;
+		m_nStartIdx[i] += nDiffSize;
 	}
 	return true;
 }

@@ -228,7 +228,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 			if (wcschr(L"([{", *p)) {	//)
 				// level up
 				if (m_parenthesis_ptr < parptr_max) {
-					m_parenthesis[ m_parenthesis_ptr ] = *p;
+					m_parenthesis[m_parenthesis_ptr] = *p;
 				}
 				m_parenthesis_ptr++;
 			}else if (wcschr(L")]}", *p)) {	//)
@@ -245,7 +245,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 				// level down
 				--m_parenthesis_ptr;
 				while (1 <= m_parenthesis_ptr && m_parenthesis_ptr < parptr_max) {
-					if (m_parenthesis[ m_parenthesis_ptr ] != op) {
+					if (m_parenthesis[m_parenthesis_ptr] != op) {
 						// if unmatch then skip
 						--m_parenthesis_ptr;
 					}else {
@@ -382,7 +382,7 @@ void COutlineErlang::build_arity(int arity)
 	numstr[0] = L'/';
 	_itow(arity, numstr + 1, 10);
 	wcsncpy(p, numstr, buf_size - len - 1);
-	m_func[ buf_size - 1 ] = L'\0';
+	m_func[buf_size - 1] = L'\0';
 }
 
 /** Erlang アウトライン解析

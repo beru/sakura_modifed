@@ -668,17 +668,17 @@ void CDialog::ResizeItem(HWND hTarget, const POINT& ptDlgDefault, const POINT& p
 		// ‚È‚µ
 	}else if ((anchor & (ANCHOR_LEFT | ANCHOR_RIGHT)) == ANCHOR_RIGHT) {
 		/*
-			[<- rcItemDefault.left ->[   ]      ]
-			[<- rcItemDefault.right  [ ->]      ]
+			[<- rcItemDefault.left ->[ ]     ]
+			[<- rcItemDefault.right  [->]     ]
 			[<-    ptDlgDefault.x             ->]
-			[<-    ptDlgNew.x             [   ]    ->]
-			[<-    pt.x                 ->[   ]      ]
+			[<-    ptDlgNew.x             [ ]    ->]
+			[<-    pt.x                 ->[ ]     ]
 		*/
 		pt.x = rcItemDefault.left + (ptDlgNew.x - ptDlgDefault.x);
 	}else if ((anchor & (ANCHOR_LEFT | ANCHOR_RIGHT)) == (ANCHOR_LEFT | ANCHOR_RIGHT)) {
 		/*
-			[<-    ptDlgNew.x        [   ]         ->]
-			[                        [<-width->]     ]
+			[<-    ptDlgNew.x        [ ]         ->]
+			[                       [<-width->]    ]
 		*/
 		width = ptDlgNew.x - rcItemDefault.left - (ptDlgDefault.x - rcItemDefault.right);
 	}

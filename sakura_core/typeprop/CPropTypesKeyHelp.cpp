@@ -295,8 +295,8 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 					::DlgItem_SetText(hwndDlg, IDC_LABEL_KEYHELP_ABOUT, LS(STR_PROPTYPKEYHELP_LINE1));
 					::DlgItem_SetText(hwndDlg, IDC_EDIT_KEYHELP, LS(STR_PROPTYPKEYHELP_DICPATH));
 				// リストの最後を削除した場合は、削除後のリストの最後を選択する。
-				}else if (nIndex > ListView_GetItemCount(hwndList)-1) {
-					ListView_SetItemState(hwndList, ListView_GetItemCount(hwndList)-1, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+				}else if (nIndex > ListView_GetItemCount(hwndList) - 1) {
+					ListView_SetItemState(hwndList, ListView_GetItemCount(hwndList) - 1, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				// 同じ位置のキーを選択状態にする。
 				}else {
 					ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);

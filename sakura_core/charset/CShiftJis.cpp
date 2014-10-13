@@ -219,7 +219,7 @@ EConvertResult CShiftJis::UnicodeToSJIS(CMemory* pMem)
 	// 変換先バッファサイズを設定してバッファを確保
 	char* pDst;
 	try {
-		pDst = new char[ nSrcLen * 2 ];
+		pDst = new char[nSrcLen * 2];
 	}catch (...) {
 		pDst = NULL;
 	}

@@ -52,7 +52,7 @@ static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
 	0, 0
 };
 
-static const int keyword_select_target_combo[ KEYWORD_SELECT_NUM ] = {
+static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 	IDC_COMBO1,
 	IDC_COMBO2,
 	IDC_COMBO3,
@@ -83,13 +83,13 @@ CDlgKeywordSelect::~CDlgKeywordSelect()
 int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
 	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
-		m_nSet[ i ] = pnSet[ i ];
+		m_nSet[i] = pnSet[i];
 	}
 
 	(void)CDialog::DoModal(hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL);
 
 	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
-		pnSet[ i ] = m_nSet[ i ];
+		pnSet[i] = m_nSet[i];
 	}
 
 	return TRUE;
@@ -120,7 +120,7 @@ BOOL CDlgKeywordSelect::OnBnClicked(int wID)
 void CDlgKeywordSelect::SetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[ index ]);
+		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[index]);
 
 		// コンボボックスを空にする
 		Combo_ResetContent(hwndCombo);
@@ -133,12 +133,12 @@ void CDlgKeywordSelect::SetData(void)
 				Combo_AddString(hwndCombo, m_pCKeyWordSetMgr->GetTypeName(i));
 			}
 
-			if (-1 == m_nSet[ index ]) {
+			if (-1 == m_nSet[index]) {
 				// セット名コンボボックスのデフォルト選択
 				Combo_SetCurSel(hwndCombo, 0);
 			}else {
 				// セット名コンボボックスのデフォルト選択
-				Combo_SetCurSel(hwndCombo, m_nSet[ index ] + 1);
+				Combo_SetCurSel(hwndCombo, m_nSet[index] + 1);
 			}
 		}
 	}
@@ -149,13 +149,13 @@ void CDlgKeywordSelect::SetData(void)
 int CDlgKeywordSelect::GetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[ index ]);
+		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[index]);
 
 		int n = Combo_GetCurSel(hwndCombo);
 		if (CB_ERR == n || 0 == n) {
-			m_nSet[ index ] = -1;
+			m_nSet[index] = -1;
 		}else {
-			m_nSet[ index ] = n - 1;
+			m_nSet[index] = n - 1;
 		}
 	}
 

@@ -253,7 +253,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 			switch (wNotifyCode) {
 			// ボタン／チェックボックスがクリックされた
 			case BN_CLICKED:
-				switch(wID) {
+				switch (wID) {
 				case IDC_BUTTON_INSERTSEPARATOR:
 					nIndex1 = List_GetCurSel(hwndResList);
 					if (LB_ERR == nIndex1) {

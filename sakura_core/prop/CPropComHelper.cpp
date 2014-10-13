@@ -233,7 +233,7 @@ INT_PTR CPropHelper::DispatchEvent(
 		break;	// WM_COMMAND
 	case WM_NOTIFY:
 		pNMHDR = (NMHDR*)lParam;
-//		switch(idCtrl) {
+//		switch (idCtrl) {
 //		case ???????:
 //			return 0L;
 //		default:

@@ -51,20 +51,20 @@ private:
 	bool			m_bSizeBox;
 	HWND			m_hwndSizeBox;
 	int				m_nTimerCount;
-	int				m_nButtonGroupNum; // Openで初期化
-	EFunctionCode	m_nFuncCodeArr[12]; // Open->CreateButtonsで初期化
+	int				m_nButtonGroupNum;	// Openで初期化
+	EFunctionCode	m_nFuncCodeArr[12];	// Open->CreateButtonsで初期化
 protected:
 	/*
 	|| 実装ヘルパ系
 	*/
 	void CreateButtons(void);	// ボタンの生成
 	int CalcButtonSize(void);	// ボタンのサイズを計算
-
+	
 	// 仮想関数
 	virtual void AfterCreateWindow(void) {}	// ウィンドウ作成後の処理	// 2007.03.13 ryoji 可視化しない
-
+	
 	// 仮想関数 メッセージ処理 詳しくは実装を参照
-	virtual LRESULT OnTimer(HWND, UINT, WPARAM, LPARAM);		// WM_TIMERタイマーの処理
+	virtual LRESULT OnTimer(HWND, UINT, WPARAM, LPARAM);	// WM_TIMERタイマーの処理
 	virtual LRESULT OnCommand(HWND, UINT, WPARAM, LPARAM);	// WM_COMMAND処理
 	virtual LRESULT OnSize(HWND, UINT, WPARAM, LPARAM);		// WM_SIZE処理
 	virtual LRESULT OnDestroy(HWND, UINT, WPARAM, LPARAM);	// WM_DESTROY処理

@@ -140,19 +140,19 @@ EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 //! 現在のEOL長を取得。文字単位。
 CLogicInt CEol::GetLen() const
 {
-	return CLogicInt(g_aEolTable[ m_eEolType ].m_nLen);
+	return CLogicInt(g_aEolTable[m_eEolType].m_nLen);
 }
 
 //! 現在のEOLの名称取得
 const TCHAR* CEol::GetName() const
 {
-	return g_aEolTable[ m_eEolType ].m_szName;
+	return g_aEolTable[m_eEolType].m_szName;
 }
 
 //!< 現在のEOL文字列先頭へのポインタを取得
 const wchar_t* CEol::GetValue2() const
 {
-	return g_aEolTable[ m_eEolType ].m_szDataW;
+	return g_aEolTable[m_eEolType].m_szDataW;
 }
 
 /*!

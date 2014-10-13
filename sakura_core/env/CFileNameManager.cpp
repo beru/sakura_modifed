@@ -180,7 +180,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 #endif
 
 	LPCTSTR ps;
-	LPTSTR  pd;
+	LPTSTR pd;
 	LPTSTR pd_end = pszDes + (nDesLen - 1);
 	for (ps = pszSrc, pd = pszDes; _T('\0') != *ps; ps++) {
 		if (pd_end <= pd) {

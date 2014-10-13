@@ -393,9 +393,9 @@ LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 		for (i = 0 ; i < nTabCount-1; i++) {
 			RECT rc;
 			TabCtrl_GetItemRect(m_hwndTab, i, &rc);
-			m_nTabBorderArray[ i ] = rc.right;
+			m_nTabBorderArray[i] = rc.right;
 		}
-		m_nTabBorderArray[ i ] = 0;		// 最後の要素は番兵
+		m_nTabBorderArray[i] = 0;		// 最後の要素は番兵
 		Tooltip_Activate(TabCtrl_GetToolTips(m_hwndTab), FALSE);	// ツールチップ無効化
 		// ここに来たらドラッグ開始なので break しないでそのまま DRAG_DRAG 処理に入る
 
@@ -408,8 +408,8 @@ LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 			lpCursorName = NULL;	// 開始時カーソル指定
 
 			// ドラッグ開始時のタブ位置で移動先タブを再計算
-			for (nDstTab = 0; m_nTabBorderArray[ nDstTab ] != 0; nDstTab++) {
-				if (hitinfo.pt.x < m_nTabBorderArray[ nDstTab ]) {
+			for (nDstTab = 0; m_nTabBorderArray[nDstTab] != 0; nDstTab++) {
+				if (hitinfo.pt.x < m_nTabBorderArray[nDstTab]) {
 					break;
 				}
 			}

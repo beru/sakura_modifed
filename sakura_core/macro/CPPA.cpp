@@ -181,7 +181,7 @@ bool CPPA::InitDllImp()
 	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
-	for (int i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName != NULL; i++) {
+	for (int i = 0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName != NULL; i++) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
@@ -190,7 +190,7 @@ bool CPPA::InitDllImp()
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
-	for (int i=0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; i++) {
+	for (int i = 0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; i++) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
@@ -233,7 +233,7 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 	
 	char szArguments[8][20]; // 引数用バッファ
 	int i;
-	for (i=0; i<8; i++) {
+	for (i = 0; i < 8; i++) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
 			type = cMacroFuncInfo.m_varArguments[i];
@@ -400,7 +400,7 @@ void __stdcall CPPA::stdProc(
 	// Argumentをwchar_t[]に変換 -> tmpArguments
 	WCHAR** tmpArguments2=new WCHAR*[ArgSize];
 	int* tmpArgLengths = new int[ArgSize];
-	for (int i=0; i<ArgSize; i++) {
+	for (int i = 0; i < ArgSize; i++) {
 		if (Argument[i]) {
 			tmpArguments2[i]=mbstowcs_new(Argument[i]);
 			tmpArgLengths[i]=wcslen(tmpArguments2[i]);
@@ -418,7 +418,7 @@ void __stdcall CPPA::stdProc(
 	}
 
 	// tmpArgumentsを解放
-	for (int i=0; i<ArgSize; i++) {
+	for (int i = 0; i < ArgSize; i++) {
 		if (tmpArguments2[i]) {
 			WCHAR* p = const_cast<WCHAR*>(tmpArguments2[i]);
 			delete[] p;
@@ -519,11 +519,11 @@ bool CPPA::CallHandleFunction(
 	VARIANT vtArg[maxArgSize];
 	
 	const MacroFuncInfo* mfi = CSMacroMgr::GetFuncInfoByID(Index);
-	for (int i=0; i<maxArgSize && i<ArgSize; i++) {
+	for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
 		::VariantInit(&vtArg[i]);
 	}
 	ArgCnt = 0;
-	for (int i=0; i<maxArgSize && i<ArgSize; i++) {
+	for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
 			type = mfi->m_varArguments[i];
@@ -549,7 +549,7 @@ bool CPPA::CallHandleFunction(
 			break;
 		}
 		default:
-			for (int i=0; i<maxArgSize && i<ArgSize; i++) {
+			for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
 				::VariantClear(&vtArg[i]);
 			}
 			return false;
@@ -559,12 +559,12 @@ bool CPPA::CallHandleFunction(
 
 	if (Index >= F_FUNCTION_FIRST) {
 		bool Ret = CMacro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
-		for (int i=0; i<maxArgSize && i<ArgSize; i++) {
+		for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
 			::VariantClear(&vtArg[i]);
 		}
 		return Ret;
 	}else {
-		for (int i=0; i<maxArgSize && i<ArgSize; i++) {
+		for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
 			::VariantClear(&vtArg[i]);
 		}
 		return false;

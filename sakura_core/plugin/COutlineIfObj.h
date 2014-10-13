@@ -78,7 +78,7 @@ public:
 				if (!Arguments[1]) return false;
 				if (!Arguments[2]) return false;
 				if (!Arguments[3]) return false;
-				CLogicPoint ptLogic(_wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1);
+				CLogicPoint ptLogic(_wtoi(Arguments[1]) - 1, _wtoi(Arguments[0]) - 1);
 				if (ptLogic.x < 0) ptLogic.x = 0;
 				if (ptLogic.y < 0) ptLogic.y = 0;
 				CLayoutPoint ptLayout;

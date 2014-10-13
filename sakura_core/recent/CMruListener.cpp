@@ -99,7 +99,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 
 	// 食い違う場合
 	if (IsValidCodeType(ePrevCode) && pLoadInfo->eCharCode != ePrevCode) {
-		//オプション：前回と文字コードが異なるときに問い合わせを行う
+		// オプション：前回と文字コードが異なるときに問い合わせを行う
 		if (GetDllShareData().m_Common.m_sFile.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			const TCHAR* pszCodeNameOld = CCodeTypeName(ePrevCode).Normal();
 			const TCHAR* pszCodeNameNew = CCodeTypeName(pLoadInfo->eCharCode).Normal();
@@ -141,22 +141,22 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
-	CMRUFile		cMRU;
+	CMRUFile cMRU;
 
-	EditInfo	eiOld;
+	EditInfo eiOld;
 	bool bIsExistInMRU = cMRU.GetEditInfo(pcDoc->m_cDocFile.GetFilePath(), &eiOld);
 
-	//キャレット位置の復元
+	// キャレット位置の復元
 	if (bIsExistInMRU && GetDllShareData().m_Common.m_sFile.GetRestoreCurPosition()) {
-		//キャレット位置取得
+		// キャレット位置取得
 		CLayoutPoint ptCaretPos;
 		pcDoc->m_cLayoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
 
-		//ビュー取得
+		// ビュー取得
 		CEditView& cView = pcDoc->m_pcEditWnd->GetActiveView();
 
 		if (ptCaretPos.GetY2() >= pcDoc->m_cLayoutMgr.GetLineCount()) {
-			//ファイルの最後に移動
+			// ファイルの最後に移動
 			cView.GetCommander().HandleCommand(F_GOFILEEND, false, 0, 0, 0, 0);
 		}else {
 			cView.GetTextArea().SetViewTopLine(eiOld.m_nViewTopLine); // 2001/10/20 novice
@@ -197,7 +197,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 ECallbackResult CMruListener::OnBeforeClose()
 {
-	//	Mar. 30, 2003 genta サブルーチンにまとめた
+	// Mar. 30, 2003 genta サブルーチンにまとめた
 	_HoldBookmarks_And_AddToMRU();
 
 	return CALLBACK_CONTINUE;
@@ -217,16 +217,16 @@ ECallbackResult CMruListener::OnBeforeClose()
 */
 void CMruListener::_HoldBookmarks_And_AddToMRU()
 {
-	//EditInfo取得
+	// EditInfo取得
 	CEditDoc* pcDoc = GetListeningDoc();
-	EditInfo	fi;
+	EditInfo fi;
 	pcDoc->GetEditInfo(&fi);
 
-	//ブックマーク情報の保存
+	// ブックマーク情報の保存
 	wcscpy_s(fi.m_szMarkLines, CBookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks());
 
-	//MRUリストに登録
-	CMRUFile	cMRU;
+	// MRUリストに登録
+	CMRUFile cMRU;
 	cMRU.Add(&fi);
 }
 

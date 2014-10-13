@@ -435,7 +435,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 
 	if (_T('\0') == pszLabel[0]) {
 		_tcsncpy(pszLabel, LS(nFuncId), LABEL_MAX - 1);
-		pszLabel[ LABEL_MAX - 1 ] = _T('\0');
+		pszLabel[LABEL_MAX - 1] = _T('\0');
 	}
 	if (_T('\0') == pszLabel[0]) {
 		_tcscpy(pszLabel, _T("-- undefined name --"));

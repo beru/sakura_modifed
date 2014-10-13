@@ -89,8 +89,8 @@ BOOL CDlgTypeList::OnLbnDblclk(int wID)
 {
 	switch (wID) {
 	case IDC_LIST_TYPES:
-		//	Nov. 29, 2000	genta
-		//	動作変更: 指定タイプの設定ダイアログ→一時的に別の設定を適用
+		// Nov. 29, 2000	genta
+		// 動作変更: 指定タイプの設定ダイアログ→一時的に別の設定を適用
 		::EndDialog(
 			GetHwnd(),
 			List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_TYPES))
@@ -106,11 +106,11 @@ BOOL CDlgTypeList::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_HELP:
 		//「タイプ別設定一覧」のヘルプ
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_TYPE_LIST));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
-	//	Nov. 29, 2000	From Here	genta
-	//	適用する型の一時的変更
+	// Nov. 29, 2000	From Here	genta
+	// 適用する型の一時的変更
 	case IDC_BUTTON_TEMPCHANGE:
 		::EndDialog(
 			GetHwnd(),
@@ -118,7 +118,7 @@ BOOL CDlgTypeList::OnBnClicked(int wID)
 			| PROP_TEMPCHANGE_FLAG
 		);
 		return TRUE;
-	//	Nov. 29, 2000	To Here
+	// Nov. 29, 2000	To Here
 	case IDOK:
 		::EndDialog(GetHwnd(), List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_TYPES)));
 		return TRUE;
@@ -200,27 +200,27 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 					::EnableWindow(hwndDblClick, FALSE);
 				}else {
 					::EnableWindow(GetDlgItem(GetHwnd(), IDC_CHECK_EXT_RMENU), TRUE);
-					if (!m_bRegistryChecked[ nIdx ]) {
+					if (!m_bRegistryChecked[nIdx]) {
 						TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 						_tcscpy(exts, type->m_szTypeExts);
 						static const TCHAR	pszSeps[] = _T(" ;,");	// separator
 						TCHAR* ext = _tcstok(exts, pszSeps);
 
-						m_bExtRMenu[ nIdx ] = true;
-						m_bExtDblClick[ nIdx ] = true;
+						m_bExtRMenu[nIdx] = true;
+						m_bExtDblClick[nIdx] = true;
 						while (ext) {
 							bool bRMenu;
 							bool bDblClick;
 							CheckExt(ext, &bRMenu, &bDblClick);
-							m_bExtRMenu[ nIdx ] &= bRMenu;
-							m_bExtDblClick[ nIdx ] &= bDblClick;
+							m_bExtRMenu[nIdx] &= bRMenu;
+							m_bExtDblClick[nIdx] &= bDblClick;
 							ext = _tcstok(NULL, pszSeps);
 						}
-						m_bRegistryChecked[ nIdx ] = true;
+						m_bRegistryChecked[nIdx] = true;
 					}
-					BtnCtl_SetCheck(hwndRMenu, m_bExtRMenu[ nIdx ]);
-					::EnableWindow(hwndDblClick, m_bExtRMenu[ nIdx ]);
-					BtnCtl_SetCheck(hwndDblClick, m_bExtDblClick[ nIdx ]);
+					BtnCtl_SetCheck(hwndRMenu, m_bExtRMenu[nIdx]);
+					::EnableWindow(hwndDblClick, m_bExtRMenu[nIdx]);
+					BtnCtl_SetCheck(hwndDblClick, m_bExtDblClick[nIdx]);
 				}
 				return TRUE;
 			}
@@ -251,9 +251,9 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 						break;
 					}
 				}
-				m_bExtRMenu[ nIdx ] = checked;
+				m_bExtRMenu[nIdx] = checked;
 				::EnableWindow(hwndDblClick, checked);
-				m_bExtDblClick[ nIdx ] = checked;
+				m_bExtDblClick[nIdx] = checked;
 				BtnCtl_SetCheck(hwndDblClick, checked);
 				ext = _tcstok(NULL, pszSeps);
 			}
@@ -276,7 +276,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 					::MessageBox(GetHwnd(), (tstring(LS(STR_DLGTYPELIST_ERR1)) + buf).c_str(), GSTR_APPNAME, MB_OK);
 					break;
 				}
-				m_bExtDblClick[ nIdx ] = checked;
+				m_bExtDblClick[nIdx] = checked;
 				ext = _tcstok(NULL, pszSeps);
 			}
 			return TRUE;
@@ -327,9 +327,9 @@ void CDlgTypeList::SetData(int selIdx)
 			);
 		}
 		::List_AddString(hwndList, szText);
-		m_bRegistryChecked[ nIdx ] = FALSE;
-		m_bExtRMenu[ nIdx ] = FALSE;
-		m_bExtDblClick[ nIdx ] = FALSE;
+		m_bRegistryChecked[nIdx] = FALSE;
+		m_bExtRMenu[nIdx] = FALSE;
+		m_bExtDblClick[nIdx] = FALSE;
 
 		SIZE sizeExtent;
 		if (::GetTextExtentPoint32(hDC, szText, _tcslen(szText), &sizeExtent) && sizeExtent.cx > nExtent) {
@@ -337,9 +337,9 @@ void CDlgTypeList::SetData(int selIdx)
 		}
 	}
 	for (nIdx; nIdx < MAX_TYPES; ++nIdx) {
-		m_bRegistryChecked[ nIdx ] = FALSE;
-		m_bExtRMenu[ nIdx ] = FALSE;
-		m_bExtDblClick[ nIdx ] = FALSE;
+		m_bRegistryChecked[nIdx] = FALSE;
+		m_bExtRMenu[nIdx] = FALSE;
+		m_bExtDblClick[nIdx] = FALSE;
 	}
 	::SelectObject(hDC, hFontOld);
 	::ReleaseDC(hwndList, hDC);
@@ -394,7 +394,7 @@ static void SendChangeSettingType2(int nType)
 }
 
 // タイプ別設定インポート
-//		2010/4/12 Uchi
+// 2010/4/12 Uchi
 bool CDlgTypeList::Import()
 {
 	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
@@ -440,7 +440,7 @@ bool CDlgTypeList::Import()
 }
 
 // タイプ別設定エクスポート
-//		2010/4/12 Uchi
+// 2010/4/12 Uchi
 bool CDlgTypeList::Export()
 {
 	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
@@ -461,7 +461,7 @@ bool CDlgTypeList::Export()
 }
 
 // タイプ別設定初期化
-//		2010/4/12 Uchi
+// 2010/4/12 Uchi
 bool CDlgTypeList::InitializeType(void)
 {
 	HWND hwndDlg = GetHwnd();
@@ -690,8 +690,8 @@ int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstr
 
 	int index = 0;
 	for (;;) {
-		TCHAR szValue[ BUFFER_SIZE ] = {0};
-		BYTE data[ BUFFER_SIZE ] = {0};
+		TCHAR szValue[BUFFER_SIZE] = {0};
+		BYTE data[BUFFER_SIZE] = {0};
 		DWORD dwDataLen;
 		DWORD dwType;
 
@@ -711,7 +711,7 @@ int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstr
 	}
 
 	index = 0;
-	TCHAR szSubKey[ BUFFER_SIZE ] = {0};
+	TCHAR szSubKey[BUFFER_SIZE] = {0};
 	for (;;) {
 		errorCode = keySrc.EnumKey(index, szSubKey, _countof(szSubKey));
 		if (errorCode == ERROR_NO_MORE_ITEMS) {
@@ -741,7 +741,7 @@ int DeleteRegistry(HKEY root, const tstring& path)
 
 	int index = 0;
 	index = 0;
-	TCHAR szSubKey[ BUFFER_SIZE ] = {0};
+	TCHAR szSubKey[BUFFER_SIZE] = {0};
 	for (;;) {
 		errorCode = keySrc.EnumKey(index, szSubKey, _countof(szSubKey));
 		if (errorCode == ERROR_NO_MORE_ITEMS) {
@@ -806,7 +806,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 	tstring sGenProgID = tstring() + _T("SakuraEditor_") + szLowerExt;
 
 	CRegKey keyExt_HKLM;
-	TCHAR szProgID_HKLM[ BUFFER_SIZE ] = {0};
+	TCHAR szProgID_HKLM[BUFFER_SIZE] = {0};
 	if ((errorCode = keyExt_HKLM.Open(HKEY_LOCAL_MACHINE, sDotExt.c_str(), KEY_READ)) == 0) {
 		keyExt_HKLM.GetValue(NULL, szProgID_HKLM, _countof(szProgID_HKLM));
 	}
@@ -818,7 +818,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 		}
 	}
 
-	TCHAR szProgID[ BUFFER_SIZE ] = {0};
+	TCHAR szProgID[BUFFER_SIZE] = {0};
 	keyExt.GetValue(NULL, szProgID, _countof(szProgID));
 
 	if (_tcscmp(sGenProgID.c_str(), szProgID) != 0) {
@@ -872,7 +872,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 	if ((errorCode = keyShell.Open(HKEY_CURRENT_USER, sShellPath.c_str(), KEY_READ | KEY_WRITE)) != 0) {
 		return errorCode;
 	}
-	TCHAR szShellValue[ BUFFER_SIZE ] = {0};
+	TCHAR szShellValue[BUFFER_SIZE] = {0};
 	keyShell.GetValue(NULL, szShellValue, _countof(szShellValue));
 	if (bDefProg) {
 		if (_tcscmp(szShellValue, ACTION_NAME) != 0) {
@@ -892,7 +892,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 		if ((errorCode = keyBackup.Open(HKEY_CURRENT_USER, sBackupPath.c_str(), KEY_READ | KEY_WRITE)) != 0) {
 			keyShell.DeleteValue(_T(""));
 		}else {
-			TCHAR sBackupValue[ BUFFER_SIZE ] = {0};
+			TCHAR sBackupValue[BUFFER_SIZE] = {0};
 			keyBackup.GetValue(NULL, sBackupValue, _countof(sBackupValue));
 			keyShell.SetValue(NULL, sBackupValue);
 		}
@@ -922,7 +922,7 @@ int UnregistExt(LPCTSTR sExt)
 	int errorCode = ERROR_SUCCESS;
 	tstring sBasePath = tstring(_T("Software\\Classes\\"));
 
-	//小文字化
+	// 小文字化
 	TCHAR szLowerExt[MAX_PATH] = {0};
 	_tcsncpy_s(szLowerExt, _countof(szLowerExt), sExt, _tcslen(sExt));
 	CharLower(szLowerExt);
@@ -935,7 +935,7 @@ int UnregistExt(LPCTSTR sExt)
 		return errorCode;
 	}
 
-	TCHAR szProgID[ BUFFER_SIZE ] = {0};
+	TCHAR szProgID[BUFFER_SIZE] = {0};
 	keyExt.GetValue(NULL, szProgID, _countof(szProgID));
 
 	if (szProgID[0] == _T('\0')) {
@@ -961,7 +961,7 @@ int UnregistExt(LPCTSTR sExt)
 	if ((errorCode = keyBackup.Open(HKEY_CURRENT_USER, sBackupPath.c_str(), KEY_READ | KEY_WRITE)) != 0) {
 		keyShell.DeleteValue(_T(""));
 	}else {
-		TCHAR szBackupValue[ BUFFER_SIZE ] = {0};
+		TCHAR szBackupValue[BUFFER_SIZE] = {0};
 		keyBackup.GetValue(NULL, szBackupValue, _countof(szBackupValue));
 		keyShell.SetValue(NULL, szBackupValue);
 	}
@@ -973,7 +973,7 @@ int UnregistExt(LPCTSTR sExt)
 			return errorCode;
 		}
 
-		TCHAR szBackupValue[ BUFFER_SIZE ] = {0};
+		TCHAR szBackupValue[BUFFER_SIZE] = {0};
 		keyExt.GetValue(PROGID_BACKUP_NAME, szBackupValue, _countof(szBackupValue));
 		if (szBackupValue[0] != _T('\0')) {
 			keyExt.SetValue(NULL, szBackupValue);
@@ -1015,7 +1015,7 @@ int CheckExt(LPCTSTR sExt, bool* pbRMenu, bool* pbDblClick)
 	*pbRMenu = false;
 	*pbDblClick = false;
 
-	//小文字化
+	// 小文字化
 	TCHAR szLowerExt[MAX_PATH] = {0};
 	_tcsncpy_s(szLowerExt, _countof(szLowerExt), sExt, _tcslen(sExt));
 	CharLower(szLowerExt);
@@ -1028,7 +1028,7 @@ int CheckExt(LPCTSTR sExt, bool* pbRMenu, bool* pbDblClick)
 		return ERROR_SUCCESS;
 	}
 
-	TCHAR szProgID[ BUFFER_SIZE ] = {0};
+	TCHAR szProgID[BUFFER_SIZE] = {0};
 	keyExt.GetValue(NULL, szProgID, _countof(szProgID));
 
 	if (szProgID[0] == _T('\0')) {
@@ -1046,7 +1046,7 @@ int CheckExt(LPCTSTR sExt, bool* pbRMenu, bool* pbDblClick)
 	if ((errorCode = keyShell.Open(HKEY_CURRENT_USER, sShellPath.c_str(), KEY_READ)) != 0) {
 		return errorCode;
 	}
-	TCHAR szShellValue[ BUFFER_SIZE ] = {0};
+	TCHAR szShellValue[BUFFER_SIZE] = {0};
 	keyShell.GetValue(NULL, szShellValue, _countof(szShellValue));
 	if (_tcscmp(szShellValue, ACTION_NAME) == 0) {
 		*pbDblClick = true;

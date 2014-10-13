@@ -80,7 +80,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 					break;
 				if (wcsncmp_literal(pLine + i, L"sub"))
 					break;
-				int c = pLine[ i + 3 ];
+				int c = pLine[i + 3];
 				if (c == L' ' || c == L'\t') {
 					nMode = 2;	//	”­Œ©
 					i += 3;

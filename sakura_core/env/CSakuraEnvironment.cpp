@@ -146,8 +146,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				// ポインタを末尾に
 				const wchar_t *dot_position, *end_of_path;
 				r = to_wchar(pcDoc->m_cDocFile.GetFileName()); // 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
-				end_of_path = dot_position =
-					r + wcslen(r);
+				end_of_path = dot_position = r + wcslen(r);
 				// 後ろから.を探す
 				for (--dot_position ; dot_position > r && *dot_position != '.'; --dot_position)
 					;
@@ -226,7 +225,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 
 				// 簡易表示に変換
 				TCHAR szText[1024];
-				CFileNameManager::getInstance()->GetTransformFileNameFast(to_tchar(buff), szText, _countof(szText)-1);
+				CFileNameManager::getInstance()->GetTransformFileNameFast(to_tchar(buff), szText, _countof(szText) - 1);
 				q = wcs_pushT(q, q_max - q, szText);
 			}
 			++p;
@@ -235,10 +234,10 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				q = wcs_pushW(q, q_max - q, NO_TITLE.c_str(), NO_TITLE_LEN);
 			}else {
-				const WCHAR*	pStr;
-				const WCHAR*	pEnd;
-				const WCHAR*	p;
-
+				const WCHAR* pStr;
+				const WCHAR* pEnd;
+				const WCHAR* p;
+				
 				pStr = to_wchar(pcDoc->m_cDocFile.GetFilePath());
 				pEnd = pStr - auto_strlen(pStr) - 1;
 				for (p = pStr; *p != '\0'; p++) {
@@ -253,7 +252,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		// From Here Jan. 15, 2002 hor
 		case L'B':	// タイプ別設定の名前			2013/03/28 Uchi
 			{
-				const STypeConfig&	sTypeCongig = pcDoc->m_cDocType.GetDocumentAttribute();
+				const STypeConfig& sTypeCongig = pcDoc->m_cDocType.GetDocumentAttribute();
 				if (sTypeCongig.m_nIdx > 0) {	// 基本は表示しない
 					q = wcs_pushT(q, q_max - q, sTypeCongig.m_szTypeName);
 				}
@@ -263,7 +262,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case L'b':	// 開いているファイルの拡張子	2013/03/28 Uchi
 			if (pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				// ポインタを末尾に
-				const wchar_t	*dot_position, *end_of_path;
+				const wchar_t *dot_position, *end_of_path;
 				r = to_wchar(pcDoc->m_cDocFile.GetFileName());
 				end_of_path = dot_position = r + wcslen(r);
 				// 後ろから.を探す

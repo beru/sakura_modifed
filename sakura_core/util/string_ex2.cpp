@@ -355,13 +355,13 @@ int scan_ints(
 	memset(dummy, 0, sizeof(dummy));
 	int nRet = swscanf(
 		pszData, pszFormat,
-		&dummy[ 0],&dummy[ 1],&dummy[ 2],&dummy[ 3],&dummy[ 4],&dummy[ 5],&dummy[ 6],&dummy[ 7],&dummy[ 8],&dummy[ 9],
+		&dummy[0],&dummy[1],&dummy[2],&dummy[3],&dummy[4],&dummy[5],&dummy[6],&dummy[7],&dummy[8],&dummy[9],
 		&dummy[10],&dummy[11],&dummy[12],&dummy[13],&dummy[14],&dummy[15],&dummy[16],&dummy[17],&dummy[18],&dummy[19],
 		&dummy[20],&dummy[21],&dummy[22],&dummy[23],&dummy[24],&dummy[25],&dummy[26],&dummy[27],&dummy[28],&dummy[29]
 	);
 
 	// Œ‹‰ÊƒRƒs[
-	for (int i=0; i<num; i++) {
+	for (int i = 0; i < num; i++) {
 		anBuf[i] = dummy[i];
 	}
 

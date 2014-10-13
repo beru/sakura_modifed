@@ -58,7 +58,7 @@ void CMarkMgr::SetMax(int max)
 bool CMarkMgr::CheckCurrent(void) const
 {
 	if (m_nCurpos < Count()) {
-		return m_cMarkChain[ m_nCurpos ].IsValid();
+		return m_cMarkChain[m_nCurpos].IsValid();
 	}
 
 	return false;
@@ -73,7 +73,7 @@ bool CMarkMgr::CheckCurrent(void) const
 bool CMarkMgr::CheckPrev(void) const
 {
 	for (int i = m_nCurpos - 1; i >= 0; i--) {
-		if (m_cMarkChain[ i ].IsValid()) {
+		if (m_cMarkChain[i].IsValid()) {
 			return true;
 		}
 	}
@@ -89,7 +89,7 @@ bool CMarkMgr::CheckPrev(void) const
 bool CMarkMgr::CheckNext(void) const
 {
 	for (int i = m_nCurpos + 1; i < Count(); i++) {
-		if (m_cMarkChain[ i ].IsValid()) {
+		if (m_cMarkChain[i].IsValid()) {
 			return true;
 		}
 	}
@@ -105,7 +105,7 @@ bool CMarkMgr::CheckNext(void) const
 bool CMarkMgr::PrevValid(void)
 {
 	for (int i = m_nCurpos - 1; i >= 0; i--) {
-		if (m_cMarkChain[ i ].IsValid()) {
+		if (m_cMarkChain[i].IsValid()) {
 			m_nCurpos = i;
 			return true;
 		}
@@ -122,7 +122,7 @@ bool CMarkMgr::PrevValid(void)
 bool CMarkMgr::NextValid(void)
 {
 	for (int i = m_nCurpos + 1; i < Count(); i++) {
-		if (m_cMarkChain[ i ].IsValid()) {
+		if (m_cMarkChain[i].IsValid()) {
 			m_nCurpos = i;
 			return true;
 		}

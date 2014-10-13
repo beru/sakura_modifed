@@ -65,9 +65,9 @@ public:
 	void Add(EditInfo* pEditInfo);		//	*pEditInfoを追加する。
 
 protected:
-	//	共有メモリアクセス用。
+	// 共有メモリアクセス用。
 	struct DLLSHAREDATA* m_pShareData;		//	共有メモリを参照するよ。
-
+	
 private:
 	CRecentFile	m_cRecentFile;	// 履歴	//@@@ 2003.04.08 MIK
 };

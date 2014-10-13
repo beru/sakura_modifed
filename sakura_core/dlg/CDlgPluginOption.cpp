@@ -128,7 +128,7 @@ void CDlgPluginOption::SetData(void)
 
 	CPluginOption* cOpt;
 	CPluginOption::ArrayIter it;
-	for (i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
+	for (i = 0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
 		cOpt = *it;
 
 		auto_snprintf_s(buf, _countof(buf), _T("%ls"), cOpt->GetLabel().c_str());
@@ -230,7 +230,7 @@ int CDlgPluginOption::GetData(void)
 	CPluginOption* cOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	CPluginOption::ArrayIter it;
-	for (i=0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
+	for (i = 0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
 		cOpt = *it;
 
 		memset_raw(&lvi, 0, sizeof(lvi));

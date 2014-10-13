@@ -18,8 +18,8 @@
 
 CBlockComment::CBlockComment()
 {
-	m_szBlockCommentFrom[ 0 ] = '\0';
-	m_szBlockCommentTo[ 0 ] = '\0';
+	m_szBlockCommentFrom[0] = '\0';
+	m_szBlockCommentTo[0] = '\0';
 	m_nBlockFromLen = 0;
 	m_nBlockToLen = 0;
 }

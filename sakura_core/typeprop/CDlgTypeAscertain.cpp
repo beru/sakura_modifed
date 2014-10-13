@@ -47,7 +47,7 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-//  Constructors
+// Constructors
 CDlgTypeAscertain::CDlgTypeAscertain()
 	:
 	m_psi(NULL)
@@ -69,7 +69,7 @@ BOOL CDlgTypeAscertain::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
-		// 「タイプ別設定インポート」のヘルプ
+		//「タイプ別設定インポート」のヘルプ
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, HLP000338);
 		return TRUE;
 	case IDOK:

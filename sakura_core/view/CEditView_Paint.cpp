@@ -852,7 +852,7 @@ bool CEditView::DrawLogicLine(
 	//開始ロジック位置を算出
 	{
 		const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
-		pInfo->m_nPosInLogic = pcLayout?pcLayout->GetLogicOffset():CLogicInt(0);
+		pInfo->m_nPosInLogic = pcLayout ? pcLayout->GetLogicOffset() : CLogicInt(0);
 	}
 
 	for (;;) {
@@ -1071,7 +1071,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 			pInfo->m_gr,
 			pInfo->m_pDispPos->GetLayoutLineRef(),
 			CMyPoint(pInfo->m_sDispPosBegin.GetDrawPos().x, pInfo->m_pDispPos->GetDrawPos().y),
-			pcLayout->CalcLayoutWidth(CEditDoc::GetInstance(0)->m_cLayoutMgr) + CLayoutInt(pcLayout->GetLayoutEol().GetLen()?1:0)
+			pcLayout->CalcLayoutWidth(CEditDoc::GetInstance(0)->m_cLayoutMgr) + CLayoutInt(pcLayout->GetLayoutEol().GetLen() ? 1 : 0)
 		);
 	}
 

@@ -19,7 +19,7 @@ int CUtf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 	const char* pr = pSrc;
 	wchar_t* pw = pDst;
 
-	for(; pr < pSrc + nSrcLen; ++pr) {
+	for (; pr < pSrc + nSrcLen; ++pr) {
 		if (IsUtf7Direct(*pr)) {
 			*pw = *pr;
 		}else {
@@ -39,9 +39,9 @@ int CUtf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 	char* pbuf;
 	bool bError = false;
 
-	try{
+	try {
 		pbuf = new char[nSrcLen];
-	}catch(...) {
+	}catch (...) {
 		pbuf = NULL;
 		bError = true;
 	}
@@ -82,7 +82,7 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 	pr_end = pSrc + nSrcLen;
 	pw = pDst;
 
-	do{
+	do {
 		// UTF-7 Set D 部分のチェック
 		nblocklen = CheckUtf7DPart(pr, pr_end - pr, &pr_next, &berror_tmp);
 		if (berror_tmp == true) {
@@ -137,12 +137,12 @@ EConvertResult CUtf7::UTF7ToUnicode(CMemory* pMem)
 
 	// 必要なバッファサイズを調べて確保
 	wchar_t* pDst;
-	try{
+	try {
 		pDst = new wchar_t[nDataLen + 1];
 		if (!pDst) {
 			return RESULT_FAILURE;
 		}
-	}catch(...) {
+	}catch (...) {
 		return RESULT_FAILURE;
 	}
 
@@ -170,7 +170,7 @@ int CUtf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pD
 	}
 
 	int i;
-	for(i = 0; i < nSrcLen; ++i) {
+	for (i = 0; i < nSrcLen; ++i) {
 		pDst[i] = static_cast<char>(pSrc[i] & 0x00ff);
 	}
 
@@ -188,9 +188,9 @@ int CUtf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pD
 		return 0;
 	}
 
-	try{
+	try {
 		psrc = new wchar_t[nSrcLen];
-	}catch(...) {
+	}catch (...) {
 		psrc = NULL;
 	}
 	if (!psrc) {
@@ -228,8 +228,8 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 	pr_end = pSrc + nSrcLen;
 	pw = pDst;
 
-	do{
-		for(; pr < pr_end; ++pr) {
+	do {
+		for (; pr < pr_end; ++pr) {
 			if (!IsUtf7SetD(*pr)) {
 				break;
 			}
@@ -244,7 +244,7 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 			++pr;
 			pw += 2;
 		}else {
-			for(; pr < pr_end; ++pr) {
+			for (; pr < pr_end; ++pr) {
 				if (IsUtf7SetD(*pr)) {
 					break;
 				}
@@ -271,10 +271,10 @@ EConvertResult CUtf7::UnicodeToUTF7(CMemory* pMem)
 
 	// 出力先バッファの確保
 	char* pDst;
-	try{
+	try {
 		// 最大で、変換元のデータ長の５倍。
-		pDst = new char[ nSrcLen * 5 + 1 ];  // * → +ACo-
-	}catch(...) {
+		pDst = new char[nSrcLen * 5 + 1];  // * → +ACo-
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {

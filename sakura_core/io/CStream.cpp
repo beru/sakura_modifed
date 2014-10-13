@@ -131,7 +131,7 @@ void CStream::SeekSet(	//!< シーク
 	fseek(m_fp, offset, SEEK_SET);
 }
 
-void CStream::SeekEnd(   //!< シーク
+void CStream::SeekEnd(  //!< シーク
 	long offset //!< ストリーム終端からのオフセット
 )
 {

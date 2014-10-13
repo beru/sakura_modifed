@@ -69,7 +69,7 @@ inline int CShiftJis::_SjisToUni_char(const unsigned char* pSrc, unsigned short*
 	int nret;
 	bool berror = false;
 
-	switch(eCharset) {
+	switch (eCharset) {
 	case CHARSET_JIS_HANKATA:
 		// 半角カタカナを処理
 		// エラーは起こらない。

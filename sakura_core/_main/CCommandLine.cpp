@@ -346,7 +346,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				// ファイルタイプの強制指定
 				{
 					_tcsncpy(m_fi.m_szDocType, arg, MAX_DOCTYPE_LEN);
-					m_fi.m_szDocType[ nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN ] = L'\0';
+					m_fi.m_szDocType[nArgLen < MAX_DOCTYPE_LEN ? nArgLen : MAX_DOCTYPE_LEN] = L'\0';
 				}
 				break;
 			case CMDLINEOPT_CODE:	// CODE

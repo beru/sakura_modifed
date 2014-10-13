@@ -237,7 +237,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
 		}else if (szSpecialIndentChar[0] != L'\0') {
 			wchar_t buf[3]; // 文字の長さは1 or 2
 			wmemcpy(buf, it.getCurrentPos(), it.getIndexDelta());
-			buf[ it.getIndexDelta() ] = L'\0';
+			buf[it.getIndexDelta()] = L'\0';
 			if (wcsstr(szSpecialIndentChar, buf)) {
 				// インデントのカウントを継続する
 			}else {
@@ -342,7 +342,7 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 		}
 		// レイアウト行の長さを算出する
 		if (bCalLineLen) {
-			CLayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen()>0?1:0);
+			CLayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0);
 			pLayout->SetLayoutWidth(nWidth);
 		}
 

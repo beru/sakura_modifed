@@ -134,7 +134,7 @@ int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 
 	while ((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset, 0)) > 0) {
 		// 保護コード
-		switch(echarset) {
+		switch (echarset) {
 		case CHARSET_UNI_NORMAL:
 			nclen = 1;
 			break;
@@ -182,9 +182,9 @@ EConvertResult CUtf8::_UnicodeToUTF8(CMemory* pMem, bool bCesu8Mode)
 
 	// 必要なバッファサイズを調べてメモリを確保
 	char* pDst;
-	try{
+	try {
 		pDst = new char[nSrcLen * 3];
-	}catch(...) {
+	}catch (...) {
 		pDst = NULL;
 	}
 	if (!pDst) {

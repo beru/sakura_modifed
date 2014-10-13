@@ -1819,7 +1819,7 @@ CColorStrategy* CPrintPreview::GetColorStrategy(
 		}
 	}
 	if (!pStrategy) {
-		for (int i=0; i < m_pool->GetStrategyCount(); i++) {
+		for (int i = 0; i < m_pool->GetStrategyCount(); i++) {
 			if (m_pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
 				pStrategy = m_pool->GetStrategy(i);
 				break;

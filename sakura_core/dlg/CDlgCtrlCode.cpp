@@ -92,7 +92,7 @@ struct ctrl_info_t {
 // Feb. 12, 2003 MIK long‚ª”²‚¯‚Ä‚¢‚½
 
 // LMP: Added, nasukoji changed
-static CLoadString cLabel_jname[ _countof(p_ctrl_list) ];
+static CLoadString cLabel_jname[_countof(p_ctrl_list)];
 
 CDlgCtrlCode::CDlgCtrlCode()
 {

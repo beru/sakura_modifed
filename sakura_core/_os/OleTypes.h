@@ -24,7 +24,7 @@ struct SysString {
 
 	SysString()                         { Data = NULL; }
 	SysString(const SysString& Source)  { Data = ::SysAllocStringLen(Source.Data, SysStringLen(Source.Data)); }
-	SysString(BSTR &Source)             { Data = ::SysAllocStringLen(Source, SysStringLen(Source)); }
+	SysString(BSTR& Source)             { Data = ::SysAllocStringLen(Source, SysStringLen(Source)); }
 	SysString(const wchar_t* S, int L)  { Data = ::SysAllocStringLen(S, L); }
 	SysString(const char* S, int L) { 
 		wchar_t* buf = new wchar_t[L + 1];
@@ -75,15 +75,15 @@ struct SysString {
 struct Variant {
 	VARIANT Data;
 	Variant()                       { ::VariantInit(&Data); }
-	Variant(Variant &Source)        { ::VariantCopyInd(&Data, &Source.Data); }
-	Variant(VARIANT &Source)        { ::VariantCopyInd(&Data, &Source); }
+	Variant(Variant& Source)        { ::VariantCopyInd(&Data, &Source.Data); }
+	Variant(VARIANT& Source)        { ::VariantCopyInd(&Data, &Source); }
 	~Variant()                      { ::VariantClear(&Data); }
 	Variant& operator = (Variant& Source) { ::VariantCopyInd(&Data, &Source.Data); return *this; }
 	/*! SysStringをVariantにセットする
 	
 		セット後、SysStringの方は中身がNULLになる。
 	*/
-	void Receive(SysString &Source) {
+	void Receive(SysString& Source) {
 		::VariantClear(&Data); 
 		Data.vt = VT_BSTR; 
 		Data.bstrVal = Source.Data; 

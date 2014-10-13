@@ -256,13 +256,13 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 			}
 			break;
 		case CBN_DROPDOWN:
-			//switch(wID) {
+			//switch (wID) {
 			//default:
 			//	break;
 			//}
 			break;	// CBN_DROPDOWN
 		case EN_KILLFOCUS:
-			//switch(wID) {
+			//switch (wID) {
 			//default:
 			//	break;
 			//}

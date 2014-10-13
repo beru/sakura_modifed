@@ -143,13 +143,13 @@ int COutlinePython::EnterString(const wchar_t* data, int linelen, int start_offs
 
 	int col = start_offset;
 	//	文字列開始チェック
-	if (data[ col ] == '\"' || data[ col ] == '\'') {
-		int quote_char = data[ col ];
+	if (data[col] == '\"' || data[col] == '\'') {
+		int quote_char = data[col];
 		m_state = STATE_STRING;
 		m_quote_char = quote_char;
 		//	文字列の開始
 		if (col >= 1 &&
-			(data[ col - 1 ] == 'r' || data[ col - 1 ] == 'R')
+			(data[col - 1] == 'r' || data[col - 1] == 'R')
 		) {
 			//	厳密には直前がSHIFT_JISの2バイト目だと誤判定する可能性があるが
 			//	そういう動かないコードは相手にしない
@@ -158,8 +158,8 @@ int COutlinePython::EnterString(const wchar_t* data, int linelen, int start_offs
 			m_raw_string = false;
 		}
 		if (col + 2 < linelen &&
-			data[ col + 1 ] == quote_char &&
-			data[ col + 2 ] == quote_char
+			data[col + 1] == quote_char &&
+			data[col + 2] == quote_char
 		) {
 			m_long_string = true;
 			col += 2;
@@ -217,9 +217,9 @@ int COutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offse
 			//	最終行には改行コードがないことがあるが，それ以降には何もないので影響しない
 			if (
 				(linelen - 2 == col && 
-				(data[ col + 1 ] == WCODE::CR && data[ col + 2 ] == WCODE::LF)) ||
+				(data[col + 1] == WCODE::CR && data[col + 2] == WCODE::LF)) ||
 				(linelen - 1 == col && 
-				(WCODE::IsLineDelimiter(data[ col + 1 ])))
+				(WCODE::IsLineDelimiter(data[col + 1])))
 			) {
 				m_state = STATE_CONTINUE;
 				break;
@@ -268,8 +268,8 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 		}
 		//	rawモード以外ではエスケープをチェック
 		//	rawモードでも継続行はチェック
-		if (data[ col ] == '\\' && col + 1 < linelen) {
-			wchar_t key = data[ col + 1 ];
+		if (data[col] == '\\' && col + 1 < linelen) {
+			wchar_t key = data[col + 1];
 			if (! m_raw_string) {
 				if (key == L'\\' ||
 					key == L'\"' ||
@@ -283,17 +283,17 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 			if (WCODE::IsLineDelimiter(key)) {
 				// \r\nをまとめて\nとして扱う必要がある
 				if (col + 1 >= linelen ||
-					data[ col + 2 ] == key
+					data[col + 2] == key
 				) {
 					// 本当に行末
 					++col;
 					continue;
-				}else if (data[ col + 2 ] == WCODE::LF) {
+				}else if (data[col + 2] == WCODE::LF) {
 					col += 2;	//	 CRLF
 				}
 			}
 		//	short string + 改行の場合はエラーから強制復帰
-		}else if (WCODE::IsLineDelimiter(data[ col ])) {
+		}else if (WCODE::IsLineDelimiter(data[col])) {
 			//あとで
 			if (!m_long_string) {
 				//	文字列の末尾を発見した
@@ -301,7 +301,7 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 				return col + 1;
 			}
 		//	引用符が見つかったら終了チェック
-		}else if (data[ col ] == quote_char) {
+		}else if (data[col] == quote_char) {
 			if (!m_long_string) {
 				//	文字列の末尾を発見した
 				m_state = STATE_NORMAL;
@@ -309,8 +309,8 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 			}
 			//	long stringの場合
 			if (col + 2 < linelen &&
-				data[ col + 1 ] == quote_char &&
-				data[ col + 2 ] == quote_char
+				data[col + 1] == quote_char &&
+				data[col + 2] == quote_char
 			) {
 				m_state = STATE_NORMAL;
 				return col + 3;
@@ -388,7 +388,7 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 
 	const int MAX_DEPTH = 10;
 
-	int indent_level[ MAX_DEPTH ]; // 各レベルのインデント桁位置()
+	int indent_level[MAX_DEPTH]; // 各レベルのインデント桁位置()
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
@@ -451,12 +451,12 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 			//	def/class以外のインデントは記録しない方がいいので
 			//	見出し行と確定してからインデントレベルの判定を行う
 			for (int i = depth_index; i >= 0; --i) {
-				if (depth == indent_level[ i ]) {
+				if (depth == indent_level[i]) {
 					depth_index = i;
 					break;
-				}else if (depth > indent_level[ i ] && i < MAX_DEPTH - 1) {
+				}else if (depth > indent_level[i] && i < MAX_DEPTH - 1) {
 					depth_index = i + 1;
-					indent_level[ depth_index ] = depth;
+					indent_level[depth_index] = depth;
 					break;
 				}
 			}
@@ -491,7 +491,7 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 					len = _countof(szWord) - 1;
 				}
 				wcsncpy(szWord, pLine + col, len);
-				szWord[ len ] = L'\0';
+				szWord[len] = L'\0';
 			}else {
 				wcscpy_s(szWord, LSW(STR_OUTLINE_PYTHON_UNDEFINED));
 				len = 8;

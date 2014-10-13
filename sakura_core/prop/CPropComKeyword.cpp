@@ -148,7 +148,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 		plvi = &plvdi->item;
 
 		if (hwndLIST_KEYWORD == pNMHDR->hwndFrom) {
-			switch(pNMHDR->code) {
+			switch (pNMHDR->code) {
 			case NM_DBLCLK:
 //				MYTRACE(_T("NM_DBLCLK     \n"));
 				// リスト中で選択されているキーワードを編集する
@@ -359,7 +359,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					}
 					return TRUE;
 				case IDC_CHECK_KEYWORDCASE:	// キーワードの英大文字小文字区別
-//					csSpecialKeyword.m_CKeyWordSetMgr.m_bKEYWORDCASEArr[ csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ] = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYWORDCASE);	//MIK 2000.12.01 case sense
+//					csSpecialKeyword.m_CKeyWordSetMgr.m_bKEYWORDCASEArr[csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx] = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYWORDCASE);	//MIK 2000.12.01 case sense
 					csSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordCase(csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYWORDCASE));			//MIK 2000.12.01 case sense
 					return TRUE;
 				case IDC_BUTTON_ADDKEYWORD:	// キーワード追加
@@ -702,7 +702,7 @@ void CPropKeyword::DispKeywordCount(HWND hwndDlg)
 		+ keywordSetMgr.GetFreeSize()
 	;
 	
-	TCHAR szCount[ 256 ];
+	TCHAR szCount[256];
 	auto_sprintf(szCount, LS(STR_PROPCOMKEYWORD_INFO), MAX_KEYWORDLEN, n, nAlloc);
 	::SetWindowText(::GetDlgItem(hwndDlg, IDC_STATIC_KEYWORD_COUNT), szCount);
 }

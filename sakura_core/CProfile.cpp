@@ -313,7 +313,7 @@ bool CProfile::_WriteFile(
 	}
 
 	int nSize = (int)vecLine.size();
-	for (int i=0; i < nSize; i++) {
+	for (int i = 0; i < nSize; i++) {
 		// o—Í
 		out.WriteString(vecLine[i].c_str());
 		out.WriteString(L"\n");

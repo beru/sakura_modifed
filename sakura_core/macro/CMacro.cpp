@@ -951,7 +951,7 @@ bool CMacro::HandleCommand(
 			if (lFlag & 0x04) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
 			if (lFlag & 0x08) _tcscat(pOpt, _T("R"));	// 正規表現
 			if (lFlag & 0x20) _tcscat(pOpt, _T("P"));	// 行を出力するか該当部分だけ出力するか
-			if (    0x40 == (lFlag & 0xC0)) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
+			if (0x40 == (lFlag & 0xC0)) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
 			else if (0x80 == (lFlag & 0xC0)) _tcscat(pOpt, _T("3"));
 			else _tcscat(pOpt, _T("1"));
 			if (lFlag & 0x10000) _tcscat(pOpt, _T("W"));
@@ -1263,7 +1263,7 @@ inline bool VariantToI4(Variant& varCopy, const VARIANT& arg)
 	@date 2005.08.05 maru,zenryaku 関数追加
 	@date 2005.11.29 FILE VariantChangeType対応
 */
-bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Arguments, int ArgSize, VARIANT &Result)
+bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Arguments, int ArgSize, VARIANT& Result)
 {
 	Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
@@ -1555,7 +1555,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				}
 			}
 
-			TCHAR* Buffer = new TCHAR[ nMaxLen + 1 ];
+			TCHAR* Buffer = new TCHAR[nMaxLen + 1];
 			_tcscpy_s(Buffer, nMaxLen + 1, sDefaultValue.c_str());
 			CDlgInput1 cDlgInput1;
 			if (cDlgInput1.DoModal(G_AppInstance(), View->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, Buffer)) {
@@ -1676,7 +1676,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				sDefault.c_str()
 			);
 			bool bRet;
-			TCHAR szPath[ _MAX_PATH ];
+			TCHAR szPath[_MAX_PATH];
 			_tcscpy_s(szPath, sDefault.c_str());
 			if (LOWORD(ID) == F_FILEOPENDIALOG) {
 				bRet = cDlgOpenFile.DoModal_GetOpenFileName(szPath);
@@ -1714,7 +1714,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				delete[] Source;
 			}
 
-			TCHAR szPath[ _MAX_PATH ];
+			TCHAR szPath[_MAX_PATH];
 			int nRet = SelectDir(View->GetHwnd(), sMessage.c_str(), sDefault.c_str(), szPath);
 			if (nRet == IDOK) {
 				SysString S(szPath, _tcslen(szPath));

@@ -82,14 +82,21 @@ HMENU CMRUFile::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 		
 		// MRUリストの中にある開かれていないファイル
 
-		const EditInfo	*p = m_cRecentFile.GetItem(i);
+		const EditInfo* p = m_cRecentFile.GetItem(i);
 		bool bFavorite = m_cRecentFile.IsFavorite(i);
 		bool bFavoriteLabel = bFavorite && !bMenuIcon;
 		CFileNameManager::getInstance()->GetMenuFullLabel_MRU(szMenu, _countof(szMenu), p, -1, bFavoriteLabel, i);
 
-		//	メニューに追加。
-		pCMenuDrawer->MyAppendMenu(hMenuPopUp, MF_BYPOSITION | MF_STRING, IDM_SELMRU + i, szMenu, _T(""), TRUE,
-			bFavorite ? F_FAVORITE : -1);
+		// メニューに追加。
+		pCMenuDrawer->MyAppendMenu(
+			hMenuPopUp,
+			MF_BYPOSITION | MF_STRING,
+			IDM_SELMRU + i,
+			szMenu,
+			_T(""),
+			TRUE,
+			bFavorite ? F_FAVORITE : -1
+		);
 	}
 	return hMenuPopUp;
 }
@@ -110,7 +117,7 @@ std::vector<LPCTSTR> CMRUFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
 	for (int i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
-		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
+		//「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_cRecentFile.GetViewCount()) {
 			break;
 		}
@@ -207,10 +214,10 @@ void CMRUFile::Add(EditInfo* pEditInfo)
 	EditInfo tmpEditInfo = *pEditInfo;
 	tmpEditInfo.m_bIsModified = FALSE; // 変更フラグを無効に
 
-	TCHAR	szDrive[_MAX_DRIVE];
-	TCHAR	szDir[_MAX_DIR];
-	TCHAR	szFolder[_MAX_PATH + 1];	//	ドライブ＋フォルダ
-
+	TCHAR szDrive[_MAX_DRIVE];
+	TCHAR szDir[_MAX_DIR];
+	TCHAR szFolder[_MAX_PATH + 1];	//	ドライブ＋フォルダ
+	
 	_tsplitpath(pEditInfo->m_szPath, szDrive, szDir, NULL, NULL);	//	ドライブとフォルダを取り出す。
 
 	//	Jan.  10, 2006 genta USBメモリはRemovable mediaと認識されるようなので，

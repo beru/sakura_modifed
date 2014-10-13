@@ -74,7 +74,7 @@ INT_PTR CPropGrep::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 		return TRUE;
 	case WM_NOTIFY:
 		pNMHDR = (NMHDR*)lParam;
-//		switch(idCtrl) {
+//		switch (idCtrl) {
 //		default:
 			switch (pNMHDR->code) {
 			case PSN_HELP:

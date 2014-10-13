@@ -815,7 +815,7 @@ void CMenuDrawer::MyAppendMenu(
 	szLabel[0] = _T('\0');
 	if (pszLabel) {
 		_tcsncpy(szLabel, pszLabel, _countof(szLabel) - 1);
-		szLabel[ _countof(szLabel) - 1 ] = _T('\0');
+		szLabel[_countof(szLabel) - 1] = _T('\0');
 	}
 	auto_strcpy(szKey, pszKey); 
 	if (nFuncId != 0) {
@@ -874,7 +874,7 @@ void CMenuDrawer::MyAppendMenu(
 	if (MF_CHECKED		& (nFlag | nFlagAdd)) mii.fState |= MFS_CHECKED;
 
 	mii.wID = nFuncId;
-	mii.hSubMenu = (nFlag&MF_POPUP)?((HMENU)nFuncId):NULL;
+	mii.hSubMenu = (nFlag & MF_POPUP) ? ((HMENU)nFuncId) : NULL;
 	mii.hbmpChecked = NULL;
 	mii.hbmpUnchecked = NULL;
 	mii.dwItemData = (ULONG_PTR)this;

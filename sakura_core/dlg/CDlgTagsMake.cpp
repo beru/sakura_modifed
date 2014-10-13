@@ -123,9 +123,9 @@ void CDlgTagsMake::SelectFolder(HWND hwndDlg)
 	if (SelectDir(hwndDlg, LS(STR_DLGTAGMAK_SELECTDIR), szPath, szPath)) {
 		// 末尾に\\マークを追加する．
 		int pos = _tcslen(szPath);
-		if (pos > 0 && szPath[ pos - 1 ] != _T('\\')) {
-			szPath[ pos     ] = _T('\\');
-			szPath[ pos + 1 ] = _T('\0');
+		if (pos > 0 && szPath[pos - 1] != _T('\\')) {
+			szPath[pos    ] = _T('\\');
+			szPath[pos + 1] = _T('\0');
 		}
 
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_TAG_MAKE_FOLDER, szPath);
@@ -159,7 +159,7 @@ int CDlgTagsMake::GetData(void)
 	::DlgItem_GetText(GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof(m_szPath));
 	int length = _tcslen(m_szPath);
 	if (length > 0) {
-		if (m_szPath[ length - 1 ] != _T('\\')) _tcscat(m_szPath, _T("\\"));
+		if (m_szPath[length - 1] != _T('\\')) _tcscat(m_szPath, _T("\\"));
 	}
 
 	// CTAGSオプション

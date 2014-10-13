@@ -82,7 +82,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					bSpace = FALSE;
 				}
 			}
-			//for(; i < nLineLen; ++i) {
+			//for (; i < nLineLen; ++i) {
 			//	pDes[nPosDes] = pLine[i];
 			//	nPosDes++;
 			//}
@@ -91,7 +91,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					pDes[nPosDes] = SPACE;
 					nPosDes++;
 				}else {
-					//for(j = nStartPos - 1; (j + m_nTabWidth) <= nPosX + 1; j += m_nTabWidth) {
+					//for (j = nStartPos - 1; (j + m_nTabWidth) <= nPosX + 1; j += m_nTabWidth) {
 					for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); j++) {
 						pDes[nPosDes] = TAB;
 						nPosDes++;
