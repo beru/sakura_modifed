@@ -160,7 +160,7 @@ bool CProfile::ReadProfile(const TCHAR* pszProfileName)
 */
 bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 {
-	static const BYTE UTF8_BOM[] = {0xEF,0xBB,0xBF};
+	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 	HRSRC		hRsrc;
 	HGLOBAL		hGlobal;
 	size_t		nSize;
@@ -192,13 +192,13 @@ bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 			}else {
 				pn++;
 			}
-			lnsz = (pn-p)<=300 ? (pn-p) : 300;
+			lnsz = (pn - p) <= 300 ? (pn - p) : 300;
 			memcpy(sLine, p, lnsz);
 			sLine[lnsz] = '\0';
-			if (sLine[lnsz-1] == '\n') {
+			if (sLine[lnsz - 1] == '\n') {
 				sLine[--lnsz] = '\0';
 			}
-			if (sLine[lnsz-1] == '\r') {
+			if (sLine[lnsz - 1] == '\r') {
 				sLine[--lnsz] = '\0';
 			}
 			
@@ -313,7 +313,7 @@ bool CProfile::_WriteFile(
 	}
 
 	int nSize = (int)vecLine.size();
-	for (int i=0;i<nSize;i++) {
+	for (int i=0; i < nSize; i++) {
 		// o—Í
 		out.WriteString(vecLine[i].c_str());
 		out.WriteString(L"\n");

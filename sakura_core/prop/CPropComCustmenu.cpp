@@ -216,7 +216,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 			break;	// BN_CLICKED
 		}
 
-		if(hwndCOMBO_MENU == hwndCtl) {
+		if (hwndCOMBO_MENU == hwndCtl) {
 			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);

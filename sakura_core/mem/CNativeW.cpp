@@ -24,7 +24,7 @@ CNativeW::CNativeW(const CNativeW& rhs)
 }
 
 //! nDataLenは文字単位。
-CNativeW::CNativeW( const wchar_t* pData, int nDataLen )
+CNativeW::CNativeW(const wchar_t* pData, int nDataLen)
 #if _DEBUG
 	:
 	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
@@ -33,7 +33,7 @@ CNativeW::CNativeW( const wchar_t* pData, int nDataLen )
 	SetString(pData, nDataLen);
 }
 
-CNativeW::CNativeW( const wchar_t* pData)
+CNativeW::CNativeW(const wchar_t* pData)
 #if _DEBUG
 	:
 	m_pDebugData((PWCHAR&)_DebugGetPointerRef())
@@ -48,43 +48,43 @@ CNativeW::CNativeW( const wchar_t* pData)
 
 
 // バッファの内容を置き換える
-void CNativeW::SetString( const wchar_t* pData, int nDataLen )
+void CNativeW::SetString(const wchar_t* pData, int nDataLen)
 {
 	CNative::SetRawData(pData, nDataLen * sizeof(wchar_t));
 }
 
 // バッファの内容を置き換える
-void CNativeW::SetString( const wchar_t* pszData )
+void CNativeW::SetString(const wchar_t* pszData)
 {
 	SetString(pszData, wcslen(pszData));
 }
 
 // バッファの内容を置き換える
-void CNativeW::SetNativeData( const CNativeW& pcNative )
+void CNativeW::SetNativeData(const CNativeW& pcNative)
 {
 	CNative::SetRawData(pcNative);
 }
 
 //! (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
-void CNativeW::AllocStringBuffer( int nDataLen )
+void CNativeW::AllocStringBuffer(int nDataLen)
 {
 	CNative::AllocBuffer(nDataLen * sizeof(wchar_t));
 }
 
 //! バッファの最後にデータを追加する
-void CNativeW::AppendString( const wchar_t* pszData )
+void CNativeW::AppendString(const wchar_t* pszData)
 {
 	AppendString(pszData, wcslen(pszData));
 }
 
 //! バッファの最後にデータを追加する。nLengthは文字単位。
-void CNativeW::AppendString( const wchar_t* pszData, int nLength )
+void CNativeW::AppendString(const wchar_t* pszData, int nLength)
 {
 	CNative::AppendRawData(pszData, nLength * sizeof(wchar_t));
 }
 
 //! バッファの最後にデータを追加する
-void CNativeW::AppendNativeData( const CNativeW& cmemData )
+void CNativeW::AppendNativeData(const CNativeW& cmemData)
 {
 	AppendString(cmemData.GetStringPtr(), cmemData.GetStringLength());
 }
@@ -92,7 +92,7 @@ void CNativeW::AppendNativeData( const CNativeW& cmemData )
 // -- -- charからの移行用 -- -- //
 
 //! バッファの内容を置き換える。nDataLenは文字単位。
-void CNativeW::SetStringOld( const char* pData, int nDataLen )
+void CNativeW::SetStringOld(const char* pData, int nDataLen)
 {
 	int nLen;
 	wchar_t* szTmp = mbstowcs_new(pData, nDataLen, &nLen);
@@ -101,12 +101,12 @@ void CNativeW::SetStringOld( const char* pData, int nDataLen )
 }
 
 //! バッファの内容を置き換える
-void CNativeW::SetStringOld( const char* pszData )
+void CNativeW::SetStringOld(const char* pszData)
 {
 	SetStringOld(pszData, strlen(pszData));
 }
 
-void CNativeW::AppendStringOld( const char* pData, int nDataLen )
+void CNativeW::AppendStringOld(const char* pData, int nDataLen)
 {
 	int nLen;
 	wchar_t* szTmp=mbstowcs_new(pData, nDataLen, &nLen);
@@ -115,7 +115,7 @@ void CNativeW::AppendStringOld( const char* pData, int nDataLen )
 }
 
 //! バッファの最後にデータを追加する。pszDataはSJIS。
-void CNativeW::AppendStringOld( const char* pszData )
+void CNativeW::AppendStringOld(const char* pszData)
 {
 	AppendStringOld(pszData, strlen(pszData));
 }
@@ -136,19 +136,19 @@ wchar_t CNativeW::operator[](int nIndex) const
 
 
 // 等しい内容か
-bool CNativeW::IsEqual( const CNativeW& cmem1, const CNativeW& cmem2 )
+bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
 {
 	if (&cmem1 == &cmem2) {
 		return true;
 	}
 
 	int nLen1;
-	const wchar_t* psz1 = cmem1.GetStringPtr( &nLen1 );
+	const wchar_t* psz1 = cmem1.GetStringPtr(&nLen1);
 	int nLen2;
-	const wchar_t* psz2 = cmem2.GetStringPtr( &nLen2 );
+	const wchar_t* psz2 = cmem2.GetStringPtr(&nLen2);
 	
 	if (nLen1 == nLen2) {
-		if (0 == wmemcmp( psz1, psz2, nLen1 )) {
+		if (0 == wmemcmp(psz1, psz2, nLen1)) {
 			return true;
 		}
 	}
@@ -161,22 +161,22 @@ bool CNativeW::IsEqual( const CNativeW& cmem1, const CNativeW& cmem2 )
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! 文字列置換
-void CNativeW::Replace( const wchar_t* pszFrom, const wchar_t* pszTo )
+void CNativeW::Replace(const wchar_t* pszFrom, const wchar_t* pszTo)
 {
 	CNativeW	cmemWork;
-	int			nFromLen = wcslen( pszFrom );
-	int			nToLen = wcslen( pszTo );
+	int			nFromLen = wcslen(pszFrom);
+	int			nToLen = wcslen(pszTo);
 	int			nBgnOld = 0;
 	int			nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
-		if (0 == wmemcmp( &GetStringPtr()[nBgn], pszFrom, nFromLen )) {
+		if (0 == wmemcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
 			if (nBgnOld == 0 && nFromLen <= nToLen) {
-				cmemWork.AllocStringBuffer( GetStringLength() );
+				cmemWork.AllocStringBuffer(GetStringLength());
 			}
 			if (0  < nBgn - nBgnOld) {
-				cmemWork.AppendString( &GetStringPtr()[nBgnOld], nBgn - nBgnOld );
+				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
-			cmemWork.AppendString( pszTo, nToLen );
+			cmemWork.AppendString(pszTo, nToLen);
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
@@ -185,9 +185,9 @@ void CNativeW::Replace( const wchar_t* pszFrom, const wchar_t* pszTo )
 	}
 	if (nBgnOld != 0) {
 		if (0  < GetStringLength() - nBgnOld) {
-			cmemWork.AppendString( &GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld );
+			cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 		}
-		SetNativeData( cmemWork );
+		SetNativeData(cmemWork);
 	}else {
 		if (!this->GetStringPtr()) {
 			this->SetString(L"");
@@ -201,7 +201,7 @@ void CNativeW::Replace( const wchar_t* pszFrom, const wchar_t* pszTo )
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! 指定した位置の文字がwchar_t何個分かを返す
-CLogicInt CNativeW::GetSizeOfChar( const wchar_t* pData, int nDataLen, int nIdx )
+CLogicInt CNativeW::GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx)
 {
 	if (nIdx >= nDataLen) {
 		return CLogicInt(0);
@@ -219,7 +219,7 @@ CLogicInt CNativeW::GetSizeOfChar( const wchar_t* pData, int nDataLen, int nIdx 
 }
 
 //! 指定した位置の文字が半角何個分かを返す
-CLayoutInt CNativeW::GetKetaOfChar( const wchar_t* pData, int nDataLen, int nIdx )
+CLayoutInt CNativeW::GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx)
 {
 	// 文字列範囲外なら 0
 	if (nIdx >= nDataLen) {
@@ -255,7 +255,7 @@ CLayoutInt CNativeW::GetKetaOfChar( const wchar_t* pData, int nDataLen, int nIdx
 
 // ポインタで示した文字の次にある文字の位置を返します
 // 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
-const wchar_t* CNativeW::GetCharNext( const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent )
+const wchar_t* CNativeW::GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent)
 {
 	const wchar_t* pNext = pDataCurrent + 1;
 
@@ -275,7 +275,7 @@ const wchar_t* CNativeW::GetCharNext( const wchar_t* pData, int nDataLen, const 
 
 // ポインタで示した文字の直前にある文字の位置を返します
 // 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します
-const wchar_t* CNativeW::GetCharPrev( const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent )
+const wchar_t* CNativeW::GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent)
 {
 	const wchar_t* pPrev = pDataCurrent - 1;
 	if (pPrev <= pData) {
@@ -290,7 +290,7 @@ const wchar_t* CNativeW::GetCharPrev( const wchar_t* pData, int nDataLen, const 
 	}
 
 	return pPrev;
-//	return ::CharPrevW_AnyBuild( pData, pDataCurrent );
+//	return ::CharPrevW_AnyBuild(pData, pDataCurrent);
 }
 
 

@@ -54,9 +54,9 @@
 
 //UNICODE BOOLíËêî
 #ifdef _UNICODE
-static const bool UNICODE_BOOL=true;
+static const bool UNICODE_BOOL = true;
 #else
-static const bool UNICODE_BOOL=false;
+static const bool UNICODE_BOOL = false;
 #endif
 
 

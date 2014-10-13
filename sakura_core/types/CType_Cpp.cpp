@@ -237,7 +237,7 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 		//	if 0は最初が無効部分とみなす．
 		//	それ以外のif/ifdef/ifndefは最初が有効部分と見なす
 		//	最初の条件によってこの時点ではp < lastptrなので判定省略
-		// 2007/12/13 じゅうじ : #if(0)とスペースを空けない場合の対応
+		// 2007/12/13 じゅうじ : #if (0)とスペースを空けない場合の対応
 		if (C_IsSpace(*p) || *p == L'(') {
 			//	if 0 チェック
 			//	skip whitespace
@@ -822,7 +822,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					continue;
 				}else if ('(' == pLine[i]) {
 					//  2002/10/27 frozen ここから
-//					if(nNestLevel == 0 && !bCppInitSkip) {
+//					if (nNestLevel == 0 && !bCppInitSkip) {
 //						wcscpy(szFuncName, szWordPrev);
 //						nFuncLine = nLineCount + 1;
 //						nNestLevel2 = 1;
@@ -896,7 +896,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					continue;
 				}else if (')' == pLine[i]) {
 					//  2002/10/27 frozen ここから
-//					if(1 == nNestLevel2) {
+//					if (1 == nNestLevel2) {
 //						nNestLevel2 = 2;
 //					}
 //					nMode = 0;

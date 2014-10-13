@@ -247,7 +247,7 @@ void CEditView::ViewDiffInfo(
 									szDiffData[nDiffLen++] = work[j];
 								}
 								/*
-								else if(work[j] == '<' || work[j] == '>' || work[j] == '-')
+								else if (work[j] == '<' || work[j] == '>' || work[j] == '-')
 								{
 									bDiffInfo = false;
 									nDiffLen = 0;

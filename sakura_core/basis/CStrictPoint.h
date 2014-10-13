@@ -29,7 +29,7 @@ template <int TYPE>
 class CStrictPoint : public CMyPoint {
 public:
 	CStrictPoint() : CMyPoint() { }
-	CStrictPoint(int _x,int _y) : CMyPoint(_x,_y) { }
+	CStrictPoint(int _x, int _y) : CMyPoint(_x, _y) { }
 	CStrictPoint(const CStrictPoint& rhs) : CMyPoint(rhs) { }
 
 	//※POINTからの変換は、「明示的に指定されたときのみ」許可する。

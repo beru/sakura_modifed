@@ -62,9 +62,9 @@ public:
 
 	//	@@ 2005.03.31 MIK 階層パラメータを追加
 //	bool AddParamA(const ACHAR*, const ACHAR*, int, const ACHAR*, const ACHAR*, int depth, int baseDirId);	// 登録
-	bool GetSelectedParam(TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3, TCHAR *s4, int *depth, TCHAR* fileBase );	// 取得
-	void SetFileName(const TCHAR *pszFileName);
-	void SetKeyword(const wchar_t *pszKeyword);	//	@@ 2005.03.31 MIK
+	bool GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* fileBase );	// 取得
+	void SetFileName(const TCHAR* pszFileName);
+	void SetKeyword(const wchar_t* pszKeyword);	//	@@ 2005.03.31 MIK
 	int  FindDirectTagJump();
 
 	bool GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int* lineNum, int* depth);
@@ -95,11 +95,11 @@ private:
 	int		GetData(void);	// ダイアログデータの取得
 	void	UpdateData(bool);	//	@@ 2005.03.31 MIK
 
-	TCHAR	*GetNameByType(const TCHAR type, const TCHAR *name);	// タイプを名前に変換する。
+	TCHAR	*GetNameByType(const TCHAR type, const TCHAR* name);	// タイプを名前に変換する。
 	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
 	//	@@ 2005.03.31 MIK
-	const TCHAR *GetFileName(void);
-	const TCHAR *GetFilePath(void) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
+	const TCHAR* GetFileName(void);
+	const TCHAR* GetFilePath(void) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
 	void Empty(void);
 	void SetTextDir();
 	void FindNext(bool);

@@ -228,7 +228,7 @@ HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames(
 		DEBUG_TRACE(_T("GetNames\n"));
 #endif
 	*pcNames = 1;
-	if(cMaxNames > 0)
+	if (cMaxNames > 0)
 		*rgBstrNames = SysAllocString(m_MethodsRef[memid].Name);
 	return S_OK;
 }

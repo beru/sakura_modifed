@@ -34,7 +34,7 @@ public:
 		return UnicodeToUnicode_in(pDst->_GetMemory());
 	}
 	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) {	//!< UNICODE    → 特定コード 変換
-		*pDst=*cSrc._GetMemory();
+		*pDst = *cSrc._GetMemory();
 		return UnicodeToUnicode_out(pDst);
 	}
 	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得

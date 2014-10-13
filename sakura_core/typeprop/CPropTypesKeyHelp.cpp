@@ -63,8 +63,8 @@ static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
 	0, 0
 };
 
-static TCHAR* strcnv(TCHAR *str);
-static TCHAR* GetFileName(const TCHAR *fullpath);
+static TCHAR* strcnv(TCHAR* str);
+static TCHAR* GetFileName(const TCHAR* fullpath);
 
 /*! キーワード辞書ファイル設定 メッセージ処理
 
@@ -629,7 +629,7 @@ int CPropTypesKeyHelp::GetData(HWND hwndDlg)
 			szAbout[0]	= _T('\0');
 			szPath[0]	= _T('\0');
 			// チェックボックス状態を取得してbUseにセット
-			if(ListView_GetCheckState(hwndList, i))
+			if (ListView_GetCheckState(hwndList, i))
 				bUse = true;
 			ListView_GetItemText(hwndList, i, 1, szAbout, _countof(szAbout));
 			ListView_GetItemText(hwndList, i, 2, szPath, _countof(szPath));
@@ -683,7 +683,7 @@ bool CPropTypesKeyHelp::Export(HWND hwndDlg)
 
 	@date 2006.04.10 fon 新規作成
 */
-static TCHAR* strcnv(TCHAR *str)
+static TCHAR* strcnv(TCHAR* str)
 {
 	TCHAR* p = str;
 	// 改行コードの削除

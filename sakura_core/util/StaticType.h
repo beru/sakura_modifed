@@ -43,7 +43,7 @@ public:
 	const ElementType& operator[](int nIndex) const	{ assert(nIndex<MAX_SIZE); assert_warning(nIndex<m_nCount); return m_aElements[nIndex]; }
 
 	// 操作
-	void clear() { m_nCount=0; }
+	void clear() { m_nCount = 0; }
 	void push_back(SET_TYPE e) {
 		assert(m_nCount<MAX_SIZE);
 		m_nCount++;
@@ -83,7 +83,7 @@ public:
 	static const int BUFFER_COUNT = N_BUFFER_COUNT;
 public:
 	// コンストラクタ・デストラクタ
-	StaticString() { m_szData[0]=0; }
+	StaticString() { m_szData[0] = 0; }
 	StaticString(const CHAR_TYPE* rhs) { if (!rhs) m_szData[0] = 0; else auto_strcpy(m_szData, rhs); }
 
 	// クラス属性

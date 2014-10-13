@@ -51,7 +51,7 @@ namespace WCODE
 		//※ほぼ未検証。ロジックが確定したらインライン化すると良い。
 
 		//参考：http://www.swanq.co.jp/blog/archives/000783.html
-		if(
+		if (
 			   wc <= 0x007E //ACODEとか
 //			|| wc == 0x00A5 //円マーク
 //			|| wc == 0x203E //にょろ
@@ -109,7 +109,7 @@ namespace WCODE
 	bool IsKutoten(wchar_t wc)
 	{
 		//句読点定義
-		static const wchar_t *KUTOTEN=
+		static const wchar_t* KUTOTEN =
 			L"｡､,."
 			L"。、，．"
 		;
@@ -206,7 +206,7 @@ namespace WCODE
 		}
 		bool CalcHankakuByFont(wchar_t c)
 		{
-			SIZE size={m_han_size.cx * 2, 0}; //関数が失敗したときのことを考え、全角幅で初期化しておく
+			SIZE size = {m_han_size.cx * 2, 0}; // 関数が失敗したときのことを考え、全角幅で初期化しておく
 			GetTextExtentPoint32W_AnyBuild(m_hdc, &c, 1, &size);
 			return (size.cx <= m_han_size.cx);
 		}
@@ -229,14 +229,14 @@ namespace WCODE
 		LocalCacheSelector()
 		{
 			pcache = &m_localcache[0];
-			for (int i=0; i<CWM_FONT_MAX; i++) {
+			for (int i = 0; i < CWM_FONT_MAX; i++) {
 				m_parCache[i] = 0;
 			}
 			m_eLastEditCacheMode = CWM_CACHE_NEUTRAL;
 		}
 		~LocalCacheSelector()
 		{
-			for (int i=0; i<CWM_FONT_MAX; i++) {
+			for (int i = 0; i < CWM_FONT_MAX; i++) {
 				delete m_parCache[i];
 				m_parCache[i] = 0;
 			}
@@ -300,7 +300,7 @@ void InitCharWidthCache(const LOGFONT &lf, ECharWidthFontMode fMode)
 }
 
 //	文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
-void SelectCharWidthCache(ECharWidthFontMode fMode, ECharWidthCacheMode cMode )
+void SelectCharWidthCache(ECharWidthFontMode fMode, ECharWidthCacheMode cMode)
 {
 	assert(fMode == CWM_FONT_EDIT || cMode == CWM_CACHE_LOCAL);
 

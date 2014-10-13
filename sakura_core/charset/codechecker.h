@@ -179,10 +179,10 @@ inline bool IsUnicodeNoncharacter( const wchar32_t wc )
 {
 	wchar32_t wc_ = wc & 0xffff;
 
-	if( wc_ == 0xfffe || wc_ == 0xffff ) {
+	if ( wc_ == 0xfffe || wc_ == 0xffff ) {
 		return true;
 	}
-	if( wc >= 0xfdd0 && wc <= 0xfdef ) {
+	if ( wc >= 0xfdd0 && wc <= 0xfdef ) {
 		return true;
 	}
 	return false;
@@ -322,7 +322,7 @@ inline bool IsUtf16SurrogLow( const wchar_t wc ) {
 //! UtF-8版 上位サロゲートか
 inline bool IsUtf8SurrogHi( const char* pS ) {
 	const unsigned char* ps = reinterpret_cast<const unsigned char*>( pS );
-	if( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xa0 ) {
+	if ( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xa0 ) {
 		return true;
 	}
 	return false;
@@ -330,7 +330,7 @@ inline bool IsUtf8SurrogHi( const char* pS ) {
 //! UtF-8版 下位サロゲートか
 inline bool IsUtf8SurrogLow( const char* pS ) {
 	const unsigned char* ps = reinterpret_cast<const unsigned char*>( pS );
-	if( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xb0 ) {
+	if ( (ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xb0 ) {
 		return true;
 	}
 	return false;
@@ -391,34 +391,34 @@ inline unsigned short _SwapHLByte( const unsigned short wc ) {
 //
 //! SJIS の文字長を推測
 inline int GuessSjisCharsz( const char uc ) {
-	if( IsSjisZen1(uc) ) { return 2; }
+	if ( IsSjisZen1(uc) ) { return 2; }
 	return 1;
 }
 //! UTF-16 の文字長を推測（組み合わせ文字列の考慮なし）
 inline int GuessUtf16Charsz( const wchar_t wc ) {
-	if( IsUtf16SurrogHi(wc) ) { return 2; }
+	if ( IsUtf16SurrogHi(wc) ) { return 2; }
 	return 1;
 }
 //! UTF-8 の文字長を推測（組み合わせ文字列の考慮なし）
 inline int GuessUtf8Charsz( const char uc_ ) {
 	unsigned char uc = uc_;
-	if( (uc & 0xe0) == 0xc0 ) { return 2; }
-	if( (uc & 0xf0) == 0xe0 ) { return 3; }
-	if( (uc & 0xf8) == 0xf0 ) { return 4; }
+	if ( (uc & 0xe0) == 0xc0 ) { return 2; }
+	if ( (uc & 0xf0) == 0xe0 ) { return 3; }
+	if ( (uc & 0xf8) == 0xf0 ) { return 4; }
 	return 1;
 }
 //! CESU-8 の文字長を推測
 inline int GuessCesu8Charsz( const char uc_ ) {
 	unsigned char uc = uc_;
-	if( (uc & 0xe0) == 0xc0 ) { return 2; }
-	if( (uc & 0xf0) == 0xe0 ) { return 6; }
+	if ( (uc & 0xe0) == 0xc0 ) { return 2; }
+	if ( (uc & 0xf0) == 0xe0 ) { return 6; }
 	return 1;
 }
 //! EUCJP の文字長を推測
 inline int GuessEucjpCharsz( const char uc_ ) {
 	unsigned char uc = uc_;
-	if( uc == 0x8f ) { return 3; }
-	if( uc == 0x8e || IsEucjpZen1(static_cast<char>(uc)) ) { return 2; }
+	if ( uc == 0x8f ) { return 3; }
+	if ( uc == 0x8e || IsEucjpZen1(static_cast<char>(uc)) ) { return 2; }
 	return 1;
 }
 
@@ -429,7 +429,7 @@ inline int GuessEucjpCharsz( const char uc_ ) {
 int CheckSjisChar( const char*, const int, ECharSet* );
 int CheckEucjpChar( const char*, const int, ECharSet* );
 int DetectJisEscseq( const char*, const int, EMyJisEscseq* ); // JIS エスケープシーケンス検出器
-int _CheckJisAnyPart( const char*, const int, const char **ppNextChar, EMyJisEscseq *peNextEsc, int *pnErrorCount, const int nType );
+int _CheckJisAnyPart( const char*, const int, const char** ppNextChar, EMyJisEscseq* peNextEsc, int* pnErrorCount, const int nType );
 enum EJisChecker{
 	JISCHECK_ASCII7,
 	JISCHECK_HANKATA,
@@ -438,16 +438,16 @@ enum EJisChecker{
 };
 
 inline int CheckJisAscii7Part( const char *pS, const int nLen,
-		const char **ppNextChar, EMyJisEscseq *peNextEsc, int *pnErrorCount )
+		const char** ppNextChar, EMyJisEscseq* peNextEsc, int* pnErrorCount )
 	{ return _CheckJisAnyPart( pS, nLen, ppNextChar, peNextEsc, pnErrorCount, JISCHECK_ASCII7 ); }
-inline int CheckJisHankataPart( const char *pS, const int nLen,
-		const char **ppNextChar, EMyJisEscseq *peNextEsc, int *pnErrorCount )
+inline int CheckJisHankataPart( const char* pS, const int nLen,
+		const char **ppNextChar, EMyJisEscseq* peNextEsc, int* pnErrorCount )
 	{ return _CheckJisAnyPart( pS, nLen, ppNextChar, peNextEsc, pnErrorCount, JISCHECK_HANKATA ); }
-inline int CheckJisZenkakuPart( const char *pS, const int nLen,
-		const char **ppNextChar, EMyJisEscseq *peNextEsc, int *pnErrorCount )
+inline int CheckJisZenkakuPart( const char* pS, const int nLen,
+		const char **ppNextChar, EMyJisEscseq *peNextEsc, int* pnErrorCount )
 	{ return _CheckJisAnyPart( pS, nLen, ppNextChar, peNextEsc, pnErrorCount, JISCHECK_ZENKAKU ); }
-inline int CheckJisUnknownPart( const char *pS, const int nLen,
-		const char **ppNextChar, EMyJisEscseq *peNextEsc, int *pnErrorCount )
+inline int CheckJisUnknownPart( const char* pS, const int nLen,
+		const char **ppNextChar, EMyJisEscseq* peNextEsc, int* pnErrorCount )
 	{ return _CheckJisAnyPart( pS, nLen, ppNextChar, peNextEsc, pnErrorCount, JISCHECK_UNKNOWN ); }
 
 

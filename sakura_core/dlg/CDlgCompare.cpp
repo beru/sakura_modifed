@@ -102,7 +102,7 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 //		phwndArr[0] = ::GetParent(m_hwndParent);
 //		phwndArr[1] = hwndCompareWnd;
 //		for(i = 0; i < 2; ++i) {
-//			if(::IsZoomed(phwndArr[i])) {
+//			if (::IsZoomed(phwndArr[i])) {
 //				::ShowWindow(phwndArr[i], SW_RESTORE);
 //			}
 //		}

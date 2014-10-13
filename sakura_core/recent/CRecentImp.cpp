@@ -379,11 +379,11 @@ bool CRecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 	int	i;
 	bool	bFavorite;
 
-	if(! IsAvailable()) return false;
-	if(nSrcIndex < 0 || nSrcIndex >= *m_pnUserItemCount) return false;
-	if(nDstIndex < 0 || nDstIndex >= *m_pnUserItemCount) return false;
+	if (! IsAvailable()) return false;
+	if (nSrcIndex < 0 || nSrcIndex >= *m_pnUserItemCount) return false;
+	if (nDstIndex < 0 || nDstIndex >= *m_pnUserItemCount) return false;
 
-	if(nSrcIndex == nDstIndex) return true;
+	if (nSrcIndex == nDstIndex) return true;
 
 	DataType pri;
 

@@ -240,7 +240,7 @@ static int IsNumber(const CStringRef& cStr, /*const wchar_t *buf,*/ int offset/*
 			return i;
 		}else {
 			// "0" ‚¾‚¯‚ª”’l
-			//if(*p == L'.') return i - 1;  // ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢
+			//if (*p == L'.') return i - 1;  // ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢
 			if (p < q) {
 				if (0
 					|| ((d == 0) && (*p == L'L' || *p == L'l'))
@@ -349,8 +349,8 @@ static int IsNumber(const CStringRef& cStr, /*const wchar_t *buf,*/ int offset/*
 		}
 		// "-", "-." ‚¾‚¯‚È‚ç”’l‚Å‚È‚¢
 		//@@@ 2001.11.09 start MIK
-		//if(i <= 2) return 0;
-		//if(*(p - 1)  == L'.') return i - 1;  // ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢
+		//if (i <= 2) return 0;
+		//if (*(p - 1)  == L'.') return i - 1;  // ÅŒã‚ª "." ‚È‚çŠÜ‚ß‚È‚¢
 		if (i == 1) return 0;
 		if (*(p - 1) == L'.') {
 			i--;

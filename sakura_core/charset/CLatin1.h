@@ -35,8 +35,8 @@ class CLatin1 : public CCodeBase {
 
 public:
 	//CCodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory()=cSrc; return Latin1ToUnicode(pDst->_GetMemory()); }	//!< 特定コード → UNICODE    変換
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) { *pDst=*cSrc._GetMemory(); return UnicodeToLatin1(pDst); }				//!< UNICODE    → 特定コード 変換
+	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory() = cSrc; return Latin1ToUnicode(pDst->_GetMemory()); }	//!< 特定コード → UNICODE    変換
+	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) { *pDst = *cSrc._GetMemory(); return UnicodeToLatin1(pDst); }				//!< UNICODE    → 特定コード 変換
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:
@@ -65,7 +65,7 @@ inline int CLatin1::_UniToLatin1_char( const unsigned short* pSrc, unsigned char
 	bool berror = false;
 	BOOL blost;
 
-	if( eCharset == CHARSET_UNI_NORMAL ) {
+	if ( eCharset == CHARSET_UNI_NORMAL ) {
 		if ((pSrc[0] >= 0 && pSrc[0] <= 0x7f) || (pSrc[0] >= 0xa0 && pSrc[0] <= 0xff)) {
 			// ISO 58859-1の範囲
 			pDst[0] = (unsigned char)pSrc[0];
@@ -73,26 +73,26 @@ inline int CLatin1::_UniToLatin1_char( const unsigned short* pSrc, unsigned char
 		} else {
 			// ISO 8859-1以外
 			nret = ::WideCharToMultiByte( 1252, 0, reinterpret_cast<const wchar_t*>(pSrc), 1, reinterpret_cast<char*>(pDst), 4, NULL, &blost );
-			if( blost == TRUE ) {
+			if ( blost == TRUE ) {
 				// Uni -> CLatin1 変換に失敗
 				berror = true;
 				pDst[0] = '?';
 				nret = 1;
 			}
 		}
-	}else if( eCharset == CHARSET_UNI_SURROG ) {
+	}else if ( eCharset == CHARSET_UNI_SURROG ) {
 		// サロゲートペアは CLatin1 に変換できない。
 		berror = true;
 		pDst[0] = '?';
 		nret = 1;
-	}else{
+	}else {
 		// 保護コード
 		berror = true;
 		pDst[0] = '?';
 		nret = 1;
 	}
 
-	if( pbError ) {
+	if ( pbError ) {
 		*pbError = berror;
 	}
 

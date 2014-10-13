@@ -414,7 +414,7 @@ inline wchar_t tchar_to_wchar(TCHAR tc)
 #ifdef _UNICODE
 	return tc;
 #else
-	WCHAR wc=0;
+	WCHAR wc = 0;
 	mbtowc(&wc, &tc, sizeof(tc));
 	return wc;
 #endif
@@ -648,7 +648,7 @@ LRESULT CEditView::DispatchEvent(
 //	case WM_RBUTTONDOWN:
 //		MYTRACE(_T(" WM_RBUTTONDOWN wParam=%08xh, x=%d y=%d\n"), wParam, LOWORD(lParam), HIWORD(lParam));
 //		OnRBUTTONDOWN(wParam, (short)LOWORD(lParam), (short)HIWORD(lParam));
-//		if(m_nMyIndex != m_pcEditWnd->GetActivePane()) {
+//		if (m_nMyIndex != m_pcEditWnd->GetActivePane()) {
 //			// アクティブなペインを設定
 //			m_pcEditWnd->SetActivePane(m_nMyIndex);
 //		}

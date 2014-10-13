@@ -212,7 +212,7 @@ BOOL CDlgPrintSetting::OnNotify(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgPrintSetting::OnCbnSelChange(HWND hwndCtl, int wID)
 {
-//	if(::GetDlgItem(GetHwnd(), IDC_COMBO_SETTINGNAME) == hwndCtl) {
+//	if (::GetDlgItem(GetHwnd(), IDC_COMBO_SETTINGNAME) == hwndCtl) {
 	switch (wID) {
 	case IDC_COMBO_SETTINGNAME:
 		// 設定のタイプが変わった
@@ -390,7 +390,7 @@ BOOL CDlgPrintSetting::OnEnChange(HWND hwndCtl, int wID)
 {
 	switch(wID) {
 	case IDC_EDIT_FONTHEIGHT:	// フォント幅の最小値が非０のため'12'と入力すると'1'のところで蹴られてしまう 2013.5.5 aroka
-		if (::GetDlgItemInt(GetHwnd(), IDC_EDIT_FONTHEIGHT, NULL, FALSE) >=10) {	// 二桁以上の場合は領域チェック 2013.5.20 aroka
+		if (::GetDlgItemInt(GetHwnd(), IDC_EDIT_FONTHEIGHT, NULL, FALSE) >= 10) {	// 二桁以上の場合は領域チェック 2013.5.20 aroka
 			UpdatePrintableLineAndColumn();
 		}
 		break;	// ここでは行と桁の更新要求のみ。後の処理はCDialogに任せる。
@@ -737,7 +737,7 @@ void CDlgPrintSetting::OnSpin(int nCtrlId, BOOL bDown)
 	int		nIdx = -1;
 	switch (nCtrlId) {
 	case IDC_SPIN_FONTHEIGHT:	nIdx = 0;				break;
-	case IDC_SPIN_LINESPACE:	nIdx = 1;	nDiff=10;	break;
+	case IDC_SPIN_LINESPACE:	nIdx = 1;	nDiff = 10;	break;
 	case IDC_SPIN_DANSUU:		nIdx = 2;				break;
 	case IDC_SPIN_DANSPACE:		nIdx = 3;				break;
 	case IDC_SPIN_MARGINTY:		nIdx = 4;				break;

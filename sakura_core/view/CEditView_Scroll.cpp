@@ -399,7 +399,7 @@ CLayoutInt CEditView::ScrollAtV(CLayoutInt nPos)
 			rcClip.bottom = GetTextArea().GetAreaBottom();
 		}
 		if (GetDrawSwitch()) {
-			RECT rcClip2 = {0,0,0,0};
+			RECT rcClip2 = {0, 0, 0, 0};
 			ScrollDraw(nScrollRowNum, CLayoutInt(0), rcScrol, rcClip, rcClip2);
 			::UpdateWindow(GetHwnd());
 		}
@@ -476,7 +476,7 @@ CLayoutInt CEditView::ScrollAtH(CLayoutInt nPos)
 		}
 		GetTextArea().SetViewLeftCol(nPos);
 		if (GetDrawSwitch()) {
-			RECT rcClip = {0,0,0,0};
+			RECT rcClip = {0, 0, 0, 0};
 			ScrollDraw(CLayoutInt(0), nScrollColNum, rcScrol, rcClip, rcClip2);
 			::UpdateWindow(GetHwnd());
 		}

@@ -317,7 +317,7 @@ int CDlgReplace::GetData(void)
 			SetCombosList();
 		}
 		return 1;
-	}else{
+	}else {
 		return 0;
 	}
 }
@@ -475,10 +475,10 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 //	case IDOK:			// 下検索
 //		// ダイアログデータの取得
 //		nRet = GetData();
-//		if(0 < nRet) {
+//		if (0 < nRet) {
 //			::EndDialog(hwndDlg, 2);
 //		}else
-//		if(0 == nRet) {
+//		if (0 == nRet) {
 //			::EndDialog(hwndDlg, 0);
 //		}
 //		return TRUE;

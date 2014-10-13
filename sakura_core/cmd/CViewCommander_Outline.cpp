@@ -53,7 +53,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 
 	EOutlineType nOutlineType = (EOutlineType)_nOutlineType; //2007.11.29 kobake
 
-//	if(bCheckOnly) {
+//	if (bCheckOnly) {
 //		return TRUE;
 //	}
 

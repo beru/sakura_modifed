@@ -197,7 +197,7 @@ void CEditView::InsertData_CEditView(
 	}
 
 	// 文字列挿入
-	CLayoutInt	nModifyLayoutLinesOld=CLayoutInt(0);
+	CLayoutInt	nModifyLayoutLinesOld = CLayoutInt(0);
 	CLayoutInt	nInsLineNum;		// 挿入によって増えたレイアウト行の数
 	int	nInsSeq;
 	{

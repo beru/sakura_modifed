@@ -51,7 +51,7 @@ public:
 		return E_NOINTERFACE; 
 	}
 	virtual ULONG STDMETHODCALLTYPE AddRef() { ++ m_RefCount; return m_RefCount; }
-	virtual ULONG STDMETHODCALLTYPE Release() { -- m_RefCount; int R = m_RefCount; if(m_RefCount == 0) delete this; return R; }
+	virtual ULONG STDMETHODCALLTYPE Release() { -- m_RefCount; int R = m_RefCount; if (m_RefCount == 0) delete this; return R; }
 public:
 	ImplementsIUnknown(): m_RefCount(0) {}
 	virtual ~ImplementsIUnknown() {}

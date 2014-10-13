@@ -82,9 +82,9 @@ EConvertResult CUtf8::_UTF8ToUnicode(CMemory* pMem, bool bCESU8Mode/*, bool deco
 
 //	CMemory cmem;
 //	// MIME ヘッダーデコード
-//	if(decodeMime == true) {
+//	if (decodeMime == true) {
 //		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_UTF8);
-//		if(bret == true) {
+//		if (bret == true) {
 //			psrc = reinterpret_cast<char*>(cmem.GetRawPtr());
 //			nsrclen = cmem.GetRawLength();
 //		}
@@ -112,7 +112,7 @@ EConvertResult CUtf8::_UTF8ToUnicode(CMemory* pMem, bool bCESU8Mode/*, bool deco
 
 	if (bError == false) {
 		return RESULT_COMPLETE;
-	}else{
+	}else {
 		return RESULT_LOSESOME;
 	}
 }
@@ -145,14 +145,14 @@ int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 			echarset = CHARSET_BINARY;
 			nclen = 1;
 		}
-		if(echarset != CHARSET_BINARY) {
+		if (echarset != CHARSET_BINARY) {
 			pw += _UniToUtf8_char(pr, nclen, pw, bCESU8Mode);
 			pr += nclen;
-		}else{
-			if( nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr))) {
+		}else {
+			if (nclen == 1 && IsBinaryOnSurrogate(static_cast<wchar_t>(*pr))) {
 				*pw = static_cast<unsigned char>(TextToBin(*pr) & 0x000000ff);
 				++pw;
-			}else{
+			}else {
 				berror = true;
 				*pw = '?';
 				++pw;
@@ -161,7 +161,7 @@ int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 		}
 	}
 
-	if(pbError) {
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -200,9 +200,9 @@ EConvertResult CUtf8::_UnicodeToUTF8(CMemory* pMem, bool bCesu8Mode)
 	// 後始末
 	delete [] pDst;
 
-	if(bError == false) {
+	if (bError == false) {
 		return RESULT_COMPLETE;
-	}else{
+	}else {
 		return RESULT_LOSESOME;
 	}
 }
@@ -227,7 +227,7 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	}
 	else {
 		cBuff.SetRawData(cSrc, 2);
-		if(IsBinaryOnSurrogate(cSrc[0])) {
+		if (IsBinaryOnSurrogate(cSrc[0])) {
 			bbinary = true;
 		}
 	}
@@ -246,11 +246,11 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	// Hex変換
 	ps = reinterpret_cast<unsigned char*>(cBuff.GetRawPtr());
 	pd = pDst;
-	if(bbinary == false) {
+	if (bbinary == false) {
 		for (int i = cBuff.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
-	}else{
+	}else {
 		auto_sprintf(pd, _T("?%02X"), *ps);
 	}
 

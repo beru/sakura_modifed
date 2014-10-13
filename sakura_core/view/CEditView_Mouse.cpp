@@ -859,7 +859,7 @@ void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 */
 void CEditView::OnXRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
-	if(m_nAutoScrollMode) {
+	if (m_nAutoScrollMode) {
 		AutoScrollExit();
 	}
 }

@@ -71,7 +71,7 @@ bool CConvert_ToUpper::DoConvert(CNativeW* pcData)
 			c--;
 		}
 		else if (c == 0x01C6 || c == 0x01C9 || c == 0x01CC || c == 0x01F3) {
-			c-=2;
+			c -= 2;
 		}
 		else if (c == 0x01C5 || c == 0x01C8 || c == 0x01CB || c == 0x01F2) {
 			// Title Letter

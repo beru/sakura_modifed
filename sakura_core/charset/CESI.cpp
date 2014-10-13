@@ -101,7 +101,7 @@ int CESI::GetIndexById(const ECodeType eCodeType) const
 		nret = 0;
 	}else if (CODE_UNICODEBE == eCodeType) {
 		nret = 1;
-	}else{
+	}else {
 		nret = gm_aMbcPriority[eCodeType]; // 優先順位表の優先度数をそのまま m_aMbcInfo の添え字として使う。
 	}
 	return nret;
@@ -121,7 +121,7 @@ void CESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 	int nidx = GetIndexById(eCodeId);
 	if (eCodeId == CODE_UNICODE || eCodeId == CODE_UNICODEBE) {
 		pcEI = &m_aWcInfo[nidx];
-	}else{
+	}else {
 		pcEI = &m_aMbcInfo[nidx];
 	}
 	pcEI->eCodeID = eCodeId;
@@ -139,9 +139,9 @@ void CESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo から，
 	それ以外の場合は m_pMbInfo から値が取得されることに注意。
 */
-void CESI::GetEvaluation(const ECodeType eCodeId, int *pv1, int *pv2) const
+void CESI::GetEvaluation(const ECodeType eCodeId, int* pv1, int* pv2) const
 {
-	const struct tagEncodingInfo *pcEI;
+	const struct tagEncodingInfo* pcEI;
 
 	int nidx = GetIndexById(eCodeId);
 	if (eCodeId == CODE_UNICODE || eCodeId == CODE_UNICODEBE) {
@@ -584,7 +584,7 @@ void CESI::GetEncodingInfo_uni(const char* pS, const int nLen)
 					// UTF-16 LE 版の改行コードをカウント
 					if (_CheckUtf16EolLE(pr1, pr_end - pr1)) { nnewlinew1++; }
 				}
-			}else{
+			}else {
 				unsigned int n = GuessUtf16Charsz(pr1[0] | static_cast<wchar_t>(pr1[1] << 8));
 				if ((pr_end - pr1) / sizeof(wchar_t) < n) {
 					break;

@@ -53,7 +53,7 @@ CFileExt::~CFileExt()
 	m_nCount = 0;
 }
 
-bool CFileExt::AppendExt(const TCHAR *pszName, const TCHAR *pszExt)
+bool CFileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
 {
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
@@ -63,7 +63,7 @@ bool CFileExt::AppendExt(const TCHAR *pszName, const TCHAR *pszExt)
 	return AppendExtRaw(pszName, szWork);
 }
 
-bool CFileExt::AppendExtRaw(const TCHAR *pszName, const TCHAR *pszExt)
+bool CFileExt::AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt)
 {
 	if (!pszName || pszName[0] == _T('\0')) {
 		return false;
@@ -140,7 +140,7 @@ const TCHAR* CFileExt::GetExtFilter(void)
 	@param pszSrcExt [in]  拡張子リスト 例「.c .cpp;.h」
 	@param pszDstExt [out] 拡張子リスト 例「*.c;*.cpp;*.h」
 */
-bool CFileExt::ConvertTypesExtToDlgExt(const TCHAR *pszSrcExt, TCHAR *pszDstExt)
+bool CFileExt::ConvertTypesExtToDlgExt(const TCHAR* pszSrcExt, TCHAR* pszDstExt)
 {
 	// 2003.08.14 MIK NULLじゃなくてfalse
 	if (!pszSrcExt) {

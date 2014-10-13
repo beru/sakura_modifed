@@ -92,7 +92,7 @@ static const SAnchorList anchorList[] = {
 /*
 	ctags.exe が出力する、拡張子と対応する種類
 */
-static const TCHAR *p_extentions[] = {
+static const TCHAR* p_extentions[] = {
 	/*asm*/			_T("asm,s"),								_T("d=define,l=label,m=macro,t=type"),
 	/*asp*/			_T("asp,asa"),								_T("f=function,s=sub"),
 	/*awk*/			_T("awk,gawk,mawk"),						_T("f=function"),
@@ -338,7 +338,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 	const TCHAR* pszMsgText = NULL;
 
 	//	数が多すぎる場合は切り捨てた旨を末尾に挿入
-//	if(m_pcList->IsOverflow()) {
+//	if (m_pcList->IsOverflow()) {
 		// 2010.04.03 「次」「前」ボタン追加して Overflowしなくなった
 //		pszMsgText = _T("(これ以降は切り捨てました)");
 //	}
@@ -724,7 +724,7 @@ bool CDlgTagJumpList::AddParamA(const ACHAR *s0, const ACHAR *s1, int n2, const 
 }
 #endif
 
-bool CDlgTagJumpList::GetSelectedParam(TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3, TCHAR *s4, int *depth, TCHAR *baseDir)
+bool CDlgTagJumpList::GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* baseDir)
 {
 	if (1 != m_pcList->GetCount()) {
 		if (-1 == m_nIndex || m_nIndex >= m_pcList->GetCount()) return false;
@@ -737,7 +737,7 @@ bool CDlgTagJumpList::GetSelectedParam(TCHAR *s0, TCHAR *s1, int *n2, TCHAR *s3,
 	return true;
 }
 
-bool CDlgTagJumpList::GetSelectedFullPathAndLine(TCHAR *fullPath, int count, int *lineNum, int *depth)
+bool CDlgTagJumpList::GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int* lineNum, int* depth)
 {
 	TCHAR path[1024];
 	TCHAR fileName[1024];
@@ -785,7 +785,7 @@ bool CDlgTagJumpList::GetSelectedFullPathAndLine(TCHAR *fullPath, int count, int
 /*!
 	@return 「.ext」形式のタイプ情報。 freeすること
 */
-TCHAR *CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR *name)
+TCHAR* CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 {
 	const TCHAR* p;
 	TCHAR*	token;
@@ -821,7 +821,7 @@ TCHAR *CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR *name)
 /*!
 	基準ファイル名を設定
 */
-void CDlgTagJumpList::SetFileName(const TCHAR *pszFileName)
+void CDlgTagJumpList::SetFileName(const TCHAR* pszFileName)
 {
 	assert_warning(pszFileName);
 	if (!pszFileName) return;
@@ -1100,7 +1100,7 @@ int CDlgTagJumpList::find_key_core(
 						const ACHAR* pTag = s[0] + 6;
 						if (0 == strncmp_literal(pTag , "FILE_FORMAT")) {
 							n2 = atoi(s[1]);
-							if (1 <=n2 && n2 <= 2) {
+							if (1 <= n2 && n2 <= 2) {
 								nTagFormat = n2;
 							}
 						}else if (0 == strncmp_literal(pTag, "FILE_SORTED")) {
@@ -1345,7 +1345,7 @@ TCHAR* CDlgTagJumpList::CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR
 TCHAR* CDlgTagJumpList::DirUp(TCHAR* dir)
 {
 	CutLastYenFromDirectoryPath(dir);
-	const TCHAR *p = GetFileTitlePointer(dir); // 最後の\の次の文字を取得 last_index_of('\\') + 1;
+	const TCHAR* p = GetFileTitlePointer(dir); // 最後の\の次の文字を取得 last_index_of('\\') + 1;
 	if (0 < p - dir) {
 		dir[p - dir] = '\0';
 	}

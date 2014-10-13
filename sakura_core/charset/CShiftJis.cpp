@@ -47,8 +47,8 @@ int CShiftJis::SjisToUni(const char *pSrc, const int nSrcLen, wchar_t *pDst, boo
 	ECharSet echarset;
 	int nclen;
 	const unsigned char *pr, *pr_end;
-	unsigned short *pw;
-	bool berror_tmp, berror=false;
+	unsigned short* pw;
+	bool berror_tmp, berror = false;
 
 	if (nSrcLen < 1) {
 		if (pbError) {
@@ -152,7 +152,7 @@ int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 	const unsigned short *pr, *pr_end;
 	unsigned char* pw;
 	ECharSet echarset;
-	bool berror=false, berror_tmp;
+	bool berror = false, berror_tmp;
 
 	if (nSrcLen < 1) {
 		if (pbError) {
@@ -252,7 +252,7 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 	EConvertResult	res;
 	unsigned char*	ps;
 	TCHAR*			pd;
-	bool			bbinary=false;
+	bool			bbinary = false;
 
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInSjis) {

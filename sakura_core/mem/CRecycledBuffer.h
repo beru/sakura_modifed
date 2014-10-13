@@ -82,7 +82,7 @@ public:
 	}
 	~CRecycledBufferDynamic() {
 		for (int i=0; i<_countof(m_buf); i++) {
-			if(m_buf[i])delete[] m_buf[i];
+			if (m_buf[i])delete[] m_buf[i];
 		}
 	}
 

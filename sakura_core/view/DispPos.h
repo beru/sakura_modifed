@@ -38,7 +38,7 @@ public:
 		m_ptDrawOrigin.y = 0;
 		m_ptDrawLayout.x = CLayoutInt(0);
 		m_ptDrawLayout.y = CLayoutInt(0);
-		m_nLineRef=CLayoutInt(0);
+		m_nLineRef = CLayoutInt(0);
 		// ƒLƒƒƒbƒVƒ…
 		m_pcLayoutRef = CEditDoc::GetInstance(0)->m_cLayoutMgr.GetTopLayout();
 	}

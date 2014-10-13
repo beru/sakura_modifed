@@ -41,9 +41,9 @@ struct EditNode {
 	BOOL			m_bClosing;					//!< 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
 
 	HWND GetHwnd() const { return GetSafeHwnd(); }
-	HWND GetSafeHwnd() const { if(this)return m_hWnd; else return NULL; }
+	HWND GetSafeHwnd() const { if (this)return m_hWnd; else return NULL; }
 	int GetId() const { return GetSafeId(); }
-	int GetSafeId() const { if(this)return m_nId; else return 0; }
+	int GetSafeId() const { if (this)return m_nId; else return 0; }
 	CAppNodeGroupHandle GetGroup() const;
 	bool IsTopInGroup() const;
 };
@@ -132,7 +132,7 @@ public:
 };
 
 
-inline CAppNodeGroupHandle EditNode::GetGroup() const { if(this)return m_nGroup; else return 0; }
+inline CAppNodeGroupHandle EditNode::GetGroup() const { if (this)return m_nGroup; else return 0; }
 
 inline bool EditNode::IsTopInGroup() const { return this && (CAppNodeGroupHandle(m_nGroup).GetEditNodeAt(0) == this); }
 

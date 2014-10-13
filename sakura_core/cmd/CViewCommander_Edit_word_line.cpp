@@ -363,7 +363,7 @@ void CViewCommander::Command_DELETE_LINE(void)
 
 			CLayoutInt tmp;
 			nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, ptCaretPos_OLD.GetX2(), &tmp);
-			ptCaretPos_OLD.x=tmp;
+			ptCaretPos_OLD.x = tmp;
 
 			if (ptCaretPos_OLD.x > 0) {
 				ptCaretPos_OLD.x--;

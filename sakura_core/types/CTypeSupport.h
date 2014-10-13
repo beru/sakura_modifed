@@ -35,7 +35,7 @@
 */
 class CTypeSupport {
 private:
-	static const COLORREF INVALID_COLOR=0xFFFFFFFF; // –³Œø‚ÈF’è”
+	static const COLORREF INVALID_COLOR = 0xFFFFFFFF; // –³Œø‚ÈF’è”
 
 public:
 	CTypeSupport(const CEditView* pEditView, EColorIndexType eColorIdx)

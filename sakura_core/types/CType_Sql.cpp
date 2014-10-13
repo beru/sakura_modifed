@@ -55,7 +55,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 			if (0 == nCharChars) {
 				nCharChars = 1;
 			}
-//			if(1 < nCharChars) {
+//			if (1 < nCharChars) {
 //				i += (nCharChars - 1);
 //				continue;
 //			}
@@ -129,7 +129,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 							++nParseCnt;
 							wcscpy_s(szFuncName, szWord);
 //						}else
-//						if(3 == nFuncOrProc) {
+//						if (3 == nFuncOrProc) {
 
 						}
 					}else if (2 == nParseCnt) {

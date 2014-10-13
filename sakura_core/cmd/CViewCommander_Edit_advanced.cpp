@@ -746,7 +746,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	//bAsc:TRUE=昇順,FALSE=降順
 	int j = (int)sta.size();
 	repData.resize(sta.size());
 	int opeSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNextSeq();
-	for (int i=0; i<j; i++) {
+	for (int i = 0; i < j; i++) {
 		repData[i].nSeq = opeSeq;
 		repData[i].cmemLine.SetString(sta[i]->pCmemLine->GetStringPtr(), sta[i]->pCmemLine->GetStringLength());
 		if (pStrLast == sta[i]->pCmemLine->GetStringPtr()) {
@@ -834,7 +834,7 @@ void CViewCommander::Command_MERGE(void)
 		return;
 	}
 
-	nCaretPosYOLD=GetCaret().GetCaretLayoutPos().GetY();
+	nCaretPosYOLD = GetCaret().GetCaretLayoutPos().GetY();
 	CLogicRange sSelectOld; //範囲選択
 	GetDocument()->m_cLayoutMgr.LayoutToLogic(
 		selInfo.m_sSelect,
@@ -846,7 +846,7 @@ void CViewCommander::Command_MERGE(void)
 	// その行も選択範囲に加える
 	if (sSelectOld.GetTo().x > 0) {
 #if 0
-		const CLayout* pcLayout=GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(selInfo.m_sSelect.GetTo().GetY2()); //2007.10.09 kobake 単位混在バグ修正
+		const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(selInfo.m_sSelect.GetTo().GetY2()); //2007.10.09 kobake 単位混在バグ修正
 		if (pcLayout && EOL_NONE != pcLayout->GetLayoutEol()) {
 			sSelectOld.GetToPointer()->y++;
 			//sSelectOld.GetTo().y++;
@@ -918,7 +918,7 @@ void CViewCommander::Command_MERGE(void)
 	nMergeLayoutLines -= GetDocument()->m_cLayoutMgr.GetLineCount();
 
 	// 選択エリアの復元
-	selInfo.m_sSelect=sSelectOld_Layout;
+	selInfo.m_sSelect = sSelectOld_Layout;
 	// 2010.08.22 座標混在バグ
 	selInfo.m_sSelect.GetToPointer()->y -= nMergeLayoutLines;
 

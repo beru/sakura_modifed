@@ -301,7 +301,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					for (; k < nLineLen2; ++k) {
 						if (!bCommentLoop) {
 							if (pLine2[k] != L' ' && pLine2[k] != WCODE::TAB && !WCODE::IsLineDelimiter(pLine2[k])) {
-								if(k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'*') {
+								if (k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'*') {
 									bCommentLoop = TRUE;
 									++k;
 								}else if (k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'/') {

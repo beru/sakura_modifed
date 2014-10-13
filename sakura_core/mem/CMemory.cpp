@@ -63,7 +63,7 @@ CMemory::CMemory(
 )
 {
 	_init_members();
-	SetRawData( pData, nDataLenBytes );
+	SetRawData(pData, nDataLenBytes);
 }
 
 CMemory::CMemory(const CMemory& rhs)
@@ -82,10 +82,10 @@ CMemory::~CMemory()
 //                          演算子                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-const CMemory& CMemory::operator = ( const CMemory& rhs )
+const CMemory& CMemory::operator = (const CMemory& rhs)
 {
 	if (this != &rhs) {
-		SetRawData( rhs );
+		SetRawData(rhs);
 	}
 	return *this;
 }
@@ -98,12 +98,12 @@ const CMemory& CMemory::operator = ( const CMemory& rhs )
 /*
 || バッファの最後にデータを追加する（protectメンバ
 */
-void CMemory::_AddData( const void* pData, int nDataLen )
+void CMemory::_AddData(const void* pData, int nDataLen)
 {
 	if (!m_pRawData) {
 		return;
 	}
-	memcpy( &m_pRawData[m_nRawLen], pData, nDataLen );
+	memcpy(&m_pRawData[m_nRawLen], pData, nDataLen);
 	m_nRawLen += nDataLen;
 	m_pRawData[m_nRawLen]   = '\0';
 	m_pRawData[m_nRawLen + 1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
@@ -112,14 +112,14 @@ void CMemory::_AddData( const void* pData, int nDataLen )
 
 
 // 等しい内容か
-int CMemory::IsEqual( CMemory& cmem1, CMemory& cmem2 )
+int CMemory::IsEqual(CMemory& cmem1, CMemory& cmem2)
 {
 	int		nLen1;
 	int		nLen2;
-	const char*	psz1 = (const char*)cmem1.GetRawPtr( &nLen1 );
-	const char*	psz2 = (const char*)cmem2.GetRawPtr( &nLen2 );
+	const char*	psz1 = (const char*)cmem1.GetRawPtr(&nLen1);
+	const char*	psz2 = (const char*)cmem2.GetRawPtr(&nLen2);
 	if (nLen1 == nLen2) {
-		if (0 == memcmp( psz1, psz2, nLen1 )) {
+		if (0 == memcmp(psz1, psz2, nLen1)) {
 			return TRUE;
 		}
 	}
@@ -134,11 +134,11 @@ int CMemory::IsEqual( CMemory& cmem1, CMemory& cmem2 )
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void CMemory::SwapHLByte( char* pData, const int nDataLen ) {
+void CMemory::SwapHLByte(char* pData, const int nDataLen) {
 	unsigned char ctemp;
 
-	//pBuf = (unsigned char*)GetRawPtr( &nBufLen );
-	unsigned char* pBuf = reinterpret_cast<unsigned char*>( pData );
+	//pBuf = (unsigned char*)GetRawPtr(&nBufLen);
+	unsigned char* pBuf = reinterpret_cast<unsigned char*>(pData);
 	int nBufLen = nDataLen;
 
 	if (nBufLen < 2) {
@@ -179,21 +179,21 @@ void CMemory::SwapHLByte( char* pData, const int nDataLen ) {
 	
 	@note	nBufLen が2の倍数でないときは、最後の1バイトは交換されない
 */
-void CMemory::SwapHLByte( void ) {
+void CMemory::SwapHLByte(void) {
 	int nBufLen;
-	char* pBuf = reinterpret_cast<char*>( GetRawPtr(&nBufLen) );
-	SwapHLByte( pBuf, nBufLen );
+	char* pBuf = reinterpret_cast<char*>(GetRawPtr(&nBufLen));
+	SwapHLByte(pBuf, nBufLen);
 	return;
 /*
-	unsigned char *p;
+	unsigned char* p;
 	unsigned char ctemp;
-	unsigned char *p_end;
-	unsigned int *pdwchar;
-	unsigned int *pdw_end;
-	unsigned char*	pBuf;
+	unsigned char* p_end;
+	unsigned int* pdwchar;
+	unsigned int* pdw_end;
+	unsigned char* pBuf;
 	int			nBufLen;
 
-	pBuf = (unsigned char*)GetRawPtr( &nBufLen );
+	pBuf = (unsigned char*)GetRawPtr(&nBufLen);
 
 	if (nBufLen < 2) {
 		return;
@@ -229,7 +229,7 @@ void CMemory::SwapHLByte( void ) {
 /*
 || バッファサイズの調整
 */
-void CMemory::AllocBuffer( int nNewDataLen )
+void CMemory::AllocBuffer(int nNewDataLen)
 {
 	char* pWork = NULL;
 
@@ -238,12 +238,12 @@ void CMemory::AllocBuffer( int nNewDataLen )
 
 	if (m_nDataBufSize == 0) {
 		// 未確保の状態
-		pWork = malloc_char( nWorkLen );
+		pWork = malloc_char(nWorkLen);
 		m_nDataBufSize = nWorkLen;
 	}else {
 		// 現在のバッファサイズより大きくなった場合のみ再確保する
 		if (m_nDataBufSize < nWorkLen) {
-			pWork = (char*)realloc( m_pRawData, nWorkLen );
+			pWork = (char*)realloc(m_pRawData, nWorkLen);
 			m_nDataBufSize = nWorkLen;
 		}else {
 			return;
@@ -266,51 +266,51 @@ void CMemory::AllocBuffer( int nNewDataLen )
 
 
 // バッファの内容を置き換える
-void CMemory::SetRawData( const void* pData, int nDataLen )
+void CMemory::SetRawData(const void* pData, int nDataLen)
 {
 	_Empty();
-	AllocBuffer( nDataLen );
-	_AddData( pData, nDataLen );
+	AllocBuffer(nDataLen);
+	_AddData(pData, nDataLen);
 	return;
 }
 
 
 // バッファの内容を置き換える
-void CMemory::SetRawData( const CMemory& pcmemData )
+void CMemory::SetRawData(const CMemory& pcmemData)
 {
 	int nDataLen;
-	const void*	pData = pcmemData.GetRawPtr( &nDataLen );
+	const void*	pData = pcmemData.GetRawPtr(&nDataLen);
 	_Empty();
-	AllocBuffer( nDataLen );
-	_AddData( pData, nDataLen );
+	AllocBuffer(nDataLen);
+	_AddData(pData, nDataLen);
 	return;
 }
 
 
 // バッファの最後にデータを追加する（publicメンバ）
-void CMemory::AppendRawData( const void* pData, int nDataLenBytes )
+void CMemory::AppendRawData(const void* pData, int nDataLenBytes)
 {
 	if (nDataLenBytes <= 0) return;
-	AllocBuffer( m_nRawLen + nDataLenBytes );
-	_AddData( pData, nDataLenBytes );
+	AllocBuffer(m_nRawLen + nDataLenBytes);
+	_AddData(pData, nDataLenBytes);
 }
 
 // バッファの最後にデータを追加する（publicメンバ）
-void CMemory::AppendRawData( const CMemory* pcmemData )
+void CMemory::AppendRawData(const CMemory* pcmemData)
 {
 	if (this == pcmemData) {
 		CMemory cm = *pcmemData;
 		AppendRawData(&cm);
 	}
 	int	nDataLen;
-	const void*	pData = pcmemData->GetRawPtr( &nDataLen );
-	AllocBuffer( m_nRawLen + nDataLen );
-	_AddData( pData, nDataLen );
+	const void*	pData = pcmemData->GetRawPtr(&nDataLen);
+	AllocBuffer(m_nRawLen + nDataLen);
+	_AddData(pData, nDataLen);
 }
 
-void CMemory::_Empty( void )
+void CMemory::_Empty(void)
 {
-	free( m_pRawData );
+	free(m_pRawData);
 	m_pRawData = NULL;
 	m_nDataBufSize = 0;
 	m_nRawLen = 0;
@@ -321,7 +321,7 @@ void CMemory::_Empty( void )
 void CMemory::_AppendSz(const char* str)
 {
 	int len = strlen(str);
-	AllocBuffer( m_nRawLen + len );
+	AllocBuffer(m_nRawLen + len);
 	_AddData(str, len);
 }
 

@@ -42,18 +42,18 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 	const int nMaxStack = 8;	//	ネストの最深
 	int nDepth = 0;				//	いまのアイテムの深さを表す数値。
 	wchar_t szTag[32], szTitle[256];			//	一時領域
-	int thisSection=0, lastSection = 0;	// 現在のセクション種類と一つ前のセクション種類
+	int thisSection = 0, lastSection = 0;	// 現在のセクション種類と一つ前のセクション種類
 	int stackSection[nMaxStack];		// 各深さでのセクションの番号
 	int nStartTitlePos = 0;				// \section{dddd} の dddd の部分の始まる番号
 	int bNoNumber = 0;					// * 付の場合はセクション番号を付けない
 
 	// 一行ずつ
 	CLogicInt	nLineCount;
-	for (nLineCount=CLogicInt(0);nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount();nLineCount++) {
+	for (nLineCount = CLogicInt(0); nLineCount < m_pcDocRef->m_cDocLineMgr.GetLineCount(); nLineCount++) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 		// 一文字ずつ
-		for (i=0;i<nLineLen-1;i++) {
+		for (i = 0; i < nLineLen - 1; i++) {
 			if (pLine[i] == L'%') break;	// コメントなら以降はいらない
 			if (nDepth >= nMaxStack) continue;
 			if (pLine[i] != L'\\') continue;	// 「\」がないなら次の文字へ
@@ -88,7 +88,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 							nStartTitlePos = j + i + 1;
 							break;
 						}
-						szTag[k++]	=	pLine[i + j];
+						szTag[k++] = pLine[i + j];
 					}
 					szTag[k] = '\0';
 					thisSection = 1;
@@ -123,16 +123,16 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 				}else {
 					nDepth += sabunSection;
 					if (sabunSection > 0) {
-						if (nDepth >= nMaxStack) nDepth=nMaxStack-1;
+						if (nDepth >= nMaxStack) nDepth = nMaxStack-1;
 						stackSection[nDepth] = 1;
 					}else {
-						if (nDepth < 0) nDepth=0;
+						if (nDepth < 0) nDepth = 0;
 						++stackSection[nDepth];
 					}
 				}
 				tmpstr[0] = L'\0';
 				if (!bNoNumber) {
-					for (k=0; k<=nDepth; k++) {
+					for (k = 0; k <= nDepth; k++) {
 						auto_sprintf_s(secstr, L"%d.", stackSection[k]);
 						wcscat(tmpstr, secstr);
 					}

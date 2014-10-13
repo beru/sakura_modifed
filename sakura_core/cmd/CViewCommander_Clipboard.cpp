@@ -230,7 +230,7 @@ void CViewCommander::Command_PASTE(int option)
 //<< 2002/03/28 Azumaiya
 // メモリデータを矩形貼り付け用のデータと解釈して処理する。
 //  なお、この関数は Command_PASTEBOX(void) と、
-// 2769 : GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
+// 2769 : GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 // から、
 // 3057 : m_pCommanderView->SetDrawSwitch(true);	// 2002.01.25 hor
 // 間まで、一緒です。
@@ -479,13 +479,10 @@ void CViewCommander::Command_INSTEXT(
 			// 同一行の行末以降のみが選択されている場合には選択無しと見なす
 			bool bAfterEOLSelect = false;
 			if (!bFastMode) {
-				CLogicInt		len;
-				int pos;
-				const wchar_t	*line;
+				CLogicInt len;
 				const CLayout* pcLayout;
-				line = GetDocument()->m_cLayoutMgr.GetLineStr(GetSelect().GetFrom().GetY2(), &len, &pcLayout);
-
-				pos = (!line) ? 0 : m_pCommanderView->LineColumnToIndex(pcLayout, GetSelect().GetFrom().GetX2());
+				const wchar_t* line = GetDocument()->m_cLayoutMgr.GetLineStr(GetSelect().GetFrom().GetY2(), &len, &pcLayout);
+				int pos = (!line) ? 0 : m_pCommanderView->LineColumnToIndex(pcLayout, GetSelect().GetFrom().GetX2());
 
 				// 開始位置が行末より後ろで、終了位置が同一行
 				if (pos >= len && GetSelect().IsLineOne()) {
@@ -585,7 +582,9 @@ void CViewCommander::Command_ADDTAIL(
 )
 {
 	// テキスト長自動計算
-	if (nDataLen == -1 && pszData != NULL) nDataLen = wcslen(pszData);
+	if (nDataLen == -1 && pszData != NULL) {
+		nDataLen = wcslen(pszData);
+	}
 
 	GetDocument()->m_cDocEditor.SetModified(true, true);	//	Jan. 22, 2002 genta
 

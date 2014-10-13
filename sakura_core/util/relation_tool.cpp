@@ -13,7 +13,7 @@ CSubject::CSubject()
 CSubject::~CSubject()
 {
 	// ƒŠƒXƒi‚ğ‰ğœ
-	for (int i=0; i<(int)m_vListenersRef.size(); i++) {
+	for (int i = 0; i < (int)m_vListenersRef.size(); i++) {
 		m_vListenersRef[i]->Listen(NULL);
 	}
 	m_vListenersRef.clear();
@@ -22,7 +22,7 @@ CSubject::~CSubject()
 void CSubject::_AddListener(CListener* pcListener)
 {
 	// Šù‚É’Ç‰ÁÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
-	for (int i=0; i<(int)m_vListenersRef.size(); i++) {
+	for (int i = 0; i < (int)m_vListenersRef.size(); i++) {
 		if (m_vListenersRef[i] == pcListener) {
 			return;
 		}
@@ -34,7 +34,7 @@ void CSubject::_AddListener(CListener* pcListener)
 void CSubject::_RemoveListener(CListener* pcListener)
 {
 	// ”z—ñ‚©‚çíœ
-	for (int i=0; i<(int)m_vListenersRef.size(); i++) {
+	for (int i = 0; i < (int)m_vListenersRef.size(); i++) {
 		if (m_vListenersRef[i] == pcListener) {
 			m_vListenersRef.erase(m_vListenersRef.begin() + i);
 			break;

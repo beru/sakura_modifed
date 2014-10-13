@@ -883,7 +883,7 @@ BOOL CEditDoc::OnFileClose()
 		case IDYES:
 			if (m_cDocFile.GetFilePathClass().IsValidPath()) {
 				nBool = m_cDocFileOperation.FileSave();	// 2006.12.30 ryoji
-			}else{
+			}else {
 				nBool = m_cDocFileOperation.FileSaveAs();	// 2006.12.30 ryoji
 			}
 			return nBool;

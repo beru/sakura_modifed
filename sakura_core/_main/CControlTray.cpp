@@ -978,7 +978,7 @@ LRESULT CControlTray::DispatchEvent(
 			//	この時点ではWindowsの終了が確定していないので常駐解除すべきではない．
 			//	::DestroyWindow(hwnd);
 			return TRUE;
-		}else{
+		}else {
 			return FALSE;
 		}
 	case WM_CLOSE:

@@ -45,7 +45,7 @@ public:
 		return m_nViewTopLine;
 	}
 	void SetViewTopLine(CLayoutInt nLine) {
-		m_nViewTopLine=nLine;
+		m_nViewTopLine = nLine;
 	}
 
 	//! 表示域の一番左の桁
@@ -53,7 +53,7 @@ public:
 		return m_nViewLeftCol;
 	}
 	void SetViewLeftCol(CLayoutInt nLeftCol) {
-		m_nViewLeftCol=nLeftCol;
+		m_nViewLeftCol = nLeftCol;
 	}
 
 	//!右にはみ出した最初の列を返す
@@ -96,13 +96,13 @@ public:
 		return m_nTopYohaku;
 	}
 	void SetTopYohaku(int nPixel) {
-		m_nTopYohaku=nPixel;
+		m_nTopYohaku = nPixel;
 	}
 	int GetLeftYohaku() const {
 		return m_nLeftYohaku;
 	}
 	void SetLeftYohaku(int nPixel) {
-		m_nLeftYohaku=nPixel;
+		m_nLeftYohaku = nPixel;
 	}
 	// 行番号の幅(余白なし)
 	int GetLineNumberWidth() const {

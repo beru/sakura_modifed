@@ -300,10 +300,10 @@ void CPropWin::SetData(HWND hwndDlg)
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, csWindow.m_nLineNumRightSpace, FALSE);
 
 	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if(0 == csWindow.m_nRulerType) {
+//	if (0 == csWindow.m_nRulerType) {
 //		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, TRUE);
 //		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, FALSE);
-//	}else{
+//	}else {
 //		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, FALSE);
 //		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, TRUE);
 //	}
@@ -384,10 +384,10 @@ int CPropWin::GetData(HWND hwndDlg)
 	csWindow.m_bDispSTATUSBAR = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispSTATUSBAR);
 
 	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if(::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_0)) {
+//	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_0)) {
 //		csWindow.m_nRulerType = 0;
 //	}
-//	if(::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_1)) {
+//	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_1)) {
 //		csWindow.m_nRulerType = 1;
 //	}
 

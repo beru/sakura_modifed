@@ -55,6 +55,6 @@ private:
 	CLayoutColorInfo* m_colorInfo;
 
 	CLayoutExInfo(const CLayoutExInfo&);
-	CLayoutExInfo& operator=(const CLayoutExInfo&);
+	CLayoutExInfo& operator = (const CLayoutExInfo&);
 };
 

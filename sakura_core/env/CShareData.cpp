@@ -256,7 +256,7 @@ bool CShareData::InitShareData()
 			0										// user profile update flag
 		);
 		// ai 02/05/21 Add E
-		INT		nIconPointSize = lfIconTitle.lfHeight >=0 ? lfIconTitle.lfHeight : DpiPixelsToPoints(-lfIconTitle.lfHeight, 10);	// フォントサイズ（1/10ポイント単位）
+		INT		nIconPointSize = lfIconTitle.lfHeight >= 0 ? lfIconTitle.lfHeight : DpiPixelsToPoints(-lfIconTitle.lfHeight, 10);	// フォントサイズ（1/10ポイント単位）
 		m_pShareData->m_Common.m_sHelper.m_lf = lfIconTitle;
 		m_pShareData->m_Common.m_sHelper.m_nPointSize = nIconPointSize;	// フォントサイズ（1/10ポイント単位） ※古いバージョンからの移行を考慮して無効値で初期化	// 2009.10.01 ryoji
 
@@ -317,7 +317,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sSearch.m_bGrepOutputBaseFolder = false;
 		m_pShareData->m_Common.m_sSearch.m_bGrepSeparateFolder = false;
 
-		m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder=FALSE;		// Grep: フォルダの初期値をカレントフォルダにする
+		m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder = FALSE;		// Grep: フォルダの初期値をカレントフォルダにする
 		m_pShareData->m_Common.m_sSearch.m_nGrepCharSet = CODE_AUTODETECT;	// Grep: 文字コードセット
 		m_pShareData->m_Common.m_sSearch.m_bGrepRealTimeView = FALSE;		// 2003.06.28 Moca Grep結果のリアルタイム表示
 		m_pShareData->m_Common.m_sSearch.m_bCaretTextForSearch = TRUE;		// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
@@ -498,7 +498,7 @@ bool CShareData::InitShareData()
 
 		// [プラグイン]タブ
 		m_pShareData->m_Common.m_sPlugin.m_bEnablePlugin			= FALSE;	// プラグインを使用する
-		for (int nPlugin=0; nPlugin < MAX_PLUGIN; nPlugin++) {
+		for (int nPlugin = 0; nPlugin < MAX_PLUGIN; nPlugin++) {
 			m_pShareData->m_Common.m_sPlugin.m_PluginTable[nPlugin].m_szName[0]	= L'\0';	// プラグイン名
 			m_pShareData->m_Common.m_sPlugin.m_PluginTable[nPlugin].m_szId[0]	= L'\0';	// プラグインID
 			m_pShareData->m_Common.m_sPlugin.m_PluginTable[nPlugin].m_state = PLS_NONE;		// プラグイン状態
@@ -1003,7 +1003,7 @@ BOOL CShareData::IsPrivateSettings(void) {
 	
 	@note idxは正確なものでなければならない。(内部で正当性チェックを行っていない)
 */
-int CShareData::GetMacroFilename(int idx, TCHAR *pszPath, int nBufLen)
+int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 {
 	if (-1 != idx && !m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].IsEnabled())
 		return 0;

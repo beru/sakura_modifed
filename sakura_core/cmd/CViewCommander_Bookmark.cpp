@@ -41,7 +41,6 @@ void CViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 }
 
 
-
 /*! 指定行へジャンプダイアログの表示
 	2002.2.2 YAZAKI
 */
@@ -54,7 +53,6 @@ void CViewCommander::Command_JUMP_DIALOG(void)
 		return;
 	}
 }
-
 
 
 // 指定行ヘジャンプ
@@ -262,7 +260,6 @@ void CViewCommander::Command_JUMP(void)
 }
 
 
-
 //	from CViewCommander_New.cpp
 //! ブックマークの設定・解除を行う(トグル動作)
 void CViewCommander::Command_BOOKMARK_SET(void)
@@ -329,7 +326,7 @@ re_do:;								// hor
 			bRedo			// 最初の検索
 		) {
 			ptXY.y = -1;	//	2002/06/01 MIK
-			bRedo=FALSE;
+			bRedo = FALSE;
 			goto re_do;		// 先頭から再検索
 		}
 	}

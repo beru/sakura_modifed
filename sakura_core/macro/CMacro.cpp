@@ -455,7 +455,7 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 				out.WriteString(cmemWork3.GetStringPtr(), cmemWork3.GetStringLength());
 				out.WriteF(L"', %d", (GetParamAt(m_pParamTop, 3) ? _wtoi(GetParamAt(m_pParamTop, 3)) : 0));
 				// 古いマクロは引数4つなので5つめはオプション
-				if(GetParamAt(m_pParamTop, 4)) {
+				if (GetParamAt(m_pParamTop, 4)) {
 					out.WriteF(L", %d", _wtoi(GetParamAt(m_pParamTop, 4)));
 				}
 				out.WriteF(L");\t// %ls\r\n", szFuncNameJapanese);

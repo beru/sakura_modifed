@@ -35,13 +35,13 @@ struct SysString {
 	~SysString()                        { ::SysFreeString(Data); }
 	SysString& operator = (const SysString& Source) { Data = ::SysAllocStringLen(Source.Data, SysStringLen(Source.Data)); return *this; }
 	int Length()                        { return ::SysStringLen(Data); }
-	void Get(char **S, int *L) {
+	void Get(char** S, int* L) {
 		int Len = ::SysStringLen(Data);
 		*S = new char[Len * 2 + 1];
 		*L = ::WideCharToMultiByte(CP_ACP, 0, Data, Len, *S, Len * 2, NULL, NULL);
 		(*S)[*L] = 0;
 	}
-	void GetW(wchar_t **S, int *L) {
+	void GetW(wchar_t** S, int* L) {
 		int Len = ::SysStringLen(Data);
 		*S = new wchar_t[Len + 1];
 		*L = Len;
@@ -60,10 +60,10 @@ struct SysString {
 		str->assign(Data, Len);
 	}
 #ifdef _UNICODE
-	void GetT(TCHAR **S, int *L) {GetW(S, L);}
+	void GetT(TCHAR** S, int* L) {GetW(S, L);}
 	void GetT(std::wstring* str) {GetW(str);}
 #else
-	void GetT(TCHAR **S, int *L) {Get(S, L);}
+	void GetT(TCHAR** S, int* L) {Get(S, L);}
 	void GetT(std::string* str) {Get(str);}
 #endif
 };

@@ -4,7 +4,7 @@
 
 CBinaryInputStream::CBinaryInputStream(LPCTSTR tszFilePath)
 	:
-	CStream(tszFilePath,_T("rb"))
+	CStream(tszFilePath, _T("rb"))
 {
 }
 

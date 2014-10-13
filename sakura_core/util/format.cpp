@@ -95,7 +95,7 @@ UINT32 ParseVersion(const TCHAR* sVer)
 	const TCHAR* p = sVer;
 	int i;
 
-	for (i=0; *p && i<4; i++) {
+	for (i = 0; *p && i < 4; i++) {
 		// “Á•Ê‚È•¶Žš—ñ‚Ìˆ—
 		if (*p == _T('a')) {
 			if (_tcsncmp(_T("alpha"), p, 5) == 0) p += 5;

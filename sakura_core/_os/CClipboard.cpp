@@ -65,7 +65,7 @@ void CClipboard::Close()
 {
 	if (m_bOpenResult) {
 		::CloseClipboard();
-		m_bOpenResult=FALSE;
+		m_bOpenResult = FALSE;
 	}
 }
 

@@ -63,8 +63,8 @@ public:
 	}
 	void CaretUnderLineON(bool, bool);	// カーソル行アンダーラインのON
 	void CaretUnderLineOFF(bool, bool = true, bool = false);	// カーソル行アンダーラインのOFF
-	void SetUnderLineDoNotOFF(bool flag) { if(!m_nLockCounter)m_bUnderLineDoNotOFF = flag; }
-	void SetVertLineDoNotOFF(bool flag) { if(!m_nLockCounter)m_bVertLineDoNotOFF = flag; }
+	void SetUnderLineDoNotOFF(bool flag) { if (!m_nLockCounter)m_bUnderLineDoNotOFF = flag; }
+	void SetVertLineDoNotOFF(bool flag) { if (!m_nLockCounter)m_bVertLineDoNotOFF = flag; }
 	inline bool GetUnderLineDoNotOFF()const { return m_bUnderLineDoNotOFF; }
 	inline bool GetVertLineDoNotOFF()const { return m_bVertLineDoNotOFF; }
 private:
@@ -143,7 +143,7 @@ public:
 
 	//$ 設計思想的に微妙
 	void SetCaretLayoutPos(const CLayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	//!< キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const CLogicPoint pt) { m_ptCaretPos_Logic=pt; }		//!< キャレット位置(ロジック)を設定
+	void SetCaretLogicPos(const CLogicPoint pt) { m_ptCaretPos_Logic = pt; }		//!< キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

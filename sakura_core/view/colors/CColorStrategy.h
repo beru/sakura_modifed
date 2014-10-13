@@ -65,7 +65,7 @@ int ToColorInfoArrIndex(const EColorIndexType eColorIndex)
 }
 
 // カラー名＜＞インデックス番号の変換	//@@@ 2002.04.30
-int GetColorIndexByName(const TCHAR *name);
+int GetColorIndexByName(const TCHAR* name);
 const TCHAR* GetColorNameByIndex(int index);
 
 

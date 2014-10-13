@@ -591,7 +591,7 @@ void CDlgFuncList::SetData()
 			if (41 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK07));}else
 			if (50 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK08));}else
 			if (51 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK09));}else
-			if (52 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK10));}else{
+			if (52 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK10));}else {
 				// Jul 10, 2003  little YOSHI
 				// ここにあったVB関係の処理はSetListVB()メソッドに移動しました。
 
@@ -957,7 +957,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 					//none
 				}
 				htiParent = htiClass;
-				//if(k + 1 >= nClassNest) {
+				//if (k + 1 >= nClassNest) {
 				//	break;
 				//}
 				htiClass = TreeView_GetChild(hwndTree, htiClass);
@@ -1856,7 +1856,7 @@ BOOL CDlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 						COLORREF clrText = TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
 						COLORREF clrTextBk = TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
 						if (hwndList == pnmh->hwndFrom) {
-							//if(lpnmcd->uItemState & CDIS_SELECTED) {	// 非選択のアイテムもすべて CDIS_SELECTED で来る？
+							//if (lpnmcd->uItemState & CDIS_SELECTED) {	// 非選択のアイテムもすべて CDIS_SELECTED で来る？
 							if (ListView_GetItemState(hwndList, lpnmcd->dwItemSpec, LVIS_SELECTED)) {
 								((LPNMLVCUSTOMDRAW)lpnmcd)->clrText = clrText ^ RGB(255, 255, 255);
 								((LPNMLVCUSTOMDRAW)lpnmcd)->clrTextBk = clrTextBk ^ RGB(255, 255, 255);
@@ -1994,7 +1994,7 @@ BOOL CDlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-//	if(IsDocking())
+//	if (IsDocking())
 	{
 		// ダイアログ部分を再描画（ツリー／リストの範囲はちらつかないように除外）
 		::InvalidateRect(GetHwnd(), NULL, FALSE);

@@ -606,11 +606,11 @@ void CPrint::SettingInitialize(PRINTSETTING& pPrintSetting, const TCHAR* setting
 int CPrint::CalculatePrintableColumns(PRINTSETTING* pPS, int nPaperAllWidth, int nLineNumberColumns)
 {
 	int nPrintablePaperWidth = nPaperAllWidth - pPS->m_nPrintMarginLX - pPS->m_nPrintMarginRX;
-	if(nPrintablePaperWidth < 0) { return 0; }
+	if (nPrintablePaperWidth < 0) { return 0; }
 
 	int nPrintSpaceWidth = (pPS->m_nPrintDansuu - 1) * pPS->m_nPrintDanSpace
 						 + (pPS->m_nPrintDansuu) * (nLineNumberColumns * pPS->m_nPrintFontWidth);
-	if(nPrintablePaperWidth < nPrintSpaceWidth) { return 0; }
+	if (nPrintablePaperWidth < nPrintSpaceWidth) { return 0; }
 
 	int nEnableColumns =
 		(nPrintablePaperWidth - nPrintSpaceWidth
@@ -626,14 +626,14 @@ int CPrint::CalculatePrintableColumns(PRINTSETTING* pPS, int nPaperAllWidth, int
 int CPrint::CalculatePrintableLines(PRINTSETTING *pPS, int nPaperAllHeight)
 {
 	int nPrintablePaperHeight = nPaperAllHeight - pPS->m_nPrintMarginTY - pPS->m_nPrintMarginBY;
-	if(nPrintablePaperHeight < 0) { return 0; }
+	if (nPrintablePaperHeight < 0) { return 0; }
 
 	int nPrintSpaceHeight = (pPS->m_nPrintFontHeight * pPS->m_nPrintLineSpacing / 100);
 
 	int nEnableLines =
 		(nPrintablePaperHeight - CalcHeaderHeight(pPS)*2 - CalcFooterHeight(pPS)*2 + nPrintSpaceHeight) /
 		(pPS->m_nPrintFontHeight + nPrintSpaceHeight);	// 印字可能行数/ページ
-	if(nEnableLines < 0) { return 0; }
+	if (nEnableLines < 0) { return 0; }
 	return nEnableLines;
 }
 

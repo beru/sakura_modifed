@@ -40,7 +40,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 
-inline ACHAR _GetHexChar( ACHAR c )
+inline ACHAR _GetHexChar(ACHAR c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
 		return c;
@@ -50,7 +50,7 @@ inline ACHAR _GetHexChar( ACHAR c )
 		return '\0';
 	}
 }
-inline WCHAR _GetHexChar( WCHAR c )
+inline WCHAR _GetHexChar(WCHAR c)
 {
 	if ((c >= L'0' && c <= L'9') || (c >= L'A' && c <= L'F')) {
 		return c;
@@ -64,7 +64,7 @@ inline WCHAR _GetHexChar( WCHAR c )
 /*
 	c の入力値： 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
 */
-inline int _HexToInt( ACHAR c )
+inline int _HexToInt(ACHAR c)
 {
 	if (c <= '9') {
 		return c - '0';
@@ -72,7 +72,7 @@ inline int _HexToInt( ACHAR c )
 		return c - 'A' + 10;
 	}
 }
-inline int _HexToInt( WCHAR c )
+inline int _HexToInt(WCHAR c)
 {
 	if (c <= L'9') {
 		return c - L'0';
@@ -82,7 +82,7 @@ inline int _HexToInt( WCHAR c )
 }
 
 template <class CHAR_TYPE>
-int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
+int _DecodeQP(const CHAR_TYPE* pS, const int nLen, char* pDst)
 {
 	const CHAR_TYPE* pr;
 	char* pw;
@@ -95,14 +95,14 @@ int _DecodeQP( const CHAR_TYPE* pS, const int nLen, char* pDst )
 		// =XX の形式でない部分をデコード
 		if (sizeof(CHAR_TYPE) == 2) {
 			if (*pr != L'=') {
-				*pw = static_cast<char>( *pr );
+				*pw = static_cast<char>(*pr);
 				pw += 1;
 				pr += 1;
 				continue;
 			}
 		}else {
 			if (*pr != '=') {
-				*pw = static_cast<char>( *pr );
+				*pw = static_cast<char>(*pr);
 				pw += 1;
 				pr += 1;
 				continue;
@@ -148,12 +148,12 @@ extern const char TABLE_ValueToBASE64Char[];
 
 // BASE64文字 <-> 数値
 template <class CHAR_TYPE>
-inline uchar_t Base64ToVal( const CHAR_TYPE c ) {
+inline uchar_t Base64ToVal(const CHAR_TYPE c) {
 	int c_ = c;
 	return static_cast<uchar_t>((c_ < 0x80)? TABLE_BASE64CharToValue[c_] : -1);
 }
 template <class CHAR_TYPE>
-inline CHAR_TYPE ValToBase64( const char v ) {
+inline CHAR_TYPE ValToBase64(const char v) {
 	int v_ = v;
 	return static_cast<CHAR_TYPE>((v_ < 64)? TABLE_ValueToBASE64Char[v_] : -1);
 }
@@ -166,7 +166,7 @@ inline CHAR_TYPE ValToBase64( const char v ) {
 	入力：BASE64 文字列。
 */
 template<class CHAR_TYPE>
-bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
+bool CheckBase64Padbit(const CHAR_TYPE *pSrc, const int nSrcLen)
 {
 	bool bret = true;
 
@@ -208,7 +208,7 @@ bool CheckBase64Padbit( const CHAR_TYPE *pSrc, const int nSrcLen )
 	正しい BASE64 入力文字列を仮定している。
 */
 template <class CHAR_TYPE>
-int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
+int _DecodeBase64(const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest)
 {
 	long lData;
 	int nDesLen;
@@ -221,9 +221,9 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 		bool bret;
 		for (; i < nsrclen; i++) {
 			if (sizeof(CHAR_TYPE) == 2) {
-				bret = ( pSrc[nsrclen - 1 - i] == L'=' );
+				bret = (pSrc[nsrclen - 1 - i] == L'=');
 			}else {
-				bret = ( pSrc[nsrclen - 1 - i] == '=' );
+				bret = (pSrc[nsrclen - 1 - i] == '=');
 			}
 			if (bret != true) {
 				break;
@@ -241,7 +241,7 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 		}
 		lData = 0;
 		for (int j = 0; j < sMax; j++) {
-			long k = Base64ToVal( pSrc[i + j] );
+			long k = Base64ToVal(pSrc[i + j]);
 			lData |= k << ((4 - j - 1) * 6);
 		}
 		for (int j = 0; j < (sMax * 6)/ 8 ; j++) {
@@ -261,7 +261,7 @@ int _DecodeBase64( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	パッド文字などは付加しない。エラーチェックなし。
 */
 template <class CHAR_TYPE>
-int _EncodeBase64( const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest )
+int _EncodeBase64(const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest)
 {
 	const unsigned char* psrc;
 	unsigned long lDataSrc;
@@ -290,7 +290,7 @@ int _EncodeBase64( const char *pSrc, const int nSrcLen, CHAR_TYPE *pDest )
 		// エンコードして書き込む。
 		for (k = 0; k < j; k++) {
 			v = static_cast<char>((lDataSrc >> (6 * (j - k - 1))) & 0x0000003f);
-			pDest[nDesLen] = static_cast<CHAR_TYPE>(ValToBase64<CHAR_TYPE>( v ));
+			pDest[nDesLen] = static_cast<CHAR_TYPE>(ValToBase64<CHAR_TYPE>(v));
 			nDesLen++;
 		}
 	}
@@ -336,7 +336,7 @@ end
 */
 
 
-inline BYTE _UUDECODE_CHAR( WCHAR c )
+inline BYTE _UUDECODE_CHAR(WCHAR c)
 {
 	BYTE c_ = (c & 0xff);
 	if (c_ == L'`' || c_ == L'~') {
@@ -345,7 +345,7 @@ inline BYTE _UUDECODE_CHAR( WCHAR c )
 	return static_cast<BYTE>((static_cast<BYTE>(c_) - 0x20) & 0x3f);
 }
 
-inline BYTE _UUDECODE_CHAR( ACHAR c )
+inline BYTE _UUDECODE_CHAR(ACHAR c)
 {
 	if (c == '`' || c == '~') {
 		c = ' ';
@@ -364,7 +364,7 @@ inline BYTE _UUDECODE_CHAR( ACHAR c )
 	        書き込んだデータが戻り値よりも大きいときがあるので注意。
 */
 template <class CHAR_TYPE>
-int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
+int _DecodeUU_line(const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest)
 {
 	unsigned long lDataDes;
 	const CHAR_TYPE *pr;
@@ -395,7 +395,7 @@ int _DecodeUU_line( const CHAR_TYPE *pSrc, const int nSrcLen, char *pDest )
 	UUエンコードのヘッダー部分を解析
 */
 template <class CHAR_TYPE>
-bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
+bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 {
 //	using namespace WCODE;
 
@@ -445,7 +445,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	// begin を取得
 
-	pr += CWordParse::GetWord( pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen );
+	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	if (nwlen != 5) {
 		// error.
 		return false;
@@ -464,7 +464,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	// 3桁の8進数（Unix システムのパーミッション）を取得
 
-	pr += CWordParse::GetWord( pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen );
+	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	if (nwlen != 3) {
 		// error.
 		return false;
@@ -487,7 +487,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 
 	// 書き出し用のファイル名を取得
 
-	pr += CWordParse::GetWord( pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen );
+	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	// 末尾の空白・改行文字をスキップ
 	for (; nwlen > 0; --nwlen) {
 		CHAR_TYPE c = pwstart[nwlen - 1];
@@ -507,7 +507,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 	}
 	// ファイル名を格納
 	if (pszFilename) {
-		strtotcs( pszFilename, pwstart, (size_t)nwlen );
+		strtotcs(pszFilename, pwstart, (size_t)nwlen);
 		pszFilename[nwlen] = _WINT('\0');
 	}
 
@@ -519,7 +519,7 @@ bool CheckUUHeader( const CHAR_TYPE *pSrc, const int nLen, TCHAR *pszFilename )
 	UU フッターを確認
 */
 template <class CHAR_TYPE>
-bool CheckUUFooter( const CHAR_TYPE *pS, const int nLen )
+bool CheckUUFooter(const CHAR_TYPE *pS, const int nLen)
 {
 	int nstartidx;
 	const CHAR_TYPE* psrc;
@@ -606,7 +606,7 @@ enum EEncodingMethod {
 	@return  CMemory と置き換えられる入力文字列長 (nSkipLen)
 */
 template <class CHAR_TYPE>
-int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_alt, ECodeType* peCodetype )
+int _DecodeMimeHeader(const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_alt, ECodeType* peCodetype)
 {
 	ECodeType ecode = CODE_NONE;
 	EEncodingMethod emethod = EM_NONE;
@@ -630,9 +630,9 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 	if (pSrc + 14 < pSrc + nSrcLen) {
 		// JIS の場合
 		if (sizeof(CHAR_TYPE) == 2) {
-			ncmpresult = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?ISO-2022-JP?", 14 );
+			ncmpresult = wcsnicmp(reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?ISO-2022-JP?", 14);
 		}else {
-			ncmpresult = strnicmp( &pSrc[0], "=?ISO-2022-JP?", 14 );
+			ncmpresult = strnicmp(&pSrc[0], "=?ISO-2022-JP?", 14);
 		}
 		if (ncmpresult == 0) {  // 
 			ecode = CODE_JIS;
@@ -643,9 +643,9 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 	if (pSrc + 8 < pSrc + nSrcLen) {
 		// UTF-8 の場合
 		if (sizeof(CHAR_TYPE) == 2) {
-			ncmpresult = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?UTF-8?", 8 );
+			ncmpresult = wcsnicmp(reinterpret_cast<const wchar_t*>(&pSrc[0]), L"=?UTF-8?", 8);
 		}else {
-			ncmpresult = strnicmp( &pSrc[0], "=?UTF-8?", 8 );
+			ncmpresult = strnicmp(&pSrc[0], "=?UTF-8?", 8);
 		}
 		if (ncmpresult == 0) {
 			ecode = CODE_UTF8;
@@ -654,7 +654,7 @@ int _DecodeMimeHeader( const CHAR_TYPE* pSrc, const int nSrcLen, CMemory* pcMem_
 		}
 	}
 	// マッチしなかった場合
-	pcMem_alt->SetRawData( "", 0 );
+	pcMem_alt->SetRawData("", 0);
 	if (peCodetype) {
 		*peCodetype = CODE_NONE;
 	}
@@ -677,11 +677,11 @@ finish_first_detect:;
 		return 0;
 	}
 	if (sizeof(CHAR_TYPE) == 2) {
-		ncmpresult1 = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[nLen_part1]), L"B?", 2 );
-		ncmpresult2 = wcsnicmp( reinterpret_cast<const wchar_t*>(&pSrc[nLen_part1]), L"Q?", 2 );
+		ncmpresult1 = wcsnicmp(reinterpret_cast<const wchar_t*>(&pSrc[nLen_part1]), L"B?", 2);
+		ncmpresult2 = wcsnicmp(reinterpret_cast<const wchar_t*>(&pSrc[nLen_part1]), L"Q?", 2);
 	}else {
-		ncmpresult1 = strnicmp( &pSrc[nLen_part1], "B?", 2 );
-		ncmpresult2 = strnicmp( &pSrc[nLen_part1], "Q?", 2 );
+		ncmpresult1 = strnicmp(&pSrc[nLen_part1], "B?", 2);
+		ncmpresult2 = strnicmp(&pSrc[nLen_part1], "Q?", 2);
 	}
 	if (ncmpresult1 == 0) {
 		emethod = EM_BASE64;
@@ -701,9 +701,9 @@ finish_first_detect:;
 	pr = pSrc + nLen_part1 + nLen_part2;
 	for (; pr < pSrc + nSrcLen - 1; ++pr) {
 		if (sizeof(CHAR_TYPE) == 2) {
-			ncmpresult = wcsncmp( reinterpret_cast<const wchar_t*>(pr), L"?=", 2 );
+			ncmpresult = wcsncmp(reinterpret_cast<const wchar_t*>(pr), L"?=", 2);
 		}else {
-			ncmpresult = strncmp( pr, "?=", 2 );
+			ncmpresult = strncmp(pr, "?=", 2);
 		}
 		if (ncmpresult == 0) {
 			break;
@@ -719,20 +719,20 @@ finish_first_detect:;
 	//   デコード ----------------------------------------------------
 	//
 
-	pcMem_alt->AllocBuffer( pr - pr_base );
-	pdst = reinterpret_cast<char*>( pcMem_alt->GetRawPtr() );
+	pcMem_alt->AllocBuffer(pr - pr_base);
+	pdst = reinterpret_cast<char*>(pcMem_alt->GetRawPtr());
 	if (!pdst) {
 		pcMem_alt->SetRawData("", 0);
 		return 0;
 	}
 
 	if (emethod == EM_BASE64) {
-		ndecoded_len = _DecodeBase64( pr_base, pr - pr_base, pdst );
+		ndecoded_len = _DecodeBase64(pr_base, pr - pr_base, pdst);
 	}else {
-		ndecoded_len = _DecodeQP( pr_base, pr - pr_base, pdst );
+		ndecoded_len = _DecodeQP(pr_base, pr - pr_base, pdst);
 	}
 
-	pcMem_alt->_SetRawLength( ndecoded_len );
+	pcMem_alt->_SetRawLength(ndecoded_len);
 
 	return nskipped_len;
 }

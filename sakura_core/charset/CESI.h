@@ -125,7 +125,7 @@ public:
 
 	// m_nTargetDataLen のセッター／ゲッター
 protected:
-	void SetDataLen( const int n ) { if( n < 1 ) { m_nTargetDataLen = 0; }else{ m_nTargetDataLen = n; } }
+	void SetDataLen( const int n ) { if (n < 1) { m_nTargetDataLen = 0; }else { m_nTargetDataLen = n; } }
 public:
 	int GetDataLen( void ) const { return m_nTargetDataLen; }
 
@@ -167,8 +167,9 @@ public:
 	bool IsAmbiguousEucAndSjis( void ) {
 		// EUC と SJIS がトップ2に上がった時
 		// かつ、EUC と SJIS のポイント数が同数のとき
-		if( (m_apMbcInfo[0]->eCodeID == CODE_SJIS && m_apMbcInfo[1]->eCodeID == CODE_EUC
-		     || m_apMbcInfo[1]->eCodeID == CODE_SJIS && m_apMbcInfo[0]->eCodeID == CODE_EUC)
+		if ((m_apMbcInfo[0]->eCodeID == CODE_SJIS && m_apMbcInfo[1]->eCodeID == CODE_EUC
+		     || m_apMbcInfo[1]->eCodeID == CODE_SJIS && m_apMbcInfo[0]->eCodeID == CODE_EUC
+			)
 		 && m_apMbcInfo[0]->nPoints == m_apMbcInfo[1]->nPoints
 		) {
 			return true;
@@ -180,8 +181,9 @@ public:
 	bool IsAmbiguousUtf8AndCesu8( void ) {
 		// UTF-8 と SJIS がトップ2に上がった時
 		// かつ、UTF-8 と SJIS のポイント数が同数のとき
-		if( (m_apMbcInfo[0]->eCodeID == CODE_UTF8 && m_apMbcInfo[1]->eCodeID == CODE_CESU8
-		     || m_apMbcInfo[1]->eCodeID == CODE_UTF8 && m_apMbcInfo[0]->eCodeID == CODE_CESU8)
+		if ((m_apMbcInfo[0]->eCodeID == CODE_UTF8 && m_apMbcInfo[1]->eCodeID == CODE_CESU8
+		     || m_apMbcInfo[1]->eCodeID == CODE_UTF8 && m_apMbcInfo[0]->eCodeID == CODE_CESU8
+			)
 		 && m_apMbcInfo[0]->nPoints == m_apMbcInfo[1]->nPoints
 		) {
 			return true;

@@ -38,8 +38,8 @@ public:
 	CFileExt();
 	~CFileExt();
 
-	bool AppendExt(const TCHAR *pszName, const TCHAR *pszExt);
-	bool AppendExtRaw(const TCHAR *pszName, const TCHAR *pszExt);
+	bool AppendExt(const TCHAR* pszName, const TCHAR* pszExt);
+	bool AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt);
 	const TCHAR* GetName(int nIndex);
 	const TCHAR* GetExt(int nIndex);
 
@@ -49,7 +49,7 @@ public:
 	int GetCount(void) { return m_nCount; }
 
 protected:
-	bool ConvertTypesExtToDlgExt(const TCHAR *pszSrcExt, TCHAR *pszDstExt);
+	bool ConvertTypesExtToDlgExt(const TCHAR* pszSrcExt, TCHAR* pszDstExt);
 
 private:
 	typedef struct {

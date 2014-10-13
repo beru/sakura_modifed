@@ -409,7 +409,7 @@ int CDlgDiff::GetData(void)
 
 	// 相手ファイルが指定されてなければキャンセル
 	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除
-	//if(m_szFile2[0] == '\0') ret = FALSE;
+	//if (m_szFile2[0] == '\0') ret = FALSE;
 
 	return ret;
 }

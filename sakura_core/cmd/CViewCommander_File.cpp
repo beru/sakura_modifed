@@ -608,7 +608,7 @@ BOOL CViewCommander::Command_PUTFILE(
 			pcSaveCode->UnicodeToCode(*pConvBuffer, &cDst);
 
 			// èëçû
-			if(0 < cDst.GetRawLength())
+			if (0 < cDst.GetRawLength())
 				out.Write(cDst.GetRawPtr(), cDst.GetRawLength());
 		}catch (CError_FileOpen) {
 			WarningMessage(

@@ -185,7 +185,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 				FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
 				NULL
 			);
-			if(hStdIn == INVALID_HANDLE_VALUE) hStdIn = NULL;
+			if (hStdIn == INVALID_HANDLE_VALUE) hStdIn = NULL;
 		}
 	}
 	
@@ -336,7 +336,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 				break;
 			case WAIT_OBJECT_0 + 1:
 				//処理中のユーザー操作を可能にする
-				if(!::BlockingHook(cDlgCancel.GetHwnd())) {
+				if (!::BlockingHook(cDlgCancel.GetHwnd())) {
 					// WM_QUIT受信。ただちに終了処理
 					::TerminateProcess(pi.hProcess, 0);
 					goto finish;
@@ -406,7 +406,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 						//@@@ 2002.1.24 YAZAKI 1バイト取りこぼす可能性があった。
 						//	Jan. 28, 2004 Moca 最後の文字はあとでチェックする
 						int j;
-						for (j=0; j<(int)read_cnt - 1; j++) {
+						for (j = 0; j < (int)read_cnt - 1; j++) {
 							//	2007.09.10 ryoji
 							if (CNativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
 								j++;

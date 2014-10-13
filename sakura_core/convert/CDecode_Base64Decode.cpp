@@ -76,7 +76,7 @@ bool CDecode_Base64Decode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 		pw += _DecodeBase64(&buffer[0], j, pw);
 	}while (i < nSrcLen && c != LTEXT('='));
 
-	//if(CheckBase64Padbit(&buffer[0], j) == false) {
+	//if (CheckBase64Padbit(&buffer[0], j) == false) {
 	//	return false;
 	//}
 

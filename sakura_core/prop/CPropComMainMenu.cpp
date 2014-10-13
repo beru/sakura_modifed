@@ -81,7 +81,7 @@ static	int		nMenuCnt = 0;					// 一時データ番号
 // ローカル関数定義
 static HTREEITEM TreeCopy(HWND, HTREEITEM, HTREEITEM, bool, bool);
 static void TreeView_ExpandAll(HWND, bool);
-static const TCHAR * MakeDispLabel(SMainMenuWork*);
+static const TCHAR* MakeDispLabel(SMainMenuWork*);
 
 // 特別機能
 struct SSpecialFunc	{
@@ -764,7 +764,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN),   FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_RIGHT),  FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_LEFT),   FALSE);
-		}else{
+		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELETE), TRUE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_UP),     NULL != TreeView_GetPrevSibling(hwndTreeRes, nIdxMenu));
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN),   NULL != TreeView_GetNextSibling(hwndTreeRes, nIdxMenu));

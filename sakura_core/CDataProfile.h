@@ -89,11 +89,11 @@ protected:
 protected:
 	//bool
 	void profile_to_value(const wstring& profile, bool* value) {
-		if(profile != L"0")*value=true;
-		else *value=false;
+		if (profile != L"0") *value = true;
+		else *value = false;
 	}
 	void value_to_profile(const bool& value, wstring* profile) {
-		*profile = _work_itow(value?1:0);
+		*profile = _work_itow(value ? 1 : 0);
 	}
 	// int
 	void profile_to_value(const wstring& profile, int* value) {
@@ -196,7 +196,7 @@ public:
 		if (m_bRead) {
 			// ï∂éöóÒì«Ç›çûÇ›
 			wstring buf;
-			bool ret=GetProfileDataImp(pszSectionName, pszEntryKey, buf);
+			bool ret = GetProfileDataImp(pszSectionName, pszEntryKey, buf);
 			if (ret) {
 				// TÇ…ïœä∑
 				profile_to_value(buf, &tEntryValue);

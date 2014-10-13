@@ -33,19 +33,19 @@ public:
 	virtual ~CDecode() { }
 
 	// インターフェース
-	bool CallDecode( const CNativeW& pcData, CMemory* pDest )
+	bool CallDecode(const CNativeW& pcData, CMemory* pDest)
 	{
 		bool bRet = DoDecode(pcData, pDest);
 		if (!bRet) {
 			ErrorMessage(NULL, LS(STR_CONVERT_ERR));
-			pDest->SetRawData( "", 0 );
+			pDest->SetRawData("", 0);
 			return false;
 		}
 		return true;
 	}
 
 	// 実装
-	virtual bool DoDecode( const CNativeW& pcData, CMemory* pDest ) = 0;
+	virtual bool DoDecode(const CNativeW& pcData, CMemory* pDest) = 0;
 
 };
 

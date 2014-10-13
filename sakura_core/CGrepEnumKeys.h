@@ -123,7 +123,7 @@ public:
 				}else {
 					push_back_unique(m_vecExceptAbsFileKeys, token);
 				}
-			}else if(keyType == FILTER_EXCEPT_FOLDER) {
+			}else if (keyType == FILTER_EXCEPT_FOLDER) {
 				if (bRelPath) {
 					push_back_unique(m_vecExceptFolderKeys, token);
 				}else {

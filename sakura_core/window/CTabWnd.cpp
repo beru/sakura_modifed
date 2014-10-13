@@ -55,7 +55,7 @@
 #include "sakura_rc.h"
 
 
-//#if(WINVER >= 0x0500)
+//#if (WINVER >= 0x0500)
 #ifndef	SPI_GETFOREGROUNDLOCKTIMEOUT
 #define SPI_GETFOREGROUNDLOCKTIMEOUT        0x2000
 #endif

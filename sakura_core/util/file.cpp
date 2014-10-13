@@ -332,7 +332,7 @@ void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* psz
 {
 	TCHAR* out = pszPath;
 	// フォルダをコピー
-	for (const TCHAR* in=pszDir; *in != '\0';) {
+	for (const TCHAR* in = pszDir; *in != '\0';) {
 		*out++ = *in++;
 	}
 	// 円記号を付加
@@ -346,7 +346,7 @@ void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* psz
 	}
 #endif
 	// ファイル名をコピー
-	for (const TCHAR* in=pszTitle; *in != '\0';) {
+	for (const TCHAR* in = pszTitle; *in != '\0';) {
 		*out++ = *in++;
 	}
 	*out = '\0';
@@ -761,7 +761,7 @@ void GetExistPath(char *po , const char *pi)
 	/ ・ / を \ に変換しつつ(Win32API では / も \ と同等に扱われるから)
 	/ ・最大 (_MAX_PATH -1) 文字まで
 	/ po にコピーする。 */
-	for (pw=po, cnt=0 ; (*pi != '\0') && (cnt < _MAX_PATH -1) ; pi++) {
+	for (pw = po, cnt = 0; (*pi != '\0') && (cnt < _MAX_PATH -1); pi++) {
 		// /," 共に Shift_JIS の漢字コード中には含まれないので Shift_JIS 判定は不要。
 		if (*pi == '\"')	continue;		//  " なら何もしない。次の文字へ
 		if (*pi == '/')		*pw++ = '\\';	//  / なら \ に変換してコピー
@@ -790,7 +790,7 @@ void GetExistPath(char *po , const char *pi)
 
 	// ps = 検索開始位置
 	char* ps = po;	// ↓文字列の先頭が \\ なら、\ 検索処理の対象から外す
-	if ((*po == '\\') && (*(po + 1) == '\\'))	ps +=2;
+	if ((*po == '\\') && (*(po + 1) == '\\')) ps += 2;
 
 	if (*ps == '\0') {	// 検索対象が空文字列なら
 		*po = '\0';		// 返値文字列 = "";(空文字列)
@@ -838,7 +838,7 @@ void GetExistPathW(wchar_t *po , const wchar_t *pi)
 	/ ・ / を \ に変換しつつ(Win32API では / も \ と同等に扱われるから)
 	/ ・最大 (_MAX_PATH-1) 文字まで
 	/ po にコピーする。 */
-	for (pw=po, cnt=0 ; (*pi != L'\0') && (cnt < _MAX_PATH-1) ; pi++) {
+	for (pw = po, cnt = 0; (*pi != L'\0') && (cnt < _MAX_PATH-1); pi++) {
 		// /," 共に Shift_JIS の漢字コード中には含まれないので Shift_JIS 判定は不要。
 		if (*pi == L'\"')	continue;		//  " なら何もしない。次の文字へ
 		if (*pi == L'/')	*pw++ = L'\\';	//  / なら \ に変換してコピー
@@ -864,7 +864,7 @@ void GetExistPathW(wchar_t *po , const wchar_t *pi)
 
 	// ps = 検索開始位置
 	wchar_t* ps = po;	// ↓文字列の先頭が \\ なら、\ 検索処理の対象から外す
-	if ((*po == L'\\')&&(*(po + 1) == L'\\'))	ps +=2;
+	if ((*po == L'\\')&&(*(po + 1) == L'\\'))	ps += 2;
 
 	if (*ps == L'\0') {	// 検索対象が空文字列なら
 		*po = L'\0';	// 返値文字列 = "";(空文字列)
@@ -1073,9 +1073,9 @@ void my_splitpath_w(
 //
 //
 // -----------------------------------------------------------------------------
-int FileMatchScore(const TCHAR *file1, const TCHAR *file2);
+int FileMatchScore(const TCHAR* file1, const TCHAR* file2);
 
-int FileMatchScoreSepExt(const TCHAR *file1, const TCHAR *file2)
+int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2)
 {
 	TCHAR szFile1[_MAX_PATH];
 	TCHAR szFile2[_MAX_PATH];
@@ -1105,7 +1105,7 @@ int FileMatchScoreSepExt(const TCHAR *file1, const TCHAR *file2)
 }
 
 //!	2つのファイル名の最長一致部分の長さを返す
-int FileMatchScore(const TCHAR *file1, const TCHAR *file2)
+int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
 {
 	int score = 0;
 	int len1 = auto_strlen(file1);

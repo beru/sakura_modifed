@@ -75,14 +75,14 @@ inline int CShiftJis::_SjisToUni_char( const unsigned char *pSrc, unsigned short
 		// エラーは起こらない。
 		nret = MyMultiByteToWideChar_JP( pSrc, 1, pDst );
 		// 保護コード
-		if( nret < 1 ) {
+		if ( nret < 1 ) {
 			nret = 1;
 		}
 		break;
 	case CHARSET_JIS_ZENKAKU:
 		// 全角文字を処理
 		nret = MyMultiByteToWideChar_JP( pSrc, 2, pDst );
-		if( nret < 1 ) {	// SJIS -> Unicode 変換に失敗
+		if ( nret < 1 ) {	// SJIS -> Unicode 変換に失敗
 			nret = BinToText( pSrc, 2, pDst );
 		}
 		break;
@@ -93,7 +93,7 @@ inline int CShiftJis::_SjisToUni_char( const unsigned char *pSrc, unsigned short
 		nret = 1;
 	}
 
-	if( pbError ) {
+	if ( pbError ) {
 		*pbError = berror;
 	}
 
@@ -115,27 +115,27 @@ inline int CShiftJis::_UniToSjis_char( const unsigned short* pSrc, unsigned char
 	int nret;
 	bool berror = false;
 
-	if( eCharset == CHARSET_UNI_NORMAL ) {
+	if ( eCharset == CHARSET_UNI_NORMAL ) {
 		nret = MyWideCharToMultiByte_JP( pSrc, 1, pDst );
-		if( nret < 1 ) {
+		if ( nret < 1 ) {
 			// Uni -> SJIS 変換に失敗
 			berror = true;
 			pDst[0] = '?';
 			nret = 1;
 		}
-	}else if( eCharset == CHARSET_UNI_SURROG ) {
+	}else if ( eCharset == CHARSET_UNI_SURROG ) {
 		// サロゲートペアは SJIS に変換できない。
 		berror = true;
 		pDst[0] = '?';
 		nret = 1;
-	}else{
+	}else {
 		// 保護コード
 		berror = true;
 		pDst[0] = '?';
 		nret = 1;
 	}
 
-	if( pbError ) {
+	if ( pbError ) {
 		*pbError = berror;
 	}
 

@@ -71,9 +71,9 @@ next:
 	//! フック終了
 	void Unuse()
 	{
-		if (--g_nCnt<=0 && g_hHook != NULL) {
+		if (--g_nCnt <= 0 && g_hHook != NULL) {
 			::UnhookWindowsHookEx(g_hHook);
-			g_hHook=NULL;
+			g_hHook = NULL;
 		}
 	}
 } // namespace CWindowCreationHook

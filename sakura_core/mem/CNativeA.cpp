@@ -33,58 +33,58 @@ CNativeA::CNativeA(const CNativeA& rhs)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // バッファの内容を置き換える
-void CNativeA::SetString( const char* pszData )
+void CNativeA::SetString(const char* pszData)
 {
 	SetString(pszData, strlen(pszData));
 }
 
 // バッファの内容を置き換える。nLenは文字単位。
-void CNativeA::SetString( const char* pData, int nDataLen )
+void CNativeA::SetString(const char* pData, int nDataLen)
 {
 	int nDataLenBytes = nDataLen * sizeof(char);
 	CNative::SetRawData(pData, nDataLenBytes);
 }
 
 // バッファの内容を置き換える
-void CNativeA::SetNativeData( const CNativeA& pcNative )
+void CNativeA::SetNativeData(const CNativeA& pcNative)
 {
 	CNative::SetRawData(pcNative);
 }
 
 // バッファの最後にデータを追加する
-void CNativeA::AppendString( const char* pszData )
+void CNativeA::AppendString(const char* pszData)
 {
 	AppendString(pszData, strlen(pszData));
 }
 
 //! バッファの最後にデータを追加する。nLengthは文字単位。
-void CNativeA::AppendString( const char* pszData, int nLength )
+void CNativeA::AppendString(const char* pszData, int nLength)
 {
 	CNative::AppendRawData(pszData, nLength * sizeof(char));
 }
 
-const CNativeA& CNativeA::operator = ( char cChar )
+const CNativeA& CNativeA::operator = (char cChar)
 {
 	char pszChar[2];
 	pszChar[0] = cChar;
 	pszChar[1] = '\0';
-	SetRawData( pszChar, 1 );
+	SetRawData(pszChar, 1);
 	return *this;
 }
 
 //! バッファの最後にデータを追加する
-void CNativeA::AppendNativeData( const CNativeA& pcNative )
+void CNativeA::AppendNativeData(const CNativeA& pcNative)
 {
 	AppendString(pcNative.GetStringPtr(), pcNative.GetStringLength());
 }
 
 //! (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
-void CNativeA::AllocStringBuffer( int nDataLen )
+void CNativeA::AllocStringBuffer(int nDataLen)
 {
 	CNative::AllocBuffer(nDataLen * sizeof(char));
 }
 
-const CNativeA& CNativeA::operator += ( char ch )
+const CNativeA& CNativeA::operator += (char ch)
 {
 	char szChar[2] = {ch, '\0'};
 	AppendString(szChar);
@@ -141,19 +141,19 @@ char CNativeA::operator[](int nIndex) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字列置換
-void CNativeA::Replace( const char* pszFrom, const char* pszTo )
+void CNativeA::Replace(const char* pszFrom, const char* pszTo)
 {
 	CNativeA	cmemWork;
-	int			nFromLen = strlen( pszFrom );
-	int			nToLen = strlen( pszTo );
+	int			nFromLen = strlen(pszFrom);
+	int			nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
 	int			nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
-		if (0 == auto_memcmp( &GetStringPtr()[nBgn], pszFrom, nFromLen )) {
+		if (0 == auto_memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
 			if (0  < nBgn - nBgnOld) {
-				cmemWork.AppendString( &GetStringPtr()[nBgnOld], nBgn - nBgnOld );
+				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
-			cmemWork.AppendString( pszTo, nToLen );
+			cmemWork.AppendString(pszTo, nToLen);
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
@@ -161,39 +161,39 @@ void CNativeA::Replace( const char* pszFrom, const char* pszTo )
 		}
 	}
 	if (0 < GetStringLength() - nBgnOld) {
-		cmemWork.AppendString( &GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld );
+		cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 	}
-	SetNativeData( cmemWork );
+	SetNativeData(cmemWork);
 	return;
 }
 
 // 文字列置換（日本語考慮版）
-void CNativeA::Replace_j( const char* pszFrom, const char* pszTo )
+void CNativeA::Replace_j(const char* pszFrom, const char* pszTo)
 {
 	CNativeA	cmemWork;
-	int			nFromLen = strlen( pszFrom );
-	int			nToLen = strlen( pszTo );
+	int			nFromLen = strlen(pszFrom);
+	int			nToLen = strlen(pszTo);
 	int			nBgnOld = 0;
 	int			nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
-		if (0 == memcmp( &GetStringPtr()[nBgn], pszFrom, nFromLen )) {
+		if (0 == memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
 			if (0 < nBgn - nBgnOld) {
-				cmemWork.AppendString( &GetStringPtr()[nBgnOld], nBgn - nBgnOld );
+				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
-			cmemWork.AppendString( pszTo, nToLen );
+			cmemWork.AppendString(pszTo, nToLen);
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
-			if (_IS_SJIS_1( (unsigned char)GetStringPtr()[nBgn] )) {
+			if (_IS_SJIS_1((unsigned char)GetStringPtr()[nBgn])) {
 				nBgn++;
 			}
 			nBgn++;
 		}
 	}
 	if (0  < GetStringLength() - nBgnOld) {
-		cmemWork.AppendString( &GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld );
+		cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 	}
-	SetNativeData( cmemWork );
+	SetNativeData(cmemWork);
 	return;
 }
 
@@ -212,9 +212,9 @@ void CNativeA::ToLower()
 	unsigned char	uc;
 	for (i = 0; i < nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CShiftJis::GetSizeOfChar( (const char *)pBuf, nBufLen, i );
+		nCharChars = CShiftJis::GetSizeOfChar((const char *)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
-			uc = (unsigned char)tolower( pBuf[i] );
+			uc = (unsigned char)tolower(pBuf[i]);
 			pBuf[i] = uc;
 		}else if (nCharChars == 2) {
 			// 全角英大文字→全角英小文字
@@ -255,9 +255,9 @@ void CNativeA::ToUpper()
 	int				nBufLen = GetStringLength();
 	for (int i = 0; i < nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar( (const char *)pBuf, nBufLen, i );
+		int nCharChars = CShiftJis::GetSizeOfChar((const char *)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
-			unsigned char uc = (unsigned char)toupper( pBuf[i] );
+			unsigned char uc = (unsigned char)toupper(pBuf[i]);
 			pBuf[i] = uc;
 		}else if (nCharChars == 2) {
 			// 全角英小文字→全角英大文字
@@ -315,17 +315,17 @@ void CNativeA::ToZenkaku(
 	int nBufDesLen = 0;
 	for (int i = 0; i < nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar( (const char *)pBuf, nBufLen, i );
+		int nCharChars = CShiftJis::GetSizeOfChar((const char *)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			bHenkanOK = FALSE;
 			if (bHanKataOnly) {	// 1== 半角カタカナにのみ作用する
-				if (strchr( (const char *)pszHanKataSet, pBuf[i] )) {
+				if (strchr((const char *)pszHanKataSet, pBuf[i])) {
 					bHenkanOK = TRUE;
 				}
 			}else {
 				//! 英数変換用に新たな条件を付加 2001/07/30 Misaka
-				if (( (unsigned char)0x20 <= pBuf[i] && pBuf[i] <= (unsigned char)0x7E ) ||
-					( bHiragana != 2 && (unsigned char)0xA1 <= pBuf[i] && pBuf[i] <= (unsigned char)0xDF )
+				if (((unsigned char)0x20 <= pBuf[i] && pBuf[i] <= (unsigned char)0x7E) ||
+					(bHiragana != 2 && (unsigned char)0xA1 <= pBuf[i] && pBuf[i] <= (unsigned char)0xDF)
 				) {
 					bHenkanOK = TRUE;
 				}
@@ -340,12 +340,12 @@ void CNativeA::ToZenkaku(
 					usDes = (unsigned short)0x8394; // ヴ
 					nCharChars = 2;
 				}else {
-					usDes = (unsigned short)_mbbtombc( usSrc );
+					usDes = (unsigned short)_mbbtombc(usSrc);
 					// 濁音
 					if (1
 						&& bHiragana != 2
 						&& pBuf[i + 1] == (unsigned char)'ﾞ'
-						&& strchr( (const char *)pszDakuSet, pBuf[i] )
+						&& strchr((const char *)pszDakuSet, pBuf[i])
 					) {
 						usDes++;
 						nCharChars = 2;
@@ -356,7 +356,7 @@ void CNativeA::ToZenkaku(
 					if (1
 						&& bHiragana != 2
 						&& pBuf[i + 1] == (unsigned char)'ﾟ'
-						&& strchr( (const char *)pszYouSet, pBuf[i] )
+						&& strchr((const char *)pszYouSet, pBuf[i])
 					) {
 						usDes += 2;
 						nCharChars = 2;
@@ -372,16 +372,16 @@ void CNativeA::ToZenkaku(
 						usDes-= (unsigned short)0x00a2;
 					}
 				}
-				pBufDes[nBufDesLen]		= ( usDes & 0xff00 ) >>  8;
-				pBufDes[nBufDesLen + 1] = ( usDes & 0x00ff );
+				pBufDes[nBufDesLen]		= (usDes & 0xff00) >>  8;
+				pBufDes[nBufDesLen + 1] = (usDes & 0x00ff);
 				nBufDesLen += 2;
 			}else {
-				memcpy( &pBufDes[nBufDesLen], &pBuf[i], nCharChars );
+				memcpy(&pBufDes[nBufDesLen], &pBuf[i], nCharChars);
 				nBufDesLen += nCharChars;
 
 			}
 		}else if (nCharChars == 2) {
-			usDes = usSrc = pBuf[i + 1] | ( pBuf[i] << 8 );
+			usDes = usSrc = pBuf[i + 1] | (pBuf[i] << 8);
 			if (bHanKataOnly == 0) {
 				if (bHiragana == 1) { // 英数変換を付加したために数値で指定した　2001/07/30 Misaka
 					// 全角ひらがなに変換可能な全角カタカナならば、ひらがなに変換する
@@ -401,11 +401,11 @@ void CNativeA::ToZenkaku(
 					}
 				}
 			}
-			pBufDes[nBufDesLen]		= ( usDes & 0xff00 ) >> 8;
-			pBufDes[nBufDesLen + 1] = ( usDes & 0x00ff );
+			pBufDes[nBufDesLen]		= (usDes & 0xff00) >> 8;
+			pBufDes[nBufDesLen + 1] = (usDes & 0x00ff);
 			nBufDesLen += 2;
 		}else {
-			memcpy( &pBufDes[nBufDesLen], &pBuf[i], nCharChars );
+			memcpy(&pBufDes[nBufDesLen], &pBuf[i], nCharChars);
 			nBufDesLen += nCharChars;
 		}
 		if (nCharChars > 0) {
@@ -413,7 +413,7 @@ void CNativeA::ToZenkaku(
 		}
 	}
 	pBufDes[nBufDesLen] = '\0';
-	SetRawData( pBufDes, nBufDesLen );
+	SetRawData(pBufDes, nBufDesLen);
 	delete [] pBufDes;
 	
 	return;
@@ -421,7 +421,7 @@ void CNativeA::ToZenkaku(
 
 
 // TAB→空白
-void CNativeA::TABToSPACE( int nTabSpace	/* TABの文字数 */ )
+void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 {
 	using namespace ACODE;
 
@@ -432,12 +432,12 @@ void CNativeA::TABToSPACE( int nTabSpace	/* TABの文字数 */ )
 	int nBgn = 0;
 	int nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while (( pLine = GetNextLine( GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
 		if (0 < nLineLen) {
 			int nPosX = 0;
 			for (int i = 0; i < nLineLen; ++i) {
 				if (TAB == pLine[i]) {
-					int nWork = nTabSpace - ( nPosX % nTabSpace );
+					int nWork = nTabSpace - (nPosX % nTabSpace);
 					nPosDes += nWork;
 					nPosX += nWork;
 				}else {
@@ -455,13 +455,13 @@ void CNativeA::TABToSPACE( int nTabSpace	/* TABの文字数 */ )
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while (( pLine = GetNextLine( GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
 		if (0 < nLineLen) {
 			int nPosX = 0;
 			for (int i = 0; i < nLineLen; ++i) {
 				if (TAB == pLine[i]) {
-					int nWork = nTabSpace - ( nPosX % nTabSpace );
-					auto_memset( &pDes[nPosDes], ' ', nWork );
+					int nWork = nTabSpace - (nPosX % nTabSpace);
+					auto_memset(&pDes[nPosDes], ' ', nWork);
 					nPosDes += nWork;
 					nPosX += nWork;
 				}else {
@@ -472,12 +472,12 @@ void CNativeA::TABToSPACE( int nTabSpace	/* TABの文字数 */ )
 			}
 		}
 		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem, cEol.GetType());
-		auto_memcpy( &pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength() );
+		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
 	pDes[nPosDes] = '\0';
 
-	SetRawData( pDes, nPosDes );
+	SetRawData(pDes, nPosDes);
 	delete [] pDes;
 	pDes = NULL;
 	return;
@@ -492,7 +492,7 @@ void CNativeA::TABToSPACE( int nTabSpace	/* TABの文字数 */ )
 	@author Stonee
 	@date 2001/5/27
 */
-void CNativeA::SPACEToTAB( int nTabSpace )
+void CNativeA::SPACEToTAB(int nTabSpace)
 {
 	using namespace ACODE;
 
@@ -509,7 +509,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 	nBgn = 0;
 	nPosDes = 0;
 	// 変換後に必要なバイト数を調べる
-	while (( pLine = GetNextLine( GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
 		if (0 < nLineLen) {
 			nPosDes += nLineLen;
 		}
@@ -522,13 +522,13 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
-	while (( pLine = GetNextLine( GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol ) )) {
+	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
 		if (0 < nLineLen) {
 			nPosX = 0;	// 処理中のiに対応する表示桁位置
 			bSpace = FALSE;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			int i;
-			for(i = 0; i < nLineLen; ++i ) {
+			for(i = 0; i < nLineLen; ++i) {
 				if (SPACE == pLine[i] || TAB == pLine[i]) {
 					if (bSpace == FALSE) {
 						nStartPos = nPosX;
@@ -549,7 +549,7 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 							for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); j++) {
 								pDes[nPosDes] = TAB;
 								nPosDes++;
-								nStartPos += nTabSpace - ( nStartPos % nTabSpace );
+								nStartPos += nTabSpace - (nStartPos % nTabSpace);
 							}
 							// 003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
@@ -576,11 +576,11 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 					nPosDes++;
 				}else {
 					int j;
-					//for( j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j += nTabSpace ) {
+					//for(j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j += nTabSpace) {
 					for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); j++) {
 						pDes[nPosDes] = TAB;
 						nPosDes++;
-						nStartPos += nTabSpace - ( nStartPos % nTabSpace );
+						nStartPos += nTabSpace - (nStartPos % nTabSpace);
 					}
 					// 2003.08.05 Moca
 					// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
@@ -595,12 +595,12 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 
 		// 行末の処理
 		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem, cEol.GetType());
-		auto_memcpy( &pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength() );
+		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
 	pDes[nPosDes] = '\0';
 
-	SetRawData( pDes, nPosDes );
+	SetRawData(pDes, nPosDes);
 	delete [] pDes;
 	pDes = NULL;
 	return;
@@ -612,30 +612,30 @@ void CNativeA::SPACEToTAB( int nTabSpace )
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! 指定した位置の文字が何バイト文字かを返す
-int CNativeA::GetSizeOfChar( const char* pData, int nDataLen, int nIdx )
+int CNativeA::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 {
 	return CShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);
 }
 
 // ポインタで示した文字の次にある文字の位置を返します
 // 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
-const char* CNativeA::GetCharNext( const char* pData, int nDataLen, const char* pDataCurrent )
+const char* CNativeA::GetCharNext(const char* pData, int nDataLen, const char* pDataCurrent)
 {
 //#ifdef _DEBUG
-//	CRunningTimer cRunningTimer( "CMemory::MemCharNext" );
+//	CRunningTimer cRunningTimer("CMemory::MemCharNext");
 //#endif
 
 	const char*	pNext;
 	if (pDataCurrent[0] == '\0') {
 		pNext = pDataCurrent + 1;
 	}else {
-//		pNext = ::CharNext( pDataCurrent );
+//		pNext = ::CharNext(pDataCurrent);
 		if (
 			// SJIS全角コードの1バイト目か	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
-			_IS_SJIS_1( (unsigned char)pDataCurrent[0] )
+			_IS_SJIS_1((unsigned char)pDataCurrent[0])
 			&&
 			// SJIS全角コードの2バイト目か	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
-			_IS_SJIS_2( (unsigned char)pDataCurrent[1] )
+			_IS_SJIS_2((unsigned char)pDataCurrent[1])
 		) {
 			pNext = pDataCurrent + 2;
 		}else {
@@ -651,13 +651,13 @@ const char* CNativeA::GetCharNext( const char* pData, int nDataLen, const char* 
 
 // ポインタで示した文字の直前にある文字の位置を返します
 // 直前にある文字がバッファの先頭の位置を越える場合はpDataを返します
-const char* CNativeA::GetCharPrev( const char* pData, int nDataLen, const char* pDataCurrent )
+const char* CNativeA::GetCharPrev(const char* pData, int nDataLen, const char* pDataCurrent)
 {
 //#ifdef _DEBUG
-//	CRunningTimer cRunningTimer( "CMemory::MemCharPrev" );
+//	CRunningTimer cRunningTimer("CMemory::MemCharPrev");
 //#endif
 
-	const char*	pPrev = ::CharPrevA( pData, pDataCurrent );
+	const char*	pPrev = ::CharPrevA(pData, pDataCurrent);
 
 //===1999.08.12  このやり方だと、ダメだった。===============-
 //
@@ -667,13 +667,13 @@ const char* CNativeA::GetCharPrev( const char* pData, int nDataLen, const char* 
 //		if (pDataCurrent - pData >= 2 &&
 //			// SJIS全角コードの1バイト目か		//Sept. 1, 2000 jepro 'シフト'を'S'に変更
 //			(
-//			( (unsigned char)0x81 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0x9F ) ||
-//			( (unsigned char)0xE0 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0xFC )
+//			((unsigned char)0x81 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0x9F) ||
+//			((unsigned char)0xE0 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0xFC)
 //			) &&
 //			// SJIS全角コードの2バイト目か		//Sept. 1, 2000 jepro 'シフト'を'S'に変更
 //			(
-//			( (unsigned char)0x40 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0x7E ) ||
-//			( (unsigned char)0x80 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0xFC )
+//			((unsigned char)0x40 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0x7E) ||
+//			((unsigned char)0x80 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0xFC)
 //			)
 //		) {
 //			pPrev = pDataCurrent - 2;
@@ -688,12 +688,12 @@ const char* CNativeA::GetCharPrev( const char* pData, int nDataLen, const char* 
 }
 
 
-void CNativeA::AppendStringNew( const wchar_t* pszData )
+void CNativeA::AppendStringNew(const wchar_t* pszData)
 {
 	AppendStringNew(pszData, wcslen(pszData));
 }
 
-void CNativeA::AppendStringNew( const wchar_t* pData, int nDataLen )
+void CNativeA::AppendStringNew(const wchar_t* pData, int nDataLen)
 {
 	char* buf = wcstombs_new(pData, nDataLen);
 	AppendString(buf);

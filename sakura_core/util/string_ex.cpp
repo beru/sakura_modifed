@@ -359,7 +359,7 @@ void mbstowcs_vector(const char* pSrc, int nSrcLen, std::vector<wchar_t>* ret)
 		&(*ret)[0],
 		nNewLen
 	);
-	(*ret)[nNewLen]=L'\0';
+	(*ret)[nNewLen] = L'\0';
 }
 
 
@@ -471,7 +471,7 @@ int _tctowc(const TCHAR* tc, WCHAR* wc)
 
 int wmemicmp(const WCHAR* p1, const WCHAR* p2, size_t count)
 {
-	for (size_t i=0; i<count; i++) {
+	for (size_t i = 0; i < count; i++) {
 		int n = skr_towlower(*p1++) - skr_towlower(*p2++);	// 非ASCIIも変換
 		if (n != 0) return n;
 	}
@@ -485,7 +485,7 @@ int wmemicmp(const WCHAR* p1, const WCHAR* p2)
 
 int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
 {
-	for (size_t i=0; i<count; i++) {
+	for (size_t i = 0; i < count; i++) {
 		int n = my_towlower(*p1++) - my_towlower(*p2++);	// ASCIIのみ変換（高速）
 		if (n != 0) return n;
 	}
@@ -506,8 +506,8 @@ int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
 //$ いちいち手間かかる。。
 namespace {
 	template <class T> struct Charset {};
-	template <> struct Charset<ACHAR>{ static const ACHAR QUOT= '"'; };
-	template <> struct Charset<WCHAR>{ static const WCHAR QUOT=L'"'; };
+	template <> struct Charset<ACHAR>{ static const ACHAR QUOT = '"'; };
+	template <> struct Charset<WCHAR>{ static const WCHAR QUOT = L'"'; };
 }
 template <class CHAR_TYPE>
 CHAR_TYPE* my_strtok(

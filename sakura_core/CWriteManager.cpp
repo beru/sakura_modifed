@@ -50,7 +50,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 				}
 				EConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
 				if (e == RESULT_LOSESOME) {
-					nRetVal=RESULT_LOSESOME;
+					nRetVal = RESULT_LOSESOME;
 				}
 			}
 			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());

@@ -204,7 +204,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 						TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 						_tcscpy(exts, type->m_szTypeExts);
 						static const TCHAR	pszSeps[] = _T(" ;,");	// separator
-						TCHAR *ext = _tcstok(exts, pszSeps);
+						TCHAR* ext = _tcstok(exts, pszSeps);
 
 						m_bExtRMenu[ nIdx ] = true;
 						m_bExtDblClick[ nIdx ] = true;
@@ -233,7 +233,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 			_tcscpy(exts, type->m_szTypeExts);
 			static const TCHAR	pszSeps[] = _T(" ;,");	// separator
-			TCHAR *ext = _tcstok(exts, pszSeps);
+			TCHAR* ext = _tcstok(exts, pszSeps);
 			int nRet;
 			while (ext) {
 				if (checked) {	//「右クリック」チェックON
@@ -267,7 +267,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 			_tcscpy(exts, type->m_szTypeExts);
 			static const TCHAR	pszSeps[] = _T(" ;,");	// separator
-			TCHAR *ext = _tcstok(exts, pszSeps);
+			TCHAR* ext = _tcstok(exts, pszSeps);
 			int nRet;
 			while (ext) {
 				if ((nRet = RegistExt(ext, checked)) != 0) {
@@ -541,7 +541,7 @@ bool CDlgTypeList::CopyType()
 	int n = 1;
 	bool bUpdate = true;
 	for (int i = 0; i < nNewTypeIndex; i++) {
-		if(bUpdate) {
+		if (bUpdate) {
 			TCHAR* p = NULL;
 			for (int k = (int)auto_strlen(type.m_szTypeName) - 1; 0 <= k; k--) {
 				if (WCODE::Is09(type.m_szTypeName[k])) {

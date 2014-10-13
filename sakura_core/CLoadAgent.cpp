@@ -248,7 +248,7 @@ void CLoadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	pcDoc->m_pcEditWnd->UpdateCaption();
 
 	// -- -- ※ InitAllViewでやってたこと -- -- //	// 2009.08.28 nasukoji	CEditView::OnAfterLoad()からここに移動
-	pcDoc->m_nCommandExecNum=0;
+	pcDoc->m_nCommandExecNum = 0;
 
 	// テキストの折り返し方法を初期化
 	pcDoc->m_nTextWrapMethodCur = pcDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod;	// 折り返し方法

@@ -457,7 +457,7 @@ BOOL CDlgFavorite::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		// 行選択
 		long lngStyle = ListView_GetExtendedListViewStyle(hwndList);
 		lngStyle |= LVS_EX_FULLROWSELECT;
-		if(m_aFavoriteInfo[nTab].m_bHaveFavorite) lngStyle |= LVS_EX_CHECKBOXES;
+		if (m_aFavoriteInfo[nTab].m_bHaveFavorite) lngStyle |= LVS_EX_CHECKBOXES;
 		ListView_SetExtendedListViewStyle(hwndList, lngStyle);
 
 		// タブ項目追加

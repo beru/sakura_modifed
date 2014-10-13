@@ -804,7 +804,7 @@ void CLayoutMgr::LogicToLayout(
 			const CLayout* pLayoutNext = pLayout->GetNextLayout();
 			if (1
 				&& pLayoutNext
-				&& ptLogic.GetY2() ==pLayoutNext->GetLogicLineNo()
+				&& ptLogic.GetY2() == pLayoutNext->GetLogicLineNo()
 				&& pLayoutNext->GetLogicOffset() <= ptLogic.x
 			) {
 				nCaretPosY++;
@@ -833,7 +833,7 @@ void CLayoutMgr::LogicToLayout(
 				
 				// 文字レイアウト幅 -> nCharKetas
 				CLayoutInt nCharKetas;
-				if (pData[i] ==	WCODE::TAB) {
+				if (pData[i] == WCODE::TAB) {
 					// Sep. 23, 2002 genta メンバー関数を使うように
 					nCharKetas = GetActualTabSpace(nCaretPosX);
 				}else {
@@ -846,7 +846,7 @@ void CLayoutMgr::LogicToLayout(
 				nCaretPosX += nCharKetas;
 
 				// ロジック加算
-				if (pData[i] ==	WCODE::TAB) {
+				if (pData[i] == WCODE::TAB) {
 					nCharChars = CLogicInt(1);
 				}
 				i += nCharChars - CLogicInt(1);
@@ -977,7 +977,7 @@ checkloop:;
 		nX += nCharKetas;
 
 		// ロジック加算
-		if (pData[i] ==	WCODE::TAB) {
+		if (pData[i] == WCODE::TAB) {
 			nCharChars = CLogicInt(1);
 		}
 		i += nCharChars - CLogicInt(1);

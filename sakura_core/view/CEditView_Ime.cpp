@@ -409,7 +409,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 					p[i] = ' ';
 				}
 			}
-			p[dwReconvTextInsLen]='\0';
+			p[dwReconvTextInsLen] = '\0';
 		}
 	}
 	
@@ -454,7 +454,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 				return 0;
 			}
 			// 2010.03.17 sizeof(pReconv)+1‚Å‚Í‚È‚­dwStrOffset‚ð—˜—p‚·‚é‚æ‚¤‚É
-			const char* p=((const char*)(pReconv)) + pReconv->dwStrOffset;
+			const char* p = ((const char*)(pReconv)) + pReconv->dwStrOffset;
 			cmemBuf.SetString(p, pReconv->dwCompStrOffset); 
 			CShiftJis::SJISToUnicode(cmemBuf._GetMemory());
 			dwOffset = cmemBuf._GetMemory()->GetRawLength()/sizeof(WCHAR);

@@ -595,8 +595,8 @@ int CSearchAgent::SearchWord(
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
 								// 1 == 大文字小文字の区別
-								if ((!sSearchOption.bLoHiCase && 0 == auto_memicmp(&(pData[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second)) ||
-									(sSearchOption.bLoHiCase && 0 ==	 auto_memcmp(&(pData[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second))
+								if ((!sSearchOption.bLoHiCase && 0 == auto_memicmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second)) ||
+									(sSearchOption.bLoHiCase && 0 == auto_memcmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second))
 								) {
 									pMatchRange->SetFromY(nLinePos);	// マッチ行
 									pMatchRange->SetToY  (nLinePos);	// マッチ行

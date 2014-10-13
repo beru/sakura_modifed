@@ -478,12 +478,12 @@ bool CBackupAgent::FormatBackUpPath(
 			{
 				//	Jan. 9, 2006 genta VC6‘Îô
 				int idx;
-				for (idx=0; idx<10; ++idx) {
+				for (idx = 0; idx < 10; ++idx) {
 					folders[idx] = 0;
 				}
 				folders[0] = szFname;
 
-				for (idx=1; idx<10; ++idx) {
+				for (idx = 1; idx < 10; ++idx) {
 					TCHAR* cp = _tcsrchr(keybuff, _T('\\'));
 					if (cp != NULL) {
 						folders[idx] = cp + 1;

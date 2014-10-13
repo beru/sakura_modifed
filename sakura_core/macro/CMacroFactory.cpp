@@ -47,7 +47,7 @@ CMacroFactory::CMacroFactory()
 	@li NULLは""にする。
 	@li アルファベットは小文字に統一
 */
-std::tstring CMacroFactory::Ext2Key(const TCHAR *ext)
+std::tstring CMacroFactory::Ext2Key(const TCHAR* ext)
 {
 	if (!ext) {
 		ext = NULSTR;

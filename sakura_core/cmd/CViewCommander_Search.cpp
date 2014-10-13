@@ -1012,14 +1012,14 @@ void CViewCommander::Command_REPLACE_ALL()
 				if (!(sRangeA.GetFrom().x <= GetSelect().GetFrom().x && ptOld.GetX2() <= sRangeA.GetTo().GetX2() + colDif)) {
 					if (ptOld.x < sRangeA.GetTo().GetX2() + colDif) {
 						linNext = (Int)GetSelect().GetTo().GetY2();
-					}else{
+					}else {
 						linNext = (Int)GetSelect().GetTo().GetY2() + 1;
 					}
 					// 次の検索開始位置へシフト
 					GetCaret().SetCaretLayoutPos(CLayoutPoint(sRangeA.GetFrom().x, CLayoutInt(linNext)));
 					// 2004.05.30 Moca 現在の検索文字列を使って検索する
 					Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL);
-					colDif=(0);
+					colDif = (0);
 					continue;
 				}
 			}else {
@@ -1149,7 +1149,7 @@ void CViewCommander::Command_REPLACE_ALL()
 							&ptWork
 						);
 						ptColLineP.x = ptWork.x;
-						if(nLen - pcDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
+						if (nLen - pcDocLine->GetEol().GetLen() > ptColLineP.x + colDif)
 							nLen = ptColLineP.GetX2() + CLogicInt(colDif);
 					}else {	// 通常の選択
 						if (ptColLineP.y + linDif == (Int)ptOld.y) { //$$ 単位混在
@@ -1335,13 +1335,13 @@ void CViewCommander::Command_REPLACE_ALL()
 			// 矩形選択
 			m_pCommanderView->GetSelectionInfo().SetBoxSelect(bBeginBoxSelect);
 			sRangeA.GetToPointer()->y += linDif;
-			if (sRangeA.GetTo().y<0) sRangeA.SetToY(CLayoutInt(0));
+			if (sRangeA.GetTo().y < 0) sRangeA.SetToY(CLayoutInt(0));
 		}else {
 			// 普通の選択
 			ptColLineP.x += colDif;
-			if (ptColLineP.x<0) ptColLineP.x=0;
+			if (ptColLineP.x < 0) ptColLineP.x = 0;
 			ptColLineP.y += linDif;
-			if (ptColLineP.y<0) ptColLineP.y=0;
+			if (ptColLineP.y < 0) ptColLineP.y = 0;
 			layoutMgr.LogicToLayout(
 				ptColLineP,
 				sRangeA.GetToPointer()
@@ -1356,7 +1356,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	// To Here 2001.12.03 hor
 
 	dlgReplace.m_bCanceled = (cDlgCancel.IsCanceled() != FALSE);
-	dlgReplace.m_nReplaceCnt=nReplaceNum;
+	dlgReplace.m_nReplaceCnt = nReplaceNum;
 	m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 	ActivateFrameWindow(GetMainWindow());
 }

@@ -61,11 +61,11 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 	unsigned char chankata;
 	unsigned char czenkaku[2];
 	unsigned int ctemp;
-	bool berror=false;
+	bool berror = false;
 	int nret;
 
-	if(nSrcLen < 1) {
-		if(pbError) {
+	if (nSrcLen < 1) {
+		if (pbError) {
 			*pbError = false;
 		}
 		return 0;
@@ -77,9 +77,9 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 	switch(eMyJisesc) {
 	case MYJISESC_ASCII7:
 		for(; pr < pSrc + nSrcLen; ++pr) {
-			if(IsAscii7(static_cast<const char>(*pr))) {
+			if (IsAscii7(static_cast<const char>(*pr))) {
 				pw[0] = *pr;
-			}else{
+			}else {
 				berror = true;
 				pw[0] = L'?';
 			}
@@ -88,16 +88,16 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 		break;
 	case MYJISESC_HANKATA:
 		for(; pr < pSrc + nSrcLen; ++pr) {
-			if(IsJisHankata(static_cast<const char>(*pr))) {
+			if (IsJisHankata(static_cast<const char>(*pr))) {
 				// JIS → SJIS
 				chankata = (*pr | 0x80);
 				// SJIS → Unicode
 				nret = MyMultiByteToWideChar_JP(&chankata, 1, pw, false);
-				if(nret < 1) {
+				if (nret < 1) {
 					nret = 1;
 				}
 				pw += nret;
-			}else{
+			}else {
 				berror = true;
 				pw[0] = L'?';
 				++pw;
@@ -106,29 +106,29 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 		break;
 	case MYJISESC_ZENKAKU:
 		for(; pr < pSrc + nSrcLen - 1; pr += 2) {
-			if(IsJisZen(reinterpret_cast<const char*>(pr))) {
+			if (IsJisZen(reinterpret_cast<const char*>(pr))) {
 				// JIS -> SJIS
 				ctemp = _mbcjistojms((static_cast<unsigned int>(pr[0]) << 8) | pr[1]);
-				if(ctemp != 0) {
+				if (ctemp != 0) {
 				// 変換に成功。
 					// SJIS → Unicode
 					czenkaku[0] = static_cast<unsigned char>((ctemp & 0x0000ff00) >> 8);
 					czenkaku[1] = static_cast<unsigned char>(ctemp & 0x000000ff);
 					nret = MyMultiByteToWideChar_JP(&czenkaku[0], 2, pw, false);
-					if(nret < 1) {
+					if (nret < 1) {
 						// SJIS → Unicode 変換に失敗
 	  					berror = true;
 						pw[0] = L'?';
 						nret = 1;
 					}
 					pw += nret;
-				}else{
+				}else {
 				// 変換に失敗。
 					berror = true;
 					pw[0] = L'?';
 					++pw;
 				}
-			}else{
+			}else {
 				berror = true;
 				pw[0] = L'?';
 				++pw;
@@ -138,9 +138,9 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 	case MYJISESC_UNKNOWN:
 		berror = true;
 		for(; pr < pSrc + nSrcLen; ++pr) {
-			if(IsJis(static_cast<const char>(*pr))) {
+			if (IsJis(static_cast<const char>(*pr))) {
 				pw[0] = *pr;
-			}else{
+			}else {
 				pw[0] = L'?';
 			}
 			++pw;
@@ -155,7 +155,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 		}
 	}
 
-	if(pbError) {
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -171,14 +171,14 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	const unsigned char *pr, *pr_end;
-	const unsigned char *pr_next;
-	unsigned short *pw;
-	bool berror=false, berror_tmp;
+	const unsigned char* pr_next;
+	unsigned short* pw;
+	bool berror = false, berror_tmp;
 	int nblocklen;
 	EMyJisEscseq esctype, next_esctype;
 
-	if(nSrcLen < 1) {
-		if(pbError) {
+	if (nSrcLen < 1) {
+		if (pbError) {
 			*pbError = false;
 		}
 		return 0;
@@ -222,14 +222,14 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 		}
 		// 変換実行
 		pw += _JisToUni_block(pr, nblocklen, pw, esctype, &berror_tmp);
-		if(berror_tmp == true) {
+		if (berror_tmp == true) {
 			berror = true;
 		}
 		esctype = next_esctype;
 		pr = pr_next;
 	}while(pr_next < pr_end);
 
-	if(pbError) {
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -262,7 +262,7 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 	if (base64decode == true) {
 		// ISO-2202-J 用の MIME ヘッダーをデコード
 		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_JIS);
-		if(bret == true) {
+		if (bret == true) {
 			psrc = reinterpret_cast<const char*>(cmem.GetRawPtr());
 			nsrclen = cmem.GetRawLength();
 		}
@@ -289,9 +289,9 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 	
 	delete [] pDst;
 
-	if(berror == false) {
+	if (berror == false) {
 		return RESULT_COMPLETE;
-	}else{
+	}else {
 		return RESULT_LOSESOME;
 	}
 }
@@ -303,7 +303,7 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 int CJis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSet eCharset, bool* pbError)
 {
 	int nret;
-	bool berror=false;
+	bool berror = false;
 	unsigned int ctemp, ctemp_;
 
 	switch(eCharset) {
@@ -320,12 +320,12 @@ int CJis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharS
 		ctemp_ = SjisFilter_basis(static_cast<unsigned int>(pSrc[0] << 8) | pSrc[1]);
 		ctemp_ = SjisFilter_ibm2nec(ctemp_);
 		ctemp = _mbcjmstojis(ctemp_);
-		if(ctemp != 0) {
+		if (ctemp != 0) {
 			// 返還に成功。
 			pDst[0] = static_cast<char>((ctemp & 0x0000ff00) >> 8);
 			pDst[1] = static_cast<char>(ctemp & 0x000000ff);
 			nret = 2;
-		}else{
+		}else {
 			// 変換に失敗
 			berror = true;
 			// '・'  0x2126(JIS) を出力
@@ -341,7 +341,7 @@ int CJis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharS
 		nret = 1;
 	}
 
-	if(pbError) {
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -357,10 +357,10 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 	ECharSet echarset, echarset_cur, echarset_tmp;
 	unsigned char cbuf[4];
 	int nlen, nclen;
-	bool berror=false, berror_tmp;
+	bool berror = false, berror_tmp;
 
-	if(nSrcLen < 1) {
-		if(pbError) {
+	if (nSrcLen < 1) {
+		if (pbError) {
 			*pbError = false;
 		}
 		return 0;
@@ -374,38 +374,38 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 	while((nclen = CheckUtf16leChar(reinterpret_cast<const wchar_t*>(pr), pr_end - pr, &echarset_tmp, 0)) > 0) {
 		// Unicode -> SJIS
 		nlen = MyWideCharToMultiByte_JP(pr, nclen, &cbuf[0]);
-		if(nlen < 1) {
+		if (nlen < 1) {
 			// Unicode -> SJIS に失敗
 			berror = true;
-			if(echarset_cur == CHARSET_ASCII7) {
+			if (echarset_cur == CHARSET_ASCII7) {
 				*pw = '?';
 				++pw;
-			}else if(echarset_cur == CHARSET_JIS_HANKATA) {
+			}else if (echarset_cur == CHARSET_JIS_HANKATA) {
 				// '･' 0x25(JIS) を出力
 				*pw = 0x25;
 				++pw;
-			}else if(echarset_cur == CHARSET_JIS_ZENKAKU) {
+			}else if (echarset_cur == CHARSET_JIS_ZENKAKU) {
 				// '・' 0x2126(JIS) を出力
 				pw[0] = 0x21;
 				pw[1] = 0x26;
 				pw += 2;
-			}else{
+			}else {
 				// 保護コード
 				*pw = '?';
 				++pw;
 			}
 			pr += nclen;
-		}else{
+		}else {
 			// 文字セットを確認
-			if(nlen == 1) {
-				if(IsAscii7(cbuf[0])) {
+			if (nlen == 1) {
+				if (IsAscii7(cbuf[0])) {
 					echarset = CHARSET_ASCII7;
-				}else{
+				}else {
 					echarset = CHARSET_JIS_HANKATA;
 				}
-			}else if(nlen == 2) {
+			}else if (nlen == 2) {
 				echarset = CHARSET_JIS_ZENKAKU;
-			}else{
+			}else {
 				// エラー回避コード
 				echarset = CHARSET_ASCII7;
 				nlen = 1;
@@ -414,7 +414,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 			// const char CJis::JISESCDATA_ASCII[]				= "\x1b" "(B";  // ☆
 			// const char CJis::JISESCDATA_JISX0201Katakana[]	= "\x1b" "(I";  // ☆
 			// const char CJis::JISESCDATA_JISX0208_1983[]		= "\x1b" "$B";  // ☆
-			if(echarset != echarset_cur) {
+			if (echarset != echarset_cur) {
 				// 文字セットが変われば、
 				// エスケープシーケンス文字列を出力
 				switch(echarset) {
@@ -436,7 +436,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 
 			// SJIS -> JIS
 			pw += _SjisToJis_char(&cbuf[0], pw, echarset_cur, &berror_tmp);
-			if(berror_tmp == true) {
+			if (berror_tmp == true) {
 				berror = true;
 			}
 			pr += nclen;
@@ -444,12 +444,12 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 	}
 	// CHARSET_ASCII7 でデータが終了しない場合は、変換データの最後に
 	// CHARSET_ASCII7 のエスケープシーケンスを出力
-	if(echarset_cur != CHARSET_ASCII7) {
+	if (echarset_cur != CHARSET_ASCII7) {
 		strncpy(reinterpret_cast<char*>(pw), JISESCDATA_ASCII7, 3);
 		pw += 3;
 	}
 
-	if(pbError) {
+	if (pbError) {
 		*pbError = berror;
 	}
 
@@ -459,7 +459,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 
 EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
 {
-	bool berror=false;
+	bool berror = false;
 
 	// ソースを取得
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
@@ -484,9 +484,9 @@ EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
 
 	delete [] pDst;
 
-	if(berror) {
+	if (berror) {
 		return RESULT_LOSESOME;
-	}else{
+	}else {
 		return RESULT_COMPLETE;
 	}
 }
@@ -526,7 +526,7 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 			bInEsc = true;
 		}
 		else if (bInEsc) {
-			if (*ps >= 'A' && *ps <='Z') {
+			if (*ps >= 'A' && *ps <= 'Z') {
 				bInEsc = false;
 			}
 		}

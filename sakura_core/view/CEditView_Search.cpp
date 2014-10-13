@@ -126,7 +126,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
 			CNativeW* pcmemRefText;
-			int nSearchResult=m_cDicMgr.CDicMgr::Search(
+			int nSearchResult = m_cDicMgr.CDicMgr::Search(
 				pcmemCurText->GetStringPtr(),
 				nCmpLen,
 				&pcmemRefKey,
@@ -162,8 +162,8 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 					delete pcmemRefKey;	// 2006.07.02 genta
 					// タグジャンプ用の情報を残す
 					if (!m_cTipWnd.m_KeyWasHit) {
-						m_cTipWnd.m_nSearchDict=i;	// 辞書を開くとき最初にヒットした辞書を開く
-						m_cTipWnd.m_nSearchLine=nLine;
+						m_cTipWnd.m_nSearchDict = i;	// 辞書を開くとき最初にヒットした辞書を開く
+						m_cTipWnd.m_nSearchLine = nLine;
 						m_cTipWnd.m_KeyWasHit = TRUE;
 					}
 				}else {	// 最初のヒット項目のみ返す場合
@@ -182,8 +182,8 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 					delete pcmemRefText;
 					delete pcmemRefKey;	// 2006.07.02 genta
 					// タグジャンプ用の情報を残す
-					m_cTipWnd.m_nSearchDict=i;
-					m_cTipWnd.m_nSearchLine=nLine;
+					m_cTipWnd.m_nSearchDict = i;
+					m_cTipWnd.m_nSearchLine = nLine;
 					m_cTipWnd.m_KeyWasHit = TRUE;
 					return TRUE;
 				}

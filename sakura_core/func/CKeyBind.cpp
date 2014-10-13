@@ -26,7 +26,7 @@ struct KEYDATAINIT {
 	short			m_nKeyCode;			//!< Key Code (0 for non-keybord button)
 	union {
 		const TCHAR*	m_pszKeyName;		//!< Key Name (for display)
-		UINT			m_nKeyNameId;		//!< String Resource Id ( 0x0000 - 0xFFFF )
+		UINT			m_nKeyNameId;		//!< String Resource Id (0x0000 - 0xFFFF)
 	};
 	EFunctionCode	m_nFuncCodeArr[8];	//!< Key Function Number
 //					m_nFuncCodeArr[0]	//                      Key
@@ -71,7 +71,7 @@ HACCEL CKeyBind::CreateAccerelator(
 	for (int i = 0; i < nKeyNameArrNum; ++i) {
 		if (0 != pKeyNameArr[i].m_nKeyCode) {
 			for (int j = 0; j < 8; ++j) {
-				if (0 != GetFuncCodeAt( pKeyNameArr[i], j )) {
+				if (0 != GetFuncCodeAt(pKeyNameArr[i], j)) {
 					nAccelArrNum++;
 				}
 			}
@@ -87,11 +87,11 @@ HACCEL CKeyBind::CreateAccerelator(
 	for (int i = 0; i < nKeyNameArrNum; ++i) {
 		if (0 != pKeyNameArr[i].m_nKeyCode) {
 			for (int j = 0; j < 8; ++j) {
-				if (0 != GetFuncCodeAt( pKeyNameArr[i], j )) {
+				if (0 != GetFuncCodeAt(pKeyNameArr[i], j)) {
 					pAccelArr[k].fVirt = FNOINVERT | FVIRTKEY;
-					pAccelArr[k].fVirt |= ( j & _SHIFT ) ? FSHIFT   : 0;
-					pAccelArr[k].fVirt |= ( j & _CTRL  ) ? FCONTROL : 0;
-					pAccelArr[k].fVirt |= ( j & _ALT   ) ? FALT     : 0;
+					pAccelArr[k].fVirt |= (j & _SHIFT) ? FSHIFT   : 0;
+					pAccelArr[k].fVirt |= (j & _CTRL ) ? FCONTROL : 0;
+					pAccelArr[k].fVirt |= (j & _ALT  ) ? FALT     : 0;
 					pAccelArr[k].key = pKeyNameArr[i].m_nKeyCode;
 					pAccelArr[k].cmd = pKeyNameArr[i].m_nKeyCode | (((WORD)j)<<8) ;
 
@@ -100,7 +100,7 @@ HACCEL CKeyBind::CreateAccerelator(
 			}
 		}
 	}
-	HACCEL hAccel = ::CreateAcceleratorTable( pAccelArr, nAccelArrNum );
+	HACCEL hAccel = ::CreateAcceleratorTable(pAccelArr, nAccelArrNum);
 	delete[] pAccelArr;
 	return hAccel;
 }
@@ -123,13 +123,13 @@ EFunctionCode CKeyBind::GetFuncCode(
 	if (nCmd == 0) { // mouse command
 		for (int i = 0; i < nKeyNameArrNum; ++i) {
 			if (nCmd == pKeyNameArr[i].m_nKeyCode) {
-				return GetFuncCodeAt( pKeyNameArr[i], nSts, bGetDefFuncCode );
+				return GetFuncCodeAt(pKeyNameArr[i], nSts, bGetDefFuncCode);
 			}
 		}
 	}else {
 		// 2012.12.10 aroka キーコード検索時のループを除去
 		DLLSHAREDATA* pShareData = &GetDllShareData();
-		return GetFuncCodeAt( pKeyNameArr[pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode );
+		return GetFuncCodeAt(pKeyNameArr[pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
 	}
 	return F_DEFAULT;
 }
@@ -162,35 +162,35 @@ int CKeyBind::CreateKeyBindList(
 	const WCHAR*	pszTAB   = LTEXT("\t");
 	const WCHAR*	pszCR    = LTEXT("\r\n");	// \r=0x0d=CRを追加
 
-	cMemList.AppendString( LSW(STR_ERR_DLGKEYBIND1) );
-	cMemList.AppendString( pszCR );
-	cMemList.AppendString( LTEXT("-----\t-----\t-----\t-----\t-----") );
-	cMemList.AppendString( pszCR );
+	cMemList.AppendString(LSW(STR_ERR_DLGKEYBIND1));
+	cMemList.AppendString(pszCR);
+	cMemList.AppendString(LTEXT("-----\t-----\t-----\t-----\t-----"));
+	cMemList.AppendString(pszCR);
 
 	for (int j = 0; j < 8; ++j) {
 		for (int i = 0; i < nKeyNameArrNum; ++i) {
-			int iFunc = GetFuncCodeAt( pKeyNameArr[i], j, bGetDefFuncCode );
+			int iFunc = GetFuncCodeAt(pKeyNameArr[i], j, bGetDefFuncCode);
 
 			if (0 != iFunc) {
 				nValidKeys++;
 				if (j & _SHIFT) {
-					cMemList.AppendString( pszSHIFT );
+					cMemList.AppendString(pszSHIFT);
 				}
 				if (j & _CTRL) {
-					cMemList.AppendString( pszCTRL );
+					cMemList.AppendString(pszCTRL);
 				}
 				if (j & _ALT) {
-					cMemList.AppendString( pszALT );
+					cMemList.AppendString(pszALT);
 				}
-				cMemList.AppendString( to_wchar(pKeyNameArr[i].m_szKeyName) );
+				cMemList.AppendString(to_wchar(pKeyNameArr[i].m_szKeyName));
 				//	Oct. 31, 2001 genta 
 				if (!pcFuncLookup->Funccode2Name(
 					iFunc,
-					szFuncNameJapanese, 255 )
+					szFuncNameJapanese, 255)
 				) {
-					auto_strcpy( szFuncNameJapanese, LSW(STR_ERR_DLGKEYBIND2) );
+					auto_strcpy(szFuncNameJapanese, LSW(STR_ERR_DLGKEYBIND2));
 				}
-				auto_strcpy( szFuncName, LTEXT("")/*"---unknown()--"*/ );
+				auto_strcpy(szFuncName, LTEXT("")/*"---unknown()--"*/);
 
 //				// 機能名日本語
 //				::LoadString(
@@ -198,8 +198,8 @@ int CKeyBind::CreateKeyBindList(
 //					pKeyNameArr[i].m_nFuncCodeArr[j],
 //					 szFuncNameJapanese, 255
 //				);
-				cMemList.AppendString( pszTAB );
-				cMemList.AppendString( szFuncNameJapanese );
+				cMemList.AppendString(pszTAB);
+				cMemList.AppendString(szFuncNameJapanese);
 
 				// 機能ID→関数名，機能名日本語
 				//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
@@ -211,24 +211,24 @@ int CKeyBind::CreateKeyBindList(
 				);
 
 				// 関数名
-				cMemList.AppendString( pszTAB );
-				cMemList.AppendString( szFuncName );
+				cMemList.AppendString(pszTAB);
+				cMemList.AppendString(szFuncName);
 
 				// 機能番号
-				cMemList.AppendString( pszTAB );
-				auto_sprintf_s( szStr, LTEXT("%d"), iFunc );
-				cMemList.AppendString( szStr );
+				cMemList.AppendString(pszTAB);
+				auto_sprintf_s(szStr, LTEXT("%d"), iFunc);
+				cMemList.AppendString(szStr);
 
 				// キーマクロに記録可能な機能かどうかを調べる
-				cMemList.AppendString( pszTAB );
+				cMemList.AppendString(pszTAB);
 				//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-				if (CSMacroMgr::CanFuncIsKeyMacro( iFunc )) {
-					cMemList.AppendString( LTEXT("○") );
+				if (CSMacroMgr::CanFuncIsKeyMacro(iFunc)) {
+					cMemList.AppendString(LTEXT("○"));
 				}else {
-					cMemList.AppendString( LTEXT("×") );
+					cMemList.AppendString(LTEXT("×"));
 				}
 
-				cMemList.AppendString( pszCR );
+				cMemList.AppendString(pszCR);
 			}
 		}
 	}
@@ -268,17 +268,17 @@ bool CKeyBind::GetKeyStrSub(
 
 	int i;
 	for (i = nKeyNameArrBegin; i < nKeyNameArrEnd; ++i) {
-		if (nFuncId == GetFuncCodeAt( pKeyNameArr[i], nShiftState, bGetDefFuncCode )) {
+		if (nFuncId == GetFuncCodeAt(pKeyNameArr[i], nShiftState, bGetDefFuncCode)) {
 			if (nShiftState & _SHIFT) {
-				cMemList.AppendString( pszSHIFT );
+				cMemList.AppendString(pszSHIFT);
 			}
 			if (nShiftState & _CTRL) {
-				cMemList.AppendString( pszCTRL );
+				cMemList.AppendString(pszCTRL);
 			}
 			if (nShiftState & _ALT) {
-				cMemList.AppendString( pszALT );
+				cMemList.AppendString(pszALT);
 			}
-			cMemList.AppendString( pKeyNameArr[i].m_szKeyName );
+			cMemList.AppendString(pKeyNameArr[i].m_szKeyName);
 			nKeyNameArrBegin = i + 1;
 			return true;
 		}
@@ -307,7 +307,7 @@ int CKeyBind::GetKeyStr(
 	// 先にキー部分を調査する
 	for (int j = 0; j < 8; ++j) {
 		for (int i = MOUSEFUNCTION_KEYBEGIN; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
-			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode )) {
+			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
 		}
@@ -316,7 +316,7 @@ int CKeyBind::GetKeyStr(
 	// 後にマウス部分を調査する
 	for (int j = 0; j < 8; ++j) {
 		for (int i = 0; i < MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
-			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode )) {
+			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
 		}
@@ -344,7 +344,7 @@ int CKeyBind::GetKeyStrList(
 	}
 	for (int j = 0; j < 8; ++j) {
 		for (int i = 0; i < nKeyNameArrNum; ++i) {
-			if (nFuncId == GetFuncCodeAt( pKeyNameArr[i], j, bGetDefFuncCode )) {
+			if (nFuncId == GetFuncCodeAt(pKeyNameArr[i], j, bGetDefFuncCode)) {
 				nAssignedKeysNum++;
 			}
 		}
@@ -363,8 +363,8 @@ int CKeyBind::GetKeyStrList(
 	for (int j = 0; j < 8; ++j) {
 		for (int i = 0; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
 			//	2007.11.04 genta 共通機能のサブルーチン化
-			if (GetKeyStrSub( i, nKeyNameArrNum, pKeyNameArr, j,
-					*((*pppcMemList)[nAssignedKeysNum]), nFuncId, bGetDefFuncCode )
+			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j,
+					*((*pppcMemList)[nAssignedKeysNum]), nFuncId, bGetDefFuncCode)
 			) {
 				nAssignedKeysNum++;
 			}
@@ -383,33 +383,33 @@ int CKeyBind::GetKeyStrList(
 TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
 	if (!sKey || sKey[0] == L'\0') {
-		return const_cast<TCHAR*>( to_tchar(sName) );
+		return const_cast<TCHAR*>(to_tchar(sName));
 	}else {
 		static	TCHAR	sLabel[300];
 		const	TCHAR*	p;
 		if (!GetDllShareData().m_Common.m_sMainMenu.m_bMainMenuKeyParentheses
-			  && (((p = auto_strchr( sName, sKey[0])) != NULL) || ((p = auto_strchr( sName, _totlower(sKey[0]))) != NULL))
+			  && (((p = auto_strchr(sName, sKey[0])) != NULL) || ((p = auto_strchr(sName, _totlower(sKey[0]))) != NULL))
 		) {
 			// 欧文風、使用している文字をアクセスキーに
-			auto_strcpy_s( sLabel, _countof(sLabel), sName );
+			auto_strcpy_s(sLabel, _countof(sLabel), sName);
 			sLabel[p-sName] = _T('&');
-			auto_strcpy_s( sLabel + (p-sName) + 1, _countof(sLabel), p );
-		}else if ((p = auto_strchr( sName, _T('(') )) != NULL
-			  && (p = auto_strchr( p, sKey[0] )) != NULL
+			auto_strcpy_s(sLabel + (p-sName) + 1, _countof(sLabel), p);
+		}else if ((p = auto_strchr(sName, _T('('))) != NULL
+			  && (p = auto_strchr(p, sKey[0])) != NULL
 		) {
 			// (付その後にアクセスキー
-			auto_strcpy_s( sLabel, _countof(sLabel), sName );
+			auto_strcpy_s(sLabel, _countof(sLabel), sName);
 			sLabel[p-sName] = _T('&');
-			auto_strcpy_s( sLabel + (p-sName) + 1, _countof(sLabel), p );
-		}else if (_tcscmp( sName + _tcslen(sName) - 3, _T("...") ) == 0) {
+			auto_strcpy_s(sLabel + (p-sName) + 1, _countof(sLabel), p);
+		}else if (_tcscmp(sName + _tcslen(sName) - 3, _T("...")) == 0) {
 			// 末尾...
-			auto_strcpy_s( sLabel, _countof(sLabel), sName );
+			auto_strcpy_s(sLabel, _countof(sLabel), sName);
 			sLabel[_tcslen(sName) - 3] = '\0';						// 末尾の...を取る
-			auto_strcat_s( sLabel, _countof(sLabel), _T("(&") );
-			auto_strcat_s( sLabel, _countof(sLabel), sKey );
-			auto_strcat_s( sLabel, _countof(sLabel), _T(")...") );
+			auto_strcat_s(sLabel, _countof(sLabel), _T("(&"));
+			auto_strcat_s(sLabel, _countof(sLabel), sKey);
+			auto_strcat_s(sLabel, _countof(sLabel), _T(")..."));
 		}else {
-			auto_sprintf_s( sLabel, _countof(sLabel), _T("%ts(&%ts)"), sName, sKey );
+			auto_sprintf_s(sLabel, _countof(sLabel), _T("%ts(&%ts)"), sName, sKey);
 		}
 
 		return sLabel;
@@ -434,14 +434,14 @@ TCHAR* CKeyBind::GetMenuLabel(
 	const int LABEL_MAX = 256;
 
 	if (_T('\0') == pszLabel[0]) {
-		_tcsncpy( pszLabel, LS( nFuncId ), LABEL_MAX - 1 );
+		_tcsncpy(pszLabel, LS(nFuncId), LABEL_MAX - 1);
 		pszLabel[ LABEL_MAX - 1 ] = _T('\0');
 	}
 	if (_T('\0') == pszLabel[0]) {
-		_tcscpy( pszLabel, _T("-- undefined name --") );
+		_tcscpy(pszLabel, _T("-- undefined name --"));
 	}
 	// アクセスキーの追加	2010/5/17 Uchi
-	_tcsncpy_s( pszLabel, LABEL_MAX, MakeMenuLabel( pszLabel, pszKey ), _TRUNCATE );
+	_tcsncpy_s(pszLabel, LABEL_MAX, MakeMenuLabel(pszLabel, pszKey), _TRUNCATE);
 
 	// 機能に対応するキー名を追加するか
 	if (bKeyStr) {
@@ -449,11 +449,11 @@ TCHAR* CKeyBind::GetMenuLabel(
 		// 2010.07.11 Moca メニューラベルの「\t」の付加条件変更
 		// [ファイル/フォルダ/ウィンドウ一覧以外]から[アクセスキーがあるときのみ]に付加するように変更
 		// 機能に対応するキー名の取得
-		if (GetKeyStr( hInstance, nKeyNameArrNum, pKeyNameArr, cMemAccessKey, nFuncId, bGetDefFuncCode )) {
+		if (GetKeyStr(hInstance, nKeyNameArrNum, pKeyNameArr, cMemAccessKey, nFuncId, bGetDefFuncCode)) {
 			// バッファが足りないときは入れない
-			if (_tcslen( pszLabel ) + cMemAccessKey.GetStringLength() + 1 < LABEL_MAX) {
-				_tcscat( pszLabel, _T("\t") );
-				_tcscat( pszLabel, cMemAccessKey.GetStringPtr() );
+			if (_tcslen(pszLabel) + cMemAccessKey.GetStringLength() + 1 < LABEL_MAX) {
+				_tcscat(pszLabel, _T("\t"));
+				_tcscat(pszLabel, cMemAccessKey.GetStringPtr());
 			}
 		}
 	}
@@ -470,7 +470,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 
 	@date 2007.02.22 ryoji 新規作成
 */
-EFunctionCode CKeyBind::GetDefFuncCode( int nKeyCode, int nState )
+EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 	if (!pShareData)
@@ -506,12 +506,12 @@ EFunctionCode CKeyBind::GetDefFuncCode( int nKeyCode, int nState )
 
 	@date 2007.03.07 ryoji インライン関数から通常の関数に変更（BCCの最適化バグ対策）
 */
-EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDefFuncCode )
+EFunctionCode CKeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, BOOL bGetDefFuncCode)
 {
 	if (0 != KeyData.m_nFuncCodeArr[nState])
 		return KeyData.m_nFuncCodeArr[nState];
 	if (bGetDefFuncCode)
-		return GetDefFuncCode( KeyData.m_nKeyCode, nState );
+		return GetDefFuncCode(KeyData.m_nKeyCode, nState);
 	return F_DEFAULT;
 }
 
@@ -655,15 +655,15 @@ EFunctionCode CKeyBind::GetFuncCodeAt( KEYDATA& KeyData, int nState, BOOL bGetDe
 
 		// ファンクションキー
 		//keycode,	keyname,			なし,				Shitf+,				Ctrl+,					Shift+Ctrl+,		Alt+,					Shit+Alt+,			Ctrl+Alt+,				Shift+Ctrl+Alt+
-		{ VK_F1,	_T("F1" ),			{ F_EXTHTMLHELP,	F_MENU_ALLFUNC,		F_EXTHELP1,				F_ABOUT,			F_HELP_CONTENTS,		F_HELP_SEARCH,		F_0,					F_0 }, },
-		{ VK_F2,	_T("F2" ),			{ F_BOOKMARK_NEXT,	F_BOOKMARK_PREV,	F_BOOKMARK_SET,			F_BOOKMARK_RESET,	F_BOOKMARK_VIEW,		F_0,				F_0,					F_0 }, },
-		{ VK_F3,	_T("F3" ),			{ F_SEARCH_NEXT,	F_SEARCH_PREV,		F_SEARCH_CLEARMARK,		F_JUMP_SRCHSTARTPOS,F_0,					F_0,				F_0,					F_0 }, },
-		{ VK_F4,	_T("F4" ),			{ F_SPLIT_V,		F_SPLIT_H,			F_0,					F_FILECLOSE_OPEN,	F_0,					F_EXITALLEDITORS,	F_EXITALL,				F_0 }, },
-		{ VK_F5,	_T("F5" ),			{ F_REDRAW,			F_0,				F_EXECMD_DIALOG,		F_0,				F_UUDECODE,				F_0,				F_TABTOSPACE,			F_SPACETOTAB }, },
-		{ VK_F6,	_T("F6" ),			{ F_BEGIN_SEL,		F_BEGIN_BOX,		F_TOLOWER,				F_0,				F_BASE64DECODE,			F_0,				F_0,					F_0 }, },
-		{ VK_F7,	_T("F7" ),			{ F_CUT,			F_0,				F_TOUPPER,				F_0,				F_CODECNV_UTF72SJIS,	F_CODECNV_SJIS2UTF7,F_FILE_REOPEN_UTF7,		F_0 }, },
-		{ VK_F8,	_T("F8" ),			{ F_COPY,			F_COPY_CRLF,		F_TOHANKAKU,			F_0,				F_CODECNV_UTF82SJIS,	F_CODECNV_SJIS2UTF8,F_FILE_REOPEN_UTF8,		F_0 }, },
-		{ VK_F9,	_T("F9" ),			{ F_PASTE,			F_PASTEBOX,			F_TOZENKAKUKATA,		F_0,				F_CODECNV_UNICODE2SJIS,	F_0,				F_FILE_REOPEN_UNICODE,	F_0 }, },
+		{ VK_F1,	_T("F1"),			{ F_EXTHTMLHELP,	F_MENU_ALLFUNC,		F_EXTHELP1,				F_ABOUT,			F_HELP_CONTENTS,		F_HELP_SEARCH,		F_0,					F_0 }, },
+		{ VK_F2,	_T("F2"),			{ F_BOOKMARK_NEXT,	F_BOOKMARK_PREV,	F_BOOKMARK_SET,			F_BOOKMARK_RESET,	F_BOOKMARK_VIEW,		F_0,				F_0,					F_0 }, },
+		{ VK_F3,	_T("F3"),			{ F_SEARCH_NEXT,	F_SEARCH_PREV,		F_SEARCH_CLEARMARK,		F_JUMP_SRCHSTARTPOS,F_0,					F_0,				F_0,					F_0 }, },
+		{ VK_F4,	_T("F4"),			{ F_SPLIT_V,		F_SPLIT_H,			F_0,					F_FILECLOSE_OPEN,	F_0,					F_EXITALLEDITORS,	F_EXITALL,				F_0 }, },
+		{ VK_F5,	_T("F5"),			{ F_REDRAW,			F_0,				F_EXECMD_DIALOG,		F_0,				F_UUDECODE,				F_0,				F_TABTOSPACE,			F_SPACETOTAB }, },
+		{ VK_F6,	_T("F6"),			{ F_BEGIN_SEL,		F_BEGIN_BOX,		F_TOLOWER,				F_0,				F_BASE64DECODE,			F_0,				F_0,					F_0 }, },
+		{ VK_F7,	_T("F7"),			{ F_CUT,			F_0,				F_TOUPPER,				F_0,				F_CODECNV_UTF72SJIS,	F_CODECNV_SJIS2UTF7,F_FILE_REOPEN_UTF7,		F_0 }, },
+		{ VK_F8,	_T("F8"),			{ F_COPY,			F_COPY_CRLF,		F_TOHANKAKU,			F_0,				F_CODECNV_UTF82SJIS,	F_CODECNV_SJIS2UTF8,F_FILE_REOPEN_UTF8,		F_0 }, },
+		{ VK_F9,	_T("F9"),			{ F_PASTE,			F_PASTEBOX,			F_TOZENKAKUKATA,		F_0,				F_CODECNV_UNICODE2SJIS,	F_0,				F_FILE_REOPEN_UNICODE,	F_0 }, },
 		{ VK_F10,	_T("F10"),			{ _SQL_RUN,			F_DUPLICATELINE,	F_TOZENKAKUHIRA,		F_0,				F_CODECNV_EUC2SJIS,		F_CODECNV_SJIS2EUC,	F_FILE_REOPEN_EUC,		F_0 }, },
 		{ VK_F11,	_T("F11"),			{ F_OUTLINE,		F_ACTIVATE_SQLPLUS,	F_HANKATATOZENKATA,		F_0,				F_CODECNV_EMAIL,		F_CODECNV_SJIS2JIS,	F_FILE_REOPEN_JIS,		F_0 }, },
 		{ VK_F12,	_T("F12"),			{ F_TAGJUMP,		F_TAGJUMPBACK,		F_HANKATATOZENHIRA,		F_0,				F_CODECNV_AUTO2SJIS,	F_0,				F_FILE_REOPEN_SJIS,		F_0 }, },
@@ -771,7 +771,7 @@ TCHAR* jpVKEXNames[] = {
 	_T("ホイール左"),
 	_T("ホイール右")
 };
-int jpVKEXNamesLen = _countof( jpVKEXNames );
+int jpVKEXNamesLen = _countof(jpVKEXNames);
 
 /*!	@brief 共有メモリ初期化/キー割り当て
 
@@ -785,12 +785,12 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	/********************/
 	/* 共通設定の規定値 */
 	/********************/
-	const int nKeyDataInitNum = _countof( KeyDataInit );
-	const int KEYNAME_SIZE = _countof( pShareData->m_Common.m_sKeyBind.m_pKeyNameArr ) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int nKeyDataInitNum = _countof(KeyDataInit);
+	const int KEYNAME_SIZE = _countof(pShareData->m_Common.m_sKeyBind.m_pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
 	//	From Here 2007.11.04 genta バッファオーバーラン防止
-	assert( !(nKeyDataInitNum > KEYNAME_SIZE) );
+	assert(!(nKeyDataInitNum > KEYNAME_SIZE));
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
-//		PleaseReportToAuthor( NULL, _T("キー設定数に対してDLLSHARE::m_nKeyNameArr[]のサイズが不足しています") );
+//		PleaseReportToAuthor(NULL, _T("キー設定数に対してDLLSHARE::m_nKeyNameArr[]のサイズが不足しています"));
 //		return false;
 //	}
 	//	To Here 2007.11.04 genta バッファオーバーラン防止
@@ -801,17 +801,17 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	};
 
 	// インデックス用ダミー作成
-	SetKeyNameArrVal( pShareData, KEYNAME_SIZE, &dummy[0] );
+	SetKeyNameArrVal(pShareData, KEYNAME_SIZE, &dummy[0]);
 	// インデックス作成 重複した場合は先頭にあるものを優先
 	for (int ii = 0; ii< _countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ii++) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
-	for (int i=nKeyDataInitNum-1; i >= 0; i--) {
+	for (int i = nKeyDataInitNum-1; i >= 0; i--) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
 	}
 
 	for (int i = 0; i < nKeyDataInitNum; ++i) {
-		SetKeyNameArrVal( pShareData, i, &KeyDataInit[i] );
+		SetKeyNameArrVal(pShareData, i, &KeyDataInit[i]);
 	}
 	pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum = nKeyDataInitNum;
 	return true;
@@ -820,13 +820,13 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 /*!	@brief 言語選択後の文字列更新処理 */
 void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
-	const int nKeyDataInitNum = _countof( KeyDataInit );
+	const int nKeyDataInitNum = _countof(KeyDataInit);
 
 	for (int i = 0; i < nKeyDataInitNum; ++i) {
 		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];
 
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {
-			_tcscpy_s( pKeydata->m_szKeyName, LS( KeyDataInit[i].m_nKeyNameId ) );
+			_tcscpy_s(pKeydata->m_szKeyName, LS(KeyDataInit[i].m_nKeyNameId));
 		}
 	}
 
@@ -847,8 +847,8 @@ static void SetKeyNameArrVal(
 
 	pKeydata->m_nKeyCode = pKeydataInit->m_nKeyCode;
 	if (0xFFFF < pKeydataInit->m_nKeyNameId) {
-		_tcscpy_s( pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName );
+		_tcscpy_s(pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName);
 	}
-	memcpy_raw( pKeydata->m_nFuncCodeArr, pKeydataInit->m_nFuncCodeArr, sizeof(pKeydataInit->m_nFuncCodeArr) );
+	memcpy_raw(pKeydata->m_nFuncCodeArr, pKeydataInit->m_nFuncCodeArr, sizeof(pKeydataInit->m_nFuncCodeArr));
 }
 

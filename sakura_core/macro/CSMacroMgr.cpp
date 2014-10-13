@@ -637,13 +637,13 @@ BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const 
 	delete *ppMacro;
 	*ppMacro = NULL;
 	
-	const TCHAR *ext;
+	const TCHAR* ext;
 	if (!pszType) {				// ファイル指定
 		// ファイルの拡張子を取得する
 		ext = _tcsrchr(pszPath, _T('.'));
 		// Feb. 02, 2004 genta .が無い場合にext==NULLとなるのでNULLチェック追加
 		if (ext != NULL) {
-			const TCHAR *chk = _tcsrchr(ext, _T('\\'));
+			const TCHAR* chk = _tcsrchr(ext, _T('\\'));
 			if (chk != NULL) {	//	.のあとに\があったらそれは拡張子の区切りではない
 								//	\が漢字の2バイト目の場合も拡張子ではない。
 				ext = NULL;

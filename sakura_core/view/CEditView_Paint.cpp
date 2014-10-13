@@ -74,8 +74,8 @@ void CEditView_Paint::Call_OnPaint(
 	if (rcs.size() == 0) return;
 	CMyRect rc = rcs[0];
 	int nSize = (int)rcs.size();
-	for (int i=1;i<nSize;i++)
-		rc=MergeRect(rc, rcs[i]);
+	for (int i = 1; i < nSize; i++)
+		rc = MergeRect(rc, rcs[i]);
 
 	//描画
 	PAINTSTRUCT	ps;
@@ -342,7 +342,7 @@ CColor3Setting CEditView::GetColorIndex(
 
 			// 論理行の先頭まで戻らないと確実には正確な色は得られない
 			// （正規表現キーワードにマッチした長い強調表示がその位置のレイアウト行頭をまたいでいる場合など）
-			//if(pcLayout->GetLogicOffset() - pcLayoutLineFirst->GetLogicOffset() > 260)
+			//if (pcLayout->GetLogicOffset() - pcLayoutLineFirst->GetLogicOffset() > 260)
 			//	break;
 		}
 
@@ -1110,7 +1110,7 @@ void CEditView::DispTextSelected(
 	CLayoutRange& sSelect = GetSelectionInfo().m_sSelect;
 
 	// 選択範囲内の行かな
-//	if(IsTextSelected()) {
+//	if (IsTextSelected()) {
 		if (nLineNum >= sSelect.GetFrom().y && nLineNum <= sSelect.GetTo().y) {
 			CLayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
 			nSelectFrom = selectArea.GetFrom().x;

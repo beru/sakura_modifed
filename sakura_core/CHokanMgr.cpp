@@ -308,7 +308,7 @@ int CHokanMgr::Search(
 //			// è„Ç…ÇÕÇ›èoÇ∑
 //			// Å®çÇÇ≥ÇæÇØí≤êﬂ
 //			nCY = rcDesktop.bottom - nY - 4;
-//		}else{
+//		}else {
 //
 //		}
 //

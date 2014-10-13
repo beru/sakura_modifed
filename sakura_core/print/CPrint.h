@@ -188,7 +188,7 @@ protected:
 	||  À‘•ƒwƒ‹ƒpŠÖ”
 	*/
 	// DCì¬‚·‚é(ˆ—‚ğ‚Ü‚Æ‚ß‚½) 2003.05.02 ‚©‚ë‚Æ
-	HDC CreateDC(MYDEVMODE *pMYDEVMODE, TCHAR *pszErrMsg);
+	HDC CreateDC(MYDEVMODE* pMYDEVMODE, TCHAR* pszErrMsg);
 	
 	static const PAPER_INFO* FindPaperInfo(int id);
 private:

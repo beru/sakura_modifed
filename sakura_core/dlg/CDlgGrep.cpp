@@ -626,7 +626,7 @@ int CDlgGrep::GetData(void)
 	m_pShareData->m_Common.m_sSearch.m_bGrepSeparateFolder = m_bGrepSeparateFolder;
 
 //やめました
-//	if(0 == wcslen(m_szText)) {
+//	if (0 == wcslen(m_szText)) {
 //		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
 //		return FALSE;
 //	}

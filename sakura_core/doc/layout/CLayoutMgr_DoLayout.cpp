@@ -269,7 +269,7 @@ void CLayoutMgr::_MakeOneLine(SLayoutWork* pWork, PF_OnLine pfOnLine)
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
 			CLayoutInt nCharKetas = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
-//			if(0 == nCharKetas) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//			if (0 == nCharKetas) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				nCharKetas = CLayoutInt(1);
 //			}
 
@@ -383,7 +383,7 @@ void CLayoutMgr::_DoLayout()
 			&& 0 == (pWork->nCurLine % 1024)
 		) {
 			NotifyProgress(pWork->nCurLine * 100 / nAllLineNum);
-			if(!::BlockingHook(NULL))return;
+			if (!::BlockingHook(NULL))return;
 		}
 
 // 2002/03/13 novice
@@ -534,7 +534,7 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 					&& !pWork->pLayout->GetNextLayout()->GetColorInfo()
 				) {
 					pWork->bNeedChangeCOMMENTMODE = true;
-				}else if(1
+				}else if (1
 					&& !pWork->exInfoPrev.GetColorInfo()
 					&& pWork->pLayout->GetNextLayout()->GetColorInfo()
 				) {

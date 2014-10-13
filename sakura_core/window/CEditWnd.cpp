@@ -744,7 +744,7 @@ HWND CEditWnd::Create(
 	// Aug. 29, 2003 wmlhq
 	m_nTimerCount = 0;
 	// タイマーを起動	タイマーのIDと間隔を変更 20060128 aroka
-	if(0 == ::SetTimer(GetHwnd(), IDT_EDIT, 500, NULL)) {
+	if (0 == ::SetTimer(GetHwnd(), IDT_EDIT, 500, NULL)) {
 		WarningMessage(GetHwnd(), LS(STR_ERR_DLGEDITWND03));
 	}
 	// ツールバーのタイマーを分離した 20060128 aroka
@@ -845,7 +845,7 @@ void CEditWnd::LayoutMainMenu()
 			// ラベル未設定かつFunctionコードがありならストリングテーブルから取得 2012/10/18 syat 各国語対応
 			pszName = (cMainMenu->m_sName[0] == L'\0' && cMainMenu->m_nFunc != F_NODE)
 								? LS(cMainMenu->m_nFunc) : to_tchar(cMainMenu->m_sName);
-			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount<=1 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
+			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 1 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
 				CKeyBind::MakeMenuLabel(pszName, to_tchar(cMainMenu->m_sKey)));
 			break;
 		case T_LEAF:
@@ -920,7 +920,7 @@ void CEditWnd::LayoutMainMenu()
 				}
 				break;
 			}
-			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount<=0 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
+			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 0 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
 				CKeyBind::MakeMenuLabel(to_tchar(cMainMenu->m_sName), to_tchar(cMainMenu->m_sKey)));
 			break;
 		}
@@ -941,7 +941,7 @@ void CEditWnd::LayoutToolBar(void)
 {
 	if (m_pShareData->m_Common.m_sWindow.m_bDispTOOLBAR) {	// ツールバーを表示する
 		m_cToolbar.CreateToolBar();
-	}else{
+	}else {
 		m_cToolbar.DestroyToolBar();
 	}
 }
@@ -1181,7 +1181,7 @@ LRESULT CEditWnd::DispatchEvent(
 				::GetTextMetrics(lpdis->hDC, &tm);
 				int y = (lpdis->rcItem.bottom - lpdis->rcItem.top - tm.tmHeight + 1) / 2 + lpdis->rcItem.top;
 				::TextOut(lpdis->hDC, lpdis->rcItem.left, y, _T("REC"), _tcslen(_T("REC")));
-				if(COLOR_BTNTEXT == nColor) {
+				if (COLOR_BTNTEXT == nColor) {
 					::TextOut(lpdis->hDC, lpdis->rcItem.left + 1, y, _T("REC"), _tcslen(_T("REC")));
 				}
 			}
@@ -1674,7 +1674,7 @@ LRESULT CEditWnd::DispatchEvent(
 				if (CAppNodeManager::getInstance()->GetEditNode(GetHwnd())->IsTopInGroup()) {
 					if (!::IsWindowVisible(GetHwnd())) {
 						// ::ShowWindow(GetHwnd(), SW_SHOWNA) だと非表示から表示に切り替わるときに Z-order がおかしくなることがあるので ::SetWindowPos を使う
-						::SetWindowPos(GetHwnd(), NULL, 0,0,0,0,
+						::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
 										SWP_SHOWWINDOW | SWP_NOACTIVATE
 										| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 
@@ -1689,7 +1689,7 @@ LRESULT CEditWnd::DispatchEvent(
 			}else {
 				if (!::IsWindowVisible(GetHwnd())) {
 					// ::ShowWindow(GetHwnd(), SW_SHOWNA) だと非表示から表示に切り替わるときに Z-order がおかしくなることがあるので ::SetWindowPos を使う
-					::SetWindowPos(GetHwnd(), NULL, 0,0,0,0,
+					::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
 									SWP_SHOWWINDOW | SWP_NOACTIVATE
 									| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 				}
@@ -2199,11 +2199,11 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 				if (cMainMenu->m_nFunc != 0 && cMainMenu->m_sName[0] == L'\0') {
 					// ストリングテーブルから読み込み
 					tmpMenuName = LSW(cMainMenu->m_nFunc);
-					if(MAX_MAIN_MENU_NAME_LEN < tmpMenuName.length()) {
+					if (MAX_MAIN_MENU_NAME_LEN < tmpMenuName.length()) {
 						tmpMenuName = tmpMenuName.substr(0, MAX_MAIN_MENU_NAME_LEN);
 					}
 					pMenuName = tmpMenuName.c_str();
-				}else{
+				}else {
 					pMenuName = cMainMenu->m_sName;
 				}
 				m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , 
@@ -3294,7 +3294,7 @@ BOOL CEditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 						}else {
 							// 前のウィンドウ
 							for (j = i - 1; j >= 0; --j) {
-								if(nGroup == pEditNodeArr[j].m_nGroup)
+								if (nGroup == pEditNodeArr[j].m_nGroup)
 									break;
 							}
 							if (j < 0) {
@@ -3801,7 +3801,7 @@ void CEditWnd::WindowTopMost(int top)
 		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; i++) {
 			HWND hwnd = m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd();
 			if (hwnd != GetHwnd() && IsSakuraMainWindow(hwnd)) {
-				if(!CAppNodeManager::IsSameGroup(GetHwnd(), hwnd))
+				if (!CAppNodeManager::IsSameGroup(GetHwnd(), hwnd))
 					continue;
 				::SetWindowPos(hwnd, hwndInsertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 				hwndInsertAfter = hwnd;
@@ -3963,10 +3963,10 @@ void CEditWnd::OnEditTimer(void)
 
 #if 0	// 2011.02.11 ryoji 書込禁止の監視を廃止（復活させるなら「更新の監視」付随ではなく別オプションにしてほしい）
 		// ファイル書込可能のチェック処理
-		if(GetDocument()->m_cAutoReloadAgent._ToDoChecking()) {
+		if (GetDocument()->m_cAutoReloadAgent._ToDoChecking()) {
 			bool bOld = GetDocument()->m_cDocLocker.IsDocWritable();
 			GetDocument()->m_cDocLocker.CheckWritable(false);
-			if(bOld != GetDocument()->m_cDocLocker.IsDocWritable()) {
+			if (bOld != GetDocument()->m_cDocLocker.IsDocWritable()) {
 				this->UpdateCaption();
 			}
 		}
@@ -4102,7 +4102,7 @@ void  CEditWnd::SetActivePane(int nIndex)
 	) {
 		// ::SetFocus()でフォーカスを切り替える
 		::SetFocus(GetActiveView().GetHwnd());
-	}else{
+	}else {
 		// 2010.04.08 ryoji
 		// 起動と同時にエディットボックスにフォーカスのあるダイアログを表示すると当該エディットボックスに
 		// キャレットが表示されない問題(*1)を修正するのため、内部的な切り替えをするのはアクティブペインが

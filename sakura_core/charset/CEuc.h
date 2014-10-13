@@ -30,7 +30,7 @@
 class CEuc : public CCodeBase {
 public:
 	// CCodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory()=cSrc; return EUCToUnicode(pDst->_GetMemory()); }	//!< 特定コード → UNICODE    変換
+	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory() = cSrc; return EUCToUnicode(pDst->_GetMemory()); }	//!< 特定コード → UNICODE    変換
 	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) { *pDst = *cSrc._GetMemory(); return UnicodeToEUC(pDst); }	//!< UNICODE    → 特定コード 変換
 // GetEolはCCodeBaseに移動	2010/6/13 Uchi
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
@@ -63,7 +63,7 @@ inline int CEuc::_EucjpToUni_char( const unsigned char* pSrc, unsigned short* pD
 	int nret;
 	unsigned char czenkaku[2];
 	unsigned int ctemp;
-	bool berror=false;
+	bool berror = false;
 	bool hex = false;
 
 	switch (eCharset) {
@@ -125,10 +125,10 @@ inline int CEuc::_EucjpToUni_char( const unsigned char* pSrc, unsigned short* pD
 */
 inline int CEuc::_UniToEucjp_char( const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError )
 {
-	int nret=0, nclen;
+	int nret = 0, nclen;
 	unsigned char cbuf[4];
 	unsigned int ctemp;
-	bool berror=false;
+	bool berror = false;
 
 	if (eCharset == CHARSET_UNI_SURROG) {
 		// サロゲートは SJIS に変換できない。

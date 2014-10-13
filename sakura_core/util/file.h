@@ -105,5 +105,5 @@ void my_splitpath_t (const TCHAR* comln, TCHAR* drv, TCHAR* dir, TCHAR* fnm, TCH
 #define my_splitpath_t my_splitpath
 #endif
 
-int FileMatchScoreSepExt(const TCHAR *file1, const TCHAR *file2);
+int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2);
 

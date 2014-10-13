@@ -246,7 +246,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 #ifdef _UNICODE
 	wchar_t szWord[2] = {wChar, 0};
 #else
-	ACHAR szAnsiWord[3]={(wChar >> 8) & 0xff, wChar & 0xff, 0};
+	ACHAR szAnsiWord[3] = {(wChar >> 8) & 0xff, wChar & 0xff, 0};
 	const wchar_t* pUniData = to_wchar(szAnsiWord);
 	wchar_t szWord[2] = {pUniData[0], 0};
 #endif

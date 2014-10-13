@@ -143,7 +143,7 @@ void CSplitterWnd::DrawSplitter(int xPos, int yPos, int bEraseOld)
 	int			nTrackerWidth = 6;
 
 	hdc = ::GetDC(GetHwnd());
-	hBrush = ::CreateSolidBrush(RGB(255,255,255));
+	hBrush = ::CreateSolidBrush(RGB(255, 255, 255));
 	hBrushOld = (HBRUSH)::SelectObject(hdc, hBrush);
 	::SetROP2(hdc, R2_XORPEN);
 	::SetBkMode(hdc, TRANSPARENT);
@@ -837,7 +837,7 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	::GetClientRect(GetHwnd(), &rcClient);
 
 	if (m_nAllSplitRows == 1 && m_nAllSplitCols == 1) {
-		if(m_ChildWndArr[0] != NULL) {
+		if (m_ChildWndArr[0] != NULL) {
 			::MoveWindow(m_ChildWndArr[0], 0, 0, rcClient.right,  rcClient.bottom, TRUE);		// 子ウィンドウ配列
 
 			pcViewArr[0]->SplitBoxOnOff(TRUE, TRUE, bSizeBox);	// 縦・横の分割ボックスのＯＮ／ＯＦＦ

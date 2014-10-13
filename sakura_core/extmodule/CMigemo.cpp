@@ -280,7 +280,7 @@ int CMigemo::migemo_load_all()
 		TCHAR* szDict = GetDllShareData().m_Common.m_sHelper.m_szMigemoDict;
 		TCHAR path[MAX_PATH];
 		//char path2[MAX_PATH];
-		TCHAR *ppath;
+		TCHAR* ppath;
 		
 		if (szDict[0] == _T('\0')) {
 			GetInidirOrExedir(path, _T("dict"));	// 2007.05.20 ryoji 相対パスは設定ファイルからのパスを優先

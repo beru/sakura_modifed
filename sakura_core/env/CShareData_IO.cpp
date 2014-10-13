@@ -1031,7 +1031,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 
 					if (tmpKeydata.m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
 						// 2013.10.23 syat マウスのキーコードを拡張仮想キーコードに変更。以下は互換性のため残す。
-						for (int im=0; im< jpVKEXNamesLen; im++) {
+						for (int im = 0; im < jpVKEXNamesLen; im++) {
 							if (_tcscmp(tmpKeydata.m_szKeyName, jpVKEXNames[im]) == 0) {
 								_tcscpy(tmpKeydata.m_szKeyName, sKeyBind.m_pKeyNameArr[im].m_szKeyName);
 								sKeyBind.m_pKeyNameArr[im + 0x0100] = tmpKeydata;
@@ -1054,7 +1054,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 					}
 				}
 			}
-		}else{
+		}else {
 		//	auto_sprintf_s(szKeyData, LTEXT("%d,%d,%d,%d,%d,%d,%d,%d"),
 		//		keydata.m_nFuncCodeArr[0],
 		//		keydata.m_nFuncCodeArr[1],
@@ -2090,7 +2090,7 @@ void CShareData_IO::IO_ColorSet(CDataProfile* pcProfile, const WCHAR* pszSecName
 				// 2006.12.07 ryoji
 				// sakura Ver1.5.13.1 以前のiniファイルを読んだときにキャレットがテキスト背景色と同じになると
 				// ちょっと困るのでキャレット色が読めないときはキャレット色をテキスト色と同じにする
-				if(COLORIDX_CARET == j)
+				if (COLORIDX_CARET == j)
 					pColorInfoArr[j].m_sColorAttr.m_cTEXT = pColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
 			}
 			// 2006.12.18 ryoji

@@ -375,7 +375,7 @@ bool CWSHClient::Execute(const wchar_t *AScript)
 						IActiveScriptSite->OnScriptErrorに通知済み。
 						中断メッセージが既に表示されてるはず。
 					*/
-					}else if(hr != S_OK) {
+					}else if (hr != S_OK) {
 						Error(LSW(STR_ERR_CWSH08));
 					}else {
 						bRet = true;

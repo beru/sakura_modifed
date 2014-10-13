@@ -115,8 +115,8 @@ public:
 
 
 	template <class CHAR_TYPE>
-	static int GetWord(const CHAR_TYPE*, const int, const CHAR_TYPE *pszSplitCharList,
-		CHAR_TYPE **ppWordStart, int *pnWordLen);
+	static int GetWord(const CHAR_TYPE*, const int, const CHAR_TYPE* pszSplitCharList,
+		CHAR_TYPE** ppWordStart, int* pnWordLen);
 
 protected:
 

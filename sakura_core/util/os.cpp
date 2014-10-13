@@ -253,7 +253,7 @@ HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 	STGMEDIUM stgMedium;
 	// 2006.03.16 Moca SUCCEEDEDマクロではS_FALSEのとき困るので、S_OKに変更
 	if (S_OK == pDataObject->GetData(&fe, &stgMedium)) {
-		if(!stgMedium.pUnkForRelease) {
+		if (!stgMedium.pUnkForRelease) {
 			if (stgMedium.tymed == TYMED_HGLOBAL)
 				hDest = stgMedium.hGlobal;
 		}else {

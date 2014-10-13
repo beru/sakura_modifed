@@ -525,7 +525,7 @@ const wchar_t* CSakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, i
 	bool next = true;	// 継続フラグ
 	const wchar_t* p;
 	for (p = pszSource; next && *p != L'\0'; ++p) {
-		if(*p == L'$' && p[1] != L'\0') { // $が末尾なら無視
+		if (*p == L'$' && p[1] != L'\0') { // $が末尾なら無視
 			switch (*(++p)) {
 			case L'{':	// 入れ子の開始
 				++nest;

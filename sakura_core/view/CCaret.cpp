@@ -431,7 +431,7 @@ BOOL CCaret::GetAdjustCursorPos(
 
 				// EOFだけ折り返されているか
 				//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-				//if(ptPosXY2.x >= m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas()) {
+				//if (ptPosXY2.x >= m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas()) {
 				//	ptPosXY2.y++;
 				//	ptPosXY2.x = CLayoutInt(0);
 				//}
@@ -456,9 +456,9 @@ BOOL CCaret::GetAdjustCursorPos(
 void CCaret::ShowEditCaret()
 {
 	// 必要なインターフェース
-	const CLayoutMgr* pLayoutMgr=&m_pEditDoc->m_cLayoutMgr;
-	CommonSetting* pCommon=&GetDllShareData().m_Common;
-	const STypeConfig* pTypes=&m_pEditDoc->m_cDocType.GetDocumentAttribute();
+	const CLayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
+	CommonSetting* pCommon = &GetDllShareData().m_Common;
+	const STypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
 
 	using namespace WCODE;
 
@@ -499,7 +499,7 @@ void CCaret::ShowEditCaret()
 	}
 	CMySize caretSizeOld = GetCaretSize();
 	SetCaretSize(nCaretWidth, nCaretHeight);
-	POINT ptDrawPos=CalcCaretDrawPos(GetCaretLayoutPos());
+	POINT ptDrawPos = CalcCaretDrawPos(GetCaretLayoutPos());
 	SetCaretSize(caretSizeOld.cx, caretSizeOld.cy); // 後で比較するので戻す
 	bool bShowCaret = false;
 	auto& textArea = m_pEditView->GetTextArea();
@@ -641,8 +641,8 @@ void CCaret::ShowEditCaret()
 void CCaret::ShowCaretPosInfo()
 {
 	// 必要なインターフェース
-	const CLayoutMgr* pLayoutMgr=&m_pEditDoc->m_cLayoutMgr;
-	const STypeConfig* pTypes=&m_pEditDoc->m_cDocType.GetDocumentAttribute();
+	const CLayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
+	const STypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
 
 	if (!m_pEditView->GetDrawSwitch()) {
 		return;
@@ -712,7 +712,7 @@ void CCaret::ShowCaretPosInfo()
 
 	// -- -- -- -- キャレット位置の文字情報 -> szCaretChar -- -- -- -- //
 	//
-	TCHAR szCaretChar[32]=_T("");
+	TCHAR szCaretChar[32] = _T("");
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
 		CLogicInt nIdx = GetCaretLogicPos().GetX2() - pcLayout->GetLogicOffset();

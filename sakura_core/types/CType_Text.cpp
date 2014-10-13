@@ -226,7 +226,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 {
 	int levelPrev = 0;
 
-	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); nLineCount++) {
+	for (CLogicInt nLineCount = CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); nLineCount++) {
 		const wchar_t*	pLine;
 		CLogicInt		nLineLen;
 

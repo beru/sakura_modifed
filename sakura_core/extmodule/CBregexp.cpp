@@ -547,7 +547,7 @@ int CBregexp::Replace(const wchar_t *szTarget, int nLen, int nStart)
 	// 使用すると現状では結果に１バイト余分なゴミが付加される
 	// 置換に失敗するのはnLenが０に限らず nLen = nStart のとき（行頭マッチだけ対策しても．．．）
 	//
-	//if(nLen == 0) {
+	//if (nLen == 0) {
 	//	szTarget = m_tmpBuf;
 	//	nLen = 1;
 	//}

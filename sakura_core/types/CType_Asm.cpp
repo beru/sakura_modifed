@@ -95,11 +95,11 @@ void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 					nFuncId = 52;
 					entry_token = token[ 0 ];
 				//}else
-				//if(my_stricmp(token[ 1 ], _T("macro")) == 0) {	//マクロ
+				//if (my_stricmp(token[ 1 ], _T("macro")) == 0) {	//マクロ
 				//	nFuncId = -1;
 				//	entry_token = token[ 0 ];
 				//}else
-				//if(my_stricmp(token[ 1 ], _T("struc")) == 0) {	//構造体
+				//if (my_stricmp(token[ 1 ], _T("struc")) == 0) {	//構造体
 				//	nFuncId = -1;
 				//	entry_token = token[ 0 ];
 				}

@@ -71,7 +71,7 @@ private:
 		CDummy(int);
 	};
 	
-	template <bool t, bool=false>
+	template <bool t, bool = false>
 	struct ChooseIntOrDummy {
 		typedef int Type;
 	};
@@ -139,17 +139,17 @@ public:
 
 	// -- -- -- -- •Êí‚ÌCStrictInteger‚Æ‚Ì‰‰Z‚Íâ‘Î‹–‚³‚ñ(‚â‚è‚½‚«‚áint‚Å‚à‰î‚µ‚Ä‚­‚¾‚³‚¢) -- -- -- -- //
 private:
-	template <bool B0,bool B1,bool B2,bool B3> Me&  operator += (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
-	template <bool B0,bool B1,bool B2,bool B3> Me&  operator -= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
-	template <bool B0,bool B1,bool B2,bool B3> Me   operator +  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> Me   operator -  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> Me&  operator =  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
-	template <bool B0,bool B1,bool B2,bool B3> bool operator <  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> bool operator <= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> bool operator >  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> bool operator >= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> bool operator == (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0,bool B1,bool B2,bool B3> bool operator != (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> Me&  operator += (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
+	template <bool B0, bool B1, bool B2, bool B3> Me&  operator -= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
+	template <bool B0, bool B1, bool B2, bool B3> Me   operator +  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> Me   operator -  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> Me&  operator =  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
+	template <bool B0, bool B1, bool B2, bool B3> bool operator <  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator <= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator >  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator >= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator == (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator != (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
 
 	// -- -- -- -- ALLOW_ADDSUB_INT‚ªtrue‚Ìê‡‚ÍAint‚Æ‚Ì‰ÁŒ¸Z‚ğ‹–‚· -- -- -- -- //
 private:

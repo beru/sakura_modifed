@@ -497,7 +497,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			if (nVal < 1) {
 				nVal = 1;
 			}
-			if(nVal > 1000) {
+			if (nVal > 1000) {
 				nVal = 1000;
 			}
 			::SetDlgItemInt(hwndDlg, IDC_EDIT_LINECOMMENTPOS2, nVal, FALSE);
@@ -1122,7 +1122,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 
 
 	// 2002/11/02 Moca 比較方法変更
-//	if(0 != strcmp("カーソル行アンダーライン", pColorInfo->m_szName))
+//	if (0 != strcmp("カーソル行アンダーライン", pColorInfo->m_szName))
 	if (0 == (g_ColorAttributeArr[pColorInfo->m_nColorIdx].fAttribute & COLOR_ATTRIB_NO_BACK)) {	// 2006.12.18 ryoji フラグ利用で簡素化
 		// 背景色 見本矩形
 		rc1 = pDis->rcItem;

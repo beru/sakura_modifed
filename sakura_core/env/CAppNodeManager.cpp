@@ -569,7 +569,7 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 
 				// 同一グループのウィンドウに同じMRU番号をつける
 				for (int j = i + 1; j < nRowNum; j++) {
-					if(pNode[ j ].p->m_nGroup == nGroup)
+					if (pNode[ j ].p->m_nGroup == nGroup)
 						pNode[ j ].nGroupMru = iGroupMru;
 				}
 			}

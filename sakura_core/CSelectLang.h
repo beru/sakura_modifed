@@ -87,7 +87,7 @@ protected:
 		/*virtual*/
 		~CLoadStrBuffer() {
 			// バッファを取得していた場合は解放する。
-			if( m_pszString && m_pszString != m_szString ) {
+			if ( m_pszString && m_pszString != m_szString ) {
 				delete[] m_pszString;
 			}
 		}

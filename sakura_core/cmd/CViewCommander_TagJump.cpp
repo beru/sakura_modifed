@@ -509,7 +509,7 @@ bool CViewCommander::Command_TagsMake(void)
 				break;
 			case WAIT_OBJECT_0 + 1:
 				// 処理中のユーザー操作を可能にする
-				if(!::BlockingHook(cDlgCancel.GetHwnd())) {
+				if (!::BlockingHook(cDlgCancel.GetHwnd())) {
 					break;
 				}
 				break;

@@ -44,7 +44,7 @@ void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
 //! 現在のカーソル位置から選択を開始する
 void CViewSelect::BeginSelectArea(const CLayoutPoint* po)
 {
-	const CEditView* pView=GetEditView();
+	const CEditView* pView = GetEditView();
 	CLayoutPoint temp;
 	if (!po) {
 		temp = pView->GetCaret().GetCaretLayoutPos();
@@ -287,7 +287,7 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
 		// 2002.02.16 hor ちらつきを抑止するためEOF以降のエリアが反転したらもう一度反転して元に戻すことにする
-		//if((GetTextArea().GetViewTopLine()+m_nViewRowNum+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount()) &&
+		//if ((GetTextArea().GetViewTopLine()+m_nViewRowNum+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount()) &&
 		//   (m_sSelect.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount() ||
 		//	m_sSelectOld.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount())) {
 		//	Redraw();
@@ -538,7 +538,7 @@ void CViewSelect::DrawSelectAreaLine(
 		*(const_cast<CLayoutRange*>(&m_sSelect)) = selectOld;
 		
 		// 2006.03.28 Moca 表示域内のみ処理する
-		if (nSelectFrom <=pView->GetTextArea().GetRightCol() && pView->GetTextArea().GetViewLeftCol() < nSelectTo) {
+		if (nSelectFrom <= pView->GetTextArea().GetRightCol() && pView->GetTextArea().GetViewLeftCol() < nSelectTo) {
 			HRGN hrgnDraw = ::CreateRectRgn(rcClip.left, rcClip.top, rcClip.right, rcClip.bottom);
 			::PaintRgn(hdc, hrgnDraw);
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
