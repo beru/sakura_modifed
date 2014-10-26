@@ -699,7 +699,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	}
 
 	auto& dlgReplace = GetEditWindow()->m_cDlgReplace;
-	//2002.02.10 hor
+	// 2002.02.10 hor
 	BOOL nPaste			= dlgReplace.m_nPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
 	BOOL bRegularExp	= m_pCommanderView->m_sCurSearchOption.bRegularExp;

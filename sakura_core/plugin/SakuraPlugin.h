@@ -45,7 +45,7 @@ extern "C" {
 	  History:
 	  0x00010000	初期バージョン(sakura2, UNICODE)
 */
-#define SAKURA_DLL_PLUGIN_VERSION	0x00010000	//構造体のバージョン
+#define SAKURA_DLL_PLUGIN_VERSION	0x00010000	// 構造体のバージョン
 
 typedef BOOL (WINAPI *HandleFunctionCallback)(LPCWSTR lpszName, LPVOID lpIfObj, LPVOID lpEditView, const DWORD ID, const VARIANT* Arguments, const int ArgSize, VARIANT* Result);
 typedef void (WINAPI *HandleCommandCallback)(LPCWSTR lpszName, LPVOID lpIfObj, LPVOID lpEditView, const DWORD ID, LPCWSTR Arguments[], const int* ArgLengths, const int ArgSize);
@@ -94,7 +94,7 @@ typedef struct tagSAKURA_DLL_PLUGIN_OBJ {
 	DWORD						m_wPadding2;			//!< 予備(パディング)
 	LPVOID						m_lpUserData[4];		//!< ユーザ情報
 	DWORD						m_dwReserve[8];			//!< 予備
-//TODO: 構造体を拡張するときはDLL_PLUGIN_INFO_VERSIONを変更しifdefで拡張する
+// TODO: 構造体を拡張するときはDLL_PLUGIN_INFO_VERSIONを変更しifdefで拡張する
 } SAKURA_DLL_PLUGIN_OBJ;
 
 // DLLプラグインAPI

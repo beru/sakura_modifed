@@ -29,7 +29,7 @@
 #include "view/CViewFont.h"
 #include "view/colors/CColorStrategy.h"
 
-//2007.08.28 kobake 追加
+// 2007.08.28 kobake 追加
 /*!タイプサポートクラス
 	今のところタイプ別設定の色情報取得の補助
 */

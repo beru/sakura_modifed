@@ -275,7 +275,7 @@ bool CPlugin::ReadPluginDefString(CDataProfile *cProfile, CDataProfile *cProfile
 	WCHAR bufKey[64];
 	m_aStrings.clear();
 	m_aStrings.push_back(wstring(L"")); // 0î‘ñ⁄É_É~Å[
-	for (int nCount = 1; nCount < MAX_PLUG_STRING; nCount++) {	//ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
+	for (int nCount = 1; nCount < MAX_PLUG_STRING; nCount++) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
 		wstring sVal = L"";
 		swprintf(bufKey, L"S[%d]", nCount);
 		if (cProfile->IOProfileData(PII_STRING, bufKey, sVal)) {

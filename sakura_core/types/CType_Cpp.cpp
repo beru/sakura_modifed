@@ -110,7 +110,7 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 		}else if (len == 2) {
 			if (CNativeW::GetSizeOfChar(s, 2 , 0) == 1)
 				return(true);
-		}else { //残り３バイト以上
+		}else { // 残り３バイト以上
 			if (CNativeW::GetSizeOfChar(s, len , len-2) == 1)
 				return(true);
 			if (CNativeW::GetSizeOfChar(s, len , len-3) == 2)
@@ -1190,7 +1190,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 	CLogicPoint	ptCP;
 
 	if (wcChar == WCODE::CR || wcschr(L":{}()", wcChar) != NULL) {
-		//次へ進む
+		// 次へ進む
 	}else return;
 
 	switch (wcChar) {
@@ -1296,7 +1296,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 					) {
 //						MYTRACE(_T("▼[%ls]\n"), pLine2);
 					}else {
-						//同じ行の場合
+						// 同じ行の場合
 						if (j == GetCaret().GetCaretLogicPos().y) {
 							if (L'{' == wcChar && L'}' == pLine2[k]) {
 								wcChar = L'}';
@@ -1320,7 +1320,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 					) {
 //						MYTRACE(_T("▼[%ls]\n"), pLine2);
 					}else {
-						//同じ行の場合
+						// 同じ行の場合
 						if (j == GetCaret().GetCaretLogicPos().y) {
 							if (L'{' == wcChar && L'{' == pLine2[k]) {
 								return;

@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include <Windows.h> //SIZE
+#include <Windows.h> // SIZE
 
 class CMySize : public SIZE {
 public:

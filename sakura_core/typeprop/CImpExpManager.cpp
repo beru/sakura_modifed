@@ -63,9 +63,9 @@ static const wchar_t	szKeyStructureVersion[]			= L"vStructureVersion";
 
 // カラー（ CPropTypes.hからコピー改変 ）
 //static const wchar_t	WSTR_COLORDATA_HEAD2[]	=  L" テキストエディタ色設定 Ver2";
-//static const wchar_t	WSTR_COLORDATA_HEAD21[]	=  L" テキストエディタ色設定 Ver2.1";	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
-static const wchar_t	WSTR_COLORDATA_HEAD3[]	=  L" テキストエディタ色設定 Ver3";		//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
-//static const wchar_t	WSTR_COLORDATA_HEAD4[]	=  L" テキストエディタ色設定 Ver4";		//2007.10.02 kobake UNICODE化に際してカラーファイル仕様も変更
+//static const wchar_t	WSTR_COLORDATA_HEAD21[]	=  L" テキストエディタ色設定 Ver2.1";	// Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+static const wchar_t	WSTR_COLORDATA_HEAD3[]	=  L" テキストエディタ色設定 Ver3";		// Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
+//static const wchar_t	WSTR_COLORDATA_HEAD4[]	=  L" テキストエディタ色設定 Ver4";		// 2007.10.02 kobake UNICODE化に際してカラーファイル仕様も変更
 static const wchar_t	szSecColor[]			=  L"SakuraColor";
 
 // 正規表現キーワード
@@ -75,8 +75,8 @@ static const wchar_t	WSTR_REGEXKW_HEAD[]		= L"// 正規表現キーワード Ver1\n";
 static const wchar_t	WSTR_KEYHELP_HEAD[]		= L"// キーワード辞書設定 Ver1\n";
 
 // キー割り当て
-static const wchar_t	WSTR_KEYBIND_HEAD4[]	= L"SakuraKeyBind_Ver4";	//2013.12.05 syat 多言語対応
-static const wchar_t	WSTR_KEYBIND_HEAD3[]	= L"SakuraKeyBind_Ver3";	//2007.10.05 kobake ファイル形式をini形式に変更
+static const wchar_t	WSTR_KEYBIND_HEAD4[]	= L"SakuraKeyBind_Ver4";	// 2013.12.05 syat 多言語対応
+static const wchar_t	WSTR_KEYBIND_HEAD3[]	= L"SakuraKeyBind_Ver3";	// 2007.10.05 kobake ファイル形式をini形式に変更
 static const wchar_t	WSTR_KEYBIND_HEAD2[]	= L"// テキストエディタキー設定 Ver2";	// (旧バージョン(ANSI版)） 読み込みのみ対応 2008/5/3 by Uchi
 
 // カスタムメニューファイル
@@ -524,7 +524,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	sErrMsg =  std::wstring(LSW(STR_IMPEXP_OK_EXPORT)) + sFileName + files;
+	sErrMsg = std::wstring(LSW(STR_IMPEXP_OK_EXPORT)) + sFileName + files;
 
 	return true;
 }
@@ -582,7 +582,7 @@ bool CImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 	CDataProfile cProfile;
 	cProfile.SetWritingMode();
 	CShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_ColorInfoArr);
-	if (!cProfile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { //Jan. 15, 2001 Stonee
+	if (!cProfile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { // Jan. 15, 2001 Stonee
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_EXPORT)) + sFileName;
 		return false;
 	}
@@ -749,19 +749,19 @@ bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 
 		WCHAR *p1, *p2, *p3;
 		p1 = &buff[9];
-		p3 = p1;					//結果確認用に初期化
+		p3 = p1;					// 結果確認用に初期化
 		if ((p2 = wcsstr(p1, LTEXT(",")))) {
 			*p2 = LTEXT('\0');
-			p2 += 1;				//カンマの次が、次の要素
+			p2 += 1;				// カンマの次が、次の要素
 			if ((p3=wcsstr(p2, LTEXT(",")))) {
 				*p3 = LTEXT('\0');
-				p3 += 1;			//カンマの次が、次の要素
+				p3 += 1;			// カンマの次が、次の要素
 			}
 		}// 結果の確認
-		if ((p3 == NULL) ||			//カンマが1個足りない
-			(p3 == p1) //||			//カンマが2個足りない
+		if ((p3 == NULL) ||			// カンマが1個足りない
+			(p3 == p1) //||			// カンマが2個足りない
 			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
-			//(NULL != wcsstr(p3,","))	//カンマが多すぎる
+			//(NULL != wcsstr(p3,","))	// カンマが多すぎる
 		) {
 			//	2007.02.03 genta 処理を継続
 			++invalid_record;
@@ -881,7 +881,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	if (bVer3 || bVer4) {
 		// Count取得 -> nKeyNameArrNum
 		in.IOProfileData(szSecInfo, L"KEYBIND_COUNT", sKeyBind.m_nKeyNameArrNum);
-		if (sKeyBind.m_nKeyNameArrNum < 0 || sKeyBind.m_nKeyNameArrNum > KEYNAME_SIZE) {	bVer3=false; bVer4=false; } //範囲チェック
+		if (sKeyBind.m_nKeyNameArrNum < 0 || sKeyBind.m_nKeyNameArrNum > KEYNAME_SIZE) {	bVer3=false; bVer4=false; } // 範囲チェック
 
 		CShareData_IO::IO_KeyBind(in, sKeyBind, true);	// 2008/5/25 Uchi
 	}
@@ -912,14 +912,14 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 			}
 		}
 		if (bVer2) {
-			//各要素取得
+			// 各要素取得
 			for (int i = 0; i < KEYNAME_SIZE; i++) {
 				int n, kc, nc;
-				//値 -> szData
+				// 値 -> szData
 				wchar_t szData[1024];
 				auto_strcpy(szData, in.ReadLineW().c_str());
 
-				//解析開始
+				// 解析開始
 				cnt = swscanf(szData, L"KeyBind[%03d]=%04x,%n",
 												&n,   &kc, &nc);
 				if (cnt !=2 && cnt !=3)	{
@@ -932,7 +932,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 				sKeyBind.m_pKeyNameArr[i].m_nKeyCode = (short)kc;
 				wchar_t* p = szData + nc;
 
-				//後に続くトークン
+				// 後に続くトークン
 				for (int j = 0; j < 8; j++) {
 					wchar_t* q = auto_strchr(p, L',');
 					if (!q) {
@@ -941,8 +941,8 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 					}
 					*q = L'\0';
 
-					//機能名を数値に置き換える。(数値の機能名もあるかも)
-					//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
+					// 機能名を数値に置き換える。(数値の機能名もあるかも)
+					// @@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 					EFunctionCode n = CSMacroMgr::GetFuncInfoByName(G_AppInstance(), p, NULL);
 					if (n == F_INVALID) {
 						if (WCODE::Is09(*p)) {
@@ -1025,7 +1025,7 @@ bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 	cProfile.IOProfileData(szSecInfo, L"KEYBIND_VERSION", szKeydataHead);
 	cProfile.IOProfileData_WrapInt(szSecInfo, L"KEYBIND_COUNT", m_Common.m_sKeyBind.m_nKeyNameArrNum);
 
-	//内容
+	// 内容
 	CShareData_IO::IO_KeyBind(cProfile, m_Common.m_sKeyBind, true);
 
 	// 書き込み
@@ -1046,7 +1046,7 @@ bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring	strPath = to_tchar(sFileName.c_str());
 
-	//ヘッダ確認
+	// ヘッダ確認
 	CTextInputStream in(strPath.c_str());
 	if (!in) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
@@ -1057,7 +1057,7 @@ bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 	cProfile.SetReadingMode();
 	cProfile.ReadProfile(strPath.c_str());
 
-	//バージョン確認
+	// バージョン確認
 	WCHAR szHeader[256];
 	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(szHeader));
 	if (wcscmp(szHeader, WSTR_CUSTMENU_HEAD_V2) != 0) {
@@ -1085,19 +1085,19 @@ bool CImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.Close();
 
 	// カスタムメニュー情報
-	//ヘッダ
+	// ヘッダ
 	CDataProfile	cProfile;
 	CommonSetting_CustomMenu* menu=&m_Common.m_sCustomMenu;
 
 	// 書き込みモード設定
 	cProfile.SetWritingMode();
 
-	//ヘッダ
+	// ヘッダ
 	cProfile.IOProfileData(szSecInfo, L"MENU_VERSION", MakeStringBufferW(WSTR_CUSTMENU_HEAD_V2));
 	int iWork = MAX_CUSTOM_MENU;
 	cProfile.IOProfileData_WrapInt(szSecInfo, L"MAX_CUSTOM_MENU", iWork);
 	
-	//内容
+	// 内容
 	CShareData_IO::IO_CustMenu(cProfile, *menu, true);
 
 	// 書き込み
@@ -1139,7 +1139,7 @@ bool CImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 			continue;
 		}
 		
-		//解析
+		// 解析
 		if (0 < szLine.length()) {
 			// ｎ番目のセットにキーワードを追加
 			int nRetValue = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWord(m_nIdx, szLine.c_str());
@@ -1180,7 +1180,7 @@ bool CImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.WriteF(m_bCase ? L"True" : L"False");
 	out.WriteF(L"\n\n");
 
-	m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SortKeyWord(m_nIdx);	//MIK 2000.12.01 sort keyword
+	m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SortKeyWord(m_nIdx);	// MIK 2000.12.01 sort keyword
 
 	// ｎ番目のセットのキーワードの数を返す
 	nKeyWordNum = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWordNum(m_nIdx);

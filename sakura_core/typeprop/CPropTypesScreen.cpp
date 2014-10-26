@@ -76,7 +76,7 @@ static const DWORD p_helpids1[] = {	//11300
 };
 
 
-//アウトライン解析方法・標準ルール
+// アウトライン解析方法・標準ルール
 TYPE_NAME_ID<EOutlineType> OlmArr[] = {
 //	{ OUTLINE_C,		_T("C") },
 	{ OUTLINE_CPP,		STR_OUTLINE_CPP },
@@ -170,8 +170,8 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_OUTLINERULEFILE), _countof2(m_Types.m_szOutlineRuleFilename) - 1);	//	Oct. 5, 2002 genta 画面上でも入力制限
 
 		if (0 == m_Types.m_nIdx) {
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPENAME), FALSE);	//設定の名前
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPEEXTS), FALSE);	//ファイル拡張子
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPENAME), FALSE);	// 設定の名前
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPEEXTS), FALSE);	// ファイル拡張子
 		}
 		return TRUE;
 		
@@ -415,7 +415,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.11.17 add start MIK
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids1);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -515,7 +515,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 		}
 		Combo_SetCurSel(hwndCombo, nSelPos);
 
-		// 改行時に末尾の空白を削除	//2005.10.11 ryoji
+		// 改行時に末尾の空白を削除	// 2005.10.11 ryoji
 		::CheckDlgButton(hwndDlg, IDC_CHECK_RTRIM_PREVLINE, m_Types.m_bRTrimPrevLine);
 	}
 
@@ -685,7 +685,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		nSelPos = Combo_GetCurSel(hwndCombo);
 		m_Types.m_nIndentLayout = IndentTypeArr[nSelPos].nMethod;	// 折り返し部インデント種別
 
-		// 改行時に末尾の空白を削除	//2005.10.11 ryoji
+		// 改行時に末尾の空白を削除	// 2005.10.11 ryoji
 		m_Types.m_bRTrimPrevLine = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_RTRIM_PREVLINE);
 	}
 
@@ -704,7 +704,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 			m_Types.m_eDefaultOutline = OUTLINE_FILE;
 		}
 
-		// ルールファイル	//2003.06.23 Moca ルールを使っていなくてもファイル名を保持
+		// ルールファイル	// 2003.06.23 Moca ルールを使っていなくてもファイル名を保持
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_OUTLINERULEFILE, m_Types.m_szOutlineRuleFilename, _countof2(m_Types.m_szOutlineRuleFilename));
 	}
 

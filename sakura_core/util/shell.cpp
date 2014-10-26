@@ -26,7 +26,7 @@
 #include <HtmlHelp.h>
 #include <ShlObj.h>
 #include <ShellAPI.h>
-#include <CdErr.h> // Nov. 3, 2005 genta	//CDERR_FINDRESFAILURE“™
+#include <CdErr.h> // Nov. 3, 2005 genta	// CDERR_FINDRESFAILURE“™
 #include "util/shell.h"
 #include "util/string_ex2.h"
 #include "util/file.h"

@@ -240,7 +240,7 @@ void CMainToolBar::CreateToolBar(void)
 				count++;
 				break;
 
-			case TBSTYLE_COMBOBOX:	//コンボボックス
+			case TBSTYLE_COMBOBOX:	// コンボボックス
 				{
 					RECT			rc;
 					TBBUTTONINFO	tbi;
@@ -304,7 +304,7 @@ void CMainToolBar::CreateToolBar(void)
 								::SendMessage(m_hwndSearchBox, WM_SETFONT, (WPARAM)m_hFontSearchBox, MAKELONG (TRUE, 0));
 							}
 
-							// //入力長制限
+							// 入力長制限
 							// Combo_LimitText(m_hwndSearchBox, (WPARAM)_MAX_PATH - 1);
 
 							// 検索ボックスを更新	// 関数化 2010/6/6 Uchi
@@ -322,8 +322,8 @@ void CMainToolBar::CreateToolBar(void)
 				}
 				break;
 
-			case TBSTYLE_BUTTON:	//ボタン
-			case TBSTYLE_SEP:		//セパレータ
+			case TBSTYLE_BUTTON:	// ボタン
+			case TBSTYLE_SEP:		// セパレータ
 			default:
 				Toolbar_AddButtons(m_hwndToolBar, 1, &tbb);
 				count++;

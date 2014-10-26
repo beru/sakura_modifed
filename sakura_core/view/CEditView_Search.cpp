@@ -122,7 +122,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	if (m_pTypeData->m_bUseKeyHelpPrefix)
 		nCmpLen = wcslen(pcmemCurText->GetStringPtr());	// 2006.04.10 fon
 	m_cTipWnd.m_KeyWasHit = FALSE;
-	for (int i =0 ; i < m_pTypeData->m_nKeyHelpNum; i++) {	//最大数：MAX_KEYHELP_FILE
+	for (int i =0 ; i < m_pTypeData->m_nKeyHelpNum; i++) {	// 最大数：MAX_KEYHELP_FILE
 		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
 			CNativeW* pcmemRefText;
@@ -312,9 +312,9 @@ void CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 現在位置が検索文字列に該当するか
-//2002.02.08 hor
-//正規表現で検索したときの速度改善のため、マッチ先頭位置を引数に追加
-//Jun. 26, 2001 genta	正規表現ライブラリの差し替え
+// 2002.02.08 hor
+// 正規表現で検索したときの速度改善のため、マッチ先頭位置を引数に追加
+// Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 /*
 	@retval 0
 		(パターン検索時) 指定位置以降にマッチはない。

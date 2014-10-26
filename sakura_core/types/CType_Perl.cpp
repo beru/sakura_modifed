@@ -6,9 +6,9 @@
 #include "outline/CFuncInfoArr.h"
 #include "view/Colors/EColorIndexType.h"
 
-/* Perl */
-//Jul. 08, 2001 JEPRO Perl ユーザに贈る
-//Jul. 08, 2001 JEPRO 追加
+// Perl
+// Jul. 08, 2001 JEPRO Perl ユーザに贈る
+// Jul. 08, 2001 JEPRO 追加
 void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 {
 	// 名前と拡張子
@@ -16,12 +16,12 @@ void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("cgi,pl,pm"));
 
 	// 設定
-	pType->m_cLineComment.CopyTo(0, L"#", -1);					/* 行コメントデリミタ */
-	pType->m_eDefaultOutline = OUTLINE_PERL;						/* アウトライン解析方法 */
-	pType->m_nKeyWordSetIdx[0]  = 11;								/* キーワードセット */
-	pType->m_nKeyWordSetIdx[1] = 12;								/* キーワードセット2 */
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			/* 半角数値を色分け表示 */
-	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	//対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
+	pType->m_cLineComment.CopyTo(0, L"#", -1);						// 行コメントデリミタ
+	pType->m_eDefaultOutline = OUTLINE_PERL;						// アウトライン解析方法
+	pType->m_nKeyWordSetIdx[0]  = 11;								// キーワードセット
+	pType->m_nKeyWordSetIdx[1] = 12;								// キーワードセット2
+	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示
+	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトON	//Sep. 21, 2002 genta
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -153,7 +153,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 
 
 const wchar_t* g_ppszKeywordsPERL[] = {
-	//Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
+	// Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
 	L"break",
 	L"continue",
 	L"do",
@@ -387,7 +387,7 @@ const wchar_t* g_ppszKeywordsPERL[] = {
 int g_nKeywordsPERL = _countof(g_ppszKeywordsPERL);
 
 
-//Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
+// Jul. 10, 2001 JEPRO	変数を第２強調キーワードとして分離した
 // 2008/05/05 novice 重複文字列削除
 const wchar_t* g_ppszKeywordsPERL2[] = {
 	L"$ARGV",

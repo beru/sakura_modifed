@@ -8,11 +8,11 @@
 // PL/SQL
 void CType_Sql::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("PL/SQL"));
 	_tcscpy(pType->m_szTypeExts, _T("sql,plsql"));
 
-	//設定
+	// 設定
 	pType->m_cLineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
 	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
 	pType->m_nStringType = STRING_LITERAL_PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']

@@ -63,8 +63,8 @@ void CTextArea::UpdateAreaMetrics(HDC hdc)
 	// 行間隔
 	pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight() + pView->m_pTypeData->m_nLineSpace);
 
-	//表示域の再計算
-	//2010.08.24 Dx/Dyを使うので後で設定
+	// 表示域の再計算
+	// 2010.08.24 Dx/Dyを使うので後で設定
 	UpdateViewColRowNums();
 }
 
@@ -80,14 +80,14 @@ void CTextArea::GenerateCharRect(RECT* rc, const DispPos& sPos, int nHankakuNum)
 
 bool CTextArea::TrimRectByArea(RECT* rc) const
 {
-	//左はみ出し調整
+	// 左はみ出し調整
 	if (rc->left < GetAreaLeft()) {
 		rc->left = GetAreaLeft();
 	}
 
-	if (rc->left >= rc->right) return false; //左と右があべこべ
-	if (rc->left >= GetAreaRight()) return false; //画面外(右)
-	if (rc->right <= GetAreaLeft()) return false; //画面外(左)
+	if (rc->left >= rc->right) return false; // 左と右があべこべ
+	if (rc->left >= GetAreaRight()) return false; // 画面外(右)
+	if (rc->right <= GetAreaLeft()) return false; // 画面外(左)
 
 	//$ 元動作踏襲：画面上下のはみ出し判定は省略
 
@@ -110,14 +110,14 @@ bool CTextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
 	rc->top    = sPos.GetDrawPos().y;
 	rc->bottom = sPos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
 
-	//左はみ出し調整
+	// 左はみ出し調整
 	if (rc->left < GetAreaLeft()) {
 		rc->left = GetAreaLeft();
 	}
 
-	if (rc->left >= rc->right) return false; //左と右があべこべ
-	if (rc->left >= GetAreaRight()) return false; //画面外(右)
-	if (rc->right <= GetAreaLeft()) return false; //画面外(左)
+	if (rc->left >= rc->right) return false; // 左と右があべこべ
+	if (rc->left >= GetAreaRight()) return false; // 画面外(右)
+	if (rc->right <= GetAreaLeft()) return false; // 画面外(左)
 
 	//$ 元動作踏襲：画面上下のはみ出し判定は省略
 
@@ -282,7 +282,7 @@ void CTextArea::GenerateLeftRect  (RECT* rc, CLayoutInt nColCount) const
 
 void CTextArea::GenerateRightRect (RECT* rc, CLayoutInt nColCount) const
 {
-	rc->left   = m_nViewAlignLeft + m_nViewCx - (Int)nColCount * m_pEditView->GetTextMetrics().GetHankakuDx(); //2008.01.26 kobake 符号が逆になってたのを修正
+	rc->left   = m_nViewAlignLeft + m_nViewCx - (Int)nColCount * m_pEditView->GetTextMetrics().GetHankakuDx(); // 2008.01.26 kobake 符号が逆になってたのを修正
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
 	rc->top    = m_nViewAlignTop;
 	rc->bottom = m_nViewAlignTop  + m_nViewCy;

@@ -128,9 +128,9 @@ ECharKind CWordParse::WhatKindOfChar(
 		}
 		//if (c == CR              ) return CK_CR;
 		//if (c == LF              ) return CK_LF;
-		//if (c == TAB             ) return CK_TAB;		// タブ
+		//if (c == TAB             ) return CK_TAB;			// タブ
 		//if (IsControlCode(c)     ) return CK_CTRL;		// 制御文字
-		//if (c == SPACE           ) return CK_SPACE;	// 半角スペース
+		//if (c == SPACE           ) return CK_SPACE;		// 半角スペース
 		//if (isCSymbol(c)         ) return CK_CSYM;		// 識別子に使用可能な文字 (半角英数字、半角アンダースコア)
 		if (IsHankakuKatakana(c)) return CK_KATA;	// 半角のカタカナ
 		if (0x00C0 <= c && c < 0x0180 && c != 0x00D7 && c != 0x00F7) return CK_LATIN;
@@ -337,9 +337,9 @@ uchar_t wc_to_c(wchar_t wc)
 //! wcがSJIS1バイト文字ならcharに変換して0～255を返す。SJIS2バイト文字なら0を返す。
 	char buf[3]={0, 0, 0};
 	int ret=wctomb(buf, wc);
-	if (ret == -1) return 0;   //エラー
-	if (buf[1] != 0) return 0; //エラー扱い
-	return buf[0] <= 0x7F ? buf[0]: 0; //1バイトで表せたので、これを返す  2011.12.17 バッファオーバーランの修正
+	if (ret == -1) return 0;   // エラー
+	if (buf[1] != 0) return 0; // エラー扱い
+	return buf[0] <= 0x7F ? buf[0]: 0; // 1バイトで表せたので、これを返す  2011.12.17 バッファオーバーランの修正
 #endif
 	// 2011.12.15 wctombを使わない版
 	if (wc <= 0x7F) {
@@ -385,8 +385,8 @@ BOOL IsURL(
 		{ L"nntp://",		7,	false }, // 8
 		{ L"prospero://",	11,	false }, // 9
 		{ L"telnet://",		9,	false }, // 10
-		{ L"tp://",			5,	false }, // 11	//2004.02.02
-		{ L"ttp://",		6,	false }, // 12	//2004.02.02
+		{ L"tp://",			5,	false }, // 11	// 2004.02.02
+		{ L"ttp://",		6,	false }, // 12	// 2004.02.02
 		{ L"wais://",		7,	false }, // 13
 		{ L"{",				0,	false }  // 14  /* '{' is 'z'+1 : terminate */
 	};
@@ -399,7 +399,7 @@ BOOL IsURL(
 	const char urN = 7;
 	const char urP = 9;
 	const char urT = 10;
-	const char urW = 13;	//2004.02.02
+	const char urW = 13;	// 2004.02.02
 
 	static const char url_char[] = {
 	  /* +0  +1  +2  +3  +4  +5  +6  +7  +8  +9  +A  +B  +C  +D  +E  +F */

@@ -136,10 +136,10 @@ INT_PTR CPropKeybind::DispatchEvent(
 		hwndEDIT_KEYSFUNC = ::GetDlgItem(hwndDlg, IDC_EDIT_KEYSFUNC);
 
 		// キー選択時の処理
-//	From Here Oct. 14, 2000 JEPRO わかりにくいので選択しないように変更	//Oct. 17, 2000 JEPRO 復活！
+//	From Here Oct. 14, 2000 JEPRO わかりにくいので選択しないように変更	// Oct. 17, 2000 JEPRO 復活！
 //	// キーリストの先頭の項目を選択（リストボックス）
-		List_SetCurSel(hwndKeyList, 0);	//Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
-		::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);	//Oct. 14, 2000 JEPRO ここはどっちでもいい？(わからん)
+		List_SetCurSel(hwndKeyList, 0);	// Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
+		::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);	// Oct. 14, 2000 JEPRO ここはどっちでもいい？(わからん)
 //	To Here Oct. 14, 2000
 		::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
@@ -331,17 +331,17 @@ INT_PTR CPropKeybind::DispatchEvent(
 					if (ret != LB_ERR) {
 						i = 0;
 						p = buff;
-						//SHIFT
+						// SHIFT
 						if (auto_memcmp(p, STR_SHIFT_PLUS, _tcslen(STR_SHIFT_PLUS)) == 0) {
 							p += _tcslen(STR_SHIFT_PLUS);
 							i |= _SHIFT;
 						}
-						//CTRL
+						// CTRL
 						if (auto_memcmp(p, STR_CTRL_PLUS, _tcslen(STR_CTRL_PLUS)) == 0) {
 							p += _tcslen(STR_CTRL_PLUS);
 							i |= _CTRL;
 						}
-						//ALT
+						// ALT
 						if (auto_memcmp(p, STR_ALT_PLUS, _tcslen(STR_ALT_PLUS)) == 0) {
 							p += _tcslen(STR_ALT_PLUS);
 							i |= _ALT;
@@ -349,12 +349,12 @@ INT_PTR CPropKeybind::DispatchEvent(
 						for (j = 0; j < csKeybind.m_nKeyNameArrNum; j++) {
 							if (_tcscmp(csKeybind.m_pKeyNameArr[j].m_szKeyName, p) == 0) {
 								List_SetCurSel(hwndKeyList, j);
-								if (i & _SHIFT) ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED);  //チェック
-								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_UNCHECKED);  //チェックをはずす
-								if (i & _CTRL)  ::CheckDlgButton(hwndDlg, IDC_CHECK_CTRL,  BST_CHECKED);  //チェック
-								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_CTRL,  BST_UNCHECKED);  //チェックをはずす
-								if (i & _ALT)   ::CheckDlgButton(hwndDlg, IDC_CHECK_ALT,   BST_CHECKED);  //チェック
-								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_ALT,   BST_UNCHECKED);  //チェックをはずす
+								if (i & _SHIFT) ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED);	// チェック
+								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_UNCHECKED);	// チェックをはずす
+								if (i & _CTRL)  ::CheckDlgButton(hwndDlg, IDC_CHECK_CTRL,  BST_CHECKED);	// チェック
+								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_CTRL,  BST_UNCHECKED);	// チェックをはずす
+								if (i & _ALT)   ::CheckDlgButton(hwndDlg, IDC_CHECK_ALT,   BST_CHECKED);	// チェック
+								else            ::CheckDlgButton(hwndDlg, IDC_CHECK_ALT,   BST_UNCHECKED);	// チェックをはずす
 								::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_KEY, LBN_SELCHANGE), (LPARAM)hwndKeyList);
 
 								// キー一覧の文字列も変更
@@ -396,7 +396,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.11.07 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -415,7 +415,7 @@ void CPropKeybind::SetData(HWND hwndDlg)
 	m_cLookup.SetCategory2Combo(hwndCombo);	//	Oct. 2, 2001 genta
 
 	// 種別の先頭の項目を選択（コンボボックス）
-	Combo_SetCurSel(hwndCombo, 0);	//Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
 	// キー一覧に文字列をセット（リストボックス）
 	HWND hwndKeyList = ::GetDlgItem(hwndDlg, IDC_LIST_KEY);

@@ -31,8 +31,8 @@
 #include "doc/logic/CDocLine.h"
 #include "cmd/CViewCommander_inline.h"
 #include "window/CEditWnd.h"
-#include "dlg/CDlgCtrlCode.h"	//コントロールコードの入力(ダイアログ)
-#include "dlg/CDlgFavorite.h"	//履歴の管理	//@@@ 2003.04.08 MIK
+#include "dlg/CDlgCtrlCode.h"	// コントロールコードの入力(ダイアログ)
+#include "dlg/CDlgFavorite.h"	// 履歴の管理	//@@@ 2003.04.08 MIK
 #include "debug/CRunningTimer.h"
 
 using namespace std; // 2002/2/3 aroka
@@ -80,7 +80,7 @@ void CEditView::InsertData_CEditView(
 	MY_RUNNINGTIMER(cRunningTimer, "CEditView::InsertData_CEditView");
 #endif
 
-	//2007.10.18 kobake COpe処理をここにまとめる
+	// 2007.10.18 kobake COpe処理をここにまとめる
 	CInsertOpe* pcOpe = NULL;
 	int opeSeq;
 	if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
@@ -103,7 +103,7 @@ void CEditView::InsertData_CEditView(
 		ptInsertPos = GetCaret().GetCaretLayoutPos();
 	}
 
-	//テキスト取得 -> pLine, nLineLen, pcLayout
+	// テキスト取得 -> pLine, nLineLen, pcLayout
 	bool			bHintPrev = false;	// 更新が前行からになる可能性があることを示唆する
 	bool			bHintNext = false;	// 更新が次行からになる可能性があることを示唆する
 	CLogicInt		nLineLen;
@@ -324,7 +324,7 @@ void CEditView::InsertData_CEditView(
 		pcOpe->m_pcmemData.clear();		// 操作に関連するデータ
 	}
 
-	//2007.10.18 kobake ここでCOpe処理をまとめる
+	// 2007.10.18 kobake ここでCOpe処理をまとめる
 	if (!m_bDoing_UndoRedo) {
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
 			*pptNewPos,
@@ -362,7 +362,7 @@ void CEditView::DeleteData2(
 	}
 	CLogicInt nIdxFrom = LineColumnToIndex(pcLayout, _ptCaretPos.GetX2());
 
-	//2007.10.18 kobake COpeの生成をここにまとめる
+	// 2007.10.18 kobake COpeの生成をここにまとめる
 	CDeleteOpe*	pcOpe = NULL;
 	CLayoutInt columnFrom = LineIndexToColumn(pcLayout, nIdxFrom);
 	CLayoutInt columnTo = LineIndexToColumn(pcLayout, nIdxFrom + nDelLen);
@@ -410,7 +410,7 @@ void CEditView::DeleteData2(
 			pcMem->AppendNativeData(memDeleted[i].cmemLine);
 		}
 	}
-	//2007.10.18 kobake COpeの追加をここにまとめる
+	// 2007.10.18 kobake COpeの追加をここにまとめる
 	if (pcOpe) {
 		pcOpe->m_pcmemData.swap(memDeleted);
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
@@ -603,7 +603,7 @@ void CEditView::DeleteData(
 		if (WCODE::IsLineDelimiter(pLine[nCurIdx])) {
 			// 改行
 			nNxtIdx = nCurIdx + pcLayout->GetLayoutEol().GetLen();
-			nNxtPos = GetCaret().GetCaretLayoutPos().GetX() + CLayoutInt((Int)pcLayout->GetLayoutEol().GetLen()); //※改行コードの文字数を文字幅と見なす
+			nNxtPos = GetCaret().GetCaretLayoutPos().GetX() + CLayoutInt((Int)pcLayout->GetLayoutEol().GetLen()); // ※改行コードの文字数を文字幅と見なす
 		}else {
 			nNxtIdx = CLogicInt(CNativeW::GetCharNext(pLine, nLineLen, &pLine[nCurIdx]) - pLine);
 			// 指定された行のデータ内の位置に対応する桁の位置を調べる
@@ -642,7 +642,7 @@ void CEditView::DeleteData(
 			if (EOL_NONE != pcLayout->GetLayoutEol()) {
 				goto end_of_func;
 			}
-			//ファイルの最後に移動
+			// ファイルの最後に移動
 			GetCommander().Command_GOFILEEND(false);
 		}
 	}
@@ -761,7 +761,7 @@ void CEditView::ReplaceData_CEditView3(
 		//	To Here
 	}
 
-	//削除範囲ロジック単位 sDelRange -> sDelRangeLogic
+	// 削除範囲ロジック単位 sDelRange -> sDelRangeLogic
 	CLogicRange sDelRangeLogic;
 	if (!bDelRangeUpdate && psDelRangeLogicFast) {
 		sDelRangeLogic = *psDelRangeLogicFast;

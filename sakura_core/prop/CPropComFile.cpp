@@ -82,7 +82,7 @@ INT_PTR CPropFile::DispatchEvent(
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
 //	int			nVal;
-	int			nVal;	//Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
+	int			nVal;	// Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
 //	char		szFolder[_MAX_PATH];
 
 	switch (uMsg) {
@@ -244,7 +244,7 @@ INT_PTR CPropFile::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -368,7 +368,7 @@ int CPropFile::GetData(HWND hwndDlg)
 	if (1 > csFile.m_nDropFileNumMax) {
 		csFile.m_nDropFileNumMax = 1;
 	}
-	if (99 < csFile.m_nDropFileNumMax) {	//Sept. 21, 2000, JEPRO 16より大きいときに99と制限されていたのを修正(16→99と変更)
+	if (99 < csFile.m_nDropFileNumMax) {	// Sept. 21, 2000, JEPRO 16より大きいときに99と制限されていたのを修正(16→99と変更)
 		csFile.m_nDropFileNumMax = 99;
 	}
 
@@ -468,12 +468,12 @@ void CPropFile::EnableFilePropInput(HWND hwndDlg)
 	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_AUTOSAVE)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), TRUE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), TRUE);	//Sept. 6, 2000 JEPRO 自動保存にしたときだけEnableになるように変更
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), TRUE);	// Sept. 6, 2000 JEPRO 自動保存にしたときだけEnableになるように変更
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), TRUE);	//@@@ 2001.03.21 by MIK
 	}else {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), FALSE);
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), FALSE);	//Sept. 6, 2000 JEPRO 同上
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), FALSE);	// Sept. 6, 2000 JEPRO 同上
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL), FALSE);	//@@@ 2001.03.21 by MIK
 	}
 

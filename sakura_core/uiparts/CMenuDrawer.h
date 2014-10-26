@@ -29,15 +29,15 @@ struct DLLSHAREDATA;
 //	初期値の300から増やす
 // #define MAX_MENUITEMS	400 // 2011.11.23 Moca 上限撤廃
 
-//ツールバーの拡張	//@@@ 2002.06.15 MIK
-#define TBSTYLE_COMBOBOX	((BYTE)0x40)	//ツールバーにコンボボックス
-#ifndef TBSTYLE_DROPDOWN	//IE3以上
+// ツールバーの拡張	//@@@ 2002.06.15 MIK
+#define TBSTYLE_COMBOBOX	((BYTE)0x40)	// ツールバーにコンボボックス
+#ifndef TBSTYLE_DROPDOWN	// IE3以上
 	#define TBSTYLE_DROPDOWN	0x0008
 #endif
-#ifndef TB_SETEXTENDEDSTYLE	//IE4以上
+#ifndef TB_SETEXTENDEDSTYLE	// IE4以上
 	#define TB_SETEXTENDEDSTYLE     (WM_USER + 84)  // For TBSTYLE_EX_*
 #endif
-#ifndef TBSTYLE_EX_DRAWDDARROWS	//IE4以上
+#ifndef TBSTYLE_EX_DRAWDDARROWS	// IE4以上
 	#define TBSTYLE_EX_DRAWDDARROWS 0x00000001
 #endif
 
@@ -64,7 +64,7 @@ public:
 	*/
 	void ResetContents(void);
 	//void MyAppendMenu(HMENU , int , int , const char*, BOOL = TRUE);	/* メニュー項目を追加 */
-	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const TCHAR*     pszLabel, const TCHAR*     pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1);	/* メニュー項目を追加 */	//お気に入り	//@@@ 2003.04.08 MIK	// add pszKey	2010/5/17 Uchi
+	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const TCHAR*     pszLabel, const TCHAR*     pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1);	/* メニュー項目を追加 */	// お気に入り	//@@@ 2003.04.08 MIK	// add pszKey	2010/5/17 Uchi
 	void MyAppendMenu(HMENU hMenu, int nFlag, UINT_PTR nFuncId, const NOT_TCHAR* pszLabel, const NOT_TCHAR* pszKey, BOOL bAddKeyStr = TRUE, int nForceIconId = -1) {
 		MyAppendMenu(hMenu, nFlag, nFuncId, to_tchar(pszLabel), to_tchar(pszKey), bAddKeyStr, nForceIconId);
 	}
@@ -79,14 +79,14 @@ public:
 	int GetIconIdByFuncId(int nIndex) const;
 
 	TBBUTTON getButton(int nToolBarNo) const; // 20050809 aroka
-	void AddToolButton(int iBitmap, int iCommand);	//ツールバーボタンを追加する 2009.11.14 syat
+	void AddToolButton(int iBitmap, int iCommand);	// ツールバーボタンを追加する 2009.11.14 syat
 	
 	// iBitmapに対応する定数
-	static const int TOOLBAR_ICON_MACRO_INTERNAL = 384;		//外部マクロ既定アイコン
-	static const int TOOLBAR_ICON_PLUGCOMMAND_DEFAULT = 283;//プラグインコマンド既定アイコン
+	static const int TOOLBAR_ICON_MACRO_INTERNAL = 384;		// 外部マクロ既定アイコン
+	static const int TOOLBAR_ICON_PLUGCOMMAND_DEFAULT = 283;// プラグインコマンド既定アイコン
 	// m_tbMyButtonのindexに対応する定数
-	static const int TOOLBAR_BUTTON_F_SEPARATOR = 0;		//セパレータ（ダミー）
-	static const int TOOLBAR_BUTTON_F_TOOLBARWRAP = 384;	//ツールバー折返しアイコン（ダミー）
+	static const int TOOLBAR_BUTTON_F_SEPARATOR = 0;		// セパレータ（ダミー）
+	static const int TOOLBAR_BUTTON_F_TOOLBARWRAP = 384;	// ツールバー折返しアイコン（ダミー）
 
 private:
 	void DeleteCompDC();
@@ -103,7 +103,7 @@ private:
 	HWND			m_hWndOwner;
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
-//2009.11.14 syat プラグインコマンド動的追加のためvector化
+// 2009.11.14 syat プラグインコマンド動的追加のためvector化
 	std::vector<TBBUTTON>	m_tbMyButton;	/* ツールバーのボタン */
 	int				m_nMyButtonNum;
 	int				m_nMyButtonFixSize;	// 固定部分の最大数

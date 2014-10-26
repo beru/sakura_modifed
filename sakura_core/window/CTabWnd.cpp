@@ -48,7 +48,7 @@
 #include "env/CSakuraEnvironment.h"
 #include "uiparts/CGraphics.h"
 #include "recent/CRecentEditNode.h"
-#include "util/os.h" //WM_THEMECHANGED
+#include "util/os.h" // WM_THEMECHANGED
 #include "util/window.h"
 #include "util/module.h"
 #include "util/string_ex2.h"
@@ -828,7 +828,7 @@ HWND CTabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 	RegisterWC(
 		hInstance,
 		NULL,								// Handle to the class icon.
-		NULL,								//Handle to a small icon
+		NULL,								// Handle to a small icon
 		::LoadCursor(NULL, IDC_ARROW),	// Handle to the class cursor.
 		// 2006.01.30 ryoji 背景は WM_PAINT で描画するほうがちらつかない（と思う）
 		//(HBRUSH)(COLOR_3DFACE + 1),			// Handle to the class background brush.
@@ -1587,7 +1587,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 	if (!m_hwndTab)
 		return;
 
-	bool	bFlag = false;	//前回何もタブがなかったか？
+	bool	bFlag = false;	// 前回何もタブがなかったか？
 	int		nCount;
 	int		nIndex;
 	HWND	hwndUpDown;
@@ -1598,14 +1598,14 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 	nCount = TabCtrl_GetItemCount(m_hwndTab);
 	if (nCount <= 0) {
 		bFlag = true;
-		//最初のときはすでに存在するウインドウの情報も登録する必要がある。
+		// 最初のときはすでに存在するウインドウの情報も登録する必要がある。
 		// 起動時、CTabWnd::Open()内のRefresh()ではまだグループ入り前のため既に別ウィンドウがあってもタブは空
 		if (wParam == TWNT_ADD)
 			Refresh();	// 続けてTWNT_ADD処理で自分以外のウィンドウを隠す
 	}
 
 	switch (wParam) {
-	case TWNT_ADD:	//ウインドウ登録
+	case TWNT_ADD:	// ウインドウ登録
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (-1 == nIndex) {
 			TCITEM	tcitem;
@@ -1626,11 +1626,11 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 
 		if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
-			//自分ならアクティブに
+			// 自分ならアクティブに
 			if (!::IsWindowVisible(GetParentHwnd())) {
 				ShowHideWindow(GetParentHwnd(), TRUE);
-				//ここに来たということはすでにアクティブ
-				//コマンド実行時のアウトプットで問題があるのでアクティブにする
+				// ここに来たということはすでにアクティブ
+				// コマンド実行時のアウトプットで問題があるのでアクティブにする
 			}
 
 			TabCtrl_SetCurSel(m_hwndTab, nIndex);
@@ -1640,7 +1640,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case TWNT_DEL:	//ウインドウ削除
+	case TWNT_DEL:	// ウインドウ削除
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (-1 != nIndex) {
 			if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
@@ -1667,7 +1667,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (-1 != nIndex) {
 			if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
-				//自分ならアクティブに
+				// 自分ならアクティブに
 				if (!::IsWindowVisible(GetParentHwnd())) {
 					ShowHideWindow(GetParentHwnd(), TRUE);
 				}
@@ -1712,18 +1712,18 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 
 			TabCtrl_SetItem(m_hwndTab, nIndex, &tcitem);
 		}else {
-			//指定のウインドウがないので再表示
+			// 指定のウインドウがないので再表示
 			if (!CAppNodeManager::IsSameGroup(GetParentHwnd(), (HWND)lParam))
 				Refresh();
 		}
 		break;
 
-	case TWNT_REFRESH:	//再表示
+	case TWNT_REFRESH:	// 再表示
 		Refresh((BOOL)lParam);
 		break;
 
-	//Start 2004.07.14 Kazika 追加
-	//タブモード有効になった場合、まとめられる側のウィンドウは隠れる
+	// Start 2004.07.14 Kazika 追加
+	// タブモード有効になった場合、まとめられる側のウィンドウは隠れる
 	case TWNT_MODE_ENABLE:
 		Refresh();
 		if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
@@ -1735,10 +1735,10 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			HideOtherWindows(GetParentHwnd());
 		}
 		break;
-	//End 2004.07.14 Kazika
+	// End 2004.07.14 Kazika
 
-	//Start 2004.08.27 Kazika 追加
-	//タブモード無効になった場合、隠れていたウィンドウは表示状態となる
+	// Start 2004.08.27 Kazika 追加
+	// タブモード無効になった場合、隠れていたウィンドウは表示状態となる
 	case TWNT_MODE_DISABLE:
 		Refresh();
 		if (!::IsWindowVisible(GetParentHwnd())) {
@@ -1746,7 +1746,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 			TabWnd_ActivateFrameWindow(GetParentHwnd(), false);
 		}
 		break;
-	//End 2004.08.27 Kazika
+	// End 2004.08.27 Kazika
 
 	case TWNT_WNDPL_ADJUST:	// ウィンドウ位置合わせ	// 2007.04.03 ryoji
 		AdjustWindowPlacement();

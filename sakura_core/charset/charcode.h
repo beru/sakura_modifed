@@ -96,10 +96,11 @@ extern const unsigned char gm_keyword_char[128];
 // Nov. 27, 2010 syat   速度改善のためテーブルに変更
 inline bool IS_KEYWORD_CHAR(wchar_t wc)
 {
-	if (0 <= wc && wc < _countof(gm_keyword_char) && (gm_keyword_char[wc] == CK_CSYM||gm_keyword_char[wc] == CK_UDEF))
-		return true;
-	else
-		return false;
+	return (1
+		&& 0 <= wc
+		&& wc < _countof(gm_keyword_char)
+		&& (gm_keyword_char[wc] == CK_CSYM||gm_keyword_char[wc] == CK_UDEF)
+	);
 }
 
 
@@ -141,28 +142,27 @@ namespace WCODE {
 		return wc == SPACE || wc == TAB || IsZenkakuSpace(wc);
 	}
 
-	//!インデント構成要素であるかどうか。bAcceptZenSpace: 全角スペースを含めるかどうか
+	//! インデント構成要素であるかどうか。bAcceptZenSpace: 全角スペースを含めるかどうか
 	inline bool IsIndentChar(wchar_t wc, bool bAcceptZenSpace) {
 		if (wc == TAB || wc == SPACE) return true;
 		if (bAcceptZenSpace && IsZenkakuSpace(wc)) return true;
 		return false;
 	}
 
-	//!空白かどうか
+	//! 空白かどうか
 	inline bool IsBlank(wchar_t wc) {
 		return wc == TAB || wc == SPACE || IsZenkakuSpace(wc);
 	}
 
-	//!ファイル名に使える文字であるかどうか
+	//! ファイル名に使える文字であるかどうか
 	inline bool IsValidFilenameChar(const wchar_t* pData, size_t nIndex) {
 		static const wchar_t* table = L"<>?\"|*";
 
 		wchar_t wc = pData[nIndex];
-		if (wcschr(table, wc) != NULL) return false; // table内の文字が含まれていたら、ダメ。
-		else return true;
+		return (wcschr(table, wc) == NULL); // table内の文字が含まれていたら、ダメ。
 	}
 
-	//!タブ表示に使える文字かどうか
+	//! タブ表示に使える文字かどうか
 	inline bool IsTabAvailableCode(wchar_t wc) {
 		//$$要検証
 		if (wc == L'\0') return false;
@@ -261,14 +261,8 @@ namespace ACODE
 	inline bool IsValidFilenameChar(const char* pData, size_t nIndex) {
 		static const char* table = "<>?\"|*";
 		char c = pData[nIndex];
-
 		// table内の文字が含まれていて
-		if (strchr(table, c) != NULL) {
-			// 2013.06.01 判定間違いを削除
-			return false;
-		}
-
-		return true;
+		return (strchr(table, c) == NULL);
 	}
 }
 

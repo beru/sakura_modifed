@@ -1156,7 +1156,7 @@ prev_line:;
 					CModifyVisitor().SetLineModified(pCDocLine, (*pArg->pInsData)[nCount].nSeq);
 					pCDocLine = pCDocLine->GetNextLine();
 				}else {
-					CDocLine* pCDocLineNew = m_pcDocLineMgr->InsertNewLine(pCDocLine);	//pCDocLine‚Ì‘O‚É‘}“ü
+					CDocLine* pCDocLineNew = m_pcDocLineMgr->InsertNewLine(pCDocLine);	// pCDocLine‚Ì‘O‚É‘}“ü
 					pCDocLineNew->SetDocLineStringMove(&cmemLine);
 					CModifyVisitor().SetLineModified(pCDocLineNew, (*pArg->pInsData)[nCount].nSeq);
 				}

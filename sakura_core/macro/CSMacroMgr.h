@@ -61,7 +61,7 @@ struct MacroFuncInfo {
 	VARTYPE			m_varResult;		//!< 戻り値の型 VT_EMPTYならprocedureということで
 	MacroFuncInfoEx*	m_pData;
 };
-//マクロ関数情報構造体配列
+// マクロ関数情報構造体配列
 typedef MacroFuncInfo* MacroFuncInfoArray;
 
 /*-----------------------------------------------------------------------

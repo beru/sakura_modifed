@@ -235,14 +235,14 @@ void CColorStrategyPool::CheckColorMODE(
 	const CStringRef&	cLineStr
 )
 {
-	//色終了
+	// 色終了
 	if (*ppcColorStrategy) {
 		if ((*ppcColorStrategy)->EndColor(cLineStr, nPos)) {
 			*ppcColorStrategy = NULL;
 		}
 	}
 
-	//色開始
+	// 色開始
 	if (!*ppcColorStrategy) {
 		// CheckColorMODE はレイアウト処理全体のボトルネックになるくらい頻繁に呼び出される
 		// 基本クラスからの動的仮想関数呼び出しを使用すると無視できないほどのオーバヘッドになる模様
@@ -304,7 +304,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
 	{_T("MOD"), 0},
 	{_T("EBK"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("TAB"), 0},
-	{_T("SPC"), 0},	//2002.04.28 Add By KK
+	{_T("SPC"), 0},	// 2002.04.28 Add By KK
 	{_T("ZEN"), 0},
 	{_T("CTL"), 0},
 	{_T("EOL"), 0},
@@ -312,7 +312,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
 	{_T("VER"), 0},  // 2005.11.08 Moca 指定桁縦線
 	{_T("EOF"), 0},
 	{_T("NUM"), 0},	//@@@ 2001.02.17 by MIK 半角数値の強調
-	{_T("BRC"), 0},	//対括弧	// 02/09/18 ai Add
+	{_T("BRC"), 0},	// 対括弧	// 02/09/18 ai Add
 	{_T("SEL"), 0},
 	{_T("FND"), 0},
 	{_T("FN2"), 0},
@@ -344,10 +344,10 @@ const SColorAttributeData g_ColorAttributeArr[] =
 	{_T("RK8"), 0},	//@@@ 2001.11.17 add MIK
 	{_T("RK9"), 0},	//@@@ 2001.11.17 add MIK
 	{_T("RKA"), 0},	//@@@ 2001.11.17 add MIK
-	{_T("DFA"), 0},	//DIFF追加	//@@@ 2002.06.01 MIK
-	{_T("DFC"), 0},	//DIFF変更	//@@@ 2002.06.01 MIK
-	{_T("DFD"), 0},	//DIFF削除	//@@@ 2002.06.01 MIK
-	{_T("MRK"), 0},	//ブックマーク	// 02/10/16 ai Add
+	{_T("DFA"), 0},	// DIFF追加	//@@@ 2002.06.01 MIK
+	{_T("DFC"), 0},	// DIFF変更	//@@@ 2002.06.01 MIK
+	{_T("DFD"), 0},	// DIFF削除	//@@@ 2002.06.01 MIK
+	{_T("MRK"), 0},	// ブックマーク	// 02/10/16 ai Add
 	{_T("LAST"), 0}	// Not Used
 };
 

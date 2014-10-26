@@ -273,7 +273,7 @@ INT_PTR CPropHelper::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -296,9 +296,9 @@ void CPropHelper::SetData(HWND hwndDlg)
 	auto& csHelper = m_Common.m_sHelper;
 	
 	// 補完候補決定キー
-	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, csHelper.m_bHokanKey_RETURN);	//VK_RETURN 補完決定キーが有効/無効
-	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_TAB, csHelper.m_bHokanKey_TAB);		//VK_TAB    補完決定キーが有効/無効
-	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT, csHelper.m_bHokanKey_RIGHT);	//VK_RIGHT  補完決定キーが有効/無効
+	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, csHelper.m_bHokanKey_RETURN);	// VK_RETURN 補完決定キーが有効/無効
+	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_TAB, csHelper.m_bHokanKey_TAB);		// VK_TAB    補完決定キーが有効/無効
+	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT, csHelper.m_bHokanKey_RIGHT);	// VK_RIGHT  補完決定キーが有効/無効
 
 	// 外部ヘルプ１
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_EXTHELP1, csHelper.m_szExtHelp);
@@ -312,7 +312,7 @@ void CPropHelper::SetData(HWND hwndDlg)
 	// キーワードヘルプ フォント	// 2013/4/24 Uchi
 	m_hKeywordHelpFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.m_lf, csHelper.m_nPointSize);
 
-	//migemo dict
+	// migemo dict
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_MIGEMO_DLL, csHelper.m_szMigemoDll);
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_MIGEMO_DICT, csHelper.m_szMigemoDict);
 }
@@ -324,9 +324,9 @@ int CPropHelper::GetData(HWND hwndDlg)
 	auto& csHelper = m_Common.m_sHelper;
 	
 	// 補完候補決定キー
-	csHelper.m_bHokanKey_RETURN = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN);//VK_RETURN 補完決定キーが有効/無効
-	csHelper.m_bHokanKey_TAB = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_TAB);		//VK_TAB    補完決定キーが有効/無効
-	csHelper.m_bHokanKey_RIGHT = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT);	//VK_RIGHT  補完決定キーが有効/無効
+	csHelper.m_bHokanKey_RETURN = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN);// VK_RETURN 補完決定キーが有効/無効
+	csHelper.m_bHokanKey_TAB = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_TAB);		// VK_TAB    補完決定キーが有効/無効
+	csHelper.m_bHokanKey_RIGHT = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT);	// VK_RIGHT  補完決定キーが有効/無効
 
 	// 外部ヘルプ１
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_EXTHELP1, csHelper.m_szExtHelp, _countof(csHelper.m_szExtHelp));
@@ -337,7 +337,7 @@ int CPropHelper::GetData(HWND hwndDlg)
 	// HtmlHelpビューアはひとつ
 	csHelper.m_bHtmlHelpIsSingle = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_HTMLHELPISSINGLE) != 0;
 
-	//migemo dict
+	// migemo dict
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_MIGEMO_DLL, csHelper.m_szMigemoDll, _countof(csHelper.m_szMigemoDll));
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_MIGEMO_DICT, csHelper.m_szMigemoDict, _countof(csHelper.m_szMigemoDict));
 

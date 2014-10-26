@@ -6,23 +6,23 @@
 #include "outline/CFuncInfoArr.h"
 #include "view/Colors/EColorIndexType.h"
 
-/* Visual Basic */
-//JUl. 10, 2001 JEPRO VB   ユーザに贈る
-//Jul. 09, 2001 JEPRO 追加 //Dec. 16, 2002 MIK追加 // Feb. 19, 2006 genta .vb追加
+// Visual Basic
+// JUl. 10, 2001 JEPRO VB   ユーザに贈る
+// Jul. 09, 2001 JEPRO 追加 //Dec. 16, 2002 MIK追加 // Feb. 19, 2006 genta .vb追加
 void CType_Vb::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("Visual Basic"));
 	_tcscpy(pType->m_szTypeExts, _T("bas,frm,cls,ctl,pag,dob,dsr,vb"));
 
-	//設定
-	pType->m_cLineComment.CopyTo(0, L"'", -1);				/* 行コメントデリミタ */
-	pType->m_eDefaultOutline = OUTLINE_VB;						/* アウトライン解析方法 */
-	pType->m_nKeyWordSetIdx[0]  = 13;							/* キーワードセット */
-	pType->m_nKeyWordSetIdx[1] = 14;							/* キーワードセット2 */
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		/* 半角数値を色分け表示 */
-	pType->m_nStringType = STRING_LITERAL_PLSQL;				/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	//シングルクォーテーション文字列を色分け表示しない
+	// 設定
+	pType->m_cLineComment.CopyTo(0, L"'", -1);					// 行コメントデリミタ
+	pType->m_eDefaultOutline = OUTLINE_VB;						// アウトライン解析方法
+	pType->m_nKeyWordSetIdx[0]  = 13;							// キーワードセット
+	pType->m_nKeyWordSetIdx[1] = 14;							// キーワードセット2
+	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
+	pType->m_nStringType = STRING_LITERAL_PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -371,7 +371,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 //	To Here June 23, 2001 N.Nakatani
 
 
-//Jul. 10, 2001 JEPRO 追加
+// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsVB[] = {
 	L"And",
 	L"As",
@@ -487,17 +487,17 @@ const wchar_t* g_ppszKeywordsVB[] = {
 	//=========================================================
 	// 以下はVB.NET用キーワードです
 	//=========================================================
-	//BitAnd
-	//BitOr
-	//BitNot
-	//BitXor
-	//Delegate
-	//Short
-	//Structure
+	// BitAnd
+	// BitOr
+	// BitNot
+	// BitXor
+	// Delegate
+	// Short
+	// Structure
 };
 int g_nKeywordsVB = _countof(g_ppszKeywordsVB);
 
-//Jul. 10, 2001 JEPRO 追加
+// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsVB2[] = {
 	L"AppActivate",
 	L"Beep",
@@ -688,7 +688,7 @@ const wchar_t* g_ppszKeywordsVB2[] = {
 	L"String$",
 	L"Trim$",
 	L"UCase$",
-	//VB5,6の隠し関数
+	// VB5,6の隠し関数
 	L"VarPtr",
 	L"StrPtr",
 	L"ObjPtr",

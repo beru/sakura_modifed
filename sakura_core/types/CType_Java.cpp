@@ -6,21 +6,21 @@
 #include "outline/CFuncInfoArr.h"
 #include "view/Colors/EColorIndexType.h"
 
-/* Java */
+// Java
 void CType_Java::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("Java"));
 	_tcscpy(pType->m_szTypeExts, _T("java,jav"));
 
-	//設定
-	pType->m_cLineComment.CopyTo(0, L"//", -1);					/* 行コメントデリミタ */
-	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	/* ブロックコメントデリミタ */
-	pType->m_nKeyWordSetIdx[0] = 4;									/* キーワードセット */
-	pType->m_eDefaultOutline = OUTLINE_JAVA;						/* アウトライン解析方法 */
-	pType->m_eSmartIndent = SMARTINDENT_CPP;						/* スマートインデント種別 */
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			//半角数値を色分け表示	//Mar. 10, 2001 JEPRO
-	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	//対括弧の強調をデフォルトONに	//Sep. 21, 2002 genta
+	// 設定
+	pType->m_cLineComment.CopyTo(0, L"//", -1);						// 行コメントデリミタ
+	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
+	pType->m_nKeyWordSetIdx[0] = 4;									// キーワードセット
+	pType->m_eDefaultOutline = OUTLINE_JAVA;						// アウトライン解析方法
+	pType->m_eSmartIndent = SMARTINDENT_CPP;						// スマートインデント種別
+	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;			// 半角数値を色分け表示			// Mar. 10, 2001 JEPRO
+	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;	// 対括弧の強調をデフォルトONに	// Sep. 21, 2002 genta
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
@@ -68,7 +68,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 	szClass[0] = L'\0';
 	nClassNestArrNum = 0;
 	CLogicInt		nLineCount;
-	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	//識別子に使用できない半角記号。_:~.$は許可
+	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
 
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);

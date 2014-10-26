@@ -122,7 +122,7 @@ bool CKeyWordSetMgr::AddKeyWordSet(
 	if (MAX_SETNUM <= m_nKeyWordSetNum) {
 		return false;
 	}
-	int nIdx = m_nKeyWordSetNum;	//追加位置
+	int nIdx = m_nKeyWordSetNum;	// 追加位置
 	m_nStartIdx[++m_nKeyWordSetNum] = m_nStartIdx[nIdx];// サイズ0でセット追加
 
 	if (!KeyWordReAlloc(nIdx, nSize)) {
@@ -132,7 +132,7 @@ bool CKeyWordSetMgr::AddKeyWordSet(
 	wcscpy(m_szSetNameArr[nIdx], pszSetName);
 	m_bKEYWORDCASEArr[nIdx] = bKEYWORDCASE;
 	m_nKeyWordNumArr[nIdx] = 0;
-	m_IsSorted[nIdx] = 0;	//MIK 2000.12.01 binary search
+	m_IsSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
 	return true;
 }
 
@@ -153,13 +153,13 @@ bool CKeyWordSetMgr::DelKeyWordSet(int nIdx)
 		m_bKEYWORDCASEArr[i] = m_bKEYWORDCASEArr[i + 1];
 		m_nKeyWordNumArr[i] = m_nKeyWordNumArr[i + 1];
 		m_nStartIdx[i] = m_nStartIdx[i + 1];	//	2004.07.29 Moca 可変長記憶
-		m_IsSorted[i] = m_IsSorted[i + 1];	//MIK 2000.12.01 binary search
+		m_IsSorted[i] = m_IsSorted[i + 1];	// MIK 2000.12.01 binary search
 	}
 	m_nStartIdx[m_nKeyWordSetNum - 1] = m_nStartIdx[m_nKeyWordSetNum];	// 2007.07.14 ryoji これが無いと末尾＝最終セットの先頭になってしまう
 	m_nKeyWordSetNum--;
 	if (m_nKeyWordSetNum <= m_nCurrentKeyWordSetIdx) {
 		m_nCurrentKeyWordSetIdx = m_nKeyWordSetNum - 1;
-//セットが無くなったとき、m_nCurrentKeyWordSetIdxをわざと-1にするため、コメント化
+// セットが無くなったとき、m_nCurrentKeyWordSetIdxをわざと-1にするため、コメント化
 //		if (0 > m_nCurrentKeyWordSetIdx) {
 //			m_nCurrentKeyWordSetIdx = 0;
 //		}
@@ -243,7 +243,7 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 			return NULL;
 		}
 	}
-	m_IsSorted[nIdx] = 0;	//MIK 2000.12.01 binary search
+	m_IsSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
 	return wcscpy(m_szKeyWordArr[m_nStartIdx[nIdx] + nIdx2], pszKeyWord);
 }
 
@@ -288,7 +288,7 @@ int CKeyWordSetMgr::AddKeyWord(int nIdx, const wchar_t* pszKeyWord)
 		wcscpy(m_szKeyWordArr[m_nStartIdx[nIdx] + m_nKeyWordNumArr[nIdx]], pszKeyWord);
 	}
 	m_nKeyWordNumArr[nIdx]++;
-	m_IsSorted[nIdx] = 0;	//MIK 2000.12.01 binary search
+	m_IsSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
 	return 0;
 }
 
@@ -316,13 +316,13 @@ int CKeyWordSetMgr::DelKeyWord(int nIdx, int nIdx2)
 	m_nKeyWordNumArr[nIdx]--;
 
 	// 2005.01.26 Moca 1つずらすだけなので、ソートの状態は保持される
-	// m_IsSorted[nIdx] = 0;	//MIK 2000.12.01 binary search
+	// m_IsSorted[nIdx] = 0;	// MIK 2000.12.01 binary search
 	KeyWordReAlloc(nIdx, m_nKeyWordNumArr[nIdx]);	// 2004.07.29 Moca
 	return 0;
 }
 
 
-//MIK START 2000.12.01 binary search
+// MIK START 2000.12.01 binary search
 /*!	キーワードのソートとキーワード長の最大値計算
 
 	@param nIdx [in] キーワードセット番号
@@ -406,15 +406,15 @@ int CKeyWordSetMgr::SearchKeyWord2(int nIdx, const wchar_t* pszKeyWord, int nKey
 	}
 	return result;
 }
-//MIK END
+// MIK END
 
-//MIK START 2000.12.01 START
+// MIK START 2000.12.01 START
 void CKeyWordSetMgr::SetKeyWordCase(int nIdx, int nCase)
 {
-	//大文字小文字判断は１ビットあれば実現できる。
-	//今はint型(sizeof(int) * セット数 = 4 * 100 = 400)だが,
-	//char型(sizeof(char) * セット数 = 1 * 100 = 100)で十分だし
-	//ビット操作してもいい。
+	// 大文字小文字判断は１ビットあれば実現できる。
+	// 今はint型(sizeof(int) * セット数 = 4 * 100 = 400)だが,
+	// char型(sizeof(char) * セット数 = 1 * 100 = 100)で十分だし
+	// ビット操作してもいい。
 	if (nCase) {
 		m_bKEYWORDCASEArr[nIdx] = true;
 	}else {
@@ -429,7 +429,7 @@ bool CKeyWordSetMgr::GetKeyWordCase(int nIdx)
 {
 	return m_bKEYWORDCASEArr[nIdx];
 }
-//MIK END
+// MIK END
 
 // From Here 2004.07.29 Moca 可変長記憶
 /*!	@brief \\0またはTABで区切られた文字列からキーワードを設定
@@ -526,7 +526,7 @@ int CKeyWordSetMgr::CleanKeyWords(int nIdx)
 		if (bDelKey) {
 			DelKeyWord(nIdx, i);
 			nDelCount++;
-			//後ろがずれるので、iを増やさない
+			// 後ろがずれるので、iを増やさない
 		}else {
 			i++;
 		}

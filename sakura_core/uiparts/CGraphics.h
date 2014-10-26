@@ -179,7 +179,7 @@ public:
 		::MoveToEx(m_hdc, x1, y1, NULL);
 		::LineTo(m_hdc, x2, y2);
 	}
-	void DrawDotLine(int x1, int y1, int x2, int y2);	//“_ü
+	void DrawDotLine(int x1, int y1, int x2, int y2);	// “_ü
 	//! ‹éŒ`“h‚è’×‚µ
 	void FillMyRect(const RECT& rc) {
 		::FillRect(m_hdc, &rc, GetCurrentBrush());

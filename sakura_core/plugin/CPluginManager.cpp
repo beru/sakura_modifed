@@ -84,7 +84,7 @@ bool CPluginManager::SearchNewPlugin(CommonSetting& common, HWND hWndOwner)
 	WIN32_FIND_DATA wf;
 	hFind = FindFirstFile((m_sBaseDir + _T("*")).c_str(), &wf);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		//プラグインフォルダが存在しない
+		// プラグインフォルダが存在しない
 		if (!CreateDirectory(m_sBaseDir.c_str(), NULL)) {
 			InfoMessage(hWndOwner, _T("%ts"), LS(STR_PLGMGR_FOLDER));
 			return true;
@@ -351,7 +351,7 @@ bool CPluginManager::InstZipPluginSub(CommonSetting& common, HWND hWndOwner, con
 	return bNewPlugin;
 }
 
-//プラグインの初期導入をする
+// プラグインの初期導入をする
 //	common			共有設定変数
 //	pszPluginName	プラグイン名
 //	hWndOwner		
@@ -376,7 +376,7 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 		errorMsg = LSW(STR_PLGMGR_INST_ID);
 		return -1;
 	}
-	//2010.08.04 ID使用不可の文字を確認
+	// 2010.08.04 ID使用不可の文字を確認
 	//  後々ファイル名やiniで使うことを考えていくつか拒否する
 	static const WCHAR szReservedChars[] = L"/\\,[]*?<>&|;:=\" \t";
 	for (int x = 0; x < _countof(szReservedChars); ++x) {
@@ -399,7 +399,7 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 			nEmpty = iNo;
 			// break してはいけない。後ろで同一IDがあるかも
 		}
-		if (wcscmp(sId.c_str(), plugin_table[iNo].m_szId) == 0) {	//ID一致
+		if (wcscmp(sId.c_str(), plugin_table[iNo].m_szId) == 0) {	// ID一致
 			if (!bUpdate) {
 				const TCHAR* msg = LS(STR_PLGMGR_INST_NAME);
 				// 2010.08.04 削除中のIDは元の位置へ追加(復活させる)
@@ -543,7 +543,7 @@ CPlugin* CPluginManager::LoadPlugin(const TCHAR* pszPluginDir, const TCHAR* pszP
 	strMlang = std::tstring(pszBasePath) + _T("\\") + PII_L10NDIR + _T("\\") + PII_L10NFILEBASE + pszLangName + PII_L10NFILEEXT;
 	cProfDefMLang.SetReadingMode();
 	if (!cProfDefMLang.ReadProfile(strMlang.c_str())) {
-		//プラグイン定義ファイルが存在しない
+		// プラグイン定義ファイルが存在しない
 		pcProfDefMLang = NULL;
 #ifdef _UNICODE
 		DEBUG_TRACE(_T("  L10N定義ファイル読込 %ts Not Found\n"),  strMlang.c_str() );

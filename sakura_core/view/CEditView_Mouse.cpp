@@ -53,7 +53,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 		m_bHokan = FALSE;
 	}
 
-	//isearch 2004.10.22 isearchをキャンセルする
+	// isearch 2004.10.22 isearchをキャンセルする
 	if (m_nISearchMode > 0) {
 		ISearchExit();
 	}
@@ -75,7 +75,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() == 0) {
 		return;
 	}
-	if (!GetCaret().ExistCaretFocus()) { //フォーカスがないとき
+	if (!GetCaret().ExistCaretFocus()) { // フォーカスがないとき
 		return;
 	}
 
@@ -461,7 +461,7 @@ normal_action:;
 			// URLがクリックされたら選択するか
 			if (TRUE == GetDllShareData().m_Common.m_sEdit.m_bSelectClickedURL) {
 
-				CLogicRange cUrlRange;	//URL範囲
+				CLogicRange cUrlRange;	// URL範囲
 				// カーソル位置にURLが有る場合のその範囲を調べる
 				bool bIsUrl = IsCurrentPositionURL(
 					ptNewCaret,	// カーソル位置
@@ -959,7 +959,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		CLayoutPoint ptNew;
 		GetTextArea().ClientToLayout(ptMouse, &ptNew);
 
-		CLogicRange	cUrlRange;	//URL範囲
+		CLogicRange	cUrlRange;	// URL範囲
 
 		// 選択テキストのドラッグ中か
 		if (m_bDragMode) {
@@ -993,7 +993,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				// 手カーソル
 				SetHandCursor();		// Hand Cursorを設定 2013/1/29 Uchi
 			}else {
-				//migemo isearch 2004.10.22
+				// migemo isearch 2004.10.22
 				if (m_nISearchMode > 0) {
 					if (m_nISearchDirection == 1) {
 						::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
@@ -1138,7 +1138,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					sRange.SetToX(LineIndexToColumn(pcLayout, sRange.GetTo().x));
 					*/
 					int nWorkF = IsCurrentPositionSelectedTEST(
-						sRange.GetFrom(), //カーソル位置
+						sRange.GetFrom(), // カーソル位置
 						sSelect
 					);
 					int nWorkT = IsCurrentPositionSelectedTEST(
@@ -1506,9 +1506,9 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 			if (IsMailAddress(wstrURL.c_str(), wstrURL.length(), NULL)) {
 				wstrOPEN = pszMailTo + wstrURL;
 			}else {
-				if (wcsnicmp(wstrURL.c_str(), L"ttp://", 6) == 0) {	//抑止URL
+				if (wcsnicmp(wstrURL.c_str(), L"ttp://", 6) == 0) {	// 抑止URL
 					wstrOPEN = L"h" + wstrURL;
-				}else if (wcsnicmp(wstrURL.c_str(), L"tp://", 5) == 0) {	//抑止URL
+				}else if (wcsnicmp(wstrURL.c_str(), L"tp://", 5) == 0) {	// 抑止URL
 					wstrOPEN = L"ht" + wstrURL;
 				}else {
 					wstrOPEN = wstrURL;
@@ -1531,7 +1531,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 					::Sleep(200);
 					::CloseHandle(hThread);
 				}else {
-					//スレッド作成失敗
+					// スレッド作成失敗
 					delete[] szUrlDup;
 				}
 			}
@@ -1636,7 +1636,7 @@ STDMETHODIMP CEditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, PO
 	//「OLEによるドラッグ & ドロップを使う」オプションが無効の場合にはドロップを受け付けない
 	if (!GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop) return E_UNEXPECTED;
 
-	//編集禁止の場合はドロップを受け付けない
+	// 編集禁止の場合はドロップを受け付けない
 	if (!m_pcEditDoc->IsEditable()) return E_UNEXPECTED;
 
 

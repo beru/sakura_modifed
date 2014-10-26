@@ -85,7 +85,7 @@ INT_PTR CPropWin::DispatchEvent(
 	NMHDR*		pNMHDR;
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
-	int			nVal;	//Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
+	int			nVal;	// Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -250,7 +250,7 @@ INT_PTR CPropWin::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -283,10 +283,10 @@ void CPropWin::SetData(HWND hwndDlg)
 	// 2002/11/04 Moca ファンクションキーのグループボタン数
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM, csWindow.m_nFUNCKEYWND_GroupNum, FALSE);
 
-	//From Here@@@ 2003.06.13 MIK
+	// From Here@@@ 2003.06.13 MIK
 	//	Feb. 12, 2007 genta TAB関連は「タブバー」シートへ移動
 
-	//To Here@@@ 2003.06.13 MIK
+	// To Here@@@ 2003.06.13 MIK
 	//	Feb. 11, 2007 genta TAB関連は「タブバー」シートへ移動
 
 	// 次回ウィンドウを開いたときステータスバーを表示する
@@ -376,9 +376,9 @@ int CPropWin::GetData(HWND hwndDlg)
 		csWindow.m_nFUNCKEYWND_GroupNum = 12;
 	}
 
-	//From Here@@@ 2003.06.13 MIK
+	// From Here@@@ 2003.06.13 MIK
 	//	Feb. 12, 2007 genta TAB関連は「タブバー」シートへ移動
-	//To Here@@@ 2003.06.13 MIK
+	// To Here@@@ 2003.06.13 MIK
 
 	// 次回ウィンドウを開いたときステータスバーを表示する 
 	csWindow.m_bDispSTATUSBAR = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispSTATUSBAR);

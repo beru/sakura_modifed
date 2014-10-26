@@ -181,7 +181,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 	psh.hwndParent = m_hwndParent;
 	psh.hInstance  = CSelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
-	psh.pszCaption = LS(STR_PROPTYPE);	//_T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
+	psh.pszCaption = LS(STR_PROPTYPE);	// _T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
 	psh.nPages     = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
@@ -232,9 +232,9 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ヘルプ
-//2001.05.18 Stonee 機能番号からヘルプトピック番号を調べるようにした
-//2001.07.03 JEPRO  支援タブのヘルプを有効化
-//2001.11.17 MIK    IDD_PROP_REGEX
+// 2001.05.18 Stonee 機能番号からヘルプトピック番号を調べるようにした
+// 2001.07.03 JEPRO  支援タブのヘルプを有効化
+// 2001.11.17 MIK    IDD_PROP_REGEX
 void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
 {
 	int		nContextID;

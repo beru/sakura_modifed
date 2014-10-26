@@ -10,10 +10,7 @@
 
 bool CFigure_ZenSpace::Match(const wchar_t* pText) const
 {
-	if (pText[0] == L'Å@') {
-		return true;
-	}
-	return false;
+	return (pText[0] == L'Å@');
 }
 
 

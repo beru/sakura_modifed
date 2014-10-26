@@ -212,7 +212,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 					int nTop  = (Int)(ptColLine.GetY2() - GetTextArea().GetViewTopLine()) * nHeight + GetTextArea().GetAreaTop();
 					CLayoutInt charsWidth = CNativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
-					//色設定
+					// 色設定
 					CTypeSupport cTextType(this, COLORIDX_TEXT);
 					cTextType.SetGraphicsState_WhileThisObj(gr);
 					// 2013.05.24 背景色がテキストの背景色と同じならカーソル行の背景色を適用
@@ -246,7 +246,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 					sPos.InitDrawPos(CMyPoint(nLeft, nTop));
 					GetTextDrawer().DispText(gr, &sPos,  &pLine[OutputX], 1, bTrans);
 					// 2006.04.30 Moca 対括弧の縦線対応
-					GetTextDrawer().DispVerticalLines(gr, nTop, nTop + nHeight, ptColLine.x, ptColLine.x + charsWidth); //※括弧が全角幅である場合を考慮
+					GetTextDrawer().DispVerticalLines(gr, nTop, nTop + nHeight, ptColLine.x, ptColLine.x + charsWidth); // ※括弧が全角幅である場合を考慮
 					cTextType.RewindGraphicsState(gr);
 				}
 
@@ -271,20 +271,20 @@ void CEditView::DrawBracketPair(bool bDraw)
 
 
 //======================================================================
-//!対括弧の対応表
-//2007.10.16 kobake
+// 対括弧の対応表
+// 2007.10.16 kobake
 struct KAKKO_T {
 	const wchar_t* sStr;
 	const wchar_t* eStr;
 };
 static const KAKKO_T g_aKakkos[] = {
-	//半角
+	// 半角
 	{ L"(", L")", },
 	{ L"[", L"]", },
 	{ L"{", L"}", },
 	{ L"<", L">", },
 	{ L"｢", L"｣", },
-	//全角
+	// 全角
 	{ L"【", L"】", },
 	{ L"『", L"』", },
 	{ L"「", L"」", },
@@ -298,7 +298,7 @@ static const KAKKO_T g_aKakkos[] = {
 	{ L"［", L"］", },
 	{ L"“", L"”", },
 	{ L"〝", L"〟", },
-	//終端
+	// 終端
 	{ NULL, NULL, },
 };
 
@@ -441,13 +441,13 @@ bool CEditView::SearchBracketForward(
 				--level;
 			}// 03/01/08 ai End
 
-			if (level == 0) {	//	見つかった！
+			if (level == 0) {	// 見つかった！
 				ptPos.x = cPos - cline;
 				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
-				//	Happy Ending
+				// Happy Ending
 			}
-			cPos = nPos;	//	次の文字へ
+			cPos = nPos;	// 次の文字へ
 		}
 
 		// 02/09/19 ai Start
@@ -523,13 +523,13 @@ bool CEditView::SearchBracketBackward(
 				--level;
 			}// 03/01/08 ai End
 
-			if (level == 0) {	//	見つかった！
+			if (level == 0) {	// 見つかった！
 				ptPos.x = pPos - cline;
 				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
-				//	Happy Ending
+				// Happy Ending
 			}
-			cPos = pPos;	//	次の文字へ
+			cPos = pPos;	// 次の文字へ
 		}
 
 		// 02/09/19 ai Start

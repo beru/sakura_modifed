@@ -110,7 +110,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 				NotifyProgress(cfl.GetPercent());
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook( NULL )) {
-					throw CAppExitException(); //中断検出
+					throw CAppExitException(); // 中断検出
 				}
 			}
 		}
@@ -118,7 +118,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		// ファイルをクローズする
 		cfl.FileClose();
 	}catch (CAppExitException) {
-		//WM_QUITが発生した
+		// WM_QUITが発生した
 		return RESULT_FAILURE;
 	}catch (CError_FileOpen) {
 		eRet = RESULT_FAILURE;
@@ -126,7 +126,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 			// ファイルがない
 			ErrorMessage(
 				CEditWnd::getInstance()->GetHwnd(),
-				LS(STR_ERR_DLGDOCLM1),	//Mar. 24, 2001 jepro 若干修正
+				LS(STR_ERR_DLGDOCLM1),	// Mar. 24, 2001 jepro 若干修正
 				pszPath
 			);
 		}else if (-1 == _taccess( pszPath, 4 )) {

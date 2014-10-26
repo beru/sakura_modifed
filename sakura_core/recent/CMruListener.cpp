@@ -91,7 +91,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 	if (CODE_NONE == pLoadInfo->eCharCode) {
 		const STypeConfigMini* type;
 		if (CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
-			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	//無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
+			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
 		}else {
 			pLoadInfo->eCharCode = GetDllShareData().m_TypeBasis.m_encoding.m_eDefaultCodetype;
 		}
@@ -124,12 +124,12 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 			}
 		// 食い違っても問い合わせを行わない場合
 		}else {
-			//デフォルトの回答
+			// デフォルトの回答
 			//  自動判別の場合：前回の文字コードを採用
 			//  明示指定の場合：明示指定の文字コードを採用
-			if (!bSpecified) { //自動判別
+			if (!bSpecified) { // 自動判別
 				pLoadInfo->eCharCode = ePrevCode;
-			}else { //明示指定
+			}else { // 明示指定
 				pLoadInfo->eCharCode = pLoadInfo->eCharCode;
 			}
 		}

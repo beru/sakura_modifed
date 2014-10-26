@@ -313,7 +313,7 @@ void CPropCommon::InitData(void)
 {
 	m_Common = m_pShareData->m_Common;
 
-	//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。	;
+	// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。	;
 	for (int i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
 		SKeywordSetIndex indexs;
 		STypeConfig type;
@@ -340,7 +340,7 @@ void CPropCommon::ApplyData(void)
 		if (configIdx.IsValidType()) {
 			STypeConfig type;
 			CDocTypeManager().GetTypeConfig(configIdx, type);
-			//2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
+			// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++) {
 				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];
@@ -352,7 +352,7 @@ void CPropCommon::ApplyData(void)
 
 
 // ヘルプ
-//Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
+// Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
 void CPropCommon::OnHelp(HWND hwndParent, int nPageID)
 {
 	int		nContextID;

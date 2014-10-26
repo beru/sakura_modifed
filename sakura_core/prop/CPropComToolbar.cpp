@@ -441,7 +441,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -459,7 +459,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 	m_cLookup.SetCategory2Combo(hwndCombo);	//	Oct. 15, 2001 genta
 	
 	// 種別の先頭の項目を選択(コンボボックス)
-	Combo_SetCurSel(hwndCombo, 0);	//Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 	::PostMessageCmd(hwndCombo, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
 	// コントロールのハンドルを取得
@@ -470,7 +470,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 	::GetTextMetrics(hdc, &tm);
 	::ReleaseDC(hwndDlg, hdc);
 
-	int nListItemHeight = 18; //Oct. 18, 2000 JEPRO 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
+	int nListItemHeight = 18; // Oct. 18, 2000 JEPRO 「ツールバー」タブでのツールバーアイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
 	if (nListItemHeight < tm.tmHeight) {
 		nListItemHeight = tm.tmHeight;
 	}
@@ -488,7 +488,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 		lResult = List_SetItemHeight(hwndResList, lResult, nListItemHeight);
 	}
 	// ツールバーの先頭の項目を選択(リストボックス)
-	List_SetCurSel(hwndResList, 0);	//Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
+	List_SetCurSel(hwndResList, 0);	// Oct. 14, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
 
 	// フラットツールバーにする／しない 
 	::CheckDlgButton(hwndDlg, IDC_CHECK_TOOLBARISFLAT, csToolBar.m_bToolBarIsFlat);

@@ -125,7 +125,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		m_nLastReconvLine  = -1;
 	}
 	
-	//矩形選択中は何もしない
+	// 矩形選択中は何もしない
 	if (GetSelectionInfo().IsBoxSelecting())
 		return 0;
 
@@ -137,12 +137,12 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      選択範囲を取得                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//選択範囲を取得 -> ptSelect, ptSelectTo, nSelectedLen
+	// 選択範囲を取得 -> ptSelect, ptSelectTo, nSelectedLen
 	CLogicPoint	ptSelect;
 	CLogicPoint	ptSelectTo;
 	int			nSelectedLen;
 	if (GetSelectionInfo().IsTextSelected()) {
-		//テキストが選択されているとき
+		// テキストが選択されているとき
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetSelectionInfo().m_sSelect.GetFrom(), &ptSelect);
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetSelectionInfo().m_sSelect.GetTo(), &ptSelectTo);
 		
@@ -189,19 +189,19 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			}
 		}
 	}else {
-		//テキストが選択されていないとき
+		// テキストが選択されていないとき
 		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptSelect);
 		ptSelectTo = ptSelect;
 	}
 	nSelectedLen = ptSelectTo.x - ptSelect.x;
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
-	//ドキュメント行取得 -> pcCurDocLine
+	// ドキュメント行取得 -> pcCurDocLine
 	CDocLine* pcCurDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptSelect.GetY2());
 	if (!pcCurDocLine)
 		return 0;
 
-	//テキスト取得 -> pLine, nLineLen
+	// テキスト取得 -> pLine, nLineLen
 	const int nLineLen = pcCurDocLine->GetLengthWithoutEOL();
 	if (0 == nLineLen)
 		return 0;
@@ -223,7 +223,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	//              再変換範囲・考慮文字を修正                     //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//再変換考慮文字列開始  //行の中で再変換のAPIにわたすとする文字列の開始位置
+	// 再変換考慮文字列開始  // 行の中で再変換のAPIにわたすとする文字列の開始位置
 	int nReconvIndex = 0;
 	int nInsertCompLen = 0; // DOCUMENTFEED用。変換中の文字列をdwStrに混ぜる
 	// Iはカーソル　[]が選択範囲=dwTargetStrLenだとして
@@ -237,7 +237,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		nReconvIndex = t_max<int>(nReconvIndex + 1, ::CharNextW_AnyBuild(pLine + nReconvIndex) - pLine);
 	}
 	
-	//再変換考慮文字列終了  //行の中で再変換のAPIにわたすとする文字列の長さ
+	// 再変換考慮文字列終了  // 行の中で再変換のAPIにわたすとする文字列の長さ
 	int nReconvLen = nLineLen - nReconvIndex;
 	if ((nReconvLen + nReconvIndex - ptSelect.x) > nReconvMaxLen) {
 		const wchar_t*       p = pLine + ptSelect.x;
@@ -248,7 +248,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		nReconvLen = p - pLine - nReconvIndex;
 	}
 	
-	//対象文字列の調整
+	// 対象文字列の調整
 	if (ptSelect.x + nSelectedLen > nReconvIndex + nReconvLen) {
 		// 考慮分しかAPIに渡さないので、選択範囲を縮小
 		nSelectedLen = nReconvLen + nReconvIndex - ptSelect.x;
@@ -278,7 +278,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	//                      構造体設定要素                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//行の中で再変換のAPIにわたすとする文字列の長さ
+	// 行の中で再変換のAPIにわたすとする文字列の長さ
 	int         cbReconvLenWithNull; // byte
 	DWORD       dwReconvTextLen;    // CHARs
 	DWORD       dwReconvTextInsLen; // CHARs
@@ -289,7 +289,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	const void* pszReconv; 
 	const void* pszInsBuffer;
 
-	//UNICODE→UNICODE
+	// UNICODE→UNICODE
 	if (bUnicode) {
 		const WCHAR* pszCompInsStr = L"";
 		int nCompInsStr   = 0;
@@ -299,31 +299,31 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		}
 		dwInsByteCount      = nCompInsStr * sizeof(wchar_t);
 		dwReconvTextLen     = nReconvLen;
-		dwReconvTextInsLen  = dwReconvTextLen + nCompInsStr;                 //reconv文字列長。文字単位。
-		cbReconvLenWithNull = (dwReconvTextInsLen + 1) * sizeof(wchar_t);    //reconvデータ長。バイト単位。
-		dwCompStrOffset     = (Int)(ptSelect.x - nReconvIndex) * sizeof(wchar_t);    //compオフセット。バイト単位。
-		dwCompStrLen        = nSelectedLen + nCompInsStr;                            //comp文字列長。文字単位。
-		pszReconv           = reinterpret_cast<const void*>(pLine + nReconvIndex);   //reconv文字列へのポインタ。
+		dwReconvTextInsLen  = dwReconvTextLen + nCompInsStr;                 // reconv文字列長。文字単位。
+		cbReconvLenWithNull = (dwReconvTextInsLen + 1) * sizeof(wchar_t);    // reconvデータ長。バイト単位。
+		dwCompStrOffset     = (Int)(ptSelect.x - nReconvIndex) * sizeof(wchar_t);    // compオフセット。バイト単位。
+		dwCompStrLen        = nSelectedLen + nCompInsStr;                            // comp文字列長。文字単位。
+		pszReconv           = reinterpret_cast<const void*>(pLine + nReconvIndex);   // reconv文字列へのポインタ。
 		pszInsBuffer        = pszCompInsStr;
 	}else {
-		//UNICODE→ANSI
+		// UNICODE→ANSI
 		const wchar_t* pszReconvSrc =  pLine + nReconvIndex;
 
-		//考慮文字列の開始から対象文字列の開始まで -> dwCompStrOffset
+		// 考慮文字列の開始から対象文字列の開始まで -> dwCompStrOffset
 		if (ptSelect.x - nReconvIndex > 0) {
 			cmemBuf1.SetString(pszReconvSrc, ptSelect.x - nReconvIndex);
 			CShiftJis::UnicodeToSJIS(cmemBuf1._GetMemory());
-			dwCompStrOffset = cmemBuf1._GetMemory()->GetRawLength();				//compオフセット。バイト単位。
+			dwCompStrOffset = cmemBuf1._GetMemory()->GetRawLength();				// compオフセット。バイト単位。
 		}else {
 			dwCompStrOffset = 0;
 		}
 		
 		pszInsBuffer = "";
-		//対象文字列の開始から対象文字列の終了まで -> dwCompStrLen
+		// 対象文字列の開始から対象文字列の終了まで -> dwCompStrLen
 		if (nSelectedLen > 0) {
 			cmemBuf1.SetString(pszReconvSrc + ptSelect.x, nSelectedLen);  
 			CShiftJis::UnicodeToSJIS(cmemBuf1._GetMemory());
-			dwCompStrLen = cmemBuf1._GetMemory()->GetRawLength();					//comp文字列長。文字単位。
+			dwCompStrLen = cmemBuf1._GetMemory()->GetRawLength();					// comp文字列長。文字単位。
 		}else if (nInsertCompLen > 0) {
 			// nSelectedLen と nInsertCompLen が両方指定されることはないはず
 			const ACHAR* pComp = to_achar(m_szComposition);
@@ -334,22 +334,22 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			dwCompStrLen = 0;
 		}
 		
-		//考慮文字列すべて
+		// 考慮文字列すべて
 		cmemBuf1.SetString(pszReconvSrc , nReconvLen);
 		CShiftJis::UnicodeToSJIS(cmemBuf1._GetMemory());
 		
-		dwReconvTextLen    = cmemBuf1._GetMemory()->GetRawLength();				//reconv文字列長。文字単位。
-		dwReconvTextInsLen = dwReconvTextLen + dwInsByteCount;						//reconv文字列長。文字単位。
-		cbReconvLenWithNull = cmemBuf1._GetMemory()->GetRawLength() + dwInsByteCount + sizeof(char);		//reconvデータ長。バイト単位。
+		dwReconvTextLen    = cmemBuf1._GetMemory()->GetRawLength();				// reconv文字列長。文字単位。
+		dwReconvTextInsLen = dwReconvTextLen + dwInsByteCount;						// reconv文字列長。文字単位。
+		cbReconvLenWithNull = cmemBuf1._GetMemory()->GetRawLength() + dwInsByteCount + sizeof(char);		// reconvデータ長。バイト単位。
 		
-		pszReconv = reinterpret_cast<const void*>(cmemBuf1._GetMemory()->GetRawPtr());	//reconv文字列へのポインタ
+		pszReconv = reinterpret_cast<const void*>(cmemBuf1._GetMemory()->GetRawPtr());	// reconv文字列へのポインタ
 	}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        構造体設定                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	if (pReconv) {
-		//再変換構造体の設定
+		// 再変換構造体の設定
 		DWORD dwOrgSize = pReconv->dwSize;
 		// 2010.03.17 Moca dwSizeはpReconvを用意する側(IME等)が設定
 		//     のはずなのに Win XP+IME2002+TSF では dwSizeが0で送られてくる
@@ -361,12 +361,12 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			pReconv->dwSize = sizeof(*pReconv) + cbReconvLenWithNull;
 		}
 		pReconv->dwVersion         = 0;
-		pReconv->dwStrLen          = dwReconvTextInsLen;	//文字単位
+		pReconv->dwStrLen          = dwReconvTextInsLen;	// 文字単位
 		pReconv->dwStrOffset       = sizeof(*pReconv) ;
-		pReconv->dwCompStrLen      = dwCompStrLen;		//文字単位
-		pReconv->dwCompStrOffset   = dwCompStrOffset;	//バイト単位
-		pReconv->dwTargetStrLen    = dwCompStrLen;		//文字単位
-		pReconv->dwTargetStrOffset = dwCompStrOffset;	//バイト単位
+		pReconv->dwCompStrLen      = dwCompStrLen;		// 文字単位
+		pReconv->dwCompStrOffset   = dwCompStrOffset;	// バイト単位
+		pReconv->dwTargetStrLen    = dwCompStrLen;		// 文字単位
+		pReconv->dwTargetStrOffset = dwCompStrOffset;	// バイト単位
 		
 		// 2004.01.28 Moca ヌル終端の修正
 		if (bUnicode) {
@@ -440,15 +440,15 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 	
 	DWORD dwOffset, dwLen;
 
-	//UNICODE→UNICODE
+	// UNICODE→UNICODE
 	if (bUnicode) {
-		dwOffset = pReconv->dwCompStrOffset/sizeof(WCHAR);	//0またはデータ長。バイト単位。→文字単位
-		dwLen    = pReconv->dwCompStrLen;					//0または文字列長。文字単位。
+		dwOffset = pReconv->dwCompStrOffset/sizeof(WCHAR);	// 0またはデータ長。バイト単位。→文字単位
+		dwLen    = pReconv->dwCompStrLen;					// 0または文字列長。文字単位。
 	}else {
-	//ANSI→UNICODE
+	// ANSI→UNICODE
 		CNativeA	cmemBuf;
 
-		//考慮文字列の開始から対象文字列の開始まで
+		// 考慮文字列の開始から対象文字列の開始まで
 		if (pReconv->dwCompStrOffset > 0) {
 			if (pReconv->dwSize < (pReconv->dwStrOffset + pReconv->dwCompStrOffset)) {
 				return 0;
@@ -462,7 +462,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 			dwOffset = 0;
 		}
 
-		//対象文字列の開始から対象文字列の終了まで
+		// 対象文字列の開始から対象文字列の終了まで
 		if (pReconv->dwCompStrLen > 0) {
 			if (pReconv->dwSize <
 					pReconv->dwStrOffset + pReconv->dwCompStrOffset + pReconv->dwCompStrLen*sizeof(char)
@@ -479,13 +479,13 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 		}
 	}
 	
-	//選択開始の位置を取得
+	// 選択開始の位置を取得
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
 		CLogicPoint(m_nLastReconvIndex + dwOffset, m_nLastReconvLine),
 		GetSelectionInfo().m_sSelect.GetFromPointer()
 	);
 
-	//選択終了の位置を取得
+	// 選択終了の位置を取得
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
 		CLogicPoint(m_nLastReconvIndex + dwOffset + dwLen, m_nLastReconvLine),
 		GetSelectionInfo().m_sSelect.GetToPointer()
@@ -494,7 +494,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 	// 単語の先頭にカーソルを移動
 	GetCaret().MoveCursor(GetSelectionInfo().m_sSelect.GetFrom(), true);
 
-	//選択範囲再描画 
+	// 選択範囲再描画 
 	GetSelectionInfo().DrawSelectArea();
 
 	// 再変換情報の破棄

@@ -5,7 +5,7 @@
 #include "env/DLLSHAREDATA.h"
 #include "types/CTypeSupport.h"
 
-//2007.08.28 kobake 追加
+// 2007.08.28 kobake 追加
 void _DispTab(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 // タブ矢印描画関数	//@@@ 2003.03.26 MIK
 void _DrawTabArrow(CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
@@ -16,10 +16,7 @@ void _DrawTabArrow(CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight,
 
 bool CFigure_Tab::Match(const wchar_t* pText) const
 {
-	if (pText[0] == WCODE::TAB) {
-		return true;
-	}
-	return false;
+	return (pText[0] == WCODE::TAB);
 }
 
 
@@ -132,10 +129,10 @@ void CFigure_Tab::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView,
 */
 void _DrawTabArrow(
 	CGraphics&	gr,
-	int			nPosX,   //ピクセルX
-	int			nPosY,   //ピクセルY
-	int			nWidth,  //ピクセルW
-	int			nHeight, //ピクセルH
+	int			nPosX,   // ピクセルX
+	int			nPosY,   // ピクセルY
+	int			nWidth,  // ピクセルW
+	int			nHeight, // ピクセルH
 	bool		bBold,
 	COLORREF	pColor
 )

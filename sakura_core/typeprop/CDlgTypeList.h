@@ -59,10 +59,10 @@ protected:
 private:
 	CTypeConfig m_nSettingType;
 	// 関連付け状態
-	bool m_bRegistryChecked[ MAX_TYPES ];	//レジストリ確認 未／済
-	bool m_bExtRMenu[ MAX_TYPES ];			//右クリック登録 未／済
-	bool m_bExtDblClick[ MAX_TYPES ];		//ダブルクリック 未／済
-	bool m_bAlertFileAssociation;			//関連付け警告の表示フラグ
-	bool m_bEnableTempChange;				//一時適用の有効化
+	bool m_bRegistryChecked[ MAX_TYPES ];	// レジストリ確認 未／済
+	bool m_bExtRMenu[ MAX_TYPES ];			// 右クリック登録 未／済
+	bool m_bExtDblClick[ MAX_TYPES ];		// ダブルクリック 未／済
+	bool m_bAlertFileAssociation;			// 関連付け警告の表示フラグ
+	bool m_bEnableTempChange;				// 一時適用の有効化
 };
 

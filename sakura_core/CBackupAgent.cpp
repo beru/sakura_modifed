@@ -27,7 +27,7 @@
 #include <io.h>	// access
 #include "CBackupAgent.h"
 #include "window/CEditWnd.h"
-#include "util/format.h" //GetDateTimeFormat
+#include "util/format.h" // GetDateTimeFormat
 
 /*! セーブ前おまけ処理
 	@param pSaveInfo [in] 保存ファイル情報
@@ -50,9 +50,9 @@ ECallbackResult CBackupAgent::OnPreBeforeSave(SSaveInfo* pSaveInfo)
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
 		{
-			pcDoc->m_cDocFileOperation.DoFileUnlock();	//バックアップ作成前にロックを解除する #####スマートじゃないよ！
+			pcDoc->m_cDocFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
 			nBackupResult = MakeBackUp(pSaveInfo->cFilePath);
-			pcDoc->m_cDocFileOperation.DoFileLock();	//バックアップ作成後にロックを戻す #####スマートじゃないよ！
+			pcDoc->m_cDocFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
 		}
 		switch (nBackupResult) {
 		case 2:	//	中断指示
@@ -128,7 +128,7 @@ int CBackupAgent::MakeBackUp(
 	if (bup_setting.m_bBackUpDialog) {	/* バックアップの作成前に確認 */
 		ConfirmBeep();
 		int nRet;
-		if (bup_setting.m_bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add start MIK	//2002.03.23
+		if (bup_setting.m_bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add start MIK	// 2002.03.23
 			nRet = ::MYMESSAGEBOX(
 				CEditWnd::getInstance()->GetHwnd(),
 				MB_YESNO/*CANCEL*/ | MB_ICONQUESTION | MB_TOPMOST,
@@ -145,7 +145,7 @@ int CBackupAgent::MakeBackUp(
 				LS(STR_BACKUP_CONFORM_MSG2),
 				target_file,
 				szPath
-			);	//Jul. 06, 2001 jepro [名前を付けて保存] の場合もあるのでメッセージを修正
+			);	// Jul. 06, 2001 jepro [名前を付けて保存] の場合もあるのでメッセージを修正
 		}	//@@@ 2001.12.11 add MIK
 		//	Jun.  5, 2005 genta 戻り値変更
 		if (IDNO == nRet) {
@@ -260,8 +260,8 @@ int CBackupAgent::MakeBackUp(
 			fos.wFunc  = FO_DELETE;
 			fos.pFrom  = szDustPath;
 			fos.pTo    = NULL;
-			fos.fFlags = FOF_ALLOWUNDO | FOF_SIMPLEPROGRESS | FOF_NOCONFIRMATION;	//ダイアログなし
-			fos.fAnyOperationsAborted = true; //false;
+			fos.fFlags = FOF_ALLOWUNDO | FOF_SIMPLEPROGRESS | FOF_NOCONFIRMATION;	// ダイアログなし
+			fos.fAnyOperationsAborted = true; // false;
 			fos.hNameMappings = NULL;
 			fos.lpszProgressTitle = NULL; //"バックアップファイルをごみ箱に移動しています...";
 			if (::SHFileOperation(&fos) == 0) {

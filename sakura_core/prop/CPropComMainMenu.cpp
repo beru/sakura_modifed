@@ -338,7 +338,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 			  && pNMHDR->hwndFrom == hwndTreeRes
 			  && (htiItem = TreeView_GetSelection(hwndTreeRes)) != NULL
 			) {
-				//•t‘®î•ñ‚ğíœ
+				// •t‘®î•ñ‚ğíœ
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiItem;
 				if (TreeView_GetItem(hwndTreeRes, &tvi)) {
@@ -803,7 +803,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 		}
 		return TRUE;
 
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);
 

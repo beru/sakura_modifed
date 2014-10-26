@@ -166,8 +166,8 @@ bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer
 //                      クリップボード                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//SetClipboardTextA,SetClipboardTextT 実装用テンプレート
-//2007.08.14 kobake UNICODE用に改造
+// SetClipboardTextA,SetClipboardTextT 実装用テンプレート
+// 2007.08.14 kobake UNICODE用に改造
 //
 /*! クリープボードにText形式でコピーする
 	@param hwnd    [in] クリップボードのオーナー
@@ -323,7 +323,7 @@ BOOL GetSystemResources(
 //                        便利クラス                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
+// コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
 
 CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
 {

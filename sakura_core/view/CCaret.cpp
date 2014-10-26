@@ -243,7 +243,7 @@ CLayoutInt CCaret::MoveCursor(
 	if (textArea.m_nViewRowNum <= 3) {
 		// 移動先は、画面のスクロールラインより上か？（up キー）
 		if (ptWk_CaretPos.y - textArea.GetViewTopLine() < nCaretMarginY) {
-			if (ptWk_CaretPos.y < nCaretMarginY) {	//１行目に移動
+			if (ptWk_CaretPos.y < nCaretMarginY) {	// １行目に移動
 				nScrollRowNum = textArea.GetViewTopLine();
 			}else if (textArea.m_nViewRowNum <= 1) {	// 画面が１行
 				nScrollRowNum = textArea.GetViewTopLine() - ptWk_CaretPos.y;
@@ -271,7 +271,7 @@ CLayoutInt CCaret::MoveCursor(
 		}
 	// 移動先は、画面のスクロールラインより上か？（up キー）
 	}else if (ptWk_CaretPos.y - textArea.GetViewTopLine() < nCaretMarginY) {
-		if (ptWk_CaretPos.y < nCaretMarginY) {	//１行目に移動
+		if (ptWk_CaretPos.y < nCaretMarginY) {	// １行目に移動
 			nScrollRowNum = textArea.GetViewTopLine();
 		}else {
 			nScrollRowNum = -(ptWk_CaretPos.y - textArea.GetViewTopLine()) + nCaretMarginY;
@@ -335,7 +335,7 @@ CLayoutInt CCaret::MoveCursor(
 
 	// 横スクロールが発生したら、ルーラー全体を再描画 2002.02.25 Add By KK
 	if (nScrollColNum != 0) {
-		//次回DispRuler呼び出し時に再描画。（bDraw=falseのケースを考慮した。）
+		// 次回DispRuler呼び出し時に再描画。（bDraw=falseのケースを考慮した。）
 		m_pEditView->GetRuler().SetRedrawFlag();
 	}
 
@@ -387,7 +387,7 @@ CLayoutInt CCaret::MoveCursorFastMode(
 || 必要に応じて縦/横スクロールもする
 || 垂直スクロールをした場合はその行数を返す(正／負)
 */
-//2007.09.11 kobake 関数名変更: MoveCursorToPoint→MoveCursorToClientPoint
+// 2007.09.11 kobake 関数名変更: MoveCursorToPoint→MoveCursorToClientPoint
 CLayoutInt CCaret::MoveCursorToClientPoint(const POINT& ptClientPos, bool test, CLayoutPoint* pCaretPosNew)
 {
 	CLayoutPoint	ptLayoutPos;
@@ -517,7 +517,7 @@ void CCaret::ShowEditCaret()
 	if (0 == pCommon->m_sGeneral.GetCaretType()) {
 		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
-			nCaretWidth = 2; //2px
+			nCaretWidth = 2; // 2px
 			// 2011.12.22 システムの設定に従う(けど2px以上)
 			DWORD dwWidth;
 			if (::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &dwWidth, 0) && 2 < dwWidth) {
@@ -616,7 +616,7 @@ void CCaret::ShowEditCaret()
 	SetCaretSize(nCaretWidth, nCaretHeight);
 
 	// キャレットの位置を調整
-	//2007.08.26 kobake キャレットX座標の計算をUNICODE仕様にした。
+	// 2007.08.26 kobake キャレットX座標の計算をUNICODE仕様にした。
 	::SetCaretPos(ptDrawPos.x, ptDrawPos.y);
 	if (bShowCaret) {
 		// キャレットの表示
@@ -637,7 +637,7 @@ void CCaret::ShowEditCaret()
 	@note ステータスバーの出力内容の変更はCEditWnd::OnSize()の
 		カラム幅計算に影響があることに注意
 */
-//2007.10.17 kobake 重複するコードを整理
+// 2007.10.17 kobake 重複するコードを整理
 void CCaret::ShowCaretPosInfo()
 {
 	// 必要なインターフェース
@@ -795,7 +795,7 @@ void CCaret::ShowCaretPosInfo()
 	// ステータスバーに状態を書き出す
 	}else {
 		TCHAR	szText_1[64];
-		auto_sprintf_s(szText_1, LS(STR_STATUS_ROW_COL), ptCaret.y, ptCaret.x);	//Oct. 30, 2000 JEPRO 千万行も要らん
+		auto_sprintf_s(szText_1, LS(STR_STATUS_ROW_COL), ptCaret.y, ptCaret.x);	// Oct. 30, 2000 JEPRO 千万行も要らん
 
 		TCHAR	szText_6[16];
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
@@ -1017,7 +1017,7 @@ POINT CCaret::CalcCaretDrawPos(const CLayoutPoint& ptCaretPos) const
 
 	int nPosY = textArea.GetAreaTop()
 		+ (Int)(ptCaretPos.y - textArea.GetViewTopLine()) * m_pEditView->GetTextMetrics().GetHankakuDy()
-		+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; //下寄せ
+		+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; // 下寄せ
 
 	return CMyPoint(nPosX, nPosY);
 }

@@ -54,7 +54,7 @@ CRecentEditNode::CRecentEditNode()
 */
 const TCHAR* CRecentEditNode::GetItemText(int nIndex) const
 {
-	return _T("WIN"); //※テキスト情報は無い (GetWindowTextしてあげても良いけど、この関数は実行されないので、意味は無い)
+	return _T("WIN"); // ※テキスト情報は無い (GetWindowTextしてあげても良いけど、この関数は実行されないので、意味は無い)
 }
 
 bool CRecentEditNode::DataToReceiveType(const EditNode** dst, const EditNode* src) const

@@ -51,10 +51,10 @@ private:
 	std::vector<COpe*>	m_ppCOpeArr;	//!< 操作の配列
 
 	// 参照カウンタ
-	//　HandleCommand内から再帰的にHandleCommandが呼ばれる場合、
-	//  内側のHandleCommand終了時にCOpeBlkが破棄されて後続の処理に影響が出るのを防ぐため、
-	//　参照カウンタを用いて一番外側のHandleCommand終了時のみCOpeBlkを破棄する。
-	//　COpeBlkをnewしたときにAddRef()するのが作法だが、しなくても使える。
+	// HandleCommand内から再帰的にHandleCommandが呼ばれる場合、
+	// 内側のHandleCommand終了時にCOpeBlkが破棄されて後続の処理に影響が出るのを防ぐため、
+	// 参照カウンタを用いて一番外側のHandleCommand終了時のみCOpeBlkを破棄する。
+	// COpeBlkをnewしたときにAddRef()するのが作法だが、しなくても使える。
 	int m_refCount;
 };
 

@@ -178,7 +178,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 		pNMHDR = (NMHDR*)lParam;
 //		pMNUD  = (NM_UPDOWN*)lParam;
 		switch (pNMHDR->code) {
-		case PSN_HELP:	//Jul. 03, 2001 JEPRO 支援タブのヘルプを有効化
+		case PSN_HELP:	// Jul. 03, 2001 JEPRO 支援タブのヘルプを有効化
 			OnHelp(hwndDlg, IDD_PROP_SUPPORT);
 			return TRUE;
 		case PSN_KILLACTIVE:
@@ -192,7 +192,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 		}
 		break;
 
-//From Here Jul. 05, 2001 JEPRO: Popup Help
+// From Here Jul. 05, 2001 JEPRO: Popup Help
 	case WM_HELP:
 		{
 			HELPINFO* p = (HELPINFO*) lParam;
@@ -201,10 +201,10 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 		return TRUE;
 		// NOTREACHED
 //		break;
-//To Here  Jul. 05, 2001
+// To Here  Jul. 05, 2001
 
 //@@@ 2001.11.17 add start MIK
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids3);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;

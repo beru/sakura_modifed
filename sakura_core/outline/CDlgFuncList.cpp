@@ -384,7 +384,7 @@ void CDlgFuncList::SetData()
 	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_FL);
 	HWND hwndTree = ::GetDlgItem(GetHwnd(), IDC_TREE_FL);
 
-	//2002.02.08 hor 隠しといてアイテム削除→あとで表示
+	// 2002.02.08 hor 隠しといてアイテム削除→あとで表示
 	::ShowWindow(hwndList, SW_HIDE);
 	::ShowWindow(hwndTree, SW_HIDE);
 	ListView_DeleteAllItems(hwndList);
@@ -673,7 +673,7 @@ void CDlgFuncList::SetData()
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_bFunclistSetFocusOnJump), TRUE);
 	}
 
-	//2002.02.08 hor
+	// 2002.02.08 hor
 	//（IDC_LIST_FLもIDC_TREE_FLも常に存在していて、m_nViewTypeによって、どちらを表示するかを選んでいる）
 	HWND hwndShow = (VIEWTYPE_LIST == m_nViewType)? hwndList: hwndTree;
 	::ShowWindow(hwndShow, SW_SHOW);
@@ -681,7 +681,7 @@ void CDlgFuncList::SetData()
 		::SetFocus(hwndShow);
 	}
 
-	//2002.02.08 hor
+	// 2002.02.08 hor
 	// 空行をどう扱うかのチェックボックスはブックマーク一覧のときだけ表示する
 	if (OUTLINE_BOOKMARK == m_nListType) {
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_bMarkUpBlankLineEnable), TRUE);
@@ -789,7 +789,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 	HTREEITEM		htiSelected = NULL;
 	TV_ITEM			tvi;
 	int				nDummylParam = -64000;	// 2002.11.10 Moca クラス名のダミーlParam ソートのため
-	TCHAR			szClassArr[MAX_JAVA_TREE_NEST][64];	// Jan. 04, 2001 genta クラス名エリアの拡大 //2009.9.21 syat ネストが深すぎる際のBOF対策
+	TCHAR			szClassArr[MAX_JAVA_TREE_NEST][64];	// Jan. 04, 2001 genta クラス名エリアの拡大 // 2009.9.21 syat ネストが深すぎる際のBOF対策
 
 	::EnableWindow(::GetDlgItem(GetHwnd() , IDC_BUTTON_COPY), TRUE);
 
@@ -836,7 +836,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 			int	nNestTemplate = 0;
 			nWorkLen = _tcslen(pWork);
 			for (k = 0; k < nWorkLen; ++k) {
-				//2009.9.21 syat ネストが深すぎる際のBOF対策
+				// 2009.9.21 syat ネストが深すぎる際のBOF対策
 				if (nClassNest == MAX_JAVA_TREE_NEST) {
 					k = nWorkLen;
 					break;
@@ -953,7 +953,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 					delete [] pClassName; // 2002/10/28 frozen 下からここへ移動
 
 				}else {
-					//none
+					// none
 				}
 				htiParent = htiClass;
 				//if (k + 1 >= nClassNest) {
@@ -1298,7 +1298,7 @@ void CDlgFuncList::SetListVB (void)
 		}
 	}
 
-	//2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
+	// 2002.02.08 hor Listは列幅調整とかを実行する前に表示しとかないと変になる
 	::ShowWindow(hwndList, SW_SHOW);
 	// 列の幅をデータに合わせて調整
 	ListView_SetColumnWidth(hwndList, FL_COL_ROW, LVSCW_AUTOSIZE);
@@ -1682,7 +1682,7 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_HELP:
 		//「アウトライン解析」のヘルプ
-		//Apr. 5, 2001 JEPRO 修正漏れを追加 (Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした)
+		// Apr. 5, 2001 JEPRO 修正漏れを追加 (Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした)
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_OUTLINE));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDOK:
@@ -1711,7 +1711,7 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 		::DlgItem_SetText(GetHwnd(), IDC_BUTTON_WINSIZE,
 			m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 		return TRUE;
-	//2002.02.08 オプション切替後List/Treeにフォーカス移動
+	// 2002.02.08 オプション切替後List/Treeにフォーカス移動
 	case IDC_CHECK_bAutoCloseDlgFuncList:
 	case IDC_CHECK_bMarkUpBlankLineEnable:
 	case IDC_CHECK_bFunclistSetFocusOnJump:
@@ -2124,7 +2124,7 @@ void  CDlgFuncList::SortTree(HWND hWndTree, HTREEITEM htiParent)
 }
 
 
-BOOL CDlgFuncList::OnJump(bool bCheckAutoClose)	//2002.02.08 hor 引数追加
+BOOL CDlgFuncList::OnJump(bool bCheckAutoClose)	// 2002.02.08 hor 引数追加
 {
 	int				nLineTo;
 	int				nColTo;

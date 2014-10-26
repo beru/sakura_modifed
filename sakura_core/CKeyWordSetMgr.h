@@ -39,7 +39,7 @@
 #include <Windows.h>
 #include "_main/global.h"// 2002/2/10 aroka
 
-#define		MAX_SETNUM		100	//2007.12.01 genta Å‘å’l‘‰Á
+#define		MAX_SETNUM		100	// 2007.12.01 genta Å‘å’l‘‰Á
 #define		MAX_SETNAMELEN	32
 
 

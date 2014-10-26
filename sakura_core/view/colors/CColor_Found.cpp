@@ -30,10 +30,7 @@ bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nL
 
 	// 2011.12.27 レイアウト行頭で1回だけ確認してあとはメンバー変数をみる
 	if (m_nSelectLine == nLineNum) {
-		if (m_nSelectStart <= nPos && nPos < m_nSelectEnd) {
-			return true;
-		}
-		return false;
+		return (m_nSelectStart <= nPos && nPos < m_nSelectEnd);
 	}
 	m_nSelectLine = nLineNum;
 	CLayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
@@ -57,12 +54,7 @@ bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nL
 bool CColor_Select::EndColor(const CStringRef& cStr, int nPos)
 {
 	// マッチ文字列終了検出
-	if (m_nSelectEnd <= nPos) {
-		// -- -- マッチ文字列を描画 -- -- //
-		return true;
-	}
-
-	return false;
+	return (m_nSelectEnd <= nPos);
 }
 
 
@@ -107,21 +99,12 @@ bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 		);
 	}
 	// マッチ文字列検出
-	if (m_nSearchResult && m_nSearchStart == nPos) {
-		return true;
-	}
-	return false;
+	return (m_nSearchResult && m_nSearchStart == nPos);
 }
 
 bool CColor_Found::EndColor(const CStringRef& cStr, int nPos)
 {
 	// マッチ文字列終了検出
-	if (m_nSearchEnd <= nPos) { //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
-		// -- -- マッチ文字列を描画 -- -- //
-
-		return true;
-	}
-
-	return false;
+	return (m_nSearchEnd <= nPos); //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
 }
 

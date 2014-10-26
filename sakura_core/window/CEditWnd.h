@@ -72,7 +72,7 @@ class CEditDoc;
 struct DLLSHAREDATA;
 
 
-//メインウィンドウ内コントロールID
+// メインウィンドウ内コントロールID
 #define IDT_EDIT		455  // 20060128 aroka
 #define IDT_TOOLBAR		456
 #define IDT_CAPTION		457
@@ -130,7 +130,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         イベント                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//ドキュメントイベント
+	// ドキュメントイベント
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
 	// 管理
@@ -197,7 +197,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void PrintPreviewModeONOFF(void);	// 印刷プレビューモードのオン/オフ
 	
-	//アイコン
+	// アイコン
 	void SetWindowIcon(HICON, int);	//	Sep. 10, 2002 genta
 	void GetDefaultIcon(HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
 	bool GetRelatedIcon(const TCHAR* szFile, HICON* hIconBig, HICON* hIconSmall) const;	//	Sep. 10, 2002 genta
@@ -280,7 +280,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//by 鬼
+// by 鬼
 protected:
 	enum EIconClickStatus{
 		icNone,

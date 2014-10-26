@@ -92,7 +92,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 	LV_ITEM	lvi;
 	LV_COLUMN	col;
 	RECT		rc;
-	static int nPrevIndex = -1;	//更新時におかしくなるバグ修正 @@@ 2003.03.26 MIK
+	static int nPrevIndex = -1;	// 更新時におかしくなるバグ修正 @@@ 2003.03.26 MIK
 
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 
@@ -126,12 +126,12 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 		SetData(hwndDlg);	// ダイアログデータの設定 正規表現キーワード
 		if (CheckRegexpVersion(hwndDlg, IDC_LABEL_REGEX_VERSION, false) == false) {	//@@@ 2001.11.17 add MIK
 			::DlgItem_SetText(hwndDlg, IDC_LABEL_REGEX_VERSION, LS(STR_PROPTYPEREGEX_NOUSE));
-			//ライブラリがなくて、使用しないになっている場合は、無効にする。
+			// ライブラリがなくて、使用しないになっている場合は、無効にする。
 			if (!IsDlgButtonChecked(hwndDlg, IDC_CHECK_REGEX)) {
-				//Disableにする。
+				// Disableにする。
 				EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_REGEX), FALSE);
 			}else {
-				//使用するになってるんだけどDisableにする。もうユーザは変更できない。
+				// 使用するになってるんだけどDisableにする。もうユーザは変更できない。
 				EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_REGEX), FALSE);
 			}
 		}
@@ -154,49 +154,49 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 								LS(STR_PROPTYPEREGEX_NOTFOUND));
 						if (nRet != IDYES) {
 							CheckDlgButton(hwndDlg, IDC_CHECK_REGEX, BST_UNCHECKED);
-							//Disableにする。
+							// Disableにする。
 							EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_REGEX), FALSE);
 							return TRUE;
 						}
 					}
 				}else {
 					if (CheckRegexpVersion(NULL, 0, false) == false) {
-						//Disableにする。
+						// Disableにする。
 						EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_REGEX), FALSE);
 					}
 				}
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	//Need Compile
+				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_INS:	// 挿入
 			{
-				//挿入するキー情報を取得する。
+				// 挿入するキー情報を取得する。
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
 				if (szKeyWord[0] == _T('\0')) {
 					return FALSE;
 				}
-				//同じキーがないか調べる。
+				// 同じキーがないか調べる。
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 >= MAX_REGEX_KEYWORD) {
 					ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_NOREG));
 					return FALSE;
 				}
-				//選択中のキーを探す。
+				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
-					//選択中でなければ最後にする。
+					// 選択中でなければ最後にする。
 					nIndex = nIndex2;
 				}
 				if (!CheckKeywordList(hwndDlg, &szKeyWord[0], -1)) {
 					return FALSE;
 				}
 				
-				//挿入するキー情報を取得する。
+				// 挿入するキー情報を取得する。
 				auto_memset(szColorIndex, 0, _countof(szColorIndex));
 				::DlgItem_GetText(hwndDlg, IDC_COMBO_REGEX_COLOR, szColorIndex, _countof(szColorIndex));
-				//キー情報を挿入する。
+				// キー情報を挿入する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
 				lvi.iItem    = nIndex;
@@ -208,7 +208,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.iSubItem = 1;
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
-				//挿入したキーを選択する。
+				// 挿入したキーを選択する。
 				ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				GetData(hwndDlg);
 				return TRUE;
@@ -217,9 +217,9 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_ADD:	// 追加
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				//最後のキー番号を取得する。
+				// 最後のキー番号を取得する。
 				nIndex = ListView_GetItemCount(hwndList);
-				//追加するキー情報を取得する。
+				// 追加するキー情報を取得する。
 				szKeyWord[0] = _T('\0');
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
 				if (szKeyWord[0] == L'\0') {
@@ -233,10 +233,10 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				if (!CheckKeywordList(hwndDlg, &szKeyWord[0], -1)) {
 					return FALSE;
 				}
-				//追加するキー情報を取得する。
+				// 追加するキー情報を取得する。
 				auto_memset(szColorIndex, 0, _countof(szColorIndex));
 				::DlgItem_GetText(hwndDlg, IDC_COMBO_REGEX_COLOR, szColorIndex, _countof(szColorIndex));
-				//キーを追加する。
+				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
 				lvi.iItem    = nIndex;
@@ -248,7 +248,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.iSubItem = 1;
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
-				//追加したキーを選択する。
+				// 追加したキーを選択する。
 				ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				GetData(hwndDlg);
 				return TRUE;
@@ -257,13 +257,13 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_UPD:	// 更新
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
-				//選択中のキーを探す。
+				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
 					ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_NOSEL));
 					return FALSE;
 				}
-				//更新するキー情報を取得する。
+				// 更新するキー情報を取得する。
 				szKeyWord[0] = _T('\0');
 				::DlgItem_GetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0], nKeyWordSize);
 				if (&szKeyWord[0] == L'\0') {
@@ -272,10 +272,10 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				if (!CheckKeywordList(hwndDlg, &szKeyWord[0], nIndex)) {
 					return FALSE;
 				}
-				//追加するキー情報を取得する。
+				// 追加するキー情報を取得する。
 				auto_memset(szColorIndex, 0, _countof(szColorIndex));
 				::DlgItem_GetText(hwndDlg, IDC_COMBO_REGEX_COLOR, szColorIndex, _countof(szColorIndex));
-				//キーを更新する。
+				// キーを更新する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
 				lvi.iItem    = nIndex;
@@ -289,21 +289,21 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
 
-				//更新したキーを選択する。
+				// 更新したキーを選択する。
 				ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				GetData(hwndDlg);
 				return TRUE;
 			}
 
 			case IDC_BUTTON_REGEX_DEL:	// 削除
-				//選択中のキー番号を探す。
+				// 選択中のキー番号を探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
 					return FALSE;
 				}
-				//削除する。
+				// 削除する。
 				ListView_DeleteItem(hwndList, nIndex);
-				//同じ位置のキーを選択状態にする。
+				// 同じ位置のキーを選択状態にする。
 				ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				GetData(hwndDlg);
 				return TRUE;
@@ -312,19 +312,19 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			{
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
-				//選択中のキーを探す。
+				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 				if (-1 == nIndex) {
 					return FALSE;
 				}
 				if (0 == nIndex) {
-					return TRUE;	//すでに先頭にある。
+					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = 0;
 				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
-				ListView_DeleteItem(hwndList, nIndex);	//古いキーを削除
-				//キーを追加する。
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
+				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
 				lvi.iItem    = nIndex2;
@@ -336,7 +336,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.iSubItem = 1;
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
-				//移動したキーを選択状態にする。
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState(hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				GetData(hwndDlg);
 				return TRUE;
@@ -352,11 +352,11 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 - 1 == nIndex) {
-					return TRUE;	//すでに最終にある。
+					return TRUE;	// すでに最終にある。
 				}
 				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
-				//キーを追加する。
+				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
 				lvi.iItem    = nIndex2;
@@ -368,9 +368,9 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.iSubItem = 1;
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
-				//移動したキーを選択状態にする。
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState(hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
-				ListView_DeleteItem(hwndList, nIndex);	//古いキーを削除
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				GetData(hwndDlg);
 				return TRUE;
 			}
@@ -384,7 +384,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					return FALSE;
 				}
 				if (0 == nIndex) {
-					return TRUE;	//すでに先頭にある。
+					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 <= 1) {
@@ -393,7 +393,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				nIndex2 = nIndex - 1;
 				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
-				ListView_DeleteItem(hwndList, nIndex);	//古いキーを削除
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
@@ -406,7 +406,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.iSubItem = 1;
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
-				//移動したキーを選択状態にする。
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState(hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 				GetData(hwndDlg);
 				return TRUE;
@@ -422,7 +422,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if (nIndex2 - 1 == nIndex) {
-					return TRUE;	//すでに最終にある。
+					return TRUE;	// すでに最終にある。
 				}
 				if (nIndex2 <= 1) {
 					return TRUE;
@@ -430,7 +430,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				nIndex2 = nIndex + 2;
 				ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
 				ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
-				//キーを追加する。
+				// キーを追加する。
 				lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 				lvi.pszText  = &szKeyWord[0];
 				lvi.iItem    = nIndex2;
@@ -442,16 +442,16 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				lvi.iSubItem = 1;
 				lvi.pszText  = szColorIndex;
 				ListView_SetItem(hwndList, &lvi);
-				//移動したキーを選択状態にする。
+				// 移動したキーを選択状態にする。
 				ListView_SetItemState(hwndList, nIndex2, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
-				ListView_DeleteItem(hwndList, nIndex);	//古いキーを削除
+				ListView_DeleteItem(hwndList, nIndex);	// 古いキーを削除
 				GetData(hwndDlg);
 				return TRUE;
 			}
 
 			case IDC_BUTTON_REGEX_IMPORT:	// インポート
 				Import(hwndDlg);
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	//Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
 			case IDC_BUTTON_REGEX_EXPORT:	// エクスポート
@@ -480,7 +480,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			if (pNMHDR->hwndFrom == hwndList) {
 				HWND	hwndCombo;
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {	//削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
+				if (-1 == nIndex) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
 					nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
 				}
 				if (-1 == nIndex) {
@@ -501,7 +501,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					return FALSE;
 				}
 				if (nPrevIndex != nIndex) {	//@@@ 2003.03.26 MIK
-					//更新時にListViewのSubItemを正しく取得できないので、その対策
+					// 更新時にListViewのSubItemを正しく取得できないので、その対策
 					auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 					szKeyWord[0] = _T('\0');
 					ListView_GetItemText(hwndList, nIndex, 0, &szKeyWord[0], nKeyWordSize);
@@ -535,7 +535,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 		// NOTREACHED
 		//break;
 
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -628,14 +628,14 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [szKeyWordSize]);
 	TCHAR	szColorIndex[256];
 
-	//使用する・使用しない
+	// 使用する・使用しない
 	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_REGEX)) {
 		m_Types.m_bUseRegexKeyword = true;
 	}else {
 		m_Types.m_bUseRegexKeyword = false;
 	}
 
-	//リストに登録されている情報を配列に取り込む
+	// リストに登録されている情報を配列に取り込む
 	hwndList = GetDlgItem(hwndDlg, IDC_LIST_REGEX);
 	nIndex = ListView_GetItemCount(hwndList);
 	wchar_t* pKeyword = &m_Types.m_RegexKeywordList[0];
@@ -650,7 +650,7 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 			if (pKeyword < pKeywordLast - 1) {
 				_tcstowcs(pKeyword, &szKeyWord[0], pKeywordLast - pKeyword);
 			}
-			//色指定文字列を番号に変換する
+			// 色指定文字列を番号に変換する
 			m_Types.m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
 			for (j = 0; j < COLORIDX_LAST; j++) {
 				if (_tcscmp(m_Types.m_ColorInfoArr[j].m_szName, szColorIndex) == 0) {
@@ -662,15 +662,15 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 				for (; *pKeyword != L'\0'; pKeyword++) {}
 				pKeyword++;
 			}
-		}else { //未登録部分はクリアする
+		}else { // 未登録部分はクリアする
 			m_Types.m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
 		}
 	}
 	*pKeyword = L'\0'; // 番兵
 
-	//タイプ設定の変更があった
+	// タイプ設定の変更があった
 	m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
-//	m_Types.m_nRegexKeyMagicNumber = 0;	//Not Compiled.
+//	m_Types.m_nRegexKeyMagicNumber = 0;	// Not Compiled.
 
 	return TRUE;
 }
@@ -687,8 +687,8 @@ BOOL CPropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 bool CPropTypesRegex::CheckKeywordList(HWND hwndDlg, const TCHAR* szNewKeyWord, int nUpdateItem)
 {
 	int nRet;
-	//書式をチェックする。
-	if (!RegexKakomiCheck(to_wchar(szNewKeyWord))) {	//囲みをチェックする。
+	// 書式をチェックする。
+	if (!RegexKakomiCheck(to_wchar(szNewKeyWord))) {	// 囲みをチェックする。
 		nRet = ::MYMESSAGEBOX(
 				hwndDlg,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST | MB_DEFBUTTON2,

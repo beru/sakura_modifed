@@ -344,7 +344,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					if (LB_ERR == nIdx2) {
 						nIdx2 = 0;
 					}
-					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, LSW(STR_PROPCOMCUSTMENU_SEP));	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 					if (nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE) {
 						break;
 					}
@@ -627,7 +627,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -653,7 +653,7 @@ void CPropCustmenu::SetData(HWND hwndDlg)
 	nSpecialFuncsNum = Combo_AddString(hwndCombo, LS(STR_SPECIAL_FUNC));
 
 	// 種別の先頭の項目を選択（コンボボックス）
-	Combo_SetCurSel(hwndCombo, 0);	//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
+	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
 	// メニュー一覧に文字列をセット（コンボボックス）
 	hwndCOMBO_MENU = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
@@ -664,7 +664,7 @@ void CPropCustmenu::SetData(HWND hwndDlg)
 	Combo_SetCurSel(hwndCOMBO_MENU, 0);
 	SetDataMenuList(hwndDlg, 0);
 
-//	// カスタムメニューの先頭の項目を選択（リストボックス）	//Oct. 8, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
+//	// カスタムメニューの先頭の項目を選択（リストボックス）	// Oct. 8, 2000 JEPRO ここをコメントアウトすると先頭項目が選択されなくなる
 	HWND hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 	List_SetCurSel(hwndLIST_RES, 0);
 }
@@ -681,7 +681,7 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 	List_ResetContent(hwndLIST_RES);
 	for (int i = 0; i < csCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
 		if (0 == csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i]) {
-			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 		}else {
 			EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i];
 			//	Oct. 3, 2001 genta

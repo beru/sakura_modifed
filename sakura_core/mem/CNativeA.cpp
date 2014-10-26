@@ -294,7 +294,7 @@ void CNativeA::ToUpper()
 
 // 半角→全角
 void CNativeA::ToZenkaku(
-	int bHiragana,		// 1== ひらがな 0==カタカナ //2==英数専用 2001/07/30 Misaka 追加
+	int bHiragana,		// 1== ひらがな 0==カタカナ // 2==英数専用 2001/07/30 Misaka 追加
 	int bHanKataOnly	// 1== 半角カタカナにのみ作用する
 )
 {
@@ -352,7 +352,7 @@ void CNativeA::ToZenkaku(
 					}
 					// 拗音
 					//! 英数変換用に新たな条件を付加 2001/07/30 Misaka
-					//! bHiragana != 2 //英数変換フラグがオンではない場合
+					//! bHiragana != 2 // 英数変換フラグがオンではない場合
 					if (1
 						&& bHiragana != 2
 						&& pBuf[i + 1] == (unsigned char)'ﾟ'
@@ -631,10 +631,10 @@ const char* CNativeA::GetCharNext(const char* pData, int nDataLen, const char* p
 	}else {
 //		pNext = ::CharNext(pDataCurrent);
 		if (
-			// SJIS全角コードの1バイト目か	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
+			// SJIS全角コードの1バイト目か	// Sept. 1, 2000 jepro 'シフト'を'S'に変更
 			_IS_SJIS_1((unsigned char)pDataCurrent[0])
 			&&
-			// SJIS全角コードの2バイト目か	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
+			// SJIS全角コードの2バイト目か	// Sept. 1, 2000 jepro 'シフト'を'S'に変更
 			_IS_SJIS_2((unsigned char)pDataCurrent[1])
 		) {
 			pNext = pDataCurrent + 2;
@@ -665,12 +665,12 @@ const char* CNativeA::GetCharPrev(const char* pData, int nDataLen, const char* p
 //		pPrev = pDataCurrent - 1;
 //	}else {
 //		if (pDataCurrent - pData >= 2 &&
-//			// SJIS全角コードの1バイト目か		//Sept. 1, 2000 jepro 'シフト'を'S'に変更
+//			// SJIS全角コードの1バイト目か		// Sept. 1, 2000 jepro 'シフト'を'S'に変更
 //			(
 //			((unsigned char)0x81 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0x9F) ||
 //			((unsigned char)0xE0 <= (unsigned char)pDataCurrent[-2] && (unsigned char)pDataCurrent[-2] <= (unsigned char)0xFC)
 //			) &&
-//			// SJIS全角コードの2バイト目か		//Sept. 1, 2000 jepro 'シフト'を'S'に変更
+//			// SJIS全角コードの2バイト目か		// Sept. 1, 2000 jepro 'シフト'を'S'に変更
 //			(
 //			((unsigned char)0x40 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0x7E) ||
 //			((unsigned char)0x80 <= (unsigned char)pDataCurrent[-1] && (unsigned char)pDataCurrent[-1] <= (unsigned char)0xFC)

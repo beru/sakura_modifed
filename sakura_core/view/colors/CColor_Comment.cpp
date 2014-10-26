@@ -12,11 +12,7 @@ bool CColor_LineComment::BeginColor(const CStringRef& cStr, int nPos)
 	if (!cStr.IsValid()) return false;
 
 	// sƒRƒƒ“ƒg
-	if (m_pTypeData->m_cLineComment.Match(nPos, cStr)	//@@@ 2002.09.22 YAZAKI
-	) {
-		return true;
-	}
-	return false;
+	return m_pTypeData->m_cLineComment.Match(nPos, cStr);	//@@@ 2002.09.22 YAZAKI
 }
 
 bool CColor_LineComment::EndColor(const CStringRef& cStr, int nPos)

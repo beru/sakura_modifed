@@ -66,12 +66,12 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 	atWork = RegisterWC(
 		hInstance,
 		NULL,// Handle to the class icon.
-		NULL,	//Handle to a small icon
+		NULL,	// Handle to a small icon
 		NULL,// Handle to the class cursor.
 		(HBRUSH)NULL,// Handle to the class background brush.
 		NULL/*MAKEINTRESOURCE(MYDOCUMENT)*/,// Pointer to a null-terminated 
-				//character string that specifies the resource name of the class menu,
-				//as the name appears in the resource file.
+				// character string that specifies the resource name of the class menu,
+				// as the name appears in the resource file.
 		m_pszClassName// Pointer to a null-terminated string or is an atom.
 	);
 	if (0 == atWork) {

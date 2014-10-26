@@ -20,7 +20,7 @@
 
 #include "_main/global.h"
 #include "extmodule/CBregexp.h"
-#include "config/maxdata.h" //MAX_REGEX_KEYWORD
+#include "config/maxdata.h" // MAX_REGEX_KEYWORD
 
 struct STypeConfig;
 
@@ -29,17 +29,17 @@ struct STypeConfig;
 
 //@@@ 2001.11.17 add start MIK
 struct RegexKeywordInfo {
-	int	m_nColorIndex;		//色指定番号
+	int	m_nColorIndex;		// 色指定番号
 };
 //@@@ 2001.11.17 add end MIK
 
 
 //!	正規表現キーワード検索情報構造体
 typedef struct RegexInfo_t {
-	BREGEXP_W* pBregexp;	//BREGEXP_W構造体
+	BREGEXP_W* pBregexp;	// BREGEXP_W構造体
 #ifdef USE_PARENT
 #else
-	struct RegexKeywordInfo	sRegexKey;	//コンパイルパターンを保持
+	struct RegexKeywordInfo	sRegexKey;	// コンパイルパターンを保持
 #endif
 	int    nStatus;		// 状態(EMPTY,CLOSE,OPEN,ACTIVE,ERROR)
 	int    nMatch;		// このキーワードのマッチ状態(EMPTY,MATCH,NOMATCH)

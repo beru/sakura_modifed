@@ -682,7 +682,7 @@ void CPrintPreview::OnChangeSetting()
 void CPrintPreview::OnChangePrintSetting(void)
 {
 	HDC hdc = ::GetDC(m_pParentWnd->GetHwnd());
-	::SetMapMode(hdc, MM_LOMETRIC); //MM_HIMETRIC それぞれの論理単位は、0.01 mm にマップされます
+	::SetMapMode(hdc, MM_LOMETRIC); // MM_HIMETRIC それぞれの論理単位は、0.01 mm にマップされます
 	::SetMapMode(hdc, MM_ANISOTROPIC);
 
 	::EnumFontFamilies(
@@ -800,7 +800,7 @@ void CPrintPreview::OnChangePrintSetting(void)
 	//@@@ 2002.09.22 YAZAKI
 	ref.m_cLineComment.CopyTo(0, L"", -1);	// 行コメントデリミタ
 	ref.m_cLineComment.CopyTo(1, L"", -1);	// 行コメントデリミタ2
-	ref.m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	//Jun. 01, 2001 JEPRO 追加
+	ref.m_cLineComment.CopyTo(2, L"", -1);	// 行コメントデリミタ3	// Jun. 01, 2001 JEPRO 追加
 	ref.m_cBlockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
 	ref.m_cBlockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
@@ -1118,8 +1118,8 @@ void CPrintPreview::OnPrint(void)
 		//	Windows NT/2000ではStartPageでも属性はリセットされません．
 
 		// マッピングモードの変更
-		::SetMapMode(hdc, MM_LOMETRIC);		//それぞれの論理単位は、0.1 mm にマップされます
-		::SetMapMode(hdc, MM_ANISOTROPIC);	//論理単位は、任意にスケーリングされた軸上の任意の単位にマップされます
+		::SetMapMode(hdc, MM_LOMETRIC);		// それぞれの論理単位は、0.1 mm にマップされます
+		::SetMapMode(hdc, MM_ANISOTROPIC);	// 論理単位は、任意にスケーリングされた軸上の任意の単位にマップされます
 
 		// 現在のフォントを印刷用半角フォントに設定
 		::SelectObject(hdc, m_hFontHan);
@@ -1249,7 +1249,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 		Tab2Space(szWork);
 		SIZE	Size;
 		nLen = wcslen(szWork);
-		::GetTextExtentPoint32W(hdc, szWork, nLen, &Size);		//テキスト幅
+		::GetTextExtentPoint32W(hdc, szWork, nLen, &Size);		// テキスト幅
 		::ExtTextOutW_AnyBuild(
 			hdc,
 			(rect.right + rect.left - Size.cx) / 2,
@@ -1267,7 +1267,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 			szWork, nWorkLen);
 		Tab2Space(szWork);
 		nLen = wcslen(szWork);
-		::GetTextExtentPoint32W(hdc, szWork, nLen, &Size);		//テキスト幅
+		::GetTextExtentPoint32W(hdc, szWork, nLen, &Size);		// テキスト幅
 		::ExtTextOutW_AnyBuild(
 			hdc,
 			rect.right - Size.cx,
@@ -1311,7 +1311,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_CENTER] : m_pPrintSetting->m_szFooterForm[POS_CENTER],
 			szWork, nWorkLen);
 		nLen = wcslen(szWork);
-		int nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); //テキスト幅
+		int nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); // テキスト幅
 		Print_DrawLine(
 			hdc,
 			CMyPoint(
@@ -1330,7 +1330,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 			bHeader ? m_pPrintSetting->m_szHeaderForm[POS_RIGHT] : m_pPrintSetting->m_szFooterForm[POS_RIGHT],
 			szWork, nWorkLen);
 		nLen = wcslen(szWork);
-		nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); //テキスト幅
+		nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); // テキスト幅
 		Print_DrawLine(
 			hdc,
 			CMyPoint(
@@ -1448,7 +1448,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				// 行番号の表示 false=折り返し単位／true=改行単位
 				if (m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_bLineNumIsCRLF) {
 					// 論理行番号表示モード
-					if (0 != pcLayout->GetLogicOffset()) { //折り返しレイアウト行
+					if (0 != pcLayout->GetLogicOffset()) { // 折り返しレイアウト行
 						wcscpy_s(szLineNum, L" ");
 					}else {
 						_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号
@@ -1468,10 +1468,10 @@ CColorStrategy* CPrintPreview::DrawPageText(
 					wcscat(szLineNum, L" ");
 				}
 
-				//文字列長
+				// 文字列長
 				const int nLineCols = wcslen(szLineNum);
 
-				//文字間隔配列を生成
+				// 文字間隔配列を生成
 				vector<int> vDxArray;
 				const int* pDxArray = CTextMetrics::GenerateDxArray(&vDxArray, szLineNum, nLineCols, m_pPrintSetting->m_nPrintFontWidth);
 
@@ -1626,13 +1626,13 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	/*	pLineをスキャンして、半角文字は半角文字でまとめて、全角文字は全角文字でまとめて描画する。
 	*/
 
-	//文字間隔
+	// 文字間隔
 	int nDx = m_pPrintSetting->m_nPrintFontWidth;
 
-	//タブ幅取得
+	// タブ幅取得
 	CLayoutInt nTabSpace = m_pParentWnd->GetDocument()->m_cLayoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
 
-	//文字間隔配列を生成
+	// 文字間隔配列を生成
 	vector<int> vDxArray;
 	const int* pDxArray = CTextMetrics::GenerateDxArray(
 		&vDxArray,
@@ -1647,9 +1647,9 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	int iLogic;					// pLineの何文字目をスキャン？
 	CLayoutInt nLayoutX = nIndent;	// TABを展開した後のバイト数で、テキストの何バイト目まで描画したか？
 
-	//文字種判定フラグ
-	int nKind     = 0; //0:半角 1:全角 2:タブ
-	int nKindLast = 2; //直前のnKind状態
+	// 文字種判定フラグ
+	int nKind     = 0; // 0:半角 1:全角 2:タブ
+	int nKindLast = 2; // 直前のnKind状態
 
 	// 色設定	2012-03-07 ossan
 	CStringRef cStringLine(pLine, nDocLineLen);
@@ -1661,7 +1661,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 		iLogic < nLineStart + nLineLen; 
 		++iLogic, nKindLast = nKind, pStrategyLast = pStrategy
 	) {
-		//文字の種類
+		// 文字の種類
 		if (pLine[iLogic] == WCODE::TAB) {
 			nKind = 2;
 		}else if (WCODE::IsHankaku(pLine[iLogic])) {
@@ -1674,7 +1674,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 
 		// タブ文字出現 or 文字種(全角／半角)の境界 or 色指定の境界
 		if (nKind != nKindLast || pStrategyLast != pStrategy) {
-			//iLogicの直前までを描画
+			// iLogicの直前までを描画
 			if (0 < iLogic - nBgnLogic) {
 				Print_DrawBlock(
 					hdc,
@@ -1690,7 +1690,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 					pDxArray
 				);
 
-				//桁進め
+				// 桁進め
 				if (nKindLast == 2) {
 					nLayoutX += (nTabSpace - nLayoutX % nTabSpace)
 						+ nTabSpace * (iLogic - nBgnLogic - 1);
@@ -1701,7 +1701,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 					}
 					nLayoutX += CLayoutInt(nIncrement/nDx);
 				}
-				//ロジック進め
+				// ロジック進め
 				nBgnLogic = iLogic;
 			}
 		}
@@ -1724,10 +1724,10 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 		);
 	}
 
-	//フォントを元 (半角) に戻す
+	// フォントを元 (半角) に戻す
 	::SelectObject(hdc, m_hFontHan);
 
-	//色を元に戻す	2012-03-07 ossan
+	// 色を元に戻す	2012-03-07 ossan
 	if (pcLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
 		if (-1 != nColorIdx) {
@@ -2116,17 +2116,17 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 				// 次ページ
 				OnPreviewGoNextPage();
 				break;
-			//From Here 2007.02.11 Moca ダイレクトジャンプおよびアンチエイリアス
+			// From Here 2007.02.11 Moca ダイレクトジャンプおよびアンチエイリアス
 			case IDC_BUTTON_DIRECTPAGE:
 				OnPreviewGoDirectPage();
 				break;
 			case IDC_CHECK_ANTIALIAS:
 				OnCheckAntialias();
 				break;
-			//To Here 2007.02.11 Moca
+			// To Here 2007.02.11 Moca
 			case IDC_BUTTON_HELP:
 				// 印刷プレビューのヘルプ
-				//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+				// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 				MyWinHelp(hwndDlg, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PREVIEW));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 				break;
 			case IDOK:

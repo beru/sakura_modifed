@@ -93,7 +93,7 @@ public:
 	int GetCommandCount() const;	// プラグインコマンドの数を返す
 	CPlug* GetCommandById(int id) const;	// IDに合致するコマンドプラグを返す
 	const CPlug::Array& GetPlugs(EJack jack) const;	// プラグを返す
-	//TODO: 作りが一貫してないので整理する syat
+	// TODO: 作りが一貫してないので整理する syat
 
 	// メンバ変数
 private:

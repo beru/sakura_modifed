@@ -181,7 +181,7 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 	// 数値パラメータを追加
 	case F_WCHAR:
 	case F_CTRL_CODE:
-		AddIntParam(lParam); //※文字コードが渡される
+		AddIntParam(lParam); // ※文字コードが渡される
 		break;
 	case F_CHGMOD_EOL:
 		{
@@ -369,7 +369,7 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 			}
 			out.WriteF(L");\t// %ls\r\n", szFuncNameJapanese);
 			break;
-		case F_BOOKMARK_PATTERN:	//2002.02.08 hor
+		case F_BOOKMARK_PATTERN:	// 2002.02.08 hor
 		case F_SEARCH_NEXT:
 		case F_SEARCH_PREV:
 			pText = m_pParamTop->m_pData;
@@ -625,7 +625,7 @@ bool CMacro::HandleCommand(
 			return false;
 		}
 		{
-			pcEditView->m_pcEditWnd->m_cDlgJump.m_nLineNum = _wtoi(Argument[0]);	//ジャンプ先
+			pcEditView->m_pcEditWnd->m_cDlgJump.m_nLineNum = _wtoi(Argument[0]);	// ジャンプ先
 			LPARAM lFlag = Argument[1] != NULL ? _wtoi(Argument[1]) : 1; // デフォルト1
 			GetDllShareData().m_bLineNumIsCRLF_ForJump = ((lFlag & 0x01) != 0);
 			pcEditView->m_pcEditWnd->m_cDlgJump.m_bPLSQL = lFlag & 0x02 ? 1 : 0;
@@ -633,7 +633,7 @@ bool CMacro::HandleCommand(
 		}
 		break;
 	// 一つ目の引数は文字列、二つ目の引数は数値
-	case F_BOOKMARK_PATTERN:	//2002.02.08 hor
+	case F_BOOKMARK_PATTERN:	// 2002.02.08 hor
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
 				NULL,
@@ -1015,7 +1015,7 @@ bool CMacro::HandleCommand(
 			}
 
 			// 改行コード
-			int nSaveLineCode = 0;	// デフォルト値	//Sep. 11, 2004 genta 初期値を「変更しない」に
+			int nSaveLineCode = 0;	// デフォルト値	// Sep. 11, 2004 genta 初期値を「変更しない」に
 			if (Argument[2] != NULL) {
 				nSaveLineCode = _wtoi(Argument[2]);
 			}
@@ -1643,7 +1643,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_UI4) != S_OK) return false;	// VT_UI4として解釈
 			CWaitCursor cWaitCursor(View->GetHwnd());	// カーソルを砂時計にする
 			::Sleep(varCopy.Data.uintVal);
-			Wrap(&Result)->Receive(0);	//戻り値は今のところ0固定
+			Wrap(&Result)->Receive(0);	// 戻り値は今のところ0固定
 		}
 		return true;
 	case F_FILEOPENDIALOG:

@@ -234,7 +234,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 
 	m_nTypeIndex = m_pTypes->m_nIdx;
 	m_nTypeId = m_pTypes->m_id;
-	m_nCompiledMagicNumber = 1;	//Not Compiled.
+	m_nCompiledMagicNumber = 1;	// Not Compiled.
 	m_bUseRegexKeyword  = m_pTypes->m_bUseRegexKeyword;
 	if (!m_bUseRegexKeyword) {
 		return FALSE;
@@ -300,7 +300,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 		pKeyword++;
 	}
 
-	m_nCompiledMagicNumber = m_pTypes->m_nRegexKeyMagicNumber;	//Compiled.
+	m_nCompiledMagicNumber = m_pTypes->m_nRegexKeyMagicNumber;	// Compiled.
 
 	return TRUE;
 }
@@ -325,8 +325,8 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 		return FALSE;
 	}
 
-#if 0	//RegexKeySetTypesで設定されているはずなので廃止
-	//情報不一致ならマスタから取得してコンパイルする。
+#if 0	// RegexKeySetTypesで設定されているはずなので廃止
+	// 情報不一致ならマスタから取得してコンパイルする。
 	if (m_nCompiledMagicNumber != m_pTypes->m_nRegexKeyMagicNumber
 	 || m_nTypeIndex           != m_pTypes->m_nIdx
 	) {
@@ -337,7 +337,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 	// 検索開始のためにオフセット情報等をクリアする。
 	for (int i = 0; i < m_nRegexKeyCount; i++) {
 		m_sInfo[i].nOffset = -1;
-		//m_sInfo[i].nMatch  = RK_EMPTY;
+		// m_sInfo[i].nMatch  = RK_EMPTY;
 		m_sInfo[i].nMatch  = m_sInfo[i].nFlag;
 		m_sInfo[i].nStatus = RK_EMPTY;
 	}

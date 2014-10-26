@@ -141,7 +141,7 @@ public:
 	}
 
 private:
-	//QÆ
+	// QÆ
 	CEditView*	m_pcEditView;
 
 public:

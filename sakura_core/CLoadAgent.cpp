@@ -44,18 +44,18 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 		goto next;
 	}
 
-	//フォルダが指定された場合は「ファイルを開く」ダイアログを表示し、実際のファイル入力を促す
+	// フォルダが指定された場合は「ファイルを開く」ダイアログを表示し、実際のファイル入力を促す
 	if (IsDirectory(pLoadInfo->cFilePath)) {
 		std::vector<std::tstring> files;
 		SLoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
 		bool bDlgResult = pcDoc->m_cDocFileOperation.OpenFileDialog(
 			CEditWnd::getInstance()->GetHwnd(),
-			pLoadInfo->cFilePath,	//指定されたフォルダ
+			pLoadInfo->cFilePath,	// 指定されたフォルダ
 			&sLoadInfo,
 			files
 		);
 		if (!bDlgResult) {
-			return CALLBACK_INTERRUPT; //キャンセルされた場合は中断
+			return CALLBACK_INTERRUPT; // キャンセルされた場合は中断
 		}
 		size_t nSize = files.size();
 		if (0 < nSize) {
@@ -102,7 +102,7 @@ next:
 			//	ここでステータスメッセージを使っても画面に表示されない．
 			TopInfoMessage(
 				CEditWnd::getInstance()->GetHwnd(),
-				LS(STR_NOT_EXSIST_SAVE),	//Mar. 24, 2001 jepro 若干修正
+				LS(STR_NOT_EXSIST_SAVE),	// Mar. 24, 2001 jepro 若干修正
 				pLoadInfo->cFilePath.GetBufferPointer()
 			);
 		}
@@ -112,7 +112,7 @@ next:
 	do {
 		CFile cFile(pLoadInfo->cFilePath.c_str());
 
-		//ファイルが存在しない場合はチェック省略
+		// ファイルが存在しない場合はチェック省略
 		if (!cFile.IsFileExist()) {
 			break;
 		}
@@ -124,7 +124,7 @@ next:
 			pcDoc->m_cDocFileOperation.DoFileUnlock();
 		}
 
-		//チェック
+		// チェック
 		if (!cFile.IsFileReadable()) {
 			if (bLock) {
 				pcDoc->m_cDocFileOperation.DoFileLock(false);
@@ -134,7 +134,7 @@ next:
 				LS(STR_LOADAGENT_ERR_OPEN),
 				pLoadInfo->cFilePath.c_str()
 			);
-			return CALLBACK_INTERRUPT; //ファイルが存在しているのに読み取れない場合は中断
+			return CALLBACK_INTERRUPT; // ファイルが存在しているのに読み取れない場合は中断
 		}
 		if (bLock) {
 			pcDoc->m_cDocFileOperation.DoFileLock(false);
@@ -277,11 +277,11 @@ void CLoadAgent::OnFinalLoad(ELoadResult eLoadResult)
 		CAppMode::getInstance()->SetViewMode(true);
 	}
 
-	//再描画 $$不足
+	// 再描画 $$不足
 	// CEditWnd::getInstance()->GetActiveView().SetDrawSwitch(true);
 	bool bDraw = CEditWnd::getInstance()->GetActiveView().GetDrawSwitch();
 	if (bDraw) {
-		CEditWnd::getInstance()->Views_RedrawAll(); //ビュー再描画
+		CEditWnd::getInstance()->Views_RedrawAll(); // ビュー再描画
 		InvalidateRect( CEditWnd::getInstance()->GetHwnd(), NULL, TRUE );
 	}
 	CCaret& cCaret = CEditWnd::getInstance()->GetActiveView().GetCaret();

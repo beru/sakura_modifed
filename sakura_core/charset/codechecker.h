@@ -322,18 +322,12 @@ inline bool IsUtf16SurrogLow(const wchar_t wc) {
 //! UtF-8版 上位サロゲートか
 inline bool IsUtf8SurrogHi(const char* pS) {
 	const unsigned char* ps = reinterpret_cast<const unsigned char*>(pS);
-	if ((ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xa0) {
-		return true;
-	}
-	return false;
+	return ((ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xa0);
 }
 //! UtF-8版 下位サロゲートか
 inline bool IsUtf8SurrogLow(const char* pS) {
 	const unsigned char* ps = reinterpret_cast<const unsigned char*>(pS);
-	if ((ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xb0) {
-		return true;
-	}
-	return false;
+	return ((ps[0] & 0xff) == 0xed && (ps[1] & 0xf0) == 0xb0);
 }
 //! UTF-7 Set D の文字か
 template < typename CHAR_TYPE >

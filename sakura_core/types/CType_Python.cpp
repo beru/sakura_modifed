@@ -294,7 +294,7 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 			}
 		//	short string + 改行の場合はエラーから強制復帰
 		}else if (WCODE::IsLineDelimiter(data[col])) {
-			//あとで
+			// あとで
 			if (!m_long_string) {
 				//	文字列の末尾を発見した
 				m_state = STATE_NORMAL;

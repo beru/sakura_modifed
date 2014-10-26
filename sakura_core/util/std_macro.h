@@ -1,4 +1,4 @@
-//2007.10.18 kobake ì¬
+// 2007.10.18 kobake ì¬
 /*
 	Copyright (C) 2007, kobake
 

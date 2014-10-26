@@ -34,9 +34,9 @@ void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
 	pSelect->m_bBeginSelect			= m_bBeginSelect;		// 範囲選択中
 	pSelect->m_bBeginBoxSelect		= m_bBeginBoxSelect;	// 矩形範囲選択中
 
-	pSelect->m_sSelectBgn			= m_sSelectBgn;			//範囲選択(原点)
-	pSelect->m_sSelect				= m_sSelect;			//範囲選択
-	pSelect->m_sSelectOld			= m_sSelectOld;			//範囲選択
+	pSelect->m_sSelectBgn			= m_sSelectBgn;			// 範囲選択(原点)
+	pSelect->m_sSelect				= m_sSelect;			// 範囲選択
+	pSelect->m_sSelectOld			= m_sSelectOld;			// 範囲選択
 
 	pSelect->m_ptMouseRollPosOld	= m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 }
@@ -50,8 +50,8 @@ void CViewSelect::BeginSelectArea(const CLayoutPoint* po)
 		temp = pView->GetCaret().GetCaretLayoutPos();
 		po = &temp;
 	}
-	m_sSelectBgn.Set(*po); //範囲選択(原点)
-	m_sSelect.   Set(*po); //範囲選択
+	m_sSelectBgn.Set(*po); // 範囲選択(原点)
+	m_sSelect.   Set(*po); // 範囲選択
 }
 
 
@@ -61,7 +61,7 @@ void CViewSelect::DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine)
 	const CEditView* pView = GetEditView();
 	CEditView* pView2 = GetEditView();
 
-	m_sSelectOld = m_sSelect;		//範囲選択(Old)
+	m_sSelectOld = m_sSelect;		// 範囲選択(Old)
 	m_sSelect.Clear(-1);
 	m_bSelectingLock	 = false;	// 選択状態のロック
 
@@ -111,7 +111,7 @@ void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 			// 選択解除
 			pSelect->Clear(-1);
 			m_nLastSelectedByteLen = 0;		// 前回選択時の選択バイト数
-		}else if (PointCompare(ptCaretPos, m_sSelectBgn.GetFrom()) < 0) { //キャレット位置がm_sSelectBgnのfromより小さかったら
+		}else if (PointCompare(ptCaretPos, m_sSelectBgn.GetFrom()) < 0) { // キャレット位置がm_sSelectBgnのfromより小さかったら
 			 pSelect->SetFrom(ptCaretPos);
 			 pSelect->SetTo(m_sSelectBgn.GetFrom());
 		}else {
@@ -128,7 +128,7 @@ void CViewSelect::ChangeSelectAreaByCurrentCursorTEST(
 			}else {
 				pSelect->SetTo(ptCaretPos);
 			}
-		//キャレット位置がm_sSelectBgnのfromより小さかったら
+		// キャレット位置がm_sSelectBgnのfromより小さかったら
 		}else if (PointCompare(ptCaretPos, m_sSelectBgn.GetFrom()) < 0) {
 			// 常時選択範囲の前方向
 			pSelect->SetFrom(ptCaretPos);
@@ -697,7 +697,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 					--select_line;
 				}
 
-				//2009.07.07 syat m_nLastSelectedByteLenが0の場合は、差分ではなく全体を変換する（モード切替時にキャッシュクリアするため）
+				// 2009.07.07 syat m_nLastSelectedByteLenが0の場合は、差分ではなく全体を変換する（モード切替時にキャッシュクリアするため）
 
 				if (m_bSelectAreaChanging && m_nLastSelectedByteLen && m_sSelect.GetFrom() == m_sSelectOld.GetFrom()) {
 					// 範囲が後方に拡大された
@@ -744,7 +744,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 			}else {
 				//  文字数でカウント
 
-				//2009.07.07 syat カウント方法を切り替えながら選択範囲を拡大・縮小すると整合性が
+				// 2009.07.07 syat カウント方法を切り替えながら選択範囲を拡大・縮小すると整合性が
 				//                とれなくなるため、モード切替時にキャッシュをクリアする。
 				thiz->m_nLastSelectedByteLen = 0;
 

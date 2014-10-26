@@ -152,7 +152,7 @@ int CHokanMgr::Search(
 		pszCurWord,
 		bHokanLoHiCase,								// ˆø”‚©‚ç‚É•ÏX	2001/06/19 asa-o
 		m_vKouho,
-		0, //MaxŒó•â”
+		0, // MaxŒó•â”
 		pszHokanFile
 	);
 

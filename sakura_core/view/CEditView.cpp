@@ -255,7 +255,7 @@ BOOL CEditView::Create(
 	}
 	// to here  2002.04.10 minfu
 	
-	//2004.10.23 isearch
+	// 2004.10.23 isearch
 	m_nISearchMode = 0;
 	m_pcmigemo = NULL;
 
@@ -408,7 +408,7 @@ CEditView::~CEditView()
 //                         イベント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//TCHAR→WCHAR変換。
+// TCHAR→WCHAR変換。
 inline wchar_t tchar_to_wchar(TCHAR tc)
 {
 #ifdef _UNICODE
@@ -1223,7 +1223,7 @@ bool CEditView::IsCurrentPositionURL(
 		&ptXY
 	);
 	CLogicInt nLineLen;
-	const wchar_t* pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen); //2007.10.09 kobake レイアウト・ロジック混在バグ修正
+	const wchar_t* pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen); // 2007.10.09 kobake レイアウト・ロジック混在バグ修正
 
 	int nMatchColor;
 	int nUrlLen = 0;
@@ -1368,7 +1368,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 					nLineNum + 1
 				);
 
-				//2007.10.18 COpe整理
+				// 2007.10.18 COpe整理
 				// 指定位置の指定長データ削除
 				DeleteData2(
 					sPos,
@@ -1850,7 +1850,7 @@ bool CEditView::GetSelectedData(
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				nIdxFrom	= LineColumnToIndex(pcLayout, rcSel.left );
 				nIdxTo		= LineColumnToIndex(pcLayout, rcSel.right);
-				//2002.02.08 hor
+				// 2002.02.08 hor
 				// pLineがNULLのとき(矩形エリアの端がEOFのみの行を含むとき)は以下を処理しない
 				if (nIdxTo - nIdxFrom > 0) {
 					if (WCODE::IsLineDelimiter(pLine[nIdxTo - 1])) {
@@ -2148,9 +2148,9 @@ int CEditView::IsCurrentPositionSelected(
 	0	選択エリア内
 	1	選択エリアより後方
 */
-//2007.09.01 kobake 整理
+// 2007.09.01 kobake 整理
 int CEditView::IsCurrentPositionSelectedTEST(
-	const CLayoutPoint& ptCaretPos,      //カーソル位置
+	const CLayoutPoint& ptCaretPos,      // カーソル位置
 	const CLayoutRange& sSelect //
 ) const
 {
@@ -2258,7 +2258,7 @@ bool CEditView::MyGetClipboardData(CNativeW& cmemBuf, bool* pbColumnSelect, bool
  */
 bool CEditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
 {
-	//WCHARに変換
+	// WCHARに変換
 	std::vector<wchar_t> buf;
 	mbstowcs_vector(pszText, nTextLen, &buf);
 	return MySetClipboardData(&buf[0], buf.size()-1, bColumnSelect, bLineSelect);

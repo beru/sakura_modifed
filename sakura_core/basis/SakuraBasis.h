@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include <Windows.h> //POINT,LONG
+#include <Windows.h> // POINT, LONG
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      ‚PŽŸŒ³Œ^‚Ì’è‹`                         //

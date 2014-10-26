@@ -26,7 +26,7 @@
 //	Jul. 21, 2003 genta 他でも使うので関数の外に出した
 //	Oct. 21, 2000 JEPRO 設定
 const int MAX_X = MAX_TOOLBAR_ICON_X;
-const int MAX_Y = MAX_TOOLBAR_ICON_Y;	//2002.01.17
+const int MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
 
 //! コンストラクタ
 CImageListMgr::CImageListMgr()
@@ -289,7 +289,7 @@ void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth,
 
 	// Copy the image from the toolbar into the memory DC
 	// and draw it (grayed) back into the toolbar.
-    //SK: Looks better on the old shell
+    // SK: Looks better on the old shell
 	// 2003.08.29 Moca 作画方法を変更
 	COLORREF coltxOld = ::SetTextColor(drawdc, RGB(0, 0, 0));
 	COLORREF colbkOld = ::SetBkColor(drawdc, RGB(255, 255, 255));
@@ -380,7 +380,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 	int index = m_nIconCount;
 	m_nIconCount++;
 
-	//アイコンを読み込む
+	// アイコンを読み込む
 	HBITMAP hExtBmp = (HBITMAP)::LoadImage(NULL, szPath, IMAGE_BITMAP, 0, 0,
 		LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
@@ -388,7 +388,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 		return -1;
 	}
 
-	//m_hIconBitmapにコピーする
+	// m_hIconBitmapにコピーする
 	HDC hDestDC = ::CreateCompatibleDC(0);
 	HBITMAP hOldDestBmp = (HBITMAP)::SelectObject(hDestDC, m_hIconBitmap);
 
@@ -417,14 +417,14 @@ void CImageListMgr::Extend(bool bExtend)
 	HDC hSrcDC = ::CreateCompatibleDC(0);
 	HBITMAP hSrcBmpOld = (HBITMAP)::SelectObject(hSrcDC, m_hIconBitmap);
 
-	//1行拡張したビットマップを作成
+	// 1行拡張したビットマップを作成
 	HDC hDestDC = ::CreateCompatibleDC(hSrcDC);
 	HBITMAP hDestBmp = ::CreateCompatibleBitmap(hSrcDC, MAX_X * cx(), (curY + (bExtend ? 1 : 0)) * cy());
 	HBITMAP hDestBmpOld = (HBITMAP)::SelectObject(hDestDC, hDestBmp);
 
 	::BitBlt(hDestDC, 0, 0, MAX_X * cx(), curY * cy(), hSrcDC, 0, 0, SRCCOPY);
 
-	//拡張した部分は透過色で塗る
+	// 拡張した部分は透過色で塗る
 	if (bExtend) {
 		FillSolidRect(hDestDC, 0, curY * cy(), MAX_X * cx(), cy(), m_cTrans);
 	}
@@ -436,7 +436,7 @@ void CImageListMgr::Extend(bool bExtend)
 	::SelectObject(hDestDC, hDestBmpOld);
 	::DeleteDC(hDestDC);
 
-	//ビットマップの差し替え
+	// ビットマップの差し替え
 	m_hIconBitmap = hDestBmp;
 }
 

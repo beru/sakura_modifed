@@ -113,7 +113,7 @@ enum EStringLiteralType {
 
 //! タイプ別設定
 struct STypeConfig {
-	//2007.09.07 変数名変更: m_nMaxLineSize→m_nMaxLineKetas
+	// 2007.09.07 変数名変更: m_nMaxLineSize→m_nMaxLineKetas
 	int					m_nIdx;
 	int					m_id;
 	TCHAR				m_szTypeName[64];				//!< タイプ属性：名称
@@ -251,7 +251,7 @@ struct STypeConfigMini {
 //                   タイプ別設定アクセサ                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //!ドキュメント種類。共有データ内 STypeConfig へのアクセサも兼ねる。
-//2007.12.13 kobake 作成
+// 2007.12.13 kobake 作成
 class CTypeConfig {
 public:
 	CTypeConfig()
@@ -271,7 +271,7 @@ public:
 	bool IsValidType() const { return m_nType >= 0 && m_nType < MAX_TYPES; }
 	int GetIndex() const { /*assert(IsValid());*/ return m_nType; }
 
-	//共有データへの簡易アクセサ
+	// 共有データへの簡易アクセサ
 //	STypeConfig* operator->() { return GetTypeConfig(); }
 //	STypeConfig* GetTypeConfig();
 private:

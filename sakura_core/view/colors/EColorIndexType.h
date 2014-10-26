@@ -49,14 +49,14 @@ enum EColorIndexType {
 	COLORIDX_GYOU_MOD,		//!< 行番号(変更行)
 	COLORIDX_EVENLINEBG,	//!< 奇数行の背景色
 	COLORIDX_TAB,			//!< TAB記号
-	COLORIDX_SPACE,			//!< 半角空白 //2002.04.28 Add by KK 以降全て+1
+	COLORIDX_SPACE,			//!< 半角空白 // 2002.04.28 Add by KK 以降全て+1
 	COLORIDX_ZENSPACE,		//!< 日本語空白
 	COLORIDX_CTRLCODE,		//!< コントロールコード
 	COLORIDX_EOL,			//!< 改行記号
 	COLORIDX_WRAP,			//!< 折り返し記号
 	COLORIDX_VERTLINE,		//!< 指定桁縦線	// 2005.11.08 Moca
 	COLORIDX_EOF,			//!< EOF記号
-	COLORIDX_DIGIT,			//!< 半角数値	 //@@@ 2001.02.17 by MIK //色設定Ver.3からユーザファイルに対しては文字列で処理しているのでリナンバリングしてもよい. Mar. 7, 2001 JEPRO noted
+	COLORIDX_DIGIT,			//!< 半角数値	 //@@@ 2001.02.17 by MIK // 色設定Ver.3からユーザファイルに対しては文字列で処理しているのでリナンバリングしてもよい. Mar. 7, 2001 JEPRO noted
 	COLORIDX_BRACKET_PAIR,	//!< 対括弧	  // 02/09/18 ai Add
 	COLORIDX_SELECT,		//!< 選択範囲
 	COLORIDX_SEARCH,		//!< 検索文字列
@@ -64,13 +64,13 @@ enum EColorIndexType {
 	COLORIDX_SEARCH3,		//!< 検索文字列3
 	COLORIDX_SEARCH4,		//!< 検索文字列4
 	COLORIDX_SEARCH5,		//!< 検索文字列5
-	COLORIDX_COMMENT,		//!< 行コメント						//Dec. 4, 2000 shifted by MIK
-	COLORIDX_SSTRING,		//!< シングルクォーテーション文字列	//Dec. 4, 2000 shifted by MIK
-	COLORIDX_WSTRING,		//!< ダブルクォーテーション文字列		//Dec. 4, 2000 shifted by MIK
+	COLORIDX_COMMENT,		//!< 行コメント						// Dec. 4, 2000 shifted by MIK
+	COLORIDX_SSTRING,		//!< シングルクォーテーション文字列	// Dec. 4, 2000 shifted by MIK
+	COLORIDX_WSTRING,		//!< ダブルクォーテーション文字列		// Dec. 4, 2000 shifted by MIK
 	COLORIDX_HEREDOC,		//!< ヒアドキュメント
-	COLORIDX_URL,			//!< URL								//Dec. 4, 2000 shifted by MIK
+	COLORIDX_URL,			//!< URL								// Dec. 4, 2000 shifted by MIK
 	COLORIDX_KEYWORD1,		//!< 強調キーワード1 // 2002/03/13 novice
-	COLORIDX_KEYWORD2,		//!< 強調キーワード2 // 2002/03/13 novice  //MIK ADDED
+	COLORIDX_KEYWORD2,		//!< 強調キーワード2 // 2002/03/13 novice  // MIK ADDED
 	COLORIDX_KEYWORD3,		//!< 強調キーワード3 // 2005.01.13 MIK 3-10 added
 	COLORIDX_KEYWORD4,		//!< 強調キーワード4
 	COLORIDX_KEYWORD5,		//!< 強調キーワード5

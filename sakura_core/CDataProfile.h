@@ -212,7 +212,7 @@ public:
 		}
 	}
 
-	//2007.08.14 kobake ’Ç‰Á
+	// 2007.08.14 kobake ’Ç‰Á
 	//! int‚ğ‰î‚µ‚Ä”CˆÓŒ^‚Ì“üo—Í‚ğs‚¤
 	template <class T>
 	bool IOProfileData_WrapInt(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {

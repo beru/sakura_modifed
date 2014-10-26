@@ -75,9 +75,9 @@ public:
 	*/
 	virtual BOOL LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode) = 0;
 
-	//static CMacroManagerBase* Creator(const char* str);
-	//純粋仮想クラスは実体化できないのでFactoryは不要。
-	//継承先クラスでは必要。
+	// static CMacroManagerBase* Creator(const char* str);
+	// 純粋仮想クラスは実体化できないのでFactoryは不要。
+	// 継承先クラスでは必要。
 	
 	// デストラクタのvirtualを忘れずに
 	virtual ~CMacroManagerBase();

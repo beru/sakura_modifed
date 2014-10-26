@@ -44,8 +44,8 @@ static const DWORD p_helpids[] = {	//10000
 	IDC_RADIO_BACKUP_TYPE1,			HIDC_RADIO_BACKUP_TYPE1,		// バックアップの種類（拡張子）
 //	IDC_RADIO_BACKUP_TYPE2,			HIDC_RADIO_BACKUP_TYPE2NEWHID,	// バックアップの種類（日付・時刻） // 2002.11.09 Moca HIDが.._TYPE3と逆だった	// Jun.  5, 2004 genta 廃止
 	IDC_RADIO_BACKUP_TYPE3,			HIDC_RADIO_BACKUP_TYPE3NEWHID,	// バックアップの種類（連番）// 2002.11.09 Moca HIDが.._TYPE2と逆だった
-	IDC_RADIO_BACKUP_DATETYPE1,		HIDC_RADIO_BACKUP_DATETYPE1,	// 付加する日時の種類（作成日時）	//Jul. 05, 2001 JEPRO 追加
-	IDC_RADIO_BACKUP_DATETYPE2,		HIDC_RADIO_BACKUP_DATETYPE2,	// 付加する日時の種類（更新日時）	//Jul. 05, 2001 JEPRO 追加
+	IDC_RADIO_BACKUP_DATETYPE1,		HIDC_RADIO_BACKUP_DATETYPE1,	// 付加する日時の種類（作成日時）	// Jul. 05, 2001 JEPRO 追加
+	IDC_RADIO_BACKUP_DATETYPE2,		HIDC_RADIO_BACKUP_DATETYPE2,	// 付加する日時の種類（更新日時）	// Jul. 05, 2001 JEPRO 追加
 	IDC_SPIN_BACKUP_GENS,			HIDC_EDIT_BACKUP_3,				// 保存する世代数のスピン
 	IDC_CHECK_BACKUP_RETAINEXT,		HIDC_CHECK_BACKUP_RETAINEXT,	// 元の拡張子を保存	// 2006.08.06 ryoji
 	IDC_CHECK_BACKUP_ADVANCED,		HIDC_CHECK_BACKUP_ADVANCED,		// 詳細設定	// 2006.08.06 ryoji
@@ -81,7 +81,7 @@ INT_PTR CPropBackup::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
 //	int			nVal;
-	int			nVal;	//Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
+	int			nVal;	// Sept.21, 2000 JEPRO スピン要素を加えたので復活させた
 //	int			nDummy;
 //	int			nCharChars;
 
@@ -211,7 +211,7 @@ INT_PTR CPropBackup::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;

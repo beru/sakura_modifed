@@ -8,24 +8,24 @@
 #include "outline/CFuncInfoArr.h"
 #include "view/colors/EColorIndexType.h"
 
-/* テキスト */
-//Sep. 20, 2000 JEPRO テキストの規定値を80→120に変更(不具合一覧.txtがある程度読みやすい桁数)
-//Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする
-//Jan. 12, 2001 JEPRO readme.1st も読めるようにする
-//Feb. 12, 2001 JEPRO .err エラーメッセージ
-//Nov.  6, 2002 genta docはMS Wordに譲ってここからは外す（関連づけ防止のため）
-//Nov.  6, 2002 genta log を追加
+// テキスト
+// Sep. 20, 2000 JEPRO テキストの規定値を80→120に変更(不具合一覧.txtがある程度読みやすい桁数)
+// Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする
+// Jan. 12, 2001 JEPRO readme.1st も読めるようにする
+// Feb. 12, 2001 JEPRO .err エラーメッセージ
+// Nov.  6, 2002 genta docはMS Wordに譲ってここからは外す（関連づけ防止のため）
+// Nov.  6, 2002 genta log を追加
 void CType_Text::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("テキスト"));
 	_tcscpy(pType->m_szTypeExts, _T("txt,log,1st,err,ps"));
 
-	//設定
-	pType->m_nMaxLineKetas = CLayoutInt(120);					/* 折り返し桁数 */
-	pType->m_eDefaultOutline = OUTLINE_TEXT;					/* アウトライン解析方法 */
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	//Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
-	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	//Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
+	// 設定
+	pType->m_nMaxLineKetas = CLayoutInt(120);					// 折り返し桁数
+	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
+	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
 	pType->m_bKinsokuHead = false;								// 行頭禁則				//@@@ 2002.04.08 MIK
 	pType->m_bKinsokuTail = false;								// 行末禁則				//@@@ 2002.04.08 MIK
 	pType->m_bKinsokuRet  = false;								// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
@@ -34,11 +34,11 @@ void CType_Text::InitTypeConfigImp(STypeConfig* pType)
 	wcscpy_s(pType->m_szKinsokuTail, L"$([{￡\\‘“〈《「『【〔＄（［｛｢￡￥");		/* 行末禁則 */	//@@@ 2002.04.08 MIK 
 	// pType->m_szKinsokuKuto（句読点ぶら下げ文字）はここではなく全タイプにデフォルト設定	// 2009.08.07 ryoji 
 
-	//※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
-	//※""で挟まれる設定は挟まれない設定よりも上に無ければならない
-	//※""で挟まれる設定を複製してちょっと修正すれば、<>や[]に挟まれたものにも対応できる（ユーザに任せる）
+	// ※小さな親切として、C:\～～ や \\～～ などのファイルパスをクリッカブルにする設定を「テキスト」に既定で仕込む
+	// ※""で挟まれる設定は挟まれない設定よりも上に無ければならない
+	// ※""で挟まれる設定を複製してちょっと修正すれば、<>や[]に挟まれたものにも対応できる（ユーザに任せる）
 
-	//正規表現キーワード
+	// 正規表現キーワード
 	int keywordPos = 0;
 	wchar_t* pKeyword = pType->m_RegexKeywordList;
 	pType->m_bUseRegexKeyword = true;							// 正規表現キーワードを使うか
@@ -68,7 +68,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 {
 	using namespace WCODE;
 
-	//見出し記号
+	// 見出し記号
 	const wchar_t*	pszStarts = GetDllShareData().m_Common.m_sFormat.m_szMidashiKigou;
 	int				nStartsLen = wcslen(pszStarts);
 
@@ -82,12 +82,12 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 	CLogicInt				nLineCount;
 	bool b278a = false;
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		//行取得
+		// 行取得
 		CLogicInt		nLineLen;
 		const wchar_t*	pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 
-		//行頭の空白飛ばし
+		// 行頭の空白飛ばし
 		int i;
 		for (i = 0; i < nLineLen; ++i) {
 			if (WCODE::IsBlank(pLine[i])) {
@@ -99,7 +99,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 			continue;
 		}
 
-		//先頭文字が見出し記号のいずれかであれば、次へ進む
+		// 先頭文字が見出し記号のいずれかであれば、次へ進む
 		int nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
 		int nCharChars2;
 		int j;
@@ -116,12 +116,12 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 			continue;
 		}
 
-		//見出し種類の判別 -> szTitle
+		// 見出し種類の判別 -> szTitle
 		if (pLine[i] == L'(') {
-			     if (IsInRange(pLine[i + 1], L'0', L'9')) wcscpy_s(szTitle, L"(0)"); //数字
-			else if (IsInRange(pLine[i + 1], L'A', L'Z')) wcscpy_s(szTitle, L"(A)"); //英大文字
-			else if (IsInRange(pLine[i + 1], L'a', L'z')) wcscpy_s(szTitle, L"(a)"); //英小文字
-			else continue; //※「(」の次が英数字で無い場合、見出しとみなさない
+			     if (IsInRange(pLine[i + 1], L'0', L'9')) wcscpy_s(szTitle, L"(0)"); // 数字
+			else if (IsInRange(pLine[i + 1], L'A', L'Z')) wcscpy_s(szTitle, L"(A)"); // 英大文字
+			else if (IsInRange(pLine[i + 1], L'a', L'z')) wcscpy_s(szTitle, L"(a)"); // 英小文字
+			else continue; // ※「(」の次が英数字で無い場合、見出しとみなさない
 		}
 		else if (IsInRange(pLine[i], L'０', L'９')) wcscpy(szTitle, L"０"); // 全角数字
 		else if (0
@@ -147,7 +147,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		else if (IsInRange(pLine[i], L'\u3220', L'\u3229')) wcscpy(szTitle, L"\ua3220"); // (一)-(十)
 		else if (IsInRange(pLine[i], L'\u3280', L'\u3289')) wcscpy(szTitle, L"\u3220"); // ○一-○十
 		else if (IsInRange(pLine[i], L'\u32d0', L'\u32fe')) wcscpy(szTitle, L"\u32d0"); // ○ア-○ヲ
-		else if (wcschr(L"〇一二三四五六七八九十百零壱弐参伍", pLine[i])) wcscpy(szTitle, L"一"); //漢数字
+		else if (wcschr(L"〇一二三四五六七八九十百零壱弐参伍", pLine[i])) wcscpy(szTitle, L"一"); // 漢数字
 		else {
 			wcsncpy(szTitle, &pLine[i], nCharChars);	//	先頭文字をszTitleに保持。
 			szTitle[nCharChars] = L'\0';
@@ -158,7 +158,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 			で始まる行は、アウトライン結果に表示する。
 		*/
 
-		//行文字列から改行を取り除く pLine -> pszText
+		// 行文字列から改行を取り除く pLine -> pszText
 		wchar_t* pszText = new wchar_t[nLineLen + 1];
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';

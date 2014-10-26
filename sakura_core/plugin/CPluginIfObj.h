@@ -39,15 +39,15 @@
 class CPluginIfObj : public CWSHIfObj {
 	// 型定義
 	enum FuncId {
-		F_PL_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
-		F_PL_SETOPTION,							//オプションファイルに値を書く
-		F_PL_ADDCOMMAND,						//コマンドを追加する
-		F_PL_FUNCTION_FIRST = F_FUNCTION_FIRST,	//↓関数は以下に追加する
-		F_PL_GETPLUGINDIR,						//プラグインフォルダパスを取得する
-		F_PL_GETDEF,							//設定ファイルから値を読む
-		F_PL_GETOPTION,							//オプションファイルから値を読む
-		F_PL_GETCOMMANDNO,						//実行中プラグの番号を取得する
-		F_PL_GETSTRING,							//設定ファイルから文字列を読みだす(多言語対応)
+		F_PL_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
+		F_PL_SETOPTION,							// オプションファイルに値を書く
+		F_PL_ADDCOMMAND,						// コマンドを追加する
+		F_PL_FUNCTION_FIRST = F_FUNCTION_FIRST,	// ↓関数は以下に追加する
+		F_PL_GETPLUGINDIR,						// プラグインフォルダパスを取得する
+		F_PL_GETDEF,							// 設定ファイルから値を読む
+		F_PL_GETOPTION,							// オプションファイルから値を読む
+		F_PL_GETCOMMANDNO,						// 実行中プラグの番号を取得する
+		F_PL_GETSTRING,							// 設定ファイルから文字列を読みだす(多言語対応)
 	};
 	typedef std::string string;
 	typedef std::wstring wstring;
@@ -84,14 +84,14 @@ public:
 		Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
 		switch (LOWORD(ID)) {
-		case F_PL_GETPLUGINDIR:			//プラグインフォルダパスを取得する
+		case F_PL_GETPLUGINDIR:			// プラグインフォルダパスを取得する
 			{
 				SysString S(m_cPlugin.m_sBaseDir.c_str(), m_cPlugin.m_sBaseDir.size());
 				Wrap(&Result)->Receive(S);
 			}
 			return true;
-		case F_PL_GETDEF:				//設定ファイルから値を読む
-		case F_PL_GETOPTION:			//オプションファイルから値を読む
+		case F_PL_GETDEF:				// 設定ファイルから値を読む
+		case F_PL_GETOPTION:			// オプションファイルから値を読む
 			{
 				CDataProfile cProfile;
 				wstring sSection;
@@ -129,7 +129,7 @@ public:
 				Wrap(&Result)->Receive(S);
 			}
 			return true;
-		case F_PL_GETCOMMANDNO:			//実行中プラグの番号を取得する
+		case F_PL_GETCOMMANDNO:			// 実行中プラグの番号を取得する
 			{
 				Wrap(&Result)->Receive(m_nPlugIndex);
 			}
@@ -188,6 +188,6 @@ private:
 	CPlugin& m_cPlugin;
 	static MacroFuncInfo m_MacroFuncInfoCommandArr[];	// コマンド情報(戻り値なし)
 	static MacroFuncInfo m_MacroFuncInfoArr[];	// 関数情報(戻り値あり)
-	int m_nPlugIndex;	//実行中プラグの番号
+	int m_nPlugIndex;	// 実行中プラグの番号
 };
 

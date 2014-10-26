@@ -309,7 +309,7 @@ HDC CPrint::CreateDC(
 	pDEVMODE->dmPaperWidth	= pMYDEVMODE->dmPaperWidth;
 
 	//
-	//DocumentProperties()でアプリケーション独自のプリンタ設定に変更する
+	// DocumentProperties()でアプリケーション独自のプリンタ設定に変更する
 	//
 	::DocumentProperties(
 		NULL,
@@ -380,7 +380,7 @@ BOOL CPrint::GetPrintMetrics(
 	}
 
 	// マッピング モードの設定
-	::SetMapMode(hdc, MM_LOMETRIC);	//MM_LOMETRIC	それぞれの論理単位は 0.1 mm にマップされます。
+	::SetMapMode(hdc, MM_LOMETRIC);	// MM_LOMETRIC	それぞれの論理単位は 0.1 mm にマップされます。
 
 	// 最小左マージンと最小上マージンを取得(1mm単位)
 	POINT	po;
@@ -471,7 +471,7 @@ BOOL CPrint::PrintOpen(
 	}
 
 	// マッピング モードの設定
-	::SetMapMode(hdc, MM_LOMETRIC);	//MM_LOMETRIC		それぞれの論理単位は、0.1 mm にマップされます。
+	::SetMapMode(hdc, MM_LOMETRIC);	// MM_LOMETRIC		それぞれの論理単位は、0.1 mm にマップされます。
 
 	//
 	//  印刷ジョブ開始

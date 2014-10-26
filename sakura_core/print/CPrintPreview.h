@@ -133,8 +133,8 @@ protected:
 		POINT			ptDraw,		//!< •`‰æÀ•WBHDC“à•”’PˆÊB
 		const wchar_t*	pPhysicalLine,
 		int				nBlockLen,
-		int				nKind,		//< 0:”¼Šp, 1:‘SŠp
-		const CLayout*	pcLayout,	//!< FÝ’è—pLayout
+		int				nKind,		// 0:”¼Šp, 1:‘SŠp
+		const CLayout*	pcLayout,	// FÝ’è—pLayout
 		const CColorStrategy*	pStrategy,
 		int				nBgnPhysical,
 		CLayoutInt		nLayoutX,

@@ -27,7 +27,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 	std::auto_ptr<CCodeBase> pcCodeBase(CCodeFactory::CreateCodeBase(sSaveInfo.eCharCode, 0));
 
 	try {
-		//ファイルオープン
+		// ファイルオープン
 		CBinaryOutputStream out(sSaveInfo.cFilePath, true);
 
 		// 各行出力
@@ -66,7 +66,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 				NotifyProgress(nLineNumber * 100 / pcDocLineMgr.GetLineCount());
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook(NULL)) {
-					throw CAppExitException(); //中断検出
+					throw CAppExitException(); // 中断検出
 				}
 			}
 

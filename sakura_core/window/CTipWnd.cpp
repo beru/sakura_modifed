@@ -51,7 +51,7 @@ void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 		hInstance,
 		// WNDCLASS用
 		NULL,// Handle to the class icon.
-		NULL,	//Handle to a small icon
+		NULL,	// Handle to a small icon
 		::LoadCursor(NULL, IDC_ARROW),// Handle to the class cursor.
 		(HBRUSH)/*NULL*/(COLOR_INFOBK + 1),// Handle to the class background brush.
 		NULL/*MAKEINTRESOURCE(MYDOCUMENT)*/,// Pointer to a null-terminated character string that specifies the resource name of the class menu, as the name appears in the resource file.
@@ -273,7 +273,7 @@ void CTipWnd::GetWindowSize(LPRECT pRect)
 	const TCHAR* pszText = m_cInfo.GetStringPtr();
 	// ウィンドウのサイズを得る
 	ComputeWindowSize(hdc, m_hFont, pszText , pRect);
-	ReleaseDC(GetHwnd(), hdc); //2007.10.10 kobake ReleaseDCが抜けていたのを修正
+	ReleaseDC(GetHwnd(), hdc); // 2007.10.10 kobake ReleaseDCが抜けていたのを修正
 }
 
 // 2001/06/19 End

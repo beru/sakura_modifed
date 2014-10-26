@@ -411,7 +411,7 @@ CLayoutInt CEditView::ScrollAtV(CLayoutInt nPos)
 	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 
-	return -nScrollRowNum;	//方向が逆なので符号反転が必要
+	return -nScrollRowNum;	// 方向が逆なので符号反転が必要
 }
 
 
@@ -495,7 +495,7 @@ CLayoutInt CEditView::ScrollAtH(CLayoutInt nPos)
 	// キャレットの表示・更新
 	GetCaret().ShowEditCaret();
 
-	return -nScrollColNum;	//方向が逆なので符号反転が必要
+	return -nScrollColNum;	// 方向が逆なので符号反転が必要
 }
 
 
@@ -643,7 +643,7 @@ void CEditView::SyncScrollH(CLayoutInt col)
 #else
 		cEditView.ScrollAtH(GetTextArea().GetViewLeftCol());
 #endif
-		GetRuler().SetRedrawFlag(); //2002.02.25 Add By KK スクロール時ルーラー全体を描きなおす。
+		GetRuler().SetRedrawFlag(); // 2002.02.25 Add By KK スクロール時ルーラー全体を描きなおす。
 		GetRuler().DispRuler(hdc);
 		::ReleaseDC(GetHwnd(), hdc);
 	}

@@ -111,7 +111,7 @@ BOOL CViewCommander::HandleCommand(
 		bRepeat = false;
 		// キーマクロに記録可能な機能かどうかを調べる
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-		//F_EXECEXTMACROコマンドはファイルを選択した後にマクロ文が確定するため個別に記録する。
+		// F_EXECEXTMACROコマンドはファイルを選択した後にマクロ文が確定するため個別に記録する。
 		if (CSMacroMgr::CanFuncIsKeyMacro(nCommand) &&
 			nCommand != F_EXECEXTMACRO	// F_EXECEXTMACROは個別で記録します
 		) {
@@ -236,7 +236,7 @@ BOOL CViewCommander::HandleCommand(
 	case F_PROPERTY_FILE:		Command_PROPERTY_FILE(); break;		// ファイルのプロパティ
 	case F_EXITALLEDITORS:		Command_EXITALLEDITORS(); break;	// 編集の全終了	// 2007.02.13 ryoji 追加
 	case F_EXITALL:				Command_EXITALL(); break;			// サクラエディタの全終了	// Dec. 26, 2000 JEPRO 追加
-	case F_PUTFILE:				Command_PUTFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// 作業中ファイルの一時出力 //maru 2006.12.10
+	case F_PUTFILE:				Command_PUTFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// 作業中ファイルの一時出力 // maru 2006.12.10
 	case F_INSFILE:				Command_INSFILE((LPCWSTR)lparam1, (ECodeType)lparam2, (int)lparam3); break;	// キャレット位置にファイル挿入 //maru 2006.12.10
 
 	// 編集系
@@ -280,13 +280,13 @@ BOOL CViewCommander::HandleCommand(
 	case F_WORDLEFT:		Command_WORDLEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// 単語の左端に移動
 	case F_WORDRIGHT:		Command_WORDRIGHT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 単語の右端に移動
 	// 0ct. 29, 2001 genta マクロ向け機能拡張
-	case F_GOLINETOP:		Command_GOLINETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, lparam1); break;	// 行頭に移動(折り返し単位/改行単位)
+	case F_GOLINETOP:		Command_GOLINETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, lparam1); break;		// 行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND:		Command_GOLINEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
-//	case F_ROLLDOWN:		Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// スクロールダウン
+//	case F_ROLLDOWN:		Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールダウン
 //	case F_ROLLUP:			Command_ROLLUP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールアップ
 	case F_HalfPageUp:		Command_HalfPageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 半ページアップ	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_HalfPageDown:	Command_HalfPageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;			// 半ページダウン	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_1PageUp:			Command_1PageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// １ページアップ	// Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	case F_HalfPageDown:	Command_HalfPageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// 半ページダウン	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_1PageUp:			Command_1PageUp(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// １ページアップ	// Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
 	case F_1PageDown:		Command_1PageDown(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// １ページダウン	// Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	case F_GOFILETOP:		Command_GOFILETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの先頭に移動
 	case F_GOFILEEND:		Command_GOFILEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの最後に移動

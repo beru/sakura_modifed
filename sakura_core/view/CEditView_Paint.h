@@ -32,7 +32,7 @@ enum EPaintArea{
 	PAINT_RULER      = (1 << 1), //!< ƒ‹[ƒ‰[
 	PAINT_BODY       = (1 << 2), //!< –{•¶
 
-	//“ÁŽê
+	// “ÁŽê
 	PAINT_ALL        = PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, //!< ‚º‚ñ‚Ô
 };
 

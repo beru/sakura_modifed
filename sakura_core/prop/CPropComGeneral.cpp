@@ -254,7 +254,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PROPCOM_PAGENUM_GENERAL;	//Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
+				m_nPageNum = ID_PROPCOM_PAGENUM_GENERAL;	// Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
 				return TRUE;
 			}
 			break;
@@ -274,12 +274,12 @@ INT_PTR CPropGeneral::DispatchEvent(
 			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;
-		//NOTREACHED
+		// NOTREACHED
 //		break;
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -454,7 +454,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 		csGeneral.m_nMRUArrNum_MAX = MAX_MRU;
 	}
 
-	{	//履歴の管理	//@@@ 2003.04.09 MIK
+	{	// 履歴の管理	//@@@ 2003.04.09 MIK
 		CRecentFile	cRecentFile;
 		cRecentFile.UpdateView();
 		cRecentFile.Terminate();

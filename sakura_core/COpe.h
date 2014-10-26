@@ -49,7 +49,7 @@ typedef std::vector<CLineData> COpeLineData;
 	Undoのためにに操作手順を記録するために用いる。
 	1オブジェクトが１つの操作を表す。
 */
-//2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
+// 2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
 class COpe {
 public:
 	COpe(EOpeCode eCode = OPE_UNKNOWN);		// COpeクラス構築

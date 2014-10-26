@@ -81,7 +81,7 @@ public:
 	// ひとつはオーバーヘッドを抑える意味で。
 	// ひとつは変換によるデータ喪失を抑える意味で。
 
-	//WCHAR
+	// WCHAR
 	void SetStringNew(const wchar_t* wszData, int nDataLen);
 	void SetStringNew(const wchar_t* wszData);
 	void AppendStringNew(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
@@ -92,7 +92,7 @@ public:
 	void AppendStringW(const wchar_t* pData, int nLength)	{ return AppendStringNew(pData, nLength); }
 	const wchar_t* GetStringW() const;
 
-	//TCHAR
+	// TCHAR
 #ifdef _UNICODE
 	void SetStringT(const TCHAR* pszData)				{ return SetStringNew(pszData); }
 	void SetStringT(const TCHAR* pData, int nLength)	{ return SetStringNew(pData, nLength); }

@@ -1131,7 +1131,7 @@ void CViewCommander::Command_COPYTAG(void)
 
 
 //// キー割り当て一覧をコピー
-// Dec. 26, 2000 JEPRO //Jan. 24, 2001 JEPRO debug version (directed by genta)
+// Dec. 26, 2000 JEPRO // Jan. 24, 2001 JEPRO debug version (directed by genta)
 void CViewCommander::Command_CREATEKEYBINDLIST(void)
 {
 	CNativeW cMemKeyList;

@@ -141,17 +141,17 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 		ptFrom = this->GetSelectionInfo().m_sSelect.GetFrom();
 	}
 
-	//子プロセスの標準出力と接続するパイプを作成
+	// 子プロセスの標準出力と接続するパイプを作成
 	SECURITY_ATTRIBUTES	sa;
 	sa.nLength = sizeof(sa);
 	sa.bInheritHandle = TRUE;
 	sa.lpSecurityDescriptor = NULL;
 	HANDLE hStdOutWrite, hStdOutRead;
 	if (CreatePipe(&hStdOutRead, &hStdOutWrite, &sa, 1000) == FALSE) {
-		//エラー。対策無し
+		// エラー。対策無し
 		return;
 	}
-	//hStdOutReadのほうは子プロセスでは使用されないので継承不能にする（子プロセスのリソースを無駄に増やさない）
+	// hStdOutReadのほうは子プロセスでは使用されないので継承不能にする（子プロセスのリソースを無駄に増やさない）
 	DuplicateHandle(GetCurrentProcess(), hStdOutRead,
 				GetCurrentProcess(), &hStdOutRead,					// 新しい継承不能ハンドルを受け取る	// 2007.01.31 ryoji
 				0, FALSE,
@@ -196,7 +196,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 			// 2013.06.12 Moca 標準入力ハンドルを用意する
 			HANDLE hStdInWrite = NULL;
 			if (CreatePipe(&hStdIn, &hStdInWrite, &sa, 1000) == FALSE) {
-				//エラー
+				// エラー
 				hStdIn = hStdInWrite = NULL;
 			}
 			if (hStdInWrite != NULL) {
@@ -206,7 +206,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 	}
 	// To Here 2007.03.18 maru 子プロセスの標準入力ハンドル
 	
-	//CreateProcessに渡すSTARTUPINFOを作成
+	// CreateProcessに渡すSTARTUPINFOを作成
 	STARTUPINFO	sui;
 	ZeroMemory(&sui, sizeof(sui));
 	sui.cb = sizeof(sui);
@@ -218,20 +218,20 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 		sui.hStdError = bGetStdout ? hStdOutWrite : GetStdHandle(STD_ERROR_HANDLE);
 	}
 
-	//コマンドライン実行
+	// コマンドライン実行
 	TCHAR cmdline[1024];
 	_tcscpy_s(cmdline, pszCmd);
 	if (CreateProcess(NULL, cmdline, NULL, NULL, TRUE,
 				CREATE_NEW_CONSOLE, NULL, bCurDir ? pszCurDir : NULL, &sui, &pi) == FALSE
 	) {
-		//実行に失敗した場合、コマンドラインベースのアプリケーションと判断して
+		// 実行に失敗した場合、コマンドラインベースのアプリケーションと判断して
 		// command(9x) か cmd(NT) を呼び出す
 
 		// 2010.08.27 Moca システムディレクトリ付加
 		TCHAR szCmdDir[_MAX_PATH];
 		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
 
-		//コマンドライン文字列作成
+		// コマンドライン文字列作成
 		auto_sprintf_s(
 			cmdline,
 			_T("\"%ts\\%ts\" %ts%ts%ts"),
@@ -283,11 +283,11 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 		bool	bCancelEnd = false; // キャンセルでプロセス停止
 		OutputAdapter oa(this, bToEditWindow);
 
-		//中断ダイアログ表示
+		// 中断ダイアログ表示
 		cDlgCancel.DoModeless(G_AppInstance(), m_hwndParent, IDD_EXECRUNNING);
 		// ダイアログにコマンドを表示
 		::DlgItem_SetText(cDlgCancel.GetHwnd(), IDC_STATIC_CMD, pszCmd);
-		//実行したコマンドラインを表示
+		// 実行したコマンドラインを表示
 		// 2004.09.20 naoh 多少は見やすく・・・
 		// 2006.12.03 maru アウトプットウィンドウにのみ出力
 		if (bOutputExtInfo) {
@@ -308,7 +308,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 			oa.OutputW(L"#============================================================\r\n");
 		}
 		
-		//charで読む
+		// charで読む
 		typedef char PIPE_CHAR;
 		const int WORK_NULL_TERMS = sizeof(wchar_t); // 出力用\0の分
 		const int MAX_BUFIDX = 10; // bufidxの分
@@ -319,9 +319,9 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 		// テキストモードだと new_cntが改行に\rがつく分だけ向こう側の設定値より多く一度に送られてくる
 		// 4KBだと 4096 -> 100 -> 4096 -> 100 のように読み取ることになるので5KBにした
 		PIPE_CHAR work[MAX_WORK_READ + MAX_BUFIDX + WORK_NULL_TERMS];
-		//実行結果の取り込み
+		// 実行結果の取り込み
 		do {
-			//プロセスが終了していないか確認
+			// プロセスが終了していないか確認
 			// Jun. 04, 2003 genta CPU消費を減らすために200msec待つ
 			// その間メッセージ処理が滞らないように待ち方をWaitForSingleObjectから
 			// MsgWaitForMultipleObjectに変更
@@ -330,12 +330,12 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 			// 停止してしまうため，待ち時間を200msから20msに減らす
 			switch (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, 20, QS_ALLEVENTS)) {
 			case WAIT_OBJECT_0:
-				//終了していればループフラグをfalseとする
-				//ただしループの終了条件は プロセス終了 && パイプが空
+				// 終了していればループフラグをfalseとする
+				// ただしループの終了条件は プロセス終了 && パイプが空
 				bLoopFlag = false;
 				break;
 			case WAIT_OBJECT_0 + 1:
-				//処理中のユーザー操作を可能にする
+				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook(cDlgCancel.GetHwnd())) {
 					// WM_QUIT受信。ただちに終了処理
 					::TerminateProcess(pi.hProcess, 0);
@@ -345,24 +345,24 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 			default:
 				break;
 			}
-			//中断ボタン押下チェック
+			// 中断ボタン押下チェック
 			if (cDlgCancel.IsCanceled()) {
-				//指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
+				// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
 				::TerminateProcess(pi.hProcess, 0);
 				bCancelEnd  = true;
 				break;
 			}
 			new_cnt = 0;
 
-			if (PeekNamedPipe(hStdOutRead, NULL, 0, NULL, &new_cnt, NULL)) {	//パイプの中の読み出し待機中の文字数を取得
-				while (new_cnt > 0) {												//待機中のものがある
+			if (PeekNamedPipe(hStdOutRead, NULL, 0, NULL, &new_cnt, NULL)) {	// パイプの中の読み出し待機中の文字数を取得
+				while (new_cnt > 0) {												// 待機中のものがある
 
-					if (new_cnt > MAX_WORK_READ) {							//パイプから読み出す量を調整
+					if (new_cnt > MAX_WORK_READ) {							// パイプから読み出す量を調整
 						new_cnt = MAX_WORK_READ;
 					}
 					DWORD	read_cnt = 0;
-					::ReadFile(hStdOutRead, &work[bufidx], new_cnt, &read_cnt, NULL);	//パイプから読み出し
-					read_cnt += bufidx;													//work内の実際のサイズにする
+					::ReadFile(hStdOutRead, &work[bufidx], new_cnt, &read_cnt, NULL);	// パイプから読み出し
+					read_cnt += bufidx;													// work内の実際のサイズにする
 
 					if (read_cnt == 0) {
 						// Jan. 23, 2004 genta while追加のため制御を変更
@@ -379,7 +379,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 						if (read_cntw) {
 							workw[read_cntw] = L'\0';
 							bool bCarry = false;
-							//読み出した文字列をチェックする
+							// 読み出した文字列をチェックする
 							if (workw[read_cntw-1] == L'\r') {
 								bCarry = true;
 								read_cntw -= 1; // 2010.04.12 1文字余分に消されてた
@@ -401,7 +401,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 						}
 					// end 2008/6/8 Uchi
 					}else if (outputEncoding == CODE_SJIS) {
-						//読み出した文字列をチェックする
+						// 読み出した文字列をチェックする
 						// \r\n を \r だけとか漢字の第一バイトだけを出力するのを防ぐ必要がある
 						//@@@ 2002.1.24 YAZAKI 1バイト取りこぼす可能性があった。
 						//	Jan. 28, 2004 Moca 最後の文字はあとでチェックする
@@ -430,7 +430,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 							}
 						}
 						//	To Here Jan. 28, 2004 Moca
-						if (j == (int)read_cnt) {	//ぴったり出力できる場合
+						if (j == (int)read_cnt) {	// ぴったり出力できる場合
 							work[read_cnt] = '\0';
 							//	2006.12.03 maru アウトプットウィンドウor編集中のウィンドウ分岐追加
 							oa.OutputA(work, read_cnt);
@@ -459,7 +459,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 								j += checklen;
 							}
 						}
-						if (j == (int)read_cnt) {	//ぴったり出力できる場合
+						if (j == (int)read_cnt) {	// ぴったり出力できる場合
 							work[read_cnt] = '\0';
 							//	2006.12.03 maru アウトプットウィンドウor編集中のウィンドウ分岐追加
 							oa.OutputUTF8(work, read_cnt);
@@ -496,7 +496,7 @@ void CEditView::ExecCmd(const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 						goto finish;
 					}
 					if (cDlgCancel.IsCanceled()) {
-						//指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
+						// 指定されたプロセスと、そのプロセスが持つすべてのスレッドを終了させます。
 						if (bLoopFlag) {
 							::TerminateProcess(pi.hProcess, 0);
 						}
@@ -533,7 +533,7 @@ user_cancel:
 
 		if (bCancelEnd && bOutputExtInfo) {
 			//	2006.12.03 maru アウトプットウィンドウにのみ出力
-			//最後にテキストを追加
+			// 最後にテキストを追加
 			oa.OutputW(LSW(STR_EDITVIEW_EXECCMD_STOP));
 		}
 		
@@ -567,7 +567,7 @@ user_cancel:
 
 
 finish:
-	//終了処理
+	// 終了処理
 	if (hStdIn != NULL) CloseHandle(hStdIn);	// 2007.03.18 maru 標準入力の制御のため
 	if (hStdOutWrite) CloseHandle(hStdOutWrite);
 	CloseHandle(hStdOutRead);

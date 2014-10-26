@@ -239,7 +239,7 @@ INT_PTR CPropFormat::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -261,22 +261,22 @@ void CPropFormat::SetData(HWND hwndDlg)
 	// 引用符
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_INYOUKIGOU, csFormat.m_szInyouKigou);
 
-	//日付書式のタイプ
+	// 日付書式のタイプ
 	if (0 == csFormat.m_nDateFormatType) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_DFORM_0, BST_CHECKED);
 	}else {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_DFORM_1, BST_CHECKED);
 	}
-	//日付書式
+	// 日付書式
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_DFORM, csFormat.m_szDateFormat);
 
-	//時刻書式のタイプ
+	// 時刻書式のタイプ
 	if (0 == csFormat.m_nTimeFormatType) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_TFORM_0, BST_CHECKED);
 	}else {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_TFORM_1, BST_CHECKED);
 	}
-	//時刻書式
+	// 時刻書式
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TFORM, csFormat.m_szTimeFormat);
 
 	//	From Here Sept. 10, 2000 JEPRO

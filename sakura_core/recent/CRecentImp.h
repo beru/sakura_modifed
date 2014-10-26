@@ -55,7 +55,7 @@ public:
 	void _Recovery();
 
 	// 更新
-	bool ChangeViewCount(int nViewCount);	//表示数の変更
+	bool ChangeViewCount(int nViewCount);	// 表示数の変更
 	bool UpdateView();
 
 	// プロパティ取得系

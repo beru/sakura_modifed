@@ -224,7 +224,7 @@ public:
 	}
 };
 
-//implementation
+// implementation
 
 CWSHClient::CWSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler, void *AData): 
 				m_OnError(AErrorHandler), m_Data(AData), m_Valid(false), m_Engine(NULL)
@@ -253,7 +253,7 @@ CWSHClient::CWSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler,
 
 CWSHClient::~CWSHClient()
 {
-	//インタフェースオブジェクトを解放
+	// インタフェースオブジェクトを解放
 	for (auto it = m_IfObjArr.begin(); it != m_IfObjArr.end(); it++) {
 		(*it)->Release();
 	}
@@ -266,7 +266,7 @@ CWSHClient::~CWSHClient()
 // AbortMacroProcのパラメータ構造体
 typedef struct {
 	HANDLE hEvent;
-	IActiveScript* pEngine;				//ActiveScript
+	IActiveScript* pEngine;				// ActiveScript
 	int nCancelTimer;
 	CEditView* view;
 } SAbortMacroParam;

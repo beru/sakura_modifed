@@ -789,7 +789,6 @@ bool CDlgFavorite::RefreshListOne(int nIndex)
 changed:
 	SetDataOne(nIndex, nCurrentIndex);
 	
-
 	return true;
 }
 

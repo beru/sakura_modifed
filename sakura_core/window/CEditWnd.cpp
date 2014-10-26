@@ -61,7 +61,7 @@
 #include "recent/CMRUFile.h"
 #include "recent/CMRUFolder.h"
 #include "util/module.h"
-#include "util/os.h"		//WM_MOUSEWHEEL,WM_THEMECHANGED
+#include "util/os.h"		// WM_MOUSEWHEEL,WM_THEMECHANGED
 #include "util/window.h"
 #include "util/shell.h"
 #include "util/string_ex2.h"
@@ -154,7 +154,7 @@ static void ShowCodeBox(HWND hWnd, CEditDoc* pcEditDoc)
 				for (int i = 0; i < CODE_CODEMAX; i++) {
 					if (i == CODE_SJIS || i == CODE_JIS || i == CODE_EUC || i == CODE_LATIN1 || i == CODE_UNICODE || i == CODE_UTF8 || i == CODE_CESU8) {
 						//auto_sprintf(szCaretChar, _T("%04x"),);
-						//任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
+						// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 						CCodeBase* pCode = CCodeFactory::CreateCodeBase((ECodeType)i, false);
 						EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCode[i], &sStatusbar);
 						delete pCode;
@@ -222,8 +222,8 @@ CEditWnd::CEditWnd()
 	, m_hAccelWine(NULL)
 	, m_hAccel(NULL)
 	, m_bDragMode(false)
-	, m_IconClicked(icNone) //by 鬼(2)
-	, m_nSelectCountMode(SELECT_COUNT_TOGGLE)	//文字カウント方法の初期値はSELECT_COUNT_TOGGLE→共通設定に従う
+	, m_IconClicked(icNone) // by 鬼(2)
+	, m_nSelectCountMode(SELECT_COUNT_TOGGLE)	// 文字カウント方法の初期値はSELECT_COUNT_TOGGLE→共通設定に従う
 {
 	g_pcEditWnd = this;
 }
@@ -495,7 +495,7 @@ void CEditWnd::_AdjustInMonitor(const STabGroupInfo& sTabGroupInfo)
 		DWORD dwExStyle = (DWORD)::GetWindowLongPtr(sTabGroupInfo.hwndTop, GWL_EXSTYLE);
 		::SetWindowPos(GetHwnd(), (dwExStyle & WS_EX_TOPMOST)? HWND_TOPMOST: HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-		//タブウインドウ時は現状を維持
+		// タブウインドウ時は現状を維持
 		// ウィンドウサイズ継承
 		// Vista 以降の初回表示アニメーション効果を抑止する
 		if (!IsWinVista_or_later()) {
@@ -581,7 +581,7 @@ void CEditWnd::_AdjustInMonitor(const STabGroupInfo& sTabGroupInfo)
 			::ShowWindow(GetHwnd(), SW_SHOW);
 		}
 	}
-	//To Here @@@ 2003.06.13 MIK
+	// To Here @@@ 2003.06.13 MIK
 }
 
 /*!
@@ -626,7 +626,7 @@ HWND CEditWnd::Create(
 	// ウィンドウ毎にアクセラレータテーブルを作成する(Wine用)
 	CreateAccelTbl();
 
-	//ウィンドウ数制限
+	// ウィンドウ数制限
 	if (m_pShareData->m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return NULL;
@@ -909,7 +909,7 @@ void CEditWnd::LayoutMainMenu()
 				}
 				break;
 			case F_PLUGIN_LIST:				// プラグインコマンドリスト
-				//プラグインコマンドを提供するプラグインを列挙する
+				// プラグインコマンドを提供するプラグインを列挙する
 				{
 					const CJackManager* pcJackManager = CJackManager::getInstance();
 
@@ -1041,9 +1041,9 @@ static inline BOOL MyIsDialogMessage(HWND hwnd, MSG* msg)
 	return ::IsDialogMessage(hwnd, msg);
 }
 
-//複数プロセス版
+// 複数プロセス版
 // メッセージループ
-//2004.02.17 Moca GetMessageのエラーチェック
+// 2004.02.17 Moca GetMessageのエラーチェック
 void CEditWnd::MessageLoop(void)
 {
 	MSG	msg;
@@ -1053,7 +1053,7 @@ void CEditWnd::MessageLoop(void)
 		if (ret == 0) break; // WM_QUIT
 		if (ret == -1) break; // GetMessage失敗
 
-		//ダイアログメッセージ
+		// ダイアログメッセージ
 		     if (MyIsDialogMessage(m_pPrintPreview->GetPrintPreviewBarHANDLE_Safe(),	&msg)) {}	//!< 印刷プレビュー 操作バー
 		else if (MyIsDialogMessage(m_cDlgFind.GetHwnd(),								&msg)) {}	//!<「検索」ダイアログ
 		else if (MyIsDialogMessage(m_cDlgFuncList.GetHwnd(),							&msg)) {}	//!<「アウトライン」ダイアログ
@@ -1064,7 +1064,7 @@ void CEditWnd::MessageLoop(void)
 		// アクセラレータ
 		else {
 			if (m_hAccel && TranslateAccelerator(msg.hwnd, m_hAccel, &msg)) {}
-			//通常メッセージ
+			// 通常メッセージ
 			else {
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
@@ -1289,7 +1289,7 @@ LRESULT CEditWnd::DispatchEvent(
 		}
 		return OnSize(wParam, lParam);
 
-	//From here 2003.05.31 MIK
+	// From here 2003.05.31 MIK
 	case WM_MOVE:
 		// From Here 2004.05.13 Moca ウィンドウ位置継承
 		//	最後の位置を復元するため，移動されるたびに共有メモリに位置を保存する．
@@ -1311,7 +1311,7 @@ LRESULT CEditWnd::DispatchEvent(
 		}
 		// To Here 2004.05.13 Moca ウィンドウ位置継承
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
-	//To here 2003.05.31 MIK
+	// To here 2003.05.31 MIK
 	case WM_SYSCOMMAND:
 		// タブまとめ表示では閉じる動作はオプション指定に従う	// 2006.02.13 ryoji
 		//	Feb. 11, 2007 genta 動作を選べるように(MDI風と従来動作)
@@ -1899,7 +1899,7 @@ LRESULT CEditWnd::DispatchEvent(
 		}
 		return 0L;
 
-	//by 鬼 (2) MYWM_CHECKSYSMENUDBLCLKは不要に, WM_LBUTTONDBLCLK追加
+	// by 鬼 (2) MYWM_CHECKSYSMENUDBLCLKは不要に, WM_LBUTTONDBLCLK追加
 	case WM_NCLBUTTONDOWN:
 		return OnNcLButtonDown(wParam, lParam);
 
@@ -1968,7 +1968,7 @@ LRESULT CEditWnd::DispatchEvent(
 
 /*! 終了時の処理
 
-	@param hWndFrom [in] 終了要求の Wimdow Handle	//2013/4/9 Uchi
+	@param hWndFrom [in] 終了要求の Wimdow Handle	// 2013/4/9 Uchi
 
 	@retval TRUE: 終了して良い / FALSE: 終了しない
 */
@@ -2034,7 +2034,7 @@ int	CEditWnd::OnClose(HWND hWndFrom)
 
 
 /*! WM_COMMAND処理
-	@date 2000.11.15 JEPRO //ショートカットキーがうまく働かないので殺してあった下の2行(F_HELP_CONTENTS,F_HELP_SEARCH)を修正・復活
+	@date 2000.11.15 JEPRO // ショートカットキーがうまく働かないので殺してあった下の2行(F_HELP_CONTENTS,F_HELP_SEARCH)を修正・復活
 	@date 2013.05.09 novice 重複するメッセージ処理削除
 */
 void CEditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
@@ -2048,10 +2048,10 @@ void CEditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			break;
 		case CBN_KILLFOCUS:
 			m_nCurrentFocus = 0;
-			//フォーカスがはずれたときに検索キーにしてしまう。
-			//検索キーワードを取得
+			// フォーカスがはずれたときに検索キーにしてしまう。
+			// 検索キーワードを取得
 			std::wstring	strText;
-			if (m_cToolbar.GetSearchKey(strText)) {	//キー文字列がある
+			if (m_cToolbar.GetSearchKey(strText)) {	// キー文字列がある
 				// 検索キーを登録
 				if (strText.length() < _MAX_PATH) {
 					CSearchKeywordManager().AddToSearchKeyArr(strText.c_str());
@@ -2226,7 +2226,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 				bInList = InitMenu_Special(hMenu, cMainMenu->m_nFunc);
 				// リストが無い場合の処理
 				if (!bInList) {
-					//分割線に囲まれ、かつリストなし ならば 次の分割線をスキップ
+					// 分割線に囲まれ、かつリストなし ならば 次の分割線をスキップ
 					if ((i == nIdxStr + 1
 						  || (pcMenu->m_cMainMenuTbl[i - 1].m_nType == T_SEPARATOR 
 							&& pcMenu->m_cMainMenuTbl[i - 1].m_nLevel == cMainMenu->m_nLevel))
@@ -2324,7 +2324,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 		j = -1;
 		for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 			if ((*it)->GetFunctionCode() == eFunc) {
-				//コマンドを登録
+				// コマンドを登録
 				j = eFunc - F_PLUGCOMMAND_FIRST;
 				m_CMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING,
 					(*it)->GetFunctionCode(), (*it)->m_sLabel.c_str(), pszKey,
@@ -2747,7 +2747,7 @@ void CEditWnd::OnCaptionTimer(void)
 	@date 2007.04.03 ryoji パラメータ無しにした
 	                       以前はコールバック関数でやっていたKillTimer()をここで行うようにした
 */
-void CEditWnd::OnSysMenuTimer(void) //by 鬼(2)
+void CEditWnd::OnSysMenuTimer(void) // by 鬼(2)
 {
 	::KillTimer(GetHwnd(), IDT_SYSMENU);	// 2007.04.03 ryoji
 
@@ -2765,7 +2765,7 @@ void CEditWnd::OnSysMenuTimer(void) //by 鬼(2)
 		GetMonitorWorkRect(pt, &R);
 		::PostMessageAny(
 			GetHwnd(),
-			0x0313, //右クリックでシステムメニューを表示する際に送信するモノらしい
+			0x0313, // 右クリックでシステムメニューを表示する際に送信するモノらしい
 			0,
 			MAKELPARAM((pt.x > R.left)? pt.x: R.left, (pt.y < R.bottom)? pt.y: R.bottom)
 		);
@@ -2927,7 +2927,7 @@ LRESULT CEditWnd::OnSize(WPARAM wParam, LPARAM lParam)
 		nFuncKeyWndHeight = rc.bottom - rc.top;
 	}
 	//@@@ From Here 2003.05.31 MIK
-	//タブウインドウ
+	// タブウインドウ
 	int nTabWndHeight = 0;
 	if (m_cTabWnd.GetHwnd()) {
 		::SendMessage(m_cTabWnd.GetHwnd(), WM_SIZE, wParam, lParam);
@@ -2947,7 +2947,7 @@ LRESULT CEditWnd::OnSize(WPARAM wParam, LPARAM lParam)
 		// 2004-02-28 yasu 文字列を出力時の書式に合わせる
 		// 幅を変えた場合にはCEditView::ShowCaretPosInfo()での表示方法を見直す必要あり．
 		// ※pszLabel[3]: ステータスバー文字コード表示領域は大きめにとっておく
-		const TCHAR*	pszLabel[7] = { _T(""), _T("99999 行 9999 列"), _T("CRLF"), _T("AAAAAAAAAAAA"), _T("Unicode BOM付"), _T("REC"), _T("上書") };	//Oct. 30, 2000 JEPRO 千万行も要らん	文字コード枠を広げる 2008/6/21	Uchi
+		const TCHAR*	pszLabel[7] = { _T(""), _T("99999 行 9999 列"), _T("CRLF"), _T("AAAAAAAAAAAA"), _T("Unicode BOM付"), _T("REC"), _T("上書") };	// Oct. 30, 2000 JEPRO 千万行も要らん	文字コード枠を広げる 2008/6/21	Uchi
 		int			nStArrNum = 7;
 		//	To Here
 		int			nAllWidth = rc.right - rc.left;
@@ -3122,7 +3122,7 @@ LRESULT CEditWnd::OnHScroll(WPARAM wParam, LPARAM lParam)
 
 LRESULT CEditWnd::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
-	//by 鬼(2) キャプチャーして押されたら非クライアントでもこっちに来る
+	// by 鬼(2) キャプチャーして押されたら非クライアントでもこっちに来る
 	if (m_IconClicked != icNone)
 		return 0;
 
@@ -3164,7 +3164,7 @@ LRESULT CEditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 		// by 鬼(2) 一回押された時だけ
 		if (m_IconClicked == icDown) {
 			POINT P;
-			GetCursorPos(&P); //スクリーン座標
+			GetCursorPos(&P); // スクリーン座標
 			if (SendMessage(GetHwnd(), WM_NCHITTEST, 0, P.x | (P.y << 16)) != HTSYSMENU) {
 				ReleaseCapture();
 				m_IconClicked = icNone;
@@ -3430,7 +3430,7 @@ LRESULT CEditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 	return Result;
 }
 
-LRESULT CEditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) //by 鬼(2)
+LRESULT CEditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
 {
 	LRESULT Result;
 	if (m_IconClicked != icNone) {
@@ -3693,7 +3693,7 @@ void CEditWnd::PrintMenubarMessage(const TCHAR* msg)
 		m_pnCaretPosInfoDx[i] = (m_nCaretPosInfoCharWidth);
 	}
 	*/
-	::ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED | ETO_OPAQUE,&rc,m_pszMenubarMessage,nStrLen,NULL/*m_pnCaretPosInfoDx*/); //2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
+	::ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED | ETO_OPAQUE,&rc,m_pszMenubarMessage,nStrLen,NULL/*m_pnCaretPosInfoDx*/); // 2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
 	::SelectObject(hdc, hFontOld);
 	::ReleaseDC(GetHwnd(), hdc);
 }
@@ -3905,7 +3905,7 @@ LRESULT CEditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, 
 	return 0L;
 }
 
-//2007.09.08 kobake 追加
+// 2007.09.08 kobake 追加
 //! ツールチップのテキストを取得
 void CEditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 {
@@ -4488,14 +4488,14 @@ void CEditWnd::DeleteAccelTbl(void)
 	}
 }
 
-//プラグインコマンドをエディタに登録する
+// プラグインコマンドをエディタに登録する
 void CEditWnd::RegisterPluginCommand(int idCommand)
 {
 	CPlug* plug = CJackManager::getInstance()->GetCommandById(idCommand);
 	RegisterPluginCommand(plug);
 }
 
-//プラグインコマンドをエディタに登録する（一括）
+// プラグインコマンドをエディタに登録する（一括）
 void CEditWnd::RegisterPluginCommand()
 {
 	const CPlug::Array& plugs = CJackManager::getInstance()->GetPlugs(PP_COMMAND);
@@ -4504,7 +4504,7 @@ void CEditWnd::RegisterPluginCommand()
 	}
 }
 
-//プラグインコマンドをエディタに登録する
+// プラグインコマンドをエディタに登録する
 void CEditWnd::RegisterPluginCommand(CPlug* plug)
 {
 	int iBitmap = CMenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;

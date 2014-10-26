@@ -2,26 +2,26 @@
 #include "types/CType.h"
 #include "view/colors/EColorIndexType.h"
 
-/* リッチテキスト */
-//JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
-//Jul. 10, 2001 JEPRO 追加
+// リッチテキスト
+// JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
+// Jul. 10, 2001 JEPRO 追加
 void CType_Rich::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("リッチテキスト"));
 	_tcscpy(pType->m_szTypeExts, _T("rtf"));
 
-	//設定
-	pType->m_eDefaultOutline = OUTLINE_TEXT;					/* アウトライン解析方法 */
-	pType->m_nKeyWordSetIdx[0]  = 15;							/* キーワードセット */
-	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		/* 半角数値を色分け表示 */
-	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	//シングルクォーテーション文字列を色分け表示しない
-	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	//ダブルクォーテーション文字列を色分け表示しない
-	pType->m_ColorInfoArr[COLORIDX_URL].m_bDisp = false;		//URLにアンダーラインを引かない
+	// 設定
+	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
+	pType->m_nKeyWordSetIdx[0]  = 15;							// キーワードセット
+	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
+	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
+	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// ダブルクォーテーション文字列を色分け表示しない
+	pType->m_ColorInfoArr[COLORIDX_URL].m_bDisp = false;		// URLにアンダーラインを引かない
 }
 
 
-//Jul. 10, 2001 JEPRO 追加
+// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsRTF[] = {
 	L"\\ansi",
 	L"\\b",

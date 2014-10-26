@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include <Windows.h> //RECT
+#include <Windows.h> // RECT
 #include "CMyPoint.h"
 
 class CMyRect : public RECT {

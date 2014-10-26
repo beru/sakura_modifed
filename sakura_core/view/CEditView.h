@@ -121,8 +121,8 @@ const int CMD_FROM_MOUSE = 2;
 	
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-//2007.08.25 kobake 文字間隔配列の機能をCTextMetricsに移動
-//2007.10.02 kobake Command_TRIM2をCConvertに移動
+// 2007.08.25 kobake 文字間隔配列の機能をCTextMetricsに移動
+// 2007.10.02 kobake Command_TRIM2をCConvertに移動
 
 class CEditView :
 	public CViewCalc, //$$ これが親クラスである必要は無いが、このクラスのメソッド呼び出しが多いので、暫定的に親クラスとする。
@@ -276,9 +276,9 @@ public:
 	void AdjustScrollBars();											// スクロールバーの状態を更新する
 	BOOL CreateScrollBar();												// スクロールバー作成	// 2006.12.19 ryoji
 	void DestroyScrollBar();											// スクロールバー破棄	// 2006.12.19 ryoji
-	CLayoutInt GetWrapOverhang(void) const;							// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
+	CLayoutInt GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
 	CLayoutInt ViewColNumToWrapColNum(CLayoutInt nViewColNum) const;	//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
-	CLayoutInt GetRightEdgeForScrollBar(void);						// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
+	CLayoutInt GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           IME                               //
@@ -425,7 +425,7 @@ public:
 	//                           検索                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	//2004.10.13 インクリメンタルサーチ関係
+	// 2004.10.13 インクリメンタルサーチ関係
 	void TranslateCommand_isearch(EFunctionCode&, bool&, LPARAM&, LPARAM&, LPARAM&, LPARAM&);
 	bool ProcessCommand_isearch(int, bool, LPARAM, LPARAM, LPARAM, LPARAM);
 
@@ -446,14 +446,14 @@ public:
 	};
 	BOOL KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
-	int IsSearchString(const CStringRef& cStr, CLogicInt, CLogicInt*, CLogicInt*) const;	// 現在位置が検索文字列に該当するか	//2002.02.08 hor 引数追加
+	int IsSearchString(const CStringRef& cStr, CLogicInt, CLogicInt*, CLogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(CNativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	void GetCurrentTextForSearchDlg(CNativeW&);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
 
 private:
 	// インクリメンタルサーチ 
-	//2004.10.24 isearch migemo
+	// 2004.10.24 isearch migemo
 	void ISearchEnter(int mode, ESearchDirection direction);
 	void ISearchExit();
 	void ISearchExec(DWORD wChar);
@@ -514,15 +514,15 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	void AnalyzeDiffInfo(const char*, int);	// DIFF情報の解析	//@@@ 2002.05.25 MIK
-	BOOL MakeDiffTmpFile(TCHAR*, HWND);		// DIFF一時ファイル作成	//@@@ 2002.05.28 MIK	//2005.10.29 maru
-	void ViewDiffInfo(const TCHAR*, const TCHAR*, int);		// DIFF差分表示		//2005.10.29 maru
+	BOOL MakeDiffTmpFile(TCHAR*, HWND);		// DIFF一時ファイル作成	//@@@ 2002.05.28 MIK	// 2005.10.29 maru
+	void ViewDiffInfo(const TCHAR*, const TCHAR*, int);		// DIFF差分表示		// 2005.10.29 maru
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           履歴                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	//	Aug. 31, 2000 genta
-	void AddCurrentLineToHistory(void);	//現在行を履歴に追加する
+	void AddCurrentLineToHistory(void);	// 現在行を履歴に追加する
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -648,8 +648,8 @@ public:
 	BOOL			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
-	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	//2007.10.02 nasukoji
-	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	//2007.10.02 nasukoji
+	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	// 2007.10.02 nasukoji
+	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
 	CMyPoint		m_cMouseDownPos;		//!< クリック時のマウス座標
 	int				m_nWheelDelta;			//!< ホイール変化量
 	EFunctionCode	m_eWheelScroll; 		//!< スクロールの種類
@@ -665,11 +665,11 @@ public:
 
 	// 検索
 	CSearchStringPattern m_sSearchPattern;
-	mutable CBregexp	m_CurRegexp;				//!< コンパイルデータ
+	mutable CBregexp	m_CurRegexp;				// コンパイルデータ
 	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
-	bool				m_bCurSearchUpdate;			//<! コンパイルデータ更新要求
-	int					m_nCurSearchKeySequence;	//<! 検索キーシーケンス
-	std::wstring		m_strCurSearchKey;			//<! 検索文字列
+	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
+	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
+	std::wstring		m_strCurSearchKey;			// 検索文字列
 	SSearchOption		m_sCurSearchOption;			// 検索／置換  オプション
 	CLogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	BOOL				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
@@ -707,8 +707,8 @@ private:
 public:
 	UINT			m_uWM_MSIME_RECONVERTREQUEST;
 private:
-	int				m_nLastReconvLine;             //2002.04.09 minfu 再変換情報保存用;
-	int				m_nLastReconvIndex;            //2002.04.09 minfu 再変換情報保存用;
+	int				m_nLastReconvLine;             // 2002.04.09 minfu 再変換情報保存用;
+	int				m_nLastReconvIndex;            // 2002.04.09 minfu 再変換情報保存用;
 
 public:
 	// ATOK専用再変換のAPI

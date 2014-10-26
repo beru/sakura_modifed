@@ -38,6 +38,7 @@
 #include "_main/global.h"
 #include "config/maxdata.h"
 #include "func/Funccode.h"
+
 struct MacroRec;// 2007.11.02 ryoji
 struct CommonSetting;// 2002/2/10 aroka
 

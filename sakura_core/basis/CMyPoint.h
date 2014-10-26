@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include <Windows.h> //POINT
+#include <Windows.h> // POINT
 
 class CMyPoint : public POINT {
 public:

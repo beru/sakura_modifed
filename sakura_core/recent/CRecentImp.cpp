@@ -53,13 +53,13 @@ bool CRecentImp<T, S>::Create(
 {
 	Terminate();
 
-	//パラメータチェック
+	// パラメータチェック
 	if (!pszItemArray) return false;
 	if (!pnItemCount) return false;
 	if (nArrayCount <= 0) return false;
 	if (pnViewCount && (*pnViewCount < 0 || nArrayCount < *pnViewCount)) return false;
 
-	//各パラメータ格納
+	// 各パラメータ格納
 	m_puUserItemData		= pszItemArray;
 	m_pnUserItemCount		= pnItemCount;
 	m_pbUserItemFavorite	= pbItemFavorite;
@@ -67,7 +67,7 @@ bool CRecentImp<T, S>::Create(
 	m_pnUserViewCount		= pnViewCount;
 	m_bCreate = true;
 
-	//個別に操作されていたときのための対応
+	// 個別に操作されていたときのための対応
 	UpdateView();
 
 	return true;
@@ -192,12 +192,12 @@ bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 	if (!IsAvailable()) return false;
 	if (!pItemData) return false;
 
-	//登録済みか調べる。
+	// 登録済みか調べる。
 	int	nIndex = FindItem(pItemData);
 	if (nIndex >= 0) {
 		CopyItem(GetItemPointer(nIndex), pItemData);
 
-		//先頭に持ってくる。
+		// 先頭に持ってくる。
 		MoveItem(nIndex, 0);
 		goto reconfigure;
 	}
@@ -219,7 +219,7 @@ bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 	CopyItem(GetItemPointer(0), pItemData);
 
 	//(void)SetFavorite(0, true);
-	//内部処理しないとだめ。
+	// 内部処理しないとだめ。
 	if (m_pbUserItemFavorite) {
 		m_pbUserItemFavorite[0] = false;
 	}
@@ -228,7 +228,7 @@ bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 
 
 reconfigure:
-	//お気に入りを表示内に移動する。
+	// お気に入りを表示内に移動する。
 	if (m_pnUserViewCount) {
 		ChangeViewCount(*m_pnUserViewCount);
 	}
@@ -313,7 +313,7 @@ bool CRecentImp<T, S>::DeleteItem(int nIndex)
 
 	ZeroItem(nIndex);
 
-	//以降のアイテムを前に詰める。
+	// 以降のアイテムを前に詰める。
 	int i;
 	for (i = nIndex; i < *m_pnUserItemCount - 1; i++) {
 		CopyItem(i + 1, i);
@@ -387,7 +387,7 @@ bool CRecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 
 	DataType pri;
 
-	//移動する情報を退避
+	// 移動する情報を退避
 	memcpy_raw(&pri, GetItemPointer(nSrcIndex), sizeof(pri));
 	bFavorite = IsFavorite(nSrcIndex);
 
@@ -419,7 +419,7 @@ bool CRecentImp<T, S>::CopyItem(int nSrcIndex, int nDstIndex)
 	memcpy_raw(GetItemPointer(nDstIndex), GetItemPointer(nSrcIndex), sizeof(DataType));
 
 	//(void)SetFavorite(nDstIndex, IsFavorite(nSrcIndex));
-	//内部処理しないとだめ。
+	// 内部処理しないとだめ。
 	if (m_pbUserItemFavorite) m_pbUserItemFavorite[nDstIndex] = m_pbUserItemFavorite[nSrcIndex];
 
 	return true;
@@ -495,30 +495,30 @@ bool CRecentImp<T, S>::ChangeViewCount(int nViewCount)
 	int	i;
 	int	nIndex;
 
-	//範囲外ならエラー
+	// 範囲外ならエラー
 	if (!IsAvailable()) return false;
 	if (nViewCount < 0 || nViewCount > m_nArrayCount) return false;
 
-	//表示個数を更新する。
+	// 表示個数を更新する。
 	if (m_pnUserViewCount) {
 		*m_pnUserViewCount = nViewCount;
 	}
 
-	//範囲内にすべて収まっているので何もしなくてよい。
+	// 範囲内にすべて収まっているので何もしなくてよい。
 	if (nViewCount >= *m_pnUserItemCount) return true;
 
-	//最も古いお気に入りを探す。
+	// 最も古いお気に入りを探す。
 	i = GetOldestItem(*m_pnUserItemCount - 1, true);
-	if (-1 == i) return true;	//ないので何もしないで終了
+	if (-1 == i) return true;	// ないので何もしないで終了
 
-	//表示外アイテムを表示内に移動する。
+	// 表示外アイテムを表示内に移動する。
 	for (; i >= nViewCount; i--) {
 		if (IsFavorite(i)) {
-			//カレント位置から上に通常アイテムを探す
+			// カレント位置から上に通常アイテムを探す
 			nIndex = GetOldestItem(i - 1, false);
-			if (-1 == nIndex) break;	//もう1個もない
+			if (-1 == nIndex) break;	// もう1個もない
 
-			//見つかったアイテムをカレント位置に移動する
+			// 見つかったアイテムをカレント位置に移動する
 			MoveItem(nIndex, i);
 		}
 	}
@@ -534,11 +534,10 @@ bool CRecentImp<T, S>::UpdateView()
 {
 	int	nViewCount;
 
-	//範囲外ならエラー
+	// 範囲外ならエラー
 	if (!IsAvailable()) return false;
 
-	if (m_pnUserViewCount) nViewCount = *m_pnUserViewCount;
-	else                   nViewCount = m_nArrayCount;
+	nViewCount = m_pnUserViewCount ? *m_pnUserViewCount : m_nArrayCount;
 
 	return ChangeViewCount(nViewCount);
 }

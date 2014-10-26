@@ -44,22 +44,22 @@
 using namespace std;
 
 static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
-	IDC_CHECK_KEYHELP,				HIDC_CHECK_KEYHELP,				//キーワードヘルプ機能を使う
-	IDC_LIST_KEYHELP,				HIDC_LIST_KEYHELP,				//SysListView32
-	IDC_BUTTON_KEYHELP_UPD,			HIDC_BUTTON_KEYHELP_UPD,		//更新(&E)
-	IDC_EDIT_KEYHELP,				HIDC_EDIT_KEYHELP,				//EDITTEXT
-	IDC_BUTTON_KEYHELP_REF,			HIDC_BUTTON_KEYHELP_REF,		//参照(&O)...
-	IDC_BUTTON_KEYHELP_TOP,			HIDC_BUTTON_KEYHELP_TOP,		//先頭(&T)
-	IDC_BUTTON_KEYHELP_UP,			HIDC_BUTTON_KEYHELP_UP,			//上へ(&U)
-	IDC_BUTTON_KEYHELP_DOWN,		HIDC_BUTTON_KEYHELP_DOWN,		//下へ(&G)
-	IDC_BUTTON_KEYHELP_LAST,		HIDC_BUTTON_KEYHELP_LAST,		//最終(&B)
-	IDC_BUTTON_KEYHELP_INS,			HIDC_BUTTON_KEYHELP_INS,		//挿入(&S)
-	IDC_BUTTON_KEYHELP_DEL,			HIDC_BUTTON_KEYHELP_DEL,		//削除(&D)
-	IDC_CHECK_KEYHELP_ALLSEARCH,	HIDC_CHECK_KEYHELP_ALLSEARCH,	//全辞書検索する(&A)
-	IDC_CHECK_KEYHELP_KEYDISP,		HIDC_CHECK_KEYHELP_KEYDISP,		//キーワードも表示する(&W)
-	IDC_CHECK_KEYHELP_PREFIX,		HIDC_CHECK_KEYHELP_PREFIX,		//前方一致検索(&P)
-	IDC_BUTTON_KEYHELP_IMPORT,		HIDC_BUTTON_KEYHELP_IMPORT,		//インポート
-	IDC_BUTTON_KEYHELP_EXPORT,		HIDC_BUTTON_KEYHELP_EXPORT,		//エクスポート
+	IDC_CHECK_KEYHELP,				HIDC_CHECK_KEYHELP,				// キーワードヘルプ機能を使う
+	IDC_LIST_KEYHELP,				HIDC_LIST_KEYHELP,				// SysListView32
+	IDC_BUTTON_KEYHELP_UPD,			HIDC_BUTTON_KEYHELP_UPD,		// 更新(&E)
+	IDC_EDIT_KEYHELP,				HIDC_EDIT_KEYHELP,				// EDITTEXT
+	IDC_BUTTON_KEYHELP_REF,			HIDC_BUTTON_KEYHELP_REF,		// 参照(&O)...
+	IDC_BUTTON_KEYHELP_TOP,			HIDC_BUTTON_KEYHELP_TOP,		// 先頭(&T)
+	IDC_BUTTON_KEYHELP_UP,			HIDC_BUTTON_KEYHELP_UP,			// 上へ(&U)
+	IDC_BUTTON_KEYHELP_DOWN,		HIDC_BUTTON_KEYHELP_DOWN,		// 下へ(&G)
+	IDC_BUTTON_KEYHELP_LAST,		HIDC_BUTTON_KEYHELP_LAST,		// 最終(&B)
+	IDC_BUTTON_KEYHELP_INS,			HIDC_BUTTON_KEYHELP_INS,		// 挿入(&S)
+	IDC_BUTTON_KEYHELP_DEL,			HIDC_BUTTON_KEYHELP_DEL,		// 削除(&D)
+	IDC_CHECK_KEYHELP_ALLSEARCH,	HIDC_CHECK_KEYHELP_ALLSEARCH,	// 全辞書検索する(&A)
+	IDC_CHECK_KEYHELP_KEYDISP,		HIDC_CHECK_KEYHELP_KEYDISP,		// キーワードも表示する(&W)
+	IDC_CHECK_KEYHELP_PREFIX,		HIDC_CHECK_KEYHELP_PREFIX,		// 前方一致検索(&P)
+	IDC_BUTTON_KEYHELP_IMPORT,		HIDC_BUTTON_KEYHELP_IMPORT,		// インポート
+	IDC_BUTTON_KEYHELP_EXPORT,		HIDC_BUTTON_KEYHELP_EXPORT,		// エクスポート
 	0, 0
 };
 
@@ -147,45 +147,45 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 			switch (wID) {
 			case IDC_CHECK_KEYHELP:	// キーワードヘルプ機能を使う
 				if (!IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYHELP)) {
-					//EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP), FALSE);			//キーワードヘルプ機能を使う(&K)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_FRAME_KEYHELP), FALSE);		  	//辞書ファイル一覧(&L)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LIST_KEYHELP), FALSE);         	//SysListView32
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_TITLE), FALSE);  	//<辞書の説明>
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_ABOUT), FALSE);  	//辞書ファイルの概要
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UPD), FALSE);   	//更新(&E)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_KEYWORD), FALSE);	//辞書ファイル
-					EnableWindow(GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), FALSE);         	//EDITTEXT
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_REF), FALSE);   	//参照(&O)...
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_PRIOR), FALSE);  	//↑優先度(高)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_TOP), FALSE);   	//先頭(&T)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UP), FALSE);    	//上へ(&U)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DOWN), FALSE);  	//下へ(&G)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_LAST), FALSE);  	//最終(&B)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_INS), FALSE);   	//挿入(&S)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DEL), FALSE);   	//削除(&D)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH), FALSE);	//全辞書検索する(&A)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP), FALSE);	//キーワードも表示する(&W)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_PREFIX), FALSE);		//前方一致検索(&P)
+					//EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP), FALSE);			// キーワードヘルプ機能を使う(&K)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_FRAME_KEYHELP), FALSE);		  	// 辞書ファイル一覧(&L)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LIST_KEYHELP), FALSE);         	// SysListView32
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_TITLE), FALSE);  	// <辞書の説明>
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_ABOUT), FALSE);  	// 辞書ファイルの概要
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UPD), FALSE);   	// 更新(&E)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_KEYWORD), FALSE);	// 辞書ファイル
+					EnableWindow(GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), FALSE);         	// EDITTEXT
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_REF), FALSE);   	// 参照(&O)...
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_PRIOR), FALSE);  	// ↑優先度(高)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_TOP), FALSE);   	// 先頭(&T)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UP), FALSE);    	// 上へ(&U)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DOWN), FALSE);  	// 下へ(&G)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_LAST), FALSE);  	// 最終(&B)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_INS), FALSE);   	// 挿入(&S)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DEL), FALSE);   	// 削除(&D)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH), FALSE);	// 全辞書検索する(&A)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP), FALSE);	// キーワードも表示する(&W)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_PREFIX), FALSE);		// 前方一致検索(&P)
 				}else {
-					//EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP), TRUE);			//キーワードヘルプ機能を使う(&K)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_FRAME_KEYHELP), TRUE);				//辞書ファイル一覧(&L)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LIST_KEYHELP), TRUE);				//SysListView32
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_TITLE), TRUE);		//<辞書の説明>
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_ABOUT), TRUE);  		//辞書ファイルの概要
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UPD), TRUE);   		//更新(&E)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_KEYWORD), TRUE);		//辞書ファイル
-					EnableWindow(GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), TRUE);         		//EDITTEXT
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_REF), TRUE);   		//参照(&O)...
-					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_PRIOR), TRUE);  		//↑優先度(高)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_TOP), TRUE);   		//先頭(&T)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UP), TRUE);    		//上へ(&U)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DOWN), TRUE);  		//下へ(&G)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_LAST), TRUE);  		//最終(&B)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_INS), TRUE);   		//挿入(&S)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DEL), TRUE);   		//削除(&D)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH), TRUE);	//全辞書検索する(&A)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP), TRUE);		//キーワードも表示する(&W)
-					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_PREFIX), TRUE);		//前方一致検索(&P)
+					//EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP), TRUE);			// キーワードヘルプ機能を使う(&K)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_FRAME_KEYHELP), TRUE);				// 辞書ファイル一覧(&L)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LIST_KEYHELP), TRUE);				// SysListView32
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_TITLE), TRUE);		// <辞書の説明>
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_ABOUT), TRUE);  		// 辞書ファイルの概要
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UPD), TRUE);   		// 更新(&E)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_KEYWORD), TRUE);		// 辞書ファイル
+					EnableWindow(GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), TRUE);         		// EDITTEXT
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_REF), TRUE);   		// 参照(&O)...
+					EnableWindow(GetDlgItem(hwndDlg, IDC_LABEL_KEYHELP_PRIOR), TRUE);  		// ↑優先度(高)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_TOP), TRUE);   		// 先頭(&T)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_UP), TRUE);    		// 上へ(&U)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DOWN), TRUE);  		// 下へ(&G)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_LAST), TRUE);  		// 最終(&B)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_INS), TRUE);   		// 挿入(&S)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_BUTTON_KEYHELP_DEL), TRUE);   		// 削除(&D)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_ALLSEARCH), TRUE);	// 全辞書検索する(&A)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_KEYDISP), TRUE);		// キーワードも表示する(&W)
+					EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_KEYHELP_PREFIX), TRUE);		// 前方一致検索(&P)
 				}
 				m_Types.m_nKeyHelpNum = ListView_GetItemCount(hwndList);
 				return TRUE;
@@ -514,10 +514,10 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 			m_nPageNum = ID_PROPTYPE_PAGENUM_KEYHELP;
 			return TRUE;
 
-		case LVN_ITEMCHANGED:	//リストの項目が変更された際の処理
+		case LVN_ITEMCHANGED:	// リストの項目が変更された際の処理
 			if (pNMHDR->hwndFrom == hwndList) {
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {	//削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
+				if (-1 == nIndex) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
 					nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
 					return FALSE;
 				}

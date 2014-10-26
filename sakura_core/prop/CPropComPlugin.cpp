@@ -165,7 +165,7 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 				if (m_bTrayProc) {
 					LoadPluginTemp(m_Common, *m_pcMenuDrawer);
 				}
-				SetData_LIST(hwndDlg);	//リストの再構築
+				SetData_LIST(hwndDlg);	// リストの再構築
 				break;
 			case IDC_PLUGIN_INST_ZIP:		// ZIPプラグインを追加
 				{
@@ -186,7 +186,7 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 						if (m_bTrayProc) {
 							LoadPluginTemp(m_Common, *m_pcMenuDrawer);
 						}
-						SetData_LIST(hwndDlg);	//リストの再構築
+						SetData_LIST(hwndDlg);	// リストの再構築
 					}
 					// フォルダを記憶
 					TCHAR	szFolder[_MAX_PATH + 1];
@@ -282,7 +282,7 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -300,10 +300,10 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 */
 void CPropPlugin::SetData(HWND hwndDlg)
 {
-	//プラグインを有効にする
+	// プラグインを有効にする
 	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_Common.m_sPlugin.m_bEnablePlugin);
 
-	//プラグインリスト
+	// プラグインリスト
 	SetData_LIST(hwndDlg);
 	
 	EnablePluginPropInput(hwndDlg);
@@ -325,16 +325,16 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), FALSE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_README), FALSE);
 
-	//プラグインリスト
+	// プラグインリスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_PLUGINLIST);
 
 	ListView_DeleteAllItems(hListView);
 
 	for (index = 0; index < MAX_PLUGIN; ++index) {
-		std::basic_string<TCHAR> sDirName;	//CPlugin.GetDirName()の結果保持変数
+		std::basic_string<TCHAR> sDirName;	// CPlugin.GetDirName()の結果保持変数
 		CPlugin* plugin = CPluginManager::getInstance()->GetPlugin(index);
 
-		//番号
+		// 番号
 		TCHAR buf[4];
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -345,7 +345,7 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 		sItem.lParam = index;
 		ListView_InsertItem(hListView, &sItem);
 
-		//名前
+		// 名前
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -357,7 +357,7 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 		}
 		ListView_SetItem(hListView, &sItem);
 
-		//状態
+		// 状態
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -373,7 +373,7 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 		}
 		ListView_SetItem(hListView, &sItem);
 		
-		//読込
+		// 読込
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
 		sItem.iSubItem = 3;
@@ -384,7 +384,7 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 		}
 		ListView_SetItem(hListView, &sItem);
 
-		//フォルダ
+		// フォルダ
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -425,10 +425,10 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 */
 int CPropPlugin::GetData(HWND hwndDlg)
 {
-	//プラグインを有効にする
+	// プラグインを有効にする
 	m_Common.m_sPlugin.m_bEnablePlugin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
-	//プラグインリストは今のところ変更できる部分がない
+	// プラグインリストは今のところ変更できる部分がない
 	//「新規プラグイン追加」はm_Commonに直接書き込むので、この関数ですることはない
 
 	return TRUE;
@@ -532,7 +532,7 @@ bool CPropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 	// -- -- -- -- コマンドライン文字列を生成 -- -- -- -- //
 	CCommandLineString cCmdLineBuf;
 
-	//アプリケーションパス
+	// アプリケーションパス
 	TCHAR szExePath[MAX_PATH + 1];
 	::GetModuleFileName(NULL, szExePath, _countof(szExePath));
 	cCmdLineBuf.AppendF(_T("\"%ts\""), szExePath);
@@ -549,7 +549,7 @@ bool CPropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 		cCmdLineBuf.AppendF(_T(" -GROUP=%d"), nGroup + 1);
 	}
 
-	//CreateProcessに渡すSTARTUPINFOを作成
+	// CreateProcessに渡すSTARTUPINFOを作成
 	STARTUPINFO	sui;
 	::GetStartupInfo(&sui);
 

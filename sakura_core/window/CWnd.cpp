@@ -15,7 +15,7 @@
 */
 #include "StdAfx.h"
 #include "CWnd.h"
-#include "util/os.h" //WM_MOUSEWHEEL
+#include "util/os.h" // WM_MOUSEWHEEL
 
 
 // CWndウィンドウメッセージのコールバック関数

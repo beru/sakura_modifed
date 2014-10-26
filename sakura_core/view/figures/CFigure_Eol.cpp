@@ -34,10 +34,10 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 
 // EOF描画関数
 // 実際には pX と nX が更新される。
-//2004.05.29 genta
-//2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
-//2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
-//2007.08.28 kobake 引数 fuOptions を削除
+// 2004.05.29 genta
+// 2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
+// 2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
+// 2007.08.28 kobake 引数 fuOptions を削除
 //void _DispEOF(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, bool bTrans);
 
 // 改行記号描画
@@ -243,7 +243,7 @@ void _DispEOF(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 画面描画補助関数
-//May 23, 2000 genta
+// May 23, 2000 genta
 //@@@ 2001.12.21 YAZAKI 改行記号の書きかたが変だったので修正
 void _DrawEOL(
 	CGraphics&		gr,
@@ -253,7 +253,7 @@ void _DrawEOL(
 	COLORREF		pColor
 );
 
-//2007.08.30 kobake 追加
+// 2007.08.30 kobake 追加
 void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView, bool bTrans)
 {
 	RECT rcClip2;

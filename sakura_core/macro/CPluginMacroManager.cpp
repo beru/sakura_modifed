@@ -105,7 +105,7 @@ CMacroManagerBase* CPluginMacroManager::Creator(const TCHAR* Ext)
 	CPlug::Array plugs;
 	CJackManager::getInstance()->GetUsablePlug(PP_MACRO, 0, &plugs);
 	for (auto it = plugs.begin(); it != plugs.end(); it++) {
-		objMacro->SetMatch(0);	//Check macro ext mode
+		objMacro->SetMatch(0);	// Check macro ext mode
 		(*it)->Invoke(NULL, params);
 		if (objMacro->IsMatch()) {
 			objMacro->Release();

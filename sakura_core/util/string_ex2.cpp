@@ -334,7 +334,7 @@ void GetLineColumn(const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn)
 	使用例:
 		int a[3];
 		scan_ints("1,23,4,5", "%d,%d,%d", a);
-		//結果: a[0]=1, a[1]=23, a[2]=4 となる。
+		// 結果: a[0]=1, a[1]=23, a[2]=4 となる。
 */
 int scan_ints(
 	const wchar_t*	pszData,	//!< [in]

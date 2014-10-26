@@ -183,7 +183,7 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.11.17 add start MIK
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids2);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -208,11 +208,11 @@ void CPropTypesWindow::SetCombobox(HWND hwndWork, const int* nIds, int nCount, i
 void CPropTypesWindow::SetData(HWND hwndDlg)
 {
 	{
-		// 文書アイコンを使う	//Sep. 10, 2002 genta
+		// 文書アイコンを使う	// Sep. 10, 2002 genta
 		::CheckDlgButtonBool(hwndDlg, IDC_CHECK_DOCICON, m_Types.m_bUseDocumentIcon);
 	}
 
-	// 起動時のIME(日本語入力変換)	//Nov. 20, 2000 genta
+	// 起動時のIME(日本語入力変換)	// Nov. 20, 2000 genta
 	{
 		int ime;
 		// ON/OFF状態
@@ -368,7 +368,7 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 int CPropTypesWindow::GetData(HWND hwndDlg)
 {
 	{
-		// 文書アイコンを使う	//Sep. 10, 2002 genta
+		// 文書アイコンを使う	// Sep. 10, 2002 genta
 		m_Types.m_bUseDocumentIcon = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_DOCICON);
 	}
 

@@ -749,6 +749,7 @@ bool GetPlugCmdInfoByFuncCode(
 	}
 	CommonSetting_Plugin& plugin = GetDllShareData().m_Common.m_sPlugin;
 	auto_sprintf(pszFuncName, L"%ls/%02d", plugin.m_PluginTable[nID].m_szId, nNo);
+
 	return true;
 }
 

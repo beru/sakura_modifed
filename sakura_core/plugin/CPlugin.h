@@ -36,7 +36,7 @@ typedef int PluginId;
 //! プラグの管理番号 プラグインのコマンドプラグごとに一意。ほかは0
 typedef int PlugId;
 
-//プラグイン定義ファイル名
+// プラグイン定義ファイル名
 #define PII_FILENAME				_T("plugin.def")
 #define PII_L10NDIR					_T("local")
 #define PII_L10NFILEBASE			_T("plugin_")
@@ -45,27 +45,27 @@ typedef int PlugId;
 #define PII_OPTFILEEXT				_T(".ini")
 
 // プラグイン定義ファイル・キー文字列
-#define	PII_PLUGIN					L"Plugin"		//共通情報
-#define	PII_PLUGIN_ID				L"Id"			//ID：プラグインID
-#define	PII_PLUGIN_NAME				L"Name"			//名前：プラグイン名
-#define	PII_PLUGIN_DESCRIPTION		L"Description"	//説明：簡潔な説明
-#define	PII_PLUGIN_PLUGTYPE			L"Type"			//種別：wsh / dll
-#define	PII_PLUGIN_AUTHOR			L"Author"		//作者：著作権者名
-#define	PII_PLUGIN_VERSION			L"Version"		//バージョン：プラグインのバージョン
-#define	PII_PLUGIN_URL				L"Url"			//配布URL：配布元URL
+#define	PII_PLUGIN					L"Plugin"		// 共通情報
+#define	PII_PLUGIN_ID				L"Id"			// ID：プラグインID
+#define	PII_PLUGIN_NAME				L"Name"			// 名前：プラグイン名
+#define	PII_PLUGIN_DESCRIPTION		L"Description"	// 説明：簡潔な説明
+#define	PII_PLUGIN_PLUGTYPE			L"Type"			// 種別：wsh / dll
+#define	PII_PLUGIN_AUTHOR			L"Author"		// 作者：著作権者名
+#define	PII_PLUGIN_VERSION			L"Version"		// バージョン：プラグインのバージョン
+#define	PII_PLUGIN_URL				L"Url"			// 配布URL：配布元URL
 
-#define PII_PLUG					L"Plug"			//プラグ情報
-#define PII_STRING					L"String"		//文字列情報
+#define PII_PLUG					L"Plug"			// プラグ情報
+#define PII_STRING					L"String"		// 文字列情報
 
-#define PII_COMMAND					L"Command"		//コマンド情報
-#define PII_OPTION					L"Option"		//オプション定義情報	// 2010/3/24 Uchi
+#define PII_COMMAND					L"Command"		// コマンド情報
+#define PII_OPTION					L"Option"		// オプション定義情報	// 2010/3/24 Uchi
 
 
 class CPlugin;
 
 // プラグ（プラグイン内の処理単位）クラス
 class CPlug {
-	//型定義
+	// 型定義
 protected:
 	typedef std::wstring wstring;
 public:
@@ -75,10 +75,10 @@ public:
 	  insert/eraseの第一引数に指定すると、VC2005でビルドエラーが出る。
 	  かわりにbegin/endからの相対位置指定や、インデックス指定を使うこと。
 	*/
-	typedef std::vector<CPlug*> Array;			//プラグのリスト
-	typedef Array::const_iterator ArrayIter;	//そのイテレータ
+	typedef std::vector<CPlug*> Array;			// プラグのリスト
+	typedef Array::const_iterator ArrayIter;	// そのイテレータ
 
-	//コンストラクタ
+	// コンストラクタ
 public:
 	CPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel)
 		:
@@ -89,19 +89,19 @@ public:
 		m_cPlugin(plugin)
 	{
 	}
-	//デストラクタ
+	// デストラクタ
 public:
 	virtual ~CPlug() {}
 
-	//操作
+	// 操作
 public:
-	bool Invoke(CEditView* view, CWSHIfObj::List& params);	//プラグを実行する
+	bool Invoke(CEditView* view, CWSHIfObj::List& params);	// プラグを実行する
 
-	//属性
+	// 属性
 public:
 	EFunctionCode GetFunctionCode() const;
 
-	//補助関数
+	// 補助関数
 public:
 	// Plug Function番号の計算(クラス外でも使えるバージョン)
 	// 2010/4/19 Uchi
@@ -154,14 +154,14 @@ public:
 		return static_cast<ESmartIndentType>(nFunctionCode);
 	}
 
-	//メンバ変数
+	// メンバ変数
 public:
-	const PlugId m_id;					//プラグID
-	const wstring m_sJack;				//関連付けるジャック名
-	const wstring m_sHandler;			//ハンドラ文字列（関数名）
-	const wstring m_sLabel;				//ラベル文字列
-	wstring m_sIcon;					//アイコンのファイルパス
-	CPlugin& m_cPlugin;					//親プラグイン
+	const PlugId m_id;					// プラグID
+	const wstring m_sJack;				// 関連付けるジャック名
+	const wstring m_sHandler;			// ハンドラ文字列（関数名）
+	const wstring m_sLabel;				// ラベル文字列
+	wstring m_sIcon;					// アイコンのファイルパス
+	CPlugin& m_cPlugin;					// 親プラグイン
 };
 
 // オプション定義	// 2010/3/24 Uchi
@@ -220,29 +220,29 @@ protected:
 };
 
 
-//プラグインクラス
+// プラグインクラス
 
 class CPlugin {
-	//型定義
+	// 型定義
 protected:
 	typedef std::wstring wstring;
 	typedef std::string string;
 
 public:
-	typedef std::list<CPlugin*> List;		//プラグインのリスト
-	typedef List::const_iterator ListIter;	//そのイテレータ
+	typedef std::list<CPlugin*> List;		// プラグインのリスト
+	typedef List::const_iterator ListIter;	// そのイテレータ
 
-	//コンストラクタ
+	// コンストラクタ
 public:
 	CPlugin(const tstring& sBaseDir);
 
-	//デストラクタ
+	// デストラクタ
 public:
 	virtual ~CPlugin(void);
 
-	//操作
+	// 操作
 public:
-	virtual int AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister);	//コマンドを追加する
+	virtual int AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister);	// コマンドを追加する
 	int 	GetCommandCount()	{ return m_nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
 
 protected:
@@ -257,7 +257,7 @@ protected:
 		return new CPlug(plugin, id, sJack, sHandler, sLabel);
 	}
 
-//	void NormalizeExtList(const wstring& sExtList, wstring& sOut);	//カンマ区切り拡張子リストを正規化する
+//	void NormalizeExtList(const wstring& sExtList, wstring& sOut);	// カンマ区切り拡張子リストを正規化する
 
 	// 属性
 public:

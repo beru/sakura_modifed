@@ -120,7 +120,7 @@ void CEditView::ShowHokanMgr(CNativeW& cmemData, BOOL bAutoDecided)
 			GetHwnd(),
 			(LPARAM)this
 		);
-		::SetFocus(GetHwnd());	//エディタにフォーカスを戻す
+		::SetFocus(GetHwnd());	// エディタにフォーカスを戻す
 	}
 	int nKouhoNum = hokanMgr.CHokanMgr::Search(
 		&poWin,
@@ -187,7 +187,7 @@ int CEditView::HokanSearchByFile(
 	int nLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
-	CLogicPoint ptCur = GetCaret().GetCaretLogicPos(); //物理カーソル位置
+	CLogicPoint ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
 
 	// キーが記号で始まるか
 	// キーの先頭が記号(#$@\)かどうか判定

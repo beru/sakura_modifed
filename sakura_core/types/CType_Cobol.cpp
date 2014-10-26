@@ -9,18 +9,18 @@
 /* COBOL */
 void CType_Cobol::InitTypeConfigImp(STypeConfig* pType)
 {
-	//名前と拡張子
+	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("COBOL"));
-	_tcscpy(pType->m_szTypeExts, _T("cbl,cpy,pco,cob"));	//Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
+	_tcscpy(pType->m_szTypeExts, _T("cbl,cpy,pco,cob"));	// Jun. 04, 2001 JEPRO KENCH氏の助言に従い追加
 
-	//設定
-	pType->m_cLineComment.CopyTo(0, L"*", 6);			//Jun. 02, 2001 JEPRO 修正
-	pType->m_cLineComment.CopyTo(1, L"D", 6);			//Jun. 04, 2001 JEPRO 追加
-	pType->m_nStringType = STRING_LITERAL_PLSQL;							/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-	wcscpy_s(pType->m_szIndentChars, L"*");				/* その他のインデント対象文字 */
-	pType->m_nKeyWordSetIdx[0] = 3;						/* キーワードセット */		//Jul. 10, 2001 JEPRO
-	pType->m_eDefaultOutline = OUTLINE_COBOL;			/* アウトライン解析方法 */
-	// 指定桁縦線	//2005.11.08 Moca
+	// 設定
+	pType->m_cLineComment.CopyTo(0, L"*", 6);			// Jun. 02, 2001 JEPRO 修正
+	pType->m_cLineComment.CopyTo(1, L"D", 6);			// Jun. 04, 2001 JEPRO 追加
+	pType->m_nStringType = STRING_LITERAL_PLSQL;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	wcscpy_s(pType->m_szIndentChars, L"*");				// その他のインデント対象文字
+	pType->m_nKeyWordSetIdx[0] = 3;						// キーワードセット		// Jul. 10, 2001 JEPRO
+	pType->m_eDefaultOutline = OUTLINE_COBOL;			// アウトライン解析方法
+	// 指定桁縦線	// 2005.11.08 Moca
 	pType->m_ColorInfoArr[COLORIDX_VERTLINE].m_bDisp = true;
 	pType->m_nVertLineIdx[0] = CLayoutInt(7);
 	pType->m_nVertLineIdx[1] = CLayoutInt(8);
@@ -114,7 +114,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 	return;
 }
 
-//Jul. 10, 2001 JEPRO 追加
+// Jul. 10, 2001 JEPRO 追加
 const wchar_t* g_ppszKeywordsCOBOL[] = {
 	L"ACCEPT",
 	L"ADD",

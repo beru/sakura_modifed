@@ -50,10 +50,7 @@ bool CColor_RegexKeyword::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_RegexKeyword::EndColor(const CStringRef& cStr, int nPos)
 {
-	if (nPos == this->m_nCOMMENTEND) {
-		return true;
-	}
-	return false;
+	return (nPos == this->m_nCOMMENTEND);
 }
 
 void CColor_RegexKeyword::OnStartScanLogic()

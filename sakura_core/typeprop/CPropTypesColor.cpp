@@ -374,7 +374,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 				m_Types.m_ColorInfoArr[m_nCurrentColorType].m_bDisp = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_DISP);
 				// 現在選択されている色タイプ
 				List_SetCurSel(hwndListColor, m_nCurrentColorType);
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	//Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 			case IDC_CHECK_BOLD:	// 太字か
 				m_Types.m_ColorInfoArr[m_nCurrentColorType].m_sFontAttr.m_bBoldFont = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BOLD);
@@ -389,7 +389,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 
 			case IDC_BUTTON_IMPORT:	// 色の設定をインポート
 				Import(hwndDlg);
-				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	//Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
+				m_Types.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();	// Need Compile	//@@@ 2001.11.17 add MIK 正規表現キーワードのため
 				return TRUE;
 
 			case IDC_BUTTON_EXPORT:	// 色の設定をエクスポート
@@ -571,7 +571,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 //@@@ 2001.02.04 End
 
 //@@@ 2001.11.17 add start MIK
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids2);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -595,7 +595,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する	//@@@ 2002.09.22 YAZAKI
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENT)		, COMMENT_DELIMITER_BUFFERSIZE - 1);
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENT2)		, COMMENT_DELIMITER_BUFFERSIZE - 1);
-	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENT3)		, COMMENT_DELIMITER_BUFFERSIZE - 1);	//Jun. 01, 2001 JEPRO 追加
+	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENT3)		, COMMENT_DELIMITER_BUFFERSIZE - 1);	// Jun. 01, 2001 JEPRO 追加
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM)	, BLOCKCOMMENT_BUFFERSIZE - 1);
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO)	, BLOCKCOMMENT_BUFFERSIZE - 1);
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2), BLOCKCOMMENT_BUFFERSIZE - 1);
@@ -779,7 +779,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 		m_Types.m_nKeyWordSetIdx[0] = nIdx - 1;
 	}
 
-	//強調キーワード2～10の取得(1は別)
+	// 強調キーワード2～10の取得(1は別)
 	for (nIdx = 1; nIdx < MAX_KEYWORDSET_PER_TYPE; nIdx++) {
 		m_Types.m_nKeyWordSetIdx[nIdx] = m_nSet[nIdx];
 	}
@@ -858,7 +858,7 @@ void CPropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
 	RECT		rc;
 	RECT		rcFocus;
 
-	//描画対象
+	// 描画対象
 	CGraphics gr(pDis->hDC);
 
 	// ボタンの表面の色で塗りつぶす

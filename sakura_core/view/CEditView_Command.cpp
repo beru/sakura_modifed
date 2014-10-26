@@ -127,21 +127,21 @@ bool CEditView::TagJumpSub(
 			true	// 同期モードで開く
 		);
 
-		if (!bSuccess)	//	ファイルが開けなかった
+		if (!bSuccess)	// ファイルが開けなかった
 			return false;
 
-		//	Apr. 23, 2001 genta
-		//	hwndOwnerに値が入らなくなってしまったために
-		//	Tag Jump Backが動作しなくなっていたのを修正
+		// Apr. 23, 2001 genta
+		// hwndOwnerに値が入らなくなってしまったために
+		// Tag Jump Backが動作しなくなっていたのを修正
 		if (!CShareData::getInstance()->IsPathOpened(szJumpToFile, &hwndOwner))
 			return false;
 	}
 
 	// 2006.12.30 ryoji 閉じる処理は最後に（処理位置移動）
-	//	Apr. 2003 genta 閉じるかどうかは引数による
-	//	grep結果からEnterでジャンプするところにCtrl判定移動
+	// Apr. 2003 genta 閉じるかどうかは引数による
+	// grep結果からEnterでジャンプするところにCtrl判定移動
 	if (bClose) {
-		GetCommander().Command_WINCLOSE();	//	挑戦するだけ。
+		GetCommander().Command_WINCLOSE();	// 挑戦するだけ。
 	}
 
 	return true;
@@ -271,7 +271,7 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode(CLayoutInt* _newKetas)
 {
 	CLayoutInt& newKetas = *_newKetas;
 	//@@@ 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするコマンド。
-	//2002/04/08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
+	// 2002/04/08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
 	// 20051022 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにするコマンド
 	// ウィンドウ幅==文書タイプ||最大値==文書タイプ の場合があるため判定順序に注意する。
 	/*	Jan.  8, 2006 genta

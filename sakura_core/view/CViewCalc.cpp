@@ -5,7 +5,7 @@
 #include "doc/CEditDoc.h"
 #include "doc/layout/CLayout.h"
 
-//ŠO•”ˆË‘¶
+// ŠO•”ˆË‘¶
 CLayoutInt CViewCalc::GetTabSpace() const
 {
 	return m_pOwner->m_pcEditDoc->m_cLayoutMgr.GetTabSpace();

@@ -205,7 +205,7 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					break;
 				case IDC_BUTTON_FNAME_DEL:	// 削除
 					if (-1 != nIndex) {
-						ListView_DeleteItem(hListView, nIndex);	//古いキーを削除
+						ListView_DeleteItem(hListView, nIndex);	// 古いキーを削除
 						ListView_SetItemState(hListView, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 						return TRUE;
 					}
@@ -249,7 +249,7 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 //@@@ 2001.02.04 End
 
 //@@@ 2001.12.22 Start by MIK: Context Menu Help
-	//Context Menu
+	// Context Menu
 	case WM_CONTEXTMENU:
 		MyWinHelp(hwndDlg, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
@@ -415,7 +415,7 @@ int CPropFileName::MoveListViewItem_FILENAME(HWND hListView, int nIndex, int nIn
 	}
 
 	GetListViewItem_FILENAME(hListView, nIndex, szFrom, szTo);
-	ListView_DeleteItem(hListView, nIndex);	//古いキーを削除
+	ListView_DeleteItem(hListView, nIndex);	// 古いキーを削除
 	SetListViewItem_FILENAME(hListView, nIndex2, szFrom, szTo, true);
 	return nIndex2;
 }

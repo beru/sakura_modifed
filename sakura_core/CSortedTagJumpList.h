@@ -30,7 +30,7 @@
 
 #pragma once
 
-#define MAX_TAG_STRING_LENGTH _MAX_PATH	//管理する文字列の最大長
+#define MAX_TAG_STRING_LENGTH _MAX_PATH	// 管理する文字列の最大長
 
 /*!	@brief ダイレクトタグジャンプ用検索結果をソートして保持する．
 	@author MIK

@@ -26,7 +26,7 @@
 #include "CNative.h"
 #include "mem/CNativeT.h"
 #include "basis/SakuraBasis.h"
-#include "debug/Debug2.h" //assert
+#include "debug/Debug2.h" // assert
 
 
 //! 文字列への参照を取得するインターフェース
@@ -153,7 +153,7 @@ public:
 	void SetStringOld(const char* pszData);                //!< バッファの内容を置き換える。pszDataはSJIS。
 	void AppendStringOld(const char* pData, int nDataLen); //!< バッファの最後にデータを追加する。pszDataはSJIS。
 	void AppendStringOld(const char* pszData);             //!< バッファの最後にデータを追加する。pszDataはSJIS。
-	const char* GetStringPtrOld() const; //ShiftJISに変換して返す
+	const char* GetStringPtrOld() const; // ShiftJISに変換して返す
 
 	// WCHAR
 	void SetStringW(const wchar_t* pszData)					{ return SetString(pszData); }

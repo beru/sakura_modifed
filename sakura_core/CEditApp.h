@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//2007.10.23 kobake ì¬
+// 2007.10.23 kobake ì¬
 
 #include "util/design_template.h"
 #include "uiparts/CSoundSet.h"

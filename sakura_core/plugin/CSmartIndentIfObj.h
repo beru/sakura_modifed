@@ -34,9 +34,9 @@
 class CSmartIndentIfObj : public CWSHIfObj {
 	// 型定義
 	enum FuncId {
-		F_SI_COMMAND_FIRST = 0,					//↓コマンドは以下に追加する
-		F_SI_FUNCTION_FIRST = F_FUNCTION_FIRST,	//↓関数は以下に追加する
-		F_SI_GETCHAR							//押下したキーを取得する
+		F_SI_COMMAND_FIRST = 0,					// ↓コマンドは以下に追加する
+		F_SI_FUNCTION_FIRST = F_FUNCTION_FIRST,	// ↓関数は以下に追加する
+		F_SI_GETCHAR							// 押下したキーを取得する
 	};
 	typedef std::string string;
 	typedef std::wstring wstring;
@@ -67,7 +67,7 @@ public:
 	MacroFuncInfoArray GetMacroFuncInfo() const {
 		static MacroFuncInfo macroFuncInfoNotCommandArr[] = {
 			//ID									関数名							引数										戻り値の型	m_pszData
-			{EFunctionCode(F_SI_GETCHAR),			LTEXT("GetChar"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, //押下したキーを取得する
+			{EFunctionCode(F_SI_GETCHAR),			LTEXT("GetChar"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // 押下したキーを取得する
 			//	終端
 			{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 		};

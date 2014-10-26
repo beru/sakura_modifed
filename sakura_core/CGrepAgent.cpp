@@ -216,7 +216,7 @@ DWORD CGrepAgent::DoGrep(
 	sGrepOption.bGrepOutputBaseFolder = bGrepOutputBaseFolder;
 	sGrepOption.bGrepSeparateFolder = bGrepSeparateFolder;
 
-//2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
+// 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
 	HICON	hIconBig, hIconSmall;
 	//	Dec, 2, 2002 genta アイコン読み込み方法変更
 	hIconBig   = GetAppIcon(G_AppInstance(), ICON_DEFAULT_GREP, FN_GREP_ICON, false);
@@ -605,7 +605,7 @@ int CGrepAgent::DoGrepTree(
 		for (int i = 0; i < count; i++) {
 			LPCTSTR lpFileName = cGrepEnumFilterFolders.GetFileName(i);
 
-			//サブフォルダの探索を再帰呼び出し。
+			// サブフォルダの探索を再帰呼び出し。
 			// 処理中のユーザー操作を可能にする
 			if (!::BlockingHook(pcDlgCancel->GetHwnd())) {
 				goto cancel_return;

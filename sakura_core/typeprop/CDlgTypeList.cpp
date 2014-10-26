@@ -226,7 +226,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			}
 		}else if (LOWORD(wParam) == IDC_CHECK_EXT_RMENU && HIWORD(wParam) == BN_CLICKED) {
 			bool checked = (BtnCtl_GetCheck(hwndRMenu) == TRUE ? true : false);
-			if (!AlertFileAssociation()) {		//レジストリ変更確認
+			if (!AlertFileAssociation()) {		// レジストリ変更確認
 				BtnCtl_SetCheck(hwndRMenu, !checked);
 				break;
 			}
@@ -260,7 +260,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			return TRUE;
 		}else if (LOWORD(wParam) == IDC_CHECK_EXT_DBLCLICK && HIWORD(wParam) == BN_CLICKED) {
 			bool checked = (BtnCtl_GetCheck(hwndDblClick) == TRUE ? true : false);
-			if (!AlertFileAssociation()) {		//レジストリ変更確認
+			if (!AlertFileAssociation()) {		// レジストリ変更確認
 				BtnCtl_SetCheck(hwndDblClick, !checked);
 				break;
 			}
@@ -490,7 +490,7 @@ bool CDlgTypeList::InitializeType(void)
 	if (-1 == iDocType) {
 		return false;
 	}
-//	_DefaultConfig(&types);		//規定値をコピー
+//	_DefaultConfig(&types);		// 規定値をコピー
 	STypeConfig type;
 	CDocTypeManager().GetTypeConfig(CTypeConfig(0), type); 	// 基本をコピー
 
@@ -797,7 +797,7 @@ int RegistExt(LPCTSTR sExt, bool bDefProg)
 	int errorCode = ERROR_SUCCESS;
 	tstring sBasePath = tstring(_T("Software\\Classes\\"));
 
-	//小文字化
+	// 小文字化
 	TCHAR szLowerExt[MAX_PATH] = {0};
 	_tcsncpy_s(szLowerExt, _countof(szLowerExt), sExt, _tcslen(sExt));
 	CharLower(szLowerExt);

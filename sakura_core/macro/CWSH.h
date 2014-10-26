@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ActivScp.h>
-//↑Microsoft Platform SDK より
+// ↑Microsoft Platform SDK より
 #include "macro/CIfObj.h"
 
 /* 2009.10.29 syat インタフェースオブジェクト部分をCWSHIfObj.hに分離
