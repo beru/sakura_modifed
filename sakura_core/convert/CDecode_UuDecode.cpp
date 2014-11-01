@@ -61,7 +61,7 @@ bool CDecode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 		}
 		pw += _DecodeUU_line(pline, nlinelen, pw);
 	}
-	if (bsuccess == false) {
+	if (!bsuccess) {
 		return false;
 	}
 

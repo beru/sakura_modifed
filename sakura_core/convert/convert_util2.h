@@ -225,7 +225,7 @@ int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 			}else {
 				bret = (pSrc[nsrclen - 1 - i] == '=');
 			}
-			if (bret != true) {
+			if (!bret) {
 				break;
 			}
 		}

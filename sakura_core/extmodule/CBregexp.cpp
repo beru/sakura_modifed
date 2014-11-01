@@ -274,7 +274,7 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 		}
 		delete [] szNPattern;
 
-		if (bJustDollar == true || (m_ePatType & PAT_TAB) != 0) {
+		if (bJustDollar || (m_ePatType & PAT_TAB) != 0) {
 			// 行末指定の$ or 行頭行末指定 なので、検索文字列を置換
 			if (BSubst(BOT_SUBST, szPattern, szPattern + nLen, &sReg, szMsg) > 0) {
 				szPattern = sReg->outp;

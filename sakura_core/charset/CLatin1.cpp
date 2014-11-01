@@ -99,7 +99,7 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 
 
 
-/* コード変換 Latin1→Unicode */
+// コード変換 Latin1→Unicode
 EConvertResult CLatin1::Latin1ToUnicode(CMemory* pMem)
 {
 	// エラー状態
@@ -129,17 +129,12 @@ EConvertResult CLatin1::Latin1ToUnicode(CMemory* pMem)
 	// 後始末
 	delete [] pDst;
 
-	if (bError == false) {
+	if (!bError) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;
 	}
 }
-
-
-
-
-
 
 
 /*
@@ -179,7 +174,7 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 		}
 		if (echarset != CHARSET_BINARY) {
 			pw += _UniToLatin1_char(pr, pw, echarset, &berror_tmp);
-			if (berror_tmp == true) {
+			if (berror_tmp) {
 				berror = true;
 			}
 			pr += nclen;
@@ -205,8 +200,7 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 
 
-
-/* コード変換 Unicode→Latin1 */
+// コード変換 Unicode→Latin1
 EConvertResult CLatin1::UnicodeToLatin1(CMemory* pMem)
 {
 	// 状態
@@ -237,7 +231,7 @@ EConvertResult CLatin1::UnicodeToLatin1(CMemory* pMem)
 	delete[] pDst;
 
 	// 結果
-	if (berror == true) {
+	if (berror) {
 		return RESULT_LOSESOME;
 	}else {
 		return RESULT_COMPLETE;
@@ -276,7 +270,7 @@ EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR
 	// Hex変換
 	ps = reinterpret_cast<unsigned char*>(cCharBuffer.GetRawPtr());
 	pd = pDst;
-	if (bbinary == false) {
+	if (!bbinary) {
 		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf(pd, _T("%02x"), *ps);
 		}

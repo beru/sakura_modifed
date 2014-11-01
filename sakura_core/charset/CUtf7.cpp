@@ -85,7 +85,7 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 	do {
 		// UTF-7 Set D 部分のチェック
 		nblocklen = CheckUtf7DPart(pr, pr_end - pr, &pr_next, &berror_tmp);
-		if (berror_tmp == true) {
+		if (berror_tmp) {
 			berror = true;
 		}
 		pw += _Utf7SetDToUni_block(pr, nblocklen, pw);
@@ -108,7 +108,7 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 				++pw;
 			}else {
 				pw += _Utf7SetBToUni_block(pr, nblocklen, pw, &berror_tmp);
-				if (berror_tmp != false) {
+				if (berror_tmp) {
 					berror = true;
 				}
 			}
@@ -154,7 +154,7 @@ EConvertResult CUtf7::UTF7ToUnicode(CMemory* pMem)
 
 	delete [] pDst;
 
-	if (bError == false) {
+	if (!bError) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;

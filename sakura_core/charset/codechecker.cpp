@@ -492,12 +492,12 @@ int _CheckUtf16Char(const wchar_t* pS, const int nLen, ECharSet *peCharset, cons
 	// 文字を読み込む
 
 	wc1 = pS[0];
-	if (bBigEndian == true) {
+	if (bBigEndian) {
 		wc1 = _SwapHLByte(wc1);
 	}
 	if (1 < nLen) {
 		wc2 = pS[1];
-		if (bBigEndian == true) {
+		if (bBigEndian) {
 			wc2 = _SwapHLByte(wc2);
 		}
 	}
@@ -634,7 +634,7 @@ int CheckUtf8Char(const char* pS, const int nLen, ECharSet* peCharset, const boo
 			//	charset = CHARSET_BINARY;
 			//	ncwidth = 1;
 			//}
-			if (bAllow4byteCode == true && (c0 & 0x0f) == 0x0d && (c1 & 0x20) != 0) {
+			if (bAllow4byteCode && (c0 & 0x0f) == 0x0d && (c1 & 0x20) != 0) {
 				// サロゲート領域 (U+D800 から U+DFFF)
 				echarset = CHARSET_BINARY;
 				ncwidth = 1;
@@ -663,7 +663,7 @@ int CheckUtf8Char(const char* pS, const int nLen, ECharSet* peCharset, const boo
 				echarset = CHARSET_BINARY;
 				ncwidth = 1;
 			}
-			if (bAllow4byteCode == false) {
+			if (!bAllow4byteCode) {
 				echarset = CHARSET_BINARY;
 				ncwidth = 1;
 			}
@@ -734,7 +734,7 @@ int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bo
 				//	charset = CHARSET_BINARY;
 				//	ncwidth = 1;
 				//}
-				if (bAllow4byteCode == true && (c0 & 0x0f) == 0x0d && (c1 & 0x20) != 0) {
+				if (bAllow4byteCode && (c0 & 0x0f) == 0x0d && (c1 & 0x20) != 0) {
 					// サロゲート領域 (U+D800 から U+DFFF)
 					echarset = CHARSET_BINARY;
 					ncwidth = 1;
@@ -775,7 +775,7 @@ int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bo
 					echarset = CHARSET_BINARY;
 					ncwidth = 1;
 				}
-				if (bAllow4byteCode == false) {
+				if (!bAllow4byteCode) {
 					echarset = CHARSET_BINARY;
 					ncwidth = 1;
 				}
@@ -1071,7 +1071,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 
 	// UTF-7文字列 "+-" のチェック
 
-	if (pr < pr_end && (nchecklen < 1 && bminus_found != true)) {
+	if (pr < pr_end && (nchecklen < 1 && !bminus_found)) {
 		// 読み取りポインタがデータの終端を指していなくて
 		// 確認できた Set B 文字列の長さがゼロの場合は、
 		// 必ず終端文字 '-' が存在していることを確認する。
@@ -1080,7 +1080,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 
 	// 実際にデコードして内容を確認する。
 
-	if (berror_found == true || nchecklen < 1) {
+	if (berror_found || nchecklen < 1) {
 		goto EndFunc;
 	}
 
@@ -1109,7 +1109,7 @@ EndFunc:;
 		*pbError = berror_found;
 	}
 
-	if ((berror_found == false || UC_LOOSE == (nOption & UC_LOOSE)) && (pr < pr_end && bminus_found == true)) {
+	if ((!berror_found || UC_LOOSE == (nOption & UC_LOOSE)) && (pr < pr_end && bminus_found)) {
 		// '-' をスキップ。
 		*ppNextChar = const_cast<char*>(pr) + 1;
 	}else {

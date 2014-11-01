@@ -726,7 +726,7 @@ bool CDlgFavorite::RefreshList(void)
 	// 全リストの現在選択中のアイテムを取得する。
 	for (nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		bret = RefreshListOne(nTab);
-		if (bret == true) {
+		if (bret) {
 			ret_val = true;
 		
 			if (msg[0] != _T('\0')) _tcscat(msg, LS(STR_DLGFAV_DELIMITER));

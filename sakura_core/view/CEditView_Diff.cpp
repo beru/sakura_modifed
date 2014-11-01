@@ -258,7 +258,7 @@ void CEditView::ViewDiffInfo(
 							// 行末に達したか？
 							if (work[j] == '\n' || work[j] == '\r') {
 								// DIFF情報があれば解析する
-								if (bDiffInfo == true && nDiffLen > 0) {
+								if (bDiffInfo && nDiffLen > 0) {
 									szDiffData[nDiffLen] = '\0';
 									AnalyzeDiffInfo(szDiffData, nFlgFile12);
 									nDiffLen = 0;
@@ -289,7 +289,7 @@ void CEditView::ViewDiffInfo(
 		} while (bLoopFlag || new_cnt > 0);
 
 		// 残ったDIFF情報があれば解析する
-		if (bDiffInfo == true && nDiffLen > 0) {
+		if (bDiffInfo && nDiffLen > 0) {
 			szDiffData[nDiffLen] = '\0';
 			AnalyzeDiffInfo(szDiffData, nFlgFile12);
 		}

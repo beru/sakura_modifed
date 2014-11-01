@@ -458,7 +458,7 @@ void CEditView::ISearchBack(void) {
 	if (m_nISearchHistoryCount == 1) {
 		m_bCurSrchKeyMark = false;
 		m_bISearchFirst = true;
-	}else if (m_bISearchFlagHistory[m_nISearchHistoryCount] == false) {
+	}else if (!m_bISearchFlagHistory[m_nISearchHistoryCount]) {
 		// ŒŸõ•¶Žš‚ð‚Ö‚ç‚·
 		size_t l = m_strCurSearchKey.size();
 		if (l > 0) {

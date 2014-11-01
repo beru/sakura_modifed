@@ -88,7 +88,7 @@ public:
 		case F_CM_ADDLIST:		// Œó•â‚É’Ç‰Á‚·‚é
 			{
 				std::wstring keyword;
-				if (variant_to_wstr(Arguments[0], keyword) != true) {
+				if (!variant_to_wstr(Arguments[0], keyword)) {
 					return false;
 				}
 				const wchar_t* word = keyword.c_str();

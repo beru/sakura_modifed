@@ -1022,7 +1022,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	/*	nFirstLineIsEmptyLineが空行だったら、今見ているところは非空行。すなわちおしまい。
 		nFirstLineIsEmptyLineが非空行だったら、今見ているところは空行。
 	*/
-	if (nFirstLineIsEmptyLine == true) {
+	if (nFirstLineIsEmptyLine) {
 		// おしまい。
 	}else {
 		// いま見ているところは空行の1行目
@@ -1096,7 +1096,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 		nFirstLineIsEmptyLineが非空行だったら、今見ているところは空行。
 	*/
 	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;	
-	if (nFirstLineIsEmptyLine == true) {
+	if (nFirstLineIsEmptyLine) {
 		// おしまい。
 		if (csGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
 			nCaretPointer++;	// 空行の最上行（段落の末端の次の行）で止まる。

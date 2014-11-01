@@ -97,10 +97,10 @@ public:
 				wstring sSection;
 				wstring sKey;
 				wstring sValue;
-				if (variant_to_wstr(Arguments[0], sSection) != true) {
+				if (!variant_to_wstr(Arguments[0], sSection)) {
 					return false;
 				}
-				if (variant_to_wstr(Arguments[1], sKey) != true) {
+				if (!variant_to_wstr(Arguments[1], sKey)) {
 					return false;
 				}
 
@@ -137,7 +137,7 @@ public:
 		case F_PL_GETSTRING:
 			{
 				int num;
-				if (variant_to_int(Arguments[0], num) == false) {
+				if (!variant_to_int(Arguments[0], num)) {
 					return false;
 				}
 				if (0 < num && num < MAX_PLUG_STRING) {

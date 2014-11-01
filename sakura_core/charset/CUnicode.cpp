@@ -32,7 +32,7 @@ EConvertResult CUnicode::_UnicodeToUnicode_in(CMemory* pMem, const bool bBigEndi
 
 EConvertResult CUnicode::_UnicodeToUnicode_out(CMemory* pMem, const bool bBigEndian)
 {
-	if (bBigEndian == true) {
+	if (bBigEndian) {
 		pMem->SwapHLByte();   // Unicode -> UnicodeBe
 	}
 

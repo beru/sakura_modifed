@@ -760,7 +760,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 							}else {
 								szNamespace[nNamespaceLen[nNestLevel_global]] = L'\0';
 								szNamespace[nNamespaceLen[nNestLevel_global] + 1] = L':';
-								if (bVisibleMemberFunc == false && nNestPoint_class == 0)
+								if (!bVisibleMemberFunc && nNestPoint_class == 0)
 									nNestPoint_class = nNestLevel_global;
 							}
 						}

@@ -222,7 +222,7 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 		}
 		// 変換実行
 		pw += _JisToUni_block(pr, nblocklen, pw, esctype, &berror_tmp);
-		if (berror_tmp == true) {
+		if (berror_tmp) {
 			berror = true;
 		}
 		esctype = next_esctype;
@@ -256,10 +256,10 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 	int nsrclen = nSrcLen;
 	CMemory cmem;
 
-	if (base64decode == true) {
+	if (base64decode) {
 		// ISO-2202-J 用の MIME ヘッダーをデコード
 		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_JIS);
-		if (bret == true) {
+		if (bret) {
 			psrc = reinterpret_cast<const char*>(cmem.GetRawPtr());
 			nsrclen = cmem.GetRawLength();
 		}
@@ -285,7 +285,7 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 	
 	delete [] pDst;
 
-	if (berror == false) {
+	if (!berror) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;
@@ -429,7 +429,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 
 			// SJIS -> JIS
 			pw += _SjisToJis_char(&cbuf[0], pw, echarset_cur, &berror_tmp);
-			if (berror_tmp == true) {
+			if (berror_tmp) {
 				berror = true;
 			}
 			pr += nclen;

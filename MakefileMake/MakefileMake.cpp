@@ -118,9 +118,7 @@ struct SExpList {
 	{".rc",		EXP_SRC	},
 };
 
-
 std::vector<std::string> file_list;  // filename_list
-
 
 // ファイルリストを作成する
 int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
@@ -141,8 +139,9 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 		do {
 			if (sexp.type == EXP_DIR) {
 				// search subdirectory
-				if ((ffData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-						(strcmp(ffData.cFileName, ".") != 0 && strcmp(ffData.cFileName, "..") != 0)) {
+				if ((ffData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+					&& (strcmp(ffData.cFileName, ".") != 0 && strcmp(ffData.cFileName, "..") != 0)
+				) {
 
 					fl_nm = ffData.cFileName;
 					if (dir != "") {
@@ -150,7 +149,7 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 					}
 
 					// search subdirectory
-					int		res;
+					int res;
 					for (int i = 0; i < _countof(s_exp_list); i++) {
 						if ((res = makeFileList(top_dir, fl_nm, s_exp_list[i])) != 0) {
 							::FindClose(hFind);
@@ -158,8 +157,7 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 						}
 					}
 				}
-			}
-			else {
+			}else {
 				std::string fl_nm;
 
 				fl_nm = ffData.cFileName;
@@ -168,7 +166,7 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 					fl_nm = dir + "/" + fl_nm;
 				}
 
-				//add to list
+				// add to list
 				file_list.push_back( fl_nm );
 			}
 		} while (::FindNextFileA(hFind, &ffData));
@@ -180,7 +178,7 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 // ファイルリストを作成する(top level)
 int makeFileListTop(const char* top_dir)
 {
-	int		res;
+	int res;
 
 	for (int i = 0; i < _countof(s_exp_list); i++) {
 		if ((res = makeFileList(top_dir, "", s_exp_list[i])) != 0)
@@ -194,8 +192,8 @@ int makeFileListTop(const char* top_dir)
 // 最後はNULLを返す
 const char* getFile()
 {
-	static int		pt;
-	static std::string	r_str;
+	static int pt;
+	static std::string r_str;
 
 	if (pt >= (int)file_list.size()) {
 		return NULL;
@@ -223,8 +221,8 @@ int main(int argc, char* argv[])
 	const char*	makefile	= NULL;
 	const char*	top_dir		= NULL;
 
-	for (int i=1; i < argc; i++) {
-		char*	p = argv[i];
+	for (int i = 1; i < argc; i++) {
+		char* p = argv[i];
 		if (*p == '/' || *p =='-') {
 			p++;
 			if (_strnicmp(p,"file",4) == 0) {
@@ -233,30 +231,25 @@ int main(int argc, char* argv[])
 					if (i < argc) {
 						makefile = argv[++i];
 					}
-				}
-				else {
+				}else {
 					if (*p == '=') p++;
 					makefile = p;
 				}
-			}
-			else if (_strnicmp(p,"dir",3) == 0) {
+			}else if (_strnicmp(p,"dir",3) == 0) {
 				p += 3;
 				if (*p == '\0') {
 					if (i < argc) {
 						top_dir = argv[++i];
 					}
-				}
-				else {
+				}else {
 					if (*p == '=') p++;
 					top_dir = p;
 				}
-			}
-			else {
+			}else {
 				printf("Error: 不明な引数[%s]\n", argv[i]);
 				return usage();
 			}
-		}
-		else {
+		}else {
 			printf("Error: 不明な引数[%s]\n", argv[i]);
 			return usage();
 		}
@@ -267,28 +260,28 @@ int main(int argc, char* argv[])
 
 
 	// トップディレクトリのチェック
-	struct stat		st;
-	int		ret = stat( top_dir, &st );
+	struct stat st;
+	int ret = stat( top_dir, &st );
 	if (ret != 0 || !(st.st_mode & _S_IFDIR)) {
 		printf("Error: トップディレクトリ[%s]が見つかりません\n", top_dir);
 		return 1;
 	}
 
 	// ファイルオープン
-	FILE*	in = NULL;
+	FILE* in = NULL;
 	if (fopen_s( &in, makefile, "rt" ) != 0) {
 		printf("Error: 出力ファイル[%s]を開けません\n", makefile);
 		return 1;
 	}
 
 	// テンポラリファイルの作成
-	char	tmp_file[_MAX_PATH];
-	char	drive[_MAX_DRIVE], dir[_MAX_DIR];
+	char tmp_file[_MAX_PATH];
+	char drive[_MAX_DRIVE], dir[_MAX_DIR];
 	if (_splitpath_s( makefile, drive, _countof(drive), dir, _countof(dir), NULL, 0, NULL, 0 )) {
 		printf("Error: 一時ファイル名を作れません[%s]\n", makefile);
 		return 1;
 	}
-	if (_makepath_s( tmp_file, _countof(tmp_file), drive, dir, "mfXXXXXX", NULL )) {
+	if (_makepath_s(tmp_file, _countof(tmp_file), drive, dir, "mfXXXXXX", NULL)) {
 		printf("Error: 一時ファイル名を作れません[%s, %s]\n", drive, dir);
 		return 1;
 	}
@@ -296,7 +289,7 @@ int main(int argc, char* argv[])
 		printf("Error: 一時ファイル名を作れません[%s]\n", tmp_file);
 		return 1;
 	}
-	FILE*	out = NULL;
+	FILE* out = NULL;
 	if (fopen_s( &out, tmp_file, "wt" ) != 0) {
 		printf("Error: 一時ファイル[%s]を開けません\n", tmp_file);
 		return 1;
@@ -306,12 +299,12 @@ int main(int argc, char* argv[])
 	makeFileListTop(top_dir);
 
 	// ファイルの書替え
-	int			mode = 0;			// 0:.obj前 1:.obj中 2:.obj後
-	bool		change = false;		// 変更あり
+	int mode = 0;			// 0:.obj前 1:.obj中 2:.obj後
+	bool change = false;		// 変更あり
 
-	char		line[1024];
-	char		mkline[1024];
-	char*		wtline;
+	char line[1024];
+	char mkline[1024];
+	char* wtline;
 	const char*	fl_nm;
 
 	while (fgets(line, _countof(line), in) != NULL) {
@@ -353,7 +346,7 @@ int main(int argc, char* argv[])
 		case 2:
 			break;
 		}
-		//出力
+		// 出力
 		fprintf(out,"%s", wtline);
 	}
 
@@ -370,7 +363,7 @@ int main(int argc, char* argv[])
 			printf("Error: makefile[%s]を削除出来ません\n", tmp_file);
 			return 1;
 		}
-		if (rename( tmp_file, makefile )) {
+		if (rename(tmp_file, makefile)) {
 			printf("Error: 一時ファイル[%s]をmakfile[%s]に出来ません\n", tmp_file, makefile);
 			return 1;
 		}

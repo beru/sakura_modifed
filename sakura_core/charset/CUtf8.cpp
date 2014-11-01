@@ -39,7 +39,7 @@ int CUtf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bC
 	for (;;) {
 
 		// 文字をチェック
-		if (bCESU8Mode != true) {
+		if (!bCESU8Mode) {
 			nclen = CheckUtf8Char(reinterpret_cast<const char*>(pr), pr_end - pr, &echarset, true, 0);
 		}else {
 			nclen = CheckCesu8Char(reinterpret_cast<const char*>(pr), pr_end - pr, &echarset, 0);
@@ -82,9 +82,9 @@ EConvertResult CUtf8::_UTF8ToUnicode(CMemory* pMem, bool bCESU8Mode/*, bool deco
 
 //	CMemory cmem;
 //	// MIME ヘッダーデコード
-//	if (decodeMime == true) {
+//	if (decodeMime) {
 //		bool bret = MIMEHeaderDecode(pSrc, nSrcLen, &cmem, CODE_UTF8);
-//		if (bret == true) {
+//		if (bret) {
 //			psrc = reinterpret_cast<char*>(cmem.GetRawPtr());
 //			nsrclen = cmem.GetRawLength();
 //		}
@@ -110,7 +110,7 @@ EConvertResult CUtf8::_UTF8ToUnicode(CMemory* pMem, bool bCESU8Mode/*, bool deco
 	// 後始末
 	delete[] pDst;
 
-	if (bError == false) {
+	if (!bError) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;
@@ -200,7 +200,7 @@ EConvertResult CUtf8::_UnicodeToUTF8(CMemory* pMem, bool bCesu8Mode)
 	// 後始末
 	delete [] pDst;
 
-	if (bError == false) {
+	if (!bError) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;
@@ -233,7 +233,7 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	}
 
 	// UTF-8/CESU-8 変換
-	if (bCESUMode != true) {
+	if (!bCESUMode) {
 		res = UnicodeToUTF8(&cBuff);
 	}
 	else {
@@ -246,7 +246,7 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	// Hex変換
 	ps = reinterpret_cast<unsigned char*>(cBuff.GetRawPtr());
 	pd = pDst;
-	if (bbinary == false) {
+	if (!bbinary) {
 		for (int i = cBuff.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}

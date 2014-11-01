@@ -47,7 +47,7 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 			}
 			// 全角文字・半角カタカナ文字の変換
 			pw += _EucjpToUni_char(pr, pw, echarset, &berror_tmp);
-			if (berror_tmp == true) {
+			if (berror_tmp) {
 				berror = true;
 			}
 			break;
@@ -102,7 +102,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 
 	//$$ SJISを介しているので無駄にデータを失うかも？
 	// エラーを返すようにする。	2008/5/12 Uchi
-	if (bError == false) {
+	if (!bError) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;
@@ -136,7 +136,7 @@ int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 		if (echarset != CHARSET_BINARY) {
 			pw += _UniToEucjp_char(pr, pw, echarset, &berror_tmp);
 			// 保護コード
-			if (berror_tmp == true) {
+			if (berror_tmp) {
 				berror = true;
 			}
 			pr += nclen;
@@ -190,7 +190,7 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 	// 後始末
 	delete [] pDst;
 
-	if (bError == false) {
+	if (!bError) {
 		return RESULT_COMPLETE;
 	}else {
 		return RESULT_LOSESOME;
@@ -229,7 +229,7 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	// Hex変換
 	unsigned char* ps = reinterpret_cast<unsigned char*>(cCharBuffer.GetRawPtr());
 	TCHAR* pd = pDst;
-	if (bbinary == false) {
+	if (!bbinary) {
 		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}

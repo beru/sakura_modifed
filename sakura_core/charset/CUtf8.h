@@ -84,7 +84,7 @@ int CUtf8::_Utf8ToUni_char(const unsigned char* pSrc, const int nSrcLen, unsigne
 		return 0;
 	}
 
-	if (bCESUMode != true) {
+	if (!bCESUMode) {
 		// UTF-8 ÇÃèàóù
 		if (nSrcLen < 4) {
 			pDst[0] = static_cast<unsigned short>(DecodeUtf8(pSrc, nSrcLen) & 0x0000ffff);
@@ -137,7 +137,7 @@ int CUtf8::_UniToUtf8_char(const unsigned short* pSrc, const int nSrcLen, unsign
 		return 0;
 	}
 
-	if (bCESU8Mode != true) {
+	if (!bCESU8Mode) {
 		// UTF-8 ÇÃèàóù
 		wchar32_t wc32;
 		if (nSrcLen == 2) {

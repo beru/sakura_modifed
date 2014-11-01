@@ -54,7 +54,7 @@ retry:;
 	// 補完候補一覧ファイルが設定されていないときは、設定するように促す。
 	// 2003.06.22 Moca ファイル内から検索する場合には補完ファイルの設定は必須ではない
 	if (m_pCommanderView->m_pTypeData->m_bUseHokanByFile == FALSE &&
-		m_pCommanderView->m_pTypeData->m_bUseHokanByKeyword == false &&
+		!m_pCommanderView->m_pTypeData->m_bUseHokanByKeyword &&
 		_T('\0') == m_pCommanderView->m_pTypeData->m_szHokanFile[0]
 	) {
 		ConfirmBeep();
@@ -192,7 +192,7 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 void CViewCommander::Command_EXTHELP1(void)
 {
 retry:;
-	if (CHelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute())) == false) {
+	if (!CHelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 //	if (0 == wcslen(GetDllShareData().m_Common.m_szExtHelp1)) {
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO

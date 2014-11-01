@@ -980,7 +980,7 @@ void CCaret::CreateEditCaret(COLORREF crCaret, COLORREF crBack, int nWidth, int 
 */
 void CCaret::ShowCaret_(HWND hwnd)
 {
-	if (m_bCaretShowFlag == false) {
+	if (!m_bCaretShowFlag) {
 		::ShowCaret(hwnd);
 		m_bCaretShowFlag = true;
 	}
@@ -992,7 +992,7 @@ void CCaret::ShowCaret_(HWND hwnd)
 */
 void CCaret::HideCaret_(HWND hwnd)
 {
-	if (m_bCaretShowFlag == true) {
+	if (m_bCaretShowFlag) {
 		::HideCaret(hwnd);
 		m_bCaretShowFlag = false;
 	}

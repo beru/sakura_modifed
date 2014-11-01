@@ -99,9 +99,9 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	// ======= Grepの実行 =============
 	// Grep結果ウィンドウの表示
 
-	CNativeW		cmWork1;
-	CNativeT		cmWork2;
-	CNativeT		cmWork3;
+	CNativeW cmWork1;
+	CNativeT cmWork2;
+	CNativeT cmWork3;
 	cmWork1.SetString(cDlgGrep.m_strText.c_str());
 	cmWork2.SetString(cDlgGrep.m_szFile);
 	cmWork3.SetString(cDlgGrep.m_szFolder);
@@ -238,7 +238,7 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 		wc.hbrBackground	= (HBRUSH)(COLOR_WINDOW + 1);
 		wc.lpszMenuName		= NULL;
 		wc.lpszClassName	= GSTR_CEDITAPP;
-		ATOM	atom = RegisterClass(&wc);
+		ATOM atom = RegisterClass(&wc);
 		if (atom == 0) {
 			ErrorMessage(NULL, LS(STR_TRAY_CREATE));
 		}
@@ -362,9 +362,9 @@ LRESULT CControlTray::DispatchEvent(
 	LPARAM	lParam 	// second message parameter
 )
 {
-	int				nId;
-	HWND			hwndWork;
-	LPHELPINFO		lphi;
+	int			nId;
+	HWND		hwndWork;
+	LPHELPINFO	lphi;
 
 	int			nRowNum;
 	EditNode*	pEditNodeArr;
@@ -885,7 +885,9 @@ LRESULT CControlTray::DispatchEvent(
 				CControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
 				break;
 			default:
-				if (nId - IDM_SELWINDOW  >= 0 && nId - IDM_SELWINDOW  < m_pShareData->m_sNodes.m_nEditArrNum) {
+				if (nId - IDM_SELWINDOW >= 0
+					&& nId - IDM_SELWINDOW < m_pShareData->m_sNodes.m_nEditArrNum
+				) {
 					hwndWork = m_pShareData->m_sNodes.m_pEditArr[nId - IDM_SELWINDOW].GetHwnd();
 
 					// アクティブにする
@@ -917,7 +919,10 @@ LRESULT CControlTray::DispatchEvent(
 
 					}
 					// To Here Oct. 27, 2000 genta
-				}else if (nId - IDM_SELOPENFOLDER  >= 0 && nId - IDM_SELOPENFOLDER  < 999) {
+				}else if (
+					nId - IDM_SELOPENFOLDER >= 0
+					&& nId - IDM_SELOPENFOLDER  < 999
+				) {
 					// MRUリストのファイルのリスト
 					const CMRUFile cMRU;
 					std::vector<LPCTSTR> vMRU = cMRU.GetPathList();
@@ -1240,7 +1245,9 @@ bool CControlTray::OpenNewEditor(
 		}
 	}else {
 		// タブまとめ時は起動したプロセスが立ち上がるまでしばらくタイトルバーをアクティブに保つ	// 2007.02.03 ryoji
-		if (pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
+		if (pShareData->m_Common.m_sTabBar.m_bDispTabWnd
+			&& !pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin
+		) {
 			WaitForInputIdle(p.hProcess, 3000);
 			sync = true;
 		}
@@ -1337,7 +1344,7 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 		}
 		if (i < nRowNum) {
 			// 前のウィンドウ
-			int		j;
+			int j;
 			for (j = i - 1; j >= 0; --j) {
 				if (nGroup == pEditNodeArr[j].m_nGroup) {
 					break;
@@ -1363,8 +1370,8 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 void CControlTray::ActivePrevWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
-	EditNode*	pEditNodeArr;
-	int			nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+	EditNode* pEditNodeArr;
+	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
 	if (nRowNum > 0) {
 		// 自分のウィンドウを調べる
 		int nGroup = 0;

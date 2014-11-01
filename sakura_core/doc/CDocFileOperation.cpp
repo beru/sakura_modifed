@@ -260,7 +260,7 @@ bool CDocFileOperation::SaveFileDialog(
 	TCHAR szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
 	{
 		LPCTSTR	szExt;
-		TCHAR	szWork[MAX_TYPES_EXTS];
+		TCHAR szWork[MAX_TYPES_EXTS];
 
 		const STypeConfig& type = m_pcDocRef->m_cDocType.GetDocumentAttribute();
 		// ファイルパスが無い場合は *.txt とする
@@ -287,8 +287,8 @@ bool CDocFileOperation::SaveFileDialog(
 				_tcscat(szDefaultWildCard, szExt);
 			}
 			// 拡張子を指定に合わせる
-			const TCHAR*	pStr;
-			const TCHAR*	pEnd;
+			const TCHAR* pStr;
+			const TCHAR* pEnd;
 			pStr = pEnd = type.m_szTypeExts;
 			do {
 				if (*pEnd == _T('\0') || *pEnd == _T(',')) {

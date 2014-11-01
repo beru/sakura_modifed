@@ -705,7 +705,7 @@ void CEditView::ReplaceData_CEditView3(
 	const CLogicRange*	psDelRangeLogicFast
 )
 {
-	assert((bFastMode && bRedraw == false) || (!bFastMode)); // bFastMode‚Ì‚Æ‚«‚Í bReadraw == false
+	assert((bFastMode && !bRedraw) || (!bFastMode)); // bFastMode‚Ì‚Æ‚«‚Í bReadraw == false
 	bool bLineModifiedChange;
 	auto& layoutMgr = m_pcEditDoc->m_cLayoutMgr;
 	bool bDelRangeUpdate = false;
