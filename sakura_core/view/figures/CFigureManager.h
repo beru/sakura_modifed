@@ -40,6 +40,6 @@ public:
 
 private:
 	std::vector<CFigure*>	m_vFigures;
-	std::vector<CFigure*>	m_vFiguresDisp;	//!< 色分け表示対象
+	std::vector<CFigure*>	m_vFiguresDisp;	// 色分け表示対象
 };
 

@@ -27,7 +27,7 @@
 //                         アクセサ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! どこからでもアクセスできる、共有データアクセサ。2007.10.30 kobake
+// どこからでもアクセスできる、共有データアクセサ。2007.10.30 kobake
 struct DLLSHAREDATA;
 
 // DLLSHAREDATAへの簡易アクセサ
@@ -132,11 +132,11 @@ struct DLLSHAREDATA {
 	SShare_Nodes				m_sNodes;
 	SShare_Handles				m_sHandles;
 
-	SCharWidthCache				m_sCharWidth;							//!< 文字半角全角キャッシュ
+	SCharWidthCache				m_sCharWidth;							// 文字半角全角キャッシュ
 
 	// プラグイン
-	short						m_PlugCmdIcon[MAX_PLUGIN*MAX_PLUG_CMD];	//!< プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
-	int							m_maxTBNum;								//!< ツールバーボタン 最大値		// 2010/7/5 Uchi
+	short						m_PlugCmdIcon[MAX_PLUGIN*MAX_PLUG_CMD];	// プラグイン コマンド ICON 番号	// 2010/7/3 Uchi
+	int							m_maxTBNum;								// ツールバーボタン 最大値		// 2010/7/5 Uchi
 
 	// -- -- 保存対象 -- -- //
 	// 設定
@@ -145,7 +145,7 @@ struct DLLSHAREDATA {
 	STypeConfig					m_TypeBasis;							// タイプ別設定: 共通
 	STypeConfigMini				m_TypeMini[MAX_TYPES];					// タイプ別設定(mini)
 	PRINTSETTING				m_PrintSettingArr[MAX_PRINTSETTINGARR];	// 印刷ページ設定
-	int							m_nLockCount;							//!< ロックカウント
+	int							m_nLockCount;							// ロックカウント
 	
 	// その他
 	SShare_SearchKeywords		m_sSearchKeywords;

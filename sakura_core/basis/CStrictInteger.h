@@ -44,13 +44,13 @@
 	bool operator != (TYPE rhs) const	{ return operator != ((int)rhs); }
 
 
-//! 暗黙の変換を許さない、整数クラス
+// 暗黙の変換を許さない、整数クラス
 template <
-	int STRICT_ID,			//!< 型を分けるための数値。0 or 1。
-	bool ALLOW_CMP_INT,		//!< intとの比較を許すかどうか
-	bool ALLOW_ADDSUB_INT,	//!< intとの加減算を許すかどうか
-	bool ALLOW_CAST_INT,	//!< intへの暗黙の変換を許すかどうか
-	bool ALLOW_ASSIGNOP_INT	//!< intの代入を許すかどうか
+	int STRICT_ID,			// 型を分けるための数値。0 or 1。
+	bool ALLOW_CMP_INT,		// intとの比較を許すかどうか
+	bool ALLOW_ADDSUB_INT,	// intとの加減算を許すかどうか
+	bool ALLOW_CAST_INT,	// intへの暗黙の変換を許すかどうか
+	bool ALLOW_ASSIGNOP_INT	// intの代入を許すかどうか
 >
 class CStrictInteger {
 private:
@@ -64,7 +64,7 @@ private:
 	static const int NOT_STRICT_ID = (1 - STRICT_ID);
 
 private:
-	//!ゴミクラス
+	// ゴミクラス
 	class CDummy {
 	public:
 		CDummy();

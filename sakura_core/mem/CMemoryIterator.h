@@ -26,7 +26,7 @@
 #include "doc/layout/CLayout.h"
 #include "doc/logic/CDocLine.h"
 
-//! ブロックコメントデリミタを管理する
+// ブロックコメントデリミタを管理する
 class CMemoryIterator {
 public:
 	// CDocLine用コンストラクタ
@@ -51,7 +51,7 @@ public:
 		first();
 	}
 
-	//! 桁位置を行の先頭にセット
+	// 桁位置を行の先頭にセット
 	void first() {
 		m_nIndex = CLogicInt(0);
 		m_nColumn = m_nIndent;

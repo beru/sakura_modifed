@@ -30,7 +30,7 @@
 class CSubject;
 class CListener;
 
-//! 複数のCListenerからウォッチされる
+// 複数のCListenerからウォッチされる
 class CSubject {
 public:
 	// コンストラクタ・デストラクタ
@@ -50,14 +50,14 @@ private:
 	std::vector<CListener*> m_vListenersRef;
 };
 
-//! 1つのCSubjectをウォッチする
+// 1つのCSubjectをウォッチする
 class CListener {
 public:
 	CListener();
 	virtual ~CListener();
 
 	// 公開インターフェース
-	CSubject* Listen(CSubject* pcSubject); //!< 直前にウォッチしていたサブジェクトを返す
+	CSubject* Listen(CSubject* pcSubject); // 直前にウォッチしていたサブジェクトを返す
 	CSubject* GetListeningSubject() const { return m_pcSubjectRef; }
 
 private:

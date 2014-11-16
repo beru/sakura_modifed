@@ -501,7 +501,7 @@ CSMacroMgr::~CSMacroMgr()
 	// ClearAllと同じ処理だったので削除
 }
 
-//! キーマクロのバッファをクリアする
+// キーマクロのバッファをクリアする
 void CSMacroMgr::ClearAll(void)
 {
 	for (int i = 0; i < MAX_CUSTMACRO; i++) {
@@ -523,10 +523,10 @@ void CSMacroMgr::ClearAll(void)
 	@date 2002.06.16 genta キーマクロの多種対応のため変更
 */
 int CSMacroMgr::Append(
-	int				idx,		//!<
-	EFunctionCode	nFuncID,	//!< [in] 機能番号
-	const LPARAM*	lParams,	//!< [in] パラメータ。
-	CEditView*		pcEditView	//!< 
+	int				idx,		//
+	EFunctionCode	nFuncID,	// [in] 機能番号
+	const LPARAM*	lParams,	// [in] パラメータ。
+	CEditView*		pcEditView	// 
 )
 {
 	assert(idx == STAND_KEYMACRO);
@@ -787,10 +787,10 @@ const MacroFuncInfo* CSMacroMgr::GetFuncInfoByID(int nFuncID)
 	@date 2011.04.10 nasukoji 各国語メッセージリソース対応
 */
 WCHAR* CSMacroMgr::GetFuncInfoByID(
-	HINSTANCE	hInstance,			//!< [in] リソース取得のためのInstance Handle
-	int			nFuncID,			//!< [in] 機能番号
-	WCHAR*		pszFuncName,		//!< [out] 関数名．この先には最長関数名＋1バイトのメモリが必要．
-	WCHAR*		pszFuncNameJapanese	//!< [out] 機能名日本語．NULL許容. この先には256バイトのメモリが必要．
+	HINSTANCE	hInstance,			// [in] リソース取得のためのInstance Handle
+	int			nFuncID,			// [in] 機能番号
+	WCHAR*		pszFuncName,		// [out] 関数名．この先には最長関数名＋1バイトのメモリが必要．
+	WCHAR*		pszFuncNameJapanese	// [out] 機能名日本語．NULL許容. この先には256バイトのメモリが必要．
 )
 {
 	const MacroFuncInfo* MacroInfo = GetFuncInfoByID(nFuncID);
@@ -827,9 +827,9 @@ WCHAR* CSMacroMgr::GetFuncInfoByID(
 	@date 2002.06.16 genta ループ内の文字列コピーを排除
 */
 EFunctionCode CSMacroMgr::GetFuncInfoByName(
-	HINSTANCE		hInstance,				//!< [in]  リソース取得のためのInstance Handle
-	const WCHAR*	pszFuncName,			//!< [in]  関数名
-	WCHAR*			pszFuncNameJapanese		//!< [out] 機能名日本語．この先には256バイトのメモリが必要．
+	HINSTANCE		hInstance,				// [in]  リソース取得のためのInstance Handle
+	const WCHAR*	pszFuncName,			// [in]  関数名
+	WCHAR*			pszFuncNameJapanese		// [out] 機能名日本語．この先には256バイトのメモリが必要．
 )
 {
 	// Jun. 16, 2002 genta

@@ -25,9 +25,9 @@
 
 // 定数
 enum EConvertResult{
-	RESULT_COMPLETE, //!< データを失うことなく変換が完了した。
-	RESULT_LOSESOME, //!< 変換が完了したが、一部のデータが失われた。
-	RESULT_FAILURE,  //!< 何らかの原因により失敗した。
+	RESULT_COMPLETE, // データを失うことなく変換が完了した。
+	RESULT_LOSESOME, // 変換が完了したが、一部のデータが失われた。
+	RESULT_FAILURE,  // 何らかの原因により失敗した。
 };
 
 class CMemory;
@@ -44,23 +44,23 @@ enum EEolType;
 class CCodeBase {
 public:
 	virtual ~CCodeBase() {}
-//	virtual bool IsCode(const CMemory* pMem) {return false;}  //!< 特定コードであればtrue
+//	virtual bool IsCode(const CMemory* pMem) {return false;}  // 特定コードであればtrue
 
 	// 文字コード変換
-	virtual EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) = 0;	//!< 特定コード → UNICODE    変換
-	virtual EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) = 0;	//!< UNICODE    → 特定コード 変換
-	//! UNICODE    → 特定コード 変換
+	virtual EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) = 0;	// 特定コード → UNICODE    変換
+	virtual EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) = 0;	// UNICODE    → 特定コード 変換
+	// UNICODE    → 特定コード 変換
 	virtual EConvertResult UnicodeToCode(const CStringRef& cSrc, CMemory* pDst) {
 		CNativeW mem(cSrc.GetPtr(), cSrc.GetLength());
 		return UnicodeToCode(mem, pDst);
 	}
 
 	// ファイル形式
-	virtual void GetBom(CMemory* pcmemBom);											//!< BOMデータ取得
-	void GetEol(CMemory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol, eEolType); }	//!< 改行データ取得 virtualから実体へ	2010/6/13 Uchi
+	virtual void GetBom(CMemory* pcmemBom);											// BOMデータ取得
+	void GetEol(CMemory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol, eEolType); }	// 改行データ取得 virtualから実体へ	2010/6/13 Uchi
 
 	// 文字コード表示用		2008/6/9 Uchi
-	virtual EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
+	virtual EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			// UNICODE → Hex 変換
 
 	// 変換エラー処理（１バイト <-> U+D800 から U+D8FF）
 	static int BinToText(const unsigned char*, const int, unsigned short*);
@@ -70,7 +70,7 @@ public:
 	static bool MIMEHeaderDecode(const char*, const int, CMemory*, const ECodeType);
 
 	// CShiftJisより移動 2010/6/13 Uchi
-	static void S_GetEol(CMemory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
+	static void S_GetEol(CMemory* pcmemEol, EEolType eEolType);	// 改行データ取得
 };
 
 /*!

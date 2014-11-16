@@ -43,11 +43,11 @@ public:
 protected:
 	// 生成
 	bool Create(
-		DataType*		pszItemArray,	//!< アイテム配列へのポインタ
-		int*			pnItemCount,	//!< アイテム個数へのポインタ
-		bool*			pbItemFavorite,	//!< お気に入りへのポインタ(NULL許可)
-		int				nArrayCount,	//!< 最大管理可能なアイテム数
-		int*			pnViewCount		//!< 表示個数(NULL許可)
+		DataType*		pszItemArray,	// アイテム配列へのポインタ
+		int*			pnItemCount,	// アイテム個数へのポインタ
+		bool*			pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
+		int				nArrayCount,	// 最大管理可能なアイテム数
+		int*			pnViewCount		// 表示個数(NULL許可)
 	);
 public:
 	void Terminate();
@@ -103,14 +103,14 @@ private:
 
 protected:
 	// 内部フラグ
-	bool		m_bCreate;				//!< Create済みか
+	bool		m_bCreate;				// Create済みか
 
 	// 外部参照
-	DataType*	m_puUserItemData;		//!< アイテム配列へのポインタ
-	int*		m_pnUserItemCount;		//!< アイテム個数へのポインタ
-	bool*		m_pbUserItemFavorite;	//!< お気に入りへのポインタ (NULL許可)
-	int			m_nArrayCount;			//!< 最大管理可能なアイテム数
-	int*		m_pnUserViewCount;		//!< 表示個数 (NULL許可)
+	DataType*	m_puUserItemData;		// アイテム配列へのポインタ
+	int*		m_pnUserItemCount;		// アイテム個数へのポインタ
+	bool*		m_pbUserItemFavorite;	// お気に入りへのポインタ (NULL許可)
+	int			m_nArrayCount;			// 最大管理可能なアイテム数
+	int*		m_pnUserViewCount;		// 表示個数 (NULL許可)
 };
 
 #include "CRecentFile.h"

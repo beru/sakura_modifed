@@ -32,17 +32,17 @@ class CUtf8 : public CCodeBase {
 public:
 
 	// CCodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	//!< 特定コード → UNICODE    変換
+	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	// 特定コード → UNICODE    変換
 		*pDst->_GetMemory() = cSrc;
 		return UTF8ToUnicode(pDst->_GetMemory());
 	}
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) {	//!< UNICODE    → 特定コード 変換
+	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) {	// UNICODE    → 特定コード 変換
 		*pDst = *cSrc._GetMemory();
 		return UnicodeToUTF8(pDst);
 	}
-	void GetBom(CMemory* pcmemBom);																			//!< BOMデータ取得
+	void GetBom(CMemory* pcmemBom);																			// BOMデータ取得
 // GetEolはCCodeBaseに移動	2010/6/13 Uchi
-	EConvertResult _UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool CESU8Mode);			//!< UNICODE → Hex 変換
+	EConvertResult _UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool CESU8Mode);			// UNICODE → Hex 変換
 	EConvertResult UnicodeToHex(const wchar_t* ps, const int nsl, TCHAR* pd, const CommonSetting_Statusbar* psStatusbar) {
 		return _UnicodeToHex(ps, nsl, pd, psStatusbar, false);
 	}

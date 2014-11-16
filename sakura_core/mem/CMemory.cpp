@@ -58,8 +58,8 @@ CMemory::CMemory()
 	@note 格納データにはNULLを含むことができる
 */
 CMemory::CMemory(
-	const void*	pData,			//!< 格納データアドレス
-	int			nDataLenBytes	//!< 格納データの有効長
+	const void*	pData,			// 格納データアドレス
+	int			nDataLenBytes	// 格納データの有効長
 )
 {
 	_init_members();

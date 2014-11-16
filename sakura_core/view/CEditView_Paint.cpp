@@ -49,14 +49,14 @@
 void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum);
 
 /*
-	PAINT_LINENUMBER = (1<<0), //!< 行番号
-	PAINT_RULER      = (1<<1), //!< ルーラー
-	PAINT_BODY       = (1<<2), //!< 本文
+	PAINT_LINENUMBER = (1<<0), // 行番号
+	PAINT_RULER      = (1<<1), // ルーラー
+	PAINT_BODY       = (1<<2), // 本文
 */
 
 void CEditView_Paint::Call_OnPaint(
-	int nPaintFlag,   //!< 描画する領域を選択する
-	bool bUseMemoryDC //!< メモリDCを使用する
+	int nPaintFlag,   // 描画する領域を選択する
+	bool bUseMemoryDC // メモリDCを使用する
 )
 {
 	CEditView* pView = GetEditView();
@@ -815,9 +815,9 @@ void CEditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	@date 2007.08.31 kobake 引数 bDispBkBitmap を削除
 */
 bool CEditView::DrawLogicLine(
-	HDC				_hdc,			//!< [in]     作画対象
-	DispPos*		_pDispPos,		//!< [in/out] 描画する箇所、描画元ソース
-	CLayoutInt		nLineTo			//!< [in]     作画終了するレイアウト行番号
+	HDC				_hdc,			// [in]     作画対象
+	DispPos*		_pDispPos,		// [in/out] 描画する箇所、描画元ソース
+	CLayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 )
 {
 //	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DrawLogicLine");
@@ -1094,10 +1094,10 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	
 */
 void CEditView::DispTextSelected(
-	HDC				hdc,		//!< 作画対象ビットマップを含むデバイス
-	CLayoutInt		nLineNum,	//!< 反転処理対象レイアウト行番号(0開始)
-	const CMyPoint&	ptXY,		//!< (相対レイアウト0桁目の左端座標, 対象行の上端座標)
-	CLayoutInt		nX_Layout	//!< 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
+	HDC				hdc,		// 作画対象ビットマップを含むデバイス
+	CLayoutInt		nLineNum,	// 反転処理対象レイアウト行番号(0開始)
+	const CMyPoint&	ptXY,		// (相対レイアウト0桁目の左端座標, 対象行の上端座標)
+	CLayoutInt		nX_Layout	// 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
 )
 {
 	CLayoutInt	nSelectFrom;

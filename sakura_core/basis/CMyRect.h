@@ -74,17 +74,17 @@ public:
 	int Height() const {
 		return bottom - top;
 	}
-	//! 左上座標 (TopLeft)
+	// 左上座標 (TopLeft)
 	CMyPoint UpperLeft() const {
 		return CMyPoint(left, top);
 	}
-	//! 右下座標 (BottomRight)
+	// 右下座標 (BottomRight)
 	CMyPoint LowerRight() const {
 		return CMyPoint(right, bottom);
 	}
 
 };
 
-//! CRect合成。rc1,rc2を含む最小の矩形を生成する。
+// CRect合成。rc1,rc2を含む最小の矩形を生成する。
 CMyRect MergeRect(const CMyRect& rc1, const CMyRect& rc2);
 

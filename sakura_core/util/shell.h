@@ -41,6 +41,6 @@ BOOL GetSpecialFolderPath(int nFolder, LPTSTR pszPath);	// “ÁêƒtƒHƒ‹ƒ_‚ÌƒpƒX‚ğ
 
 INT_PTR MyPropertySheet(LPPROPSHEETHEADER lppsph);	// “Æ©Šg’£ƒvƒƒpƒeƒBƒV[ƒg	// 2007.05.24 ryoji
 
-//! ƒtƒHƒ“ƒg‘I‘ğƒ_ƒCƒAƒƒO
+// ƒtƒHƒ“ƒg‘I‘ğƒ_ƒCƒAƒƒO
 BOOL MySelectFont(LOGFONT* plf, INT* piPointSize, HWND hwndDlgOwner, bool);	// 2009.10.01 ryoji ƒ|ƒCƒ“ƒgƒTƒCƒYi1/10ƒ|ƒCƒ“ƒg’PˆÊjˆø”’Ç‰Á
 

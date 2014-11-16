@@ -105,7 +105,7 @@ public:
 	//                   初期化・終了処理など                      //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//! キャレットの作成。2006.12.07 ryoji
+	// キャレットの作成。2006.12.07 ryoji
 	void CreateEditCaret(
 		COLORREF crCaret,
 		COLORREF crBack,
@@ -113,13 +113,13 @@ public:
 		int nHeight
 	);
 	
-	//! キャレットを破棄する（内部的にも破棄）
+	// キャレットを破棄する（内部的にも破棄）
 	void DestroyCaret() {
 		::DestroyCaret();
 		m_sizeCaret.cx = 0;
 	}
 
-	//! コピー
+	// コピー
 	void CopyCaretStatus(CCaret* pDestCaret) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -127,36 +127,36 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 設定
-	CLayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, CLayoutPoint* = NULL);		//!< マウス等による座標指定によるカーソル移動
-	CLayoutInt Cursor_UPDOWN(CLayoutInt nMoveLines, bool bSelect);	//!< カーソル上下移動処理
-	CLayoutInt MoveCursor(												//!< 行桁指定によるカーソル移動
-		CLayoutPoint	ptWk_CaretPos,									//!< [in] 移動先レイアウト位置
-		bool			bScroll,										//!< [in] true: 画面位置調整有り  false: 画面位置調整無し
-		int				nCaretMarginRate	= _CARETMARGINRATE,			//!< [in] 縦スクロール開始位置を決める値
-		bool			bUnderlineDoNotOFF	= false,					//!< [in] アンダーラインを消去しない
-		bool			bVertLineDoNotOFF	= false						//!< [in] カーソル位置縦線を消去しない
+	CLayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, CLayoutPoint* = NULL);		// マウス等による座標指定によるカーソル移動
+	CLayoutInt Cursor_UPDOWN(CLayoutInt nMoveLines, bool bSelect);		// カーソル上下移動処理
+	CLayoutInt MoveCursor(												// 行桁指定によるカーソル移動
+		CLayoutPoint	ptWk_CaretPos,									// [in] 移動先レイアウト位置
+		bool			bScroll,										// [in] true: 画面位置調整有り  false: 画面位置調整無し
+		int				nCaretMarginRate	= _CARETMARGINRATE,			// [in] 縦スクロール開始位置を決める値
+		bool			bUnderlineDoNotOFF	= false,					// [in] アンダーラインを消去しない
+		bool			bVertLineDoNotOFF	= false						// [in] カーソル位置縦線を消去しない
 	);
 	CLayoutInt MoveCursorFastMode(
-		const CLogicPoint&	pptWk_CaretPosLogic							//!< [in] 移動先ロジック位置
+		const CLogicPoint&	pptWk_CaretPosLogic							// [in] 移動先ロジック位置
 	);
 	CLayoutInt MoveCursorProperly(CLayoutPoint ptNewXY, bool, bool = false, CLayoutPoint* = NULL, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
 
 	//$ 設計思想的に微妙
-	void SetCaretLayoutPos(const CLayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	//!< キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const CLogicPoint pt) { m_ptCaretPos_Logic = pt; }		//!< キャレット位置(ロジック)を設定
+	void SetCaretLayoutPos(const CLayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
+	void SetCaretLogicPos(const CLogicPoint pt) { m_ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        サイズ変更                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void SetCaretSize(int nW, int nH) { m_sizeCaret.Set(nW, nH); }						//!< キャレットサイズを設定
+	void SetCaretSize(int nW, int nH) { m_sizeCaret.Set(nW, nH); }						// キャレットサイズを設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           計算                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 計算
-	BOOL GetAdjustCursorPos(CLayoutPoint* pptPosXY); //!< 正しいカーソル位置を算出する
+	BOOL GetAdjustCursorPos(CLayoutPoint* pptPosXY); // 正しいカーソル位置を算出する
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -164,8 +164,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 描画？
-	void ShowEditCaret();    //!< キャレットの表示・更新
-	void ShowCaretPosInfo(); //!< キャレットの行桁位置を表示する
+	void ShowEditCaret();    // キャレットの表示・更新
+	void ShowCaretPosInfo(); // キャレットの行桁位置を表示する
 
 	// API呼び出し
 	void ShowCaret_(HWND hwnd);
@@ -176,10 +176,10 @@ public:
 	//                           取得                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	CLayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	//!< キャレット位置(レイアウト)を取得
-	CMySize GetCaretSize() const			{ return m_sizeCaret; }			//!< キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
-	bool ExistCaretFocus() const			{ return m_sizeCaret.cx>0; }	//!< キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
-	CLogicPoint GetCaretLogicPos() const	{ return m_ptCaretPos_Logic; }	//!< キャレット位置(ロジック)を取得
+	CLayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
+	CMySize GetCaretSize() const			{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
+	bool ExistCaretFocus() const			{ return m_sizeCaret.cx>0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
+	CLogicPoint GetCaretLogicPos() const	{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

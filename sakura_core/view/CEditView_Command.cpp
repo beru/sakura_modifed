@@ -49,7 +49,7 @@
 bool CEditView::TagJumpSub(
 	const TCHAR*	pszFileName,
 	CMyPoint		ptJumpTo,
-	bool			bClose,			//!< [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
+	bool			bClose,			// [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
 	bool			bRelFromIni
 	)
 {
@@ -155,13 +155,13 @@ bool CEditView::TagJumpSub(
 	@date 2008.04.09 ryoji 処理対象(file_ext)と開く対象(open_ext)の扱いが逆になっていたのを修正
 */
 BOOL CEditView::OPEN_ExtFromtoExt(
-	BOOL			bCheckOnly,		//!< [in] true: チェックのみ行ってファイルは開かない
-	BOOL			bBeepWhenMiss,	//!< [in] true: ファイルを開けなかった場合に警告音を出す
-	const TCHAR*	file_ext[],		//!< [in] 処理対象とする拡張子
-	const TCHAR*	open_ext[],		//!< [in] 開く対象とする拡張子
-	int				file_extno,		//!< [in] 処理対象拡張子リストの要素数
-	int				open_extno,		//!< [in] 開く対象拡張子リストの要素数
-	const TCHAR*	errmes			//!< [in] ファイルを開けなかった場合に表示するエラーメッセージ
+	BOOL			bCheckOnly,		// [in] true: チェックのみ行ってファイルは開かない
+	BOOL			bBeepWhenMiss,	// [in] true: ファイルを開けなかった場合に警告音を出す
+	const TCHAR*	file_ext[],		// [in] 処理対象とする拡張子
+	const TCHAR*	open_ext[],		// [in] 開く対象とする拡張子
+	int				file_extno,		// [in] 処理対象拡張子リストの要素数
+	int				open_extno,		// [in] 開く対象拡張子リストの要素数
+	const TCHAR*	errmes			// [in] ファイルを開けなかった場合に表示するエラーメッセージ
 )
 {
 	// 編集中ファイルの拡張子を調べる
@@ -396,9 +396,9 @@ BOOL CEditView::ChangeCurRegexp(bool bRedrawIfChanged)
 	@date 2007.10.08 ryoji 新規（Command_COPY()から処理抜き出し）
 */
 void CEditView::CopyCurLine(
-	bool		bAddCRLFWhenCopy,		//!< [in] 折り返し位置に改行コードを挿入するか？
-	EEolType	neweol,					//!< [in] コピーするときのEOL。
-	bool		bEnableLineModePaste	//!< [in] ラインモード貼り付けを可能にする
+	bool		bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
+	EEolType	neweol,					// [in] コピーするときのEOL。
+	bool		bEnableLineModePaste	// [in] ラインモード貼り付けを可能にする
 )
 {
 	if (GetSelectionInfo().IsTextSelected()) {

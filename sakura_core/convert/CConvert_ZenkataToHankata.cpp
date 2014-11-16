@@ -6,7 +6,7 @@
 //                     インターフェース                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 全角カナ→半角カナ
+// 全角カナ→半角カナ
 bool CConvert_ZenkataToHankata::DoConvert(CNativeW* pcData)
 {
 	// 全角カタカナ→半角カタカナ

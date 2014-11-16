@@ -32,13 +32,13 @@ class CGrepEnumFiles;
 class CGrepEnumFolders;
 
 struct SGrepOption {
-	bool		bGrepSubFolder;			//!< サブフォルダからも検索する
-	ECodeType	nGrepCharSet;			//!< 文字コードセット選択
-	bool		bGrepOutputLine;		//!< true: ヒット行を出力 / false: ヒット部分を出力
-	int			nGrepOutputStyle;		//!< 出力形式 1: Normal, 2: WZ風(ファイル単位) 3: 結果のみ
-	bool		bGrepOutputFileOnly;	//!< ファイル毎最初のみ検索
-	bool		bGrepOutputBaseFolder;	//!< ベースフォルダ表示
-	bool		bGrepSeparateFolder;	//!< フォルダ毎に表示
+	bool		bGrepSubFolder;			// サブフォルダからも検索する
+	ECodeType	nGrepCharSet;			// 文字コードセット選択
+	bool		bGrepOutputLine;		// true: ヒット行を出力 / false: ヒット部分を出力
+	int			nGrepOutputStyle;		// 出力形式 1: Normal, 2: WZ風(ファイル単位) 3: 結果のみ
+	bool		bGrepOutputFileOnly;	// ファイル毎最初のみ検索
+	bool		bGrepOutputBaseFolder;	// ベースフォルダ表示
+	bool		bGrepSeparateFolder;	// フォルダ毎に表示
 
 	SGrepOption() : 
 		 bGrepSubFolder(true)
@@ -76,29 +76,29 @@ public:
 		ECodeType				nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
 		BOOL					bGrepOutputLine,
 		int						nGrepOutputStyle,
-		bool					bGrepOutputFileOnly,	//!< [in] ファイル毎最初のみ出力
-		bool					bGrepOutputBaseFolder,	//!< [in] ベースフォルダ表示
-		bool					bGrepSeparateFolder	//!< [in] フォルダ毎に表示
+		bool					bGrepOutputFileOnly,	// [in] ファイル毎最初のみ出力
+		bool					bGrepOutputBaseFolder,	// [in] ベースフォルダ表示
+		bool					bGrepSeparateFolder		// [in] フォルダ毎に表示
 	);
 
 private:
 	// Grep実行
 	int DoGrepTree(
 		CEditView*				pcViewDst,
-		CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
-		const wchar_t*			pszKey,				//!< [in] 検索パターン
-		CGrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン(!で除外指定)
+		CDlgCancel*				pcDlgCancel,		// [in] Cancelダイアログへのポインタ
+		const wchar_t*			pszKey,				// [in] 検索パターン
+		CGrepEnumKeys&			cGrepEnumKeys,		// [in] 検索対象ファイルパターン(!で除外指定)
 		CGrepEnumFiles&			cGrepExceptAbsFiles,
 		CGrepEnumFolders&		cGrepExceptAbsFolders,
-		const TCHAR*			pszPath,			//!< [in] 検索対象パス
-		const TCHAR*			pszBasePath,		//!< [in] 検索対象パス(ベース)
-		const SSearchOption&	sSearchOption,		//!< [in] 検索オプション
-		const SGrepOption&		sGrepOption,		//!< [in] Grepオプション
-		const CSearchStringPattern& pattern,		//!< [in] 検索パターン
-		CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
-		int						nNest,				//!< [in] ネストレベル
+		const TCHAR*			pszPath,			// [in] 検索対象パス
+		const TCHAR*			pszBasePath,		// [in] 検索対象パス(ベース)
+		const SSearchOption&	sSearchOption,		// [in] 検索オプション
+		const SGrepOption&		sGrepOption,		// [in] Grepオプション
+		const CSearchStringPattern& pattern,		// [in] 検索パターン
+		CBregexp*				pRegexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+		int						nNest,				// [in] ネストレベル
 		bool&					bOutputBaseFolder,
-		int*					pnHitCount			//!< [i/o] ヒット数の合計
+		int*					pnHitCount			// [i/o] ヒット数の合計
 	);
 
 	// Grep実行
@@ -142,7 +142,7 @@ private:
 	);
 
 public: //$$ 仮
-	bool	m_bGrepMode;		//!< Grepモードか
-	bool	m_bGrepRunning;		//!< Grep処理中
+	bool	m_bGrepMode;		// Grepモードか
+	bool	m_bGrepRunning;		// Grep処理中
 };
 

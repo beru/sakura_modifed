@@ -71,7 +71,7 @@ void CViewCommander::Command_TOZENKAKUHIRA(void)
 
 
 
-//! 半角英数→全角英数				// July. 30, 2001 Misaka
+// 半角英数→全角英数				// July. 30, 2001 Misaka
 void CViewCommander::Command_TOZENEI(void)
 {
 	// 選択エリアのテキストを指定方法で変換
@@ -81,7 +81,7 @@ void CViewCommander::Command_TOZENEI(void)
 
 
 
-//! 全角英数→半角英数
+// 全角英数→半角英数
 void CViewCommander::Command_TOHANEI(void)
 {
 	// 選択エリアのテキストを指定方法で変換

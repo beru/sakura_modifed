@@ -24,7 +24,7 @@
 */
 #pragma once
 
-bool fexist(LPCTSTR pszPath); //!< ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚ª‘¶Ý‚·‚ê‚Îtrue
+bool fexist(LPCTSTR pszPath); // ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚ª‘¶Ý‚·‚ê‚Îtrue
 
 bool IsFilePath(const wchar_t*, int*, int*, bool = true);
 bool IsFileExists(const TCHAR* path, bool bFileOnly = false);
@@ -49,8 +49,8 @@ void SplitPath_FolderAndFile(const TCHAR*, TCHAR*, TCHAR*);	// ƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒ
 void Concat_FolderAndFile(const TCHAR*, const TCHAR*, TCHAR*);// ƒtƒHƒ‹ƒ_Aƒtƒ@ƒCƒ‹–¼‚©‚çAŒ‹‡‚µ‚½ƒpƒX‚ðì¬
 BOOL GetLongFileName(const TCHAR*, TCHAR*);					// ƒƒ“ƒOƒtƒ@ƒCƒ‹–¼‚ðŽæ“¾‚·‚é
 BOOL CheckEXT(const TCHAR*, const TCHAR*);					// Šg’£Žq‚ð’²‚×‚é
-const TCHAR* GetFileTitlePointer(const TCHAR* tszPath);			//!< ƒtƒ@ƒCƒ‹ƒtƒ‹ƒpƒX“à‚Ìƒtƒ@ƒCƒ‹–¼‚ðŽw‚·ƒ|ƒCƒ“ƒ^‚ðŽæ“¾B2007.09.20 kobake ì¬
-bool _IS_REL_PATH(const TCHAR* path);							//!< ‘Š‘ÎƒpƒX‚©”»’è‚·‚éB2003.06.23 Moca
+const TCHAR* GetFileTitlePointer(const TCHAR* tszPath);			// ƒtƒ@ƒCƒ‹ƒtƒ‹ƒpƒX“à‚Ìƒtƒ@ƒCƒ‹–¼‚ðŽw‚·ƒ|ƒCƒ“ƒ^‚ðŽæ“¾B2007.09.20 kobake ì¬
+bool _IS_REL_PATH(const TCHAR* path);							// ‘Š‘ÎƒpƒX‚©”»’è‚·‚éB2003.06.23 Moca
 
 // ¦ƒTƒNƒ‰ˆË‘¶
 void GetExedir(LPTSTR pDir, LPCTSTR szFile = NULL);

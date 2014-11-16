@@ -70,8 +70,8 @@ void CClipboard::Close()
 }
 
 bool CClipboard::SetText(
-	const wchar_t*	pData,			//!< コピーするUNICODE文字列
-	int				nDataLen,		//!< pDataの長さ（文字単位）
+	const wchar_t*	pData,			// コピーするUNICODE文字列
+	int				nDataLen,		// pDataの長さ（文字単位）
 	bool			bColumnSelect,
 	bool			bLineSelect,
 	UINT			uFormat
@@ -655,7 +655,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-//! クリップボード内に、サクラエディタで扱えるデータがあればtrue
+// クリップボード内に、サクラエディタで扱えるデータがあればtrue
 bool CClipboard::HasValidData()
 {
 	// 扱える形式が１つでもあればtrue
@@ -667,7 +667,7 @@ bool CClipboard::HasValidData()
 	return false;
 }
 
-//!< サクラエディタ独自のクリップボードデータ形式
+// サクラエディタ独自のクリップボードデータ形式
 CLIPFORMAT CClipboard::GetSakuraFormat()
 {
 	/*
@@ -680,7 +680,7 @@ CLIPFORMAT CClipboard::GetSakuraFormat()
 	return (CLIPFORMAT)::RegisterClipboardFormat(_T("SAKURAClipW"));
 }
 
-//!< クリップボードデータ形式(CF_UNICODETEXT等)の取得
+// クリップボードデータ形式(CF_UNICODETEXT等)の取得
 int CClipboard::GetDataType()
 {
 	// 扱える形式が１つでもあればtrue

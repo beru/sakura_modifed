@@ -49,7 +49,7 @@ void CMainToolBar::Create(CImageListMgr* pcIcons)
 	m_pcIcons = pcIcons;
 }
 
-//! 検索ボックスでの処理
+// 検索ボックスでの処理
 void CMainToolBar::ProcSearchBox(MSG *msg)
 {
 	if (msg->message == WM_KEYDOWN /* && ::GetParent(msg->hwnd) == m_hwndSearchBox */) {
@@ -396,7 +396,7 @@ void CMainToolBar::DestroyToolBar(void)
 	return;
 }
 
-//! メッセージ処理。なんか処理したなら true を返す。
+// メッセージ処理。なんか処理したなら true を返す。
 bool CMainToolBar::EatMessage(MSG* msg)
 {
 	if (m_hwndSearchBox && ::IsDialogMessage(m_hwndSearchBox, msg)) {	// 検索コンボボックス

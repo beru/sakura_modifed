@@ -29,7 +29,7 @@
 
 typedef StaticString<TCHAR, MAX_CMDLEN> CCmdString;
 
-//! コマンドの履歴を管理 (RECENT_FOR_CMD)
+// コマンドの履歴を管理 (RECENT_FOR_CMD)
 class CRecentCmd : public CRecentImp<CCmdString, LPCTSTR> {
 public:
 	// 生成

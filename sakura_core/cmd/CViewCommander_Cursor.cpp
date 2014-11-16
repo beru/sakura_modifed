@@ -77,7 +77,7 @@ void CViewCommander::Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option)
 
 /////////////////////////////////// 以下はコマンド群 (Oct. 17, 2000 jepro note) ///////////////////////////////////////////
 
-//! カーソル上移動
+// カーソル上移動
 int CViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 {
 	auto& caret = GetCaret();
@@ -563,8 +563,8 @@ try_again:;
 	@date Jun. 18, 2007 maru 行頭判定に全角空白のインデント設定も考慮する
 */
 void CViewCommander::Command_GOLINETOP(
-	bool	bSelect,	//!< [in] 選択の有無。true: 選択しながら移動。false: 選択しないで移動。
-	int		lparam		/*!< [in] マクロから使用する拡張フラグ
+	bool	bSelect,	// [in] 選択の有無。true: 選択しながら移動。false: 選択しないで移動。
+	int		lparam		/* [in] マクロから使用する拡張フラグ
 								  @li 0: キー操作と同一(default)
 								  @li 1: カーソル位置に関係なく行頭に移動(合成可)
 								  @li 4: 選択して移動(合成可)

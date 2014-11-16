@@ -697,7 +697,7 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 
 // プラグインコマンドを名前から機能番号へ変換
 EFunctionCode GetPlugCmdInfoByName(
-	const WCHAR* pszFuncName			//!< [in]  プラグインコマンド名
+	const WCHAR* pszFuncName			// [in]  プラグインコマンド名
 )
 {
 	if (pszFuncName == NULL) {
@@ -734,8 +734,8 @@ EFunctionCode GetPlugCmdInfoByName(
 
 // プラグインコマンドを機能番号から名前へ変換
 bool GetPlugCmdInfoByFuncCode(
-	EFunctionCode	eFuncCode,				//!< [in]  機能コード
-	WCHAR*			pszFuncName				//!< [out] 機能名．この先にはMAX_PLUGIN_ID + 20文字のメモリが必要．
+	EFunctionCode	eFuncCode,				// [in]  機能コード
+	WCHAR*			pszFuncName				// [out] 機能名．この先にはMAX_PLUGIN_ID + 20文字のメモリが必要．
 )
 {
 	if (eFuncCode < F_PLUGCOMMAND_FIRST || eFuncCode > F_PLUGCOMMAND_LAST) {

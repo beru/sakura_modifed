@@ -28,7 +28,7 @@ class CDocLine;
 
 class COpeBlk;
 
-//!	文書データ1行
+// 文書データ1行
 class CDocLine {
 protected:
 	friend class CDocLineMgr; //######仮
@@ -41,7 +41,7 @@ public:
 	bool			IsEmptyLine() const;		// このCDocLineが空行（スペース、タブ、改行記号のみの行）かどうか。
 
 	// データ取得
-	CLogicInt		GetLengthWithoutEOL() const			{ return m_cLine.GetStringLength() - m_cEol.GetLen(); } //!< 戻り値は文字単位。
+	CLogicInt		GetLengthWithoutEOL() const			{ return m_cLine.GetStringLength() - m_cEol.GetLen(); } // 戻り値は文字単位。
 	const wchar_t*	GetPtr() const						{ return m_cLine.GetStringPtr(); }
 	CLogicInt		GetLengthWithEOL() const			{ return m_cLine.GetStringLength(); }	// CMemoryIterator用
 #ifdef USE_STRICT_INT
@@ -89,11 +89,11 @@ public:
 	void _SetNextLine(CDocLine* pcDocLine) { m_pNext = pcDocLine; }
 	
 private: //####
-	CDocLine*	m_pPrev;	//!< 一つ前の要素
-	CDocLine*	m_pNext;	//!< 一つ後の要素
+	CDocLine*	m_pPrev;	// 一つ前の要素
+	CDocLine*	m_pNext;	// 一つ後の要素
 private:
-	CNativeW	m_cLine;	//!< データ  2007.10.11 kobake ポインタではなく、実体を持つように変更
-	CEol		m_cEol;		//!< 行末コード
+	CNativeW	m_cLine;	// データ  2007.10.11 kobake ポインタではなく、実体を持つように変更
+	CEol		m_cEol;		// 行末コード
 public:
 	// 拡張情報 $$分離中
 	struct MarkType {

@@ -28,7 +28,7 @@
 
 typedef StaticString<TCHAR, _MAX_PATH> CMetaPath;
 
-//! フォルダの履歴を管理 (RECENT_FOR_FOLDER)
+// フォルダの履歴を管理 (RECENT_FOR_FOLDER)
 class CRecentExceptMRU : public CRecentImp<CMetaPath, LPCTSTR> {
 public:
 	// 生成

@@ -32,14 +32,14 @@ class CEditView;
 
 bool _IsPosKeywordHead(const CStringRef& cStr, int nPos);
 
-//! 正規表現キーワードのEColorIndexType値を作る関数
+// 正規表現キーワードのEColorIndexType値を作る関数
 inline
 EColorIndexType ToColorIndexType_RegularExpression(const int nRegexColorIndex)
 {
 	return (EColorIndexType)(COLORIDX_REGEX_FIRST + nRegexColorIndex);
 }
 
-//! 正規表現キーワードのEColorIndexType値を色番号に戻す関数
+// 正規表現キーワードのEColorIndexType値を色番号に戻す関数
 inline
 int ToColorInfoArrIndex_RegularExpression(const EColorIndexType eRegexColorIndex)
 {
@@ -80,11 +80,11 @@ class CColorStrategy;
 class CColor_Found;
 class CColor_Select;
 
-//! 色設定
+// 色設定
 struct CColor3Setting {
-	EColorIndexType eColorIndex;    //!< 選択を含む現在の色
-	EColorIndexType eColorIndex2;   //!< 選択以外の現在の色
-	EColorIndexType eColorIndexBg;  //!< 背景色
+	EColorIndexType eColorIndex;    // 選択を含む現在の色
+	EColorIndexType eColorIndex2;   // 選択以外の現在の色
+	EColorIndexType eColorIndexBg;  // 背景色
 };
 
 struct SColorStrategyInfo {
@@ -120,14 +120,14 @@ struct SColorStrategyInfo {
 	EColorIndexType		m_colorIdxBackLine;
 	CColor3Setting		m_cIndex;
 
-	//! 色の切り替え
+	// 色の切り替え
 	bool CheckChangeColor(const CStringRef& cLineStr);
 	void DoChangeColor(CColor3Setting *pcColor);
 	EColorIndexType GetCurrentColor() const { return m_cIndex.eColorIndex; }
 	EColorIndexType GetCurrentColor2() const { return m_cIndex.eColorIndex2; }
 	EColorIndexType GetCurrentColorBg() const { return m_cIndex.eColorIndexBg; }
 
-	//! 現在のスキャン位置
+	// 現在のスキャン位置
 	CLogicInt GetPosInLogic() const {
 		return m_nPosInLogic;
 	}
@@ -145,12 +145,12 @@ struct SColorStrategyInfo {
 class CColorStrategy {
 public:
 	virtual ~CColorStrategy() {}
-	//! 色定義
+	// 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
 	virtual CLayoutColorInfo* GetStrategyColorInfo() const {
 		return NULL;
 	}
-	//! 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
+	// 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual void InitStrategyStatus() = 0;
 	virtual void SetStrategyColorInfo(const CLayoutColorInfo* = NULL) {};
 	virtual bool BeginColor(const CStringRef& cStr, int nPos) { return false; }
@@ -159,7 +159,7 @@ public:
 	// イベント
 	virtual void OnStartScanLogic() {}
 
-	//! 設定更新
+	// 設定更新
 	virtual void Update(void) {
 		const CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
@@ -222,7 +222,7 @@ public:
 
 private:
 	std::vector<CColorStrategy*>	m_vStrategies;
-	std::vector<CColorStrategy*>	m_vStrategiesDisp;	//!< 色分け表示対象
+	std::vector<CColorStrategy*>	m_vStrategiesDisp;	// 色分け表示対象
 	CColor_Found*					m_pcFoundStrategy;
 	CColor_Select*					m_pcSelectStrategy;
 

@@ -60,14 +60,14 @@ public:
 	EOpeCode	GetCode() const { return m_nOpe; }
 
 private:
-	EOpeCode	m_nOpe;						//!< 操作種別
+	EOpeCode	m_nOpe;						// 操作種別
 
 public:
-	CLogicPoint	m_ptCaretPos_PHY_Before;	//!< キャレット位置。文字単位。			[共通]
-	CLogicPoint	m_ptCaretPos_PHY_After;		//!< キャレット位置。文字単位。			[共通]
+	CLogicPoint	m_ptCaretPos_PHY_Before;	// キャレット位置。文字単位。			[共通]
+	CLogicPoint	m_ptCaretPos_PHY_After;		// キャレット位置。文字単位。			[共通]
 };
 
-//! 削除
+// 削除
 class CDeleteOpe : public COpe {
 public:
 	CDeleteOpe() : COpe(OPE_DELETE) {
@@ -75,22 +75,22 @@ public:
 	}
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	CLogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	COpeLineData	m_pcmemData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	CLogicPoint	m_ptCaretPos_PHY_To;		// 操作前のキャレット位置。文字単位。	[DELETE]
+	COpeLineData	m_pcmemData;			// 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
-//! 挿入
+// 挿入
 class CInsertOpe : public COpe {
 public:
 	CInsertOpe() : COpe(OPE_INSERT) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	COpeLineData	m_pcmemData;				//!< 操作に関連するデータ				[DELETE/INSERT]
+	COpeLineData	m_pcmemData;				// 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
-//! 挿入
+// 挿入
 class CReplaceOpe : public COpe {
 public:
 	CReplaceOpe()
@@ -100,14 +100,14 @@ public:
 		m_ptCaretPos_PHY_To.Set(CLogicInt(0), CLogicInt(0));
 	}
 public:
-	CLogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	COpeLineData	m_pcmemDataIns;			//!< 操作に関連するデータ				[INSERT]
-	COpeLineData	m_pcmemDataDel;			//!< 操作に関連するデータ				[DELETE]
+	CLogicPoint	m_ptCaretPos_PHY_To;		// 操作前のキャレット位置。文字単位。	[DELETE]
+	COpeLineData	m_pcmemDataIns;			// 操作に関連するデータ				[INSERT]
+	COpeLineData	m_pcmemDataDel;			// 操作に関連するデータ				[DELETE]
 	int				m_nOrgInsSeq;
 	int				m_nOrgDelSeq;
 };
 
-//! キャレット移動
+// キャレット移動
 class CMoveCaretOpe : public COpe {
 public:
 	CMoveCaretOpe() : COpe(OPE_MOVECARET) { }

@@ -23,7 +23,7 @@ public:
 	{
 	}
 
-	//! 指定属性を取り除く
+	// 指定属性を取り除く
 	void PopAttribute(DWORD dwPopAttribute)
 	{
 		if (m_bAttributeChanged) {
@@ -39,7 +39,7 @@ public:
 		}
 	}
 	
-	//! 属性を元に戻す
+	// 属性を元に戻す
 	void RestoreAttribute()
 	{
 		if (m_bAttributeChanged) {
@@ -124,15 +124,15 @@ void CStream::Close()
 //                           操作                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CStream::SeekSet(	//!< シーク
-	long offset	//!< ストリーム先頭からのオフセット 
+void CStream::SeekSet(	// シーク
+	long offset	// ストリーム先頭からのオフセット 
 )
 {
 	fseek(m_fp, offset, SEEK_SET);
 }
 
-void CStream::SeekEnd(  //!< シーク
-	long offset //!< ストリーム終端からのオフセット
+void CStream::SeekEnd(  // シーク
+	long offset // ストリーム終端からのオフセット
 )
 {
 	fseek(m_fp, offset, SEEK_END);

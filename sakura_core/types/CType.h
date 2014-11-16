@@ -32,11 +32,11 @@
 #include "CRegexKeyword.h"		// RegexKeywordInfo
 
 
-//! タブ表示方法
+// タブ表示方法
 enum ETabArrow {
-	TABARROW_STRING = 0,	//!< 文字指定
-	TABARROW_SHORT,			//!< 短い矢印
-	TABARROW_LONG,			//!< 長い矢印
+	TABARROW_STRING = 0,	// 文字指定
+	TABARROW_SHORT,			// 短い矢印
+	TABARROW_LONG,			// 長い矢印
 };
 
 // アウトライン解析の種類
@@ -111,37 +111,37 @@ enum EStringLiteralType {
 //                       タイプ別設定                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! タイプ別設定
+// タイプ別設定
 struct STypeConfig {
 	// 2007.09.07 変数名変更: m_nMaxLineSize→m_nMaxLineKetas
 	int					m_nIdx;
 	int					m_id;
-	TCHAR				m_szTypeName[64];				//!< タイプ属性：名称
-	TCHAR				m_szTypeExts[MAX_TYPES_EXTS];	//!< タイプ属性：拡張子リスト
-	int					m_nTextWrapMethod;				//!< テキストの折り返し方法		// 2008.05.30 nasukoji
-	CLayoutInt			m_nMaxLineKetas;				//!< 折り返し桁数
-	int					m_nColumnSpace;					//!< 文字と文字の隙間
-	int					m_nLineSpace;					//!< 行間のすきま
-	CLayoutInt			m_nTabSpace;					//!< TABの文字数
-	ETabArrow			m_bTabArrow;					//!< タブ矢印表示		//@@@ 2003.03.26 MIK
-	EDIT_CHAR			m_szTabViewString[8 + 1];		//!< TAB表示文字列	// 2003.1.26 aroka サイズ拡張	// 2009.02.11 ryoji サイズ戻し(17->8+1)
-	bool				m_bInsSpace;					//!< スペースの挿入	// 2001.12.03 hor
+	TCHAR				m_szTypeName[64];				// タイプ属性：名称
+	TCHAR				m_szTypeExts[MAX_TYPES_EXTS];	// タイプ属性：拡張子リスト
+	int					m_nTextWrapMethod;				// テキストの折り返し方法		// 2008.05.30 nasukoji
+	CLayoutInt			m_nMaxLineKetas;				// 折り返し桁数
+	int					m_nColumnSpace;					// 文字と文字の隙間
+	int					m_nLineSpace;					// 行間のすきま
+	CLayoutInt			m_nTabSpace;					// TABの文字数
+	ETabArrow			m_bTabArrow;					// タブ矢印表示		//@@@ 2003.03.26 MIK
+	EDIT_CHAR			m_szTabViewString[8 + 1];		// TAB表示文字列	// 2003.1.26 aroka サイズ拡張	// 2009.02.11 ryoji サイズ戻し(17->8+1)
+	bool				m_bInsSpace;					// スペースの挿入	// 2001.12.03 hor
 	// 2005.01.13 MIK 配列化
-	int					m_nKeyWordSetIdx[MAX_KEYWORDSET_PER_TYPE];	//!< キーワードセット
+	int					m_nKeyWordSetIdx[MAX_KEYWORDSET_PER_TYPE];	// キーワードセット
 
-	CLineComment		m_cLineComment;					//!< 行コメントデリミタ				//@@@ 2002.09.22 YAZAKI
-	CBlockComment		m_cBlockComments[2];			//!< ブロックコメントデリミタ		//@@@ 2002.09.22 YAZAKI
+	CLineComment		m_cLineComment;					// 行コメントデリミタ				//@@@ 2002.09.22 YAZAKI
+	CBlockComment		m_cBlockComments[2];			// ブロックコメントデリミタ		//@@@ 2002.09.22 YAZAKI
 
-	int					m_nStringType;					//!< 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
-	bool				m_bStringLineOnly;				//!< 文字列は行内のみ
-	bool				m_bStringEndLine;				//!< (終了文字列がない場合)行末まで色分け
+	int					m_nStringType;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	bool				m_bStringLineOnly;				// 文字列は行内のみ
+	bool				m_bStringEndLine;				// (終了文字列がない場合)行末まで色分け
 	int					m_nHeredocType;
-	wchar_t				m_szIndentChars[64];			//!< その他のインデント対象文字
+	wchar_t				m_szIndentChars[64];			// その他のインデント対象文字
 
-	int					m_nColorInfoArrNum;				//!< 色設定配列の有効数
-	ColorInfo			m_ColorInfoArr[64];				//!< 色設定配列
+	int					m_nColorInfoArrNum;				// 色設定配列の有効数
+	ColorInfo			m_ColorInfoArr[64];				// 色設定配列
 
-	SFilePath			m_szBackImgPath;				//!< 背景画像
+	SFilePath			m_szBackImgPath;				// 背景画像
 	EBackgroundImagePos m_backImgPos;					
 	bool				m_backImgRepeatX;				
 	bool				m_backImgRepeatY;				
@@ -149,56 +149,56 @@ struct STypeConfig {
 	bool				m_backImgScrollY;				
 	POINT				m_backImgPosOffset;				
 
-	bool				m_bLineNumIsCRLF;				//!< 行番号の表示 false=折り返し単位／true=改行単位
-	int					m_nLineTermType;				//!< 行番号区切り  0=なし 1=縦線 2=任意
-	wchar_t				m_cLineTermChar;				//!< 行番号区切り文字
-	CLayoutInt			m_nVertLineIdx[MAX_VERTLINES];	//!< 指定桁縦線
+	bool				m_bLineNumIsCRLF;				// 行番号の表示 false=折り返し単位／true=改行単位
+	int					m_nLineTermType;				// 行番号区切り  0=なし 1=縦線 2=任意
+	wchar_t				m_cLineTermChar;				// 行番号区切り文字
+	CLayoutInt			m_nVertLineIdx[MAX_VERTLINES];	// 指定桁縦線
 
-	bool				m_bWordWrap;					//!< 英文ワードラップをする
-	bool				m_bKinsokuHead;					//!< 行頭禁則をする		//@@@ 2002.04.08 MIK
-	bool				m_bKinsokuTail;					//!< 行末禁則をする		//@@@ 2002.04.08 MIK
-	bool				m_bKinsokuRet;					//!< 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
-	bool				m_bKinsokuKuto;					//!< 句読点のぶらさげ	//@@@ 2002.04.17 MIK
-	bool				m_bKinsokuHide;					//!< ぶら下げを隠す		// 2011/11/30 Uchi
-	wchar_t				m_szKinsokuHead[200];			//!< 行頭禁則文字		//@@@ 2002.04.08 MIK
-	wchar_t				m_szKinsokuTail[200];			//!< 行頭禁則文字 		//@@@ 2002.04.08 MIK
-	wchar_t				m_szKinsokuKuto[200];			//!< 句読点ぶらさげ文字	// 2009.08.07 ryoji
+	bool				m_bWordWrap;					// 英文ワードラップをする
+	bool				m_bKinsokuHead;					// 行頭禁則をする		//@@@ 2002.04.08 MIK
+	bool				m_bKinsokuTail;					// 行末禁則をする		//@@@ 2002.04.08 MIK
+	bool				m_bKinsokuRet;					// 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
+	bool				m_bKinsokuKuto;					// 句読点のぶらさげ	//@@@ 2002.04.17 MIK
+	bool				m_bKinsokuHide;					// ぶら下げを隠す		// 2011/11/30 Uchi
+	wchar_t				m_szKinsokuHead[200];			// 行頭禁則文字		//@@@ 2002.04.08 MIK
+	wchar_t				m_szKinsokuTail[200];			// 行頭禁則文字 		//@@@ 2002.04.08 MIK
+	wchar_t				m_szKinsokuKuto[200];			// 句読点ぶらさげ文字	// 2009.08.07 ryoji
 
-	int					m_nCurrentPrintSetting;			//!< 現在選択している印刷設定
+	int					m_nCurrentPrintSetting;			// 現在選択している印刷設定
 
-	BOOL				m_bOutlineDockDisp;				//!< アウトライン解析表示の有無
-	EDockSide			m_eOutlineDockSide;				//!< アウトライン解析ドッキング配置
-	int					m_cxOutlineDockLeft;			//!< アウトラインの左ドッキング幅
-	int					m_cyOutlineDockTop;				//!< アウトラインの上ドッキング高
-	int					m_cxOutlineDockRight;			//!< アウトラインの右ドッキング幅
-	int					m_cyOutlineDockBottom;			//!< アウトラインの下ドッキング高
-	int					m_nDockOutline;					//!< ドッキング時のアウトライン/ブックマーク
-	EOutlineType		m_eDefaultOutline;				//!< アウトライン解析方法
-	SFilePath			m_szOutlineRuleFilename;		//!< アウトライン解析ルールファイル
-	int					m_nOutlineSortCol;				//!< アウトライン解析ソート列番号
-	bool				m_bOutlineSortDesc;				//!< アウトライン解析ソート降順
-	int					m_nOutlineSortType;				//!< アウトライン解析ソート基準
+	BOOL				m_bOutlineDockDisp;				// アウトライン解析表示の有無
+	EDockSide			m_eOutlineDockSide;				// アウトライン解析ドッキング配置
+	int					m_cxOutlineDockLeft;			// アウトラインの左ドッキング幅
+	int					m_cyOutlineDockTop;				// アウトラインの上ドッキング高
+	int					m_cxOutlineDockRight;			// アウトラインの右ドッキング幅
+	int					m_cyOutlineDockBottom;			// アウトラインの下ドッキング高
+	int					m_nDockOutline;					// ドッキング時のアウトライン/ブックマーク
+	EOutlineType		m_eDefaultOutline;				// アウトライン解析方法
+	SFilePath			m_szOutlineRuleFilename;		// アウトライン解析ルールファイル
+	int					m_nOutlineSortCol;				// アウトライン解析ソート列番号
+	bool				m_bOutlineSortDesc;				// アウトライン解析ソート降順
+	int					m_nOutlineSortType;				// アウトライン解析ソート基準
 
-	ESmartIndentType	m_eSmartIndent;					//!< スマートインデント種別
-	int					m_nImeState;					//!< 初期IME状態	Nov. 20, 2000 genta
+	ESmartIndentType	m_eSmartIndent;					// スマートインデント種別
+	int					m_nImeState;					// 初期IME状態	Nov. 20, 2000 genta
 
 	//	2001/06/14 asa-o 補完のタイプ別設定
-	SFilePath			m_szHokanFile;					//!< 入力補完 単語ファイル
-	int					m_nHokanType;					//!< 入力補完 種別(プラグイン)
+	SFilePath			m_szHokanFile;					// 入力補完 単語ファイル
+	int					m_nHokanType;					// 入力補完 種別(プラグイン)
 	//	2003.06.23 Moca ファイル内からの入力補完機能
-	bool				m_bUseHokanByFile;				//!< 入力補完 開いているファイル内から候補を探す
+	bool				m_bUseHokanByFile;				// 入力補完 開いているファイル内から候補を探す
 	bool				m_bUseHokanByKeyword;			// 強調キーワードから入力補完
 	
 	//	2001/06/19 asa-o
-	bool				m_bHokanLoHiCase;				//!< 入力補完機能：英大文字小文字を同一視する
+	bool				m_bHokanLoHiCase;				// 入力補完機能：英大文字小文字を同一視する
 
 	SFilePath			m_szExtHelp;					// 外部ヘルプ１
 	SFilePath			m_szExtHtmlHelp;				// 外部HTMLヘルプ
 	bool				m_bHtmlHelpIsSingle;			// HtmlHelpビューアはひとつ
 
-	bool				m_bChkEnterAtEnd;				//!< 保存時に改行コードの混在を警告する	2013/4/14 Uchi
+	bool				m_bChkEnterAtEnd;				// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
 
-	SEncodingConfig		m_encoding;						//!< エンコードオプション
+	SEncodingConfig		m_encoding;						// エンコードオプション
 
 
 //@@@ 2001.11.17 add start MIK
@@ -224,10 +224,10 @@ struct STypeConfig {
 	int					m_nIndentLayout;				// 折り返しは2行目以降を字下げ表示
 
 	//	Sep. 10, 2002 genta
-	bool				m_bUseDocumentIcon;				//!< ファイルに関連づけられたアイコンを使う
+	bool				m_bUseDocumentIcon;				// ファイルに関連づけられたアイコンを使う
 
 	bool				m_bUseTypeFont;
-	LOGFONT				m_lf;							//!< フォント // 2013.03.18 aroka
+	LOGFONT				m_lf;							// フォント // 2013.03.18 aroka
 	INT					m_nPointSize;
 
 	STypeConfig()
@@ -241,16 +241,16 @@ struct STypeConfig {
 // タイプ別設定(mini)
 struct STypeConfigMini {
 	int			m_id;
-	TCHAR		m_szTypeName[64];				//!< タイプ属性：名称
-	TCHAR		m_szTypeExts[MAX_TYPES_EXTS];	//!< タイプ属性：拡張子リスト
-	SEncodingConfig		m_encoding;				//!< エンコードオプション
+	TCHAR		m_szTypeName[64];				// タイプ属性：名称
+	TCHAR		m_szTypeExts[MAX_TYPES_EXTS];	// タイプ属性：拡張子リスト
+	SEncodingConfig		m_encoding;				// エンコードオプション
 };
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                   タイプ別設定アクセサ                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//!ドキュメント種類。共有データ内 STypeConfig へのアクセサも兼ねる。
+// ドキュメント種類。共有データ内 STypeConfig へのアクセサも兼ねる。
 // 2007.12.13 kobake 作成
 class CTypeConfig {
 public:

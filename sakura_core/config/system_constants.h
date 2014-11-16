@@ -41,21 +41,21 @@
 #define _NUM_TO_STR(n) #n
 #define NUM_TO_STR(n) _NUM_TO_STR(n)
 
-//! ƒfƒoƒbƒO”»•ÊA’è”ƒTƒtƒBƒbƒNƒX 2007.09.20 kobake
+// ƒfƒoƒbƒO”»•ÊA’è”ƒTƒtƒBƒbƒNƒX 2007.09.20 kobake
 #ifdef _DEBUG
 	#define _DEBUG_SUFFIX_ "_DEBUG"
 #else
 	#define _DEBUG_SUFFIX_ ""
 #endif
 
-//! ƒrƒ‹ƒhƒR[ƒh”»•ÊA’è”ƒTƒtƒBƒbƒNƒX 2007.09.20 kobake
+// ƒrƒ‹ƒhƒR[ƒh”»•ÊA’è”ƒTƒtƒBƒbƒNƒX 2007.09.20 kobake
 #ifdef _UNICODE
 	#define _CODE_SUFFIX_ "W"
 #else
 	#define _CODE_SUFFIX_ "A"
 #endif
 
-//! ƒ^[ƒQƒbƒgƒ}ƒVƒ“”»•Ê 2010.08.21 Moca ’Ç‰Á
+// ƒ^[ƒQƒbƒgƒ}ƒVƒ“”»•Ê 2010.08.21 Moca ’Ç‰Á
 #ifdef _WIN64
 	#define CON_SKR_MACHINE_SUFFIX_ "M64"
 #else
@@ -66,7 +66,7 @@
 //                        ‹¤—Lƒƒ‚ƒŠ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//!	‹¤—Lƒƒ‚ƒŠ‚Ìƒo[ƒWƒ‡ƒ“
+//	‹¤—Lƒƒ‚ƒŠ‚Ìƒo[ƒWƒ‡ƒ“
 /*!
 	‹¤—Lƒƒ‚ƒŠ‚Ìƒo[ƒWƒ‡ƒ“”Ô†B‹¤—Lƒƒ‚ƒŠ‚ÌŒ`Ž®‚ð•ÏX‚µ‚½‚Æ‚«‚Í‚±‚±‚ð1‘‚â‚·B
 
@@ -481,19 +481,19 @@
 //                      ƒ~ƒ…[ƒeƒbƒNƒX                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ŽÀsŒŸo—p(ƒCƒ“ƒXƒg[ƒ‰‚ÅŽg—p)
+// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ŽÀsŒŸo—p(ƒCƒ“ƒXƒg[ƒ‰‚ÅŽg—p)
 #define	GSTR_MUTEX_SAKURA					_T("MutexSakuraEditor")
 
-//! ƒRƒ“ƒgƒ[ƒ‹ƒvƒƒZƒX
+// ƒRƒ“ƒgƒ[ƒ‹ƒvƒƒZƒX
 #define	GSTR_MUTEX_SAKURA_CP				(_T("MutexSakuraEditorCP")				_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
-//! ƒm[ƒ}ƒ‹ƒvƒƒZƒX‰Šú‰»“¯Šú
+// ƒm[ƒ}ƒ‹ƒvƒƒZƒX‰Šú‰»“¯Šú
 #define	GSTR_MUTEX_SAKURA_INIT				(_T("MutexSakuraEditorInit")			_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
-//! ƒm[ƒh‘€ì“¯Šú
+// ƒm[ƒh‘€ì“¯Šú
 #define	GSTR_MUTEX_SAKURA_EDITARR			(_T("MutexSakuraEditorEditArr")			_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
-//! ‹­’²ƒL[ƒ[ƒhƒƒbƒN
+// ‹­’²ƒL[ƒ[ƒhƒƒbƒN
 #define	GSTR_MUTEX_SAKURA_KEYWORD			(_T("MutexSakuraEditorKeyword")			_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 // ƒ^ƒCƒv•ÊÝ’è“]‘——p
@@ -503,7 +503,7 @@
 //                         ƒCƒxƒ“ƒg                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! ‰Šú‰»Š®—¹ƒCƒxƒ“ƒg
+// ‰Šú‰»Š®—¹ƒCƒxƒ“ƒg
 #define	GSTR_EVENT_SAKURA_CP_INITIALIZED	(_T("EventSakuraEditorCPInitialized")	_T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 
@@ -511,13 +511,13 @@
 //                     ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! ƒRƒ“ƒgƒ[ƒ‹ƒgƒŒƒC
+// ƒRƒ“ƒgƒ[ƒ‹ƒgƒŒƒC
 #define	GSTR_CEDITAPP		(_T("CControlTray") _T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)		_T(STR_SHAREDATA_VERSION))
 
-//! ƒƒCƒ“ƒEƒBƒ“ƒhƒE
+// ƒƒCƒ“ƒEƒBƒ“ƒhƒE
 #define	GSTR_EDITWINDOWNAME	(_T("TextEditorWindow") _T(CON_SKR_MACHINE_SUFFIX_) _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
-//! ƒrƒ…[
+// ƒrƒ…[
 #define	GSTR_VIEWNAME		(_T("SakuraView")												_T(STR_SHAREDATA_VERSION))
 
 
@@ -539,7 +539,7 @@
 //                      ƒpƒtƒH[ƒ}ƒ“ƒX                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // ƒoƒbƒtƒ@ƒTƒCƒY
-const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒoƒbƒtƒ@ƒTƒCƒY
+const int LINEREADBUFSIZE	= 10240;	// ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒoƒbƒtƒ@ƒTƒCƒY
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -564,101 +564,101 @@ const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒ
 // lParam: bool‚Á‚Û‚¢‰½‚©
 #define MYWM_SETACTIVEPANE  (WM_APP+1510)
 
-//! Ý’è‚ª•ÏX‚³‚ê‚½‚±‚Æ‚Ì’Ê’mƒƒbƒZ[ƒW
+// Ý’è‚ª•ÏX‚³‚ê‚½‚±‚Æ‚Ì’Ê’mƒƒbƒZ[ƒW
 // wParam:PM_CHANGESETTING_TYPE‚Ì‚Æ‚«Aƒ^ƒCƒv•ÊÝ’èIndexB‚»‚êˆÈŠO‚È‚µB
 #define MYWM_CHANGESETTING  (WM_APP+1520)
-//! MYWM_CHANGESETTINGƒƒbƒZ[ƒW‚ÌlParam
+// MYWM_CHANGESETTINGƒƒbƒZ[ƒW‚ÌlParam
 enum e_PM_CHANGESETTING_SELECT {
-	PM_CHANGESETTING_ALL		= 0, //!< ‘S•”
-	PM_CHANGESETTING_FONT		= 1, //!< ƒtƒHƒ“ƒg•ÏX
-	PM_CHANGESETTING_FONTSIZE	= 2, //!< ƒtƒHƒ“ƒgƒTƒCƒY•ÏX(WPARAM ƒ^ƒCƒv•Ê”Ô†B-1‚Å‹¤’ÊÝ’è•ÏX)
-	PM_CHANGESETTING_TYPE		= 3, //!< ƒ^ƒCƒv•ÊÝ’è
-	PM_CHANGESETTING_TYPE2		= 4, //!< ƒ^ƒCƒv•ÊÝ’è(Ä“Ç‚Ýž‚Ý‚È‚µ)
-	PM_PRINTSETTING				= 5, //!< ƒvƒŠƒ“ƒgÝ’è
+	PM_CHANGESETTING_ALL		= 0, // ‘S•”
+	PM_CHANGESETTING_FONT		= 1, // ƒtƒHƒ“ƒg•ÏX
+	PM_CHANGESETTING_FONTSIZE	= 2, // ƒtƒHƒ“ƒgƒTƒCƒY•ÏX(WPARAM ƒ^ƒCƒv•Ê”Ô†B-1‚Å‹¤’ÊÝ’è•ÏX)
+	PM_CHANGESETTING_TYPE		= 3, // ƒ^ƒCƒv•ÊÝ’è
+	PM_CHANGESETTING_TYPE2		= 4, // ƒ^ƒCƒv•ÊÝ’è(Ä“Ç‚Ýž‚Ý‚È‚µ)
+	PM_PRINTSETTING				= 5, // ƒvƒŠƒ“ƒgÝ’è
 };
-//!À•WˆÊ’uî•ñ‚Ì•Û‘¶
+// À•WˆÊ’uî•ñ‚Ì•Û‘¶
 #define MYWM_SAVEEDITSTATE  (WM_APP+1521)
 
-//! ƒ^ƒXƒNƒgƒŒƒC‚©‚ç‚Ì’Ê’mƒƒbƒZ[ƒW
+// ƒ^ƒXƒNƒgƒŒƒC‚©‚ç‚Ì’Ê’mƒƒbƒZ[ƒW
 #define MYWM_NOTIFYICON		(WM_APP+100)
 
 
 
-//! ƒgƒŒƒC‚©‚çƒGƒfƒBƒ^‚Ö‚ÌI—¹—v‹
+// ƒgƒŒƒC‚©‚çƒGƒfƒBƒ^‚Ö‚ÌI—¹—v‹
 #define	MYWM_CLOSE			(WM_APP+200)
 
-//! ƒgƒŒƒC‚©‚çƒGƒfƒBƒ^‚Ö‚Ì•ÒWƒtƒ@ƒCƒ‹î•ñ —v‹’Ê’m
+// ƒgƒŒƒC‚©‚çƒGƒfƒBƒ^‚Ö‚Ì•ÒWƒtƒ@ƒCƒ‹î•ñ —v‹’Ê’m
 #define	MYWM_GETFILEINFO	(WM_APP+203)
 
-//! ƒJ[ƒ\ƒ‹ˆÊ’u•ÏX’Ê’m
+// ƒJ[ƒ\ƒ‹ˆÊ’u•ÏX’Ê’m
 #define	MYWM_SETCARETPOS	(WM_APP+204)
-//! MYWM_SETCARETPOSƒƒbƒZ[ƒW‚ÌlParam
+// MYWM_SETCARETPOSƒƒbƒZ[ƒW‚ÌlParam
 enum e_PM_SETCARETPOS_SELECTSTATE {
-	PM_SETCARETPOS_NOSELECT		= 0, //!< ‘I‘ð‰ðœ
-	PM_SETCARETPOS_SELECT		= 1, //!< ‘I‘ðŠJŽnE•ÏX
-	PM_SETCARETPOS_KEEPSELECT	= 2, //!< Œ»Ý‚Ì‘I‘ðó‘Ô‚ð•Û‚Á‚ÄˆÚ“®
+	PM_SETCARETPOS_NOSELECT		= 0, // ‘I‘ð‰ðœ
+	PM_SETCARETPOS_SELECT		= 1, // ‘I‘ðŠJŽnE•ÏX
+	PM_SETCARETPOS_KEEPSELECT	= 2, // Œ»Ý‚Ì‘I‘ðó‘Ô‚ð•Û‚Á‚ÄˆÚ“®
 };
 
-//! ƒJ[ƒ\ƒ‹ˆÊ’uŽæ“¾—v‹
+// ƒJ[ƒ\ƒ‹ˆÊ’uŽæ“¾—v‹
 #define	MYWM_GETCARETPOS	(WM_APP+205)
 
-//! –¢Žg—p
+// –¢Žg—p
 // wParam:–¢Žg—p
 // lParam:–¢Žg—p
 #define	MYWM_ADDSTRING		(WM_APP+206)
 
-//! ƒ^ƒOƒWƒƒƒ“ƒvŒ³’Ê’m
+// ƒ^ƒOƒWƒƒƒ“ƒvŒ³’Ê’m
 #define	MYWM_SETREFERER		(WM_APP+207)
 
-//! s(‰üs’PˆÊ)ƒf[ƒ^‚Ì—v‹
+// s(‰üs’PˆÊ)ƒf[ƒ^‚Ì—v‹
 #define	MYWM_GETLINEDATA	(WM_APP+208)
 
 
-//! •ÒWƒEƒBƒ“ƒhƒEƒIƒuƒWƒFƒNƒg‚©‚ç‚ÌƒIƒuƒWƒFƒNƒgíœ—v‹
+// •ÒWƒEƒBƒ“ƒhƒEƒIƒuƒWƒFƒNƒg‚©‚ç‚ÌƒIƒuƒWƒFƒNƒgíœ—v‹
 #define	MYWM_DELETE_ME		(WM_APP+209)
 
-//! V‚µ‚¢•ÒWƒEƒBƒ“ƒhƒE‚Ìì¬ˆË—Š(ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ð“n‚·)
+// V‚µ‚¢•ÒWƒEƒBƒ“ƒhƒE‚Ìì¬ˆË—Š(ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ð“n‚·)
 #define	MYWM_OPENNEWEDITOR	(WM_APP+210)
 
 // ƒwƒ‹ƒv‚Á‚Û‚¢‰½‚©
 #define	MYWM_HTMLHELP			(WM_APP+212)
 
-//! ƒ^ƒuƒEƒCƒ“ƒhƒE—pƒƒbƒZ[ƒW
+// ƒ^ƒuƒEƒCƒ“ƒhƒE—pƒƒbƒZ[ƒW
 #define	MYWM_TAB_WINDOW_NOTIFY	(WM_APP+213)	//@@@ 2003.05.31 MIK
 
-//! ƒo[‚Ì•\Ž¦E”ñ•\Ž¦•ÏXƒƒbƒZ[ƒW
+// ƒo[‚Ì•\Ž¦E”ñ•\Ž¦•ÏXƒƒbƒZ[ƒW
 #define	MYWM_BAR_CHANGE_NOTIFY	(WM_APP+214)	//@@@ 2003.06.10 MIK
 
-//! ƒGƒfƒBƒ^|ƒgƒŒƒCŠÔ‚Å‚ÌUI“ÁŒ •ª—£‚ÌŠm”FƒƒbƒZ[ƒW
+// ƒGƒfƒBƒ^|ƒgƒŒƒCŠÔ‚Å‚ÌUI“ÁŒ •ª—£‚ÌŠm”FƒƒbƒZ[ƒW
 #define	MYWM_UIPI_CHECK	(WM_APP+215)	//@@@ 2007.06.07 ryoji
 
-//! ƒ|ƒbƒvƒAƒbƒvƒEƒBƒ“ƒhƒE‚Ì•\Ž¦Ø‘ÖŽwŽ¦
+// ƒ|ƒbƒvƒAƒbƒvƒEƒBƒ“ƒhƒE‚Ì•\Ž¦Ø‘ÖŽwŽ¦
 #define MYWM_SHOWOWNEDPOPUPS (WM_APP+216)	//@@@ 2007.10.22 ryoji
 
-//! ƒvƒƒZƒX‚Ì‰‰ñƒAƒCƒhƒŠƒ“ƒO’Ê’m
+// ƒvƒƒZƒX‚Ì‰‰ñƒAƒCƒhƒŠƒ“ƒO’Ê’m
 #define MYWM_FIRST_IDLE (WM_APP+217)	//@@@ 2008.04.19 ryoji
 
-//! “ÆŽ©‚Ìƒhƒƒbƒvƒtƒ@ƒCƒ‹’Ê’m
+// “ÆŽ©‚Ìƒhƒƒbƒvƒtƒ@ƒCƒ‹’Ê’m
 #define MYWM_DROPFILES (WM_APP+218)	//@@@ 2008.06.18 ryoji
 
-//! ƒeƒLƒXƒg’Ç‰Á’Ê’m(‹¤—Lƒf[ƒ^Œo—R)
+// ƒeƒLƒXƒg’Ç‰Á’Ê’m(‹¤—Lƒf[ƒ^Œo—R)
 // wParam:’Ç‰Á‚·‚é•¶Žš”(WCHAR’PˆÊ)
 // lParam:–¢Žg—p
 // @2010.05.11 Moca ƒƒbƒZ[ƒW’Ç‰Á
 #define	MYWM_ADDSTRINGLEN_W (WM_APP+219)
 
-//! ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ‰æ–Ê‚Ì’Ê’m
+// ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ‰æ–Ê‚Ì’Ê’m
 #define MYWM_OUTLINE_NOTIFY (WM_APP+220)	//@@@ 2010.06.06 ryoji
 
-//! ƒ^ƒCƒv•Ê‚ðÝ’è
+// ƒ^ƒCƒv•Ê‚ðÝ’è
 // wParam:ƒ^ƒCƒv•Ê”Ô†
 #define MYWM_SET_TYPESETTING (WM_APP+221)
-//! ƒ^ƒCƒv•Ê‚ðŽæ“¾
+// ƒ^ƒCƒv•Ê‚ðŽæ“¾
 #define MYWM_GET_TYPESETTING (WM_APP+222)
 
-//! ƒ^ƒCƒv•Ê‚ð’Ç‰Á
+// ƒ^ƒCƒv•Ê‚ð’Ç‰Á
 #define MYWM_ADD_TYPESETTING (WM_APP+223)
-//! ƒ^ƒCƒv•Ê‚ðíœ
+// ƒ^ƒCƒv•Ê‚ðíœ
 #define MYWM_DEL_TYPESETTING (WM_APP+224)
 
 // Ä•ÏŠ·‘Î‰ž // 20020331 aroka

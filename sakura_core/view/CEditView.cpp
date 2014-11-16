@@ -152,10 +152,10 @@ CEditView::CEditView(CEditWnd* pcEditWnd)
 
 // 2007.10.23 kobake コンストラクタ内の処理をすべてCreateに移しました。(初期化処理が不必要に分散していたため)
 BOOL CEditView::Create(
-	HWND		hwndParent,	//!< 親
-	CEditDoc*	pcEditDoc,	//!< 参照するドキュメント
-	int			nMyIndex,	//!< ビューのインデックス
-	BOOL		bShow		//!< 作成時に表示するかどうか
+	HWND		hwndParent,	// 親
+	CEditDoc*	pcEditDoc,	// 参照するドキュメント
+	int			nMyIndex,	// ビューのインデックス
+	BOOL		bShow		// 作成時に表示するかどうか
 )
 {
 	m_pcTextArea = new CTextArea(this);
@@ -1134,9 +1134,9 @@ void CEditView::SetFont(void)
 	@date 2006.07.09 genta 新規作成
 */
 void CEditView::MoveCursorSelecting(
-	CLayoutPoint	ptWk_CaretPos,		//!< [in] 移動先レイアウト位置
-	bool			bSelect,			//!< true: 選択する  false: 選択解除
-	int				nCaretMarginRate	//!< 縦スクロール開始位置を決める値
+	CLayoutPoint	ptWk_CaretPos,		// [in] 移動先レイアウト位置
+	bool			bSelect,			// true: 選択する  false: 選択解除
+	int				nCaretMarginRate	// 縦スクロール開始位置を決める値
 )
 {
 	if (bSelect) {
@@ -1179,9 +1179,9 @@ void CEditView::MoveCursorSelecting(
 	                 URLの強調表示OFFのチェックはこの関数内で行うように変更
 */
 bool CEditView::IsCurrentPositionURL(
-	const CLayoutPoint&	ptCaretPos,		//!< [in]  カーソル位置
-	CLogicRange*		pUrlRange,		//!< [out] URL範囲。ロジック単位。
-	std::wstring*		pwstrURL		//!< [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
+	const CLayoutPoint&	ptCaretPos,		// [in]  カーソル位置
+	CLogicRange*		pUrlRange,		// [out] URL範囲。ロジック単位。
+	std::wstring*		pwstrURL		// [out] URL文字列受け取り先。NULLを指定した場合はURL文字列を受け取らない。
 )
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CEditView::IsCurrentPositionURL");
@@ -2172,8 +2172,8 @@ int CEditView::IsCurrentPositionSelectedTEST(
 
 // 選択範囲内の全行をクリップボードにコピーする
 void CEditView::CopySelectedAllLines(
-	const wchar_t*	pszQuote,		//!< 先頭に付ける引用符
-	BOOL			bWithLineNumber	//!< 行番号を付与する
+	const wchar_t*	pszQuote,		// 先頭に付ける引用符
+	BOOL			bWithLineNumber	// 行番号を付与する
 )
 {
 	CNativeW	cmemBuf;
@@ -2585,7 +2585,7 @@ void CEditView::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 
 
-//!	現在のカーソル行位置を履歴に登録する
+//	現在のカーソル行位置を履歴に登録する
 void CEditView::AddCurrentLineToHistory(void)
 {
 	CLogicPoint ptPos;
@@ -2714,7 +2714,7 @@ bool CEditView::IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelect
 	return result;
 }
 
-//! アンドゥバッファの処理
+// アンドゥバッファの処理
 void CEditView::SetUndoBuffer(bool bPaintLineNumber)
 {
 	COpeBlk* pOpe = m_cCommander.GetOpeBlk();

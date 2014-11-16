@@ -46,12 +46,12 @@ class CDlgTypeAscertain : public CDialog {
 public:
 	// 型
 	struct SAscertainInfo {
-		tstring	sImportFile;	//!< in インポートファイル名
-		wstring	sTypeNameTo;	//!< in タイプ名（インポート先）
-		wstring	sTypeNameFile;	//!< in タイプ名（ファイルから）
-		int 	nColorType;		//!< out 文書種類(カラーコピー用)
-		wstring	sColorFile;		//!< out 色設定ファイル名
-		bool	bAddType;		//!< out タイプを追加する
+		tstring	sImportFile;	// in インポートファイル名
+		wstring	sTypeNameTo;	// in タイプ名（インポート先）
+		wstring	sTypeNameFile;	// in タイプ名（ファイルから）
+		int 	nColorType;		// out 文書種類(カラーコピー用)
+		wstring	sColorFile;		// out 色設定ファイル名
+		bool	bAddType;		// out タイプを追加する
 	};
 
 public:

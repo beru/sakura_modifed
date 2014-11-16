@@ -30,7 +30,7 @@
 #include <Windows.h>
 #include <vector>
 
-//! オリジナル値保存クラス
+// オリジナル値保存クラス
 template <class T>
 class TOriginalHolder {
 public:
@@ -60,13 +60,13 @@ private:
 };
 
 
-//! フォント情報管理
+// フォント情報管理
 struct SFONT {
 	SFontAttr	m_sFontAttr;
-	HFONT		m_hFont;      //!< フォントハンドル
+	HFONT		m_hFont;      // フォントハンドル
 };
 
-//! 描画管理
+// 描画管理
 // 最新実装：ブラシ
 class CGraphics {
 public:
@@ -136,7 +136,7 @@ public:
 	void PushMyFont(const SFONT& sFont);
 	void PopMyFont();
 	void ClearMyFont();
-	//! フォント設定
+	// フォント設定
 	void SetMyFont(const SFONT& sFont) {
 		ClearMyFont();
 		PushMyFont(sFont);
@@ -161,7 +161,7 @@ public:
 public:
 	void _InitBrushColor();
 	void PushBrushColor(
-		COLORREF color	//!< ブラシの色。(COLORREF)-1 にすると、透明ブラシとなる。
+		COLORREF color	// ブラシの色。(COLORREF)-1 にすると、透明ブラシとなる。
 	);
 	void PopBrushColor();
 	void ClearBrush();
@@ -174,26 +174,26 @@ public:
 
 	// 描画
 public:
-	//! 直線
+	// 直線
 	void DrawLine(int x1, int y1, int x2, int y2) {
 		::MoveToEx(m_hdc, x1, y1, NULL);
 		::LineTo(m_hdc, x2, y2);
 	}
 	void DrawDotLine(int x1, int y1, int x2, int y2);	// 点線
-	//! 矩形塗り潰し
+	// 矩形塗り潰し
 	void FillMyRect(const RECT& rc) {
 		::FillRect(m_hdc, &rc, GetCurrentBrush());
 #ifdef _DEBUG
 		::SetPixel(m_hdc, -1, -1, 0); //###########実験
 #endif
 	}
-	//! 矩形塗り潰し
+	// 矩形塗り潰し
 	void FillSolidMyRect(const RECT& rc, COLORREF color) {
 		PushTextBackColor(color);
 		FillMyRectTextBackColor(rc);
 		PopTextBackColor();
 	}
-	//! 矩形塗り潰し
+	// 矩形塗り潰し
 	void FillMyRectTextBackColor(const RECT& rc) {
 		::ExtTextOut(m_hdc, rc.left, rc.top, ETO_OPAQUE|ETO_CLIPPED, &rc, _T(""), 0, NULL);
 	}

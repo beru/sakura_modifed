@@ -30,10 +30,10 @@ public:
 	CBinaryInputStream(LPCTSTR tszFilePath);
 
 public:
-	//! ストリームの「残り」サイズを取得
+	// ストリームの「残り」サイズを取得
 	int GetLength();
 
-	//! データを無変換で読み込む。戻り値は読み込んだバイト数。
+	// データを無変換で読み込む。戻り値は読み込んだバイト数。
 	int Read(void* pBuffer, int nSizeInBytes);
 };
 

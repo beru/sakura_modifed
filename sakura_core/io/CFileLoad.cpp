@@ -51,14 +51,14 @@
 		2GB以上のファイルは開けない
 */
 
-//! ロード用バッファサイズの初期値 */
+// ロード用バッファサイズの初期値 */
 const int CFileLoad::gm_nBufSizeDef = 32768;
 // (最適値がマシンによって違うのでとりあえず32KB確保する)
 
 // ロード用バッファサイズの設定可能な最低値
 // const int gm_nBufSizeMin = 1024;
 
-//! コンストラクタ
+// コンストラクタ
 CFileLoad::CFileLoad(const SEncodingConfig& encode)
 {
 	m_pEencoding = &encode;
@@ -81,7 +81,7 @@ CFileLoad::CFileLoad(const SEncodingConfig& encode)
 	m_nReadBufOffSet  = 0;
 }
 
-//! デストラクタ
+// デストラクタ
 CFileLoad::~CFileLoad(void)
 {
 	if (m_hFile) {
@@ -223,8 +223,8 @@ void CFileLoad::FileClose(void)
 			NULL		データがなかった
 */
 EConvertResult CFileLoad::ReadLine(
-	CNativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
-	CEol*		pcEol			//!< [i/o]
+	CNativeW*	pUnicodeBuffer,	// [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
+	CEol*		pcEol			// [i/o]
 )
 {
 	EConvertResult eRet = RESULT_COMPLETE;
@@ -370,12 +370,12 @@ int CFileLoad::GetPercent(void) {
 	GetNextLineの汎用文字コード版
 */
 const char* CFileLoad::GetNextLineCharCode(
-	const char*	pData,		//!< [in]	検索文字列
-	int			nDataLen,	//!< [in]	検索文字列のバイト数
-	int*		pnLineLen,	//!< [out]	1行のバイト数を返すただしEOLは含まない
-	int*		pnBgn,		//!< [i/o]	検索文字列のバイト単位のオフセット位置
-	CEol*		pcEol,		//!< [i/o]	EOL
-	int*		pnEolLen	//!< [out]	EOLのバイト数 (Unicodeで困らないように)
+	const char*	pData,		// [in]	検索文字列
+	int			nDataLen,	// [in]	検索文字列のバイト数
+	int*		pnLineLen,	// [out]	1行のバイト数を返すただしEOLは含まない
+	int*		pnBgn,		// [i/o]	検索文字列のバイト単位のオフセット位置
+	CEol*		pcEol,		// [i/o]	EOL
+	int*		pnEolLen	// [out]	EOLのバイト数 (Unicodeで困らないように)
 ) {
 	int nbgn = *pnBgn;
 	int i;

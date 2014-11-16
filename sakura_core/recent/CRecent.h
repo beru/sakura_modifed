@@ -51,7 +51,7 @@ public:
 	virtual int				GetItemCount() const = 0;
 	virtual void			DeleteAllItem() = 0;
 	virtual bool			DeleteItemsNoFavorite() = 0;
-	virtual bool			DeleteItem(int nIndex) = 0;	//!< アイテムをクリア
+	virtual bool			DeleteItem(int nIndex) = 0;	// アイテムをクリア
 	virtual bool			AppendItemText(const TCHAR* pszText) = 0;
 	virtual bool			EditItemText(int nIndex, const TCHAR* pszText) = 0;
 
@@ -66,8 +66,8 @@ public:
 	}
 
 	// お気に入り
-	virtual bool	SetFavorite(int nIndex, bool bFavorite = true) = 0;		//!< お気に入りに設定
-	virtual bool	IsFavorite(int nIndex) const = 0;						//!< お気に入りか調べる
+	virtual bool	SetFavorite(int nIndex, bool bFavorite = true) = 0;		// お気に入りに設定
+	virtual bool	IsFavorite(int nIndex) const = 0;						// お気に入りか調べる
 
 	// その他
 	virtual int		GetViewCount() const = 0;

@@ -66,14 +66,14 @@ INT_PTR CALLBACK CPropFile::DlgProc_page(
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropFile::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
-//	To Here Jun. 2, 2001 genta
+// To Here Jun. 2, 2001 genta
 
-//! ファイルページ メッセージ処理
+// ファイルページ メッセージ処理
 INT_PTR CPropFile::DispatchEvent(
-	HWND	hwndDlg,	//!< handle to dialog box
-	UINT	uMsg,	//!< message
-	WPARAM	wParam,	//!< first message parameter
-	LPARAM	lParam 	//!< second message parameter
+	HWND	hwndDlg,	// handle to dialog box
+	UINT	uMsg,	// message
+	WPARAM	wParam,	// first message parameter
+	LPARAM	lParam 	// second message parameter
 )
 {
 	WORD		wNotifyCode;

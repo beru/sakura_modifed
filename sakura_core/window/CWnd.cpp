@@ -32,12 +32,12 @@ LRESULT CALLBACK CWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-//! Windowsフック(CBT)
+// Windowsフック(CBT)
 namespace CWindowCreationHook {
 	int		g_nCnt  = 0;	// 参照カウンタ
 	HHOOK	g_hHook = NULL;
 
-	//! フック用コールバック
+	// フック用コールバック
 	static
 	LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
@@ -60,7 +60,7 @@ next:
 		return ::CallNextHookEx(g_hHook, nCode, wParam, lParam);
 	}
 
-	//! フック開始
+	// フック開始
 	void Use()
 	{
 		if (++g_nCnt >= 1 && !g_hHook) {
@@ -68,7 +68,7 @@ next:
 		}
 	}
 
-	//! フック終了
+	// フック終了
 	void Unuse()
 	{
 		if (--g_nCnt <= 0 && g_hHook != NULL) {

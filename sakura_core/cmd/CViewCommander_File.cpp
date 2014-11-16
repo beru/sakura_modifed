@@ -253,10 +253,10 @@ void CViewCommander::Command_FILECLOSE_OPEN(LPCWSTR filename, ECodeType nCharCod
 }
 
 
-//! ファイルの再オープン
+// ファイルの再オープン
 void CViewCommander::Command_FILE_REOPEN(
-	ECodeType	nCharCode,	//!< [in] 開き直す際の文字コード
-	bool		bNoConfirm	//!< [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
+	ECodeType	nCharCode,	// [in] 開き直す際の文字コード
+	bool		bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 )
 {
 	CEditDoc* pcDoc = GetDocument();
@@ -554,12 +554,12 @@ void CViewCommander::Command_EXITALL(void)
 	@date	2006.12.10 maru 新規作成
 */
 BOOL CViewCommander::Command_PUTFILE(
-	LPCWSTR		filename,	//!< [in] filename 出力ファイル名
-	ECodeType	nCharCode,	//!< [in] nCharCode 文字コード指定
-							//!<  @li CODE_xxxxxxxxxx:各種文字コード
-							//!<  @li CODE_AUTODETECT:現在の文字コードを維持
-	int			nFlgOpt		//!< [in] nFlgOpt 動作オプション
-							//!<  @li 0x01:選択範囲を出力 (非選択状態でも空ファイルを出力する)
+	LPCWSTR		filename,	// [in] filename 出力ファイル名
+	ECodeType	nCharCode,	// [in] nCharCode 文字コード指定
+							//  @li CODE_xxxxxxxxxx:各種文字コード
+							//  @li CODE_AUTODETECT:現在の文字コードを維持
+	int			nFlgOpt		// [in] nFlgOpt 動作オプション
+							//  @li 0x01:選択範囲を出力 (非選択状態でも空ファイルを出力する)
 )
 {
 	BOOL bResult = TRUE;

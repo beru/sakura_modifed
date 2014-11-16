@@ -67,7 +67,7 @@ void CViewCommander::Command_CHGMOD_EOL(EEolType e)
 }
 
 
-//! 文字コードセット指定
+// 文字コードセット指定
 void CViewCommander::Command_CHG_CHARSET(
 	ECodeType	eCharSet,	// [in] 設定する文字コードセット
 	bool		bBom		// [in] 設定するBOM(Unicode系以外は無視)

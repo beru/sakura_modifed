@@ -68,7 +68,7 @@ typedef const StringBufferW_ StringBufferW;
 
 
 // 2007.09.24 kobake データ変換部を子クラスに分離
-//! 各種データ変換付きCProfile
+// 各種データ変換付きCProfile
 class CDataProfile : public CProfile {
 private:
 	// 専用型
@@ -213,7 +213,7 @@ public:
 	}
 
 	// 2007.08.14 kobake 追加
-	//! intを介して任意型の入出力を行う
+	// intを介して任意型の入出力を行う
 	template <class T>
 	bool IOProfileData_WrapInt(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {
 		int n = nEntryValue;

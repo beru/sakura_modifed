@@ -122,9 +122,9 @@ void CPropTypes::Create(HINSTANCE hInstApp, HWND hwndParent)
 }
 
 struct TypePropSheetInfo {
-	int m_nTabNameId;										//!< TABの表示名
-	unsigned int resId;										//!< Property sheetに対応するDialog resource
-	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	//!< Dialog Procedure
+	int m_nTabNameId;										// TABの表示名
+	unsigned int resId;										// Property sheetに対応するDialog resource
+	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	// Dialog Procedure
 };
 
 // キーワード：タイプ別設定タブ順序(プロパティシート)

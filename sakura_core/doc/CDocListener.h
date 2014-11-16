@@ -44,25 +44,25 @@ class CDocListener;
 enum ESaveResult {
 	SAVED_OK,
 	SAVED_FAILURE,
-	SAVED_INTERRUPT,	//!< 中断された
-	SAVED_LOSESOME,		//!< 文字の一部が失われた
+	SAVED_INTERRUPT,	// 中断された
+	SAVED_LOSESOME,		// 文字の一部が失われた
 };
 
 //###
 enum ELoadResult {
 	LOADED_OK,
 	LOADED_FAILURE,
-	LOADED_INTERRUPT,	//!< 中断された
-	LOADED_LOSESOME,	//!< 文字の一部が失われた
+	LOADED_INTERRUPT,	// 中断された
+	LOADED_LOSESOME,	// 文字の一部が失われた
 
 	// 特殊
-	LOADED_NOIMPLEMENT,	//!< 実装無し
+	LOADED_NOIMPLEMENT,	// 実装無し
 };
 
 //###
 enum ECallbackResult {
-	CALLBACK_CONTINUE,	//!< 続ける
-	CALLBACK_INTERRUPT,	//!< 中断
+	CALLBACK_CONTINUE,	// 続ける
+	CALLBACK_INTERRUPT,	// 中断
 };
 
 //###
@@ -106,19 +106,19 @@ struct SLoadInfo {
 	{
 	}
 
-	//! ファイルパスの比較
+	// ファイルパスの比較
 	bool IsSamePath(LPCTSTR pszPath) const;
 };
 
 struct SSaveInfo {
-	CFilePath	cFilePath;	//!< 保存ファイル名
-	ECodeType	eCharCode;	//!< 保存文字コードセット
-	bool		bBomExist;	//!< 保存時BOM付加
-	bool		bChgCodeSet;//!< 文字コードセット変更	2013/5/19 Uchi
-	CEol		cEol;		//!< 保存改行コード
+	CFilePath	cFilePath;	// 保存ファイル名
+	ECodeType	eCharCode;	// 保存文字コードセット
+	bool		bBomExist;	// 保存時BOM付加
+	bool		bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
+	CEol		cEol;		// 保存改行コード
 
 	// モード
-	bool		bOverwriteMode;	//!< 上書き要求
+	bool		bOverwriteMode;	// 上書き要求
 
 	SSaveInfo()
 		:
@@ -147,21 +147,21 @@ struct SSaveInfo {
 	{
 	}
 
-	//! ファイルパスの比較
+	// ファイルパスの比較
 	bool IsSamePath(LPCTSTR pszPath) const;
 };
 
 
 class CProgressListener;
 
-//! 複数のCProgressSubjectからウォッチされる
+// 複数のCProgressSubjectからウォッチされる
 class CProgressSubject : public CSubjectT<CProgressListener> {
 public:
 	virtual ~CProgressSubject() {}
 	void NotifyProgress(int nPer);
 };
 
-//! 1つのCProgressSubjectをウォッチする
+// 1つのCProgressSubjectをウォッチする
 class CProgressListener : public CListenerT<CProgressSubject> {
 public:
 	virtual ~CProgressListener() {}
@@ -205,21 +205,21 @@ public:
 
 	// -- -- 各種イベント -- -- //
 	// ロード前後
-	virtual ECallbackResult	OnCheckLoad	(SLoadInfo* pLoadInfo)		{ return CALLBACK_CONTINUE; }	//!< 本当にロードを行うかの判定を行う
-	virtual void			OnBeforeLoad(SLoadInfo* sLoadInfo)		{ return ; }	//!< ロード事前処理
-	virtual ELoadResult		OnLoad		(const SLoadInfo& sLoadInfo) { return LOADED_NOIMPLEMENT; }	//!< ロード処理
-	virtual void			OnLoading	(int nPer)					{ return ; }	//!< ロード処理の経過情報を受信
-	virtual void			OnAfterLoad	(const SLoadInfo& sLoadInfo) { return ; }	//!< ロード事後処理
-	virtual void			OnFinalLoad	(ELoadResult eLoadResult)	{ return ; }	//!< ロードフローの最後に必ず呼ばれる
+	virtual ECallbackResult	OnCheckLoad	(SLoadInfo* pLoadInfo)		{ return CALLBACK_CONTINUE; }	// 本当にロードを行うかの判定を行う
+	virtual void			OnBeforeLoad(SLoadInfo* sLoadInfo)		{ return ; }	// ロード事前処理
+	virtual ELoadResult		OnLoad		(const SLoadInfo& sLoadInfo) { return LOADED_NOIMPLEMENT; }	// ロード処理
+	virtual void			OnLoading	(int nPer)					{ return ; }	// ロード処理の経過情報を受信
+	virtual void			OnAfterLoad	(const SLoadInfo& sLoadInfo) { return ; }	// ロード事後処理
+	virtual void			OnFinalLoad	(ELoadResult eLoadResult)	{ return ; }	// ロードフローの最後に必ず呼ばれる
 
 	// セーブ前後
-	virtual ECallbackResult OnCheckSave	(SSaveInfo* pSaveInfo)		{ return CALLBACK_CONTINUE; }	//!< 本当にセーブを行うかの判定を行う
-	virtual ECallbackResult OnPreBeforeSave	(SSaveInfo* pSaveInfo)	{ return CALLBACK_CONTINUE; }	//!< セーブ事前おまけ処理 ($$ 仮)
-	virtual void			OnBeforeSave(const SSaveInfo& sSaveInfo) { return ; }	//!< セーブ事前処理
-	virtual void			OnSave		(const SSaveInfo& sSaveInfo) { return ; }	//!< セーブ処理
-	virtual void			OnSaving	(int nPer)					{ return ; }	//!< セーブ処理の経過情報を受信
-	virtual void			OnAfterSave	(const SSaveInfo& sSaveInfo) { return ; }	//!< セーブ事後処理
-	virtual void			OnFinalSave	(ESaveResult eSaveResult)	{ return ; }	//!< セーブフローの最後に必ず呼ばれる
+	virtual ECallbackResult OnCheckSave	(SSaveInfo* pSaveInfo)		{ return CALLBACK_CONTINUE; }	// 本当にセーブを行うかの判定を行う
+	virtual ECallbackResult OnPreBeforeSave	(SSaveInfo* pSaveInfo)	{ return CALLBACK_CONTINUE; }	// セーブ事前おまけ処理 ($$ 仮)
+	virtual void			OnBeforeSave(const SSaveInfo& sSaveInfo) { return ; }	// セーブ事前処理
+	virtual void			OnSave		(const SSaveInfo& sSaveInfo) { return ; }	// セーブ処理
+	virtual void			OnSaving	(int nPer)					{ return ; }	// セーブ処理の経過情報を受信
+	virtual void			OnAfterSave	(const SSaveInfo& sSaveInfo) { return ; }	// セーブ事後処理
+	virtual void			OnFinalSave	(ESaveResult eSaveResult)	{ return ; }	// セーブフローの最後に必ず呼ばれる
 
 	// クローズ前後
 	virtual ECallbackResult OnBeforeClose()							{ return CALLBACK_CONTINUE; }

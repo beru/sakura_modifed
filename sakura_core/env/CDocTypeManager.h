@@ -28,7 +28,7 @@
 
 #include "DLLSHAREDATA.h"
 
-//! ドキュメントタイプ管理
+// ドキュメントタイプ管理
 class CDocTypeManager {
 public:
 	CDocTypeManager() {

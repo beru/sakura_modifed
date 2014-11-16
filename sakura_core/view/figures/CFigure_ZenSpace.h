@@ -25,7 +25,7 @@
 
 #include "view/figures/CFigureStrategy.h"
 
-//! 全角スペース描画
+// 全角スペース描画
 class CFigure_ZenSpace : public CFigureSpace {
 public:
 	// traits

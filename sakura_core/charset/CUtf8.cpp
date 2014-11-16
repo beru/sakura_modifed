@@ -8,7 +8,7 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 
-//! BOMデータ取得
+// BOMデータ取得
 void CUtf8::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
@@ -66,7 +66,7 @@ int CUtf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bC
 
 
 
-//! UTF-8→Unicodeコード変換
+// UTF-8→Unicodeコード変換
 // 2007.08.13 kobake 作成
 EConvertResult CUtf8::_UTF8ToUnicode(CMemory* pMem, bool bCESU8Mode/*, bool decodeMime*/)
 {
@@ -169,7 +169,7 @@ int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 }
 
 
-//! コード変換 Unicode→UTF-8
+// コード変換 Unicode→UTF-8
 EConvertResult CUtf8::_UnicodeToUTF8(CMemory* pMem, bool bCesu8Mode)
 {
 	// エラー状態

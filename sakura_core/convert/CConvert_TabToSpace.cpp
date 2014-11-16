@@ -4,7 +4,7 @@
 #include "CEol.h"
 #include "util/string_ex2.h"
 
-//! TAB¨‹ó”’
+// TAB¨‹ó”’
 bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 {
 	using namespace WCODE;

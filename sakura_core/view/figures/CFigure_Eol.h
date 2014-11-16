@@ -25,7 +25,7 @@
 
 #include "view/figures/CFigureStrategy.h"
 
-//! ‰üs•`‰æ
+// ‰üs•`‰æ
 class CFigure_Eol : public CFigureSpace {
 public:
 	// traits

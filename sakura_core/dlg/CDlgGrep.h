@@ -21,7 +21,7 @@ class CDlgGrep;
 #include "recent/CRecent.h"
 #include "util/window.h"
 
-//! GREPダイアログボックス
+// GREPダイアログボックス
 class CDlgGrep : public CDialog {
 public:
 	/*
@@ -36,21 +36,21 @@ public:
 //	HWND DoModeless(HINSTANCE, HWND, const char*);	// モードレスダイアログの表示
 
 
-	BOOL		m_bSubFolder;		//!< サブフォルダからも検索する
-	BOOL		m_bFromThisText;	//!< この編集中のテキストから検索する
+	BOOL		m_bSubFolder;		// サブフォルダからも検索する
+	BOOL		m_bFromThisText;	// この編集中のテキストから検索する
 
-	SSearchOption	m_sSearchOption;	//!< 検索オプション
+	SSearchOption	m_sSearchOption;	// 検索オプション
 
-	ECodeType	m_nGrepCharSet;				//!< 文字コードセット
-	int			m_nGrepOutputStyle;			//!< Grep: 出力形式
-	BOOL		m_bGrepOutputLine;			//!< 行を出力するか該当部分だけ出力するか
-	bool		m_bGrepOutputFileOnly;		//!< ファイル毎最初のみ検索
-	bool		m_bGrepOutputBaseFolder;	//!< ベースフォルダ表示
-	bool		m_bGrepSeparateFolder;		//!< フォルダ毎に表示
+	ECodeType	m_nGrepCharSet;				// 文字コードセット
+	int			m_nGrepOutputStyle;			// Grep: 出力形式
+	BOOL		m_bGrepOutputLine;			// 行を出力するか該当部分だけ出力するか
+	bool		m_bGrepOutputFileOnly;		// ファイル毎最初のみ検索
+	bool		m_bGrepOutputBaseFolder;	// ベースフォルダ表示
+	bool		m_bGrepSeparateFolder;		// フォルダ毎に表示
 
-	std::wstring	m_strText;				//!< 検索文字列
-	SFilePath	m_szFile;					//!< 検索ファイル
-	SFilePath	m_szFolder;					//!< 検索フォルダ
+	std::wstring	m_strText;				// 検索文字列
+	SFilePath	m_szFile;					// 検索ファイル
+	SFilePath	m_szFolder;					// 検索フォルダ
 	SFilePath	m_szCurrentFilePath;
 protected:
 	SComboBoxItemDeleter	m_comboDelText;

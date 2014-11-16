@@ -36,7 +36,7 @@
 class CEditView;
 
 ///////////////////////////////////////////////////////////////////////////////
-//!	Plugin macro manager
+// Plugin macro manager
 class CPluginMacroManager: public CMacroManagerBase {
 public:
 	CPluginMacroManager(const WCHAR* Ext, CPlug* plug);
@@ -50,8 +50,8 @@ public:
 	static void declare(void);
 
 protected:
-	std::wstring	m_Source;	//!< マクロスクリプト
-	std::wstring	m_Ext;		//!< 拡張子
-	CPlug*			m_Plug;		//!< プラグイン
+	std::wstring	m_Source;	// マクロスクリプト
+	std::wstring	m_Ext;		// 拡張子
+	CPlug*			m_Plug;		// プラグイン
 };
 

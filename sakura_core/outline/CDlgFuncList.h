@@ -31,7 +31,7 @@ class CFuncInfoArr; // 2002/2/10 aroka
 #define OUTLINE_LAYOUT_BACKGROUND (1)
 #define OUTLINE_LAYOUT_FILECHANGED (2)
 
-//!	アウトライン解析ダイアログボックス
+//	アウトライン解析ダイアログボックス
 class CDlgFuncList : public CDialog {
 public:
 	/*
@@ -62,7 +62,7 @@ protected:
 	void SetTypeConfig(CTypeConfig, const STypeConfig&);
 
 public:
-	//! 現在の種別と同じなら
+	// 現在の種別と同じなら
 	bool CheckListType(int nOutLineType) const { return nOutLineType == m_nOutlineType; }
 	void Redraw(int nOutLineType, int nListType, CFuncInfoArr*, CLayoutInt nCurLine, CLayoutInt nCurCol);
 	void Refresh(void);
@@ -79,8 +79,8 @@ protected:
 	CLayoutInt		m_nCurLine;			// 現在行
 	CLayoutInt		m_nCurCol;			// 現在桁
 	int				m_nSortCol;			// ソートする列番号
-	int				m_nSortColOld;		//!< ソートする列番号(OLD)
-	bool			m_bSortDesc;		//!< 降順
+	int				m_nSortColOld;		// ソートする列番号(OLD)
+	bool			m_bSortDesc;		// 降順
 	int				m_nDocType;			// ドキュメントの種類
 	CNativeW		m_cmemClipText;		// クリップボードコピー用テキスト
 	bool			m_bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
@@ -110,7 +110,7 @@ protected:
 	void SetListVB(void);			// リストビューコントロールの初期化：VisualBasic		// Jul 10, 2003  little YOSHI
 
 	// 2002/11/1 frozen 
-	void SortTree(HWND hWndTree, HTREEITEM htiParent);//!< ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
+	void SortTree(HWND hWndTree, HTREEITEM htiParent);// ツリービューの項目をソートする（ソート基準はm_nSortTypeを使用）
 #if 0
 2002.04.01 YAZAKI SetTreeTxt()、SetTreeTxtNest()は廃止。GetTreeTextNextはもともと使用されていなかった。
 	void SetTreeTxt(HWND);	// ツリーコントロールの初期化：テキストトピックツリー
@@ -159,7 +159,7 @@ private:
 	bool m_bWaitTreeProcess;
 
 	// 2002/11/1 frozen
-	//! ツリービューをソートする基準
+	// ツリービューをソートする基準
 	// 0 デフォルト(ノードに関連づけれられた値順)
 	// 1 アルファベット順
 	int m_nSortType;
@@ -168,7 +168,7 @@ private:
 	CFuncInfo* m_cFuncInfo;
 
 	EDockSide	m_eDockSide;	// 現在の画面の表示位置
-	HWND		m_hwndToolTip;	//!< ツールチップ（ボタン用）
+	HWND		m_hwndToolTip;	// ツールチップ（ボタン用）
 	bool		m_bStretching;
 	bool		m_bHovering;
 	int			m_nHilightedBtn;

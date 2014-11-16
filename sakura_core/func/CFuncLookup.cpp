@@ -86,10 +86,10 @@ EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUna
 	@date 2007.11.02 ryoji 処理を簡素化
 */
 bool CFuncLookup::Pos2FuncName(
-	int		category,	//!< [in]  分類番号 (0-)
-	int		position,	//!< [in]  分類中のindex (0-)
-	WCHAR*	ptr,		//!< [out] 文字列を格納するバッファの先頭
-	int		bufsize		//!< [in]  文字列を格納するバッファのサイズ
+	int		category,	// [in]  分類番号 (0-)
+	int		position,	// [in]  分類中のindex (0-)
+	WCHAR*	ptr,		// [out] 文字列を格納するバッファの先頭
+	int		bufsize		// [in]  文字列を格納するバッファのサイズ
 ) const
 {
 	int funccode = Pos2FuncCode(category, position);

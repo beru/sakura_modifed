@@ -39,7 +39,7 @@ typedef struct bregexp {
 	int nparens;			// number of parentheses
 } BREGEXP_W;
 
-//! BREGONIG.DLLをラップしたもの。
+// BREGONIG.DLLをラップしたもの。
 // 2007.09.13 kobake 作成
 class CBregexpDll2 : public CDllImp {
 public:

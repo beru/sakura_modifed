@@ -672,7 +672,7 @@ bool CDlgTypeList::DelType()
 }
 
 
-//! 再帰的レジストリコピー
+// 再帰的レジストリコピー
 int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstring& destPath)
 {
 	int errorCode;
@@ -730,7 +730,7 @@ int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstr
 	return errorCode;
 }
 
-//! 再帰的レジストリ削除
+// 再帰的レジストリ削除
 int DeleteRegistry(HKEY root, const tstring& path)
 {
 	int errorCode;

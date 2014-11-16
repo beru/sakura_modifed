@@ -434,7 +434,7 @@ int CPropKeybind::GetData(HWND hwndDlg)
 	return TRUE;
 }
 	
-//! Keybind: キーリストをチェックボックスの状態に合わせて更新する
+// Keybind: キーリストをチェックボックスの状態に合わせて更新する
 void CPropKeybind::ChangeKeyList(HWND hwndDlg) {
 	HWND	hwndKeyList;
 	int 	nIndex;

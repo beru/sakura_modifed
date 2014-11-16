@@ -59,7 +59,7 @@ extern const int		SELECTEDAREA_ROP2;
 
 
 //@@@ From Here 2003.05.31 MIK
-//! タブウインドウ用メッセージサブコマンド
+// タブウインドウ用メッセージサブコマンド
 enum ETabWndNotifyType {
 	TWNT_REFRESH	= 0,		// 再表示
 	TWNT_ADD		= 1,		// ウインドウ登録
@@ -71,7 +71,7 @@ enum ETabWndNotifyType {
 	TWNT_WNDPL_ADJUST= 7,		// ウィンドウ位置合わせ	// 2007.04.03 ryoji 追加
 };
 
-//! バーの表示・非表示
+// バーの表示・非表示
 enum EBarChangeNotifyType {
 	MYBCN_TOOLBAR	= 0,		// ツールバー
 	MYBCN_FUNCKEY	= 1,		// ファンクションキー
@@ -86,7 +86,7 @@ enum EBarChangeNotifyType {
 #define	CUSTMENU_INDEX_FOR_RBUTTONUP	0
 
 
-//!< 色タイプ
+// 色タイプ
 //@@@ From Here 2006.12.18 ryoji
 #define COLOR_ATTRIB_FORCE_DISP		0x00000001
 #define COLOR_ATTRIB_NO_TEXT		0x00000010
@@ -104,7 +104,7 @@ extern const SColorAttributeData g_ColorAttributeArr[];
 
 //@@@ To Here 2006.12.18 ryoji
 
-//!< 設定値の上限・下限
+// 設定値の上限・下限
 // ルーラの高さ
 const int IDC_SPIN_nRulerHeight_MIN = 2;
 const int IDC_SPIN_nRulerHeight_MAX = 32;
@@ -114,18 +114,18 @@ const int IDC_SPIN_nRulerHeight_MAX = 32;
 	@date 2007.11.04 genta 新規作成．即値回避と範囲サイズ定義のため
 */
 enum MOUSEFUNCTION_ASSIGN {
-	MOUSEFUNCTION_DOUBLECLICK	= 0,	//!< ダブルクリック
-	MOUSEFUNCTION_RIGHT			= 1,	//!< 右クリック
-	MOUSEFUNCTION_CENTER		= 2,	//!< 中クリック
-	MOUSEFUNCTION_LEFTSIDE		= 3,	//!< 左サイドクリック
-	MOUSEFUNCTION_RIGHTSIDE		= 4,	//!< 右サイドクリック
-	MOUSEFUNCTION_TRIPLECLICK	= 5,	//!< トリプルクリック
-	MOUSEFUNCTION_QUADCLICK		= 6,	//!< クアドラプルクリック
-	MOUSEFUNCTION_WHEELUP		= 7,	//!< ホイールアップ
-	MOUSEFUNCTION_WHEELDOWN		= 8,	//!< ホイールダウン
-	MOUSEFUNCTION_WHEELLEFT		= 9,	//!< ホイール左
-	MOUSEFUNCTION_WHEELRIGHT	= 10,	//!< ホイール右
-	MOUSEFUNCTION_KEYBEGIN		= 11,	//!< マウスへの割り当て個数＝本当のキー割り当て先頭INDEX
+	MOUSEFUNCTION_DOUBLECLICK	= 0,	// ダブルクリック
+	MOUSEFUNCTION_RIGHT			= 1,	// 右クリック
+	MOUSEFUNCTION_CENTER		= 2,	// 中クリック
+	MOUSEFUNCTION_LEFTSIDE		= 3,	// 左サイドクリック
+	MOUSEFUNCTION_RIGHTSIDE		= 4,	// 右サイドクリック
+	MOUSEFUNCTION_TRIPLECLICK	= 5,	// トリプルクリック
+	MOUSEFUNCTION_QUADCLICK		= 6,	// クアドラプルクリック
+	MOUSEFUNCTION_WHEELUP		= 7,	// ホイールアップ
+	MOUSEFUNCTION_WHEELDOWN		= 8,	// ホイールダウン
+	MOUSEFUNCTION_WHEELLEFT		= 9,	// ホイール左
+	MOUSEFUNCTION_WHEELRIGHT	= 10,	// ホイール右
+	MOUSEFUNCTION_KEYBEGIN		= 11,	// マウスへの割り当て個数＝本当のキー割り当て先頭INDEX
 };
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
@@ -143,7 +143,7 @@ enum ESelectCountMode {
 };
 
 // 2007.09.06 kobake 追加
-//!検索方向
+// 検索方向
 enum ESearchDirection{
 	SEARCH_BACKWARD = 0, // 前方検索 (前を検索)
 	SEARCH_FORWARD  = 1, // 後方検索 (次を検索) (普通)
@@ -152,10 +152,10 @@ enum ESearchDirection{
 // 2007.09.06 kobake 追加
 struct SSearchOption {
 //	ESearchDirection	eDirection;
-//	bool	bPrevOrNext;	//!< false==前方検索 true==後方検索
-	bool	bRegularExp;	//!< true==正規表現
-	bool	bLoHiCase;		//!< true==英大文字小文字の区別
-	bool	bWordOnly;		//!< true==単語のみ検索
+//	bool	bPrevOrNext;	// false==前方検索 true==後方検索
+	bool	bRegularExp;	// true==正規表現
+	bool	bLoHiCase;		// true==英大文字小文字の区別
+	bool	bWordOnly;		// true==単語のみ検索
 
 	SSearchOption()
 		:

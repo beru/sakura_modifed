@@ -97,7 +97,7 @@ wstring CTextInputStream::ReadLineW()
 	return ret;
 }
 
-void CTextInputStream::ReadLineW(std::vector<wchar_t>& line) //!< 1行読込。改行は削る
+void CTextInputStream::ReadLineW(std::vector<wchar_t>& line) // 1行読込。改行は削る
 {
 	m_rawLine.clear();
 	FILE* fp = GetFp();
@@ -164,8 +164,8 @@ CTextOutputStream::~CTextOutputStream()
 }
 
 void CTextOutputStream::WriteString(
-	const wchar_t*	szData,	//!< 書き込む文字列
-	int				nLen	//!< 書き込む文字列長。-1を渡すと自動計算。
+	const wchar_t*	szData,	// 書き込む文字列
+	int				nLen	// 書き込む文字列長。-1を渡すと自動計算。
 )
 {
 	//$$メモ: 文字変換時にいちいちコピーを作ってるので効率が悪い。後々効率改善予定。

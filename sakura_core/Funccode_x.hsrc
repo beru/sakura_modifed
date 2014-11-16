@@ -39,9 +39,9 @@ F_DUMMY_MAX_CODE    = 10,	// 特別10である必要はないけど 10まで予約
 
 //	2007.07.07 genta 状況通知フラグ
 //	コマンドが送られた状況をコマンドと併せて通知する．
-FA_FROMKEYBOARD		 = 0x00010000,	//!< キーボードアクセラレータからのコマンド
-FA_FROMMACRO		 = 0x00020000,	//!< マクロからのコマンド実行
-FA_NONRECORD		 = 0x00040000,	//!< マクロへの記録を抑制する
+FA_FROMKEYBOARD		 = 0x00010000,	// キーボードアクセラレータからのコマンド
+FA_FROMMACRO		 = 0x00020000,	// マクロからのコマンド実行
+FA_NONRECORD		 = 0x00040000,	// マクロへの記録を抑制する
 
 F_PLUGCOMMAND_FIRST			= 20000,
 F_PLUGCOMMAND_LAST			= 21999,

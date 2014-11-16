@@ -27,33 +27,33 @@
 #include "basis/SakuraBasis.h"
 class CNativeW;
 
-//! 文字種類識別子
+// 文字種類識別子
 enum ECharKind {
-	CK_NULL,			//!< NULL
-	CK_TAB,				//!< タブ 0x9<=c<=0x9
-	CK_CR,				//!< CR = 0x0d 
-	CK_LF,				//!< LF = 0x0a 
-	CK_CTRL,			//!< 上記以外の c<0x20
+	CK_NULL,			// NULL
+	CK_TAB,				// タブ 0x9<=c<=0x9
+	CK_CR,				// CR = 0x0d 
+	CK_LF,				// LF = 0x0a 
+	CK_CTRL,			// 上記以外の c<0x20
 
-	CK_SPACE,			//!< 半角のスペース 0x20<=c<=0x20
-	CK_CSYM,			//!< 識別子に使用可能な文字 (英数字、アンダースコア)
-	CK_KATA,			//!< 半角のカタカナ 0xA1<=c<=0xFD
-	CK_LATIN,			//!< ラテン１補助、ラテン拡張のうちアルファベット風のもの 0x00C0<=c<0x0180
-	CK_UDEF,			//!< ユーザ定義キーワード文字（#$@\）
-	CK_ETC,				//!< 半角のその他
+	CK_SPACE,			// 半角のスペース 0x20<=c<=0x20
+	CK_CSYM,			// 識別子に使用可能な文字 (英数字、アンダースコア)
+	CK_KATA,			// 半角のカタカナ 0xA1<=c<=0xFD
+	CK_LATIN,			// ラテン１補助、ラテン拡張のうちアルファベット風のもの 0x00C0<=c<0x0180
+	CK_UDEF,			// ユーザ定義キーワード文字（#$@\）
+	CK_ETC,				// 半角のその他
 
-	CK_ZEN_SPACE,		//!< 全角スペース
-	CK_ZEN_NOBASU,		//!< 伸ばす記号 0x815B<=c<=0x815B 'ー'
-	CK_ZEN_DAKU,		//!< 全角濁点 0x309B<=c<=0x309C 「゛゜」
-	CK_ZEN_CSYM,		//!< 全角版、識別子に使用可能な文字 (英数字、アンダースコア)
+	CK_ZEN_SPACE,		// 全角スペース
+	CK_ZEN_NOBASU,		// 伸ばす記号 0x815B<=c<=0x815B 'ー'
+	CK_ZEN_DAKU,		// 全角濁点 0x309B<=c<=0x309C 「゛゜」
+	CK_ZEN_CSYM,		// 全角版、識別子に使用可能な文字 (英数字、アンダースコア)
 
-	CK_ZEN_KIGO,		//!< 全角の記号
-	CK_HIRA,			//!< ひらがな
-	CK_ZEN_KATA,		//!< 全角カタカナ
-	CK_GREEK,			//!< ギリシャ文字
-	CK_ZEN_ROS,			//!< ロシア文字:
-	CK_ZEN_SKIGO,		//!< 全角の特殊記号
-	CK_ZEN_ETC,			//!< 全角のその他（漢字など）
+	CK_ZEN_KIGO,		// 全角の記号
+	CK_HIRA,			// ひらがな
+	CK_ZEN_KATA,		// 全角カタカナ
+	CK_GREEK,			// ギリシャ文字
+	CK_ZEN_ROS,			// ロシア文字:
+	CK_ZEN_SKIGO,		// 全角の特殊記号
+	CK_ZEN_ETC,			// 全角のその他（漢字など）
 };
 
 class CWordParse {
@@ -76,20 +76,20 @@ public:
 		CNativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	);
 
-	//! 現在位置の文字の種類を調べる
+	// 現在位置の文字の種類を調べる
 	static ECharKind WhatKindOfChar(
 		const wchar_t*	pData,
 		int				pDataLen,
 		int				nIdx
 	);
 
-	//! 二つの文字を結合したものの種類を調べる
+	// 二つの文字を結合したものの種類を調べる
 	static ECharKind WhatKindOfTwoChars(
 		ECharKind		kindPre,
 		ECharKind		kindCur
 	);
 
-	//! 二つの文字を結合したものの種類を調べる for 強調キーワード
+	// 二つの文字を結合したものの種類を調べる for 強調キーワード
 	static ECharKind WhatKindOfTwoChars4KW(
 		ECharKind		kindPre,
 		ECharKind		kindCur

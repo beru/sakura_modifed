@@ -43,7 +43,7 @@
 #include "sakura_rc.h"
 #include "sakura.hh"
 
-//! Popup Help用ID
+// Popup Help用ID
 //@@@ 2001.12.22 Start by MIK: Popup Help
 static const DWORD p_helpids[] = {	//11700
 	IDC_MACRODIRREF,	HIDC_MACRODIRREF,	// マクロディレクトリ参照

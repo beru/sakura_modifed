@@ -85,14 +85,14 @@ void CTextMetrics::SetHankakuWidth(int nHankakuWidth)
 	m_nCharWidth = nHankakuWidth;
 }
 
-//! 半角文字の縦幅を設定。単位はピクセル。
+// 半角文字の縦幅を設定。単位はピクセル。
 void CTextMetrics::SetHankakuHeight(int nHankakuHeight)
 {
 	m_nCharHeight = nHankakuHeight;
 }
 
 
-//!文字間隔基準設定。nDxBasisは半角文字の基準ピクセル幅。SetHankakuDx
+//文字間隔基準設定。nDxBasisは半角文字の基準ピクセル幅。SetHankakuDx
 void CTextMetrics::SetHankakuDx(int nDxBasis)
 {
 	m_nDxBasis = nDxBasis;
@@ -109,14 +109,14 @@ void CTextMetrics::SetHankakuDy(int nDyBasis)
 //                           取得                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 指定した文字列により文字間隔配列を生成する。
+// 指定した文字列により文字間隔配列を生成する。
 const int* CTextMetrics::GenerateDxArray(
-	std::vector<int>* vResultArray, //!< [out] 文字間隔配列の受け取りコンテナ
-	const wchar_t* pText,           //!< [in]  文字列
-	int nLength,                    //!< [in]  文字列長
-	int	nHankakuDx,					//!< [in]  半角文字の文字間隔
-	int	nTabSpace,					//   [in]  TAB幅
-	int	nIndent						//   [in]  インデント(TAB対応用)
+	std::vector<int>* vResultArray, // [out] 文字間隔配列の受け取りコンテナ
+	const wchar_t* pText,           // [in]  文字列
+	int nLength,                    // [in]  文字列長
+	int	nHankakuDx,					// [in]  半角文字の文字間隔
+	int	nTabSpace,					// [in]  TAB幅
+	int	nIndent						// [in]  インデント(TAB対応用)
 )
 {
 	bool bHigh;				// サロゲートペア（上位）
@@ -176,11 +176,11 @@ const int* CTextMetrics::GenerateDxArray(
 		return NULL;
 }
 
-//! 文字列のピクセル幅を返す。
+// 文字列のピクセル幅を返す。
 int CTextMetrics::CalcTextWidth(
-	const wchar_t* pText, //!< 文字列
-	int nLength,          //!< 文字列長
-	const int* pnDx       //!< 文字間隔の入った配列
+	const wchar_t* pText, // 文字列
+	int nLength,          // 文字列長
+	const int* pnDx       // 文字間隔の入った配列
 )
 {
 	// ANSI時代の動作 ※pnDxにはすべて同じ値が入っていた
@@ -194,11 +194,11 @@ int CTextMetrics::CalcTextWidth(
 	return w;
 }
 
-//! 文字列のピクセル幅を返す。
+// 文字列のピクセル幅を返す。
 int CTextMetrics::CalcTextWidth2(
-	const wchar_t* pText, //!< 文字列
-	int nLength,          //!< 文字列長
-	int nHankakuDx        //!< 半角文字の文字間隔
+	const wchar_t* pText, // 文字列
+	int nLength,          // 文字列長
+	int nHankakuDx        // 半角文字の文字間隔
 )
 {
 	// 文字間隔配列を生成

@@ -44,8 +44,8 @@ public:
 	}
 
 private:
-	wchar_t	m_pszLineComment[COMMENT_DELIMITER_NUM][COMMENT_DELIMITER_BUFFERSIZE];	//!< 行コメントデリミタ
-	int		m_nLineCommentPos[COMMENT_DELIMITER_NUM];	//!< 行コメントの開始位置(負数は指定無し)
-	int		m_nLineCommentLen[COMMENT_DELIMITER_NUM];	//!< 行コメント文字列の長さ
+	wchar_t	m_pszLineComment[COMMENT_DELIMITER_NUM][COMMENT_DELIMITER_BUFFERSIZE];	// 行コメントデリミタ
+	int		m_nLineCommentPos[COMMENT_DELIMITER_NUM];	// 行コメントの開始位置(負数は指定無し)
+	int		m_nLineCommentLen[COMMENT_DELIMITER_NUM];	// 行コメント文字列の長さ
 };
 

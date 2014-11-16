@@ -167,7 +167,7 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_bHokanLoHiCase = false;			// 入力補完機能：英大文字小文字を同一視する
 
 	//	2003.06.23 Moca ファイル内からの入力補完機能
-	pType->m_bUseHokanByFile = true;			//! 入力補完 開いているファイル内から候補を探す
+	pType->m_bUseHokanByFile = true;			// 入力補完 開いているファイル内から候補を探す
 	pType->m_bUseHokanByKeyword = false;		// 強調キーワードから入力補完
 
 	// 文字コード設定
@@ -262,6 +262,6 @@ void _DefaultConfig(STypeConfig* pType)
 	//  保存時に改行コードの混在を警告する	2013/4/14 Uchi
 	pType->m_bChkEnterAtEnd = true;
 
-	pType->m_bUseTypeFont = false;			//!< タイプ別フォントの使用
+	pType->m_bUseTypeFont = false;			// タイプ別フォントの使用
 }
 

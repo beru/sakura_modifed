@@ -84,32 +84,32 @@ public:
 	CMarkMgr() : m_nCurpos(0), m_nMaxitem(10) {}
 	// CMarkMgr(const CDocLineMgr *p) : doc(p) {}
 
-	int Count(void) const { return (int)m_cMarkChain.size(); }	//!<	項目数を返す
-	int GetMax(void) const { return m_nMaxitem; }	//!<	最大項目数を返す
-	void SetMax(int max);	//!<	最大項目数を設定
+	int Count(void) const { return (int)m_cMarkChain.size(); }	// 項目数を返す
+	int GetMax(void) const { return m_nMaxitem; }	// 最大項目数を返す
+	void SetMax(int max);	// 最大項目数を設定
 
 	virtual
-	void Add(const CMark& m) = 0;	//!<	要素の追加
+	void Add(const CMark& m) = 0;	// 要素の追加
 
 	//	Apr. 1, 2001 genta
 	virtual
-	void Flush(void);	//!<	要素の全消去
+	void Flush(void);	// 要素の全消去
 
-	//!	要素の取得
+	// 要素の取得
 	const CMark& GetCurrent(void) const { return m_cMarkChain[m_nCurpos]; }
 
-	//	有効性の確認
+	// 有効性の確認
 	bool  CheckCurrent(void) const;
 	bool  CheckPrev(void) const;
 	bool  CheckNext(void) const;
 
-	//	現在位置の移動
+	// 現在位置の移動
 	bool NextValid(void);
 	bool PrevValid(void);
 
 	const CMark& operator[](int index) const { return m_cMarkChain[index]; }
 
-	//	連続取得インターフェース
+	// 連続取得インターフェース
 //	CMarkIterator CurrentPos(void) const { return (CMarkIterator)m_cMarkChain.begin() + m_nCurpos; }
 //	CMarkIterator Begin(void) const { return (CMarkIterator)m_cMarkChain.begin(); }
 //	CMarkIterator End(void) const { return (CMarkIterator)m_cMarkChain.end(); }
@@ -137,9 +137,9 @@ private:
 class CAutoMarkMgr : public CMarkMgr {
 public:
 	virtual
-	void Add(const CMark& m);	//!<	要素の追加
+	void Add(const CMark& m);	// 要素の追加
 	
 	virtual
-	void Expire(void);	//!<	要素数の調整
+	void Expire(void);	// 要素数の調整
 };
 

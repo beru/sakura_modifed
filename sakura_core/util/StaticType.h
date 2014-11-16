@@ -25,7 +25,7 @@
 
 #include "util/string_ex.h"
 
-//! ヒープを用いないvector
+// ヒープを用いないvector
 // 2007.09.23 kobake 作成。
 template <class ELEMENT_TYPE, int MAX_SIZE, class SET_TYPE = const ELEMENT_TYPE&>
 class StaticVector {
@@ -55,7 +55,7 @@ public:
 		m_nCount = nNewSize;
 	}
 	
-	//! 要素数が0でも要素へのポインタを取得
+	// 要素数が0でも要素へのポインタを取得
 	ElementType*  dataPtr() { return m_aElements;}
 
 	// 特殊
@@ -73,7 +73,7 @@ private:
 	ElementType m_aElements[MAX_SIZE];
 };
 
-//! ヒープを用いない文字列クラス
+// ヒープを用いない文字列クラス
 // 2007.09.23 kobake 作成。
 template <class CHAR_TYPE, int N_BUFFER_COUNT>
 class StaticString {

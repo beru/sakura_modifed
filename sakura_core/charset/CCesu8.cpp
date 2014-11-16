@@ -3,7 +3,7 @@
 #include "CCesu8.h"
 #include "CEol.h"
 
-//! BOMデータ取得
+// BOMデータ取得
 void CCesu8::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};

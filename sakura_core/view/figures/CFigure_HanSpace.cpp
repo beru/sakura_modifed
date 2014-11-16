@@ -18,7 +18,7 @@ bool CFigure_HanSpace::Match(const wchar_t* pText) const
 //                         描画実装                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 半角スペース描画
+// 半角スペース描画
 void CFigure_HanSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない

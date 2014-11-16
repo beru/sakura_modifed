@@ -94,27 +94,27 @@ public:
 		m_nTargetDataLen = -1;
 	}
 
-	//! 調査結果の情報を格納
+	// 調査結果の情報を格納
 	void SetInformation(const char*, const int);
 
 protected:
 
-	//! 添え字に使われる優先順位表を作成
+	// 添え字に使われる優先順位表を作成
 	void InitPriorityTable(void);
 
 	// **** 全般
 	// マルチバイト系とUNICODE系とでそれぞれ情報の格納先が違う。
 	// 以下の関数で吸収する
-	int GetIndexById(const ECodeType) const; //!< 文字コードID から情報格納先インデックスを生成
+	int GetIndexById(const ECodeType) const; // 文字コードID から情報格納先インデックスを生成
 
 	// データセッタ/ゲッター
 	void SetEvaluation(const ECodeType, const int, const int);
 	void GetEvaluation(const ECodeType, int*, int *) const;
 
-	//! 調査対象となったデータの長さ（8bit 単位）
+	// 調査対象となったデータの長さ（8bit 単位）
 	int m_nTargetDataLen;
 
-	//! 判定結果を格納するもの
+	// 判定結果を格納するもの
 	unsigned int m_dwStatus;
 
 public:
@@ -154,16 +154,16 @@ public:
 	// **** マルチバイト判定関係の変数その他
 	//
 	static const int NUM_OF_MBCODE = (CODE_CODEMAX - 2);
-	MBCODE_INFO m_aMbcInfo[NUM_OF_MBCODE];   //!< SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
-	MBCODE_INFO* m_apMbcInfo[NUM_OF_MBCODE]; //!< 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
-	int m_nMbcSjisHankata;                   //!< SJIS 半角カタカナのバイト数
-	int m_nMbcEucZenHirakata;                //!< EUC 全角ひらがなカタカナのバイト数
-	int m_nMbcEucZen;                        //!< EUC 全角のバイト数
+	MBCODE_INFO m_aMbcInfo[NUM_OF_MBCODE];   // SJIS, JIS, EUCJP, UTF8, UTF7 情報（優先度に従って格納される）
+	MBCODE_INFO* m_apMbcInfo[NUM_OF_MBCODE]; // 評価順にソートされた SJIS, JIS, EUCJP, UTF8, UTF7, CESU8 の情報
+	int m_nMbcSjisHankata;                   // SJIS 半角カタカナのバイト数
+	int m_nMbcEucZenHirakata;                // EUC 全角ひらがなカタカナのバイト数
+	int m_nMbcEucZen;                        // EUC 全角のバイト数
 
-	//! マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
+	// マルチバイト系の捜査結果を、ポイントが大きい順にソート。 ソートした結果は、m_apMbcInfo に格納
 	void SortMBCInfo(void);
 
-	//! EUC と SJIS が候補のトップ２に上がっているかどうか
+	// EUC と SJIS が候補のトップ２に上がっているかどうか
 	bool IsAmbiguousEucAndSjis(void) {
 		// EUC と SJIS がトップ2に上がった時
 		// かつ、EUC と SJIS のポイント数が同数のとき
@@ -175,7 +175,7 @@ public:
 		);
 	}
 
-	//! SJIS と UTF-8 が候補のトップ2に上がっているかどうか
+	// SJIS と UTF-8 が候補のトップ2に上がっているかどうか
 	bool IsAmbiguousUtf8AndCesu8(void) {
 		// UTF-8 と SJIS がトップ2に上がった時
 		// かつ、UTF-8 と SJIS のポイント数が同数のとき
@@ -188,19 +188,19 @@ public:
 	}
 
 protected:
-	void GuessEucOrSjis(void);	//!< EUC か SJIS かを判定
-	void GuessUtf8OrCesu8(void);	//!< UTF-8 か CESU-8 かを判定
+	void GuessEucOrSjis(void);		// EUC か SJIS かを判定
+	void GuessUtf8OrCesu8(void);	// UTF-8 か CESU-8 かを判定
 public:
 	//
 	// 	**** UTF-16 判定関係の変数その他
 	//
-	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];  //!< UTF-16 LE/BE 情報
-	EBOMType m_eWcBomType;          //!< m_pWcInfo から推測される BOM の種類
+	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];  // UTF-16 LE/BE 情報
+	EBOMType m_eWcBomType;          // m_pWcInfo から推測される BOM の種類
 
 	EBOMType GetBOMType(void) const { return m_eWcBomType; }
 
 protected:
-	//! BOMの種類を推測して m_eWcBomType を設定
+	// BOMの種類を推測して m_eWcBomType を設定
 	void GuessUtf16Bom(void);
 
 

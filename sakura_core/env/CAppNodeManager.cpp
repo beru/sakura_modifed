@@ -336,10 +336,10 @@ int CAppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
 */
 BOOL CAppNodeGroupHandle::PostMessageToAllEditors(
-	UINT		uMsg,		//!< ポストするメッセージ
-	WPARAM		wParam,		//!< 第1メッセージ パラメータ
-	LPARAM		lParam,		//!< 第2メッセージ パラメータ
-	HWND		hWndLast	//!< 最後に送りたいウィンドウ
+	UINT		uMsg,		// ポストするメッセージ
+	WPARAM		wParam,		// 第1メッセージ パラメータ
+	LPARAM		lParam,		// 第2メッセージ パラメータ
+	HWND		hWndLast	// 最後に送りたいウィンドウ
 )
 {
 	EditNode* pWndArr;
@@ -468,7 +468,7 @@ EditNode* CAppNodeManager::GetEditNode(HWND hWnd)
 }
 
 
-//! 無題番号取得
+// 無題番号取得
 int CAppNodeManager::GetNoNameNumber(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();

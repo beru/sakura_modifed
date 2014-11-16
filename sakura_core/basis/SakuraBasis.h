@@ -36,21 +36,21 @@
 
 	// ロジック単位
 	typedef CStrictInteger <
-		0,		//!< 型を分けるための数値。
-		true,	//!< intとの比較を許すかどうか
-		true,	//!< intとの加減算を許すかどうか
-		true,	//!< intへの暗黙の変換を許すかどうか
-		true	//!< intの代入を許すかどうか
+		0,		// 型を分けるための数値。
+		true,	// intとの比較を許すかどうか
+		true,	// intとの加減算を許すかどうか
+		true,	// intへの暗黙の変換を許すかどうか
+		true	// intの代入を許すかどうか
 	>
 	CLogicInt;
 
 	// レイアウト単位
 	typedef CStrictInteger <
-		1,		//!< 型を分けるための数値。
-		true,	//!< intとの比較を許すかどうか
-		true,	//!< intとの加減算を許すかどうか
-		false,	//!< intへの暗黙の変換を許すかどうか
-		true	//!< intの代入を許すかどうか
+		1,		// 型を分けるための数値。
+		true,	// intとの比較を許すかどうか
+		true,	// intとの加減算を許すかどうか
+		false,	// intへの暗黙の変換を許すかどうか
+		true	// intの代入を許すかどうか
 	>
 	CLayoutInt;
 
@@ -127,7 +127,7 @@ inline void TwoPointToRange(
 }
 
 
-//! 2点を対角とする矩形を求める
+// 2点を対角とする矩形を求める
 template <class T, class INT_TYPE>
 inline void TwoPointToRect(
 	CStrictRect<INT_TYPE, CStrictPoint<T, INT_TYPE> >*	prcRect,

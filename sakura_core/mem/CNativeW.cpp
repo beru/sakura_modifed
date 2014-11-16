@@ -23,7 +23,7 @@ CNativeW::CNativeW(const CNativeW& rhs)
 	SetNativeData(rhs);
 }
 
-//! nDataLenは文字単位。
+// nDataLenは文字単位。
 CNativeW::CNativeW(const wchar_t* pData, int nDataLen)
 #if _DEBUG
 	:
@@ -65,25 +65,25 @@ void CNativeW::SetNativeData(const CNativeW& pcNative)
 	CNative::SetRawData(pcNative);
 }
 
-//! (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
+// (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 void CNativeW::AllocStringBuffer(int nDataLen)
 {
 	CNative::AllocBuffer(nDataLen * sizeof(wchar_t));
 }
 
-//! バッファの最後にデータを追加する
+// バッファの最後にデータを追加する
 void CNativeW::AppendString(const wchar_t* pszData)
 {
 	AppendString(pszData, wcslen(pszData));
 }
 
-//! バッファの最後にデータを追加する。nLengthは文字単位。
+// バッファの最後にデータを追加する。nLengthは文字単位。
 void CNativeW::AppendString(const wchar_t* pszData, int nLength)
 {
 	CNative::AppendRawData(pszData, nLength * sizeof(wchar_t));
 }
 
-//! バッファの最後にデータを追加する
+// バッファの最後にデータを追加する
 void CNativeW::AppendNativeData(const CNativeW& cmemData)
 {
 	AppendString(cmemData.GetStringPtr(), cmemData.GetStringLength());
@@ -91,7 +91,7 @@ void CNativeW::AppendNativeData(const CNativeW& cmemData)
 
 // -- -- charからの移行用 -- -- //
 
-//! バッファの内容を置き換える。nDataLenは文字単位。
+// バッファの内容を置き換える。nDataLenは文字単位。
 void CNativeW::SetStringOld(const char* pData, int nDataLen)
 {
 	int nLen;
@@ -100,7 +100,7 @@ void CNativeW::SetStringOld(const char* pData, int nDataLen)
 	delete[] szTmp;
 }
 
-//! バッファの内容を置き換える
+// バッファの内容を置き換える
 void CNativeW::SetStringOld(const char* pszData)
 {
 	SetStringOld(pszData, strlen(pszData));
@@ -114,7 +114,7 @@ void CNativeW::AppendStringOld(const char* pData, int nDataLen)
 	delete[] szTmp;
 }
 
-//! バッファの最後にデータを追加する。pszDataはSJIS。
+// バッファの最後にデータを追加する。pszDataはSJIS。
 void CNativeW::AppendStringOld(const char* pszData)
 {
 	AppendStringOld(pszData, strlen(pszData));
@@ -160,7 +160,7 @@ bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
 //              ネイティブ変換インターフェース                 //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 文字列置換
+// 文字列置換
 void CNativeW::Replace(const wchar_t* pszFrom, const wchar_t* pszTo)
 {
 	CNativeW	cmemWork;
@@ -200,7 +200,7 @@ void CNativeW::Replace(const wchar_t* pszFrom, const wchar_t* pszTo)
 //                  staticインターフェース                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 指定した位置の文字がwchar_t何個分かを返す
+// 指定した位置の文字がwchar_t何個分かを返す
 CLogicInt CNativeW::GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx)
 {
 	if (nIdx >= nDataLen) {
@@ -218,7 +218,7 @@ CLogicInt CNativeW::GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx)
 	return CLogicInt(1);
 }
 
-//! 指定した位置の文字が半角何個分かを返す
+// 指定した位置の文字が半角何個分かを返す
 CLayoutInt CNativeW::GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx)
 {
 	// 文字列範囲外なら 0

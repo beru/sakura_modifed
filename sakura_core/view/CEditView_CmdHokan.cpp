@@ -178,10 +178,10 @@ void CEditView::ShowHokanMgr(CNativeW& cmemData, BOOL bAutoDecided)
 	@date 2010.06.16 Moca ‚Ğ‚ç‚ª‚È‚Å‘±s‚·‚éê‡A’¼‘O‚ğŠ¿š‚É§ŒÀ
 */
 int CEditView::HokanSearchByFile(
-	const wchar_t*	pszKey,			//!< [in]
-	bool			bHokanLoHiCase,	//!< [in] ‰p‘å•¶š¬•¶š‚ğ“¯ˆê‹‚·‚é
-	vector_ex<std::wstring>& 	vKouho,	//!< [in,out] Œó•â
-	int				nMaxKouho		//!< [in] MaxŒó•â”(0 == –³§ŒÀ)
+	const wchar_t*	pszKey,				// [in]
+	bool			bHokanLoHiCase,		// [in] ‰p‘å•¶š¬•¶š‚ğ“¯ˆê‹‚·‚é
+	vector_ex<std::wstring>& 	vKouho,	// [in,out] Œó•â
+	int				nMaxKouho			// [in] MaxŒó•â”(0 == –³§ŒÀ)
 ) {
 	const int nKeyLen = wcslen(pszKey);
 	int nLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();

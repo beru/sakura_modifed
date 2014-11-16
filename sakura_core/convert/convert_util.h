@@ -25,13 +25,13 @@
 
 // 2007.10.18 kobake
 
-//! 全角ひらがな→全角カタカナ (文字数は不変)
+// 全角ひらがな→全角カタカナ (文字数は不変)
 void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength);
 
-//! 全角カタカナ→全角ひらがな (文字数は不変)
+// 全角カタカナ→全角ひらがな (文字数は不変)
 void Convert_ZenkataToZenhira(wchar_t* pData, int nLength);
 
-//! 全角英数→半角英数 (文字数は不変)
+// 全角英数→半角英数 (文字数は不変)
 void Convert_ZeneisuToHaneisu(wchar_t* pData, int nLength);
 
 /*!
@@ -49,7 +49,7 @@ void Convert_ZenkataToHankata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 void Convert_ToHankaku(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* nDstLength);
 
 
-//! 半角英数→全角英数 (文字数は不変)
+// 半角英数→全角英数 (文字数は不変)
 void Convert_HaneisuToZeneisu(wchar_t* pData, int nLength);
 
 /*!

@@ -131,11 +131,11 @@ const char* GetNextLine(
 	static メンバ関数
 */
 const wchar_t* GetNextLineW(
-	const wchar_t*	pData,		//!< [in]	検索文字列
-	int				nDataLen,	//!< [in]	検索文字列の文字数
-	int*			pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
-	int*			pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	CEol*			pcEol		//!< [out]	EOL
+	const wchar_t*	pData,		// [in]	検索文字列
+	int				nDataLen,	// [in]	検索文字列の文字数
+	int*			pnLineLen,	// [out]	1行の文字数を返すただしEOLは含まない
+	int*			pnBgn,		// [i/o]	検索文字列のオフセット位置
+	CEol*			pcEol		// [out]	EOL
 )
 {
 	int nBgn = *pnBgn;
@@ -166,7 +166,7 @@ const wchar_t* GetNextLineW(
 */
 static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 {
-	//! 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca
+	// 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca
 	static const wchar_t* aEolTable[EOL_TYPE_NUM] = {
 		L"",									// EOL_NONE
 		(const wchar_t*)"\x00\x0d\x00\x0a\x00",	// EOL_CRLF
@@ -190,11 +190,11 @@ static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 	static メンバ関数
 */
 const wchar_t* GetNextLineWB(
-	const wchar_t*	pData,	//!< [in]	検索文字列
-	int			nDataLen,	//!< [in]	検索文字列の文字数
-	int*		pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
-	int*		pnBgn,		//!< [i/o]	検索文字列のオフセット位置
-	CEol*		pcEol		//!< [i/o]	EOL
+	const wchar_t*	pData,	// [in]	検索文字列
+	int			nDataLen,	// [in]	検索文字列の文字数
+	int*		pnLineLen,	// [out]	1行の文字数を返すただしEOLは含まない
+	int*		pnBgn,		// [i/o]	検索文字列のオフセット位置
+	CEol*		pcEol		// [i/o]	EOL
 )
 {
 	int nBgn = *pnBgn;
@@ -252,12 +252,12 @@ const char* GetNextLimitedLengthText(const char* pText, int nTextLen, int nLimit
 }
 
 
-//! データを指定「文字数」以内に切り詰める。戻り値は結果の文字数。
+// データを指定「文字数」以内に切り詰める。戻り値は結果の文字数。
 int LimitStringLengthW(
-	const wchar_t*	pszData,		//!< [in]
-	int				nDataLength,	//!< [in]
-	int				nLimitLength,	//!< [in]
-	CNativeW&		cmemDes			//!< [out]
+	const wchar_t*	pszData,		// [in]
+	int				nDataLength,	// [in]
+	int				nLimitLength,	// [in]
+	CNativeW&		cmemDes			// [out]
 )
 {
 	int n = nDataLength;
@@ -337,9 +337,9 @@ void GetLineColumn(const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn)
 		// 結果: a[0]=1, a[1]=23, a[2]=4 となる。
 */
 int scan_ints(
-	const wchar_t*	pszData,	//!< [in]
-	const wchar_t*	pszFormat,	//!< [in]
-	int*			anBuf		//!< [out]
+	const wchar_t*	pszData,	// [in]
+	const wchar_t*	pszFormat,	// [in]
+	int*			anBuf		// [out]
 )
 {
 	// 要素数

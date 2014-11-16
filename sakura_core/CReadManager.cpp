@@ -40,9 +40,9 @@
 	@date	2003/07/26 ryoji BOM‚Ìó‘Ô‚Ìæ“¾‚ğ’Ç‰Á
 */
 EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
-	CDocLineMgr*		pcDocLineMgr,	//!< [out]
-	const SLoadInfo&	sLoadInfo,		//!< [in]
-	SFileInfo*			pFileInfo		//!< [out]
+	CDocLineMgr*		pcDocLineMgr,	// [out]
+	const SLoadInfo&	sLoadInfo,		// [in]
+	SFileInfo*			pFileInfo		// [out]
 )
 {
 	LPCTSTR pszPath = sLoadInfo.cFilePath.c_str();

@@ -11,13 +11,13 @@
 	@retval false	失敗 現在位置のデータは「単語」とは言いきれない気がする。
 */
 bool CWordParse::WhereCurrentWord_2(
-	const wchar_t*	pLine,			//!< [in]  調べるメモリ全体の先頭アドレス
-	CLogicInt		nLineLen,		//!< [in]  調べるメモリ全体の有効長
-	CLogicInt		nIdx,			//!< [in]  調査開始地点:pLineからの相対的な位置
-	CLogicInt*		pnIdxFrom,		//!< [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
-	CLogicInt*		pnIdxTo,		//!< [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
-	CNativeW*		pcmcmWord,		//!< [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
-	CNativeW*		pcmcmWordLeft	//!< [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
+	const wchar_t*	pLine,			// [in]  調べるメモリ全体の先頭アドレス
+	CLogicInt		nLineLen,		// [in]  調べるメモリ全体の有効長
+	CLogicInt		nIdx,			// [in]  調査開始地点:pLineからの相対的な位置
+	CLogicInt*		pnIdxFrom,		// [out] 単語が見つかった場合は、単語の先頭インデックスを返す。
+	CLogicInt*		pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
+	CNativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
+	CNativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 )
 {
 	using namespace WCODE;
@@ -85,7 +85,7 @@ bool CWordParse::WhereCurrentWord_2(
 }
 
 
-//! 識別子に使用可能な文字かどうか
+// 識別子に使用可能な文字かどうか
 inline bool isCSymbol(wchar_t c)
 {
 	//return
@@ -96,7 +96,7 @@ inline bool isCSymbol(wchar_t c)
 	return (c<128 && gm_keyword_char[c] == CK_CSYM);
 }
 
-//! 全角版、識別子に使用可能な文字かどうか
+// 全角版、識別子に使用可能な文字かどうか
 inline bool isCSymbolZen(wchar_t c)
 {
 	return
@@ -107,7 +107,7 @@ inline bool isCSymbolZen(wchar_t c)
 }
 
 
-//! 現在位置の文字の種類を調べる
+// 現在位置の文字の種類を調べる
 ECharKind CWordParse::WhatKindOfChar(
 	const wchar_t*	pData,
 	int				pDataLen,
@@ -167,7 +167,7 @@ ECharKind CWordParse::WhatKindOfChar(
 }
 
 
-//! 二つの文字を結合したものの種類を調べる
+// 二つの文字を結合したものの種類を調べる
 ECharKind CWordParse::WhatKindOfTwoChars(ECharKind kindPre, ECharKind kindCur)
 {
 	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
@@ -202,7 +202,7 @@ ECharKind CWordParse::WhatKindOfTwoChars(ECharKind kindPre, ECharKind kindCur)
 }
 
 
-//! 二つの文字を結合したものの種類を調べる
+// 二つの文字を結合したものの種類を調べる
 ECharKind CWordParse::WhatKindOfTwoChars4KW(ECharKind kindPre, ECharKind kindCur)
 {
 	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
@@ -330,11 +330,11 @@ bool CWordParse::SearchNextWordPosition4KW(
 }
 
 
-//! wcがasciiなら0-127のまま返す。それ以外は0を返す。
+// wcがasciiなら0-127のまま返す。それ以外は0を返す。
 uchar_t wc_to_c(wchar_t wc)
 {
 #if 0
-//! wcがSJIS1バイト文字ならcharに変換して0～255を返す。SJIS2バイト文字なら0を返す。
+// wcがSJIS1バイト文字ならcharに変換して0～255を返す。SJIS2バイト文字なら0を返す。
 	char buf[3]={0, 0, 0};
 	int ret=wctomb(buf, wc);
 	if (ret == -1) return 0;   // エラー
@@ -363,9 +363,9 @@ uchar_t wc_to_c(wchar_t wc)
 	2007.10.23 kobake UNICODE対応。//$ wchar_t専用のテーブル(または判定ルーチン)を用意したほうが効率は上がるはずです。
 */
 BOOL IsURL(
-	const wchar_t*	pszLine,	//!< [in]  文字列
-	int				nLineLen,	//!< [in]  文字列の長さ
-	int*			pnMatchLen	//!< [out] URLの長さ
+	const wchar_t*	pszLine,	// [in]  文字列
+	int				nLineLen,	// [in]  文字列の長さ
+	int*			pnMatchLen	// [out] URLの長さ
 )
 {
 	struct _url_table_t {

@@ -8,7 +8,7 @@
 #include "env/DLLSHAREDATA.h"
 
 
-//! 指定した位置の文字が何バイト文字かを返す
+// 指定した位置の文字が何バイト文字かを返す
 /*!
 	@param[in] pData 位置を求めたい文字列の先頭
 	@param[in] nDataLen 文字列長

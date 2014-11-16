@@ -28,7 +28,7 @@
 
 typedef StaticString<WCHAR, _MAX_PATH> CSearchString;
 
-//! ŒŸõ‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_SEARCH)
+// ŒŸõ‚Ì—š—ğ‚ğŠÇ— (RECENT_FOR_SEARCH)
 class CRecentSearch : public CRecentImp<CSearchString, LPCWSTR> {
 public:
 	// ¶¬

@@ -39,7 +39,7 @@ class CPropertyManager;
 class CGrepAgent;
 enum EFunctionCode;
 
-//!エディタ部分アプリケーションクラス。CNormalProcess1個につき、1個存在。
+// エディタ部分アプリケーションクラス。CNormalProcess1個につき、1個存在。
 class CEditApp : public TSingleton<CEditApp> {
 	friend class TSingleton<CEditApp>;
 	CEditApp() {}
@@ -49,10 +49,10 @@ public:
 	void Create(HINSTANCE hInst, int);
 
 	// モジュール情報
-	HINSTANCE GetAppInstance() const { return m_hInst; }	//!< インスタンスハンドル取得
+	HINSTANCE GetAppInstance() const { return m_hInst; }	// インスタンスハンドル取得
 
 	// ウィンドウ情報
-	CEditWnd* GetEditWindow() { return m_pcEditWnd; }		//!< ウィンドウ取得
+	CEditWnd* GetEditWindow() { return m_pcEditWnd; }		// ウィンドウ取得
 
 	CEditDoc*		GetDocument() { return m_pcEditDoc; }
 	CImageListMgr&	GetIcons() { return m_cIcons; }
@@ -84,7 +84,7 @@ public:
 	CSoundSet			m_cSoundSet;			// サウンド管理
 
 	// GUIオブジェクト
-	CImageListMgr		m_cIcons;				//!< Image List
+	CImageListMgr		m_cIcons;				// Image List
 };
 
 

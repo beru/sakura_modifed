@@ -63,46 +63,46 @@ struct MYDEVMODE {
 };
 
 // 2006.08.14 Moca 用紙情報の統合 PAPER_INFO新設
-//! 用紙情報
+// 用紙情報
 struct PAPER_INFO {
-	int				m_nId;			//!< 用紙ID
-	short			m_nAllWidth;	//!< 幅 (0.1mm単位)
-	short			m_nAllHeight;	//!< 高さ (0.1mm単位)
-	const TCHAR*	m_pszName;		//!< 用紙名称
+	int				m_nId;			// 用紙ID
+	short			m_nAllWidth;	// 幅 (0.1mm単位)
+	short			m_nAllHeight;	// 高さ (0.1mm単位)
+	const TCHAR*	m_pszName;		// 用紙名称
 };
 
 struct PRINTSETTING;
 
-//! 印刷設定
+// 印刷設定
 #define POS_LEFT	0
 #define POS_CENTER	1
 #define POS_RIGHT	2
 #define HEADER_MAX	100
 #define FOOTER_MAX	HEADER_MAX
 struct PRINTSETTING {
-	TCHAR			m_szPrintSettingName[32 + 1];		//!< 印刷設定の名前
-	TCHAR			m_szPrintFontFaceHan[LF_FACESIZE];	//!< 印刷フォント
-	TCHAR			m_szPrintFontFaceZen[LF_FACESIZE];	//!< 印刷フォント
-	int				m_nPrintFontWidth;					//!< 印刷フォント幅(1/10mm単位単位)
-	int				m_nPrintFontHeight;					//!< 印刷フォント高さ(1/10mm単位単位)
-	int				m_nPrintDansuu;						//!< 段組の段数
-	int				m_nPrintDanSpace;					//!< 段と段の隙間(1/10mm単位)
-	int				m_nPrintLineSpacing;				//!< 印刷フォント行間 文字の高さに対する割合(%)
-	int				m_nPrintMarginTY;					//!< 印刷用紙マージン 上(mm単位)
-	int				m_nPrintMarginBY;					//!< 印刷用紙マージン 下(mm単位)
-	int				m_nPrintMarginLX;					//!< 印刷用紙マージン 左(mm単位)
-	int				m_nPrintMarginRX;					//!< 印刷用紙マージン 右(mm単位)
-	short			m_nPrintPaperOrientation;			//!< 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
-	short			m_nPrintPaperSize;					//!< 用紙サイズ
-	bool			m_bColorPrint;						//!< カラー印刷			// 2013/4/26 Uchi
-	bool			m_bPrintWordWrap;					//!< 英文ワードラップする
-	bool			m_bPrintKinsokuHead;				//!< 行頭禁則する		//@@@ 2002.04.09 MIK
-	bool			m_bPrintKinsokuTail;				//!< 行末禁則する		//@@@ 2002.04.09 MIK
-	bool			m_bPrintKinsokuRet;					//!< 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
-	bool			m_bPrintKinsokuKuto;				//!< 句読点のぶらさげ	//@@@ 2002.04.17 MIK
-	bool			m_bPrintLineNumber;					//!< 行番号を印刷する
+	TCHAR			m_szPrintSettingName[32 + 1];		// 印刷設定の名前
+	TCHAR			m_szPrintFontFaceHan[LF_FACESIZE];	// 印刷フォント
+	TCHAR			m_szPrintFontFaceZen[LF_FACESIZE];	// 印刷フォント
+	int				m_nPrintFontWidth;					// 印刷フォント幅(1/10mm単位単位)
+	int				m_nPrintFontHeight;					// 印刷フォント高さ(1/10mm単位単位)
+	int				m_nPrintDansuu;						// 段組の段数
+	int				m_nPrintDanSpace;					// 段と段の隙間(1/10mm単位)
+	int				m_nPrintLineSpacing;				// 印刷フォント行間 文字の高さに対する割合(%)
+	int				m_nPrintMarginTY;					// 印刷用紙マージン 上(mm単位)
+	int				m_nPrintMarginBY;					// 印刷用紙マージン 下(mm単位)
+	int				m_nPrintMarginLX;					// 印刷用紙マージン 左(mm単位)
+	int				m_nPrintMarginRX;					// 印刷用紙マージン 右(mm単位)
+	short			m_nPrintPaperOrientation;			// 用紙方向 DMORIENT_PORTRAIT (1) または DMORIENT_LANDSCAPE (2)
+	short			m_nPrintPaperSize;					// 用紙サイズ
+	bool			m_bColorPrint;						// カラー印刷			// 2013/4/26 Uchi
+	bool			m_bPrintWordWrap;					// 英文ワードラップする
+	bool			m_bPrintKinsokuHead;				// 行頭禁則する		//@@@ 2002.04.09 MIK
+	bool			m_bPrintKinsokuTail;				// 行末禁則する		//@@@ 2002.04.09 MIK
+	bool			m_bPrintKinsokuRet;					// 改行文字のぶら下げ	//@@@ 2002.04.13 MIK
+	bool			m_bPrintKinsokuKuto;				// 句読点のぶらさげ	//@@@ 2002.04.17 MIK
+	bool			m_bPrintLineNumber;					// 行番号を印刷する
 
-	MYDEVMODE		m_mdmDevMode;						//!< プリンタ設定 DEVMODE用
+	MYDEVMODE		m_mdmDevMode;						// プリンタ設定 DEVMODE用
 	BOOL			m_bHeaderUse[3];					// ヘッダが使われているか？
 	EDIT_CHAR		m_szHeaderForm[3][HEADER_MAX];		// 0:左寄せヘッダ。1:中央寄せヘッダ。2:右寄せヘッダ。
 	BOOL			m_bFooterUse[3];					// フッタが使われているか？
@@ -126,8 +126,8 @@ struct PRINTSETTING {
 */
 class CPrint {
 public:
-	static const PAPER_INFO m_paperInfoArr[];	//!< 用紙情報一覧
-	static const int m_nPaperInfoArrNum; //!< 用紙情報一覧の要素数
+	static const PAPER_INFO m_paperInfoArr[];	// 用紙情報一覧
+	static const int m_nPaperInfoArrNum; // 用紙情報一覧の要素数
 
 	/*
 	||	static関数群
@@ -195,7 +195,7 @@ private:
 	/*
 	||  メンバ変数
 	*/
-	HGLOBAL	m_hDevMode;							//!< 現在プリンタのDEVMODEへのメモリハンドル
-	HGLOBAL	m_hDevNames;						//!< 現在プリンタのDEVNAMESへのメモリハンドル
+	HGLOBAL	m_hDevMode;							// 現在プリンタのDEVMODEへのメモリハンドル
+	HGLOBAL	m_hDevNames;						// 現在プリンタのDEVNAMESへのメモリハンドル
 };
 

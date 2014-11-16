@@ -34,7 +34,7 @@
 #include "dlg/CDialog.h"
 #include "recent/CRecent.h"
 
-//!「履歴とお気に入りの管理」ダイアログ
+// 履歴とお気に入りの管理」ダイアログ
 // アクセス方法：[設定] - [履歴の管理]
 class CDlgFavorite : public CDialog {
 public:
@@ -91,7 +91,7 @@ private:
 	CRecentCurDir		m_cRecentCurDir;
 
 	enum {
-		//! 管理数
+		// 管理数
 		FAVORITE_INFO_MAX = 10 // 管理数 +1(番兵)
 	};
 
@@ -109,9 +109,9 @@ private:
 	};
 
 	struct ListViewSortInfo {
-		HWND	hListView;		//!< リストビューの HWND
-		int		nSortColumn;	//!< ソート列 -1で未指定
-		bool	bSortAscending; //!< ソートが昇順
+		HWND	hListView;		// リストビューの HWND
+		int		nSortColumn;	// ソート列 -1で未指定
+		bool	bSortAscending; // ソートが昇順
 	};
 
 	FavoriteInfo        m_aFavoriteInfo[FAVORITE_INFO_MAX];

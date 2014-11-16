@@ -29,8 +29,8 @@ class CDlgTypeList : public CDialog {
 public:
 	// Œ^
 	struct SResult {
-		CTypeConfig	cDocumentType;	//!< •¶‘Ží—Þ
-		bool		bTempChange;	//!< ‹ŒPROP_TEMPCHANGE_FLAG
+		CTypeConfig	cDocumentType;	// •¶‘Ží—Þ
+		bool		bTempChange;	// ‹ŒPROP_TEMPCHANGE_FLAG
 	};
 
 public:

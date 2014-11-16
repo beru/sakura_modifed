@@ -69,9 +69,9 @@ bool CLayoutMgr::IsKinsokuKuto(wchar_t wc)
 	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
 */
 bool CLayoutMgr::IsKinsokuPosHead(
-	CLayoutInt nRest,		//!< [in] 行の残り文字数
-	CLayoutInt nCharKetas,	//!< [in] 現在位置の文字サイズ
-	CLayoutInt nCharKetas2	//!< [in] 現在位置の次の文字サイズ
+	CLayoutInt nRest,		// [in] 行の残り文字数
+	CLayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
+	CLayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
 )
 {
 	switch ((Int)nRest) {
@@ -109,9 +109,9 @@ bool CLayoutMgr::IsKinsokuPosHead(
 	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
 */
 bool CLayoutMgr::IsKinsokuPosTail(
-	CLayoutInt nRest,		//!< [in] 行の残り文字数
-	CLayoutInt nCharKetas,	//!< [in] 現在位置の文字サイズ
-	CLayoutInt nCharKetas2	//!< [in] 現在位置の次の文字サイズ
+	CLayoutInt nRest,		// [in] 行の残り文字数
+	CLayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
+	CLayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
 )
 {
 	switch ((Int)nRest) {

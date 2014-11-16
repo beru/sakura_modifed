@@ -309,7 +309,7 @@ BOOL CDlgPluginOption::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	col.iSubItem = 1;
 	ListView_InsertColumn(hwndList, 1, &col);
 
-	/* 行選択 */
+	// 行選択
 	lngStyle = ListView_GetExtendedListViewStyle(hwndList);
 	lngStyle |= LVS_EX_FULLROWSELECT;
 	ListView_SetExtendedListViewStyle(hwndList, lngStyle);

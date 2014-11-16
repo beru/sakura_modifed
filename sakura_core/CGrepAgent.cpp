@@ -476,20 +476,20 @@ DWORD CGrepAgent::DoGrep(
 */
 int CGrepAgent::DoGrepTree(
 	CEditView*				pcViewDst,
-	CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
-	const wchar_t*			pszKey,				//!< [in] 検索キー
-	CGrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン
-	CGrepEnumFiles&			cGrepExceptAbsFiles,	//!< [in] 除外ファイル絶対パス
-	CGrepEnumFolders&		cGrepExceptAbsFolders,	//!< [in] 除外フォルダ絶対パス
-	const TCHAR*			pszPath,			//!< [in] 検索対象パス
-	const TCHAR*			pszBasePath,		//!< [in] 検索対象パス(ベースフォルダ)
-	const SSearchOption&	sSearchOption,		//!< [in] 検索オプション
-	const SGrepOption&		sGrepOption,		//!< [in] Grepオプション
-	const CSearchStringPattern& pattern,		//!< [in] 検索パターン
-	CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
-	int						nNest,				//!< [in] ネストレベル
-	bool&					bOutputBaseFolder,	//!< [i/o] ベースフォルダ名出力
-	int*					pnHitCount			//!< [i/o] ヒット数の合計
+	CDlgCancel*				pcDlgCancel,			// [in] Cancelダイアログへのポインタ
+	const wchar_t*			pszKey,					// [in] 検索キー
+	CGrepEnumKeys&			cGrepEnumKeys,			// [in] 検索対象ファイルパターン
+	CGrepEnumFiles&			cGrepExceptAbsFiles,	// [in] 除外ファイル絶対パス
+	CGrepEnumFolders&		cGrepExceptAbsFolders,	// [in] 除外フォルダ絶対パス
+	const TCHAR*			pszPath,				// [in] 検索対象パス
+	const TCHAR*			pszBasePath,			// [in] 検索対象パス(ベースフォルダ)
+	const SSearchOption&	sSearchOption,			// [in] 検索オプション
+	const SGrepOption&		sGrepOption,			// [in] Grepオプション
+	const CSearchStringPattern& pattern,			// [in] 検索パターン
+	CBregexp*				pRegexp,				// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	int						nNest,					// [in] ネストレベル
+	bool&					bOutputBaseFolder,		// [i/o] ベースフォルダ名出力
+	int*					pnHitCount				// [i/o] ヒット数の合計
 )
 {
 	::DlgItem_SetText(pcDlgCancel->GetHwnd(), IDC_STATIC_CURPATH, pszPath);
@@ -678,17 +678,17 @@ void CGrepAgent::SetGrepResult(
 	// データ格納先
 	CNativeW& cmemMessage,
 	// マッチしたファイルの情報
-	const TCHAR*		pszFilePath,	//!< [in] フルパス or 相対パス
-	const TCHAR*		pszCodeName,	//!< [in] 文字コード情報．" [SJIS]"とか
+	const TCHAR*		pszFilePath,	// [in] フルパス or 相対パス
+	const TCHAR*		pszCodeName,	// [in] 文字コード情報．" [SJIS]"とか
 	// マッチした行の情報
-	int			nLine,					//!< [in] マッチした行番号(1～)
-	int			nColumn,				//!< [in] マッチした桁番号(1～)
-	const wchar_t*	pCompareData,		//!< [in] 行の文字列
-	int			nLineLen,				//!< [in] 行の文字列の長さ
-	int			nEolCodeLen,			//!< [in] EOLの長さ
+	int			nLine,					// [in] マッチした行番号(1～)
+	int			nColumn,				// [in] マッチした桁番号(1～)
+	const wchar_t*	pCompareData,		// [in] 行の文字列
+	int			nLineLen,				// [in] 行の文字列の長さ
+	int			nEolCodeLen,			// [in] EOLの長さ
 	// マッチした文字列の情報
-	const wchar_t*	pMatchData,			//!< [in] マッチした文字列
-	int			nMatchLen,				//!< [in] マッチした文字列の長さ
+	const wchar_t*	pMatchData,			// [in] マッチした文字列
+	int			nMatchLen,				// [in] マッチした文字列の長さ
 	// オプション
 	const SGrepOption&	sGrepOption
 )
@@ -825,22 +825,22 @@ static void OutputPathInfo(
 	@date 2004/03/28 genta 不要な引数nNest, bGrepSubFolder, pszPathを削除
 */
 int CGrepAgent::DoGrepFile(
-	CEditView*				pcViewDst,			//!< 
-	CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
-	const wchar_t*			pszKey,				//!< [in] 検索パターン
-	const TCHAR*			pszFile,			//!< [in] 処理対象ファイル名(表示用)
-	const SSearchOption&	sSearchOption,		//!< [in] 検索オプション
-	const SGrepOption&		sGrepOption,		//!< [in] Grepオプション
-	const CSearchStringPattern& pattern,		//!< [in] 検索パターン
-	CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
-	int*					pnHitCount,			//!< [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
-	const TCHAR*			pszFullPath,		//!< [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
-	const TCHAR*			pszBaseFolder,		//!< [in] 検索フォルダ C:\Folder
-	const TCHAR*			pszFolder,			//!< [in] サブフォルダ SubFolder (!bGrepSeparateFolder) または C:\Folder\SubFolder (!bGrepSeparateFolder)
-	const TCHAR*			pszRelPath,			//!< [in] 相対パス File.ext(bGrepSeparateFolder) または  SubFolder\File.ext(!bGrepSeparateFolder)
-	bool&					bOutputBaseFolder,	//!< 
-	bool&					bOutputFolderName,	//!< 
-	CNativeW&				cmemMessage			//!< 
+	CEditView*				pcViewDst,			// 
+	CDlgCancel*				pcDlgCancel,		// [in] Cancelダイアログへのポインタ
+	const wchar_t*			pszKey,				// [in] 検索パターン
+	const TCHAR*			pszFile,			// [in] 処理対象ファイル名(表示用)
+	const SSearchOption&	sSearchOption,		// [in] 検索オプション
+	const SGrepOption&		sGrepOption,		// [in] Grepオプション
+	const CSearchStringPattern& pattern,		// [in] 検索パターン
+	CBregexp*				pRegexp,			// [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
+	int*					pnHitCount,			// [i/o] ヒット数の合計．元々の値に見つかった数を加算して返す．
+	const TCHAR*			pszFullPath,		// [in] 処理対象ファイルパス C:\Folder\SubFolder\File.ext
+	const TCHAR*			pszBaseFolder,		// [in] 検索フォルダ C:\Folder
+	const TCHAR*			pszFolder,			// [in] サブフォルダ SubFolder (!bGrepSeparateFolder) または C:\Folder\SubFolder (!bGrepSeparateFolder)
+	const TCHAR*			pszRelPath,			// [in] 相対パス File.ext(bGrepSeparateFolder) または  SubFolder\File.ext(!bGrepSeparateFolder)
+	bool&					bOutputBaseFolder,	// 
+	bool&					bOutputFolderName,	// 
+	CNativeW&				cmemMessage			// 
 )
 {
 	int		nHitCount;

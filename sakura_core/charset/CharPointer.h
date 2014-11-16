@@ -25,7 +25,7 @@
 
 #include "charset/charcode.h"
 
-//!< ディレクトリを除いた、ファイル名だけを取得する
+// ディレクトリを除いた、ファイル名だけを取得する
 class CharPointerA {
 public:
 	CharPointerA() { }
@@ -33,9 +33,9 @@ public:
 	CharPointerA(const CharPointerA& rhs) : m_p(rhs.m_p) { }
 
 	// 進む
-	const char* operator ++ ()   { _forward(); return this->m_p; }                  //!< ++p;
-	const char* operator ++ (int) { CharPointerA tmp; _forward(); return tmp.m_p;  } //!< p++;
-	const char* operator += (size_t n) { while (n-- > 0) _forward(); return this->m_p; } //!< p+=n;
+	const char* operator ++ ()   { _forward(); return this->m_p; }							// ++p;
+	const char* operator ++ (int) { CharPointerA tmp; _forward(); return tmp.m_p;  }		// p++;
+	const char* operator += (size_t n) { while (n-- > 0) _forward(); return this->m_p; }	// p+=n;
 	
 	// 進んだ値
 	const char* operator + (size_t n) const { CharPointerA tmp = *this; return tmp += n; }
@@ -52,11 +52,11 @@ public:
 	const char* GetPointer() const { return m_p; }
 
 protected:
-	void _forward() { //!< 1文字進む
+	void _forward() { // 1文字進む
 		if (_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1])) m_p += 2;
 		else m_p += 1;
 	}
-	WORD _get() const { //!< 1文字取得する
+	WORD _get() const { // 1文字取得する
 		if (_IS_SJIS_1(m_p[0]) && _IS_SJIS_2(m_p[1])) return *((WORD*)m_p);
 		else return *m_p;
 	}
@@ -73,9 +73,9 @@ public:
 	CharPointerW(const CharPointerW& rhs) : m_p(rhs.m_p) { }
 
 	// 進む
-	const wchar_t* operator ++ ()   { _forward(); return this->m_p; }                   //!< ++p;
-	const wchar_t* operator ++ (int) { CharPointerW tmp; _forward(); return tmp.m_p;   } //!< p++;
-	const wchar_t* operator += (size_t n) { while (n-- > 0) _forward(); return this->m_p;  } //!< p+=n;
+	const wchar_t* operator ++ ()   { _forward(); return this->m_p; }							// ++p;
+	const wchar_t* operator ++ (int) { CharPointerW tmp; _forward(); return tmp.m_p;   }		// p++;
+	const wchar_t* operator += (size_t n) { while (n-- > 0) _forward(); return this->m_p;  }	// p+=n;
 	
 	// 進んだ値
 	const wchar_t* operator + (size_t n) const { CharPointerW tmp = *this; return tmp += n; }
@@ -92,10 +92,10 @@ public:
 	const wchar_t* GetPointer() const { return m_p; }
 
 protected:
-	void _forward() { //!< 1文字進む
+	void _forward() { // 1文字進む
 		++m_p;
 	}
-	WORD _get() const { //!< 1文字取得する
+	WORD _get() const { // 1文字取得する
 		return *m_p;
 	}
 

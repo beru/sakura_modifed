@@ -4,7 +4,7 @@
 #include "CEol.h"
 #include "util/string_ex2.h"
 
-//! 空白→TAB変換。単独のスペースは変換しない
+// 空白→TAB変換。単独のスペースは変換しない
 bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 {
 	using namespace WCODE;

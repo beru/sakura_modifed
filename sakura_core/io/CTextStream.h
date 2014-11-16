@@ -44,11 +44,11 @@ public:
 	virtual ~CTextInputStream();
 
 	// 操作
-	std::wstring ReadLineW(); //!< 1行読込。改行は削る
-	void ReadLineW(std::vector<wchar_t>& line); //!< 1行読込。改行は削る
+	std::wstring ReadLineW(); // 1行読込。改行は削る
+	void ReadLineW(std::vector<wchar_t>& line); // 1行読込。改行は削る
 
 private:
-	bool m_bIsUtf8; //!< UTF-8ならtrue
+	bool m_bIsUtf8; // UTF-8ならtrue
 	std::vector<char> m_rawLine;
 };
 

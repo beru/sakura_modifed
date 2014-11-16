@@ -29,7 +29,7 @@
 
 typedef StaticString<TCHAR, _MAX_PATH> CCurDirString;
 
-//! コマンドの履歴を管理 (RECENT_FOR_CUR_DIR)
+// コマンドの履歴を管理 (RECENT_FOR_CUR_DIR)
 class CRecentCurDir : public CRecentImp<CCurDirString, LPCTSTR> {
 public:
 	// 生成

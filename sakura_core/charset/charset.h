@@ -30,20 +30,20 @@
 // 文字コードセット種別
 // 2007.08.14 kobake CODE_ERROR, CODE_DEFAULT 追加
 enum ECodeType {
-	CODE_SJIS,						//!< SJIS				(MS-CP932(Windows-31J), シフトJIS(Shift_JIS))
-	CODE_JIS,						//!< JIS				(MS-CP5022x(ISO-2022-JP-MS)ではない)
-	CODE_EUC,						//!< EUC				(MS-CP51932, eucJP-ms(eucJP-open)ではない)
-	CODE_UNICODE,					//!< Unicode			(UTF-16 LittleEndian(UCS-2))
-	CODE_UTF8,						//!< UTF-8(UCS-2)
-	CODE_UTF7,						//!< UTF-7(UCS-2)
-	CODE_UNICODEBE,					//!< Unicode BigEndian	(UTF-16 BigEndian(UCS-2))
-	CODE_CESU8,						//!< CESU-8
-	CODE_LATIN1,					//!< Latin1				(Latin1, 欧文, Windows-1252, Windows Codepage 1252 West European)
+	CODE_SJIS,						// SJIS				(MS-CP932(Windows-31J), シフトJIS(Shift_JIS))
+	CODE_JIS,						// JIS				(MS-CP5022x(ISO-2022-JP-MS)ではない)
+	CODE_EUC,						// EUC				(MS-CP51932, eucJP-ms(eucJP-open)ではない)
+	CODE_UNICODE,					// Unicode			(UTF-16 LittleEndian(UCS-2))
+	CODE_UTF8,						// UTF-8(UCS-2)
+	CODE_UTF7,						// UTF-7(UCS-2)
+	CODE_UNICODEBE,					// Unicode BigEndian	(UTF-16 BigEndian(UCS-2))
+	CODE_CESU8,						// CESU-8
+	CODE_LATIN1,					// Latin1				(Latin1, 欧文, Windows-1252, Windows Codepage 1252 West European)
 	CODE_CODEMAX,
-	CODE_AUTODETECT	= 99,			//!< 文字コード自動判別
-	CODE_ERROR      = -1,			//!< エラー
-	CODE_NONE       = -1,			//!< 未検出
-	CODE_DEFAULT    = CODE_SJIS,	//!< デフォルトの文字コード
+	CODE_AUTODETECT	= 99,			// 文字コード自動判別
+	CODE_ERROR      = -1,			// エラー
+	CODE_NONE       = -1,			// 未検出
+	CODE_DEFAULT    = CODE_SJIS,	// デフォルトの文字コード
 	/*
 		- MS-CP50220 
 			Unicode から cp50220 への変換時に、
@@ -66,12 +66,12 @@ enum ECodeType {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 2007.08.14 kobake 追加
-//!有効な文字コードセットならtrue
+// 有効な文字コードセットならtrue
 // 2010/6/21	inlineをはずす
 bool IsValidCodeType(int code);
 
 // 2007.08.14 kobake 追加
-//!有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
+// 有効な文字コードセットならtrue。ただし、SJISは除く(ファイル一覧に文字コードを[]付きで表示のため)
 inline bool IsValidCodeTypeExceptSJIS(int code)
 {
 	return IsValidCodeType(code) && code != CODE_SJIS;
@@ -79,7 +79,7 @@ inline bool IsValidCodeTypeExceptSJIS(int code)
 
 // 2010/6/21 Uchi 削除
 // 2007.08.14 kobake 追加
-//!ECodeType型で表せる値ならtrue
+// ECodeType型で表せる値ならtrue
 //inline bool IsInECodeType(int code)
 //{
 //	return (code >= 0 && code < CODE_CODEMAX) || code == CODE_ERROR || code == CODE_AUTODETECT;

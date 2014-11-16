@@ -57,10 +57,10 @@ public:
 	ECodeType FileOpen(LPCTSTR, ECodeType, int, bool* pbBomExist = NULL);		// 指定文字コードでファイルをオープンする
 	void FileClose(void);					// 明示的にファイルをクローズする
 
-	//! 1行データをロードする 順アクセス用
+	// 1行データをロードする 順アクセス用
 	EConvertResult ReadLine(
-		CNativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ
-		CEol*		pcEol			//!< [i/o]
+		CNativeW*	pUnicodeBuffer,	// [out] UNICODEデータ受け取りバッファ
+		CEol*		pcEol			// [i/o]
 	);
 
 // 未実装関数郡
@@ -68,17 +68,17 @@ public:
 //	cosnt wchar_t* ReadAtLineW(int, int*, CEol*); // 指定行目をロードする(Unicode版)
 //	bool ReadIgnoreLine(void); // 1行読み飛ばす
 
-	//! ファイルの日時を取得する
+	// ファイルの日時を取得する
 	BOOL GetFileTime(FILETIME*, FILETIME*, FILETIME*); // inline
 
 	// Jun. 08, 2003 Moca
-	//! 開いたファイルにはBOMがあるか？
+	// 開いたファイルにはBOMがあるか？
 	bool IsBomExist(void) { return m_bBomExist; }
 
-	//! 現在の進行率を取得する(0% - 100%) 若干誤差が出る
+	// 現在の進行率を取得する(0% - 100%) 若干誤差が出る
 	int GetPercent(void);
 
-	//! ファイルサイズを取得する
+	// ファイルサイズを取得する
 	inline int GetFileSize(void) { return m_nFileSize; }
 
 	static const int gm_nBufSizeDef; // ロード用バッファサイズの初期値
@@ -117,10 +117,10 @@ protected:
 	// Jun. 13, 2003 Moca
 	// 状態をenumとしてわかりやすく．
 	enum enumFileLoadMode{
-		FLMODE_CLOSE = 0,	//!< 初期状態
-		FLMODE_OPEN,		//!< ファイルオープンのみ
-		FLMODE_READY,		//!< 順アクセスOK
-		FLMODE_READBUFEND	//!<ファイルの終端までバッファに入れた
+		FLMODE_CLOSE = 0,	// 初期状態
+		FLMODE_OPEN,		// ファイルオープンのみ
+		FLMODE_READY,		// 順アクセスOK
+		FLMODE_READBUFEND	// ファイルの終端までバッファに入れた
 	};
 	enumFileLoadMode	m_eMode;	// 現在の読み込み状態
 

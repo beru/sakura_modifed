@@ -28,7 +28,7 @@
 const int MAX_X = MAX_TOOLBAR_ICON_X;
 const int MAX_Y = MAX_TOOLBAR_ICON_Y;	// 2002.01.17
 
-//! コンストラクタ
+// コンストラクタ
 CImageListMgr::CImageListMgr()
 	:
 	m_cx(16),

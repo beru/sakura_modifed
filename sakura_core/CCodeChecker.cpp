@@ -11,7 +11,7 @@
 //                     セーブ時チェック                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! CDocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
+// CDocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
 static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
 {
 	bool bMix = false;
@@ -33,7 +33,7 @@ static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
 	return bMix;
 }
 
-//! CDocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
+// CDocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
 static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECodeType eCodeType)
 {
 	CDocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();

@@ -48,7 +48,7 @@
 #endif
 
 
-//! USE_UNFIXED_FONT を定義すると、フォント選択ダイアログで等幅フォント以外も選べるようになる
+// USE_UNFIXED_FONT を定義すると、フォント選択ダイアログで等幅フォント以外も選べるようになる
 //#define USE_UNFIXED_FONT
 
 

@@ -79,7 +79,7 @@ CDlgKeywordSelect::~CDlgKeywordSelect()
 }
 
 
-//! モーダルダイアログの表示
+// モーダルダイアログの表示
 int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
 	for (int i = 0; i < KEYWORD_SELECT_NUM; i++) {
@@ -95,7 +95,7 @@ int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 	return TRUE;
 }
 
-//! 初期化処理
+// 初期化処理
 BOOL CDlgKeywordSelect::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
@@ -116,7 +116,7 @@ BOOL CDlgKeywordSelect::OnBnClicked(int wID)
 	return CDialog::OnBnClicked(wID);
 }
 
-//! ダイアログデータの設定
+// ダイアログデータの設定
 void CDlgKeywordSelect::SetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
@@ -145,7 +145,7 @@ void CDlgKeywordSelect::SetData(void)
 }
 
 
-//! ダイアログデータの設定
+// ダイアログデータの設定
 int CDlgKeywordSelect::GetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {

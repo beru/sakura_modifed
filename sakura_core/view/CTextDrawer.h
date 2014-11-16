@@ -53,7 +53,7 @@ public:
 	void DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int nLength, bool bTransparent = false) const; // ƒeƒLƒXƒg•\¦
 
 	// -- -- w’èŒ…cü•`‰æ -- -- //
-	//!	w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
+	// w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
 	void DispVerticalLines(CGraphics& gr, int nTop, int nBottom, CLayoutInt nLeftCol, CLayoutInt nRightCol) const;
 
 	// -- -- Ü‚è•Ô‚µŒ…cü•`‰æ -- -- //

@@ -363,7 +363,7 @@ void CESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
 
 	do { // 検査ループ --------------------------------------------------
 
-		/* セットD/O 文字列の検査 */
+		// セットD/O 文字列の検査
 		CheckUtf7DPart(pr, pr_end - pr, &pr_next, &berror);
 		if (berror || pr_next == pr_end) {
 			// エラーが出た、または、データの検査が終了した場合、検査終了。
@@ -372,7 +372,7 @@ void CESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
 
 		pr = pr_next;
 
-		/* セットB 文字列の検査 */
+		// セットB 文字列の検査
 		nlen_setb = CheckUtf7BPart(pr, pr_end - pr, &pr_next, &berror, 0);
 		if (pr + nlen_setb == pr_next && pr_next == pr_end) {
 			// セットＢ文字列の終端文字 '-' が無い、かつ、

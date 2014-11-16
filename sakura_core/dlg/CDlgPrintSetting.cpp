@@ -718,14 +718,14 @@ const struct {
 	int minval;
 	int maxval;
 } sDataRange[] = {
-	{ IDC_EDIT_FONTHEIGHT,	7,	200},	//!< 1/10mm
-	{ IDC_EDIT_LINESPACE,	0,	150},	//!< %
+	{ IDC_EDIT_FONTHEIGHT,	7,	200},	// 1/10mm
+	{ IDC_EDIT_LINESPACE,	0,	150},	// %
 	{ IDC_EDIT_DANSUU,		1,	4  },
-	{ IDC_EDIT_DANSPACE,	0,	30 },	//!< mm
-	{ IDC_EDIT_MARGINTY,	0,	50 },	//!< mm
-	{ IDC_EDIT_MARGINBY,	0,	50 },	//!< mm
-	{ IDC_EDIT_MARGINLX,	0,	50 },	//!< mm
-	{ IDC_EDIT_MARGINRX,	0,	50 },	//!< mm
+	{ IDC_EDIT_DANSPACE,	0,	30 },	// mm
+	{ IDC_EDIT_MARGINTY,	0,	50 },	// mm
+	{ IDC_EDIT_MARGINBY,	0,	50 },	// mm
+	{ IDC_EDIT_MARGINLX,	0,	50 },	// mm
+	{ IDC_EDIT_MARGINRX,	0,	50 },	// mm
 };
 
 // スピンコントロールの処理
@@ -807,7 +807,7 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 	dmDummy.dmFields = DM_PAPERSIZE | DMORIENT_LANDSCAPE;
 	dmDummy.dmPaperSize = pPS->m_nPrintPaperSize;
 	dmDummy.dmOrientation = pPS->m_nPrintPaperOrientation;
-	/* 用紙の幅、高さ */
+	// 用紙の幅、高さ
 	if (!CPrint::GetPaperSize(
 			&nPaperAllWidth,
 			&nPaperAllHeight,
@@ -815,8 +815,8 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 		)
 	) {
 	// 2001.12.21 hor GetPaperSize失敗時はそのまま終了
-	// nPaperAllWidth = 210 * 10;		/* 用紙幅 */
-	// nPaperAllHeight = 297 * 10;		/* 用紙高さ */
+	// nPaperAllWidth = 210 * 10;		// 用紙幅
+	// nPaperAllHeight = 297 * 10;		// 用紙高さ
 		return FALSE;
 	}
 	// 行あたりの文字数(行番号込み)

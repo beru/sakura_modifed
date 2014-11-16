@@ -59,27 +59,27 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           Žæ“¾                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//! ‘OŒiF(•¶ŽšF)
+	// ‘OŒiF(•¶ŽšF)
 	COLORREF GetTextColor() const {
 		return m_pColorInfoArr->m_sColorAttr.m_cTEXT;
 	}
 
-	//! ”wŒiF
+	// ”wŒiF
 	COLORREF GetBackColor() const {
 		return m_pColorInfoArr->m_sColorAttr.m_cBACK;
 	}
 
-	//! •\Ž¦‚·‚é‚©‚Ç‚¤‚©
+	// •\Ž¦‚·‚é‚©‚Ç‚¤‚©
 	bool IsDisp() const {
 		return m_pColorInfoArr->m_bDisp;
 	}
 
-	//! ‘¾Žš‚©‚Ç‚¤‚©
+	// ‘¾Žš‚©‚Ç‚¤‚©
 	bool IsBoldFont() const {
 		return m_pColorInfoArr->m_sFontAttr.m_bBoldFont;
 	}
 
-	//! ‰ºü‚ðŽ‚Â‚©‚Ç‚¤‚©
+	// ‰ºü‚ðŽ‚Â‚©‚Ç‚¤‚©
 	bool HasUnderLine() const {
 		return m_pColorInfoArr->m_sFontAttr.m_bUnderLine;
 	}

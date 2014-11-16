@@ -93,12 +93,12 @@ public:
 	INT_TYPE GetX2() const { return INT_TYPE(x); }
 	INT_TYPE GetY2() const { return INT_TYPE(y); }
 
-	//! x,y ‚¢‚¸‚ê‚©‚ª 0 ‚æ‚è¬‚³‚¢ê‡‚É true ‚ğ•Ô‚·
+	// x,y ‚¢‚¸‚ê‚©‚ª 0 ‚æ‚è¬‚³‚¢ê‡‚É true ‚ğ•Ô‚·
 	bool HasNegative() const {
 		return x < 0 || y < 0;
 	}
 
-	//! x,y ‚Ç‚¿‚ç‚à©‘R”‚Å‚ ‚ê‚Î true
+	// x,y ‚Ç‚¿‚ç‚à©‘R”‚Å‚ ‚ê‚Î true
 	bool BothNatural() const {
 		return x >= 0 && y >= 0;
 	}

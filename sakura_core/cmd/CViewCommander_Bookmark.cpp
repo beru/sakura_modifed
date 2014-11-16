@@ -261,7 +261,7 @@ void CViewCommander::Command_JUMP(void)
 
 
 // from CViewCommander_New.cpp
-//! ブックマークの設定・解除を行う(トグル動作)
+// ブックマークの設定・解除を行う(トグル動作)
 void CViewCommander::Command_BOOKMARK_SET(void)
 {
 	CDocLine* pCDocLine;
@@ -299,7 +299,7 @@ void CViewCommander::Command_BOOKMARK_SET(void)
 
 
 // from CViewCommander_New.cpp
-//! 次のブックマークを探し，見つかったら移動する
+// 次のブックマークを探し，見つかったら移動する
 void CViewCommander::Command_BOOKMARK_NEXT(void)
 {
 	int		nYOld;				// hor
@@ -341,7 +341,7 @@ re_do:;								// hor
 
 
 // from CViewCommander_New.cpp
-//! 前のブックマークを探し，見つかったら移動する．
+// 前のブックマークを探し，見つかったら移動する．
 void CViewCommander::Command_BOOKMARK_PREV(void)
 {
 	int		nYOld;				// hor
@@ -386,7 +386,7 @@ re_do:;								// hor
 
 
 // from CViewCommander_New.cpp
-//! ブックマークをクリアする
+// ブックマークをクリアする
 void CViewCommander::Command_BOOKMARK_RESET(void)
 {
 	CBookmarkManager(&GetDocument()->m_cDocLineMgr).ResetAllBookMark();

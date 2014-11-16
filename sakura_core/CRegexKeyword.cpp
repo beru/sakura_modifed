@@ -70,7 +70,7 @@
 //#define RK_KAKOMI_4_END   "#k"
 
 
-//!	コンストラクタ
+// コンストラクタ
 /*!	@brief コンストラクタ
 
 	BREGEXP.DLL 初期化、正規表現キーワード初期化を行う。
@@ -90,7 +90,7 @@ CRegexKeyword::CRegexKeyword(LPCTSTR regexp_dll )
 	RegexKeyInit();
 }
 
-//!	デストラクタ
+// デストラクタ
 /*!	@brief デストラクタ
 
 	コンパイル済みデータの破棄を行う。
@@ -112,7 +112,7 @@ CRegexKeyword::~CRegexKeyword()
 	m_pTypes     = NULL;
 }
 
-//!	正規表現キーワード初期化処理
+// 正規表現キーワード初期化処理
 /*!	@brief 正規表現キーワード初期化
 
 	 正規表現キーワードに関する変数類を初期化する。
@@ -142,7 +142,7 @@ BOOL CRegexKeyword::RegexKeyInit(void)
 	return TRUE;
 }
 
-//!	現在タイプ設定処理
+// 現在タイプ設定処理
 /*!	@brief 現在タイプ設定
 
 	現在のタイプ設定を設定する。
@@ -186,7 +186,7 @@ BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 	return TRUE;
 }
 
-//!	正規表現キーワードコンパイル処理
+// 正規表現キーワードコンパイル処理
 /*!	@brief 正規表現キーワードコンパイル
 
 	正規表現キーワードをコンパイルする。
@@ -305,7 +305,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 	return TRUE;
 }
 
-//!	行検索開始処理
+// 行検索開始処理
 /*!	@brief 行検索開始
 
 	行検索を開始する。
@@ -345,7 +345,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 	return TRUE;
 }
 
-//!	正規表現検索処理
+// 正規表現検索処理
 /*!	@brief 正規表現検索
 
 	正規表現キーワードを検索する。
@@ -356,12 +356,12 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 	@note RegexKeyLineStart関数によって初期化されていること。
 */
 BOOL CRegexKeyword::RegexIsKeyword(
-	const CStringRef&	cStr,		//!< [in] 検索対象文字列
-//	const wchar_t*		pLine,		//!< [in] １行のデータ
-	int					nPos,		//!< [in] 検索開始オフセット
-//	int					nLineLen,	//!< [in] １行の長さ
-	int*				nMatchLen,	//!< [out] マッチした長さ
-	int*				nMatchColor	//!< [out] マッチした色番号
+	const CStringRef&	cStr,		// [in] 検索対象文字列
+//	const wchar_t*		pLine,		// [in] １行のデータ
+	int					nPos,		// [in] 検索開始オフセット
+//	int					nLineLen,	// [in] １行の長さ
+	int*				nMatchLen,	// [out] マッチした長さ
+	int*				nMatchColor	// [out] マッチした色番号
 )
 {
 	MYDBGMSG("RegexIsKeyword")

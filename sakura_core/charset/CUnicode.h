@@ -29,16 +29,16 @@
 
 class CUnicode : public CCodeBase {
 public:
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	//!< 特定コード → UNICODE    変換
+	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	// 特定コード → UNICODE    変換
 		*pDst->_GetMemory() = cSrc;
 		return UnicodeToUnicode_in(pDst->_GetMemory());
 	}
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) {	//!< UNICODE    → 特定コード 変換
+	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) {	// UNICODE    → 特定コード 変換
 		*pDst = *cSrc._GetMemory();
 		return UnicodeToUnicode_out(pDst);
 	}
-	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得
-	void GetEol(CMemory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
+	void GetBom(CMemory* pcmemBom);	// BOMデータ取得
+	void GetEol(CMemory* pcmemEol, EEolType eEolType);	// 改行データ取得
 
 public:
 	// 実装

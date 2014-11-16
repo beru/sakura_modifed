@@ -29,7 +29,7 @@
 // —væs’è‹`
 // #include "DLLSHAREDATA.h"
 
-//! ‘®ŠÇ—
+// ‘®ŠÇ—
 class CFormatManager {
 public:
 	CFormatManager() {

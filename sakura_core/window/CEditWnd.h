@@ -88,7 +88,7 @@ struct STabGroupInfo {
 	bool IsValid() const { return hwndTop != NULL; }
 };
 
-//! 編集ウィンドウ（外枠）管理クラス
+// 編集ウィンドウ（外枠）管理クラス
 // 2002.02.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 // 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
@@ -106,25 +106,25 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//	Mar. 7, 2002 genta 文書タイプ用引数追加
 	// 2007.06.26 ryoji グループ指定引数追加
-	//! 作成
+	// 作成
 	HWND Create(
 		CEditDoc*		pcEditDoc,
 		CImageListMgr*	pcIcons,
 		int				nGroup
 	);
 	void _GetTabGroupInfo(STabGroupInfo* pTabGroupInfo, int& nGroup);
-	void _GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGroupInfo& sTabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
+	void _GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGroupInfo& sTabGroupInfo);	// ウィンドウ生成用の矩形を取得
 	HWND _CreateMainWindow(int nGroup, const STabGroupInfo& sTabGroupInfo);
 	void _AdjustInMonitor(const STabGroupInfo& sTabGroupInfo);
 
 	void OpenDocumentWhenStart(
-		const SLoadInfo& sLoadInfo		//!< [in]
+		const SLoadInfo& sLoadInfo		// [in]
 	);
 
 	void SetDocumentTypeWhenCreate(
-		ECodeType		nCharCode,					//!< [in] 漢字コード
-		bool			bViewMode,					//!< [in] ビューモードで開くかどうか
-		CTypeConfig	nDocumentType = CTypeConfig(-1)	//!< [in] 文書タイプ．-1のとき強制指定無し．
+		ECodeType		nCharCode,					// [in] 漢字コード
+		bool			bViewMode,					// [in] ビューモードで開くかどうか
+		CTypeConfig	nDocumentType = CTypeConfig(-1)	// [in] 文書タイプ．-1のとき強制指定無し．
 	);
 	void UpdateCaption();
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -173,8 +173,8 @@ public:
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
 	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をCEditWndより移管	//	Dec. 4, 2002 genta
-	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, BOOL bFull);	//!< ウィンドウ一覧メニュー作成処理		2006.03.23 fon
-	LRESULT PopupWinList(bool bMousePos);		//!< ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
+	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, BOOL bFull);	// ウィンドウ一覧メニュー作成処理		2006.03.23 fon
+	LRESULT PopupWinList(bool bMousePos);		// ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(CPlug* id);		// プラグインコマンドをエディタに登録する
@@ -209,13 +209,13 @@ public:
 	//                           情報                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
-	//! 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
 	bool IsActiveApp() const { return m_bIsActiveApp; }
 	
-	//! ツールチップのテキストを取得。2007.09.08 kobake 追加
+	// ツールチップのテキストを取得。2007.09.08 kobake 追加
 	void GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const;
 	
-	//! 印刷プレビュー中かどうか
+	// 印刷プレビュー中かどうか
 	bool IsInPreviewMode() {
 		return m_pPrintPreview != NULL;
 	}
@@ -256,7 +256,7 @@ public:
 	CLogicPointEx* SavePhysPosOfAllView();
 	void RestorePhysPosOfAllView(CLogicPointEx* pptPosArray);
 	// 互換BMPによる画面バッファ 2007.09.09 Moca
-	void Views_DeleteCompatibleBitmap(); //!< CEditViewの画面バッファを削除
+	void Views_DeleteCompatibleBitmap(); // CEditViewの画面バッファを削除
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       各種アクセサ                          //
@@ -301,7 +301,7 @@ protected:
 	void CheckFreeSubMenuSub(HMENU, int);			// メニューバーの無効化を検査	2010/6/18 Uchi
 
 //public:
-	//! 周期内でm_nTimerCountをインクリメント
+	// 周期内でm_nTimerCountをインクリメント
 	void IncrementTimerCount(int nInterval) {
 		m_nTimerCount++;
 		if (nInterval <= m_nTimerCount) { // 2012.11.29 aroka 呼び出し間隔のバグ修正
@@ -344,15 +344,15 @@ private:
 
 public:
 	// 子ウィンドウ
-	CMainToolBar	m_cToolbar;			//!< ツールバー
-	CTabWnd			m_cTabWnd;			//!< タブウインドウ	//@@@ 2003.05.31 MIK
-	CFuncKeyWnd		m_CFuncKeyWnd;		//!< ファンクションバー
-	CMainStatusBar	m_cStatusBar;		//!< ステータスバー
-	CPrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
+	CMainToolBar	m_cToolbar;			// ツールバー
+	CTabWnd			m_cTabWnd;			// タブウインドウ	//@@@ 2003.05.31 MIK
+	CFuncKeyWnd		m_CFuncKeyWnd;		// ファンクションバー
+	CMainStatusBar	m_cStatusBar;		// ステータスバー
+	CPrintPreview*	m_pPrintPreview;	// 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
 
-	CSplitterWnd	m_cSplitterWnd;		//!< 分割フレーム
-	CEditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
-	CViewFont*		m_pcViewFont;		//!< フォント
+	CSplitterWnd	m_cSplitterWnd;		// 分割フレーム
+	CEditView*		m_pcDragSourceView;	// ドラッグ元のビュー
+	CViewFont*		m_pcViewFont;		// フォント
 
 	// ダイアログ達
 	CDlgFind		m_cDlgFind;			//「検索」ダイアログ
@@ -367,11 +367,11 @@ public:
 private:
 	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
 	CEditDoc* 		m_pcEditDoc;
-	CEditView*		m_pcEditViewArr[4];		//!< ビュー
-	CEditView*		m_pcEditView;			//!< 有効なビュー
-	int				m_nActivePaneIndex;		//!< 有効なビューのindex
-	int				m_nEditViewCount;		//!< 有効なビューの数
-	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
+	CEditView*		m_pcEditViewArr[4];		// ビュー
+	CEditView*		m_pcEditView;			// 有効なビュー
+	int				m_nActivePaneIndex;		// 有効なビューのindex
+	int				m_nEditViewCount;		// 有効なビューの数
+	const int		m_nEditViewMaxCount;	// ビューの最大数=4
 
 	// 共有データ
 	DLLSHAREDATA*	m_pShareData;
@@ -384,24 +384,24 @@ private:
 	UINT			m_uATOKReconvertMsg;
 
 	// 状態
-	bool			m_bIsActiveApp;			//!< 自アプリがアクティブかどうか	// 2007.03.08 ryoji
+	bool			m_bIsActiveApp;			// 自アプリがアクティブかどうか	// 2007.03.08 ryoji
 	LPTSTR			m_pszLastCaption;
-	LPTSTR			m_pszMenubarMessage;	//!< メニューバー右端に表示するメッセージ
+	LPTSTR			m_pszMenubarMessage;	// メニューバー右端に表示するメッセージ
 public:
-	int				m_nTimerCount;			//!< OnTimer用 2003.08.29 wmlhq
+	int				m_nTimerCount;			// OnTimer用 2003.08.29 wmlhq
 	CLogicPointEx*	m_posSaveAry;
 private:
-	int				m_nCurrentFocus;	//!< 現在のフォーカス情報
-	int				m_nWinSizeType;		//!< サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
-	BOOL			m_bPageScrollByWheel;		//!< ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
-	BOOL			m_bHorizontalScrollByWheel;	//!< ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
-	HACCEL			m_hAccelWine;		//!< ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
-	HACCEL			m_hAccel;			//!< アクセラレータテーブル(共有 or ウィンドウ毎)
+	int				m_nCurrentFocus;			// 現在のフォーカス情報
+	int				m_nWinSizeType;				// サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。
+	BOOL			m_bPageScrollByWheel;		// ホイール操作によるページスクロールあり	// 2009.01.17 nasukoji
+	BOOL			m_bHorizontalScrollByWheel;	// ホイール操作による横スクロールあり		// 2009.01.17 nasukoji
+	HACCEL			m_hAccelWine;				// ウィンドウ毎のアクセラレータテーブルのハンドル(Wine用)	// 2009.08.15 nasukoji
+	HACCEL			m_hAccel;					// アクセラレータテーブル(共有 or ウィンドウ毎)
 
 	// フォント・イメージ
-	HFONT			m_hFontCaretPosInfo;		//!< キャレットの行桁位置表示用フォント
-	int				m_nCaretPosInfoCharWidth;	//!< キャレットの行桁位置表示用フォントの幅
-	int				m_nCaretPosInfoCharHeight;	//!< キャレットの行桁位置表示用フォントの高さ
+	HFONT			m_hFontCaretPosInfo;		// キャレットの行桁位置表示用フォント
+	int				m_nCaretPosInfoCharWidth;	// キャレットの行桁位置表示用フォントの幅
+	int				m_nCaretPosInfoCharHeight;	// キャレットの行桁位置表示用フォントの高さ
 
 	// D&Dフラグ
 	bool			m_bDragMode;

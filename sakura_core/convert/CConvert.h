@@ -29,7 +29,7 @@
 
 class CConvertMediator {
 public:
-	//! 機能種別によるバッファの変換
+	// 機能種別によるバッファの変換
 	static void ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn);
 
 protected:

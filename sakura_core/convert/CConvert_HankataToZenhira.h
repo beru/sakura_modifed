@@ -26,7 +26,7 @@
 #include "CConvert.h"
 
 
-//! 半角カナ→全角ひらがな
+// 半角カナ→全角ひらがな
 class CConvert_HankataToZenhira : public CConvert {
 public:
 	bool DoConvert(CNativeW* pcData);

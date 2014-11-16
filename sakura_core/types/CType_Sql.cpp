@@ -22,7 +22,7 @@ void CType_Sql::InitTypeConfigImp(STypeConfig* pType)
 }
 
 
-//! PL/SQL関数リスト作成
+// PL/SQL関数リスト作成
 void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;

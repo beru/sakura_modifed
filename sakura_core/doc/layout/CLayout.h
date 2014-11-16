@@ -37,9 +37,9 @@ public:
 	*/
 	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
 	CLayout(
-		const CDocLine*	pcDocLine,		//!< 実データへの参照
-		CLogicPoint		ptLogicPos,		//!< 実データ参照位置
-		CLogicInt		nLength,		//!< 実データ内データ長
+		const CDocLine*	pcDocLine,		// 実データへの参照
+		CLogicPoint		ptLogicPos,		// 実データ参照位置
+		CLogicInt		nLength,		// 実データ内データ長
 		EColorIndexType	nTypePrev,
 		CLayoutInt		nTypeIndent,
 		CLayoutColorInfo*	pColorInfo
@@ -62,7 +62,7 @@ public:
 	CLogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
 	CLogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	}
 	//CLogicInt GetLength() const { return m_nLength; }	// CMemoryIterator用（EOL含む）
-	CLayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
+	CLayoutInt GetIndent() const { return m_nIndent; }	// このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
 	CLogicInt GetLogicLineNo() const { if (this) return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
@@ -78,13 +78,13 @@ public:
 	}
 	void SetLayoutWidth(CLayoutInt nWidth) { m_nLayoutWidth = nWidth; }
 
-	//! レイアウト幅を計算。改行は含まない。2007.10.11 kobake
+	// レイアウト幅を計算。改行は含まない。2007.10.11 kobake
 	CLayoutInt CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const;
 
-	//! オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
+	// オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
 	CLayoutInt CalcLayoutOffset(const CLayoutMgr& cLayoutMgr) const;
 
-	//! 文字列参照を取得
+	// 文字列参照を取得
 	CStringRef GetStringRef() const { return CStringRef(GetPtr(), GetLengthWithEOL()); }
 
 	// チェーン属性
@@ -110,16 +110,16 @@ private:
 	CLayout*			m_pNext;
 
 	// データ参照範囲
-	const CDocLine*		m_pCDocLine;		//!< 実データへの参照
-	CLogicPoint			m_ptLogicPos;		//!< 対応するロジック参照位置
-	CLogicInt			m_nLength;			//!< このレイアウト行の長さ。文字単位。
+	const CDocLine*		m_pCDocLine;		// 実データへの参照
+	CLogicPoint			m_ptLogicPos;		// 対応するロジック参照位置
+	CLogicInt			m_nLength;			// このレイアウト行の長さ。文字単位。
 	
 	// その他属性
-	EColorIndexType		m_nTypePrev;		//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	CLayoutInt			m_nIndent;			//!< このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
+	EColorIndexType		m_nTypePrev;		// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
+	CLayoutInt			m_nIndent;			// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
 	CEol				m_cEol;
-	CLayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
-	CLayoutExInfo		m_cExInfo;			//!< 色分け詳細情報
+	CLayoutInt			m_nLayoutWidth;		// このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
+	CLayoutExInfo		m_cExInfo;			// 色分け詳細情報
 };
 
 

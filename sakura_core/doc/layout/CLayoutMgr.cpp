@@ -492,8 +492,8 @@ void CLayoutMgr::GetEndLayoutPos(
 }
 
 
-/* 論理行の指定範囲に該当するレイアウト情報を削除して */
-/* 削除した範囲の直前のレイアウト情報のポインタを返す */
+// 論理行の指定範囲に該当するレイアウト情報を削除して
+// 削除した範囲の直前のレイアウト情報のポインタを返す
 CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 	CLayout*	pLayoutInThisArea,
 	CLayoutInt	nLineOf_pLayoutInThisArea,
@@ -573,9 +573,9 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 }
 
 
-/* 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする */
-/* 論理行が削除された場合は０より小さい行数 */
-/* 論理行が挿入された場合は０より大きい行数 */
+// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
+// 論理行が削除された場合は０より小さい行数
+// 論理行が挿入された場合は０より大きい行数
 void CLayoutMgr::ShiftLogicalLineNum(CLayout* pLayoutPrev, CLogicInt nShiftLines)
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CLayoutMgr::ShiftLogicalLineNum");
@@ -617,9 +617,9 @@ bool CLayoutMgr::ChangeLayoutParam(
 bool CLayoutMgr::WhereCurrentWord(
 	CLayoutInt		nLineNum,
 	CLogicInt		nIdx,
-	CLayoutRange*	pSelect,		//!< [out]
-	CNativeW*		pcmcmWord,		//!< [out]
-	CNativeW*		pcmcmWordLeft	//!< [out]
+	CLayoutRange*	pSelect,		// [out]
+	CNativeW*		pcmcmWord,		// [out]
+	CNativeW*		pcmcmWordLeft	// [out]
 )
 {
 	const CLayout* pLayout = SearchLineByLayoutY(nLineNum);
@@ -690,15 +690,15 @@ int CLayoutMgr::PrevOrNextWord(
 }
 
 
-//! 単語検索
+// 単語検索
 /*
 	@retval 0 見つからない
 */
 int CLayoutMgr::SearchWord(
-	CLayoutInt				nLine,				//!< [in] 検索開始レイアウト行
-	CLogicInt				nIdx,				//!< [in] 検索開始データ位置
-	ESearchDirection		eSearchDirection,	//!< [in] 検索方向
-	CLayoutRange*			pMatchRange,		//!< [out] マッチレイアウト範囲
+	CLayoutInt				nLine,				// [in] 検索開始レイアウト行
+	CLogicInt				nIdx,				// [in] 検索開始データ位置
+	ESearchDirection		eSearchDirection,	// [in] 検索方向
+	CLayoutRange*			pMatchRange,		// [out] マッチレイアウト範囲
 	const CSearchStringPattern&	pattern
 )
 {
@@ -742,9 +742,9 @@ int CLayoutMgr::SearchWord(
 	@date 2007.09.06 kobake 関数名をCaretPos_Phys2LogからLogicToLayoutに変更
 */
 void CLayoutMgr::LogicToLayout(
-	const CLogicPoint&	ptLogic,	//!< [in]  ロジック位置
-	CLayoutPoint*		pptLayout,	//!< [out] レイアウト位置
-	CLayoutInt			nLineHint	//!< [in]  レイアウトY値のヒント。求める値に近い値を渡すと高速に検索できる。
+	const CLogicPoint&	ptLogic,	// [in]  ロジック位置
+	CLayoutPoint*		pptLayout,	// [out] レイアウト位置
+	CLayoutInt			nLineHint	// [in]  レイアウトY値のヒント。求める値に近い値を渡すと高速に検索できる。
 )
 {
 	pptLayout->Clear();
@@ -895,8 +895,8 @@ void CLayoutMgr::LogicToLayout(
 	@date 2007.09.06 kobake 関数名をCaretPos_Log2Phys→LayoutToLogicに変更
 */
 void CLayoutMgr::LayoutToLogicEx(
-	const CLayoutPoint&	ptLayout,	//!< [in]  レイアウト位置
-	CLogicPointEx*		pptLogic	//!< [out] ロジック位置
+	const CLayoutPoint&	ptLayout,	// [in]  レイアウト位置
+	CLogicPointEx*		pptLogic	// [out] ロジック位置
 ) const
 {
 	pptLogic->Set(CLogicInt(0), CLogicInt(0));

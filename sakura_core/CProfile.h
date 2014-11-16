@@ -79,9 +79,9 @@ protected:
 
 protected:
 	// メンバ変数
-	tstring					m_strProfileName;	//!< 最後に読み書きしたファイル名
+	tstring					m_strProfileName;	// 最後に読み書きしたファイル名
 	std::vector< Section >	m_ProfileData;
-	bool					m_bRead;			//!< モード(true=読み込み/false=書き出し)
+	bool					m_bRead;			// モード(true=読み込み/false=書き出し)
 };
 
 #define _INI_T LTEXT

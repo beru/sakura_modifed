@@ -13,11 +13,11 @@
 // 2008.07.27 kobake
 static
 bool _GetKeywordLength(
-	const CStringRef&	cLineStr,		//!< [in]
-	CLogicInt			nPos,			//!< [in]
-	CLogicInt*			p_nWordBgn,		//!< [out]
-	CLogicInt*			p_nWordLen,		//!< [out]
-	CLayoutInt*			p_nWordKetas	//!< [out]
+	const CStringRef&	cLineStr,		// [in]
+	CLogicInt			nPos,			// [in]
+	CLogicInt*			p_nWordBgn,		// [out]
+	CLogicInt*			p_nWordLen,		// [out]
+	CLayoutInt*			p_nWordKetas	// [out]
 )
 {
 	// キーワード長をカウントする

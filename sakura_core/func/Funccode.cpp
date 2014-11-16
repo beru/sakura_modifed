@@ -545,7 +545,7 @@ const EFunctionCode* nsFuncCode::ppnFuncListArr[] = {
 const int nsFuncCode::nFincListNumArrNum = _countof(nsFuncCode::pnFuncListNumArr);
 
 
-//! 機能番号に応じてヘルプトピック番号を返す
+// 機能番号に応じてヘルプトピック番号を返す
 /*!
 	@author Stonee
 	@date	2001/02/23

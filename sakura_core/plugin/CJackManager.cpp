@@ -176,9 +176,9 @@ EJack CJackManager::GetJackFromName(wstring sName)
 
 // 利用可能なプラグを検索する
 bool CJackManager::GetUsablePlug(
-	EJack			jack,		//!< [in] ジャック番号
-	PlugId			plugId,		//!< [in] プラグID
-	CPlug::Array*	plugs		//!< [out] 利用可能プラグのリスト
+	EJack			jack,		// [in] ジャック番号
+	PlugId			plugId,		// [in] プラグID
+	CPlug::Array*	plugs		// [out] 利用可能プラグのリスト
 )
 {
 	for (auto it = m_Jacks[jack].plugs.begin(); it != m_Jacks[jack].plugs.end(); it++) {

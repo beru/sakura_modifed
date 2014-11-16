@@ -93,11 +93,11 @@ struct CommonSetting_General {
 //                        ウィンドウ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // 2004.05.13 Moca
-//! ウィンドウサイズ・位置の制御方法
+// ウィンドウサイズ・位置の制御方法
 enum EWinSizeMode {
-	WINSIZEMODE_DEF		= 0,	//!< 指定なし
-	WINSIZEMODE_SAVE	= 1,	//!< 継承(保存)
-	WINSIZEMODE_SET		= 2		//!< 直接指定(固定)
+	WINSIZEMODE_DEF		= 0,	// 指定なし
+	WINSIZEMODE_SAVE	= 1,	// 継承(保存)
+	WINSIZEMODE_SET		= 2		// 直接指定(固定)
 };
 
 struct CommonSetting_Window {
@@ -147,26 +147,26 @@ struct CommonSetting_Window {
 //                         タブバー                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 enum EDispTabClose {
-	DISPTABCLOSE_NO			= 0, //!< なし
-	DISPTABCLOSE_ALLWAYS	= 1, //!< 常に表示
-	DISPTABCLOSE_AUTO		= 2  //!< 自動表示
+	DISPTABCLOSE_NO			= 0, // なし
+	DISPTABCLOSE_ALLWAYS	= 1, // 常に表示
+	DISPTABCLOSE_AUTO		= 2  // 自動表示
 };
 
 struct CommonSetting_TabBar {
-	BOOL		m_bDispTabWnd;					// タブウインドウ表示する	//@@@ 2003.05.31 MIK
-	BOOL		m_bDispTabWndMultiWin;			// タブをまとめない	//@@@ 2003.05.31 MIK
-	BOOL		m_bTab_RetainEmptyWin;			//!< 最後の文書が閉じられたとき(無題)を残す
-	BOOL		m_bTab_CloseOneWin;				//!< タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる
-	BOOL		m_bNewWindow;					//!< 外部から起動するときは新しいウインドウで開く
+	bool		m_bDispTabWnd;					// タブウインドウ表示する	//@@@ 2003.05.31 MIK
+	bool		m_bDispTabWndMultiWin;			// タブをまとめない	//@@@ 2003.05.31 MIK
+	bool		m_bTab_RetainEmptyWin;			// 最後の文書が閉じられたとき(無題)を残す
+	bool		m_bTab_CloseOneWin;				// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる
+	bool		m_bNewWindow;					// 外部から起動するときは新しいウインドウで開く
 
 	wchar_t		m_szTabWndCaption[MAX_CAPTION_CONF_LEN];	// タブウインドウキャプション	//@@@ 2003.06.13 MIK
-	BOOL		m_bSameTabWidth;				// タブを等幅にする			//@@@ 2006.01.28 ryoji
-	BOOL		m_bDispTabIcon;					// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
+	bool		m_bSameTabWidth;				// タブを等幅にする			//@@@ 2006.01.28 ryoji
+	bool		m_bDispTabIcon;					// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
 	EDispTabClose	m_bDispTabClose;			// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
-	BOOL		m_bSortTabList;					// タブ一覧をソートする	//@@@ 2006.03.23 fon
-	BOOL		m_bTab_ListFull;				// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
+	bool		m_bSortTabList;					// タブ一覧をソートする	//@@@ 2006.03.23 fon
+	bool		m_bTab_ListFull;				// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
 
-	BOOL		m_bChgWndByWheel;				// マウスホイールでウィンドウ切り替え	//@@@ 2006.03.26 ryoji
+	bool		m_bChgWndByWheel;				// マウスホイールでウィンドウ切り替え	//@@@ 2006.03.26 ryoji
 
 	LOGFONT		m_lf;							// タブフォント // 2011.12.01 Moca
 	INT			m_nPointSize;
@@ -176,9 +176,9 @@ struct CommonSetting_TabBar {
 //                           編集                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 enum EOpenDialogDir {
-	OPENDIALOGDIR_CUR, //!< カレントフォルダ
-	OPENDIALOGDIR_MRU, //!< 最近使ったフォルダ
-	OPENDIALOGDIR_SEL, //!< 指定フォルダ
+	OPENDIALOGDIR_CUR, // カレントフォルダ
+	OPENDIALOGDIR_MRU, // 最近使ったフォルダ
+	OPENDIALOGDIR_SEL, // 指定フォルダ
 };
 
 struct CommonSetting_Edit {
@@ -460,8 +460,8 @@ struct CommonSetting_Helper {
 //                          マクロ                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_Macro {
-	TCHAR		m_szKeyMacroFileName[MAX_PATH];	//!< キーボードマクロのファイル名
-	MacroRec	m_MacroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	// Sep. 14, 2001 genta
+	TCHAR		m_szKeyMacroFileName[MAX_PATH];	// キーボードマクロのファイル名
+	MacroRec	m_MacroTable[MAX_CUSTMACRO];	// キー割り当て用マクロテーブル	// Sep. 14, 2001 genta
 	SFilePath	m_szMACROFOLDER;				// マクロ用フォルダ
 	int			m_nMacroOnOpened;				// オープン後自動実行マクロ番号		//@@@ 2006.09.01 ryoji
 	int			m_nMacroOnTypeChanged;			// タイプ変更後自動実行マクロ番号	//@@@ 2006.09.01 ryoji
@@ -485,12 +485,12 @@ struct CommonSetting_FileName {
 
 // ドッキング配置
 enum EDockSide {
-	DOCKSIDE_FLOAT,			//!< フローティング
-	DOCKSIDE_LEFT,			//!< 左ドッキング
-	DOCKSIDE_TOP,			//!< 上ドッキング
-	DOCKSIDE_RIGHT,			//!< 右ドッキング
-	DOCKSIDE_BOTTOM,		//!< 下ドッキング
-	DOCKSIDE_UNDOCKABLE = -1,//!< ドッキング禁止
+	DOCKSIDE_FLOAT,			// フローティング
+	DOCKSIDE_LEFT,			// 左ドッキング
+	DOCKSIDE_TOP,			// 上ドッキング
+	DOCKSIDE_RIGHT,			// 右ドッキング
+	DOCKSIDE_BOTTOM,		// 下ドッキング
+	DOCKSIDE_UNDOCKABLE = -1,// ドッキング禁止
 };
 
 struct CommonSetting_OutLine {
@@ -567,24 +567,24 @@ struct CommonSetting_Statusbar {
 
 // プラグイン状態
 enum EPluginState {
-	PLS_NONE,			//!< プラグインテーブルに登録がない
-	PLS_INSTALLED,		//!< 追加された
-	PLS_UPDATED,		//!< 更新された
-	PLS_STOPPED,		//!< 停止している
-	PLS_LOADED,			//!< 読み込まれた
-	PLS_DELETED			//!< 削除された
+	PLS_NONE,			// プラグインテーブルに登録がない
+	PLS_INSTALLED,		// 追加された
+	PLS_UPDATED,		// 更新された
+	PLS_STOPPED,		// 停止している
+	PLS_LOADED,			// 読み込まれた
+	PLS_DELETED			// 削除された
 };
 
 struct PluginRec {
-	WCHAR			m_szId[MAX_PLUGIN_ID];		//!< プラグインID
-	WCHAR			m_szName[MAX_PLUGIN_NAME];	//!< プラグインフォルダ/設定ファイル名
-	EPluginState	m_state;					//!< プラグイン状態。設定ファイルに保存せずメモリ上のみ。
-	int 			m_nCmdNum;					//!< プラグイン コマンドの数	// 2010/7/3 Uchi
+	WCHAR			m_szId[MAX_PLUGIN_ID];		// プラグインID
+	WCHAR			m_szName[MAX_PLUGIN_NAME];	// プラグインフォルダ/設定ファイル名
+	EPluginState	m_state;					// プラグイン状態。設定ファイルに保存せずメモリ上のみ。
+	int 			m_nCmdNum;					// プラグイン コマンドの数	// 2010/7/3 Uchi
 };
 
 struct CommonSetting_Plugin {
-	BOOL			m_bEnablePlugin;			//!< プラグインを使用するかどうか
-	PluginRec		m_PluginTable[MAX_PLUGIN];	//!< プラグインテーブル
+	BOOL			m_bEnablePlugin;			// プラグインを使用するかどうか
+	PluginRec		m_PluginTable[MAX_PLUGIN];	// プラグインテーブル
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -608,10 +608,10 @@ public:
 };
 
 struct CommonSetting_MainMenu {
-	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	//!< メインメニュートップレベル
+	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	// メインメニュートップレベル
 	int 			m_nMainMenuNum;
-	CMainMenu		m_cMainMenuTbl[MAX_MAINMENU];		//!< メインメニューデータ
-	bool 			m_bMainMenuKeyParentheses;			//!< アクセスキーを()付で表示
+	CMainMenu		m_cMainMenuTbl[MAX_MAINMENU];		// メインメニューデータ
+	bool 			m_bMainMenuKeyParentheses;			// アクセスキーを()付で表示
 };
 
 
@@ -621,7 +621,7 @@ struct CommonSetting_MainMenu {
 //                                                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 共通設定
+// 共通設定
 struct CommonSetting {
 	CommonSetting_General			m_sGeneral;			// 全般
 	CommonSetting_Window			m_sWindow;			// ウィンドウ

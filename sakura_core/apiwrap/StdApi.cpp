@@ -16,9 +16,9 @@ using namespace std;
 */
 static
 ACHAR* CreateMbString(
-	const WCHAR*	pWideString,	//!< [in]  元のWCHAR文字列
-	int				nWideLength,	//!< [in]  元のWCHAR文字列の長さ。文字単位。
-	int*			pnMbLength		//!< [out] 変換されたACHAR文字列の長さの受け取り先。文字単位。
+	const WCHAR*	pWideString,	// [in]  元のWCHAR文字列
+	int				nWideLength,	// [in]  元のWCHAR文字列の長さ。文字単位。
+	int*			pnMbLength		// [out] 変換されたACHAR文字列の長さの受け取り先。文字単位。
 )
 {
 	// 必要な領域サイズを取得
@@ -241,7 +241,7 @@ namespace ApiWrap {
 		HINSTANCE	hInstance,
 		UINT		uID,
 		LPWSTR		lpBuffer,
-		int			nBufferCount	//!< バッファのサイズ。文字単位。
+		int			nBufferCount	// バッファのサイズ。文字単位。
 	)
 	{
 		// まずはACHARでロード

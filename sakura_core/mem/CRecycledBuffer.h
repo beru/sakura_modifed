@@ -41,10 +41,10 @@ public:
 
 // インターフェース
 public:
-	//! 一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
+	// 一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
 	template <class T>
 	T* GetBuffer(
-		size_t* nCount //!< [out] 領域の要素数を受け取る。T単位。
+		size_t* nCount // [out] 領域の要素数を受け取る。T単位。
 	)
 	{
 		if (nCount) {
@@ -54,7 +54,7 @@ public:
 		return reinterpret_cast<T*>(m_buf[m_current]);
 	}
 
-	//! 領域の要素数を取得。T単位
+	// 領域の要素数を取得。T単位
 	template <class T>
 	size_t GetMaxCount() const {
 		return BLOCK_SIZE / sizeof(T);
@@ -88,10 +88,10 @@ public:
 
 // インターフェース
 public:
-	//! 一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
+	// 一時的に確保されたメモリブロックを取得。このメモリブロックを解放してはいけない。
 	template <class T>
 	T* GetBuffer(
-		size_t nCount //!< [in] 確保する要素数。T単位。
+		size_t nCount // [in] 確保する要素数。T単位。
 	)
 	{
 		m_current = (m_current + 1) % CHAIN_COUNT;

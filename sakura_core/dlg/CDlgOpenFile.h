@@ -87,8 +87,8 @@ public:
 	CEol			m_cEol;		// Feb. 9, 2001 genta
 	bool			m_bUseEol;	// Feb. 9, 2001 genta
 	
-	bool			m_bBom;		//!< BOMを付けるかどうか	// Jul. 26, 2003 ryoji BOM
-	bool			m_bUseBom;	//!< BOMの有無を選択する機能を利用するかどうか
+	bool			m_bBom;		// BOMを付けるかどうか	// Jul. 26, 2003 ryoji BOM
+	bool			m_bUseBom;	// BOMの有無を選択する機能を利用するかどうか
 
 	SFilePath		m_szPath;	// 拡張子の補完を自前で行ったときのファイルパス	// 2006.11.10 ryoji
 
@@ -115,9 +115,9 @@ protected:
 	static void OnCmbDropdown(HWND hwnd);
 
 	// 2006.09.03 Moca ファイルダイアログのエラー回避
-	//! リトライ機能付き GetOpenFileName
+	// リトライ機能付き GetOpenFileName
 	bool _GetOpenFileNameRecover(OPENFILENAMEZ* ofn);
-	//! リトライ機能付き GetOpenFileName
+	// リトライ機能付き GetOpenFileName
 	bool GetSaveFileNameRecover(OPENFILENAMEZ* ofn);
 
 	friend UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);

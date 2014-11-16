@@ -125,13 +125,13 @@ public:
 	// 算出方法がよく分からないので定数にしておく
 	// 制御不要なら ListViewはLVSCW_AUTOSIZE等推奨
 	enum StaticMagicNambers {
-		//! スクロールバーとアイテムの間の隙間
+		// スクロールバーとアイテムの間の隙間
 		WIDTH_MARGIN_SCROLLBER = 8,
-		//! リストビューヘッダ マージン
+		// リストビューヘッダ マージン
 		WIDTH_LV_HEADER = 17,
-		//! リストビューのマージン
+		// リストビューのマージン
 		WIDTH_LV_ITEM_NORMAL  = 14,
-		//! リストビューのチェックボックスとマージンの幅
+		// リストビューのチェックボックスとマージンの幅
 		WIDTH_LV_ITEM_CHECKBOX = 30,
 	};
 private:

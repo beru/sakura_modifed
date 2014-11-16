@@ -83,9 +83,9 @@ void CDocFileOperation::DoFileUnlock()
 //「ファイルを開く」ダイアログ
 // Mar. 30, 2003 genta	ファイル名未定時の初期ディレクトリをカレントフォルダに
 bool CDocFileOperation::OpenFileDialog(
-	HWND			hwndParent,		//!< [in]
-	const TCHAR*	pszOpenFolder,	//!< [in]     NULL以外を指定すると初期フォルダを指定できる
-	SLoadInfo*		pLoadInfo,		//!< [in/out] ロード情報
+	HWND			hwndParent,		// [in]
+	const TCHAR*	pszOpenFolder,	// [in]     NULL以外を指定すると初期フォルダを指定できる
+	SLoadInfo*		pLoadInfo,		// [in/out] ロード情報
 	std::vector<std::tstring>&	files
 )
 {
@@ -134,9 +134,9 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 	return eLoadResult == LOADED_OK;
 }
 
-//! ファイルを開く
+// ファイルを開く
 bool CDocFileOperation::FileLoad(
-	SLoadInfo*	pLoadInfo		//!< [in/out]
+	SLoadInfo*	pLoadInfo		// [in/out]
 )
 {
 	LARGE_INTEGER start;
@@ -168,18 +168,18 @@ bool CDocFileOperation::FileLoad(
 	return bRet;
 }
 
-//! ファイルを開く（自動実行マクロを実行しない）
+// ファイルを開く（自動実行マクロを実行しない）
 // 2009.08.11 ryoji FileLoadへのパラメータ追加にしてもいいがANSI版と整合がとりやすいので当面は別関数にしておく
 bool CDocFileOperation::FileLoadWithoutAutoMacro(
-	SLoadInfo*	pLoadInfo		//!< [in/out]
+	SLoadInfo*	pLoadInfo		// [in/out]
 )
 {
 	return DoLoadFlow(pLoadInfo);
 }
 
-//! 同一ファイルの再オープン
+// 同一ファイルの再オープン
 void CDocFileOperation::ReloadCurrentFile(
-	ECodeType	nCharCode		//!< [in] 文字コード種別
+	ECodeType	nCharCode		// [in] 文字コード種別
 )
 {
 	auto& activeView = m_pcDocRef->m_pcEditWnd->GetActiveView();
@@ -251,7 +251,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	@date 2006.11.10 ryoji	ユーザー指定の拡張子を状況依存で変化させる
 */
 bool CDocFileOperation::SaveFileDialog(
-	SSaveInfo*	pSaveInfo	//!< [out]
+	SSaveInfo*	pSaveInfo	// [out]
 )
 {
 	// 拡張子指定
@@ -340,7 +340,7 @@ bool CDocFileOperation::SaveFileDialog(
 	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalSaveDlg(pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX);
 }
 
-//!「ファイル名を付けて保存」ダイアログ
+//「ファイル名を付けて保存」ダイアログ
 bool CDocFileOperation::SaveFileDialog(LPTSTR szPath)
 {
 	SSaveInfo sSaveInfo;

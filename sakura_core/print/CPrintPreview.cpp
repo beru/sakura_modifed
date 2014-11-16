@@ -64,7 +64,7 @@ using namespace std;
 #define		COMPAT_BMP_BASE     1   // COMPAT_BMP_SCALEピクセル幅を複写する画面ピクセル幅
 #define		COMPAT_BMP_SCALE    2   // 互換BMPのCOMPAT_BMP_BASEに対する倍率(1以上の整数倍)
 
-CPrint CPrintPreview::m_cPrint;		//!< 現在のプリンタ情報 2003.05.02 かろと
+CPrint CPrintPreview::m_cPrint;		// 現在のプリンタ情報 2003.05.02 かろと
 
 /*! コンストラクタ
 	印刷プレビューを表示するために必要な情報を初期化、領域確保。
@@ -1609,13 +1609,13 @@ void CPrintPreview::InitPreviewScrollBar(void)
 */
 CColorStrategy* CPrintPreview::Print_DrawLine(
 	HDC				hdc,
-	POINT			ptDraw, //!< 描画座標。HDC内部単位。
+	POINT			ptDraw, // 描画座標。HDC内部単位。
 	const wchar_t*	pLine,
 	int				nDocLineLen,
 	int				nLineStart,
 	int				nLineLen,
 	CLayoutInt		nIndent,  // 2006.08.14 Moca 追加
-	const CLayout*	pcLayout,	//!< 色付用Layout
+	const CLayout*	pcLayout,	// 色付用Layout
 	CColorStrategy*	pStrategyStart
 )
 {
@@ -1678,11 +1678,11 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 			if (0 < iLogic - nBgnLogic) {
 				Print_DrawBlock(
 					hdc,
-					ptDraw,		//!< 描画座標。HDC内部単位。
+					ptDraw,		// 描画座標。HDC内部単位。
 					pLine + nLineStart,
 					iLogic - nBgnLogic,
 					nKindLast,
-					pcLayout,	//!< 色設定用Layout
+					pcLayout,	// 色設定用Layout
 					pStrategyLast,
 					nBgnLogic - nLineStart,
 					nLayoutX,
@@ -1711,11 +1711,11 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	if (0 < nLineStart + nLineLen - nBgnLogic) {
 		Print_DrawBlock(
 			hdc,
-			ptDraw,		//!< 描画座標。HDC内部単位。
+			ptDraw,		// 描画座標。HDC内部単位。
 			pLine + nLineStart,
 			nLineStart + nLineLen - nBgnLogic,
 			nKindLast,
-			pcLayout,	//!< 色設定用Layout
+			pcLayout,	// 色設定用Layout
 			pStrategyLast,
 			nBgnLogic - nLineStart,
 			nLayoutX,
@@ -1747,11 +1747,11 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 */
 void CPrintPreview::Print_DrawBlock(
 	HDC				hdc,
-	POINT			ptDraw,		//!< 描画座標。HDC内部単位。
+	POINT			ptDraw,		// 描画座標。HDC内部単位。
 	const wchar_t*	pPhysicalLine,
 	int				nBlockLen,	// iLogic - nBgnLogic
 	int				nKind,
-	const CLayout*	pcLayout,	//!< 色設定用Layout
+	const CLayout*	pcLayout,	// 色設定用Layout
 	const CColorStrategy*	pStrategy,
 	int				nBgnPhysical,	// nBgnLogic - nLineStart
 	CLayoutInt		nLayoutX,

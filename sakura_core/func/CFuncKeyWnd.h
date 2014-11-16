@@ -20,7 +20,7 @@
 struct DLLSHAREDATA;
 class CEditDoc; // 2002/2/10 aroka
 
-//! ファンクションキーウィンドウ
+// ファンクションキーウィンドウ
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 class CFuncKeyWnd : public CWnd {
 public:
@@ -41,13 +41,13 @@ public:
 	*/
 private:
 	// 20060126 aroka すべてPrivateにして、初期化順序に合わせて並べ替え
-	LPCTSTR			m_pszClassName;	//!< クラス名
+	LPCTSTR			m_pszClassName;	// クラス名
 	CEditDoc*		m_pcEditDoc;
 	DLLSHAREDATA*	m_pShareData;
 	int				m_nCurrentKeyState;
 	WCHAR			m_szFuncNameArr[12][256];
 	HWND			m_hwndButtonArr[12];
-	HFONT			m_hFont;	//!< 表示用フォント
+	HFONT			m_hFont;	// 表示用フォント
 	bool			m_bSizeBox;
 	HWND			m_hwndSizeBox;
 	int				m_nTimerCount;

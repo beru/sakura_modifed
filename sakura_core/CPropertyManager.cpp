@@ -42,7 +42,7 @@ void CPropertyManager::Create(
 	m_nPropTypePageNum = -1;
 }
 
-//! 共通設定 プロパティシート
+// 共通設定 プロパティシート
 bool CPropertyManager::OpenPropertySheet(
 	HWND	hWnd,
 	int		nPageNum,
@@ -109,7 +109,7 @@ bool CPropertyManager::OpenPropertySheet(
 }
 
 
-//! タイプ別設定 プロパティシート
+// タイプ別設定 プロパティシート
 bool CPropertyManager::OpenPropertySheetTypes(
 	HWND		hWnd,
 	int			nPageNum,

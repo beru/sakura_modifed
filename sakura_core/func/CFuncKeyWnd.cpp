@@ -363,7 +363,7 @@ LRESULT CFuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//! ボタンのサイズを計算
+// ボタンのサイズを計算
 int CFuncKeyWnd::CalcButtonSize(void)
 {
 	RECT rc;
@@ -424,7 +424,7 @@ void CFuncKeyWnd::CreateButtons(void)
 }
 
 
-//! サイズボックスの表示／非表示切り替え
+// サイズボックスの表示／非表示切り替え
 void CFuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
 {
 	RECT rc;

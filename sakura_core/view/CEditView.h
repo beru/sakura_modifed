@@ -138,8 +138,8 @@ public:
 		return m_pcEditDoc;
 	}
 public:
-	//! 背景にビットマップを使用するかどうか
-	//! 2010.10.03 背景実装
+	// 背景にビットマップを使用するかどうか
+	// 2010.10.03 背景実装
 	bool IsBkBitmap() const { return NULL != m_pcEditDoc->m_hBackImg; }
 
 public:
@@ -159,10 +159,10 @@ public:
 	~CEditView();
 	// 初期化系メンバ関数
 	BOOL Create(
-		HWND		hwndParent,	//!< 親
-		CEditDoc*	pcEditDoc,	//!< 参照するドキュメント
-		int			nMyIndex,	//!< ビューのインデックス
-		BOOL		bShow		//!< 作成時に表示するかどうか
+		HWND		hwndParent,	// 親
+		CEditDoc*	pcEditDoc,	// 参照するドキュメント
+		int			nMyIndex,	// ビューのインデックス
+		BOOL		bShow		// 作成時に表示するかどうか
 	);
 	void CopyViewStatus(CEditView*) const;					// 自分の表示状態を他のビューにコピー
 
@@ -206,21 +206,21 @@ public:
 	CLayoutInt  OnHScroll(int, int);					// 水平スクロールバーメッセージ処理
 	// マウス
 	void OnLBUTTONDOWN(WPARAM, int, int);				// マウス左ボタン押下
-	void OnMOUSEMOVE(WPARAM, int, int);				// マウス移動のメッセージ処理
-	void OnLBUTTONUP(WPARAM, int, int);				// マウス左ボタン開放のメッセージ処理
+	void OnMOUSEMOVE(WPARAM, int, int);					// マウス移動のメッセージ処理
+	void OnLBUTTONUP(WPARAM, int, int);					// マウス左ボタン開放のメッセージ処理
 	void OnLBUTTONDBLCLK(WPARAM, int , int);			// マウス左ボタンダブルクリック
 	void OnRBUTTONDOWN(WPARAM, int, int);				// マウス右ボタン押下
-	void OnRBUTTONUP(WPARAM, int, int);				// マウス右ボタン開放
+	void OnRBUTTONUP(WPARAM, int, int);					// マウス右ボタン開放
 	void OnMBUTTONDOWN(WPARAM, int, int);				// マウス中ボタン押下
-	void OnMBUTTONUP(WPARAM, int, int);				// マウス中ボタン開放
-	void OnXLBUTTONDOWN(WPARAM, int, int);			// マウスサイドボタン1押下
+	void OnMBUTTONUP(WPARAM, int, int);					// マウス中ボタン開放
+	void OnXLBUTTONDOWN(WPARAM, int, int);				// マウスサイドボタン1押下
 	void OnXLBUTTONUP(WPARAM, int, int);				// マウスサイドボタン1開放		// 2009.01.17 nasukoji
-	void OnXRBUTTONDOWN(WPARAM, int, int);			// マウスサイドボタン2押下
+	void OnXRBUTTONDOWN(WPARAM, int, int);				// マウスサイドボタン2押下
 	void OnXRBUTTONUP(WPARAM, int, int);				// マウスサイドボタン2開放		// 2009.01.17 nasukoji
-	LRESULT OnMOUSEWHEEL(WPARAM, LPARAM);				//!< 垂直マウスホイールのメッセージ処理
-	LRESULT OnMOUSEHWHEEL(WPARAM, LPARAM);			//!< 水平マウスホイールのメッセージ処理
-	LRESULT OnMOUSEWHEEL2(WPARAM, LPARAM, bool, EFunctionCode);		//!< マウスホイールのメッセージ処理
-	bool IsSpecialScrollMode(int);					// キー・マウスボタン状態よりスクロールモードを判定する		// 2009.01.17 nasukoji
+	LRESULT OnMOUSEWHEEL(WPARAM, LPARAM);				// 垂直マウスホイールのメッセージ処理
+	LRESULT OnMOUSEHWHEEL(WPARAM, LPARAM);				// 水平マウスホイールのメッセージ処理
+	LRESULT OnMOUSEWHEEL2(WPARAM, LPARAM, bool, EFunctionCode);		// マウスホイールのメッセージ処理
+	bool IsSpecialScrollMode(int);						// キー・マウスボタン状態よりスクロールモードを判定する		// 2009.01.17 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           描画                              //
@@ -228,14 +228,14 @@ public:
 	// 2006.05.14 Moca  互換BMPによる画面バッファ
 	// 2007.09.30 genta CompatibleDC操作関数
 protected:
-	//! ロジック行を1行描画
+	// ロジック行を1行描画
 	bool DrawLogicLine(
-		HDC				hdc,			//!< [in]     作画対象
-		DispPos*		pDispPos,		//!< [in/out] 描画する箇所、描画元ソース
-		CLayoutInt		nLineTo			//!< [in]     作画終了するレイアウト行番号
+		HDC				hdc,			// [in]     作画対象
+		DispPos*		pDispPos,		// [in/out] 描画する箇所、描画元ソース
+		CLayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 	);
 
-	//! レイアウト行を1行描画
+	// レイアウト行を1行描画
 	bool DrawLayoutLine(SColorStrategyInfo* pInfo);
 
 	// 色分け
@@ -247,10 +247,10 @@ public:
 
 	// 画面バッファ
 protected:
-	bool CreateOrUpdateCompatibleBitmap(int cx, int cy);	//!< メモリBMPを作成または更新
+	bool CreateOrUpdateCompatibleBitmap(int cx, int cy);	// メモリBMPを作成または更新
 	void UseCompatibleDC(BOOL fCache);
 public:
-	void DeleteCompatibleBitmap();							//!< メモリBMPを削除
+	void DeleteCompatibleBitmap();							// メモリBMPを削除
 
 public:
 	void DispTextSelected(HDC hdc, CLayoutInt nLineNum, const CMyPoint& ptXY, CLayoutInt nX_Layout);	// テキスト反転
@@ -327,7 +327,7 @@ public:
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
 	void MoveCursorSelecting(CLayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);								// 選択エリアのテキストを指定方法で変換
-	//!指定位置または指定範囲がテキストの存在しないエリアかチェックする		// 2008.08.03 nasukoji
+	// 指定位置または指定範囲がテキストの存在しないエリアかチェックする		// 2008.08.03 nasukoji
 	bool IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo = CLayoutPoint(CLayoutInt(-1), CLayoutInt(-1)), bool bSelect = false, bool bBoxSelect = false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -441,8 +441,8 @@ public:
 		@date 2006.04.10 fon 新規作成
 	*/
 	enum LID_SKH {
-		LID_SKH_ONTIMER		= 1,	//!< CEditView::OnTimer
-		LID_SKH_POPUPMENU_R = 2,	//!< CEditView::CreatePopUpMenu_R
+		LID_SKH_ONTIMER		= 1,	// CEditView::OnTimer
+		LID_SKH_POPUPMENU_R = 2,	// CEditView::CreatePopUpMenu_R
 	};
 	BOOL KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
@@ -581,8 +581,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	CEditWnd*			m_pcEditWnd;	//!< ウィンドウ
-	CEditDoc*			m_pcEditDoc;	//!< ドキュメント
+	CEditWnd*			m_pcEditWnd;	// ウィンドウ
+	CEditDoc*			m_pcEditDoc;	// ドキュメント
 	const STypeConfig*	m_pTypeData;
 
 	// 主要構成部品
@@ -611,7 +611,7 @@ public:
 	HWND			m_hwndSizeBox;		// サイズボックスウィンドウハンドル
 	CSplitBoxWnd*	m_pcsbwVSplitBox;	// 垂直分割ボックス
 	CSplitBoxWnd*	m_pcsbwHSplitBox;	// 水平分割ボックス
-	CAutoScrollWnd	m_cAutoScrollWnd;	//!< オートスクロール
+	CAutoScrollWnd	m_cAutoScrollWnd;	// オートスクロール
 
 public:
 	// 描画
@@ -648,20 +648,20 @@ public:
 	BOOL			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
-	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	// 2007.10.02 nasukoji
-	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
-	CMyPoint		m_cMouseDownPos;		//!< クリック時のマウス座標
-	int				m_nWheelDelta;			//!< ホイール変化量
-	EFunctionCode	m_eWheelScroll; 		//!< スクロールの種類
+	bool			m_bActivateByMouse;		// マウスによるアクティベート	// 2007.10.02 nasukoji
+	DWORD			m_dwTripleClickCheck;	// トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
+	CMyPoint		m_cMouseDownPos;		// クリック時のマウス座標
+	int				m_nWheelDelta;			// ホイール変化量
+	EFunctionCode	m_eWheelScroll; 		// スクロールの種類
 	int				m_nMousePouse;			// マウス停止時間
 	CMyPoint		m_cMousePousePos;		// マウスの停止位置
 	bool			m_bHideMouse;
 
-	int				m_nAutoScrollMode;			//!< オートスクロールモード
-	bool			m_bAutoScrollDragMode;		//!< ドラッグモード
-	CMyPoint		m_cAutoScrollMousePos;		//!< オートスクロールのマウス基準位置
-	bool			m_bAutoScrollVertical;		//!< 垂直スクロール可
-	bool			m_bAutoScrollHorizontal;	//!< 水平スクロール可
+	int				m_nAutoScrollMode;			// オートスクロールモード
+	bool			m_bAutoScrollDragMode;		// ドラッグモード
+	CMyPoint		m_cAutoScrollMousePos;		// オートスクロールのマウス基準位置
+	bool			m_bAutoScrollVertical;		// 垂直スクロール可
+	bool			m_bAutoScrollHorizontal;	// 水平スクロール可
 
 	// 検索
 	CSearchStringPattern m_sSearchPattern;

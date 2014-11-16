@@ -124,8 +124,8 @@ TYPE_NAME_ID<int> WrapMethodArr[] = {
 };
 
 // 静的メンバ
-std::vector<TYPE_NAME_ID2<EOutlineType> > CPropTypes::m_OlmArr;	//!<アウトライン解析ルール配列
-std::vector<TYPE_NAME_ID2<ESmartIndentType> > CPropTypes::m_SIndentArr;	//!<スマートインデントルール配列
+std::vector<TYPE_NAME_ID2<EOutlineType> > CPropTypes::m_OlmArr;	// アウトライン解析ルール配列
+std::vector<TYPE_NAME_ID2<ESmartIndentType> > CPropTypes::m_SIndentArr;	// スマートインデントルール配列
 
 // スクリーンタブの初期化
 void CPropTypesScreen::CPropTypes_Screen()

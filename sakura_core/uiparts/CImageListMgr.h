@@ -72,18 +72,18 @@ public:
 	bool Draw(int index, HDC dc, int x, int y, int fstyle) const	//	描画
 	;
 	
-	//! アイコン数を返す
+	// アイコン数を返す
 	int  Count(void) const;	//	アイコン数
 	
-	//! アイコンの幅
+	// アイコンの幅
 	int  cx(void) const { return m_cx; }
-	//! アイコンの高さ
+	// アイコンの高さ
 	int  cy(void) const { return m_cy; }
 	
-	//! アイコンを追加する
+	// アイコンを追加する
 	int Add(const TCHAR* szPath);
 
-	//! アイコンの追加を元に戻す
+	// アイコンの追加を元に戻す
 	void ResetExtend();
 
 	/*!
@@ -98,8 +98,8 @@ public:
 	void  SetToolBarImages(HWND hToolBar, int id = 0) const {}
 
 protected:
-	int m_cx;			//!<	width of icon
-	int m_cy;			//!<	height of icon
+	int m_cx;			// width of icon
+	int m_cy;			// height of icon
 	/*!	@brief 透過色
 	
 		描画を自前で行うため，透過色を覚えておく必要がある．
@@ -112,7 +112,7 @@ protected:
 	*/
 	HBITMAP m_hIconBitmap;
 
-	int m_nIconCount;	//!<	アイコンの個数
+	int m_nIconCount;	// アイコンの個数
 
 	//	オリジナルテキストエディタからの描画関数
 	//	2003.08.27 Moca 背景を透過処理するので背景色の指定は不要に
@@ -122,7 +122,7 @@ protected:
 	void DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth, 
                         int nHeight, HBITMAP bmp, int nXSrc, int nYSrc) const;
 
-	//! ビットマップを一行拡張する
+	// ビットマップを一行拡張する
 	void Extend(bool = true);
 
 };

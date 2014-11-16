@@ -82,7 +82,7 @@ CShareData::~CShareData()
 }
 
 
-//! CShareDataクラスの初期化処理
+// CShareDataクラスの初期化処理
 /*!
 	CShareDataクラスを利用する前に必ず呼び出すこと。
 
@@ -336,21 +336,21 @@ bool CShareData::InitShareData()
 		m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place = 1;			// ファンクションキー表示位置／0:上 1:下
 		m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_GroupNum = 4;		// 2002/11/04 Moca ファンクションキーのグループボタン数
 
-		m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd = FALSE;				// タブウインドウ表示	//@@@ 2003.05.31 MIK
+		m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd = false;				// タブウインドウ表示	//@@@ 2003.05.31 MIK
 		m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin = FALSE;		// タブウインドウ表示	//@@@ 2003.05.31 MIK
 		wcscpy_s(	//@@@ 2003.06.13 MIK
 			m_pShareData->m_Common.m_sTabBar.m_szTabWndCaption,
 			L"${w?【Grep】$h$:【アウトプット】$:$f$n$}${U?(更新)$}${R?(ビューモード)$:(上書き禁止)$}${M?【キーマクロの記録中】$}"
 		);
-		m_pShareData->m_Common.m_sTabBar.m_bSameTabWidth = FALSE;			// タブを等幅にする			//@@@ 2006.01.28 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon = FALSE;			// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bSameTabWidth = false;			// タブを等幅にする			//@@@ 2006.01.28 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon = false;			// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
 		m_pShareData->m_Common.m_sTabBar.m_bDispTabClose = DISPTABCLOSE_NO;	// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
-		m_pShareData->m_Common.m_sTabBar.m_bSortTabList = TRUE;				// タブ一覧をソートする		//@@@ 2006.05.10 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bTab_RetainEmptyWin = TRUE;		// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
-		m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin = FALSE;		// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
-		m_pShareData->m_Common.m_sTabBar.m_bTab_ListFull = FALSE;			// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bChgWndByWheel = FALSE;			// マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
-		m_pShareData->m_Common.m_sTabBar.m_bNewWindow = FALSE;				// 外部から起動するときは新しいウインドウで開く
+		m_pShareData->m_Common.m_sTabBar.m_bSortTabList = true;				// タブ一覧をソートする		//@@@ 2006.05.10 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bTab_RetainEmptyWin = true;		// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
+		m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin = false;		// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
+		m_pShareData->m_Common.m_sTabBar.m_bTab_ListFull = false;			// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bChgWndByWheel = false;			// マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
+		m_pShareData->m_Common.m_sTabBar.m_bNewWindow = false;				// 外部から起動するときは新しいウインドウで開く
 
 		m_pShareData->m_Common.m_sTabBar.m_lf = lfIconTitle;
 		m_pShareData->m_Common.m_sTabBar.m_nPointSize = nIconPointSize;

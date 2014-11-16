@@ -58,6 +58,6 @@ const int COLUMNSPACE_MAX = 64;
 // Aug. 14, 2005 genta 定数定義追加
 // 2007.09.07 kobake 定数名変更: MAXLINESIZE→MAXLINEKETAS
 // 2007.09.07 kobake 定数名変更: MINLINESIZE→MINLINEKETAS
-const int MAXLINEKETAS		= 10240;	//!< 1行の桁数の最大値
-const int MINLINEKETAS		= 10;		//!< 1行の桁数の最小値
+const int MAXLINEKETAS		= 10240;	// 1行の桁数の最大値
+const int MINLINEKETAS		= 10;		// 1行の桁数の最小値
 

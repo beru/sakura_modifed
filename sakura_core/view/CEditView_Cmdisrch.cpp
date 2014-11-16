@@ -245,7 +245,7 @@ void CEditView::ISearchEnter(int mode, ESearchDirection direction)
 	}
 }
 
-//!	インクリメンタルサーチモードから抜ける
+// インクリメンタルサーチモードから抜ける
 void CEditView::ISearchExit()
 {
 	// シーケンスを上書きして現在の検索キーを維持する
@@ -451,7 +451,7 @@ void CEditView::ISearchExec(bool bNext)
 	return ;
 }
 
-//!	バックスペースを押されたときの処理
+// バックスペースを押されたときの処理
 void CEditView::ISearchBack(void) {
 	if (m_nISearchHistoryCount == 0) return;
 	
@@ -501,7 +501,7 @@ void CEditView::ISearchBack(void) {
 	
 }
 
-//!	入力文字から、検索文字を生成する。
+// 入力文字から、検索文字を生成する。
 void CEditView::ISearchWordMake(void)
 {
 	switch (m_nISearchMode) {

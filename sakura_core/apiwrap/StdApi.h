@@ -136,7 +136,7 @@ namespace ApiWrap {
 		HINSTANCE	hInstance,
 		UINT		uID,
 		LPWSTR		lpBuffer,
-		int			nBufferCount	//!< バッファのサイズ。文字単位。
+		int			nBufferCount	// バッファのサイズ。文字単位。
 	)
 	{
 		return ::LoadStringW(hInstance, uID, lpBuffer, nBufferCount);
@@ -146,7 +146,7 @@ namespace ApiWrap {
 		HINSTANCE	hInstance,
 		UINT		uID,
 		LPWSTR		lpBuffer,
-		int			nBufferCount	//!< バッファのサイズ。文字単位。
+		int			nBufferCount	// バッファのサイズ。文字単位。
 	);
 #endif
 
@@ -161,7 +161,7 @@ namespace ApiWrap {
 	//                      よく使う引数値                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//! よく使うExtTextOutW_AnyBuildのオプション
+	// よく使うExtTextOutW_AnyBuildのオプション
 	inline UINT ExtTextOutOption() {
 		return ETO_CLIPPED | ETO_OPAQUE;
 	}
@@ -170,17 +170,17 @@ namespace ApiWrap {
 	//                       よく使う用法                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	//! SHIFTを押しているかどうか
+	// SHIFTを押しているかどうか
 	inline bool GetKeyState_Shift() {
 		return (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
 	}
 
-	//! CTRLを押しているかどうか
+	// CTRLを押しているかどうか
 	inline bool GetKeyState_Control() {
 		return (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
 	}
 
-	//! ALTを押しているかどうか
+	// ALTを押しているかどうか
 	inline bool GetKeyState_Alt() {
 		return (::GetKeyState(VK_MENU) & 0x8000) != 0;
 	}

@@ -45,7 +45,7 @@ CKeyMacroMgr::~CKeyMacroMgr()
 }
 
 
-//! キーマクロのバッファをクリアする
+// キーマクロのバッファをクリアする
 void CKeyMacroMgr::ClearAll(void)
 {
 	CMacro* p = m_pTop;
@@ -394,7 +394,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	return m_nReady ? TRUE : FALSE;
 }
 
-//! キーボードマクロを文字列から読み込み
+// キーボードマクロを文字列から読み込み
 BOOL CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	// 一時ファイル名を作成

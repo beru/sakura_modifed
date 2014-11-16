@@ -19,12 +19,12 @@
 
 class CFuncLookup;
 
-//! キー情報を保持する
+// キー情報を保持する
 struct KEYDATA {
-	//! キーコード
+	// キーコード
 	short			m_nKeyCode;
 	
-	//!	キーの名前
+	//	キーの名前
 	TCHAR			m_szKeyName[30];
 	
 	/*!	対応する機能番号
@@ -35,7 +35,7 @@ struct KEYDATA {
 	EFunctionCode	m_nFuncCodeArr[8];
 };
 
-//! 仮想キーコード独自拡張
+// 仮想キーコード独自拡張
 #define VKEX_DBL_CLICK		0x0100	// ダブルクリック
 #define VKEX_R_CLICK		0x0101	// 右クリック
 #define VKEX_MDL_CLICK		0x0102	// 中クリック
@@ -77,7 +77,7 @@ public:
 	static EFunctionCode GetFuncCodeAt(KEYDATA& KeyData, int nState, BOOL bGetDefFuncCode = TRUE);	// 特定のキー情報から機能コードを取得する	// 2007.02.24 ryoji
 	static EFunctionCode GetDefFuncCode(int nKeyCode, int nState);	// キーのデフォルト機能を取得する	// 2007.02.22 ryoji
 
-	//! キー割り当て一覧を作成する
+	// キー割り当て一覧を作成する
 	static int CreateKeyBindList(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, CNativeW& cMemList, CFuncLookup* pcFuncLookup, BOOL bGetDefFuncCode = TRUE);
 	static int GetKeyStr(HINSTANCE hInstance, int nKeyNameArrNum, KEYDATA* pKeyNameArr, CNativeT& cMemList, int nFuncId, BOOL bGetDefFuncCode = TRUE);	// 機能に対応するキー名の取得
 	static int GetKeyStrList(HINSTANCE	hInstance, int nKeyNameArrNum,KEYDATA* pKeyNameArr, CNativeT*** pppcMemList, int nFuncId, BOOL bGetDefFuncCode = TRUE);	// 機能に対応するキー名の取得(複数)

@@ -33,12 +33,12 @@
 
 #pragma once
 
-//! ファイル文字コードセット判別時の先読み最大サイズ
+// ファイル文字コードセット判別時の先読み最大サイズ
 #define CheckKanjiCode_MAXREADLENGTH 16384
 
 #include "_main/global.h"
 
-//! メモリバッファクラス
+// メモリバッファクラス
 class CMemory {
 	// コンストラクタ・デストラクタ
 public:
@@ -51,19 +51,19 @@ protected:
 
 	// インターフェース
 public:
-	void AllocBuffer(int);								//!< バッファサイズの調整。必要に応じて拡大する。
-	void SetRawData(const void* pData, int nDataLen);		//!< バッファの内容を置き換える
-	void SetRawData(const CMemory&);						//!< バッファの内容を置き換える
-	void AppendRawData(const void* pData, int nDataLen);	//!< バッファの最後にデータを追加する
-	void AppendRawData(const CMemory*);					//!< バッファの最後にデータを追加する
+	void AllocBuffer(int);									// バッファサイズの調整。必要に応じて拡大する。
+	void SetRawData(const void* pData, int nDataLen);		// バッファの内容を置き換える
+	void SetRawData(const CMemory&);						// バッファの内容を置き換える
+	void AppendRawData(const void* pData, int nDataLen);	// バッファの最後にデータを追加する
+	void AppendRawData(const CMemory*);						// バッファの最後にデータを追加する
 	void Clean() { _Empty(); }
 	void Clear() { _Empty(); }
 
-	inline const void* GetRawPtr(int* pnLength) const;		//!< データへのポインタと長さ返す
-	inline void* GetRawPtr(int* pnLength);					//!< データへのポインタと長さ返す
-	inline const void* GetRawPtr() const { return m_pRawData; } //!< データへのポインタを返す
-	inline void* GetRawPtr() { return m_pRawData; }			//!< データへのポインタを返す
-	int GetRawLength() const { return m_nRawLen; }			//!< データ長を返す。バイト単位。
+	inline const void* GetRawPtr(int* pnLength) const;		// データへのポインタと長さ返す
+	inline void* GetRawPtr(int* pnLength);					// データへのポインタと長さ返す
+	inline const void* GetRawPtr() const { return m_pRawData; } // データへのポインタを返す
+	inline void* GetRawPtr() { return m_pRawData; }			// データへのポインタを返す
+	int GetRawLength() const { return m_nRawLen; }			// データ長を返す。バイト単位。
 
 	// 演算子
 	const CMemory& operator = (const CMemory&);
@@ -79,7 +79,7 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	void _Empty(void); //!< 解放する。m_pRawDataはNULLになる。
+	void _Empty(void); // 解放する。m_pRawDataはNULLになる。
 	void _AddData(const void*, int);
 public:
 	void _AppendSz(const char* str);
@@ -111,14 +111,14 @@ private: // 2002/2/10 aroka アクセス権変更
 //                     inline関数の実装                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 inline
-const void* CMemory::GetRawPtr(int* pnLength) const //!< データへのポインタと長さ返す
+const void* CMemory::GetRawPtr(int* pnLength) const // データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;
 }
 
 inline
-void* CMemory::GetRawPtr(int* pnLength) //!< データへのポインタと長さ返す
+void* CMemory::GetRawPtr(int* pnLength) // データへのポインタと長さ返す
 {
 	if (pnLength) *pnLength = GetRawLength();
 	return m_pRawData;

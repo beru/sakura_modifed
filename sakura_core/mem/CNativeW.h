@@ -29,7 +29,7 @@
 #include "debug/Debug2.h" // assert
 
 
-//! 文字列への参照を取得するインターフェース
+// 文字列への参照を取得するインターフェース
 class IStringRef {
 public:
 	virtual const wchar_t*	GetPtr()	const = 0;
@@ -37,7 +37,7 @@ public:
 };
 
 
-//! 文字列への参照を保持するクラス
+// 文字列への参照を保持するクラス
 class CStringRef : public IStringRef {
 public:
 	CStringRef() : m_pData(NULL), m_nDataLen(0) { }
@@ -54,27 +54,27 @@ private:
 };
 
 
-//! UNICODE文字列管理クラス
+// UNICODE文字列管理クラス
 class CNativeW : public CNative {
 public:
 	// コンストラクタ・デストラクタ
 	CNativeW();
 	CNativeW(const CNativeW&);
-	CNativeW(const wchar_t* pData, int nDataLen); //!< nDataLenは文字単位。
+	CNativeW(const wchar_t* pData, int nDataLen); // nDataLenは文字単位。
 	CNativeW(const wchar_t* pData);
 
 	// 管理
-	void AllocStringBuffer(int nDataLen);                    //!< (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
+	void AllocStringBuffer(int nDataLen);                    // (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 
 	// WCHAR
-	void SetString(const wchar_t* pData, int nDataLen);      //!< バッファの内容を置き換える。nDataLenは文字単位。
-	void SetString(const wchar_t* pszData);                  //!< バッファの内容を置き換える
-	void AppendString(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
-	void AppendString(const wchar_t* pszData, int nLength);  //!< バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
+	void SetString(const wchar_t* pData, int nDataLen);      // バッファの内容を置き換える。nDataLenは文字単位。
+	void SetString(const wchar_t* pszData);                  // バッファの内容を置き換える
+	void AppendString(const wchar_t* pszData);               // バッファの最後にデータを追加する
+	void AppendString(const wchar_t* pszData, int nLength);  // バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
 
 	// CNativeW
-	void SetNativeData(const CNativeW& pcNative);            //!< バッファの内容を置き換える
-	void AppendNativeData(const CNativeW&);                  //!< バッファの最後にデータを追加する
+	void SetNativeData(const CNativeW& pcNative);            // バッファの内容を置き換える
+	void AppendNativeData(const CNativeW&);                  // バッファの最後にデータを追加する
 
 	// 演算子
 	const CNativeW& operator += (wchar_t wch)				{ AppendString(&wch, 1);   return *this; }
@@ -84,8 +84,8 @@ public:
 	CNativeW operator + (const CNativeW& rhs) const			{ CNativeW tmp = *this; return tmp += rhs; }
 
 	// ネイティブ取得インターフェース
-	wchar_t operator [] (int nIndex) const;					//!< 任意位置の文字取得。nIndexは文字単位。
-	CLogicInt GetStringLength() const {						//!< 文字列長を返す。文字単位。
+	wchar_t operator [] (int nIndex) const;					// 任意位置の文字取得。nIndexは文字単位。
+	CLogicInt GetStringLength() const {						// 文字列長を返す。文字単位。
 		return CLogicInt(CNative::GetRawLength() / sizeof(wchar_t));
 	}
 	const wchar_t* GetStringPtr() const {
@@ -131,14 +131,14 @@ public:
 	//                           判定                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
-	//! 同一の文字列ならtrue
+	// 同一の文字列ならtrue
 	static bool IsEqual(const CNativeW& cmem1, const CNativeW& cmem2);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           変換                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void Replace(const wchar_t* pszFrom, const wchar_t* pszTo);   //!< 文字列置換
+	void Replace(const wchar_t* pszFrom, const wchar_t* pszTo);   // 文字列置換
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -149,10 +149,10 @@ public:
 	// ひとつは変換によるデータ喪失を抑える意味で。
 
 	// ACHAR
-	void SetStringOld(const char* pData, int nDataLen);    //!< バッファの内容を置き換える。pDataはSJIS。nDataLenは文字単位。
-	void SetStringOld(const char* pszData);                //!< バッファの内容を置き換える。pszDataはSJIS。
-	void AppendStringOld(const char* pData, int nDataLen); //!< バッファの最後にデータを追加する。pszDataはSJIS。
-	void AppendStringOld(const char* pszData);             //!< バッファの最後にデータを追加する。pszDataはSJIS。
+	void SetStringOld(const char* pData, int nDataLen);    // バッファの内容を置き換える。pDataはSJIS。nDataLenは文字単位。
+	void SetStringOld(const char* pszData);                // バッファの内容を置き換える。pszDataはSJIS。
+	void AppendStringOld(const char* pData, int nDataLen); // バッファの最後にデータを追加する。pszDataはSJIS。
+	void AppendStringOld(const char* pszData);             // バッファの最後にデータを追加する。pszDataはSJIS。
 	const char* GetStringPtrOld() const; // ShiftJISに変換して返す
 
 	// WCHAR
@@ -187,12 +187,12 @@ private:
 
 public:
 	// -- -- staticインターフェース -- -- //
-	static CLogicInt GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字がwchar_t何個分かを返す
-	static CLayoutInt GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が半角何個分かを返す
-	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の次にある文字の位置を返します
-	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の直前にある文字の位置を返します
+	static CLogicInt GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx); // 指定した位置の文字がwchar_t何個分かを返す
+	static CLayoutInt GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx); // 指定した位置の文字が半角何個分かを返す
+	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); // ポインタで示した文字の次にある文字の位置を返します
+	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); // ポインタで示した文字の直前にある文字の位置を返します
 
-	static CLayoutInt GetKetaOfChar(const CStringRef& cStr, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
+	static CLayoutInt GetKetaOfChar(const CStringRef& cStr, int nIdx) { // 指定した位置の文字が半角何個分かを返す
 		return GetKetaOfChar(cStr.GetPtr(), cStr.GetLength(), nIdx);
 	}
 };

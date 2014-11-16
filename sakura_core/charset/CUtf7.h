@@ -28,9 +28,9 @@
 class CUtf7 : public CCodeBase {
 public:
 	// CCodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory() = cSrc; return UTF7ToUnicode(pDst->_GetMemory()); }	//!< 特定コード → UNICODE    変換
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) { *pDst = *cSrc._GetMemory(); return UnicodeToUTF7(pDst); }	//!< UNICODE    → 特定コード 変換
-	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得
+	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory() = cSrc; return UTF7ToUnicode(pDst->_GetMemory()); }	// 特定コード → UNICODE    変換
+	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) { *pDst = *cSrc._GetMemory(); return UnicodeToUTF7(pDst); }	// UNICODE    → 特定コード 変換
+	void GetBom(CMemory* pcmemBom);	// BOMデータ取得
 // GetEolはCCodeBaseに移動	2010/6/13 Uchi
 
 public:

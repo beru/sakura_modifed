@@ -14,10 +14,10 @@
 // move end
 #include "CLatin1.h"
 
-//! eCodeTypeに適合する CCodeBaseインスタンス を生成
+// eCodeTypeに適合する CCodeBaseインスタンス を生成
 CCodeBase* CCodeFactory::CreateCodeBase(
-	ECodeType	eCodeType,		//!< 文字コード
-	int			nFlag			//!< bit 0: MIME Encodeされたヘッダをdecodeするかどうか
+	ECodeType	eCodeType,		// 文字コード
+	int			nFlag			// bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 )
 {
   	switch (eCodeType) {

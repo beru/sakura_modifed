@@ -355,11 +355,11 @@ CHtmlHelp g_cHtmlHelp;
 */
 
 HWND OpenHtmlHelp(
-	HWND		hWnd,	//!< [in] 呼び出し元ウィンドウのウィンドウハンドル
-	LPCTSTR		szFile,	//!< [in] HTML Helpのファイル名。不等号に続けてウィンドウタイプ名を指定可能。
-	UINT		uCmd,	//!< [in] HTML Help に渡すコマンド
-	DWORD_PTR	data,	//!< [in] コマンドに応じたデータ
-	bool		msgflag	//!< [in] エラーメッセージを表示するか。省略時はtrue。
+	HWND		hWnd,	// [in] 呼び出し元ウィンドウのウィンドウハンドル
+	LPCTSTR		szFile,	// [in] HTML Helpのファイル名。不等号に続けてウィンドウタイプ名を指定可能。
+	UINT		uCmd,	// [in] HTML Help に渡すコマンド
+	DWORD_PTR	data,	// [in] コマンドに応じたデータ
+	bool		msgflag	// [in] エラーメッセージを表示するか。省略時はtrue。
 )
 {
 	if (DLL_SUCCESS == g_cHtmlHelp.InitDll()) {

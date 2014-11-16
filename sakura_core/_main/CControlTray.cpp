@@ -146,7 +146,7 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
 	OpenNewEditor(hinst, msgParent, sLoadInfo, cCmdLine.GetStringPtr(),
-		false, NULL, GetDllShareData().m_Common.m_sTabBar.m_bNewWindow? true : false);
+		false, NULL, GetDllShareData().m_Common.m_sTabBar.m_bNewWindow);
 }
 
 
@@ -278,7 +278,7 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 	return GetTrayHwnd();
 }
 
-//! タスクトレイにアイコンを登録する
+// タスクトレイにアイコンを登録する
 bool CControlTray::CreateTrayIcon(HWND hWnd)
 {
 	// タスクトレイのアイコンを作る
@@ -304,7 +304,7 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 		);
 		TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, pszTips);
 // To Here Jan. 12, 2001
-		m_bCreatedTrayIcon = TRUE;	/* トレイにアイコンを作った */
+		m_bCreatedTrayIcon = TRUE;	// トレイにアイコンを作った
 	}
 	return true;
 }
@@ -619,7 +619,7 @@ LRESULT CControlTray::DispatchEvent(
 				wHotKeyCode
 			);
 
-//@@			/* 共有データの保存 */
+//@@			// 共有データの保存
 //@@			m_cShareData.SaveShareData();
 		}
 		return 0L;
@@ -860,7 +860,7 @@ LRESULT CControlTray::DispatchEvent(
 					for (size_t f = 0; f < nSize; f++) {
 						sLoadInfo.cFilePath = files[f].c_str();
 						CControlTray::OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo,
-							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false);
+							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow);
 					}
 				}
 				break;
@@ -914,7 +914,7 @@ LRESULT CControlTray::DispatchEvent(
 							NULL,
 							false,
 							NULL,
-							m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false
+							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
 						);
 
 					}
@@ -935,7 +935,7 @@ LRESULT CControlTray::DispatchEvent(
 					NetConnect(cMRUFolder.GetPath(nId - IDM_SELOPENFOLDER));
 
 					// ファイルオープンダイアログの初期化
-					CDlgOpenFile	cDlgOpenFile;
+					CDlgOpenFile cDlgOpenFile;
 					cDlgOpenFile.Create(
 						m_hInstance,
 						NULL,
@@ -958,16 +958,16 @@ LRESULT CControlTray::DispatchEvent(
 					for (size_t f = 0; f < nSize; f++) {
 						sLoadInfo.cFilePath = files[f].c_str();
 						CControlTray::OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo,
-							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false);
+							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow);
 					}
 				}
 				break;
 			}
 			return 0L;
 		case WM_LBUTTONDBLCLK:
-			bLDClick = true;		/* 03/02/20 ai */
+			bLDClick = true;		// 03/02/20 ai
 			// 新規編集ウィンドウの追加
-			OnNewEditor(m_pShareData->m_Common.m_sTabBar.m_bNewWindow == TRUE);
+			OnNewEditor(m_pShareData->m_Common.m_sTabBar.m_bNewWindow);
 			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる
 			::PostMessageAny(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
 			return 0L;
@@ -1047,8 +1047,8 @@ void CControlTray::OnNewEditor(bool bNewWindow)
 {
 	// 新規ウィンドウで開くオプションは、タブバー＆グループ化を前提とする
 	bNewWindow = bNewWindow
-				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd == TRUE
-				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin == FALSE;
+				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
+				 && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin;
 
 	// 編集ウインドウを開く
 	SLoadInfo sLoadInfo;
@@ -1070,13 +1070,13 @@ void CControlTray::OnNewEditor(bool bNewWindow)
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 bool CControlTray::OpenNewEditor(
-	HINSTANCE			hInstance,			//!< [in] インスタンスID (実は未使用)
-	HWND				hWndParent,			//!< [in] 親ウィンドウハンドル．エラーメッセージ表示用
-	const SLoadInfo&	sLoadInfo,			//!< [in]
-	const TCHAR*		szCmdLineOption,	//!< [in] 追加のコマンドラインオプション
-	bool				sync,				//!< [in] trueなら新規エディタの起動まで待機する
-	const TCHAR*		pszCurDir,			//!< [in] 新規エディタのカレントディレクトリ(NULL可)
-	bool				bNewWindow			//!< [in] 新規エディタを新しいウインドウで開く
+	HINSTANCE			hInstance,			// [in] インスタンスID (実は未使用)
+	HWND				hWndParent,			// [in] 親ウィンドウハンドル．エラーメッセージ表示用
+	const SLoadInfo&	sLoadInfo,			// [in]
+	const TCHAR*		szCmdLineOption,	// [in] 追加のコマンドラインオプション
+	bool				sync,				// [in] trueなら新規エディタの起動まで待機する
+	const TCHAR*		pszCurDir,			// [in] 新規エディタのカレントディレクトリ(NULL可)
+	bool				bNewWindow			// [in] 新規エディタを新しいウインドウで開く
 )
 {
 	// 共有データ構造体のアドレスを返す
@@ -1296,7 +1296,7 @@ bool CControlTray::OpenNewEditor2(
 	const EditInfo*	pfi,
 	bool			bViewMode,
 	bool			sync,
-	bool			bNewWindow			//!< [in] 新規エディタを新しいウインドウで開く
+	bool			bNewWindow			// [in] 新規エディタを新しいウインドウで開く
 )
 {
 
@@ -1358,7 +1358,7 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 				}
 			}
 			// 前のウィンドウをアクティブにする
-			HWND	hwndWork = pEditNodeArr[j].GetHwnd();
+			HWND hwndWork = pEditNodeArr[j].GetHwnd();
 			ActivateFrameWindow(hwndWork);
 			// 最後のペインをアクティブにする
 			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 1);
@@ -1398,7 +1398,7 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 				}
 			}
 			// 次のウィンドウをアクティブにする
-			HWND	hwndWork = pEditNodeArr[j].GetHwnd();
+			HWND hwndWork = pEditNodeArr[j].GetHwnd();
 			ActivateFrameWindow(hwndWork);
 			// 最初のペインをアクティブにする
 			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 0);
@@ -1415,7 +1415,7 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
 */
 void CControlTray::TerminateApplication(
-	HWND hWndFrom	//!< [in] 呼び出し元のウィンドウハンドル
+	HWND hWndFrom	// [in] 呼び出し元のウィンドウハンドル
 )
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
@@ -1452,10 +1452,10 @@ void CControlTray::TerminateApplication(
 	@date 2007.06.20 ryoji nGroup引数を追加
 */
 BOOL CControlTray::CloseAllEditor(
-	BOOL	bCheckConfirm,	//!< [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
-	HWND	hWndFrom,		//!< [in] 呼び出し元のウィンドウハンドル
-	BOOL	bExit,			//!< [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
-	int		nGroup			//!< [in] グループID
+	BOOL	bCheckConfirm,	// [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
+	HWND	hWndFrom,		// [in] 呼び出し元のウィンドウハンドル
+	BOOL	bExit,			// [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
+	int		nGroup			// [in] グループID
 	)
 {
 	EditNode* pWndArr;
@@ -1466,12 +1466,12 @@ BOOL CControlTray::CloseAllEditor(
 	
 	// 全編集ウィンドウへ終了要求を出す
 	BOOL bRes = CAppNodeGroupHandle(nGroup).RequestCloseEditor(pWndArr, n, bExit, bCheckConfirm, hWndFrom);	// 2007.02.13 ryoji bExitを引き継ぐ
-	delete []pWndArr;
+	delete [] pWndArr;
 	return bRes;
 }
 
 
-//! ポップアップメニュー(トレイ左ボタン)
+// ポップアップメニュー(トレイ左ボタン)
 int	CControlTray::CreatePopUpMenu_L(void)
 {
 	// 本当はセマフォにしないとだめ
@@ -1585,7 +1585,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 // キーワード：トレイ右クリックメニュー順序
 // Oct. 12, 2000 JEPRO ポップアップメニュー(トレイ左ボタン) を参考にして新たに追加した部分
 
-//! ポップアップメニュー(トレイ右ボタン)
+// ポップアップメニュー(トレイ右ボタン)
 int	CControlTray::CreatePopUpMenu_R(void)
 {
 	// 本当はセマフォにしないとだめ

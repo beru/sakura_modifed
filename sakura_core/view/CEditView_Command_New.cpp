@@ -348,7 +348,7 @@ void CEditView::InsertData_CEditView(
 void CEditView::DeleteData2(
 	const CLayoutPoint& _ptCaretPos,
 	CLogicInt			nDelLen,
-	CNativeW*			pcMem		//!< [out]
+	CNativeW*			pcMem		// [out]
 )
 {
 #ifdef _DEBUG
@@ -653,9 +653,9 @@ end_of_func:;
 
 
 void CEditView::ReplaceData_CEditView(
-	const CLayoutRange&	sDelRange,			//!< [in]  削除範囲レイアウト単位
-	const wchar_t*		pInsData,			//!< [in]  挿入するデータ
-	CLogicInt			nInsDataLen,		//!< [in]  挿入するデータの長さ
+	const CLayoutRange&	sDelRange,			// [in]  削除範囲レイアウト単位
+	const wchar_t*		pInsData,			// [in]  挿入するデータ
+	CLogicInt			nInsDataLen,		// [in]  挿入するデータの長さ
 	bool				bRedraw,
 	COpeBlk*			pcOpeBlk,
 	bool				bFastMode,
@@ -694,14 +694,14 @@ void CEditView::ReplaceData_CEditView2(
 // Jun 23, 2000 genta 変数名を書き換え忘れていたのを修正
 // Jun. 1, 2000 genta DeleteDataから移動した
 void CEditView::ReplaceData_CEditView3(
-	CLayoutRange	sDelRange,			//!< [in]  削除範囲レイアウト単位
-	COpeLineData*	pcmemCopyOfDeleted,	//!< [out] 削除されたデータのコピー(NULL可能)
-	COpeLineData*	pInsData,			//!< [in]  挿入するデータ
+	CLayoutRange	sDelRange,			// [in]  削除範囲レイアウト単位
+	COpeLineData*	pcmemCopyOfDeleted,	// [out] 削除されたデータのコピー(NULL可能)
+	COpeLineData*	pInsData,			// [in]  挿入するデータ
 	bool			bRedraw,
 	COpeBlk*		pcOpeBlk,
 	int				nDelSeq,
 	int*			pnInsSeq,
-	bool			bFastMode,			//!< [in] CDocLineMgrを更新しない,行末チェックを省略する。bRedraw==falseの必要あり
+	bool			bFastMode,			// [in] CDocLineMgrを更新しない,行末チェックを省略する。bRedraw==falseの必要あり
 	const CLogicRange*	psDelRangeLogicFast
 )
 {
@@ -815,10 +815,10 @@ void CEditView::ReplaceData_CEditView3(
 		// DLRArg.ptNewPos;
 		CSearchAgent(&GetDocument()->m_cDocLineMgr).ReplaceData(&DLRArg);
 	}else {
-		LRArg.sDelRange    = sDelRange;		//!< 削除範囲レイアウト
-		LRArg.pcmemDeleted = pcMemDeleted;	//!< [out] 削除されたデータ
-		LRArg.pInsData     = pInsData;		//!< 挿入するデータ
-		LRArg.nDelSeq      = nDelSeq;	//!< 挿入するデータの長さ
+		LRArg.sDelRange    = sDelRange;		// 削除範囲レイアウト
+		LRArg.pcmemDeleted = pcMemDeleted;	// [out] 削除されたデータ
+		LRArg.pInsData     = pInsData;		// 挿入するデータ
+		LRArg.nDelSeq      = nDelSeq;		// 挿入するデータの長さ
 		layoutMgr.ReplaceData_CLayoutMgr(&LRArg);
 	}
 

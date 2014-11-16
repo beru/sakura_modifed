@@ -37,10 +37,10 @@
 #include "CKeyWordSetMgr.h"
 #include <limits>
 
-//! 1ブロック当たりのキーワード数
+// 1ブロック当たりのキーワード数
 static const int nKeyWordSetBlockSize = 50;
 
-//! ブロックサイズで整列
+// ブロックサイズで整列
 inline int GetAlignmentSize(int nSize)
 {
 	return (nKeyWordSetBlockSize - 1 + nSize) / nKeyWordSetBlockSize * nKeyWordSetBlockSize;
@@ -111,9 +111,9 @@ const CKeyWordSetMgr& CKeyWordSetMgr::operator = (CKeyWordSetMgr& cKeyWordSetMgr
 	@date 2005.01.29 genta サイズ0で作成→reallocするように
 */
 bool CKeyWordSetMgr::AddKeyWordSet(
-	const wchar_t*	pszSetName,		//!< [in] セット名
-	bool			bKEYWORDCASE,	//!< [in] 大文字小文字の区別．true:あり, false:無し
-	int				nSize			//!< [in] 最初に領域を確保するサイズ．
+	const wchar_t*	pszSetName,		// [in] セット名
+	bool			bKEYWORDCASE,	// [in] 大文字小文字の区別．true:あり, false:無し
+	int				nSize			// [in] 最初に領域を確保するサイズ．
 )
 {
 	if (nSize < 0) {
@@ -220,11 +220,11 @@ const wchar_t* CKeyWordSetMgr::GetKeyWord(int nIdx, int nIdx2)
 	return m_szKeyWordArr[m_nStartIdx[nIdx] + nIdx2];
 }
 
-//! ｎ番目のセットのｍ番目のキーワードを編集
+// ｎ番目のセットのｍ番目のキーワードを編集
 const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
-	int				nIdx,		//!< [in] キーワードセット番号
-	int				nIdx2,		//!< [in] キーワード番号
-	const WCHAR*	pszKeyWord	//!< [in] 設定するキーワード
+	int				nIdx,		// [in] キーワードセット番号
+	int				nIdx2,		// [in] キーワード番号
+	const WCHAR*	pszKeyWord	// [in] 設定するキーワード
 )
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
@@ -440,9 +440,9 @@ bool CKeyWordSetMgr::GetKeyWordCase(int nIdx)
 	@date 2004.07.29 Moca CShareData::ShareData_IO_2内のコードを元に移築・作成
 */
 int CKeyWordSetMgr::SetKeyWordArr(
-	int				nIdx,			//!< [in] キーワードセット番号
-	int				nSize,			//!< [in] キーワード数
-	const wchar_t*	pszKeyWordArr	//!< [in]「key\\tword\\t\\0」又は「key\\0word\\0\\0」の形式
+	int				nIdx,			// [in] キーワードセット番号
+	int				nSize,			// [in] キーワード数
+	const wchar_t*	pszKeyWordArr	// [in]「key\\tword\\t\\0」又は「key\\0word\\0\\0」の形式
 )
 {
 	if (!KeyWordReAlloc(nIdx, nSize)) {
@@ -474,9 +474,9 @@ int CKeyWordSetMgr::SetKeyWordArr(
 	@return 登録したキーワード数．0は失敗．
 */
 int CKeyWordSetMgr::SetKeyWordArr(
-	int				nIdx,				//!< [in] キーワードセット番号
-	int				nSize,				//!< [in] ppszKeyWordArrの要素数
-	const wchar_t*	ppszKeyWordArr[]	//!< [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
+	int				nIdx,				// [in] キーワードセット番号
+	int				nSize,				// [in] ppszKeyWordArrの要素数
+	const wchar_t*	ppszKeyWordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
 )
 {
 	if (!KeyWordReAlloc(nIdx, nSize)) {
@@ -504,11 +504,11 @@ int CKeyWordSetMgr::CleanKeyWords(int nIdx)
 		SortKeyWord(nIdx);
 	}
 
-	int nDelCount = 0;	//!< 削除キーワード数
+	int nDelCount = 0;	// 削除キーワード数
 	int i = 0;
 	while (i < GetKeyWordNum(nIdx) - 1) {
 		const wchar_t* p = GetKeyWord(nIdx, i);
-		bool bDelKey = false;	//!< trueなら削除対象
+		bool bDelKey = false;	// trueなら削除対象
 		// 重複するキーワードか
 		const wchar_t* r = GetKeyWord(nIdx, i + 1);
 		unsigned int nKeyWordLen = wcslen(p);
