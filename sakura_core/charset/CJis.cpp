@@ -245,11 +245,14 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 
 /* E-Mail(JIS→Unicode)コード変換 */
 // 2007.08.13 kobake 追加
-EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
+EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool base64decode)
 {
+	// エラー状態
+	bool berror;
+
 	// ソースを取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>(pMem->GetRawPtr(&nSrcLen));
+	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 
 	// ソースバッファポインタとソースの長さ
 	const char* psrc = pSrc;
@@ -280,8 +283,8 @@ EConvertResult CJis::JISToUnicode(CMemory* pMem, bool base64decode)
 	bool berror; // エラー状態
 	int nDstLen = JisToUni(psrc, nsrclen, pDst, &berror);
 	
-	// pMem にセット
-	pMem->SetRawData(pDst, nDstLen * sizeof(wchar_t));
+	// pDstMem にセット
+	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen * sizeof(wchar_t) );
 	
 	delete [] pDst;
 
@@ -450,13 +453,13 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 }
 
 
-EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
+EConvertResult CJis::UnicodeToJIS(const CNativeW& cSrc, CMemory* pDstMem)
 {
 	bool berror = false;
 
 	// ソースを取得
-	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
-	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
+	const wchar_t* pSrc = cSrc.GetStringPtr();
+	int nSrcLen = cSrc.GetStringLength();
 
 	// 必要なバッファ容量を確認してバッファを確保
 	char* pDst;
@@ -472,8 +475,8 @@ EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
 	// 変換
 	int nDstLen = UniToJis(pSrc, nSrcLen, pDst, &berror);
 
-	// pMem をセット
-	pMem->SetRawData(pDst, nDstLen);
+	// pDstMem をセット
+	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	delete [] pDst;
 
@@ -488,7 +491,6 @@ EConvertResult CJis::UnicodeToJIS(CMemory* pMem)
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
-	static CMemory	cCharBuffer;
 
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInJis) {
@@ -497,11 +499,11 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	}
 
 	// 1文字データバッファ
-	cCharBuffer.SetRawData("", 0);
-	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
+	CNativeW cCharBuffer;
+	cCharBuffer.SetString(cSrc, 1);
 
-	// EUC-JP 変換
-	EConvertResult res = UnicodeToJIS(&cCharBuffer);
+	// JIS 変換
+	EConvertResult res = UnicodeToJIS(cCharBuffer, cCharBuffer._GetMemory());
 	if (res != RESULT_COMPLETE) {
 		return res;
 	}
@@ -509,13 +511,9 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	// Hex変換
 	bool bInEsc = false;
 	TCHAR* pd = pDst;
-	int i;
-	unsigned char* ps; 
-	for (
-		i = cCharBuffer.GetRawLength(), ps = (unsigned char*)cCharBuffer.GetRawPtr();
-		i > 0;
-		i--, ps++
-	) {
+	int	i = cCharBuffer._GetMemory()->GetRawLength();
+	unsigned char* ps = (unsigned char*)cCharBuffer._GetMemory()->GetRawPtr();
+	for (; i >0; i--, ps ++) {
 		if (*ps == 0x1B) {
 			bInEsc = true;
 		}else if (bInEsc) {

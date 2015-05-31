@@ -25,6 +25,7 @@
 //@@@ 2002.2.2 YAZAKI マクロはCSMacroMgrに統一
 #include "macro/CSMacroMgr.h"
 #include "dlg/CDlgExec.h"
+#include "dlg/CDlgOpenFile.h"
 #include "CEditApp.h"
 #include "recent/CRecentCurDir.h"
 #include "util/module.h"
@@ -91,7 +92,6 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
 		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD26));
 	}
 
-	CDlgOpenFile	cDlgOpenFile;
 	TCHAR			szPath[_MAX_PATH + 1];
 	TCHAR			szInitDir[_MAX_PATH + 1];
 	szPath[0] = 0;
@@ -104,6 +104,7 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
 		_tcscpy(szInitDir, macroFolder);	// マクロ用フォルダ
 	}
 	// ファイルオープンダイアログの初期化
+	CDlgOpenFile	cDlgOpenFile;
 	cDlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
@@ -137,7 +138,6 @@ void CViewCommander::Command_LOADKEYMACRO(void)
 	sFlags.m_bRecordingKeyMacro = FALSE;
 	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
-	CDlgOpenFile	cDlgOpenFile;
 	TCHAR			szPath[_MAX_PATH + 1];
 	TCHAR			szInitDir[_MAX_PATH + 1];
 	const TCHAR* pszFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
@@ -151,6 +151,7 @@ void CViewCommander::Command_LOADKEYMACRO(void)
 		_tcscpy_s(szInitDir, pszFolder);	// マクロ用フォルダ
 	}
 	// ファイルオープンダイアログの初期化
+	CDlgOpenFile cDlgOpenFile;
 	cDlgOpenFile.Create(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),

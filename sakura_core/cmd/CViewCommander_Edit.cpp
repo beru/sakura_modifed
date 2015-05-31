@@ -37,6 +37,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 	}
 
 	CLogicInt nPos;
+	CLogicInt nCharChars;
 
 	auto* pDoc = GetDocument();
 	pDoc->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
@@ -52,7 +53,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 	// 現在位置にデータを挿入
 	CNativeW cmemDataW2;
 	cmemDataW2 = wcChar;
-	if (WCODE::IsLineDelimiter(wcChar)) { 
+	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
 			CEol cWork = pDoc->m_cDocEditor.GetNewLineCode();
@@ -65,6 +66,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 		}
 		if (typeData->m_bAutoIndent) {	// オートインデント
 			const CLayout* pCLayout;
+			const wchar_t* pLine;
 			CLogicInt nLineLen;
 			auto& layoutMgr = pDoc->m_cLayoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout);
@@ -200,7 +202,7 @@ end_of_for:;
 	}
 
 	// 2005.10.11 ryoji 改行時に末尾の空白を削除
-	if (WCODE::IsLineDelimiter(wcChar) && typeData->m_bRTrimPrevLine) {	// 改行時に末尾の空白を削除
+	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol) && typeData->m_bRTrimPrevLine) {	// 改行時に末尾の空白を削除
 		// 前の行にある末尾の空白を削除する
 		m_pCommanderView->RTrimPrevLine();
 	}
@@ -309,7 +311,11 @@ void CViewCommander::Command_UNDO(void)
 
 	MY_RUNNINGTIMER(cRunningTimer, "CViewCommander::Command_UNDO()");
 
+	COpe*		pcOpe = NULL;
+
 	COpeBlk*	pcOpeBlk;
+	int			nOpeBlkNum;
+	int			i;
 	bool		bIsModified;
 //	int			nNewLine;	// 挿入された部分の次の位置の行
 //	int			nNewPos;	// 挿入された部分の次の位置のデータ位置
@@ -320,14 +326,17 @@ void CViewCommander::Command_UNDO(void)
 	// 各種モードの取り消し
 	Command_CANCEL_MODE();
 
-	m_pCommanderView->m_bDoing_UndoRedo = TRUE;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = true;	// アンドゥ・リドゥの実行中か
 
 	// 現在のUndo対象の操作ブロックを返す
 	auto& caret = GetCaret();
 	auto& docEditor = GetDocument()->m_cDocEditor;
 	if ((pcOpeBlk = docEditor.m_cOpeBuf.DoUndo(&bIsModified))) {
-		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	// hor
-		int nOpeBlkNum = pcOpeBlk->GetNum();
+		nOpeBlkNum = pcOpeBlk->GetNum();
+		bool bDraw = (nOpeBlkNum < 5) && m_pCommanderView->GetDrawSwitch();
+		bool bDrawAll = false;
+		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// hor
+
 
 		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
@@ -336,10 +345,7 @@ void CViewCommander::Command_UNDO(void)
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
 
-		bool bFastMode = false;
-		if (100 < nOpeBlkNum) {
-			bFastMode = true;
-		}
+		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 		for (int i = nOpeBlkNum - 1; i >= 0; i--) {
 			COpe* pcOpe = pcOpeBlk->GetOpe(i);
@@ -377,11 +383,11 @@ void CViewCommander::Command_UNDO(void)
 					}
 
 					// データ置換 削除&挿入にも使える
-					m_pCommanderView->ReplaceData_CEditView3(
+					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						selInfo.m_sSelect,				// 削除範囲
-						&pcInsertOpe->m_pcmemData,	// 削除されたデータのコピー(NULL可能)
+						&pcInsertOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
-						false,						// 再描画するか否か
+						bDraw,						// 再描画するか否か
 						NULL,
 						pcInsertOpe->m_nOrgSeq,
 						NULL,
@@ -399,17 +405,17 @@ void CViewCommander::Command_UNDO(void)
 					CDeleteOpe* pcDeleteOpe = static_cast<CDeleteOpe*>(pcOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
-					if (0 < pcDeleteOpe->m_pcmemData.size()) {
+					if (0 < pcDeleteOpe->m_cOpeLineData.size()) {
 						// データ置換 削除&挿入にも使える
 						CLayoutRange sRange;
 						sRange.Set(ptCaretPos_Before);
 						CLogicRange cSelectLogic;
 						cSelectLogic.Set(pcOpe->m_ptCaretPos_PHY_Before);
-						m_pCommanderView->ReplaceData_CEditView3(
+						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 							sRange,
 							NULL,										// 削除されたデータのコピー(NULL可能)
-							&pcDeleteOpe->m_pcmemData,
-							false,										// 再描画するか否か
+							&pcDeleteOpe->m_cOpeLineData,
+							bDraw,										// 再描画するか否か
 							NULL,
 							0,
 							&pcDeleteOpe->m_nOrgSeq,
@@ -432,11 +438,11 @@ void CViewCommander::Command_UNDO(void)
 					cSelectLogic.SetTo(pcOpe->m_ptCaretPos_PHY_After);
 
 					// データ置換 削除&挿入にも使える
-					m_pCommanderView->ReplaceData_CEditView3(
+					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						sRange,				// 削除範囲
 						&pcReplaceOpe->m_pcmemDataIns,	// 削除されたデータのコピー(NULL可能)
 						&pcReplaceOpe->m_pcmemDataDel,	// 挿入するデータ
-						false,							// 再描画するか否か
+						bDraw,						// 再描画するか否か
 						NULL,
 						pcReplaceOpe->m_nOrgInsSeq,
 						&pcReplaceOpe->m_nOrgDelSeq,
@@ -459,6 +465,7 @@ void CViewCommander::Command_UNDO(void)
 			if (bFastMode) {
 				if (i == 0) {
 					layoutMgr._DoLayout();
+					GetEditWindow()->ClearViewCaretPosInfo();
 					if (GetDocument()->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 						layoutMgr.CalculateTextWidth();
 					}
@@ -495,7 +502,7 @@ void CViewCommander::Command_UNDO(void)
 		// Undo後の変更フラグ
 		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
 
-		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
+		m_pCommanderView->m_bDoing_UndoRedo = false;	// アンドゥ・リドゥの実行中か
 
 		m_pCommanderView->SetBracketPairPos(true);	// 03/03/07 ai
 
@@ -515,7 +522,7 @@ void CViewCommander::Command_UNDO(void)
 
 		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
 
-		if (!GetEditWindow()->UpdateTextWrap()) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+		if( !GetEditWindow()->UpdateTextWrap() && bDrawAll ){	// 折り返し方法関連の更新	// 2008.06.10 ryoji
 			GetEditWindow()->RedrawAllViews(m_pCommanderView);	// 他のペインの表示を更新
 		}
 		if (hwndProgress) {
@@ -524,7 +531,7 @@ void CViewCommander::Command_UNDO(void)
 	}
 
 	caret.m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().x;	// 2007.10.11 ryoji 追加
-	m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = false;	// アンドゥ・リドゥの実行中か
 
 	return;
 }
@@ -573,13 +580,15 @@ void CViewCommander::Command_REDO(void)
 	// 各種モードの取り消し
 	Command_CANCEL_MODE();
 
-	m_pCommanderView->m_bDoing_UndoRedo = TRUE;	// アンドゥ・リドゥの実行中か
+	m_pCommanderView->m_bDoing_UndoRedo = true;	// アンドゥ・リドゥの実行中か
 
 	// 現在のRedo対象の操作ブロックを返す
 	auto& caret = GetCaret();
 	if ((pcOpeBlk = docEditor.m_cOpeBuf.DoRedo(&bIsModified))) {
-		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(false);	// 2007.07.22 ryoji
 		nOpeBlkNum = pcOpeBlk->GetNum();
+		bool bDraw = (nOpeBlkNum < 5) && m_pCommanderView->GetDrawSwitch();
+		bool bDrawAll = false;
+		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// 2007.07.22 ryoji
 
 		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
@@ -588,10 +597,7 @@ void CViewCommander::Command_REDO(void)
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
 
-		bool bFastMode = false;
-		if (100 < nOpeBlkNum) {
-			bFastMode = true;
-		}
+		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 		for (int i = 0; i < nOpeBlkNum; ++i) {
 			pcOpe = pcOpeBlk->GetOpe(i);
@@ -624,11 +630,11 @@ void CViewCommander::Command_REDO(void)
 						sRange.Set(ptCaretPos_Before);
 						CLogicRange cSelectLogic;
 						cSelectLogic.Set(pcOpe->m_ptCaretPos_PHY_Before);
-						m_pCommanderView->ReplaceData_CEditView3(
+						bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 							sRange,
 							NULL,										// 削除されたデータのコピー(NULL可能)
-							&pcInsertOpe->m_pcmemData,					// 挿入するデータ
-							false,										// 再描画するか否か
+							&pcInsertOpe->m_cOpeLineData,				// 挿入するデータ
+							bDraw,										// 再描画するか否か
 							NULL,
 							0,
 							&pcInsertOpe->m_nOrgSeq,
@@ -637,7 +643,7 @@ void CViewCommander::Command_REDO(void)
 						);
 
 					}
-					pcInsertOpe->m_pcmemData.clear();
+					pcInsertOpe->m_cOpeLineData.clear();
 				}
 				break;
 			case OPE_DELETE:
@@ -656,11 +662,11 @@ void CViewCommander::Command_REDO(void)
 					cSelectLogic.SetTo(pcDeleteOpe->m_ptCaretPos_PHY_To);
 
 					// データ置換 削除&挿入にも使える
-					m_pCommanderView->ReplaceData_CEditView3(
+					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						CLayoutRange(ptCaretPos_Before, ptCaretPos_To),
-						&pcDeleteOpe->m_pcmemData,	// 削除されたデータのコピー(NULL可能)
+						&pcDeleteOpe->m_cOpeLineData,	// 削除されたデータのコピー(NULL可能)
 						NULL,
-						false,
+						bDraw,
 						NULL,
 						pcDeleteOpe->m_nOrgSeq,
 						NULL,
@@ -685,11 +691,11 @@ void CViewCommander::Command_REDO(void)
 					cSelectLogic.SetTo(pcReplaceOpe->m_ptCaretPos_PHY_To);
 
 					// データ置換 削除&挿入にも使える
-					m_pCommanderView->ReplaceData_CEditView3(
+					bDrawAll |= m_pCommanderView->ReplaceData_CEditView3(
 						CLayoutRange(ptCaretPos_Before, ptCaretPos_To),
 						&pcReplaceOpe->m_pcmemDataDel,	// 削除されたデータのコピー(NULL可能)
 						&pcReplaceOpe->m_pcmemDataIns,	// 挿入するデータ
-						false,
+						bDraw,
 						NULL,
 						pcReplaceOpe->m_nOrgDelSeq,
 						&pcReplaceOpe->m_nOrgInsSeq,
@@ -705,6 +711,7 @@ void CViewCommander::Command_REDO(void)
 			if (bFastMode) {
 				if (i == nOpeBlkNum - 1) {
 					layoutMgr._DoLayout();
+					GetEditWindow()->ClearViewCaretPosInfo();
 					if (GetDocument()->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 						layoutMgr.CalculateTextWidth();
 					}
@@ -736,7 +743,7 @@ void CViewCommander::Command_REDO(void)
 		// Redo後の変更フラグ
 		docEditor.SetModified(bIsModified, true);	// Jan. 22, 2002 genta
 
-		m_pCommanderView->m_bDoing_UndoRedo = FALSE;	// アンドゥ・リドゥの実行中か
+		m_pCommanderView->m_bDoing_UndoRedo = false;	// アンドゥ・リドゥの実行中か
 
 		m_pCommanderView->SetBracketPairPos(true);	// 03/03/07 ai
 
@@ -902,7 +909,8 @@ void CViewCommander::DelCharForOverwrite(const wchar_t* pszInput, int nLen)
 					nDelLen = 1;
 					if (nKetaDiff < 0 && nPos < line.GetLength()) {
 						wchar_t c = line.At(nPos);
-						if (c != WCODE::TAB && !WCODE::IsLineDelimiter(c)) {
+						if (c != WCODE::TAB && !WCODE::IsLineDelimiter(c,
+								GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
 							nDelLen = 2;
 							CLayoutInt nKetaBefore2 = CNativeW::GetKetaOfChar(line, nPos);
 							nKetaAfterIns = nKetaBefore + nKetaBefore2 - nKetaAfter;

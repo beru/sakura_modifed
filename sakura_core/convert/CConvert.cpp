@@ -4,6 +4,7 @@
 #include "CEol.h"
 #include "charset/charcode.h"
 #include "charset/CCodeMediator.h"
+#include "charset/CCodeFactory.h"
 #include "charset/CShiftJis.h"
 #include "charset/CJis.h"
 #include "charset/CEuc.h"
@@ -46,17 +47,17 @@ void CConvertMediator::ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, i
 	case F_CODECNV_UNICODEBE2SJIS:
 	case F_CODECNV_UTF82SJIS:
 	case F_CODECNV_UTF72SJIS:
-		CShiftJis::UnicodeToSJIS(pCMemory->_GetMemory());
+		CShiftJis::UnicodeToSJIS(*pCMemory, pCMemory->_GetMemory());
 		break;
 	// コード変換(SJIS2xxx)
-	case F_CODECNV_SJIS2JIS:		CJis::UnicodeToJIS(pCMemory->_GetMemory());			break;
-	case F_CODECNV_SJIS2EUC:		CEuc::UnicodeToEUC(pCMemory->_GetMemory());			break;
-	case F_CODECNV_SJIS2UTF8:		CUtf8::UnicodeToUTF8(pCMemory->_GetMemory());		break;
-	case F_CODECNV_SJIS2UTF7:		CUtf7::UnicodeToUTF7(pCMemory->_GetMemory());		break;
+	case F_CODECNV_SJIS2JIS:		CJis::UnicodeToJIS(*pCMemory, pCMemory->_GetMemory());			break;
+	case F_CODECNV_SJIS2EUC:		CEuc::UnicodeToEUC(*pCMemory, pCMemory->_GetMemory());			break;
+	case F_CODECNV_SJIS2UTF8:		CUtf8::UnicodeToUTF8(*pCMemory, pCMemory->_GetMemory());		break;
+	case F_CODECNV_SJIS2UTF7:		CUtf7::UnicodeToUTF7(*pCMemory, pCMemory->_GetMemory());		break;
 	}
 
+	ECodeType ecode = CODE_NONE;
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
-		ECodeType ecode;
 		CCodeMediator ccode(CEditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding);
 		ecode = ccode.CheckKanjiCode(
 			reinterpret_cast<const char*>(pCMemory->_GetMemory()->GetRawPtr()),
@@ -70,6 +71,7 @@ void CConvertMediator::ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, i
 		case CODE_UTF7:			nFuncCode = F_CODECNV_UTF72SJIS;		break;
 		}
 	}
+	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
 	switch (nFuncCode) {
 	// 文字種変換、整形
@@ -84,23 +86,31 @@ void CConvertMediator::ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, i
 	case F_HANKATATOZENKATA:		CConvert_HankataToZenkata().CallConvert(pCMemory);	break;	// 半角カタカナ→全角カタカナ
 	case F_HANKATATOZENHIRA:		CConvert_HankataToZenhira().CallConvert(pCMemory);	break;	// 半角カタカナ→全角ひらがな
 	// 文字種変換、整形
-	case F_TABTOSPACE:				CConvert_TabToSpace(nTabWidth, nStartColumn).CallConvert(pCMemory);break;	// TAB→空白
-	case F_SPACETOTAB:				CConvert_SpaceToTab(nTabWidth, nStartColumn).CallConvert(pCMemory);break;	// 空白→TAB
-	case F_LTRIM:					CConvert_Trim(true).CallConvert(pCMemory);			break;	// 2001.12.03 hor
-	case F_RTRIM:					CConvert_Trim(false).CallConvert(pCMemory);			break;	// 2001.12.03 hor
+	case F_TABTOSPACE:				CConvert_TabToSpace(nTabWidth, nStartColumn, bExtEol).CallConvert(pCMemory);break;	// TAB→空白
+	case F_SPACETOTAB:				CConvert_SpaceToTab(nTabWidth, nStartColumn, bExtEol).CallConvert(pCMemory);break;	// 空白→TAB
+	case F_LTRIM:					CConvert_Trim(true, bExtEol).CallConvert(pCMemory);		break;	// 2001.12.03 hor
+	case F_RTRIM:					CConvert_Trim(false, bExtEol).CallConvert(pCMemory);	break;	// 2001.12.03 hor
 	// コード変換(xxx2SJIS)
-	case F_CODECNV_EMAIL:			CJis::JISToUnicode(pCMemory->_GetMemory(), true);	break;
-	case F_CODECNV_EUC2SJIS:		CEuc::EUCToUnicode(pCMemory->_GetMemory());			break;
+	// 2014.02.10 Moca F_CODECNV_AUTO2SJIS追加。自動判別でSJIS, Latin1, CESU8になった場合をサポート
+	case F_CODECNV_AUTO2SJIS:
+		{
+			int nFlag = true;
+			std::auto_ptr<CCodeBase> pcCode( CCodeFactory::CreateCodeBase(ecode, nFlag) );
+			pcCode->CodeToUnicode(*(pCMemory->_GetMemory()), pCMemory);
+		}
+		break;
+	case F_CODECNV_EMAIL:			CJis::JISToUnicode(*(pCMemory->_GetMemory()), pCMemory, true);	break;
+	case F_CODECNV_EUC2SJIS:		CEuc::EUCToUnicode(*(pCMemory->_GetMemory()), pCMemory);			break;
 	case F_CODECNV_UNICODE2SJIS:	/* 無変換 */										break;
-	case F_CODECNV_UNICODEBE2SJIS:	CUnicodeBe::UnicodeBEToUnicode(pCMemory->_GetMemory());	break;
-	case F_CODECNV_UTF82SJIS:		CUtf8::UTF8ToUnicode(pCMemory->_GetMemory());		break;
-	case F_CODECNV_UTF72SJIS:		CUtf7::UTF7ToUnicode(pCMemory->_GetMemory());		break;
+	case F_CODECNV_UNICODEBE2SJIS:	CUnicodeBe::UnicodeBEToUnicode(*(pCMemory->_GetMemory()), pCMemory);	break;
+	case F_CODECNV_UTF82SJIS:		CUtf8::UTF8ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
+	case F_CODECNV_UTF72SJIS:		CUtf7::UTF7ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
 	// コード変換(SJIS2xxx)
 	case F_CODECNV_SJIS2JIS:
 	case F_CODECNV_SJIS2EUC:
 	case F_CODECNV_SJIS2UTF8:
 	case F_CODECNV_SJIS2UTF7:
-		CShiftJis::SJISToUnicode(pCMemory->_GetMemory());
+		CShiftJis::SJISToUnicode(*(pCMemory->_GetMemory()), pCMemory);
 		break;
 	}
 

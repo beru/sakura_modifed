@@ -61,3 +61,7 @@ const int COLUMNSPACE_MAX = 64;
 const int MAXLINEKETAS		= 10240;	//!< 1行の桁数の最大値
 const int MINLINEKETAS		= 10;		//!< 1行の桁数の最小値
 
+// 2014.08.02 定数定義追加 katze
+const int LINENUMWIDTH_MIN = 2;
+const int LINENUMWIDTH_MAX = 11;
+

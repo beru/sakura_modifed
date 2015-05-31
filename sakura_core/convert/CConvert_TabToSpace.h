@@ -27,10 +27,11 @@
 
 class CConvert_TabToSpace : public CConvert {
 public:
-	CConvert_TabToSpace(int nTabWidth, int nStartColumn)
+	CConvert_TabToSpace(int nTabWidth, int nStartColumn, bool bExtEol)
 		:
 		m_nTabWidth(nTabWidth),
-		m_nStartColumn(nStartColumn)
+		m_nStartColumn(nStartColumn),
+		m_bExtEol(bExtEol)
 	{
 	}
 
@@ -39,5 +40,6 @@ public:
 private:
 	int m_nTabWidth;
 	int m_nStartColumn;
+	bool m_bExtEol;
 };
 

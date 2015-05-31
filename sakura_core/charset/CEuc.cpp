@@ -71,14 +71,14 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 
 /* EUC→Unicodeコード変換 */
 // 2007.08.13 kobake 追加
-EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
+EConvertResult CEuc::EUCToUnicode(const CMemory& cSrc, CNativeW* pDstMem)
 {
 	// エラー状態
 	bool bError = false;
 
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>(pMem->GetRawPtr(&nSrcLen));
+	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 
 	// 変換先バッファサイズとその確保
 	wchar_t* pDst;
@@ -95,7 +95,7 @@ EConvertResult CEuc::EUCToUnicode(CMemory* pMem)
 	int nDstLen = EucjpToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
-	pMem->SetRawData(pDst, nDstLen * sizeof(wchar_t));
+	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
 
 	// 後始末
 	delete [] pDst;
@@ -167,8 +167,8 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 	// エラー状態
 	bool bError = false;
 
-	const wchar_t* pSrc = reinterpret_cast<wchar_t*>(pMem->GetRawPtr());
-	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
+	const wchar_t* pSrc = cSrc.GetStringPtr();
+	int nSrcLen = cSrc.GetStringLength();
 
 	// 必要なバッファサイズを調べてメモリを確保
 	char* pDst;
@@ -185,7 +185,7 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 	int nDstLen = UniToEucjp(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
-	pMem->SetRawData(pDst, nDstLen);
+	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	// 後始末
 	delete [] pDst;
@@ -209,19 +209,16 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
-	CMemory	cCharBuffer;
-	bool bbinary = false;
-	
 	// 1文字データバッファ
-	cCharBuffer.SetRawData("", 0);
-	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
+	cCharBuffer.SetString(cSrc, 1);
 
+	bool bbinary = false;
 	if (IsBinaryOnSurrogate(cSrc[0])) {
 		bbinary = true;
 	}
 
 	// EUC-JP 変換
-	EConvertResult	res = UnicodeToEUC(&cCharBuffer);
+	res = UnicodeToEUC(cCharBuffer, cCharBuffer._GetMemory());
 	if (res != RESULT_COMPLETE) {
 		return res;
 	}
@@ -230,7 +227,7 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	unsigned char* ps = reinterpret_cast<unsigned char*>(cCharBuffer.GetRawPtr());
 	TCHAR* pd = pDst;
 	if (!bbinary) {
-		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
+		for (int i = cCharBuffer._GetMemory()->GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

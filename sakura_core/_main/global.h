@@ -28,12 +28,6 @@
 #include <Windows.h>
 #include <tchar.h>
 
-#if defined(__BORLANDC__)
-#define __forceinline inline
-#define _itoa itoa
-#define _stricmp stricmp
-#define _memicmp memicmp
-#endif
 
 
 // ウィンドウのID
@@ -77,6 +71,7 @@ enum EBarChangeNotifyType {
 	MYBCN_FUNCKEY	= 1,		// ファンクションキー
 	MYBCN_TAB		= 2,		// タブ
 	MYBCN_STATUSBAR	= 3,		// ステータスバー
+	MYBCN_MINIMAP	= 4,		//ミニマップ
 };
 //@@@ To Here 2003.05.31 MIK
 

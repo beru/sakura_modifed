@@ -112,6 +112,7 @@ public:
 	void Command_BROWSE(void);					// ブラウズ
 	void Command_VIEWMODE(void);				// ビューモード
 	void Command_PROPERTY_FILE(void);			// ファイルのプロパティ
+	void Command_PROFILEMGR( void );			// プロファイルマネージャ
 	void Command_EXITALLEDITORS(void);			// 編集の全終了	// 2007.02.13 ryoji 追加
 	void Command_EXITALL(void);					// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
 	BOOL Command_PUTFILE(LPCWSTR, ECodeType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
@@ -155,7 +156,7 @@ public:
 	void Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option);
 	int Command_UP(bool bSelect, bool bRepeat, int line = 0);			// カーソル上移動
 	int Command_DOWN(bool bSelect, bool bRepeat);	// カーソル下移動
-	int  Command_LEFT(bool, bool);					// カーソル左移動
+	int Command_LEFT(bool, bool);					// カーソル左移動
 	void Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, bool bRepeat);	// カーソル右移動
 	void Command_UP2(bool bSelect);					// カーソル上移動（２行づつ）
 	void Command_DOWN2(bool bSelect);				// カーソル下移動（２行づつ）
@@ -166,10 +167,10 @@ public:
 	void Command_GOLINEEND(bool bSelect, int , int);	// 行末に移動（折り返し単位）
 //	void Command_ROLLDOWN(int);						// スクロールダウン
 //	void Command_ROLLUP(int);						// スクロールアップ
-	void Command_HalfPageUp(bool bSelect);			// 半ページアップ	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) // Oct. 10, 2000 JEPRO 名称変更
-	void Command_HalfPageDown(bool bSelect);		// 半ページダウン	// Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) // Oct. 10, 2000 JEPRO 名称変更
-	void Command_1PageUp(bool bSelect);				// １ページアップ	// Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	void Command_1PageDown(bool bSelect);			// １ページダウン	// Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	void Command_HalfPageUp( bool bSelect, CLayoutYInt );			//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_HalfPageDown( bool bSelect, CLayoutYInt );		//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_1PageUp( bool bSelect, CLayoutYInt );			//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	void Command_1PageDown( bool bSelect, CLayoutYInt );			//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	void Command_GOFILETOP(bool bSelect);			// ファイルの先頭に移動
 	void Command_GOFILEEND(bool bSelect);			// ファイルの最後に移動
 	void Command_CURLINECENTER(void);				// カーソル行をウィンドウ中央へ
@@ -189,6 +190,8 @@ public:
 	void Command_WHEELPAGEDOWN(int);
 	void Command_WHEELPAGELEFT(int);
 	void Command_WHEELPAGERIGHT(int);
+	void Command_MODIFYLINE_NEXT( bool bSelect );	// 次の変更行へ
+	void Command_MODIFYLINE_PREV( bool bSelect );	// 前の変更行へ
 
 	// 選択系
 	bool Command_SELECTWORD(CLayoutPoint* pptCaretPos = NULL);		// 現在位置の単語選択
@@ -271,6 +274,8 @@ public:
 
 	void Command_GREP_DIALOG(void);						// Grepダイアログの表示
 	void Command_GREP(void);							// Grep
+	void Command_GREP_REPLACE_DLG( void );				/* Grep置換ダイアログの表示 */
+	void Command_GREP_REPLACE( void );					/* Grep置換 */
 	void Command_JUMP_DIALOG(void);						// 指定行ヘジャンプダイアログの表示
 	void Command_JUMP(void);							// 指定行ヘジャンプ
 // From Here 2001.12.03 hor
@@ -298,7 +303,8 @@ public:
 	void Command_BOOKMARK_RESET(void);					// ブックマークの全解除
 // To Here 2001.12.03 hor
 	void Command_BOOKMARK_PATTERN(void);				// 2002.01.16 hor 指定パターンに一致する行をマーク
-	bool Command_TagJumpEx(const TCHAR* szFileName, const int nLine, const int nColumn, const int nOption);	// 拡張タグジャンプ
+	void Command_FUNCLIST_NEXT( void );					// 次の関数リストマーク	2014.01.05
+	void Command_FUNCLIST_PREV( void );					// 前の関数リストマーク	2014.01.05
 
 
 
@@ -313,6 +319,7 @@ public:
 	void Command_SHOWFUNCKEY(void);		// ファンクションキーの表示/非表示
 	void Command_SHOWTAB(void);			// タブの表示/非表示	//@@@ 2003.06.10 MIK
 	void Command_SHOWSTATUSBAR(void);				// ステータスバーの表示/非表示
+	void Command_SHOWMINIMAP(void);		// ミニマップの表示/非表示
 	void Command_TYPE_LIST(void);					// タイプ別設定一覧
 	void Command_CHANGETYPE(int nTypePlusOne);		// タイプ別設定一時適用
 	void Command_OPTION_TYPE(void);					// タイプ別設定
@@ -394,8 +401,10 @@ public:
 private:
 	void AlertNotFound(HWND hwnd, bool, LPCTSTR format, ...);
 	void DelCharForOverwrite(const wchar_t* pszInput, int nLen);	// 上書き用の一文字削除	// 2009.04.11 ryoji
+	bool Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int count ); // タグジャンプの前処理
+public:
 	CLogicInt ConvertEol(const wchar_t* pszText, CLogicInt nTextLen, wchar_t* pszConvertedText);
-	bool Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count); // タグジャンプの前処理
+	void Sub_BoxSelectLock( int flags );
 
 };
 

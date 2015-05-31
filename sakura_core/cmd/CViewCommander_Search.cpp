@@ -537,6 +537,11 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 	int nPaste			=	dlgReplace.m_nPaste;
 	int nReplaceTarget	=	dlgReplace.m_nReplaceTarget;
 
+	if( nPaste && nReplaceTarget == 3 ){
+		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
+		nPaste = FALSE;
+	}
+
 	// From Here 2001.12.03 hor
 	if (nPaste && !GetDocument()->m_cDocEditor.IsEnablePaste()) {
 		OkMessage(hwndParent, LS(STR_ERR_CEDITVIEW_CMD10));
@@ -593,10 +598,28 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 				// 位置指定ないので、何もしない
 			}
 		}
+		// 行削除 選択範囲を行全体に拡大。カーソル位置を行頭へ(正規表現でも実行)
+		if (nReplaceTarget == 3) {
+			CLogicPoint lineHome;
+			GetDocument()->m_cLayoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
+			lineHome.x = CLogicXInt(0); // 行頭
+			CLayoutRange selectFix;
+			GetDocument()->m_cLayoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
+			lineHome.y++; // 次行の行頭
+			GetDocument()->m_cLayoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
+			GetCaret().GetAdjustCursorPos(selectFix.GetToPointer());
+			m_pCommanderView->GetSelectionInfo().SetSelectArea(selectFix);
+			m_pCommanderView->GetSelectionInfo().DrawSelectArea();
+			GetCaret().MoveCursor(selectFix.GetFrom(), false);
+			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+		}
 		// コマンドコードによる処理振り分け
 		// テキストを貼り付け
 		if (nPaste) {
 			Command_PASTE(0);
+		} else if( nReplaceTarget == 3 ){
+			// 行削除
+			Command_INSTEXT( false, L"", CLogicInt(0), TRUE );
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 先読みに対応するために物理行末までを使うように変更 2005/03/27 かろと
 			// 2002/01/19 novice 正規表現による文字列置換
@@ -705,6 +728,10 @@ void CViewCommander::Command_REPLACE_ALL()
 	BOOL bRegularExp	= m_pCommanderView->m_sCurSearchOption.bRegularExp;
 	BOOL bSelectedArea	= dlgReplace.m_bSelectedArea;
 	BOOL bConsecutiveAll = dlgReplace.m_bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	if (nPaste && nReplaceTarget == 3) {
+		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
+		nPaste = FALSE;
+	}
 
 	dlgReplace.m_bCanceled = false;
 	dlgReplace.m_nReplaceCnt = 0;
@@ -879,8 +906,9 @@ void CViewCommander::Command_REPLACE_ALL()
 	}
 
 	if (GetDllShareData().m_Common.m_sEdit.m_bConvertEOLPaste) {
-		wchar_t* pszConvertedText = new wchar_t[nREPLACEKEY * 2]; // 全文字\n→\r\n変換で最大の２倍になる
-		CLogicInt nConvertedTextLen = ConvertEol(szREPLACEKEY, nREPLACEKEY, pszConvertedText);
+		CLogicInt nConvertedTextLen = ConvertEol(szREPLACEKEY, nREPLACEKEY, NULL);
+		wchar_t	*pszConvertedText = new wchar_t[nConvertedTextLen];
+		ConvertEol(szREPLACEKEY, nREPLACEKEY, pszConvertedText);
 		cmemClip.SetString(pszConvertedText, nConvertedTextLen);
 		szREPLACEKEY = cmemClip.GetStringPtr(&nREPLACEKEY);
 		delete [] pszConvertedText;
@@ -1096,6 +1124,34 @@ void CViewCommander::Command_REPLACE_ALL()
 				// 位置指定ないので、何もしない
 			}
 		}
+		// 行削除 選択範囲を行全体に拡大。カーソル位置を行頭へ(正規表現でも実行)
+		if (nReplaceTarget == 3) {
+			if (bFastMode) {
+				const CLogicInt y = cSelectLogic.GetFrom().y;
+				cSelectLogic.SetFrom(CLogicPoint(CLogicXInt(0), y)); // 行頭
+				cSelectLogic.SetTo(CLogicPoint(CLogicXInt(0), y + CLogicInt(1))); // 次行の行頭
+				if (GetDocument()->m_cDocLineMgr.GetLineCount() == y + CLogicInt(1)) {
+					const CDocLine* pLine = GetDocument()->m_cDocLineMgr.GetLine(y);
+					if (pLine->GetEol() == EOL_NONE) {
+						// EOFは最終データ行にぶら下がりなので、選択終端は行末
+						cSelectLogic.SetTo(CLogicPoint(pLine->GetLengthWithEOL(), y)); // 対象行の行末
+					}
+				}
+				GetCaret().MoveCursorFastMode(cSelectLogic.GetFrom());
+			}else {
+				CLogicPoint lineHome;
+				GetDocument()->m_cLayoutMgr.LayoutToLogic(GetSelect().GetFrom(), &lineHome);
+				lineHome.x = CLogicXInt(0); // 行頭
+				CLayoutRange selectFix;
+				GetDocument()->m_cLayoutMgr.LogicToLayout(lineHome, selectFix.GetFromPointer());
+				lineHome.y++; // 次行の行頭
+				GetDocument()->m_cLayoutMgr.LogicToLayout(lineHome, selectFix.GetToPointer());
+				GetCaret().GetAdjustCursorPos(selectFix.GetToPointer());
+				m_pCommanderView->GetSelectionInfo().SetSelectArea(selectFix);
+				GetCaret().MoveCursor(selectFix.GetFrom(), false);
+			}
+		}
+
 
 		// コマンドコードによる処理振り分け
 		// テキストを貼り付け
@@ -1113,6 +1169,9 @@ void CViewCommander::Command_REPLACE_ALL()
 				// m_pCommanderView->AdjustScrollBars(); // 2007.07.22 ryoji
 				// m_pCommanderView->Redraw();
 			}
+			++nReplaceNum;
+		}else if (nReplaceTarget == 3) {
+			Command_INSTEXT( false, L"", CLogicInt(0), true, false, bFastMode, bFastMode ? &cSelectLogic : NULL );
 			++nReplaceNum;
 		}else if (bRegularExp) { // 検索／置換  1==正規表現
 			// 2002/01/19 novice 正規表現による文字列置換
@@ -1241,6 +1300,30 @@ void CViewCommander::Command_REPLACE_ALL()
 			}
 		}
 
+		if (!bFastMode && 50 <= nReplaceNum && !(bSelectedArea || nPaste)) {
+			bFastMode = true;
+			nAllLineNum = (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+			nAllLineNumOrg = nAllLineNumLogicOrg;
+			for (nShiftCount = 0; 300 < nAllLineNum; nShiftCount++) {
+				nAllLineNum/=2;
+			}
+			Progress_SetRange( hwndProgress, 0, nAllLineNum + 1 );
+			int nDiff = nAllLineNumOrg - (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+			if (0 <= nDiff) {
+				nNewPos = (nDiff + (Int)cSelectLogic.GetFrom().GetY2()) >> nShiftCount;
+			}else {
+				nNewPos = ::MulDiv((Int)cSelectLogic.GetFrom().GetY(), nAllLineNum, (Int)GetDocument()->m_cDocLineMgr.GetLineCount());
+			}
+			Progress_SetPos( hwndProgress, nNewPos +1 );
+			Progress_SetPos( hwndProgress, nNewPos );
+		}
+		// 最後に置換した位置を記憶
+		if (bFastMode) {
+			ptLastLogic = GetCaret().GetCaretLogicPos();
+		}else {
+			ptLast = GetCaret().GetCaretLayoutPos();
+		}
+
 		// 置換後の位置を確認
 		if (bSelectedArea) {
 			// 検索→置換の行補正値取得
@@ -1273,17 +1356,6 @@ void CViewCommander::Command_REPLACE_ALL()
 		}
 		// To Here 2001.12.03 hor
 
-		if (!bFastMode && 50 <= nReplaceNum && !(bSelectedArea || nPaste)) {
-			bFastMode = true;
-			nAllLineNum = (Int)layoutMgr.GetLineCount() >> nShiftCount;
-		}
-		// 最後に置換した位置を記憶
-		if (bFastMode) {
-			ptLastLogic = GetCaret().GetCaretLogicPos();
-		}else {
-			ptLast = GetCaret().GetCaretLayoutPos();
-		}
-
 		// 次を検索
 		// 2004.05.30 Moca 現在の検索文字列を使って検索する
 		Command_SEARCH_NEXT(false, bDisplayUpdate, true, 0, NULL, bFastMode ? &cSelectLogic : NULL);
@@ -1293,6 +1365,7 @@ void CViewCommander::Command_REPLACE_ALL()
 		if (0 < nReplaceNum) {
 			// CLayoutMgrの更新(変更有の場合)
 			layoutMgr._DoLayout();
+			GetEditWindow()->ClearViewCaretPosInfo();
 			if (GetDocument()->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 				layoutMgr.CalculateTextWidth();
 			}

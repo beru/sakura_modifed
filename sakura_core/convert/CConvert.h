@@ -41,7 +41,8 @@ public:
 	virtual ~CConvert() {}
 
 	// インターフェース
-	void CallConvert(CNativeW* pcData) {
+	void CallConvert( CNativeW* pcData )
+	{
 		bool bRet = DoConvert(pcData);
 		if (!bRet) {
 			ErrorMessage(NULL, LS(STR_CONVERT_ERR));

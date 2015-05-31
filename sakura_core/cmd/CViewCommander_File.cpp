@@ -42,6 +42,7 @@
 #include "uiparts/CWaitCursor.h"
 #include "dlg/CDlgProperty.h"
 #include "dlg/CDlgCancel.h"// 2002/2/8 hor
+#include "dlg/CDlgProfileMgr.h"
 #include "doc/CDocReader.h"	//  Command_PROPERTY_FILE for _DEBUG
 #include "print/CPrintPreview.h"
 #include "io/CBinaryStream.h"
@@ -413,9 +414,9 @@ void CViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 		// ファイルパスに空白が含まれている場合はダブルクォーテーションで囲む
 		// 2003.10.20 MIK コード簡略化
 		if (_tcschr(GetDocument()->m_cDocFile.GetFilePath(), TCODE::SPACE) ? TRUE : FALSE) {
-			auto_sprintf_s(szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_cDocFile.GetFilePath());
+			auto_sprintf( szPath, _T("@\"%ts\"\r\n"), GetDocument()->m_cDocFile.GetFilePath() );
 		}else {
-			auto_sprintf_s(szPath, _T("@%ts\r\n"), GetDocument()->m_cDocFile.GetFilePath());
+			auto_sprintf( szPath, _T("@%ts\r\n"), GetDocument()->m_cDocFile.GetFilePath() );
 		}
 		// クリップボードにデータを設定
 		m_pCommanderView->MySetClipboardData(szPath, _tcslen(szPath), false);
@@ -455,7 +456,7 @@ void CViewCommander::Command_BROWSE(void)
 		return;
 	}
 //	char	szURL[MAX_PATH + 64];
-//	auto_sprintf_s(szURL, L"%ls", GetDocument()->m_cDocFile.GetFilePath());
+//	auto_sprintf( szURL, L"%ls", GetDocument()->m_cDocFile.GetFilePath() );
 	// URLを開く
 //	::ShellExecuteEx(NULL, L"open", szURL, NULL, NULL, SW_SHOW);
 
@@ -525,6 +526,20 @@ void CViewCommander::Command_PROPERTY_FILE(void)
 	return;
 }
 
+
+void CViewCommander::Command_PROFILEMGR( void )
+{
+	CDlgProfileMgr profMgr;
+	if( profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 ) ){
+		TCHAR szOpt[MAX_PATH+10];
+		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
+		SLoadInfo sLoadInfo;
+		sLoadInfo.cFilePath = _T("");
+		sLoadInfo.eCharCode = CODE_DEFAULT;
+		sLoadInfo.bViewMode = false;
+		CControlTray::OpenNewEditor( G_AppInstance(), m_pCommanderView->GetHwnd(), sLoadInfo, szOpt, false, NULL, false );
+	}
+}
 
 // 編集の全終了	// 2007.02.13 ryoji 追加
 void CViewCommander::Command_EXITALLEDITORS(void)
@@ -713,8 +728,14 @@ BOOL CViewCommander::Command_INSFILE(LPCWSTR filename, ECodeType nCharCode, int 
 	if (!IsValidCodeType(nSaveCharCode)) nSaveCharCode = CODE_SJIS;
 
 	try {
+		bool bBigFile;
+#ifdef _WIN64
+		bBigFile = true;
+#else
+		bBigFile = false;
+#endif
 		// ファイルを開く
-		cfl.FileOpen(to_tchar(filename), nSaveCharCode, 0);
+		cfl.FileOpen( to_tchar(filename), bBigFile, nSaveCharCode, 0 );
 
 		// ファイルサイズが65KBを越えたら進捗ダイアログ表示
 		if (0x10000 < cfl.GetFileSize()) {

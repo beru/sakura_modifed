@@ -465,16 +465,32 @@ bool CViewCommander::Command_TagsMake(void)
 	_tcscat(options, _T(" *"));	// 配下のすべてのファイル
 
 	// コマンドライン文字列作成(MAX:1024)
-	// 2010.08.28 Moca システムディレクトリ付加
-	TCHAR szCmdDir[_MAX_PATH];
-	::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
-	// 2006.08.04 genta add /D to disable autorun
-	auto_sprintf_s(cmdline, _T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
+	if (IsWin32NT()) {
+		// 2010.08.28 Moca システムディレクトリ付加
+		TCHAR szCmdDir[_MAX_PATH];
+		::GetSystemDirectory(szCmdDir, _countof(szCmdDir));
+		// 2006.08.04 genta add /D to disable autorun
+		auto_sprintf(
+			cmdline,
+			_T("\"%ts\\cmd.exe\" /D /C \"\"%ts\\%ts\" %ts\""),
 			szCmdDir,
 			szExeFolder,	// sakura.exeパス
 			CTAGS_COMMAND,	// ctags.exe
 			options			// ctagsオプション
 		);
+	}else {
+		// 2010.08.28 Moca システムディレクトリ付加
+		TCHAR szCmdDir[_MAX_PATH];
+		::GetWindowsDirectory(szCmdDir, _countof(szCmdDir));
+		auto_sprintf(
+			cmdline,
+			_T("\"%ts\\command.com\" /C \"%ts\\%ts\" %ts"),
+			szCmdDir,
+			szExeFolder,	//sakura.exeパス
+			CTAGS_COMMAND,	//ctags.exe
+			options			//ctagsオプション
+		);
+	}
 
 	// コマンドライン実行
 	BOOL bProcessResult = CreateProcess(
@@ -705,41 +721,13 @@ bool CViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int coun
 		// (無題)でもファイル名を要求してくるのでダミーをつける
 		// 現在のタイプ別の1番目の拡張子を拝借
 		TCHAR szExts[MAX_TYPES_EXTS];
-		TCHAR* pszExt = szExts;
-		auto_strcpy(szExts, m_pCommanderView->m_pTypeData->m_szTypeExts);
-		if (szExts[0] != '\0') {
-			// strtok 注意
-			pszExt = _tcstok(szExts, _T(" ;,"));
-		}
-		int nExtLen = 0;
-		if (pszExt) {
-			nExtLen = auto_strlen(pszExt);
-		}
+		CDocTypeManager::GetFirstExt(m_pCommanderView->m_pTypeData->m_szTypeExts, szExts, _countof(szExts));
+		int nExtLen = auto_strlen( szExts );
 		_tcscat(szCurrentPath, _T("\\dmy"));
 		if (nExtLen) {
 			_tcscat(szCurrentPath, _T("."));
-			_tcscat(szCurrentPath, pszExt);
+			_tcscat( szCurrentPath, szExts );
 		}
 	}
 	return true;
 }
-
-/*!
-	拡張タグジャンプ
-	@param[in]	szFileName	ファイル名
-	@param[in]	nLine		行番号
-	@param[in]	nColumn		カラム
-	@param[in]	nOption		オプション情報
-*/
-bool CViewCommander::Command_TagJumpEx(const TCHAR* szFileName, const int nLine, const int nColumn, const int nOption)
-{
-	bool bClose = (nOption & 0x0001) ? true : false;
-	//bool bRelFromIni = (nOption & 0x0002) ? true : false;
-	if (szFileName != NULL) {
-		return m_pCommanderView->TagJumpSub(szFileName, CMyPoint(nColumn, nLine), bClose);
-	}else {
-		// 通常のジャンプ？
-		return false;
-	}
-}
-

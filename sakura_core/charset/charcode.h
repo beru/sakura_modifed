@@ -136,6 +136,12 @@ namespace WCODE {
 	inline bool IsLineDelimiter(wchar_t wc) {
 		return wc == CR || wc == LF || wc == 0x85 || wc == 0x2028 || wc == 0x2029;
 	}
+	inline bool IsLineDelimiterBasic(wchar_t wc) {
+		return wc==CR || wc==LF;
+	}
+	inline bool IsLineDelimiterExt(wchar_t wc) {
+		return wc==CR || wc==LF || wc==0x85 || wc==0x2028 || wc==0x2029;
+	}
 
 	//! íPåÍÇÃãÊêÿÇËï∂éöÇ≈Ç†ÇÈÇ©Ç«Ç§Ç©
 	inline bool IsWordDelimiter(wchar_t wc) {
@@ -286,6 +292,7 @@ struct SCharWidthCache {
 enum ECharWidthFontMode {
 	CWM_FONT_EDIT,
 	CWM_FONT_PRINT,
+	CWM_FONT_MINIMAP,
 	CWM_FONT_MAX,
 };
 

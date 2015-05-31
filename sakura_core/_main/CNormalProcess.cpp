@@ -110,7 +110,7 @@ bool CNormalProcess::InitializeProcess()
 			// From Here Oct. 19, 2001 genta
 			// カーソル位置が引数に指定されていたら指定位置にジャンプ
 			if (fi.m_ptCursor.y >= 0) {	// 行の指定があるか
-				CLogicPoint& pt = *GetDllShareData().m_sWorkBuffer.GetWorkBuffer<CLogicPoint>();
+				CLogicPoint& pt = GetDllShareData().m_sWorkBuffer.m_LogicPoint;
 				if (fi.m_ptCursor.x < 0) {
 					// 桁の指定が無い場合
 					::SendMessageAny(hwndOwner, MYWM_GETCARETPOS, 0, 0);
@@ -170,6 +170,7 @@ bool CNormalProcess::InitializeProcess()
 
 	if (bDebugMode) {
 		// デバッグモニタモードに設定
+		pEditWnd->GetDocument()->SetCurDirNotitle();
 		CAppMode::getInstance()->SetDebugModeON();
 		if (!CAppMode::getInstance()->IsDebugMode()) {
 			// デバッグではなくて(無題)
@@ -194,6 +195,8 @@ bool CNormalProcess::InitializeProcess()
 		}
 		cmdLine.GetGrepInfo(&gi); // 2002/2/8 aroka ここに移動
 		if (!bGrepDlg) {
+			// Grepでは対象パス解析に現在のカレントディレクトリを必要とする
+			// pEditWnd->GetDocument()->SetCurDirNotitle();
 			// 2003.06.23 Moca GREP実行前にMutexを開放
 			// こうしないとGrepが終わるまで新しいウィンドウを開けない
 			SetMainWindow(pEditWnd->GetHwnd());
@@ -201,18 +204,24 @@ bool CNormalProcess::InitializeProcess()
 			::CloseHandle(hMutex);
 			this->m_pcEditApp->m_pcGrepAgent->DoGrep(
 				&activeView,
+				gi.bGrepReplace,
 				&gi.cmGrepKey,
+				&gi.cmGrepRep,
 				&gi.cmGrepFile,
 				&gi.cmGrepFolder,
 				gi.bGrepCurFolder,
 				gi.bGrepSubFolder,
+				gi.bGrepStdout,
+				gi.bGrepHeader,
 				gi.sGrepSearchOption,
 				gi.nGrepCharSet,	// 2002/09/21 Moca
-				gi.bGrepOutputLine,
+				gi.nGrepOutputLineType,
 				gi.nGrepOutputStyle,
 				gi.bGrepOutputFileOnly,
 				gi.bGrepOutputBaseFolder,
-				gi.bGrepSeparateFolder
+				gi.bGrepSeparateFolder,
+				gi.bGrepPaste,
+				gi.bGrepBackup
 			);
 			pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
@@ -241,7 +250,7 @@ bool CNormalProcess::InitializeProcess()
 			csSearch.m_bGrepSubFolder = gi.bGrepSubFolder;
 			csSearch.m_sSearchOption = gi.sGrepSearchOption;
 			csSearch.m_nGrepCharSet = gi.nGrepCharSet;
-			csSearch.m_bGrepOutputLine = gi.bGrepOutputLine;
+			csSearch.m_nGrepOutputLineType = gi.nGrepOutputLineType;
 			csSearch.m_nGrepOutputStyle = gi.nGrepOutputStyle;
 			// 2003.06.23 Moca GREPダイアログ表示前にMutexを開放
 			// こうしないとGrepが終わるまで新しいウィンドウを開けない
@@ -253,6 +262,7 @@ bool CNormalProcess::InitializeProcess()
 			// Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
 			// 引数の設定がBOXに反映されない
 			pEditWnd->m_cDlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		// 検索文字列
+			pEditWnd->m_cDlgGrep.m_bSetText = true;
 			int nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFile);
 			_tcsncpy(pEditWnd->m_cDlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize);	// 検索ファイル
 			pEditWnd->m_cDlgGrep.m_szFile[nSize - 1] = _T('\0');
@@ -265,6 +275,9 @@ bool CNormalProcess::InitializeProcess()
 			int nRet = pEditWnd->m_cDlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
 			if (FALSE != nRet) {
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
+			}else {
+				// 自分はGrepでない
+				pEditWnd->GetDocument()->SetCurDirNotitle();
 			}
 			pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
@@ -283,6 +296,11 @@ bool CNormalProcess::InitializeProcess()
 		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it = plugs.begin(); it != plugs.end(); it++) {
 			(*it)->Invoke(&activeView, params);
+		}
+
+		if( !bGrepDlg && gi.bGrepStdout ){
+			// 即時終了
+			PostMessageCmd( pEditWnd->GetHwnd(), MYWM_CLOSE, PM_CLOSE_GREPNOCONFIRM | PM_CLOSE_EXIT, (LPARAM)NULL );
 		}
 
 		return true; // 2003.06.23 Moca
@@ -313,10 +331,10 @@ bool CNormalProcess::InitializeProcess()
 					nType
 				);
 			}
-			// ov. 6, 2000 genta
+			// Nov. 6, 2000 genta
 			// キャレット位置の復元のため
 			// オプション指定がないときは画面移動を行わないようにする
-			// ct. 19, 2001 genta
+			// Oct. 19, 2001 genta
 			// 未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
 			// 移動するようにする． || → &&
 			if (
@@ -328,8 +346,8 @@ bool CNormalProcess::InitializeProcess()
 			}
 
 			// オプション指定がないときはカーソル位置設定を行わないようにする
-			// ct. 19, 2001 genta
-			// も位置としては有効な値なので判定に含めなくてはならない
+			// Oct. 19, 2001 genta
+			// 0も位置としては有効な値なので判定に含めなくてはならない
 			if (0 <= fi.m_ptCursor.x || 0 <= fi.m_ptCursor.y) {
 				/*
 				  カーソル位置変換
@@ -360,6 +378,7 @@ bool CNormalProcess::InitializeProcess()
 			}
 			activeView.RedrawAll();
 		}else {
+			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
 			// 2004.05.13 Moca ファイル名が与えられなくてもReadOnlyとタイプ指定を有効にする
 			pEditWnd->SetDocumentTypeWhenCreate(
 				fi.m_nCharCode,
@@ -368,6 +387,7 @@ bool CNormalProcess::InitializeProcess()
 			);
 		}
 		if (!pEditWnd->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
+			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
 			CAppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
 		}
@@ -499,7 +519,11 @@ void CNormalProcess::OnExitProcess()
 HANDLE CNormalProcess::_GetInitializeMutex() const
 {
 	MY_RUNNINGTIMER(cRunningTimer, "NormalProcess::_GetInitializeMutex");
-	HANDLE hMutex = ::CreateMutex(NULL, TRUE, GSTR_MUTEX_SAKURA_INIT);
+	HANDLE hMutex;
+	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strMutexInitName = GSTR_MUTEX_SAKURA_INIT;
+	strMutexInitName += strProfileName;
+	hMutex = ::CreateMutex( NULL, TRUE, strMutexInitName.c_str() );
 	if (!hMutex) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));

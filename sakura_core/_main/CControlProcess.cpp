@@ -52,17 +52,23 @@ bool CControlProcess::InitializeProcess()
 		return false;
 	}
 
+	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+
 	// 初期化完了イベントを作成する
-	m_hEventCPInitialized = ::CreateEvent(NULL, TRUE, FALSE, GSTR_EVENT_SAKURA_CP_INITIALIZED);
-	if (!m_hEventCPInitialized) {
+	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
+	strInitEvent += strProfileName;
+	m_hEventCPInitialized = ::CreateEvent( NULL, TRUE, FALSE, strInitEvent.c_str() );
+	if (m_hEventCPInitialized) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateEvent()失敗。\n終了します。"));
 		return false;
 	}
 
-	// コントロールプロセスの目印
-	m_hMutexCP = ::CreateMutex(NULL, TRUE, GSTR_MUTEX_SAKURA_CP);
-	if (!m_hMutexCP) {
+	/* コントロールプロセスの目印 */
+	std::tstring strCtrlProcEvent = GSTR_MUTEX_SAKURA_CP;
+	strCtrlProcEvent += strProfileName;
+	m_hMutexCP = ::CreateMutex( NULL, TRUE, strCtrlProcEvent.c_str() );
+	if (m_hMutexCP) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));
 		return false;
@@ -83,9 +89,10 @@ bool CControlProcess::InitializeProcess()
 
 	// 共有データのロード
 	// 2007.05.19 ryoji 「設定を保存して終了する」オプション処理（sakuext連携用）を追加
+	TCHAR szIniFile[_MAX_PATH];
 	CShareData_IO::LoadShareData();
-	LPCTSTR pszIniFile = CFileNameManager::getInstance()->GetIniFileName();	// 出力iniファイル名
-	if (!fexist(pszIniFile) || CCommandLine::getInstance()->IsWriteQuit()) {
+	CFileNameManager::getInstance()->GetIniFileName( szIniFile, strProfileName.c_str() );	// 出力iniファイル名
+	if (!fexist(szIniFile) || CCommandLine::getInstance()->IsWriteQuit()) {
 		// レジストリ項目 作成
 		CShareData_IO::SaveShareData();
 		if (CCommandLine::getInstance()->IsWriteQuit()) {

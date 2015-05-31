@@ -36,14 +36,14 @@ bool CDecode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	}
 
 	// ヘッダーを解析
-	pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol);
+	pline = GetNextLineW( psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false );
 	if (!CheckUUHeader(pline, nlinelen, m_aFilename)) {
 		pcDst->_AppendSz("");
 		return false;
 	}
 
 	// ボディーを処理
-	while ((pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol)) != NULL) {
+	while( (pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false)) != NULL ){
 		if (ceol.GetType() != EOL_CRLF) {
 			pcDst->_AppendSz("");
 			return false;

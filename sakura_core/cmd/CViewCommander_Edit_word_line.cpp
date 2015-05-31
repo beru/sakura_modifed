@@ -38,11 +38,8 @@ void CViewCommander::Command_WordDeleteToStart(void)
 		return;
 	}
 
-	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
-		//$$ 動作上は問題が無いらしいですが。
-		//   ここの COpe だけ、意味付け(EOpeCode指定)がされていないので、
-		//   せめて何らかの名前付けをしてあげないと、意図が読み取れません。
-		COpe* pcOpe = new COpe;
+	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+		CMoveCaretOpe*	pcOpe = new CMoveCaretOpe();
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
 			GetSelect().GetTo(),
 			&pcOpe->m_ptCaretPos_PHY_Before
@@ -378,8 +375,7 @@ void CViewCommander::Command_DELETE_LINE(void)
 			// 操作の追加
 			GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(
-					GetCaret().GetCaretLogicPos(),
-					GetCaret().GetCaretLogicPos()
+					GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
 		}
@@ -411,8 +407,7 @@ void CViewCommander::Command_DUPLICATELINE(void)
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
-				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-				GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
@@ -426,8 +421,7 @@ void CViewCommander::Command_DUPLICATELINE(void)
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
-				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-				GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
@@ -475,8 +469,7 @@ void CViewCommander::Command_DUPLICATELINE(void)
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
-				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-				GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}

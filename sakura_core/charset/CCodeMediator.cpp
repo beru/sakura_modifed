@@ -123,7 +123,11 @@ ECodeType CCodeMediator::CheckKanjiCode(CESI* pcesi)
 	if (!pcesi) {
 		return CODE_DEFAULT;
 	}
-	ECodeType nret = DetectUnicode(pcesi);
+	if( pcesi->GetMetaName() != CODE_NONE ){
+		return pcesi->GetMetaName();
+	}
+	ECodeType nret;
+	nret = DetectUnicode( pcesi );
 	if (nret != CODE_NONE && pcesi->GetStatus() != ESI_NODETECTED) {
 		return nret;
 	}

@@ -29,17 +29,23 @@ class CMemory;
 */
 struct GrepInfo {
 	CNativeW		cmGrepKey;				//!< 検索キー
+	CNativeW		cmGrepRep;			//!< 置換キー
 	CNativeT		cmGrepFile;				//!< 検索対象ファイル
 	CNativeT		cmGrepFolder;			//!< 検索対象フォルダ
 	SSearchOption	sGrepSearchOption;		//!< 検索オプション
 	bool			bGrepCurFolder;			//!< カレントディレクトリを維持
+	bool			bGrepStdout;		//!< 標準出力モード
+	bool			bGrepHeader;		//!< ヘッダ情報表示
 	bool			bGrepSubFolder;			//!< サブフォルダを検索する
 	ECodeType		nGrepCharSet;			//!< 文字コードセット
 	int				nGrepOutputStyle;		//!< 結果出力形式
-	bool			bGrepOutputLine;		//!< 結果出力で該当行を出力する
+	int				nGrepOutputLineType;	//!< 結果出力：行を出力/該当部分/否マッチ行
 	bool			bGrepOutputFileOnly;	//!< ファイル毎最初のみ検索
 	bool			bGrepOutputBaseFolder;	//!< ベースフォルダ表示
 	bool			bGrepSeparateFolder;	//!< フォルダ毎に表示
+	bool			bGrepReplace;		//!< Grep置換
+	bool			bGrepPaste;			//!< クリップボードから貼り付け
+	bool			bGrepBackup;		//!< 置換でバックアップを保存
 };
 
 
@@ -82,6 +88,13 @@ public:
 	int GetGroupId() const {return m_nGroup;}	// 2007.06.26 ryoji
 	LPCWSTR GetMacro() const { return m_cmMacro.GetStringPtr(); }
 	LPCWSTR GetMacroType() const { return m_cmMacroType.GetStringPtr(); }
+	LPCWSTR GetProfileName() const{ return m_cmProfile.GetStringPtr(); }
+	bool IsSetProfile() const{ return m_bSetProfile; }
+	void SetProfileName(LPCWSTR s){
+		m_bSetProfile = true;
+		m_cmProfile.SetString(s);
+	}
+	bool IsProfileMgr() { return m_bProfileMgr; }
 	int GetFileNum(void) { return m_vFiles.size(); }
 	const TCHAR* GetFileName(int i) { return i < GetFileNum() ? m_vFiles[i].c_str() : NULL; }
 	void ClearFile(void) { m_vFiles.clear(); }
@@ -94,12 +107,15 @@ private:
 	bool		m_bDebugMode;		
 	bool		m_bNoWindow;		//! [out] TRUE: 編集Windowを開かない
 	bool		m_bWriteQuit;		//! [out] TRUE: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
+	bool		m_bProfileMgr;
+	bool		m_bSetProfile;
 	EditInfo	m_fi;				//!
 	GrepInfo	m_gi;				//!
 	bool		m_bViewMode;		//! [out] TRUE: Read Only
 	int			m_nGroup;			//! グループID	// 2007.06.26 ryoji
 	CNativeW	m_cmMacro;			//! [out] マクロファイル名／マクロ文
 	CNativeW	m_cmMacroType;		//! [out] マクロ種別
+	CNativeW	m_cmProfile;		//! プロファイル名
 	std::vector<std::tstring> m_vFiles;	//!< ファイル名(複数)
 };
 

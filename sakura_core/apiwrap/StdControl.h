@@ -114,6 +114,7 @@ namespace ApiWrap {
 	inline int List_GetCaretIndex(HWND hwndCtl)							{ return (int)(DWORD)::SendMessage(hwndCtl, LB_GETCARETINDEX, 0L, 0L); }
 	inline int List_GetCount(HWND hwndCtl)								{ return (int)(DWORD)::SendMessage(hwndCtl, LB_GETCOUNT, 0L, 0L); }
 	inline int List_GetCurSel(HWND hwndCtl)								{ return (int)(DWORD)::SendMessage(hwndCtl, LB_GETCURSEL, 0L, 0L); }
+	inline int List_GetTextLen(HWND hwndCtl, int nIndex)				{ return (int)(DWORD)::SendMessage(hwndCtl, LB_GETTEXTLEN, nIndex, 0L); }
 	inline int List_SetCurSel(HWND hwndCtl, int index)					{ return (int)(DWORD)::SendMessage(hwndCtl, LB_SETCURSEL, (WPARAM)index, 0L); }
 	inline LRESULT List_GetItemData(HWND hwndCtl, int index)			{ return (LRESULT)(ULONG_PTR)::SendMessage(hwndCtl, LB_GETITEMDATA, (WPARAM)index, 0L); }
 	inline int List_SetItemData(HWND hwndCtl, int index, int data)		{ return (int)(DWORD)::SendMessage(hwndCtl, LB_SETITEMDATA, (WPARAM)index, (LPARAM)data); }
@@ -135,6 +136,8 @@ namespace ApiWrap {
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	inline void EditCtl_LimitText(HWND hwndCtl, int cchLimit)			{ ::SendMessage(hwndCtl, EM_LIMITTEXT, (WPARAM)(cchLimit), 0L); }
 	inline void EditCtl_SetSel(HWND hwndCtl, int ichStart, int ichEnd)	{ ::SendMessage(hwndCtl, EM_SETSEL, ichStart, ichEnd); }
+
+	inline void EditCtl_ReplaceSel(HWND hwndCtl, const TCHAR* lpsz)		{ ::SendMessage(hwndCtl, EM_REPLACESEL, 0, (LPARAM)lpsz); }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      ボタン コントロール                    //

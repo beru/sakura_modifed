@@ -399,8 +399,7 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(
-					caret.GetCaretLogicPos(),	// 操作前のキャレット位置
-					caret.GetCaretLogicPos()	// 操作後のキャレット位置
+					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
 		}
@@ -507,12 +506,11 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 			caret.MoveCursor(CLayoutPoint(CLayoutInt(0), i), false);
 			caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 			
-			CNativeW pcMemDeleted;
 			// 指定位置の指定長データ削除
 			m_pCommanderView->DeleteData2(
 				CLayoutPoint(CLayoutInt(0), i),
 				nDelLen,	// 2001.12.03 hor
-				&pcMemDeleted
+				NULL
 			);
 			if (nLineCountPrev != GetDocument()->m_cLayoutMgr.GetLineCount()) {
 				// 行数が変化した!!
@@ -538,8 +536,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(
-					caret.GetCaretLogicPos(),	// 操作前のキャレット位置
-					caret.GetCaretLogicPos()	// 操作後のキャレット位置
+					caret.GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
 		}
@@ -648,7 +645,9 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	CLayoutInt	nCF(0), nCT(0);
 	CLayoutInt	nCaretPosYOLD;
 	bool		bBeginBoxSelectOld;
+	const wchar_t*	pLine;
 	CLogicInt	nLineLen;
+	int			j;
 	std::vector<SORTDATA*> sta;
 
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -699,7 +698,6 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	}
 	
 	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
-	int nStrDataLength = 0;
 	for (CLogicInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().y; i++) {
 		const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(i);
 		const CNativeW& cmemLine = pcDocLine->_GetDocLineDataWithEOL();
@@ -730,7 +728,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		pStrLast = sta[sta.size() - 1]->pCmemLine->GetStringPtr();
 		int nlen = sta[sta.size() - 1]->pCmemLine->GetStringLength();
 		if (0 < nlen) {
-			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1])) {
+			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
 				pStrLast = NULL;
 			}
 		}
@@ -759,7 +757,8 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		// 最終行の改行を削除
 		CLineData& lastData = repData[repData.size() - 1];
 		int nLen = lastData.cmemLine.GetStringLength();
-		while (0 < nLen && WCODE::IsLineDelimiter(lastData.cmemLine[nLen - 1])) {
+		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		while (0 <nLen && WCODE::IsLineDelimiter(lastData.cmemLine[nLen-1], bExtEol)) {
 			nLen--;
 		}
 		lastData.cmemLine._SetStringLength(nLen);
@@ -798,8 +797,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
-				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-				GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
@@ -876,12 +874,11 @@ void CViewCommander::Command_MERGE(void)
 
 	// 2010.08.22 NUL対応修正
 	std::vector<CStringRef> lineArr;
-	const wchar_t*	pLinew = NULL;
+	const wchar_t* pLinew = NULL;
 	int nLineLenw = 0;
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().GetY2());
 	for (CLogicInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().y; i++) {
-		CLogicInt nLineLen;
 		const wchar_t*	pLine = GetDocument()->m_cDocLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
@@ -931,8 +928,7 @@ void CViewCommander::Command_MERGE(void)
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
-				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-				GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}

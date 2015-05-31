@@ -126,14 +126,14 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 
 //! UTF-7→Unicodeコード変換
 // 2007.08.13 kobake 作成
-EConvertResult CUtf7::UTF7ToUnicode(CMemory* pMem)
+EConvertResult CUtf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
 	// エラー状態：
 	bool bError;
 
 	// データ取得
 	int nDataLen;
-	const char* pData = reinterpret_cast<const char*>(pMem->GetRawPtr(&nDataLen));
+	const char* pData = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nDataLen) );
 
 	// 必要なバッファサイズを調べて確保
 	wchar_t* pDst;
@@ -149,8 +149,8 @@ EConvertResult CUtf7::UTF7ToUnicode(CMemory* pMem)
 	// 変換
 	int nDstLen = Utf7ToUni(pData, nDataLen, pDst, &bError);
 
-	// pMem を設定
-	pMem->SetRawData(pDst, nDstLen * sizeof(wchar_t));
+	// pDstMem を設定
+	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
 
 	delete [] pDst;
 

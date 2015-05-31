@@ -205,15 +205,16 @@ void CViewCommander::Command_PASTE(int option)
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(pszText[nTextLen - 1])) {
+		if (!WCODE::IsLineDelimiter(pszText[nTextLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
 			cmemClip.AppendString(GetDocument()->m_cDocEditor.GetNewLineCode().GetValue2());
 			pszText = cmemClip.GetStringPtr(&nTextLen);
 		}
 	}
 
 	if (bConvertEol) {
-		wchar_t* pszConvertedText = new wchar_t[nTextLen * 2]; // 全文字\n→\r\n変換で最大の２倍になる
-		CLogicInt nConvertedTextLen = ConvertEol(pszText, nTextLen, pszConvertedText);
+		CLogicInt nConvertedTextLen = ConvertEol( pszText, nTextLen, NULL );
+		wchar_t	*pszConvertedText = new wchar_t[nConvertedTextLen];
+		ConvertEol( pszText, nTextLen, pszConvertedText );
 		// テキストを貼り付け
 		Command_INSTEXT(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);	// 2010.09.17 ryoji
 		delete [] pszConvertedText;
@@ -280,6 +281,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 	CLayoutPoint ptCurOld = GetCaret().GetCaretLayoutPos();
 
 	CLayoutInt nCount = CLayoutInt(0);
+	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
@@ -290,7 +292,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
 		// 最終行のPaste処理が動かないので，
 		// データの末尾に来た場合は強制的に処理するようにする
-		if (WCODE::IsLineDelimiter(szPaste[nPos]) || nPos == nPasteSize) {
+		if (WCODE::IsLineDelimiter(szPaste[nPos], bExtEol) || nPos == nPasteSize) {
 			// 現在位置にデータを挿入
 			if (nPos - nBgn > 0) {
 				m_pCommanderView->InsertData_CEditView(
@@ -312,7 +314,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 			const wchar_t* pLine = GetDocument()->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
 
 			if (pLine && 1 <= nLineLen) {
-				if (WCODE::IsLineDelimiter(pLine[nLineLen - 1])) {
+				if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
 				}else {
 					bAddLastCR = TRUE;
 				}
@@ -369,8 +371,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
 			new CMoveCaretOpe(
-				GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-				GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
@@ -467,8 +468,9 @@ void CViewCommander::Command_INSTEXT(
 		if (selInfo.IsBoxSelecting()) {
 			// 改行までを抜き出す
 			CLogicInt i;
+			bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 			for (i = CLogicInt(0); i < nTextLen; i++) {
-				if (WCODE::IsLineDelimiter(pszText[i])) {
+				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					break;
 				}
 			}
@@ -701,7 +703,8 @@ static bool AppendHTMLColor(
 	cmemBuf.Replace(L">", L"&gt;");
 	cmemClip.AppendNativeData(cmemBuf);
 	if (0 < nLen) {
-		return WCODE::IsLineDelimiter(pAppendStr[nLen - 1]);
+		return WCODE::IsLineDelimiter(pAppendStr[nLen-1],
+									  GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol);
 	}
 	return false;
 }
@@ -853,7 +856,6 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		CColorStrategy* pStrategyNormal = NULL;
 		CColorStrategy* pStrategyFound = NULL;
 		CColorStrategy* pStrategy = NULL;
-		CColorStrategy*	pStrategyLast = (CColorStrategy*)-1;
 		CStringRef cStringLine(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 		{
 			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
@@ -929,15 +931,15 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			int iLogic = nLineStart;
 			bool bAddCRLF = false;
 			for (; iLogic < nLineStart + nLineLen; ++iLogic) {
-				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, pool, &pStrategyNormal, &pStrategyFound);
-				if (pStrategy != pStrategyLast) {
+				bool bChange = false;
+				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, pool, &pStrategyNormal, &pStrategyFound, bChange);
+				if( bChange ){
 					int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 					if (-1 != nColorIdx) {
 						const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
 						sColorAttrNext = info.m_sColorAttr;
 						sFontAttrNext  = info.m_sFontAttr;
 					}
-					pStrategyLast = pStrategy;
 				}
 				if (nIdxFrom != -1 && nIdxFrom + nLineStart <= iLogic && iLogic <= nIdxTo + nLineStart) {
 					if (nIdxFrom + nLineStart == iLogic) {
@@ -1005,6 +1007,10 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			if (bLineNumLayout && !bAddCRLF) {
 				cmemClip.AppendString(WCODE::CRLF, 2);
 			}
+			// 2014.06.25 バッファ拡張
+			if( cmemClip.capacity() < cmemClip.GetStringLength() + 100 ){
+				cmemClip.AllocStringBuffer( cmemClip.capacity() + cmemClip.capacity() / 2 );
+			}
 		}
 	}
 	if (sFontAttrLast2.m_bBoldFont) {
@@ -1028,18 +1034,24 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 }
 
 
+
+/*!
+	@date 2014.12.30 Moca 同じCColorStrategyで違う色に切り替わったときに対応
+*/
 CColorStrategy* CViewCommander::GetColorStrategyHTML(
 	const CStringRef&	cStringLine,
 	int					iLogic,
 	const CColorStrategyPool*	pool,
 	CColorStrategy**	ppStrategy,
-	CColorStrategy**	ppStrategyFound		// [in, out]
+	CColorStrategy**	ppStrategyFound,		// [in,out]
+	bool& bChange
 )
 {
 	// 検索色終了
 	if (*ppStrategyFound) {
 		if ((*ppStrategyFound)->EndColor(cStringLine, iLogic)) {
 			*ppStrategyFound = NULL;
+			bChange = true;
 		}
 	}
 
@@ -1048,6 +1060,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 		CColor_Found*  pcFound  = pool->GetFoundStrategy();
 		if (pcFound->BeginColor(cStringLine, iLogic)) {
 			*ppStrategyFound = pcFound;
+			bChange = true;
 		}
 	}
 
@@ -1055,6 +1068,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 	if (*ppStrategy) {
 		if ((*ppStrategy)->EndColor(cStringLine, iLogic)) {
 			*ppStrategy = NULL;
+			bChange = true;
 		}
 	}
 
@@ -1064,6 +1078,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 		for (int i = 0; i < size; i++) {
 			if (pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
 				*ppStrategy = pool->GetStrategy(i);
+				bChange = true;
 				break;
 			}
 		}
@@ -1122,7 +1137,7 @@ void CViewCommander::Command_COPYTAG(void)
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptColLine);
 
 		// クリップボードにデータを設定
-		auto_sprintf_s(buf, L"%ts (%d,%d): ", GetDocument()->m_cDocFile.GetFilePath(), ptColLine.y + 1, ptColLine.x + 1);
+		auto_sprintf( buf, L"%ts (%d,%d): ", GetDocument()->m_cDocFile.GetFilePath(), ptColLine.y+1, ptColLine.x+1 );
 		m_pCommanderView->MySetClipboardData(buf, wcslen(buf), false);
 	}else {
 		ErrorBeep();

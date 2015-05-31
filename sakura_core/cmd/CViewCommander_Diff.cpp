@@ -24,14 +24,91 @@
 
 #include "dlg/CDlgCompare.h"
 #include "dlg/CDlgDiff.h"
+#include "charset/CCodeMediator.h"
+#include "charset/CCodePage.h"
+#include "env/CShareData.h"
 #include "util/window.h"
 #include "util/os.h"
+#include "_main/CMutex.h"
 
+
+/*!
+	@return true:正常終了 / false:エラー終了
+*/
+static bool Commander_COMPARE_core(CViewCommander& commander, bool& bDifferent, HWND hwnd, CLogicPoint& poSrc, CLogicPoint& poDes)
+{
+	const wchar_t*	pLineSrc;
+	CLogicInt		nLineLenSrc;
+	const wchar_t*	pLineDes;
+	int			nLineLenDes;
+	int max_size = (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>();
+	const CDocLineMgr& docMgr = commander.GetDocument()->m_cDocLineMgr;
+
+	bDifferent = true;
+	{
+		pLineDes = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<const EDIT_CHAR>();
+		int nLineOffset = 0;
+		for (;;) {
+			pLineSrc = docMgr.GetLine(poSrc.y)->GetDocLineStrWithEOL(&nLineLenSrc);
+			do {
+				// m_sWorkBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
+				LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
+				// 行(改行単位)データの要求
+				nLineLenDes = ::SendMessageAny( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
+				if (nLineLenDes < 0) {
+					return false;
+				}
+				// どっちも最終行(EOF)に到達。同一と判定
+				if (pLineSrc == NULL && 0 == nLineLenDes) {
+					bDifferent = false;
+					return true;
+				}
+				// どちらかだけが、最終行に到達
+				if (pLineSrc == NULL || 0 == nLineLenDes) {
+					return true;
+				}
+				int nDstEndPos = std::min( nLineLenDes, max_size ) + nLineOffset;
+				if (poDes.x < nLineOffset) {
+					// 1行目行頭データ読み飛ばし
+					if (nLineLenDes < poDes.x) {
+						poDes.x = nLineLenDes - 1;
+						return true;
+					}
+					nLineOffset = poDes.x;
+				}else {
+					// Note: サロゲート/改行の途中にカーソルがくることがある
+					while (poDes.x < nDstEndPos) {
+						if (nLineLenSrc <= poSrc.x) {
+							return true;
+						}
+						if (pLineSrc[poSrc.x] != pLineDes[poDes.x - nLineOffset]) {
+							return true;
+						}
+						poSrc.x++;
+						poDes.x++;
+					}
+				}
+				nLineOffset += max_size;
+			}while (max_size < nLineLenDes);
+
+			if (poSrc.x < nLineLenSrc) {
+				return true;
+			}
+			poSrc.x = 0;
+			poSrc.y++;
+			poDes.x = 0;
+			poDes.y++;
+			nLineOffset = 0;
+		}
+	}
+	assert_warning(0);
+	return false;
+}
 
 // ファイル内容比較
 void CViewCommander::Command_COMPARE(void)
 {
-	HWND		hwndCompareWnd;
+	HWND		hwndCompareWnd = NULL;
 	TCHAR		szPath[_MAX_PATH + 1];
 	CDlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
@@ -44,7 +121,6 @@ void CViewCommander::Command_COMPARE(void)
 		m_pCommanderView->GetHwnd(),
 		(LPARAM)GetDocument(),
 		GetDocument()->m_cDocFile.GetFilePath(),
-		GetDocument()->m_cDocEditor.IsModified(),
 		szPath,
 		&hwndCompareWnd
 	);
@@ -77,84 +153,47 @@ void CViewCommander::Command_COMPARE(void)
 	);
 
 	// カーソル位置取得 -> poDes
-	CMyPoint poDes;
+	CLogicPoint	poDes;
 	{
 		::SendMessageAny(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
-		CLogicPoint* ppoCaretDes = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<CLogicPoint>();
+		CLogicPoint* ppoCaretDes = &(GetDllShareData().m_sWorkBuffer.m_LogicPoint);
 		poDes.x = ppoCaretDes->x;
 		poDes.y = ppoCaretDes->y;
 	}
-	BOOL bDefferent = TRUE;
-	CLogicInt nLineLenSrc;
-	const wchar_t* pLineSrc = GetDocument()->m_cDocLineMgr.GetLine(poSrc.GetY2())->GetDocLineStrWithEOL(&nLineLenSrc);
-	// 行(改行単位)データの要求
-	int nLineLenDes = ::SendMessageAny(hwndCompareWnd, MYWM_GETLINEDATA, poDes.y, 0);
-	const wchar_t* pLineDes = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<EDIT_CHAR>();
-	for (;;) {
-		if (!pLineSrc && 0 == nLineLenDes) {
-			bDefferent = FALSE;
-			break;
-		}
-		if (!pLineSrc || 0 == nLineLenDes) {
-			break;
-		}
-		if (nLineLenDes > (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>()) {
-			TopErrorMessage(m_pCommanderView->GetHwnd(),
-				LS(STR_ERR_CMPERR), // "比較先のファイル\n%ts\n%d文字を超える行があります。\n比較できません。"
-				szPath,
-				GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>()
-			);
-			return;
-		}
-		for (; poSrc.x < nLineLenSrc;) {
-			if (poDes.x >= nLineLenDes) {
-				goto end_of_compare;
-			}
-			if (pLineSrc[poSrc.x] != pLineDes[poDes.x]) {
-				goto end_of_compare;
-			}
-			poSrc.x++;
-			poDes.x++;
-		}
-		if (poDes.x < nLineLenDes) {
-			goto end_of_compare;
-		}
-		poSrc.x = 0;
-		poSrc.y++;
-		poDes.x = 0;
-		poDes.y++;
-		pLineSrc = GetDocument()->m_cDocLineMgr.GetLine(poSrc.GetY2())->GetDocLineStrWithEOL(&nLineLenSrc);
-		// 行(改行単位)データの要求
-		nLineLenDes = ::SendMessageAny(hwndCompareWnd, MYWM_GETLINEDATA, poDes.y, 0);
-	}
-end_of_compare:;
-	// 比較後、左右に並べて表示
+	bool bDifferent = false;
+	// 本処理
+	Commander_COMPARE_core(*this, bDifferent, hwndCompareWnd, poSrc, poDes);
+
+	/* 比較後、左右に並べて表示 */
 // From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
 	if (GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz) {
-		HWND hWnds[2];
-		hWnds[0] = GetMainWindow();
-		hWnds[1] = hwndCompareWnd;
+		HWND* phwndArr = new HWND[2];
+		phwndArr[0] = GetMainWindow();
+		phwndArr[1] = hwndCompareWnd;
 		
-		for (int i = 0; i < 2; ++i) {
-			if (::IsZoomed(hWnds[i])) {
-				::ShowWindow(hWnds[i], SW_RESTORE);
+		int i;	// Jan. 28, 2002 genta ループ変数 intの宣言を前に出した．
+				// 互換性対策．forの()内で宣言すると古い規格と新しい規格で矛盾するので．
+		for( i = 0; i < 2; ++i ){
+			if( ::IsZoomed( phwndArr[i] ) ){
+				::ShowWindow( phwndArr[i], SW_RESTORE );
 			}
 		}
 		// デスクトップサイズを得る 2002.1.24 YAZAKI
 		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
-		::GetMonitorWorkRect(hWnds[0], &rcDesktop);
+		::GetMonitorWorkRect( phwndArr[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left) / 2;
-		for (int i = 1; i >= 0; i--) {
+		for( i = 1; i >= 0; i-- ){
 			::SetWindowPos(
-				hWnds[i], 0,
+				phwndArr[i], 0,
 				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
 				width, rcDesktop.bottom - rcDesktop.top,
 				SWP_NOOWNERZORDER | SWP_NOZORDER
 			);
 		}
-//		::TileWindows(NULL, MDITILE_VERTICAL, NULL, 2, hWnds);
+//		::TileWindows( NULL, MDITILE_VERTICAL, NULL, 2, phwndArr );
+		delete [] phwndArr;
 	}
 // To Here Oct. 10, 2000
 
@@ -166,11 +205,11 @@ end_of_compare:;
 		/* カーソルを移動させる
 			比較相手は、別プロセスなのでメッセージを飛ばす。
 		*/
-		memcpy_raw(GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &poDes, sizeof(poDes));
+		GetDllShareData().m_sWorkBuffer.m_LogicPoint = poDes;
 		::SendMessageAny(hwndCompareWnd, MYWM_SETCARETPOS, 0, 0);
 
 		// カーソルを移動させる
-		memcpy_raw(GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &poSrc, sizeof(poSrc));
+		GetDllShareData().m_sWorkBuffer.m_LogicPoint = poSrc;
 		::PostMessageAny(GetMainWindow(), MYWM_SETCARETPOS, 0, 0);
 		TopWarningMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));	// 位置を変更してからメッセージ	2008/4/27 Uchi
 	}
@@ -182,37 +221,92 @@ end_of_compare:;
 }
 
 
+
+static ECodeType GetFileCharCode( LPCTSTR pszFile )
+{
+	const STypeConfigMini* typeMini;
+	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
+	return CCodeMediator(typeMini->m_encoding).CheckKanjiCodeOfFile( pszFile );
+}
+
+
+
+static ECodeType GetDiffCreateTempFileCode(ECodeType code)
+{
+	EEncodingTrait e = CCodePage::GetEncodingTrait(code);
+	if (e != ENCODING_TRAIT_ASCII) {
+		return CODE_UTF8;
+	}
+	return code;
+}
+
+
+
 /*!	差分表示
 	@note	HandleCommandからの呼び出し対応(ダイアログなし版)
 	@author	maru
 	@date	2005/10/28 これまでのCommand_Diffはm_pCommanderView->ViewDiffInfoに名称変更
 */
-void CViewCommander::Command_Diff(const WCHAR* _szTmpFile2, int nFlgOpt)
+void CViewCommander::Command_Diff( const WCHAR* _szDiffFile2, int nFlgOpt )
 {
-	const TCHAR* szTmpFile2 = to_tchar(_szTmpFile2);
+	const std::tstring strDiffFile2 = to_tchar(_szDiffFile2);
+	const TCHAR* szDiffFile2 = strDiffFile2.c_str();
 
 	bool bTmpFile1 = false;
 	TCHAR szTmpFile1[_MAX_PATH * 2];
 
-	if ((DWORD)-1 == ::GetFileAttributes(szTmpFile2)) {
+	if (!IsFileExists( szDiffFile2, true )) {
 		WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF1));
 		return;
 	}
 
 	// 自ファイル
-	if (!GetDocument()->m_cDocEditor.IsModified()) {
-		_tcscpy_s(szTmpFile1, GetDocument()->m_cDocFile.GetFilePath());
-	}else if (m_pCommanderView->MakeDiffTmpFile(szTmpFile1, NULL)) {
+	// 2013.06.21 Unicodeのときは、いつもファイル出力
+	ECodeType code = GetDocument()->GetDocumentEncoding();
+	ECodeType saveCode = GetDiffCreateTempFileCode(code);
+	ECodeType code2 = GetFileCharCode(szDiffFile2);
+	ECodeType saveCode2 = GetDiffCreateTempFileCode(code2);
+	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
+	if (saveCode != saveCode2) {
+		saveCode = CODE_UTF8;
+		saveCode2 = CODE_UTF8;
+	}
+
+	if (GetDocument()->m_cDocEditor.IsModified()
+		|| saveCode != code
+		|| !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+	) {
+		if (!m_pCommanderView->MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist())) {
+			return;
+		}
 		bTmpFile1 = true;
-	}else return;
+	}else {
+		_tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath() );
+	}
+
+	bool bTmpFile2 = false;
+	TCHAR	szTmpFile2[_MAX_PATH * 2];
+	bool bTmpFileMode = code2 != saveCode2;
+	if (!bTmpFileMode) {
+		_tcscpy(szTmpFile2, szDiffFile2);
+	}else if (m_pCommanderView->MakeDiffTmpFile2( szTmpFile2, szDiffFile2, code2, saveCode2 )) {
+		bTmpFile2 = true;
+	}else {
+		if (bTmpFile1) _tunlink( szTmpFile1 );
+		return;
+	}
+
+	bool bUTF8io = true;
+	if (saveCode == CODE_SJIS) {
+		bUTF8io = false;
+	}
 
 	// 差分表示
-	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, nFlgOpt);
+	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, nFlgOpt, bUTF8io);
 
 	// 一時ファイルを削除する
-	if (bTmpFile1) {
-		_tunlink(szTmpFile1);
-	}
+	if (bTmpFile1) _tunlink( szTmpFile1 );
+	if (bTmpFile2) _tunlink( szTmpFile2 );
 
 	return;
 }
@@ -237,8 +331,7 @@ void CViewCommander::Command_Diff_Dialog(void)
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 		(LPARAM)GetDocument(),
-		docFile.GetFilePath(),
-		docEditor.IsModified()
+		docFile.GetFilePath()
 	);
 	if (!nDiffDlgResult) {
 		return;
@@ -246,21 +339,66 @@ void CViewCommander::Command_Diff_Dialog(void)
 	
 	// 自ファイル
 	TCHAR szTmpFile1[_MAX_PATH * 2];
-	if (!docEditor.IsModified()) _tcscpy_s(szTmpFile1, docFile.GetFilePath());
-	else if (m_pCommanderView->MakeDiffTmpFile(szTmpFile1, NULL)) bTmpFile1 = true;
-	else return;
+	ECodeType code = GetDocument()->GetDocumentEncoding();
+	ECodeType saveCode = GetDiffCreateTempFileCode(code);
+	ECodeType code2 = cDlgDiff.m_nCodeTypeDst;
+	if( CODE_ERROR == code2 ){
+		if( cDlgDiff.m_szFile2[0] != _T('\0') ){
+			// ファイル名指定
+			code2 = GetFileCharCode(cDlgDiff.m_szFile2);
+		}
+	}
+	ECodeType saveCode2 = GetDiffCreateTempFileCode(code2);
+	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
+	if( saveCode != saveCode2 ){
+		saveCode = CODE_UTF8;
+		saveCode2 = CODE_UTF8;
+	}
+	if( GetDocument()->m_cDocEditor.IsModified()
+			|| code != saveCode
+			|| !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+	){
+		if( !m_pCommanderView->MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() ) ){ return; }
+		bTmpFile1 = true;
+	}else{
+		_tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath() );
+	}
 		
 	// 相手ファイル
+	// UNICODE,UNICODEBEの場合は常に一時ファイルでUTF-8にする
 	TCHAR szTmpFile2[_MAX_PATH * 2];
-	if (!cDlgDiff.m_bIsModifiedDst) _tcscpy_s(szTmpFile2, cDlgDiff.m_szFile2);
-	else if (m_pCommanderView->MakeDiffTmpFile (szTmpFile2, cDlgDiff.m_hWnd_Dst)) bTmpFile2 = true;
-	else {
-		if (bTmpFile1) _tunlink(szTmpFile1);
-		return;
+	// 2014.06.25 ファイル名がない(=無題,Grep,アウトプット)もTmpFileModeにする
+	bool bTmpFileMode = cDlgDiff.m_bIsModifiedDst || code2 != saveCode2 || cDlgDiff.m_szFile2[0] == _T('\0');
+	if (!bTmpFileMode) {
+		// 未変更でファイルありでASCII系コードの場合のみ,そのままファイルを利用する
+		_tcscpy( szTmpFile2, cDlgDiff.m_szFile2 );
+	}else if (cDlgDiff.m_hWnd_Dst) {
+		// ファイル一覧から選択
+		if (m_pCommanderView->MakeDiffTmpFile( szTmpFile2, cDlgDiff.m_hWnd_Dst, saveCode2, cDlgDiff.m_bBomDst )) {
+			bTmpFile2 = true;
+		}else {
+			if (bTmpFile1) _tunlink( szTmpFile1 );
+			return;
+		}
+	}else {
+		// ファイル名指定で非ASCII系だった場合
+		if (m_pCommanderView->MakeDiffTmpFile2( szTmpFile2, cDlgDiff.m_szFile2, code2, saveCode2 )) {
+			bTmpFile2 = true;
+		}else {
+			// Error
+			if (bTmpFile1) _tunlink( szTmpFile1 );
+			return;
+		}
 	}
 	
-	// 差分表示
-	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, cDlgDiff.m_nDiffFlgOpt);
+	bool bUTF8io = true;
+	if (saveCode == CODE_SJIS) {
+		bUTF8io = false;
+	}
+
+	//差分表示
+	m_pCommanderView->ViewDiffInfo(szTmpFile1, szTmpFile2, cDlgDiff.m_nDiffFlgOpt, bUTF8io);
+	
 	
 	// 一時ファイルを削除する
 	if (bTmpFile1) _tunlink(szTmpFile1);

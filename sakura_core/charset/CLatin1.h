@@ -35,14 +35,14 @@ class CLatin1 : public CCodeBase {
 
 public:
 	// CCodeBaseインターフェース
-	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) { *pDst->_GetMemory() = cSrc; return Latin1ToUnicode(pDst->_GetMemory()); }	//!< 特定コード → UNICODE    変換
-	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst) { *pDst = *cSrc._GetMemory(); return UnicodeToLatin1(pDst); }				//!< UNICODE    → 特定コード 変換
+	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){ return Latin1ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
+	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst){ return UnicodeToLatin1(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:
 	// 実装
-	static EConvertResult Latin1ToUnicode(CMemory* pMem);		// Latin1   → Unicodeコード変換
-	static EConvertResult UnicodeToLatin1(CMemory* pMem);		// Unicode  → Latin1コード変換
+	static EConvertResult Latin1ToUnicode(const CMemory& cSrc, CNativeW* pDstMem);		// Latin1   → Unicodeコード変換
+	static EConvertResult UnicodeToLatin1(const CNativeW& cSrc, CMemory* pDstMem);		// Unicode  → Latin1コード変換
 	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が何バイト文字かを返す
 
 protected:
@@ -73,7 +73,7 @@ inline int CLatin1::_UniToLatin1_char(const unsigned short* pSrc, unsigned char*
 		} else {
 			// ISO 8859-1以外
 			nret = ::WideCharToMultiByte(1252, 0, reinterpret_cast<const wchar_t*>(pSrc), 1, reinterpret_cast<char*>(pDst), 4, NULL, &blost);
-			if (blost == TRUE) {
+			if (blost != FALSE) {
 				// Uni -> CLatin1 変換に失敗
 				berror = true;
 				pDst[0] = '?';

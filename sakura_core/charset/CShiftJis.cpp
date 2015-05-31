@@ -104,15 +104,16 @@ int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 }
 
 
-// コード変換 SJIS→Unicode
-EConvertResult CShiftJis::SJISToUnicode(CMemory* pMem)
+
+/* コード変換 SJIS→Unicode */
+EConvertResult CShiftJis::SJISToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
 	// エラー状態
 	bool bError;
 
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>(pMem->GetRawPtr(&nSrcLen));
+	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 
 	// 変換先バッファサイズを設定してメモリ領域確保
 	wchar_t* pDst;
@@ -128,8 +129,8 @@ EConvertResult CShiftJis::SJISToUnicode(CMemory* pMem)
 	// 変換
 	int nDstLen = SjisToUni(pSrc, nSrcLen, pDst, &bError);
 
-	// pMemを更新
-	pMem->SetRawData(pDst, nDstLen * sizeof(wchar_t));
+	// pDstを更新
+	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
 
 	// 後始末
 	delete [] pDst;
@@ -206,11 +207,13 @@ int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 
 
-// コード変換 Unicode→SJIS
-EConvertResult CShiftJis::UnicodeToSJIS(CMemory* pMem)
+
+/* コード変換 Unicode→SJIS */
+EConvertResult CShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
 {
 	// 状態
 	bool berror;
+	const CMemory* pMem = cSrc._GetMemory();
 
 	// ソース取得
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
@@ -231,7 +234,7 @@ EConvertResult CShiftJis::UnicodeToSJIS(CMemory* pMem)
 	int nDstLen = UniToSjis(pSrc, nSrcLen, pDst, &berror);
 
 	// pMemを更新
-	pMem->SetRawData(pDst, nDstLen);
+	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	// 後始末
 	delete[] pDst;
@@ -248,8 +251,9 @@ EConvertResult CShiftJis::UnicodeToSJIS(CMemory* pMem)
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
-	CMemory cCharBuffer;
+	CNativeW		cCharBuffer;
 	EConvertResult	res;
+	int				i;
 	unsigned char*	ps;
 	TCHAR*			pd;
 	bool			bbinary = false;
@@ -260,24 +264,23 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
-	cCharBuffer.SetRawData("", 0);
-	cCharBuffer.AppendRawData(cSrc, sizeof(wchar_t));
+	cCharBuffer.AppendString(cSrc, 1);
 
 	if (IsBinaryOnSurrogate(cSrc[0])) {
 		bbinary = true;
 	}
 
 	// SJIS 変換
-	res = UnicodeToSJIS(&cCharBuffer);
+	res = UnicodeToSJIS(cCharBuffer, cCharBuffer._GetMemory());
 	if (res != RESULT_COMPLETE) {
 		return RESULT_LOSESOME;
 	}
 
 	// Hex変換
-	ps = reinterpret_cast<unsigned char*>(cCharBuffer.GetRawPtr());
+	ps = reinterpret_cast<unsigned char*>( cCharBuffer._GetMemory()->GetRawPtr() );
 	pd = pDst;
 	if (!bbinary) {
-		for (int i = cCharBuffer.GetRawLength(); i >0; i--, ps ++, pd += 2) {
+		for (i = cCharBuffer._GetMemory()->GetRawLength(); i >0; i--, ps ++, pd += 2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {
