@@ -219,16 +219,16 @@ void CDlgJump::SetData(void)
 	nPLSQLBlockNum = 0;
 	for (i = 0; i < cFuncInfoArr.GetNum(); ++i) {
 		CFuncInfo* pFI = cFuncInfoArr.GetAt(i);
-		if (31 == pFI->m_nInfo || 41 == pFI->m_nInfo) {
+		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
 		}
-		if (31 == pFI->m_nInfo) {
+		if (pFI->m_nInfo == 31) {
 			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				auto_sprintf_s(szText, LSW(STR_DLGJUMP_PSLQL),
+				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
 					pFI->m_cmemFuncName.GetStringPtr()
 				);
 			}else {
-				auto_sprintf_s(szText, LSW(STR_DLGJUMP_PSLQL),
+				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineLAYOUT,
 					pFI->m_cmemFuncName.GetStringPtr()
 				);
@@ -241,14 +241,14 @@ void CDlgJump::SetData(void)
 			}
 			nPLSQLBlockNum++;
 		}
-		if (41 == pFI->m_nInfo) {
+		if (pFI->m_nInfo == 41) {
 			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
-				auto_sprintf_s(szText, LSW(STR_DLGJUMP_PSLQL),
+				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
 					pFI->m_cmemFuncName.GetStringPtr()
 				);
 			}else {
-				auto_sprintf_s(szText, LSW(STR_DLGJUMP_PSLQL),
+				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineLAYOUT,
 					pFI->m_cmemFuncName.GetStringPtr()
 				);

@@ -62,16 +62,17 @@ INT_PTR CALLBACK MyDialogProc(
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-CDialog::CDialog()
+CDialog::CDialog(bool bSizable, bool bCheckShareData)
 {
 //	MYTRACE(_T("CDialog::CDialog()\n"));
 	// 共有データ構造体のアドレスを返す
-	m_pShareData = &GetDllShareData();
+	m_pShareData = &GetDllShareData(bCheckShareData);
 
 	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
 	m_hWnd  = NULL;			// このダイアログのハンドル
 	m_hwndSizeBox = NULL;
+	m_bSizable = bSizable;
 	m_lParam = (LPARAM)NULL;
 	m_nShowCmd = SW_SHOW;
 	m_xPos = -1;
@@ -205,6 +206,13 @@ void CDialog::SetDialogPosSize()
 
 	if (-1 != m_xPos && -1 != m_yPos) {
 		// ウィンドウ位置・サイズを再現
+		// 2014.11.28 フォント変更対応
+		if (m_nWidth == -1) {
+			RECT rc;
+			::GetWindowRect(m_hWnd, &rc);
+			m_nWidth = rc.right - rc.left;
+			m_nHeight = rc.bottom - rc.top;
+		}
 
 		if (!(::GetWindowLongPtr(m_hWnd, GWL_STYLE) & WS_CHILD)) {
 			// 2006.06.09 ryoji
@@ -270,6 +278,11 @@ BOOL CDialog::OnDestroy(void)
 		m_yPos = cWindowPlacement.rcNormalPosition.top;
 		m_nWidth = cWindowPlacement.rcNormalPosition.right - cWindowPlacement.rcNormalPosition.left;
 		m_nHeight = cWindowPlacement.rcNormalPosition.bottom - cWindowPlacement.rcNormalPosition.top;
+		// 2014.11.28 フォント変更によるサイズ変更対応
+		if (!m_bSizable) {
+			m_nWidth = -1;
+			m_nHeight = -1;
+		}
 	}
 	// 破棄
 	if (m_hwndSizeBox) {
@@ -516,6 +529,11 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 	return TRUE;
 }
 
+BOOL CDialog::OnCbnDropDown( HWND hwndCtl, int wID )
+{
+	return OnCbnDropDown( hwndCtl, false );
+}
+
 /** コンボボックスのドロップダウン時処理
 
 	コンボボックスがドロップダウンされる時に
@@ -525,12 +543,13 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 	@param wID [in]			コンボボックスのID
 
 	@author ryoji
-	@date 2009.03.29
+	@date 2009.03.29 新規作成
 */
-BOOL CDialog::OnCbnDropDown(HWND hwndCtl, int wID)
+BOOL CDialog::OnCbnDropDown( HWND hwndCtl, bool scrollBar )
 {
 	SIZE sizeText;
-	int nMargin = 8;
+	const int nMargin = 8;
+	int nScrollWidth = scrollBar ? ::GetSystemMetrics( SM_CXVSCROLL ) + 2 : 2;
 
 	HDC hDC = ::GetDC(hwndCtl);
 	if (!hDC)
@@ -540,15 +559,15 @@ BOOL CDialog::OnCbnDropDown(HWND hwndCtl, int wID)
 	int nItem = Combo_GetCount(hwndCtl);
 	RECT rc;
 	::GetWindowRect(hwndCtl, &rc);
-	LONG nWidth = rc.right - rc.left - nMargin;
+	LONG nWidth = rc.right - rc.left - nMargin + nScrollWidth;
 	for (int iItem = 0; iItem < nItem; iItem++) {
 		int nTextLen = Combo_GetLBTextLen(hwndCtl, iItem);
 		if (0 < nTextLen) {
 			TCHAR* pszText = new TCHAR[nTextLen + 1];
 			Combo_GetLBText(hwndCtl, iItem, pszText);
 			if (::GetTextExtentPoint32(hDC, pszText, nTextLen, &sizeText)) {
-				if (nWidth < sizeText.cx)
-					nWidth = sizeText.cx;
+				if (nWidth < sizeText.cx + nScrollWidth)
+					nWidth = sizeText.cx + nScrollWidth;
 			}
 			delete []pszText;
 		}

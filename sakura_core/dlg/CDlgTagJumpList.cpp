@@ -137,7 +137,7 @@ inline void CDlgTagJumpList::ClearPrevFindInfo() {
 
 
 CDlgTagJumpList::CDlgTagJumpList(bool bDirectTagJump)
-	:
+	: CDialog(true),
 	m_bDirectTagJump(bDirectTagJump),
 	m_nIndex(-1),
 	m_pszFileName(NULL),
@@ -314,13 +314,13 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 		ListView_InsertItem(hwndList, &lvi);
 
 		if (item->baseDirId) {
-			auto_sprintf_s(tmp, _T("(%d)"), item->depth);
+			auto_sprintf( tmp, _T("(%d)"), item->depth );
 		}else {
-			auto_sprintf_s(tmp, _T("%d"), item->depth);
+			auto_sprintf( tmp, _T("%d"), item->depth );
 		}
 		ListView_SetItemText(hwndList, nIndex, 1, tmp);
 
-		auto_sprintf_s(tmp, _T("%d"), item->no);
+		auto_sprintf( tmp, _T("%d"), item->no );
 		ListView_SetItemText(hwndList, nIndex, 2, tmp);
 
 		TCHAR	*p;
@@ -724,7 +724,7 @@ bool CDlgTagJumpList::AddParamA(const ACHAR* s0, const ACHAR* s1, int n2, const 
 }
 #endif
 
-bool CDlgTagJumpList::GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3, TCHAR* s4, int* depth, TCHAR* baseDir)
+bool CDlgTagJumpList::GetSelectedFullPathAndLine( TCHAR *fullPath, int count, int *lineNum, int *depth )
 {
 	if (1 != m_pcList->GetCount()) {
 		if (-1 == m_nIndex || m_nIndex >= m_pcList->GetCount()) return false;
@@ -732,12 +732,14 @@ bool CDlgTagJumpList::GetSelectedParam(TCHAR* s0, TCHAR* s1, int* n2, TCHAR* s3,
 		m_nIndex = 0;
 	}
 
-	m_pcList->GetParam(m_nIndex, s0, s1, n2, &s3[0], s4, depth, baseDir);
-
-	return true;
+	return GetFullPathAndLine( m_nIndex, fullPath, count, lineNum, depth );
 }
 
-bool CDlgTagJumpList::GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int* lineNum, int* depth)
+/*
+	@param lineNum [out] オプション
+	@param depth [out] オプション
+*/
+bool CDlgTagJumpList::GetFullPathAndLine( int index, TCHAR *fullPath, int count, int *lineNum, int *depth )
 {
 	TCHAR path[1024];
 	TCHAR fileName[1024];
@@ -746,9 +748,7 @@ bool CDlgTagJumpList::GetSelectedFullPathAndLine(TCHAR* fullPath, int count, int
 	SplitPath_FolderAndFile(GetFilePath(), path, NULL);
 	AddLastYenFromDirectoryPath(path);
 	
-	if (!GetSelectedParam(NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName)) {
-		return false;
-	}
+	m_pcList->GetParam( index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName );
 	if (depth) {
 		*depth = tempDepth;
 	}
@@ -848,6 +848,26 @@ void CDlgTagJumpList::SetKeyword(const wchar_t* pszKeyword)
 	return;
 }
 
+typedef struct tagTagPathInfo {
+	TCHAR	szFileNameDst[_MAX_PATH*4];
+	TCHAR	szDriveSrc[_MAX_DRIVE*2];
+	TCHAR	szDriveDst[_MAX_DRIVE*2];
+	TCHAR	szPathSrc[_MAX_PATH*4];
+	TCHAR	szPathDst[_MAX_PATH*4];
+	TCHAR	szFileSrc[_MAX_PATH*4];
+	TCHAR	szFileDst[_MAX_PATH*4];
+	TCHAR	szExtSrc[_MAX_EXT*2];
+	TCHAR	szExtDst[_MAX_EXT*2];
+	size_t	nDriveSrc;
+	size_t	nDriveDst;
+	size_t	nPathSrc;
+	size_t	nPathDst;
+	size_t	nFileSrc;
+	size_t	nFileDst;
+	size_t	nExtSrc;
+	size_t	nExtDst;
+} TagPathInfo;
+
 /*!
 	得られた候補から最も期待に近いと思われるものを
 	選び出す．(初期選択位置決定のため)
@@ -860,35 +880,124 @@ int CDlgTagJumpList::SearchBestTag(void)
 	if (m_pcList->GetCount() <= 0) return -1;	// 選べません。
 	if (!m_pszFileName) return 0;
 
-	TCHAR	szFileSrc[1024];
-	TCHAR	szFileDst[1024];
-	TCHAR	szExtSrc[1024];
-	TCHAR	szExtDst[1024];
-	int		nMatch = -1;
+	std::auto_ptr<TagPathInfo> mem_lpPathInfo( new TagPathInfo );
+	TagPathInfo* lpPathInfo= mem_lpPathInfo.get();
+	int nMatch1 = -1;
+	int nMatch2 = -1;
+	int nMatch3 = -1;
+	int nMatch4 = -1;
+	int nMatch5 = -1;
+	int nMatch6 = -1;
+	int nMatch7 = -1;
 	int		i;
 	int		count;
 
-	szFileSrc[0] = 0;
-	szExtSrc[0] = 0;
-	_tsplitpath(m_pszFileName, NULL, NULL, szFileSrc, szExtSrc);
+	lpPathInfo->szDriveSrc[0] = _T('\0');
+	lpPathInfo->szPathSrc[0] = _T('\0');
+	lpPathInfo->szFileSrc[0] = _T('\0');
+	lpPathInfo->szExtSrc[0] = _T('\0');
+	_tsplitpath( m_pszFileName, lpPathInfo->szDriveSrc, lpPathInfo->szPathSrc, lpPathInfo->szFileSrc, lpPathInfo->szExtSrc );
+	lpPathInfo->nDriveSrc = _tcslen(lpPathInfo->szDriveSrc);
+	lpPathInfo->nPathSrc = _tcslen(lpPathInfo->szPathSrc);
+	lpPathInfo->nFileSrc = _tcslen(lpPathInfo->szFileSrc);
+	lpPathInfo->nExtSrc = _tcslen(lpPathInfo->szExtSrc);
 
 	count = m_pcList->GetCount();
 
 	for (i = 0; i < count; i++) {
-		CSortedTagJumpList::TagJumpInfo* item;
-		item = m_pcList->GetPtr(i);
+		// タグのファイル名部分をフルパスにする
+		lpPathInfo->szFileNameDst[0] = _T('\0');
+		{
+			TCHAR szPath[_MAX_PATH];
+			GetFullPathAndLine( i, szPath, _countof(szPath), NULL, NULL );
+			if (FALSE == GetLongFileName( szPath, lpPathInfo->szFileNameDst )) {
+				_tcscpy( lpPathInfo->szFileNameDst, szPath );
+			}
+		}
 
-		szFileDst[0] = 0;
-		szExtDst[0] = 0;
-		_tsplitpath(item->filename, NULL, NULL, szFileDst, szExtDst);
+		lpPathInfo->szDriveDst[0] = _T('\0');
+		lpPathInfo->szPathDst[0] = _T('\0');
+		lpPathInfo->szFileDst[0] = _T('\0');
+		lpPathInfo->szExtDst[0] = _T('\0');
+		_tsplitpath( lpPathInfo->szFileNameDst, lpPathInfo->szDriveDst, lpPathInfo->szPathDst, lpPathInfo->szFileDst, lpPathInfo->szExtDst );
+		lpPathInfo->nDriveDst = _tcslen(lpPathInfo->szDriveDst);
+		lpPathInfo->nPathDst = _tcslen(lpPathInfo->szPathDst);
+		lpPathInfo->nFileDst = _tcslen(lpPathInfo->szFileDst);
+		lpPathInfo->nExtDst = _tcslen(lpPathInfo->szExtDst);
 		
-		if (_tcsicmp(szFileSrc, szFileDst) == 0) {
-			if (_tcsicmp(szExtSrc, szExtDst) == 0) return i;
-			if (nMatch == -1) nMatch = i;
+		if (_tcsicmp(m_pszFileName, lpPathInfo->szFileNameDst) == 0) {
+			return i;	//同一ファイルを見つけた
+		}
+
+		if ((nMatch1 == -1)
+		&& (_tcsicmp(lpPathInfo->szDriveSrc, lpPathInfo->szDriveDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szPathSrc, lpPathInfo->szPathDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szFileSrc, lpPathInfo->szFileDst) == 0)
+		) {
+			//ファイル名まで一致
+			nMatch1 = i;
+		}
+
+		if ((nMatch2 == -1)
+		&& (_tcsicmp(lpPathInfo->szDriveSrc, lpPathInfo->szDriveDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szPathSrc, lpPathInfo->szPathDst) == 0)
+		) {
+			//パス名まで一致
+			nMatch2 = i;
+		}
+
+		if ((nMatch5 == -1)
+		&& (_tcsicmp(lpPathInfo->szPathSrc, lpPathInfo->szPathDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szFileSrc, lpPathInfo->szFileDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szExtSrc, lpPathInfo->szExtDst) == 0)
+		) {
+			nMatch5 = i;
+		}
+
+		if ((nMatch6 == -1)
+		&& (_tcsicmp(lpPathInfo->szFileSrc, lpPathInfo->szFileDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szExtSrc, lpPathInfo->szExtDst) == 0)
+		) {
+			if ((lpPathInfo->nPathSrc >= lpPathInfo->nPathDst)
+			&& (_tcsicmp(&lpPathInfo->szPathSrc[lpPathInfo->nPathSrc - lpPathInfo->nPathDst], lpPathInfo->szPathDst) == 0)
+			) {
+				nMatch6 = i;
+			}
+		}
+
+		if ((nMatch7 == -1)
+		&& (_tcsicmp(lpPathInfo->szFileSrc, lpPathInfo->szFileDst) == 0)
+		) {
+			if ((lpPathInfo->nPathSrc >= lpPathInfo->nPathDst)
+			&& (_tcsicmp(&lpPathInfo->szPathSrc[lpPathInfo->nPathSrc - lpPathInfo->nPathDst], lpPathInfo->szPathDst) == 0)
+			) {
+				nMatch7 = i;
+			}
+		}
+
+		if ((nMatch3 == -1)
+		&& (_tcsicmp(lpPathInfo->szFileSrc, lpPathInfo->szFileDst) == 0)
+		&& (_tcsicmp(lpPathInfo->szExtSrc, lpPathInfo->szExtDst) == 0)
+		) {
+			//ファイル名・拡張子が一致
+			nMatch3 = i;
+		}
+
+		if ((nMatch4 == -1)
+		&& (_tcsicmp(lpPathInfo->szFileSrc, lpPathInfo->szFileDst) == 0)
+		) {
+			//ファイル名が一致
+			nMatch4 = i;
 		}
 	}
 
-	if (nMatch != -1) return nMatch;
+	if (nMatch1 != -1) return nMatch1;
+	if (nMatch5 != -1) return nMatch5;
+	if (nMatch6 != -1) return nMatch6;
+	if (nMatch7 != -1) return nMatch7;
+	if (nMatch3 != -1) return nMatch3;
+	if (nMatch4 != -1) return nMatch4;
+	if (nMatch2 != -1) return nMatch2;
 
 	return 0;
 }
@@ -931,7 +1040,7 @@ int CDlgTagJumpList::FindDirectTagJump()
 		true,  // 完全一致
 		false, // 大小を区別
 		true,  // 自動モード
-		1
+		m_pShareData->m_Common.m_sSearch.m_nTagJumpMode
 	);
 }
 
@@ -947,7 +1056,7 @@ void CDlgTagJumpList::find_key(const wchar_t* keyword)
 		FALSE != m_bTagJumpExactMatch,
 		FALSE != m_bTagJumpICase,
 		IsDirectTagJump(),
-		IsDirectTagJump() ? 1 : 3
+		IsDirectTagJump() ? (m_pShareData->m_Common.m_sSearch.m_nTagJumpMode) : m_pShareData->m_Common.m_sSearch.m_nTagJumpModeKeyword
 	);
 	DlgItem_SetText(GetHwnd(), IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
@@ -1017,7 +1126,7 @@ int CDlgTagJumpList::find_key_core(
 		// 初回or使えないときはクリア
 		ClearPrevFindInfo();
 		// ファイル名をコピーしたあと、ディレクトリ(最後\)のみにする
-		_tcscpy_s(state.m_szCurPath, GetFilePath());
+		_tcscpy( state.m_szCurPath, GetFilePath() );
 		state.m_szCurPath[GetFileName() - GetFilePath()] = _T('\0');
 		state.m_nLoop = m_nLoop;
 	}
@@ -1225,7 +1334,10 @@ next_line:
 		if (szNextPath[0]) {
 			state.m_bJumpPath = true;
 			auto_strcpy(state.m_szCurPath, szNextPath);
-			state.m_nLoop = CalcMaxUpDirectory(state.m_szCurPath);
+			std::tstring path = state.m_szCurPath;
+			path += _T("\\dummy");
+			state.m_nLoop = CalcMaxUpDirectory( path.c_str() );
+			state.m_nDepth = 0;
 			szNextPath[0] = 0;
 		}else {
 //			_tcscat(state.m_szCurPath, _T("..\\"));

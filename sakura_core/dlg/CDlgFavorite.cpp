@@ -111,6 +111,7 @@ struct CompareListViewLParam {
 
 
 CDlgFavorite::CDlgFavorite()
+	 : CDialog(true)
 {
 	int	i;
 
@@ -121,8 +122,6 @@ CDlgFavorite::CDlgFavorite()
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
 	{
-		memset_raw(m_aFavoriteInfo, 0, sizeof(m_aFavoriteInfo));
-
 		i = 0;
 		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentFile;
 		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_FILE);
@@ -221,6 +220,7 @@ CDlgFavorite::CDlgFavorite()
 		m_aFavoriteInfo[i].m_bFilePath  = true;
 		m_aFavoriteInfo[i].m_bHaveView  = false;
 		m_aFavoriteInfo[i].m_bEditable  = false;
+		m_aFavoriteInfo[i].m_bAddExcept = false;
 
 		i++;
 		m_aFavoriteInfo[i].m_pRecent    = NULL;
@@ -323,16 +323,16 @@ void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 		ListViewSort(m_aListViewInfo[nIndex], pRecent, m_aListViewInfo[nIndex].nSortColumn, false);
 	}
 
-	if (-1 != nLvItemIndex && nLvItemIndex < nItemCount) {
+	if (nLvItemIndex != -1 && nLvItemIndex < nItemCount) {
 		nNewFocus = nLvItemIndex;
 	}
 
 	// アイテムがあってどれも非選択なら、要求に近いアイテム(先頭か末尾)を選択
-	if (nItemCount > 0 && -1 != nLvItemIndex && nNewFocus == -1) {
+	if (nItemCount > 0 && nLvItemIndex != -1 && nNewFocus == -1) {
 		nNewFocus = (0 < nLvItemIndex ? nItemCount - 1: 0);
 	}
 
-	if (-1 != nNewFocus) {
+	if (nNewFocus != -1) {
 		ListView_SetItemState(hwndList, nNewFocus, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 		ListView_EnsureVisible(hwndList, nNewFocus, FALSE);
 	}
@@ -666,11 +666,12 @@ void CDlgFavorite::TabSelectChange(bool bSetFocus)
 	::DlgItem_SetText(GetHwnd(), IDC_STATIC_FAVORITE_MSG, _T(""));
 	HWND hwndTab = GetItemHwnd(IDC_TAB_FAVORITE);
 	int nIndex = TabCtrl_GetCurSel(hwndTab);
-	if (-1 != nIndex) {
+	if (nIndex != -1) {
 		// 新しく表示する。
 		HWND hwndList = GetItemHwnd(m_aFavoriteInfo[nIndex].m_nId);
 		::ShowWindow(hwndList, SW_SHOW);
 
+		// 現在表示中のリストを隠す。
 		HWND hwndList2 = GetItemHwnd(m_aFavoriteInfo[m_nCurrentTab].m_nId);
 		::ShowWindow(hwndList2, SW_HIDE);
 
@@ -1080,7 +1081,8 @@ int FormatFavoriteColumn(TCHAR* buf, int size, int index, bool view)
 */
 static int ListView_GetLParamInt(HWND hwndList, int lvIndex)
 {
-	LV_ITEM	lvitem = {0};
+	LV_ITEM	lvitem;
+	memset_raw( &lvitem, 0, sizeof(lvitem) );
 	lvitem.mask = LVIF_PARAM;
 	lvitem.iItem = lvIndex;
 	lvitem.iSubItem = 0;
@@ -1153,7 +1155,7 @@ void CDlgFavorite::ListViewSort(ListViewSortInfo& info, const CRecent* pRecent, 
 
 static int CALLBACK CompareListViewFunc(LPARAM lParamItem1, LPARAM lParamItem2, LPARAM lParamSort)
 {
-	CompareListViewLParam* pCompInfo = (CompareListViewLParam*)lParamSort;
+	CompareListViewLParam* pCompInfo = reinterpret_cast<CompareListViewLParam*>(lParamSort);
 	int nRet = 0;
 	if (0 == pCompInfo->nSortColumn) {
 		nRet = lParamItem1 - lParamItem2;

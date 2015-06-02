@@ -109,11 +109,14 @@ private:
 	bool IsDirectTagJump();
 	
 	void ClearPrevFindInfo();
+	bool GetFullPathAndLine( int index, TCHAR *fullPath, int count, int *lineNum, int *depth );
+
 
 	//! depthから完全パス名(相対パス/絶対パス)を作成する
 	static TCHAR* GetFullPathFromDepth(TCHAR*, int, TCHAR*, const TCHAR*, int);
+	static TCHAR* CopyDirDir( TCHAR* dest, const TCHAR* target, const TCHAR* base );
+public:
 	static int CalcMaxUpDirectory(const TCHAR*);
-	static TCHAR* CopyDirDir(TCHAR* dest, const TCHAR* target, const TCHAR* base);
 	static TCHAR* DirUp(TCHAR* dir);
 
 private:
@@ -155,5 +158,9 @@ private:
 	
 	POINT	m_ptDefaultSize;
 	RECT	m_rcItems[11];
+
+private:
+	DISALLOW_COPY_AND_ASSIGN(CDlgTagJumpList);
 };
+
 

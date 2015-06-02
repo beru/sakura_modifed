@@ -48,7 +48,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal(HINSTANCE, HWND, LPARAM, const TCHAR*, bool);	// モーダルダイアログの表示
+	int DoModal( HINSTANCE, HWND, LPARAM, const TCHAR* );	// モーダルダイアログの表示
 
 protected:
 	/*
@@ -56,6 +56,7 @@ protected:
 	*/
 	BOOL	OnBnClicked(int);
 	BOOL	OnLbnSelChange(HWND hwndCtl, int wID);
+	BOOL	OnLbnDblclk( int wID );
 	BOOL	OnEnChange(HWND hwndCtl, int wID);
 	LPVOID	GetHelpIdTable(void);
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 標準以外のメッセージを捕捉する
@@ -75,8 +76,9 @@ private:
 public:
 	SFilePath	m_szFile1;			// 自ファイル
 	SFilePath	m_szFile2;			// 相手ファイル
-	bool		m_bIsModified;		// 自ファイル更新中
 	bool		m_bIsModifiedDst;	// 相手ファイル更新中
+	ECodeType	m_nCodeTypeDst;		// 相手ファイルの文字コード
+	bool		m_bBomDst;			// 相手ファイルのBOM
 	int			m_nDiffFlgOpt;		// DIFFオプション
 	HWND		m_hWnd_Dst;			// 相手ウインドウハンドル
 

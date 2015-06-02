@@ -114,7 +114,7 @@ void CDlgPluginOption::SetData(void)
 	bool bLoadDefault = false;
 
 	// タイトル
-	auto_sprintf_s(buf, LS(STR_DLGPLUGINOPT_TITLE), m_cPlugin->m_sName.c_str());
+	auto_sprintf( buf, LS(STR_DLGPLUGINOPT_TITLE), m_cPlugin->m_sName.c_str());
 	::SetWindowText(GetHwnd(), buf);
 
 	// リスト
@@ -164,7 +164,7 @@ void CDlgPluginOption::SetData(void)
 			_tcscpy(buf, sValue == wstring(L"0") || sValue == wstring(L"") ? BOOL_DISP_FALSE : BOOL_DISP_TRUE);
 		}else if (cOpt->GetType() == OPTION_TYPE_INT) {
 			// 数値へ正規化
-			auto_sprintf_s(buf, _T("%d"), _wtoi(sValue.c_str()));
+			auto_sprintf( buf, _T("%d"), _wtoi(sValue.c_str()));
 		}else if (cOpt->GetType() == OPTION_TYPE_SEL) {
 			// 値から表示へ
 			wstring	sView;
@@ -258,7 +258,7 @@ int CDlgPluginOption::GetData(void)
 			for (auto it = selects.begin(); it != selects.end(); it++) {
 				SepSelect(*it, &sView, &sTrg);
 				if (sView == sWbuf) {
-					auto_sprintf_s(buf, _T("%ls"), sTrg.c_str());
+					auto_sprintf( buf, _T("%ls"), sTrg.c_str());
 					break;
 				}
 			}
@@ -491,6 +491,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 	}
 
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
+	LVITEM	lvi;
 
 	// 戻し
 	if (m_Line >= 0) {
@@ -502,7 +503,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 	// 編集領域に書き込み
 	SetToEdit(current);
 
-	LVITEM lvi = {0};
+	memset_raw( &lvi, 0, sizeof( lvi ));
 	lvi.mask       = LVIF_TEXT;
 	lvi.iItem      = current;
 	lvi.iSubItem   = 1;
@@ -523,7 +524,7 @@ void CDlgPluginOption::MoveFocusToEdit(void)
 	if (iLine >= 0) {
 		// Focusの切り替え
 		sType = m_cPlugin->m_options[iLine]->GetType();
-		transform(sType.begin(), sType.end(), sType.begin(), tolower);
+		transform( sType.begin(), sType.end(), sType.begin(), my_towlower2 );
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_CHECK_PLUGIN_OPTION);
 			::SetFocus(hwndCtrl);
@@ -564,7 +565,7 @@ void CDlgPluginOption::SetToEdit(int iLine)
 		ListView_GetItem(hwndList, &lvi);
 
 		sType = m_cPlugin->m_options[iLine]->GetType();
-		transform(sType.begin(), sType.end(), sType.begin(), tolower);
+		transform( sType.begin(), sType.end(), sType.begin(), my_towlower2 );
 		if (sType == OPTION_TYPE_BOOL) {
 			::CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
 			::DlgItem_SetText(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, m_cPlugin->m_options[iLine]->GetLabel().c_str());
@@ -643,7 +644,7 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 
 	if (iLine >= 0) {
 		sType = m_cPlugin->m_options[iLine]->GetType();
-		transform (sType.begin (), sType.end (), sType.begin (), tolower);
+		transform(sType.begin (), sType.end (), sType.begin (), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_PLUGIN_OPTION)) {
 				_tcscpy(buf, BOOL_DISP_TRUE);
@@ -657,7 +658,7 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 			ListView_SetItem(hwndList, &lvi);
 		}else if (sType == OPTION_TYPE_INT) {
 			nVal = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, NULL, TRUE);
-			auto_sprintf_s(buf, _T("%d"), nVal);
+			auto_sprintf( buf, _T("%d"), nVal);
 		}else if (sType == OPTION_TYPE_SEL) {
 			::DlgItem_GetText(GetHwnd(), IDC_COMBO_PLUGIN_OPTION, buf, MAX_LENGTH_VALUE + 1);
 		}else if (sType == OPTION_TYPE_DIR) {
@@ -699,15 +700,16 @@ void CDlgPluginOption::SelectDirectory(int iLine)
 	::DlgItem_GetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, szDir, _countof(szDir));
 
 	if (_IS_REL_PATH(szDir)) {
-		TCHAR	folder[_MAX_PATH + 1];
+		TCHAR	folder[_MAX_PATH];
 		_tcscpy(folder, szDir);
 		GetInidirOrExedir(szDir, folder);
 	}
 
 	// 項目名の取得
 	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS);
+	LVITEM	lvi;
 	TCHAR buf[MAX_LENGTH_VALUE + 1];
-	LVITEM lvi = {0};
+	memset_raw( &lvi, 0, sizeof( lvi ));
 	lvi.mask       = LVIF_TEXT;
 	lvi.iItem      = iLine;
 	lvi.iSubItem   = 0;
@@ -716,7 +718,7 @@ void CDlgPluginOption::SelectDirectory(int iLine)
 	ListView_GetItem(hwndList, &lvi);
 
 	TCHAR	sTitle[MAX_LENGTH_VALUE + 10];
-	auto_sprintf_s(sTitle, LS(STR_DLGPLUGINOPT_SELECT), buf);
+	auto_sprintf( sTitle, LS(STR_DLGPLUGINOPT_SELECT), buf);
 	if (SelectDir(GetHwnd(), (const TCHAR*)sTitle /*_T("ディレクトリの選択")*/, szDir, szDir)) {
 		// 末尾に\マークを追加する．
 		AddLastChar(szDir, _countof(szDir), _T('\\'));

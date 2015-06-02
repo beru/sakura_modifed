@@ -137,7 +137,7 @@ void CDlgCtrlCode::SetData(void)
 			p_ctrl_list[i].jname = (LPTSTR)cLabel_jname[i].LoadString(STR_ERR_DLGCTL5 + i);
 		}
 
-		auto_sprintf_s(tmp, _T("0x%02X"), p_ctrl_list[i].code);
+		auto_sprintf(tmp, _T("0x%02X"), p_ctrl_list[i].code);
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText  = tmp;
 		lvi.iItem    = count;
@@ -146,7 +146,7 @@ void CDlgCtrlCode::SetData(void)
 		ListView_InsertItem(hwndWork, &lvi);
 		
 		if (p_ctrl_list[i].code <= 0x1f)
-			auto_sprintf_s(tmp, _T("^%tc"), _T('@') + p_ctrl_list[i].code);
+			auto_sprintf(tmp, _T("^%tc"), _T('@') + p_ctrl_list[i].code);
 		else if (p_ctrl_list[i].code == 0x7f)
 			_tcscpy(tmp, _T("^?"));
 		else

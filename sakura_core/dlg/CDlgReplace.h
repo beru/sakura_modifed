@@ -65,7 +65,7 @@ protected:
 	/*
 	||  実装ヘルパ関数
 	*/
-	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam); // 標準以外のメッセージを捕捉する
+	BOOL OnCbnDropDown( HWND hwndCtl, int wID );
 	BOOL OnInitDialog(HWND, WPARAM, LPARAM);
 	BOOL OnDestroy();
 	BOOL OnBnClicked(int);

@@ -82,16 +82,16 @@ static const SAnchorList anchorList[] = {
 
 
 CDlgDiff::CDlgDiff()
-	: m_nIndexSave(0)
+	: CDialog(true)
+	, m_nIndexSave( 0 )
 {
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
-	m_szFile1[0] = 0;
-	m_szFile2[0] = 0;
 	m_nDiffFlgOpt    = 0;
-	m_bIsModified    = false;
 	m_bIsModifiedDst = false;
+	m_nCodeTypeDst = CODE_ERROR;
+	m_bBomDst = false;
 	m_hWnd_Dst       = NULL;
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -103,12 +103,10 @@ int CDlgDiff::DoModal(
 	HINSTANCE			hInstance,
 	HWND				hwndParent,
 	LPARAM				lParam,
-	const TCHAR*		pszPath,		// 自ファイル
-	bool				bIsModified		// 自ファイル編集中？
+	const TCHAR*		pszPath		// 自ファイル
 )
 {
 	_tcscpy(m_szFile1, pszPath);
-	m_bIsModified = bIsModified;
 
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
 }
@@ -125,7 +123,7 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 		{
 			CDlgOpenFile	cDlgOpenFile;
 			TCHAR			szPath[_MAX_PATH];
-			_tcscpy_s(szPath, m_szFile2);
+			_tcscpy(szPath, m_szFile2);
 			// ファイルオープンダイアログの初期化
 			cDlgOpenFile.Create(
 				m_hInstance,
@@ -254,10 +252,7 @@ void CDlgDiff::SetData(void)
 		nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
-			HDC hDC = ::GetDC(hwndList);
-			HFONT hFont = (HFONT)::SendMessageAny(hwndList, WM_GETFONT, 0, 0);
-			HFONT hFontOld = (HFONT)::SelectObject(hDC, hFont);
-			int nExtent = 0;	// 文字列の横幅
+			CTextWidthCalc calc(hwndList);
 			int score = 0;
 			TCHAR		szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(m_szFile1, NULL, szFile1);
@@ -269,13 +264,13 @@ void CDlgDiff::SetData(void)
 				// 自分ならスキップ
 				if (pEditNode[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
-					CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape(szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1);
+					CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1, calc.GetDC() );
 					::DlgItem_SetText(GetHwnd(), IDC_STATIC_DIFF_SRC, szName);
 					continue;
 				}
 
 				// 番号はウィンドウ一覧と同じ番号を使う
-				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape(szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, i);
+				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, i, calc.GetDC() );
 
 
 				// リストに登録する
@@ -284,12 +279,7 @@ void CDlgDiff::SetData(void)
 				count++;
 
 				// 横幅を計算する
-				SIZE sizeExtent;
-				if (::GetTextExtentPoint32(hDC, szName, _tcslen(szName), &sizeExtent)
-					&& sizeExtent.cx > nExtent
-				) {
-					nExtent = sizeExtent.cx;
-				}
+				calc.SetTextWidthIfMax(szName);
 
 				// ファイル名一致のスコアを計算する
 				TCHAR szFile2[_MAX_PATH];
@@ -307,9 +297,7 @@ void CDlgDiff::SetData(void)
 
 			delete [] pEditNode;
 			// 2002/11/01 Moca 追加 リストビューの横幅を設定。これをやらないと水平スクロールバーが使えない
-			::SelectObject(hDC, hFontOld);
-			::ReleaseDC(hwndList, hDC);
-			List_SetHorizontalExtent(hwndList, nExtent + 8);
+			List_SetHorizontalExtent( hwndList, calc.GetCx() + 8 );
 
 			// 最初を選択
 			//List_SetCurSel(hwndList, 0);
@@ -388,6 +376,8 @@ int CDlgDiff::GetData(void)
 
 			_tcscpy(m_szFile2, pFileInfo->m_szPath);
 			m_bIsModifiedDst = pFileInfo->m_bIsModified;
+			m_nCodeTypeDst = pFileInfo->m_nCharCode;
+			m_bBomDst = pFileInfo->m_bBom;
 		}else {
 			ret = FALSE;
 		}
@@ -536,5 +526,14 @@ BOOL CDlgDiff::OnMinMaxInfo(LPARAM lParam)
 	lpmmi->ptMaxTrackSize.x = m_ptDefaultSize.x*2;
 	lpmmi->ptMaxTrackSize.y = m_ptDefaultSize.y*2;
 	return 0;
+}
+
+BOOL CDlgDiff::OnLbnDblclk( int wID )
+{
+	HWND hwndList = GetDlgItem( GetHwnd(), IDC_LIST_DIFF_FILES );
+	if (List_GetCurSel(hwndList) == LB_ERR) {
+		return FALSE;
+	}
+	return OnBnClicked(IDOK);
 }
 

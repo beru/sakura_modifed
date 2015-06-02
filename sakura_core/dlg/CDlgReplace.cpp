@@ -43,6 +43,7 @@ const DWORD p_helpids[] = {	//11900
 	IDC_RADIO_REPLACE,				HIDC_REP_RADIO_REPLACE,				// 置換対象：置換
 	IDC_RADIO_INSERT,				HIDC_REP_RADIO_INSERT,				// 置換対象：挿入
 	IDC_RADIO_ADD,					HIDC_REP_RADIO_ADD,					// 置換対象：追加
+	IDC_RADIO_LINEDELETE,			HIDC_REP_RADIO_LINEDELETE,			//置換対象：行削除
 	IDC_RADIO_SELECTEDAREA,			HIDC_REP_RADIO_SELECTEDAREA,		// 範囲：全体
 	IDC_RADIO_ALLAREA,				HIDC_REP_RADIO_ALLAREA,				// 範囲：選択範囲
 	IDC_STATIC_JRE32VER,			HIDC_REP_STATIC_JRE32VER,			// 正規表現バージョン
@@ -66,44 +67,31 @@ CDlgReplace::CDlgReplace()
 }
 
 /*!
-	標準以外のメッセージを捕捉する
+	コンボボックスのドロップダウンメッセージを捕捉する
 
 	@date 2013.03.24 novice 新規作成
 */
-INT_PTR CDlgReplace::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
 {
-	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
-	switch (wMsg) {
-	case WM_COMMAND:
-		WORD wID = LOWORD(wParam);
-		switch (wID) {
-		case IDC_COMBO_TEXT:
-			if (HIWORD(wParam) == CBN_DROPDOWN) {
-				HWND hwndCombo = ::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT);
-				if (::SendMessage(hwndCombo, CB_GETCOUNT, 0L, 0L) == 0) {
-					int nSize = m_pShareData->m_sSearchKeywords.m_aSearchKeys.size();
-					for (int i = 0; i < nSize; ++i) {
-						Combo_AddString(hwndCombo, m_pShareData->m_sSearchKeywords.m_aSearchKeys[i]);
-					}
-				}
+	switch (wID) {
+	case IDC_COMBO_TEXT:
+		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
+			int nSize = m_pShareData->m_sSearchKeywords.m_aSearchKeys.size();
+			for (int i = 0; i < nSize; ++i) {
+				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aSearchKeys[i] );
 			}
-			break;
-		case IDC_COMBO_TEXT2:
-			if (HIWORD(wParam) == CBN_DROPDOWN) {
-				HWND hwndCombo = ::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT2);
-				if (::SendMessage(hwndCombo, CB_GETCOUNT, 0L, 0L) == 0) {
-					int nSize = m_pShareData->m_sSearchKeywords.m_aReplaceKeys.size();
-					for (int i = 0; i < nSize; ++i) {
-						Combo_AddString(hwndCombo, m_pShareData->m_sSearchKeywords.m_aReplaceKeys[i]);
-					}
-				}
+		}
+		break;
+	case IDC_COMBO_TEXT2:
+		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
+			int nSize = m_pShareData->m_sSearchKeywords.m_aReplaceKeys.size();
+			for (int i = 0; i < nSize; ++i) {
+				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aReplaceKeys[i] );
 			}
-			break;
 		}
 		break;
 	}
-	return result;
+	return CDialog::OnCbnDropDown( hwndCtl, wID );
 }
 
 // モードレスダイアログの表示
@@ -183,6 +171,10 @@ void CDlgReplace::SetData(void)
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_INSERT, TRUE);
 	}else if (m_nReplaceTarget == 2) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_ADD, TRUE);
+	}else if (m_nReplaceTarget == 3) {
+		::CheckDlgButton( GetHwnd(), IDC_RADIO_LINEDELETE, TRUE );
+		::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), FALSE );
+		::EnableWindow( GetItemHwnd( IDC_CHK_PASTE ), FALSE );
 	}
 	// To Here 2001.12.03 hor
 
@@ -252,10 +244,14 @@ int CDlgReplace::GetData(void)
 	::DlgItem_GetText(GetHwnd(), IDC_COMBO_TEXT, &vText[0], nBufferSize);
 	m_strText = to_wchar(&vText[0]);
 	// 置換後文字列
-	nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT2)) + 1;
-	vText.resize(nBufferSize);
-	::DlgItem_GetText(GetHwnd(), IDC_COMBO_TEXT2, &vText[0], nBufferSize);
-	m_strText2 = to_wchar(&vText[0]);
+	if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
+		m_strText2 = L"";
+	}else {
+		nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT2)) + 1;
+		vText.resize(nBufferSize);
+		::DlgItem_GetText(GetHwnd(), IDC_COMBO_TEXT2, &vText[0], nBufferSize);
+		m_strText2 = to_wchar(&vText[0]);
+	}
 
 	// 置換 ダイアログを自動的に閉じる
 	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_bAutoCloseDlgReplace);
@@ -309,6 +305,10 @@ int CDlgReplace::GetData(void)
 			m_nReplaceTarget=1;
 		}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ADD)) {
 			m_nReplaceTarget=2;
+		}else if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
+			m_nReplaceTarget=3;
+			m_nPaste = FALSE;
+			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), FALSE );
 		}
 		// To Here 2001.12.03 hor
 
@@ -397,6 +397,19 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 			::CheckDlgButton(GetHwnd(), IDC_CHK_PASTE, FALSE);
 		}
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT2), !(::IsDlgButtonChecked(GetHwnd(), IDC_CHK_PASTE)));
+		return TRUE;
+		// 置換対象
+	case IDC_RADIO_REPLACE:
+	case IDC_RADIO_INSERT:
+	case IDC_RADIO_ADD:
+	case IDC_RADIO_LINEDELETE:
+		if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
+			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), FALSE );
+			::EnableWindow( GetItemHwnd( IDC_CHK_PASTE ), FALSE );
+		}else{
+			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), TRUE );
+			::EnableWindow( GetItemHwnd( IDC_CHK_PASTE ), TRUE );
+		}
 		return TRUE;
 	case IDC_RADIO_SELECTEDAREA:
 		// 範囲範囲
@@ -489,7 +502,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (TRUE == pcEditView->m_bSearch) {
+			if (pcEditView->m_bSearch != FALSE) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
 				pcEditView->m_bSearch = FALSE;
 			}// 02/07/28 ai end
@@ -508,7 +521,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (TRUE == pcEditView->m_bSearch) {
+			if (pcEditView->m_bSearch != FALSE) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
 				pcEditView->m_bSearch = FALSE;
 			}// 02/07/28 ai end
@@ -536,7 +549,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 置換開始位置を登録 02/07/28 ai start
-			if (TRUE == pcEditView->m_bSearch) {
+			if (pcEditView->m_bSearch != FALSE) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
 				pcEditView->m_bSearch = FALSE;
 			}// 02/07/28 ai end
@@ -555,7 +568,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 			// 置換開始位置を登録 02/07/28 ai start
-			if (TRUE == pcEditView->m_bSearch) {
+			if (pcEditView->m_bSearch != FALSE) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
 				pcEditView->m_bSearch = FALSE;
 			}// 02/07/28 ai end

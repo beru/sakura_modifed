@@ -66,7 +66,7 @@ int CDlgTagsMake::DoModal(
 	const TCHAR*	pszPath		// ƒpƒX
 )
 {
-	_tcscpy_s(m_szPath, pszPath);
+	_tcscpy( m_szPath, pszPath );
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
 }
 
