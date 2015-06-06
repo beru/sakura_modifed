@@ -22,6 +22,7 @@
 #include <Windows.h>
 #include "_main/global.h" // 2002/2/10 aroka
 #include "basis/SakuraBasis.h"
+#include "util/design_template.h"
 #include "COpe.h"
 
 class CDocLine; // 2002/2/10 aroka
@@ -52,9 +53,14 @@ public:
 	CLogicInt GetLineCount() const { return m_nLines; }	//!< 全行数を返す
 	
 	// 行データへのアクセス
-	CDocLine* GetLine(CLogicInt nLine) const;						//!< 指定行を取得
-	CDocLine* GetDocLineTop() const { return m_pDocLineTop; }		//!< 先頭行を取得
-	CDocLine* GetDocLineBottom() const { return m_pDocLineBot; }	//!< 最終行を取得
+	const CDocLine* GetLine( CLogicInt nLine ) const;						//!< 指定行を取得
+	CDocLine* GetLine( CLogicInt nLine ){
+		return const_cast<CDocLine*>(const_cast<CDocLine*>(static_cast<const CDocLineMgr*>(this)->GetLine( nLine )));
+	}
+	const CDocLine* GetDocLineTop() const { return m_pDocLineTop; }		//!< 先頭行を取得
+	CDocLine* GetDocLineTop() { return m_pDocLineTop; }		//!< 先頭行を取得
+	const CDocLine* GetDocLineBottom() const { return m_pDocLineBot; }	//!< 最終行を取得
+	CDocLine* GetDocLineBottom() { return m_pDocLineBot; }	//!< 最終行を取得
 	
 	// 行データの管理
 	CDocLine* InsertNewLine(CDocLine* pPos);	//!< pPosの直前に新しい行を挿入
@@ -88,5 +94,8 @@ public:
 	mutable CDocLine*	m_pDocLineCurrent;	//!< 順アクセス時の現在位置
 	mutable CLogicInt	m_nPrevReferLine;
 	mutable CDocLine*	m_pCodePrevRefer;
+
+private:
+	DISALLOW_COPY_AND_ASSIGN(CDocLineMgr);
 };
 

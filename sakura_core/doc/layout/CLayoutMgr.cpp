@@ -70,6 +70,7 @@ CLayoutMgr::~CLayoutMgr()
 */
 void CLayoutMgr::Create(CEditDoc* pcEditDoc, CDocLineMgr* pcDocLineMgr)
 {
+	_Empty();
 	Init();
 	// Jun. 20, 2003 genta EditDoc‚Ö‚Ìƒ|ƒCƒ“ƒ^’Ç‰Á
 	m_pcEditDoc = pcEditDoc;
@@ -925,7 +926,7 @@ void CLayoutMgr::LayoutToLogicEx(
 				return;
 			}else {
 				pData = GetLineStr(ptLayout.GetY2() - CLayoutInt(1), &nDataLen);
-				if (WCODE::IsLineDelimiter(pData[nDataLen - 1])) {
+				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
 					pptLogic->Set(CLogicInt(0), m_pcDocLineMgr->GetLineCount());
 					return;
 				}else {

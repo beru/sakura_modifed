@@ -28,6 +28,7 @@
 
 #include "recent/CMRUFile.h"
 #include "recent/CMRUFolder.h"
+#include "dlg/CDlgOpenFile.h"
 #include "_main/CAppMode.h" 
 #include "_main/CControlTray.h"
 #include "CEditApp.h"
@@ -93,7 +94,8 @@ bool CDocFileOperation::OpenFileDialog(
 	ActivateFrameWindow(hwndParent);
 
 	// ファイルオープンダイアログを表示
-	m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.Create(
+	CDlgOpenFile cDlgOpenFile;
+	cDlgOpenFile.Create(
 		G_AppInstance(),
 		hwndParent,
 		_T("*.*"),
@@ -101,7 +103,7 @@ bool CDocFileOperation::OpenFileDialog(
 		CMRUFile().GetPathList(),														// MRUリストのファイルのリスト
 		CMRUFolder().GetPathList()														// OPENFOLDERリストのファイルのリスト
 	);
-	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalOpenDlg(pLoadInfo, &files);
+	return cDlgOpenFile.DoModalOpenDlg( pLoadInfo, &files );
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -212,7 +214,8 @@ void CDocFileOperation::ReloadCurrentFile(
 	SLoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = m_pcDocRef->m_cDocFile.GetFilePath();
 	sLoadInfo.eCharCode = nCharCode;
-	sLoadInfo.bViewMode = !m_pcDocRef->IsEditable(); //CAppMode::getInstance()->IsViewMode();
+	sLoadInfo.bViewMode = CAppMode::getInstance()->IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
+	sLoadInfo.bWritableNoMsg = !m_pcDocRef->IsEditable(); // すでに編集できない状態ならファイルロックのメッセージを表示しない
 	sLoadInfo.bRequestReload = true;
 	bool bRet = this->DoLoadFlow(&sLoadInfo);
 
@@ -260,7 +263,6 @@ bool CDocFileOperation::SaveFileDialog(
 	TCHAR szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
 	{
 		LPCTSTR	szExt;
-		TCHAR szWork[MAX_TYPES_EXTS];
 
 		const STypeConfig& type = m_pcDocRef->m_cDocType.GetDocumentAttribute();
 		// ファイルパスが無い場合は *.txt とする
@@ -281,30 +283,7 @@ bool CDocFileOperation::SaveFileDialog(
 			}
 		}else {
 			szDefaultWildCard[0] = _T('\0'); 
-			if (szExt[0] != _T('\0')) {
-				// ファイルパスがあり、拡張子ありの場合、トップに指定
-				_tcscpy(szDefaultWildCard, _T("*"));
-				_tcscat(szDefaultWildCard, szExt);
-			}
-			// 拡張子を指定に合わせる
-			const TCHAR* pStr;
-			const TCHAR* pEnd;
-			pStr = pEnd = type.m_szTypeExts;
-			do {
-				if (*pEnd == _T('\0') || *pEnd == _T(',')) {
-					auto_strncpy(szWork, pStr, pEnd - pStr);
-					szWork[pEnd - pStr]= _T('\0');
-					if (szExt[0] == _T('\0') || auto_stricmp(szWork, szExt + 1) != 0) {
-						// 拡張子指定なし、またはマッチした拡張子でない
-						if (szDefaultWildCard[0] != _T('\0')) {
-							_tcscat(szDefaultWildCard, _T(";"));
-						}
-						_tcscat(szDefaultWildCard, _T("*."));
-						_tcscat(szDefaultWildCard, szWork);
-					}
-					pStr = pEnd + 1;
-				}
-			}while (*pEnd++ != _T('\0'));
+			CDocTypeManager::ConvertTypesExtToDlgExt(type.m_szTypeExts, szExt, szDefaultWildCard);
 		}
 
 		if (!this->m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
@@ -322,14 +301,15 @@ bool CDocFileOperation::SaveFileDialog(
 		const EditNode* node = CAppNodeManager::getInstance()->GetEditNode(m_pcDocRef->m_pcEditWnd->GetHwnd());
 		if (0 < node->m_nId) {
 			TCHAR szText[16];
-			auto_sprintf_s(szText, _T("%d"), node->m_nId);
+			auto_sprintf(szText, _T("%d"), node->m_nId);
 			auto_strcpy(pSaveInfo->cFilePath, LS(STR_NO_TITLE2));	// 無題
 			auto_strcat(pSaveInfo->cFilePath, szText);
 		}
 	}
 
 	// ダイアログを表示
-	m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.Create(
+	CDlgOpenFile cDlgOpenFile;
+	cDlgOpenFile.Create(
 		G_AppInstance(),
 		CEditWnd::getInstance()->GetHwnd(),
 		szDefaultWildCard,
@@ -337,7 +317,7 @@ bool CDocFileOperation::SaveFileDialog(
 		CMRUFile().GetPathList(),	// 最近のファイル
 		CMRUFolder().GetPathList()	// 最近のフォルダ
 	);
-	return m_pcDocRef->m_pcEditWnd->m_cDlgOpenFile.DoModalSaveDlg(pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX);
+	return cDlgOpenFile.DoModalSaveDlg( pSaveInfo, pSaveInfo->eCharCode == CODE_CODEMAX );
 }
 
 //!「ファイル名を付けて保存」ダイアログ
@@ -528,7 +508,7 @@ bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, E
 bool CDocFileOperation::FileClose()
 {
 	// ファイルを閉じるときのMRU登録 & 保存確認 & 保存実行
-	if (!m_pcDocRef->OnFileClose()) {
+	if (!m_pcDocRef->OnFileClose(false)) {
 		return false;
 	}
 
@@ -545,6 +525,8 @@ bool CDocFileOperation::FileClose()
 
 	// 全ビューの初期化
 	m_pcDocRef->InitAllView();
+
+	m_pcDocRef->SetCurDirNotitle();
 
 	// 無題番号取得
 	CAppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
@@ -610,16 +592,16 @@ void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
 	// 全ビューの初期化
 	m_pcDocRef->InitAllView();
 
-	// 親ウィンドウのタイトルを更新
-	m_pcDocRef->m_pcEditWnd->UpdateCaption();
-
 	// 開く
 	FileLoadWithoutAutoMacro(&sLoadInfo);
 
 	if (!m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
+		m_pcDocRef->SetCurDirNotitle();
 		CAppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
-		m_pcDocRef->m_pcEditWnd->UpdateCaption();
 	}
+
+	/* 親ウィンドウのタイトルを更新 */
+	m_pcDocRef->m_pcEditWnd->UpdateCaption();
 
 	// オープン後自動実行マクロを実行する
 	// ※ロードしてなくても(無題)には変更済み

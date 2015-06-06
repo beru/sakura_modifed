@@ -15,17 +15,19 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDocLine;
 
 #pragma once
 
+#include "util/design_template.h"
 #include "CEol.h"
 #include "mem/CMemory.h"
 
 #include "docplus/CBookmarkManager.h"
 #include "docplus/CDiffManager.h"
 #include "docplus/CModifyManager.h"
+#include "docplus/CFuncListManager.h"
 
+class CDocLine;
 class COpeBlk;
 
 //!	文書データ1行
@@ -99,8 +101,12 @@ public:
 	struct MarkType {
 		CLineModified	m_cModified;	// 変更フラグ
 		CLineBookmarked	m_cBookmarked;	// ブックマーク
+		CLineFuncList	m_cFuncList;	//関数リストマーク
 		CLineDiffed		m_cDiffmarked;	// DIFF差分情報
 	};
 	MarkType m_sMark;
+
+private:
+	DISALLOW_COPY_AND_ASSIGN(CDocLine);
 };
 

@@ -47,6 +47,7 @@ static ColorInfoIni ColorInfo_DEFAULT[] = {
 	{ STR_COLOR_CURSOR_LINE_BG,				{ FALSE,	{ FALSE,	FALSE },	{ RGB(  0,   0,   0),	RGB(255, 255, 128) } } },	// 2012.11.21 Moca
 	{ STR_COLOR_CURSOR_LINE,				{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0, 255),	RGB(255, 251, 240) } } },
 	{ STR_COLOR_CURSOR_COLUMN,				{ FALSE,	{ FALSE,	FALSE },	{ RGB(128, 128, 255),	RGB(255, 251, 240) } } },	// 2007.09.09 Moca
+	{ STR_COLOR_NOTE_LINE,					{ FALSE,	{ FALSE,	FALSE },	{ RGB( 192, 192, 255 ),	RGB( 255, 251, 240 ) } } },
 	{ STR_COLOR_LINE_NO,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0,   0, 255),	RGB(239, 239, 239) } } },
 	{ STR_COLOR_LINE_NO_CHANGE,				{ TRUE,		{ TRUE,		FALSE },	{ RGB(  0,   0, 255),	RGB(239, 239, 239) } } },
 	{ STR_COLOR_EVEN_LINE_BG,				{ FALSE,	{ FALSE,	FALSE },	{ RGB(  0,   0,   0),	RGB(243, 243, 243) } } },	// 2013.12.30 Moca
@@ -95,6 +96,7 @@ static ColorInfoIni ColorInfo_DEFAULT[] = {
 	{ STR_COLOR_DIFF_CNG,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(  0, 111,   0),	RGB(189, 253, 192) } } },	//@@@ 2002.06.01 MIK
 	{ STR_COLOR_DIFF_DEL,					{ TRUE,		{ FALSE,	FALSE },	{ RGB(213, 106,   0),	RGB(255, 233, 172) } } },	//@@@ 2002.06.01 MIK
 	{ STR_COLOR_BOOKMARK,					{ TRUE ,	{ FALSE,	FALSE },	{ RGB(255, 251, 240),	RGB(  0, 128, 192) } } },	// 02/10/16 ai
+	{ STR_COLOR_PAGEVIEW,					{ TRUE ,	{ FALSE,	FALSE },	{ RGB( 255, 251, 240 ),	RGB( 190, 230, 255 ) } } },
 };
 
 void GetDefaultColorInfo(ColorInfo* pColorInfo, int nIndex)
@@ -111,7 +113,6 @@ void GetDefaultColorInfoName(ColorInfo* pColorInfo, int nIndex)
 {
 	assert(nIndex < _countof(ColorInfo_DEFAULT));
 
-	ColorInfoBase* p = pColorInfo;
 	_tcscpy(pColorInfo->m_szName, LS(ColorInfo_DEFAULT[nIndex].m_nNameId));
 }
 

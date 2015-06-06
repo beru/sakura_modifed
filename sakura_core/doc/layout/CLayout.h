@@ -13,17 +13,17 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CLayout;
-class CLayoutMgr;
-
 #pragma once
 
+#include "util/design_template.h"
 #include "CEol.h"// 2002/2/10 aroka
 #include "doc/logic/CDocLine.h"// 2002/4/21 YAZAKI
 #include "mem/CMemory.h"// 2002/4/21 YAZAKI
 #include "CLayoutExInfo.h"
 #include "view/colors/EColorIndexType.h"
 
+class CLayout;
+class CLayoutMgr;
 
 /*-----------------------------------------------------------------------
 クラスの宣言
@@ -82,7 +82,9 @@ public:
 	CLayoutInt CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const;
 
 	//! オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
-	CLayoutInt CalcLayoutOffset(const CLayoutMgr& cLayoutMgr) const;
+	CLayoutInt CalcLayoutOffset(const CLayoutMgr& cLayoutMgr,
+								CLogicInt nStartPos = CLogicInt(0),
+								CLayoutInt nStartOffset = CLayoutInt(0)) const;
 
 	//! 文字列参照を取得
 	CStringRef GetStringRef() const { return CStringRef(GetPtr(), GetLengthWithEOL()); }
@@ -120,6 +122,9 @@ private:
 	CEol				m_cEol;
 	CLayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
 	CLayoutExInfo		m_cExInfo;			//!< 色分け詳細情報
+
+private:
+	DISALLOW_COPY_AND_ASSIGN(CLayout);
 };
 
 
