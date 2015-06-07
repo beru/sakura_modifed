@@ -36,7 +36,6 @@
 #include "env/DLLSHAREDATA.h"
 #include "env/CSakuraEnvironment.h"
 #include "recent/CRecentEditNode.h"
-#include "uiparts/CWaitCursor.h"
 #include "util/window.h"
 #include "_main/CMutex.h"
 
@@ -155,7 +154,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 			// 以前の情報をコピーする。
 			EditNode* p = cRecentEditNode.GetItem(nIndex);
 			if (p) {
-				memcpy_raw(&sMyEditNode, p, sizeof(sMyEditNode));
+				sMyEditNode = *p;
 			}
 		}
 
@@ -235,59 +234,87 @@ void CAppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 */
 BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOOL bExit, BOOL bCheckConfirm, HWND hWndFrom)
 {
-	if (bCheckConfirm && GetDllShareData().m_Common.m_sGeneral.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
-		int nCloseCount = 0;
-
-		// クローズ対象ウィンドウの数を調べる
-		for (int i = 0; i < nArrCnt; i++) {
-			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-				if (pWndArr[i].m_hWnd) {
-					nCloseCount++;
+	// クローズ対象ウィンドウを調べる
+	int iGroup = -1;
+	HWND hWndLast = NULL;
+	int nCloseCount = 0;
+	for (int i = 0; i < nArrCnt; i++) {
+		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
+			if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
+				nCloseCount++;
+				if (iGroup == -1) {
+					iGroup = pWndArr[i].m_nGroup;	// 最初に閉じるグループ
+					hWndLast = pWndArr[i].m_hWnd;
+				}else if (iGroup == pWndArr[i].m_nGroup) {
+					hWndLast = pWndArr[i].m_hWnd;	// 最初に閉じるグループの最後のウィンドウ
 				}
 			}
 		}
+	}
 
+	if (bCheckConfirm && GetDllShareData().m_Common.m_sGeneral.m_bCloseAllConfirm) {	//[すべて閉じる]で他に編集用のウィンドウがあれば確認する
 		if (1 < nCloseCount) {
 			if (IDYES != ::MYMESSAGEBOX(
 				hWndFrom,
 				MB_YESNO | MB_APPLMODAL | MB_ICONQUESTION,
 				GSTR_APPNAME,
 				LS(STR_ERR_CSHAREDATA19)
-				)
-			) {
+			)) {
 				return FALSE;
 			}
 		}
 	}
 
-	bool bInThisClose = false;		// 要求元のウィンドウをクローズするか
-	CWaitCursor	cWaitCursor(hWndFrom);	// 砂時計カーソル
-	for (int i = 0; i < nArrCnt; ++i) {
-		// m_hWndにNULLを設定したEditNodeはとばす
-		if (!pWndArr[i].m_hWnd) {
-			continue;
-		}
+	// アクティブ化制御ウィンドウを決める
+	// ・メッセージを表示していない間はこの制御ウィンドウをアクティブに保つようにする
+	// ・閉じられるエディタが保存確認のメッセージを表示する場合は、この制御ウィンドウにアクティブ化要求（MYWM_ALLOWACTIVATE）を出してアクティブにしてもらう
+	// ・タブグループ表示かどうかなどの条件に応じて、ちらつきを最小限にするのに都合の良いウィンドウをここで選択しておく
+	HWND hWndActive;
+	bool bTabGroup = (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd && !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin);
+	if (bTabGroup) {
+		hWndActive = hWndLast;	// 最後に閉じるウィンドウが担当
+	}else {
+		hWndActive = GetDllShareData().m_sHandles.m_hwndTray;	// タスクトレイが担当
+	}
+
+	// アクティブ化制御ウインドウをアクティブにしておく
+	if (IsSakuraMainWindow(hWndActive)) {
+		ActivateFrameWindow(hWndActive);	// エディタウィンドウ
+	}else {
+		::SetForegroundWindow(hWndActive);	// タスクトレイ
+	}
+
+	// エディタへの終了要求
+	for (int i = 0; i < nArrCnt; i++) {
 		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 			if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
-				if (pWndArr[i].m_hWnd == hWndFrom) {	// 要求元?
-					bInThisClose = true;
-					continue;
+				// タブグループ表示で次に閉じるのがアクティブ化制御ウィンドウの場合、
+				// アクティブ化制御ウィンドウを次のグループの最後のウィンドウに切替える
+				if (bTabGroup && pWndArr[i].m_hWnd == hWndActive) {
+					iGroup = -1;
+					hWndActive = ( IsSakuraMainWindow(hWndFrom) )? hWndFrom: NULL;	// 一番最後用
+					for (int j = i + 1; j < nArrCnt; j++) {
+						if (m_nGroup == 0 || m_nGroup == pWndArr[j].m_nGroup) {
+							if (IsSakuraMainWindow(pWndArr[j].m_hWnd)) {
+								if (iGroup == -1) {
+									iGroup = pWndArr[j].m_nGroup;	// 次に閉じるグループ
+									hWndActive = pWndArr[j].m_hWnd;
+								}else if (iGroup == pWndArr[j].m_nGroup) {
+									hWndActive = pWndArr[j].m_hWnd;	// 次に閉じるグループの最後のウィンドウ
+								}else {
+									break;
+								}
+							}
+						}
+					}
 				}
-				// アクティブにする
-// 				ActivateFrameWindow(pWndArr[i].m_hWnd);	// 画面をバタつかせない様に削除 2013/4/8 Uchi
-				// トレイからエディタへの終了要求
-				if (!::SendMessage(pWndArr[i].m_hWnd, MYWM_CLOSE, bExit, (LPARAM)hWndFrom)) {	// 2007.02.13 ryoji bExitを引き継ぐ	//  終了要求元のウィンドウを通知するようにする 2013/4/9 Uchi
-//					delete []pWndArr;	// 呼元で削除に合わせる
+				DWORD dwPid;
+				::GetWindowThreadProcessId(pWndArr[i].m_hWnd, &dwPid);
+				::SendMessage(hWndActive, MYWM_ALLOWACTIVATE, dwPid, 0);	// アクティブ化の許可を依頼する
+				if (!::SendMessage( pWndArr[i].m_hWnd, MYWM_CLOSE, bExit ? PM_CLOSE_EXIT : 0, (LPARAM)hWndActive )) {	// 2007.02.13 ryoji bExitを引き継ぐ
 					return FALSE;
 				}
 			}
-		}
-	}
-	if (bInThisClose) {
-		// 要求元は最後
-		// トレイからエディタへの終了要求
-		if (!::SendMessage(hWndFrom, MYWM_CLOSE, bExit, (LPARAM)hWndFrom)) {
-			return FALSE;
 		}
 	}
 
@@ -562,7 +589,9 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 		int iGroupMru = 0;	// グループ単位のMRU番号
 		int nGroup = -1;
 		for (int i = 0; i < nRowNum; i++) {
-			if (pNode[i].nGroupMru == -1 && nGroup != pNode[i].p->m_nGroup) {
+			if (pNode[i].nGroupMru == -1
+				&& nGroup != pNode[i].p->m_nGroup
+			) {
 				nGroup = pNode[i].p->m_nGroup;
 				iGroupMru++;
 				pNode[i].nGroupMru = iGroupMru;	// MRU番号付与
@@ -774,7 +803,9 @@ HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 					if (p[i].GetHwnd() == hWndCur) {
 						bFound= true;
 					}else {
-						hWnd = p[i].GetHwnd();
+						if (!bFound && hWnd == NULL || bFound) {
+							hWnd = p[i].GetHwnd();
+						}
 						if (bFound) {
 							break;
 						}

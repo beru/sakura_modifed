@@ -30,10 +30,13 @@
 
 #include "DLLSHAREDATA.h"
 #include "CFileNameManager.h"
+#include "charset/CCodePage.h"
 #include "util/module.h"
 #include "util/os.h"
 #include "util/shell.h"
 #include "util/string_ex2.h"
+#include "util/file.h"
+#include "util/window.h"
 #include "_main/CCommandLine.h"
 #include "_os/COsVersionInfo.h"
 
@@ -49,12 +52,21 @@
 	@date 2003.01.27 Moca 新規作成
 	@note 連続して呼び出す場合のため、展開済みメタ文字列をキャッシュして高速化している。
 */
-LPTSTR CFileNameManager::GetTransformFileNameFast(LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen)
+LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDest, int nDestLen, HDC hDC, bool bFitMode, int cchMaxWidth )
 {
 	TCHAR szBuf[_MAX_PATH + 1];
 
 	if (-1 == m_nTransformFileNameCount) {
 		TransformFileName_MakeCache();
+	}
+
+	int nPxWidth = -1;
+	if (m_pShareData->m_Common.m_sFileName.m_bTransformShortPath && cchMaxWidth != -1) {
+		if (cchMaxWidth == 0) {
+			cchMaxWidth = m_pShareData->m_Common.m_sFileName.m_nTransformShortMaxWidth;
+		}
+		CTextWidthCalc calc(hDC);
+		nPxWidth = calc.GetTextWidth(_T("x")) * cchMaxWidth;
 	}
 
 	if (0 < m_nTransformFileNameCount) {
@@ -63,11 +75,17 @@ LPTSTR CFileNameManager::GetTransformFileNameFast(LPCTSTR pszSrc, LPTSTR pszDest
 			m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
 		for (int i = 1; i < m_nTransformFileNameCount; i++) {
-			_tcscpy_s(szBuf, pszDest);
+			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
 				m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
 		}
+		if (nPxWidth != -1) {
+			_tcscpy( szBuf, pszDest );
+			GetShortViewPath( pszDest, nDestLen, szBuf, hDC, nPxWidth, bFitMode );
+		}
+	}else if (nPxWidth != -1) {
+		GetShortViewPath( pszDest, nDestLen, pszSrc, hDC, nPxWidth, bFitMode );
 	}else {
 		// 変換する必要がない コピーだけする
 		_tcsncpy(pszDest, pszSrc, nDestLen - 1);
@@ -239,7 +257,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 					; // 読み飛ばす
 				for (; nMetaLen == pAlias->nLenth; pAlias++) {
 					if (0 == auto_stricmp(pAlias->szAlias, szMeta)) {
-						_tcscpy_s(szMeta, pAlias->szOrig);
+						_tcscpy(szMeta, pAlias->szOrig);
 						break;
 					}
 				}
@@ -260,7 +278,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 					if (pStr) {
 						nPathLen = _tcslen(pStr);
 						if (nPathLen < _MAX_PATH) {
-							_tcscpy_s(szPath, pStr);
+							_tcscpy(szPath, pStr);
 						}else {
 							*pd = _T('\0');
 							return false;
@@ -367,7 +385,7 @@ static void GetAccessKeyLabelByIndex(TCHAR* pszLabel, bool bEspaceAmp, int index
 bool CFileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
 	const EditInfo* editInfo, int nId, bool bFavorite,
-	int index, bool bAccKeyZeroOrigin
+	int index, bool bAccKeyZeroOrigin, HDC hDC
 ) {
 	const EditInfo* pfi = editInfo;
 	TCHAR szAccKey[4];
@@ -375,7 +393,7 @@ bool CFileNameManager::GetMenuFullLabel(
 	if (!pfi) {
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_UNKOWN), szAccKey);
-		return true; // trueにしておく
+		return 0 < ret;
 	}else if (pfi->m_bIsGrep) {
 		
 		GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
@@ -409,7 +427,7 @@ bool CFileNameManager::GetMenuFullLabel(
 		ret = auto_snprintf_s(pszOutput, nBuffSize, LS(STR_MENU_OUTPUT), szAccKey);
 	}else {
 		return GetMenuFullLabel(pszOutput, nBuffSize, bEspaceAmp, pfi->m_szPath, nId, pfi->m_bIsModified, pfi->m_nCharCode, bFavorite,
-			 index, bAccKeyZeroOrigin);
+			 index, bAccKeyZeroOrigin, hDC);
 	}
 	return 0 < ret;
 }
@@ -417,7 +435,7 @@ bool CFileNameManager::GetMenuFullLabel(
 bool CFileNameManager::GetMenuFullLabel(
 	TCHAR* pszOutput, int nBuffSize, bool bEspaceAmp,
 	const TCHAR* pszFile, int nId, bool bModified, ECodeType nCharCode, bool bFavorite,
-	int index, bool bAccKeyZeroOrigin
+	int index, bool bAccKeyZeroOrigin, HDC hDC
 ) {
 	TCHAR szAccKey[4];
 	TCHAR szFileName[_MAX_PATH];
@@ -426,7 +444,7 @@ bool CFileNameManager::GetMenuFullLabel(
 
 	GetAccessKeyLabelByIndex(szAccKey, bEspaceAmp, index, bAccKeyZeroOrigin);
 	if (pszFile[0]) {
-		this->GetTransformFileNameFast(pszFile, szFileName, _MAX_PATH);
+		this->GetTransformFileNameFast( pszFile, szFileName, _MAX_PATH, hDC );
 
 		// szFileName → szMenu2
 		// Jan. 19, 2002 genta
@@ -446,8 +464,12 @@ bool CFileNameManager::GetMenuFullLabel(
 		pszName = szFileName;
 	}
 	const TCHAR* pszCharset = _T("");
+	TCHAR szCodePageName[100];
 	if (IsValidCodeTypeExceptSJIS(nCharCode)) {
 		pszCharset = CCodeTypeName(nCharCode).Bracket();
+	}else if (IsValidCodeOrCPTypeExceptSJIS(nCharCode)) {
+		CCodePage::GetNameBracket(szCodePageName, nCharCode);
+		pszCharset = szCodePageName;
 	}
 	
 	int ret = auto_snprintf_s(pszOutput, nBuffSize, _T("%ts%ts%ts %ts%ts"),
@@ -470,7 +492,7 @@ bool CFileNameManager::GetMenuFullLabel(
 	@date 2007.09.04 ryoji 新規作成
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
-void CFileNameManager::GetIniFileNameDirect(LPTSTR pszPrivateIniFile, LPTSTR pszIniFile)
+void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName )
 {
 	TCHAR szPath[_MAX_PATH];
 	TCHAR szDrive[_MAX_DRIVE];
@@ -484,35 +506,49 @@ void CFileNameManager::GetIniFileNameDirect(LPTSTR pszPrivateIniFile, LPTSTR psz
 	);
 	_tsplitpath(szPath, szDrive, szDir, szFname, szExt);
 
-	auto_snprintf_s(pszIniFile, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".ini"));
+	if( pszProfName[0] == '\0' ){
+		auto_snprintf_s(pszIniFile, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".ini"));
+	}else{
+		auto_snprintf_s( pszIniFile, _MAX_PATH - 1, _T("%ts%ts%ts\\%ts%ts"), szDrive, szDir, pszProfName, szFname, _T(".ini") );
+	}
 
 	// マルチユーザ用のiniファイルパス
 	//		exeと同じフォルダに置かれたマルチユーザ構成設定ファイル（sakura.exe.ini）の内容
 	//		に従ってマルチユーザ用のiniファイルパスを決める
 	pszPrivateIniFile[0] = _T('\0');
-	auto_snprintf_s(szPath, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".exe.ini"));
-	int nEnable = ::GetPrivateProfileInt(_T("Settings"), _T("MultiUser"), 0, szPath);
-	if (nEnable) {
-		int nFolder = ::GetPrivateProfileInt(_T("Settings"), _T("UserRootFolder"), 0, szPath);
-		switch (nFolder) {
-		case 1:
-			nFolder = CSIDL_PROFILE;			// ユーザのルートフォルダ
-			break;
-		case 2:
-			nFolder = CSIDL_PERSONAL;			// ユーザのドキュメントフォルダ
-			break;
-		case 3:
-			nFolder = CSIDL_DESKTOPDIRECTORY;	// ユーザのデスクトップフォルダ
-			break;
-		default:
-			nFolder = CSIDL_APPDATA;			// ユーザのアプリケーションデータフォルダ
-			break;
-		}
-		::GetPrivateProfileString(_T("Settings"), _T("UserSubFolder"), _T("sakura"), szDir, _MAX_DIR, szPath);
-		if (szDir[0] == _T('\0'))
-			::lstrcpy(szDir, _T("sakura"));
-		if (GetSpecialFolderPath(nFolder, szPath)) {
-			auto_snprintf_s(pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, _T(".ini"));
+	if (IsWin2000_or_later()) {
+		auto_snprintf_s(szPath, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".exe.ini"));
+		int nEnable = ::GetPrivateProfileInt(_T("Settings"), _T("MultiUser"), 0, szPath);
+		if (nEnable) {
+			int nFolder = ::GetPrivateProfileInt(_T("Settings"), _T("UserRootFolder"), 0, szPath);
+			switch (nFolder) {
+			case 1:
+				nFolder = CSIDL_PROFILE;			// ユーザのルートフォルダ
+				break;
+			case 2:
+				nFolder = CSIDL_PERSONAL;			// ユーザのドキュメントフォルダ
+				break;
+			case 3:
+				nFolder = CSIDL_DESKTOPDIRECTORY;	// ユーザのデスクトップフォルダ
+				break;
+			default:
+				nFolder = CSIDL_APPDATA;			// ユーザのアプリケーションデータフォルダ
+				break;
+			}
+			::GetPrivateProfileString(_T("Settings"), _T("UserSubFolder"), _T("sakura"), szDir, _MAX_DIR, szPath);
+			if (szDir[0] == _T('\0'))
+				::lstrcpy(szDir, _T("sakura"));
+			if (GetSpecialFolderPath(nFolder, szPath)) {
+				if (pszProfName[0] == '\0') {
+					auto_snprintf_s(pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, _T(".ini"));
+				}else {
+					auto_snprintf_s( pszPrivateIniFile, _MAX_PATH - 1, _T("%ts\\%ts\\%ts\\%ts%ts"), szPath, szDir, szFname, pszProfName, _T(".ini") );
+				}
+	
+	
+	
+	
+			}
 		}
 	}
 }
@@ -529,7 +565,7 @@ void CFileNameManager::GetIniFileNameDirect(LPTSTR pszPrivateIniFile, LPTSTR psz
 	@author ryoji
 	@date 2007.05.19 ryoji 新規作成
 */
-LPCTSTR CFileNameManager::GetIniFileName(BOOL bRead/*=FALSE*/)
+void CFileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
 {
 	auto& iniFolder = m_pShareData->m_sFileNameManagement.m_IniFolder;
 	if (!iniFolder.m_bInit) {
@@ -537,7 +573,7 @@ LPCTSTR CFileNameManager::GetIniFileName(BOOL bRead/*=FALSE*/)
 		iniFolder.m_bReadPrivate = false;	// マルチユーザ用iniからの読み出しフラグ
 		iniFolder.m_bWritePrivate = false;	// マルチユーザ用iniへの書き込みフラグ
 
-		GetIniFileNameDirect(iniFolder.m_szPrivateIniFile, iniFolder.m_szIniFile);
+		GetIniFileNameDirect(iniFolder.m_szPrivateIniFile, iniFolder.m_szIniFile, pszProfName);
 		if (iniFolder.m_szPrivateIniFile[0] != _T('\0')) {
 			iniFolder.m_bReadPrivate = true;
 			iniFolder.m_bWritePrivate = true;
@@ -549,7 +585,16 @@ LPCTSTR CFileNameManager::GetIniFileName(BOOL bRead/*=FALSE*/)
 				TCHAR szPath[_MAX_PATH];
 				TCHAR szDrive[_MAX_DRIVE];
 				TCHAR szDir[_MAX_DIR];
-				_tsplitpath(iniFolder.m_szPrivateIniFile, szDrive, szDir, NULL, NULL);
+				_tsplitpath( iniFolder.m_szPrivateIniFile, szDrive, szDir, NULL, NULL );
+				auto_snprintf_s( szPath, _MAX_PATH - 1, _T("%ts\\%ts"), szDrive, szDir );
+				MakeSureDirectoryPathExistsT( szPath );
+			}
+		}else {
+			if (pszProfName[0] != _T('\0')) {
+				TCHAR szPath[_MAX_PATH];
+				TCHAR szDrive[_MAX_DRIVE];
+				TCHAR szDir[_MAX_DIR];
+				_tsplitpath( iniFolder.m_szIniFile, szDrive, szDir, NULL, NULL );
 				auto_snprintf_s(szPath, _MAX_PATH - 1, _T("%ts\\%ts"), szDrive, szDir);
 				MakeSureDirectoryPathExistsT(szPath);
 			}
@@ -557,6 +602,6 @@ LPCTSTR CFileNameManager::GetIniFileName(BOOL bRead/*=FALSE*/)
 	}
 
 	bool bPrivate = bRead ? iniFolder.m_bReadPrivate : iniFolder.m_bWritePrivate;
-	return bPrivate ? iniFolder.m_szPrivateIniFile: iniFolder.m_szIniFile;
+	::lstrcpy( pszIniFileName, bPrivate? iniFolder.m_szPrivateIniFile: iniFolder.m_szIniFile );
 }
 

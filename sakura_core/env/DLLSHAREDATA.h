@@ -39,6 +39,16 @@ inline DLLSHAREDATA& GetDllShareData()
 	return *g_theDLLSHAREDATA;
 }
 
+inline DLLSHAREDATA& GetDllShareData(bool bNullCheck)
+{
+	extern DLLSHAREDATA* g_theDLLSHAREDATA;
+
+	if( bNullCheck ){
+		assert(g_theDLLSHAREDATA);
+	}
+	return *g_theDLLSHAREDATA;
+}
+
 // DLLSHAREDATAを確保したら、まずこれを呼ぶ。破棄する前にも呼ぶ。
 inline
 void SetDllShareData(DLLSHAREDATA* pShareData)
@@ -95,6 +105,7 @@ public:
 
 public:
 	EditInfo	m_EditInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
+	CLogicPoint			m_LogicPoint;
 	STypeConfig	m_TypeConfig;
 };
 
@@ -124,6 +135,7 @@ struct DLLSHAREDATA {
 		必ず先頭になくてはならない．
 	*/
 	unsigned int				m_vStructureVersion;
+	unsigned int				m_nSize;
 
 	// -- -- 非保存対象 -- -- //
 	SShare_Version				m_sVersion;		// ※読込は行わないが、書込は行う
@@ -133,6 +145,7 @@ struct DLLSHAREDATA {
 	SShare_Handles				m_sHandles;
 
 	SCharWidthCache				m_sCharWidth;							//!< 文字半角全角キャッシュ
+	DWORD						m_dwCustColors[16];						//!< フォントDialogカスタムパレット
 
 	// プラグイン
 	short						m_PlugCmdIcon[MAX_PLUGIN*MAX_PLUG_CMD];	//!< プラグイン コマンド ICON 番号	// 2010/7/3 Uchi

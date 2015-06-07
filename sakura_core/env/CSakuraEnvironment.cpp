@@ -29,6 +29,7 @@
 #include "env/CFormatManager.h"
 #include "env/CFileNameManager.h"
 #include "_main/CAppMode.h"
+#include "_main/CCommandLine.h"
 #include "doc/CEditDoc.h"
 #include "window/CEditWnd.h"
 #include "print/CPrintPreview.h"
@@ -40,6 +41,7 @@
 #include "util/string_ex2.h"
 #include "util/module.h" // GetAppVersionInfo
 #include "util/shell.h"
+#include "util/window.h"
 
 typedef std::wstring wstring;
 
@@ -47,6 +49,25 @@ CEditWnd* CSakuraEnvironment::GetMainWindow()
 {
 	return CEditWnd::getInstance();
 }
+
+enum EExpParamName
+{
+	EExpParamName_none = -1,
+	EExpParamName_begin = 0,
+	EExpParamName_profile = 0,
+	EExpParamName_end
+};
+
+struct SExpParamName
+{
+	const wchar_t* m_szName;
+	int m_nLen;
+};
+static SExpParamName SExpParamNameTable[] = {
+	{L"profile", 7},
+	{NULL, 0}
+};
+wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam );
 
 /*!	$xの展開
 
@@ -78,6 +99,7 @@ CEditWnd* CSakuraEnvironment::GetMainWindow()
 	@li S  サクラエディタのフルパス
 	@li I  iniファイルのフルパス
 	@li M  現在実行しているマクロファイルパス
+	@li <profile> プロファイル名
 
 	@date 2003.04.03 genta wcsncpy_ex導入によるfor文の削減
 	@date 2005.09.15 FILE 特殊文字S, M追加
@@ -182,7 +204,11 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}else {
 				TCHAR szText[1024];
-				CFileNameManager::getInstance()->GetTransformFileNameFast(pcDoc->m_cDocFile.GetFilePath(), szText, 1023);
+				NONCLIENTMETRICS met;
+				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
+				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
+				CDCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
+				CFileNameManager::getInstance()->GetTransformFileNameFast( pcDoc->m_cDocFile.GetFilePath(), szText, 1023, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 				++p;
 			}
@@ -225,7 +251,11 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 
 				// 簡易表示に変換
 				TCHAR szText[1024];
-				CFileNameManager::getInstance()->GetTransformFileNameFast(to_tchar(buff), szText, _countof(szText) - 1);
+				NONCLIENTMETRICS met;
+				met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
+				::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
+				CDCFont dcFont(met.lfCaptionFont, GetMainWindow()->GetHwnd());
+				CFileNameManager::getInstance()->GetTransformFileNameFast( to_tchar(buff), szText, _countof(szText)-1, dcFont.GetHDC(), true );
 				q = wcs_pushT(q, q_max - q, szText);
 			}
 			++p;
@@ -396,7 +426,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
 				DWORD dwVersionMS, dwVersionLS;
 				GetAppVersionInfo(NULL, VS_VERSION_INFO, &dwVersionMS, &dwVersionLS);
-				int len = auto_sprintf_s(buf, L"%d.%d.%d.%d",
+				int len = auto_sprintf(buf, L"%d.%d.%d.%d",
 					HIWORD(dwVersionMS),
 					LOWORD(dwVersionMS),
 					HIWORD(dwVersionLS),
@@ -432,8 +462,10 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case 'I':	// May. 19, 2007 ryoji
 			// iniファイルのフルパス
 			{
-				LPCTSTR pszPath = CFileNameManager::getInstance()->GetIniFileName();
-				q = wcs_pushT(q, q_max - q, pszPath);
+				TCHAR	szPath[_MAX_PATH + 1];
+				std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+				CFileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
+				q = wcs_pushT( q, q_max - q, szPath );
 				++p;
 			}
 			break;
@@ -489,6 +521,29 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			// 特にすることはない
 			++p;
 			break;
+		case L'<':
+			{
+				// $<LongName>
+				++p;
+				const wchar_t *pBegin = p;
+				while (*p != '>' && *p != '\0') {
+					++p;
+				}
+				if (*p == '\0') {
+					break;
+				}
+				int nParamNameIdx = EExpParamName_begin;
+				for (; nParamNameIdx != EExpParamName_end; nParamNameIdx++) {
+					if (SExpParamNameTable[nParamNameIdx].m_nLen == (p - pBegin)
+						&& auto_strnicmp(SExpParamNameTable[nParamNameIdx].m_szName, pBegin, p - pBegin) == 0
+					) {
+						q = ExParam_LongName( q, q_max, static_cast<EExpParamName>(nParamNameIdx) );
+						break;
+					}
+				}
+				++p; // skip '>'
+				break;
+			}
 		default:
 			*q++ = '$';
 			*q++ = *p++;
@@ -612,6 +667,23 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 		break;
 	}
 	return 0;
+}
+
+/*! 長い名前の設定 */
+wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam )
+{
+	switch (eLongParam) {
+	case EExpParamName_profile:
+		{
+			LPCWSTR pszProf = CCommandLine::getInstance()->GetProfileName();
+			q = wcs_pushW( q, q_max - q, pszProf );
+		}
+		break;
+	default:
+		assert( 0 );
+		break;
+	}
+	return q;
 }
 
 /*!	@brief 初期フォルダ取得

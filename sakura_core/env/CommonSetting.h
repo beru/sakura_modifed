@@ -105,18 +105,19 @@ struct CommonSetting_Window {
 	BOOL			m_bDispTOOLBAR;				// 次回ウィンドウを開いたときツールバーを表示する
 	BOOL			m_bDispSTATUSBAR;			// 次回ウィンドウを開いたときステータスバーを表示する
 	BOOL			m_bDispFUNCKEYWND;			// 次回ウィンドウを開いたときファンクションキーを表示する
+	bool			m_bDispMiniMap;				// ミニマップを表示する
 	BOOL			m_bMenuIcon;				// メニューにアイコンを表示する (アイコン付きメニュー)
 	BOOL			m_bScrollBarHorz;			// 水平スクロールバーを使う
 	BOOL			m_bUseCompatibleBMP;		// 再作画用互換ビットマップを使う 2007.09.09 Moca
 
 	// 位置と大きさの設定
 	EWinSizeMode	m_eSaveWindowSize;			// ウィンドウサイズ継承・固定 EWinSizeModeに順ずる 2004.05.13 Moca
-	int				m_nWinSizeType;
-	int				m_nWinSizeCX;
-	int				m_nWinSizeCY;
+	int				m_nWinSizeType;				// 大きさの指定
+	int				m_nWinSizeCX;				// 直接指定 幅
+	int				m_nWinSizeCY;				// 直接指定 高さ
 	EWinSizeMode	m_eSaveWindowPos;			// ウィンドウ位置継承・固定 EWinSizeModeに順ずる 2004.05.13 Moca
-	int				m_nWinPosX;
-	int				m_nWinPosY;
+	int				m_nWinPosX;					// 直接指定 X座標
+	int				m_nWinPosY;					// 直接指定 Y座標
 
 	// ファンクションキー
 	int				m_nFUNCKEYWND_Place;		// ファンクションキー表示位置／0:上 1:下
@@ -133,31 +134,47 @@ struct CommonSetting_Window {
 	BOOL			m_bSplitterWndVScroll;		// 分割ウィンドウの垂直スクロールの同期をとる 2001/06/20 asa-o
 
 	// タイトルバー
-	TCHAR			m_szWindowCaptionActive[MAX_CAPTION_CONF_LEN];
-	TCHAR			m_szWindowCaptionInactive[MAX_CAPTION_CONF_LEN];
+	TCHAR			m_szWindowCaptionActive[MAX_CAPTION_CONF_LEN];		// タイトルバー(アクティブ時)
+	TCHAR			m_szWindowCaptionInactive[MAX_CAPTION_CONF_LEN];	// タイトルバー(非アクティブ時)
 
 	// INI内設定のみ
 	int				m_nVertLineOffset;			// 縦線の描画座標オフセット 2005.11.10 Moca
 
 	// 言語選択
-	TCHAR			m_szLanguageDll[MAX_PATH];
+	TCHAR			m_szLanguageDll[MAX_PATH];	// 言語DLLファイル名
+
+	// ミニマップ
+	int				m_nMiniMapFontSize;
+	int				m_nMiniMapQuality;
+	int				m_nMiniMapWidth;
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         タブバー                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//! 閉じるボタン
 enum EDispTabClose {
 	DISPTABCLOSE_NO			= 0, //!< なし
 	DISPTABCLOSE_ALLWAYS	= 1, //!< 常に表示
 	DISPTABCLOSE_AUTO		= 2  //!< 自動表示
 };
 
+enum ETabPosition{
+	TabPosition_Top,
+	TabPosition_Bottom,
+	TabPosition_Left,
+	TabPosition_Right,
+	TabPosition_None = -1,
+};
+
 struct CommonSetting_TabBar {
 	BOOL		m_bDispTabWnd;					// タブウインドウ表示する	//@@@ 2003.05.31 MIK
 	BOOL		m_bDispTabWndMultiWin;			// タブをまとめない	//@@@ 2003.05.31 MIK
-	BOOL		m_bTab_RetainEmptyWin;			//!< 最後の文書が閉じられたとき(無題)を残す
-	BOOL		m_bTab_CloseOneWin;				//!< タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる
-	BOOL		m_bNewWindow;					//!< 外部から起動するときは新しいウインドウで開く
+	BOOL		m_bTab_RetainEmptyWin;			// 最後の文書が閉じられたとき(無題)を残す
+	BOOL		m_bTab_CloseOneWin;				// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる
+	BOOL		m_bNewWindow;					// 外部から起動するときは新しいウインドウで開く
+	bool		m_bTabMultiLine;				// タブ多段
+	ETabPosition	m_eTabPosition;				// タブ位置
 
 	wchar_t		m_szTabWndCaption[MAX_CAPTION_CONF_LEN];	// タブウインドウキャプション	//@@@ 2003.06.13 MIK
 	BOOL		m_bSameTabWidth;				// タブを等幅にする			//@@@ 2006.01.28 ryoji
@@ -169,12 +186,16 @@ struct CommonSetting_TabBar {
 	BOOL		m_bChgWndByWheel;				// マウスホイールでウィンドウ切り替え	//@@@ 2006.03.26 ryoji
 
 	LOGFONT		m_lf;							// タブフォント // 2011.12.01 Moca
-	INT			m_nPointSize;
+	INT			m_nPointSize;					// フォントサイズ（1/10ポイント単位）
+	int			m_nTabMaxWidth;					// タブ幅の最大値
+	int			m_nTabMinWidth;					// タブ幅の最小値
+	int			m_nTabMinWidthOnMulti;			// タブ幅の最小値(タブ多段時)
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           編集                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//! ファイルダイアログの初期位置
 enum EOpenDialogDir {
 	OPENDIALOGDIR_CUR, //!< カレントフォルダ
 	OPENDIALOGDIR_MRU, //!< 最近使ったフォルダ
@@ -196,6 +217,7 @@ struct CommonSetting_Edit {
 	// 上書きモード
 	BOOL	m_bNotOverWriteCRLF;		// 改行は上書きしない
 	bool	m_bOverWriteFixMode;		// 文字幅に合わせてスペースを詰める
+	bool	m_bOverWriteBoxDelete;		// 上書きモードでの矩形入力で選択範囲を削除する
 
 	// クリッカブルURL
 	BOOL	m_bJumpSingleClickURL;		// URLのシングルクリックでJump $$$未使用
@@ -203,6 +225,9 @@ struct CommonSetting_Edit {
 
 	EOpenDialogDir	m_eOpenDialogDir;	// ファイルダイアログの初期位置
 	SFilePath	m_OpenDialogSelDir;		// 指定フォルダ
+
+	bool	m_bEnableExtEol;			//!< NEL,PS,LSを改行コードとして利用する
+	bool	m_bBoxSelectLock;			//!< (矩形選択)移動でロックする
 
 	// (ダイアログ項目無し)
 	BOOL	m_bAutoColumnPaste;			// 矩形コピーのテキストは常に矩形貼り付け
@@ -235,7 +260,7 @@ public:
 
 public:
 	// ファイルの排他制御モード
-	EShareMode	m_nFileShareMode;
+	EShareMode	m_nFileShareMode;			// ファイルの排他制御モード
 	bool		m_bCheckFileTimeStamp;		// 更新の監視
 	int 		m_nAutoloadDelay;			// 自動読込時遅延
 	bool		m_bUneditableIfUnwritable;	// 上書き禁止検出時は編集禁止にする
@@ -340,16 +365,17 @@ struct CommonSetting_Format {
 	TCHAR		m_szTimeFormat[MAX_DATETIMEFOREMAT_LEN];	// 時刻書式
 
 	// 見出し記号
-	wchar_t		m_szMidashiKigou[256];
+	wchar_t		m_szMidashiKigou[256];						// 見出し記号
 
 	// 引用符
-	wchar_t		m_szInyouKigou[32];
+	wchar_t		m_szInyouKigou[32];							// 引用符
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           検索                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_Search {
+	
 	int				m_nSearchKeySequence;		// 検索シーケンス(未保存)
 	SSearchOption	m_sSearchOption;			// 検索／置換  条件
 
@@ -359,13 +385,15 @@ struct CommonSetting_Search {
 	int				m_bSelectedArea;			// 置換  選択範囲内置換
 
 	int				m_bGrepSubFolder;			// Grep: サブフォルダも検索
-	BOOL			m_bGrepOutputLine;			// Grep: 行を出力するか該当部分だけ出力するか
+	int				m_nGrepOutputLineType;			// Grep: 行を出力/該当部分/否マッチ行 を出力
 	int				m_nGrepOutputStyle;			// Grep: 出力形式
 	int				m_bGrepDefaultFolder;		// Grep: フォルダの初期値をカレントフォルダにする
 	ECodeType		m_nGrepCharSet;				// Grep: 文字コードセット // 2002/09/20 Moca Add
 	bool			m_bGrepOutputFileOnly;		// Grep: ファイル毎最初のみ検索
 	bool			m_bGrepOutputBaseFolder;	// Grep: ベースフォルダ表示
 	bool			m_bGrepSeparateFolder;		// Grep: フォルダ毎に表示
+	bool			m_bGrepBackup;				// Grep: バックアップ作成
+	
 	BOOL			m_bCaretTextForSearch;		// カーソル位置の文字列をデフォルトの検索文字列にする 2006.08.23 ryoji
 	bool			m_bInheritKeyOtherView;		// 次・前検索で他のビューの検索条件を引き継ぐ
 	TCHAR			m_szRegexpLib[_MAX_PATH];	// 使用する正規表現DLL  2007.08.22 genta
@@ -382,6 +410,9 @@ struct CommonSetting_Search {
 	BOOL			m_bAutoCloseDlgReplace;		// 置換 ダイアログを自動的に閉じる
 	BOOL			m_bSearchAll;				// 先頭（末尾）から再検索 2002.01.26 hor
 
+	int				m_nTagJumpMode;				//!< タグジャンプモード(0-3)
+	int				m_nTagJumpModeKeyword;		//!< タグジャンプモード(0-3)
+
 	// INI内設定のみ
 	BOOL			m_bUseCaretKeyWord;			// キャレット位置の単語を辞書検索		// 2006.03.24 fon
 };
@@ -392,7 +423,7 @@ struct CommonSetting_Search {
 struct CommonSetting_KeyBind {
 	// キー割り当て
 	int					m_nKeyNameArrNum;				// キー割り当て表の有効データ数
-	KEYDATA				m_pKeyNameArr[100 + 1];			// キー割り当て表 // 未割り当てキーコード用にダミーを追加
+	KEYDATA				m_pKeyNameArr[100 + 1];			// キー割り当て表 未割り当てキーコード用にダミーを追加
 	BYTE				m_VKeyToKeyNameArr[256 + 10];	// キーコード→割り当て表インデックス // 2012.11.25 aroka
 };
 
@@ -413,9 +444,9 @@ struct CommonSetting_CustomMenu {
 //                        ツールバー                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_ToolBar {
-	int		m_nToolBarButtonNum;			// ツールバーボタンの数
+	int		m_nToolBarButtonNum;								// ツールバーボタンの数
 	int		m_nToolBarButtonIdxArr[MAX_TOOLBAR_BUTTON_ITEMS];	// ツールバーボタン構造体
-	int		m_bToolBarIsFlat;				// フラットツールバーにする／しない
+	int		m_bToolBarIsFlat;									// フラットツールバーにする／しない
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -438,10 +469,10 @@ struct CommonSetting_Helper {
 	BOOL		m_bHokanKey_SPACE;				// VK_SPACE		補完決定キーが有効/無効 $$$ほぼ未使用
 
 	// 外部ヘルプの設定
-	TCHAR		m_szExtHelp[_MAX_PATH];
+	TCHAR		m_szExtHelp[_MAX_PATH];			// 外部ヘルプ１
 
 	// 外部HTMLヘルプの設定
-	TCHAR		m_szExtHtmlHelp[_MAX_PATH];
+	TCHAR		m_szExtHtmlHelp[_MAX_PATH];		// 外部HTMLヘルプ
 	bool		m_bHtmlHelpIsSingle;			// HtmlHelpビューアはひとつ (ビューアを複数起動しない)
 
 	// migemo設定
@@ -461,21 +492,23 @@ struct CommonSetting_Helper {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_Macro {
 	TCHAR		m_szKeyMacroFileName[MAX_PATH];	//!< キーボードマクロのファイル名
-	MacroRec	m_MacroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	// Sep. 14, 2001 genta
+	MacroRec	m_MacroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	 Sep. 14, 2001 genta
 	SFilePath	m_szMACROFOLDER;				// マクロ用フォルダ
-	int			m_nMacroOnOpened;				// オープン後自動実行マクロ番号		//@@@ 2006.09.01 ryoji
-	int			m_nMacroOnTypeChanged;			// タイプ変更後自動実行マクロ番号	//@@@ 2006.09.01 ryoji
-	int			m_nMacroOnSave;					// 保存前自動実行マクロ番号			//@@@ 2006.09.01 ryoji
-	int			m_nMacroCancelTimer;			// マクロ停止ダイアログ表示待ち時間	//@@@ 2011.08.04 syat
+	int			m_nMacroOnOpened;				// オープン後自動実行マクロ番号		@@@ 2006.09.01 ryoji
+	int			m_nMacroOnTypeChanged;			// タイプ変更後自動実行マクロ番号	@@@ 2006.09.01 ryoji
+	int			m_nMacroOnSave;					// 保存前自動実行マクロ番号			@@@ 2006.09.01 ryoji
+	int			m_nMacroCancelTimer;			// マクロ停止ダイアログ表示待ち時間	@@@ 2011.08.04 syat
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      ファイル名表示                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_FileName {
-	int		m_nTransformFileNameArrNum;
-	TCHAR	m_szTransformFileNameFrom[MAX_TRANSFORM_FILENAME][_MAX_PATH];
-	TCHAR	m_szTransformFileNameTo[MAX_TRANSFORM_FILENAME][_MAX_PATH];	// お気に入り	//@@@ 2003.04.08 MIK
+	bool	m_bTransformShortPath;											// ファイル名の省略表記
+	int		m_nTransformShortMaxWidth;										// ファイル名の省略表記の最大長
+	int		m_nTransformFileNameArrNum;										// ファイル名の簡易表示登録数
+	TCHAR	m_szTransformFileNameFrom[MAX_TRANSFORM_FILENAME][_MAX_PATH];	// ファイル名の簡易表示変換前文字列
+	TCHAR	m_szTransformFileNameTo[MAX_TRANSFORM_FILENAME][_MAX_PATH];		// ファイル名の簡易表示変換後文字列	//@@@ 2003.04.08 MIK
 };
 
 
@@ -493,13 +526,49 @@ enum EDockSide {
 	DOCKSIDE_UNDOCKABLE = -1,//!< ドッキング禁止
 };
 
+enum EFileTreeItemType{
+	EFileTreeItemType_Grep,
+	EFileTreeItemType_File,
+	EFileTreeItemType_Folder
+};
+
+struct SFileTreeItem{
+public:
+	EFileTreeItemType m_eFileTreeItemType;
+	SFilePath	m_szTargetPath;	//!< フォルダorファイルパス
+	StaticString<TCHAR,_MAX_PATH> m_szLabelName; //!< ラベル名(""のときはファイル名を使う)
+	int  m_nDepth;	//!< 階層
+
+	// GrepタイプTreeItem
+	StaticString<TCHAR,_MAX_PATH>	m_szTargetFile;	//!< ファイル一覧
+	bool		m_bIgnoreHidden;		//!< 隠しファイルを除く
+	bool		m_bIgnoreReadOnly;		//!< 読み取り専用ファイルを除く
+	bool		m_bIgnoreSystem;		//!< システムファイルを除く
+
+	SFileTreeItem()
+		: m_eFileTreeItemType(EFileTreeItemType_Grep)
+		, m_nDepth(0)
+		, m_bIgnoreHidden(true)
+		, m_bIgnoreReadOnly(false)
+		, m_bIgnoreSystem(false)
+		{}
+};
+
+struct SFileTree{
+	bool		m_bProject;			//!< プロジェクトファイルモード
+	SFilePath	m_szProjectIni;		//!< デフォルトiniパス
+	int			m_nItemCount;		//!< ファイルパス数
+	SFileTreeItem	m_aItems[20];	//!< ツリーアイテム
+};
+
+
 struct CommonSetting_OutLine {
 	// 20060201 aroka アウトライン/トピックリスト の位置とサイズを記憶
-	int			m_bRememberOutlineWindowPos;
-	int			m_widthOutlineWindow;
-	int			m_heightOutlineWindow;
-	int			m_xOutlineWindowPos;
-	int			m_yOutlineWindowPos;
+	int			m_bRememberOutlineWindowPos;// アウトライン/トピックリスト の位置とサイズを記憶する
+	int			m_widthOutlineWindow;		// アウトライン/トピックリスト のサイズ(幅)
+	int			m_heightOutlineWindow;		// アウトライン/トピックリスト のサイズ(高さ)
+	int			m_xOutlineWindowPos;        // アウトライン/トピックリスト の位置(X座標)
+	int			m_yOutlineWindowPos;		// アウトライン/トピックリスト の位置(Y座標)
 
 	int			m_nOutlineDockSet;			// アウトライン解析のドッキング位置継承方法(0:共通設定, 1:タイプ別設定)
 	BOOL		m_bOutlineDockSync;			// アウトライン解析のドッキング位置を同期する
@@ -515,6 +584,9 @@ struct CommonSetting_OutLine {
 	BOOL		m_bAutoCloseDlgFuncList;	// アウトラインダイアログを自動的に閉じる
 	BOOL		m_bFunclistSetFocusOnJump;	// フォーカスを移す 2002.02.08 hor
 	BOOL		m_bMarkUpBlankLineEnable;	// 空行を無視する 2002.02.08 aroka,hor
+
+	SFileTree	m_sFileTree;				// ファイルツリー設定
+	SFilePath	m_sFileTreeDefIniName;		// ファイルツリー設定のデフォルトファイル名(GUIなし)
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -541,10 +613,10 @@ struct CommonSetting_View {
 struct CommonSetting_Others {
 	// INI内設定のみ
 	RECT		m_rcOpenDialog;				//「開く」ダイアログのサイズと位置
-	RECT		m_rcCompareDialog;
-	RECT		m_rcDiffDialog;
-	RECT		m_rcFavoriteDialog;
-	RECT		m_rcTagJumpDialog;
+	RECT		m_rcCompareDialog;			//「ファイル比較」ダイアログボックスのサイズと位置
+	RECT		m_rcDiffDialog;				//「DIFF差分表示」ダイアログボックスのサイズと位置
+	RECT		m_rcFavoriteDialog;			//「履歴とお気に入りの管理」ダイアログボックスのサイズと位置
+	RECT		m_rcTagJumpDialog;			//「ダイレクトタグジャンプ候補一覧」ダイアログボックスのサイズと位置
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -590,7 +662,7 @@ struct CommonSetting_Plugin {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        メインメニュー                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-// 種類
+// メインメニュー種類
 enum EMainMenuType {
 	T_NODE,			// Node
 	T_LEAF,			// 機能コマンド
@@ -604,14 +676,15 @@ public:
 	EFunctionCode	m_nFunc;		// Function
 	WCHAR			m_sKey[2];		// アクセスキー
 	WCHAR			m_sName[MAX_MAIN_MENU_NAME_LEN + 1];	// 名前
-	int 			m_nLevel;
+	int 			m_nLevel;		// レベル
 };
 
 struct CommonSetting_MainMenu {
-	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	//!< メインメニュートップレベル
-	int 			m_nMainMenuNum;
-	CMainMenu		m_cMainMenuTbl[MAX_MAINMENU];		//!< メインメニューデータ
-	bool 			m_bMainMenuKeyParentheses;			//!< アクセスキーを()付で表示
+	int				m_nVersion;							// メインメニューバージョン
+	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	// メインメニュートップレベル
+	int 			m_nMainMenuNum;						// メインメニューデータの数
+	CMainMenu		m_cMainMenuTbl[MAX_MAINMENU];		// メインメニューデータ
+	bool 			m_bMainMenuKeyParentheses;			// アクセスキーを()付で表示
 };
 
 
@@ -640,10 +713,11 @@ struct CommonSetting {
 	CommonSetting_Macro				m_sMacro;			// マクロ
 	CommonSetting_FileName			m_sFileName;		// ファイル名表示
 	//
-	CommonSetting_OutLine			m_sOutline;
-	CommonSetting_Compare			m_sCompare;
-	CommonSetting_View				m_sView;
-	CommonSetting_Others			m_sOthers;
+	CommonSetting_OutLine			m_sOutline;			// アウトライン
+	CommonSetting_Compare			m_sCompare;			// ファイル内容比較
+	CommonSetting_View				m_sView;			// ビュー
+	CommonSetting_Others			m_sOthers;			// その他
+
 	//
 	CommonSetting_Statusbar			m_sStatusbar;		// ステータスバー		// 2008/6/21 Uchi
 	CommonSetting_Plugin			m_sPlugin;			// プラグイン 2009/11/30 syat

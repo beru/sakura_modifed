@@ -38,6 +38,7 @@ class CShareData;
 // CShareData.hは、自分のInterfaceしか提供しません。別にDLLSHAREDATA.hをincludeすること。
 struct DLLSHAREDATA;
 struct STypeConfig;
+class CMutex;
 
 /*!	@brief 共有データの管理
 
@@ -88,6 +89,8 @@ public:
 	// 国際化対応のための文字列を変更する(コントロールプロセス専用)
 	void ConvertLangValues(std::vector<std::wstring>& values, bool bSetValues);
 
+	static CMutex& GetMutexShareWork();
+
 protected:
 	/*
 	||  実装ヘルパ関数
@@ -100,6 +103,9 @@ protected:
 	void InitToolButtons(DLLSHAREDATA*);
 	void InitTypeConfigs(DLLSHAREDATA*, std::vector<STypeConfig*>&);
 	void InitPopupMenu(DLLSHAREDATA*);
+
+public:
+	static void InitFileTree(SFileTree*);
 
 private:
 	CSelectLang		m_cSelectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
