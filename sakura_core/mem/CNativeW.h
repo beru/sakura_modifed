@@ -69,6 +69,7 @@ public:
 	// WCHAR
 	void SetString(const wchar_t* pData, int nDataLen);      //!< バッファの内容を置き換える。nDataLenは文字単位。
 	void SetString(const wchar_t* pszData);                  //!< バッファの内容を置き換える
+	void SetStringHoldBuffer( const wchar_t* pData, int nDataLen );
 	void AppendString(const wchar_t* pszData);               //!< バッファの最後にデータを追加する
 	void AppendString(const wchar_t* pszData, int nLength);  //!< バッファの最後にデータを追加する。nLengthは文字単位。成功すればtrue。メモリ確保に失敗したらfalseを返す。
 
@@ -139,6 +140,10 @@ public:
 	//                           変換                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	void Replace(const wchar_t* pszFrom, const wchar_t* pszTo);   //!< 文字列置換
+	void ReplaceT( const wchar_t* pszFrom, const wchar_t* pszTo ){
+		Replace( pszFrom, pszTo );
+	}
+	void Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* pszTo, int nToLen );   //!< 文字列置換
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

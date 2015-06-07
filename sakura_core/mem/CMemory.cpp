@@ -164,9 +164,7 @@ void CMemory::SwapHLByte(char* pData, const int nDataLen) {
 	unsigned char* p_end = pBuf + nBufLen - 2;
 	
 	for (; p <= p_end ; p += 2) {
-		ctemp = p[0];
-		p[0]  = p[1];
-		p[1]  = ctemp;
+		std::swap( p[0], p[1] );
 	}
 	return;
 }
@@ -226,6 +224,34 @@ void CMemory::SwapHLByte(void) {
 */
 }
 
+
+
+bool CMemory::SwabHLByte( const CMemory& mem )
+{
+	if (this == &mem) {
+		SwapHLByte();
+		return true;
+	}
+	int nSize = mem.GetRawLength();
+	if (m_pRawData && nSize + 2 <= m_nDataBufSize) {
+		// データが短い時はバッファの再利用
+		_SetRawLength(0);
+	}else {
+		_Empty();
+	}
+	AllocBuffer(nSize);
+	char* pSrc = reinterpret_cast<char*>(const_cast<void*>(mem.GetRawPtr()));
+	char* pDst = reinterpret_cast<char*>(GetRawPtr());
+	if (pDst == NULL) {
+		return false;
+	}
+	_swab(pSrc, pDst, nSize);
+	_SetRawLength(nSize);
+	return true;
+}
+
+
+
 /*
 || バッファサイズの調整
 */
@@ -234,7 +260,7 @@ void CMemory::AllocBuffer(int nNewDataLen)
 	char* pWork = NULL;
 
 	// 2バイト多くメモリ確保しておく('\0'またはL'\0'を入れるため) 2007.08.13 kobake 変更
-	int nWorkLen = nNewDataLen + 2;
+	nWorkLen = ((nNewDataLen + 2) + 7) & (~7); // 8Byteごとに整列
 
 	if (m_nDataBufSize == 0) {
 		// 未確保の状態
@@ -243,7 +269,14 @@ void CMemory::AllocBuffer(int nNewDataLen)
 	}else {
 		// 現在のバッファサイズより大きくなった場合のみ再確保する
 		if (m_nDataBufSize < nWorkLen) {
-			pWork = (char*)realloc(m_pRawData, nWorkLen);
+			// 2014.06.25 有効データ長が0の場合はfree & malloc
+			if (m_nRawLen == 0) {
+				free( m_pRawData );
+				m_pRawData = NULL;
+				pWork = malloc_char( nWorkLen );
+			}else {
+				pWork = (char*)realloc(m_pRawData, nWorkLen);
+			}
 			m_nDataBufSize = nWorkLen;
 		}else {
 			return;
@@ -286,8 +319,33 @@ void CMemory::SetRawData(const CMemory& pcmemData)
 	return;
 }
 
+/*! バッファの内容を置き換える */
+void CMemory::SetRawDataHoldBuffer( const void* pData, int nDataLen )
+{
+	// this 重複不可
+	assert( m_pRawData != pData );
+	if (m_nRawLen != 0) {
+		_SetRawLength(0);
+	}
+	AllocBuffer( nDataLen );
+	_AddData( pData, nDataLen );
+	return;
+}
 
-// バッファの最後にデータを追加する（publicメンバ）
+/*! バッファの内容を置き換える */
+void CMemory::SetRawDataHoldBuffer( const CMemory& pcmemData )
+{
+	if (this == &pcmemData) {
+		return;
+	}
+	int nDataLen;
+	const void*	pData = pcmemData.GetRawPtr( &nDataLen );
+	SetRawDataHoldBuffer( pData, nDataLen );
+	return;
+}
+
+
+/* バッファの最後にデータを追加する（publicメンバ）*/
 void CMemory::AppendRawData(const void* pData, int nDataLenBytes)
 {
 	if (nDataLenBytes <= 0) return;

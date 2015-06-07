@@ -56,7 +56,12 @@ void CNativeW::SetString(const wchar_t* pData, int nDataLen)
 // バッファの内容を置き換える
 void CNativeW::SetString(const wchar_t* pszData)
 {
-	SetString(pszData, wcslen(pszData));
+	CNative::SetRawData(pszData,wcslen(pszData) * sizeof(wchar_t));
+}
+
+void CNativeW::SetStringHoldBuffer( const wchar_t* pData, int nDataLen )
+{
+	CNative::SetRawDataHoldBuffer(pData, nDataLen * sizeof(wchar_t));
 }
 
 // バッファの内容を置き換える
@@ -74,7 +79,7 @@ void CNativeW::AllocStringBuffer(int nDataLen)
 //! バッファの最後にデータを追加する
 void CNativeW::AppendString(const wchar_t* pszData)
 {
-	AppendString(pszData, wcslen(pszData));
+	CNative::AppendRawData(pszData,wcslen(pszData) * sizeof(wchar_t));
 }
 
 //! バッファの最後にデータを追加する。nLengthは文字単位。
@@ -86,7 +91,7 @@ void CNativeW::AppendString(const wchar_t* pszData, int nLength)
 //! バッファの最後にデータを追加する
 void CNativeW::AppendNativeData(const CNativeW& cmemData)
 {
-	AppendString(cmemData.GetStringPtr(), cmemData.GetStringLength());
+	CNative::AppendRawData(cmemData.GetStringPtr(), cmemData.GetRawLength());
 }
 
 // -- -- charからの移行用 -- -- //
@@ -163,11 +168,16 @@ bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
 //! 文字列置換
 void CNativeW::Replace(const wchar_t* pszFrom, const wchar_t* pszTo)
 {
+	int nFromLen = wcslen(pszFrom);
+	int nToLen = wcslen(pszTo);
+	Replace( pszFrom, nFromLen, pszTo, nToLen );
+}
+
+void CNativeW::Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* pszTo, int nToLen )
+{
 	CNativeW	cmemWork;
-	int			nFromLen = wcslen(pszFrom);
-	int			nToLen = wcslen(pszTo);
-	int			nBgnOld = 0;
-	int			nBgn = 0;
+	int nBgnOld = 0;
+	int nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
 		if (0 == wmemcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
 			if (nBgnOld == 0 && nFromLen <= nToLen) {

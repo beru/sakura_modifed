@@ -551,7 +551,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 								nPosDes++;
 								nStartPos += nTabSpace - (nStartPos % nTabSpace);
 							}
-							// 003.08.05 Moca
+							// 2003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 							// バッファをはみ出すのを修正
 							for (j = nStartPos; j < nPosX; j++) {
