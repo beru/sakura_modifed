@@ -46,9 +46,10 @@
 class CIfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
 	const CIfObj::CMethodInfoList& m_MethodsRef;
+	const std::wstring& m_sName;
 	TYPEATTR m_TypeAttr;
 public:
-	CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods);
+	CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods, const std::wstring& sName);
 
 	virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(
 					/* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr)
@@ -129,10 +130,27 @@ public:
 	{
 		// Feb. 08, 2004 genta
 		// とりあえず全部NULLを返す (情報無し)
-		pBstrName = NULL;
-		pBstrDocString = NULL;
-		pdwHelpContext = NULL;
-		pBstrHelpFile = NULL;
+		//	2014.02.12 各パラメータを設定するように
+		if (memid == -1) {
+			if (pBstrName) {
+				*pBstrName = SysAllocString( m_sName.c_str() );
+			}
+		}else if (0 <= memid && memid < (int)m_MethodsRef.size()) {
+			if (pBstrName) {
+				*pBstrName = SysAllocString( m_MethodsRef[memid].Name );
+			}
+		}else {
+			return TYPE_E_ELEMENTNOTFOUND;
+		}
+		if (pBstrDocString) {
+			*pBstrDocString = SysAllocString(L"");
+		}
+		if (pdwHelpContext) {
+			*pdwHelpContext = 0;
+		}
+		if (pBstrHelpFile) {
+			*pBstrHelpFile = SysAllocString(L"");
+		}
 		return S_OK ;
 	}
 
@@ -199,8 +217,12 @@ public:
 	}
 };
 
-CIfObjTypeInfo::CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods)
-				: ImplementsIUnknown<ITypeInfo>(), m_MethodsRef(methods)
+CIfObjTypeInfo::CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods,
+							   const std::wstring& sName)
+	:
+	ImplementsIUnknown<ITypeInfo>(),
+	m_MethodsRef(methods),
+	m_sName(sName)
 { 
 	ZeroMemory(&m_TypeAttr, sizeof(m_TypeAttr));
 	m_TypeAttr.cImplTypes = 0; // 親クラスのITypeInfoの数
@@ -352,7 +374,8 @@ void CIfObj::AddMethod(
 	Info->Desc.cParams = (SHORT)ArgumentCount + 1; // 戻り値の分
 	Info->Desc.lprgelemdescParam = Info->Arguments;
 	// Nov. 10, 2003 FILE Win9Xでは、[lstrcpyW]が無効のため、[wcscpy]に修正
-	wcscpy_s(Info->Name, Name);
+	assert( auto_strlen(Name)<_countof(Info->Name) );
+	wcscpy(Info->Name, Name);
 	Info->Method = Method;
 	Info->ID = ID;
 	for (int i = 0; i < ArgumentCount; ++i) {

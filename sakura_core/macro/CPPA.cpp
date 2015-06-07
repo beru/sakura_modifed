@@ -213,7 +213,7 @@ bool CPPA::InitDllImp()
 
 	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
-char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer)
+char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer )
 {
 	char szType[20];	// procedure/function用バッファ
 	char szReturn[20];	// 戻り値型用バッファ
@@ -238,8 +238,8 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 		if (i < 4) {
 			type = cMacroFuncInfo.m_varArguments[i];
 		}else {
-			if (cMacroFuncInfo.m_pData && cMacroFuncInfo.m_pData->m_nArgSize < i) {
-				type = cMacroFuncInfo.m_pData->m_pVarArgEx[i];
+			if (cMacroFuncInfo.m_pData && i < cMacroFuncInfo.m_pData->m_nArgMinSize) {
+				type = cMacroFuncInfo.m_pData->m_pVarArgEx[i - 4];
 			}
 		}
 		if (type == VT_EMPTY) {
@@ -263,7 +263,7 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 			strcat(szArgument, "; ");
 			strcat(szArgument, szArguments[j]);
 		}
-		auto_sprintf(pszBuffer, "%hs S_%ls(%hs)%hs; index %d;",
+		auto_sprintf( szBuffer, "%hs S_%ls(%hs)%hs; index %d;",
 			szType,
 			cMacroFuncInfo.m_pszFuncName,
 			szArgument,
@@ -271,7 +271,7 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 			cMacroFuncInfo.m_nFuncID
 		);
 	}else {
-		auto_sprintf(pszBuffer, "%hs S_%ls%hs; index %d;",
+		auto_sprintf( szBuffer, "%hs S_%ls%hs; index %d;",
 			szType,
 			cMacroFuncInfo.m_pszFuncName,
 			szReturn,
@@ -279,7 +279,7 @@ char* CPPA::GetDeclarations(const MacroFuncInfo& cMacroFuncInfo, char* pszBuffer
 		);
 	}
 	// Jun. 01, 2003 Moca / Jun. 16, 2003 genta
-	return pszBuffer;
+	return szBuffer;
 }
 
 /*! ユーザー定義文字列型オブジェクト
@@ -349,9 +349,9 @@ void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 			}
 		}
 		if (szFuncDec[0] != '\0') {
-			auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA2), szFuncDec);
+			auto_sprintf( szMes, LS(STR_ERR_DLGPPA2), szFuncDec );
 		}else {
-			auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA3), FuncID);
+			auto_sprintf( szMes, LS(STR_ERR_DLGPPA3), FuncID );
 		}
 	}else {
 		// 2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
@@ -368,7 +368,7 @@ void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 				}
 				break;
 			default:
-				auto_sprintf_s(szMes, LS(STR_ERR_DLGPPA5), Err_CD, to_tchar(Err_Mes));
+				auto_sprintf( szMes, LS(STR_ERR_DLGPPA5), Err_CD, to_tchar(Err_Mes) );
 			}
 		}
 	}
@@ -519,17 +519,17 @@ bool CPPA::CallHandleFunction(
 	VARIANT vtArg[maxArgSize];
 	
 	const MacroFuncInfo* mfi = CSMacroMgr::GetFuncInfoByID(Index);
-	for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
+	for (i=0; i<maxArgSize && i<ArgSize; i++) {
 		::VariantInit(&vtArg[i]);
 	}
 	ArgCnt = 0;
-	for (int i = 0; i < maxArgSize && i < ArgSize; i++) {
+	for (i=0, ArgCnt=0; i<maxArgSize && i<ArgSize; i++) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
 			type = mfi->m_varArguments[i];
 		}else {
-			if (mfi->m_pData && mfi->m_pData->m_nArgSize < i) {
-				type = mfi->m_pData->m_pVarArgEx[i];
+			if (mfi->m_pData && i < mfi->m_pData->m_nArgMinSize) {
+				type = mfi->m_pData->m_pVarArgEx[i - 4];
 			}
 		}
 		if (VT_EMPTY == type) {

@@ -51,8 +51,11 @@
 #include "window/CEditWnd.h"
 #include "env/CSakuraEnvironment.h"
 #include "dlg/CDlgInput1.h"
+#include "dlg/CDlgOpenFile.h"
 #include "util/format.h"
 #include "util/shell.h"
+#include "util/ole_convert.h"
+#include "util/os.h"
 #include "uiparts/CWaitCursor.h"
 
 CMacro::CMacro(EFunctionCode nFuncID)
@@ -64,14 +67,20 @@ CMacro::CMacro(EFunctionCode nFuncID)
 
 CMacro::~CMacro(void)
 {
+	ClearMacroParam();
+}
+
+void CMacro::ClearMacroParam()
+{
 	CMacroParam* p = m_pParamTop;
 	CMacroParam* del_p;
 	while (p) {
 		del_p = p;
 		p = p->m_pNext;
-		delete[] del_p->m_pData;
 		delete del_p;
 	}
+	m_pParamTop = NULL;
+	m_pParamBot = NULL;
 	return;
 }
 
@@ -84,9 +93,67 @@ CMacro::~CMacro(void)
 */
 void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 {
+	int nOption = 0;
 	LPARAM lParam = lParams[0];
 	switch (m_nFuncID) {
-	// 文字列パラメータを追加
+	case F_GOLOGICALLINETOP_BOX:
+	case F_GOLINETOP_BOX:
+	case F_GOLINEEND_BOX:
+	case F_HalfPageUp_BOX:
+	case F_HalfPageDown_BOX:
+	case F_1PageUp_BOX:
+	case F_1PageDown_BOX:
+		nOption = 1;
+	case F_UP_BOX:
+	case F_DOWN_BOX:
+	case F_LEFT_BOX:
+	case F_RIGHT_BOX:
+	case F_UP2_BOX:
+	case F_DOWN2_BOX:
+	case F_WORDLEFT_BOX:
+	case F_WORDRIGHT_BOX:
+	case F_GOFILETOP_BOX:
+	case F_GOFILEEND_BOX:
+		{
+			if (nOption == 1) {
+				switch (m_nFuncID) {
+				case F_HalfPageUp_BOX:
+				case F_HalfPageDown_BOX:
+					if (lParam == 0) {
+						AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum / 2 );
+					}else {
+						AddIntParam( lParam );
+					}
+					break;
+				case F_1PageUp_BOX:
+				case F_1PageDown_BOX:
+					if (lParam == 0) {
+						AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum - 1 );
+					}else {
+						AddIntParam( lParam );
+					}
+					break;
+				default:
+					AddIntParam( lParam );
+					break;
+				}
+			}
+			int nParamOption;
+			if (nOption == 1) {
+				nParamOption = lParams[1];
+			}else {
+				nParamOption = lParam;
+			}
+			if (nParamOption == 0) {
+				if (GetDllShareData().m_Common.m_sEdit.m_bBoxSelectLock) {
+					nParamOption = 0x01;
+				}else {
+					nParamOption = 0x02;
+				}
+			}
+			AddIntParam( nParamOption );
+		}
+		break;
 	case F_INSTEXT_W:
 	case F_FILEOPEN:
 	case F_EXECEXTMACRO:
@@ -151,29 +218,45 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 			AddIntParam(lFlag);
 		}
 		break;
+	case F_GREP_REPLACE:
 	case F_GREP:
 		{
-			AddStringParam(pcEditView->m_pcEditWnd->m_cDlgGrep.m_strText.c_str());	// lParamを追加。
+			CDlgGrep* pcDlgGrep;
+			CDlgGrepReplace* pcDlgGrepRep;
+			if (F_GREP == m_nFuncID) {
+				pcDlgGrep = &pcEditView->m_pcEditWnd->m_cDlgGrep;
+				pcDlgGrepRep = NULL;
+				AddStringParam( pcDlgGrep->m_strText.c_str() );
+			}else {
+				pcDlgGrep = pcDlgGrepRep = &pcEditView->m_pcEditWnd->m_cDlgGrepReplace;
+				AddStringParam( pcDlgGrep->m_strText.c_str() );
+				AddStringParam( pcEditView->m_pcEditWnd->m_cDlgGrepReplace.m_strText2.c_str() );
+			}
 			AddStringParam(GetDllShareData().m_sSearchKeywords.m_aGrepFiles[0]);	// lParamを追加。
 			AddStringParam(GetDllShareData().m_sSearchKeywords.m_aGrepFolders[0]);	// lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepSubFolder				? 0x01 : 0x00;
 			// この編集中のテキストから検索する(0x02.未実装)
-			lFlag |= pcEditView->m_pcEditWnd->m_cDlgGrep.m_sSearchOption.bLoHiCase		? 0x04 : 0x00;
-			lFlag |= pcEditView->m_pcEditWnd->m_cDlgGrep.m_sSearchOption.bRegularExp	? 0x08 : 0x00;
+			lFlag |= pcDlgGrep->m_sSearchOption.bLoHiCase		? 0x04 : 0x00;
+			lFlag |= pcDlgGrep->m_sSearchOption.bRegularExp	? 0x08 : 0x00;
 			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepCharSet == CODE_AUTODETECT) ? 0x10 : 0x00;	// 2002/09/21 Moca 下位互換性のための処理
-			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepOutputLine				? 0x20 : 0x00;
+			lFlag |= GetDllShareData().m_Common.m_sSearch.m_nGrepOutputLineType == 1	? 0x20 : 0x00;
+			lFlag |= GetDllShareData().m_Common.m_sSearch.m_nGrepOutputLineType == 2	? 0x400000 : 0x00;	// 2014.09.23 否ヒット行
 			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepOutputStyle == 2)		? 0x40 : 0x00;	// CShareDataに入れなくていいの？
 			lFlag |= (GetDllShareData().m_Common.m_sSearch.m_nGrepOutputStyle == 3)		? 0x80 : 0x00;
 			ECodeType code = GetDllShareData().m_Common.m_sSearch.m_nGrepCharSet;
 			if (IsValidCodeType(code) || CODE_AUTODETECT == code) {
 				lFlag |= code << 8;
 			}
-			lFlag |= GetDllShareData().m_Common.m_sSearch.m_sSearchOption.bWordOnly		? 0x10000 : 0x00;
+			lFlag |= pcDlgGrep->m_sSearchOption.bWordOnly								? 0x10000 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepOutputFileOnly			? 0x20000 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepOutputBaseFolder		? 0x40000 : 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepSeparateFolder			? 0x80000 : 0x00;
+			if (F_GREP_REPLACE == m_nFuncID) {
+				lFlag |= pcDlgGrepRep->m_bPaste											? 0x100000 : 0x00;
+				lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepBackup				? 0x200000 : 0x00;
+			}
 			AddIntParam(lFlag);
 			AddIntParam(code);
 		}
@@ -207,6 +290,27 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 			AddIntParam(lParams[2]);
 		}
 		break;
+	// 2014.01.15 PageUp/Down系追加
+	case F_HalfPageUp:
+	case F_HalfPageUp_Sel:
+	case F_HalfPageDown:
+	case F_HalfPageDown_Sel:
+		if (lParam == 0) {
+			AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum / 2 );
+		}else {
+			AddIntParam( lParam );
+		}
+		break;
+	case F_1PageUp:
+	case F_1PageUp_Sel:
+	case F_1PageDown:
+	case F_1PageDown_Sel:
+		if (lParam == 0) {
+			AddIntParam( (Int)pcEditView->GetTextArea().m_nViewRowNum - 1 );
+		}else {
+			AddIntParam( lParam );
+		}
+		break;
 
 	// 標準もパラメータを追加
 	default:
@@ -215,17 +319,38 @@ void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
 	}
 }
 
-// 引数に文字列を追加
-void CMacro::AddStringParam(const WCHAR* szParam)
+void CMacroParam::SetStringParam( const WCHAR* szParam, int nLength )
 {
-	CMacroParam* param = new CMacroParam;
-	param->m_pNext = NULL;
+	Clear();
+	int nLen;
+	if (nLength == -1) {
+		nLen = auto_strlen( szParam );
+	}else {
+		nLen = nLength;
+	}
+	m_pData = new WCHAR[nLen + 1];
+	auto_memcpy( m_pData, szParam, nLen );
+	m_pData[nLen] = LTEXT('\0');
+	m_nDataLen = nLen;
+	m_eType = EMacroParamTypeStr;
+}
 
-	// 必要な領域を確保してコピー。
-	int nLen = auto_strlen(szParam);
-	param->m_pData = new WCHAR[nLen + 1];
-	auto_memcpy(param->m_pData, szParam, nLen);
-	param->m_pData[nLen] = LTEXT('\0');
+void CMacroParam::SetIntParam( const int nParam )
+{
+	Clear();
+	m_pData = new WCHAR[16];	//	数値格納（最大16桁）用
+	_itow(nParam, m_pData, 10);
+	m_nDataLen = auto_strlen(m_pData);
+	m_eType = EMacroParamTypeInt;
+}
+
+/*	引数に文字列を追加。
+*/
+void CMacro::AddStringParam( const WCHAR* szParam, int nLength )
+{
+	CMacroParam* param = new CMacroParam();
+
+	param->SetStringParam( szParam, nLength );
 
 	// リストの整合性を保つ
 	if (m_pParamTop) {
@@ -240,12 +365,9 @@ void CMacro::AddStringParam(const WCHAR* szParam)
 // 引数に数値を追加
 void CMacro::AddIntParam(const int nParam)
 {
-	CMacroParam* param = new CMacroParam;
-	param->m_pNext = NULL;
+	CMacroParam* param = new CMacroParam();
 
-	// 必要な領域を確保してコピー。
-	param->m_pData = new WCHAR[16];	// 数値格納（最大16桁）用
-	_itow(nParam, param->m_pData, 10);
+	param->SetIntParam( nParam );
 
 	// リストの整合性を保つ
 	if (m_pParamTop) {
@@ -305,6 +427,17 @@ WCHAR* CMacro::GetParamAt(CMacroParam* p, int index)
 	return x->m_pData;
 }
 
+int CMacro::GetParamCount() const
+{
+	CMacroParam* p = m_pParamTop;
+	int n = 0;
+	while (p) {
+		n++;
+		p = p->m_pNext;
+	}
+	return n;
+}
+
 static inline int wtoi_def(const WCHAR* arg, int def_val)
 {
 	return (!arg ? def_val: _wtoi(arg));
@@ -328,150 +461,63 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 	int				nTextLen;
 	const WCHAR*	pText;
 	CNativeW		cmemWork;
+	int nFuncID = m_nFuncID;
 
-	// 2002.2.2 YAZAKI CSMacroMgrに頼む
-	if (CSMacroMgr::GetFuncInfoByID(hInstance, m_nFuncID, szFuncName, szFuncNameJapanese)) {
-		switch (m_nFuncID) {
-		case F_INSTEXT_W:
-		case F_FILEOPEN:
-		case F_EXECEXTMACRO:
-			// 引数ひとつ分だけ保存
-			pText = m_pParamTop->m_pData;
-			nTextLen = wcslen(pText);
-			cmemWork.SetString(pText, nTextLen);
-			cmemWork.Replace(LTEXT("\\"), LTEXT("\\\\"));
-			cmemWork.Replace(LTEXT("\'"), LTEXT("\\\'"));
-			out.WriteF(L"S_%ls(\'", szFuncName);
-			out.WriteString(cmemWork.GetStringPtr(), cmemWork.GetStringLength());
-			out.WriteF(L"\');\t// %ls\r\n",
-				szFuncNameJapanese
-			);
-			break;
-		case F_JUMP:		// 指定行へジャンプ（ただしPL/SQLコンパイルエラー行へのジャンプは未対応）
-			out.WriteF(
-				LTEXT("S_%ls(%d, %d);\t// %ls\r\n"),
-				szFuncName,
-				(m_pParamTop->m_pData ? _wtoi(m_pParamTop->m_pData) : 1),
-				m_pParamTop->m_pNext->m_pData ? _wtoi(m_pParamTop->m_pNext->m_pData) : 0,
-				szFuncNameJapanese
-			);
-			break;
-		case F_SETFONTSIZE:	// 2013.05.31
-			out.WriteF(
-				L"S_%ls(%d",
-				szFuncName,
-				_wtoi(m_pParamTop->m_pData));
-			if (GetParamAt(m_pParamTop, 1)) {
-				out.WriteF(L", %d", wtoi_def(GetParamAt(m_pParamTop, 1), 0));
+	/* 2002.2.2 YAZAKI CSMacroMgrに頼む */
+	if (CSMacroMgr::GetFuncInfoByID( hInstance, nFuncID, szFuncName, szFuncNameJapanese)){
+		// 2014.01.24 Moca マクロ書き出しをm_eTypeを追加して統合
+		out.WriteF( L"S_%ls(", szFuncName );
+		CMacroParam* pParam = m_pParamTop;
+		while (pParam) {
+			if (pParam != m_pParamTop) {
+				out.WriteString( L", " );
 			}
-			if (GetParamAt(m_pParamTop, 2)) {
-				out.WriteF(L", %d", wtoi_def(GetParamAt(m_pParamTop, 2), 0));
-			}
-			out.WriteF(L");\t// %ls\r\n", szFuncNameJapanese);
-			break;
-		case F_BOOKMARK_PATTERN:	// 2002.02.08 hor
-		case F_SEARCH_NEXT:
-		case F_SEARCH_PREV:
-			pText = m_pParamTop->m_pData;
-			nTextLen = wcslen(pText);
-			cmemWork.SetString(pText, nTextLen);
-			cmemWork.Replace(LTEXT("\\"), LTEXT("\\\\"));
-			cmemWork.Replace(LTEXT("\'"), LTEXT("\\\'"));
-			out.WriteF(L"S_%ls(\'", szFuncName);
-			out.WriteString(cmemWork.GetStringPtr(), cmemWork.GetStringLength());
-			out.WriteF(L"', %d);\t// %ls\r\n",
-				m_pParamTop->m_pNext->m_pData ? _wtoi(m_pParamTop->m_pNext->m_pData) : 0,
-				szFuncNameJapanese
-			);
-			break;
-		case F_EXECMD:
-			pText = m_pParamTop->m_pData;
-			nTextLen = wcslen(pText);
-			cmemWork.SetString(pText, nTextLen);
-			cmemWork.Replace(LTEXT("\\"), LTEXT("\\\\"));
-			cmemWork.Replace(LTEXT("\'"), LTEXT("\\\'"));
-			if (m_pParamTop->m_pNext->m_pNext) {
-				CNativeW cmemWork2(m_pParamTop->m_pNext->m_pNext->m_pData); 
-				cmemWork2.Replace(LTEXT("\\"), LTEXT("\\\\"));
-				cmemWork2.Replace(LTEXT("\'"), LTEXT("\\\'"));
-				out.WriteF(
-					LTEXT("S_%ls(\'%ls\', %d, '%ls');\t// %ls\r\n"),
-					szFuncName,
-					cmemWork.GetStringPtr(),
-					m_pParamTop->m_pNext->m_pData ? _wtoi(m_pParamTop->m_pNext->m_pData) : 0,
-					cmemWork2.GetStringPtr(),
-					szFuncNameJapanese
-				);
-			}else {
-				out.WriteF(
-					LTEXT("S_%ls(\'%ls\', %d);\t// %ls\r\n"),
-					szFuncName,
-					cmemWork.GetStringPtr(),
-					m_pParamTop->m_pNext->m_pData ? _wtoi(m_pParamTop->m_pNext->m_pData) : 0,
-					szFuncNameJapanese
-				);
-			}
-			break;
-		case F_REPLACE:
-		case F_REPLACE_ALL:
-			pText = m_pParamTop->m_pData;
-			nTextLen = wcslen(pText);
-			cmemWork.SetString(pText, nTextLen);
-			cmemWork.Replace(LTEXT("\\"), LTEXT("\\\\"));
-			cmemWork.Replace(LTEXT("\'"), LTEXT("\\\'"));
-			{
-				CNativeW cmemWork2(m_pParamTop->m_pNext->m_pData);
-				cmemWork2.Replace(LTEXT("\\"), LTEXT("\\\\"));
-				cmemWork2.Replace(LTEXT("\'"), LTEXT("\\\'"));
-				out.WriteF(L"S_%ls(\'", szFuncName);
-				out.WriteString(cmemWork.GetStringPtr(), cmemWork.GetStringLength());
-				out.WriteF(L"\', \'");
-				out.WriteString(cmemWork2.GetStringPtr(), cmemWork2.GetStringLength());
-				out.WriteF(L"\', %d);\t// %ls\r\n",
-					m_pParamTop->m_pNext->m_pNext->m_pData ? _wtoi(m_pParamTop->m_pNext->m_pNext->m_pData) : 0,
-					szFuncNameJapanese
-				);
-			}
-			break;
-		case F_GREP:
-			pText = m_pParamTop->m_pData;
-			nTextLen = wcslen(pText);
-			cmemWork.SetString(pText, nTextLen);
-			cmemWork.Replace(LTEXT("\\"), LTEXT("\\\\"));
-			cmemWork.Replace(LTEXT("\'"), LTEXT("\\\'"));
-			{
-				CNativeW cmemWork2(m_pParamTop->m_pNext->m_pData);
-				cmemWork2.Replace(LTEXT("\\"), LTEXT("\\\\"));
-				cmemWork2.Replace(LTEXT("\'"), LTEXT("\\\'"));
-
-				CNativeW cmemWork3(m_pParamTop->m_pNext->m_pNext->m_pData);
-				cmemWork3.Replace(LTEXT("\\"), LTEXT("\\\\"));
-				cmemWork3.Replace(LTEXT("\'"), LTEXT("\\\'"));
-				out.WriteF(L"S_%ls(\'", szFuncName);
-				out.WriteString(cmemWork.GetStringPtr(), cmemWork.GetStringLength());
-				out.WriteString(L"\', \'");
-				out.WriteString(cmemWork2.GetStringPtr(), cmemWork2.GetStringLength());
-				out.WriteString(L"\', \'");
-				out.WriteString(cmemWork3.GetStringPtr(), cmemWork3.GetStringLength());
-				out.WriteF(L"', %d", (GetParamAt(m_pParamTop, 3) ? _wtoi(GetParamAt(m_pParamTop, 3)) : 0));
-				// 古いマクロは引数4つなので5つめはオプション
-				if (GetParamAt(m_pParamTop, 4)) {
-					out.WriteF(L", %d", _wtoi(GetParamAt(m_pParamTop, 4)));
+			switch (pParam->m_eType) {
+			case EMacroParamTypeInt:
+				out.WriteString( pParam->m_pData );
+				break;
+			case EMacroParamTypeStr:
+				pText = pParam->m_pData;
+				nTextLen = pParam->m_nDataLen;
+				cmemWork.SetString( pText, nTextLen );
+				cmemWork.Replace( L"\\", L"\\\\" );
+				cmemWork.Replace( L"\'", L"\\\'" );
+				cmemWork.Replace( L"\r", L"\\\r" );
+				cmemWork.Replace( L"\n", L"\\\n" );
+				cmemWork.Replace( L"\t", L"\\\t" );
+				cmemWork.Replace( L"\0", 1, L"\\u0000", 6 );
+				const wchar_t u0085[] = {0x85, 0};
+				cmemWork.Replace( u0085, L"\\u0085" );
+				cmemWork.Replace( L"\u2028", L"\\u2028" );
+				cmemWork.Replace( L"\u2029", L"\\u2029" );
+				for (int c = 0; c < 0x20; c++) {
+					int nLen = cmemWork.GetStringLength();
+					const wchar_t* p = cmemWork.GetStringPtr();
+					for (int i = 0; i < nLen; i++) {
+						if (p[i] == c) {
+							wchar_t from[2];
+							wchar_t to[7];
+							from[0] = c;
+							from[1] = L'\0';
+							auto_sprintf( to, L"\\u%4x", c );
+							cmemWork.Replace( from, to );
+							break;
+						}
+					}
 				}
-				out.WriteF(L");\t// %ls\r\n", szFuncNameJapanese);
+				const wchar_t u007f[] = {0x7f, 0};
+				cmemWork.Replace( u007f, L"\\u007f" );
+				out.WriteString( L"'" );
+				out.WriteString( cmemWork.GetStringPtr(), cmemWork.GetStringLength() );
+				out.WriteString( L"'" );
+				break;
 			}
-			break;
-		default:
-			if (0 == m_pParamTop) {
-				out.WriteF(LTEXT("S_%ls();\t// %ls\r\n"), szFuncName, szFuncNameJapanese);
-			}else {
-				out.WriteF(LTEXT("S_%ls(%d);\t// %ls\r\n"), szFuncName, m_pParamTop->m_pData ? _wtoi(m_pParamTop->m_pData) : 0, szFuncNameJapanese);
-			}
-			break;
+			pParam = pParam->m_pNext;
 		}
+		out.WriteF( L");\t// %ls\r\n", szFuncNameJapanese );
 		return;
 	}
-	out.WriteF(LSW(STR_ERR_DLGMACRO01));
+	out.WriteF( LSW(STR_ERR_DLGMACRO01) );
 }
 
 /**	マクロ引数変換
@@ -496,6 +542,7 @@ bool CMacro::HandleCommand(
 {
 	std::tstring EXEC_ERROR_TITLE_string = LS(STR_ERR_DLGMACRO02);
 	const TCHAR* EXEC_ERROR_TITLE = EXEC_ERROR_TITLE_string.c_str();
+	int nOptions = 0;
 
 	switch (LOWORD(Index)) {
 	case F_WCHAR:		// 文字入力。数値は文字コード
@@ -516,11 +563,8 @@ bool CMacro::HandleCommand(
 	case F_TEXTWRAPMETHOD:	// テキストの折り返し方法の指定。数値は、0x0（折り返さない）、0x1（指定桁で折り返す）、0x2（右端で折り返す）	// 2008.05.30 nasukoji
 	case F_GOLINETOP:	// 行頭に移動。数値は、0x0（デフォルト）、0x1（空白を無視して先頭に移動）、0x2（未定義）、0x4（選択して移動）、0x8（改行単位で先頭に移動）
 	case F_GOLINETOP_SEL:
-	case F_GOLOGICALLINETOP_BOX:
-	case F_GOLINETOP_BOX:
 	case F_GOLINEEND:	// 行末に移動
 	case F_GOLINEEND_SEL:
-	case F_GOLINEEND_BOX:
 	case F_SELECT_COUNT_MODE:	// 文字カウントの方法を指定。数値は、0x0（変更せず取得のみ）、0x1（文字数）、0x2（バイト数）、0x3（文字数⇔バイト数トグル）	// 2009.07.06 syat
 	case F_OUTLINE:	// アウトライン解析のアクションを指定。数値は、0x0（画面表示）、0x1（画面表示＆再解析）、0x2（画面表示トグル）
 	case F_CHANGETYPE:
@@ -534,7 +578,46 @@ bool CMacro::HandleCommand(
 	case F_WHEELPAGEDOWN:
 	case F_WHEELPAGELEFT:
 	case F_WHEELPAGERIGHT:
+	case F_HalfPageUp:
+	case F_HalfPageDown:
+	case F_HalfPageUp_Sel:
+	case F_HalfPageDown_Sel:
+	case F_1PageUp:
+	case F_1PageDown:
+	case F_1PageUp_Sel:
+	case F_1PageDown_Sel:
 		pcEditView->GetCommander().HandleCommand(Index, true, (Argument[0] != NULL ? _wtoi(Argument[0]) : 0), 0, 0, 0);
+		break;
+	case F_UP_BOX:
+	case F_DOWN_BOX:
+	case F_LEFT_BOX:
+	case F_RIGHT_BOX:
+	case F_UP2_BOX:
+	case F_DOWN2_BOX:
+	case F_WORDLEFT_BOX:
+	case F_WORDRIGHT_BOX:
+	case F_GOFILETOP_BOX:
+	case F_GOFILEEND_BOX:
+		nOptions = 1;
+	case F_GOLOGICALLINETOP_BOX:
+	case F_GOLINETOP_BOX:
+	case F_GOLINEEND_BOX:
+	case F_HalfPageUp_BOX:
+	case F_HalfPageDown_BOX:
+	case F_1PageUp_BOX:
+	case F_1PageDown_BOX:
+		{
+			// 0: 共通設定
+			// 1: true(マクロのデフォルト値)
+			// 2: false
+			// マクロのデフォルト値はtrue(1)だが、CEditView側のデフォルトは共通設定(0)
+			int nBoxLock = wtoi_def(Argument[nOptions == 1 ? 0 : 1], 1);
+			if( nOptions == 1 ){
+				pcEditView->GetCommander().HandleCommand( Index, true, nBoxLock, 0, 0, 0 );
+			}else{
+				pcEditView->GetCommander().HandleCommand( Index, true, wtoi_def(Argument[0], 0), nBoxLock, 0, 0 );
+			}
+		}
 		break;
 	case F_CHGMOD_EOL:	// 入力改行コード指定。EEolTypeの数値を指定。2003.06.23 Moca
 		// Jun. 16, 2002 genta
@@ -646,8 +729,8 @@ bool CMacro::HandleCommand(
 		// NO BREAK
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
-		// Argument[0]を検索。オプションはArgument[1]に。
-		// Argument[1]:
+		//	Argument[0] を検索。(省略時、元の検索文字列・オプションを使う)
+		//	Argument[1]:オプション (省略時、0のみなす)
 		//		0x01	単語単位で探す
 		//		0x02	英大文字と小文字を区別する
 		//		0x04	正規表現
@@ -655,6 +738,7 @@ bool CMacro::HandleCommand(
 		//		0x10	検索ダイアログを自動的に閉じる
 		//		0x20	先頭（末尾）から再検索する
 		//		0x800	(マクロ専用)検索キーを履歴に登録しない
+		//		0x1000	(マクロ専用)検索オプションを元に戻す
 		{
 			LPARAM lFlag = Argument[1] != NULL ? _wtoi(Argument[1]) : 0;
 			SSearchOption sSearchOption;
@@ -662,7 +746,22 @@ bool CMacro::HandleCommand(
 			sSearchOption.bLoHiCase			= (0 != (lFlag & 0x02));
 			sSearchOption.bRegularExp		= (0 != (lFlag & 0x04));
 			bool bAddHistory = (0 == (lFlag & 0x800));
-			int nLen = wcslen(Argument[0]);
+			bool bBackupFlag = (0 != (lFlag & 0x1000));
+			CommonSetting_Search backupFlags;
+			SSearchOption backupLocalFlags;
+			std::wstring backupStr;
+			bool backupKeyMark;
+			int nBackupSearchKeySequence;
+			if (bBackupFlag) {
+				backupFlags = GetDllShareData().m_Common.m_sSearch;
+				backupLocalFlags = pcEditView->m_sCurSearchOption;
+				backupStr = pcEditView->m_strCurSearchKey;
+				backupKeyMark = pcEditView->m_bCurSrchKeyMark;
+				nBackupSearchKeySequence = pcEditView->m_nCurSearchKeySequence;
+				bAddHistory = false;
+			}
+			const WCHAR* pszSearchKey = wtow_def(Argument[0], L"");
+			int nLen = wcslen( pszSearchKey );
 			if (0 < nLen) {
 				// 正規表現
 				if (lFlag & 0x04
@@ -689,6 +788,19 @@ bool CMacro::HandleCommand(
 
 			// コマンド発行
 			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
+			if (bBackupFlag) {
+				GetDllShareData().m_Common.m_sSearch = backupFlags;
+				pcEditView->m_sCurSearchOption = backupLocalFlags;
+				pcEditView->m_strCurSearchKey = backupStr;
+				pcEditView->m_bCurSearchUpdate = true;
+				pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence;
+				pcEditView->ChangeCurRegexp( backupKeyMark );
+				pcEditView->m_bCurSrchKeyMark = backupKeyMark;
+				if (!backupKeyMark) {
+					pcEditView->Redraw();
+				}
+				pcEditView->m_nCurSearchKeySequence = nBackupSearchKeySequence;
+			}
 		}
 		break;
 	case F_DIFF:
@@ -801,7 +913,8 @@ bool CMacro::HandleCommand(
 		//		**********************************
 		//		0x400	「すべて置換」は置換の繰返し（ON:連続置換, OFF:一括置換）
 		//		0x800	(マクロ専用)検索キーを履歴に登録しない
-		if (!Argument[0] || Argument[0][0] == L'\0') {
+		//		0x1000	(マクロ専用)検索オプションを元に戻す
+		if (Argument[0] == NULL || Argument[0][0] == L'\0') {
 			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
 				LS(STR_ERR_DLGMACRO09));
 			return false;
@@ -819,7 +932,23 @@ bool CMacro::HandleCommand(
 			sSearchOption.bLoHiCase			= (0 != (lFlag & 0x02));
 			sSearchOption.bRegularExp		= (0 != (lFlag & 0x04));
 			bool bAddHistory = (0 == (lFlag & 0x800));
-			// 正規表現
+			bool bBackupFlag = (0 != (lFlag & 0x1000));
+			CommonSetting_Search backupFlags;
+			SSearchOption backupLocalFlags;
+			std::wstring backupStr;
+			std::wstring backupStrRep;
+			int nBackupSearchKeySequence;
+			bool backupKeyMark;
+			if (bBackupFlag) {
+				backupFlags = GetDllShareData().m_Common.m_sSearch;
+				backupLocalFlags = pcEditView->m_sCurSearchOption;
+				backupStr = pcEditView->m_strCurSearchKey;
+				backupStrRep = cDlgReplace.m_strText2;
+				backupKeyMark = pcEditView->m_bCurSrchKeyMark;
+				nBackupSearchKeySequence = pcEditView->m_nCurSearchKeySequence;
+				bAddHistory = false;
+			}
+			/* 正規表現 */
 			if (lFlag & 0x04
 				&& !CheckRegexpSyntax(Argument[0], NULL, true)
 			) {
@@ -861,8 +990,23 @@ bool CMacro::HandleCommand(
 			}
 			// コマンド発行
 			pcEditView->GetCommander().HandleCommand(Index, true, 0, 0, 0, 0);
+			if (bBackupFlag) {
+				GetDllShareData().m_Common.m_sSearch = backupFlags;
+				pcEditView->m_sCurSearchOption = backupLocalFlags;
+				pcEditView->m_strCurSearchKey = backupStr;
+				pcEditView->m_bCurSearchUpdate = true;
+				cDlgReplace.m_strText2 = backupStrRep;
+				pcEditView->m_nCurSearchKeySequence = GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence;
+				pcEditView->ChangeCurRegexp( backupKeyMark );
+				pcEditView->m_bCurSrchKeyMark = backupKeyMark;
+				if (!backupKeyMark) {
+					pcEditView->Redraw();
+				}
+				pcEditView->m_nCurSearchKeySequence = nBackupSearchKeySequence;
+			}
 		}
 		break;
+	case F_GREP_REPLACE:
 	case F_GREP:
 		// Argument[0]	検索文字列
 		// Argument[1]	検索対象にするファイル名
@@ -877,6 +1021,8 @@ bool CMacro::HandleCommand(
 		//		******** 以下「結果出力」 ********
 		//		0x00	該当行
 		//		0x20	該当部分
+		//		0x400000	否ヒット行	// 2014.09.23
+		//		0x400020	(未使用)	// 2014.09.23
 		//		**********************************
 		//		******** 以下「出力形式」 ********
 		//		0x00	ノーマル
@@ -889,30 +1035,49 @@ bool CMacro::HandleCommand(
 		//		0x020000	ファイル毎最初のみ検索
 		//		0x040000	ベースフォルダ表示
 		//		0x080000	フォルダ毎に表示
-		if (!Argument[0]) {
-			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				LS(STR_ERR_DLGMACRO11));
-			return false;
-		}
-		if (!Argument[1]) {
-			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				LS(STR_ERR_DLGMACRO12));
-			return false;
-		}
-		if (!Argument[2]) {
-			::MYMESSAGEBOX(NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				LS(STR_ERR_DLGMACRO13));
-			return false;
-		}
 		{
-			// 常に外部ウィンドウに。
+			if (Argument[0] == NULL) {
+				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
+					LS(STR_ERR_DLGMACRO11));
+				return false;
+			}
+			int ArgIndex = 0;
+			bool bGrepReplace = LOWORD(Index) == F_GREP_REPLACE;
+			if (bGrepReplace) {
+				if (ArgLengths[0] == 0) {
+					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
+						LS(STR_ERR_DLGMACRO11));
+					return false;
+				}
+				ArgIndex = 1;
+				if (Argument[1] == NULL) {
+					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
+						LS(STR_ERR_DLGMACRO17));
+					return false;
+				}
+			}
+			if (Argument[ArgIndex+1] == NULL) {
+				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
+					LS(STR_ERR_DLGMACRO12));
+				return false;
+			}
+			if (Argument[ArgIndex+2] == NULL) {
+				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
+					LS(STR_ERR_DLGMACRO13));
+				return false;
+			}
+			//	常に外部ウィンドウに。
 			/*======= Grepの実行 =============*/
 			/* Grep結果ウィンドウの表示 */
-			CNativeW cmWork1;	cmWork1.SetString(Argument[0]);	cmWork1.Replace(L"\"", L"\"\"");			// 検索文字列
-			CNativeT cmWork2;	cmWork2.SetStringW(Argument[1]);	cmWork2.Replace(_T("\""), _T("\"\""));	// ファイル名
-			CNativeT cmWork3;	cmWork3.SetStringW(Argument[2]);	cmWork3.Replace(_T("\""), _T("\"\""));	// フォルダ名
+			CNativeW cmWork1;	cmWork1.SetString( Argument[0] );	cmWork1.Replace( L"\"", L"\"\"" );	//	検索文字列
+			CNativeW cmWork4;
+			if (bGrepReplace) {
+				cmWork4.SetString( Argument[1] );	cmWork4.Replace( L"\"", L"\"\"" );	//	置換後
+			}
+			CNativeT cmWork2;	cmWork2.SetStringW( Argument[ArgIndex+1] );	cmWork2.Replace( _T("\""), _T("\"\"") );	//	ファイル名
+			CNativeT cmWork3;	cmWork3.SetStringW( Argument[ArgIndex+2] );	cmWork3.Replace( _T("\""), _T("\"\"") );	//	フォルダ名
 
-			LPARAM lFlag = Argument[3] != NULL ? _wtoi(Argument[3]) : 5;
+			LPARAM lFlag = wtoi_def(Argument[ArgIndex+3], 5);
 
 			// 2002/09/21 Moca 文字コードセット
 			ECodeType	nCharSet;
@@ -926,8 +1091,8 @@ bool CMacro::HandleCommand(
 					nCharSet = (ECodeType)nCode;
 				}
 				// 2013.06.11 5番目の引き数を文字コードにする
-				if (5 <= ArgSize) {
-					nCharSet = (ECodeType)_wtoi(Argument[4]);
+				if (ArgIndex + 5 <= ArgSize) {
+					nCharSet = (ECodeType)_wtoi(Argument[ArgIndex + 4]);
 				}
 			}
 
@@ -937,33 +1102,42 @@ bool CMacro::HandleCommand(
 			TCHAR	pOpt[64];
 			cCmdLine.AppendString(_T("-GREPMODE -GKEY=\""));
 			cCmdLine.AppendStringW(cmWork1.GetStringPtr());
+			if (bGrepReplace) {
+				cCmdLine.AppendString(_T("\" -GREPR=\""));
+				cCmdLine.AppendStringW(cmWork4.GetStringPtr());
+			}
 			cCmdLine.AppendString(_T("\" -GFILE=\""));
 			cCmdLine.AppendString(cmWork2.GetStringPtr());
 			cCmdLine.AppendString(_T("\" -GFOLDER=\""));
 			cCmdLine.AppendString(cmWork3.GetStringPtr());
 			cCmdLine.AppendString(_T("\" -GCODE="));
-			auto_sprintf_s(szTemp, _T("%d"), nCharSet);
+			auto_sprintf( szTemp, _T("%d"), nCharSet );
 			cCmdLine.AppendString(szTemp);
 
-			// GOPTオプション
+			//GOPTオプション
 			pOpt[0] = '\0';
-			if (lFlag & 0x01) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
-			if (lFlag & 0x04) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
-			if (lFlag & 0x08) _tcscat(pOpt, _T("R"));	// 正規表現
-			if (lFlag & 0x20) _tcscat(pOpt, _T("P"));	// 行を出力するか該当部分だけ出力するか
-			if (0x40 == (lFlag & 0xC0)) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
-			else if (0x80 == (lFlag & 0xC0)) _tcscat(pOpt, _T("3"));
-			else _tcscat(pOpt, _T("1"));
-			if (lFlag & 0x10000) _tcscat(pOpt, _T("W"));
-			if (lFlag & 0x20000) _tcscat(pOpt, _T("F"));
-			if (lFlag & 0x40000) _tcscat(pOpt, _T("B"));
-			if (lFlag & 0x80000) _tcscat(pOpt, _T("D"));
+			if (lFlag & 0x01) _tcscat( pOpt, _T("S") );	/* サブフォルダからも検索する */
+			if (lFlag & 0x04) _tcscat( pOpt, _T("L") );	/* 英大文字と英小文字を区別する */
+			if (lFlag & 0x08) _tcscat( pOpt, _T("R") );	/* 正規表現 */
+			if (        0x20 == (lFlag & 0x400020)) _tcscat( pOpt, _T("P") );	// 行を出力する
+			else if (0x400000 == (lFlag & 0x400020)) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する
+			if (     0x40 == (lFlag & 0xC0)) _tcscat( pOpt, _T("2") );	/* Grep: 出力形式 */
+			else if (0x80 == (lFlag & 0xC0)) _tcscat( pOpt, _T("3") );
+			else _tcscat( pOpt, _T("1") );
+			if (lFlag & 0x10000) _tcscat( pOpt, _T("W") );
+			if (lFlag & 0x20000) _tcscat( pOpt, _T("F") );
+			if (lFlag & 0x40000) _tcscat( pOpt, _T("B") );
+			if (lFlag & 0x80000) _tcscat( pOpt, _T("D") );
+			if (bGrepReplace) {
+				if (lFlag & 0x100000) _tcscat( pOpt, _T("C") );
+				if (lFlag & 0x200000) _tcscat( pOpt, _T("O") );
+			}
 			if (pOpt[0] != _T('\0')) {
-				auto_sprintf_s(szTemp, _T(" -GOPT=%ts"), pOpt);
+				auto_sprintf( szTemp, _T(" -GOPT=%ts"), pOpt );
 				cCmdLine.AppendString(szTemp);
 			}
 
-			// 新規編集ウィンドウの追加 ver 0
+			/* 新規編集ウィンドウの追加 ver 0 */
 			SLoadInfo sLoadInfo;
 			sLoadInfo.cFilePath = _T("");
 			sLoadInfo.eCharCode = CODE_NONE;
@@ -974,8 +1148,8 @@ bool CMacro::HandleCommand(
 				sLoadInfo,
 				cCmdLine.GetStringPtr()
 			);
-			//======= Grepの実行 =============
-			// Grep結果ウィンドウの表示
+			/*======= Grepの実行 =============*/
+			/* Grep結果ウィンドウの表示 */
 		}
 		break;
 	case F_FILEOPEN2:
@@ -1008,7 +1182,7 @@ bool CMacro::HandleCommand(
 			if (Argument[1] != NULL) {
 				nCharCode = (ECodeType)_wtoi(Argument[1]);
 			}
-			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeType(nCharCode) && nCharCode != pcEditView->m_pcEditDoc->GetDocumentEncoding()) {
+			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeOrCPType(nCharCode) && nCharCode != pcEditView->m_pcEditDoc->GetDocumentEncoding()) {
 				// From Here Jul. 26, 2003 ryoji BOM状態を初期化
 				pcEditView->m_pcEditDoc->SetDocumentEncoding(nCharCode, CCodeTypeName(pcEditView->m_pcEditDoc->GetDocumentEncoding()).IsBomDefOn());
 				// To Here Jul. 26, 2003 ryoji BOM状態を初期化
@@ -1207,8 +1381,7 @@ bool CMacro::HandleCommand(
 			opeBlk->AddRef();
 			opeBlk->AppendOpe(
 				new CMoveCaretOpe(
-					pcEditView->GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-					pcEditView->GetCaret().GetCaretLogicPos() 	// 操作後のキャレット位置
+					pcEditView->GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
 			pcEditView->SetUndoBuffer();
@@ -1220,12 +1393,40 @@ bool CMacro::HandleCommand(
 			cClipboard.Empty();
 		}
 		break;
-	case F_TAGJUMP_EX:	// 拡張タグジャンプ
+	case F_SETVIEWTOP:
 		{
-			int val1 = (Argument[1] != NULL) ? _wtoi(Argument[1]) : 0;
-			int val2 = (Argument[2] != NULL) ? _wtoi(Argument[2]) : 0;
-			int val3 = (Argument[3] != NULL) ? _wtoi(Argument[3]) : 0;
-			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], (LPARAM)val1, (LPARAM)val2, (LPARAM)val3);
+			if (ArgSize <= 0) {
+				return false;
+			}
+			if (ArgLengths[0] <= 0) {
+				return false;
+			}
+			if (!WCODE::Is09( Argument[0][0] )) {
+				return false;
+			}
+			CLayoutYInt nLineNum = CLayoutYInt(_wtoi(Argument[0]) - 1);
+			if (nLineNum < 0) {
+				nLineNum = CLayoutYInt(0);
+			}
+			pcEditView->SyncScrollV( pcEditView->ScrollAtV( nLineNum ));
+		}
+		break;
+	case F_SETVIEWLEFT:
+		{
+			if (ArgSize <= 0) {
+				return false;
+			}
+			if (ArgLengths[0] <= 0) {
+				return false;
+			}
+			if (!WCODE::Is09( Argument[0][0] )) {
+				return false;
+			}
+			CLayoutXInt nColumn = CLayoutXInt(_wtoi(Argument[0]) - 1);
+			if (nColumn < 0) {
+				nColumn = CLayoutXInt(0);
+			}
+			pcEditView->SyncScrollH( pcEditView->ScrollAtH( nColumn ) );
 		}
 		break;
 	default:
@@ -1556,7 +1757,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			}
 
 			TCHAR* Buffer = new TCHAR[nMaxLen + 1];
-			_tcscpy_s(Buffer, nMaxLen + 1, sDefaultValue.c_str());
+			_tcscpy( Buffer, sDefaultValue.c_str() );
 			CDlgInput1 cDlgInput1;
 			if (cDlgInput1.DoModal(G_AppInstance(), View->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, Buffer)) {
 				SysString S(Buffer, _tcslen(Buffer));
@@ -1677,7 +1878,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			);
 			bool bRet;
 			TCHAR szPath[_MAX_PATH];
-			_tcscpy_s(szPath, sDefault.c_str());
+			_tcscpy( szPath, sDefault.c_str() );
 			if (LOWORD(ID) == F_FILEOPENDIALOG) {
 				bRet = cDlgOpenFile.DoModal_GetOpenFileName(szPath);
 			}else {
@@ -2049,6 +2250,193 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				CStringRef cstr(varCopy.Data.bstrVal, ::SysStringLen(varCopy.Data.bstrVal));
 				bool bret = cClipboard.SetClipboradByFormat(cstr, varCopy2.Data.bstrVal, varCopy3.Data.lVal, varCopy4.Data.lVal);
 				Wrap(&Result)->Receive(bret ? 1 : 0);
+				return true;
+			}
+			return false;
+		}
+	case F_GETLINEATTRIBUTE:
+		{
+			int nLineNum;
+			int nAttType;
+			if (ArgSize < 2) {
+				return false;
+			}
+			if (!variant_to_int(Arguments[0], nLineNum)) return false;
+			if (!variant_to_int(Arguments[1], nAttType)) return false;
+			CLogicInt nLine;
+			if (0 == nLineNum) {
+				nLine = View->GetCaret().GetCaretLogicPos().GetY2();
+			}else if (nLineNum < 0) {
+				return false;
+			}else {
+				nLine = CLogicInt(nLineNum - 1); // nLineNumは1開始
+			}
+			const CDocLine* pcDocLine = View->GetDocument()->m_cDocLineMgr.GetLine(nLine);
+			if (pcDocLine == NULL) {
+				return false;
+			}
+			int nRet;
+			switch (nAttType) {
+			case 0:
+				nRet = (CModifyVisitor().IsLineModified(pcDocLine, View->GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()) ? 1: 0);
+				break;
+			case 1:
+				nRet = pcDocLine->m_sMark.m_cModified.GetSeq();
+				break;
+			case 2:
+				nRet = (pcDocLine->m_sMark.m_cBookmarked ? 1: 0);
+				break;
+			case 3:
+				nRet = pcDocLine->m_sMark.m_cDiffmarked;
+				break;
+			case 4:
+				nRet = (pcDocLine->m_sMark.m_cFuncList.GetFuncListMark() ? 1: 0 );
+				break;
+			default:
+				return false;
+			}
+			Wrap( &Result )->Receive( nRet );
+			return true;
+		}
+	case F_ISTEXTSELECTINGLOCK:
+		{
+			if (View->GetSelectionInfo().m_bSelectingLock) {
+				if (View->GetSelectionInfo().IsBoxSelecting()) {
+					Wrap( &Result )->Receive( 2 );	//選択ロック+矩形選択中
+				}else {
+					Wrap( &Result )->Receive( 1 );	//選択ロック中
+				}
+			}else {
+				Wrap( &Result )->Receive( 0 );		//非ロック中
+			}
+		}
+		return true;
+	case F_GETVIEWLINES:
+		{
+			int nLines = (Int)View->GetTextArea().m_nViewRowNum;
+			Wrap( &Result )->Receive( nLines );
+			return true;
+		}
+	case F_GETVIEWCOLUMNS:
+		{
+			int nColumns = (Int)View->GetTextArea().m_nViewColNum;
+			Wrap( &Result )->Receive( nColumns );
+			return true;
+		}
+	case F_CREATEMENU:
+		{
+			Variant varCopy2;
+			if (2 <= ArgSize) {
+				if (!VariantToI4(varCopy, Arguments[0])) return false;
+				if (!VariantToBStr(varCopy2, Arguments[1])) return false;
+				std::vector<wchar_t> vStrMenu;
+				int nLen = (int)auto_strlen(varCopy2.Data.bstrVal);
+				vStrMenu.assign( nLen + 1, L'\0' );
+				auto_strcpy(&vStrMenu[0], varCopy2.Data.bstrVal);
+				HMENU hMenu = ::CreatePopupMenu();
+				std::vector<HMENU> vHmenu;
+				vHmenu.push_back( hMenu );
+				HMENU hMenuCurrent = hMenu;
+				int nPos = 0;
+				wchar_t* p;
+				int i = 1;
+				while (p = my_strtok( &vStrMenu[0], nLen, &nPos, L"," )) {
+					wchar_t* r = p;
+					int nFlags = MF_STRING;
+					int nFlagBreak = 0;
+					bool bSpecial = false;
+					bool bRadio = false;
+					bool bSubMenu = false;
+					int nBreakNum = 0;
+					if (p[0] == L'[') {
+						r++;
+						while (*r != L']' && *r != L'\0') {
+							switch (*r) {
+							case L'S':
+								if (!bSubMenu) {
+									HMENU hMenuSub = ::CreatePopupMenu();
+									vHmenu.push_back( hMenuSub );
+									bSubMenu = true;
+								}
+								break;
+							case L'E':
+								nBreakNum++;
+								break;
+							case L'C':
+								nFlags |= MF_CHECKED;
+								break;
+							case L'D':
+								nFlags |= MF_GRAYED;
+								break;
+							case L'R':
+								bRadio = true;
+								break;
+							case L'B':
+								nFlagBreak |= MF_MENUBARBREAK;
+								break;
+							default:
+								break;
+							}
+							r++;
+						}
+						if (*r == L']') {
+							r++;
+						}
+					}
+					if (p[0] == L'-' && p[1] == L'\0') {
+						nFlags |= MF_SEPARATOR;
+						r++;
+						bSpecial = true;
+					}
+
+					if (bSubMenu) {
+						nFlags |= nFlagBreak;
+						::InsertMenu( hMenuCurrent, -1, nFlags | MF_BYPOSITION | MF_POPUP, (UINT_PTR)vHmenu.back(), to_tchar(r) );
+						hMenuCurrent = vHmenu.back();
+					}else if (bSpecial) {
+						nFlags |= nFlagBreak;
+						::InsertMenu( hMenuCurrent, -1, nFlags | MF_BYPOSITION, 0, NULL );
+					}else {
+						nFlags |= nFlagBreak;
+						::InsertMenu( hMenuCurrent, -1, nFlags | MF_BYPOSITION, i, to_tchar(r) );
+						if (bRadio) {
+							::CheckMenuRadioItem( hMenuCurrent, i, i, i, MF_BYCOMMAND );
+						}
+						i++;
+					}
+					for (int n = 0; n < nBreakNum; n++) {
+						if (1 < vHmenu.size()) {
+							vHmenu.resize( vHmenu.size() - 1 );
+						}
+						hMenuCurrent = vHmenu.back();
+					}
+				}
+				POINT pt;
+				int nViewPointType = varCopy.Data.lVal;
+				if (nViewPointType == 1) {
+					// キャレット位置
+					pt = View->GetCaret().CalcCaretDrawPos( View->GetCaret().GetCaretLayoutPos() );
+					if (View->GetTextArea().GetAreaLeft() <= pt.x
+						&& View->GetTextArea().GetAreaTop() <= pt.y
+						&& pt.x < View->GetTextArea().GetAreaRight()
+						&& pt.y < View->GetTextArea().GetAreaBottom()
+					) {
+						::ClientToScreen( View->GetHwnd(), &pt );
+					}else {
+						::GetCursorPos( &pt );
+					}
+				}else {
+					// マウス位置
+					::GetCursorPos( &pt );
+				}
+				RECT rcWork;
+				GetMonitorWorkRect( pt, &rcWork );
+				int nId = ::TrackPopupMenu( hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD,
+											( pt.x > rcWork.left )? pt.x: rcWork.left,
+											( pt.y < rcWork.bottom )? pt.y: rcWork.bottom,
+											0, View->GetHwnd(), NULL);
+				::DestroyMenu( hMenu );
+				Wrap( &Result )->Receive( nId );
 				return true;
 			}
 			return false;
