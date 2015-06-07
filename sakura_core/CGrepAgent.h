@@ -32,22 +32,32 @@ class CGrepEnumFiles;
 class CGrepEnumFolders;
 
 struct SGrepOption {
+	bool		bGrepReplace;			//!< Grep置換
 	bool		bGrepSubFolder;			//!< サブフォルダからも検索する
+	bool		bGrepStdout;			//!< 標準出力モード
+	bool		bGrepHeader;			//!< ヘッダ・フッダ表示
 	ECodeType	nGrepCharSet;			//!< 文字コードセット選択
-	bool		bGrepOutputLine;		//!< true: ヒット行を出力 / false: ヒット部分を出力
+	int			nGrepOutputLineType;	//!< 0:ヒット部分を出力, 1: ヒット行を出力, 2: 否ヒット行を出力
 	int			nGrepOutputStyle;		//!< 出力形式 1: Normal, 2: WZ風(ファイル単位) 3: 結果のみ
 	bool		bGrepOutputFileOnly;	//!< ファイル毎最初のみ検索
 	bool		bGrepOutputBaseFolder;	//!< ベースフォルダ表示
 	bool		bGrepSeparateFolder;	//!< フォルダ毎に表示
+	bool		bGrepPaste;				//!< Grep置換：クリップボードから貼り付ける
+	bool		bGrepBackup;			//!< Grep置換：バックアップ
 
 	SGrepOption() : 
-		 bGrepSubFolder(true)
+		 bGrepReplace(false)
+		,bGrepSubFolder(true)
+		,bGrepStdout(false)
+		,bGrepHeader(true)
 		,nGrepCharSet(CODE_AUTODETECT)
-		,bGrepOutputLine(true)
-		,nGrepOutputStyle(true)
+		,nGrepOutputLineType(1)
+		,nGrepOutputStyle(1)
 		,bGrepOutputFileOnly(false)
 		,bGrepOutputBaseFolder(false)
 		,bGrepSeparateFolder(false)
+		,bGrepPaste(false)
+		,bGrepBackup(false)
 	{}
 };
 
@@ -61,24 +71,31 @@ public:
 	ECallbackResult OnBeforeClose();
 	void OnAfterSave(const SSaveInfo& sSaveInfo);
 
-	static
-	void CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& vPaths);
+	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
+	static std::tstring ChopYen( const std::tstring& str );
+	static void AddTail( CEditView* pcEditView, const CNativeW& cmem, bool bAddStdout );
 
 	// Grep実行
 	DWORD DoGrep(
 		CEditView*				pcViewDst,
+		bool					bGrepReplace,
 		const CNativeW*			pcmGrepKey,
+		const CNativeW*			pcmGrepReplace,
 		const CNativeT*			pcmGrepFile,
 		const CNativeT*			pcmGrepFolder,
 		bool					bGrepCurFolder,
 		BOOL					bGrepSubFolder,
+		bool					bGrepStdout,
+		bool					bGrepHeader,
 		const SSearchOption&	sSearchOption,
 		ECodeType				nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
-		BOOL					bGrepOutputLine,
+		int						nGrepOutputLineType,
 		int						nGrepOutputStyle,
 		bool					bGrepOutputFileOnly,	//!< [in] ファイル毎最初のみ出力
 		bool					bGrepOutputBaseFolder,	//!< [in] ベースフォルダ表示
-		bool					bGrepSeparateFolder	//!< [in] フォルダ毎に表示
+		bool					bGrepSeparateFolder,	//!< [in] フォルダ毎に表示
+		bool					bGrepPaste,
+		bool					bGrepBackup
 	);
 
 private:
@@ -87,6 +104,7 @@ private:
 		CEditView*				pcViewDst,
 		CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
 		const wchar_t*			pszKey,				//!< [in] 検索パターン
+		const CNativeW&			cmGrepReplace,
 		CGrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン(!で除外指定)
 		CGrepEnumFiles&			cGrepExceptAbsFiles,
 		CGrepEnumFolders&		cGrepExceptAbsFolders,
@@ -121,6 +139,26 @@ private:
 		CNativeW&				cmemMessage
 	);
 
+	int DoGrepReplaceFile(
+		CEditView*				pcViewDst,
+		CDlgCancel*				pcDlgCancel,
+		const wchar_t*			pszKey,
+		const CNativeW&			cmGrepReplace,
+		const TCHAR*			pszFile,
+		const SSearchOption&	sSearchOption,
+		const SGrepOption&		sGrepOption,
+		const CSearchStringPattern& pattern,
+		CBregexp*				pRegexp,
+		int*					pnHitCount,
+		const TCHAR*			pszFullPath,
+		const TCHAR*			pszBaseFolder,
+		const TCHAR*			pszFolder,
+		const TCHAR*			pszRelPath,
+		bool&					bOutputBaseFolder,
+		bool&					bOutputFolderName,
+		CNativeW&				cmemMessage
+	);
+
 	// Grep結果をpszWorkに格納
 	void SetGrepResult(
 		// データ格納先
@@ -129,7 +167,7 @@ private:
 		const TCHAR*	pszFilePath,	//	フルパス or 相対パス
 		const TCHAR*	pszCodeName,	//	文字コード情報"[SJIS]"とか
 		// マッチした行の情報
-		int				nLine,			//	マッチした行番号
+		LONGLONG		nLine,			//	マッチした行番号
 		int				nColumn,		//	マッチした桁番号
 		const wchar_t*	pCompareData,	//	行の文字列
 		int				nLineLen,		//	行の文字列の長さ

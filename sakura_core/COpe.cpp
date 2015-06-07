@@ -19,6 +19,7 @@
 // COpeクラス構築
 COpe::COpe(EOpeCode eCode)
 {
+	assert( eCode != OPE_UNKNOWN );
 	m_nOpe = eCode;		// 操作種別
 
 	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1), CLogicInt(-1));	// カーソル位置
@@ -37,8 +38,6 @@ void COpe::DUMP(void)
 	DEBUG_TRACE(_T("\t\tm_nOpe                  = [%d]\n"), m_nOpe               );
 	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_Before = [%d,%d]\n"), m_ptCaretPos_PHY_Before.x, m_ptCaretPos_PHY_Before.y   );
 	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_After  = [%d,%d]\n"), m_ptCaretPos_PHY_After.x, m_ptCaretPos_PHY_After.y   );
-//	DEBUG_TRACE(_T("\t\tm_nDataLen              = [%d]\n"),  m_nDataLen           );
-//	DEBUG_TRACE(_T("\t\tm_pcmemData             = [%ls]\n"), m_pcmemData.GetStringPtr() );
 	return;
 }
 

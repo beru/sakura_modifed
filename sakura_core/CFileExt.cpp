@@ -32,12 +32,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include "CFileExt.h"
+#include "env/CDocTypeManager.h"
 
 CFileExt::CFileExt()
 {
 	m_puFileExtInfo = NULL;
 	m_nCount = 0;
-	m_szFilter[0] = 0;
+	m_vstrFilter.resize( 1 );
+	m_vstrFilter[0] = _T('\0');
 
 //	// テキストエディタとして、既定でリストに載ってほしい拡張子
 //	AppendExt("すべてのファイル", "*");
@@ -57,7 +59,7 @@ bool CFileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
 {
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
-	if (!ConvertTypesExtToDlgExt(pszExt, szWork)) {
+	if (!ConvertTypesExtToDlgExt(pszExt, NULL, szWork)) {
 		return false;
 	}
 	return AppendExtRaw(pszName, szWork);
@@ -86,8 +88,8 @@ bool CFileExt::AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt)
 	}
 	m_puFileExtInfo = p;
 
-	_tcscpy_s(m_puFileExtInfo[m_nCount].m_szName, pszName);
-	_tcscpy_s(m_puFileExtInfo[m_nCount].m_szExt, pszExt);
+	_tcscpy(m_puFileExtInfo[m_nCount].m_szName, pszName);
+	_tcscpy(m_puFileExtInfo[m_nCount].m_szExt, pszExt);
 	m_nCount++;
 
 	return true;
@@ -111,63 +113,31 @@ const TCHAR* CFileExt::GetExt(int nIndex)
 
 const TCHAR* CFileExt::GetExtFilter(void)
 {
+	std::tstring work;
+
 	// 拡張子フィルタの作成
-	m_szFilter[0] = 0;
+	m_vstrFilter.resize(0);
 
-	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szName) + _countof(m_puFileExtInfo[0].m_szExt)*2 + 10];
 	for (int i = 0; i < m_nCount; i++) {
-		auto_sprintf_s(szWork,
-			_T("%ts (%ts)|%ts|"),
-			m_puFileExtInfo[i].m_szName,
-			m_puFileExtInfo[i].m_szExt,
-			m_puFileExtInfo[i].m_szExt);
+		// "%ts (%ts)\0%ts\0"
+		work = m_puFileExtInfo[i].m_szName;
+		work.append(_T(" ("));
+		work.append(m_puFileExtInfo[i].m_szExt);
+		work.append(_T(")"));
+		work.append(_T("\0"), 1);
+		work.append(m_puFileExtInfo[i].m_szExt);
+		work.append(_T("\0"), 1);
 
-		_tcscat(m_szFilter, szWork);
+		int sz = (int)m_vstrFilter.size();
+		m_vstrFilter.resize( sz + work.length() );
+		auto_memcpy( &m_vstrFilter[sz], &work[0], work.length() );
 	}
-	_tcscat(m_szFilter, _T("|"));
-
-	// 区切りは０なので置き換える。
-	for (int i = 0; m_szFilter[i] != _T('\0'); i++) {
-		if (m_szFilter[i] == _T('|')) {
-			m_szFilter[i] = _T('\0');
-		}
+	if( 0 == m_nCount ){
+		m_vstrFilter.push_back( _T('\0') );
 	}
+	m_vstrFilter.push_back( _T('\0') );
 
-	return m_szFilter;
-}
+	return &m_vstrFilter[0];
 
-/*! タイプ別設定の拡張子リストをダイアログ用リストに変換する
-	@param pszSrcExt [in]  拡張子リスト 例「.c .cpp;.h」
-	@param pszDstExt [out] 拡張子リスト 例「*.c;*.cpp;*.h」
-*/
-bool CFileExt::ConvertTypesExtToDlgExt(const TCHAR* pszSrcExt, TCHAR* pszDstExt)
-{
-	// 2003.08.14 MIK NULLじゃなくてfalse
-	if (!pszSrcExt) {
-		return false;
-	}
-	if (!pszDstExt) {
-		return false;
-	}
-
-	TCHAR* p = _tcsdup(pszSrcExt);
-	pszDstExt[0] = 0;
-
-	TCHAR* token = _tcstok(p, _T(" ;,"));
-	while (token) {
-		if (_T('.') == *token) {
-			_tcscat(pszDstExt, _T("*"));
-		}else {
-			_tcscat(pszDstExt, _T("*."));
-		}
-		_tcscat(pszDstExt, token);
-
-		token = _tcstok(NULL, _T(" ;,"));
-		if (token) {
-			_tcscat(pszDstExt, _T(";"));
-		}
-	}
-	free(p);	// 2003.05.20 MIK メモリ解放漏れ
-	return true;
 }
 

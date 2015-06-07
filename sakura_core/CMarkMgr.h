@@ -88,12 +88,10 @@ public:
 	int GetMax(void) const { return m_nMaxitem; }	//!<	最大項目数を返す
 	void SetMax(int max);	//!<	最大項目数を設定
 
-	virtual
-	void Add(const CMark& m) = 0;	//!<	要素の追加
+	virtual void Add(const CMark& m) = 0;	//!<	要素の追加
 
 	//	Apr. 1, 2001 genta
-	virtual
-	void Flush(void);	//!<	要素の全消去
+	virtual void Flush(void);	//!<	要素の全消去
 
 	//!	要素の取得
 	const CMark& GetCurrent(void) const { return m_cMarkChain[m_nCurpos]; }
@@ -115,8 +113,7 @@ public:
 //	CMarkIterator End(void) const { return (CMarkIterator)m_cMarkChain.end(); }
 
 protected:
-	virtual
-	void Expire(void) = 0;
+	virtual void Expire(void) = 0;
 
 	// CMarkFactory m_factory;	//	Factory Class (マクロで生成される）
 	CMarkChain m_cMarkChain;	//	マークデータ本体
@@ -136,10 +133,8 @@ private:
 */
 class CAutoMarkMgr : public CMarkMgr {
 public:
-	virtual
-	void Add(const CMark& m);	//!<	要素の追加
-	
-	virtual
-	void Expire(void);	//!<	要素数の調整
+	virtual void Add(const CMark& m);	// 要素の追加
+	virtual void Expire(void);			// 要素数の調整
 };
+
 

@@ -159,5 +159,6 @@ protected:
 	*/
 	//bool KeyWordAlloc(int);
 	bool KeyWordReAlloc(int, int);
+	void KeywordMaxLen( int );
 };
 

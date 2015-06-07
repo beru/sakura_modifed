@@ -62,35 +62,33 @@ void CProfile::Init(void)
 	@param line [in] 読み込んだ行
 */
 void CProfile::ReadOneline(
-	const wchar_t* line,
-	size_t len
+	const wstring& line
 	)
 {
 	// 空行を読み飛ばす
-	if (len == 0) {
+	if (line.empty()) {
 		return;
 	}
 
-	wchar_t fl = line[0];
 	// コメント行を読みとばす
-	if (len >= 2 && fl == '/' && line[1] == '/') {
+	if (0 == line.compare( 0, 2, LTEXT("//") )) {
 		return;
 	}
 
 	// セクション取得
 	//	Jan. 29, 2004 genta compare使用
-	if (fl == '['
-		&& wcschr(line + 1, '=') == NULL
-		&& wcschr(line + 1, ']') == (line + len - 1)
+	if (line.compare( 0, 1, LTEXT("[") ) == 0 
+		&& line.find( LTEXT("=") ) == line.npos
+		&& line.find( LTEXT("]") ) == ( line.size() - 1 )
 	) {
 		Section Buffer;
-		Buffer.strSectionName = std::wstring(line + 1, len - 1 - 1);
+		Buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
 		m_ProfileData.push_back(Buffer);
 	// エントリ取得
 	}else if (!m_ProfileData.empty()) {	// 最初のセクション以前の行のエントリは無視
-		const wchar_t* pos = wcschr(line, '=');
-		if (pos != nullptr) {
-			m_ProfileData.back().mapEntries.emplace(std::wstring(line, pos - line), std::wstring(pos + 1));
+		wstring::size_type idx = line.find( LTEXT("=") );
+		if (line.npos != idx) {
+			m_ProfileData.back().mapEntries.insert( PAIR_STR_STR( line.substr(0,idx), line.substr(idx+1) ) );
 		}
 	}
 }
@@ -121,13 +119,12 @@ bool CProfile::ReadProfile(const TCHAR* pszProfileName)
 	}
 
 	try {
-		std::vector<wchar_t> line;
 		while (in) {
 			// 1行読込
-			in.ReadLineW(line);
+			wstring line=in.ReadLineW();
 
 			// 解析
-			ReadOneline(&line[0], line.size() - 1);
+			ReadOneline(line);
 		}
 	}catch (...) {
 		return false;
@@ -158,7 +155,7 @@ bool CProfile::ReadProfile(const TCHAR* pszProfileName)
 
 	1行300文字までに制限
 */
-bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
+bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType, std::vector<std::wstring>* pData )
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 	HRSRC		hRsrc;
@@ -170,7 +167,8 @@ bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 	char*		pn;
 	size_t		lnsz;
 	wstring		line;
-
+	CMemory cmLine;
+	CNativeW cmLineW;
 	m_strProfileName = _T("-Res-");
 
 	if ((hRsrc = ::FindResource(0, pName, pType)) != NULL
@@ -203,13 +201,16 @@ bool CProfile::ReadProfileRes(const TCHAR* pName, const TCHAR* pType)
 			}
 			
 			// UTF-8 -> UNICODE
-			CMemory cmLine(sLine, lnsz);
-			CUtf8::UTF8ToUnicode(&cmLine);
-			// 解析
-			ReadOneline(
-				(const wchar_t*)cmLine.GetRawPtr(),
-				cmLine.GetRawLength() / 2
-			);
+			cmLine.SetRawDataHoldBuffer( sLine, lnsz );
+			CUtf8::UTF8ToUnicode( cmLine, &cmLineW );
+			line = cmLineW.GetStringPtr();
+
+			if( pData ){
+				pData->push_back(line);
+			}else {
+				// 解析
+				ReadOneline(line);
+			}
 		}
 	}
 	return true;
@@ -241,12 +242,15 @@ bool CProfile::WriteProfile(
 		vecLine.push_back(LTEXT(";") + wstring(pszComment));		// //->;	2008/5/24 Uchi
 		vecLine.push_back(LTEXT(""));
 	}
-	auto iterEnd = m_ProfileData.end();
-	for (auto iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
+	std::vector< Section >::iterator iter;
+	std::vector< Section >::iterator iterEnd = m_ProfileData.end();
+	MAP_STR_STR::iterator mapiter;
+	MAP_STR_STR::iterator mapiterEnd;
+	for (iter = m_ProfileData.begin(); iter != iterEnd; iter++) {
 		// セクション名を書き込む
 		vecLine.push_back(LTEXT("[") + iter->strSectionName + LTEXT("]"));
-		auto mapiterEnd = iter->mapEntries.end();
-		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
+		mapiterEnd = iter->mapEntries.end();
+		for (mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; mapiter++) {
 			// エントリを書き込む
 			vecLine.push_back(mapiter->first + LTEXT("=") + mapiter->second);
 		}
@@ -260,8 +264,8 @@ bool CProfile::WriteProfile(
 	LPTSTR lpszName;
 	DWORD nLen = ::GetFullPathName(m_strProfileName.c_str(), _countof(szPath), szPath, &lpszName);
 	if (0 < nLen && nLen < _countof(szPath)
-		&& (lpszName - szPath + 11) < _countof(szMirrorFile)
-	) { // path\preuuuu.TMP
+		&& (lpszName - szPath + 11) < _countof(szMirrorFile) )	// path\preuuuu.TMP
+	{
 		*lpszName = _T('\0');
 		::GetTempFileName(szPath, _T("sak"), 0, szMirrorFile);
 	}
@@ -342,7 +346,6 @@ bool CProfile::GetProfileDataImp(
 	wstring&		strEntryValue	//!< [out] エントリ値
 	)
 {
-	wstring strWork;
 	auto iterEnd = m_ProfileData.end();
 	for (auto iter = m_ProfileData.begin(); iter != iterEnd; ++iter) {
 		if (iter->strSectionName == strSectionName) {

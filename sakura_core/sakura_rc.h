@@ -35,6 +35,7 @@
 #define IDD_CTRLCODE                    137
 #define IDD_MACRORUNNING                138
 #define IDD_SETCHARSET                  139
+#define IDD_GREP_REPLACE                140
 #define IDB_MYTOOL                      200
 #define IDB_SCROLL_CENTER               201
 #define IDB_SCROLL_VERTICAL             202
@@ -734,6 +735,55 @@
 #define IDC_BUTTON_COPY_TYPE            1666
 #define IDC_RADIO_TYPE_ADD              1667
 #define IDC_STATIC_TYPEFONT             1668
+#define IDC_TextTabClose                1669
+#define IDC_TextTabCaption              1670
+#define IDC_CHECK_CP                    1671
+#define IDC_CHECK_ENABLEEXTEOL          1672
+#define IDC_LIST_PROFILE                1673
+#define IDC_BUTTON_PROF_CREATE          1674
+#define IDC_BUTTON_PROF_RENAME          1675
+#define IDC_BUTTON_PROF_DELETE          1676
+#define IDC_CHECK_PROF_DEFSTART         1677
+#define IDC_BUTTON_PROF_DEFSET          1678
+#define IDC_BUTTON_PROF_DEFCLEAR        1679
+#define IDC_TAB_POSITION                1680
+#define IDC_COMBO_TAB_POSITION          1681
+#define IDC_CHECK_TAB_MULTILINE         1682
+#define IDC_CHECK_bOverWriteBoxDelete   1683
+#define IDC_CHECK_SHORTPATH             1684
+#define IDC_EDIT_SHORTMAXWIDTH          1685
+#define IDC_COMBO_TAGJUMP               1686
+#define IDC_COMBO_KEYWORD_TAGJUMP       1687
+#define IDC_SPIN_LINENUMWIDTH           1688
+#define IDC_EDIT_LINENUMWIDTH           1689
+#define IDC_CHK_BACKUP                  1690
+#define IDC_STATIC_SETTFING_FROM        1691
+#define IDC_CHECK_LOADINI               1692
+#define IDC_EDIT_DEFINI                 1693
+#define IDC_BUTTON_REF1                 1694
+#define IDC_BUTTON_LOAD                 1695
+#define IDC_RADIO_GREP                  1696
+#define IDC_RADIO_FILE                  1697
+#define IDC_RADIO_FOLDER                1698
+#define IDC_STATIC_PATH                 1699
+#define IDC_EDIT_PATH                   1700
+#define IDC_BUTTON_REF2                 1701
+#define IDC_BUTTON_PATH_MENU            1702
+#define IDC_EDIT_LABEL                  1703
+#define IDC_STATIC_FILE                 1704
+#define IDC_EDIT_FILE                   1705
+#define IDC_CHECK_HIDDEN                1706
+#define IDC_CHECK_READONLY              1707
+#define IDC_CHECK_SYSTEM                1708
+#define IDC_BUTTON_UPDATE               1709
+#define IDC_BUTTON_FILEADD              1710
+#define IDC_BUTTON_REPLACE              1711
+#define IDC_BUTTON_SETTING              1712
+#define IDC_STATIC_CHARCODE             1713
+#define IDC_PLUGIN_URL                  1714
+#define IDC_RADIO_LINEDELETE            1715
+#define IDC_RADIO_NOHIT                 1716
+#define IDC_CHECK_BOXSELECTLOCK         1717
 #define IDS_AUTHOR_PAGE                 4054
 #define IDS_ABOUT_DESCRIPTION           4056
 #define IDD_TYPELIST                    5000
@@ -766,6 +816,8 @@
 #define IDD_PROP_MAINMENU               5217
 #define IDD_WINPOSSIZE                  5220
 #define IDD_PLUGIN_OPTION               5221
+#define IDD_PROFILEMGR                  5222
+#define IDD_FILETREE                    5223
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -774,7 +826,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        230
 #define _APS_NEXT_COMMAND_VALUE         4057
-#define _APS_NEXT_CONTROL_VALUE         1669
+#define _APS_NEXT_CONTROL_VALUE         1718
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

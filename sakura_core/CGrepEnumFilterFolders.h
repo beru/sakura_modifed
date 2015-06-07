@@ -56,9 +56,9 @@ public:
 		return FALSE;
 	}
 
-	int Enumerates(LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumFolders& except) {
-		m_cGrepEnumExceptFolders.Enumerates(lpBaseFolder, cGrepEnumKeys.m_vecExceptFolderKeys, NULL);
-		return CGrepEnumFolders::Enumerates(lpBaseFolder, cGrepEnumKeys.m_vecSearchFolderKeys, &except);
+	int Enumerates( LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumOptions option, CGrepEnumFolders& except ){
+		m_cGrepEnumExceptFolders.Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecExceptFolderKeys, option, NULL );
+		return CGrepEnumFolders::Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecSearchFolderKeys, option, &except );
 	}
 };
 

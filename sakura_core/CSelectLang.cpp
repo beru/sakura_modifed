@@ -86,13 +86,12 @@ WORD CSelectLang::getDefaultLangId(void)
 	@note ƒƒbƒZ[ƒWƒŠƒ\[ƒXDLL‚ª–¢Žw’èA‚Ü‚½‚Í“Ç‚Ýž‚ÝƒGƒ‰[”­¶‚ÌŽž‚Íexe‚ÌƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹‚ª•Ô‚é
 	@note iLoadString()‚Ìˆø”‚Æ‚µ‚Ä‚»‚Ì‚Ü‚ÜŽg—p‚·‚é‚½‚ßj
 	@note ƒfƒtƒHƒ‹ƒgŒ¾Œê‚Ì•¶Žš—ñ‚Ì“Ç‚Ýž‚Ý‚às‚¤
-	@note ƒvƒƒZƒX–ˆ‚ÉCShareData‚©‚ç1‰ñ‚¾‚¯ŒÄ‚Î‚ê‚é
+	@note ƒvƒƒZƒX–ˆ‚ÉProcessFactory‚ÌÅ‰‚É1‰ñ‚¾‚¯ŒÄ‚Î‚ê‚é
 
 	@date 2011.04.10 nasukoji	V‹Kì¬
 */
 HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 {
-	int nCount;
 	SSelLangInfo* psLangInfo;
 
 	if (m_psLangInfoList.size() == 0) {
@@ -101,23 +100,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 		psLangInfo->hInstance = GetModuleHandle(NULL);
 
 		// Œ¾Œêî•ñƒ_ƒCƒAƒƒO‚Å "System default" ‚É•\Ž¦‚·‚é•¶Žš—ñ‚ðì¬‚·‚é
-		nCount = ::LoadString(GetModuleHandle(NULL), STR_SELLANG_NAME, psLangInfo->szLangName, _countof(psLangInfo->szLangName));
-
-		TCHAR szExePath[_MAX_PATH] = { 0 };
-		::GetModuleFileName(NULL, szExePath, _countof(szExePath));
-		SplitPath_FolderAndFile(szExePath, NULL, psLangInfo->szDllName);
-		TCHAR szLangID[_MAX_PATH] = { 0 };
-		nCount = ::LoadString(GetModuleHandle(NULL), STR_SELLANG_LANGID, szLangID, _countof(szLangID));
-		if (_tcsncmp(szLangID, _T("0x"), 2) == 0) {
-			psLangInfo->wLangId = (WORD)_tcstol(szLangID, NULL, 16);
-		}else {
-			psLangInfo->wLangId = _ttoi(szLangID);
-		}
-		if (psLangInfo->wLangId > 0) {
-			psLangInfo->bValid = TRUE;
-		}else {
-			psLangInfo->bValid = FALSE;
-		}
+		::LoadString( GetModuleHandle(NULL), STR_SELLANG_NAME, psLangInfo->szLangName, _countof(psLangInfo->szLangName) );
 
 		m_psLangInfoList.push_back(psLangInfo);
 	}
@@ -250,8 +233,7 @@ int CLoadString::m_nDataTempArrayIndex = 0;							// ÅŒã‚ÉŽg—p‚µ‚½ƒoƒbƒtƒ@‚ÌƒCƒ
 LPCTSTR CLoadString::LoadStringSt(UINT uid)
 {
 	// Žg—p‚·‚éƒoƒbƒtƒ@‚ÌŒ»ÝˆÊ’u‚ði‚ß‚é
-	m_nDataTempArrayIndex = (m_nDataTempArrayIndex >= _countof(m_acLoadStrBufferTemp) - 1) ?
-															0 : (m_nDataTempArrayIndex + 1);
+	m_nDataTempArrayIndex = (m_nDataTempArrayIndex + 1) % _countof(m_acLoadStrBufferTemp);
 
 	m_acLoadStrBufferTemp[m_nDataTempArrayIndex].LoadString(uid);
 

@@ -174,7 +174,7 @@ BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 
 	if (m_nTypeId == pTypesPtr->m_id
 		&& m_nCompiledMagicNumber == pTypesPtr->m_nRegexKeyMagicNumber
-	/* && m_bUseRegexKeyword     == pTypesPtr->m_bUseRegexKeyword */
+	 && m_pTypes != NULL  // 2014.07.02 条件追加
 	) {
 		return TRUE;
 	}
@@ -258,7 +258,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 		rp = &m_sInfo[i].sRegexKey;
 #endif
 
-		if (RegexKeyCheckSyntax(pKeyword) == TRUE) {
+		if (RegexKeyCheckSyntax( pKeyword ) != FALSE) {
 			m_szMsg[0] = '\0';
 			BMatch(pKeyword, dummy, dummy + 1, &m_sInfo[i].pBregexp, m_szMsg);
 
@@ -321,7 +321,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 	MYDBGMSG("RegexKeyLineStart")
 
 	// 動作に必要なチェックをする。
-	if (!m_bUseRegexKeyword || !IsAvailable() || m_pTypes == NULL) {
+	if (!m_bUseRegexKeyword || !IsAvailable() || m_pTypes==NULL) {
 		return FALSE;
 	}
 
@@ -451,7 +451,7 @@ BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 			// 始まりを確かめる
 			if (wcsncmp(kakomi[i], s, wcslen(kakomi[i])) == 0) {
 				// 終わりを確かめる
-				const wchar_t* p = &s[length - wcslen(kakomi[i + 1])];
+				p = &s[length - wcslen(kakomi[i+1])];
 				if (wcscmp(p, kakomi[i + 1]) == 0) {
 					// 正常
 					return TRUE;

@@ -11,17 +11,16 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class COpe;
 
 #pragma once
 
 // アンドゥバッファ用 操作コード
 enum EOpeCode {
-	OPE_UNKNOWN		= 0,
-	OPE_INSERT		= 1,
-	OPE_DELETE		= 2,
-	OPE_REPLACE		= 3,
-	OPE_MOVECARET	= 4,
+	OPE_UNKNOWN		= 0, //!< 不明(未使用)
+	OPE_INSERT		= 1, //!< 挿入
+	OPE_DELETE		= 2, //!< 削除
+	OPE_REPLACE		= 3, //!< 置換
+	OPE_MOVECARET	= 4, //!< キャレット移動
 };
 
 class CLineData {
@@ -76,7 +75,7 @@ public:
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
 	CLogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	COpeLineData	m_pcmemData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	COpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
@@ -86,7 +85,7 @@ public:
 	CInsertOpe() : COpe(OPE_INSERT) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	COpeLineData	m_pcmemData;				//!< 操作に関連するデータ				[DELETE/INSERT]
+	COpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
@@ -117,6 +116,13 @@ public:
 	{
 		m_ptCaretPos_PHY_Before = ptBefore;
 		m_ptCaretPos_PHY_After = ptAfter;
+	}
+	CMoveCaretOpe(const CLogicPoint& ptCaretPos)
+		:
+		COpe(OPE_MOVECARET)
+	{
+		m_ptCaretPos_PHY_Before = ptCaretPos;
+		m_ptCaretPos_PHY_After = ptCaretPos;
 	}
 };
 

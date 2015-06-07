@@ -238,7 +238,7 @@ int CBackupAgent::MakeBackUp(
 	TCHAR	szExt[_MAX_EXT];
 	_tsplitpath(szPath, szDrive, szDir, szFname, szExt);
 	TCHAR	szPath2[MAX_PATH];
-	auto_sprintf_s(szPath2, _T("%ts%ts"), szDrive, szDir);
+	auto_sprintf(szPath2, _T("%ts%ts"), szDrive, szDir);
 
 	WIN32_FIND_DATA	fData;
 	HANDLE hFind = ::FindFirstFile(szPath2, &fData);
@@ -391,22 +391,22 @@ bool CBackupAgent::FormatBackUpPath(
 
 				szTime[0] = 0;
 				if (bup_setting.GetBackupOpt(BKUP_YEAR)) {	// バックアップファイル名：日付の年
-					auto_sprintf_s(szTime, L"%d", ctimeLastWrite->wYear);
+					auto_sprintf(szTime, L"%d", ctimeLastWrite->wYear);
 				}
 				if (bup_setting.GetBackupOpt(BKUP_MONTH)) {	// バックアップファイル名：日付の月
-					auto_sprintf_s(szTime, L"%ls%02d", szTime, ctimeLastWrite->wMonth);
+					auto_sprintf(szTime, L"%ls%02d", szTime, ctimeLastWrite->wMonth);
 				}
 				if (bup_setting.GetBackupOpt(BKUP_DAY)) {	// バックアップファイル名：日付の日
-					auto_sprintf_s(szTime, L"%ls%02d", szTime, ctimeLastWrite->wDay);
+					auto_sprintf(szTime, L"%ls%02d", szTime, ctimeLastWrite->wDay);
 				}
 				if (bup_setting.GetBackupOpt(BKUP_HOUR)) {	// バックアップファイル名：日付の時
-					auto_sprintf_s(szTime, L"%ls%02d", szTime, ctimeLastWrite->wHour);
+					auto_sprintf(szTime, L"%ls%02d", szTime, ctimeLastWrite->wHour);
 				}
 				if (bup_setting.GetBackupOpt(BKUP_MIN)) {	// バックアップファイル名：日付の分
-					auto_sprintf_s(szTime, L"%ls%02d", szTime, ctimeLastWrite->wMinute);
+					auto_sprintf(szTime, L"%ls%02d", szTime, ctimeLastWrite->wMinute);
 				}
 				if (bup_setting.GetBackupOpt(BKUP_SEC)) {	// バックアップファイル名：日付の秒
-					auto_sprintf_s(szTime, L"%ls%02d", szTime, ctimeLastWrite->wSecond);
+					auto_sprintf(szTime, L"%ls%02d", szTime, ctimeLastWrite->wSecond);
 				}
 				if (-1 == auto_sprintf_s(pBase, nBaseCount, _T("%ts_%ls%ts"), szFname, szTime, szExt)) {
 					return false;
@@ -533,7 +533,7 @@ bool CBackupAgent::FormatBackUpPath(
 
 			// * を拡張子にする
 			while (_tcschr(szNewPath, _T('*'))) {
-				_tcscpy_s(temp, szNewPath);
+				_tcscpy(temp, szNewPath);
 				cp = _tcschr(temp, _T('*'));
 				*cp = 0;
 				if (-1 == auto_snprintf_s(szNewPath, newPathCount, _T("%ts%ts%ts"), temp, ep, cp + 1)) {

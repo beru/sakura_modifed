@@ -41,7 +41,7 @@ LIBS= \
  -lwinspool -lcomdlg32 -ladvapi32 \
  -lshell32 -lole32 -loleaut32 \
  -luuid -lcomctl32 -limm32 \
- -lmpr -limagehlp \
+ -lmpr -limagehlp -lshlwapi \
  -static-libgcc -static-libstdc++ -mwindows -s
 
 exe= sakura.exe
@@ -91,6 +91,7 @@ charset/CCesu8.o \
 charset/CCodeBase.o \
 charset/CCodeFactory.o \
 charset/CCodeMediator.o \
+charset/CCodePage.o \
 charset/CESI.o \
 charset/CEuc.o \
 charset/charcode.o \
@@ -159,11 +160,13 @@ dlg/CDlgFavorite.o \
 dlg/CDlgFileUpdateQuery.o \
 dlg/CDlgFind.o \
 dlg/CDlgGrep.o \
+dlg/CDlgGrepReplace.o \
 dlg/CDlgInput1.o \
 dlg/CDlgJump.o \
 dlg/CDlgOpenFile.o \
 dlg/CDlgPluginOption.o \
 dlg/CDlgPrintSetting.o \
+dlg/CDlgProfileMgr.o \
 dlg/CDlgProperty.o \
 dlg/CDlgReplace.o \
 dlg/CDlgSetCharSet.o \
@@ -192,6 +195,7 @@ doc/logic/CDocLine.o \
 doc/logic/CDocLineMgr.o \
 docplus/CBookmarkManager.o \
 docplus/CDiffManager.o \
+docplus/CFuncListManager.o \
 docplus/CModifyManager.o \
 env/CAppNodeManager.o \
 env/CDocTypeManager.o \
@@ -229,7 +233,6 @@ macro/CKeyMacroMgr.o \
 macro/CMacro.o \
 macro/CMacroFactory.o \
 macro/CMacroManagerBase.o \
-macro/CPluginMacroManager.o \
 macro/CPPA.o \
 macro/CPPAMacroMgr.o \
 macro/CSMacroMgr.o \
@@ -242,6 +245,7 @@ mem/CNativeA.o \
 mem/CNativeW.o \
 mem/CRecycledBuffer.o \
 mfclike/CMyWnd.o \
+outline/CDlgFileTree.o \
 outline/CDlgFuncList.o \
 outline/CFuncInfo.o \
 outline/CFuncInfoArr.o \
@@ -249,7 +253,6 @@ parse/CWordParse.o \
 plugin/CDllPlugin.o \
 plugin/CJackManager.o \
 plugin/CPlugin.o \
-plugin/CPluginIfObj.o \
 plugin/CPluginManager.o \
 plugin/CWSHPlugin.o \
 print/CPrint.o \
