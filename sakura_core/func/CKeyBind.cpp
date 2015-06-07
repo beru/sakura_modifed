@@ -190,7 +190,7 @@ int CKeyBind::CreateKeyBindList(
 				) {
 					auto_strcpy(szFuncNameJapanese, LSW(STR_ERR_DLGKEYBIND2));
 				}
-				auto_strcpy(szFuncName, LTEXT("")/*"---unknown()--"*/);
+				szFuncName[0] = LTEXT('\0'); /*"---unknown()--"*/
 
 //				// 機能名日本語
 //				::LoadString(
@@ -216,7 +216,7 @@ int CKeyBind::CreateKeyBindList(
 
 				// 機能番号
 				cMemList.AppendString(pszTAB);
-				auto_sprintf_s(szStr, LTEXT("%d"), iFunc);
+				auto_sprintf(pszStr, LTEXT("%d"), iFunc);
 				cMemList.AppendString(szStr);
 
 				// キーマクロに記録可能な機能かどうかを調べる
@@ -382,11 +382,13 @@ int CKeyBind::GetKeyStrList(
 */
 TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
+	const int MAX_LABEL_CCH = _MAX_PATH*2 + 30;
+	static	TCHAR	sLabel[MAX_LABEL_CCH];
+	const	TCHAR*	p;
+
 	if (!sKey || sKey[0] == L'\0') {
-		return const_cast<TCHAR*>(to_tchar(sName));
+		return const_cast<TCHAR*>(sName);
 	}else {
-		static	TCHAR	sLabel[300];
-		const	TCHAR*	p;
 		if (!GetDllShareData().m_Common.m_sMainMenu.m_bMainMenuKeyParentheses
 			  && (((p = auto_strchr(sName, sKey[0])) != NULL) || ((p = auto_strchr(sName, _totlower(sKey[0]))) != NULL))
 		) {
@@ -419,6 +421,7 @@ TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 /*! メニューラベルの作成
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 	2010/5/17	アクセスキーの追加
+	@date 2014.05.04 Moca LABEL_MAX=256 => nLabelSize
 */
 TCHAR* CKeyBind::GetMenuLabel(
 	HINSTANCE	hInstance,
@@ -428,10 +431,11 @@ TCHAR* CKeyBind::GetMenuLabel(
 	TCHAR*      pszLabel,   //!< [in,out] バッファは256以上と仮定
 	const TCHAR*	pszKey,
 	BOOL		bKeyStr,
+	int			nLabelSize,
 	BOOL		bGetDefFuncCode // = TRUE
 )
 {
-	const int LABEL_MAX = 256;
+	const unsigned int LABEL_MAX = nLabelSize;
 
 	if (_T('\0') == pszLabel[0]) {
 		_tcsncpy(pszLabel, LS(nFuncId), LABEL_MAX - 1);
@@ -771,7 +775,7 @@ TCHAR* jpVKEXNames[] = {
 	_T("ホイール左"),
 	_T("ホイール右")
 };
-int jpVKEXNamesLen = _countof(jpVKEXNames);
+const int jpVKEXNamesLen = _countof( jpVKEXNames );
 
 /*!	@brief 共有メモリ初期化/キー割り当て
 
@@ -826,7 +830,7 @@ void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];
 
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {
-			_tcscpy_s(pKeydata->m_szKeyName, LS(KeyDataInit[i].m_nKeyNameId));
+			_tcscpy(pKeydata->m_szKeyName, LS(KeyDataInit[i].m_nKeyNameId));
 		}
 	}
 
@@ -847,8 +851,9 @@ static void SetKeyNameArrVal(
 
 	pKeydata->m_nKeyCode = pKeydataInit->m_nKeyCode;
 	if (0xFFFF < pKeydataInit->m_nKeyNameId) {
-		_tcscpy_s(pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName);
+		_tcscpy(pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName);
 	}
+	assert( sizeof(pKeydata->m_nFuncCodeArr) == sizeof(pKeydataInit->m_nFuncCodeArr) );
 	memcpy_raw(pKeydata->m_nFuncCodeArr, pKeydataInit->m_nFuncCodeArr, sizeof(pKeydataInit->m_nFuncCodeArr));
 }
 

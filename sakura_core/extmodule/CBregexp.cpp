@@ -280,7 +280,7 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 				szPattern = sReg->outp;
 				if (szPattern2 != NULL) {
 					// 置換パターンもあるので、置換パターンの最後に $(nParens+1)を追加
-					auto_sprintf_s(szAdd2, L"$%d", nParens + 1);
+					auto_sprintf(szAdd2, L"$%d", nParens + 1);
 				}
 			}
 			// sReg->outp のポインタを参照しているので、sRegを解放するのは最後に
@@ -351,7 +351,7 @@ wchar_t* CBregexp::MakePatternAlternate(const wchar_t* const szSearch, const wch
 		LARGEQ, // Q
 		LARGEE, // E
 		LBRCKT, // [
-		RBRCKT, //]
+		RBRCKT, // ]
 		ESCAPE, // '\\'
 		NUMBER_OF_CHARCLASS
 	};
@@ -602,9 +602,7 @@ bool InitRegexp(
 	// From Here 2007.08.12 genta
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
-	LPCTSTR RegexpDll = _T("");
-
-	RegexpDll = pShareData->m_Common.m_sSearch.m_szRegexpLib;
+	LPCTSTR RegexpDll = pShareData->m_Common.m_sSearch.m_szRegexpLib;
 	// To Here 2007.08.12 genta
 
 	EDllResult eDllResult = rRegexp.InitDll(RegexpDll);

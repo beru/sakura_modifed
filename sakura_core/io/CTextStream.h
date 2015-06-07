@@ -45,11 +45,9 @@ public:
 
 	// 操作
 	std::wstring ReadLineW(); //!< 1行読込。改行は削る
-	void ReadLineW(std::vector<wchar_t>& line); //!< 1行読込。改行は削る
 
 private:
 	bool m_bIsUtf8; //!< UTF-8ならtrue
-	std::vector<char> m_rawLine;
 };
 
 // テキスト出力ストリーム
@@ -57,7 +55,7 @@ private:
 class CTextOutputStream : public COutputStream {
 public:
 	// コンストラクタ・デストラクタ
-	CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType = CODE_UTF8, bool bExceptionMode = false);
+	CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType = CODE_UTF8, bool bExceptionMode = false, bool bBom = true);
 	virtual ~CTextOutputStream();
 
 	// 文字列書込。改行を入れたい場合は、文字列内に'\n'を含めること。(クラス側で適切な改行コードに変換して出力します)

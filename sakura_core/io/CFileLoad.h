@@ -32,6 +32,9 @@
 
 #include <Windows.h>
 #include "CStream.h" //CError_FileOpen
+#include "charset/CCodeBase.h"
+#include "charset/CCodePage.h"
+#include "util/design_template.h"
 
 // VC6添付のヘッダで定義されてません
 #ifndef INVALID_SET_FILE_POINTER
@@ -39,7 +42,6 @@
 #endif // INVALID_SET_FILE_POINTER
 
 struct SEncodingConfig;
-#include "charset/CCodeBase.h"
 class CCodeBase;
 
 /*!
@@ -54,7 +56,7 @@ public:
 	~CFileLoad(void);
 
 	// Jul. 26, 2003 ryoji BOM引数追加
-	ECodeType FileOpen(LPCTSTR, ECodeType, int, bool* pbBomExist = NULL);		// 指定文字コードでファイルをオープンする
+	ECodeType FileOpen( LPCTSTR, bool bBigFile, ECodeType, int, bool* pbBomExist = NULL );		// 指定文字コードでファイルをオープンする
 	void FileClose(void);					// 明示的にファイルをクローズする
 
 	//! 1行データをロードする 順アクセス用
@@ -79,24 +81,20 @@ public:
 	int GetPercent(void);
 
 	//! ファイルサイズを取得する
-	inline int GetFileSize(void) { return m_nFileSize; }
+	inline LONGLONG GetFileSize( void ){ return m_nFileSize; }
 
 	static const int gm_nBufSizeDef; // ロード用バッファサイズの初期値
 //	static const int gm_nBufSizeMin; // ロード用バッファサイズの設定可能な最低値
 
 protected:
-
-	// コピーの禁止
-	CFileLoad(const CFileLoad&) {}
-	CFileLoad& operator = (const CFileLoad&) { return *this; }
-
 	// Oct. 19, 2002 genta スペルミス修正
 //	void SeekBegin(void);		// ファイルの先頭位置に移動する(BOMを考慮する)
 	void Buffering(void);		// バッファにデータをロードする
 	void ReadBufEmpty(void);	// バッファを空にする
 
 	// GetLextLine の 文字コード考慮版
-	const char* GetNextLineCharCode(const char*, int, int*, int*, CEol*, int*);
+	const char* GetNextLineCharCode( const char*, int, int*, int*, CEol*, int*, int* );
+	EConvertResult ReadLine_core( CNativeW*, CEol* );
 
 	int Read(void*, size_t); // inline
 	DWORD FilePointer(DWORD, DWORD); // inline
@@ -106,12 +104,16 @@ protected:
 
 //	LPTSTR	m_pszFileName;	// ファイル名
 	HANDLE	m_hFile;		// ファイルハンドル
-	int		m_nFileSize;	// ファイルサイズ
-	int		m_nFileDataLen;	// ファイルデータ長からBOM長を引いたバイト数
-	int		m_nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
+	LONGLONG	m_nFileSize;	// ファイルサイズ(64bit)
+	LONGLONG	m_nFileDataLen;	// ファイルデータ長からBOM長を引いたバイト数
+	LONGLONG	m_nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
 	int		m_nLineIndex;	// 現在ロードしている論理行(0開始)
 	ECodeType	m_CharCode;		// 文字コード
 	CCodeBase*	m_pCodeBase;	////
+	EEncodingTrait	m_encodingTrait;
+	CMemory			m_memEols[3];
+	bool	m_bEolEx;		//!< CR/LF以外のEOLが有効か
+	int		m_nMaxEolLen;	//!< EOLの長さ
 	bool	m_bBomExist;	// ファイルのBOMが付いているか Jun. 08, 2003 Moca 
 	int		m_nFlag;		// 文字コードの変換オプション
 	// Jun. 13, 2003 Moca
@@ -130,9 +132,13 @@ protected:
 	int		m_nReadDataLen;		// 読み込みバッファの有効データサイズ
 	int		m_nReadBufOffSet;	// 読み込みバッファ中のオフセット(次の行頭位置)
 //	int		m_nReadBufSumSize;	// 今までにバッファに読み込んだデータの合計サイズ
-	// 行データバッファ (文字コード変換無しの生のデータ)
 	CMemory m_cLineBuffer;
+	CNativeW m_cLineTemp;
+	int		m_nReadOffset2;
+	EConvertResult m_nTempResult;
 
+private:
+	DISALLOW_COPY_AND_ASSIGN(CFileLoad);
 }; // class CFileLoad
 
 // インライン関数郡

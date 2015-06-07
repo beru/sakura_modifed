@@ -161,6 +161,9 @@
 //2007.09.30 kobake 機能番号定数を列挙型に変更。(デバッグをしやすくするため)
 #include "Funccode_enum.h"
 
+#ifndef UINT16
+#define UINT16 WORD
+#endif
 #ifndef uint16_t
 typedef UINT16 uint16_t;
 #endif
@@ -172,6 +175,9 @@ namespace nsFuncCode {
 	extern const int			pnFuncListNumArr[];
 	extern const EFunctionCode*	ppnFuncListArr[];
 	extern const int			nFincListNumArrNum;
+
+	extern const EFunctionCode	pnFuncList_Special[];
+	extern const int			nFuncList_Special_Num;
 };
 ///////////////////////////////////////////////////////////////////////
 

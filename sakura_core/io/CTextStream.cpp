@@ -53,7 +53,8 @@ CTextInputStream::~CTextInputStream()
 wstring CTextInputStream::ReadLineW()
 {
 	//$$ 非効率だけど今のところは許して。。
-	CMemory line;
+	CNativeW line;
+	line.AllocStringBuffer(60);
 	for (;;) {
 		int c = getc(GetFp());
 		// EOFで終了
@@ -72,83 +73,36 @@ wstring CTextInputStream::ReadLineW()
 		if (c == '\n') {
 			break;
 		}
-		line.AppendRawData(&c, sizeof(char));
+		if (line._GetMemory()->capacity() < line._GetMemory()->GetRawLength() + 10) {
+			line._GetMemory()->AllocBuffer( line._GetMemory()->GetRawLength() * 2 );
+		}
+		line._GetMemory()->AppendRawData(&c,sizeof(char));
 	}
 
 	// UTF-8 → UNICODE
 	if (m_bIsUtf8) {
-		CUtf8::UTF8ToUnicode(&line);
+		CUtf8::UTF8ToUnicode(*(line._GetMemory()), &line);
 	// Shift_JIS → UNICODE
 	}else {
-		CShiftJis::SJISToUnicode(&line);
+		CShiftJis::SJISToUnicode(*(line._GetMemory()), &line);
 	}
 
-	return wstring().assign((wchar_t*)line.GetRawPtr(), line.GetRawLength()/sizeof(wchar_t));	// EOL まで NULL 文字も含める
-}
-
-#else
-
-wstring CTextInputStream::ReadLineW()
-{
-	std::vector<wchar_t> lineBuff;
-	ReadLineW(lineBuff);
-	const wchar_t* ret = lineBuff.empty() ? L"" : &lineBuff[0];
-//	OutputDebugStringW(ret);
-	return ret;
-}
-
-void CTextInputStream::ReadLineW(std::vector<wchar_t>& line) //!< 1行読込。改行は削る
-{
-	m_rawLine.clear();
-	FILE* fp = GetFp();
-	for (;;) {
-		int c = getc(fp);
-		// EOFで終了
-		if (c == EOF) {
-			break;
-		// "\r" または "\r\n" で終了
-		}else if (c == '\r') {
-			c = getc(fp);
-			if (c != '\n') {
-				ungetc(c, fp);
-			}
-			break;
-		// "\n" で終了
-		}else if (c == '\n') {
-			break;
-		}else {
-			m_rawLine.push_back(c);
-		}
-	}
-	m_rawLine.push_back(0);
-
-	static const UINT cp_sjis = 932;
-	UINT codePage = m_bIsUtf8 ? CP_UTF8 : cp_sjis;
-//	OutputDebugStringA(&m_rawLine[0]);
-	int wLen = MultiByteToWideChar(codePage, 0, &m_rawLine[0], m_rawLine.size(), 0, 0);
-#if 0
-	char buff[32];
-	sprintf(buff, "wLen %d", wLen);
-	OutputDebugStringA(buff);
-#endif
-	line.resize(wLen);
-	int ret = MultiByteToWideChar(codePage, 0, &m_rawLine[0], m_rawLine.size(), &line[0], wLen);
-//	OutputDebugStringW(&line[0]);
+	return wstring().assign( line.GetStringPtr(), line.GetStringLength() );	// EOL まで NULL 文字も含める
 }
 
 
-#endif
+
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     CTextOutputStream                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CTextOutputStream::CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType, bool bExceptionMode)
+CTextOutputStream::CTextOutputStream(const TCHAR* tszPath, ECodeType eCodeType, bool bExceptionMode, bool bBom)
 : COutputStream(tszPath, _T("wb"), bExceptionMode)
 {
 	m_pcCodeBase = CCodeFactory::CreateCodeBase(eCodeType, 0);
-	if (Good()) {
+	if (Good() && bBom) {
 		// BOM付加
 		CMemory cmemBom;
 		m_pcCodeBase->GetBom(&cmemBom);

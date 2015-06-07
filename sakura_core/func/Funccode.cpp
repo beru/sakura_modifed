@@ -330,9 +330,11 @@ const EFunctionCode pnFuncList_Search[] = {	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(Lis
 	F_SEARCH_CLEARMARK	,	// ŒŸõƒ}[ƒN‚ÌƒNƒŠƒA
 	F_JUMP_SRCHSTARTPOS	,	// ŒŸõŠJŽnˆÊ’u‚Ö–ß‚é	// 02/06/26 ai
 	F_GREP_DIALOG		,	// Grep
+	F_GREP_REPLACE_DLG	,	//Grep’uŠ·
 	F_JUMP_DIALOG		,	// Žw’èsƒwƒWƒƒƒ“ƒv
 	F_OUTLINE			,	// ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ
 	F_OUTLINE_TOGGLE	,	// ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ(toggle) // 20060201 aroka
+	F_FILETREE			,	//ƒtƒ@ƒCƒ‹ƒcƒŠ[	// 2012.06.20 Moca
 	F_TAGJUMP			,	// ƒ^ƒOƒWƒƒƒ“ƒv‹@”\
 	F_TAGJUMP_CLOSE		,	// •Â‚¶‚Äƒ^ƒOƒWƒƒƒ“ƒv(Œ³ƒEƒBƒ“ƒhƒE‚ð•Â‚¶‚é) // Apr. 03, 2003 genta
 	F_TAGJUMPBACK		,	// ƒ^ƒOƒWƒƒƒ“ƒvƒoƒbƒN‹@”\
@@ -355,7 +357,9 @@ const EFunctionCode pnFuncList_Search[] = {	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(Lis
 	F_ISEARCH_REGEXP_NEXT,	// ‘O•û³‹K•\Œ»ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`  //2004.10.13 isearch
 	F_ISEARCH_REGEXP_PREV,	// Œã•û³‹K•\Œ»ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`  //2004.10.13 isearch
 	F_ISEARCH_MIGEMO_NEXT,	// ‘O•ûMIGEMOƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`    //2004.10.13 isearch
-	F_ISEARCH_MIGEMO_PREV	// Œã•ûMIGEMOƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`    //2004.10.13 isearch
+	F_ISEARCH_MIGEMO_PREV,	// Œã•ûMIGEMOƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`    //2004.10.13 isearch
+	F_FUNCLIST_NEXT		,	// ŽŸ‚ÌŠÖ”ƒŠƒXƒgƒ}[ƒN
+	F_FUNCLIST_PREV		,	// ‘O‚ÌŠÖ”ƒŠƒXƒgƒ}[ƒN
 };
 const int nFincList_Search_Num = _countof(pnFuncList_Search);	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(List4¨List_Search)
 
@@ -378,6 +382,7 @@ const EFunctionCode pnFuncList_Set[] = {	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(List9
 	F_SHOWFUNCKEY		,	// ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[‚Ì•\Ž¦	//Sept. 14, 2000 JEPRO ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[‚ÆƒXƒe[ƒ^ƒXƒo[‚ð“ü‚ê‘Ö‚¦
 	F_SHOWTAB			,	// ƒ^ƒu‚Ì•\Ž¦	//@@@ 2003.06.10 MIK
 	F_SHOWSTATUSBAR		,	// ƒXƒe[ƒ^ƒXƒo[‚Ì•\Ž¦
+	F_SHOWMINIMAP		,	// ƒ~ƒjƒ}ƒbƒv‚Ì•\Ž¦
 	F_TYPE_LIST			,	// ƒ^ƒCƒv•ÊÝ’èˆê——			//Sept. 17, 2000 JEPRO Ý’èŒn‚É“ü‚Á‚Ä‚È‚©‚Á‚½‚Ì‚Å’Ç‰Á
 	F_OPTION_TYPE		,	// ƒ^ƒCƒv•ÊÝ’è
 	F_OPTION			,	// ‹¤’ÊÝ’è
@@ -501,6 +506,19 @@ const EFunctionCode pnFuncList_Others[] = {
 };
 const int nFincList_Others_Num = _countof(pnFuncList_Others);	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(List12¨List_Others)
 
+// “ÁŽê‹@”\
+const EFunctionCode nsFuncCode::pnFuncList_Special[] = {
+	F_WINDOW_LIST,
+	F_FILE_USED_RECENTLY,
+	F_FOLDER_USED_RECENTLY,
+	F_CUSTMENU_LIST,
+	F_USERMACRO_LIST,
+	F_PLUGIN_LIST,
+};
+const int nsFuncCode::nFuncList_Special_Num = (int)_countof(nsFuncCode::pnFuncList_Special);
+
+
+
 
 const int nsFuncCode::pnFuncListNumArr[] = {
 //	nFincList_Undef_Num,	//Oct. 14, 2000 JEPRO u--–¢’è‹`--v‚ð•\Ž¦‚³‚¹‚È‚¢‚æ‚¤‚É•ÏX	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(List0¨List_Undef)
@@ -593,6 +611,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_BROWSE:				return HLP000121;			// ƒuƒ‰ƒEƒY
 	case F_VIEWMODE:			return HLP000249;			// ƒrƒ…[ƒ‚[ƒh
 	case F_PROPERTY_FILE:		return HLP000022;			// ƒtƒ@ƒCƒ‹‚ÌƒvƒƒpƒeƒB
+	case F_PROFILEMGR:			return HLP000363;			//ƒvƒƒtƒ@ƒCƒ‹ƒ}ƒl[ƒWƒƒ
 
 	case F_EXITALLEDITORS:	return HLP000030;				// •ÒW‚Ì‘SI—¹ 2007.02.13 ryoji ’Ç‰Á
 	case F_EXITALL:			return HLP000028;				// ƒTƒNƒ‰ƒGƒfƒBƒ^‚Ì‘SI—¹	Dec. 26, 2000 JEPRO F_‚É•ÏX
@@ -652,6 +671,8 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_AUTOSCROLL:		return HLP000296;	// ƒI[ƒgƒXƒNƒ[ƒ‹
 	case F_SETFONTSIZEUP:	return HLP000359;	// ƒtƒHƒ“ƒgƒTƒCƒYŠg‘å
 	case F_SETFONTSIZEDOWN:	return HLP000360;	// ƒtƒHƒ“ƒgƒTƒCƒYk¬
+	case F_MODIFYLINE_NEXT:	return HLP000366;	// ŽŸ‚Ì•ÏXs‚ÖˆÚ“®
+	case F_MODIFYLINE_PREV:	return HLP000367;	// ‘O‚Ì•ÏXs‚ÖˆÚ“®
 
 	// ‘I‘ðŒn		//Oct. 15, 2000 JEPRO uƒJ[ƒ\ƒ‹ˆÚ“®Œnv‚©‚ç(‘I‘ð)‚ðˆÚ“®
 	case F_SELECTWORD:		return HLP000045;	// Œ»ÝˆÊ’u‚Ì’PŒê‘I‘ð
@@ -678,6 +699,8 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_1PageDown_Sel:	return HLP000241;	// (”ÍˆÍ‘I‘ð)‚Pƒy[ƒWƒ_ƒEƒ“
 	case F_GOFILETOP_SEL:	return HLP000242;	// (”ÍˆÍ‘I‘ð)ƒtƒ@ƒCƒ‹‚Ìæ“ª‚ÉˆÚ“®
 	case F_GOFILEEND_SEL:	return HLP000243;	// (”ÍˆÍ‘I‘ð)ƒtƒ@ƒCƒ‹‚ÌÅŒã‚ÉˆÚ“®
+	case F_MODIFYLINE_NEXT_SEL:	return HLP000369;	// (”ÍˆÍ‘I‘ð)ŽŸ‚Ì•ÏXs‚ÖˆÚ“®
+	case F_MODIFYLINE_PREV_SEL:	return HLP000370;	// (”ÍˆÍ‘I‘ð)‘O‚Ì•ÏXs‚ÖˆÚ“®
 
 
 	// ‹éŒ`‘I‘ðŒn	//Oct. 17, 2000 JEPRO (‹éŒ`‘I‘ð)‚ªVÝ‚³‚êŽŸ‘æ‚±‚±‚É‚¨‚­
@@ -772,6 +795,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_REPLACE_DIALOG:		return HLP000062;	// ’uŠ·(’uŠ·ƒ_ƒCƒAƒƒO)
 	case F_SEARCH_CLEARMARK:	return HLP000136;	// ŒŸõƒ}[ƒN‚ÌƒNƒŠƒA
 	case F_GREP_DIALOG:			return HLP000067;	// Grep
+	case F_GREP_REPLACE_DLG:	return HLP000362;	// Grep’uŠ·
 	case F_JUMP_DIALOG:			return HLP000063;	// Žw’ès‚ÖƒWƒƒƒ“ƒv
 	case F_OUTLINE:				return HLP000064;	// ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ
 	case F_OUTLINE_TOGGLE:		return HLP000317;	// ƒAƒEƒgƒ‰ƒCƒ“‰ðÍ(ƒgƒOƒ‹)	// 2006.10.11 ryoji
@@ -800,6 +824,9 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_ISEARCH_REGEXP_PREV:	return HLP000307;	// ³‹K•\Œ»Œã•ûƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`	// 2006.10.05 ryoji
 	case F_ISEARCH_MIGEMO_NEXT:	return HLP000308;	// MIGEMO‘O•ûƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`	// 2006.10.05 ryoji
 	case F_ISEARCH_MIGEMO_PREV:	return HLP000309;	// MIGEMOŒã•ûƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`	// 2006.10.05 ryoji
+	case F_FUNCLIST_NEXT:		return HLP000364;	// ŽŸ‚ÌŠÖ”ƒŠƒXƒgƒ}[ƒN
+	case F_FUNCLIST_PREV:		return HLP000365;	// ‘O‚ÌŠÖ”ƒŠƒXƒgƒ}[ƒN
+	case F_FILETREE:			return HLP000368;	// ƒtƒ@ƒCƒ‹ƒcƒŠ[
 
 	// ƒ‚[ƒhØ‚è‘Ö‚¦Œn
 	case F_CHGMOD_INS:		return HLP000046;	// ‘}“ü^ã‘‚«ƒ‚[ƒhØ‚è‘Ö‚¦
@@ -815,6 +842,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 	case F_SHOWFUNCKEY:		return HLP000070;	// ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[‚Ì•\Ž¦
 	case F_SHOWTAB:			return HLP000282;	// ƒ^ƒu‚Ì•\Ž¦	//@@@ 2003.06.10 MIK
 	case F_SHOWSTATUSBAR:	return HLP000134;	// ƒXƒe[ƒ^ƒXƒo[‚Ì•\Ž¦
+	case F_SHOWMINIMAP:		return HLP000371;	// ƒ~ƒjƒ}ƒbƒv‚Ì•\Ž¦
 	case F_TYPE_LIST:		return HLP000072;	// ƒ^ƒCƒv•ÊÝ’èˆê——
 	case F_OPTION_TYPE:		return HLP000073;	// ƒ^ƒCƒv•ÊÝ’è
 	case F_OPTION:			return HLP000076;	// ‹¤’ÊÝ’è
@@ -1096,7 +1124,6 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 		// ƒeƒLƒXƒg‚ª‘I‘ð‚³‚ê‚Ä‚¢‚ê‚Îtrue
 		return pcEditDoc->m_pcEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
-	case F_SELECTWORD:	// Œ»ÝˆÊ’u‚Ì’PŒê‘I‘ð 
 	case F_CUT_LINE:	// sØ‚èŽæ‚è(Ü‚è•Ô‚µ’PˆÊ)
 	case F_DELETE_LINE:	// síœ(Ü‚è•Ô‚µ’PˆÊ)
 		// ƒeƒLƒXƒg‚ª‘I‘ð‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Îtrue
@@ -1187,7 +1214,7 @@ bool IsFuncChecked(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 			return false;
 		}
 	case F_SHOWTOOLBAR:			return pCEditWnd->m_cToolbar.GetToolbarHwnd() != NULL;
-	case F_SHOWFUNCKEY:			return pCEditWnd->m_CFuncKeyWnd.GetHwnd() != NULL;
+	case F_SHOWFUNCKEY:			return pCEditWnd->m_cFuncKeyWnd.GetHwnd() != NULL;
 	case F_SHOWTAB:				return pCEditWnd->m_cTabWnd.GetHwnd() != NULL;	//@@@ 2003.06.10 MIK
 	case F_SHOWSTATUSBAR:		return pCEditWnd->m_cStatusBar.GetStatusHwnd() != NULL;
 	// 2008.05.30 nasukoji	ƒeƒLƒXƒg‚ÌÜ‚è•Ô‚µ•û–@
@@ -1196,7 +1223,7 @@ bool IsFuncChecked(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EF
 	case F_TMPWRAPWINDOW:		return (pcEditDoc->m_nTextWrapMethodCur == WRAP_WINDOW_WIDTH);		// ‰E’[‚ÅÜ‚è•Ô‚·
 	// 2009.07.06 syat  •¶ŽšƒJƒEƒ“ƒg•û–@
 	case F_SELECT_COUNT_MODE:	return (pCEditWnd->m_nSelectCountMode == SELECT_COUNT_TOGGLE ?
-											pShareData->m_Common.m_sStatusbar.m_bDispSelCountByByte == TRUE :
+											pShareData->m_Common.m_sStatusbar.m_bDispSelCountByByte != FALSE :
 											pCEditWnd->m_nSelectCountMode == SELECT_COUNT_BY_BYTE);
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return CAppMode::getInstance()->IsViewMode(); // ƒrƒ…[ƒ‚[ƒh
