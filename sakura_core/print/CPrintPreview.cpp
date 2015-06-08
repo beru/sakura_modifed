@@ -392,9 +392,14 @@ LRESULT CPrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 		::DeleteObject(m_hbmpCompatBMP);
 	}
 	// 2007.02.11 Moca プレビューを滑らかにする
-	if (BST_CHECKED == ::IsDlgButtonChecked(m_hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS)) {
+	// Win9xでは 巨大なBMPは作成できないことと
+	// StretchBltでSTRETCH_HALFTONEが未サポートであるので Win2K 以上のみで有効にする。
+	if (BST_CHECKED == ::IsDlgButtonChecked( m_hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS )
+		&& IsWin2000_or_later()
+	) {
 		m_nbmpCompatScale = COMPAT_BMP_SCALE;
 	}else {
+		// Win9x: BASE = SCALE で 1:1
 		m_nbmpCompatScale = COMPAT_BMP_BASE;
 	}
 	m_hbmpCompatBMP = ::CreateCompatibleBitmap(hdc, (cx * m_nbmpCompatScale + COMPAT_BMP_BASE - 1) / COMPAT_BMP_BASE,
@@ -829,6 +834,15 @@ void CPrintPreview::OnChangePrintSetting(void)
 	// プレビュー ページ指定
 	OnPreviewGoPage(m_nCurPageNum);
 	m_bLockSetting = bLockOld;
+
+	// 2014.07.23 レイアウト行番号で行番号幅が合わない時は再計算
+	if (m_pPrintSetting->m_bPrintLineNumber) {
+		/* 行番号表示に必要な桁数を計算 */
+		int tempLineNum = m_pParentWnd->GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pLayoutMgr_Print);
+		if (m_nPreview_LineNumberColumns != tempLineNum) {
+			OnChangeSetting();
+		}
+	}
 	if (m_bDemandUpdateSetting) {
 		// やりなおし
 		OnChangeSetting();
@@ -848,8 +862,8 @@ void CPrintPreview::OnPreviewGoDirectPage(void)
 	TCHAR szMessage[512];
 	TCHAR szPageNum[INPUT_PAGE_NUM_LEN];
 	
-	auto_sprintf_s(szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum);
-	auto_sprintf_s(szPageNum, _T("%d"), m_nCurPageNum + 1);
+	auto_sprintf(szMessage, LS(STR_ERR_DLGPRNPRVW4) , m_nAllPageNum);
+	auto_sprintf(szPageNum, _T("%d"), m_nCurPageNum + 1);
 
 	BOOL bDlgInputPageResult=cDlgInputPage.DoModal(
 		CEditApp::getInstance()->GetAppInstance(),
@@ -910,10 +924,10 @@ void CPrintPreview::OnPreviewGoPage(int nPage)
 		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE), FALSE);
 	}
 	wchar_t	szEdit[1024];
-	auto_sprintf_s(szEdit, LSW(STR_ERR_DLGPRNPRVW6), m_nCurPageNum + 1, m_nAllPageNum);
+	auto_sprintf(szEdit, LSW(STR_ERR_DLGPRNPRVW6), m_nCurPageNum + 1, m_nAllPageNum);
 	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_PAGENUM, szEdit);
 
-	auto_sprintf_s(szEdit, L"%d %%", m_nPreview_Zoom);
+	auto_sprintf(szEdit, L"%d %%", m_nPreview_Zoom);
 	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit);
 
 	::InvalidateRect(m_pParentWnd->GetHwnd(), NULL, TRUE);
@@ -962,7 +976,7 @@ void CPrintPreview::OnPreviewZoom(BOOL bZoomUp)
 	}
 
 	wchar_t	szEdit[1024];
-	auto_sprintf_s(szEdit, L"%d %%", m_nPreview_Zoom);
+	auto_sprintf(szEdit, L"%d %%", m_nPreview_Zoom);
 	::DlgItem_SetText(m_hwndPrintPreviewBar, IDC_STATIC_ZOOM, szEdit);
 
 	// WM_SIZE 処理
@@ -986,7 +1000,7 @@ void CPrintPreview::OnPreviewZoom(BOOL bZoomUp)
 void CPrintPreview::OnCheckAntialias(void)
 {
 	// WM_SIZE 処理
-	RECT	rc;
+	RECT rc;
 	::GetClientRect(m_pParentWnd->GetHwnd(), &rc);
 	OnSize(SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 }
@@ -1652,9 +1666,10 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	int nKindLast = 2; // 直前のnKind状態
 
 	// 色設定	2012-03-07 ossan
-	CStringRef cStringLine(pLine, nDocLineLen);
+	CStringRef cStringLine( pLine, nDocLineLen );
 	CColorStrategy* pStrategy = pStrategyStart;
-	CColorStrategy*	pStrategyLast = (CColorStrategy*)-1;
+	// 2014.12.30 色はGetColorStrategyで次の色になる前に取得する必要がある
+	int nColorIdx = ToColorInfoArrIndex( pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT );
 
 	for (
 		iLogic = nLineStart;
@@ -1670,10 +1685,11 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 			nKind = 1;
 		}
 
-		pStrategy = pcLayout ? GetColorStrategy(cStringLine, iLogic, pStrategy) : NULL;
+		bool bChange = false;
+		pStrategy = pcLayout ? GetColorStrategy(cStringLine, iLogic, pStrategy, bChange) : NULL;
 
 		// タブ文字出現 or 文字種(全角／半角)の境界 or 色指定の境界
-		if (nKind != nKindLast || pStrategyLast != pStrategy) {
+		if (nKind != nKindLast || bChange) {
 			// iLogicの直前までを描画
 			if (0 < iLogic - nBgnLogic) {
 				Print_DrawBlock(
@@ -1683,7 +1699,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 					iLogic - nBgnLogic,
 					nKindLast,
 					pcLayout,	//!< 色設定用Layout
-					pStrategyLast,
+					nColorIdx,
 					nBgnLogic - nLineStart,
 					nLayoutX,
 					nDx,
@@ -1704,6 +1720,10 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 				// ロジック進め
 				nBgnLogic = iLogic;
 			}
+			if (bChange) {
+				// 次のブロックの色
+				nColorIdx = ToColorInfoArrIndex( pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT );
+			}
 		}
 	}
 
@@ -1716,7 +1736,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 			nLineStart + nLineLen - nBgnLogic,
 			nKindLast,
 			pcLayout,	//!< 色設定用Layout
-			pStrategyLast,
+			nColorIdx,
 			nBgnLogic - nLineStart,
 			nLayoutX,
 			nDx,
@@ -1752,7 +1772,7 @@ void CPrintPreview::Print_DrawBlock(
 	int				nBlockLen,	// iLogic - nBgnLogic
 	int				nKind,
 	const CLayout*	pcLayout,	//!< 色設定用Layout
-	const CColorStrategy*	pStrategy,
+	int				nColorIdx,
 	int				nBgnPhysical,	// nBgnLogic - nLineStart
 	CLayoutInt		nLayoutX,
 	int				nDx,
@@ -1766,7 +1786,6 @@ void CPrintPreview::Print_DrawBlock(
 	HFONT hFont = (nKind == 1 ? m_hFontZen : m_hFontHan);
 	// 色設定
 	if (pcLayout) {
-		int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 		if (-1 != nColorIdx) {
 			const ColorInfo& info = m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
 			if (nKind == 2 && !info.m_sFontAttr.m_bUnderLine) {
@@ -1806,22 +1825,26 @@ void CPrintPreview::Print_DrawBlock(
 	@param[in] 
 
 	@date 2013.05.01 Uchi 新規作成
+	@date 2014.12.30 Moca 正規表現の違う色が並んでいた場合に色替えできてなかったバグを修正
 */
 CColorStrategy* CPrintPreview::GetColorStrategy(
 	const CStringRef&	cStringLine,
 	int					iLogic,
-	CColorStrategy*		pStrategy
+	CColorStrategy*		pStrategy,
+	bool&				bChange
 )
 {
 	if (pStrategy) {
 		if (pStrategy->EndColor(cStringLine, iLogic)) {
 			pStrategy = NULL;
+			bChange = true;
 		}
 	}
 	if (!pStrategy) {
 		for (int i = 0; i < m_pool->GetStrategyCount(); i++) {
 			if (m_pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
 				pStrategy = m_pool->GetStrategy(i);
+				bChange = true;
 				break;
 			}
 		}
@@ -2063,7 +2086,9 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 		//// Modified by KEITA for WIN64 2003.9.6
 		//::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 		{
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_ANTIALIAS), TRUE);
+			if (IsWin2000_or_later()) {
+				::EnableWindow( ::GetDlgItem(hwndDlg, IDC_CHECK_ANTIALIAS), TRUE );
+			}
 		}
 		return TRUE;
 	case WM_COMMAND:

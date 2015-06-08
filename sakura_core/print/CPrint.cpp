@@ -587,15 +587,15 @@ void CPrint::SettingInitialize(PRINTSETTING& pPrintSetting, const TCHAR* setting
 	pPrintSetting.m_bHeaderUse[0] = TRUE;
 	pPrintSetting.m_bHeaderUse[1] = FALSE;
 	pPrintSetting.m_bHeaderUse[2] = FALSE;
-	wcscpy_s(pPrintSetting.m_szHeaderForm[0], L"$f");
-	wcscpy_s(pPrintSetting.m_szHeaderForm[1], L"");
-	wcscpy_s(pPrintSetting.m_szHeaderForm[2], L"");
+	wcscpy(pPrintSetting.m_szHeaderForm[0], L"$f");
+	wcscpy(pPrintSetting.m_szHeaderForm[1], L"");
+	wcscpy(pPrintSetting.m_szHeaderForm[2], L"");
 	pPrintSetting.m_bFooterUse[0] = TRUE;
 	pPrintSetting.m_bFooterUse[1] = FALSE;
 	pPrintSetting.m_bFooterUse[2] = FALSE;
-	wcscpy_s(pPrintSetting.m_szFooterForm[0], L"");
-	wcscpy_s(pPrintSetting.m_szFooterForm[1], L"- $p -");
-	wcscpy_s(pPrintSetting.m_szFooterForm[2], L"");
+	wcscpy(pPrintSetting.m_szFooterForm[0], L"");
+	wcscpy(pPrintSetting.m_szFooterForm[1], L"- $p -");
+	wcscpy(pPrintSetting.m_szFooterForm[2], L"");
 }
 
 
