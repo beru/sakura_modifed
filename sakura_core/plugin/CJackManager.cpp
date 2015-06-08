@@ -54,7 +54,6 @@ CJackManager::CJackManager()
 		{ PP_SMARTINDENT			, L"SmartIndent"		},
 		{ PP_COMPLEMENT				, L"Complement"			},
 		{ PP_COMPLEMENTGLOBAL		, L"ComplementGlobal"	},
-		{ PP_MACRO					, L"Macro"				}
 	};
 
 	m_pShareData = &GetDllShareData();

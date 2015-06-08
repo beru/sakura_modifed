@@ -28,12 +28,11 @@
 #pragma once
 
 #include "CPlugin.h"
-#include "plugin/SakuraPlugin.h"
 
 #define	PII_DLL							L"Dll"			// DLL情報
 #define	PII_DLL_NAME					L"Name"			// 名前
 
-//typedef void (WINAPI *DllPlugHandler)(SAKURA_DLL_PLUGIN_OBJ* obj);
+typedef void (*DllPlugHandler)();
 
 class CDllPlug : public CPlug {
 public:
@@ -87,11 +86,5 @@ public:
 private:
 	wstring m_sDllName;
 
-	// DLLプラグイン
-private:
-	static SAKURA_DLL_PLUGIN_OBJ* CreateIfObj(CEditView* view, CWSHIfObj::List& params);
-	static void EraseIfObj(SAKURA_DLL_PLUGIN_OBJ* obj);
-	static BOOL WINAPI HandleFunctionCallback(LPCWSTR lpszName, LPVOID lpIfObj, LPVOID lpEditView, const DWORD ID, const VARIANT* Arguments, const int ArgSize, VARIANT* Result);
-	static void WINAPI HandleCommandCallback(LPCWSTR lpszName, LPVOID lpIfObj, LPVOID lpEditView, const DWORD ID, LPCWSTR Arguments[], const int ArgLengths[], const int ArgSize);
 };
 

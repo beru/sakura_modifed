@@ -30,6 +30,7 @@
 #include <algorithm>
 #include "macro/CWSHIfObj.h"
 #include "CDataProfile.h"
+#include "util/string_ex.h"
 
 //! ƒvƒ‰ƒOƒCƒ“‚ÌŠÇ—”Ô†index
 typedef int PluginId;
