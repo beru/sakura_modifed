@@ -109,7 +109,8 @@ std::tstring CGrepAgent::ChopYen( const std::tstring& str )
 	// [A:\]などのルートであっても削除
 	for (size_t i = 0; i < nPathLen; i++) {
 #ifdef _MBCS
-		if (_IS_SJIS_1( (unsigned char)dst[i] )
+		if (1
+			&& _IS_SJIS_1( (unsigned char)dst[i] )
 			&& (i + 1 < nPathLen)
 			&& _IS_SJIS_2( (unsigned char)dst[i + 1] )
 		) {
@@ -117,7 +118,8 @@ std::tstring CGrepAgent::ChopYen( const std::tstring& str )
 			i++;
 		} else
 #endif
-		if (_T('\\') == dst[i]
+		if (1
+			&& _T('\\') == dst[i]
 			&& i == nPathLen - 1
 		) {
 			dst.resize( nPathLen - 1 );
@@ -418,7 +420,8 @@ DWORD CGrepAgent::DoGrep(
 			if (FALSE == type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
 				// 2011.11.28 色指定が無効ならエスケープしない
 			}else
-			if (type.m_nStringType == STRING_LITERAL_CPP
+			if (0
+				|| type.m_nStringType == STRING_LITERAL_CPP
 				|| type.m_nStringType == STRING_LITERAL_CSHARP
 				|| type.m_nStringType == STRING_LITERAL_PYTHON
 			) {	// 文字列区切り記号エスケープ方法
@@ -1408,7 +1411,7 @@ int CGrepAgent::DoGrepFile(
 					}
 						
 					//	Jun. 21, 2003 genta 行単位で出力する場合は1つ見つかれば十分
-					if (sGrepOption.bGrepOutputLine || sGrepOption.bGrepOutputFileOnly) {
+					if (sGrepOption.nGrepOutputLineType != 0 || sGrepOption.bGrepOutputFileOnly) {
 						break;
 					}
 					//	探し始める位置を補正
@@ -1701,7 +1704,7 @@ int CGrepAgent::DoGrepReplaceFile(
 		CNativeW cOutBuffer;
 		// 注意 : cfl.ReadLine が throw する可能性がある
 		CNativeW cUnicodeBuffer;
-		while (RESULT_FAILURE != cfl.ReadLine( &cUnicodeBuffer, &cEol )) {
+		while (cfl.ReadLine(&cUnicodeBuffer, &cEol) != RESULT_FAILURE) {
 			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
 			int nLineLen = cUnicodeBuffer.GetStringLength();
 	
@@ -1753,9 +1756,11 @@ int CGrepAgent::DoGrepReplaceFile(
 				//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 				// From Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
 				// 2010.08.25 行頭以外で^にマッチする不具合の修正
-				while (nIndex <= nLineLen &&
-					(( !sGrepOption.bGrepPaste && (nMatchNum = pRegexp->Replace( pLine, nLineLen, nIndex ))) || 
-					 ( sGrepOption.bGrepPaste && pRegexp->Match( pLine, nLineLen, nIndex )))
+				while (
+					nIndex <= nLineLen
+					&& (  (!sGrepOption.bGrepPaste && (nMatchNum = pRegexp->Replace(pLine, nLineLen, nIndex)))
+						|| (sGrepOption.bGrepPaste && pRegexp->Match(pLine, nLineLen, nIndex))
+					)
 				) {
 					//	パターン発見
 					nIndex = pRegexp->GetIndex();

@@ -109,7 +109,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 
 	// カーソル行背景色
 	CTypeSupport cCaretLineBg(m_pcView, COLORIDX_CARETLINEBG);
-	if (cCaretLineBg.IsDisp()) {
+	if (cCaretLineBg.IsDisp() && !m_pcView->m_bMiniMap) {
 		if (m_colorIdxBackLine == COLORIDX_CARETLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() != m_pcView->GetCaret().GetCaretLayoutPos().GetY2()) {
 				m_colorIdxBackLine = COLORIDX_TEXT;
@@ -124,7 +124,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	}
 	// 偶数行の背景色
 	CTypeSupport cEvenLineBg(m_pcView, COLORIDX_EVENLINEBG);
-	if (cEvenLineBg.IsDisp() && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
+	if (cEvenLineBg.IsDisp() && !m_pcView->m_bMiniMap && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
 		if (m_colorIdxBackLine == COLORIDX_EVENLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() % 2 == 0) {
 				m_colorIdxBackLine = COLORIDX_TEXT;
@@ -134,6 +134,25 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 			if (m_pDispPos->GetLayoutLineRef() % 2 == 1) {
 				m_colorIdxBackLine = COLORIDX_EVENLINEBG;
 				bChange = true;
+			}
+		}
+	}
+	if (m_pcView->m_bMiniMap) {
+		CTypeSupport cPageViewBg(m_pcView, COLORIDX_PAGEVIEW);
+		if (cPageViewBg.IsDisp()) {
+			CEditView& cActiveView = m_pcView->m_pcEditWnd->GetActiveView();
+			CLayoutInt curLine = m_pDispPos->GetLayoutLineRef();
+			if (m_colorIdxBackLine == COLORIDX_PAGEVIEW) {
+				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
+				}else {
+					m_colorIdxBackLine = COLORIDX_TEXT;
+					bChange = true;
+				}
+			}else if (m_colorIdxBackLine == COLORIDX_TEXT) {
+				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
+					m_colorIdxBackLine = COLORIDX_PAGEVIEW;
+					bChange = true;
+				}
 			}
 		}
 	}
@@ -275,19 +294,85 @@ void CColorStrategyPool::OnChangeSetting(void)
 	}
 
 	// CheckColorMODE 用
-	m_pcHeredoc = (CColor_Heredoc*)GetStrategyByColor(COLORIDX_HEREDOC);
-	m_pcBlockComment1 = (CColor_BlockComment*)GetStrategyByColor(COLORIDX_BLOCK1);	// ブロックコメント
-	m_pcBlockComment2 = (CColor_BlockComment*)GetStrategyByColor(COLORIDX_BLOCK2);	// ブロックコメント2
-	m_pcLineComment = (CColor_LineComment*)GetStrategyByColor(COLORIDX_COMMENT);	// 行コメント
-	m_pcSingleQuote = (CColor_SingleQuote*)GetStrategyByColor(COLORIDX_SSTRING);	// シングルクォーテーション文字列
-	m_pcDoubleQuote = (CColor_DoubleQuote*)GetStrategyByColor(COLORIDX_WSTRING);	// ダブルクォーテーション文字列
+	m_pcHeredoc = static_cast<CColor_Heredoc*>(GetStrategyByColor(COLORIDX_HEREDOC));
+	m_pcBlockComment1 = static_cast<CColor_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK1));	// ブロックコメント
+	m_pcBlockComment2 = static_cast<CColor_BlockComment*>(GetStrategyByColor(COLORIDX_BLOCK2));	// ブロックコメント2
+	m_pcLineComment = static_cast<CColor_LineComment*>(GetStrategyByColor(COLORIDX_COMMENT));	// 行コメント
+	m_pcSingleQuote = static_cast<CColor_SingleQuote*>(GetStrategyByColor(COLORIDX_SSTRING));	// シングルクォーテーション文字列
+	m_pcDoubleQuote = static_cast<CColor_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
+
+	// 色分けをしない場合に、処理をスキップできるように確認する
+	const STypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+	EColorIndexType bSkipColorTypeTable[] = {
+		COLORIDX_DIGIT,
+		COLORIDX_COMMENT,
+		COLORIDX_SSTRING,
+		COLORIDX_WSTRING,
+		COLORIDX_HEREDOC,
+		COLORIDX_URL,
+		COLORIDX_KEYWORD1,
+		COLORIDX_KEYWORD2,
+		COLORIDX_KEYWORD3,
+		COLORIDX_KEYWORD4,
+		COLORIDX_KEYWORD5,
+		COLORIDX_KEYWORD6,
+		COLORIDX_KEYWORD7,
+		COLORIDX_KEYWORD8,
+		COLORIDX_KEYWORD9,
+		COLORIDX_KEYWORD10,
+	};
+	m_bSkipBeforeLayoutGeneral = true;
+	int nKeyword1;
+	int bUnuseKeyword = false;
+	for (int n=0; n<_countof(bSkipColorTypeTable); ++n) {
+		if (COLORIDX_KEYWORD1 == bSkipColorTypeTable[n]) {
+			nKeyword1 = n;
+		}
+		if (COLORIDX_KEYWORD1 <= bSkipColorTypeTable[n]
+			&& bSkipColorTypeTable[n] <= COLORIDX_KEYWORD10
+		) {
+			if (type.m_nKeyWordSetIdx[n - nKeyword1] == -1) {
+				bUnuseKeyword = true; // -1以降は無効
+			}
+			if (!bUnuseKeyword && type.m_ColorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
+				m_bSkipBeforeLayoutGeneral = false;
+				break;
+			}
+		}else if (type.m_ColorInfoArr[bSkipColorTypeTable[n]].m_bDisp) {
+			m_bSkipBeforeLayoutGeneral = false;
+			break;
+		}
+	}
+	if (m_bSkipBeforeLayoutGeneral) {
+		if (type.m_bUseRegexKeyword) {
+			m_bSkipBeforeLayoutGeneral = false;
+		}
+	}
+	m_bSkipBeforeLayoutFound = true;
+	for (int n=COLORIDX_SEARCH; n<=COLORIDX_SEARCHTAIL; ++n) {
+		if (type.m_ColorInfoArr[n].m_bDisp) {
+			m_bSkipBeforeLayoutFound = false;
+			break;
+		}
+	}
+}
+
+bool CColorStrategyPool::IsSkipBeforeLayout()
+{
+	if (!m_bSkipBeforeLayoutGeneral) {
+		return false;
+	}
+	if (!m_bSkipBeforeLayoutFound && m_pcView->m_bCurSrchKeyMark) {
+		return false;
+	}
+	return true;
 }
 
 /*!
   iniの色設定を番号でなく文字列で書き出す。(added by Stonee, 2001/01/12, 2001/01/15)
   配列の順番は共有メモリ中のデータの順番と一致している。
 
-  @note 数値による内部的対応は EColorIndexType CColorStrategy.h
+  @note 数値による内部的対応は EColorIndexType EColorIndexType.h
   日本語名などは  ColorInfo_DEFAULT CDocTypeSetting.cpp
   CShareDataからglobalに移動
 */
@@ -300,6 +385,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
 	{_T("CBK"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("UND"), COLOR_ATTRIB_NO_BACK | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("CVL"), COLOR_ATTRIB_NO_BACK | (COLOR_ATTRIB_NO_EFFECTS & ~COLOR_ATTRIB_NO_BOLD)}, // 2007.09.09 Moca カーソル位置縦線
+	{_T("NOT"), COLOR_ATTRIB_NO_BACK | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("LNO"), 0},
 	{_T("MOD"), 0},
 	{_T("EBK"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
@@ -348,6 +434,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
 	{_T("DFC"), 0},	// DIFF変更	//@@@ 2002.06.01 MIK
 	{_T("DFD"), 0},	// DIFF削除	//@@@ 2002.06.01 MIK
 	{_T("MRK"), 0},	// ブックマーク	// 02/10/16 ai Add
+	{_T("PGV"), COLOR_ATTRIB_NO_TEXT | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("LAST"), 0}	// Not Used
 };
 
@@ -357,7 +444,7 @@ const SColorAttributeData g_ColorAttributeArr[] =
  */
 int GetColorIndexByName(const TCHAR* name)
 {
-	for (int i = 0; i < COLORIDX_LAST; i++) {
+	for (int i = 0; i < COLORIDX_LAST; ++i) {
 		if (_tcscmp(name, g_ColorAttributeArr[i].szName) == 0) return i;
 	}
 	return -1;

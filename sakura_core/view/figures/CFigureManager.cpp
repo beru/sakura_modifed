@@ -56,12 +56,12 @@ CFigureManager::~CFigureManager()
 }
 
 //$$ ‚‘¬‰»‰Â”\
-CFigure& CFigureManager::GetFigure(const wchar_t* pText)
+CFigure& CFigureManager::GetFigure(const wchar_t* pText, int nTextLen)
 {
 	int size = (int)m_vFiguresDisp.size();
 	for (int i = 0; i < size; i++) {
 		CFigure* pcFigure = m_vFiguresDisp[i];
-		if (pcFigure->Match(pText)) {
+		if (pcFigure->Match(pText, nTextLen)) {
 			return *pcFigure;
 		}
 	}
@@ -76,7 +76,7 @@ void CFigureManager::OnChangeSetting(void)
 	m_vFiguresDisp.clear();
 
 	int size = (int)m_vFigures.size();
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		m_vFigures[i]->Update();
 		// F•ª‚¯•\¦‘ÎÛ‚Ì‚İ‚ğ“o˜^
 		if (m_vFigures[i]->Disp()) {

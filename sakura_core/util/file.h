@@ -107,3 +107,5 @@ void my_splitpath_t (const TCHAR* comln, TCHAR* drv, TCHAR* dir, TCHAR* fnm, TCH
 
 int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2);
 
+void GetStrTrancateWidth(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth);
+void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth, bool bFitMode);

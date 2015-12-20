@@ -59,7 +59,7 @@ bool CFileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
 {
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
-	if (!ConvertTypesExtToDlgExt(pszExt, NULL, szWork)) {
+	if (!CDocTypeManager::ConvertTypesExtToDlgExt(pszExt, NULL, szWork)) {
 		return false;
 	}
 	return AppendExtRaw(pszName, szWork);
@@ -129,13 +129,13 @@ const TCHAR* CFileExt::GetExtFilter(void)
 		work.append(_T("\0"), 1);
 
 		int sz = (int)m_vstrFilter.size();
-		m_vstrFilter.resize( sz + work.length() );
-		auto_memcpy( &m_vstrFilter[sz], &work[0], work.length() );
+		m_vstrFilter.resize(sz + work.length());
+		auto_memcpy(&m_vstrFilter[sz], &work[0], work.length());
 	}
-	if( 0 == m_nCount ){
-		m_vstrFilter.push_back( _T('\0') );
+	if (m_nCount == 0) {
+		m_vstrFilter.push_back(_T('\0'));
 	}
-	m_vstrFilter.push_back( _T('\0') );
+	m_vstrFilter.push_back(_T('\0'));
 
 	return &m_vstrFilter[0];
 

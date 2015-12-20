@@ -513,7 +513,7 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 	List_GetText( hwndList, nItem, &wszLabel[0] );
 
  	// テキストを貼り付け
-	pcEditView = reinterpret_cast<CEditView*>(m_lParam);
+	CEditView* pcEditView = reinterpret_cast<CEditView*>(m_lParam);
 	//	Apr. 28, 2000 genta
 	pcEditView->GetCommander().HandleCommand(F_WordDeleteToStart, false, 0, 0, 0, 0);
 	pcEditView->GetCommander().HandleCommand( F_INSTEXT_W, true, (LPARAM)&wszLabel[0], wcslen(&wszLabel[0]), TRUE, 0 );

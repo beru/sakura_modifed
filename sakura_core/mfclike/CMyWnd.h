@@ -74,6 +74,7 @@ public:
 	BOOL GetClientRect(LPRECT lpRect) const {
 		return ::GetClientRect(m_hWnd, lpRect);
 	}
+
 private:
 	HWND m_hWnd;
 };

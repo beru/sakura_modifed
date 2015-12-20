@@ -1,3 +1,27 @@
+/*
+	Copyright (C) 2008, kobake
+
+	This software is provided 'as-is', without any express or implied
+	warranty. In no event will the authors be held liable for any damages
+	arising from the use of this software.
+
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
+
+		1. The origin of this software must not be misrepresented;
+		   you must not claim that you wrote the original software.
+		   If you use this software in a product, an acknowledgment
+		   in the product documentation would be appreciated but is
+		   not required.
+
+		2. Altered source versions must be plainly marked as such,
+		   and must not be misrepresented as being the original software.
+
+		3. This notice may not be removed or altered from any source
+		   distribution.
+*/
+
 #include "StdAfx.h"
 #include "CType.h"
 #include "doc/CDocOutline.h"
@@ -101,7 +125,15 @@ bool C_IsOperator(wchar_t* szStr, int nLen	)
 static
 bool C_IsLineEsc(const wchar_t* s, int len)
 {
-	if (len > 0 && WCODE::IsLineDelimiter(s[len-1])) len--;
+	if (
+		len > 0
+		&& WCODE::IsLineDelimiter(
+			s[len-1],
+			GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+		)
+	) {
+		len--;
+	}
 	if (len > 0 && s[len-1] == L'\r') len--;
 
 	if (len > 0 && s[len-1] == L'\\') {
@@ -202,9 +234,10 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
+	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
 	//	skip whitespace
-	for (p = str; C_IsSpace(*p) && p < lastptr ; ++p)
+	for (p = str; C_IsSpace(*p, bExtEol) && p < lastptr ; ++p)
 		;
 	if (lastptr <= p)
 		return CLogicInt(length);	//	空行のため処理不要
@@ -224,7 +257,7 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 	++p; // #をスキップ
 	
 	//	skip whitespace
-	for (; C_IsSpace(*p) && p < lastptr ; ++p)
+	for (; C_IsSpace(*p, bExtEol) && p < lastptr ; ++p)
 		;
 
 	//	ここからPreprocessor directive解析
@@ -238,11 +271,11 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 		//	それ以外のif/ifdef/ifndefは最初が有効部分と見なす
 		//	最初の条件によってこの時点ではp < lastptrなので判定省略
 		// 2007/12/13 じゅうじ : #if (0)とスペースを空けない場合の対応
-		if (C_IsSpace(*p) || *p == L'(') {
+		if (C_IsSpace(*p, bExtEol) || *p == L'(') {
 			//	if 0 チェック
 			//	skip whitespace
 			//	2007.12.15 genta
-			for (; (C_IsSpace(*p) || *p == L'(') && p < lastptr ; ++p)
+			for (; (C_IsSpace(*p, bExtEol) || *p == L'(') && p < lastptr ; ++p)
 				;
 			if (*p == L'0') {
 				enable = 1;
@@ -419,6 +452,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
 	CCppPreprocessMng cCppPMng;
+	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 	
 	CLogicInt		nLineCount;
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
@@ -599,7 +633,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 			}else if (2 == nMode) {
 				// 記号列読み込み中
 				if (C_IsWordChar(pLine[i]) ||
-					C_IsSpace(pLine[i]) ||
+					C_IsSpace(pLine[i], bExtEol) ||
 					 '{' == pLine[i] ||
 					 '}' == pLine[i] ||
 					 '(' == pLine[i] ||
@@ -670,14 +704,14 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 			}else if (999 == nMode) {
 				// 長過ぎる単語無視中
 				// 空白やタブ記号等を飛ばす
-				if (C_IsSpace(pLine[i])) {
+				if (C_IsSpace(pLine[i], bExtEol)) {
 					nMode = 0;
 					continue;
 				}
 			}else if (0 == nMode) {
 				// ノーマルモード
 				// 空白やタブ記号等を飛ばす
-				if (C_IsSpace(pLine[i]))
+				if (C_IsSpace(pLine[i], bExtEol))
 					continue;
 				if (i < nLineLen - 1 && '/' == pLine[i] &&  '/' == pLine[i + 1]) {
 					++i;
@@ -738,6 +772,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 						&& (nMode2 & M2_AFTER_ITEM) != 0
 						&& nNestLevel_global < nNamespaceNestMax
 						&& (nNamespaceLen[nNestLevel_global] +  (nItemNameLen = wcslen(szItemName)) + nLenDefPos + 1) < nNamespaceLenMax
+						&& (nItemLine > 0)
 					) {
 						// ３番目の(&&の後の)条件
 						// バッファが足りない場合は項目の追加を行わない。
@@ -832,9 +867,9 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					bool bOperator = false;
 					if (nMode2 == M2_NORMAL && nNestLevel_fparam == 0 && C_IsOperator(szWordPrev, nLen)) {
 						int k;
-						for (k = i + 1; k < nLineLen && C_IsSpace(pLine[k]); k++) {}
+						for (k = i + 1; k < nLineLen && C_IsSpace(pLine[k], bExtEol); k++) {}
 						if (k < nLineLen && pLine[k] == L')') {
-							for (k++; k < nLineLen && C_IsSpace(pLine[k]); k++) {}
+							for (k++; k < nLineLen && C_IsSpace(pLine[k], bExtEol); k++) {}
 							if (k < nLineLen && (pLine[k] == L'<' || pLine[k] == L'(')) {
 								// オペレータだった operator()(/ operator()<;
 								if (nLen + 1 < _countof(szWordPrev)) {
@@ -1448,8 +1483,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 			// 操作の追加
 			m_cCommander.GetOpeBlk()->AppendOpe(
 				new CMoveCaretOpe(
-					GetCaret().GetCaretLogicPos(),	// 操作前のキャレット位置
-					GetCaret().GetCaretLogicPos()	// 操作後のキャレット位置
+					GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
 		}
@@ -1547,10 +1581,10 @@ const wchar_t* g_ppszKeywordsCPP[] = {
 	L"mutable",
 	L"namespace",
 	L"new",
-	L"noexcept"
+	L"noexcept",
 	L"not",
 	L"not_eq",
-	L"nullptr"
+	L"nullptr",
 	L"operator",
 	L"or",
 	L"or_eq",
@@ -1567,13 +1601,13 @@ const wchar_t* g_ppszKeywordsCPP[] = {
 	L"signed",
 	L"sizeof",
 	L"static",
-	L"static_assert"
+	L"static_assert",
 	L"static_cast",
 	L"struct",
 	L"switch",
 	L"template",
 	L"this",
-	L"thread_local"
+	L"thread_local",
 	L"throw",
 	L"true",
 	L"try",
@@ -1588,7 +1622,7 @@ const wchar_t* g_ppszKeywordsCPP[] = {
 	L"void",
 	L"volatile",
 	L"wchar_t",
-	L"while"
+	L"while",
 	L"xor",
 	L"xor_eq",
 };

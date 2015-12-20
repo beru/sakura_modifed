@@ -474,7 +474,7 @@ void CDlgGrep::SetData(void)
 	}
 
 	// s‚ğo—Í‚·‚é‚©ŠY“–•”•ª‚¾‚¯o—Í‚·‚é‚©
-	if (m_nGrepOutputLineType == 1) {6
+	if (m_nGrepOutputLineType == 1) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_OUTPUTLINE, TRUE);
 	}else if (m_nGrepOutputLineType == 2) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_NOHIT, TRUE);

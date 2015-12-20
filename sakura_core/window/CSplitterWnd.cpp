@@ -26,8 +26,7 @@
 CSplitterWnd::CSplitterWnd()
 	:
 	CWnd(_T("::CSplitterWnd")),
-	m_pszClassName(_T("SplitterWndClass")),	// クラス名
-	m_pCEditWnd(NULL),
+	m_pcEditWnd(NULL),
 	m_nAllSplitRows(1),					// 分割行数
 	m_nAllSplitCols(1),					// 分割桁数
 	m_nVSplitPos(0),					// 垂直分割位置
@@ -58,8 +57,10 @@ CSplitterWnd::~CSplitterWnd()
 // 初期化
 HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 {
+	LPCTSTR pszClassName = _T("SplitterWndClass");
+	
 	// 初期化
-	m_pCEditWnd	= pCEditWnd;
+	m_pcEditWnd	= pCEditWnd;
 
 	// ウィンドウクラス作成
 	ATOM atWork;
@@ -72,7 +73,7 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 		NULL/*MAKEINTRESOURCE(MYDOCUMENT)*/,// Pointer to a null-terminated 
 				// character string that specifies the resource name of the class menu,
 				// as the name appears in the resource file.
-		m_pszClassName// Pointer to a null-terminated string or is an atom.
+		pszClassName// Pointer to a null-terminated string or is an atom.
 	);
 	if (0 == atWork) {
 		ErrorMessage(NULL, LS(STR_ERR_CSPLITTER01));
@@ -82,8 +83,8 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 	return CWnd::Create(
 		hwndParent,
 		0, // extended window style
-		m_pszClassName,	// Pointer to a null-terminated string or is an atom.
-		m_pszClassName, // pointer to window name
+		pszClassName,	// Pointer to a null-terminated string or is an atom.
+		pszClassName,	// pointer to window name
 		WS_CHILD | WS_VISIBLE, // window style
 		CW_USEDEFAULT, // horizontal position of window
 		0, // vertical position of window
@@ -245,7 +246,7 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	BOOL				bVUp;
 	BOOL				bHUp;
 	BOOL				bSizeBox;
-	CEditWnd*			pCEditWnd = (CEditWnd*)m_pCEditWnd;
+	CEditWnd*			pCEditWnd = (CEditWnd*)m_pcEditWnd;
 	bVUp = FALSE;
 	bHUp = FALSE;
 
@@ -264,9 +265,14 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	|| ステータスパーを表示している場合はサイズボックスを表示しない
 	*/
 	if (!pCEditWnd
-	 ||(pCEditWnd->m_CFuncKeyWnd.GetHwnd()
-	  && 1 == m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place	// ファンクションキー表示位置／0:上 1:下
-	 )
+		|| (
+			pCEditWnd->m_cFuncKeyWnd.GetHwnd()
+	 		&& m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
+	 	)
+	) {
+		bSizeBox = FALSE;
+	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
+		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
 	) {
 		bSizeBox = FALSE;
 	}else {
@@ -275,6 +281,15 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 		if (pCEditWnd->m_cStatusBar.GetStatusHwnd()) {
 			bSizeBox = FALSE;
 		}
+	}
+	if (pCEditWnd->m_cDlgFuncList.GetHwnd()) {
+		EDockSide eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
+		if (eDockSideFL == DOCKSIDE_RIGHT || eDockSideFL == DOCKSIDE_BOTTOM) {
+			bSizeBox = FALSE;
+		}
+	}
+	if (pCEditWnd->GetMiniMap().GetHwnd()) {
+		bSizeBox = FALSE;
 	}
 	// メインウィンドウが最大化されている場合はサイズボックスを表示しない
 	WINDOWPLACEMENT	wp;
@@ -799,7 +814,7 @@ LRESULT CSplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 // ウィンドウサイズの変更処理
 LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	CEditWnd*	pCEditWnd = (CEditWnd*)m_pCEditWnd;
+	CEditWnd*	pCEditWnd = (CEditWnd*)m_pcEditWnd;
 	CEditView*	pcViewArr[MAXCOUNTOFVIEW];
 	int			i;
 	RECT		rcClient;
@@ -814,10 +829,14 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	|| ステータスパーを表示している場合はサイズボックスを表示しない
 	*/
 	if (!pCEditWnd
-	 ||(pCEditWnd->m_CFuncKeyWnd.GetHwnd()
-	  && 1 == m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place	// ファンクションキー表示位置／0:上 1:下
-	 )
+	 	|| (
+	 		pCEditWnd->m_cFuncKeyWnd.GetHwnd()
+	  		&& m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
+	 	)
 	) {
+		bSizeBox = FALSE;
+	}else if( NULL != pCEditWnd->m_cTabWnd.GetHwnd()
+		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom ) {
 		bSizeBox = FALSE;
 	}else {
 		bSizeBox = TRUE;
@@ -826,6 +845,16 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			bSizeBox = FALSE;
 		}
 	}
+	if (pCEditWnd->m_cDlgFuncList.GetHwnd()) {
+		EDockSide eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
+		if (eDockSideFL == DOCKSIDE_RIGHT || eDockSideFL == DOCKSIDE_BOTTOM) {
+			bSizeBox = FALSE;
+		}
+	}
+	if (pCEditWnd->GetMiniMap().GetHwnd()) {
+		bSizeBox = FALSE;
+	}
+
 	// メインウィンドウが最大化されている場合はサイズボックスを表示しない
 	WINDOWPLACEMENT	wp;
 	wp.length = sizeof(wp);
@@ -909,7 +938,7 @@ LRESULT CSplitterWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		::SetCursor(::LoadCursor(NULL, IDC_SIZEALL));
 		break;
 	}
-	if (0 != m_bDragging) {		// 分割バーをドラッグ中か
+	if (m_bDragging != 0) {		// 分割バーをドラッグ中か
 		::GetClientRect(GetHwnd(), &rc);
 		if (xPos < 1) {
 			xPos = 1;
@@ -944,7 +973,7 @@ LRESULT CSplitterWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 	::SetFocus(GetParentHwnd());
 	// 分割バーへのヒットテスト
 	nHit = HitTestSplitter(xPos, yPos);
-	if (0 != nHit) {
+	if (nHit != 0) {
 		m_bDragging = nHit;	// 分割バーをドラッグ中か
 		::SetCapture(GetHwnd());
 	}

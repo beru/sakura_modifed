@@ -26,7 +26,7 @@ CTipWnd::CTipWnd()
 	:
 	CWnd(_T("::CTipWnd"))
 {
-	m_pszClassName = _T("CTipWnd");
+	m_hFont = NULL;
 	m_KeyWasHit = FALSE;	// キーがヒットしたか
 	return;
 }
@@ -46,6 +46,8 @@ CTipWnd::~CTipWnd()
 // 初期化
 void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 {
+	LPCTSTR pszClassName = _T("CTipWnd");
+	
 	// ウィンドウクラス作成
 	RegisterWC(
 		hInstance,
@@ -55,7 +57,7 @@ void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 		::LoadCursor(NULL, IDC_ARROW),// Handle to the class cursor.
 		(HBRUSH)/*NULL*/(COLOR_INFOBK + 1),// Handle to the class background brush.
 		NULL/*MAKEINTRESOURCE(MYDOCUMENT)*/,// Pointer to a null-terminated character string that specifies the resource name of the class menu, as the name appears in the resource file.
-		m_pszClassName// Pointer to a null-terminated string or is an atom.
+		pszClassName// Pointer to a null-terminated string or is an atom.
 	);
 
 	// 基底クラスメンバ呼び出し
@@ -64,8 +66,8 @@ void CTipWnd::Create(HINSTANCE hInstance, HWND hwndParent)
 	CWnd::Create(
 		hwndParent,
 		WS_EX_TOOLWINDOW, // extended window style	// 2002/2/3 GAE
-		m_pszClassName,	// Pointer to a null-terminated string or is an atom.
-		m_pszClassName, // pointer to window name
+		pszClassName,	// Pointer to a null-terminated string or is an atom.
+		pszClassName, // pointer to window name
 		WS_POPUP | WS_CLIPCHILDREN | WS_BORDER, // window style
 		CW_USEDEFAULT, // horizontal position of window
 		0, // vertical position of window
@@ -114,7 +116,14 @@ void CTipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 
 	::ReleaseDC(GetHwnd(), hdc);
 
-	::MoveWindow(GetHwnd(), nX, nY, rc.right + 8, rc.bottom + 8/*nHeight*/, TRUE);
+	if (m_bAlignLeft) {
+		// 右側固定で表示(MiniMap)
+		::MoveWindow(GetHwnd(), nX - rc.right, nY, rc.right + 8, rc.bottom + 8, TRUE);
+	}else {
+		// 左側固定で表示(通常)
+		::MoveWindow(GetHwnd(), nX, nY, rc.right + 8, rc.bottom + 8/*nHeight*/, TRUE);
+	}
+	::InvalidateRect(GetHwnd(), NULL, TRUE);
 	::ShowWindow(GetHwnd(), SW_SHOWNA);
 	return;
 
@@ -128,7 +137,7 @@ void CTipWnd::ComputeWindowSize(
 	RECT*			pRect
 	)
 {
-	RECT	rc;
+	RECT rc;
 	HFONT hFontOld = (HFONT)::SelectObject(hdc, hFont);
 	int nCurMaxWidth = 0;
 	int nCurHeight = 0;

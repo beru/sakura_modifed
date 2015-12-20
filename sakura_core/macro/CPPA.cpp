@@ -511,10 +511,13 @@ void __stdcall CPPA::stdStrFunc(
 	@author Moca
 */
 bool CPPA::CallHandleFunction(
-	const int Index, const char* Arg[],
-	int ArgSize, VARIANT* Result)
+	const int Index,
+	const char* Arg[],
+	int ArgSize,
+	VARIANT* Result
+	)
 {
-	int ArgCnt;
+	int i, ArgCnt;
 	const int maxArgSize = 8;
 	VARIANT vtArg[maxArgSize];
 	

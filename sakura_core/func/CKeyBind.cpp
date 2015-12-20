@@ -216,7 +216,7 @@ int CKeyBind::CreateKeyBindList(
 
 				// 機能番号
 				cMemList.AppendString(pszTAB);
-				auto_sprintf(pszStr, LTEXT("%d"), iFunc);
+				auto_sprintf(szStr, LTEXT("%d"), iFunc);
 				cMemList.AppendString(szStr);
 
 				// キーマクロに記録可能な機能かどうかを調べる
@@ -762,7 +762,7 @@ EFunctionCode CKeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, BOOL bGetDef
 		{ VK_APPS,	(LPCTSTR)STR_KEY_BIND_APLI,	{ F_MENU_RBUTTON,	F_MENU_RBUTTON,		F_MENU_RBUTTON,			F_MENU_RBUTTON,		F_MENU_RBUTTON,			F_MENU_RBUTTON,		F_MENU_RBUTTON,			F_MENU_RBUTTON }, }
 	};
 
-TCHAR* jpVKEXNames[] = {
+const TCHAR* jpVKEXNames[] = {
 	_T("ダブルクリック"),
 	_T("右クリック"),
 	_T("中クリック"),

@@ -7,6 +7,12 @@
 #include "env/DLLSHAREDATA.h"
 #include "doc/CEditDoc.h"
 
+// 2014.07.26 katze
+//#define USE_LOG10			// この行のコメントを外すと行番号の最小桁数の計算にlog10()を用いる
+#ifdef USE_LOG10
+#include <math.h>
+#endif
+
 CTextArea::CTextArea(CEditView* pEditView)
 : m_pEditView(pEditView)
 {
@@ -57,11 +63,19 @@ void CTextArea::UpdateAreaMetrics(HDC hdc)
 {
 	CEditView* pView = m_pEditView;
 
-	// 文字間隔
-	pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth() + pView->m_pTypeData->m_nColumnSpace);
+	if (pView->m_bMiniMap) {
+		// 文字間隔
+		pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth());
 
-	// 行間隔
-	pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight() + pView->m_pTypeData->m_nLineSpace);
+		// 行間隔
+		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight());
+	}else {
+		// 文字間隔
+		pView->GetTextMetrics().SetHankakuDx(pView->GetTextMetrics().GetHankakuWidth() + pView->m_pTypeData->m_nColumnSpace);
+	
+		// 行間隔
+		pView->GetTextMetrics().SetHankakuDy(pView->GetTextMetrics().GetHankakuHeight() + pView->m_pTypeData->m_nLineSpace);
+	}
 
 	// 表示域の再計算
 	// 2010.08.24 Dx/Dyを使うので後で設定
@@ -144,11 +158,14 @@ bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 	int				nViewAlignLeftNew;
 
-	if (pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp) {
+	if (pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp && !pView->m_bMiniMap) {
 		// 行番号表示に必要な桁数を計算
-		int i = DetectWidthOfLineNumberArea_calculate();
+		int i = DetectWidthOfLineNumberArea_calculate(&pView->m_pcEditDoc->m_cLayoutMgr);
 		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	// 表示域の左端座標
 		m_nViewAlignLeftCols = i + 1;
+	}else if (pView->m_bMiniMap) {
+		nViewAlignLeftNew = 4;
+		m_nViewAlignLeftCols = 0;
 	}else {
 		nViewAlignLeftNew = 8;
 		m_nViewAlignLeftCols = 0;
@@ -166,7 +183,7 @@ bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 		// m_nViewColNum = CLayoutInt(t_max(0, m_nViewCx - 1) / pView->GetTextMetrics().GetHankakuDx());	// 表示域の桁数
 		UpdateViewColRowNums();
 
-		if (bRedraw) {
+		if (bRedraw && pView2->GetDrawSwitch()) {
 			// 再描画
 			pView2->GetCaret().m_cUnderLine.Lock();
 			// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
@@ -197,32 +214,53 @@ bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 
 // 行番号表示に必要な桁数を計算
-int CTextArea::DetectWidthOfLineNumberArea_calculate() const
+int CTextArea::DetectWidthOfLineNumberArea_calculate(const CLayoutMgr* pLayoutMgr, bool bLayout) const
 {
 	const CEditView* pView = m_pEditView;
 
 	int nAllLines; //$$ 単位混在
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (pView->m_pTypeData->m_bLineNumIsCRLF) {
+	if (pView->m_pTypeData->m_bLineNumIsCRLF && !bLayout) {
 		nAllLines = pView->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	}else {
-		nAllLines = (Int)pView->m_pcEditDoc->m_cLayoutMgr.GetLineCount();
+		nAllLines = (Int)pLayoutMgr->GetLineCount();
 	}
 	
 	if (0 < nAllLines) {
-		int nWork = 100;
+		int nWork;
 		int i;
-		for (i = 3; i < 12; ++i) {
+
+		// 行番号の桁数を決める 2014.07.26 katze
+		// m_nLineNumWidthは純粋に数字の桁数を示し、先頭の空白を含まない（仕様変更） 2014.08.02 katze
+#ifdef USE_LOG10
+		// 表示している行数の桁数を求める
+		nWork = (int)(log10( (double)nAllLines) +1);	// 10を底とする対数(小数点以下切り捨て)+1で桁数
+		// 設定値と比較し、大きい方を取る
+		i = nWork > pView->m_pTypeData->m_nLineNumWidth ?
+			nWork : pView->m_pTypeData->m_nLineNumWidth;
+		// 先頭の空白分を加算する
+		return (i +1);
+#else
+		// 設定から行数を求める
+		nWork = 10;
+		for (i = 1; i < pView->m_pTypeData->m_nLineNumWidth; ++i) {
+			nWork *= 10;
+		}
+		// 表示している行数と比較し、大きい方の値を取る
+		for (i = pView->m_pTypeData->m_nLineNumWidth; i < LINENUMWIDTH_MAX; ++i) {
 			if (nWork > nAllLines) {	// Oct. 18, 2003 genta 式を整理
 				break;
 			}
 			nWork *= 10;
 		}
-		return i;
+		// 先頭の空白分を加算する
+		return (i +1);
+#endif
 	}else {
 		//	2003.09.11 wmlhq 行番号が1桁のときと幅を合わせる
-		return 3;
+		// 最小桁数を可変に変更 2014.07.26 katze	// 先頭の空白分を加算する 2014.07.31 katze
+		return pView->m_pTypeData->m_nLineNumWidth +1;
 	}
 }
 
@@ -302,5 +340,20 @@ void CTextArea::GenerateTextAreaRect(RECT* rc) const
 	rc->right  = m_nViewAlignLeft + m_nViewCx;
 	rc->top    = m_nViewAlignTop;
 	rc->bottom = m_nViewAlignTop + m_nViewCy;
+}
+
+
+int CTextArea::GenerateYPx(CLayoutYInt nLineNum) const
+{
+	CLayoutYInt nY = nLineNum - GetViewTopLine();
+	int ret;
+	if (nY < 0) {
+		ret = GetAreaTop();
+	}else if (m_nViewRowNum < nY) {
+		ret = GetAreaBottom();
+	}else {
+		ret = GetAreaTop() + m_pEditView->GetTextMetrics().GetHankakuDy() * (Int)(nY);
+	}
+	return ret;
 }
 

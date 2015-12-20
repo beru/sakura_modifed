@@ -1,3 +1,27 @@
+/*
+	Copyright (C) 2008, kobake
+
+	This software is provided 'as-is', without any express or implied
+	warranty. In no event will the authors be held liable for any damages
+	arising from the use of this software.
+
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
+
+		1. The origin of this software must not be misrepresented;
+		   you must not claim that you wrote the original software.
+		   If you use this software in a product, an acknowledgment
+		   in the product documentation would be appreciated but is
+		   not required.
+
+		2. Altered source versions must be plainly marked as such,
+		   and must not be misrepresented as being the original software.
+
+		3. This notice may not be removed or altered from any source
+		   distribution.
+*/
+
 #include "StdAfx.h"
 #include "CType.h"
 #include "view/Colors/EColorIndexType.h"
@@ -258,10 +282,13 @@ void _DefaultConfig(STypeConfig* pType)
 	for (int i = 0; i < MAX_VERTLINES; i++) {
 		pType->m_nVertLineIdx[i] = CLayoutInt(0);
 	}
+	pType->m_nNoteLineOffset = 0;
 
 	//  保存時に改行コードの混在を警告する	2013/4/14 Uchi
 	pType->m_bChkEnterAtEnd = true;
 
 	pType->m_bUseTypeFont = false;			//!< タイプ別フォントの使用
+
+	pType->m_nLineNumWidth = LINENUMWIDTH_MIN;	//!< 行番号最小桁数 2014.08.02 katze
 }
 

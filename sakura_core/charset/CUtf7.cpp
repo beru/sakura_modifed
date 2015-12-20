@@ -262,12 +262,12 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 /*! コード変換 Unicode→UTF-7
 	@date 2002.10.25 Moca UTF-7で直接エンコードできる文字をRFCに合わせて制限した
 */
-EConvertResult CUtf7::UnicodeToUTF7(CMemory* pMem)
+EConvertResult CUtf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
 {
 
 	// データ取得
-	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
-	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
+	const wchar_t* pSrc = cSrc.GetStringPtr();
+	int nSrcLen = cSrc.GetStringLength();
 
 	// 出力先バッファの確保
 	char* pDst;
@@ -285,7 +285,7 @@ EConvertResult CUtf7::UnicodeToUTF7(CMemory* pMem)
 	int nDstLen = UniToUtf7(pSrc, nSrcLen, pDst);
 
 	// pMem にデータをセット
-	pMem->SetRawData(pDst, nDstLen);
+	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	delete [] pDst;
 
@@ -297,4 +297,22 @@ void CUtf7::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF7_BOM[]= {'+', '/', 'v', '8', '-'};
 	pcmemBom->SetRawData(UTF7_BOM, sizeof(UTF7_BOM));
+}
+
+void CUtf7::GetEol(CMemory* pcmemEol, EEolType eEolType)
+{
+	static const struct{
+		const char* szData;
+		int nLen;
+	}
+	aEolTable[EOL_TYPE_NUM] = {
+		{ "",			0 },	// EOL_NONE
+		{ "\x0d\x0a",	2 },	// EOL_CRLF
+		{ "\x0a",		1 },	// EOL_LF
+		{ "\x0d",		1 },	// EOL_CR
+		{ "+AIU-",		5 },	// EOL_NEL
+		{ "+ICg-",		5 },	// EOL_LS
+		{ "+ICk-",		5 },	// EOL_PS
+	};
+	pcmemEol->SetRawData(aEolTable[eEolType].szData,aEolTable[eEolType].nLen);
 }

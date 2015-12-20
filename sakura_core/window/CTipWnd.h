@@ -47,7 +47,6 @@ public:
 	}
 
 protected: // 2002/2/10 aroka アクセス権変更
-	LPCTSTR		m_pszClassName;	// Mutex作成用・ウィンドウクラス名
 	HFONT		m_hFont;
 
 public:
@@ -57,6 +56,7 @@ public:
 	int			m_nSearchDict;	// ヒット辞書番号	// 2006.04.10 fon
 
 	CNativeT	m_cInfo;		// Tipの内容データ
+	bool		m_bAlignLeft;	// 右側揃えでチップを表示
 
 protected:
 	/*

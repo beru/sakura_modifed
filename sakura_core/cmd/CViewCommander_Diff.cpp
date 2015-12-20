@@ -198,7 +198,7 @@ void CViewCommander::Command_COMPARE(void)
 // To Here Oct. 10, 2000
 
 	// 2002/05/11 YAZAKI 親ウィンドウをうまく設定してみる。
-	if (!bDefferent) {
+	if (!bDifferent) {
 		TopInfoMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD22));
 	}else {
 //		TopInfoMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));

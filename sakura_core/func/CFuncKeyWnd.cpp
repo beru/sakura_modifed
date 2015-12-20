@@ -53,7 +53,6 @@ CFuncKeyWnd::CFuncKeyWnd()
 	:
 	CWnd(_T("::CFuncKeyWnd"))
 {
-	m_pszClassName = _T("CFuncKeyWnd");
 	m_pcEditDoc = NULL;
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();

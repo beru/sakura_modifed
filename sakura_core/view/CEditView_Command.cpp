@@ -48,13 +48,18 @@
 */
 bool CEditView::TagJumpSub(
 	const TCHAR*	pszFileName,
-	CMyPoint		ptJumpTo,
+	CMyPoint		ptJumpTo,		//!< ジャンプ位置(1開始)
 	bool			bClose,			//!< [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
-	bool			bRelFromIni
+	bool			bRelFromIni,
+	bool*			pbJumpToSelf	//!< [out] オプションNULL可。自分にジャンプしたか
 	)
 {
 	// 2004/06/21 novice タグジャンプ機能追加
 	TagJump	tagJump;
+
+	if (pbJumpToSelf) {
+		*pbJumpToSelf = false;
+	}
 
 	// 参照元ウィンドウ保存
 	tagJump.hwndReferer = CEditWnd::getInstance()->GetHwnd();
@@ -82,8 +87,10 @@ bool CEditView::TagJumpSub(
 // その前で保存するように変更。
 
 	// カーソル位置変換
-	GetDocument()->m_cLayoutMgr.LayoutToLogic(
-		GetCaret().GetCaretLayoutPos(),
+	CEditDoc* pDoc = GetDocument();
+	CCaret& caret = GetCaret();
+	pDoc->m_cLayoutMgr.LayoutToLogic(
+		caret.GetCaretLayoutPos(),
 		&tagJump.point
 	);
 
@@ -105,11 +112,16 @@ bool CEditView::TagJumpSub(
 			}else {
 				poCaret.x = 0;
 			}
-			memcpy_raw(GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &poCaret, sizeof(poCaret));
+			GetDllShareData().m_sWorkBuffer.m_LogicPoint.Set(CLogicInt(poCaret.x), CLogicInt(poCaret.y));
 			::SendMessageAny(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 		}
 		// アクティブにする
 		ActivateFrameWindow(hwndOwner);
+		if (tagJump.hwndReferer == hwndOwner) {
+			if (pbJumpToSelf) {
+				*pbJumpToSelf = true;
+			}
+		}
 	}else {
 		// 新しく開く
 		EditInfo inf;
@@ -121,7 +133,7 @@ bool CEditView::TagJumpSub(
 
 		bool bSuccess = CControlTray::OpenNewEditor2(
 			G_AppInstance(),
-			this->GetHwnd(),
+			GetHwnd(),
 			&inf,
 			false,	// ビューモードか
 			true	// 同期モードで開く
@@ -141,7 +153,8 @@ bool CEditView::TagJumpSub(
 	// Apr. 2003 genta 閉じるかどうかは引数による
 	// grep結果からEnterでジャンプするところにCtrl判定移動
 	if (bClose) {
-		GetCommander().Command_WINCLOSE();	// 挑戦するだけ。
+		CViewCommander& commander = GetCommander();
+		commander.Command_WINCLOSE();	// 挑戦するだけ。
 	}
 
 	return true;

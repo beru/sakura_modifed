@@ -136,7 +136,7 @@ protected:
 		int				nBlockLen,
 		int				nKind,		// 0:îºäp, 1:ëSäp
 		const CLayout*	pcLayout,	// êFê›íËópLayout
-		const CColorStrategy*	pStrategy,
+		int				nColorIndex,
 		int				nBgnPhysical,
 		CLayoutInt		nLayoutX,
 		int				nDx,

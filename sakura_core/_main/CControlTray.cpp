@@ -49,6 +49,7 @@
 #include "doc/CDocListener.h" // SLoadInfo,EditInfo
 #include "recent/CMRUFile.h"
 #include "recent/CMRUFolder.h"
+#include "_main/CCommandLine.h"
 #include "sakura_rc.h"
 
 #define IDT_EDITCHECK 2
@@ -1565,7 +1566,14 @@ int	CControlTray::CreatePopUpMenu_L(void)
 				EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 				// メニューラベル。1からアクセスキーを振る
-				CFileNameManager::getInstance()->GetMenuFullLabel_WinList(szMenu, _countof(szMenu), pfi, m_pShareData->m_sNodes.m_pEditArr[i].m_nId, i);
+				CFileNameManager::getInstance()->GetMenuFullLabel_WinList(
+					szMenu,
+					_countof(szMenu),
+					pfi,
+					m_pShareData->m_sNodes.m_pEditArr[i].m_nId,
+					i,
+					dcFont.GetHDC()
+				);
 				m_cMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING, IDM_SELWINDOW + i, szMenu, _T(""), FALSE);
 				++j;
 			}

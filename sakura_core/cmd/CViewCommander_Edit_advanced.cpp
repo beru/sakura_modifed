@@ -645,9 +645,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=è∏èá,FALSE=ç~èá
 	CLayoutInt	nCF(0), nCT(0);
 	CLayoutInt	nCaretPosYOLD;
 	bool		bBeginBoxSelectOld;
-	const wchar_t*	pLine;
 	CLogicInt	nLineLen;
-	int			j;
 	std::vector<SORTDATA*> sta;
 
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -822,6 +820,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=è∏èá,FALSE=ç~èá
 void CViewCommander::Command_MERGE(void)
 {
 	CLayoutInt	nCaretPosYOLD;
+	CLogicInt	nLineLen;
 	CLayoutInt	nMergeLayoutLines;
 
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -879,7 +878,7 @@ void CViewCommander::Command_MERGE(void)
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().GetY2());
 	for (CLogicInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().y; i++) {
-		const wchar_t*	pLine = GetDocument()->m_cDocLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = GetDocument()->m_cDocLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
 			lineArr.push_back(CStringRef(pLine, nLineLen));

@@ -109,9 +109,7 @@ CFileLoad::~CFileLoad(void)
 */
 ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, bool bBigFile, ECodeType CharCode, int nFlag, bool* pbBomExist )
 {
-	HANDLE	hFile;
 	ULARGE_INTEGER	fileSize;
-	ECodeType	nBomCode;
 
 	// FileCloseを呼んでからにしてください
 	if (m_hFile) {
@@ -278,7 +276,8 @@ EConvertResult CFileLoad::ReadLine( CNativeW* pUnicodeBuffer, CEol* pcEol )
 										&nRetLineLen,
 										&m_nReadOffset2,
 										&cEolTemp,
-										GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol);
+										GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+									  );
 	if( m_cLineTemp.GetStringLength() == m_nReadOffset2 && nOffsetTemp == 0 ){
 		// 途中に改行がない限りは、swapを使って中身のコピーを省略する
 		pUnicodeBuffer->swap(m_cLineTemp);

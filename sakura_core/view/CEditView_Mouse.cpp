@@ -60,6 +60,13 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
 	}
+	if (m_bMiniMap) {
+		::SetFocus(GetHwnd());
+		::SetCapture(GetHwnd());
+		m_bMiniMapMouseDown = true;
+		OnMOUSEMOVE(fwKeys, _xPos, _yPos);
+		return;
+	}
 
 	CNativeW	cmemCurText;
 	const wchar_t*	pLine;
@@ -459,7 +466,7 @@ normal_action:;
 			}
 		}else {
 			// URLがクリックされたら選択するか
-			if (TRUE == GetDllShareData().m_Common.m_sEdit.m_bSelectClickedURL) {
+			if (GetDllShareData().m_Common.m_sEdit.m_bSelectClickedURL) {
 
 				CLogicRange cUrlRange;	// URL範囲
 				// カーソル位置にURLが有る場合のその範囲を調べる
@@ -561,6 +568,9 @@ void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
+	}
+	if (m_bMiniMap) {
+		return;
 	}
 	// 現在のマウスカーソル位置→レイアウト位置
 
@@ -700,6 +710,9 @@ void CEditView::AutoScrollEnter()
 {
 	m_bAutoScrollVertical = GetTextArea().m_nViewRowNum < m_pcEditDoc->m_cLayoutMgr.GetLineCount() + 2;
 	m_bAutoScrollHorizontal = GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar();
+	if (m_bMiniMap) {
+		m_bAutoScrollHorizontal = false;
+	}
 	if (!m_bAutoScrollHorizontal && !m_bAutoScrollVertical) {
 		m_nAutoScrollMode = 0;
 		return;
@@ -935,6 +948,76 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		return;
 	}else if (2 == m_nAutoScrollMode) {
 		AutoScrollMove(ptMouse);
+		return;
+	}
+
+	if (m_bMiniMap) {
+		POINT po;
+		::GetCursorPos(&po);
+		// 辞書Tipが起動されている
+		if (m_dwTipTimer == 0) {
+			if ((m_poTipCurPos.x != po.x || m_poTipCurPos.y != po.y )) {
+				m_cTipWnd.Hide();
+				m_dwTipTimer = ::GetTickCount();
+			}
+		}else {
+			m_dwTipTimer = ::GetTickCount();
+		}
+		if (m_bMiniMapMouseDown) {
+			CLayoutPoint ptNew;
+			CTextArea& area = GetTextArea();
+			area.ClientToLayout( ptMouse, &ptNew );
+			// ミニマップの上下スクロール
+			if (ptNew.y < 0) {
+				ptNew.y = CLayoutYInt(0);
+			}
+			CLayoutYInt nScrollRow = CLayoutYInt(0);
+			CLayoutYInt nScrollMargin = CLayoutYInt(15);
+			nScrollMargin  = t_min(nScrollMargin,  (GetTextArea().m_nViewRowNum) / 2);
+			if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() > area.m_nViewRowNum
+				&& ptNew.y > area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin
+			) {
+				nScrollRow = (area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin) - ptNew.y;
+			}else if (0 < area.GetViewTopLine() && ptNew.y < area.GetViewTopLine() + nScrollMargin) {
+				nScrollRow = area.GetViewTopLine() + nScrollMargin - ptNew.y;
+				if (0 > area.GetViewTopLine() - nScrollRow) {
+					nScrollRow = area.GetViewTopLine();
+				}
+			}
+			if (nScrollRow != 0) {
+				ScrollAtV( area.GetViewTopLine() - nScrollRow );
+			}
+
+			GetTextArea().ClientToLayout( ptMouse, &ptNew );
+			if (ptNew.y < 0) {
+				ptNew.y = CLayoutYInt(0);
+			}
+			CEditView& view = m_pcEditWnd->GetActiveView();
+			ptNew.x = 0;
+			CLogicPoint ptNewLogic;
+			view.GetCaret().GetAdjustCursorPos(&ptNew);
+			GetDocument()->m_cLayoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
+			GetDocument()->m_cLayoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
+			if (GetKeyState_Shift()) {
+				if (view.GetSelectionInfo().IsTextSelected()) {
+					if (view.GetSelectionInfo().IsBoxSelecting()) {
+						view.GetSelectionInfo().DisableSelectArea(true);
+						view.GetSelectionInfo().BeginSelectArea();
+					}
+				}else {
+					view.GetSelectionInfo().BeginSelectArea();
+				}
+				view.GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptNew);
+			}else {
+				if (view.GetSelectionInfo().IsTextSelected()) {
+					view.GetSelectionInfo().DisableSelectArea(true);
+				}
+			}
+			view.GetCaret().MoveCursor(ptNew, true);
+			view.GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
+		}
+		::SetCursor(::LoadCursor(NULL, IDC_ARROW));
+		GetSelectionInfo().m_ptMouseRollPosOld = ptMouse; // マウス範囲選択前回位置(XY座標)
 		return;
 	}
 
@@ -1291,11 +1374,17 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 				if (::SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &nScrollChars, 0)) {
 					bGetParam = true;
 					nRollLineNum = nScrollChars;
+					if (nRollLineNum != -1 && m_bMiniMap) {
+						nRollLineNum *= 10;
+					}
 				}
 			}
 			if (!bGetParam) {
 				if (ReadRegistry(HKEY_CURRENT_USER, _T("Control Panel\\desktop"), _T("WheelScrollLines"), szValStr, uDataLen)) {
 					nRollLineNum = ::_ttoi(szValStr);
+					if (nRollLineNum != -1 && m_bMiniMap) {
+						nRollLineNum *= 10;
+					}
 				}
 			}
 		}
@@ -1465,6 +1554,10 @@ void CEditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 			GetSelectionInfo().DisableSelectArea(true);
 		}
 	}
+	if (m_bMiniMapMouseDown) {
+		m_bMiniMapMouseDown = false;
+		::ReleaseCapture();
+	}
 	return;
 }
 
@@ -1520,9 +1613,9 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 				CWaitCursor cWaitCursor(GetHwnd());	// カーソルを砂時計にする
 
 				unsigned int nThreadId;
-				LPCTSTR pszUrl = to_tchar(wstrOPEN.c_str());
-				LPTSTR szUrlDup = new TCHAR[_tcslen(pszUrl) + 1];
-				_tcscpy(szUrlDup, pszUrl);
+				LPCTSTR szUrl = to_tchar(wstrOPEN.c_str());
+				LPTSTR szUrlDup = new TCHAR[_tcslen(szUrl) + 1];
+				_tcscpy(szUrlDup, szUrl);
 				HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, ShellExecuteProc, (LPVOID)szUrlDup, 0, &nThreadId);
 				if (hThread != INVALID_HANDLE_VALUE) {
 					// ユーザーのURL起動指示に反応した目印としてちょっとの時間だけ砂時計カーソルを表示しておく

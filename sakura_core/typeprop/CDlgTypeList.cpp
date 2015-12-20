@@ -24,6 +24,7 @@
 #include "util/shell.h"
 #include "util/window.h"
 #include "util/RegKey.h"
+#include "util/string_ex2.h"
 #include <memory>
 #include "sakura_rc.h"
 #include "sakura.hh"
@@ -181,15 +182,15 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 
 	INT_PTR result;
 	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
-	switch (wMsg) {
-	case WM_COMMAND:
-		{
+	if (wMsg == WM_COMMAND) {
 		HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
 		int nIdx = List_GetCurSel(hwndList);
 		const STypeConfigMini* type = NULL;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (LOWORD(wParam) == IDC_LIST_TYPES) {
 			switch (HIWORD(wParam)) {
+
+
 			case LBN_SELCHANGE:
 				DlgItem_Enable(GetHwnd(), IDC_BUTTON_INITIALIZE, nIdx != 0);
 				DlgItem_Enable(GetHwnd(), IDC_BUTTON_UP_TYPE, 1 < nIdx);
@@ -203,18 +204,19 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 					if (!m_bRegistryChecked[nIdx]) {
 						TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 						_tcscpy(exts, type->m_szTypeExts);
-						static const TCHAR	pszSeps[] = _T(" ;,");	// separator
-						TCHAR* ext = _tcstok(exts, pszSeps);
+						TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
 
 						m_bExtRMenu[nIdx] = true;
 						m_bExtDblClick[nIdx] = true;
-						while (ext) {
-							bool bRMenu;
-							bool bDblClick;
-							CheckExt(ext, &bRMenu, &bDblClick);
-							m_bExtRMenu[nIdx] &= bRMenu;
-							m_bExtDblClick[nIdx] &= bDblClick;
-							ext = _tcstok(NULL, pszSeps);
+						while( NULL != ext ){
+							if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
+								bool bRMenu;
+								bool bDblClick;
+								CheckExt(ext, &bRMenu, &bDblClick);
+								m_bExtRMenu[nIdx] &= bRMenu;
+								m_bExtDblClick[nIdx] &= bDblClick;
+							}
+							ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
 						}
 						m_bRegistryChecked[nIdx] = true;
 					}
@@ -226,61 +228,69 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			}
 		}else if (LOWORD(wParam) == IDC_CHECK_EXT_RMENU && HIWORD(wParam) == BN_CLICKED) {
 			bool checked = (BtnCtl_GetCheck(hwndRMenu) == TRUE);
+
+
 			if (!AlertFileAssociation()) {		// レジストリ変更確認
 				BtnCtl_SetCheck(hwndRMenu, !checked);
-				break;
+				return result;
 			}
 			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 			_tcscpy(exts, type->m_szTypeExts);
-			static const TCHAR	pszSeps[] = _T(" ;,");	// separator
-			TCHAR* ext = _tcstok(exts, pszSeps);
+			TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
+			int nRet;
+			while( NULL != ext ){
+				if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
+					if (checked) {	//「右クリック」チェックON
+						if ((nRet = RegistExt( ext, true )) != 0 ) {
+	
+							TCHAR buf[BUFFER_SIZE] = {0};
+							::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, nRet, 0, buf, _countof(buf), NULL); 
+							::MessageBox(GetHwnd(), (tstring(LS(STR_DLGTYPELIST_ERR1)) + buf).c_str(), GSTR_APPNAME, MB_OK);
+							break;
+						}
+					}else {			//「右クリック」チェックOFF
+						if ((nRet = UnregistExt(ext)) != 0) {
+	
+							TCHAR buf[BUFFER_SIZE] = {0};
+							::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, nRet, 0, buf, _countof(buf), NULL); 
+							::MessageBox(GetHwnd(), (tstring(LS(STR_DLGTYPELIST_ERR2)) + buf).c_str(), GSTR_APPNAME, MB_OK);
+							break;
+						}
+					}
+				}
+				ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
+			}
+			m_bExtRMenu[nIdx] = checked;
+			::EnableWindow(hwndDblClick, checked);
+			m_bExtDblClick[nIdx] = checked;
+			BtnCtl_SetCheck(hwndDblClick, checked);
+			return TRUE;
+		}else if (LOWORD(wParam) == IDC_CHECK_EXT_DBLCLICK && HIWORD(wParam) == BN_CLICKED) {
+			bool checked = (BtnCtl_GetCheck(hwndDblClick) == TRUE);
+
+
+			if (!AlertFileAssociation()) {		// レジストリ変更確認
+				BtnCtl_SetCheck(hwndDblClick, !checked);
+				return result;
+			}
+			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
+			_tcscpy(exts, type->m_szTypeExts);
+			TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
 			int nRet;
 			while (ext) {
-				if (checked) {	//「右クリック」チェックON
-					if ((nRet = RegistExt(ext, true)) != 0) {
+				if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
+					if ((nRet = RegistExt( ext, checked )) != 0) {
+
 						TCHAR buf[BUFFER_SIZE] = {0};
 						::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, nRet, 0, buf, _countof(buf), NULL); 
 						::MessageBox(GetHwnd(), (tstring(LS(STR_DLGTYPELIST_ERR1)) + buf).c_str(), GSTR_APPNAME, MB_OK);
 						break;
 					}
-				}else {			//「右クリック」チェックOFF
-					if ((nRet = UnregistExt(ext)) != 0) {
-						TCHAR buf[BUFFER_SIZE] = {0};
-						::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, nRet, 0, buf, _countof(buf), NULL); 
-						::MessageBox(GetHwnd(), (tstring(LS(STR_DLGTYPELIST_ERR2)) + buf).c_str(), GSTR_APPNAME, MB_OK);
-						break;
-					}
 				}
-				m_bExtRMenu[nIdx] = checked;
-				::EnableWindow(hwndDblClick, checked);
-				m_bExtDblClick[nIdx] = checked;
-				BtnCtl_SetCheck(hwndDblClick, checked);
-				ext = _tcstok(NULL, pszSeps);
+				ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
 			}
+			m_bExtDblClick[ nIdx ] = checked;
 			return TRUE;
-		}else if (LOWORD(wParam) == IDC_CHECK_EXT_DBLCLICK && HIWORD(wParam) == BN_CLICKED) {
-			bool checked = (BtnCtl_GetCheck(hwndDblClick) == TRUE);
-			if (!AlertFileAssociation()) {		// レジストリ変更確認
-				BtnCtl_SetCheck(hwndDblClick, !checked);
-				break;
-			}
-			TCHAR exts[_countof(type->m_szTypeExts)] = {0};
-			_tcscpy(exts, type->m_szTypeExts);
-			static const TCHAR	pszSeps[] = _T(" ;,");	// separator
-			TCHAR* ext = _tcstok(exts, pszSeps);
-			int nRet;
-			while (ext) {
-				if ((nRet = RegistExt(ext, checked)) != 0) {
-					TCHAR buf[BUFFER_SIZE] = {0};
-					::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, nRet, 0, buf, _countof(buf), NULL); 
-					::MessageBox(GetHwnd(), (tstring(LS(STR_DLGTYPELIST_ERR1)) + buf).c_str(), GSTR_APPNAME, MB_OK);
-					break;
-				}
-				m_bExtDblClick[nIdx] = checked;
-				ext = _tcstok(NULL, pszSeps);
-			}
-			return TRUE;
-		}
 		}
 	}
 	return result;
@@ -427,6 +437,7 @@ bool CDlgTypeList::Import()
 		}
 		type.m_nIdx = nIdx;
 	}
+	type.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
 	// 適用
 	CDocTypeManager().SetTypeConfig(CTypeConfig(nIdx), type);
 	if (!bAdd) {
@@ -516,6 +527,7 @@ bool CDlgTypeList::InitializeType(void)
 	type.m_szTypeExts[0] = 0;
 	type.m_nIdx = iDocType;
 	type.m_id = (::GetTickCount() & 0x3fffffff) + iDocType * 0x10000;
+	type.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
 
 	CDocTypeManager().SetTypeConfig(CTypeConfig(iDocType), type);
 
@@ -557,7 +569,15 @@ bool CDlgTypeList::CopyType()
 				n++;
 			}
 			TCHAR szNum[12];
-			auto_sprintf_s(szNum, _T("%d"), n);
+			auto_sprintf( szNum, _T("%d"), n );
+			int nLen = auto_strlen( szNum );
+			TCHAR szTemp[_countof(type.m_szTypeName) + 12];
+			auto_strcpy( szTemp, type.m_szTypeName );
+			int nTempLen = auto_strlen( szTemp );
+			CNativeT cmem;
+			// バッファをはみ出さないように
+			LimitStringLengthT( szTemp, nTempLen, _countof(type.m_szTypeName) - nLen - 1, cmem );
+			auto_strcpy( type.m_szTypeName, cmem.GetStringPtr() );
 			auto_strcat(type.m_szTypeName, szNum);
 			bUpdate = false;
 		}
@@ -573,6 +593,7 @@ bool CDlgTypeList::CopyType()
 	}
 	type.m_id = (::GetTickCount() & 0x3fffffff) + nNewTypeIndex * 0x10000;
 	type.m_nIdx = nNewTypeIndex;
+	type.m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
 	CDocTypeManager().SetTypeConfig(CTypeConfig(nNewTypeIndex), type);
 	SetData(nNewTypeIndex);
 	return true;
@@ -580,7 +601,6 @@ bool CDlgTypeList::CopyType()
 
 bool CDlgTypeList::UpType()
 {
-	HWND hwndDlg = GetHwnd();
 	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	if (iDocType == 0) {
@@ -603,7 +623,6 @@ bool CDlgTypeList::UpType()
 
 bool CDlgTypeList::DownType()
 {
-	HWND hwndDlg = GetHwnd();
 	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	if (iDocType == 0 || GetDllShareData().m_nTypesCount <= iDocType + 1) {
@@ -627,8 +646,6 @@ bool CDlgTypeList::DownType()
 bool CDlgTypeList::AddType()
 {
 	int nNewTypeIndex = GetDllShareData().m_nTypesCount;
-	HWND hwndDlg = GetHwnd();
-	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_TYPES);
 	if (!CDocTypeManager().AddTypeConfig(CTypeConfig(nNewTypeIndex))) {
 		return false;
 	}

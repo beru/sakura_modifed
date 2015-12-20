@@ -43,7 +43,7 @@ INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 	switch (uMsg) {
 	case WM_INITDIALOG:
 		pPsp = (PROPSHEETPAGE*)lParam;
-		pCPropTypes = (CPropTypes*)(pPsp->lParam);
+		pCPropTypes = reinterpret_cast<CPropTypes*>(pPsp->lParam);
 		if (pCPropTypes) {
 			return (pCPropTypes->*pDispatch)(hwndDlg, uMsg, wParam, pPsp->lParam);
 		}else {
@@ -102,12 +102,7 @@ CPropTypes::CPropTypes()
 	m_hwndThis  = NULL;		// このダイアログのハンドル
 	m_nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
 
-	// 2005.11.30 Moca カスタム色を設定・保持
-	for (int i = 0; i < _countof(m_dwCustColors); i++) {
-		m_dwCustColors[i] = RGB(255, 255, 255);
-	}
-
-	((CPropTypesScreen*)(this))->CPropTypes_Screen();
+	(static_cast<CPropTypesScreen*>(this))->CPropTypes_Screen();
 }
 
 CPropTypes::~CPropTypes()
@@ -147,6 +142,8 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 		{ STR_PROPTYPE_KEYWORD_HELP,	IDD_PROP_KEYHELP,	PropTypesKeyHelp }
 	};
 
+	// カスタム色を共有メモリから取得
+	memcpy_raw( m_dwCustColors, m_pShareData->m_dwCustColors, sizeof(m_dwCustColors) );
 	// 2005.11.30 Moca カスタム色の先頭にテキスト色を設定しておく
 	m_dwCustColors[0] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
 	m_dwCustColors[1] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
@@ -222,6 +219,9 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 		);
 		::LocalFree(pszMsgBuf);
 	}
+
+	// カスタム色を共有メモリに設定
+	memcpy_raw( m_pShareData->m_dwCustColors, m_dwCustColors, sizeof(m_dwCustColors) );
 
 	return nRet;
 }

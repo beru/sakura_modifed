@@ -831,7 +831,7 @@ void CEditDoc::OnChangeSetting(
 
 	@retval TRUE: 終了して良い / FALSE: 終了しない
 */
-BOOL CEditDoc::OnFileClose()
+BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 {
 	// クローズ事前処理
 	ECallbackResult eBeforeCloseResult = NotifyBeforeClose();

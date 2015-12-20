@@ -53,7 +53,7 @@
 #include "dlg/CDlgReplace.h"
 #include "dlg/CDlgJump.h"
 #include "dlg/CDlgGrep.h"
-#include "dlg/CDlgOpenFile.h"
+#include "dlg/CDlgGrepReplace.h"
 #include "dlg/CDlgSetCharSet.h"
 #include "outline/CDlgFuncList.h"
 #include "CHokanMgr.h"
@@ -140,6 +140,7 @@ public:
 	// 各種イベント
 	LRESULT OnPaint(HWND, UINT, WPARAM, LPARAM);	// 描画処理
 	LRESULT OnSize(WPARAM, LPARAM);	// WM_SIZE 処理
+	LRESULT OnSize2(WPARAM, LPARAM, bool);
 	LRESULT OnLButtonUp(WPARAM, LPARAM);
 	LRESULT OnLButtonDown(WPARAM, LPARAM);
 	LRESULT OnMouseMove(WPARAM, LPARAM);
@@ -147,7 +148,7 @@ public:
 	BOOL DoMouseWheel(WPARAM wParam, LPARAM lParam);	// マウスホイール処理	// 2007.10.16 ryoji
 	LRESULT OnHScroll(WPARAM, LPARAM);
 	LRESULT OnVScroll(WPARAM, LPARAM);
-	int	OnClose(HWND hWndFrom);			// 終了時の処理
+	int	OnClose(HWND hWndFrom, bool);	// 終了時の処理
 	void OnDropFiles(HDROP);			// ファイルがドロップされた
 	BOOL OnPrintPageSetting(void);		// 印刷ページ設定
 	LRESULT OnTimer(WPARAM, LPARAM);	// WM_TIMER 処理	// 2007.04.03 ryoji
@@ -189,6 +190,7 @@ public:
 	void LayoutFuncKey(void);		// ファンクションキーの配置処理		// 2006.12.19 ryoji
 	void LayoutTabBar(void);		// タブバーの配置処理				// 2006.12.19 ryoji
 	void LayoutStatusBar(void);		// ステータスバーの配置処理			// 2006.12.19 ryoji
+	void LayoutMiniMap();			// ミニマップの配置処理
 	void EndLayoutBars(BOOL bAdjust = TRUE);	// バーの配置終了処理		// 2006.12.19 ryoji
 
 
@@ -262,7 +264,7 @@ public:
 	//                       各種アクセサ                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	HWND			GetHwnd() const			{ return m_hWnd; }
-	CMenuDrawer&	GetMenuDrawer()			{ return m_CMenuDrawer; }
+	CMenuDrawer&	GetMenuDrawer()			{ return m_cMenuDrawer; }
 	CEditDoc*		GetDocument()			{ return m_pcEditDoc; }
 	const CEditDoc*	GetDocument() const		{ return m_pcEditDoc; }
 
@@ -271,6 +273,7 @@ public:
 	CEditView&			GetActiveView()				{ return *m_pcEditView; }
 	const CEditView&	GetView(int n) const		{ return *m_pcEditViewArr[n]; }
 	CEditView&			GetView(int n)				{ return *m_pcEditViewArr[n]; }
+	CEditView&          GetMiniMap()       { return *m_pcEditViewMiniMap; }
 	bool				IsEnablePane(int n) const	{ return 0 <= n && n < m_nEditViewCount; }
 	int					GetAllViewCount() const		{ return m_nEditViewCount; }
 
@@ -332,6 +335,8 @@ public:
 	const LOGFONT& GetLogfont(bool bTempSetting = true);
 	int GetFontPointSize(bool bTempSetting = true);
 	ECharWidthCacheMode GetLogfontCacheMode();
+
+	void ClearViewCaretPosInfo();
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -346,21 +351,22 @@ public:
 	// 子ウィンドウ
 	CMainToolBar	m_cToolbar;			//!< ツールバー
 	CTabWnd			m_cTabWnd;			//!< タブウインドウ	//@@@ 2003.05.31 MIK
-	CFuncKeyWnd		m_CFuncKeyWnd;		//!< ファンクションバー
+	CFuncKeyWnd		m_cFuncKeyWnd;		//!< ファンクションバー
 	CMainStatusBar	m_cStatusBar;		//!< ステータスバー
 	CPrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
 
 	CSplitterWnd	m_cSplitterWnd;		//!< 分割フレーム
 	CEditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
 	CViewFont*		m_pcViewFont;		//!< フォント
+	CViewFont*		m_pcViewFontMiniMap;		//!< フォント
 
 	// ダイアログ達
 	CDlgFind		m_cDlgFind;			//「検索」ダイアログ
 	CDlgReplace		m_cDlgReplace;		//「置換」ダイアログ
 	CDlgJump		m_cDlgJump;			//「指定行へジャンプ」ダイアログ
 	CDlgGrep		m_cDlgGrep;			// Grepダイアログ
+	CDlgGrepReplace	m_cDlgGrepReplace;	// Grep置換ダイアログ
 	CDlgFuncList	m_cDlgFuncList;		// アウトライン解析結果ダイアログ
-	CDlgOpenFile	m_cDlgOpenFile;		// ファイルオープンダイアログ
 	CHokanMgr		m_cHokanMgr;		// 入力補完
 	CDlgSetCharSet	m_cDlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
@@ -369,6 +375,7 @@ private:
 	CEditDoc* 		m_pcEditDoc;
 	CEditView*		m_pcEditViewArr[4];		//!< ビュー
 	CEditView*		m_pcEditView;			//!< 有効なビュー
+	CEditView*		m_pcEditViewMiniMap;	//!< ミニマップ
 	int				m_nActivePaneIndex;		//!< 有効なビューのindex
 	int				m_nEditViewCount;		//!< 有効なビューの数
 	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
@@ -377,7 +384,7 @@ private:
 	DLLSHAREDATA*	m_pShareData;
 
 	// ヘルパ
-	CMenuDrawer		m_CMenuDrawer;
+	CMenuDrawer		m_cMenuDrawer;
 
 	// メッセージID
 	UINT			m_uMSIMEReconvertMsg;

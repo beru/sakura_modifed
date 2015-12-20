@@ -162,7 +162,7 @@ int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 }
 
 
-EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
+EConvertResult CEuc::UnicodeToEUC(const CNativeW& cSrc, CMemory* pDstMem)
 {
 	// エラー状態
 	bool bError = false;
@@ -203,6 +203,7 @@ EConvertResult CEuc::UnicodeToEUC(CMemory* pMem)
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
+	CNativeW cCharBuffer;
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInEuc) {
 		// Unicodeで表示
@@ -218,13 +219,13 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	}
 
 	// EUC-JP 変換
-	res = UnicodeToEUC(cCharBuffer, cCharBuffer._GetMemory());
+	EConvertResult res = UnicodeToEUC(cCharBuffer, cCharBuffer._GetMemory());
 	if (res != RESULT_COMPLETE) {
 		return res;
 	}
 
 	// Hex変換
-	unsigned char* ps = reinterpret_cast<unsigned char*>(cCharBuffer.GetRawPtr());
+	unsigned char* ps = reinterpret_cast<unsigned char*>(cCharBuffer._GetMemory()->GetRawPtr());
 	TCHAR* pd = pDst;
 	if (!bbinary) {
 		for (int i = cCharBuffer._GetMemory()->GetRawLength(); i >0; i--, ps ++, pd += 2) {

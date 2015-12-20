@@ -331,7 +331,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 
 				// 02/06/26 ai Start
 				// 検索開始位置を登録
-				if (pcEditView->m_bSearch != FALSE6) {
+				if (pcEditView->m_bSearch != FALSE) {
 					// 検索開始時のカーソル位置登録条件変更 02/07/28 ai start
 					pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
 					pcEditView->m_bSearch = FALSE;

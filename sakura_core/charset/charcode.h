@@ -133,7 +133,7 @@ namespace WCODE {
 	bool IsControlCode(wchar_t wc);
 
 	//! â¸çsï∂éöÇ≈Ç†ÇÈÇ©Ç«Ç§Ç©
-	inline bool IsLineDelimiter(wchar_t wc) {
+	inline bool IsLineDelimiter(wchar_t wc, bool ext) {
 		return wc == CR || wc == LF || wc == 0x85 || wc == 0x2028 || wc == 0x2029;
 	}
 	inline bool IsLineDelimiterBasic(wchar_t wc) {

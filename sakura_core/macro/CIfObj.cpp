@@ -311,7 +311,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
 {
 	if (!m_TypeInfo) {
-		m_TypeInfo = new CIfObjTypeInfo(this->m_Methods);
+		m_TypeInfo = new CIfObjTypeInfo(this->m_Methods, this->m_sName);
 		m_TypeInfo->AddRef();
 	}
 	(*ppTInfo) = m_TypeInfo;

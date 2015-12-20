@@ -113,6 +113,7 @@ public:
 	CTextWidthCalc(HWND hParentDlg, int nID);
 	CTextWidthCalc(HWND hwndThis);
 	CTextWidthCalc(HFONT font);
+	CTextWidthCalc(HDC hdc);
 	virtual ~CTextWidthCalc();
 	void Reset() { nCx = 0; nExt = 0; }
 	void SetCx(int cx = 0) { nCx = cx; }
@@ -121,6 +122,9 @@ public:
 	bool SetWidthIfMax(int width, int extCx);
 	bool SetTextWidthIfMax(LPCTSTR pszText);
 	bool SetTextWidthIfMax(LPCTSTR pszText, int extCx);
+	int GetTextWidth(LPCTSTR pszText) const;
+	int GetTextHeight() const;
+	HDC GetDC() const{ return hDC; }
 	int GetCx() { return nCx; }
 	// 算出方法がよく分からないので定数にしておく
 	// 制御不要なら ListViewはLVSCW_AUTOSIZE等推奨
@@ -141,6 +145,8 @@ private:
 	HFONT hFontOld;
 	int nCx;
 	int nExt;
+	bool  bHDCComp;
+	bool  bFromDC;
 };
 
 class CFontAutoDeleter {
@@ -155,5 +161,31 @@ private:
 	HFONT m_hFontOld;
 	HFONT m_hFont;
 	HWND  m_hwnd;
+};
+
+class CDCFont
+{
+public:
+	CDCFont(LOGFONT& font, HWND hwnd = NULL) {
+		m_hwnd = hwnd;
+		m_hDC = ::GetDC(hwnd);
+		HFONT hFont = ::CreateFontIndirect(&font);
+		m_hFontOld = (HFONT)::SelectObject(m_hDC, hFont);
+	}
+	~CDCFont() {
+		if (m_hDC) {
+			::SelectObject(m_hDC, m_hFontOld);
+			::ReleaseDC(m_hwnd, m_hDC);
+			m_hDC = NULL;
+			::DeleteObject(m_hFont);
+			m_hFont = NULL;
+		}
+	}
+	HDC GetHDC() { return m_hDC; }
+private:
+	HWND  m_hwnd;
+	HDC   m_hDC;
+	HFONT m_hFontOld;
+	HFONT m_hFont;
 };
 

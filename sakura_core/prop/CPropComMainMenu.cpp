@@ -849,14 +849,13 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 	HWND			hwndCombo;
 	HWND			hwndCheck;
 	HWND			hwndTreeRes;
-	WCHAR			szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
+	const int		MAX_LABEL_CCH = 256+10;
+	WCHAR			szLabel[MAX_LABEL_CCH];
 	int				nCurLevel;
 	HTREEITEM		htiItem;
 	HTREEITEM		htiParent;
 	TV_INSERTSTRUCT	tvis;			// 挿入用
 	SMainMenuWork*	pFuncWk;		// 機能(work)
-	int 			i;
-	int 			j;
 
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
@@ -883,7 +882,7 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 	nCurLevel = 0;
 	htiParent = TVI_ROOT;
 	htiItem = TreeView_GetRoot(hwndTreeRes);
-	for (i = 0; i < m_Common.m_sMainMenu.m_nMainMenuNum; i++) {
+	for (int i = 0; i < m_Common.m_sMainMenu.m_nMainMenuNum; i++) {
 		pcFunc = &pcMenuTBL[i];
 		if (pcFunc->m_nLevel < nCurLevel) {
 			// Level Up
@@ -917,7 +916,7 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 		case T_SPECIAL:
 			pFuncWk->m_sName = pcFunc->m_sName;
 			if (pFuncWk->m_sName.empty()) {
-				for (j = 0; j < _countof(sSpecialFuncs); j++) {
+				for (int j = 0; j < _countof(sSpecialFuncs); j++) {
 					if (pcFunc->m_nFunc == sSpecialFuncs[j].m_nFunc) {
 						pFuncWk->m_sName = RemoveAmpersand(LSW(sSpecialFuncs[j].m_nNameId));
 						break;
@@ -1028,11 +1027,8 @@ bool CPropMainMenu::GetDataTree(HWND hwndTree, HTREEITEM htiTrg, int nLevel)
 			}
 			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
 				pcFunc->m_nType = T_SPECIAL;
-				if (nLevel == 0) {
-					auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
-				}else {
+				// 2014.05.04 nLevel == 0 のときも"名前なし"にする
 					pcFunc->m_sName[0] = L'\0';
-				}
 			}else {
 				if (pFuncWk->m_nFunc == F_OPTION) {
 					bOptionOk = true;
@@ -1125,13 +1121,18 @@ static HTREEITEM TreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool fChi
 	TV_INSERTSTRUCT	tvis;		// 挿入用
 	TV_ITEM			tvi;		// 取得用
 	int				n = 0;
-	TCHAR			szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
+#ifdef _UNICODE
+	const int		MAX_LABEL_CCH = 256+10;
+#else
+	const int		MAX_LABEL_CCH = (256+10)*2;
+#endif
+	TCHAR			szLabel[MAX_LABEL_CCH];
 
 	for (s = src; s != NULL; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
 		tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
 		tvi.hItem = s;
 		tvi.pszText = szLabel;
-		tvi.cchTextMax = MAX_MAIN_MENU_NAME_LEN;
+		tvi.cchTextMax = MAX_LABEL_CCH;
 		if (!TreeView_GetItem(hwndTree, &tvi)) {
 			// Error
 			break;
@@ -1225,11 +1226,11 @@ static const TCHAR* MakeDispLabel(SMainMenuWork* pFunc)
 	if (pFunc->m_sKey[0]) {
 		auto_sprintf_s(szLabel, MAX_MAIN_MENU_NAME_LEN + 10, L"%ls%ls(%ls)",
 			pFunc->m_bDupErr ? L">" : L"",
-			pFunc->m_sName.c_str() , pFunc->m_sKey);
+			pFunc->m_sName.substr(0, MAX_MAIN_MENU_NAME_LEN).c_str(), pFunc->m_sKey);
 	}else {
 		auto_sprintf_s(szLabel, MAX_MAIN_MENU_NAME_LEN + 10, L"%ls%ls",
 			pFunc->m_bDupErr ? L">" : L"",
-			pFunc->m_sName.c_str());
+			pFunc->m_sName.substr(0, MAX_MAIN_MENU_NAME_LEN).c_str() );
 	}
 	return to_tchar(szLabel);
 }
@@ -1241,14 +1242,13 @@ bool CPropMainMenu::Check_MainMenu(
 	wstring&	sErrMsg			// エラーメッセージ
 )
 {
-	bool			bRet = false;
 	HTREEITEM		htiItem;
 	
 	sErrMsg = L"";
 	
 	htiItem = TreeView_GetRoot(hwndTree);
 
-	bRet = Check_MainMenu_Sub(hwndTree, htiItem, 0, sErrMsg);
+	bool bRet = Check_MainMenu_Sub( hwndTree, htiItem, 0, sErrMsg );
 	return bRet;
 }
 
@@ -1274,6 +1274,7 @@ bool CPropMainMenu::Check_MainMenu_Sub(
 	TV_ITEM			tvi;							// 取得用
 	SMainMenuWork*	pFuncWk;						// 機能(work)
 	std::map< WCHAR, HTREEITEM >	mKey;			// 重複エラー検出用
+	std::map< WCHAR, HTREEITEM >::iterator itKey;	// 同上
 
 	if (nLevel == 0) {
 		bOptionOk = false;

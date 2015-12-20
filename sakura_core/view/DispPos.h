@@ -100,6 +100,6 @@ private:
 	CLayoutInt		m_nLineRef;		// 絶対レイアウト単位。
 
 	// キャッシュ############
-	CLayout*		m_pcLayoutRef;
+	const CLayout*		m_pcLayoutRef;
 };
 

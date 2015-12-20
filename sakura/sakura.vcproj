@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="shift_jis"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="sakura"
 	ProjectGUID="{DFFC20C2-2220-4135-847D-873E6ACE13E3}"
 	RootNamespace="sakura"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -31,6 +32,9 @@
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
 				Name="VCMIDLTool"
@@ -61,13 +65,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib"
+				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib Shlwapi.lib"
 				LinkIncremental="1"
 				GenerateMapFile="true"
 				SubSystem="2"
 				LargeAddressAware="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -112,6 +118,9 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
 				Name="VCMIDLTool"
 			/>
 			<Tool
@@ -140,10 +149,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib"
+				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib Shlwapi.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -189,6 +200,9 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
 				Name="VCMIDLTool"
 			/>
 			<Tool
@@ -217,11 +231,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib"
+				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib Shlwapi.lib"
 				LinkIncremental="1"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -266,6 +282,9 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
 				Name="VCMIDLTool"
 			/>
 			<Tool
@@ -294,10 +313,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib"
+				AdditionalDependencies="comctl32.lib Imm32.lib mpr.lib imagehlp.lib Shlwapi.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -396,11 +417,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\sakura_core\svnrev.h"
+				RelativePath="..\sakura_core\String_define.h"
 				>
 			</File>
 			<File
-				RelativePath="..\sakura_core\String_define.h"
+				RelativePath="..\sakura_core\svnrev.h"
 				>
 			</File>
 		</Filter>
@@ -821,6 +842,14 @@
 				</File>
 				<File
 					RelativePath="..\sakura_core\charset\CCodeMediator.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\charset\CCodePage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\charset\CCodePage.h"
 					>
 				</File>
 				<File
@@ -2624,6 +2653,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\sakura_core\dlg\CDlgGrepReplace.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\dlg\CDlgGrepReplace.h"
+					>
+				</File>
+				<File
 					RelativePath="..\sakura_core\dlg\CDlgInput1.cpp"
 					>
 				</File>
@@ -2661,6 +2698,14 @@
 				</File>
 				<File
 					RelativePath="..\sakura_core\dlg\CDlgPrintSetting.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\dlg\CDlgProfileMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\dlg\CDlgProfileMgr.h"
 					>
 				</File>
 				<File
@@ -2805,6 +2850,14 @@
 				</File>
 				<File
 					RelativePath="..\sakura_core\docplus\CDiffManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\docplus\CFuncListManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\docplus\CFuncListManager.h"
 					>
 				</File>
 				<File
@@ -2963,6 +3016,14 @@
 			<Filter
 				Name="outline"
 				>
+				<File
+					RelativePath="..\sakura_core\outline\CDlgFileTree.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\outline\CDlgFileTree.h"
+					>
+				</File>
 				<File
 					RelativePath="..\sakura_core\outline\CDlgFuncList.cpp"
 					>

@@ -39,7 +39,7 @@ enum ETabArrow {
 	TABARROW_LONG,			//!< 長い矢印
 };
 
-// アウトライン解析の種類
+//! アウトライン解析の種類
 enum EOutlineType {
 	OUTLINE_C,
 	OUTLINE_CPP,
@@ -60,6 +60,7 @@ enum EOutlineType {
 	OUTLINE_CODEMAX,
 	OUTLINE_BOOKMARK,	// 2001.12.03 hor
 	OUTLINE_PLUGIN,		// 2009.10.29 syat プラグインによるアウトライン解析
+	OUTLINE_FILETREE,	//	2012.06.20 Moca ファイルツリー
 	OUTLINE_DEFAULT =-1,// 2001.12.03 hor
 	OUTLINE_UNKNOWN	= 99,
 	OUTLINE_TREE = 100,			// 汎用ツリー 2010.03.28 syat
@@ -68,43 +69,47 @@ enum EOutlineType {
 	OUTLINE_LIST = 300,			// 汎用リスト 2010.03.28 syat
 };
 
-// スマートインデント種別
+//! スマートインデント種別
 enum ESmartIndentType {
-	SMARTINDENT_NONE,
-	SMARTINDENT_CPP
+	SMARTINDENT_NONE,		//!< なし
+	SMARTINDENT_CPP			//!< C/C++
 };
 
+//! ヒアドキュメント種別
 enum EHereDocType {
-	HEREDOC_PHP,
-	HEREDOC_RUBY,
-	HEREDOC_PERL
+	HEREDOC_PHP,			//!< PHP
+	HEREDOC_RUBY,			//!< Ruby
+	HEREDOC_PERL			//!< Perl
 };
 
+//! 背景画像表示位置
 enum EBackgroundImagePos {
-	BGIMAGE_TOP_LEFT,
-	BGIMAGE_TOP_RIGHT,
-	BGIMAGE_BOTTOM_LEFT,
-	BGIMAGE_BOTTOM_RIGHT,
-	BGIMAGE_CENTER,
-	BGIMAGE_TOP_CENTER,
-	BGIMAGE_BOTTOM_CENTER,
-	BGIMAGE_CENTER_LEFT,
-	BGIMAGE_CENTER_RIGHT
+	BGIMAGE_TOP_LEFT,		//!< 左上
+	BGIMAGE_TOP_RIGHT,		//!< 右上
+	BGIMAGE_BOTTOM_LEFT,	//!< 左下
+	BGIMAGE_BOTTOM_RIGHT,	//!< 右下
+	BGIMAGE_CENTER,			//!< 中央
+	BGIMAGE_TOP_CENTER,		//!< 中央上
+	BGIMAGE_BOTTOM_CENTER,	//!< 中央下
+	BGIMAGE_CENTER_LEFT,	//!< 中央左
+	BGIMAGE_CENTER_RIGHT	//!< 中央右
 };
 
+//! エンコードオプション
 struct SEncodingConfig {
-	bool		m_bPriorCesu8;			// 自動判別時に CESU-8 を優先するかどうか
-	ECodeType	m_eDefaultCodetype;		// デフォルト文字コード
-	EEolType	m_eDefaultEoltype;		// デフォルト改行コード		// 2011.01.24 ryoji
-	bool		m_bDefaultBom;			// デフォルトBOM			// 2011.01.24 ryoji
+	bool				m_bPriorCesu8;					//!< 自動判別時に CESU-8 を優先するかどうか
+	ECodeType			m_eDefaultCodetype;				//!< デフォルト文字コード
+	EEolType			m_eDefaultEoltype;				//!< デフォルト改行コード	// 2011.01.24 ryoji
+	bool				m_bDefaultBom;					//!< デフォルトBOM			// 2011.01.24 ryoji
 };
 
+//! 文字列区切り記号エスケープ方法
 enum EStringLiteralType {
-	STRING_LITERAL_CPP,
-	STRING_LITERAL_PLSQL,
-	STRING_LITERAL_HTML,
-	STRING_LITERAL_CSHARP,
-	STRING_LITERAL_PYTHON,
+	STRING_LITERAL_CPP,		//!< C/C++言語風
+	STRING_LITERAL_PLSQL,	//!< PL/SQL風
+	STRING_LITERAL_HTML,	//!< HTML/XML風
+	STRING_LITERAL_CSHARP,	//!< C#風
+	STRING_LITERAL_PYTHON,	//!< Python風
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -142,17 +147,18 @@ struct STypeConfig {
 	ColorInfo			m_ColorInfoArr[64];				//!< 色設定配列
 
 	SFilePath			m_szBackImgPath;				//!< 背景画像
-	EBackgroundImagePos m_backImgPos;					
-	bool				m_backImgRepeatX;				
-	bool				m_backImgRepeatY;				
-	bool				m_backImgScrollX;				
-	bool				m_backImgScrollY;				
-	POINT				m_backImgPosOffset;				
+	EBackgroundImagePos m_backImgPos;					//!< 背景画像表示位置
+	bool				m_backImgRepeatX;				//!< 背景画像表示横方向繰り返し
+	bool				m_backImgRepeatY;				//!< 背景画像表示縦方向繰り返し
+	bool				m_backImgScrollX;				//!< 背景画像表示横方向スクロール
+	bool				m_backImgScrollY;				//!< 背景画像表示縦方向スクロール
+	POINT				m_backImgPosOffset;				//!< 背景画像表示オフセット
 
 	bool				m_bLineNumIsCRLF;				//!< 行番号の表示 false=折り返し単位／true=改行単位
 	int					m_nLineTermType;				//!< 行番号区切り  0=なし 1=縦線 2=任意
 	wchar_t				m_cLineTermChar;				//!< 行番号区切り文字
 	CLayoutInt			m_nVertLineIdx[MAX_VERTLINES];	//!< 指定桁縦線
+	int 				m_nNoteLineOffset;				//!< ノート線のオフセット
 
 	bool				m_bWordWrap;					//!< 英文ワードラップをする
 	bool				m_bKinsokuHead;					//!< 行頭禁則をする		//@@@ 2002.04.08 MIK
@@ -178,6 +184,7 @@ struct STypeConfig {
 	int					m_nOutlineSortCol;				//!< アウトライン解析ソート列番号
 	bool				m_bOutlineSortDesc;				//!< アウトライン解析ソート降順
 	int					m_nOutlineSortType;				//!< アウトライン解析ソート基準
+	SFileTree			m_sFileTree;					/*!< ファイルツリー設定 */
 
 	ESmartIndentType	m_eSmartIndent;					//!< スマートインデント種別
 	int					m_nImeState;					//!< 初期IME状態	Nov. 20, 2000 genta
@@ -187,14 +194,14 @@ struct STypeConfig {
 	int					m_nHokanType;					//!< 入力補完 種別(プラグイン)
 	//	2003.06.23 Moca ファイル内からの入力補完機能
 	bool				m_bUseHokanByFile;				//!< 入力補完 開いているファイル内から候補を探す
-	bool				m_bUseHokanByKeyword;			// 強調キーワードから入力補完
+	bool				m_bUseHokanByKeyword;			//!< 強調キーワードから入力補完
 	
 	//	2001/06/19 asa-o
 	bool				m_bHokanLoHiCase;				//!< 入力補完機能：英大文字小文字を同一視する
 
-	SFilePath			m_szExtHelp;					// 外部ヘルプ１
-	SFilePath			m_szExtHtmlHelp;				// 外部HTMLヘルプ
-	bool				m_bHtmlHelpIsSingle;			// HtmlHelpビューアはひとつ
+	SFilePath			m_szExtHelp;					//!< 外部ヘルプ１
+	SFilePath			m_szExtHtmlHelp;				//!< 外部HTMLヘルプ
+	bool				m_bHtmlHelpIsSingle;			//!< HtmlHelpビューアはひとつ
 
 	bool				m_bChkEnterAtEnd;				//!< 保存時に改行コードの混在を警告する	2013/4/14 Uchi
 
@@ -202,33 +209,33 @@ struct STypeConfig {
 
 
 //@@@ 2001.11.17 add start MIK
-	bool				m_bUseRegexKeyword;						// 正規表現キーワードを使うか
-	DWORD				m_nRegexKeyMagicNumber;					// 正規表現キーワード更新マジックナンバー
-	RegexKeywordInfo	m_RegexKeywordArr[MAX_REGEX_KEYWORD];	// 正規表現キーワード
-	wchar_t				m_RegexKeywordList[MAX_REGEX_KEYWORDLISTLEN];	// 正規表現キーワード
+	bool				m_bUseRegexKeyword;								//!< 正規表現キーワードを使うか
+	DWORD				m_nRegexKeyMagicNumber;							//!< 正規表現キーワード更新マジックナンバー
+	RegexKeywordInfo	m_RegexKeywordArr[MAX_REGEX_KEYWORD];			//!< 正規表現キーワード
+	wchar_t				m_RegexKeywordList[MAX_REGEX_KEYWORDLISTLEN];	//!< 正規表現キーワード
 //@@@ 2001.11.17 add end MIK
 
 //@@@ 2006.04.10 fon ADD-start
-	bool				m_bUseKeyWordHelp;				// キーワード辞書セレクト機能を使うか
-	int					m_nKeyHelpNum;					// キーワード辞書の冊数
-	KeyHelpInfo			m_KeyHelpArr[MAX_KEYHELP_FILE];	// キーワード辞書ファイル
-	bool				m_bUseKeyHelpAllSearch;			// ヒットした次の辞書も検索(&A)
-	bool				m_bUseKeyHelpKeyDisp;			// 1行目にキーワードも表示する(&W)
-	bool				m_bUseKeyHelpPrefix;			// 選択範囲で前方一致検索(&P)
+	bool				m_bUseKeyWordHelp;				//!< キーワード辞書セレクト機能を使うか
+	int					m_nKeyHelpNum;					//!< キーワード辞書の冊数
+	KeyHelpInfo			m_KeyHelpArr[MAX_KEYHELP_FILE];	//!< キーワード辞書ファイル
+	bool				m_bUseKeyHelpAllSearch;			//!< ヒットした次の辞書も検索(&A)
+	bool				m_bUseKeyHelpKeyDisp;			//!< 1行目にキーワードも表示する(&W)
+	bool				m_bUseKeyHelpPrefix;			//!< 選択範囲で前方一致検索(&P)
 //@@@ 2006.04.10 fon ADD-end
 
 	//	2002/04/30 YAZAKI Commonから移動。
-	bool				m_bAutoIndent;					// オートインデント
-	bool				m_bAutoIndent_ZENSPACE;			// 日本語空白もインデント
-	bool				m_bRTrimPrevLine;				// 2005.10.11 ryoji 改行時に末尾の空白を削除
-	int					m_nIndentLayout;				// 折り返しは2行目以降を字下げ表示
+	bool				m_bAutoIndent;					//!< オートインデント
+	bool				m_bAutoIndent_ZENSPACE;			//!< 日本語空白もインデント
+	bool				m_bRTrimPrevLine;				//!< 2005.10.11 ryoji 改行時に末尾の空白を削除
+	int					m_nIndentLayout;				//!< 折り返しは2行目以降を字下げ表示
 
 	//	Sep. 10, 2002 genta
 	bool				m_bUseDocumentIcon;				//!< ファイルに関連づけられたアイコンを使う
 
-	bool				m_bUseTypeFont;
+	bool				m_bUseTypeFont;					//!< タイプ別フォントの使用
 	LOGFONT				m_lf;							//!< フォント // 2013.03.18 aroka
-	INT					m_nPointSize;
+	INT					m_nPointSize;					//!< フォントサイズ（1/10ポイント単位）
 
 	STypeConfig()
 		:
@@ -236,6 +243,7 @@ struct STypeConfig {
 	{
 	}
 
+	int					m_nLineNumWidth;				//!< 行番号の最小桁数 2014.08.02 katze
 }; // STypeConfig
 
 // タイプ別設定(mini)
@@ -324,12 +332,12 @@ GEN_CTYPE(CType_Other)
 	スペースの判定
 */
 inline
-bool C_IsSpace( wchar_t c )
+bool C_IsSpace( wchar_t c, bool bExtEol )
 {
 	return (
 		L'\t' == c ||
 		L' ' == c ||
-		WCODE::IsLineDelimiter(c)
+		WCODE::IsLineDelimiter(c, bExtEol)
 	);
 }
 

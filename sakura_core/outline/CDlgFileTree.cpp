@@ -106,22 +106,23 @@ int CDlgFileTree::DoModal(
 
 
 // LS()を使用しているのですぐ使うこと
-static TCHAR* GetFileTreeLabel( const SFileTreeItem& item )
+static TCHAR* GetFileTreeLabel(const SFileTreeItem& item)
 {
 	const TCHAR* pszLabel;
-	if( item.m_eFileTreeItemType != EFileTreeItemType_Folder ){
+	if (item.m_eFileTreeItemType != EFileTreeItemType_Folder) {
 		pszLabel = item.m_szLabelName;
-		if( item.m_szLabelName[0] == _T('\0') ){
+		if (item.m_szLabelName[0] == _T('\0')) {
 			pszLabel = item.m_szTargetPath;
-			if( 0 == auto_strcmp(pszLabel, _T("."))
-			  || 0 == auto_strcmp(pszLabel, _T(".\\")) 
-			  || 0 == auto_strcmp(pszLabel, _T("./")) ){
+			if (0 == auto_strcmp(pszLabel, _T("."))
+				|| 0 == auto_strcmp(pszLabel, _T(".\\")) 
+				|| 0 == auto_strcmp(pszLabel, _T("./"))
+			) {
 				pszLabel = LS(STR_FILETREE_CURDIR);
 			}
 		}
-	}else{
+	}else {
 		pszLabel = item.m_szLabelName;
-		if( pszLabel[0] == _T('\0') ){
+		if (pszLabel[0] == _T('\0')) {
 			pszLabel = _T("Folder");
 		}
 	}
@@ -138,13 +139,13 @@ void CDlgFileTree::SetData()
 	m_aItemRemoveList.clear();
 	TreeView_DeleteAllItems(hwndTree);
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
-	for( int i = 0; i < (int)m_fileTreeSetting.m_aItems.size(); i++ ){
+	for (int i=0; i<(int)m_fileTreeSetting.m_aItems.size(); ++i) {
 		int nMaxCount = _countof(GetDllShareData().m_Common.m_sOutline.m_sFileTree.m_aItems);
-		if( bSaveShareData && nMaxCount < i + 1 ){
+		if (bSaveShareData && nMaxCount < i + 1) {
 			::InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT), nMaxCount);
 		}
 		const SFileTreeItem& item = m_fileTreeSetting.m_aItems[i];
-		while( item.m_nDepth < (int)hParentTree.size() - 1 ){
+		while (item.m_nDepth < (int)hParentTree.size() - 1) {
 			hParentTree.resize(hParentTree.size() - 1);
 		}
 		TVINSERTSTRUCT tvis;
@@ -154,14 +155,14 @@ void CDlgFileTree::SetData()
 		tvis.item.pszText = GetFileTreeLabel(item);
 		tvis.item.cChildren = (item.m_eFileTreeItemType == EFileTreeItemType_Folder) ? 1 : 0;
 		HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
-		if( item.m_eFileTreeItemType == EFileTreeItemType_Folder ){
+		if (item.m_eFileTreeItemType == EFileTreeItemType_Folder) {
 			hParentTree.push_back(hParent);
 		}
-		if( hSelect == NULL ){
+		if (!hSelect) {
 			hSelect = hParent;
 		}
 	}
-	if( hSelect != NULL ){
+	if (hSelect) {
 		TreeView_SelectItem(hwndTree, hSelect);
 	}
 	int nIndex = (m_fileTreeSetting.m_aItems.size() == 0 ? -1: 0);
@@ -174,7 +175,7 @@ void CDlgFileTree::SetDataItem(int nItemIndex)
 {
 	HWND hwndDlg = GetHwnd();
 	bool bDummy = false;
-	if( nItemIndex < 0 || (int)m_fileTreeSetting.m_aItems.size() <= nItemIndex ){
+	if (nItemIndex < 0 || (int)m_fileTreeSetting.m_aItems.size() <= nItemIndex) {
 		bDummy = true;
 	}
 	SFileTreeItem itemDummy;
@@ -183,7 +184,7 @@ void CDlgFileTree::SetDataItem(int nItemIndex)
 	int nIDs[] ={IDC_RADIO_GREP, IDC_RADIO_FILE, IDC_RADIO_FOLDER};
 	int nID1;
 	int nID2, nID3;
-	switch( item.m_eFileTreeItemType ){
+	switch (item.m_eFileTreeItemType) {
 	case EFileTreeItemType_Grep:   nID1 = 0; nID2 = 1; nID3 = 2; break;
 	case EFileTreeItemType_File:   nID1 = 1; nID2 = 0; nID3 = 2; break;
 	case EFileTreeItemType_Folder: nID1 = 2; nID2 = 0; nID3 = 1; break;
@@ -206,10 +207,10 @@ void CDlgFileTree::ChangeEnableItemType()
 	HWND hwndDlg = GetHwnd();
 	BOOL bGrepEnable = FALSE;
 	BOOL bPathEnable = FALSE;
-	if( IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP) ){ 
+	if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) { 
 		bGrepEnable = TRUE;
 		bPathEnable = TRUE;
-	}else if( IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE) ){ 
+	}else if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE)) { 
 		bPathEnable = TRUE;
 	}
 	::EnableWindow(GetItemHwnd(IDC_STATIC_PATH), bPathEnable);
@@ -226,11 +227,11 @@ void CDlgFileTree::ChangeEnableItemType()
 void CDlgFileTree::ChangeEnableAddInsert()
 {
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
-	if( bSaveShareData ){
+	if (bSaveShareData) {
 		int nCount = TreeView_GetCount(GetItemHwnd(IDC_TREE_FL));
 		bool bEnable = true;
 		int nMaxCount = _countof(GetDllShareData().m_Common.m_sOutline.m_sFileTree.m_aItems);
-		if( nMaxCount < nCount ){
+		if (nMaxCount < nCount) {
 			bEnable = false;
 		}
 		::EnableWindow(GetItemHwnd(IDC_BUTTON_ADD), bEnable);
@@ -247,41 +248,41 @@ int CDlgFileTree::GetData()
 	SFileTree* pFileTree;
 	STypeConfig type;
 	bool bTypeError = false;
-	if( m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Common ){
+	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Common) {
 		pFileTree = &GetDllShareData().m_Common.m_sOutline.m_sFileTree;
-	}else{
-		if( false == CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), type) ){
+	}else {
+		if (!CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), type)) {
 			bTypeError = true;
 			pFileTree = NULL;
-		}else{
+		}else {
 			pFileTree = &type.m_sFileTree;
 		}
 	}
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
 	std::vector<SFileTreeItem> items;
-	if( !GetDataTree(items, TreeView_GetRoot(GetItemHwnd(IDC_TREE_FL)), 0, (bSaveShareData ? _countof(pFileTree->m_aItems) : 0) ) ){
+	if (!GetDataTree(items, TreeView_GetRoot(GetItemHwnd(IDC_TREE_FL)), 0, (bSaveShareData ? _countof(pFileTree->m_aItems) : 0))) {
 		InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT));
 	}
-	if( pFileTree ){
+	if (pFileTree) {
 		pFileTree->m_bProject = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_LOADINI);
 		DlgItem_GetText(hwndDlg, IDC_EDIT_DEFINI, pFileTree->m_szProjectIni, pFileTree->m_szProjectIni.GetBufferCount());
-		if( bSaveShareData ){
+		if (bSaveShareData) {
 			pFileTree->m_nItemCount = (int)items.size();
 			assert(pFileTree->m_nItemCount <= _countof(pFileTree->m_aItems));
-			for( int i = 0; i < pFileTree->m_nItemCount; i++ ){
+			for (int i=0; i<pFileTree->m_nItemCount; ++i) {
 				pFileTree->m_aItems[i] = items[i];
 			}
 		}
-		if( m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Type ){
+		if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Type) {
 			CDocTypeManager().SetTypeConfig(CTypeConfig(m_nDocType), type);
 		}
 	}
-	if( false == bSaveShareData ){
+	if (!bSaveShareData) {
 		// 元のiniに保存
 		CImpExpFileTree cImpExp(items);
 		std::wstring strIni = to_wchar(m_fileTreeSetting.m_szLoadProjectIni);
 		std::wstring strError;
-		if( false == cImpExp.Export(strIni, strError) ){
+		if (!cImpExp.Export(strIni, strError)) {
 			ErrorMessage(hwndDlg, _T("%ls"), strError.c_str());
 		}
 	}
@@ -291,22 +292,22 @@ int CDlgFileTree::GetData()
 bool CDlgFileTree::GetDataTree(std::vector<SFileTreeItem>& data, HTREEITEM hItem, int nLevel, int nMaxCount)
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
-	for( HTREEITEM s = hItem; s != NULL; s = TreeView_GetNextSibling(hwndTree, s) ){
+	for (HTREEITEM s=hItem; s!=NULL; s=TreeView_GetNextSibling(hwndTree, s)) {
 		TV_ITEM	tvi;
 		tvi.mask = TVIF_HANDLE | TVIF_PARAM | TVIF_CHILDREN;
 		tvi.hItem = s;
-		if( !TreeView_GetItem(hwndTree, &tvi) ){
+		if (!TreeView_GetItem(hwndTree, &tvi)) {
 			return false;
 		}
-		if( 0 < nMaxCount && nMaxCount <= (int)data.size() ){
+		if (0 < nMaxCount && nMaxCount <= (int)data.size()) {
 			return false;
 		}
 		data.push_back(m_fileTreeSetting.m_aItems[tvi.lParam]);
 		data.back().m_nDepth = nLevel;
-		if( 0 < tvi.cChildren ){
+		if (0 < tvi.cChildren) {
 			HTREEITEM ts = TreeView_GetChild(hwndTree, s);
-			if( ts != NULL ){
-				if( !GetDataTree(data, ts, nLevel+1, nMaxCount) ){
+			if (ts) {
+				if (!GetDataTree(data, ts, nLevel+1, nMaxCount)) {
 					return false;
 				}
 			}
@@ -315,27 +316,27 @@ bool CDlgFileTree::GetDataTree(std::vector<SFileTreeItem>& data, HTREEITEM hItem
 	return true;
 }
 
-int CDlgFileTree::GetDataItem( SFileTreeItem& item )
+int CDlgFileTree::GetDataItem(SFileTreeItem& item)
 {
 	HWND hwndDlg = GetHwnd();
 	item = SFileTreeItem(); // 初期化
 	BOOL bGrepEnable = FALSE;
 	BOOL bPathEnable = FALSE;
-	if( IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP) ){
+	if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) {
 		bGrepEnable = TRUE;
 		bPathEnable = TRUE;
 		item.m_eFileTreeItemType = EFileTreeItemType_Grep;
-	}else if( IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE) ){ 
+	}else if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE)) { 
 		bPathEnable = TRUE;
 		item.m_eFileTreeItemType = EFileTreeItemType_File;
-	}else{
+	}else {
 		item.m_eFileTreeItemType = EFileTreeItemType_Folder;
 	}
-	if( bPathEnable ){
+	if (bPathEnable) {
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_PATH, item.m_szTargetPath, item.m_szTargetPath.GetBufferCount());
 	}
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_LABEL, item.m_szLabelName, item.m_szLabelName.GetBufferCount());
-	if( bGrepEnable ){
+	if (bGrepEnable) {
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_FILE, item.m_szTargetFile, item.m_szTargetFile.GetBufferCount());
 		item.m_bIgnoreHidden = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_HIDDEN);
 		item.m_bIgnoreReadOnly = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_READONLY);
@@ -344,7 +345,7 @@ int CDlgFileTree::GetDataItem( SFileTreeItem& item )
 	return TRUE;
 }
 
-BOOL CDlgFileTree::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
+BOOL CDlgFileTree::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
 	SFileTreeItem item;
@@ -366,20 +367,20 @@ void CDlgFileTree::SetDataInit()
 {
 	HWND hwndDlg = GetHwnd();
 	BOOL bEnableDefIni = TRUE;
-	if( m_fileTreeSetting.m_eFileTreeSettingLoadType != EFileTreeSettingFrom_File ){
+	if (m_fileTreeSetting.m_eFileTreeSettingLoadType != EFileTreeSettingFrom_File) {
 		int id;
-		if( m_fileTreeSetting.m_eFileTreeSettingLoadType == EFileTreeSettingFrom_Common ){
+		if (m_fileTreeSetting.m_eFileTreeSettingLoadType == EFileTreeSettingFrom_Common) {
 			id = STR_FILETREE_FROM_COMMON;
-		}else{
+		}else {
 			id = STR_FILETREE_FROM_TYPE;
 		}
 		std::tstring str = LS(id);
-		if( m_fileTreeSetting.m_szLoadProjectIni[0] != _T('\0') ){
+		if (m_fileTreeSetting.m_szLoadProjectIni[0] != _T('\0')) {
 			str += _T("+");
 			str += LS(F_FILE_TOPMENU);
 		}
 		::SetWindowText(GetItemHwnd(IDC_STATIC_SETTFING_FROM), str.c_str() );
-	}else{
+	}else {
 		TCHAR szMsg[_MAX_PATH+200];
 		const TCHAR* pFile = m_fileTreeSetting.m_szLoadProjectIni;
 		TCHAR szFilePath[_MAX_PATH];
@@ -402,10 +403,10 @@ void CDlgFileTree::SetDataInit()
 HTREEITEM CDlgFileTree::InsertTreeItem(SFileTreeItem& item, HTREEITEM htiParent, HTREEITEM htiInsert )
 {
 	int nlParam;
-	if( m_aItemRemoveList.empty() ){
+	if (m_aItemRemoveList.empty()) {
 		nlParam = m_fileTreeSetting.m_aItems.size();
 		m_fileTreeSetting.m_aItems.push_back(item);
-	}else{
+	}else {
 		// 削除リストから復活させる
 		nlParam = m_aItemRemoveList.back();
 		m_aItemRemoveList.pop_back();
@@ -425,7 +426,7 @@ HTREEITEM CDlgFileTree::InsertTreeItem(SFileTreeItem& item, HTREEITEM htiParent,
 // ツリーのコピー
 //		fChildがtrueの時はdstの子としてコピー, そうでなければdstの兄弟としてdstの後ろにコピー
 //		fOnryOneがtrueの時は1つだけコピー（子があったらコピー）
-static HTREEITEM FileTreeCopy( HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool fChild, bool fOnryOne )
+static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool fChild, bool fOnryOne)
 {
 	HTREEITEM		s;
 	HTREEITEM		ts;
@@ -435,12 +436,12 @@ static HTREEITEM FileTreeCopy( HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool
 	int				n = 0;
 	TCHAR			szLabel[_MAX_PATH];
 
-	for (s = src; s != NULL; s = fOnryOne ? NULL:TreeView_GetNextSibling( hwndTree, s )) {
+	for (s = src; s != NULL; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
 		tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
 		tvi.hItem = s;
 		tvi.pszText = szLabel;
 		tvi.cchTextMax = _countof(szLabel);
-		if (!TreeView_GetItem( hwndTree, &tvi )) {
+		if (!TreeView_GetItem(hwndTree, &tvi)) {
 			// Error
 			break;
 		}
@@ -449,25 +450,24 @@ static HTREEITEM FileTreeCopy( HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool
 			// dstの子供として作成
 			tvis.hParent = dst;
 			tvis.hInsertAfter = TVI_LAST;
-		}
-		else {
+		}else {
 			//	dstの兄弟として作成
-			tvis.hParent = TreeView_GetParent( hwndTree, dst );
+			tvis.hParent = TreeView_GetParent(hwndTree, dst);
 			tvis.hInsertAfter = dst;
 		}
 		tvis.item.pszText = szLabel;
 		tvis.item.lParam = tvi.lParam;
 		tvis.item.cChildren = tvi.cChildren;
-		td = TreeView_InsertItem( hwndTree, &tvis );	//	Itemの作成
+		td = TreeView_InsertItem(hwndTree, &tvis);	//	Itemの作成
 
 		if (tvi.cChildren) {
-			ts = TreeView_GetChild( hwndTree, s );	//	子の取得
+			ts = TreeView_GetChild(hwndTree, s);	//	子の取得
 			if (ts != NULL) {
-				FileTreeCopy( hwndTree, td, ts, true, false );
+				FileTreeCopy(hwndTree, td, ts, true, false);
 			}
 			// 展開
 			if (tvi.state & TVIS_EXPANDEDONCE) {
-				TreeView_Expand( hwndTree, td, TVE_EXPAND );
+				TreeView_Expand(hwndTree, td, TVE_EXPAND);
 			}
 		}
 		n++;
@@ -479,29 +479,28 @@ static HTREEITEM FileTreeCopy( HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool
 
 BOOL CDlgFileTree::OnBnClicked( int wID )
 {
-	switch( wID )
-	{
+	switch (wID) {
 	case IDC_BUTTON_REF1:
 		{
-			SelectFile( GetHwnd(), GetItemHwnd(IDC_EDIT_DEFINI), _T("*.ini"), true );
+			SelectFile(GetHwnd(), GetItemHwnd(IDC_EDIT_DEFINI), _T("*.ini"), true);
 		}
 		return TRUE;
 	case IDC_BUTTON_LOAD:
 		{
 			DlgItem_GetText( GetHwnd(), IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni, m_fileTreeSetting.m_szDefaultProjectIni.GetBufferCount() );
-			if( m_fileTreeSetting.m_szDefaultProjectIni[0] != _T('\0') ){
+			if (m_fileTreeSetting.m_szDefaultProjectIni[0] != _T('\0')) {
 				CDataProfile cProfile;
 				cProfile.SetReadingMode();
 				const TCHAR* pszIniFileName;
 				TCHAR szDir[_MAX_PATH * 2];
-				if( _IS_REL_PATH( m_fileTreeSetting.m_szDefaultProjectIni ) ){
+				if (_IS_REL_PATH(m_fileTreeSetting.m_szDefaultProjectIni)) {
 					// sakura.iniからの相対パス
-					GetInidirOrExedir( szDir, m_fileTreeSetting.m_szDefaultProjectIni );
+					GetInidirOrExedir(szDir, m_fileTreeSetting.m_szDefaultProjectIni);
 					pszIniFileName = szDir;
-				}else{
+				}else {
 					pszIniFileName = m_fileTreeSetting.m_szDefaultProjectIni;
 				}
-				if( cProfile.ReadProfile(pszIniFileName) ){
+				if (cProfile.ReadProfile(pszIniFileName)) {
 					CImpExpFileTree::IO_FileTreeIni(cProfile, m_fileTreeSetting.m_aItems);
 					m_fileTreeSetting.m_szLoadProjectIni = pszIniFileName;
 				}
@@ -518,13 +517,14 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 			HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 			HTREEITEM htiItem = TreeView_GetSelection(hwndTree);
 			BOOL bEnableUpdate = TRUE;
-			if( htiItem != NULL && !IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_FOLDER) ){
+			if (htiItem != NULL && !IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_FOLDER)) {
 				TV_ITEM tvi;
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiItem;
-				if( TreeView_GetItem(hwndTree, &tvi)
-				  && m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder
-				  && NULL != TreeView_GetChild(hwndTree, htiItem) ){
+				if (TreeView_GetItem(hwndTree, &tvi)
+					&& m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder
+					&& TreeView_GetChild(hwndTree, htiItem)
+				) {
 					// [Folder]以外を子がいるFolderに上書きするの禁止
 					bEnableUpdate = FALSE;
 				}
@@ -535,14 +535,14 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 	case IDC_BUTTON_REF2:
 		{
 			HWND hwndDlg = GetHwnd();
-			if( IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP) ){
+			if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) {
 				// RADIO_GREP == folder
 				TCHAR szDir[MAX_PATH];
 				DlgItem_GetText(GetHwnd(), IDC_EDIT_PATH, szDir, _countof(szDir) );
-				if( SelectDir(hwndDlg, LS(STR_DLGGREP1), szDir, szDir) ){
+				if (SelectDir(hwndDlg, LS(STR_DLGGREP1), szDir, szDir)) {
 					DlgItem_SetText(GetHwnd(), IDC_EDIT_PATH, szDir );
 				}
-			}else{
+			}else {
 				// RADIO_FILE == file
 				CDlgOpenFile dlg;
 				TCHAR szDir[_MAX_PATH];
@@ -550,7 +550,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 				dlg.Create( G_AppInstance(), hwndDlg, _T("*.*"), szDir,
 					std::vector<LPCTSTR>(), std::vector<LPCTSTR>() );
 				TCHAR szFile[_MAX_PATH];
-				if( dlg.DoModal_GetOpenFileName(szFile) ){
+				if (dlg.DoModal_GetOpenFileName(szFile)) {
 					CNativeT cmemFile = szFile;
 					cmemFile.ReplaceT(_T("%"), _T("%%"));
 					DlgItem_SetText( GetHwnd(), IDC_EDIT_PATH, cmemFile.GetStringPtr() );
@@ -584,13 +584,13 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 			pt.x = rc.left;
 			pt.y = rc.bottom;
 			RECT rcWork;
-			GetMonitorWorkRect( pt, &rcWork );	// モニタのワークエリア
+			GetMonitorWorkRect(pt, &rcWork);	// モニタのワークエリア
 			int nId = ::TrackPopupMenu( hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD,
 										( pt.x > rcWork.left )? pt.x: rcWork.left,
 										( pt.y < rcWork.bottom )? pt.y: rcWork.bottom,
 										0, GetHwnd(), NULL);
 			::DestroyMenu( hMenu );
-			if( nId != 0 ){
+			if (nId != 0) {
 				int index = nId - MENU_ROOT;
 				const TCHAR* pszPaths[] = { _T("<iniroot>"), _T("%MYDOC%"), _T("%MYMUSIC%"), _T("%MYVIDEO%"),
 					_T("%DESKTOP%"), _T("%TEMP%"), _T("%SAKURA%"), _T("%SAKURADATA%") };
@@ -602,19 +602,20 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 		{
 			HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 			HTREEITEM htiItem = TreeView_GetSelection(hwndTree);
-			if( htiItem != NULL ){
-				if( TreeView_GetChild(hwndTree, htiItem) != NULL
-				  && IDCANCEL == ::MYMESSAGEBOX(GetHwnd(), MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					LS(STR_PROPCOMMAINMENU_DEL)) ){
+			if (htiItem) {
+				if (TreeView_GetChild(hwndTree, htiItem)
+					&& IDCANCEL == ::MYMESSAGEBOX(GetHwnd(), MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
+					LS(STR_PROPCOMMAINMENU_DEL))
+				) {
 					return TRUE;
 				}
 				HTREEITEM htiTemp = TreeView_GetNextSibling(hwndTree, htiItem);
-				if( htiTemp == NULL ){
+				if (htiTemp) {
 					// 末尾ならば、前を取る
 					htiTemp = TreeView_GetPrevSibling(hwndTree, htiItem);
 				}
 				TreeView_DeleteItem(hwndTree, htiItem);
-				if( htiTemp != NULL ){
+				if (htiTemp) {
 					TreeView_SelectItem(hwndTree, htiTemp);
 				}
 			}
@@ -631,61 +632,61 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 			// 挿入位置検索
 			HTREEITEM htiTemp = TreeView_GetSelection(hwndTree);
 			TV_ITEM tvi;
-			if( htiTemp == NULL ){
-			}else if( wID == IDC_BUTTON_ADD ){
+			if (!htiTemp) {
+			}else if (wID == IDC_BUTTON_ADD) {
 				// 追加
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiTemp;
-				if( TreeView_GetItem(hwndTree, &tvi) ){
-					if( m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder ){
+				if (TreeView_GetItem(hwndTree, &tvi)) {
+					if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder) {
 						// ノード
 						htiParent = htiTemp;
-					}else{
+					}else {
 						// 子を付けられないので親に付ける（選択アイテムの下に付く）
 						htiParent = TreeView_GetParent(hwndTree, htiTemp);
 					}
 				}
-			}else if( wID == IDC_BUTTON_INSERT_A ){
+			}else if (wID == IDC_BUTTON_INSERT_A) {
 				// ノード挿入、挿入(下)
 				// 追加先を探る
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiTemp;
-				if( TreeView_GetItem(hwndTree, &tvi) ){
-					if( m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder ){
+				if (TreeView_GetItem(hwndTree, &tvi)) {
+					if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder) {
 						// ノード
 						htiParent = htiTemp;
 						htiInsert = TVI_FIRST;
-					}else{
+					}else {
 						// 子を付けられないので親に付ける（選択アイテムの下に付く）
 						htiParent = TreeView_GetParent(hwndTree, htiTemp);
 						htiInsert = htiTemp;
 					}
 				}
-			}else{
+			}else {
 				assert(wID == IDC_BUTTON_INSERT);
 				// 挿入(上)
 				// 挿入先を探る
 				htiParent = TreeView_GetParent(hwndTree, htiTemp);
-				if( htiParent == NULL ){
+				if (!htiParent) {
 					htiInsert = TVI_FIRST;
-				}else{
+				}else {
 					htiInsert = TreeView_GetPrevSibling(hwndTree, htiTemp);
-					if( htiInsert == NULL ){
+					if (!htiInsert) {
 						htiInsert = TVI_FIRST;
 					}
 				}
 			}
-			if( htiParent == NULL ){
+			if (!htiParent) {
 				htiParent = TVI_ROOT;
 			}
-			if( htiInsert == NULL ){
+			if (!htiInsert) {
 				htiInsert = TVI_LAST;
 			}
 			SFileTreeItem item;
 			GetDataItem(item);
 			HTREEITEM htiItem = InsertTreeItem(item, htiParent, htiInsert);
 			// 展開
-			if( htiParent != TVI_ROOT ){
+			if (htiParent != TVI_ROOT) {
 				TreeView_Expand(hwndTree, htiParent, TVE_EXPAND);
 			}
 			TreeView_SelectItem(hwndTree, htiItem);

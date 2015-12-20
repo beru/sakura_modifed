@@ -493,7 +493,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				CDlgOpenFileData* pData = (CDlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 				// OFN‚ÌÄÝ’è‚ÍNTŒn‚Å‚ÍUnicode”ÅAPI‚Ì‚Ý—LŒø
 				if (1
-					&& (pcDlgOpenFile->m_ofn.Flags & OFN_ALLOWMULTISELECT)
+					&& (pData->m_ofn.Flags & OFN_ALLOWMULTISELECT)
 					&&
 #ifdef _UNICODE
 						IsWin32NT()

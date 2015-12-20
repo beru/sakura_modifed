@@ -712,7 +712,7 @@ void CPrintPreview::OnChangePrintSetting(void)
 	// 行番号を表示するか
 	if (m_pPrintSetting->m_bPrintLineNumber) {
 		// 行番号表示に必要な桁数を計算
-		m_nPreview_LineNumberColumns = m_pParentWnd->GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate();
+		m_nPreview_LineNumberColumns = m_pParentWnd->GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pLayoutMgr_Print);
 	}
 	// 現在のページ設定の、用紙サイズと用紙方向を反映させる
 	m_pPrintSetting->m_mdmDevMode.dmPaperSize = m_pPrintSetting->m_nPrintPaperSize;
@@ -1394,7 +1394,8 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 				CStringRef	csr = pcPageTopLayout->GetDocLineRef()->GetStringRefWithEOL();
 				CLogicInt	iLogic;
 				for (iLogic = 0; iLogic < nPageTopOff; ++iLogic) {
-					pStrategy = GetColorStrategy(csr, iLogic, pStrategy);
+					bool bChange;
+					pStrategy = GetColorStrategy(csr, iLogic, pStrategy, bChange);
 				}
 			}
 		}
@@ -1674,7 +1675,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	for (
 		iLogic = nLineStart;
 		iLogic < nLineStart + nLineLen; 
-		++iLogic, nKindLast = nKind, pStrategyLast = pStrategy
+		++iLogic, nKindLast = nKind
 	) {
 		// 文字の種類
 		if (pLine[iLogic] == WCODE::TAB) {
@@ -1783,7 +1784,7 @@ void CPrintPreview::Print_DrawBlock(
 		// TABはカラーで無ければ印字不要
 		return;
 	}
-	HFONT hFont = (nKind == 1 ? m_hFontZen : m_hFontHan);
+	HFONT hFont = (nKind == 1) ? m_hFontZen : m_hFontHan;
 	// 色設定
 	if (pcLayout) {
 		if (-1 != nColorIdx) {

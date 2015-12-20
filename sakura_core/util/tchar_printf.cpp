@@ -1,3 +1,27 @@
+/*
+	Copyright (C) 2008, kobake
+
+	This software is provided 'as-is', without any express or implied
+	warranty. In no event will the authors be held liable for any damages
+	arising from the use of this software.
+
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
+
+		1. The origin of this software must not be misrepresented;
+		   you must not claim that you wrote the original software.
+		   If you use this software in a product, an acknowledgment
+		   in the product documentation would be appreciated but is
+		   not required.
+
+		2. Altered source versions must be plainly marked as such,
+		   and must not be misrepresented as being the original software.
+
+		3. This notice may not be removed or altered from any source
+		   distribution.
+*/
+
 #include "StdAfx.h"
 #include "tchar_printf.h"
 #include "util/tchar_template.h"
@@ -65,40 +89,47 @@ inline bool is_field_type(wchar_t c)
 	return wcschr(L"cCdiouxXeEfgGaAnpsS", c) != NULL;
 }
 
-// vsprintf_s API
-static int local_vsprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
+
+//vsprintf_s API
+static inline
+int local_vsprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
 {
 	return vsprintf_s(buf, nBufCount, format, v);
 }
 
-static int local_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
+static inline
+int local_vsprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
 	return vswprintf_s(buf, nBufCount, format, v);
 }
 
 // vsprintf API
-static int local_vsprintf(char* buf, const char* format, va_list& v)
+static inline
+int local_vsprintf(char* buf, const char* format, va_list& v)
 {
 	return vsprintf(buf, format, v);
 }
 
-static int local_vsprintf(wchar_t* buf, const wchar_t* format, va_list& v)
+static inline
+int local_vsprintf(wchar_t* buf, const wchar_t* format, va_list& v)
 {
 	return vswprintf(buf, format, v);
 }
 
 // vsnprintf_s API
-static int local_vsnprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
+static inline
+int local_vsnprintf_s(char* buf, size_t nBufCount, const char* format, va_list& v)
 {
 	return vsnprintf_s(buf, nBufCount, _TRUNCATE, format, v);
 }
 
-static int local_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
+static inline
+int local_vsnprintf_s(wchar_t* buf, size_t nBufCount, const wchar_t* format, va_list& v)
 {
 	return _vsnwprintf_s(buf, nBufCount, _TRUNCATE, format, v);
 }
 
-static void my_va_forward(va_list& v, const char* field)
+static void my_va_forward(va_list& v, const char* field, const char* prefix)
 {
 	if (*field == 0) return;
 	const char* field_end = auto_strchr(field, 0) - 1;
@@ -114,7 +145,15 @@ static void my_va_forward(va_list& v, const char* field)
 	case 'u':
 	case 'x':
 	case 'X':
-		va_arg(v, int);
+		{
+			// 2014.06.12 64bit値対応
+			const char *p = prefix;
+			if( p[0]=='I' && p[1]=='6' && p[2]=='4' ){
+				va_arg(v,LONGLONG);
+			}else{
+				va_arg(v, int);
+			}
+		}
 		break;
 	case 'c':
 		if (field_end-1 >= field && *(field_end-1) == 'w') va_arg(v, int); // wchar_t
@@ -136,7 +175,7 @@ static void my_va_forward(va_list& v, const char* field)
 		break;
 	}
 }
-static void my_va_forward(va_list& v, const wchar_t* field)
+static void my_va_forward(va_list& v, const wchar_t* field, const wchar_t* prefix)
 {
 	if (*field == 0) return;
 	const wchar_t* field_end = auto_strchr(field, 0) - 1;
@@ -152,7 +191,15 @@ static void my_va_forward(va_list& v, const wchar_t* field)
 	case L'u':
 	case L'x':
 	case L'X':
-		va_arg(v, int);
+		// 2014.06.12 64bit値対応
+		{
+			const wchar_t *p = prefix;
+			if( p[0]==L'I' && p[1]==L'6' && p[2]==L'4' ){
+				va_arg(v, LONGLONG);
+			}else{
+				va_arg(v, int);
+			}
+		}
 		break;
 	case 'c':
 		if (field_end-1 >= field && *(field_end-1) == L'h') va_arg(v, int);
@@ -216,6 +263,7 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 			src = skip_field_flag(src);
 			src = skip_field_width(src);
 			src = skip_field_precision(src);
+			const T* prefix = src;
 			src = skip_field_prefix(src);
 
 			if (is_field_type(*src)) {
@@ -247,7 +295,7 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 				}
 
 				// vを進める。自信なっしんぐ
-				my_va_forward(v, field);
+				my_va_forward(v, field, prefix);
 
 				// 変換先ワークポインタを進める
 				if (ret != -1) {
@@ -278,7 +326,7 @@ int tchar_vsprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list&
 	return tchar_vsprintf_s_imp<ACHAR>(buf, nBufCount, format, v, false);
 }
 
-int tchar_vswprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v)
+int tchar_vsprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v)
 {
 	return tchar_vsprintf_s_imp<WCHAR>(buf, nBufCount, format, v, false);
 }
@@ -291,9 +339,9 @@ int tchar_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v)
 {
 	return tchar_vsprintf_s(buf, MAX_BUF, format, v);
 }
-int tchar_vswprintf(WCHAR* buf, const WCHAR* format, va_list& v)
+int tchar_vsprintf(WCHAR* buf, const WCHAR* format, va_list& v)
 {
-	return tchar_vswprintf_s(buf, MAX_BUF, format, v);
+	return tchar_vsprintf_s(buf, MAX_BUF, format, v);
 }
 
 
@@ -304,7 +352,7 @@ int tchar_vsnprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list
 {
 	return tchar_vsprintf_s_imp<ACHAR>(buf, nBufCount, format, v, true);
 }
-int tchar_vsnwprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v)
+int tchar_vsnprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v)
 {
 	return tchar_vsprintf_s_imp<WCHAR>(buf, nBufCount, format, v, true);
 }
@@ -326,11 +374,11 @@ int tchar_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...)
 	va_end(v);
 	return ret;
 }
-int tchar_swprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...)
+int tchar_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v, format);
-	int ret = tchar_vswprintf_s(buf, nBufCount, format, v);
+	int ret = tchar_vsprintf_s(buf, nBufCount, format, v);
 	va_end(v);
 	return ret;
 }
@@ -354,11 +402,11 @@ int tchar_sprintf(ACHAR* buf, const ACHAR* format, ...)
 	return ret;
 }
 
-int tchar_swprintf(WCHAR* buf, const WCHAR* format, ...)
+int tchar_sprintf(WCHAR* buf, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v, format);
-	int ret = tchar_vswprintf_s(buf, MAX_BUF, format, v);
+	int ret = tchar_vsprintf_s(buf, MAX_BUF, format, v);
 	va_end(v);
 	return ret;
 }
@@ -374,11 +422,11 @@ int tchar_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...)
 	va_end(v);
 	return ret;
 }
-int tchar_snwprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)
+int tchar_snprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v, format);
-	int ret = tchar_vswprintf_s(buf, count, format, v);
+	int ret = tchar_vsprintf_s(buf, count, format, v);
 	va_end(v);
 	return ret;
 }

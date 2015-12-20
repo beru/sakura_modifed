@@ -35,6 +35,7 @@ static const DWORD p_helpids[] = {	//10210
 	IDC_CHECK_DROPSOURCE,				HIDC_CHECK_DROPSOURCE,					// ドロップ元にする
 	IDC_CHECK_bNotOverWriteCRLF,		HIDC_CHECK_bNotOverWriteCRLF,			// 上書きモード
 	IDC_CHECK_bOverWriteFixMode,		HIDC_CHECK_bOverWriteFixMode,			// 文字幅に合わせてスペースを詰める
+	IDC_CHECK_bOverWriteBoxDelete,		HIDC_CHECK_bOverWriteBoxDelete,			// 矩形入力で選択範囲を削除する
 	//	2007.02.11 genta クリッカブルURLをこのページに移動
 	IDC_CHECK_bSelectClickedURL,		HIDC_CHECK_bSelectClickedURL,			// クリッカブルURL
 	IDC_CHECK_CONVERTEOLPASTE,			HIDC_CHECK_CONVERTEOLPASTE,				// 改行コードを変換して貼り付ける
@@ -43,6 +44,8 @@ static const DWORD p_helpids[] = {	//10210
 	IDC_RADIO_SELDIR,					HIDC_RADIO_SELDIR,						// 指定フォルダ
 	IDC_EDIT_FILEOPENDIR,				HIDC_EDIT_FILEOPENDIR,					// 指定フォルダパス
 	IDC_BUTTON_FILEOPENDIR, 			HIDC_EDIT_FILEOPENDIR,					// 指定フォルダパス
+	IDC_CHECK_ENABLEEXTEOL,				HIDC_CHECK_ENABLEEXTEOL,				// 改行コードNEL,PS,LSを有効にする
+	IDC_CHECK_BOXSELECTLOCK,			HIDC_CHECK_BOXSELECTLOCK,				// 矩形選択移動で選択をロックする
 //	IDC_STATIC,							-1,
 	0, 0
 };
@@ -198,6 +201,9 @@ void CPropEdit::SetData(HWND hwndDlg)
 	// 文字幅に合わせてスペースを詰める
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bOverWriteFixMode, csEdit.m_bOverWriteFixMode);
 
+	// 矩形入力で選択範囲を削除する
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_bOverWriteBoxDelete, csEdit.m_bOverWriteFixMode);
+
 	// URLがクリックされたら選択するか	// 2007.02.11 genta このページへ移動
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bSelectClickedURL, csEdit.m_bSelectClickedURL);
 
@@ -215,6 +221,11 @@ void CPropEdit::SetData(HWND hwndDlg)
 		::CheckDlgButton(hwndDlg, IDC_RADIO_SELDIR, TRUE);
 	}
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_FILEOPENDIR, csEdit.m_OpenDialogSelDir);
+
+	// 改行コードNEL,PS,LSを有効にする
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_ENABLEEXTEOL, csEdit.m_bEnableExtEol);
+	// 矩形選択移動で選択をロックする
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_BOXSELECTLOCK, csEdit.m_bBoxSelectLock);
 
 	EnableEditPropInput(hwndDlg);
 }
@@ -248,6 +259,9 @@ int CPropEdit::GetData(HWND hwndDlg)
 	// 文字幅に合わせてスペースを詰める
 	csEdit.m_bOverWriteFixMode = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bOverWriteFixMode);
 
+	// 矩形入力で選択範囲を削除する
+	csEdit.m_bOverWriteBoxDelete = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bOverWriteBoxDelete);
+
 	// URLがクリックされたら選択するか	// 2007.02.11 genta このページへ移動
 	csEdit.m_bSelectClickedURL = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bSelectClickedURL);
 
@@ -264,6 +278,12 @@ int CPropEdit::GetData(HWND hwndDlg)
 		csEdit.m_eOpenDialogDir = OPENDIALOGDIR_SEL;
 	}
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_FILEOPENDIR, csEdit.m_OpenDialogSelDir, _countof2(csEdit.m_OpenDialogSelDir));
+
+	// 改行コードNEL,PS,LSを有効にする
+	csEdit.m_bEnableExtEol = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_ENABLEEXTEOL);
+	// 矩形選択移動で選択をロックする
+	csEdit.m_bBoxSelectLock = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BOXSELECTLOCK);
+
 	return TRUE;
 }
 

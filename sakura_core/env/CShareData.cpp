@@ -1474,7 +1474,7 @@ std::vector<STypeConfig*>& CShareData::GetTypeSettings()
 void CShareData::InitFileTree( SFileTree* setting )
 {
 	setting->m_bProject = true;
-	for (nt i = 0; i < (int)_countof(setting->m_aItems); i++) {
+	for (int i=0; i<(int)_countof(setting->m_aItems); ++i) {
 		SFileTreeItem& item = setting->m_aItems[i];
 		item.m_eFileTreeItemType = EFileTreeItemType_Grep;
 		item.m_szTargetPath = _T("");

@@ -161,7 +161,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 			if (1
 				&& !bDraw
 				&& GetSelectionInfo().m_bDrawSelectArea
-				&& (0 == IsCurrentPositionSelected(ptColLine))
+				&& (IsCurrentPositionSelected(ptColLine) == 0)
 			) {	// 選択範囲描画済みで消去対象の括弧が選択範囲内の場合
 				continue;
 			}
@@ -245,6 +245,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 					DispPos sPos(nWidth, nHeight);
 					sPos.InitDrawPos(CMyPoint(nLeft, nTop));
 					GetTextDrawer().DispText(gr, &sPos,  &pLine[OutputX], 1, bTrans);
+					GetTextDrawer().DispNoteLine(gr, nTop, nTop + nHeight, nLeft, nLeft + (Int)charsWidth * nWidth);
 					// 2006.04.30 Moca 対括弧の縦線対応
 					GetTextDrawer().DispVerticalLines(gr, nTop, nTop + nHeight, ptColLine.x, ptColLine.x + charsWidth); // ※括弧が全角幅である場合を考慮
 					cTextType.RewindGraphicsState(gr);

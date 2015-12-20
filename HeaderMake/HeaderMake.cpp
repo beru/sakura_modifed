@@ -229,7 +229,7 @@ next:
 		GetFileTitlePointer(in_file)
 	);
 	if (mode == MODE_ENUM) fprintf(out, "enum %s{\n", enum_name); //enumŠJŽn
-	while (NULL != fgets(line, _countof(line), in)) {
+	while (fgets(line, _countof(line), in)) {
 		// #–³Ž‹(for MinGW)
 		if ('#' == line[0]) {
 			continue;

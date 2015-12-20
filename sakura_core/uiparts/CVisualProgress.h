@@ -24,6 +24,7 @@
 #pragma once
 
 #include "doc/CDocListener.h"
+#include "util/design_template.h"
 class CWaitCursor;
 
 class CVisualProgress :
@@ -54,5 +55,8 @@ protected:
 private:
 	CWaitCursor* m_pcWaitCursor;
 	int	nOldValue;
+
+private:
+	DISALLOW_COPY_AND_ASSIGN(CVisualProgress);
 };
 

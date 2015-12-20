@@ -25,6 +25,7 @@
 #include "StdAfx.h"
 #include <limits.h>
 #include "CEditView.h"
+#include "window/CEditWnd.h"
 #include "parse/CWordParse.h"
 #include "util/string_ex2.h"
 
@@ -197,6 +198,96 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	return FALSE;
 }
 
+bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
+{
+	*pbHide = true;
+	if (!m_bMiniMap) {
+		return false;
+	}
+	// ウィンドウ内にマウスカーソルがあるか？
+	GetCursorPos(po);
+	GetWindowRect(GetHwnd(), rc);
+	rc->right -= ::GetSystemMetrics(SM_CXVSCROLL);
+	if (!PtInRect(rc, *po)) {
+		return false;
+	}
+	if (!( m_bInMenuLoop == FALSE	&&			/* １．メニュー モーダル ループに入っていない */
+		300 < ::GetTickCount() - m_dwTipTimer	/* ２．一定時間以上、マウスが固定されている */
+	)) {
+		return false;
+	}
+	if (WindowFromPoint(*po) != GetHwnd()) {
+		return false;
+	}
+
+	CMyPoint ptClient(*po);
+	ScreenToClient(GetHwnd(), &ptClient);
+	CLayoutPoint ptNew;
+	GetTextArea().ClientToLayout(ptClient, &ptNew);
+	// 同じ行ならなにもしない
+	if (0 == m_dwTipTimer && m_cTipWnd.m_nSearchLine == (Int)ptNew.y) {
+		*pbHide = false; // 表示継続
+		return false;
+	}
+	CNativeW cmemCurText;
+	CLayoutYInt nTipBeginLine = ptNew.y;
+	CLayoutYInt nTipEndLine = ptNew.y + CLayoutYInt(4);
+	for (CLayoutYInt nCurLine = nTipBeginLine; nCurLine < nTipEndLine; nCurLine++) {
+		const CLayout* pcLayout = NULL;
+		if (0 <= nCurLine) {
+			pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( nCurLine );
+		}
+		if (pcLayout) {
+			CNativeW cmemCurLine;
+			{
+				CLogicInt nLineLen = pcLayout->GetLengthWithoutEOL();
+				const wchar_t* pszData = pcLayout->GetPtr();
+				int nLimitLength = 80;
+				int pre = 0;
+				int i = 0;
+				int k = 0;
+				int charSize = CNativeW::GetSizeOfChar( pszData, nLineLen, i );
+				int charWidth = t_max(1, (int)(Int)CNativeW::GetKetaOfChar( pszData, nLineLen, i ));
+				int charType = 0;
+				// 連続する"\t" " " を " "1つにする
+				// 左からnLimitLengthまでの幅を切り取り
+				while (i + charSize <= (Int)nLineLen && k + charWidth <= nLimitLength) {
+					if (pszData[i] == L'\t' || pszData[i] == L' ') {
+						if (charType == 0) {
+							cmemCurLine.AppendString( pszData + pre , i - pre );
+							cmemCurLine.AppendString( L" " );
+							charType = 1;
+						}
+						pre = i + charSize;
+						k++;
+					}else {
+						k += charWidth;
+						charType = 0;
+					}
+					i += charSize;
+					charSize = CNativeW::GetSizeOfChar( pszData, nLineLen, i );
+					charWidth = t_max(1, (int)(Int)CNativeW::GetKetaOfChar( pszData, nLineLen, i ));
+				}
+				cmemCurLine.AppendString( pszData + pre , i - pre );
+			}
+			if (nTipBeginLine != nCurLine) {
+				cmemCurText.AppendString( L"\n" );
+			}
+			cmemCurLine.Replace( L"\\", L"\\\\" );
+			cmemCurText.AppendNativeData( cmemCurLine );
+		}
+	}
+	if (cmemCurText.GetStringLength() <= 0) {
+		return false;
+	}
+	m_cTipWnd.m_cKey = cmemCurText;
+	m_cTipWnd.m_cInfo = cmemCurText.GetStringT();
+	m_cTipWnd.m_nSearchLine = (Int)ptNew.y;
+	m_dwTipTimer = 0;		// 辞書Tipを表示している */
+	m_poTipCurPos = *po;	// 現在のマウスカーソル位置 */
+	return true;			// ここまで来ていればヒット・ワード
+}
+
 // 現在カーソル位置単語または選択範囲より検索等のキーを取得
 void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPath /* = true */, bool bTrimSpaceTab /* = false */)
 {
@@ -216,7 +307,7 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 	}else {
 		CLogicInt nLineLen;
 		const CLayout* pcLayout;
-		const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
+		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
 			CLogicInt nIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
@@ -259,9 +350,10 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 	}
 	int nTopic2Len = (int)wcslen(pTopic2);
 	// 検索文字列は改行まで
+	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 	int i;
 	for (i = 0; i < nTopic2Len; ++i) {
-		if (WCODE::IsLineDelimiter(pTopic2[i])) {
+		if (WCODE::IsLineDelimiter(pTopic2[i], bExtEol)) {
 			break;
 		}
 	}
@@ -283,9 +375,11 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 
 
 /*!	現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用）
+	@return 値を設定したか
 	@date 2006.08.23 ryoji 新規作成
+	@date 2014.07.01 Moca bGetHistory追加、戻り値をboolに変更
 */
-void CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText)
+bool CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText, bool bGetHistory)
 {
 	bool bStripMaxPath = false;
 	cmemCurText.SetString(L"");
@@ -293,17 +387,30 @@ void CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText)
 	if (GetSelectionInfo().IsTextSelected()) {	// テキストが選択されている
 		GetCurrentTextForSearch(cmemCurText, bStripMaxPath);
 	}else {	// テキストが選択されていない
+		bool bGet = false;
 		if (GetDllShareData().m_Common.m_sSearch.m_bCaretTextForSearch) {
 			GetCurrentTextForSearch(cmemCurText, bStripMaxPath);	// カーソル位置単語を取得
-		}else if (1
-			&& 0 < GetDllShareData().m_sSearchKeywords.m_aSearchKeys.size()
-			&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
-		) {
-			cmemCurText.SetString(GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0]);	// 履歴からとってくる
+			if (cmemCurText.GetStringLength() == 0 && bGetHistory) {
+				bGet = true;
+			}
 		}else {
-			cmemCurText.SetString(m_strCurSearchKey.c_str());
+			bGet = true;
+		}
+		if (bGet) {
+			if (1
+				&& 0 < GetDllShareData().m_sSearchKeywords.m_aSearchKeys.size()
+				&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
+			) {
+				cmemCurText.SetString(GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0]);	// 履歴からとってくる
+				return true; // ""でもtrue	
+			}else {
+				cmemCurText.SetString(m_strCurSearchKey.c_str());
+				return 0 <= m_nCurSearchKeySequence; // ""でもtrue.未設定のときはfalse
+
+			}
 		}
 	}
+	return 0 < cmemCurText.GetStringLength();
 }
 
 

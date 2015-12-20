@@ -98,6 +98,7 @@ public:
 						ptLayout.GetY() + 1,
 						ptLayout.GetX() + 1,
 						Arguments[2],
+						NULL,
 						nParam
 					);
 				}else if( LOWORD(ID) == F_OL_ADDFUNCINFO2 ){
@@ -109,6 +110,7 @@ public:
 						ptLayout.GetY() + 1,
 						ptLayout.GetX() + 1,
 						Arguments[2],
+						NULL,
 						nParam,
 						nDepth
 					);

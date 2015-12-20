@@ -327,8 +327,9 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 
 #if 0	// RegexKeySetTypesで設定されているはずなので廃止
 	// 情報不一致ならマスタから取得してコンパイルする。
-	if (m_nCompiledMagicNumber != m_pTypes->m_nRegexKeyMagicNumber
-	 || m_nTypeIndex           != m_pTypes->m_nIdx
+	if (0
+		|| m_nCompiledMagicNumber != m_pTypes->m_nRegexKeyMagicNumber
+	 	|| m_nTypeIndex           != m_pTypes->m_nIdx
 	) {
 		RegexKeyCompile();
 	}
@@ -367,11 +368,13 @@ BOOL CRegexKeyword::RegexIsKeyword(
 	MYDBGMSG("RegexIsKeyword")
 
 	// 動作に必要なチェックをする。
-	if (!m_bUseRegexKeyword || !IsAvailable()
+	if (0
+		|| !m_bUseRegexKeyword
+		|| !IsAvailable()
 #ifdef USE_PARENT
-	 || !m_pTypes
+		|| !m_pTypes
 #endif
-	 /* || (!pLine) */
+		// || (!pLine)
 	) {
 		return FALSE;
 	}
@@ -451,7 +454,7 @@ BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 			// 始まりを確かめる
 			if (wcsncmp(kakomi[i], s, wcslen(kakomi[i])) == 0) {
 				// 終わりを確かめる
-				p = &s[length - wcslen(kakomi[i+1])];
+				const wchar_t* p = &s[length - wcslen(kakomi[i+1])];
 				if (wcscmp(p, kakomi[i + 1]) == 0) {
 					// 正常
 					return TRUE;

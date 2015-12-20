@@ -50,6 +50,7 @@ enum EJack {
 	PP_SMARTINDENT,
 	PP_COMPLEMENT,
 	PP_COMPLEMENTGLOBAL,
+	PP_MACRO,
 
 	// ↑ジャックを追加するときはこの行の上に。
 	PP_BUILTIN_JACK_COUNT	// 組み込みジャック数

@@ -137,7 +137,7 @@ int CCommandLine::CheckCommandLine(
 	int len = lstrlen(str);
 
 	// 引数がある場合を先に確認
-	for (const auto* ptr = _COptWithA; ptr->opt != NULL; ptr++) {
+	for (const auto* ptr = _COptWithA; ptr->opt != NULL; ++ptr) {
 		if (
 			len >= ptr->len		// 長さが足りているか
 			&& (str[ptr->len] == '=' || str[ptr->len] == ':')	// オプション部分の長さチェック
@@ -161,7 +161,7 @@ int CCommandLine::CheckCommandLine(
 	}
 
 	// 引数がない場合
-	for (const auto* ptr = _COptWoA; ptr->opt != NULL; ptr++) {
+	for (const auto* ptr = _COptWoA; ptr->opt != NULL; ++ptr) {
 		if (
 			len == ptr->len									// 長さチェック
 			&& auto_memicmp(str, ptr->opt, ptr->len) == 0	// 文字列の比較

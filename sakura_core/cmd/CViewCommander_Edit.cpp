@@ -66,7 +66,6 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 		}
 		if (typeData->m_bAutoIndent) {	// オートインデント
 			const CLayout* pCLayout;
-			const wchar_t* pLine;
 			CLogicInt nLineLen;
 			auto& layoutMgr = pDoc->m_cLayoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout);
@@ -315,7 +314,6 @@ void CViewCommander::Command_UNDO(void)
 
 	COpeBlk*	pcOpeBlk;
 	int			nOpeBlkNum;
-	int			i;
 	bool		bIsModified;
 //	int			nNewLine;	// 挿入された部分の次の位置の行
 //	int			nNewPos;	// 挿入された部分の次の位置のデータ位置
@@ -423,7 +421,7 @@ void CViewCommander::Command_UNDO(void)
 							&cSelectLogic
 						);
 					}
-					pcDeleteOpe->m_pcmemData.clear();
+					pcDeleteOpe->m_cOpeLineData.clear();
 				}
 				break;
 			case OPE_REPLACE:
@@ -624,7 +622,7 @@ void CViewCommander::Command_REDO(void)
 					CInsertOpe* pcInsertOpe = static_cast<CInsertOpe*>(pcOpe);
 
 					// 2007.10.17 kobake メモリリークしてました。修正。
-					if (0 < pcInsertOpe->m_pcmemData.size()) {
+					if (0 < pcInsertOpe->m_cOpeLineData.size()) {
 						// データ置換 削除&挿入にも使える
 						CLayoutRange sRange;
 						sRange.Set(ptCaretPos_Before);

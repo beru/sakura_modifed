@@ -140,7 +140,7 @@ void CDocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
 	@param nLine [in] 行番号
 	@return 行オブジェクトへのポインタ。該当行がない場合はNULL。
 */
-CDocLine* CDocLineMgr::GetLine(CLogicInt nLine) const
+const CDocLine* CDocLineMgr::GetLine(CLogicInt nLine) const
 {
 	if (CLogicInt(0) == m_nLines) {
 		return NULL;

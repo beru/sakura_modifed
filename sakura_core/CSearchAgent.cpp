@@ -42,7 +42,13 @@ CSearchStringPattern::CSearchStringPattern()
 {
 }
 
-CSearchStringPattern::CSearchStringPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* pRegexp)
+CSearchStringPattern::CSearchStringPattern(
+	HWND hwnd,
+	const wchar_t* pszPattern,
+	int nPatternLen,
+	const SSearchOption& sSearchOption,
+	CBregexp* pRegexp
+	)
 	:
 	m_pszKey(NULL),
 	m_psSearchOption(NULL),
@@ -82,7 +88,14 @@ void CSearchStringPattern::Reset() {
 #endif
 }
 
-bool CSearchStringPattern::SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* regexp)
+bool CSearchStringPattern::SetPattern(
+	HWND hwnd,
+	const wchar_t* pszPattern,
+	int nPatternLen,
+	const wchar_t* pszPattern2,
+	const SSearchOption& sSearchOption,
+	CBregexp* regexp
+	)
 {
 	Reset();
 	m_pszCaseKeyRef = m_pszKey = pszPattern;
@@ -357,7 +370,7 @@ bool CSearchAgent::WhereCurrentWord(
 	*pnIdxFrom = nIdx;
 	*pnIdxTo = nIdx;
 	
-	CDocLine*	pDocLine = m_pcDocLineMgr->GetLine(nLineNum);
+	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLineNum);
 	if (!pDocLine) {
 		return false;
 	}
@@ -502,8 +515,9 @@ int CSearchAgent::SearchWord(
 						// 2005-09-02 D.S.Koba GetSizeOfChar
 						nIdxPos += (CNativeW::GetSizeOfChar(pLine, nLineLen, nIdxPos) == 2 ? 2 : 1);
 					}
-					if (nIdxPos <= pDocLine->GetLengthWithoutEOL() 
-						&&	pRegexp->Match(pLine, nLineLen, nIdxPos)
+					if (1
+						&& nIdxPos <= pDocLine->GetLengthWithoutEOL() 
+						&& pRegexp->Match(pLine, nLineLen, nIdxPos)
 					) {
 						// 検索にマッチした！
 						nHitPos = pRegexp->GetIndex();
@@ -543,8 +557,9 @@ int CSearchAgent::SearchWord(
 			nIdxPos = ptSerachBegin.x;
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				if (nIdxPos <= pDocLine->GetLengthWithoutEOL() 
-					&&	pRegexp->Match(pLine, nLineLen, nIdxPos)
+				if (1
+					&& nIdxPos <= pDocLine->GetLengthWithoutEOL() 
+					&& pRegexp->Match(pLine, nLineLen, nIdxPos)
 				) {
 					// マッチした
 					pMatchRange->SetFromX(pRegexp->GetIndex());			// マッチ位置from
@@ -1003,7 +1018,8 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				// 2002/2/10 aroka CMemory変更 何度も GetLength,GetPtr をよばない。
 				int nNewLen = nLineLen - nWorkLen + nInsLen;
 				int nAfterLen = nLineLen - (nWorkPos + nWorkLen);
-				if (pCDocLine->_GetDocLineData().capacity() * 9 / 10 < nNewLen
+				if (1
+					&& pCDocLine->_GetDocLineData().capacity() * 9 / 10 < nNewLen
 					&& nNewLen <= pCDocLine->_GetDocLineData().capacity()
 				) {
 					CNativeW& ref = pCDocLine->_GetDocLineData();
@@ -1075,7 +1091,7 @@ prev_line:;
 	}
 
 	// データ挿入処理
-	if (!pArg->pInsData || 0 == pArg->pInsData->size()) {
+	if (!pArg->pInsData || pArg->pInsData->size() == 0) {
 		pArg->nInsSeq = 0;
 		return;
 	}

@@ -212,6 +212,7 @@ public:
 	//@@@ 2002.09.22 YAZAKI
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
 	void CheckColorMODE(CColorStrategy** ppcColorStrategy, int nPos, const CStringRef& cLineStr);
+	bool IsSkipBeforeLayout();	// レイアウトが行頭からチェックしなくていいか判定
 
 	// 設定変更
 	void OnChangeSetting(void);
@@ -234,5 +235,8 @@ private:
 	CColor_Heredoc*					m_pcHeredoc;
 
 	CEditView*						m_pcView;
+
+	bool	m_bSkipBeforeLayoutGeneral;
+	bool	m_bSkipBeforeLayoutFound;
 };
 

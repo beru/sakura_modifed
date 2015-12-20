@@ -42,8 +42,8 @@ void CMainStatusBar::CreateStatusBar()
 		0
 	);
 
-	if (m_pOwner->m_CFuncKeyWnd.GetHwnd()) {
-		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF(FALSE);
+	if (m_pOwner->m_cFuncKeyWnd.GetHwnd()) {
+		m_pOwner->m_cFuncKeyWnd.SizeBox_ONOFF(FALSE);
 	}
 
 	// スプリッターの、サイズボックスの位置を変更
@@ -61,7 +61,7 @@ void CMainStatusBar::DestroyStatusBar()
 	::DestroyWindow(m_hwndStatusBar);
 	m_hwndStatusBar = NULL;
 
-	if (m_pOwner->m_CFuncKeyWnd.GetHwnd()) {
+	if (m_pOwner->m_cFuncKeyWnd.GetHwnd()) {
 		bool bSizeBox;
 		if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 			// サイズボックスの表示／非表示切り替え
@@ -73,7 +73,7 @@ void CMainStatusBar::DestroyStatusBar()
 				bSizeBox = false;
 			}
 		}
-		m_pOwner->m_CFuncKeyWnd.SizeBox_ONOFF(bSizeBox);
+		m_pOwner->m_cFuncKeyWnd.SizeBox_ONOFF(bSizeBox);
 	}
 	// スプリッターの、サイズボックスの位置を変更
 	m_pOwner->m_cSplitterWnd.DoSplit(-1, -1);

@@ -29,7 +29,7 @@
 class CFigure_CtrlCode : public CFigureSpace {
 public:
 	// traits
-	bool Match(const wchar_t* pText) const;
+	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;
@@ -40,7 +40,7 @@ public:
 class CFigure_HanBinary : public CFigureSpace {
 public:
 	// traits
-	bool Match(const wchar_t* pText) const;
+	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;
@@ -51,7 +51,7 @@ public:
 class CFigure_ZenBinary : public CFigureSpace {
 public:
 	// traits
-	bool Match(const wchar_t* pText) const;
+	bool Match(const wchar_t* pText, int nTextLen) const;
 
 	// action
 	void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const;

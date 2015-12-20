@@ -36,6 +36,9 @@
 
 using namespace std;
 
+//! カスタムカラー用の識別文字列
+static const TCHAR* TSTR_PTRCUSTOMCOLORS = _T("ptrCustomColors");
+
 WNDPROC	m_wpColorListProc;
 
 static const DWORD p_helpids2[] = {	//11400
@@ -437,7 +440,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 					pCommon->InitData();
 					pCommon->m_nKeywordSet1 = m_nSet[0];
 					INT_PTR res = ::DialogBoxParam(
-						::GetModuleHandle(NULL),
+						CSelectLang::getLangRsrcInstance(),
 						MAKEINTRESOURCE(IDD_PROP_KEYWORD),
 						hwndDlg,
 						CPropKeyword::DlgProc_dialog,
@@ -602,9 +605,9 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2)	, BLOCKCOMMENT_BUFFERSIZE - 1);
 
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_Types.m_cBlockComments[0].getBlockCommentFrom());	// ブロックコメントデリミタ(From)
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO	, m_Types.m_cBlockComments[0].getBlockCommentTo());	// ブロックコメントデリミタ(To)
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_Types.m_cBlockComments[0].getBlockCommentTo());		// ブロックコメントデリミタ(To)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_Types.m_cBlockComments[1].getBlockCommentFrom());	// ブロックコメントデリミタ2(From)
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_cBlockComments[1].getBlockCommentTo());	// ブロックコメントデリミタ2(To)
+	::DlgItem_SetText(hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_cBlockComments[1].getBlockCommentTo());		// ブロックコメントデリミタ2(To)
 
 	// 行コメントデリミタ @@@ 2002.09.22 YAZAKI
 	// From Here May 12, 2001 genta
@@ -667,6 +670,9 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// 色をつける文字種類のリスト
 	hwndWork = ::GetDlgItem(hwndDlg, IDC_LIST_COLORS);
 	List_ResetContent(hwndWork);  // リストを空にする
+	// 2014.11.25 大きいフォント対応
+	int nItemHeight = CTextWidthCalc(hwndWork).GetTextHeight();
+	List_SetItemHeight(hwndWork, 0, nItemHeight + 4);
 	for (i = 0; i < COLORIDX_LAST; ++i) {
 		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
 		nItem = ::List_AddString(hwndWork, m_Types.m_ColorInfoArr[i].m_szName);

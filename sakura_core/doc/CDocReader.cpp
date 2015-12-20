@@ -10,7 +10,7 @@
 */
 wchar_t* CDocReader::GetAllData(int* pnDataLen)
 {
-	CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	const CDocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
 	int nDataLen = 0;
 	while (pDocLine) {
 		// Oct. 7, 2002 YAZAKI
@@ -44,7 +44,7 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 
 const wchar_t* CDocReader::GetLineStr(CLogicInt nLine, CLogicInt* pnLineLen)
 {
-	CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
+	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
 		*pnLineLen = CLogicInt(0);
 		return NULL;
@@ -86,7 +86,7 @@ const wchar_t* CDocReader::GetFirstLinrStr(int* pnLineLen)
 		*pnLineLen = 0;
 	}else {
 		pszLine = m_pcDocLineMgr->GetDocLineTop()->GetDocLineStrWithEOL(pnLineLen);
-		m_pcDocLineMgr->m_pDocLineCurrent = m_pcDocLineMgr->GetDocLineTop()->GetNextLine();
+		m_pcDocLineMgr->m_pDocLineCurrent = const_cast<CDocLine*>(m_pcDocLineMgr->GetDocLineTop()->GetNextLine());
 	}
 	return pszLine;
 }

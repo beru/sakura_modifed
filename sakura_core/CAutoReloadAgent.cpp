@@ -81,33 +81,19 @@ void CAutoReloadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
 bool CAutoReloadAgent::_ToDoChecking() const
 {
 	const CommonSetting_File& setting = GetDllShareData().m_Common.m_sFile;
-	if (IsPausing()) {
-		return false;
-	}
-	if (!setting.m_bCheckFileTimeStamp) {
-		return false;	// 更新の監視設定
-	}
-	if (m_eWatchUpdate == WU_NONE) {
-		return false;
-	}
-	if (setting.m_nFileShareMode != SHAREMODE_NOT_EXCLUSIVE) {
-		return false; // ファイルの排他制御モード
-	}
 	HWND hwndActive = ::GetActiveWindow();
-	if (!hwndActive) {
-		return false;	// アクティブ？
-	}
-	if (hwndActive != CEditWnd::getInstance()->GetHwnd()) {
+	if (0
+		|| IsPausing()
+		|| !setting.m_bCheckFileTimeStamp	// 更新の監視設定
+		|| m_eWatchUpdate == WU_NONE
+		|| setting.m_nFileShareMode != SHAREMODE_NOT_EXCLUSIVE	 // ファイルの排他制御モード
+		|| !hwndActive		// アクティブ？
+		|| hwndActive != CEditWnd::getInstance()->GetHwnd()
+		|| !GetListeningDoc()->m_cDocFile.GetFilePathClass().IsValidPath()
+		|| GetListeningDoc()->m_cDocFile.IsFileTimeZero()	// 現在編集中のファイルのタイムスタンプ
+		|| GetListeningDoc()->m_pcEditWnd->m_pPrintPreview	// 印刷プレビュー中	2013/5/8 Uchi
+	) {
 		return false;
-	}
-	if (!GetListeningDoc()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		return false;
-	}
-	if (GetListeningDoc()->m_cDocFile.IsFileTimeZero()) { 
-		return false;	// 現在編集中のファイルのタイムスタンプ
-	}
-	if (GetListeningDoc()->m_pcEditWnd->m_pPrintPreview ) {
-		return false;	// 印刷プレビュー中	2013/5/8 Uchi
 	}
 	return true;
 }
@@ -118,7 +104,11 @@ bool CAutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 	// 2005.10.20 ryoji FindFirstFileを使うように変更（ファイルがロックされていてもタイムスタンプ取得可能）
 	CFileTime ftime;
 	if (GetLastWriteTimestamp(GetListeningDoc()->m_cDocFile.GetFilePath(), &ftime)) {
-		if (0 != ::CompareFileTime(&GetListeningDoc()->m_cDocFile.GetFileTime().GetFILETIME(), &ftime.GetFILETIME())) {	//	Aug. 13, 2003 wmlhq タイムスタンプが古く変更されている場合も検出対象とする
+		if (::CompareFileTime(
+				&GetListeningDoc()->m_cDocFile.GetFileTime().GetFILETIME(),
+				&ftime.GetFILETIME()
+			) != 0
+		) {	//	Aug. 13, 2003 wmlhq タイムスタンプが古く変更されている場合も検出対象とする
 			*pNewFileTime = ftime.GetFILETIME();
 			return true;
 		}

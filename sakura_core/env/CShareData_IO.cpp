@@ -85,13 +85,13 @@ bool CShareData_IO::ShareData_IO_2(bool bRead)
 	}
 
 	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
-	TCHAR	szIniFileName[_MAX_PATH + 1];
+	TCHAR szIniFileName[_MAX_PATH + 1];
 	CFileNameManager::getInstance()->GetIniFileName( szIniFileName, strProfileName.c_str(), bRead );	// 2007.05.19 ryoji iniファイル名を取得する
 
 //	MYTRACE(_T("Iniファイル処理-1 所要時間(ミリ秒) = %d\n"), cRunningTimer.Read());
 
 	if (bRead) {
-		if (!cProfile.ReadProfile(pszIniFileName)) {
+		if (!cProfile.ReadProfile(szIniFileName)) {
 			// 設定ファイルが存在しない
 			return false;
 		}
@@ -2024,7 +2024,12 @@ void CShareData_IO::ShareData_IO_MainMenu(CDataProfile& cProfile)
 	@date 2010/5/15 Uchi
 	@date 2014.11.21 Moca pData追加。データのみのタイプを追加
 */
-void CShareData_IO::IO_MainMenu( CDataProfile& cProfile, std::vector<std::wstring>* pData, CommonSetting_MainMenu& mainmenu, bool bOutCmdName)
+void CShareData_IO::IO_MainMenu(
+	CDataProfile& cProfile,
+	std::vector<std::wstring>* pData,
+	CommonSetting_MainMenu& mainmenu,
+	bool bOutCmdName
+	)
 {
 	static const WCHAR* pszSecName = LTEXT("MainMenu");
 	WCHAR	szKeyName[64];
@@ -2033,6 +2038,8 @@ void CShareData_IO::IO_MainMenu( CDataProfile& cProfile, std::vector<std::wstrin
 	WCHAR	szLine[1024];
 	WCHAR*	p = NULL;
 	WCHAR*	pn;
+	std::vector<std::wstring>& data = *pData;
+	int dataNum = 0;
 
 	if (cProfile.IsReadingMode()) {
 		int menuNum = 0;

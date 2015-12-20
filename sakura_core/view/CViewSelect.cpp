@@ -162,7 +162,6 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 		if (m_sSelect != m_sSelectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画
 			const int nCharWidth = pView->GetTextMetrics().GetHankakuDx();
-			const int nCharHeight = pView->GetTextMetrics().GetHankakuDy();
 			const CTextArea& area =  pView->GetTextArea();
 			CLayoutRect rcOld; // CLayoutRect
 			TwoPointToRect(&rcOld, m_sSelectOld.GetFrom(), m_sSelectOld.GetTo());
@@ -179,7 +178,10 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				rc.bottom = rcNew.bottom;
 			}else if (1
 				&& IsBoxSelecting()
-				&& (m_sSelect.GetTo().x != m_sSelectOld.GetTo().x || m_sSelect.GetFrom().x != m_sSelectOld.GetFrom().x)
+				&& (
+					m_sSelect.GetTo().x != m_sSelectOld.GetTo().x
+					|| m_sSelect.GetFrom().x != m_sSelectOld.GetFrom().x
+				)
 			) {
 				rc.UnionStrictRect(rcOld, rcNew);
 			}else if (!IsBoxSelecting() && rcOld.top == rcNew.top && rcOld.bottom == rcNew.bottom) {
@@ -214,8 +216,8 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 				rcPx.left   =  area.GetAreaLeft() + nCharWidth * (Int)(drawLeft - area.GetViewLeftCol());
 				rcPx.right  = area.GetAreaLeft() + nCharWidth * (Int)(drawRight- area.GetViewLeftCol());
 			}
-			rcPx.top    = area.GetAreaTop() + nCharHeight * (Int)(rc.top -area.GetViewTopLine());
-			rcPx.bottom = area.GetAreaTop() + nCharHeight * (Int)(rc.bottom + 1 -area.GetViewTopLine());
+			rcPx.top    = area.GenerateYPx(rc.top);
+			rcPx.bottom = area.GenerateYPx(rc.bottom + 1);
 
 			CMyRect rcArea;
 			pView->GetTextArea().GenerateTextAreaRect(&rcArea);
@@ -238,6 +240,11 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			}
 		}
 	}else {
+		if( IsTextSelecting() && (!m_sSelectOld.IsValid() || m_sSelectOld.IsOne()) ){
+			m_bDrawSelectArea = false;
+			pView->DrawBracketPair( false );
+			m_bDrawSelectArea = true;
+		}
 		HDC hdc = pView->GetDC();
 		DrawSelectArea2(hdc);
 		// 2011.12.02 選択解除状態での、カーソル位置ライン復帰
@@ -314,8 +321,8 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 		RECT rcOld2;
 		rcOld2.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcOld.left  * nCharWidth;
 		rcOld2.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcOld.right * nCharWidth;
-		rcOld2.top		= (Int)(rcOld.top - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
-		rcOld2.bottom	= (Int)(rcOld.bottom + 1 - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
+		rcOld2.top		= pView->GetTextArea().GenerateYPx(rcOld.top);
+		rcOld2.bottom	= pView->GetTextArea().GenerateYPx(rcOld.bottom + 1);
 		HRGN hrgnOld = ::CreateRectRgnIndirect(&rcOld2);
 
 		// 2点を対角とする矩形を求める
@@ -335,8 +342,8 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 		RECT rcNew2;
 		rcNew2.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcNew.left  * nCharWidth;
 		rcNew2.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)rcNew.right * nCharWidth;
-		rcNew2.top		= (Int)(rcNew.top - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
-		rcNew2.bottom	= (Int)(rcNew.bottom + 1 - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
+		rcNew2.top		= pView->GetTextArea().GenerateYPx(rcNew.top);
+		rcNew2.bottom	= pView->GetTextArea().GenerateYPx(rcNew.bottom + 1);
 
 		HRGN hrgnNew = ::CreateRectRgnIndirect(&rcNew2);
 
@@ -374,7 +381,7 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 					RECT rcNew;
 					rcNew.left   = pView->GetTextArea().GetAreaLeft() + (Int)(pView->GetTextArea().GetViewLeftCol() + ptLast.x) * nCharWidth;
 					rcNew.right  = pView->GetTextArea().GetAreaRight();
-					rcNew.top    = (Int)(ptLast.y - pView->GetTextArea().GetViewTopLine()) * nCharHeight + pView->GetTextArea().GetAreaTop();
+					rcNew.top    = pView->GetTextArea().GenerateYPx(ptLast.y);
 					rcNew.bottom = rcNew.top + nCharHeight;
 					
 					// 2006.10.01 Moca GDI(リージョン)リソースリーク修正
@@ -525,7 +532,7 @@ void CViewSelect::DrawSelectAreaLine(
 	CMyRect	rcClip; // px
 	rcClip.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)nSelectFrom * nCharWidth;
 	rcClip.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)nSelectTo   * nCharWidth;
-	rcClip.top		= (Int)(nLineNum - pView->GetTextArea().GetViewTopLine()) * nLineHeight + pView->GetTextArea().GetAreaTop();
+	rcClip.top		= pView->GetTextArea().GenerateYPx(nLineNum);
 	rcClip.bottom	= rcClip.top + nLineHeight;
 	if (rcClip.right > pView->GetTextArea().GetAreaRight()) {
 		rcClip.right = pView->GetTextArea().GetAreaRight();
@@ -711,7 +718,11 @@ void CViewSelect::PrintSelectionInfoMsg() const
 
 					const_cast<CEditView*>(pView)->GetSelectedDataSimple(cmemW);
 					thiz->m_sSelect = rngSelect;		// m_sSelectを元に戻す
-				}else if (m_bSelectAreaChanging && m_nLastSelectedByteLen && m_sSelect.GetTo() == m_sSelectOld.GetTo()) {
+				}else if (
+					m_bSelectAreaChanging
+					&& m_nLastSelectedByteLen
+					&& m_sSelect.GetTo() == m_sSelectOld.GetTo()
+				) {
 					// 範囲が前方に拡大された
 					if (PointCompare(m_sSelect.GetFrom(), m_sSelectOld.GetFrom()) < 0) {
 						bSelExtend = true;				// 拡大
@@ -764,7 +775,8 @@ void CViewSelect::PrintSelectionInfoMsg() const
 					//	VC .NET以降でもMicrosoft拡張を有効にした標準動作はVC6と同じことに注意
 					CLayoutInt nLineNum;
 					for (nLineNum = m_sSelect.GetFrom().GetY2() + CLayoutInt(1);
-						nLineNum < m_sSelect.GetTo().GetY2(); ++nLineNum
+						nLineNum < m_sSelect.GetTo().GetY2();
+						++nLineNum
 					) {
 						pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
@@ -793,14 +805,21 @@ void CViewSelect::PrintSelectionInfoMsg() const
 		}
 
 #ifdef _DEBUG
-		auto_sprintf_s(msg, _T("%d %ts (%d lines) selected. [%d:%d]-[%d:%d]"),
+		auto_sprintf_s(
+			msg, _T("%d %ts (%d lines) selected. [%d:%d]-[%d:%d]"),
 			select_sum,
 			(bCountByByte ? _T("bytes") : _T("chars")),
 			select_line,
 			m_sSelect.GetFrom().x, m_sSelect.GetFrom().y,
-			m_sSelect.GetTo().x, m_sSelect.GetTo().y);
+			m_sSelect.GetTo().x, m_sSelect.GetTo().y
+		);
 #else
-		auto_sprintf_s(msg, _T("%d %ts (%d lines) selected."), select_sum, (bCountByByte ? _T("bytes") : _T("chars")), select_line);
+		auto_sprintf_s(
+			msg, _T("%d %ts (%d lines) selected."),
+			select_sum,
+			(bCountByByte ? _T("bytes") : _T("chars")),
+			select_line
+		);
 #endif
 	}
 	const_cast<CEditView*>(pView)->GetCaret().m_bClearStatus = false;

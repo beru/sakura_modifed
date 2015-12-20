@@ -71,15 +71,16 @@ void CProfile::ReadOneline(
 	}
 
 	// コメント行を読みとばす
-	if (0 == line.compare( 0, 2, LTEXT("//") )) {
+	if (line.compare(0, 2, LTEXT("//")) == 0) {
 		return;
 	}
 
 	// セクション取得
 	//	Jan. 29, 2004 genta compare使用
-	if (line.compare( 0, 1, LTEXT("[") ) == 0 
-		&& line.find( LTEXT("=") ) == line.npos
-		&& line.find( LTEXT("]") ) == ( line.size() - 1 )
+	if (1
+		&& line.compare(0, 1, LTEXT("[")) == 0 
+		&& line.find(LTEXT("=")) == line.npos
+		&& line.find(LTEXT("]")) == ( line.size() - 1 )
 	) {
 		Section Buffer;
 		Buffer.strSectionName = line.substr( 1, line.size() - 1 - 1 );
@@ -171,10 +172,11 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType, std::vect
 	CNativeW cmLineW;
 	m_strProfileName = _T("-Res-");
 
-	if ((hRsrc = ::FindResource(0, pName, pType)) != NULL
-	 && (hGlobal = ::LoadResource(0, hRsrc)) != NULL
-	 && (psMMres = (char*)::LockResource(hGlobal)) != NULL
-	 && (nSize = (size_t)::SizeofResource(0, hRsrc)) != 0
+	if (1
+		&& (hRsrc = ::FindResource(0, pName, pType)) != NULL
+		&& (hGlobal = ::LoadResource(0, hRsrc)) != NULL
+		&& (psMMres = (char*)::LockResource(hGlobal)) != NULL
+		&& (nSize = (size_t)::SizeofResource(0, hRsrc)) != 0
 	) {
 		p = psMMres;
 		if (nSize >= sizeof(UTF8_BOM) && memcmp(p, UTF8_BOM, sizeof(UTF8_BOM)) == 0) {

@@ -1,3 +1,27 @@
+/*
+	Copyright (C) 2008, kobake
+
+	This software is provided 'as-is', without any express or implied
+	warranty. In no event will the authors be held liable for any damages
+	arising from the use of this software.
+
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
+
+		1. The origin of this software must not be misrepresented;
+		   you must not claim that you wrote the original software.
+		   If you use this software in a product, an acknowledgment
+		   in the product documentation would be appreciated but is
+		   not required.
+
+		2. Altered source versions must be plainly marked as such,
+		   and must not be misrepresented as being the original software.
+
+		3. This notice may not be removed or altered from any source
+		   distribution.
+*/
+
 #include "StdAfx.h"
 #include "types/CType.h"
 #include "doc/CEditDoc.h"
@@ -69,6 +93,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 	nClassNestArrNum = 0;
 	CLogicInt		nLineCount;
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
+	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
@@ -104,7 +129,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 			}else if (FL_JAVA_MODE_WORD == nMode) {
 				// 2011.09.16 syat アウトライン解析で日本語が含まれている部分が表示されない
 				if (! WCODE::IsBlank(pLine[i]) &&
-					! WCODE::IsLineDelimiter(pLine[i]) &&
+					! WCODE::IsLineDelimiter(pLine[i], bExtEol) &&
 					! WCODE::IsControlCode(pLine[i]) &&
 					! wcschr(szJavaKigou, pLine[i])
 				) {
@@ -164,7 +189,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
 					L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
-					WCODE::IsLineDelimiter(pLine[i]) ||
+					WCODE::IsLineDelimiter(pLine[i], bExtEol) ||
 					L'{' == pLine[i] ||
 					L'}' == pLine[i] ||
 					L'(' == pLine[i] ||
@@ -185,7 +210,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
-					WCODE::IsLineDelimiter(pLine[i])
+					WCODE::IsLineDelimiter(pLine[i], bExtEol)
 				) {
 					nMode = FL_JAVA_MODE_NORMAL;
 					continue;
@@ -195,7 +220,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
-					WCODE::IsLineDelimiter(pLine[i])
+					WCODE::IsLineDelimiter(pLine[i], bExtEol)
 				) {
 					continue;
 				}else if (i < nLineLen - 1 && L'/' == pLine[i] &&  L'/' == pLine[i + 1]) {
@@ -300,7 +325,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 				loop_is_func:;
 					for (; k < nLineLen2; ++k) {
 						if (!bCommentLoop) {
-							if (pLine2[k] != L' ' && pLine2[k] != WCODE::TAB && !WCODE::IsLineDelimiter(pLine2[k])) {
+							if (pLine2[k] != L' ' && pLine2[k] != WCODE::TAB && !WCODE::IsLineDelimiter(pLine2[k], bExtEol)) {
 								if (k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'*') {
 									bCommentLoop = TRUE;
 									++k;
@@ -388,7 +413,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}else {
 					if (! WCODE::IsBlank(pLine[i]) &&
-						! WCODE::IsLineDelimiter(pLine[i]) &&
+						! WCODE::IsLineDelimiter(pLine[i], bExtEol) &&
 						! WCODE::IsControlCode(pLine[i]) &&
 						! wcschr(szJavaKigou, pLine[i])
 					) {

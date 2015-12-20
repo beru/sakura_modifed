@@ -110,7 +110,7 @@
       <Culture>0x0411</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>comctl32.lib;Imm32.lib;mpr.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comctl32.lib;Imm32.lib;mpr.lib;imagehlp.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
       <LargeAddressAware>true</LargeAddressAware>
@@ -144,7 +144,7 @@
       <Culture>0x0411</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>comctl32.lib;Imm32.lib;mpr.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comctl32.lib;Imm32.lib;mpr.lib;imagehlp.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -215,10 +215,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\sakura_core\charset\CCodePage.h" />
+    <ClInclude Include="..\sakura_core\dlg\CDlgGrepReplace.h" />
+    <ClInclude Include="..\sakura_core\dlg\CDlgProfileMgr.h" />
+    <ClInclude Include="..\sakura_core\docplus\CFuncListManager.h" />
     <ClInclude Include="..\sakura_core\Funccode_define.h" />
     <ClInclude Include="..\sakura_core\Funccode_enum.h" />
     <ClInclude Include="..\sakura_core\macro\CMacroIfObj.h" />
     <ClInclude Include="..\sakura_core\macro\CPluginMacroManager.h" />
+    <ClInclude Include="..\sakura_core\outline\CDlgFileTree.h" />
     <ClInclude Include="..\sakura_core\plugin\SakuraPlugin.h" />
     <ClInclude Include="..\sakura_core\sakura.hh" />
     <ClInclude Include="..\sakura_core\sakura_rc.h" />
@@ -560,7 +565,12 @@
     <ResourceCompile Include="..\sakura_core\sakura_rc.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\sakura_core\charset\CCodePage.cpp" />
+    <ClCompile Include="..\sakura_core\dlg\CDlgGrepReplace.cpp" />
+    <ClCompile Include="..\sakura_core\dlg\CDlgProfileMgr.cpp" />
+    <ClCompile Include="..\sakura_core\docplus\CFuncListManager.cpp" />
     <ClCompile Include="..\sakura_core\macro\CPluginMacroManager.cpp" />
+    <ClCompile Include="..\sakura_core\outline\CDlgFileTree.cpp" />
     <ClCompile Include="..\sakura_core\plugin\CPluginIfObj.cpp" />
     <ClCompile Include="..\sakura_core\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Ansi|Win32'">Create</PrecompiledHeader>

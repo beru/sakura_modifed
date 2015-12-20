@@ -48,7 +48,6 @@ CTextInputStream::~CTextInputStream()
 {
 }
 
-#if 0 // no mercy
 
 wstring CTextInputStream::ReadLineW()
 {
@@ -186,7 +185,8 @@ void CTextOutputStream::WriteF(const wchar_t* format, ...)
 //                  CTextInputStream_AbsIni                    //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-static const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
+static
+const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
 {
 	if (_IS_REL_PATH(fname)) {
 		static TCHAR path[_MAX_PATH];
@@ -201,7 +201,8 @@ static const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
 }
 
 CTextInputStream_AbsIni::CTextInputStream_AbsIni(const TCHAR* fname, bool bOrExedir)
-: CTextInputStream(_Resolve(fname, bOrExedir))
+	:
+	CTextInputStream(_Resolve(fname, bOrExedir))
 {
 }
 

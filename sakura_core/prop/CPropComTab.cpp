@@ -40,23 +40,26 @@
 #include "prop/CPropCommon.h"
 #include "CPropertyManager.h"
 #include "util/shell.h"
+#include "util/window.h"
 #include "sakura_rc.h"
 #include "sakura.hh"
 
 
 static const DWORD p_helpids[] = {
 	IDC_CHECK_DispTabWnd,			HIDC_CHECK_DispTabWnd,			// タブウインドウ表示	//@@@ 2003.05.31 MIK
-	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		// 等幅	// 2006.08.06 ryoji
+	IDC_CHECK_DispTabWndMultiWin,	HIDC_CHECK_DispTabWndMultiWin,	//ウィンドウをまとめてグループ化する
+	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	//最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
+	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			//ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
+	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			//外部から起動するときは新しいウインドウで開く 2009.06.19
 	IDC_CHECK_DispTabIcon,			HIDC_CHECK_DispTabIcon,			// アイコン表示	// 2006.08.06 ryoji
+	IDC_CHECK_SameTabWidth,			HIDC_CHECK_SameTabWidth,		//等幅	// 2006.08.06 ryoji
 	IDC_CHECK_DispTabClose,			HIDC_CHECK_DispTabClose,		// タブを閉じるボタン表示	// 2012.04.14 syat
+	IDC_BUTTON_TABFONT,				HIDC_BUTTON_TABFONT,			//タブフォント
 	IDC_CHECK_SortTabList,			HIDC_CHECK_SortTabList,			// タブ一覧ソート	// 2006.08.06 ryoji
-	IDC_CHECK_DispTabWndMultiWin,	HIDC_CHECK_DispTabWndMultiWin,	// タブウインドウ表示	//@@@ 2003.05.31 MIK
+	IDC_CHECK_TAB_MULTILINE,		HIDC_CHECK_TAB_MULTILINE,		//タブ多段
+	IDC_COMBO_TAB_POSITION,			HIDC_COMBO_TAB_POSITION,		//タブ表示位置
 	IDC_TABWND_CAPTION,				HIDC_TABWND_CAPTION,			// タブウインドウキャプション	//@@@ 2003.06.15 MIK
-	IDC_CHECK_RetainEmptyWindow,	HIDC_CHECK_RetainEmptyWindow,	// 最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
-	IDC_CHECK_CloseOneWin,			HIDC_CHECK_CloseOneWin,			// ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
 	IDC_CHECK_ChgWndByWheel,		HIDC_CHECK_ChgWndByWheel,		// マウスホイールでウィンドウ切り替え 2007.04.03 ryoji
-	IDC_CHECK_OpenNewWin,			HIDC_CHECK_OpenNewWin,			// 外部から起動するときは新しいウインドウで開く 2009.06.19
-	IDC_BUTTON_TABFONT,				HIDC_BUTTON_TABFONT,			// タブフォント
 	0, 0
 };
 
@@ -64,6 +67,15 @@ TYPE_NAME_ID<EDispTabClose> DispTabCloseArr[] = {
 	{ DISPTABCLOSE_NO,		STR_PROPCOMTAB_DISP_NO },
 	{ DISPTABCLOSE_ALLWAYS,	STR_PROPCOMTAB_DISP_ALLWAYS },
 	{ DISPTABCLOSE_AUTO,	STR_PROPCOMTAB_DISP_AUTO },
+};
+
+TYPE_NAME_ID<ETabPosition> TabPosArr[] = {
+	{ TabPosition_Top, STR_PROPCOMTAB_TAB_POS_TOP },
+	{ TabPosition_Bottom, STR_PROPCOMTAB_TAB_POS_BOTTOM },
+#if 0
+	{ TabPosition_Left, STR_PROPCOMTAB_TAB_POS_LEFT },
+	{ TabPosition_Right, STR_PROPCOMTAB_TAB_POS_RIGHT },
+#endif
 };
 
 //	From Here Jun. 2, 2001 genta
@@ -188,6 +200,7 @@ void CPropTab::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_SameTabWidth, csTabBar.m_bSameTabWidth);	//@@@ 2006.01.28 ryoji
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DispTabIcon, csTabBar.m_bDispTabIcon);	//@@@ 2006.01.28 ryoji
 	::CheckDlgButton(hwndDlg, IDC_CHECK_SortTabList, csTabBar.m_bSortTabList);			//@@@ 2006.03.23 fon
+	CheckDlgButtonBool(hwndDlg, IDC_CHECK_TAB_MULTILINE, csTabBar.m_bTabMultiLine );
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DispTabWndMultiWin, ! csTabBar.m_bDispTabWndMultiWin); //@@@ 2003.05.31 MIK
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_TABWND_CAPTION), _countof(csTabBar.m_szTabWndCaption) - 1);
 	::DlgItem_SetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.m_szTabWndCaption);
@@ -197,7 +210,18 @@ void CPropTab::SetData(HWND hwndDlg)
 	int nSelPos = 0;
 	for (int i = 0; i < _countof(DispTabCloseArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(DispTabCloseArr[i].nNameId));
-		if (DispTabCloseArr[i].nMethod == csTabBar.m_bDispTabClose) {
+		if (DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_bDispTabClose) {
+			nSelPos = i;
+		}
+	}
+	Combo_SetCurSel(hwndCombo, nSelPos);
+
+	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAB_POSITION);
+	Combo_ResetContent(hwndCombo);
+	nSelPos = 0;
+	for (int i = 0; i < _countof(TabPosArr); ++i) {
+		Combo_InsertString(hwndCombo, i, LS(TabPosArr[i].nNameId));
+		if (TabPosArr[i].nMethod == m_Common.m_sTabBar.m_eTabPosition) {
 			nSelPos = i;
 		}
 	}
@@ -232,6 +256,10 @@ int CPropTab::GetData(HWND hwndDlg)
 	int nSelPos = Combo_GetCurSel(hwndCombo);
 	csTabBar.m_bDispTabClose = DispTabCloseArr[nSelPos].nMethod;
 
+	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAB_POSITION);
+	nSelPos = Combo_GetCurSel(hwndCombo);
+	csTabBar.m_eTabPosition = TabPosArr[nSelPos].nMethod;
+
 	//	Feb. 11, 2007 genta 新規作成
 	csTabBar.m_bTab_RetainEmptyWin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_RetainEmptyWindow);
 	csTabBar.m_bTab_CloseOneWin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CloseOneWin);
@@ -260,9 +288,14 @@ void CPropTab::EnableTabPropInput(HWND hwndDlg)
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DispTabIcon       ), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_SameTabWidth      ), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DispTabClose      ), bTabWnd);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_TextTabClose            ), bTabWnd);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_TextTabCaption          ), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_TABFONT          ), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_STATIC_TABFONT          ), bTabWnd);	// 2013/4/24 Uchi
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_SortTabList       ), bTabWnd);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_TAB_MULTILINE     ), bTabWnd);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_TAB_POSITION            ), bTabWnd);
+	::EnableWindow(::GetDlgItem(hwndDlg, IDC_COMBO_TAB_POSITION      ), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_TABWND_CAPTION          ), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_ChgWndByWheel     ), bTabWnd);	// 2007.04.03 ryoji
 }

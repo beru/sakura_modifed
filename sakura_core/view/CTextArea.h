@@ -25,6 +25,7 @@
 
 class CViewFont;
 class CEditView;
+class CLayoutMgr;
 #include "DispPos.h"
 
 class CTextArea {
@@ -120,7 +121,7 @@ public:
 	bool DetectWidthOfLineNumberArea(bool bRedraw);
 
 	//! 行番号表示に必要な桁数を計算
-	int  DetectWidthOfLineNumberArea_calculate() const;
+	int  DetectWidthOfLineNumberArea_calculate(const CLayoutMgr*, bool bLayout=false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           判定                              //
@@ -189,6 +190,8 @@ public:
 	void GenerateLineNumberRect(RECT* rc) const;
 
 	void GenerateTextAreaRect(RECT* rc) const;
+
+	int GenerateYPx(CLayoutYInt nLineNum) const;
 
 private:
 	// 参照

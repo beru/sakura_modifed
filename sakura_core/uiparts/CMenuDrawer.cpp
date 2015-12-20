@@ -192,7 +192,7 @@ CMenuDrawer::CMenuDrawer()
 /* 60 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 /* 61 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 /* 62 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
-/* 63 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
+/* 63 */		F_PROFILEMGR					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//プロファイルマネージャ
 /* 64 */		F_FILE_REOPEN_LATIN1			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// Latin1で開きなおす	// 2010/3/20 Uchi
 
 /* カーソル移動系(3段目32個: 65-96) */
@@ -225,8 +225,8 @@ CMenuDrawer::CMenuDrawer()
 /* 91 */		F_GONEXTPARAGRAPH				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 次の段落へ
 /* 92 */		F_GOPREVPARAGRAPH				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 前の段落へ
 /* 93 */		F_JUMPHIST_SET					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 現在位置を移動履歴に登録
-/* 94 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
-/* 95 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
+/* 94 */		F_MODIFYLINE_PREV				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//前の変更行へ
+/* 95 */		F_MODIFYLINE_NEXT				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//次の変更行へ
 /* 96 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 
 /* 選択系(4段目32個: 97-128) */
@@ -254,13 +254,13 @@ CMenuDrawer::CMenuDrawer()
 /* 118 */		F_GONEXTPARAGRAPH_SEL			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// (範囲選択)次の段落へ
 /* 119 */		F_GOPREVPARAGRAPH_SEL			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// (範囲選択)前の段落へ
 /* 120 */		F_SELECTLINE					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 1行選択
-/* 121 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
-/* 122 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
+/* 121 */		F_FUNCLIST_PREV					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//前の関数リストマーク
+/* 122 */		F_FUNCLIST_NEXT					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//次の関数リストマーク
 /* 123 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 /* 124 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 /* 125 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
-/* 126 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
-/* 127 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
+/* 126 */		F_MODIFYLINE_PREV_SEL			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//(範囲選択)前の変更行へ
+/* 127 */		F_MODIFYLINE_NEXT_SEL			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//(範囲選択)次の変更行へ
 /* 128 */		F_DISABLE						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 
 /* 矩形選択系(5段目32個: 129-160) */ //(注. 矩形選択系のほとんどは未実装)
@@ -359,8 +359,8 @@ CMenuDrawer::CMenuDrawer()
 /* 215 */		F_TOHANEI				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 全角英数→半角英数
 /* 216 */		F_CODECNV_UNICODEBE2SJIS/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// UnicodeBE→SJISコード変換	// Moca, 2002/05/26
 /* 217 */		F_TOHANKATA				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 全角カタカナ→半角カタカナ	// Aug. 29, 2002 ai
-/* 218 */		F_DISABLE				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
-/* 219 */		F_DISABLE				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
+/* 218 */		F_FILETREE				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//ファイルツリー表示
+/* 219 */		F_SHOWMINIMAP			/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//ミニマップを表示
 /* 220 */		F_DISABLE				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 /* 221 */		F_DISABLE				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
 /* 222 */		F_DISABLE				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
@@ -405,7 +405,7 @@ CMenuDrawer::CMenuDrawer()
 /* 257 */		F_CHGMOD_INS	/*, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 挿入／上書きモード切り替え	// Nov. 5, 2000 JEPRO 追加
 /* 258 */		F_CANCEL_MODE	/*, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 各種モードの取り消し			// Nov. 7, 2000 JEPRO 追加
 /* 259 */		F_CHG_CHARSET	/*, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// 文字コードセット指定			// 2010/6/14 Uchi
-/* 260 */		F_DISABLE		/*, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ダミー
+/* 260 */		F_GREP_REPLACE_DLG	/*, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//Grep置換
 
 /* 設定系(9段目次の16個: 261-276) */
 /* 261 */		F_SHOWTOOLBAR		/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	// ツールバーの表示
@@ -827,7 +827,8 @@ void CMenuDrawer::MyAppendMenu(
 			nFuncId,
 			szLabel,
 			szKey,
-			bAddKeyStr
+			bAddKeyStr,
+			_countof(szLabel)
 		);
 
 		/* アイコン用ビットマップを持つものは、オーナードロウにする */

@@ -1069,6 +1069,21 @@
     <ClInclude Include="..\sakura_core\macro\CMacroIfObj.h">
       <Filter>Cpp Source Files\macro</Filter>
     </ClInclude>
+    <ClInclude Include="..\sakura_core\charset\CCodePage.h">
+      <Filter>Cpp Source Files\charset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sakura_core\dlg\CDlgProfileMgr.h">
+      <Filter>Cpp Source Files\dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sakura_core\outline\CDlgFileTree.h">
+      <Filter>Cpp Source Files\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sakura_core\dlg\CDlgGrepReplace.h">
+      <Filter>Cpp Source Files\dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sakura_core\docplus\CFuncListManager.h">
+      <Filter>Cpp Source Files\docplus</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sakura_core\Funccode_x.hsrc">
@@ -2217,6 +2232,21 @@
     </ClCompile>
     <ClCompile Include="..\sakura_core\macro\CPluginMacroManager.cpp">
       <Filter>Cpp Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sakura_core\charset\CCodePage.cpp">
+      <Filter>Cpp Source Files\charset</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sakura_core\dlg\CDlgProfileMgr.cpp">
+      <Filter>Cpp Source Files\dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sakura_core\outline\CDlgFileTree.cpp">
+      <Filter>Cpp Source Files\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sakura_core\dlg\CDlgGrepReplace.cpp">
+      <Filter>Cpp Source Files\dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sakura_core\docplus\CFuncListManager.cpp">
+      <Filter>Cpp Source Files\docplus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

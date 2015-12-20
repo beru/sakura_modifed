@@ -74,6 +74,8 @@ inline int my_toupper(int c) { return (((c) >= 'a') && ((c) <= 'z')) ? ((c) - 'a
 inline int my_tolower(int c) { return (((c) >= 'A') && ((c) <= 'Z')) ? ((c) - 'A' + 'a') : (c); }
 inline int my_towupper(int c) { return (((c) >= L'a') && ((c) <= L'z')) ? ((c) - L'a' + L'A') : (c); }
 inline int my_towlower(int c) { return (((c) >= L'A') && ((c) <= L'Z')) ? ((c) - L'A' + L'a') : (c); }
+inline wchar_t my_towupper2( wchar_t c ){ return my_towupper(c); }
+inline wchar_t my_towlower2( wchar_t c ){ return my_towlower(c); }
 int skr_towupper(int c);
 int skr_towlower(int c);
 #ifdef _UNICODE
@@ -225,7 +227,7 @@ int auto_sprintf_s(WCHAR (&buff)[len], const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v, format);
-	int ret = tchar_vswprintf_s(buff, len, format, v);
+	int ret = tchar_vsprintf_s(buff, len, format, v);
 	va_end(v);
 	return ret; 
 }
@@ -235,20 +237,20 @@ int auto_sprintf(WCHAR* buf, const WCHAR* format, ...)
 {
 	va_list v;
 	va_start(v, format);
-	int ret = tchar_vswprintf(buf, format, v);
+	int ret = tchar_vsprintf(buf, format, v);
 	va_end(v);
 	return ret;
 }
 
 inline int auto_snprintf_s(ACHAR* buf, size_t count, const ACHAR* format, ...)   { va_list v; va_start(v, format); int ret = tchar_vsnprintf_s (buf, count, format, v); va_end(v); return ret; }
-inline int auto_snprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)   { va_list v; va_start(v, format); int ret = tchar_vsnwprintf_s(buf, count, format, v); va_end(v); return ret; }
+inline int auto_snprintf_s(WCHAR* buf, size_t count, const WCHAR* format, ...)   { va_list v; va_start(v, format); int ret = tchar_vsnprintf_s(buf, count, format, v); va_end(v); return ret; }
 inline int auto_sprintf(ACHAR* buf, const ACHAR* format, ...)                    { va_list v; va_start(v, format); int ret = tchar_vsprintf (buf, format, v); va_end(v); return ret; }
 inline int auto_sprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, ...) { va_list v; va_start(v, format); int ret = tchar_vsprintf_s (buf, nBufCount, format, v); va_end(v); return ret; }
-inline int auto_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...) { va_list v; va_start(v, format); int ret = tchar_vswprintf_s(buf, nBufCount, format, v); va_end(v); return ret; }
+inline int auto_sprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, ...) { va_list v; va_start(v, format); int ret = tchar_vsprintf_s(buf, nBufCount, format, v); va_end(v); return ret; }
 inline int auto_vsprintf(ACHAR* buf, const ACHAR* format, va_list& v) { return tchar_vsprintf (buf, format, v); }
-inline int auto_vsprintf(WCHAR* buf, const WCHAR* format, va_list& v) { return tchar_vswprintf(buf, format, v); }
+inline int auto_vsprintf(WCHAR* buf, const WCHAR* format, va_list& v) { return tchar_vsprintf(buf, format, v); }
 inline int auto_vsprintf_s(ACHAR* buf, size_t nBufCount, const ACHAR* format, va_list& v) { return tchar_vsprintf_s (buf, nBufCount, format, v); }
-inline int auto_vsprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v) { return tchar_vswprintf_s(buf, nBufCount, format, v); }
+inline int auto_vsprintf_s(WCHAR* buf, size_t nBufCount, const WCHAR* format, va_list& v) { return tchar_vsprintf_s(buf, nBufCount, format, v); }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      •¶ŽšƒR[ƒh•ÏŠ·                         //

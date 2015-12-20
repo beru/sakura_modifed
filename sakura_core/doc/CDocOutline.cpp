@@ -69,12 +69,14 @@ int CDocOutline::ReadRuleFile(
 		return 0;
 	}
 	wchar_t szLine[LINEREADBUFSIZE];
+	wchar_t szText[256];
 	static const wchar_t* pszDelimit = L" /// ";
 	static const int nDelimitLen = wcslen(pszDelimit);
 	static const wchar_t* pszKeySeps = L",\0";
 	wchar_t	cComment = L';';
 	int nCount = 0;
 	bRegex = false;
+	bool bRegexReplace = false;
 	title = L"";
 	int regexOption = CBregexp::optCaseSensitive;
 	
@@ -116,15 +118,15 @@ int CDocOutline::ReadRuleFile(
 						bTopDummy = true;
 					}
 				}
-				if( bRegexReplace && pszToken ){
-					const wchar_t* pszGroupDel = wcsstr( pszWork, pszDelimit );
-					if( NULL != pszGroupDel && 0 < pszWork[0] != L'\0' ){
+				if (bRegexReplace && pszToken) {
+					const wchar_t* pszGroupDel = wcsstr(pszWork, pszDelimit);
+					if (pszGroupDel && 0 < pszWork[0] != L'\0') {
 						// pszWork = 「titleRep /// group」
 						// pszGroupDel = 「 /// group」
 						int nTitleLen = pszGroupDel - pszWork; // Len == 0 OK
-						if( nTitleLen < _countof(szText) ){
+						if (nTitleLen < _countof(szText)) {
 							wcsncpy_s(szText, _countof(szText), pszWork, nTitleLen);
-						}else{
+						}else {
 							wcsncpy_s(szText, _countof(szText), pszWork, _TRUNCATE);
 						}
 						pszTextReplace = szText;

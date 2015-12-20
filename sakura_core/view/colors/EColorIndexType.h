@@ -45,6 +45,7 @@ enum EColorIndexType {
 	COLORIDX_CARETLINEBG,	//!< カーソル行背景色
 	COLORIDX_UNDERLINE,		//!< カーソル行アンダーライン
 	COLORIDX_CURSORVLINE,	//!< カーソル位置縦線 // 2006.05.13 Moca
+	COLORIDX_NOTELINE,		//!< ノート線	// 2013.12.21 Moca
 	COLORIDX_GYOU,			//!< 行番号
 	COLORIDX_GYOU_MOD,		//!< 行番号(変更行)
 	COLORIDX_EVENLINEBG,	//!< 奇数行の背景色
@@ -93,6 +94,7 @@ enum EColorIndexType {
 	COLORIDX_DIFF_CHANGE,	//!< DIFF追加  //@@@ 2002.06.01 MIK
 	COLORIDX_DIFF_DELETE,	//!< DIFF追加  //@@@ 2002.06.01 MIK
 	COLORIDX_MARK,			//!< ブックマーク  // 02/10/16 ai Add
+	COLORIDX_PAGEVIEW,		//!< 表示範囲(ミニマップ)  // 2014.07.14 Add
 
 	// カラーの最後
 	COLORIDX_LAST,			//!< カラーの最後

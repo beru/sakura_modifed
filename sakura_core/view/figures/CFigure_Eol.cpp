@@ -28,6 +28,7 @@
 #include "types/CTypeSupport.h"
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
+#include "window/CEditWnd.h"
 
 // 折り返し描画
 void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
@@ -49,10 +50,12 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 //                        CFigure_Eol                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_Eol::Match(const wchar_t* pText) const
+bool CFigure_Eol::Match(const wchar_t* pText, int nTextLen) const
 {
-	if (pText[0] == L'\r' && pText[1] == L'\n' && pText[2] == L'\0') return true;
-	if (WCODE::IsLineDelimiter(pText[0]) && pText[1] == L'\0') return true;
+	// 2014.06.18 折り返し・最終行だとDrawImpでcEol.GetLen()==0になり無限ループするので
+	// もしも行の途中に改行コードがあった場合はMatchさせない
+	if (nTextLen == 2 && pText[0] == L'\r' && pText[1] == L'\n') return true;
+	if (nTextLen == 1 && WCODE::IsLineDelimiterExt(pText[0])) return true;
 	return false;
 }
 
@@ -115,6 +118,10 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		DrawImp_DrawUnderline(pInfo, sPos);
 
 		pInfo->m_nPosInLogic += cEol.GetLen();
+	}else {
+		// 無限ループ対策
+		pInfo->m_nPosInLogic += 1;
+		assert_warning( 1 );
 	}
 
 	return true;
@@ -134,10 +141,12 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 		CTypeSupport cTextType(pcView, COLORIDX_TEXT);
 		CTypeSupport cBgLineType(pcView, COLORIDX_CARETLINEBG);
 		CTypeSupport cEvenBgLineType(pcView, COLORIDX_EVENLINEBG);
+		CTypeSupport cPageViewBgLineType(pcView,COLORIDX_PAGEVIEW);
 		bool bBgcolor = cWrapType.GetBackColor() == cTextType.GetBackColor();
 		EColorIndexType eBgcolorOverwrite = COLORIDX_WRAP;
 		bool bTrans = pcView->IsBkBitmap();
 		if (cWrapType.IsDisp()) {
+			CEditView& cActiveView = pcView->m_pcEditWnd->GetActiveView();
 			if (cBgLineType.IsDisp() && pcView->GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
 				if (bBgcolor) {
 					eBgcolorOverwrite = COLORIDX_CARETLINEBG;
@@ -148,6 +157,13 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayou
 					eBgcolorOverwrite = COLORIDX_EVENLINEBG;
 					bTrans = bTrans && cEvenBgLineType.GetBackColor() == cTextType.GetBackColor();
 				}
+			}else if (
+				pcView->m_bMiniMap
+				&& cActiveView.GetTextArea().GetViewTopLine() <= nLineNum
+				&& nLineNum < cActiveView.GetTextArea().GetBottomLine()
+			) {
+				eBgcolorOverwrite = COLORIDX_PAGEVIEW;
+				bTrans = bTrans && cPageViewBgLineType.GetBackColor() == cTextType.GetBackColor();
 			}
 		}
 		bool bChangeColor = false;
@@ -395,9 +411,6 @@ void _DrawEOL(
 		break;
 	case EOL_LF:	// 下向き矢印	// 2007.08.17 ryoji EOL_CR -> EOL_LF
 	// 2013.04.22 Moca NEL,LS,PS対応。暫定でLFと同じにする
-	case EOL_NEL:
-	case EOL_LS:
-	case EOL_PS:
 		{
 			sx = rcEol.left + (rcEol.Width() / 2);
 			sy = rcEol.top + (rcEol.Height() * 3 / 4);
@@ -427,6 +440,43 @@ void _DrawEOL(
 				pt[4].x += 1;	// そして右上へ
 				pt[4].y += 0;
 				::PolyPolyline(gr, pt, pp, _countof(pp));
+			}
+		}
+		break;
+	case EOL_NEL:
+	case EOL_LS:
+	case EOL_PS:
+		{
+			// 左下矢印(折れ曲がりなし)
+			sx = rcEol.left;			//X左端
+			sy = rcEol.top + ( rcEol.Height() * 3 / 4 );	//Y上から3/4
+			DWORD pp[] = { 2, 3 };
+			POINT pt[5];
+			int nWidth = t_min(rcEol.Width(), rcEol.Height() / 2);
+			pt[0].x = sx + nWidth;	//	右上から
+			pt[0].y = sy - nWidth;
+			pt[1].x = sx;	//	先頭へ
+			pt[1].y = sy;
+			pt[2].x = sx + nWidth;	//	右から
+			pt[2].y = sy;
+			pt[3].x = sx;	//	先頭へ戻り
+			pt[3].y = sy;
+			pt[4].x = sx;	//	先頭から上へ
+			pt[4].y = sy - nWidth;
+			::PolyPolyline( gr, pt, pp, _countof(pp));
+
+			if ( bBold ) {
+				pt[0].x += 0;	//	右上から
+				pt[0].y += 1;
+				pt[1].x += 0;	//	先頭へ
+				pt[1].y += 1;
+				pt[2].x += 0;	//	右から
+				pt[2].y -= 1;
+				pt[3].x += 1;	//	先頭へ戻り
+				pt[3].y -= 1;
+				pt[4].x += 1;	//	先頭から上へ
+				pt[4].y += 0;
+				::PolyPolyline( gr, pt, pp, _countof(pp));
 			}
 		}
 		break;

@@ -1,3 +1,27 @@
+/*
+	Copyright (C) 2008, kobake
+
+	This software is provided 'as-is', without any express or implied
+	warranty. In no event will the authors be held liable for any damages
+	arising from the use of this software.
+
+	Permission is granted to anyone to use this software for any purpose,
+	including commercial applications, and to alter it and redistribute it
+	freely, subject to the following restrictions:
+
+		1. The origin of this software must not be misrepresented;
+		   you must not claim that you wrote the original software.
+		   If you use this software in a product, an acknowledgment
+		   in the product documentation would be appreciated but is
+		   not required.
+
+		2. Altered source versions must be plainly marked as such,
+		   and must not be misrepresented as being the original software.
+
+		3. This notice may not be removed or altered from any source
+		   distribution.
+*/
+
 #include "StdAfx.h"
 #include "types/CType.h"
 #include "doc/CEditDoc.h"
@@ -49,17 +73,17 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 
 	// 一行ずつ
 	CLogicInt	nLineCount;
-	for (nLineCount = CLogicInt(0); nLineCount < m_pcDocRef->m_cDocLineMgr.GetLineCount(); nLineCount++) {
+	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 		// 一文字ずつ
-		for (i = 0; i < nLineLen - 1; i++) {
+		for (i = 0; i < nLineLen - 1; ++i) {
 			if (pLine[i] == L'%') break;	// コメントなら以降はいらない
 			if (nDepth >= nMaxStack) continue;
 			if (pLine[i] != L'\\') continue;	// 「\」がないなら次の文字へ
 			++i;
 			// 見つかった「\」以降の文字列チェック
-			for (j = 0; i + j < nLineLen && j < _countof(szTag) - 1; j++) {
+			for (j = 0; i + j < nLineLen && j < _countof(szTag) - 1; ++j) {
 				if (pLine[i + j] == L'{') { // }
 					bNoNumber = (pLine[i + j - 1] == '*');
 					nStartTitlePos = j + i + 1;
@@ -83,7 +107,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 				// さらに{slide}{}まで読みとっておく
 				if (wcsstr(pLine, L"{slide}")) {
 					k = 0;
-					for (j = nStartTitlePos + 1; i + j < nLineLen && j < _countof(szTag) - 1; j++) {
+					for (j = nStartTitlePos + 1; i + j < nLineLen && j < _countof(szTag) - 1; ++j) {
 						if (pLine[i + j] == L'{') { // }
 							nStartTitlePos = j + i + 1;
 							break;
@@ -97,7 +121,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 
 			if (thisSection > 0) {
 				// sectionの中身取得
-				for (k = 0; nStartTitlePos + k < nLineLen && k < _countof(szTitle) - 1; k++) {
+				for (k = 0; nStartTitlePos + k < nLineLen && k < _countof(szTitle) - 1; ++k) {
 					// {
 					if (pLine[k + nStartTitlePos] == L'}') {
 						break;

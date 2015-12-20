@@ -51,8 +51,8 @@ typedef std::vector<CLineData> COpeLineData;
 // 2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
 class COpe {
 public:
-	COpe(EOpeCode eCode = OPE_UNKNOWN);		// COpeクラス構築
-	virtual ~COpe();	// COpeクラス消滅
+	COpe(EOpeCode eCode);	// COpeクラス構築
+	virtual ~COpe();		// COpeクラス消滅
 
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 

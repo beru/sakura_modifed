@@ -135,7 +135,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 				LS(STR_ERR_DLGDOCLM1),	// Mar. 24, 2001 jepro 若干修正
 				pszPath
 			);
-		}else if (-1 == _taccess( pszPath, 4 )) {
+		}else if (_taccess(pszPath, 4) == -1) {
 			// 読み込みアクセス権がない
 			ErrorMessage(
 				CEditWnd::getInstance()->GetHwnd(),

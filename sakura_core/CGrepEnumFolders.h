@@ -45,9 +45,10 @@ public:
 
 	virtual
 	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
-		if ((w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-			 && (0 != _tcscmp(w32fd.cFileName, _T(".")))
-			 && (0 != _tcscmp(w32fd.cFileName, _T("..")))
+		if (1
+			&& (w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			&& (0 != _tcscmp(w32fd.cFileName, _T(".")))
+			&& (0 != _tcscmp(w32fd.cFileName, _T("..")))
 		) {
 			if (CGrepEnumFileBase::IsValid(w32fd, pFile)) {
 				return TRUE;

@@ -233,6 +233,7 @@ macro/CKeyMacroMgr.o \
 macro/CMacro.o \
 macro/CMacroFactory.o \
 macro/CMacroManagerBase.o \
+macro/CPluginMacroManager.o \
 macro/CPPA.o \
 macro/CPPAMacroMgr.o \
 macro/CSMacroMgr.o \
@@ -253,6 +254,7 @@ parse/CWordParse.o \
 plugin/CDllPlugin.o \
 plugin/CJackManager.o \
 plugin/CPlugin.o \
+plugin/CPluginIfObj.o \
 plugin/CPluginManager.o \
 plugin/CWSHPlugin.o \
 print/CPrint.o \

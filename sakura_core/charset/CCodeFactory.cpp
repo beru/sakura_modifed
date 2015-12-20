@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "CCodeFactory.h"
 #include "CCodeMediator.h"
+#include "CCodePage.h"
 
 // move start	from CCodeMediator.h	2012/12/02 Uchi
 #include "CEuc.h"

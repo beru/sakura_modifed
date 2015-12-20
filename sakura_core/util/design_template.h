@@ -29,6 +29,13 @@
 */
 #pragma once
 
+// http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml#Copy_Constructors
+// A macro to disallow the copy constructor and operator= functions
+// This should be used in the private: declarations for a class
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
+
 /*!
 	SingletonÉpÉ^Å[Éì
 
@@ -46,8 +53,7 @@ public:
 protected:
 	TSingleton() {}
 private:
-	TSingleton(TSingleton const&);
-	void operator = (TSingleton const&);
+	DISALLOW_COPY_AND_ASSIGN(TSingleton);
 };
 
 /*!

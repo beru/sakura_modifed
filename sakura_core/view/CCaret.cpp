@@ -44,6 +44,7 @@
 #include "doc/layout/CLayout.h"
 #include "mem/CMemoryIterator.h"
 #include "charset/charcode.h"
+#include "charset/CCodePage.h"
 #include "charset/CCodeFactory.h"
 #include "charset/CCodeBase.h"
 #include "window/CEditWnd.h"
@@ -112,6 +113,7 @@ CCaret::CCaret(CEditView* pEditView, const CEditDoc* pEditDoc)
 	m_crCaret = -1;				// キャレットの色				// 2006.12.16 ryoji
 	m_hbmpCaret = NULL;			// キャレット用ビットマップ		// 2006.11.28 ryoji
 	m_bClearStatus = true;
+	ClearCaretPosInfoCache();
 }
 
 CCaret::~CCaret()
@@ -191,7 +193,6 @@ CLayoutInt CCaret::MoveCursor(
 	SetCaretLayoutPos(ptWk_CaretPos);
 
 	// カーソル行アンダーラインのOFF
-	DEBUG_TRACE(_T("%d, %d\n"), (int)(Int)ptWk_CaretPos.GetY2(), (int)(Int)m_pEditView->m_nOldUnderLineYBg);
 	bool bDrawPaint = ptWk_CaretPos.GetY2() != m_pEditView->m_nOldUnderLineYBg;
 	m_cUnderLine.SetUnderLineDoNotOFF(bUnderLineDoNotOFF);
 	m_cUnderLine.SetVertLineDoNotOFF(bVertLineDoNotOFF);
@@ -298,6 +299,9 @@ CLayoutInt CCaret::MoveCursor(
 			textArea.OffsetViewTopLine(-nScrollRowNum);
 			if (m_pEditView->GetDrawSwitch()) {
 				m_pEditView->InvalidateRect(NULL);
+				if (m_pEditView->m_pcEditWnd->GetMiniMap().GetHwnd()) {
+					m_pEditView->MiniMapRedraw(true);
+				}
 			}
 		}else if (nScrollRowNum != 0 || nScrollColNum != 0) {
 			RECT	rcClip;
@@ -326,6 +330,9 @@ CLayoutInt CCaret::MoveCursor(
 
 			if (m_pEditView->GetDrawSwitch()) {
 				m_pEditView->ScrollDraw(nScrollRowNum, nScrollColNum, rcScroll, rcClip, rcClip2);
+				if (m_pEditView->m_pcEditWnd->GetMiniMap().GetHwnd()) {
+					m_pEditView->MiniMapRedraw(false);
+				}
 			}
 		}
 
@@ -455,6 +462,9 @@ BOOL CCaret::GetAdjustCursorPos(
 // キャレットの表示・更新
 void CCaret::ShowEditCaret()
 {
+	if (m_pEditView->m_bMiniMap) {
+		return;
+	}
 	// 必要なインターフェース
 	const CLayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
 	CommonSetting* pCommon = &GetDllShareData().m_Common;
@@ -476,6 +486,10 @@ void CCaret::ShowEditCaret()
 */
 	if (::GetFocus() != m_pEditView->GetHwnd() && !m_pEditView->m_bDragMode) {
 		m_sizeCaret.cx = 0;
+		return;
+	}
+	// 2014.07.02 GetDrawSwitchを見る
+	if (!m_pEditView->GetDrawSwitch()) {
 		return;
 	}
 
@@ -539,7 +553,7 @@ void CCaret::ShowEditCaret()
 				int nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
-					|| WCODE::IsLineDelimiter(pLine[nIdxFrom])
+					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)
 					|| pLine[nIdxFrom] == TAB
 				) {
 					nCaretWidth = GetHankakuDx();
@@ -572,7 +586,7 @@ void CCaret::ShowEditCaret()
 			int nIdxFrom = m_pEditView->LineColumnToIndex(pcLayout, GetCaretLayoutPos().GetX2());
 			if (0
 				|| nIdxFrom >= nLineLen
-				|| WCODE::IsLineDelimiter(pLine[nIdxFrom])
+				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {
 				nCaretWidth = GetHankakuDx();
@@ -597,7 +611,11 @@ void CCaret::ShowEditCaret()
 		CreateEditCaret(crCaret, crBack, nCaretWidth, nCaretHeight);	// 2006.12.07 ryoji
 		m_bCaretShowFlag = false; // 2002/07/22 novice
 	}else {
-		if (GetCaretSize() != CMySize(nCaretWidth, nCaretHeight) || m_crCaret != crCaret || m_pEditView->m_crBack != crBack) {
+		if (
+			GetCaretSize() != CMySize(nCaretWidth, nCaretHeight)
+			|| m_crCaret != crCaret
+			|| m_pEditView->m_crBack != crBack
+		) {
 			// キャレットはあるが、大きさや色が変わった場合
 			// 現在のキャレットを削除
 			::DestroyCaret();
@@ -624,7 +642,7 @@ void CCaret::ShowEditCaret()
 	}
 
 	m_crCaret = crCaret;	//	2006.12.07 ryoji
-	m_pEditView->m_crBack = crBack;		//	2006.12.07 ryoji
+	m_pEditView->m_crBack2 = crBack;		//	2006.12.07 ryoji
 	m_pEditView->SetIMECompFormPos();
 }
 
@@ -660,17 +678,21 @@ void CCaret::ShowCaretPosInfo()
 	const TCHAR* pszCodeName;
 	CNativeT cmemCodeName;
 	if (hwndStatusBar) {
-		cmemCodeName.AppendString(CCodeTypeName(m_pEditDoc->GetDocumentEncoding()).Normal());
+		TCHAR szCodeName[100];
+		CCodePage::GetNameNormal(szCodeName, m_pEditDoc->GetDocumentEncoding());
+		cmemCodeName.AppendString(szCodeName);
 		if (m_pEditDoc->GetDocumentBomExist()) {
 			cmemCodeName.AppendString(LS(STR_CARET_WITHBOM));
 		}
 	}else {
-		cmemCodeName.AppendString(CCodeTypeName(m_pEditDoc->GetDocumentEncoding()).Short());
+		TCHAR szCodeName[100];
+		CCodePage::GetNameShort(szCodeName, m_pEditDoc->GetDocumentEncoding());
+		cmemCodeName.AppendString(szCodeName);
 		if (m_pEditDoc->GetDocumentBomExist()) {
 			cmemCodeName.AppendString(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
 		}
 	}
-	pszCodeName = (const TCHAR*)cmemCodeName._GetMemory()->GetRawPtr();
+	pszCodeName = cmemCodeName.GetStringPtr();
 
 
 	// -- -- -- -- 改行モード -> szEolMode -- -- -- -- //
@@ -688,8 +710,58 @@ void CCaret::ShowCaretPosInfo()
 		ptCaret.x = 0;
 		ptCaret.y = (Int)GetCaretLogicPos().y;
 		if (pcLayout) {
+			// 2014.01.10 改行のない大きい行があると遅いのでキャッシュする
+			CLayoutInt offset;
+			if (m_nLineLogicNoCache == pcLayout->GetLogicLineNo()
+				&& m_nLineNoCache == GetCaretLayoutPos().GetY2()
+				&& m_nLineLogicModCache == CModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() )
+			) {
+				offset = m_nOffsetCache;
+			}else if (
+				m_nLineLogicNoCache == pcLayout->GetLogicLineNo()
+				&& m_nLineNoCache < GetCaretLayoutPos().GetY2()
+				&& m_nLineLogicModCache == CModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() )
+			) {
+				// 下移動
+				offset = pcLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffsetCache, m_nOffsetCache);
+				m_nOffsetCache = offset;
+				m_nLogicOffsetCache = pcLayout->GetLogicOffset();
+				m_nLineNoCache = GetCaretLayoutPos().GetY2();
+			}else if (m_nLineLogicNoCache == pcLayout->GetLogicLineNo()
+				&& m_nLineNo50Cache <= GetCaretLayoutPos().GetY2()
+				&& GetCaretLayoutPos().GetY2() <= m_nLineNo50Cache + 50
+				&& m_nLineLogicModCache == CModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() )
+			) {
+				// 上移動
+				offset = pcLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
+				m_nOffsetCache = offset;
+				m_nLogicOffsetCache = pcLayout->GetLogicOffset();
+				m_nLineNoCache = GetCaretLayoutPos().GetY2();
+			}else {
 			// 2013.05.11 折り返しなしとして計算する
-			CLayoutInt offset = pcLayout->CalcLayoutOffset(*pLayoutMgr);
+				const CLayout* pcLayout50 = pcLayout;
+				CLayoutInt nLineNum = GetCaretLayoutPos().GetY2();
+				for (;;) {
+					if (pcLayout50->GetLogicOffset() == 0) {
+						break;
+					}
+					if (nLineNum + 50 == GetCaretLayoutPos().GetY2()) {
+						break;
+					}
+					pcLayout50 = pcLayout50->GetPrevLayout();
+					nLineNum--;
+				}
+				m_nOffset50Cache = pcLayout50->CalcLayoutOffset(*pLayoutMgr);
+				m_nLogicOffset50Cache = pcLayout50->GetLogicOffset();
+				m_nLineNo50Cache = nLineNum;
+				
+				offset = pcLayout->CalcLayoutOffset(*pLayoutMgr, m_nLogicOffset50Cache, m_nOffset50Cache);
+				m_nOffsetCache = offset;
+				m_nLogicOffsetCache = pcLayout->GetLogicOffset();
+				m_nLineLogicNoCache = pcLayout->GetLogicLineNo();
+				m_nLineNoCache = GetCaretLayoutPos().GetY2();
+				m_nLineLogicModCache = CModifyVisitor().GetLineModifiedSeq( pcLayout->GetDocLineRef() );
+			}
 			CLayout cLayout(
 				pcLayout->GetDocLineRef(),
 				pcLayout->GetLogicPos(),
@@ -731,7 +803,7 @@ void CCaret::ShowCaretPosInfo()
 					delete pCode;
 				}
 			}else {
-				_tcscpy_s(szCaretChar, pcLayout->GetLayoutEol().GetName());
+				_tcscpy_s(szCaretChar, _countof(szCaretChar), pcLayout->GetLayoutEol().GetName());
 			}
 		}
 	}
@@ -818,6 +890,18 @@ void CCaret::ShowCaretPosInfo()
 		::StatusBar_SetText(hwndStatusBar, 6 | 0,             szText_6);
 	}
 
+}
+
+void CCaret::ClearCaretPosInfoCache()
+{
+	m_nOffsetCache = CLayoutInt(-1);
+	m_nLineNoCache = CLayoutInt(-1);
+	m_nLogicOffsetCache = CLogicInt(-1);
+	m_nLineLogicNoCache = CLogicInt(-1);
+	m_nLineNo50Cache = CLayoutInt(-1);
+	m_nOffset50Cache = CLayoutInt(-1);
+	m_nLogicOffset50Cache = CLogicInt(-1);
+	m_nLineLogicModCache = -1;
 }
 
 /* カーソル上下移動処理 */
@@ -1015,9 +1099,17 @@ POINT CCaret::CalcCaretDrawPos(const CLayoutPoint& ptCaretPos) const
 	int nPosX = textArea.GetAreaLeft()
 		+ (Int)(ptCaretPos.x - textArea.GetViewLeftCol()) * GetHankakuDx();
 
-	int nPosY = textArea.GetAreaTop()
-		+ (Int)(ptCaretPos.y - textArea.GetViewTopLine()) * m_pEditView->GetTextMetrics().GetHankakuDy()
+	CLayoutYInt nY = ptCaretPos.y - textArea.GetViewTopLine();
+	int nPosY;
+	if (nY < 0) {
+		nPosY = -1;
+	}else if (textArea.m_nViewRowNum < nY) {
+		nPosY = textArea.GetAreaBottom() + 1;
+	}else {
+		nPosY = textArea.GetAreaTop()
+			+ (Int)(nY) * m_pEditView->GetTextMetrics().GetHankakuDy()
 		+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; // 下寄せ
+	}
 
 	return CMyPoint(nPosX, nPosY);
 }
