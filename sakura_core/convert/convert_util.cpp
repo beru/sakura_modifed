@@ -91,7 +91,7 @@ bool wcschr_idx(const wchar_t* str, wchar_t c, int* idx)
 
 
 
-//! ëSäpÇ–ÇÁÇ™Ç»Å®ëSäpÉJÉ^ÉJÉi (ï∂éöêîÇÕïsïœ)
+// ëSäpÇ–ÇÁÇ™Ç»Å®ëSäpÉJÉ^ÉJÉi (ï∂éöêîÇÕïsïœ)
 inline wchar_t ZenhiraToZenkata_(wchar_t c) { return ((c >= L'Çü' && c <= L'\u3096') || (c >= L'ÅT' && c <= L'ÅU')) ? L'É@' + (c - L'Çü') : c; }
 void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
 {
@@ -103,7 +103,7 @@ void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
 	}
 }
 
-//! ëSäpÉJÉ^ÉJÉiÅ®ëSäpÇ–ÇÁÇ™Ç» (ï∂éöêîÇÕïsïœ)
+// ëSäpÉJÉ^ÉJÉiÅ®ëSäpÇ–ÇÁÇ™Ç» (ï∂éöêîÇÕïsïœ)
 // 2012.06.17 syat ÅuÉïÅvÅuÉñÅvÇÅuÇ©ÅvÅuÇØÅvÇ…ïœä∑ÇµÇ»Ç¢
 inline wchar_t ZenkataToZenhira_(wchar_t c) { return ((c >= L'É@' && c <= L'Éî') || (c >= L'ÅR' && c <= L'ÅS')) ? L'Çü' + (c - L'É@') : c; }
 void Convert_ZenkataToZenhira(wchar_t* pData, int nLength)
@@ -117,7 +117,7 @@ void Convert_ZenkataToZenhira(wchar_t* pData, int nLength)
 }
 
 
-//! ëSäpâpêîÅ®îºäpâpêî (ï∂éöêîÇÕïsïœ)
+// ëSäpâpêîÅ®îºäpâpêî (ï∂éöêîÇÕïsïœ)
 inline wchar_t ZeneisuToHaneisu_(wchar_t c)
 {
 	int n;
@@ -140,7 +140,7 @@ void Convert_ZeneisuToHaneisu(wchar_t* pData, int nLength)
 	}
 }
 
-//! îºäpâpêîÅ®ëSäpâpêî (ï∂éöêîÇÕïsïœ)
+// îºäpâpêîÅ®ëSäpâpêî (ï∂éöêîÇÕïsïœ)
 inline wchar_t HaneisuToZeneisu_(wchar_t c)
 {
 	int n;

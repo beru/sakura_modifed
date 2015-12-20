@@ -56,7 +56,7 @@ public:
 	void DispNoteLine( CGraphics& gr, int nTop, int nBottom, int nLeft, int nRight ) const;
 
 	// -- -- w’èŒ…cü•`‰æ -- -- //
-	//!	w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
+	// w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
 	void DispVerticalLines(CGraphics& gr, int nTop, int nBottom, CLayoutInt nLeftCol, CLayoutInt nRightCol) const;
 
 	// -- -- Ü‚è•Ô‚µŒ…cü•`‰æ -- -- //

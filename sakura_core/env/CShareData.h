@@ -74,7 +74,7 @@ public:
 	void TraceOut(LPCTSTR lpFmt, ...);	// アウトプットウィンドウに出力(printfフォーマット)
 	void TraceOutString(const wchar_t* pszStr, int len = -1);	// アウトプットウィンドウに出力(未加工文字列)
 	void SetTraceOutSource(HWND hwnd) { m_hwndTraceOutSource = hwnd; }	// TraceOut起動元ウィンドウの設定
-	bool OpenDebugWindow(HWND hwnd, bool bAllwaysActive);	//!< デバッグウィンドウを開く
+	bool OpenDebugWindow(HWND hwnd, bool bAllwaysActive);	// デバッグウィンドウを開く
 
 	BOOL IsPrivateSettings(void);
 

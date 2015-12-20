@@ -309,8 +309,8 @@ bool CProfile::WriteProfile(
 	@date 2004-01-29 genta stream使用をやめてCライブラリ使用に．
 */
 bool CProfile::_WriteFile(
-	const tstring&			strFilename,	//!< [in]  ファイル名
-	const vector<wstring>&	vecLine			//!< [out] 文字列格納先
+	const tstring&			strFilename,	// [in]  ファイル名
+	const vector<wstring>&	vecLine			// [out] 文字列格納先
 )
 {
 	CTextOutputStream out(strFilename.c_str());
@@ -343,9 +343,9 @@ bool CProfile::_WriteFile(
 	@date 2003-10-22 D.S.Koba 作成
 */
 bool CProfile::GetProfileDataImp(
-	const wstring&	strSectionName,	//!< [in] セクション名
-	const wstring&	strEntryKey,	//!< [in] エントリ名
-	wstring&		strEntryValue	//!< [out] エントリ値
+	const wstring&	strSectionName,	// [in] セクション名
+	const wstring&	strEntryKey,	// [in] エントリ名
+	wstring&		strEntryValue	// [out] エントリ値
 	)
 {
 	auto iterEnd = m_ProfileData.end();
@@ -369,9 +369,9 @@ bool CProfile::GetProfileDataImp(
 	@date 2003-10-21 D.S.Koba 作成
 */
 bool CProfile::SetProfileDataImp(
-	const wstring&	strSectionName,	//!< [in] セクション名
-	const wstring&	strEntryKey,	//!< [in] エントリ名
-	const wstring&	strEntryValue	//!< [in] エントリ値
+	const wstring&	strSectionName,	// [in] セクション名
+	const wstring&	strEntryKey,	// [in] エントリ名
+	const wstring&	strEntryValue	// [in] エントリ値
 	)
 {
 	auto iterEnd = m_ProfileData.end();

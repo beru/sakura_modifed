@@ -25,7 +25,7 @@
 
 #include "view/figures/CFigureStrategy.h"
 
-//! コントロールコード描画
+// コントロールコード描画
 class CFigure_CtrlCode : public CFigureSpace {
 public:
 	// traits
@@ -36,7 +36,7 @@ public:
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 
-//! バイナリ半角描画
+// バイナリ半角描画
 class CFigure_HanBinary : public CFigureSpace {
 public:
 	// traits
@@ -47,7 +47,7 @@ public:
 	EColorIndexType GetColorIdx(void) const { return COLORIDX_CTRLCODE; }
 };
 
-//! バイナリ全角描画
+// バイナリ全角描画
 class CFigure_ZenBinary : public CFigureSpace {
 public:
 	// traits

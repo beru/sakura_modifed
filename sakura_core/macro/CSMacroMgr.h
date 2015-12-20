@@ -44,9 +44,9 @@
 class CEditView;
 
 
-const int STAND_KEYMACRO	= -1;	//!< 標準マクロ(キーマクロ)
-const int TEMP_KEYMACRO		= -2;	//!< 一時マクロ(名前を指定してマクロ実行)
-const int INVALID_MACRO_IDX	= -3;	//!< 無効なマクロのインデックス番号 @date Sep. 15, 2005 FILE
+const int STAND_KEYMACRO	= -1;	// 標準マクロ(キーマクロ)
+const int TEMP_KEYMACRO		= -2;	// 一時マクロ(名前を指定してマクロ実行)
+const int INVALID_MACRO_IDX	= -3;	// 無効なマクロのインデックス番号 @date Sep. 15, 2005 FILE
 
 struct MacroFuncInfoEx {
 	int			m_nArgMinSize;
@@ -59,8 +59,8 @@ struct MacroFuncInfoEx {
 struct MacroFuncInfo {
 	int				m_nFuncID;
 	const WCHAR*	m_pszFuncName;
-	VARTYPE			m_varArguments[4];	//!< 引数の型の配列
-	VARTYPE			m_varResult;		//!< 戻り値の型 VT_EMPTYならprocedureということで
+	VARTYPE			m_varArguments[4];	// 引数の型の配列
+	VARTYPE			m_varResult;		// 戻り値の型 VT_EMPTYならprocedureということで
 	MacroFuncInfoEx*	m_pData;
 };
 // マクロ関数情報構造体配列
@@ -95,22 +95,22 @@ public:
 	void Clear(int idx);
 	void ClearAll(void);	// キーマクロのバッファをクリアする
 
-	//! キーボードマクロの実行
+	// キーボードマクロの実行
 	BOOL Exec(int idx, HINSTANCE hInstance, CEditView* pcEditView, int flags);
 	
-	//!	実行可能か？CShareDataに問い合わせ
+	//	実行可能か？CShareDataに問い合わせ
 	bool IsEnabled(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].IsEnabled() : false;
 	}
 	
-	//!	表示する名前の取得
+	//	表示する名前の取得
 	const TCHAR* GetTitle(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].GetTitle() : NULL;	// 2007.11.02 ryoji
 	}
 	
-	//!	表示名の取得
+	//	表示名の取得
 	const TCHAR* GetName(int idx) const {
 		return (0 <= idx && idx < MAX_CUSTMACRO) ?
 		m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szName : NULL;
@@ -126,12 +126,12 @@ public:
 		m_sMacroPath.c_str() : NULL;
 	}
 
-	//! キーボードマクロの読み込み
+	// キーボードマクロの読み込み
 	BOOL Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType);
 	BOOL Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath);
 	void UnloadAll(void);
 
-	//! キーマクロのバッファにデータ追加
+	// キーマクロのバッファにデータ追加
 	int Append(int idx, EFunctionCode nFuncID, const LPARAM* lParams, CEditView* pcEditView);
 
 	/*

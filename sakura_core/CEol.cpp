@@ -31,7 +31,7 @@
 #include "StdAfx.h"
 #include "CEol.h"
 
-//! 行終端子の配列
+// 行終端子の配列
 const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
 	EOL_NONE			,	// == 0
 	EOL_CRLF			,	// == 2
@@ -137,19 +137,19 @@ EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 //-----------------------------------------------
 
 
-//! 現在のEOL長を取得。文字単位。
+// 現在のEOL長を取得。文字単位。
 CLogicInt CEol::GetLen() const
 {
 	return CLogicInt(g_aEolTable[m_eEolType].m_nLen);
 }
 
-//! 現在のEOLの名称取得
+// 現在のEOLの名称取得
 const TCHAR* CEol::GetName() const
 {
 	return g_aEolTable[m_eEolType].m_szName;
 }
 
-//!< 現在のEOL文字列先頭へのポインタを取得
+// 現在のEOL文字列先頭へのポインタを取得
 const wchar_t* CEol::GetValue2() const
 {
 	return g_aEolTable[m_eEolType].m_szDataW;

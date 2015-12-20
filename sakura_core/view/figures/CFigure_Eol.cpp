@@ -210,8 +210,8 @@ EOF記号の描画
 @date 2007.08.30 kobake 引数 EofColInfo 削除
 */
 void _DispEOF(
-	CGraphics&			gr,			//!< [in] 描画対象のDevice Context
-	DispPos*			pDispPos,	//!< [in] 表示座標
+	CGraphics&			gr,			// [in] 描画対象のDevice Context
+	DispPos*			pDispPos,	// [in] 表示座標
 	const CEditView*	pcView
 )
 {
@@ -328,11 +328,11 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 						矢印の先頭を、sx, syにして描画ルーチン書き直し。
 */
 void _DrawEOL(
-	CGraphics&		gr,			//!< Device Context Handle
-	const CMyRect&	rcEol,		//!< 描画領域
-	CEol			cEol,		//!< 行末コード種別
-	bool			bBold,		//!< TRUE: 太字
-	COLORREF		pColor		//!< 色
+	CGraphics&		gr,			// Device Context Handle
+	const CMyRect&	rcEol,		// 描画領域
+	CEol			cEol,		// 行末コード種別
+	bool			bBold,		// TRUE: 太字
+	COLORREF		pColor		// 色
 )
 {
 	int sx, sy;	// 矢印の先頭

@@ -40,20 +40,20 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                      選択範囲の変更                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine = true); //!< 現在の選択範囲を非選択状態に戻す
+	void DisableSelectArea(bool bDraw, bool bDrawBracketCursorLine = true); // 現在の選択範囲を非選択状態に戻す
 
 	void BeginSelectArea(const CLayoutPoint* po = NULL);								// 現在のカーソル位置から選択を開始する
 	void ChangeSelectAreaByCurrentCursor(const CLayoutPoint& ptCaretPos);			// 現在のカーソル位置によって選択範囲を変更
 	void ChangeSelectAreaByCurrentCursorTEST(const CLayoutPoint& ptCaretPos, CLayoutRange* pSelect);// 現在のカーソル位置によって選択範囲を変更
 
-	//! 選択範囲を指定する(原点未選択)
+	// 選択範囲を指定する(原点未選択)
 	// 2005.06.24 Moca
 	void SetSelectArea(const CLayoutRange& sRange) {
 		m_sSelectBgn.Set(sRange.GetFrom());
 		m_sSelect = sRange;
 	}
 
-	//! 単語選択開始
+	// 単語選択開始
 	void SelectBeginWord() {
 		m_bBeginSelect     = true;			// 範囲選択中
 		m_bBeginBoxSelect  = false;			// 矩形範囲選択中でない
@@ -61,7 +61,7 @@ public:
 		m_bBeginWordSelect = true;			// 単語単位選択中
 	}
 
-	//! 矩形選択開始
+	// 矩形選択開始
 	void SelectBeginBox() {
 		m_bBeginSelect     = true;		// 範囲選択中
 		m_bBeginBoxSelect  = true;		// 矩形範囲選択中
@@ -69,7 +69,7 @@ public:
 		m_bBeginWordSelect = false;		// 単語単位選択中
 	}
 
-	//! 謎の選択開始
+	// 謎の選択開始
 	void SelectBeginNazo() {
 		m_bBeginSelect     = true;		// 範囲選択中
 //		m_bBeginBoxSelect  = false;		// 矩形範囲選択中でない
@@ -77,12 +77,12 @@ public:
 		m_bBeginWordSelect = false;		// 単語単位選択中
 	}
 
-	//! 範囲選択終了
+	// 範囲選択終了
 	void SelectEnd() {
 		m_bBeginSelect = false;
 	}
 
-	//! m_bBeginBoxSelectを設定。
+	// m_bBeginBoxSelectを設定。
 	void SetBoxSelect(bool b) {
 		m_bBeginBoxSelect = b;
 	}
@@ -90,13 +90,13 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           描画                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void DrawSelectArea(bool bDrawBracketCursorLine = true);		//!< 指定行の選択領域の描画
+	void DrawSelectArea(bool bDrawBracketCursorLine = true);		// 指定行の選択領域の描画
 private:
-	void DrawSelectArea2(HDC) const;	//!< 指定範囲の選択領域の描画
-	void DrawSelectAreaLine(			//!< 指定行の選択領域の描画
-		HDC					hdc,		//!< [in] 描画領域のDevice Context Handle
-		CLayoutInt			nLineNum,	//!< [in] 描画対象行(レイアウト行)
-		const CLayoutRange&	sRange		//!< [in] 選択範囲(レイアウト単位)
+	void DrawSelectArea2(HDC) const;	// 指定範囲の選択領域の描画
+	void DrawSelectAreaLine(			// 指定行の選択領域の描画
+		HDC					hdc,		// [in] 描画領域のDevice Context Handle
+		CLayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
+		const CLayoutRange&	sRange		// [in] 選択範囲(レイアウト単位)
 	) const;
 public:
 	void GetSelectAreaLineFromRange(CLayoutRange& ret, CLayoutInt nLineNum, const CLayout* pcLayout, const CLayoutRange& sRange) const;
@@ -108,13 +108,13 @@ public:
 		GetSelectAreaLineFromRange(ret, nLineNum, pcLayout, m_sSelect);
 		return ret;
 	}
-	//! 選択情報データの作成	2005.07.09 genta
+	// 選択情報データの作成	2005.07.09 genta
 	void PrintSelectionInfoMsg() const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         状態取得                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//! テキストが選択されているか
+	// テキストが選択されているか
 	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelected() const {
 		return m_sSelect.IsValid();
@@ -123,19 +123,19 @@ public:
 //			);
 	}
 
-	//! テキストの選択中か
+	// テキストの選択中か
 	// 2002/03/29 Azumaiya インライン関数化
 	bool IsTextSelecting() const {
 		// ジャンプ回数を減らして、一気に判定。
 		return m_bSelectingLock || IsTextSelected();
 	}
 
-	//!マウスで選択中か
+	// マウスで選択中か
 	bool IsMouseSelecting() const {
 		return m_bBeginSelect;
 	}
 
-	//!矩形選択中か
+	// 矩形選択中か
 	bool IsBoxSelecting() const {
 		return m_bBeginBoxSelect;
 	}

@@ -40,19 +40,19 @@
 */
 struct COutlineErlang {
 	enum {
-		STATE_NORMAL,	//!< 解析中でない
-		STATE_FUNC_CANDIDATE_FIN,	//!< 関数らしきもの(行頭のatom)を解析済み
-		STATE_FUNC_ARGS1,	//!< 最初の引数確認中
-		STATE_FUNC_ARGS,	//!< 2つめ以降の引数確認中
-		STATE_FUNC_ARGS_FIN,//!< 関数の解析を完了
-		STATE_FUNC_FOUND,	//!< 関数を発見．データの取得が可能
+		STATE_NORMAL,				// 解析中でない
+		STATE_FUNC_CANDIDATE_FIN,	// 関数らしきもの(行頭のatom)を解析済み
+		STATE_FUNC_ARGS1,			// 最初の引数確認中
+		STATE_FUNC_ARGS,			// 2つめ以降の引数確認中
+		STATE_FUNC_ARGS_FIN,		// 関数の解析を完了
+		STATE_FUNC_FOUND,			// 関数を発見．データの取得が可能
 	} m_state;
 
-	wchar_t m_func[64];	//!< 関数名(Arity含む) = 表示名
-	CLogicInt m_lnum;	//!< 関数の行番号
-	int m_argcount;		//!< 発見した引数の数
-	wchar_t m_parenthesis[32];	//!< 括弧のネストを管理するもの
-	int m_parenthesis_ptr;	//!< 括弧のネストレベル
+	wchar_t m_func[64];			// 関数名(Arity含む) = 表示名
+	CLogicInt m_lnum;			// 関数の行番号
+	int m_argcount;				// 発見した引数の数
+	wchar_t m_parenthesis[32];	// 括弧のネストを管理するもの
+	int m_parenthesis_ptr;		// 括弧のネストレベル
 	
 	COutlineErlang();
 	bool parse(const wchar_t* buf, int linelen, CLogicInt linenum);

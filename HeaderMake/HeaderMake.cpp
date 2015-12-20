@@ -122,7 +122,7 @@ inline bool is_token(char c)
 	return __iscsym(c) || c == '-';
 }
 
-//! 後ろから検索し、c1 か c2 、先に見つかったほうのアドレスを返す
+// 後ろから検索し、c1 か c2 、先に見つかったほうのアドレスを返す
 const char* strrchr2(const char* str, char c1, char c2)
 {
 	const char* p = strchr(str, '\0');

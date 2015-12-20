@@ -85,7 +85,7 @@ void CViewCommander::Command_SHOWTAB(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = ((!pCEditWnd->m_cTabWnd.GetHwnd())? TRUE: FALSE);	// タブバー表示
+	GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd = !pCEditWnd->m_cTabWnd.GetHwnd();	// タブバー表示
 	pCEditWnd->LayoutTabBar();
 	pCEditWnd->EndLayoutBars();
 
@@ -173,7 +173,7 @@ void CViewCommander::Command_TYPE_LIST(void)
 }
 
 
-//! タイプ別設定一時適用
+// タイプ別設定一時適用
 void CViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 {
 	CTypeConfig type = CTypeConfig(nTypePlusOne - 1);

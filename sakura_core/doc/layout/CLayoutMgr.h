@@ -42,33 +42,33 @@ class CEditDoc;// 2003/07/20 genta
 class CSearchStringPattern;
 class CColorStrategy;
 
-//! レイアウト中の禁則タイプ	//@@@ 2002.04.20 MIK
+// レイアウト中の禁則タイプ	//@@@ 2002.04.20 MIK
 enum EKinsokuType {
-	KINSOKU_TYPE_NONE = 0,			//!< なし
-	KINSOKU_TYPE_WORDWRAP,			//!< 英文ワードラップ中
-	KINSOKU_TYPE_KINSOKU_HEAD,		//!< 行頭禁則中
-	KINSOKU_TYPE_KINSOKU_TAIL,		//!< 行末禁則中
-	KINSOKU_TYPE_KINSOKU_KUTO,		//!< 句読点ぶら下げ中
+	KINSOKU_TYPE_NONE = 0,			// なし
+	KINSOKU_TYPE_WORDWRAP,			// 英文ワードラップ中
+	KINSOKU_TYPE_KINSOKU_HEAD,		// 行頭禁則中
+	KINSOKU_TYPE_KINSOKU_TAIL,		// 行末禁則中
+	KINSOKU_TYPE_KINSOKU_KUTO,		// 句読点ぶら下げ中
 };
 
 struct LayoutReplaceArg {
-	CLayoutRange	sDelRange;		//!< [in]削除範囲。レイアウト単位。
-	COpeLineData*	pcmemDeleted;	//!< [out]削除されたデータ
-	COpeLineData*	pInsData;		//!< [in/out]挿入するデータ
-	CLayoutInt		nAddLineNum;	//!< [out] 再描画ヒント レイアウト行の増減
-	CLayoutInt		nModLineFrom;	//!< [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)
-	CLayoutInt		nModLineTo;		//!< [out] 再描画ヒント 変更されたレイアウト行To(レイアウト行の増減が0のとき使う)
-	CLayoutPoint	ptLayoutNew;	//!< [out]挿入された部分の次の位置の位置(レイアウト桁位置, レイアウト行)
-	int				nDelSeq;		//!< [in]削除行のOpeシーケンス
-	int				nInsSeq;		//!< [out]挿入行の元のシーケンス
+	CLayoutRange	sDelRange;		// [in]削除範囲。レイアウト単位。
+	COpeLineData*	pcmemDeleted;	// [out]削除されたデータ
+	COpeLineData*	pInsData;		// [in/out]挿入するデータ
+	CLayoutInt		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
+	CLayoutInt		nModLineFrom;	// [out] 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う)
+	CLayoutInt		nModLineTo;		// [out] 再描画ヒント 変更されたレイアウト行To(レイアウト行の増減が0のとき使う)
+	CLayoutPoint	ptLayoutNew;	// [out]挿入された部分の次の位置の位置(レイアウト桁位置, レイアウト行)
+	int				nDelSeq;		// [in]削除行のOpeシーケンス
+	int				nInsSeq;		// [out]挿入行の元のシーケンス
 };
 
 // 編集時のテキスト最大幅算出用		// 2009.08.28 nasukoji
 struct CalTextWidthArg {
-	CLayoutPoint	ptLayout;		//!< 編集開始位置
-	CLayoutInt		nDelLines;		//!< 削除に関係する行数 - 1（負数の時削除なし）
-	CLayoutInt		nAllLinesOld;	//!< 編集前のテキスト行数
-	BOOL			bInsData;		//!< 追加文字列あり
+	CLayoutPoint	ptLayout;		// 編集開始位置
+	CLayoutInt		nDelLines;		// 削除に関係する行数 - 1（負数の時削除なし）
+	CLayoutInt		nAllLinesOld;	// 編集前のテキスト行数
+	BOOL			bInsData;		// 追加文字列あり
 };
 
 class CLogicPointEx: public CLogicPoint {
@@ -101,7 +101,7 @@ public:
 	//                        コンフィグ                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	//! タブ幅の取得
+	// タブ幅の取得
 	CKetaXInt GetTabSpaceKetas() const { return m_nTabSpace; }
 	CLayoutInt GetTabSpace() const { return m_nTabSpace; }
 
@@ -164,7 +164,7 @@ public:
 	//                        単位の変換                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	//! ロジック→レイアウト
+	// ロジック→レイアウト
 	void LogicToLayoutEx(const CLogicPointEx& ptLogicEx, CLayoutPoint* pptLayout, CLayoutInt nLineHint = CLayoutInt(0)) {
 		LogicToLayout(ptLogicEx, pptLayout, nLineHint);
 		pptLayout->x += ptLogicEx.ext;
@@ -175,7 +175,7 @@ public:
 		LogicToLayout(rangeLogic.GetTo(), prangeLayout->GetToPointer());
 	}
 	
-	//! レイアウト→ロジック変換
+	// レイアウト→ロジック変換
 	void LayoutToLogicEx(const CLayoutPoint& ptLayout, CLogicPointEx* pptLogicEx) const;
 	void LayoutToLogic(const CLayoutPoint& ptLayout, CLogicPoint* pptLogic) const;
 	void LayoutToLogic(const CLayoutRange& rangeLayout, CLogicRange* prangeLogic) const {
@@ -290,9 +290,9 @@ protected:
 private:
 	bool _ExistKinsokuKuto(wchar_t wc) const { return m_pszKinsokuKuto_1.exist(wc); }
 	bool _ExistKinsokuHead(wchar_t wc) const { return m_pszKinsokuHead_1.exist(wc); }
-	bool IsKinsokuHead(wchar_t wc);	//!< 行頭禁則文字をチェックする	//@@@ 2002.04.08 MIK
-	bool IsKinsokuTail(wchar_t wc);	//!< 行末禁則文字をチェックする	//@@@ 2002.04.08 MIK
-	bool IsKinsokuKuto(wchar_t wc);	//!< 句読点文字をチェックする	//@@@ 2002.04.17 MIK
+	bool IsKinsokuHead(wchar_t wc);	// 行頭禁則文字をチェックする	//@@@ 2002.04.08 MIK
+	bool IsKinsokuTail(wchar_t wc);	// 行末禁則文字をチェックする	//@@@ 2002.04.08 MIK
+	bool IsKinsokuKuto(wchar_t wc);	// 句読点文字をチェックする	//@@@ 2002.04.17 MIK
 	// 2005-08-20 D.S.Koba 禁則関連処理の関数化
 	/*! 句読点ぶら下げの処理位置か
 		@date 2005-08-20 D.S.Koba
@@ -301,8 +301,8 @@ private:
 	bool IsKinsokuPosKuto(CLayoutInt nRest, CLayoutInt nCharChars) const {
 		return nRest < nCharChars;
 	}
-	bool IsKinsokuPosHead(CLayoutInt, CLayoutInt, CLayoutInt);	//!< 行頭禁則の処理位置か
-	bool IsKinsokuPosTail(CLayoutInt, CLayoutInt, CLayoutInt);	//!< 行末禁則の処理位置か
+	bool IsKinsokuPosHead(CLayoutInt, CLayoutInt, CLayoutInt);	// 行頭禁則の処理位置か
+	bool IsKinsokuPosTail(CLayoutInt, CLayoutInt, CLayoutInt);	// 行末禁則の処理位置か
 private:
 	// Oct. 1, 2002 genta インデント幅計算関数群
 	CLayoutInt getIndentOffset_Normal(CLayout* pLayoutPrev);
@@ -347,7 +347,7 @@ protected:
 	CalcIndentProc			m_getIndentOffset;			// Oct. 1, 2002 genta インデント幅計算関数を保持
 
 	// フラグ等
-	EColorIndexType			m_nLineTypeBot;				//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
+	EColorIndexType			m_nLineTypeBot;				// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
 	CLayoutExInfo			m_cLayoutExInfoBot;
 	CLayoutInt				m_nLines;					// 全レイアウト行数
 
@@ -355,8 +355,8 @@ protected:
 	mutable CLayout*		m_pLayoutPrevRefer;
 	
 	// EOFカーソル位置を記憶する(_DoLayout/DoLayout_Rangeで無効にする)	//2006.10.01 Moca
-	CLayoutInt				m_nEOFLine; //!< EOF行数
-	CLayoutInt				m_nEOFColumn; //!< EOF幅位置
+	CLayoutInt				m_nEOFLine;		// EOF行数
+	CLayoutInt				m_nEOFColumn;	// EOF幅位置
 
 	// テキスト最大幅を記憶（折り返し位置算出に使用）	// 2009.08.28 nasukoji
 	CLayoutInt				m_nTextWidth;				// テキスト最大幅の記憶

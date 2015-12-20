@@ -74,8 +74,8 @@ inline void dupamp(const TCHAR* org, TCHAR* out)
 		// 結果: a[0]=1, a[1]=23, a[2]=4 となる。
 */
 int scan_ints(
-	const wchar_t*	pszData,	//!< [in]  データ文字列
-	const wchar_t*	pszFormat,	//!< [in]  データフォーマット
-	int*			anBuf		//!< [out] 取得した数値 (要素数は最大32まで)
+	const wchar_t*	pszData,	// [in]  データ文字列
+	const wchar_t*	pszFormat,	// [in]  データフォーマット
+	int*			anBuf		// [out] 取得した数値 (要素数は最大32まで)
 );
 

@@ -44,7 +44,7 @@
 
 static void LoadPluginTemp(CommonSetting& common, CMenuDrawer& cMenuDrawer);
 
-//! Popup Help用ID
+// Popup Help用ID
 static const DWORD p_helpids[] = {	//11700
 	IDC_CHECK_PluginEnable,	HIDC_CHECK_PluginEnable,	// プラグインを有効にする
 	IDC_PLUGINLIST,			HIDC_PLUGINLIST,			// プラグインリスト

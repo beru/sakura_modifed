@@ -57,7 +57,7 @@ void CNativeA::AppendString(const char* pszData)
 	AppendString(pszData, strlen(pszData));
 }
 
-//! バッファの最後にデータを追加する。nLengthは文字単位。
+// バッファの最後にデータを追加する。nLengthは文字単位。
 void CNativeA::AppendString(const char* pszData, int nLength)
 {
 	CNative::AppendRawData(pszData, nLength * sizeof(char));
@@ -72,13 +72,13 @@ const CNativeA& CNativeA::operator = (char cChar)
 	return *this;
 }
 
-//! バッファの最後にデータを追加する
+// バッファの最後にデータを追加する
 void CNativeA::AppendNativeData(const CNativeA& pcNative)
 {
 	AppendString(pcNative.GetStringPtr(), pcNative.GetStringLength());
 }
 
-//! (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
+// (重要：nDataLenは文字単位) バッファサイズの調整。必要に応じて拡大する。
 void CNativeA::AllocStringBuffer(int nDataLen)
 {
 	CNative::AllocBuffer(nDataLen * sizeof(char));
@@ -323,7 +323,7 @@ void CNativeA::ToZenkaku(
 					bHenkanOK = TRUE;
 				}
 			}else {
-				//! 英数変換用に新たな条件を付加 2001/07/30 Misaka
+				// 英数変換用に新たな条件を付加 2001/07/30 Misaka
 				if (((unsigned char)0x20 <= pBuf[i] && pBuf[i] <= (unsigned char)0x7E) ||
 					(bHiragana != 2 && (unsigned char)0xA1 <= pBuf[i] && pBuf[i] <= (unsigned char)0xDF)
 				) {
@@ -351,8 +351,8 @@ void CNativeA::ToZenkaku(
 						nCharChars = 2;
 					}
 					// 拗音
-					//! 英数変換用に新たな条件を付加 2001/07/30 Misaka
-					//! bHiragana != 2 // 英数変換フラグがオンではない場合
+					// 英数変換用に新たな条件を付加 2001/07/30 Misaka
+					// bHiragana != 2 // 英数変換フラグがオンではない場合
 					if (1
 						&& bHiragana != 2
 						&& pBuf[i + 1] == (unsigned char)'ﾟ'
@@ -484,7 +484,7 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 }
 
 
-//! 空白→TAB変換
+// 空白→TAB変換
 /*!
 	@param nTabSpace TABの文字数
 	単独のスペースは変換しない
@@ -611,7 +611,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 //                  staticインターフェース                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 指定した位置の文字が何バイト文字かを返す
+// 指定した位置の文字が何バイト文字かを返す
 int CNativeA::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 {
 	return CShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);

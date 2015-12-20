@@ -112,7 +112,7 @@ private:
 	bool GetFullPathAndLine( int index, TCHAR *fullPath, int count, int *lineNum, int *depth );
 
 
-	//! depthから完全パス名(相対パス/絶対パス)を作成する
+	// depthから完全パス名(相対パス/絶対パス)を作成する
 	static TCHAR* GetFullPathFromDepth(TCHAR*, int, TCHAR*, const TCHAR*, int);
 	static TCHAR* CopyDirDir( TCHAR* dest, const TCHAR* target, const TCHAR* base );
 public:
@@ -132,26 +132,26 @@ private:
 	
 	bool	m_bDirectTagJump;
 
-	int		m_nIndex;				//!< 選択された要素番号
-	TCHAR	*m_pszFileName;			//!< 編集中のファイル名
-	wchar_t	*m_pszKeyword;			//!< キーワード(DoModalのlParam != 0を指定した場合に指定できる)
-	int		m_nLoop;				//!< さかのぼれる階層数
-	CSortedTagJumpList*	m_pcList;	//!< タグジャンプ情報
-	UINT	m_nTimerId;				//!< タイマ番号
-	BOOL	m_bTagJumpICase;		//!< 大文字小文字を同一視
-	BOOL	m_bTagJumpAnyWhere;		//!< 文字列の途中にマッチ
-	BOOL	m_bTagJumpExactMatch;	//! 完全一致(画面無し)
+	int		m_nIndex;				// 選択された要素番号
+	TCHAR	*m_pszFileName;			// 編集中のファイル名
+	wchar_t	*m_pszKeyword;			// キーワード(DoModalのlParam != 0を指定した場合に指定できる)
+	int		m_nLoop;				// さかのぼれる階層数
+	CSortedTagJumpList*	m_pcList;	// タグジャンプ情報
+	UINT	m_nTimerId;				// タイマ番号
+	BOOL	m_bTagJumpICase;		// 大文字小文字を同一視
+	BOOL	m_bTagJumpAnyWhere;		// 文字列の途中にマッチ
+	BOOL	m_bTagJumpExactMatch;	// 完全一致(画面無し)
 
-	int 	m_nTop;					//!< ページめくりの表示の先頭(0開始)
-	bool	m_bNextItem;			//!< まだ次にヒットするものがある
+	int 	m_nTop;					// ページめくりの表示の先頭(0開始)
+	bool	m_bNextItem;			// まだ次にヒットするものがある
 
 	// 絞り込み検索用
-	STagFindState* m_psFindPrev;	//<! 前回の最後に検索した状態
-	STagFindState* m_psFind0Match;	//<! 前回の1つもHitしなかった最後のtags
+	STagFindState* m_psFindPrev;	// 前回の最後に検索した状態
+	STagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
 
-	CNativeW	m_strOldKeyword;	//!< 前回のキーワード
-	BOOL	m_bOldTagJumpICase;		//!< 前回の大文字小文字を同一視
-	BOOL	m_bOldTagJumpAnyWhere;	//!< 前回の文字列の途中にマッチ
+	CNativeW	m_strOldKeyword;	// 前回のキーワード
+	BOOL	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
+	BOOL	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
 	SComboBoxItemDeleter	m_comboDel;
 	CRecentTagjumpKeyword	m_cRecentKeyword;

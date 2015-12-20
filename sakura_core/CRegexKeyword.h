@@ -34,7 +34,7 @@ struct RegexKeywordInfo {
 //@@@ 2001.11.17 add end MIK
 
 
-//!	正規表現キーワード検索情報構造体
+// 正規表現キーワード検索情報構造体
 typedef struct RegexInfo_t {
 	BREGEXP_W* pBregexp;	// BREGEXP_W構造体
 #ifdef USE_PARENT
@@ -50,7 +50,7 @@ typedef struct RegexInfo_t {
 } REGEX_INFO;
 
 
-//!	正規表現キーワードクラス
+// 正規表現キーワードクラス
 /*!
 	正規表現キーワードを扱う。
 */
@@ -59,38 +59,38 @@ public:
 	CRegexKeyword(LPCTSTR);
 	~CRegexKeyword();
 
-	//! 行検索開始
+	// 行検索開始
 	BOOL RegexKeyLineStart(void);
-	//! 行検索
+	// 行検索
 	BOOL RegexIsKeyword(const CStringRef& cStr, int nPos, int* nMatchLen, int* nMatchColor);
-	//! タイプ設定
+	// タイプ設定
 	BOOL RegexKeySetTypes(const STypeConfig* pTypesPtr);
 
-	//! 書式(囲み)チェック
+	// 書式(囲み)チェック
 	static BOOL RegexKeyCheckSyntax(const wchar_t* s);
 	
 	static DWORD GetNewMagicNumber();
 
 protected:
-	//! コンパイル
+	// コンパイル
 	BOOL RegexKeyCompile(void);
-	//! 変数初期化
+	// 変数初期化
 	BOOL RegexKeyInit(void);
 
 public:
-	int				m_nTypeIndex;				//!< 現在のタイプ設定番号
-	bool			m_bUseRegexKeyword;			//!< 正規表現キーワードを使用する・しない
+	int				m_nTypeIndex;				// 現在のタイプ設定番号
+	bool			m_bUseRegexKeyword;			// 正規表現キーワードを使用する・しない
 
 private:
-	const STypeConfig*	m_pTypes;				//!< タイプ設定へのポインタ(呼び出し側が持っているもの)
-	int				m_nTypeId;					//!< タイプ設定ID
-	DWORD			m_nCompiledMagicNumber;		//!< コンパイル済みか？
-	int				m_nRegexKeyCount;			//!< 現在のキーワード数
-	REGEX_INFO		m_sInfo[MAX_REGEX_KEYWORD];	//!< キーワード一覧(BREGEXPコンパイル対象)
+	const STypeConfig*	m_pTypes;				// タイプ設定へのポインタ(呼び出し側が持っているもの)
+	int				m_nTypeId;					// タイプ設定ID
+	DWORD			m_nCompiledMagicNumber;		// コンパイル済みか？
+	int				m_nRegexKeyCount;			// 現在のキーワード数
+	REGEX_INFO		m_sInfo[MAX_REGEX_KEYWORD];	// キーワード一覧(BREGEXPコンパイル対象)
 #ifdef USE_PARENT
 #else
 	wchar_t			m_keywordList[MAX_REGEX_KEYWORDLISTLEN];
 #endif
-	wchar_t			m_szMsg[256];				//!< BREGEXP_Wからのメッセージを保持する
+	wchar_t			m_szMsg[256];				// BREGEXP_Wからのメッセージを保持する
 };
 

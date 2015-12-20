@@ -78,8 +78,8 @@ INT_PTR CALLBACK CPropToolbar::DlgProc_page(
 	@date 2002.04.13 genta 
 */
 int Listbox_INSERTDATA(
-	HWND hWnd,				//!< handle to destination window 
-	int index,				//!< item index
+	HWND hWnd,				// handle to destination window 
+	int index,				// item index
 	int value
 )
 {
@@ -110,7 +110,7 @@ int Listbox_INSERTDATA(
 	@date 2002.04.13 genta 
 */
 int Listbox_ADDDATA(
-	HWND hWnd,              //!< handle to destination window 
+	HWND hWnd,              // handle to destination window 
 	int value
 )
 {

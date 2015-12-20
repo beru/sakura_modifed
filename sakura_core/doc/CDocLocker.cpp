@@ -60,7 +60,7 @@ void CDocLocker::OnAfterSave(const SSaveInfo& sSaveInfo)
 //                         チェック                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 書き込めるか検査
+// 書き込めるか検査
 void CDocLocker::CheckWritable(bool bMsg)
 {
 	CEditDoc* pcDoc = GetListeningDoc();

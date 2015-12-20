@@ -90,7 +90,7 @@ CDialog::~CDialog()
 	return;
 }
 
-//! モーダルダイアログの表示
+// モーダルダイアログの表示
 /*!
 	@param hInstance [in] アプリケーションインスタンスのハンドル
 	@param hwndParent [in] オーナーウィンドウのハンドル
@@ -114,7 +114,7 @@ INT_PTR CDialog::DoModal(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete,
 	);
 }
 
-//! モードレスダイアログの表示
+// モードレスダイアログの表示
 /*!
 	@param hInstance [in] アプリケーションインスタンスのハンドル
 	@param hwndParent [in] オーナーウィンドウのハンドル

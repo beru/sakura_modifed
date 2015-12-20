@@ -34,7 +34,7 @@ struct EditInfo;
 struct DLLSHAREDATA;
 class CPropertyManager;
 
-//!	常駐部の管理
+// 常駐部の管理
 /*!
 	タスクトレイアイコンの管理，タスクトレイメニューのアクション，
 	MRU、キー割り当て、共通設定、編集ウィンドウの管理など
@@ -63,16 +63,16 @@ public:
 	void DeleteAccelTbl(void);	// アクセラレータテーブル破棄
 
 	// ウィンドウ管理
-	static bool OpenNewEditor(							//!< 新規編集ウィンドウの追加 ver 0
-		HINSTANCE			hInstance,					//!< [in] インスタンスID (実は未使用)
-		HWND				hWndParent,					//!< [in] 親ウィンドウハンドル．エラーメッセージ表示用
-		const SLoadInfo&	sLoadInfo,					//!< [in]
-		const TCHAR*		szCmdLineOption	= NULL,		//!< [in] 追加のコマンドラインオプション
-		bool				sync			= false,	//!< [in] trueなら新規エディタの起動まで待機する
-		const TCHAR*		pszCurDir		= NULL,		//!< [in] 新規エディタのカレントディレクトリ
-		bool				bNewWindow		= false		//!< [in] 新規エディタをウインドウで開く
+	static bool OpenNewEditor(							// 新規編集ウィンドウの追加 ver 0
+		HINSTANCE			hInstance,					// [in] インスタンスID (実は未使用)
+		HWND				hWndParent,					// [in] 親ウィンドウハンドル．エラーメッセージ表示用
+		const SLoadInfo&	sLoadInfo,					// [in]
+		const TCHAR*		szCmdLineOption	= NULL,		// [in] 追加のコマンドラインオプション
+		bool				sync			= false,	// [in] trueなら新規エディタの起動まで待機する
+		const TCHAR*		pszCurDir		= NULL,		// [in] 新規エディタのカレントディレクトリ
+		bool				bNewWindow		= false		// [in] 新規エディタをウインドウで開く
 	);
-	static bool OpenNewEditor2(						//!< 新規編集ウィンドウの追加 ver 1
+	static bool OpenNewEditor2(						// 新規編集ウィンドウの追加 ver 1
 		HINSTANCE		hInstance,
 		HWND			hWndParent,
 		const EditInfo*	pfi,
@@ -95,11 +95,11 @@ public:
 	static void DoGrepCreateWindow(HINSTANCE hinst, HWND, CDlgGrep& cDlgGrep);
 protected:
 	void	DoGrep();	// Stonee, 2001/03/21
-	BOOL TrayMessage(HWND , DWORD , UINT , HICON , const TCHAR* );	//!< タスクトレイのアイコンに関する処理
-	void OnCommand(WORD , WORD  , HWND);	//!< WM_COMMANDメッセージ処理
-	void OnNewEditor(bool); //!< 2003.05.30 genta 新規ウィンドウ作成処理を切り出し
+	BOOL TrayMessage(HWND , DWORD , UINT , HICON , const TCHAR* );	// タスクトレイのアイコンに関する処理
+	void OnCommand(WORD , WORD  , HWND);	// WM_COMMANDメッセージ処理
+	void OnNewEditor(bool); // 2003.05.30 genta 新規ウィンドウ作成処理を切り出し
 
-	static INT_PTR CALLBACK ExitingDlgProc(	//!< 終了ダイアログ用プロシージャ			2006.07.02 ryoji CControlProcess から移動
+	static INT_PTR CALLBACK ExitingDlgProc(	// 終了ダイアログ用プロシージャ			2006.07.02 ryoji CControlProcess から移動
 		HWND	hwndDlg,	// handle to dialog box
 		UINT	uMsg,		// message
 		WPARAM	wParam,		// first message parameter
@@ -115,7 +115,7 @@ private:
 	bool			m_bUseTrayMenu;			// トレイメニュー表示中
 	HINSTANCE		m_hInstance;
 	HWND			m_hWnd;
-	BOOL			m_bCreatedTrayIcon;		//!< トレイにアイコンを作った
+	BOOL			m_bCreatedTrayIcon;		// トレイにアイコンを作った
 
 	DLLSHAREDATA*	m_pShareData;
 	CDlgGrep		m_cDlgGrep;				// Jul. 2, 2001 genta
@@ -123,7 +123,7 @@ private:
 
 	CImageListMgr	m_hIcons;
 
-	UINT			m_uCreateTaskBarMsg;	//!< RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
+	UINT			m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
 
 	TCHAR			m_szLanguageDll[MAX_PATH];
 };

@@ -50,9 +50,9 @@ void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
 }
 
 
-//	From Here Sep 8, 2000 genta
+// From Here Sep 8, 2000 genta
 //
-//!	Perl用アウトライン解析機能（簡易版）
+// Perl用アウトライン解析機能（簡易版）
 /*!
 	単純に /^\\s*sub\\s+(\\w+)/ に一致したら $1を取り出す動作を行う。
 	ネストとかは面倒くさいので考えない。

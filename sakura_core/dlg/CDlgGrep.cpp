@@ -253,11 +253,11 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 		// Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_GREP_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
-	case IDC_CHK_FROMTHISTEXT:	/* この編集中のテキストから検索する */
+	case IDC_CHK_FROMTHISTEXT:	// この編集中のテキストから検索する
 		// 2010.05.30 関数化
 		SetDataFromThisText(0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_FROMTHISTEXT));
 		return TRUE;
-	case IDC_BUTTON_CURRENTFOLDER:	/* 現在編集中のファイルのフォルダ */
+	case IDC_BUTTON_CURRENTFOLDER:	// 現在編集中のファイルのフォルダ
 		// ファイルを開いているか
 		if (m_szCurrentFilePath[0] != _T('\0')) {
 			TCHAR	szWorkFolder[MAX_PATH];

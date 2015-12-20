@@ -71,9 +71,9 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	);
 	pArg->nInsSeq = DLRArg.nInsSeq;
 
-	/*--- 変更された行のレイアウト情報を再生成 ---*/
-	/* 論理行の指定範囲に該当するレイアウト情報を削除して */
-	/* 削除した範囲の直前のレイアウト情報のポインタを返す */
+	// --- 変更された行のレイアウト情報を再生成 ---
+	// 論理行の指定範囲に該当するレイアウト情報を削除して
+	// 削除した範囲の直前のレイアウト情報のポインタを返す
 
 	CLayoutInt	nModifyLayoutLinesOld = CLayoutInt(0);
 	CLayout* pLayoutPrev;

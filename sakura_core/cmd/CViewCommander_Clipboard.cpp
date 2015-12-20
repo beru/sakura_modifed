@@ -75,9 +75,9 @@ void CViewCommander::Command_CUT(void)
 	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
 */
 void CViewCommander::Command_COPY(
-	bool		bIgnoreLockAndDisable,	//!< [in] 選択範囲を解除するか？
-	bool		bAddCRLFWhenCopy,		//!< [in] 折り返し位置に改行コードを挿入するか？
-	EEolType	neweol					//!< [in] コピーするときのEOL。
+	bool		bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
+	bool		bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
+	EEolType	neweol					// [in] コピーするときのEOL。
 )
 {
 	CNativeW cmemBuf;
@@ -414,7 +414,7 @@ void CViewCommander::Command_PASTEBOX(int option)
 }
 
 
-//! 矩形文字列挿入
+// 矩形文字列挿入
 void CViewCommander::Command_INSBOXTEXT(const wchar_t* pszPaste, int nPasteSize)
 {
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -438,13 +438,13 @@ void CViewCommander::Command_INSBOXTEXT(const wchar_t* pszPaste, int nPasteSize)
 	@date 2013.05.10 Moca 高速モード
 */
 void CViewCommander::Command_INSTEXT(
-	bool			bRedraw,		//!< 
-	const wchar_t*	pszText,		//!< [in] 貼り付ける文字列。
-	CLogicInt		nTextLen,		//!< [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
-	bool			bNoWaitCursor,	//!< 
-	bool			bLinePaste,		//!< [in] ラインモード貼り付け
-	bool			bFastMode,		//!< [in] 高速モード(レイアウト座標は無視する)
-	const CLogicRange*	pcSelectLogic	//!< [in] オプション。高速モードのときの削除範囲ロジック単位
+	bool			bRedraw,		// 
+	const wchar_t*	pszText,		// [in] 貼り付ける文字列。
+	CLogicInt		nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
+	bool			bNoWaitCursor,	// 
+	bool			bLinePaste,		// [in] ラインモード貼り付け
+	bool			bFastMode,		// [in] 高速モード(レイアウト座標は無視する)
+	const CLogicRange*	pcSelectLogic	// [in] オプション。高速モードのときの削除範囲ロジック単位
 )
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -579,8 +579,8 @@ end_of_func:
 
 // 最後にテキストを追加
 void CViewCommander::Command_ADDTAIL(
-	const wchar_t*	pszData,	//!< 追加するテキスト
-	int				nDataLen	//!< 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
+	const wchar_t*	pszData,	// 追加するテキスト
+	int				nDataLen	// 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
 )
 {
 	// テキスト長自動計算
@@ -710,7 +710,7 @@ static bool AppendHTMLColor(
 }
 
 
-//! 選択範囲内色付きHTMLコピー
+// 選択範囲内色付きHTMLコピー
 void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -1089,7 +1089,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 	return *ppStrategy;
 }
 
-//! 選択範囲内行番号色付きHTMLコピー
+// 選択範囲内行番号色付きHTMLコピー
 void CViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
 {
 	Command_COPY_COLOR_HTML(true);

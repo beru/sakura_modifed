@@ -187,7 +187,7 @@ LRESULT CTabWnd::TabWndDispatchEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 	return 1L;	// デフォルトのディスパッチにまわす
 }
 
-//! タブ部 WM_LBUTTONDOWN 処理
+// タブ部 WM_LBUTTONDOWN 処理
 LRESULT CTabWnd::OnTabLButtonDown(WPARAM wParam, LPARAM lParam)
 {
 	// ボタンが押された位置を確認する
@@ -225,7 +225,7 @@ LRESULT CTabWnd::OnTabLButtonDown(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-//! タブ部 WM_LBUTTONUP 処理
+// タブ部 WM_LBUTTONUP 処理
 LRESULT CTabWnd::OnTabLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	TCHITTESTINFO hitinfo;
@@ -305,7 +305,7 @@ LRESULT CTabWnd::OnTabLButtonUp(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-//! タブ部 WM_MOUSEMOVE 処理
+// タブ部 WM_MOUSEMOVE 処理
 LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	TCHITTESTINFO	hitinfo;
@@ -468,7 +468,7 @@ LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-//! タブ部 WM_TIMER 処理
+// タブ部 WM_TIMER 処理
 LRESULT CTabWnd::OnTabTimer(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == 1) {
@@ -484,7 +484,7 @@ LRESULT CTabWnd::OnTabTimer(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-//! タブ部 WM_CAPTURECHANGED 処理
+// タブ部 WM_CAPTURECHANGED 処理
 LRESULT CTabWnd::OnTabCaptureChanged(WPARAM wParam, LPARAM lParam)
 {
 	if (m_eDragState != DRAG_NONE)
@@ -492,7 +492,7 @@ LRESULT CTabWnd::OnTabCaptureChanged(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-//! タブ部 WM_RBUTTONDOWN 処理
+// タブ部 WM_RBUTTONDOWN 処理
 LRESULT CTabWnd::OnTabRButtonDown(WPARAM wParam, LPARAM lParam)
 {
 	BreakDrag();	// 2006.01.28 ryoji ドラッグ状態を解除する(関数化)
@@ -500,7 +500,7 @@ LRESULT CTabWnd::OnTabRButtonDown(WPARAM wParam, LPARAM lParam)
 	return 0L;	// 2006.01.28 ryoji OnTabMButtonDown にあわせて 0 を返すように変更
 }
 
-//! タブ部 WM_RBUTTONUP 処理
+// タブ部 WM_RBUTTONUP 処理
 LRESULT CTabWnd::OnTabRButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	// 2006.01.28 ryoji タブのカスタムメニュー表示コマンドを実行する(関数化)
@@ -1096,7 +1096,7 @@ LRESULT CTabWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		pt.x = rcBtn.left;
 		pt.y = rcBtn.bottom;
 		::ClientToScreen(GetHwnd(), &pt);
-		TabListMenu(pt, FALSE, FALSE, FALSE);	// タブ一覧メニュー（タブ名）
+		TabListMenu(pt, false, false, false);	// タブ一覧メニュー（タブ名）
 	}else {
 		// 閉じるボタン上ならキャプチャー開始
 		GetCloseBtnRect(&rc, &rcBtn);
@@ -1169,7 +1169,7 @@ LRESULT CTabWnd::OnRButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		pt.x = rcBtn.left;
 		pt.y = rcBtn.bottom;
 		::ClientToScreen(GetHwnd(), &pt);
-		TabListMenu(pt, FALSE, TRUE, FALSE);	// タブ一覧メニュー（フルパス）
+		TabListMenu(pt, false, true, false);	// タブ一覧メニュー（フルパス）
 	}
 
 	return 0L;
@@ -2086,7 +2086,7 @@ void CTabWnd::HideOtherWindows(HWND hwndExclude)
 	}
 }
 
-//! ウインドウを強制的に前面に持ってくる
+// ウインドウを強制的に前面に持ってくる
 void CTabWnd::ForceActiveWindow(HWND hwnd)
 {
 
@@ -2175,7 +2175,7 @@ void CTabWnd::LayoutTab(void)
 	}
 
 	// アイコンの表示を切り替える
-	BOOL bDispTabIcon = m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon;
+	bool bDispTabIcon = m_pShareData->m_Common.m_sTabBar.m_bDispTabIcon;
 	HIMAGELIST hImg = TabCtrl_GetImageList(m_hwndTab);
 	if (!hImg && bDispTabIcon) {
 		if (InitImageList())
@@ -2189,7 +2189,7 @@ void CTabWnd::LayoutTab(void)
 	UINT lStyleOld = lStyle;
 
 	// タブのアイテム幅の等幅を切り替える
-	BOOL bSameTabWidth = m_pShareData->m_Common.m_sTabBar.m_bSameTabWidth;
+	bool bSameTabWidth = m_pShareData->m_Common.m_sTabBar.m_bSameTabWidth;
 	if (bSameTabWidth && !(lStyle & TCS_FIXEDWIDTH)) {
 		lStyle |= (TCS_FIXEDWIDTH | TCS_FORCELABELLEFT);
 	}else if (!bSameTabWidth && (lStyle & TCS_FIXEDWIDTH)) {
@@ -2490,7 +2490,7 @@ void CTabWnd::DrawListBtn(CGraphics& gr, const LPRECT lprcClient)
 	::Polygon(gr, pt, _countof(pt));
 }
 
-//! 閉じるマーク描画処理
+// 閉じるマーク描画処理
 void CTabWnd::DrawCloseFigure(CGraphics& gr, const RECT& rcBtn)
 {
 	// [x]描画イメージ形状（直線6本）
@@ -2703,7 +2703,7 @@ void CTabWnd::GetTabName(EditNode* pEditNode, BOOL bFull, BOOL bDupamp, LPTSTR p
 	@date 2007.02.28 ryoji タブ名一覧／パス名一覧の表示をメニュー自身で切り替える
 	@date 2007.06.28 ryoji グループ化対応（他グループのウィンドウを表示する／しない）
 */
-LRESULT CTabWnd::TabListMenu(POINT pt, BOOL bSel/* = TRUE*/, BOOL bFull/* = FALSE*/, BOOL bOtherGroup/* = TRUE*/)
+LRESULT CTabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = false*/, bool bOtherGroup/* = true*/)
 {
 	bool bRepeat;
 

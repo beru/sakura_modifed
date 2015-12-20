@@ -56,7 +56,7 @@ public:
 	// アクセサ
 	DLLIMP* operator -> () { return m_pcDllImp; }
 
-	//! 利用状態のチェック（operator版）
+	// 利用状態のチェック（operator版）
 	bool operator!() const { return m_pcDllImp->IsAvailable(); }
 
 private:
@@ -64,14 +64,14 @@ private:
 };
 
 
-//! 結果定数
+// 結果定数
 enum EDllResult {
 	DLL_SUCCESS,		// 成功
 	DLL_LOADFAILURE,	// DLLロード失敗
 	DLL_INITFAILURE,	// 初期処理に失敗
 };
 
-//! DLLの動的なLoad/Unloadを行うためのクラス
+// DLLの動的なLoad/Unloadを行うためのクラス
 /*!
 	@author genta
 	@date Jun. 10, 2001 genta
@@ -110,34 +110,34 @@ public:
 	//                         DLLロード                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	//! DLLの関数を呼び出せるか状態どうか
+	// DLLの関数を呼び出せるか状態どうか
 	virtual bool IsAvailable() const { return m_hInstance != NULL; }
 
-	//! DLLロードと初期処理
+	// DLLロードと初期処理
 	EDllResult InitDll(
-		LPCTSTR pszSpecifiedDllName = NULL	//!< [in] クラスが定義しているDLL名以外のDLLを読み込みたいときに、そのDLL名を指定。
+		LPCTSTR pszSpecifiedDllName = NULL	// [in] クラスが定義しているDLL名以外のDLLを読み込みたいときに、そのDLL名を指定。
 	);
 
-	//! 終了処理とDLLアンロード
+	// 終了処理とDLLアンロード
 	bool DeinitDll(
-		bool force = false	//!< [in] 終了処理に失敗してもDLLを解放するかどうか
+		bool force = false	// [in] 終了処理に失敗してもDLLを解放するかどうか
 	);
 
-	//! インスタンスハンドルの取得
+	// インスタンスハンドルの取得
 	HINSTANCE GetInstance() const { return m_hInstance; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           属性                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	//! ロード済みDLLファイル名の取得。ロードされていない (またはロードに失敗した) 場合は NULL を返す。
+	// ロード済みDLLファイル名の取得。ロードされていない (またはロードに失敗した) 場合は NULL を返す。
 	LPCTSTR GetLoadedDllName() const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                  オーバーロード可能実装                     //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	//!	DLLの初期化
+	// DLLの初期化
 	/*!
 		DLLのロードに成功した直後に呼び出される．エントリポイントの
 		確認などを行う．
@@ -149,7 +149,7 @@ protected:
 	*/
 	virtual bool InitDllImp() = 0;
 
-	//!	関数の初期化
+	// 関数の初期化
 	/*!
 		DLLのアンロードを行う直前に呼び出される．メモリの解放などを
 		行う．
@@ -174,7 +174,7 @@ protected:
 	*/
 	virtual bool DeinitDllImp();
 
-	//! DLLファイル名の取得(複数を順次)
+	// DLLファイル名の取得(複数を順次)
 	/*!
 		DLLファイル名として複数の可能性があり，そのうちの一つでも
 		見つかったものを使用する場合に対応する．

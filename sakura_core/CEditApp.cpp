@@ -92,7 +92,7 @@ CEditApp::~CEditApp()
 	delete m_pcEditDoc;
 }
 
-//! 共通設定 プロパティシート
+// 共通設定 プロパティシート
 bool CEditApp::OpenPropertySheet(int nPageNum)
 {
 	// プロパティシートの作成
@@ -104,7 +104,7 @@ bool CEditApp::OpenPropertySheet(int nPageNum)
 	return bRet;
 }
 
-//! タイプ別設定 プロパティシート
+// タイプ別設定 プロパティシート
 bool CEditApp::OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType)
 {
 	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes(m_pcEditWnd->GetHwnd(), nPageNum, nSettingType);

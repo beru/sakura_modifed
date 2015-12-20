@@ -32,9 +32,9 @@
 #include "CDataProfile.h"
 #include "util/string_ex.h"
 
-//! プラグインの管理番号index
+// プラグインの管理番号index
 typedef int PluginId;
-//! プラグの管理番号 プラグインのコマンドプラグごとに一意。ほかは0
+// プラグの管理番号 プラグインのコマンドプラグごとに一意。ほかは0
 typedef int PlugId;
 
 // プラグイン定義ファイル名
@@ -270,16 +270,16 @@ public:
 
 	// メンバ変数
 public:
-	PluginId m_id;				//!< プラグイン番号（エディタがふる0～MAX_PLUGIN-1の番号）
-	wstring m_sId;				//!< プラグインID
-	wstring m_sName;			//!< プラグイン和名
-	wstring m_sDescription;		//!< プラグインについての簡単な記述
-	wstring m_sAuthor;			//!< 作者
-	wstring m_sVersion;			//!< バージョン
-	wstring m_sUrl;				//!< 配布URL
+	PluginId m_id;				// プラグイン番号（エディタがふる0～MAX_PLUGIN-1の番号）
+	wstring m_sId;				// プラグインID
+	wstring m_sName;			// プラグイン和名
+	wstring m_sDescription;		// プラグインについての簡単な記述
+	wstring m_sAuthor;			// 作者
+	wstring m_sVersion;			// バージョン
+	wstring m_sUrl;				// 配布URL
 	tstring m_sBaseDir;
 	tstring m_sOptionDir;
-	tstring m_sLangName;		//!< 言語名
+	tstring m_sLangName;		// 言語名
 	CPluginOption::Array m_options;		// オプション	// 2010/3/24 Uchi
 	std::vector<std::wstring> m_aStrings;	// 文字列
 private:

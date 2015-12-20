@@ -39,17 +39,17 @@
 */
 #ifdef __MINGW32__
 int WINAPI WinMain(
-	HINSTANCE	hInstance,		//!< handle to current instance
-	HINSTANCE	hPrevInstance,	//!< handle to previous instance
-	LPSTR		lpCmdLineA,		//!< pointer to command line
-	int			nCmdShow		//!< show state of window
+	HINSTANCE	hInstance,		// handle to current instance
+	HINSTANCE	hPrevInstance,	// handle to previous instance
+	LPSTR		lpCmdLineA,		// pointer to command line
+	int			nCmdShow		// show state of window
 )
 #else
 int WINAPI _tWinMain(
-	HINSTANCE	hInstance,		//!< handle to current instance
-	HINSTANCE	hPrevInstance,	//!< handle to previous instance
-	LPTSTR		lpCmdLine,		//!< pointer to command line
-	int			nCmdShow		//!< show state of window
+	HINSTANCE	hInstance,		// handle to current instance
+	HINSTANCE	hPrevInstance,	// handle to previous instance
+	LPTSTR		lpCmdLine,		// pointer to command line
+	int			nCmdShow		// show state of window
 )
 #endif
 {

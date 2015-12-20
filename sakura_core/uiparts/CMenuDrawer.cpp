@@ -34,11 +34,11 @@
 // メニューの選択色を淡くする
 #define DRAW_MENU_SELECTION_LIGHT
 
-// //! メニューアイコンを3Dボタンにする(旧仕様)
-// //! 未定義なら、選択色との混合色とフラットな枠で選択を表現
+// // メニューアイコンを3Dボタンにする(旧仕様)
+// // 未定義なら、選択色との混合色とフラットな枠で選択を表現
 // #define DRAW_MENU_ICON_3DBUTTON
 
-// //! メニューのDISABLE/セパレータに影を落とす(旧仕様)
+// // メニューのDISABLE/セパレータに影を落とす(旧仕様)
 // #define DRAW_MENU_3DSTYLE
 
 
@@ -1572,7 +1572,7 @@ struct WorkData {
 	MENUITEMINFO	mii;
 };
 
-//! メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
+// メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
 LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR chUser;

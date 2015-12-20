@@ -243,7 +243,7 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-/* E-Mail(JIS→Unicode)コード変換 */
+// E-Mail(JIS→Unicode)コード変換
 // 2007.08.13 kobake 追加
 EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool base64decode)
 {

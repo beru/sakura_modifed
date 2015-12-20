@@ -84,7 +84,7 @@ public:
 	
 
 protected:
-	//!	Load済みかどうかを表すフラグ true...Load済み、false...未Load。
+	// Load済みかどうかを表すフラグ true...Load済み、false...未Load。
 	bool m_nReady;
 
 public:

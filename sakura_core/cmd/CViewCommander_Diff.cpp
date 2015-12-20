@@ -409,7 +409,7 @@ void CViewCommander::Command_Diff_Dialog(void)
 
 
 
-//!	次の差分を探し，見つかったら移動する
+//	次の差分を探し，見つかったら移動する
 void CViewCommander::Command_Diff_Next(void)
 {
 	BOOL bFound = FALSE;
@@ -461,7 +461,7 @@ re_do:;
 
 
 
-//!	前の差分を探し，見つかったら移動する
+// 前の差分を探し，見つかったら移動する
 void CViewCommander::Command_Diff_Prev(void)
 {
 	BOOL bFound = FALSE;

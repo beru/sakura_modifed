@@ -166,11 +166,11 @@ end:
 	@note Common::m_nVertLineOffsetにより、指定桁の前の文字の上に作画されることがある。
 */
 void CTextDrawer::DispVerticalLines(
-	CGraphics&	gr,			//!< 作画するウィンドウのDC
-	int			nTop,		//!< 線を引く上端のクライアント座標y
-	int			nBottom,	//!< 線を引く下端のクライアント座標y
-	CLayoutInt	nLeftCol,	//!< 線を引く範囲の左桁の指定
-	CLayoutInt	nRightCol	//!< 線を引く範囲の右桁の指定(-1で未指定)
+	CGraphics&	gr,			// 作画するウィンドウのDC
+	int			nTop,		// 線を引く上端のクライアント座標y
+	int			nBottom,	// 線を引く下端のクライアント座標y
+	CLayoutInt	nLeftCol,	// 線を引く範囲の左桁の指定
+	CLayoutInt	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
 ) const
 {
 	const CEditView* pView = m_pEditView;
@@ -323,9 +323,9 @@ void CTextDrawer::DispNoteLine(
 	@date 2009.10.24 ryoji 新規作成
 */
 void CTextDrawer::DispWrapLine(
-	CGraphics&	gr,			//!< 作画するウィンドウのDC
-	int			nTop,		//!< 線を引く上端のクライアント座標y
-	int			nBottom		//!< 線を引く下端のクライアント座標y
+	CGraphics&	gr,			// 作画するウィンドウのDC
+	int			nTop,		// 線を引く上端のクライアント座標y
+	int			nBottom		// 線を引く下端のクライアント座標y
 ) const
 {
 	const CEditView* pView = m_pEditView;

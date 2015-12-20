@@ -102,7 +102,7 @@ enum EFuncListCol {
 	FL_COL_REMARK	= 3		// 備考
 };
 
-//! ソート比較用プロシージャ
+// ソート比較用プロシージャ
 int CALLBACK CDlgFuncList::CompareFunc_Asc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	CDlgFuncList* pcDlgFuncList = (CDlgFuncList*)lParamSort;
@@ -407,7 +407,7 @@ void CDlgFuncList::ChangeView(LPARAM pcEditView)
 	return;
 }
 
-//! ダイアログデータの設定
+// ダイアログデータの設定
 void CDlgFuncList::SetData()
 {
 	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_FL);
@@ -2547,7 +2547,7 @@ LPVOID CDlgFuncList::GetHelpIdTable(void)
 //@@@ 2002.01.18 add end
 
 
-//!	キー操作をコマンドに変換するヘルパー関数
+// キー操作をコマンドに変換するヘルパー関数
 void CDlgFuncList::Key2Command(WORD KeyCode)
 {
 	CEditView*	pcEditView;

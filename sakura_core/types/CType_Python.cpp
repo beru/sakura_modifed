@@ -81,14 +81,14 @@ inline bool Python_IsWordChar(wchar_t c) {
 */
 struct COutlinePython {
 	enum {
-		STATE_NORMAL,	//!< 通常行 : 行頭を含む
-		STATE_STRING,	//!< 文字列中
-		STATE_CONTINUE,	//!< 継続行 : 前の行からの続きなので行頭とはみなされない
+		STATE_NORMAL,	// 通常行 : 行頭を含む
+		STATE_STRING,	// 文字列中
+		STATE_CONTINUE,	// 継続行 : 前の行からの続きなので行頭とはみなされない
 	} m_state;
 	
-	int m_quote_char;	//!<	引用符記号
-	bool m_raw_string;	//!<	エスケープ記号無視ならtrue
-	bool m_long_string;	//!<	長い文字列中ならtrue
+	int m_quote_char;	// 引用符記号
+	bool m_raw_string;	// エスケープ記号無視ならtrue
+	bool m_long_string;	// 長い文字列中ならtrue
 
 	COutlinePython();
 

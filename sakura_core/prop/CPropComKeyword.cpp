@@ -567,7 +567,7 @@ void CPropKeyword::Export_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 }
 
 
-//! キーワードを整頓する
+// キーワードを整頓する
 void CPropKeyword::Clean_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 {
 	if (IDYES == ::MessageBox(hwndDlg, LS(STR_PROPCOMKEYWORD_DEL),

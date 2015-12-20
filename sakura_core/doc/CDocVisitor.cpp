@@ -7,7 +7,7 @@
 #include "COpeBlk.h"
 
 
-//! 改行コードを統一する
+// 改行コードを統一する
 void CDocVisitor::SetAllEol(CEol cEol)
 {
 	CEditView* pcView = &CEditWnd::getInstance()->GetActiveView();

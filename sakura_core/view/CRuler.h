@@ -38,17 +38,17 @@ public:
 	//                     インターフェース                        //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	
-	//! ルーラー描画 (背景とキャレット)
+	// ルーラー描画 (背景とキャレット)
 	void DispRuler(HDC);
 	
-	//! ルーラーの背景のみ描画 2007.08.29 kobake 追加
+	// ルーラーの背景のみ描画 2007.08.29 kobake 追加
 	void DrawRulerBg(CGraphics& gr);
 	
 	void SetRedrawFlag() { m_bRedrawRuler = true; }
 	bool GetRedrawFlag() { return m_bRedrawRuler; }
 	
 private:
-	//! ルーラーのキャレットのみ描画 2002.02.25 Add By KK
+	// ルーラーのキャレットのみ描画 2002.02.25 Add By KK
 	void DrawRulerCaret(CGraphics& gr);
 	
 	void _DrawRulerCaret(CGraphics& gr, int nCaretDrawX, int nCaretWidth);

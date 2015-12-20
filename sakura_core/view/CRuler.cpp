@@ -80,7 +80,7 @@ void CRuler::DrawRulerCaret(CGraphics& gr)
 	}
 }
 
-//! ルーラーの背景のみ描画 2007.08.29 kobake 追加
+// ルーラーの背景のみ描画 2007.08.29 kobake 追加
 void CRuler::DrawRulerBg(CGraphics& gr)
 {
 	// 必要なインターフェース

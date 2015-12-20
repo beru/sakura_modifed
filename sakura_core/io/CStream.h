@@ -26,9 +26,9 @@
 class CFileAttribute;
 
 // 例外
-class CError_FileOpen {};	//!< 例外：ファイルオープンに失敗
-class CError_FileWrite {};	//!< 例外：ファイル書き込み失敗
-class CError_FileRead {};	//!< 例外：ファイル読み込み失敗
+class CError_FileOpen {};	// 例外：ファイルオープンに失敗
+class CError_FileWrite {};	// 例外：ファイル書き込み失敗
+class CError_FileRead {};	// 例外：ファイル読み込み失敗
 
 // ストリーム基底クラス
 class CStream {
@@ -46,11 +46,11 @@ public:
 	void Close();
 
 	// 操作
-	void SeekSet(	//!< シーク
-		long offset	//!< ストリーム先頭からのオフセット 
+	void SeekSet(	// シーク
+		long offset	// ストリーム先頭からのオフセット 
 	);
-	void SeekEnd(  //!< シーク
-		long offset //!< ストリーム終端からのオフセット
+	void SeekEnd(	// シーク
+		long offset // ストリーム終端からのオフセット
 	);
 
 	// 状態
@@ -77,7 +77,7 @@ public:
 	{
 	}
 
-	//! データを無変換で書き込む。戻り値は書き込んだバイト数。
+	// データを無変換で書き込む。戻り値は書き込んだバイト数。
 	int Write(const void* pBuffer, int nSizeInBytes) {
 		int nRet = fwrite(pBuffer, 1, nSizeInBytes, GetFp());
 		if (nRet != nSizeInBytes && IsExceptionMode()) {

@@ -42,7 +42,7 @@ class CDlgWinSize : public CDialog {
 public:
 	CDlgWinSize();
 	~CDlgWinSize();
-	int DoModal(HINSTANCE, HWND, EWinSizeMode&, EWinSizeMode&, int&, RECT&);	//!< モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, EWinSizeMode&, EWinSizeMode&, int&, RECT&);	// モーダルダイアログの表示
 
 protected:
 
@@ -55,9 +55,9 @@ protected:
 	void RenewItemState(void);
 
 private:
-	EWinSizeMode	m_eSaveWinSize;	//!< ウィンドウサイズの保存: 0/デフォルト，1/継承，2/指定
-	EWinSizeMode	m_eSaveWinPos;	//!< ウィンドウ位置の保存: 0/デフォルト，1/継承，2/指定
-	int				m_nWinSizeType;	//!< ウィンドウ表示方法: 0/標準，1/最大化，2/最小化
+	EWinSizeMode	m_eSaveWinSize;	// ウィンドウサイズの保存: 0/デフォルト，1/継承，2/指定
+	EWinSizeMode	m_eSaveWinPos;	// ウィンドウ位置の保存: 0/デフォルト，1/継承，2/指定
+	int				m_nWinSizeType;	// ウィンドウ表示方法: 0/標準，1/最大化，2/最小化
 	RECT			m_rc;
 };
 

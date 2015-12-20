@@ -469,10 +469,10 @@ bool CSearchAgent::PrevOrNextWord(
 */
 // 見つからない場合は０を返す
 int CSearchAgent::SearchWord(
-	CLogicPoint				ptSerachBegin,	//!< 検索開始位置
-	ESearchDirection		eDirection,		//!< 検索方向
-	CLogicRange*			pMatchRange,	//!< [out] マッチ範囲。ロジック単位。
-	const CSearchStringPattern&	pattern		//!< 検索パターン
+	CLogicPoint				ptSerachBegin,	// 検索開始位置
+	ESearchDirection		eDirection,		// 検索方向
+	CLogicRange*			pMatchRange,	// [out] マッチ範囲。ロジック単位。
+	const CSearchStringPattern&	pattern		// 検索パターン
 )
 {
 	CDocLine*	pDocLine;

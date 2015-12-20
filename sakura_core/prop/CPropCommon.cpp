@@ -187,9 +187,9 @@ void CPropCommon::Create(HWND hwndParent, CImageListMgr* pcIcons, CMenuDrawer* p
 	保持する構造体
 */
 struct ComPropSheetInfo {
-	int m_nTabNameId;										//!< TABの表示名
-	unsigned int resId;										//!< Property sheetに対応するDialog resource
-	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	//!< Dialog Procedure
+	int m_nTabNameId;										// TABの表示名
+	unsigned int resId;										// Property sheetに対応するDialog resource
+	INT_PTR (CALLBACK *DProc)(HWND, UINT, WPARAM, LPARAM);	// Dialog Procedure
 };
 //	To Here Jun. 2, 2001 genta
 
@@ -204,11 +204,11 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 
 	m_bTrayProc = bTrayProc;
 
-	//	From Here Jun. 2, 2001 genta
-	//	Feb. 11, 2007 genta URLをTABと入れ換え	// 2007.02.13 順序変更（TABをWINの次に）
-	//!	「共通設定」プロパティシートの作成時に必要な情報の配列．
-	//	順序変更 Win,Toolbar,Tab,Statusbarの順に、File,FileName 順に	2008/6/22 Uchi 
-	//	DProcの変更	2010/5/9 Uchi
+	// From Here Jun. 2, 2001 genta
+	// Feb. 11, 2007 genta URLをTABと入れ換え	// 2007.02.13 順序変更（TABをWINの次に）
+	// 「共通設定」プロパティシートの作成時に必要な情報の配列．
+	// 順序変更 Win,Toolbar,Tab,Statusbarの順に、File,FileName 順に	2008/6/22 Uchi 
+	// DProcの変更	2010/5/9 Uchi
 	static const ComPropSheetInfo ComPropSheetInfoList[] = {
 		{ STR_PROPCOMMON_GENERAL,	IDD_PROP_GENERAL,	CPropGeneral::DlgProc_page },
 		{ STR_PROPCOMMON_WINDOW,	IDD_PROP_WIN,		CPropWin::DlgProc_page },

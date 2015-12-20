@@ -87,7 +87,7 @@ public:
 
 	void SetFocusToPrintPreviewBar(void);
 	HWND GetPrintPreviewBarHANDLE(void) { return m_hwndPrintPreviewBar;	}
-	HWND GetPrintPreviewBarHANDLE_Safe() const { if (!this) return NULL; else return m_hwndPrintPreviewBar; } //!< thisがNULLでも実行できる版。2007.10.29 kobake
+	HWND GetPrintPreviewBarHANDLE_Safe() const { if (!this) return NULL; else return m_hwndPrintPreviewBar; } // thisがNULLでも実行できる版。2007.10.29 kobake
 	
 	//	PrintPreviewバーのメッセージ処理。
 	//	まずPrintPreviewBar_DlgProcにメッセージが届き、DispatchEvent_PPBに転送する仕組み
@@ -118,20 +118,20 @@ protected:
 	// 印刷／プレビュー 行描画
 	CColorStrategy* Print_DrawLine(
 		HDC				hdc,
-		POINT			ptDraw,		//!< 描画座標。HDC内部単位。
+		POINT			ptDraw,		// 描画座標。HDC内部単位。
 		const wchar_t*	pLine,
 		int				nDocLineLen,
 		int				nLineStart,
 		int				nLineLen,
-		CLayoutInt		nIndent,	//!< 折り返しインデント桁数 // 2006.08.14 Moca
-		const CLayout*	pcLayout = NULL,	//!< 色付用Layout
+		CLayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
+		const CLayout*	pcLayout = NULL,	// 色付用Layout
 		CColorStrategy*	pStrategyStart = NULL
 	);
 
 	// 印刷／プレビュー ブロック描画
 	void Print_DrawBlock(
 		HDC				hdc,
-		POINT			ptDraw,		//!< 描画座標。HDC内部単位。
+		POINT			ptDraw,		// 描画座標。HDC内部単位。
 		const wchar_t*	pPhysicalLine,
 		int				nBlockLen,
 		int				nKind,		// 0:半角, 1:全角
@@ -196,10 +196,10 @@ protected:
 	CEditWnd*		m_pParentWnd;	//	親のCEditDoc*。
 
 	// 2006.08.17 Moca YAZAKIさんのメモの通りDC/BMPをCEditDocからCPrintPreviewへ移動
-	HDC				m_hdcCompatDC;		//!< 再描画用コンパチブルDC
-	HBITMAP			m_hbmpCompatBMP;	//!< 再描画用メモリBMP
-	HBITMAP			m_hbmpCompatBMPOld;	//!< 再描画用メモリBMP(OLD)
-	int				m_nbmpCompatScale;	//!< BMPの画面の10(COMPAT_BMP_BASE)ピクセル幅あたりのBMPのピクセル幅
+	HDC				m_hdcCompatDC;		// 再描画用コンパチブルDC
+	HBITMAP			m_hbmpCompatBMP;	// 再描画用メモリBMP
+	HBITMAP			m_hbmpCompatBMPOld;	// 再描画用メモリBMP(OLD)
+	int				m_nbmpCompatScale;	// BMPの画面の10(COMPAT_BMP_BASE)ピクセル幅あたりのBMPのピクセル幅
 
 	/*	コントロール制御用	*/
 	//	操作バー
@@ -260,7 +260,7 @@ protected:
 	STypeConfig m_typePrint;
 
 	// プレビューから出ても現在のプリンタ情報を記憶しておけるようにstaticにする 2003.05.02 かろと 
-	static CPrint	m_cPrint;					//!< 現在のプリンタ情報
+	static CPrint	m_cPrint;					// 現在のプリンタ情報
 
 	bool			m_bLockSetting;				// 設定のロック
 	bool			m_bDemandUpdateSetting;		// 設定の更新要求

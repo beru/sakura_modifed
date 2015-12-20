@@ -28,17 +28,17 @@
 
 class CAppNodeGroupHandle;
 
-//! 編集ウィンドウノード
+// 編集ウィンドウノード
 struct EditNode {
 	int				m_nIndex;
-	int				m_nGroup;					//!< グループID								//@@@ 2007.06.20 ryoji
+	int				m_nGroup;					// グループID								//@@@ 2007.06.20 ryoji
 	HWND			m_hWnd;
-	int				m_nId;						//!< 無題Id
-	WIN_CHAR		m_szTabCaption[_MAX_PATH];	//!< タブウインドウ用：キャプション名		//@@@ 2003.05.31 MIK
-	SFilePath		m_szFilePath;				//!< タブウインドウ用：ファイル名			//@@@ 2006.01.28 ryoji
-	bool			m_bIsGrep;					//!< Grepのウィンドウか						//@@@ 2006.01.28 ryoji
-	UINT			m_showCmdRestore;			//!< 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
-	BOOL			m_bClosing;					//!< 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
+	int				m_nId;						// 無題Id
+	WIN_CHAR		m_szTabCaption[_MAX_PATH];	// タブウインドウ用：キャプション名		//@@@ 2003.05.31 MIK
+	SFilePath		m_szFilePath;				// タブウインドウ用：ファイル名			//@@@ 2006.01.28 ryoji
+	bool			m_bIsGrep;					// Grepのウィンドウか						//@@@ 2006.01.28 ryoji
+	UINT			m_showCmdRestore;			// 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
+	BOOL			m_bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji
 
 	HWND GetHwnd() const { return GetSafeHwnd(); }
 	HWND GetSafeHwnd() const { if (this) return m_hWnd; else return NULL; }
@@ -48,14 +48,14 @@ struct EditNode {
 	bool IsTopInGroup() const;
 };
 
-//! 拡張構造体
+// 拡張構造体
 struct EditNodeEx {
-	EditNode*	p;			//!< 編集ウィンドウ配列要素へのポインタ
-	int			nGroupMru;	//!< グループ単位のMRU番号
+	EditNode*	p;			// 編集ウィンドウ配列要素へのポインタ
+	int			nGroupMru;	// グループ単位のMRU番号
 };
 
 
-//! 共有メモリ内構造体
+// 共有メモリ内構造体
 struct SShare_Nodes {
 	int					m_nEditArrNum;	// short->intに修正	//@@@ 2003.05.31 MIK
 	EditNode			m_pEditArr[MAX_EDITWINDOWS];	// 最大値修正	@@@ 2003.05.31 MIK
@@ -65,7 +65,7 @@ struct SShare_Nodes {
 };
 
 
-//! ノードアクセサ
+// ノードアクセサ
 class CAppNodeHandle {
 public:
 	CAppNodeHandle(HWND hwnd);
@@ -74,18 +74,18 @@ private:
 	EditNode* m_pNodeRef;
 };
 
-//! グループアクセサ
+// グループアクセサ
 class CAppNodeGroupHandle {
 public:
 	CAppNodeGroupHandle(int nGroupId) : m_nGroup(nGroupId) { }
 	CAppNodeGroupHandle(HWND hwnd) { m_nGroup = CAppNodeHandle(hwnd)->GetGroup(); }
 
 	EditNode* GetTopEditNode() { return GetEditNodeAt(0); }	//
-	EditNode* GetEditNodeAt(int nIndex);					//!< 指定位置の編集ウィンドウ情報を取得する
-	BOOL AddEditWndList(HWND);							//!< 編集ウィンドウの登録	// 2007.06.26 ryoji nGroup引数追加
-	void DeleteEditWndList(HWND);							//!< 編集ウィンドウリストからの削除
+	EditNode* GetEditNodeAt(int nIndex);					// 指定位置の編集ウィンドウ情報を取得する
+	BOOL AddEditWndList(HWND);								// 編集ウィンドウの登録	// 2007.06.26 ryoji nGroup引数追加
+	void DeleteEditWndList(HWND);							// 編集ウィンドウリストからの削除
 	BOOL RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOOL bExit, BOOL bCheckConfirm, HWND hWndFrom);
-															//!< いくつかのウィンドウへ終了要求を出す	// 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加	// 2007.06.20 ryoji nGroup引数追加
+															// いくつかのウィンドウへ終了要求を出す	// 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加	// 2007.06.20 ryoji nGroup引数追加
 
 	int GetEditorWindowsNum(bool bExcludeClosing = true);				// 現在の編集ウィンドウの数を調べる		// 2007.06.20 ryoji nGroup引数追加	// 2008.04.19 ryoji bExcludeClosing引数追加
 

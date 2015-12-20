@@ -8,7 +8,7 @@ CBinaryInputStream::CBinaryInputStream(LPCTSTR tszFilePath)
 {
 }
 
-//! ストリームの「残り」サイズを取得
+// ストリームの「残り」サイズを取得
 int CBinaryInputStream::GetLength()
 {
 	long nCur = ftell(GetFp());
@@ -18,7 +18,7 @@ int CBinaryInputStream::GetLength()
 	return nDataLen;
 }
 
-//! データを無変換で読み込む。戻り値は読み込んだバイト数。
+// データを無変換で読み込む。戻り値は読み込んだバイト数。
 int CBinaryInputStream::Read(void* pBuffer, int nSizeInBytes)
 {
 	return fread(pBuffer, 1, nSizeInBytes, GetFp());

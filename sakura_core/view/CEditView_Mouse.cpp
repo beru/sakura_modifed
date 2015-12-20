@@ -1462,7 +1462,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 }
 
 
-//! 垂直マウススクロール
+// 垂直マウススクロール
 LRESULT CEditView::OnMOUSEWHEEL(WPARAM wParam, LPARAM lParam)
 {
 	return OnMOUSEWHEEL2(wParam, lParam, false, F_0);

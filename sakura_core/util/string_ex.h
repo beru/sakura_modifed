@@ -108,10 +108,10 @@ inline ACHAR* stristr(ACHAR* s1, const ACHAR* s2) { return const_cast<ACHAR*>(st
 #endif
 
 // 大文字小文字を区別せずに文字列を検索（日本語対応版）
-const char* strchr_j(const char* s1, char c);				//!< strchr の日本語対応版。
-const char* strichr_j(const char* s1, char c);			//!< strchr の大文字小文字同一視＆日本語対応版。
-const char* strstr_j(const char* s1, const char* s2);		//!< strstr の日本語対応版。
-const char* stristr_j(const char* s1, const char* s2);	//!< strstr の大文字小文字同一視＆日本語対応版。
+const char* strchr_j(const char* s1, char c);				// strchr の日本語対応版。
+const char* strichr_j(const char* s1, char c);				// strchr の大文字小文字同一視＆日本語対応版。
+const char* strstr_j(const char* s1, const char* s2);		// strstr の日本語対応版。
+const char* stristr_j(const char* s1, const char* s2);		// strstr の大文字小文字同一視＆日本語対応版。
 inline char* strchr_j (char* s1, char c        ) { return const_cast<char*>(strchr_j ((const char*)s1, c)); }
 inline char* strichr_j(char* s1, char c        ) { return const_cast<char*>(strichr_j((const char*)s1, c)); }
 inline char* strstr_j (char* s1, const char* s2) { return const_cast<char*>(strstr_j ((const char*)s1, s2)); }

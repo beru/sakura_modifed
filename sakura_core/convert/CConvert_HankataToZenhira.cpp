@@ -6,7 +6,7 @@
 //                     インターフェース                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 半角カナ→全角ひらがな
+// 半角カナ→全角ひらがな
 bool CConvert_HankataToZenhira::DoConvert(CNativeW* pcData)
 {
 	// 半角カナ→全角ひらがな

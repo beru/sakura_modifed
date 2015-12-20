@@ -41,7 +41,7 @@ CDocType::CDocType(CEditDoc* pcDoc)
 {
 }
 
-//! •¶‘í•Ê‚Ìİ’è
+// •¶‘í•Ê‚Ìİ’è
 void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 {
 	if (!m_nSettingTypeLocked || force) {

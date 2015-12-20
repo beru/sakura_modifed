@@ -32,7 +32,7 @@
 #include "view/CEditView.h"
 #include "view/colors/EColorIndexType.h"
 
-//! CPPキーワードで始まっていれば true
+// CPPキーワードで始まっていれば true
 inline
 bool IsHeadCppKeyword(const wchar_t* pData)
 {
@@ -187,17 +187,17 @@ public:
 	CLogicInt ScanLine(const wchar_t*, CLogicInt);
 
 private:
-	bool m_ismultiline; //!< 複数行のディレクティブ
-	int m_maxnestlevel;	//!< ネストレベルの最大値
+	bool m_ismultiline; // 複数行のディレクティブ
+	int m_maxnestlevel;	// ネストレベルの最大値
 
-	int m_stackptr;	//!< ネストレベル
+	int m_stackptr;	// ネストレベル
 	/*!
 		ネストレベルに対応するビットパターン
 		
 		m_stackptr = n の時，下から(n-1)bit目に1が入っている
 	*/
 	unsigned int m_bitpattern;
-	unsigned int m_enablebuf;	//!< 処理の有無を保存するバッファ
+	unsigned int m_enablebuf;	// 処理の有無を保存するバッファ
 };
 
 /*!
@@ -383,12 +383,12 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 	*/
 
 	// 2002/10/27 frozen　ここから
-	//! 状態2
+	// 状態2
 	enum MODE2 {
-		M2_NORMAL			= 0x00,	//!< 通常
-		M2_ATTRIBUTE		= 0x02,	//!< C++/CLI attribute : 2007.05.26 genta
-		M2_TEMPLATE			= 0x03, //!< "template<" でM2_TEMPLATEになり '>' でM2_NORMALに戻る
-		M2_NAMESPACE_SAVE	= 0x11,	//!< ネームスペース名調査中
+		M2_NORMAL			= 0x00,	// 通常
+		M2_ATTRIBUTE		= 0x02,	// C++/CLI attribute : 2007.05.26 genta
+		M2_TEMPLATE			= 0x03, // "template<" でM2_TEMPLATEになり '>' でM2_NORMALに戻る
+		M2_NAMESPACE_SAVE	= 0x11,	// ネームスペース名調査中
 			// 「通常」状態で単語 "class" "struct" "union" "enum" "namespace", "__interface" を読み込むと、この状態になり、';' '{' ',' '>' '='を読み込むと「通常」になる。
 			//	2007.05.26 genta キーワードに__interface追加
 			//
@@ -397,21 +397,21 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 			// これは "__declspec(dllexport)"のように"class"とクラス名の間にキーワードが書いてある場合でもクラス名を取得できるようにするため。
 			//
 			// '<' を読み込むと「テンプレートクラス名調査中」に移行する。
-		M2_TEMPLATE_SAVE	= 0x12, //!< テンプレートクラス名調査中
+		M2_TEMPLATE_SAVE	= 0x12, // テンプレートクラス名調査中
 			// ';' '{'を読み込むと「通常」になる。
 			// また、この状態の間は単語を区切る方法を一時的に変更し、
 			// 「template_name <paramA,paramB>」のような文字列を一つの単語をみなすようにする。
 			// これは特殊化したクラステンプレートを実装する際の構文で有効に働く。	
-		M2_NAMESPACE_END	= 0x13,	//!< ネームスペース名調査完了。(';' '{' を読み込んだ時点で「通常」になる。)
-		M2_OPERATOR_WORD	= 0x14, //!< operator名調査中。operatorで '('で次に遷移　template<> names::operator<T>(x)
-		M2_TEMPLATE_WORD	= 0x15, //!< テンプレート特殊化を調査中 func<int>()等 '単語 <'でM2_TEMPLATE_WORDになり、'>'(ネスト認識)でM2_NORMAL/M2_OPERATOR_WORDに戻る
-		M2_FUNC_NAME_END	= 0x16, //!< 関数名調査完了。(';' '{' を読み込んだ時点で「通常」になる。)
-		M2_AFTER_EQUAL		= 0x05,	//!< '='の後。
+		M2_NAMESPACE_END	= 0x13,	// ネームスペース名調査完了。(';' '{' を読み込んだ時点で「通常」になる。)
+		M2_OPERATOR_WORD	= 0x14, // operator名調査中。operatorで '('で次に遷移　template<> names::operator<T>(x)
+		M2_TEMPLATE_WORD	= 0x15, // テンプレート特殊化を調査中 func<int>()等 '単語 <'でM2_TEMPLATE_WORDになり、'>'(ネスト認識)でM2_NORMAL/M2_OPERATOR_WORDに戻る
+		M2_FUNC_NAME_END	= 0x16, // 関数名調査完了。(';' '{' を読み込んだ時点で「通常」になる。)
+		M2_AFTER_EQUAL		= 0x05,	// '='の後。
 			//「通常」かつ nNestLevel_fparam==0 で'='が見つかるとこの状態になる。（ただし "opreator"の直後は除く）
 			// ';'が見つかると「通常」に戻る。
 			// int val=abs(-1);
 			// のような文が関数とみなされないようにするために使用する。
-		M2_KR_FUNC	= 0x18,	//!< K&Rスタイル/C++の関数定義を調査する。func() word ←wordがあると遷移する
+		M2_KR_FUNC	= 0x18,	// K&Rスタイル/C++の関数定義を調査する。func() word ←wordがあると遷移する
 		M2_AFTER_ITEM		= 0x10,
 	} nMode2 = M2_NORMAL;
 	MODE2 nMode2Old = M2_NORMAL; // M2_TEMPLATE_WORDになる直前のnMode2
@@ -419,13 +419,13 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 	bool  bDefinedTypedef = false;	// typedef が書かれている。trueの間は関数名として認識しない。;で復帰する
 	bool  bNoFunction = true; // fparamだけど関数定義でない可能性の場合
 
-	const int	nNamespaceNestMax	= 32;			//!< ネスト可能なネームスペース、クラス等の最大数
-	int			nNamespaceLen[nNamespaceNestMax + 1];	//!< ネームスペース全体の長さ
-	const int	nNamespaceLenMax 	= 512;			//!< 最大のネームスペース全体の長さ
-	wchar_t		szNamespace[nNamespaceLenMax];		//!< 現在のネームスペース(終端が\0になっているとは限らないので注意)
+	const int	nNamespaceNestMax	= 32;				// ネスト可能なネームスペース、クラス等の最大数
+	int			nNamespaceLen[nNamespaceNestMax + 1];	// ネームスペース全体の長さ
+	const int	nNamespaceLenMax 	= 512;				// 最大のネームスペース全体の長さ
+	wchar_t		szNamespace[nNamespaceLenMax];			// 現在のネームスペース(終端が\0になっているとは限らないので注意)
 	const int 	nItemNameLenMax	 	= 256;
-	wchar_t		szItemName[nItemNameLenMax];		//!< すぐ前の 関数名 or クラス名 or 構造体名 or 共用体名 or 列挙体名 or ネームスペース名
-	wchar_t		szTemplateName[nItemNameLenMax];		//!< すぐ前の 関数名 or クラス名 or 構造体名 or 共用体名 or 列挙体名 or ネームスペース名
+	wchar_t		szItemName[nItemNameLenMax];			// すぐ前の 関数名 or クラス名 or 構造体名 or 共用体名 or 列挙体名 or ネームスペース名
+	wchar_t		szTemplateName[nItemNameLenMax];		// すぐ前の 関数名 or クラス名 or 構造体名 or 共用体名 or 列挙体名 or ネームスペース名
 	// 例えば下のコードの←の部分での
 	// szNamespaceは"Namespace\ClassName\"
 	// nMamespaceLenは{10,20}
@@ -439,7 +439,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 	int nRawStringTagLen = 0;
 	int nRawStringTagCompLen = 0;
 
-	CLogicInt	nItemLine(0);		//!< すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
+	CLogicInt	nItemLine(0);		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
 	int			nItemFuncId = 0;
 
 	szWordPrev[0] = L'\0';

@@ -78,7 +78,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 	bool			bReplaceAll,
 	HWND			hwndParent,
 	const WCHAR*	pszNotFoundMessage,
-	CLogicRange*	pcSelectLogic		//!< [out] 選択範囲のロジック版。マッチ範囲を返す。すべて置換/高速モードで使用
+	CLogicRange*	pcSelectLogic		// [out] 選択範囲のロジック版。マッチ範囲を返す。すべて置換/高速モードで使用
 )
 {
 	bool		bSelecting;
@@ -86,7 +86,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 	bool		bSelectingLock_Old = false;
 	bool		bFound = false;
 	bool		bDisableSelect = false;
-	bool		b0Match = false;		//!< 長さ０でマッチしているか？フラグ by かろと
+	bool		b0Match = false;		// 長さ０でマッチしているか？フラグ by かろと
 	CLogicInt	nIdx(0);
 	CLayoutInt	nLineNum(0);
 

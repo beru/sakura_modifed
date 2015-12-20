@@ -38,7 +38,7 @@ struct SShare_SearchKeywords {
 	StaticVector< StaticString<TCHAR, _MAX_PATH>, MAX_GREPFOLDER, const TCHAR*>	m_aGrepFolders;
 };
 
-//! 検索キーワード管理
+// 検索キーワード管理
 class CSearchKeywordManager {
 public:
 	CSearchKeywordManager() {

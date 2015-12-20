@@ -44,11 +44,11 @@
 */
 template <class T, class S>
 bool CRecentImp<T, S>::Create(
-	DataType*		pszItemArray,	//!< アイテム配列へのポインタ
-	int*			pnItemCount,	//!< アイテム個数へのポインタ
-	bool*			pbItemFavorite,	//!< お気に入りへのポインタ(NULL許可)
-	int				nArrayCount,	//!< 最大管理可能なアイテム数
-	int*			pnViewCount		//!< 表示個数(NULL許可)
+	DataType*		pszItemArray,	// アイテム配列へのポインタ
+	int*			pnItemCount,	// アイテム個数へのポインタ
+	bool*			pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
+	int				nArrayCount,	// 最大管理可能なアイテム数
+	int*			pnViewCount		// 表示個数(NULL許可)
 )
 {
 	Terminate();
@@ -106,7 +106,7 @@ bool CRecentImp<T, S>::IsAvailable() const
 	return true;
 }
 
-//! リカバリ
+// リカバリ
 template <class T, class S>
 void CRecentImp<T, S>::_Recovery()
 {

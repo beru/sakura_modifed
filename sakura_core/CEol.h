@@ -36,13 +36,13 @@
 // 2002/09/22 Moca EOL_CRLF_UNICODEを廃止
 // 行終端子の種類
 enum EEolType {
-	EOL_NONE,			//!< 
-	EOL_CRLF,			//!< 0d0a
-	EOL_LF,				//!< 0a
-	EOL_CR,				//!< 0d
-	EOL_NEL,			//!< 85
-	EOL_LS,				//!< 2028
-	EOL_PS,				//!< 2029
+	EOL_NONE,			// 
+	EOL_CRLF,			// 0d0a
+	EOL_LF,				// 0a
+	EOL_CR,				// 0d
+	EOL_NEL,			// 85
+	EOL_LS,				// 2028
+	EOL_PS,				// 2029
 	EOL_CODEMAX,		//
 	EOL_UNKNOWN = -1	//
 };
@@ -88,10 +88,10 @@ public:
 	void SetTypeByStringForFile_unibe(const char* pszData, int nDataLen);
 
 	// 取得
-	EEolType		GetType()	const { return m_eEolType; }		//!< 現在のTypeを取得
-	CLogicInt		GetLen()	const;	//!< 現在のEOL長を取得。文字単位。
-	const TCHAR*	GetName()	const;	//!< 現在のEOLの名称取得
-	const wchar_t*	GetValue2()	const;	//!< 現在のEOL文字列先頭へのポインタを取得
+	EEolType		GetType()	const { return m_eEolType; }		// 現在のTypeを取得
+	CLogicInt		GetLen()	const;	// 現在のEOL長を取得。文字単位。
+	const TCHAR*	GetName()	const;	// 現在のEOLの名称取得
+	const wchar_t*	GetValue2()	const;	// 現在のEOL文字列先頭へのポインタを取得
 	//#####
 
 	bool IsValid() const {
@@ -99,6 +99,6 @@ public:
 	}
 
 private:
-	EEolType	m_eEolType;	//!< 改行コードの種類
+	EEolType	m_eEolType;	// 改行コードの種類
 };
 

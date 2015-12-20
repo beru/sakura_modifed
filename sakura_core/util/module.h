@@ -31,6 +31,6 @@ DWORD GetDllVersion(LPCTSTR lpszDllName);	// シェルやコモンコントロール DLL のバ
 
 void ChangeCurrentDirectoryToExeDir();
 
-//! カレントディレクトリ移動機能付LoadLibrary
+// カレントディレクトリ移動機能付LoadLibrary
 HMODULE LoadLibraryExedir(LPCTSTR pszDll);
 

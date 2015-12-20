@@ -67,7 +67,7 @@ CDocLineMgr::~CDocLineMgr()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 
-//! pPosの直前に新しい行を挿入
+// pPosの直前に新しい行を挿入
 CDocLine* CDocLineMgr::InsertNewLine(CDocLine* pPos)
 {
 	CDocLine* pcDocLineNew = new CDocLine;
@@ -75,7 +75,7 @@ CDocLine* CDocLineMgr::InsertNewLine(CDocLine* pPos)
 	return pcDocLineNew;
 }
 
-//! 最下部に新しい行を挿入
+// 最下部に新しい行を挿入
 CDocLine* CDocLineMgr::AddNewLine()
 {
 	CDocLine* pcDocLineNew = new CDocLine;
@@ -83,7 +83,7 @@ CDocLine* CDocLineMgr::AddNewLine()
 	return pcDocLineNew;
 }
 
-//! 全ての行を削除する
+// 全ての行を削除する
 void CDocLineMgr::DeleteAllLine()
 {
 	CDocLine* pDocLine = m_pDocLineTop;
@@ -96,7 +96,7 @@ void CDocLineMgr::DeleteAllLine()
 }
 
 
-//! 行の削除
+// 行の削除
 void CDocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
 {
 	// Prev切り離し
@@ -242,7 +242,7 @@ void CDocLineMgr::_Init()
 }
 
 // -- -- チェーン関数 -- -- // 2007.10.11 kobake 作成
-//! 最下部に挿入
+// 最下部に挿入
 void CDocLineMgr::_PushBottom(CDocLine* pDocLineNew)
 {
 	if (!m_pDocLineTop) {
@@ -259,7 +259,7 @@ void CDocLineMgr::_PushBottom(CDocLine* pDocLineNew)
 	++m_nLines;
 }
 
-//! pPosの直前に挿入。pPosにNULLを指定した場合は、最下部に追加。
+// pPosの直前に挿入。pPosにNULLを指定した場合は、最下部に追加。
 void CDocLineMgr::_InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos)
 {
 	// New.Nextを設定
@@ -285,7 +285,7 @@ void CDocLineMgr::_InsertBeforePos(CDocLine* pDocLineNew, CDocLine* pPos)
 	++m_nLines;
 }
 
-//! pPosの直後に挿入。pPosにNULLを指定した場合は、先頭に追加。
+// pPosの直後に挿入。pPosにNULLを指定した場合は、先頭に追加。
 void CDocLineMgr::_InsertAfterPos(CDocLine* pDocLineNew, CDocLine* pPos)
 {
 	// New.Prevを設定

@@ -69,7 +69,7 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 }
 
 
-/* EUC→Unicodeコード変換 */
+// EUC→Unicodeコード変換
 // 2007.08.13 kobake 追加
 EConvertResult CEuc::EUCToUnicode(const CMemory& cSrc, CNativeW* pDstMem)
 {

@@ -9,7 +9,7 @@
 bool CBookmarkGetter::IsBookmarked() const { return m_pcDocLine->m_sMark.m_cBookmarked; }
 void CBookmarkSetter::SetBookmark(bool bFlag) { m_pcDocLine->m_sMark.m_cBookmarked = bFlag; }
 
-//! ブックマークの全解除
+// ブックマークの全解除
 /*
 	@date 2001.12.03 hor
 */
@@ -23,7 +23,7 @@ void CBookmarkManager::ResetAllBookMark(void)
 }
 
 
-//! ブックマーク検索
+// ブックマーク検索
 /*
 	@date 2001.12.03 hor
 */
@@ -63,7 +63,7 @@ bool CBookmarkManager::SearchBookMark(
 	return false;
 }
 
-//! 物理行番号のリストからまとめて行マーク
+// 物理行番号のリストからまとめて行マーク
 /*
 	@date 2002.01.16 hor
 */
@@ -131,7 +131,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 }
 
 
-//! 行マークされてる物理行番号のリストを作る
+// 行マークされてる物理行番号のリストを作る
 /*
 	@date 2002.01.16 hor
 	@date 2014.04.24 Moca ver2 差分32進数方式に変更
@@ -197,7 +197,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 }
 
 
-//! 検索条件に該当する行にブックマークをセットする
+// 検索条件に該当する行にブックマークをセットする
 /*
 	@date 2002.01.16 hor
 */

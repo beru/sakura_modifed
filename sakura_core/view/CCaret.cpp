@@ -155,11 +155,11 @@ CCaret::~CCaret()
 	@date 2010.11.27 syat アンダーライン、縦線を消去しないフラグを追加
 */
 CLayoutInt CCaret::MoveCursor(
-	CLayoutPoint	ptWk_CaretPos,		//!< [in] 移動先レイアウト位置
-	bool			bScroll,			//!< [in] true: 画面位置調整有り  false: 画面位置調整無し
-	int				nCaretMarginRate,	//!< [in] 縦スクロール開始位置を決める値
-	bool			bUnderLineDoNotOFF,	//!< [in] アンダーラインを消去しない
-	bool			bVertLineDoNotOFF	//!< [in] カーソル位置縦線を消去しない
+	CLayoutPoint	ptWk_CaretPos,		// [in] 移動先レイアウト位置
+	bool			bScroll,			// [in] true: 画面位置調整有り  false: 画面位置調整無し
+	int				nCaretMarginRate,	// [in] 縦スクロール開始位置を決める値
+	bool			bUnderLineDoNotOFF,	// [in] アンダーラインを消去しない
+	bool			bVertLineDoNotOFF	// [in] カーソル位置縦線を消去しない
 )
 {
 	// スクロール処理
@@ -382,7 +382,7 @@ CLayoutInt CCaret::MoveCursor(
 
 
 CLayoutInt CCaret::MoveCursorFastMode(
-	const CLogicPoint&		ptWk_CaretPosLogic	//!< [in] 移動先ロジック位置
+	const CLogicPoint&		ptWk_CaretPosLogic	// [in] 移動先ロジック位置
 )
 {
 	// fastMode
@@ -1082,7 +1082,7 @@ void CCaret::HideCaret_(HWND hwnd)
 	}
 }
 
-//! 自分の状態を他のCCaretにコピー
+// 自分の状態を他のCCaretにコピー
 void CCaret::CopyCaretStatus(CCaret* pCaret) const
 {
 	pCaret->SetCaretLayoutPos(GetCaretLayoutPos());
@@ -1128,12 +1128,12 @@ POINT CCaret::CalcCaretDrawPos(const CLayoutPoint& ptCaretPos) const
 	@date 2009.02.17 ryoji レイアウト行末以後のカラム位置指定なら末尾文字の前ではなく末尾文字の後に移動する
 */
 CLayoutInt CCaret::MoveCursorProperly(
-	CLayoutPoint	ptNewXY,			//!< [in] カーソルのレイアウト座標X
-	bool			bScroll,			//!< [in] true: 画面位置調整有り/ false: 画面位置調整有り無し
-	bool			test,				//!< [in] true: カーソル移動はしない
-	CLayoutPoint*	ptNewXYNew,			//!< [out] 新しいレイアウト座標
-	int				nCaretMarginRate,	//!< [in] 縦スクロール開始位置を決める値
-	int				dx					//!< [in] ptNewXY.xとマウスカーソル位置との誤差(カラム幅未満のドット数)
+	CLayoutPoint	ptNewXY,			// [in] カーソルのレイアウト座標X
+	bool			bScroll,			// [in] true: 画面位置調整有り/ false: 画面位置調整有り無し
+	bool			test,				// [in] true: カーソル移動はしない
+	CLayoutPoint*	ptNewXYNew,			// [out] 新しいレイアウト座標
+	int				nCaretMarginRate,	// [in] 縦スクロール開始位置を決める値
+	int				dx					// [in] ptNewXY.xとマウスカーソル位置との誤差(カラム幅未満のドット数)
 )
 {
 	CLogicInt		nLineLen;

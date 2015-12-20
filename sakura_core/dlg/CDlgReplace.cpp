@@ -497,7 +497,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 //		return TRUE;
 
 
-	case IDC_BUTTON_SEARCHPREV:	/* è„åüçı */
+	case IDC_BUTTON_SEARCHPREV:	// è„åüçı
 		nRet = GetData();
 		if (0 < nRet) {
 

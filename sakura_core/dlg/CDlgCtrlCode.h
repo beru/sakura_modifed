@@ -49,7 +49,7 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
-	wchar_t GetCharCode() const { return m_nCode; } //!< 選択された文字コードを取得
+	wchar_t GetCharCode() const { return m_nCode; } // 選択された文字コードを取得
 
 private:
 	/*

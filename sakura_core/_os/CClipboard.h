@@ -25,25 +25,25 @@
 
 class CEol;
 
-//! サクラエディタ用クリップボードクラス。後々はこの中で全てのクリップボードAPIを呼ばせたい。
+// サクラエディタ用クリップボードクラス。後々はこの中で全てのクリップボードAPIを呼ばせたい。
 class CClipboard {
 public:
 	// コンストラクタ・デストラクタ
-	CClipboard(HWND hwnd); //!< コンストラクタ内でクリップボードが開かれる
-	virtual ~CClipboard(); //!< デストラクタ内でCloseが呼ばれる
+	CClipboard(HWND hwnd); // コンストラクタ内でクリップボードが開かれる
+	virtual ~CClipboard(); // デストラクタ内でCloseが呼ばれる
 
 	// インターフェース
-	void Empty(); //!< クリップボードを空にする
-	void Close(); //!< クリップボードを閉じる
-	bool SetText(const wchar_t* pData, int nDataLen, bool bColumnSelect, bool bLineSelect, UINT uFormat = (UINT)-1);   //!< テキストを設定する
+	void Empty(); // クリップボードを空にする
+	void Close(); // クリップボードを閉じる
+	bool SetText(const wchar_t* pData, int nDataLen, bool bColumnSelect, bool bLineSelect, UINT uFormat = (UINT)-1);   // テキストを設定する
 	bool SetHtmlText(const CNativeW& cmemBUf);
-	bool GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const CEol& cEol, UINT uGetFormat = (UINT)-1); //!< テキストを取得する
+	bool GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const CEol& cEol, UINT uGetFormat = (UINT)-1); // テキストを取得する
 	bool IsIncludeClipboradFormat(const wchar_t* pFormatName);
 	bool SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFormatName, int nMode, int nEndMode);
 	bool GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const CEol& cEol);
 	
 	// 演算子
-	operator bool() const { return m_bOpenResult != FALSE; } //!< クリップボードを開けたならtrue
+	operator bool() const { return m_bOpenResult != FALSE; } // クリップボードを開けたならtrue
 	
 private:
 	HWND m_hwnd;
@@ -51,8 +51,8 @@ private:
 	
 	// -- -- staticインターフェース -- -- //
 public:
-	static bool HasValidData();    //!< クリップボード内に、サクラエディタで扱えるデータがあればtrue
-	static CLIPFORMAT GetSakuraFormat(); //!< サクラエディタ独自のクリップボードデータ形式
-	static int GetDataType();      //!< クリップボードデータ形式(CF_UNICODETEXT等)の取得
+	static bool HasValidData();    // クリップボード内に、サクラエディタで扱えるデータがあればtrue
+	static CLIPFORMAT GetSakuraFormat(); // サクラエディタ独自のクリップボードデータ形式
+	static int GetDataType();      // クリップボードデータ形式(CF_UNICODETEXT等)の取得
 };
 

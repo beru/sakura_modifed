@@ -19,8 +19,8 @@
 	@date 2003.07.26 ryoji BOMˆø”’Ç‰Á
 */
 EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
-	const CDocLineMgr&	pcDocLineMgr,	//!< [in]
-	const SSaveInfo&	sSaveInfo		//!< [in]
+	const CDocLineMgr&	pcDocLineMgr,	// [in]
+	const SSaveInfo&	sSaveInfo		// [in]
 	)
 {
 	EConvertResult nRetVal = RESULT_COMPLETE;

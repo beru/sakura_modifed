@@ -48,7 +48,7 @@ void CTextArea::CopyTextAreaStatus(CTextArea* pDst) const
 	pDst->SetViewLeftCol			(this->GetViewLeftCol());		// 表示域の一番左の桁(0開始)
 }
 
-//!表示域の再計算
+// 表示域の再計算
 void CTextArea::UpdateViewColRowNums()
 {
 	CEditView* pView = m_pEditView;
@@ -58,7 +58,7 @@ void CTextArea::UpdateViewColRowNums()
 	m_nViewRowNum = CLayoutInt(t_max(1, t_max(0, m_nViewCy - 1) / pView->GetTextMetrics().GetHankakuDy()));	// 表示域の行数
 }
 
-//!フォント変更の際、各種パラメータを計算し直す
+//フォント変更の際、各種パラメータを計算し直す
 void CTextArea::UpdateAreaMetrics(HDC hdc)
 {
 	CEditView* pView = m_pEditView;
@@ -114,7 +114,7 @@ bool CTextArea::GenerateClipRect(RECT* rc, const DispPos& sPos, int nHankakuNum)
 	return TrimRectByArea(rc);
 }
 
-//!右の残りを表す矩形を生成する
+// 右の残りを表す矩形を生成する
 bool CTextArea::GenerateClipRectRight(RECT* rc, const DispPos& sPos) const
 {
 	const CEditView* pView = m_pEditView;
@@ -265,9 +265,9 @@ int CTextArea::DetectWidthOfLineNumberArea_calculate(const CLayoutMgr* pLayoutMg
 }
 
 void CTextArea::TextArea_OnSize(
-	const CMySize& sizeClient, //!< ウィンドウのクライアントサイズ
-	int nCxVScroll,            //!< 垂直スクロールバーの横幅
-	int nCyHScroll             //!< 水平スクロールバーの縦幅
+	const CMySize& sizeClient, // ウィンドウのクライアントサイズ
+	int nCxVScroll,            // 垂直スクロールバーの横幅
+	int nCyHScroll             // 水平スクロールバーの縦幅
 )
 {
 	m_nViewCx = sizeClient.cx - nCxVScroll - GetAreaLeft(); // 表示域の幅
@@ -281,7 +281,7 @@ int CTextArea::GetDocumentLeftClientPointX() const
 	return GetAreaLeft() - (Int)GetViewLeftCol() * m_pEditView->GetTextMetrics().GetHankakuDx();
 }
 
-//! クライアント座標からレイアウト位置に変換する
+// クライアント座標からレイアウト位置に変換する
 void CTextArea::ClientToLayout(CMyPoint ptClient, CLayoutPoint* pptLayout) const
 {
 	const CEditView* pView = m_pEditView;
@@ -292,7 +292,7 @@ void CTextArea::ClientToLayout(CMyPoint ptClient, CLayoutPoint* pptLayout) const
 }
 
 
-//! 行番号エリアも含む範囲
+// 行番号エリアも含む範囲
 void CTextArea::GenerateTopRect   (RECT* rc, CLayoutInt nLineCount) const
 {
 	rc->left   = 0; //m_nViewAlignLeft;
@@ -301,7 +301,7 @@ void CTextArea::GenerateTopRect   (RECT* rc, CLayoutInt nLineCount) const
 	rc->bottom = m_nViewAlignTop + (Int)nLineCount * m_pEditView->GetTextMetrics().GetHankakuDy();
 }
 
-//! 行番号エリアも含む範囲
+// 行番号エリアも含む範囲
 void CTextArea::GenerateBottomRect(RECT* rc, CLayoutInt nLineCount) const
 {
 	rc->left   = 0; //m_nViewAlignLeft;

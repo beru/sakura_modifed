@@ -77,17 +77,17 @@ CBregexp::~CBregexp()
 */
 int CBregexp::CheckPattern(const wchar_t* szPattern)
 {
-	static const wchar_t TOP_MATCH[] = L"/^\\(*\\^/k";							//!< 行頭パターンのチェック用パターン
-	static const wchar_t DOL_MATCH[] = L"/\\\\\\$$/k";							//!< \$(行末パターンでない)チェック用パターン
-	static const wchar_t BOT_MATCH[] = L"/\\$\\)*$/k";							//!< 行末パターンのチェック用パターン
-	static const wchar_t TAB_MATCH[] = L"/^\\(*\\^\\$\\)*$/k";					//!< "^$"パターンかをチェック用パターン
-	static const wchar_t LOOKAHEAD[] = L"/\\(\\?[=]/k";							//!< "(?=" 先読み の存在チェックパターン
-	BREGEXP_W* sReg = NULL;						//!< コンパイル構造体
-	wchar_t szMsg[80] = L"";					//!< エラーメッセージ
-	int nLen;									//!< 検索パターンの長さ
-	const wchar_t* szPatternEnd;				//!< 検索パターンの終端
+	static const wchar_t TOP_MATCH[] = L"/^\\(*\\^/k";							// 行頭パターンのチェック用パターン
+	static const wchar_t DOL_MATCH[] = L"/\\\\\\$$/k";							// \$(行末パターンでない)チェック用パターン
+	static const wchar_t BOT_MATCH[] = L"/\\$\\)*$/k";							// 行末パターンのチェック用パターン
+	static const wchar_t TAB_MATCH[] = L"/^\\(*\\^\\$\\)*$/k";					// "^$"パターンかをチェック用パターン
+	static const wchar_t LOOKAHEAD[] = L"/\\(\\?[=]/k";							// "(?=" 先読み の存在チェックパターン
+	BREGEXP_W* sReg = NULL;						// コンパイル構造体
+	wchar_t szMsg[80] = L"";					// エラーメッセージ
+	int nLen;									// 検索パターンの長さ
+	const wchar_t* szPatternEnd;				// 検索パターンの終端
 
-	m_ePatType = PAT_NORMAL;	//!<　ノーマルは確定
+	m_ePatType = PAT_NORMAL;	//　ノーマルは確定
 	nLen = wcslen(szPattern);
 	szPatternEnd = szPattern + nLen;
 	// パターン種別の設定
@@ -139,19 +139,19 @@ int CBregexp::CheckPattern(const wchar_t* szPattern)
 ** @date 2003.05.03 かろと 関数に切り出し
 */
 wchar_t* CBregexp::MakePatternSub(
-	const wchar_t*	szPattern,	//!< 検索パターン
-	const wchar_t*	szPattern2,	//!< 置換パターン(NULLなら検索)
-	const wchar_t*	szAdd2,		//!< 置換パターンの後ろに付け加えるパターン($1など) 
-	int				nOption		//!< 検索オプション
+	const wchar_t*	szPattern,	// 検索パターン
+	const wchar_t*	szPattern2,	// 置換パターン(NULLなら検索)
+	const wchar_t*	szAdd2,		// 置換パターンの後ろに付け加えるパターン($1など) 
+	int				nOption		// 検索オプション
 ) 
 {
-	static const wchar_t DELIMITER = WCODE::BREGEXP_DELIMITER;	//!< デリミタ
+	static const wchar_t DELIMITER = WCODE::BREGEXP_DELIMITER;	// デリミタ
 
 	// 検索パターン作成
-	wchar_t* szNPattern;		//!< ライブラリ渡し用の検索パターン文字列
-	wchar_t* pPat;				//!< パターン文字列操作用のポインタ
+	wchar_t* szNPattern;		// ライブラリ渡し用の検索パターン文字列
+	wchar_t* pPat;				// パターン文字列操作用のポインタ
 
-	//!< szPatternの長さ
+	// szPatternの長さ
 	int nLen = wcslen(szPattern);
 	if (!szPattern2) {
 		// 検索(BMatch)時
@@ -160,7 +160,7 @@ wchar_t* CBregexp::MakePatternSub(
 		*pPat++ = L'm';
 	}else {
 		// 置換(BSubst)時
-		//!< szPattern2 + szAdd2 の長さ
+		// szPattern2 + szAdd2 の長さ
 		int nLen2 = wcslen(szPattern2) + wcslen(szAdd2);
 		szNPattern = new wchar_t[nLen + nLen2 + 15];
 		pPat = szNPattern;
@@ -232,20 +232,20 @@ wchar_t* CBregexp::MakePatternSub(
 wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPattern2, int nOption) 
 {
 	using namespace WCODE;
-	static const wchar_t* szCRLF = CRLF;		//!< 復帰・改行
-	static const wchar_t szCR[] = {CR, 0};		//!< 復帰
-	static const wchar_t szLF[] = {LF, 0};		//!< 改行
-	static const wchar_t BOT_SUBST[] = L"s/\\$(\\)*)$/([\\\\r\\\\n]+)\\$$1/k";	//!< 行末パターンの置換用パターン
-	BREGEXP_W* sReg = NULL;						//!< コンパイル構造体
-	wchar_t szMsg[80] = L"";					//!< エラーメッセージ
-	wchar_t szAdd2[5] = L"";					//!< 行末あり置換の $数字 格納用
-	int nParens = 0;							//!< 検索パターン(szPattern)中の括弧の数(行末時に使用)
+	static const wchar_t* szCRLF = CRLF;		// 復帰・改行
+	static const wchar_t szCR[] = {CR, 0};		// 復帰
+	static const wchar_t szLF[] = {LF, 0};		// 改行
+	static const wchar_t BOT_SUBST[] = L"s/\\$(\\)*)$/([\\\\r\\\\n]+)\\$$1/k";	// 行末パターンの置換用パターン
+	BREGEXP_W* sReg = NULL;						// コンパイル構造体
+	wchar_t szMsg[80] = L"";					// エラーメッセージ
+	wchar_t szAdd2[5] = L"";					// 行末あり置換の $数字 格納用
+	int nParens = 0;							// 検索パターン(szPattern)中の括弧の数(行末時に使用)
 
-	//!< szPatternの長さ
+	// szPatternの長さ
 	int nLen = CheckPattern(szPattern);
 	if ((m_ePatType & PAT_BOTTOM) != 0) {
 		bool bJustDollar = false;			// 行末指定の$のみであるフラグ($の前に \r\nが指定されていない)
-		//!< 検索パターン
+		// 検索パターン
 		wchar_t* szNPattern = MakePatternSub(szPattern, NULL, NULL, nOption);
 		int matched = BMatch(szNPattern, szCRLF, szCRLF + wcslen(szCRLF), &sReg, szMsg);
 		if (matched >= 0) {
@@ -444,7 +444,7 @@ bool CBregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int
 		szNPattern = MakePatternAlternate(szPattern0, szPattern1, nOption);
 		pszNPattern = szNPattern;
 	}
-	m_szMsg[0] = L'\0';		//!< エラー解除
+	m_szMsg[0] = L'\0';		// エラー解除
 	if (!szPattern1) {
 		// 検索実行
 		BMatch(pszNPattern, m_tmpBuf, m_tmpBuf + 1, &m_pRegExp, m_szMsg);
@@ -480,14 +480,14 @@ bool CBregexp::Compile(const wchar_t* szPattern0, const wchar_t* szPattern1, int
 */
 bool CBregexp::Match(const wchar_t* target, int len, int nStart)
 {
-	int matched;		//!< 検索一致したか? >0:Match, 0:NoMatch, <0:Error
+	int matched;		// 検索一致したか? >0:Match, 0:NoMatch, <0:Error
 
 	// DLLが利用可能でないとき、または構造体が未設定の時はエラー終了
 	if ((!IsAvailable() || !m_pRegExp)) {
 		return false;
 	}
 
-	m_szMsg[0] = '\0';		//!< エラー解除
+	m_szMsg[0] = '\0';		// エラー解除
 	// 拡張関数がない場合は、行の先頭("^")の検索時の特別処理 by かろと
 	if (!ExistBMatchEx()) {
 		/*
@@ -554,7 +554,7 @@ int CBregexp::Replace(const wchar_t* szTarget, int nLen, int nStart)
 	// To Here 2003.05.03 かろと
 
 	int result;
-	m_szMsg[0] = '\0';		//!< エラー解除
+	m_szMsg[0] = '\0';		// エラー解除
 	if (!ExistBSubstEx()) {
 		result = BSubst(NULL, szTarget + nStart, szTarget + nLen, &m_pRegExp, m_szMsg);
 	}else {
@@ -594,9 +594,9 @@ const TCHAR* CBregexp::GetLastMessage() const
 	@date 2007.08.12 genta 共通設定からDLL名を取得する
 */
 bool InitRegexp(
-	HWND		hWnd,			//!< [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
-	CBregexp&	rRegexp,		//!< [in] チェックに利用するCBregexpクラスへの参照
-	bool		bShowMessage	//!< [in] 初期化失敗時にエラーメッセージを出すフラグ
+	HWND		hWnd,			// [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
+	CBregexp&	rRegexp,		// [in] チェックに利用するCBregexpクラスへの参照
+	bool		bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
 )
 {
 	// From Here 2007.08.12 genta
@@ -632,9 +632,9 @@ bool InitRegexp(
 	@retval false 正規表現ライブラリの初期化に失敗
 */
 bool CheckRegexpVersion(
-	HWND	hWnd,			//!< [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
-	int		nCmpId,			//!< [in] バージョン文字列を設定するコンポーネントID
-	bool	bShowMessage	//!< [in] 初期化失敗時にエラーメッセージを出すフラグ
+	HWND	hWnd,			// [in] ダイアログボックスのウィンドウハンドル。バージョン番号の設定が不要であればNULL。
+	int		nCmpId,			// [in] バージョン文字列を設定するコンポーネントID
+	bool	bShowMessage	// [in] 初期化失敗時にエラーメッセージを出すフラグ
 )
 {
 	CBregexp cRegexp;

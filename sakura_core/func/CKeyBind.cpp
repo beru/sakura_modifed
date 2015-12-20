@@ -21,14 +21,14 @@
 #include "env/CShareData.h"
 #include "macro/CSMacroMgr.h"// 2002/2/10 aroka
 
-//! KEYDATAとほぼ同じ
+// KEYDATAとほぼ同じ
 struct KEYDATAINIT {
-	short			m_nKeyCode;			//!< Key Code (0 for non-keybord button)
+	short			m_nKeyCode;			// Key Code (0 for non-keybord button)
 	union {
-		const TCHAR*	m_pszKeyName;		//!< Key Name (for display)
-		UINT			m_nKeyNameId;		//!< String Resource Id (0x0000 - 0xFFFF)
+		const TCHAR*	m_pszKeyName;		// Key Name (for display)
+		UINT			m_nKeyNameId;		// String Resource Id (0x0000 - 0xFFFF)
 	};
-	EFunctionCode	m_nFuncCodeArr[8];	//!< Key Function Number
+	EFunctionCode	m_nFuncCodeArr[8];	// Key Function Number
 //					m_nFuncCodeArr[0]	//                      Key
 //					m_nFuncCodeArr[1]	// Shift +              Key
 //					m_nFuncCodeArr[2]	//         Ctrl +       Key
@@ -142,12 +142,12 @@ EFunctionCode CKeyBind::GetFuncCode(
 	@date 2007.02.22 ryoji デフォルト機能割り当てに関する処理を追加
 */
 int CKeyBind::CreateKeyBindList(
-	HINSTANCE		hInstance,		//!< [in] インスタンスハンドル
-	int				nKeyNameArrNum,	//!< [in]
-	KEYDATA*		pKeyNameArr,	//!< [out]
-	CNativeW&		cMemList,		//!<
-	CFuncLookup*	pcFuncLookup,	//!< [in] 機能番号→名前の対応を取る
-	BOOL			bGetDefFuncCode //!< [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:TRUE
+	HINSTANCE		hInstance,		// [in] インスタンスハンドル
+	int				nKeyNameArrNum,	// [in]
+	KEYDATA*		pKeyNameArr,	// [out]
+	CNativeW&		cMemList,		//
+	CFuncLookup*	pcFuncLookup,	// [in] 機能番号→名前の対応を取る
+	BOOL			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:TRUE
 )
 {
 	WCHAR	szStr[256];
@@ -428,7 +428,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
 	int			nFuncId,
-	TCHAR*      pszLabel,   //!< [in,out] バッファは256以上と仮定
+	TCHAR*      pszLabel,   // [in,out] バッファは256以上と仮定
 	const TCHAR*	pszKey,
 	BOOL		bKeyStr,
 	int			nLabelSize,
@@ -840,7 +840,7 @@ void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 //                         実装補助                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! KEYDATA配列にデータをセット
+// KEYDATA配列にデータをセット
 static void SetKeyNameArrVal(
 	DLLSHAREDATA*		pShareData,
 	int					nIdx,

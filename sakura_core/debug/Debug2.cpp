@@ -4,7 +4,7 @@
 // 2007.08.30 kobake 追加
 
 #ifdef _DEBUG
-//! デバッグメッセージ出力
+// デバッグメッセージ出力
 void debug_output(const char* str, ...)
 {
 	static char buf[_MAX_PATH + 150];
@@ -18,7 +18,7 @@ void debug_output(const char* str, ...)
 	OutputDebugStringA(buf);
 }
 
-//! 強制終了
+// 強制終了
 void debug_exit()
 {
 	MessageBox(NULL, _T("assertとかに引っ掛かったぽいです"), GSTR_APPNAME, MB_OK);

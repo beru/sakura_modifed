@@ -131,9 +131,9 @@ void CDiffLineMgr::ResetAllDiffMark()
 	@date	2002.05.25
 */
 bool CDiffLineMgr::SearchDiffMark(
-	CLogicInt			nLineNum,		//!< 検索開始行
-	ESearchDirection	bPrevOrNext,	//!< 0==前方検索 1==後方検索
-	CLogicInt*			pnLineNum 		//!< マッチ行
+	CLogicInt			nLineNum,		// 検索開始行
+	ESearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	CLogicInt*			pnLineNum 		// マッチ行
 )
 {
 	CLogicInt nLinePos = nLineNum;

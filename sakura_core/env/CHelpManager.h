@@ -30,7 +30,7 @@
 // #include "DLLSHAREDATA.h"
 
 
-//! ƒwƒ‹ƒvŠÇ—
+// ƒwƒ‹ƒvŠÇ—
 class CHelpManager {
 public:
 	CHelpManager() {

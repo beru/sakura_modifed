@@ -81,7 +81,7 @@ bool CFile::IsFileReadable() const
 //                          ロック                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! ファイルの排他ロック解除
+// ファイルの排他ロック解除
 void CFile::FileUnlock()
 {
 	// クローズ
@@ -91,7 +91,7 @@ void CFile::FileUnlock()
 	}
 }
 
-//! ファイルの排他ロック
+// ファイルの排他ロック
 bool CFile::FileLock(EShareMode eShareMode, bool bMsg)
 {
 	// ロック解除

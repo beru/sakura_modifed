@@ -28,7 +28,7 @@
 
 typedef StaticString<TCHAR, _MAX_PATH> CGrepFolderString;
 
-//! GREPフォルダの履歴を管理 (RECENT_FOR_GREP_FOLDER)
+// GREPフォルダの履歴を管理 (RECENT_FOR_GREP_FOLDER)
 class CRecentGrepFolder : public CRecentImp<CGrepFolderString, LPCTSTR> {
 public:
 	// 生成

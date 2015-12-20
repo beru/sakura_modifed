@@ -124,7 +124,7 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 }
 
 
-//! UTF-7→Unicodeコード変換
+// UTF-7→Unicodeコード変換
 // 2007.08.13 kobake 作成
 EConvertResult CUtf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
@@ -292,7 +292,7 @@ EConvertResult CUtf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
 	return RESULT_COMPLETE;
 }
 
-//! BOMデータ取得
+// BOMデータ取得
 void CUtf7::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF7_BOM[]= {'+', '/', 'v', '8', '-'};

@@ -41,7 +41,7 @@ void CViewSelect::CopySelectStatus(CViewSelect* pSelect) const
 	pSelect->m_ptMouseRollPosOld	= m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 }
 
-//! 現在のカーソル位置から選択を開始する
+// 現在のカーソル位置から選択を開始する
 void CViewSelect::BeginSelectArea(const CLayoutPoint* po)
 {
 	const CEditView* pView = GetEditView();
@@ -483,9 +483,9 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 	@date 2006.03.29 Moca 3000桁制限を撤廃．
 */
 void CViewSelect::DrawSelectAreaLine(
-	HDC					hdc,		//!< [in] 描画領域のDevice Context Handle
-	CLayoutInt			nLineNum,	//!< [in] 描画対象行(レイアウト行)
-	const CLayoutRange&	sRange		//!< [in] 選択範囲(レイアウト単位)
+	HDC					hdc,		// [in] 描画領域のDevice Context Handle
+	CLayoutInt			nLineNum,	// [in] 描画対象行(レイアウト行)
+	const CLayoutRange&	sRange		// [in] 選択範囲(レイアウト単位)
 ) const
 {
 	CEditView const * const pView = m_pcEditView;

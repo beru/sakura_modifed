@@ -34,7 +34,7 @@ public:
 
 public:
 	// ”Ä—p
-	void Clear(); //!< ‹ó‚Á‚Û‚É‚·‚é
+	void Clear(); // ‹ó‚Á‚Û‚É‚·‚é
 };
 
 #include "mem/CNativeA.h"

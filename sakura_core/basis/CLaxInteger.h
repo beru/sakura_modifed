@@ -23,7 +23,7 @@
 */
 #pragma once
 
-//! 型チェックの緩い整数型
+// 型チェックの緩い整数型
 class CLaxInteger {
 private:
 	typedef CLaxInteger Me;

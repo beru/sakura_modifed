@@ -50,14 +50,14 @@ public:
 	bool IsOverflow(void) { return m_bOverflow; }
 
 	typedef struct tagjump_info_t {
-		struct tagjump_info_t*	next;	//!< 次のリスト
-		TCHAR*	keyword;	//!< キーワード
-		TCHAR*	filename;	//!< ファイル名
-		int		no;			//!< 行番号
-		TCHAR	type;		//!< 種類
-		TCHAR*	note;		//!< 備考
-		int		depth;		//!< (さかのぼる)階層
-		int		baseDirId;	//!< ファイル名のベースディレクトリ
+		struct tagjump_info_t*	next;	// 次のリスト
+		TCHAR*	keyword;	// キーワード
+		TCHAR*	filename;	// ファイル名
+		int		no;			// 行番号
+		TCHAR	type;		// 種類
+		TCHAR*	note;		// 備考
+		int		depth;		// (さかのぼる)階層
+		int		baseDirId;	// ファイル名のベースディレクトリ
 	} TagJumpInfo;
 
 	TagJumpInfo* GetPtr(int index);
@@ -69,13 +69,13 @@ public:
 	int GetCapacity(void) const { return m_MAX_TAGJUMPLIST; }
 
 private:
-	TagJumpInfo*	m_pTagjump;	//!< タグジャンプ情報
-	std::vector<std::tstring> m_baseDirArr;	//!< ベースディレクトリ情報
-	int		m_nCount;		//!< 個数
-	bool	m_bOverflow;	//!< オーバーフロー
+	TagJumpInfo*	m_pTagjump;	// タグジャンプ情報
+	std::vector<std::tstring> m_baseDirArr;	// ベースディレクトリ情報
+	int		m_nCount;		// 個数
+	bool	m_bOverflow;	// オーバーフロー
 	
 	//	2005.04.22 genta 最大値を可変に
-	const int	m_MAX_TAGJUMPLIST;	//!< 管理する情報の最大数
+	const int	m_MAX_TAGJUMPLIST;	// 管理する情報の最大数
 
 	void Free(TagJumpInfo* item);
 

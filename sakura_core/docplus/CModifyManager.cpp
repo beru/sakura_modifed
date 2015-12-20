@@ -28,7 +28,7 @@ void CModifyVisitor::SetLineModified(CDocLine* pcDocLine, int seq)
 	pcDocLine->m_sMark.m_cModified = seq;
 }
 
-/* 行変更状態をすべてリセット */
+// 行変更状態をすべてリセット
 /*
   ・変更フラグCDocLineオブジェクト作成時にはTRUEである
   ・変更回数はCDocLineオブジェクト作成時には1である

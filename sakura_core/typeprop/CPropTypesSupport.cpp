@@ -288,7 +288,7 @@ int CPropTypesSupport::GetData(HWND hwndDlg)
 
 // 2001/06/13 End
 
-//! •âŠ®Ží•Ê‚Ì’Ç‰Á
+// •âŠ®Ží•Ê‚Ì’Ç‰Á
 void CPropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
 {
 	SHokanMethod item = { nMethod, std::wstring(szName) };

@@ -149,7 +149,7 @@ private:
 };
 
 
-//! CEnumFORMATETC クラス
+// CEnumFORMATETC クラス
 // 2008.03.26 ryoji 新規作成
 class CEnumFORMATETC : public CYbInterfaceImpl<IEnumFORMATETC> {
 private:

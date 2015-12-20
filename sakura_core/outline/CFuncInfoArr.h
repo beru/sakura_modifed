@@ -32,7 +32,7 @@ class CFuncInfo;
 #define FL_OBJ_GLOBAL		9	// グローバル（組み込み解析では使用しない）
 #define FL_OBJ_ELEMENT_MAX	30	// プラグインで追加可能な定数の上限
 
-//! アウトライン解析 データ配列
+// アウトライン解析 データ配列
 class CFuncInfoArr {
 public:
 	CFuncInfoArr();		// CFuncInfoArrクラス構築
@@ -51,10 +51,10 @@ public:
 	int AppendTextLenMax() { return m_nAppendTextLenMax; }
 
 public:
-	SFilePath	m_szFilePath;	//!< 解析対象ファイル名
+	SFilePath	m_szFilePath;	// 解析対象ファイル名
 private:
-	int			m_nFuncInfoArrNum;	//!< 配列要素数
-	CFuncInfo**	m_ppcFuncInfoArr;	//!< 配列
+	int			m_nFuncInfoArrNum;	// 配列要素数
+	CFuncInfo**	m_ppcFuncInfoArr;	// 配列
 	std::map<int, std::wstring>	m_AppendTextArr;	// 追加文字列のリスト
 	int			m_nAppendTextLenMax;
 

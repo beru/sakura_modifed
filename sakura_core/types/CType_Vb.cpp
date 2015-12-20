@@ -50,8 +50,8 @@ void CType_Vb::InitTypeConfigImp(STypeConfig* pType)
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
 
-//	From Here June 23, 2001 N.Nakatani
-//!	Visual Basic関数リスト作成（簡易版）
+// From Here June 23, 2001 N.Nakatani
+// Visual Basic関数リスト作成（簡易版）
 /*!
 	Visual Basicのコードから単純にユーザー定義の関数やステートメントを取り出す動作を行う。
 

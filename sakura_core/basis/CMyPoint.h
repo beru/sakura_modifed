@@ -64,13 +64,13 @@ public:
 	int GetY() const { return (int)y; }
 	CMyPoint Get() const { return *this; }
 
-	//! x,y いずれかが 0 より小さい場合に true を返す
+	// x,y いずれかが 0 より小さい場合に true を返す
 	bool HasNegative() const
 	{
 		return x < 0 || y < 0;
 	}
 
-	//! x,y どちらも自然数であれば true
+	// x,y どちらも自然数であれば true
 	bool BothNatural() const
 	{
 		return x >= 0 && y >= 0;
@@ -94,7 +94,7 @@ inline int PointCompare(const POINT_T& pt1, const POINT_T& pt2)
 }
 
 
-//! 2点を対角とする矩形を求める
+// 2点を対角とする矩形を求める
 template <class POINT_T>
 inline void TwoPointToRect(
 	RECT*	prcRect,

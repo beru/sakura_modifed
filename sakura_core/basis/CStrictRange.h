@@ -55,14 +55,14 @@ public:
 	}
 
 	// 判定
-	//! 1文字しか選択してない状態ならtrue
+	// 1文字しか選択してない状態ならtrue
 	bool IsOne() const {
 		return m_ptFrom == m_ptTo;
 	}
 	bool IsLineOne() const {
 		return m_ptFrom.y == m_ptTo.y;
 	}
-	bool IsValid() const { //! 有効な範囲ならtrue
+	bool IsValid() const { // 有効な範囲ならtrue
 		return m_ptFrom.BothNatural() && m_ptTo.BothNatural();
 	}
 

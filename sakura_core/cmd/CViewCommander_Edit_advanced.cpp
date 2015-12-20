@@ -555,7 +555,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 	@date 2001.12.03 hor 新規作成
 */
 void CViewCommander::Command_TRIM(
-	BOOL bLeft	//!<  [in] FALSE: 右TRIM / それ以外: 左TRIM
+	BOOL bLeft	//  [in] FALSE: 右TRIM / それ以外: 左TRIM
 )
 {
 	bool bBeDisableSelectArea = false;
@@ -590,7 +590,7 @@ void CViewCommander::Command_TRIM(
 
 
 // from CViewCommander_New.cpp
-//!	物理行のソートに使う構造体
+// 物理行のソートに使う構造体
 struct SORTDATA {
 	const CNativeW* pCmemLine;
 	CStringRef sKey;
@@ -603,10 +603,10 @@ inline int CNativeW_comp(const CNativeW& lhs, const CNativeW& rhs)
 			t_min(lhs.GetStringLength() + 1, rhs.GetStringLength() + 1));
 }
 
-//!	物理行のソートに使う関数(昇順)
+// 物理行のソートに使う関数(昇順)
 bool SortByLineAsc (SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) < 0;}
 
-//!	物理行のソートに使う関数(降順)
+// 物理行のソートに使う関数(降順)
 bool SortByLineDesc(SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) > 0;}
 
 inline int CStringRef_comp(const CStringRef& c1, const CStringRef& c2)
@@ -618,10 +618,10 @@ inline int CStringRef_comp(const CStringRef& c1, const CStringRef& c2)
 	return ret;
 }
 
-//!	物理行のソートに使う関数(昇順)
+// 物理行のソートに使う関数(昇順)
 bool SortByKeyAsc(SORTDATA* pst1, SORTDATA* pst2)  {return CStringRef_comp(pst1->sKey, pst2->sKey) < 0 ;}
 
-//!	物理行のソートに使う関数(降順)
+// 物理行のソートに使う関数(降順)
 bool SortByKeyDesc(SORTDATA* pst1, SORTDATA* pst2) {return CStringRef_comp(pst1->sKey, pst2->sKey) > 0 ;}
 
 /*!	@brief 物理行のソート

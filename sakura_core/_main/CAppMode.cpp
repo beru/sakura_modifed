@@ -12,7 +12,7 @@ void CAppMode::OnAfterSave(const SSaveInfo& sSaveInfo)
 	}
 }
 
-//! デバッグモニタモードに設定
+// デバッグモニタモードに設定
 void CAppMode::SetDebugModeON()
 {
 	auto& shared = GetDllShareData();
@@ -28,7 +28,7 @@ void CAppMode::SetDebugModeON()
 }
 
 // 2005.06.24 Moca
-//! デバックモニタモードの解除
+// デバックモニタモードの解除
 void CAppMode::SetDebugModeOFF()
 {
 	auto& shared = GetDllShareData();

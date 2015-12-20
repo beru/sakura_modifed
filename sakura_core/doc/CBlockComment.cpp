@@ -28,8 +28,8 @@ CBlockComment::CBlockComment()
 	ブロックコメントデリミタをコピーする
 */
 void CBlockComment::SetBlockCommentRule(
-	const wchar_t* pszFrom,	//!< [in] コメント開始文字列
-	const wchar_t* pszTo	//!< [in] コメント終了文字列
+	const wchar_t* pszFrom,	// [in] コメント開始文字列
+	const wchar_t* pszTo	// [in] コメント終了文字列
 	)
 {
 	int nStrLen = wcslen(pszFrom);
@@ -57,11 +57,11 @@ void CBlockComment::SetBlockCommentRule(
 	@retval false 一致しなかった
 */
 bool CBlockComment::Match_CommentFrom(
-	int					nPos,		//!< [in] 探索開始位置
-	const CStringRef&	cStr		//!< [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	int					nPos,		// [in] 探索開始位置
+	const CStringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
-	int				nLineLen,	//!< [in] pLineの長さ
-	const wchar_t*	pLine		//!< [in] 探索行の先頭．
+	int				nLineLen,	// [in] pLineの長さ
+	const wchar_t*	pLine		// [in] 探索行の先頭．
 	*/
 ) const
 {
@@ -80,11 +80,11 @@ bool CBlockComment::Match_CommentFrom(
 	@return 当てはまった位置を返すが、当てはまらなかったときは、nLineLenをそのまま返す。
 */
 int CBlockComment::Match_CommentTo(
-	int					nPos,		//!< [in] 探索開始位置
-	const CStringRef&	cStr		//!< [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	int					nPos,		// [in] 探索開始位置
+	const CStringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
-	int				nLineLen,	//!< [in] pLineの長さ
-	const wchar_t*	pLine		//!< [in] 探索行の先頭．探索開始位置のポインタではないことに注意
+	int				nLineLen,	// [in] pLineの長さ
+	const wchar_t*	pLine		// [in] 探索行の先頭．探索開始位置のポインタではないことに注意
 	*/
 ) const
 {

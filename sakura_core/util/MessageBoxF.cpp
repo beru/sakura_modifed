@@ -56,11 +56,11 @@ HWND GetMessageBoxOwner(HWND hwndOwner)
 	デバッグ目的以外でも使用できる．
 */
 int VMessageBoxF(
-	HWND		hwndOwner,	//!< [in] オーナーウィンドウのハンドル
-	UINT		uType,		//!< [in] メッセージボックスのスタイル (MessageBoxと同じ形式)
-	LPCTSTR		lpCaption,	//!< [in] メッセージボックスのタイトル
-	LPCTSTR		lpText,		//!< [in] 表示するテキスト。printf仕様の書式指定が可能。
-	va_list&	v			//!< [in/out] 引数リスト
+	HWND		hwndOwner,	// [in] オーナーウィンドウのハンドル
+	UINT		uType,		// [in] メッセージボックスのスタイル (MessageBoxと同じ形式)
+	LPCTSTR		lpCaption,	// [in] メッセージボックスのタイトル
+	LPCTSTR		lpText,		// [in] 表示するテキスト。printf仕様の書式指定が可能。
+	va_list&	v			// [in/out] 引数リスト
 )
 {
 	hwndOwner = GetMessageBoxOwner(hwndOwner);

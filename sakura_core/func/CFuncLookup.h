@@ -42,10 +42,10 @@
 struct MacroRec;// 2007.11.02 ryoji
 struct CommonSetting;// 2002/2/10 aroka
 
-//! マクロ情報
+// マクロ情報
 struct MacroRec {
-	TCHAR	m_szName[MACRONAME_MAX];	//!< 表示名
-	TCHAR	m_szFile[_MAX_PATH + 1];	//!< ファイル名(ディレクトリを含まない)
+	TCHAR	m_szName[MACRONAME_MAX];	// 表示名
+	TCHAR	m_szFile[_MAX_PATH + 1];	// ファイル名(ディレクトリを含まない)
 	bool	m_bReloadWhenExecute;		// 実行時に読み込みなおすか（デフォルトon）
 	
 	bool IsEnabled() const { return m_szFile[0] != _T('\0'); }
@@ -88,9 +88,9 @@ public:
 
 
 private:
-	MacroRec* m_pMacroRec;	//!< マクロ情報	// 2007.11.02 ryoji メンバ変更（CSMacroMgr->MacroRec）
+	MacroRec* m_pMacroRec;	// マクロ情報	// 2007.11.02 ryoji メンバ変更（CSMacroMgr->MacroRec）
 	
-	CommonSetting* m_pCommon;	//! 共通設定データ領域へのポインタ
+	CommonSetting* m_pCommon;	// 共通設定データ領域へのポインタ
 
 };
 

@@ -31,10 +31,10 @@
 
 
 // 2004/06/21 novice タグジャンプ機能追加
-//! タグジャンプ情報
+// タグジャンプ情報
 struct TagJump {
-	HWND		hwndReferer;				//!< 参照元ウィンドウ
-	CLogicPoint	point;						//!< ライン, カラム
+	HWND		hwndReferer;				// 参照元ウィンドウ
+	CLogicPoint	point;						// ライン, カラム
 };
 
 
@@ -49,12 +49,12 @@ struct SShare_TagJump {
 	> ATagJumpKeywords;
 
 	// データ
-	int					m_TagJumpNum;					//!< タグジャンプ情報の有効データ数
-	int					m_TagJumpTop;					//!< スタックの一番上の位置
-	TagJump				m_TagJump[MAX_TAGJUMPNUM];		//!< タグジャンプ情報
+	int					m_TagJumpNum;					// タグジャンプ情報の有効データ数
+	int					m_TagJumpTop;					// スタックの一番上の位置
+	TagJump				m_TagJump[MAX_TAGJUMPNUM];		// タグジャンプ情報
 	ATagJumpKeywords	m_aTagJumpKeywords;
-	BOOL				m_bTagJumpICase;				//!< 大文字小文字を同一視
-	BOOL				m_bTagJumpAnyWhere;				//!< 文字列の途中にマッチ
+	BOOL				m_bTagJumpICase;				// 大文字小文字を同一視
+	BOOL				m_bTagJumpAnyWhere;				// 文字列の途中にマッチ
 };
 
 
@@ -64,8 +64,8 @@ public:
 		m_pShareData = &GetDllShareData();
 	}
 	// タグジャンプ関連	// 2004/06/21 novice タグジャンプ機能追加
-	void PushTagJump(const TagJump*);		//!< タグジャンプ情報の保存
-	bool PopTagJump(TagJump*);				//!< タグジャンプ情報の参照
+	void PushTagJump(const TagJump*);		// タグジャンプ情報の保存
+	bool PopTagJump(TagJump*);				// タグジャンプ情報の参照
 private:
 	DLLSHAREDATA* m_pShareData;
 };

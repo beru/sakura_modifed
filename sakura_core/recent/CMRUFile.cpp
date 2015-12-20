@@ -132,7 +132,7 @@ std::vector<LPCTSTR> CMRUFile::GetPathList() const
 	return ret;
 }
 
-//! アイテム数を返す
+// アイテム数を返す
 int CMRUFile::Length(void) const
 {
 	return m_cRecentFile.GetItemCount();

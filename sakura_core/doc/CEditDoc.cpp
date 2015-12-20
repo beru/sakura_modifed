@@ -451,19 +451,19 @@ void CEditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 //                           属性                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! ドキュメントの文字コードを取得
+// ドキュメントの文字コードを取得
 ECodeType CEditDoc::GetDocumentEncoding() const
 {
 	return m_cDocFile.GetCodeSet();
 }
 
-//! ドキュメントのBOM付加を取得
+// ドキュメントのBOM付加を取得
 bool CEditDoc::GetDocumentBomExist() const
 {
 	return m_cDocFile.IsBomExist();
 }
 
-//! ドキュメントの文字コードを設定
+// ドキュメントの文字コードを設定
 void CEditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 {
 	if (!IsValidCodeType(eCharCode)) return; // 無効な範囲を受け付けない
@@ -484,7 +484,7 @@ void CEditDoc::GetSaveInfo(SSaveInfo* pSaveInfo) const
 
 // 編集ファイル情報を格納
 void CEditDoc::GetEditInfo(
-	EditInfo* pfi	//!< [out]
+	EditInfo* pfi	// [out]
 ) const
 {
 	// ファイルパス

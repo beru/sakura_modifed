@@ -58,10 +58,10 @@ bool fexist(LPCTSTR pszPath)
 	@date 2013.05.27 Moca 最長一致に変更
 */
 bool IsFilePath(
-	const wchar_t*	pLine,		//!< [in]  探査対象文字列
-	int*			pnBgn,		//!< [out] 先頭offset。pLine + *pnBgnがファイル名先頭へのポインタ。
-	int*			pnPathLen,	//!< [out] ファイル名の長さ
-	bool			bFileOnly	//!< [in]  true: ファイルのみ対象 / false: ディレクトリも対象
+	const wchar_t*	pLine,		// [in]  探査対象文字列
+	int*			pnBgn,		// [out] 先頭offset。pLine + *pnBgnがファイル名先頭へのポインタ。
+	int*			pnPathLen,	// [out] ファイル名の長さ
+	bool			bFileOnly	// [in]  true: ファイルのみ対象 / false: ディレクトリも対象
 )
 {
 	wchar_t	szJumpToFile[_MAX_PATH];
@@ -427,7 +427,7 @@ bool _IS_REL_PATH(const TCHAR* path)
 	@date 2003.04.30 genta 新規作成
 */
 int CalcDirectoryDepth(
-	const TCHAR* path	//!< [in] 深さを調べたいファイル/ディレクトリのフルパス
+	const TCHAR* path	// [in] 深さを調べたいファイル/ディレクトリのフルパス
 )
 {
 	int depth = 0;
@@ -474,8 +474,8 @@ int CalcDirectoryDepth(
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
 void GetExedir(
-	LPTSTR	pDir,	//!< [out] EXEファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
-	LPCTSTR	szFile	//!< [in]  ディレクトリ名に結合するファイル名．
+	LPTSTR	pDir,	// [out] EXEファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
+	LPCTSTR	szFile	// [in]  ディレクトリ名に結合するファイル名．
 )
 {
 	if (!pDir)
@@ -500,8 +500,8 @@ void GetExedir(
 	@date 2007.05.19 新規作成（GetExedirベース）
 */
 void GetInidir(
-	LPTSTR	pDir,				//!< [out] INIファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
-	LPCTSTR szFile	/*=NULL*/	//!< [in] ディレクトリ名に結合するファイル名．
+	LPTSTR	pDir,				// [out] INIファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
+	LPCTSTR szFile	/*=NULL*/	// [in] ディレクトリ名に結合するファイル名．
 )
 {
 	if (!pDir)
@@ -529,10 +529,10 @@ void GetInidir(
 	@date 2007.05.22 新規作成
 */
 void GetInidirOrExedir(
-	LPTSTR	pDir,								//!< [out] INIファイルまたはEXEファイルのあるディレクトリを返す場所．
-												//         予め_MAX_PATHのバッファを用意しておくこと．
-	LPCTSTR	szFile					/*=NULL*/,	//!< [in] ディレクトリ名に結合するファイル名．
-	BOOL	bRetExedirIfFileEmpty	/*=FALSE*/	//!< [in] ファイル名の指定が空の場合はEXEファイルのフルパスを返す．
+	LPTSTR	pDir,								// [out] INIファイルまたはEXEファイルのあるディレクトリを返す場所．
+												//       予め_MAX_PATHのバッファを用意しておくこと．
+	LPCTSTR	szFile					/*=NULL*/,	// [in] ディレクトリ名に結合するファイル名．
+	BOOL	bRetExedirIfFileEmpty	/*=FALSE*/	// [in] ファイル名の指定が空の場合はEXEファイルのフルパスを返す．
 )
 {
 	// ファイル名の指定が空の場合はEXEファイルのフルパスを返す（オプション）
@@ -653,8 +653,8 @@ bool IsDirectory(LPCTSTR pszPath)
 	取得できる．(ryoji)
 */
 bool GetLastWriteTimestamp(
-	const TCHAR*	pszFileName,	//!< [in]  ファイルのパス
-	CFileTime*		pcFileTime		//!< [out] 更新日時を返す場所
+	const TCHAR*	pszFileName,	// [in]  ファイルのパス
+	CFileTime*		pcFileTime		// [out] 更新日時を返す場所
 )
 {
 	WIN32_FIND_DATA ffd;
@@ -1118,7 +1118,7 @@ int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2)
 	return score;
 }
 
-//!	2つのファイル名の最長一致部分の長さを返す
+// 2つのファイル名の最長一致部分の長さを返す
 int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
 {
 	int score = 0;

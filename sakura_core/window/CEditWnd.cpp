@@ -268,7 +268,7 @@ CEditWnd::~CEditWnd()
 }
 
 
-//! ドキュメントリスナ：セーブ後
+// ドキュメントリスナ：セーブ後
 // 2008.02.02 kobake
 void CEditWnd::OnAfterSave(const SSaveInfo& sSaveInfo)
 {
@@ -310,7 +310,7 @@ void CEditWnd::UpdateCaption()
 
 
 
-//!< ウィンドウ生成用の矩形を取得
+// ウィンドウ生成用の矩形を取得
 void CEditWnd::_GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGroupInfo& sTabGroupInfo)
 {
 	// ウィンドウサイズ継承
@@ -600,8 +600,8 @@ void CEditWnd::_AdjustInMonitor(const STabGroupInfo& sTabGroupInfo)
 */
 HWND CEditWnd::Create(
 	CEditDoc*		pcEditDoc,
-	CImageListMgr*	pcIcons,	//!< [in] Image List
-	int				nGroup		//!< [in] グループID
+	CImageListMgr*	pcIcons,	// [in] Image List
+	int				nGroup		// [in] グループID
 )
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CEditWnd::Create");
@@ -774,9 +774,9 @@ HWND CEditWnd::Create(
 
 
 
-//! 起動時のファイルオープン処理
+// 起動時のファイルオープン処理
 void CEditWnd::OpenDocumentWhenStart(
-	const SLoadInfo& _sLoadInfo		//!< [in]
+	const SLoadInfo& _sLoadInfo		// [in]
 	)
 {
 	if (_sLoadInfo.cFilePath.Length()) {
@@ -797,9 +797,9 @@ void CEditWnd::OpenDocumentWhenStart(
 }
 
 void CEditWnd::SetDocumentTypeWhenCreate(
-	ECodeType		nCharCode,		//!< [in] 漢字コード
-	bool			bViewMode,		//!< [in] ビューモードで開くかどうか
-	CTypeConfig		nDocumentType	//!< [in] 文書タイプ．-1のとき強制指定無し．
+	ECodeType		nCharCode,		// [in] 漢字コード
+	bool			bViewMode,		// [in] ビューモードで開くかどうか
+	CTypeConfig		nDocumentType	// [in] 文書タイプ．-1のとき強制指定無し．
 	)
 {
 	//	Mar. 7, 2002 genta 文書タイプの強制指定
@@ -1097,13 +1097,13 @@ void CEditWnd::MessageLoop(void)
 		if (ret == -1) break; // GetMessage失敗
 
 		// ダイアログメッセージ
-		     if (MyIsDialogMessage(m_pPrintPreview->GetPrintPreviewBarHANDLE_Safe(),	&msg)) {}	//!< 印刷プレビュー 操作バー
-		else if (MyIsDialogMessage(m_cDlgFind.GetHwnd(),								&msg)) {}	//!<「検索」ダイアログ
-		else if (MyIsDialogMessage(m_cDlgFuncList.GetHwnd(),							&msg)) {}	//!<「アウトライン」ダイアログ
-		else if (MyIsDialogMessage(m_cDlgReplace.GetHwnd(),							&msg)) {}	//!<「置換」ダイアログ
-		else if (MyIsDialogMessage(m_cDlgGrep.GetHwnd(),								&msg)) {}	//!<「Grep」ダイアログ
-		else if (MyIsDialogMessage(m_cHokanMgr.GetHwnd(),								&msg)) {}	//!<「入力補完」
-		else if (m_cToolbar.EatMessage(&msg)) { }													//!<ツールバー
+		     if (MyIsDialogMessage(m_pPrintPreview->GetPrintPreviewBarHANDLE_Safe(),	&msg)) {}	// 印刷プレビュー 操作バー
+		else if (MyIsDialogMessage(m_cDlgFind.GetHwnd(),								&msg)) {}	//「検索」ダイアログ
+		else if (MyIsDialogMessage(m_cDlgFuncList.GetHwnd(),							&msg)) {}	//「アウトライン」ダイアログ
+		else if (MyIsDialogMessage(m_cDlgReplace.GetHwnd(),								&msg)) {}	//「置換」ダイアログ
+		else if (MyIsDialogMessage(m_cDlgGrep.GetHwnd(),								&msg)) {}	//「Grep」ダイアログ
+		else if (MyIsDialogMessage(m_cHokanMgr.GetHwnd(),								&msg)) {}	//「入力補完」
+		else if (m_cToolbar.EatMessage(&msg)) { }													// ツールバー
 		// アクセラレータ
 		else {
 			if (m_hAccel && TranslateAccelerator(msg.hwnd, m_hAccel, &msg)) {}
@@ -3638,7 +3638,7 @@ LRESULT CEditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
 	return Result;
 }
 
-//! ドロップダウンメニュー(開く)	@@@ 2002.06.15 MIK
+// ドロップダウンメニュー(開く)	@@@ 2002.06.15 MIK
 int	CEditWnd::CreateFileDropDownMenu(HWND hwnd)
 {
 	int			nId;
@@ -4119,7 +4119,7 @@ LRESULT CEditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, 
 }
 
 // 2007.09.08 kobake 追加
-//! ツールチップのテキストを取得
+// ツールチップのテキストを取得
 void CEditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 {
 	// 機能文字列の取得 -> tmp -> wszBuf

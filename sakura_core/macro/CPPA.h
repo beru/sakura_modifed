@@ -62,7 +62,7 @@ public:
 	CPPA();
 	virtual ~CPPA();
 
-	const char* GetVersion() {		//!< DLLのバージョン情報を取得。m_szMsgを壊す
+	const char* GetVersion() {		// DLLのバージョン情報を取得。m_szMsgを壊す
 		if (IsAvailable()) {
 			auto_sprintf(m_szMsg, "PPA.DLL Version %d.%d", m_fnGetVersion() / 100, m_fnGetVersion() % 100);
 			return m_szMsg;
@@ -70,7 +70,7 @@ public:
 		return "";
 	}
 
-	//! PPAメッセージを取得する
+	// PPAメッセージを取得する
 	const char* GetLastMessage(void) const { return m_szMsg; }
 
 	// Jun. 16, 2003 genta 引数追加
@@ -264,27 +264,27 @@ private:
 	static void __stdcall stdFinishProc();	// 2003.06.01 Moca
 
 	// メンバ変数
-	char m_szMsg[80];		//!< CPPAからのメッセージを保持する
+	char m_szMsg[80];		// CPPAからのメッセージを保持する
 
 	// 2007.07.26 genta : PPAのネストを許容するために，別データ構造とする．
 	
 	struct PpaExecInfo {
-		CNativeA		m_cMemRet;		//!< コールバックからDLLに渡す文字列を保持
+		CNativeA		m_cMemRet;		// コールバックからDLLに渡す文字列を保持
 		CEditView*		m_pcEditView;	// 2003.06.01 Moca
 		DLLSHAREDATA*	m_pShareData;	// 2003.06.01 Moca
-		bool			m_bError;		//!< エラーが2回表示されるのを防ぐ	2003.06.01 Moca
-		CNativeA		m_cMemDebug;	//!< デバッグ用変数UserErrorMes 2003.06.01 Moca
+		bool			m_bError;		// エラーが2回表示されるのを防ぐ	2003.06.01 Moca
+		CNativeA		m_cMemDebug;	// デバッグ用変数UserErrorMes 2003.06.01 Moca
 		/** オプションフラグ
 		
 			CEditView::HandleCommand()にコマンドと一緒に渡すことで
 			コマンドの素性を教える．
 		*/
-		int				m_commandflags;	//!< 
+		int				m_commandflags;	// 
 	};
 	// 2007.07.26 genta : 現在実行中のインスタンス
 	static PpaExecInfo* m_CurInstance;
 	// PPAの多重起動禁止 2008.10.22 syat
-	static bool				m_bIsRunning;	//!< PPAが同時実行されるのを防ぐ
+	static bool				m_bIsRunning;	// PPAが同時実行されるのを防ぐ
 
 
 /*	関数名はCMacroが持つ。

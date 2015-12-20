@@ -438,7 +438,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 {
 	CLogicInt nLineLen;
-	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_Common.m_sOutline.m_bMarkUpBlankLineEnable;	//! 空行をマーク対象にするフラグ 20020119 aroka
+	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_Common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
 	int nNewLineLen	= m_pcDocRef->m_cDocEditor.m_cNewLineCode.GetLen();
 	CLogicInt nLineLast	= m_pcDocRef->m_cDocLineMgr.GetLineCount();
 	int nCharChars;
