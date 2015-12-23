@@ -58,7 +58,7 @@ bool CControlProcess::InitializeProcess()
 	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
 	strInitEvent += strProfileName;
 	m_hEventCPInitialized = ::CreateEvent( NULL, TRUE, FALSE, strInitEvent.c_str() );
-	if (m_hEventCPInitialized) {
+	if (!m_hEventCPInitialized) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateEvent()失敗。\n終了します。"));
 		return false;
@@ -68,7 +68,7 @@ bool CControlProcess::InitializeProcess()
 	std::tstring strCtrlProcEvent = GSTR_MUTEX_SAKURA_CP;
 	strCtrlProcEvent += strProfileName;
 	m_hMutexCP = ::CreateMutex( NULL, TRUE, strCtrlProcEvent.c_str() );
-	if (m_hMutexCP) {
+	if (!m_hMutexCP) {
 		ErrorBeep();
 		TopErrorMessage(NULL, _T("CreateMutex()失敗。\n終了します。"));
 		return false;
