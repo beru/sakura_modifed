@@ -35,7 +35,7 @@ void CViewCommander::Command_GREP_DIALOG(void)
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool bSet = m_pCommanderView->GetCurrentTextForSearchDlg(cmemCurText, bGetHistory);	// 2006.08.23 ryoji ダイアログ専用関数に変更
 
-	if( bSet ){
+	if (bSet) {
 		GetEditWindow()->m_cDlgGrep.m_strText = cmemCurText.GetStringPtr();
 		GetEditWindow()->m_cDlgGrep.m_bSetText = true;
 	}

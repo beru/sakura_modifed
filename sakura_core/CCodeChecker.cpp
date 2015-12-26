@@ -101,7 +101,7 @@ static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECod
 						&cmemTmp,
 						pCodeBase
 					);
-					if( e2 == RESULT_LOSESOME ){
+					if (e2 == RESULT_LOSESOME) {
 						point.x = nPos;
 						wc = mem;
 						break;

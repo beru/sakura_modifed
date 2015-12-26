@@ -406,7 +406,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
 			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), FALSE );
 			::EnableWindow( GetItemHwnd( IDC_CHK_PASTE ), FALSE );
-		}else{
+		}else {
 			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), TRUE );
 			::EnableWindow( GetItemHwnd( IDC_CHK_PASTE ), TRUE );
 		}

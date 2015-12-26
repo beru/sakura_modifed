@@ -705,7 +705,7 @@ void CDlgOpenFile::Create(
 	m_mem->m_hwndParent = hwndParent;
 
 	// ユーザー定義ワイルドカード（保存時の拡張子補完でも使用される）
-	if( NULL != pszUserWildCard ){
+	if (pszUserWildCard) {
 		_tcscpy( m_mem->m_szDefaultWildCard, pszUserWildCard );
 	}
 
@@ -794,7 +794,7 @@ bool CDlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath , bool bSetCurDir)
 	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
 
-	if( _GetOpenFileNameRecover( &pData->m_ofn ) ){
+	if (_GetOpenFileNameRecover( &pData->m_ofn )) {
 		return true;
 	}else {
 		// May 29, 2004 genta 関数にまとめた

@@ -194,7 +194,7 @@ int main(int argc,char* argv[])
 	if (-1 == _stat(out_file, &out_stat)) goto next;
 	// 入力ファイルが新しければ処理を続行する
 	if (in_stat.st_mtime > out_stat.st_mtime) goto next;
-	else{ printf("出力ファイルは最新です\n"); return 0; }
+	else { printf("出力ファイルは最新です\n"); return 0; }
 
 
 next:

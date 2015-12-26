@@ -82,27 +82,27 @@ bool CColor_Quote::IsCppRawString(const CStringRef& cStr, int nPos)
 		// \b(u8|u|U|L|)R"[^(]*\(
 		// \b = ^|[\s!"#$%&'()=@{};:<>?,.*/\-\+\[\]\]
 		wchar_t c1 = L' ';
-		if( 2 <= nPos ){
+		if (2 <= nPos) {
 			c1 = cStr.At(nPos-2);
 		}
 		wchar_t c2 = L' ';
-		if( 3 <= nPos ){
+		if (3 <= nPos) {
 			c2 = cStr.At(nPos-3);
 		}
 		const wchar_t* pszSep = L" \t!\"#$%&'()=@{};:<>?,.*/-+[]";
-		if( (c1 == 'u' || c1 == 'U' || c1 == 'L') ){
-			if( NULL != wcschr(pszSep, c2) ){
+		if ((c1 == 'u' || c1 == 'U' || c1 == 'L')) {
+			if (wcschr(pszSep, c2)) {
 				return true;
 			}
-		}else if( c1 == '8' && c2 == 'u' ){
+		}else if (c1 == '8' && c2 == 'u') {
 			wchar_t c3 = L'\0';
-			if( 4 <= nPos ){
+			if (4 <= nPos) {
 				c3 = cStr.At(nPos-4);
 			}
-			if( NULL != wcschr(pszSep, c3) ){
+			if (wcschr(pszSep, c3)) {
 				return true;
 			}
-		}else if( NULL != wcschr(pszSep, c1) ){
+		}else if (wcschr(pszSep, c1)) {
 			return true;
 		}
 	}

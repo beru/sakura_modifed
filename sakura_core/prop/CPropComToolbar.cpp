@@ -167,10 +167,10 @@ INT_PTR CPropToolbar::DispatchEvent(
 			CTextWidthCalc calc(hwndResList);
 			int nFontHeight = calc.GetTextHeight();
 			nListItemHeight = 18; //Oct. 18, 2000 JEPRO 「ツールバー」タブでの機能アイテムの行間を少し狭くして表示行数を増やした(20→18 これ以上小さくしても効果はないようだ)
-			if( nListItemHeight < nFontHeight ){
+			if (nListItemHeight < nFontHeight) {
 				nListItemHeight = nFontHeight;
 				nToolBarListBoxTopMargin = 0;
-			}else{
+			}else {
 				nToolBarListBoxTopMargin = (nListItemHeight - (nFontHeight + 1)) / 2;
 			}
 		}

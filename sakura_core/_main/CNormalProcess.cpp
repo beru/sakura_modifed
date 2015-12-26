@@ -298,7 +298,7 @@ bool CNormalProcess::InitializeProcess()
 			(*it)->Invoke(&activeView, params);
 		}
 
-		if( !bGrepDlg && gi.bGrepStdout ){
+		if (!bGrepDlg && gi.bGrepStdout) {
 			// ‘¦ŽžI—¹
 			PostMessageCmd( pEditWnd->GetHwnd(), MYWM_CLOSE, PM_CLOSE_GREPNOCONFIRM | PM_CLOSE_EXIT, (LPARAM)NULL );
 		}

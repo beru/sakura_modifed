@@ -933,7 +933,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			for (; iLogic < nLineStart + nLineLen; ++iLogic) {
 				bool bChange = false;
 				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, pool, &pStrategyNormal, &pStrategyFound, bChange);
-				if( bChange ){
+				if (bChange) {
 					int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
 					if (-1 != nColorIdx) {
 						const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
@@ -1008,7 +1008,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				cmemClip.AppendString(WCODE::CRLF, 2);
 			}
 			// 2014.06.25 バッファ拡張
-			if( cmemClip.capacity() < cmemClip.GetStringLength() + 100 ){
+			if (cmemClip.capacity() < cmemClip.GetStringLength() + 100) {
 				cmemClip.AllocStringBuffer( cmemClip.capacity() + cmemClip.capacity() / 2 );
 			}
 		}

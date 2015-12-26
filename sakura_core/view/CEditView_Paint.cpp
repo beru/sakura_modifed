@@ -783,7 +783,7 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 				nLayoutLineTo
 			);
 
-//			if(bDispResult){
+//			if (bDispResult) {
 //				pPs->rcPaint.bottom += nLineHeight;	// EOFÄ•`‰æ‘Î‰ž
 //				break;
 //			}
@@ -916,7 +916,7 @@ bool CEditView::DrawLogicLine(
 				pInfo->m_pStrategy->InitStrategyStatus();
 				pInfo->m_pStrategy->SetStrategyColorInfo(colorInfo);
 			}
-		}else{
+		}else {
 			CColor3Setting cColor = GetColorIndex(pcLayout, pInfo->m_pDispPos->GetLayoutLineRef(), 0, pInfo, true);
 			SetCurrentColor(pInfo->m_gr, cColor.eColorIndex, cColor.eColorIndex2, cColor.eColorIndexBg);
 		}
@@ -1166,7 +1166,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	);
 
 	// Ü‚è•Ô‚µŒ…cü•`‰æ
-	if( !m_bMiniMap ){
+	if (!m_bMiniMap) {
 		GetTextDrawer().DispWrapLine(
 			pInfo->m_gr,
 			pInfo->m_pDispPos->GetDrawPos().y,

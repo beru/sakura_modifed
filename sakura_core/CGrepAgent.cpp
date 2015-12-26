@@ -310,7 +310,7 @@ DWORD CGrepAgent::DoGrep(
 										cmemReplace.GetStringPtr(),
 										sSearchOption,
 										&cRegexp);
-		}else{
+		}else {
 			bError = !pattern.SetPattern(pcViewDst->GetHwnd(),
 										pcmGrepKey->GetStringPtr(),
 										pcmGrepKey->GetStringLength(),
@@ -1274,7 +1274,7 @@ int CGrepAgent::DoGrepFile(
 #endif
 					++nHitCount;
 					++(*pnHitCount);
-					if( sGrepOption.nGrepOutputLineType != 2 ){
+					if (sGrepOption.nGrepOutputLineType != 2) {
 
 						OutputPathInfo(
 							cmemMessage, sGrepOption,
@@ -1353,7 +1353,7 @@ int CGrepAgent::DoGrepFile(
 							sGrepOption
 						);
 						//	May 22, 2000 genta
-						if( 0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128 ){
+						if (((*pnHitCount) % 128) == 0 || *pnHitCount < 128) {
 							::SetDlgItemInt(pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
@@ -1930,7 +1930,7 @@ int CGrepAgent::DoGrepReplaceFile(
 				nOutputHitCount = nHitCount;
 				AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 				pcViewDst->GetCommander().Command_GOFILEEND( FALSE );
-				if( !CEditWnd::getInstance()->UpdateTextWrap() )	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+				if (!CEditWnd::getInstance()->UpdateTextWrap())	// 折り返し方法関連の更新	// 2008.06.10 ryoji
 					CEditWnd::getInstance()->RedrawAllViews( pcViewDst );	//	他のペインの表示を更新
 				cmemMessage._SetStringLength(0);
 			}

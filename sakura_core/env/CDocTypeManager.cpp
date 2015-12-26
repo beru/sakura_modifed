@@ -230,7 +230,7 @@ bool CDocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCH
 	token = _tcstok(p, m_typeExtSeps);
 	while (token) {
 		if (szExt == NULL || szExt[0] == _T('\0') || auto_stricmp(token, szExt + 1) != 0) {
-			if( pszDstExt[0] != '\0' ) _tcscat( pszDstExt, _T(";") );
+			if (pszDstExt[0] != '\0') _tcscat( pszDstExt, _T(";") );
 			// 拡張子指定なし、またはマッチした拡張子でない
 			if (_tcspbrk(token, m_typeExtWildcards) == NULL) {
 				if (_T('.') == *token) _tcscat(pszDstExt, _T("*"));

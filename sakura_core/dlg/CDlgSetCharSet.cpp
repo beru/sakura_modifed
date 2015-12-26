@@ -76,7 +76,7 @@ BOOL CDlgSetCharSet::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_CHECK_CP:
-		if( !m_bCP ){
+		if (!m_bCP) {
 			m_bCP = true;
 			::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHECK_CP ), FALSE );
 			CCodePage::AddComboCodePages( GetHwnd(), m_hwndCharSet, -1 );
@@ -183,7 +183,7 @@ void CDlgSetCharSet::SetData(void)
 		::CheckDlgButton( GetHwnd(), IDC_CHECK_CP, TRUE );
 		::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHECK_CP ), FALSE );
 		nCurIdx = CCodePage::AddComboCodePages( GetHwnd(), m_hwndCharSet, *m_pnCharSet );
-		if( nCurIdx == -1 ){
+		if (nCurIdx == -1) {
 			nCurIdx = nIdxOld;
 		}
 	}

@@ -1274,7 +1274,6 @@ bool CPropMainMenu::Check_MainMenu_Sub(
 	TV_ITEM			tvi;							// 取得用
 	SMainMenuWork*	pFuncWk;						// 機能(work)
 	std::map< WCHAR, HTREEITEM >	mKey;			// 重複エラー検出用
-	std::map< WCHAR, HTREEITEM >::iterator itKey;	// 同上
 
 	if (nLevel == 0) {
 		bOptionOk = false;

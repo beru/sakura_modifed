@@ -171,10 +171,10 @@ int CDocOutline::ReadRuleFile(
 					}else {
 						cComment = strLine[13];
 					}
-				}else if (11 == strLine.length() && 0 == wcsicmp(strLine.c_str() + 1, L"Mode=Regex")) {
+				}else if (strLine.length() == 11 && 0 == wcsicmp(strLine.c_str() + 1, L"Mode=Regex")) {
 					bRegex = true;
 					bRegexReplace = false;
-				}else if( 18 == strLine.length() && 0 == wcsicmp( strLine.c_str() + 1, L"Mode=RegexReplace" ) ){
+				}else if (strLine.length() == 18 && 0 == wcsicmp( strLine.c_str() + 1, L"Mode=RegexReplace" )) {
 					bRegex = true;
 					bRegexReplace = true;
 				}else if (7 <= strLine.length() && 0 == _wcsnicmp(strLine.c_str() + 1, L"Title=", 6)) {
@@ -250,8 +250,8 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 				delete [] pRegex;
 				return;
 			}
-			if( test[i].nRegexMode == 1 ){
-				if( !pRegex[i].Compile(test[i].szMatch, test[i].szText, test[i].nRegexOption) ){
+			if (test[i].nRegexMode == 1) {
+				if (!pRegex[i].Compile(test[i].szMatch, test[i].szText, test[i].nRegexOption)) {
 					std::wstring str = test[i].szMatch;
 					str += L"\n";
 					str += test[i].szText;
@@ -317,7 +317,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		int j;
 		for (j = 0; j < nCount; j++) {
 			if (bRegex) {
-				if( test[j].nRegexMode == 0 ){
+				if (test[j].nRegexMode == 0) {
 					if (0 < test[j].nLength && pRegex[j].Match(pLine, nLineLen, 0)) {
 						wcscpy(szTitle, test[j].szGroupName);
 						break;

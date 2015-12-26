@@ -451,13 +451,20 @@ void CViewCommander::Command_FUNCLIST_PREV(void)
 	CLogicPoint	ptXY(0,GetCaret().GetCaretLogicPos().y);
 	int			nYOld = ptXY.y;
 
-	for(int n = 0; n < 2; n++){
-		if(CFuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
-				ptXY.GetY2(), SEARCH_BACKWARD, &ptXY.y)){
+	for (int n = 0; n < 2; n++) {
+		if (CFuncListManager().SearchFuncListMark(
+			&GetDocument()->m_cDocLineMgr,
+			ptXY.GetY2(),
+			SEARCH_BACKWARD,
+			&ptXY.y
+			)
+		) {
 			CLayoutPoint ptLayout;
-			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
-			m_pCommanderView->MoveCursorSelecting( ptLayout,
-				m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
+			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
+			m_pCommanderView->MoveCursorSelecting(
+				ptLayout,
+				m_pCommanderView->GetSelectionInfo().m_bSelectingLock
+				);
 			if (nYOld <= ptXY.y) {
 				m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRPREV1));
 			}

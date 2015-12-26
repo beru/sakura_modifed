@@ -47,7 +47,7 @@ class CProcess;
 */
 CProcess* CProcessFactory::Create(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 {
-	if( !ProfileSelect( hInstance, lpCmdLine ) ){
+	if (!ProfileSelect( hInstance, lpCmdLine )) {
 		return 0;
 	}
 
@@ -115,7 +115,7 @@ bool CProcessFactory::ProfileSelect( HINSTANCE hInstance, LPCTSTR lpCmdLine )
 	if (bDialog) {
 		if (dlgProf.DoModal(hInstance, NULL, 0)) {
 			CCommandLine::getInstance()->SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
-		}else{
+		}else {
 			return false; // プロファイルマネージャで「閉じる」を選んだ。プロセス終了
 		}
 	}
@@ -170,15 +170,6 @@ bool CProcessFactory::IsValidVersion()
 	}
 #endif
 
-#if (WINVER < _WIN32_WINNT_WIN2K)
-	/* システムリソースのチェック */
-	// Jul. 5, 2001 shoji masami NTではリソースチェックを行わない
-	if( !IsWin32NT() ){
-		if( !CheckSystemResources( GSTR_APPNAME ) ){
-			return false;
-		}
-	}
-#endif
 	return true;
 }
 

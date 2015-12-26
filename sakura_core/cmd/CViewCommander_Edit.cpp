@@ -520,7 +520,7 @@ void CViewCommander::Command_UNDO(void)
 
 		caret.ShowCaretPosInfo();	// キャレットの行桁位置を表示する	// 2007.10.19 ryoji
 
-		if( !GetEditWindow()->UpdateTextWrap() && bDrawAll ){	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+		if (!GetEditWindow()->UpdateTextWrap() && bDrawAll) {	// 折り返し方法関連の更新	// 2008.06.10 ryoji
 			GetEditWindow()->RedrawAllViews(m_pCommanderView);	// 他のペインの表示を更新
 		}
 		if (hwndProgress) {

@@ -172,10 +172,8 @@ void CViewCommander::Command_COMPARE(void)
 		phwndArr[0] = GetMainWindow();
 		phwndArr[1] = hwndCompareWnd;
 		
-		int i;	// Jan. 28, 2002 genta ループ変数 intの宣言を前に出した．
-				// 互換性対策．forの()内で宣言すると古い規格と新しい規格で矛盾するので．
-		for( i = 0; i < 2; ++i ){
-			if( ::IsZoomed( phwndArr[i] ) ){
+		for (int i = 0; i < 2; ++i) {
+			if (::IsZoomed( phwndArr[i] )) {
 				::ShowWindow( phwndArr[i], SW_RESTORE );
 			}
 		}
@@ -184,7 +182,7 @@ void CViewCommander::Command_COMPARE(void)
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( phwndArr[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left) / 2;
-		for( i = 1; i >= 0; i-- ){
+		for(int i = 1; i >= 0; i-- ){
 			::SetWindowPos(
 				phwndArr[i], 0,
 				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮
@@ -342,25 +340,25 @@ void CViewCommander::Command_Diff_Dialog(void)
 	ECodeType code = GetDocument()->GetDocumentEncoding();
 	ECodeType saveCode = GetDiffCreateTempFileCode(code);
 	ECodeType code2 = cDlgDiff.m_nCodeTypeDst;
-	if( CODE_ERROR == code2 ){
-		if( cDlgDiff.m_szFile2[0] != _T('\0') ){
+	if (CODE_ERROR == code2) {
+		if (cDlgDiff.m_szFile2[0] != _T('\0')) {
 			// ファイル名指定
 			code2 = GetFileCharCode(cDlgDiff.m_szFile2);
 		}
 	}
 	ECodeType saveCode2 = GetDiffCreateTempFileCode(code2);
 	// 2014.10.24 コードが違うときは必ずUTF-8ファイル出力
-	if( saveCode != saveCode2 ){
+	if (saveCode != saveCode2) {
 		saveCode = CODE_UTF8;
 		saveCode2 = CODE_UTF8;
 	}
-	if( GetDocument()->m_cDocEditor.IsModified()
-			|| code != saveCode
-			|| !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
-	){
-		if( !m_pCommanderView->MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() ) ){ return; }
+	if (GetDocument()->m_cDocEditor.IsModified()
+		|| code != saveCode
+		|| !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+	) {
+		if (!m_pCommanderView->MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() )) { return; }
 		bTmpFile1 = true;
-	}else{
+	}else {
 		_tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath() );
 	}
 		

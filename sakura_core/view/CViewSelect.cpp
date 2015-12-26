@@ -240,7 +240,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			}
 		}
 	}else {
-		if( IsTextSelecting() && (!m_sSelectOld.IsValid() || m_sSelectOld.IsOne()) ){
+		if (IsTextSelecting() && (!m_sSelectOld.IsValid() || m_sSelectOld.IsOne())) {
 			m_bDrawSelectArea = false;
 			pView->DrawBracketPair( false );
 			m_bDrawSelectArea = true;

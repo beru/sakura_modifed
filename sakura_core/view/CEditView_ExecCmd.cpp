@@ -301,7 +301,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 		COutputAdapter& oa = customOa ? *customOa: *oaInst;
 
 		// 中断ダイアログ表示
-		if( oa.IsEnableRunningDlg() ){
+		if (oa.IsEnableRunningDlg()) {
 			cDlgCancel.DoModeless(G_AppInstance(), m_hwndParent, IDD_EXECRUNNING);
 			// ダイアログにコマンドを表示
 			::DlgItem_SetText(cDlgCancel.GetHwnd(), IDC_STATIC_CMD, pszCmd);

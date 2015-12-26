@@ -530,7 +530,7 @@ void CViewCommander::Command_PROPERTY_FILE(void)
 void CViewCommander::Command_PROFILEMGR( void )
 {
 	CDlgProfileMgr profMgr;
-	if( profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 ) ){
+	if (profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
 		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
 		SLoadInfo sLoadInfo;

@@ -34,7 +34,7 @@ CCodeBase* CCodeFactory::CreateCodeBase(
 	case CODE_CPACP:		return new CCodePage(eCodeType);
 	case CODE_CPOEM:		return new CCodePage(eCodeType);
 	default:
-		if( IsValidCodePageEx(eCodeType) ){
+		if (IsValidCodePageEx(eCodeType)) {
 			return new CCodePage(eCodeType);
 		}
 		assert_warning(0);

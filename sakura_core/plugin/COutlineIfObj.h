@@ -101,7 +101,7 @@ public:
 						NULL,
 						nParam
 					);
-				}else if( LOWORD(ID) == F_OL_ADDFUNCINFO2 ){
+				}else if (LOWORD(ID) == F_OL_ADDFUNCINFO2) {
 					int nDepth = nParam & FUNCINFO_INFOMASK;
 					nParam -= nDepth;
 					m_cFuncInfoArr.AppendData(

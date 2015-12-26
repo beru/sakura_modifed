@@ -199,11 +199,11 @@ CTextWidthCalc::CTextWidthCalc(HDC hdc)
 
 CTextWidthCalc::~CTextWidthCalc()
 {
-	if(hDC && !bFromDC){
+	if (hDC && !bFromDC) {
 		::SelectObject(hDC, hFontOld);
 		if (bHDCComp) {
 			::DeleteDC(hDC);
-		}else{
+		}else {
 			::ReleaseDC(hwnd, hDC);
 		}
 		hwnd = 0;

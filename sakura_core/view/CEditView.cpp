@@ -173,7 +173,7 @@ BOOL CEditView::Create(
 	m_pcRuler = new CRuler(this, pcEditDoc);
 	if (m_bMiniMap) {
 		m_pcViewFont = m_pcEditWnd->m_pcViewFontMiniMap;
-	}else{
+	}else {
 		m_pcViewFont = m_pcEditWnd->m_pcViewFont;
 	}
 
@@ -2816,7 +2816,7 @@ void CEditView::SetUndoBuffer(bool bPaintLineNumber)
 			//  	Call_OnPaint(PAINT_LINENUMBER, false);	// 自ペインの行番号（変更行）表示を更新 ← 変更行のみの表示更新で済ませている場合があるため
 
 			if (!m_pcEditWnd->UpdateTextWrap())	{	// 折り返し方法関連の更新	// 2008.06.10 ryoji
-				if( 0 < pOpe->GetNum() - GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount ){
+				if (0 < pOpe->GetNum() - GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount) {
 					m_pcEditWnd->RedrawAllViews(this);	//	他のペインの表示を更新
 				}
 			}

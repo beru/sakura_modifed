@@ -195,10 +195,8 @@ void CEditView::ViewDiffInfo(
 	}
 
 	//DIFF差分が見つからなかったときにメッセージ表示
-	if( nFlgOpt & 0x0040 )
-	{
-		if( !CDiffManager::getInstance()->IsDiffUse() )
-		{
+	if (nFlgOpt & 0x0040) {
+		if (!CDiffManager::getInstance()->IsDiffUse()) {
 			InfoMessage( this->GetHwnd(), LS(STR_ERR_DLGEDITVWDIFF5) );
 		}
 	}
@@ -212,16 +210,14 @@ void CEditView::ViewDiffInfo(
 
 bool COutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
 {
-	if( size == -1 ){
+	if (size == -1) {
 		size = auto_strlen(pBuf);
 	}
 	//@@@ 2003.05.31 MIK
 	//	先頭がBinary filesならバイナリファイルのため意味のある差分が取られなかった
-	if( bFirst )
-	{
+	if (bFirst) {
 		bFirst = false;
-		if( strncmp( pBuf, "Binary files ", strlen( "Binary files " ) ) == 0 )
-		{
+		if (strncmp( pBuf, "Binary files ", strlen( "Binary files " ) ) == 0) {
 			WarningMessage(NULL, LS(STR_ERR_DLGEDITVWDIFF4));
 			return false;
 		}
@@ -417,10 +413,10 @@ bool MakeDiffTmpFile_core(CTextOutputStream& out, HWND hwnd, CEditView& view, bo
 			}while (max_size < nLineLen);
 			y++;
 		}
-	}else{
+	}else {
 		return false;
 	}
-	if( bBom ){
+	if (bBom) {
 		out.WriteString(L"\ufeff", 1);
 	}
 	return true;

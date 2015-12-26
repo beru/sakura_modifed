@@ -278,14 +278,14 @@ EConvertResult CFileLoad::ReadLine( CNativeW* pUnicodeBuffer, CEol* pcEol )
 										&cEolTemp,
 										GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
 									  );
-	if( m_cLineTemp.GetStringLength() == m_nReadOffset2 && nOffsetTemp == 0 ){
+	if (m_cLineTemp.GetStringLength() == m_nReadOffset2 && nOffsetTemp == 0) {
 		// 途中に改行がない限りは、swapを使って中身のコピーを省略する
 		pUnicodeBuffer->swap(m_cLineTemp);
-		if( 0 < m_cLineTemp.GetStringLength() ){
+		if (0 < m_cLineTemp.GetStringLength()) {
 			m_cLineTemp._GetMemory()->SetRawDataHoldBuffer( L"", 0 );
 		}
 		m_nReadOffset2 = 0;
-	}else{
+	}else {
 		// 改行が途中にあった。必要分をコピー
 		pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
 		pUnicodeBuffer->AppendString( pRet, nRetLineLen + cEolTemp.GetLen() );

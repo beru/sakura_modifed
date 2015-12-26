@@ -835,8 +835,9 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	 	)
 	) {
 		bSizeBox = FALSE;
-	}else if( NULL != pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom ) {
+	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
+		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+	) {
 		bSizeBox = FALSE;
 	}else {
 		bSizeBox = TRUE;

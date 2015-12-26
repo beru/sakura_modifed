@@ -537,7 +537,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 	int nPaste			=	dlgReplace.m_nPaste;
 	int nReplaceTarget	=	dlgReplace.m_nReplaceTarget;
 
-	if( nPaste && nReplaceTarget == 3 ){
+	if (nPaste && nReplaceTarget == 3) {
 		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
 		nPaste = FALSE;
 	}
@@ -617,7 +617,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 		// テキストを貼り付け
 		if (nPaste) {
 			Command_PASTE(0);
-		} else if( nReplaceTarget == 3 ){
+		} else if (nReplaceTarget == 3) {
 			// 行削除
 			Command_INSTEXT( false, L"", CLogicInt(0), TRUE );
 		}else if (bRegularExp) { // 検索／置換  1==正規表現

@@ -2045,7 +2045,7 @@ void CShareData_IO::IO_MainMenu(
 		int menuNum = 0;
 		if (pData) {
 			menuNum = (int)data.size() - 1;
-		}else{
+		}else {
 			cProfile.IOProfileData(pszSecName, LTEXT("nMainMenuNum"), menuNum);
 		}
 		if (menuNum == 0) {
@@ -2059,7 +2059,7 @@ void CShareData_IO::IO_MainMenu(
 	
 	if (pData) {
 		mainmenu.m_bMainMenuKeyParentheses = (_wtoi(data[dataNum++].c_str()) != 0);
-	}else{
+	}else {
 		cProfile.IOProfileData(pszSecName, LTEXT("bKeyParentheses"), mainmenu.m_bMainMenuKeyParentheses);
 	}
 
@@ -2086,7 +2086,7 @@ void CShareData_IO::IO_MainMenu(
 			// ì«Ç›èoÇµ
 			if (pData) {
 				wcscpy(szLine, data[dataNum++].c_str());
-			}else{
+			}else {
 				cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szLine));
 			}
 

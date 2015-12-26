@@ -38,7 +38,7 @@ void CViewCommander::Command_WordDeleteToStart(void)
 		return;
 	}
 
-	if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		CMoveCaretOpe*	pcOpe = new CMoveCaretOpe();
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
 			GetSelect().GetTo(),

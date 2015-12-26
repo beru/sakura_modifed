@@ -612,9 +612,9 @@ bool CMacro::HandleCommand(
 			// 2: false
 			// マクロのデフォルト値はtrue(1)だが、CEditView側のデフォルトは共通設定(0)
 			int nBoxLock = wtoi_def(Argument[nOptions == 1 ? 0 : 1], 1);
-			if( nOptions == 1 ){
+			if (nOptions == 1) {
 				pcEditView->GetCommander().HandleCommand( Index, true, nBoxLock, 0, 0, 0 );
-			}else{
+			}else {
 				pcEditView->GetCommander().HandleCommand( Index, true, wtoi_def(Argument[0], 0), nBoxLock, 0, 0 );
 			}
 		}

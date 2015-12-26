@@ -461,7 +461,7 @@ void CDlgGrep::SetData(void)
 				nCurIdx = nIdx;
 			}
 		}
-		if( nCurIdx != -1 ){
+		if (nCurIdx != -1) {
 			Combo_SetCurSel(hWndCombo, nCurIdx);
 		}else {
 			::CheckDlgButton( GetHwnd(), IDC_CHECK_CP, TRUE );

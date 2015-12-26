@@ -207,7 +207,7 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType, std::vect
 			CUtf8::UTF8ToUnicode( cmLine, &cmLineW );
 			line = cmLineW.GetStringPtr();
 
-			if( pData ){
+			if (pData) {
 				pData->push_back(line);
 			}else {
 				// ‰ğÍ

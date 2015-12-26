@@ -33,13 +33,13 @@ EConvertResult CUnicode::_UnicodeToUnicode_in( const CMemory& cSrc, CNativeW* pD
 	}
 
 	if (bBigEndian) {
-		if( &cSrc != pDstMem2 && !bCopy ){
+		if (&cSrc != pDstMem2 && !bCopy) {
 			// ƒRƒs[‚µ‚Â‚Â UnicodeBe -> Unicode
 			pDstMem2->SwabHLByte(cSrc);
-		}else{
+		}else {
 			pDstMem2->SwapHLByte();  // UnicodeBe -> Unicode
 		}
-	}else if( !bCopy ){
+	}else if (!bCopy) {
 		pDstMem2->SetRawDataHoldBuffer(pSrc, nSrcLen);
 	}
 	return res;

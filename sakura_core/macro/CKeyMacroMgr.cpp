@@ -331,7 +331,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 								}
 								cmemTemp.AppendString( p + nBegin, n - nBegin );
 								nBegin = k;
-								if( 0 < k - n - 2 ){
+								if (0 < k - n - 2) {
 									wchar_t hex[5];
 									wcsncpy( hex, &p[n+2], k - n - 2 );
 									hex[k - n - 2] = L'\0';
@@ -342,8 +342,8 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 								n = k - 1;
 							}
 						}
-						if( nBegin != 0 ){
-							if( 0 < nLen - nBegin ){
+						if (nBegin != 0) {
+							if (0 < nLen - nBegin) {
 								cmemTemp.AppendString( p + nBegin, nLen - nBegin );
 							}
 							cmemWork.swap( cmemTemp );

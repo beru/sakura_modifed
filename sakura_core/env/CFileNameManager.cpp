@@ -506,9 +506,9 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 	);
 	_tsplitpath(szPath, szDrive, szDir, szFname, szExt);
 
-	if( pszProfName[0] == '\0' ){
+	if (pszProfName[0] == '\0') {
 		auto_snprintf_s(pszIniFile, _MAX_PATH - 1, _T("%ts%ts%ts%ts"), szDrive, szDir, szFname, _T(".ini"));
-	}else{
+	}else {
 		auto_snprintf_s( pszIniFile, _MAX_PATH - 1, _T("%ts%ts%ts\\%ts%ts"), szDrive, szDir, pszProfName, szFname, _T(".ini") );
 	}
 

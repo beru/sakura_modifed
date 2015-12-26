@@ -54,9 +54,9 @@ struct CMacroParam{
 
 	CMacroParam():m_pData(NULL), m_pNext(NULL), m_nDataLen(0), m_eType(EMacroParamTypeNull){}
 	CMacroParam( const CMacroParam& obj ){
-		if( obj.m_pData ){
+		if (obj.m_pData) {
 			m_pData = new WCHAR[obj.m_nDataLen + 1];
-		}else{
+		}else {
 			m_pData = NULL;
 		}
 		m_pNext = NULL;

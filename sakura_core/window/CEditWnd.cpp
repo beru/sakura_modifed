@@ -3038,7 +3038,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	//@@@ From Here 2003.05.31 MIK
 	//@@@ To Here 2003.05.31 MIK
 	bool bMiniMapSizeBox = true;
-	if( wParam == SIZE_MAXIMIZED ){
+	if (wParam == SIZE_MAXIMIZED) {
 		bMiniMapSizeBox = false;
 	}
 	int nStatusBarHeight = 0;
@@ -3082,7 +3082,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		//	初期状態ではすべての部分が「枠あり」だが，メッセージエリアは枠を描画しないようにしている
 		//	ため，初期化時の枠が変な風に残ってしまう．初期状態で枠を描画させなくするため，
 		//	最初に「枠無し」状態を設定した後でバーの分割を行う．
-		if( bUpdateStatus ){
+		if (bUpdateStatus) {
 			m_cStatusBar.SetStatusText(0, SBT_NOBORDERS, _T(""));
 		}
 
@@ -4474,7 +4474,7 @@ BOOL CEditWnd::UpdateTextWrap(void)
 			for (int i = 0; i < GetAllViewCount(); i++) {
 				::UpdateWindow(GetView(i).GetHwnd());
 			}
-			if( GetMiniMap().GetHwnd() ){
+			if (GetMiniMap().GetHwnd()) {
 				::UpdateWindow( GetMiniMap().GetHwnd() );
 			}
 		}
