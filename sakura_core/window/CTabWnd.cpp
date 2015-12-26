@@ -605,7 +605,7 @@ BOOL CTabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDr
 		return FALSE;
 	if (hWnd != CAppNodeManager::getInstance()->GetEditNode(hwndSrc)->GetGroup().GetTopEditNode()->GetHwnd())
 		return FALSE;
-	if (hwndDst != NULL && hwndDst != CAppNodeManager::getInstance()->GetEditNode(hwndDst)->GetGroup().GetTopEditNode()->GetHwnd())
+	if (hwndDst && hwndDst != CAppNodeManager::getInstance()->GetEditNode(hwndDst)->GetGroup().GetTopEditNode()->GetHwnd())
 		return FALSE;
 	if (hwndSrc == hwndDst)
 		return TRUE;
@@ -1711,7 +1711,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 				// 自タブアイテムを強制的に可視位置にするために、
 				// 自タブアイテム選択前に一時的に画面左端のタブアイテムを選択する
 				hwndUpDown = ::FindWindowEx(m_hwndTab, NULL, UPDOWN_CLASS, 0);	// タブ内の Up-Down コントロール
-				nScrollPos = (hwndUpDown != NULL && ::IsWindowVisible(hwndUpDown))? LOWORD(UpDown_GetPos(hwndUpDown)): 0;	// 2007.09.24 ryoji hwndUpDown可視の条件追加
+				nScrollPos = (hwndUpDown && ::IsWindowVisible(hwndUpDown))? LOWORD(UpDown_GetPos(hwndUpDown)): 0;	// 2007.09.24 ryoji hwndUpDown可視の条件追加
 				TabCtrl_SetCurSel(m_hwndTab, nScrollPos);
 				TabCtrl_SetCurSel(m_hwndTab, nIndex);
 

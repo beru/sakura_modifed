@@ -46,7 +46,7 @@ int CUtf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 		bError = true;
 	}
 
-	if (pbuf != NULL) {
+	if (pbuf) {
 		ndecoded_len = _DecodeBase64(pSrc, nSrcLen, pbuf);
 		int nModLen = ndecoded_len % sizeof(wchar_t);
 		ndecoded_len = ndecoded_len - nModLen;

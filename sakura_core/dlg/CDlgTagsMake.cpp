@@ -137,7 +137,7 @@ void CDlgTagsMake::SetData(void)
 {
 	// 作成フォルダ
 	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER), _countof(m_szPath));
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER, m_szPath);
+	SetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath);
 
 	// オプション
 	m_nTagsOpt = m_pShareData->m_nTagsOpt;
@@ -146,7 +146,7 @@ void CDlgTagsMake::SetData(void)
 	// コマンドライン
 	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE), _countof(m_pShareData->m_szTagsCmdLine));
 	_tcscpy(m_szTagsCmdLine, m_pShareData->m_szTagsCmdLine);
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->m_szTagsCmdLine);
+	SetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->m_szTagsCmdLine);
 
 	return;
 }
@@ -164,7 +164,7 @@ int CDlgTagsMake::GetData(void)
 
 	// CTAGSオプション
 	m_nTagsOpt = 0;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE) == BST_CHECKED) m_nTagsOpt |= 0x0001;
+	if (IsDlgButtonChecked(GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE)) m_nTagsOpt |= 0x0001;
 	m_pShareData->m_nTagsOpt = m_nTagsOpt;
 
 	// コマンドライン

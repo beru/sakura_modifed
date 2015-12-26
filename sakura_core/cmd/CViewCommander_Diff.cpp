@@ -135,7 +135,7 @@ void CViewCommander::Command_COMPARE(void)
 		&& !commonSetting.m_sTabBar.m_bDispTabWndMultiWin
 	) {
 		hwndMsgBox = m_pCommanderView->GetHwnd();
-		csCompare.m_bCompareAndTileHorz = FALSE;
+		csCompare.m_bCompareAndTileHorz = false;
 	}else {
 		hwndMsgBox = hwndCompareWnd;
 	}

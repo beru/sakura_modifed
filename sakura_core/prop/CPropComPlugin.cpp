@@ -107,7 +107,7 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
 						CPlugin* plugin = CPluginManager::getInstance()->GetPlugin(sel);
-						if (plugin != NULL) {
+						if (plugin) {
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Description), to_tchar(plugin->m_sDescription.c_str()));
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Author), to_tchar(plugin->m_sAuthor.c_str()));
 							::SetWindowText(::GetDlgItem(hwndDlg, IDC_LABEL_PLUGIN_Version), to_tchar(plugin->m_sVersion.c_str()));
@@ -261,7 +261,7 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
 						CPlugin* plugin = CPluginManager::getInstance()->GetPlugin(sel);
-						if (plugin != NULL) {
+						if (plugin) {
 							::ShellExecute(NULL, _T("Open"), to_tchar(plugin->m_sUrl.c_str()), NULL, NULL, SW_SHOW);
 						}
 					}
@@ -441,7 +441,7 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 int CPropPlugin::GetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	m_Common.m_sPlugin.m_bEnablePlugin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_PluginEnable);
+	m_Common.m_sPlugin.m_bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
 	// プラグインリストは今のところ変更できる部分がない
 	//「新規プラグイン追加」はm_Commonに直接書き込むので、この関数ですることはない
@@ -502,7 +502,7 @@ void CPropPlugin::InitDialog(HWND hwndDlg)
 */
 void CPropPlugin::EnablePluginPropInput(HWND hwndDlg)
 {
-	if (!::IsDlgButtonChecked(hwndDlg, IDC_CHECK_PluginEnable)) {
+	if (!DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_SearchNew        ), FALSE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_INST_ZIP         ), FALSE);
 	}else {

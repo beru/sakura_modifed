@@ -67,8 +67,8 @@ public:
 	void RefreshString();	// 言語選択後に共有メモリ内の文字列を更新する
 	
 	// MRU系
-	BOOL IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner); // 指定ファイルが開かれているか調べる
-	BOOL ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode); // 指定ファイルが開かれているか調べつつ、多重オープン時の文字コード衝突も確認 // 2007.03.16
+	bool IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner); // 指定ファイルが開かれているか調べる
+	bool ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode); // 指定ファイルが開かれているか調べつつ、多重オープン時の文字コード衝突も確認 // 2007.03.16
 
 	// デバッグ  今は主にマクロ・外部コマンド実行用
 	void TraceOut(LPCTSTR lpFmt, ...);	// アウトプットウィンドウに出力(printfフォーマット)
@@ -76,7 +76,7 @@ public:
 	void SetTraceOutSource(HWND hwnd) { m_hwndTraceOutSource = hwnd; }	// TraceOut起動元ウィンドウの設定
 	bool OpenDebugWindow(HWND hwnd, bool bAllwaysActive);	// デバッグウィンドウを開く
 
-	BOOL IsPrivateSettings(void);
+	bool IsPrivateSettings(void);
 
 	// マクロ関連
 	int	 GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen); // idxで指定したマクロファイル名（フルパス）を取得する	// Jun. 14, 2003 genta 引数追加．書式変更

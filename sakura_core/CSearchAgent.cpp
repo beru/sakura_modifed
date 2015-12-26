@@ -573,7 +573,7 @@ int CSearchAgent::SearchWord(
 		}
 		//
 		// 正規表現検索の後処理
-		if (pDocLine != NULL) {
+		if (pDocLine) {
 			// マッチした行がある
 			pMatchRange->SetFromY(nLinePos); // マッチ行
 			pMatchRange->SetToY  (nLinePos); // マッチ行

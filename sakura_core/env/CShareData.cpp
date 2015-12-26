@@ -220,44 +220,44 @@ bool CShareData::InitShareData()
 		{
 			CommonSetting_General& sGeneral = m_pShareData->m_Common.m_sGeneral;
 
-			sGeneral.m_nMRUArrNum_MAX = 15;	/* ファイルの履歴MAX */	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
-			sGeneral.m_nOPENFOLDERArrNum_MAX = 15;	/* フォルダの履歴MAX */	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+			sGeneral.m_nMRUArrNum_MAX = 15;				// ファイルの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
+			sGeneral.m_nOPENFOLDERArrNum_MAX = 15;		// フォルダの履歴MAX	//Oct. 14, 2000 JEPRO 少し増やした(10→15)
 
-			sGeneral.m_nCaretType = 0;					/* カーソルのタイプ 0=win 1=dos */
-			sGeneral.m_bIsINSMode = true;				/* 挿入／上書きモード */
-			sGeneral.m_bIsFreeCursorMode = false;		/* フリーカーソルモードか */	//Oct. 29, 2000 JEPRO 「なし」に変更
+			sGeneral.m_nCaretType = 0;					// カーソルのタイプ 0=win 1=dos
+			sGeneral.m_bIsINSMode = true;				// 挿入／上書きモード
+			sGeneral.m_bIsFreeCursorMode = false;		// フリーカーソルモードか	//Oct. 29, 2000 JEPRO 「なし」に変更
 
-			sGeneral.m_bStopsBothEndsWhenSearchWord = FALSE;	/* 単語単位で移動するときに、単語の両端で止まるか */
-			sGeneral.m_bStopsBothEndsWhenSearchParagraph = FALSE;	/* 単語単位で移動するときに、単語の両端で止まるか */
+			sGeneral.m_bStopsBothEndsWhenSearchWord = false;	// 単語単位で移動するときに、単語の両端で止まるか
+			sGeneral.m_bStopsBothEndsWhenSearchParagraph = false;	// 単語単位で移動するときに、単語の両端で止まるか
 
-			sGeneral.m_bCloseAllConfirm = FALSE;		/* [すべて閉じる]で他に編集用のウィンドウがあれば確認する */	// 2006.12.25 ryoji
-			sGeneral.m_bExitConfirm = FALSE;			/* 終了時の確認をする */
+			sGeneral.m_bCloseAllConfirm = false;		/* [すべて閉じる]で他に編集用のウィンドウがあれば確認する */	// 2006.12.25 ryoji
+			sGeneral.m_bExitConfirm = false;			/* 終了時の確認をする */
 			sGeneral.m_nRepeatedScrollLineNum = CLayoutInt(3);	/* キーリピート時のスクロール行数 */
-			sGeneral.m_nRepeatedScroll_Smooth = FALSE;	/* キーリピート時のスクロールを滑らかにするか */
+			sGeneral.m_nRepeatedScroll_Smooth = false;	/* キーリピート時のスクロールを滑らかにするか */
 			sGeneral.m_nPageScrollByWheel = 0;			/* キー/マウスボタン + ホイールスクロールでページスクロールする */	// 2009.01.17 nasukoji
 			sGeneral.m_nHorizontalScrollByWheel = 0;	/* キー/マウスボタン + ホイールスクロールで横スクロールする */		// 2009.01.17 nasukoji
 
-			sGeneral.m_bUseTaskTray = TRUE;				/* タスクトレイのアイコンを使う */
+			sGeneral.m_bUseTaskTray = true;				/* タスクトレイのアイコンを使う */
 #ifdef _DEBUG
-			sGeneral.m_bStayTaskTray = FALSE;				/* タスクトレイのアイコンを常駐 */
+			sGeneral.m_bStayTaskTray = false;				/* タスクトレイのアイコンを常駐 */
 #else
-			sGeneral.m_bStayTaskTray = TRUE;				/* タスクトレイのアイコンを常駐 */
+			sGeneral.m_bStayTaskTray = true;				/* タスクトレイのアイコンを常駐 */
 #endif
 			sGeneral.m_wTrayMenuHotKeyCode = L'Z';		/* タスクトレイ左クリックメニュー キー */
 			sGeneral.m_wTrayMenuHotKeyMods = HOTKEYF_ALT | HOTKEYF_CONTROL;	/* タスクトレイ左クリックメニュー キー */
 
-			sGeneral.m_bDispExitingDialog = FALSE;		/* 終了ダイアログを表示する */
+			sGeneral.m_bDispExitingDialog = false;		/* 終了ダイアログを表示する */
 
-			sGeneral.m_bNoCaretMoveByActivation = FALSE;	/* マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta) */
+			sGeneral.m_bNoCaretMoveByActivation = false;	/* マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta) */
 		}
 
 		// [ウィンドウ]タブ
 		{
 			CommonSetting_Window& sWindow = m_pShareData->m_Common.m_sWindow;
 
-			sWindow.m_bDispTOOLBAR = TRUE;			/* 次回ウィンドウを開いたときツールバーを表示する */
-			sWindow.m_bDispSTATUSBAR = TRUE;			/* 次回ウィンドウを開いたときステータスバーを表示する */
-			sWindow.m_bDispFUNCKEYWND = FALSE;		/* 次回ウィンドウを開いたときファンクションキーを表示する */
+			sWindow.m_bDispTOOLBAR = true;			/* 次回ウィンドウを開いたときツールバーを表示する */
+			sWindow.m_bDispSTATUSBAR = true;			/* 次回ウィンドウを開いたときステータスバーを表示する */
+			sWindow.m_bDispFUNCKEYWND = false;		/* 次回ウィンドウを開いたときファンクションキーを表示する */
 			sWindow.m_bDispMiniMap = false;			// ミニマップを表示する
 			sWindow.m_nFUNCKEYWND_Place = 1;			/* ファンクションキー表示位置／0:上 1:下 */
 			sWindow.m_nFUNCKEYWND_GroupNum = 4;			// 2002/11/04 Moca ファンクションキーのグループボタン数
@@ -265,8 +265,8 @@ bool CShareData::InitShareData()
 			sWindow.m_nMiniMapQuality = NONANTIALIASED_QUALITY;
 			sWindow.m_nMiniMapWidth = 150;
 
-			sWindow.m_bSplitterWndHScroll = TRUE;	// 2001/06/20 asa-o 分割ウィンドウの水平スクロールの同期をとる
-			sWindow.m_bSplitterWndVScroll = TRUE;	// 2001/06/20 asa-o 分割ウィンドウの垂直スクロールの同期をとる
+			sWindow.m_bSplitterWndHScroll = true;	// 2001/06/20 asa-o 分割ウィンドウの水平スクロールの同期をとる
+			sWindow.m_bSplitterWndVScroll = true;	// 2001/06/20 asa-o 分割ウィンドウの垂直スクロールの同期をとる
 
 			// 2001/06/14 asa-o 補完とキーワードヘルプはタイプ別に移動したので削除
 			//	2004.05.13 Moca ウィンドウサイズ固定指定追加に伴う指定方法変更
@@ -275,7 +275,7 @@ bool CShareData::InitShareData()
 			sWindow.m_nWinSizeCX = CW_USEDEFAULT;
 			sWindow.m_nWinSizeCY = 0;
 
-			sWindow.m_bScrollBarHorz = TRUE;				/* 水平スクロールバーを使う */
+			sWindow.m_bScrollBarHorz = true;				/* 水平スクロールバーを使う */
 			//	2004.05.13 Moca ウィンドウ位置
 			sWindow.m_eSaveWindowPos = WINSIZEMODE_DEF;		// ウィンドウ位置固定・継承
 			sWindow.m_nWinPosX = CW_USEDEFAULT;
@@ -286,9 +286,9 @@ bool CShareData::InitShareData()
 			sWindow.m_nRulerType = 0;					/* ルーラーのタイプ */
 			sWindow.m_nLineNumRightSpace = 0;			/* 行番号の右の隙間 */
 			sWindow.m_nVertLineOffset = -1;			// 2005.11.10 Moca 指定桁縦線
-			sWindow.m_bUseCompatibleBMP = TRUE;		// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji FALSE->TRUE
+			sWindow.m_bUseCompatibleBMP = true;		// 2007.09.09 Moca 画面キャッシュを使う	// 2009.06.09 ryoji FALSE->TRUE
 
-			sWindow.m_bMenuIcon = TRUE;		/* メニューにアイコンを表示する */
+			sWindow.m_bMenuIcon = true;		/* メニューにアイコンを表示する */
 
 			//	Apr. 05, 2003 genta ウィンドウキャプションの初期値
 			//	Aug. 16, 2003 genta $N(ファイル名省略表示)をデフォルトに変更
@@ -304,23 +304,23 @@ bool CShareData::InitShareData()
 		{
 			CommonSetting_TabBar& sTabBar = m_pShareData->m_Common.m_sTabBar;
 
-			sTabBar.m_bDispTabWnd = FALSE;			//タブウインドウ表示	//@@@ 2003.05.31 MIK
-			sTabBar.m_bDispTabWndMultiWin = FALSE;	//タブウインドウ表示	//@@@ 2003.05.31 MIK
+			sTabBar.m_bDispTabWnd = false;				// タブウインドウ表示	//@@@ 2003.05.31 MIK
+			sTabBar.m_bDispTabWndMultiWin = false;		// タブウインドウ表示	//@@@ 2003.05.31 MIK
 			wcscpy(	//@@@ 2003.06.13 MIK
 				sTabBar.m_szTabWndCaption,
 				L"${w?【Grep】$h$:【アウトプット】$:$f$n$}${U?(更新)$}${R?(ビューモード)$:(上書き禁止)$}${M?【キーマクロの記録中】$}"
 			);
-			sTabBar.m_bSameTabWidth = FALSE;			//タブを等幅にする			//@@@ 2006.01.28 ryoji
-			sTabBar.m_bDispTabIcon = FALSE;			//タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
-			sTabBar.m_bDispTabClose = DISPTABCLOSE_NO;	//タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
-			sTabBar.m_bSortTabList = TRUE;			//タブ一覧をソートする		//@@@ 2006.05.10 ryoji
-			sTabBar.m_bTab_RetainEmptyWin = TRUE;	// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
-			sTabBar.m_bTab_CloseOneWin = FALSE;	// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
-			sTabBar.m_bTab_ListFull = FALSE;			//タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
-			sTabBar.m_bChgWndByWheel = FALSE;		//マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
-			sTabBar.m_bNewWindow = FALSE;			// 外部から起動するときは新しいウインドウで開く
-			sTabBar.m_bTabMultiLine = false;		// タブ多段
-			sTabBar.m_eTabPosition = TabPosition_Top;		//タブ位置
+			sTabBar.m_bSameTabWidth = false;			// タブを等幅にする			//@@@ 2006.01.28 ryoji
+			sTabBar.m_bDispTabIcon = false;				// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
+			sTabBar.m_bDispTabClose = DISPTABCLOSE_NO;	// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
+			sTabBar.m_bSortTabList = true;				// タブ一覧をソートする		//@@@ 2006.05.10 ryoji
+			sTabBar.m_bTab_RetainEmptyWin = true;		// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
+			sTabBar.m_bTab_CloseOneWin = false;			// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
+			sTabBar.m_bTab_ListFull = false;			// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
+			sTabBar.m_bChgWndByWheel = false;			// マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
+			sTabBar.m_bNewWindow = false;				// 外部から起動するときは新しいウインドウで開く
+			sTabBar.m_bTabMultiLine = false;			// タブ多段
+			sTabBar.m_eTabPosition = TabPosition_Top;	// タブ位置
 
 			sTabBar.m_lf = lfIconTitle;
 			sTabBar.m_nPointSize = nIconPointSize;
@@ -335,23 +335,23 @@ bool CShareData::InitShareData()
 
 			sEdit.m_bAddCRLFWhenCopy = false;			/* 折り返し行に改行を付けてコピー */
 
-			sEdit.m_bUseOLE_DragDrop = TRUE;			/* OLEによるドラッグ & ドロップを使う */
-			sEdit.m_bUseOLE_DropSource = TRUE;			/* OLEによるドラッグ元にするか */
-			sEdit.m_bSelectClickedURL = TRUE;			/* URLがクリックされたら選択するか */
-			sEdit.m_bCopyAndDisablSelection = FALSE;	/* コピーしたら選択解除 */
-			sEdit.m_bEnableNoSelectCopy = TRUE;		/* 選択なしでコピーを可能にする */	// 2007.11.18 ryoji
+			sEdit.m_bUseOLE_DragDrop = true;			/* OLEによるドラッグ & ドロップを使う */
+			sEdit.m_bUseOLE_DropSource = true;			/* OLEによるドラッグ元にするか */
+			sEdit.m_bSelectClickedURL = true;			/* URLがクリックされたら選択するか */
+			sEdit.m_bCopyAndDisablSelection = false;	/* コピーしたら選択解除 */
+			sEdit.m_bEnableNoSelectCopy = true;		/* 選択なしでコピーを可能にする */	// 2007.11.18 ryoji
 			sEdit.m_bEnableLineModePaste = true;		/* ラインモード貼り付けを可能にする */	// 2007.10.08 ryoji
 			sEdit.m_bConvertEOLPaste = false;			/* 改行コードを変換して貼り付ける */	// 2009.02.28 salarm
 			sEdit.m_bEnableExtEol = false;
 			sEdit.m_bBoxSelectLock = true;
 
-			sEdit.m_bNotOverWriteCRLF = TRUE;			/* 改行は上書きしない */
+			sEdit.m_bNotOverWriteCRLF = true;			/* 改行は上書きしない */
 			sEdit.m_bOverWriteFixMode = false;			// 文字幅に合わせてスペースを詰める
 
 			sEdit.m_bOverWriteBoxDelete = false;
 			sEdit.m_eOpenDialogDir = OPENDIALOGDIR_CUR;
 			auto_strcpy(sEdit.m_OpenDialogSelDir, _T("%Personal%\\"));
-			sEdit.m_bAutoColumnPaste = TRUE;			/* 矩形コピーのテキストは常に矩形貼り付け */
+			sEdit.m_bAutoColumnPaste = true;			/* 矩形コピーのテキストは常に矩形貼り付け */
 		}
 
 		// [ファイル]タブ
@@ -428,10 +428,10 @@ bool CShareData::InitShareData()
 
 			sSearch.m_sSearchOption.Reset();			// 検索オプション
 			sSearch.m_bConsecutiveAll = 0;			// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-			sSearch.m_bSelectedArea = FALSE;			// 選択範囲内置換
-			sSearch.m_bNOTIFYNOTFOUND = TRUE;		/* 検索／置換  見つからないときメッセージを表示 */
+			sSearch.m_bSelectedArea = false;			// 選択範囲内置換
+			sSearch.m_bNOTIFYNOTFOUND = true;		/* 検索／置換  見つからないときメッセージを表示 */
 
-			sSearch.m_bGrepSubFolder = TRUE;			/* Grep: サブフォルダも検索 */
+			sSearch.m_bGrepSubFolder = true;			/* Grep: サブフォルダも検索 */
 			sSearch.m_nGrepOutputLineType = 1;			// Grep: 行を出力/該当部分/否マッチ行 を出力
 			sSearch.m_nGrepOutputStyle = 1;			/* Grep: 出力形式 */
 			sSearch.m_bGrepOutputFileOnly = false;
@@ -439,20 +439,20 @@ bool CShareData::InitShareData()
 			sSearch.m_bGrepSeparateFolder = false;
 			sSearch.m_bGrepBackup = true;
 
-			sSearch.m_bGrepDefaultFolder=FALSE;		/* Grep: フォルダの初期値をカレントフォルダにする */
+			sSearch.m_bGrepDefaultFolder = false;		/* Grep: フォルダの初期値をカレントフォルダにする */
 			sSearch.m_nGrepCharSet = CODE_AUTODETECT;	/* Grep: 文字コードセット */
-			sSearch.m_bGrepRealTimeView = FALSE;		/* 2003.06.28 Moca Grep結果のリアルタイム表示 */
-			sSearch.m_bCaretTextForSearch = TRUE;		/* 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする */
+			sSearch.m_bGrepRealTimeView = false;		/* 2003.06.28 Moca Grep結果のリアルタイム表示 */
+			sSearch.m_bCaretTextForSearch = true;		/* 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする */
 			sSearch.m_bInheritKeyOtherView = true;
 			sSearch.m_szRegexpLib[0] = _T('\0');		/* 2007.08.12 genta 正規表現DLL */
-			sSearch.m_bGTJW_RETURN = TRUE;				/* エンターキーでタグジャンプ */
-			sSearch.m_bGTJW_LDBLCLK = TRUE;			/* ダブルクリックでタグジャンプ */
+			sSearch.m_bGTJW_RETURN = true;				/* エンターキーでタグジャンプ */
+			sSearch.m_bGTJW_LDBLCLK = true;			/* ダブルクリックでタグジャンプ */
 
-			sSearch.m_bGrepExitConfirm = FALSE;			/* Grepモードで保存確認するか */
+			sSearch.m_bGrepExitConfirm = false;			/* Grepモードで保存確認するか */
 
-			sSearch.m_bAutoCloseDlgFind = TRUE;			/* 検索ダイアログを自動的に閉じる */
-			sSearch.m_bSearchAll		 = FALSE;			/* 検索／置換／ブックマーク  先頭（末尾）から再検索 2002.01.26 hor */
-			sSearch.m_bAutoCloseDlgReplace = TRUE;		/* 置換 ダイアログを自動的に閉じる */
+			sSearch.m_bAutoCloseDlgFind = true;			/* 検索ダイアログを自動的に閉じる */
+			sSearch.m_bSearchAll		 = false;			/* 検索／置換／ブックマーク  先頭（末尾）から再検索 2002.01.26 hor */
+			sSearch.m_bAutoCloseDlgReplace = true;		/* 置換 ダイアログを自動的に閉じる */
 
 			sSearch.m_nTagJumpMode = 1;				//タグジャンプモード
 			sSearch.m_nTagJumpModeKeyword = 3;			//タグジャンプモード
@@ -511,10 +511,10 @@ bool CShareData::InitShareData()
 
 			sHelper.m_bHtmlHelpIsSingle = true;		/* HtmlHelpビューアはひとつ */
 
-			sHelper.m_bHokanKey_RETURN	= TRUE;			/* VK_RETURN 補完決定キーが有効/無効 */
-			sHelper.m_bHokanKey_TAB		= FALSE;		/* VK_TAB   補完決定キーが有効/無効 */
-			sHelper.m_bHokanKey_RIGHT	= TRUE;			/* VK_RIGHT 補完決定キーが有効/無効 */
-			sHelper.m_bHokanKey_SPACE	= FALSE;		/* VK_SPACE 補完決定キーが有効/無効 */
+			sHelper.m_bHokanKey_RETURN	= true;			/* VK_RETURN 補完決定キーが有効/無効 */
+			sHelper.m_bHokanKey_TAB		= false;		/* VK_TAB   補完決定キーが有効/無効 */
+			sHelper.m_bHokanKey_RIGHT	= true;			/* VK_RIGHT 補完決定キーが有効/無効 */
+			sHelper.m_bHokanKey_SPACE	= false;		/* VK_SPACE 補完決定キーが有効/無効 */
 
 			sHelper.m_bUseHokan = FALSE;					/* 入力補完機能を使用する */
 		}
@@ -524,7 +524,7 @@ bool CShareData::InitShareData()
 			CommonSetting_OutLine& sOutline = m_pShareData->m_Common.m_sOutline;
 
 			sOutline.m_nOutlineDockSet = 0;					/* アウトライン解析のドッキング位置継承方法 */
-			sOutline.m_bOutlineDockSync = TRUE;				/* アウトライン解析のドッキング位置を同期する */
+			sOutline.m_bOutlineDockSync = true;				/* アウトライン解析のドッキング位置を同期する */
 			sOutline.m_bOutlineDockDisp = FALSE;				/* アウトライン解析表示の有無 */
 			sOutline.m_eOutlineDockSide = DOCKSIDE_FLOAT;		/* アウトライン解析ドッキング配置 */
 			sOutline.m_cxOutlineDockLeft		=	0;	// アウトラインの左ドッキング幅
@@ -544,7 +544,7 @@ bool CShareData::InitShareData()
 		{
 			CommonSetting_Compare& sCompare = m_pShareData->m_Common.m_sCompare;
 
-			sCompare.m_bCompareAndTileHorz = TRUE;		/* 文書比較後、左右に並べて表示 */
+			sCompare.m_bCompareAndTileHorz = true;		/* 文書比較後、左右に並べて表示 */
 		}
 
 		// [ビュー]タブ
@@ -554,7 +554,7 @@ bool CShareData::InitShareData()
 			sView.m_lf = lf;
 			sView.m_nPointSize = 0;	// フォントサイズ（1/10ポイント単位） ※古いバージョンからの移行を考慮して無効値で初期化	// 2009.10.01 ryoji
 
-			sView.m_bFontIs_FIXED_PITCH = TRUE;				/* 現在のフォントは固定幅フォントである */
+			sView.m_bFontIs_FIXED_PITCH = true;				/* 現在のフォントは固定幅フォントである */
 		}
 
 		// [マクロ]タブ
@@ -628,8 +628,8 @@ bool CShareData::InitShareData()
 			sStatusbar.m_bDispUniInSjis		= FALSE;	// SJISで文字コード値をUnicodeで表示する
 			sStatusbar.m_bDispUniInJis			= FALSE;	// JISで文字コード値をUnicodeで表示する
 			sStatusbar.m_bDispUniInEuc			= FALSE;	// EUCで文字コード値をUnicodeで表示する
-			sStatusbar.m_bDispUtf8Codepoint	= TRUE;		// UTF-8をコードポイントで表示する
-			sStatusbar.m_bDispSPCodepoint		= TRUE;		// サロゲートペアをコードポイントで表示する
+			sStatusbar.m_bDispUtf8Codepoint	= true;		// UTF-8をコードポイントで表示する
+			sStatusbar.m_bDispSPCodepoint		= true;		// サロゲートペアをコードポイントで表示する
 			sStatusbar.m_bDispSelCountByByte	= FALSE;	// 選択文字数を文字単位ではなくバイト単位で表示する
 		}
 
@@ -870,7 +870,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 			break;
 		}
 	}
-	assert(m_pvTypeSettings != NULL);
+	assert(m_pvTypeSettings);
 	indexBackup = index;
 	ConvertLangValue(shareData.m_TypeBasis.m_szTypeName, STR_TYPE_NAME_BASIS);
 	for (int i = 0; i < (int)GetTypeSettings().size(); i++) {
@@ -900,10 +900,10 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	
 	指定のファイルが開かれている場合は開いているウィンドウのハンドルを返す
 
-	@retval	TRUE すでに開いていた
-	@retval	FALSE 開いていなかった
+	@retval	true すでに開いていた
+	@retval	false 開いていなかった
 */
-BOOL CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
+bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 {
 	*phwndOwner = NULL;
 
@@ -917,7 +917,7 @@ BOOL CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 
 	// 現在の編集ウィンドウの数を調べる
 	if (0 == CAppNodeGroupHandle(0).GetEditorWindowsNum()) {
-		return FALSE;
+		return false;
 	}
 	
 	for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
@@ -929,11 +929,11 @@ BOOL CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 			// 同一パスのファイルが既に開かれているか
 			if (0 == _tcsicmp(pfi->m_szPath, pszPath)) {
 				*phwndOwner = m_pShareData->m_sNodes.m_pEditArr[i].m_hWnd;
-				return TRUE;
+				return true;
 			}
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 /*!
@@ -954,7 +954,7 @@ BOOL CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 
 	@date 2007.03.12 maru 新規作成
 */
-BOOL CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode)
+bool CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwner, ECodeType nCharCode)
 {
 	if (IsPathOpened(pszPath, phwndOwner)) {
 		
@@ -992,9 +992,9 @@ BOOL CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 
 		// MRUリストへの登録
 		CMRUFile().Add(pfi);
-		return TRUE;
+		return true;
 	}else {
-		return FALSE;
+		return false;
 	}
 
 }
@@ -1127,7 +1127,7 @@ bool CShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 }
 
 // iniファイルの保存先がユーザ別設定フォルダかどうか	// 2007.05.25 ryoji
-BOOL CShareData::IsPrivateSettings(void) {
+bool CShareData::IsPrivateSettings(void) {
 	return m_pShareData->m_sFileNameManagement.m_IniFolder.m_bWritePrivate;
 }
 
@@ -1171,7 +1171,7 @@ int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 		pszFile = m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szFile;
 	}
 	if (pszFile[0] == _T('\0')) {	// ファイル名が無い
-		if (pszPath != NULL) {
+		if (pszPath) {
 			pszPath[0] = _T('\0');
 		}
 		return 0;

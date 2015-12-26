@@ -735,18 +735,18 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 	// May 21, 2001 genta 桁位置を1から数えるように
 	wchar_t buffer[COMMENT_DELIMITER_BUFFERSIZE];	//@@@ 2002.09.22 YAZAKI LineCommentを取得するためのバッファ
 	int pos;
-	UINT en;
+	bool en;
 	BOOL bTranslated;
 
 	for (int i = 0; i < COMMENT_DELIMITER_NUM; i++) {
-		en = ::IsDlgButtonChecked(hwndDlg, cLineComment[i].nCheckBoxID);
+		en = DlgButton_IsChecked(hwndDlg, cLineComment[i].nCheckBoxID);
 		pos = ::GetDlgItemInt(hwndDlg, cLineComment[i].nTextID, &bTranslated, FALSE);
 		if (!bTranslated) {
-			en = 0;
+			en = false;
 			pos = 0;
 		}
 		//	pos == 0のときは無効扱い
-		if (pos == 0)	en = 0;
+		if (pos == 0)	en = false;
 		else			--pos;
 		//	無効のときは1の補数で格納
 
@@ -950,7 +950,7 @@ void CPropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 	//	From Here Jun. 6, 2001 genta
 	//	行コメント開始桁位置入力ボックスのEnable/Disable設定
 	//	1つ目
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_LCPOS)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_LCPOS)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENTPOS), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_LCPOS), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_LCColNum), TRUE);
@@ -960,7 +960,7 @@ void CPropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_LCColNum), FALSE);
 	}
 	//	2つ目
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_LCPOS2)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_LCPOS2)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENTPOS2), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_LCPOS2), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_LCColNum2), TRUE);
@@ -970,7 +970,7 @@ void CPropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_LCColNum2), FALSE);
 	}
 	//	3つ目
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_LCPOS3)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_LCPOS3)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_LINECOMMENTPOS3), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_LCPOS3), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_LCColNum3), TRUE);

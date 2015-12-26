@@ -258,7 +258,7 @@ CWSHClient::~CWSHClient()
 		(*it)->Release();
 	}
 	
-	if (m_Engine != NULL) {
+	if (m_Engine) {
 		m_Engine->Release();
 	}
 }
@@ -296,7 +296,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 				::SendMessage(cDlgCancel.GetHwnd(), WM_CLOSE, 0, 0);
 			}else if (dwResult == WAIT_OBJECT_0 + 1) {
 				while (::PeekMessage(&msg , NULL , 0 , 0, PM_REMOVE)) {
-					if (cDlgCancel.GetHwnd() != NULL && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)) {
+					if (cDlgCancel.GetHwnd() && ::IsDialogMessage(cDlgCancel.GetHwnd(), &msg)) {
 					}else {
 						::TranslateMessage(&msg);
 						::DispatchMessage(&msg);
@@ -401,7 +401,7 @@ bool CWSHClient::Execute(const wchar_t* AScript)
 
 void CWSHClient::Error(BSTR Description, BSTR Source)
 {
-	if (m_OnError != NULL) {
+	if (m_OnError) {
 		m_OnError(Description, Source, m_Data);
 	}
 }

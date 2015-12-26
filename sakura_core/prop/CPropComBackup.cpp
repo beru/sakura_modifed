@@ -331,27 +331,27 @@ int CPropBackup::GetData(HWND hwndDlg)
 	auto& csBackup = m_Common.m_sBackup;
 
 	// バックアップの作成
-	csBackup.m_bBackUp = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKUP);
+	csBackup.m_bBackUp = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP);
 	// バックアップの作成前に確認
-	csBackup.m_bBackUpDialog = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKUPDIALOG);
+	csBackup.m_bBackUpDialog = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPDIALOG);
 //	// 指定フォルダにバックアップを作成する // 20051107 aroka 「バックアップの作成」に連動させる
-//	csBackup.m_bBackUpFolder = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
+//	csBackup.m_bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
 
 	// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE1)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE1)) {
 		//	Jun.  5, 2005 genta 拡張子を残すパターンを追加
-		if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_RETAINEXT)) {
+		if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_RETAINEXT)) {
 			csBackup.SetBackupType(5);
 		}else {
 			csBackup.SetBackupType(1);
 		}
 	}
-//	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE2)) {
+//	if (::DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE2)) {
 		// 2001/06/05 Start by asa-o: 日付のタイプ
-		if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1)) {
+		if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1)) {
 			csBackup.SetBackupType(2);	// 現時刻
 		}
-		if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE2)) {
+		if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE2)) {
 			csBackup.SetBackupType(4);	// 前回の保存時刻
 		}
 		// 2001/06/05 End
@@ -359,8 +359,8 @@ int CPropBackup::GetData(HWND hwndDlg)
 
 	//	Aug. 16, 2000 genta
 	//	3 = *.b??
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE3)) {
-		if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_RETAINEXT)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE3)) {
+		if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_RETAINEXT)) {
 			csBackup.SetBackupType(6);
 		}else {
 			csBackup.SetBackupType(3);
@@ -368,21 +368,21 @@ int CPropBackup::GetData(HWND hwndDlg)
 	}
 
 	// バックアップファイル名：日付の年
-	csBackup.SetBackupOpt(BKUP_YEAR, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_YEAR) == BST_CHECKED);
+	csBackup.SetBackupOpt(BKUP_YEAR, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_YEAR));
 	// バックアップファイル名：日付の月
-	csBackup.SetBackupOpt(BKUP_MONTH, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_MONTH) == BST_CHECKED);
+	csBackup.SetBackupOpt(BKUP_MONTH, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_MONTH));
 	// バックアップファイル名：日付の日
-	csBackup.SetBackupOpt(BKUP_DAY, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_DAY) == BST_CHECKED);
+	csBackup.SetBackupOpt(BKUP_DAY, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_DAY));
 	// バックアップファイル名：日付の時
-	csBackup.SetBackupOpt(BKUP_HOUR, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_HOUR) == BST_CHECKED);
+	csBackup.SetBackupOpt(BKUP_HOUR, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_HOUR));
 	// バックアップファイル名：日付の分
-	csBackup.SetBackupOpt(BKUP_MIN, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_MIN) == BST_CHECKED);
+	csBackup.SetBackupOpt(BKUP_MIN, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_MIN));
 	// バックアップファイル名：日付の秒
-	csBackup.SetBackupOpt(BKUP_SEC, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_SEC) == BST_CHECKED);
+	csBackup.SetBackupOpt(BKUP_SEC, DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_SEC));
 
 	// 指定フォルダにバックアップを作成する // 20051107 aroka 移動
-	csBackup.m_bBackUpFolder = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKUPFOLDER);
-	csBackup.m_bBackUpFolderRM = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM);	// 2010/5/27 Uchi
+	csBackup.m_bBackUpFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
+	csBackup.m_bBackUpFolderRM = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_FOLDER_RM);	// 2010/5/27 Uchi
 
 	// バックアップを作成するフォルダ
 	//	Oct. 5, 2002 genta サイズをsizeof()で指定
@@ -390,18 +390,18 @@ int CPropBackup::GetData(HWND hwndDlg)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFOLDER, csBackup.m_szBackUpFolder, _countof2(csBackup.m_szBackUpFolder) - 1);
 
 	// バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add MIK
-	csBackup.m_bBackUpDustBox = (BST_CHECKED == ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX));	//@@@ 2001.12.11 add MIK
+	csBackup.m_bBackUpDustBox = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_DUSTBOX);	//@@@ 2001.12.11 add MIK
 
 	// 指定フォルダにバックアップを作成する詳細設定 // 20051107 aroka
-	csBackup.m_bBackUpPathAdvanced = (BST_CHECKED == ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED));
+	csBackup.m_bBackUpPathAdvanced = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED);
 	// バックアップを作成するフォルダ // 20051107 aroka
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_BACKUPFILE, csBackup.m_szBackUpPathAdvanced, _countof2(csBackup.m_szBackUpPathAdvanced) - 1);
 
 	// 20051128 aroka 詳細設定の日付のタイプ
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1A)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1A)) {
 		csBackup.SetBackupTypeAdv(2);	// 現時刻
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE2A)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE2A)) {
 		csBackup.SetBackupTypeAdv(4);	// 前回の保存時刻
 	}
 
@@ -450,14 +450,14 @@ void CPropBackup::EnableBackupInput(HWND hwndDlg)
 {
 	#define SHOWENABLE(id, show, enable) ShowEnable(::GetDlgItem(hwndDlg, id), show, enable)
 
-	BOOL bBackup = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP);
-	BOOL bAdvanced = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED);
-	BOOL bType1 = ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE1);
-	//BOOL bType2 = ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE2);
-	BOOL bType3 = ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE3);
-	BOOL bDate1 = ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1);
-	BOOL bDate2 = ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE2);
-	BOOL bFolder = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
+	bool bBackup = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP);
+	bool bAdvanced = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP_ADVANCED);
+	bool bType1 = DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE1);
+	//bool bType2 = DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE2);
+	bool bType3 = DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_TYPE3);
+	bool bDate1 = DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE1);
+	bool bDate2 = DlgButton_IsChecked(hwndDlg, IDC_RADIO_BACKUP_DATETYPE2);
+	bool bFolder = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUPFOLDER);
 
 	SHOWENABLE(IDC_CHECK_BACKUP_ADVANCED,	TRUE, bBackup);	// 20050628 aroka
 	SHOWENABLE(IDC_RADIO_BACKUP_TYPE1,		!bAdvanced, bBackup);

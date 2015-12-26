@@ -2459,8 +2459,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 				m_cSplitterWnd.GetAllSplitRows() == 1 || m_cSplitterWnd.GetAllSplitCols() == 1);
 			break;
 		case F_TAB_CLOSEOTHER:
-			SetMenuFuncSel(hMenu, eFunc, pszKey, 
-				m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd != 0);
+			SetMenuFuncSel(hMenu, eFunc, pszKey, m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd);
 			break;
 		case F_TOPMOST:
 			SetMenuFuncSel(hMenu, eFunc, pszKey, 
@@ -2651,7 +2650,7 @@ void CEditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 	int cMenuItems = ::GetMenuItemCount(hMenu);
 	for (int nPos = 0; nPos < cMenuItems; nPos++) {
 		HMENU hSubMenu = ::GetSubMenu(hMenu, nPos);
-		if (hSubMenu != NULL) {
+		if (hSubMenu) {
 			if (::GetMenuItemCount(hSubMenu) == 0) {
 				// 下が無いので無効化
 				::EnableMenuItem(hMenu, nPos, MF_BYPOSITION | MF_GRAYED);
@@ -3014,7 +3013,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 
 		// 元に戻すときのサイズ種別を記憶	// 2007.06.20 ryoji
 		EditNode* p = CAppNodeManager::getInstance()->GetEditNode(GetHwnd());
-		if (p != NULL) {
+		if (p) {
 			p->m_showCmdRestore = ::IsZoomed(p->GetHwnd())? SW_SHOWMAXIMIZED: SW_SHOWNORMAL;
 		}
 	}
@@ -3066,7 +3065,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		// 正確な幅を計算するために、表示フォントを取得してhdcに選択させる。
 		hdc = ::GetDC(m_cStatusBar.GetStatusHwnd());
 		HFONT hFont = (HFONT)::SendMessage(m_cStatusBar.GetStatusHwnd(), WM_GETFONT, 0, 0);
-		if (hFont != NULL) {
+		if (hFont) {
 			hFont = (HFONT)::SelectObject(hdc, hFont);
 		}
 		nStArr[nStArrNum - 1] = nAllWidth;
@@ -3087,7 +3086,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		}
 
 		StatusBar_SetParts(m_cStatusBar.GetStatusHwnd(), nStArrNum, nStArr);
-		if (hFont != NULL) {
+		if (hFont) {
 			::SelectObject(hdc, hFont);
 		}
 		::ReleaseDC(m_cStatusBar.GetStatusHwnd(), hdc);
@@ -3745,7 +3744,7 @@ int	CEditWnd::CreateFileDropDownMenu(HWND hwnd)
 void CEditWnd::SetWindowIcon(HICON hIcon, int flag)
 {
 	HICON hOld = (HICON)::SendMessage(GetHwnd(), WM_SETICON, flag, (LPARAM)hIcon);
-	if (hOld != NULL) {
+	if (hOld) {
 		::DestroyIcon(hOld);
 	}
 }

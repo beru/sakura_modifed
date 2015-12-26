@@ -91,16 +91,16 @@ void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 			token[j] = my_strtok<WCHAR>(pTmpLine, length, &offset, L" \t\r\n");
 			if (!token[j]) break;
 			// トークンに含まれるべき文字でないか？
-			if (wcsstr(token[j], L"\"") != NULL
-			 || wcsstr(token[j], L"\\") != NULL
-			 || wcsstr(token[j], L"'") != NULL
+			if (wcsstr(token[j], L"\"")
+			 || wcsstr(token[j], L"\\")
+			 || wcsstr(token[j], L"'")
 			) {
 				token[j] = NULL;
 				break;
 			}
 		}
 
-		if (token[0] != NULL) {	// トークンが1個以上ある
+		if (token[0]) {	// トークンが1個以上ある
 			int nFuncId = -1;
 			WCHAR* entry_token = NULL;
 
@@ -111,7 +111,7 @@ void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 				token[0][length - 1] = L'\0';
 				nFuncId = 51;
 				entry_token = token[0];
-			}else if (token[1] != NULL) {	// トークンが2個以上ある
+			}else if (token[1]) {	// トークンが2個以上ある
 				if (wcsicmp(token[1], L"proc") == 0) {	// 関数
 					nFuncId = 50;
 					entry_token = token[0];

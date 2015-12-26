@@ -210,7 +210,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 				// エラー
 				hStdIn = hStdInWrite = NULL;
 			}
-			if (hStdInWrite != NULL) {
+			if (hStdInWrite) {
 				::CloseHandle(hStdInWrite);
 			}
 		}
@@ -605,7 +605,7 @@ user_cancel:
 
 finish:
 	// 終了処理
-	if (hStdIn != NULL) CloseHandle(hStdIn);	// 2007.03.18 maru 標準入力の制御のため
+	if (hStdIn) CloseHandle(hStdIn);	// 2007.03.18 maru 標準入力の制御のため
 	if (hStdOutWrite) CloseHandle(hStdOutWrite);
 	CloseHandle(hStdOutRead);
 	if (pi.hProcess) CloseHandle(pi.hProcess);

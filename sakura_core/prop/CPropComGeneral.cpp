@@ -112,7 +112,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 			// From Here 2001.12.03 hor
 			//		操作しにくいって評判だったのでタスクトレイ関係のEnable制御をやめました
 			//@@@ YAZAKI 2001.12.31 IDC_CHECKSTAYTASKTRAYのアクティブ、非アクティブのみ制御。
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETRAYICON)) {
+				if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_USETRAYICON)) {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
 				}else {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
@@ -392,29 +392,29 @@ int CPropGeneral::GetData(HWND hwndDlg)
 	auto& csGeneral = m_Common.m_sGeneral;
 	
 	// カーソルのタイプ 0=win 1=dos 
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CARETTYPE0)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_CARETTYPE0)) {
 		csGeneral.SetCaretType(0);
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CARETTYPE1)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_CARETTYPE1)) {
 		csGeneral.SetCaretType(1);
 	}
 
 	// フリーカーソルモード
-	csGeneral.m_bIsFreeCursorMode = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_FREECARET) != 0;
+	csGeneral.m_bIsFreeCursorMode = DlgButton_IsChecked(hwndDlg, IDC_CHECK_FREECARET);
 
 	// 単語単位で移動するときに、単語の両端で止まるか
-	csGeneral.m_bStopsBothEndsWhenSearchWord = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD);
+	csGeneral.m_bStopsBothEndsWhenSearchWord = DlgButton_IsChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_WORD);
 	//	2007.10.08 genta マウスクリックでアクティブになったときはカーソルをクリック位置に移動しない (2007.10.02 by nasukoji)
-	csGeneral.m_bNoCaretMoveByActivation = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE);
+	csGeneral.m_bNoCaretMoveByActivation = DlgButton_IsChecked(hwndDlg, IDC_CHECK_NOMOVE_ACTIVATE_BY_MOUSE);
 
 	// 段落単位で移動するときに、段落の両端で止まるか
-	csGeneral.m_bStopsBothEndsWhenSearchParagraph = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH);
+	csGeneral.m_bStopsBothEndsWhenSearchParagraph = DlgButton_IsChecked(hwndDlg, IDC_CHECK_STOPS_BOTH_ENDS_WHEN_SEARCH_PARAGRAPH);
 
 	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する	// 2006.12.25 ryoji
-	csGeneral.m_bCloseAllConfirm = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CLOSEALLCONFIRM);
+	csGeneral.m_bCloseAllConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CLOSEALLCONFIRM);
 
 	// 終了時の確認をする
-	csGeneral.m_bExitConfirm = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_EXITCONFIRM);
+	csGeneral.m_bExitConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_EXITCONFIRM);
 
 	// キーリピート時のスクロール行数
 	csGeneral.m_nRepeatedScrollLineNum = (CLayoutInt)::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
@@ -426,7 +426,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 	}
 
 	// キーリピート時のスクロールを滑らかにするか
-	csGeneral.m_nRepeatedScroll_Smooth = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH);
+	csGeneral.m_nRepeatedScroll_Smooth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_REPEATEDSCROLLSMOOTH);
 
 	// 2009.01.17 nasukoji	組み合わせてホイール操作した時ページスクロールする
 	HWND	hwndCombo;
@@ -434,7 +434,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	m_Common.m_sWindow.m_bUseCompatibleBMP = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_MEMDC);
+	m_Common.m_sWindow.m_bUseCompatibleBMP = DlgButton_IsChecked(hwndDlg, IDC_CHECK_MEMDC);
 
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
 	nSelPos = Combo_GetCurSel(hwndCombo);
@@ -476,7 +476,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 	}
 
 	// タスクトレイを使う
-	csGeneral.m_bUseTaskTray = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETRAYICON);
+	csGeneral.m_bUseTaskTray = DlgButton_IsChecked(hwndDlg, IDC_CHECK_USETRAYICON);
 //@@@ YAZAKI 2001.12.31 m_bUseTaskTrayに引きづられるように。
 	if (csGeneral.m_bUseTaskTray) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), TRUE);
@@ -484,7 +484,7 @@ int CPropGeneral::GetData(HWND hwndDlg)
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_STAYTASKTRAY), FALSE);
 	}
 	// タスクトレイに常駐
-	csGeneral.m_bStayTaskTray = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_STAYTASKTRAY);
+	csGeneral.m_bStayTaskTray = DlgButton_IsChecked(hwndDlg, IDC_CHECK_STAYTASKTRAY);
 
 	// タスクトレイ左クリックメニューのショートカット
 	LRESULT	lResult;

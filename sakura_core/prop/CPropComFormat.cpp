@@ -307,7 +307,7 @@ int CPropFormat::GetData(HWND hwndDlg)
 
 
 	// 日付書式のタイプ
-	if (BST_CHECKED == ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_DFORM_0)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_RADIO_DFORM_0)) {
 		csFormat.m_nDateFormatType = 0;
 	}else {
 		csFormat.m_nDateFormatType = 1;
@@ -316,7 +316,7 @@ int CPropFormat::GetData(HWND hwndDlg)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_DFORM, csFormat.m_szDateFormat, _countof(csFormat.m_szDateFormat));
 
 	// 時刻書式のタイプ
-	if (BST_CHECKED == ::IsDlgButtonChecked(hwndDlg, IDC_RADIO_TFORM_0)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_RADIO_TFORM_0)) {
 		csFormat.m_nTimeFormatType = 0;
 	}else {
 		csFormat.m_nTimeFormatType = 1;
@@ -335,7 +335,7 @@ int CPropFormat::GetData(HWND hwndDlg)
 void CPropFormat::EnableFormatPropInput(HWND hwndDlg)
 {
 	//	日付書式をカスタムにするかどうか
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_DFORM_1)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_RADIO_DFORM_1)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_DFORM), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_DFORM), TRUE);
 	}else {
@@ -344,7 +344,7 @@ void CPropFormat::EnableFormatPropInput(HWND hwndDlg)
 	}
 
 	//	時刻書式をカスタムにするかどうか
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_TFORM_1)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_RADIO_TFORM_1)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_TFORM), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TFORM), TRUE);
 	}else {

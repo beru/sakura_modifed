@@ -255,7 +255,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_CHK_FROMTHISTEXT:	// この編集中のテキストから検索する
 		// 2010.05.30 関数化
-		SetDataFromThisText(0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_FROMTHISTEXT));
+		SetDataFromThisText(IsButtonChecked(IDC_CHK_FROMTHISTEXT));
 		return TRUE;
 	case IDC_BUTTON_CURRENTFOLDER:	// 現在編集中のファイルのフォルダ
 		// ファイルを開いているか
@@ -313,7 +313,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 //		return TRUE;
 	case IDC_CHK_REGULAREXP:	// 正規表現
 //		MYTRACE(_T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP) = %d\n"), ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
-		if (::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP)) {
+		if (IsButtonChecked(IDC_CHK_REGULAREXP)) {
 			// From Here Jun. 26, 2001 genta
 			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {
@@ -361,7 +361,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_CHECK_CP:
 		{
-			if (IsDlgButtonChecked( GetHwnd(), IDC_CHECK_CP )) {
+			if (IsButtonChecked(IDC_CHECK_CP)) {
 				::EnableWindow( ::GetDlgItem( GetHwnd(), IDC_CHECK_CP ), FALSE );
 				HWND combo = ::GetDlgItem( GetHwnd(), IDC_COMBO_CHARSET );
 				CCodePage::AddComboCodePages(GetHwnd(), combo, -1);
@@ -371,7 +371,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 	case IDC_CHK_DEFAULTFOLDER:
 		// フォルダの初期値をカレントフォルダにする
 		{
-			m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder = ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_DEFAULTFOLDER);
+			m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
 		}
 		return TRUE;
 	case IDC_RADIO_OUTPUTSTYLE3:
@@ -409,13 +409,13 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 void CDlgGrep::SetData(void)
 {
 	// 検索文字列
-	::DlgItem_SetText(GetHwnd(), IDC_COMBO_TEXT, m_strText.c_str());
+	SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
 
 	// 検索ファイル
-	::DlgItem_SetText(GetHwnd(), IDC_COMBO_FILE, m_szFile);
+	SetItemText(IDC_COMBO_FILE, m_szFile);
 
 	// 検索フォルダ
-	::DlgItem_SetText(GetHwnd(), IDC_COMBO_FOLDER, m_szFolder);
+	SetItemText(IDC_COMBO_FOLDER, m_szFolder);
 
 	if (1
 		&& (m_szFolder[0] == _T('\0') || m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder)
@@ -549,7 +549,7 @@ void CDlgGrep::SetDataFromThisText(bool bChecked)
 		szWorkFile[0] = _T('"');
 		SplitPath_FolderAndFile(m_szCurrentFilePath, szWorkFolder, szWorkFile + 1);
 		_tcscat(szWorkFile, _T("\"")); // 2003.08.01 Moca
-		::DlgItem_SetText(GetHwnd(), IDC_COMBO_FILE, szWorkFile);
+		SetItemText(IDC_COMBO_FILE, szWorkFile);
 		
 		SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
 
@@ -568,24 +568,24 @@ void CDlgGrep::SetDataFromThisText(bool bChecked)
 int CDlgGrep::GetData(void)
 {
 	// サブフォルダからも検索する
-	m_bSubFolder = ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_SUBFOLDER);
+	m_bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
 
 	m_pShareData->m_Common.m_sSearch.m_bGrepSubFolder = m_bSubFolder;		// Grep：サブフォルダも検索
 
 	// この編集中のテキストから検索する
-	m_bFromThisText = ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_FROMTHISTEXT);
+	m_bFromThisText = IsButtonChecked(IDC_CHK_FROMTHISTEXT);
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = (0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
+	m_sSearchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で検索
-	m_sSearchOption.bWordOnly = (0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
+	m_sSearchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
 	// 正規表現
-	m_sSearchOption.bRegularExp = (0 != ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
+	m_sSearchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 
 	// 文字コード自動判別
-//	m_bKanjiCode_AutoDetect = ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_KANJICODEAUTODETECT);
+//	m_bKanjiCode_AutoDetect = IsButtonChecked(IDC_CHK_KANJICODEAUTODETECT);
 
 	// 文字コードセット
 	{
@@ -596,28 +596,28 @@ int CDlgGrep::GetData(void)
 	}
 
 	// 行を出力/該当部分/否マッチ行 を出力
-	if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_OUTPUTLINE )) {
+	if (IsButtonChecked(IDC_RADIO_OUTPUTLINE )) {
 		m_nGrepOutputLineType = 1;
-	}else if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_NOHIT )) {
+	}else if (IsButtonChecked(IDC_RADIO_NOHIT )) {
 		m_nGrepOutputLineType = 2;
 	}else {
 		m_nGrepOutputLineType = 0;
 	}
 	
 	// Grep: 出力形式
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_OUTPUTSTYLE1) != FALSE) {
+	if (IsButtonChecked(IDC_RADIO_OUTPUTSTYLE1)) {
 		m_nGrepOutputStyle = 1;				// Grep: 出力形式
 	}
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_OUTPUTSTYLE2) != FALSE) {
+	if (IsButtonChecked(IDC_RADIO_OUTPUTSTYLE2)) {
 		m_nGrepOutputStyle = 2;				// Grep: 出力形式
 	}
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_OUTPUTSTYLE3) != FALSE) {
+	if (IsButtonChecked(IDC_RADIO_OUTPUTSTYLE3)) {
 		m_nGrepOutputStyle = 3;
 	}
 
-	m_bGrepOutputFileOnly = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_FILE_ONLY);
-	m_bGrepOutputBaseFolder = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_BASE_PATH);
-	m_bGrepSeparateFolder = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_SEP_FOLDER);
+	m_bGrepOutputFileOnly = IsButtonChecked(IDC_CHECK_FILE_ONLY);
+	m_bGrepOutputBaseFolder = IsButtonChecked(IDC_CHECK_BASE_PATH);
+	m_bGrepSeparateFolder = IsButtonChecked(IDC_CHECK_SEP_FOLDER);
 
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;

@@ -134,17 +134,17 @@ int CPropStatusbar::GetData(HWND hwndDlg)
 	auto& csStatusbar = m_Common.m_sStatusbar;
 	// 表示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
-	csStatusbar.m_bDispUniInSjis		= ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS);
+	csStatusbar.m_bDispUniInSjis	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS);
 	// JISで文字コード値をUnicodeで出力する
-	csStatusbar.m_bDispUniInJis		= ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS);
+	csStatusbar.m_bDispUniInJis		= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS);
 	// EUCで文字コード値をUnicodeで出力する
-	csStatusbar.m_bDispUniInEuc		= ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC);
+	csStatusbar.m_bDispUniInEuc		= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC);
 	// UTF-8で表示をバイトコードで行う
-	csStatusbar.m_bDispUtf8Codepoint	= ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT);
+	csStatusbar.m_bDispUtf8Codepoint	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT);
 	// サロゲートペアをコードポイントで表示
-	csStatusbar.m_bDispSPCodepoint	= ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT);
+	csStatusbar.m_bDispSPCodepoint	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT);
 	// 選択文字数を文字単位ではなくバイト単位で表示する
-	csStatusbar.m_bDispSelCountByByte	= ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DISP_SELCOUNT_BY_BYTE);
+	csStatusbar.m_bDispSelCountByByte	= DlgButton_IsChecked(hwndDlg, IDC_CHECK_DISP_SELCOUNT_BY_BYTE);
 
 	return TRUE;
 }

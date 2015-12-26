@@ -521,7 +521,7 @@ int CPropToolbar::GetData(HWND hwndDlg)
 	csToolBar.m_nToolBarButtonNum = k;
 
 	// フラットツールバーにする／しない
-	csToolBar.m_bToolBarIsFlat = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_TOOLBARISFLAT);
+	csToolBar.m_bToolBarIsFlat = DlgButton_IsChecked(hwndDlg, IDC_CHECK_TOOLBARISFLAT);
 	return TRUE;
 }
 

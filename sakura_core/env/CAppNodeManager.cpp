@@ -721,7 +721,7 @@ HWND CAppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, 
 
 	// 非表示のタブを既存グループに移動するときは非表示のままにするので
 	// 内部情報も先頭にはならないよう、必要なら先頭ウィンドウと位置を交換する。
-	if (!bSrcIsTop && pDstEditNode != NULL) {
+	if (!bSrcIsTop && pDstEditNode) {
 		if (pSrcEditNode < pDstEditNode) {
 			EditNode en = *pDstEditNode;
 			*pDstEditNode = *pSrcEditNode;

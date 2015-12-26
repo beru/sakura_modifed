@@ -179,7 +179,7 @@ INT_PTR CPropHelper::DispatchEvent(
 						csHelper.m_nPointSize = nPointSize;	// 2009.10.01 ryoji
 						// キーワードヘルプ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_KEYWORDHELPFONT, csHelper.m_lf, csHelper.m_nPointSize);
-						if (m_hKeywordHelpFont != NULL) {
+						if (m_hKeywordHelpFont) {
 							::DeleteObject(m_hKeywordHelpFont);
 						}
 						m_hKeywordHelpFont = hFont;
@@ -281,7 +281,7 @@ INT_PTR CPropHelper::DispatchEvent(
 
 	case WM_DESTROY:
 		// キーワードヘルプ フォント破棄	// 2013/4/24 Uchi
-		if (m_hKeywordHelpFont != NULL) {
+		if (m_hKeywordHelpFont) {
 			::DeleteObject(m_hKeywordHelpFont);
 			m_hKeywordHelpFont = NULL;
 		}
@@ -324,9 +324,9 @@ int CPropHelper::GetData(HWND hwndDlg)
 	auto& csHelper = m_Common.m_sHelper;
 	
 	// 補完候補決定キー
-	csHelper.m_bHokanKey_RETURN = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN);// VK_RETURN 補完決定キーが有効/無効
-	csHelper.m_bHokanKey_TAB = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_TAB);		// VK_TAB    補完決定キーが有効/無効
-	csHelper.m_bHokanKey_RIGHT = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT);	// VK_RIGHT  補完決定キーが有効/無効
+	csHelper.m_bHokanKey_RETURN = DlgButton_IsChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN);// VK_RETURN 補完決定キーが有効/無効
+	csHelper.m_bHokanKey_TAB = DlgButton_IsChecked(hwndDlg, IDC_CHECK_m_bHokanKey_TAB);		// VK_TAB    補完決定キーが有効/無効
+	csHelper.m_bHokanKey_RIGHT = DlgButton_IsChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT);	// VK_RIGHT  補完決定キーが有効/無効
 
 	// 外部ヘルプ１
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_EXTHELP1, csHelper.m_szExtHelp, _countof(csHelper.m_szExtHelp));
@@ -335,7 +335,7 @@ int CPropHelper::GetData(HWND hwndDlg)
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_EXTHTMLHELP, csHelper.m_szExtHtmlHelp, _countof(csHelper.m_szExtHtmlHelp));
 
 	// HtmlHelpビューアはひとつ
-	csHelper.m_bHtmlHelpIsSingle = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_HTMLHELPISSINGLE) != 0;
+	csHelper.m_bHtmlHelpIsSingle = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HTMLHELPISSINGLE);
 
 	// migemo dict
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_MIGEMO_DLL, csHelper.m_szMigemoDll, _countof(csHelper.m_szMigemoDll));

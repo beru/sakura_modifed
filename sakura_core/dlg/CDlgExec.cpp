@@ -135,7 +135,7 @@ void CDlgExec::SetData(void)
 	_tcscpy(m_szCommand, m_pShareData->m_sHistory.m_aCommands[0]);
 	HWND hwndCombo = ::GetDlgItem(GetHwnd(), IDC_COMBO_m_szCommand);
 	Combo_ResetContent(hwndCombo);
-	::DlgItem_SetText(GetHwnd(), IDC_COMBO_TEXT, m_szCommand);
+	SetItemText(IDC_COMBO_TEXT, m_szCommand);
 	int nSize = m_pShareData->m_sHistory.m_aCommands.size();
 	for (int i = 0; i < nSize; ++i) {
 		Combo_AddString(hwndCombo, m_pShareData->m_sHistory.m_aCommands[i]);
@@ -145,7 +145,7 @@ void CDlgExec::SetData(void)
 	_tcscpy(m_szCurDir, m_pShareData->m_sHistory.m_aCurDirs[0]);
 	hwndCombo = GetItemHwnd(IDC_COMBO_CUR_DIR);
 	Combo_ResetContent(hwndCombo);
-	::DlgItem_SetText(GetHwnd(), IDC_COMBO_TEXT, m_szCurDir);
+	SetItemText(IDC_COMBO_TEXT, m_szCurDir);
 	for (int i = 0; i < m_pShareData->m_sHistory.m_aCurDirs.size(); ++i) {
 		Combo_AddString(hwndCombo, m_pShareData->m_sHistory.m_aCurDirs[i]);
 	}
@@ -176,7 +176,7 @@ void CDlgExec::SetData(void)
 int CDlgExec::GetData(void)
 {
 	DlgItem_GetText(GetHwnd(), IDC_COMBO_m_szCommand, m_szCommand, _countof(m_szCommand));
-	if (IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_CUR_DIR)) {
+	if (IsButtonChecked(IDC_CHECK_CUR_DIR)) {
 		DlgItem_GetText(GetHwnd(), IDC_COMBO_CUR_DIR, &m_szCurDir[0], _countof2(m_szCurDir));
 	}else {
 		m_szCurDir[0] = _T('\0');
@@ -185,10 +185,10 @@ int CDlgExec::GetData(void)
 	{	// From Here 2007.01.02 maru 引数を拡張のため
 		// マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nFlgOpt = 0;
-		nFlgOpt |= (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_GETSTDOUT)) ? 0x01 : 0;	// 標準出力を得る
-		nFlgOpt |= (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_EDITWINDOW)) ? 0x02 : 0;	// 標準出力を編集中のウインドウへ
-		nFlgOpt |= (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_SENDSTDIN)) ? 0x04 : 0;	// 編集中ファイルを標準入力へ
-		nFlgOpt |= (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_CUR_DIR)) ? 0x200 : 0;		// カレントディレクトリ指定
+		nFlgOpt |= (IsButtonChecked(IDC_CHECK_GETSTDOUT)) ? 0x01 : 0;	// 標準出力を得る
+		nFlgOpt |= (IsButtonChecked(IDC_RADIO_EDITWINDOW)) ? 0x02 : 0;	// 標準出力を編集中のウインドウへ
+		nFlgOpt |= (IsButtonChecked(IDC_CHECK_SENDSTDIN)) ? 0x04 : 0;	// 編集中ファイルを標準入力へ
+		nFlgOpt |= (IsButtonChecked(IDC_CHECK_CUR_DIR)) ? 0x200 : 0;		// カレントディレクトリ指定
 		int sel;
 		sel = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_CODE_GET));
 		nFlgOpt |= codeTable1[sel];
@@ -205,27 +205,20 @@ BOOL CDlgExec::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_CHECK_GETSTDOUT:
 		{	// From Here 2007.01.02 maru 引数を拡張のため
-			BOOL bEnabled;
-			bEnabled = (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_GETSTDOUT)) ? TRUE : FALSE;
+			bool bEnabled = IsButtonChecked(IDC_CHECK_GETSTDOUT);
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_RADIO_OUTPUT), bEnabled);
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_RADIO_EDITWINDOW), (bEnabled && m_bEditable) ? TRUE : FALSE);	// ビューモードや上書き禁止の条件追加	// 2009.02.21 ryoji
 		}	// To Here 2007.01.02 maru 引数を拡張のため
 
 		// 標準出力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
-		::EnableWindow(
-			GetItemHwnd(IDC_COMBO_CODE_GET), 
-			BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_GETSTDOUT)
-		);
+		::EnableWindow(GetItemHwnd(IDC_COMBO_CODE_GET), IsButtonChecked(IDC_CHECK_GETSTDOUT));
 		break;
 	case IDC_CHECK_SENDSTDIN:	// 標準入力Off時、Unicodeを使用するをDesableする	2008/6/20 Uchi
-		::EnableWindow(GetItemHwnd(IDC_COMBO_CODE_SEND), 
-			BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_SENDSTDIN));
+		::EnableWindow(GetItemHwnd(IDC_COMBO_CODE_SEND), IsButtonChecked(IDC_CHECK_SENDSTDIN));
 		break;
 	case IDC_CHECK_CUR_DIR:
-		::EnableWindow(GetItemHwnd(IDC_COMBO_CUR_DIR),
-			BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_CUR_DIR));
-		::EnableWindow(GetItemHwnd(IDC_BUTTON_REFERENCE2),
-			BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_CUR_DIR));
+		::EnableWindow(GetItemHwnd(IDC_COMBO_CUR_DIR), IsButtonChecked(IDC_CHECK_CUR_DIR));
+		::EnableWindow(GetItemHwnd(IDC_BUTTON_REFERENCE2), IsButtonChecked(IDC_CHECK_CUR_DIR));
 		break;
 
 	case IDC_BUTTON_HELP:
@@ -251,7 +244,7 @@ BOOL CDlgExec::OnBnClicked(int wID)
 			);
 			if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 				_tcscpy(m_szCommand, szPath);
-				::DlgItem_SetText(GetHwnd(), IDC_COMBO_m_szCommand, m_szCommand);
+				SetItemText(IDC_COMBO_m_szCommand, m_szCommand);
 			}
 		}
 		return TRUE;
@@ -260,7 +253,7 @@ BOOL CDlgExec::OnBnClicked(int wID)
 	case IDC_BUTTON_REFERENCE2:
 		{
 			if (SelectDir(GetHwnd(), LS(STR_DLGEXEC_SELECT_CURDIR), &m_szCurDir[0], &m_szCurDir[0])) {
-				::DlgItem_SetText(GetHwnd(), IDC_COMBO_CUR_DIR, &m_szCurDir[0]);
+				SetItemText(IDC_COMBO_CUR_DIR, &m_szCurDir[0]);
 			}
 		}
 		return TRUE;

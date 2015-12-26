@@ -54,7 +54,7 @@ CZipFile::CZipFile() {
 
 // デストラクタ
 CZipFile::~CZipFile() {
-	if (pZipFile != NULL) {
+	if (pZipFile) {
 		pZipFile->Release();
 		pZipFile = NULL;
 	}
@@ -66,7 +66,7 @@ CZipFile::~CZipFile() {
 // Zip File名 設定
 bool CZipFile::SetZip(const std::tstring& sZipPath)
 {
-	if (pZipFile != NULL) {
+	if (pZipFile) {
 		pZipFile->Release();
 		pZipFile = NULL;
 	}

@@ -1011,7 +1011,7 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 			return (pShareData->m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			//@@@ 2002.1.24 YAZAKI m_szKeyMacroFileNameにファイル名がコピーされているかどうか。
-			return (pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0]);
+			return (pShareData->m_Common.m_sMacro.m_szKeyMacroFileName[0] != NULL);
 		}
 	case F_LOADKEYMACRO:	// キーマクロの読み込み
 		if (pShareData->m_sFlags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中

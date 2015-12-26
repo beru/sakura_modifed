@@ -587,8 +587,7 @@ int CDlgPrintSetting::GetData(void)
 	curPS.m_bPrintKinsokuKuto = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUKUTO);
 
 	// カラー印刷
-	curPS.m_bColorPrint =
-		(BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_COLORPRINT));
+	curPS.m_bColorPrint = IsButtonChecked(IDC_CHECK_COLORPRINT);
 
 	//@@@ 2002.2.4 YAZAKI
 	// ヘッダー
@@ -690,14 +689,14 @@ void CDlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 		curPS.m_bColorPrint ? BST_CHECKED : BST_UNCHECKED);
 
 	// ヘッダー
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD1, curPS.m_szHeaderForm[POS_LEFT]);	// 100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD2, curPS.m_szHeaderForm[POS_CENTER]);	// 100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_HEAD3, curPS.m_szHeaderForm[POS_RIGHT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_HEAD1, curPS.m_szHeaderForm[POS_LEFT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_HEAD2, curPS.m_szHeaderForm[POS_CENTER]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_HEAD3, curPS.m_szHeaderForm[POS_RIGHT]);	// 100文字で制限しないと。。。
 
 	// フッター
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT1, curPS.m_szFooterForm[POS_LEFT]);	// 100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT2, curPS.m_szFooterForm[POS_CENTER]);	// 100文字で制限しないと。。。
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_FOOT3, curPS.m_szFooterForm[POS_RIGHT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_FOOT1, curPS.m_szFooterForm[POS_LEFT]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_FOOT2, curPS.m_szFooterForm[POS_CENTER]);	// 100文字で制限しないと。。。
+	SetItemText(IDC_EDIT_FOOT3, curPS.m_szFooterForm[POS_RIGHT]);	// 100文字で制限しないと。。。
 
 	// ヘッダフォント
 	SetFontName(IDC_STATIC_FONT_HEAD, IDC_CHECK_USE_FONT_HEAD,
@@ -832,7 +831,7 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 	int		nFontPoints = pPS->m_nPrintFontHeight * 720 / 254;
 	TCHAR	szFontPoints[20];
 	auto_sprintf_s(szFontPoints, _countof(szFontPoints), _T("%d.%dpt"), nFontPoints/10, nFontPoints%10);
-	::DlgItem_SetText(GetHwnd(), IDC_STATIC_FONTSIZE, szFontPoints);
+	SetItemText(IDC_STATIC_FONTSIZE, szFontPoints);
 
 	// 印字可能領域がない場合は OK を押せなくする 2013.5.10 aroka
 	if (nEnableColumns == 0 || nEnableLines == 0) {
@@ -897,6 +896,6 @@ void CDlgPrintSetting::SetFontName(int idTxt, int idUse, LOGFONT& lf, int nPoint
 	}else {
 		szName[0] = _T('\0');
 	}
-	::DlgItem_SetText(GetHwnd(), idTxt, szName);
+	SetItemText(idTxt, szName);
 }
 

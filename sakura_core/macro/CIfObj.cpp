@@ -268,7 +268,7 @@ CIfObj::CIfObj(const wchar_t* name, bool isGlobal)
 // デストラクタ
 CIfObj::~CIfObj()
 {
-	if (m_TypeInfo != NULL) {
+	if (m_TypeInfo) {
 		m_TypeInfo->Release();
 	}
 }

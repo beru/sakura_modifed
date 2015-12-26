@@ -188,12 +188,12 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, bool bBigFile, ECodeType CharC
 	if (bBom) {
 		// Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
 		m_bBomExist = true;
-		if (pbBomExist != NULL) {
+		if (pbBomExist) {
 			*pbBomExist = true;
 		}
 	}else {
 		// Jul. 26, 2003 ryoji BOMの有無をパラメータで返す
-		if (pbBomExist != NULL) {
+		if (pbBomExist) {
 			*pbBomExist = false;
 		}
 	}

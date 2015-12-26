@@ -360,7 +360,10 @@ INT_PTR CPropKeyword::DispatchEvent(
 					return TRUE;
 				case IDC_CHECK_KEYWORDCASE:	// キーワードの英大文字小文字区別
 //					csSpecialKeyword.m_CKeyWordSetMgr.m_bKEYWORDCASEArr[csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx] = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYWORDCASE);	// MIK 2000.12.01 case sense
-					csSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordCase(csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KEYWORDCASE));			// MIK 2000.12.01 case sense
+					csSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordCase(
+						csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx,
+						DlgButton_IsChecked(hwndDlg, IDC_CHECK_KEYWORDCASE)
+						);			// MIK 2000.12.01 case sense
 					return TRUE;
 				case IDC_BUTTON_ADDKEYWORD:	// キーワード追加
 					// ｎ番目のセットのキーワードの数を返す

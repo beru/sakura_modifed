@@ -105,7 +105,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 		m_psLangInfoList.push_back(psLangInfo);
 	}
 
-	if (m_psLangInfo != NULL && m_psLangInfo->hInstance && m_psLangInfo->hInstance != GetModuleHandle(NULL)) {
+	if (m_psLangInfo && m_psLangInfo->hInstance && m_psLangInfo->hInstance != GetModuleHandle(NULL)) {
 		// “Ç‚Ýž‚ÝÏ‚Ý‚ÌDLL‚ð‰ð•ú‚·‚é
 		::FreeLibrary(m_psLangInfo->hInstance);
 		m_psLangInfo->hInstance = NULL;

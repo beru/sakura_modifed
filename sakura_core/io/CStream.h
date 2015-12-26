@@ -54,8 +54,8 @@ public:
 	);
 
 	// 状態
-	virtual bool Good() const { return m_fp != NULL && !Eof(); }
-	bool Eof() const { return m_fp == NULL || feof(m_fp); }
+	virtual bool Good() const { return m_fp && !Eof(); }
+	bool Eof() const { return !m_fp || feof(m_fp); }
 
 	// ファイルハンドル
 	FILE* GetFp() const { return m_fp; }

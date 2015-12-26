@@ -315,7 +315,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 		&& ::IsClipboardFormatAvailable(uFormatSakuraClip)
 	) {
 		HGLOBAL hSakura = ::GetClipboardData(uFormatSakuraClip);
-		if (hSakura != NULL) {
+		if (hSakura) {
 			BYTE* pData = (BYTE*)::GlobalLock(hSakura);
 			size_t nLength        = *((int*)pData);
 			const wchar_t* szData = (const wchar_t*)(pData + sizeof(int));
@@ -331,7 +331,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 	if (uGetFormat == -1 || uGetFormat == CF_UNICODETEXT) {
 		hUnicode = ::GetClipboardData(CF_UNICODETEXT);
 	}
-	if (hUnicode != NULL) {
+	if (hUnicode) {
 		//DWORD nLen = GlobalSize(hUnicode);
 		wchar_t* szData = GlobalLockWChar(hUnicode);
 		cmemBuf->SetString(szData);
@@ -345,7 +345,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 	if (uGetFormat == -1 || uGetFormat == CF_OEMTEXT) {
 		hText = ::GetClipboardData(CF_OEMTEXT);
 	}
-	if (hText != NULL) {
+	if (hText) {
 		char* szData = GlobalLockChar(hText);
 		// SJISÅ®UNICODE
 		CMemory cmemSjis(szData, GlobalSize(hText));
@@ -366,7 +366,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 		&& ::IsClipboardFormatAvailable(CF_HDROP)
 	) {
 		HDROP hDrop = (HDROP)::GetClipboardData(CF_HDROP);
-		if (hDrop != NULL) {
+		if (hDrop) {
 			TCHAR sTmpPath[_MAX_PATH + 1] = {0};
 			const int nMaxCnt = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 
@@ -592,7 +592,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 		return bret;
 	}
 	HGLOBAL hClipData = ::GetClipboardData(uFormat);
-	if (hClipData != NULL) {
+	if (hClipData) {
 		bool retVal = true;
 		const BYTE* pData = (BYTE*)::GlobalLock(hClipData);
 		if (!pData) {

@@ -810,7 +810,7 @@ void CViewCommander::Command_DELETE(void)
 							nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 						}
 						if (nLineLen != 0) {	// （スペース挿入後も）折り返し行末なら次文字を削除するために次行の先頭に移動する必要がある
-							if (pcLayout->GetNextLayout() != NULL) {	// 最終行末ではない
+							if (pcLayout->GetNextLayout()) {	// 最終行末ではない
 								CLayoutPoint ptLay;
 								CLogicPoint ptLog(pcLayout->GetLogicOffset() + nIndex, pcLayout->GetLogicLineNo());
 								layoutMgr.LogicToLayout(ptLog, &ptLay);

@@ -280,7 +280,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		nLvStack[0] = test[0].nLv;
 		const wchar_t* p = wcschr(g, L',');
 		int len;
-		if (p != NULL) {
+		if (p) {
 			len = p - g;
 		}else {
 			len = wcslen(g);

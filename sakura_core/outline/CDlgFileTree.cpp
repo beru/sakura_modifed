@@ -192,9 +192,9 @@ void CDlgFileTree::SetDataItem(int nItemIndex)
 	::CheckDlgButton(hwndDlg, nIDs[nID1], TRUE);
 	::CheckDlgButton(hwndDlg, nIDs[nID2], FALSE);
 	::CheckDlgButton(hwndDlg, nIDs[nID3], FALSE);
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_PATH, item.m_szTargetPath);
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_LABEL, item.m_szLabelName);
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_FILE, item.m_szTargetFile);
+	SetItemText(IDC_EDIT_PATH, item.m_szTargetPath);
+	SetItemText(IDC_EDIT_LABEL, item.m_szLabelName);
+	SetItemText(IDC_EDIT_FILE, item.m_szTargetFile);
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_HIDDEN, item.m_bIgnoreHidden);
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_READONLY, item.m_bIgnoreReadOnly);
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_SYSTEM, item.m_bIgnoreSystem);
@@ -397,7 +397,7 @@ void CDlgFileTree::SetDataInit()
 	}
 	::EnableWindow(GetItemHwnd(IDC_BUTTON_LOAD), bEnableDefIni);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_LOADINI, m_fileTreeSetting.m_bProject);
-	::DlgItem_SetText(hwndDlg, IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni); 
+	SetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni); 
 }
 
 HTREEITEM CDlgFileTree::InsertTreeItem(SFileTreeItem& item, HTREEITEM htiParent, HTREEITEM htiInsert )
@@ -436,7 +436,7 @@ static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool 
 	int				n = 0;
 	TCHAR			szLabel[_MAX_PATH];
 
-	for (s = src; s != NULL; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
+	for (s = src; s; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
 		tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
 		tvi.hItem = s;
 		tvi.pszText = szLabel;
@@ -462,7 +462,7 @@ static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool 
 
 		if (tvi.cChildren) {
 			ts = TreeView_GetChild(hwndTree, s);	//	q‚Ìæ“¾
-			if (ts != NULL) {
+			if (ts) {
 				FileTreeCopy(hwndTree, td, ts, true, false);
 			}
 			// “WŠJ
@@ -517,7 +517,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 			HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 			HTREEITEM htiItem = TreeView_GetSelection(hwndTree);
 			BOOL bEnableUpdate = TRUE;
-			if (htiItem != NULL && !IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_FOLDER)) {
+			if (htiItem && !IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_FOLDER)) {
 				TV_ITEM tvi;
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiItem;
@@ -540,7 +540,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 				TCHAR szDir[MAX_PATH];
 				DlgItem_GetText(GetHwnd(), IDC_EDIT_PATH, szDir, _countof(szDir) );
 				if (SelectDir(hwndDlg, LS(STR_DLGGREP1), szDir, szDir)) {
-					DlgItem_SetText(GetHwnd(), IDC_EDIT_PATH, szDir );
+					SetItemText(IDC_EDIT_PATH, szDir );
 				}
 			}else {
 				// RADIO_FILE == file
@@ -553,7 +553,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 				if (dlg.DoModal_GetOpenFileName(szFile)) {
 					CNativeT cmemFile = szFile;
 					cmemFile.ReplaceT(_T("%"), _T("%%"));
-					DlgItem_SetText( GetHwnd(), IDC_EDIT_PATH, cmemFile.GetStringPtr() );
+					SetItemText(IDC_EDIT_PATH, cmemFile.GetStringPtr() );
 				}
 			}
 		}
@@ -953,7 +953,7 @@ BOOL CDlgFileTree::OnNotify( WPARAM wParam, LPARAM lParam )
 	case TVN_DELETEITEM:
 		if (!m_bInMove
 			&& pNMHDR->hwndFrom == hwndTree
-			&& (htiItem = TreeView_GetSelection( hwndTree )) != NULL
+			&& (htiItem = TreeView_GetSelection( hwndTree ))
 		) {
 			//•t‘®î•ñ‚ğíœ
 			TV_ITEM tvi;

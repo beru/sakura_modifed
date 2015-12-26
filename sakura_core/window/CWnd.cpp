@@ -71,7 +71,7 @@ next:
 	// フック終了
 	void Unuse()
 	{
-		if (--g_nCnt <= 0 && g_hHook != NULL) {
+		if (--g_nCnt <= 0 && g_hHook) {
 			::UnhookWindowsHookEx(g_hHook);
 			g_hHook = NULL;
 		}

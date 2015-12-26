@@ -98,7 +98,7 @@ INT_PTR CPropEdit::DispatchEvent(
 		case BN_CLICKED:
 			switch (wID) {
 			case IDC_CHECK_DRAGDROP:	// タスクトレイを使う
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DRAGDROP)) {
+				if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP)) {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DROPSOURCE), TRUE);
 				}else {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DROPSOURCE), FALSE);
@@ -174,7 +174,7 @@ void CPropEdit::SetData(HWND hwndDlg)
 	auto& csEdit = m_Common.m_sEdit;
 	// ドラッグ & ドロップ編集
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DRAGDROP, csEdit.m_bUseOLE_DragDrop);
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DRAGDROP)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DROPSOURCE), TRUE);
 	}else {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DROPSOURCE), FALSE);
@@ -237,52 +237,52 @@ int CPropEdit::GetData(HWND hwndDlg)
 	auto& csEdit = m_Common.m_sEdit;
 	
 	// ドラッグ & ドロップ編集
-	csEdit.m_bUseOLE_DragDrop = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DRAGDROP);
+	csEdit.m_bUseOLE_DragDrop = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DRAGDROP);
 	// DropSource
-	csEdit.m_bUseOLE_DropSource = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DROPSOURCE);
+	csEdit.m_bUseOLE_DropSource = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DROPSOURCE);
 
 	// 折り返し行に改行を付けてコピー
-	csEdit.m_bAddCRLFWhenCopy = (0 != ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ADDCRLFWHENCOPY));
+	csEdit.m_bAddCRLFWhenCopy = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ADDCRLFWHENCOPY);
 
 	// コピーしたら選択解除
-	csEdit.m_bCopyAndDisablSelection = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_COPYnDISABLESELECTEDAREA);
+	csEdit.m_bCopyAndDisablSelection = DlgButton_IsChecked(hwndDlg, IDC_CHECK_COPYnDISABLESELECTEDAREA);
 
 	// 選択なしでコピーを可能にする	// 2007.11.18 ryoji
-	csEdit.m_bEnableNoSelectCopy = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bEnableNoSelectCopy);
+	csEdit.m_bEnableNoSelectCopy = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bEnableNoSelectCopy);
 
 	// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
-	csEdit.m_bEnableLineModePaste = (0 != ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bEnableLineModePaste));
+	csEdit.m_bEnableLineModePaste = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bEnableLineModePaste);
 
 	// 改行は上書きしない
-	csEdit.m_bNotOverWriteCRLF = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bNotOverWriteCRLF);
+	csEdit.m_bNotOverWriteCRLF = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bNotOverWriteCRLF);
 
 	// 文字幅に合わせてスペースを詰める
-	csEdit.m_bOverWriteFixMode = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bOverWriteFixMode);
+	csEdit.m_bOverWriteFixMode = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bOverWriteFixMode);
 
 	// 矩形入力で選択範囲を削除する
-	csEdit.m_bOverWriteBoxDelete = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bOverWriteBoxDelete);
+	csEdit.m_bOverWriteBoxDelete = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bOverWriteBoxDelete);
 
 	// URLがクリックされたら選択するか	// 2007.02.11 genta このページへ移動
-	csEdit.m_bSelectClickedURL = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bSelectClickedURL);
+	csEdit.m_bSelectClickedURL = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bSelectClickedURL);
 
 	//	改行コードを変換して貼り付ける	// 2009.02.28 salarm
-	csEdit.m_bConvertEOLPaste = (0 != ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CONVERTEOLPASTE));
+	csEdit.m_bConvertEOLPaste = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CONVERTEOLPASTE);
 
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_CURDIR)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_CURDIR)) {
 		csEdit.m_eOpenDialogDir = OPENDIALOGDIR_CUR;
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_MRUDIR)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_MRUDIR)) {
 		csEdit.m_eOpenDialogDir = OPENDIALOGDIR_MRU;
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_SELDIR)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_SELDIR)) {
 		csEdit.m_eOpenDialogDir = OPENDIALOGDIR_SEL;
 	}
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_FILEOPENDIR, csEdit.m_OpenDialogSelDir, _countof2(csEdit.m_OpenDialogSelDir));
 
 	// 改行コードNEL,PS,LSを有効にする
-	csEdit.m_bEnableExtEol = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_ENABLEEXTEOL);
+	csEdit.m_bEnableExtEol = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ENABLEEXTEOL);
 	// 矩形選択移動で選択をロックする
-	csEdit.m_bBoxSelectLock = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BOXSELECTLOCK);
+	csEdit.m_bBoxSelectLock = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BOXSELECTLOCK);
 
 	return TRUE;
 }
@@ -297,7 +297,7 @@ int CPropEdit::GetData(HWND hwndDlg)
 void CPropEdit::EnableEditPropInput(HWND hwndDlg)
 {
 	// 指定フォルダ
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_SELDIR)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_SELDIR)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FILEOPENDIR), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_FILEOPENDIR), TRUE);
 	}else {

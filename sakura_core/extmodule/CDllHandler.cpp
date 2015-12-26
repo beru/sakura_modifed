@@ -187,7 +187,7 @@ bool CDllImp::RegisterEntries(const ImportTable table[])
 	if (!IsAvailable()) {
 		return false;
 	}
-	for (int i = 0; table[i].proc != NULL; i++) {
+	for (int i = 0; table[i].proc; i++) {
 		FARPROC proc;
 		if (!(proc = ::GetProcAddress(GetInstance(), table[i].name))) {
 			return false;

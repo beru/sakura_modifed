@@ -435,18 +435,13 @@ int CKeyWordSetMgr::SearchKeyWord2(int nIdx, const wchar_t* pszKeyWord, int nKey
 // MIK END
 
 // MIK START 2000.12.01 START
-void CKeyWordSetMgr::SetKeyWordCase(int nIdx, int nCase)
+void CKeyWordSetMgr::SetKeyWordCase(int nIdx, bool bCase)
 {
 	// 大文字小文字判断は１ビットあれば実現できる。
 	// 今はint型(sizeof(int) * セット数 = 4 * 100 = 400)だが,
 	// char型(sizeof(char) * セット数 = 1 * 100 = 100)で十分だし
 	// ビット操作してもいい。
-	if (nCase) {
-		m_bKEYWORDCASEArr[nIdx] = true;
-	}else {
-		m_bKEYWORDCASEArr[nIdx] = false;
-	}
-
+	m_bKEYWORDCASEArr[nIdx] = bCase;
 	m_IsSorted[nIdx] = 0;
 	return;
 }

@@ -84,7 +84,7 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 			SetNewLineCode(EOL_CRLF);
 		}
 		CDocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine(CLogicInt(0));
-		if (pFirstlineinfo != NULL) {
+		if (pFirstlineinfo) {
 			EEolType t = pFirstlineinfo->GetEol();
 			if (t != EOL_NONE && t != EOL_UNKNOWN) {
 				SetNewLineCode(t);

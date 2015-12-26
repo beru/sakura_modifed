@@ -696,7 +696,7 @@ static TCHAR* strcnv(TCHAR* str)
 	}
 	// ƒJƒ“ƒ}‚Ì’uŠ·
 	p = str;
-	for (; (p =_tcschr(p, _T(','))) != NULL;) {
+	for (; (p =_tcschr(p, _T(',')));) {
 		*p = _T('.');
 	}
 	return str;

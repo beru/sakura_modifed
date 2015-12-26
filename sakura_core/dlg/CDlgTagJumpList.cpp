@@ -247,8 +247,8 @@ void CDlgTagJumpList::SetData(void)
 		::CheckDlgButton(GetHwnd(), IDC_CHECK_ANYWHERE, BST_UNCHECKED);
 		m_bTagJumpExactMatch = TRUE;
 
-		if (m_pszKeyword != NULL) {
-			::DlgItem_SetText(GetHwnd(), IDC_KEYWORD, m_pszKeyword);
+		if (m_pszKeyword) {
+			SetItemText(IDC_KEYWORD, m_pszKeyword);
 		}
 	}else {
 		// From Here 2005.04.03 MIK ê›íËílÇÃì«Ç›çûÇ›
@@ -265,8 +265,8 @@ void CDlgTagJumpList::SetData(void)
 		for (int i = 0; i < cRecentTagJump.GetItemCount(); i++) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
-		if (m_pszKeyword != NULL) {
-			::DlgItem_SetText(GetHwnd(), IDC_KEYWORD, m_pszKeyword);
+		if (m_pszKeyword) {
+			SetItemText(IDC_KEYWORD, m_pszKeyword);
 		}else if (cRecentTagJump.GetItemCount() > 0) {
 			Combo_SetCurSel(hwndKey, 0);
 		}
@@ -556,12 +556,12 @@ BOOL CDlgTagJumpList::OnBnClicked(int wID)
 
 	// From Here 2005.04.03 MIK åüçıèåèê›íË
 	case IDC_CHECK_ICASE:
-		m_bTagJumpICase = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_ICASE) == BST_CHECKED;
+		m_bTagJumpICase = IsButtonChecked(IDC_CHECK_ICASE);
 		StartTimer(TAGJUMP_TIMER_DELAY_SHORT);
 		return TRUE;
 
 	case IDC_CHECK_ANYWHERE:
-		m_bTagJumpAnyWhere = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_ANYWHERE) == BST_CHECKED;
+		m_bTagJumpAnyWhere = IsButtonChecked(IDC_CHECK_ANYWHERE);
 		StartTimer(TAGJUMP_TIMER_DELAY_SHORT);
 		return TRUE;
 	// To Here 2005.04.03 MIK åüçıèåèê›íË
@@ -1046,7 +1046,7 @@ int CDlgTagJumpList::FindDirectTagJump()
 
 void CDlgTagJumpList::find_key(const wchar_t* keyword)
 {
-	DlgItem_SetText(GetHwnd(), IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP3));
+	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP3));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
 
 	find_key_core(
@@ -1058,7 +1058,7 @@ void CDlgTagJumpList::find_key(const wchar_t* keyword)
 		IsDirectTagJump(),
 		IsDirectTagJump() ? (m_pShareData->m_Common.m_sSearch.m_nTagJumpMode) : m_pShareData->m_Common.m_sSearch.m_nTagJumpModeKeyword
 	);
-	DlgItem_SetText(GetHwnd(), IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
+	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
 }
 
@@ -1378,11 +1378,11 @@ const TCHAR* CDlgTagJumpList::GetFileName(void)
 void CDlgTagJumpList::SetTextDir()
 {
 	if (GetHwnd()) {
-		DlgItem_SetText(GetHwnd(), IDC_STATIC_BASEDIR, _T(""));
+		SetItemText(IDC_STATIC_BASEDIR, _T(""));
 		if (GetFileName()) {
 			std::tstring strPath = GetFilePath();
 			strPath[GetFileName() - GetFilePath()] = _T('\0');
-			DlgItem_SetText(GetHwnd(), IDC_STATIC_BASEDIR, strPath.c_str());
+			SetItemText(IDC_STATIC_BASEDIR, strPath.c_str());
 		}
 	}
 }

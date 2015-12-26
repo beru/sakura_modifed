@@ -130,6 +130,8 @@ public:
 	HWND GetHwnd() const { return m_hWnd; }
 	// 特殊インターフェース (使用は好ましくない)
 	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
+	bool IsButtonChecked(int id) { return DlgButton_IsChecked(m_hWnd, id); }
+	BOOL SetItemText(int nIDDlgItem, const WCHAR* str) { return DlgItem_SetText(m_hWnd, nIDDlgItem, str); }
 
 public:
 	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
@@ -139,7 +141,7 @@ private:
 public:
 	HWND			m_hwndSizeBox;
 	LPARAM			m_lParam;
-	BOOL			m_bModal;		// モーダル ダイアログか
+	bool			m_bModal;		// モーダル ダイアログか
 	bool			m_bSizable;		// 可変ダイアログかどうか
 	int				m_nShowCmd;		// 最大化/最小化
 	int				m_nWidth;
@@ -148,7 +150,7 @@ public:
 	int				m_yPos;
 //	void*			m_pcEditView;
 	DLLSHAREDATA*	m_pShareData;
-	BOOL			m_bInited;
+	bool			m_bInited;
 	HINSTANCE		m_hLangRsrcInstance;		// メッセージリソースDLLのインスタンスハンドル	// 2011.04.10 nasukoji
 
 protected:

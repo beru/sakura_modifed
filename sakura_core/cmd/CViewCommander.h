@@ -66,7 +66,7 @@ private:
 
 	// -- -- -- -- 以下、コマンド処理関数群 -- -- -- -- //
 public:
-	BOOL HandleCommand(
+	bool HandleCommand(
 		EFunctionCode	nCommand,
 		bool			bRedraw,
 		LPARAM			lparam1,
@@ -91,8 +91,8 @@ public:
 	// 上書き保存 // Feb. 28, 2004 genta 引数追加, Jan. 24, 2005 genta 引数追加
 	bool Command_FILESAVE(bool warnbeep = true, bool askname = true);
 	bool Command_FILESAVEAS_DIALOG(const WCHAR*, ECodeType, EEolType);		// 名前を付けて保存
-	BOOL Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType);		// 名前を付けて保存
-	BOOL Command_FILESAVEALL(void);				// 全て上書き保存 // Jan. 23, 2005 genta
+	bool Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType);		// 名前を付けて保存
+	bool Command_FILESAVEALL(void);				// 全て上書き保存 // Jan. 23, 2005 genta
 	void Command_FILECLOSE(void);				// 開じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 	// 閉じて開く
 	// Mar. 30, 2003 genta 引数追加
@@ -104,9 +104,9 @@ public:
 	void Command_PRINT(void);					// 印刷
 	void Command_PRINT_PREVIEW(void);			// 印刷プレビュー
 	void Command_PRINT_PAGESETUP(void);			// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	BOOL Command_OPEN_HfromtoC(BOOL);			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
-	BOOL Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
-	BOOL Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+	bool Command_OPEN_HfromtoC(BOOL);			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
+	bool Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	bool Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	void Command_ACTIVATE_SQLPLUS(void);			// Oracle SQL*Plusをアクティブ表示
 	void Command_PLSQL_COMPILE_ON_SQLPLUS(void);	// Oracle SQL*Plusで実行
 	void Command_BROWSE(void);					// ブラウズ
@@ -115,8 +115,8 @@ public:
 	void Command_PROFILEMGR( void );			// プロファイルマネージャ
 	void Command_EXITALLEDITORS(void);			// 編集の全終了	// 2007.02.13 ryoji 追加
 	void Command_EXITALL(void);					// サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
-	BOOL Command_PUTFILE(LPCWSTR, ECodeType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
-	BOOL Command_INSFILE(LPCWSTR, ECodeType, int);	// キャレット位置にファイル挿入 maru 2006.12.10
+	bool Command_PUTFILE(LPCWSTR, ECodeType, int);	// 作業中ファイルの一時出力 maru 2006.12.10
+	bool Command_INSFILE(LPCWSTR, ECodeType, int);	// キャレット位置にファイル挿入 maru 2006.12.10
 
 	// 編集系
 	void Command_WCHAR(wchar_t, bool bConvertEOL = true);			// 文字入力 // 2007.09.02 kobake Command_CHAR(char)→Command_WCHAR(wchar_t)に変更
@@ -279,7 +279,7 @@ public:
 	void Command_JUMP_DIALOG(void);						// 指定行ヘジャンプダイアログの表示
 	void Command_JUMP(void);							// 指定行ヘジャンプ
 // From Here 2001.12.03 hor
-	BOOL Command_FUNCLIST(int nAction, int nOutlineType);	// アウトライン解析 // 20060201 aroka
+	bool Command_FUNCLIST(int nAction, int nOutlineType);	// アウトライン解析 // 20060201 aroka
 // To Here 2001.12.03 hor
 	// Apr. 03, 2003 genta 引数追加
 	bool Command_TAGJUMP(bool bClose = false);			// タグジャンプ機能

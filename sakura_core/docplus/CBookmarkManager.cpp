@@ -119,8 +119,8 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 		}
 	}else {
 		// ‹ŒŒ`Ž® s”Ô†,‹æØ‚è
-		while (wcstok(p, delim) != NULL) {
-			while (wcschr(delim, *p) != NULL) p++;
+		while (wcstok(p, delim)) {
+			while (wcschr(delim, *p)) p++;
 			pCDocLine=m_pcDocLineMgr->GetLine( CLogicInt(_wtol(p)) );
 			if (pCDocLine) {
 				CBookmarkSetter(pCDocLine).SetBookmark(true);

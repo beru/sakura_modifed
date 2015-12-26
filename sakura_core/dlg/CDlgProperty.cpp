@@ -270,7 +270,7 @@ void CDlgProperty::SetData(void)
 	}
 end_of_CodeTest:;
 #endif //ifdef _DEBUG/////////////////////////////////////////////////////
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_PROPERTY, cmemProp.GetStringPtr());
+	SetItemText(IDC_EDIT_PROPERTY, cmemProp.GetStringPtr());
 
 	return;
 }

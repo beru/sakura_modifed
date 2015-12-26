@@ -99,7 +99,7 @@ public:
 	WNDPROC			m_wpOpenDialogProc;
 	int				m_nHelpTopicID;
 	bool			m_bViewMode;		// ビューモードか
-	BOOL			m_bIsSaveDialog;	// 保存のダイアログか
+	bool			m_bIsSaveDialog;	// 保存のダイアログか
 	ECodeType		m_nCharCode;		// 文字コード
 
 	CEol			m_cEol;
@@ -167,7 +167,7 @@ LRESULT APIENTRY OFNHookProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 				MyWinHelp( hwnd, HELP_CONTEXT, pData->m_nHelpTopicID );	// 2006.10.10 ryoji MyWinHelpに変更に変更
 				break;
 			case chx1:	// The read-only check box
-				pData->m_bViewMode = ( 0 != ::IsDlgButtonChecked( hwnd , chx1 ) );
+				pData->m_bViewMode = DlgButton_IsChecked( hwnd , chx1 );
 				break;
 			}
 			break;

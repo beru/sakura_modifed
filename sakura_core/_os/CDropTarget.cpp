@@ -130,7 +130,7 @@ BOOL CDropTarget::Register_DropTarget(HWND hWnd)
 BOOL CDropTarget::Revoke_DropTarget(void)
 {
 	BOOL bResult = TRUE;
-	if (m_hWnd_DropTarget != NULL) {
+	if (m_hWnd_DropTarget) {
 		bResult = SUCCEEDED(::RevokeDragDrop(m_hWnd_DropTarget));
 		m_hWnd_DropTarget = NULL;
 	}
@@ -199,7 +199,7 @@ STDMETHODIMP CDropSource::GiveFeedback(DWORD dropEffect)
 void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
-	if (m_pData != NULL) {
+	if (m_pData) {
 		for (int i = 0; i < m_nFormat; i++) {
 			delete [](m_pData[i].data);
 		}
@@ -207,7 +207,7 @@ void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 		m_pData = NULL;
 		m_nFormat = 0;
 	}
-	if (lpszText != NULL) {
+	if (lpszText) {
 		m_nFormat = bColumnSelect? 4: 3;	// ‹éŒ`‚ðŠÜ‚ß‚é‚©
 		m_pData = new DATA[m_nFormat];
 
@@ -335,7 +335,7 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpfe)
 	if (!m_pData)
 		return OLE_E_NOTRUNNING;
 
-	if (lpfe->ptd != NULL
+	if (lpfe->ptd
 		|| lpfe->dwAspect != DVASPECT_CONTENT
 		|| lpfe->lindex != -1
 		|| !(lpfe->tymed & TYMED_HGLOBAL))
@@ -409,7 +409,7 @@ STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetc
 		m_nIndex++;
 		i--;
 	}
-	if (pceltFetched != NULL)
+	if (pceltFetched)
 		*pceltFetched = celt - i;
 
 	return (i == 0) ? S_OK : S_FALSE;

@@ -212,7 +212,7 @@ int CHokanMgr::Search(
 
 //	2001/06/19 asa-o 候補が１つの場合補完ウィンドウは表示しない(逐次補完の場合は除く)
 	if (1 == m_vKouho.size()) {
-		if (pcmemHokanWord != NULL) {
+		if (pcmemHokanWord) {
 			m_nCurKouhoIdx = -1;
 			pcmemHokanWord->SetString(m_vKouho[0].c_str());
 			return 1;

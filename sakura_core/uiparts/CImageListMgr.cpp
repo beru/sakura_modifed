@@ -47,7 +47,7 @@ static
 void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 {
 //	ASSERT_VALID(this);
-//	ASSERT(m_hDC != NULL);
+//	ASSERT(m_hDC);
 
 	RECT rect;
 	::SetBkColor(hdc, clr);
@@ -59,7 +59,7 @@ void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 CImageListMgr::~CImageListMgr()
 {
 	//	2003.07.21 Image List‚Ì‘ã‚í‚è‚É•`‰æ—pbitmap‚ğ‰ğ•ú
-	if (m_hIconBitmap != NULL) {
+	if (m_hIconBitmap) {
 		DeleteObject(m_hIconBitmap);
 	}
 }
@@ -77,7 +77,7 @@ CImageListMgr::~CImageListMgr()
 bool CImageListMgr::Create(HINSTANCE hInstance)
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CImageListMgr::Create");
-	if (m_hIconBitmap != NULL) {	//	Šù‚É\’zÏ‚İ‚È‚ç–³‹‚·‚é
+	if (m_hIconBitmap) {	//	Šù‚É\’zÏ‚İ‚È‚ç–³‹‚·‚é
 		return true;
 	}
 

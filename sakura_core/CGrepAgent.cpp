@@ -674,7 +674,7 @@ int CGrepAgent::DoGrepTree(
 	int*					pnHitCount			//!< [i/o] ヒット数の合計
 )
 {
-	::DlgItem_SetText(pcDlgCancel->GetHwnd(), IDC_STATIC_CURPATH, pszPath);
+	pcDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);
 
 	CNativeW	cmemMessage;
 	int			nWork = 0;
@@ -703,11 +703,11 @@ int CGrepAgent::DoGrepTree(
 
 		// 表示設定をチェック
 		CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
-			0 != ::IsDlgButtonChecked(pcDlgCancel->GetHwnd(), IDC_CHECK_REALTIMEVIEW)
+			pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 		);
 
 		// GREP実行！
-		::DlgItem_SetText(pcDlgCancel->GetHwnd(), IDC_STATIC_CURFILE, lpFileName);
+		pcDlgCancel->SetItemText(IDC_STATIC_CURFILE, lpFileName);
 
 		std::tstring currentFile = pszPath;
 		currentFile += _T("\\");
@@ -823,7 +823,7 @@ int CGrepAgent::DoGrepTree(
 			}
 			// 表示設定をチェック
 			CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
-				0 != ::IsDlgButtonChecked(pcDlgCancel->GetHwnd(), IDC_CHECK_REALTIMEVIEW)
+				pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 			);
 
 			// フォルダ名を作成する。
@@ -853,11 +853,11 @@ int CGrepAgent::DoGrepTree(
 			if (-1 == nGrepTreeResult) {
 				goto cancel_return;
 			}
-			::DlgItem_SetText(pcDlgCancel->GetHwnd(), IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
+			pcDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
 		}
 	}
 
-	::DlgItem_SetText(pcDlgCancel->GetHwnd(), IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
+	pcDlgCancel->SetItemText(IDC_STATIC_CURFILE, LTEXT(" "));	// 2002/09/09 Moca add
 	return 0;
 
 cancel_return:;
@@ -1228,7 +1228,7 @@ int CGrepAgent::DoGrepFile(
 				}
 				//	2003.06.23 Moca 表示設定をチェック
 				CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
-					0 != ::IsDlgButtonChecked(pcDlgCancel->GetHwnd(), IDC_CHECK_REALTIMEVIEW)
+					pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
 				if (5000000 < cfl.GetFileSize()) {
@@ -1239,7 +1239,7 @@ int CGrepAgent::DoGrepFile(
 						::auto_sprintf( szWork, _T(" (%3d%%)"), nPercent );
 						std::tstring str;
 						str = str + pszFile + szWork;
-						::DlgItem_SetText(pcDlgCancel->GetHwnd(), IDC_STATIC_CURFILE, str.c_str());
+						pcDlgCancel->SetItemText(IDC_STATIC_CURFILE, str.c_str());
 					}
 				}
 			}
@@ -1327,7 +1327,7 @@ int CGrepAgent::DoGrepFile(
 				int nMatchLen;
 				int nIdx = 0;
 				// Jun. 26, 2003 genta 無駄なwhileは削除
-				while ((pszRes = CSearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, sSearchOption.bLoHiCase, &nMatchLen)) != NULL) {
+				while ((pszRes = CSearchAgent::SearchStringWord(pLine, nLineLen, nIdx, searchWords, sSearchOption.bLoHiCase, &nMatchLen))) {
 					nIdx = pszRes - pLine + nMatchLen;
 					++nHitCount;
 					++(*pnHitCount);
@@ -1723,7 +1723,7 @@ int CGrepAgent::DoGrepReplaceFile(
 				}
 				//	2003.06.23 Moca 表示設定をチェック
 				CEditWnd::getInstance()->SetDrawSwitchOfAllViews(
-					0 != ::IsDlgButtonChecked( pcDlgCancel->GetHwnd(), IDC_CHECK_REALTIMEVIEW )
+					pcDlgCancel->IsButtonChecked(IDC_CHECK_REALTIMEVIEW)
 				);
 				// 2002/08/30 Moca 進行状態を表示する(5MB以上)
 				if (5000000 < cfl.GetFileSize()) {
@@ -1734,7 +1734,7 @@ int CGrepAgent::DoGrepReplaceFile(
 						::auto_sprintf( szWork, _T(" (%3d%%)"), nPercent );
 						std::tstring str;
 						str = str + pszFile + szWork;
-						::DlgItem_SetText( pcDlgCancel->GetHwnd(), IDC_STATIC_CURFILE, str.c_str() );
+						pcDlgCancel->SetItemText(IDC_STATIC_CURFILE, str.c_str() );
 					}
 				}
 			}

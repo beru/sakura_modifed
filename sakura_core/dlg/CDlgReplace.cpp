@@ -95,7 +95,7 @@ BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
 }
 
 // モードレスダイアログの表示
-HWND CDlgReplace::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam, BOOL bSelected)
+HWND CDlgReplace::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam, bool bSelected)
 {
 	m_sSearchOption = m_pShareData->m_Common.m_sSearch.m_sSearchOption;		// 検索オプション
 	m_bConsecutiveAll = m_pShareData->m_Common.m_sSearch.m_bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
@@ -153,17 +153,17 @@ void CDlgReplace::SetData(void)
 	// To Here Jun. 29, 2001 genta
 
 	// 検索／置換  見つからないときメッセージを表示
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
+	CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
 
 	// 置換 ダイアログを自動的に閉じる
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_bAutoCloseDlgReplace, m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace);
+	CheckDlgButton(GetHwnd(), IDC_CHECK_bAutoCloseDlgReplace, m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
+	CheckDlgButton(GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
 
 	// From Here 2001.12.03 hor
 	// クリップボードから貼り付ける？
-	::CheckDlgButton(GetHwnd(), IDC_CHK_PASTE, m_nPaste);
+	CheckDlgButton(GetHwnd(), IDC_CHK_PASTE, m_nPaste);
 	// 置換対象
 	if (m_nReplaceTarget == 0) {
 		::CheckDlgButton(GetHwnd(), IDC_RADIO_REPLACE, TRUE);
@@ -196,7 +196,7 @@ void CDlgReplace::SetCombosList(void)
 	vText.resize(nBufferSize);
 	Combo_GetText(hwndCombo, &vText[0], nBufferSize);
 	if (auto_strcmp(to_wchar(&vText[0]), m_strText.c_str()) != 0) {
-		::DlgItem_SetText(GetHwnd(), IDC_COMBO_TEXT, m_strText.c_str());
+		SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
 	}
 
 	// 置換後文字列
@@ -208,7 +208,7 @@ void CDlgReplace::SetCombosList(void)
 	vText.resize(nBufferSize);
 	Combo_GetText(hwndCombo, &vText[0], nBufferSize);
 	if (auto_strcmp(to_wchar(&vText[0]), m_strText2.c_str()) != 0) {
-		::DlgItem_SetText(GetHwnd(), IDC_COMBO_TEXT2, m_strText2.c_str());
+		SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str());
 	}
 }
 
@@ -218,21 +218,21 @@ void CDlgReplace::SetCombosList(void)
 int CDlgReplace::GetData(void)
 {
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
+	m_sSearchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で探す
-	m_sSearchOption.bWordOnly = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
+	m_sSearchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
 	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
-	m_bConsecutiveAll = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_CONSECUTIVEALL);
+	m_bConsecutiveAll = IsButtonChecked(IDC_CHECK_CONSECUTIVEALL);
 
 	// 正規表現
-	m_sSearchOption.bRegularExp = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
+	m_sSearchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 	// 選択範囲内置換
-	m_bSelectedArea = ::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_SELECTEDAREA);
+	m_bSelectedArea = IsButtonChecked(IDC_RADIO_SELECTEDAREA);
 	// 検索／置換  見つからないときメッセージを表示
-	m_bNOTIFYNOTFOUND = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND);
+	m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
 	m_pShareData->m_Common.m_sSearch.m_bConsecutiveAll = m_bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	m_pShareData->m_Common.m_sSearch.m_bSelectedArea = m_bSelectedArea;		// 選択範囲内置換
@@ -244,7 +244,7 @@ int CDlgReplace::GetData(void)
 	::DlgItem_GetText(GetHwnd(), IDC_COMBO_TEXT, &vText[0], nBufferSize);
 	m_strText = to_wchar(&vText[0]);
 	// 置換後文字列
-	if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
+	if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
 		m_strText2 = L"";
 	}else {
 		nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT2)) + 1;
@@ -254,10 +254,10 @@ int CDlgReplace::GetData(void)
 	}
 
 	// 置換 ダイアログを自動的に閉じる
-	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_bAutoCloseDlgReplace);
+	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = IsButtonChecked(IDC_CHECK_bAutoCloseDlgReplace);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	m_pShareData->m_Common.m_sSearch.m_bSearchAll = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_SEARCHALL);
+	m_pShareData->m_Common.m_sSearch.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < m_strText.size()) {
 		// 正規表現？
@@ -297,17 +297,17 @@ int CDlgReplace::GetData(void)
 
 		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
-		m_nPaste=IsDlgButtonChecked(GetHwnd(), IDC_CHK_PASTE);
+		m_nPaste = IsButtonChecked(IDC_CHK_PASTE);
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT2), !m_nPaste);
 		// 置換対象
 		m_nReplaceTarget=0;
-		if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_INSERT)) {
+		if (IsButtonChecked(IDC_RADIO_INSERT)) {
 			m_nReplaceTarget=1;
-		}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ADD)) {
+		}else if (IsButtonChecked(IDC_RADIO_ADD)) {
 			m_nReplaceTarget=2;
-		}else if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
+		}else if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
 			m_nReplaceTarget=3;
-			m_nPaste = FALSE;
+			m_nPaste = false;
 			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), FALSE );
 		}
 		// To Here 2001.12.03 hor
@@ -390,20 +390,20 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 	case IDC_CHK_PASTE:
 		// テキストの貼り付け
 		if (1
-			&& ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_PASTE)
+			&& IsButtonChecked(IDC_CHK_PASTE)
 			&& !pcEditView->m_pcEditDoc->m_cDocEditor.IsEnablePaste()
 		) {
 			OkMessage(GetHwnd(), LS(STR_DLGREPLC_CLIPBOARD));
 			::CheckDlgButton(GetHwnd(), IDC_CHK_PASTE, FALSE);
 		}
-		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT2), !(::IsDlgButtonChecked(GetHwnd(), IDC_CHK_PASTE)));
+		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT2), !IsButtonChecked(IDC_CHK_PASTE));
 		return TRUE;
 		// 置換対象
 	case IDC_RADIO_REPLACE:
 	case IDC_RADIO_INSERT:
 	case IDC_RADIO_ADD:
 	case IDC_RADIO_LINEDELETE:
-		if (::IsDlgButtonChecked( GetHwnd(), IDC_RADIO_LINEDELETE )) {
+		if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
 			::EnableWindow( GetItemHwnd( IDC_COMBO_TEXT2 ), FALSE );
 			::EnableWindow( GetItemHwnd( IDC_CHK_PASTE ), FALSE );
 		}else {
@@ -413,7 +413,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_RADIO_SELECTEDAREA:
 		// 範囲範囲
-		if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALLAREA)) {
+		if (IsButtonChecked(IDC_RADIO_ALLAREA)) {
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_SEARCHPREV), TRUE);
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_SEARCHNEXT), TRUE);
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_REPALCE), TRUE);
@@ -425,7 +425,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_RADIO_ALLAREA:
 		// ファイル全体
-		if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_ALLAREA)) {
+		if (IsButtonChecked(IDC_RADIO_ALLAREA)) {
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_SEARCHPREV), TRUE);
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_SEARCHNEXT), TRUE);
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_BUTTON_REPALCE), TRUE);
@@ -449,7 +449,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 //		break;
 	case IDC_CHK_REGULAREXP:	// 正規表現
 //		MYTRACE(_T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP) = %d\n"), ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
-		if (::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP)) {
+		if (IsButtonChecked(IDC_CHK_REGULAREXP)) {
 			// From Here Jun. 26, 2001 genta
 			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {

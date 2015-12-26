@@ -99,7 +99,7 @@ private:
 	int		SearchBestTag(void);	// もっとも確率の高そうなインデックスを返す。
 	// @@ 2005.03.31 MIK
 	const TCHAR* GetFileName(void);
-	const TCHAR* GetFilePath(void) { return m_pszFileName != NULL ? m_pszFileName : _T(""); }
+	const TCHAR* GetFilePath(void) { return m_pszFileName ? m_pszFileName : _T(""); }
 	void Empty(void);
 	void SetTextDir();
 	void FindNext(bool);
@@ -138,9 +138,9 @@ private:
 	int		m_nLoop;				// さかのぼれる階層数
 	CSortedTagJumpList*	m_pcList;	// タグジャンプ情報
 	UINT	m_nTimerId;				// タイマ番号
-	BOOL	m_bTagJumpICase;		// 大文字小文字を同一視
-	BOOL	m_bTagJumpAnyWhere;		// 文字列の途中にマッチ
-	BOOL	m_bTagJumpExactMatch;	// 完全一致(画面無し)
+	bool	m_bTagJumpICase;		// 大文字小文字を同一視
+	bool	m_bTagJumpAnyWhere;		// 文字列の途中にマッチ
+	bool	m_bTagJumpExactMatch;	// 完全一致(画面無し)
 
 	int 	m_nTop;					// ページめくりの表示の先頭(0開始)
 	bool	m_bNextItem;			// まだ次にヒットするものがある
@@ -150,8 +150,8 @@ private:
 	STagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
 
 	CNativeW	m_strOldKeyword;	// 前回のキーワード
-	BOOL	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
-	BOOL	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
+	bool	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
+	bool	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
 	SComboBoxItemDeleter	m_comboDel;
 	CRecentTagjumpKeyword	m_cRecentKeyword;

@@ -653,7 +653,7 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	HDC hdcOld = 0;
 	// 2007.09.09 Moca bUseMemoryDCを有効化。
 	// bUseMemoryDC = FALSE;
-	BOOL bUseMemoryDC = (m_hdcCompatDC != NULL);
+	bool bUseMemoryDC = (m_hdcCompatDC != NULL);
 	assert_warning(gr != m_hdcCompatDC);
 	if (bUseMemoryDC) {
 		hdcOld = gr;
@@ -1110,7 +1110,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	}
 
 	// 必要なら折り返し記号描画
-	if (pcLayout && pcLayout->GetLayoutEol().GetLen() == 0 && pcLayout->GetNextLayout() != NULL) {
+	if (pcLayout && pcLayout->GetLayoutEol().GetLen() == 0 && pcLayout->GetNextLayout()) {
 		_DispWrap(pInfo->m_gr, pInfo->m_pDispPos, this, pInfo->m_pDispPos->GetLayoutLineRef());
 	}
 
@@ -1408,7 +1408,7 @@ void CEditView::UseCompatibleDC(BOOL fCache)
 	}else {
 		//	CompatibleBitmapが残っているかもしれないので最初に削除
 		DeleteCompatibleBitmap();
-		if (m_hdcCompatDC != NULL) {
+		if (m_hdcCompatDC) {
 			::DeleteDC(m_hdcCompatDC);
 			DEBUG_TRACE(_T("CEditView::UseCompatibleDC: Deleted.\n"));
 			m_hdcCompatDC = NULL;

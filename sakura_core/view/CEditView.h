@@ -352,7 +352,7 @@ public: // テスト用にアクセス属性を変更
 	DWORD TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, DWORD dwEffect);
 	bool IsDragSource(void);
 
-	void _SetDragMode(BOOL b) {
+	void _SetDragMode(bool b) {
 		m_bDragMode = b;
 	}
 	
@@ -530,7 +530,7 @@ public:
 	//                          その他                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	BOOL OPEN_ExtFromtoExt(BOOL, BOOL, const TCHAR* [], const TCHAR* [], int, int, const TCHAR*); // 指定拡張子のファイルに対応するファイルを開く補助関数 // 2003.08.12 Moca
+	bool OPEN_ExtFromtoExt(BOOL, BOOL, const TCHAR* [], const TCHAR* [], int, int, const TCHAR*); // 指定拡張子のファイルに対応するファイルを開く補助関数 // 2003.08.12 Moca
 	//	Jan.  8, 2006 genta 折り返しトグル動作判定
 	enum TOGGLE_WRAP_ACTION {
 		TGWRAP_NONE = 0,
@@ -638,16 +638,16 @@ public:
 public:
 	// D&D
 	CDropTarget*	m_pcDropTarget;
-	BOOL			m_bDragMode;					// 選択テキストのドラッグ中か
+	bool			m_bDragMode;					// 選択テキストのドラッグ中か
 	CLIPFORMAT		m_cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
-	BOOL			m_bDragBoxData;					// ドラッグデータは矩形か
+	bool			m_bDragBoxData;					// ドラッグデータは矩形か
 	CLayoutPoint	m_ptCaretPos_DragEnter;			// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
 	CLayoutInt		m_nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
 
 	// 括弧
 	CLogicPoint		m_ptBracketCaretPos_PHY;	// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	CLogicPoint		m_ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	BOOL			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
+	bool			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
 	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	// 2007.10.02 nasukoji
@@ -674,7 +674,7 @@ public:
 	std::wstring		m_strCurSearchKey;			// 検索文字列
 	SSearchOption		m_sCurSearchOption;			// 検索／置換  オプション
 	CLogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	BOOL				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
+	bool				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
 	ESearchDirection	m_nISearchDirection;
 	int					m_nISearchMode;
 	bool				m_bISearchWrap;
@@ -685,10 +685,10 @@ public:
 
 	// マクロ
 	bool			m_bExecutingKeyMacro;	// キーボードマクロの実行中
-	BOOL			m_bCommandRunning;		// コマンドの実行中
+	bool			m_bCommandRunning;		// コマンドの実行中
 
 	// 入力補完
-	BOOL			m_bHokan;				//	補完中か？＝補完ウィンドウが表示されているか？かな？
+	bool			m_bHokan;				//	補完中か？＝補完ウィンドウが表示されているか？かな？
 
 	// 編集
 	bool			m_bDoing_UndoRedo;		// アンドゥ・リドゥの実行中か
@@ -697,7 +697,7 @@ public:
 	DWORD			m_dwTipTimer;			// Tip起動タイマー
 	CTipWnd			m_cTipWnd;				// Tip表示ウィンドウ
 	POINT			m_poTipCurPos;			// Tip起動時のマウスカーソル位置
-	BOOL			m_bInMenuLoop;			// メニュー モーダル ループに入っています
+	bool			m_bInMenuLoop;			// メニュー モーダル ループに入っています
 	CDicMgr			m_cDicMgr;				// 辞書マネージャ
 
 	TCHAR			m_szComposition[512];	// IMR_DOCUMENTFEED用入力中文字列データ

@@ -128,7 +128,7 @@ BOOL CDlgGrepReplace::OnBnClicked( int wID )
 		{
 			bool bStop = false;
 			CEditView* pcEditView = (CEditView*)m_lParam;
-			if (::IsDlgButtonChecked( GetHwnd(), IDC_CHK_PASTE )
+			if (IsDlgButtonChecked( GetHwnd(), IDC_CHK_PASTE )
 				&& !pcEditView->m_pcEditDoc->m_cDocEditor.IsEnablePaste()
 			) {
 				OkMessage( GetHwnd(), LS(STR_DLGREPLC_CLIPBOARD) );
@@ -151,7 +151,7 @@ BOOL CDlgGrepReplace::OnBnClicked( int wID )
 void CDlgGrepReplace::SetData( void )
 {
 	/* íuä∑å„ */
-	::DlgItem_SetText( GetHwnd(), IDC_COMBO_TEXT2, m_strText2.c_str() );
+	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
 	HWND	hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_TEXT2 );
 	for (int i = 0; i < m_pShareData->m_sSearchKeywords.m_aReplaceKeys.size(); ++i) {
 		Combo_AddString( hwndCombo, m_pShareData->m_sSearchKeywords.m_aReplaceKeys[i] );

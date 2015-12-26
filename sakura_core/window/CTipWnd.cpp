@@ -107,7 +107,7 @@ void CTipWnd::Show(int nX, int nY, const TCHAR* szText, RECT* pRect)
 
 	// サイズを計算済み	2001/06/19 asa-o
 	RECT rc;
-	if (pRect != NULL) {
+	if (pRect) {
 		rc = *pRect;
 	}else {
 		// ウィンドウのサイズを決める

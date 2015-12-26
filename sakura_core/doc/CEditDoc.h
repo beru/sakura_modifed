@@ -103,7 +103,7 @@ public:
 	bool IsAcceptLoad() const;				// このウィンドウで(新しいウィンドウを開かずに)新しいファイルを開けるか
 
 	// イベント
-	BOOL HandleCommand(EFunctionCode);
+	bool HandleCommand(EFunctionCode);
 	void OnChangeType();
 	void OnChangeSetting(bool bDoLayout = true);					// ビューに設定変更を反映させる
 	BOOL OnFileClose(bool);			// ファイルを閉じるときのMRU登録 & 保存確認 ＆ 保存実行

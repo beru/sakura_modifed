@@ -224,7 +224,7 @@ bool SetClipboardText(HWND hwnd, const WCHAR* pszText, int nLength)
 	@date 2006.01.16 Moca 他のTYMEDが利用可能でも、取得できるように変更。
 	@note IDataObject::GetData() で tymed = TYMED_HGLOBAL を指定すること。
 */
-BOOL IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
+bool IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 {
 	FORMATETC	fe;
 
@@ -236,7 +236,7 @@ BOOL IsDataAvailable(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 	fe.lindex = -1;
 	fe.tymed = TYMED_HGLOBAL;
 	// 2006.03.16 Moca S_FALSEでも受け入れてしまうバグを修正(ファイルのドロップ等)
-	return S_OK == pDataObject->QueryGetData(&fe);
+	return pDataObject->QueryGetData(&fe) == S_OK;
 }
 
 HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
@@ -252,7 +252,7 @@ HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 	HGLOBAL hDest = NULL;
 	STGMEDIUM stgMedium;
 	// 2006.03.16 Moca SUCCEEDEDマクロではS_FALSEのとき困るので、S_OKに変更
-	if (S_OK == pDataObject->GetData(&fe, &stgMedium)) {
+	if (pDataObject->GetData(&fe, &stgMedium) == S_OK) {
 		if (!stgMedium.pUnkForRelease) {
 			if (stgMedium.tymed == TYMED_HGLOBAL)
 				hDest = stgMedium.hGlobal;
@@ -260,7 +260,7 @@ HGLOBAL GetGlobalData(LPDATAOBJECT pDataObject, CLIPFORMAT cfFormat)
 			if (stgMedium.tymed == TYMED_HGLOBAL) {
 				DWORD nSize = ::GlobalSize(stgMedium.hGlobal);
 				hDest = ::GlobalAlloc(GMEM_SHARE|GMEM_MOVEABLE, nSize);
-				if (hDest != NULL) {
+				if (hDest) {
 					// copy the bits
 					LPVOID lpSource = ::GlobalLock(stgMedium.hGlobal);
 					LPVOID lpDest = ::GlobalLock(hDest);
@@ -304,7 +304,7 @@ BOOL GetSystemResources(
 			hlib,
 			"_MyGetFreeSystemResources32@4"
 		);
-		if (GetFreeSystemResources != NULL) {
+		if (GetFreeSystemResources) {
 			*pnSystemResources = GetFreeSystemResources(GFSR_SYSTEMRESOURCES);
 			*pnUserResources = GetFreeSystemResources(GFSR_USERRESOURCES);
 			*pnGDIResources = GetFreeSystemResources(GFSR_GDIRESOURCES);

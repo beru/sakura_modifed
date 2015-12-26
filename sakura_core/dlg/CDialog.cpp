@@ -99,8 +99,8 @@ CDialog::~CDialog()
 */
 INT_PTR CDialog::DoModal(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete, LPARAM lParam)
 {
-	m_bInited = FALSE;
-	m_bModal = TRUE;
+	m_bInited = false;
+	m_bModal = true;
 	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_lParam = lParam;
@@ -123,8 +123,8 @@ INT_PTR CDialog::DoModal(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete,
 */
 HWND CDialog::DoModeless(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete, LPARAM lParam, int nCmdShow)
 {
-	m_bInited = FALSE;
-	m_bModal = FALSE;
+	m_bInited = false;
+	m_bModal = false;
 	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_lParam = lParam;
@@ -144,8 +144,8 @@ HWND CDialog::DoModeless(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete,
 
 HWND CDialog::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPCDLGTEMPLATE lpTemplate, LPARAM lParam, int nCmdShow)
 {
-	m_bInited = FALSE;
-	m_bModal = FALSE;
+	m_bInited = false;
+	m_bModal = false;
 	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_lParam = lParam;
@@ -187,7 +187,7 @@ BOOL CDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	SetDialogPosSize();
 
-	m_bInited = TRUE;
+	m_bInited = true;
 	return TRUE;
 }
 

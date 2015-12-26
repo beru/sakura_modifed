@@ -267,7 +267,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_USETYPEFONT), m_Types.m_bUseTypeFont);
 						// フォント表示	// 2013/6/23 Uchi
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TYPEFONT, m_Types.m_lf, m_Types.m_nPointSize, m_Types.m_bUseTypeFont);
-						if (m_hTypeFont != NULL) {
+						if (m_hTypeFont) {
 							::DeleteObject(m_hTypeFont);
 						}
 						m_hTypeFont = hFont;
@@ -275,11 +275,11 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 				}
 				return TRUE;
 			case IDC_CHECK_USETYPEFONT:	// 2013/6/24 Uchi
-				if (!::IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETYPEFONT)) {
+				if (!IsDlgButtonChecked(hwndDlg, IDC_CHECK_USETYPEFONT)) {
 					::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_USETYPEFONT), FALSE);
 					// フォント表示
 					HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TYPEFONT, m_Types.m_lf, m_Types.m_nPointSize, FALSE);
-					if (m_hTypeFont != NULL) {
+					if (m_hTypeFont) {
 						::DeleteObject(m_hTypeFont);
 					}
 					m_hTypeFont = hFont;
@@ -289,8 +289,8 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 			case IDC_CHECK_KINSOKUKUTO:		// 句読点をぶら下げる
 				// ぶら下げを隠すの有効化	2012/11/30 Uchi
 				::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_KINSOKUHIDE), 
-					::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KINSOKURET) 
-				 || ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_KINSOKUKUTO));
+					IsDlgButtonChecked(hwndDlg, IDC_CHECK_KINSOKURET) 
+				 || IsDlgButtonChecked(hwndDlg, IDC_CHECK_KINSOKUKUTO));
 			}
 			break;	// BN_CLICKED
 		}
@@ -423,7 +423,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 
 	case WM_DESTROY:
 		// タイプフォント破棄	// 2013/6/23 Uchi
-		if (m_hTypeFont != NULL) {
+		if (m_hTypeFont) {
 			::DeleteObject(m_hTypeFont);
 			m_hTypeFont = NULL;
 		}
@@ -693,7 +693,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 	// 2002.04.01 YAZAKI ルールファイル関連追加
 	{
 		// 標準ルール
-		if (!::IsDlgButtonChecked(hwndDlg, IDC_RADIO_OUTLINERULEFILE)) {
+		if (!IsDlgButtonChecked(hwndDlg, IDC_RADIO_OUTLINERULEFILE)) {
 			HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_OUTLINES);
 			int		nSelPos = Combo_GetCurSel(hwndCombo);
 			if (nSelPos >= 0) {

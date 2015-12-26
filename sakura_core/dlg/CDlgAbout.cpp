@@ -216,7 +216,7 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 #endif
 	cmemMsg.AppendString(_T("\r\n"));
 
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_VER, cmemMsg.GetStringPtr());
+	SetItemText(IDC_EDIT_VER, cmemMsg.GetStringPtr());
 
 	// From Here Jun. 8, 2001 genta
 	// Edit Boxにメッセージを追加する．
@@ -225,7 +225,7 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	if (_tcslen(pszDesc) > 0) {
 		_tcsncpy(szMsg, pszDesc, _countof(szMsg) - 1);
 		szMsg[_countof(szMsg) - 1] = 0;
-		::DlgItem_SetText(GetHwnd(), IDC_EDIT_ABOUT, szMsg);
+		SetItemText(IDC_EDIT_ABOUT, szMsg);
 	}
 	// To Here Jun. 8, 2001 genta
 
@@ -234,7 +234,7 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false);
 	HWND hIconWnd = GetDlgItem(GetHwnd(), IDC_STATIC_MYICON);
 	
-	if (hIconWnd != NULL && hIcon != NULL) {
+	if (hIconWnd && hIcon) {
 		StCtl_SetIcon(hIconWnd, hIcon);
 	}
 	// To Here Dec. 2, 2002 genta
@@ -293,7 +293,7 @@ BOOL CUrlWnd::SetSubclassWindow(HWND hWnd)
 {
 	// STATICウィンドウをサブクラス化する
 	// 元のSTATICは WS_TABSTOP, SS_NOTIFY スタイルのものを使用すること
-	if (GetHwnd() != NULL)
+	if (GetHwnd())
 		return FALSE;
 	if (!IsWindow(hWnd))
 		return FALSE;
@@ -423,7 +423,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		// 後始末
 		KillTimer(hWnd, 1);
 		SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pUrlWnd->m_pOldProc);
-		if (pUrlWnd->m_hFont != NULL)
+		if (pUrlWnd->m_hFont)
 			DeleteObject(pUrlWnd->m_hFont);
 		pUrlWnd->m_hWnd = NULL;
 		pUrlWnd->m_hFont = NULL;

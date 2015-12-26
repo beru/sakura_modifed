@@ -50,7 +50,7 @@ CViewCommander::CViewCommander(CEditView* pEditView) : m_pCommanderView(pEditVie
 	@param lparam3 parameter3(内容はコマンドコードによって変わります)
 	@param lparam4 parameter4(内容はコマンドコードによって変わります)
 */
-BOOL CViewCommander::HandleCommand(
+bool CViewCommander::HandleCommand(
 	EFunctionCode	nCommand,
 	bool			bRedraw,
 	LPARAM			lparam1,
@@ -59,7 +59,7 @@ BOOL CViewCommander::HandleCommand(
 	LPARAM			lparam4
 )
 {
-	BOOL	bRet = TRUE;
+	bool	bRet = true;
 	bool	bRepeat = false;
 	int		nFuncID;
 
@@ -83,7 +83,7 @@ BOOL CViewCommander::HandleCommand(
 
 	// 2013.09.23 novice 機能が利用可能か調べる
 	if (!IsFuncEnable(GetDocument(), &GetDllShareData(), nCommand)) {
-		return TRUE;
+		return true;
 	}
 
 	++GetDocument()->m_nCommandExecNum;		// コマンド実行回数
@@ -96,7 +96,7 @@ BOOL CViewCommander::HandleCommand(
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
 	if (GetEditWindow()->m_pPrintPreview && F_PRINT_PREVIEW != nCommand) {
 		ErrorBeep();
-		return -1;
+		return true;
 	}
 	// キーリピート状態
 	if (m_bPrevCommand == nCommand) {
@@ -146,7 +146,7 @@ BOOL CViewCommander::HandleCommand(
 				m_pcSMacroMgr->GetFile(nCommand - F_USERMACRO_0)
 			);
 		}
-		return TRUE;
+		return true;
 	}
 	// To Here Sep. 29, 2001 genta マクロの実行機能追加
 
@@ -156,7 +156,7 @@ BOOL CViewCommander::HandleCommand(
 	// -------------------------------------
 	m_pCommanderView->PreprocessCommand_hokan(nCommand);
 	if (m_pCommanderView->ProcessCommand_isearch(nCommand, bRedraw, lparam1, lparam2, lparam3, lparam4))
-		return TRUE;
+		return true;
 
 	// -------------------------------------
 	// Jan. 10, 2005 genta コメント

@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
 			return usage();
 		}
 	}
-	if (!makefile && top_dir != NULL) { return usage(); }
+	if (!makefile && top_dir) { return usage(); }
 	if (!makefile)	{ printf("Error: makefileを指定してください\n\n");				return usage(); }
 	if (!top_dir)	{ printf("Error: トップディレクトリを指定してください\n\n");	return usage(); }
 
@@ -307,7 +307,7 @@ int main(int argc, char* argv[])
 	char* wtline;
 	const char*	fl_nm;
 
-	while (fgets(line, _countof(line), in) != NULL) {
+	while (fgets(line, _countof(line), in)) {
 		wtline = line;
 		switch (mode) {
 		case 0:
@@ -319,13 +319,13 @@ int main(int argc, char* argv[])
 			if (line[0] == '\n' || line[0] == '\0') {
 				// リスト終了?
 				fl_nm = getFile();
-				if (fl_nm != NULL) {
+				if (fl_nm) {
 					// ファイルが増えた
 					change = true;
 					do {
 						//出力
 						fprintf(out, "%s", makeObjLine( mkline, _countof(mkline), fl_nm ) );
-					} while ((fl_nm = getFile()) != NULL);
+					} while ((fl_nm = getFile()));
 				}
 				mode = 2;
 			}

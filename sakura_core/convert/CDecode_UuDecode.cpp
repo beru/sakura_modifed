@@ -43,7 +43,7 @@ bool CDecode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	}
 
 	// ボディーを処理
-	while( (pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false)) != NULL ){
+	while( (pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false)) ){
 		if (ceol.GetType() != EOL_CRLF) {
 			pcDst->_AppendSz("");
 			return false;

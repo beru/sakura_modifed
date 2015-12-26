@@ -53,7 +53,7 @@ CDlgCompare::CDlgCompare()
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
-	m_bCompareAndTileHorz = TRUE;	// 左右に並べて表示
+	m_bCompareAndTileHorz = true;	// 左右に並べて表示
 
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -158,7 +158,7 @@ void CDlgCompare::SetData(void)
 			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 				// 2010.07.30 自分の名前もここから設定する
 				CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, -1, calc.GetDC() );
-				::DlgItem_SetText(GetHwnd(), IDC_STATIC_COMPARESRC, szMenu);
+				SetItemText(IDC_STATIC_COMPARESRC, szMenu);
 				continue;
 			}
 			// 番号は ウィンドウリストと同じになるようにする
@@ -189,10 +189,10 @@ void CDlgCompare::SetData(void)
 	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd != FALSE
+	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
 		&& !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin
 	) {
-		m_bCompareAndTileHorz = FALSE;
+		m_bCompareAndTileHorz = false;
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_TILE_H), FALSE);
 	}
 	::CheckDlgButton(GetHwnd(), IDC_CHECK_TILE_H, m_bCompareAndTileHorz);
@@ -223,7 +223,7 @@ int CDlgCompare::GetData(void)
 		CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( m_pszCompareLabel, _MAX_PATH/*長さ不明*/, pfi, nId, -1, calc.GetDC() );
 
 		// 左右に並べて表示
-		m_bCompareAndTileHorz = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_TILE_H);
+		m_bCompareAndTileHorz = IsButtonChecked(IDC_CHECK_TILE_H);
 
 		return TRUE;
 	}

@@ -244,7 +244,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 						pEnd = p;
 					}
 				}
-				if (pEnd != NULL) {
+				if (pEnd) {
 					// ç≈å„ÇÃ\ÇÃå„Ç≈èIí[
 					*(pEnd + 1) = '\0';
 				}

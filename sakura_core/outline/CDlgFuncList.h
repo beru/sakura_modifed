@@ -71,8 +71,8 @@ protected:
 	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->m_Common.m_sOutline; }
 	STypeConfig& TypeSet(void) { return m_type; }
 	int& ProfDockSet() { return CommonSet().m_nOutlineDockSet; }
-	BOOL& ProfDockSync() { return CommonSet().m_bOutlineDockSync; }
-	BOOL& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().m_bOutlineDockDisp: TypeSet().m_bOutlineDockDisp; }
+	bool& ProfDockSync() { return CommonSet().m_bOutlineDockSync; }
+	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().m_bOutlineDockDisp: TypeSet().m_bOutlineDockDisp; }
 	EDockSide& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().m_eOutlineDockSide: TypeSet().m_eOutlineDockSide; }
 	int& ProfDockLeft() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockLeft: TypeSet().m_cxOutlineDockLeft; }
 	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockTop: TypeSet().m_cyOutlineDockTop; }

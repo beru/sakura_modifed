@@ -100,10 +100,10 @@ CPrint::~CPrint(void)
 {
 	// ƒƒ‚ƒŠŠ„‚è“–‚ÄÏ‚İ‚È‚ç‚ÎA‰ğ•ú‚·‚é
 	// 2003.05.18 ‚©‚ë‚Æ
-	if (m_hDevMode != NULL) {
+	if (m_hDevMode) {
 		::GlobalFree(m_hDevMode);
 	}
-	if (m_hDevNames != NULL) {
+	if (m_hDevNames) {
 		::GlobalFree(m_hDevNames);
 	}
 	m_hDevMode	= NULL;
@@ -339,7 +339,7 @@ HDC CPrint::CreateDC(
 	::GlobalUnlock(m_hDevMode);
 
 end_of_func:;
-	if (hPrinter != NULL) {
+	if (hPrinter) {
 		::ClosePrinter(hPrinter);
 	}
 

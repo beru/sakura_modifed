@@ -47,7 +47,7 @@ HWND MyGetAncestor(HWND hWnd, UINT gaFlags)
 		do {
 			hwndAncestor = hwndWk;
 			hwndWk = ::GetParent(hwndAncestor);
-		}while (hwndWk != NULL);
+		}while (hwndWk);
 		break;
 
 	case GA_ROOTOWNER2:	// 所有関係をGetWindow()で遡って所有されていないトップレベルウィンドウを返す
@@ -57,7 +57,7 @@ HWND MyGetAncestor(HWND hWnd, UINT gaFlags)
 			hwndWk = ::GetParent(hwndAncestor);
 			if (!hwndWk)
 				hwndWk = ::GetWindow(hwndAncestor, GW_OWNER);
-		}while (hwndWk != NULL);
+		}while (hwndWk);
 		break;
 
 	default:

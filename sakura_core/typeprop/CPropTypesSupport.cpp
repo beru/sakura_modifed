@@ -256,10 +256,10 @@ int CPropTypesSupport::GetData(HWND hwndDlg)
 {
 //	2001/06/19	asa-o
 	// 入力補完機能：英大文字小文字を同一視する
-	m_Types.m_bHokanLoHiCase = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_HOKANLOHICASE) != 0;
+	m_Types.m_bHokanLoHiCase = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANLOHICASE);
 
-	m_Types.m_bUseHokanByFile = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_HOKANBYFILE) != 0;
-	m_Types.m_bUseHokanByKeyword = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_HOKANBYKEYWORD);
+	m_Types.m_bUseHokanByFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANBYFILE);
+	m_Types.m_bUseHokanByKeyword = DlgButton_IsChecked(hwndDlg, IDC_CHECK_HOKANBYKEYWORD);
 
 	// 入力補完 単語ファイル
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_HOKANFILE, m_Types.m_szHokanFile, _countof2(m_Types.m_szHokanFile));
@@ -278,10 +278,10 @@ int CPropTypesSupport::GetData(HWND hwndDlg)
 	//@@@ 2002.2.2 YAZAKI
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHELP, m_Types.m_szExtHelp, _countof2(m_Types.m_szExtHelp));
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTHTMLHELP, m_Types.m_szExtHtmlHelp, _countof2(m_Types.m_szExtHtmlHelp));
-	m_Types.m_bHtmlHelpIsSingle = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE) != 0;
+	m_Types.m_bHtmlHelpIsSingle = DlgButton_IsChecked(hwndDlg, IDC_CHECK_TYPEHTMLHELPISSINGLE);
 
 	// 保存時に改行コードの混在を警告する	2013/4/14 Uchi
-	m_Types.m_bChkEnterAtEnd = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CHKENTERATEND) != 0;
+	m_Types.m_bChkEnterAtEnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CHKENTERATEND);
 
 	return TRUE;
 }

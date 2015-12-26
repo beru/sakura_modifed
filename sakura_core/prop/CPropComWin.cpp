@@ -354,16 +354,16 @@ int CPropWin::GetData(HWND hwndDlg)
 	auto& csWindow = m_Common.m_sWindow;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
-	csWindow.m_bDispTOOLBAR = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTOOLBAR);
+	csWindow.m_bDispTOOLBAR = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTOOLBAR);
 
 	// 次回ウィンドウを開いたときファンクションキーを表示する
-	csWindow.m_bDispFUNCKEYWND = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND);
+	csWindow.m_bDispFUNCKEYWND = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND);
 
 	// ファンクションキー表示位置／0:上 1:下
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1)) {
 		csWindow.m_nFUNCKEYWND_Place = 0;
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2)) {
 		csWindow.m_nFUNCKEYWND_Place = 1;
 	}
 
@@ -381,13 +381,13 @@ int CPropWin::GetData(HWND hwndDlg)
 	// To Here@@@ 2003.06.13 MIK
 
 	// 次回ウィンドウを開いたときステータスバーを表示する 
-	csWindow.m_bDispSTATUSBAR = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispSTATUSBAR);
+	csWindow.m_bDispSTATUSBAR = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispSTATUSBAR);
 
 	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_0)) {
+//	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_nRulerType_0)) {
 //		csWindow.m_nRulerType = 0;
 //	}
-//	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_nRulerType_1)) {
+//	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_nRulerType_1)) {
 //		csWindow.m_nRulerType = 1;
 //	}
 
@@ -418,14 +418,14 @@ int CPropWin::GetData(HWND hwndDlg)
 	}
 
 	// 水平スクロールバー
-	csWindow.m_bScrollBarHorz = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bScrollBarHorz);
+	csWindow.m_bScrollBarHorz = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bScrollBarHorz);
 
 	// アイコン付きメニュー
-	csWindow.m_bMenuIcon = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bMenuIcon);
+	csWindow.m_bMenuIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bMenuIcon);
 
 	//	2001/06/20 Start by asa-o:	スクロールの同期
-	csWindow.m_bSplitterWndVScroll = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SplitterWndVScroll);
-	csWindow.m_bSplitterWndHScroll = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SplitterWndHScroll);
+	csWindow.m_bSplitterWndVScroll = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SplitterWndVScroll);
+	csWindow.m_bSplitterWndHScroll = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SplitterWndHScroll);
 	//	2001/06/20 End
 
 	//	Apr. 05, 2003 genta ウィンドウキャプションのカスタマイズ
@@ -451,7 +451,7 @@ int CPropWin::GetData(HWND hwndDlg)
 void CPropWin::EnableWinPropInput(HWND hwndDlg)
 {
 	//	ファクションキーを表示するかどうか
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispFUNCKEYWND)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_FUNCKEYWND_GROUPNUM), TRUE);	// IDC_GROUP_FUNCKEYWND_POSITION->IDC_EDIT_FUNCKEYWND_GROUPNUM 2008/7/4 Uchi
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2), TRUE);

@@ -487,7 +487,7 @@ void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
 	sItem.iItem = index;
 	sItem.mask = LVIF_TEXT;
 	sItem.iSubItem = 3;
-	sItem.pszText = const_cast<TCHAR*>(::IsDlgButtonChecked(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE) ? _T("on") : _T("off"));
+	sItem.pszText = const_cast<TCHAR*>(IsDlgButtonChecked(hwndDlg, IDC_CHECK_RELOADWHENEXECUTE) ? _T("on") : _T("off"));
 	ListView_SetItem(hListView, &sItem);
 
 	// é©ìÆé¿çsÉ}ÉNÉç	// 2006.09.01 ryoji
@@ -517,17 +517,17 @@ void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
 			}
 		}
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_MacroOnOpened)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_MacroOnOpened)) {
 		nMacroOnOpened = index;
 	}else if (nMacroOnOpened == index) {
 		nMacroOnOpened = -1;
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_MacroOnTypeChanged)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_MacroOnTypeChanged)) {
 		nMacroOnTypeChanged = index;
 	}else if (nMacroOnTypeChanged == index) {
 		nMacroOnTypeChanged = -1;
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_MacroOnSave)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_MacroOnSave)) {
 		nMacroOnSave = index;
 	}else if (nMacroOnSave == index) {
 		nMacroOnSave = -1;

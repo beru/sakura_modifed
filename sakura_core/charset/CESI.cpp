@@ -931,7 +931,7 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 				quoteChar = pBuf[i];
 				i++;
 				int k;
-				for (k = 0; encodingNameToCode[k].name != NULL; k++) {
+				for (k = 0; encodingNameToCode[k].name; k++) {
 					const int nLen = encodingNameToCode[k].nLen;
 					if (i + nLen < nSize - 1
 					  && pBuf[i + nLen] == quoteChar
@@ -1062,7 +1062,7 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 							int nCharsetBegin = i;
 							while (i < nEndAttVal && !IsXMLWhiteSpace(pBuf[i])) { i++; }
 							int k;
-							for (k = 0; encodingNameToCode[k].name != NULL; k++) {
+							for (k = 0; encodingNameToCode[k].name; k++) {
 								const int nLen = encodingNameToCode[k].nLen;
 								if (i - nCharsetBegin == nLen
 								  && 0 == memicmp( encodingNameToCode[k].name, pBuf + nCharsetBegin, nLen )) {
@@ -1078,7 +1078,7 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 						i = nNextPos;
 					}else if (3 == nAttType) {
 						int k;
-						for (k = 0; encodingNameToCode[k].name != NULL; k++) {
+						for (k = 0; encodingNameToCode[k].name; k++) {
 							const int nLen = encodingNameToCode[k].nLen;
 							if (nEndAttVal - nBeginAttVal == nLen
 							  && 0 == memicmp( encodingNameToCode[k].name, pBuf + nBeginAttVal, nLen )) {
@@ -1134,7 +1134,7 @@ ECodeType CESI::AutoDetectByCoding( const char* pBuf, int nSize )
 				return CODE_NONE;
 			}
 			int k;
-			for (k = 0; encodingNameToCode[k].name != NULL; k++) {
+			for (k = 0; encodingNameToCode[k].name; k++) {
 				const int nLen = encodingNameToCode[k].nLen;
 				if (i - nBegin == nLen
 				  && 0 == memicmp( encodingNameToCode[k].name, pBuf + nBegin, nLen )) {

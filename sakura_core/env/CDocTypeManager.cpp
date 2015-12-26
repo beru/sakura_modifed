@@ -164,7 +164,7 @@ bool CDocTypeManager::IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* psz
 				return true;
 			}
 			const TCHAR* pszExt = _tcsrchr(pszFileName, _T('.'));
-			if (pszExt != NULL && _tcsicmp(token, pszExt + 1) == 0) {
+			if (pszExt && _tcsicmp(token, pszExt + 1) == 0) {
 				return true;
 			}
 		}else {
@@ -221,7 +221,7 @@ bool CDocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCH
 	p = _tcsdup( pszSrcExt );
 	_tcscpy( pszDstExt, _T("") );
 
-	if (szExt != NULL && szExt[0] != _T('\0')) {
+	if (szExt && szExt[0] != _T('\0')) {
 		// ファイルパスがあり、拡張子ありの場合、トップに指定
 		_tcscpy(pszDstExt, _T("*"));
 		_tcscat(pszDstExt, szExt);

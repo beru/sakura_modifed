@@ -485,7 +485,7 @@ bool CBackupAgent::FormatBackUpPath(
 
 				for (idx = 1; idx < 10; ++idx) {
 					TCHAR* cp = _tcsrchr(keybuff, _T('\\'));
-					if (cp != NULL) {
+					if (cp) {
 						folders[idx] = cp + 1;
 						*cp = _T('\0');
 					}else {
@@ -543,7 +543,7 @@ bool CBackupAgent::FormatBackUpPath(
 			//	??はバックアップ連番にしたいところではあるが，
 			//	連番処理は末尾の2桁にしか対応していないので
 			//	使用できない文字?を_に変換してお茶を濁す
-			while ((cp = _tcschr(szNewPath, _T('?'))) != NULL) {
+			while ((cp = _tcschr(szNewPath, _T('?')))) {
 				*cp = _T('_');
 			}
 		}

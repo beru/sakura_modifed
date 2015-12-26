@@ -150,7 +150,7 @@ namespace WCODE
 		~LocalCache()
 		{
 			// -- -- å„énññ -- -- //
-			if (m_hFont != NULL) {
+			if (m_hFont) {
 				SelectObject(m_hdc, m_hFontOld);
 				DeleteObject(m_hFont);
 			}
@@ -159,7 +159,7 @@ namespace WCODE
 		// çƒèâä˙âª
 		void Init(const LOGFONT& lf)
 		{
-			if (m_hFontOld != NULL) {
+			if (m_hFontOld) {
 				m_hFontOld = (HFONT)SelectObject(m_hdc, m_hFontOld);
 				DeleteObject(m_hFontOld);
 			}

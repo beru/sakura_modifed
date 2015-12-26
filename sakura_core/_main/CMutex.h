@@ -50,15 +50,12 @@ public:
 			m_hObj = NULL;
 		}
 	}
-	BOOL Lock(DWORD dwTimeout = INFINITE) {
+	bool Lock(DWORD dwTimeout = INFINITE) {
 		DWORD dwRet = ::WaitForSingleObject(m_hObj, dwTimeout);
-		if (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED)
-			return TRUE;
-		else
-			return FALSE;
+		return (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_ABANDONED);
 	}
-	BOOL Unlock() {
-		return ::ReleaseMutex(m_hObj);
+	bool Unlock() {
+		return ::ReleaseMutex(m_hObj) != 0;
 	}
 	operator HANDLE() const { return m_hObj; }
 protected:

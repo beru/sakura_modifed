@@ -108,13 +108,13 @@ CPrintPreview::~CPrintPreview()
 
 	// 2006.08.17 Moca CompatDC削除。CEditWndから移設
 	// 再描画用メモリBMP
-	if (m_hbmpCompatBMP != NULL) {
+	if (m_hbmpCompatBMP) {
 		// 再描画用メモリBMP(OLD)
 		::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);
 		::DeleteObject(m_hbmpCompatBMP);
 	}
 	// 再描画用コンパチブルDC
-	if (m_hdcCompatDC != NULL) {
+	if (m_hdcCompatDC) {
 		::DeleteDC(m_hdcCompatDC);
 	}
 }
@@ -387,14 +387,14 @@ LRESULT CPrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 	::LPtoDP(hdc, &po, 1);
 
 	// 再描画用メモリＢＭＰ
-	if (m_hbmpCompatBMP != NULL) {
+	if (m_hbmpCompatBMP) {
 		::SelectObject(m_hdcCompatDC, m_hbmpCompatBMPOld);	// 再描画用メモリＢＭＰ(OLD)
 		::DeleteObject(m_hbmpCompatBMP);
 	}
 	// 2007.02.11 Moca プレビューを滑らかにする
 	// Win9xでは 巨大なBMPは作成できないことと
 	// StretchBltでSTRETCH_HALFTONEが未サポートであるので Win2K 以上のみで有効にする。
-	if (BST_CHECKED == ::IsDlgButtonChecked( m_hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS )
+	if (IsDlgButtonChecked( m_hwndPrintPreviewBar, IDC_CHECK_ANTIALIAS )
 		&& IsWin2000_or_later()
 	) {
 		m_nbmpCompatScale = COMPAT_BMP_SCALE;
@@ -1074,8 +1074,8 @@ void CPrintPreview::OnPrint(void)
 	// 印刷過程を表示して、キャンセルするためのダイアログを作成
 	CDlgCancel	cDlgPrinting;
 	cDlgPrinting.DoModeless(CEditApp::getInstance()->GetAppInstance(), m_pParentWnd->GetHwnd(), IDD_PRINTING);
-	::DlgItem_SetText(cDlgPrinting.GetHwnd(), IDC_STATIC_JOBNAME, szJobName);
-	::DlgItem_SetText(cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, _T(""));	// XPS対応 2013/5/8 Uchi
+	cDlgPrinting.SetItemText(IDC_STATIC_JOBNAME, szJobName);
+	cDlgPrinting.SetItemText(IDC_STATIC_PROGRESS, _T(""));	// XPS対応 2013/5/8 Uchi
 
 	// 親ウィンドウを無効化
 	::EnableWindow(m_pParentWnd->GetHwnd(), FALSE);
@@ -1120,7 +1120,7 @@ void CPrintPreview::OnPrint(void)
 		// 印刷過程を表示
 		//	Jun. 18, 2001 genta ページ番号表示の計算ミス修正
 		auto_sprintf_s(szProgress, _T("%d/%d"), i + 1, nNum);
-		::DlgItem_SetText(cDlgPrinting.GetHwnd(), IDC_STATIC_PROGRESS, szProgress);
+		cDlgPrinting.SetItemText(IDC_STATIC_PROGRESS, szProgress);
 
 		// 印刷 ページ開始
 		m_cPrint.PrintStartPage(hdc);
@@ -1375,7 +1375,7 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 		const CLayoutInt	nPageTopLineNum = CLayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
 		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 
-		if (pcPageTopLayout != NULL) {
+		if (pcPageTopLayout) {
 			const CLogicInt		nPageTopOff = pcPageTopLayout->GetLogicOffset();
 
 			// ページトップの物理行の先頭を検索

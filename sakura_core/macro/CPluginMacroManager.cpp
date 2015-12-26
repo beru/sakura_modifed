@@ -52,10 +52,10 @@ bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 	bool result = false;
 	CWSHIfObj::List params;
 	CMacroIfObj* objMacro = new CMacroIfObj(CMacroIfObj::MACRO_MODE_EXEC, m_Ext.c_str(), flags, m_Source.c_str());
-	if (objMacro != NULL) {
+	if (objMacro) {
 		objMacro->AddRef();
 		params.push_back(objMacro);
-		if (m_Plug != NULL) {
+		if (m_Plug) {
 			objMacro->SetMatch(1);	// Run macro mode
 			m_Plug->Invoke(EditView, params);
 			result = true;

@@ -74,7 +74,7 @@ BOOL SelectDir(HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TCH
 	bi.pidlRoot = NULL;
 	bi.pszDisplayName = strFolderName;
 	bi.lpszTitle = pszTitle;
-	bi.ulFlags = BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*//* | BIF_STATUSTEXT*/;
+	bi.ulFlags = BIF_RETURNONLYFSDIRS|BIF_NEWDIALOGSTYLE|BIF_NONEWFOLDERBUTTON/* | BIF_EDITBOX*//* | BIF_STATUSTEXT*/;
 	bi.lpfn = MYBrowseCallbackProc;
 	bi.lParam = (LPARAM)szInitFolder;
 	bi.iImage = 0;
@@ -556,7 +556,7 @@ BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData)
 	if (IsFileExists(lpszHelp, true)) {
 		// HTML ヘルプを呼び出す
 		HWND hWnd = OpenHtmlHelp(hwndCaller, lpszHelp, uCommand, dwData);
-		if (bDesktop && hWnd != NULL) {
+		if (bDesktop && hWnd) {
 			::SetForegroundWindow(hWnd);	// ヘルプ画面を手前に出す
 		}
 	}else {

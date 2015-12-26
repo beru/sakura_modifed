@@ -224,9 +224,9 @@ void CViewCommander::Command_FONT(void)
 		csView.m_nPointSize = nPointSize;
 
 		if (csView.m_lf.lfPitchAndFamily & FIXED_PITCH) {
-			csView.m_bFontIs_FIXED_PITCH = TRUE;	// 現在のフォントは固定幅フォントである
+			csView.m_bFontIs_FIXED_PITCH = true;	// 現在のフォントは固定幅フォントである
 		}else {
-			csView.m_bFontIs_FIXED_PITCH = FALSE;	// 現在のフォントは固定幅フォントでないアル
+			csView.m_bFontIs_FIXED_PITCH = false;	// 現在のフォントは固定幅フォントでないアル
 		}
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする

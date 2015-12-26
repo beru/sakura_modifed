@@ -584,7 +584,7 @@ void CViewCommander::Command_ADDTAIL(
 )
 {
 	// テキスト長自動計算
-	if (nDataLen == -1 && pszData != NULL) {
+	if (nDataLen == -1 && pszData) {
 		nDataLen = wcslen(pszData);
 	}
 
@@ -741,7 +741,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		}
 		pcLayoutTop = pcLayout;
 		CLayoutInt i = rcSel.top;
-		for (; pcLayout != NULL && i <= rcSel.bottom; i++, pcLayout = pcLayout->GetNextLayout()) {
+		for (; pcLayout && i <= rcSel.bottom; i++, pcLayout = pcLayout->GetNextLayout()) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
 			CLogicInt nIdxFrom;
 			CLogicInt nIdxTo;

@@ -173,9 +173,9 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType, std::vect
 	m_strProfileName = _T("-Res-");
 
 	if (1
-		&& (hRsrc = ::FindResource(0, pName, pType)) != NULL
-		&& (hGlobal = ::LoadResource(0, hRsrc)) != NULL
-		&& (psMMres = (char*)::LockResource(hGlobal)) != NULL
+		&& (hRsrc = ::FindResource(0, pName, pType))
+		&& (hGlobal = ::LoadResource(0, hRsrc))
+		&& (psMMres = (char*)::LockResource(hGlobal))
 		&& (nSize = (size_t)::SizeofResource(0, hRsrc)) != 0
 	) {
 		p = psMMres;
@@ -235,7 +235,7 @@ bool CProfile::WriteProfile(
 	const WCHAR* pszComment
 	)
 {
-	if (pszProfileName != NULL) {
+	if (pszProfileName) {
 		m_strProfileName = pszProfileName;
 	}
     

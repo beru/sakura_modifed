@@ -129,7 +129,7 @@ BOOL CDlgJump::OnBnClicked(int wID)
 		MyWinHelp(GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_JUMP_DIALOG));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		return TRUE;
 	case IDC_CHECK_PLSQL:		// PL/SQLソースの有効行か
-		if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_PLSQL)) {
+		if (IsButtonChecked(IDC_CHECK_PLSQL)) {
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LABEL_PLSQL1), TRUE);	// Sept. 12, 2000 JEPRO
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LABEL_PLSQL2), TRUE);	// Sept. 12, 2000 JEPRO
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LABEL_PLSQL3), TRUE);	// Sept. 12, 2000 JEPRO
@@ -200,7 +200,7 @@ void CDlgJump::SetData(void)
 // From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
 //	::DlgItem_SetText(GetHwnd(), IDC_EDIT_LINENUM, "");	// 行番号
 	if (0 == m_nLineNum) {
-		::DlgItem_SetText(GetHwnd(), IDC_EDIT_LINENUM, _T(""));	// 行番号
+		SetItemText(IDC_EDIT_LINENUM, _T(""));	// 行番号
 	}else {
 		::SetDlgItemInt(GetHwnd(), IDC_EDIT_LINENUM, m_nLineNum, FALSE);	// 前回の行番号
 	}
@@ -276,7 +276,7 @@ void CDlgJump::SetData(void)
 		m_bPLSQL = TRUE;
 	}
 	::CheckDlgButton(GetHwnd(), IDC_CHECK_PLSQL, m_bPLSQL);	// PL/SQLソースの有効行か
-	if (BST_CHECKED == ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_PLSQL)) {
+	if (IsButtonChecked(IDC_CHECK_PLSQL)) {
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LABEL_PLSQL1), TRUE);	// Sept. 12, 2000 JEPRO
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LABEL_PLSQL2), TRUE);	// Sept. 12, 2000 JEPRO
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LABEL_PLSQL3), TRUE);	// Sept. 12, 2000 JEPRO
@@ -315,14 +315,10 @@ int CDlgJump::GetData(void)
 	BOOL pTranslated;
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_LINENUM_LAYOUT)) {
-		m_pShareData->m_bLineNumIsCRLF_ForJump = false;
-	}else {
-		m_pShareData->m_bLineNumIsCRLF_ForJump = true;
-	}
+	m_pShareData->m_bLineNumIsCRLF_ForJump = !IsButtonChecked(IDC_RADIO_LINENUM_LAYOUT);
 
 	// PL/SQLソースの有効行か
-	m_bPLSQL = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_PLSQL);
+	m_bPLSQL = IsButtonChecked(IDC_CHECK_PLSQL);
 	m_nPLSQL_E1 = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_PLSQL_E1, &pTranslated, FALSE);
 	if (m_nPLSQL_E1 == 0 && !pTranslated) {
 		m_nPLSQL_E1 = 1;

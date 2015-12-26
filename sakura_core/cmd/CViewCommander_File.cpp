@@ -201,7 +201,7 @@ bool CViewCommander::Command_FILESAVEAS_DIALOG(const WCHAR* fileNameDef, ECodeTy
 /* 名前を付けて保存
 	filenameで保存。NULLは厳禁。
 */
-BOOL CViewCommander::Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType)
+bool CViewCommander::Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType)
 {
 	return GetDocument()->m_cDocFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
 }
@@ -216,7 +216,7 @@ BOOL CViewCommander::Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType
 
 	@date 2005.01.24 genta 新規作成
 */
-BOOL CViewCommander::Command_FILESAVEALL(void)
+bool CViewCommander::Command_FILESAVEALL(void)
 {
 	CAppNodeGroupHandle(0).SendMessageToAllEditors(
 		WM_COMMAND,
@@ -224,7 +224,7 @@ BOOL CViewCommander::Command_FILESAVEALL(void)
 		0,
 		NULL
 	);
-	return TRUE;
+	return true;
 }
 
 
@@ -312,12 +312,12 @@ void CViewCommander::Command_PRINT_PAGESETUP(void)
 
 // From Here Feb. 10, 2001 JEPRO 追加
 // C/C++ヘッダファイルまたはソースファイル オープン機能
-BOOL CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
+bool CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
 {
-	if (Command_OPEN_HHPP(bCheckOnly, FALSE))	return TRUE;
-	if (Command_OPEN_CCPP(bCheckOnly, FALSE))	return TRUE;
+	if (Command_OPEN_HHPP(bCheckOnly, FALSE))	return true;
+	if (Command_OPEN_CCPP(bCheckOnly, FALSE))	return true;
 	ErrorBeep();
-	return FALSE;
+	return false;
 // 2002/03/24 YAZAKI コードの重複を削減
 // 2003.06.28 Moca コメントとして残っていたコードを削除
 }
@@ -325,7 +325,7 @@ BOOL CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
 
 // C/C++ヘッダファイル オープン機能		// Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
 //BOOL CViewCommander::Command_OPENINCLUDEFILE(BOOL bCheckOnly)
-BOOL CViewCommander::Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
+bool CViewCommander::Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -339,7 +339,7 @@ BOOL CViewCommander::Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
 
 // C/C++ソースファイル オープン機能
 //BOOL CViewCommander::Command_OPENCCPP(BOOL bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
-BOOL CViewCommander::Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
+bool CViewCommander::Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -568,7 +568,7 @@ void CViewCommander::Command_EXITALL(void)
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-BOOL CViewCommander::Command_PUTFILE(
+bool CViewCommander::Command_PUTFILE(
 	LPCWSTR		filename,	// [in] filename 出力ファイル名
 	ECodeType	nCharCode,	// [in] nCharCode 文字コード指定
 							//  @li CODE_xxxxxxxxxx:各種文字コード
@@ -577,13 +577,15 @@ BOOL CViewCommander::Command_PUTFILE(
 							//  @li 0x01:選択範囲を出力 (非選択状態でも空ファイルを出力する)
 )
 {
-	BOOL bResult = TRUE;
+	bool bResult = true;
 	ECodeType nSaveCharCode = nCharCode;
 	if (filename[0] == L'\0') {
-		return FALSE;
+		return false;
 	}
 
-	if (nSaveCharCode == CODE_AUTODETECT) nSaveCharCode = GetDocument()->GetDocumentEncoding();
+	if (nSaveCharCode == CODE_AUTODETECT) {
+		nSaveCharCode = GetDocument()->GetDocumentEncoding();
+	}
 
 	// 2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
@@ -631,13 +633,13 @@ BOOL CViewCommander::Command_PUTFILE(
 				LS(STR_SAVEAGENT_OTHER_APP),
 				to_tchar(filename)
 			);
-			bResult = FALSE;
+			bResult = false;
 		}catch (CError_FileWrite) {
 			WarningMessage(
 				NULL,
 				LS(STR_ERR_DLGEDITVWCMDNW11)
 			);
-			bResult = FALSE;
+			bResult = false;
 		}
 	}else {	// ファイル全体を出力
 		HWND		hwndProgress;
@@ -663,8 +665,9 @@ BOOL CViewCommander::Command_PUTFILE(
 			)
 		);
 		bResult = (eRet != RESULT_FAILURE);
-
-		if (hwndProgress) ::ShowWindow(hwndProgress, SW_HIDE);
+		if (hwndProgress) {
+			::ShowWindow(hwndProgress, SW_HIDE);
+		}
 	}
 	return bResult;
 }
@@ -686,7 +689,7 @@ BOOL CViewCommander::Command_PUTFILE(
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-BOOL CViewCommander::Command_INSFILE(LPCWSTR filename, ECodeType nCharCode, int nFlgOpt)
+bool CViewCommander::Command_INSFILE(LPCWSTR filename, ECodeType nCharCode, int nFlgOpt)
 {
 	CFileLoad	cfl(m_pCommanderView->m_pTypeData->m_encoding);
 	CEol cEol;
@@ -696,10 +699,10 @@ BOOL CViewCommander::Command_INSFILE(LPCWSTR filename, ECodeType nCharCode, int 
 	HWND		hwndCancel = NULL;
 	HWND		hwndProgress = NULL;
 	int			nOldPercent = -1;
-	BOOL		bResult = TRUE;
+	bool		bResult = true;
 
 	if (filename[0] == L'\0') {
-		return FALSE;
+		return false;
 	}
 
 	// 2007.09.08 genta CEditDoc::FileLoad()にならって砂時計カーソル
@@ -783,10 +786,10 @@ BOOL CViewCommander::Command_INSFILE(LPCWSTR filename, ECodeType nCharCode, int 
 		cfl.FileClose();
 	}catch (CError_FileOpen) {
 		WarningMessage(NULL, LS(STR_GREP_ERR_FILEOPEN), to_tchar(filename));
-		bResult = FALSE;
+		bResult = false;
 	}catch (CError_FileRead) {
 		WarningMessage(NULL, LS(STR_ERR_DLGEDITVWCMDNW12));
-		bResult = FALSE;
+		bResult = false;
 	} // 例外処理終わり
 
 	delete pcDlgCancel;

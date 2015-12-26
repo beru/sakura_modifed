@@ -418,7 +418,7 @@ int CPropTypesWindow::GetData(HWND hwndDlg)
 {
 	{
 		// 文書アイコンを使う	// Sep. 10, 2002 genta
-		m_Types.m_bUseDocumentIcon = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_DOCICON);
+		m_Types.m_bUseDocumentIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DOCICON);
 	}
 
 	// 起動時のIME(日本語入力変換)	Nov. 20, 2000 genta
@@ -437,7 +437,7 @@ int CPropTypesWindow::GetData(HWND hwndDlg)
 	// 「文字コード」グループの設定
 	{
 		// m_Types.m_bPriorCesu8 を設定
-		m_Types.m_encoding.m_bPriorCesu8 = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_PRIOR_CESU8) != 0;
+		m_Types.m_encoding.m_bPriorCesu8 = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PRIOR_CESU8);
 
 		// m_Types.eDefaultCodetype を設定
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
@@ -447,7 +447,7 @@ int CPropTypesWindow::GetData(HWND hwndDlg)
 		}
 
 		// m_Types.m_bDefaultBom を設定
-		m_Types.m_encoding.m_bDefaultBom = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DEFAULT_BOM) != 0;
+		m_Types.m_encoding.m_bDefaultBom = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DEFAULT_BOM);
 
 		// m_Types.eDefaultEoltype を設定
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_EOLTYPE);
@@ -458,29 +458,25 @@ int CPropTypesWindow::GetData(HWND hwndDlg)
 	}
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_LINENUM_LAYOUT)) {
-		m_Types.m_bLineNumIsCRLF = false;
-	}else {
-		m_Types.m_bLineNumIsCRLF = true;
-	}
+	m_Types.m_bLineNumIsCRLF = !DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINENUM_LAYOUT);
 
 	DlgItem_GetText(hwndDlg, IDC_EDIT_BACKIMG_PATH, m_Types.m_szBackImgPath, _countof2(m_Types.m_szBackImgPath));
 	m_Types.m_backImgPos = static_cast<EBackgroundImagePos>(Combo_GetCurSel(GetDlgItem(hwndDlg, IDC_COMBO_BACKIMG_POS)));
-	m_Types.m_backImgRepeatX = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKIMG_REP_X);
-	m_Types.m_backImgRepeatY = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKIMG_REP_Y);
-	m_Types.m_backImgScrollX = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKIMG_SCR_X);
-	m_Types.m_backImgScrollY = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_BACKIMG_SCR_Y);
+	m_Types.m_backImgRepeatX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_X);
+	m_Types.m_backImgRepeatY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_REP_Y);
+	m_Types.m_backImgScrollX = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_X);
+	m_Types.m_backImgScrollY = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKIMG_SCR_Y);
 	m_Types.m_backImgPosOffset.x = GetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_X, NULL, TRUE);
 	m_Types.m_backImgPosOffset.y = GetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y, NULL, TRUE);
 
 	// 行番号区切り  0=なし 1=縦線 2=任意
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_LINETERMTYPE0)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE0)) {
 		m_Types.m_nLineTermType = 0;
 	}else
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_LINETERMTYPE1)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE1)) {
 		m_Types.m_nLineTermType = 1;
 	}else
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_LINETERMTYPE2)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE2)) {
 		m_Types.m_nLineTermType = 2;
 	}
 	
@@ -508,7 +504,7 @@ int CPropTypesWindow::GetData(HWND hwndDlg)
 void CPropTypesWindow::EnableTypesPropInput(HWND hwndDlg)
 {
 	//	行番号区切りを任意の半角文字にするかどうか
-	if (::IsDlgButtonChecked(hwndDlg, IDC_RADIO_LINETERMTYPE2)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE2)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_LINETERMCHAR), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_LINETERMCHAR), TRUE);
 	}else {

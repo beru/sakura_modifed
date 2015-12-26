@@ -172,7 +172,7 @@ struct STypeConfig {
 
 	int					m_nCurrentPrintSetting;			//!< 現在選択している印刷設定
 
-	BOOL				m_bOutlineDockDisp;				//!< アウトライン解析表示の有無
+	bool				m_bOutlineDockDisp;				//!< アウトライン解析表示の有無
 	EDockSide			m_eOutlineDockSide;				//!< アウトライン解析ドッキング配置
 	int					m_cxOutlineDockLeft;			//!< アウトラインの左ドッキング幅
 	int					m_cyOutlineDockTop;				//!< アウトラインの上ドッキング高

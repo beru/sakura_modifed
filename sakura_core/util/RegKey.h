@@ -65,7 +65,7 @@ public:
 	}
 	
 	void Close() {
-		if (_key != NULL) {
+		if (_key) {
 			RegCloseKey(_key);
 			_key = NULL;
 			_root = NULL;

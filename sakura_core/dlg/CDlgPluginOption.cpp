@@ -201,7 +201,7 @@ void CDlgPluginOption::SetData(void)
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_LIST_PLUGIN_OPTIONS  ), FALSE);
 		::EnableWindow(::GetDlgItem(GetHwnd(), IDOK                     ), FALSE);
 	
-		::DlgItem_SetText(GetHwnd(), IDC_STATIC_MSG, LS(STR_DLGPLUGINOPT_OPTION));
+		SetItemText(IDC_STATIC_MSG, LS(STR_DLGPLUGINOPT_OPTION));
 	}
 
 	// ReadMe Button
@@ -278,7 +278,10 @@ int CDlgPluginOption::GetData(void)
 		cProfile->IOProfileData(sSection.c_str(), sKey.c_str(), sValue);
 	}
 
-	cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str(), (m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
+	cProfile->WriteProfile(
+		m_cPlugin->GetOptionPath().c_str(),
+		(m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str()
+		);
 
 	return TRUE;
 }
@@ -511,7 +514,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 	lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 
 	ListView_GetItem(hwndList, &lvi);
-	::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf);
+	SetItemText(IDC_EDIT_PLUGIN_OPTION, buf);
 }
 
 void CDlgPluginOption::MoveFocusToEdit(void)
@@ -527,20 +530,16 @@ void CDlgPluginOption::MoveFocusToEdit(void)
 		transform( sType.begin(), sType.end(), sType.begin(), my_towlower2 );
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_CHECK_PLUGIN_OPTION);
-			::SetFocus(hwndCtrl);
 		}else if (sType == OPTION_TYPE_INT) {
 			hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM);
-			::SetFocus(hwndCtrl);
 		}else if (sType == OPTION_TYPE_SEL) {
 			hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_COMBO_PLUGIN_OPTION);
-			::SetFocus(hwndCtrl);
 		}else if (sType == OPTION_TYPE_DIR) {
 			hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR);
-			::SetFocus(hwndCtrl);
 		}else {
 			hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_EDIT_PLUGIN_OPTION);
-			::SetFocus(hwndCtrl);
 		}
+		::SetFocus(hwndCtrl);
 	}
 }
 
@@ -568,12 +567,12 @@ void CDlgPluginOption::SetToEdit(int iLine)
 		transform( sType.begin(), sType.end(), sType.begin(), my_towlower2 );
 		if (sType == OPTION_TYPE_BOOL) {
 			::CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
-			::DlgItem_SetText(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, m_cPlugin->m_options[iLine]->GetLabel().c_str());
+			SetItemText(IDC_CHECK_PLUGIN_OPTION, m_cPlugin->m_options[iLine]->GetLabel().c_str());
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_CHECK_PLUGIN_OPTION);
 		}else if (sType == OPTION_TYPE_INT) {
-			::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_NUM, buf);
+			SetItemText(IDC_EDIT_PLUGIN_OPTION_NUM, buf);
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_EDIT_PLUGIN_OPTION_NUM);
@@ -607,12 +606,12 @@ void CDlgPluginOption::SetToEdit(int iLine)
 			// 編集領域の切り替え
 			SelectEdit(IDC_COMBO_PLUGIN_OPTION);
 		}else if (sType == OPTION_TYPE_DIR) {
-			::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, buf);
+			SetItemText(IDC_EDIT_PLUGIN_OPTION_DIR, buf);
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_EDIT_PLUGIN_OPTION_DIR);
 		}else {
-			::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION, buf);
+			SetItemText(IDC_EDIT_PLUGIN_OPTION, buf);
 
 			// 編集領域の切り替え
 			SelectEdit(IDC_EDIT_PLUGIN_OPTION);
@@ -646,7 +645,7 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 		sType = m_cPlugin->m_options[iLine]->GetType();
 		transform(sType.begin (), sType.end (), sType.begin (), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
-			if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_PLUGIN_OPTION)) {
+			if (IsDlgButtonChecked(GetHwnd(), IDC_CHECK_PLUGIN_OPTION)) {
 				_tcscpy(buf, BOOL_DISP_TRUE);
 			}else {
 				_tcscpy(buf, BOOL_DISP_FALSE);
@@ -722,7 +721,7 @@ void CDlgPluginOption::SelectDirectory(int iLine)
 	if (SelectDir(GetHwnd(), (const TCHAR*)sTitle /*_T("ディレクトリの選択")*/, szDir, szDir)) {
 		// 末尾に\マークを追加する．
 		AddLastChar(szDir, _countof(szDir), _T('\\'));
-		::DlgItem_SetText(GetHwnd(), IDC_EDIT_PLUGIN_OPTION_DIR, szDir);
+		SetItemText(IDC_EDIT_PLUGIN_OPTION_DIR, szDir);
 	}
 }
 

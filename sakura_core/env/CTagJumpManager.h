@@ -53,8 +53,8 @@ struct SShare_TagJump {
 	int					m_TagJumpTop;					// スタックの一番上の位置
 	TagJump				m_TagJump[MAX_TAGJUMPNUM];		// タグジャンプ情報
 	ATagJumpKeywords	m_aTagJumpKeywords;
-	BOOL				m_bTagJumpICase;				// 大文字小文字を同一視
-	BOOL				m_bTagJumpAnyWhere;				// 文字列の途中にマッチ
+	bool				m_bTagJumpICase;				// 大文字小文字を同一視
+	bool				m_bTagJumpAnyWhere;				// 文字列の途中にマッチ
 };
 
 

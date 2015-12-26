@@ -167,7 +167,7 @@ bool CEditView::TagJumpSub(
 	@date 2003.06.28 Moca ヘッダ・ソースファイルオープン機能のコードを統合
 	@date 2008.04.09 ryoji 処理対象(file_ext)と開く対象(open_ext)の扱いが逆になっていたのを修正
 */
-BOOL CEditView::OPEN_ExtFromtoExt(
+bool CEditView::OPEN_ExtFromtoExt(
 	BOOL			bCheckOnly,		//!< [in] true: チェックのみ行ってファイルは開かない
 	BOOL			bBeepWhenMiss,	//!< [in] true: ファイルを開けなかった場合に警告音を出す
 	const TCHAR*	file_ext[],		//!< [in] 処理対象とする拡張子
@@ -186,7 +186,7 @@ BOOL CEditView::OPEN_ExtFromtoExt(
 	if (bBeepWhenMiss) {
 		ErrorBeep();
 	}
-	return FALSE;
+	return false;
 
 open_c:;
 
@@ -207,12 +207,12 @@ open_c:;
 			if (bBeepWhenMiss) {
 				ErrorBeep();
 			}
-			return FALSE;
+			return false;
 		}
 		break;
 	}
 	if (bCheckOnly) {
-		return TRUE;
+		return true;
 	}
 
 	// 指定ファイルが開かれているか調べる
@@ -240,7 +240,7 @@ open_c:;
 			// OpenNewEditor()または起動された側のメッセージ表示で十分と思われる
 
 			//ErrorMessage(this->GetHwnd(), _T("%ts\n\n%ts\n\n"), errmes, szPath);
-			return FALSE;
+			return false;
 		}
 	}
 	// アクティブにする
@@ -263,7 +263,7 @@ open_c:;
 	tagJump.hwndReferer = CEditWnd::getInstance()->GetHwnd();
 	// タグジャンプ情報の保存
 	CTagJumpManager().PushTagJump(&tagJump);
-	return TRUE;
+	return true;
 }
 
 

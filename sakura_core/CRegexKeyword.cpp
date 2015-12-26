@@ -174,7 +174,7 @@ BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 
 	if (m_nTypeId == pTypesPtr->m_id
 		&& m_nCompiledMagicNumber == pTypesPtr->m_nRegexKeyMagicNumber
-	 && m_pTypes != NULL  // 2014.07.02 ğŒ’Ç‰Á
+		&& m_pTypes  // 2014.07.02 ğŒ’Ç‰Á
 	) {
 		return TRUE;
 	}
@@ -448,7 +448,7 @@ BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 	};
 
 	int	length = wcslen(s);
-	for (int i = 0; kakomi[i] != NULL; i += 2) {
+	for (int i = 0; kakomi[i]; i += 2) {
 		// •¶š’·‚ğŠm‚©‚ß‚é
 		if (length > (int)wcslen(kakomi[i]) + (int)wcslen(kakomi[i + 1])) {
 			// n‚Ü‚è‚ğŠm‚©‚ß‚é

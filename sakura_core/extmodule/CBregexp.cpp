@@ -171,7 +171,7 @@ wchar_t* CBregexp::MakePatternSub(
 		*pPat++ = *szPattern++;
 	}
 	*pPat++ = DELIMITER;
-	if (szPattern2 != NULL) {
+	if (szPattern2) {
 		while (*szPattern2 != L'\0') { *pPat++ = *szPattern2++; }
 		while (*szAdd2 != L'\0') { *pPat++ = *szAdd2++; }
 		*pPat++ = DELIMITER;
@@ -278,7 +278,7 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 			// 行末指定の$ or 行頭行末指定 なので、検索文字列を置換
 			if (BSubst(BOT_SUBST, szPattern, szPattern + nLen, &sReg, szMsg) > 0) {
 				szPattern = sReg->outp;
-				if (szPattern2 != NULL) {
+				if (szPattern2) {
 					// 置換パターンもあるので、置換パターンの最後に $(nParens+1)を追加
 					auto_sprintf(szAdd2, L"$%d", nParens + 1);
 				}
@@ -288,7 +288,7 @@ wchar_t* CBregexp::MakePattern(const wchar_t* szPattern, const wchar_t* szPatter
 	}
 
 	wchar_t* szNPattern = MakePatternSub(szPattern, szPattern2, szAdd2, nOption);
-	if (sReg != NULL) {
+	if (sReg) {
 		BRegfree(sReg);
 	}
 	return szNPattern;
@@ -640,12 +640,12 @@ bool CheckRegexpVersion(
 	CBregexp cRegexp;
 
 	if (!InitRegexp(hWnd, cRegexp, bShowMessage)) {
-		if (hWnd != NULL) {
+		if (hWnd) {
 			::DlgItem_SetText(hWnd, nCmpId, _T(" "));
 		}
 		return false;
 	}
-	if (hWnd != NULL) {
+	if (hWnd) {
 		::DlgItem_SetText(hWnd, nCmpId, cRegexp.GetVersionT());
 	}
 	return true;

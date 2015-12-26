@@ -252,7 +252,7 @@ retry:;
 void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd)
 {
 	std::tstring helpfile;
-	if (_helpfile != NULL) {
+	if (_helpfile) {
 		helpfile = to_tchar(_helpfile);
 	}
 
@@ -291,7 +291,7 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 	// Jul. 5, 2002 genta
 	// キーワードの外部指定を可能に
 	CNativeW	cmemCurText;
-	if (kwd != NULL && kwd[0] != _T('\0')) {
+	if (kwd && kwd[0] != _T('\0')) {
 		cmemCurText.SetString(kwd);
 	}else {
 		// 現在カーソル位置単語または選択範囲より検索等のキーを取得
@@ -353,7 +353,7 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 	}
 
 	// Jul. 6, 2001 genta hwndHtmlHelpのチェックを追加
-	if (hwndHtmlHelp != NULL) {
+	if (hwndHtmlHelp) {
 		::BringWindowToTop(hwndHtmlHelp);
 	}
 

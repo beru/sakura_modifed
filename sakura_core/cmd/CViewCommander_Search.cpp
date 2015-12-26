@@ -61,7 +61,7 @@ void CViewCommander::Command_SEARCH_DIALOG(void)
 	}else {
 		// アクティブにする
 		ActivateFrameWindow(dlgFind.GetHwnd());
-		::DlgItem_SetText(dlgFind.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT());
+		dlgFind.SetItemText(IDC_COMBO_TEXT, cmemCurText.GetStringT());
 	}
 	return;
 }
@@ -479,7 +479,7 @@ end_of_func:;
 // 置換(置換ダイアログ)
 void CViewCommander::Command_REPLACE_DIALOG(void)
 {
-	BOOL bSelected = FALSE;
+	bool bSelected = false;
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	CNativeW cmemCurText;
@@ -498,13 +498,13 @@ void CViewCommander::Command_REPLACE_DIALOG(void)
 	}
 	
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected() && !GetSelect().IsLineOne()) {
-		bSelected = TRUE;	// 選択範囲をチェックしてダイアログ表示
+		bSelected = true;	// 選択範囲をチェックしてダイアログ表示
 	}else {
-		bSelected = FALSE;	// ファイル全体をチェックしてダイアログ表示
+		bSelected = false;	// ファイル全体をチェックしてダイアログ表示
 	}
 	// 置換オプションの初期化
 	dlgReplace.m_nReplaceTarget = 0;	// 置換対象
-	dlgReplace.m_nPaste = FALSE;		// 貼り付ける？
+	dlgReplace.m_nPaste = false;		// 貼り付ける？
 // To Here 2001.12.03 hor
 
 	// 置換ダイアログの表示
@@ -514,7 +514,7 @@ void CViewCommander::Command_REPLACE_DIALOG(void)
 	}else {
 		// アクティブにする
 		ActivateFrameWindow(dlgReplace.GetHwnd());
-		::DlgItem_SetText(dlgReplace.GetHwnd(), IDC_COMBO_TEXT, cmemCurText.GetStringT());
+		dlgReplace.SetItemText(IDC_COMBO_TEXT, cmemCurText.GetStringT());
 	}
 	// To Here Jul. 2, 2001 genta 置換ウィンドウの2重開きを抑止
 	return;

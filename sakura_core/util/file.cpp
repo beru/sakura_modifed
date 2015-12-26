@@ -109,7 +109,7 @@ bool IsFilePath(
 			  pLine[i] == L'\t'||	//@@@ 2002.01.08 YAZAKI タブ文字も。
 			  pLine[i] == L'(' ||
 			  pLine[i] == L'"' ||
-			  wcschr(L")'`[]{};#!@&%$", pLine[i]) != NULL // 2013.05.27 Moca 文字種追加
+			  wcschr(L")'`[]{};#!@&%$", pLine[i]) // 2013.05.27 Moca 文字種追加
 			) &&
 			szJumpToFile[0] != L'\0'
 		) {
@@ -1004,10 +1004,10 @@ void my_splitpath_w(
 	wchar_t* pf;
 	wchar_t* pe;
 
-	if (drv != NULL)	*drv = L'\0';
-	if (dir != NULL)	*dir = L'\0';
-	if (fnm != NULL)	*fnm = L'\0';
-	if (ext != NULL)	*ext = L'\0';
+	if (drv)	*drv = L'\0';
+	if (dir)	*dir = L'\0';
+	if (fnm)	*fnm = L'\0';
+	if (ext)	*ext = L'\0';
 	if (*comln == L'\0')	return;
 
 	// コマンドライン先頭部分の実在するパス名を ppp に書き出す。
@@ -1027,25 +1027,25 @@ void my_splitpath_w(
 
 		if (!a_dir) {	// 見つけた物がファイルだった場合。
 			pf = wcsrchr(ppp, L'\\');	// 最末尾の \ を探す。
-			if (pf != NULL)	pf++;		// 見つかった→  pf=\の次の文字の位置
+			if (pf)	pf++;		// 見つかった→  pf=\の次の文字の位置
 			else			pf = pd;	// 見つからない→pf=パス名の先頭位置
 			// ここまでで pf = ファイル名の先頭位置
 			pe = wcsrchr(pf, L'.');		// 最末尾の '.' を探す。
-			if (pe != NULL) {					// 見つかった(pe = L'.'の位置)
-				if (ext != NULL) {	// 拡張子を返値として書き込む。
+			if (pe) {					// 見つかった(pe = L'.'の位置)
+				if (ext) {	// 拡張子を返値として書き込む。
 					wcsncpy(ext, pe, _MAX_EXT-1);
 					ext[_MAX_EXT -1] = L'\0';
 				}
 				*pe = L'\0';	// 区切り位置を文字列終端にする。pe = 拡張子名の先頭位置。
 			}
-			if (fnm != NULL) {	// ファイル名を返値として書き込む。
+			if (fnm) {	// ファイル名を返値として書き込む。
 				wcsncpy(fnm, pf, _MAX_FNAME-1);
 				fnm[_MAX_FNAME -1] = L'\0';
 			}
 			*pf = L'\0';	// ファイル名の先頭位置を文字列終端にする。
 		}
 		// ここまでで文字列 ppp はドライブレター＋ディレクトリ名のみになっている
-		if (dir != NULL) {
+		if (dir) {
 			// ディレクトリ名の最後の文字が \ ではない場合、\ にする。
 
 			// ↓最後の文字を ch に得る。(ディレクトリ文字列が空の場合 ch=L'\\' となる)
@@ -1063,7 +1063,7 @@ void my_splitpath_w(
 			dir[_MAX_DIR -1] = L'\0';
 		}
 		*pd = L'\0';		// ディレクトリ名の先頭位置を文字列終端にする。
-		if (drv != NULL) {	// ドライブレターを返値として書き込む。
+		if (drv) {	// ドライブレターを返値として書き込む。
 			wcsncpy(drv, ppp, _MAX_DRIVE -1);
 			drv[_MAX_DRIVE -1] = L'\0';
 		}

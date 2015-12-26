@@ -138,14 +138,14 @@ void CDlgFind::SetData(void)
 	SetCombosList();
 
 	// 英大文字と英小文字を区別する
-	::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase);
+	CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase);
 
 	// 2001/06/23 Norio Nakatani
 	// 単語単位で検索
-	::CheckDlgButton(GetHwnd(), IDC_CHK_WORD, m_sSearchOption.bWordOnly);
+	CheckDlgButton(GetHwnd(), IDC_CHK_WORD, m_sSearchOption.bWordOnly);
 
 	// 検索／置換  見つからないときメッセージを表示
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
+	CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
 
 	// From Here Jun. 29, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直し
@@ -194,7 +194,7 @@ void CDlgFind::SetCombosList(void)
 	std::vector<TCHAR> vText(nBufferSize);
 	Combo_GetText(hwndCombo, &vText[0], nBufferSize);
 	if (auto_strcmp(to_wchar(&vText[0]), m_strText.c_str()) != 0) {
-		::DlgItem_SetText(GetHwnd(), IDC_COMBO_TEXT, m_strText.c_str());
+		SetItemText(IDC_COMBO_TEXT, m_strText.c_str());
 	}
 }
 
@@ -205,18 +205,18 @@ int CDlgFind::GetData(void)
 //	MYTRACE(_T("CDlgFind::GetData()"));
 
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_LOHICASE));
+	m_sSearchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
 	// 2001/06/23 Norio Nakatani
 	// 単語単位で検索
-	m_sSearchOption.bWordOnly = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_WORD));
+	m_sSearchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
 	// 一致する単語のみ検索する
 	// 正規表現
-	m_sSearchOption.bRegularExp = (0 != IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
+	m_sSearchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 
 	// 検索／置換  見つからないときメッセージを表示
-	m_bNOTIFYNOTFOUND = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND);
+	m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
 	m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 
@@ -227,10 +227,10 @@ int CDlgFind::GetData(void)
 	m_strText = to_wchar(&vText[0]);
 
 	// 検索ダイアログを自動的に閉じる
-	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_bAutoCloseDlgFind);
+	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	m_pShareData->m_Common.m_sSearch.m_bSearchAll = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_SEARCHALL);
+	m_pShareData->m_Common.m_sSearch.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < m_strText.length()) {
 		// 正規表現？
@@ -286,7 +286,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 		break;
 	case IDC_CHK_REGULAREXP:	// 正規表現
 //		MYTRACE(_T("IDC_CHK_REGULAREXP ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP) = %d\n"), ::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP));
-		if (::IsDlgButtonChecked(GetHwnd(), IDC_CHK_REGULAREXP)) {
+		if (IsButtonChecked(IDC_CHK_REGULAREXP)) {
 			// From Here Jun. 26, 2001 genta
 			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {

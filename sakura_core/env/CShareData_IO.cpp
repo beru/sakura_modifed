@@ -527,13 +527,13 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 		}
 	}
 	
-	cProfile.IOProfileData(pszSecName, LTEXT("nBackUpType")			, common.m_sBackup.m_nBackUpType);
+	cProfile.IOProfileData(pszSecName, LTEXT("nBackUpType")				, common.m_sBackup.m_nBackUpType);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpType2_Opt1")		, common.m_sBackup.m_nBackUpType_Opt1);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpType2_Opt2")		, common.m_sBackup.m_nBackUpType_Opt2);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpType2_Opt3")		, common.m_sBackup.m_nBackUpType_Opt3);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpType2_Opt4")		, common.m_sBackup.m_nBackUpType_Opt4);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpDustBox")			, common.m_sBackup.m_bBackUpDustBox);	//@@@ 2001.12.11 add MIK
-	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpPathAdvanced")	, common.m_sBackup.m_bBackUpPathAdvanced);	/* 20051107 aroka */
+	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpPathAdvanced")		, common.m_sBackup.m_bBackUpPathAdvanced);	/* 20051107 aroka */
 	cProfile.IOProfileData(pszSecName, LTEXT("szBackUpPathAdvanced")	, common.m_sBackup.m_szBackUpPathAdvanced);	/* 20051107 aroka */
 	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("nFileShareMode")			, common.m_sFile.m_nFileShareMode);
 	cProfile.IOProfileData(pszSecName, LTEXT("szExtHelp"), MakeStringBufferT(common.m_sHelper.m_szExtHelp));
@@ -555,7 +555,7 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 	SetValueLimit(common.m_sGeneral.m_nOPENFOLDERArrNum_MAX, MAX_OPENFOLDER);
 	cProfile.IOProfileData(pszSecName, LTEXT("bDispTOOLBAR")			, common.m_sWindow.m_bDispTOOLBAR);
 	cProfile.IOProfileData(pszSecName, LTEXT("bDispSTATUSBAR")			, common.m_sWindow.m_bDispSTATUSBAR);
-	cProfile.IOProfileData(pszSecName, LTEXT("bDispFUNCKEYWND")		, common.m_sWindow.m_bDispFUNCKEYWND);
+	cProfile.IOProfileData(pszSecName, LTEXT("bDispFUNCKEYWND")			, common.m_sWindow.m_bDispFUNCKEYWND);
 	cProfile.IOProfileData( pszSecName, LTEXT("bDispMiniMap")			, common.m_sWindow.m_bDispMiniMap );
 	cProfile.IOProfileData(pszSecName, LTEXT("nFUNCKEYWND_Place")		, common.m_sWindow.m_nFUNCKEYWND_Place);
 	cProfile.IOProfileData(pszSecName, LTEXT("nFUNCKEYWND_GroupNum")	, common.m_sWindow.m_nFUNCKEYWND_GroupNum);		// 2002/11/04 Moca ファンクションキーのグループボタン数
@@ -597,7 +597,7 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 	cProfile.IOProfileData(pszSecName, LTEXT("bUseHokan")				, common.m_sHelper.m_bUseHokan);
 	// 2002/09/21 Moca bGrepKanjiCode_AutoDetect は bGrepCharSetに統合したので削除
 	// 2001/06/19 asa-o タイプ別に移動したので削除：1行
-	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("bSaveWindowSize"), common.m_sWindow.m_eSaveWindowSize);	//#####フラグ名が激しくきもい
+	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("bSaveWindowSize")	, common.m_sWindow.m_eSaveWindowSize);	//#####フラグ名が激しくきもい
 	cProfile.IOProfileData(pszSecName, LTEXT("nWinSizeType")			, common.m_sWindow.m_nWinSizeType);
 	cProfile.IOProfileData(pszSecName, LTEXT("nWinSizeCX")				, common.m_sWindow.m_nWinSizeCX);
 	cProfile.IOProfileData(pszSecName, LTEXT("nWinSizeCY")				, common.m_sWindow.m_nWinSizeCY);
@@ -621,58 +621,58 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 	cProfile.IOProfileData(pszSecName, LTEXT("nRulerBottomSpace")			, common.m_sWindow.m_nRulerBottomSpace);	// ルーラーとテキストの隙間
 	cProfile.IOProfileData(pszSecName, LTEXT("nRulerType")					, common.m_sWindow.m_nRulerType);			// ルーラーのタイプ
 	// Sep. 18, 2002 genta 追加
-	cProfile.IOProfileData(pszSecName, LTEXT("nLineNumberRightSpace")		, common.m_sWindow.m_nLineNumRightSpace);	// 行番号の右側の隙間
+	cProfile.IOProfileData(pszSecName, LTEXT("nLineNumberRightSpace")	, common.m_sWindow.m_nLineNumRightSpace);	// 行番号の右側の隙間
 	cProfile.IOProfileData(pszSecName, LTEXT("nVertLineOffset")			, common.m_sWindow.m_nVertLineOffset);		// 2005.11.10 Moca
-	cProfile.IOProfileData(pszSecName, LTEXT("bUseCompotibleBMP")			, common.m_sWindow.m_bUseCompatibleBMP);	// 2007.09.09 Moca
+	cProfile.IOProfileData(pszSecName, LTEXT("bUseCompotibleBMP")		, common.m_sWindow.m_bUseCompatibleBMP);	// 2007.09.09 Moca
 	cProfile.IOProfileData(pszSecName, LTEXT("bCopyAndDisablSelection")	, common.m_sEdit.m_bCopyAndDisablSelection);	// コピーしたら選択解除
 	cProfile.IOProfileData(pszSecName, LTEXT("bEnableNoSelectCopy")		, common.m_sEdit.m_bEnableNoSelectCopy);		// 選択なしでコピーを可能にする	// 2007.11.18 ryoji
-	cProfile.IOProfileData(pszSecName, LTEXT("bEnableLineModePaste")		, common.m_sEdit.m_bEnableLineModePaste);		// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
-	cProfile.IOProfileData(pszSecName, LTEXT("bConvertEOLPaste")			, common.m_sEdit.m_bConvertEOLPaste);			// 改行コードを変換して貼り付ける	// 2009.02.28 salarm
-	cProfile.IOProfileData(pszSecName, LTEXT("bEnableExtEol")				, common.m_sEdit.m_bEnableExtEol);
+	cProfile.IOProfileData(pszSecName, LTEXT("bEnableLineModePaste")	, common.m_sEdit.m_bEnableLineModePaste);		// ラインモード貼り付けを可能にする	// 2007.10.08 ryoji
+	cProfile.IOProfileData(pszSecName, LTEXT("bConvertEOLPaste")		, common.m_sEdit.m_bConvertEOLPaste);			// 改行コードを変換して貼り付ける	// 2009.02.28 salarm
+	cProfile.IOProfileData(pszSecName, LTEXT("bEnableExtEol")			, common.m_sEdit.m_bEnableExtEol);
 	
-	cProfile.IOProfileData(pszSecName, LTEXT("bHtmlHelpIsSingle")			, common.m_sHelper.m_bHtmlHelpIsSingle);		// HtmlHelpビューアはひとつ
+	cProfile.IOProfileData(pszSecName, LTEXT("bHtmlHelpIsSingle")		, common.m_sHelper.m_bHtmlHelpIsSingle);		// HtmlHelpビューアはひとつ
 	cProfile.IOProfileData(pszSecName, LTEXT("bCompareAndTileHorz")		, common.m_sCompare.m_bCompareAndTileHorz);	// 文書比較後、左右に並べて表示	// Oct. 10, 2000 JEPRO チェックボックスをボタン化すればこの行は不要のはず
-	cProfile.IOProfileData(pszSecName, LTEXT("bDropFileAndClose")			, common.m_sFile.m_bDropFileAndClose);			// ファイルをドロップしたときは閉じて開く
+	cProfile.IOProfileData(pszSecName, LTEXT("bDropFileAndClose")		, common.m_sFile.m_bDropFileAndClose);			// ファイルをドロップしたときは閉じて開く
 	cProfile.IOProfileData(pszSecName, LTEXT("nDropFileNumMax")			, common.m_sFile.m_nDropFileNumMax);			// 一度にドロップ可能なファイル数
 	cProfile.IOProfileData(pszSecName, LTEXT("bCheckFileTimeStamp")		, common.m_sFile.m_bCheckFileTimeStamp);		// 更新の監視
-	cProfile.IOProfileData(pszSecName, LTEXT("nAutoloadDelay")				, common.m_sFile.m_nAutoloadDelay);			// 自動読込時遅延
+	cProfile.IOProfileData(pszSecName, LTEXT("nAutoloadDelay")			, common.m_sFile.m_nAutoloadDelay);			// 自動読込時遅延
 	cProfile.IOProfileData(pszSecName, LTEXT("bUneditableIfUnwritable")	, common.m_sFile.m_bUneditableIfUnwritable);	// 上書き禁止検出時は編集禁止にする
-	cProfile.IOProfileData(pszSecName, LTEXT("bNotOverWriteCRLF")			, common.m_sEdit.m_bNotOverWriteCRLF);			// 改行は上書きしない
-	cProfile.IOProfileData(pszSecName, LTEXT("bOverWriteFixMode")			, common.m_sEdit.m_bOverWriteFixMode);			// 文字幅に合わせてスペースを詰める
+	cProfile.IOProfileData(pszSecName, LTEXT("bNotOverWriteCRLF")		, common.m_sEdit.m_bNotOverWriteCRLF);			// 改行は上書きしない
+	cProfile.IOProfileData(pszSecName, LTEXT("bOverWriteFixMode")		, common.m_sEdit.m_bOverWriteFixMode);			// 文字幅に合わせてスペースを詰める
 	cProfile.IOProfileData(pszSecName, LTEXT("bOverWriteBoxDelete")		, common.m_sEdit.m_bOverWriteBoxDelete);
-	cProfile.IOProfileData(pszSecName, LTEXT("bAutoCloseDlgFind")			, common.m_sSearch.m_bAutoCloseDlgFind);		// 検索ダイアログを自動的に閉じる
-	cProfile.IOProfileData(pszSecName, LTEXT("bAutoCloseDlgFuncList")		, common.m_sOutline.m_bAutoCloseDlgFuncList);	// アウトライン ダイアログを自動的に閉じる
-	cProfile.IOProfileData(pszSecName, LTEXT("bAutoCloseDlgReplace")		, common.m_sSearch.m_bAutoCloseDlgReplace);	// 置換 ダイアログを自動的に閉じる
+	cProfile.IOProfileData(pszSecName, LTEXT("bAutoCloseDlgFind")		, common.m_sSearch.m_bAutoCloseDlgFind);		// 検索ダイアログを自動的に閉じる
+	cProfile.IOProfileData(pszSecName, LTEXT("bAutoCloseDlgFuncList")	, common.m_sOutline.m_bAutoCloseDlgFuncList);	// アウトライン ダイアログを自動的に閉じる
+	cProfile.IOProfileData(pszSecName, LTEXT("bAutoCloseDlgReplace")	, common.m_sSearch.m_bAutoCloseDlgReplace);	// 置換 ダイアログを自動的に閉じる
 	cProfile.IOProfileData(pszSecName, LTEXT("bAutoColmnPaste")			, common.m_sEdit.m_bAutoColumnPaste);			// 矩形コピーのテキストは常に矩形貼り付け // 2013.5.23 aroka iniファイルのtypo未修正
 	cProfile.IOProfileData(pszSecName, LTEXT("NoCaretMoveByActivation")	, common.m_sGeneral.m_bNoCaretMoveByActivation);// マウスクリックにてアクティベートされた時はカーソル位置を移動しない 2007.10.02 nasukoji (add by genta)
-	cProfile.IOProfileData(pszSecName, LTEXT("bScrollBarHorz")				, common.m_sWindow.m_bScrollBarHorz);			// 水平スクロールバーを使う
+	cProfile.IOProfileData(pszSecName, LTEXT("bScrollBarHorz")			, common.m_sWindow.m_bScrollBarHorz);			// 水平スクロールバーを使う
 
-	cProfile.IOProfileData(pszSecName, LTEXT("bHokanKey_RETURN")			, common.m_sHelper.m_bHokanKey_RETURN);		// VK_RETURN 補完決定キーが有効/無効
-	cProfile.IOProfileData(pszSecName, LTEXT("bHokanKey_TAB")				, common.m_sHelper.m_bHokanKey_TAB);			// VK_TAB    補完決定キーが有効/無効
+	cProfile.IOProfileData(pszSecName, LTEXT("bHokanKey_RETURN")		, common.m_sHelper.m_bHokanKey_RETURN);		// VK_RETURN 補完決定キーが有効/無効
+	cProfile.IOProfileData(pszSecName, LTEXT("bHokanKey_TAB")			, common.m_sHelper.m_bHokanKey_TAB);			// VK_TAB    補完決定キーが有効/無効
 	cProfile.IOProfileData(pszSecName, LTEXT("bHokanKey_RIGHT")			, common.m_sHelper.m_bHokanKey_RIGHT);			// VK_RIGHT  補完決定キーが有効/無効
 	cProfile.IOProfileData(pszSecName, LTEXT("bHokanKey_SPACE")			, common.m_sHelper.m_bHokanKey_SPACE);			// VK_SPACE  補完決定キーが有効/無効
 	
 	cProfile.IOProfileData(pszSecName, LTEXT("nDateFormatType")			, common.m_sFormat.m_nDateFormatType);			// 日付書式のタイプ
-	cProfile.IOProfileData(pszSecName, LTEXT("szDateFormat")				, MakeStringBufferT(common.m_sFormat.m_szDateFormat));	// 日付書式
+	cProfile.IOProfileData(pszSecName, LTEXT("szDateFormat")			, MakeStringBufferT(common.m_sFormat.m_szDateFormat));	// 日付書式
 	cProfile.IOProfileData(pszSecName, LTEXT("nTimeFormatType")			, common.m_sFormat.m_nTimeFormatType);			// 時刻書式のタイプ
-	cProfile.IOProfileData(pszSecName, LTEXT("szTimeFormat")				, MakeStringBufferT(common.m_sFormat.m_szTimeFormat));	// 時刻書式
+	cProfile.IOProfileData(pszSecName, LTEXT("szTimeFormat")			, MakeStringBufferT(common.m_sFormat.m_szTimeFormat));	// 時刻書式
 	
-	cProfile.IOProfileData(pszSecName, LTEXT("bMenuIcon")					, common.m_sWindow.m_bMenuIcon);			// メニューにアイコンを表示する
+	cProfile.IOProfileData(pszSecName, LTEXT("bMenuIcon")				, common.m_sWindow.m_bMenuIcon);			// メニューにアイコンを表示する
 	cProfile.IOProfileData(pszSecName, LTEXT("bAutoMIMEdecode")			, common.m_sFile.m_bAutoMIMEdecode);			// ファイル読み込み時にMIMEのdecodeを行うか
-	cProfile.IOProfileData(pszSecName, LTEXT("bQueryIfCodeChange")			, common.m_sFile.m_bQueryIfCodeChange);		// Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うか
-	cProfile.IOProfileData(pszSecName, LTEXT("bAlertIfFileNotExist")		, common.m_sFile.m_bAlertIfFileNotExist);	// Oct. 09, 2004 genta 開こうとしたファイルが存在しないとき警告する
+	cProfile.IOProfileData(pszSecName, LTEXT("bQueryIfCodeChange")		, common.m_sFile.m_bQueryIfCodeChange);		// Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うか
+	cProfile.IOProfileData(pszSecName, LTEXT("bAlertIfFileNotExist")	, common.m_sFile.m_bAlertIfFileNotExist);	// Oct. 09, 2004 genta 開こうとしたファイルが存在しないとき警告する
 	
-	cProfile.IOProfileData(pszSecName, LTEXT("bNoFilterSaveNew")			, common.m_sFile.m_bNoFilterSaveNew);	// 新規から保存時は全ファイル表示	// 2006.11.16 ryoji
-	cProfile.IOProfileData(pszSecName, LTEXT("bNoFilterSaveFile")			, common.m_sFile.m_bNoFilterSaveFile);	// 新規以外から保存時は全ファイル表示	// 2006.11.16 ryoji
-	cProfile.IOProfileData(pszSecName, LTEXT("bAlertIfLargeFile")			, common.m_sFile.m_bAlertIfLargeFile);	// 開こうとしたファイルが大きい場合に警告する
-	cProfile.IOProfileData(pszSecName, LTEXT("nAlertFileSize")				, common.m_sFile.m_nAlertFileSize);	// 警告を開始するファイルサイズ(MB単位)
+	cProfile.IOProfileData(pszSecName, LTEXT("bNoFilterSaveNew")		, common.m_sFile.m_bNoFilterSaveNew);	// 新規から保存時は全ファイル表示	// 2006.11.16 ryoji
+	cProfile.IOProfileData(pszSecName, LTEXT("bNoFilterSaveFile")		, common.m_sFile.m_bNoFilterSaveFile);	// 新規以外から保存時は全ファイル表示	// 2006.11.16 ryoji
+	cProfile.IOProfileData(pszSecName, LTEXT("bAlertIfLargeFile")		, common.m_sFile.m_bAlertIfLargeFile);	// 開こうとしたファイルが大きい場合に警告する
+	cProfile.IOProfileData(pszSecName, LTEXT("nAlertFileSize")			, common.m_sFile.m_nAlertFileSize);	// 警告を開始するファイルサイズ(MB単位)
 	
 	//「開く」ダイアログのサイズと位置
-	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcOpenDialog"), common.m_sOthers.m_rcOpenDialog);
-	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcCompareDialog"), common.m_sOthers.m_rcCompareDialog);
-	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcDiffDialog"), common.m_sOthers.m_rcDiffDialog);
-	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcFavoriteDialog"), common.m_sOthers.m_rcFavoriteDialog);
-	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcTagJumpDialog"), common.m_sOthers.m_rcTagJumpDialog);
+	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcOpenDialog")		, common.m_sOthers.m_rcOpenDialog);
+	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcCompareDialog")	, common.m_sOthers.m_rcCompareDialog);
+	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcDiffDialog")		, common.m_sOthers.m_rcDiffDialog);
+	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcFavoriteDialog")	, common.m_sOthers.m_rcFavoriteDialog);
+	ShareData_IO_RECT(cProfile,  pszSecName, LTEXT("rcTagJumpDialog")	, common.m_sOthers.m_rcTagJumpDialog);
 	
 	// 2002.02.08 aroka,hor
 	cProfile.IOProfileData(pszSecName, LTEXT("bMarkUpBlankLineEnable")	, common.m_sOutline.m_bMarkUpBlankLineEnable);
@@ -892,7 +892,7 @@ void CShareData_IO::IO_CustMenu(CDataProfile& cProfile, CommonSetting_CustomMenu
 			auto_sprintf(szKeyName, LTEXT("nCMIF[%02d][%02d]"), i, j);
 			if (cProfile.IsReadingMode()) {
 				cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szFuncName));
-				if (wcschr(szFuncName, L'/') != NULL) {
+				if (wcschr(szFuncName, L'/')) {
 					// Plugin名
 					n = GetPlugCmdInfoByName(szFuncName);
 				}else if (1
@@ -1042,7 +1042,7 @@ void CShareData_IO::IO_KeyBind(CDataProfile& cProfile, CommonSetting_KeyBind& sK
 						pn = auto_strchr(p, ',');
 						if (!pn)	break;
 						*pn = 0;
-						if (wcschr(p, L'/') != NULL) {
+						if (wcschr(p, L'/')) {
 							// Plugin名
 							n = GetPlugCmdInfoByName(p);
 						}else if (WCODE::Is09(*p) && (p[1] == L'\0' || WCODE::Is09(p[1]))) {
@@ -2093,7 +2093,7 @@ void CShareData_IO::IO_MainMenu(
 			// レベル
 			p = szLine;
 			pn = wcschr(p, L',');
-			if (pn != NULL)		*pn++ = L'\0';
+			if (pn) *pn++ = L'\0';
 			pcMenu->m_nLevel = auto_atol(p);
 			if (!pn) {
 				continue;
@@ -2102,7 +2102,7 @@ void CShareData_IO::IO_MainMenu(
 			// 種類
 			p = pn;
 			pn = wcschr(p, L',');
-			if (pn != NULL)		*pn++ = L'\0';
+			if (pn) *pn++ = L'\0';
 			pcMenu->m_nType = (EMainMenuType)auto_atol(p);
 			if (!pn) {
 				continue;
@@ -2111,8 +2111,8 @@ void CShareData_IO::IO_MainMenu(
 			// 機能(マクロ名対応)
 			p = pn;
 			pn = wcschr(p, L',');
-			if (pn != NULL)		*pn++ = L'\0';
-			if (wcschr(p, L'/') != NULL) {
+			if (pn)	*pn++ = L'\0';
+			if (wcschr(p, L'/')) {
 				// Plugin名
 				n = GetPlugCmdInfoByName(p);
 			}else if (WCODE::Is09(*p)

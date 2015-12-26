@@ -220,7 +220,7 @@ void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* ps
 	const TCHAR*	pszType = NULL;				// 第2引数をTCHAR*に変換した文字列
 	HWND			hwndRecordingKeyMacro = NULL;
 
-	if (pszPathW != NULL) {
+	if (pszPathW) {
 		// to_tchar()で取得した文字列はdeleteしないこと。
 		pszPath = to_tchar(pszPathW);
 		pszType = to_tchar(pszTypeW);
@@ -284,12 +284,12 @@ void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* ps
 
 	// 終わったら開放
 	m_pcSMacroMgr->Clear(TEMP_KEYMACRO);
-	if (oldMacro != NULL) {
+	if (oldMacro) {
 		m_pcSMacroMgr->SetTempMacro(oldMacro);
 	}
 
 	// キーマクロ記録中だった場合は再開する
-	if (hwndRecordingKeyMacro != NULL) {
+	if (hwndRecordingKeyMacro) {
 		sFlags.m_bRecordingKeyMacro = TRUE;
 		sFlags.m_hwndRecordingKeyMacro = hwndRecordingKeyMacro;	// キーボードマクロを記録中のウィンドウ
 	}

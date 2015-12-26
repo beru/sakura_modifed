@@ -575,7 +575,7 @@ BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int 
 	if (idx == STAND_KEYMACRO) {
 		// Jun. 16, 2002 genta
 		// キーマクロ以外のサポートによりNULLの可能性が出てきたので判定追加
-		if (m_pKeyMacro != NULL) {
+		if (m_pKeyMacro) {
 			// Sep. 15, 2005 FILE
 			// Jul. 01, 2007 マクロの多重実行時に備えて直前のマクロ番号を退避
 			int prevmacro = SetCurrentIdx(idx);
@@ -587,7 +587,7 @@ BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int 
 		}
 	}
 	if (idx == TEMP_KEYMACRO) {		// 一時マクロ
-		if (m_pTempMacro != NULL) {
+		if (m_pTempMacro) {
 			int prevmacro = SetCurrentIdx( idx );
 			m_pTempMacro->ExecKeyMacro2(pcEditView, flags);
 			SetCurrentIdx( prevmacro );
@@ -654,14 +654,14 @@ BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const 
 		// ファイルの拡張子を取得する
 		ext = _tcsrchr(pszPath, _T('.'));
 		// Feb. 02, 2004 genta .が無い場合にext==NULLとなるのでNULLチェック追加
-		if (ext != NULL) {
+		if (ext) {
 			const TCHAR* chk = _tcsrchr(ext, _T('\\'));
-			if (chk != NULL) {	// .のあとに\があったらそれは拡張子の区切りではない
+			if (chk) {	// .のあとに\があったらそれは拡張子の区切りではない
 								// \が漢字の2バイト目の場合も拡張子ではない。
 				ext = NULL;
 			}
 		}
-		if (ext != NULL) {
+		if (ext) {
 			++ext;
 		}
 	}else {								// コード指定
@@ -724,7 +724,7 @@ BOOL CSMacroMgr::Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath)
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {
 		CKeyMacroMgr* pKeyMacro = dynamic_cast<CKeyMacroMgr*>(m_pKeyMacro);
-		if (pKeyMacro != NULL) {
+		if (pKeyMacro) {
 			return pKeyMacro->SaveKeyMacro(hInstance, pszPath);
 		}
 		// Jun. 27, 2002 genta
@@ -748,7 +748,7 @@ BOOL CSMacroMgr::Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath)
 void CSMacroMgr::Clear(int idx)
 {
 	CMacroManagerBase **ppMacro = Idx2Ptr(idx);
-	if (ppMacro != NULL) {
+	if (ppMacro) {
 		delete *ppMacro;
 		*ppMacro = NULL;
 	}
@@ -771,12 +771,12 @@ const MacroFuncInfo* CSMacroMgr::GetFuncInfoByID(int nFuncID)
 {
 	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
-	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; ++i) {
+	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
 		if (m_MacroFuncInfoCommandArr[i].m_nFuncID == nFuncID) {
 			return &m_MacroFuncInfoCommandArr[i];
 		}
 	}
-	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName != NULL; ++i) {
+	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
 		if (m_MacroFuncInfoArr[i].m_nFuncID == nFuncID) {
 			return &m_MacroFuncInfoArr[i];
 		}
@@ -806,8 +806,8 @@ WCHAR* CSMacroMgr::GetFuncInfoByID(
 )
 {
 	const MacroFuncInfo* MacroInfo = GetFuncInfoByID(nFuncID);
-	if (MacroInfo != NULL) {
-		if (pszFuncName != NULL) {
+	if (MacroInfo) {
+		if (pszFuncName) {
 			auto_strcpy(pszFuncName, MacroInfo->m_pszFuncName);
 			WCHAR* p = pszFuncName;
 			while (*p) {
@@ -819,7 +819,7 @@ WCHAR* CSMacroMgr::GetFuncInfoByID(
 			}
 		}
 		// Jun. 16, 2002 genta NULLのときは何もしない．
-		if (pszFuncNameJapanese != NULL) {
+		if (pszFuncNameJapanese) {
 			wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 		}
 		return pszFuncName;
@@ -858,10 +858,10 @@ EFunctionCode CSMacroMgr::GetFuncInfoByName(
 	}
 
 	// コマンド関数を検索
-	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName != NULL; ++i) {
+	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
 		if (0 == auto_strcmp(normalizedFuncName, m_MacroFuncInfoCommandArr[i].m_pszFuncName)) {
 			EFunctionCode nFuncID = EFunctionCode(m_MacroFuncInfoCommandArr[i].m_nFuncID);
-			if (pszFuncNameJapanese != NULL) {
+			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
 			}
@@ -869,10 +869,10 @@ EFunctionCode CSMacroMgr::GetFuncInfoByName(
 		}
 	}
 	// 非コマンド関数を検索
-	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName != NULL; ++i) {
+	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
 		if (0 == auto_strcmp(normalizedFuncName, m_MacroFuncInfoArr[i].m_pszFuncName)) {
 			EFunctionCode nFuncID = EFunctionCode(m_MacroFuncInfoArr[i].m_nFuncID);
-			if (pszFuncNameJapanese != NULL) {
+			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
 				pszFuncNameJapanese[255] = L'\0';
 			}

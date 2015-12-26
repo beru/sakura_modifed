@@ -581,7 +581,7 @@ bool CEditDoc::IsAcceptLoad() const
 	@date 2006.05.19 genta 上位16bitに送信元の識別子が入るように変更
 	@date 2007.06.20 ryoji グループ内で巡回するように変更
 */
-BOOL CEditDoc::HandleCommand(EFunctionCode nCommand)
+bool CEditDoc::HandleCommand(EFunctionCode nCommand)
 {
 	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
 	// 下位16ビットのみを取り出す
@@ -997,7 +997,7 @@ void CEditDoc::SetCurDirNotitle()
 		CFileNameManager::ExpandMetaToFolder( GetDllShareData().m_Common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir) );
 		pszDir = szSelDir;
 	}
-	if (pszDir != NULL) {
+	if (pszDir) {
 		::SetCurrentDirectory( pszDir );
 	}
 }

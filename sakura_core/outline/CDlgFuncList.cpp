@@ -699,7 +699,7 @@ void CDlgFuncList::SetData()
 	// アウトライン ■位置とサイズを記憶する // 20060201 aroka
 	::CheckDlgButton(GetHwnd(), IDC_BUTTON_WINSIZE, m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos);
 	// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
-	::DlgItem_SetText(GetHwnd(), IDC_BUTTON_WINSIZE, 
+	SetItemText(IDC_BUTTON_WINSIZE, 
 		m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 
 	// ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない
@@ -802,7 +802,7 @@ bool CDlgFuncList::GetTreeFileFullName(HWND hwndTree,
 			*pPath = szFileName;
 		}
 		target = TreeView_GetParent( hwndTree, target );
-	}while (target != NULL);
+	}while (target);
 	return false;
 }
 
@@ -1830,7 +1830,7 @@ BOOL CDlgFuncList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	// アウトライン位置とサイズを初期化する // 20060201 aroka
 	CEditView* pcEditView=(CEditView*)m_lParam;
-	if (pcEditView != NULL) {
+	if (pcEditView) {
 		if (!IsDocking() && m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos) {
 			WINDOWPLACEMENT cWindowPlacement;
 			cWindowPlacement.length = sizeof(cWindowPlacement);
@@ -2017,19 +2017,19 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_WINSIZE:
 		{// ウィンドウの位置とサイズを記憶 // 20060201 aroka
-			m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos = ::IsDlgButtonChecked(GetHwnd(), IDC_BUTTON_WINSIZE);
+			m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
 		}
 		// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
-		::DlgItem_SetText(GetHwnd(), IDC_BUTTON_WINSIZE,
+		SetItemText(IDC_BUTTON_WINSIZE,
 			m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 		return TRUE;
 	// 2002.02.08 オプション切替後List/Treeにフォーカス移動
 	case IDC_CHECK_bAutoCloseDlgFuncList:
 	case IDC_CHECK_bMarkUpBlankLineEnable:
 	case IDC_CHECK_bFunclistSetFocusOnJump:
-		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_bAutoCloseDlgFuncList);
-		m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_bMarkUpBlankLineEnable);
-		m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump = ::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_bFunclistSetFocusOnJump);
+		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
+		m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
+		m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
 		if (m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList) {
 			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_bFunclistSetFocusOnJump), FALSE);
 		}else {
@@ -2480,7 +2480,7 @@ BOOL CDlgFuncList::OnJump( bool bCheckAutoClose, bool bFileJump )	//2002.02.08 h
 	int nLineTo;
 	int nColTo;
 	// ダイアログデータの取得
-	if (0 < GetData() && (m_cFuncInfo != NULL || 0 < m_sJumpFile.size() )) {
+	if (0 < GetData() && (m_cFuncInfo || 0 < m_sJumpFile.size() )) {
 		if (m_bModal) {		// モーダル ダイアログか
 			// モーダル表示する場合は、m_cFuncInfoを取得するアクセサを実装して結果取得すること。
 			::EndDialog(GetHwnd(), 1);
@@ -2499,7 +2499,7 @@ BOOL CDlgFuncList::OnJump( bool bCheckAutoClose, bool bFileJump )	//2002.02.08 h
 					bFileJumpSelf = TagJumpTimer(m_sJumpFile.c_str(), poCaret, bCheckAutoClose);
 				}
 			}else
-			if (m_cFuncInfo != NULL && 0 < m_cFuncInfo->m_cmemFileName.GetStringLength()) {
+			if (m_cFuncInfo && 0 < m_cFuncInfo->m_cmemFileName.GetStringLength()) {
 				if (bFileJump) {
 					nLineTo = m_cFuncInfo->m_nFuncLineCRLF;
 					nColTo = m_cFuncInfo->m_nFuncColCRLF;
@@ -2670,7 +2670,7 @@ void CDlgFuncList::GetDockSpaceRect(LPRECT pRect)
 		nCount++;
 	}
 	hwnd[nCount] = pcEditView->m_pcEditWnd->GetMiniMap().GetHwnd();
-	if (hwnd[nCount] != NULL) {
+	if (hwnd[nCount]) {
 		nCount++;
 	}
 	for (int i = 0; i < nCount; i++) {

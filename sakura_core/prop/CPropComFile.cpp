@@ -350,19 +350,19 @@ int CPropFile::GetData(HWND hwndDlg)
 	csFile.m_nFileShareMode = ShareModeArr[nSelPos].nMethod;
 
 	// 更新の監視
-	csFile.m_bCheckFileTimeStamp = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bCheckFileTimeStamp);
+	csFile.m_bCheckFileTimeStamp = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCheckFileTimeStamp);
 
 	// 自動読込時遅延
 	csFile.m_nAutoloadDelay = ::GetDlgItemInt(hwndDlg, IDC_EDIT_AUTOLOAD_DELAY, NULL, FALSE);
 
 	// 上書き禁止検出時は編集禁止にする
-	csFile.m_bUneditableIfUnwritable = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bUneditableIfUnwritable);
+	csFile.m_bUneditableIfUnwritable = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bUneditableIfUnwritable);
 
 	// 無変更でも上書きするか
-	csFile.m_bEnableUnmodifiedOverwrite = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_ENABLEUNMODIFIEDOVERWRITE);
+	csFile.m_bEnableUnmodifiedOverwrite = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ENABLEUNMODIFIEDOVERWRITE);
 
 	// ファイルをドロップしたときは閉じて開く
-	csFile.m_bDropFileAndClose = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bDropFileAndClose);
+	csFile.m_bDropFileAndClose = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bDropFileAndClose);
 	// 一度にドロップ可能なファイル数
 	csFile.m_nDropFileNumMax = ::GetDlgItemInt(hwndDlg, IDC_EDIT_nDropFileNumMax, NULL, FALSE);
 	if (1 > csFile.m_nDropFileNumMax) {
@@ -374,7 +374,7 @@ int CPropFile::GetData(HWND hwndDlg)
 
 	//	From Here Aug. 16, 2000 genta
 	//	自動保存を行うかどうか
-	m_Common.m_sBackup.EnableAutoBackup(::IsDlgButtonChecked(hwndDlg, IDC_CHECK_AUTOSAVE) == TRUE);
+	m_Common.m_sBackup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
 
 	//	自動保存間隔の取得
 	TCHAR szNumBuf[/*6*/ 7];	//@@@ 2001.03.21 by MIK
@@ -396,17 +396,17 @@ int CPropFile::GetData(HWND hwndDlg)
 	//	To Here Aug. 16, 2000 genta
 
 	//	Oct. 27, 2000 genta	カーソル位置復元フラグ
-	csFile.SetRestoreCurPosition(::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_RestoreCurPosition));
+	csFile.SetRestoreCurPosition(DlgButton_IsChecked(hwndDlg, IDC_CHECK_RestoreCurPosition));
 	// 2002.01.16 hor ブックマーク復元フラグ
-	csFile.SetRestoreBookmarks(::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_RestoreBookmarks));
+	csFile.SetRestoreBookmarks(DlgButton_IsChecked(hwndDlg, IDC_CHECK_RestoreBookmarks));
 	//	Nov. 12, 2000 genta	MIME Decodeフラグ
-	csFile.SetAutoMIMEdecode(::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_AutoMIMEDecode));
+	csFile.SetAutoMIMEdecode(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AutoMIMEDecode));
 	//	Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
-	csFile.SetQueryIfCodeChange(::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_QueryIfCodeChange));
+	csFile.SetQueryIfCodeChange(DlgButton_IsChecked(hwndDlg, IDC_CHECK_QueryIfCodeChange));
 	//	Oct. 03, 2004 genta 前回と異なる文字コードのときに問い合わせを行うかどうかのフラグ
-	csFile.SetAlertIfFileNotExist(::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_AlertIfFileNotExist));
+	csFile.SetAlertIfFileNotExist(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AlertIfFileNotExist));
 	// 開こうとしたファイルが大きい場合に警告する
-	csFile.m_bAlertIfLargeFile = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE);
+	csFile.m_bAlertIfLargeFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE);
 	csFile.m_nAlertFileSize = ::GetDlgItemInt(hwndDlg, IDC_EDIT_ALERT_FILESIZE, NULL, FALSE);
 	if (csFile.m_nAlertFileSize < 1) {
 		csFile.m_nAlertFileSize = 1;
@@ -416,8 +416,8 @@ int CPropFile::GetData(HWND hwndDlg)
 	}
 
 	// ファイル保存ダイアログのフィルタ設定	// 2006.11.16 ryoji
-	csFile.m_bNoFilterSaveNew = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_NoFilterSaveNew);	// 新規から保存時は全ファイル表示
-	csFile.m_bNoFilterSaveFile = ::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_NoFilterSaveFile);	// 新規以外から保存時は全ファイル表示
+	csFile.m_bNoFilterSaveNew = DlgButton_IsChecked(hwndDlg, IDC_CHECK_NoFilterSaveNew);	// 新規から保存時は全ファイル表示
+	csFile.m_bNoFilterSaveFile = DlgButton_IsChecked(hwndDlg, IDC_CHECK_NoFilterSaveFile);	// 新規以外から保存時は全ファイル表示
 
 	return TRUE;
 }
@@ -432,7 +432,7 @@ void CPropFile::EnableFilePropInput(HWND hwndDlg)
 {
 
 	//	Drop時の動作
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_bDropFileAndClose)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_bDropFileAndClose)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE3), FALSE);	// added Sept. 6, JEPRO 自動保存にしたときだけEnableになるように変更
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE4), FALSE);	// added Sept. 6, JEPRO	同上
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_nDropFileNumMax), FALSE);
@@ -448,7 +448,7 @@ void CPropFile::EnableFilePropInput(HWND hwndDlg)
 	int nSelPos = Combo_GetCurSel(::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE));
 	if (ShareModeArr[nSelPos].nMethod == SHAREMODE_NOT_EXCLUSIVE) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_bCheckFileTimeStamp), TRUE);
-		if (::IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_bCheckFileTimeStamp)) {
+		if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCheckFileTimeStamp)) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOLOAD_DELAY), TRUE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOLOAD_DELAY),  TRUE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_AUTOLOAD_DELAY),  TRUE);
@@ -465,7 +465,7 @@ void CPropFile::EnableFilePropInput(HWND hwndDlg)
 	}
 
 	//	自動保存
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_AUTOSAVE)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_LABEL_AUTOSAVE2), TRUE);	// Sept. 6, 2000 JEPRO 自動保存にしたときだけEnableになるように変更
@@ -478,7 +478,7 @@ void CPropFile::EnableFilePropInput(HWND hwndDlg)
 	}
 
 	// 「開こうとしたファイルが大きい場合に警告を出す」
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE)) {
+	if (DlgButton_IsChecked(hwndDlg, IDC_CHECK_ALERT_IF_LARGEFILE)) {
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_ALERT_FILESIZE), TRUE);
 		::EnableWindow(::GetDlgItem(hwndDlg, IDC_SPIN_ALERT_FILESIZE), TRUE);
 	}else {

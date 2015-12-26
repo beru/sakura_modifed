@@ -143,9 +143,8 @@ INT_PTR CDlgInput1::DispatchEvent(
 
 		::SetWindowText(hwndDlg, m_pszTitle);	// ダイアログタイトル
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_INPUT1), m_nMaxTextLen);	// 入力サイズ上限
-		DlgItem_SetText(hwndDlg, IDC_EDIT_INPUT1, m_cmemText.GetStringPtr());			// テキスト
-		::SetWindowText(::GetDlgItem(hwndDlg, IDC_STATIC_MSG), m_pszMessage);		// メッセージ
-
+		::SetDlgItemText(hwndDlg, IDC_EDIT_INPUT1, m_cmemText.GetStringPtr());			// テキスト
+		::SetDlgItemText(hwndDlg, IDC_STATIC_MSG, m_pszMessage);		// メッセージ
 		return TRUE;
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	// 通知コード

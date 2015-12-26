@@ -372,10 +372,10 @@ void CDocLineMgr::DUMP()
 	if (nNum != m_nLines) {
 		MYTRACE(_T("error: nNum(%d) != m_nLines(%d)\n"), nNum, m_nLines);
 	}
-	if (!bIncludeCurrent && m_pDocLineCurrent != NULL) {
+	if (!bIncludeCurrent && m_pDocLineCurrent) {
 		MYTRACE(_T("error: m_pDocLineCurrent=%08lxh Invalid value.\n"), m_pDocLineCurrent);
 	}
-	if (!bIncludePrevRefer && m_pCodePrevRefer != NULL) {
+	if (!bIncludePrevRefer && m_pCodePrevRefer) {
 		MYTRACE(_T("error: m_pCodePrevRefer =%08lxh Invalid value.\n"), m_pCodePrevRefer);
 	}
 

@@ -140,7 +140,7 @@ HICON GetAppIcon(HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSmal
 		size,
 		LR_SHARED | LR_LOADFROMFILE
 	);
-	if (hIcon != NULL) {
+	if (hIcon) {
 		return hIcon;
 	}
 

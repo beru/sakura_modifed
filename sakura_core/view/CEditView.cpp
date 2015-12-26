@@ -403,7 +403,7 @@ CEditView::~CEditView()
 
 void CEditView::Close()
 {
-	if (GetHwnd() != NULL) {
+	if (GetHwnd()) {
 		::DestroyWindow(GetHwnd());
 	}
 
@@ -1001,7 +1001,7 @@ void CEditView::OnSize(int cx, int cy)
 
 	// 再描画用メモリＢＭＰ
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
-	if (m_hdcCompatDC != NULL) {
+	if (m_hdcCompatDC) {
 		CreateOrUpdateCompatibleBitmap(cx, cy);
  	}
 	// To Here 2007.09.09 Moca
@@ -1900,7 +1900,7 @@ bool CEditView::GetSelectedData(
 
 		// 実際の文字量。
 		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(rcSel.top, &nLineLen, &pcLayout);
-		for (; i != CLayoutInt(0) && pcLayout != NULL; i--, pcLayout = pcLayout->GetNextLayout()) {
+		for (; i != CLayoutInt(0) && pcLayout; i--, pcLayout = pcLayout->GetNextLayout()) {
 			pLine = pcLayout->GetPtr() + pcLayout->GetLogicOffset();
 			nLineLen = CLogicInt(pcLayout->GetLengthWithEOL());
 			if (pLine) {
@@ -1979,7 +1979,7 @@ bool CEditView::GetSelectedData(
 		nBufSize *= (Int)i;
 
 		// 実際の各行の長さ。
-		for (; i != 0 && pcLayout != NULL; i--, pcLayout = pcLayout->GetNextLayout()) {
+		for (; i != 0 && pcLayout; i--, pcLayout = pcLayout->GetNextLayout()) {
 			nBufSize += pcLayout->GetLengthWithoutEOL() + appendEol.GetLen();
 			if (bLineOnly) {	// 複数行選択の場合は先頭の行のみ
 				break;
@@ -2787,7 +2787,7 @@ bool CEditView::IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelect
 
 		result = true;
 		for (CLayoutInt nLineNum = nLineFrom; nLineNum <= nLineTo; nLineNum++) {
-			if ((pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum)) != NULL) {
+			if ((pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum))) {
 				// 指定位置に対応する行のデータ内の位置
 				LineColumnToIndex2(pcLayout, nColumnFrom, &nLineLen);
 				if (nLineLen == 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る

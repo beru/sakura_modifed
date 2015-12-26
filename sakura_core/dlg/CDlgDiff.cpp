@@ -133,7 +133,7 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 			);
 			if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 				_tcscpy(m_szFile2, szPath);
-				::DlgItem_SetText(GetHwnd(), IDC_EDIT_DIFF_DST, m_szFile2);
+				SetItemText(IDC_EDIT_DIFF_DST, m_szFile2);
 				// 外部ファイルを選択状態に
 				::CheckDlgButton(GetHwnd(), IDC_RADIO_DIFF_DST1, TRUE);
 				::CheckDlgButton(GetHwnd(), IDC_RADIO_DIFF_DST2, FALSE);
@@ -221,10 +221,10 @@ void CDlgDiff::SetData(void)
 	if (m_nDiffFlgOpt & 0x0040) ::CheckDlgButton(GetHwnd(), IDC_CHECK_DIFF_EXEC_STATE, TRUE);
 
 	// 見つからないときメッセージを表示
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND);
+	CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND);
 	
 	// 先頭（末尾）から再検索
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
+	CheckDlgButton(GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
 
 	// 編集中のファイル一覧を作成する
 	{
@@ -265,7 +265,7 @@ void CDlgDiff::SetData(void)
 				if (pEditNode[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
 					// 同じ形式にしておく。ただしアクセスキー番号はなし
 					CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szName, _countof(szName), pFileInfo, pEditNode[i].m_nId, -1, calc.GetDC() );
-					::DlgItem_SetText(GetHwnd(), IDC_STATIC_DIFF_SRC, szName);
+					SetItemText(IDC_STATIC_DIFF_SRC, szName);
 					continue;
 				}
 
@@ -338,28 +338,28 @@ int CDlgDiff::GetData(void)
 
 	// DIFFオプション
 	m_nDiffFlgOpt = 0;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_CASE ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0001;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_SPACE) == BST_CHECKED) m_nDiffFlgOpt |= 0x0002;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_SPCCHG) == BST_CHECKED) m_nDiffFlgOpt |= 0x0004;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_BLINE) == BST_CHECKED) m_nDiffFlgOpt |= 0x0008;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_OPT_TABSPC) == BST_CHECKED) m_nDiffFlgOpt |= 0x0010;
+	if (IsButtonChecked(IDC_CHECK_DIFF_OPT_CASE)) m_nDiffFlgOpt |= 0x0001;
+	if (IsButtonChecked(IDC_CHECK_DIFF_OPT_SPACE)) m_nDiffFlgOpt |= 0x0002;
+	if (IsButtonChecked(IDC_CHECK_DIFF_OPT_SPCCHG)) m_nDiffFlgOpt |= 0x0004;
+	if (IsButtonChecked(IDC_CHECK_DIFF_OPT_BLINE)) m_nDiffFlgOpt |= 0x0008;
+	if (IsButtonChecked(IDC_CHECK_DIFF_OPT_TABSPC)) m_nDiffFlgOpt |= 0x0010;
 	// ファイル新旧
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_DIFF_FILE2    ) == BST_CHECKED) m_nDiffFlgOpt |= 0x0020;
+	if (IsButtonChecked(IDC_RADIO_DIFF_FILE2)) m_nDiffFlgOpt |= 0x0020;
 	// DIFF差分が見つからないときにメッセージを表示 2003.05.12 MIK
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_DIFF_EXEC_STATE) == BST_CHECKED) m_nDiffFlgOpt |= 0x0040;
+	if (IsButtonChecked(IDC_CHECK_DIFF_EXEC_STATE)) m_nDiffFlgOpt |= 0x0040;
 	m_pShareData->m_nDiffFlgOpt = m_nDiffFlgOpt;
 
 	// 相手ファイル名
 	m_szFile2[0] = 0;
 	m_hWnd_Dst = NULL;
 	m_bIsModifiedDst = false;
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_DIFF_DST1) == BST_CHECKED) {
+	if (IsButtonChecked(IDC_RADIO_DIFF_DST1)) {
 		::DlgItem_GetText(GetHwnd(), IDC_EDIT_DIFF_DST, m_szFile2, _countof2(m_szFile2));
 		// 2004.05.19 MIK 外部ファイルが指定されていない場合はキャンセル
 		// 相手ファイルが指定されてなければキャンセル
 		if (m_szFile2[0] == '\0') ret = FALSE;
 
-	}else if (::IsDlgButtonChecked(GetHwnd(), IDC_RADIO_DIFF_DST2) == BST_CHECKED) {
+	}else if (IsButtonChecked(IDC_RADIO_DIFF_DST2)) {
 		HWND		hwndList;
 		int			nItem;
 		EditInfo*	pFileInfo;
@@ -386,16 +386,10 @@ int CDlgDiff::GetData(void)
 	}
 
 	// 見つからないときメッセージを表示
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND) == BST_CHECKED)
-		m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = TRUE;
-	else
-		m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = FALSE;
+	m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
 	// 先頭（末尾）から再検索
-	if (::IsDlgButtonChecked(GetHwnd(), IDC_CHECK_SEARCHALL) == BST_CHECKED)
-		m_pShareData->m_Common.m_sSearch.m_bSearchAll = TRUE;
-	else
-		m_pShareData->m_Common.m_sSearch.m_bSearchAll = FALSE;
+	m_pShareData->m_Common.m_sSearch.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	// 相手ファイルが指定されてなければキャンセル
 	// 2004.02.21 MIK 相手が無題だと比較できないので判定削除

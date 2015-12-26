@@ -199,7 +199,7 @@ int CEditView::HokanSearchByFile(
 
 	// キーが記号で始まるか
 	// キーの先頭が記号(#$@\)かどうか判定
-	bool bKeyStartWithMark = (wcschr(L"$@#\\", pszKey[0]) != NULL ? true : false);
+	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
 	for (CLogicInt i = CLogicInt(0); i < nLines; i++) {
 		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
@@ -211,7 +211,7 @@ int CEditView::HokanSearchByFile(
 			if (pszLine[j] < 0x00C0 && !IS_KEYWORD_CHAR(pszLine[j])) continue;
 
 			// キーの先頭が記号以外の場合、記号で始まる単語は候補からはずす
-			if (!bKeyStartWithMark && wcschr(L"$@#\\", pszLine[j]) != NULL) continue;
+			if (!bKeyStartWithMark && wcschr(L"$@#\\", pszLine[j])) continue;
 
 			// 文字種類取得
 			ECharKind kindPre = CWordParse::WhatKindOfChar(pszLine, nLineLen, j);	// 文字種類取得
@@ -227,7 +227,7 @@ int CEditView::HokanSearchByFile(
 				continue;
 
 			// 候補が記号で始まるか
-			bool bWordStartWithMark = (wcschr(L"$@#\\", pszLine[j]) != NULL ? true : false);
+			bool bWordStartWithMark = wcschr(L"$@#\\", pszLine[j]) != NULL;
 
 			nWordBegin = j;
 			// 候補単語の終了位置を求める

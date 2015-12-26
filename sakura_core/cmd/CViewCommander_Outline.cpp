@@ -33,7 +33,7 @@
 	2002/3/13 YAZAKI nOutlineTypeとnListTypeを統合。
 */
 // トグル用のフラグに変更 20060201 aroka
-BOOL CViewCommander::Command_FUNCLIST(
+bool CViewCommander::Command_FUNCLIST(
 	int nAction,
 	int _nOutlineType = OUTLINE_DEFAULT
 	)
@@ -41,7 +41,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 	static bool bIsProcessing = false;	// アウトライン解析処理中フラグ
 
 	// アウトラインプラグイン内でのEditor.Outline呼び出しによる再入を禁止する
-	if (bIsProcessing) return FALSE;
+	if (bIsProcessing) return false;
 
 	bIsProcessing = true;
 
@@ -84,7 +84,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 					::SetFocus(dlgFuncList.GetHwnd());
 				}
 				bIsProcessing = false;
-				return TRUE;
+				return true;
 			}
 			break;
 		case SHOW_TOGGLE: // 閉じる
@@ -95,7 +95,7 @@ BOOL CViewCommander::Command_FUNCLIST(
 				else
 					::SendMessageAny(dlgFuncList.GetHwnd(), WM_CLOSE, 0, 0);
 				bIsProcessing = false;
-				return TRUE;
+				return true;
 			}
 			break;
 		default:
@@ -189,6 +189,6 @@ BOOL CViewCommander::Command_FUNCLIST(
 	}
 
 	bIsProcessing = false;
-	return TRUE;
+	return true;
 }
 

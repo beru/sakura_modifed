@@ -119,7 +119,7 @@ CCaret::CCaret(CEditView* pEditView, const CEditDoc* pEditDoc)
 CCaret::~CCaret()
 {
 	// キャレット用ビットマップ	// 2006.11.28 ryoji
-	if (m_hbmpCaret != NULL)
+	if (m_hbmpCaret)
 		DeleteObject(m_hbmpCaret);
 }
 
@@ -1048,7 +1048,7 @@ void CCaret::CreateEditCaret(COLORREF crCaret, COLORREF crBack, int nWidth, int 
 	m_pEditView->ReleaseDC(hdc);
 
 	// 以前のビットマップを破棄する
-	if (m_hbmpCaret != NULL)
+	if (m_hbmpCaret)
 		::DeleteObject(m_hbmpCaret);
 	m_hbmpCaret = hbmpCaret;
 

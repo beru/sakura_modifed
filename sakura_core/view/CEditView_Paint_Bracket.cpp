@@ -348,7 +348,7 @@ bool CEditView::SearchBracket(
 		return false;
 
 	// Š‡ŒÊˆ— 2007.10.16 kobake
-	for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL;  p++) {
+	for (const KAKKO_T* p = g_aKakkos; p->sStr;  p++) {
 		if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
 			return SearchBracketForward(ptPos, pptLayoutNew, p->sStr, p->eStr, *mode);
 		}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
@@ -375,7 +375,7 @@ bool CEditView::SearchBracket(
 	// Š‡ŒÊˆ— 2007.10.16 kobake
 	if (nCharSize == 1) {
 		ptPos.x = bPos - cline;
-		for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL; p++) {
+		for (const KAKKO_T* p = g_aKakkos; p->sStr; p++) {
 			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
 				return SearchBracketForward(ptPos, pptLayoutNew, p->sStr, p->eStr, *mode);
 			}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
@@ -469,7 +469,7 @@ bool CEditView::SearchBracketForward(
 		cline = ci->GetDocLineStrWithEOL(&len);
 		cPos = cline;
 		lineend = cline + len;
-	}while (cline != NULL);
+	}while (cline);
 
 	return false;
 }
@@ -550,7 +550,7 @@ bool CEditView::SearchBracketBackward(
 
 		cline = ci->GetDocLineStrWithEOL(&len);
 		cPos = cline + len;
-	}while (cline != NULL);
+	}while (cline);
 	
 	return false;
 }
@@ -572,7 +572,7 @@ bool CEditView::IsBracket(const wchar_t* pLine, CLogicInt x, CLogicInt size)
 {
 	// Š‡ŒÊˆ— 2007.10.16 kobake
 	if (size == 1) {
-		for (const KAKKO_T* p = g_aKakkos; p->sStr != NULL; p++) {
+		for (const KAKKO_T* p = g_aKakkos; p->sStr; p++) {
 			if (wcsncmp(p->sStr, &pLine[x], 1) == 0) {
 				return true;
 			}else if (wcsncmp(p->eStr, &pLine[x], 1) == 0) {

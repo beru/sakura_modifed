@@ -36,8 +36,8 @@ public:
 //	HWND DoModeless(HINSTANCE, HWND, const char*);	// モードレスダイアログの表示
 
 
-	BOOL		m_bSubFolder;		//!< サブフォルダからも検索する
-	BOOL		m_bFromThisText;	//!< この編集中のテキストから検索する
+	bool		m_bSubFolder;		//!< サブフォルダからも検索する
+	bool		m_bFromThisText;	//!< この編集中のテキストから検索する
 
 	SSearchOption	m_sSearchOption;	//!< 検索オプション
 

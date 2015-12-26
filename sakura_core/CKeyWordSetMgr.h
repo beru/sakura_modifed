@@ -82,8 +82,8 @@ public:
 	bool DelKeyWordSet(int);			// ｎ番目のセットを削除
 	const wchar_t* GetTypeName(int);	// ｎ番目のセット名を返す
 	const wchar_t* SetTypeName(int, const wchar_t*);	// ｎ番目のセット名を設定する // 2005.01.26 Moca
-	void SetKeyWordCase(int, int);				// ｎ番目のセットの大文字小文字判断をセットする		//MIK
-	bool GetKeyWordCase(int);						// ｎ番目のセットの大文字小文字判断を取得する		//MIK
+	void SetKeyWordCase(int, bool);				// ｎ番目のセットの大文字小文字判断をセットする		//MIK
+	bool GetKeyWordCase(int);					// ｎ番目のセットの大文字小文字判断を取得する		//MIK
 	void SortKeyWord(int);						// ｎ番目のセットのキーワードをソートする			//MIK
 
 	// From Here 2004.07.29 Moca 追加 可変長記憶

@@ -150,7 +150,7 @@ INT_PTR CPropTab::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 						csTabBar.m_nPointSize = nPointSize;
 						// タブ フォント表示	// 2013/4/24 Uchi
 						HFONT hFont = SetFontLabel(hwndDlg, IDC_STATIC_TABFONT, csTabBar.m_lf, csTabBar.m_nPointSize);
-						if (m_hTabFont != NULL) {
+						if (m_hTabFont) {
 							::DeleteObject(m_hTabFont);
 						}
 						m_hTabFont = hFont;
@@ -180,7 +180,7 @@ INT_PTR CPropTab::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 	case WM_DESTROY:
 		// タブ フォント破棄	// 2013/4/24 Uchi
-		if (m_hTabFont != NULL) {
+		if (m_hTabFont) {
 			::DeleteObject(m_hTabFont);
 			m_hTabFont = NULL;
 		}
@@ -244,12 +244,11 @@ int CPropTab::GetData(HWND hwndDlg)
 {
 	auto& csTabBar = m_Common.m_sTabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
-	csTabBar.m_bDispTabWnd = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTabWnd);
-	csTabBar.m_bSameTabWidth = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji
-	csTabBar.m_bDispTabIcon = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTabIcon);		// 2006.01.28 ryoji
-	csTabBar.m_bSortTabList = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SortTabList);		// 2006.03.23 fon
-	csTabBar.m_bDispTabWndMultiWin =
-		(::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTabWndMultiWin) == BST_CHECKED) ? FALSE : TRUE;
+	csTabBar.m_bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
+	csTabBar.m_bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji
+	csTabBar.m_bDispTabIcon = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabIcon);		// 2006.01.28 ryoji
+	csTabBar.m_bSortTabList = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SortTabList);		// 2006.03.23 fon
+	csTabBar.m_bDispTabWndMultiWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWndMultiWin);
 	::DlgItem_GetText(hwndDlg, IDC_TABWND_CAPTION, csTabBar.m_szTabWndCaption, _countof(csTabBar.m_szTabWndCaption));
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_DispTabClose);
@@ -261,10 +260,10 @@ int CPropTab::GetData(HWND hwndDlg)
 	csTabBar.m_eTabPosition = TabPosArr[nSelPos].nMethod;
 
 	//	Feb. 11, 2007 genta 新規作成
-	csTabBar.m_bTab_RetainEmptyWin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_RetainEmptyWindow);
-	csTabBar.m_bTab_CloseOneWin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CloseOneWin);
-	csTabBar.m_bChgWndByWheel = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ChgWndByWheel);	// 2007.04.03 ryoji
-	csTabBar.m_bNewWindow = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_OpenNewWin);  // 2009.06.17
+	csTabBar.m_bTab_RetainEmptyWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_RetainEmptyWindow);
+	csTabBar.m_bTab_CloseOneWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_CloseOneWin);
+	csTabBar.m_bChgWndByWheel = DlgButton_IsChecked(hwndDlg, IDC_CHECK_ChgWndByWheel);	// 2007.04.03 ryoji
+	csTabBar.m_bNewWindow = DlgButton_IsChecked(hwndDlg, IDC_CHECK_OpenNewWin);  // 2009.06.17
 
 	return TRUE;
 }
@@ -276,10 +275,10 @@ int CPropTab::GetData(HWND hwndDlg)
 void CPropTab::EnableTabPropInput(HWND hwndDlg)
 {
 	
-	BOOL bTabWnd = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTabWnd);
-	BOOL bMultiWin = FALSE;
+	bool bTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
+	bool bMultiWin = false;
 	if (bTabWnd) {
-		bMultiWin = ::IsDlgButtonChecked(hwndDlg, IDC_CHECK_DispTabWndMultiWin);
+		bMultiWin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWndMultiWin);
 	}
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_DispTabWndMultiWin), bTabWnd);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_CHECK_RetainEmptyWindow ), bMultiWin);

@@ -155,7 +155,7 @@ public:
 	{
 		switch (LOWORD(ID)) {
 		case F_MA_SET_MATCH:
-			if (Arguments[0] != NULL) {
+			if (Arguments[0]) {
 				m_nIsMatch = _wtol(Arguments[0]);
 			}
 			return true;

@@ -332,7 +332,7 @@ void CControlTray::MessageLoop(void)
 	int ret;
 	
 	// 2004.02.17 Moca GetMessageのエラーチェック
-	while (GetTrayHwnd() != NULL && (ret = ::GetMessage(&msg, NULL, 0, 0 )) != 0) {
+	while (GetTrayHwnd() && (ret = ::GetMessage(&msg, NULL, 0, 0 )) != 0) {
 		if (ret == -1) {
 			break;
 		}
@@ -1073,8 +1073,8 @@ void CControlTray::OnNewEditor(bool bNewWindow)
 {
 	// 新規ウィンドウで開くオプションは、タブバー＆グループ化を前提とする
 	bNewWindow = bNewWindow
-				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd != FALSE
-				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin == FALSE;
+				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
+				 && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin;
 
 	// 編集ウインドウを開く
 	SLoadInfo sLoadInfo;
@@ -1341,7 +1341,7 @@ bool CControlTray::OpenNewEditor2(
 
 	// 追加のコマンドラインオプション
 	CCommandLineString cCmdLine;
-	if (pfi != NULL) {
+	if (pfi) {
 		if (pfi->m_ptCursor.x >= 0				) cCmdLine.AppendF(_T(" -X=%d"), pfi->m_ptCursor.x + 1);
 		if (pfi->m_ptCursor.y >= 0				) cCmdLine.AppendF(_T(" -Y=%d"), pfi->m_ptCursor.y + 1);
 		if (pfi->m_nViewLeftCol >= CLayoutInt(0)) cCmdLine.AppendF(_T(" -VX=%d"), (Int)pfi->m_nViewLeftCol + 1);

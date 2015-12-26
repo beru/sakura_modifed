@@ -206,13 +206,13 @@ INT_PTR CPropKeybind::DispatchEvent(
 				}
 				nFuncCode = m_cLookup.Pos2FuncCode(nIndex2, nIndex3);	// Oct. 2, 2001 genta
 				i = 0;
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
 					i |= _SHIFT;
 				}
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
 					i |= _CTRL;
 				}
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 					i |= _ALT;
 				}
 				csKeybind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
@@ -226,13 +226,13 @@ INT_PTR CPropKeybind::DispatchEvent(
 				}
 				nFuncCode = F_DEFAULT;
 				i = 0;
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
 					i |= _SHIFT;
 				}
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
 					i |= _CTRL;
 				}
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 					i |= _ALT;
 				}
 				csKeybind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i] = nFuncCode;
@@ -257,13 +257,13 @@ INT_PTR CPropKeybind::DispatchEvent(
 			case LBN_SELCHANGE:
 				nIndex = List_GetCurSel(hwndKeyList);
 				i = 0;
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
 					i |= _SHIFT;
 				}
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
 					i |= _CTRL;
 				}
-				if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
+				if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 					i |= _ALT;
 				}
 				nFuncCode = csKeybind.m_pKeyNameArr[nIndex].m_nFuncCodeArr[i];
@@ -447,15 +447,15 @@ void CPropKeybind::ChangeKeyList(HWND hwndDlg) {
 	nIndexTop = List_GetTopIndex(hwndKeyList);
 	szKeyState[0] = 0;
 	i = 0;
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_SHIFT)) {
 		i |= _SHIFT;
 		wcscat(szKeyState, L"Shift+");
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_CTRL)) {
 		i |= _CTRL;
 		wcscat(szKeyState, L"Ctrl+");
 	}
-	if (::IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
+	if (IsDlgButtonChecked(hwndDlg, IDC_CHECK_ALT)) {
 		i |= _ALT;
 		wcscat(szKeyState, L"Alt+");
 	}
