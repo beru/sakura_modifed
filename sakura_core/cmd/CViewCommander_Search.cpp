@@ -545,8 +545,8 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 	// From Here 2001.12.03 hor
 	if (nPaste && !GetDocument()->m_cDocEditor.IsEnablePaste()) {
 		OkMessage(hwndParent, LS(STR_ERR_CEDITVIEW_CMD10));
-		::CheckDlgButton(dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE);
-		::EnableWindow(::GetDlgItem(dlgReplace.GetHwnd(), IDC_COMBO_TEXT2), TRUE);
+		dlgReplace.CheckButton(IDC_CHK_PASTE, false);
+		dlgReplace.EnableItem(IDC_COMBO_TEXT2, true);
 		return;	// Ž¸”sreturn;
 	}
 
@@ -739,8 +739,8 @@ void CViewCommander::Command_REPLACE_ALL()
 	// From Here 2001.12.03 hor
 	if (nPaste && !GetDocument()->m_cDocEditor.IsEnablePaste()) {
 		OkMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD10));
-		::CheckDlgButton(dlgReplace.GetHwnd(), IDC_CHK_PASTE, FALSE);
-		::EnableWindow(::GetDlgItem(dlgReplace.GetHwnd(), IDC_COMBO_TEXT2), TRUE);
+		dlgReplace.CheckButton(IDC_CHK_PASTE, false);
+		dlgReplace.EnableItem(IDC_COMBO_TEXT2, true);
 		return;	// TRUE;
 	}
 	// To Here 2001.12.03 hor

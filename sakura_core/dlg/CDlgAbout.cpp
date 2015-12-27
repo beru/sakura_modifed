@@ -232,7 +232,7 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	// From Here Dec. 2, 2002 genta
 	// アイコンをカスタマイズアイコンに合わせる
 	HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, false);
-	HWND hIconWnd = GetDlgItem(GetHwnd(), IDC_STATIC_MYICON);
+	HWND hIconWnd = GetItemHwnd(IDC_STATIC_MYICON);
 	
 	if (hIconWnd && hIcon) {
 		StCtl_SetIcon(hIconWnd, hIcon);
@@ -240,10 +240,10 @@ BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	// To Here Dec. 2, 2002 genta
 
 	// URLウィンドウをサブクラス化する
-	m_UrlUrWnd.SetSubclassWindow(GetDlgItem(GetHwnd(), IDC_STATIC_URL_UR));
+	m_UrlUrWnd.SetSubclassWindow(GetItemHwnd(IDC_STATIC_URL_UR));
 
 	// Oct. 22, 2005 genta 原作者ホームページが無くなったので削除
-	//m_UrlOrgWnd.SubclassWindow(GetDlgItem(GetHwnd(), IDC_STATIC_URL_ORG));
+	//m_UrlOrgWnd.SubclassWindow(GetItemHwnd(IDC_STATIC_URL_ORG));
 
 	// 基底クラスメンバ
 	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
@@ -255,7 +255,7 @@ BOOL CDlgAbout::OnBnClicked(int wID)
 	switch (wID) {
 	case IDC_BUTTON_COPY:
 		{
-			HWND hwndEditVer = GetDlgItem(GetHwnd(), IDC_EDIT_VER);
+			HWND hwndEditVer = GetItemHwnd(IDC_EDIT_VER);
 	 		EditCtl_SetSel(hwndEditVer, 0, -1); 
 	 		SendMessage(hwndEditVer, WM_COPY, 0, 0);
 	 		EditCtl_SetSel(hwndEditVer, -1, 0); 
@@ -274,7 +274,7 @@ BOOL CDlgAbout::OnStnClicked(int wID)
 		// Web Browserの起動
 		{
 			TCHAR buf[512];
-			::GetWindowText(::GetDlgItem(GetHwnd(), wID), buf, _countof(buf));
+			GetItemText(wID, buf, _countof(buf));
 			::ShellExecute(GetHwnd(), NULL, buf, NULL, NULL, SW_SHOWNORMAL);
 			return TRUE;
 		}
@@ -312,12 +312,12 @@ BOOL CUrlWnd::SetSubclassWindow(HWND hWnd)
 
 	// 下線付きフォントに変更する
 	LOGFONT lf;
-	HFONT hFont = (HFONT)SendMessageAny(hWnd, WM_GETFONT, (WPARAM)0, (LPARAM)0);
+	HFONT hFont = (HFONT)SendMessage(hWnd, WM_GETFONT, (WPARAM)0, (LPARAM)0);
 	GetObject(hFont, sizeof(lf), &lf);
 	lf.lfUnderline = TRUE;
 	m_hFont = CreateFontIndirect(&lf);
 	if (m_hFont) {
-		SendMessageAny(hWnd, WM_SETFONT, (WPARAM)m_hFont, (LPARAM)FALSE);
+		SendMessage(hWnd, WM_SETFONT, (WPARAM)m_hFont, (LPARAM)FALSE);
 	}
 	return TRUE;
 }
@@ -337,7 +337,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		return (LRESULT)0;
 	case WM_LBUTTONDOWN:
 		// キーボードフォーカスを自分に当てる
-		SendMessageAny(GetParent(hWnd), WM_NEXTDLGCTL, (WPARAM)hWnd, (LPARAM)1);
+		SendMessage(GetParent(hWnd), WM_NEXTDLGCTL, (WPARAM)hWnd, (LPARAM)1);
 		break;
 	case WM_SETFOCUS:
 	case WM_KILLFOCUS:
@@ -373,7 +373,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		ScreenToClient(hWnd, &pt);
 		GetClientRect(hWnd, &rc);
 		if (!PtInRect(&rc, pt))
-			SendMessageAny(hWnd, WM_MOUSEMOVE, 0, MAKELONG(pt.x, pt.y));
+			SendMessage(hWnd, WM_MOUSEMOVE, 0, MAKELONG(pt.x, pt.y));
 		break;
 	case WM_PAINT:
 		// ウィンドウの描画
@@ -387,7 +387,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		// 現在のクライアント矩形、テキスト、フォントを取得する
 		GetClientRect(hWnd, &rc);
 		GetWindowText(hWnd, szText, _countof(szText));
-		hFont = (HFONT)SendMessageAny(hWnd, WM_GETFONT, (WPARAM)0, (LPARAM)0);
+		hFont = (HFONT)SendMessage(hWnd, WM_GETFONT, (WPARAM)0, (LPARAM)0);
 
 		// テキスト描画
 		SetBkMode(hdc, TRANSPARENT);
@@ -413,7 +413,7 @@ LRESULT CALLBACK CUrlWnd::UrlWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 			::ExtTextOutW_AnyBuild(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 		}else {
 			// 親にWM_CTLCOLORSTATICを送って背景ブラシを取得し、背景描画する
-			HBRUSH hbr = (HBRUSH)SendMessageAny(GetParent(hWnd), WM_CTLCOLORSTATIC, wParam, (LPARAM)hWnd);
+			HBRUSH hbr = (HBRUSH)SendMessage(GetParent(hWnd), WM_CTLCOLORSTATIC, wParam, (LPARAM)hWnd);
 			HBRUSH hbrOld = (HBRUSH)SelectObject(hdc, hbr);
 			FillRect(hdc, &rc, hbr);
 			SelectObject(hdc, hbrOld);

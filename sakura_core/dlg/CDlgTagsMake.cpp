@@ -79,7 +79,7 @@ BOOL CDlgTagsMake::OnBnClicked(int wID)
 		return TRUE;
 
 	case IDC_BUTTON_TAG_MAKE_REF:	// 参照
-		SelectFolder(GetHwnd());
+		SelectFolder();
 		return TRUE;
 
 	case IDC_BUTTON_FOLDER_UP:
@@ -113,8 +113,9 @@ BOOL CDlgTagsMake::OnBnClicked(int wID)
 	
 	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
 */
-void CDlgTagsMake::SelectFolder(HWND hwndDlg)
+void CDlgTagsMake::SelectFolder()
 {
+	HWND hwndDlg = GetHwnd();
 	TCHAR szPath[_MAX_PATH + 1];
 
 	// フォルダ
@@ -128,7 +129,7 @@ void CDlgTagsMake::SelectFolder(HWND hwndDlg)
 			szPath[pos + 1] = _T('\0');
 		}
 
-		::DlgItem_SetText(hwndDlg, IDC_EDIT_TAG_MAKE_FOLDER, szPath);
+		SetItemText(IDC_EDIT_TAG_MAKE_FOLDER, szPath);
 	}
 }
 
@@ -136,15 +137,17 @@ void CDlgTagsMake::SelectFolder(HWND hwndDlg)
 void CDlgTagsMake::SetData(void)
 {
 	// 作成フォルダ
-	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER), _countof(m_szPath));
+	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_FOLDER), _countof(m_szPath));
 	SetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath);
 
 	// オプション
 	m_nTagsOpt = m_pShareData->m_nTagsOpt;
-	if (m_nTagsOpt & 0x0001) ::CheckDlgButton(GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE, TRUE);
+	if (m_nTagsOpt & 0x0001) {
+		CheckButton(IDC_CHECK_TAG_MAKE_RECURSE, true);
+	}
 
 	// コマンドライン
-	Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE), _countof(m_pShareData->m_szTagsCmdLine));
+	Combo_LimitText(GetItemHwnd(IDC_EDIT_TAG_MAKE_CMDLINE), _countof(m_pShareData->m_szTagsCmdLine));
 	_tcscpy(m_szTagsCmdLine, m_pShareData->m_szTagsCmdLine);
 	SetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_pShareData->m_szTagsCmdLine);
 
@@ -156,7 +159,7 @@ void CDlgTagsMake::SetData(void)
 int CDlgTagsMake::GetData(void)
 {
 	// フォルダ
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof(m_szPath));
+	GetItemText(IDC_EDIT_TAG_MAKE_FOLDER, m_szPath, _countof(m_szPath));
 	int length = _tcslen(m_szPath);
 	if (length > 0) {
 		if (m_szPath[length - 1] != _T('\\')) _tcscat(m_szPath, _T("\\"));
@@ -164,11 +167,11 @@ int CDlgTagsMake::GetData(void)
 
 	// CTAGSオプション
 	m_nTagsOpt = 0;
-	if (IsDlgButtonChecked(GetHwnd(), IDC_CHECK_TAG_MAKE_RECURSE)) m_nTagsOpt |= 0x0001;
+	if (IsButtonChecked(IDC_CHECK_TAG_MAKE_RECURSE)) m_nTagsOpt |= 0x0001;
 	m_pShareData->m_nTagsOpt = m_nTagsOpt;
 
 	// コマンドライン
-	::DlgItem_GetText(GetHwnd(), IDC_EDIT_TAG_MAKE_CMDLINE, m_szTagsCmdLine, _countof(m_szTagsCmdLine));
+	GetItemText(IDC_EDIT_TAG_MAKE_CMDLINE, m_szTagsCmdLine, _countof(m_szTagsCmdLine));
 	_tcscpy(m_pShareData->m_szTagsCmdLine, m_szTagsCmdLine);
 
 	return TRUE;

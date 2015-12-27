@@ -242,9 +242,9 @@ void CDlgTagJumpList::SetData(void)
 {
 	if (IsDirectTagJump()) {
 		m_bTagJumpICase = FALSE;
-		::CheckDlgButton(GetHwnd(), IDC_CHECK_ICASE, BST_UNCHECKED);
+		CheckButton(IDC_CHECK_ICASE, false);
 		m_bTagJumpAnyWhere = FALSE;
-		::CheckDlgButton(GetHwnd(), IDC_CHECK_ANYWHERE, BST_UNCHECKED);
+		CheckButton(IDC_CHECK_ANYWHERE, false);
 		m_bTagJumpExactMatch = TRUE;
 
 		if (m_pszKeyword) {
@@ -253,12 +253,12 @@ void CDlgTagJumpList::SetData(void)
 	}else {
 		// From Here 2005.04.03 MIK 設定値の読み込み
 		HWND hwndKey;
-		hwndKey = ::GetDlgItem(GetHwnd(), IDC_KEYWORD);
+		hwndKey = GetItemHwnd(IDC_KEYWORD);
 
 		m_bTagJumpICase = m_pShareData->m_sTagJump.m_bTagJumpICase;
-		::CheckDlgButton(GetHwnd(), IDC_CHECK_ICASE, m_bTagJumpICase ? BST_CHECKED : BST_UNCHECKED);
+		CheckButton(IDC_CHECK_ICASE, m_bTagJumpICase);
 		m_bTagJumpAnyWhere = m_pShareData->m_sTagJump.m_bTagJumpAnyWhere;
-		::CheckDlgButton(GetHwnd(), IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere ? BST_CHECKED : BST_UNCHECKED);
+		CheckButton(IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere);
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
 		CRecentTagjumpKeyword cRecentTagJump;
@@ -296,7 +296,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 	int		nIndex;
 	int		count;
 
-	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_TAGJUMP);
+	hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 	ListView_DeleteAllItems(hwndList);
 
 	count = m_pcList->GetCount();
@@ -364,8 +364,8 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_NEXTTAG), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_PREVTAG), SW_HIDE);
 	}else {
-		::EnableWindow(GetItemHwnd(IDC_BUTTON_NEXTTAG), m_bNextItem);
-		::EnableWindow(GetItemHwnd(IDC_BUTTON_PREVTAG), (0 < m_nTop));
+		EnableItem(IDC_BUTTON_NEXTTAG, m_bNextItem);
+		EnableItem(IDC_BUTTON_PREVTAG, (0 < m_nTop));
 	}
 
 	m_nIndex = SearchBestTag();
@@ -385,9 +385,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 */
 int CDlgTagJumpList::GetData(void)
 {
-	HWND	hwndList;
-
-	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_TAGJUMP);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 	m_nIndex = ListView_GetNextItem(hwndList, -1, LVIS_SELECTED);
 
 	// From Here 2005.04.03 MIK 設定値の保存
@@ -400,7 +398,7 @@ int CDlgTagJumpList::GetData(void)
 		}
 		wchar_t	tmp[MAX_TAG_STRING_LENGTH];
 		tmp[0] = 0;
-		::DlgItem_GetText(GetHwnd(), IDC_KEYWORD, tmp, _countof(tmp));
+		GetItemText(IDC_KEYWORD, tmp, _countof(tmp));
 		SetKeyword(tmp);
 
 		// 設定を保存
@@ -600,11 +598,11 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	CDialog::OnSize(wParam, lParam);
 
-	::GetWindowRect(GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog);
 
 	RECT  rc;
 	POINT ptNew;
-	::GetWindowRect(GetHwnd(), &rc);
+	GetWindowRect(&rc);
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
@@ -618,7 +616,7 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	::GetWindowRect(GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog);
 
 	return CDialog::OnMove(wParam, lParam);
 }
@@ -640,12 +638,8 @@ BOOL CDlgTagJumpList::OnMinMaxInfo(LPARAM lParam)
 
 BOOL CDlgTagJumpList::OnNotify(WPARAM wParam, LPARAM lParam)
 {
-	NMHDR*	pNMHDR;
-	HWND	hwndList;
-
-	pNMHDR = (NMHDR*)lParam;
-
-	hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TAGJUMP);
+	NMHDR* pNMHDR = (NMHDR*)lParam;
+	HWND hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 
 	// 候補一覧リストボックス
 	if (hwndList == pNMHDR->hwndFrom) {
@@ -773,7 +767,7 @@ bool CDlgTagJumpList::GetFullPathAndLine( int index, TCHAR *fullPath, int count,
 	}else {
 		fileNamePath = fileName;
 	}
-	bool ret = NULL != GetFullPathFromDepth(fullPath, count, path, fileNamePath, tempDepth);
+	bool ret = GetFullPathFromDepth(fullPath, count, path, fileNamePath, tempDepth) != NULL;
 	if (ret) {
 		DEBUG_TRACE(_T("jump to: %ts\n"), static_cast<const TCHAR*>(fullPath));
 	}else {
@@ -1009,7 +1003,7 @@ void CDlgTagJumpList::FindNext(bool bNewFind)
 {
 	wchar_t	szKey[MAX_TAG_STRING_LENGTH];
 	szKey[0] = 0;
-	::DlgItem_GetText(GetHwnd(), IDC_KEYWORD, szKey, _countof(szKey));
+	GetItemText(IDC_KEYWORD, szKey, _countof(szKey));
 	if (bNewFind) {
 		// 前回のキーワードからの絞込検索のときで、tagsをスキップできるときはスキップ
 		if (-1 < m_psFind0Match->m_nDepth

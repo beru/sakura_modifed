@@ -54,7 +54,7 @@ static bool Commander_COMPARE_core(CViewCommander& commander, bool& bDifferent, 
 				// m_sWorkBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
 				LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
 				// 行(改行単位)データの要求
-				nLineLenDes = ::SendMessageAny( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
+				nLineLenDes = ::SendMessage( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
 				if (nLineLenDes < 0) {
 					return false;
 				}
@@ -155,7 +155,7 @@ void CViewCommander::Command_COMPARE(void)
 	// カーソル位置取得 -> poDes
 	CLogicPoint	poDes;
 	{
-		::SendMessageAny(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
+		::SendMessage(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
 		CLogicPoint* ppoCaretDes = &(GetDllShareData().m_sWorkBuffer.m_LogicPoint);
 		poDes.x = ppoCaretDes->x;
 		poDes.y = ppoCaretDes->y;
@@ -204,11 +204,11 @@ void CViewCommander::Command_COMPARE(void)
 			比較相手は、別プロセスなのでメッセージを飛ばす。
 		*/
 		GetDllShareData().m_sWorkBuffer.m_LogicPoint = poDes;
-		::SendMessageAny(hwndCompareWnd, MYWM_SETCARETPOS, 0, 0);
+		::SendMessage(hwndCompareWnd, MYWM_SETCARETPOS, 0, 0);
 
 		// カーソルを移動させる
 		GetDllShareData().m_sWorkBuffer.m_LogicPoint = poSrc;
-		::PostMessageAny(GetMainWindow(), MYWM_SETCARETPOS, 0, 0);
+		::PostMessage(GetMainWindow(), MYWM_SETCARETPOS, 0, 0);
 		TopWarningMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));	// 位置を変更してからメッセージ	2008/4/27 Uchi
 	}
 

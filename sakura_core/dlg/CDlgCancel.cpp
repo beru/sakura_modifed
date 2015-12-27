@@ -49,7 +49,7 @@ INT_PTR CDlgCancel::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lP
 void CDlgCancel::DeleteAsync(void)
 {
 	m_bAutoCleanup = true;
-	::PostMessageAny(GetHwnd(), WM_CLOSE, 0, 0);
+	::PostMessage(GetHwnd(), WM_CLOSE, 0, 0);
 }
 
 // モーダルダイアログの表示
@@ -72,10 +72,10 @@ BOOL CDlgCancel::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	HICON	hIcon;
 	hIcon = ::LoadIcon(NULL, IDI_ASTERISK);
 //	hIcon = ::LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON_GREP));
-	::SendMessageAny(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)NULL);
-	::SendMessageAny(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
-	::SendMessageAny(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)NULL);
-	::SendMessageAny(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)NULL);
+	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)NULL);
+	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 
 
 	// 基底クラスメンバ

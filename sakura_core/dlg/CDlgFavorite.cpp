@@ -113,8 +113,6 @@ struct CompareListViewLParam {
 CDlgFavorite::CDlgFavorite()
 	 : CDialog(true)
 {
-	int	i;
-
 	m_nCurrentTab = 0;
 	m_szMsg[0] = 0;
 
@@ -122,123 +120,124 @@ CDlgFavorite::CDlgFavorite()
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
 	{
-		i = 0;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentFile;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_FILE);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_FILE;
-		m_aFavoriteInfo[i].m_bHaveFavorite = true;
-		m_aFavoriteInfo[i].m_bFilePath  = true;
-		m_aFavoriteInfo[i].m_bHaveView  = true;
-		m_aFavoriteInfo[i].m_bEditable  = false;
-		m_aFavoriteInfo[i].m_bAddExcept = true;
+		FavoriteInfo* pFavInfo = &m_aFavoriteInfo[0];
+		pFavInfo->m_pRecent    = &m_cRecentFile;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_FILE);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_FILE;
+		pFavInfo->m_bHaveFavorite = true;
+		pFavInfo->m_bFilePath  = true;
+		pFavInfo->m_bHaveView  = true;
+		pFavInfo->m_bEditable  = false;
+		pFavInfo->m_bAddExcept = true;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentFolder;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_FOLDER);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_FOLDER;
-		m_aFavoriteInfo[i].m_bHaveFavorite = true;
-		m_aFavoriteInfo[i].m_bFilePath  = true;
-		m_aFavoriteInfo[i].m_bHaveView  = true;
-		m_aFavoriteInfo[i].m_bEditable  = false;
-		m_aFavoriteInfo[i].m_bAddExcept = true;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentFolder;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_FOLDER);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_FOLDER;
+		pFavInfo->m_bHaveFavorite = true;
+		pFavInfo->m_bFilePath  = true;
+		pFavInfo->m_bHaveView  = true;
+		pFavInfo->m_bEditable  = false;
+		pFavInfo->m_bAddExcept = true;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentExceptMRU;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_FF_EXCLUDE);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_EXCEPTMRU;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = false;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = true;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
-		m_nExceptTab = i;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentExceptMRU;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_FF_EXCLUDE);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_EXCEPTMRU;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = false;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = true;
+		pFavInfo->m_bAddExcept = false;
+		m_nExceptTab = (pFavInfo - m_aFavoriteInfo);
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentSearch;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_SEARCH);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_SEARCH;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = false;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = true;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentSearch;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_SEARCH);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_SEARCH;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = false;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = true;
+		pFavInfo->m_bAddExcept = false;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentReplace;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_REPLACE);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_REPLACE;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = false;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = true;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentReplace;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_REPLACE);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_REPLACE;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = false;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = true;
+		pFavInfo->m_bAddExcept = false;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentGrepFile;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_GREP_FILE);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_GREP_FILE;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = false;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = true;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentGrepFile;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_GREP_FILE);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_GREP_FILE;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = false;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = true;
+		pFavInfo->m_bAddExcept = false;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentGrepFolder;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_GREP_FOLDER);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_GREP_FOLDER;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = true;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = false;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentGrepFolder;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_GREP_FOLDER);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_GREP_FOLDER;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = true;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = false;
+		pFavInfo->m_bAddExcept = false;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentCmd;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_EXT_COMMAND);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_CMD;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = false;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = true;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentCmd;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_EXT_COMMAND);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_CMD;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = false;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = true;
+		pFavInfo->m_bAddExcept = false;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = &m_cRecentCurDir;
-		m_aFavoriteInfo[i].m_strCaption = LS(STR_DLGFAV_CURRENT_DIR);
-		m_aFavoriteInfo[i].m_pszCaption = const_cast<TCHAR*>(m_aFavoriteInfo[i].m_strCaption.c_str());
-		m_aFavoriteInfo[i].m_nId        = IDC_LIST_FAVORITE_CUR_DIR;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = true;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = false;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = &m_cRecentCurDir;
+		pFavInfo->m_strCaption = LS(STR_DLGFAV_CURRENT_DIR);
+		pFavInfo->m_pszCaption = const_cast<TCHAR*>(pFavInfo->m_strCaption.c_str());
+		pFavInfo->m_nId        = IDC_LIST_FAVORITE_CUR_DIR;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = true;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = false;
+		pFavInfo->m_bAddExcept = false;
 
-		i++;
-		m_aFavoriteInfo[i].m_pRecent    = NULL;
-		m_aFavoriteInfo[i].m_pszCaption = NULL;
-		m_aFavoriteInfo[i].m_nId        = -1;
-		m_aFavoriteInfo[i].m_bHaveFavorite = false;
-		m_aFavoriteInfo[i].m_bFilePath  = false;
-		m_aFavoriteInfo[i].m_bHaveView  = false;
-		m_aFavoriteInfo[i].m_bEditable  = false;
-		m_aFavoriteInfo[i].m_bAddExcept = false;
+		++pFavInfo;
+		pFavInfo->m_pRecent    = NULL;
+		pFavInfo->m_pszCaption = NULL;
+		pFavInfo->m_nId        = -1;
+		pFavInfo->m_bHaveFavorite = false;
+		pFavInfo->m_bFilePath  = false;
+		pFavInfo->m_bHaveView  = false;
+		pFavInfo->m_bEditable  = false;
+		pFavInfo->m_bAddExcept = false;
 
 		// これ以上増やすときはテーブルサイズも書き換えてね
-		assert(i < _countof(m_aFavoriteInfo));
+		assert((pFavInfo - m_aFavoriteInfo) < _countof(m_aFavoriteInfo));
 	}
-	for (i = 0; i < FAVORITE_INFO_MAX; i++) {
-		m_aListViewInfo[i].hListView   = 0;
-		m_aListViewInfo[i].nSortColumn = -1;
-		m_aListViewInfo[i].bSortAscending = false;
+	for (int i = 0; i < FAVORITE_INFO_MAX; i++) {
+		auto& info = m_aListViewInfo[i];
+		info.hListView   = 0;
+		info.nSortColumn = -1;
+		info.bSortAscending = false;
 	}
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
@@ -264,7 +263,7 @@ int CDlgFavorite::DoModal(
 // ダイアログデータの設定
 void CDlgFavorite::SetData(void)
 {
-	for (int nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		SetDataOne(nTab, 0);
 	}
 
@@ -287,7 +286,7 @@ void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 	const CRecent*  pRecent = m_aFavoriteInfo[nIndex].m_pRecent;
 
 	// リスト
-	HWND hwndList = ::GetDlgItem(GetHwnd(), m_aFavoriteInfo[nIndex].m_nId);
+	HWND hwndList = GetItemHwnd(m_aFavoriteInfo[nIndex].m_nId);
 	ListView_DeleteAllItems(hwndList);  // リストを空にする
 
 	const int nViewCount = pRecent->GetViewCount();
@@ -582,7 +581,7 @@ BOOL CDlgFavorite::OnNotify(WPARAM wParam, LPARAM lParam)
 	HWND	hwndTab;
 	HWND	hwndList;
 
-	hwndTab = ::GetDlgItem(GetHwnd(), IDC_TAB_FAVORITE);
+	hwndTab = GetItemHwnd(IDC_TAB_FAVORITE);
 	lpnmhdr = (LPNMHDR) lParam;
 	if (lpnmhdr->hwndFrom == hwndTab) {
 		switch (lpnmhdr->code) {
@@ -725,7 +724,7 @@ bool CDlgFavorite::RefreshList(void)
 	m_szMsg[0] = 0;
 
 	// 全リストの現在選択中のアイテムを取得する。
-	for (nTab = 0; NULL != m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
 		bret = RefreshListOne(nTab);
 		if (bret) {
 			ret_val = true;
@@ -759,7 +758,7 @@ bool CDlgFavorite::RefreshListOne(int nIndex)
 
 	CRecent*	pRecent = m_aFavoriteInfo[nIndex].m_pRecent;
 	nItemCount    = pRecent->GetItemCount();
-	hwndList      = GetDlgItem(GetHwnd(), m_aFavoriteInfo[nIndex].m_nId);
+	hwndList      = GetItemHwnd(m_aFavoriteInfo[nIndex].m_nId);
 	nCount        = ListView_GetItemCount(hwndList);
 	nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
 	if (-1 == nCurrentIndex) nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED);
@@ -882,20 +881,20 @@ void CDlgFavorite::UpdateUIState()
 {
 	CRecent& recent = *(m_aFavoriteInfo[m_nCurrentTab].m_pRecent);
 
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_ADD_FAVORITE,
+	EnableItem(IDC_BUTTON_ADD_FAVORITE,
 		m_aFavoriteInfo[m_nCurrentTab].m_bEditable && recent.GetItemCount() <= recent.GetArrayCount());
 
 	// 削除の有効・無効化
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_CLEAR,
+	EnableItem(IDC_BUTTON_CLEAR,
 		0 < recent.GetItemCount());
 
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_DELETE_NOFAVORATE,
+	EnableItem(IDC_BUTTON_DELETE_NOFAVORATE,
 		m_aFavoriteInfo[m_nCurrentTab].m_bHaveFavorite && 0 < recent.GetItemCount());
 
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_DELETE_NOTFOUND,
+	EnableItem(IDC_BUTTON_DELETE_NOTFOUND,
 		m_aFavoriteInfo[m_nCurrentTab].m_bFilePath && 0 < recent.GetItemCount());
 
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_DELETE_SELECTED,
+	EnableItem(IDC_BUTTON_DELETE_SELECTED,
 		0 < recent.GetItemCount());
 }
 
@@ -1182,11 +1181,11 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	CDialog::OnSize(wParam, lParam);
 
-	::GetWindowRect(GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog);
 
 	RECT rc;
 	POINT ptNew;
-	::GetWindowRect(GetHwnd(), &rc);
+	GetWindowRect(&rc);
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
@@ -1204,7 +1203,7 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgFavorite::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	::GetWindowRect(GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog);
 	
 	return CDialog::OnMove(wParam, lParam);
 }

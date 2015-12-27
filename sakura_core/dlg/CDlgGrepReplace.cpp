@@ -102,7 +102,7 @@ BOOL CDlgGrepReplace::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	/* コンボボックスのユーザー インターフェイスを拡張インターフェースにする */
 	Combo_SetExtendedUI( ::GetDlgItem( GetHwnd(), IDC_COMBO_TEXT2 ), TRUE );
 
-	HFONT hFontOld = (HFONT)::SendMessageAny( GetItemHwnd( IDC_COMBO_TEXT2 ), WM_GETFONT, 0, 0 );
+	HFONT hFontOld = (HFONT)::SendMessage( GetItemHwnd( IDC_COMBO_TEXT2 ), WM_GETFONT, 0, 0 );
 	HFONT hFont = SetMainFont( GetItemHwnd( IDC_COMBO_TEXT2 ) );
 	m_cFontText2.SetFont( hFontOld, hFont, GetItemHwnd( IDC_COMBO_TEXT2 ) );
 
@@ -128,11 +128,11 @@ BOOL CDlgGrepReplace::OnBnClicked( int wID )
 		{
 			bool bStop = false;
 			CEditView* pcEditView = (CEditView*)m_lParam;
-			if (IsDlgButtonChecked( GetHwnd(), IDC_CHK_PASTE )
+			if (IsButtonChecked(IDC_CHK_PASTE)
 				&& !pcEditView->m_pcEditDoc->m_cDocEditor.IsEnablePaste()
 			) {
 				OkMessage( GetHwnd(), LS(STR_DLGREPLC_CLIPBOARD) );
-				::CheckDlgButton( GetHwnd(), IDC_CHK_PASTE, FALSE );
+				CheckButton(IDC_CHK_PASTE, false);
 				bStop = true;
 			}
 			::DlgItem_Enable( GetHwnd(), IDC_COMBO_TEXT2, !IsDlgButtonCheckedBool( GetHwnd(), IDC_CHK_PASTE ) );

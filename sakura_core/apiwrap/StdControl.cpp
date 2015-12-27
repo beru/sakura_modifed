@@ -27,7 +27,7 @@ namespace ApiWrap {
 
 	UINT DlgItem_GetText(HWND hwndDlg, int nIDDlgItem, WCHAR* str, int nMaxCount)
 	{
-		return GetDlgItemText(hwndDlg, nIDDlgItem, TcharReceiver<WCHAR>(str, nMaxCount), nMaxCount);
+		return GetDlgItemText(hwndDlg, nIDDlgItem, str, nMaxCount);
 	}
 
 }

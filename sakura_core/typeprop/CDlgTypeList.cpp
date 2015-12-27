@@ -94,7 +94,7 @@ BOOL CDlgTypeList::OnLbnDblclk(int wID)
 		// 動作変更: 指定タイプの設定ダイアログ→一時的に別の設定を適用
 		::EndDialog(
 			GetHwnd(),
-			List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_TYPES))
+			List_GetCurSel(GetItemHwnd(IDC_LIST_TYPES))
 			| PROP_TEMPCHANGE_FLAG
 		);
 		return TRUE;
@@ -115,13 +115,13 @@ BOOL CDlgTypeList::OnBnClicked(int wID)
 	case IDC_BUTTON_TEMPCHANGE:
 		::EndDialog(
 			GetHwnd(),
- 			List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_TYPES))
+ 			List_GetCurSel(GetItemHwnd(IDC_LIST_TYPES))
 			| PROP_TEMPCHANGE_FLAG
 		);
 		return TRUE;
 	// Nov. 29, 2000	To Here
 	case IDOK:
-		::EndDialog(GetHwnd(), List_GetCurSel(GetDlgItem(GetHwnd(), IDC_LIST_TYPES)));
+		::EndDialog(GetHwnd(), List_GetCurSel(GetItemHwnd(IDC_LIST_TYPES)));
 		return TRUE;
 	case IDCANCEL:
 		::EndDialog(GetHwnd(), -1);
@@ -177,13 +177,13 @@ BOOL CDlgTypeList::OnActivate(WPARAM wParam, LPARAM lParam)
 
 INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndRMenu = GetDlgItem(GetHwnd(), IDC_CHECK_EXT_RMENU);
-	HWND hwndDblClick = GetDlgItem(GetHwnd(), IDC_CHECK_EXT_DBLCLICK);
+	HWND hwndRMenu = GetItemHwnd(IDC_CHECK_EXT_RMENU);
+	HWND hwndDblClick = GetItemHwnd(IDC_CHECK_EXT_DBLCLICK);
 
 	INT_PTR result;
 	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	if (wMsg == WM_COMMAND) {
-		HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+		HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 		int nIdx = List_GetCurSel(hwndList);
 		const STypeConfigMini* type = NULL;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
@@ -192,15 +192,15 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 
 
 			case LBN_SELCHANGE:
-				DlgItem_Enable(GetHwnd(), IDC_BUTTON_INITIALIZE, nIdx != 0);
-				DlgItem_Enable(GetHwnd(), IDC_BUTTON_UP_TYPE, 1 < nIdx);
-				DlgItem_Enable(GetHwnd(), IDC_BUTTON_DOWN_TYPE, nIdx != 0 && nIdx < GetDllShareData().m_nTypesCount - 1);
-				DlgItem_Enable(GetHwnd(), IDC_BUTTON_DEL_TYPE, nIdx != 0);
+				EnableItem(IDC_BUTTON_INITIALIZE, nIdx != 0);
+				EnableItem(IDC_BUTTON_UP_TYPE, 1 < nIdx);
+				EnableItem(IDC_BUTTON_DOWN_TYPE, nIdx != 0 && nIdx < GetDllShareData().m_nTypesCount - 1);
+				EnableItem(IDC_BUTTON_DEL_TYPE, nIdx != 0);
 				if (type->m_szTypeExts[0] == '\0') {
 					::EnableWindow(hwndRMenu, FALSE);
 					::EnableWindow(hwndDblClick, FALSE);
 				}else {
-					::EnableWindow(GetDlgItem(GetHwnd(), IDC_CHECK_EXT_RMENU), TRUE);
+					EnableItem(IDC_CHECK_EXT_RMENU, true);
 					if (!m_bRegistryChecked[nIdx]) {
 						TCHAR exts[_countof(type->m_szTypeExts)] = {0};
 						_tcscpy(exts, type->m_szTypeExts);
@@ -209,7 +209,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 						m_bExtRMenu[nIdx] = true;
 						m_bExtDblClick[nIdx] = true;
 						while( NULL != ext ){
-							if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
+							if (!_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards)) {
 								bool bRMenu;
 								bool bDblClick;
 								CheckExt(ext, &bRMenu, &bDblClick);
@@ -238,7 +238,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			_tcscpy(exts, type->m_szTypeExts);
 			TCHAR *ext = _tcstok( exts, CDocTypeManager::m_typeExtSeps );
 			int nRet;
-			while( NULL != ext ){
+			while (ext) {
 				if (_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards) == NULL) {
 					if (checked) {	//「右クリック」チェックON
 						if ((nRet = RegistExt( ext, true )) != 0 ) {
@@ -308,9 +308,9 @@ void CDlgTypeList::SetData(int selIdx)
 	int		nIdx;
 	TCHAR	szText[64 + MAX_TYPES_EXTS + 10];
 	int		nExtent = 0;
-	HWND	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND	hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	HDC		hDC = ::GetDC(hwndList);
-	HFONT	hFont = (HFONT)::SendMessageAny(hwndList, WM_GETFONT, 0, 0);
+	HFONT	hFont = (HFONT)::SendMessage(hwndList, WM_GETFONT, 0, 0);
 	HFONT	hFontOld = (HFONT)::SelectObject(hDC, hFont);
 
 	if (-1 == selIdx) {
@@ -359,10 +359,10 @@ void CDlgTypeList::SetData(int selIdx)
 	}
 	List_SetCurSel(hwndList, selIdx);
 
-	::SendMessageAny(GetHwnd(), WM_COMMAND, MAKEWPARAM(IDC_LIST_TYPES, LBN_SELCHANGE), 0);
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_TEMPCHANGE, m_bEnableTempChange);
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_COPY_TYPE, GetDllShareData().m_nTypesCount < MAX_TYPES);
-	DlgItem_Enable(GetHwnd(), IDC_BUTTON_ADD_TYPE, GetDllShareData().m_nTypesCount < MAX_TYPES);
+	::SendMessage(GetHwnd(), WM_COMMAND, MAKEWPARAM(IDC_LIST_TYPES, LBN_SELCHANGE), 0);
+	EnableItem(IDC_BUTTON_TEMPCHANGE, m_bEnableTempChange);
+	EnableItem(IDC_BUTTON_COPY_TYPE, GetDllShareData().m_nTypesCount < MAX_TYPES);
+	EnableItem(IDC_BUTTON_ADD_TYPE, GetDllShareData().m_nTypesCount < MAX_TYPES);
 	return;
 }
 
@@ -407,7 +407,7 @@ static void SendChangeSettingType2(int nType)
 // 2010/4/12 Uchi
 bool CDlgTypeList::Import()
 {
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int nIdx = List_GetCurSel(hwndList);
 	STypeConfig type;
 	// ベースのデータは基本
@@ -454,7 +454,7 @@ bool CDlgTypeList::Import()
 // 2010/4/12 Uchi
 bool CDlgTypeList::Export()
 {
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int nIdx = List_GetCurSel(hwndList);
 	STypeConfig types;
 	CDocTypeManager().GetTypeConfig(CTypeConfig(nIdx), types);
@@ -476,7 +476,7 @@ bool CDlgTypeList::Export()
 bool CDlgTypeList::InitializeType(void)
 {
 	HWND hwndDlg = GetHwnd();
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	if (iDocType == 0) {
 		// 基本の場合には何もしない
@@ -601,7 +601,7 @@ bool CDlgTypeList::CopyType()
 
 bool CDlgTypeList::UpType()
 {
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	if (iDocType == 0) {
 		// 基本の場合には何もしない
@@ -623,7 +623,7 @@ bool CDlgTypeList::UpType()
 
 bool CDlgTypeList::DownType()
 {
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	if (iDocType == 0 || GetDllShareData().m_nTypesCount <= iDocType + 1) {
 		// 基本、最後の場合には何もしない
@@ -656,7 +656,7 @@ bool CDlgTypeList::AddType()
 bool CDlgTypeList::DelType()
 {
 	HWND hwndDlg = GetHwnd();
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_TYPES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
 	if (iDocType == 0) {
 		// 基本の場合には何もしない

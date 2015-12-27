@@ -567,7 +567,7 @@ bool CViewCommander::HandleCommand(
 		if (0 != nFuncID) {
 			// コマンドコードによる処理振り分け
 //			HandleCommand(nFuncID, true, 0, 0, 0, 0);
-			::PostMessageCmd(GetMainWindow(), WM_COMMAND, MAKELONG(nFuncID, 0), (LPARAM)NULL);
+			::PostMessage(GetMainWindow(), WM_COMMAND, MAKELONG(nFuncID, 0), (LPARAM)NULL);
 		}
 		return bRet;
 

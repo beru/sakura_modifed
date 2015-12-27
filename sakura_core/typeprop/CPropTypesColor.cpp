@@ -179,7 +179,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		}
 		if (18 <= xPos && xPos <= rcItem.right - 29) {	// 2009.02.22 ryoji 有効範囲の制限追加
 			List_SetCurSel(hwnd, nIndex);
-			::SendMessageCmd(::GetParent(hwnd), WM_COMMAND, MAKELONG(IDC_LIST_COLORS, LBN_SELCHANGE), (LPARAM)hwnd);
+			::SendMessage(::GetParent(hwnd), WM_COMMAND, MAKELONG(IDC_LIST_COLORS, LBN_SELCHANGE), (LPARAM)hwnd);
 			pColorInfo = (ColorInfo*)List_GetItemData(hwnd, nIndex);
 			// 下線
 			if (0 == (g_ColorAttributeArr[nIndex].fAttribute & COLOR_ATTRIB_NO_UNDERLINE)) {	// 2006.12.18 ryoji フラグ利用で簡素化
@@ -680,7 +680,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	}
 	// 現在選択されている色タイプ
 	List_SetCurSel(hwndWork, m_nCurrentColorType);
-	::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_COLORS, LBN_SELCHANGE), (LPARAM)hwndWork);
+	::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_LIST_COLORS, LBN_SELCHANGE), (LPARAM)hwndWork);
 
 	// from here 2005.11.30 Moca 指定位置縦線の設定
 	WCHAR szVertLine[MAX_VERTLINES * 15] = L"";

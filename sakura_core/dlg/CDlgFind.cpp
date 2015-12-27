@@ -98,7 +98,7 @@ BOOL CDlgFind::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDel);
 
 	// フォント設定	2012/11/27 Uchi
-	HFONT hFontOld = (HFONT)::SendMessageAny(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
+	HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(IDC_COMBO_TEXT), WM_GETFONT, 0, 0);
 	HFONT hFont = SetMainFont(GetItemHwnd(IDC_COMBO_TEXT));
 	m_cFontText.SetFont(hFontOld, hFont, GetItemHwnd(IDC_COMBO_TEXT));
 	return bRet;
@@ -125,9 +125,9 @@ void CDlgFind::SetData(void)
 
 	// ユーザーがコンボ ボックスのエディット コントロールに入力できるテキストの長さを制限する
 	// 2011.12.18 長さ制限撤廃
-	// Combo_LimitText(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), _MAX_PATH - 1);
+	// Combo_LimitText(GetItem(IDC_COMBO_TEXT), _MAX_PATH - 1);
 	// コンボボックスのユーザー インターフェイスを拡張インターフェースにする
-	Combo_SetExtendedUI(::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), TRUE);
+	Combo_SetExtendedUI(GetItemHwnd(IDC_COMBO_TEXT), TRUE);
 
 
 	/*****************************
@@ -138,14 +138,14 @@ void CDlgFind::SetData(void)
 	SetCombosList();
 
 	// 英大文字と英小文字を区別する
-	CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase);
+	CheckButton(IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase);
 
 	// 2001/06/23 Norio Nakatani
 	// 単語単位で検索
-	CheckDlgButton(GetHwnd(), IDC_CHK_WORD, m_sSearchOption.bWordOnly);
+	CheckButton(IDC_CHK_WORD, m_sSearchOption.bWordOnly);
 
 	// 検索／置換  見つからないときメッセージを表示
-	CheckDlgButton(GetHwnd(), IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
+	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
 
 	// From Here Jun. 29, 2001 genta
 	// 正規表現ライブラリの差し替えに伴う処理の見直し
@@ -156,24 +156,24 @@ void CDlgFind::SetData(void)
 		&& m_sSearchOption.bRegularExp
 	) {
 		// 英大文字と英小文字を区別する
-		::CheckDlgButton(GetHwnd(), IDC_CHK_REGULAREXP, 1);
+		CheckButton(IDC_CHK_REGULAREXP, true);
 // 正規表現がONでも、大文字小文字を区別する／しないを選択できるように。
-//		::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 1);
-//		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), FALSE);
+//		CheckButton(IDC_CHK_LOHICASE, true);
+//		EnableItem(IDC_CHK_LOHICASE, FALSE);
 
 		// 2001/06/23 N.Nakatani
 		// 単語単位で探す
-		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD), FALSE);
+		EnableItem(IDC_CHK_WORD, false);
 	}else {
-		::CheckDlgButton(GetHwnd(), IDC_CHK_REGULAREXP, 0);
+		CheckButton(IDC_CHK_REGULAREXP, false);
 	}
 	// To Here Jun. 29, 2001 genta
 
 	// 検索ダイアログを自動的に閉じる
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_bAutoCloseDlgFind, m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFind, m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
 
 	return;
 }
@@ -186,7 +186,7 @@ void CDlgFind::SetCombosList(void)
 	HWND	hwndCombo;
 
 	// 検索文字列
-	hwndCombo = ::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT);
+	hwndCombo = GetItemHwnd(IDC_COMBO_TEXT);
 	while (Combo_GetCount(hwndCombo) > 0) {
 		Combo_DeleteString(hwndCombo, 0);
 	}
@@ -223,7 +223,7 @@ int CDlgFind::GetData(void)
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
 	std::vector<TCHAR> vText(nBufferSize);
-	::DlgItem_GetText(GetHwnd(), IDC_COMBO_TEXT, &vText[0], nBufferSize);
+	GetItemText(IDC_COMBO_TEXT, &vText[0], nBufferSize);
 	m_strText = to_wchar(&vText[0]);
 
 	// 検索ダイアログを自動的に閉じる
@@ -290,30 +290,30 @@ BOOL CDlgFind::OnBnClicked(int wID)
 			// From Here Jun. 26, 2001 genta
 			// 正規表現ライブラリの差し替えに伴う処理の見直し
 			if (!CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, true)) {
-				::CheckDlgButton(GetHwnd(), IDC_CHK_REGULAREXP, 0);
+				CheckButton(IDC_CHK_REGULAREXP, false);
 			}else {
 			// To Here Jun. 26, 2001 genta
 
 				// 英大文字と英小文字を区別する
 				// Jan. 31, 2002 genta
 				// 大文字・小文字の区別は正規表現の設定に関わらず保存する
-				//::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 1);
-				//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), FALSE);
+				//CheckButton(IDC_CHK_LOHICASE, true);
+				//EnableItem(IDC_CHK_LOHICASE, FALSE);
 
 				// 2001/06/23 Norio Nakatani
 				// 単語単位で検索
-				::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD), FALSE);
+				EnableItem(IDC_CHK_WORD, false);
 			}
 		}else {
 			// 英大文字と英小文字を区別する
-			//::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_LOHICASE), TRUE);
+			//EnableItem(IDC_CHK_LOHICASE, true);
 			// Jan. 31, 2002 genta
 			// 大文字・小文字の区別は正規表現の設定に関わらず保存する
-			//::CheckDlgButton(GetHwnd(), IDC_CHK_LOHICASE, 0);
+			//CheckButton(IDC_CHK_LOHICASE, false);
 
 			// 2001/06/23 Norio Nakatani
 			// 単語単位で検索
-			::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHK_WORD), TRUE);
+			EnableItem(IDC_CHK_WORD, true);
 		}
 		break;
 	case IDC_BUTTON_SEARCHPREV:	// 上検索	// Feb. 13, 2001 JEPRO ボタン名を[IDC_BUTTON1]→[IDC_BUTTON_SERACHPREV]に変更
@@ -386,7 +386,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 				if (m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgFind) {
 					CloseDialog(0);
 				}else {
-					::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)::GetDlgItem(GetHwnd(), IDC_COMBO_TEXT), TRUE);
+					::SendMessage(GetHwnd(), WM_NEXTDLGCTL, (WPARAM)GetItemHwnd(IDC_COMBO_TEXT), TRUE);
 				}
 			}
 		}

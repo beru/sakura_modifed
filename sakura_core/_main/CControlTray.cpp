@@ -445,7 +445,7 @@ LRESULT CControlTray::DispatchEvent(
 			) {
 				// Jan. 1, 2003 AROKA
 				// タスクトレイメニューの表示タイミングをLBUTTONDOWN→LBUTTONUPに変更したことによる
-				::PostMessageAny(GetTrayHwnd(), MYWM_NOTIFYICON, 0, WM_LBUTTONUP);
+				::PostMessage(GetTrayHwnd(), MYWM_NOTIFYICON, 0, WM_LBUTTONUP);
 			}
 		}
 		return 0;
@@ -469,7 +469,7 @@ LRESULT CControlTray::DispatchEvent(
 				}
 			}while (bDelFound);
 			if (bDelete && m_pShareData->m_sNodes.m_nEditArrNum == 0) {
-				PostMessageAny(hwnd, MYWM_DELETE_ME, 0, 0);
+				PostMessage(hwnd, MYWM_DELETE_ME, 0, 0);
 			}
 		}
 		return 0;
@@ -992,7 +992,7 @@ LRESULT CControlTray::DispatchEvent(
 			// 新規編集ウィンドウの追加
 			OnNewEditor(m_pShareData->m_Common.m_sTabBar.m_bNewWindow != FALSE);
 			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる
-			::PostMessageAny(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
+			::PostMessage(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
 			return 0L;
 		case WM_RBUTTONDBLCLK:
 			return 0L;
@@ -1467,7 +1467,7 @@ void CControlTray::TerminateApplication(
 	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 	BOOL bCheckConfirm = (pShareData->m_Common.m_sGeneral.m_bExitConfirm)? FALSE: TRUE;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
 	if (CloseAllEditor(bCheckConfirm, hWndFrom, TRUE, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
-		::PostMessageAny(pShareData->m_sHandles.m_hwndTray, WM_CLOSE, 0, 0);
+		::PostMessage(pShareData->m_sHandles.m_hwndTray, WM_CLOSE, 0, 0);
 	}
 	return;
 }
@@ -1616,7 +1616,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 		GetTrayHwnd(),
 		&rc
 	);
-	::PostMessageAny(GetTrayHwnd(), WM_USER + 1, 0, 0);
+	::PostMessage(GetTrayHwnd(), WM_USER + 1, 0, 0);
 	::DestroyMenu(hMenuTop);
 //	MYTRACE(_T("nId=%d\n"), nId);
 
@@ -1683,7 +1683,7 @@ int	CControlTray::CreatePopUpMenu_R(void)
 		GetTrayHwnd(),
 		&rc
 	);
-	::PostMessageAny(GetTrayHwnd(), WM_USER + 1, 0, 0);
+	::PostMessage(GetTrayHwnd(), WM_USER + 1, 0, 0);
 	::DestroyMenu(hMenuTop);
 //	MYTRACE(_T("nId=%d\n"), nId);
 

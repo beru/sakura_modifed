@@ -609,7 +609,7 @@ void CEditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
-		::PostMessageCmd(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
+		::PostMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 //	// 右クリックメニュー
 //	GetCommander().Command_MENU_RBUTTON();
@@ -690,7 +690,7 @@ void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}else if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
-		::PostMessageCmd(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
+		::PostMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 	if (m_nAutoScrollMode) {
 		AutoScrollExit();
@@ -853,7 +853,7 @@ void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
-		::PostMessageCmd(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
+		::PostMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
 	return;
@@ -917,7 +917,7 @@ void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
-		::PostMessageCmd(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
+		::PostMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
 	return;
@@ -1439,7 +1439,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 			if (nFuncID != F_0) {
 				// スクロール変化量分コマンド実行(zDeltaが120あたりで1回)
 				for (int i = 0; i < nRollNum; i++) {
-					::PostMessageCmd(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
+					::PostMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 				}
 			}
 			return bHorizontalMsg ? TRUE: 0;
@@ -1672,7 +1672,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
-		::SendMessageCmd(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
+		::SendMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 	}
 
 	// 2007.10.06 nasukoji	クアドラプルクリック時もここで抜ける
@@ -2096,7 +2096,7 @@ STDMETHODIMP CEditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
 	HGLOBAL hDrop = ::GlobalAlloc(GHND | GMEM_DDESHARE, nSize);
 	memcpy_raw(::GlobalLock(hDrop), pData, nSize);
 	::GlobalUnlock(hDrop);
-	::PostMessageAny(
+	::PostMessage(
 		GetHwnd(),
 		MYWM_DROPFILES,
 		(WPARAM)hDrop,
@@ -2152,7 +2152,7 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 	switch (nId) {
 	case 110:	// ファイルを開く
 		// 通常のドロップファイル処理を行う
-		::SendMessageAny(m_pcEditWnd->GetHwnd(), WM_DROPFILES, (WPARAM)hDrop, 0);
+		::SendMessage(m_pcEditWnd->GetHwnd(), WM_DROPFILES, (WPARAM)hDrop, 0);
 		break;
 
 	case 100:	// パス名を貼り付ける

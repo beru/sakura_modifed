@@ -165,7 +165,6 @@ namespace ApiWrap {
 	// GetDlgItemText
 
 	inline bool DlgButton_IsChecked(HWND hDlg, int nIDButton)					{ return ::IsDlgButtonChecked(hDlg, nIDButton) == BST_CHECKED; }
-	inline bool DlgButton_Check(HWND hDlg, int nIDButton, bool bCheck)			{ return ::CheckDlgButton(hDlg, nIDButton, bCheck ? BST_CHECKED : BST_UNCHECKED) != 0; }
 }
 using namespace ApiWrap;
 

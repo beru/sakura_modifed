@@ -504,7 +504,7 @@ int CSearchAgent::SearchWord(
 			//
 			nHitTo = ptSerachBegin.x;				// 検索開始位置
 			nIdxPos = 0;
-			while (NULL != pDocLine) {
+			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				nHitPos		= -1;	// -1:この行でマッチ位置なし
 				for (;;) {
@@ -872,7 +872,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	bool bFirstLine = true;
 	bool bSetMark = false;
 	/* 後ろから処理していく */
-	for (; i >= pArg->sDelRange.GetFrom().y && NULL != pCDocLine; i--) {
+	for (; i >= pArg->sDelRange.GetFrom().y && pCDocLine; i--) {
 		pLine = pCDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
 		nLineLen = pCDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
 		pCDocLinePrev = pCDocLine->GetPrevLine();

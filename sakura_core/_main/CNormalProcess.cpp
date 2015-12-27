@@ -113,12 +113,12 @@ bool CNormalProcess::InitializeProcess()
 				CLogicPoint& pt = GetDllShareData().m_sWorkBuffer.m_LogicPoint;
 				if (fi.m_ptCursor.x < 0) {
 					// 桁の指定が無い場合
-					::SendMessageAny(hwndOwner, MYWM_GETCARETPOS, 0, 0);
+					::SendMessage(hwndOwner, MYWM_GETCARETPOS, 0, 0);
 				}else {
 					pt.x = fi.m_ptCursor.x;
 				}
 				pt.y = fi.m_ptCursor.y;
-				::SendMessageAny(hwndOwner, MYWM_SETCARETPOS, 0, 0);
+				::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 			}
 			// To Here Oct. 19, 2001 genta
 			// アクティブにする
@@ -191,7 +191,7 @@ bool CNormalProcess::InitializeProcess()
 		if (!::IsIconic(hEditWnd) && pEditWnd->m_cDlgFuncList.GetHwnd()) {
 			RECT rc;
 			::GetClientRect(hEditWnd, &rc);
-			::SendMessageAny(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
+			::SendMessage(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 		}
 		cmdLine.GetGrepInfo(&gi); // 2002/2/8 aroka ここに移動
 		if (!bGrepDlg) {
@@ -300,7 +300,7 @@ bool CNormalProcess::InitializeProcess()
 
 		if (!bGrepDlg && gi.bGrepStdout) {
 			// 即時終了
-			PostMessageCmd( pEditWnd->GetHwnd(), MYWM_CLOSE, PM_CLOSE_GREPNOCONFIRM | PM_CLOSE_EXIT, (LPARAM)NULL );
+			PostMessage( pEditWnd->GetHwnd(), MYWM_CLOSE, PM_CLOSE_GREPNOCONFIRM | PM_CLOSE_EXIT, (LPARAM)NULL );
 		}
 
 		return true; // 2003.06.23 Moca
@@ -404,7 +404,7 @@ bool CNormalProcess::InitializeProcess()
 		if (!::IsIconic(hEditWnd)) {
 			RECT rc;
 			::GetClientRect(hEditWnd, &rc);
-			::PostMessageAny(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
+			::PostMessage(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
 		}
 	}
 

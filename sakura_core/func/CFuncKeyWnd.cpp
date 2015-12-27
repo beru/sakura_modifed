@@ -203,7 +203,7 @@ LRESULT CFuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	int nButtonWidth = CalcButtonSize();
 
 	RECT rcParent;
-	::GetWindowRect(GetHwnd(), &rcParent);
+	GetWindowRect(&rcParent);
 	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
 	int nX = 1;
@@ -257,7 +257,7 @@ LRESULT CFuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 		for (int i = 0; i < _countof(m_hwndButtonArr); ++i) {
 			if (hwndCtl == m_hwndButtonArr[i]) {
 				if (0 != m_nFuncCodeArr[i]) {
-					::SendMessageCmd(GetParentHwnd(), WM_COMMAND, MAKELONG(m_nFuncCodeArr[i], 0),  (LPARAM)hwnd);
+					::SendMessage(GetParentHwnd(), WM_COMMAND, MAKELONG(m_nFuncCodeArr[i], 0),  (LPARAM)hwnd);
 				}
 				break;
 			}
@@ -326,11 +326,10 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		m_nTimerCount = 0;
 		// 機能が利用可能か調べる
 		for (int i = 0; i < _countof(	m_szFuncNameArr); ++i) {
-			if (IsFuncEnable((CEditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i] )) {
-				::EnableWindow(m_hwndButtonArr[i], TRUE);
-			}else {
-				::EnableWindow(m_hwndButtonArr[i], FALSE);
-			}
+			::EnableWindow(
+				m_hwndButtonArr[i],
+				IsFuncEnable((CEditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
+				);
 		}
 	}
 	m_nCurrentKeyState = nIdx;
@@ -368,7 +367,7 @@ LRESULT CFuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 int CFuncKeyWnd::CalcButtonSize(void)
 {
 	RECT rc;
-	::GetWindowRect(GetHwnd(), &rc);
+	GetWindowRect(&rc);
 	
 	int nButtonNum = _countof(m_hwndButtonArr);
 	int nCxVScroll;
@@ -394,7 +393,7 @@ int CFuncKeyWnd::CalcButtonSize(void)
 void CFuncKeyWnd::CreateButtons(void)
 {
 	RECT rcParent;
-	::GetWindowRect(GetHwnd(), &rcParent);
+	GetWindowRect(&rcParent);
 	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
 	for (int i = 0; i < _countof(	m_nFuncCodeArr); ++i) {
@@ -418,7 +417,7 @@ void CFuncKeyWnd::CreateButtons(void)
 			NULL				// pointer not needed
 		);
 		// フォント変更
-		::SendMessageAny(m_hwndButtonArr[i], WM_SETFONT, (WPARAM)m_hFont, MAKELPARAM(TRUE, 0));
+		::SendMessage(m_hwndButtonArr[i], WM_SETFONT, (WPARAM)m_hFont, MAKELPARAM(TRUE, 0));
 	}
 	m_nCurrentKeyState = -1;
 	return;
@@ -429,7 +428,7 @@ void CFuncKeyWnd::CreateButtons(void)
 void CFuncKeyWnd::SizeBox_ONOFF(bool bSizeBox)
 {
 	RECT rc;
-	::GetWindowRect(GetHwnd(), &rc);
+	GetWindowRect(&rc);
 	if (m_bSizeBox == bSizeBox) {
 		return;
 	}

@@ -92,15 +92,15 @@ BOOL CDlgWinSize::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
 
-	Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_NORMAL));	// L"普通"
-	Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_MAXIMIZE));	// L"最大化"
-	Combo_AddString(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_MINIMIZE));	// L"(最小化)"
+	Combo_AddString(GetItemHwnd(IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_NORMAL));	// L"普通"
+	Combo_AddString(GetItemHwnd(IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_MAXIMIZE));	// L"最大化"
+	Combo_AddString(GetItemHwnd(IDC_COMBO_WINTYPE), LSW(STR_DLGWINSZ_MINIMIZE));	// L"(最小化)"
 
-	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_SX), 30000, 0);
-	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_SY), 30000, 0);
+	UpDown_SetRange(GetItemHwnd(IDC_SPIN_SX), 30000, 0);
+	UpDown_SetRange(GetItemHwnd(IDC_SPIN_SY), 30000, 0);
 	// ウィンドウの座標は、マイナス値も有効。
-	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_WX), 30000, -30000);
-	UpDown_SetRange(::GetDlgItem(GetHwnd(), IDC_SPIN_WY), 30000, -30000);
+	UpDown_SetRange(GetItemHwnd(IDC_SPIN_WX), 30000, -30000);
+	UpDown_SetRange(GetItemHwnd(IDC_SPIN_WY), 30000, -30000);
 
 	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
 }
@@ -133,24 +133,24 @@ void CDlgWinSize::SetData(void)
 {
 	switch (m_eSaveWinSize) {
 	case 1:
-		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINSIZE_SAVE, TRUE);
+		CheckButton(IDC_RADIO_WINSIZE_SAVE, true);
 		break;
 	case 2:
-		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINSIZE_SET, TRUE);
+		CheckButton(IDC_RADIO_WINSIZE_SET, true);
 		break;
 	default:
-		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINSIZE_DEF, TRUE);
+		CheckButton(IDC_RADIO_WINSIZE_DEF, true);
 	}
 
 	switch (m_eSaveWinPos) {
 	case 1:
-		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINPOS_SAVE, TRUE);
+		CheckButton(IDC_RADIO_WINPOS_SAVE, true);
 		break;
 	case 2:
-		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINPOS_SET, TRUE);
+		CheckButton(IDC_RADIO_WINPOS_SET, true);
 		break;
 	default:
-		::CheckDlgButton(GetHwnd(), IDC_RADIO_WINPOS_DEF, TRUE);
+		CheckButton(IDC_RADIO_WINPOS_DEF, true);
 	}
 
 	int nCurIdx = 0;
@@ -164,11 +164,11 @@ void CDlgWinSize::SetData(void)
 	default:
 		nCurIdx = 0;
 	}
-	Combo_SetCurSel(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), nCurIdx);
-	::SetDlgItemInt(GetHwnd(), IDC_EDIT_SX, m_rc.right,  TRUE);
-	::SetDlgItemInt(GetHwnd(), IDC_EDIT_SY, m_rc.bottom, TRUE);
-	::SetDlgItemInt(GetHwnd(), IDC_EDIT_WX, m_rc.top,  TRUE);
-	::SetDlgItemInt(GetHwnd(), IDC_EDIT_WY, m_rc.left, TRUE);
+	Combo_SetCurSel(GetItemHwnd(IDC_COMBO_WINTYPE), nCurIdx);
+	SetItemInt(IDC_EDIT_SX, m_rc.right,  TRUE);
+	SetItemInt(IDC_EDIT_SY, m_rc.bottom, TRUE);
+	SetItemInt(IDC_EDIT_WX, m_rc.top,  TRUE);
+	SetItemInt(IDC_EDIT_WY, m_rc.left, TRUE);
 	RenewItemState();
 }
 
@@ -194,7 +194,7 @@ int CDlgWinSize::GetData(void)
 	}
 
 	int nCurIdx;
-	nCurIdx = Combo_GetCurSel(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE));
+	nCurIdx = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_WINTYPE));
 	switch (nCurIdx) {
 	case 2:
 		m_nWinSizeType = SIZE_MINIMIZED;
@@ -205,10 +205,10 @@ int CDlgWinSize::GetData(void)
 	default:
 		m_nWinSizeType = SIZE_RESTORED;
 	}
-	m_rc.right  = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_SX, NULL, TRUE);
-	m_rc.bottom = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_SY, NULL, TRUE);
-	m_rc.top    = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_WX, NULL, TRUE);
-	m_rc.left   = ::GetDlgItemInt(GetHwnd(), IDC_EDIT_WY, NULL, TRUE);
+	m_rc.right  = GetItemInt(IDC_EDIT_SX, NULL, TRUE);
+	m_rc.bottom = GetItemInt(IDC_EDIT_SY, NULL, TRUE);
+	m_rc.top    = GetItemInt(IDC_EDIT_WX, NULL, TRUE);
+	m_rc.left   = GetItemInt(IDC_EDIT_WY, NULL, TRUE);
 	return TRUE;
 }
 
@@ -218,13 +218,13 @@ int CDlgWinSize::GetData(void)
 void CDlgWinSize::RenewItemState(void)
 {
 	bool state = IsButtonChecked(IDC_RADIO_WINPOS_SET);
-	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_WX), state);
-	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_WY), state);
+	EnableItem(IDC_EDIT_WX, state);
+	EnableItem(IDC_EDIT_WY, state);
 
 	state = IsButtonChecked(IDC_RADIO_WINSIZE_SET);
-	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_COMBO_WINTYPE), state);
-	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_SX), state);
-	::EnableWindow(::GetDlgItem(GetHwnd(), IDC_EDIT_SY), state);
+	EnableItem(IDC_COMBO_WINTYPE, state);
+	EnableItem(IDC_EDIT_SX, state);
+	EnableItem(IDC_EDIT_SY, state);
 }
 
 LPVOID CDlgWinSize::GetHelpIdTable(void)

@@ -42,7 +42,7 @@ public:
 		@sa SendStatusMessage2
 	*/
 	bool SendStatusMessage2IsEffective() const {
-		return NULL != m_hwndStatusBar;
+		return m_hwndStatusBar != NULL;
 	}
 
 	// Žæ“¾

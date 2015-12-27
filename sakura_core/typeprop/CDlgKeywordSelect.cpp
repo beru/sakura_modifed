@@ -120,7 +120,7 @@ BOOL CDlgKeywordSelect::OnBnClicked(int wID)
 void CDlgKeywordSelect::SetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[index]);
+		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
 
 		// コンボボックスを空にする
 		Combo_ResetContent(hwndCombo);
@@ -149,7 +149,7 @@ void CDlgKeywordSelect::SetData(void)
 int CDlgKeywordSelect::GetData(void)
 {
 	for (int index = 0; index < KEYWORD_SELECT_NUM; index++) {
-		HWND hwndCombo = ::GetDlgItem(GetHwnd(), keyword_select_target_combo[index]);
+		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
 
 		int n = Combo_GetCurSel(hwndCombo);
 		if (CB_ERR == n || 0 == n) {

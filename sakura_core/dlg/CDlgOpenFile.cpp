@@ -566,7 +566,7 @@ UINT_PTR CALLBACK OFNHookProc(
 						if (::IsWindow(hwndFilebox)) {
 							::SetWindowText(hwndFilebox, szWork);
 							if (IDC_COMBO_OPENFOLDER == wID)
-								::PostMessageAny(hwndFilebox, WM_KEYDOWN, VK_RETURN, (LPARAM)0);
+								::PostMessage(hwndFilebox, WM_KEYDOWN, VK_RETURN, (LPARAM)0);
 						}
 					}
 				}

@@ -766,10 +766,10 @@ INT_PTR CPropMainMenu::DispatchEvent(
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_LEFT),   FALSE);
 		}else {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELETE), TRUE);
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_UP),     NULL != TreeView_GetPrevSibling(hwndTreeRes, nIdxMenu));
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN),   NULL != TreeView_GetNextSibling(hwndTreeRes, nIdxMenu));
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_RIGHT),  NULL != TreeView_GetPrevSibling(hwndTreeRes, nIdxMenu));
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_LEFT),   NULL != TreeView_GetParent(hwndTreeRes, nIdxMenu));
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_UP),     TreeView_GetPrevSibling(hwndTreeRes, nIdxMenu) != NULL);
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DOWN),   TreeView_GetNextSibling(hwndTreeRes, nIdxMenu) != NULL);
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_RIGHT),  TreeView_GetPrevSibling(hwndTreeRes, nIdxMenu) != NULL);
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_LEFT),   TreeView_GetParent(hwndTreeRes, nIdxMenu) != NULL);
 		}
 		if (LB_ERR == nIdxFunc ||
 		  (CB_ERR != nIdxFIdx && LB_ERR != nIdxFunc &&
@@ -779,8 +779,8 @@ INT_PTR CPropMainMenu::DispatchEvent(
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT_A), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
 		}else {
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), NULL != nIdxMenu);
-			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT_A), NULL != nIdxMenu);
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), nIdxMenu != NULL);
+			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT_A), nIdxMenu != NULL);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), TRUE);
 		}
 		break;

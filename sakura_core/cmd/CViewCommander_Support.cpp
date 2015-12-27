@@ -180,7 +180,7 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 	if (0 != nId) {
 		// コマンドコードによる処理振り分け
 //		HandleCommand(nFuncID, true, 0, 0, 0, 0);
-		::PostMessageCmd(GetMainWindow(), WM_COMMAND, MAKELONG(nId, 0), (LPARAM)NULL);
+		::PostMessage(GetMainWindow(), WM_COMMAND, MAKELONG(nId, 0), (LPARAM)NULL);
 	}
 	return;
 }
@@ -311,7 +311,7 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 		}
 		int nLen = _tcslen(pWork);
 		_tcscpy(&pWork[nLen + 1], cmemCurText.GetStringT());
-		hwndHtmlHelp = (HWND)::SendMessageAny(
+		hwndHtmlHelp = (HWND)::SendMessage(
 			GetDllShareData().m_sHandles.m_hwndTray,
 			MYWM_HTMLHELP,
 			(WPARAM)GetMainWindow(),

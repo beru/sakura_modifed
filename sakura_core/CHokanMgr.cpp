@@ -56,7 +56,7 @@ LRESULT APIENTRY HokanList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		// 補完実行キーなら補完する
 		if (-1 != pCHokanMgr->KeyProc(wParam, lParam)) {
 			// キーストロークを親に転送
-			return ::PostMessageAny(::GetParent(::GetParent(pCDialog->m_hwndParent)), uMsg, wParam, lParam);
+			return ::PostMessage(::GetParent(::GetParent(pCDialog->m_hwndParent)), uMsg, wParam, lParam);
 		}
 		break;
 	case WM_GETDLGCODE:
@@ -91,7 +91,7 @@ HWND CHokanMgr::DoModeless(HINSTANCE hInstance , HWND hwndParent, LPARAM lParam)
 	OnSize(0, 0);
 	// リストをフック
 	// Modified by KEITA for WIN64 2003.9.6
-	::gm_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr(::GetDlgItem(GetHwnd(), IDC_LIST_WORDS), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc);
+	::gm_wpHokanListProc = (WNDPROC) ::SetWindowLongPtr(GetItemHwnd(IDC_LIST_WORDS), GWLP_WNDPROC, (LONG_PTR)HokanList_SubclassProc);
 
 	::ShowWindow(GetHwnd(), SW_HIDE);
 	return hwndWork;
@@ -235,7 +235,7 @@ int CHokanMgr::Search(
 //	::ShowWindow(GetHwnd(), SW_SHOWNA);
 
 	HWND hwndList;
-	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_WORDS);
+	hwndList = GetItemHwnd(IDC_LIST_WORDS);
 	List_ResetContent(hwndList);
 	{
 		size_t kouhoNum = m_vKouho.size();
@@ -318,7 +318,7 @@ int CHokanMgr::Search(
 	::ShowWindow(GetHwnd(), SW_SHOW);
 //	::ShowWindow(GetHwnd(), SW_SHOWNA);
 	::SetFocus(GetHwnd());
-//	::SetFocus(::GetDlgItem(GetHwnd(), IDC_LIST_WORDS));
+//	::SetFocus(GetItemHwnd(IDC_LIST_WORDS));
 //	::SetFocus(::GetParent(::GetParent(m_hwndParent)));
 
 
@@ -402,7 +402,7 @@ BOOL CHokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 
 	int nControls = _countof(Controls);
 	for (int i = 0; i < nControls; ++i) {
-		HWND hwndCtrl = ::GetDlgItem(GetHwnd(), Controls[i]);
+		HWND hwndCtrl = GetItemHwnd(Controls[i]);
 		RECT rc;
 		::GetWindowRect(hwndCtrl, &rc);
 		POINT po;
@@ -503,7 +503,7 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 	if (VK_TAB		== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
 	if (VK_RIGHT	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)	return FALSE; // VK_RIGHT  補完決定キーが有効/無効
 
-	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_WORDS);
+	HWND hwndList = GetItemHwnd(IDC_LIST_WORDS);
 	int nItem = List_GetCurSel(hwndList);
 	if (LB_ERR == nItem) {
 		return FALSE;
@@ -606,7 +606,7 @@ int CHokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 //	2001/06/18 Start by asa-o: 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 void CHokanMgr::ShowTip()
 {
-	HWND hwndCtrl = ::GetDlgItem(GetHwnd(), IDC_LIST_WORDS);
+	HWND hwndCtrl = GetItemHwnd(IDC_LIST_WORDS);
 	int nItem = List_GetCurSel(hwndCtrl);
 	if (LB_ERR == nItem) {
 		return ;

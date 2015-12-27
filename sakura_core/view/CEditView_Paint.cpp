@@ -1363,7 +1363,7 @@ bool CEditView::CreateOrUpdateCompatibleBitmap(int cx, int cy)
 		}
 		::ReleaseDC(GetHwnd(), hdc);
 	}
-	return NULL != m_hbmpCompatBMP;
+	return m_hbmpCompatBMP != NULL;
 }
 
 

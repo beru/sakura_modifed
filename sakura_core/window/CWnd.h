@@ -113,6 +113,7 @@ public:
 	HWND GetHwnd() const { return m_hWnd; }
 	HWND GetParentHwnd() const { return m_hwndParent; }
 	HINSTANCE GetAppInstance() const { return m_hInstance; }
+	bool GetWindowRect(LPRECT lpRect) { return ::GetWindowRect(m_hWnd, lpRect) != 0; }
 
 	// 特殊インターフェース (使用は好ましくない)
 	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }

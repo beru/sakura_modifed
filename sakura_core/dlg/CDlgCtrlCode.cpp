@@ -115,7 +115,7 @@ void CDlgCtrlCode::SetData(void)
 	LV_ITEM	lvi;
 
 	// リスト
-	HWND hwndWork = ::GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
+	HWND hwndWork = GetItemHwnd(IDC_LIST_CTRLCODE);
 	ListView_DeleteAllItems(hwndWork);  // リストを空にする
 
 	// 行選択
@@ -180,7 +180,7 @@ void CDlgCtrlCode::SetData(void)
 // TRUE==正常  FALSE==入力エラー
 int CDlgCtrlCode::GetData(void)
 {
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
+	HWND hwndList = GetItemHwnd(IDC_LIST_CTRLCODE);
 	// 選択中のキー番号を探す。
 	int nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
 	if (nIndex == -1) {
@@ -268,7 +268,7 @@ typedef struct tagNMKEY {
 BOOL CDlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	NMHDR* pNMHDR = (NMHDR*) lParam;
-	HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
+	HWND hwndList = GetItemHwnd(IDC_LIST_CTRLCODE);
 	if (hwndList == pNMHDR->hwndFrom) {
 		switch (pNMHDR->code) {
 		case NM_DBLCLK:
@@ -284,7 +284,7 @@ BOOL CDlgCtrlCode::OnNotify(WPARAM wParam, LPARAM lParam)
 					if (c == (p->nVKey & 0xffff)) {
 						for (int j = 0; j < _countof(p_ctrl_list); j++) {
 							if (p_ctrl_list[i].code == p_ctrl_list[j].code) {
-								HWND hwndList = GetDlgItem(GetHwnd(), IDC_LIST_CTRLCODE);
+								HWND hwndList = GetItemHwnd(IDC_LIST_CTRLCODE);
 								ListView_SetItemState(hwndList, j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 								ListView_EnsureVisible(hwndList, j, FALSE);
 						

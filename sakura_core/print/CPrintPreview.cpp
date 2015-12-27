@@ -663,7 +663,7 @@ LRESULT CPrintPreview::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 
 	for (int i = 0; i < 3; ++i) {
 		// 印刷プレビュー 垂直スクロールバーメッセージ処理 WM_VSCROLL
-		::PostMessageAny(m_pParentWnd->GetHwnd(), WM_VSCROLL, MAKELONG(nScrollCode, 0), (LPARAM)m_hwndVScrollBar);
+		::PostMessage(m_pParentWnd->GetHwnd(), WM_VSCROLL, MAKELONG(nScrollCode, 0), (LPARAM)m_hwndVScrollBar);
 
 		// 処理中のユーザー操作を可能にする
 		if (!::BlockingHook(NULL)) {

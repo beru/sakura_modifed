@@ -383,7 +383,7 @@ LRESULT CSplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		::ReleaseDC(::GetParent(GetParentHwnd()), hdc);
 
 		// 親ウィンドウに、メッセージをポストする
-		::PostMessageAny(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)0, (LPARAM)m_nDragPosY);
+		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)0, (LPARAM)m_nDragPosY);
 
 	}else {
 		::GetClientRect(::GetParent(GetParentHwnd()), &rc);
@@ -409,7 +409,7 @@ LRESULT CSplitBoxWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		::ReleaseDC(GetParentHwnd(), hdc);
 
 		// 親ウィンドウに、メッセージをポストする
-		::PostMessageAny(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)m_nDragPosX, (LPARAM)0);
+		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)m_nDragPosX, (LPARAM)0);
 	}
 	::ReleaseCapture();
 	return 0L;
@@ -427,14 +427,14 @@ LRESULT CSplitBoxWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 		rc.bottom -= nCyHScroll;
 
 		// 親ウィンドウに、メッセージをポストする
-		::PostMessageAny(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)0, (LPARAM)(rc.bottom / 2));
+		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)0, (LPARAM)(rc.bottom / 2));
 	}else {
 		::GetClientRect(GetParentHwnd(), &rc);
 		nCyHScroll = ::GetSystemMetrics(SM_CYHSCROLL);	// 水平スクロールバーの高さ
 		rc.bottom -= nCyHScroll;
 
 		// 親ウィンドウに、メッセージをポストする
-		::PostMessageAny(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)(rc.right / 2), (LPARAM)0);
+		::PostMessage(GetParentHwnd(), MYWM_DOSPLIT, (WPARAM)(rc.right / 2), (LPARAM)0);
 	}
 	return 0L;
 }

@@ -84,7 +84,7 @@ public:
 		const CNativeT*			pcmGrepFile,
 		const CNativeT*			pcmGrepFolder,
 		bool					bGrepCurFolder,
-		BOOL					bGrepSubFolder,
+		bool					bGrepSubFolder,
 		bool					bGrepStdout,
 		bool					bGrepHeader,
 		const SSearchOption&	sSearchOption,

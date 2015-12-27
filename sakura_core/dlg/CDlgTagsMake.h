@@ -63,7 +63,7 @@ protected:
 	int		GetData(void);	// ダイアログデータの取得
 
 private:
-	void SelectFolder(HWND hwndDlg);
+	void SelectFolder();
 
 };
 

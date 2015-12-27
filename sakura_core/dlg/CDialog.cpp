@@ -554,7 +554,7 @@ BOOL CDialog::OnCbnDropDown( HWND hwndCtl, bool scrollBar )
 	HDC hDC = ::GetDC(hwndCtl);
 	if (!hDC)
 		return FALSE;
-	HFONT hFont = (HFONT)::SendMessageAny(hwndCtl, WM_GETFONT, 0, (LPARAM)NULL);
+	HFONT hFont = (HFONT)::SendMessage(hwndCtl, WM_GETFONT, 0, (LPARAM)NULL);
 	hFont = (HFONT)::SelectObject(hDC, hFont);
 	int nItem = Combo_GetCount(hwndCtl);
 	RECT rc;

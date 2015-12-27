@@ -165,7 +165,7 @@ DWORD CGrepAgent::DoGrep(
 	const CNativeT*			pcmGrepFile,
 	const CNativeT*			pcmGrepFolder,
 	bool					bGrepCurFolder,
-	BOOL					bGrepSubFolder,
+	bool					bGrepSubFolder,
 	bool					bGrepStdout,
 	bool					bGrepHeader,
 	const SSearchOption&	sSearchOption,
@@ -326,7 +326,7 @@ DWORD CGrepAgent::DoGrep(
 	}
 	
 	// Grepオプションまとめ
-	sGrepOption.bGrepSubFolder = FALSE != bGrepSubFolder;
+	sGrepOption.bGrepSubFolder = bGrepSubFolder;
 	sGrepOption.bGrepStdout = bGrepStdout;
 	sGrepOption.bGrepHeader = bGrepHeader;
 	sGrepOption.nGrepCharSet = nGrepCharSet;
@@ -1166,7 +1166,7 @@ int CGrepAgent::DoGrepFile(
 			}
 		}
 		++(*pnHitCount);
-		::SetDlgItemInt(pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+		pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 		return 1;
 	}
 
@@ -1295,7 +1295,7 @@ int CGrepAgent::DoGrepFile(
 							sGrepOption
 						);
 						if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
-							::SetDlgItemInt(pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+							pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
 					// To Here 2005.03.19 かろと もはやBREGEXP構造体に直接アクセスしない
@@ -1354,7 +1354,7 @@ int CGrepAgent::DoGrepFile(
 						);
 						//	May 22, 2000 genta
 						if (((*pnHitCount) % 128) == 0 || *pnHitCount < 128) {
-							::SetDlgItemInt(pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+							pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
 	
@@ -1406,7 +1406,7 @@ int CGrepAgent::DoGrepFile(
 						);
 						//	May 22, 2000 genta
 						if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
-							::SetDlgItemInt(pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
+							pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
 						
@@ -1445,7 +1445,7 @@ int CGrepAgent::DoGrepFile(
 						pLine, nLineLen, sGrepOption
 					);
 					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
-						::SetDlgItemInt( pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 				}
 			}
@@ -1788,7 +1788,7 @@ int CGrepAgent::DoGrepReplaceFile(
 					++nHitCount;
 					++(*pnHitCount);
 					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
-						::SetDlgItemInt( pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (!sGrepOption.bGrepPaste) {
 						// gオプションでは行末まで一度に置換済み
@@ -1859,7 +1859,7 @@ int CGrepAgent::DoGrepReplaceFile(
 					++(*pnHitCount);
 					//	May 22, 2000 genta
 					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
-						::SetDlgItemInt( pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (0 < pszRes - pLine - nOutputPos) {
 						cOutBuffer.AppendString( &pLine[nOutputPos], pszRes - pLine - nOutputPos );
@@ -1906,7 +1906,7 @@ int CGrepAgent::DoGrepReplaceFile(
 					++(*pnHitCount);
 					//	May 22, 2000 genta
 					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
-						::SetDlgItemInt( pcDlgCancel->GetHwnd(), IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
+						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (nColumn) {
 						cOutBuffer.AppendString( pCompareData, nColumn );

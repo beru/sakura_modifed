@@ -132,7 +132,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 		}
 
 		// ‰Šúó‘Ô‚ğİ’è
-		SendMessageCmd(hwndDlg, WM_COMMAND, (WPARAM)MAKELONG(IDC_CHECK_KEYHELP, BN_CLICKED), 0);
+		SendMessage(hwndDlg, WM_COMMAND, (WPARAM)MAKELONG(IDC_CHECK_KEYHELP, BN_CLICKED), 0);
 
 		return TRUE;
 

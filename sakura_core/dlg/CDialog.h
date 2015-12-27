@@ -131,7 +131,16 @@ public:
 	// 特殊インターフェース (使用は好ましくない)
 	void _SetHwnd(HWND hwnd) { m_hWnd = hwnd; }
 	bool IsButtonChecked(int id) { return DlgButton_IsChecked(m_hWnd, id); }
-	BOOL SetItemText(int nIDDlgItem, const WCHAR* str) { return DlgItem_SetText(m_hWnd, nIDDlgItem, str); }
+	bool CheckButton(int id, bool bCheck) { return ::CheckDlgButton(m_hWnd, id, bCheck ? BST_CHECKED : BST_UNCHECKED) != 0; }
+	UINT GetItemText(int nIDDlgItem, TCHAR* str, int nMaxCount) { return ::GetDlgItemText(m_hWnd, nIDDlgItem, str, nMaxCount); }
+	BOOL SetItemText(int nIDDlgItem, const TCHAR* str) { return ::SetDlgItemText(m_hWnd, nIDDlgItem, str); }
+	UINT GetItemInt(int nIDDlgItem, BOOL *lpTranslated, BOOL bSigned) { return ::GetDlgItemInt(m_hWnd, nIDDlgItem, lpTranslated, bSigned); }
+	bool SetItemInt(int nIDDlgItem, UINT uValue, BOOL bSigned) { return ::SetDlgItemInt(m_hWnd, nIDDlgItem, uValue, bSigned) != 0; }
+
+	HWND GetItemHwnd(int nID) { return ::GetDlgItem(m_hWnd, nID); }
+	bool EnableItem(int nID, bool bEnable) { return ::EnableWindow(GetItemHwnd(nID), bEnable ? TRUE : FALSE) != 0; }
+
+	bool GetWindowRect(LPRECT lpRect) { return ::GetWindowRect(m_hWnd, lpRect) != 0; }
 
 public:
 	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
@@ -156,8 +165,6 @@ public:
 protected:
 	void CreateSizeBox(void);
 	BOOL OnCommand(WPARAM, LPARAM);
-
-	HWND GetItemHwnd(int nID) { return ::GetDlgItem(GetHwnd(), nID); }
 
 	// コントロールに画面のフォントを設定	2012/11/27 Uchi
 	HFONT SetMainFont(HWND hTarget);

@@ -128,8 +128,8 @@ BOOL CDlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRet = CDialog::OnInitDialog(hwndDlg, wParam, lParam);
 
-	HWND hwndStatic = ::GetDlgItem(GetHwnd(), IDC_STATIC_COLOR);
-	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_COLORS);
+	HWND hwndStatic = GetItemHwnd(IDC_STATIC_COLOR);
+	HWND hwndList = GetItemHwnd(IDC_LIST_COLORS);
 
 	// 指定色スタティック、色選択リストをサブクラス化
 	::SetWindowLongPtr(hwndStatic, GWLP_USERDATA, (LONG_PTR)this);
@@ -194,7 +194,7 @@ BOOL CDlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 */
 BOOL CDlgSameColor::OnBnClicked(int wID)
 {
-	HWND hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_COLORS);
+	HWND hwndList = GetItemHwnd(IDC_LIST_COLORS);
 	int nItemNum = List_GetCount(hwndList);
 	BOOL bCheck;
 
@@ -329,7 +329,7 @@ BOOL CDlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 {
 	// 色選択リストで現在フォーカスのある色について
 	// タイプ別設定から同色の項目を取り出して項目リストに表示する
-	HWND hwndListInfo = ::GetDlgItem(GetHwnd(), IDC_LIST_ITEMINFO);
+	HWND hwndListInfo = GetItemHwnd(IDC_LIST_ITEMINFO);
 	List_ResetContent(hwndListInfo);
 
 	int i = List_GetCaretIndex(hwndCtl);
@@ -409,7 +409,7 @@ LRESULT CALLBACK CDlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, W
 
 		// 親にWM_CTLCOLORSTATICを送って背景ブラシを取得し、背景描画する
 		{
-			HBRUSH	hBrush = (HBRUSH)::SendMessageAny(GetParent(hwnd), WM_CTLCOLORSTATIC, wParam, (LPARAM)hwnd);
+			HBRUSH	hBrush = (HBRUSH)::SendMessage(GetParent(hwnd), WM_CTLCOLORSTATIC, wParam, (LPARAM)hwnd);
 			HBRUSH	hBrushOld = (HBRUSH)::SelectObject(hDC, hBrush);
 			::FillRect(hDC, &rc, hBrush);
 			::SelectObject(hDC, hBrushOld);

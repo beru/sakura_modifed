@@ -93,7 +93,7 @@ bool CViewCommander::Command_FUNCLIST(
 				if (dlgFuncList.IsDocking())
 					::DestroyWindow(dlgFuncList.GetHwnd());
 				else
-					::SendMessageAny(dlgFuncList.GetHwnd(), WM_CLOSE, 0, 0);
+					::SendMessage(dlgFuncList.GetHwnd(), WM_CLOSE, 0, 0);
 				bIsProcessing = false;
 				return true;
 			}

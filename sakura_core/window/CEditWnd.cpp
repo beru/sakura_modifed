@@ -787,7 +787,7 @@ void CEditWnd::OpenDocumentWhenStart(
 		if (!bReadResult) {
 			// ファイルが既に開かれている
 			if (sLoadInfo.bOpened) {
-				::PostMessageAny(GetHwnd(), WM_CLOSE, 0, 0);
+				::PostMessage(GetHwnd(), WM_CLOSE, 0, 0);
 				// 2004.07.12 Moca return NULLだと、メッセージループを通らずにそのまま破棄されてしまい、タブの終了処理が抜ける
 				//	この後は正常ルートでメッセージループに入った後WM_CLOSEを受信して直ちにCLOSE & DESTROYとなる．
 				//	その中で編集ウィンドウの削除が行われる．
@@ -1580,7 +1580,7 @@ LRESULT CEditWnd::DispatchEvent(
 
 
 		// 編集ウィンドウオブジェクトからのオブジェクト削除要求
-		::PostMessageAny(m_pShareData->m_sHandles.m_hwndTray, MYWM_DELETE_ME, 0, 0);
+		::PostMessage(m_pShareData->m_sHandles.m_hwndTray, MYWM_DELETE_ME, 0, 0);
 
 		// Windows にスレッドの終了を要求します
 		::PostQuitMessage(0);
@@ -2866,7 +2866,7 @@ void CEditWnd::OnSysMenuTimer(void) // by 鬼(2)
 		pt.x = R.left + GetSystemMetrics(SM_CXFRAME);
 		pt.y = R.top + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
 		GetMonitorWorkRect(pt, &R);
-		::PostMessageAny(
+		::PostMessage(
 			GetHwnd(),
 			0x0313, // 右クリックでシステムメニューを表示する際に送信するモノらしい
 			0,
@@ -3209,7 +3209,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	int nFuncListWidth = 0;
 	int nFuncListHeight = 0;
 	if (m_cDlgFuncList.GetHwnd() && m_cDlgFuncList.IsDocking()) {
-		::SendMessageAny(m_cDlgFuncList.GetHwnd(), WM_SIZE, wParam, lParam);
+		::SendMessage(m_cDlgFuncList.GetHwnd(), WM_SIZE, wParam, lParam);
 		::GetWindowRect(m_cDlgFuncList.GetHwnd(), &rc);
 		nFuncListWidth = rc.right - rc.left;
 		nFuncListHeight = rc.bottom - rc.top;

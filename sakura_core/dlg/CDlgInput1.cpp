@@ -52,7 +52,7 @@ INT_PTR CALLBACK CDlgInput1Proc(
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		pCDlgInput1 = (CDlgInput1*)::GetWindowLongPtr(hwndDlg, DWLP_USER);
-		if (NULL != pCDlgInput1) {
+		if (pCDlgInput1) {
 			return pCDlgInput1->DispatchEvent(hwndDlg, uMsg, wParam, lParam);
 		}else {
 			return FALSE;

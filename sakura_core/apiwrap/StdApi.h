@@ -207,25 +207,6 @@ namespace ApiWrap {
 		static const int SIZEOF_MENUITEMINFO = 44;
 	#endif
 
-
-	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//             SendMessage,PostMessage意味付け                 //
-	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	// 過去のUNICODE化の名残です。
-	// 現在となっては、特に意味はありません。
-
-	// 文字コードに関係のなさそうな SendMessage は SendMessageAny に差し替えておく。
-	#define SendMessageAny SendMessage
-
-	// WM_COMMAND系の SendMessage は SendMessageCmd に差し替えておく。
-	#define SendMessageCmd SendMessage
-
-	// 文字コードに関係のなさそうな PostMessage は PostMessageAny に差し替えておく。
-	#define PostMessageAny PostMessage
-
-	// WM_COMMAND系の PostMessage は PostMessageCmd に差し替えておく。
-	#define PostMessageCmd PostMessage
-
 }
 using namespace ApiWrap;
 

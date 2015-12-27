@@ -135,7 +135,7 @@ void CDlgCompare::SetData(void)
 	int				nItem;
 	int				selIndex = 0;
 
-	hwndList = ::GetDlgItem(GetHwnd(), IDC_LIST_FILES);
+	hwndList = GetItemHwnd(IDC_LIST_FILES);
 
 // 2002/2/10 aroka ファイル名で比較しないため不用 (2001.12.26 YAZAKIさん)
 //	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
@@ -147,11 +147,11 @@ void CDlgCompare::SetData(void)
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 		CTextWidthCalc calc(hwndList);
 		int score = 0;
-		TCHAR		szFile1[_MAX_PATH];
+		TCHAR szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
 		for (i = 0; i < nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
-			::SendMessageAny(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
+			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 			pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
@@ -193,9 +193,9 @@ void CDlgCompare::SetData(void)
 		&& !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin
 	) {
 		m_bCompareAndTileHorz = false;
-		::EnableWindow(::GetDlgItem(GetHwnd(), IDC_CHECK_TILE_H), FALSE);
+		EnableItem(IDC_CHECK_TILE_H, false);
 	}
-	::CheckDlgButton(GetHwnd(), IDC_CHECK_TILE_H, m_bCompareAndTileHorz);
+	CheckButton(IDC_CHECK_TILE_H, m_bCompareAndTileHorz);
 	return;
 }
 
@@ -204,17 +204,16 @@ void CDlgCompare::SetData(void)
 // TRUE==正常  FALSE==入力エラー
 int CDlgCompare::GetData(void)
 {
-	HWND			hwndList;
 	int				nItem;
 	EditInfo*		pfi;
-	hwndList = :: GetDlgItem(GetHwnd(), IDC_LIST_FILES);
+	HWND hwndList = GetItemHwnd(IDC_LIST_FILES);
 	nItem = List_GetCurSel(hwndList);
 	if (LB_ERR == nItem) {
 		return FALSE;
 	}else {
 		*m_phwndCompareWnd = (HWND)List_GetItemData(hwndList, nItem);
 		// トレイからエディタへの編集ファイル名要求通知
-		::SendMessageAny(*m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
+		::SendMessage(*m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
 		pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
@@ -281,11 +280,11 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	CDialog::OnSize(wParam, lParam);
 
-	::GetWindowRect(GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
 
 	RECT  rc;
 	POINT ptNew;
-	::GetWindowRect(GetHwnd(), &rc);
+	GetWindowRect(&rc);
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
@@ -298,7 +297,7 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	::GetWindowRect(GetHwnd(), &GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
 	
 	return CDialog::OnMove(wParam, lParam);
 }

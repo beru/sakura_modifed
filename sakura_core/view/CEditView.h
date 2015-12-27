@@ -128,7 +128,7 @@ public:
 public:
 	//! ”wŒi‚Éƒrƒbƒgƒ}ƒbƒv‚ðŽg—p‚·‚é‚©‚Ç‚¤‚©
 	//! 2010.10.03 ”wŒiŽÀ‘•
-	bool IsBkBitmap() const { return NULL != m_pcEditDoc->m_hBackImg; }
+	bool IsBkBitmap() const { return m_pcEditDoc->m_hBackImg != NULL; }
 
 public:
 	CEditView* GetEditView() {

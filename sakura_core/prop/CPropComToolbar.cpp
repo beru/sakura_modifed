@@ -181,7 +181,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 
 //	From Here Oct.14, 2000 JEPRO added	(Ref. CPropComCustmenu.cpp 内のWM_INITDIALOGを参考にした)
 		// キー選択時の処理
-		::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
+		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 //	To Here Oct. 14, 2000
 
 		::SetTimer(hwndDlg, 1, 300, NULL);
@@ -466,7 +466,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 	
 	// 種別の先頭の項目を選択(コンボボックス)
 	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
-	::PostMessageCmd(hwndCombo, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
+	::PostMessage(hwndCombo, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCombo);
 
 	// コントロールのハンドルを取得
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);

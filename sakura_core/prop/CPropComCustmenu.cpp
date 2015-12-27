@@ -137,7 +137,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 		hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 
 		// キー選択時の処理
-		::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCOMBO_FUNCKIND);
+		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCOMBO_FUNCKIND);
 
 		::SetTimer(hwndDlg, 1, 300, NULL);
 
@@ -164,13 +164,13 @@ INT_PTR CPropCustmenu::DispatchEvent(
 			nIdx3 = Combo_GetCurSel(hwndCOMBO_FUNCKIND);
 			nIdx4 = List_GetCurSel(hwndLIST_FUNC);
 			if (nIdx1 != CB_ERR) {
-				::SendMessageAny(hwndDlg, WM_COMMAND, MAKEWPARAM(IDC_COMBO_MENU, CBN_SELCHANGE), (LPARAM)hwndCOMBO_MENU);
+				::SendMessage(hwndDlg, WM_COMMAND, MAKEWPARAM(IDC_COMBO_MENU, CBN_SELCHANGE), (LPARAM)hwndCOMBO_MENU);
 				if (nIdx2 != LB_ERR) {
 					List_SetCurSel(hwndLIST_RES, nIdx2);
 				}
 			}
 			if (nIdx3 != CB_ERR) {
-				::SendMessageAny(hwndDlg, WM_COMMAND, MAKEWPARAM(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCOMBO_FUNCKIND);
+				::SendMessage(hwndDlg, WM_COMMAND, MAKEWPARAM(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCOMBO_FUNCKIND);
 				if (nIdx4 != LB_ERR) {
 					List_SetCurSel(hwndLIST_FUNC, nIdx4);
 				}
@@ -729,7 +729,7 @@ void CPropCustmenu::Import(HWND hwndDlg)
 	
 	// 画面更新
 	HWND	hwndCtrl = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
-	::SendMessageCmd(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_MENU, CBN_SELCHANGE), (LPARAM)hwndCtrl);
+	::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_MENU, CBN_SELCHANGE), (LPARAM)hwndCtrl);
 }
 
 // カスタムメニュー設定をエクスポートする

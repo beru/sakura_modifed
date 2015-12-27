@@ -653,7 +653,7 @@ void CPropKeyword::SetKeyWordSet(HWND hwndDlg, int nIdx)
 	hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_KEYWORD);
 
 	// 2005.01.25 Moca/genta リスト追加中は再描画を抑制してすばやく表示
-	::SendMessageAny(hwndList, WM_SETREDRAW, FALSE, 0);
+	::SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
 
 	for (i = 0; i < nNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
@@ -668,7 +668,7 @@ void CPropKeyword::SetKeyWordSet(HWND hwndDlg, int nIdx)
 	keywordSetMgr.m_nCurrentKeyWordSetIdx = nIdx;
 
 	// 2005.01.25 Moca/genta リスト追加完了のため再描画許可
-	::SendMessageAny(hwndList, WM_SETREDRAW, TRUE, 0);
+	::SendMessage(hwndList, WM_SETREDRAW, TRUE, 0);
 
 	// キーワード数を表示する。
 	DispKeywordCount(hwndDlg);

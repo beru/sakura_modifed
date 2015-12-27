@@ -148,7 +148,7 @@ CTextWidthCalc::CTextWidthCalc(HWND hParent, int nID)
 	hwnd = ::GetDlgItem(hParent, nID);
 	hDC = ::GetDC(hwnd);
 	assert(hDC);
-	hFont = (HFONT)::SendMessageAny(hwnd, WM_GETFONT, 0, 0);
+	hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
 	hFontOld = (HFONT)::SelectObject(hDC, hFont);
 	nCx = 0;
 	nExt = 0;
@@ -163,7 +163,7 @@ CTextWidthCalc::CTextWidthCalc(HWND hwndThis)
 	hwnd = hwndThis;
 	hDC = ::GetDC(hwnd);
 	assert(hDC);
-	hFont = (HFONT)::SendMessageAny(hwnd, WM_GETFONT, 0, 0);
+	hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
 	hFontOld = (HFONT)::SelectObject(hDC, hFont);
 	nCx = 0;
 	nExt = 0;
@@ -301,7 +301,7 @@ void CFontAutoDeleter::ReleaseOnDestroy()
 void CFontAutoDeleter::Release()
 {
 	if (m_hwnd && m_hFont) {
-		::SendMessageAny(m_hwnd, WM_SETFONT, (WPARAM)m_hFontOld, FALSE);
+		::SendMessage(m_hwnd, WM_SETFONT, (WPARAM)m_hFontOld, FALSE);
 		::DeleteObject(m_hFont);
 		m_hFont = NULL;
 		m_hwnd = NULL;

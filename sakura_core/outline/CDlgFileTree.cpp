@@ -205,23 +205,23 @@ void CDlgFileTree::SetDataItem(int nItemIndex)
 void CDlgFileTree::ChangeEnableItemType()
 {
 	HWND hwndDlg = GetHwnd();
-	BOOL bGrepEnable = FALSE;
-	BOOL bPathEnable = FALSE;
+	bool bGrepEnable = false;
+	bool bPathEnable = false;
 	if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) { 
-		bGrepEnable = TRUE;
-		bPathEnable = TRUE;
+		bGrepEnable = true;
+		bPathEnable = true;
 	}else if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE)) { 
-		bPathEnable = TRUE;
+		bPathEnable = true;
 	}
-	::EnableWindow(GetItemHwnd(IDC_STATIC_PATH), bPathEnable);
-	::EnableWindow(GetItemHwnd(IDC_EDIT_PATH), bPathEnable);
-	::EnableWindow(GetItemHwnd(IDC_BUTTON_REF2), bPathEnable);
-	::EnableWindow(GetItemHwnd(IDC_BUTTON_PATH_MENU), bPathEnable);
-	::EnableWindow(GetItemHwnd(IDC_STATIC_FILE), bGrepEnable);
-	::EnableWindow(GetItemHwnd(IDC_EDIT_FILE), bGrepEnable);
-	::EnableWindow(GetItemHwnd(IDC_CHECK_HIDDEN), bGrepEnable);
-	::EnableWindow(GetItemHwnd(IDC_CHECK_READONLY), bGrepEnable);
-	::EnableWindow(GetItemHwnd(IDC_CHECK_SYSTEM), bGrepEnable);
+	EnableItem(IDC_STATIC_PATH, bPathEnable);
+	EnableItem(IDC_EDIT_PATH, bPathEnable);
+	EnableItem(IDC_BUTTON_REF2, bPathEnable);
+	EnableItem(IDC_BUTTON_PATH_MENU, bPathEnable);
+	EnableItem(IDC_STATIC_FILE, bGrepEnable);
+	EnableItem(IDC_EDIT_FILE, bGrepEnable);
+	EnableItem(IDC_CHECK_HIDDEN, bGrepEnable);
+	EnableItem(IDC_CHECK_READONLY, bGrepEnable);
+	EnableItem(IDC_CHECK_SYSTEM, bGrepEnable);
 }
 
 void CDlgFileTree::ChangeEnableAddInsert()
@@ -234,9 +234,9 @@ void CDlgFileTree::ChangeEnableAddInsert()
 		if (nMaxCount < nCount) {
 			bEnable = false;
 		}
-		::EnableWindow(GetItemHwnd(IDC_BUTTON_ADD), bEnable);
-		::EnableWindow(GetItemHwnd(IDC_BUTTON_INSERT), bEnable);
-		::EnableWindow(GetItemHwnd(IDC_BUTTON_INSERT_A), bEnable);
+		EnableItem(IDC_BUTTON_ADD, bEnable);
+		EnableItem(IDC_BUTTON_INSERT, bEnable);
+		EnableItem(IDC_BUTTON_INSERT_A, bEnable);
 	}
 }
 
@@ -366,7 +366,7 @@ BOOL CDlgFileTree::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 void CDlgFileTree::SetDataInit()
 {
 	HWND hwndDlg = GetHwnd();
-	BOOL bEnableDefIni = TRUE;
+	bool bEnableDefIni = true;
 	if (m_fileTreeSetting.m_eFileTreeSettingLoadType != EFileTreeSettingFrom_File) {
 		int id;
 		if (m_fileTreeSetting.m_eFileTreeSettingLoadType == EFileTreeSettingFrom_Common) {
@@ -386,16 +386,16 @@ void CDlgFileTree::SetDataInit()
 		TCHAR szFilePath[_MAX_PATH];
 		CTextWidthCalc calc(GetHwnd(), IDC_STATIC_SETTFING_FROM);
 		RECT rc;
-		GetWindowRect( GetItemHwnd(IDC_STATIC_SETTFING_FROM), &rc);
+		::GetWindowRect(GetItemHwnd(IDC_STATIC_SETTFING_FROM), &rc);
 		const int xWidth = calc.GetTextWidth(_T("x"));
 		const int ctrlWidth = rc.right - rc.left;
 		int nMaxCch = ctrlWidth / xWidth;
 		CFileNameManager::getInstance()->GetTransformFileNameFast(pFile, szFilePath, _countof(szFilePath), calc.GetDC(), true, nMaxCch);
 		wsprintf(szMsg, LS(STR_FILETREE_FROM_FILE), szFilePath);
 		::SetWindowText(GetItemHwnd(IDC_STATIC_SETTFING_FROM), szMsg);
-		bEnableDefIni = FALSE;
+		bEnableDefIni = false;
 	}
-	::EnableWindow(GetItemHwnd(IDC_BUTTON_LOAD), bEnableDefIni);
+	EnableItem(IDC_BUTTON_LOAD, bEnableDefIni);
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_LOADINI, m_fileTreeSetting.m_bProject);
 	SetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni); 
 }
