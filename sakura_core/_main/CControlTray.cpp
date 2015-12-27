@@ -458,7 +458,7 @@ LRESULT CControlTray::DispatchEvent(
 			bool bDelFound;
 			do {
 				bDelFound = false;
-				for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
+				for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 					HWND target = m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd();
 					if (!IsSakuraMainWindow(target)) {
 						CAppNodeGroupHandle(m_pShareData->m_sNodes.m_pEditArr[i].m_nGroup).DeleteEditWndList(target);
@@ -689,7 +689,7 @@ LRESULT CControlTray::DispatchEvent(
 				// 同じ名前のものがあったらその次にする
 				int nAddNameNum = nInsert + 1;
 				auto_sprintf_s(type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum); 
-				for (int k = 1; k < m_pShareData->m_nTypesCount; k++) {
+				for (int k=1; k<m_pShareData->m_nTypesCount; ++k) {
 					if (auto_strcmp(types[k]->m_szTypeName, type->m_szTypeName) == 0) {
 						nAddNameNum++;
 						auto_sprintf_s(type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum); 
@@ -701,7 +701,7 @@ LRESULT CControlTray::DispatchEvent(
 				types.resize(m_pShareData->m_nTypesCount + 1);
 				int nTypeSizeOld = m_pShareData->m_nTypesCount;
 				m_pShareData->m_nTypesCount++;
-				for (int i = nTypeSizeOld; nInsert < i; i--) {
+				for (int i=nTypeSizeOld; nInsert<i; --i) {
 					types[i] = types[i - 1];
 					types[i]->m_nIdx = i;
 					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i - 1];
@@ -723,7 +723,7 @@ LRESULT CControlTray::DispatchEvent(
 				int nTypeSizeOld = m_pShareData->m_nTypesCount;
 				auto& types = CShareData::getInstance()->GetTypeSettings();
 				delete types[nDelPos];
-				for (int i = nDelPos; i < nTypeSizeOld - 1; i++) {
+				for (int i=nDelPos; i<nTypeSizeOld-1; ++i) {
 					types[i] = types[i + 1];
 					types[i]->m_nIdx = i;
 					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i + 1];
@@ -800,7 +800,7 @@ LRESULT CControlTray::DispatchEvent(
 						// アイコンの登録
 						const auto& plugs = CJackManager::getInstance()->GetPlugs(PP_COMMAND);
 						m_cMenuDrawer.m_pcIcons->ResetExtend();
-						for (auto it = plugs.begin(); it != plugs.end(); it++) {
+						for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 							int iBitmap = CMenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 							const CPlug* plug = *it;
 							if (!plug->m_sIcon.empty()) {
@@ -880,7 +880,7 @@ LRESULT CControlTray::DispatchEvent(
 						
 					// 新たな編集ウィンドウを起動
 					size_t nSize = files.size();
-					for (size_t f = 0; f < nSize; f++) {
+					for (size_t f=0; f<nSize; ++f) {
 						sLoadInfo.cFilePath = files[f].c_str();
 						CControlTray::OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo,
 							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false);
@@ -978,7 +978,7 @@ LRESULT CControlTray::DispatchEvent(
 
 					// 新たな編集ウィンドウを起動
 					size_t nSize = files.size();
-					for (size_t f = 0; f < nSize; f++) {
+					for (size_t f=0; f<nSize; ++f) {
 						sLoadInfo.cFilePath = files[f].c_str();
 						CControlTray::OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo,
 							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false);
@@ -1287,7 +1287,7 @@ bool CControlTray::OpenNewEditor(
 	// Note. 起動先プロセスが初期化処理中に COM 関数（SHGetFileInfo API なども含む）を実行すると、
 	//       その時点で COM の同期機構が動いて WaitForInputIdle は終了してしまう可能性がある（らしい）。
 	if (sync && bRet) {
-		for (int i = 0; i < 200; i++) {
+		for (int i=0; i<200; ++i) {
 			MSG msg;
 			DWORD dwExitCode;
 			if (::PeekMessage(&msg, 0, MYWM_FIRST_IDLE, MYWM_FIRST_IDLE, PM_REMOVE)) {
@@ -1366,7 +1366,7 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
 		int i;
-		for (i = 0; i < nRowNum; ++i) {
+		for (i=0; i<nRowNum; ++i) {
 			if (hwndParent == pEditNodeArr[i].GetHwnd()) {
 				nGroup = pEditNodeArr[i].m_nGroup;
 				break;
@@ -1375,13 +1375,13 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 		if (i < nRowNum) {
 			// 前のウィンドウ
 			int j;
-			for (j = i - 1; j >= 0; --j) {
+			for (j=i-1; j>=0; --j) {
 				if (nGroup == pEditNodeArr[j].m_nGroup) {
 					break;
 				}
 			}
 			if (j < 0) {
-				for (j = nRowNum - 1; j > i; --j) {
+				for (j=nRowNum-1; j>i; --j) {
 					if (nGroup == pEditNodeArr[j].m_nGroup) {
 						break;
 					}
@@ -1406,7 +1406,7 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 		// 自分のウィンドウを調べる
 		int nGroup = 0;
 		int	i;
-		for (i = 0; i < nRowNum; ++i) {
+		for (i=0; i<nRowNum; ++i) {
 			if (hwndParent == pEditNodeArr[i].GetHwnd()) {
 				nGroup = pEditNodeArr[i].m_nGroup;
 				break;
@@ -1415,13 +1415,13 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 		if (i < nRowNum) {
 			// 次のウィンドウ
 			int j;
-			for (j = i + 1; j < nRowNum; ++j) {
+			for (j=i+1; j<nRowNum; ++j) {
 				if (nGroup == pEditNodeArr[j].m_nGroup) {
 					break;
 				}
 			}
 			if (j >= nRowNum) {
-				for (j = 0; j < i; ++j) {
+				for (j=0; j<i; ++j) {
 					if (nGroup == pEditNodeArr[j].m_nGroup) {
 						break;
 					}
@@ -1543,7 +1543,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 
 	// 現在開いている編集窓のリストをメニューにする
 	int j = 0;
-	for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
+	for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 		if (IsSakuraMainWindow(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd())) {
 			++j;
 		}
@@ -1559,7 +1559,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 
 		j = 0;
 		TCHAR szMenu[100 + MAX_PATH * 2];	// Jan. 19, 2001 genta
-		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
+		for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 			if (IsSakuraMainWindow(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd())) {
 				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessage(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);

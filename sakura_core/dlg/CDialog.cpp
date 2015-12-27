@@ -560,7 +560,7 @@ BOOL CDialog::OnCbnDropDown( HWND hwndCtl, bool scrollBar )
 	RECT rc;
 	::GetWindowRect(hwndCtl, &rc);
 	LONG nWidth = rc.right - rc.left - nMargin + nScrollWidth;
-	for (int iItem = 0; iItem < nItem; iItem++) {
+	for (int iItem=0; iItem<nItem; ++iItem) {
 		int nTextLen = Combo_GetLBTextLen(hwndCtl, iItem);
 		if (0 < nTextLen) {
 			TCHAR* pszText = new TCHAR[nTextLen + 1];

@@ -254,9 +254,9 @@ void CDlgDiff::SetData(void)
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 			CTextWidthCalc calc(hwndList);
 			int score = 0;
-			TCHAR		szFile1[_MAX_PATH];
+			TCHAR szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(m_szFile1, NULL, szFile1);
-			for (i = 0; i < nRowNum; i++) {
+			for (i=0; i<nRowNum; ++i) {
 				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessage(pEditNode[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 				pFileInfo = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
@@ -465,7 +465,7 @@ BOOL CDlgDiff::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i = 0; i < _countof(anchorList); i++) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
@@ -495,7 +495,7 @@ BOOL CDlgDiff::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i = 0; i < _countof(anchorList); i++) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);

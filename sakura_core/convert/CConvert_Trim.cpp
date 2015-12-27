@@ -47,7 +47,7 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 	if (m_bLeft) {
 		while ((pLine = GetNextLineW(pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) { // 2002/2/10 aroka CMemoryïœçX
 			if (0 < nLineLen) {
-				for (i = 0; i <= nLineLen; ++i) {
+				for (i=0; i<=nLineLen; ++i) {
 					if (WCODE::IsBlank(pLine[i])) {
 						continue;
 					}else {

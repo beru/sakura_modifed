@@ -100,7 +100,7 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 //		phwndArr = new HWND[2];
 //		phwndArr[0] = ::GetParent(m_hwndParent);
 //		phwndArr[1] = hwndCompareWnd;
-//		for (i = 0; i < 2; ++i) {
+//		for (i=0; i<2; ++i) {
 //			if (::IsZoomed(phwndArr[i])) {
 //				::ShowWindow(phwndArr[i], SW_RESTORE);
 //			}
@@ -149,7 +149,7 @@ void CDlgCompare::SetData(void)
 		int score = 0;
 		TCHAR szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
-		for (i = 0; i < nRowNum; ++i) {
+		for (i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 			pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
@@ -258,7 +258,7 @@ BOOL CDlgCompare::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i = 0; i < _countof(anchorList); i++) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
@@ -288,7 +288,7 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i = 0 ; i < _countof(anchorList); i++) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);

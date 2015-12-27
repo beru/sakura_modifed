@@ -146,9 +146,9 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 	HMENU hMenu = ::CreatePopupMenu();
 // Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
 	// Oct. 3, 2001 genta
-	for (int i = 0; i < FuncLookup.GetCategoryCount(); i++) {
+	for (int i=0; i<FuncLookup.GetCategoryCount(); ++i) {
 		HMENU hMenuPopUp = ::CreatePopupMenu();
-		for (int j = 0; j < FuncLookup.GetItemCount(i); j++) {
+		for (int j=0; j<FuncLookup.GetItemCount(i); ++j) {
 			// Oct. 3, 2001 genta
 			int code = FuncLookup.Pos2FuncCode(i, j, false);	// 2007.11.02 ryoji 未登録マクロ非表示を明示指定
 			if (code != 0) {

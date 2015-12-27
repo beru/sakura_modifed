@@ -287,14 +287,14 @@ bool CNormalProcess::InitializeProcess()
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
 		CJackManager::getInstance()->GetUsablePlug(PP_EDITOR_START, 0, &plugs);
-		for (auto it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&activeView, params);
 		}
 
 		// プラグイン：DocumentOpenイベント実行
 		plugs.clear();
 		CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
-		for (auto it = plugs.begin(); it != plugs.end(); it++) {
+		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			(*it)->Invoke(&activeView, params);
 		}
 
@@ -424,7 +424,7 @@ bool CNormalProcess::InitializeProcess()
 			0,
 			&plugs
 		);
-	for (auto it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&activeView, params);
 	}
 
@@ -452,7 +452,7 @@ bool CNormalProcess::InitializeProcess()
 			fileNum = nDropFileNumMax;
 		}
 		EditInfo openFileInfo = fi;
-		for (int i = 0; i < fileNum; i++) {
+		for (int i=0; i<fileNum; ++i) {
 			// ファイル名差し替え
 			_tcscpy_s(openFileInfo.m_szPath, cmdLine.GetFileName(i));
 			bool ret = CControlTray::OpenNewEditor2(GetProcessInstance(), pEditWnd->GetHwnd(), &openFileInfo, bViewMode);
@@ -467,7 +467,7 @@ bool CNormalProcess::InitializeProcess()
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();
 	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
-	for (auto it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&activeView, params);
 	}
 

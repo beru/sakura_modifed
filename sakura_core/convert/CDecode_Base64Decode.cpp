@@ -58,7 +58,7 @@ bool CDecode_Base64Decode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	i = 0;  // pcSrc の添え字
 	do {
 		j = 0;
-		for (; i < nSrcLen; ++i) {
+		for (; i<nSrcLen; ++i) {
 		// バッファに文字をためるループ
 			c = pSrc[i];
 			if (IsLineDelimiterBasic(c) || c == TAB || c == SPACE) {

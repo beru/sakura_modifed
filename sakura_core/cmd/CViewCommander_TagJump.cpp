@@ -56,7 +56,7 @@ bool GetQuoteFilePath(const wchar_t* pLine, wchar_t* pFile, size_t size) {
 static
 bool IsFileExists2(const wchar_t* pszFile)
 {
-	for (int i = 0; pszFile[i]; i++) {
+	for (int i=0; pszFile[i]; ++i) {
 		if (!WCODE::IsValidFilenameChar(pszFile, i)) {
 			return false;
 		}
@@ -205,13 +205,13 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 					pTagEnd = wcsstr(pLine, L"]: ");
 					if (pTagEnd) {
 						int fileEnd = pTagEnd - pLine - 1;
-						for (; 1 < fileEnd; fileEnd--) {
+						for (; 1<fileEnd; --fileEnd) {
 							if (L'[' == pLine[fileEnd]) {
 								fileEnd--;
 								break;
 							}
 						}
-						for (; 1 < fileEnd && L' ' == pLine[fileEnd]; fileEnd--) {}
+						for (; 1<fileEnd && L' '==pLine[fileEnd]; --fileEnd) {}
 						if (')' == pLine[fileEnd]) {
 							pTagEnd = &pLine[fileEnd];
 						}else {
@@ -221,9 +221,9 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 				}
 				if (pTagEnd) {
 					int fileEnd = pTagEnd - pLine - 1;
-					for (; 1 < fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); fileEnd--) {}
+					for (; 1<fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); --fileEnd) {}
 					if (1 < fileEnd && (L',' == pLine[fileEnd])) { fileEnd--; }
-					for (; 1 < fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); fileEnd--) {}
+					for (; 1<fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); --fileEnd) {}
 					if (1 < fileEnd && L'(' == pLine[fileEnd] && fileEnd - 1 < (int)_countof(szFile)) {
 						wmemcpy(szFile, pLine + 1, fileEnd - 1);
 						szFile[fileEnd - 1] = L'\0';
@@ -239,7 +239,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 		}
 		ptXY.y--;
 
-		for (; 0 <= ptXY.y; ptXY.y--) {
+		for (; 0<=ptXY.y; --ptXY.y) {
 			pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 			if (!pLine) {
 				break;

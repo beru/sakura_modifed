@@ -233,7 +233,7 @@ CDlgFavorite::CDlgFavorite()
 		// これ以上増やすときはテーブルサイズも書き換えてね
 		assert((pFavInfo - m_aFavoriteInfo) < _countof(m_aFavoriteInfo));
 	}
-	for (int i = 0; i < FAVORITE_INFO_MAX; i++) {
+	for (int i=0; i<FAVORITE_INFO_MAX; ++i) {
 		auto& info = m_aListViewInfo[i];
 		info.hListView   = 0;
 		info.nSortColumn = -1;
@@ -245,7 +245,7 @@ CDlgFavorite::CDlgFavorite()
 
 CDlgFavorite::~CDlgFavorite()
 {
-	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		m_aFavoriteInfo[nTab].m_pRecent->Terminate();
 	}
 }
@@ -263,7 +263,7 @@ int CDlgFavorite::DoModal(
 // ダイアログデータの設定
 void CDlgFavorite::SetData(void)
 {
-	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		SetDataOne(nTab, 0);
 	}
 
@@ -294,7 +294,7 @@ void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 	m_aFavoriteInfo[nIndex].m_nViewCount = nViewCount;
 
 	TCHAR tmp[1024];
-	for (int i = 0; i < nItemCount; i++) {
+	for (int i=0; i<nItemCount; ++i) {
 		FormatFavoriteColumn(tmp, _countof(tmp), i, i < nViewCount);
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText  = tmp;
@@ -317,7 +317,7 @@ void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 		}
 	}
 
-	if (-1 != m_aListViewInfo[nIndex].nSortColumn) {
+	if (m_aListViewInfo[nIndex].nSortColumn != -1) {
 		// ソートを維持
 		ListViewSort(m_aListViewInfo[nIndex], pRecent, m_aListViewInfo[nIndex].nSortColumn, false);
 	}
@@ -345,7 +345,7 @@ void CDlgFavorite::SetDataOne(int nIndex, int nLvItemIndex)
 */
 int CDlgFavorite::GetData(void)
 {
-	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		if (m_aFavoriteInfo[nTab].m_bHaveFavorite) {
 			GetFavorite(nTab);
 			// リストを更新する。
@@ -371,7 +371,7 @@ BOOL CDlgFavorite::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i = 0; i < _countof(anchorList); i++) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
@@ -420,7 +420,7 @@ BOOL CDlgFavorite::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		CTextWidthCalc calc(hwndBaseList);
 		calc.SetTextWidthIfMax(pszFAVORITE_TEXT, CTextWidthCalc::WIDTH_LV_HEADER);
 		TCHAR szBuf[200];
-		for (int i = 0; i < 40; i++) {
+		for (int i=0; i<40; ++i) {
 			//「M (非表示)」等の幅を求める
 			FormatFavoriteColumn(szBuf, _countof(szBuf), i, false);
 			calc.SetTextWidthIfMax(szBuf, CTextWidthCalc::WIDTH_LV_ITEM_CHECKBOX);
@@ -432,7 +432,7 @@ BOOL CDlgFavorite::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	for (int nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (int nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		hwndList = GetDlgItem(hwndDlg, m_aFavoriteInfo[nTab].m_nId);
 		m_aListViewInfo[nTab].hListView = hwndList;
 		
@@ -503,7 +503,7 @@ BOOL CDlgFavorite::OnBnClicked(int wID)
 				const int nRet = ConfirmMessage(GetHwnd(), 
 					LS(STR_DLGFAV_CONF_DEL_FAV),	// "最近使った%tsの履歴を削除します。\nよろしいですか？\n"
 					m_aFavoriteInfo[m_nCurrentTab].m_pszCaption);
-				if (IDYES == nRet) {
+				if (nRet == IDYES) {
 					pRecent->DeleteAllItem();
 					RefreshListOne(m_nCurrentTab);
 					UpdateUIState();
@@ -520,7 +520,7 @@ BOOL CDlgFavorite::OnBnClicked(int wID)
 					LS(STR_DLGFAV_CONF_DEL_NOTFAV),	// "最近使った%tsの履歴のお気に入り以外を削除します。\nよろしいですか？"
 					m_aFavoriteInfo[m_nCurrentTab].m_pszCaption);
 				CRecent* const pRecent = m_aFavoriteInfo[m_nCurrentTab].m_pRecent;
-				if (IDYES == nRet && pRecent) {
+				if (nRet == IDYES && pRecent) {
 					GetFavorite(m_nCurrentTab);
 					pRecent->DeleteItemsNoFavorite();
 					pRecent->UpdateView();
@@ -539,11 +539,11 @@ BOOL CDlgFavorite::OnBnClicked(int wID)
 					LS(STR_DLGFAV_CONF_DEL_PATH),	// "最近使った%tsの存在しないパスを削除します。\nよろしいですか？"
 					m_aFavoriteInfo[m_nCurrentTab].m_pszCaption);
 				CRecent* const pRecent = m_aFavoriteInfo[m_nCurrentTab].m_pRecent;
-				if (IDYES == nRet && pRecent) {
+				if (nRet == IDYES && pRecent) {
 					GetFavorite(m_nCurrentTab);
 
 					// 存在しないパスの削除
-					for (int i = pRecent->GetItemCount() - 1; i >= 0; i--) {
+					for (int i=pRecent->GetItemCount()-1; i>=0; --i) {
 						TCHAR szPath[_MAX_PATH];
 						auto_strcpy(szPath, pRecent->GetItemText(i));
 						CutLastYenFromDirectoryPath(szPath);
@@ -724,7 +724,7 @@ bool CDlgFavorite::RefreshList(void)
 	m_szMsg[0] = 0;
 
 	// 全リストの現在選択中のアイテムを取得する。
-	for (nTab = 0; m_aFavoriteInfo[nTab].m_pRecent; nTab++) {
+	for (nTab=0; m_aFavoriteInfo[nTab].m_pRecent; ++nTab) {
 		bret = RefreshListOne(nTab);
 		if (bret) {
 			ret_val = true;
@@ -768,7 +768,7 @@ bool CDlgFavorite::RefreshListOne(int nIndex)
 	// お気に入り数が変わったので再構築
 	if (m_aFavoriteInfo[nIndex].m_nViewCount != pRecent->GetViewCount()) goto changed;
 
-	for (i = 0; i < nCount; i++) {
+	for (i=0; i<nCount; ++i) {
 		TCHAR	szText[1024];
 		auto_memset(szText, 0, _countof(szText));
 		memset_raw(&lvitem, 0, sizeof(lvitem));
@@ -799,7 +799,7 @@ void CDlgFavorite::GetFavorite(int nIndex)
 	const HWND      hwndList = m_aListViewInfo[nIndex].hListView;
 	if (m_aFavoriteInfo[nIndex].m_bHaveFavorite) {
 		const int nCount = ListView_GetItemCount(hwndList);
-		for (int i = 0; i < nCount; i++) {
+		for (int i=0; i<nCount; ++i) {
 			const int  recIndex = ListView_GetLParamInt(hwndList, i);
 			const BOOL bret = ListView_GetCheckState(hwndList, i);
 			pRecent->SetFavorite(recIndex, bret ? true : false);
@@ -838,7 +838,7 @@ int CDlgFavorite::DeleteSelected()
 			std::sort(selRecIndexs.rbegin(), selRecIndexs.rend());
 			// 大きいほうから削除しないと、CRecent側のindexがずれる
 			size_t nSize = selRecIndexs.size();
-			for (size_t n = 0; n < nSize; n++) {
+			for (size_t n=0; n<nSize; ++n) {
 				pRecent->DeleteItem(selRecIndexs[n]);
 				++nDelItemCount;
 			}
@@ -1189,11 +1189,11 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i = 0 ; i < _countof(anchorList); i++) {
+	for (int i=0 ; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
 	}
 
-	for (int i = 0; i < FAVORITE_INFO_MAX; i++) {
+	for (int i=0; i<FAVORITE_INFO_MAX; ++i) {
 		HWND hwndList = GetItemHwnd(m_aFavoriteInfo[i].m_nId);
 		ResizeItem(hwndList, m_ptDefaultSize, ptNew, m_rcListDefault, ANCHOR_ALL, (i == m_nCurrentTab));
 	}

@@ -99,7 +99,7 @@ int CALLBACK SetData_EnumFontFamProc(
 	LPARAM			lParam 	// address of application-defined data
 )
 {
-	CDlgPrintSetting*	pCDlgPrintSetting = (CDlgPrintSetting*)lParam;
+	CDlgPrintSetting* pCDlgPrintSetting = (CDlgPrintSetting*)lParam;
 	HWND hwndComboFontHan = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN);
 	HWND hwndComboFontZen = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN);
 
@@ -122,7 +122,7 @@ int CDlgPrintSetting::DoModal(
 )
 {
 	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
-	for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
 		m_PrintSettingArr[i] = pPrintSettingArr[i];
 	}
 	m_nLineNumberColumns = nLineNumberColumns;
@@ -130,7 +130,7 @@ int CDlgPrintSetting::DoModal(
 	int nRet = (int)CDialog::DoModal(hInstance, hwndParent, IDD_PRINTSETTING, (LPARAM)NULL);
 	if (nRet != FALSE) {
 		*pnCurrentPrintSetting = m_nCurrentPrintSetting;
-		for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+		for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
 			pPrintSettingArr[i] = m_PrintSettingArr[i];
 		}
 	}
@@ -263,12 +263,9 @@ BOOL CDlgPrintSetting::OnBnClicked(int wID)
 			// 印刷設定名一覧
 			hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 			Combo_ResetContent(hwndComboSettingName);
-			int		nSelectIdx;
-			int		i;
-			int		nItemIdx;
-			nSelectIdx = 0;
-			for (i = 0; i < MAX_PRINTSETTINGARR; ++i) {
-				nItemIdx = Combo_AddString(
+			int nSelectIdx = 0;
+			for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
+				int nItemIdx = Combo_AddString(
 					hwndComboSettingName,
 					m_PrintSettingArr[i].m_szPrintSettingName
 				);
@@ -455,7 +452,7 @@ void CDlgPrintSetting::SetData(void)
 	HWND hwndComboPaper = GetItemHwnd(IDC_COMBO_PAPER);
 	Combo_ResetContent(hwndComboPaper);
 	// 2006.08.14 Moca 用紙名一覧の重複削除
-	for (int i = 0; i < CPrint::m_nPaperInfoArrNum; ++i) {
+	for (int i=0; i<CPrint::m_nPaperInfoArrNum; ++i) {
 		int nItemIdx = Combo_AddString(hwndComboPaper, CPrint::m_paperInfoArr[i].m_pszName);
 		Combo_SetItemData(hwndComboPaper, nItemIdx, CPrint::m_paperInfoArr[i].m_nId);
 	}
@@ -464,7 +461,7 @@ void CDlgPrintSetting::SetData(void)
 	HWND hwndComboSettingName = GetItemHwnd(IDC_COMBO_SETTINGNAME);
 	Combo_ResetContent(hwndComboSettingName);
 	int nSelectIdx = 0;
-	for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
 		int nItemIdx = Combo_AddString(hwndComboSettingName, m_PrintSettingArr[i].m_szPrintSettingName);
 		Combo_SetItemData(hwndComboSettingName, nItemIdx, i);
 		if (i == m_nCurrentPrintSetting) {
@@ -538,7 +535,7 @@ int CDlgPrintSetting::GetData(void)
 
 	// 用紙の向き
 	// 2006.08.14 Moca 用紙方向コンボボックスを廃止し、ボタンを有効化
-	if (IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_PORTRAIT)) {
+	if (IsButtonChecked(IDC_RADIO_PORTRAIT)) {
 		curPS.m_nPrintPaperOrientation = DMORIENT_PORTRAIT;
 	}else {
 		curPS.m_nPrintPaperOrientation = DMORIENT_LANDSCAPE;
@@ -572,18 +569,18 @@ int CDlgPrintSetting::GetData(void)
 	}
 
 	// 行番号を印刷
-	curPS.m_bPrintLineNumber = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_LINENUMBER);
+	curPS.m_bPrintLineNumber = IsButtonChecked(IDC_CHECK_LINENUMBER);
 	// 英文ワードラップ
-	curPS.m_bPrintWordWrap = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_WORDWRAP);
+	curPS.m_bPrintWordWrap = IsButtonChecked(IDC_CHECK_WORDWRAP);
 
 	// 行頭禁則	//@@@ 2002.04.09 MIK
-	curPS.m_bPrintKinsokuHead = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUHEAD);
+	curPS.m_bPrintKinsokuHead = IsButtonChecked(IDC_CHECK_PS_KINSOKUHEAD);
 	// 行末禁則	//@@@ 2002.04.09 MIK
-	curPS.m_bPrintKinsokuTail = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUTAIL);
+	curPS.m_bPrintKinsokuTail = IsButtonChecked(IDC_CHECK_PS_KINSOKUTAIL);
 	// 改行文字をぶら下げる	//@@@ 2002.04.13 MIK
-	curPS.m_bPrintKinsokuRet = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKURET);
+	curPS.m_bPrintKinsokuRet = IsButtonChecked(IDC_CHECK_PS_KINSOKURET);
 	// 句読点をぶら下げる	//@@@ 2002.04.17 MIK
-	curPS.m_bPrintKinsokuKuto = IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_PS_KINSOKUKUTO);
+	curPS.m_bPrintKinsokuKuto = IsButtonChecked(IDC_CHECK_PS_KINSOKUKUTO);
 
 	// カラー印刷
 	curPS.m_bColorPrint = IsButtonChecked(IDC_CHECK_COLORPRINT);
@@ -600,11 +597,11 @@ int CDlgPrintSetting::GetData(void)
 	GetItemText(IDC_EDIT_FOOT3, curPS.m_szFooterForm[2], HEADER_MAX);	// 100文字で制限しないと。。。
 
 	// ヘッダフォント
-	if (!IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_USE_FONT_HEAD)) {
+	if (!IsButtonChecked(IDC_CHECK_USE_FONT_HEAD)) {
 		memset(&curPS.m_lfHeader, 0, sizeof(LOGFONT));
 	}
 	// フッタフォント
-	if (!IsDlgButtonCheckedBool(GetHwnd(), IDC_CHECK_USE_FONT_FOOT)) {
+	if (!IsButtonChecked(IDC_CHECK_USE_FONT_FOOT)) {
 		memset(&curPS.m_lfFooter, 0, sizeof(LOGFONT));
 	}
 
@@ -648,7 +645,7 @@ void CDlgPrintSetting::OnChangeSettingType(BOOL bGetData)
 	// 用紙サイズ一覧
 	hwndCtrl = GetItemHwnd(IDC_COMBO_PAPER);
 	nItemNum = Combo_GetCount(hwndCtrl);
-	for (int i = 0; i < nItemNum; ++i) {
+	for (int i=0; i<nItemNum; ++i) {
 		int nItemData = Combo_GetItemData(hwndCtrl, i);
 		if (curPS.m_nPrintPaperSize == nItemData) {
 			Combo_SetCurSel(hwndCtrl, i);

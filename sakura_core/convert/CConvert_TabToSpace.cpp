@@ -25,7 +25,7 @@ bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pcData->GetStringPtr() == pLine)? m_nStartColumn: 0;
-			for (i = 0; i < nLineLen; ++i) {
+			for (i=0; i<nLineLen; ++i) {
 				if (TAB == pLine[i]) {
 					nWork = m_nTabWidth - (nPosX % m_nTabWidth);
 					nPosDes += nWork;
@@ -50,7 +50,7 @@ bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pcData->GetStringPtr() == pLine)? m_nStartColumn: 0;
-			for (i = 0; i < nLineLen; ++i) {
+			for (i=0; i<nLineLen; ++i) {
 				if (TAB == pLine[i]) {
 					nWork = m_nTabWidth - (nPosX % m_nTabWidth);
 					auto_memset(&pDes[nPosDes], L' ', nWork);

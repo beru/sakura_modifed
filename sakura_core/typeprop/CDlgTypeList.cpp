@@ -208,7 +208,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 
 						m_bExtRMenu[nIdx] = true;
 						m_bExtDblClick[nIdx] = true;
-						while( NULL != ext ){
+						while (ext) {
 							if (!_tcspbrk(ext, CDocTypeManager::m_typeExtWildcards)) {
 								bool bRMenu;
 								bool bDblClick;

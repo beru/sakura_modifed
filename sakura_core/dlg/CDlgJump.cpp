@@ -170,7 +170,7 @@ BOOL CDlgJump::OnBnClicked(int wID)
 		}
 // To Here Feb. 20, 2001
 		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
-			CEditDoc*		pCEditDoc = (CEditDoc*)m_lParam;
+			CEditDoc* pCEditDoc = (CEditDoc*)m_lParam;
 			pCEditDoc->m_pcEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
 		return TRUE;
@@ -188,7 +188,6 @@ void CDlgJump::SetData(void)
 {
 	CEditDoc*		pCEditDoc = (CEditDoc*)m_lParam;
 	CFuncInfoArr	cFuncInfoArr;
-	int				i;
 	HWND			hwndCtrl;
 	wchar_t			szText[1024];
 	int				nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
@@ -217,7 +216,7 @@ void CDlgJump::SetData(void)
 	nWorkLine = -1;
 	nIndex = 0;
 	nPLSQLBlockNum = 0;
-	for (i = 0; i < cFuncInfoArr.GetNum(); ++i) {
+	for (int i=0; i<cFuncInfoArr.GetNum(); ++i) {
 		CFuncInfo* pFI = cFuncInfoArr.GetAt(i);
 		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
 		}
@@ -267,7 +266,7 @@ void CDlgJump::SetData(void)
 	Combo_SetCurSel(hwndCtrl, nIndexCurSel);
 
 	// PL/SQLのパッケージ本体が検出された場合
-	if (-1 != nWorkLine) {
+	if (nWorkLine != -1) {
 		m_nPLSQL_E1 = nWorkLine;
 		SetItemInt(IDC_EDIT_PLSQL_E1, m_nPLSQL_E1, FALSE);
 	}

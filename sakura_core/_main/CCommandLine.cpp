@@ -202,11 +202,11 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 
 		int	len = wcslen( wexename );
 
-		for (int i = len - 1; 0 <= i; i--) {
+		for (int i=len-1; 0<=i; --i) {
 			if (wexename[i] == L'.' ) {
 				wexename[i] = L'\0';
 				int k = i - 1;
-				for (; 0 < k && WCODE::Is09(wexename[k]); k-- ) {}
+				for (; 0<k && WCODE::Is09(wexename[k]); --k) {}
 				if (k < 0 || !WCODE::Is09(wexename[k])) {
 					k++;
 				}
@@ -228,7 +228,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	int		nPos;
 	int		i = 0;
 	if (pszCmdLineSrc[0] != _T('-')) {
-		for (i = 0; i < _countof(szPath); ++i) {
+		for (i=0; i<_countof(szPath); ++i) {
 			if (pszCmdLineSrc[i] == _T(' ') || pszCmdLineSrc[i] == _T('\0')) {
 				// ファイルの存在をチェック
 				szPath[i] = _T('\0');	// 終端文字
@@ -292,7 +292,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				_tcscpy(szPath, &(szPath[8]));
 			}
 			int len = _tcslen(szPath);
-			for (int i = 0; i < len ; ) {
+			for (int i=0; i<len; ) {
 				if (!TCODE::IsValidFilenameChar(szPath, i)) {
 					TCHAR msg_str[_MAX_PATH + 1];
 					_stprintf(
@@ -409,7 +409,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				m_gi.cmGrepFolder.Replace(_T("\"\""), _T("\""));
 				break;
 			case CMDLINEOPT_GOPT:	// GOPT
-				for (; *arg != '\0' ; ++arg) {
+				for (; *arg!='\0' ; ++arg) {
 					switch (*arg) {
 					case 'X':
 						m_gi.bGrepCurFolder = true;	break;

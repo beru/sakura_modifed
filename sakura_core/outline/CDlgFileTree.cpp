@@ -207,10 +207,10 @@ void CDlgFileTree::ChangeEnableItemType()
 	HWND hwndDlg = GetHwnd();
 	bool bGrepEnable = false;
 	bool bPathEnable = false;
-	if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) { 
+	if (IsButtonChecked(IDC_RADIO_GREP)) { 
 		bGrepEnable = true;
 		bPathEnable = true;
-	}else if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE)) { 
+	}else if (IsButtonChecked(IDC_RADIO_FILE)) { 
 		bPathEnable = true;
 	}
 	EnableItem(IDC_STATIC_PATH, bPathEnable);
@@ -264,7 +264,7 @@ int CDlgFileTree::GetData()
 		InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT));
 	}
 	if (pFileTree) {
-		pFileTree->m_bProject = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_LOADINI);
+		pFileTree->m_bProject = IsButtonChecked(IDC_CHECK_LOADINI);
 		DlgItem_GetText(hwndDlg, IDC_EDIT_DEFINI, pFileTree->m_szProjectIni, pFileTree->m_szProjectIni.GetBufferCount());
 		if (bSaveShareData) {
 			pFileTree->m_nItemCount = (int)items.size();
@@ -318,29 +318,28 @@ bool CDlgFileTree::GetDataTree(std::vector<SFileTreeItem>& data, HTREEITEM hItem
 
 int CDlgFileTree::GetDataItem(SFileTreeItem& item)
 {
-	HWND hwndDlg = GetHwnd();
 	item = SFileTreeItem(); // ‰Šú‰»
 	BOOL bGrepEnable = FALSE;
 	BOOL bPathEnable = FALSE;
-	if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) {
+	if (IsButtonChecked(IDC_RADIO_GREP)) {
 		bGrepEnable = TRUE;
 		bPathEnable = TRUE;
 		item.m_eFileTreeItemType = EFileTreeItemType_Grep;
-	}else if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_FILE)) { 
+	}else if (IsButtonChecked(IDC_RADIO_FILE)) { 
 		bPathEnable = TRUE;
 		item.m_eFileTreeItemType = EFileTreeItemType_File;
 	}else {
 		item.m_eFileTreeItemType = EFileTreeItemType_Folder;
 	}
 	if (bPathEnable) {
-		::DlgItem_GetText(hwndDlg, IDC_EDIT_PATH, item.m_szTargetPath, item.m_szTargetPath.GetBufferCount());
+		GetItemText(IDC_EDIT_PATH, item.m_szTargetPath, item.m_szTargetPath.GetBufferCount());
 	}
-	::DlgItem_GetText(hwndDlg, IDC_EDIT_LABEL, item.m_szLabelName, item.m_szLabelName.GetBufferCount());
+	GetItemText(IDC_EDIT_LABEL, item.m_szLabelName, item.m_szLabelName.GetBufferCount());
 	if (bGrepEnable) {
-		::DlgItem_GetText(hwndDlg, IDC_EDIT_FILE, item.m_szTargetFile, item.m_szTargetFile.GetBufferCount());
-		item.m_bIgnoreHidden = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_HIDDEN);
-		item.m_bIgnoreReadOnly = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_READONLY);
-		item.m_bIgnoreSystem = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_SYSTEM);	
+		GetItemText(IDC_EDIT_FILE, item.m_szTargetFile, item.m_szTargetFile.GetBufferCount());
+		item.m_bIgnoreHidden = IsButtonChecked(IDC_CHECK_HIDDEN);
+		item.m_bIgnoreReadOnly = IsButtonChecked(IDC_CHECK_READONLY);
+		item.m_bIgnoreSystem = IsButtonChecked(IDC_CHECK_SYSTEM);	
 	}
 	return TRUE;
 }
@@ -379,7 +378,7 @@ void CDlgFileTree::SetDataInit()
 			str += _T("+");
 			str += LS(F_FILE_TOPMENU);
 		}
-		::SetWindowText(GetItemHwnd(IDC_STATIC_SETTFING_FROM), str.c_str() );
+		SetItemText(IDC_STATIC_SETTFING_FROM, str.c_str() );
 	}else {
 		TCHAR szMsg[_MAX_PATH+200];
 		const TCHAR* pFile = m_fileTreeSetting.m_szLoadProjectIni;
@@ -392,7 +391,7 @@ void CDlgFileTree::SetDataInit()
 		int nMaxCch = ctrlWidth / xWidth;
 		CFileNameManager::getInstance()->GetTransformFileNameFast(pFile, szFilePath, _countof(szFilePath), calc.GetDC(), true, nMaxCch);
 		wsprintf(szMsg, LS(STR_FILETREE_FROM_FILE), szFilePath);
-		::SetWindowText(GetItemHwnd(IDC_STATIC_SETTFING_FROM), szMsg);
+		SetItemText(IDC_STATIC_SETTFING_FROM, szMsg);
 		bEnableDefIni = false;
 	}
 	EnableItem(IDC_BUTTON_LOAD, bEnableDefIni);
@@ -487,7 +486,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 		return TRUE;
 	case IDC_BUTTON_LOAD:
 		{
-			DlgItem_GetText( GetHwnd(), IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni, m_fileTreeSetting.m_szDefaultProjectIni.GetBufferCount() );
+			GetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni, m_fileTreeSetting.m_szDefaultProjectIni.GetBufferCount() );
 			if (m_fileTreeSetting.m_szDefaultProjectIni[0] != _T('\0')) {
 				CDataProfile cProfile;
 				cProfile.SetReadingMode();
@@ -517,7 +516,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 			HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 			HTREEITEM htiItem = TreeView_GetSelection(hwndTree);
 			BOOL bEnableUpdate = TRUE;
-			if (htiItem && !IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_FOLDER)) {
+			if (htiItem && !IsButtonChecked(IDC_RADIO_FOLDER)) {
 				TV_ITEM tvi;
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiItem;
@@ -535,12 +534,12 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 	case IDC_BUTTON_REF2:
 		{
 			HWND hwndDlg = GetHwnd();
-			if (IsDlgButtonCheckedBool(hwndDlg, IDC_RADIO_GREP)) {
+			if (IsButtonChecked(IDC_RADIO_GREP)) {
 				// RADIO_GREP == folder
 				TCHAR szDir[MAX_PATH];
-				DlgItem_GetText(GetHwnd(), IDC_EDIT_PATH, szDir, _countof(szDir) );
+				GetItemText(IDC_EDIT_PATH, szDir, _countof(szDir) );
 				if (SelectDir(hwndDlg, LS(STR_DLGGREP1), szDir, szDir)) {
-					SetItemText(IDC_EDIT_PATH, szDir );
+					SetItemText(IDC_EDIT_PATH, szDir);
 				}
 			}else {
 				// RADIO_FILE == file

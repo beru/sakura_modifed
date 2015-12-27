@@ -61,9 +61,10 @@ BOOL CDlgFind::OnCbnDropDown( HWND hwndCtl, int wID )
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_sSearchKeywords.m_aSearchKeys.size();
-			for (int i = 0; i < nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aSearchKeys[i] );
+			auto& keywords = m_pShareData->m_sSearchKeywords.m_aSearchKeys;
+			int nSize = keywords.size();
+			for (int i=0; i<nSize; ++i) {
+				Combo_AddString( hwndCtl, keywords[i] );
 			}
 		}
 		break;
@@ -75,8 +76,9 @@ BOOL CDlgFind::OnCbnDropDown( HWND hwndCtl, int wID )
 // モードレスダイアログの表示
 HWND CDlgFind::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 {
-	m_sSearchOption = m_pShareData->m_Common.m_sSearch.m_sSearchOption;		// 検索オプション
-	m_bNOTIFYNOTFOUND = m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	m_sSearchOption = csSearch.m_sSearchOption;		// 検索オプション
+	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	m_ptEscCaretPos_PHY = ((CEditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索開始時のカーソル位置退避
 	((CEditView*)lParam)->m_bSearch = TRUE;							// 検索開始位置の登録有無		02/07/28 ai
 	return CDialog::DoModeless(hInstance, hwndParent, IDD_FIND, lParam, SW_SHOW);
@@ -183,10 +185,8 @@ void CDlgFind::SetData(void)
 // 2010/5/28 Uchi
 void CDlgFind::SetCombosList(void)
 {
-	HWND	hwndCombo;
-
 	// 検索文字列
-	hwndCombo = GetItemHwnd(IDC_COMBO_TEXT);
+	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT);
 	while (Combo_GetCount(hwndCombo) > 0) {
 		Combo_DeleteString(hwndCombo, 0);
 	}
@@ -401,7 +401,7 @@ BOOL CDlgFind::OnBnClicked(int wID)
 BOOL CDlgFind::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	// 0文字幅マッチ描画のON/OFF	// 2009.11.29 ryoji
-	CEditView*	pcEditView = (CEditView*)m_lParam;
+	CEditView* pcEditView = (CEditView*)m_lParam;
 	CLayoutRange cRangeSel = pcEditView->GetSelectionInfo().m_sSelect;
 	if (cRangeSel.IsValid() && cRangeSel.IsLineOne() && cRangeSel.IsOne())
 		pcEditView->InvalidateRect(NULL);	// アクティブ化／非アクティブ化が完了してから再描画

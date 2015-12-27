@@ -316,9 +316,10 @@ void CEditWnd::_GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGr
 	// ウィンドウサイズ継承
 	int	nWinCX, nWinCY;
 	//	2004.05.13 Moca m_Common.m_eSaveWindowSizeをBOOLからenumに変えたため
-	if (WINSIZEMODE_DEF != m_pShareData->m_Common.m_sWindow.m_eSaveWindowSize) {
-		nWinCX = m_pShareData->m_Common.m_sWindow.m_nWinSizeCX;
-		nWinCY = m_pShareData->m_Common.m_sWindow.m_nWinSizeCY;
+	auto& csWindow = m_pShareData->m_Common.m_sWindow;
+	if (csWindow.m_eSaveWindowSize != WINSIZEMODE_DEF) {
+		nWinCX = csWindow.m_nWinSizeCX;
+		nWinCY = csWindow.m_nWinSizeCY;
 	}else {
 		nWinCX = CW_USEDEFAULT;
 		nWinCY = 0;
@@ -339,9 +340,9 @@ void CEditWnd::_GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGr
 	int nWinOY = 0;
 	// ウィンドウ位置固定
 	//	2004.05.13 Moca 保存したウィンドウ位置を使う場合は共有メモリからセット
-	if (WINSIZEMODE_DEF != m_pShareData->m_Common.m_sWindow.m_eSaveWindowPos) {
-		nWinOX =  m_pShareData->m_Common.m_sWindow.m_nWinPosX;
-		nWinOY =  m_pShareData->m_Common.m_sWindow.m_nWinPosY;
+	if (csWindow.m_eSaveWindowPos != WINSIZEMODE_DEF) {
+		nWinOX =  csWindow.m_nWinPosX;
+		nWinOY =  csWindow.m_nWinPosY;
 	}
 
 	//	2004.05.13 Moca マルチディスプレイでは負の値も有効なので，
@@ -574,14 +575,15 @@ void CEditWnd::_AdjustInMonitor(const STabGroupInfo& sTabGroupInfo)
 		);
 
 		// ウィンドウサイズ継承
-		if (WINSIZEMODE_DEF != m_pShareData->m_Common.m_sWindow.m_eSaveWindowSize &&
-			m_pShareData->m_Common.m_sWindow.m_nWinSizeType == SIZE_MAXIMIZED
+		auto& csWindow = m_pShareData->m_Common.m_sWindow;
+		if (csWindow.m_eSaveWindowSize != WINSIZEMODE_DEF &&
+			csWindow.m_nWinSizeType == SIZE_MAXIMIZED
 		) {
 			::ShowWindow(GetHwnd(), SW_SHOWMAXIMIZED);
 		}else
 		// 2004.05.14 Moca ウィンドウサイズを直接指定する場合は、最小化表示を受け入れる
-		if (WINSIZEMODE_SET == m_pShareData->m_Common.m_sWindow.m_eSaveWindowSize &&
-			m_pShareData->m_Common.m_sWindow.m_nWinSizeType == SIZE_MINIMIZED
+		if (csWindow.m_eSaveWindowSize == WINSIZEMODE_SET &&
+			csWindow.m_nWinSizeType == SIZE_MINIMIZED
 		) {
 			::ShowWindow(GetHwnd(), SW_SHOWMINIMIZED);
 		}else {
@@ -2734,12 +2736,13 @@ void CEditWnd::OnDropFiles(HDROP hDrop)
 	::DragQueryPoint(hDrop, &pt);
 	int cFiles = (int)::DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 	// ファイルをドロップしたときは閉じて開く
-	if (m_pShareData->m_Common.m_sFile.m_bDropFileAndClose) {
+	auto& csFile = m_pShareData->m_Common.m_sFile;
+	if (csFile.m_bDropFileAndClose) {
 		cFiles = 1;
 	}
 	// 一度にドロップ可能なファイル数
-	if (cFiles > m_pShareData->m_Common.m_sFile.m_nDropFileNumMax) {
-		cFiles = m_pShareData->m_Common.m_sFile.m_nDropFileNumMax;
+	if (cFiles > csFile.m_nDropFileNumMax) {
+		cFiles = csFile.m_nDropFileNumMax;
 	}
 
 	// アクティブにする	// 2009.08.20 ryoji 処理開始前に無条件でアクティブ化
@@ -2770,7 +2773,7 @@ void CEditWnd::OnDropFiles(HDROP hDrop)
 				GetDocument()->m_cDocFileOperation.FileLoad(&sLoadInfo);
 			}else {
 				// ファイルをドロップしたときは閉じて開く
-				if (m_pShareData->m_Common.m_sFile.m_bDropFileAndClose) {
+				if (csFile.m_bDropFileAndClose) {
 					// ファイル読み込み
 					SLoadInfo sLoadInfo(szFile, CODE_AUTODETECT, false);
 					GetDocument()->m_cDocFileOperation.FileCloseOpen(sLoadInfo);
@@ -2980,14 +2983,15 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 
 	int cx = LOWORD(lParam);
 	int cy = HIWORD(lParam);
+	auto& csWindow = m_pShareData->m_Common.m_sWindow;
 	
 	// ウィンドウサイズ継承
 	if (wParam != SIZE_MINIMIZED) {						// 最小化は継承しない
 		//	2004.05.13 Moca m_eSaveWindowSizeの解釈追加のため
-		if (WINSIZEMODE_SAVE == m_pShareData->m_Common.m_sWindow.m_eSaveWindowSize) {		// ウィンドウサイズ継承をするか
+		if (csWindow.m_eSaveWindowSize == WINSIZEMODE_SAVE) {		// ウィンドウサイズ継承をするか
 			if (wParam == SIZE_MAXIMIZED) {					// 最大化はサイズを記録しない
-				if (m_pShareData->m_Common.m_sWindow.m_nWinSizeType != (int)wParam) {
-					m_pShareData->m_Common.m_sWindow.m_nWinSizeType = wParam;
+				if (csWindow.m_nWinSizeType != (int)wParam) {
+					csWindow.m_nWinSizeType = wParam;
 				}
 			}else {
 				// Aero Snapの縦方向最大化状態で終了して次回起動するときは元のサイズにする必要があるので、
@@ -3000,13 +3004,13 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 				GetMonitorWorkRect(GetHwnd(), &rcWork, &rcMon);
 				::OffsetRect(&rcWin, rcWork.left - rcMon.left, rcWork.top - rcMon.top);	// スクリーン座標に変換
 				// ウィンドウサイズに関するデータが変更されたか
-				if (m_pShareData->m_Common.m_sWindow.m_nWinSizeType != (int)wParam ||
-					m_pShareData->m_Common.m_sWindow.m_nWinSizeCX != rcWin.right - rcWin.left ||
-					m_pShareData->m_Common.m_sWindow.m_nWinSizeCY != rcWin.bottom - rcWin.top
+				if (csWindow.m_nWinSizeType != (int)wParam ||
+					csWindow.m_nWinSizeCX != rcWin.right - rcWin.left ||
+					csWindow.m_nWinSizeCY != rcWin.bottom - rcWin.top
 				) {
-					m_pShareData->m_Common.m_sWindow.m_nWinSizeType = wParam;
-					m_pShareData->m_Common.m_sWindow.m_nWinSizeCX = rcWin.right - rcWin.left;
-					m_pShareData->m_Common.m_sWindow.m_nWinSizeCY = rcWin.bottom - rcWin.top;
+					csWindow.m_nWinSizeType = wParam;
+					csWindow.m_nWinSizeCX = rcWin.right - rcWin.left;
+					csWindow.m_nWinSizeCY = rcWin.bottom - rcWin.top;
 				}
 			}
 		}
@@ -3118,7 +3122,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 			m_cTabWnd.SizeBox_ONOFF( false );
 			::GetWindowRect( m_cTabWnd.GetHwnd(), &rc );
 			nTabWndHeight = rc.bottom - rc.top;
-			if (m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {
+			if (csWindow.m_nFUNCKEYWND_Place == 0) {
 				::MoveWindow(m_cTabWnd.GetHwnd(), 0, nToolBarHeight + nFuncKeyWndHeight, cx, nTabWndHeight, TRUE);
 			}else {
 				::MoveWindow(m_cTabWnd.GetHwnd(), 0, nToolBarHeight, cx, nTabWndHeight, TRUE);
@@ -3127,7 +3131,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 			::GetWindowRect( m_cTabWnd.GetHwnd(), &rc );
 			if (nTabWndHeight != rc.bottom - rc.top) {
 				nTabWndHeight = rc.bottom - rc.top;
-				if (m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {
+				if (csWindow.m_nFUNCKEYWND_Place == 0) {
 					::MoveWindow( m_cTabWnd.GetHwnd(), 0, nToolBarHeight + nFuncKeyWndHeight, cx, nTabWndHeight, TRUE );
 				}else {
 					::MoveWindow( m_cTabWnd.GetHwnd(), 0, nToolBarHeight, cx, nTabWndHeight, TRUE );
@@ -3144,7 +3148,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 				bSizeBox = false;
 			}
 			if (m_cFuncKeyWnd.GetHwnd()) {
-				if (m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 1 ){
+				if (csWindow.m_nFUNCKEYWND_Place == 1 ){
 					bSizeBox = false;
 				}
 			}
@@ -3175,7 +3179,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 
 	//	2005.04.23 genta ファンクションキー非表示の時は移動しない
 	if (m_cFuncKeyWnd.GetHwnd()) {
-		if (m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {
+		if (csWindow.m_nFUNCKEYWND_Place == 0) {
 			// ファンクションキー表示位置／0:上 1:下
 			::MoveWindow(
 				m_cFuncKeyWnd.GetHwnd(),
@@ -3183,7 +3187,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 				nToolBarHeight,
 				cx,
 				nFuncKeyWndHeight, TRUE);
-		}else if (m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 1) {
+		}else if (csWindow.m_nFUNCKEYWND_Place == 1) {
 			// ファンクションキー表示位置／0:上 1:下
 			::MoveWindow(
 				m_cFuncKeyWnd.GetHwnd(),
@@ -3217,7 +3221,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 
 	EDockSide eDockSideFL = m_cDlgFuncList.GetDockSide();
 	int nTop = nToolBarHeight + nTabWndHeight;
-	if (m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0)
+	if (csWindow.m_nFUNCKEYWND_Place == 0)
 		nTop += nFuncKeyWndHeight;
 	int nHeight = cy - nToolBarHeight - nFuncKeyWndHeight - nTabWndHeight - nTabHeightBottom - nStatusBarHeight;
 	if (m_cDlgFuncList.GetHwnd() && m_cDlgFuncList.IsDocking()) {
@@ -4003,6 +4007,7 @@ void CEditWnd::WindowTopMost(int top)
 	::SetWindowPos(GetHwnd(), hwndInsertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
 	// タブまとめ時は WS_EX_TOPMOST 状態を全ウィンドウで同期する	// 2007.05.18 ryoji
+	auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
 	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
 		hwndInsertAfter = GetHwnd();
 		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {

@@ -370,7 +370,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 			TCHAR sTmpPath[_MAX_PATH + 1] = {0};
 			const int nMaxCnt = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 
-			for (int nLoop = 0; nLoop < nMaxCnt; nLoop++) {
+			for (int nLoop=0; nLoop<nMaxCnt; ++nLoop) {
 				DragQueryFile(hDrop, nLoop, sTmpPath, _countof(sTmpPath) - 1);
 				// 2012.10.05 Moca ANSI版に合わせて最終行にも改行コードをつける
 				cmemBuf->AppendStringT(sTmpPath);
@@ -416,14 +416,14 @@ static CLIPFORMAT GetClipFormat(const wchar_t* pFormatName)
 	if (pFormatName[0] == L'\0') {
 		return uFormat;
 	}
-	for (int i = 0; i < _countof(sClipFormatNames); i++) {
+	for (int i=0; i<_countof(sClipFormatNames); ++i) {
 		if (0 == wcsicmp(pFormatName, sClipFormatNames[i].m_pszName)) {
 			uFormat = sClipFormatNames[i].m_nClipFormat;
 		}
 	}
 	if (uFormat == (CLIPFORMAT)-1) {
 		bool bNumber = true;
-		for (int i =0; pFormatName[i]; i++) {
+		for (int i=0; pFormatName[i]; ++i) {
 			if (!WCODE::Is09(pFormatName[i])) {
 				bNumber = false;
 			}
@@ -489,7 +489,7 @@ bool CClipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFo
 		pBuf = (char*)cmemBuf.GetRawPtr();
 		size_t len = cstr.GetLength();
 		const wchar_t* pMem = cstr.GetPtr();
-		for (size_t i = 0; i < len; i++) {
+		for (size_t i=0; i<len; ++i) {
 			pBuf[i] = (unsigned char)pMem[i];
 			if (0xff < pMem[i]) {
 				return false;
@@ -608,7 +608,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 			mem.AllocStringBuffer(nLength);
 			mem._SetStringLength(nLength);
 			wchar_t* pBuf = (wchar_t*)mem.GetStringPtr();
-			for (size_t i = 0; i < nLength; i++) {
+			for (size_t i=0; i<nLength; ++i) {
 				pBuf[i] = (unsigned char)pData[i];
 			}
 		}else {

@@ -402,7 +402,7 @@ int _CheckJisAnyPart(
 	pr = pS;
 	pr_end = pS + nLen;
 
-	for (; pr < pr_end; pr++) {
+	for (; pr<pr_end; ++pr) {
 		nesclen = DetectJisEscseq(pr, pr_end-pr, &emyesc);  // 次のエスケープシーケンスを検索
 		if (emyesc != MYJISESC_NONE || nesclen > 0) {
 			// 長さ nesclen の JIS エスケープシーケンス（種類 emyesc）が見つかった
@@ -948,7 +948,7 @@ int CheckUtf7DPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 
 	pr = pS;
 	pr_end = pS + nLen;
-	for (; pr < pr_end; ++pr) {
+	for (; pr<pr_end; ++pr) {
 		if (*pr == '+') {
 			break;
 		}
@@ -1010,7 +1010,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 	pr = pS;
 	pr_end = pS + nLen;
 
-	for (; pr < pr_end; ++pr) {
+	for (; pr<pr_end; ++pr) {
 		// セットＢの文字でなくなるまでループ
 		if (!IsBase64(*pr)) {
 			if (*pr == '-') {
@@ -1091,7 +1091,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 	}
 	ndatalen = _DecodeBase64(pS, nchecklen, reinterpret_cast<char*>(pdata)) / sizeof(wchar_t);
 	CMemory::SwapHLByte(reinterpret_cast<char*>(pdata), ndatalen * sizeof(wchar_t));
-	for (int i = 0; i < ndatalen; i += nret) {
+	for (int i=0; i<ndatalen; i+=nret) {
 		nret = CheckUtf16leChar(&pdata[i], ndatalen - i, &echarset, nOption & UC_NONCHARACTER);
 		if (echarset == CHARSET_BINARY) {
 			berror_found = true;

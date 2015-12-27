@@ -76,7 +76,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 
 	switch (eMyJisesc) {
 	case MYJISESC_ASCII7:
-		for (; pr < pSrc + nSrcLen; ++pr) {
+		for (; pr<pSrc+nSrcLen; ++pr) {
 			if (IsAscii7(static_cast<const char>(*pr))) {
 				pw[0] = *pr;
 			}else {
@@ -87,7 +87,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 		}
 		break;
 	case MYJISESC_HANKATA:
-		for (; pr < pSrc + nSrcLen; ++pr) {
+		for (; pr<pSrc+nSrcLen; ++pr) {
 			if (IsJisHankata(static_cast<const char>(*pr))) {
 				// JIS → SJIS
 				chankata = (*pr | 0x80);
@@ -105,7 +105,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 		}
 		break;
 	case MYJISESC_ZENKAKU:
-		for (; pr < pSrc + nSrcLen - 1; pr += 2) {
+		for (; pr<pSrc+nSrcLen-1; pr+=2) {
 			if (IsJisZen(reinterpret_cast<const char*>(pr))) {
 				// JIS -> SJIS
 				ctemp = _mbcjistojms((static_cast<unsigned int>(pr[0]) << 8) | pr[1]);
@@ -137,7 +137,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 		break;
 	case MYJISESC_UNKNOWN:
 		berror = true;
-		for (; pr < pSrc + nSrcLen; ++pr) {
+		for (; pr<pSrc+nSrcLen; ++pr) {
 			if (IsJis(static_cast<const char>(*pr))) {
 				pw[0] = *pr;
 			}else {
@@ -149,7 +149,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 	default:
 		// 致命的エラー回避コード
 		berror = true;
-		for (; pr < pSrc + nSrcLen; ++pr) {
+		for (; pr<pSrc+nSrcLen; ++pr) {
 			pw[0] = L'?';
 			++pw;
 		}
@@ -510,7 +510,7 @@ EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	TCHAR* pd = pDst;
 	int	i = cCharBuffer._GetMemory()->GetRawLength();
 	unsigned char* ps = (unsigned char*)cCharBuffer._GetMemory()->GetRawPtr();
-	for (; i >0; i--, ps ++) {
+	for (; i>0; --i, ++ps) {
 		if (*ps == 0x1B) {
 			bInEsc = true;
 		}else if (bInEsc) {

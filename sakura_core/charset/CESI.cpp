@@ -169,11 +169,11 @@ void CESI::SortMBCInfo(void)
 	/*
 		「特有バイト数 － 不正バイト数＝ポイント数 (.nPoints)」の数の大きい順にソート（バブルソート）
 	*/
-	for (int i = 0; i < NUM_OF_MBCODE; i++) {
+	for (int i=0; i<NUM_OF_MBCODE; ++i) {
 		m_apMbcInfo[i] = &m_aMbcInfo[i];
 	}
-	for (int i = 1; i < NUM_OF_MBCODE; i++) {
-		for (int j = 0; j < NUM_OF_MBCODE - i; j++) {
+	for (int i=1; i<NUM_OF_MBCODE; ++i) {
+		for (int j=0; j<NUM_OF_MBCODE-i; ++j) {
 			if (m_apMbcInfo[j]->nPoints < m_apMbcInfo[j + 1]->nPoints) {
 				MBCODE_INFO* pei_tmp = m_apMbcInfo[j + 1];
 				m_apMbcInfo[j + 1] = m_apMbcInfo[j];
@@ -204,7 +204,7 @@ void CESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 
 	int nret;
 	ECharSet echarset;
-	for (; 0 != (nret = CheckSjisChar(pr, pr_end - pr, &echarset)); pr += nret) {
+	for (; 0!=(nret = CheckSjisChar(pr, pr_end - pr, &echarset)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
 			if (echarset == CHARSET_JIS_ZENKAKU) {
 				num_of_sjis_encoded_bytes += nret;
@@ -307,7 +307,7 @@ void CESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 	int num_of_euc_zen_hirakata = 0;
 	int num_of_euc_zen = 0;
 
-	for (; 0 != (nret = CheckEucjpChar(pr, pr_end - pr, &echarset)); pr += nret) {
+	for (; 0!=(nret = CheckEucjpChar(pr, pr_end - pr, &echarset)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
 			if (1 < nret) {
 				num_of_eucjp_encoded_bytes += nret;
@@ -426,7 +426,7 @@ void CESI::GetEncodingInfo_utf8(const char* pS, const int nLen)
 	const char* pr = pS;
 	const char* pr_end = pS + nLen;
 
-	for (; 0 != (nret = CheckUtf8Char(pr, pr_end - pr, &echarset, true, 0)); pr += nret) {
+	for (; 0!=(nret = CheckUtf8Char(pr, pr_end - pr, &echarset, true, 0)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
 			if (1 < nret) {
 				num_of_utf8_encoded_bytes += nret;
@@ -463,7 +463,7 @@ void CESI::GetEncodingInfo_cesu8(const char* pS, const int nLen)
 
 	int nret;
 	ECharSet echarset;
-	for (; 0 != (nret = CheckCesu8Char(pr, pr_end - pr, &echarset, 0)); pr += nret) {
+	for (; 0!=(nret = CheckCesu8Char(pr, pr_end - pr, &echarset, 0)); pr+=nret) {
 		if (echarset != CHARSET_BINARY) {
 			if (1 < nret) {
 				num_of_cesu8_encoded_bytes += nret;
@@ -717,7 +717,7 @@ void CESI::GuessEucOrSjis(void)
 	) { // 0.25 という値は適当です。
 		// EUC をトップに持ってくる
 		int i;
-		for (i = 0; i < 2; ++i) {
+		for (i=0; i<2; ++i) {
 			if (m_apMbcInfo[i]->eCodeID == CODE_EUC) {
 				break;
 			}
@@ -742,7 +742,7 @@ void CESI::GuessUtf8OrCesu8(void)
 	if (IsAmbiguousUtf8AndCesu8()
 	 && m_pEncodingConfig->m_bPriorCesu8) {
 		int i;
-		for (i = 0; i < 2; ++i) {
+		for (i=0; i<2; ++i) {
 			if (m_apMbcInfo[i]->eCodeID == CODE_CESU8) {
 				break;
 			}
@@ -907,7 +907,7 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 		char quoteXML = '\0';
 		int i;
 		// xml規格ではencodingはverionに続いて現れる以外は許されない。ここではいいにする
-		for (i = 5; i < nSize - 12; i++) {
+		for (i=5; i<nSize-12; ++i) {
 			// [ \t\r\n]encoding[ \t\r\n]*=[ \t\r\n]*[\"\']を探す
 			if (IsXMLWhiteSpace( pBuf[i])
 			 && 0 == memcmp( pBuf + i + 1, "encoding", 8 )) {
@@ -930,8 +930,7 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 				}
 				quoteChar = pBuf[i];
 				i++;
-				int k;
-				for (k = 0; encodingNameToCode[k].name; k++) {
+				for (int k=0; encodingNameToCode[k].name; ++k) {
 					const int nLen = encodingNameToCode[k].nLen;
 					if (i + nLen < nSize - 1
 					  && pBuf[i + nLen] == quoteChar
@@ -949,7 +948,7 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 				}
 			}
 		}
-		for (; i < nSize; i++) {
+		for (; i<nSize; ++i) {
 			if (pBuf[i] == '<' || pBuf[i] == '>') {
 				break;
 			}
@@ -978,7 +977,7 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 
 ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 {
-	for (int i = 0; i + 14 < nSize; i++) {
+	for (int i=0; i+14<nSize; ++i) {
 		// 「<meta http-equiv="Content-Type" content="text/html; Charset=Shift_JIS">」
 		// 「<meta charset="utf-8">」
 		if (0 == memicmp(pBuf + i, "<meta", 5) && IsXMLWhiteSpace(pBuf[i+5])) {
@@ -1061,8 +1060,7 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 							if (nEndAttVal <= i) { i = nNextPos; continue; }
 							int nCharsetBegin = i;
 							while (i < nEndAttVal && !IsXMLWhiteSpace(pBuf[i])) { i++; }
-							int k;
-							for (k = 0; encodingNameToCode[k].name; k++) {
+							for (int k=0; encodingNameToCode[k].name; ++k) {
 								const int nLen = encodingNameToCode[k].nLen;
 								if (i - nCharsetBegin == nLen
 								  && 0 == memicmp( encodingNameToCode[k].name, pBuf + nCharsetBegin, nLen )) {
@@ -1077,8 +1075,7 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 						}
 						i = nNextPos;
 					}else if (3 == nAttType) {
-						int k;
-						for (k = 0; encodingNameToCode[k].name; k++) {
+						for (int k=0; encodingNameToCode[k].name; ++k) {
 							const int nLen = encodingNameToCode[k].nLen;
 							if (nEndAttVal - nBeginAttVal == nLen
 							  && 0 == memicmp( encodingNameToCode[k].name, pBuf + nBeginAttVal, nLen )) {
@@ -1120,21 +1117,20 @@ ECodeType CESI::AutoDetectByCoding( const char* pBuf, int nSize )
 {
 	bool bComment = false;
 	int nLineNum = 1;
-	for (int i = 0; i + 8 < nSize; i++) {
+	for (int i=0; i+8<nSize; ++i) {
 		if (bComment && 0 == memcmp(pBuf + i, "coding", 6)
 			&& ('=' == pBuf[i+6] ||':' == pBuf[i+6])) {
 			i += 7;
-			for (; i < nSize && (' ' == pBuf[i] || '\t' == pBuf[i]); i++) {}
+			for (; i<nSize && (' ' == pBuf[i] || '\t' == pBuf[i]); ++i) {}
 			if (nSize <= i) {
 				return CODE_NONE;
 			}
 			int nBegin = i;
-			for (;i < nSize && IsEncodingNameChar(pBuf[i]); i++) {}
+			for (; i<nSize && IsEncodingNameChar(pBuf[i]); ++i) {}
 			if (nBegin == i) {
 				return CODE_NONE;
 			}
-			int k;
-			for (k = 0; encodingNameToCode[k].name; k++) {
+			for (int k=0; encodingNameToCode[k].name; ++k) {
 				const int nLen = encodingNameToCode[k].nLen;
 				if (i - nBegin == nLen
 				  && 0 == memicmp( encodingNameToCode[k].name, pBuf + nBegin, nLen )) {
@@ -1242,7 +1238,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	}
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_MBC_OTHER_UNICODE));
-	for (int i = 0; i < NUM_OF_MBCODE; ++i) {
+	for (int i=0; i<NUM_OF_MBCODE; ++i) {
 		if (!IsValidCodeType(cesi.m_apMbcInfo[i]->eCodeID)) {
 			cesi.m_apMbcInfo[i]->eCodeID = CODE_SJIS;
 		}

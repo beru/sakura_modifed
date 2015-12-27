@@ -138,12 +138,12 @@ void CViewCommander::Command_JUMP(void)
 	}
 
 	auto& lineMgr = GetDocument()->m_cDocLineMgr;
-	for (; nLineCount <  lineMgr.GetLineCount(); ++nLineCount) {
+	for (; nLineCount<lineMgr.GetLineCount(); ++nLineCount) {
 		CLogicInt nLineLen;
 		const wchar_t* pLine = lineMgr.GetLine(CLogicInt(nLineCount))->GetDocLineStrWithEOL(&nLineLen);
 		bValidLine = FALSE;
 		CLogicInt i;
-		for (i = CLogicInt(0); i < nLineLen; ++i) {
+		for (i=CLogicInt(0); i<nLineLen; ++i) {
 			wchar_t let = pLine[i];
 			if (1
 				&& let != L' '
@@ -155,7 +155,7 @@ void CViewCommander::Command_JUMP(void)
 		CLogicInt nBgn = i;
 		wchar_t let = 0;
 		wchar_t prevLet;
-		for (i = nBgn; i < nLineLen; ++i) {
+		for (i=nBgn; i<nLineLen; ++i) {
 			// シングルクォーテーション文字列読み込み中
 			prevLet = let;
 			let = pLine[i];
@@ -283,7 +283,7 @@ void CViewCommander::Command_BOOKMARK_SET(void)
 			CLayoutPoint(CLayoutInt(0), sSelect.GetTo().y),
 			&ptTo
 		);
-		for (CLogicInt nY = ptFrom.GetY2(); nY <= ptTo.y; nY++) {
+		for (CLogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
 			pCDocLine = lineMgr.GetLine(nY);
 			CBookmarkSetter cBookmark(pCDocLine);
 			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
@@ -418,9 +418,9 @@ void CViewCommander::Command_BOOKMARK_PATTERN(void)
 void CViewCommander::Command_FUNCLIST_NEXT(void)
 {
 	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
-	int			nYOld = ptXY.y;
+	int nYOld = ptXY.y;
 
-	for (int n = 0; n < 2; n++) {
+	for (int n=0; n<2; ++n) {
 		if (CFuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
 				ptXY.GetY2(), SEARCH_FORWARD, &ptXY.y)) {
 			CLayoutPoint ptLayout;
@@ -449,9 +449,9 @@ void CViewCommander::Command_FUNCLIST_PREV(void)
 {
 
 	CLogicPoint	ptXY(0,GetCaret().GetCaretLogicPos().y);
-	int			nYOld = ptXY.y;
+	int nYOld = ptXY.y;
 
-	for (int n = 0; n < 2; n++) {
+	for (int n=0; n<2; ++n) {
 		if (CFuncListManager().SearchFuncListMark(
 			&GetDocument()->m_cDocLineMgr,
 			ptXY.GetY2(),

@@ -172,7 +172,7 @@ void CViewCommander::Command_COMPARE(void)
 		phwndArr[0] = GetMainWindow();
 		phwndArr[1] = hwndCompareWnd;
 		
-		for (int i = 0; i < 2; ++i) {
+		for (int i=0; i<2; ++i) {
 			if (::IsZoomed( phwndArr[i] )) {
 				::ShowWindow( phwndArr[i], SW_RESTORE );
 			}

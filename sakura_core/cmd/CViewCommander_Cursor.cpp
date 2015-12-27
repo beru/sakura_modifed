@@ -111,7 +111,7 @@ int CViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 	}else {
 		++nRepeat;
 		if (caret.Cursor_UPDOWN(CLayoutInt(-1), bSelect) != 0 && bRepeat) {
-			for (int i = 0; i < csGeneral.m_nRepeatedScrollLineNum - 1; ++i) {		// キーリピート時のスクロール行数
+			for (int i=0; i<csGeneral.m_nRepeatedScrollLineNum-1; ++i) {		// キーリピート時のスクロール行数
 				::UpdateWindow(m_pCommanderView->GetHwnd());	// YAZAKI
 				caret.Cursor_UPDOWN(CLayoutInt(-1), bSelect);
 				++nRepeat;
@@ -141,7 +141,7 @@ int CViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 	}else {
 		++nRepeat;
 		if (caret.Cursor_UPDOWN(CLayoutInt(1), bSelect) != 0 && bRepeat) {
-			for (int i = 0; i < csGeneral.m_nRepeatedScrollLineNum - 1; ++i) {	// キーリピート時のスクロール行数
+			for (int i=0; i<csGeneral.m_nRepeatedScrollLineNum-1; ++i) {	// キーリピート時のスクロール行数
 				// ここで再描画。
 				::UpdateWindow(m_pCommanderView->GetHwnd());	// YAZAKI
 				caret.Cursor_UPDOWN(CLayoutInt(1), bSelect);
@@ -171,7 +171,7 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 	int nRepeat = bRepeat ? 2 : 1;
 	int nRes = 0;
 	CLayoutPoint ptCaretMove = GetCaret().GetCaretLayoutPos();
-	for (int nRepCount = 0; nRepCount < nRepeat; ++nRepCount) {
+	for (int nRepCount=0; nRepCount<nRepeat; ++nRepCount) {
 		if (bSelect && ! m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 			// 現在のカーソル位置から選択を開始する
 			m_pCommanderView->GetSelectionInfo().BeginSelectArea();
@@ -271,7 +271,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 	bool	bMoveCaretLine = false;
 	int nRepeat = bRepeat ? 2 : 1; // 移動する回数
 	CLayoutPoint ptCaretMove = GetCaret().GetCaretLayoutPos();
-	for (int nRepCount = 0; nRepCount < nRepeat; ++nRepCount) {
+	for (int nRepCount=0; nRepCount<nRepeat; ++nRepCount) {
 		// 2003.06.28 Moca [EOF]のみの行にカーソルがあるときに右を押しても選択を解除できない問題に
 		// 対応するため、現在行のデータを取得を移動
 		if (!bIgnoreCurrentSelection) {
@@ -305,7 +305,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 
 			// 現在のキャレットの右の位置(to_x)を求める。
 			CMemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
-			for (; ! it.end(); it.scanNext(), it.addDelta()) {
+			for (; !it.end(); it.scanNext(), it.addDelta()) {
 				if (ptCaret.x < it.getColumn()) {
 					break;
 				}
@@ -634,7 +634,7 @@ void CViewCommander::Command_GOLINETOP(
 			if (!pLine) {
 				return;
 			}
-			for (nPosX_Logic = 0; nPosX_Logic < nLineLen; ++nPosX_Logic) {
+			for (nPosX_Logic=0; nPosX_Logic<nLineLen; ++nPosX_Logic) {
 				if (WCODE::IsIndentChar(pLine[nPosX_Logic], bZenSpace != 0)) continue;
 				
 				if (WCODE::IsLineDelimiter(pLine[nPosX_Logic], bExtEol)) {
@@ -1268,7 +1268,7 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 		ptXY.y++;
 		pcDocLine = pcDocLine->GetNextLine();
 	}
-	for (int n = 0; n < 2; n++) {
+	for (int n=0; n<2; ++n) {
 		while (pcDocLine) {
 			if (CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq) != bModified
 				|| (0 == ptXY.y
@@ -1371,7 +1371,7 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		ptXY.y--;
 		pcDocLine = pcDocLine->GetPrevLine();
 	}
-	for (int n = 0; n < 2; n++) {
+	for (int n=0; n<2; ++n) {
 		while (pcDocLine) {
 			bool bModifiedTemp = CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq);
 			if (bModifiedTemp != bModified) {

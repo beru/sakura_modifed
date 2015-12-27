@@ -77,7 +77,7 @@ BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
 			int nSize = m_pShareData->m_sSearchKeywords.m_aSearchKeys.size();
-			for (int i = 0; i < nSize; ++i) {
+			for (int i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aSearchKeys[i] );
 			}
 		}
@@ -85,7 +85,7 @@ BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
 	case IDC_COMBO_TEXT2:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
 			int nSize = m_pShareData->m_sSearchKeywords.m_aReplaceKeys.size();
-			for (int i = 0; i < nSize; ++i) {
+			for (int i=0; i<nSize; ++i) {
 				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aReplaceKeys[i] );
 			}
 		}
@@ -97,10 +97,11 @@ BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
 // モードレスダイアログの表示
 HWND CDlgReplace::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam, bool bSelected)
 {
-	m_sSearchOption = m_pShareData->m_Common.m_sSearch.m_sSearchOption;		// 検索オプション
-	m_bConsecutiveAll = m_pShareData->m_Common.m_sSearch.m_bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	m_bSelectedArea = m_pShareData->m_Common.m_sSearch.m_bSelectedArea;		// 選択範囲内置換
-	m_bNOTIFYNOTFOUND = m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	m_sSearchOption = csSearch.m_sSearchOption;		// 検索オプション
+	m_bConsecutiveAll = csSearch.m_bConsecutiveAll;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	m_bSelectedArea = csSearch.m_bSelectedArea;		// 選択範囲内置換
+	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	m_bSelected = bSelected;
 	m_ptEscCaretPos_PHY = ((CEditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
 	((CEditView*)lParam)->m_bSearch = TRUE;							// 検索/置換開始位置の登録有無			02/07/28 ai
@@ -118,6 +119,8 @@ void CDlgReplace::ChangeView(LPARAM pcEditView)
 // ダイアログデータの設定
 void CDlgReplace::SetData(void)
 {
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+
 	// 検索文字列/置換後文字列リストの設定(関数化)	2010/5/26 Uchi
 	SetCombosList();
 
@@ -156,10 +159,10 @@ void CDlgReplace::SetData(void)
 	CheckButton(IDC_CHECK_NOTIFYNOTFOUND, m_bNOTIFYNOTFOUND);
 
 	// 置換 ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgReplace, m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace);
+	CheckButton(IDC_CHECK_bAutoCloseDlgReplace, csSearch.m_bAutoCloseDlgReplace);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	CheckButton(IDC_CHECK_SEARCHALL, m_pShareData->m_Common.m_sSearch.m_bSearchAll);
+	CheckButton(IDC_CHECK_SEARCHALL, csSearch.m_bSearchAll);
 
 	// From Here 2001.12.03 hor
 	// クリップボードから貼り付ける？
@@ -217,6 +220,8 @@ void CDlgReplace::SetCombosList(void)
 // 0==条件未入力  0より大きい==正常   0より小さい==入力エラー
 int CDlgReplace::GetData(void)
 {
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+
 	// 英大文字と英小文字を区別する
 	m_sSearchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
@@ -234,9 +239,9 @@ int CDlgReplace::GetData(void)
 	// 検索／置換  見つからないときメッセージを表示
 	m_bNOTIFYNOTFOUND = IsButtonChecked(IDC_CHECK_NOTIFYNOTFOUND);
 
-	m_pShareData->m_Common.m_sSearch.m_bConsecutiveAll = m_bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	m_pShareData->m_Common.m_sSearch.m_bSelectedArea = m_bSelectedArea;		// 選択範囲内置換
-	m_pShareData->m_Common.m_sSearch.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
+	csSearch.m_bConsecutiveAll = m_bConsecutiveAll;	// 1==「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	csSearch.m_bSelectedArea = m_bSelectedArea;		// 選択範囲内置換
+	csSearch.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 
 	// 検索文字列
 	int nBufferSize = ::GetWindowTextLength(GetItemHwnd(IDC_COMBO_TEXT)) + 1;
@@ -254,10 +259,10 @@ int CDlgReplace::GetData(void)
 	}
 
 	// 置換 ダイアログを自動的に閉じる
-	m_pShareData->m_Common.m_sSearch.m_bAutoCloseDlgReplace = IsButtonChecked(IDC_CHECK_bAutoCloseDlgReplace);
+	csSearch.m_bAutoCloseDlgReplace = IsButtonChecked(IDC_CHECK_bAutoCloseDlgReplace);
 
 	// 先頭（末尾）から再検索 2002.01.26 hor
-	m_pShareData->m_Common.m_sSearch.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
+	csSearch.m_bSearchAll = IsButtonChecked(IDC_CHECK_SEARCHALL);
 
 	if (0 < m_strText.size()) {
 		// 正規表現？
@@ -276,7 +281,7 @@ int CDlgReplace::GetData(void)
 		//@@@ 2002.2.2 YAZAKI CShareData.AddToSearchKeyArr()追加に伴う変更
 		if (m_strText.size() < _MAX_PATH) {
 			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
-			m_pShareData->m_Common.m_sSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
+			csSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
 		CEditView*	pcEditView = (CEditView*)m_lParam;

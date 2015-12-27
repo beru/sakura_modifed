@@ -128,7 +128,7 @@ void CDlgPluginOption::SetData(void)
 
 	CPluginOption* cOpt;
 	CPluginOption::ArrayIter it;
-	for (i = 0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
+	for (i=0, it=m_cPlugin->m_options.begin(); it!=m_cPlugin->m_options.end(); ++i, ++it) {
 		cOpt = *it;
 
 		auto_snprintf_s(buf, _countof(buf), _T("%ls"), cOpt->GetLabel().c_str());
@@ -173,7 +173,7 @@ void CDlgPluginOption::SetData(void)
 			selects = cOpt->GetSelects();
 
 			buf[0] = 0;
-			for (auto it = selects.begin(); it != selects.end(); it++) {
+			for (auto it=selects.begin(); it!=selects.end(); ++it) {
 				SepSelect(*it, &sView, &sTrg);
 				if (sValue == sTrg) {
 					auto_snprintf_s(buf, _countof(buf), _T("%ls"), sView.c_str());
@@ -215,12 +215,10 @@ void CDlgPluginOption::SetData(void)
 int CDlgPluginOption::GetData(void)
 {
 	// .ini ファイルへの書き込み
-	HWND	hwndList;
-	int		i;
 	LV_ITEM	lvi;
 
 	// リスト
-	hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
+	HWND hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 
 	std::auto_ptr<CDataProfile> cProfile(new CDataProfile);
 	cProfile->SetReadingMode();
@@ -230,7 +228,8 @@ int CDlgPluginOption::GetData(void)
 	CPluginOption* cOpt;
 	TCHAR	buf[MAX_LENGTH_VALUE + 1];
 	CPluginOption::ArrayIter it;
-	for (i = 0, it = m_cPlugin->m_options.begin(); it != m_cPlugin->m_options.end(); i++, it++) {
+	int i;
+	for (i=0, it=m_cPlugin->m_options.begin(); it!=m_cPlugin->m_options.end(); ++i, ++it) {
 		cOpt = *it;
 
 		memset_raw(&lvi, 0, sizeof(lvi));
@@ -255,7 +254,7 @@ int CDlgPluginOption::GetData(void)
 			selects = cOpt->GetSelects();
 			wstring sWbuf = to_wchar(buf);
 
-			for (auto it = selects.begin(); it != selects.end(); it++) {
+			for (auto it=selects.begin(); it!=selects.end(); ++it) {
 				SepSelect(*it, &sView, &sTrg);
 				if (sView == sWbuf) {
 					auto_sprintf( buf, _T("%ls"), sTrg.c_str());
@@ -288,14 +287,13 @@ int CDlgPluginOption::GetData(void)
 
 BOOL CDlgPluginOption::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
-	HWND		hwndList;
 	LV_COLUMN	col;
 	RECT		rc;
 	long		lngStyle;
 
 	_SetHwnd(hwndDlg);
 
-	hwndList = GetDlgItem(hwndDlg, IDC_LIST_PLUGIN_OPTIONS);
+	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_PLUGIN_OPTIONS);
 	::GetWindowRect(hwndList, &rc);
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -337,10 +335,8 @@ BOOL CDlgPluginOption::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgPluginOption::OnNotify(WPARAM wParam, LPARAM lParam)
 {
-	NMHDR*		pNMHDR;
-	int			idCtrl;
-
-	idCtrl = (int)wParam;
+	NMHDR* pNMHDR;
+	int idCtrl = (int)wParam;
 	switch (idCtrl) {
 	case IDC_LIST_PLUGIN_OPTIONS:
 		pNMHDR = (NMHDR*)lParam;
@@ -433,7 +429,6 @@ BOOL CDlgPluginOption::OnCbnSelChange(HWND hwndCtl, int wID)
 	case IDC_COMBO_PLUGIN_OPTION:
 		// 編集中のデータの戻し
 		SetFromEdit(m_Line);
-
 		return TRUE;
 	}
 
@@ -450,7 +445,6 @@ BOOL CDlgPluginOption::OnEnChange(HWND hwndCtl, int wID)
 	case IDC_EDIT_PLUGIN_OPTION_NUM:
 		// 編集中のデータの戻し
 		SetFromEdit(m_Line);
-
 		return TRUE;
 	}
 
@@ -592,7 +586,7 @@ void CDlgPluginOption::SetToEdit(int iLine)
 			wstring	sWbuf = to_wchar(buf);
 			nSelIdx = -1;		// 選択
 			i = 0;
-			for (auto it = selects.begin(); it != selects.end(); it++) {
+			for (auto it=selects.begin(); it!=selects.end(); ++it) {
 				SepSelect(*it, &sView, &sValue);
 				nItemIdx = Combo_AddString(hwndCombo, sView.c_str());
 				if (sView == sWbuf) {

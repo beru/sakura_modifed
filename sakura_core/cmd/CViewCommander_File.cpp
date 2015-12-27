@@ -137,7 +137,7 @@ void CViewCommander::Command_FILEOPEN(const WCHAR* filename, ECodeType nCharCode
 		sLoadInfo.cFilePath = files[0].c_str();
 		// 他のファイルは新規ウィンドウ
 		int nSize = (int)files.size();
-		for (int i = 1; i < nSize; i++) {
+		for (int i=1; i<nSize; ++i) {
 			SLoadInfo sFilesLoadInfo = sLoadInfo;
 			sFilesLoadInfo.cFilePath = files[i].c_str();
 			CControlTray::OpenNewEditor(
@@ -248,7 +248,7 @@ void CViewCommander::Command_FILECLOSE_OPEN(LPCWSTR filename, ECodeType nCharCod
 	CPlug::Array plugs;
 	CWSHIfObj::List params;
 	CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
-	for (auto it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		(*it)->Invoke(&GetEditWindow()->GetActiveView(), params);
 	}
 }

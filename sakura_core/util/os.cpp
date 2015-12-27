@@ -27,7 +27,7 @@ DWORD GetComctl32Version()
 	@author ryoji
 	@date 2006.06.17 ryoji 新規
 */
-BOOL IsVisualStyle()
+bool IsVisualStyle()
 {
 	// ロードした Comctl32.dll が Ver 6 以上で画面設定がビジュアルスタイル指定になっている場合だけ
 	// ビジュアルスタイル表示になる（マニフェストで指定しないと Comctl32.dll は 6 未満になる）

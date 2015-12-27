@@ -1608,7 +1608,7 @@ void CDlgFuncList::SetDocLineFuncList()
 */
 void CDlgFuncList::SetTreeFile()
 {
-	HWND hwndTree = ::GetDlgItem( GetHwnd(), IDC_TREE_FL );
+	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
 	m_cmemClipText.SetString(L"");
 	SFilePath IniDirPath;
@@ -1689,7 +1689,7 @@ void CDlgFuncList::SetTreeFile()
 
 void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
 {
-	HWND hwndTree = ::GetDlgItem( GetHwnd(), IDC_TREE_FL );
+	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
 	if (TreeView_GetChild( hwndTree, hParent )) {
 		return;

@@ -228,7 +228,7 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	unsigned char* ps = reinterpret_cast<unsigned char*>(cCharBuffer._GetMemory()->GetRawPtr());
 	TCHAR* pd = pDst;
 	if (!bbinary) {
-		for (int i = cCharBuffer._GetMemory()->GetRawLength(); i >0; i--, ps ++, pd += 2) {
+		for (int i=cCharBuffer._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

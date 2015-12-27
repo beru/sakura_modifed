@@ -91,9 +91,9 @@ bool CPlugin::ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMl
 	std::vector<JackDef> jacks = CJackManager::getInstance()->GetJackDef();
 	wchar_t szIndex[8];
 
-	for (size_t i = 0; i < jacks.size(); i++) {
-		const wstring sKey = jacks[i].szName;
-		for (int nCount = 0; nCount < MAX_PLUG_CMD; nCount++) {
+	for (size_t i=0; i<jacks.size(); ++i) {
+		const wstring& sKey = jacks[i].szName;
+		for (int nCount=0; nCount<MAX_PLUG_CMD; ++nCount) {
 			if (nCount == 0) {
 				szIndex[0] = L'\0';
 			}else {
@@ -112,7 +112,7 @@ bool CPlugin::ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMl
 					sLabel = sHandler;		// LabelÇ™ñ≥ÇØÇÍÇŒÉnÉìÉhÉâñºÇ≈ë„óp
 				}
 
-				CPlug *newPlug = CreatePlug(*this, nCount, jacks[i].szName, sHandler, sLabel);
+				CPlug *newPlug = CreatePlug(*this, nCount, sKey, sHandler, sLabel);
 				m_plugs.push_back(newPlug);
 			}else {
 				break;		// íËã`Ç™Ç»ÇØÇÍÇŒì«Ç›çûÇ›ÇèIóπ
@@ -129,7 +129,7 @@ bool CPlugin::ReadPluginDefCommand(CDataProfile *cProfile, CDataProfile *cProfil
 	wstring sHandler;
 	WCHAR bufKey[64];
 
-	for (int nCount = 1; nCount < MAX_PLUG_CMD; nCount++) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
+	for (int nCount=1; nCount<MAX_PLUG_CMD; ++nCount) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
 		swprintf(bufKey, L"C[%d]", nCount);
 		if (cProfile->IOProfileData(PII_COMMAND, bufKey, sHandler)) {
 			wstring sLabel;
@@ -173,7 +173,7 @@ bool CPlugin::ReadPluginDefOption(CDataProfile *cProfile, CDataProfile *cProfile
 	WCHAR bufKey[64];
 
 	sSection = L"";
-	for (int nCount = 1; nCount < MAX_PLUG_OPTION; nCount++) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
+	for (int nCount=1; nCount<MAX_PLUG_OPTION; ++nCount) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
 		sKey = sLabel = sType = sDefaultVal= L"";
 		// KeyÇÃéÊìæ
 		swprintf(bufKey, L"O[%d].Key", nCount);
@@ -255,8 +255,8 @@ int CPlugin::AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* i
 //	ì∆óßÇ≥ÇπÇΩÇŸÇ§Ç™Ç¢Ç¢ÇÃÇæÇ™
 std::vector<std::wstring> wstring_split(std::wstring sTrg, wchar_t cSep)
 {
-    std::vector<std::wstring>	splitVec;
-    int 	idx;
+    std::vector<std::wstring> splitVec;
+    int idx;
 
     while ((idx = sTrg.find(cSep)) != std::wstring::npos) {
         splitVec.push_back(sTrg.substr(0, idx));
@@ -275,7 +275,7 @@ bool CPlugin::ReadPluginDefString(CDataProfile *cProfile, CDataProfile *cProfile
 	WCHAR bufKey[64];
 	m_aStrings.clear();
 	m_aStrings.push_back(wstring(L"")); // 0î‘ñ⁄É_É~Å[
-	for (int nCount = 1; nCount < MAX_PLUG_STRING; nCount++) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
+	for (int nCount=1; nCount<MAX_PLUG_STRING; ++nCount) {	// ìYÇ¶éöÇÕÇPÇ©ÇÁénÇﬂÇÈ
 		wstring sVal = L"";
 		swprintf(bufKey, L"S[%d]", nCount);
 		if (cProfile->IOProfileData(PII_STRING, bufKey, sVal)) {

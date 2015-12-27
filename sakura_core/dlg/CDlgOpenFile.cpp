@@ -291,7 +291,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				// 値の設定
 				// 2013.05.27 初期値をSaveInfoから設定する
 				nIdxSel = 0;
-				for (i = 0; i < nEolNameArrNum; ++i) {
+				for (i=0; i<nEolNameArrNum; ++i) {
 					if (i == 0) {
 						nIdx = Combo_AddString( pData->m_hwndComboEOL, LS(STR_DLGOPNFL1) );
 					}else {
@@ -340,7 +340,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				i = 0;
 			}
 			CCodeTypesForCombobox cCodeTypes;
-			for (/*i = 0*/; i < cCodeTypes.GetCount(); ++i) {
+			for (/*i = 0*/; i<cCodeTypes.GetCount(); ++i) {
 				nIdx = Combo_AddString( pData->m_hwndComboCODES, cCodeTypes.GetName(i) );
 				Combo_SetItemData( pData->m_hwndComboCODES, nIdx, cCodeTypes.GetCode(i) );
 				if (cCodeTypes.GetCode(i) == pData->m_nCharCode) {
@@ -583,7 +583,7 @@ UINT_PTR CALLBACK OFNHookProc(
 						/* 最近開いたファイル コンボボックス初期値設定 */
 						//	2003.06.22 Moca m_vMRU がNULLの場合を考慮する
 						int nSize = (int)pData->m_pcDlgOpenFile->m_mem->m_vMRU.size();
-						for (i = 0; i < nSize; i++) {
+						for (i=0; i<nSize; ++i) {
 							Combo_AddString( pData->m_hwndComboMRU, pData->m_pcDlgOpenFile->m_mem->m_vMRU[i] );
 						}
 					}
@@ -595,7 +595,7 @@ UINT_PTR CALLBACK OFNHookProc(
 						/* 最近開いたフォルダ コンボボックス初期値設定 */
 						//	2003.06.22 Moca m_vOPENFOLDER がNULLの場合を考慮する
 						int nSize = (int)pData->m_pcDlgOpenFile->m_mem->m_vOPENFOLDER.size();
-						for (i = 0; i < nSize; i++) {
+						for (i=0; i<nSize; ++i) {
 							Combo_AddString( pData->m_hwndComboOPENFOLDER, pData->m_pcDlgOpenFile->m_mem->m_vOPENFOLDER[i] );
 						}
 					}
@@ -877,7 +877,7 @@ bool CDlgOpenFile::DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstrin
 	CFileExt cFileExt;
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
-	for (int i = 0; i < GetDllShareData().m_nTypesCount; i++) {
+	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(i), &type);
 		cFileExt.AppendExt(type->m_szTypeName, type->m_szTypeExts);

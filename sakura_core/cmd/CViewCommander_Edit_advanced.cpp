@@ -183,9 +183,9 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 		if (cWaitCursor.IsEnable()) {
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
-		for (bool insertionWasDone = false; ; alignFullWidthChar = false) {
+		for (bool insertionWasDone=false; ; alignFullWidthChar=false) {
 			minOffset = CLayoutInt(-1);
-			for (CLayoutInt nLineNum = rcSel.GetFrom().y; nLineNum <= rcSel.GetTo().y; ++nLineNum) {
+			for (CLayoutInt nLineNum=rcSel.GetFrom().y; nLineNum<=rcSel.GetTo().y; ++nLineNum) {
 				const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 				// Nov. 6, 2002 genta NULLチェック追加
 				// これがないとEOF行を含む矩形選択中の文字列入力で落ちる
@@ -204,8 +204,8 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 						{ CLayoutInt(-1), 0, 0 }
 					};
 					CMemoryIterator it(pcLayout, this->GetDocument()->m_cLayoutMgr.GetTabSpace());
-					for (int i = 0; 0 <= sortedKetas[i].keta; ++i) {
-						for (; ! it.end(); it.addDelta()) {
+					for (int i=0; 0<=sortedKetas[i].keta; ++i) {
+						for (; !it.end(); it.addDelta()) {
 							if (sortedKetas[i].keta == it.getColumn()) {
 								break;
 							}
@@ -347,7 +347,7 @@ void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt 
 			hwndProgress = m_pCommanderView->StartProgress();
 		}
 
-		for (CLayoutInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().GetY2(); i++) {
+		for (CLayoutInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().GetY2(); ++i) {
 			CLayoutInt nLineCountPrev = GetDocument()->m_cLayoutMgr.GetLineCount();
 			const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(i);
 			if (!pcLayout ||						// テキストが無いEOLの行は無視
@@ -481,7 +481,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 					// 削り取る半角スペース数 (1～タブ幅分) -> nDelLen
 					CLogicInt i;
 					CLogicInt nTabSpaces = CLogicInt((Int)GetDocument()->m_cLayoutMgr.GetTabSpace());
-					for (i = CLogicInt(0); i < nLineLen; i++) {
+					for (i=CLogicInt(0); i<nLineLen; ++i) {
 						if (WCODE::SPACE != pLine[i]) {
 							break;
 						}
@@ -696,7 +696,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	}
 	
 	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
-	for (CLogicInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().y; i++) {
+	for (CLogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
 		const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(i);
 		const CNativeW& cmemLine = pcDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = cmemLine.GetStringPtr(&nLineLen);
@@ -742,7 +742,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	int j = (int)sta.size();
 	repData.resize(sta.size());
 	int opeSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNextSeq();
-	for (int i = 0; i < j; i++) {
+	for (int i=0; i<j; ++i) {
 		repData[i].nSeq = opeSeq;
 		repData[i].cmemLine.SetString(sta[i]->pCmemLine->GetStringPtr(), sta[i]->pCmemLine->GetStringLength());
 		if (pStrLast == sta[i]->pCmemLine->GetStringPtr()) {
@@ -877,7 +877,7 @@ void CViewCommander::Command_MERGE(void)
 	int nLineLenw = 0;
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().GetY2());
-	for (CLogicInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().y; i++) {
+	for (CLogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
 		const wchar_t* pLine = GetDocument()->m_cDocLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
@@ -893,7 +893,7 @@ void CViewCommander::Command_MERGE(void)
 		int nSize = (int)lineArr.size();
 		repData.resize(nSize);
 		int opeSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNextSeq();
-		for (int idx = 0; idx < nSize; idx++) {
+		for (int idx=0; idx<nSize; ++idx) {
 			repData[idx].nSeq = opeSeq;
 			repData[idx].cmemLine.SetString(lineArr[idx].GetPtr(), lineArr[idx].GetLength());
 		}

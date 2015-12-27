@@ -105,12 +105,12 @@ static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar
 	auto_strcpy(conv, trg);
 
 	p = conv;
-	while ((p = wcspbrk(p, L"\t\\:*?\"<>|")) != NULL) {
+	while ((p = wcspbrk(p, L"\t\\:*?\"<>|"))) {
 		// ファイル名に使えない文字を _ に置き換える
 		*p++ = L'_';
 	}
 	p = conv;
-	while ((p = wcspbrk(p, L"/")) != NULL) {
+	while ((p = wcspbrk(p, L"/"))) {
 		// ファイル名に使えない文字を ／ に置き換える
 		*p++ = L'／';
 	}

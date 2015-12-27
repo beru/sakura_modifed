@@ -86,7 +86,7 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 					);
 
 					// 指定された桁に対応する行のデータ内の位置を調べる
-					for (nPos = CLogicInt(0); nPos < nLineLen && nPos < ptXY.GetX2();) {
+					for (nPos=CLogicInt(0); nPos<nLineLen && nPos<ptXY.GetX2();) {
 						// 2005-09-02 D.S.Koba GetSizeOfChar
 						CLogicInt nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nPos);
 
@@ -345,7 +345,7 @@ void CViewCommander::Command_UNDO(void)
 
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
-		for (int i = nOpeBlkNum - 1; i >= 0; i--) {
+		for (int i=nOpeBlkNum-1; i>=0; --i) {
 			COpe* pcOpe = pcOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_After);
@@ -597,7 +597,7 @@ void CViewCommander::Command_REDO(void)
 
 		const bool bFastMode = (100 < nOpeBlkNum);
 		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
-		for (int i = 0; i < nOpeBlkNum; ++i) {
+		for (int i=0; i<nOpeBlkNum; ++i) {
 			pcOpe = pcOpeBlk->GetOpe(i);
 			if (bFastMode) {
 				if (i == 0) {
@@ -928,15 +928,15 @@ void CViewCommander::DelCharForOverwrite(const wchar_t* pszInput, int nLen)
 			// 1文字削除
 			m_pCommanderView->DeleteData(false);
 			posBefore = GetCaret().GetCaretLayoutPos();
-			for (int i = 1; i < nDelLen; i++) {
+			for (int i=1; i<nDelLen; ++i) {
 				m_pCommanderView->DeleteData(false);
 			}
 		}
 		CNativeW tmp;
-		for (CLayoutInt i = CLayoutInt(0); i < nKetaDiff; i++) {
+		for (CLayoutInt i=CLayoutInt(0); i<nKetaDiff; ++i) {
 			tmp.AppendString(L" ");
 		}
-		for (CLayoutInt i = CLayoutInt(0); i < nKetaAfterIns; i++) {
+		for (CLayoutInt i=CLayoutInt(0); i<nKetaAfterIns; ++i) {
 			tmp.AppendString(L" ");
 		}
 		if (0 < tmp.GetStringLength()) {

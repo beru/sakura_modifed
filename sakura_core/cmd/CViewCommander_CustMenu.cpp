@@ -40,7 +40,7 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 			pszWork[nLength] = _T('\0');
 
 			// Œ©‚½–Ú‚Æ“¯‚¶‚æ‚¤‚ÉA\n ‚ğ CR+LF‚Ö•ÏŠ·‚·‚é
-			for (int i = 0; i < nLength ; ++i) {
+			for (int i=0; i<nLength; ++i) {
 				if (pszWork[i] == _T('\\') && pszWork[i + 1] == _T('n')) {
 					pszWork[i] =     WCODE::CR;
 					pszWork[i + 1] = WCODE::LF;

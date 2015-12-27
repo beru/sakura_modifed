@@ -784,7 +784,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	//<< 2002/03/26 Azumaiya
 	// Š„‚èŽZŠ|‚¯ŽZ‚ð‚¹‚¸‚Éi•àó‹µ‚ð•\‚¹‚é‚æ‚¤‚ÉAƒVƒtƒg‰‰ŽZ‚ð‚·‚éB
 	int nShiftCount;
-	for (nShiftCount = 0; 300 < nAllLineNum; nShiftCount++) {
+	for (nShiftCount=0; 300<nAllLineNum; ++nShiftCount) {
 		nAllLineNum /= 2;
 	}
 	//>> 2002/03/26 Azumaiya
@@ -1305,8 +1305,8 @@ void CViewCommander::Command_REPLACE_ALL()
 			bFastMode = true;
 			nAllLineNum = (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
 			nAllLineNumOrg = nAllLineNumLogicOrg;
-			for (nShiftCount = 0; 300 < nAllLineNum; nShiftCount++) {
-				nAllLineNum/=2;
+			for (nShiftCount=0; 300<nAllLineNum; ++nShiftCount) {
+				nAllLineNum /= 2;
 			}
 			Progress_SetRange( hwndProgress, 0, nAllLineNum + 1 );
 			int nDiff = nAllLineNumOrg - (Int)GetDocument()->m_cDocLineMgr.GetLineCount();

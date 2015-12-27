@@ -76,7 +76,7 @@ BOOL CDlgTypeAscertain::OnBnClicked(int wID)
 		TCHAR	buff1[_MAX_PATH + 20];
 		wchar_t	buff2[_MAX_PATH + 20];
 
-		m_psi->bAddType = IsDlgButtonCheckedBool(GetHwnd(), IDC_RADIO_TYPE_ADD);
+		m_psi->bAddType = IsButtonChecked(IDC_RADIO_TYPE_ADD);
 		m_psi->sColorFile = L"";
 		m_psi->nColorType = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_COLORS)) - 1;
 		if (m_psi->nColorType >= MAX_TYPES
@@ -103,8 +103,8 @@ void CDlgTypeAscertain::SetData(void)
 {
 	// ƒ^ƒCƒv–¼Ý’è
 	std::wstring typeNameTo = m_psi->sTypeNameTo + L"(&B)";
-	::SetWindowText(GetItemHwnd(IDC_RADIO_TYPE_TO   ), to_tchar(typeNameTo.c_str()));
-	::SetWindowText(GetItemHwnd(IDC_STATIC_TYPE_FILE), to_tchar(m_psi->sTypeNameFile.c_str()));
+	SetItemText(IDC_RADIO_TYPE_TO, typeNameTo.c_str());
+	SetItemText(IDC_STATIC_TYPE_FILE, m_psi->sTypeNameFile.c_str());
 
 	CheckButton(IDC_RADIO_TYPE_ADD, true);
 

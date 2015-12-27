@@ -980,7 +980,7 @@ static void OutputPathInfo(
 		// バッファを2^n 分確保する
 		int n = 1024;
 		int size = cmemMessage.GetStringLength() + 300;
-		while( n < size ){
+		while (n < size) {
 			n *= 2;
 		}
 		cmemMessage.AllocStringBuffer(n);

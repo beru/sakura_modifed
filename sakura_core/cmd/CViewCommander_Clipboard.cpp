@@ -288,7 +288,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 	//for (nPos = 0; nPos < nPasteSize;)
 	int				nPos;
 	CLayoutPoint	ptLayoutNew;	// 挿入された部分の次の位置
-	for (int nBgn = nPos = 0; nBgn < nPasteSize;) {
+	for (int nBgn=nPos=0; nBgn<nPasteSize;) {
 		// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無いと
 		// 最終行のPaste処理が動かないので，
 		// データの末尾に来た場合は強制的に処理するようにする
@@ -469,7 +469,7 @@ void CViewCommander::Command_INSTEXT(
 			// 改行までを抜き出す
 			CLogicInt i;
 			bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-			for (i = CLogicInt(0); i < nTextLen; i++) {
+			for (i=CLogicInt(0); i<nTextLen; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					break;
 				}
@@ -741,7 +741,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		}
 		pcLayoutTop = pcLayout;
 		CLayoutInt i = rcSel.top;
-		for (; pcLayout && i <= rcSel.bottom; i++, pcLayout = pcLayout->GetNextLayout()) {
+		for (; pcLayout && i <= rcSel.bottom; ++i, pcLayout = pcLayout->GetNextLayout()) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
 			CLogicInt nIdxFrom;
 			CLogicInt nIdxTo;
@@ -806,7 +806,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		int nWork = 10;
 		int i;
 		cmemNullLine.AppendString(L" ");
-		for (i = 1; i < 12; ++i) {
+		for (i=1; i<12; ++i) {
 			if (nWork > nLineNumberMax) {
 				break;
 			}
@@ -848,14 +848,17 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	SFontAttr sFontAttrLast2 = { false, false };
 	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pCommanderView);
-	for (CLogicInt nLineNum = sSelectLogic.GetFrom().y; nLineNum <= nLineNumLast; nLineNum++, pcDocLine = pcDocLine->GetNextLine()) {
+	for (auto nLineNum = sSelectLogic.GetFrom().y;
+		nLineNum <= nLineNumLast;
+		++nLineNum, pcDocLine = pcDocLine->GetNextLine()
+	) {
 		if (!pcDocLine) {
 			break;
 		}
 		pool->NotifyOnStartScanLogic();
-		CColorStrategy* pStrategyNormal = NULL;
-		CColorStrategy* pStrategyFound = NULL;
-		CColorStrategy* pStrategy = NULL;
+		CColorStrategy* pStrategyNormal = nullptr;
+		CColorStrategy* pStrategyFound = nullptr;
+		CColorStrategy* pStrategy = nullptr;
 		CStringRef cStringLine(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 		{
 			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
@@ -930,7 +933,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			int nBgnLogic = nIdxFrom + nLineStart;
 			int iLogic = nLineStart;
 			bool bAddCRLF = false;
-			for (; iLogic < nLineStart + nLineLen; ++iLogic) {
+			for (; iLogic<nLineStart+nLineLen; ++iLogic) {
 				bool bChange = false;
 				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, pool, &pStrategyNormal, &pStrategyFound, bChange);
 				if (bChange) {
@@ -1075,7 +1078,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 	// 色開始
 	if (!*ppStrategy) {
 		int size = pool->GetStrategyCount();
-		for (int i = 0; i < size; i++) {
+		for (int i=0; i<size; ++i) {
 			if (pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
 				*ppStrategy = pool->GetStrategy(i);
 				bChange = true;

@@ -19,7 +19,7 @@ int CUtf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 	const char* pr = pSrc;
 	wchar_t* pw = pDst;
 
-	for (; pr < pSrc + nSrcLen; ++pr) {
+	for (; pr<pSrc+nSrcLen; ++pr) {
 		if (IsUtf7Direct(*pr)) {
 			*pw = *pr;
 		}else {
@@ -170,7 +170,7 @@ int CUtf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pD
 	}
 
 	int i;
-	for (i = 0; i < nSrcLen; ++i) {
+	for (i=0; i<nSrcLen; ++i) {
 		pDst[i] = static_cast<char>(pSrc[i] & 0x00ff);
 	}
 
@@ -229,7 +229,7 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 	pw = pDst;
 
 	do {
-		for (; pr < pr_end; ++pr) {
+		for (; pr<pr_end; ++pr) {
 			if (!IsUtf7SetD(*pr)) {
 				break;
 			}
@@ -244,7 +244,7 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 			++pr;
 			pw += 2;
 		}else {
-			for (; pr < pr_end; ++pr) {
+			for (; pr<pr_end; ++pr) {
 				if (IsUtf7SetD(*pr)) {
 					break;
 				}

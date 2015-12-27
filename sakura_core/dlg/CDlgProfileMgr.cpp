@@ -112,7 +112,7 @@ void CDlgProfileMgr::SetData()
 void CDlgProfileMgr::SetData( int nSelIndex )
 {
 	int		nExtent = 0;
-	HWND	hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND	hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 
 	List_ResetContent( hwndList );
 	SProfileSettings settings;
@@ -125,7 +125,7 @@ void CDlgProfileMgr::SetData( int nSelIndex )
 	CTextWidthCalc calc( hwndList );
 	calc.SetDefaultExtend( CTextWidthCalc::WIDTH_MARGIN_SCROLLBER );
 	int count = (int)settings.m_vProfList.size();
-	for (int i = 0; i < count; i++) {
+	for (int i=0; i<count; ++i) {
 		std::tstring str = settings.m_vProfList[i];
 		if (settings.m_nDefaultIndex == i + 1) {
 			str += _T("*");
@@ -168,7 +168,7 @@ int CDlgProfileMgr::GetData()
 
 int CDlgProfileMgr::GetData(bool bStart)
 {
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	int nCurIndex = List_GetCurSel(hwndList);
 	TCHAR szText[_MAX_PATH];
 	MyList_GetText( hwndList, nCurIndex, szText );
@@ -176,7 +176,7 @@ int CDlgProfileMgr::GetData(bool bStart)
 	if (m_strProfileName == _T("(default)")) {
 		m_strProfileName = _T("");
 	}
-	bool bDefaultSelect = IsDlgButtonCheckedBool( GetHwnd(), IDC_CHECK_PROF_DEFSTART );
+	bool bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
 	SProfileSettings settings;
 	ReadProfSettings( settings );
 	bool bWrtie = false;
@@ -211,7 +211,7 @@ BOOL CDlgProfileMgr::OnBnClicked( int wID )
 
 	case IDC_BUTTON_PROF_DEFSET:
 		{
-			HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+			HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 			int nSelIndex = List_GetCurSel( hwndList );
 			SetDefaultProf(nSelIndex);
 			UpdateIni();
@@ -222,7 +222,7 @@ BOOL CDlgProfileMgr::OnBnClicked( int wID )
 
 	case IDC_BUTTON_PROF_DEFCLEAR:
 		{
-			HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+			HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 			int nSelIndex = List_GetCurSel( hwndList );
 			ClearDefaultProf();
 			UpdateIni();
@@ -274,13 +274,13 @@ INT_PTR CDlgProfileMgr::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPAR
 
 void CDlgProfileMgr::UpdateIni()
 {
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	SProfileSettings settings;
 	ReadProfSettings( settings );
 	int nCount = List_GetCount( hwndList );
 	settings.m_vProfList.clear();
 	settings.m_nDefaultIndex = -1;
-	for (int i = 0; i < nCount; i++) {
+	for (int i=0; i<nCount; ++i) {
 		TCHAR szProfileName[_MAX_PATH];
 		if (MyList_GetText( hwndList, i, szProfileName )) {
 			settings.m_nDefaultIndex = i;
@@ -290,7 +290,7 @@ void CDlgProfileMgr::UpdateIni()
 			settings.m_vProfList.push_back( str );
 		}
 	}
-	settings.m_bDefaultSelect = IsDlgButtonCheckedBool( GetHwnd(), IDC_CHECK_PROF_DEFSTART );
+	settings.m_bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
 
 	if (!WriteProfSettings( settings )) {
 		ErrorMessage( GetHwnd(), LS(STR_DLGPROFILE_ERR_WRITE) );
@@ -301,7 +301,7 @@ void CDlgProfileMgr::UpdateIni()
 static bool IsProfileDuplicate(HWND hwndList, LPCTSTR szProfName, int skipIndex)
 {
 	int nCount = List_GetCount( hwndList );
-	for (int i = 0; i < nCount; i++) {
+	for (int i=0; i<nCount; ++i) {
 		if (skipIndex == i) {
 			continue;
 		}
@@ -330,7 +330,7 @@ void CDlgProfileMgr::CreateProf()
 	}
 	std::wstring strText = to_wchar(szText);
 	static const WCHAR szReservedChars[] = L"/\\*?<>&|:\"'\t";
-	for (int x = 0; x < _countof(szReservedChars); ++x) {
+	for (int x=0; x<_countof(szReservedChars); ++x) {
 		if (strText.npos != strText.find(szReservedChars[x])) {
 			ErrorMessage( GetHwnd(), LS(STR_DLGPROFILE_ERR_INVALID_CHAR) );
 			return;
@@ -340,7 +340,7 @@ void CDlgProfileMgr::CreateProf()
 		ErrorMessage( GetHwnd(), LS(STR_DLGPROFILE_ERR_INVALID_CHAR) );
 		return;
 	}
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	if (IsProfileDuplicate( hwndList, szText, -1 )) {
 		ErrorMessage( GetHwnd(), LS(STR_DLGPROFILE_ERR_ALREADY) );
 		return;
@@ -360,7 +360,7 @@ void CDlgProfileMgr::CreateProf()
 
 void CDlgProfileMgr::DeleteProf()
 {
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	int nCurIndex = List_GetCurSel(hwndList);
 	List_DeleteString( hwndList, nCurIndex );
 	UpdateIni();
@@ -373,7 +373,7 @@ void CDlgProfileMgr::DeleteProf()
 
 void CDlgProfileMgr::RenameProf()
 {
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	CDlgInput1 cDlgInput1;
 	int nCurIndex = List_GetCurSel(hwndList);
 	TCHAR szText[_MAX_PATH];
@@ -394,7 +394,7 @@ void CDlgProfileMgr::RenameProf()
 	}
 	std::wstring strText = to_wchar(szText);
 	static const WCHAR szReservedChars[] = L"/\\*?<>&|:\"'\t";
-	for (int x = 0; x < _countof(szReservedChars); ++x) {
+	for (int x=0; x<_countof(szReservedChars); ++x) {
 		if (strText.npos != strText.find(szReservedChars[x])) {
 			ErrorMessage( GetHwnd(), LS(STR_DLGPROFILE_ERR_INVALID_CHAR) );
 			return;
@@ -438,7 +438,7 @@ void CDlgProfileMgr::RenameProf()
 void CDlgProfileMgr::SetDefaultProf(int index)
 {
 	ClearDefaultProf();
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	TCHAR szProfileName[_MAX_PATH];
 	MyList_GetText( hwndList, index, szProfileName );
 	List_DeleteString( hwndList, index );
@@ -449,9 +449,9 @@ void CDlgProfileMgr::SetDefaultProf(int index)
 
 void CDlgProfileMgr::ClearDefaultProf()
 {
-	HWND hwndList = ::GetDlgItem( GetHwnd(), IDC_LIST_PROFILE );
+	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 	int nCount = List_GetCount( hwndList );
-	for (int i = 0; i < nCount; i++) {
+	for (int i=0; i<nCount; ++i) {
 		TCHAR szProfileName[_MAX_PATH];
 		if (MyList_GetText( hwndList, i, szProfileName )) {
 			List_DeleteString( hwndList, i );
@@ -478,7 +478,7 @@ static bool IOProfSettings( SProfileSettings& settings, bool bWrite )
 	int nCount = (int)settings.m_vProfList.size();
 	const wchar_t* const pSection = L"Profile";
 	cProf.IOProfileData(pSection , L"nCount", nCount );
-	for (int i = 0; i < nCount; i++) {
+	for (int i=0; i<nCount; ++i) {
 		wchar_t szKey[64];
 		std::tstring strProfName;
 		swprintf( szKey, L"P[%d]", i + 1 ); // 1ŠJŽn

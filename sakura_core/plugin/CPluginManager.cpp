@@ -57,11 +57,11 @@ CPluginManager::CPluginManager()
 // 全プラグインを解放する
 void CPluginManager::UnloadAllPlugin()
 {
-	for (auto it = m_plugins.begin(); it != m_plugins.end(); it++) {
+	for (auto it=m_plugins.begin(); it!=m_plugins.end(); ++it) {
 		UnRegisterPlugin(*it);
 	}
 
-	for (auto it = m_plugins.begin(); it != m_plugins.end(); it++) {
+	for (auto it=m_plugins.begin(); it!=m_plugins.end(); ++it) {
 		delete *it;
 	}
 	
@@ -135,13 +135,14 @@ bool CPluginManager::SearchNewPluginDir(CommonSetting& common, HWND hWndOwner, c
 	do {
 		if ((wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY &&
 			(wf.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == 0 &&
-			_tcscmp(wf.cFileName, _T(".")) != 0 && _tcscmp(wf.cFileName, _T("..")) != 0 &&
-			auto_stricmp(wf.cFileName, _T("unuse")) !=0
+			_tcscmp(wf.cFileName, _T(".")) != 0 &&
+			_tcscmp(wf.cFileName, _T("..")) != 0 &&
+			auto_stricmp(wf.cFileName, _T("unuse")) != 0
 		) {
 			// インストール済みチェック。フォルダ名＝プラグインテーブルの名前ならインストールしない
 			// 2010.08.04 大文字小文字同一視にする
 			bool isNotInstalled = true;
-			for (int iNo=0; iNo < MAX_PLUGIN; iNo++) {
+			for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
 				if (auto_stricmp(wf.cFileName, to_tchar(plugin_table[iNo].m_szName)) == 0) {
 					isNotInstalled = false;
 					break;
@@ -218,8 +219,8 @@ bool CPluginManager::InstZipPlugin(CommonSetting& common, HWND hWndOwner, const 
 	DEBUG_TRACE(_T("Entry InstZipPlugin\n"));
 #endif
 
-	CZipFile		cZipFile;
-	TCHAR			msg[512];
+	CZipFile	cZipFile;
+	TCHAR		msg[512];
 
 	// ZIPファイルが扱えるか
 	if (!cZipFile.IsOk()) {
@@ -247,7 +248,7 @@ bool CPluginManager::InstZipPlugin(CommonSetting& common, HWND hWndOwner, const 
 	}
 	::FindClose(hFind);
 
-	bool	bCancel;
+	bool bCancel;
 	return CPluginManager::InstZipPluginSub(common, hWndOwner, sZipFile, sZipFile, false, bCancel);
 }
 
@@ -283,7 +284,7 @@ bool CPluginManager::InstZipPluginSub(CommonSetting& common, HWND hWndOwner, con
 		bool	isNotInstalled = true;
 		int		iNo;
 		if (bOk) {
-			for (iNo=0; iNo < MAX_PLUGIN; iNo++) {
+			for (iNo=0; iNo<MAX_PLUGIN; ++iNo) {
 				if (auto_stricmp(to_wchar(sFolderName.c_str()), to_wchar(plugin_table[iNo].m_szName)) == 0) {
 					isNotInstalled = false;
 					break;
@@ -379,7 +380,7 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 	// 2010.08.04 ID使用不可の文字を確認
 	//  後々ファイル名やiniで使うことを考えていくつか拒否する
 	static const WCHAR szReservedChars[] = L"/\\,[]*?<>&|;:=\" \t";
-	for (int x = 0; x < _countof(szReservedChars); ++x) {
+	for (int x=0; x<_countof(szReservedChars); ++x) {
 		if (sId.npos != sId.find(szReservedChars[x])) {
 			errorMsg = std::wstring(LSW(STR_PLGMGR_INST_RESERVE1)) + szReservedChars + LSW(STR_PLGMGR_INST_RESERVE2);
 			return -1;
@@ -394,7 +395,7 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 	PluginRec* plugin_table = common.m_sPlugin.m_PluginTable;
 	int nEmpty = -1;
 	bool isDuplicate = false;
-	for (int iNo=0; iNo < MAX_PLUGIN; iNo++) {
+	for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
 		if (nEmpty == -1 && plugin_table[iNo].m_state == PLS_NONE) {
 			nEmpty = iNo;
 			// break してはいけない。後ろで同一IDがあるかも

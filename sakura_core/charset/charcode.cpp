@@ -115,7 +115,7 @@ namespace WCODE
 		;
 
 		const wchar_t* p;
-		for (p = KUTOTEN; *p; p++) {
+		for (p = KUTOTEN; *p; ++p) {
 			if (*p == wc) return true;
 		}
 		return false;
@@ -229,14 +229,14 @@ namespace WCODE
 		LocalCacheSelector()
 		{
 			pcache = &m_localcache[0];
-			for (int i = 0; i < CWM_FONT_MAX; i++) {
+			for (int i=0; i<CWM_FONT_MAX; ++i) {
 				m_parCache[i] = 0;
 			}
 			m_eLastEditCacheMode = CWM_CACHE_NEUTRAL;
 		}
 		~LocalCacheSelector()
 		{
-			for (int i = 0; i < CWM_FONT_MAX; i++) {
+			for (int i=0; i<CWM_FONT_MAX; ++i) {
 				delete m_parCache[i];
 				m_parCache[i] = 0;
 			}

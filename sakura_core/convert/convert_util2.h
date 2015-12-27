@@ -219,7 +219,7 @@ int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 	{
 		int i = 0;
 		bool bret;
-		for (; i < nsrclen; i++) {
+		for (; i<nsrclen; ++i) {
 			if (sizeof(CHAR_TYPE) == 2) {
 				bret = (pSrc[nsrclen - 1 - i] == L'=');
 			}else {
@@ -233,18 +233,18 @@ int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 	}
 
 	nDesLen = 0;
-	for (int i = 0; i < nsrclen; i++) {
+	for (int i=0; i<nsrclen; ++i) {
 		if (i < nsrclen - (nsrclen % 4)) {
 			sMax = 4;
 		}else {
 			sMax = (nsrclen % 4);
 		}
 		lData = 0;
-		for (int j = 0; j < sMax; j++) {
+		for (int j=0; j<sMax; ++j) {
 			long k = Base64ToVal(pSrc[i + j]);
 			lData |= k << ((4 - j - 1) * 6);
 		}
-		for (int j = 0; j < (sMax * 6)/ 8 ; j++) {
+		for (int j=0; j<(sMax * 6)/8 ; ++j) {
 			pDest[nDesLen] = static_cast<char>((lData >> (8 * (2 - j))) & 0x0000ff);
 			nDesLen++;
 		}
@@ -271,7 +271,7 @@ int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
 
 	psrc = reinterpret_cast<const unsigned char*>(pSrc);
 	nDesLen = 0;
-	for (i = 0; i < nSrcLen; i += 3) {
+	for (i=0; i<nSrcLen; i+=3) {
 		lDataSrc = 0;
 		if (nSrcLen - i < 3) {
 			n = nSrcLen % 3;
@@ -282,13 +282,13 @@ int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
 		}
 		// n 今回エンコードする長さ
 		// j エンコード後のBASE64文字数
-		for (k = 0; k < n; k++) {
+		for (k=0; k<n; ++k) {
 			lDataSrc |= static_cast<unsigned long>(psrc[i + k]) << ((n - k - 1) * 8);
 		}
 		// パッドビット付加。lDataSrc の長さが 6*j になるように調節する。
 		lDataSrc <<= j * 6 - n * 8;
 		// エンコードして書き込む。
-		for (k = 0; k < j; k++) {
+		for (k=0; k<j; ++k) {
 			v = static_cast<char>((lDataSrc >> (6 * (j - k - 1))) & 0x0000003f);
 			pDest[nDesLen] = static_cast<CHAR_TYPE>(ValToBase64<CHAR_TYPE>(v));
 			nDesLen++;
@@ -377,12 +377,12 @@ int _DecodeUU_line(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	for (; i < nSrcLen; i += 4) {
+	for (; i<nSrcLen; i+=4) {
 		lDataDes = 0;
-		for (j = 0; j < 4; ++j) {
+		for (j=0; j<4; ++j) {
 			lDataDes |= _UUDECODE_CHAR(pr[i + j]) << ((4 - j - 1) * 6);
 		}
-		for (j = 0; j < 3; ++j) {
+		for (j=0; j<3; ++j) {
 			pDest[k + j] = (char)((lDataDes >> ((3 - j - 1) * 8)) & 0x000000ff);
 		}
 		k += 3;
@@ -424,7 +424,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 	}
 
 	// 先頭の空白・改行文字をスキップ
-	for (nstartidx = 0; nstartidx < nLen; ++nstartidx) {
+	for (nstartidx=0; nstartidx<nLen; ++nstartidx) {
 		CHAR_TYPE c = pSrc[nstartidx];
 		if (sizeof(CHAR_TYPE) == 2) {
 			if (c != L'\r' && c != L'\n' && c != L' ' && c != L'\t') {
@@ -469,7 +469,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 		// error.
 		return false;
 	}
-	for (int i = 0; i < nwlen; i++) {
+	for (int i=0; i<nwlen; ++i) {
 		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
 			if (!iswdigit(pwstart[i]) || (pwstart[i] == L'8' || pwstart[i] == L'9')) {
@@ -489,7 +489,7 @@ bool CheckUUHeader(const CHAR_TYPE* pSrc, const int nLen, TCHAR* pszFilename)
 
 	pr += CWordParse::GetWord(pr, pr_end - pr, pszSplitChars, &pwstart, &nwlen);
 	// 末尾の空白・改行文字をスキップ
-	for (; nwlen > 0; --nwlen) {
+	for (; nwlen>0; --nwlen) {
 		CHAR_TYPE c = pwstart[nwlen - 1];
 		if (sizeof(CHAR_TYPE) == 2) {
 			if (!WCODE::IsLineDelimiterBasic(c) && c != L' ' && c != L'\t') {
@@ -531,7 +531,7 @@ bool CheckUUFooter(const CHAR_TYPE *pS, const int nLen)
 	// ※ 空行はフッターに含めない。
 
 	// 先頭の改行・空白文字をスキップ
-	for (nstartidx = 0; nstartidx < nLen; ++nstartidx) {
+	for (nstartidx=0; nstartidx<nLen; ++nstartidx) {
 		CHAR_TYPE c = pS[nstartidx];
 		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
@@ -567,7 +567,7 @@ bool CheckUUFooter(const CHAR_TYPE *pS, const int nLen)
 	i += 3;
 
 	// end の後が空白文字ばかりであることを確認
-	for (; i < nsrclen; ++i) {
+	for (; i<nsrclen; ++i) {
 		CHAR_TYPE c = psrc[i];
 		if (sizeof(CHAR_TYPE) == 2) {
 			// WCHAR の場合の処理
@@ -699,7 +699,7 @@ finish_first_detect:;
 
 	pr_base = pSrc + nLen_part1 + nLen_part2;
 	pr = pSrc + nLen_part1 + nLen_part2;
-	for (; pr < pSrc + nSrcLen - 1; ++pr) {
+	for (; pr<pSrc+nSrcLen-1; ++pr) {
 		if (sizeof(CHAR_TYPE) == 2) {
 			ncmpresult = wcsncmp(reinterpret_cast<const wchar_t*>(pr), L"?=", 2);
 		}else {

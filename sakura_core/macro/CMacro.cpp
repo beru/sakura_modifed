@@ -1274,7 +1274,7 @@ bool CMacro::HandleCommand(
 	case F_MOVECURSORLAYOUT:
 	case F_MOVECURSOR:
 		{
-			if (Argument[0] && Argument[1] != NULL && Argument[2] != NULL) {
+			if (Argument[0] && Argument[1] && Argument[2]) {
 				int lparam1 = _wtoi(Argument[0]) - 1;
 				int lparam2 = _wtoi(Argument[1]) - 1;
 				int lparam3 = _wtoi(Argument[2]);

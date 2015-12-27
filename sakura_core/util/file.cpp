@@ -916,10 +916,10 @@ void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ex
 	char*	pf;
 	char*	pe;
 
-	if (drv != NULL)	*drv = '\0';
-	if (dir != NULL)	*dir = '\0';
-	if (fnm != NULL)	*fnm = '\0';
-	if (ext != NULL)	*ext = '\0';
+	if (drv) *drv = '\0';
+	if (dir) *dir = '\0';
+	if (fnm) *fnm = '\0';
+	if (ext) *ext = '\0';
 	if (*comln == '\0')	return;
 
 	// コマンドライン先頭部分の実在するパス名を ppp に書き出す。
@@ -941,25 +941,25 @@ void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ex
 		int a_dir = (attr & FILE_ATTRIBUTE_DIRECTORY) ?  1 : 0;
 		if (!a_dir) {	// 見つけた物がファイルだった場合。
 			pf = sjis_strrchr2(ppp, '\\','\\');	// 最末尾の \ を探す。
-			if (pf != NULL)	pf++;		// 見つかった→  pf=\の次の文字の位置
+			if (pf)	pf++;		// 見つかった→  pf=\の次の文字の位置
 			else			pf = pd;	// 見つからない→pf=パス名の先頭位置
 			// ここまでで pf = ファイル名の先頭位置
 			pe = sjis_strrchr2(pf, '.','.');		// 最末尾の '.' を探す。
-			if (pe != NULL) {					// 見つかった(pe = '.'の位置)
-				if (ext != NULL) {	// 拡張子を返値として書き込む。
+			if (pe) {					// 見つかった(pe = '.'の位置)
+				if (ext) {	// 拡張子を返値として書き込む。
 					strncpy(ext, pe,_MAX_EXT -1);
 					ext[_MAX_EXT -1] = '\0';
 				}
 				*pe = '\0';	// 区切り位置を文字列終端にする。pe = 拡張子名の先頭位置。
 			}
-			if (fnm != NULL) {	// ファイル名を返値として書き込む。
+			if (fnm) {	// ファイル名を返値として書き込む。
 				strncpy(fnm, pf,_MAX_FNAME -1);
 				fnm[_MAX_FNAME -1] = '\0';
 			}
 			*pf = '\0';	// ファイル名の先頭位置を文字列終端にする。
 		}
 		// ここまでで文字列 ppp はドライブレター＋ディレクトリ名のみになっている
-		if (dir != NULL) {
+		if (dir) {
 			// ディレクトリ名の最後の文字が \ ではない場合、\ にする。
 
 			// ↓最後の文字を ch に得る。(ディレクトリ文字列が空の場合 ch='\\' となる)
@@ -978,7 +978,7 @@ void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ex
 			dir[_MAX_DIR -1] = '\0';
 		}
 		*pd = '\0';		// ディレクトリ名の先頭位置を文字列終端にする。
-		if (drv != NULL) {	// ドライブレターを返値として書き込む。
+		if (drv) {	// ドライブレターを返値として書き込む。
 			strncpy(drv, ppp,_MAX_DRIVE -1);
 			drv[_MAX_DRIVE -1] = '\0';
 		}

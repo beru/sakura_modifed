@@ -62,7 +62,7 @@ BOOL CDlgSetCharSet::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	// 文字コードセット選択コンボボックス初期化
 	CCodeTypesForCombobox cCodeTypes;
 	Combo_ResetContent(m_hwndCharSet);
-	for (int i = 1; i < cCodeTypes.GetCount(); ++i) {
+	for (int i=1; i<cCodeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString(m_hwndCharSet, cCodeTypes.GetName(i));
 		Combo_SetItemData(m_hwndCharSet, idx, cCodeTypes.GetCode(i));
 	}
@@ -166,14 +166,12 @@ LPVOID CDlgSetCharSet::GetHelpIdTable(void)
 void CDlgSetCharSet::SetData(void)
 {
 	// 文字コードセット
-	int		nIdx, nCurIdx, nIdxOld;
-	ECodeType nCharSet;
 	CCodeTypesForCombobox cCodeTypes;
 
-	nIdxOld = Combo_GetCurSel( m_hwndCharSet );
-	nCurIdx = -1;
-	for (nIdx = 0; nIdx < Combo_GetCount( m_hwndCharSet ); nIdx++) {
-		nCharSet = (ECodeType)Combo_GetItemData( m_hwndCharSet, nIdx );
+	int nIdxOld = Combo_GetCurSel( m_hwndCharSet );
+	int nCurIdx = -1;
+	for (int nIdx = 0; nIdx < Combo_GetCount( m_hwndCharSet ); nIdx++) {
+		ECodeType nCharSet = (ECodeType)Combo_GetItemData( m_hwndCharSet, nIdx );
 		if (nCharSet == *m_pnCharSet) {
 			nCurIdx = nIdx;
 		}

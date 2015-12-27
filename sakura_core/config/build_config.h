@@ -91,8 +91,7 @@ static const bool UNICODE_BOOL = false;
 	inline void _fill_new_memory(void* p, size_t nSize, const char* pSrc, size_t nSrcLen)
 	{
 		char* s = (char*)p;
-		size_t i;
-		for (i = 0; i < nSize; i++)
+		for (size_t i=0; i<nSize; ++i)
 		{
 			*s++ = pSrc[i%nSrcLen];
 		}

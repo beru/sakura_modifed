@@ -200,7 +200,7 @@ void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (m_pData) {
-		for (int i = 0; i < m_nFormat; i++) {
+		for (int i=0; i<m_nFormat; ++i) {
 			delete [](m_pData[i].data);
 		}
 		delete []m_pData;
@@ -273,7 +273,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 		return DV_E_FORMATETC;
 
 	int i;
-	for (i = 0; i < m_nFormat; i++) {
+	for (i=0; i<m_nFormat; ++i) {
 		if (lpfe->cfFormat == m_pData[i].cfFormat)
 			break;
 	}
@@ -309,7 +309,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 		return DV_E_DVASPECT;
 
 	int i;
-	for (i = 0; i < m_nFormat; i++) {
+	for (i=0; i<m_nFormat; ++i) {
 		if (lpfe->cfFormat == m_pData[i].cfFormat)
 			break;
 	}
@@ -342,7 +342,7 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpfe)
 		return DATA_E_FORMATETC;
 
 	int i;
-	for (i = 0; i < m_nFormat; i++) {
+	for (i=0; i<m_nFormat; ++i) {
 		if (lpfe->cfFormat == m_pData[i].cfFormat)
 			break;
 	}

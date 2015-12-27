@@ -236,26 +236,26 @@ int CSplitterWnd::HitTestSplitter(int xPos, int yPos)
 */
 void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 {
-	int					nActivePane;
-	int					nLimit = 32;
-	RECT				rc;
-	int					nAllSplitRowsOld = m_nAllSplitRows;	// •ªŠ„s”
-	int					nAllSplitColsOld = m_nAllSplitCols;	// •ªŠ„Œ…”
-	CEditView*			pcViewArr[MAXCOUNTOFVIEW];
-//	int					i;
-	BOOL				bVUp;
-	BOOL				bHUp;
-	BOOL				bSizeBox;
-	CEditWnd*			pCEditWnd = (CEditWnd*)m_pcEditWnd;
+	int			nActivePane;
+	int			nLimit = 32;
+	RECT		rc;
+	int			nAllSplitRowsOld = m_nAllSplitRows;	// •ªŠ„s”
+	int			nAllSplitColsOld = m_nAllSplitCols;	// •ªŠ„Œ…”
+	CEditView*	pcViewArr[MAXCOUNTOFVIEW];
+//	int			i;
+	BOOL		bVUp;
+	BOOL		bHUp;
+	BOOL		bSizeBox;
+	CEditWnd*	pCEditWnd = (CEditWnd*)m_pcEditWnd;
 	bVUp = FALSE;
 	bHUp = FALSE;
 
-	if (-1 == nHorizontal && -1 == nVertical) {
+	if (nHorizontal == -1 && nVertical == -1) {
 		nVertical = m_nVSplitPos;		// ‚’¼•ªŠ„ˆÊ’u
 		nHorizontal = m_nHSplitPos;		// …•½•ªŠ„ˆÊ’u
 	}
 
-	if (0 != nVertical || 0 != nHorizontal) {
+	if (nVertical != 0 || nHorizontal != 0) {
 		// •ªŠ„w¦B‚Ü‚¾–¢ì¬‚È‚ç2‚Â–ÚˆÈ~‚Ìƒrƒ…[‚ğì¬‚µ‚Ü‚·
 		// ¡‚Ì‚Æ‚±‚ë‚Í•ªŠ„”‚ÉŠÖŒW‚È‚­4‚Â‚Ü‚Åˆê“x‚Éì‚è‚Ü‚·B
 		pCEditWnd->CreateEditViewBySplit(2*2);
@@ -597,7 +597,7 @@ void CSplitterWnd::SetActivePane(int nIndex)
 // c•ªŠ„‚n‚m^‚n‚e‚e
 void CSplitterWnd::VSplitOnOff(void)
 {
-	RECT		rc;
+	RECT rc;
 	::GetClientRect(GetHwnd(), &rc);
 
 	if (m_nAllSplitRows == 1 && m_nAllSplitCols == 1) {

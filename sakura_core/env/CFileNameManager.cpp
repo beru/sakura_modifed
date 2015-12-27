@@ -101,10 +101,14 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 */
 int CFileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
-	for (int i = 0; i < m_pShareData->m_Common.m_sFileName.m_nTransformFileNameArrNum; i++) {
-		if (L'\0' != m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i][0]) {
-			if (ExpandMetaToFolder(m_pShareData->m_Common.m_sFileName.m_szTransformFileNameFrom[i],
-			 m_szTransformFileNameFromExp[nCount], _MAX_PATH)
+	auto& csFileName = m_pShareData->m_Common.m_sFileName;
+	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; i++) {
+		if (L'\0' != csFileName.m_szTransformFileNameFrom[i][0]) {
+			if (ExpandMetaToFolder(
+				csFileName.m_szTransformFileNameFrom[i],
+				m_szTransformFileNameFromExp[nCount],
+				_MAX_PATH
+				)
 			) {
 				// m_szTransformFileNameTo‚Æm_szTransformFileNameFromExp‚Ì”Ô†‚ª‚¸‚ê‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å‹L˜^‚µ‚Ä‚¨‚­
 				m_nTransformFileNameOrgId[nCount] = i;

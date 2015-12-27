@@ -90,28 +90,29 @@ CDlgGrep::CDlgGrep()
 */
 BOOL CDlgGrep::OnCbnDropDown( HWND hwndCtl, int wID )
 {
+	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_sSearchKeywords.m_aSearchKeys.size();
-			for (int i = 0; i < nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aSearchKeys[i] );
+			int nSize = searchKeywords.m_aSearchKeys.size();
+			for (int i=0; i<nSize; ++i) {
+				Combo_AddString( hwndCtl, searchKeywords.m_aSearchKeys[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_FILE:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_sSearchKeywords.m_aGrepFiles.size();
-			for (int i = 0; i < nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aGrepFiles[i] );
+			int nSize = searchKeywords.m_aGrepFiles.size();
+			for (int i=0; i<nSize; ++i) {
+				Combo_AddString( hwndCtl, searchKeywords.m_aGrepFiles[i] );
 			}
 		}
 		break;
 	case IDC_COMBO_FOLDER:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
-			int nSize = m_pShareData->m_sSearchKeywords.m_aGrepFolders.size();
-			for (int i = 0; i < nSize; ++i) {
-				Combo_AddString( hwndCtl, m_pShareData->m_sSearchKeywords.m_aGrepFolders[i] );
+			int nSize = searchKeywords.m_aGrepFolders.size();
+			for (int i=0; i<nSize; ++i) {
+				Combo_AddString( hwndCtl, searchKeywords.m_aGrepFolders[i] );
 			}
 		}
 		break;
@@ -122,22 +123,24 @@ BOOL CDlgGrep::OnCbnDropDown( HWND hwndCtl, int wID )
 // モーダルダイアログの表示
 int CDlgGrep::DoModal(HINSTANCE hInstance, HWND hwndParent, const TCHAR* pszCurrentFilePath)
 {
-	m_bSubFolder = m_pShareData->m_Common.m_sSearch.m_bGrepSubFolder;			// Grep: サブフォルダも検索
-	m_sSearchOption = m_pShareData->m_Common.m_sSearch.m_sSearchOption;			// 検索オプション
-	m_nGrepCharSet = m_pShareData->m_Common.m_sSearch.m_nGrepCharSet;			// 文字コードセット
-	m_nGrepOutputLineType = m_pShareData->m_Common.m_sSearch.m_nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
-	m_nGrepOutputStyle = m_pShareData->m_Common.m_sSearch.m_nGrepOutputStyle;	// Grep: 出力形式
-	m_bGrepOutputFileOnly = m_pShareData->m_Common.m_sSearch.m_bGrepOutputFileOnly;
-	m_bGrepOutputBaseFolder = m_pShareData->m_Common.m_sSearch.m_bGrepOutputBaseFolder;
-	m_bGrepSeparateFolder = m_pShareData->m_Common.m_sSearch.m_bGrepSeparateFolder;
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	m_bSubFolder = csSearch.m_bGrepSubFolder;			// Grep: サブフォルダも検索
+	m_sSearchOption = csSearch.m_sSearchOption;			// 検索オプション
+	m_nGrepCharSet = csSearch.m_nGrepCharSet;			// 文字コードセット
+	m_nGrepOutputLineType = csSearch.m_nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
+	m_nGrepOutputStyle = csSearch.m_nGrepOutputStyle;	// Grep: 出力形式
+	m_bGrepOutputFileOnly = csSearch.m_bGrepOutputFileOnly;
+	m_bGrepOutputBaseFolder = csSearch.m_bGrepOutputBaseFolder;
+	m_bGrepSeparateFolder = csSearch.m_bGrepSeparateFolder;
 
 	// 2013.05.21 コンストラクタからDoModalに移動
 	// m_strText は呼び出し元で設定済み
-	if (m_szFile[0] == _T('\0') && m_pShareData->m_sSearchKeywords.m_aGrepFiles.size()) {
-		_tcscpy(m_szFile, m_pShareData->m_sSearchKeywords.m_aGrepFiles[0]);		// 検索ファイル
+	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
+	if (m_szFile[0] == _T('\0') && searchKeywords.m_aGrepFiles.size()) {
+		_tcscpy(m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
 	}
-	if (m_szFolder[0] == _T('\0') && m_pShareData->m_sSearchKeywords.m_aGrepFolders.size()) {
-		_tcscpy(m_szFolder, m_pShareData->m_sSearchKeywords.m_aGrepFolders[0]);	// 検索フォルダ
+	if (m_szFolder[0] == _T('\0') && searchKeywords.m_aGrepFolders.size()) {
+		_tcscpy(m_szFolder, searchKeywords.m_aGrepFolders[0]);	// 検索フォルダ
 	}
 
 	if (pszCurrentFilePath) {	// 2010.01.10 ryoji
@@ -176,7 +179,7 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	// 文字コードセット選択コンボボックス初期化
 	CCodeTypesForCombobox cCodeTypes;
-	for (int i = 0; i < cCodeTypes.GetCount(); ++i) {
+	for (int i=0; i<cCodeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), cCodeTypes.GetName(i));
 		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, cCodeTypes.GetCode(i));
 	}
@@ -285,7 +288,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 				if (DirectoryUp(szFolder)) {
 					*(vPaths.rbegin()) = szFolder;
 					szFolder[0] = _T('\0');
-					for (int i = 0 ; i < (int)vPaths.size(); i++) {
+					for (int i=0; i<(int)vPaths.size(); ++i) {
 						TCHAR szFolderItem[_MAX_PATH];
 						auto_strncpy(szFolderItem, vPaths[i].c_str(), _MAX_PATH);
 						szFolderItem[_MAX_PATH-1] = _T('\0');
@@ -363,7 +366,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 		{
 			if (IsButtonChecked(IDC_CHECK_CP)) {
 				EnableItem(IDC_CHECK_CP, false);
-				HWND combo = ::GetDlgItem( GetHwnd(), IDC_COMBO_CHARSET );
+				HWND combo = GetItemHwnd(IDC_COMBO_CHARSET );
 				CCodePage::AddComboCodePages(GetHwnd(), combo, -1);
 			}
 		}
@@ -455,7 +458,7 @@ void CDlgGrep::SetData(void)
 		HWND	hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
 		nCurIdx = Combo_GetCurSel(hWndCombo);
 		CCodeTypesForCombobox cCodeTypes;
-		for (nIdx = 0; nIdx < cCodeTypes.GetCount(); nIdx++) {
+		for (nIdx=0; nIdx<cCodeTypes.GetCount(); ++nIdx) {
 			nCharSet = (ECodeType)Combo_GetItemData(hWndCombo, nIdx);
 			if (nCharSet == m_nGrepCharSet) {
 				nCurIdx = nIdx;
@@ -566,7 +569,8 @@ int CDlgGrep::GetData(void)
 	// サブフォルダからも検索する
 	m_bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
 
-	m_pShareData->m_Common.m_sSearch.m_bGrepSubFolder = m_bSubFolder;		// Grep：サブフォルダも検索
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	csSearch.m_bGrepSubFolder = m_bSubFolder;		// Grep：サブフォルダも検索
 
 	// この編集中のテキストから検索する
 	m_bFromThisText = IsButtonChecked(IDC_CHK_FROMTHISTEXT);
@@ -627,12 +631,12 @@ int CDlgGrep::GetData(void)
 	// 検索フォルダ
 	GetItemText(IDC_COMBO_FOLDER, m_szFolder, _countof2(m_szFolder));
 
-	m_pShareData->m_Common.m_sSearch.m_nGrepCharSet = m_nGrepCharSet;			// 文字コード自動判別
-	m_pShareData->m_Common.m_sSearch.m_nGrepOutputLineType = m_nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
-	m_pShareData->m_Common.m_sSearch.m_nGrepOutputStyle = m_nGrepOutputStyle;	// Grep: 出力形式
-	m_pShareData->m_Common.m_sSearch.m_bGrepOutputFileOnly = m_bGrepOutputFileOnly;
-	m_pShareData->m_Common.m_sSearch.m_bGrepOutputBaseFolder = m_bGrepOutputBaseFolder;
-	m_pShareData->m_Common.m_sSearch.m_bGrepSeparateFolder = m_bGrepSeparateFolder;
+	csSearch.m_nGrepCharSet = m_nGrepCharSet;				// 文字コード自動判別
+	csSearch.m_nGrepOutputLineType = m_nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
+	csSearch.m_nGrepOutputStyle = m_nGrepOutputStyle;		// Grep: 出力形式
+	csSearch.m_bGrepOutputFileOnly = m_bGrepOutputFileOnly;
+	csSearch.m_bGrepOutputBaseFolder = m_bGrepOutputBaseFolder;
+	csSearch.m_bGrepSeparateFolder = m_bGrepSeparateFolder;
 
 // やめました
 //	if (0 == wcslen(m_szText)) {
@@ -672,7 +676,7 @@ int CDlgGrep::GetData(void)
 		int nFolderLen = 0;
 		TCHAR szFolder[_MAX_PATH];
 		szFolder[0] = _T('\0');
-		for (int i = 0 ; i < (int)vPaths.size(); i ++) {
+		for (int i=0; i<(int)vPaths.size(); ++i) {
 			// 相対パス→絶対パス
 			if (!::SetCurrentDirectory(vPaths[i].c_str())) {
 				WarningMessage(	GetHwnd(), LS(STR_DLGGREP5));
@@ -713,7 +717,7 @@ int CDlgGrep::GetData(void)
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 		if (m_strText.size() < _MAX_PATH) {
 			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
-			m_pShareData->m_Common.m_sSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
+			csSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
 		}
 	}else {
 		// 2014.07.01 空キーも登録する

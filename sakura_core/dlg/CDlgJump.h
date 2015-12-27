@@ -31,10 +31,10 @@ public:
 	*/
 	int DoModal(HINSTANCE, HWND, LPARAM);	// モーダルダイアログの表示
 
-	int			m_nLineNum;		// 行番号
-	bool		m_bPLSQL;		// PL/SQLソースの有効行か
-	int			m_nPLSQL_E1;
-	int			m_nPLSQL_E2;
+	int		m_nLineNum;		// 行番号
+	bool	m_bPLSQL;		// PL/SQLソースの有効行か
+	int		m_nPLSQL_E1;
+	int		m_nPLSQL_E2;
 protected:
 	/*
 	||  実装ヘルパ関数

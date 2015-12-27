@@ -28,7 +28,7 @@ bool CDecode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	pw_base = pw = static_cast<char*>(pcDst->GetRawPtr());
 
 	// 先頭の改行・空白文字をスキップ
-	for (ncuridx = 0; ncuridx < nsrclen; ++ncuridx) {
+	for (ncuridx=0; ncuridx<nsrclen; ++ncuridx) {
 		WCHAR c = psrc[ncuridx];
 		if (!WCODE::IsLineDelimiterBasic(c) && c != L' ' && c != L'\t') {
 			break;
@@ -43,7 +43,7 @@ bool CDecode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 	}
 
 	// ボディーを処理
-	while( (pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false)) ){
+	while ((pline = GetNextLineW(psrc, nsrclen, &nlinelen, &ncuridx, &ceol, false))) {
 		if (ceol.GetType() != EOL_CRLF) {
 			pcDst->_AppendSz("");
 			return false;

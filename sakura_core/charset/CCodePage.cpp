@@ -438,7 +438,7 @@ CCodePage::CodePageList& CCodePage::GetCodePageList()
 #endif
 	pfn_GetCPInfoExT_t pfn_GetCPInfoExT = (pfn_GetCPInfoExT_t)::GetProcAddress(hDLLkernel, strFunc_GetCPInfoEx);
 	CPINFOEX cpInfo;
-	for (CodePageList::iterator it = result.begin(); it != result.end(); ++it) {
+	for (auto it=result.begin(); it!=result.end(); ++it) {
 		cpInfo.CodePageName[0] = _T('\0');
 		if (pfn_GetCPInfoExT && pfn_GetCPInfoExT(it->first, 0, &cpInfo)) {
 			it->second = to_wchar(cpInfo.CodePageName);
@@ -482,7 +482,7 @@ int CCodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 	}
 	Combo_SetItemData( combo, nIdx, CODE_CPOEM );
 	CCodePage::CodePageList& cpList = CCodePage::GetCodePageList();
-	for (CCodePage::CodePageList::iterator it = cpList.begin(); it != cpList.end(); ++it) {
+	for (auto it=cpList.begin(); it!=cpList.end(); ++it) {
 		nIdx = Combo_AddString(combo, it->second.c_str());
 		Combo_SetItemData(combo, nIdx, it->first);
 		if (nSelCode == it->first) {
@@ -528,7 +528,7 @@ int CCodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 	if (!pDst) {
 		int nDstUseLen = 0;
 		int i = 0;
-		for (; i < nSrcLen; ) {
+		for (; i<nSrcLen; ) {
 			if (i + 3 < nSrcLen) {
 				if (pSrcByte[i+3] == 0x00 && pSrcByte[i+2] == 0x00) {
 					wchar_t c = static_cast<wchar_t>(pSrcByte[i+1] << 8 | pSrcByte[i]);
@@ -556,7 +556,7 @@ int CCodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 	int nDstUseCharLen;
 	int i = 0;
 	unsigned short* pDstShort = reinterpret_cast<unsigned short*>(pDst);
-	for (; i < nSrcLen; ) {
+	for (; i<nSrcLen; ) {
 		if (i + 3 < nSrcLen) {
 			if (pSrcByte[i+3] == 0x00 && pSrcByte[i+2] == 0x00) {
 				wchar_t c = static_cast<wchar_t>(pSrcByte[i+1] << 8 | pSrcByte[i]);
@@ -619,7 +619,7 @@ int CCodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 	if (!pDst) {
 		int nDstUseLen = 0;
 		int i = 0;
-		for (; i < nSrcLen; ) {
+		for (; i<nSrcLen; ) {
 			if (i + 3 < nSrcLen) {
 				if (pSrcByte[i+1] == 0x00 && pSrcByte[i] == 0x00) {
 					wchar_t c = static_cast<wchar_t>(pSrcByte[i+1] << 8 | pSrcByte[i]);
@@ -647,7 +647,7 @@ int CCodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 	int nDstUseCharLen;
 	int i = 0;
 	unsigned short* pDstShort = reinterpret_cast<unsigned short*>(pDst);
-	for (; i < nSrcLen; ) {
+	for (; i<nSrcLen; ) {
 		if (i + 3 < nSrcLen) {
 			if (pSrcByte[i] == 0x00 && pSrcByte[i+1] == 0x00) {
 				wchar_t c = static_cast<wchar_t>(pSrcByte[i+1] << 8 | pSrcByte[i]);
@@ -706,10 +706,10 @@ int CCodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 static bool BinToUTF32( const unsigned short* pSrc, int Len, char* pDst, int nDstLen )
 {
 	if (4 <= nDstLen) {
-		for (int i = 0; i < Len; ++i) {
+		for (int i=0; i<Len; ++i) {
 			pDst[i] = CCodeBase::TextToBin(pSrc[i]);
 		}
-		for (int k = Len; k < 4; ++k) {
+		for (int k=Len; k<4; ++k) {
 			pDst[k] = 0;
 		}
 	}else {
@@ -724,7 +724,7 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 		int nDstUseLen = 0;
 		int nBinaryLen = 0;
 		int i = 0;
-		for (; i < nSrcLen; ) {
+		for (; i<nSrcLen; ) {
 			// 4Byteに満たないバイナリデータは4Byte単位で出力
 			if (i + 1 < nSrcLen && IsUtf16SurrogHi( pSrc[i] ) && IsUtf16SurrogLow( pSrc[i+1] )) {
 				if (nBinaryLen != 0) {
@@ -763,7 +763,7 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 	int i = 0;
 	const unsigned short* pSrcShort = reinterpret_cast<const unsigned short*>(pSrc);
 	unsigned char* pDstByte = reinterpret_cast<unsigned char*>(pDst);
-	for (; i < nSrcLen; ) {
+	for (; i<nSrcLen; ) {
 		if (i + 1 < nSrcLen && IsUtf16SurrogHi( pSrc[i] ) && IsUtf16SurrogLow( pSrc[i+1] )) {
 			if (nBinaryLen != 0) {
 				if (!BinToUTF32(pSrcShort + nBinaryPos, nBinaryLen, pDst + nDstUseLen, nDstLen - nDstUseLen)) {
@@ -820,7 +820,7 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 	// ファイル末尾の端数は、そのままの長さで出力
 	if (nBinaryLen != 0) {
 		if (nDstUseLen + nBinaryLen <= nDstLen) {
-			for (int k = 0; k < nBinaryLen; k++) {
+			for (int k=0; k<nBinaryLen; ++k) {
 				pDstByte[nDstUseLen + k] = TextToBin(pSrcShort[nBinaryPos]);
 			}
 		}else {
@@ -838,7 +838,7 @@ int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 		int nDstUseLen = 0;
 		int nBinaryLen = 0;
 		int i = 0;
-		for (; i < nSrcLen; ) {
+		for (; i<nSrcLen; ) {
 			// 4Byteに満たないバイナリデータは4Byte単位で出力
 			if (i + 1 < nSrcLen && IsUtf16SurrogHi( pSrc[i] ) && IsUtf16SurrogLow( pSrc[i+1] )) {
 				if (nBinaryLen != 0) {
@@ -877,7 +877,7 @@ int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 	int i = 0;
 	const unsigned short* pSrcShort = reinterpret_cast<const unsigned short*>(pSrc);
 	unsigned char* pDstByte = reinterpret_cast<unsigned char*>(pDst);
-	for (; i < nSrcLen; ) {
+	for (; i<nSrcLen; ) {
 		if (i + 1 < nSrcLen && IsUtf16SurrogHi( pSrc[i] ) && IsUtf16SurrogLow( pSrc[i+1] )) {
 			if (nBinaryLen != 0) {
 				if (!BinToUTF32(pSrcShort + nBinaryPos, nBinaryLen, pDst + nDstUseLen, nDstLen - nDstUseLen)) {
@@ -934,7 +934,7 @@ int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 	// ファイル末尾の端数は、そのままの長さで出力
 	if (nBinaryLen != 0) {
 		if (nDstUseLen + nBinaryLen <= nDstLen) {
-			for (int k = 0; k < nBinaryLen; k++) {
+			for (int k=0; k<nBinaryLen; ++k) {
 				pDstByte[nDstUseLen + k] = TextToBin(pSrcShort[nBinaryPos]);
 			}
 		}else {

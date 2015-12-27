@@ -80,7 +80,7 @@ inline int CCodeBase::BinToText(const unsigned char* pSrc, const int nLen, unsig
 {
 	int i;
 
-	for (i = 0; i < nLen; ++i) {
+	for (i=0; i<nLen; ++i) {
 		pDst[i] = static_cast<unsigned short>(pSrc[i]) + 0xdc00;
 	}
 

@@ -267,7 +267,7 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	ps = reinterpret_cast<unsigned char*>( cBuff._GetMemory()->GetRawPtr() );
 	pd = pDst;
 	if (!bbinary) {
-		for (i = cBuff._GetMemory()->GetRawLength(); i >0; i--, ps ++, pd += 2) {
+		for (i=cBuff._GetMemory()->GetRawLength(); i>0; --i, ++ps, pd+=2) {
 			auto_sprintf(pd, _T("%02X"), *ps);
 		}
 	}else {

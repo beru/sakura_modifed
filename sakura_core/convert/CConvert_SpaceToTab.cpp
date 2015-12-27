@@ -44,7 +44,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 			nPosX = (pcData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
 			bSpace = FALSE;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
-			for (i = 0; i < nLineLen; ++i) {
+			for (i=0; i<nLineLen; ++i) {
 				if (SPACE == pLine[i] || TAB == pLine[i]) {
 					if (bSpace == FALSE) {
 						nStartPos = nPosX;
@@ -61,7 +61,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 							pDes[nPosDes] = SPACE;
 							nPosDes++;
 						}else {
-							for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); j++) {
+							for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); ++j) {
 								pDes[nPosDes] = TAB;
 								nPosDes++;
 								nStartPos += m_nTabWidth - (nStartPos % m_nTabWidth);
@@ -69,7 +69,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 							// 2003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 							// バッファをはみ出すのを修正
-							for (j = nStartPos; j < nPosX; j++) {
+							for (j=nStartPos; j<nPosX; ++j) {
 								pDes[nPosDes] = SPACE;
 								nPosDes++;
 							}
@@ -82,7 +82,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					bSpace = FALSE;
 				}
 			}
-			//for (; i < nLineLen; ++i) {
+			//for (; i<nLineLen; ++i) {
 			//	pDes[nPosDes] = pLine[i];
 			//	nPosDes++;
 			//}
@@ -92,7 +92,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					nPosDes++;
 				}else {
 					//for (j = nStartPos - 1; (j + m_nTabWidth) <= nPosX + 1; j += m_nTabWidth) {
-					for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); j++) {
+					for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); ++j) {
 						pDes[nPosDes] = TAB;
 						nPosDes++;
 						nStartPos += m_nTabWidth - (nStartPos % m_nTabWidth);
@@ -100,7 +100,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					// 2003.08.05 Moca
 					// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 					// バッファをはみ出すのを修正
-					for (j = nStartPos; j < nPosX; j++) {
+					for (j=nStartPos; j<nPosX; ++j) {
 						pDes[nPosDes] = SPACE;
 						nPosDes++;
 					}
