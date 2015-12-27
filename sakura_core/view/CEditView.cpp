@@ -1584,9 +1584,9 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 		}
 		pNextParam[nParamIndex] = nThisCode;
 	}
-
-	for (int i=0; i<GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
-		EFunctionCode code = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemFuncArr[nMenuIdx][i];
+	auto& csCustomMenu = GetDllShareData().m_Common.m_sCustomMenu;
+	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
+		EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nMenuIdx][i];
 		bool bAppend = false;
 		if (F_0 == code) {
 			// 2010.07.24 メニュー配列に入れる
@@ -1599,7 +1599,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 			}else {
 				nCustIdx = code - F_CUSTMENU_1 + 1;
 			}
-			bool bMenuLoop = !GetDllShareData().m_Common.m_sCustomMenu.m_bCustMenuPopupArr[nCustIdx];
+			bool bMenuLoop = !csCustomMenu.m_bCustMenuPopupArr[nCustIdx];
 			if (!bMenuLoop) {
 				for (int k = 0; pNextParam[k] != 0; k++) {
 					if (pNextParam[k] == code) {
@@ -1612,7 +1612,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 				WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 				LPCWSTR p = GetDocument()->m_cFuncLookup.Custmenu2Name(nCustIdx, buf, _countof(buf));
 				wchar_t keys[2];
-				keys[0] = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
+				keys[0] = csCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
 				HMENU hMenuPopUp = ::CreatePopupMenu();
 				cMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)hMenuPopUp , p, keys);
@@ -1630,7 +1630,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 				m_pcEditWnd->InitMenu_Special(hMenu, code);
 			}else {
 				wchar_t keys[2];
-				keys[0] = GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
+				keys[0] = csCustomMenu.m_nCustMenuItemKeyArr[nMenuIdx][i];
 				keys[1] = 0;
 				m_pcEditWnd->InitMenu_Function(hMenu, code, szLabel, keys);
 			}
@@ -1644,9 +1644,9 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 	}
 
 	int cMenuItems = ::GetMenuItemCount(hMenu);
-	for (int nPos = 0; nPos < cMenuItems; nPos++) {
-		EFunctionCode	id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
-		UINT		fuFlags;
+	for (int nPos=0; nPos<cMenuItems; ++nPos) {
+		EFunctionCode id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
+		UINT fuFlags;
 		// 機能が利用可能か調べる
 		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
 		if (!IsFuncEnable(GetDocument(), &GetDllShareData(), id)) {
@@ -1695,7 +1695,8 @@ void CEditView::OnChangeSetting()
 	if (!GetHwnd()) {
 		return;
 	}
-	GetTextArea().SetTopYohaku(GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	auto& csWindow = GetDllShareData().m_Common.m_sWindow;
+	GetTextArea().SetTopYohaku(csWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	GetTextArea().SetAreaTop(GetTextArea().GetTopYohaku());									// 表示域の上端座標
 
 	// 文書種別更新
@@ -1703,9 +1704,9 @@ void CEditView::OnChangeSetting()
 
 	// ルーラー表示
 	if (m_pTypeData->m_ColorInfoArr[COLORIDX_RULER].m_bDisp && !m_bMiniMap) {
-		GetTextArea().SetAreaTop(GetTextArea().GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
+		GetTextArea().SetAreaTop(GetTextArea().GetAreaTop() + csWindow.m_nRulerHeight);	// ルーラー高さ
 	}
-	GetTextArea().SetLeftYohaku(GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace);
+	GetTextArea().SetLeftYohaku(csWindow.m_nLineNumRightSpace);
 
 	// フォントの変更
 	SetFont();
@@ -1718,7 +1719,7 @@ void CEditView::OnChangeSetting()
 	// AdjustScrollBars();
 
 	//	2007.09.30 genta 画面キャッシュ用CompatibleDCを用意する
-	UseCompatibleDC(GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP);
+	UseCompatibleDC(csWindow.m_bUseCompatibleBMP);
 
 	// ウィンドウサイズの変更処理
 	RECT rc;

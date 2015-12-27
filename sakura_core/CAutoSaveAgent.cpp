@@ -66,8 +66,9 @@ void CAutoSaveAgent::CheckAutoSave()
 //
 void CAutoSaveAgent::ReloadAutoSaveParam()
 {
-	m_cPassiveTimer.SetInterval(GetDllShareData().m_Common.m_sBackup.GetAutoBackupInterval());
-	m_cPassiveTimer.Enable(GetDllShareData().m_Common.m_sBackup.IsAutoBackupEnabled());
+	auto& csBackup = GetDllShareData().m_Common.m_sBackup;
+	m_cPassiveTimer.SetInterval(csBackup.GetAutoBackupInterval());
+	m_cPassiveTimer.Enable(csBackup.IsAutoBackupEnabled());
 }
 
 //----------------------------------------------------------

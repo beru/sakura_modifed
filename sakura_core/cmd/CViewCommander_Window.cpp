@@ -125,8 +125,8 @@ void CViewCommander::Command_WINLIST(int nCommandFrom)
 void CViewCommander::Command_CASCADE(void)
 {
 	// 現在開いている編集窓のリストを取得する
-	EditNode*	pEditNodeArr;
-	int			nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
+	EditNode* pEditNodeArr;
+	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
 
 	if (nRowNum > 0) {
 		struct WNDARR {
@@ -321,7 +321,7 @@ void CViewCommander::Command_TILE_H(void)
 		HWND* phwndArr = new HWND[nRowNum];
 		int count = 0;
 		// デスクトップサイズを得る
-		RECT	rcDesktop;
+		RECT rcDesktop;
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect(m_pCommanderView->GetHwnd(), &rcDesktop);
 		for (int i=0; i<nRowNum; ++i) {
@@ -383,12 +383,13 @@ void CViewCommander::Command_WINTOPMOST(LPARAM lparam)
 void CViewCommander::Command_BIND_WINDOW(void)
 {
 	// タブモードであるならば
-	if (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd) {
+	auto& csTabBar = GetDllShareData().m_Common.m_sTabBar;
+	if (csTabBar.m_bDispTabWnd) {
 		// タブウィンドウの設定を変更
-		GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin = !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin;
+		csTabBar.m_bDispTabWndMultiWin = !csTabBar.m_bDispTabWndMultiWin;
 
 		// まとめるときは WS_EX_TOPMOST 状態を同期する	// 2007.05.18 ryoji
-		if (!GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
+		if (!csTabBar.m_bDispTabWndMultiWin) {
 			GetEditWindow()->WindowTopMost(
 				((DWORD)::GetWindowLongPtr(GetEditWindow()->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST)? 1: 2
 			);
@@ -399,7 +400,7 @@ void CViewCommander::Command_BIND_WINDOW(void)
 		CAppNodeManager::getInstance()->ResetGroupId();
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
-			(WPARAM)((GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin) ? TWNT_MODE_DISABLE : TWNT_MODE_ENABLE), // タブモード有効/無効化イベント
+			(WPARAM)((csTabBar.m_bDispTabWndMultiWin) ? TWNT_MODE_DISABLE : TWNT_MODE_ENABLE), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow()->GetHwnd(),	// CEditWndのウィンドウハンドル
 			m_pCommanderView->GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika
@@ -411,9 +412,10 @@ void CViewCommander::Command_BIND_WINDOW(void)
 // グループを閉じる		// 2007.06.20 ryoji 追加
 void CViewCommander::Command_GROUPCLOSE(void)
 {
+	auto& csTabBar = GetDllShareData().m_Common.m_sTabBar;
 	if (
-		GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd
-		&& !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin
+		csTabBar.m_bDispTabWnd
+		&& !csTabBar.m_bDispTabWndMultiWin
 	) {
 		int nGroup = CAppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
 		CControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, nGroup);

@@ -94,8 +94,9 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 	}
 
 next:
+	auto& csFile = GetDllShareData().m_Common.m_sFile;
 	// オプション：開こうとしたファイルが存在しないとき警告する
-	if (GetDllShareData().m_Common.m_sFile.GetAlertIfFileNotExist()) {
+	if (csFile.GetAlertIfFileNotExist()) {
 		if (!fexist(pLoadInfo->cFilePath)) {
 			InfoBeep();
 			//	Feb. 15, 2003 genta Popupウィンドウを表示しないように．
@@ -142,7 +143,7 @@ next:
 	}while (false);	//	1回しか通らない. breakでここまで飛ぶ
 
 	// ファイルサイズチェック
-	if (GetDllShareData().m_Common.m_sFile.m_bAlertIfLargeFile) {
+	if (csFile.m_bAlertIfLargeFile) {
 		WIN32_FIND_DATA wfd;
 		HANDLE nFind = ::FindFirstFile( pLoadInfo->cFilePath.c_str(), &wfd );
 		if (nFind != INVALID_HANDLE_VALUE) {
@@ -150,13 +151,13 @@ next:
 			LARGE_INTEGER nFileSize;
 			nFileSize.HighPart = wfd.nFileSizeHigh;
 			nFileSize.LowPart = wfd.nFileSizeLow;
-			// GetDllShareData().m_Common.m_sFile.m_nAlertFileSize はMB単位
-			if ((nFileSize.QuadPart>>20) >= (GetDllShareData().m_Common.m_sFile.m_nAlertFileSize)) {
+			// csFile.m_nAlertFileSize はMB単位
+			if ((nFileSize.QuadPart>>20) >= (csFile.m_nAlertFileSize)) {
 				int nRet = MYMESSAGEBOX( CEditWnd::getInstance()->GetHwnd(),
 					MB_ICONQUESTION | MB_YESNO | MB_TOPMOST,
 					GSTR_APPNAME,
 					LS(STR_LOADAGENT_BIG_FILE),
-					GetDllShareData().m_Common.m_sFile.m_nAlertFileSize );
+					csFile.m_nAlertFileSize );
 				if (nRet != IDYES) {
 					return CALLBACK_INTERRUPT;
 				}
