@@ -73,8 +73,9 @@ void CControlTray::DoGrep()
 	}
 
 	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
+	auto& csSearch = m_pShareData->m_Common.m_sSearch;
 	if (0 < searchKeywords.m_aSearchKeys.size()
-		&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
+		&& m_nCurSearchKeySequence < csSearch.m_nSearchKeySequence
 	) {
 		m_cDlgGrep.m_strText = searchKeywords.m_aSearchKeys[0];
 	}
@@ -90,8 +91,8 @@ void CControlTray::DoGrep()
 	if (!nRet || !GetTrayHwnd()) {
 		return;
 	}
-	m_nCurSearchKeySequence = GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence;
-	DoGrepCreateWindow(m_hInstance, GetDllShareData().m_sHandles.m_hwndTray, m_cDlgGrep);
+	m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;
+	DoGrepCreateWindow(m_hInstance, m_pShareData->m_sHandles.m_hwndTray, m_cDlgGrep);
 }
 
 void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep& cDlgGrep)
@@ -128,8 +129,8 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	if (cDlgGrep.m_bSubFolder				) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
 	if (cDlgGrep.m_sSearchOption.bLoHiCase	) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
 	if (cDlgGrep.m_sSearchOption.bRegularExp) _tcscat(pOpt, _T("R"));	// 正規表現
-	if (cDlgGrep.m_nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
-	if (cDlgGrep.m_nGrepOutputLineType == 2	) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
+	if (cDlgGrep.m_nGrepOutputLineType == 1	) _tcscat(pOpt, _T("P"));	// 行を出力する
+	if (cDlgGrep.m_nGrepOutputLineType == 2	) _tcscat(pOpt, _T("N"));	// 否ヒット行を出力する 2014.09.23
 	if (cDlgGrep.m_sSearchOption.bWordOnly	) _tcscat(pOpt, _T("W"));	// 単語単位で探す
 	if (1 == cDlgGrep.m_nGrepOutputStyle	) _tcscat(pOpt, _T("1"));	// Grep: 出力形式
 	if (2 == cDlgGrep.m_nGrepOutputStyle	) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
@@ -221,7 +222,7 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
 	std::tstring strCEditAppName = GSTR_CEDITAPP;
 	strCEditAppName += strProfileName;
-	HWND hwndWork = ::FindWindow( strCEditAppName.c_str(), strCEditAppName.c_str() );
+	HWND hwndWork = ::FindWindow(strCEditAppName.c_str(), strCEditAppName.c_str());
 	if (hwndWork) {
 		return NULL;
 	}
@@ -278,7 +279,7 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 	m_pcPropertyManager = new CPropertyManager();
 	m_pcPropertyManager->Create(GetTrayHwnd(), &m_hIcons, &m_cMenuDrawer);
 
-	auto_strcpy(m_szLanguageDll, GetDllShareData().m_Common.m_sWindow.m_szLanguageDll);
+	auto_strcpy(m_szLanguageDll, m_pShareData->m_Common.m_sWindow.m_szLanguageDll);
 
 	return GetTrayHwnd();
 }
@@ -439,7 +440,7 @@ LRESULT CControlTray::DispatchEvent(
 				return -1;
 			}
 
-			if (ID_HOTKEY_TRAYMENU == idHotKey
+			if (idHotKey == ID_HOTKEY_TRAYMENU
 				&& (wHotKeyMods) == fuModifiers
 				&& wHotKeyCode == uVirtKey
 			) {
@@ -456,19 +457,20 @@ LRESULT CControlTray::DispatchEvent(
 			// 2010.08.26 ウィンドウ存在確認。消えたウィンドウを抹消する
 			bool bDelete = false;
 			bool bDelFound;
+			auto& sNodes = m_pShareData->m_sNodes;
 			do {
 				bDelFound = false;
-				for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
-					HWND target = m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd();
+				for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
+					HWND target = sNodes.m_pEditArr[i].GetHwnd();
 					if (!IsSakuraMainWindow(target)) {
-						CAppNodeGroupHandle(m_pShareData->m_sNodes.m_pEditArr[i].m_nGroup).DeleteEditWndList(target);
+						CAppNodeGroupHandle(sNodes.m_pEditArr[i].m_nGroup).DeleteEditWndList(target);
 						bDelete = bDelFound = true;
 						// 1つ削除したらやり直し
 						break;
 					}
 				}
 			}while (bDelFound);
-			if (bDelete && m_pShareData->m_sNodes.m_nEditArrNum == 0) {
+			if (bDelete && sNodes.m_nEditArrNum == 0) {
 				PostMessage(hwnd, MYWM_DELETE_ME, 0, 0);
 			}
 		}
@@ -482,12 +484,10 @@ LRESULT CControlTray::DispatchEvent(
 	case MYWM_HTMLHELP:
 		{
 			TCHAR* pWork = m_pShareData->m_sWorkBuffer.GetWorkBuffer<TCHAR>();
-
 			// szHtmlFile取得
 			TCHAR szHtmlHelpFile[1024];
 			_tcscpy_s(szHtmlHelpFile, pWork);
 			int nLen = _tcslen(szHtmlHelpFile);
-
 			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,
@@ -496,7 +496,6 @@ LRESULT CControlTray::DispatchEvent(
 				(DWORD_PTR)0,
 				true
 			);
-
 			HH_AKLINK link;
 			link.cbStruct		= sizeof_raw(link);
 			link.fReserved		= FALSE;
@@ -506,7 +505,6 @@ LRESULT CControlTray::DispatchEvent(
 			link.pszMsgTitle	= NULL;
 			link.pszWindow		= NULL;
 			link.fIndexOnFail	= TRUE;
-
 			// Jul. 6, 2001 genta HtmlHelpの呼び出し方法変更
 			hwndHtmlHelp = OpenHtmlHelp(
 				NULL,
@@ -517,7 +515,6 @@ LRESULT CControlTray::DispatchEvent(
 			);
 		}
 		return (LRESULT)hwndHtmlHelp;
-
 
 	// 編集ウィンドウオブジェクトからのオブジェクト削除要求
 	case MYWM_DELETE_ME:
@@ -548,13 +545,13 @@ LRESULT CControlTray::DispatchEvent(
 
 			// タスクトレイ左クリックメニューへのショートカットキー登録
 			wHotKeyMods = 0;
-			if (HOTKEYF_SHIFT & csGeneral.m_wTrayMenuHotKeyMods) {
+			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_SHIFT) {
 				wHotKeyMods |= MOD_SHIFT;
 			}
-			if (HOTKEYF_CONTROL & csGeneral.m_wTrayMenuHotKeyMods) {
+			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_CONTROL) {
 				wHotKeyMods |= MOD_CONTROL;
 			}
-			if (HOTKEYF_ALT & csGeneral.m_wTrayMenuHotKeyMods) {
+			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_ALT) {
 				wHotKeyMods |= MOD_ALT;
 			}
 			wHotKeyCode = csGeneral.m_wTrayMenuHotKeyCode;
@@ -569,8 +566,7 @@ LRESULT CControlTray::DispatchEvent(
 
 			// 2006.07.09 ryoji 最後の方でシャットダウンするアプリケーションにする
 			BOOL (WINAPI *pfnSetProcessShutdownParameters)(DWORD dwLevel, DWORD dwFlags);
-			HINSTANCE hDll;
-			hDll = ::GetModuleHandle(_T("KERNEL32"));
+			HINSTANCE hDll = ::GetModuleHandle(_T("KERNEL32"));
 			if (hDll) {
 				*(FARPROC*)&pfnSetProcessShutdownParameters = ::GetProcAddress(hDll, "SetProcessShutdownParameters");
 				if (pfnSetProcessShutdownParameters) {
@@ -601,14 +597,15 @@ LRESULT CControlTray::DispatchEvent(
 	case MYWM_CHANGESETTING:
 		if ((e_PM_CHANGESETTING_SELECT)lParam == PM_CHANGESETTING_ALL) {
 			{
-				bool bChangeLang = auto_strcmp(GetDllShareData().m_Common.m_sWindow.m_szLanguageDll, m_szLanguageDll) != 0;
-				auto_strcpy(m_szLanguageDll, GetDllShareData().m_Common.m_sWindow.m_szLanguageDll);
+				auto& csWindow = GetDllShareData().m_Common.m_sWindow;
+				bool bChangeLang = auto_strcmp(csWindow.m_szLanguageDll, m_szLanguageDll) != 0;
+				auto_strcpy(m_szLanguageDll, csWindow.m_szLanguageDll);
 				std::vector<std::wstring> values;
 				if (bChangeLang) {
 					CShareData::getInstance()->ConvertLangValues(values, true);
 				}
 				// 言語を選択する
-				CSelectLang::ChangeLang(GetDllShareData().m_Common.m_sWindow.m_szLanguageDll);
+				CSelectLang::ChangeLang(csWindow.m_szLanguageDll);
 				if (bChangeLang) {
 					CShareData::getInstance()->ConvertLangValues(values, false);
 				}
@@ -618,13 +615,13 @@ LRESULT CControlTray::DispatchEvent(
 			// タスクトレイ左クリックメニューへのショートカットキー登録
 			wHotKeyMods = 0;
 			auto& csGeneral = m_pShareData->m_Common.m_sGeneral;
-			if (HOTKEYF_SHIFT & csGeneral.m_wTrayMenuHotKeyMods) {
+			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_SHIFT) {
 				wHotKeyMods |= MOD_SHIFT;
 			}
-			if (HOTKEYF_CONTROL & csGeneral.m_wTrayMenuHotKeyMods) {
+			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_CONTROL) {
 				wHotKeyMods |= MOD_CONTROL;
 			}
-			if (HOTKEYF_ALT & csGeneral.m_wTrayMenuHotKeyMods) {
+			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_ALT) {
 				wHotKeyMods |= MOD_ALT;
 			}
 			wHotKeyCode = csGeneral.m_wTrayMenuHotKeyCode;
@@ -651,16 +648,17 @@ LRESULT CControlTray::DispatchEvent(
 			int nIdx = (int)wParam;
 			if (0 <= nIdx && m_pShareData->m_nTypesCount) {
 				STypeConfig& type = m_pShareData->m_sWorkBuffer.m_TypeConfig;
-				if (0 == nIdx) {
+				if (nIdx == 0) {
 					m_pShareData->m_TypeBasis = type;
 					m_pShareData->m_TypeBasis.m_nIdx = 0;
 				}
 				*(CShareData::getInstance()->GetTypeSettings()[nIdx]) = type;
 				CShareData::getInstance()->GetTypeSettings()[nIdx]->m_nIdx = nIdx;
-				auto_strcpy(m_pShareData->m_TypeMini[nIdx].m_szTypeName, type.m_szTypeName);
-				auto_strcpy(m_pShareData->m_TypeMini[nIdx].m_szTypeExts, type.m_szTypeExts);
-				m_pShareData->m_TypeMini[nIdx].m_id = type.m_id;
-				m_pShareData->m_TypeMini[nIdx].m_encoding = type.m_encoding;
+				auto& typeMini = m_pShareData->m_TypeMini[nIdx];
+				auto_strcpy(typeMini.m_szTypeName, type.m_szTypeName);
+				auto_strcpy(typeMini.m_szTypeExts, type.m_szTypeExts);
+				typeMini.m_id = type.m_id;
+				typeMini.m_encoding = type.m_encoding;
 			}else {
 				return FALSE;
 			}
@@ -696,21 +694,22 @@ LRESULT CControlTray::DispatchEvent(
 						k = 0;
 					}
 				}
-				auto_strcpy( type->m_szTypeExts, _T("") );
+				auto_strcpy(type->m_szTypeExts, _T(""));
 				type->m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
 				types.resize(m_pShareData->m_nTypesCount + 1);
 				int nTypeSizeOld = m_pShareData->m_nTypesCount;
 				++m_pShareData->m_nTypesCount;
 				for (int i=nTypeSizeOld; nInsert<i; --i) {
-					types[i] = types[i - 1];
+					types[i] = types[i-1];
 					types[i]->m_nIdx = i;
-					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i - 1];
+					m_pShareData->m_TypeMini[i] = m_pShareData->m_TypeMini[i-1];
 				}
 				types[nInsert] = type;
-				auto_strcpy(m_pShareData->m_TypeMini[nInsert].m_szTypeName, type->m_szTypeName);
-				auto_strcpy(m_pShareData->m_TypeMini[nInsert].m_szTypeExts, type->m_szTypeExts);
-				m_pShareData->m_TypeMini[nInsert].m_id = type->m_id;
-				m_pShareData->m_TypeMini[nInsert].m_encoding = type->m_encoding;
+				auto& typeMini = m_pShareData->m_TypeMini[nInsert];
+				auto_strcpy(typeMini.m_szTypeName, type->m_szTypeName);
+				auto_strcpy(typeMini.m_szTypeExts, type->m_szTypeExts);
+				typeMini.m_id = type->m_id;
+				typeMini.m_encoding = type->m_encoding;
 			}else {
 				return FALSE;
 			}
@@ -901,7 +900,7 @@ LRESULT CControlTray::DispatchEvent(
 				break;
 			case F_EXITALLEDITORS:	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
 				// 編集の全終了
-				CControlTray::CloseAllEditor(TRUE, GetTrayHwnd(), TRUE, 0);	// 2006.12.25, 2007.02.13 ryoji 引数追加
+				CControlTray::CloseAllEditor(true, GetTrayHwnd(), true, 0);	// 2006.12.25, 2007.02.13 ryoji 引数追加
 				break;
 			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
 				// サクラエディタの全終了
@@ -1001,7 +1000,7 @@ LRESULT CControlTray::DispatchEvent(
 
 	case WM_QUERYENDSESSION:
 		// すべてのウィンドウを閉じる // Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-		if (CloseAllEditor(FALSE, GetTrayHwnd(), TRUE, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
+		if (CloseAllEditor(false, GetTrayHwnd(), true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
 			// Jan. 31, 2000 genta
 			// この時点ではWindowsの終了が確定していないので常駐解除すべきではない．
 			//::DestroyWindow(hwnd);
@@ -1011,7 +1010,7 @@ LRESULT CControlTray::DispatchEvent(
 		}
 	case WM_CLOSE:
 		// すべてのウィンドウを閉じる 	Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-		if (CloseAllEditor(FALSE, GetTrayHwnd(), TRUE, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
+		if (CloseAllEditor(false, GetTrayHwnd(), true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
 			::DestroyWindow(hwnd);
 		}
 		return 0L;
@@ -1072,9 +1071,10 @@ void CControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 void CControlTray::OnNewEditor(bool bNewWindow)
 {
 	// 新規ウィンドウで開くオプションは、タブバー＆グループ化を前提とする
+	auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
 	bNewWindow = bNewWindow
-				 && m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
-				 && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin;
+				 && csTabBar.m_bDispTabWnd
+				 && !csTabBar.m_bDispTabWndMultiWin;
 
 	// 編集ウインドウを開く
 	SLoadInfo sLoadInfo;
@@ -1388,7 +1388,7 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 				}
 			}
 			// 前のウィンドウをアクティブにする
-			HWND	hwndWork = pEditNodeArr[j].GetHwnd();
+			HWND hwndWork = pEditNodeArr[j].GetHwnd();
 			ActivateFrameWindow(hwndWork);
 			// 最後のペインをアクティブにする
 			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 1);
@@ -1428,7 +1428,7 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 				}
 			}
 			// 次のウィンドウをアクティブにする
-			HWND	hwndWork = pEditNodeArr[j].GetHwnd();
+			HWND hwndWork = pEditNodeArr[j].GetHwnd();
 			ActivateFrameWindow(hwndWork);
 			// 最初のペインをアクティブにする
 			::PostMessage(hwndWork, MYWM_SETACTIVEPANE, (WPARAM) - 1, 0);
@@ -1453,20 +1453,20 @@ void CControlTray::TerminateApplication(
 	// 現在の編集ウィンドウの数を調べる
 	if (pShareData->m_Common.m_sGeneral.m_bExitConfirm) {	// 終了時の確認
 		if (0 < CAppNodeGroupHandle(0).GetEditorWindowsNum()) {
-			if (IDYES != ::MYMESSAGEBOX(
+			if (::MYMESSAGEBOX(
 					hWndFrom,
 					MB_YESNO | MB_APPLMODAL | MB_ICONQUESTION,
 					GSTR_APPNAME,
 					LS(STR_TRAY_EXITALL)
-				)
+				) != IDYES
 			) {
 				return;
 			}
 		}
 	}
 	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	BOOL bCheckConfirm = (pShareData->m_Common.m_sGeneral.m_bExitConfirm)? FALSE: TRUE;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
-	if (CloseAllEditor(bCheckConfirm, hWndFrom, TRUE, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
+	bool bCheckConfirm = pShareData->m_Common.m_sGeneral.m_bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
+	if (CloseAllEditor(bCheckConfirm, hWndFrom, true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
 		::PostMessage(pShareData->m_sHandles.m_hwndTray, WM_CLOSE, 0, 0);
 	}
 	return;
@@ -1482,9 +1482,9 @@ void CControlTray::TerminateApplication(
 	@date 2007.06.20 ryoji nGroup引数を追加
 */
 BOOL CControlTray::CloseAllEditor(
-	BOOL	bCheckConfirm,	//!< [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
+	bool	bCheckConfirm,	//!< [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
 	HWND	hWndFrom,		//!< [in] 呼び出し元のウィンドウハンドル
-	BOOL	bExit,			//!< [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
+	bool	bExit,			//!< [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
 	int		nGroup			//!< [in] グループID
 	)
 {

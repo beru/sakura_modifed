@@ -63,7 +63,7 @@ void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 		if (Info->m_pData) {
 			ArgCount = Info->m_pData->m_nArgMinSize;
 		}else {
-			for (int i = 0; i < 4; ++i) {
+			for (int i=0; i<4; ++i) {
 				if (Info->m_varArguments[i] != VT_EMPTY) {
 					++ArgCount;
 				}
@@ -73,7 +73,7 @@ void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 		VARTYPE* varArg = Info->m_varArguments;
 		if (4 < ArgCount) {
 			varArgTmp = varArg = new VARTYPE[ArgCount];
-			for (int i = 0; i < ArgCount; ++i) {
+			for (int i=0; i<ArgCount; ++i) {
 				if (i < 4) {
 					varArg[i] = Info->m_varArguments[i];
 				}else {
@@ -115,7 +115,7 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 
 		// 2011.3.18 syat 引数の順序を正しい順にする
 		auto_array_ptr<VARIANTARG> rgvargParam(new VARIANTARG[ArgCount]);
-		for (int i = 0; i < ArgCount; ++i) {
+		for (int i=0; i<ArgCount; ++i) {
 			::VariantInit(&rgvargParam[ArgCount - i - 1]);
 			::VariantCopy(&rgvargParam[ArgCount - i - 1], &Arguments->rgvarg[i]);
 		}
@@ -124,7 +124,7 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 		bool r = HandleFunction(m_pView, ID, &rgvargParam[0], ArgCount, ret);
 		if (Result) {::VariantCopyInd(Result, &ret);}
 		VariantClear(&ret);
-		for (int i = 0; i < ArgCount; ++i) {
+		for (int i=0; i<ArgCount; ++i) {
 			::VariantClear(&rgvargParam[i]);
 		}
 		return r ? S_OK : E_FAIL;
@@ -134,14 +134,14 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 		//	Nov. 29, 2005 FILE 引数を文字列で取得する
 		auto_array_ptr<LPWSTR> StrArgs(new LPWSTR[argCountMin]);
 		auto_array_ptr<int> strLengths(new int[argCountMin]);
-		for (int i = ArgCount; i < argCountMin; ++i) {
+		for (int i=ArgCount; i<argCountMin; ++i) {
 			StrArgs[i] = NULL;
 			strLengths[i] = 0;
 		}
 		WCHAR* s = NULL;							// 初期化必須
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
-		for (int i = 0; i < ArgCount; ++i) {
+		for (int i=0; i<ArgCount; ++i) {
 			if (VariantChangeType(&varCopy.Data, &(Arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
 				Wrap(&varCopy.Data.bstrVal)->GetW(&s, &Len);
 			}else {
@@ -157,7 +157,7 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 		HandleCommand(m_pView, ID, const_cast<WCHAR const **>(&StrArgs[0]), &strLengths[0], ArgCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
-		for (int j = 0; j < ArgCount; ++j) {
+		for (int j=0; j<ArgCount; ++j) {
 			delete [] StrArgs[j];
 		}
 		return S_OK;

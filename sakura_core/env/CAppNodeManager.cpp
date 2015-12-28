@@ -232,27 +232,28 @@ void CAppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	@date 2008.11.22 syat 全て→いくつかに変更。複数ウィンドウを閉じる時の警告メッセージを追加
 	@date 2013.03.09 Uchi 終了要求に要求元のウィンドウを渡す
 */
-BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOOL bExit, BOOL bCheckConfirm, HWND hWndFrom)
+BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, bool bExit, bool bCheckConfirm, HWND hWndFrom)
 {
 	// クローズ対象ウィンドウを調べる
 	int iGroup = -1;
 	HWND hWndLast = NULL;
 	int nCloseCount = 0;
-	for (int i = 0; i < nArrCnt; ++i) {
-		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-			if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
+	for (int i=0; i<nArrCnt; ++i) {
+		auto& wnd = pWndArr[i];
+		if (m_nGroup == 0 || m_nGroup == wnd.m_nGroup) {
+			if (IsSakuraMainWindow(wnd.m_hWnd)) {
 				++nCloseCount;
 				if (iGroup == -1) {
-					iGroup = pWndArr[i].m_nGroup;	// 最初に閉じるグループ
-					hWndLast = pWndArr[i].m_hWnd;
-				}else if (iGroup == pWndArr[i].m_nGroup) {
-					hWndLast = pWndArr[i].m_hWnd;	// 最初に閉じるグループの最後のウィンドウ
+					iGroup = wnd.m_nGroup;	// 最初に閉じるグループ
+					hWndLast = wnd.m_hWnd;
+				}else if (iGroup == wnd.m_nGroup) {
+					hWndLast = wnd.m_hWnd;	// 最初に閉じるグループの最後のウィンドウ
 				}
 			}
 		}
 	}
 
-	if (bCheckConfirm && GetDllShareData().m_Common.m_sGeneral.m_bCloseAllConfirm) {	//[すべて閉じる]で他に編集用のウィンドウがあれば確認する
+	if (bCheckConfirm && GetDllShareData().m_Common.m_sGeneral.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 		if (1 < nCloseCount) {
 			if (IDYES != ::MYMESSAGEBOX(
 				hWndFrom,
@@ -285,22 +286,24 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOO
 	}
 
 	// エディタへの終了要求
-	for (int i = 0; i < nArrCnt; ++i) {
-		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-			if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
+	for (int i=0; i<nArrCnt; ++i) {
+		auto& wnd = pWndArr[i];
+		if (m_nGroup == 0 || m_nGroup == wnd.m_nGroup) {
+			if (IsSakuraMainWindow(wnd.m_hWnd)) {
 				// タブグループ表示で次に閉じるのがアクティブ化制御ウィンドウの場合、
 				// アクティブ化制御ウィンドウを次のグループの最後のウィンドウに切替える
-				if (bTabGroup && pWndArr[i].m_hWnd == hWndActive) {
+				if (bTabGroup && wnd.m_hWnd == hWndActive) {
 					iGroup = -1;
-					hWndActive = ( IsSakuraMainWindow(hWndFrom) )? hWndFrom: NULL;	// 一番最後用
-					for (int j = i + 1; j < nArrCnt; ++j) {
-						if (m_nGroup == 0 || m_nGroup == pWndArr[j].m_nGroup) {
-							if (IsSakuraMainWindow(pWndArr[j].m_hWnd)) {
+					hWndActive = IsSakuraMainWindow(hWndFrom) ? hWndFrom: NULL;	// 一番最後用
+					for (int j=i+1; j<nArrCnt; ++j) {
+						auto& wnd2 = pWndArr[j];
+						if (m_nGroup == 0 || m_nGroup == wnd2.m_nGroup) {
+							if (IsSakuraMainWindow(wnd2.m_hWnd)) {
 								if (iGroup == -1) {
-									iGroup = pWndArr[j].m_nGroup;	// 次に閉じるグループ
-									hWndActive = pWndArr[j].m_hWnd;
-								}else if (iGroup == pWndArr[j].m_nGroup) {
-									hWndActive = pWndArr[j].m_hWnd;	// 次に閉じるグループの最後のウィンドウ
+									iGroup = wnd2.m_nGroup;	// 次に閉じるグループ
+									hWndActive = wnd2.m_hWnd;
+								}else if (iGroup == wnd2.m_nGroup) {
+									hWndActive = wnd2.m_hWnd;	// 次に閉じるグループの最後のウィンドウ
 								}else {
 									break;
 								}
@@ -309,9 +312,9 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOO
 					}
 				}
 				DWORD dwPid;
-				::GetWindowThreadProcessId(pWndArr[i].m_hWnd, &dwPid);
+				::GetWindowThreadProcessId(wnd.m_hWnd, &dwPid);
 				::SendMessage(hWndActive, MYWM_ALLOWACTIVATE, dwPid, 0);	// アクティブ化の許可を依頼する
-				if (!::SendMessage( pWndArr[i].m_hWnd, MYWM_CLOSE, bExit ? PM_CLOSE_EXIT : 0, (LPARAM)hWndActive )) {	// 2007.02.13 ryoji bExitを引き継ぐ
+				if (!::SendMessage(wnd.m_hWnd, MYWM_CLOSE, bExit ? PM_CLOSE_EXIT : 0, (LPARAM)hWndActive)) {	// 2007.02.13 ryoji bExitを引き継ぐ
 					return FALSE;
 				}
 			}
@@ -332,76 +335,96 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOO
 int CAppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-
-	int j = 0;
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
-		auto hWnd = pShare->m_sNodes.m_pEditArr[i].m_hWnd;
-		if (IsSakuraMainWindow(hWnd)) {
+	int cnt = 0;
+	auto appNodeMgr = CAppNodeManager::getInstance();
+	for (int i=0; i<pShare->m_sNodes.m_nEditArrNum; ++i) {
+		auto& node = pShare->m_sNodes.m_pEditArr[i];
+		if (IsSakuraMainWindow(node.m_hWnd)) {
 			if (1
 				&& m_nGroup != 0
-				&& m_nGroup != CAppNodeManager::getInstance()->GetEditNode(hWnd)->GetGroup()
+				&& m_nGroup != appNodeMgr->GetEditNode(node.m_hWnd)->GetGroup()
 			) {
 				continue;
 			}
 			if (1
 				&& bExcludeClosing
-				&& pShare->m_sNodes.m_pEditArr[i].m_bClosing
+				&& node.m_bClosing
 			) {
 				continue;
 			}
-			++j;
+			++cnt;
 		}
 	}
-	return j;
-
+	return cnt;
 }
 
-
-/** 全編集ウィンドウへメッセージをポストする
-
-	@date 2005.01.24 genta hWndLast == NULLのとき全くメッセージが送られなかった
-	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
-*/
-BOOL CAppNodeGroupHandle::PostMessageToAllEditors(
-	UINT		uMsg,		// ポストするメッセージ
+template <typename Func>
+bool relayMessageToAllEditors(
+	UINT		uMsg,		// 送るメッセージ
 	WPARAM		wParam,		// 第1メッセージ パラメータ
 	LPARAM		lParam,		// 第2メッセージ パラメータ
-	HWND		hWndLast	// 最後に送りたいウィンドウ
+	HWND		hWndLast,	// 最後に送りたいウィンドウ
+	int			nGroup,		// 指定グループ
+	Func		func
 )
 {
 	EditNode* pWndArr;
 	int n = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE);
-	if (0 == n) {
-		return TRUE;
+	if (n == 0) {
+		return true;
 	}
 
 	// hWndLast以外へのメッセージ
-	for (int i = 0; i < n; ++i) {
+	for (int i=0; i<n; ++i) {
 		// Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
-		if (!hWndLast || hWndLast != pWndArr[i].m_hWnd) {
-			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-				if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
+		auto& node = pWndArr[i];
+		if (!hWndLast || node.m_hWnd != hWndLast) {
+			if (nGroup == 0 || nGroup == node.m_nGroup) {
+				if (IsSakuraMainWindow(node.m_hWnd)) {
 					// メッセージをポスト
-					::PostMessage(pWndArr[i].m_hWnd, uMsg, wParam, lParam);
+					func(node.m_hWnd, uMsg, wParam, lParam);
 				}
 			}
 		}
 	}
 
 	// hWndLastへのメッセージ
-	for (int i = 0; i < n; ++i) {
-		if (hWndLast == pWndArr[i].m_hWnd) {
-			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-				if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
+	for (int i=0; i<n; ++i) {
+		auto& node = pWndArr[i];
+		if (hWndLast == node.m_hWnd) {
+			if (nGroup == 0 || nGroup == node.m_nGroup) {
+				if (IsSakuraMainWindow(node.m_hWnd)) {
 					// メッセージをポスト
-					::PostMessage(pWndArr[i].m_hWnd, uMsg, wParam, lParam);
+					func(node.m_hWnd, uMsg, wParam, lParam);
 				}
 			}
 		}
 	}
 
 	delete[] pWndArr;
-	return TRUE;
+	return true;
+}
+
+/** 全編集ウィンドウへメッセージをポストする
+
+	@date 2005.01.24 genta hWndLast == NULLのとき全くメッセージが送られなかった
+	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
+*/
+bool CAppNodeGroupHandle::PostMessageToAllEditors(
+	UINT		uMsg,		// ポストするメッセージ
+	WPARAM		wParam,		// 第1メッセージ パラメータ
+	LPARAM		lParam,		// 第2メッセージ パラメータ
+	HWND		hWndLast	// 最後に送りたいウィンドウ
+)
+{
+	return relayMessageToAllEditors(
+		uMsg,
+		wParam,
+		lParam,
+		hWndLast,
+		m_nGroup,
+		::PostMessage
+	);
 }
 
 /** 全編集ウィンドウへメッセージを送る
@@ -409,46 +432,21 @@ BOOL CAppNodeGroupHandle::PostMessageToAllEditors(
 	@date 2005.01.24 genta m_hWndLast == NULLのとき全くメッセージが送られなかった
 	@date 2007.06.22 ryoji nGroup引数を追加、グループ単位で順番に送る
 */
-BOOL CAppNodeGroupHandle::SendMessageToAllEditors(
-	UINT		uMsg,		// ポストするメッセージ
-	WPARAM		wParam,		// 第1メッセージ パラメータ
-	LPARAM		lParam,		// 第2メッセージ パラメータ
-	HWND		hWndLast	// 最後に送りたいウィンドウ
+bool CAppNodeGroupHandle::SendMessageToAllEditors(
+	UINT	uMsg,		// ポストするメッセージ
+	WPARAM	wParam,		// 第1メッセージ パラメータ
+	LPARAM	lParam,		// 第2メッセージ パラメータ
+	HWND	hWndLast	// 最後に送りたいウィンドウ
 )
 {
-	EditNode* pWndArr;
-	int n = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE);
-	if (0 == n) {
-		return TRUE;
-	}
-
-	// hWndLast以外へのメッセージ
-	for (int i = 0; i < n; ++i) {
-		// Jan. 24, 2005 genta hWndLast == NULLのときにメッセージが送られるように
-		if (hWndLast == NULL || hWndLast != pWndArr[i].m_hWnd) {
-			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-				if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
-					// メッセージを送る
-					::SendMessage(pWndArr[i].m_hWnd, uMsg, wParam, lParam);
-				}
-			}
-		}
-	}
-
-	// hWndLastへのメッセージ
-	for (int i = 0; i < n; ++i) {
-		if (hWndLast == pWndArr[i].m_hWnd) {
-			if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
-				if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
-					// メッセージを送る
-					::SendMessage(pWndArr[i].m_hWnd, uMsg, wParam, lParam);
-				}
-			}
-		}
-	}
-
-	delete[] pWndArr;
-	return TRUE;
+	return relayMessageToAllEditors(
+		uMsg,
+		wParam,
+		lParam,
+		hWndLast,
+		m_nGroup,
+		::SendMessage
+	);
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -462,11 +460,12 @@ BOOL CAppNodeGroupHandle::SendMessageToAllEditors(
 void CAppNodeManager::ResetGroupId()
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-
-	int nGroup = ++pShare->m_sNodes.m_nGroupSequences;
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
-		if (IsSakuraMainWindow(pShare->m_sNodes.m_pEditArr[i].m_hWnd)) {
-			pShare->m_sNodes.m_pEditArr[i].m_nGroup = nGroup;
+	auto& sNodes = pShare->m_sNodes;
+	int nGroup = ++sNodes.m_nGroupSequences;
+	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
+		auto& node = sNodes.m_pEditArr[i];
+		if (IsSakuraMainWindow(node.m_hWnd)) {
+			node.m_nGroup = nGroup;
 		}
 	}
 }
@@ -483,10 +482,13 @@ void CAppNodeManager::ResetGroupId()
 EditNode* CAppNodeManager::GetEditNode(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
-		if (hWnd == pShare->m_sNodes.m_pEditArr[i].m_hWnd) {
-			if (IsSakuraMainWindow(pShare->m_sNodes.m_pEditArr[i].m_hWnd))
-				return &pShare->m_sNodes.m_pEditArr[i];
+	auto& sNodes = pShare->m_sNodes;
+	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
+		auto& node = sNodes.m_pEditArr[i];
+		if (hWnd == node.m_hWnd) {
+			if (IsSakuraMainWindow(node.m_hWnd)) {
+				return &node;
+			}
 		}
 	}
 	return nullptr;
@@ -567,9 +569,10 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	int nRowNum = 0;	// 編集ウインドウ数
-	for (int i = 0; i < sNodes.m_nEditArrNum; ++i) {
-		if (IsSakuraMainWindow(sNodes.m_pEditArr[i].m_hWnd)) {
-			pNode[nRowNum].p = &sNodes.m_pEditArr[i];	// ポインタ格納
+	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
+		auto& node = sNodes.m_pEditArr[i];
+		if (IsSakuraMainWindow(node.m_hWnd)) {
+			pNode[nRowNum].p = &node;	// ポインタ格納
 			pNode[nRowNum].nGroupMru = -1;	// グループ単位のMRU番号初期化
 			++nRowNum;
 		}
@@ -585,16 +588,15 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 	if (!bGSort) {
 		int iGroupMru = 0;	// グループ単位のMRU番号
 		int nGroup = -1;
-		for (int i = 0; i < nRowNum; ++i) {
+		for (int i=0; i<nRowNum; ++i) {
 			if (pNode[i].nGroupMru == -1
 				&& nGroup != pNode[i].p->m_nGroup
 			) {
 				nGroup = pNode[i].p->m_nGroup;
 				++iGroupMru;
 				pNode[i].nGroupMru = iGroupMru;	// MRU番号付与
-
 				// 同一グループのウィンドウに同じMRU番号をつける
-				for (int j = i + 1; j < nRowNum; ++j) {
+				for (int j=i+1; j<nRowNum; ++j) {
 					if (pNode[j].p->m_nGroup == nGroup)
 						pNode[j].nGroupMru = iGroupMru;
 				}

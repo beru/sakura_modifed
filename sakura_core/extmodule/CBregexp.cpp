@@ -313,7 +313,7 @@ wchar_t* CBregexp::MakePatternAlternate(const wchar_t* const szSearch, const wch
 
 	// すべての . を [^\r\n] へ、すべての $ を (?<![\r\n])(?=\r|$) へ置換すると仮定して、strModifiedSearchの最大長を決定する。
 	std::wstring::size_type modifiedSearchSize = 0;
-	for (const wchar_t* p = szSearch; *p; ++p) {
+	for (const wchar_t* p=szSearch; *p; ++p) {
 		if (*p == L'.') {
 			modifiedSearchSize += _countof(szDotAlternative) - 1;
 		}else if (*p == L'$') {

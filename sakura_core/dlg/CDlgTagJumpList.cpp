@@ -262,7 +262,7 @@ void CDlgTagJumpList::SetData(void)
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
 		CRecentTagjumpKeyword cRecentTagJump;
-		for (int i = 0; i < cRecentTagJump.GetItemCount(); ++i) {
+		for (int i=0; i<cRecentTagJump.GetItemCount(); ++i) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
 		if (m_pszKeyword) {
@@ -302,7 +302,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 	count = m_pcList->GetCount();
 
 	TCHAR	tmp[32];
-	for (nIndex = 0; nIndex < count; nIndex++) {
+	for (nIndex=0; nIndex<count; ++nIndex) {
 		CSortedTagJumpList::TagJumpInfo* item;
 		item = m_pcList->GetPtr(nIndex);
 		if (!item) break;
@@ -434,7 +434,7 @@ BOOL CDlgTagJumpList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i = 0; i < _countof(anchorList); ++i) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
@@ -606,7 +606,7 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i = 0 ; i < _countof(anchorList); ++i) {
+	for (int i=0 ; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
@@ -791,7 +791,7 @@ TCHAR* CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 	if (!p) p = _T(".c");	// 見つからないときは ".c" と想定する。
 	++p;
 
-	for (i = 0; p_extentions[i]; i += 2) {
+	for (i=0; p_extentions[i]; i+=2) {
 		_tcscpy(tmp, p_extentions[i]);
 		token = _tcstok(tmp, _T(","));
 		while (token) {
@@ -898,7 +898,7 @@ int CDlgTagJumpList::SearchBestTag(void)
 
 	count = m_pcList->GetCount();
 
-	for (i = 0; i < count; ++i) {
+	for (i=0; i<count; ++i) {
 		// タグのファイル名部分をフルパスにする
 		lpPathInfo->szFileNameDst[0] = _T('\0');
 		{
@@ -1134,7 +1134,7 @@ int CDlgTagJumpList::find_key_core(
 	vector_ex<std::tstring> seachDirs;
 
 	// パスのJumpで循環している場合に最大値を規制する
-	for (; state.m_nDepth <= state.m_nLoop && state.m_nDepth < (_MAX_PATH/2); state.m_nDepth++) {
+	for (; state.m_nDepth<=state.m_nLoop && state.m_nDepth<(_MAX_PATH/2); state.m_nDepth++) {
 		// 0 次のファイルは検索しない
 		// 1 1つでもヒットしたら次は検索しない
 		// 2 完全一致のときは1に同じ。 それ以外は3に同じ
@@ -1416,11 +1416,11 @@ TCHAR* CDlgTagJumpList::GetFullPathFromDepth(TCHAR* pszOutput, int count,
 	}else if (_istalpha(p[0]) && p[1] == _T(':')) {	// 絶対パスか？
 		_tcscpy(pszOutput, p);	// 何も加工しない。
 	}else {
-		for (int i = 0; i < depth; ++i) {
+		for (int i=0; i<depth; ++i) {
 			//_tcscat(basePath, _T("..\\"));
 			DirUp(basePath);
 		}
-		if (-1 == auto_snprintf_s(pszOutput, count, _T("%ts%ts"), basePath, p)) {
+		if (auto_snprintf_s(pszOutput, count, _T("%ts%ts"), basePath, p) == -1) {
 			return NULL;
 		}
 	}

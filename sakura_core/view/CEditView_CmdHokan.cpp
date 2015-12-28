@@ -201,10 +201,10 @@ int CEditView::HokanSearchByFile(
 	// キーの先頭が記号(#$@\)かどうか判定
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
-	for (CLogicInt i = CLogicInt(0); i < nLines; ++i) {
+	for (CLogicInt i=CLogicInt(0); i<nLines; ++i) {
 		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
-		for (j = 0; j < nLineLen; j += nCharSize) {
+		for (j=0; j<nLineLen; j+=nCharSize) {
 			nCharSize = CNativeW::GetSizeOfChar(pszLine, nLineLen, j);
 
 			// 半角記号は候補に含めない
@@ -233,7 +233,7 @@ int CEditView::HokanSearchByFile(
 			// 候補単語の終了位置を求める
 			nWordLen = nCharSize;
 			nWordLenStop = -1; // 送り仮名無視用単語の終わり。-1は無効
-			for (j += nCharSize; j < nLineLen; j += nCharSize) {
+			for (j+=nCharSize; j<nLineLen; j+=nCharSize) {
 				nCharSize = CNativeW::GetSizeOfChar(pszLine, nLineLen, j);
 
 				// 半角記号は含めない

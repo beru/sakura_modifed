@@ -126,7 +126,7 @@ bool CSearchStringPattern::SetPattern(
 			m_pszPatternCase = new wchar_t[nPatternLen + 1];
 			m_pszCaseKeyRef = m_pszPatternCase;
 			// note: 合成文字,サロゲートの「大文字小文字同一視」未対応
-			for (int i = 0; i < m_nPatternLen; ++i) {
+			for (int i=0; i<m_nPatternLen; ++i) {
 				m_pszPatternCase[i] = (wchar_t)skr_towlower(pszPattern[i]);
 			}
 			m_pszPatternCase[nPatternLen] = L'\0';
@@ -141,7 +141,7 @@ bool CSearchStringPattern::SetPattern(
 		m_pnNextPossArr = new int[nPatternLen + 1];
 		int* next = m_pnNextPossArr;
 		const wchar_t* key = m_pszPatternCase;
-		for (int i = 0, k = -1; i < nPatternLen; ++i, ++k) {
+		for (int i=0, k=-1; i<nPatternLen; ++i, ++k) {
 			next[i] = k;
 			while (-1 < k && key[i] != key[k]) {
 				k = next[k];
@@ -155,10 +155,10 @@ bool CSearchStringPattern::SetPattern(
 		// 64KB も作らないで、ISO-8859-1 それ以外(包括) の2つの情報のみ記録する
 		// 「あ」と「乂」　「ぅ」と「居」は値を共有している
 		m_pnUseCharSkipArr = new int[BM_MAPSIZE];
-		for (int n = 0; n < BM_MAPSIZE; ++n) {
+		for (int n=0; n<BM_MAPSIZE; ++n) {
 			m_pnUseCharSkipArr[n] = nPatternLen + 1;
 		}
-		for (int n = 0; n < nPatternLen; ++n) {
+		for (int n=0; n<nPatternLen; ++n) {
 			const int index = GetMapIndex(m_pszCaseKeyRef[n]);
 			m_pnUseCharSkipArr[index] = nPatternLen - n;
 		}
@@ -201,7 +201,7 @@ const wchar_t* CSearchAgent::SearchString(
 #if defined(SEARCH_STRING_SUNDAY_QUICK) && !defined(SEARCH_STRING_KMP)
 	// SUNDAY_QUICKのみ版
 	if (!bLoHiCase || nPatternLen > 5) {
-		for (int nPos = nIdxPos; nPos <= nCompareTo;) {
+		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
 			int i;
 			for (i = 0; i < nPatternLen && toLoHiLower(bLoHiCase, pLine[nPos + i]) == pszPattern[i]; ++i) {
 			}
@@ -212,7 +212,7 @@ const wchar_t* CSearchAgent::SearchString(
 			nPos += useSkipMap[index];
 		}
 	}else {
-		for (int nPos = nIdxPos; nPos <= nCompareTo;) {
+		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
 			int n = wmemcmp(&pLine[nPos], pszPattern, nPatternLen);
 			if (n == 0) {
 				return &pLine[nPos];
@@ -228,7 +228,7 @@ const wchar_t* CSearchAgent::SearchString(
 	if (!bLoHiCase || nPatternLen > 5) {
 		const wchar_t pattern0 = pszPattern[0];
 		const int* const nextTable = pattern.GetKMPNextTable();
-		for (int nPos = nIdxPos; nPos <= nCompareTo;) {
+		for (int nPos=nIdxPos; nPos<=nCompareTo;) {
 			if (toLoHiLower(bLoHiCase, pLine[nPos]) != pattern0) {
 #ifdef SEARCH_STRING_SUNDAY_QUICK
 				int index = CSearchStringPattern::GetMapIndex((wchar_t)toLoHiLower(bLoHiCase, pLine[nPos + nPatternLen));
@@ -280,7 +280,7 @@ void CSearchAgent::CreateCharCharsArr(
 )
 {
 	int* pnCharCharsArr = new int[nSrcLen];
-	for (int i = 0; i < nSrcLen; /*++i*/) {
+	for (int i=0; i<nSrcLen; /*++i*/) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		pnCharCharsArr[i] = CNativeW::GetSizeOfChar(pszPattern, nSrcLen, i);
 		if (0 == pnCharCharsArr[i]) {
@@ -303,7 +303,7 @@ void CSearchAgent::CreateWordList(
 	int	nPatternLen
 	)
 {
-	for (CLogicInt pos = CLogicInt(0); pos < nPatternLen;) {
+	for (CLogicInt pos=CLogicInt(0); pos<nPatternLen;) {
 		CLogicInt begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 		if (CWordParse::WhereCurrentWord_2(pszPattern + pos, nPatternLen - pos, CLogicInt(0), &begin, &end, NULL, NULL)
 			&& begin == 0 && begin < end
@@ -336,7 +336,7 @@ const wchar_t* CSearchAgent::SearchStringWord(
 	CLogicInt nNextWordTo2;
 	while (CWordParse::WhereCurrentWord_2(pLine, CLogicInt(nLineLen), nNextWordFrom, &nNextWordFrom2, &nNextWordTo2, NULL, NULL)) {
 		size_t nSize = searchWords.size();
-		for (size_t iSW = 0; iSW < nSize; ++iSW) {
+		for (size_t iSW=0; iSW<nSize; ++iSW) {
 			if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 				// 1 == 大文字小文字の区別
 				if ((!bLoHiCase && 0 == auto_memicmp(&(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second) ) ||
@@ -612,7 +612,7 @@ int CSearchAgent::SearchWord(
 					nNextWordFrom = nWork;
 					if (WhereCurrentWord(nLinePos, nNextWordFrom, &nNextWordFrom2, &nNextWordTo2 , NULL, NULL)) {
 						size_t nSize = searchWords.size();
-						for (size_t iSW = 0; iSW < nSize; ++iSW) {
+						for (size_t iSW=0; iSW<nSize; ++iSW) {
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
 								// 1 == 大文字小文字の区別
@@ -1145,7 +1145,7 @@ prev_line:;
 		}
 	}
 	int nCount;
-	for (nCount = 0; nCount < nInsSize; ++nCount) {
+	for (nCount=0; nCount<nInsSize; ++nCount) {
 		CNativeW& cmemLine = (*pArg->pInsData)[nCount].cmemLine;
 #ifdef _DEBUG
 		int nLen = cmemLine.GetStringLength();

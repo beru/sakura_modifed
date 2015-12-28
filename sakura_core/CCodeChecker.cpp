@@ -66,7 +66,7 @@ static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECod
 			const wchar_t* p = pcDocLine->GetPtr();
 			const wchar_t* r = cmemTmp2.GetStringPtr();
 			int nPos = -1;
-			for (int i = 0; i < nDataMinLen; ++i) {
+			for (int i=0; i<nDataMinLen; ++i) {
 				if (p[i] != r[i]) {
 					nPos = i;
 					break;

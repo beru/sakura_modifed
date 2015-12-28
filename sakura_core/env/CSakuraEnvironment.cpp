@@ -780,22 +780,18 @@ void CSakuraEnvironment::ResolvePath(TCHAR* pszPath)
 
 
 // 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる
-BOOL IsSakuraMainWindow(HWND hWnd)
+bool IsSakuraMainWindow(HWND hWnd)
 {
 	TCHAR szClassName[64];
 	if (hWnd == NULL) {	// 2007.06.20 ryoji 条件追加
-		return FALSE;
+		return false;
 	}
 	if (!::IsWindow(hWnd)) {
-		return FALSE;
+		return false;
 	}
-	if (0 == ::GetClassName(hWnd, szClassName, _countof(szClassName) - 1)) {
-		return FALSE;
+	if (::GetClassName(hWnd, szClassName, _countof(szClassName) - 1) == 0) {
+		return false;
 	}
-	if (0 == _tcscmp(GSTR_EDITWINDOWNAME, szClassName)) {
-		return TRUE;
-	}else {
-		return FALSE;
-	}
+	return (_tcscmp(GSTR_EDITWINDOWNAME, szClassName) == 0);
 }
 

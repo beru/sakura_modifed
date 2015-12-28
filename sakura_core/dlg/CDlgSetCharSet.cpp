@@ -170,7 +170,7 @@ void CDlgSetCharSet::SetData(void)
 
 	int nIdxOld = Combo_GetCurSel( m_hwndCharSet );
 	int nCurIdx = -1;
-	for (int nIdx = 0; nIdx < Combo_GetCount( m_hwndCharSet ); nIdx++) {
+	for (int nIdx=0; nIdx<Combo_GetCount(m_hwndCharSet); ++nIdx) {
 		ECodeType nCharSet = (ECodeType)Combo_GetItemData( m_hwndCharSet, nIdx );
 		if (nCharSet == *m_pnCharSet) {
 			nCurIdx = nIdx;

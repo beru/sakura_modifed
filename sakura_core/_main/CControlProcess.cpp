@@ -64,7 +64,7 @@ bool CControlProcess::InitializeProcess()
 		return false;
 	}
 
-	/* コントロールプロセスの目印 */
+	// コントロールプロセスの目印
 	std::tstring strCtrlProcEvent = GSTR_MUTEX_SAKURA_CP;
 	strCtrlProcEvent += strProfileName;
 	m_hMutexCP = ::CreateMutex( NULL, TRUE, strCtrlProcEvent.c_str() );

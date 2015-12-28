@@ -3900,7 +3900,7 @@ void CEditWnd::PrintMenubarMessage(const TCHAR* msg)
 	::SetBkColor(hdc, bkColor);
 	/*
 	int m_pnCaretPosInfoDx[64];	// •¶š—ñ•`‰æ—p•¶š•”z—ñ
-	for (i = 0; i < _countof(m_pnCaretPosInfoDx); ++i) {
+	for (i=0; i<_countof(m_pnCaretPosInfoDx); ++i) {
 		m_pnCaretPosInfoDx[i] = (m_nCaretPosInfoCharWidth);
 	}
 	*/

@@ -57,13 +57,13 @@ CFuncKeyWnd::CFuncKeyWnd()
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 	m_nCurrentKeyState = -1;
-	for (int i = 0; i < _countof(m_szFuncNameArr); ++i) {
+	for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 		m_szFuncNameArr[i][0] = 0;
 	}
 // 2002.11.04 Moca Open()側で設定
 //	m_nButtonGroupNum = 4;
 
-	for (int i = 0; i < _countof(m_hwndButtonArr); ++i) {
+	for (int i=0; i<_countof(m_hwndButtonArr); ++i) {
 		m_hwndButtonArr[i] = NULL;
 	}
 
@@ -207,7 +207,7 @@ LRESULT CFuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
 	int nX = 1;
-	for (int i = 0; i < nButtonNum; ++i) {
+	for (int i=0; i<nButtonNum; ++i) {
 		if (0 < i  && 0 == (i % m_nButtonGroupNum)) {
 			nX += 12;
 		}
@@ -254,7 +254,7 @@ LRESULT CFuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 	HWND hwndCtl = (HWND) lParam;		// handle of control
 //	switch (wNotifyCode) {
 //	case BN_PUSHED:
-		for (int i = 0; i < _countof(m_hwndButtonArr); ++i) {
+		for (int i=0; i<_countof(m_hwndButtonArr); ++i) {
 			if (hwndCtl == m_hwndButtonArr[i]) {
 				if (0 != m_nFuncCodeArr[i]) {
 					::SendMessage(GetParentHwnd(), WM_COMMAND, MAKELONG(m_nFuncCodeArr[i], 0),  (LPARAM)hwnd);
@@ -296,7 +296,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		// ファンクションキーの機能名を取得
-		for (int i = 0; i < _countof(m_szFuncNameArr); ++i) {
+		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji CKeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
@@ -325,7 +325,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	) {
 		m_nTimerCount = 0;
 		// 機能が利用可能か調べる
-		for (int i = 0; i < _countof(	m_szFuncNameArr); ++i) {
+		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			::EnableWindow(
 				m_hwndButtonArr[i],
 				IsFuncEnable((CEditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
@@ -344,7 +344,7 @@ LRESULT CFuncKeyWnd::OnDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 	Timer_ONOFF(false); // 20060126 aroka
 	
 	// ボタンを削除
-	for (int i = 0; i < _countof(m_hwndButtonArr); ++i) {
+	for (int i=0; i<_countof(m_hwndButtonArr); ++i) {
 		if (m_hwndButtonArr[i]) {
 			::DestroyWindow(m_hwndButtonArr[i]	);
 			m_hwndButtonArr[i] = NULL;
@@ -396,11 +396,11 @@ void CFuncKeyWnd::CreateButtons(void)
 	GetWindowRect(&rcParent);
 	int nButtonHeight = rcParent.bottom - rcParent.top - 2;
 
-	for (int i = 0; i < _countof(	m_nFuncCodeArr); ++i) {
+	for (int i=0; i<_countof(m_nFuncCodeArr); ++i) {
 		m_nFuncCodeArr[i] = F_0;
 	}
 
-	for (int i = 0; i < _countof(m_hwndButtonArr); ++i) {
+	for (int i=0; i<_countof(m_hwndButtonArr); ++i) {
 		m_hwndButtonArr[i] = ::CreateWindow(
 			_T("BUTTON"),						// predefined class
 			_T(""),								// button text

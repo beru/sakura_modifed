@@ -336,13 +336,13 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
 	LCID lcid,
 	DISPID FAR* rgdispid)
 {
-	for (unsigned i = 0; i < cNames; ++i) {
+	for (unsigned i=0; i<cNames; ++i) {
 #ifdef TEST
 		// 大量にメッセージが出るので注意。
 		//DEBUG_TRACE(_T("GetIDsOfNames: %ls\n"), rgszNames[i]);
 #endif
 		size_t nSize = m_Methods.size();
-		for (size_t j = 0; j < nSize; ++j) {
+		for (size_t j=0; j<nSize; ++j) {
 			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
 			if (_wcsicmp(rgszNames[i], m_Methods[j].Name) == 0) {
 				rgdispid[i] = j;
@@ -378,7 +378,7 @@ void CIfObj::AddMethod(
 	wcscpy(Info->Name, Name);
 	Info->Method = Method;
 	Info->ID = ID;
-	for (int i = 0; i < ArgumentCount; ++i) {
+	for (int i=0; i<ArgumentCount; ++i) {
 		Info->Arguments[i].tdesc.vt = ArgumentTypes[ArgumentCount - i - 1];
 		Info->Arguments[i].paramdesc.wParamFlags = PARAMFLAG_FIN;
 	}

@@ -68,10 +68,10 @@ HACCEL CKeyBind::CreateAccerelator(
 {
 	// 機能が割り当てられているキーの数をカウント -> nAccelArrNum
 	int nAccelArrNum = 0;
-	for (int i = 0; i < nKeyNameArrNum; ++i) {
-		if (0 != pKeyNameArr[i].m_nKeyCode) {
-			for (int j = 0; j < 8; ++j) {
-				if (0 != GetFuncCodeAt(pKeyNameArr[i], j)) {
+	for (int i=0; i<nKeyNameArrNum; ++i) {
+		if (pKeyNameArr[i].m_nKeyCode != 0) {
+			for (int j=0; j<8; ++j) {
+				if (GetFuncCodeAt(pKeyNameArr[i], j) != 0) {
 					++nAccelArrNum;
 				}
 			}
@@ -84,10 +84,10 @@ HACCEL CKeyBind::CreateAccerelator(
 	}
 	ACCEL* pAccelArr = new ACCEL[nAccelArrNum];
 	int k = 0;
-	for (int i = 0; i < nKeyNameArrNum; ++i) {
-		if (0 != pKeyNameArr[i].m_nKeyCode) {
-			for (int j = 0; j < 8; ++j) {
-				if (0 != GetFuncCodeAt(pKeyNameArr[i], j)) {
+	for (int i=0; i<nKeyNameArrNum; ++i) {
+		if (pKeyNameArr[i].m_nKeyCode != 0) {
+			for (int j=0; j<8; ++j) {
+				if (GetFuncCodeAt(pKeyNameArr[i], j) != 0) {
 					pAccelArr[k].fVirt = FNOINVERT | FVIRTKEY;
 					pAccelArr[k].fVirt |= (j & _SHIFT) ? FSHIFT   : 0;
 					pAccelArr[k].fVirt |= (j & _CTRL ) ? FCONTROL : 0;
@@ -121,7 +121,7 @@ EFunctionCode CKeyBind::GetFuncCode(
 	int nCmd = (int)LOBYTE(nAccelCmd);
 	int nSts = (int)HIBYTE(nAccelCmd);
 	if (nCmd == 0) { // mouse command
-		for (int i = 0; i < nKeyNameArrNum; ++i) {
+		for (int i=0; i<nKeyNameArrNum; ++i) {
 			if (nCmd == pKeyNameArr[i].m_nKeyCode) {
 				return GetFuncCodeAt(pKeyNameArr[i], nSts, bGetDefFuncCode);
 			}
@@ -167,11 +167,11 @@ int CKeyBind::CreateKeyBindList(
 	cMemList.AppendString(LTEXT("-----\t-----\t-----\t-----\t-----"));
 	cMemList.AppendString(pszCR);
 
-	for (int j = 0; j < 8; ++j) {
-		for (int i = 0; i < nKeyNameArrNum; ++i) {
+	for (int j=0; j<8; ++j) {
+		for (int i=0; i<nKeyNameArrNum; ++i) {
 			int iFunc = GetFuncCodeAt(pKeyNameArr[i], j, bGetDefFuncCode);
 
-			if (0 != iFunc) {
+			if (iFunc != 0) {
 				++nValidKeys;
 				if (j & _SHIFT) {
 					cMemList.AppendString(pszSHIFT);
@@ -267,7 +267,7 @@ bool CKeyBind::GetKeyStrSub(
 	static const TCHAR*	pszALT   = _T("Alt+");
 
 	int i;
-	for (i = nKeyNameArrBegin; i < nKeyNameArrEnd; ++i) {
+	for (i=nKeyNameArrBegin; i<nKeyNameArrEnd; ++i) {
 		if (nFuncId == GetFuncCodeAt(pKeyNameArr[i], nShiftState, bGetDefFuncCode)) {
 			if (nShiftState & _SHIFT) {
 				cMemList.AppendString(pszSHIFT);
@@ -305,8 +305,8 @@ int CKeyBind::GetKeyStr(
 	cMemList.SetString(_T(""));
 
 	// 先にキー部分を調査する
-	for (int j = 0; j < 8; ++j) {
-		for (int i = MOUSEFUNCTION_KEYBEGIN; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
+	for (int j=0; j<8; ++j) {
+		for (int i=MOUSEFUNCTION_KEYBEGIN; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
@@ -314,8 +314,8 @@ int CKeyBind::GetKeyStr(
 	}
 
 	// 後にマウス部分を調査する
-	for (int j = 0; j < 8; ++j) {
-		for (int i = 0; i < MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
+	for (int j=0; j<8; ++j) {
+		for (int i=0; i<MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
@@ -339,29 +339,29 @@ int CKeyBind::GetKeyStrList(
 )
 {
 	int nAssignedKeysNum = 0;
-	if (0 == nFuncId) {
+	if (nFuncId == 0) {
 		return 0;
 	}
-	for (int j = 0; j < 8; ++j) {
-		for (int i = 0; i < nKeyNameArrNum; ++i) {
+	for (int j=0; j<8; ++j) {
+		for (int i=0; i<nKeyNameArrNum; ++i) {
 			if (nFuncId == GetFuncCodeAt(pKeyNameArr[i], j, bGetDefFuncCode)) {
 				++nAssignedKeysNum;
 			}
 		}
 	}
-	if (0 == nAssignedKeysNum) {
+	if (nAssignedKeysNum == 0) {
 		return 0;
 	}
 	(*pppcMemList) = new CNativeT*[nAssignedKeysNum + 1];
 	int i;
-	for (i = 0; i < nAssignedKeysNum; ++i) {
+	for (i=0; i<nAssignedKeysNum; ++i) {
 		(*pppcMemList)[i] = new CNativeT;
 	}
 	(*pppcMemList)[i] = NULL;
 	
 	nAssignedKeysNum = 0;
-	for (int j = 0; j < 8; ++j) {
-		for (int i = 0; i < nKeyNameArrNum; /* 1を加えてはいけない */) {
+	for (int j=0; j<8; ++j) {
+		for (int i=0; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
 			// 2007.11.04 genta 共通機能のサブルーチン化
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j,
 					*((*pppcMemList)[nAssignedKeysNum]), nFuncId, bGetDefFuncCode)
@@ -807,14 +807,14 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	// インデックス用ダミー作成
 	SetKeyNameArrVal(pShareData, KEYNAME_SIZE, &dummy[0]);
 	// インデックス作成 重複した場合は先頭にあるものを優先
-	for (int ii = 0; ii< _countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ++ii) {
+	for (int ii=0; ii<_countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ++ii) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
-	for (int i = nKeyDataInitNum-1; i >= 0; --i) {
+	for (int i=nKeyDataInitNum-1; i>=0; --i) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
 	}
 
-	for (int i = 0; i < nKeyDataInitNum; ++i) {
+	for (int i=0; i<nKeyDataInitNum; ++i) {
 		SetKeyNameArrVal(pShareData, i, &KeyDataInit[i]);
 	}
 	pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum = nKeyDataInitNum;
@@ -826,7 +826,7 @@ void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 
-	for (int i = 0; i < nKeyDataInitNum; ++i) {
+	for (int i=0; i<nKeyDataInitNum; ++i) {
 		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];
 
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {

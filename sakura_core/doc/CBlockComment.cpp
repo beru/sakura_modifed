@@ -88,7 +88,7 @@ int CBlockComment::Match_CommentTo(
 	*/
 ) const
 {
-	for (int i = nPos; i <= cStr.GetLength() - m_nBlockToLen; ++i) {
+	for (int i=nPos; i<=cStr.GetLength()-m_nBlockToLen; ++i) {
 		//if (0 == auto_memicmp(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	// ”ñASCII‚à‘å•¶Žš¬•¶Žš‚ð‹æ•Ê‚µ‚È‚¢	//###locale ˆË‘¶
 		if (0 == wmemicmp_ascii(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen)) {	// ASCII‚Ì‚Ý‘å•¶Žš¬•¶Žš‚ð‹æ•Ê‚µ‚È‚¢i‚‘¬j
 			return i + m_nBlockToLen;

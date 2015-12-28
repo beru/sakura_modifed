@@ -179,8 +179,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 					++nColumn;
 					nDiff /= 32;
 				}
-				int i = 0;
-				for (; i < nColumn; ++i) {
+				for (int i=0; i<nColumn; ++i) {
 					szBuff2[i] = szBuff[nColumn - 1 - i];
 				}
 				szBuff2[nColumn] = L'\0';

@@ -73,7 +73,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 	CLogicInt	nLineCount;
 	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		for (i = 0; i < nLineLen; ++i) {
+		for (i=0; i<nLineLen; ++i) {
 			// 1ƒoƒCƒg•¶Žš‚¾‚¯‚ðˆ—‚·‚é
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);

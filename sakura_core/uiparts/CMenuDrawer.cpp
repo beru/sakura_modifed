@@ -1530,7 +1530,7 @@ int CMenuDrawer::Find(int nFuncID)
 {
 	int i;
 	int nItemNum = (int)m_menuItems.size();
-	for (i = 0; i < nItemNum; ++i) {
+	for (i=0; i<nItemNum; ++i) {
 		if (nFuncID == m_menuItems[i].m_nFuncId) {
 			break;
 		}
@@ -1555,7 +1555,7 @@ const TCHAR* CMenuDrawer::GetLabel(int nFuncID)
 TCHAR CMenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)
 {
 	int nLen = (int)_tcslen(pszLabel);
-	for (int i = 0; i + 1 < nLen; ++i) {
+	for (int i=0; i+1<nLen; ++i) {
 		if (_T('&') == pszLabel[i]) {
 			if (_T('&') == pszLabel[i + 1]) {
 				++i;

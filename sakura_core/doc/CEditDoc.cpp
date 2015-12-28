@@ -211,8 +211,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 #ifdef _DEBUG
 	{
 		// 編集禁止コマンドの並びをチェック
-		int i;
-		for ( i = 0; i < _countof(EIsModificationForbidden) - 1; ++i){
+		for (int i=0; i<_countof(EIsModificationForbidden)-1; ++i){
 			assert( EIsModificationForbidden[i] <  EIsModificationForbidden[i+1] );
 		}
 	}
@@ -809,13 +808,13 @@ void CEditDoc::OnChangeSetting(
 
 	// ビューに設定変更を反映させる
 	int viewCount = m_pcEditWnd->GetAllViewCount();
-	for (int i = 0; i < viewCount; ++i) {
+	for (int i=0; i<viewCount; ++i) {
 		m_pcEditWnd->GetView(i).OnChangeSetting();
 	}
 	if (posSaveAry) {
 		m_pcEditWnd->RestorePhysPosOfAllView(posSaveAry);
 	}
-	for (int i = 0; i < viewCount; ++i) {
+	for (int i=0; i<viewCount; ++i) {
 		m_pcEditWnd->GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
 	}
 	if (hwndProgress) {
@@ -986,7 +985,7 @@ void CEditDoc::SetCurDirNotitle()
 		const CMRUFolder cMRU;
 		std::vector<LPCTSTR> vMRU = cMRU.GetPathList();
 		int nCount = cMRU.Length();
-		for (int i = 0; i < nCount ; ++i) {
+		for (int i=0; i<nCount ; ++i) {
 			DWORD attr = ::GetFileAttributes( vMRU[i] );
 			if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 				pszDir = vMRU[i];

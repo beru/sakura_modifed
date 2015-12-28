@@ -427,7 +427,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 						//@@@ 2002.1.24 YAZAKI 1バイト取りこぼす可能性があった。
 						//	Jan. 28, 2004 Moca 最後の文字はあとでチェックする
 						int j;
-						for (j = 0; j < (int)read_cnt - 1; ++j) {
+						for (j=0; j<(int)read_cnt-1; ++j) {
 							//	2007.09.10 ryoji
 							if (CNativeA::GetSizeOfChar(work, read_cnt, j) == 2) {
 								++j;
@@ -472,7 +472,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 					}else if (outputEncoding == CODE_UTF8) {
 						int j;
 						int checklen = 0;
-						for (j = 0; j < (int)read_cnt;) {
+						for (j=0; j<(int)read_cnt;) {
 							ECharSet echarset;
 							checklen = CheckUtf8Char2(work + j , read_cnt - j, &echarset, true, 0);
 							if (echarset == CHARSET_BINARY2) {

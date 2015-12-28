@@ -336,7 +336,7 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 #endif
 
 	// レイアウト行の最大幅を取り出す
-	for (CLayoutInt i = nStart; i < nEnd; ++i) {
+	for (CLayoutInt i=nStart; i<nEnd; ++i) {
 		if (!pLayout) {
 			break;
 		}

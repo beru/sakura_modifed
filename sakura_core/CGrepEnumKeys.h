@@ -151,7 +151,7 @@ private:
 		return;
 	}
 	void ClearEnumKeys(VGrepEnumKeys& keys) {
-		for (int i = 0; i < (int)keys.size(); ++i) {
+		for (int i=0; i<(int)keys.size(); ++i) {
 			delete [] keys[ i ];
 		}
 		keys.clear();
@@ -166,7 +166,7 @@ private:
 	}
 
 	BOOL IsExist(VGrepEnumKeys& keys, LPCTSTR addKey) {
-		for (int i = 0; i < (int)keys.size(); ++i) {
+		for (int i=0; i<(int)keys.size(); ++i) {
 			if (_tcscmp(keys[ i ], addKey) == 0) {
 				return TRUE;
 			}
@@ -181,7 +181,7 @@ private:
 	int ValidateKey(LPCTSTR key) {
 		// 
 		bool wildcard = false;
-		for (int i = 0; key[i]; ++i) {
+		for (int i=0; key[i]; ++i) {
 			if (!wildcard && (key[i] == _T('*') || key[i] == _T('?'))) {
 				wildcard = true;
 			}else if (wildcard && (key[i] == _T('\\') || key[i] == _T('/'))) {

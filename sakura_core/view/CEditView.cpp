@@ -1250,14 +1250,14 @@ bool CEditView::IsCurrentPositionURL(
 	bool bUseRegexKeyword = false;
 	if (m_pTypeData->m_bUseRegexKeyword) {
 		const wchar_t* pKeyword = m_pTypeData->m_RegexKeywordList;
-		for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
+		for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 			if (*pKeyword == L'\0')
 				break;
 			if (m_pTypeData->m_RegexKeywordArr[i].m_nColorIndex == COLORIDX_URL) {
 				bUseRegexKeyword = true;	// URL色指定の正規表現キーワードがある
 				break;
 			}
-			for (; *pKeyword != '\0'; ++pKeyword) {}
+			for (; *pKeyword!='\0'; ++pKeyword) {}
 			++pKeyword;
 		}
 	}
@@ -1410,7 +1410,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 		nIdxFrom = CLogicInt(0);
 		nIdxTo = CLogicInt(0);
-		for (nLineNum = rcSelLayout.bottom; nLineNum >= rcSelLayout.top - 1; --nLineNum) {
+		for (nLineNum=rcSelLayout.bottom; nLineNum>=rcSelLayout.top-1; --nLineNum) {
 			const CLayout* pcLayout;
 			nDelPosNext = nIdxFrom;
 			nDelLenNext	= nIdxTo - nIdxFrom;
@@ -1421,7 +1421,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				nIdxTo		= LineColumnToIndex(pcLayout, rcSelLayout.right);
 
 				bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-				for (CLogicInt i = nIdxFrom; i <= nIdxTo; ++i) {
+				for (CLogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
 					if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 						nIdxTo = i;
 						break;
@@ -1569,7 +1569,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 	{
 		if (pParentMenus) {
 			int k;
-			for (k = 0; pParentMenus[k] != 0; ++k) {
+			for (k=0; pParentMenus[k]!=0; ++k) {
 			}
 			nParamIndex = k;
 			pNextParam = pParentMenus;
@@ -1601,7 +1601,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 			}
 			bool bMenuLoop = !csCustomMenu.m_bCustMenuPopupArr[nCustIdx];
 			if (!bMenuLoop) {
-				for (int k = 0; pNextParam[k] != 0; ++k) {
+				for (int k=0; pNextParam[k]!=0; ++k) {
 					if (pNextParam[k] == code) {
 						bMenuLoop = true;
 						break;
@@ -1922,7 +1922,7 @@ bool CEditView::GetSelectedData(
 
 		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 		nRowNum = 0;
-		for (nLineNum = rcSel.top; nLineNum <= rcSel.bottom; ++nLineNum) {
+		for (nLineNum=rcSel.top; nLineNum<=rcSel.bottom; ++nLineNum) {
 			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 			if (pLine) {
 				// 指定された桁に対応する行のデータ内の位置を調べる
@@ -1991,7 +1991,7 @@ bool CEditView::GetSelectedData(
 		cmemBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
-		for (nLineNum = GetSelectionInfo().m_sSelect.GetFrom().GetY2(); nLineNum <= GetSelectionInfo().m_sSelect.GetTo().y; ++nLineNum) {
+		for (nLineNum=GetSelectionInfo().m_sSelect.GetFrom().GetY2(); nLineNum<=GetSelectionInfo().m_sSelect.GetTo().y; ++nLineNum) {
 			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 			if (!pLine) {
 				break;
@@ -2787,7 +2787,7 @@ bool CEditView::IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelect
 		CLayoutInt nLineLen;
 
 		result = true;
-		for (CLayoutInt nLineNum = nLineFrom; nLineNum <= nLineTo; ++nLineNum) {
+		for (CLayoutInt nLineNum=nLineFrom; nLineNum<=nLineTo; ++nLineNum) {
 			if ((pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum))) {
 				// 指定位置に対応する行のデータ内の位置
 				LineColumnToIndex2(pcLayout, nColumnFrom, &nLineLen);

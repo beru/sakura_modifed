@@ -28,7 +28,7 @@ COpeBlk::~COpeBlk()
 {
 	// ‘€ì‚Ì”z—ñ‚ğíœ‚·‚é
 	int size = (int)m_ppCOpeArr.size();
-	for (int i = 0; i < size; ++i) {
+	for (int i=0; i<size; ++i) {
 		SAFE_DELETE(m_ppCOpeArr[i]);
 	}
 	m_ppCOpeArr.clear();
@@ -78,7 +78,7 @@ void COpeBlk::DUMP(void)
 {
 #ifdef _DEBUG
 	int size = GetNum();
-	for (int i = 0; i < size; ++i) {
+	for (int i=0; i<size; ++i) {
 		MYTRACE(_T("\tCOpeBlk.m_ppCOpeArr[%d]----\n"), i);
 		m_ppCOpeArr[i]->DUMP();
 	}

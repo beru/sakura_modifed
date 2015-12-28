@@ -45,7 +45,7 @@ CLayoutInt CLayout::CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const
 
 	// ŒvŽZ
 	CLayoutInt nWidth = GetIndent();
-	for (CLogicInt i = m_ptLogicPos.GetX2(); i < m_ptLogicPos.GetX2() + m_nLength; ++i) {
+	for (CLogicInt i=m_ptLogicPos.GetX2(); i<m_ptLogicPos.GetX2()+m_nLength; ++i) {
 		if (pText[i] == WCODE::TAB) {
 			nWidth += cLayoutMgr.GetActualTabSpace(nWidth);
 		}else {
@@ -66,7 +66,7 @@ CLayoutInt CLayout::CalcLayoutOffset(
 		const wchar_t* pLine = this->m_pCDocLine->GetPtr();
 		int nLineLen = this->m_pCDocLine->GetLengthWithEOL();
 		const int nOffset = GetLogicOffset();
-		for (int i = (Int)nStartPos; i < nOffset; ++i) {
+		for (int i=(Int)nStartPos; i<nOffset; ++i) {
 			if (pLine[i] == WCODE::TAB) {
 				nRet += cLayoutMgr.GetActualTabSpace(nRet);
 			}else {

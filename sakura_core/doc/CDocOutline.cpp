@@ -182,7 +182,7 @@ int CDocOutline::ReadRuleFile(
 				}else if (13 < strLine.length() && 0 == _wcsnicmp(strLine.c_str() + 1, L"RegexOption=", 12)) {
 					int nCaseFlag = CBregexp::optCaseSensitive;
 					regexOption = 0;
-					for (int i = 13; i < (int)strLine.length(); ++i) {
+					for (int i=13; i<(int)strLine.length(); ++i) {
 						if (strLine[i] == L'i') {
 							nCaseFlag = 0;
 						}else if (strLine[i] == L'g') {
@@ -242,7 +242,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 	CBregexp* pRegex = NULL;
 	if (bRegex) {
 		pRegex = new CBregexp[nCount];
-		for (int i = 0; i < nCount; ++i) {
+		for (int i=0; i<nCount; ++i) {
 			if (0 == test[i].nLength) {
 				continue;
 			}
@@ -290,7 +290,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		pcFuncInfoArr->AppendData(CLogicInt(1), CLayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (CLogicInt nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		CLogicInt nLineLen;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
@@ -301,7 +301,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		// 行頭の空白飛ばし
 		int i = 0;
 		if (!bRegex) {
-			for (i = 0; i < nLineLen; ++i) {
+			for (i=0; i<nLineLen; ++i) {
 				if (pLine[i] == L' ' || pLine[i] == L'\t' || pLine[i] == L'　') {
 					continue;
 				}
@@ -315,7 +315,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		// 先頭文字が見出し記号のいずれかであれば、次へ進む
 		wchar_t* pszText = NULL;
 		int j;
-		for (j = 0; j < nCount; ++j) {
+		for (j=0; j<nCount; ++j) {
 			if (bRegex) {
 				if (test[j].nRegexMode == 0) {
 					if (0 < test[j].nLength && pRegex[j].Match(pLine, nLineLen, 0)) {
@@ -362,7 +362,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 			wmemcpy(pszText, &pLine[i], nLineLen);
 			pszText[nLineLen] = L'\0';
 			bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-			for (i = 0; pszText[i] != L'\0'; ++i) {
+			for (i=0; pszText[i]!=L'\0'; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					pszText[i] = L'\0';
 					break;
@@ -385,7 +385,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		// nDepthを計算
 		int k;
 		BOOL bAppend = TRUE;
-		for (k = 0; k < nDepth; ++k) {
+		for (k=0; k<nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {
 				break;
@@ -398,7 +398,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		}else if (nMaxStack> k) {
 			// いままでに同じ見出しが存在しなかった。
 			// Lvが高い場合は、一致するまでさかのぼる
-			for (k = nDepth - 1; 0 <= k ; --k) {
+			for (k=nDepth-1; 0<=k; --k) {
 				if (nLvStack[k] <= test[j].nLv) {
 					++k;
 					break;
@@ -443,7 +443,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 	CLogicInt nLineLast	= m_pcDocRef->m_cDocLineMgr.GetLineCount();
 	int nCharChars;
 
-	for (CLogicInt nLineCount = CLogicInt(0); nLineCount <  nLineLast; ++nLineCount) {
+	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<nLineLast; ++nLineCount) {
 		if (!CBookmarkGetter(m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
@@ -456,7 +456,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 			}
 		}// LTrim
 		int leftspace;
-		for (leftspace = 0; leftspace < nLineLen; ++leftspace) {
+		for (leftspace=0; leftspace<nLineLen; ++leftspace) {
 			if (WCODE::IsBlank(pLine[leftspace])) {
 				continue;
 			}

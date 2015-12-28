@@ -401,7 +401,7 @@ bool CMacro::Exec(CEditView* pcEditView, int flags) const
 
 	CMacroParam* p = m_pParamTop;
 	int i = 0;
-	for (i = 0; i < maxArg; ++i) {
+	for (i=0; i<maxArg; ++i) {
 		if (!p) break;	// p‚ª–³‚¯‚ê‚Îbreak;
 		paramArr[i] = p->m_pData;
 		paramLenArr[i] = wcslen(paramArr[i]);
@@ -490,10 +490,10 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 				cmemWork.Replace( u0085, L"\\u0085" );
 				cmemWork.Replace( L"\u2028", L"\\u2028" );
 				cmemWork.Replace( L"\u2029", L"\\u2029" );
-				for (int c = 0; c < 0x20; ++c) {
+				for (int c=0; c<0x20; ++c) {
 					int nLen = cmemWork.GetStringLength();
 					const wchar_t* p = cmemWork.GetStringPtr();
-					for (int i = 0; i < nLen; ++i) {
+					for (int i=0; i<nLen; ++i) {
 						if (p[i] == c) {
 							wchar_t from[2];
 							wchar_t to[7];
@@ -2154,7 +2154,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				}
 				const int nTabWidth = (Int)View->GetDocument()->m_cLayoutMgr.GetTabSpaceKetas();
 				int nPosX = varCopy2.Data.lVal - 1;
-				for (int i =0; i < nLen;) {
+				for (int i=0; i<nLen;) {
 					if (pLine[i] == WCODE::TAB) {
 						nPosX += nTabWidth - (nPosX % nTabWidth);
 					}else {
@@ -2404,7 +2404,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 						}
 						++i;
 					}
-					for (int n = 0; n < nBreakNum; ++n) {
+					for (int n=0; n<nBreakNum; ++n) {
 						if (1 < vHmenu.size()) {
 							vHmenu.resize( vHmenu.size() - 1 );
 						}

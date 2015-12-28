@@ -183,7 +183,7 @@ bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType, std::vect
 			// Skip BOM
 			p += sizeof(UTF8_BOM);
 		}
-		for (; p < psMMres + nSize ; p = pn) {
+		for (; p < psMMres+nSize; p = pn) {
 			// 1行切り取り（長すぎた場合切捨て）
 			pn = strpbrk(p, "\n");
 			if (!pn) {
@@ -244,15 +244,12 @@ bool CProfile::WriteProfile(
 		vecLine.push_back(LTEXT(";") + wstring(pszComment));		// //->;	2008/5/24 Uchi
 		vecLine.push_back(LTEXT(""));
 	}
-	std::vector< Section >::iterator iter;
-	std::vector< Section >::iterator iterEnd = m_ProfileData.end();
-	MAP_STR_STR::iterator mapiter;
-	MAP_STR_STR::iterator mapiterEnd;
-	for (iter = m_ProfileData.begin(); iter != iterEnd; ++iter) {
+	auto iterEnd = m_ProfileData.end();
+	for (auto iter=m_ProfileData.begin(); iter!=iterEnd; ++iter) {
 		// セクション名を書き込む
 		vecLine.push_back(LTEXT("[") + iter->strSectionName + LTEXT("]"));
-		mapiterEnd = iter->mapEntries.end();
-		for (mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; ++mapiter) {
+		auto mapiterEnd = iter->mapEntries.end();
+		for (auto mapiter=iter->mapEntries.begin(); mapiter!=mapiterEnd; ++mapiter) {
 			// エントリを書き込む
 			vecLine.push_back(mapiter->first + LTEXT("=") + mapiter->second);
 		}
@@ -319,7 +316,7 @@ bool CProfile::_WriteFile(
 	}
 
 	int nSize = (int)vecLine.size();
-	for (int i = 0; i < nSize; ++i) {
+	for (int i=0; i<nSize; ++i) {
 		// 出力
 		out.WriteString(vecLine[i].c_str());
 		out.WriteString(L"\n");
@@ -408,10 +405,10 @@ void CProfile::DUMP(void)
 	auto iterEnd = m_ProfileData.end();
 	// 2006.02.20 ryoji: MAP_STR_STR_ITER削除時の修正漏れによるコンパイルエラー修正
 	MYTRACE(_T("\n\nCProfile::DUMP()======================"));
-	for (auto iter = m_ProfileData.begin(); iter != iterEnd; ++iter) {
+	for (auto iter=m_ProfileData.begin(); iter!=iterEnd; ++iter) {
 		MYTRACE(_T("\n■strSectionName=%ls"), iter->strSectionName.c_str());
 		auto mapiterEnd = iter->mapEntries.end();
-		for (auto mapiter = iter->mapEntries.begin(); mapiter != mapiterEnd; ++mapiter) {
+		for (auto mapiter=iter->mapEntries.begin(); mapiter!=mapiterEnd; ++mapiter) {
 			MYTRACE(_T("\"%ls\" = \"%ls\"\n"), mapiter->first.c_str(), mapiter->second.c_str());
 		}
 	}

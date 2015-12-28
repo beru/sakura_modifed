@@ -59,7 +59,7 @@ LPWSTR wcscpyn(LPWSTR lpString1, LPCWSTR lpString2, int iMaxLength)
 ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
 	TCHAR* pr = const_cast<TCHAR*>(src);
 	ACHAR* pw = dest;
-	for (; pr < src + count; ++pr) {
+	for (; pr<src+count; ++pr) {
 		*pw = static_cast<ACHAR>(*pr);
 		++pw;
 	}
@@ -68,7 +68,7 @@ ACHAR* tcstostr(ACHAR* dest, const TCHAR* src, size_t count) {
 WCHAR* tcstostr(WCHAR* dest, const TCHAR* src, size_t count) {
 	TCHAR* pr = const_cast<TCHAR*>(src);
 	WCHAR* pw = dest;
-	for (; pr < src + count; ++pr) {
+	for (; pr<src+count; ++pr) {
 		*pw = static_cast<WCHAR>(*pr);
 		++pw;
 	}
@@ -79,7 +79,7 @@ TCHAR* strtotcs(TCHAR* dest, const ACHAR* src, size_t count)
 {
 	ACHAR* pr = const_cast<ACHAR*>(src);
 	TCHAR* pw = dest;
-	for (; pr < src + count; ++pr) {
+	for (; pr<src+count; ++pr) {
 		*pw = static_cast<TCHAR>(*pr);
 		++pw;
 	}
@@ -90,7 +90,7 @@ TCHAR* strtotcs(TCHAR* dest, const WCHAR* src, size_t count)
 {
 	WCHAR* pr = const_cast<WCHAR*>(src);
 	TCHAR* pw = dest;
-	for (; pr < src + count; ++pr) {
+	for (; pr<src+count; ++pr) {
 		*pw = static_cast<TCHAR>(*pr);
 		++pw;
 	}
@@ -157,7 +157,7 @@ const char* strichr_j(const char* s1, char c2)
 	if (c2 == 0) return ::strchr(s1, 0); // 文字列終端を探すためにc2に0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
 
 	int C2 = my_toupper(c2);
-	for (const char* p1 = s1; *p1; ++p1) {
+	for (const char* p1=s1; *p1; ++p1) {
 		if (my_toupper(*p1) == C2) return p1;
 		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) ++p1;
 	}
@@ -172,7 +172,7 @@ const char* strchr_j(const char* str, char c)
 {
 	if (c == 0) return ::strchr(str, 0); // 文字列終端を探すためにcに0を渡した場合も、正しく処理されるように。 2007.10.16 kobake
 
-	for (const char* p1 = str; *p1; ++p1) {
+	for (const char* p1=str; *p1; ++p1) {
 		if (*p1 == c) return p1;
 		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) ++p1;
 	}
@@ -188,7 +188,7 @@ const char* strchr_j(const char* str, char c)
 const char* strstr_j(const char* s1, const char* s2)
 {
 	size_t n = strlen(s2);
-	for (const char* p1 = s1; *p1; ++p1) {
+	for (const char* p1=s1; *p1; ++p1) {
 		if (strncmp(p1, s2, n) == 0) return p1;
 		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) ++p1;
 	}
@@ -208,7 +208,7 @@ const char* strstr_j(const char* s1, const char* s2)
 const char* stristr_j(const char* s1, const char* s2)
 {
 	size_t n = strlen(s2);
-	for (const char* p1 = s1; *p1; ++p1) {
+	for (const char* p1=s1; *p1; ++p1) {
 		if (my_strnicmp(p1, s2, n) == 0) return p1;
 		if (my_iskanji1(*(const unsigned char*)p1) && *(p1 + 1) != 0) ++p1;
 	}
@@ -471,7 +471,7 @@ int _tctowc(const TCHAR* tc, WCHAR* wc)
 
 int wmemicmp(const WCHAR* p1, const WCHAR* p2, size_t count)
 {
-	for (size_t i = 0; i < count; ++i) {
+	for (size_t i=0; i<count; ++i) {
 		int n = skr_towlower(*p1++) - skr_towlower(*p2++);	// 非ASCIIも変換
 		if (n != 0) return n;
 	}
@@ -485,7 +485,7 @@ int wmemicmp(const WCHAR* p1, const WCHAR* p2)
 
 int wmemicmp_ascii(const WCHAR* p1, const WCHAR* p2, size_t count)
 {
-	for (size_t i = 0; i < count; ++i) {
+	for (size_t i=0; i<count; ++i) {
 		int n = my_towlower(*p1++) - my_towlower(*p2++);	// ASCIIのみ変換（高速）
 		if (n != 0) return n;
 	}
@@ -524,7 +524,7 @@ CHAR_TYPE* my_strtok(
 		bool bFlag = false;	// ダブルコーテーションの中か？
 		if (i >= nLen) return NULL;
 		p = &pBuffer[i];
-		for (; i < nLen; ++i) {
+		for (; i<nLen; ++i) {
 			if (pBuffer[i] == Charset<CHAR_TYPE>::QUOT) bFlag = ! bFlag;
 			if (!bFlag) {
 				if (auto_strchr(pDelimiter, pBuffer[i])) {
@@ -628,7 +628,7 @@ int __cdecl my_internal_icmp(const char* s1, const char* s2, unsigned int n, uns
 #endif  // MY_ICMP_MBS
 
 	// 指定長だけ繰り返す
-	for (unsigned int i = n; i > 0; i -= dcount) {
+	for (unsigned int i=n; i>0; i-=dcount) {
 		// 比較対象となる文字を取得する
 //		c1 = c1_lo = c1_up = (int)((unsigned int)*p1);
 //		c2 = c2_lo = c2_up = (int)((unsigned int)*p2);
@@ -718,9 +718,9 @@ int skr_towupper(int c)
 	if (!bInit) {
 		int i;
 		_locale_t locale = _create_locale(LC_CTYPE, "English");
-		for (i = 0; i < 0x80; ++i) szMap[i] = (wchar_t)my_towupper(i);	// 自前で変換
-		for (; i < 0xA0; ++i) szMap[i] = (wchar_t)i;						// 無変換（制御コード部）
-		for (; i < 255; ++i) szMap[i] = _towupper_l((wchar_t)i, locale);	// "English"localeで変換
+		for (i=0; i<0x80; ++i) szMap[i] = (wchar_t)my_towupper(i);	// 自前で変換
+		for (; i<0xA0; ++i) szMap[i] = (wchar_t)i;						// 無変換（制御コード部）
+		for (; i<255; ++i) szMap[i] = _towupper_l((wchar_t)i, locale);	// "English"localeで変換
 		szMap[255] = 0x0178;	// Windows-1252 だと 0x9f(制御文字域) にマップしてしまうので
 		_free_locale(locale);
 		bInit = true;
@@ -739,9 +739,9 @@ int skr_towlower(int c)
 	if (!bInit) {
 		int i;
 		_locale_t locale = _create_locale(LC_CTYPE, "English");
-		for (i = 0; i < 0x80; ++i) szMap[i] = (wchar_t)my_towlower(i);	// 自前で変換
-		for (; i < 0xA0; ++i) szMap[i] = (wchar_t)i;						// 無変換（制御コード部）
-		for (; i < 256; ++i) szMap[i] = _towlower_l((wchar_t)i, locale);	// "English"localeで変換
+		for (i=0; i<0x80; ++i) szMap[i] = (wchar_t)my_towlower(i);	// 自前で変換
+		for (; i<0xA0; ++i) szMap[i] = (wchar_t)i;						// 無変換（制御コード部）
+		for (; i<256; ++i) szMap[i] = _towlower_l((wchar_t)i, locale);	// "English"localeで変換
 		_free_locale(locale);
 		bInit = true;
 	}

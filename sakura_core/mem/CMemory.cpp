@@ -155,7 +155,7 @@ void CMemory::SwapHLByte(char* pData, const int nDataLen) {
 		}
 		unsigned int* pdw_end = (unsigned int*)(pBuf + nBufLen - sizeof(unsigned int));
 
-		for (; pdwchar <= pdw_end ; ++pdwchar) {
+		for (; pdwchar<=pdw_end ; ++pdwchar) {
 			pdwchar[0] = ((pdwchar[0] & (unsigned int)0xff00ff00) >> 8) |
 						 ((pdwchar[0] & (unsigned int)0x00ff00ff) << 8);
 		}
@@ -163,7 +163,7 @@ void CMemory::SwapHLByte(char* pData, const int nDataLen) {
 	unsigned char* p = (unsigned char*)pdwchar;
 	unsigned char* p_end = pBuf + nBufLen - 2;
 	
-	for (; p <= p_end ; p += 2) {
+	for (; p<=p_end; p+=2) {
 		std::swap( p[0], p[1] );
 	}
 	return;
@@ -208,7 +208,7 @@ void CMemory::SwapHLByte(void) {
 		}
 		pdw_end = (unsigned int*)(pdwchar + nBufLen / sizeof(int)) - 1;
 
-		for (; pdwchar <= pdw_end ; ++pdwchar) {
+		for (; pdwchar<=pdw_end; ++pdwchar) {
 			pdwchar[0] = ((pdwchar[0] & (unsigned int)0xff00ff00) >> 8) |
 						 ((pdwchar[0] & (unsigned int)0x00ff00ff) << 8);
 		}
@@ -216,7 +216,7 @@ void CMemory::SwapHLByte(void) {
 	p = (unsigned char*)pdwchar;
 	p_end = pBuf + nBufLen - 2;
 	
-	for (; p <= p_end ; p += 2) {
+	for (; p<=p_end; p+=2) {
 		ctemp = p[0];
 		p[0]  = p[1];
 		p[1]  = ctemp;

@@ -101,7 +101,7 @@ SysString CCookieManager::GetCookieNames(LPCWSTR scope) const
 		keyNames += it->first;
 		++it;
 	}
-	for (; it != cookies->end(); ++it) {
+	for (; it!=cookies->end(); ++it) {
 		keyNames += L",";
 		keyNames += it->first;
 	}
@@ -130,7 +130,7 @@ std::map<std::wstring, std::wstring>* CCookieManager::SelectCookieType(LPCWSTR s
 
 bool CCookieManager::ValidateCookieName(LPCWSTR cookieName) const
 {
-	for (int i = 0; cookieName[i] != L'\0'; ++i) {
+	for (int i=0; cookieName[i]!=L'\0'; ++i) {
 		if (L'0' <= cookieName[i] && cookieName[i] <= L'9' ||
 			L'a' <= cookieName[i] && cookieName[i] <= L'z' ||
 			L'A' <= cookieName[i] && cookieName[i] <= L'Z' ||

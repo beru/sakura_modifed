@@ -71,7 +71,7 @@ bool IsFilePath(
 
 	// 先頭の空白を読み飛ばす
 	int i;
-	for (i = 0; i < nLineLen; ++i) {
+	for (i=0; i<nLineLen; ++i) {
 		wchar_t c = pLine[i];
 		if (L' ' != c && L'\t' != c && L'\"' != c) {
 			break;
@@ -81,7 +81,7 @@ bool IsFilePath(
 	// #include <ファイル名>の考慮
 	// #で始まるときは"または<まで読み飛ばす
 	if (i < nLineLen && L'#' == pLine[i]) {
-		for (; i < nLineLen; ++i) {
+		for (; i<nLineLen; ++i) {
 			if (L'<'  == pLine[i] || L'\"' == pLine[i]) {
 				++i;
 				break;
@@ -1132,10 +1132,10 @@ int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
 		len1 = len2;
 		len2 = tmpLen;
 	}
-	for (int i = 0; i < len1;) {
-		for (int k = 0; k < len2 && score < (len2 - k);) {
+	for (int i=0; i<len1;) {
+		for (int k=0; k<len2 && score<(len2 - k);) {
 			int tmpScore = 0;
-			for (int m = k; m < len2;) {
+			for (int m=k; m<len2;) {
 				int pos1 = i + (m - k);
 				int chars1 = (Int)CNativeT::GetSizeOfChar(file1, len1, pos1);
 				int chars2 = (Int)CNativeT::GetSizeOfChar(file2, len2, m);
@@ -1239,7 +1239,7 @@ void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nP
 			nLeft = nTop;
 		}
 	}
-	for (int i = 0; i < nSkipLevel; ++i) {
+	for (int i=0; i<nSkipLevel; ++i) {
 		while (path[nLeft] != _T('\0') && path[nLeft] != _T('\\') && path[nLeft] != _T('/')) {
 			nLeft += t_max(1, (int)(Int)CNativeT::GetSizeOfChar(path, nPathLen, nLeft));
 		}

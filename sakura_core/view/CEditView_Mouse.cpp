@@ -1438,7 +1438,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 		if (bExecCmd) {
 			if (nFuncID != F_0) {
 				// スクロール変化量分コマンド実行(zDeltaが120あたりで1回)
-				for (int i = 0; i < nRollNum; ++i) {
+				for (int i=0; i<nRollNum; ++i) {
 					::PostMessage(::GetParent(m_hwndParent), WM_COMMAND, MAKELONG(nFuncID, CMD_FROM_MOUSE),  (LPARAM)NULL);
 				}
 			}
@@ -1449,7 +1449,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 		const int nRollActions = bSmooth ? nRollNum : 1;
 		const CLayoutInt nCount = CLayoutInt(((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum));
 
-		for (i = 0; i < nRollActions; ++i) {
+		for (i=0; i<nRollActions; ++i) {
 			//	Sep. 11, 2004 genta 同期スクロール行数
 			if (bHorizontal) {
 				SyncScrollH(ScrollAtH(GetTextArea().GetViewLeftCol() + nCount));

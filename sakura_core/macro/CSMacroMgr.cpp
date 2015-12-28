@@ -493,7 +493,7 @@ CSMacroMgr::CSMacroMgr()
 	CKeyMacroMgr::declare();
 	CWSHMacroManager::declare();
 	
-	for (int i = 0 ; i < MAX_CUSTMACRO ; ++i) {
+	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		m_cSavedKeyMacro[i] = NULL;
 	}
 	// Jun. 16, 2002 genta
@@ -516,7 +516,7 @@ CSMacroMgr::~CSMacroMgr()
 // キーマクロのバッファをクリアする
 void CSMacroMgr::ClearAll(void)
 {
-	for (int i = 0; i < MAX_CUSTMACRO; ++i) {
+	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		// Apr. 29, 2002 genta
 		delete m_cSavedKeyMacro[i];
 		m_cSavedKeyMacro[i] = NULL;
@@ -704,7 +704,7 @@ BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const 
 */
 void CSMacroMgr::UnloadAll(void)
 {
-	for (int idx = 0; idx < MAX_CUSTMACRO; ++idx) {
+	for (int idx=0; idx<MAX_CUSTMACRO; ++idx) {
 		delete m_cSavedKeyMacro[idx];
 		m_cSavedKeyMacro[idx] = NULL;
 	}
@@ -771,12 +771,12 @@ const MacroFuncInfo* CSMacroMgr::GetFuncInfoByID(int nFuncID)
 {
 	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
-	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+	for (int i=0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
 		if (m_MacroFuncInfoCommandArr[i].m_nFuncID == nFuncID) {
 			return &m_MacroFuncInfoCommandArr[i];
 		}
 	}
-	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
+	for (int i=0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
 		if (m_MacroFuncInfoArr[i].m_nFuncID == nFuncID) {
 			return &m_MacroFuncInfoArr[i];
 		}
@@ -858,8 +858,8 @@ EFunctionCode CSMacroMgr::GetFuncInfoByName(
 	}
 
 	// コマンド関数を検索
-	for (int i = 0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
-		if (0 == auto_strcmp(normalizedFuncName, m_MacroFuncInfoCommandArr[i].m_pszFuncName)) {
+	for (int i=0; m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, m_MacroFuncInfoCommandArr[i].m_pszFuncName) == 0) {
 			EFunctionCode nFuncID = EFunctionCode(m_MacroFuncInfoCommandArr[i].m_nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);
@@ -869,8 +869,8 @@ EFunctionCode CSMacroMgr::GetFuncInfoByName(
 		}
 	}
 	// 非コマンド関数を検索
-	for (int i = 0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
-		if (0 == auto_strcmp(normalizedFuncName, m_MacroFuncInfoArr[i].m_pszFuncName)) {
+	for (int i=0; m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
+		if (auto_strcmp(normalizedFuncName, m_MacroFuncInfoArr[i].m_pszFuncName) == 0) {
 			EFunctionCode nFuncID = EFunctionCode(m_MacroFuncInfoArr[i].m_nFuncID);
 			if (pszFuncNameJapanese) {
 				wcsncpy(pszFuncNameJapanese, LSW(nFuncID), 255);

@@ -182,7 +182,7 @@ void CViewCommander::Command_COMPARE(void)
 		// May 01, 2004 genta マルチモニタ対応
 		::GetMonitorWorkRect( phwndArr[0], &rcDesktop );
 		int width = (rcDesktop.right - rcDesktop.left) / 2;
-		for (int i = 1; i >= 0; --i) {
+		for (int i=1; i>=0; --i) {
 			::SetWindowPos(
 				phwndArr[i], 0,
 				width * i + rcDesktop.left, rcDesktop.top, // Oct. 18, 2003 genta タスクバーが左にある場合を考慮

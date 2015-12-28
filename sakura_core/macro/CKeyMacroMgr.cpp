@@ -169,14 +169,14 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	const TCHAR* MACRO_ERROR_TITLE = MACRO_ERROR_TITLE_string.c_str();
 
 	int line = 1;	// エラー時に行番号を通知するため．1始まり．
-	for (; in.Good() ; ++line) {
+	for (; in.Good(); ++line) {
 		std::wstring strLine = in.ReadLineW();
 		const WCHAR* szLine = strLine.c_str(); // '\0'終端文字列を取得
 		using namespace WCODE;
 
 		int nLineLen = strLine.length();
 		// 先行する空白をスキップ
-		for (i = 0; i < nLineLen; ++i) {
+		for (i=0; i<nLineLen; ++i) {
 			if (szLine[i] != SPACE && szLine[i] != TAB) {
 				break;
 			}
@@ -194,7 +194,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 
 		// 関数名の取得
 		szFuncName[0]='\0';// 初期化
-		for (; i < nLineLen; ++i) {
+		for (; i<nLineLen; ++i) {
 			//# バッファオーバーランチェック
 			if (szLine[i] == LTEXT('(') && (i - nBgn)< _countof(szFuncName)) {
 				auto_memcpy(szFuncName, &szLine[nBgn], i - nBgn);
@@ -218,7 +218,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 			if (mInfo->m_pData) {
 				nArgSizeMax = mInfo->m_pData->m_nArgMaxSize;
 			}
-			for (nArgs = 0; szLine[i] ; ++nArgs) {
+			for (nArgs=0; szLine[i]; ++nArgs) {
 				// Jun. 16, 2002 genta プロトタイプチェック
 				if (nArgs >= nArgSizeMax) {
 					::MYMESSAGEBOX(
@@ -270,7 +270,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
 					// Jun. 16, 2002 genta
 					// 行末の検出のため，ループ回数を1増やした
-					for (; i <= nLineLen; ++i) {		// 最後の文字+1までスキャン
+					for (; i<=nLineLen; ++i) {		// 最後の文字+1までスキャン
 						if (szLine[i] == LTEXT('\\')) {	// エスケープのスキップ
 							++i;
 							continue;
@@ -317,7 +317,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						size_t nBegin = 0;
 						const wchar_t* p = cmemWork.GetStringPtr();
 						CNativeW cmemTemp;
-						for (size_t n = 0; n < nLen; ++n) {
+						for (size_t n=0; n<nLen; ++n) {
 							if (n + 1 < nLen && p[n] == L'\\' && p[n+1] == L'u') {
 								size_t k;
 								for (k = n + 2;
@@ -372,7 +372,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					}
 					nBgn = nEnd = i;	// nBgnは引数の先頭の文字
 					// 行末の検出のため，ループ回数を1増やした
-					for (i = nBgn + 1; i <= nLineLen; ++i) {		// 最後の文字+1までスキャン
+					for (i=nBgn+1; i<=nLineLen; ++i) {		// 最後の文字+1までスキャン
 						if (Is09(szLine[i])) {	// まだ数値
 //							++i;
 							continue;
@@ -403,7 +403,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 					m_nReady = false;
 					break;
 				}
-				for (; i < nLineLen; ++i) {		// 最後の文字までスキャン
+				for (; i<nLineLen; ++i) {		// 最後の文字までスキャン
 					if (szLine[i] == LTEXT(')') || szLine[i] == LTEXT(',')) {	// ,もしくは)を読み飛ばす
 						++i;
 						break;

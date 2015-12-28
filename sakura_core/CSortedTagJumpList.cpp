@@ -69,11 +69,11 @@ void CSortedTagJumpList::Free(TagJumpInfo* item)
 */
 void CSortedTagJumpList::Empty(void)
 {
-	TagJumpInfo*	p;
-	TagJumpInfo*	next;
-	for (p = m_pTagjump; p; p = next) {
-		next = p->next;
+	auto p = m_pTagjump;
+	while (p) {
+		auto next = p->next;
 		Free(p);
+		p = next;
 	}
 	m_pTagjump = NULL;
 	m_nCount = 0;
@@ -139,7 +139,7 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 
 	// アイテムをリストの適当な位置に追加する。
 	prev = NULL;
-	for (p = m_pTagjump; p; p = p->next) {
+	for (p=m_pTagjump; p; p=p->next) {
 		if (_tcscmp(p->keyword, item->keyword) > 0) {
 			break;
 		}
@@ -153,7 +153,7 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 	// 最大数を超えたら最後のアイテムを削除する。
 	if (m_nCount > m_MAX_TAGJUMPLIST) {
 		prev = NULL;
-		for (p = m_pTagjump; p->next; p = p->next) {
+		for (p=m_pTagjump; p->next; p=p->next) {
 			prev = p;
 		}
 		if (prev) prev->next = NULL;
@@ -217,10 +217,8 @@ BOOL CSortedTagJumpList::GetParam(int index, TCHAR* keyword, TCHAR* filename, in
 */
 CSortedTagJumpList::TagJumpInfo* CSortedTagJumpList::GetPtr(int index)
 {
-	TagJumpInfo* p;
-	int	i;
-	i = 0;
-	for (p = m_pTagjump; p; p = p->next) {
+	int	i = 0;
+	for (auto p=m_pTagjump; p; p=p->next) {
 		if (index == i) {
 			return p;
 		}

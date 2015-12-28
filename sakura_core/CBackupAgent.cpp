@@ -170,7 +170,7 @@ int CBackupAgent::MakeBackUp(
 
 		//------------------------------------------------------------------
 		//	1. 該当ディレクトリ中のbackupファイルを1つずつ探す
-		for (i = 0; i <= 99; ++i) {	//	最大値に関わらず，99（2桁の最大値）まで探す
+		for (i=0; i<=99; ++i) {	//	最大値に関わらず，99（2桁の最大値）まで探す
 			//	ファイル名をセット
 			auto_sprintf(pBase, _T("%02d"), i);
 
@@ -191,7 +191,7 @@ int CBackupAgent::MakeBackUp(
 		int boundary = bup_setting.GetBackupCount();
 		boundary = boundary > 0 ? boundary - 1 : 0;	//	最小値は0
 
-		for (; i >= boundary; --i) {
+		for (; i>=boundary; --i) {
 			//	ファイル名をセット
 			auto_sprintf(pBase, _T("%02d"), i);
 			if (::DeleteFile(szPath) == 0) {
@@ -212,7 +212,7 @@ int CBackupAgent::MakeBackUp(
 		_tcscpy(szNewPath, szPath);
 		TCHAR* pNewNrBase = szNewPath + _tcslen(szNewPath) - 2;
 
-		for (; i >= 0; --i) {
+		for (; i>=0; --i) {
 			//	ファイル名をセット
 			auto_sprintf(pBase, _T("%02d"), i);
 			auto_sprintf(pNewNrBase, _T("%02d"), i + 1);
@@ -478,12 +478,12 @@ bool CBackupAgent::FormatBackUpPath(
 			{
 				//	Jan. 9, 2006 genta VC6対策
 				int idx;
-				for (idx = 0; idx < 10; ++idx) {
+				for (idx=0; idx<10; ++idx) {
 					folders[idx] = 0;
 				}
 				folders[0] = szFname;
 
-				for (idx = 1; idx < 10; ++idx) {
+				for (idx=1; idx<10; ++idx) {
 					TCHAR* cp = _tcsrchr(keybuff, _T('\\'));
 					if (cp) {
 						folders[idx] = cp + 1;

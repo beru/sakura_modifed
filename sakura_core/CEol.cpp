@@ -99,7 +99,7 @@ static const SEolDefinitionForUniFile g_aEolTable_uni_file[] = {
 template <class T>
 EEolType GetEOLType(const T* pszData, int nDataLen)
 {
-	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
+	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable[i].StartsWith(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
 		}
@@ -114,7 +114,7 @@ EEolType GetEOLType(const T* pszData, int nDataLen)
 
 EEolType _GetEOLType_uni(const char* pszData, int nDataLen)
 {
-	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
+	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithW(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
 		}
@@ -124,7 +124,7 @@ EEolType _GetEOLType_uni(const char* pszData, int nDataLen)
 
 EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 {
-	for (int i = 1; i < EOL_TYPE_NUM; ++i) {
+	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithWB(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
 		}

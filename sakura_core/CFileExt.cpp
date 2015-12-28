@@ -118,7 +118,7 @@ const TCHAR* CFileExt::GetExtFilter(void)
 	// 拡張子フィルタの作成
 	m_vstrFilter.resize(0);
 
-	for (int i = 0; i < m_nCount; ++i) {
+	for (int i=0; i<m_nCount; ++i) {
 		// "%ts (%ts)\0%ts\0"
 		work = m_puFileExtInfo[i].m_szName;
 		work.append(_T(" ("));

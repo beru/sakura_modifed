@@ -107,7 +107,7 @@ std::tstring CGrepAgent::ChopYen( const std::tstring& str )
 
 	// 最後のフォルダ区切り記号を削除する
 	// [A:\]などのルートであっても削除
-	for (size_t i = 0; i < nPathLen; ++i) {
+	for (size_t i=0; i<nPathLen; ++i) {
 #ifdef _MBCS
 		if (1
 			&& _IS_SJIS_1( (unsigned char)dst[i] )
@@ -450,7 +450,7 @@ DWORD CGrepAgent::DoGrep(
 	cmemMessage.AppendString(LSW(STR_GREP_SEARCH_FOLDER));	// L"フォルダ   "
 	{
 		std::tstring grepFolder;
-		for (int i = 0; i < (int)vPaths.size(); ++i) {
+		for (int i=0; i<(int)vPaths.size(); ++i) {
 			if (i) {
 				grepFolder += _T(';');
 			}
@@ -562,7 +562,7 @@ DWORD CGrepAgent::DoGrep(
 
 	int nGrepTreeResult = 0;
 
-	for (int nPath = 0; nPath < (int)vPaths.size(); ++nPath) {
+	for (int nPath=0; nPath<(int)vPaths.size(); ++nPath) {
 		bool bOutputBaseFolder = false;
 		std::tstring sPath = ChopYen( vPaths[nPath] );
 		int nTreeRet = DoGrepTree(
@@ -689,7 +689,7 @@ int CGrepAgent::DoGrepTree(
 	 * カレントフォルダのファイルを探索する。
 	 */
 	int count = cGrepEnumFilterFiles.GetCount();
-	for (int i = 0; i < count; ++i) {
+	for (int i=0; i<count; ++i) {
 		LPCTSTR lpFileName = cGrepEnumFilterFiles.GetFileName(i);
 
 		// 処理中のユーザー操作を可能にする
@@ -809,7 +809,7 @@ int CGrepAgent::DoGrepTree(
 		cGrepEnumFilterFolders.Enumerates( pszPath, cGrepEnumKeys, cGrepEnumOptionsDir, cGrepExceptAbsFolders );
 
 		int count = cGrepEnumFilterFolders.GetCount();
-		for (int i = 0; i < count; ++i) {
+		for (int i=0; i<count; ++i) {
 			LPCTSTR lpFileName = cGrepEnumFilterFolders.GetFileName(i);
 
 			// サブフォルダの探索を再帰呼び出し。
@@ -1538,7 +1538,7 @@ public:
 				pcCodeBase->GetBom(&cBom);
 				out->Write(cBom.GetRawPtr(), cBom.GetRawLength());
 			}
-			for (size_t i = 0; i < buffer.size(); ++i) {
+			for (size_t i=0; i<buffer.size(); ++i) {
 				Output(buffer[i]);
 			}
 			buffer.clear();

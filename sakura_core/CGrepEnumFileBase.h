@@ -65,7 +65,7 @@ public:
 	}
 
 	void ClearItems(void) {
-		for (int i = 0; i < GetCount(); ++i) {
+		for (int i=0; i<GetCount(); ++i) {
 			LPTSTR lp = m_vpItems[ i ].first;
 			m_vpItems[ i ].first = NULL;
 			delete [] lp;
@@ -75,7 +75,7 @@ public:
 	}
 
 	BOOL IsExist(LPCTSTR lpFileName) {
-		for (int i = 0; i < GetCount(); ++i) {
+		for (int i=0; i<GetCount(); ++i) {
 			if (_tcscmp(m_vpItems[ i ].first, lpFileName) == 0) {
 				return TRUE;
 			}
@@ -116,7 +116,7 @@ public:
 	) {
 		int found = 0;
 
-		for (int i = 0; i < (int)vecKeys.size(); ++i) {
+		for (int i=0; i<(int)vecKeys.size(); ++i) {
 			int baseLen = _tcslen(lpBaseFolder);
 			LPTSTR lpPath = new TCHAR[ baseLen + _tcslen(vecKeys[ i ]) + 2 ];
 			if (!lpPath) {

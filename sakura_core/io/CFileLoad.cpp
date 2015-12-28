@@ -206,7 +206,7 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, bool bBigFile, ECodeType CharC
 	m_pCodeBase->GetEol( &m_memEols[2], EOL_PS );
 	bool bEolEx = false;
 	int nMaxEolLen = 0;
-	for (int k = 0; k < (int)_countof(m_memEols); ++k) {
+	for (int k=0; k<(int)_countof(m_memEols); ++k) {
 		if (0 != m_memEols[k].GetRawLength()) {
 			bEolEx = true;
 			nMaxEolLen = t_max(nMaxEolLen, m_memEols[k].GetRawLength());
@@ -487,7 +487,7 @@ const char* CFileLoad::GetNextLineCharCode(
 				EOL_PS,
 			};
 			nLen = nDataLen;
-			for (i = nbgn; i < nDataLen; ++i) {
+			for (i=nbgn; i<nDataLen; ++i) {
 				if (pData[i] == '\r' || pData[i] == '\n') {
 					pcEol->SetTypeByStringForFile( &pData[i], nDataLen - i );
 					neollen = pcEol->GetLen();
@@ -495,7 +495,7 @@ const char* CFileLoad::GetNextLineCharCode(
 				}
 				if (m_bEolEx) {
 					int k;
-					for (k = 0; k < (int)_countof(eEolEx); ++k) {
+					for (k=0; k<(int)_countof(eEolEx); ++k) {
 						if (0 != m_memEols[k].GetRawLength()
 							&& i + m_memEols[k].GetRawLength() - 1 < nDataLen
 							&& 0 == memcmp( m_memEols[k].GetRawPtr(), pData + i, m_memEols[k].GetRawLength())
@@ -512,10 +512,10 @@ const char* CFileLoad::GetNextLineCharCode(
 			}
 			// UTF-8のNEL,PS,LS断片の検出
 			if (i == nDataLen && m_bEolEx) {
-				for (i = t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; ++i) {
+				for (i=t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; ++i) {
 					int k;
 					bool bSet = false;
-					for (k = 0; k < (int)_countof(eEolEx); ++k) {
+					for (k=0; k<(int)_countof(eEolEx); ++k) {
 						int nCompLen = t_min(nDataLen - i, m_memEols[k].GetRawLength());
 						if (0 != nCompLen
 							&& 0 == memcmp(m_memEols[k].GetRawPtr(), pData + i, nCompLen)
@@ -534,7 +534,7 @@ const char* CFileLoad::GetNextLineCharCode(
 		break;
 	case ENCODING_TRAIT_UTF16LE:
 		nLen = nDataLen - 1;
-		for (i = nbgn; i < nLen; i += 2) {
+		for (i=nbgn; i<nLen; i+=2) {
 			wchar_t c = static_cast<wchar_t>((pUData[i + 1] << 8) | pUData[i]);
 			if (WCODE::IsLineDelimiter(c, bExtEol)) {
 				pcEol->SetTypeByStringForFile_uni( &pData[i], nDataLen - i );
@@ -545,7 +545,7 @@ const char* CFileLoad::GetNextLineCharCode(
 		break;
 	case ENCODING_TRAIT_UTF16BE:
 		nLen = nDataLen - 1;
-		for (i = nbgn; i < nLen; i += 2) {
+		for (i=nbgn; i<nLen; i+=2) {
 			wchar_t c = static_cast<wchar_t>((pUData[i] << 8) | pUData[i + 1]);
 			if (WCODE::IsLineDelimiter(c, bExtEol)) {
 				pcEol->SetTypeByStringForFile_unibe( &pData[i], nDataLen - i );
@@ -556,7 +556,7 @@ const char* CFileLoad::GetNextLineCharCode(
 		break;
 	case ENCODING_TRAIT_UTF32LE:
 		nLen = nDataLen - 3;
-		for (i = nbgn; i < nLen; i += 4) {
+		for (i=nbgn; i<nLen; i+=4) {
 			wchar_t c = static_cast<wchar_t>((pUData[i+1] << 8) | pUData[i]);
 			if (pUData[i+3] == 0x00
 				&& pUData[i+2] == 0x00
@@ -583,7 +583,7 @@ const char* CFileLoad::GetNextLineCharCode(
 		break;
 	case ENCODING_TRAIT_UTF32BE:
 		nLen = nDataLen - 3;
-		for (i = nbgn; i < nLen; i += 4) {
+		for (i=nbgn; i<nLen; i+=4) {
 			wchar_t c = static_cast<wchar_t>((pUData[i+2] << 8) | pUData[i+3]);
 			if (pUData[i] == 0x00
 				&& pUData[i+1] == 0x00
@@ -611,7 +611,7 @@ const char* CFileLoad::GetNextLineCharCode(
 	case ENCODING_TRAIT_EBCDIC_CRLF:
 	case ENCODING_TRAIT_EBCDIC:
 		// EOLコード変換しつつ設定
-		for (i = nbgn; i < nDataLen; ++i) {
+		for (i=nbgn; i<nDataLen; ++i) {
 			if (m_encodingTrait == ENCODING_TRAIT_EBCDIC && bExtEol) {
 				if (pData[i] == '\x15') {
 					pcEol->SetType(EOL_NEL);

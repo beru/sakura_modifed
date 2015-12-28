@@ -110,7 +110,7 @@ bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderN
 	hr = pZipFileItems->get_Count(&lCount);
 	VariantInit(&vari);
 	vari.vt = VT_I4;
-	for (vari.lVal = 0; vari.lVal < lCount; vari.lVal++) {
+	for (vari.lVal=0; vari.lVal<lCount; vari.lVal++) {
 		BSTR			bps;
 		VARIANT_BOOL	vFolder;
 		FolderItem*		pFileItem;
@@ -135,7 +135,7 @@ bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderN
 			hr = pFileItems2->get_Count(&lCount2);
 			if (hr != S_OK) { continue; }
 			varj.vt = VT_I4;
-			for (varj.lVal = 0; varj.lVal < lCount2; varj.lVal++) {
+			for (varj.lVal=0; varj.lVal<lCount2; varj.lVal++) {
 				hr = pFileItems2->Item(varj, &pFileItem);
 				if (hr != S_OK) { continue; }
 				hr = pFileItem->get_IsFolder(&vFolder);

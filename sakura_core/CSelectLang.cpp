@@ -31,7 +31,7 @@ CSelectLang::PSSelLangInfoList CSelectLang::m_psLangInfoList;
 */
 CSelectLang::~CSelectLang(void)
 {
-	for (auto it = m_psLangInfoList.begin(); it != m_psLangInfoList.end(); ++it) {
+	for (auto it=m_psLangInfoList.begin(); it!=m_psLangInfoList.end(); ++it) {
 		if ((*it)->hInstance) {
 			FreeLibrary((*it)->hInstance);
 			(*it)->hInstance = NULL;
@@ -356,8 +356,7 @@ int CLoadString::CLoadStrBuffer::LoadString(UINT uid)
 void CSelectLang::ChangeLang(TCHAR* pszDllName)
 {
 	// Œ¾Œê‚ð‘I‘ð‚·‚é
-	UINT unIndex;
-	for (unIndex = 0; unIndex < CSelectLang::m_psLangInfoList.size(); ++unIndex) {
+	for (size_t unIndex=0; unIndex<CSelectLang::m_psLangInfoList.size(); ++unIndex) {
 		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(unIndex);
 		if (_tcsncmp(pszDllName, psLangInfo->szDllName, MAX_PATH) == 0) {
 			CSelectLang::ChangeLang(unIndex);

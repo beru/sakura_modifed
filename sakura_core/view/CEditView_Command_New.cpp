@@ -42,7 +42,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, COpe
 	int nBegin = 0;
 	int i;
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-	for (i = 0; i < nLineDataLen; ++i) {
+	for (i=0; i<nLineDataLen; ++i) {
 		if (WCODE::IsLineDelimiter(pLineData[i], bExtEol)) {
 			if (i + 1 < nLineDataLen && WCODE::CR == pLineData[i] && WCODE::LF == pLineData[i + 1]) {
 				++i;
@@ -147,14 +147,14 @@ void CEditView::InsertData_CEditView(
 			if (EOL_NONE != pcLayout->GetLayoutEol()) {
 				nIdxFrom = nLineLen - CLogicInt(1);
 				cMem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen + 1) + nDataLen);
-				for (int i = 0; i < ptInsertPos.GetX2() - nLineAllColLen + 1; ++i) {
+				for (int i=0; i<ptInsertPos.GetX2()-nLineAllColLen+1; ++i) {
 					cMem += L' ';
 				}
 				cMem.AppendString(pData, nDataLen);
 			}else {
 				nIdxFrom = nLineLen;
 				cMem.AllocStringBuffer((Int)(ptInsertPos.GetX2() - nLineAllColLen) + nDataLen);
-				for (int i = 0; i < ptInsertPos.GetX2() - nLineAllColLen; ++i) {
+				for (int i=0; i<ptInsertPos.GetX2()-nLineAllColLen; ++i) {
 					cMem += L' ';
 				}
 				cMem.AppendString(pData, nDataLen);
@@ -175,7 +175,7 @@ void CEditView::InsertData_CEditView(
 		}
 		if (0 < ptInsertPos.GetX2()) {
 			cMem.AllocStringBuffer((Int)ptInsertPos.GetX2() + nDataLen);
-			for (CLayoutInt i = CLayoutInt(0); i < ptInsertPos.GetX2(); ++i) {
+			for (CLayoutInt i=CLayoutInt(0); i<ptInsertPos.GetX2(); ++i) {
 				cMem += L' ';
 			}
 			cMem.AppendString(pData, nDataLen);

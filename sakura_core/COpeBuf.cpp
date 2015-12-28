@@ -31,7 +31,7 @@ COpeBuf::~COpeBuf()
 {
 	// 操作ブロックの配列を削除する
 	int size = (int)m_vCOpeBlkArr.size();
-	for (int i = 0; i < size; ++i) {
+	for (int i=0; i<size; ++i) {
 		SAFE_DELETE(m_vCOpeBlkArr[i]);
 	}
 	m_vCOpeBlkArr.clear();
@@ -63,7 +63,7 @@ bool COpeBuf::AppendOpeBlk(COpeBlk* pcOpeBlk)
 	// 現在位置より後ろ（アンドゥ対象）がある場合は、消去
 	int size = (int)m_vCOpeBlkArr.size();
 	if (m_nCurrentPointer < size) {
-		for (int i = m_nCurrentPointer; i < size; ++i) {
+		for (int i=m_nCurrentPointer; i<size; ++i) {
 			SAFE_DELETE(m_vCOpeBlkArr[i]);
 		}
 		m_vCOpeBlkArr.resize(m_nCurrentPointer);
@@ -79,7 +79,7 @@ void COpeBuf::ClearAll()
 {
 	// 操作ブロックの配列を削除する
 	int size = (int)m_vCOpeBlkArr.size();
-	for (int i = 0; i < size; ++i) {
+	for (int i=0; i<size; ++i) {
 		SAFE_DELETE(m_vCOpeBlkArr[i]);
 	}
 	m_vCOpeBlkArr.clear();
@@ -142,7 +142,7 @@ void COpeBuf::DUMP()
 #ifdef _DEBUG
 	MYTRACE(_T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
 	int size = (int)m_vCOpeBlkArr.size();
-	for (int i = 0; i < size; ++i) {
+	for (int i=0; i<size; ++i) {
 		MYTRACE(_T("COpeBuf.m_vCOpeBlkArr[%d]----\n"), i);
 		m_vCOpeBlkArr[i]->DUMP();
 	}

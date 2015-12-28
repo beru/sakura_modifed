@@ -83,7 +83,7 @@ public:
 	static void ActiveNextWindow(HWND hwndParent);
 	static void ActivePrevWindow(HWND hwndParent);
 
-	static BOOL CloseAllEditor(BOOL bCheckConfirm, HWND hWndFrom, BOOL bExit, int nGroup);	// すべてのウィンドウを閉じる	Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更	// 2006.12.25, 2007.02.13 ryoji 引数追加
+	static BOOL CloseAllEditor(bool bCheckConfirm, HWND hWndFrom, bool bExit, int nGroup);	// すべてのウィンドウを閉じる	Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更	// 2006.12.25, 2007.02.13 ryoji 引数追加
 	static void TerminateApplication(HWND hWndFrom);	// サクラエディタの全終了		2006.12.25 ryoji 引数追加
 
 public:
@@ -110,21 +110,21 @@ protected:
 	|| メンバ変数
 	*/
 private:
-	CMenuDrawer		m_cMenuDrawer;
+	CMenuDrawer			m_cMenuDrawer;
 	CPropertyManager*	m_pcPropertyManager;
-	bool			m_bUseTrayMenu;			// トレイメニュー表示中
-	HINSTANCE		m_hInstance;
-	HWND			m_hWnd;
-	BOOL			m_bCreatedTrayIcon;		// トレイにアイコンを作った
+	bool					m_bUseTrayMenu;			// トレイメニュー表示中
+	HINSTANCE			m_hInstance;
+	HWND					m_hWnd;
+	BOOL					m_bCreatedTrayIcon;		// トレイにアイコンを作った
 
-	DLLSHAREDATA*	m_pShareData;
-	CDlgGrep		m_cDlgGrep;				// Jul. 2, 2001 genta
-	int				m_nCurSearchKeySequence;
+	DLLSHAREDATA*		m_pShareData;
+	CDlgGrep				m_cDlgGrep;				// Jul. 2, 2001 genta
+	int					m_nCurSearchKeySequence;
 
-	CImageListMgr	m_hIcons;
+	CImageListMgr		m_hIcons;
 
-	UINT			m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
+	UINT					m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
 
-	TCHAR			m_szLanguageDll[MAX_PATH];
+	TCHAR				m_szLanguageDll[MAX_PATH];
 };
 
