@@ -107,12 +107,12 @@ EditNode* CAppNodeGroupHandle::GetEditNodeAt(int nIndex)
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
 	int iIndex = 0;
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
+	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
 		if (m_nGroup == 0 || m_nGroup == pShare->m_sNodes.m_pEditArr[i].m_nGroup) {
 			if (IsSakuraMainWindow(pShare->m_sNodes.m_pEditArr[i].m_hWnd)) {
 				if (iIndex == nIndex)
 					return &pShare->m_sNodes.m_pEditArr[i];
-				iIndex++;
+				++iIndex;
 			}
 		}
 	}
@@ -238,10 +238,10 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOO
 	int iGroup = -1;
 	HWND hWndLast = NULL;
 	int nCloseCount = 0;
-	for (int i = 0; i < nArrCnt; i++) {
+	for (int i = 0; i < nArrCnt; ++i) {
 		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 			if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
-				nCloseCount++;
+				++nCloseCount;
 				if (iGroup == -1) {
 					iGroup = pWndArr[i].m_nGroup;	// 最初に閉じるグループ
 					hWndLast = pWndArr[i].m_hWnd;
@@ -285,7 +285,7 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOO
 	}
 
 	// エディタへの終了要求
-	for (int i = 0; i < nArrCnt; i++) {
+	for (int i = 0; i < nArrCnt; ++i) {
 		if (m_nGroup == 0 || m_nGroup == pWndArr[i].m_nGroup) {
 			if (IsSakuraMainWindow(pWndArr[i].m_hWnd)) {
 				// タブグループ表示で次に閉じるのがアクティブ化制御ウィンドウの場合、
@@ -293,7 +293,7 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, BOO
 				if (bTabGroup && pWndArr[i].m_hWnd == hWndActive) {
 					iGroup = -1;
 					hWndActive = ( IsSakuraMainWindow(hWndFrom) )? hWndFrom: NULL;	// 一番最後用
-					for (int j = i + 1; j < nArrCnt; j++) {
+					for (int j = i + 1; j < nArrCnt; ++j) {
 						if (m_nGroup == 0 || m_nGroup == pWndArr[j].m_nGroup) {
 							if (IsSakuraMainWindow(pWndArr[j].m_hWnd)) {
 								if (iGroup == -1) {
@@ -349,7 +349,7 @@ int CAppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 			) {
 				continue;
 			}
-			j++;
+			++j;
 		}
 	}
 	return j;
@@ -464,7 +464,7 @@ void CAppNodeManager::ResetGroupId()
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
 	int nGroup = ++pShare->m_sNodes.m_nGroupSequences;
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
+	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
 		if (IsSakuraMainWindow(pShare->m_sNodes.m_pEditArr[i].m_hWnd)) {
 			pShare->m_sNodes.m_pEditArr[i].m_nGroup = nGroup;
 		}
@@ -483,7 +483,7 @@ void CAppNodeManager::ResetGroupId()
 EditNode* CAppNodeManager::GetEditNode(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; i++) {
+	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
 		if (hWnd == pShare->m_sNodes.m_pEditArr[i].m_hWnd) {
 			if (IsSakuraMainWindow(pShare->m_sNodes.m_pEditArr[i].m_hWnd))
 				return &pShare->m_sNodes.m_pEditArr[i];
@@ -567,11 +567,11 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	int nRowNum = 0;	// 編集ウインドウ数
-	for (int i = 0; i < sNodes.m_nEditArrNum; i++) {
+	for (int i = 0; i < sNodes.m_nEditArrNum; ++i) {
 		if (IsSakuraMainWindow(sNodes.m_pEditArr[i].m_hWnd)) {
 			pNode[nRowNum].p = &sNodes.m_pEditArr[i];	// ポインタ格納
 			pNode[nRowNum].nGroupMru = -1;	// グループ単位のMRU番号初期化
-			nRowNum++;
+			++nRowNum;
 		}
 	}
 	if (nRowNum <= 0) {
@@ -585,16 +585,16 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 	if (!bGSort) {
 		int iGroupMru = 0;	// グループ単位のMRU番号
 		int nGroup = -1;
-		for (int i = 0; i < nRowNum; i++) {
+		for (int i = 0; i < nRowNum; ++i) {
 			if (pNode[i].nGroupMru == -1
 				&& nGroup != pNode[i].p->m_nGroup
 			) {
 				nGroup = pNode[i].p->m_nGroup;
-				iGroupMru++;
+				++iGroupMru;
 				pNode[i].nGroupMru = iGroupMru;	// MRU番号付与
 
 				// 同一グループのウィンドウに同じMRU番号をつける
-				for (int j = i + 1; j < nRowNum; j++) {
+				for (int j = i + 1; j < nRowNum; ++j) {
 					if (pNode[j].p->m_nGroup == nGroup)
 						pNode[j].nGroupMru = iGroupMru;
 				}
@@ -788,7 +788,7 @@ HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 		int			nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr(&p, FALSE, FALSE);
 		if (nCount > 1) {
 			// search Group No.
-			for (int i = 0; i < nCount; i++) {
+			for (int i = 0; i < nCount; ++i) {
 				if (p[i].GetHwnd() == hWndCur) {
 					nGroup = p[i].m_nGroup;
 					break;

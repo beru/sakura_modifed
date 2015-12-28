@@ -391,7 +391,7 @@ LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 		}
 		m_nTabBorderArray = new LONG[nTabCount];
 		int i;
-		for (i = 0 ; i < nTabCount-1; i++) {
+		for (i = 0 ; i < nTabCount-1; ++i) {
 			RECT rc;
 			TabCtrl_GetItemRect(m_hwndTab, i, &rc);
 			m_nTabBorderArray[i] = rc.right;
@@ -409,7 +409,7 @@ LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 			lpCursorName = NULL;	// 開始時カーソル指定
 
 			// ドラッグ開始時のタブ位置で移動先タブを再計算
-			for (nDstTab = 0; m_nTabBorderArray[nDstTab] != 0; nDstTab++) {
+			for (nDstTab = 0; m_nTabBorderArray[nDstTab] != 0; ++nDstTab) {
 				if (hitinfo.pt.x < m_nTabBorderArray[nDstTab]) {
 					break;
 				}
@@ -702,7 +702,7 @@ BOOL CTabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDr
 
 	// 再表示メッセージをブロードキャストする。
 	//	2007.07.07 genta 2回ループに
-	for (int group = 0; group < _countof(notifygroups); group++) {
+	for (int group = 0; group < _countof(notifygroups); ++group) {
 		CAppNodeGroupHandle(notifygroups[group]).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,
 			(WPARAM)TWNT_REFRESH,
@@ -1827,7 +1827,7 @@ int CTabWnd::FindTabIndexByHWND(HWND hWnd)
 	}
 	TCITEM tcitem;
 	int nCount = TabCtrl_GetItemCount(m_hwndTab);
-	for (int i = 0; i < nCount; i++) {
+	for (int i = 0; i < nCount; ++i) {
 		tcitem.mask   = TCIF_PARAM;
 		tcitem.lParam = (LPARAM)0;
 		TabCtrl_GetItem(m_hwndTab, i, &tcitem);
@@ -1883,7 +1883,7 @@ void CTabWnd::Refresh(BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/)
 			TabCtrl_DeleteAllItems(m_hwndTab);	// 作成しなおす
 
 		// 作成するタブ数と選択状態にするタブ位置（自ウィンドウの位置）を調べる
-		for (i = 0, j = 0; i < nCount; i++) {
+		for (i = 0, j = 0; i < nCount; ++i) {
 			auto& node = pEditNode[i];
 			if (node.m_nGroup != nGroup)
 				continue;
@@ -1891,7 +1891,7 @@ void CTabWnd::Refresh(BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/)
 				continue;
 			if (node.m_hWnd == GetParentHwnd())
 				nSel = j;	// 選択状態にするタブ位置
-			j++;
+			++j;
 		}
 		nTab = j;	// 作成するタブ数
 
@@ -1910,25 +1910,25 @@ void CTabWnd::Refresh(BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/)
 		// （選択タブの直前位置への追加／削除を繰り返すことでスクロール発生を低減）
 		nCurSel = TabCtrl_GetCurSel(m_hwndTab);	// 現在の選択タブ位置
 		if (nCurSel > nSel) {
-			for (i = 0; i < nCurSel - nSel; i++)
+			for (i = 0; i < nCurSel - nSel; ++i)
 				TabCtrl_DeleteItem(m_hwndTab, nCurSel - 1 - i);	// 余分を削除
 		}else {
-			for (i = 0; i < nSel - nCurSel; i++)
+			for (i = 0; i < nSel - nCurSel; ++i)
 				TabCtrl_InsertItem(m_hwndTab, nCurSel + i, &tcitem);	// 不足を追加
 		}
 
 		// 選択タブよりも後の過不足を調整する
 		nCurTab = TabCtrl_GetItemCount(m_hwndTab);	// 現在のタブ数
 		if (nCurTab > nTab) {
-			for (i = 0; i < nCurTab - nTab; i++)
+			for (i = 0; i < nCurTab - nTab; ++i)
 				TabCtrl_DeleteItem(m_hwndTab, nSel + 1);	// 余分を削除
 		}else {
-			for (i = 0; i < nTab - nCurTab; i++)
+			for (i = 0; i < nTab - nCurTab; ++i)
 				TabCtrl_InsertItem(m_hwndTab, nSel + 1, &tcitem);	// 不足を追加
 		}
 
 		// 作成したタブに各ウィンドウ情報を設定する
-		for (i = 0, j = 0; i < nCount; i++) {
+		for (i = 0, j = 0; i < nCount; ++i) {
 			auto& node = pEditNode[i];
 			if (node.m_nGroup != nGroup)
 				continue;
@@ -1946,7 +1946,7 @@ void CTabWnd::Refresh(BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/)
 			tcitem.iImage = GetImageIndex(&node);
 
 			TabCtrl_SetItem(m_hwndTab, j, &tcitem);
-			j++;
+			++j;
 		}
 
 		::SendMessage(m_hwndTab, WM_SETREDRAW, (WPARAM)TRUE, (LPARAM)0);	// 2005.09.01 ryoji 再描画許可
@@ -2077,7 +2077,7 @@ void CTabWnd::HideOtherWindows(HWND hwndExclude)
 	auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
 	if (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin) {
 		HWND hwnd;
-		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; i++) {
+		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 			hwnd = m_pShareData->m_sNodes.m_pEditArr[i].m_hWnd;
 			if (IsSakuraMainWindow(hwnd)) {
 				if (!CAppNodeManager::IsSameGroup(hwndExclude, hwnd))
@@ -2431,7 +2431,7 @@ HIMAGELIST CTabWnd::ImageList_Duplicate(HIMAGELIST himl)
 	if (hImlNew) {
 		ImageList_SetBkColor(hImlNew, CLR_NONE);
 		int nCount = ImageList_GetImageCount(himl);
-		for (int i = 0; i < nCount; i++) {
+		for (int i = 0; i < nCount; ++i) {
 			HICON hIcon = ImageList_GetIcon(himl, i, ILD_TRANSPARENT);
 			if (!hIcon) {
 				ImageList_Destroy(hImlNew);
@@ -2749,7 +2749,7 @@ LRESULT CTabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = fals
 				pData[nSelfTab].hwnd = node.m_hWnd;
 				pData[nSelfTab].iItem = i;
 				pData[nSelfTab].iImage = GetImageIndex(&node);
-				nSelfTab++;
+				++nSelfTab;
 			}
 			// 表示文字でソートする
 			if (nSelfTab > 0 && csTabBar.m_bSortTabList)	// 2006.03.23 fon 変更
@@ -2768,7 +2768,7 @@ LRESULT CTabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = fals
 			pData[nTab].hwnd = node.m_hWnd;
 			pData[nTab].iItem = i;
 			pData[nTab].iImage = GetImageIndex(&node);
-			nTab++;
+			++nTab;
 		}
 		// 表示文字でソートする
 		if (nTab > nSelfTab && csTabBar.m_bSortTabList) {
@@ -2795,7 +2795,7 @@ LRESULT CTabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = fals
 		// 他グループのウィンドウ一覧を追加する
 		if (nTab > nSelfTab) {
 			if (bOtherGroup) {
-				for (int i = nSelfTab; i < nTab; i++) {
+				for (int i = nSelfTab; i < nTab; ++i) {
 					::InsertMenu(hMenu, i, uFlags, IDM_SELWINDOW + i, m_hIml? (LPCTSTR)&pData[i]: pData[i].szText);
 				}
 			}else {

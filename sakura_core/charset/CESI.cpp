@@ -215,7 +215,7 @@ void CESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 			}
 			if (echarset == CHARSET_JIS_HANKATA) {
 				num_of_sjis_encoded_bytes += nret;
-				num_of_sjis_hankata++;
+				++num_of_sjis_hankata;
 			}
 		}else {
 			if (pr_end - pr < GuessSjisCharsz(pr[0])) { break; }
@@ -600,7 +600,7 @@ void CESI::GetEncodingInfo_uni(const char* pS, const int nLen)
 			if (echarset1 != CHARSET_BINARY) {
 				if (nret1 == 1) {
 					// UTF-16 LE 版の改行コードをカウント
-					if (_CheckUtf16EolLE(pr1, pr_end - pr1)) { nnewlinew1++; }
+					if (_CheckUtf16EolLE(pr1, pr_end - pr1)) { ++nnewlinew1; }
 				}
 			}else {
 				unsigned int n = GuessUtf16Charsz(pr1[0] | static_cast<wchar_t>(pr1[1] << 8));
@@ -617,7 +617,7 @@ void CESI::GetEncodingInfo_uni(const char* pS, const int nLen)
 			if (echarset2 != CHARSET_BINARY) {
 				if (nret2 == 1) {
 					// UTF-16 BE 版の改行コードをカウント
-					if (_CheckUtf16EolBE(pr2, pr_end - pr2)) { nnewlinew2++; }
+					if (_CheckUtf16EolBE(pr2, pr_end - pr2)) { ++nnewlinew2; }
 				}
 			}else {
 				unsigned int n = GuessUtf16Charsz((static_cast<wchar_t>(pr2[0] << 8)) | pr2[1]);
@@ -914,22 +914,22 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 				i += 9;
 				while (i < nSize - 2) {
 					if (!IsXMLWhiteSpace( pBuf[i] )) break;
-					i++;
+					++i;
 				}
 				if (pBuf[i] != '=') {
 					break;
 				}
-				i++;
+				++i;
 				while (i < nSize - 1) {
 					if (!IsXMLWhiteSpace( pBuf[i] )) break;
-					i++;
+					++i;
 				}
 				char quoteChar;
 				if (pBuf[i] != '\'' && pBuf[i] != '\"') {
 					break;
 				}
 				quoteChar = pBuf[i];
-				i++;
+				++i;
 				for (int k=0; encodingNameToCode[k].name; ++k) {
 					const int nLen = encodingNameToCode[k].nLen;
 					if (i + nLen < nSize - 1
@@ -987,7 +987,7 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 			while (i < nSize) {
 				if (IsXMLWhiteSpace(pBuf[i]) && i + 1 < nSize && !IsXMLWhiteSpace(pBuf[i+1])) {
 					int nAttType = 0;
-					i++;
+					++i;
 					if (i + 12 < nSize && 0 == memicmp(pBuf + i, "http-equiv", 10)
 						&& (IsXMLWhiteSpace(pBuf[i+10]) || '=' == pBuf[i+10])) {
 						i += 10;
@@ -1002,20 +1002,20 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 						nAttType = 3; // charset
 					}else {
 						// その他の属性名読み飛ばし
-						while (i < nSize && !IsXMLWhiteSpace(pBuf[i])) { i++; }
+						while (i < nSize && !IsXMLWhiteSpace(pBuf[i])) { ++i; }
 					}
 					if (nSize <= i) { return CODE_NONE; }
-					while (IsXMLWhiteSpace(pBuf[i]) && i < nSize) { i++; }
+					while (IsXMLWhiteSpace(pBuf[i]) && i < nSize) { ++i; }
 					if (nSize <= i) { return CODE_NONE; }
 					if ('=' == pBuf[i]) {
 						i += 1;
 						if (nSize <= i) { return CODE_NONE; }
 					}else {
 						// [<meta att ...]
-						i--;
+						--i;
 						continue;
 					}
-					while (IsXMLWhiteSpace(pBuf[i]) && i < nSize) { i++; }
+					while (IsXMLWhiteSpace(pBuf[i]) && i < nSize) { ++i; }
 					if (nSize <= i) { return CODE_NONE; }
 					char quoteChar = '\0';
 					int nBeginAttVal = i;
@@ -1023,15 +1023,15 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 					int nNextPos;
 					if ('\'' == pBuf[i] || '"' == pBuf[i]) {
 						quoteChar = pBuf[i];
-						i++;
+						++i;
 						nBeginAttVal = i;
 						if (nSize <= i) { return CODE_NONE; }
-						while (i < nSize && quoteChar != pBuf[i] && '<' != pBuf[i] && '>' != pBuf[i]) { i++; }
+						while (i < nSize && quoteChar != pBuf[i] && '<' != pBuf[i] && '>' != pBuf[i]) { ++i; }
 						nEndAttVal = i;
-						i++;
+						++i;
 						nNextPos = i;
 					}else {
-						while (i < nSize && !IsXMLWhiteSpace(pBuf[i]) && '<' != pBuf[i] && '>' != pBuf[i]) { i++; }
+						while (i < nSize && !IsXMLWhiteSpace(pBuf[i]) && '<' != pBuf[i] && '>' != pBuf[i]) { ++i; }
 						nEndAttVal = i;
 						nNextPos = i;
 					}
@@ -1045,21 +1045,21 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 						}
 					}else if (2 == nAttType) {
 						i = nBeginAttVal;
-						while (i < nEndAttVal && ';' != pBuf[i]) { i++; }
+						while (i < nEndAttVal && ';' != pBuf[i]) { ++i; }
 						if (nEndAttVal <= i) { i = nNextPos; continue; }
-						i++; // Skip ';'
-						while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { i++; }
+						++i; // Skip ';'
+						while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { ++i; }
 						if (nEndAttVal <= i) { i = nNextPos; continue; }
 						if (i + 7 < nEndAttVal && 0 == memicmp(pBuf + i, "charset", 7)) {
 							i += 7;
-							while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { i++; }
+							while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { ++i; }
 							if (nEndAttVal <= i) { i = nNextPos; continue; }
 							if ('=' != pBuf[i]) { i = nNextPos; continue; }
-							i++;
-							while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { i++; }
+							++i;
+							while (i < nEndAttVal && IsXMLWhiteSpace(pBuf[i])) { ++i; }
 							if (nEndAttVal <= i) { i = nNextPos; continue; }
 							int nCharsetBegin = i;
-							while (i < nEndAttVal && !IsXMLWhiteSpace(pBuf[i])) { i++; }
+							while (i < nEndAttVal && !IsXMLWhiteSpace(pBuf[i])) { ++i; }
 							for (int k=0; encodingNameToCode[k].name; ++k) {
 								const int nLen = encodingNameToCode[k].nLen;
 								if (i - nCharsetBegin == nLen
@@ -1084,13 +1084,13 @@ ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
 						}
 					}
 				}else if ('<' == pBuf[i]) {
-					i--;
+					--i;
 					break;
 				}else if ('>' == pBuf[i]) {
 					break;
 				}else {
 					// 連続したスペース
-					i++;
+					++i;
 				}
 			}
 		}
@@ -1139,9 +1139,9 @@ ECodeType CESI::AutoDetectByCoding( const char* pBuf, int nSize )
 			}
 		}else if ('\r' == pBuf[i] || '\n' == pBuf[i]) {
 			if ('\r' == pBuf[i] && '\n' == pBuf[i+1]) {
-				i++;
+				++i;
 			}
-			nLineNum++;
+			++nLineNum;
 			bComment = false;
 			if (3 <= nLineNum) {
 				break;

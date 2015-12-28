@@ -346,7 +346,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 							p += _tcslen(STR_ALT_PLUS);
 							i |= _ALT;
 						}
-						for (j = 0; j < csKeybind.m_nKeyNameArrNum; j++) {
+						for (j = 0; j < csKeybind.m_nKeyNameArrNum; ++j) {
 							if (_tcscmp(csKeybind.m_pKeyNameArr[j].m_szKeyName, p) == 0) {
 								List_SetCurSel(hwndKeyList, j);
 								if (i & _SHIFT) ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED);	// チェック

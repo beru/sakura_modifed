@@ -176,7 +176,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					}
 
 					nMode = FL_JAVA_MODE_NORMAL;
-					i--;
+					--i;
 					continue;
 				}
 			/* ãLçÜóÒì«Ç›çûÇ›íÜ */
@@ -201,7 +201,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					L'.' == pLine[i]
 				) {
 					nMode = FL_JAVA_MODE_NORMAL;
-					i--;
+					--i;
 					continue;
 				}else {
 				}
@@ -279,15 +279,15 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					if (0 < nClassNestArrNum) {
 						nNestLevel2Arr[nClassNestArrNum - 1] = 0;
 					}
-					nNestLevel--;
+					--nNestLevel;
 					if (0 < nClassNestArrNum &&
 						nClassNestArr[nClassNestArrNum - 1] == nNestLevel
 					) {
 						nClassNestArr.pop_back();
 						nNestLevel2Arr.pop_back();
-						nClassNestArrNum--;
+						--nClassNestArrNum;
 						int k;
-						for (k = wcslen(szClass) - 1; k >= 0; k--) {
+						for (k = wcslen(szClass) - 1; k >= 0; --k) {
 							if (L'\\' == szClass[k]) {
 								break;
 							}

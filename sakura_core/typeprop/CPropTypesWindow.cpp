@@ -288,14 +288,14 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 		int		j = 0;
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_CODETYPE);
 		CCodeTypesForCombobox cCodeTypes;
-		for (int i = 0; i < cCodeTypes.GetCount(); i++) {
+		for (int i=0; i<cCodeTypes.GetCount(); ++i) {
 			if (CCodeTypeName(cCodeTypes.GetCode(i)).CanDefault()) {
 				int idx = Combo_AddString(hCombo, cCodeTypes.GetName(i));
 				Combo_SetItemData(hCombo, idx, cCodeTypes.GetCode(i));
 				if (m_Types.m_encoding.m_eDefaultCodetype == cCodeTypes.GetCode(i)) {
 					nSel = j;
 				}
-				j++;
+				++j;
 			}
 		}
 		if (nSel == -1) {

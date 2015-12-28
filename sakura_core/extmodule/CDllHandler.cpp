@@ -66,7 +66,7 @@ EDllResult CDllImp::InitDll(LPCTSTR pszSpecifiedDllName)
 	// 名前候補を順次検証し、有効なものを採用する
 	LPCTSTR pszLastName  = NULL;
 	bool bInitImpFailure = false;
-	for (int i = -1; ;i++) {
+	for (int i=-1; ; ++i) {
 		// 名前候補
 		LPCTSTR pszName = NULL;
 		if (i == -1) { // まずは引数で指定された名前から。
@@ -187,7 +187,7 @@ bool CDllImp::RegisterEntries(const ImportTable table[])
 	if (!IsAvailable()) {
 		return false;
 	}
-	for (int i = 0; table[i].proc; i++) {
+	for (int i = 0; table[i].proc; ++i) {
 		FARPROC proc;
 		if (!(proc = ::GetProcAddress(GetInstance(), table[i].name))) {
 			return false;

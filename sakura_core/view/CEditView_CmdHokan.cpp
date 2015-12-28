@@ -201,7 +201,7 @@ int CEditView::HokanSearchByFile(
 	// ƒL[‚Ìæ“ª‚ª‹L†(#$@\)‚©‚Ç‚¤‚©”»’è
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
-	for (CLogicInt i = CLogicInt(0); i < nLines; i++) {
+	for (CLogicInt i = CLogicInt(0); i < nLines; ++i) {
 		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
 		for (j = 0; j < nLineLen; j += nCharSize) {

@@ -401,7 +401,7 @@ bool CMacro::Exec(CEditView* pcEditView, int flags) const
 
 	CMacroParam* p = m_pParamTop;
 	int i = 0;
-	for (i = 0; i < maxArg; i++) {
+	for (i = 0; i < maxArg; ++i) {
 		if (!p) break;	// p‚ª–³‚¯‚ê‚Îbreak;
 		paramArr[i] = p->m_pData;
 		paramLenArr[i] = wcslen(paramArr[i]);
@@ -419,7 +419,7 @@ WCHAR* CMacro::GetParamAt(CMacroParam* p, int index)
 			return NULL;
 		}
 		x = x->m_pNext;
-		i++;
+		++i;
 	}
 	if (!x) {
 		return NULL;
@@ -432,7 +432,7 @@ int CMacro::GetParamCount() const
 	CMacroParam* p = m_pParamTop;
 	int n = 0;
 	while (p) {
-		n++;
+		++n;
 		p = p->m_pNext;
 	}
 	return n;
@@ -490,10 +490,10 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 				cmemWork.Replace( u0085, L"\\u0085" );
 				cmemWork.Replace( L"\u2028", L"\\u2028" );
 				cmemWork.Replace( L"\u2029", L"\\u2029" );
-				for (int c = 0; c < 0x20; c++) {
+				for (int c = 0; c < 0x20; ++c) {
 					int nLen = cmemWork.GetStringLength();
 					const wchar_t* p = cmemWork.GetStringPtr();
-					for (int i = 0; i < nLen; i++) {
+					for (int i = 0; i < nLen; ++i) {
 						if (p[i] == c) {
 							wchar_t from[2];
 							wchar_t to[7];
@@ -2149,7 +2149,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				int nLen = ::SysStringLen(varCopy.Data.bstrVal);
 				if (2 <= nLen) {
 					if (pLine[nLen-2] == WCODE::CR && pLine[nLen-1] == WCODE::LF) {
-						nLen--;
+						--nLen;
 					}
 				}
 				const int nTabWidth = (Int)View->GetDocument()->m_cLayoutMgr.GetTabSpaceKetas();
@@ -2349,7 +2349,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 					bool bSubMenu = false;
 					int nBreakNum = 0;
 					if (p[0] == L'[') {
-						r++;
+						++r;
 						while (*r != L']' && *r != L'\0') {
 							switch (*r) {
 							case L'S':
@@ -2360,7 +2360,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 								}
 								break;
 							case L'E':
-								nBreakNum++;
+								++nBreakNum;
 								break;
 							case L'C':
 								nFlags |= MF_CHECKED;
@@ -2377,15 +2377,15 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 							default:
 								break;
 							}
-							r++;
+							++r;
 						}
 						if (*r == L']') {
-							r++;
+							++r;
 						}
 					}
 					if (p[0] == L'-' && p[1] == L'\0') {
 						nFlags |= MF_SEPARATOR;
-						r++;
+						++r;
 						bSpecial = true;
 					}
 
@@ -2402,9 +2402,9 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 						if (bRadio) {
 							::CheckMenuRadioItem( hMenuCurrent, i, i, i, MF_BYCOMMAND );
 						}
-						i++;
+						++i;
 					}
-					for (int n = 0; n < nBreakNum; n++) {
+					for (int n = 0; n < nBreakNum; ++n) {
 						if (1 < vHmenu.size()) {
 							vHmenu.resize( vHmenu.size() - 1 );
 						}

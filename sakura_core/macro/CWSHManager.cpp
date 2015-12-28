@@ -69,7 +69,7 @@ bool CWSHMacroManager::ExecKeyMacro(CEditView *EditView, int flags) const
 		CWSHIfObj* objEditor = new CEditorIfObj();
 		objEditor->ReadyMethods(EditView, flags);
 		Engine->AddInterfaceObject(objEditor);
-		for (auto it = m_Params.begin(); it != m_Params.end(); it++) {
+		for (auto it = m_Params.begin(); it != m_Params.end(); ++it) {
 			(*it)->ReadyMethods(EditView, flags);
 			Engine->AddInterfaceObject(*it);
 		}

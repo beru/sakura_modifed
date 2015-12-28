@@ -74,7 +74,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 			m_szTransformFileNameFromExp[0],
 			m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
-		for (int i = 1; i < m_nTransformFileNameCount; i++) {
+		for (int i = 1; i < m_nTransformFileNameCount; ++i) {
 			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
@@ -102,7 +102,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 int CFileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
 	auto& csFileName = m_pShareData->m_Common.m_sFileName;
-	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; i++) {
+	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
 		if (L'\0' != csFileName.m_szTransformFileNameFrom[i][0]) {
 			if (ExpandMetaToFolder(
 				csFileName.m_szTransformFileNameFrom[i],
@@ -112,7 +112,7 @@ int CFileNameManager::TransformFileName_MakeCache(void) {
 			) {
 				// m_szTransformFileNameToとm_szTransformFileNameFromExpの番号がずれることがあるので記録しておく
 				m_nTransformFileNameOrgId[nCount] = i;
-				nCount++;
+				++nCount;
 			}
 		}
 	}
@@ -131,10 +131,10 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 	int nFromLen = _tcslen(pszFrom);
 	int nToLen   = _tcslen(pszTo);
 
-	nDestLen--;
+	--nDestLen;
 
 	int j = 0;
-	for (int i = 0; i < nSrcLen && j < nDestLen; i++) {
+	for (int i = 0; i < nSrcLen && j < nDestLen; ++i) {
 #if defined(_MBCS)
 		if (0 == strnicmp(&pszSrc[i], pszFrom, nFromLen))
 #else
@@ -151,8 +151,8 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 			if (_IS_SJIS_1((unsigned char)pszSrc[i]) && i + 1 < nSrcLen && _IS_SJIS_2((unsigned char)pszSrc[i + 1])) {
 				if (j + 1 < nDestLen) {
 					pszDest[j] = pszSrc[i];
-					j++;
-					i++;
+					++j;
+					++i;
 				}else {
 					// SJISの先行バイトだけコピーされるのを防ぐ
 					break;// goto end_of_func;
@@ -160,7 +160,7 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 			}
 #endif
 			pszDest[j] = pszSrc[i];
-			j++;
+			++j;
 		}
 	}
 // end_of_func:;
@@ -204,7 +204,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 	LPCTSTR ps;
 	LPTSTR pd;
 	LPTSTR pd_end = pszDes + (nDesLen - 1);
-	for (ps = pszSrc, pd = pszDes; _T('\0') != *ps; ps++) {
+	for (ps = pszSrc, pd = pszDes; _T('\0') != *ps; ++ps) {
 		if (pd_end <= pd) {
 			if (pd_end == pd) {
 				*pd = _T('\0');
@@ -214,15 +214,15 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 
 		if (_T('%') != *ps) {
 			*pd = *ps;
-			pd++;
+			++pd;
 			continue;
 		}
 
 		// %% は %
 		if (_T('%') == ps[1]) {
 			*pd = _T('%');
-			pd++;
-			ps++;
+			++pd;
+			++ps;
 			continue;
 		}
 
@@ -233,7 +233,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 			int   nPathLen;
 			bool  bFolderPath;
 			LPCTSTR  pStr;
-			ps++;
+			++ps;
 			// %SAKURA%
 			if (0 == auto_strnicmp(_T("SAKURA%"), ps, 7)) {
 				// exeのあるフォルダ
@@ -257,9 +257,9 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 #ifdef _USE_META_ALIAS
 				// メタ文字列がエイリアス名なら書き換える
 				const MetaAlias* pAlias;
-				for (pAlias = &AliasList[0]; nMetaLen < pAlias->nLenth; pAlias++)
+				for (pAlias = &AliasList[0]; nMetaLen < pAlias->nLenth; ++pAlias)
 					; // 読み飛ばす
-				for (; nMetaLen == pAlias->nLenth; pAlias++) {
+				for (; nMetaLen == pAlias->nLenth; ++pAlias) {
 					if (0 == auto_stricmp(pAlias->szAlias, szMeta)) {
 						_tcscpy(szMeta, pAlias->szOrig);
 						break;
@@ -303,8 +303,8 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 			}else {
 				// %...%の終わりの%がない とりあえず，%をコピー
 				*pd = _T('%');
-				pd++;
-				ps--; // 先にps++してしまったので戻す
+				++pd;
+				--ps; // 先に++psしてしまったので戻す
 				continue;
 			}
 
@@ -319,11 +319,11 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 
 			// 最後のフォルダ区切り記号を削除する
 			// [A:\]などのルートであっても削除
-			for (nPathLen = 0; pStr2[nPathLen] != _T('\0'); nPathLen++) {
+			for (nPathLen = 0; pStr2[nPathLen] != _T('\0'); ++nPathLen) {
 #ifdef _MBCS
 				if (_IS_SJIS_1((unsigned char)pStr2[nPathLen]) && _IS_SJIS_2((unsigned char)pStr2[nPathLen + 1])) {
 					// SJIS読み飛ばし
-					nPathLen++; // 2003/01/17 sui
+					++nPathLen; // 2003/01/17 sui
 				}else
 #endif
 				if (_T('\\') == pStr2[nPathLen] && _T('\0') == pStr2[nPathLen + 1]) {
@@ -343,7 +343,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 		}else {
 			// 最後の文字が%だった
 			*pd = *ps;
-			pd++;
+			++pd;
 		}
 	}
 	*pd = _T('\0');

@@ -69,7 +69,7 @@ static
 bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
 {
 	if (F_SPECIAL_FIRST <= code && code <= F_SPECIAL_LAST) {
-		for (int k = 0; k < nSpecialFuncsCount; k++) {
+		for (int k = 0; k < nSpecialFuncsCount; ++k) {
 			if (sSpecialFuncs[k].m_nFunc == code) {
 				auto_strcpy(ptr, LSW(sSpecialFuncs[k].m_nNameId));
 				return true;
@@ -314,7 +314,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 				if (nIdx3 == nSpecialFuncsNum) {
 					// 機能一覧に特殊機能をセット
 					List_ResetContent(hwndLIST_FUNC);
-					for (i = 0; i < nSpecialFuncsCount; i++) {
+					for (i = 0; i < nSpecialFuncsCount; ++i) {
 						List_AddString(hwndLIST_FUNC, LS(sSpecialFuncs[i].m_nNameId));
 					}
 				}else {
@@ -350,7 +350,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 					List_SetCurSel(hwndLIST_RES, nIdx2);
 
-					for (i = csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i > nIdx2; i--) {
+					for (i = csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i > nIdx2; --i) {
 						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i - 1];
 						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i - 1];
 					}
@@ -419,7 +419,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 					List_GetText(hwndLIST_FUNC, nIdx4, szLabel);
 
-					for (i = csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i > nIdx2; i--) {
+					for (i = csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i > nIdx2; --i) {
 						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i - 1];
 						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i - 1];
 					}

@@ -210,7 +210,7 @@ void CFuncLookup::SetListItem(HWND hListBox, int category) const
 	List_ResetContent(hListBox);
 
 	int n = GetItemCount(category);
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n; ++i) {
 		if (Pos2FuncCode(category, i) == F_DISABLE)
 			continue;
 		Pos2FuncName(category, i, pszLabel, _countof(pszLabel));

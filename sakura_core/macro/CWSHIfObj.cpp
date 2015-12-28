@@ -73,7 +73,7 @@ void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 		VARTYPE* varArg = Info->m_varArguments;
 		if (4 < ArgCount) {
 			varArgTmp = varArg = new VARTYPE[ArgCount];
-			for (int i = 0; i < ArgCount; i++) {
+			for (int i = 0; i < ArgCount; ++i) {
 				if (i < 4) {
 					varArg[i] = Info->m_varArguments[i];
 				}else {
@@ -105,7 +105,6 @@ void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 */
 HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Result, void *Data)
 {
-	int I;
 	int ArgCount = Arguments->cArgs;
 
 	const EFunctionCode ID = static_cast<EFunctionCode>(IntID);
@@ -116,17 +115,17 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 
 		// 2011.3.18 syat 引数の順序を正しい順にする
 		auto_array_ptr<VARIANTARG> rgvargParam(new VARIANTARG[ArgCount]);
-		for (I = 0; I < ArgCount; I++) {
-			::VariantInit(&rgvargParam[ArgCount - I - 1]);
-			::VariantCopy(&rgvargParam[ArgCount - I - 1], &Arguments->rgvarg[I]);
+		for (int i = 0; i < ArgCount; ++i) {
+			::VariantInit(&rgvargParam[ArgCount - i - 1]);
+			::VariantCopy(&rgvargParam[ArgCount - i - 1], &Arguments->rgvarg[i]);
 		}
 
 		// 2009.9.5 syat HandleFunctionはサブクラスでオーバーライドする
 		bool r = HandleFunction(m_pView, ID, &rgvargParam[0], ArgCount, ret);
 		if (Result) {::VariantCopyInd(Result, &ret);}
 		VariantClear(&ret);
-		for (I = 0; I < ArgCount; I++) {
-			::VariantClear(&rgvargParam[I]);
+		for (int i = 0; i < ArgCount; ++i) {
+			::VariantClear(&rgvargParam[i]);
 		}
 		return r ? S_OK : E_FAIL;
 	}else {
@@ -135,31 +134,31 @@ HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Resul
 		//	Nov. 29, 2005 FILE 引数を文字列で取得する
 		auto_array_ptr<LPWSTR> StrArgs(new LPWSTR[argCountMin]);
 		auto_array_ptr<int> strLengths(new int[argCountMin]);
-		for (I = ArgCount; I < argCountMin; I++) {
-			StrArgs[I] = NULL;
-			strLengths[I] = 0;
+		for (int i = ArgCount; i < argCountMin; ++i) {
+			StrArgs[i] = NULL;
+			strLengths[i] = 0;
 		}
-		WCHAR* S = NULL;							// 初期化必須
+		WCHAR* s = NULL;							// 初期化必須
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
-		for (I = 0; I < ArgCount; ++I) {
-			if (VariantChangeType(&varCopy.Data, &(Arguments->rgvarg[I]), 0, VT_BSTR) == S_OK) {
-				Wrap(&varCopy.Data.bstrVal)->GetW(&S, &Len);
+		for (int i = 0; i < ArgCount; ++i) {
+			if (VariantChangeType(&varCopy.Data, &(Arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
+				Wrap(&varCopy.Data.bstrVal)->GetW(&s, &Len);
 			}else {
-				S = new WCHAR[1];
-				S[0] = 0;
+				s = new WCHAR[1];
+				s[0] = 0;
 				Len = 0;
 			}
-			StrArgs[ArgCount - I - 1] = S;			// DISPPARAMSは引数の順序が逆転しているため正しい順に直す
-			strLengths[ArgCount - I - 1] = Len;
+			StrArgs[ArgCount - i - 1] = s;			// DISPPARAMSは引数の順序が逆転しているため正しい順に直す
+			strLengths[ArgCount - i - 1] = Len;
 		}
 
 		// 2009.10.29 syat HandleCommandはサブクラスでオーバーライドする
 		HandleCommand(m_pView, ID, const_cast<WCHAR const **>(&StrArgs[0]), &strLengths[0], ArgCount);
 
 		//	Nov. 29, 2005 FILE 配列の破棄なので、[括弧]を追加
-		for (int J = 0; J < ArgCount; ++J) {
-			delete [] StrArgs[J];
+		for (int j = 0; j < ArgCount; ++j) {
+			delete [] StrArgs[j];
 		}
 		return S_OK;
 	}

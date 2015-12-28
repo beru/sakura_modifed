@@ -178,7 +178,7 @@ bool CEditView::OPEN_ExtFromtoExt(
 )
 {
 	// 編集中ファイルの拡張子を調べる
-	for (int i = 0; i < file_extno; i++) {
+	for (int i = 0; i < file_extno; ++i) {
 		if (CheckEXT(GetDocument()->m_cDocFile.GetFilePath(), file_ext[i])) {
 			goto open_c;
 		}
@@ -199,7 +199,7 @@ open_c:;
 
 	_tsplitpath(GetDocument()->m_cDocFile.GetFilePath(), szDrive, szDir, szFname, szExt);
 
-	for (int i = 0; i < open_extno; i++) {
+	for (int i = 0; i < open_extno; ++i) {
 		_tmakepath(szPath, szDrive, szDir, szFname, open_ext[i]);
 		if (!fexist(szPath)) {
 			if (i < open_extno - 1)

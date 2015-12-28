@@ -31,7 +31,7 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 		if (nCurLine <= 0) {
 			return 0;
 		}
-		nCurLine--;
+		--nCurLine;
 		pLine = m_pEditView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nCurLine, &nLineLen);
 		if (!pLine) {
 			return 0;

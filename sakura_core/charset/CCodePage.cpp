@@ -536,7 +536,7 @@ int CCodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 						// サロゲート断片。バイトごとに出力する)
 						nDstUseLen += 4;
 					}else {
-						nDstUseLen++;
+						++nDstUseLen;
 					}
 				}else if (pSrcByte[i+3] == 0x00 && pSrcByte[i+2] <= 0x10) {
 					nDstUseLen += 2;
@@ -627,7 +627,7 @@ int CCodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 						// サロゲート断片。バイトごとに出力する)
 						nDstUseLen += 4;
 					}else {
-						nDstUseLen++;
+						++nDstUseLen;
 					}
 				}else if (pSrcByte[i+1] <= 0x10 && pSrcByte[i] == 0x00) {
 					nDstUseLen += 2;
@@ -738,16 +738,16 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 					nDstUseLen += 4;
 					nBinaryLen = 0;
 				}else {
-					nBinaryLen++;
+					++nBinaryLen;
 				}
-				i++;
+				++i;
 			}else {
 				if (nBinaryLen != 0) {
 					nDstUseLen += 4;
 					nBinaryLen = 0;
 				}
 				nDstUseLen += 4;
-				i++;
+				++i;
 			}
 		}
 		if (nBinaryLen != 0) {
@@ -793,11 +793,11 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 				nDstUseLen += 4;
 			}else if (nBinaryLen == 0) {
 				nBinaryPos = i;
-				nBinaryLen++;
+				++nBinaryLen;
 			}else {
-				nBinaryLen++;
+				++nBinaryLen;
 			}
-			i++;
+			++i;
 		}else {
 			if (nBinaryLen != 0) {
 				if (!BinToUTF32(pSrcShort + nBinaryPos, nBinaryLen, pDst + nDstUseLen, nDstLen - nDstUseLen)) {
@@ -814,7 +814,7 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 				pDstByte[nDstUseLen]   = static_cast<unsigned char>(pSrc[i]);
 			}
 			nDstUseLen += nDstUseCharLen;
-			i++;
+			++i;
 		}
 	}
 	// ファイル末尾の端数は、そのままの長さで出力
@@ -852,16 +852,16 @@ int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 					nDstUseLen += 4;
 					nBinaryLen = 0;
 				}else {
-					nBinaryLen++;
+					++nBinaryLen;
 				}
-				i++;
+				++i;
 			}else {
 				if (nBinaryLen != 0) {
 					nDstUseLen += 4;
 					nBinaryLen = 0;
 				}
 				nDstUseLen += 4;
-				i++;
+				++i;
 			}
 		}
 		if (nBinaryLen != 0) {
@@ -907,11 +907,11 @@ int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 				nDstUseLen += 4;
 			}else if (nBinaryLen == 0) {
 				nBinaryPos = i;
-				nBinaryLen++;
+				++nBinaryLen;
 			}else {
-				nBinaryLen++;
+				++nBinaryLen;
 			}
-			i++;
+			++i;
 		}else {
 			if (nBinaryLen != 0) {
 				if (!BinToUTF32(pSrcShort + nBinaryPos, nBinaryLen, pDst + nDstUseLen, nDstLen - nDstUseLen)) {
@@ -928,7 +928,7 @@ int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 				pDstByte[nDstUseLen+3]   = static_cast<unsigned char>(pSrc[i]);
 			}
 			nDstUseLen += nDstUseCharLen;
-			i++;
+			++i;
 		}
 	}
 	// ファイル末尾の端数は、そのままの長さで出力

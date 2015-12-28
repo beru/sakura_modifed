@@ -126,7 +126,7 @@ bool CSearchStringPattern::SetPattern(
 			m_pszPatternCase = new wchar_t[nPatternLen + 1];
 			m_pszCaseKeyRef = m_pszPatternCase;
 			// note: 合成文字,サロゲートの「大文字小文字同一視」未対応
-			for (int i = 0; i < m_nPatternLen; i++) {
+			for (int i = 0; i < m_nPatternLen; ++i) {
 				m_pszPatternCase[i] = (wchar_t)skr_towlower(pszPattern[i]);
 			}
 			m_pszPatternCase[nPatternLen] = L'\0';
@@ -203,7 +203,7 @@ const wchar_t* CSearchAgent::SearchString(
 	if (!bLoHiCase || nPatternLen > 5) {
 		for (int nPos = nIdxPos; nPos <= nCompareTo;) {
 			int i;
-			for (i = 0; i < nPatternLen && toLoHiLower(bLoHiCase, pLine[nPos + i]) == pszPattern[i]; i++) {
+			for (i = 0; i < nPatternLen && toLoHiLower(bLoHiCase, pLine[nPos + i]) == pszPattern[i]; ++i) {
 			}
 			if (i >= nPatternLen) {
 				return &pLine[nPos];
@@ -234,17 +234,17 @@ const wchar_t* CSearchAgent::SearchString(
 				int index = CSearchStringPattern::GetMapIndex((wchar_t)toLoHiLower(bLoHiCase, pLine[nPos + nPatternLen));
 				nPos += useSkipMap[index];
 #else
-				nPos++;
+				++nPos;
 #endif
 				continue;
 			}
 			// 途中まで一致ならずらして継続(KMP)
 			int i = 1;
-			nPos++;
+			++nPos;
 			while (0 < i) {
 				while (i < nPatternLen && toLoHiLower(bLoHiCase, pLine[nPos]) == pszPattern[i]) {
-					i++;
-					nPos++;
+					++i;
+					++nPos;
 				}
 				if (i >= nPatternLen) {
 					return &pLine[nPos - nPatternLen];
@@ -280,7 +280,7 @@ void CSearchAgent::CreateCharCharsArr(
 )
 {
 	int* pnCharCharsArr = new int[nSrcLen];
-	for (int i = 0; i < nSrcLen; /*i++*/) {
+	for (int i = 0; i < nSrcLen; /*++i*/) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		pnCharCharsArr[i] = CNativeW::GetSizeOfChar(pszPattern, nSrcLen, i);
 		if (0 == pnCharCharsArr[i]) {
@@ -541,7 +541,7 @@ int CSearchAgent::SearchWord(
 					break;
 				}else {
 					// この行でマッチした位置が存在しないので、前の行を検索へ
-					nLinePos--;
+					--nLinePos;
 					pDocLine = pDocLine->GetPrevLine();
 					nIdxPos = 0;
 					if (pDocLine) {
@@ -632,7 +632,7 @@ int CSearchAgent::SearchWord(
 					}
 				}
 				// 前の行を見に行く
-				nLinePos--;
+				--nLinePos;
 				pDocLine = pDocLine->GetPrevLine();
 				if (pDocLine) {
 					nNextWordFrom = pDocLine->GetLengthWithEOL() - pDocLine->GetEol().GetLen();
@@ -659,7 +659,7 @@ int CSearchAgent::SearchWord(
 					goto end_of_func;
 				}
 				// 次の行を見に行く
-				nLinePos++;
+				++nLinePos;
 				pDocLine = pDocLine->GetNextLine();
 				nNextWordFrom = CLogicInt(0);
 			}
@@ -717,7 +717,7 @@ int CSearchAgent::SearchWord(
 						}
 					}
 				}
-				nLinePos--;
+				--nLinePos;
 				pDocLine = pDocLine->GetPrevLine();
 				nIdxPos = 0;
 				if (pDocLine) {
@@ -867,12 +867,12 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	int i = pArg->sDelRange.GetTo().y;
 	if (0 < pArg->sDelRange.GetTo().y && !pCDocLine) {
 		pCDocLine = m_pcDocLineMgr->GetLine(pArg->sDelRange.GetTo().GetY2() - CLogicInt(1));
-		i--;
+		--i;
 	}
 	bool bFirstLine = true;
 	bool bSetMark = false;
 	/* 後ろから処理していく */
-	for (; i >= pArg->sDelRange.GetFrom().y && pCDocLine; i--) {
+	for (; i >= pArg->sDelRange.GetFrom().y && pCDocLine; --i) {
 		pLine = pCDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
 		nLineLen = pCDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
 		pCDocLinePrev = pCDocLine->GetPrevLine();
@@ -958,7 +958,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 								nBufferReserve = n;
 							}
 						}else {
-							nAccessCount++;
+							++nAccessCount;
 						}
 					}else {
 						pDocLinePrevAccess = pCDocLine;
@@ -1145,7 +1145,7 @@ prev_line:;
 		}
 	}
 	int nCount;
-	for (nCount = 0; nCount < nInsSize; nCount++) {
+	for (nCount = 0; nCount < nInsSize; ++nCount) {
 		CNativeW& cmemLine = (*pArg->pInsData)[nCount].cmemLine;
 #ifdef _DEBUG
 		int nLen = cmemLine.GetStringLength();

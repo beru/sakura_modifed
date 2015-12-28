@@ -156,7 +156,7 @@ int CDocOutline::ReadRuleFile(
 				pcOneRule[nCount].nLength = wcslen(pcOneRule[nCount].szMatch);
 				pcOneRule[nCount].nRegexOption = regexOption;
 				pcOneRule[nCount].nRegexMode = bRegexRep2 ? 1 : 0; // 文字列が正しい時だけReplaceMode
-				nCount++;
+				++nCount;
 				if (bTopDummy || bRegex) {
 					pszToken = NULL;
 				}else {
@@ -182,7 +182,7 @@ int CDocOutline::ReadRuleFile(
 				}else if (13 < strLine.length() && 0 == _wcsnicmp(strLine.c_str() + 1, L"RegexOption=", 12)) {
 					int nCaseFlag = CBregexp::optCaseSensitive;
 					regexOption = 0;
-					for (int i = 13; i < (int)strLine.length(); i++) {
+					for (int i = 13; i < (int)strLine.length(); ++i) {
 						if (strLine[i] == L'i') {
 							nCaseFlag = 0;
 						}else if (strLine[i] == L'g') {
@@ -242,7 +242,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 	CBregexp* pRegex = NULL;
 	if (bRegex) {
 		pRegex = new CBregexp[nCount];
-		for (int i = 0; i < nCount; i++) {
+		for (int i = 0; i < nCount; ++i) {
 			if (0 == test[i].nLength) {
 				continue;
 			}
@@ -315,7 +315,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		// 先頭文字が見出し記号のいずれかであれば、次へ進む
 		wchar_t* pszText = NULL;
 		int j;
-		for (j = 0; j < nCount; j++) {
+		for (j = 0; j < nCount; ++j) {
 			if (bRegex) {
 				if (test[j].nRegexMode == 0) {
 					if (0 < test[j].nLength && pRegex[j].Match(pLine, nLineLen, 0)) {
@@ -385,7 +385,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		// nDepthを計算
 		int k;
 		BOOL bAppend = TRUE;
-		for (k = 0; k < nDepth; k++) {
+		for (k = 0; k < nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {
 				break;
@@ -398,9 +398,9 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		}else if (nMaxStack> k) {
 			// いままでに同じ見出しが存在しなかった。
 			// Lvが高い場合は、一致するまでさかのぼる
-			for (k = nDepth - 1; 0 <= k ; k--) {
+			for (k = nDepth - 1; 0 <= k ; --k) {
 				if (nLvStack[k] <= test[j].nLv) {
-					k++;
+					++k;
 					break;
 				}
 			}
@@ -418,7 +418,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		
 		if (FALSE != bAppend) {
 			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , pszText, 0, nDepth);
-			nDepth++;
+			++nDepth;
 		}
 		delete [] pszText;
 

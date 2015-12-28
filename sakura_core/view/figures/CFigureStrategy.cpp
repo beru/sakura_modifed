@@ -160,7 +160,7 @@ void CFigureSpace::DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos& sPo
 
 		int nLength = (Int)(pInfo->m_pDispPos->GetDrawCol() - sPos.GetDrawCol());
 		wchar_t* pszText = new wchar_t[nLength];
-		for (int i = 0; i < nLength; i++)
+		for (int i = 0; i < nLength; ++i)
 			pszText[i] = L' ';
 		pInfo->m_pcView->GetTextDrawer().DispText(
 			pInfo->m_gr,

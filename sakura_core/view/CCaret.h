@@ -42,21 +42,21 @@ public:
 	}
 	// 表示非表示を切り替えられないようにする
 	void Lock() {
-		m_nLockCounter++;
+		++m_nLockCounter;
 	}
 	// 表示非表示を切り替えられるようにする
 	void UnLock() {
-		m_nLockCounter--;
+		--m_nLockCounter;
 		if (m_nLockCounter < 0) {
 			m_nLockCounter = 0;
 		}
 	}
 	void UnderLineLock() {
-		m_nUnderLineLockCounter++;
+		++m_nUnderLineLockCounter;
 	}
 	// 表示非表示を切り替えられるようにする
 	void UnderLineUnLock() {
-		m_nUnderLineLockCounter--;
+		--m_nUnderLineLockCounter;
 		if (m_nUnderLineLockCounter < 0) {
 			m_nUnderLineLockCounter = 0;
 		}

@@ -33,7 +33,7 @@
 // デストラクタ
 CWSHPlugin::~CWSHPlugin(void)
 {
-	for (auto it = m_plugs.begin(); it != m_plugs.end(); it++) {
+	for (auto it = m_plugs.begin(); it != m_plugs.end(); ++it) {
 		delete *it;
 	}
 }

@@ -122,7 +122,7 @@ void CDocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
 	delete pcDocLineDel;
 
 	// 行数減算
-	m_nLines--;
+	--m_nLines;
 	if (CLogicInt(0) == m_nLines) {
 		// データがなくなった
 		_Init();
@@ -172,7 +172,7 @@ const CDocLine* CDocLineMgr::GetLine(CLogicInt nLine) const
 					return pDocLine;
 				}
 				pDocLine = pDocLine->GetNextLine();
-				nCounter++;
+				++nCounter;
 			}
 		}else {
 			nCounter = m_nLines - CLogicInt(1);
@@ -185,7 +185,7 @@ const CDocLine* CDocLineMgr::GetLine(CLogicInt nLine) const
 					return pDocLine;
 				}
 				pDocLine = pDocLine->GetPrevLine();
-				nCounter--;
+				--nCounter;
 			}
 		}
 
@@ -218,7 +218,7 @@ const CDocLine* CDocLineMgr::GetLine(CLogicInt nLine) const
 					return pDocLine;
 				}
 				pDocLine = pDocLine->GetPrevLine();
-				nCounter--;
+				--nCounter;
 			}
 		}
 	}
@@ -308,7 +308,7 @@ void CDocLineMgr::_InsertAfterPos(CDocLine* pDocLineNew, CDocLine* pPos)
 	}
 
 	// 行数を加算
-	m_nLines++;
+	++m_nLines;
 }
 
 
@@ -362,7 +362,7 @@ void CDocLineMgr::DUMP()
 			pDocLineEnd = pDocLine;
 		}
 		pDocLine = pDocLine->GetNextLine();
-		nNum++;
+		++nNum;
 	}
 	
 	if (pDocLineEnd != m_pDocLineBot) {

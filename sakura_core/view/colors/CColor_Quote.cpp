@@ -126,7 +126,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 				&& cStr.At(nPos) == '"'
 				&& nPos + 1 < cStr.GetLength()
 			) {
-				for (int i = nPos + 1; i < cStr.GetLength(); i++) {
+				for (int i = nPos + 1; i < cStr.GetLength(); ++i) {
 					if (cStr.At(i) == '(') {
 						if (nPos + 1 < i) {
 							m_tag = L')';
@@ -145,7 +145,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 		case STRING_LITERAL_HTML:
 			{
 				int i;
-				for (i = nPos - 1; 0 <= i; i--) {
+				for (i = nPos - 1; 0 <= i; --i) {
 					if (cStr.At(i) != L' ' && cStr.At(i) != L'\t') {
 						break;
 					}

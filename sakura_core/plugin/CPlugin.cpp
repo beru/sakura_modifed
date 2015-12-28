@@ -53,7 +53,7 @@ CPlugin::CPlugin(const tstring& sBaseDir)
 // デストラクタ
 CPlugin::~CPlugin(void)
 {
-	for (auto it = m_options.begin(); it != m_options.end(); it++) {
+	for (auto it = m_options.begin(); it != m_options.end(); ++it) {
 		delete *it;
 	}
 }
@@ -237,7 +237,7 @@ int CPlugin::AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* i
 	if (!label) { label = L""; }
 
 	// コマンドプラグIDは1から振る
-	m_nCommandCount++;
+	++m_nCommandCount;
 	CPlug* newPlug = CreatePlug(*this, m_nCommandCount, PP_COMMAND_STR, wstring(handler), wstring(label));
 	if (icon) {
 		newPlug->m_sIcon = icon;

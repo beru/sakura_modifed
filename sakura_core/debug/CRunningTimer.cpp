@@ -41,7 +41,7 @@ CRunningTimer::CRunningTimer(const char* pszText)
 CRunningTimer::~CRunningTimer()
 {
 	WriteTrace("Exit Scope");
-	m_nNestCount--;
+	--m_nNestCount;
 	return;
 }
 

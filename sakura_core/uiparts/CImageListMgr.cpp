@@ -378,7 +378,7 @@ int CImageListMgr::Add(const TCHAR* szPath)
 		Extend();
 	}
 	int index = m_nIconCount;
-	m_nIconCount++;
+	++m_nIconCount;
 
 	// ÉAÉCÉRÉìÇì«Ç›çûÇﬁ
 	HBITMAP hExtBmp = (HBITMAP)::LoadImage(NULL, szPath, IMAGE_BITMAP, 0, 0,

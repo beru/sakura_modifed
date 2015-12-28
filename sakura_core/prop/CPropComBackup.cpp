@@ -410,7 +410,7 @@ int CPropBackup::GetData(HWND hwndDlg)
 	int	 nN;
 	nN = ::GetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, NULL, FALSE);	//	Oct. 29, 2001 genta
 
-//	for (nN = 0, pDigit = szNumBuf; *pDigit != '\0'; pDigit++) {
+//	for (nN = 0, pDigit = szNumBuf; *pDigit != '\0'; ++pDigit) {
 //		if ('0' <= *pDigit && *pDigit <= '9') {
 //			nN = nN * 10 + *pDigit - '0';
 //		}

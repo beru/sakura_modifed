@@ -555,7 +555,7 @@ static int GetLengthByMode(HGLOBAL hClipData, const BYTE* pData, int nMode, int 
 		const size_t len = nMemLength / 4;
 		nLength = 0;
 		while (pData32[nLength] != 0 && nLength < len) {
-			nLength++;
+			++nLength;
 		}
 		nLength *= 4;
 	}else {

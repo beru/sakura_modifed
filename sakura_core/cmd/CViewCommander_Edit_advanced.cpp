@@ -464,7 +464,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 
 		auto& caret = GetCaret();
 		CLogicInt nDelLen;
-		for (CLayoutInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().GetY2(); i++) {
+		for (CLayoutInt i = sSelectOld.GetFrom().GetY2(); i < sSelectOld.GetTo().GetY2(); ++i) {
 			CLayoutInt nLineCountPrev = GetDocument()->m_cLayoutMgr.GetLineCount();
 
 			const CLayout*	pcLayout;
@@ -757,7 +757,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=è∏èá,FALSE=ç~èá
 		int nLen = lastData.cmemLine.GetStringLength();
 		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 		while (0 <nLen && WCODE::IsLineDelimiter(lastData.cmemLine[nLen-1], bExtEol)) {
-			nLen--;
+			--nLen;
 		}
 		lastData.cmemLine._SetStringLength(nLen);
 	}

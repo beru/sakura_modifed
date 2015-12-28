@@ -150,24 +150,24 @@ int main(int argc,char* argv[])
 	const char* out_file = NULL;
 	const char* mode_name = NULL;
 	const char* enum_name = "";
-	for (int i=1; i<argc; i++){
+	for (int i=1; i<argc; ++i){
 		char* p = argv[i];
 		if (*p == '/') *p = '-';
 		if (strncmp(p, "-in", 3) == 0) {
 			p += 3;
-			if (*p != '\0') { if (*p == '=') p++; in_file = p; }
+			if (*p != '\0') { if (*p == '=') ++p; in_file = p; }
 			else in_file = argv[++i];
 		}else if (strncmp(p, "-out", 4) == 0) {
 			p += 4;
-			if (*p != '\0') { if (*p == '=') p++; out_file = p; }
+			if (*p != '\0') { if (*p == '=') ++p; out_file = p; }
 			else out_file = argv[++i];
 		}else if (strncmp(p, "-mode", 5) == 0) {
 			p += 5;
-			if (*p != '\0') { if (*p == '=') p++; mode_name = p; }
+			if (*p != '\0') { if (*p == '=') ++p; mode_name = p; }
 			else mode_name = argv[++i];
 		}else if (strncmp(p, "-enum", 5) == 0) {
 			p += 5;
-			if (*p != '\0') { if (*p == '=') p++; enum_name = p; }
+			if (*p != '\0') { if (*p == '=') ++p; enum_name = p; }
 			else enum_name = argv[++i];
 		}else {
 			printf("Error: •s–¾‚Èˆø”[%s]\n", p);
@@ -247,18 +247,18 @@ next:
 
 		// ID•¶Žš—ñ -> id
 		char id[256];
-		while (*p && !is_token(*p)) p++;
+		while (*p && !is_token(*p)) ++p;
 		q = p;
-		while (*q && is_token(*q)) q++;
+		while (*q && is_token(*q)) ++q;
 		strncpy_s(id, _countof(id), p, q - p);
 		id[q - p] = '\0';
 		p = q;
 
 		// ’l -> value
 		char value[256];
-		while (*p && !is_token(*p)) p++;
+		while (*p && !is_token(*p)) ++p;
 		q = p;
-		while (*q && is_token(*q)) q++;
+		while (*q && is_token(*q)) ++q;
 		strncpy_s(value, _countof(value), p, q - p);
 		value[q - p] = '\0';
 		p = q;

@@ -41,8 +41,8 @@ public:
 	void OnAfterLoad(const SLoadInfo& sLoadInfo);
 	
 	// ŠÄŽ‹‚ÌˆêŽž’âŽ~
-	void PauseWatching() { m_nPauseCount++; }
-	void ResumeWatching() { m_nPauseCount--; assert(m_nPauseCount >= 0); }
+	void PauseWatching() { ++m_nPauseCount; }
+	void ResumeWatching() { --m_nPauseCount; assert(m_nPauseCount >= 0); }
 	bool IsPausing() const { return m_nPauseCount >= 1; }
 	
 public://#####‰¼

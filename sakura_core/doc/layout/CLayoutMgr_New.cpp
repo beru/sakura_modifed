@@ -299,7 +299,7 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 	if (nEnd < 0 || nEnd >= nLines) {	// 算出終了行の指定なし または 文書行数以上
 		nEnd = nLines;
 	}else {
-		nEnd++;					// 算出終了行の次行
+		++nEnd;					// 算出終了行の次行
 	}
 	CLayout* pLayout;
 	// 算出開始レイアウト行を探す
@@ -319,7 +319,7 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 				break;
 			}
 			pLayout = pLayout->GetNextLayout();
-			nCount++;
+			++nCount;
 		}
 	}else {
 		// 後方からサーチ
@@ -336,7 +336,7 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 #endif
 
 	// レイアウト行の最大幅を取り出す
-	for (CLayoutInt i = nStart; i < nEnd; i++) {
+	for (CLayoutInt i = nStart; i < nEnd; ++i) {
 		if (!pLayout) {
 			break;
 		}

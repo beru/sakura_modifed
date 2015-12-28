@@ -888,7 +888,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 		const int nBuffLenTag = 13 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		const int nNum = m_pcFuncInfoArr->GetNum();
 		int nBuffLen = 0;
-		for (int i = 0; i < nNum; i++) {
+		for (int i = 0; i < nNum; ++i) {
 			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 		}
@@ -954,10 +954,10 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 					m = k + 1;
 				}else if (1 == nCharChars && _T('<') == pWork[k]) {
 					// namesp::function<std::string> のようなものを処理する
-					nNestTemplate++;
+					++nNestTemplate;
 				}else if (1 == nCharChars && _T('>') == pWork[k]) {
 					if (0 < nNestTemplate) {
-						nNestTemplate--;
+						--nNestTemplate;
 					}
 				}
 				if (2 == nCharChars) {
@@ -1026,7 +1026,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 							//_tcscat(pClassName, _T(" クラス"));
 							_tcscat(pClassName, to_tchar(m_pcFuncInfoArr->GetAppendText(FL_OBJ_CLASS).c_str()));
 							tvis.item.lParam = nDummylParam;
-							nDummylParam++;
+							++nDummylParam;
 						}
 					}
 
@@ -1073,7 +1073,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 					tvg.item.pszText = const_cast<TCHAR*>(sGlobal.c_str());
 					tvg.item.lParam = nDummylParam;
 					htiGlobal = TreeView_InsertItem(hwndTree, &tvg);
-					nDummylParam++;
+					++nDummylParam;
 				}
 				htiClass = htiGlobal;
 			}
@@ -1186,7 +1186,7 @@ void CDlgFuncList::SetListVB (void)
 		const int nBuffLenTag = 17 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		const int nNum = m_pcFuncInfoArr->GetNum();
 		int nBuffLen = 0;
-		for (int i = 0; i < nNum; i++) {
+		for (int i = 0; i < nNum; ++i) {
 			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 		}
@@ -1442,17 +1442,17 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 		if (tagjump) {
 			nBuffLenTag = 10 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		}
-		for (int i = 0; i < nFuncInfoArrNum; i++) {
+		for (int i = 0; i < nFuncInfoArrNum; ++i) {
 			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			if (pcFuncInfo->IsAddClipText()) {
 				nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength() + pcFuncInfo->m_nDepth * 2;
-				nCount++;
+				++nCount;
 			}
 		}
 		m_cmemClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nCount);
 	}
 
-	for (int i = 0; i < nFuncInfoArrNum; i++) {
+	for (int i = 0; i < nFuncInfoArrNum; ++i) {
 		CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
 		/*	新しいアイテムを作成
@@ -1549,7 +1549,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 			}
 
 			if (!nolabel) {
-				for (int cnt = 0; cnt < nStackPointer; cnt++) {
+				for (int cnt = 0; cnt < nStackPointer; ++cnt) {
 					text.AppendString(_T("  "));
 				}
 				text.AppendString(_T(" "));
@@ -1617,7 +1617,7 @@ void CDlgFuncList::SetTreeFile()
 	int nFuncInfo = 0;
 	std::vector<HTREEITEM> hParentTree;
 	hParentTree.push_back(TVI_ROOT);
-	for (int i = 0; i < (int)m_fileTreeSetting.m_aItems.size(); i++) {
+	for (int i = 0; i < (int)m_fileTreeSetting.m_aItems.size(); ++i) {
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szPath2[_MAX_PATH];
 		const SFileTreeItem& item = m_fileTreeSetting.m_aItems[i];
@@ -1665,14 +1665,14 @@ void CDlgFuncList::SetTreeFile()
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = -(nFuncInfo * 10 + 3);
 			HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
-			nFuncInfo++;
+			++nFuncInfo;
 			SetTreeFileSub( hParent, NULL );
 		}else if (item.m_eFileTreeItemType == EFileTreeItemType_File) {
 			m_pcFuncInfoArr->AppendData( CLogicInt(-1), CLogicInt(-1), CLayoutInt(-1), CLayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = nFuncInfo;
 			TreeView_InsertItem(hwndTree, &tvis);
-			nFuncInfo++;
+			++nFuncInfo;
 		}else if (item.m_eFileTreeItemType == EFileTreeItemType_Folder) {
 			pszLabel = item.m_szLabelName;
 			if (pszLabel[0] == _T('\0')) {
@@ -1729,7 +1729,7 @@ void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
 	cGrepEnumFilterFolders.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFolders );
 	int nItemCount = cGrepEnumFilterFolders.GetCount();
 	count = nItemCount;
-	for (int i = 0; i < nItemCount; i++) {
+	for (int i = 0; i < nItemCount; ++i) {
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
 		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
@@ -1744,7 +1744,7 @@ void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
 	cGrepEnumFilterFiles.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFiles );
 	nItemCount = cGrepEnumFilterFiles.GetCount();
 	count += nItemCount;
-	for (int i = 0; i < nItemCount; i++) {
+	for (int i = 0; i < nItemCount; ++i) {
 		const TCHAR* pFile = cGrepEnumFilterFiles.GetFileName(i);
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
@@ -1962,7 +1962,7 @@ BOOL CDlgFuncList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSizeClient.x = rc.right;
 	m_ptDefaultSizeClient.y = rc.bottom;
 
-	for (int i = 0; i < _countof(anchorList); i++) {
+	for (int i = 0; i < _countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 		// ドッキング中はウィンドウ幅いっぱいまで伸ばす
 		if (IsDocking()) {
@@ -2299,7 +2299,7 @@ BOOL CDlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rcDlg.right - rcDlg.left;
 	ptNew.y = rcDlg.bottom - rcDlg.top;
 
-	for (int i = 0 ; i < _countof(anchorList); i++) {
+	for (int i = 0 ; i < _countof(anchorList); ++i) {
 		HWND hwndCtrl = GetItemHwnd(anchorList[i].id);
 		ResizeItem(hwndCtrl, m_ptDefaultSizeClient, ptNew, m_rcItems[i], anchorList[i].anchor, (anchorList[i].anchor != ANCHOR_ALL));
 //	2013.2.6 aroka ちらつき防止用の試行錯誤
@@ -2659,13 +2659,13 @@ void CDlgFuncList::GetDockSpaceRect(LPRECT pRect)
 	int nCount = 1;
 	if (IsDocking()) {
 		hwnd[nCount] = GetHwnd();
-		nCount++;
+		++nCount;
 	}
 	hwnd[nCount] = pcEditView->m_pcEditWnd->GetMiniMap().GetHwnd();
 	if (hwnd[nCount]) {
-		nCount++;
+		++nCount;
 	}
-	for (int i = 0; i < nCount; i++) {
+	for (int i = 0; i < nCount; ++i) {
 		::GetWindowRect(hwnd[i], &rc[i]);
 	}
 	if (1 == nCount) {
@@ -2755,7 +2755,7 @@ int CDlgFuncList::HitTestCaptionButton(int xPos, int yPos)
 	rcBtn.left = rcBtn.right - ::GetSystemMetrics(SM_CXSMSIZE);
 	rcBtn.bottom = rcBtn.top + ::GetSystemMetrics(SM_CYSMSIZE);
 	int nBtn = -1;
-	for (int i = 0; i < DOCK_BUTTON_NUM; i++) {
+	for (int i = 0; i < DOCK_BUTTON_NUM; ++i) {
 		if (::PtInRect(&rcBtn, pt)) {
 			nBtn = i;	// 右端から i 番目のボタン上
 			break;
@@ -3185,7 +3185,7 @@ INT_PTR CDlgFuncList::OnNcPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	::OffsetRect(&rcBtn, 0, 1);
 	rcBtn.left = rcBtn.right - ::GetSystemMetrics(SM_CXSMSIZE);
 	rcBtn.bottom = rcBtn.top + ::GetSystemMetrics(SM_CYSMSIZE);
-	for (int i = 0; i < DOCK_BUTTON_NUM; i++) {
+	for (int i = 0; i < DOCK_BUTTON_NUM; ++i) {
 		int nClrCaptionText;
 		// マウスカーソルがボタン上にあればハイライト
 		if (::PtInRect(&rcBtn, pt)) {
@@ -3246,7 +3246,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_FLOAT,      LS(STR_DLGFNCLST_MENU_FLOATING));
 	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_UNDOCKABLE, LS(STR_DLGFNCLST_MENU_NODOCK));
 	int iTo = iPosRef - 1;
-	for (int i = iFrom; i <= iTo; i++) {
+	for (int i = iFrom; i <= iTo; ++i) {
 		if (::GetMenuItemID(hMenuRef, i) == (100 + eDockSide)) {
 			::CheckMenuRadioItem(hMenuRef, iFrom, iTo, i, MF_BYPOSITION);
 			break;
@@ -3311,7 +3311,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				}
 			}
 			STypeConfig* type = new STypeConfig();
-			for (int i = 0; i < GetDllShareData().m_nTypesCount; i++) {
+			for (int i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
 				CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 				type->m_bOutlineDockDisp = CommonSet().m_bOutlineDockDisp;
 				type->m_eOutlineDockSide = CommonSet().m_eOutlineDockSide;
@@ -3874,7 +3874,7 @@ void CDlgFuncList::LoadFileTreeSetting( CFileTreeSetting& data, SFilePath& IniDi
 		::GetLongFileName( _T("."), szPath );
 		auto_strcat( szPath, _T("\\") );
 		int maxDir = CDlgTagJumpList::CalcMaxUpDirectory( szPath );
-		for (int i = 0; i <= maxDir; i++) {
+		for (int i = 0; i <= maxDir; ++i) {
 			CDataProfile cProfile;
 			cProfile.SetReadingMode();
 			std::tstring strIniFileName;
@@ -3916,7 +3916,7 @@ void CDlgFuncList::LoadFileTreeSetting( CFileTreeSetting& data, SFilePath& IniDi
 			// 共通設定orタイプ別設定から読み込み
 			//m_fileTreeSetting = *pFileTree;
 			data.m_aItems.resize( pFileTree->m_nItemCount );
-			for (int i = 0; i < pFileTree->m_nItemCount; i++) {
+			for (int i = 0; i < pFileTree->m_nItemCount; ++i) {
 				data.m_aItems[i] = pFileTree->m_aItems[i];
 			}
 		}

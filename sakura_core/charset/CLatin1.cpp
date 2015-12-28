@@ -87,7 +87,7 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 			if (nret == 0) {
 				*pw = static_cast<unsigned short>(*pr);
 			}
-			pw++;
+			++pw;
 		}
 		else {
 			*pw++ = static_cast<unsigned short>(*pr);

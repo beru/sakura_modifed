@@ -132,9 +132,9 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 			GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
 		)
 	) {
-		len--;
+		--len;
 	}
-	if (len > 0 && s[len-1] == L'\r') len--;
+	if (len > 0 && s[len-1] == L'\r') --len;
 
 	if (len > 0 && s[len-1] == L'\\') {
 		if (len == 1) {
@@ -627,7 +627,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
-					i--;
+					--i;
 					continue;
 				}
 			}else if (2 == nMode) {
@@ -647,7 +647,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
-					i--;
+					--i;
 					continue;
 				}else {
 					++nWordIdx;
@@ -682,10 +682,10 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					}
 					if (nMode2 == M2_TEMPLATE || nMode2 == M2_TEMPLATE_SAVE || nMode2 == M2_TEMPLATE_WORD) {
 						if (pLine[i] == L'<') {
-							nNestLevel_template++;
+							++nNestLevel_template;
 						}else if (pLine[i] == L'>') {
 							wcscpy_s(szItemName, szTemplateName);
-							nNestLevel_template--;
+							--nNestLevel_template;
 							if (nNestLevel_template == 0) {
 								if (nMode2 == M2_TEMPLATE) {
 									nMode2 = M2_NORMAL;
@@ -742,7 +742,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 						) {
 							// C++11 raw string
 							// R"abc(string)abc"
-							for (int k = i + 1; k < nLineLen; k++) {
+							for (int k = i + 1; k < nLineLen; ++k) {
 								if (pLine[k] == L'(') {
 									// i = 1, k = 5, len = 5-1-1=3
 									CLogicInt tagLen = t_min(k - i - 1, CLogicInt(_countof(szRawStringTag) - 1));
@@ -867,9 +867,9 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					bool bOperator = false;
 					if (nMode2 == M2_NORMAL && nNestLevel_fparam == 0 && C_IsOperator(szWordPrev, nLen)) {
 						int k;
-						for (k = i + 1; k < nLineLen && C_IsSpace(pLine[k], bExtEol); k++) {}
+						for (k = i + 1; k < nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
 						if (k < nLineLen && pLine[k] == L')') {
-							for (k++; k < nLineLen && C_IsSpace(pLine[k], bExtEol); k++) {}
+							for (++k; k < nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
 							if (k < nLineLen && (pLine[k] == L'<' || pLine[k] == L'(')) {
 								// オペレータだった operator()(/ operator()<;
 								if (nLen + 1 < _countof(szWordPrev)) {
@@ -1186,7 +1186,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 								nMode2 = M2_TEMPLATE_SAVE;
 						}
 						nMode = 2;
-						i--;
+						--i;
 					}
 				}
 			}
@@ -1257,7 +1257,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				*/
 
 				int i;
-				for (i = nCaretPosX_PHY; i < nLineLen; i++) {
+				for (i = nCaretPosX_PHY; i < nLineLen; ++i) {
 					if (WCODE::TAB != pLine[i] && WCODE::SPACE != pLine[i]) {
 						break;
 					}
@@ -1275,7 +1275,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 			int i;
-			for (i = 0; i < nWork; i++) {
+			for (i=0; i<nWork; ++i) {
 				if (WCODE::TAB != pLine[i] && WCODE::SPACE != pLine[i]) {
 					break;
 				}
@@ -1335,15 +1335,15 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						if (j == GetCaret().GetCaretLogicPos().y) {
 							if (L'{' == wcChar && L'}' == pLine2[k]) {
 								wcChar = L'}';
-								nLevel--;	// {}の入れ子レベル
+								--nLevel;	// {}の入れ子レベル
 							}
 							if (L'(' == wcChar && L')' == pLine2[k]) {
 								wcChar = L')';
-								nLevel--;	// {}の入れ子レベル
+								--nLevel;	// {}の入れ子レベル
 							}
 						}
 
-						nLevel++;	// {}の入れ子レベル
+						++nLevel;	// {}の入れ子レベル
 					}
 				}
 				if (1 == nCharChars && (L'{' == pLine2[k] || L'(' == pLine2[k])) {
@@ -1367,7 +1367,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						if (0 == nLevel) {
 							break;
 						}else {
-							nLevel--;	// {}の入れ子レベル
+							--nLevel;	// {}の入れ子レベル
 						}
 					}
 				}
@@ -1382,7 +1382,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				continue;
 			}
 
-			for (m = 0; m < nLineLen2; m++) {
+			for (m = 0; m < nLineLen2; ++m) {
 				if (WCODE::TAB != pLine2[m] && WCODE::SPACE != pLine2[m]) {
 					break;
 				}
@@ -1407,7 +1407,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						i += nCharChars;
 					}
 					nCharChars = (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(CLayoutInt(m));
-					for (int i = 0; i < nCharChars; i++)
+					for (int i=0; i<nCharChars; ++i)
 						pszData[nDataLen + i] = WCODE::SPACE;
 					pszData[nDataLen + nCharChars] = L'\0';
 					nDataLen += CLogicInt(nCharChars);

@@ -76,7 +76,7 @@ bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 		// <<<[\t]*((['"][_A-Za-z0-9]+['"])|[_A-Za-z0-9]+)[\r\n]+
 		const int length = cStr.GetLength();
 		int nPosIdStart = nPos + 3;
-		for (; nPosIdStart < length; nPosIdStart++) {
+		for (; nPosIdStart < length; ++nPosIdStart) {
 			if (cStr.At(nPosIdStart) != L'\t' && cStr.At(nPosIdStart) != L' ') {
 				break;
 			}
@@ -87,10 +87,10 @@ bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 		}
 		if (cStr.At(nPosIdStart) == L'\'' || cStr.At(nPosIdStart) == L'"') {
 			quote = cStr.At(nPosIdStart);
-			nPosIdStart++;
+			++nPosIdStart;
 		}
 		int i = nPosIdStart;
-		for (; i < length; i++) {
+		for (; i < length; ++i) {
 			if (!(WCODE::IsAZ(cStr.At(i)) || WCODE::Is09(cStr.At(i)) || cStr.At(i) == L'_')) {
 				break;
 			}
@@ -101,7 +101,7 @@ bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 		const int k = i;
 		if (quote != L'\0') {
 			if (i < length && cStr.At(i) == quote) {
-				i++;
+				++i;
 			}else {
 				return false;
 			}

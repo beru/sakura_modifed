@@ -208,7 +208,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				int k = i - 1;
 				for (; 0<k && WCODE::Is09(wexename[k]); --k) {}
 				if (k < 0 || !WCODE::Is09(wexename[k])) {
-					k++;
+					++k;
 				}
 				if (WCODE::Is09(wexename[k])) {
 					ECodeType n = (ECodeType)_wtoi(&wexename[k]);

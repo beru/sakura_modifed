@@ -691,7 +691,7 @@ LRESULT CControlTray::DispatchEvent(
 				auto_sprintf_s(type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum); 
 				for (int k=1; k<m_pShareData->m_nTypesCount; ++k) {
 					if (auto_strcmp(types[k]->m_szTypeName, type->m_szTypeName) == 0) {
-						nAddNameNum++;
+						++nAddNameNum;
 						auto_sprintf_s(type->m_szTypeName, LS(STR_TRAY_TYPE_NAME), nAddNameNum); 
 						k = 0;
 					}
@@ -700,7 +700,7 @@ LRESULT CControlTray::DispatchEvent(
 				type->m_nRegexKeyMagicNumber = CRegexKeyword::GetNewMagicNumber();
 				types.resize(m_pShareData->m_nTypesCount + 1);
 				int nTypeSizeOld = m_pShareData->m_nTypesCount;
-				m_pShareData->m_nTypesCount++;
+				++m_pShareData->m_nTypesCount;
 				for (int i=nTypeSizeOld; nInsert<i; --i) {
 					types[i] = types[i - 1];
 					types[i]->m_nIdx = i;

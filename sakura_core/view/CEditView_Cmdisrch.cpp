@@ -321,12 +321,12 @@ void CEditView::ISearchExec(LPCWSTR pszText)
 	while (*p != L'\0') {
 		if (IsUtf16SurrogHi(*p) && IsUtf16SurrogLow(*(p + 1))) {
 			c = (((WORD)*p) << 16) | ((WORD)*(p + 1));
-			p++;
+			++p;
 		}else {
 			c = *p;
 		}
 		ISearchExec(c);
-		p++;
+		++p;
 	}
 	return ;
 }
@@ -405,7 +405,7 @@ void CEditView::ISearchExec(bool bNext)
 
 	if (m_nISearchHistoryCount >= 256) {
 		m_nISearchHistoryCount = 156;
-		for (int i = 100 ; i<= 255 ; i++) {
+		for (int i = 100 ; i<= 255 ; ++i) {
 			m_bISearchFlagHistory[i-100] = m_bISearchFlagHistory[i];
 			m_sISearchHistory[i-100] = m_sISearchHistory[i];
 		}

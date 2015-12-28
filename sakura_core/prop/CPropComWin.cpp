@@ -335,7 +335,7 @@ void CPropWin::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
 	UINT uiIndex = 0;
-	for (uiIndex = 0; uiIndex < CSelectLang::m_psLangInfoList.size(); uiIndex++) {
+	for (uiIndex = 0; uiIndex < CSelectLang::m_psLangInfoList.size(); ++uiIndex) {
 		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(uiIndex);
 		Combo_InsertString(hwndCombo, uiIndex, psLangInfo->szLangName);
 		if (_tcscmp(csWindow.m_szLanguageDll, psLangInfo->szDllName) == 0) {

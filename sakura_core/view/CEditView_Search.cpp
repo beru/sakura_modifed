@@ -123,7 +123,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	if (m_pTypeData->m_bUseKeyHelpPrefix)
 		nCmpLen = wcslen(pcmemCurText->GetStringPtr());	// 2006.04.10 fon
 	m_cTipWnd.m_KeyWasHit = FALSE;
-	for (int i =0 ; i < m_pTypeData->m_nKeyHelpNum; i++) {	// 最大数：MAX_KEYHELP_FILE
+	for (int i =0 ; i < m_pTypeData->m_nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
 		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
 			CNativeW* pcmemRefText;
@@ -232,7 +232,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	CNativeW cmemCurText;
 	CLayoutYInt nTipBeginLine = ptNew.y;
 	CLayoutYInt nTipEndLine = ptNew.y + CLayoutYInt(4);
-	for (CLayoutYInt nCurLine = nTipBeginLine; nCurLine < nTipEndLine; nCurLine++) {
+	for (CLayoutYInt nCurLine = nTipBeginLine; nCurLine < nTipEndLine; ++nCurLine) {
 		const CLayout* pcLayout = NULL;
 		if (0 <= nCurLine) {
 			pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( nCurLine );
@@ -259,7 +259,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 							charType = 1;
 						}
 						pre = i + charSize;
-						k++;
+						++k;
 					}else {
 						k += charWidth;
 						charType = 0;
@@ -345,7 +345,7 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 	if (bTrimSpaceTab) {
 		// 前のスペース・タブを取り除く
 		while (L'\0' != *pTopic2 && (' ' == *pTopic2 || '\t' == *pTopic2)) {
-			pTopic2++;
+			++pTopic2;
 		}
 	}
 	int nTopic2Len = (int)wcslen(pTopic2);
@@ -364,7 +364,7 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 		while (0 <= m &&
 		    (L' ' == pTopic2[m] || L'\t' == pTopic2[m])
 		) {
-			m--;
+			--m;
 		}
 		if (0 <= m) {
 			i = m + 1;

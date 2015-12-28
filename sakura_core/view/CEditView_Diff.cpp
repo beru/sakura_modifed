@@ -225,7 +225,7 @@ bool COutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
 
 	// 読み出した文字列をチェックする
 	int j;
-	for (j = 0; j < (int)size/*-1*/; j++) {
+	for (j = 0; j < (int)size/*-1*/; ++j) {
 		if (bLineHead) {
 			if (pBuf[j] != '\n' && pBuf[j] != '\r') {
 				bLineHead = false;
@@ -296,7 +296,7 @@ void CEditView::AnalyzeDiffInfo(
 	// 前半ファイルの開始行
 	int s1 = 0;
 	int e1;
-	for (q = pszDiffInfo; *q; q++) {
+	for (q = pszDiffInfo; *q; ++q) {
 		if (*q == ',') break;
 		if (*q == 'a' || *q == 'c' || *q == 'd') break;
 		// 行番号を抽出
@@ -311,7 +311,7 @@ void CEditView::AnalyzeDiffInfo(
 		e1 = s1;
 	}else {
 		e1 = 0;
-		for (q++; *q; q++) {
+		for (++q; *q; ++q) {
 			if (*q == 'a' || *q == 'c' || *q == 'd') break;
 			// 行番号を抽出
 			if (*q >= '0' && *q <= '9') e1 = e1 * 10 + (*q - '0');
@@ -326,7 +326,7 @@ void CEditView::AnalyzeDiffInfo(
 	// 後半ファイルの開始行
 	int s2 = 0;
 	int e2;
-	for (q++; *q; q++) {
+	for (++q; *q; ++q) {
 		if (*q == ',') break;
 		// 行番号を抽出
 		if (*q >= '0' && *q <= '9') s2 = s2 * 10 + (*q - '0');
@@ -339,7 +339,7 @@ void CEditView::AnalyzeDiffInfo(
 		e2 = s2;
 	}else {
 		e2 = 0;
-		for (q++; *q; q++) {
+		for (++q; *q; ++q) {
 			// 行番号を抽出
 			if (*q >= '0' && *q <= '9') e2 = e2 * 10 + (*q - '0');
 			else return;
@@ -385,7 +385,7 @@ bool MakeDiffTmpFile_core(CTextOutputStream& out, HWND hwnd, CEditView& view, bo
 			}else {
 				out.WriteString(pLineData,nLineLen);
 			}
-			y++;
+			++y;
 		}
 	}else if (IsSakuraMainWindow(hwnd)) {
 		const int max_size = (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<const EDIT_CHAR>();
@@ -411,7 +411,7 @@ bool MakeDiffTmpFile_core(CTextOutputStream& out, HWND hwnd, CEditView& view, bo
 				}
 				nLineOffset += max_size;
 			}while (max_size < nLineLen);
-			y++;
+			++y;
 		}
 	}else {
 		return false;

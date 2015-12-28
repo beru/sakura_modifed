@@ -55,27 +55,27 @@ bool CFuncListManager::SearchFuncListMark(
 	CLogicInt nLinePos = nLineNum;
 
 	if (bPrevOrNext == SEARCH_BACKWARD) {
-		//後方検索(↑)
-		nLinePos--;
+		// 後方検索(↑)
+		--nLinePos;
 		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				/* マッチ行 */
 				return true;
 			}
-			nLinePos--;
+			--nLinePos;
 			pDocLine = pDocLine->GetPrevLine();
 		}
 	}else {
-		//前方検索(↓)
-		nLinePos++;
+		// 前方検索(↓)
+		++nLinePos;
 		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				/* マッチ行 */
 				return true;
 			}
-			nLinePos++;
+			++nLinePos;
 			pDocLine = pDocLine->GetNextLine();
 		}
 	}

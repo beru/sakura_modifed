@@ -372,7 +372,7 @@ void CViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 	if (!pcLayout) {
 		// pcLayoutはNULLとなるのは、[EOF]から前検索した場合
 		// １行前に移動する処理
-		nLineNum--;
+		--nLineNum;
 		if (nLineNum < 0) {
 			goto end_of_func;
 		}
@@ -983,7 +983,7 @@ void CViewCommander::Command_REPLACE_ALL()
 			return;// -1;
 		}
 
-		nLoopCnt++;
+		++nLoopCnt;
 		// 128 ごとに表示。
 		if (0 == (nLoopCnt & 0x7F)) {
 			// 時間ごとに進歩状況描画だと時間取得分遅くなると思うが、そちらの方が自然だと思うので・・・。

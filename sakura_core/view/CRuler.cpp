@@ -161,7 +161,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 		}
 
 		nX += m_pEditView->GetTextMetrics().GetHankakuDx();
-		i++;
+		++i;
 	}
 
 	// F–ß‚·

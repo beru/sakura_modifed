@@ -434,7 +434,7 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 	wstring		sPlugCmd;
 
 	plugin_table[nEmpty].m_nCmdNum = 0;
-	for (i = 1; i < MAX_PLUG_CMD; i++) {
+	for (i = 1; i < MAX_PLUG_CMD; ++i) {
 		auto_sprintf_s(szPlugKey, L"C[%d]", i);
 		sPlugCmd.clear();
 		cProfDef.IOProfileData(PII_COMMAND, szPlugKey, sPlugCmd);
@@ -481,7 +481,7 @@ bool CPluginManager::LoadAllPlugin(CommonSetting* common)
 
 	// プラグインテーブルに登録されたプラグインを読み込む
 	PluginRec* plugin_table = pluginSetting.m_PluginTable;
-	for (int iNo=0; iNo < MAX_PLUGIN; iNo++) {
+	for (int iNo=0; iNo < MAX_PLUGIN; ++iNo) {
 		if (plugin_table[iNo].m_szName[0] == '\0') {
 			continue;
 		}
@@ -591,7 +591,7 @@ bool CPluginManager::RegisterPlugin(CPlugin* plugin)
 	CJackManager* pJackMgr = CJackManager::getInstance();
 	CPlug::Array plugs = plugin->GetPlugs();
 
-	for (auto plug = plugs.begin() ; plug != plugs.end(); plug++) {
+	for (auto plug = plugs.begin() ; plug != plugs.end(); ++plug) {
 		pJackMgr->RegisterPlug((*plug)->m_sJack.c_str(), *plug);
 	}
 
@@ -604,7 +604,7 @@ bool CPluginManager::UnRegisterPlugin(CPlugin* plugin)
 	CJackManager* pJackMgr = CJackManager::getInstance();
 	CPlug::Array plugs = plugin->GetPlugs();
 
-	for (auto plug = plugs.begin() ; plug != plugs.end(); plug++) {
+	for (auto plug = plugs.begin() ; plug != plugs.end(); ++plug) {
 		pJackMgr->UnRegisterPlug((*plug)->m_sJack.c_str(), *plug);
 	}
 
@@ -614,7 +614,7 @@ bool CPluginManager::UnRegisterPlugin(CPlugin* plugin)
 // プラグインを取得する
 CPlugin* CPluginManager::GetPlugin(int id)
 {
-	for (auto plugin = m_plugins.begin() ; plugin != m_plugins.end(); plugin++) {
+	for (auto plugin = m_plugins.begin() ; plugin != m_plugins.end(); ++plugin) {
 		if ((*plugin)->m_id == id) {
 			return *plugin;
 		}

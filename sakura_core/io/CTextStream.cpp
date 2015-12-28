@@ -139,7 +139,7 @@ void CTextOutputStream::WriteString(
 			if (*q == L'\n' && !((q-1) >= p && *(q-1) == L'\r')) {
 				break;
 			}
-			q++;
+			++q;
 		}
 		const wchar_t* lf = (q < pEnd) ? q : NULL;
 		if (lf) {

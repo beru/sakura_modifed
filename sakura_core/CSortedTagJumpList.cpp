@@ -148,7 +148,7 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 	item->next = p;
 	if (prev) prev->next = item;
 	else      m_pTagjump = item;
-	m_nCount++;
+	++m_nCount;
 
 	// 最大数を超えたら最後のアイテムを削除する。
 	if (m_nCount > m_MAX_TAGJUMPLIST) {
@@ -224,7 +224,7 @@ CSortedTagJumpList::TagJumpInfo* CSortedTagJumpList::GetPtr(int index)
 		if (index == i) {
 			return p;
 		}
-		i++;
+		++i;
 	}
 	return NULL;
 }

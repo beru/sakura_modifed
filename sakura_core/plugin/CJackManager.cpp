@@ -227,7 +227,7 @@ int CJackManager::GetCommandCount() const
 CPlug* CJackManager::GetCommandById(int id) const
 {
 	const CPlug::Array& plugs = GetPlugs(PP_COMMAND);
-	for (auto it = plugs.begin(); it != plugs.end(); it++) {
+	for (auto it = plugs.begin(); it != plugs.end(); ++it) {
 		if ((*it)->GetFunctionCode() == id) {
 			return (*it);
 		}

@@ -515,7 +515,7 @@ int CPropToolbar::GetData(HWND hwndDlg)
 		int j = List_GetItemData(hwndResList, i);
 		if (LB_ERR != j) {
 			csToolBar.m_nToolBarButtonIdxArr[k] = j;
-			k++;
+			++k;
 		}
 	}
 	csToolBar.m_nToolBarButtonNum = k;

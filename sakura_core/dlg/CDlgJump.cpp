@@ -79,7 +79,7 @@ BOOL CDlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
 		if (pMNUD->iDelta < 0) {
 			++nData;
 		}else if (pMNUD->iDelta > 0) {
-			nData--;
+			--nData;
 		}
 		if (nData < 1) {
 			nData = 1;
@@ -91,7 +91,7 @@ BOOL CDlgJump::OnNotify(WPARAM wParam, LPARAM lParam)
 		if (pMNUD->iDelta < 0) {
 			++nData;
 		}else if (pMNUD->iDelta > 0) {
-			nData--;
+			--nData;
 		}
 		if (nData < 1) {
 			nData = 1;

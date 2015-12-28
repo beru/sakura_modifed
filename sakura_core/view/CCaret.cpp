@@ -749,7 +749,7 @@ void CCaret::ShowCaretPosInfo()
 						break;
 					}
 					pcLayout50 = pcLayout50->GetPrevLayout();
-					nLineNum--;
+					--nLineNum;
 				}
 				m_nOffset50Cache = pcLayout50->CalcLayoutOffset(*pLayoutMgr);
 				m_nLogicOffset50Cache = pcLayout50->GetLogicOffset();

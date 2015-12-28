@@ -74,7 +74,7 @@ void CEditView_Paint::Call_OnPaint(
 	if (rcs.size() == 0) return;
 	CMyRect rc = rcs[0];
 	int nSize = (int)rcs.size();
-	for (int i = 1; i < nSize; i++)
+	for (int i = 1; i < nSize; ++i)
 		rc = MergeRect(rc, rcs[i]);
 
 	// 描画
@@ -192,7 +192,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	COLORREF colorOld = ::SetBkColor(hdc, cols[testColorIndex]);
 	MyFillRect(hdc, rcPaint);
 	::SetBkColor(hdc, colorOld);
-	testColorIndex++;
+	++testColorIndex;
 #else
 	CTypeSupport cTextType(this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
@@ -379,7 +379,7 @@ CColor3Setting CEditView::GetColorIndex(
 		// 論理行の最初のレイアウト情報を取得 -> pcLayoutLineFirst
 		while (0 != pcLayoutLineFirst->GetLogicOffset()) {
 			pcLayoutLineFirst = pcLayoutLineFirst->GetPrevLayout();
-			nLineNumFirst--;
+			--nLineNumFirst;
 
 			// 論理行の先頭まで戻らないと確実には正確な色は得られない
 			// （正規表現キーワードにマッチした長い強調表示がその位置のレイアウト行頭をまたいでいる場合など）
@@ -407,7 +407,7 @@ CColor3Setting CEditView::GetColorIndex(
 		//		int n = -1;
 		//		while (pcLayout) {
 		//			pcLayout = pcLayout->GetPrevLayout(); // prev or null
-		//			n++;
+		//			++n;
 		//		}
 		//		return n;
 		//	}
@@ -446,7 +446,7 @@ CColor3Setting CEditView::GetColorIndex(
 									pInfo->m_nPosInLogic
 								);
 		if (pcLayoutNext && pcLayoutNext->GetLogicOffset() <= pInfo->m_nPosInLogic) {
-			nLineNumScan++;
+			++nLineNumScan;
 			pInfo->m_pDispPos->SetLayoutLineRef(nLineNumScan);
 			pcLayoutNext = pcLayoutNext->GetNextLayout();
 		}

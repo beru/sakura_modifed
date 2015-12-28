@@ -702,7 +702,7 @@ void CViewCommander::Command_GOLINEEND(bool bSelect, int bIgnoreCurrentSelection
 		while (pcLayout && pcLayoutNext && pcLayoutNext->GetLogicOffset() != 0) {
 			pcLayout = pcLayoutNext;
 			pcLayoutNext = pcLayoutNext->GetNextLayout();
-			nPosXY.y++;
+			++nPosXY.y;
 		}
 	}
 	nPosXY.x = CLayoutInt(0);
@@ -1037,7 +1037,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	// まずは、現在位置が空行（スペース、タブ、改行記号のみの行）かどうか判別
 	if ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		nFirstLineIsEmptyLine = pcDocLine->IsEmptyLine();
-		nCaretPointer++;
+		++nCaretPointer;
 	}else {
 		// EOF行でした。
 		return;
@@ -1046,7 +1046,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	// 次に、nFirstLineIsEmptyLineと異なるところまで読み飛ばす
 	while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		if (pcDocLine->IsEmptyLine() == nFirstLineIsEmptyLine) {
-			nCaretPointer++;
+			++nCaretPointer;
 		}else {
 			break;
 		}
@@ -1064,7 +1064,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 			// 仕上げに、空行じゃないところまで進む
 			while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 				if (pcDocLine->IsEmptyLine()) {
-					nCaretPointer++;
+					++nCaretPointer;
 				}else {
 					break;
 				}
@@ -1110,16 +1110,16 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	// まずは、現在位置が空行（スペース、タブ、改行記号のみの行）かどうか判別
 	if ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		nFirstLineIsEmptyLine = pcDocLine->IsEmptyLine();
-		nCaretPointer--;
+		--nCaretPointer;
 	}else {
 		nFirstLineIsEmptyLine = true;
-		nCaretPointer--;
+		--nCaretPointer;
 	}
 
 	// 次に、nFirstLineIsEmptyLineと異なるところまで読み飛ばす
 	while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		if (pcDocLine->IsEmptyLine() == nFirstLineIsEmptyLine) {
-			nCaretPointer--;
+			--nCaretPointer;
 		}else {
 			break;
 		}
@@ -1132,24 +1132,24 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	if (nFirstLineIsEmptyLine) {
 		// おしまい。
 		if (csGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
-			nCaretPointer++;	// 空行の最上行（段落の末端の次の行）で止まる。
+			++nCaretPointer;	// 空行の最上行（段落の末端の次の行）で止まる。
 		}else {
 			// 仕上げに、空行じゃないところまで進む
 			while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 				if (pcDocLine->IsEmptyLine()) {
 					break;
 				}else {
-					nCaretPointer--;
+					--nCaretPointer;
 				}
 			}
-			nCaretPointer++;	// 空行の最上行（段落の末端の次の行）で止まる。
+			++nCaretPointer;	// 空行の最上行（段落の末端の次の行）で止まる。
 		}
 	}else {
 		// いま見ているところは空行の1行目
 		if (csGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
-			nCaretPointer++;
+			++nCaretPointer;
 		}else {
-			nCaretPointer++;
+			++nCaretPointer;
 		}
 	}
 

@@ -88,7 +88,7 @@ public:
 		gm_table.push_back(static_cast<T*>(this));
 	}
 	virtual ~TInstanceHolder() {
-		for (size_t i = 0; i < gm_table.size(); i++) {
+		for (size_t i=0; i<gm_table.size(); ++i) {
 			if (gm_table[i] == static_cast<T*>(this)) {
 				gm_table.erase(gm_table.begin() + i);
 				break;

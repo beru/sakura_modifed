@@ -215,7 +215,7 @@ void CMainToolBar::CreateToolBar(void)
 			if ((pTbbArr[nToolBarButtonNum].fsStyle & TBSTYLE_SEP) && (nToolBarButtonNum != 0)) {
 				if ((pTbbArr[nToolBarButtonNum-1].fsStyle & TBSTYLE_SEP)) {
 					pTbbArr[nToolBarButtonNum-1] = pTbbArr[nToolBarButtonNum];
-					nToolBarButtonNum--;
+					--nToolBarButtonNum;
 				}
 			}
 			// 仮想折返しボタンがきたら直前のボタンに折返し属性を付ける
@@ -225,7 +225,7 @@ void CMainToolBar::CreateToolBar(void)
 				}
 				continue;
 			}
-			nToolBarButtonNum++;
+			++nToolBarButtonNum;
 		}
 		//	To Here 2005.08.29 aroka
 
@@ -238,7 +238,7 @@ void CMainToolBar::CreateToolBar(void)
 				// 拡張スタイルに設定
 				Toolbar_SetExtendedStyle(m_hwndToolBar, TBSTYLE_EX_DRAWDDARROWS);
 				Toolbar_AddButtons(m_hwndToolBar, 1, &tbb);
-				count++;
+				++count;
 				break;
 
 			case TBSTYLE_COMBOBOX:	// コンボボックス
@@ -262,7 +262,7 @@ void CMainToolBar::CreateToolBar(void)
 							my_tbb.fsState |=  TBSTATE_WRAP;
 						}
 						Toolbar_AddButtons(m_hwndToolBar, 1, &my_tbb);
-						count++;
+						++count;
 
 						// サイズを設定する
 						tbi.cbSize = sizeof(tbi);
@@ -327,7 +327,7 @@ void CMainToolBar::CreateToolBar(void)
 			case TBSTYLE_SEP:		// セパレータ
 			default:
 				Toolbar_AddButtons(m_hwndToolBar, 1, &tbb);
-				count++;
+				++count;
 				break;
 			}
 			//@@@ 2002.06.15 MIK end
@@ -521,7 +521,7 @@ void CMainToolBar::AcceptSharedSearchKey()
 			Combo_DeleteString(m_hwndSearchBox, 0);
 		}
 		int nSize = GetDllShareData().m_sSearchKeywords.m_aSearchKeys.size();
-		for (i = 0; i < nSize; i++) {
+		for (i = 0; i < nSize; ++i) {
 			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_sSearchKeywords.m_aSearchKeys[i]);
 		}
 		const wchar_t* pszText;

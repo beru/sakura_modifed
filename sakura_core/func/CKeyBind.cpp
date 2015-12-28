@@ -72,7 +72,7 @@ HACCEL CKeyBind::CreateAccerelator(
 		if (0 != pKeyNameArr[i].m_nKeyCode) {
 			for (int j = 0; j < 8; ++j) {
 				if (0 != GetFuncCodeAt(pKeyNameArr[i], j)) {
-					nAccelArrNum++;
+					++nAccelArrNum;
 				}
 			}
 		}
@@ -95,7 +95,7 @@ HACCEL CKeyBind::CreateAccerelator(
 					pAccelArr[k].key = pKeyNameArr[i].m_nKeyCode;
 					pAccelArr[k].cmd = pKeyNameArr[i].m_nKeyCode | (((WORD)j)<<8) ;
 
-					k++;
+					++k;
 				}
 			}
 		}
@@ -172,7 +172,7 @@ int CKeyBind::CreateKeyBindList(
 			int iFunc = GetFuncCodeAt(pKeyNameArr[i], j, bGetDefFuncCode);
 
 			if (0 != iFunc) {
-				nValidKeys++;
+				++nValidKeys;
 				if (j & _SHIFT) {
 					cMemList.AppendString(pszSHIFT);
 				}
@@ -345,7 +345,7 @@ int CKeyBind::GetKeyStrList(
 	for (int j = 0; j < 8; ++j) {
 		for (int i = 0; i < nKeyNameArrNum; ++i) {
 			if (nFuncId == GetFuncCodeAt(pKeyNameArr[i], j, bGetDefFuncCode)) {
-				nAssignedKeysNum++;
+				++nAssignedKeysNum;
 			}
 		}
 	}
@@ -366,7 +366,7 @@ int CKeyBind::GetKeyStrList(
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j,
 					*((*pppcMemList)[nAssignedKeysNum]), nFuncId, bGetDefFuncCode)
 			) {
-				nAssignedKeysNum++;
+				++nAssignedKeysNum;
 			}
 		}
 	}
@@ -807,10 +807,10 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	// インデックス用ダミー作成
 	SetKeyNameArrVal(pShareData, KEYNAME_SIZE, &dummy[0]);
 	// インデックス作成 重複した場合は先頭にあるものを優先
-	for (int ii = 0; ii< _countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ii++) {
+	for (int ii = 0; ii< _countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ++ii) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
-	for (int i = nKeyDataInitNum-1; i >= 0; i--) {
+	for (int i = nKeyDataInitNum-1; i >= 0; --i) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
 	}
 

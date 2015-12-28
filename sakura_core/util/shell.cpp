@@ -312,7 +312,7 @@ DWORD NetConnect (const TCHAR strNetWorkPass[])
 	sTemp[0] = _T('\\');
 	sTemp[1] = _T('\\');
     int i;
-	for (i = 2; strNetWorkPass[i] != _T('\0'); i++) {
+	for (i = 2; strNetWorkPass[i] != _T('\0'); ++i) {
 		if (strNetWorkPass[i] == _T('\\')) {
 			break;
 		}

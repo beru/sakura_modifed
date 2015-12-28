@@ -242,7 +242,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 
 				// Skip Space
 				while (szLine[i] == LTEXT(' ') || szLine[i] == LTEXT('\t')) {
-					i++;
+					++i;
 				}
 				//@@@ 2002.2.2 YAZAKI PPA.DLLマクロにあわせて仕様変更。文字列は''で囲む。
 				// Jun. 16, 2002 genta double quotationも許容する
@@ -317,7 +317,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 						size_t nBegin = 0;
 						const wchar_t* p = cmemWork.GetStringPtr();
 						CNativeW cmemTemp;
-						for (size_t n = 0; n < nLen; n++) {
+						for (size_t n = 0; n < nLen; ++n) {
 							if (n + 1 < nLen && p[n] == L'\\' && p[n+1] == L'u') {
 								size_t k;
 								for (k = n + 2;
@@ -326,7 +326,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 									&& (WCODE::Is09(p[k])
 										|| (L'a' <= p[k] && p[k] <= L'f')
 										|| (L'A' <= p[k] && p[k] <= L'F'));
-									k++
+									++k
 								) {
 								}
 								cmemTemp.AppendString( p + nBegin, n - nBegin );
@@ -378,7 +378,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 							continue;
 						}else {
 							nEnd = i;	// 数字の最後の文字
-							i--;
+							--i;
 							break;
 						}
 					}
@@ -405,7 +405,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 				}
 				for (; i < nLineLen; ++i) {		// 最後の文字までスキャン
 					if (szLine[i] == LTEXT(')') || szLine[i] == LTEXT(',')) {	// ,もしくは)を読み飛ばす
-						i++;
+						++i;
 						break;
 					}
 				}

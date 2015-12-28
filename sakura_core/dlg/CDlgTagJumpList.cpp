@@ -262,7 +262,7 @@ void CDlgTagJumpList::SetData(void)
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
 		CRecentTagjumpKeyword cRecentTagJump;
-		for (int i = 0; i < cRecentTagJump.GetItemCount(); i++) {
+		for (int i = 0; i < cRecentTagJump.GetItemCount(); ++i) {
 			Combo_AddString(hwndKey, cRecentTagJump.GetItemText(i));
 		}
 		if (m_pszKeyword) {
@@ -434,7 +434,7 @@ BOOL CDlgTagJumpList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSize.x = rc.right - rc.left;
 	m_ptDefaultSize.y = rc.bottom - rc.top;
 
-	for (int i = 0; i < _countof(anchorList); i++) {
+	for (int i = 0; i < _countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
@@ -606,7 +606,7 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
 
-	for (int i = 0 ; i < _countof(anchorList); i++) {
+	for (int i = 0 ; i < _countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
@@ -789,7 +789,7 @@ TCHAR* CDlgTagJumpList::GetNameByType(const TCHAR type, const TCHAR* name)
 
 	p = _tcsrchr(name, _T('.'));
 	if (!p) p = _T(".c");	// 見つからないときは ".c" と想定する。
-	p++;
+	++p;
 
 	for (i = 0; p_extentions[i]; i += 2) {
 		_tcscpy(tmp, p_extentions[i]);
@@ -898,7 +898,7 @@ int CDlgTagJumpList::SearchBestTag(void)
 
 	count = m_pcList->GetCount();
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		// タグのファイル名部分をフルパスにする
 		lpPathInfo->szFileNameDst[0] = _T('\0');
 		{
@@ -1416,7 +1416,7 @@ TCHAR* CDlgTagJumpList::GetFullPathFromDepth(TCHAR* pszOutput, int count,
 	}else if (_istalpha(p[0]) && p[1] == _T(':')) {	// 絶対パスか？
 		_tcscpy(pszOutput, p);	// 何も加工しない。
 	}else {
-		for (int i = 0; i < depth; i++) {
+		for (int i = 0; i < depth; ++i) {
 			//_tcscat(basePath, _T("..\\"));
 			DirUp(basePath);
 		}

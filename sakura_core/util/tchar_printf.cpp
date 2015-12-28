@@ -41,7 +41,7 @@ inline const T* skip_field_flag(const T* p)
 {
 	while (*p) {
 		T c = *p;
-		if (c == _T2(T,'-') || c == _T2(T, '+') || c == _T2(T,'0') || c == _T2(T,' ') || c == _T2(T,'#')) { p++; continue; }
+		if (c == _T2(T,'-') || c == _T2(T, '+') || c == _T2(T,'0') || c == _T2(T,' ') || c == _T2(T,'#')) { ++p; continue; }
 		break;
 	}
 	return p;
@@ -51,8 +51,8 @@ inline const T* skip_field_flag(const T* p)
 template <class T>
 inline const T* skip_field_width(const T* p)
 {
-	if (*p >= _T2(T,'1') && *p <= _T2(T,'9')) p++; else return p; // 一桁目は0を受け付けない
-	while (*p >= _T2(T,'0') && *p <= _T2(T,'9')) p++;
+	if (*p >= _T2(T,'1') && *p <= _T2(T,'9')) ++p; else return p; // 一桁目は0を受け付けない
+	while (*p >= _T2(T,'0') && *p <= _T2(T,'9')) ++p;
 	return p;
 }
 
@@ -60,8 +60,8 @@ inline const T* skip_field_width(const T* p)
 template <class T>
 inline const T* skip_field_precision(const T* p)
 {
-	if (*p == _T2(T,'.')) p++; else return p; // ドットで始まる文字列のみ受け付ける
-	while (*p >= _T2(T,'0') && *p <= _T2(T,'9')) p++; // よくわからんのでとりあえず全数字を受け付ける
+	if (*p == _T2(T,'.')) ++p; else return p; // ドットで始まる文字列のみ受け付ける
+	while (*p >= _T2(T,'0') && *p <= _T2(T,'9')) ++p; // よくわからんのでとりあえず全数字を受け付ける
 	return p;
 }
 
@@ -259,7 +259,7 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 		// 書式指定フィールドを取得
 		if (is_field_begin(*src)) {
 			const T* field_begin = src;
-			src++;
+			++src;
 			src = skip_field_flag(src);
 			src = skip_field_width(src);
 			src = skip_field_precision(src);
@@ -267,7 +267,7 @@ int tchar_vsprintf_s_imp(T* buf, size_t nBufCount, const T* format, va_list& v, 
 			src = skip_field_prefix(src);
 
 			if (is_field_type(*src)) {
-				src++;
+				++src;
 				const T* field_end = src;
 
 				// フィールドを一時変数にコピー

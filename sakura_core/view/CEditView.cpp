@@ -1250,15 +1250,15 @@ bool CEditView::IsCurrentPositionURL(
 	bool bUseRegexKeyword = false;
 	if (m_pTypeData->m_bUseRegexKeyword) {
 		const wchar_t* pKeyword = m_pTypeData->m_RegexKeywordList;
-		for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+		for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 			if (*pKeyword == L'\0')
 				break;
 			if (m_pTypeData->m_RegexKeywordArr[i].m_nColorIndex == COLORIDX_URL) {
 				bUseRegexKeyword = true;	// URL色指定の正規表現キーワードがある
 				break;
 			}
-			for (; *pKeyword != '\0'; pKeyword++) {}
-			pKeyword++;
+			for (; *pKeyword != '\0'; ++pKeyword) {}
+			++pKeyword;
 		}
 	}
 	if (!bDispUrl && !bUseRegexKeyword) {
@@ -1410,7 +1410,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 
 		nIdxFrom = CLogicInt(0);
 		nIdxTo = CLogicInt(0);
-		for (nLineNum = rcSelLayout.bottom; nLineNum >= rcSelLayout.top - 1; nLineNum--) {
+		for (nLineNum = rcSelLayout.bottom; nLineNum >= rcSelLayout.top - 1; --nLineNum) {
 			const CLayout* pcLayout;
 			nDelPosNext = nIdxFrom;
 			nDelLenNext	= nIdxTo - nIdxFrom;
@@ -1569,7 +1569,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 	{
 		if (pParentMenus) {
 			int k;
-			for (k = 0; pParentMenus[k] != 0; k++) {
+			for (k = 0; pParentMenus[k] != 0; ++k) {
 			}
 			nParamIndex = k;
 			pNextParam = pParentMenus;
@@ -1601,7 +1601,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 			}
 			bool bMenuLoop = !csCustomMenu.m_bCustMenuPopupArr[nCustIdx];
 			if (!bMenuLoop) {
-				for (int k = 0; pNextParam[k] != 0; k++) {
+				for (int k = 0; pNextParam[k] != 0; ++k) {
 					if (pNextParam[k] == code) {
 						bMenuLoop = true;
 						break;
@@ -1901,7 +1901,7 @@ bool CEditView::GetSelectedData(
 
 		// 実際の文字量。
 		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(rcSel.top, &nLineLen, &pcLayout);
-		for (; i != CLayoutInt(0) && pcLayout; i--, pcLayout = pcLayout->GetNextLayout()) {
+		for (; i != CLayoutInt(0) && pcLayout; --i, pcLayout = pcLayout->GetNextLayout()) {
 			pLine = pcLayout->GetPtr() + pcLayout->GetLogicOffset();
 			nLineLen = CLogicInt(pcLayout->GetLengthWithEOL());
 			if (pLine) {
@@ -1980,7 +1980,7 @@ bool CEditView::GetSelectedData(
 		nBufSize *= (Int)i;
 
 		// 実際の各行の長さ。
-		for (; i != 0 && pcLayout; i--, pcLayout = pcLayout->GetNextLayout()) {
+		for (; i != 0 && pcLayout; --i, pcLayout = pcLayout->GetNextLayout()) {
 			nBufSize += pcLayout->GetLengthWithoutEOL() + appendEol.GetLen();
 			if (bLineOnly) {	// 複数行選択の場合は先頭の行のみ
 				break;
@@ -2787,7 +2787,7 @@ bool CEditView::IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo, bool bSelect
 		CLayoutInt nLineLen;
 
 		result = true;
-		for (CLayoutInt nLineNum = nLineFrom; nLineNum <= nLineTo; nLineNum++) {
+		for (CLayoutInt nLineNum = nLineFrom; nLineNum <= nLineTo; ++nLineNum) {
 			if ((pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum))) {
 				// 指定位置に対応する行のデータ内の位置
 				LineColumnToIndex2(pcLayout, nColumnFrom, &nLineLen);

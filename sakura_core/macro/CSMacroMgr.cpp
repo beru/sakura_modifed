@@ -493,7 +493,7 @@ CSMacroMgr::CSMacroMgr()
 	CKeyMacroMgr::declare();
 	CWSHMacroManager::declare();
 	
-	for (int i = 0 ; i < MAX_CUSTMACRO ; i++) {
+	for (int i = 0 ; i < MAX_CUSTMACRO ; ++i) {
 		m_cSavedKeyMacro[i] = NULL;
 	}
 	// Jun. 16, 2002 genta
@@ -516,7 +516,7 @@ CSMacroMgr::~CSMacroMgr()
 // キーマクロのバッファをクリアする
 void CSMacroMgr::ClearAll(void)
 {
-	for (int i = 0; i < MAX_CUSTMACRO; i++) {
+	for (int i = 0; i < MAX_CUSTMACRO; ++i) {
 		// Apr. 29, 2002 genta
 		delete m_cSavedKeyMacro[i];
 		m_cSavedKeyMacro[i] = NULL;
@@ -704,7 +704,7 @@ BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const 
 */
 void CSMacroMgr::UnloadAll(void)
 {
-	for (int idx = 0; idx < MAX_CUSTMACRO; idx++) {
+	for (int idx = 0; idx < MAX_CUSTMACRO; ++idx) {
 		delete m_cSavedKeyMacro[idx];
 		m_cSavedKeyMacro[idx] = NULL;
 	}
@@ -815,7 +815,7 @@ WCHAR* CSMacroMgr::GetFuncInfoByID(
 					*p = LTEXT('\0');
 					break;
 				}
-				p++;
+				++p;
 			}
 		}
 		// Jun. 16, 2002 genta NULLのときは何もしない．

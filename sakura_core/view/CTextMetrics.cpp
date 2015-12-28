@@ -96,8 +96,8 @@ void CTextMetrics::SetHankakuHeight(int nHankakuHeight)
 void CTextMetrics::SetHankakuDx(int nDxBasis)
 {
 	m_nDxBasis = nDxBasis;
-	for (int i = 0; i<_countof(m_anHankakuDx); i++) m_anHankakuDx[i] = GetHankakuDx();
-	for (int i = 0; i<_countof(m_anZenkakuDx); i++) m_anZenkakuDx[i] = GetZenkakuDx();
+	for (int i = 0; i<_countof(m_anHankakuDx); ++i) m_anHankakuDx[i] = GetHankakuDx();
+	for (int i = 0; i<_countof(m_anZenkakuDx); ++i) m_anZenkakuDx[i] = GetZenkakuDx();
 }
 
 void CTextMetrics::SetHankakuDy(int nDyBasis)
@@ -128,7 +128,7 @@ const int* CTextMetrics::GenerateDxArray(
 	int	 nLayoutCnt = nIndent;
 	const wchar_t* q = pText;
 	bHigh = false;
-	for (int i = 0; i < nLength; i++, p++, q++) {
+	for (int i = 0; i < nLength; ++i, ++p, ++q) {
 		if (*q == WCODE::TAB) {
 			// TAB対応	2013/5/7 Uchi
 			if (i > 0 && *(q-1) == WCODE::TAB) {
@@ -152,7 +152,7 @@ const int* CTextMetrics::GenerateDxArray(
 			}else {
 				if (IsBinaryOnSurrogate(*q)) {
 					*p = nHankakuDx;
-					nLayoutCnt++;
+					++nLayoutCnt;
 				}else {
 					*p = nHankakuDx*2;
 					nLayoutCnt += 2;
@@ -161,7 +161,7 @@ const int* CTextMetrics::GenerateDxArray(
 			bHigh = false;
 		}else if (WCODE::IsHankaku(*q)) {
 			*p = nHankakuDx;
-			nLayoutCnt++;
+			++nLayoutCnt;
 			bHigh = false;				// サロゲートペア対策	2008/7/5 Uchi
 		}else {
 			*p = nHankakuDx*2;
@@ -188,7 +188,7 @@ int CTextMetrics::CalcTextWidth(
 
 	// UNICODE時代の動作
 	int w = 0;
-	for (int i = 0; i < nLength; i++) {
+	for (int i = 0; i < nLength; ++i) {
 		w += pnDx[i];
 	}
 	return w;

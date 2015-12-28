@@ -150,7 +150,7 @@ int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
 
 					// search subdirectory
 					int res;
-					for (int i = 0; i < _countof(s_exp_list); i++) {
+					for (int i = 0; i < _countof(s_exp_list); ++i) {
 						if ((res = makeFileList(top_dir, fl_nm, s_exp_list[i])) != 0) {
 							::FindClose(hFind);
 							return res;
@@ -180,7 +180,7 @@ int makeFileListTop(const char* top_dir)
 {
 	int res;
 
-	for (int i = 0; i < _countof(s_exp_list); i++) {
+	for (int i = 0; i < _countof(s_exp_list); ++i) {
 		if ((res = makeFileList(top_dir, "", s_exp_list[i])) != 0)
 			return res;
 	}
@@ -200,7 +200,7 @@ const char* getFile()
 	}
 
 	r_str = file_list[pt];
-	pt++;
+	++pt;
 
 	return r_str.c_str();
 }
@@ -221,10 +221,10 @@ int main(int argc, char* argv[])
 	const char*	makefile	= NULL;
 	const char*	top_dir		= NULL;
 
-	for (int i = 1; i < argc; i++) {
+	for (int i = 1; i < argc; ++i) {
 		char* p = argv[i];
 		if (*p == '/' || *p =='-') {
-			p++;
+			++p;
 			if (_strnicmp(p,"file",4) == 0) {
 				p += 4;
 				if (*p == '\0') {
@@ -232,7 +232,7 @@ int main(int argc, char* argv[])
 						makefile = argv[++i];
 					}
 				}else {
-					if (*p == '=') p++;
+					if (*p == '=') ++p;
 					makefile = p;
 				}
 			}else if (_strnicmp(p,"dir",3) == 0) {
@@ -242,7 +242,7 @@ int main(int argc, char* argv[])
 						top_dir = argv[++i];
 					}
 				}else {
-					if (*p == '=') p++;
+					if (*p == '=') ++p;
 					top_dir = p;
 				}
 			}else {

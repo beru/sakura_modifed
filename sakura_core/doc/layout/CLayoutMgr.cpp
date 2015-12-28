@@ -144,7 +144,7 @@ void CLayoutMgr::SetLayoutInfo(
 	// refType.m_szKinsokuKuto → m_pszKinsokuKuto_1
 	m_pszKinsokuKuto_1.clear();
 	if (refType.m_bKinsokuKuto) {	// 2009.08.06 ryoji m_bKinsokuKutoで振り分ける(Fix)
-		for (const wchar_t* p = refType.m_szKinsokuKuto; *p; p++) {
+		for (const wchar_t* p = refType.m_szKinsokuKuto; *p; ++p) {
 			m_pszKinsokuKuto_1.push_back_unique(*p);
 		}
 	}
@@ -152,7 +152,7 @@ void CLayoutMgr::SetLayoutInfo(
 	// 行頭禁則文字
 	// refType.m_szKinsokuHead → (句読点以外) m_pszKinsokuHead_1
 	m_pszKinsokuHead_1.clear();
-	for (const wchar_t* p = refType.m_szKinsokuHead; *p; p++) {
+	for (const wchar_t* p = refType.m_szKinsokuHead; *p; ++p) {
 		if (m_pszKinsokuKuto_1.exist(*p)) {
 			continue;
 		}else {
@@ -163,7 +163,7 @@ void CLayoutMgr::SetLayoutInfo(
 	// 行末禁則文字
 	// refType.m_szKinsokuTail → m_pszKinsokuTail_1
 	m_pszKinsokuTail_1.clear();
-	for (const wchar_t* p = refType.m_szKinsokuTail; *p; p++) {
+	for (const wchar_t* p = refType.m_szKinsokuTail; *p; ++p) {
 		m_pszKinsokuTail_1.push_back_unique(*p);
 	}
 
@@ -209,7 +209,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 //				return pLayout;
 //			}
 //			pLayout = pLayout->GetNextLayout();
-//			nCount++;
+//			++nCount;
 //		}
 //	}else {
 //		nCount = m_nLines - 1;
@@ -221,7 +221,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 //				return pLayout;
 //			}
 //			pLayout = pLayout->GetPrevLayout();
-//			nCount--;
+//			--nCount;
 //		}
 //	}
 
@@ -244,7 +244,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 					return pLayout;
 				}
 				pLayout = pLayout->GetNextLayout();
-				nCount++;
+				++nCount;
 			}
 		}else {
 			nCount = m_nLines - CLayoutInt(1);
@@ -256,7 +256,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 					return pLayout;
 				}
 				pLayout = pLayout->GetPrevLayout();
-				nCount--;
+				--nCount;
 			}
 		}
 	}else {
@@ -272,7 +272,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 					return pLayout;
 				}
 				pLayout = pLayout->GetNextLayout();
-				nCount++;
+				++nCount;
 			}
 		}else {
 			nCount = m_nPrevReferLine - CLayoutInt(1);
@@ -284,7 +284,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 					return pLayout;
 				}
 				pLayout = pLayout->GetPrevLayout();
-				nCount--;
+				--nCount;
 			}
 		}
 	}
@@ -304,7 +304,7 @@ void CLayoutMgr::AddLineBottom(CLayout* pLayout)
 		m_pLayoutBot = pLayout;
 	}
 	pLayout->m_pNext = NULL;
-	m_nLines++;
+	++m_nLines;
 	return;
 }
 
@@ -337,7 +337,7 @@ CLayout* CLayoutMgr::InsertLineNext(CLayout* pLayoutPrev, CLayout* pLayout)
 		pLayout->m_pPrev = pLayoutPrev;
 		pLayout->m_pNext = pLayoutNext;
 	}
-	m_nLines++;
+	++m_nLines;
 	return pLayout;
 }
 
@@ -562,7 +562,7 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 
 		delete pLayout;
 
-		m_nLines--;	// 全物理行数
+		--m_nLines;	// 全物理行数
 		if (!pLayoutNext) {
 			m_pLayoutBot = pLayoutWork;
 		}
@@ -782,7 +782,7 @@ void CLayoutMgr::LogicToLayout(
 		// ロジックYがでかすぎる場合は、一致するまでデクリメント (
 		while (pLayout->GetLogicLineNo() > ptLogic.GetY2()) {
 			pLayout = pLayout->GetPrevLayout();
-			nCaretPosY--;
+			--nCaretPosY;
 		}
 
 		// ロジックYが同じでOffsetが行き過ぎている場合は戻る
@@ -793,7 +793,7 @@ void CLayoutMgr::LogicToLayout(
 				&& ptLogic.x < pLayout->GetLogicOffset()
 			) {
 				pLayout = pLayout->GetPrevLayout();
-				nCaretPosY--;
+				--nCaretPosY;
 			}
 		}
 	}
@@ -808,7 +808,7 @@ void CLayoutMgr::LogicToLayout(
 				&& ptLogic.GetY2() == pLayoutNext->GetLogicLineNo()
 				&& pLayoutNext->GetLogicOffset() <= ptLogic.x
 			) {
-				nCaretPosY++;
+				++nCaretPosY;
 				pLayout = pLayout->GetNextLayout();
 				continue;
 			}
@@ -876,7 +876,7 @@ void CLayoutMgr::LogicToLayout(
 		}
 
 		// 次の行へ進む
-		nCaretPosY++;
+		++nCaretPosY;
 		pLayout = pLayout->GetNextLayout();
 	} while (pLayout);
 

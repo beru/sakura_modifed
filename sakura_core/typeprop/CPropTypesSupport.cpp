@@ -226,7 +226,7 @@ void CPropTypesSupport::SetData(HWND hwndDlg)
 		ApiWrap::Combo_AddString(hCombo, LS(STR_SMART_INDENT_NONE));
 		Combo_SetCurSel(hCombo, 0);
 		size_t nSize = pMedothList->size();
-		for (size_t i = 0; i < nSize; i++) {
+		for (size_t i=0; i<nSize; ++i) {
 			ApiWrap::Combo_AddString(hCombo, (*pMedothList)[i].name.c_str());
 			if (m_Types.m_nHokanType == (*pMedothList)[i].nMethod) {
 				Combo_SetCurSel(hCombo, i + 1);
@@ -298,7 +298,7 @@ void CPropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
 void CPropTypesSupport::RemoveHokanMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = GetHokanMethodList()->size();
-	for (int i = 0; i < nSize; i++) {
+	for (int i=0; i<nSize; ++i) {
 		if ((*GetHokanMethodList())[i].nMethod == (EOutlineType)nMethod) {
 			GetHokanMethodList()->erase(GetHokanMethodList()->begin() + i);
 			break;

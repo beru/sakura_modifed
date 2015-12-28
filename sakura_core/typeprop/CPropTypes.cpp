@@ -151,7 +151,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 	std::tstring sTabname[_countof(TypePropSheetInfoList)];
 	m_bChangeKeyWordSet = false;
 	PROPSHEETPAGE psp[_countof(TypePropSheetInfoList)];
-	for (nIdx = 0; nIdx < _countof(TypePropSheetInfoList); nIdx++) {
+	for (nIdx = 0; nIdx < _countof(TypePropSheetInfoList); ++nIdx) {
 		sTabname[nIdx] = LS(TypePropSheetInfoList[nIdx].m_nTabNameId);
 
 		PROPSHEETPAGE* p = &psp[nIdx];

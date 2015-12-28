@@ -666,7 +666,7 @@ CMenuDrawer::CMenuDrawer()
 	SetTBBUTTONVal(&m_tbMyButton[0], -1, F_SEPARATOR, 0, TBSTYLE_SEP, 0, 0);	// セパレータ	// 2007.11.02 ryoji アイコンの未定義化(-1)
 
 	// 2010.06.23 Moca ループインデックスの基準をm_tbMyButtonに変更
-	for (int i = INDEX_GAP; i < myButtonEnd; i++) {
+	for (int i=INDEX_GAP; i<myButtonEnd; ++i) {
 		const int funcCode = tbd[i-INDEX_GAP];
 		const int imageIndex = i - INDEX_GAP;
 
@@ -718,7 +718,7 @@ CMenuDrawer::CMenuDrawer()
 		const int nAddFuncs = MAX_CUSTMACRO - MAX_CUSTMACRO_ICO;
 		const int nBaseIndex = m_tbMyButton.size();
 		m_tbMyButton.resize(m_tbMyButton.size() + nAddFuncs);
-		for (int k = 0; k < nAddFuncs; k++) {
+		for (int k = 0; k < nAddFuncs; ++k) {
 			const int macroFuncCode = F_USERMACRO_0 + MAX_CUSTMACRO_ICO + k;
 			SetTBBUTTONVal(
 				&m_tbMyButton[k + nBaseIndex],
@@ -1387,11 +1387,11 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 				const int nBASE = 100 * 100; // 座標,nScale共に0.01単位
 				// 16dot幅しかないので 1.0倍から2.1倍までスケールする(10-23)
 				const int nScale = t_max(100, t_min(210, int((lpdis->rcItem.bottom - lpdis->rcItem.top - 2) * 100) / (16-2)));
-				for (int nBold = 1; nBold <= (281*nScale)/nBASE; nBold++) {
+				for (int nBold = 1; nBold <= (281*nScale)/nBASE; ++nBold) {
 					::MoveToEx(hdc, nX - (187*nScale)/nBASE, nY - (187*nScale)/nBASE, NULL);
 					::LineTo(  hdc, nX -   (0*nScale)/nBASE, nY -   (0*nScale)/nBASE);
 					::LineTo(  hdc, nX + (468*nScale)/nBASE, nY - (468*nScale)/nBASE);
-					nY++;
+					++nY;
 				}
 				if (hPen) {
 					::SelectObject(hdc, hPenOld);
@@ -1493,7 +1493,7 @@ int CMenuDrawer::FindIndexFromCommandId(int idCommand, bool bOnlyFunc) const
 	}
 
 	int nIndex = -1;
-	for (int i = 0; i < m_nMyButtonNum; i++) {
+	for (int i=0; i<m_nMyButtonNum; ++i) {
 		if (m_tbMyButton[i].idCommand == idCommand) {
 			nIndex = i;
 			break;
@@ -1558,7 +1558,7 @@ TCHAR CMenuDrawer::GetAccelCharFromLabel(const TCHAR* pszLabel)
 	for (int i = 0; i + 1 < nLen; ++i) {
 		if (_T('&') == pszLabel[i]) {
 			if (_T('&') == pszLabel[i + 1]) {
-				i++;
+				++i;
 			}else {
 				return (TCHAR)_totupper(pszLabel[i + 1]);
 			}
@@ -1591,7 +1591,7 @@ LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	// 2011.11.18 vector化
 	std::vector<WorkData> vecAccel;
 	size_t nAccelSel = 99999;
-	for (int i = 0; i < ::GetMenuItemCount(hmenu); i++) {
+	for (int i=0; i<::GetMenuItemCount(hmenu); ++i) {
 		TCHAR	szText[1024];
 		// メニュー項目に関する情報を取得します。
 		MENUITEMINFO mii = {0};
@@ -1692,16 +1692,16 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 				// このウィンドウで未登録
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i = m_tbMyButton.size(); i < m_pShareData->m_PlugCmdIcon[iCmdNo]; i++) {
+				for (i=m_tbMyButton.size(); i<m_pShareData->m_PlugCmdIcon[iCmdNo]; ++i) {
 					m_tbMyButton.push_back(tbb);
-					m_nMyButtonNum++;
+					++m_nMyButtonNum;
 				}
 
 				// 未登録
 				SetTBBUTTONVal(&tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 				// 最後に追加に変更
 				m_tbMyButton.push_back(tbb);
-				m_nMyButtonNum++;
+				++m_nMyButtonNum;
 			}else {
 				// 再設定
 				SetTBBUTTONVal(&m_tbMyButton[m_pShareData->m_PlugCmdIcon[iCmdNo]],
@@ -1712,9 +1712,9 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			if (m_tbMyButton.size() < (size_t)m_pShareData->m_maxTBNum) {
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT-1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i = m_tbMyButton.size(); i < m_pShareData->m_maxTBNum; i++) {
+				for (i=m_tbMyButton.size(); i<m_pShareData->m_maxTBNum; ++i) {
 					m_tbMyButton.push_back(tbb);
-					m_nMyButtonNum++;
+					++m_nMyButtonNum;
 				}
 			}
 			// 新規登録
@@ -1724,7 +1724,7 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			// 最後から２番目に挿入する。一番最後は番兵で固定。
 			// 2010.06.23 Moca 最後に追加に変更
 			m_tbMyButton.push_back(tbb);
-			m_nMyButtonNum++;
+			++m_nMyButtonNum;
 		}
 	}
 	if (m_pShareData->m_maxTBNum < m_nMyButtonNum) {

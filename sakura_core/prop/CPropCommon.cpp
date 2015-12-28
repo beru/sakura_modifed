@@ -232,7 +232,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 
 	std::tstring		sTabname[_countof(ComPropSheetInfoList)];
 	PROPSHEETPAGE		psp[_countof(ComPropSheetInfoList)];
-	for (nIdx = 0; nIdx < _countof(ComPropSheetInfoList); nIdx++) {
+	for (nIdx = 0; nIdx < _countof(ComPropSheetInfoList); ++nIdx) {
 		sTabname[nIdx] = LS(ComPropSheetInfoList[nIdx].m_nTabNameId);
 
 		PROPSHEETPAGE* p = &psp[nIdx];
@@ -319,7 +319,7 @@ void CPropCommon::InitData(void)
 		STypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(i), type);
 		indexs.typeId = type.m_id;
-		for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++) {
+		for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
 			indexs.index[j] = type.m_nKeyWordSetIdx[j];
 		}
 		m_Types_nKeyWordSetIdx.push_back(indexs);
@@ -342,7 +342,7 @@ void CPropCommon::ApplyData(void)
 			CDocTypeManager().GetTypeConfig(configIdx, type);
 			// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
-			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; j++) {
+			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
 				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];
 			}
 			CDocTypeManager().SetTypeConfig(configIdx, type);

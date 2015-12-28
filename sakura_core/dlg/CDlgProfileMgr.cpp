@@ -365,7 +365,7 @@ void CDlgProfileMgr::DeleteProf()
 	List_DeleteString( hwndList, nCurIndex );
 	UpdateIni();
 	if (List_GetCount( hwndList ) <= nCurIndex) {
-		nCurIndex--;
+		--nCurIndex;
 	}
 	SetData(nCurIndex);
 }

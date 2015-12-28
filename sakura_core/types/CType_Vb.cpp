@@ -276,7 +276,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
-					i--;
+					--i;
 					continue;
 				}
 			/* ãLçÜóÒì«Ç›çûÇ›íÜ */
@@ -307,7 +307,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
-					i--;
+					--i;
 					continue;
 				}else if (1 == nCharChars && L'"' == pLine[i]) {
 					// Aug 7, 2003 little YOSHI  í«â¡

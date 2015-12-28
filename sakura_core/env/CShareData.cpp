@@ -75,7 +75,7 @@ CShareData::~CShareData()
 		CloseHandle(m_hFileMap);
 	}
 	if (m_pvTypeSettings) {
-		for (int i = 0; i < (int)m_pvTypeSettings->size(); i++) {
+		for (int i = 0; i < (int)m_pvTypeSettings->size(); ++i) {
 			delete (*m_pvTypeSettings)[i];
 			(*m_pvTypeSettings)[i] = NULL;
 		}
@@ -171,7 +171,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_sHandles.m_hAccel = NULL;
 		m_pShareData->m_sHandles.m_hwndDebug = NULL;
 
-		for (int i = 0; i < _countof(m_pShareData->m_dwCustColors); i++) {
+		for (int i = 0; i < _countof(m_pShareData->m_dwCustColors); ++i) {
 			m_pShareData->m_dwCustColors[i] = RGB( 255, 255, 255 );
 		}
 
@@ -638,7 +638,7 @@ bool CShareData::InitShareData()
 			CommonSetting_Plugin& sPlugin = m_pShareData->m_Common.m_sPlugin;
 
 			sPlugin.m_bEnablePlugin			= FALSE;	// プラグインを使用する
-			for (int nPlugin=0; nPlugin < MAX_PLUGIN; nPlugin++) {
+			for (int nPlugin=0; nPlugin < MAX_PLUGIN; ++nPlugin) {
 				sPlugin.m_PluginTable[nPlugin].m_szName[0]	= L'\0';	// プラグイン名
 				sPlugin.m_PluginTable[nPlugin].m_szId[0]	= L'\0';	// プラグインID
 				sPlugin.m_PluginTable[nPlugin].m_state = PLS_NONE;		// プラグイン状態
@@ -784,7 +784,7 @@ void ConvertLangValueImpl(
 	}
 	std::wstring to = LSW(nStrId);
 	ConvertLangString(pBuf, chBufSize, values[index], to);
-	index++;
+	++index;
 }
 
 static
@@ -806,7 +806,7 @@ void ConvertLangValueImpl(
 	}
 	std::wstring to = LSW(nStrId);
 	ConvertLangString(pBuf, chBufSize, values[index], to);
-	index++;
+	++index;
 }
 
 #define ConvertLangValue(buf, id)  ConvertLangValueImpl(buf, _countof(buf), id, values, index, bSetValues, true);
@@ -849,7 +849,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	ConvertLangValue(common.m_sFormat.m_szDateFormat, STR_DATA_FORMAT);
 	ConvertLangValue(common.m_sFormat.m_szTimeFormat, STR_TIME_FORMAT);
 	indexBackup = index;
-	for (int i = 0; i < common.m_sFileName.m_nTransformFileNameArrNum; i++) {
+	for (int i = 0; i < common.m_sFileName.m_nTransformFileNameArrNum; ++i) {
 		index = indexBackup;
 		ConvertLangValue(common.m_sFileName.m_szTransformFileNameTo[i], STR_TRANSNAME_COMDESKTOP);
 		ConvertLangValue(common.m_sFileName.m_szTransformFileNameTo[i], STR_TRANSNAME_COMDOC);
@@ -863,7 +863,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 		}
 	}
 	indexBackup = index;
-	for (int i = 0; i < MAX_PRINTSETTINGARR; i++) {
+	for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
 		index = indexBackup;
 		ConvertLangValue(shareData.m_PrintSettingArr[i].m_szPrintSettingName, STR_PRINT_SET_NAME);
 		if (bSetValues) {
@@ -873,7 +873,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	assert(m_pvTypeSettings);
 	indexBackup = index;
 	ConvertLangValue(shareData.m_TypeBasis.m_szTypeName, STR_TYPE_NAME_BASIS);
-	for (int i = 0; i < (int)GetTypeSettings().size(); i++) {
+	for (int i = 0; i < (int)GetTypeSettings().size(); ++i) {
 		index = indexBackup;
 		STypeConfig& type = *(GetTypeSettings()[i]);
 		ConvertLangValue2(type.m_szTypeName, STR_TYPE_NAME_BASIS);
@@ -1311,71 +1311,71 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	int n = 0;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_UNDO;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'U';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_REDO;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'R';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_CUT;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'T';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPY;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'C';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_PASTE;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'P';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_DELETE;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'D';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPY_CRLF;	// Nov. 9, 2000 JEPRO 「CRLF改行でコピー」を追加
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'L';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPY_ADDCRLF;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'H';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_PASTEBOX;	// Nov. 9, 2000 JEPRO 「矩形貼り付け」を復活
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'X';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_SELECTALL;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'A';
-	n++;
+	++n;
 
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;		// Oct. 3, 2000 JEPRO 以下に「タグジャンプ」と「タグジャンプバック」を追加
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_TAGJUMP;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'G';		// Nov. 9, 2000 JEPRO 「コピー」とバッティングしていたアクセスキーを変更(T→G)
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_TAGJUMPBACK;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'B';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;		// Oct. 15, 2000 JEPRO 以下に「選択範囲内全行コピー」と「引用符付きコピー」を追加
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPYLINES;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '@';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPYLINESASPASSAGE;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '.';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_COPYPATH;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = '\\';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[0][n] = F_PROPERTY_FILE;
 	rMenu.m_nCustMenuItemKeyArr [0][n] = 'F';		// Nov. 9, 2000 JEPRO 「やり直し」とバッティングしていたアクセスキーを変更(R→F)
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemNumArr[0] = n;
 
 	// カスタムメニュー１
@@ -1399,55 +1399,55 @@ void CShareData::InitPopupMenu(DLLSHAREDATA* pShareData)
 	n = 0;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILESAVE;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'S';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILESAVEAS_DIALOG;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'A';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILECLOSE;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'R';	// 2007.06.26 ryoji B -> R
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILECLOSE_OPEN;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'L';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_WINCLOSE;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'C';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_FILE_REOPEN;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'W';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_GROUPCLOSE;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'G';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_CLOSEOTHER;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'O';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_CLOSELEFT;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'H';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_CLOSERIGHT;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'M';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_0;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = '\0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_MOVERIGHT;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = '0';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_MOVELEFT;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = '1';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_SEPARATE;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'E';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_JOINTNEXT;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'X';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemFuncArr[CUSTMENU_INDEX_FOR_TABWND][n] = F_TAB_JOINTPREV;
 	rMenu.m_nCustMenuItemKeyArr [CUSTMENU_INDEX_FOR_TABWND][n] = 'V';
-	n++;
+	++n;
 	rMenu.m_nCustMenuItemNumArr[CUSTMENU_INDEX_FOR_TABWND] = n;
 }
 

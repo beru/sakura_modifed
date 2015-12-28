@@ -206,7 +206,7 @@ ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, bool bBigFile, ECodeType CharC
 	m_pCodeBase->GetEol( &m_memEols[2], EOL_PS );
 	bool bEolEx = false;
 	int nMaxEolLen = 0;
-	for (int k = 0; k < (int)_countof(m_memEols); k++) {
+	for (int k = 0; k < (int)_countof(m_memEols); ++k) {
 		if (0 != m_memEols[k].GetRawLength()) {
 			bEolEx = true;
 			nMaxEolLen = t_max(nMaxEolLen, m_memEols[k].GetRawLength());
@@ -364,7 +364,7 @@ EConvertResult CFileLoad::ReadLine_core(
 		eRet = RESULT_LOSESOME;
 	}
 
-	m_nLineIndex++;
+	++m_nLineIndex;
 
 	// 2012.10.21 Moca BOM‚Ìœ‹Ž(UTF-7‘Î‰ž)
 	if (m_nLineIndex == 0) {
@@ -495,7 +495,7 @@ const char* CFileLoad::GetNextLineCharCode(
 				}
 				if (m_bEolEx) {
 					int k;
-					for (k = 0; k < (int)_countof(eEolEx); k++) {
+					for (k = 0; k < (int)_countof(eEolEx); ++k) {
 						if (0 != m_memEols[k].GetRawLength()
 							&& i + m_memEols[k].GetRawLength() - 1 < nDataLen
 							&& 0 == memcmp( m_memEols[k].GetRawPtr(), pData + i, m_memEols[k].GetRawLength())
@@ -512,10 +512,10 @@ const char* CFileLoad::GetNextLineCharCode(
 			}
 			// UTF-8‚ÌNEL,PS,LS’f•Ð‚ÌŒŸo
 			if (i == nDataLen && m_bEolEx) {
-				for (i = t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; i++) {
+				for (i = t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; ++i) {
 					int k;
 					bool bSet = false;
-					for (k = 0; k < (int)_countof(eEolEx); k++) {
+					for (k = 0; k < (int)_countof(eEolEx); ++k) {
 						int nCompLen = t_min(nDataLen - i, m_memEols[k].GetRawLength());
 						if (0 != nCompLen
 							&& 0 == memcmp(m_memEols[k].GetRawPtr(), pData + i, nCompLen)

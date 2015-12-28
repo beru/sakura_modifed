@@ -295,7 +295,7 @@ void GetLineColumn(const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn)
 		int j = 0;
 		for (; i < nLineLen && j + 1 < _countof(szNumber);) {
 			szNumber[j] = pLine[i];
-			j++;
+			++j;
 			++i;
 			if (pLine[i] >= L'0' &&
 				pLine[i] <= L'9'
@@ -313,7 +313,7 @@ void GetLineColumn(const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn)
 			++i;
 			for (; i < nLineLen && j + 1 < _countof(szNumber);) {
 				szNumber[j] = pLine[i];
-				j++;
+				++j;
 				++i;
 				if (pLine[i] >= L'0' &&
 					pLine[i] <= L'9'
@@ -347,8 +347,8 @@ int scan_ints(
 	int num = 0;
 	const wchar_t* p = pszFormat;
 	while (*p) {
-		if (*p == L'%') num++;
-		p++;
+		if (*p == L'%') ++num;
+		++p;
 	}
 
 	// スキャン
@@ -362,7 +362,7 @@ int scan_ints(
 	);
 
 	// 結果コピー
-	for (int i = 0; i < num; i++) {
+	for (int i = 0; i < num; ++i) {
 		anBuf[i] = dummy[i];
 	}
 

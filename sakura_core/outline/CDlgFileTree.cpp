@@ -469,7 +469,7 @@ static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool 
 				TreeView_Expand(hwndTree, td, TVE_EXPAND);
 			}
 		}
-		n++;
+		++n;
 	}
 
 	return td;
@@ -750,7 +750,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 						htiInsert = TVI_LAST;
 					}
 					HTREEITEM htiItemFirst = NULL;
-					for (int i = 0; i < (int)aFileNames.size(); i++) {
+					for (int i = 0; i < (int)aFileNames.size(); ++i) {
 						CNativeT cmemFile = aFileNames[i].c_str();
 						cmemFile.ReplaceT(_T("%"), _T("%%"));
 						SFileTreeItem item;
@@ -784,7 +784,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 				strMsg = LS(STR_FILETREE_REPLACE_PATH_TO);
 				if (dlgInput.DoModal( G_AppInstance(), GetHwnd(), strTitle.c_str(), strMsg.c_str(), _countof(szPathTo), szPathTo)) {
 					int nItemsCount = (int)m_fileTreeSetting.m_aItems.size();
-					for (int i = 0; i < nItemsCount; i++) {
+					for (int i = 0; i < nItemsCount; ++i) {
 						SFileTreeItem& item =  m_fileTreeSetting.m_aItems[i];
 						CNativeT str(item.m_szTargetPath);
 						str.Replace(szPathFrom, szPathTo);

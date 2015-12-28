@@ -382,7 +382,7 @@ int CPropFile::GetData(HWND hwndDlg)
 
 	int nN;
 	TCHAR* pDigit;
-	for (nN = 0, pDigit = szNumBuf; *pDigit != _T('\0'); pDigit++) {
+	for (nN = 0, pDigit = szNumBuf; *pDigit != _T('\0'); ++pDigit) {
 		if (_T('0') <= *pDigit && *pDigit <= _T('9')) {
 			nN = nN * 10 + *pDigit - _T('0');
 		}else {

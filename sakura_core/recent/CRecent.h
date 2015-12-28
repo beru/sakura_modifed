@@ -57,7 +57,7 @@ public:
 
 	int FindItemByText(const TCHAR* pszText) const {
 		int n = GetItemCount();
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < n; ++i) {
 			if (_tcscmp(GetItemText(i), pszText) == 0) {
 				return i;
 			}

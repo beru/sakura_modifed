@@ -157,7 +157,7 @@ void CNativeA::Replace(const char* pszFrom, const char* pszTo)
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
-			nBgn++;
+			++nBgn;
 		}
 	}
 	if (0 < GetStringLength() - nBgnOld) {
@@ -185,9 +185,9 @@ void CNativeA::Replace_j(const char* pszFrom, const char* pszTo)
 			nBgnOld = nBgn;
 		}else {
 			if (_IS_SJIS_1((unsigned char)GetStringPtr()[nBgn])) {
-				nBgn++;
+				++nBgn;
 			}
-			nBgn++;
+			++nBgn;
 		}
 	}
 	if (0  < GetStringLength() - nBgnOld) {
@@ -347,7 +347,7 @@ void CNativeA::ToZenkaku(
 						&& pBuf[i + 1] == (unsigned char)'ﾞ'
 						&& strchr((const char*)pszDakuSet, pBuf[i])
 					) {
-						usDes++;
+						++usDes;
 						nCharChars = 2;
 					}
 					// 拗音
@@ -441,8 +441,8 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 					nPosDes += nWork;
 					nPosX += nWork;
 				}else {
-					nPosDes++;
-					nPosX++;
+					++nPosDes;
+					++nPosX;
 				}
 			}
 		}
@@ -466,8 +466,8 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 					nPosX += nWork;
 				}else {
 					pDes[nPosDes] = pLine[i];
-					nPosDes++;
-					nPosX++;
+					++nPosDes;
+					++nPosX;
 				}
 			}
 		}
@@ -535,7 +535,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 					}
 					bSpace = TRUE;
 					if (SPACE == pLine[i]) {
-						nPosX++;
+						++nPosX;
 					}else if (TAB == pLine[i]) {
 						nPosX += nTabSpace - (nPosX % nTabSpace);
 					}
@@ -543,51 +543,51 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 					if (bSpace) {
 						if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
 							pDes[nPosDes] = SPACE;
-							nPosDes++;
+							++nPosDes;
 						}else {
 							int j;
-							for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); j++) {
+							for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); ++j) {
 								pDes[nPosDes] = TAB;
-								nPosDes++;
+								++nPosDes;
 								nStartPos += nTabSpace - (nStartPos % nTabSpace);
 							}
 							// 2003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 							// バッファをはみ出すのを修正
-							for (j = nStartPos; j < nPosX; j++) {
+							for (j = nStartPos; j < nPosX; ++j) {
 								pDes[nPosDes] = SPACE;
-								nPosDes++;
+								++nPosDes;
 							}
 						}
 					}
-					nPosX++;
+					++nPosX;
 					pDes[nPosDes] = pLine[i];
-					nPosDes++;
+					++nPosDes;
 					bSpace = FALSE;
 				}
 			}
 			//for (; i < nLineLen; ++i) {
 			//	pDes[nPosDes] = pLine[i];
-			//	nPosDes++;
+			//	++nPosDes;
 			//}
 			if (bSpace) {
 				if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
 					pDes[nPosDes] = SPACE;
-					nPosDes++;
+					++nPosDes;
 				}else {
 					int j;
 					//for (j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j += nTabSpace) {
-					for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); j++) {
+					for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); ++j) {
 						pDes[nPosDes] = TAB;
-						nPosDes++;
+						++nPosDes;
 						nStartPos += nTabSpace - (nStartPos % nTabSpace);
 					}
 					// 2003.08.05 Moca
 					// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 					// バッファをはみ出すのを修正
-					for (j = nStartPos; j < nPosX; j++) {
+					for (j = nStartPos; j < nPosX; ++j) {
 						pDes[nPosDes] = SPACE;
-						nPosDes++;
+						++nPosDes;
 					}
 				}
 			}

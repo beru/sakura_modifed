@@ -68,7 +68,7 @@ BOOL CDicMgr::Search(
 	}
 
 	wchar_t	szLine[LINEREADBUFSIZE];
-	for (int line = 1; in; line++) {	// 2006.04.10 fon
+	for (int line = 1; in; ++line) {	// 2006.04.10 fon
 		// 1çsì«Ç›çûÇ›
 		{
 			wstring tmp = in.ReadLineW(); //NULL != fgetws(szLine, _countof(szLine), pFile);

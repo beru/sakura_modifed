@@ -129,7 +129,7 @@ bool IsFilePath(
 		}
 
 		szJumpToFile[cur_pos] = pLine[i];
-		cur_pos++;
+		++cur_pos;
 	}
 
 	// Jan. 04, 2002 genta
@@ -189,9 +189,9 @@ const TCHAR* GetFileTitlePointer(const TCHAR* tszPath)
 	while (*p) {
 		if (*p == _T('\\')) {
 			pszName = p + 1;
-			p++;
+			++p;
 		}else {
-			p++;
+			++p;
 		}
 	}
 	return pszName;
@@ -392,7 +392,7 @@ BOOL CheckEXT(const TCHAR* pszPath, const TCHAR* pszExt)
 	_tsplitpath(pszPath, NULL, NULL, NULL, szExt);
 	TCHAR* pszWork = szExt;
 	if (pszWork[0] == _T('.')) {
-		pszWork++;
+		++pszWork;
 	}
 	if (0 == _tcsicmp(pszExt, pszWork)) {
 		return TRUE;
@@ -737,8 +737,8 @@ char* sjis_strrchr2(const char* pt , const char ch1 , const char ch2) {
 	const char* pf = NULL;
 	while (*pt != '\0') {	// 文字列の終端まで調べる。
 		if ((*pt == ch1) || (*pt == ch2))	pf = pt;	// pf = 検索文字の位置
-		if (_IS_SJIS_1(*pt))	pt++;	// Shift_JIS の1文字目なら、次の1文字をスキップ
-		if (*pt != '\0')		pt++;	// 次の文字へ
+		if (_IS_SJIS_1(*pt))	++pt;	// Shift_JIS の1文字目なら、次の1文字をスキップ
+		if (*pt != '\0')		++pt;	// 次の文字へ
 	}
 	return (char*) pf;
 }
@@ -746,7 +746,7 @@ wchar_t* wcsrchr2(const wchar_t* pt , const wchar_t ch1 , const wchar_t ch2) {
 	const wchar_t* pf = NULL;
 	while (*pt != L'\0') {	// 文字列の終端まで調べる。
 		if ((*pt == ch1) || (*pt == ch2))	pf = pt;	// pf = 検索文字の位置
-		if (*pt != '\0')		pt++;	// 次の文字へ
+		if (*pt != '\0')		++pt;	// 次の文字へ
 	}
 	return (wchar_t*)pf;
 }
@@ -766,12 +766,12 @@ void GetExistPath(char* po , const char* pi)
 	/ ・ / を \ に変換しつつ(Win32API では / も \ と同等に扱われるから)
 	/ ・最大 (_MAX_PATH -1) 文字まで
 	/ po にコピーする。 */
-	for (pw = po, cnt = 0; (*pi != '\0') && (cnt < _MAX_PATH -1); pi++) {
+	for (pw = po, cnt = 0; (*pi != '\0') && (cnt < _MAX_PATH -1); ++pi) {
 		// /," 共に Shift_JIS の漢字コード中には含まれないので Shift_JIS 判定は不要。
 		if (*pi == '\"')	continue;		//  " なら何もしない。次の文字へ
 		if (*pi == '/')		*pw++ = '\\';	//  / なら \ に変換してコピー
 		else				*pw++ = *pi;	// その他の文字はそのままコピー
-		cnt++;	// コピーした文字数 ++
+		++cnt;	// コピーした文字数 ++
 	}
 	*pw = '\0';		// 文字列終端
 
@@ -843,12 +843,12 @@ void GetExistPathW(wchar_t* po , const wchar_t* pi)
 	/ ・ / を \ に変換しつつ(Win32API では / も \ と同等に扱われるから)
 	/ ・最大 (_MAX_PATH-1) 文字まで
 	/ po にコピーする。 */
-	for (pw = po, cnt = 0; (*pi != L'\0') && (cnt < _MAX_PATH-1); pi++) {
+	for (pw = po, cnt = 0; (*pi != L'\0') && (cnt < _MAX_PATH-1); ++pi) {
 		// /," 共に Shift_JIS の漢字コード中には含まれないので Shift_JIS 判定は不要。
 		if (*pi == L'\"')	continue;		//  " なら何もしない。次の文字へ
 		if (*pi == L'/')	*pw++ = L'\\';	//  / なら \ に変換してコピー
 		else				*pw++ = *pi;	// その他の文字はそのままコピー
-		cnt++;	// コピーした文字数 ++
+		++cnt;	// コピーした文字数 ++
 	}
 	*pw = L'\0';		// 文字列終端
 
@@ -941,7 +941,7 @@ void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ex
 		int a_dir = (attr & FILE_ATTRIBUTE_DIRECTORY) ?  1 : 0;
 		if (!a_dir) {	// 見つけた物がファイルだった場合。
 			pf = sjis_strrchr2(ppp, '\\','\\');	// 最末尾の \ を探す。
-			if (pf)	pf++;		// 見つかった→  pf=\の次の文字の位置
+			if (pf)	++pf;		// 見つかった→  pf=\の次の文字の位置
 			else			pf = pd;	// 見つからない→pf=パス名の先頭位置
 			// ここまでで pf = ファイル名の先頭位置
 			pe = sjis_strrchr2(pf, '.','.');		// 最末尾の '.' を探す。
@@ -964,9 +964,9 @@ void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ex
 
 			// ↓最後の文字を ch に得る。(ディレクトリ文字列が空の場合 ch='\\' となる)
 			char ch;
-			for (ch = '\\' , pf = pd ; *pf != '\0' ; pf++) {
+			for (ch = '\\' , pf = pd ; *pf != '\0' ; ++pf) {
 				ch = *pf;
-				if (_IS_SJIS_1(*pf))	pf++;	// Shift_JIS の1文字目なら次の1文字をスキップ
+				if (_IS_SJIS_1(*pf))	++pf;	// Shift_JIS の1文字目なら次の1文字をスキップ
 			}
 			// 文字列が空でなく、かつ、最後の文字が \ でなかったならば \ を追加。
 			if ((ch != '\\') && (strlen(ppp) < _MAX_PATH -1)) {
@@ -1027,7 +1027,7 @@ void my_splitpath_w(
 
 		if (!a_dir) {	// 見つけた物がファイルだった場合。
 			pf = wcsrchr(ppp, L'\\');	// 最末尾の \ を探す。
-			if (pf)	pf++;		// 見つかった→  pf=\の次の文字の位置
+			if (pf)	++pf;		// 見つかった→  pf=\の次の文字の位置
 			else			pf = pd;	// 見つからない→pf=パス名の先頭位置
 			// ここまでで pf = ファイル名の先頭位置
 			pe = wcsrchr(pf, L'.');		// 最末尾の '.' を探す。
@@ -1050,7 +1050,7 @@ void my_splitpath_w(
 
 			// ↓最後の文字を ch に得る。(ディレクトリ文字列が空の場合 ch=L'\\' となる)
 			wchar_t	ch;
-			for (ch = L'\\' , pf = pd ; *pf != L'\0' ; pf++) {
+			for (ch = L'\\' , pf = pd ; *pf != L'\0' ; ++pf) {
 				ch = *pf;
 			}
 			// 文字列が空でなく、かつ、最後の文字が \ でなかったならば \ を追加。
@@ -1090,7 +1090,7 @@ void FileNameSepExt(const TCHAR *file, TCHAR* pszFile, TCHAR* pszExt)
 	while (x) {
 		x = auto_strchr(folderPos, _T('\\'));
 		if (x) {
-			x++;
+			++x;
 			folderPos = x;
 		}
 	}
@@ -1239,13 +1239,13 @@ void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nP
 			nLeft = nTop;
 		}
 	}
-	for (int i = 0; i < nSkipLevel; i++) {
+	for (int i = 0; i < nSkipLevel; ++i) {
 		while (path[nLeft] != _T('\0') && path[nLeft] != _T('\\') && path[nLeft] != _T('/')) {
 			nLeft += t_max(1, (int)(Int)CNativeT::GetSizeOfChar(path, nPathLen, nLeft));
 		}
 		if (path[nLeft] != _T('\0')) {
 			if (i + 1 < nSkipLevel) {
-				nLeft++;
+				++nLeft;
 			}
 		}else {
 			if (bFitMode) {
@@ -1260,7 +1260,7 @@ void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nP
 	int nRight = nLeft; // 右側の表示開始位置(nRightは\を指している)
 	while (path[nRight] != _T('\0')) {
 		int nNext = nRight;
-		nNext++;
+		++nNext;
 		while (path[nNext] != _T('\0') && path[nNext] != _T('\\') && path[nNext] != _T('/')) {
 			nNext += t_max(1, (int)(Int)CNativeT::GetSizeOfChar(path, nPathLen, nNext));
 		}
@@ -1294,7 +1294,7 @@ void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nP
 	// C:\...\file.ext
 	int nLeftLen = nLeft;
 	if (nLeftLen && nLeftLen != nRight) {
-		nLeftLen++;
+		++nLeftLen;
 	}
 	std::tstring strTemp(path, nLeftLen);
 	if (nLeft != nRight) {

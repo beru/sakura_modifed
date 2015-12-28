@@ -209,7 +209,7 @@ void CMRUFile::Add(EditInfo* pEditInfo)
 	// ‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÍAœŠOŽw’è‚ð–³Ž‹‚·‚é
 	if (-1 == m_cRecentFile.FindItemByPath(pEditInfo->m_szPath)) {
 		int nSize = m_pShareData->m_sHistory.m_aExceptMRU.size();
-		for (int i = 0 ; i < nSize; i++) {
+		for (int i = 0 ; i < nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pEditInfo->m_szPath,  szExceptMRU)) {

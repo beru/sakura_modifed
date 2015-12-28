@@ -276,7 +276,7 @@ void CDlgDiff::SetData(void)
 				// ƒŠƒXƒg‚É“o˜^‚·‚é
 				nItem = ::List_AddString(hwndList, szName);
 				List_SetItemData(hwndList, nItem, pEditNode[i].GetHwnd());
-				count++;
+				++count;
 
 				// ‰¡•‚ğŒvZ‚·‚é
 				calc.SetTextWidthIfMax(szName);

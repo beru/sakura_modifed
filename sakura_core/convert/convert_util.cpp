@@ -99,7 +99,7 @@ void Convert_ZenhiraToZenkata(wchar_t* pData, int nLength)
 	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = ZenhiraToZenkata_(*p);
-		p++;
+		++p;
 	}
 }
 
@@ -112,7 +112,7 @@ void Convert_ZenkataToZenhira(wchar_t* pData, int nLength)
 	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = ZenkataToZenhira_(*p);
-		p++;
+		++p;
 	}
 }
 
@@ -136,7 +136,7 @@ void Convert_ZeneisuToHaneisu(wchar_t* pData, int nLength)
 	wchar_t* q = p +nLength;
 	while (p < q) {
 		*p = ZeneisuToHaneisu_(*p);
-		p++;
+		++p;
 	}
 }
 
@@ -159,7 +159,7 @@ void Convert_HaneisuToZeneisu(wchar_t* pData, int nLength)
 	wchar_t* q = p + nLength;
 	while (p < q) {
 		*p = HaneisuToZeneisu_(*p);
-		p++;
+		++p;
 	}
 }
 
@@ -192,7 +192,7 @@ void Convert_ZenkataToHankata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 		else if (wcschr_idx(tableZenkata_Kigo      , c, &n)) { *dst++ = tableHankata_Kigo[n]; bInKataNormal = false; bInKata = false; }
 		// 無変換
 		else { *dst++ = c; bInKataNormal = false; bInKata = false; }
-		src++;
+		++src;
 	}
 	*dst = L'\0';
 	*nDstLength = dst - pDst;
@@ -233,7 +233,7 @@ void Convert_ToHankaku(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst, int* 
 				else { *dst++ = c; }
 			}
 		}
-		src++;
+		++src;
 	}
 	*dst = L'\0';
 	*nDstLength = dst - pDst;
@@ -264,7 +264,7 @@ void Convert_HankataToZenkata(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 		else if (             wcschr_idx(tableHankata_Kigo      ,c,&n)) { *dst++ = tableZenkata_Kigo[n];              }
 		// 無変換
 		else { *dst++ = c; }
-		src++;
+		++src;
 	}
 	*dst = L'\0';
 	*nDstLength = dst - pDst;
@@ -299,7 +299,7 @@ void Convert_HankataToZenhira(const wchar_t* pSrc, int nSrcLength, wchar_t* pDst
 		// 無変換
 		else { *dst++ = c; hit = false; }
 		if (hit) { *(dst - 1) = ZenkataToZenhira_(*(dst - 1)); }	// 半角カタカナから変換した全角カタカナを全角ひらがなに変換（※もともと全角だったカタカナは無変換）
-		src++;
+		++src;
 	}
 	*dst = L'\0';
 	*nDstLength = dst - pDst;

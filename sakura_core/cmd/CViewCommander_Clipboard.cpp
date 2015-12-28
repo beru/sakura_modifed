@@ -876,7 +876,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		const WCHAR* pLine = pcDocLine->GetPtr();
 		for (;
 			pcLayout->GetLogicLineNo() == nLineNum;
-			nLayoutLineNum++, pcLayout = pcLayout->GetNextLayout()
+			++nLayoutLineNum, pcLayout = pcLayout->GetNextLayout()
 		) {
 			CLogicInt nIdxFrom;
 			CLogicInt nIdxTo;

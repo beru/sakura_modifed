@@ -81,12 +81,12 @@ int WINAPI _tWinMain(
 		pszCommandLine = ::GetCommandLine();
 		// 実行ファイル名をスキップする
 		if (_T('\"') == *pszCommandLine) {
-			pszCommandLine++;
+			++pszCommandLine;
 			while (_T('\"') != *pszCommandLine && _T('\0') != *pszCommandLine) {
-				pszCommandLine++;
+				++pszCommandLine;
 			}
 			if (_T('\"') == *pszCommandLine) {
-				pszCommandLine++;
+				++pszCommandLine;
 			}
 		}else {
 			while (
@@ -94,12 +94,12 @@ int WINAPI _tWinMain(
 				&& _T('\t') != *pszCommandLine
 				&& _T('\0') != *pszCommandLine
 			) {
-				pszCommandLine++;
+				++pszCommandLine;
 			}
 		}
 		// 次のトークンまで進める
 		while (_T(' ') == *pszCommandLine || _T('\t') == *pszCommandLine) {
-			pszCommandLine++;
+			++pszCommandLine;
 		}
 		process = aFactory.Create(hInstance, pszCommandLine);
 #else

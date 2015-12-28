@@ -31,7 +31,7 @@ bool _GetKeywordLength(
 		}
 		nWordLen += 1;
 		nWordKetas += k;
-		nPos++;
+		++nPos;
 	}
 	// 結果
 	if (nWordLen > 0) {
@@ -513,7 +513,7 @@ CLayoutInt CLayoutMgr::DoLayout_Range(
 			_OnLine2(pWork);
 		}
 
-		nLineNumWork++;
+		++nLineNumWork;
 		pWork->nCurLine++;
 
 		// 目的の行数(nLineNum)に達したか、または通り過ぎた（＝行数が増えた）か確認
@@ -635,7 +635,7 @@ void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 
 #if defined(_DEBUG) && defined(_UNICODE)
 		static int testcount = 0;
-		testcount++;
+		++testcount;
 
 		// テキスト最大幅を算出する
 		if (bCalTextWidth) {

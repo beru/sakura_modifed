@@ -239,7 +239,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 
 				wcscpy_s(buff, _MAX_PATH, to_wchar(pcDoc->m_cDocFile.GetFilePath()));
 				pEnd = NULL;
-				for (p = buff; *p != '\0'; p++) {
+				for (p = buff; *p != '\0'; ++p) {
 					if (*p == L'\\') {
 						pEnd = p;
 					}
@@ -270,7 +270,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				
 				pStr = to_wchar(pcDoc->m_cDocFile.GetFilePath());
 				pEnd = pStr - auto_strlen(pStr) - 1;
-				for (p = pStr; *p != '\0'; p++) {
+				for (p = pStr; *p != '\0'; ++p) {
 					if (*p == L'\\') {
 						pEnd = p;
 					}
@@ -533,7 +533,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 					break;
 				}
 				int nParamNameIdx = EExpParamName_begin;
-				for (; nParamNameIdx != EExpParamName_end; nParamNameIdx++) {
+				for (; nParamNameIdx != EExpParamName_end; ++nParamNameIdx) {
 					if (SExpParamNameTable[nParamNameIdx].m_nLen == (p - pBegin)
 						&& auto_strnicmp(SExpParamNameTable[nParamNameIdx].m_szName, pBegin, p - pBegin) == 0
 					) {
@@ -721,7 +721,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 			const CMRUFolder cMRU;
 			auto& vMRU = cMRU.GetPathList();
 			int nCount = cMRU.Length();
-			for (int i = 0; i < nCount ; i++) {
+			for (int i = 0; i < nCount ; ++i) {
 				DWORD attr = GetFileAttributes(vMRU[i]);
 				if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 					return vMRU[i];

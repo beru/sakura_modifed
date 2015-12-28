@@ -487,7 +487,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					// 初期値を設定する
 					::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEX, _T("//k"));	// 正規表現
 					hwndCombo = GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
-					for (i = 0, j = 0; i < COLORIDX_LAST; i++) {
+					for (i = 0, j = 0; i < COLORIDX_LAST; ++i) {
 						if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
 							0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
@@ -495,7 +495,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 								Combo_SetCurSel(hwndCombo, j);	// コンボボックスのデフォルト選択
 								break;
 							}
-							j++;
+							++j;
 						}
 					}
 					return FALSE;
@@ -508,7 +508,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					ListView_GetItemText(hwndList, nIndex, 1, szColorIndex, _countof(szColorIndex));
 					::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0]);	// 正規表現
 					hwndCombo = GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
-					for (i = 0, j = 0; i < COLORIDX_LAST; i++) {
+					for (i = 0, j = 0; i < COLORIDX_LAST; ++i) {
 						if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
 							0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
@@ -516,7 +516,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 								Combo_SetCurSel(hwndCombo, j);
 								break;
 							}
-							j++;
+							++j;
 						}
 					}
 				}
@@ -554,7 +554,7 @@ void CPropTypesRegex::SetData(HWND hwndDlg)
 	// 色種類のリスト
 	HWND hwndWork = ::GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
-	for (int i = 0; i < COLORIDX_LAST; i++) {
+	for (int i = 0; i < COLORIDX_LAST; ++i) {
 		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
 		if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
 			0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
@@ -593,7 +593,7 @@ void CPropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 
 	// データ表示
 	wchar_t* pKeyword = &m_Types.m_RegexKeywordList[0];
-	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 		if (*pKeyword == L'\0') {
 			break;
 		}
@@ -609,10 +609,10 @@ void CPropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 		lvi.iSubItem = 1;
 		lvi.pszText  = m_Types.m_ColorInfoArr[m_Types.m_RegexKeywordArr[i].m_nColorIndex].m_szName;
 		ListView_SetItem(hwndWork, &lvi);
-		for (; *pKeyword != '\0'; pKeyword++) {
+		for (; *pKeyword != '\0'; ++pKeyword) {
 			;
 		}
-		pKeyword++;
+		++pKeyword;
 	}
 	ListView_SetItemState(hwndWork, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
@@ -641,7 +641,7 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 	wchar_t* pKeyword = &m_Types.m_RegexKeywordList[0];
 	wchar_t* pKeywordLast = pKeyword + _countof(m_Types.m_RegexKeywordList) - 1;
 	// key1\0key2\0\0 の形式
-	for (i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 		if (i < nIndex) {
 			szKeyWord[0]    = _T('\0');
 			szColorIndex[0] = _T('\0');
@@ -652,15 +652,15 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 			}
 			// 色指定文字列を番号に変換する
 			m_Types.m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
-			for (j = 0; j < COLORIDX_LAST; j++) {
+			for (j = 0; j < COLORIDX_LAST; ++j) {
 				if (_tcscmp(m_Types.m_ColorInfoArr[j].m_szName, szColorIndex) == 0) {
 					m_Types.m_RegexKeywordArr[i].m_nColorIndex = j;
 					break;
 				}
 			}
 			if (*pKeyword) {
-				for (; *pKeyword != L'\0'; pKeyword++) {}
-				pKeyword++;
+				for (; *pKeyword != L'\0'; ++pKeyword) {}
+				++pKeyword;
 			}
 		}else { // 未登録部分はクリアする
 			m_Types.m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
@@ -712,7 +712,7 @@ bool CPropTypesRegex::CheckKeywordList(HWND hwndDlg, const TCHAR* szNewKeyWord, 
 	int  nIndex  = ListView_GetItemCount(hwndList);
 	auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 	int nKeywordLen = auto_strlen(to_wchar(szNewKeyWord)) + 1;
-	for (int i = 0; i < nIndex; i++) {
+	for (int i = 0; i < nIndex; ++i) {
 		if (i != nUpdateItem) {
 			szKeyWord[0] = _T('\0');
 			ListView_GetItemText(hwndList, i, 0, &szKeyWord[0], nKeyWordSize);

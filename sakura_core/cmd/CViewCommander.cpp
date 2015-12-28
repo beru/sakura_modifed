@@ -686,12 +686,12 @@ CLogicInt CViewCommander::ConvertEol(const wchar_t* pszText, CLogicInt nTextLen,
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				if (pszText[i] == WCODE::CR) {
 					if (i + 1 < nTextLen && pszText[i + 1] == WCODE::LF) {
-						i++;
+						++i;
 					}
 				}
 				nConvertedTextLen += eol.GetLen();
 			}else {
-				nConvertedTextLen++;
+				++nConvertedTextLen;
 			}
 		}
 	}else {
@@ -699,7 +699,7 @@ CLogicInt CViewCommander::ConvertEol(const wchar_t* pszText, CLogicInt nTextLen,
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				if (pszText[i] == WCODE::CR) {
 					if (i + 1 < nTextLen && pszText[i + 1] == WCODE::LF) {
-						i++;
+						++i;
 					}
 				}
 				wmemcpy(&pszConvertedText[nConvertedTextLen], eol.GetValue2(), eol.GetLen());

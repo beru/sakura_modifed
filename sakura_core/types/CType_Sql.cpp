@@ -223,7 +223,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
-					i--;
+					--i;
 					continue;
 				}
 			// ãLçÜóÒì«Ç›çûÇ›íÜ
@@ -251,7 +251,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					nWordIdx = 0;
 					szWord[0] = L'\0';
 					nMode = 0;
-					i--;
+					--i;
 					continue;
 				}else {
 //					++nWordIdx;

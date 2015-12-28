@@ -340,13 +340,13 @@ void CHokanMgr::HokanSearchByKeyword(
 	const STypeConfig& type = pcEditView->GetDocument()->m_cDocType.GetDocumentAttribute();
 	CKeyWordSetMgr& keywordMgr = m_pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
-	for (int n = 0; n < MAX_KEYWORDSET_PER_TYPE; n++) {
+	for (int n = 0; n < MAX_KEYWORDSET_PER_TYPE; ++n) {
 		int kwdset = type.m_nKeyWordSetIdx[n];
 		if (kwdset == -1) {
 			continue;
 		}
 		const int keyCount = keywordMgr.GetKeyWordNum(kwdset);
-		for (int i = 0; i < keyCount; i++) {
+		for (int i = 0; i < keyCount; ++i) {
 			const wchar_t* word = keywordMgr.GetKeyWord(kwdset, i);
 			int nRet;
 			if (bHokanLoHiCase) {

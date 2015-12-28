@@ -306,7 +306,7 @@ protected:
 //public:
 	//! 周期内でm_nTimerCountをインクリメント
 	void IncrementTimerCount(int nInterval) {
-		m_nTimerCount++;
+		++m_nTimerCount;
 		if (nInterval <= m_nTimerCount) { // 2012.11.29 aroka 呼び出し間隔のバグ修正
 			m_nTimerCount = 0;
 		}

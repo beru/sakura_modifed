@@ -311,8 +311,8 @@ int DetectJisEscseq(const char* pS, const int nLen, EMyJisEscseq* peEscType)
 	pr_end = pS + nLen;
 
 	if (pr[0] == ACODE::ESC) {
-		expected_esc_len++;
-		pr++;
+		++expected_esc_len;
+		++pr;
 		if (pr + 1 < pr_end) {
 			expected_esc_len += 2;
 			if (pr[0] == '(') {
@@ -412,12 +412,12 @@ int _CheckJisAnyPart(
 			switch (nType) {
 			case JISCHECK_ASCII7:
 				if (!IsAscii7(*pr)) {
-					nerror_cnt++;
+					++nerror_cnt;
 				}
 				break;
 			case JISCHECK_HANKATA:
 				if (!IsJisHankata(*pr)) {
-					nerror_cnt++;
+					++nerror_cnt;
 				}
 				break;
 			case JISCHECK_ZENKAKU:
@@ -429,7 +429,7 @@ int _CheckJisAnyPart(
 				break;
 			default:
 				if (!IsJis(*pr)) {
-					nerror_cnt++;
+					++nerror_cnt;
 				}
 			}
 		}

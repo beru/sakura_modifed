@@ -246,7 +246,7 @@ int _DecodeBase64(const CHAR_TYPE* pSrc, const int nSrcLen, char* pDest)
 		}
 		for (int j=0; j<(sMax * 6)/8 ; ++j) {
 			pDest[nDesLen] = static_cast<char>((lData >> (8 * (2 - j))) & 0x0000ff);
-			nDesLen++;
+			++nDesLen;
 		}
 		i+= 3;
 	}
@@ -291,7 +291,7 @@ int _EncodeBase64(const char* pSrc, const int nSrcLen, CHAR_TYPE* pDest)
 		for (k=0; k<j; ++k) {
 			v = static_cast<char>((lDataSrc >> (6 * (j - k - 1))) & 0x0000003f);
 			pDest[nDesLen] = static_cast<CHAR_TYPE>(ValToBase64<CHAR_TYPE>(v));
-			nDesLen++;
+			++nDesLen;
 		}
 	}
 	return nDesLen;

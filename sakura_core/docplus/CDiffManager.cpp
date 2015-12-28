@@ -140,26 +140,26 @@ bool CDiffLineMgr::SearchDiffMark(
 
 	// 前方検索
 	if (bPrevOrNext == SEARCH_BACKWARD) {
-		nLinePos--;
+		--nLinePos;
 		const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
 			if (CDiffLineGetter(pDocLine).GetLineDiffMark() != 0) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
-			nLinePos--;
+			--nLinePos;
 			pDocLine = pDocLine->GetPrevLine();
 		}
 	// 後方検索
 	}else {
-		nLinePos++;
+		++nLinePos;
 		const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
 			if (CDiffLineGetter(pDocLine).GetLineDiffMark() != 0) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
-			nLinePos++;
+			++nLinePos;
 			pDocLine = pDocLine->GetNextLine();
 		}
 	}
@@ -188,7 +188,7 @@ void CDiffLineMgr::SetDiffMarkRange(EDiffMark nMode, CLogicInt nStartLine, CLogi
 	}
 
 	// 行範囲にマークをつける
-	for (CLogicInt i = nStartLine; i <= nEndLine; i++) {
+	for (CLogicInt i = nStartLine; i <= nEndLine; ++i) {
 		CDocLine* pCDocLine = m_pcDocLineMgr->GetLine(i);
 		if (pCDocLine) {
 			CDiffLineSetter(pCDocLine).SetLineDiffMark(nMode);

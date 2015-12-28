@@ -134,7 +134,7 @@ void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int
 		}
 		// サロゲートペア対策	2008/7/5 Uchi	Update 7/8 Uchi
 		if (nDrawLength < nDrawDataMaxLength && pDrawDxArray[nDrawLength] == 0) {
-			nDrawLength++;
+			++nDrawLength;
 		}
 
 		// 描画
@@ -210,7 +210,7 @@ void CTextDrawer::DispVerticalLines(
 		gr.SetPen(cVertType.GetTextColor());
 	}
 
-	for (int k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; k++) {
+	for (int k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; ++k) {
 		// nXColは1開始。GetTextArea().GetViewLeftCol()は0開始なので注意。
 		CLayoutInt nXCol = typeData.m_nVertLineIdx[k];
 		CLayoutInt nXColEnd = nXCol;
@@ -253,7 +253,7 @@ void CTextDrawer::DispVerticalLines(
 					int y = nTop;
 					// スクロールしても線が切れないように座標を調整
 					if (bOddLine) {
-						y++;
+						++y;
 					}
 					for (; y < nBottom; y += 2) {
 						if (nPosX < nPosXRight) {

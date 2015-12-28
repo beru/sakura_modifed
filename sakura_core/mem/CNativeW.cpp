@@ -190,7 +190,7 @@ void CNativeW::Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* psz
 			nBgn = nBgn + nFromLen;
 			nBgnOld = nBgn;
 		}else {
-			nBgn++;
+			++nBgn;
 		}
 	}
 	if (nBgnOld != 0) {

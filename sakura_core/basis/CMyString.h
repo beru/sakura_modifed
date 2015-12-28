@@ -111,7 +111,7 @@ public:
 			if (*p == _T('.')) break;
 			if (*p == _T('\\')) break;
 			if (*p == _T('/')) break;
-			p--;
+			--p;
 		}
 		if (p >= head && *p == _T('.')) {
 			return bWithoutDot ? p + 1 : p;	// bWithoutDot == true‚È‚çƒhƒbƒg‚È‚µ‚ð•Ô‚·

@@ -37,26 +37,26 @@ bool CBookmarkManager::SearchBookMark(
 	
 	// 前方検索
 	if (bPrevOrNext == SEARCH_BACKWARD) {
-		nLinePos--;
+		--nLinePos;
 		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
 			if (CBookmarkGetter(pDocLine).IsBookmarked()) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
-			nLinePos--;
+			--nLinePos;
 			pDocLine = pDocLine->GetPrevLine();
 		}
 	// 後方検索
 	}else {
-		nLinePos++;
+		++nLinePos;
 		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
 			if (CBookmarkGetter(pDocLine).IsBookmarked()) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
-			nLinePos++;
+			++nLinePos;
 			pDocLine = pDocLine->GetNextLine();
 		}
 	}
@@ -107,12 +107,12 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 					if (pCDocLine) {
 						CBookmarkSetter(pCDocLine).SetBookmark(true);
 					}
-					nLineNum++;
+					++nLineNum;
 					nLineTemp = 0;
 				}else {
 					nLineTemp *= 32;
 				}
-				p++;
+				++p;
 			}
 		}else {
 			// 不明なバージョン
@@ -120,7 +120,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 	}else {
 		// 旧形式 行番号,区切り
 		while (wcstok(p, delim)) {
-			while (wcschr(delim, *p)) p++;
+			while (wcschr(delim, *p)) ++p;
 			pCDocLine=m_pcDocLineMgr->GetLine( CLogicInt(_wtol(p)) );
 			if (pCDocLine) {
 				CBookmarkSetter(pCDocLine).SetBookmark(true);
@@ -176,11 +176,11 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 						}
 					}
 					szBuff[nColumn] = c;
-					nColumn++;
+					++nColumn;
 					nDiff /= 32;
 				}
 				int i = 0;
-				for (; i < nColumn; i++) {
+				for (; i < nColumn; ++i) {
 					szBuff2[i] = szBuff[nColumn - 1 - i];
 				}
 				szBuff2[nColumn] = L'\0';
@@ -190,7 +190,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 			wcscpy( szText + nTextLen, szBuff2 );
 			nTextLen += nBuff2Len;
 		}
-		nLinePos++;
+		++nLinePos;
 		pCDocLine = pCDocLine->GetNextLine();
 	}
 	return szText; // Feb. 17, 2003 genta

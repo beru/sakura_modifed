@@ -209,7 +209,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		/* nDepth‚ğŒvZ */
 		int k;
 		bool bAppend = true;
-		for (k = 0; k < nDepth; k++) {
+		for (k = 0; k < nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {
 				break;
@@ -231,7 +231,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		
 		if (bAppend) {
 			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , pszText, 0, nDepth);
-			nDepth++;
+			++nDepth;
 		}
 		delete [] pszText;
 
@@ -283,7 +283,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 				int dummyLevel;
 				// (–³‘è)‚ğ‘}“ü
 				//	‚½‚¾‚µCTAGˆê——‚É‚Ío—Í‚³‚ê‚È‚¢‚æ‚¤‚É
-				for (dummyLevel = levelPrev + 1; dummyLevel < level; dummyLevel++) {
+				for (dummyLevel = levelPrev + 1; dummyLevel < level; ++dummyLevel) {
 					pcFuncInfoArr->AppendData(
 						nLineCount + CLogicInt(1),
 						ptPos.GetY2() + CLayoutInt(1),

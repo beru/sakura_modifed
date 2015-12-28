@@ -152,7 +152,7 @@ void CRecentImp<T, S>::ResetAllFavorite()
 		return;
 	}
 
-	for (int i = 0; i < *m_pnUserItemCount; i++) {
+	for (int i = 0; i < *m_pnUserItemCount; ++i) {
 		SetFavorite(i, false);
 	}
 }
@@ -212,7 +212,7 @@ bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 		DeleteItem(nIndex);
 	}
 
-	for (i = *m_pnUserItemCount; i > 0; i--) {
+	for (i = *m_pnUserItemCount; i > 0; --i) {
 		CopyItem(i - 1, i);
 	}
 
@@ -315,7 +315,7 @@ bool CRecentImp<T, S>::DeleteItem(int nIndex)
 
 	// 以降のアイテムを前に詰める。
 	int i;
-	for (i = nIndex; i < *m_pnUserItemCount - 1; i++) {
+	for (i = nIndex; i < *m_pnUserItemCount - 1; ++i) {
 		CopyItem(i + 1, i);
 	}
 	ZeroItem(i);
@@ -336,7 +336,7 @@ bool CRecentImp<T, S>::DeleteItemsNoFavorite()
 	}
 
 	bool bDeleted = false;
-	for (int i = *m_pnUserItemCount - 1; 0 <= i; i--) {
+	for (int i = *m_pnUserItemCount - 1; 0 <= i; --i) {
 		if (!IsFavorite(i)) {
 			if (DeleteItem(i)) {
 				bDeleted = true;
@@ -361,7 +361,7 @@ void CRecentImp<T, S>::DeleteAllItem()
 		return;
 	}
 	
-	for (i = 0; i < m_nArrayCount; i++) {
+	for (i = 0; i < m_nArrayCount; ++i) {
 		ZeroItem(i);
 	}
 	
@@ -392,11 +392,11 @@ bool CRecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 	bFavorite = IsFavorite(nSrcIndex);
 
 	if (nSrcIndex < nDstIndex) {
-		for (i = nSrcIndex; i < nDstIndex; i++) {
+		for (i = nSrcIndex; i < nDstIndex; ++i) {
 			CopyItem(i + 1, i);
 		}
 	}else {
-		for (i = nSrcIndex; i > nDstIndex; i--) {
+		for (i = nSrcIndex; i > nDstIndex; --i) {
 			CopyItem(i - 1, i);
 		}
 	}
@@ -453,7 +453,7 @@ int CRecentImp<T, S>::FindItem(ReceiveType pItemData) const
 	if (!IsAvailable()) return -1;
 	if (!pItemData) return -1;
 
-	for (int i = 0; i < *m_pnUserItemCount; i++) {
+	for (int i = 0; i < *m_pnUserItemCount; ++i) {
 		if (CompareItem(GetItemPointer(i), pItemData) == 0) return i;
 	}
 
@@ -472,7 +472,7 @@ int CRecentImp<T, S>::GetOldestItem(int nIndex, bool bFavorite)
 	if (!IsAvailable()) return -1;
 	if (nIndex >= *m_pnUserItemCount) nIndex = *m_pnUserItemCount - 1;
 
-	for (int i = nIndex; i >= 0; i--) {
+	for (int i = nIndex; i >= 0; --i) {
 		if (IsFavorite(i) == bFavorite) return i;
 	}
 
@@ -512,7 +512,7 @@ bool CRecentImp<T, S>::ChangeViewCount(int nViewCount)
 	if (-1 == i) return true;	// ないので何もしないで終了
 
 	// 表示外アイテムを表示内に移動する。
-	for (; i >= nViewCount; i--) {
+	for (; i >= nViewCount; --i) {
 		if (IsFavorite(i)) {
 			// カレント位置から上に通常アイテムを探す
 			nIndex = GetOldestItem(i - 1, false);

@@ -38,7 +38,7 @@ public:
 	int GetNum() const { return (int)m_ppCOpeArr.size(); }	// 操作の数を返す
 	bool AppendOpe(COpe* pcOpe);							// 操作の追加
 	COpe* GetOpe(int nIndex);								// 操作を返す
-	void AddRef() { m_refCount++; }	// 参照カウンタ増加
+	void AddRef() { ++m_refCount; }	// 参照カウンタ増加
 	int Release() { return m_refCount > 0 ? --m_refCount : 0; }	// 参照カウンタ減少
 	int GetRefCount() const { return m_refCount; }	// 参照カウンタ取得
 	int SetRefCount(int val) {  return m_refCount = val > 0? val : 0; }	// 参照カウンタ設定

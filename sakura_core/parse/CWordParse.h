@@ -131,7 +131,7 @@ BOOL IsMailAddress(const wchar_t*, int, int*);	// 現在位置がメールアドレスならば
 // ACHAR 版
 inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 {
-	for (int i = 0; pszList[i] != '\0'; i++) {
+	for (int i = 0; pszList[i] != '\0'; ++i) {
 		if (pszList[i] == c) {
 			return true;
 		}
@@ -141,7 +141,7 @@ inline bool CWordParse::_match_charlist(const ACHAR c, const ACHAR* pszList)
 // WCHAR 版
 inline bool CWordParse::_match_charlist(const WCHAR c, const WCHAR* pszList)
 {
-	for (int i = 0; pszList[i] != L'\0'; i++) {
+	for (int i = 0; pszList[i] != L'\0'; ++i) {
 		if (pszList[i] == c) {
 			return true;
 		}
@@ -177,7 +177,7 @@ int CWordParse::GetWord(
 	}
 
 	// 区切り文字をスキップ
-	for (; pr < pS + nLen; pr++) {
+	for (; pr < pS + nLen; ++pr) {
 		// 区切り文字でない文字の間ループ
 		if (!_match_charlist(*pr, pszSplitCharList)) {
 			break;
@@ -186,7 +186,7 @@ int CWordParse::GetWord(
 	pwordstart = const_cast<CHAR_TYPE*>(pr);   // 単語の先頭位置を記録
 
 	// 単語をスキップ
-	for (; pr < pS + nLen; pr++) {
+	for (; pr < pS + nLen; ++pr) {
 		// 区切り文字がくるまでループ
 		if (_match_charlist(*pr, pszSplitCharList)) {
 			break;

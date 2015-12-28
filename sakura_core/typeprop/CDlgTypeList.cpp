@@ -508,10 +508,10 @@ bool CDlgTypeList::InitializeType(void)
 	// “¯‚¶–¼‘O‚É‚È‚ç‚È‚¢‚æ‚¤‚É”š‚ğ‚Â‚¯‚é
 	int nNameNum = iDocType + 1;
 	bool bUpdate = true;
-	for (int i = 1; i < GetDllShareData().m_nTypesCount; i++) {
+	for (int i = 1; i < GetDllShareData().m_nTypesCount; ++i) {
 		if (bUpdate) {
 			auto_sprintf_s(type.m_szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum);
-			nNameNum++;
+			++nNameNum;
 			bUpdate = false;
 		}
 		if (iDocType == i) {
@@ -552,10 +552,10 @@ bool CDlgTypeList::CopyType()
 	// –¼‘O‚É2“™‚ğ•t‚¯‚é
 	int n = 1;
 	bool bUpdate = true;
-	for (int i = 0; i < nNewTypeIndex; i++) {
+	for (int i = 0; i < nNewTypeIndex; ++i) {
 		if (bUpdate) {
 			TCHAR* p = NULL;
-			for (int k = (int)auto_strlen(type.m_szTypeName) - 1; 0 <= k; k--) {
+			for (int k = (int)auto_strlen(type.m_szTypeName) - 1; 0 <= k; --k) {
 				if (WCODE::Is09(type.m_szTypeName[k])) {
 					p = &type.m_szTypeName[k];
 				}else {
@@ -566,7 +566,7 @@ bool CDlgTypeList::CopyType()
 				n = _ttoi(p) + 1;
 				*p = _T('\0');
 			}else {
-				n++;
+				++n;
 			}
 			TCHAR szNum[12];
 			auto_sprintf( szNum, _T("%d"), n );
@@ -723,7 +723,7 @@ int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstr
 			if ((errorCode = keyDest.SetValue(szValue, data, dwDataLen, dwType)) != 0) {
 				return errorCode;
 			}
-			index++;
+			++index;
 		}
 	}
 
@@ -740,7 +740,7 @@ int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstr
 			if ((errorCode = CopyRegistry(srcRoot, srcPath + _T("\\") + szSubKey, destRoot, destPath + _T("\\") + szSubKey))) {
 				return errorCode;
 			}
-			index++;
+			++index;
 		}
 	}
 	

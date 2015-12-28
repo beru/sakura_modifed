@@ -99,7 +99,7 @@ CRegexKeyword::~CRegexKeyword()
 {
 	MYDBGMSG("~CRegexKeyword")
 	// コンパイル済みのバッファを解放する。
-	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 		if (m_sInfo[i].pBregexp && IsAvailable()) {
 			BRegfree(m_sInfo[i].pBregexp);
 		}
@@ -127,7 +127,7 @@ BOOL CRegexKeyword::RegexKeyInit(void)
 	m_nCompiledMagicNumber = 1;
 	m_bUseRegexKeyword = false;
 	m_nRegexKeyCount = 0;
-	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 		m_sInfo[i].pBregexp = NULL;
 #ifdef USE_PARENT
 #else
@@ -205,7 +205,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 
 	MYDBGMSG("RegexKeyCompile")
 	// コンパイル済みのバッファを解放する。
-	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 		if (m_sInfo[i].pBregexp && IsAvailable()) {
 			BRegfree(m_sInfo[i].pBregexp);
 		}
@@ -219,7 +219,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 #else
 	wmemcpy(m_keywordList,  m_pTypes->m_RegexKeywordList, _countof(m_RegexKeywordList));
 #endif
-	for (int i = 0; i < MAX_REGEX_KEYWORD; i++) {
+	for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
 		if (pKeyword[0] == L'\0') {
 			break;
 		}
@@ -227,9 +227,9 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 #else
 		m_sInfo[i].sRegexKey.m_nColorIndex = m_pTypes->m_RegexKeywordArr[i].m_nColorIndex;
 #endif
-		m_nRegexKeyCount++;
-		for (; *pKeyword != '\0'; pKeyword++) {}
-		pKeyword++;
+		++m_nRegexKeyCount;
+		for (; *pKeyword != '\0'; ++pKeyword) {}
+		++pKeyword;
 	}
 
 	m_nTypeIndex = m_pTypes->m_nIdx;
@@ -251,7 +251,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 	pKeyword = &m_keywordList[0];
 #endif
 	// パターンをコンパイルする。
-	for (int i = 0; i < m_nRegexKeyCount; i++) {
+	for (int i = 0; i < m_nRegexKeyCount; ++i) {
 #ifdef USE_PARENT
 		rp = &m_pTypes->m_RegexKeywordArr[i];
 #else
@@ -296,8 +296,8 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 			// 書式エラーなので検索対象からはずす
 			m_sInfo[i].nFlag = RK_NOMATCH;
 		}
-		for (; *pKeyword != '\0'; pKeyword++ ) {}
-		pKeyword++;
+		for (; *pKeyword != '\0'; ++pKeyword) {}
+		++pKeyword;
 	}
 
 	m_nCompiledMagicNumber = m_pTypes->m_nRegexKeyMagicNumber;	// Compiled.
@@ -336,7 +336,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 #endif
 
 	// 検索開始のためにオフセット情報等をクリアする。
-	for (int i = 0; i < m_nRegexKeyCount; i++) {
+	for (int i = 0; i < m_nRegexKeyCount; ++i) {
 		m_sInfo[i].nOffset = -1;
 		// m_sInfo[i].nMatch  = RK_EMPTY;
 		m_sInfo[i].nMatch  = m_sInfo[i].nFlag;
@@ -379,7 +379,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 		return FALSE;
 	}
 
-	for (int i = 0; i < m_nRegexKeyCount; i++) {
+	for (int i = 0; i < m_nRegexKeyCount; ++i) {
 		if (m_sInfo[i].nMatch != RK_NOMATCH) {  // この行にキーワードがないと分かっていない
 			if (m_sInfo[i].nOffset == nPos) {  // 以前検索した結果に一致する
 				*nMatchLen   = m_sInfo[i].nLength;

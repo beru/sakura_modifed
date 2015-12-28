@@ -156,7 +156,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 				}
 				tmpstr[0] = L'\0';
 				if (!bNoNumber) {
-					for (k = 0; k <= nDepth; k++) {
+					for (k = 0; k <= nDepth; ++k) {
 						auto_sprintf_s(secstr, L"%d.", stackSection[k]);
 						wcscat(tmpstr, secstr);
 					}

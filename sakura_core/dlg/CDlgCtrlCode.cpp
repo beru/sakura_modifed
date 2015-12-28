@@ -169,7 +169,7 @@ void CDlgCtrlCode::SetData(void)
 		lvi.pszText  = const_cast<TCHAR*>(p_ctrl_list[i].jname);
 		ListView_SetItem(hwndWork, &lvi);
 		
-		count++;
+		++count;
 	}
 	ListView_SetItemState(hwndWork, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 

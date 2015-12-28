@@ -45,7 +45,7 @@ bool CConvert_ToLower::DoConvert(CNativeW* pcData)
 			c = (c | 0x0001);
 		}
 		else if (((c >= 0x0139 && c <= 0x0148) || (c >= 0x0179 && c <= 0x017E)) && ((c&1) == 1)) {
-			c++;
+			++c;
 		}
 		// Latin Extended-B •ÏŠ·(ŠÜPinyin—p ¬•¶Žš‚µ‚©Žg‚í‚È‚¢‚©‚ç—]‚èˆÓ–¡–³‚¢‚¯‚Ç)
 		else if (
@@ -71,14 +71,14 @@ bool CConvert_ToLower::DoConvert(CNativeW* pcData)
 			)
 			&& ((c&1) == 1)
 		) {
-			c++;
+			++c;
 		}
 		else if (c == 0x01C4 || c == 0x01C7 || c == 0x01CA || c == 0x01F1) {
 			c += 2;
 		}
 		else if (c == 0x01C5 || c == 0x01C8 || c == 0x01CB || c == 0x01F2) {
 			// Title Letter
-			c++;
+			++c;
 		}
 		else if (c == 0x018E) {
 			c = 0x01DD;

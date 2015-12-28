@@ -57,7 +57,7 @@ void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 
 	nTotalLine = m_pcDocRef->m_cDocLineMgr.GetLineCount();
 
-	for (CLogicInt nLineCount = CLogicInt(0); nLineCount < nTotalLine; nLineCount++) {
+	for (CLogicInt nLineCount = CLogicInt(0); nLineCount < nTotalLine; ++nLineCount) {
 		const WCHAR* pLine;
 		CLogicInt nLineLen;
 		WCHAR* pTmpLine;
@@ -86,8 +86,8 @@ void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 		offset = 0;
 
 		// トークンに分割
-		for (int j = 0; j < MAX_ASM_TOKEN; j++) token[j] = NULL;
-		for (int j = 0; j < MAX_ASM_TOKEN; j++) {
+		for (int j = 0; j < MAX_ASM_TOKEN; ++j) token[j] = NULL;
+		for (int j = 0; j < MAX_ASM_TOKEN; ++j) {
 			token[j] = my_strtok<WCHAR>(pTmpLine, length, &offset, L" \t\r\n");
 			if (!token[j]) break;
 			// トークンに含まれるべき文字でないか？

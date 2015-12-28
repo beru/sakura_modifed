@@ -51,7 +51,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					}
 					bSpace = TRUE;
 					if (SPACE == pLine[i]) {
-						nPosX++;
+						++nPosX;
 					}else if (TAB == pLine[i]) {
 						nPosX += m_nTabWidth - (nPosX % m_nTabWidth);
 					}
@@ -59,11 +59,11 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					if (bSpace) {
 						if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
 							pDes[nPosDes] = SPACE;
-							nPosDes++;
+							++nPosDes;
 						}else {
 							for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); ++j) {
 								pDes[nPosDes] = TAB;
-								nPosDes++;
+								++nPosDes;
 								nStartPos += m_nTabWidth - (nStartPos % m_nTabWidth);
 							}
 							// 2003.08.05 Moca
@@ -71,30 +71,30 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 							// バッファをはみ出すのを修正
 							for (j=nStartPos; j<nPosX; ++j) {
 								pDes[nPosDes] = SPACE;
-								nPosDes++;
+								++nPosDes;
 							}
 						}
 					}
-					nPosX++;
-					if (WCODE::IsZenkaku(pLine[i])) nPosX++;		// 全角文字ずれ対応 2008.10.17 matsumo
+					++nPosX;
+					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// 全角文字ずれ対応 2008.10.17 matsumo
 					pDes[nPosDes] = pLine[i];
-					nPosDes++;
+					++nPosDes;
 					bSpace = FALSE;
 				}
 			}
 			//for (; i<nLineLen; ++i) {
 			//	pDes[nPosDes] = pLine[i];
-			//	nPosDes++;
+			//	++nPosDes;
 			//}
 			if (bSpace) {
 				if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
 					pDes[nPosDes] = SPACE;
-					nPosDes++;
+					++nPosDes;
 				}else {
 					//for (j = nStartPos - 1; (j + m_nTabWidth) <= nPosX + 1; j += m_nTabWidth) {
 					for (j = nStartPos / m_nTabWidth; j < (nPosX / m_nTabWidth); ++j) {
 						pDes[nPosDes] = TAB;
-						nPosDes++;
+						++nPosDes;
 						nStartPos += m_nTabWidth - (nStartPos % m_nTabWidth);
 					}
 					// 2003.08.05 Moca
@@ -102,7 +102,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					// バッファをはみ出すのを修正
 					for (j=nStartPos; j<nPosX; ++j) {
 						pDes[nPosDes] = SPACE;
-						nPosDes++;
+						++nPosDes;
 					}
 				}
 			}

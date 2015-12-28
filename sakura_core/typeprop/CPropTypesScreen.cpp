@@ -646,7 +646,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		WIN_CHAR szTab[8 + 1]; // +1. happy
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, szTab, _countof(szTab));
 		wcscpy_s(m_Types.m_szTabViewString, L"^       ");
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 8; ++i) {
 			if (!TCODE::IsTabAvailableCode(szTab[i])) {
 				break;
 			}
@@ -760,7 +760,7 @@ void CPropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
 void CPropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = (int)m_OlmArr.size();
-	for (int i = 0; i < nSize; i++) {
+	for (int i=0; i<nSize; ++i) {
 		if (m_OlmArr[i].nMethod == (EOutlineType)nMethod) {
 			delete [] m_OlmArr[i].pszName;
 			m_OlmArr.erase(m_OlmArr.begin() + i);
@@ -788,7 +788,7 @@ void CPropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
 void CPropTypesScreen::RemoveSIndentMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = (int)m_SIndentArr.size();
-	for (int i = 0; i < nSize; i++) {
+	for (int i=0; i<nSize; ++i) {
 		if (m_SIndentArr[i].nMethod == (ESmartIndentType)nMethod) {
 			delete [] m_SIndentArr[i].pszName;
 			m_SIndentArr.erase(m_SIndentArr.begin() + i);

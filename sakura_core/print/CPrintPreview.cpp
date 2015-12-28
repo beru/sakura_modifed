@@ -820,7 +820,7 @@ void CPrintPreview::OnChangePrintSetting(void)
 	m_pLayoutMgr_Print->SetLayoutInfo(true, ref, ref.m_nTabSpace, ref.m_nMaxLineKetas);
 	m_nAllPageNum = (WORD)((Int)m_pLayoutMgr_Print->GetLineCount() / (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu));		// 全ページ数
 	if (0 < m_pLayoutMgr_Print->GetLineCount() % (m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu)) {
-		m_nAllPageNum++;
+		++m_nAllPageNum;
 	}
 	if (m_nAllPageNum <= m_nCurPageNum) {	// 現在のページ
 		m_nCurPageNum = 0;
@@ -875,7 +875,7 @@ void CPrintPreview::OnPreviewGoDirectPage(void)
 	);
 	if (FALSE != bDlgInputPageResult) {
 		int nPageNumLen = _tcslen(szPageNum);
-		for (int i = 0; i < nPageNumLen;  i++) {
+		for (int i = 0; i < nPageNumLen;  ++i) {
 			if (!(_T('0') <= szPageNum[i] &&  szPageNum[i] <= _T('9'))) {
 				return;
 			}
@@ -1207,7 +1207,7 @@ void CPrintPreview::OnPrint(void)
 // Tab文字をSpace文字に置換え
 static void Tab2Space(wchar_t* pTrg)
 {
-	for (;*pTrg != L'\0'; pTrg++) {
+	for (;*pTrg != L'\0'; ++pTrg) {
 		if (*pTrg == L'\t') {
 			*pTrg = L' ';
 		}
@@ -1713,7 +1713,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 						+ nTabSpace * (iLogic - nBgnLogic - 1);
 				}else {
 					int		nIncrement = 0;
-					for (int i = nBgnLogic - nLineStart; i < iLogic - nLineStart; i++) {
+					for (int i = nBgnLogic - nLineStart; i < iLogic - nLineStart; ++i) {
 						nIncrement += pDxArray[i];
 					}
 					nLayoutX += CLayoutInt(nIncrement/nDx);
@@ -1842,7 +1842,7 @@ CColorStrategy* CPrintPreview::GetColorStrategy(
 		}
 	}
 	if (!pStrategy) {
-		for (int i = 0; i < m_pool->GetStrategyCount(); i++) {
+		for (int i = 0; i < m_pool->GetStrategyCount(); ++i) {
 			if (m_pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
 				pStrategy = m_pool->GetStrategy(i);
 				bChange = true;

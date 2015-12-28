@@ -436,7 +436,7 @@ BOOL IsURL(
 					return FALSE;
 				}
 				int i;
-				for (i = urlp->length; i < nLineLen; i++, p++) {	// ’Êí‚Ì‰ðÍ‚Ö
+				for (i = urlp->length; i < nLineLen; ++i, ++p) {	// ’Êí‚Ì‰ðÍ‚Ö
 					if (wc_to_c(*p) == 0 || (!(url_char[wc_to_c(*p)]))) {
 						break;	// I’[‚É’B‚µ‚½
 					}
@@ -460,7 +460,7 @@ BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
 	 || (pszBuf[j] >= L'A' && pszBuf[j] <= L'Z')
 	 || (pszBuf[j] >= L'0' && pszBuf[j] <= L'9')
 	) {
-		j++;
+		++j;
 	}else {
 		return FALSE;
 	}
@@ -475,7 +475,7 @@ BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
 		 || (pszBuf[j] == L'_')
 		)
 	) {
-		j++;
+		++j;
 	}
 	if (j == 0 || j >= nBufLen - 2) {
 		return FALSE;
@@ -484,7 +484,7 @@ BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
 		return FALSE;
 	}
 //	nAtPos = j;
-	j++;
+	++j;
 	int nDotCount = 0;
 //	nAlphaCount = 0;
 	
@@ -500,7 +500,7 @@ BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
 			 || (pszBuf[j] == L'_')
 			)
 		) {
-			j++;
+			++j;
 		}
 		if (0 == j - nBgn) {
 			return FALSE;
@@ -512,8 +512,8 @@ BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
 				break;
 			}
 		}else {
-			nDotCount++;
-			j++;
+			++nDotCount;
+			++j;
 		}
 	}
 	if (pnAddressLenfth) {

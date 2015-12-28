@@ -158,14 +158,14 @@ void CViewCommander::Command_CASCADE(void)
 				continue;
 			}
 			pWndArr[count].hWnd = pEditNodeArr[i].GetHwnd();
-			count++;
+			++count;
 		}
 
 		// Mar. 20, 2004 genta
 		// 現在のウィンドウを末尾に挿入 inspired by crayonzen
 		if (current_win_index >= 0) {
 			pWndArr[count].hWnd = pEditNodeArr[current_win_index].GetHwnd();
-			count++;
+			++count;
 		}
 
 		// デスクトップサイズを得る
@@ -288,7 +288,7 @@ void CViewCommander::Command_TILE_V(void)
 				phwndArr[count] = pEditNodeArr[i].GetHwnd();
 			}
 			// To Here Jul. 28, 2002 genta
-			count++;
+			++count;
 		}
 		int height = (rcDesktop.bottom - rcDesktop.top) / count;
 		for (int i=0; i<count; ++i) {
@@ -340,7 +340,7 @@ void CViewCommander::Command_TILE_H(void)
 				phwndArr[count] = pEditNodeArr[i].GetHwnd();
 			}
 			// To Here Jul. 28, 2002 genta
-			count++;
+			++count;
 		}
 		int width = (rcDesktop.right - rcDesktop.left) / count;
 		for (int i=0; i<count; ++i) {

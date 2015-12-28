@@ -207,7 +207,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 						int fileEnd = pTagEnd - pLine - 1;
 						for (; 1<fileEnd; --fileEnd) {
 							if (L'[' == pLine[fileEnd]) {
-								fileEnd--;
+								--fileEnd;
 								break;
 							}
 						}
@@ -222,7 +222,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 				if (pTagEnd) {
 					int fileEnd = pTagEnd - pLine - 1;
 					for (; 1<fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); --fileEnd) {}
-					if (1 < fileEnd && (L',' == pLine[fileEnd])) { fileEnd--; }
+					if (1 < fileEnd && (L',' == pLine[fileEnd])) { --fileEnd; }
 					for (; 1<fileEnd && (L'0' <= pLine[fileEnd] && pLine[fileEnd] <= L'9'); --fileEnd) {}
 					if (1 < fileEnd && L'(' == pLine[fileEnd] && fileEnd - 1 < (int)_countof(szFile)) {
 						wmemcpy(szFile, pLine + 1, fileEnd - 1);

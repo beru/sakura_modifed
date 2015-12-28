@@ -71,7 +71,7 @@ void CFuncInfoArr::AppendData(CFuncInfo* pcFuncInfo)
 		m_ppcFuncInfoArr = (CFuncInfo**)realloc(m_ppcFuncInfoArr, sizeof(CFuncInfo*) * (m_nFuncInfoArrNum + 1));
 	}
 	m_ppcFuncInfoArr[m_nFuncInfoArrNum] = pcFuncInfo;
-	m_nFuncInfoArrNum++;
+	++m_nFuncInfoArrNum;
 	return;
 }
 
@@ -160,7 +160,7 @@ void CFuncInfoArr::DUMP(void)
 {
 #ifdef _DEBUG
 	MYTRACE(_T("=============================\n"));
-	for (int i = 0; i < m_nFuncInfoArrNum; i++) {
+	for (int i = 0; i < m_nFuncInfoArrNum; ++i) {
 		MYTRACE(_T("[%d]------------------\n"), i);
 		MYTRACE(_T("m_nFuncLineCRLF	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineCRLF);
 		MYTRACE(_T("m_nFuncLineLAYOUT	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineLAYOUT);

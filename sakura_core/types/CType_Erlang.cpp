@@ -154,7 +154,7 @@ const wchar_t* COutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 	assert(m_state == STATE_FUNC_CANDIDATE_FIN);
 
 	while (IS_SPACE(*p) && p < end)
-		p++;
+		++p;
 	
 	if (p >= end)
 		return end;
@@ -186,7 +186,7 @@ const wchar_t* COutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 	assert(m_state == STATE_FUNC_ARGS1);
 	
 	while (IS_SPACE(*p) && p < end)
-		p++;
+		++p;
 
 	if (p >= end)
 		return end;
@@ -194,7 +194,7 @@ const wchar_t* COutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 	if (*p == /* (*/ L')') {
 		// no argument
 		m_state = STATE_FUNC_ARGS_FIN;
-		p++;
+		++p;
 	}else if (IS_COMMENT(*p)) {
 		return end;
 	}else {
@@ -220,7 +220,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 
 	const int parptr_max = _countof(m_parenthesis);
 	wchar_t quote = L'\0'; // êÊì™à íuÇï€ë∂
-	for (const wchar_t* head = p ; p < end ; p++) {
+	for (const wchar_t* head = p ; p < end ; ++p) {
 		if (quote) {
 			if (*p == quote)
 				quote = L'\0';
@@ -230,7 +230,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 				if (m_parenthesis_ptr < parptr_max) {
 					m_parenthesis[m_parenthesis_ptr] = *p;
 				}
-				m_parenthesis_ptr++;
+				++m_parenthesis_ptr;
 			}else if (wcschr(L")]}", *p)) {	//)
 				wchar_t op;
 				switch (*p) {
@@ -301,7 +301,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 const wchar_t* COutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 {
 	while (IS_SPACE(*p) && p < end)
-		p++;
+		++p;
 
 	if (p >= end)
 		return end;

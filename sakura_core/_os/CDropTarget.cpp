@@ -218,20 +218,20 @@ void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 		memcpy_raw(m_pData[0].data, lpszText, nTextLen * sizeof(wchar_t));
 		*((wchar_t*)m_pData[0].data + nTextLen) = L'\0';
 
-		i++;
+		++i;
 		m_pData[i].cfFormat = CF_TEXT;
 		m_pData[i].size = ::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), NULL, 0, NULL, NULL);
 		m_pData[i].data = new BYTE[m_pData[i].size];
 		::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), (LPSTR)m_pData[i].data, m_pData[i].size, NULL, NULL);
 
-		i++;
+		++i;
 		m_pData[i].cfFormat = CClipboard::GetSakuraFormat();
 		m_pData[i].size = sizeof(int) + nTextLen * sizeof(wchar_t);
 		m_pData[i].data = new BYTE[m_pData[i].size];
 		*(int*)m_pData[i].data = nTextLen;
 		memcpy_raw(m_pData[i].data + sizeof(int), lpszText, nTextLen * sizeof(wchar_t));
 
-		i++;
+		++i;
 		if (bColumnSelect) {
 			m_pData[i].cfFormat = (CLIPFORMAT)::RegisterClipboardFormat(_T("MSDEVColumnSelect"));
 			m_pData[i].size = 1;
@@ -405,9 +405,9 @@ STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetc
 		(*rgelt).dwAspect = DVASPECT_CONTENT;
 		(*rgelt).lindex = -1;
 		(*rgelt).tymed = TYMED_HGLOBAL;
-		rgelt++;
-		m_nIndex++;
-		i--;
+		++rgelt;
+		++m_nIndex;
+		--i;
 	}
 	if (pceltFetched)
 		*pceltFetched = celt - i;

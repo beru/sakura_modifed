@@ -90,15 +90,15 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
 	*/
 	int nHeadDepth[6 + 1];		// [0]は 空けておく
-	for (k=0; k<=6; k++) {
+	for (k=0; k<=6; ++k) {
 		nHeadDepth[k] = -1;
 	}
-	for (nLineCount=CLogicInt(0);nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount();nLineCount++) {
+	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLineBuf = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLineBuf) {
 			break;
 		}
-		for (i = 0; i < nLineLen - 1; i++) {
+		for (i=0; i<nLineLen-1; ++i) {
 			pLine = &pLineBuf[i];
 			// 2004.04.20 Moca コメントを処理する
 			if (bCommentTag) {
@@ -114,9 +114,9 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				continue;
 			}
 			bEndTag = false;
-			pLine++; i++;
+			++pLine; ++i;
 			if (*pLine == L'/') {
-				pLine++; i++;
+				++pLine; ++i;
 				bEndTag = true;
 			}
 			for (j = 0; i + j < nLineLen && j < _countof(szTitle) - 1;) {
@@ -210,13 +210,13 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 					// pの中でブロック要素がきたら、自動的にpを閉じる。 2008.09.07 aroka
 					if (bParaTag) {
 						if (nLabelType == LT_HEADING || nLabelType == LT_PARAGRAPH || nLabelType == LT_BLOCK) {
-							nDepth--;
+							--nDepth;
 						}
 					}
 					if (nLabelType == LT_HEADING) {
 						if (nHeadDepth[szTitle[1]-L'0'] != -1) { // 小見出し:既出
 							nDepth = nHeadDepth[szTitle[1]-L'0'];
-							for (k=szTitle[1]-L'0';k<=6;k++) {
+							for (k=szTitle[1]-L'0'; k<=6; ++k) {
 								nHeadDepth[k] = -1;
 							}
 							nHeadDepth[szTitle[1]-L'0'] = nDepth;
@@ -241,7 +241,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						wcscpy_s(pszStack[nDepth], szTitle);
 						k = j;
 						if (j < _countof(szTitle) - 3) {
-							for (; i + j < nLineLen; j++) {
+							for (; i + j < nLineLen; ++j) {
 								if (pLine[j] == L'/' && pLine[j + 1] == L'>') {
 									bEndTag = true;
 									break;
@@ -252,7 +252,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
 								bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-								for (j -= k - 1; i + j + k < nLineLen && k < _countof(szTitle) - 1; k++) {
+								for (j -= k - 1; i + j + k < nLineLen && k < _countof(szTitle) - 1; ++k) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k], bExtEol)) {
 										break;
 									}
@@ -262,9 +262,9 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							}
 						}
 						szTitle[k] = L'\0';
-						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, nDepth++);
+						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, ++nDepth);
 					}else {
-						for (; i + j < nLineLen && j < _countof(szTitle) - 1; j++) {
+						for (; i + j < nLineLen && j < _countof(szTitle) - 1; ++j) {
 							if (pLine[j] == L'>') {
 								break;
 							}
@@ -278,7 +278,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 			if (bEndTag) { // 終了タグ
 				int nDepthOrg = nDepth; // 2004.04.20 Moca 追加
 				while (nDepth > 0) {
-					nDepth--;
+					--nDepth;
 					if (!wcsicmp(pszStack[nDepth], szTitle)) {
 						break;
 					}
@@ -291,7 +291,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				}else {
 					if (nLabelType == LT_HEADING) {	//	見出しの終わり
 						nHeadDepth[szTitle[1] - L'0'] = nDepth;
-						nDepth++;
+						++nDepth;
 					}
 					if (nLabelType == LT_PARAGRAPH) {
 						bParaTag = false;

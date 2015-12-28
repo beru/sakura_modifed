@@ -36,7 +36,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	if (pLayoutWork) {
 		while (0 != pLayoutWork->GetLogicOffset()) {
 			pLayoutWork = pLayoutWork->GetPrevLayout();
-			nLineWork--;
+			--nLineWork;
 		}
 		nCurrentLineType = pLayoutWork->GetColorTypePrev();
 		colorInfo = pLayoutWork->GetLayoutExInfo()->DetachColorInfo();

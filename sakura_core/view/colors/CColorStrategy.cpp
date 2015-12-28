@@ -98,7 +98,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	// 色開始
 	if (!m_pStrategy) {
 		int size = pool->GetStrategyCount();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < size; ++i) {
 			if (pool->GetStrategy(i)->BeginColor(cLineStr, this->GetPosInLogic())) {
 				m_pStrategy = pool->GetStrategy(i);
 				bChange = true;
@@ -217,7 +217,7 @@ CColorStrategyPool::~CColorStrategyPool()
 	SAFE_DELETE(m_pcFoundStrategy);
 	m_vStrategiesDisp.clear();
 	int size = (int)m_vStrategies.size();
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		delete m_vStrategies[i];
 	}
 	m_vStrategies.clear();
@@ -229,7 +229,7 @@ CColorStrategy*	CColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) c
 		return m_pcFoundStrategy;
 	}
 	int size = (int)m_vStrategiesDisp.size();
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		if (m_vStrategiesDisp[i]->GetStrategyColor() == eColor) {
 			return m_vStrategiesDisp[i];
 		}
@@ -242,7 +242,7 @@ void CColorStrategyPool::NotifyOnStartScanLogic()
 	m_pcSelectStrategy->OnStartScanLogic();
 	m_pcFoundStrategy->OnStartScanLogic();
 	int size = GetStrategyCount();
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		GetStrategy(i)->OnStartScanLogic();
 	}
 }
@@ -284,7 +284,7 @@ void CColorStrategyPool::OnChangeSetting(void)
 	m_pcSelectStrategy->Update();
 	m_pcFoundStrategy->Update();
 	int size = (int)m_vStrategies.size();
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		m_vStrategies[i]->Update();
 
 		// 色分け表示対象であれば登録

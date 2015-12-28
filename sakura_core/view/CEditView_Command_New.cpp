@@ -42,10 +42,10 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, COpe
 	int nBegin = 0;
 	int i;
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-	for (i = 0; i < nLineDataLen; i++) {
+	for (i = 0; i < nLineDataLen; ++i) {
 		if (WCODE::IsLineDelimiter(pLineData[i], bExtEol)) {
 			if (i + 1 < nLineDataLen && WCODE::CR == pLineData[i] && WCODE::LF == pLineData[i + 1]) {
-				i++;
+				++i;
 			}
 			CLineData tmp;
 			lineData.push_back(tmp);
@@ -263,8 +263,8 @@ void CEditView::InsertData_CEditView(
 					if (bHintPrev) {
 						bHintPrev = false;
 					}
-					nStartLine--;
-					nModifyLayoutLinesOld++;
+					--nStartLine;
+					++nModifyLayoutLinesOld;
 				}
 			}
 			CLayoutYInt nLayoutTop;
@@ -275,7 +275,7 @@ void CEditView::InsertData_CEditView(
 
 				// 描画開始行位置を調整する	// 2009.02.17 ryoji
 				if (bHintPrev) {	// 更新が前行からになる可能性がある
-					nStartLine--;
+					--nStartLine;
 				}
 
 				ps.rcPaint.left = 0;
@@ -287,11 +287,11 @@ void CEditView::InsertData_CEditView(
 			}else {
 				// 描画開始行位置と描画行数を調整する	// 2009.02.17 ryoji
 				if (bHintPrev) {	// 更新が前行からになる可能性がある
-					nStartLine--;
-					nModifyLayoutLinesOld++;
+					--nStartLine;
+					++nModifyLayoutLinesOld;
 				}
 				if (bHintNext) {	// 更新が次行からになる可能性がある
-					nModifyLayoutLinesOld++;
+					++nModifyLayoutLinesOld;
 				}
 
 	//			ps.rcPaint.left = GetTextArea().GetAreaLeft();
@@ -416,12 +416,12 @@ void CEditView::DeleteData2(
 	if (pcMem) {
 		int size = (int)memDeleted.size();
 		size_t bufSize = 0;
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < size; ++i) {
 			bufSize += memDeleted[i].cmemLine.GetStringLength();
 		}
 		pcMem->SetString(L"");
 		pcMem->AllocStringBuffer(bufSize);
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < size; ++i) {
 			pcMem->AppendNativeData(memDeleted[i].cmemLine);
 		}
 	}
@@ -514,7 +514,7 @@ void CEditView::DeleteData(
 
 			nIdxFrom = CLogicInt(0);
 			nIdxTo = CLogicInt(0);
-			for (nLineNum = rcSel.bottom; nLineNum >= rcSel.top - 1; nLineNum--) {
+			for (nLineNum = rcSel.bottom; nLineNum >= rcSel.top - 1; --nLineNum) {
 				nDelLenNext	= nIdxTo - nIdxFrom;
 				const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 				if (pLine) {

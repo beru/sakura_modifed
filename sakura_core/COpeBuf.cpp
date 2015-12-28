@@ -70,7 +70,7 @@ bool COpeBuf::AppendOpeBlk(COpeBlk* pcOpeBlk)
 	}
 	// 配列のメモリサイズを調整
 	m_vCOpeBlkArr.push_back(pcOpeBlk);
-	m_nCurrentPointer++;
+	++m_nCurrentPointer;
 	return true;
 }
 
@@ -105,7 +105,7 @@ COpeBlk* COpeBuf::DoUndo(bool* pbModified)
 	if (!IsEnableUndo()) {
 		return NULL;
 	}
-	m_nCurrentPointer--;
+	--m_nCurrentPointer;
 	if (m_nCurrentPointer == m_nNoModifiedIndex) {		// 無変更な状態になった位置
 		*pbModified = false;
 	}else {
@@ -122,7 +122,7 @@ COpeBlk* COpeBuf::DoRedo(bool* pbModified)
 		return NULL;
 	}
 	COpeBlk* pcOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
-	m_nCurrentPointer++;
+	++m_nCurrentPointer;
 	if (m_nCurrentPointer == m_nNoModifiedIndex) {		// 無変更な状態になった位置
 		*pbModified = false;
 	}else {
