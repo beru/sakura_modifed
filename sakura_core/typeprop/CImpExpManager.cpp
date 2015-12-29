@@ -123,7 +123,7 @@ static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar
 bool CImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 {
 	// ファイルオープンダイアログの初期化
-	CDlgOpenFile	cDlgOpenFile;
+	CDlgOpenFile cDlgOpenFile;
 	cDlgOpenFile.Create(
 		hInstance,
 		hwndParent,
@@ -483,8 +483,8 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	// Plugin
 	//  アウトライン解析方法
 	CommonSetting_Plugin& plugin = common.m_sPlugin;
-	int		nPIdx;
-	int		nPlug;
+	int nPIdx;
+	int nPlug;
 	wchar_t szId[MAX_PLUGIN_ID + 1 + 2];
 	if ((nPIdx = CPlug::GetPluginId(static_cast<EFunctionCode>(m_Types.m_eDefaultOutline))) >= 0) {
 		cProfile.IOProfileData(szSecTypeEx, szKeyPluginOutlineName, MakeStringBufferW(plugin.m_PluginTable[nPIdx].m_szName));
@@ -510,7 +510,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	// Version
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	int		nStructureVersion;
+	int nStructureVersion;
 	wchar_t	wbuff[_MAX_PATH + 1];
 	auto_sprintf_s(wbuff, L"%d.%d.%d.%d", 
 				HIWORD(pShare->m_sVersion.m_dwProductVersionMS),
@@ -1007,7 +1007,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 // エクスポート
 bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 {
-	const tstring	strPath = to_tchar(sFileName.c_str());
+	const tstring strPath = to_tchar(sFileName.c_str());
 
 	CTextOutputStream out(strPath.c_str());
 	if (!out) {
@@ -1047,7 +1047,7 @@ bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 // インポート
 bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 {
-	const tstring	strPath = to_tchar(sFileName.c_str());
+	const tstring strPath = to_tchar(sFileName.c_str());
 
 	// ヘッダ確認
 	CTextInputStream in(strPath.c_str());
@@ -1076,7 +1076,7 @@ bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 // エクスポート
 bool CImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 {
-	const tstring	strPath = to_tchar(sFileName.c_str());
+	const tstring strPath = to_tchar(sFileName.c_str());
 
 	// オープン
 	CTextOutputStream out(strPath.c_str());
@@ -1119,7 +1119,7 @@ bool CImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 // インポート
 bool CImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 {
-	bool			bAddError = false;
+	bool bAddError = false;
 
 	CTextInputStream in(to_tchar(sFileName.c_str()));
 	if (!in) {
@@ -1133,7 +1133,7 @@ bool CImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 		if (szLine.length() == 0) {
 			continue;
 		}
-		if (2 <= szLine.length() && 0 == auto_memcmp(szLine.c_str(), L"//", 2)) {
+		if (2 <= szLine.length() && auto_memcmp(szLine.c_str(), L"//", 2) == 0) {
 			if (szLine == WSTR_CASE_TRUE) {
 				m_bCase = true;
 			}else if (szLine == WSTR_CASE_FALSE) {
@@ -1146,7 +1146,7 @@ bool CImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 		if (0 < szLine.length()) {
 			// ｎ番目のセットにキーワードを追加
 			int nRetValue = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWord(m_nIdx, szLine.c_str());
-			if (2 == nRetValue) {
+			if (nRetValue == 2) {
 				bAddError = true;
 				break;
 			}
@@ -1292,7 +1292,7 @@ bool CImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
-	CDataProfile	cProfile;
+	CDataProfile cProfile;
 
 	// 書き込みモード設定
 	cProfile.SetWritingMode();
@@ -1316,11 +1316,11 @@ void CImpExpFileTree::IO_FileTreeIni( CDataProfile& cProfile, std::vector<SFileT
 	if (nItemCount < 0) {
 		nItemCount = 0;
 	}
-	int i = 0;
 	if (cProfile.IsReadingMode()) {
 		data.resize(nItemCount);
 	}
-	for (; i<nItemCount; ++i) {
+	for (int i=0; i<nItemCount; ++i) {
 		CShareData_IO::ShareData_IO_FileTreeItem(cProfile, data[i], pszSecName, i);
 	}
 }
+

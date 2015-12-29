@@ -120,7 +120,7 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					hListView = GetDlgItem(hwndDlg, IDC_LIST_FNAME);
 					nIndex = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					// 未選択
-					if (-1 == nIndex) {
+					if (nIndex == -1) {
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_FNAME_FROM, _T(""));
 						::DlgItem_SetText(hwndDlg, IDC_EDIT_FNAME_TO, _T(""));
 					}else if (nIndex != m_nLastPos_FILENAME) {
@@ -169,7 +169,7 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 				case IDC_BUTTON_FNAME_INS:	// 挿入
 					// 選択中のキーを探す
 					nCount = ListView_GetItemCount(hListView);
-					if (-1 == nIndex) {
+					if (nIndex == -1) {
 						// 選択中でなければ最後に追加
 						nIndex = nCount;
 					}
@@ -200,7 +200,7 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 						}
 					}else {
 						// 未選択でリストにひとつも項目がない場合は追加しておく
-						if (0 == ListView_GetItemCount(hListView)) {
+						if (ListView_GetItemCount(hListView) == 0) {
 							if (-1 != SetListViewItem_FILENAME(hListView, 0, szFrom, szTo, true)) {
 								return TRUE;
 							}
@@ -358,7 +358,7 @@ int CPropFileName::GetData(HWND hwndDlg)
 
 int CPropFileName::SetListViewItem_FILENAME(HWND hListView, int nIndex, LPTSTR szFrom, LPTSTR szTo, bool bInsMode)
 {
-	if (_T('\0') == szFrom[0] || -1 == nIndex) {
+	if (szFrom[0] == _T('\0') || nIndex == -1) {
 		return -1;
 	}
 

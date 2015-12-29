@@ -148,9 +148,9 @@ int CBackupAgent::MakeBackUp(
 			);	// Jul. 06, 2001 jepro [名前を付けて保存] の場合もあるのでメッセージを修正
 		}	//@@@ 2001.12.11 add MIK
 		//	Jun.  5, 2005 genta 戻り値変更
-		if (IDNO == nRet) {
+		if (nRet == IDNO) {
 			return 0;	//	保存継続
-		}else if (IDCANCEL == nRet) {
+		}else if (nRet == IDCANCEL) {
 			return 2;	// 保存中断
 		}
 	}
@@ -343,12 +343,12 @@ bool CBackupAgent::FormatBackUpPath(
 		// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
 		switch (bup_setting.GetBackupType()) {
 		case 1:
-			if (-1 == auto_snprintf_s(pBase, nBaseCount, _T("%ts.bak"), szFname)) {
+			if (auto_snprintf_s(pBase, nBaseCount, _T("%ts.bak"), szFname) == -1) {
 				return false;
 			}
 			break;
 		case 5: //	Jun.  5, 2005 genta 1の拡張子を残す版
-			if (-1 == auto_snprintf_s(pBase, nBaseCount, _T("%ts%ts.bak"), szFname, szExt)) {
+			if (auto_snprintf_s(pBase, nBaseCount, _T("%ts%ts.bak"), szFname, szExt) == -1) {
 				return false;
 			}
 			break;
@@ -379,7 +379,7 @@ bool CBackupAgent::FormatBackUpPath(
 			}
 			// YYYYMMDD時分秒 形式に変換
 			wcsftime(szTime, _countof(szTime) - 1, szForm, today);
-			if (-1 == auto_snprintf_s(pBase, nBaseCount, _T("%ts_%ls%ts"), szFname, szTime, szExt)) {
+			if (auto_snprintf_s(pBase, nBaseCount, _T("%ts_%ls%ts"), szFname, szTime, szExt) == -1) {
 				return false;
 			}
 			break;
@@ -408,7 +408,7 @@ bool CBackupAgent::FormatBackUpPath(
 				if (bup_setting.GetBackupOpt(BKUP_SEC)) {	// バックアップファイル名：日付の秒
 					auto_sprintf(szTime, L"%ls%02d", szTime, ctimeLastWrite->wSecond);
 				}
-				if (-1 == auto_sprintf_s(pBase, nBaseCount, _T("%ts_%ls%ts"), szFname, szTime, szExt)) {
+				if (auto_sprintf_s(pBase, nBaseCount, _T("%ts_%ls%ts"), szFname, szTime, szExt) == -1) {
 					return false;
 				}
 			}
@@ -434,7 +434,7 @@ bool CBackupAgent::FormatBackUpPath(
 				*++ptr = _T('0');
 				*++ptr = _T('\0');
 			}
-			if (-1 == auto_snprintf_s(pBase, nBaseCount, _T("%ts%ts"), szFname, szExt)) {
+			if (auto_snprintf_s(pBase, nBaseCount, _T("%ts%ts"), szFname, szExt) == -1) {
 				return false;
 			}
 			break;
@@ -536,7 +536,7 @@ bool CBackupAgent::FormatBackUpPath(
 				_tcscpy(temp, szNewPath);
 				cp = _tcschr(temp, _T('*'));
 				*cp = 0;
-				if (-1 == auto_snprintf_s(szNewPath, newPathCount, _T("%ts%ts%ts"), temp, ep, cp + 1)) {
+				if (auto_snprintf_s(szNewPath, newPathCount, _T("%ts%ts%ts"), temp, ep, cp + 1) == -1) {
 					return false;
 				}
 			}

@@ -282,7 +282,7 @@ int CKeyWordSetMgr::AddKeyWord(int nIdx, const wchar_t* pszKeyWord)
 	}
 	// 重複したキーワードは登録しない
 	for (int i=m_nStartIdx[nIdx]; i<m_nStartIdx[nIdx]+m_nKeyWordNumArr[nIdx]; ++i) {
-		if (0 == wcscmp(m_szKeyWordArr[i], pszKeyWord)) {
+		if (wcscmp(m_szKeyWordArr[i], pszKeyWord) == 0) {
 			return 4;
 		}
 	}
@@ -538,11 +538,11 @@ int CKeyWordSetMgr::CleanKeyWords(int nIdx)
 		unsigned int nKeyWordLen = wcslen(p);
 		if (nKeyWordLen == wcslen(r)) {
 			if (m_bKEYWORDCASEArr[nIdx]) {
-				if (0 == auto_memcmp(p, r, nKeyWordLen)) {
+				if (auto_memcmp(p, r, nKeyWordLen) == 0) {
 					bDelKey = true;
 				}
 			}else {
-				if (0 == auto_memicmp(p, r, nKeyWordLen)) {
+				if (auto_memicmp(p, r, nKeyWordLen) == 0) {
 					bDelKey = true;
 				}
 			}

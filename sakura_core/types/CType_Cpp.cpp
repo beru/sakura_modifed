@@ -484,14 +484,14 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 			// いずれもコメント処理の後へ移動
 // del end 2005/12/6 じゅうじ
 			// コメント読み込み中
-			if (8 == nMode) {
+			if (nMode == 8) {
 				if (i < nLineLen - 1 && '*' == pLine[i] &&  '/' == pLine[i + 1]) {
 					++i;
 					nMode = 0;
 					continue;
 				}else {
 				}
-			}else if (10 == nMode) {
+			}else if (nMode == 10) {
 				// ラインコメント読み込み中
 				// 2003/06/24 zenryaku
 				if (!C_IsLineEsc(pLine, nLineLen)) {
@@ -499,18 +499,18 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 				}
 				i = nLineLen;
 				continue;
-			}else if ('\\' == pLine[i] && nRawStringTagLen == 0) {
+			}else if (pLine[i] == '\\' && nRawStringTagLen == 0) {
 				// add start 2005/12/6 じゅうじ
 				// エスケープシーケンスは常に取り除く
 				++i;
-			}else if (20 == nMode) {
+			}else if (nMode == 20) {
 				// シングルクォーテーション文字列読み込み中
 				if ('\'' == pLine[i]) {
 					nMode = 0;
 					continue;
 				}else {
 				}
-			}else if (21 == nMode) {
+			}else if (nMode == 21) {
 				// ダブルクォーテーション文字列読み込み中
 				// operator "" _userliteral
 				if (nMode2 == M2_OPERATOR_WORD) {
@@ -520,7 +520,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 						szWordPrev[nLen + 1] = L'\0';
 					}
 				}
-				if ('"' == pLine[i]) {
+				if (pLine[i] == '"') {
 					if (nRawStringTagLen) {
 						// R"abc(test
 						//)abc"
@@ -535,7 +535,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					}
 				}else {
 				}
-			}else if (1 == nMode) {
+			}else if (nMode == 1) {
 				// add end 2005/12/6 じゅうじ
 				// 単語読み込み中
 				if (C_IsWordChar(pLine[i])) {
@@ -630,7 +630,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					--i;
 					continue;
 				}
-			}else if (2 == nMode) {
+			}else if (nMode == 2) {
 				// 記号列読み込み中
 				if (C_IsWordChar(pLine[i]) ||
 					C_IsSpace(pLine[i], bExtEol) ||
@@ -701,30 +701,30 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 						}
 					}
 				}
-			}else if (999 == nMode) {
+			}else if (nMode == 999) {
 				// 長過ぎる単語無視中
 				// 空白やタブ記号等を飛ばす
 				if (C_IsSpace(pLine[i], bExtEol)) {
 					nMode = 0;
 					continue;
 				}
-			}else if (0 == nMode) {
+			}else if (nMode == 0) {
 				// ノーマルモード
 				// 空白やタブ記号等を飛ばす
 				if (C_IsSpace(pLine[i], bExtEol))
 					continue;
-				if (i < nLineLen - 1 && '/' == pLine[i] &&  '/' == pLine[i + 1]) {
+				if (i < nLineLen - 1 && pLine[i] == '/' && pLine[i + 1] == '/') {
 					++i;
 					nMode = 10;
 					continue;
-				}else if (i < nLineLen - 1 && '/' == pLine[i] &&  '*' == pLine[i + 1]) {
+				}else if (i < nLineLen - 1 && pLine[i] == '/' && pLine[i + 1] == '*') {
 					++i;
 					nMode = 8;
 					continue;
-				}else if ('\'' == pLine[i]) {
+				}else if (pLine[i] == '\'') {
 					nMode = 20;
 					continue;
-				}else if ('"' == pLine[i]) {
+				}else if (pLine[i] == '"') {
 					int nLen = (int)wcslen(szWordPrev);
 					if (nMode2 == M2_NORMAL && C_IsOperator(szWordPrev, nLen)) {
 						// 演算子のオペレータだった operator ""i
@@ -1240,14 +1240,14 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 
 		pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
-			if (WCODE::CR != wcChar) {
+			if (wcChar != WCODE::CR) {
 				return;
 			}
 			// 調整によって置換される箇所
 			sRangeA.Set(CLogicPoint(0, GetCaret().GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
-			if (WCODE::CR != wcChar) {
+			if (wcChar != WCODE::CR) {
 				nWork = nCaretPosX_PHY - 1;
 			}else {
 				/*
@@ -1258,14 +1258,14 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 
 				int i;
 				for (i=nCaretPosX_PHY; i<nLineLen; ++i) {
-					if (WCODE::TAB != pLine[i] && WCODE::SPACE != pLine[i]) {
+					if (pLine[i] != WCODE::TAB && pLine[i] != WCODE::SPACE) {
 						break;
 					}
 				}
 				if (i < nLineLen) {
 					// 2005-09-02 D.S.Koba GetSizeOfChar
 					nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
-					if (1 == nCharChars && (pLine[i] == L')' || pLine[i] == L'}')) {
+					if (nCharChars == 1 && (pLine[i] == L')' || pLine[i] == L'}')) {
 						wcChar = pLine[i];
 					}
 					nCaretPosX_PHY = i;
@@ -1276,21 +1276,21 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 			int i;
 			for (i=0; i<nWork; ++i) {
-				if (WCODE::TAB != pLine[i] && WCODE::SPACE != pLine[i]) {
+				if (pLine[i] != WCODE::TAB && pLine[i] != WCODE::SPACE) {
 					break;
 				}
 			}
 			if (i < nWork) {
-				if ((L':' == wcChar && IsHeadCppKeyword(&pLine[i]))
+				if ((wcChar == L':' && IsHeadCppKeyword(&pLine[i]))
 					//	Sep. 18, 2002 かろと
-					|| (L'{' == wcChar && L'#' != pLine[i])
-					|| (L'(' == wcChar && L'#' != pLine[i])
+					|| (wcChar == L'{' && pLine[i] != L'#')
+					|| (wcChar == L'(' && pLine[i] != L'#')
 				) {
 				}else {
 					return;
 				}
 			}else {
-				if (L':' == wcChar) {
+				if (wcChar == L':') {
 					return;
 				}
 			}
@@ -1322,22 +1322,22 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 
 			for (; k>=0; /*k--*/) {
-				if (1 == nCharChars && (L'}' == pLine2[k] || L')' == pLine2[k])) {
+				if (nCharChars == 1 && (pLine2[k] == L'}' || pLine2[k] == L')')) {
 					if (1
 						&& 0 < k
-						&& L'\'' == pLine2[k - 1]
+						&& pLine2[k - 1] == L'\''
 						&& nLineLen2 - 1 > k
-						&& L'\'' == pLine2[k + 1]
+						&& pLine2[k + 1] == L'\''
 					) {
 //						MYTRACE(_T("▼[%ls]\n"), pLine2);
 					}else {
 						// 同じ行の場合
 						if (j == GetCaret().GetCaretLogicPos().y) {
-							if (L'{' == wcChar && L'}' == pLine2[k]) {
+							if (wcChar == L'{' && pLine2[k] == L'}') {
 								wcChar = L'}';
 								--nLevel;	// {}の入れ子レベル
 							}
-							if (L'(' == wcChar && L')' == pLine2[k]) {
+							if (wcChar == L'(' && pLine2[k] == L')') {
 								wcChar = L')';
 								--nLevel;	// {}の入れ子レベル
 							}
@@ -1346,25 +1346,25 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						++nLevel;	// {}の入れ子レベル
 					}
 				}
-				if (1 == nCharChars && (L'{' == pLine2[k] || L'(' == pLine2[k])) {
+				if (nCharChars == 1 && (pLine2[k] == L'{' || pLine2[k] == L'(')) {
 					if (1
 						&& 0 < k
-						&& L'\'' == pLine2[k - 1]
+						&& pLine2[k - 1] == L'\''
 						&& nLineLen2 - 1 > k
-						&& L'\'' == pLine2[k + 1]
+						&& pLine2[k + 1] == L'\''
 					) {
 //						MYTRACE(_T("▼[%ls]\n"), pLine2);
 					}else {
 						// 同じ行の場合
 						if (j == GetCaret().GetCaretLogicPos().y) {
-							if (L'{' == wcChar && L'{' == pLine2[k]) {
+							if (wcChar == L'{' && pLine2[k] == L'{') {
 								return;
 							}
-							if (L'(' == wcChar && L'(' == pLine2[k]) {
+							if (wcChar == L'(' && pLine2[k] == L'(') {
 								return;
 							}
 						}
-						if (0 == nLevel) {
+						if (nLevel == 0) {
 							break;
 						}else {
 							--nLevel;	// {}の入れ子レベル
@@ -1372,7 +1372,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 					}
 				}
 				nCharChars = CLogicInt(&pLine2[k] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]));
-				if (0 == nCharChars) {
+				if (nCharChars == 0) {
 					nCharChars = CLogicInt(1);
 				}
 				k -= nCharChars;
@@ -1383,7 +1383,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 
 			for (m=0; m<nLineLen2; ++m) {
-				if (WCODE::TAB != pLine2[m] && WCODE::SPACE != pLine2[m]) {
+				if (pLine2[m] != WCODE::TAB && pLine2[m] != WCODE::SPACE) {
 					break;
 				}
 			}
@@ -1392,7 +1392,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 			nCharChars = (m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bInsSpace)? (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(): 1;
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
-			if (WCODE::CR == wcChar || L'{' == wcChar || L'(' == wcChar) {
+			if (wcChar == WCODE::CR || wcChar == L'{' || wcChar == L'(') {
 				// 2005.10.11 ryoji TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
 				//	既存文字列の右端の表示位置を求めた上で挿入するスペースの数を決定する
 				if (m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bInsSpace) {	// SPACE挿入設定
@@ -1400,15 +1400,17 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 					i = m = 0;
 					while (i < nDataLen) {
 						nCharChars = CNativeW::GetSizeOfChar(pszData, nDataLen, i);
-						if (nCharChars == 1 && WCODE::TAB == pszData[i])
+						if (nCharChars == 1 && pszData[i] == WCODE::TAB) {
 							m += (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(CLayoutInt(m));
-						else
+						}else {
 							m += nCharChars;
+						}
 						i += nCharChars;
 					}
 					nCharChars = (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(CLayoutInt(m));
-					for (int i=0; i<nCharChars; ++i)
+					for (int i=0; i<nCharChars; ++i) {
 						pszData[nDataLen + i] = WCODE::SPACE;
+					}
 					pszData[nDataLen + nCharChars] = L'\0';
 					nDataLen += CLogicInt(nCharChars);
 				}else {
@@ -1454,8 +1456,8 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(sRangeA, &sRangeLayout);
 
 		if (0
-			|| (0 == nDataLen && sRangeLayout.IsOne())
-			|| (nDataLen == nSrcLen && 0 == wmemcmp(pszSrc, pszData, nDataLen))
+			|| (nDataLen == 0 && sRangeLayout.IsOne())
+			|| (nDataLen == nSrcLen && wmemcmp(pszSrc, pszData, nDataLen) == 0)
 		) {
 			bChange = FALSE;
 		}else {

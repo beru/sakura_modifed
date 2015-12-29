@@ -626,16 +626,16 @@ void CDlgFuncList::SetData()
 			//	To Here Apr. 23, 2005 genta 行番号を左端へ
 
 			item.mask = LVIF_TEXT;
-			if (1 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK01));}else
-			if (10 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK02));}else
-			if (20 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK03));}else
-			if (11 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK04));}else
-			if (21 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK05));}else
-			if (31 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK06));}else
-			if (41 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK07));}else
-			if (50 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK08));}else
-			if (51 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK09));}else
-			if (52 == pcFuncInfo->m_nInfo) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK10));}else {
+			if (pcFuncInfo->m_nInfo == 1) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK01));}else
+			if (pcFuncInfo->m_nInfo == 10) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK02));}else
+			if (pcFuncInfo->m_nInfo == 20) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK03));}else
+			if (pcFuncInfo->m_nInfo == 11) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK04));}else
+			if (pcFuncInfo->m_nInfo == 21) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK05));}else
+			if (pcFuncInfo->m_nInfo == 31) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK06));}else
+			if (pcFuncInfo->m_nInfo == 41) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK07));}else
+			if (pcFuncInfo->m_nInfo == 50) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK08));}else
+			if (pcFuncInfo->m_nInfo == 51) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK09));}else
+			if (pcFuncInfo->m_nInfo == 52) {item.pszText = const_cast<TCHAR*>(LS(STR_DLGFNCLST_REMARK10));}else {
 				// Jul 10, 2003  little YOSHI
 				// ここにあったVB関係の処理はSetListVB()メソッドに移動しました。
 
@@ -824,7 +824,7 @@ int CDlgFuncList::GetData(void)
 	if (m_nViewType == VIEWTYPE_LIST) {
 		//	List
  		int nItem = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-		if (-1 == nItem) {
+		if (nItem == -1) {
 			return -1;
 		}
 		LV_ITEM item;
@@ -943,7 +943,7 @@ void CDlgFuncList::SetTreeJava(
 				}
 				// 2005-09-02 D.S.Koba GetSizeOfChar
 				nCharChars = CNativeT::GetSizeOfChar(pWork, nWorkLen, k);
-				if (1 == nCharChars && 0 == nNestTemplate && _T(':') == pWork[k]) {
+				if (nCharChars == 1 && nNestTemplate == 0 && pWork[k] == _T(':')) {
 					//	Jan. 04, 2001 genta
 					//	C++の統合のため、\に加えて::をクラス区切りとみなすように
 					if (k < nWorkLen - 1 && _T(':') == pWork[k + 1]) {
@@ -1004,7 +1004,7 @@ void CDlgFuncList::SetTreeJava(
 					tvi.pszText = szLabel;
 					tvi.cchTextMax = _countof(szLabel);
 					if (TreeView_GetItem(hwndTree, &tvi)) {
-						if (0 == _tcsncmp(szClassArr[k], szLabel, nClassNameLen)) {
+						if (_tcsncmp(szClassArr[k], szLabel, nClassNameLen) == 0) {
 							if (_countof(szLabel) < (nClassNameLen +1)) {
 								break;// バッファ不足では無条件にマッチする
 							}else {
@@ -1352,7 +1352,7 @@ void CDlgFuncList::SetListVB (void)
 		}
 
 		TCHAR szTypeOption[256]; // 2006.12.12 Moca auto_sprintfの入出力で同一変数を使わないための作業領域追加
-		if (0 == nInfo) {
+		if (nInfo == 0) {
 			szTypeOption[0] = _T('\0');	//	2006.12.17 genta 全体を0で埋める必要はない
 		}else
 		if (szOption[0] == _T('\0')) {
@@ -1504,7 +1504,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 		// pcFuncInfoに登録されている行数、桁を確認して、選択するアイテムを考える
 		bool bFileSelect = false;
 		if (pcFuncInfo->m_cmemFileName.GetStringPtr() && m_pcFuncInfoArr->m_szFilePath[0]) {
-			if (0 == auto_stricmp( pcFuncInfo->m_cmemFileName.GetStringPtr(), m_pcFuncInfoArr->m_szFilePath.c_str() )) {
+			if (auto_stricmp(pcFuncInfo->m_cmemFileName.GetStringPtr(), m_pcFuncInfoArr->m_szFilePath.c_str()) == 0) {
 				bFileSelect = true;
 			}
 		}else {

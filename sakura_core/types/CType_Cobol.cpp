@@ -109,7 +109,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 			bDivision = FALSE;
 			int nLen = (int)wcslen(szLabel) - nKeyWordLen;
 			for (i=0; i<=nLen ; ++i) {
-				if (0 == auto_memicmp(&szLabel[i], pszKeyWord, nKeyWordLen)) {
+				if (auto_memicmp(&szLabel[i], pszKeyWord, nKeyWordLen) == 0) {
 					szLabel[i + nKeyWordLen] = L'\0';
 					wcscpy_s(szDivision, szLabel);
 					bDivision = TRUE;

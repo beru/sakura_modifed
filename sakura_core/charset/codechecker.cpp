@@ -334,7 +334,7 @@ int DetectJisEscseq(const char* pS, const int nLen, EMyJisEscseq* peEscType)
 			}
 		}else if (pr + 4 < pr_end) {
 			expected_esc_len += 5;
-			if (0 == strncmp(pr, "&@\x1b$B", 5)) {
+			if (strncmp(pr, "&@\x1b$B", 5) == 0) {
 				ejisesc = JISESC_JISX0208_1990;			// ESC & @ ESC $ B  -  JIS X 0208-1990
 			}
 		}
@@ -1065,7 +1065,7 @@ int CheckUtf7BPart(const char* pS, const int nLen, char** ppNextChar, bool* pbEr
 		berror_found = true;
 	}
 
-	if (UC_LOOSE == (nOption & UC_LOOSE)) {
+	if ((nOption & UC_LOOSE) == UC_LOOSE) {
 		goto EndFunc;
 	}
 
@@ -1109,7 +1109,7 @@ EndFunc:;
 		*pbError = berror_found;
 	}
 
-	if ((!berror_found || UC_LOOSE == (nOption & UC_LOOSE)) && (pr < pr_end && bminus_found)) {
+	if ((!berror_found || (nOption & UC_LOOSE) == UC_LOOSE) && (pr < pr_end && bminus_found)) {
 		// '-' をスキップ。
 		*ppNextChar = const_cast<char*>(pr) + 1;
 	}else {

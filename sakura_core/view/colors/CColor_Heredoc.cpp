@@ -125,7 +125,7 @@ bool CColor_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_Heredoc::EndColor(const CStringRef& cStr, int nPos)
 {
-	if (0 == this->m_nCOMMENTEND) {
+	if (this->m_nCOMMENTEND == 0) {
 		if (1
 			&& m_pTypeData->m_nHeredocType == HEREDOC_PHP
 			&& nPos == 0 && m_nSize <= cStr.GetLength()

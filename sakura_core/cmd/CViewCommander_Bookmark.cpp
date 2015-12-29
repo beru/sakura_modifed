@@ -60,7 +60,7 @@ void CViewCommander::Command_JUMP_DIALOG(void)
 void CViewCommander::Command_JUMP(void)
 {
 	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
-	if (0 == layoutMgr.GetLineCount()) {
+	if (layoutMgr.GetLineCount() == 0) {
 		ErrorBeep();
 		return;
 	}
@@ -159,7 +159,7 @@ void CViewCommander::Command_JUMP(void)
 			// シングルクォーテーション文字列読み込み中
 			prevLet = let;
 			let = pLine[i];
-			if (20 == nMode) {
+			if (nMode == 20) {
 				bValidLine = TRUE;
 				if (let == L'\'') {
 					if (i > 0 && L'\\' == prevLet) {
@@ -171,7 +171,7 @@ void CViewCommander::Command_JUMP(void)
 				}
 			}else
 			// ダブルクォーテーション文字列読み込み中
-			if (21 == nMode) {
+			if (nMode == 21) {
 				bValidLine = TRUE;
 				if (let == L'"') {
 					if (i > 0 && L'\\' == prevLet) {
@@ -183,7 +183,7 @@ void CViewCommander::Command_JUMP(void)
 				}
 			}else
 			// コメント読み込み中
-			if (8 == nMode) {
+			if (nMode == 8) {
 				if (i < nLineLen - 1 && let == L'*' &&  L'/' == pLine[i + 1]) {
 					if (/*nCommentBegin != nLineCount &&*/ nCommentBegin != 0) {
 						bValidLine = TRUE;
@@ -195,7 +195,7 @@ void CViewCommander::Command_JUMP(void)
 				}
 			}else
 			// ノーマルモード
-			if (0 == nMode) {
+			if (nMode == 0) {
 				// 空白やタブ記号等を飛ばす
 				if (0
 					|| let == L'\t'
@@ -227,7 +227,7 @@ void CViewCommander::Command_JUMP(void)
 			}
 		}
 		// コメント読み込み中
-		if (8 == nMode) {
+		if (nMode == 8) {
 			if (nCommentBegin != 0) {
 				bValidLine = TRUE;
 			}

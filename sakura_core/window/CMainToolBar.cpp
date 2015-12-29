@@ -527,7 +527,7 @@ void CMainToolBar::AcceptSharedSearchKey()
 		const wchar_t* pszText;
 		if (GetDllShareData().m_Common.m_sSearch.m_bInheritKeyOtherView
 			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
-			|| 0 == m_pOwner->GetActiveView().m_strCurSearchKey.size()
+			|| m_pOwner->GetActiveView().m_strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {
 				pszText = GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0];

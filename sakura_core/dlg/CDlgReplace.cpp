@@ -504,7 +504,7 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 //		if (0 < nRet) {
 //			::EndDialog(hwndDlg, 2);
 //		}else
-//		if (0 == nRet) {
+//		if (nRet == 0) {
 //			::EndDialog(hwndDlg, 0);
 //		}
 //		return TRUE;

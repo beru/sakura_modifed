@@ -225,7 +225,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	CLayoutPoint ptNew;
 	GetTextArea().ClientToLayout(ptClient, &ptNew);
 	// 同じ行ならなにもしない
-	if (0 == m_dwTipTimer && m_cTipWnd.m_nSearchLine == (Int)ptNew.y) {
+	if (m_dwTipTimer == 0 && m_cTipWnd.m_nSearchLine == (Int)ptNew.y) {
 		*pbHide = false; // 表示継続
 		return false;
 	}
@@ -488,7 +488,7 @@ int CEditView::IsSearchString(
 				if (!WCODE::IsWordDelimiter(*p)) {
 					++wordIndex;
 					// p...(p + end) が検索語に含まれる wordIndex番目の単語。(wordIndexの最初は 1)
-					if (wordLength == end && 0 == fcmp(p, pWordHead, wordLength)) {
+					if (wordLength == end && fcmp(p, pWordHead, wordLength) == 0) {
 						*pnSearchStart = posWordHead;
 						*pnSearchEnd = posWordEnd;
 						return wordIndex;

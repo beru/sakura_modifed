@@ -196,7 +196,7 @@ ECodeType CCodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 	}
 
 	// 0バイトならタイプ別のデフォルト設定
-	if (0 == nBufLen) {
+	if (nBufLen == 0) {
 		return m_pEncodingConfig->m_eDefaultCodetype;
 	}
 

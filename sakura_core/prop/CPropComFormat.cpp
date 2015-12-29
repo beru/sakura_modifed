@@ -262,7 +262,7 @@ void CPropFormat::SetData(HWND hwndDlg)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_INYOUKIGOU, csFormat.m_szInyouKigou);
 
 	// 日付書式のタイプ
-	if (0 == csFormat.m_nDateFormatType) {
+	if (csFormat.m_nDateFormatType == 0) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_DFORM_0, BST_CHECKED);
 	}else {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_DFORM_1, BST_CHECKED);
@@ -271,7 +271,7 @@ void CPropFormat::SetData(HWND hwndDlg)
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_DFORM, csFormat.m_szDateFormat);
 
 	// 時刻書式のタイプ
-	if (0 == csFormat.m_nTimeFormatType) {
+	if (csFormat.m_nTimeFormatType == 0) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_TFORM_0, BST_CHECKED);
 	}else {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_TFORM_1, BST_CHECKED);

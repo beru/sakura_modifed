@@ -87,7 +87,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	}
 
 	// 辞書Tipが起動されている
-	if (0 == m_dwTipTimer) {
+	if (m_dwTipTimer == 0) {
 		// 辞書Tipを消す
 		m_cTipWnd.Hide();
 		m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
@@ -101,7 +101,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	if (tripleClickMode) {
 		// マウス左トリプルクリックに対応する機能コードはm_Common.m_pKeyNameArr[5]に入っている
 		nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_TRIPLECLICK].m_nFuncCodeArr[getCtrlKeyState()];
-		if (0 == nFuncID) {
+		if (nFuncID == 0) {
 			tripleClickMode = 0;	// 割り当て機能無しの時はトリプルクリック OFF
 		}
 	}else {
@@ -124,7 +124,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 				goto normal_action;
 			}
 			// 指定カーソル位置が選択エリア内にあるか
-			if (0 == IsCurrentPositionSelected(ptNew)) {
+			if (IsCurrentPositionSelected(ptNew) == 0) {
 				POINT ptWk = {ptMouse.x, ptMouse.y};
 				::ClientToScreen(GetHwnd(), &ptWk);
 				if (!::DragDetect(GetHwnd(), ptWk)) {
@@ -376,9 +376,9 @@ normal_action:;
 						nWork = IsCurrentPositionSelected(
 							sRange.GetFrom()	// カーソル位置
 						);
-						if (-1 == nWork || 0 == nWork) {
+						if (nWork == -1 || nWork == 0) {
 							GetSelectionInfo().m_sSelect.SetFrom(sRange.GetFrom());
-							if (1 == nWorkRel) {
+							if (nWorkRel == 1) {
 								GetSelectionInfo().m_sSelectBgn = sRange;
 							}
 						}
@@ -401,13 +401,13 @@ normal_action:;
 						*/
 
 						nWork = IsCurrentPositionSelected(sRange.GetFrom());
-						if (-1 == nWork || 0 == nWork) {
+						if (nWork == -1 || nWork == 0) {
 							GetSelectionInfo().m_sSelect.SetTo(sRange.GetFrom());
 						}
-						if (1 == IsCurrentPositionSelected(sRange.GetTo())) {
+						if (IsCurrentPositionSelected(sRange.GetTo()) == 1) {
 							GetSelectionInfo().m_sSelect.SetTo(sRange.GetTo());
 						}
-						if (-1 == nWorkRel || 0 == nWorkRel) {
+						if (nWorkRel == -1 || nWorkRel == 0) {
 							GetSelectionInfo().m_sSelectBgn=sRange;
 						}
 					}
@@ -581,9 +581,9 @@ void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	ptNew.y = GetTextArea().GetViewTopLine() + (yPos - GetTextArea().GetAreaTop()) / GetTextMetrics().GetHankakuDy();
 	*/
 	// 指定カーソル位置が選択エリア内にあるか
-	if (0 == IsCurrentPositionSelected(
+	if (IsCurrentPositionSelected(
 			ptNew		// カーソル位置
-		)
+		) == 0
 	) {
 		return;
 	}
@@ -1028,7 +1028,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		//	2001/06/18 asa-o: 補完ウィンドウが表示されていない
 		if (!m_bHokan) {
 			// 辞書Tipが起動されている
-			if (0 == m_dwTipTimer) {
+			if (m_dwTipTimer == 0) {
 				if ((m_poTipCurPos.x != po.x || m_poTipCurPos.y != po.y)) {
 					// 辞書Tipを消す
 					m_cTipWnd.Hide();
@@ -1061,7 +1061,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			}else if (1
 				&& GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop	// OLEによるドラッグ & ドロップを使う
 				&& GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DropSource	// OLEによるドラッグ元にするか
-				&& 0 == IsCurrentPositionSelected(ptNew)					// 指定カーソル位置が選択エリア内にあるか
+				&& IsCurrentPositionSelected(ptNew) == 0					// 指定カーソル位置が選択エリア内にあるか
 			) {
 				// 矢印カーソル
 				::SetCursor(::LoadCursor(NULL, IDC_ARROW));
@@ -1228,7 +1228,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 						sRange.GetTo(),	// カーソル位置
 						sSelect
 					);
-					if (-1 == nWorkF) {
+					if (nWorkF == -1) {
 						// 始点が前方に移動。現在のカーソル位置によって選択範囲を変更
 						GetSelectionInfo().ChangeSelectAreaByCurrentCursor(sRange.GetFrom());
 					}else if (1 == nWorkT) {
@@ -1389,7 +1389,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 			}
 		}
 
-		if (-1 == nRollLineNum || bKeyPageScroll) {
+		if (nRollLineNum == -1 || bKeyPageScroll) {
 			// 「1画面分スクロールする」
 			if (bHorizontal) {
 				nRollLineNum = (Int)GetTextArea().m_nViewColNum - 1;	// 表示域の桁数
@@ -2073,7 +2073,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 
 	::GlobalUnlock(hData);
 	// 2004.07.12 fotomo/もか メモリーリークの修正
-	if (0 == (GMEM_LOCKCOUNT & ::GlobalFlags(hData))) {
+	if ((GMEM_LOCKCOUNT & ::GlobalFlags(hData)) == 0) {
 		::GlobalFree(hData);
 	}
 
@@ -2104,7 +2104,7 @@ STDMETHODIMP CEditView::PostMyDropFiles(LPDATAOBJECT pDataObject)
 	);
 
 	::GlobalUnlock(hData);
-	if (0 == (GMEM_LOCKCOUNT & ::GlobalFlags(hData))) {
+	if ((GMEM_LOCKCOUNT & ::GlobalFlags(hData)) == 0) {
 		::GlobalFree(hData);
 	}
 

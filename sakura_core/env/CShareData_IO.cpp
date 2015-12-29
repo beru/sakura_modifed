@@ -1248,8 +1248,8 @@ void CShareData_IO::ShareData_IO_Print(CDataProfile& cProfile)
 		cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferT(printsetting.m_mdmDevMode.m_szPrinterOutputName));
 
 		// 2002.02.16 hor Ç∆ÇËÇ†Ç¶Ç∏ãåê›íËÇïœä∑ÇµÇ∆Ç≠
-		if (0 == wcscmp(printsetting.m_szHeaderForm[0], _EDITL("&f")) &&
-			0 == wcscmp(printsetting.m_szFooterForm[0], _EDITL("&C- &P -"))
+		if (wcscmp(printsetting.m_szHeaderForm[0], _EDITL("&f")) == 0 &&
+			wcscmp(printsetting.m_szFooterForm[0], _EDITL("&C- &P -")) == 0
 		) {
 			auto_strcpy(printsetting.m_szHeaderForm[0], _EDITL("$f"));
 			auto_strcpy(printsetting.m_szFooterForm[0], _EDITL(""));

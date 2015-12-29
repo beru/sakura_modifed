@@ -159,7 +159,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 		}
 
 		// ウィンドウ連番
-		if (0 == ::GetWindowLongPtr(hWnd, sizeof(LONG_PTR))) {
+		if (::GetWindowLongPtr(hWnd, sizeof(LONG_PTR)) == 0) {
 			pShare->m_sNodes.m_nSequences++;
 			::SetWindowLongPtr(hWnd, sizeof(LONG_PTR) , (LONG_PTR)pShare->m_sNodes.m_nSequences);
 
@@ -501,7 +501,7 @@ int CAppNodeManager::GetNoNameNumber(HWND hWnd)
 	DLLSHAREDATA* pShare = &GetDllShareData();
 	EditNode* editNode = GetEditNode(hWnd);
 	if (editNode) {
-		if (-1 == editNode->m_nId) {
+		if (editNode->m_nId == -1) {
 			pShare->m_sNodes.m_nNonameSequences++;
 			editNode->m_nId = pShare->m_sNodes.m_nNonameSequences;
 		}

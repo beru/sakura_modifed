@@ -131,7 +131,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars2 = CNativeW::GetSizeOfChar(pszStarts, nStartsLen, j);
 			if (nCharChars == nCharChars2) {
-				if (0 == wmemcmp(&pLine[i], &pszStarts[j], nCharChars)) {
+				if (wmemcmp(&pLine[i], &pszStarts[j], nCharChars) == 0) {
 					break;
 				}
 			}

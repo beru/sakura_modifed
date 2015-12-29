@@ -601,7 +601,7 @@ void CViewCommander::Command_MAXIMIZE_H(void)
 void CViewCommander::Command_MINIMIZE_ALL(void)
 {
 	int j = GetDllShareData().m_sNodes.m_nEditArrNum;
-	if (0 == j) {
+	if (j == 0) {
 		return;
 	}
 	HWND* phWndArr = new HWND[j];

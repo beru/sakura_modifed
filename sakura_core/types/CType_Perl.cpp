@@ -90,7 +90,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 			}
 
 			/* 単語読み込み中 */
-			if (0 == nMode) {
+			if (nMode == 0) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||

@@ -56,7 +56,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 {
 	TCHAR szBuf[_MAX_PATH + 1];
 
-	if (-1 == m_nTransformFileNameCount) {
+	if (m_nTransformFileNameCount == -1) {
 		TransformFileName_MakeCache();
 	}
 
@@ -136,9 +136,9 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 	int j = 0;
 	for (int i=0; i<nSrcLen && j<nDestLen; ++i) {
 #if defined(_MBCS)
-		if (0 == strnicmp(&pszSrc[i], pszFrom, nFromLen))
+		if (strnicmp(&pszSrc[i], pszFrom, nFromLen) == 0)
 #else
-		if (0 == _tcsncicmp(&pszSrc[i], pszFrom, nFromLen))
+		if (_tcsncicmp(&pszSrc[i], pszFrom, nFromLen) == 0)
 #endif
 		{
 			int nCopy = t_min(nToLen, nDestLen - j);
@@ -235,12 +235,12 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 			LPCTSTR  pStr;
 			++ps;
 			// %SAKURA%
-			if (0 == auto_strnicmp(_T("SAKURA%"), ps, 7)) {
+			if (auto_strnicmp(_T("SAKURA%"), ps, 7) == 0) {
 				// exeのあるフォルダ
 				GetExedir(szPath);
 				nMetaLen = 6;
 			// %SAKURADATA%	// 2007.06.06 ryoji
-			}else if (0 == auto_strnicmp(_T("SAKURADATA%"), ps, 11)) {
+			}else if (auto_strnicmp(_T("SAKURADATA%"), ps, 11) == 0) {
 				// iniのあるフォルダ
 				GetInidir(szPath);
 				nMetaLen = 10;
@@ -260,7 +260,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 				for (pAlias=&AliasList[0]; nMetaLen<pAlias->nLenth; ++pAlias)
 					; // 読み飛ばす
 				for (; nMetaLen==pAlias->nLenth; ++pAlias) {
-					if (0 == auto_stricmp(pAlias->szAlias, szMeta)) {
+					if (auto_stricmp(pAlias->szAlias, szMeta) == 0) {
 						_tcscpy(szMeta, pAlias->szOrig);
 						break;
 					}

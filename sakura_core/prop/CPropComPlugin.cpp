@@ -220,7 +220,7 @@ INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 						// 2010.08.21 プラグイン名(フォルダ名)の同一性の確認
 						CPlugin* plugin = CPluginManager::getInstance()->GetPlugin(sel);
 						wstring sDirName = to_wchar(plugin->GetFolderName().c_str());
-						if (plugin && 0 == auto_stricmp(sDirName.c_str(), pluginTable[sel].m_szName)) {
+						if (plugin && auto_stricmp(sDirName.c_str(), pluginTable[sel].m_szName) == 0) {
 							CDlgPluginOption cDlgPluginOption;
 							cDlgPluginOption.DoModal(::GetModuleHandle(NULL), hwndDlg, this, sel);
 						}else {

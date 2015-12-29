@@ -208,7 +208,7 @@ namespace ApiWrap {
 	)
 	{
 		//$$ サロゲートペア無視
-		if (lpszCurrent>lpszStart) return const_cast<LPWSTR>(lpszCurrent - 1);
+		if (lpszCurrent > lpszStart) return const_cast<LPWSTR>(lpszCurrent - 1);
 		else return const_cast<LPWSTR>(lpszStart);
 	}
 

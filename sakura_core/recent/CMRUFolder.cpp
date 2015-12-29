@@ -133,7 +133,7 @@ void CMRUFolder::Add(const TCHAR* pszFolder)
 	}
 
 	// ‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚éê‡‚ÍAœŠOŽw’è‚ð–³Ž‹‚·‚é
-	if (-1 == m_cRecentFolder.FindItemByText(pszFolder)) {
+	if (m_cRecentFolder.FindItemByText(pszFolder) == -1) {
 		int nSize = m_pShareData->m_sHistory.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];

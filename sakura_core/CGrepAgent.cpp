@@ -82,7 +82,7 @@ void CGrepAgent::CreateFolders(const TCHAR* pszPath, std::vector<std::tstring>& 
 		int	nFolderLen = q - &szTmp[0];
 		if (0 < nFolderLen) {
 			int nCharChars = &szTmp[nFolderLen] - CNativeT::GetCharPrev(&szTmp[0], nFolderLen, &szTmp[nFolderLen]);
-			if (1 == nCharChars && (_T('\\') == szTmp[nFolderLen - 1] || _T('/') == szTmp[nFolderLen - 1])) {
+			if (nCharChars == 1 && (_T('\\') == szTmp[nFolderLen - 1] || _T('/') == szTmp[nFolderLen - 1])) {
 				szTmp[nFolderLen - 1] = _T('\0');
 			}
 		}
@@ -211,7 +211,7 @@ DWORD CGrepAgent::DoGrep(
 	// アンドゥバッファの処理
 	if (pcViewDst->GetDocument()->m_cDocEditor.m_pcOpeBlk) {	// 操作ブロック
 //@@@2002.2.2 YAZAKI NULLじゃないと進まないので、とりあえずコメント。＆NULLのときは、new COpeBlkする。
-//		while (NULL != m_pcOpeBlk) {}
+//		while (m_pcOpeBlk) {}
 //		delete m_pcOpeBlk;
 //		m_pcOpeBlk = NULL;
 	}else {
@@ -388,7 +388,7 @@ DWORD CGrepAgent::DoGrep(
 		CNativeW cmemWork2;
 		cmemWork2.SetNativeData(*pcmGrepKey);
 		const STypeConfig& type = pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
-		if (FALSE == type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
+		if (!type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
 			// 2011.11.28 色指定が無効ならエスケープしない
 		}else
 		if (type.m_nStringType == STRING_LITERAL_CPP || type.m_nStringType == STRING_LITERAL_CSHARP
@@ -417,7 +417,7 @@ DWORD CGrepAgent::DoGrep(
 			CNativeW cmemWork2;
 			cmemWork2.SetNativeData( cmemReplace );
 			const STypeConfig& type = pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
-			if (FALSE == type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
+			if (!type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
 				// 2011.11.28 色指定が無効ならエスケープしない
 			}else
 			if (0
@@ -500,7 +500,7 @@ DWORD CGrepAgent::DoGrep(
 		}
 	}
 
-	if (CODE_AUTODETECT == sGrepOption.nGrepCharSet) {
+	if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
 		cmemMessage.AppendString(LSW(STR_GREP_CHARSET_AUTODETECT));	// L"    (文字コードセットの自動判別)\r\n"
 	}else if (IsValidCodeOrCPType(sGrepOption.nGrepCharSet)) {
 		cmemMessage.AppendString(LSW(STR_GREP_CHARSET));	// L"    (文字コードセット："
@@ -589,7 +589,7 @@ DWORD CGrepAgent::DoGrep(
 		}
 		nGrepTreeResult += nTreeRet;
 	}
-	if (-1 == nGrepTreeResult && sGrepOption.bGrepHeader) {
+	if (nGrepTreeResult == -1 && sGrepOption.bGrepHeader) {
 		const wchar_t* p = LSW(STR_GREP_SUSPENDED);	// L"中断しました。\r\n"
 		CNativeW cmemSuspend;
 		cmemSuspend.SetString( p );
@@ -762,7 +762,7 @@ int CGrepAgent::DoGrepTree(
 
 		// 2003.06.23 Moca リアルタイム表示のときは早めに表示
 		if (pcViewDst->GetDrawSwitch()) {
-			if (LTEXT('\0') != pszKey[0]) {
+			if (pszKey[0] != LTEXT('\0')) {
 				// データ検索のときファイルの合計が最大10MBを超えたら表示
 				nWork += (cGrepEnumFilterFiles.GetFileSizeLow(i) + 1023) / 1024;
 			}
@@ -785,7 +785,7 @@ int CGrepAgent::DoGrepTree(
 			nWork = 0;
 			nHitCountOld = *pnHitCount;
 		}
-		if (-1 == nRet) {
+		if (nRet == -1) {
 			goto cancel_return;
 		}
 	}
@@ -850,7 +850,7 @@ int CGrepAgent::DoGrepTree(
 				bOutputBaseFolder,
 				pnHitCount
 			);
-			if (-1 == nGrepTreeResult) {
+			if (nGrepTreeResult == -1) {
 				goto cancel_return;
 			}
 			pcDlgCancel->SetItemText(IDC_STATIC_CURPATH, pszPath);	//@@@ 2002.01.10 add サブフォルダから戻ってきたら...
@@ -985,12 +985,12 @@ static void OutputPathInfo(
 		}
 		cmemMessage.AllocStringBuffer(n);
 	}
-	if (3 == sGrepOption.nGrepOutputStyle) {
+	if (sGrepOption.nGrepOutputStyle == 3) {
 		return;
 	}
 
 	if (!bOutputBaseFolder && sGrepOption.bGrepOutputBaseFolder) {
-		if (!sGrepOption.bGrepSeparateFolder && 1 == sGrepOption.nGrepOutputStyle) {
+		if (!sGrepOption.bGrepSeparateFolder && sGrepOption.nGrepOutputStyle == 1) {
 			cmemMessage.AppendString(L"■\"");
 		}else {
 			cmemMessage.AppendString(L"◎\"");
@@ -1009,7 +1009,7 @@ static void OutputPathInfo(
 		}
 		bOutputFolderName = true;
 	}
-	if (2 == sGrepOption.nGrepOutputStyle) {
+	if (sGrepOption.nGrepOutputStyle == 2) {
 		if (!bOutFileName) {
 			const TCHAR* pszDispFilePath = (sGrepOption.bGrepSeparateFolder || sGrepOption.bGrepOutputBaseFolder) ? pszRelPath : pszFullPath;
 			if (sGrepOption.bGrepSeparateFolder) {
@@ -1083,9 +1083,9 @@ int CGrepAgent::DoGrepFile(
 
 	// 検索条件が長さゼロの場合はファイル名だけ返す
 	// 2002/08/29 行ループの前からここに移動
-	if (0 == nKeyLen) {
+	if (nKeyLen == 0) {
 		TCHAR szCpName[100];
-		if (CODE_AUTODETECT == sGrepOption.nGrepCharSet) {
+		if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
 			// 2003.06.10 Moca コード判別処理をここに移動．
 			// 判別エラーでもファイル数にカウントするため
 			// ファイルの日本語コードセット判別
@@ -1106,19 +1106,19 @@ int CGrepAgent::DoGrepFile(
 			const wchar_t* pszFormatBasePath2 = L"";
 			const wchar_t* pszFormatFilePath = L"";
 			const wchar_t* pszFormatFilePath2 = L"";
-			if (1 == sGrepOption.nGrepOutputStyle) {
+			if (sGrepOption.nGrepOutputStyle == 1) {
 				// ノーマル
 				pszFormatFullPath   = L"%ts%ts\r\n";
 				pszFormatBasePath2  = L"■\"%ts\"\r\n";
 				pszFormatFilePath   = L"・\"%ts\"%ts\r\n";
 				pszFormatFilePath2  = L"・\"%ts\"%ts\r\n";
-			}else if (2 == sGrepOption.nGrepOutputStyle) {
+			}else if (sGrepOption.nGrepOutputStyle == 2) {
 				/* WZ風 */
 				pszFormatFullPath   = L"■\"%ts\"%ts\r\n";
 				pszFormatBasePath2  = L"◎\"%ts\"\r\n";
 				pszFormatFilePath   = L"◆\"%ts\"%ts\r\n";
 				pszFormatFilePath2  = L"■\"%ts\"%ts\r\n";
-			}else if (3 == sGrepOption.nGrepOutputStyle) {
+			}else if (sGrepOption.nGrepOutputStyle == 3) {
 				// 結果のみ
 				pszFormatFullPath   = L"%ts%ts\r\n";
 				pszFormatBasePath2  = L"■\"%ts\"\r\n";
@@ -1177,7 +1177,7 @@ int CGrepAgent::DoGrepFile(
 		nCharCode = cfl.FileOpen( pszFullPath, true, sGrepOption.nGrepCharSet, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode() );
 		TCHAR szCpName[100];
 		{
-			if (CODE_AUTODETECT == sGrepOption.nGrepCharSet) {
+			if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
 				if (IsValidCodeType(nCharCode)) {
 					auto_strcpy( szCpName, CCodeTypeName(nCharCode).Bracket() );
 					pszCodeName = szCpName;
@@ -1218,10 +1218,10 @@ int CGrepAgent::DoGrepFile(
 
 			// 処理中のユーザー操作を可能にする
 			// 2010.08.31 間隔を1/32にする
-			if (((0 == nLine % 32)|| 10000 < nLineLen ) && !::BlockingHook(pcDlgCancel->GetHwnd())) {
+			if (((nLine%32 == 0) || nLineLen > 10000) && !::BlockingHook(pcDlgCancel->GetHwnd())) {
 				return -1;
 			}
-			if (0 == nLine % 64) {
+			if (nLine%64 == 0) {
 				// 中断ボタン押下チェック
 				if (pcDlgCancel->IsCanceled()) {
 					return -1;
@@ -1294,7 +1294,7 @@ int CGrepAgent::DoGrepFile(
 							matchlen,
 							sGrepOption
 						);
-						if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
+						if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 							pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
@@ -1353,7 +1353,7 @@ int CGrepAgent::DoGrepFile(
 							sGrepOption
 						);
 						//	May 22, 2000 genta
-						if (((*pnHitCount) % 128) == 0 || *pnHitCount < 128) {
+						if (((*pnHitCount)%128)==0 || *pnHitCount<128) {
 							pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
@@ -1405,7 +1405,7 @@ int CGrepAgent::DoGrepFile(
 							sGrepOption
 						);
 						//	May 22, 2000 genta
-						if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
+						if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 							pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE);
 						}
 					}
@@ -1444,7 +1444,7 @@ int CGrepAgent::DoGrepFile(
 						nLine, 1, pLine, nLineLen, nEolCodeLen,
 						pLine, nLineLen, sGrepOption
 					);
-					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
+					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 				}
@@ -1562,7 +1562,7 @@ public:
 				std::tstring oldFile = fileName;
 				oldFile += _T(".skrold");
 				if (fexist(oldFile.c_str())) {
-					if (FALSE == ::DeleteFile( oldFile.c_str() )) {
+					if (::DeleteFile(oldFile.c_str()) == FALSE) {
 						std::wstring msg = LSW(STR_GREP_REP_ERR_DELETE);
 						msg += L"[";
 						msg += to_wchar(oldFile.c_str());
@@ -1571,7 +1571,7 @@ public:
 						return;
 					}
 				}
-				if (FALSE == ::MoveFile( fileName, oldFile.c_str() )) {
+				if (::MoveFile(fileName, oldFile.c_str()) == FALSE) {
 					std::wstring msg = LSW(STR_GREP_REP_ERR_REPLACE);
 					msg += L"[";
 					msg += to_wchar(oldFile.c_str());
@@ -1580,7 +1580,7 @@ public:
 					return;
 				}
 			}else {
-				if (FALSE == ::DeleteFile( fileName )) {
+				if (::DeleteFile(fileName) == FALSE) {
 					std::wstring msg = LSW(STR_GREP_REP_ERR_DELETE);
 					msg += L"[";
 					msg += to_wchar(fileName);
@@ -1591,7 +1591,7 @@ public:
 			}
 			std::tstring name = std::tstring(fileName);
 			name += _T(".skrnew");
-			if (FALSE == ::MoveFile( name.c_str(), fileName )) {
+			if (::MoveFile(name.c_str(), fileName) == FALSE) {
 				std::wstring msg = LSW(STR_GREP_REP_ERR_REPLACE);
 				msg += L"[";
 				msg += to_wchar(fileName);
@@ -1676,7 +1676,7 @@ int CGrepAgent::DoGrepReplaceFile(
 		CWriteData output(nHitCount, pszFullPath, nCharCode, bBom, sGrepOption.bGrepBackup, cmemMessage );
 		TCHAR szCpName[100];
 		{
-			if (CODE_AUTODETECT == sGrepOption.nGrepCharSet) {
+			if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
 				if (IsValidCodeType(nCharCode)) {
 					auto_strcpy( szCpName, CCodeTypeName(nCharCode).Bracket() );
 					pszCodeName = szCpName;
@@ -1713,10 +1713,10 @@ int CGrepAgent::DoGrepReplaceFile(
 	
 			/* 処理中のユーザー操作を可能にする */
 			// 2010.08.31 間隔を1/32にする
-			if (((0 == nLine % 32)|| 10000 < nLineLen ) && !::BlockingHook( pcDlgCancel->GetHwnd() )) {
+			if (((nLine%32 == 0)|| 10000 < nLineLen ) && !::BlockingHook( pcDlgCancel->GetHwnd() )) {
 				return -1;
 			}
-			if (0 == nLine % 64) {
+			if (nLine%64 == 0) {
 				/* 中断ボタン押下チェック */
 				if (pcDlgCancel->IsCanceled()) {
 					return -1;
@@ -1787,7 +1787,7 @@ int CGrepAgent::DoGrepReplaceFile(
 					output.OutputHead();
 					++nHitCount;
 					++(*pnHitCount);
-					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
+					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (!sGrepOption.bGrepPaste) {
@@ -1858,7 +1858,7 @@ int CGrepAgent::DoGrepReplaceFile(
 					++nHitCount;
 					++(*pnHitCount);
 					//	May 22, 2000 genta
-					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
+					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (0 < pszRes - pLine - nOutputPos) {
@@ -1905,7 +1905,7 @@ int CGrepAgent::DoGrepReplaceFile(
 					++nHitCount;
 					++(*pnHitCount);
 					//	May 22, 2000 genta
-					if (0 == ( (*pnHitCount) % 128 ) || *pnHitCount < 128) {
+					if (((*pnHitCount)%128) == 0 || *pnHitCount < 128) {
 						pcDlgCancel->SetItemInt(IDC_STATIC_HITCOUNT, *pnHitCount, FALSE );
 					}
 					if (nColumn) {

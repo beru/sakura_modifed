@@ -205,7 +205,7 @@ bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 	// いっぱいのときは最古の通常アイテムを削除する。
 	if (m_nArrayCount <= *m_pnUserItemCount) {
 		nIndex = GetOldestItem(*m_pnUserItemCount - 1, false);
-		if (-1 == nIndex) {
+		if (nIndex == -1) {
 			return false;
 		}
 
@@ -509,14 +509,14 @@ bool CRecentImp<T, S>::ChangeViewCount(int nViewCount)
 
 	// 最も古いお気に入りを探す。
 	i = GetOldestItem(*m_pnUserItemCount - 1, true);
-	if (-1 == i) return true;	// ないので何もしないで終了
+	if (i == -1) return true;	// ないので何もしないで終了
 
 	// 表示外アイテムを表示内に移動する。
 	for (; i>=nViewCount; --i) {
 		if (IsFavorite(i)) {
 			// カレント位置から上に通常アイテムを探す
 			nIndex = GetOldestItem(i - 1, false);
-			if (-1 == nIndex) break;	// もう1個もない
+			if (nIndex == -1) break;	// もう1個もない
 
 			// 見つかったアイテムをカレント位置に移動する
 			MoveItem(nIndex, i);

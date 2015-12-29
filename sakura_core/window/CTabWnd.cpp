@@ -104,7 +104,7 @@ int compTABMENU_DATA(const void *arg1, const void *arg2)
 	// 文字列ソート: "XYZ" が "ABC" と "abc" との間に割って入る
 	// 単語ソート: "ABC" と "abc" とは隣接し "XYZ" はそれらの後ろに入る（実際の辞書と同様な順序）
 	ret = ::lstrcmp(((TABMENU_DATA*)arg1)->szText, ((TABMENU_DATA*)arg2)->szText);
-	if (0 == ret)
+	if (ret == 0)
 		ret = ((TABMENU_DATA*)arg1)->iItem - ((TABMENU_DATA*)arg2)->iItem;
 	return ret;
 }
@@ -1642,7 +1642,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 	switch (wParam) {
 	case TWNT_ADD:	// ウインドウ登録
 		nIndex = FindTabIndexByHWND((HWND)lParam);
-		if (-1 == nIndex) {
+		if (nIndex == -1) {
 			TCITEM	tcitem;
 			TCHAR	szName[1024];
 
@@ -2854,7 +2854,7 @@ HWND CTabWnd::GetNextGroupWnd(void)
 	if (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin) {
 		EditNode* pWndArr;
 		int n = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE, TRUE);	// グループ番号順ソート
-		if (0 == n)
+		if (n == 0)
 			return NULL;
 		int i;
 		for (i=0; i<n; ++i) {

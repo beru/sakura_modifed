@@ -60,7 +60,7 @@ const TCHAR* CFormatManager::MyGetDateFormat(
 {
 	const TCHAR* pszForm;
 	DWORD dwFlags;
-	if (0 == nDateFormatType) {
+	if (nDateFormatType == 0) {
 		dwFlags = DATE_LONGDATE;
 		pszForm = NULL;
 	}else {
@@ -95,7 +95,7 @@ const TCHAR* CFormatManager::MyGetTimeFormat(
 {
 	const TCHAR* pszForm;
 	DWORD dwFlags;
-	if (0 == nTimeFormatType) {
+	if (nTimeFormatType == 0) {
 		dwFlags = 0;
 		pszForm = NULL;
 	}else {

@@ -379,7 +379,7 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 	SetDlgItemInt(hwndDlg, IDC_EDIT_BACKIMG_OFFSET_Y, m_Types.m_backImgPosOffset.y, TRUE);
 
 	// çsî‘çÜãÊêÿÇË  0=Ç»Çµ 1=ècê¸ 2=îCà”
-	if (0 == m_Types.m_nLineTermType) {
+	if (m_Types.m_nLineTermType == 0) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE0, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, FALSE);

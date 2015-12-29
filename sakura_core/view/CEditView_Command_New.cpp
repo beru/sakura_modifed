@@ -678,7 +678,7 @@ void CEditView::ReplaceData_CEditView(
 {
 	auto& opeBuf = GetDocument()->m_cDocEditor.m_cOpeBuf;
 	int opeSeq = m_bDoing_UndoRedo ? opeBuf.GetCurrentPointer() : opeBuf.GetNextSeq();
-	if (0 == nInsDataLen) {
+	if (nInsDataLen == 0) {
 		ReplaceData_CEditView3(sDelRange, NULL, NULL, bRedraw, pcOpeBlk, opeSeq, NULL, bFastMode, psDelRangeLogicFast);
 	}else {
 		COpeLineData insData;

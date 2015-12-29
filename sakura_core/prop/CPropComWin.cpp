@@ -273,7 +273,7 @@ void CPropWin::SetData(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DispFUNCKEYWND, csWindow.m_bDispFUNCKEYWND);
 
 	// ファンクションキー表示位置／0:上 1:下
-	if (0 == csWindow.m_nFUNCKEYWND_Place) {
+	if (csWindow.m_nFUNCKEYWND_Place == 0) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE1, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_FUNCKEYWND_PLACE2, FALSE);
 	}else {
@@ -300,7 +300,7 @@ void CPropWin::SetData(HWND hwndDlg)
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_nLineNumberRightSpace, csWindow.m_nLineNumRightSpace, FALSE);
 
 	// ルーラーのタイプ//	del 2008/7/4 Uchi
-//	if (0 == csWindow.m_nRulerType) {
+//	if (csWindow.m_nRulerType == 0) {
 //		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_0, TRUE);
 //		::CheckDlgButton(hwndDlg, IDC_RADIO_nRulerType_1, FALSE);
 //	}else {

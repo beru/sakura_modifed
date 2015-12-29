@@ -66,9 +66,7 @@ void CType_Vb::InitTypeConfigImp(STypeConfig* pType)
 void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 {
 	const int	nMaxWordLeng = 255;	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
-	const wchar_t*	pLine;
 	CLogicInt		nLineLen = CLogicInt(0);//: 2002/2/3 aroka 警告対策：初期化
-	int			i;
 	int			nCharChars;
 	wchar_t		szWordPrev[256];	// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
 	wchar_t		szWord[256];		// Aug 7, 2003 little YOSHI  VBの名前付け規則より255文字に拡張
@@ -79,27 +77,25 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 	int			nFuncId;
 	int			nParseCnt = 0;
 	bool		bClass;			// クラスモジュールフラグ
-	bool		bProcedure;		// プロシージャフラグ（プロシージャ内ではTrue）
 	bool		bDQuote;		// ダブルクォーテーションフラグ（ダブルクォーテーションがきたらTrue）
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-
-
+	
 	// 調べるファイルがクラスモジュールのときはType、Constの挙動が異なるのでフラグを立てる
-	bClass	= false;
+	bClass = false;
 	int filelen = _tcslen(m_pcDocRef->m_cDocFile.GetFilePath());
 	if (4 < filelen) {
-		if (0 == _tcsicmp((m_pcDocRef->m_cDocFile.GetFilePath() + filelen - 4), _FT(".cls"))) {
-			bClass	= true;
+		if (_tcsicmp((m_pcDocRef->m_cDocFile.GetFilePath() + filelen - 4), _FT(".cls")) == 0) {
+			bClass = true;
 		}
 	}
 
 	szWordPrev[0] = L'\0';
 	szWord[nWordIdx] = L'\0';
 	nMode = 0;
-	pLine = NULL;
-	bProcedure	= false;
-	CLogicInt		nLineCount;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	const wchar_t* pLine = NULL;
+	// プロシージャフラグ（プロシージャ内ではTrue）
+	bool bProcedure = false;
+	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
@@ -108,17 +104,17 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nFuncId = 0;
 		bDQuote	= false;
-		for (i=0; i<nLineLen; ++i) {
+		for (int i=0; i<nLineLen; ++i) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
-			if (0 == nCharChars) {
+			if (nCharChars == 0) {
 				nCharChars = 1;
 			}
 			/* 単語読み込み中 */
-			if (1 == nMode) {
+			if (nMode == 1) {
 				if (
 					(
-						1 == nCharChars
+						nCharChars == 1
 						&& (
 							L'_' == pLine[i] ||
 							L'~' == pLine[i] ||
@@ -128,7 +124,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 							(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
 						)
 					)
-					|| 2 == nCharChars
+					|| nCharChars == 2
 				) {
 					if (nWordIdx >= nMaxWordLeng) {
 						nMode = 999;
@@ -139,29 +135,29 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 						szWord[nWordIdx + nCharChars] = L'\0';
 						nWordIdx += (nCharChars);
 					}
-				}else if (1 == nCharChars && '"' == pLine[i]) {
+				}else if (nCharChars == 1 && pLine[i] == '"') {
 					// Aug 7, 2003 little YOSHI  追加
 					// テキストの中は無視します。
-					nMode	= 3;
+					nMode = 3;
 				}else {
-					if (0 == nParseCnt && 0 == wcsicmp(szWord, L"Public")) {
+					if (nParseCnt == 0 && wcsicmp(szWord, L"Public") == 0) {
 						// パブリック宣言を見つけた！
 						nFuncId |= 0x10;
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"Private")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"Private") == 0) {
 						// プライベート宣言を見つけた！
 						nFuncId |= 0x20;
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"Friend")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"Friend") == 0) {
 						// フレンド宣言を見つけた！
 						nFuncId |= 0x30;
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"Static")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"Static") == 0) {
 						// スタティック宣言を見つけた！
 						nFuncId |= 0x100;
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"Function")) {
-						if (0 == wcsicmp(szWordPrev, L"End")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"Function") == 0) {
+						if (wcsicmp(szWordPrev, L"End") == 0) {
 							// プロシージャフラグをクリア
 							bProcedure	= false;
-						}else if (0 != wcsicmp(szWordPrev, L"Exit")) {
-							if (0 == wcsicmp(szWordPrev, L"Declare")) {
+						}else if (wcsicmp(szWordPrev, L"Exit") != 0) {
+							if (wcsicmp(szWordPrev, L"Declare") == 0) {
 								nFuncId |= 0x200;	// DLL参照宣言
 							}else {
 								bProcedure	= true;	// プロシージャフラグをセット
@@ -170,12 +166,12 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 							nParseCnt = 1;
 							nFuncLine = nLineCount + CLogicInt(1);
 						}
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"Sub")) {
-						if (0 == wcsicmp(szWordPrev, L"End")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"Sub") == 0) {
+						if (wcsicmp(szWordPrev, L"End") == 0) {
 							// プロシージャフラグをクリア
 							bProcedure	= false;
-						}else if (0 != wcsicmp(szWordPrev, L"Exit")) {
-							if (0 == wcsicmp(szWordPrev, L"Declare")) {
+						}else if (wcsicmp(szWordPrev, L"Exit") != 0) {
+							if (wcsicmp(szWordPrev, L"Declare") == 0) {
 								nFuncId |= 0x200;	// DLL参照宣言
 							}else {
 								bProcedure	= true;	// プロシージャフラグをセット
@@ -185,38 +181,38 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 							nFuncLine = nLineCount + CLogicInt(1);
 						}
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Get")
-						&& 0 == wcsicmp(szWordPrev, L"Property")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Get") == 0
+						&& wcsicmp(szWordPrev, L"Property") == 0
 					) {
 						bProcedure	= true;	// プロシージャフラグをセット
 						nFuncId	|= 0x03;		// プロパティ取得
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Let")
-						&& 0 == wcsicmp(szWordPrev, L"Property")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Let") == 0
+						&& wcsicmp(szWordPrev, L"Property") == 0
 					) {
 						bProcedure	= true;	// プロシージャフラグをセット
 						nFuncId |= 0x04;		// プロパティ設定
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Set")
-						&& 0 == wcsicmp(szWordPrev, L"Property")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Set") == 0
+						&& wcsicmp(szWordPrev, L"Property") == 0
 					) {
 						bProcedure	= true;	// プロシージャフラグをセット
 						nFuncId |= 0x05;		// プロパティ参照
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Const")
-						&& 0 != wcsicmp(szWordPrev, L"#")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Const") == 0
+						&& wcsicmp(szWordPrev, L"#") != 0
 					) {
-						if (bClass || bProcedure || 0 == ((nFuncId >> 4) & 0x0f)) {
+						if (bClass || bProcedure || ((nFuncId >> 4) & 0x0f) == 0) {
 							// クラスモジュールでは強制的にPrivate
 							// プロシージャ内では強制的にPrivate
 							// Publicの指定がないとき、デフォルトでPrivateになる
@@ -227,15 +223,15 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Enum")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Enum") == 0
 					) {
 						nFuncId	|= 0x207;		// 列挙型宣言
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Type")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Type") == 0
 					) {
 						if (bClass) {
 							// クラスモジュールでは強制的にPrivate
@@ -246,16 +242,16 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Event")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Event") == 0
 					) {
 						nFuncId	|= 0x209;		// イベント宣言
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
 					}else if (1
-						&& 0 == nParseCnt
-						&& 0 == wcsicmp(szWord, L"Property")
-						&& 0 == wcsicmp(szWordPrev, L"End")
+						&& nParseCnt == 0
+						&& wcsicmp(szWord, L"Property") == 0
+						&& wcsicmp(szWordPrev, L"End") == 0
 					) {
 						bProcedure	= false;	// プロシージャフラグをクリア
 					}else if (1 == nParseCnt) {
@@ -280,7 +276,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}
 			/* 記号列読み込み中 */
-			}else if (2 == nMode) {
+			}else if (nMode == 2) {
 				// Jul 10, 2003  little YOSHI
 				// 「#Const」と「Const」を区別するために、「#」も識別するように変更
 				if (L'_' == pLine[i] ||
@@ -301,7 +297,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					L'/' == pLine[i]	||
 					L'-' == pLine[i] ||
 					L'#' == pLine[i] ||
-					2 == nCharChars
+					nCharChars == 2
 				) {
 					wcscpy_s(szWordPrev, szWord);
 					nWordIdx = 0;
@@ -324,7 +320,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					}
 				}
 			/* 長過ぎる単語無視中 */
-			}else if (999 == nMode) {
+			}else if (nMode == 999) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
@@ -334,7 +330,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}
 			/* ノーマルモード */
-			}else if (0 == nMode) {
+			}else if (nMode == 0) {
 				/* 空白やタブ記号等を飛ばす */
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||

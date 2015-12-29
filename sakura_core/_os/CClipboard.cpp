@@ -129,7 +129,7 @@ bool CClipboard::SetText(
 	CLIPFORMAT	uFormatSakuraClip = CClipboard::GetSakuraFormat();
 	bool bSakuraText = (uFormat == (UINT)-1 || uFormat == uFormatSakuraClip);
 	while (bSakuraText) {
-		if (0 == uFormatSakuraClip) {
+		if (uFormatSakuraClip == 0) {
 			break;
 		}
 
@@ -292,15 +292,15 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 			// Jul. 2, 2005 genta : check return value of GetClipboardFormatName
 			TCHAR szFormatName[128];
 			if (::GetClipboardFormatName(uFormat, szFormatName, _countof(szFormatName) - 1)) {
-				if (pbColumnSelect && 0 == lstrcmpi(_T("MSDEVColumnSelect"), szFormatName)) {
+				if (pbColumnSelect && lstrcmpi(_T("MSDEVColumnSelect"), szFormatName) == 0) {
 					*pbColumnSelect = true;
 					break;
 				}
-				if (pbLineSelect && 0 == lstrcmpi(_T("MSDEVLineSelect"), szFormatName)) {
+				if (pbLineSelect && lstrcmpi(_T("MSDEVLineSelect"), szFormatName) == 0) {
 					*pbLineSelect = true;
 					break;
 				}
-				if (pbLineSelect && 0 == lstrcmpi(_T("VisualStudioEditorOperationsLineCutCopyClipboardTag"), szFormatName)) {
+				if (pbLineSelect && lstrcmpi(_T("VisualStudioEditorOperationsLineCutCopyClipboardTag"), szFormatName) == 0) {
 					*pbLineSelect = true;
 					break;
 				}
@@ -417,7 +417,7 @@ static CLIPFORMAT GetClipFormat(const wchar_t* pFormatName)
 		return uFormat;
 	}
 	for (int i=0; i<_countof(sClipFormatNames); ++i) {
-		if (0 == wcsicmp(pFormatName, sClipFormatNames[i].m_pszName)) {
+		if (wcsicmp(pFormatName, sClipFormatNames[i].m_pszName) == 0) {
 			uFormat = sClipFormatNames[i].m_nClipFormat;
 		}
 	}
@@ -626,7 +626,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 				if (!IsValidCodeType(eMode)) {
 					eMode = CODE_DEFAULT;
 				}
-				if (-1 == nEndMode) {
+				if (nEndMode == -1) {
 					// nLength ÄÝ’è
 					nLength = GetLengthByMode(hClipData, pData, eMode, nEndMode);
 				}

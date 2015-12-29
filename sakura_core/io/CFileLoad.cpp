@@ -504,7 +504,7 @@ const char* CFileLoad::GetNextLineCharCode(
 					for (k=0; k<(int)_countof(eEolEx); ++k) {
 						if (0 != m_memEols[k].GetRawLength()
 							&& i + m_memEols[k].GetRawLength() - 1 < nDataLen
-							&& 0 == memcmp( m_memEols[k].GetRawPtr(), pData + i, m_memEols[k].GetRawLength())
+							&& memcmp( m_memEols[k].GetRawPtr(), pData + i, m_memEols[k].GetRawLength()) == 0
 						) {
 							pcEol->SetType(eEolEx[k]);
 							neollen = m_memEols[k].GetRawLength();
@@ -522,8 +522,8 @@ const char* CFileLoad::GetNextLineCharCode(
 					bool bSet = false;
 					for (int k=0; k<(int)_countof(eEolEx); ++k) {
 						int nCompLen = t_min(nDataLen - i, m_memEols[k].GetRawLength());
-						if (0 != nCompLen
-							&& 0 == memcmp(m_memEols[k].GetRawPtr(), pData + i, nCompLen)
+						if (nCompLen != 0
+							&& memcmp(m_memEols[k].GetRawPtr(), pData + i, nCompLen) == 0
 						) {
 							*pnBufferNext = t_max(*pnBufferNext, nCompLen);
 							bSet = true;

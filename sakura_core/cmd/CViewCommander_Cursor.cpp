@@ -651,7 +651,7 @@ void CViewCommander::Command_GOLINETOP(
 			nPosX_Logic = 0;
 		}
 		
-		if (0 == nPosX_Logic) nPosY_Layout = ptCaretPos.y;	// 物理行の移動なし
+		if (nPosX_Logic == 0) nPosY_Layout = ptCaretPos.y;	// 物理行の移動なし
 		
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		CLayoutInt nPosX_Layout = m_pCommanderView->LineIndexToColumn(pcLayout, nPosX_Logic);
@@ -1176,7 +1176,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 
 void CViewCommander::Command_AUTOSCROLL()
 {
-	if (0 == m_pCommanderView->m_nAutoScrollMode) {
+	if (m_pCommanderView->m_nAutoScrollMode == 0) {
 		GetCursorPos(&m_pCommanderView->m_cAutoScrollMousePos);
 		ScreenToClient(m_pCommanderView->GetHwnd(), &m_pCommanderView->m_cAutoScrollMousePos);
 		m_pCommanderView->m_bAutoScrollDragMode = false;
@@ -1271,8 +1271,11 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 	for (int n=0; n<2; ++n) {
 		while (pcDocLine) {
 			if (CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq) != bModified
-				|| (0 == ptXY.y
-					&& CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq) != false )) {
+				|| (
+					ptXY.y == 0
+					&& CModifyVisitor().IsLineModified(pcDocLine, nSaveSeq)
+				)
+			) {
 				CLayoutPoint ptLayout;
 				GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
 				m_pCommanderView->MoveCursorSelecting( ptLayout, bSelect );
@@ -1339,7 +1342,7 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 	if (!pcDocLine) {
 		// [EOF]
 		const CDocLine* pcDocLineLast = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2() - 1);
-		if (NULL == pcDocLineLast) {
+		if (!pcDocLineLast) {
 			// 1行もない
 			return;
 		}

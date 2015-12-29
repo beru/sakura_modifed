@@ -94,8 +94,8 @@ inline bool IsValidCodeTypeExceptSJIS(int code)
 //}
 inline bool IsValidCodePageEx(int code)
 {
-	return 12000 == code
-		|| 12001 == code
+	return code == 12000
+		|| code == 12001
 		|| ::IsValidCodePage(code);
 }
 

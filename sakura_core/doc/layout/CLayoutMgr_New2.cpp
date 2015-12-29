@@ -142,7 +142,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	);
 
 	pArg->nAddLineNum = m_nLines - nWork_nLines;	// 変更後の全行数との差分	@@@ 2002.04.19 MIK
-	if (0 == pArg->nAddLineNum) {
+	if (pArg->nAddLineNum == 0) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}
 	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From

@@ -1490,7 +1490,7 @@ BOOL CControlTray::CloseAllEditor(
 {
 	EditNode* pWndArr;
 	int n = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pWndArr, FALSE);
-	if (0 == n) {
+	if (n == 0) {
 		return TRUE;
 	}
 	

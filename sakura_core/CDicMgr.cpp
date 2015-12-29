@@ -85,7 +85,7 @@ BOOL CDicMgr::Search(
 			wchar_t* pszToken = wcstok(szLine, pszKeySeps);
 			while (pszToken) {
 				int nRes = _wcsnicmp(pszKey, pszToken, nCmpLen);	// 2006.04.10 fon
-				if (0 == nRes) {
+				if (nRes == 0) {
 					int nLen = (int)wcslen(pszWork);
 					for (int i=0; i<nLen; ++i) {
 						if (WCODE::IsLineDelimiterBasic(pszWork[i])) {
@@ -157,9 +157,9 @@ int CDicMgr::HokanSearch(
 		}else {
 			nRet = auto_memcmp(pszKey, szLine.c_str(), nKeyLen);
 		}
-		if (0 == nRet) {
+		if (nRet == 0) {
 			vKouho.push_back(szLine);
-			if (0 != nMaxKouho && nMaxKouho <= (int)vKouho.size()) {
+			if (nMaxKouho != 0 && nMaxKouho <= (int)vKouho.size()) {
 				break;
 			}
 		}

@@ -30,7 +30,7 @@ void CRuler::_DrawRulerCaret(CGraphics& gr, int nCaretDrawPosX, int nCaretWidth)
 
 	// ƒuƒ‰ƒVì¬ -> hBrush
 	HBRUSH hBrush;
-	if (0 == nCaretWidth) {
+	if (nCaretWidth == 0) {
 		hBrush = ::CreateSolidBrush(RGB(128, 128, 128));
 	}else {
 		hBrush = ::CreateSolidBrush(RGB(0, 0, 0));
@@ -144,14 +144,14 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 			::MoveToEx(gr, nX, nY, NULL);
 			::LineTo(gr, nX, 0);
 		// 10–Ú·‚¨‚«‚Ì‹æØ‚è(‘å)‚Æ”š
-		}else if (0 == i % 10) {
+		}else if (i % 10 == 0) {
 			wchar_t szColumn[32];
 			::MoveToEx(gr, nX, nY, NULL);
 			::LineTo(gr, nX, 0);
 			_itow(((Int)i) / 10, szColumn, 10);
 			::TextOutW_AnyBuild(gr, nX + 2 + 0, -1 + 0, szColumn, wcslen(szColumn));
 		// 5–Ú·‚¨‚«‚Ì‹æØ‚è(’†)
-		}else if (0 == i % 5) {
+		}else if (i % 5 == 0) {
 			::MoveToEx(gr, nX, nY, NULL);
 			::LineTo(gr, nX, nY - 6);
 		// –ˆ–Ú·‚Ì‹æØ‚è(¬)

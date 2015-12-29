@@ -198,7 +198,7 @@ void CDlgJump::SetData(void)
 //	GetHwnd() = hwndDlg;
 // From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
 //	::DlgItem_SetText(GetHwnd(), IDC_EDIT_LINENUM, "");	// 行番号
-	if (0 == m_nLineNum) {
+	if (m_nLineNum == 0) {
 		SetItemText(IDC_EDIT_LINENUM, _T(""));	// 行番号
 	}else {
 		SetItemInt(IDC_EDIT_LINENUM, m_nLineNum, FALSE);	// 前回の行番号

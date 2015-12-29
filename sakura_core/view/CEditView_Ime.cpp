@@ -167,7 +167,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 					pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(targetY);
 				}else if (1
 					&& ptSelectTo.y == GetCaret().GetCaretLogicPos().y
-					&& 0 == GetCaret().GetCaretLogicPos().x
+					&& GetCaret().GetCaretLogicPos().x == 0
 				) {
 					// カーソルが下側行頭 => 前の行。 行頭でShift+Down/Shift+End→Rightなど
 					targetY = GetCaret().GetCaretLogicPos().y - 1;
@@ -203,7 +203,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 
 	// テキスト取得 -> pLine, nLineLen
 	const int nLineLen = pcCurDocLine->GetLengthWithoutEOL();
-	if (0 == nLineLen)
+	if (nLineLen == 0)
 		return 0;
 	const wchar_t* pLine = pcCurDocLine->GetPtr();
 
@@ -257,7 +257,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	if (bDocumentFeed) {
 		// IMR_DOCUMENTFEEDでは、再変換対象はIMEから取得した入力中文字列
 		nInsertCompLen = auto_strlen(m_szComposition);
-		if (0 == nInsertCompLen) {
+		if (nInsertCompLen == 0) {
 			// 2回呼ばれるので、m_szCompositionに覚えておく
 			HWND hwnd = GetHwnd();
 			HIMC hIMC = ::ImmGetContext(hwnd);
@@ -358,7 +358,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			// バッファ不足
 			m_szComposition[0] = _T('\0');
 			return 0;
-		}else if (0 == dwOrgSize) {
+		}else if (dwOrgSize == 0) {
 			pReconv->dwSize = sizeof(*pReconv) + cbReconvLenWithNull;
 		}
 		pReconv->dwVersion         = 0;

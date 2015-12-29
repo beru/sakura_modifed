@@ -918,7 +918,7 @@ void CPrintPreview::OnPreviewGoPage(int nPage)
 		::EnableWindow(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE), TRUE);
 	}
 
-	if (0 == m_nCurPageNum) {
+	if (m_nCurPageNum == 0) {
 		//	最初のページのときは、前のページボタンをオフ。
 		//	Jul. 18, 2001 genta FocusのあるWindowをDisableにすると操作できなくなるのを回避
 		::SetFocus(::GetDlgItem(m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE));
@@ -1012,7 +1012,7 @@ void CPrintPreview::OnCheckAntialias(void)
 */
 void CPrintPreview::OnPrint(void)
 {
-	if (0 == m_nAllPageNum) {
+	if (m_nAllPageNum == 0) {
 		TopWarningMessage(m_pParentWnd->GetHwnd(), LS(STR_ERR_DLGPRNPRVW7));
 		return;
 	}
@@ -1504,7 +1504,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 			}
 
 			const int nLineLen = pcLayout->GetLengthWithoutEOL();
-			if (0 == nLineLen) {
+			if (nLineLen == 0) {
 				continue;
 			}
 

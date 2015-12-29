@@ -565,7 +565,7 @@ bool CViewCommander::HandleCommand(
 		// 再帰処理対策
 		m_pCommanderView->SetUndoBuffer(true);
 		nFuncID = Command_CUSTMENU(nCommand - F_CUSTMENU_1 + 1);
-		if (0 != nFuncID) {
+		if (nFuncID != 0) {
 			// コマンドコードによる処理振り分け
 //			HandleCommand(nFuncID, true, 0, 0, 0, 0);
 			::PostMessage(GetMainWindow(), WM_COMMAND, MAKELONG(nFuncID, 0), (LPARAM)NULL);

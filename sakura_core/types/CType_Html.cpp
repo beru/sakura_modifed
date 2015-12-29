@@ -102,7 +102,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 			pLine = &pLineBuf[i];
 			// 2004.04.20 Moca コメントを処理する
 			if (bCommentTag) {
-				if (i < nLineLen - 3 && 0 == wmemcmp(L"-->", pLine, 3)) {
+				if (i < nLineLen - 3 && wmemcmp(L"-->", pLine, 3) == 0) {
 					bCommentTag = false;
 					i += 2;
 					pLine += 2;
@@ -134,7 +134,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 			}
 			if (j == 0) {
 				// 2004.04.20 Moca From Here コメントを処理する
-				if (i < nLineLen - 3 && 0 == wmemcmp(L"!--", pLine, 3)) {
+				if (i < nLineLen - 3 && wmemcmp(L"!--", pLine, 3) == 0) {
 					bCommentTag = true;
 					i += 3;
 					pLine += 3;

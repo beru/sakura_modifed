@@ -125,7 +125,7 @@ public:
 		それ以外のOSなら、true（提供されている）
 	*/
 	bool _OsSupportReconvert() {
-		return !((4 == m_cOsVersionInfo.dwMajorVersion) && (0 == m_cOsVersionInfo.dwMinorVersion));
+		return !((m_cOsVersionInfo.dwMajorVersion == 4) && (m_cOsVersionInfo.dwMinorVersion == 0));
 	}
 
 	// 2005.10.29 ryoji
@@ -175,7 +175,7 @@ public:
 		@date 2005.10.26 ryoji
 	*/
 	bool _IsWinMe() {
-		return (IsWin32Windows() && (4 == m_cOsVersionInfo.dwMajorVersion) && (90 == m_cOsVersionInfo.dwMinorVersion));
+		return (IsWin32Windows() && (m_cOsVersionInfo.dwMajorVersion == 4) && (m_cOsVersionInfo.dwMinorVersion == 90));
 	}
 
 #ifdef USE_SSE2

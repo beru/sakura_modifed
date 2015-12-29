@@ -170,7 +170,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 			TAGLIST_SUBPATH,
 			TAGLIST_ROOT,
 		} searchMode = TAGLIST_FILEPATH;
-		if (0 == wmemcmp(pLine, L"■\"", 2)) {
+		if (wmemcmp(pLine, L"■\"", 2) == 0) {
 			// WZ風のタグリストか
 			if (IsFilePath(&pLine[2], &nBgn, &nPathLen) && !_IS_REL_PATH(to_tchar(&pLine[2]))) {
 				wmemcpy(szJumpToFile, &pLine[2 + nBgn], nPathLen);
@@ -180,12 +180,12 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 				break;
 			}
 			searchMode = TAGLIST_ROOT;
-		}else if (0 == wmemcmp(pLine, L"◆\"", 2)) {
+		}else if (wmemcmp(pLine, L"◆\"", 2) == 0) {
 			if (!GetQuoteFilePath(&pLine[2], szFile, _countof(szFile))) {
 				break;
 			}
 			searchMode = TAGLIST_SUBPATH;
-		}else if (0 == wmemcmp(pLine, L"・", 1)) {
+		}else if (wmemcmp(pLine, L"・", 1) == 0) {
 			if (pLine[1] == L'"') {
 				// ・"FileName.ext"
 				if (!GetQuoteFilePath(&pLine[2], szFile, _countof(szFile))) {
@@ -244,9 +244,9 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 			if (!pLine) {
 				break;
 			}
-			if (0 == wmemcmp(pLine, L"・", 1)) {
+			if (wmemcmp(pLine, L"・", 1) == 0) {
 				continue;
-			}else if (3 <= nLineLen && 0 == wmemcmp(pLine, L"◆\"", 2)) {
+			}else if (3 <= nLineLen && wmemcmp(pLine, L"◆\"", 2) == 0) {
 				if (searchMode == TAGLIST_SUBPATH || searchMode == TAGLIST_ROOT) {
 					continue;
 				}
@@ -262,7 +262,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 					continue;
 				}
 				searchMode = TAGLIST_ROOT;
-			}else if (3 <= nLineLen && 0 == wmemcmp(pLine, L"■\"", 2)) {
+			}else if (3 <= nLineLen && wmemcmp(pLine, L"■\"", 2) == 0) {
 				if (searchMode == TAGLIST_ROOT) {
 					continue;
 				}
@@ -288,7 +288,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 					continue;
 				}
 				break;
-			}else if (3 <= nLineLen && 0 == wmemcmp(pLine, L"◎\"", 2)) {
+			}else if (3 <= nLineLen && wmemcmp(pLine, L"◎\"", 2) == 0) {
 				if (GetQuoteFilePath(&pLine[2], szJumpToFile, _countof(szJumpToFile))) {
 					AddLastYenFromDirectoryPath(szJumpToFile);
 					auto_strcat(szJumpToFile, szFile);
@@ -414,7 +414,7 @@ bool CViewCommander::Command_TagsMake(void)
 	SplitPath_FolderAndFile(cmdline, szExeFolder, NULL);
 
 	// ctags.exeの存在チェック
-	if ((DWORD)-1 == ::GetFileAttributes(cmdline)) {
+	if (::GetFileAttributes(cmdline) == (DWORD)-1) {
 		WarningMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD03));
 		return false;
 	}
@@ -618,7 +618,7 @@ bool CViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
 	CNativeW cmemKeyW;
 	m_pCommanderView->GetCurrentTextForSearch(cmemKeyW, true, true);
-	if (0 == cmemKeyW.GetStringLength()) {
+	if (cmemKeyW.GetStringLength() == 0) {
 		return false;
 	}
 	
@@ -717,7 +717,7 @@ bool CViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int coun
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		auto_strcpy(szCurrentPath, GetDocument()->m_cDocFile.GetFilePath());
 	}else {
-		if (0 == ::GetCurrentDirectory(count - _countof(_T("\\dmy")) - MAX_TYPES_EXTS, szCurrentPath)) {
+		if (::GetCurrentDirectory(count - _countof(_T("\\dmy")) - MAX_TYPES_EXTS, szCurrentPath) == 0) {
 			return false;
 		}
 		// (無題)でもファイル名を要求してくるのでダミーをつける

@@ -153,7 +153,7 @@ bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
 	const wchar_t* psz2 = cmem2.GetStringPtr(&nLen2);
 	
 	if (nLen1 == nLen2) {
-		if (0 == wmemcmp(psz1, psz2, nLen1)) {
+		if (wmemcmp(psz1, psz2, nLen1) == 0) {
 			return true;
 		}
 	}
@@ -179,7 +179,7 @@ void CNativeW::Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* psz
 	int nBgnOld = 0;
 	int nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
-		if (0 == wmemcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
+		if (wmemcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (nBgnOld == 0 && nFromLen <= nToLen) {
 				cmemWork.AllocStringBuffer(GetStringLength());
 			}

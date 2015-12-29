@@ -157,7 +157,6 @@ inline bool IsWctombcNonroundtrip(const unsigned int wc) {
 */
 inline int MyWideCharToMultiByte_JP(const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst) {
 	int nret;
-	BOOL blost;
 	int nsrclen;
 
 	// ï€åÏÉRÅ[Éh
@@ -168,6 +167,7 @@ inline int MyWideCharToMultiByte_JP(const unsigned short* pSrc, const int nSrcLe
 	}
 
 	if (!IsWctombcNonroundtrip(pSrc[0])) {
+		BOOL blost;
 		nret = ::WideCharToMultiByte(932, 0, reinterpret_cast<const wchar_t*>(pSrc), nsrclen, reinterpret_cast<char*>(pDst), 4, NULL, &blost);
 		if (blost == TRUE) {
 			nret = 0;

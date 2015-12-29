@@ -316,7 +316,7 @@ BOOL CEditView::Create(
 	wc.hbrBackground	= (HBRUSH)NULL/*(COLOR_WINDOW + 1)*/;
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= GSTR_VIEWNAME;
-	if (0 == ::RegisterClass(&wc)) {
+	if (::RegisterClass(&wc) == 0) {
 	}
 
 	// エディタウィンドウの作成
@@ -376,7 +376,7 @@ BOOL CEditView::Create(
 	SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &nKeyBoardSpeed, 0);
 
 	// タイマー起動
-	if (0 == ::SetTimer(GetHwnd(), IDT_ROLLMOUSE, nKeyBoardSpeed, EditViewTimerProc)) {
+	if (::SetTimer(GetHwnd(), IDT_ROLLMOUSE, nKeyBoardSpeed, EditViewTimerProc) == 0) {
 		WarningMessage(GetHwnd(), LS(STR_VIEW_TIMER));
 	}
 
@@ -750,7 +750,7 @@ LRESULT CEditView::DispatchEvent(
 		m_bInMenuLoop = TRUE;	// メニュー モーダル ループに入っています
 
 		// 辞書Tipが起動されている
-		if (0 == m_dwTipTimer) {
+		if (m_dwTipTimer == 0) {
 			// 辞書Tipを消す
 			m_cTipWnd.Hide();
 			m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
@@ -1129,7 +1129,7 @@ void CEditView::OnKillFocus(void)
 	::ReleaseDC(GetHwnd(), hdc);
 
 	// 辞書Tipが起動されている
-	if (0 == m_dwTipTimer) {
+	if (m_dwTipTimer == 0) {
 		// 辞書Tipを消す
 		m_cTipWnd.Hide();
 		m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
@@ -1343,7 +1343,7 @@ VOID CEditView::OnTimer(
 				m_cTipWnd.m_bAlignLeft = true;
 				m_cTipWnd.Show( po.x, po.y + m_pcEditWnd->GetActiveView().GetTextMetrics().GetHankakuHeight(), NULL );
 			}else {
-				if (bHide && 0 == m_dwTipTimer) {
+				if (bHide && m_dwTipTimer == 0) {
 					m_cTipWnd.Hide();
 				}
 			}
@@ -1588,7 +1588,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
 		EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nMenuIdx][i];
 		bool bAppend = false;
-		if (F_0 == code) {
+		if (code == F_0) {
 			// 2010.07.24 メニュー配列に入れる
 			cMenuDrawer.MyAppendMenuSep(hMenu, MF_SEPARATOR, F_0, _T(""));
 			bAppend = true;
@@ -2470,7 +2470,7 @@ void CEditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderL
 		&& !GetSelectionInfo().IsTextSelecting()
 		&& !DisalbeUnderLine
 	) {
-		if (!bCursorLineBgDraw || -1 == m_nOldUnderLineY) {
+		if (!bCursorLineBgDraw || m_nOldUnderLineY == -1) {
 			m_nOldUnderLineY = GetCaret().GetCaretLayoutPos().GetY2();
 			m_nOldUnderLineYBg = m_nOldUnderLineY;
 		}

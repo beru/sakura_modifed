@@ -496,7 +496,7 @@ void CCaret::ShowEditCaret()
 	// CalcCaretDrawPosのためにCaretサイズを仮設定
 	int	nCaretWidth = 0;
 	int	nCaretHeight = 0;
-	if (0 == pCommon->m_sGeneral.GetCaretType()) {
+	if (pCommon->m_sGeneral.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();
 		if (m_pEditView->IsInsMode()) {
 			nCaretWidth = 2;
@@ -528,7 +528,7 @@ void CCaret::ShowEditCaret()
 	}
 	// キャレットの幅、高さを決定
 	// カーソルのタイプ = win
-	if (0 == pCommon->m_sGeneral.GetCaretType()) {
+	if (pCommon->m_sGeneral.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretWidth = 2; // 2px

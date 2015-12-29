@@ -114,7 +114,7 @@ void CViewCommander::Command_SEARCH_NEXT(
 	// 共通部分のくくりだし
 	// 2004.05.30 Moca CEditViewの現在設定されている検索パターンを使えるように
 	if (bChangeCurRegexp && !m_pCommanderView->ChangeCurRegexp()) return;
-	if (0 == m_pCommanderView->m_strCurSearchKey.size()) {
+	if (m_pCommanderView->m_strCurSearchKey.size() == 0) {
 		goto end_of_func;
 	}
 
@@ -347,7 +347,7 @@ void CViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 	if (!m_pCommanderView->ChangeCurRegexp()) {
 		return;
 	}
-	if (0 == m_pCommanderView->m_strCurSearchKey.size()) {
+	if (m_pCommanderView->m_strCurSearchKey.size() == 0) {
 		goto end_of_func;
 	}
 	auto& si = m_pCommanderView->GetSelectionInfo();
@@ -985,7 +985,7 @@ void CViewCommander::Command_REPLACE_ALL()
 
 		++nLoopCnt;
 		// 128 ごとに表示。
-		if (0 == (nLoopCnt & 0x7F)) {
+		if ((nLoopCnt & 0x7F) == 0) {
 			// 時間ごとに進歩状況描画だと時間取得分遅くなると思うが、そちらの方が自然だと思うので・・・。
 			// と思ったけど、逆にこちらの方が自然ではないので、やめる。
 		

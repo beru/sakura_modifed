@@ -237,7 +237,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					break;
 				}
 
-				if (0 == csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2]) {
+				if (csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] == 0) {
 					break;
 				}
 
@@ -364,7 +364,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 						break;
 					}
 
-					if (0 == csCustomMenu.m_nCustMenuItemNumArr[nIdx1]) {
+					if (csCustomMenu.m_nCustMenuItemNumArr[nIdx1] == 0) {
 						break;
 					}
 
@@ -674,7 +674,7 @@ void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 //	hwndEDIT_KEY = ::GetDlgItem(hwndDlg, IDC_EDIT_KEY);
 	List_ResetContent(hwndLIST_RES);
 	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
-		if (0 == csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i]) {
+		if (csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i] == 0) {
 			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 		}else {
 			EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i];

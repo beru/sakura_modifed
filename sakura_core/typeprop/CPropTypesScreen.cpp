@@ -169,7 +169,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING  ), _countof(m_Types.m_szTabViewString) - 1);
 		EditCtl_LimitText(GetDlgItem(hwndDlg, IDC_EDIT_OUTLINERULEFILE), _countof2(m_Types.m_szOutlineRuleFilename) - 1);	//	Oct. 5, 2002 genta 画面上でも入力制限
 
-		if (0 == m_Types.m_nIdx) {
+		if (m_Types.m_nIdx == 0) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPENAME), FALSE);	// 設定の名前
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TYPEEXTS), FALSE);	// ファイル拡張子
 		}

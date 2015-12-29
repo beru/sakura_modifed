@@ -55,7 +55,7 @@ bool CColor_BlockComment::BeginColor(const CStringRef& cStr, int nPos)
 
 bool CColor_BlockComment::EndColor(const CStringRef& cStr, int nPos)
 {
-	if (0 == this->m_nCOMMENTEND) {
+	if (this->m_nCOMMENTEND == 0) {
 		// この物理行にブロックコメントの終端があるか
 		this->m_nCOMMENTEND = m_pcBlockComment->Match_CommentTo(
 			nPos,

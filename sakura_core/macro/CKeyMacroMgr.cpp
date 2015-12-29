@@ -442,8 +442,8 @@ BOOL CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	// 一時ファイル名を作成
 	TCHAR szTempDir[_MAX_PATH];
 	TCHAR szTempFile[_MAX_PATH];
-	if (0 == ::GetTempPath(_MAX_PATH, szTempDir)) return FALSE;
-	if (0 == ::GetTempFileName(szTempDir, _T("mac"), 0, szTempFile)) return FALSE;
+	if (::GetTempPath(_MAX_PATH, szTempDir) == 0) return FALSE;
+	if (::GetTempFileName(szTempDir, _T("mac"), 0, szTempFile) == 0) return FALSE;
 	// 一時ファイルに書き込む
 	CTextOutputStream out = CTextOutputStream(szTempFile);
 	out.WriteString(to_wchar(pszCode));

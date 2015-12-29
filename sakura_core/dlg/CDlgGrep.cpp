@@ -652,7 +652,7 @@ int CDlgGrep::GetData(void)
 	csSearch.m_bGrepSeparateFolder = m_bGrepSeparateFolder;
 
 // やめました
-//	if (0 == wcslen(m_szText)) {
+//	if (wcslen(m_szText) == 0) {
 //		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
 //		return FALSE;
 //	}

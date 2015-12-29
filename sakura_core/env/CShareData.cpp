@@ -916,7 +916,7 @@ bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 	}
 
 	// 現在の編集ウィンドウの数を調べる
-	if (0 == CAppNodeGroupHandle(0).GetEditorWindowsNum()) {
+	if (CAppNodeGroupHandle(0).GetEditorWindowsNum() == 0) {
 		return false;
 	}
 	
@@ -927,7 +927,7 @@ bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 			EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 			// 同一パスのファイルが既に開かれているか
-			if (0 == _tcsicmp(pfi->m_szPath, pszPath)) {
+			if (_tcsicmp(pfi->m_szPath, pszPath) == 0) {
 				*phwndOwner = m_pShareData->m_sNodes.m_pEditArr[i].m_hWnd;
 				return true;
 			}
@@ -1019,7 +1019,7 @@ void CShareData::TraceOut(LPCTSTR lpFmt, ...)
 		m_pShareData->m_sWorkBuffer.GetWorkBufferCount<WCHAR>(),
 		to_wchar(lpFmt), argList);
 	va_end(argList);
-	if (-1 == ret) {
+	if (ret == -1) {
 		// 切り詰められた
 		ret = auto_strlen(m_pShareData->m_sWorkBuffer.GetWorkBuffer<WCHAR>());
 	}else if (ret < 0) {
@@ -1045,7 +1045,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 	if (!OpenDebugWindow(m_hwndTraceOutSource, false)) {
 		return;
 	}
-	if (-1 == len) {
+	if (len == -1) {
 		len = wcslen(pStr);
 	}
 	// m_sWorkBufferぎりぎりでも問題ないけれど、念のため\0終端にするために余裕をとる
@@ -1053,7 +1053,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 	const int buffLen = (int)m_pShareData->m_sWorkBuffer.GetWorkBufferCount<WCHAR>() - 4;
 	wchar_t*  pOutBuffer = m_pShareData->m_sWorkBuffer.GetWorkBuffer<WCHAR>();
 	int outPos = 0;
-	if (0 == len) {
+	if (len == 0) {
 		// 0のときは何も追加しないが、カーソル移動が発生する
 		LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
 		pOutBuffer[0] = L'\0';
@@ -1078,8 +1078,8 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 			wmemcpy(pOutBuffer, pStr + outPos, outLen);
 			pOutBuffer[outLen] = L'\0';
 			DWORD_PTR dwMsgResult;
-			if (0 == ::SendMessageTimeout(m_pShareData->m_sHandles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, outLen, 0,
-				SMTO_NORMAL, 10000, &dwMsgResult)
+			if (::SendMessageTimeout(m_pShareData->m_sHandles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, outLen, 0,
+				SMTO_NORMAL, 10000, &dwMsgResult) == 0
 			) {
 				// エラーかタイムアウト
 				break;
@@ -1161,11 +1161,11 @@ bool CShareData::IsPrivateSettings(void) {
 */
 int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 {
-	if (-1 != idx && !m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].IsEnabled())
+	if (idx != -1 && !m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].IsEnabled())
 		return 0;
 	const TCHAR* pszFile;
 
-	if (-1 == idx) {
+	if (idx == -1) {
 		pszFile = _T("RecKey.mac");
 	}else {
 		pszFile = m_pShareData->m_Common.m_sMacro.m_MacroTable[idx].m_szFile;
@@ -1203,14 +1203,14 @@ int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 		}
 
 		int nDirLen = _tcslen(pszDir);
-		int nAllLen = nDirLen + nLen + (-1 == nFolderSep ? 1 : 0);
+		int nAllLen = nDirLen + nLen + (nFolderSep == -1 ? 1 : 0);
 		if (!pszPath || nBufLen <= nAllLen) {
 			return -nAllLen;
 		}
 
 		_tcscpy(pszPath, pszDir);
 		TCHAR* ptr = pszPath + nDirLen;
-		if (-1 == nFolderSep) {
+		if (nFolderSep == -1) {
 			*ptr++ = _T('\\');
 		}
 		_tcscpy(ptr, pszFile);

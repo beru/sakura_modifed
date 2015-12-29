@@ -27,7 +27,7 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
 		nIdxTo = m_pEditView->LineColumnToIndex(pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
 	}
-	if (0 == nIdxTo || !pLine) {
+	if (nIdxTo == 0 || !pLine) {
 		if (nCurLine <= 0) {
 			return 0;
 		}
@@ -42,14 +42,14 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 		}
 
 		nCharChars = &pLine[nLineLen] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nLineLen]);
-		if (0 == nCharChars) {
+		if (nCharChars == 0) {
 			return 0;
 		}
 		nIdxTo = nLineLen;
 		nIdx = nIdxTo - CLogicInt(nCharChars);
 	}else {
 		nCharChars = &pLine[nIdxTo] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
-		if (0 == nCharChars) {
+		if (nCharChars == 0) {
 			return 0;
 		}
 		nIdx = nIdxTo - CLogicInt(nCharChars);

@@ -251,7 +251,7 @@ const wchar_t* CSearchAgent::SearchString(
 				}
 				i = nextTable[i];
 			}
-			assert(0 == i); // -1チェック
+			assert(i == 0); // -1チェック
 		}
 	}else {
 #endif
@@ -283,10 +283,10 @@ void CSearchAgent::CreateCharCharsArr(
 	for (int i=0; i<nSrcLen; /*++i*/) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		pnCharCharsArr[i] = CNativeW::GetSizeOfChar(pszPattern, nSrcLen, i);
-		if (0 == pnCharCharsArr[i]) {
+		if (pnCharCharsArr[i] == 0) {
 			pnCharCharsArr[i] = 1;
 		}
-		if (2 == pnCharCharsArr[i]) {
+		if (pnCharCharsArr[i] == 2) {
 			pnCharCharsArr[i + 1] = pnCharCharsArr[i];
 		}
 		i += pnCharCharsArr[i];
@@ -339,8 +339,8 @@ const wchar_t* CSearchAgent::SearchStringWord(
 		for (size_t iSW=0; iSW<nSize; ++iSW) {
 			if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 				// 1 == 大文字小文字の区別
-				if ((!bLoHiCase && 0 == auto_memicmp(&(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second) ) ||
-					(bLoHiCase && 0 == auto_memcmp(&(pLine[nNextWordFrom2]) , searchWords[iSW].first, searchWords[iSW].second) )
+				if ((!bLoHiCase && auto_memicmp(&(pLine[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0) ||
+					(bLoHiCase && auto_memcmp(&(pLine[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0)
 				) {
 					*pnMatchLen = searchWords[iSW].second;
 					return &pLine[nNextWordFrom2];
@@ -616,8 +616,8 @@ int CSearchAgent::SearchWord(
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
 								// 1 == 大文字小文字の区別
-								if ((!sSearchOption.bLoHiCase && 0 == auto_memicmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second)) ||
-									(sSearchOption.bLoHiCase && 0 == auto_memcmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second))
+								if ((!sSearchOption.bLoHiCase && auto_memicmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0) ||
+									(sSearchOption.bLoHiCase && auto_memcmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0)
 								) {
 									pMatchRange->SetFromY(nLinePos);	// マッチ行
 									pMatchRange->SetToY  (nLinePos);	// マッチ行
@@ -895,7 +895,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			goto prev_line;
 		}
 		// 改行も削除するんかぃのぉ・・・？
-		if (EOL_NONE != pCDocLine->GetEol() &&
+		if (pCDocLine->GetEol() != EOL_NONE &&
 			nWorkPos + nWorkLen > nLineLen - pCDocLine->GetEol().GetLen() // 2002/2/10 aroka CMemory変更
 		) {
 			// 削除する長さに改行も含める
@@ -919,7 +919,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		// 次の行と連結するような削除
 		}else if (nWorkPos + nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
 			if (pArg->pcmemDeleted) {
-				if (pCDocLineNext && 0 == pArg->pcmemDeleted->size()) {
+				if (pCDocLineNext && pArg->pcmemDeleted->size() == 0) {
 					// 1行以内の行末削除のときだけ、次の行のseqが保存されないので必要
 					// 2014.01.07 最後が改行の範囲を最後が改行のデータで置換した場合を変更
 					if (!bLastEOLReplace) {
@@ -1070,7 +1070,7 @@ prev_line:;
 
 		if (hwndCancel) {
 			int nLines = pArg->sDelRange.GetTo().y - i;
-			if (0 == (nLines % 32)) {
+			if ((nLines % 32) == 0) {
 				nProgress = ::MulDiv(nLines, 100, nEditLines);
 				if (nProgressOld != nProgress) {
 					nProgressOld = nProgress;
@@ -1110,7 +1110,7 @@ prev_line:;
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
 		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
-			if (0 == pArg->sDelRange.GetFrom().x) {
+			if (pArg->sDelRange.GetFrom().x == 0) {
 				// 挿入データの最後が改行で行頭に挿入するとき、現在行を維持する
 				bInsertLineMode = true;
 				if (pCDocLine && m_pcDocLineMgr->m_pCodePrevRefer == pCDocLine) {
@@ -1157,7 +1157,7 @@ prev_line:;
 				CDocLine* pCDocLineNew = m_pcDocLineMgr->AddNewLine();
 
 				// 挿入データを行終端で区切った行数カウンタ
-				if (0 == nCount) {
+				if (nCount == 0) {
 					CNativeW tmp;
 					tmp.AllocStringBuffer(cPrevLine.GetLength() + cmemLine.GetStringLength());
 					tmp.AppendString(cPrevLine.GetPtr(), cPrevLine.GetLength());
@@ -1169,7 +1169,7 @@ prev_line:;
 				CModifyVisitor().SetLineModified(pCDocLineNew, (*pArg->pInsData)[nCount].nSeq);
 			}else {
 				// 挿入データを行終端で区切った行数カウンタ
-				if (0 == nCount && !bInsertLineMode) {
+				if (nCount == 0 && !bInsertLineMode) {
 					if (cmemCurLine.GetStringLength() - cPrevLine.GetLength() < cmemCurLine.GetStringLength() / 100
 						&& cPrevLine.GetLength() + cmemLine.GetStringLength() <= cmemCurLine.GetStringLength()
 						&& cmemCurLine.capacity() / 2 <= cPrevLine.GetLength() + cmemLine.GetStringLength()
@@ -1201,7 +1201,7 @@ prev_line:;
 			// 挿入データを行終端で区切った行数カウンタ
 			++(pArg->ptNewPos.y);	// 挿入された部分の次の位置の行
 			if (hwndCancel) {
-				if (0 == (nCount % 32)) {
+				if ((nCount % 32) == 0) {
 					nProgress = ::MulDiv(nCount + nDelLines, 100, nEditLines);
 					if (nProgressOld != nProgress) {
 						nProgressOld = nProgress;
@@ -1216,7 +1216,7 @@ prev_line:;
 		CNativeW cNull;
 		CStringRef cNullStr(L"", 0);
 		CNativeW& cmemLine = bLastInsert ? pArg->pInsData->back().cmemLine : cNull;
-		const CStringRef& cPrevLine2 = ((0 == nCount) ? cPrevLine: cNullStr);
+		const CStringRef& cPrevLine2 = ((nCount == 0) ? cPrevLine: cNullStr);
 		int nSeq = pArg->pInsData->back().nSeq;
 		int nLen = cmemLine.GetStringLength();
 		CNativeW tmp;

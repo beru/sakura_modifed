@@ -76,7 +76,7 @@ public:
 
 	BOOL IsExist(LPCTSTR lpFileName) {
 		for (int i=0; i<GetCount(); ++i) {
-			if (_tcscmp(m_vpItems[ i ].first, lpFileName) == 0) {
+			if (_tcscmp(m_vpItems[i].first, lpFileName) == 0) {
 				return TRUE;
 			}
 		}
@@ -142,7 +142,7 @@ public:
 
 			WIN32_FIND_DATA w32fd;
 			HANDLE handle = ::FindFirstFile(lpPath, &w32fd);
-			if (INVALID_HANDLE_VALUE != handle) {
+			if (handle != INVALID_HANDLE_VALUE) {
 				do {
 					if (option.m_bIgnoreHidden && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)) {
 						continue;

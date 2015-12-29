@@ -340,7 +340,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 					}
 				}
 			}else {
-				if (0 < test[j].nLength && 0 == wcsncmp(&pLine[i], test[j].szMatch, test[j].nLength)) {
+				if (0 < test[j].nLength && wcsncmp(&pLine[i], test[j].szMatch, test[j].nLength) == 0) {
 					wcscpy(szTitle, test[j].szGroupName);
 					break;
 				}

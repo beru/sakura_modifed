@@ -75,7 +75,7 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 				// as the name appears in the resource file.
 		pszClassName// Pointer to a null-terminated string or is an atom.
 	);
-	if (0 == atWork) {
+	if (atWork == 0) {
 		ErrorMessage(NULL, LS(STR_ERR_CSPLITTER01));
 	}
 

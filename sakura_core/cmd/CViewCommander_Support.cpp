@@ -193,7 +193,7 @@ void CViewCommander::Command_EXTHELP1(void)
 {
 retry:;
 	if (!CHelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
-//	if (0 == wcslen(GetDllShareData().m_Common.m_szExtHelp1)) {
+//	if (wcslen(GetDllShareData().m_Common.m_szExtHelp1) == 0) {
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO
 //		[Esc]キーと[x]ボタンでも中止できるように変更
@@ -232,7 +232,7 @@ retry:;
 	// 2012.09.26 Moca HTMLHELP対応
 	TCHAR	szExt[_MAX_EXT];
 	_tsplitpath(path, NULL, NULL, NULL, szExt);
-	if (0 == _tcsicmp(szExt, _T(".chi")) || 0 == _tcsicmp(szExt, _T(".chm")) || 0 == _tcsicmp(szExt, _T(".col"))) {
+	if (_tcsicmp(szExt, _T(".chi")) == 0 || _tcsicmp(szExt, _T(".chm")) == 0 || _tcsicmp(szExt, _T(".col")) == 0) {
 		std::wstring pathw = to_wchar(path);
 		Command_EXTHTMLHELP(pathw.c_str(), cmemCurText.GetStringPtr());
 	}else {
@@ -262,7 +262,7 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 
 	// From Here Jul. 5, 2002 genta
 	const TCHAR* filename = NULL;
-	if (0 == helpfile.length()) {
+	if (helpfile.length() == 0) {
 		while (!CHelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
 			ErrorBeep();
 	// From Here Sept. 15, 2000 JEPRO

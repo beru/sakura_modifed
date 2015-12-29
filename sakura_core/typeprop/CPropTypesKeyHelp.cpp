@@ -202,12 +202,12 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 						ErrorMessage(hwndDlg, LS(STR_PROPTYPKEYHELP_ERR_REG1));
 						return FALSE;
 					}
-					if (-1 == nIndex) {
+					if (nIndex == -1) {
 						// 選択中でなければ最後にする。
 						nIndex = nIndex2;
 					}
 				}else {								// 更新
-					if (-1 == nIndex) {
+					if (nIndex == -1) {
 						ErrorMessage(hwndDlg, LS(STR_PROPTYPKEYHELP_SELECT));
 						return FALSE;
 					}
@@ -285,7 +285,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 			case IDC_BUTTON_KEYHELP_DEL:	// 削除
 				// 選択中のキー番号を探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
 				// 削除する。
@@ -307,10 +307,10 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 			case IDC_BUTTON_KEYHELP_TOP:	// 先頭
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
-				if (0 == nIndex) {
+				if (nIndex == 0) {
 					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = 0;
@@ -344,7 +344,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 
 			case IDC_BUTTON_KEYHELP_LAST:	// 最終
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -382,10 +382,10 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 
 			case IDC_BUTTON_KEYHELP_UP:	// 上へ
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
-				if (0 == nIndex) {
+				if (nIndex == 0) {
 					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -424,7 +424,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 
 			case IDC_BUTTON_KEYHELP_DOWN:	// 下へ
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -517,7 +517,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 		case LVN_ITEMCHANGED:	// リストの項目が変更された際の処理
 			if (pNMHDR->hwndFrom == hwndList) {
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
+				if (nIndex == -1) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
 					nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
 					return FALSE;
 				}

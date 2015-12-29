@@ -26,7 +26,7 @@ bool _GetKeywordLength(
 	CLayoutInt nWordKetas = CLayoutInt(0);
 	while (nPos < cLineStr.GetLength() && IS_KEYWORD_CHAR(cLineStr.At(nPos))) {
 		CLayoutInt k = CNativeW::GetKetaOfChar(cLineStr, nPos);
-		if (0 == k) {
+		if (k == 0) {
 			k = CLayoutInt(1);
 		}
 		nWordLen += 1;
@@ -269,7 +269,7 @@ void CLayoutMgr::_MakeOneLine(SLayoutWork* pWork, PF_OnLine pfOnLine)
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
 			CLayoutInt nCharKetas = CNativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
-//			if (0 == nCharKetas) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//			if (nCharKetas == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				nCharKetas = CLayoutInt(1);
 //			}
 
@@ -380,7 +380,7 @@ void CLayoutMgr::_DoLayout()
 		if (1
 			&& GetListenerCount() != 0
 			&& 0 < nAllLineNum
-			&& 0 == (pWork->nCurLine % 1024)
+			&& (pWork->nCurLine % 1024) == 0
 		) {
 			NotifyProgress(pWork->nCurLine * 100 / nAllLineNum);
 			if (!::BlockingHook(NULL)) return;

@@ -144,8 +144,8 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 				}else {
 					/* ƒNƒ‰ƒXéŒ¾•”•ª‚ğŒ©‚Â‚¯‚½ */
 					//	Oct. 10, 2002 genta interface‚à‘ÎÛ‚É
-					if (0 == wcscmp(L"class", szWordPrev) ||
-						0 == wcscmp(L"interface", szWordPrev)
+					if (wcscmp(L"class", szWordPrev) == 0 ||
+						wcscmp(L"interface", szWordPrev) == 0
 					) {
 						nClassNestArr.push_back(nNestLevel);
 						nNestLevel2Arr.push_back(0);

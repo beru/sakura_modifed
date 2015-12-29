@@ -96,7 +96,7 @@ bool CDocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, STypeConfig& type
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
-		if (0 == n) {
+		if (n == 0) {
 			type = m_pShareData->m_TypeBasis;
 			return true;
 		}else {
@@ -215,8 +215,8 @@ bool CDocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCH
 	TCHAR	*p;
 
 	//	2003.08.14 MIK NULL‚¶‚á‚È‚­‚Äfalse
-	if (NULL == pszSrcExt) return false;
-	if (NULL == pszDstExt) return false;
+	if (!pszSrcExt) return false;
+	if (!pszDstExt) return false;
 
 	p = _tcsdup( pszSrcExt );
 	_tcscpy( pszDstExt, _T("") );

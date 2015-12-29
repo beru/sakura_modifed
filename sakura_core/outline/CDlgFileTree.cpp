@@ -113,9 +113,9 @@ static TCHAR* GetFileTreeLabel(const SFileTreeItem& item)
 		pszLabel = item.m_szLabelName;
 		if (item.m_szLabelName[0] == _T('\0')) {
 			pszLabel = item.m_szTargetPath;
-			if (0 == auto_strcmp(pszLabel, _T("."))
-				|| 0 == auto_strcmp(pszLabel, _T(".\\")) 
-				|| 0 == auto_strcmp(pszLabel, _T("./"))
+			if (auto_strcmp(pszLabel, _T(".")) == 0
+				|| auto_strcmp(pszLabel, _T(".\\")) == 0
+				|| auto_strcmp(pszLabel, _T("./")) == 0
 			) {
 				pszLabel = LS(STR_FILETREE_CURDIR);
 			}

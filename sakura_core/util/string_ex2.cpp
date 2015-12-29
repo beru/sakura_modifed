@@ -76,7 +76,7 @@ int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith)
 int AddLastChar(TCHAR* pszPath, int nMaxLen, TCHAR c) {
 	int pos = _tcslen(pszPath);
 	// 何もないときは\を付加
-	if (0 == pos) {
+	if (pos == 0) {
 		if (nMaxLen <= pos + 1) {
 			return -1;
 		}
@@ -178,7 +178,7 @@ static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 	// 改行コードの長さを調べる
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		CEol cEol((EEolType)i);
-		if (cEol.GetLen() <= nDataLen && 0 == auto_memcmp(pszData, aEolTable[i], cEol.GetLen())) {
+		if (cEol.GetLen() <= nDataLen && auto_memcmp(pszData, aEolTable[i], cEol.GetLen()) == 0) {
 			return gm_pnEolTypeArr[i];
 		}
 	}
@@ -239,7 +239,7 @@ const char* GetNextLimitedLengthText(const char* pText, int nTextLen, int nLimit
 	for (i=nBgn; i+1<nTextLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CNativeA::GetSizeOfChar(pText, nTextLen, i);
-		if (0 == nCharChars) {
+		if (nCharChars == 0) {
 			nCharChars = 1;
 		}
 		if (i + nCharChars - nBgn >= nLimitLen) {

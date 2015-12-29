@@ -133,7 +133,7 @@ void CDlgKeywordSelect::SetData(void)
 				Combo_AddString(hwndCombo, m_pCKeyWordSetMgr->GetTypeName(i));
 			}
 
-			if (-1 == m_nSet[index]) {
+			if (m_nSet[index] == -1) {
 				// セット名コンボボックスのデフォルト選択
 				Combo_SetCurSel(hwndCombo, 0);
 			}else {
@@ -152,7 +152,7 @@ int CDlgKeywordSelect::GetData(void)
 		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
 
 		int n = Combo_GetCurSel(hwndCombo);
-		if (CB_ERR == n || 0 == n) {
+		if (n == CB_ERR || n == 0) {
 			m_nSet[index] = -1;
 		}else {
 			m_nSet[index] = n - 1;

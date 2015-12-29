@@ -65,7 +65,7 @@ CFuncInfo* CFuncInfoArr::GetAt(int nIdx)
 //! 配列の最後にデータを追加する
 void CFuncInfoArr::AppendData(CFuncInfo* pcFuncInfo)
 {
-	if (0 == m_nFuncInfoArrNum) {
+	if (m_nFuncInfoArrNum == 0) {
 		m_ppcFuncInfoArr = (CFuncInfo**)malloc(sizeof(CFuncInfo*) * (m_nFuncInfoArrNum + 1));
 	}else {
 		m_ppcFuncInfoArr = (CFuncInfo**)realloc(m_ppcFuncInfoArr, sizeof(CFuncInfo*) * (m_nFuncInfoArrNum + 1));

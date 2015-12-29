@@ -214,7 +214,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 //	}else {
 //		nCount = m_nLines - 1;
 //		pLayout = m_pLayoutBot;
-//		while (NULL != pLayout) {
+//		while (pLayout) {
 //			if (nLineNum == nCount) {
 //				m_pLayoutPrevRefer = pLayout;
 //				m_nPrevReferLine = nLineNum;
@@ -581,7 +581,7 @@ void CLayoutMgr::ShiftLogicalLineNum(CLayout* pLayoutPrev, CLogicInt nShiftLines
 {
 	MY_RUNNINGTIMER(cRunningTimer, "CLayoutMgr::ShiftLogicalLineNum");
 
-	if (0 == nShiftLines) {
+	if (nShiftLines == 0) {
 		return;
 	}
 	CLayout* pLayout = pLayoutPrev ? pLayoutPrev->GetNextLayout() : m_pLayoutTop;

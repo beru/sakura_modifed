@@ -185,7 +185,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				}
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					// 選択中でなければ最後にする。
 					nIndex = nIndex2;
 				}
@@ -259,7 +259,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					ErrorMessage(hwndDlg, LS(STR_PROPTYPEREGEX_NOSEL));
 					return FALSE;
 				}
@@ -298,7 +298,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			case IDC_BUTTON_REGEX_DEL:	// 削除
 				// 選択中のキー番号を探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
 				// 削除する。
@@ -314,10 +314,10 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				szKeyWord[0] = _T('\0');
 				// 選択中のキーを探す。
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
-				if (0 == nIndex) {
+				if (nIndex == 0) {
 					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = 0;
@@ -347,7 +347,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -380,10 +380,10 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
-				if (0 == nIndex) {
+				if (nIndex == 0) {
 					return TRUE;	// すでに先頭にある。
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -417,7 +417,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 				auto_array_ptr<TCHAR> szKeyWord(new TCHAR [nKeyWordSize]);
 				szKeyWord[0] = _T('\0');
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					return FALSE;
 				}
 				nIndex2 = ListView_GetItemCount(hwndList);
@@ -480,16 +480,16 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 			if (pNMHDR->hwndFrom == hwndList) {
 				HWND	hwndCombo;
 				nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_SELECTED);
-				if (-1 == nIndex) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
+				if (nIndex == -1) {	// 削除、範囲外でクリック時反映されないバグ修正	//@@@ 2003.06.17 MIK
 					nIndex = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVNI_FOCUSED);
 				}
-				if (-1 == nIndex) {
+				if (nIndex == -1) {
 					// 初期値を設定する
 					::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEX, _T("//k"));	// 正規表現
 					hwndCombo = GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
 					for (i=0, j=0; i<COLORIDX_LAST; ++i) {
-						if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
-							0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
+						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
+							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
 							if (m_Types.m_ColorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {
 								Combo_SetCurSel(hwndCombo, j);	// コンボボックスのデフォルト選択
@@ -509,8 +509,8 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 					::DlgItem_SetText(hwndDlg, IDC_EDIT_REGEX, &szKeyWord[0]);	// 正規表現
 					hwndCombo = GetDlgItem(hwndDlg, IDC_COMBO_REGEX_COLOR);
 					for (i=0, j=0; i<COLORIDX_LAST; ++i) {
-						if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
-							0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
+						if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
+							(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 						) {	// 2006.12.18 ryoji フラグ利用で簡素化
 							if (_tcscmp(m_Types.m_ColorInfoArr[i].m_szName, szColorIndex) == 0) {
 								Combo_SetCurSel(hwndCombo, j);
@@ -556,8 +556,8 @@ void CPropTypesRegex::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	for (int i=0; i<COLORIDX_LAST; ++i) {
 		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
-		if (0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) &&
-			0 == (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)
+		if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) == 0 &&
+			(g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) == 0
 		) {	// 2006.12.18 ryoji フラグ利用で簡素化
 			int j = Combo_AddString(hwndWork, m_Types.m_ColorInfoArr[i].m_szName);
 			if (m_Types.m_ColorInfoArr[i].m_nColorIdx == COLORIDX_REGEX1) {

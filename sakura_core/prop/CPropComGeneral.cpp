@@ -296,7 +296,7 @@ void CPropGeneral::SetData(HWND hwndDlg)
 	auto& csGeneral = m_Common.m_sGeneral;
 
 	// カーソルのタイプ 0=win 1=dos 
-	if (0 == csGeneral.GetCaretType()) {
+	if (csGeneral.GetCaretType() == 0) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_CARETTYPE0, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_CARETTYPE1, FALSE);
 	}else {

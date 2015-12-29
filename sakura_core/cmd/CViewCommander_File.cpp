@@ -121,11 +121,11 @@ void CViewCommander::Command_FILEOPEN(
 			TCHAR szExt  [_MAX_EXT];
 			my_splitpath_t(defName.c_str(), szPath, szDir, szName, szExt);
 			auto_strcat(szPath, szDir);
-			if (0 == auto_stricmp(defName.c_str(), szPath)) {
+			if (auto_stricmp(defName.c_str(), szPath) == 0) {
 				// defNameはフォルダ名だった
 			}else {
 				CFilePath path = defName.c_str();
-				if (0 == auto_stricmp(path.GetDirPath().c_str(), szPath)) {
+				if (auto_stricmp(path.GetDirPath().c_str(), szPath) == 0) {
 					// フォルダ名までは実在している
 					sLoadInfo.cFilePath = defName.c_str();
 				}
@@ -786,7 +786,7 @@ bool CViewCommander::Command_INSFILE(
 			if (pcDlgCancel->IsCanceled()) {
 				break;
 			}
-			if (0 == (nLineNum & 0xFF)) {
+			if ((nLineNum & 0xFF) == 0) {
 				if (nOldPercent != cfl.GetPercent()) {
 					Progress_SetPos(hwndProgress, cfl.GetPercent() + 1);
 					Progress_SetPos(hwndProgress, cfl.GetPercent());

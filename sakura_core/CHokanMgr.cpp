@@ -54,7 +54,7 @@ LRESULT APIENTRY HokanList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			}
 		}
 		// 補完実行キーなら補完する
-		if (-1 != pCHokanMgr->KeyProc(wParam, lParam)) {
+		if (pCHokanMgr->KeyProc(wParam, lParam) != -1) {
 			// キーストロークを親に転送
 			return ::PostMessage(::GetParent(::GetParent(pCDialog->m_hwndParent)), uMsg, wParam, lParam);
 		}
@@ -205,13 +205,13 @@ int CHokanMgr::Search(
 		}
 	}
 
-	if (0 == m_vKouho.size()) {
+	if (m_vKouho.size() == 0) {
 		m_nCurKouhoIdx = -1;
 		return 0;
 	}
 
 //	2001/06/19 asa-o 候補が１つの場合補完ウィンドウは表示しない(逐次補完の場合は除く)
-	if (1 == m_vKouho.size()) {
+	if (m_vKouho.size() == 1) {
 		if (pcmemHokanWord) {
 			m_nCurKouhoIdx = -1;
 			pcmemHokanWord->SetString(m_vKouho[0].c_str());
@@ -499,13 +499,13 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 	DEBUG_TRACE(_T("CHokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
-	if (VK_RETURN	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
-	if (VK_TAB		== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
-	if (VK_RIGHT	== nVKey && !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)	return FALSE; // VK_RIGHT  補完決定キーが有効/無効
+	if (nVKey == VK_RETURN	&& !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
+	if (nVKey == VK_TAB		&& !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
+	if (nVKey == VK_RIGHT	&& !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)		return FALSE; // VK_RIGHT  補完決定キーが有効/無効
 
 	HWND hwndList = GetItemHwnd(IDC_LIST_WORDS);
 	int nItem = List_GetCurSel(hwndList);
-	if (LB_ERR == nItem) {
+	if (nItem == LB_ERR) {
 		return FALSE;
 	}
 	int nLabelLen = List_GetTextLen( hwndList, nItem );
@@ -608,7 +608,7 @@ void CHokanMgr::ShowTip()
 {
 	HWND hwndCtrl = GetItemHwnd(IDC_LIST_WORDS);
 	int nItem = List_GetCurSel(hwndCtrl);
-	if (LB_ERR == nItem) {
+	if (nItem == LB_ERR) {
 		return ;
 	}
 

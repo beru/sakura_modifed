@@ -393,8 +393,8 @@ HWND CEditWnd::_CreateMainWindow(int nGroup, const STabGroupInfo& sTabGroupInfo)
 	//	small icon指定のため RegisterClassExに変更
 	wc.cbSize			= sizeof(wc);
 	wc.hIconSm			= GetAppIcon(G_AppInstance(), ICON_DEFAULT_APP, FN_APP_ICON, true);
-	ATOM	atom = RegisterClassEx(&wc);
-	if (0 == atom) {
+	ATOM atom = RegisterClassEx(&wc);
+	if (atom == 0) {
 		//	2004.05.13 Moca return NULLを有効にした
 		return NULL;
 	}
@@ -762,7 +762,7 @@ HWND CEditWnd::Create(
 	// Aug. 29, 2003 wmlhq
 	m_nTimerCount = 0;
 	// タイマーを起動	タイマーのIDと間隔を変更 20060128 aroka
-	if (0 == ::SetTimer(GetHwnd(), IDT_EDIT, 500, NULL)) {
+	if (::SetTimer(GetHwnd(), IDT_EDIT, 500, NULL) == 0) {
 		WarningMessage(GetHwnd(), LS(STR_ERR_DLGEDITWND03));
 	}
 	// ツールバーのタイマーを分離した 20060128 aroka
@@ -1837,8 +1837,8 @@ LRESULT CEditWnd::DispatchEvent(
 		}
 		return 0L; 
 	case MYWM_SETACTIVEPANE:
-		if (-1 == (int)wParam) {
-			if (0 == lParam) {
+		if ((int)wParam == -1) {
+			if (lParam == 0) {
 				nPane = m_cSplitterWnd.GetFirstPane();
 			}else {
 				nPane = m_cSplitterWnd.GetLastPane();
@@ -3983,7 +3983,7 @@ void CEditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _ps
 */
 void CEditWnd::WindowTopMost(int top)
 {
-	if (0 == top) {
+	if (top == 0) {
 		DWORD dwExstyle = (DWORD)::GetWindowLongPtr(GetHwnd(), GWL_EXSTYLE);
 		if (dwExstyle & WS_EX_TOPMOST) {
 			top = 2; // 最前面である -> 解除
@@ -4032,7 +4032,7 @@ void CEditWnd::Timer_ONOFF(bool bStart)
 	if (GetHwnd()) {
 		if (bStart) {
 			// タイマーを起動
-			if (0 == ::SetTimer(GetHwnd(), IDT_TOOLBAR, 300, NULL)) {
+			if (::SetTimer(GetHwnd(), IDT_TOOLBAR, 300, NULL) == 0) {
 				WarningMessage(GetHwnd(), LS(STR_ERR_DLGEDITWND03));
 			}
 		}else {

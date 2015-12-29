@@ -357,7 +357,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 //		ListView_SetItemText(hwndList, nIndex, 5, _T(""));
 	}
 
-	if (IsDirectTagJump() && 0 == m_nTop && ! m_bNextItem) {
+	if (IsDirectTagJump() && m_nTop == 0 && ! m_bNextItem) {
 		// ダイレクトタグジャンプで、ページングの必要がないときは非表示
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_NEXTTAG), SW_HIDE);
 		::ShowWindow(GetItemHwnd(IDC_BUTTON_PREVTAG), SW_HIDE);
@@ -723,7 +723,7 @@ bool CDlgTagJumpList::AddParamA(
 	int fileBase
 	)
 {
-	if (-1 == m_nIndex) m_nIndex = 0;	// 規定値
+	if (m_nIndex == -1) m_nIndex = 0;	// 規定値
 
 	ClearPrevFindInfo();
 	m_bNextItem = false;
@@ -1035,7 +1035,7 @@ void CDlgTagJumpList::FindNext(bool bNewFind)
 		if (-1 < m_psFind0Match->m_nDepth
 			&& (m_bTagJumpAnyWhere == m_bOldTagJumpAnyWhere || FALSE == m_bTagJumpAnyWhere)
 			&& (m_bTagJumpICase    == m_bOldTagJumpICase    || FALSE == m_bTagJumpICase)
-			&& 0 == wcsncmp(m_strOldKeyword.GetStringPtr(), szKey, m_strOldKeyword.GetStringLength())
+			&& wcsncmp(m_strOldKeyword.GetStringPtr(), szKey, m_strOldKeyword.GetStringLength() == 0)
 		) {
 			// 元のキーワードで１件もヒットしないtagsがあるので飛ばす
 			// 条件は同じか、厳しくなるなら問題ない
@@ -1371,7 +1371,7 @@ next_line:
 			++(m_psFindPrev->m_nDepth);
 			DEBUG_TRACE(_T("FindPrev udpate: d:%d m:%d n:%d L:%d j:%d\n") , m_psFindPrev->m_nDepth, m_psFindPrev->m_nMatchAll, m_psFindPrev->m_nNextMode, m_psFindPrev->m_nLoop, (int)m_psFindPrev->m_bJumpPath);
 		}
-		if (0 == state.m_nMatchAll) {
+		if (state.m_nMatchAll == 0) {
 			// キーワード絞込み用: 次の絞り込み検索では、このtagsの次から検索できる
 			// (最後に通過したものを保持)
 			*m_psFind0Match = state;

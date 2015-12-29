@@ -753,8 +753,8 @@ bool CMacro::HandleCommand(
 			sSearchOption.bWordOnly			= (0 != (lFlag & 0x01));
 			sSearchOption.bLoHiCase			= (0 != (lFlag & 0x02));
 			sSearchOption.bRegularExp		= (0 != (lFlag & 0x04));
-			bool bAddHistory = (0 == (lFlag & 0x800));
-			bool bBackupFlag = (0 != (lFlag & 0x1000));
+			bool bAddHistory = ((lFlag & 0x800) == 0);
+			bool bBackupFlag = ((lFlag & 0x1000) != 0);
 			CommonSetting_Search backupFlags;
 			SSearchOption backupLocalFlags;
 			std::wstring backupStr;
@@ -939,8 +939,8 @@ bool CMacro::HandleCommand(
 			sSearchOption.bWordOnly			= (0 != (lFlag & 0x01));
 			sSearchOption.bLoHiCase			= (0 != (lFlag & 0x02));
 			sSearchOption.bRegularExp		= (0 != (lFlag & 0x04));
-			bool bAddHistory = (0 == (lFlag & 0x800));
-			bool bBackupFlag = (0 != (lFlag & 0x1000));
+			bool bAddHistory = ((lFlag & 0x800) == 0);
+			bool bBackupFlag = ((lFlag & 0x1000) != 0);
 			CommonSetting_Search backupFlags;
 			SSearchOption backupLocalFlags;
 			std::wstring backupStr;

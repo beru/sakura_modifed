@@ -36,7 +36,7 @@ bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nL
 	CLayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
 	CLayoutInt nSelectFrom = selectArea.GetFrom().x;
 	CLayoutInt nSelectTo = selectArea.GetTo().x;
-	if (nSelectFrom == nSelectTo || -1 == nSelectFrom) {
+	if (nSelectFrom == nSelectTo || nSelectFrom == -1) {
 		m_nSelectStart = -1;
 		m_nSelectEnd = -1;
 		return false;
@@ -82,7 +82,7 @@ bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 {
 	if (!cStr.IsValid()) return false;
 	const CEditView* pcView = CColorStrategyPool::getInstance()->GetCurrentView();
-	if (!pcView->m_bCurSrchKeyMark || 0 == this->validColorNum) {
+	if (!pcView->m_bCurSrchKeyMark || this->validColorNum == 0) {
 		return false;
 	}
 

@@ -709,7 +709,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 			// 2002.10.25 Moca
 			TCHAR szCurDir[_MAX_PATH];
 			int nCurDir = ::GetCurrentDirectory(_countof(szCurDir), szCurDir);
-			if (0 == nCurDir || _MAX_PATH < nCurDir) {
+			if (nCurDir == 0 || _MAX_PATH < nCurDir) {
 				return _T("");
 			}else {
 				return szCurDir;
@@ -730,7 +730,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 
 			TCHAR szCurDir[_MAX_PATH];
 			int nCurDir = ::GetCurrentDirectory(_countof(szCurDir), szCurDir);
-			if (0 == nCurDir || _MAX_PATH < nCurDir) {
+			if (nCurDir == 0 || _MAX_PATH < nCurDir) {
 				return _T("");
 			}else {
 				return szCurDir;

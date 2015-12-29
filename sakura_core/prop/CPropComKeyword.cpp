@@ -378,7 +378,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					}
 					if (szKeyWord[0] != L'\0') {
 						// ｎ番目のセットにキーワードを追加
-						if (0 == csSpecialKeyword.m_CKeyWordSetMgr.AddKeyWord(csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, szKeyWord)) {
+						if (csSpecialKeyword.m_CKeyWordSetMgr.AddKeyWord(csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, szKeyWord) == 0) {
 							// ダイアログデータの設定 Keyword 指定キーワードセットの設定
 							SetKeyWordSet(hwndDlg, csSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx);
 						}
@@ -420,7 +420,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 
 	case WM_TIMER:
 		nIndex1 = ListView_GetNextItem(hwndLIST_KEYWORD, -1, LVNI_ALL | LVNI_SELECTED);
-		if (-1 == nIndex1) {
+		if (nIndex1 == -1) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_EDITKEYWORD), FALSE);
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_DELKEYWORD), FALSE);
 		}else {
@@ -464,7 +464,7 @@ void CPropKeyword::Edit_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	CDlgInput1	cDlgInput1;
 
 	nIndex1 = ListView_GetNextItem(hwndLIST_KEYWORD, -1, LVNI_ALL | LVNI_SELECTED);
-	if (-1 == nIndex1) {
+	if (nIndex1 == -1) {
 		return;
 	}
 	lvi.mask = LVIF_PARAM;
@@ -507,7 +507,7 @@ void CPropKeyword::Delete_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	LV_ITEM		lvi;
 
 	nIndex1 = ListView_GetNextItem(hwndLIST_KEYWORD, -1, LVNI_ALL | LVNI_SELECTED);
-	if (-1 == nIndex1) {
+	if (nIndex1 == -1) {
 		return;
 	}
 	lvi.mask = LVIF_PARAM;

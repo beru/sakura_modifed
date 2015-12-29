@@ -38,7 +38,7 @@ typedef INT_PTR (CPropTypes::*DISPATCH_EVENT_TYPE)(HWND, UINT, WPARAM, LPARAM);
 // 共通ダイアログプロシージャ
 INT_PTR CALLBACK PropTypesCommonProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, DISPATCH_EVENT_TYPE pDispatch)
 {
-	PROPSHEETPAGE*	pPsp;
+	PROPSHEETPAGE* pPsp;
 	CPropTypes* pCPropTypes;
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -182,7 +182,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 	psh.nPages     = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
-	if (-1 == nPageNum) {
+	if (nPageNum == -1) {
 		psh.nStartPage = m_nPageNum;
 	}else if (0 > nPageNum) {			//- 20020106 aroka
 		psh.nStartPage = 0;
@@ -198,8 +198,8 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 
 	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
 
-	if (-1 == nRet) {
-		TCHAR*	pszMsgBuf;
+	if (nRet == -1) {
+		TCHAR* pszMsgBuf;
 		::FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			FORMAT_MESSAGE_FROM_SYSTEM |
@@ -237,7 +237,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 // 2001.11.17 MIK    IDD_PROP_REGEX
 void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
 {
-	int		nContextID;
+	int nContextID;
 	switch (nPageID) {
 	case IDD_PROP_SCREEN:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_SCREEN);			break;
 	case IDD_PROP_COLOR:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_COLOR);			break;
@@ -247,7 +247,7 @@ void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
 	case IDD_PROP_KEYHELP:	nContextID = ::FuncID_To_HelpContextID(F_TYPE_KEYHELP);			break;
 	default:				nContextID = -1;												break;
 	}
-	if (-1 != nContextID) {
+	if (nContextID != -1) {
 		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	}
 }
@@ -258,12 +258,10 @@ void CPropTypes::OnHelp(HWND hwndParent, int nPageID)
 */
 HFONT CPropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 {
-	HFONT	hFont;
-	HWND	hCtrl;
 
 	// 論理フォントを作成
-	hCtrl = ::GetDlgItem(hwndDlg, idc_ctrl);
-	hFont = ::CreateFontIndirect(&lf);
+	HWND hCtrl = ::GetDlgItem(hwndDlg, idc_ctrl);
+	HFONT hFont = ::CreateFontIndirect(&lf);
 	if (hFont) {
 		// フォントの設定
 		::SendMessage(hCtrl, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(FALSE, 0));
@@ -279,18 +277,16 @@ HFONT CPropTypes::SetCtrlFont(HWND hwndDlg, int idc_ctrl, const LOGFONT& lf)
 HFONT CPropTypes::SetFontLabel(HWND hwndDlg, int idc_static, const LOGFONT& lf, int nps, bool bUse)
 {
 	HFONT	hFont;
-	TCHAR	szFontName[80];
-	LOGFONT lfTemp;
-	lfTemp = lf;
-	// 大きすぎるフォントは小さく表示
-	if (lfTemp.lfHeight < -16) {
-		lfTemp.lfHeight = -16;
-	}
 
 	if (bUse) {
+		LOGFONT lfTemp = lf;
+		// 大きすぎるフォントは小さく表示
+		if (lfTemp.lfHeight < -16) {
+			lfTemp.lfHeight = -16;
+		}
 		hFont = SetCtrlFont(hwndDlg, idc_static, lfTemp);
-
 		// フォント名の設定
+		TCHAR szFontName[80];
 		auto_sprintf_s(szFontName, nps % 10 ? _T("%s(%.1fpt)") : _T("%s(%.0fpt)"),
 			lf.lfFaceName, double(nps)/10);
 		::DlgItem_SetText(hwndDlg, idc_static, szFontName);

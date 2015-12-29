@@ -376,7 +376,7 @@ uchar_t wc_to_c(wchar_t wc)
 
 	2007.10.23 kobake UNICODE対応。//$ wchar_t専用のテーブル(または判定ルーチン)を用意したほうが効率は上がるはずです。
 */
-BOOL IsURL(
+bool IsURL(
 	const wchar_t*	pszLine,	// [in]  文字列
 	int				nLineLen,	// [in]  文字列の長さ
 	int*			pnMatchLen	// [out] URLの長さ
@@ -436,7 +436,7 @@ BOOL IsURL(
 	const struct _url_table_t* urlp;
 	
 	if (wc_to_c(*p) == 0) {
-		return FALSE;	// 2バイト文字
+		return false;	// 2バイト文字
 	}
 	if (0 < url_char[wc_to_c(*p)]) {	// URL開始文字
 		for (urlp = &url_table[url_char[wc_to_c(*p)]-1]; urlp->name[0] == wc_to_c(*p); urlp++) {	// URLテーブルを探索
@@ -445,9 +445,9 @@ BOOL IsURL(
 				if (urlp->is_mail) {	// メール専用の解析へ
 					if (IsMailAddress(p, nLineLen - urlp->length, pnMatchLen)) {
 						*pnMatchLen = *pnMatchLen + urlp->length;
-						return TRUE;
+						return true;
 					}
-					return FALSE;
+					return false;
 				}
 				int i;
 				for (i=urlp->length; i<nLineLen; ++i, ++p) {	// 通常の解析へ
@@ -456,10 +456,10 @@ BOOL IsURL(
 					}
 				}
 				if (i == urlp->length) {
-					return FALSE;	// URLヘッダだけ
+					return false;	// URLヘッダだけ
 				}
 				*pnMatchLen = i;
-				return TRUE;
+				return true;
 			}
 		}
 	}
@@ -467,7 +467,7 @@ BOOL IsURL(
 }
 
 // 現在位置がメールアドレスならば、NULL以外と、その長さを返す
-BOOL IsMailAddress(
+bool IsMailAddress(
 	const wchar_t* pszBuf,
 	int nBufLen,
 	int* pnAddressLenfth
@@ -480,7 +480,7 @@ BOOL IsMailAddress(
 	) {
 		++j;
 	}else {
-		return FALSE;
+		return false;
 	}
 	while (
 		j < nBufLen - 2
@@ -496,10 +496,10 @@ BOOL IsMailAddress(
 		++j;
 	}
 	if (j == 0 || j >= nBufLen - 2) {
-		return FALSE;
+		return false;
 	}
-	if (L'@' != pszBuf[j]) {
-		return FALSE;
+	if (pszBuf[j] != L'@') {
+		return false;
 	}
 //	nAtPos = j;
 	++j;
@@ -520,12 +520,12 @@ BOOL IsMailAddress(
 		) {
 			++j;
 		}
-		if (0 == j - nBgn) {
-			return FALSE;
+		if (j-nBgn == 0) {
+			return false;
 		}
-		if (L'.' != pszBuf[j]) {
-			if (0 == nDotCount) {
-				return FALSE;
+		if (pszBuf[j] != L'.') {
+			if (nDotCount == 0) {
+				return false;
 			}else {
 				break;
 			}
@@ -537,6 +537,6 @@ BOOL IsMailAddress(
 	if (pnAddressLenfth) {
 		*pnAddressLenfth = j;
 	}
-	return TRUE;
+	return true;
 }
 

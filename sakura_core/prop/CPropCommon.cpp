@@ -265,7 +265,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	psh.nPages     = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
-	if (-1 == nPageNum) {
+	if (nPageNum == -1) {
 		psh.nStartPage = m_nPageNum;
 	}else
 	if (0 > nPageNum) {			//- 20020106 aroka
@@ -281,7 +281,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	psh.pfnCallback = NULL;
 
 	nRet = MyPropertySheet(&psh);	// 2007.05.24 ryoji 独自拡張プロパティシート
-	if (-1 == nRet) {
+	if (nRet == -1) {
 		TCHAR*	pszMsgBuf;
 		::FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |

@@ -640,7 +640,7 @@ bool COutputAdapterDefault::OutputW(const WCHAR* pBuf, int size)
 bool COutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
 {
 	CNativeW buf;
-	if (-1 == size) {
+	if (size == -1) {
 		buf.SetStringOld(pBuf);
 	}else {
 		buf.SetStringOld(pBuf, size);
@@ -657,7 +657,7 @@ bool COutputAdapterUTF8::OutputA(const ACHAR* pBuf, int size)
 {
 	CMemory input;
 	CNativeW buf;
-	if (-1 == size) {
+	if (size == -1) {
 		input.SetRawData(pBuf, strlen(pBuf));
 	}else {
 		input.SetRawData(pBuf, size);

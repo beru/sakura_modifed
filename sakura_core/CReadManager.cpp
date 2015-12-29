@@ -51,11 +51,11 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	const STypeConfigMini* type;
 	CDocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
 	ECodeType	eCharCode = sLoadInfo.eCharCode;
-	if (CODE_AUTODETECT == eCharCode) {
+	if (eCharCode == CODE_AUTODETECT) {
 		CCodeMediator cmediator( type->m_encoding );
 		eCharCode = cmediator.CheckKanjiCodeOfFile( pszPath );
 	}
-	if (!IsValidCodeOrCPType( eCharCode )) {
+	if (!IsValidCodeOrCPType(eCharCode)) {
 		eCharCode = type->m_encoding.m_eDefaultCodetype;	// 2011.01.24 ryoji デフォルト文字コード
 	}
 	bool	bBom;
@@ -70,7 +70,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	pcDocLineMgr->DeleteAllLine();
 
 	// 処理中のユーザー操作を可能にする
-	if (!::BlockingHook( NULL )) {
+	if (!::BlockingHook(NULL)) {
 		return RESULT_FAILURE; //######INTERRUPT
 	}
 
@@ -93,7 +93,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 
 		// ファイル時刻の取得
 		FILETIME	FileTime;
-		if (cfl.GetFileTime( NULL, NULL, &FileTime )) {
+		if (cfl.GetFileTime(NULL, NULL, &FileTime)) {
 			pFileInfo->SetFileTime( FileTime );
 		}
 
@@ -128,7 +128,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		return RESULT_FAILURE;
 	}catch (CError_FileOpen) {
 		eRet = RESULT_FAILURE;
-		if (!fexist( pszPath )) {
+		if (!fexist(pszPath)) {
 			// ファイルがない
 			ErrorMessage(
 				CEditWnd::getInstance()->GetHwnd(),
@@ -162,7 +162,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 
 	NotifyProgress(0);
 	// 処理中のユーザー操作を可能にする
-	if (!::BlockingHook( NULL )) {
+	if (!::BlockingHook(NULL)) {
 		return RESULT_FAILURE; //####INTERRUPT
 	}
 

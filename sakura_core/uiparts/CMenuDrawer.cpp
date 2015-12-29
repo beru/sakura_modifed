@@ -776,7 +776,7 @@ void CMenuDrawer::ResetContents(void)
 	}else {
 		// ポイント(1/72インチ)をピクセルへ
 		m_nMenuFontHeight = DpiScaleY(m_nMenuFontHeight);
-		if (-1 == m_nMenuFontHeight) {
+		if (m_nMenuFontHeight == -1) {
 			m_nMenuFontHeight = lf.lfHeight;
 		}
 	}
@@ -929,7 +929,7 @@ int CMenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 	HDC hdc;
 	HFONT hFontOld;
 
-	if (F_0 == nFuncID) { // F_0, なぜか F_SEPARATOR ではない
+	if (nFuncID == F_0) { // F_0, なぜか F_SEPARATOR ではない
 		// セパレータ。フォントの方の通常項目の半分の高さ
 		*pnItemHeight = m_nMenuFontHeight / 2;
 		return 30; // ダミーの幅
@@ -1169,9 +1169,9 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	_tcscpy(szText, _T("--unknown--"));
 	mii.dwTypeData = szText;
 	mii.cch = _countof(szText) - 1;
-	if (0 != ::GetMenuItemInfo((HMENU)lpdis->hwndItem, lpdis->itemID, FALSE, &mii)
+	if (::GetMenuItemInfo((HMENU)lpdis->hwndItem, lpdis->itemID, FALSE, &mii) != 0
 		&& !mii.hSubMenu
-		&& 0 == /* CEditWnd */::FuncID_To_HelpContextID((EFunctionCode)lpdis->itemID) 	/* 機能IDに対応するメニューコンテキスト番号を返す */
+		&& /* CEditWnd */::FuncID_To_HelpContextID((EFunctionCode)lpdis->itemID) == 0 	// 機能IDに対応するメニューコンテキスト番号を返す
 	) {
 		//@@@ 2001.12.21 YAZAKI
 		if (lpdis->itemState & ODS_SELECTED) {
@@ -1546,7 +1546,7 @@ int CMenuDrawer::Find(int nFuncID)
 const TCHAR* CMenuDrawer::GetLabel(int nFuncID)
 {
 	int i;
-	if (-1 == (i = Find(nFuncID))) {
+	if ((i = Find(nFuncID)) == -1) {
 		return NULL;
 	}
 	return m_menuItems[i].m_cmemLabel.GetStringPtr();
@@ -1603,7 +1603,7 @@ LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		_tcscpy(szText, _T("--unknown--"));
 		mii.dwTypeData = szText;
 		mii.cch = _countof(szText) - 1;
-		if (0 == ::GetMenuItemInfo(hmenu, i, TRUE, &mii)) {
+		if (::GetMenuItemInfo(hmenu, i, TRUE, &mii) == 0) {
 			continue;
 		}
 		const TCHAR* pszLabel;
@@ -1614,17 +1614,17 @@ LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			WorkData work;
 			work.idx = i;
 			work.mii = mii;
-			if (/*-1 == nAccelSel ||*/ MFS_HILITE & mii.fState) {
+			if (/*nAccelSel == -1 ||*/ MFS_HILITE & mii.fState) {
 				nAccelSel = vecAccel.size();
 			}
 			vecAccel.push_back(work);
 		}
 	}
 //	MYTRACE(_T("%d\n"), (int)mapAccel.size());
-	if (0 == vecAccel.size()) {
+	if (vecAccel.size() == 0) {
 		return  MAKELONG(0, MNC_IGNORE);
 	}
-	if (1 == vecAccel.size()) {
+	if (vecAccel.size() == 1) {
 		return  MAKELONG(vecAccel[0].idx, MNC_EXECUTE);
 	}
 //	MYTRACE(_T("nAccelSel=%d vecAccel.size()=%d\n"), nAccelSel, vecAccel.size());

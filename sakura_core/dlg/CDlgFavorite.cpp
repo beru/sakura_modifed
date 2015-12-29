@@ -765,7 +765,7 @@ bool CDlgFavorite::RefreshListOne(int nIndex)
 	hwndList      = GetItemHwnd(m_aFavoriteInfo[nIndex].m_nId);
 	nCount        = ListView_GetItemCount(hwndList);
 	nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
-	if (-1 == nCurrentIndex) nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED);
+	if (nCurrentIndex == -1) nCurrentIndex = ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED);
 
 	if (nItemCount != nCount) goto changed;	// å¬êîÇ™ïœÇÌÇ¡ÇΩÇÃÇ≈çƒç\íz
 
@@ -1174,7 +1174,7 @@ static int CALLBACK CompareListViewFunc(
 {
 	CompareListViewLParam* pCompInfo = reinterpret_cast<CompareListViewLParam*>(lParamSort);
 	int nRet = 0;
-	if (0 == pCompInfo->nSortColumn) {
+	if (pCompInfo->nSortColumn == 0) {
 		nRet = lParamItem1 - lParamItem2;
 	}else {
 		const CRecent* p = pCompInfo->pRecent;

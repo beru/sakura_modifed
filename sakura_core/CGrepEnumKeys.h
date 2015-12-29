@@ -167,7 +167,7 @@ private:
 
 	BOOL IsExist(VGrepEnumKeys& keys, LPCTSTR addKey) {
 		for (int i=0; i<(int)keys.size(); ++i) {
-			if (_tcscmp(keys[ i ], addKey) == 0) {
+			if (_tcscmp(keys[i], addKey) == 0) {
 				return TRUE;
 			}
 		}

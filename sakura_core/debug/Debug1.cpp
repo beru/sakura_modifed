@@ -57,7 +57,7 @@ void DebugOutW(LPCWSTR lpFmt, ...)
 
 	// o—Í
 	::OutputDebugStringW(szText);
-	if (-1 == ret) {
+	if (ret == -1) {
 		::OutputDebugStringW(L"(Ø‚èÌ‚Ä‚Ü‚µ‚½...)\n");
 	}
 #ifdef USE_DEBUGMON
@@ -82,7 +82,7 @@ void DebugOutA(LPCSTR lpFmt, ...)
 
 	// o—Í
 	::OutputDebugStringA(szText);
-	if (-1 == ret) {
+	if (ret == -1) {
 		::OutputDebugStringA("(Ø‚èÌ‚Ä‚Ü‚µ‚½...)\n");
 	}
 #ifdef USE_DEBUGMON

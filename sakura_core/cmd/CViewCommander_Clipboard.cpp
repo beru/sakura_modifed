@@ -873,7 +873,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				pStrategy->SetStrategyColorInfo(pcLayout->GetColorInfo());
 			}
 			int nColorIdx = ToColorInfoArrIndex(pcLayout->GetColorTypePrev());
-			if (-1 != nColorIdx) {
+			if (nColorIdx != -1) {
 				const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
 				sFontAttr = info.m_sFontAttr;
 				sColorAttr = info.m_sColorAttr;
@@ -944,7 +944,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 				pStrategy = GetColorStrategyHTML(cStringLine, iLogic, pool, &pStrategyNormal, &pStrategyFound, bChange);
 				if (bChange) {
 					int nColorIdx = ToColorInfoArrIndex(pStrategy ? pStrategy->GetStrategyColor() : COLORIDX_TEXT);
-					if (-1 != nColorIdx) {
+					if (nColorIdx != -1) {
 						const ColorInfo& info = type.m_ColorInfoArr[nColorIdx];
 						sColorAttrNext = info.m_sColorAttr;
 						sFontAttrNext  = info.m_sFontAttr;

@@ -77,7 +77,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 			// 1バイト文字だけを処理する
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
-			if (0 == nCharChars) {
+			if (nCharChars == 0) {
 				nCharChars = 1;
 			}
 //			if (1 < nCharChars) {
@@ -85,7 +85,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 //				continue;
 //			}
 			// シングルクォーテーション文字列読み込み中
-			if (20 == nMode) {
+			if (nMode == 20) {
 				if (L'\'' == pLine[i]) {
 					if (i + 1 < nLineLen && L'\'' == pLine[i + 1]) {
 						++i;
@@ -130,26 +130,26 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 						nWordIdx += (nCharChars);
 					}
 				}else {
-					if (0 == nParseCnt && 0 == wcsicmp(szWord, L"FUNCTION")) {
+					if (nParseCnt == 0 && wcsicmp(szWord, L"FUNCTION") == 0) {
 						nFuncOrProc = 1;
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"PROCEDURE")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"PROCEDURE") == 0) {
 						nFuncOrProc = 2;
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
-					}else if (0 == nParseCnt && 0 == wcsicmp(szWord, L"PACKAGE")) {
+					}else if (nParseCnt == 0 && wcsicmp(szWord, L"PACKAGE") == 0) {
 						nFuncOrProc = 3;
 						nParseCnt = 1;
 						nFuncLine = nLineCount + CLogicInt(1);
-					}else if (1 == nParseCnt && 3 == nFuncOrProc && 0 == wcsicmp(szWord, L"BODY")) {
+					}else if (nParseCnt == 1 && nFuncOrProc == 3 && wcsicmp(szWord, L"BODY") == 0) {
 						nFuncOrProc = 4;
 						nParseCnt = 1;
-					}else if (1 == nParseCnt) {
-						if (1 == nFuncOrProc ||
-							2 == nFuncOrProc ||
-							3 == nFuncOrProc ||
-							4 == nFuncOrProc
+					}else if (nParseCnt == 1) {
+						if (nFuncOrProc == 1 ||
+							nFuncOrProc == 2 ||
+							nFuncOrProc == 3 ||
+							nFuncOrProc == 4
 						) {
 							++nParseCnt;
 							wcscpy_s(szFuncName, szWord);
@@ -157,15 +157,15 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 //						if (3 == nFuncOrProc) {
 
 						}
-					}else if (2 == nParseCnt) {
-						if (0 == wcsicmp(szWord, L"IS")) {
-							if (1 == nFuncOrProc) {
+					}else if (nParseCnt == 2) {
+						if (wcsicmp(szWord, L"IS") == 0) {
+							if (nFuncOrProc == 1) {
 								nFuncId = 11;	// ファンクション本体
-							}else if (2 == nFuncOrProc) {
+							}else if (nFuncOrProc == 2) {
 								nFuncId = 21;	// プロシージャ本体
-							}else if (3 == nFuncOrProc) {
+							}else if (nFuncOrProc == 3) {
 								nFuncId = 31;	// パッケージ仕様部
-							}else if (4 == nFuncOrProc) {
+							}else if (nFuncOrProc == 4) {
 								nFuncId = 41;	// パッケージ本体
 							}
 							++nFuncNum;
@@ -183,8 +183,8 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 							pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + CLayoutInt(1), szFuncName, nFuncId);
 							nParseCnt = 0;
 						}
-						if (0 == wcsicmp(szWord, L"AS")) {
-							if (3 == nFuncOrProc) {
+						if (wcsicmp(szWord, L"AS") == 0) {
+							if (nFuncOrProc == 3) {
 								nFuncId = 31;	// パッケージ仕様部
 								++nFuncNum;
 								/*
@@ -200,7 +200,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 								);
 								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + CLayoutInt(1) , szFuncName, nFuncId);
 								nParseCnt = 0;
-							}else if (4 == nFuncOrProc) {
+							}else if (nFuncOrProc == 4) {
 								nFuncId = 41;	// パッケージ本体
 								++nFuncNum;
 								/*
@@ -227,7 +227,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}
 			// 記号列読み込み中
-			}else if (2 == nMode) {
+			}else if (nMode == 2) {
 				if (L'_' == pLine[i] ||
 					L'~' == pLine[i] ||
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
@@ -267,7 +267,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					}
 				}
 			// 長過ぎる単語無視中
-			}else if (999 == nMode) {
+			}else if (nMode == 999) {
 				// 空白やタブ記号等を飛ばす
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
@@ -277,7 +277,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}
 			// ノーマルモード
-			}else if (0 == nMode) {
+			}else if (nMode == 0) {
 				// 空白やタブ記号等を飛ばす
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||

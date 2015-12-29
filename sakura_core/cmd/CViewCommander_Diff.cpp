@@ -346,7 +346,7 @@ void CViewCommander::Command_Diff_Dialog(void)
 	ECodeType code = GetDocument()->GetDocumentEncoding();
 	ECodeType saveCode = GetDiffCreateTempFileCode(code);
 	ECodeType code2 = cDlgDiff.m_nCodeTypeDst;
-	if (CODE_ERROR == code2) {
+	if (code2 == CODE_ERROR) {
 		if (cDlgDiff.m_szFile2[0] != _T('\0')) {
 			// ファイル名指定
 			code2 = GetFileCharCode(cDlgDiff.m_szFile2);

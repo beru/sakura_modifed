@@ -394,7 +394,7 @@ BOOL CheckEXT(const TCHAR* pszPath, const TCHAR* pszExt)
 	if (pszWork[0] == _T('.')) {
 		++pszWork;
 	}
-	if (0 == _tcsicmp(pszExt, pszWork)) {
+	if (_tcsicmp(pszExt, pszWork) == 0) {
 		return TRUE;
 	}else {
 		return FALSE;
@@ -577,12 +577,12 @@ LPCTSTR GetRelPath(LPCTSTR pszPath)
 
 	GetInidir(szPath, _T(""));
 	int nLen = auto_strlen(szPath);
-	if (0 == auto_strnicmp(szPath, pszPath, nLen)) {
+	if (auto_strnicmp(szPath, pszPath, nLen) == 0) {
 		pszFileName = pszPath + nLen;
 	}else {
 		GetExedir(szPath, _T(""));
 		nLen = auto_strlen(szPath);
-		if (0 == auto_strnicmp(szPath, pszPath, nLen)) {
+		if (auto_strnicmp(szPath, pszPath, nLen) == 0) {
 			pszFileName = pszPath + nLen;
 		}
 	}
@@ -1147,7 +1147,7 @@ int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
 							break;
 						}
 					}else {
-						if (0 == auto_strnicmp(&file1[pos1], &file2[m], chars1)) {
+						if (auto_strnicmp(&file1[pos1], &file2[m], chars1) == 0) {
 							tmpScore += chars1;
 						}else {
 							break;

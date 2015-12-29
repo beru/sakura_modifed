@@ -455,7 +455,7 @@ void CFuncKeyWnd::Timer_ONOFF(bool bStart)
 	if (GetHwnd()) {
 		if (bStart) {
 			// タイマーを起動
-			if (0 == ::SetTimer(GetHwnd(), IDT_FUNCWND, TIMER_TIMEOUT, NULL)) {
+			if (::SetTimer(GetHwnd(), IDT_FUNCWND, TIMER_TIMEOUT, NULL) == 0) {
 				WarningMessage(	GetHwnd(), LS(STR_ERR_DLGFUNCKEYWN1));
 			}
 		}else {

@@ -54,7 +54,7 @@ void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
 	// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	if (INDENT_NONE != eIndent && selInfo.IsBoxSelecting() && GetSelect().GetFrom().x == GetSelect().GetTo().x) {
+	if (eIndent != INDENT_NONE && selInfo.IsBoxSelecting() && GetSelect().GetFrom().x == GetSelect().GetTo().x) {
 		GetSelect().SetToX(GetDocument()->m_cLayoutMgr.GetMaxLineKetas());
 		m_pCommanderView->RedrawAll();
 		return;
@@ -111,7 +111,7 @@ void CViewCommander::Command_INDENT(
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
-		if (INDENT_NONE != eIndent && !bSoftTab) {
+		if (eIndent != INDENT_NONE && !bSoftTab) {
 			// ※矩形選択ではないので Command_WCHAR から呼び戻しされるようなことはない
 			Command_WCHAR(pData[0]);	// 1文字入力
 		}else {
@@ -177,7 +177,7 @@ void CViewCommander::Command_INDENT(
 				出している行にだけスペースを挿入することとし、それではどの行にもスペースが挿入されない
 				とわかったときはやり直してスペースを挿入する。
 		*/
-		bool alignFullWidthChar = eIndent == INDENT_TAB && 0 == rcSel.GetFrom().x % this->GetDocument()->m_cLayoutMgr.GetTabSpace();
+		bool alignFullWidthChar = (eIndent == INDENT_TAB) && ((rcSel.GetFrom().x % this->GetDocument()->m_cLayoutMgr.GetTabSpace()) == 0);
 #if 1	// ↓ここを残せば選択幅1のSPACEインデントで全角文字を揃える機能(2)が追加される。
 		alignFullWidthChar = alignFullWidthChar || (eIndent == INDENT_SPACE && 1 == rcSel.GetTo().x - rcSel.GetFrom().x);
 #endif
@@ -227,7 +227,7 @@ void CViewCommander::Command_INDENT(
 					xLayoutFrom = xLayoutTo = CLayoutInt(0);
 					reachEndOfLayout = true;
 				}
-				const bool emptyLine = ! pcLayout || 0 == pcLayout->GetLengthWithoutEOL();
+				const bool emptyLine = ! pcLayout || pcLayout->GetLengthWithoutEOL() == 0;
 				const bool selectionIsOutOfLine = reachEndOfLayout && (
 					(pcLayout && pcLayout->GetLayoutEol() != EOL_NONE) ? xLayoutFrom == xLayoutTo : xLayoutTo < rcSel.GetFrom().x
 				);
@@ -236,7 +236,7 @@ void CViewCommander::Command_INDENT(
 				const CLayoutPoint ptInsert(selectionIsOutOfLine ? rcSel.GetFrom().x : xLayoutFrom, nLineNum);
 
 				// TABやスペースインデントの時
-				if (INDENT_NONE != eIndent) {
+				if (eIndent != INDENT_NONE) {
 					if (emptyLine || selectionIsOutOfLine) {
 						continue; // インデント文字をインデント対象が存在しない部分(改行文字の後ろや空行)に挿入しない。
 					}
@@ -318,7 +318,7 @@ void CViewCommander::Command_INDENT(
 		GetSelect().SetTo(rcSel.GetTo());		// 範囲選択終了位置
 		selInfo.SetBoxSelect(true);
 	}else if (GetSelect().IsLineOne()) {	// 通常選択(1行内)
-		if (INDENT_NONE != eIndent && !bSoftTab) {
+		if (eIndent != INDENT_NONE && !bSoftTab) {
 			// ※矩形選択ではないので Command_WCHAR から呼び戻しされるようなことはない
 			Command_WCHAR(pData[0]);	// 1文字入力
 		}else {
@@ -478,7 +478,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 				continue;
 			}
 
-			if (WCODE::TAB == wcChar) {
+			if (wcChar == WCODE::TAB) {
 				if (pLine[0] == wcChar) {
 					nDelLen = CLogicInt(1);
 				}else {
@@ -486,7 +486,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 					CLogicInt i;
 					CLogicInt nTabSpaces = CLogicInt((Int)GetDocument()->m_cLayoutMgr.GetTabSpace());
 					for (i=CLogicInt(0); i<nLineLen; ++i) {
-						if (WCODE::SPACE != pLine[i]) {
+						if (pLine[i] != WCODE::SPACE) {
 							break;
 						}
 						// Sep. 23, 2002 genta LayoutMgrの値を使う
@@ -494,7 +494,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 							break;
 						}
 					}
-					if (0 == i) {
+					if (i == 0) {
 						continue;
 					}
 					nDelLen = i;
@@ -958,7 +958,7 @@ void CViewCommander::Command_Reconvert(void)
 
 	// サイズを取得
 	int nSize = m_pCommanderView->SetReconvertStruct(NULL, UNICODE_BOOL);
-	if (0 == nSize)  // サイズ０の時は何もしない
+	if (nSize == 0)  // サイズ０の時は何もしない
 		return ;
 
 	bool bUseUnicodeATOK = false;
@@ -993,7 +993,7 @@ void CViewCommander::Command_Reconvert(void)
 	// サイズ取得し直し
 	if (!UNICODE_BOOL && bUseUnicodeATOK) {
 		nSize = m_pCommanderView->SetReconvertStruct(NULL, UNICODE_BOOL || bUseUnicodeATOK);
-		if (0 == nSize)  // サイズ０の時は何もしない
+		if (nSize == 0)  // サイズ０の時は何もしない
 			return;
 	}
 

@@ -268,7 +268,7 @@ int CPropTypesSupport::GetData(HWND hwndDlg)
 	{
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_HOKAN_TYPE);
 		int i = Combo_GetCurSel(hCombo);
-		if (0 == i) {
+		if (i == 0) {
 			m_Types.m_nHokanType = 0;
 		}else if (CB_ERR != i) {
 			m_Types.m_nHokanType = (*GetHokanMethodList())[i - 1].nMethod;

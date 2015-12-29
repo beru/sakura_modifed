@@ -119,7 +119,7 @@ int CMemory::IsEqual(CMemory& cmem1, CMemory& cmem2)
 	const char*	psz1 = (const char*)cmem1.GetRawPtr(&nLen1);
 	const char*	psz2 = (const char*)cmem2.GetRawPtr(&nLen2);
 	if (nLen1 == nLen2) {
-		if (0 == memcmp(psz1, psz2, nLen1)) {
+		if (memcmp(psz1, psz2, nLen1) == 0) {
 			return TRUE;
 		}
 	}

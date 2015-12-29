@@ -155,7 +155,7 @@ void CNativeA::Replace(
 	int			nBgnOld = 0;
 	int			nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
-		if (0 == auto_memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
+		if (auto_memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (0  < nBgn - nBgnOld) {
 				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}
@@ -185,7 +185,7 @@ void CNativeA::Replace_j(
 	int			nBgnOld = 0;
 	int			nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
-		if (0 == memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen)) {
+		if (memcmp(&GetStringPtr()[nBgn], pszFrom, nFromLen) == 0) {
 			if (0 < nBgn - nBgnOld) {
 				cmemWork.AppendString(&GetStringPtr()[nBgnOld], nBgn - nBgnOld);
 			}

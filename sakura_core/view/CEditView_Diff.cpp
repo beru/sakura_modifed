@@ -350,7 +350,7 @@ void CEditView::AnalyzeDiffInfo(
 	if (*q) return;
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
-	if (0 == nFlgFile12) {	// 編集中ファイルは旧ファイル
+	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
 		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, CLogicInt(s1   ), CLogicInt(e1   ));
 		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, CLogicInt(s1 - 1), CLogicInt(e1 - 1));
 		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, CLogicInt(s1 - 1), CLogicInt(e1 - 1));
@@ -536,7 +536,7 @@ BOOL CEditView::MakeDiffTmpFile2(
 			const wchar_t*	pLineData;
 			CLogicInt		nLineLen;
 			pLineData= cLine.GetStringPtr(&nLineLen);
-			if (0 == nLineLen || NULL == pLineData) {
+			if (nLineLen == 0 || !pLineData) {
 				break;
 			}
 			if (bBom) {

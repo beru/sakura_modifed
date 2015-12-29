@@ -75,7 +75,7 @@ int CDlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, SResult* psResul
 	m_bAlertFileAssociation = true;
 	m_bEnableTempChange = psResult->bTempChange;
 	nRet = (int)CDialog::DoModal(hInstance, hwndParent, IDD_TYPELIST, (LPARAM)NULL);
-	if (-1 == nRet) {
+	if (nRet == -1) {
 		return FALSE;
 	}else {
 		// 結果
@@ -189,8 +189,6 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (LOWORD(wParam) == IDC_LIST_TYPES) {
 			switch (HIWORD(wParam)) {
-
-
 			case LBN_SELCHANGE:
 				EnableItem(IDC_BUTTON_INITIALIZE, nIdx != 0);
 				EnableItem(IDC_BUTTON_UP_TYPE, 1 < nIdx);
@@ -228,8 +226,6 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 			}
 		}else if (LOWORD(wParam) == IDC_CHECK_EXT_RMENU && HIWORD(wParam) == BN_CLICKED) {
 			bool checked = (BtnCtl_GetCheck(hwndRMenu) == TRUE);
-
-
 			if (!AlertFileAssociation()) {		// レジストリ変更確認
 				BtnCtl_SetCheck(hwndRMenu, !checked);
 				return result;
@@ -289,7 +285,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 				}
 				ext = _tcstok( NULL, CDocTypeManager::m_typeExtSeps );
 			}
-			m_bExtDblClick[ nIdx ] = checked;
+			m_bExtDblClick[nIdx] = checked;
 			return TRUE;
 		}
 	}
@@ -313,9 +309,9 @@ void CDlgTypeList::SetData(int selIdx)
 	HFONT	hFont = (HFONT)::SendMessage(hwndList, WM_GETFONT, 0, 0);
 	HFONT	hFontOld = (HFONT)::SelectObject(hDC, hFont);
 
-	if (-1 == selIdx) {
+	if (selIdx == -1) {
 		selIdx = List_GetCurSel(hwndList);
-		if (-1 == selIdx) {
+		if (selIdx == -1) {
 			selIdx = 0;
 		}
 	}
@@ -432,7 +428,7 @@ bool CDlgTypeList::Import()
 	}else {
 		// UIを表示している間にずれているかもしれないのでindex再取得
 		nIdx = CDocTypeManager().GetDocumentTypeOfId(id).GetIndex();
-		if (-1 == nIdx) {
+		if (nIdx == -1) {
 			return false;
 		}
 		type.m_nIdx = nIdx;
@@ -484,7 +480,7 @@ bool CDlgTypeList::InitializeType(void)
 	}
 	const STypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini);
-	int			nRet;
+	int nRet;
 	if (typeMini->m_szTypeExts[0] != _T('\0')) { 
 		nRet = ::MYMESSAGEBOX(
 			GetHwnd(),
@@ -498,7 +494,7 @@ bool CDlgTypeList::InitializeType(void)
 	}
 
 	iDocType = CDocTypeManager().GetDocumentTypeOfId(typeMini->m_id).GetIndex();
-	if (-1 == iDocType) {
+	if (iDocType == -1) {
 		return false;
 	}
 //	_DefaultConfig(&types);		// 規定値をコピー
@@ -514,7 +510,7 @@ bool CDlgTypeList::InitializeType(void)
 			++nNameNum;
 			bUpdate = false;
 		}
-		if (iDocType == i) {
+		if (i == iDocType) {
 			continue;
 		}
 		const STypeConfigMini* typeMini2;

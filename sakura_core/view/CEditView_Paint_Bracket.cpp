@@ -78,7 +78,7 @@ void CEditView::SetBracketPairPos(bool flag)
 			// レイアウト位置から物理位置へ変換(強調表示位置を登録)
 			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(ptColLine, &m_ptBracketPairPos_PHY);
 			m_ptBracketCaretPos_PHY.y = GetCaret().GetCaretLogicPos().y;
-			if (0 == (mode & 4)) {
+			if ((mode & 4) == 0) {
 				// カーソルの後方文字位置
 				m_ptBracketCaretPos_PHY.x = GetCaret().GetCaretLogicPos().x;
 			}else {
@@ -357,7 +357,7 @@ bool CEditView::SearchBracket(
 	}
 
 	// 02/09/18 ai Start
-	if (0 == (*mode & 2)) {
+	if ((*mode & 2) == 0) {
 		// カーソルの前方を調べない場合
 		return false;
 	}
@@ -453,7 +453,7 @@ bool CEditView::SearchBracketForward(
 
 		// 02/09/19 ai Start
 		--nSearchNum;
-		if (0 > nSearchNum && 0 == (mode & 1)) {
+		if (0 > nSearchNum && (mode & 1) == 0) {
 			// 表示領域外を調べないモードで表示領域の終端の場合
 			//SendStatusMessage("対括弧の検索を中断しました");
 			break;
@@ -535,7 +535,7 @@ bool CEditView::SearchBracketBackward(
 
 		// 02/09/19 ai Start
 		--nSearchNum;
-		if (0 > nSearchNum && 0 == (mode & 1)) {
+		if (0 > nSearchNum && (mode & 1) == 0) {
 			// 表示領域外を調べないモードで表示領域の先頭の場合
 			//SendStatusMessage("対括弧の検索を中断しました");
 			break;

@@ -231,7 +231,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 	}
 
 	// Oct. 6 ,2002 genta 上下逆転
-	if (0 == (wChar & 0xff00)) {
+	if ((wChar & 0xff00) == 0) {
 		Command_WCHAR(wChar & 0xff);
 		return;
 	}
@@ -796,7 +796,7 @@ void CViewCommander::Command_DELETE(void)
 				CLogicInt nIndex;
 				nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
-					if (EOL_NONE != pcLayout->GetLayoutEol().GetType()) {	// 行終端は改行コードか?
+					if (pcLayout->GetLayoutEol().GetType() != EOL_NONE) {	// 行終端は改行コードか?
 						Command_INSTEXT(true, L"", CLogicInt(0), FALSE);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
 						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
