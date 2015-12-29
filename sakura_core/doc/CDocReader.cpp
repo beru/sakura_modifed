@@ -81,7 +81,7 @@ const wchar_t* CDocReader::GetLineStrWithoutEOL(CLogicInt nLine, int* pnLineLen)
 const wchar_t* CDocReader::GetFirstLinrStr(int* pnLineLen)
 {
 	const wchar_t* pszLine;
-	if (CLogicInt(0) == m_pcDocLineMgr->GetLineCount()) {
+	if (m_pcDocLineMgr->GetLineCount() == CLogicInt(0)) {
 		pszLine = NULL;
 		*pnLineLen = 0;
 	}else {

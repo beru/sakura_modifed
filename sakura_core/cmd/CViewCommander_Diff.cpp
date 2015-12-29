@@ -35,7 +35,13 @@
 /*!
 	@return true:正常終了 / false:エラー終了
 */
-static bool Commander_COMPARE_core(CViewCommander& commander, bool& bDifferent, HWND hwnd, CLogicPoint& poSrc, CLogicPoint& poDes)
+static bool Commander_COMPARE_core(
+	CViewCommander& commander,
+	bool& bDifferent,
+	HWND hwnd,
+	CLogicPoint& poSrc,
+	CLogicPoint& poDes
+	)
 {
 	const wchar_t*	pLineSrc;
 	CLogicInt		nLineLenSrc;
@@ -59,12 +65,12 @@ static bool Commander_COMPARE_core(CViewCommander& commander, bool& bDifferent, 
 					return false;
 				}
 				// どっちも最終行(EOF)に到達。同一と判定
-				if (pLineSrc == NULL && 0 == nLineLenDes) {
+				if (!pLineSrc && nLineLenDes == 0) {
 					bDifferent = false;
 					return true;
 				}
 				// どちらかだけが、最終行に到達
-				if (pLineSrc == NULL || 0 == nLineLenDes) {
+				if (!pLineSrc || nLineLenDes == 0) {
 					return true;
 				}
 				int nDstEndPos = std::min( nLineLenDes, max_size ) + nLineOffset;
@@ -245,7 +251,7 @@ static ECodeType GetDiffCreateTempFileCode(ECodeType code)
 	@author	maru
 	@date	2005/10/28 これまでのCommand_Diffはm_pCommanderView->ViewDiffInfoに名称変更
 */
-void CViewCommander::Command_Diff( const WCHAR* _szDiffFile2, int nFlgOpt )
+void CViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 {
 	const std::tstring strDiffFile2 = to_tchar(_szDiffFile2);
 	const TCHAR* szDiffFile2 = strDiffFile2.c_str();

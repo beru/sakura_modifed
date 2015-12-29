@@ -58,7 +58,11 @@ private:
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CStream::CStream(const TCHAR* tszPath, const TCHAR* tszMode, bool bExceptionMode)
+CStream::CStream(
+	const TCHAR* tszPath,
+	const TCHAR* tszMode,
+	bool bExceptionMode
+	)
 {
 	m_fp = NULL;
 	m_pcFileAttribute = NULL;

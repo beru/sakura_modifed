@@ -53,7 +53,7 @@ CPlugin::CPlugin(const tstring& sBaseDir)
 // デストラクタ
 CPlugin::~CPlugin(void)
 {
-	for (auto it = m_options.begin(); it != m_options.end(); ++it) {
+	for (auto it=m_options.begin(); it!=m_options.end(); ++it) {
 		delete *it;
 	}
 }

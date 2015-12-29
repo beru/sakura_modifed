@@ -82,13 +82,13 @@ CDlgKeywordSelect::~CDlgKeywordSelect()
 // モーダルダイアログの表示
 int CDlgKeywordSelect::DoModal(HINSTANCE hInstance, HWND hwndParent, int* pnSet)
 {
-	for (int i = 0; i < KEYWORD_SELECT_NUM; ++i) {
+	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
 		m_nSet[i] = pnSet[i];
 	}
 
 	(void)CDialog::DoModal(hInstance, hwndParent, IDD_DIALOG_KEYWORD_SELECT, (LPARAM)NULL);
 
-	for (int i = 0; i < KEYWORD_SELECT_NUM; ++i) {
+	for (int i=0; i<KEYWORD_SELECT_NUM; ++i) {
 		pnSet[i] = m_nSet[i];
 	}
 
@@ -119,7 +119,7 @@ BOOL CDlgKeywordSelect::OnBnClicked(int wID)
 // ダイアログデータの設定
 void CDlgKeywordSelect::SetData(void)
 {
-	for (int index = 0; index < KEYWORD_SELECT_NUM; ++index) {
+	for (int index=0; index<KEYWORD_SELECT_NUM; ++index) {
 		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
 
 		// コンボボックスを空にする
@@ -129,7 +129,7 @@ void CDlgKeywordSelect::SetData(void)
 		Combo_AddString(hwndCombo, L" ");
 
 		if (m_pCKeyWordSetMgr->m_nKeyWordSetNum > 0) {
-			for (int i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
+			for (int i=0; i<m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
 				Combo_AddString(hwndCombo, m_pCKeyWordSetMgr->GetTypeName(i));
 			}
 
@@ -148,7 +148,7 @@ void CDlgKeywordSelect::SetData(void)
 // ダイアログデータの設定
 int CDlgKeywordSelect::GetData(void)
 {
-	for (int index = 0; index < KEYWORD_SELECT_NUM; ++index) {
+	for (int index=0; index<KEYWORD_SELECT_NUM; ++index) {
 		HWND hwndCombo = GetItemHwnd(keyword_select_target_combo[index]);
 
 		int n = Combo_GetCurSel(hwndCombo);

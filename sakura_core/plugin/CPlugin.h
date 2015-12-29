@@ -81,7 +81,7 @@ public:
 
 	// コンストラクタ
 public:
-	CPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel)
+	CPlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
 		:
 		m_id(id),
 		m_sJack(sJack),
@@ -178,14 +178,24 @@ public:
 
 	// コンストラクタ
 public:
-	CPluginOption(CPlugin* parent, wstring sLabel, wstring sSection, wstring sKey, wstring sType, wstring sSelects, wstring sDefaultVal, int index) {
-		m_parent	= parent;
-		m_sLabel	= sLabel;
+	CPluginOption(
+		CPlugin* parent,
+		const wstring& sLabel,
+		const wstring& sSection,
+		const wstring& sKey,
+		const wstring& sType,
+		const wstring& sSelects,
+		const wstring& sDefaultVal,
+		int index
+		)
+	{
+		m_parent		= parent;
+		m_sLabel		= sLabel;
 		m_sSection	= sSection;
 		m_sKey		= sKey;
 		// 小文字変換
-		std::transform(sType.begin (), sType.end (), sType.begin (), tolower);
 		m_sType		= sType;
+		std::transform(m_sType.begin(), m_sType.end(), m_sType.begin(), tolower);
 		m_sSelects	= sSelects;
 		m_sDefaultVal = sDefaultVal;
 		m_index		= index;
@@ -291,7 +301,7 @@ protected:
 	// 非実装提供
 public:
 	virtual bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& param) = 0;			// プラグを実行する
-	virtual bool ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang) = 0;		// プラグイン定義ファイルを読み込む
-	virtual bool ReadPluginOption(CDataProfile *cProfile) = 0;									// オプションファイルを読み込む
+	virtual bool ReadPluginDef(CDataProfile* cProfile, CDataProfile* cProfileMlang) = 0;		// プラグイン定義ファイルを読み込む
+	virtual bool ReadPluginOption(CDataProfile* cProfile) = 0;									// オプションファイルを読み込む
 };
 

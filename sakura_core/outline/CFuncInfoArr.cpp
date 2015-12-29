@@ -38,7 +38,7 @@ CFuncInfoArr::~CFuncInfoArr()
 void CFuncInfoArr::Empty(void)
 {
 	if (m_nFuncInfoArrNum > 0 && m_ppcFuncInfoArr) {
-		for (int i = 0; i < m_nFuncInfoArrNum; ++i) {
+		for (int i=0; i<m_nFuncInfoArrNum; ++i) {
 			delete m_ppcFuncInfoArr[i];
 			m_ppcFuncInfoArr[i] = NULL;
 		}
@@ -160,7 +160,7 @@ void CFuncInfoArr::DUMP(void)
 {
 #ifdef _DEBUG
 	MYTRACE(_T("=============================\n"));
-	for (int i = 0; i < m_nFuncInfoArrNum; ++i) {
+	for (int i=0; i<m_nFuncInfoArrNum; ++i) {
 		MYTRACE(_T("[%d]------------------\n"), i);
 		MYTRACE(_T("m_nFuncLineCRLF	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineCRLF);
 		MYTRACE(_T("m_nFuncLineLAYOUT	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineLAYOUT);
@@ -173,7 +173,11 @@ void CFuncInfoArr::DUMP(void)
 #endif
 }
 
-void CFuncInfoArr::SetAppendText(int info, std::wstring s, bool overwrite)
+void CFuncInfoArr::SetAppendText(
+	int info,
+	const std::wstring& s,
+	bool overwrite
+	)
 {
 	if (m_AppendTextArr.find(info) == m_AppendTextArr.end()) {
 		// ÉLÅ[Ç™ë∂ç›ÇµÇ»Ç¢èÍçáÅAí«â¡Ç∑ÇÈ

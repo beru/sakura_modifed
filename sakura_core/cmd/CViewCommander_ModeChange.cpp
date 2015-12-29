@@ -117,9 +117,9 @@ void CViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			// 2013.04.22 Moca ç∂è„å≈íËÇÕÇ‚ÇﬂÇÈ
 			rcMoveTo = rcSel;
 		}
-		if (1 == whereCursorIs) { // ç∂è„
+		if (whereCursorIs == 1) { // ç∂è„
 			ptTo = rcMoveTo.GetFrom();
-		}else if (2 == whereCursorIs) { // âEâ∫
+		}else if (whereCursorIs == 2) { // âEâ∫
 			ptTo = rcMoveTo.GetTo();
 		}else {
 			ptTo = caret.GetCaretLayoutPos();

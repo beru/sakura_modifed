@@ -143,7 +143,7 @@ void CTipWnd::ComputeWindowSize(
 	int nCurHeight = 0;
 	int nTextLength = _tcslen(pszText);
 	int nBgn = 0;
-	for (int i = 0; i <= nTextLength; ++i) {
+	for (int i=0; i<=nTextLength; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((1 == nCharChars && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
@@ -204,7 +204,7 @@ void CTipWnd::DrawTipText(
 	int nCurHeight = 0;
 	int nTextLength = _tcslen(pszText);
 	int nBgn = 0;
-	for (int i = 0; i <= nTextLength; ++i) {
+	for (int i=0; i<=nTextLength; ++i) {
 //		int nCharChars = &pszText[i] - CMemory::MemCharPrev(pszText, nTextLength, &pszText[i]);
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);

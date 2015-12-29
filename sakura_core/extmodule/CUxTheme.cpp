@@ -91,48 +91,54 @@ bool CUxTheme::InitDllImp()
 // IsThemeActive API Wrapper
 BOOL CUxTheme::IsThemeActive(VOID)
 {
-	if (!InitThemeDll())
+	if (!InitThemeDll()) {
 		return FALSE;
+	}
 	return m_pfnIsThemeActive();
 }
 
 // SetWindowTheme API Wrapper
 HRESULT CUxTheme::SetWindowTheme(HWND hwnd, LPCWSTR pszSubAppName, LPCWSTR pszSubIdList)
 {
-	if (!InitThemeDll())
+	if (!InitThemeDll()) {
 		return S_FALSE;
+	}
 	return m_pfnSetWindowTheme(hwnd, pszSubAppName, pszSubIdList);
 }
 
 // SetWindowTheme API Wrapper
 HTHEME CUxTheme::OpenThemeData(HWND hwnd, LPCWSTR pszClassList)
 {
-	if (!InitThemeDll())
+	if (!InitThemeDll()) {
 		return NULL;
+	}
 	return (HTHEME)m_pfnOpenThemeData(hwnd, pszClassList);
 }
 
 // SetWindowTheme API Wrapper
 HRESULT CUxTheme::DrawThemeBackground(HTHEME htheme, HDC hdc, int iPartId, int iStateId, RECT* prc, RECT* prcClip)
 {
-	if (!InitThemeDll())
+	if (!InitThemeDll()) {
 		return S_FALSE;
+	}
 	return m_pfnDrawThemeBackground(htheme, hdc, iPartId, iStateId, prc, prcClip);
 }
 
 // SetWindowTheme API Wrapper
 HRESULT CUxTheme::DrawThemeParentBackground(HWND hwnd, HDC hdc, RECT *prc)
 {
-	if (!InitThemeDll())
+	if (!InitThemeDll()) {
 		return S_FALSE;
+	}
 	return m_pfnDrawThemeParentBackground(hwnd, hdc, prc);
 }
 
 // SetWindowTheme API Wrapper
 HRESULT CUxTheme::IsThemeBackgroundPartiallyTransparent(HTHEME htheme, int iPartId, int iStateId)
 {
-	if (!InitThemeDll())
+	if (!InitThemeDll()) {
 		return S_FALSE;
+	}
 	return m_pfnIsThemeBackgroundPartiallyTransparent(htheme, iPartId, iStateId);
 }
 

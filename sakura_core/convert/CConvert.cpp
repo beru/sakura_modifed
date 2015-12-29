@@ -28,7 +28,12 @@
 #include "window/CEditWnd.h"
 
 // 機能種別によるバッファの変換
-void CConvertMediator::ConvMemory(CNativeW* pCMemory, EFunctionCode nFuncCode, int nTabWidth, int nStartColumn)
+void CConvertMediator::ConvMemory(
+	CNativeW* pCMemory,
+	EFunctionCode nFuncCode,
+	int nTabWidth,
+	int nStartColumn
+	)
 {
 	// コード変換はできるだけANSI版のsakuraと互換の結果が得られるように実装する	// 2009.03.26 ryoji
 	// xxx2SJIS:

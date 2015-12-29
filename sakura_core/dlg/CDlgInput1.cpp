@@ -38,7 +38,7 @@ INT_PTR CALLBACK CDlgInput1Proc(
 	UINT uMsg,		// message
 	WPARAM wParam,	// first message parameter
 	LPARAM lParam 	// second message parameter
-)
+	)
 {
 	CDlgInput1* pCDlgInput1;
 	switch (uMsg) {
@@ -84,7 +84,7 @@ BOOL CDlgInput1::DoModal(
 	const TCHAR*	pszMessage,
 	int				nMaxTextLen,
 	TCHAR*			pszText
-)
+	)
 {
 	BOOL bRet;
 	m_hInstance = hInstApp;			// アプリケーションインスタンスのハンドル
@@ -112,7 +112,7 @@ BOOL CDlgInput1::DoModal(
 	const TCHAR*	pszMessage,
 	int				nMaxTextLen,
 	NOT_TCHAR*		pszText
-)
+	)
 {
 	TCHAR buf[1024];
 	buf[0] = _T('\0');
@@ -130,7 +130,7 @@ INT_PTR CDlgInput1::DispatchEvent(
 	UINT uMsg,		// message
 	WPARAM wParam,	// first message parameter
 	LPARAM lParam 	// second message parameter
-)
+	)
 {
 	WORD	wNotifyCode;
 	WORD	wID;

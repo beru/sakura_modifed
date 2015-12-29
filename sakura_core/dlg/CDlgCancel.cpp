@@ -22,7 +22,12 @@ CDlgCancel::CDlgCancel()
 /** 標準以外のメッセージを捕捉する
 	@date 2008.05.28 ryoji 新規作成
 */
-INT_PTR CDlgCancel::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgCancel::DispatchEvent(
+	HWND hWnd,
+	UINT wMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
@@ -53,20 +58,32 @@ void CDlgCancel::DeleteAsync(void)
 }
 
 // モーダルダイアログの表示
-int CDlgCancel::DoModal(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete)
+int CDlgCancel::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	int nDlgTemplete
+	)
 {
 	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
 	return (int)CDialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
 }
+
 // モードレスダイアログの表示
-HWND CDlgCancel::DoModeless(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete)
+HWND CDlgCancel::DoModeless(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	int nDlgTemplete
+	)
 {
 	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
 	return CDialog::DoModeless(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL, SW_SHOW);
 }
 
-
-BOOL CDlgCancel::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgCancel::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 	HICON	hIcon;

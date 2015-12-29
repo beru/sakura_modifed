@@ -122,7 +122,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 	const wchar_t *p, *r;	// p：目的のバッファ。r：作業用のポインタ。
 	wchar_t *q, *q_max;
 
-	for (p = pszSource, q = pszBuffer, q_max = pszBuffer + nBufferLen; *p != '\0' && q < q_max;) {
+	for (p=pszSource, q=pszBuffer, q_max=pszBuffer+nBufferLen; *p!='\0' && q<q_max;) {
 		if (*p != '$') {
 			*q++ = *p++;
 			continue;
@@ -170,7 +170,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				r = to_wchar(pcDoc->m_cDocFile.GetFileName()); // 2002.10.13 Moca ファイル名(パスなし)を取得。日本語対応
 				end_of_path = dot_position = r + wcslen(r);
 				// 後ろから.を探す
-				for (--dot_position ; dot_position > r && *dot_position != '.'; --dot_position)
+				for (--dot_position; dot_position>r && *dot_position!='.'; --dot_position)
 					;
 				// rと同じ場所まで行ってしまった⇔.が無かった
 				if (dot_position == r)
@@ -188,7 +188,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				++p;
 			}else {
 				// パスの区切りとして'/'を使うバージョン
-				for (r = to_wchar(pcDoc->m_cDocFile.GetFilePath()); *r != L'\0' && q < q_max; ++r, ++q) {
+				for (r=to_wchar(pcDoc->m_cDocFile.GetFilePath()); *r!=L'\0' && q<q_max; ++r, ++q) {
 					if (*r == L'\\')
 						*q = L'/';
 					else
@@ -239,7 +239,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 
 				wcscpy_s(buff, _MAX_PATH, to_wchar(pcDoc->m_cDocFile.GetFilePath()));
 				pEnd = NULL;
-				for (p = buff; *p != '\0'; ++p) {
+				for (p=buff; *p!='\0'; ++p) {
 					if (*p == L'\\') {
 						pEnd = p;
 					}
@@ -270,7 +270,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 				
 				pStr = to_wchar(pcDoc->m_cDocFile.GetFilePath());
 				pEnd = pStr - auto_strlen(pStr) - 1;
-				for (p = pStr; *p != '\0'; ++p) {
+				for (p=pStr; *p!='\0'; ++p) {
 					if (*p == L'\\') {
 						pEnd = p;
 					}
@@ -533,7 +533,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 					break;
 				}
 				int nParamNameIdx = EExpParamName_begin;
-				for (; nParamNameIdx != EExpParamName_end; ++nParamNameIdx) {
+				for (; nParamNameIdx!=EExpParamName_end; ++nParamNameIdx) {
 					if (SExpParamNameTable[nParamNameIdx].m_nLen == (p - pBegin)
 						&& auto_strnicmp(SExpParamNameTable[nParamNameIdx].m_szName, pBegin, p - pBegin) == 0
 					) {
@@ -578,7 +578,7 @@ const wchar_t* CSakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, i
 	int nest = 0;	// 入れ子のレベル
 	bool next = true;	// 継続フラグ
 	const wchar_t* p;
-	for (p = pszSource; next && *p != L'\0'; ++p) {
+	for (p=pszSource; next && *p!=L'\0'; ++p) {
 		if (*p == L'$' && p[1] != L'\0') { // $が末尾なら無視
 			switch (*(++p)) {
 			case L'{':	// 入れ子の開始
@@ -721,7 +721,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 			const CMRUFolder cMRU;
 			auto& vMRU = cMRU.GetPathList();
 			int nCount = cMRU.Length();
-			for (int i = 0; i < nCount ; ++i) {
+			for (int i=0; i<nCount ; ++i) {
 				DWORD attr = GetFileAttributes(vMRU[i]);
 				if ((attr != -1) && (attr & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 					return vMRU[i];

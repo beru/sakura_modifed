@@ -40,7 +40,11 @@
 #include "util/os.h"
 #include "macro/CMacroFactory.h"
 
-static void MacroError(BSTR Description, BSTR Source, void *Data)
+static void MacroError(
+	BSTR Description,
+	BSTR Source,
+	void* Data
+	)
 {
 	CEditView *View = reinterpret_cast<CEditView*>(Data);
 	MessageBox(View->GetHwnd(), to_tchar(Description), to_tchar(Source), MB_ICONERROR);
@@ -60,7 +64,7 @@ CWSHMacroManager::~CWSHMacroManager()
 	
 	@date 2007.07.20 genta : flags’Ç‰Á
 */
-bool CWSHMacroManager::ExecKeyMacro(CEditView *EditView, int flags) const
+bool CWSHMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 {
 	CWSHClient* Engine = new CWSHClient(m_EngineName.c_str(), MacroError, EditView);
 	bool bRet = false;

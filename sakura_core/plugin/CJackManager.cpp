@@ -207,7 +207,7 @@ EFunctionCode CJackManager::GetCommandCode(int index) const
 int CJackManager::GetCommandName(int funccode, WCHAR* buf, int size) const
 {
 	auto& plugs = m_Jacks[PP_COMMAND].plugs;
-	for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		if (((CPlug*)(*it))->GetFunctionCode() == funccode) {
 			wcsncpy(buf, ((CPlug*)(*it))->m_sLabel.c_str(), size);
 			buf[size-1] = L'\0';
@@ -227,7 +227,7 @@ int CJackManager::GetCommandCount() const
 CPlug* CJackManager::GetCommandById(int id) const
 {
 	const CPlug::Array& plugs = GetPlugs(PP_COMMAND);
-	for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		if ((*it)->GetFunctionCode() == id) {
 			return (*it);
 		}

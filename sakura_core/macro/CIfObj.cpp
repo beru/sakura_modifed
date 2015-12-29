@@ -261,7 +261,13 @@ HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames(
 
 // コンストラクタ
 CIfObj::CIfObj(const wchar_t* name, bool isGlobal)
-: ImplementsIUnknown<IDispatch>(), m_sName(name), m_isGlobal(isGlobal), m_Owner(0), m_Methods(), m_TypeInfo(NULL)
+	:
+	ImplementsIUnknown<IDispatch>(),
+	m_sName(name),
+	m_isGlobal(isGlobal),
+	m_Owner(0),
+	m_Methods(),
+	m_TypeInfo(NULL)
 { 
 };
 
@@ -296,10 +302,16 @@ HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
 	DISPPARAMS FAR* pdispparams,
 	VARIANT FAR* pvarResult,
 	EXCEPINFO FAR* pexcepinfo,
-	UINT FAR* puArgErr)
+	UINT FAR* puArgErr
+	)
 {
 	if ((unsigned)dispidMember < m_Methods.size()) {
-		return (this->* (m_Methods[dispidMember].Method))(m_Methods[dispidMember].ID, pdispparams, pvarResult, m_Owner->GetData());
+		return (this->* (m_Methods[dispidMember].Method))(
+			m_Methods[dispidMember].ID,
+			pdispparams,
+			pvarResult,
+			m_Owner->GetData()
+		);
 	}else {
 		return E_UNEXPECTED;
 	}
@@ -368,21 +380,21 @@ void CIfObj::AddMethod(
 {
 	// this->m_TypeInfoが NULLでなければ AddMethod()は反映されない。
 	m_Methods.push_back(CMethodInfo());
-	CMethodInfo* Info = &m_Methods[m_Methods.size() - 1];
-	ZeroMemory(Info, sizeof(CMethodInfo));
-	Info->Desc.invkind = INVOKE_FUNC;
-	Info->Desc.cParams = (SHORT)ArgumentCount + 1; // 戻り値の分
-	Info->Desc.lprgelemdescParam = Info->Arguments;
+	CMethodInfo* info = &m_Methods[m_Methods.size() - 1];
+	ZeroMemory(info, sizeof(CMethodInfo));
+	info->Desc.invkind = INVOKE_FUNC;
+	info->Desc.cParams = (SHORT)ArgumentCount + 1; // 戻り値の分
+	info->Desc.lprgelemdescParam = info->Arguments;
 	// Nov. 10, 2003 FILE Win9Xでは、[lstrcpyW]が無効のため、[wcscpy]に修正
-	assert( auto_strlen(Name)<_countof(Info->Name) );
-	wcscpy(Info->Name, Name);
-	Info->Method = Method;
-	Info->ID = ID;
+	assert(auto_strlen(Name)<_countof(info->Name));
+	wcscpy(info->Name, Name);
+	info->Method = Method;
+	info->ID = ID;
 	for (int i=0; i<ArgumentCount; ++i) {
-		Info->Arguments[i].tdesc.vt = ArgumentTypes[ArgumentCount - i - 1];
-		Info->Arguments[i].paramdesc.wParamFlags = PARAMFLAG_FIN;
+		info->Arguments[i].tdesc.vt = ArgumentTypes[ArgumentCount - i - 1];
+		info->Arguments[i].paramdesc.wParamFlags = PARAMFLAG_FIN;
 	}
-	Info->Arguments[ArgumentCount].tdesc.vt = ResultType;
-	Info->Arguments[ArgumentCount].paramdesc.wParamFlags = PARAMFLAG_FRETVAL;
+	info->Arguments[ArgumentCount].tdesc.vt = ResultType;
+	info->Arguments[ArgumentCount].paramdesc.wParamFlags = PARAMFLAG_FRETVAL;
 }
 

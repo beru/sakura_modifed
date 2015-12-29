@@ -174,13 +174,13 @@ CLayoutInt CEditView::OnVScroll(int nScrollCode, int nPos)
 
 	switch (nScrollCode) {
 	case SB_LINEDOWN:
-//		for (i = 0; i < 4; ++i) {
+//		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() + 1);
 //		}
 		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum);
 		break;
 	case SB_LINEUP:
-//		for (i = 0; i < 4; ++i) {
+//		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() - 1);
 //		}
 		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum);

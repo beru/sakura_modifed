@@ -74,7 +74,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 			m_szTransformFileNameFromExp[0],
 			m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
-		for (int i = 1; i < m_nTransformFileNameCount; ++i) {
+		for (int i=1; i<m_nTransformFileNameCount; ++i) {
 			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
@@ -134,7 +134,7 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 	--nDestLen;
 
 	int j = 0;
-	for (int i = 0; i < nSrcLen && j < nDestLen; ++i) {
+	for (int i=0; i<nSrcLen && j<nDestLen; ++i) {
 #if defined(_MBCS)
 		if (0 == strnicmp(&pszSrc[i], pszFrom, nFromLen))
 #else
@@ -204,7 +204,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 	LPCTSTR ps;
 	LPTSTR pd;
 	LPTSTR pd_end = pszDes + (nDesLen - 1);
-	for (ps = pszSrc, pd = pszDes; _T('\0') != *ps; ++ps) {
+	for (ps=pszSrc, pd=pszDes; _T('\0')!=*ps; ++ps) {
 		if (pd_end <= pd) {
 			if (pd_end == pd) {
 				*pd = _T('\0');
@@ -257,9 +257,9 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 #ifdef _USE_META_ALIAS
 				// メタ文字列がエイリアス名なら書き換える
 				const MetaAlias* pAlias;
-				for (pAlias = &AliasList[0]; nMetaLen < pAlias->nLenth; ++pAlias)
+				for (pAlias=&AliasList[0]; nMetaLen<pAlias->nLenth; ++pAlias)
 					; // 読み飛ばす
-				for (; nMetaLen == pAlias->nLenth; ++pAlias) {
+				for (; nMetaLen==pAlias->nLenth; ++pAlias) {
 					if (0 == auto_stricmp(pAlias->szAlias, szMeta)) {
 						_tcscpy(szMeta, pAlias->szOrig);
 						break;
@@ -319,7 +319,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 
 			// 最後のフォルダ区切り記号を削除する
 			// [A:\]などのルートであっても削除
-			for (nPathLen = 0; pStr2[nPathLen] != _T('\0'); ++nPathLen) {
+			for (nPathLen=0; pStr2[nPathLen]!=_T('\0'); ++nPathLen) {
 #ifdef _MBCS
 				if (_IS_SJIS_1((unsigned char)pStr2[nPathLen]) && _IS_SJIS_2((unsigned char)pStr2[nPathLen + 1])) {
 					// SJIS読み飛ばし

@@ -119,7 +119,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 				++pLine; ++i;
 				bEndTag = true;
 			}
-			for (j = 0; i + j < nLineLen && j < _countof(szTitle) - 1;) {
+			for (j=0; i+j<nLineLen && j<_countof(szTitle)-1; ) {
 				// タグ名を切り出す
 				// スペース、タブ、「_:-.英数」以外の半角文字、１文字目の「-.数字」は認めない。
 				if ((pLine[j] == L' ' || pLine[j] == L'\t') ||
@@ -241,7 +241,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						wcscpy_s(pszStack[nDepth], szTitle);
 						k = j;
 						if (j < _countof(szTitle) - 3) {
-							for (; i + j < nLineLen; ++j) {
+							for (; i+j<nLineLen; ++j) {
 								if (pLine[j] == L'/' && pLine[j + 1] == L'>') {
 									bEndTag = true;
 									break;
@@ -252,7 +252,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
 								bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-								for (j -= k - 1; i + j + k < nLineLen && k < _countof(szTitle) - 1; ++k) {
+								for (j-=k-1; i+j+k<nLineLen && k<_countof(szTitle)-1; ++k) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k], bExtEol)) {
 										break;
 									}
@@ -264,7 +264,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						szTitle[k] = L'\0';
 						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, ++nDepth);
 					}else {
-						for (; i + j < nLineLen && j < _countof(szTitle) - 1; ++j) {
+						for (; i+j<nLineLen && j<_countof(szTitle)-1; ++j) {
 							if (pLine[j] == L'>') {
 								break;
 							}

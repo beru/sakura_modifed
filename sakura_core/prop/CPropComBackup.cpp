@@ -73,7 +73,12 @@ INT_PTR CALLBACK CPropBackup::DlgProc_page(
 
 
 // メッセージ処理
-INT_PTR CPropBackup::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CPropBackup::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;
@@ -410,7 +415,7 @@ int CPropBackup::GetData(HWND hwndDlg)
 	int	 nN;
 	nN = ::GetDlgItemInt(hwndDlg, IDC_EDIT_BACKUP_3, NULL, FALSE);	//	Oct. 29, 2001 genta
 
-//	for (nN = 0, pDigit = szNumBuf; *pDigit != '\0'; ++pDigit) {
+//	for (nN=0, pDigit=szNumBuf; *pDigit!='\0'; ++pDigit) {
 //		if ('0' <= *pDigit && *pDigit <= '9') {
 //			nN = nN * 10 + *pDigit - '0';
 //		}
@@ -477,8 +482,8 @@ void CPropBackup::EnableBackupInput(HWND hwndDlg)
 
 	// 詳細設定
 	SHOWENABLE(IDC_EDIT_BACKUPFILE,			TRUE, bBackup && bAdvanced);
-//	SHOWENABLE(IDC_LABEL_BACKUP_HELP,			bAdvanced, bBackup);	// 不可視のまま放置（他コントロール隠しの方式は廃止） 2009.02.20 ryoji
-	SHOWENABLE(IDC_LABEL_BACKUP_HELP2,			bAdvanced, bBackup);
+//	SHOWENABLE(IDC_LABEL_BACKUP_HELP,		bAdvanced, bBackup);	// 不可視のまま放置（他コントロール隠しの方式は廃止） 2009.02.20 ryoji
+	SHOWENABLE(IDC_LABEL_BACKUP_HELP2,		bAdvanced, bBackup);
 	SHOWENABLE(IDC_RADIO_BACKUP_DATETYPE1A,	bAdvanced, bBackup);
 	SHOWENABLE(IDC_RADIO_BACKUP_DATETYPE2A,	bAdvanced, bBackup);
 

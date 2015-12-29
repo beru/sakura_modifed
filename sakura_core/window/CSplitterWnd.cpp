@@ -42,7 +42,7 @@ CSplitterWnd::CSplitterWnd()
 
 	m_hcurOld = NULL;					// もとのマウスカーソル
 
-	for (int v=0; v < MAXCOUNTOFVIEW; ++v) {
+	for (int v=0; v<MAXCOUNTOFVIEW; ++v) {
 		m_ChildWndArr[v] = NULL;		// 子ウィンドウ配列
 	}
 	return;
@@ -101,12 +101,12 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 void CSplitterWnd::SetChildWndArr(HWND* hwndEditViewArr)
 {
 	int v = 0;
-	for (; v < MAXCOUNTOFVIEW && hwndEditViewArr[v]; ++v) {
+	for (; v<MAXCOUNTOFVIEW && hwndEditViewArr[v]; ++v) {
 		m_ChildWndArr[v] = hwndEditViewArr[v];				// 子ウィンドウ配列
 	}
 	m_nChildWndCount = v;
 	// 残りはNULLで埋める
-	for (; v < MAXCOUNTOFVIEW; ++v) {
+	for (; v<MAXCOUNTOFVIEW; ++v) {
 		m_ChildWndArr[v] = NULL;
 	}
 
@@ -300,7 +300,7 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	}
 
 	int v;
-	for (v=0; v < m_nChildWndCount; ++v) {
+	for (v=0; v<m_nChildWndCount; ++v) {
 		pcViewArr[v] = (CEditView*)::GetWindowLongPtr(m_ChildWndArr[v], 0);
 	}
 	::GetClientRect(GetHwnd(), &rc);
@@ -820,7 +820,7 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	RECT		rcClient;
 	int			nFrameWidth = 3;
 	BOOL		bSizeBox;
-	for (i = 0; i < m_nChildWndCount; ++i) {
+	for (i=0; i<m_nChildWndCount; ++i) {
 		pcViewArr[i] = (CEditView*)::GetWindowLongPtr(m_ChildWndArr[i], 0);
 	}
 

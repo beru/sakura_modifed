@@ -107,8 +107,8 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 			if (eRead == RESULT_LOSESOME) {
 				eRet = RESULT_LOSESOME;
 			}
-			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
-			int		nLineLen = cUnicodeBuffer.GetStringLength();
+			const wchar_t* pLine = cUnicodeBuffer.GetStringPtr();
+			int nLineLen = cUnicodeBuffer.GetStringLength();
 			++nLineNum;
 			CDocEditAgent(pcDocLineMgr).AddLineStrX( pLine, nLineLen );
 			// Œo‰ß’Ê’m

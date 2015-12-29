@@ -113,7 +113,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 
 		// 行頭の空白飛ばし
 		int i;
-		for (i = 0; i < nLineLen; ++i) {
+		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsBlank(pLine[i])) {
 				continue;
 			}
@@ -127,7 +127,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		int nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
 		int nCharChars2;
 		int j;
-		for (j = 0; j < nStartsLen; j += nCharChars2) {
+		for (j=0; j<nStartsLen; j+=nCharChars2) {
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars2 = CNativeW::GetSizeOfChar(pszStarts, nStartsLen, j);
 			if (nCharChars == nCharChars2) {
@@ -187,7 +187,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';
 		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-		for (i = 0; i < nLineLen; ++i) {
+		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				pszText[i] = L'\0';
 				break;
@@ -209,7 +209,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		/* nDepthを計算 */
 		int k;
 		bool bAppend = true;
-		for (k = 0; k < nDepth; ++k) {
+		for (k=0; k<nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {
 				break;
@@ -267,7 +267,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 			wchar_t		szTitle[1024];
 
 			//	ピリオドの数＝階層の深さを数える
-			for (pPos = pLine + 1 ; *pPos == L'.' ; ++pPos)
+			for (pPos=pLine+1; *pPos==L'.'; ++pPos)
 				;
 
 			CLayoutPoint ptPos;
@@ -283,7 +283,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 				int dummyLevel;
 				// (無題)を挿入
 				//	ただし，TAG一覧には出力されないように
-				for (dummyLevel = levelPrev + 1; dummyLevel < level; ++dummyLevel) {
+				for (dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
 					pcFuncInfoArr->AppendData(
 						nLineCount + CLogicInt(1),
 						ptPos.GetY2() + CLayoutInt(1),

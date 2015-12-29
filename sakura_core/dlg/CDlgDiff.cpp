@@ -445,7 +445,11 @@ INT_PTR CDlgDiff::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
 	return result;
 }
 
-BOOL CDlgDiff::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgDiff::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 

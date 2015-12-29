@@ -126,7 +126,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 				&& cStr.At(nPos) == '"'
 				&& nPos + 1 < cStr.GetLength()
 			) {
-				for (int i = nPos + 1; i < cStr.GetLength(); ++i) {
+				for (int i=nPos+1; i<cStr.GetLength(); ++i) {
 					if (cStr.At(i) == '(') {
 						if (nPos + 1 < i) {
 							m_tag = L')';
@@ -145,7 +145,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 		case STRING_LITERAL_HTML:
 			{
 				int i;
-				for (i = nPos - 1; 0 <= i; --i) {
+				for (i=nPos-1; 0<=i; --i) {
 					if (cStr.At(i) != L' ' && cStr.At(i) != L'\t') {
 						break;
 					}
@@ -256,7 +256,7 @@ int CColor_Quote::Match_Quote(
 	)
 {
 	int nCharChars;
-	for (int i = nPos; i < cLineStr.GetLength(); ++i) {
+	for (int i=nPos; i<cLineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
 		if (escapeType == STRING_LITERAL_CPP) {
@@ -305,7 +305,7 @@ int CColor_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPo
 	const int nCompLen = cLineStr.GetLength() - nQuoteLen + 1;
 	const WCHAR quote1 = pszQuote[0];
 	const WCHAR* pLine = cLineStr.GetPtr();
-	for (int i = nPos; i < nCompLen; i += nCharChars) {
+	for (int i=nPos; i<nCompLen; i+=nCharChars) {
 		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;
 		}

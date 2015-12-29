@@ -244,11 +244,11 @@ int CTextArea::DetectWidthOfLineNumberArea_calculate(const CLayoutMgr* pLayoutMg
 #else
 		// 設定から行数を求める
 		nWork = 10;
-		for (i = 1; i < pView->m_pTypeData->m_nLineNumWidth; ++i) {
+		for (i=1; i<pView->m_pTypeData->m_nLineNumWidth; ++i) {
 			nWork *= 10;
 		}
 		// 表示している行数と比較し、大きい方の値を取る
-		for (i = pView->m_pTypeData->m_nLineNumWidth; i < LINENUMWIDTH_MAX; ++i) {
+		for (i=pView->m_pTypeData->m_nLineNumWidth; i<LINENUMWIDTH_MAX; ++i) {
 			if (nWork > nAllLines) {	// Oct. 18, 2003 genta 式を整理
 				break;
 			}

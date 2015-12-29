@@ -70,7 +70,8 @@ CPrint CPrintPreview::m_cPrint;		//!< 現在のプリンタ情報 2003.05.02 かろと
 	印刷プレビューを表示するために必要な情報を初期化、領域確保。
 	コントロールも作成する。
 */
-CPrintPreview::CPrintPreview(CEditWnd* pParentWnd) :
+CPrintPreview::CPrintPreview(CEditWnd* pParentWnd)
+	:
 	m_pParentWnd(pParentWnd),
 	m_hdcCompatDC(NULL),			// 再描画用コンパチブルDC
 	m_hbmpCompatBMP(NULL),		// 再描画用メモリBMP
@@ -661,7 +662,7 @@ LRESULT CPrintPreview::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 		nScrollCode = SB_LINEDOWN;
 	}
 
-	for (int i = 0; i < 3; ++i) {
+	for (int i=0; i<3; ++i) {
 		// 印刷プレビュー 垂直スクロールバーメッセージ処理 WM_VSCROLL
 		::PostMessage(m_pParentWnd->GetHwnd(), WM_VSCROLL, MAKELONG(nScrollCode, 0), (LPARAM)m_hwndVScrollBar);
 
@@ -875,7 +876,7 @@ void CPrintPreview::OnPreviewGoDirectPage(void)
 	);
 	if (FALSE != bDlgInputPageResult) {
 		int nPageNumLen = _tcslen(szPageNum);
-		for (int i = 0; i < nPageNumLen;  ++i) {
+		for (int i=0; i<nPageNumLen; ++i) {
 			if (!(_T('0') <= szPageNum[i] &&  szPageNum[i] <= _T('9'))) {
 				return;
 			}
@@ -1114,7 +1115,7 @@ void CPrintPreview::OnPrint(void)
 	WORD nCurPageNumOld = m_nCurPageNum;
 	CColorStrategy* pStrategy = DrawPageTextFirst(m_nCurPageNum);
 	TCHAR szProgress[100];
-	for (int i = 0; i < nNum; ++i) {
+	for (int i=0; i<nNum; ++i) {
 		m_nCurPageNum = nFrom + (WORD)i;
 
 		// 印刷過程を表示
@@ -1207,7 +1208,7 @@ void CPrintPreview::OnPrint(void)
 // Tab文字をSpace文字に置換え
 static void Tab2Space(wchar_t* pTrg)
 {
-	for (;*pTrg != L'\0'; ++pTrg) {
+	for (; *pTrg!=L'\0'; ++pTrg) {
 		if (*pTrg == L'\t') {
 			*pTrg = L' ';
 		}
@@ -1393,7 +1394,7 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 			if (nPageTopOff) {
 				CStringRef	csr = pcPageTopLayout->GetDocLineRef()->GetStringRefWithEOL();
 				CLogicInt	iLogic;
-				for (iLogic = 0; iLogic < nPageTopOff; ++iLogic) {
+				for (iLogic=0; iLogic<nPageTopOff; ++iLogic) {
 					bool bChange;
 					pStrategy = GetColorStrategy(csr, iLogic, pStrategy, bChange);
 				}
@@ -1433,12 +1434,12 @@ CColorStrategy* CPrintPreview::DrawPageText(
 	CColorStrategy*	pStrategy = pStrategyStart;
 
 	// 段数ループ
-	for (int nDan = 0; nDan < m_pPrintSetting->m_nPrintDansuu; ++nDan) {
+	for (int nDan=0; nDan<m_pPrintSetting->m_nPrintDansuu; ++nDan) {
 		// 本文1桁目の左隅の座標(行番号がある場合はこの座標より左側)
 		const int nBasePosX = nOffX + nDanWidth * nDan + nLineNumWidth * (nDan + 1);
 		
 		int i; //	行数カウンタ
-		for (i = 0; i < m_bPreview_EnableLines; ++i) {
+		for (i=0; i<m_bPreview_EnableLines; ++i) {
 			if (pCDlgCancel) {
 				// 処理中のユーザー操作を可能にする
 				if (!::BlockingHook(pCDlgCancel->GetHwnd())) {
@@ -1713,7 +1714,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 						+ nTabSpace * (iLogic - nBgnLogic - 1);
 				}else {
 					int		nIncrement = 0;
-					for (int i = nBgnLogic - nLineStart; i < iLogic - nLineStart; ++i) {
+					for (int i=nBgnLogic-nLineStart; i<iLogic-nLineStart; ++i) {
 						nIncrement += pDxArray[i];
 					}
 					nLayoutX += CLayoutInt(nIncrement/nDx);
@@ -1787,7 +1788,7 @@ void CPrintPreview::Print_DrawBlock(
 	HFONT hFont = (nKind == 1) ? m_hFontZen : m_hFontHan;
 	// 色設定
 	if (pcLayout) {
-		if (-1 != nColorIdx) {
+		if (nColorIdx != -1) {
 			const ColorInfo& info = m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
 			if (nKind == 2 && !info.m_sFontAttr.m_bUnderLine) {
 				// TABは下線が無ければ印字不要
@@ -1842,7 +1843,7 @@ CColorStrategy* CPrintPreview::GetColorStrategy(
 		}
 	}
 	if (!pStrategy) {
-		for (int i = 0; i < m_pool->GetStrategyCount(); ++i) {
+		for (int i=0; i<m_pool->GetStrategyCount(); ++i) {
 			if (m_pool->GetStrategy(i)->BeginColor(cStringLine, iLogic)) {
 				pStrategy = m_pool->GetStrategy(i);
 				bChange = true;
@@ -1903,10 +1904,10 @@ int CALLBACK CPrintPreview::MyEnumFontFamProc(
 )
 {
 	CPrintPreview* pCPrintPreview = (CPrintPreview*)lParam;
-	if (0 == _tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan)) {
+	if (_tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan) == 0) {
 		pCPrintPreview->SetPreviewFontHan(&pelf->elfLogFont);
 	}
-	if (0 == _tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen)) {
+	if (_tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceZen) == 0) {
 		pCPrintPreview->SetPreviewFontZen(&pelf->elfLogFont);
 	}
 
@@ -2037,7 +2038,7 @@ INT_PTR CALLBACK CPrintPreview::PrintPreviewBar_DlgProc(
 	UINT uMsg,		// message
 	WPARAM wParam,	// first message parameter
 	LPARAM lParam 	// second message parameter
-)
+	)
 {
 	CPrintPreview* pCPrintPreview;
 	switch (uMsg) {

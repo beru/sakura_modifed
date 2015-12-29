@@ -95,7 +95,10 @@ const CNativeA& CNativeA::operator += (char ch)
 //                           互換                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CNativeA::SetStringNew(const wchar_t* wszData, int nDataLen)
+void CNativeA::SetStringNew(
+	const wchar_t* wszData,
+	int nDataLen
+	)
 {
 	std::wstring buf(wszData, nDataLen); // 切り出し
 	char* tmp = wcstombs_new(buf.c_str());
@@ -141,7 +144,10 @@ char CNativeA::operator[](int nIndex) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 文字列置換
-void CNativeA::Replace(const char* pszFrom, const char* pszTo)
+void CNativeA::Replace(
+	const char* pszFrom,
+	const char* pszTo
+	)
 {
 	CNativeA	cmemWork;
 	int			nFromLen = strlen(pszFrom);
@@ -168,7 +174,10 @@ void CNativeA::Replace(const char* pszFrom, const char* pszTo)
 }
 
 // 文字列置換（日本語考慮版）
-void CNativeA::Replace_j(const char* pszFrom, const char* pszTo)
+void CNativeA::Replace_j(
+	const char* pszFrom,
+	const char* pszTo
+	)
 {
 	CNativeA	cmemWork;
 	int			nFromLen = strlen(pszFrom);
@@ -294,7 +303,7 @@ void CNativeA::ToUpper()
 // 半角→全角
 void CNativeA::ToZenkaku(
 	int bHiragana,		// 1== ひらがな 0==カタカナ // 2==英数専用 2001/07/30 Misaka 追加
-	int bHanKataOnly	// 1== 半角カタカナにのみ作用する
+	int bHanKataOnly		// 1== 半角カタカナにのみ作用する
 )
 {
 	unsigned char*			pBuf = (unsigned char*)GetStringPtr();
@@ -312,7 +321,7 @@ void CNativeA::ToZenkaku(
 		return;
 	}
 	int nBufDesLen = 0;
-	for (int i = 0; i < nBufLen; ++i) {
+	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
@@ -457,7 +466,7 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
 		if (0 < nLineLen) {
 			int nPosX = 0;
-			for (int i = 0; i < nLineLen; ++i) {
+			for (int i=0; i<nLineLen; ++i) {
 				if (pLine[i] == TAB) {
 					int nWork = nTabSpace - (nPosX % nTabSpace);
 					auto_memset(&pDes[nPosDes], ' ', nWork);
@@ -545,7 +554,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 							++nPosDes;
 						}else {
 							int j;
-							for (j = nStartPos / nTabSpace; j < (nPosX / nTabSpace); ++j) {
+							for (j=nStartPos/nTabSpace; j<(nPosX/nTabSpace); ++j) {
 								pDes[nPosDes] = TAB;
 								++nPosDes;
 								nStartPos += nTabSpace - (nStartPos % nTabSpace);
@@ -553,7 +562,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 							// 2003.08.05 Moca
 							// 変換後にTABが1つも入らない場合にスペースを詰めすぎて
 							// バッファをはみ出すのを修正
-							for (j = nStartPos; j < nPosX; ++j) {
+							for (j=nStartPos; j<nPosX; ++j) {
 								pDes[nPosDes] = SPACE;
 								++nPosDes;
 							}
@@ -565,7 +574,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 					bSpace = FALSE;
 				}
 			}
-			//for (; i < nLineLen; ++i) {
+			//for (; i<nLineLen; ++i) {
 			//	pDes[nPosDes] = pLine[i];
 			//	++nPosDes;
 			//}
@@ -575,7 +584,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 					++nPosDes;
 				}else {
 					int j;
-					//for (j = nStartPos - 1; (j + nTabSpace) <= nPosX + 1; j += nTabSpace) {
+					//for (j=nStartPos-1; (j+nTabSpace)<=nPosX+1; j+=nTabSpace) {
 					for (j=nStartPos/nTabSpace; j<(nPosX/nTabSpace); ++j) {
 						pDes[nPosDes] = TAB;
 						++nPosDes;
@@ -618,7 +627,11 @@ int CNativeA::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 
 // ポインタで示した文字の次にある文字の位置を返します
 // 次にある文字がバッファの最後の位置を越える場合は&pData[nDataLen]を返します
-const char* CNativeA::GetCharNext(const char* pData, int nDataLen, const char* pDataCurrent)
+const char* CNativeA::GetCharNext(
+	const char* pData,
+	int nDataLen,
+	const char* pDataCurrent
+	)
 {
 //#ifdef _DEBUG
 //	CRunningTimer cRunningTimer("CMemory::MemCharNext");

@@ -156,7 +156,11 @@ bool CProfile::ReadProfile(const TCHAR* pszProfileName)
 
 	1行300文字までに制限
 */
-bool CProfile::ReadProfileRes( const TCHAR* pName, const TCHAR* pType, std::vector<std::wstring>* pData )
+bool CProfile::ReadProfileRes(
+	const TCHAR* pName,
+	const TCHAR* pType,
+	std::vector<std::wstring>* pData
+	)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 	HRSRC		hRsrc;
@@ -389,7 +393,7 @@ bool CProfile::SetProfileDataImp(
 		}
 	}
 	// 既存のセクションではない場合，セクション及びエントリを追加
-	if (iterEnd == iter) {
+	if (iter == iterEnd) {
 		Section Buffer;
 		Buffer.strSectionName = strSectionName;
 		Buffer.mapEntries.insert(PAIR_STR_STR(strEntryKey, strEntryValue));

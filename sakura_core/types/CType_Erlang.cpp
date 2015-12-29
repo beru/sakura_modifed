@@ -220,7 +220,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 
 	const int parptr_max = _countof(m_parenthesis);
 	wchar_t quote = L'\0'; // æ“ªˆÊ’u‚ğ•Û‘¶
-	for (const wchar_t* head = p ; p < end ; ++p) {
+	for (const wchar_t* head=p; p<end; ++p) {
 		if (quote) {
 			if (*p == quote)
 				quote = L'\0';
@@ -404,7 +404,7 @@ void CDocOutline::MakeFuncList_Erlang(CFuncInfoArr* pcFuncInfoArr)
 	COutlineErlang erl_state_machine;
 	CLogicInt	nLineCount;
 
-	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		CLogicInt nLineLen;
 
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);

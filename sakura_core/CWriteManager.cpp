@@ -31,7 +31,7 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 		CNativeW buffer = L"abcde";
 		CMemory tmp;
 		EConvertResult e = pcCodeBase->UnicodeToCode( buffer, &tmp );
-		if (e==RESULT_FAILURE) {
+		if (e == RESULT_FAILURE) {
 			nRetVal=RESULT_FAILURE;
 			ErrorMessage(
 				CEditWnd::getInstance()->GetHwnd(),
@@ -69,8 +69,8 @@ EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 				if (e == RESULT_LOSESOME) {
 					nRetVal = RESULT_LOSESOME;
 				}
-				if (e==RESULT_FAILURE) {
-					nRetVal=RESULT_FAILURE;
+				if (e == RESULT_FAILURE) {
+					nRetVal = RESULT_FAILURE;
 					ErrorMessage(
 						CEditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),

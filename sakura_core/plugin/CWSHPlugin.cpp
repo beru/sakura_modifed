@@ -33,7 +33,7 @@
 // デストラクタ
 CWSHPlugin::~CWSHPlugin(void)
 {
-	for (auto it = m_plugs.begin(); it != m_plugs.end(); ++it) {
+	for (auto it=m_plugs.begin(); it!=m_plugs.end(); ++it) {
 		delete *it;
 	}
 }
@@ -68,7 +68,11 @@ bool CWSHPlugin::ReadPluginOption(CDataProfile *cProfile)
 }
 
 // プラグを実行する
-bool CWSHPlugin::InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& params)
+bool CWSHPlugin::InvokePlug(
+	CEditView* view,
+	CPlug& plug,
+	CWSHIfObj::List& params
+	)
 {
 	CWSHPlug& wshPlug = static_cast<CWSHPlug&>(plug);
 	CWSHMacroManager* pWsh = NULL;

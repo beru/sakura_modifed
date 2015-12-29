@@ -47,20 +47,15 @@ LPCTSTR CHtmlHelp::GetDllNameImp(int nIndex)
 
 bool CHtmlHelp::InitDllImp()
 {
-	if (!(HtmlHelp = (Proc_HtmlHelp)
-		::GetProcAddress(
-			GetInstance(),
+	HtmlHelp = (Proc_HtmlHelp) ::GetProcAddress(
+		GetInstance(),
 #ifdef _UNICODE
-			"HtmlHelpW"
+		"HtmlHelpW"
 #else
-			"HtmlHelpA"
+		"HtmlHelpA"
 #endif
-			)
-		)
-	)
-		return false;
-
-	return true;
+	);
+	return HtmlHelp != NULL; 
 }
 
 

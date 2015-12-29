@@ -46,7 +46,7 @@ public:
 	int	GetNum(void) {	return m_nFuncInfoArrNum; }	// ”z—ñ—v‘f”‚ğ•Ô‚·
 	void Empty(void);
 	void DUMP(void);
-	void SetAppendText(int info, std::wstring s, bool overwrite);
+	void SetAppendText(int info, const std::wstring& s, bool overwrite);
 	std::wstring GetAppendText(int info);
 	int AppendTextLenMax() { return m_nAppendTextLenMax; }
 

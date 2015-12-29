@@ -69,7 +69,7 @@ static
 bool SetSpecialFuncName(EFunctionCode code, wchar_t* ptr)
 {
 	if (F_SPECIAL_FIRST <= code && code <= F_SPECIAL_LAST) {
-		for (int k = 0; k < nSpecialFuncsCount; ++k) {
+		for (int k=0; k<nSpecialFuncsCount; ++k) {
 			if (sSpecialFuncs[k].m_nFunc == code) {
 				auto_strcpy(ptr, LSW(sSpecialFuncs[k].m_nNameId));
 				return true;
@@ -138,9 +138,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 		// キー選択時の処理
 		::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_FUNCKIND, CBN_SELCHANGE), (LPARAM)hwndCOMBO_FUNCKIND);
-
 		::SetTimer(hwndDlg, 1, 300, NULL);
-
 		return TRUE;
 
 	case WM_NOTIFY:
@@ -220,7 +218,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 			switch (wNotifyCode) {
 			case CBN_SELCHANGE:
 				nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-				if (CB_ERR == nIdx1) {
+				if (nIdx1 == CB_ERR) {
 					break;
 				}
 				SetDataMenuList(hwndDlg, nIdx1);
@@ -231,11 +229,11 @@ INT_PTR CPropCustmenu::DispatchEvent(
 			switch (wNotifyCode) {
 			case LBN_DBLCLK:
 				nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-				if (CB_ERR == nIdx1) {
+				if (nIdx1 == CB_ERR) {
 					break;
 				}
 				nIdx2 = List_GetCurSel(hwndLIST_RES);
-				if (LB_ERR == nIdx2) {
+				if (nIdx2 == LB_ERR) {
 					break;
 				}
 
@@ -285,16 +283,16 @@ INT_PTR CPropCustmenu::DispatchEvent(
 				break;
 			case LBN_SELCHANGE:
 				nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-				if (CB_ERR == nIdx1) {
+				if (nIdx1 == CB_ERR) {
 					break;
 				}
 
-				if (MAX_CUSTOM_MENU_ITEMS <= csCustomMenu.m_nCustMenuItemNumArr[nIdx1]) {
+				if (csCustomMenu.m_nCustMenuItemNumArr[nIdx1] >= MAX_CUSTOM_MENU_ITEMS) {
 					break;
 				}
 
 				nIdx2 = List_GetCurSel(hwndLIST_RES);
-				if (LB_ERR == nIdx2) {
+				if (nIdx2 == LB_ERR) {
 					break;
 				}
 
@@ -314,7 +312,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 				if (nIdx3 == nSpecialFuncsNum) {
 					// 機能一覧に特殊機能をセット
 					List_ResetContent(hwndLIST_FUNC);
-					for (i = 0; i < nSpecialFuncsCount; ++i) {
+					for (i=0; i<nSpecialFuncsCount; ++i) {
 						List_AddString(hwndLIST_FUNC, LS(sSpecialFuncs[i].m_nNameId));
 					}
 				}else {
@@ -341,7 +339,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 
 					nIdx2 = List_GetCurSel(hwndLIST_RES);
-					if (LB_ERR == nIdx2) {
+					if (nIdx2 == LB_ERR) {
 						nIdx2 = 0;
 					}
 					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
@@ -350,7 +348,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 					List_SetCurSel(hwndLIST_RES, nIdx2);
 
-					for (i = csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i > nIdx2; --i) {
+					for (i=csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i>nIdx2; --i) {
 						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i - 1];
 						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i - 1];
 					}
@@ -362,7 +360,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					break;
 				case IDC_BUTTON_DELETE:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 
@@ -371,7 +369,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 
 					nIdx2 = List_GetCurSel(hwndLIST_RES);
-					if (LB_ERR == nIdx2) {
+					if (nIdx2 == LB_ERR) {
 						break;
 					}
 					nNum2 = List_DeleteString(hwndLIST_RES, nIdx2);
@@ -379,7 +377,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 						break;
 					}
 
-					for (i = nIdx2; i < csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; ++i) {
+					for (i=nIdx2; i<csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; ++i) {
 						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i + 1];
 						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i + 1];
 					}
@@ -397,7 +395,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 				case IDC_BUTTON_INSERT:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 
@@ -406,20 +404,20 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 
 					nIdx2 = List_GetCurSel(hwndLIST_RES);
-					if (LB_ERR == nIdx2) {
+					if (nIdx2 == LB_ERR) {
 						nIdx2 = 0;
 					}
 					nIdx3 = Combo_GetCurSel(hwndCOMBO_FUNCKIND);
-					if (CB_ERR == nIdx3) {
+					if (nIdx3 == CB_ERR) {
 						break;
 					}
 					nIdx4 = List_GetCurSel(hwndLIST_FUNC);
-					if (LB_ERR == nIdx4) {
+					if (nIdx4 == LB_ERR) {
 						break;
 					}
 					List_GetText(hwndLIST_FUNC, nIdx4, szLabel);
 
-					for (i = csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i > nIdx2; --i) {
+					for (i=csCustomMenu.m_nCustMenuItemNumArr[nIdx1]; i>nIdx2; --i) {
 						csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][i - 1];
 						csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i] = csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][i - 1];
 					}
@@ -435,7 +433,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					csCustomMenu.m_nCustMenuItemNumArr[nIdx1]++;
 
 					nIdx2 = List_InsertString(hwndLIST_RES, nIdx2, szLabel);
-					if (LB_ERR == nIdx2 || LB_ERRSPACE == nIdx2) {
+					if (nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE) {
 						break;
 					}
 					List_SetCurSel(hwndLIST_RES, nIdx2);
@@ -443,7 +441,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					
 				case IDC_BUTTON_ADD:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 
@@ -452,19 +450,19 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					}
 
 					nIdx2 = List_GetCurSel(hwndLIST_RES);
-					if (LB_ERR == nIdx2) {
+					if (nIdx2 == LB_ERR) {
 						nIdx2 = 0;
 					}
 					nNum2 = List_GetCount(hwndLIST_RES);
-					if (LB_ERR == nNum2) {
+					if (nNum2 == LB_ERR) {
 						nIdx2 = 0;
 					}
 					nIdx3 = Combo_GetCurSel(hwndCOMBO_FUNCKIND);
-					if (CB_ERR == nIdx3) {
+					if (nIdx3 == CB_ERR) {
 						break;
 					}
 					nIdx4 = List_GetCurSel(hwndLIST_FUNC);
-					if (LB_ERR == nIdx4) {
+					if (nIdx4 == LB_ERR) {
 						break;
 					}
 
@@ -487,7 +485,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					csCustomMenu.m_nCustMenuItemNumArr[nIdx1]++;
 
 					nIdx2 = List_AddString(hwndLIST_RES, szLabel);
-					if (LB_ERR == nIdx2 || LB_ERRSPACE == nIdx2) {
+					if (nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE) {
 						break;
 					}
 					List_SetCurSel(hwndLIST_RES, nIdx2);
@@ -496,14 +494,14 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 				case IDC_BUTTON_UP:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 					nIdx2 = List_GetCurSel(hwndLIST_RES);
-					if (LB_ERR == nIdx2) {
+					if (nIdx2 == LB_ERR) {
 						break;
 					}
-					if (0 == nIdx2) {
+					if (nIdx2 == 0) {
 						break;
 					}
 
@@ -524,15 +522,15 @@ INT_PTR CPropCustmenu::DispatchEvent(
 
 				case IDC_BUTTON_DOWN:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 					nIdx2 = List_GetCurSel(hwndLIST_RES);
-					if (LB_ERR == nIdx2) {
+					if (nIdx2 == LB_ERR) {
 						break;
 					}
 					nNum2 = List_GetCount(hwndLIST_RES);
-					if (LB_ERR == nNum2) {
+					if (nNum2 == LB_ERR) {
 						break;
 					}
 					if (nNum2 - 1 <= nIdx2) {
@@ -554,7 +552,7 @@ INT_PTR CPropCustmenu::DispatchEvent(
 					break;
 				case IDC_CHECK_SUBMENU:
 					nIdx1 = Combo_GetCurSel(hwndCOMBO_MENU);
-					if (CB_ERR == nIdx1) {
+					if (nIdx1 == CB_ERR) {
 						break;
 					}
 					csCustomMenu.m_bCustMenuPopupArr[nIdx1] = IsDlgButtonCheckedBool(hwndDlg, IDC_CHECK_SUBMENU);
@@ -641,13 +639,8 @@ INT_PTR CPropCustmenu::DispatchEvent(
 // ダイアログデータの設定 Custom menu
 void CPropCustmenu::SetData(HWND hwndDlg)
 {
-	HWND		hwndCOMBO_MENU;
-	HWND		hwndCombo;
-	int			i;
-	WCHAR		buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
-
 	// 機能種別一覧に文字列をセット（コンボボックス）
-	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
+	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
 	m_cLookup.SetCategory2Combo(hwndCombo);	//	Oct. 3, 2001 genta
 	// 特別機能追加
 	nSpecialFuncsNum = Combo_AddString(hwndCombo, LS(STR_SPECIAL_FUNC));
@@ -656,8 +649,9 @@ void CPropCustmenu::SetData(HWND hwndDlg)
 	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
 
 	// メニュー一覧に文字列をセット（コンボボックス）
-	hwndCOMBO_MENU = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
-	for (i = 0; i < MAX_CUSTOM_MENU; ++i) {
+	HWND hwndCOMBO_MENU = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
+	WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
+	for (int i=0; i<MAX_CUSTOM_MENU; ++i) {
 		Combo_AddString(hwndCOMBO_MENU, m_cLookup.Custmenu2Name(i, buf, _countof(buf)));
 	}
 	// メニュー一覧の先頭の項目を選択（コンボボックス）
@@ -671,15 +665,15 @@ void CPropCustmenu::SetData(HWND hwndDlg)
 
 void CPropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 {
-	WCHAR		szLabel[300];
-	WCHAR		szLabel2[300];
+	WCHAR szLabel[300];
+	WCHAR szLabel2[300];
 	auto& csCustomMenu = m_Common.m_sCustomMenu;
 
 	// メニュー項目一覧に文字列をセット（リストボックス）
 	HWND hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
 //	hwndEDIT_KEY = ::GetDlgItem(hwndDlg, IDC_EDIT_KEY);
 	List_ResetContent(hwndLIST_RES);
-	for (int i = 0; i < csCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
+	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nIdx]; ++i) {
 		if (0 == csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i]) {
 			auto_strcpy(szLabel, LSW(STR_PROPCOMCUSTMENU_SEP));	// Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 		}else {
@@ -720,13 +714,11 @@ int CPropCustmenu::GetData(HWND hwndDlg)
 void CPropCustmenu::Import(HWND hwndDlg)
 {
 	CImpExpCustMenu	cImpExpCustMenu(m_Common);
-
 	// インポート
 	if (!cImpExpCustMenu.ImportUI(G_AppInstance(), hwndDlg)) {
 		// インポートをしていない
 		return;
 	}
-	
 	// 画面更新
 	HWND	hwndCtrl = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
 	::SendMessage(hwndDlg, WM_COMMAND, MAKELONG(IDC_COMBO_MENU, CBN_SELCHANGE), (LPARAM)hwndCtrl);
@@ -736,7 +728,6 @@ void CPropCustmenu::Import(HWND hwndDlg)
 void CPropCustmenu::Export(HWND hwndDlg)
 {
 	CImpExpCustMenu	cImpExpCustMenu(m_Common);
-
 	// エクスポート
 	if (!cImpExpCustMenu.ExportUI(G_AppInstance(), hwndDlg)) {
 		// エクスポートをしていない

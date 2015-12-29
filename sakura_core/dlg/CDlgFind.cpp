@@ -56,7 +56,7 @@ CDlgFind::CDlgFind()
 
 	@date 2013.03.24 novice 新規作成
 */
-BOOL CDlgFind::OnCbnDropDown( HWND hwndCtl, int wID )
+BOOL CDlgFind::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_COMBO_TEXT:
@@ -74,7 +74,11 @@ BOOL CDlgFind::OnCbnDropDown( HWND hwndCtl, int wID )
 
 
 // モードレスダイアログの表示
-HWND CDlgFind::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
+HWND CDlgFind::DoModeless(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	LPARAM lParam
+	)
 {
 	auto& csSearch = m_pShareData->m_Common.m_sSearch;
 	m_sSearchOption = csSearch.m_sSearchOption;		// 検索オプション
@@ -92,7 +96,11 @@ void CDlgFind::ChangeView(LPARAM pcEditView)
 }
 
 
-BOOL CDlgFind::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
+BOOL CDlgFind::OnInitDialog(
+	HWND hwnd,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	BOOL bRet = CDialog::OnInitDialog(hwnd, wParam, lParam);
 	m_comboDel = SComboBoxItemDeleter();

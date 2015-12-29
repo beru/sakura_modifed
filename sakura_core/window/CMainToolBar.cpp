@@ -206,7 +206,7 @@ void CMainToolBar::CreateToolBar(void)
 		//	From Here 2005.08.29 aroka
 		// はじめにツールバー構造体の配列を作っておく
 		TBBUTTON *pTbbArr = new TBBUTTON[csToolBar.m_nToolBarButtonNum];
-		for (i = 0; i < csToolBar.m_nToolBarButtonNum; ++i) {
+		for (i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 			nIdx = csToolBar.m_nToolBarButtonIdxArr[i];
 			pTbbArr[nToolBarButtonNum] = m_pOwner->GetMenuDrawer().getButton(nIdx);
 			// セパレータが続くときはひとつにまとめる
@@ -229,7 +229,7 @@ void CMainToolBar::CreateToolBar(void)
 		}
 		//	To Here 2005.08.29 aroka
 
-		for (i = 0; i < nToolBarButtonNum; ++i) {
+		for (i=0; i<nToolBarButtonNum; ++i) {
 			tbb = pTbbArr[i];
 
 			//@@@ 2002.06.15 MIK start
@@ -489,7 +489,7 @@ void CMainToolBar::UpdateToolbar(void)
 	// ツールバーの状態更新
 	if (m_hwndToolBar) {
 		auto& csToolBar = GetDllShareData().m_Common.m_sToolBar;
-		for (int i = 0; i < csToolBar.m_nToolBarButtonNum; ++i) {
+		for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 			TBBUTTON tbb = m_pOwner->GetMenuDrawer().getButton(
 				csToolBar.m_nToolBarButtonIdxArr[i]
 			);
@@ -521,7 +521,7 @@ void CMainToolBar::AcceptSharedSearchKey()
 			Combo_DeleteString(m_hwndSearchBox, 0);
 		}
 		int nSize = GetDllShareData().m_sSearchKeywords.m_aSearchKeys.size();
-		for (i = 0; i < nSize; ++i) {
+		for (i=0; i<nSize; ++i) {
 			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_sSearchKeywords.m_aSearchKeys[i]);
 		}
 		const wchar_t* pszText;

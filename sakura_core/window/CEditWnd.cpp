@@ -152,7 +152,7 @@ static void ShowCodeBox(HWND hWnd, CEditDoc* pcEditDoc)
 				int nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, nIdx);
 				memcpy(szChar, &pLine[nIdx], nCharChars * sizeof(wchar_t));
 				szChar[nCharChars] = L'\0';
-				for (int i = 0; i < CODE_CODEMAX; ++i) {
+				for (int i=0; i<CODE_CODEMAX; ++i) {
 					if (i == CODE_SJIS || i == CODE_JIS || i == CODE_EUC || i == CODE_LATIN1 || i == CODE_UNICODE || i == CODE_UTF8 || i == CODE_CESU8) {
 						//auto_sprintf(szCaretChar, _T("%04x"),);
 						// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
@@ -236,7 +236,7 @@ CEditWnd::~CEditWnd()
 	delete m_pPrintPreview;
 	m_pPrintPreview = NULL;
 
-	for (int i = 0; i < m_nEditViewMaxCount; ++i) {
+	for (int i=0; i<m_nEditViewMaxCount; ++i) {
 		delete m_pcEditViewArr[i];
 		m_pcEditViewArr[i] = NULL;
 	}
@@ -613,7 +613,7 @@ HWND CEditWnd::Create(
 
 	m_pcEditDoc = pcEditDoc;
 
-	for (int i = 0; i < _countof(m_pcEditViewArr); ++i) {
+	for (int i=0; i<_countof(m_pcEditViewArr); ++i) {
 		m_pcEditViewArr[i] = NULL;
 	}
 	// [0] - [3] まで作成・初期化していたものを[0]だけ作る。ほかは分割されるまで何もしない
@@ -854,7 +854,7 @@ void CEditWnd::LayoutMainMenu()
 	LPCTSTR		pszName;
 
 	hMenu = ::CreateMenu();
-	for (int i = 0; i < MAX_MAINMENU_TOP && pcMenu->m_nMenuTopIdx[i] >= 0; ++i) {
+	for (int i=0; i<MAX_MAINMENU_TOP && pcMenu->m_nMenuTopIdx[i] >= 0; ++i) {
 		nCount = (i >= MAX_MAINMENU_TOP || pcMenu->m_nMenuTopIdx[i + 1] < 0 ? pcMenu->m_nMainMenuNum : pcMenu->m_nMenuTopIdx[i+1])
 				- pcMenu->m_nMenuTopIdx[i];		// メニュー項目数
 		cMainMenu = &pcMenu->m_cMainMenuTbl[pcMenu->m_nMenuTopIdx[i]];
@@ -920,14 +920,14 @@ void CEditWnd::LayoutMainMenu()
 					++nCount;
 				}
 				//	カスタムメニュー
-				for (int j = 1; j < MAX_CUSTOM_MENU; ++j) {
+				for (int j=1; j<MAX_CUSTOM_MENU; ++j) {
 					if (m_pShareData->m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[j] > 0) {
 						++nCount;
 					}
 				}
 				break;
 			case F_USERMACRO_LIST:			// 登録済みマクロリスト
-				for (int j = 0; j < MAX_CUSTMACRO; ++j) {
+				for (int j=0; j<MAX_CUSTMACRO; ++j) {
 					MacroRec *mp = &m_pShareData->m_Common.m_sMacro.m_MacroTable[j];
 					if (mp->IsEnabled()) {
 						++nCount;
@@ -940,7 +940,7 @@ void CEditWnd::LayoutMainMenu()
 					const CJackManager* pcJackManager = CJackManager::getInstance();
 
 					CPlug::Array plugs = pcJackManager->GetPlugs(PP_COMMAND);
-					for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+					for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 						++nCount;
 					}
 				}
@@ -1191,7 +1191,7 @@ LRESULT CEditWnd::DispatchEvent(
 				uItem
 			);
 			if (0 < nAssignedKeyNum) {
-				for (int j = 0; j < nAssignedKeyNum; ++j) {
+				for (int j=0; j<nAssignedKeyNum; ++j) {
 					if (j > 0) {
 						cmemWork.AppendString(_T(" , "));
 					}
@@ -1618,14 +1618,14 @@ LRESULT CEditWnd::DispatchEvent(
 			CPlug::Array plugs;
 			CWSHIfObj::List params;
 			CJackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
-			for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				(*it)->Invoke(&GetActiveView(), params);
 			}
 
 			// プラグイン：EditorEndイベント実行
 			plugs.clear();
 			CJackManager::getInstance()->GetUsablePlug(PP_EDITOR_END, 0, &plugs);
-			for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				(*it)->Invoke(&GetActiveView(), params);
 			}
 
@@ -1708,7 +1708,7 @@ LRESULT CEditWnd::DispatchEvent(
 			// 水平スクロールバーの表示／非表示切り替え	// 2006.12.19 ryoji
 			{
 				bool b1 = (m_pShareData->m_Common.m_sWindow.m_bScrollBarHorz == FALSE);
-				for (int i = 0; i < GetAllViewCount(); ++i) {
+				for (int i=0; i<GetAllViewCount(); ++i) {
 					bool b2 = (GetView(i).m_hwndHScrollBar == NULL);
 					if (b1 != b2) {		// 水平スクロールバーを使う
 						GetView(i).DestroyScrollBar();
@@ -2097,17 +2097,17 @@ int	CEditWnd::OnClose(HWND hWndActive, bool bGrepNoConfirm)
 		EditNode* p = NULL;
 		int nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr(&p, FALSE);
 		if (nCount > 1) {
-			for (i = 0; i < nCount; ++i) {
+			for (i=0; i<nCount; ++i) {
 				if (p[i].GetHwnd() == GetHwnd())
 					break;
 			}
 			if (i < nCount) {
-				for (j = i + 1; j < nCount; ++j) {
+				for (j=i+1; j<nCount; ++j) {
 					if (p[j].m_nGroup == p[i].m_nGroup)
 						break;
 				}
 				if (j >= nCount) {
-					for (j = 0; j < i; ++j) {
+					for (j=0; j<i; ++j) {
 						if (p[j].m_nGroup == p[i].m_nGroup)
 							break;
 					}
@@ -2206,7 +2206,7 @@ void CEditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 
 				// 新たな編集ウィンドウを起動
 				size_t nSize = files.size();
-				for (size_t f = 1; f < nSize; ++f) {
+				for (size_t f=1; f<nSize; ++f) {
 					sLoadInfo.cFilePath = files[f].c_str();
 					CControlTray::OpenNewEditor(G_AppInstance(), GetHwnd(), sLoadInfo, NULL, true);
 				}
@@ -2278,7 +2278,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		// メニュー 初期化
 		m_cMenuDrawer.ResetContents();
 		cMenuItems = ::GetMenuItemCount(hMenu);
-		for (int i = cMenuItems - 1; i >= 0; --i) {
+		for (int i=cMenuItems-1; i>=0; --i) {
 			::DeleteMenu(hMenu, i, MF_BYPOSITION);
 		}
 
@@ -2289,7 +2289,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 			nLv = 0;
 			--nIdxStr;
 		}
-		for (int i = nIdxStr + 1; i < nIdxEnd; ++i) {
+		for (int i=nIdxStr+1; i<nIdxEnd; ++i) {
 			cMainMenu = &pcMenu->m_cMainMenuTbl[i];
 			if (cMainMenu->m_nLevel != nLv) {
 				nLv = cMainMenu->m_nLevel;
@@ -2358,7 +2358,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 
 	// 機能が利用可能かどうか、チェック状態かどうかを一括チェック
 	cMenuItems = ::GetMenuItemCount(hMenu);
-	for (nPos = 0; nPos < cMenuItems; ++nPos) {
+	for (nPos=0; nPos<cMenuItems; ++nPos) {
 		EFunctionCode	id = (EFunctionCode)::GetMenuItemID(hMenu, nPos);
 		// 機能が利用可能か調べる
 		//	Jan.  8, 2006 genta 機能が有効な場合には明示的に再設定しないようにする．
@@ -2582,7 +2582,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 			bInList = true;
 		}
 		// カスタムメニュー
-		for (int j = 1; j < MAX_CUSTOM_MENU; ++j) {
+		for (int j=1; j<MAX_CUSTOM_MENU; ++j) {
 			if (m_pShareData->m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[j] > 0) {
 				 m_cMenuDrawer.MyAppendMenu(hMenu, MF_BYPOSITION | MF_STRING,
 			 		F_CUSTMENU_BASE + j, GetDocument()->m_cFuncLookup.Custmenu2Name(j, buf, _countof(buf)), L"" );
@@ -2591,7 +2591,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 		}
 		break;
 	case F_USERMACRO_LIST:			// 登録済みマクロリスト
-		for (int j = 0; j < MAX_CUSTMACRO; ++j) {
+		for (int j=0; j<MAX_CUSTMACRO; ++j) {
 			MacroRec *mp = &m_pShareData->m_Common.m_sMacro.m_MacroTable[j];
 			if (mp->IsEnabled()) {
 				if (mp->m_szName[0]) {
@@ -2611,7 +2611,7 @@ bool CEditWnd::InitMenu_Special(HMENU hMenu, EFunctionCode eFunc)
 			HMENU hMenuPlugin = 0;
 
 			CPlug::Array plugs = pcJackManager->GetPlugs(PP_COMMAND);
-			for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 				const CPlugin* curPlugin = &(*it)->m_cPlugin;
 				if (curPlugin != prevPlugin) {
 					// プラグインが変わったらプラグインポップアップメニューを登録
@@ -2650,7 +2650,7 @@ void CEditWnd::CheckFreeSubMenu(HWND hWnd, HMENU hMenu, UINT uPos)
 void CEditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 {
 	int cMenuItems = ::GetMenuItemCount(hMenu);
-	for (int nPos = 0; nPos < cMenuItems; ++nPos) {
+	for (int nPos=0; nPos<cMenuItems; ++nPos) {
 		HMENU hSubMenu = ::GetSubMenu(hMenu, nPos);
 		if (hSubMenu) {
 			if (::GetMenuItemCount(hSubMenu) == 0) {
@@ -2670,7 +2670,7 @@ void CEditWnd::CheckFreeSubMenuSub(HMENU hMenu, int nLv)
 void CEditWnd::SetMenuFuncSel(HMENU hMenu, EFunctionCode nFunc, const WCHAR* sKey, bool flag)
 {
 	const WCHAR* sName = L"";
-	for (int i = 0; i < _countof(sFuncMenuName); ++i) {
+	for (int i=0; i<_countof(sFuncMenuName); ++i) {
 		if (sFuncMenuName[i].eFunc == nFunc) {
 			sName = flag ? LSW(sFuncMenuName[i].nNameId[0]) : LSW(sFuncMenuName[i].nNameId[1]);
 		}
@@ -2748,7 +2748,7 @@ void CEditWnd::OnDropFiles(HDROP hDrop)
 	// アクティブにする	// 2009.08.20 ryoji 処理開始前に無条件でアクティブ化
 	ActivateFrameWindow(GetHwnd());
 
-	for (int i = 0; i < cFiles; ++i) {
+	for (int i=0; i<cFiles; ++i) {
 		// ファイルパス取得、解決。
 		TCHAR		szFile[_MAX_PATH + 1];
 		::DragQueryFile(hDrop, i, szFile, _countof(szFile));
@@ -3076,7 +3076,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		if (wParam != SIZE_MAXIMIZED) {
 			nStArr[nStArrNum - 1] -= nSbxWidth;
 		}
-		for (i = nStArrNum - 1; i > 0; --i) {
+		for (i=nStArrNum-1; i>0; --i) {
 			::GetTextExtentPoint32(hdc, pszLabel[i], _tcslen(pszLabel[i]), &sz);
 			nStArr[i - 1] = nStArr[i] - (sz.cx + nBdrWidth);
 		}
@@ -3465,7 +3465,7 @@ BOOL CEditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 					// 自分のウィンドウを調べる
 					int i, j;
 					int nGroup = 0;
-					for (i = 0; i < nRowNum; ++i) {
+					for (i=0; i<nRowNum; ++i) {
 						if (GetHwnd() == pEditNodeArr[i].GetHwnd()) {
 							nGroup = pEditNodeArr[i].m_nGroup;
 							break;
@@ -3474,24 +3474,24 @@ BOOL CEditWnd::DoMouseWheel(WPARAM wParam, LPARAM lParam)
 					if (i < nRowNum) {
 						if (nDelta < 0) {
 							// 次のウィンドウ
-							for (j = i + 1; j < nRowNum; ++j) {
+							for (j=i+1; j<nRowNum; ++j) {
 								if (nGroup == pEditNodeArr[j].m_nGroup)
 									break;
 							}
 							if (j >= nRowNum) {
-								for (j = 0; j < i; ++j) {
+								for (j=0; j<i; ++j) {
 									if (nGroup == pEditNodeArr[j].m_nGroup)
 										break;
 								}
 							}
 						}else {
 							// 前のウィンドウ
-							for (j = i - 1; j >= 0; --j) {
+							for (j=i-1; j>=0; --j) {
 								if (nGroup == pEditNodeArr[j].m_nGroup)
 									break;
 							}
 							if (j < 0) {
-								for (j = nRowNum - 1; j > i; --j) {
+								for (j=nRowNum-1; j>i; --j) {
 									if (nGroup == pEditNodeArr[j].m_nGroup)
 										break;
 								}
@@ -4010,7 +4010,7 @@ void CEditWnd::WindowTopMost(int top)
 	auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
 	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
 		hwndInsertAfter = GetHwnd();
-		for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
+		for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 			HWND hwnd = m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd();
 			if (hwnd != GetHwnd() && IsSakuraMainWindow(hwnd)) {
 				if (!CAppNodeManager::IsSameGroup(GetHwnd(), hwnd))
@@ -4107,7 +4107,7 @@ LRESULT CEditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, 
 		met.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);
 		::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 		CDCFont dcFont(met.lfMenuFont, GetHwnd());
-		for (int i = 0; i < nRowNum; ++i) {
+		for (int i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 ////	From Here Oct. 4, 2000 JEPRO commented out & modified	開いているファイル数がわかるように履歴とは違って1から数える
@@ -4144,7 +4144,7 @@ void CEditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 
 	// wszBufへ結合
 	if (0 < nAssignedKeyNum) {
-		for (int j = 0; j < nAssignedKeyNum; ++j) {
+		for (int j=0; j<nAssignedKeyNum; ++j) {
 			const TCHAR* pszKey = ppcAssignedKeyList[j]->GetStringPtr();
 			int nKeyLen = _tcslen(pszKey);
 			if (nLen + 9 + nKeyLen < nBufCount) {
@@ -4205,7 +4205,7 @@ void CEditWnd::OnEditTimer(void)
 void CEditWnd::Views_DeleteCompatibleBitmap()
 {
 	// CEditView群へ転送する
-	for (int i = 0; i < GetAllViewCount(); ++i) {
+	for (int i=0; i<GetAllViewCount(); ++i) {
 		if (GetView(i).GetHwnd()) {
 			GetView(i).DeleteCompatibleBitmap();
 		}
@@ -4217,7 +4217,7 @@ LRESULT CEditWnd::Views_DispatchEvent(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 	switch (msg) {
 	case WM_ENTERMENULOOP:
 	case WM_EXITMENULOOP:
-		for (int i = 0; i < GetAllViewCount(); ++i) {
+		for (int i=0; i<GetAllViewCount(); ++i) {
 			GetView(i).DispatchEvent(hwnd, msg, wParam, lParam);
 		}
 		return 0L;
@@ -4236,7 +4236,7 @@ bool CEditWnd::CreateEditViewBySplit(int nViewCount)
 		return false;
 	}
 	if (GetAllViewCount() < nViewCount) {
-		for (int i = GetAllViewCount(); i < nViewCount; ++i) {
+		for (int i=GetAllViewCount(); i<nViewCount; ++i) {
 			assert(!m_pcEditViewArr[i]);
 			m_pcEditViewArr[i] = new CEditView(this);
 			m_pcEditViewArr[i]->Create(m_cSplitterWnd.GetHwnd(), GetDocument(), i, FALSE, false);
@@ -4245,7 +4245,7 @@ bool CEditWnd::CreateEditViewBySplit(int nViewCount)
 
 		std::vector<HWND> hWndArr;
 		hWndArr.reserve(nViewCount + 1);
-		for (int i = 0; i < nViewCount; ++i) {
+		for (int i=0; i<nViewCount; ++i) {
 			hWndArr.push_back(GetView(i).GetHwnd());
 		}
 		hWndArr.push_back(NULL);
@@ -4262,7 +4262,7 @@ bool CEditWnd::CreateEditViewBySplit(int nViewCount)
 void CEditWnd::InitAllViews()
 {
 	// 先頭へカーソルを移動
-	for (int i = 0; i < GetAllViewCount(); ++i) {
+	for (int i=0; i<GetAllViewCount(); ++i) {
 		//	Apr. 1, 2001 genta
 		// 移動履歴の消去
 		GetView(i).m_cHistory->Flush();
@@ -4281,7 +4281,7 @@ void CEditWnd::InitAllViews()
 void CEditWnd::Views_RedrawAll()
 {
 	// アクティブ以外を再描画してから…
-	for (int v = 0; v < GetAllViewCount(); ++v) {
+	for (int v=0; v<GetAllViewCount(); ++v) {
 		if (m_nActivePaneIndex != v) {
 			GetView(v).RedrawAll();
 		}
@@ -4294,7 +4294,7 @@ void CEditWnd::Views_RedrawAll()
 void CEditWnd::Views_Redraw()
 {
 	// アクティブ以外を再描画してから…
-	for (int v = 0; v < GetAllViewCount(); ++v) {
+	for (int v=0; v<GetAllViewCount(); ++v) {
 		if (m_nActivePaneIndex != v)
 			GetView(v).Redraw();
 	}
@@ -4370,7 +4370,7 @@ void  CEditWnd::SetActivePane(int nIndex)
 bool CEditWnd::SetDrawSwitchOfAllViews(bool bDraw)
 {
 	bool bDrawSwitchOld = GetActiveView().GetDrawSwitch();
-	for (int i = 0; i < GetAllViewCount(); ++i) {
+	for (int i=0; i<GetAllViewCount(); ++i) {
 		GetView(i).SetDrawSwitch(bDraw);
 	}
 	GetMiniMap().SetDrawSwitch( bDraw );
@@ -4388,7 +4388,7 @@ bool CEditWnd::SetDrawSwitchOfAllViews(bool bDraw)
 */
 void CEditWnd::RedrawAllViews(CEditView* pcViewExclude)
 {
-	for (int i = 0; i < GetAllViewCount(); ++i) {
+	for (int i=0; i<GetAllViewCount(); ++i) {
 		CEditView* pcView = &GetView(i);
 		if (pcView == pcViewExclude)
 			continue;
@@ -4406,7 +4406,7 @@ void CEditWnd::RedrawAllViews(CEditView* pcViewExclude)
 
 void CEditWnd::Views_DisableSelectArea(bool bRedraw)
 {
-	for (int i = 0; i < GetAllViewCount(); ++i) {
+	for (int i=0; i<GetAllViewCount(); ++i) {
 		if (GetView(i).GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
 			// 現在の選択範囲を非選択状態に戻す
 			GetView(i).GetSelectionInfo().DisableSelectArea(true);
@@ -4475,7 +4475,7 @@ BOOL CEditWnd::UpdateTextWrap(void)
 		BOOL bWrap = WrapWindowWidth(0);	// 右端で折り返す
 		if (bWrap) {
 			// WrapWindowWidth() で追加した更新リージョンで画面更新する
-			for (int i = 0; i < GetAllViewCount(); ++i) {
+			for (int i=0; i<GetAllViewCount(); ++i) {
 				::UpdateWindow(GetView(i).GetHwnd());
 			}
 			if (GetMiniMap().GetHwnd()) {
@@ -4520,7 +4520,7 @@ void CEditWnd::ChangeLayoutParam(bool bShowProgress, CLayoutInt nTabSize, CLayou
 	RestorePhysPosOfAllView(posSave);
 	SetDrawSwitchOfAllViews(bDrawSwitchOld);
 
-	for (int i = 0; i < GetAllViewCount(); ++i) {
+	for (int i=0; i<GetAllViewCount(); ++i) {
 		if (GetView(i).GetHwnd()) {
 			InvalidateRect(GetView(i).GetHwnd(), NULL, TRUE);
 			GetView(i).AdjustScrollBars();	// 2008.06.18 ryoji
@@ -4557,7 +4557,7 @@ CLogicPointEx* CEditWnd::SavePhysPosOfAllView()
 	
 	CLogicPointEx* pptPosArray = new CLogicPointEx[NUM_OF_VIEW * NUM_OF_POS];
 	
-	for (int i = 0; i < NUM_OF_VIEW; ++i) {
+	for (int i=0; i<NUM_OF_VIEW; ++i) {
 		CLayoutPoint tmp = CLayoutPoint(CLayoutInt(0), GetView(i).m_pcTextArea->GetViewTopLine());
 		const CLayout* layoutLine = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(tmp.GetY2());
 		if (layoutLine) {
@@ -4615,7 +4615,7 @@ void CEditWnd::RestorePhysPosOfAllView(CLogicPointEx* pptPosArray)
 	const int NUM_OF_VIEW = GetAllViewCount();
 	const int NUM_OF_POS = 6;
 
-	for (int i = 0; i < NUM_OF_VIEW; ++i) {
+	for (int i=0; i<NUM_OF_VIEW; ++i) {
 		CLayoutPoint tmp;
 		GetDocument()->m_cLayoutMgr.LogicToLayoutEx(
 			pptPosArray[i * NUM_OF_POS + 0],
@@ -4734,7 +4734,7 @@ void CEditWnd::RegisterPluginCommand(int idCommand)
 void CEditWnd::RegisterPluginCommand()
 {
 	const CPlug::Array& plugs = CJackManager::getInstance()->GetPlugs(PP_COMMAND);
-	for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 		RegisterPluginCommand(*it);
 	}
 }
@@ -4789,7 +4789,7 @@ ECharWidthCacheMode CEditWnd::GetLogfontCacheMode()
 
 void CEditWnd::ClearViewCaretPosInfo()
 {
-	for (int v = 0; v < GetAllViewCount(); ++v) {
+	for (int v=0; v<GetAllViewCount(); ++v) {
 		GetView(v).GetCaret().ClearCaretPosInfoCache();
 	}
 }

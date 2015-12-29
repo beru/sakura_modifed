@@ -103,7 +103,11 @@ enum EFuncListCol {
 };
 
 // ソート比較用プロシージャ
-int CALLBACK CDlgFuncList::CompareFunc_Asc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
+int CALLBACK CDlgFuncList::CompareFunc_Asc(
+	LPARAM lParam1,
+	LPARAM lParam2,
+	LPARAM lParamSort
+	)
 {
 	CDlgFuncList* pcDlgFuncList = (CDlgFuncList*)lParamSort;
 
@@ -221,7 +225,12 @@ CDlgFuncList::CDlgFuncList() : CDialog(true)
 
 	@date 2007.11.07 ryoji 新規
 */
-INT_PTR CDlgFuncList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::DispatchEvent(
+	HWND hWnd,
+	UINT wMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
@@ -536,7 +545,7 @@ void CDlgFuncList::SetData()
 			const int nBuffLenTag = 13 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 			const int nNum = m_pcFuncInfoArr->GetNum();
 			int nBuffLen = 0;
-			for (int i = 0; i < nNum; ++i) {
+			for (int i=0; i<nNum; ++i) {
 				const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 				nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 			}
@@ -545,7 +554,7 @@ void CDlgFuncList::SetData()
 
 		EnableItem(IDC_BUTTON_COPY, TRUE);
 		bSelected = false;
-		for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+		for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 			pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			if (!bSelected) {
 				if (pcFuncInfo->m_nFuncLineLAYOUT < nFuncLineTop
@@ -578,7 +587,7 @@ void CDlgFuncList::SetData()
 			bSelected = true;
 			nSelectedLine =  nSelectedLineTop;
 		}
-		for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+		for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 			// 現在の解析結果要素
 			pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
@@ -769,10 +778,12 @@ void CDlgFuncList::SetData()
 
 
 
-bool CDlgFuncList::GetTreeFileFullName(HWND hwndTree,
-										HTREEITEM target,
-										std::tstring* pPath,
-										int* pnItem)
+bool CDlgFuncList::GetTreeFileFullName(
+	HWND hwndTree,
+	HTREEITEM target,
+	std::tstring* pPath,
+	int* pnItem
+	)
 {
 	*pPath = _T("");
 	*pnItem = -1;
@@ -803,12 +814,10 @@ bool CDlgFuncList::GetTreeFileFullName(HWND hwndTree,
 }
 
 
-
 // ダイアログデータの取得
 // 0==条件未入力   0より大きい==正常   0より小さい==入力エラー
 int CDlgFuncList::GetData(void)
 {
-
 	m_cFuncInfo = NULL;
 	m_sJumpFile = _T("");
 	HWND hwndList = GetItemHwnd(IDC_LIST_FL);
@@ -863,7 +872,10 @@ int CDlgFuncList::GetData(void)
 
 	@date 2002.01.04 genta C++ツリーを統合
 */
-void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
+void CDlgFuncList::SetTreeJava(
+	HWND hwndDlg,
+	BOOL bAddClass
+	)
 {
 	CLayoutInt		nFuncLineTop(INT_MAX);
 	CLayoutInt		nFuncColTop(INT_MAX);
@@ -888,7 +900,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 		const int nBuffLenTag = 13 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		const int nNum = m_pcFuncInfoArr->GetNum();
 		int nBuffLen = 0;
-		for (int i = 0; i < nNum; ++i) {
+		for (int i=0; i<nNum; ++i) {
 			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 		}
@@ -907,7 +919,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 	CLayoutInt nFuncLineOld = CLayoutInt(-1);
 	CLayoutInt nFuncColOld = CLayoutInt(-1);
 	int bSelected = FALSE;
-	for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		const TCHAR*		pWork;
 		pWork = pcFuncInfo->m_cmemFuncName.GetStringPtr();
@@ -923,7 +935,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 			int	nCharChars;
 			int	nNestTemplate = 0;
 			nWorkLen = _tcslen(pWork);
-			for (k = 0; k < nWorkLen; ++k) {
+			for (k=0; k<nWorkLen; ++k) {
 				// 2009.9.21 syat ネストが深すぎる際のBOF対策
 				if (nClassNest == MAX_JAVA_TREE_NEST) {
 					k = nWorkLen;
@@ -974,7 +986,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 			// クラス名のアイテムが登録されているか
 			htiClass = TreeView_GetFirstVisible(hwndTree);
 			HTREEITEM htiParent = TVI_ROOT;
-			for (k = 0; k < nClassNest; ++k) {
+			for (k=0; k<nClassNest; ++k) {
 				//	Apr. 1, 2001 genta
 				//	追加文字列を全角にしたのでメモリもそれだけ必要
 				//	6 == strlen("クラス"), 1 == strlen(L'\0')
@@ -986,7 +998,7 @@ void CDlgFuncList::SetTreeJava(HWND hwndDlg, BOOL bAddClass)
 				// ただし、一致する項目が複数ある場合は最初の項目を親ノードにする。
 				// 一致しない場合は「(クラス名)(半角スペース一個)クラス」のノードを作成する。
 				size_t nClassNameLen = _tcslen(szClassArr[k]);
-				for (; htiClass ; htiClass = TreeView_GetNextSibling(hwndTree, htiClass)) {
+				for (; htiClass; htiClass=TreeView_GetNextSibling(hwndTree, htiClass)) {
 					tvi.mask = TVIF_HANDLE | TVIF_TEXT;
 					tvi.hItem = htiClass;
 					tvi.pszText = szLabel;
@@ -1186,7 +1198,7 @@ void CDlgFuncList::SetListVB (void)
 		const int nBuffLenTag = 17 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		const int nNum = m_pcFuncInfoArr->GetNum();
 		int nBuffLen = 0;
-		for (int i = 0; i < nNum; ++i) {
+		for (int i=0; i<nNum; ++i) {
 			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 		}
@@ -1199,7 +1211,7 @@ void CDlgFuncList::SetListVB (void)
 	CLayoutInt nFuncColTop(INT_MAX);
 	int nSelectedLineTop = 0;
 	bSelected = FALSE;
-	for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		if (!bSelected) {
 			if (pcFuncInfo->m_nFuncLineLAYOUT < nFuncLineTop
@@ -1228,8 +1240,8 @@ void CDlgFuncList::SetListVB (void)
 		nSelectedLine =  nSelectedLineTop;
 	}
 
-	TCHAR			szText[2048];
-	for (int i = 0; i < m_pcFuncInfoArr->GetNum(); ++i) {
+	TCHAR szText[2048];
+	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 		// 現在の解析結果要素
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
@@ -1442,7 +1454,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 		if (tagjump) {
 			nBuffLenTag = 10 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		}
-		for (int i = 0; i < nFuncInfoArrNum; ++i) {
+		for (int i=0; i<nFuncInfoArrNum; ++i) {
 			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			if (pcFuncInfo->IsAddClipText()) {
 				nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength() + pcFuncInfo->m_nDepth * 2;
@@ -1452,7 +1464,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 		m_cmemClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nCount);
 	}
 
-	for (int i = 0; i < nFuncInfoArrNum; ++i) {
+	for (int i=0; i<nFuncInfoArrNum; ++i) {
 		CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
 		/*	新しいアイテムを作成
@@ -1526,7 +1538,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 			CNativeT text;
 			if (tagjump) {
 				const TCHAR* pszFileName = pcFuncInfo->m_cmemFileName.GetStringPtr();
-				if (pszFileName == NULL) {
+				if (!pszFileName) {
 					pszFileName = m_pcFuncInfoArr->m_szFilePath;
 				}
 				text.AllocStringBuffer(
@@ -1549,7 +1561,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 			}
 
 			if (!nolabel) {
-				for (int cnt = 0; cnt < nStackPointer; ++cnt) {
+				for (int cnt=0; cnt<nStackPointer; ++cnt) {
 					text.AppendString(_T("  "));
 				}
 				text.AppendString(_T(" "));
@@ -1590,7 +1602,7 @@ void CDlgFuncList::SetDocLineFuncList()
 	
 	CFuncListManager().ResetAllFucListMark(pcDocLineMgr, false);
 	int num = m_pcFuncInfoArr->GetNum();
-	for (int i = 0; i < num; ++i) {
+	for (int i=0; i<num; ++i) {
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		if (0 < pcFuncInfo->m_nFuncLineCRLF) {
 			CDocLine* pcDocLine = pcDocLineMgr->GetLine( pcFuncInfo->m_nFuncLineCRLF - 1 );
@@ -1617,7 +1629,7 @@ void CDlgFuncList::SetTreeFile()
 	int nFuncInfo = 0;
 	std::vector<HTREEITEM> hParentTree;
 	hParentTree.push_back(TVI_ROOT);
-	for (int i = 0; i < (int)m_fileTreeSetting.m_aItems.size(); ++i) {
+	for (int i=0; i<(int)m_fileTreeSetting.m_aItems.size(); ++i) {
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szPath2[_MAX_PATH];
 		const SFileTreeItem& item = m_fileTreeSetting.m_aItems[i];
@@ -1729,7 +1741,7 @@ void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
 	cGrepEnumFilterFolders.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFolders );
 	int nItemCount = cGrepEnumFilterFolders.GetCount();
 	count = nItemCount;
-	for (int i = 0; i < nItemCount; ++i) {
+	for (int i=0; i<nItemCount; ++i) {
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
 		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
@@ -1744,7 +1756,7 @@ void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
 	cGrepEnumFilterFiles.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFiles );
 	nItemCount = cGrepEnumFilterFiles.GetCount();
 	count += nItemCount;
-	for (int i = 0; i < nItemCount; ++i) {
+	for (int i=0; i<nItemCount; ++i) {
 		const TCHAR* pFile = cGrepEnumFilterFiles.GetFileName(i);
 		TVINSERTSTRUCT tvis;
 		tvis.hParent      = hParent;
@@ -1962,7 +1974,7 @@ BOOL CDlgFuncList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	m_ptDefaultSizeClient.x = rc.right;
 	m_ptDefaultSizeClient.y = rc.bottom;
 
-	for (int i = 0; i < _countof(anchorList); ++i) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 		// ドッキング中はウィンドウ幅いっぱいまで伸ばす
 		if (IsDocking()) {
@@ -2299,7 +2311,7 @@ BOOL CDlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 	ptNew.x = rcDlg.right - rcDlg.left;
 	ptNew.y = rcDlg.bottom - rcDlg.top;
 
-	for (int i = 0 ; i < _countof(anchorList); ++i) {
+	for (int i=0; i<_countof(anchorList); ++i) {
 		HWND hwndCtrl = GetItemHwnd(anchorList[i].id);
 		ResizeItem(hwndCtrl, m_ptDefaultSizeClient, ptNew, m_rcItems[i], anchorList[i].anchor, (anchorList[i].anchor != ANCHOR_ALL));
 //	2013.2.6 aroka ちらつき防止用の試行錯誤
@@ -2665,7 +2677,7 @@ void CDlgFuncList::GetDockSpaceRect(LPRECT pRect)
 	if (hwnd[nCount]) {
 		++nCount;
 	}
-	for (int i = 0; i < nCount; ++i) {
+	for (int i=0; i<nCount; ++i) {
 		::GetWindowRect(hwnd[i], &rc[i]);
 	}
 	if (1 == nCount) {
@@ -2755,7 +2767,7 @@ int CDlgFuncList::HitTestCaptionButton(int xPos, int yPos)
 	rcBtn.left = rcBtn.right - ::GetSystemMetrics(SM_CXSMSIZE);
 	rcBtn.bottom = rcBtn.top + ::GetSystemMetrics(SM_CYSMSIZE);
 	int nBtn = -1;
-	for (int i = 0; i < DOCK_BUTTON_NUM; ++i) {
+	for (int i=0; i<DOCK_BUTTON_NUM; ++i) {
 		if (::PtInRect(&rcBtn, pt)) {
 			nBtn = i;	// 右端から i 番目のボタン上
 			break;
@@ -3103,7 +3115,12 @@ INT_PTR CDlgFuncList::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 /** WM_NCPAINT 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnNcPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnNcPaint(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	if (!IsDocking()) {
 		return 0L;
@@ -3185,7 +3202,7 @@ INT_PTR CDlgFuncList::OnNcPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	::OffsetRect(&rcBtn, 0, 1);
 	rcBtn.left = rcBtn.right - ::GetSystemMetrics(SM_CXSMSIZE);
 	rcBtn.bottom = rcBtn.top + ::GetSystemMetrics(SM_CYSMSIZE);
-	for (int i = 0; i < DOCK_BUTTON_NUM; ++i) {
+	for (int i=0; i<DOCK_BUTTON_NUM; ++i) {
 		int nClrCaptionText;
 		// マウスカーソルがボタン上にあればハイライト
 		if (::PtInRect(&rcBtn, pt)) {
@@ -3246,7 +3263,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_FLOAT,      LS(STR_DLGFNCLST_MENU_FLOATING));
 	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_UNDOCKABLE, LS(STR_DLGFNCLST_MENU_NODOCK));
 	int iTo = iPosRef - 1;
-	for (int i = iFrom; i <= iTo; ++i) {
+	for (int i=iFrom; i<=iTo; ++i) {
 		if (::GetMenuItemID(hMenuRef, i) == (100 + eDockSide)) {
 			::CheckMenuRadioItem(hMenuRef, iFrom, iTo, i, MF_BYPOSITION);
 			break;
@@ -3311,7 +3328,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				}
 			}
 			STypeConfig* type = new STypeConfig();
-			for (int i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
+			for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 				CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 				type->m_bOutlineDockDisp = CommonSet().m_bOutlineDockDisp;
 				type->m_eOutlineDockSide = CommonSet().m_eOutlineDockSide;
@@ -3602,7 +3619,12 @@ BOOL CDlgFuncList::OnContextMenu(WPARAM wParam, LPARAM lParam)
 /** タイトルバーのドラッグ＆ドロップでドッキング配置する際の移動先矩形を求める
 	@date 2010.06.17 ryoji 新規作成
 */
-EDockSide CDlgFuncList::GetDropRect(POINT ptDrag, POINT ptDrop, LPRECT pRect, bool bForceFloat)
+EDockSide CDlgFuncList::GetDropRect(
+	POINT ptDrag,
+	POINT ptDrop,
+	LPRECT pRect,
+	bool bForceFloat
+	)
 {
 	struct CDockStretch {
 		static int GetIdealStretch(int nStretch, int nMaxStretch)
@@ -3853,7 +3875,11 @@ BOOL CDlgFuncList::Track(POINT ptDrag)
 	::ReleaseCapture();
 	return FALSE;
 }
-void CDlgFuncList::LoadFileTreeSetting( CFileTreeSetting& data, SFilePath& IniDirPath )
+
+void CDlgFuncList::LoadFileTreeSetting(
+	CFileTreeSetting& data,
+	SFilePath& IniDirPath
+	)
 {
 	const SFileTree* pFileTree;
 	if (ProfDockSet() == 0) {
@@ -3874,7 +3900,7 @@ void CDlgFuncList::LoadFileTreeSetting( CFileTreeSetting& data, SFilePath& IniDi
 		::GetLongFileName( _T("."), szPath );
 		auto_strcat( szPath, _T("\\") );
 		int maxDir = CDlgTagJumpList::CalcMaxUpDirectory( szPath );
-		for (int i = 0; i <= maxDir; ++i) {
+		for (int i=0; i<=maxDir; ++i) {
 			CDataProfile cProfile;
 			cProfile.SetReadingMode();
 			std::tstring strIniFileName;
@@ -3916,7 +3942,7 @@ void CDlgFuncList::LoadFileTreeSetting( CFileTreeSetting& data, SFilePath& IniDi
 			// 共通設定orタイプ別設定から読み込み
 			//m_fileTreeSetting = *pFileTree;
 			data.m_aItems.resize( pFileTree->m_nItemCount );
-			for (int i = 0; i < pFileTree->m_nItemCount; ++i) {
+			for (int i=0; i<pFileTree->m_nItemCount; ++i) {
 				data.m_aItems[i] = pFileTree->m_aItems[i];
 			}
 		}

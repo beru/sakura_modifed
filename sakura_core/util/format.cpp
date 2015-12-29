@@ -119,7 +119,7 @@ UINT32 ParseVersion(const TCHAR* sVer)
 	const TCHAR* p = sVer;
 	int i;
 
-	for (i = 0; *p && i < 4; ++i) {
+	for (i=0; *p && i<4; ++i) {
 		// “Á•Ê‚È•¶š—ñ‚Ìˆ—
 		if (*p == _T('a')) {
 			if (_tcsncmp(_T("alpha"), p, 5) == 0) p += 5;
@@ -144,7 +144,7 @@ UINT32 ParseVersion(const TCHAR* sVer)
 		}
 		while (*p && !_istdigit(*p)) { ++p; }
 		// ”’l‚Ì’Šo
-		for (nVer = 0, nDigit = 0; _istdigit(*p); ++p) {
+		for (nVer=0, nDigit=0; _istdigit(*p); ++p) {
 			if (++nDigit > 2) break;	// ”š‚Í2Œ…‚Ü‚Å‚Å~‚ß‚é
 			nVer = nVer * 10 + *p - _T('0');
 		}

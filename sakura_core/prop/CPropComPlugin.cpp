@@ -345,7 +345,7 @@ void CPropPlugin::SetData_LIST(HWND hwndDlg)
 
 	ListView_DeleteAllItems(hListView);
 
-	for (index = 0; index < MAX_PLUGIN; ++index) {
+	for (index=0; index<MAX_PLUGIN; ++index) {
 		std::basic_string<TCHAR> sDirName;	// CPlugin.GetDirName()の結果保持変数
 		CPlugin* plugin = CPluginManager::getInstance()->GetPlugin(index);
 
@@ -478,7 +478,7 @@ void CPropPlugin::InitDialog(HWND hwndDlg)
 	::GetWindowRect(hListView, &rc);
 	int width = rc.right - rc.left;
 	
-	for (pos = 0; pos < _countof(ColumnList); ++pos) {
+	for (pos=0; pos<_countof(ColumnList); ++pos) {
 		
 		memset_raw(&sColumn, 0, sizeof(sColumn));
 		sColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_FMT;
@@ -589,7 +589,7 @@ static void LoadPluginTemp(CommonSetting& common, CMenuDrawer& cMenuDrawer)
 		// ツールバーアイコンの更新
 		const CPlug::Array& plugs = CJackManager::getInstance()->GetPlugs(PP_COMMAND);
 		cMenuDrawer.m_pcIcons->ResetExtend();
-		for (auto it = plugs.begin(); it != plugs.end(); ++it) {
+		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			int iBitmap = CMenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 			const CPlug* plug = *it;
 			if (!plug->m_sIcon.empty()) {

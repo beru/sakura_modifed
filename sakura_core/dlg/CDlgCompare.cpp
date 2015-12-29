@@ -246,7 +246,11 @@ INT_PTR CDlgCompare::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM l
 	return result;
 }
 
-BOOL CDlgCompare::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgCompare::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 

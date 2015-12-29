@@ -118,7 +118,7 @@ HWND CFuncKeyWnd::Open(
 
 	// 2002.11.04 Moca 変更できるように
 	m_nButtonGroupNum = m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_GroupNum;
-	if (1 > m_nButtonGroupNum || 12 < m_nButtonGroupNum) {
+	if (m_nButtonGroupNum < 1 || 12 < m_nButtonGroupNum) {
 		m_nButtonGroupNum = 4;
 	}
 
@@ -208,7 +208,7 @@ LRESULT CFuncKeyWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	int nX = 1;
 	for (int i=0; i<nButtonNum; ++i) {
-		if (0 < i  && 0 == (i % m_nButtonGroupNum)) {
+		if (0 < i && (i % m_nButtonGroupNum) == 0) {
 			nX += 12;
 		}
 		::MoveWindow(m_hwndButtonArr[i], nX, 1, nButtonWidth, nButtonHeight, TRUE);
@@ -231,17 +231,11 @@ LRESULT CFuncKeyWnd::DispatchEvent(
 //		return 0L;
 //	}
 
-	int		i;
-	WORD	wNotifyCode;
-	WORD	wID;
-	HWND	hwndCtl;
 	switch (uMsg) {
-
 	case WM_TIMER:		return OnTimer(hwnd, uMsg, wParam, lParam);
 	case WM_COMMAND:	return OnCommand(hwnd, uMsg, wParam, lParam);
 	case WM_SIZE:		return OnSize(hwnd, uMsg, wParam, lParam);
 	case WM_DESTROY:	return OnDestroy(hwnd, uMsg, wParam, lParam);
-
 	default:
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
@@ -272,11 +266,6 @@ LRESULT CFuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 // WM_TIMERタイマーの処理
 LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-// 	HWND hwnd,	// handle of window for timer messages
-//	UINT uMsg,	// WM_TIMER message
-//	UINT idEvent,	// timer identifier
-//	DWORD dwTime 	// current system time
-
 	//	return;
 	if (!GetHwnd()) {
 		return 0;
@@ -285,8 +274,6 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (::GetActiveWindow() != GetParentHwnd() && m_nCurrentKeyState != -1) {	// 2002/06/02 MIK	// 2006.12.20 ryoji 初回更新は処理する
 		return 0;
 	}
-
-//	int			nFuncId;
 
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
@@ -305,7 +292,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			);
 			if (nFuncCode != m_nFuncCodeArr[i]) {
 				m_nFuncCodeArr[i] = nFuncCode;
-				if (0 == m_nFuncCodeArr[i]) {
+				if (m_nFuncCodeArr[i] == 0) {
 					m_szFuncNameArr[i][0] = 0;
 				}else {
 					// Oct. 2, 2001 genta
@@ -380,7 +367,6 @@ int CFuncKeyWnd::CalcButtonSize(void)
 		nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);
 		::MoveWindow(m_hwndSizeBox,  rc.right - rc.left - nCxVScroll, rc.bottom - rc.top - nCyHScroll, nCxVScroll, nCyHScroll, TRUE);
 //		::MoveWindow(m_hwndSizeBox,  0, 0, nCxVScroll, nCyHScroll, TRUE);
-		
 //		return (rc.right - rc.left - nCxVScroll = - nButtonNum -  ((nButtonNum + m_nButtonGroupNum - 1) / m_nButtonGroupNum - 1) * 12) / nButtonNum;
 	}
 	return (rc.right - rc.left - nCxVScroll - nButtonNum -  ((nButtonNum + m_nButtonGroupNum - 1) / m_nButtonGroupNum - 1) * 12) / nButtonNum;
@@ -411,7 +397,7 @@ void CFuncKeyWnd::CreateButtons(void)
 			0 + 1,				// starting y position
 			0,					// button width
 			nButtonHeight,		// button height
-			GetHwnd(),				// parent window
+			GetHwnd(),			// parent window
 			NULL,				// No menu
 			(HINSTANCE) GetWindowLongPtr(GetHwnd(), GWLP_HINSTANCE),	// Modified by KEITA for WIN64 2003.9.6
 			NULL				// pointer not needed

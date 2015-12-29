@@ -164,7 +164,7 @@ void CPropGrep::SetData(HWND hwndDlg)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
-	for (int i = 0; i < _countof(TagJumpMode1Arr); ++i) {
+	for (int i=0; i<_countof(TagJumpMode1Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TagJumpMode1Arr[i].m_nNameID));
 		Combo_SetItemData(hwndCombo, i, TagJumpMode1Arr[i].m_nMethod);
 		if (TagJumpMode1Arr[i].m_nMethod == m_Common.m_sSearch.m_nTagJumpMode) {
@@ -182,7 +182,7 @@ void CPropGrep::SetData(HWND hwndDlg)
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_KEYWORD_TAGJUMP);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (int i = 0; i < _countof(TagJumpMode2Arr); ++i) {
+	for (int i=0; i<_countof(TagJumpMode2Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TagJumpMode2Arr[i].m_nNameID));
 		Combo_SetItemData(hwndCombo, i, TagJumpMode2Arr[i].m_nMethod);
 		if (TagJumpMode2Arr[i].m_nMethod == m_Common.m_sSearch.m_nTagJumpModeKeyword) {

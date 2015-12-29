@@ -77,7 +77,7 @@ CFileLoad::CFileLoad(const SEncodingConfig& encode)
 
 	m_nLineIndex	= -1;
 
-	m_pReadBuf = NULL;
+	m_pReadBuf		= NULL;
 	m_nReadDataLen    = 0;
 	m_nReadBufSize    = 0;
 	m_nReadBufOffSet  = 0;
@@ -107,7 +107,13 @@ CFileLoad::~CFileLoad(void)
 	@date 2003.06.08 Moca CODE_AUTODETECTを指定できるように変更
 	@date 2003.07.26 ryoji BOM引数追加
 */
-ECodeType CFileLoad::FileOpen( LPCTSTR pFileName, bool bBigFile, ECodeType CharCode, int nFlag, bool* pbBomExist )
+ECodeType CFileLoad::FileOpen(
+	LPCTSTR pFileName,
+	bool bBigFile,
+	ECodeType CharCode,
+	int nFlag,
+	bool* pbBomExist
+	)
 {
 	ULARGE_INTEGER	fileSize;
 
@@ -252,7 +258,7 @@ void CFileLoad::FileClose(void)
 /*! 1行読み込み
 	UTF-7場合、データ内のNEL,PS,LS等の改行までを1行として取り出す
 */
-EConvertResult CFileLoad::ReadLine( CNativeW* pUnicodeBuffer, CEol* pcEol )
+EConvertResult CFileLoad::ReadLine(CNativeW* pUnicodeBuffer, CEol* pcEol)
 {
 	if (m_CharCode != CODE_UTF7 && m_CharCode != CP_UTF7) {
 		return ReadLine_core( pUnicodeBuffer, pcEol );
@@ -320,20 +326,20 @@ EConvertResult CFileLoad::ReadLine_core(
 
 	// 1行取り出し ReadBuf -> m_memLine
 	// Oct. 19, 2002 genta while条件を整理
-	int			nBufLineLen;
-	int			nEolLen;
-	int			nBufferNext;
+	int	nBufLineLen;
+	int	nEolLen;
+	int	nBufferNext;
 	for (;;) {
 		const char* pLine = GetNextLineCharCode(
 			m_pReadBuf,
-			m_nReadDataLen,    //[in] バッファの有効データサイズ
-			&nBufLineLen,      //[out] 改行を含まない長さ
-			&m_nReadBufOffSet, //[i/o] オフセット
+			m_nReadDataLen,    // [in] バッファの有効データサイズ
+			&nBufLineLen,      // [out] 改行を含まない長さ
+			&m_nReadBufOffSet, // [i/o] オフセット
 			pcEol,
 			&nEolLen,
 			&nBufferNext
 		);
-		if (pLine == NULL) break;
+		if (!pLine) break;
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
 		if (m_nReadDataLen <= m_nReadBufOffSet && FLMODE_READY == m_eMode) {// From Here Jun. 13, 2003 Moca
@@ -347,7 +353,7 @@ EConvertResult CFileLoad::ReadLine_core(
 			m_nReadBufOffSet -= nBufferNext;
 			// バッファロード   File -> ReadBuf
 			Buffering();
-			if (0 == nBufferNext && 0 < nEolLen) {
+			if (nBufferNext == 0 && 0 < nEolLen) {
 				// ぴったり行出力
 				break;
 			}
@@ -375,7 +381,7 @@ EConvertResult CFileLoad::ReadLine_core(
 			}
 		}
 	}
-	if (0 == pUnicodeBuffer->GetStringLength()) {
+	if (pUnicodeBuffer->GetStringLength() == 0) {
 		eRet = RESULT_FAILURE;
 	}
 
@@ -416,7 +422,7 @@ void CFileLoad::Buffering(void)
 	}
 	// ファイルの読み込み
 	DWORD ReadSize = Read(&m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen);
-	if (0 == ReadSize) {
+	if (ReadSize == 0) {
 		m_eMode = FLMODE_READBUFEND;	// ファイルなどの終わりに達したらしい
 	}
 	m_nReadDataLen += ReadSize;
@@ -442,7 +448,7 @@ void CFileLoad::ReadBufEmpty(void)
 */
 int CFileLoad::GetPercent(void) {
 	int nRet;
-	if (0 == m_nFileDataLen || m_nReadLength > m_nFileDataLen) {
+	if (m_nFileDataLen == 0 || m_nFileDataLen < m_nReadLength) {
 		nRet = 100;
 	}else {
 		nRet = static_cast<int>(m_nReadLength * 100 / m_nFileDataLen);
@@ -454,12 +460,12 @@ int CFileLoad::GetPercent(void) {
 	GetNextLineの汎用文字コード版
 */
 const char* CFileLoad::GetNextLineCharCode(
-	const char*	pData,		//!< [in]	検索文字列
-	int			nDataLen,	//!< [in]	検索文字列のバイト数
-	int*		pnLineLen,	//!< [out]	1行のバイト数を返すただしEOLは含まない
-	int*		pnBgn,		//!< [i/o]	検索文字列のバイト単位のオフセット位置
-	CEol*		pcEol,		//!< [i/o]	EOL
-	int*		pnEolLen,	//!< [out]	EOLのバイト数 (Unicodeで困らないように)
+	const char*	pData,			//!< [in]	検索文字列
+	int			nDataLen,		//!< [in]	検索文字列のバイト数
+	int*		pnLineLen,		//!< [out]	1行のバイト数を返すただしEOLは含まない
+	int*		pnBgn,			//!< [i/o]	検索文字列のバイト単位のオフセット位置
+	CEol*		pcEol,			//!< [i/o]	EOL
+	int*		pnEolLen,		//!< [out]	EOLのバイト数 (Unicodeで困らないように)
 	int*		pnBufferNext	//!< [out]	次回持越しバッファ長(EOLの断片)
 ) {
 	int nbgn = *pnBgn;
@@ -513,9 +519,8 @@ const char* CFileLoad::GetNextLineCharCode(
 			// UTF-8のNEL,PS,LS断片の検出
 			if (i == nDataLen && m_bEolEx) {
 				for (i=t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; ++i) {
-					int k;
 					bool bSet = false;
-					for (k=0; k<(int)_countof(eEolEx); ++k) {
+					for (int k=0; k<(int)_countof(eEolEx); ++k) {
 						int nCompLen = t_min(nDataLen - i, m_memEols[k].GetRawLength());
 						if (0 != nCompLen
 							&& 0 == memcmp(m_memEols[k].GetRawPtr(), pData + i, nCompLen)

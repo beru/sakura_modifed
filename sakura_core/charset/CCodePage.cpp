@@ -126,7 +126,7 @@ EConvertResult CCodePage::CPToUnicode(const CMemory& cSrc, CNativeW* pDst, int c
 	}catch ( ... ) {
 		pDstBuffer = NULL;
 	}
-	if (pDstBuffer == NULL) {
+	if (!pDstBuffer) {
 		return RESULT_FAILURE;
 	}
 

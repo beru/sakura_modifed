@@ -44,7 +44,7 @@ const DWORD p_helpids[] = {	//12000
 	IDC_CHK_LOHICASE,				HIDC_GREP_CHK_LOHICASE,				// 大文字小文字
 	IDC_CHK_REGULAREXP,				HIDC_GREP_CHK_REGULAREXP,			// 正規表現
 	IDC_COMBO_CHARSET,				HIDC_GREP_COMBO_CHARSET,			// 文字コードセット
-	IDC_CHECK_CP,					HIDC_GREP_CHECK_CP,					//コードページ
+	IDC_CHECK_CP,					HIDC_GREP_CHECK_CP,					// コードページ
 	IDC_COMBO_TEXT,					HIDC_GREP_COMBO_TEXT,				// 条件
 	IDC_COMBO_FILE,					HIDC_GREP_COMBO_FILE,				// ファイル
 	IDC_COMBO_FOLDER,				HIDC_GREP_COMBO_FOLDER,				// フォルダ
@@ -88,7 +88,7 @@ CDlgGrep::CDlgGrep()
 
 	@date 2013.03.24 novice 新規作成
 */
-BOOL CDlgGrep::OnCbnDropDown( HWND hwndCtl, int wID )
+BOOL CDlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
 	switch (wID) {
@@ -121,7 +121,11 @@ BOOL CDlgGrep::OnCbnDropDown( HWND hwndCtl, int wID )
 }
 
 // モーダルダイアログの表示
-int CDlgGrep::DoModal(HINSTANCE hInstance, HWND hwndParent, const TCHAR* pszCurrentFilePath)
+int CDlgGrep::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	const TCHAR* pszCurrentFilePath
+	)
 {
 	auto& csSearch = m_pShareData->m_Common.m_sSearch;
 	m_bSubFolder = csSearch.m_bGrepSubFolder;			// Grep: サブフォルダも検索
@@ -154,7 +158,11 @@ int CDlgGrep::DoModal(HINSTANCE hInstance, HWND hwndParent, const TCHAR* pszCurr
 LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 WNDPROC g_pOnFolderProc;
 
-BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgGrep::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 
@@ -214,7 +222,12 @@ BOOL CDlgGrep::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 	@date 2007.02.09 bosagami 新規作成
 	@date 2007.09.02 genta ディレクトリチェックを強化
 */
-LRESULT CALLBACK OnFolderProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK OnFolderProc(
+	HWND hwnd,
+	UINT msg,
+	WPARAM wparam,
+	LPARAM lparam
+	)
 {
 	if (msg == WM_DROPFILES) do {
 		// From Here 2007.09.02 genta 

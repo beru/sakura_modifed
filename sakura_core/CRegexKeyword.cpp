@@ -119,7 +119,7 @@ CRegexKeyword::~CRegexKeyword()
 
 	@retval TRUE 成功
 */
-BOOL CRegexKeyword::RegexKeyInit(void)
+bool CRegexKeyword::RegexKeyInit(void)
 {
 	MYDBGMSG("RegexKeyInit")
 	m_nTypeIndex = -1;
@@ -139,7 +139,7 @@ BOOL CRegexKeyword::RegexKeyInit(void)
 	wmemset(m_keywordList, _countof(m_keywordList), L'\0');
 #endif
 
-	return TRUE;
+	return true;
 }
 
 // 現在タイプ設定処理
@@ -154,13 +154,13 @@ BOOL CRegexKeyword::RegexKeyInit(void)
 
 	@note タイプ設定が変わったら再ロードしコンパイルする。
 */
-BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
+bool CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 {
 	MYDBGMSG("RegexKeySetTypes")
 	if (!pTypesPtr)  {
 		m_pTypes = NULL;
 		m_bUseRegexKeyword = false;
-		return FALSE;
+		return false;
 	}
 
 	if (!pTypesPtr->m_bUseRegexKeyword) {
@@ -169,21 +169,21 @@ BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 			m_pTypes = NULL;
 			m_bUseRegexKeyword = false;
 		}
-		return FALSE;
+		return false;
 	}
 
 	if (m_nTypeId == pTypesPtr->m_id
 		&& m_nCompiledMagicNumber == pTypesPtr->m_nRegexKeyMagicNumber
 		&& m_pTypes  // 2014.07.02 条件追加
 	) {
-		return TRUE;
+		return true;
 	}
 
 	m_pTypes = pTypesPtr;
 
 	RegexKeyCompile();
 	
-	return TRUE;
+	return true;
 }
 
 // 正規表現キーワードコンパイル処理
@@ -198,7 +198,7 @@ BOOL CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
 	キーワードはコンパイルデータとして内部変数にコピーする。
 	先頭指定、色指定側の使用・未使用をチェックする。
 */
-BOOL CRegexKeyword::RegexKeyCompile(void)
+bool CRegexKeyword::RegexKeyCompile(void)
 {
 	static const wchar_t dummy[2] = L"\0";
 	const struct RegexKeywordInfo	*rp;
@@ -235,14 +235,14 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 	m_nTypeIndex = m_pTypes->m_nIdx;
 	m_nTypeId = m_pTypes->m_id;
 	m_nCompiledMagicNumber = 1;	// Not Compiled.
-	m_bUseRegexKeyword  = m_pTypes->m_bUseRegexKeyword;
+	m_bUseRegexKeyword = m_pTypes->m_bUseRegexKeyword;
 	if (!m_bUseRegexKeyword) {
-		return FALSE;
+		return false;
 	}
 
 	if (!IsAvailable()) {
 		m_bUseRegexKeyword = false;
-		return FALSE;
+		return false;
 	}
 
 #ifdef USE_PARENT
@@ -258,7 +258,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 		rp = &m_sInfo[i].sRegexKey;
 #endif
 
-		if (RegexKeyCheckSyntax( pKeyword ) != FALSE) {
+		if (RegexKeyCheckSyntax(pKeyword)) {
 			m_szMsg[0] = '\0';
 			BMatch(pKeyword, dummy, dummy + 1, &m_sInfo[i].pBregexp, m_szMsg);
 
@@ -302,7 +302,7 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 
 	m_nCompiledMagicNumber = m_pTypes->m_nRegexKeyMagicNumber;	// Compiled.
 
-	return TRUE;
+	return true;
 }
 
 // 行検索開始処理
@@ -316,13 +316,13 @@ BOOL CRegexKeyword::RegexKeyCompile(void)
 	@note それぞれの行検索の最初に実行する。
 	タイプ設定等が変更されている場合はリロードする。
 */
-BOOL CRegexKeyword::RegexKeyLineStart(void)
+bool CRegexKeyword::RegexKeyLineStart(void)
 {
 	MYDBGMSG("RegexKeyLineStart")
 
 	// 動作に必要なチェックをする。
-	if (!m_bUseRegexKeyword || !IsAvailable() || m_pTypes==NULL) {
-		return FALSE;
+	if (!m_bUseRegexKeyword || !IsAvailable() || !m_pTypes) {
+		return false;
 	}
 
 #if 0	// RegexKeySetTypesで設定されているはずなので廃止
@@ -343,7 +343,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 		m_sInfo[i].nStatus = RK_EMPTY;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // 正規表現検索処理
@@ -356,7 +356,7 @@ BOOL CRegexKeyword::RegexKeyLineStart(void)
 
 	@note RegexKeyLineStart関数によって初期化されていること。
 */
-BOOL CRegexKeyword::RegexIsKeyword(
+bool CRegexKeyword::RegexIsKeyword(
 	const CStringRef&	cStr,		// [in] 検索対象文字列
 //	const wchar_t*		pLine,		// [in] １行のデータ
 	int					nPos,		// [in] 検索開始オフセット
@@ -376,7 +376,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 #endif
 		// || (!pLine)
 	) {
-		return FALSE;
+		return false;
 	}
 
 	for (int i=0; i<m_nRegexKeyCount; ++i) {
@@ -388,7 +388,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 #else
 				*nMatchColor = m_sInfo[i].sRegexKey.m_nColorIndex;
 #endif
-				return TRUE;  // マッチした
+				return true;  // マッチした
 			}
 
 			// 以前の結果はもう古いので再検索する
@@ -416,7 +416,7 @@ BOOL CRegexKeyword::RegexIsKeyword(
 #else
 							*nMatchColor = m_sInfo[i].sRegexKey.m_nColorIndex;
 #endif
-							return TRUE;  // マッチした
+							return true;  // マッチした
 						}
 					}
 
@@ -432,10 +432,10 @@ BOOL CRegexKeyword::RegexIsKeyword(
 		}
 	}  // for
 
-	return FALSE;
+	return false;
 }
 
-BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
+bool CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 {
 	static const wchar_t* kakomi[7 * 2] = {
 		L"/",  L"/k",
@@ -457,12 +457,12 @@ BOOL CRegexKeyword::RegexKeyCheckSyntax(const wchar_t* s)
 				const wchar_t* p = &s[length - wcslen(kakomi[i+1])];
 				if (wcscmp(p, kakomi[i + 1]) == 0) {
 					// 正常
-					return TRUE;
+					return true;
 				}
 			}
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 //@@@ 2001.11.17 add end MIK

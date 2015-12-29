@@ -91,7 +91,10 @@ void CMacro::ClearMacroParam()
 
 	lParamは、HandleCommandのparamに値を渡しているコマンドの場合にのみ使います。
 */
-void CMacro::AddLParam(const LPARAM* lParams, const CEditView* pcEditView)
+void CMacro::AddLParam(
+	const LPARAM* lParams,
+	const CEditView* pcEditView
+	)
 {
 	int nOption = 0;
 	LPARAM lParam = lParams[0];
@@ -335,7 +338,7 @@ void CMacroParam::SetStringParam( const WCHAR* szParam, int nLength )
 	m_eType = EMacroParamTypeStr;
 }
 
-void CMacroParam::SetIntParam( const int nParam )
+void CMacroParam::SetIntParam(const int nParam)
 {
 	Clear();
 	m_pData = new WCHAR[16];	//	数値格納（最大16桁）用
@@ -344,9 +347,8 @@ void CMacroParam::SetIntParam( const int nParam )
 	m_eType = EMacroParamTypeInt;
 }
 
-/*	引数に文字列を追加。
-*/
-void CMacro::AddStringParam( const WCHAR* szParam, int nLength )
+// 引数に文字列を追加。
+void CMacro::AddStringParam(const WCHAR* szParam, int nLength)
 {
 	CMacroParam* param = new CMacroParam();
 
@@ -438,12 +440,18 @@ int CMacro::GetParamCount() const
 	return n;
 }
 
-static inline int wtoi_def(const WCHAR* arg, int def_val)
+static inline int wtoi_def(
+	const WCHAR* arg,
+	int def_val
+	)
 {
 	return (!arg ? def_val: _wtoi(arg));
 }
 
-static inline const WCHAR* wtow_def(const WCHAR* arg, const WCHAR* def_val)
+static inline const WCHAR* wtow_def(
+	const WCHAR* arg,
+	const WCHAR* def_val
+	)
 {
 	return (!arg ? def_val: arg);
 }
@@ -463,7 +471,7 @@ void CMacro::Save(HINSTANCE hInstance, CTextOutputStream& out) const
 	CNativeW		cmemWork;
 	int nFuncID = m_nFuncID;
 
-	/* 2002.2.2 YAZAKI CSMacroMgrに頼む */
+	// 2002.2.2 YAZAKI CSMacroMgrに頼む
 	if (CSMacroMgr::GetFuncInfoByID( hInstance, nFuncID, szFuncName, szFuncNameJapanese)){
 		// 2014.01.24 Moca マクロ書き出しをm_eTypeを追加して統合
 		out.WriteF( L"S_%ls(", szFuncName );
@@ -538,7 +546,7 @@ bool CMacro::HandleCommand(
 	const WCHAR*		Argument[],
 	const int			ArgLengths[],
 	const int			ArgSize
-)
+	)
 {
 	std::tstring EXEC_ERROR_TITLE_string = LS(STR_ERR_DLGMACRO02);
 	const TCHAR* EXEC_ERROR_TITLE = EXEC_ERROR_TITLE_string.c_str();
@@ -1137,7 +1145,7 @@ bool CMacro::HandleCommand(
 				cCmdLine.AppendString(szTemp);
 			}
 
-			/* 新規編集ウィンドウの追加 ver 0 */
+			// 新規編集ウィンドウの追加 ver 0
 			SLoadInfo sLoadInfo;
 			sLoadInfo.cFilePath = _T("");
 			sLoadInfo.eCharCode = CODE_NONE;
@@ -1464,7 +1472,13 @@ inline bool VariantToI4(Variant& varCopy, const VARIANT& arg)
 	@date 2005.08.05 maru,zenryaku 関数追加
 	@date 2005.11.29 FILE VariantChangeType対応
 */
-bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Arguments, int ArgSize, VARIANT& Result)
+bool CMacro::HandleFunction(
+	CEditView* View,
+	EFunctionCode ID,
+	const VARIANT* Arguments,
+	int ArgSize,
+	VARIANT& Result
+	)
 {
 	Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
@@ -1524,7 +1538,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				const wchar_t* Buffer;
 				CLogicInt nLength;
 				CLogicInt nLine;
-				if (0 == varCopy.Data.lVal) {
+				if (varCopy.Data.lVal == 0) {
 					nLine = View->GetCaret().GetCaretLogicPos().GetY2();
 				}else {
 					nLine = CLogicInt(varCopy.Data.lVal - 1);
@@ -1547,7 +1561,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 		{
 			if (ArgSize != 1) return false;
 			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-			if (0 == varCopy.Data.lVal) {
+			if (varCopy.Data.lVal == 0) {
 				int nLineCount;
 				nLineCount = View->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 				Wrap(&Result)->Receive(nLineCount);
@@ -2264,7 +2278,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 			if (!variant_to_int(Arguments[0], nLineNum)) return false;
 			if (!variant_to_int(Arguments[1], nAttType)) return false;
 			CLogicInt nLine;
-			if (0 == nLineNum) {
+			if (nLineNum == 0) {
 				nLine = View->GetCaret().GetCaretLogicPos().GetY2();
 			}else if (nLineNum < 0) {
 				return false;
@@ -2272,7 +2286,7 @@ bool CMacro::HandleFunction(CEditView *View, EFunctionCode ID, const VARIANT *Ar
 				nLine = CLogicInt(nLineNum - 1); // nLineNumは1開始
 			}
 			const CDocLine* pcDocLine = View->GetDocument()->m_cDocLineMgr.GetLine(nLine);
-			if (pcDocLine == NULL) {
+			if (!pcDocLine) {
 				return false;
 			}
 			int nRet;

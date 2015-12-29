@@ -239,7 +239,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 				// 機能一覧に文字列をセット (リストボックス)
 				//	From Here Oct. 15, 2001 genta Lookupを使うように変更
 				nNum = m_cLookup.GetItemCount(nIndex2);
-				for (i = 0; i < nNum; ++i) {
+				for (i=0; i<nNum; ++i) {
 					nIndex1 = m_cLookup.Pos2FuncCode(nIndex2, i);
 					int nbarNo = m_pcMenuDrawer->FindToolbarNoFromCommandId(nIndex1);
 
@@ -482,7 +482,7 @@ void CPropToolbar::SetData(HWND hwndDlg)
 
 	auto& csToolBar = m_Common.m_sToolBar;
 	// ツールバーボタンの情報をセット(リストボックス)
-	for (int i = 0; i < csToolBar.m_nToolBarButtonNum; ++i) {
+	for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 		//	From Here Apr. 13, 2002 genta
 		LRESULT lResult = ::Listbox_ADDDATA(hwndResList, (LPARAM)csToolBar.m_nToolBarButtonIdxArr[i]);
 		if (lResult == LB_ERR || lResult == LB_ERRSPACE) {
@@ -511,7 +511,7 @@ int CPropToolbar::GetData(HWND hwndDlg)
 
 	// ツールバーボタンの情報を取得
 	int k = 0;
-	for (int i = 0; i < csToolBar.m_nToolBarButtonNum; ++i) {
+	for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 		int j = List_GetItemData(hwndResList, i);
 		if (LB_ERR != j) {
 			csToolBar.m_nToolBarButtonIdxArr[k] = j;

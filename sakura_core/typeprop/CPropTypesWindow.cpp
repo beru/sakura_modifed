@@ -231,7 +231,7 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 void CPropTypesWindow::SetCombobox(HWND hwndWork, const int* nIds, int nCount, int select)
 {
 	Combo_ResetContent(hwndWork);
-	for (int i = 0; i < nCount; ++i) {
+	for (int i=0; i<nCount; ++i) {
 		Combo_AddString(hwndWork, LS(nIds[i]));
 	}
 	Combo_SetCurSel(hwndWork, select);
@@ -254,7 +254,7 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 		Combo_ResetContent(hwndCombo);
 		ime = m_Types.m_nImeState & 3;
 		int		nSelPos = 0;
-		for (int i = 0; i < _countof(ImeSwitchArr); ++i) {
+		for (int i=0; i<_countof(ImeSwitchArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(ImeSwitchArr[i].nNameId));
 			if (ImeSwitchArr[i].nMethod == ime) {	// IME状態
 				nSelPos = i;
@@ -267,7 +267,7 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 		Combo_ResetContent(hwndCombo);
 		ime = m_Types.m_nImeState >> 2;
 		nSelPos = 0;
-		for (int i = 0; i < _countof(ImeStateArr); ++i) {
+		for (int i=0; i<_countof(ImeStateArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(ImeStateArr[i].nNameId));
 			if (ImeStateArr[i].nMethod == ime) {	// IME状態
 				nSelPos = i;
@@ -320,11 +320,11 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 
 		// デフォルト改行タイプのコンボボックス設定
 		hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_DEFAULT_EOLTYPE);
-		for (int i = 0; i < _countof(aszEolStr); ++i) {
+		for (int i=0; i<_countof(aszEolStr); ++i) {
 			ApiWrap::Combo_AddString(hCombo, aszEolStr[i]);
 		}
 		int i;
-		for (i = 0; i < _countof(aeEolType); ++i) {
+		for (i=0; i<_countof(aeEolType); ++i) {
 			if (m_Types.m_encoding.m_eDefaultEoltype == aeEolType[i]) {
 				break;
 			}

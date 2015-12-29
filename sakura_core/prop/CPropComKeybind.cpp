@@ -295,7 +295,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 				// 割り当てキーリストをクリアして値の設定
 				List_ResetContent(hwndAssignedkeyList);
 				if (0 < nAssignedKeyNum) {
-					for (j = 0; j < nAssignedKeyNum; ++j) {
+					for (j=0; j<nAssignedKeyNum; ++j) {
 						// デバッグモニタに出力
 						const TCHAR* cpszString = ppcAssignedKeyList[j]->GetStringPtr();
 						::List_AddString(hwndAssignedkeyList, cpszString);
@@ -346,7 +346,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 							p += _tcslen(STR_ALT_PLUS);
 							i |= _ALT;
 						}
-						for (j = 0; j < csKeybind.m_nKeyNameArrNum; ++j) {
+						for (j=0; j<csKeybind.m_nKeyNameArrNum; ++j) {
 							if (_tcscmp(csKeybind.m_pKeyNameArr[j].m_szKeyName, p) == 0) {
 								List_SetCurSel(hwndKeyList, j);
 								if (i & _SHIFT) ::CheckDlgButton(hwndDlg, IDC_CHECK_SHIFT, BST_CHECKED);	// チェック
@@ -420,7 +420,7 @@ void CPropKeybind::SetData(HWND hwndDlg)
 	// キー一覧に文字列をセット（リストボックス）
 	HWND hwndKeyList = ::GetDlgItem(hwndDlg, IDC_LIST_KEY);
 	auto& csKeybind = m_Common.m_sKeyBind;
-	for (int i = 0; i < csKeybind.m_nKeyNameArrNum; ++i) {
+	for (int i=0; i<csKeybind.m_nKeyNameArrNum; ++i) {
 		::List_AddString(hwndKeyList, csKeybind.m_pKeyNameArr[i].m_szKeyName);
 	}
 
@@ -462,7 +462,7 @@ void CPropKeybind::ChangeKeyList(HWND hwndDlg) {
 	// キー一覧に文字列をセット（リストボックス）
 	List_ResetContent(hwndKeyList);
 	auto& csKeybind = m_Common.m_sKeyBind;
-	for (i = 0; i < csKeybind.m_nKeyNameArrNum; ++i) {
+	for (i=0; i<csKeybind.m_nKeyNameArrNum; ++i) {
 		TCHAR	szLabel[256];
 		auto_sprintf(szLabel, _T("%ls%ts"), szKeyState, csKeybind.m_pKeyNameArr[i].m_szKeyName);
 		::List_AddString(hwndKeyList, szLabel);

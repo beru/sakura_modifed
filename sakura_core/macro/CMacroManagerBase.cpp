@@ -35,7 +35,10 @@
 
 // CMacroBeforeAfter
 
-void CMacroBeforeAfter::ExecKeyMacroBefore(class CEditView* pcEditView, int flags)
+void CMacroBeforeAfter::ExecKeyMacroBefore(
+	class CEditView* pcEditView,
+	int flags
+	)
 {
 	COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 	if (opeBlk) {
@@ -46,10 +49,14 @@ void CMacroBeforeAfter::ExecKeyMacroBefore(class CEditView* pcEditView, int flag
 	m_bDrawSwitchOld = pcEditView->GetDrawSwitch();
 }
 
-void CMacroBeforeAfter::ExecKeyMacroAfter(class CEditView* pcEditView, int flags, bool bRet)
+void CMacroBeforeAfter::ExecKeyMacroAfter(
+	class CEditView* pcEditView,
+	int flags,
+	bool bRet
+	)
 {
+	COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 	if (0 < m_nOpeBlkCount) {
-		COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 		if (!opeBlk) {
 			pcEditView->m_cCommander.SetOpeBlk(new COpeBlk());
 		}
@@ -57,7 +64,6 @@ void CMacroBeforeAfter::ExecKeyMacroAfter(class CEditView* pcEditView, int flags
 			pcEditView->m_cCommander.GetOpeBlk()->SetRefCount(m_nOpeBlkCount);
 		}
 	}else {
-		COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 		if (opeBlk) {
 			opeBlk->SetRefCount(1); // 強制的にリセットするため1を指定
 			pcEditView->SetUndoBuffer();
@@ -70,13 +76,17 @@ void CMacroBeforeAfter::ExecKeyMacroAfter(class CEditView* pcEditView, int flags
 // デフォルトのコンストラクタ・デストラクタ
 
 CMacroManagerBase::CMacroManagerBase()
- : m_nReady(false)
+	:
+	m_nReady(false)
 {}
 
 CMacroManagerBase::~CMacroManagerBase()
 {}
 
-void CMacroManagerBase::ExecKeyMacro2(class CEditView* pcEditView, int flags)
+void CMacroManagerBase::ExecKeyMacro2(
+	class CEditView* pcEditView,
+	int flags
+	)
 {
 	ExecKeyMacroBefore(pcEditView, flags);
 	bool b = ExecKeyMacro(pcEditView, flags);

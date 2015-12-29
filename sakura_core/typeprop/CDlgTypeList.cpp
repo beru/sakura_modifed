@@ -323,7 +323,7 @@ void CDlgTypeList::SetData(int selIdx)
 		selIdx = GetDllShareData().m_nTypesCount - 1;
 	}
 	List_ResetContent(hwndList);	// リストを空にする
-	for (nIdx = 0; nIdx < GetDllShareData().m_nTypesCount; ++nIdx) {
+	for (nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
 		const STypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
@@ -346,7 +346,7 @@ void CDlgTypeList::SetData(int selIdx)
 			nExtent = sizeExtent.cx;
 		}
 	}
-	for (nIdx; nIdx < MAX_TYPES; ++nIdx) {
+	for (nIdx; nIdx<MAX_TYPES; ++nIdx) {
 		m_bRegistryChecked[nIdx] = FALSE;
 		m_bExtRMenu[nIdx] = FALSE;
 		m_bExtDblClick[nIdx] = FALSE;
@@ -508,7 +508,7 @@ bool CDlgTypeList::InitializeType(void)
 	// 同じ名前にならないように数字をつける
 	int nNameNum = iDocType + 1;
 	bool bUpdate = true;
-	for (int i = 1; i < GetDllShareData().m_nTypesCount; ++i) {
+	for (int i=1; i<GetDllShareData().m_nTypesCount; ++i) {
 		if (bUpdate) {
 			auto_sprintf_s(type.m_szTypeName, LS(STR_DLGTYPELIST_SETNAME), nNameNum);
 			++nNameNum;
@@ -552,10 +552,10 @@ bool CDlgTypeList::CopyType()
 	// 名前に2等を付ける
 	int n = 1;
 	bool bUpdate = true;
-	for (int i = 0; i < nNewTypeIndex; ++i) {
+	for (int i=0; i<nNewTypeIndex; ++i) {
 		if (bUpdate) {
 			TCHAR* p = NULL;
-			for (int k = (int)auto_strlen(type.m_szTypeName) - 1; 0 <= k; --k) {
+			for (int k=(int)auto_strlen(type.m_szTypeName)-1; 0<=k; --k) {
 				if (WCODE::Is09(type.m_szTypeName[k])) {
 					p = &type.m_szTypeName[k];
 				}else {

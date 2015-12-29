@@ -289,7 +289,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					// 削除対象のセットを使用しているファイルタイプを列挙
 					static TCHAR		pszLabel[1024];
 					pszLabel[0] = 0;
-					for (i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
+					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 						std::auto_ptr<STypeConfig> type(new STypeConfig());
 						CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 						// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
@@ -321,9 +321,9 @@ INT_PTR CPropKeyword::DispatchEvent(
 						return TRUE;
 					}
 					// 削除対象のセットを使用しているファイルタイプのセットをクリア
-					for (i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
+					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 						// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
-						for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
+						for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 							if (nIndex1 == m_Types_nKeyWordSetIdx[i].index[j]) {
 								m_Types_nKeyWordSetIdx[i].index[j] = -1;
 							}else if (nIndex1 < m_Types_nKeyWordSetIdx[i].index[j]) {
@@ -592,7 +592,7 @@ void CPropKeyword::SetData(HWND hwndDlg)
 	Combo_ResetContent(hwndWork);  // コンボボックスを空にする
 	auto& keywordSetMgr = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr;
 	if (0 < keywordSetMgr.m_nKeyWordSetNum) {
-		for (int i = 0; i < keywordSetMgr.m_nKeyWordSetNum; ++i) {
+		for (int i=0; i<keywordSetMgr.m_nKeyWordSetNum; ++i) {
 			Combo_AddString(hwndWork, keywordSetMgr.GetTypeName(i));
 		}
 		// セット名コンボボックスのデフォルト選択
@@ -655,7 +655,7 @@ void CPropKeyword::SetKeyWordSet(HWND hwndDlg, int nIdx)
 	// 2005.01.25 Moca/genta リスト追加中は再描画を抑制してすばやく表示
 	::SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
 
-	for (i = 0; i < nNum; ++i) {
+	for (i=0; i<nNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
 		const TCHAR* pszKeyWord = to_tchar(keywordSetMgr.GetKeyWord(nIdx, i));
 		lvi.mask = LVIF_TEXT | LVIF_PARAM;

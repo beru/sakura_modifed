@@ -53,7 +53,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 		pszFileName = pszSep + 1;
 	}
 
-	for (int i = 0; i < m_pShareData->m_nTypesCount; ++i) {
+	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;
 		GetTypeConfigMini(CTypeConfig(i), &mini);
 		if (IsFileNameMatch(mini->m_szTypeExts, pszFileName)) {
@@ -82,7 +82,7 @@ CTypeConfig CDocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 
 CTypeConfig CDocTypeManager::GetDocumentTypeOfId(int id)
 {
-	for (int i = 0; i < m_pShareData->m_nTypesCount; ++i) {
+	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const STypeConfigMini* mini;
 		GetTypeConfigMini(CTypeConfig(i), &mini);
 		if (mini->m_id == id) {
@@ -229,7 +229,7 @@ bool CDocTypeManager::ConvertTypesExtToDlgExt( const TCHAR *pszSrcExt, const TCH
 
 	token = _tcstok(p, m_typeExtSeps);
 	while (token) {
-		if (szExt == NULL || szExt[0] == _T('\0') || auto_stricmp(token, szExt + 1) != 0) {
+		if (!szExt || szExt[0] == _T('\0') || auto_stricmp(token, szExt + 1) != 0) {
 			if (pszDstExt[0] != '\0') _tcscat( pszDstExt, _T(";") );
 			// 拡張子指定なし、またはマッチした拡張子でない
 			if (_tcspbrk(token, m_typeExtWildcards) == NULL) {

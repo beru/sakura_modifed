@@ -97,7 +97,7 @@ bool IsFilePath(
 	*pnBgn = i;
 	int cur_pos = 0;
 	int tmp_end = 0;
-	for (; i <= nLineLen && cur_pos + 1 < _countof(szJumpToFile); ++i) {
+	for (; i<=nLineLen && cur_pos+1<_countof(szJumpToFile); ++i) {
 		// ファイル名終端を検知する
 		if (WCODE::IsLineDelimiterExt(pLine[i]) || pLine[i] == L'\0') {
 			break;
@@ -334,7 +334,7 @@ void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* psz
 {
 	TCHAR* out = pszPath;
 	// フォルダをコピー
-	for (const TCHAR* in = pszDir; *in != '\0';) {
+	for (const TCHAR* in=pszDir; *in!='\0'; ) {
 		*out++ = *in++;
 	}
 	// 円記号を付加
@@ -348,7 +348,7 @@ void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* psz
 	}
 #endif
 	// ファイル名をコピー
-	for (const TCHAR* in = pszTitle; *in != '\0';) {
+	for (const TCHAR* in=pszTitle; *in!='\0'; ) {
 		*out++ = *in++;
 	}
 	*out = '\0';
@@ -433,7 +433,7 @@ int CalcDirectoryDepth(
 	int depth = 0;
  
 	// とりあえず\の数を数える
-	for (CharPointerT p = path; *p != _T('\0'); ++p) {
+	for (CharPointerT p=path; *p!=_T('\0'); ++p) {
 		if (*p == _T('\\')) {
 			++depth;
 			// フルパスには入っていないはずだが念のため
@@ -766,7 +766,7 @@ void GetExistPath(char* po , const char* pi)
 	/ ・ / を \ に変換しつつ(Win32API では / も \ と同等に扱われるから)
 	/ ・最大 (_MAX_PATH -1) 文字まで
 	/ po にコピーする。 */
-	for (pw = po, cnt = 0; (*pi != '\0') && (cnt < _MAX_PATH -1); ++pi) {
+	for (pw=po, cnt=0; (*pi!='\0') && (cnt<_MAX_PATH -1); ++pi) {
 		// /," 共に Shift_JIS の漢字コード中には含まれないので Shift_JIS 判定は不要。
 		if (*pi == '\"')	continue;		//  " なら何もしない。次の文字へ
 		if (*pi == '/')		*pw++ = '\\';	//  / なら \ に変換してコピー
@@ -843,7 +843,7 @@ void GetExistPathW(wchar_t* po , const wchar_t* pi)
 	/ ・ / を \ に変換しつつ(Win32API では / も \ と同等に扱われるから)
 	/ ・最大 (_MAX_PATH-1) 文字まで
 	/ po にコピーする。 */
-	for (pw = po, cnt = 0; (*pi != L'\0') && (cnt < _MAX_PATH-1); ++pi) {
+	for (pw=po, cnt=0; (*pi!=L'\0') && (cnt<_MAX_PATH-1); ++pi) {
 		// /," 共に Shift_JIS の漢字コード中には含まれないので Shift_JIS 判定は不要。
 		if (*pi == L'\"')	continue;		//  " なら何もしない。次の文字へ
 		if (*pi == L'/')	*pw++ = L'\\';	//  / なら \ に変換してコピー
@@ -964,7 +964,7 @@ void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ex
 
 			// ↓最後の文字を ch に得る。(ディレクトリ文字列が空の場合 ch='\\' となる)
 			char ch;
-			for (ch = '\\' , pf = pd ; *pf != '\0' ; ++pf) {
+			for (ch='\\', pf=pd; *pf!='\0'; ++pf) {
 				ch = *pf;
 				if (_IS_SJIS_1(*pf))	++pf;	// Shift_JIS の1文字目なら次の1文字をスキップ
 			}
@@ -1050,7 +1050,7 @@ void my_splitpath_w(
 
 			// ↓最後の文字を ch に得る。(ディレクトリ文字列が空の場合 ch=L'\\' となる)
 			wchar_t	ch;
-			for (ch = L'\\' , pf = pd ; *pf != L'\0' ; ++pf) {
+			for (ch=L'\\', pf=pd; *pf!=L'\0'; ++pf) {
 				ch = *pf;
 			}
 			// 文字列が空でなく、かつ、最後の文字が \ でなかったならば \ を追加。
@@ -1132,7 +1132,7 @@ int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
 		len1 = len2;
 		len2 = tmpLen;
 	}
-	for (int i=0; i<len1;) {
+	for (int i=0; i<len1; ) {
 		for (int k=0; k<len2 && score<(len2 - k);) {
 			int tmpScore = 0;
 			for (int m=k; m<len2;) {

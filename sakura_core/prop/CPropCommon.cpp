@@ -48,7 +48,7 @@
 
 int	CPropCommon::SearchIntArr(int nKey, int* pnArr, int nArrNum)
 {
-	for (int i = 0; i < nArrNum; ++i) {
+	for (int i=0; i<nArrNum; ++i) {
 		if (nKey == pnArr[i]) {
 			return i;
 		}
@@ -232,7 +232,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 
 	std::tstring		sTabname[_countof(ComPropSheetInfoList)];
 	PROPSHEETPAGE		psp[_countof(ComPropSheetInfoList)];
-	for (nIdx = 0; nIdx < _countof(ComPropSheetInfoList); ++nIdx) {
+	for (nIdx=0; nIdx<_countof(ComPropSheetInfoList); ++nIdx) {
 		sTabname[nIdx] = LS(ComPropSheetInfoList[nIdx].m_nTabNameId);
 
 		PROPSHEETPAGE* p = &psp[nIdx];
@@ -314,12 +314,12 @@ void CPropCommon::InitData(void)
 	m_Common = m_pShareData->m_Common;
 
 	// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。	;
-	for (int i = 0; i < GetDllShareData().m_nTypesCount; ++i) {
+	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 		SKeywordSetIndex indexs;
 		STypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(i), type);
 		indexs.typeId = type.m_id;
-		for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
+		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 			indexs.index[j] = type.m_nKeyWordSetIdx[j];
 		}
 		m_Types_nKeyWordSetIdx.push_back(indexs);
@@ -335,7 +335,7 @@ void CPropCommon::ApplyData(void)
 	m_pShareData->m_Common = m_Common;
 
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
-	for (int i = 0; i < nSize; ++i) {
+	for (int i=0; i<nSize; ++i) {
 		CTypeConfig configIdx = CDocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
 		if (configIdx.IsValidType()) {
 			STypeConfig type;

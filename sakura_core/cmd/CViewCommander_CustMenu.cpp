@@ -27,7 +27,7 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 //	char*		pszClip;
 	// ポップアップメニュー(右クリック)
 	int nId = m_pCommanderView->CreatePopUpMenu_R();
-	if (0 == nId) {
+	if (nId == 0) {
 		return;
 	}
 	switch (nId) {
@@ -42,8 +42,8 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 			// 見た目と同じように、\n を CR+LFへ変換する
 			for (int i=0; i<nLength; ++i) {
 				if (pszWork[i] == _T('\\') && pszWork[i + 1] == _T('n')) {
-					pszWork[i] =     WCODE::CR;
-					pszWork[i + 1] = WCODE::LF;
+					pszWork[i] = WCODE::CR;
+					pszWork[i+1] = WCODE::LF;
 				}
 			}
 			// クリップボードにデータを設定
@@ -85,7 +85,7 @@ int CViewCommander::Command_CUSTMENU(int nMenuIdx)
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {
 		return 0;
 	}
-	if (0 == GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]) {
+	if (GetDllShareData().m_Common.m_sCustomMenu.m_nCustMenuItemNumArr[nMenuIdx] == 0) {
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();

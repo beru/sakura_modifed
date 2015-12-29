@@ -66,7 +66,11 @@ int CDlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 }
 
 
-BOOL CDlgExec::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
+BOOL CDlgExec::OnInitDialog(
+	HWND hwnd,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwnd);
 	

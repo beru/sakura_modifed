@@ -51,7 +51,9 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 			m_nSettingType = CDocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
 			CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 		}
-		if (bTypeOnly) return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
+		if (bTypeOnly) {
+			return;	// bTypeOnly == true は特殊ケース（一時利用）に限定
+		}
 		UnlockDocumentType();
 	}else {
 		// データは更新しておく
@@ -66,7 +68,9 @@ void CDocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 				CDocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 			}
 		}
-		if (bTypeOnly) return;
+		if (bTypeOnly) {
+			return;
+		}
 	}
 
 	// タイプ別設定更新を反映
@@ -107,11 +111,11 @@ void CDocType::SetDocumentIcon()
 		return;
 	
 	HICON hIconBig, hIconSmall;
-	if (this->GetDocumentAttribute().m_bUseDocumentIcon)
+	if (this->GetDocumentAttribute().m_bUseDocumentIcon) {
 		m_pcDocRef->m_pcEditWnd->GetRelatedIcon(m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall);
-	else
+	}else {
 		m_pcDocRef->m_pcEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
-
+	}
 	m_pcDocRef->m_pcEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
 	m_pcDocRef->m_pcEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 }

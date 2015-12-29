@@ -71,7 +71,11 @@ void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 	選択された各行の範囲の直前に、与えられた文字列(pData)を挿入する。
 	@param eIndent インデントの種別
 */
-void CViewCommander::Command_INDENT(const wchar_t* const pData, const CLogicInt nDataLen, EIndentType eIndent)
+void CViewCommander::Command_INDENT(
+	const wchar_t* const pData,
+	const CLogicInt nDataLen,
+	EIndentType eIndent
+	)
 {
 	if (nDataLen <= 0) {
 		return;

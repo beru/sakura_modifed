@@ -22,22 +22,21 @@
 // 現在位置の単語選択
 bool CViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
 {
-	CLayoutRange sRange;
-	CLogicInt	nIdx;
 	auto& si = m_pCommanderView->GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
 		// 現在の選択範囲を非選択状態に戻す
 		si.DisableSelectArea(true);
 	}
 	CLayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
-	const CLayout*	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
+	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
 	if (!pcLayout) {
 		return false;	// 単語選択に失敗
 	}
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, ptCaretPos.GetX2());
+	CLogicInt nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, ptCaretPos.GetX2());
 
 	// 現在位置の単語の範囲を調べる
+	CLayoutRange sRange;
 	if (GetDocument()->m_cLayoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &sRange, NULL, NULL)) {
 
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる

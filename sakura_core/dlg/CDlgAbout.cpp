@@ -102,7 +102,12 @@ const DWORD p_helpids[] = {	//12900
 /*!
 	標準以外のメッセージを捕捉する
 */
-INT_PTR CDlgAbout::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgAbout::DispatchEvent(
+	HWND hWnd,
+	UINT wMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
@@ -131,7 +136,11 @@ int CDlgAbout::DoModal(HINSTANCE hInstance, HWND hwndParent)
 	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 	@date 2013.04.07 novice svn revision 情報追加
 */
-BOOL CDlgAbout::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgAbout::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 
@@ -322,7 +331,12 @@ BOOL CUrlWnd::SetSubclassWindow(HWND hWnd)
 	return TRUE;
 }
 
-LRESULT CALLBACK CUrlWnd::UrlWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CUrlWnd::UrlWndProc(
+	HWND hWnd,
+	UINT msg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	CUrlWnd* pUrlWnd = (CUrlWnd*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 

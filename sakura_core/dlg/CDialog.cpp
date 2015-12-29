@@ -97,7 +97,12 @@ CDialog::~CDialog()
 
 	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 */
-INT_PTR CDialog::DoModal(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete, LPARAM lParam)
+INT_PTR CDialog::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	int nDlgTemplete,
+	LPARAM lParam
+	)
 {
 	m_bInited = false;
 	m_bModal = true;
@@ -121,7 +126,13 @@ INT_PTR CDialog::DoModal(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete,
 
 	@date 2011.04.10 nasukoji	各国語メッセージリソース対応
 */
-HWND CDialog::DoModeless(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete, LPARAM lParam, int nCmdShow)
+HWND CDialog::DoModeless(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	int nDlgTemplete,
+	LPARAM lParam,
+	int nCmdShow
+	)
 {
 	m_bInited = false;
 	m_bModal = false;
@@ -142,7 +153,13 @@ HWND CDialog::DoModeless(HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete,
 	return m_hWnd;
 }
 
-HWND CDialog::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPCDLGTEMPLATE lpTemplate, LPARAM lParam, int nCmdShow)
+HWND CDialog::DoModeless(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	LPCDLGTEMPLATE lpTemplate,
+	LPARAM lParam,
+	int nCmdShow
+	)
 {
 	m_bInited = false;
 	m_bModal = false;
@@ -176,7 +193,11 @@ void CDialog::CloseDialog(int nModalRetVal)
 }
 
 
-BOOL CDialog::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDialog::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	m_hWnd = hwndDlg;
 	// Modified by KEITA for WIN64 2003.9.6
@@ -398,7 +419,12 @@ void CDialog::CreateSizeBox(void)
 
 
 // ダイアログのメッセージ処理
-INT_PTR CDialog::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDialog::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 //	DEBUG_TRACE(_T("CDialog::DispatchEvent() uMsg == %xh\n"), uMsg);
 	switch (uMsg) {
@@ -529,7 +555,7 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 	return TRUE;
 }
 
-BOOL CDialog::OnCbnDropDown( HWND hwndCtl, int wID )
+BOOL CDialog::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	return OnCbnDropDown( hwndCtl, false );
 }
@@ -545,7 +571,7 @@ BOOL CDialog::OnCbnDropDown( HWND hwndCtl, int wID )
 	@author ryoji
 	@date 2009.03.29 新規作成
 */
-BOOL CDialog::OnCbnDropDown( HWND hwndCtl, bool scrollBar )
+BOOL CDialog::OnCbnDropDown(HWND hwndCtl, bool scrollBar)
 {
 	SIZE sizeText;
 	const int nMargin = 8;
@@ -581,7 +607,12 @@ BOOL CDialog::OnCbnDropDown( HWND hwndCtl, bool scrollBar )
 /*! ファイル選択
 	@note 実行ファイルのパスor設定ファイルのパスが含まれる場合は相対パスに変換
 */
-BOOL CDialog::SelectFile(HWND parent, HWND hwndCtl, const TCHAR* filter, bool resolvePath)
+BOOL CDialog::SelectFile(
+	HWND parent,
+	HWND hwndCtl,
+	const TCHAR* filter,
+	bool resolvePath
+	)
 {
 	CDlgOpenFile cDlgOpenFile;
 	TCHAR szFilePath[_MAX_PATH + 1];
@@ -675,7 +706,14 @@ HFONT CDialog::SetMainFont(HWND hTarget)
 	return hFont;
 }
 
-void CDialog::ResizeItem(HWND hTarget, const POINT& ptDlgDefault, const POINT& ptDlgNew, const RECT& rcItemDefault, EAnchorStyle anchor, bool bUpdate)
+void CDialog::ResizeItem(
+	HWND hTarget,
+	const POINT& ptDlgDefault,
+	const POINT& ptDlgNew,
+	const RECT& rcItemDefault,
+	EAnchorStyle anchor,
+	bool bUpdate
+	)
 {
 	POINT pt;
 	int height, width;
@@ -752,7 +790,12 @@ void DeleteItem(HWND hwnd, CRecent* pRecent)
 	}
 }
 
-LRESULT CALLBACK SubEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK SubEditProc(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	SComboBoxItemDeleter* data = (SComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
 	switch (uMsg) {
@@ -782,7 +825,12 @@ LRESULT CALLBACK SubEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-LRESULT CALLBACK SubListBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK SubListBoxProc(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	SComboBoxItemDeleter* data = (SComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
 	switch (uMsg) {
@@ -811,7 +859,12 @@ LRESULT CALLBACK SubListBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return CallWindowProc(data->pListBoxWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-LRESULT CALLBACK SubComboBoxProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK SubComboBoxProc(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	SComboBoxItemDeleter* data = (SComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
 	switch (uMsg) {

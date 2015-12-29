@@ -445,7 +445,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 		HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WRAPMETHOD);
 		Combo_ResetContent(hwndCombo);
 		int		nSelPos = 0;
-		for (int i = 0; i < _countof(WrapMethodArr); ++i) {
+		for (int i=0; i<_countof(WrapMethodArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(WrapMethodArr[i].nNameId));
 			if (WrapMethodArr[i].nMethod == m_Types.m_nTextWrapMethod) {		// テキストの折り返し方法
 				nSelPos = i;
@@ -464,7 +464,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
 		Combo_ResetContent(hwndCombo);
 		nSelPos = 0;
-		for (int i = 0; i < _countof(TabArrowArr); ++i) {
+		for (int i=0; i<_countof(TabArrowArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(TabArrowArr[i].nNameId));
 			if (TabArrowArr[i].nMethod == m_Types.m_bTabArrow) {
 				nSelPos = i;
@@ -488,7 +488,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 		Combo_ResetContent(hwndCombo);
 		int		nSelPos = 0;
 		int nSize = (int)m_SIndentArr.size();
-		for (int i = 0; i < nSize; ++i) {
+		for (int i=0; i<nSize; ++i) {
 			if (!m_SIndentArr[i].pszName) {
 				Combo_InsertString(hwndCombo, i, LS(m_SIndentArr[i].nNameId));
 			}else {
@@ -507,7 +507,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_INDENTLAYOUT);
 		Combo_ResetContent(hwndCombo);
 		nSelPos = 0;
-		for (int i = 0; i < _countof(IndentTypeArr); ++i) {
+		for (int i=0; i<_countof(IndentTypeArr); ++i) {
 			Combo_InsertString(hwndCombo, i, LS(IndentTypeArr[i].nNameId));
 			if (IndentTypeArr[i].nMethod == m_Types.m_nIndentLayout) {	// 折り返しインデント種別
 				nSelPos = i;
@@ -527,7 +527,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 		Combo_ResetContent(hwndCombo);
 		int		nSelPos = 0;
 		int nSize = (int)m_OlmArr.size();
-		for (int i = 0; i < nSize; ++i) {
+		for (int i=0; i<nSize; ++i) {
 			if (!m_OlmArr[i].pszName) {
 				Combo_InsertString(hwndCombo, i, LS(m_OlmArr[i].nNameId));
 			}else {
@@ -646,7 +646,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		WIN_CHAR szTab[8 + 1]; // +1. happy
 		::DlgItem_GetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, szTab, _countof(szTab));
 		wcscpy_s(m_Types.m_szTabViewString, L"^       ");
-		for (int i = 0; i < 8; ++i) {
+		for (int i=0; i<8; ++i) {
 			if (!TCODE::IsTabAvailableCode(szTab[i])) {
 				break;
 			}

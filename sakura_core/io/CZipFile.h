@@ -43,6 +43,6 @@ public:
 	bool	IsOk() { return (psd != NULL); }			// Zip Folderが使用できるか?
 	bool	SetZip(const std::tstring& sZipPath);		// Zip File名 設定
 	bool	ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderName);	// ZIP File 内 フォルダ名取得と定義ファイル検査(Plugin用)
-	bool	Unzip(const std::tstring sOutPath);			// Zip File 解凍
+	bool	Unzip(const std::tstring& sOutPath);			// Zip File 解凍
 };
 

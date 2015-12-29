@@ -72,7 +72,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 
 
 	CLogicInt	nLineCount;
-	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -84,7 +84,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 		/* ÉâÉxÉãçsÇ© */
 		if (8 <= nLineLen && pLine[7] != L' ') {
 			k = 0;
-			for (i = 7; i < nLineLen;) {
+			for (i=7; i<nLineLen; ) {
 				if (pLine[i] == '.'
 				 || WCODE::IsLineDelimiter(pLine[i], bExtEol)
 				) {
@@ -94,7 +94,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 				++k;
 				++i;
 				if (pLine[i - 1] == L' ') {
-					for (; i < nLineLen; ++i) {
+					for (; i<nLineLen; ++i) {
 						if (pLine[i] != L' ') {
 							break;
 						}
@@ -108,7 +108,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 			nKeyWordLen = wcslen(pszKeyWord);
 			bDivision = FALSE;
 			int nLen = (int)wcslen(szLabel) - nKeyWordLen;
-			for (i = 0; i <= nLen ; ++i) {
+			for (i=0; i<=nLen ; ++i) {
 				if (0 == auto_memicmp(&szLabel[i], pszKeyWord, nKeyWordLen)) {
 					szLabel[i + nKeyWordLen] = L'\0';
 					wcscpy_s(szDivision, szLabel);

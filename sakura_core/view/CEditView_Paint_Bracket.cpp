@@ -138,7 +138,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 	bool bCaretChange = false;
 	gr.SetTextBackTransparent(true);
 
-	for (int i = 0; i < 2; ++i) {
+	for (int i=0; i<2; ++i) {
 		// i=0:対括弧,i=1:カーソル位置の括弧
 		// 2011.11.23 ryoji 対括弧 -> カーソル位置の括弧 の順に処理順序を変更
 		//   ＃ { と } が異なる行にある場合に { を BS で消すと } の強調表示が解除されない問題（Wiki BugReport/89）の対策
@@ -348,7 +348,7 @@ bool CEditView::SearchBracket(
 		return false;
 
 	// 括弧処理 2007.10.16 kobake
-	for (const KAKKO_T* p = g_aKakkos; p->sStr;  ++p) {
+	for (const KAKKO_T* p=g_aKakkos; p->sStr; ++p) {
 		if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
 			return SearchBracketForward(ptPos, pptLayoutNew, p->sStr, p->eStr, *mode);
 		}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
@@ -375,7 +375,7 @@ bool CEditView::SearchBracket(
 	// 括弧処理 2007.10.16 kobake
 	if (nCharSize == 1) {
 		ptPos.x = bPos - cline;
-		for (const KAKKO_T* p = g_aKakkos; p->sStr; ++p) {
+		for (const KAKKO_T* p=g_aKakkos; p->sStr; ++p) {
 			if (wcsncmp(p->sStr, &cline[ptPos.x], 1) == 0) {
 				return SearchBracketForward(ptPos, pptLayoutNew, p->sStr, p->eStr, *mode);
 			}else if (wcsncmp(p->eStr, &cline[ptPos.x], 1) == 0) {
@@ -572,7 +572,7 @@ bool CEditView::IsBracket(const wchar_t* pLine, CLogicInt x, CLogicInt size)
 {
 	// 括弧処理 2007.10.16 kobake
 	if (size == 1) {
-		for (const KAKKO_T* p = g_aKakkos; p->sStr; ++p) {
+		for (const KAKKO_T* p=g_aKakkos; p->sStr; ++p) {
 			if (wcsncmp(p->sStr, &pLine[x], 1) == 0) {
 				return true;
 			}else if (wcsncmp(p->eStr, &pLine[x], 1) == 0) {

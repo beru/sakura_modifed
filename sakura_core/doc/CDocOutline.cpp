@@ -164,22 +164,22 @@ int CDocOutline::ReadRuleFile(
 				}
 			}
 		}else {
-			if (0 < strLine.length() && strLine[0] == cComment) {
-				if (13 <= strLine.length() && strLine.length() <= 14 && 0 == _wcsnicmp(strLine.c_str() + 1, L"CommentChar=", 12)) {
-					if (13 == strLine.length()) {
+			if (strLine.length() > 0 && strLine[0] == cComment) {
+				if (strLine.length() >= 13 && strLine.length() <= 14 && _wcsnicmp(strLine.c_str() + 1, L"CommentChar=", 12) == 0) {
+					if (strLine.length() == 13) {
 						cComment = L'\0';
 					}else {
 						cComment = strLine[13];
 					}
-				}else if (strLine.length() == 11 && 0 == wcsicmp(strLine.c_str() + 1, L"Mode=Regex")) {
+				}else if (strLine.length() == 11 && wcsicmp(strLine.c_str() + 1, L"Mode=Regex") == 0) {
 					bRegex = true;
 					bRegexReplace = false;
-				}else if (strLine.length() == 18 && 0 == wcsicmp( strLine.c_str() + 1, L"Mode=RegexReplace" )) {
+				}else if (strLine.length() == 18 && wcsicmp(strLine.c_str() + 1, L"Mode=RegexReplace") == 0) {
 					bRegex = true;
 					bRegexReplace = true;
-				}else if (7 <= strLine.length() && 0 == _wcsnicmp(strLine.c_str() + 1, L"Title=", 6)) {
+				}else if (strLine.length() >= 7 && _wcsnicmp(strLine.c_str() + 1, L"Title=", 6) == 0) {
 					title = strLine.c_str() + 7;
-				}else if (13 < strLine.length() && 0 == _wcsnicmp(strLine.c_str() + 1, L"RegexOption=", 12)) {
+				}else if (strLine.length() > 13 && _wcsnicmp(strLine.c_str() + 1, L"RegexOption=", 12) == 0) {
 					int nCaseFlag = CBregexp::optCaseSensitive;
 					regexOption = 0;
 					for (int i=13; i<(int)strLine.length(); ++i) {
@@ -243,7 +243,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 	if (bRegex) {
 		pRegex = new CBregexp[nCount];
 		for (int i=0; i<nCount; ++i) {
-			if (0 == test[i].nLength) {
+			if (test[i].nLength == 0) {
 				continue;
 			}
 			if (!InitRegexp(NULL, pRegex[i], true)) {
@@ -349,7 +349,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		if (j >= nCount) {
 			continue;
 		}
-		if (0 == wcscmp(szTitle, L"Except")) {
+		if (wcscmp(szTitle, L"Except") == 0) {
 			continue;
 		}
 
@@ -384,7 +384,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 
 		// nDepthを計算
 		int k;
-		BOOL bAppend = TRUE;
+		bool bAppend = true;
 		for (k=0; k<nDepth; ++k) {
 			int nResult = wcscmp(pszStack[k], szTitle);
 			if (nResult == 0) {
@@ -413,10 +413,10 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		}else {
 			// 2002.11.03 Moca 最大値を超えるとバッファオーバーランするから規制する
 			// nDepth = nMaxStack;
-			bAppend = FALSE;
+			bAppend = false;
 		}
 		
-		if (FALSE != bAppend) {
+		if (bAppend) {
 			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , pszText, 0, nDepth);
 			++nDepth;
 		}

@@ -98,7 +98,6 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 	// カレントディレクトリの変更
 	::SetCurrentDirectory(pcDoc->m_cDocFile.GetFilePathClass().GetDirPath().c_str());
-
 	CAppMode::getInstance()->SetViewMode(sLoadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 

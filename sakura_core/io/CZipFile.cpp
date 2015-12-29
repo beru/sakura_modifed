@@ -44,7 +44,13 @@ const GUID CLSID_Shell =
 
 // コンストラクタ
 CZipFile::CZipFile() {
-	HRESULT hr = CoCreateInstance(CLSID_Shell, NULL, CLSCTX_INPROC_SERVER, IID_IShellDispatch, reinterpret_cast<void **>(&psd));
+	HRESULT hr = CoCreateInstance(
+		CLSID_Shell,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_IShellDispatch,
+		reinterpret_cast<void **>(&psd)
+	);
 	if (FAILED(hr)) {
 		psd = NULL;
 	}
@@ -60,7 +66,6 @@ CZipFile::~CZipFile() {
 	}
 	psd = NULL;
 }
-
 
 
 // Zip File名 設定
@@ -88,9 +93,11 @@ bool CZipFile::SetZip(const std::tstring& sZipPath)
 }
 
 
-
 // ZIP File 内 フォルダ名取得と定義ファイル検査(Plugin用)
-bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderName)
+bool CZipFile::ChkPluginDef(
+	const std::tstring& sDefFile,
+	std::tstring& sFolderName
+	)
 {
 	VARIANT			vari;
 	FolderItems*	pZipFileItems;
@@ -166,12 +173,11 @@ bool CZipFile::ChkPluginDef(const std::tstring& sDefFile, std::tstring& sFolderN
 }
 
 
-
 // ZIP File 解凍
-bool CZipFile::Unzip(const std::tstring sOutPath)
+bool CZipFile::Unzip(const std::tstring& sOutPath)
 {
-	Folder*			pOutFolder;
-	FolderItems*	pZipFileItems;
+	Folder* pOutFolder;
+	FolderItems* pZipFileItems;
 
 	// ZIP File List
 	HRESULT hr = pZipFile->Items(&pZipFileItems);

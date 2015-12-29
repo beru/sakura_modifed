@@ -189,7 +189,7 @@ void CEditView::ISearchEnter(int mode, ESearchDirection direction)
 				SendStatusMessage(LS(STR_EDITVWISRCH_REGEX));
 				return;
 			}
-			if (m_pcmigemo == NULL) {
+			if (!m_pcmigemo) {
 				m_pcmigemo = CMigemo::getInstance();
 				m_pcmigemo->InitDll();
 			}

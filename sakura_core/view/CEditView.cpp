@@ -1901,7 +1901,7 @@ bool CEditView::GetSelectedData(
 
 		// 実際の文字量。
 		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(rcSel.top, &nLineLen, &pcLayout);
-		for (; i != CLayoutInt(0) && pcLayout; --i, pcLayout = pcLayout->GetNextLayout()) {
+		for (; i!=CLayoutInt(0) && pcLayout; --i, pcLayout=pcLayout->GetNextLayout()) {
 			pLine = pcLayout->GetPtr() + pcLayout->GetLogicOffset();
 			nLineLen = CLogicInt(pcLayout->GetLengthWithEOL());
 			if (pLine) {
@@ -1980,7 +1980,7 @@ bool CEditView::GetSelectedData(
 		nBufSize *= (Int)i;
 
 		// 実際の各行の長さ。
-		for (; i != 0 && pcLayout; --i, pcLayout = pcLayout->GetNextLayout()) {
+		for (; i!=0 && pcLayout; --i, pcLayout=pcLayout->GetNextLayout()) {
 			nBufSize += pcLayout->GetLengthWithoutEOL() + appendEol.GetLen();
 			if (bLineOnly) {	// 複数行選択の場合は先頭の行のみ
 				break;

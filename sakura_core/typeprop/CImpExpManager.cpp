@@ -330,7 +330,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	// 色の設定
 	if (m_nColorType >= 0) {
 		// 色指定あり
-		for (int i = 0; i < _countof(colorInfoArr); ++i) {
+		for (int i=0; i<_countof(colorInfoArr); ++i) {
 			bool bDisp = m_Types.m_ColorInfoArr[i].m_bDisp;
 			m_Types.m_ColorInfoArr[i] = colorInfoArr[i];
 			m_Types.m_ColorInfoArr[i].m_bDisp = bDisp;		// 表示フラグはファイルのものを使用する
@@ -351,7 +351,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 
 	// 強調キーワード
 	CKeyWordSetMgr&	cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
-	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		//types.m_nKeyWordSetIdx[i] = -1;
 		auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
 		if (m_cProfile.IOProfileData(szSecTypeEx, szKeyName, MakeStringBufferW(szKeyData))) {
@@ -390,7 +390,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 		nDataLen = wcslen(szKeyData);
 		pSlashPos = wcschr(szKeyData, L'/');
 		nIdx = -1;
-		for (int i = 0; i < MAX_PLUGIN; ++i) {
+		for (int i=0; i<MAX_PLUGIN; ++i) {
 			if (auto_strncmp(szKeyData, plugin.m_PluginTable[i].m_szId, pSlashPos ? pSlashPos-szKeyData : nDataLen) == 0) {
 				nIdx = i;
 				if (pSlashPos) {	// スラッシュの後ろのプラグIDを取得
@@ -411,7 +411,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 		nDataLen = wcslen(szKeyData);
 		pSlashPos = wcschr(szKeyData, L'/');
 		nIdx = -1;
-		for (int i = 0; i < MAX_PLUGIN; ++i) {
+		for (int i=0; i<MAX_PLUGIN; ++i) {
 			if (auto_strncmp(szKeyData, plugin.m_PluginTable[i].m_szId, pSlashPos ? pSlashPos-szKeyData : nDataLen) == 0) {
 				nIdx = i;
 				if (pSlashPos) {	// スラッシュの後ろのプラグIDを取得
@@ -453,7 +453,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	// 強調キーワード
 	auto& cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
-	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (m_Types.m_nKeyWordSetIdx[i] >= 0) {
 			int nIdx = m_Types.m_nKeyWordSetIdx[i];
 			auto_sprintf_s(szKeyName, szKeyKeywordTemp, i + 1);
@@ -641,7 +641,7 @@ bool CImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 				int k = GetColorIndexByName(&buff[11]);	//@@@ 2002.04.30
 				if (k == -1) {
 					// 日本語名からインデックス番号に変換する
-					for (int m = 0; m < COLORIDX_LAST; ++m) {
+					for (int m=0; m<COLORIDX_LAST; ++m) {
 						if (auto_strcmp(m_Types.m_ColorInfoArr[m].m_szName, &buff[11]) == 0) {
 							k = m;
 							break;
@@ -667,10 +667,10 @@ bool CImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 
 	in.Close();
 
-	for (int i = 0; i < count; ++i) {
+	for (int i=0; i<count; ++i) {
 		m_Types.m_RegexKeywordArr[i] = regexKeyArr[i];
 	}
-	for (int i = 0; i <= keywordPos; ++i) {
+	for (int i=0; i<=keywordPos; ++i) {
 		m_Types.m_RegexKeywordList[i] = pKeyword[i];
 	}
 
@@ -689,7 +689,7 @@ bool CImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.WriteF(WSTR_REGEXKW_HEAD);
 
 	const wchar_t* regex = m_Types.m_RegexKeywordList;
-	for (int i = 0; i < MAX_REGEX_KEYWORD; ++i) {
+	for (int i=0; i<MAX_REGEX_KEYWORD; ++i) {
 		if (regex[0] == L'\0') {
 			break;
 		}
@@ -697,7 +697,7 @@ bool CImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 		const TCHAR* name  = GetColorNameByIndex(m_Types.m_RegexKeywordArr[i].m_nColorIndex);
 		out.WriteF(L"RxKey[%03d]=%ts,%ls\n", i, name, regex);
 
-		for (; *regex != '\0'; ++regex) {}
+		for (; *regex!='\0'; ++regex) {}
 		++regex;
 	}
 
@@ -761,7 +761,7 @@ bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 				p3 += 1;			// カンマの次が、次の要素
 			}
 		}// 結果の確認
-		if ((p3 == NULL) ||			// カンマが1個足りない
+		if (!p3 ||			// カンマが1個足りない
 			(p3 == p1) //||			// カンマが2個足りない
 			//	2007.02.03 genta ファイル名にカンマがあるかもしれない
 			//(NULL != wcsstr(p3,","))	// カンマが多すぎる
@@ -833,7 +833,7 @@ bool CImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 	}
 
 	out.WriteF(WSTR_KEYHELP_HEAD);
-	for (int i = 0; i < m_Types.m_nKeyHelpNum; ++i) {
+	for (int i=0; i<m_Types.m_nKeyHelpNum; ++i) {
 		out.WriteF(
 			L"KDct[%02d]=%d,%ts,%ts\n",
 			i,
@@ -916,7 +916,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 		if (bVer2) {
 			// 各要素取得
-			for (int i = 0; i < KEYNAME_SIZE; ++i) {
+			for (int i=0; i<KEYNAME_SIZE; ++i) {
 				int n, kc, nc;
 				// 値 -> szData
 				wchar_t szData[1024];
@@ -936,7 +936,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 				wchar_t* p = szData + nc;
 
 				// 後に続くトークン
-				for (int j = 0; j < 8; ++j) {
+				for (int j=0; j<8; ++j) {
 					wchar_t* q = auto_strchr(p, L',');
 					if (!q) {
 						bVer2 = false;
@@ -972,9 +972,9 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	//m_Common.m_sKeyBind.m_nKeyNameArrNum = nKeyNameArrNum;
 	//memcpy_raw(m_Common.m_sKeyBind.m_pKeyNameArr, pKeyNameArr, sizeof_raw(pKeyNameArr));
 	int nKeyNameArrUsed = m_Common.m_sKeyBind.m_nKeyNameArrNum; // 使用済み領域
-	for (int j=sKeyBind.m_nKeyNameArrNum-1; j >= 0; --j) {
+	for (int j=sKeyBind.m_nKeyNameArrNum-1; j>=0; --j) {
 		if ((bVer2 || bVer3) && sKeyBind.m_pKeyNameArr[j].m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
-			for (int im=0; im< MOUSEFUNCTION_KEYBEGIN; ++im) {
+			for (int im=0; im<MOUSEFUNCTION_KEYBEGIN; ++im) {
 				if (_tcscmp(sKeyBind.m_pKeyNameArr[j].m_szKeyName, m_Common.m_sKeyBind.m_pKeyNameArr[im].m_szKeyName) == 0) {
 					m_Common.m_sKeyBind.m_pKeyNameArr[im] = sKeyBind.m_pKeyNameArr[j];
 				}
@@ -1187,7 +1187,7 @@ bool CImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	// ｎ番目のセットのキーワードの数を返す
 	nKeyWordNum = m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWordNum(m_nIdx);
-	for (int i = 0; i < nKeyWordNum; ++i) {
+	for (int i=0; i<nKeyWordNum; ++i) {
 		// ｎ番目のセットのｍ番目のキーワードを返す
 		// 2012.03.10 syat キーワードに「%」を含む場合にエクスポート結果が不正
 		out.WriteString(m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.GetKeyWord(m_nIdx, i));
@@ -1320,7 +1320,7 @@ void CImpExpFileTree::IO_FileTreeIni( CDataProfile& cProfile, std::vector<SFileT
 	if (cProfile.IsReadingMode()) {
 		data.resize(nItemCount);
 	}
-	for (;i < nItemCount; ++i) {
+	for (; i<nItemCount; ++i) {
 		CShareData_IO::ShareData_IO_FileTreeItem(cProfile, data[i], pszSecName, i);
 	}
 }

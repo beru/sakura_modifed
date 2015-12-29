@@ -285,7 +285,13 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer
 /*! ユーザー定義文字列型オブジェクト
 	現在は、デバッグ用文字列を設定する為のみ
 */
-void __stdcall CPPA::stdStrObj(const char* ObjName, int Index, BYTE GS_Mode, int* Err_CD, char** Value)
+void __stdcall CPPA::stdStrObj(
+	const char* ObjName,
+	int Index,
+	BYTE GS_Mode,
+	int* Err_CD,
+	char** Value
+	)
 {
 	NEVER_USED_PARAM(ObjName);
 	*Err_CD = 0;
@@ -437,9 +443,13 @@ void __stdcall CPPA::stdProc(
 	@date 2003.02.24 Moca
 */
 void __stdcall CPPA::stdIntFunc(
-	const char* FuncName, const int Index,
-	const char* Argument[], const int ArgSize, int* Err_CD,
-	int* ResultValue)
+	const char* FuncName,
+	const int Index,
+	const char* Argument[],
+	const int ArgSize,
+	int* Err_CD,
+	int* ResultValue
+	)
 {
 	NEVER_USED_PARAM(FuncName);
 	VARIANT Ret;
@@ -477,9 +487,13 @@ void __stdcall CPPA::stdIntFunc(
 	@date 2003.02.24 Moca CallHandleFunction対応
 */
 void __stdcall CPPA::stdStrFunc(
-	const char* FuncName, const int Index,
-	const char* Argument[], const int ArgSize, int* Err_CD,
-	char** ResultValue)
+	const char* FuncName,
+	const int Index,
+	const char* Argument[],
+	const int ArgSize,
+	int* Err_CD,
+	char** ResultValue
+	)
 {
 	NEVER_USED_PARAM(FuncName);
 
@@ -517,16 +531,16 @@ bool CPPA::CallHandleFunction(
 	VARIANT* Result
 	)
 {
-	int i, ArgCnt;
+	int ArgCnt;
 	const int maxArgSize = 8;
 	VARIANT vtArg[maxArgSize];
 	
 	const MacroFuncInfo* mfi = CSMacroMgr::GetFuncInfoByID(Index);
-	for (i=0; i<maxArgSize && i<ArgSize; ++i) {
+	for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
 		::VariantInit(&vtArg[i]);
 	}
 	ArgCnt = 0;
-	for (i=0, ArgCnt=0; i<maxArgSize && i<ArgSize; ++i) {
+	for (int i=0, ArgCnt=0; i<maxArgSize && i<ArgSize; ++i) {
 		VARTYPE type = VT_EMPTY;
 		if (i < 4) {
 			type = mfi->m_varArguments[i];

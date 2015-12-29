@@ -36,7 +36,7 @@ typedef void (*DllPlugHandler)();
 
 class CDllPlug : public CPlug {
 public:
-	CDllPlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel)
+	CDllPlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel)
 		:
 		CPlug(plugin, id, sJack, sHandler, sLabel),
 		m_handler(NULL)
@@ -65,11 +65,11 @@ public:
 
 	// ŽÀ‘•
 public:
-	bool ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang);
-	bool ReadPluginOption(CDataProfile *cProfile) {
+	bool ReadPluginDef(CDataProfile* cProfile, CDataProfile* cProfileMlang);
+	bool ReadPluginOption(CDataProfile* cProfile) {
 		return true;
 	}
-	CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel);
+	CPlug* CreatePlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel);
 	CPlug::Array GetPlugs() const {
 		return m_plugs;
 	}

@@ -104,7 +104,7 @@ int CALLBACK SetData_EnumFontFamProc(
 	HWND hwndComboFontZen = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_ZEN);
 
 	// LOGFONT
-	if (FIXED_PITCH & pelf->elfLogFont.lfPitchAndFamily) {
+	if (pelf->elfLogFont.lfPitchAndFamily & FIXED_PITCH) {
 //		MYTRACE(_T("%ls\n\n"), pelf->elfLogFont.lfFaceName);
 		Combo_AddString(hwndComboFontHan, pelf->elfLogFont.lfFaceName);
 		Combo_AddString(hwndComboFontZen, pelf->elfLogFont.lfFaceName);
@@ -119,7 +119,7 @@ int CDlgPrintSetting::DoModal(
 	int*			pnCurrentPrintSetting,
 	PRINTSETTING*	pPrintSettingArr,
 	int				nLineNumberColumns
-)
+	)
 {
 	m_nCurrentPrintSetting = *pnCurrentPrintSetting;
 	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
@@ -137,7 +137,11 @@ int CDlgPrintSetting::DoModal(
 	return nRet;
 }
 
-BOOL CDlgPrintSetting::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgPrintSetting::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 
@@ -857,7 +861,12 @@ LPVOID CDlgPrintSetting::GetHelpIdTable(void)
 
 
 // フォント名/使用ボタンの設定
-void CDlgPrintSetting::SetFontName(int idTxt, int idUse, LOGFONT& lf, int nPointSize)
+void CDlgPrintSetting::SetFontName(
+	int idTxt,
+	int idUse,
+	LOGFONT& lf,
+	int nPointSize
+	)
 {
 	TCHAR	szName[100];
 	bool	bUseFont = lf.lfFaceName[0] != _T('\0');

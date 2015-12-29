@@ -116,7 +116,12 @@ bool CPluginManager::SearchNewPlugin(CommonSetting& common, HWND hWndOwner)
 
 
 // 新規プラグインを追加する(下請け)
-bool CPluginManager::SearchNewPluginDir(CommonSetting& common, HWND hWndOwner, const tstring& sSearchDir, bool& bCancel)
+bool CPluginManager::SearchNewPluginDir(
+	CommonSetting& common,
+	HWND hWndOwner,
+	const tstring& sSearchDir,
+	bool& bCancel
+	)
 {
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter SearchNewPluginDir\n"));
@@ -178,7 +183,12 @@ bool CPluginManager::SearchNewPluginDir(CommonSetting& common, HWND hWndOwner, c
 
 
 // 新規プラグインを追加する(下請け)Zip File
-bool CPluginManager::SearchNewPluginZip(CommonSetting& common, HWND hWndOwner, const tstring& sSearchDir, bool& bCancel)
+bool CPluginManager::SearchNewPluginZip(
+	CommonSetting& common,
+	HWND hWndOwner,
+	const tstring& sSearchDir,
+	bool& bCancel
+	)
 {
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter SearchNewPluginZip\n"));
@@ -213,7 +223,12 @@ bool CPluginManager::SearchNewPluginZip(CommonSetting& common, HWND hWndOwner, c
 
 
 // Zipプラグインを導入する
-bool CPluginManager::InstZipPlugin(CommonSetting& common, HWND hWndOwner, const tstring& sZipFile, bool bInSearch)
+bool CPluginManager::InstZipPlugin(
+	CommonSetting& common,
+	HWND hWndOwner,
+	const tstring& sZipFile,
+	bool bInSearch
+	)
 {
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Entry InstZipPlugin\n"));
@@ -231,7 +246,7 @@ bool CPluginManager::InstZipPlugin(CommonSetting& common, HWND hWndOwner, const 
 
 	// プラグインフォルダの存在を確認
 	WIN32_FIND_DATA wf;
-	HANDLE		hFind;
+	HANDLE hFind;
 	if ((hFind = ::FindFirstFile((m_sBaseDir + _T("*")).c_str(), &wf )) == INVALID_HANDLE_VALUE) {
 		// プラグインフォルダが存在しない
 		if (m_sBaseDir == m_sExePluginDir) {
@@ -253,7 +268,14 @@ bool CPluginManager::InstZipPlugin(CommonSetting& common, HWND hWndOwner, const 
 }
 
 // Zipプラグインを導入する(下請け)
-bool CPluginManager::InstZipPluginSub(CommonSetting& common, HWND hWndOwner, const tstring& sZipFile, const tstring& sDispName, bool bInSearch, bool& bCancel)
+bool CPluginManager::InstZipPluginSub(
+	CommonSetting& common,
+	HWND hWndOwner,
+	const tstring& sZipFile,
+	const tstring& sDispName,
+	bool bInSearch,
+	bool& bCancel
+	)
 {
 	PluginRec*		plugin_table = common.m_sPlugin.m_PluginTable;
 	CZipFile		cZipFile;
@@ -358,7 +380,13 @@ bool CPluginManager::InstZipPluginSub(CommonSetting& common, HWND hWndOwner, con
 //	hWndOwner		
 //	errorMsg		エラーメッセージを返す
 //	bUodate			すでに登録していた場合、確認せず上書きする
-int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginName, HWND hWndOwner, std::wstring& errorMsg, bool bUpdate)
+int CPluginManager::InstallPlugin(
+	CommonSetting& common,
+	const TCHAR* pszPluginName,
+	HWND hWndOwner,
+	std::wstring& errorMsg,
+	bool bUpdate
+	)
 {
 	CDataProfile cProfDef;				// プラグイン定義ファイル
 
@@ -434,7 +462,7 @@ int CPluginManager::InstallPlugin(CommonSetting& common, const TCHAR* pszPluginN
 	wstring		sPlugCmd;
 
 	plugin_table[nEmpty].m_nCmdNum = 0;
-	for (i = 1; i < MAX_PLUG_CMD; ++i) {
+	for (i=1; i<MAX_PLUG_CMD; ++i) {
 		auto_sprintf_s(szPlugKey, L"C[%d]", i);
 		sPlugCmd.clear();
 		cProfDef.IOProfileData(PII_COMMAND, szPlugKey, sPlugCmd);
@@ -481,7 +509,7 @@ bool CPluginManager::LoadAllPlugin(CommonSetting* common)
 
 	// プラグインテーブルに登録されたプラグインを読み込む
 	PluginRec* plugin_table = pluginSetting.m_PluginTable;
-	for (int iNo=0; iNo < MAX_PLUGIN; ++iNo) {
+	for (int iNo=0; iNo<MAX_PLUGIN; ++iNo) {
 		if (plugin_table[iNo].m_szName[0] == '\0') {
 			continue;
 		}
@@ -513,7 +541,11 @@ bool CPluginManager::LoadAllPlugin(CommonSetting* common)
 }
 
 // プラグインを読み込む
-CPlugin* CPluginManager::LoadPlugin(const TCHAR* pszPluginDir, const TCHAR* pszPluginName, const TCHAR* pszLangName)
+CPlugin* CPluginManager::LoadPlugin(
+	const TCHAR* pszPluginDir,
+	const TCHAR* pszPluginName,
+	const TCHAR* pszLangName
+	)
 {
 	TCHAR pszBasePath[_MAX_PATH];
 	TCHAR pszPath[_MAX_PATH];
@@ -591,7 +623,7 @@ bool CPluginManager::RegisterPlugin(CPlugin* plugin)
 	CJackManager* pJackMgr = CJackManager::getInstance();
 	CPlug::Array plugs = plugin->GetPlugs();
 
-	for (auto plug = plugs.begin() ; plug != plugs.end(); ++plug) {
+	for (auto plug=plugs.begin(); plug!=plugs.end(); ++plug) {
 		pJackMgr->RegisterPlug((*plug)->m_sJack.c_str(), *plug);
 	}
 
@@ -604,7 +636,7 @@ bool CPluginManager::UnRegisterPlugin(CPlugin* plugin)
 	CJackManager* pJackMgr = CJackManager::getInstance();
 	CPlug::Array plugs = plugin->GetPlugs();
 
-	for (auto plug = plugs.begin() ; plug != plugs.end(); ++plug) {
+	for (auto plug=plugs.begin(); plug!=plugs.end(); ++plug) {
 		pJackMgr->UnRegisterPlug((*plug)->m_sJack.c_str(), *plug);
 	}
 
@@ -614,7 +646,7 @@ bool CPluginManager::UnRegisterPlugin(CPlugin* plugin)
 // プラグインを取得する
 CPlugin* CPluginManager::GetPlugin(int id)
 {
-	for (auto plugin = m_plugins.begin() ; plugin != m_plugins.end(); ++plugin) {
+	for (auto plugin=m_plugins.begin(); plugin!=m_plugins.end(); ++plugin) {
 		if ((*plugin)->m_id == id) {
 			return *plugin;
 		}

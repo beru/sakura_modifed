@@ -310,7 +310,7 @@ void CEditDoc::SetBackgroundImage()
 		::DeleteObject(m_hBackImg);
 		m_hBackImg = NULL;
 	}
-	if (0 == path[0]) {
+	if (path[0] == 0) {
 		return;
 	}
 	if (_IS_REL_PATH(path.c_str())) {
@@ -319,7 +319,7 @@ void CEditDoc::SetBackgroundImage()
 		path = fullPath;
 	}
 	const TCHAR* ext = path.GetExt();
-	if (0 != auto_stricmp(ext, _T(".bmp"))) {
+	if (auto_stricmp(ext, _T(".bmp")) != 0) {
 		HANDLE hFile = ::CreateFile(path.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 		if (hFile == INVALID_HANDLE_VALUE) {
 			return;
@@ -343,15 +343,16 @@ void CEditDoc::SetBackgroundImage()
 			IPicture* iPicture = NULL;
 			IStream* iStream = NULL;
 			// hGlobalの管理を移譲
-			if (S_OK != ::CreateStreamOnHGlobal(hGlobal, TRUE, &iStream)) {
+			if (::CreateStreamOnHGlobal(hGlobal, TRUE, &iStream) != S_OK) {
 				GlobalFree(hGlobal);
 			}else {
-				if (S_OK != ::OleLoadPicture(iStream, fileSize, FALSE, IID_IPicture, (void**)&iPicture)) {
+				if (::OleLoadPicture(iStream, fileSize, FALSE, IID_IPicture, (void**)&iPicture) != S_OK) {
 				}else {
 					HBITMAP hBitmap = NULL;
 					short imgType = PICTYPE_NONE;
-					if (S_OK == iPicture->get_Type(&imgType) && imgType == PICTYPE_BITMAP &&
-					    S_OK == iPicture->get_Handle((OLE_HANDLE*)&hBitmap)
+					if (iPicture->get_Type(&imgType) == S_OK
+						&& imgType == PICTYPE_BITMAP
+						&& iPicture->get_Handle((OLE_HANDLE*)&hBitmap) == S_OK
 					) {
 						m_nBackImgWidth = m_nBackImgHeight = 1;
 						m_hBackImg = (HBITMAP)::CopyImage(hBitmap, IMAGE_BITMAP, 0, 0, 0);
@@ -369,7 +370,7 @@ void CEditDoc::SetBackgroundImage()
 		GetObject(m_hBackImg, sizeof(BITMAP), &bmp);
 		m_nBackImgWidth  = bmp.bmWidth;
 		m_nBackImgHeight = bmp.bmHeight;
-		if (0 == m_nBackImgWidth || 0 == m_nBackImgHeight) {
+		if (m_nBackImgWidth == 0 || m_nBackImgHeight == 0) {
 			::DeleteObject(m_hBackImg);
 			m_hBackImg = NULL;
 		}
@@ -388,11 +389,11 @@ void CEditDoc::InitAllView(void)
 	m_bTabSpaceCurTemp = false;
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP)
+	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 		m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
-	else
+	}else {
 		m_cLayoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
-	
+	}
 	// CEditWndに引越し
 	m_pcEditWnd->InitAllViews();
 	
@@ -465,7 +466,9 @@ bool CEditDoc::GetDocumentBomExist() const
 // ドキュメントの文字コードを設定
 void CEditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 {
-	if (!IsValidCodeType(eCharCode)) return; // 無効な範囲を受け付けない
+	if (!IsValidCodeType(eCharCode)) {
+		return; // 無効な範囲を受け付けない
+	}
 
 	m_cDocFile.SetCodeSet(eCharCode, bBom);
 }
@@ -522,9 +525,10 @@ void CEditDoc::GetEditInfo(
 bool CEditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 {
 	// 編集可能の場合
-	if (IsEditable())
+	if (IsEditable()) {
 		return false; // 常に書き換え許可
-
+	}
+	
 	//	編集禁止の場合(バイナリサーチ)
 	{
 		int lbound = 0;
@@ -561,10 +565,14 @@ bool CEditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 */
 bool CEditDoc::IsAcceptLoad() const
 {
-	if (m_cDocEditor.IsModified()) return false;
-	if (m_cDocFile.GetFilePathClass().IsValidPath()) return false;
-	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) return false;
-	if (CAppMode::getInstance()->IsDebugMode()) return false;
+	if (
+		m_cDocEditor.IsModified()
+		|| m_cDocFile.GetFilePathClass().IsValidPath()
+		|| CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
+		|| CAppMode::getInstance()->IsDebugMode()
+	) {
+		return false;
+	}
 	return true;
 }
 
@@ -588,7 +596,7 @@ bool CEditDoc::HandleCommand(EFunctionCode nCommand)
 	case F_PREVWINDOW:	// 前のウィンドウ
 		{
 			int nPane = m_pcEditWnd->m_cSplitterWnd.GetPrevPane();
-			if (-1 != nPane) {
+			if (nPane != -1) {
 				m_pcEditWnd->SetActivePane(nPane);
 			}else {
 				CControlTray::ActiveNextWindow(m_pcEditWnd->GetHwnd());
@@ -598,7 +606,7 @@ bool CEditDoc::HandleCommand(EFunctionCode nCommand)
 	case F_NEXTWINDOW:	// 次のウィンドウ
 		{
 			int nPane = m_pcEditWnd->m_cSplitterWnd.GetNextPane();
-			if (-1 != nPane) {
+			if (nPane != -1) {
 				m_pcEditWnd->SetActivePane(nPane);
 			}else {
 				CControlTray::ActivePrevWindow(m_pcEditWnd->GetHwnd());
@@ -646,7 +654,7 @@ void CEditDoc::OnChangeType()
 	@date 2013.04.22 novice レイアウト情報の再作成を設定できるようにした
 */
 void CEditDoc::OnChangeSetting(
-	bool	bDoLayout
+	bool bDoLayout
 )
 {
 	HWND hwndProgress = NULL;
@@ -711,7 +719,6 @@ void CEditDoc::OnChangeSetting(
 
 	// 文書種別
 	m_cDocType.SetDocumentType(CDocTypeManager().GetDocumentTypeOfPath(m_cDocFile.GetFilePath()), false);
-
 	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
 
 	// タイプ別設定の種類が変更されたら、一時適用を元に戻す
@@ -760,9 +767,9 @@ void CEditDoc::OnChangeSetting(
 			}
 		}
 		// 一時設定適用中でなければ折り返し方法変更
-		if (!m_bTextWrapMethodCurTemp)
+		if (!m_bTextWrapMethodCurTemp) {
 			m_nTextWrapMethodCur = ref.m_nTextWrapMethod;	// 折り返し方法
-
+		}
 		// 指定桁で折り返す：タイプ別設定を使用
 		// 右端で折り返す：仮に現在の折り返し幅を使用
 		// 上記以外：MAXLINEKETASを使用
@@ -801,11 +808,11 @@ void CEditDoc::OnChangeSetting(
 	m_pcEditWnd->ClearViewCaretPosInfo();
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP)
+	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 		m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
-	else
+	}else {
 		m_cLayoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
-
+	}
 	// ビューに設定変更を反映させる
 	int viewCount = m_pcEditWnd->GetAllViewCount();
 	for (int i=0; i<viewCount; ++i) {
@@ -834,10 +841,14 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 {
 	// クローズ事前処理
 	ECallbackResult eBeforeCloseResult = NotifyBeforeClose();
-	if (eBeforeCloseResult == CALLBACK_INTERRUPT) return FALSE;
+	if (eBeforeCloseResult == CALLBACK_INTERRUPT) {
+		return FALSE;
+	}
 	
 	// デバッグモニタモードのときは保存確認しない
-	if (CAppMode::getInstance()->IsDebugMode()) return TRUE;
+	if (CAppMode::getInstance()->IsDebugMode()) {
+		return TRUE;
+	}
 
 	// GREPモードで、かつ、「GREPモードで保存確認するか」がOFFだったら、保存確認しない
 	// 2011.11.13 GrepモードでGrep直後は"未編集"状態になっているが保存確認が必要
@@ -875,7 +886,7 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 		pszTitle = szGrepTitle;
 	}
 	// ウィンドウをアクティブにする
-	HWND	hwndMainFrame = CEditWnd::getInstance()->GetHwnd();
+	HWND hwndMainFrame = CEditWnd::getInstance()->GetHwnd();
 	ActivateFrameWindow(hwndMainFrame);
 	int nBool;
 	if (CAppMode::getInstance()->IsViewMode()) {	// ビューモード
@@ -955,9 +966,9 @@ void CEditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 	}
 
 	static bool bRunning = false;
-	if (bRunning)
+	if (bRunning) {
 		return;	// 再入り実行はしない
-
+	}
 	bRunning = true;
 	if (CEditApp::getInstance()->m_pcSMacroMgr->IsEnabled(idx)) {
 		if (!(::GetAsyncKeyState(VK_SHIFT) & 0x8000)) {	// Shift キーが押されていなければ実行
@@ -971,8 +982,7 @@ void CEditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 	bRunning = false;
 }
 
-/*! (無題)の時のカレントディレクトリを設定する
-*/
+// (無題)の時のカレントディレクトリを設定する
 void CEditDoc::SetCurDirNotitle()
 {
 	if (m_cDocFile.GetFilePathClass().IsValidPath()) {

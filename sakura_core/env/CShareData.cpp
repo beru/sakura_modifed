@@ -75,7 +75,7 @@ CShareData::~CShareData()
 		CloseHandle(m_hFileMap);
 	}
 	if (m_pvTypeSettings) {
-		for (int i = 0; i < (int)m_pvTypeSettings->size(); ++i) {
+		for (int i=0; i<(int)m_pvTypeSettings->size(); ++i) {
 			delete (*m_pvTypeSettings)[i];
 			(*m_pvTypeSettings)[i] = NULL;
 		}
@@ -171,7 +171,7 @@ bool CShareData::InitShareData()
 		m_pShareData->m_sHandles.m_hAccel = NULL;
 		m_pShareData->m_sHandles.m_hwndDebug = NULL;
 
-		for (int i = 0; i < _countof(m_pShareData->m_dwCustColors); ++i) {
+		for (int i=0; i<_countof(m_pShareData->m_dwCustColors); ++i) {
 			m_pShareData->m_dwCustColors[i] = RGB( 255, 255, 255 );
 		}
 
@@ -471,10 +471,10 @@ bool CShareData::InitShareData()
 		{
 			CommonSetting_CustomMenu& sCustomMenu = m_pShareData->m_Common.m_sCustomMenu;
 
-			for (int i = 0; i < MAX_CUSTOM_MENU; ++i) {
+			for (int i=0; i<MAX_CUSTOM_MENU; ++i) {
 				sCustomMenu.m_szCustMenuNameArr[i][0] = '\0';
 				sCustomMenu.m_nCustMenuItemNumArr[i] = 0;
-				for (int j = 0; j < MAX_CUSTOM_MENU_ITEMS; ++j) {
+				for (int j=0; j<MAX_CUSTOM_MENU_ITEMS; ++j) {
 					sCustomMenu.m_nCustMenuItemFuncArr[i][j] = F_0;
 					sCustomMenu.m_nCustMenuItemKeyArr [i][j] = '\0';
 				}
@@ -566,7 +566,7 @@ bool CShareData::InitShareData()
 			// From Here Sep. 14, 2001 genta
 			// Macro登録の初期化
 			MacroRec *mptr = sMacro.m_MacroTable;
-			for (int i = 0; i < MAX_CUSTMACRO; ++i, ++mptr) {
+			for (int i=0; i<MAX_CUSTMACRO; ++i, ++mptr) {
 				mptr->m_szName[0] = L'\0';
 				mptr->m_szFile[0] = L'\0';
 				mptr->m_bReloadWhenExecute = false;
@@ -588,7 +588,7 @@ bool CShareData::InitShareData()
 			sFileName.m_bTransformShortPath = true;
 			sFileName.m_nTransformShortMaxWidth = 100; // 100'x'幅
 
-			for (int i = 0; i < MAX_TRANSFORM_FILENAME; ++i) {
+			for (int i=0; i<MAX_TRANSFORM_FILENAME; ++i) {
 				sFileName.m_szTransformFileNameFrom[i][0] = _T('\0');
 				sFileName.m_szTransformFileNameTo[i][0] = _T('\0');
 			}
@@ -638,7 +638,7 @@ bool CShareData::InitShareData()
 			CommonSetting_Plugin& sPlugin = m_pShareData->m_Common.m_sPlugin;
 
 			sPlugin.m_bEnablePlugin			= FALSE;	// プラグインを使用する
-			for (int nPlugin=0; nPlugin < MAX_PLUGIN; ++nPlugin) {
+			for (int nPlugin=0; nPlugin<MAX_PLUGIN; ++nPlugin) {
 				sPlugin.m_PluginTable[nPlugin].m_szName[0]	= L'\0';	// プラグイン名
 				sPlugin.m_PluginTable[nPlugin].m_szId[0]	= L'\0';	// プラグインID
 				sPlugin.m_PluginTable[nPlugin].m_state = PLS_NONE;		// プラグイン状態
@@ -673,7 +673,7 @@ bool CShareData::InitShareData()
 				auto_sprintf( szSettingName, _T("印刷設定 %d"), i + 1 );
 				CPrint::SettingInitialize( m_pShareData->m_PrintSettingArr[0], szSettingName );	//	初期化命令。
 			}
-			for (int i = 1; i < MAX_PRINTSETTINGARR; ++i) {
+			for (int i=1; i<MAX_PRINTSETTINGARR; ++i) {
 				m_pShareData->m_PrintSettingArr[i] = m_pShareData->m_PrintSettingArr[0];
 				auto_sprintf( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _T("印刷設定 %d"), i + 1 );	/* 印刷設定の名前 */
 			}
@@ -849,7 +849,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	ConvertLangValue(common.m_sFormat.m_szDateFormat, STR_DATA_FORMAT);
 	ConvertLangValue(common.m_sFormat.m_szTimeFormat, STR_TIME_FORMAT);
 	indexBackup = index;
-	for (int i = 0; i < common.m_sFileName.m_nTransformFileNameArrNum; ++i) {
+	for (int i=0; i<common.m_sFileName.m_nTransformFileNameArrNum; ++i) {
 		index = indexBackup;
 		ConvertLangValue(common.m_sFileName.m_szTransformFileNameTo[i], STR_TRANSNAME_COMDESKTOP);
 		ConvertLangValue(common.m_sFileName.m_szTransformFileNameTo[i], STR_TRANSNAME_COMDOC);
@@ -863,7 +863,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 		}
 	}
 	indexBackup = index;
-	for (int i = 0; i < MAX_PRINTSETTINGARR; ++i) {
+	for (int i=0; i<MAX_PRINTSETTINGARR; ++i) {
 		index = indexBackup;
 		ConvertLangValue(shareData.m_PrintSettingArr[i].m_szPrintSettingName, STR_PRINT_SET_NAME);
 		if (bSetValues) {
@@ -873,7 +873,7 @@ void CShareData::ConvertLangValues(std::vector<std::wstring>& values, bool bSetV
 	assert(m_pvTypeSettings);
 	indexBackup = index;
 	ConvertLangValue(shareData.m_TypeBasis.m_szTypeName, STR_TYPE_NAME_BASIS);
-	for (int i = 0; i < (int)GetTypeSettings().size(); ++i) {
+	for (int i=0; i<(int)GetTypeSettings().size(); ++i) {
 		index = indexBackup;
 		STypeConfig& type = *(GetTypeSettings()[i]);
 		ConvertLangValue2(type.m_szTypeName, STR_TYPE_NAME_BASIS);
@@ -920,7 +920,7 @@ bool CShareData::IsPathOpened(const TCHAR* pszPath, HWND* phwndOwner)
 		return false;
 	}
 	
-	for (int i = 0; i < m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
+	for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
 		if (IsSakuraMainWindow(m_pShareData->m_sNodes.m_pEditArr[i].m_hWnd)) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(m_pShareData->m_sNodes.m_pEditArr[i].m_hWnd, MYWM_GETFILEINFO, 1, 0);
@@ -1182,7 +1182,7 @@ int CShareData::GetMacroFilename(int idx, TCHAR* pszPath, int nBufLen)
 	if (!_IS_REL_PATH(pszFile)	// 絶対パス
 		|| m_pShareData->m_Common.m_sMacro.m_szMACROFOLDER[0] == _T('\0')	// フォルダ指定なし
 	) {
-		if (pszPath == NULL || nBufLen <= nLen) {
+		if (!pszPath || nBufLen <= nLen) {
 			return -nLen;
 		}
 		_tcscpy(pszPath, pszFile);

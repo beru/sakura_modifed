@@ -97,7 +97,7 @@ int CDlgFileTree::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
-)
+	)
 {
 	m_pcDlgFuncList = reinterpret_cast<CDlgFuncList*>(lParam);
 	m_nDocType = m_pcDlgFuncList->m_nDocType;
@@ -289,7 +289,12 @@ int CDlgFileTree::GetData()
 	return TRUE;
 }
 
-bool CDlgFileTree::GetDataTree(std::vector<SFileTreeItem>& data, HTREEITEM hItem, int nLevel, int nMaxCount)
+bool CDlgFileTree::GetDataTree(
+	std::vector<SFileTreeItem>& data,
+	HTREEITEM hItem,
+	int nLevel,
+	int nMaxCount
+	)
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 	for (HTREEITEM s=hItem; s!=NULL; s=TreeView_GetNextSibling(hwndTree, s)) {
@@ -344,7 +349,11 @@ int CDlgFileTree::GetDataItem(SFileTreeItem& item)
 	return TRUE;
 }
 
-BOOL CDlgFileTree::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgFileTree::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 	SFileTreeItem item;
@@ -399,7 +408,11 @@ void CDlgFileTree::SetDataInit()
 	SetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni); 
 }
 
-HTREEITEM CDlgFileTree::InsertTreeItem(SFileTreeItem& item, HTREEITEM htiParent, HTREEITEM htiInsert )
+HTREEITEM CDlgFileTree::InsertTreeItem(
+	SFileTreeItem& item,
+	HTREEITEM htiParent,
+	HTREEITEM htiInsert
+	)
 {
 	int nlParam;
 	if (m_aItemRemoveList.empty()) {
@@ -425,7 +438,13 @@ HTREEITEM CDlgFileTree::InsertTreeItem(SFileTreeItem& item, HTREEITEM htiParent,
 // ツリーのコピー
 //		fChildがtrueの時はdstの子としてコピー, そうでなければdstの兄弟としてdstの後ろにコピー
 //		fOnryOneがtrueの時は1つだけコピー（子があったらコピー）
-static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool fChild, bool fOnryOne)
+static HTREEITEM FileTreeCopy(
+	HWND hwndTree,
+	HTREEITEM dst,
+	HTREEITEM src,
+	bool fChild,
+	bool fOnryOne
+	)
 {
 	HTREEITEM		s;
 	HTREEITEM		ts;
@@ -435,7 +454,7 @@ static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool 
 	int				n = 0;
 	TCHAR			szLabel[_MAX_PATH];
 
-	for (s = src; s; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
+	for (s=src; s; s=fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
 		tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
 		tvi.hItem = s;
 		tvi.pszText = szLabel;
@@ -476,7 +495,7 @@ static HTREEITEM FileTreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool 
 }
 
 
-BOOL CDlgFileTree::OnBnClicked( int wID )
+BOOL CDlgFileTree::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_REF1:
@@ -750,7 +769,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 						htiInsert = TVI_LAST;
 					}
 					HTREEITEM htiItemFirst = NULL;
-					for (int i = 0; i < (int)aFileNames.size(); ++i) {
+					for (int i=0; i<(int)aFileNames.size(); ++i) {
 						CNativeT cmemFile = aFileNames[i].c_str();
 						cmemFile.ReplaceT(_T("%"), _T("%%"));
 						SFileTreeItem item;
@@ -784,7 +803,7 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 				strMsg = LS(STR_FILETREE_REPLACE_PATH_TO);
 				if (dlgInput.DoModal( G_AppInstance(), GetHwnd(), strTitle.c_str(), strMsg.c_str(), _countof(szPathTo), szPathTo)) {
 					int nItemsCount = (int)m_fileTreeSetting.m_aItems.size();
-					for (int i = 0; i < nItemsCount; ++i) {
+					for (int i=0; i<nItemsCount; ++i) {
 						SFileTreeItem& item =  m_fileTreeSetting.m_aItems[i];
 						CNativeT str(item.m_szTargetPath);
 						str.Replace(szPathFrom, szPathTo);
@@ -938,10 +957,10 @@ BOOL CDlgFileTree::OnBnClicked( int wID )
 	}
 
 	/* 基底クラスメンバ */
-	return CDialog::OnBnClicked( wID );
+	return CDialog::OnBnClicked(wID);
 }
 
-BOOL CDlgFileTree::OnNotify( WPARAM wParam, LPARAM lParam )
+BOOL CDlgFileTree::OnNotify(WPARAM wParam, LPARAM lParam)
 {
 	NMHDR* pNMHDR = (NMHDR*)lParam;
 	TV_DISPINFO* ptdi = (TV_DISPINFO*)lParam;
@@ -982,10 +1001,10 @@ BOOL CDlgFileTree::OnNotify( WPARAM wParam, LPARAM lParam )
 		}
 	}
 	/* 基底クラスメンバ */
-	return CDialog::OnNotify( wParam, lParam );
+	return CDialog::OnNotify(wParam, lParam);
 }
 
-LPVOID CDlgFileTree::GetHelpIdTable( void )
+LPVOID CDlgFileTree::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

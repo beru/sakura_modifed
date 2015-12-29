@@ -209,7 +209,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		// 関数名→機能ID，機能名日本語
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 		nFuncID = CSMacroMgr::GetFuncInfoByName(hInstance, szFuncName, szFuncNameJapanese);
-		if (-1 != nFuncID) {
+		if (nFuncID != -1) {
 			macro = new CMacro(nFuncID);
 			// Jun. 16, 2002 genta プロトタイプチェック用に追加
 			int nArgs;

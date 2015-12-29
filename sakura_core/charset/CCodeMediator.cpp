@@ -6,7 +6,6 @@
 #include "types/CType.h"
 
 
-
 /*!
 	•¶Žš—ñ‚Ìæ“ª‚ÉUnicodeŒnBOM‚ª•t‚¢‚Ä‚¢‚é‚©H
 

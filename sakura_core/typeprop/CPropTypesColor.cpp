@@ -103,7 +103,7 @@ bool CPropTypesColor::Import(HWND hwndDlg)
 	CImpExpColors	cImpExpColors(ColorInfoArr);
 
 	// 色設定 I/O
-	for (int i = 0; i < m_Types.m_nColorInfoArrNum; ++i) {
+	for (int i=0; i<m_Types.m_nColorInfoArrNum; ++i) {
 		ColorInfoArr[i] = m_Types.m_ColorInfoArr[i];
 		_tcscpy(ColorInfoArr[i].m_szName, m_Types.m_ColorInfoArr[i].m_szName);
 	}
@@ -116,7 +116,7 @@ bool CPropTypesColor::Import(HWND hwndDlg)
 
 	// データのコピー
 	m_Types.m_nColorInfoArrNum = COLORIDX_LAST;
-	for (int i = 0; i < m_Types.m_nColorInfoArrNum; ++i) {
+	for (int i=0; i<m_Types.m_nColorInfoArrNum; ++i) {
 		m_Types.m_ColorInfoArr[i] =  ColorInfoArr[i];
 		_tcscpy(m_Types.m_ColorInfoArr[i].m_szName, ColorInfoArr[i].m_szName);
 	}
@@ -160,7 +160,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		poMouse.x = xPos;
 		poMouse.y = yPos;
 		nItemNum = List_GetCount(hwnd);
-		for (i = 0; i < nItemNum; ++i) {
+		for (i=0; i<nItemNum; ++i) {
 			List_GetItemRect(hwnd, i, &rcItem);
 			if (::PtInRect(&rcItem, poMouse)) {
 //				MYTRACE(_T("hit at i == %d\n"), i);
@@ -613,7 +613,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// From Here May 12, 2001 genta
 	// 行コメントの開始桁位置設定
 	// May 21, 2001 genta 桁位置を1から数えるように
-	for (i = 0; i < COMMENT_DELIMITER_NUM; ++i) {
+	for (i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		// テキスト
 		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_Types.m_cLineComment.getLineComment(i));	
 
@@ -631,7 +631,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_STRINGLITERAL);
 	Combo_ResetContent(hwndCombo);
 	int		nSelPos = 0;
-	for (i = 0; i < _countof(StringLitteralArr); ++i) {
+	for (i=0; i<_countof(StringLitteralArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(StringLitteralArr[i].nNameId));
 		if (StringLitteralArr[i].nMethod == m_Types.m_nStringType) {		// テキストの折り返し方法
 			nSelPos = i;
@@ -650,7 +650,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	Combo_AddString(hwndWork, L" ");
 	//	Mar. 31, 2003 genta KeyWordSetMgrをポインタに
 	if (0 < m_pCKeyWordSetMgr->m_nKeyWordSetNum) {
-		for (i = 0; i < m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
+		for (i=0; i<m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
 			Combo_AddString(hwndWork, m_pCKeyWordSetMgr->GetTypeName(i));
 		}
 		if (-1 == m_Types.m_nKeyWordSetIdx[0]) {
@@ -663,7 +663,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	}
 
 	// 強調キーワード1～10の設定
-	for (i = 0; i < MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		m_nSet[i] = m_Types.m_nKeyWordSetIdx[i];
 	}
 
@@ -673,7 +673,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// 2014.11.25 大きいフォント対応
 	int nItemHeight = CTextWidthCalc(hwndWork).GetTextHeight();
 	List_SetItemHeight(hwndWork, 0, nItemHeight + 4);
-	for (i = 0; i < COLORIDX_LAST; ++i) {
+	for (i=0; i<COLORIDX_LAST; ++i) {
 		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
 		nItem = ::List_AddString(hwndWork, m_Types.m_ColorInfoArr[i].m_szName);
 		List_SetItemData(hwndWork, nItem, &m_Types.m_ColorInfoArr[i]);
@@ -685,7 +685,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// from here 2005.11.30 Moca 指定位置縦線の設定
 	WCHAR szVertLine[MAX_VERTLINES * 15] = L"";
 	int offset = 0;
-	for (i = 0; i < MAX_VERTLINES && m_Types.m_nVertLineIdx[i] != 0; ++i) {
+	for (i=0; i<MAX_VERTLINES && m_Types.m_nVertLineIdx[i]!=0; ++i) {
 		CLayoutInt nXCol = m_Types.m_nVertLineIdx[i];
 		CLayoutInt nXColEnd = nXCol;
 		CLayoutInt nXColAdd = CLayoutInt(1);
@@ -738,7 +738,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 	bool en;
 	BOOL bTranslated;
 
-	for (int i = 0; i < COMMENT_DELIMITER_NUM; ++i) {
+	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		en = DlgButton_IsChecked(hwndDlg, cLineComment[i].nCheckBoxID);
 		pos = ::GetDlgItemInt(hwndDlg, cLineComment[i].nTextID, &bTranslated, FALSE);
 		if (!bTranslated) {
@@ -786,7 +786,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 	}
 
 	// 強調キーワード2～10の取得(1は別)
-	for (nIdx = 1; nIdx < MAX_KEYWORDSET_PER_TYPE; ++nIdx) {
+	for (nIdx=1; nIdx<MAX_KEYWORDSET_PER_TYPE; ++nIdx) {
 		m_Types.m_nKeyWordSetIdx[nIdx] = m_nSet[nIdx];
 	}
 
@@ -798,7 +798,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 	int i = 0;
 	while (i < MAX_VERTLINES) {
 		int value = 0;
-		for (; '0' <= szVertLine[offset] && szVertLine[offset] <= '9'; ++offset) {
+		for (; '0'<=szVertLine[offset] && szVertLine[offset]<='9'; ++offset) {
 			value = szVertLine[offset] - '0' + value * 10;
 		}
 		if (value <= 0) {
@@ -808,7 +808,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 			++offset;
 			int valueBegin = 0;
 			int valueEnd = 0;
-			for (; '0' <= szVertLine[offset] && szVertLine[offset] <= '9'; ++offset) {
+			for (; '0'<=szVertLine[offset] && szVertLine[offset]<='9'; ++offset) {
 				valueBegin = szVertLine[offset] - '0' + valueBegin * 10;
 			}
 			if (valueBegin <= 0) {
@@ -819,7 +819,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 			}else if (szVertLine[offset] != ')') {
 				break;
 			}
-			for (; '0' <= szVertLine[offset] && szVertLine[offset] <= '9'; ++offset) {
+			for (; '0'<=szVertLine[offset] && szVertLine[offset]<='9'; ++offset) {
 				valueEnd = szVertLine[offset] - '0' + valueEnd * 10;
 			}
 			if (valueEnd <= 0) {
@@ -1001,14 +1001,14 @@ void CPropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 */
 void CPropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 {
-	int i, j;
-	for (i = 0; i < MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (m_nSet[i] != -1) {
 			continue;
 		}
 
 		// 未設定の場合
-		for (j = i; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
+		int j;
+		for (j=i; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 			if (m_nSet[j] != -1) {
 				// 後ろに設定済み項目があった場合
 				m_nSet[i] = m_nSet[j];
@@ -1159,7 +1159,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 // 色選択ダイアログ
 BOOL CPropTypesColor::SelectColor(HWND hwndParent, COLORREF* pColor, DWORD* pCustColors)
 {
-	CHOOSECOLOR		cc;
+	CHOOSECOLOR cc;
 	cc.lStructSize = sizeof_raw(cc);
 	cc.hwndOwner = hwndParent;
 	cc.hInstance = NULL;

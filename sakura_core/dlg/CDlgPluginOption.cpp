@@ -49,7 +49,11 @@
 #endif
 
 // 編集領域を表示、非表示にする
-static inline void CtrlShow(HWND hwndDlg, int id, BOOL bShow)
+static inline void CtrlShow(
+	HWND hwndDlg,
+	int id,
+	BOOL bShow
+	)
 {
 	HWND hWnd = ::GetDlgItem(hwndDlg, id);
 	::ShowWindow(hWnd, bShow? SW_SHOW: SW_HIDE);
@@ -85,10 +89,10 @@ CDlgPluginOption::~CDlgPluginOption()
 
 // モーダルダイアログの表示
 int CDlgPluginOption::DoModal(
-	HINSTANCE	hInstance,
-	HWND		hwndParent,
-	CPropPlugin*	cPropPlugin,
-	int 		ID
+	HINSTANCE			hInstance,
+	HWND				hwndParent,
+	CPropPlugin*		cPropPlugin,
+	int 				ID
 )
 {
 	// プラグイン番号（エディタがふる番号）
@@ -196,7 +200,7 @@ void CDlgPluginOption::SetData(void)
 		cProfile->WriteProfile(m_cPlugin->GetOptionPath().c_str(), (m_cPlugin->m_sName + LSW(STR_DLGPLUGINOPT_INIHEAD)).c_str());
 	}
 
-	if (i ==0) {
+	if (i == 0) {
 		// オプションが無い
 		EnableItem(IDC_LIST_PLUGIN_OPTIONS, false);
 		EnableItem(IDOK, false);
@@ -285,7 +289,11 @@ int CDlgPluginOption::GetData(void)
 	return TRUE;
 }
 
-BOOL CDlgPluginOption::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgPluginOption::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	LV_COLUMN	col;
 	RECT		rc;
@@ -668,7 +676,11 @@ void CDlgPluginOption::SetFromEdit(int iLine)
 }
 
 // 選択用文字列分解
-void CDlgPluginOption::SepSelect(wstring sTrg, wstring* spView, wstring* spValue)
+void CDlgPluginOption::SepSelect(
+	wstring sTrg,
+	wstring* spView,
+	wstring* spValue
+	)
 {
 	int ix = sTrg.find(L':');
 	if ((std::wstring::size_type)ix == std::wstring::npos) {

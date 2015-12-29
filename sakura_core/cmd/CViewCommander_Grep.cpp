@@ -167,7 +167,7 @@ void CViewCommander::Command_GREP_REPLACE_DLG( void )
 
 /*! GREPíuä∑é¿çs
 */
-void CViewCommander::Command_GREP_REPLACE( void )
+void CViewCommander::Command_GREP_REPLACE(void)
 {
 	CNativeW cmWork1;
 	CNativeT cmWork2;

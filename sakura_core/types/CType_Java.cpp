@@ -95,9 +95,9 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
-	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		for (i = 0; i < nLineLen; i += nCharChars) {
+		for (i=0; i<nLineLen; i+=nCharChars) {
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
 
 			/* エスケープシーケンスは常に取り除く */
@@ -287,7 +287,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 						nNestLevel2Arr.pop_back();
 						--nClassNestArrNum;
 						int k;
-						for (k = wcslen(szClass) - 1; k >= 0; --k) {
+						for (k=wcslen(szClass)-1; k>=0; --k) {
 							if (L'\\' == szClass[k]) {
 								break;
 							}
@@ -323,7 +323,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					BOOL		bCommentLoop;
 					bCommentLoop = FALSE;
 				loop_is_func:;
-					for (; k < nLineLen2; ++k) {
+					for (; k<nLineLen2; ++k) {
 						if (!bCommentLoop) {
 							if (pLine2[k] != L' ' && pLine2[k] != WCODE::TAB && !WCODE::IsLineDelimiter(pLine2[k], bExtEol)) {
 								if (k + 1 < nLineLen2 && pLine2[k] == L'/' && pLine2[k + 1] == L'*') {

@@ -39,14 +39,23 @@ CDllPlugin::~CDllPlugin(void)
 
 // プラグの生成
 // CPlugの代わりにCDllPlugを作成する
-CPlug* CDllPlugin::CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel)
+CPlug* CDllPlugin::CreatePlug(
+	CPlugin& plugin,
+	PlugId id,
+	const wstring& sJack,
+	const wstring& sHandler,
+	const wstring& sLabel
+	)
 {
 	CDllPlug* newPlug = new CDllPlug(plugin, id, sJack, sHandler, sLabel);
 	return newPlug;
 }
 
 // プラグイン定義ファイルの読み込み
-bool CDllPlugin::ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CDllPlugin::ReadPluginDef(
+	CDataProfile* cProfile,
+	CDataProfile* cProfileMlang
+	)
 {
 	ReadPluginDefCommon(cProfile, cProfileMlang);
 
@@ -69,7 +78,11 @@ bool CDllPlugin::ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMla
 }
 
 // プラグ実行
-bool CDllPlugin::InvokePlug(CEditView* view, CPlug& plug_raw, CWSHIfObj::List& params)
+bool CDllPlugin::InvokePlug(
+	CEditView* view,
+	CPlug& plug_raw,
+	CWSHIfObj::List& params
+	)
 {
 	tstring dllPath = GetFilePath(to_tchar(m_sDllName.c_str()));
 	EDllResult resInit = InitDll(to_tchar(dllPath.c_str()));

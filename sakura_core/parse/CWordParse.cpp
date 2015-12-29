@@ -168,9 +168,14 @@ ECharKind CWordParse::WhatKindOfChar(
 
 
 // 二つの文字を結合したものの種類を調べる
-ECharKind CWordParse::WhatKindOfTwoChars(ECharKind kindPre, ECharKind kindCur)
+ECharKind CWordParse::WhatKindOfTwoChars(
+	ECharKind kindPre,
+	ECharKind kindCur
+	)
 {
-	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
+	if (kindPre == kindCur) {
+		return kindCur;			// 同種ならその種別を返す
+	}
 
 	// 全角長音・全角濁点は前後の全角ひらがな・全角カタカナに引きずられる
 	if ((kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU) &&
@@ -196,16 +201,23 @@ ECharKind CWordParse::WhatKindOfTwoChars(ECharKind kindPre, ECharKind kindCur)
 	if (kindPre == CK_CTRL) kindPre = CK_ETC;		// 制御文字はその他の半角とみなす
 	if (kindCur == CK_CTRL) kindCur = CK_ETC;
 
-	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
+	if (kindPre == kindCur) {
+		return kindCur;			// 同種ならその種別を返す
+	}
 
 	return CK_NULL;									// それ以外なら二つの文字は別種
 }
 
 
 // 二つの文字を結合したものの種類を調べる
-ECharKind CWordParse::WhatKindOfTwoChars4KW(ECharKind kindPre, ECharKind kindCur)
+ECharKind CWordParse::WhatKindOfTwoChars4KW(
+	ECharKind kindPre,
+	ECharKind kindCur
+	)
 {
-	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
+	if (kindPre == kindCur) {
+		return kindCur;			// 同種ならその種別を返す
+	}
 
 	// 全角長音・全角濁点は前後の全角ひらがな・全角カタカナに引きずられる
 	if ((kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU) &&
@@ -232,7 +244,9 @@ ECharKind CWordParse::WhatKindOfTwoChars4KW(ECharKind kindPre, ECharKind kindCur
 	if (kindPre == CK_CTRL) kindPre = CK_CTRL;		// 制御文字はそのまま制御文字とみなす
 	if (kindCur == CK_CTRL) kindCur = CK_CTRL;
 
-	if (kindPre == kindCur) return kindCur;			// 同種ならその種別を返す
+	if (kindPre == kindCur) {
+		return kindCur;			// 同種ならその種別を返す
+	}
 
 	return CK_NULL;									// それ以外なら二つの文字は別種
 }
@@ -246,8 +260,8 @@ bool CWordParse::SearchNextWordPosition(
 	const wchar_t*	pLine,
 	CLogicInt		nLineLen,
 	CLogicInt		nIdx,			//	桁数
-	CLogicInt*		pnColumnNew,	//	見つかった位置
-	BOOL			bStopsBothEnds	//	単語の両端で止まる
+	CLogicInt*		pnColumnNew,		//	見つかった位置
+	BOOL				bStopsBothEnds	//	単語の両端で止まる
 )
 {
 	// 文字種類が変わるまで後方へサーチ
@@ -436,7 +450,7 @@ BOOL IsURL(
 					return FALSE;
 				}
 				int i;
-				for (i = urlp->length; i < nLineLen; ++i, ++p) {	// 通常の解析へ
+				for (i=urlp->length; i<nLineLen; ++i, ++p) {	// 通常の解析へ
 					if (wc_to_c(*p) == 0 || (!(url_char[wc_to_c(*p)]))) {
 						break;	// 終端に達した
 					}
@@ -453,7 +467,11 @@ BOOL IsURL(
 }
 
 // 現在位置がメールアドレスならば、NULL以外と、その長さを返す
-BOOL IsMailAddress(const wchar_t* pszBuf, int nBufLen, int* pnAddressLenfth)
+BOOL IsMailAddress(
+	const wchar_t* pszBuf,
+	int nBufLen,
+	int* pnAddressLenfth
+	)
 {
 	int j = 0;
 	if ((pszBuf[j] >= L'a' && pszBuf[j] <= L'z')

@@ -114,7 +114,7 @@ public:
 					&& LOWORD(ID) == F_PL_GETOPTION
 				) {
 					// 設定されていなければデフォルトを取得 
-					for (auto it = m_cPlugin.m_options.begin(); it != m_cPlugin.m_options.end(); ++it) {
+					for (auto it=m_cPlugin.m_options.begin(); it!=m_cPlugin.m_options.end(); ++it) {
 						wstring sSectionTmp;
 						wstring sKeyTmp;
 						(*it)->GetKey(&sSectionTmp, &sKeyTmp);

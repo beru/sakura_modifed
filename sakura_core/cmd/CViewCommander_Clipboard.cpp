@@ -105,7 +105,13 @@ void CViewCommander::Command_COPY(
 		}
 
 		// クリップボードにデータcmemBufの内容を設定
-		if (!m_pCommanderView->MySetClipboardData(cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), bBeginBoxSelect, FALSE)) {
+		if (!m_pCommanderView->MySetClipboardData(
+			cmemBuf.GetStringPtr(),
+			cmemBuf.GetStringLength(),
+			bBeginBoxSelect,
+			FALSE
+			)
+		) {
 			ErrorBeep();
 			return;
 		}
@@ -205,16 +211,16 @@ void CViewCommander::Command_PASTE(int option)
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(pszText[nTextLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
 			cmemClip.AppendString(GetDocument()->m_cDocEditor.GetNewLineCode().GetValue2());
 			pszText = cmemClip.GetStringPtr(&nTextLen);
 		}
 	}
 
 	if (bConvertEol) {
-		CLogicInt nConvertedTextLen = ConvertEol( pszText, nTextLen, NULL );
+		CLogicInt nConvertedTextLen = ConvertEol(pszText, nTextLen, NULL);
 		wchar_t	*pszConvertedText = new wchar_t[nConvertedTextLen];
-		ConvertEol( pszText, nTextLen, pszConvertedText );
+		ConvertEol(pszText, nTextLen, pszConvertedText);
 		// テキストを貼り付け
 		Command_INSTEXT(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);	// 2010.09.17 ryoji
 		delete [] pszConvertedText;

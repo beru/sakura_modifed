@@ -63,7 +63,7 @@ struct CommonValueInfo {
 			printf("%d\n", *((int*)m_pValue));
 		// それ以外ならバイナリ出力
 		}else {
-			for (int i = 0; i < m_nValueSize; ++i) {
+			for (int i=0; i<m_nValueSize; ++i) {
 				printf("%%%02X", ((BYTE*)m_pValue)[i]);
 			}
 		}
@@ -73,7 +73,7 @@ vector<CommonValueInfo> g_commonvalues;
 void CommonValue_AllSave()
 {
 	int nSize = (int)g_commonvalues.size();
-	for (int i = 0; i < nSize; ++i) {
+	for (int i=0; i<nSize; ++i) {
 		g_commonvalues[i].Save();
 	}
 }

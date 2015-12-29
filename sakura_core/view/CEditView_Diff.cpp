@@ -225,7 +225,7 @@ bool COutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
 
 	// 読み出した文字列をチェックする
 	int j;
-	for (j = 0; j < (int)size/*-1*/; ++j) {
+	for (j=0; j<(int)size/*-1*/; ++j) {
 		if (bLineHead) {
 			if (pBuf[j] != '\n' && pBuf[j] != '\r') {
 				bLineHead = false;
@@ -296,7 +296,7 @@ void CEditView::AnalyzeDiffInfo(
 	// 前半ファイルの開始行
 	int s1 = 0;
 	int e1;
-	for (q = pszDiffInfo; *q; ++q) {
+	for (q=pszDiffInfo; *q; ++q) {
 		if (*q == ',') break;
 		if (*q == 'a' || *q == 'c' || *q == 'd') break;
 		// 行番号を抽出

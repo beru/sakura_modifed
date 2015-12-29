@@ -271,7 +271,7 @@ void CPropFile::SetData(HWND hwndDlg)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
 	Combo_ResetContent(hwndCombo);
 	int nSelPos = 0;
-	for (int i = 0; i < _countof(ShareModeArr); ++i) {
+	for (int i=0; i<_countof(ShareModeArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(ShareModeArr[i].nNameId));
 		if (ShareModeArr[i].nMethod == csFile.m_nFileShareMode) {
 			nSelPos = i;
@@ -382,7 +382,7 @@ int CPropFile::GetData(HWND hwndDlg)
 
 	int nN;
 	TCHAR* pDigit;
-	for (nN = 0, pDigit = szNumBuf; *pDigit != _T('\0'); ++pDigit) {
+	for (nN=0, pDigit=szNumBuf; *pDigit!=_T('\0'); ++pDigit) {
 		if (_T('0') <= *pDigit && *pDigit <= _T('9')) {
 			nN = nN * 10 + *pDigit - _T('0');
 		}else {

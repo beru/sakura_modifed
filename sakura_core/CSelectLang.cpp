@@ -148,7 +148,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 		result = FindNextFile(handle, &w32fd);
 	}
 
-	if (INVALID_HANDLE_VALUE != handle) {
+	if (handle != INVALID_HANDLE_VALUE) {
 		FindClose(handle);
 		handle = INVALID_HANDLE_VALUE;
 	}

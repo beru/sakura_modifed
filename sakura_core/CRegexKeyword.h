@@ -60,22 +60,22 @@ public:
 	~CRegexKeyword();
 
 	// 行検索開始
-	BOOL RegexKeyLineStart(void);
+	bool RegexKeyLineStart(void);
 	// 行検索
-	BOOL RegexIsKeyword(const CStringRef& cStr, int nPos, int* nMatchLen, int* nMatchColor);
+	bool RegexIsKeyword(const CStringRef& cStr, int nPos, int* nMatchLen, int* nMatchColor);
 	// タイプ設定
-	BOOL RegexKeySetTypes(const STypeConfig* pTypesPtr);
+	bool RegexKeySetTypes(const STypeConfig* pTypesPtr);
 
 	// 書式(囲み)チェック
-	static BOOL RegexKeyCheckSyntax(const wchar_t* s);
+	static bool RegexKeyCheckSyntax(const wchar_t* s);
 	
 	static DWORD GetNewMagicNumber();
 
 protected:
 	// コンパイル
-	BOOL RegexKeyCompile(void);
+	bool RegexKeyCompile(void);
 	// 変数初期化
-	BOOL RegexKeyInit(void);
+	bool RegexKeyInit(void);
 
 public:
 	int				m_nTypeIndex;				// 現在のタイプ設定番号

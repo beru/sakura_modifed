@@ -70,7 +70,10 @@ private:
 	ITypeInfo *m_TypeInfo;
 	ULONG m_RefCount;
 public:
-	CWSHSite(CWSHClient *AClient): m_Client(AClient), m_RefCount(0)
+	CWSHSite(CWSHClient *AClient)
+		:
+		m_Client(AClient),
+		m_RefCount(0)
 	{
 	}
 
@@ -226,8 +229,16 @@ public:
 
 // implementation
 
-CWSHClient::CWSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler, void *AData): 
-				m_OnError(AErrorHandler), m_Data(AData), m_Valid(false), m_Engine(NULL)
+CWSHClient::CWSHClient(
+	const wchar_t* AEngine,
+	ScriptErrorHandler AErrorHandler,
+	void *AData
+	)
+	: 
+	m_OnError(AErrorHandler),
+	m_Data(AData),
+	m_Valid(false),
+	m_Engine(NULL)
 { 
 	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
 	CCurrentDirectoryBackupPoint dirBack;

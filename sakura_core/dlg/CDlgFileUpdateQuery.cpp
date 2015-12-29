@@ -34,7 +34,11 @@
 #include "dlg/CDlgFileUpdateQuery.h"
 #include "sakura_rc.h"
 
-BOOL CDlgFileUpdateQuery::OnInitDialog(HWND hWnd, WPARAM wParam, LPARAM lParam)
+BOOL CDlgFileUpdateQuery::OnInitDialog(
+	HWND hWnd,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	::DlgItem_SetText(hWnd, IDC_UPDATEDFILENAME, m_pFilename);
 	::DlgItem_SetText(hWnd, IDC_QUERYRELOADMSG, m_bModified ?

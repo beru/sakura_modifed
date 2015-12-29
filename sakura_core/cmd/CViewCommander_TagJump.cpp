@@ -697,7 +697,9 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 */
 bool CViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count)
 {
-	if (count) szCurrentPath[0] = _T('\0');
+	if (count) {
+		szCurrentPath[0] = _T('\0');
+	}
 
 	// 実行可能確認
 	if (! GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {

@@ -121,7 +121,10 @@ CPrint::~CPrint(void)
 	@author かろと
 	@date 2003.
 */
-BOOL CPrint::PrintDlg(PRINTDLG *pPD, MYDEVMODE *pMYDEVMODE)
+BOOL CPrint::PrintDlg(
+	PRINTDLG* pPD,
+	MYDEVMODE* pMYDEVMODE
+	)
 {
 	// デフォルトプリンタが選択されていなければ、選択する
 	if (!m_hDevMode) {
@@ -542,7 +545,7 @@ TCHAR* CPrint::GetPaperName(int nPaperSize, TCHAR* pszPaperName)
 */
 const PAPER_INFO* CPrint::FindPaperInfo(int id)
 {
-	for (int i = 0; i < m_nPaperInfoArrNum; ++i) {
+	for (int i=0; i<m_nPaperInfoArrNum; ++i) {
 		if (m_paperInfoArr[i].m_nId == id) {
 			return &(m_paperInfoArr[i]);
 		}
@@ -623,7 +626,10 @@ int CPrint::CalculatePrintableColumns(PRINTSETTING* pPS, int nPaperAllWidth, int
 	印字可能行数の計算
 	@date 2013.05.10 aroka 新規作成
 */
-int CPrint::CalculatePrintableLines(PRINTSETTING *pPS, int nPaperAllHeight)
+int CPrint::CalculatePrintableLines(
+	PRINTSETTING* pPS,
+	int nPaperAllHeight
+	)
 {
 	int nPrintablePaperHeight = nPaperAllHeight - pPS->m_nPrintMarginTY - pPS->m_nPrintMarginBY;
 	if (nPrintablePaperHeight < 0) { return 0; }

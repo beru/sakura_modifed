@@ -214,7 +214,7 @@ void CPropMacro::SetData(HWND hwndDlg)
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
 	auto& csMacro = m_pShareData->m_Common.m_sMacro;
 	
-	for (index = 0; index < MAX_CUSTMACRO; ++index) {
+	for (index=0; index<MAX_CUSTMACRO; ++index) {
 		auto& macroRec = csMacro.m_MacroTable[index];
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = index;
@@ -298,7 +298,7 @@ int CPropMacro::GetData(HWND hwndDlg)
 	//	ƒ}ƒNƒƒf[ƒ^
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
 
-	for (index = 0; index < MAX_CUSTMACRO; ++index) {
+	for (index=0; index<MAX_CUSTMACRO; ++index) {
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -341,7 +341,7 @@ int CPropMacro::GetData(HWND hwndDlg)
 		sItem.cchTextMax = _countof(szText);
 		ListView_GetItem(hListView, &sItem);
 		int nLen = ::lstrlen(szText);
-		for (int i = 0; i < nLen; ++i) {
+		for (int i=0; i<nLen; ++i) {
 			if (szText[i] == _T('O')) {
 				csMacro.m_nMacroOnOpened = index;
 			}
@@ -396,7 +396,7 @@ void CPropMacro::InitDialog(HWND hwndDlg)
 	::GetWindowRect(hListView, &rc);
 	int width = rc.right - rc.left;
 	
-	for (pos = 0; pos < _countof(ColumnList); ++pos) {
+	for (pos=0; pos<_countof(ColumnList); ++pos) {
 		
 		memset_raw(&sColumn, 0, sizeof(sColumn));
 		sColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_FMT;
@@ -416,7 +416,7 @@ void CPropMacro::InitDialog(HWND hwndDlg)
 	ListView_SetItemCount(hListView, MAX_CUSTMACRO);
 
 	//	Index•”•ª‚Ì“o˜^
-	for (pos = 0; pos < MAX_CUSTMACRO ; ++pos) {
+	for (pos=0; pos<MAX_CUSTMACRO; ++pos) {
 		LVITEM sItem;
 		TCHAR buf[4];
 		memset_raw(&sItem, 0, sizeof(sItem));
@@ -431,7 +431,7 @@ void CPropMacro::InitDialog(HWND hwndDlg)
 	
 	// “o˜^æŽw’è ComboBox‚Ì‰Šú‰»
 	HWND hNumCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_MACROID);
-	for (pos = 0; pos < MAX_CUSTMACRO ; ++pos) {
+	for (pos=0; pos<MAX_CUSTMACRO; ++pos) {
 		wchar_t buf[10];
 		auto_sprintf(buf, L"%d", pos);
 		int result = Combo_AddString(hNumCombo, buf);
@@ -496,7 +496,7 @@ void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
 	int nMacroOnSave = -1;
 	TCHAR szText[8];
 	int iItem;
-	for (iItem = 0; iItem < MAX_CUSTMACRO; ++iItem) {
+	for (iItem=0; iItem<MAX_CUSTMACRO; ++iItem) {
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = iItem;
 		sItem.mask = LVIF_TEXT;
@@ -505,7 +505,7 @@ void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
 		sItem.cchTextMax = _countof(szText);
 		ListView_GetItem(hListView, &sItem);
 		int nLen = ::lstrlen(szText);
-		for (int i = 0; i < nLen; ++i) {
+		for (int i=0; i<nLen; ++i) {
 			if (szText[i] == _T('O')) {
 				nMacroOnOpened = iItem;
 			}
@@ -532,7 +532,7 @@ void CPropMacro::SetMacro2List_Macro(HWND hwndDlg)
 	}else if (nMacroOnSave == index) {
 		nMacroOnSave = -1;
 	}
-	for (iItem = 0; iItem < MAX_CUSTMACRO; ++iItem) {
+	for (iItem=0; iItem<MAX_CUSTMACRO; ++iItem) {
 		szText[0] = _T('\0');
 		if (iItem == nMacroOnOpened) {
 			::lstrcat(szText, _T("O"));
@@ -693,7 +693,7 @@ void CPropMacro::CheckListPosition_Macro(HWND hwndDlg)
 	::CheckDlgButton(hwndDlg, IDC_CHECK_MacroOnTypeChanged, false);
 	::CheckDlgButton(hwndDlg, IDC_CHECK_MacroOnSave, false);
 	int nLen = ::lstrlen(szText);
-	for (int i = 0; i < nLen; ++i) {
+	for (int i=0; i<nLen; ++i) {
 		if (szText[i] == _T('O')) {
 			::CheckDlgButton(hwndDlg, IDC_CHECK_MacroOnOpened, true);
 		}

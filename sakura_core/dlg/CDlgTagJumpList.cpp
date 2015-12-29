@@ -329,9 +329,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 		free(p);
 
 		ListView_SetItemText(hwndList, nIndex, 4, item->filename);
-
 		ListView_SetItemText(hwndList, nIndex, 5, item->note);
-
 		ListView_SetItemState(hwndList, nIndex, 0, LVIS_SELECTED | LVIS_FOCUSED);
 	}
 
@@ -416,7 +414,11 @@ int CDlgTagJumpList::GetData(void)
 	@date 2005.03.31 MIK
 		階層カラムの追加．キーワード指定欄の追加
 */
-BOOL CDlgTagJumpList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgTagJumpList::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	HWND		hwndList;
 	LV_COLUMN	col;
@@ -581,7 +583,12 @@ BOOL CDlgTagJumpList::OnBnClicked(int wID)
 }
 
 
-INT_PTR CDlgTagJumpList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgTagJumpList::DispatchEvent(
+	HWND hWnd,
+	UINT wMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
@@ -706,7 +713,15 @@ LPVOID CDlgTagJumpList::GetHelpIdTable(void)
 }
 
 #if 0
-bool CDlgTagJumpList::AddParamA(const ACHAR* s0, const ACHAR* s1, int n2, const ACHAR* s3, const ACHAR* s4, int depth, int fileBase)
+bool CDlgTagJumpList::AddParamA(
+	const ACHAR* s0,
+	const ACHAR* s1,
+	int n2,
+	const ACHAR* s3,
+	const ACHAR* s4,
+	int depth,
+	int fileBase
+	)
 {
 	if (-1 == m_nIndex) m_nIndex = 0;	// 規定値
 
@@ -718,10 +733,15 @@ bool CDlgTagJumpList::AddParamA(const ACHAR* s0, const ACHAR* s1, int n2, const 
 }
 #endif
 
-bool CDlgTagJumpList::GetSelectedFullPathAndLine( TCHAR *fullPath, int count, int *lineNum, int *depth )
+bool CDlgTagJumpList::GetSelectedFullPathAndLine(
+	TCHAR *fullPath,
+	int count,
+	int* lineNum,
+	int* depth
+	)
 {
-	if (1 != m_pcList->GetCount()) {
-		if (-1 == m_nIndex || m_nIndex >= m_pcList->GetCount()) return false;
+	if (m_pcList->GetCount() != 1) {
+		if (m_nIndex == -1 || m_nIndex >= m_pcList->GetCount()) return false;
 	}else {
 		m_nIndex = 0;
 	}
@@ -733,7 +753,13 @@ bool CDlgTagJumpList::GetSelectedFullPathAndLine( TCHAR *fullPath, int count, in
 	@param lineNum [out] オプション
 	@param depth [out] オプション
 */
-bool CDlgTagJumpList::GetFullPathAndLine( int index, TCHAR *fullPath, int count, int *lineNum, int *depth )
+bool CDlgTagJumpList::GetFullPathAndLine(
+	int index,
+	TCHAR* fullPath,
+	int count,
+	int* lineNum,
+	int* depth
+	)
 {
 	TCHAR path[1024];
 	TCHAR fileName[1024];
@@ -742,7 +768,7 @@ bool CDlgTagJumpList::GetFullPathAndLine( int index, TCHAR *fullPath, int count,
 	SplitPath_FolderAndFile(GetFilePath(), path, NULL);
 	AddLastYenFromDirectoryPath(path);
 	
-	m_pcList->GetParam( index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName );
+	m_pcList->GetParam(index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName);
 	if (depth) {
 		*depth = tempDepth;
 	}
@@ -1139,10 +1165,9 @@ int CDlgTagJumpList::find_key_core(
 		// 1 1つでもヒットしたら次は検索しない
 		// 2 完全一致のときは1に同じ。 それ以外は3に同じ
 		// 3 必ず次も検索
-		if (0 == state.m_nNextMode) break;
-		if (1 == state.m_nNextMode && 0 < state.m_nMatchAll) break;
-		if (2 == state.m_nNextMode && bTagJumpExactMatch && 0 < state.m_nMatchAll) break; 
-
+		if (state.m_nNextMode == 0) break;
+		if (state.m_nNextMode == 1 && 0 < state.m_nMatchAll) break;
+		if (state.m_nNextMode == 2 && bTagJumpExactMatch && 0 < state.m_nMatchAll) break; 
 		{
 			std::tstring curPath = state.m_szCurPath;
 			if (seachDirs.exist(curPath)) {
@@ -1192,7 +1217,7 @@ int CDlgTagJumpList::find_key_core(
 					break;
 				}
 				if ('!' == szLineData[0]) {
-					if (0 == strncmp_literal(szLineData + 1, "_TAG_")) {
+					if (strncmp_literal(szLineData + 1, "_TAG_") == 0) {
 						s[0][0] = s[1][0] = s[2][0] = 0;
 						nRet = sscanf(
 							szLineData, 
@@ -1201,19 +1226,19 @@ int CDlgTagJumpList::find_key_core(
 						);
 						if (nRet < 2) goto next_line;
 						const ACHAR* pTag = s[0] + 6;
-						if (0 == strncmp_literal(pTag , "FILE_FORMAT")) {
+						if (strncmp_literal(pTag , "FILE_FORMAT") == 0) {
 							n2 = atoi(s[1]);
 							if (1 <= n2 && n2 <= 2) {
 								nTagFormat = n2;
 							}
-						}else if (0 == strncmp_literal(pTag, "FILE_SORTED")) {
+						}else if (strncmp_literal(pTag, "FILE_SORTED") == 0) {
 							n2 = atoi(s[1]);
 							bSorted   = (1 == n2);
 							bFoldcase = (2 == n2);
 							if (bTagJumpICaseByTags) {
 								bTagJumpICase = bFoldcase;
 							}
-						}else if (0 == strncmp_literal(pTag, "S_SEARCH_NEXT")) {
+						}else if (strncmp_literal(pTag, "S_SEARCH_NEXT") == 0) {
 							// 独自拡張:次に検索するtagファイルの指定
 							if ('0' <= s[1][0] && s[1][0] <= '3') {
 								n2 = atoi(s[1]);
@@ -1231,7 +1256,7 @@ int CDlgTagJumpList::find_key_core(
 									}
 								}
 							}
-						}else if (0 == strncmp_literal(pTag, "S_FILE_BASEDIR")) {
+						}else if (strncmp_literal(pTag, "S_FILE_BASEDIR") == 0) {
 							TCHAR baseWork[1024];
 							// 独自拡張:ファイル名の基準ディレクトリ
 							if (state.m_bJumpPath) {
@@ -1272,7 +1297,7 @@ int CDlgTagJumpList::find_key_core(
 					if (n2 <= 0) goto next_line;
 				}
 
-				int  cmp;
+				int cmp;
 				if (bTagJumpAnyWhere) {
 					if (bTagJumpICase) {
 						cmp = stristr_j(s[0], paszKeyword) != NULL ? 0 : -1;
@@ -1296,7 +1321,7 @@ int CDlgTagJumpList::find_key_core(
 						}
 					}
 				}
-				if (0 == cmp) {
+				if (cmp == 0) {
 					state.m_nMatchAll++;
 					if (nTop < state.m_nMatchAll) {
 						if (cList.GetCount() < nCap) {
@@ -1339,7 +1364,7 @@ next_line:
 			DirUp(state.m_szCurPath);
 		}
 		
-		if (0 != state.m_nMatchAll && !m_bNextItem) {
+		if (state.m_nMatchAll != 0 && !m_bNextItem) {
 			// 0 ページめくり用: 打ち切られていないので次のページでは、このtagsの次から検索できる
 			// (最後に通過したものを保持)
 			*m_psFindPrev = state;

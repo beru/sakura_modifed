@@ -27,14 +27,15 @@ void CDocVisitor::SetAllEol(CEol cEol)
 	CLayoutInt		nCaretPosX_Prev = pcView->GetCaret().m_nCaretPosX_Prev;
 
 	bool bReplace = false;
-
 	// 改行コードを統一する
 	if (cEol.IsValid()) {
 		CLogicInt nLine = CLogicInt(0);
 		COpeBlk* pcOpeBlk = pcView->m_bDoing_UndoRedo ? NULL : pcView->m_cCommander.GetOpeBlk();
 		for (;;) {
 			CDocLine* pcDocLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLine); //#######非効率
-			if (!pcDocLine) break;
+			if (!pcDocLine) {
+				break;
+			}
 			// 改行を置換
 			if (pcDocLine->GetEol() != EOL_NONE && pcDocLine->GetEol() != cEol) {
 				CLogicRange sRange;

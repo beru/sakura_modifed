@@ -80,7 +80,7 @@ HMENU CMRUFile::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, met.cbSize, &met, 0);
 	CDCFont dcFont(met.lfMenuFont);
 
-	for (int i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
+	for (int i=0; i<m_cRecentFile.GetItemCount(); ++i) {
 		//	「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_cRecentFile.GetViewCount()) {
 			break;
@@ -122,7 +122,7 @@ BOOL CMRUFile::DestroyMenu(HMENU hMenuPopUp) const
 std::vector<LPCTSTR> CMRUFile::GetPathList() const
 {
 	std::vector<LPCTSTR> ret;
-	for (int i = 0; i < m_cRecentFile.GetItemCount(); ++i) {
+	for (int i=0; i<m_cRecentFile.GetItemCount(); ++i) {
 		//「共通設定」→「全般」→「ファイルの履歴MAX」を反映
 		if (i >= m_cRecentFile.GetViewCount()) {
 			break;
@@ -209,7 +209,7 @@ void CMRUFile::Add(EditInfo* pEditInfo)
 	// すでに登録されている場合は、除外指定を無視する
 	if (-1 == m_cRecentFile.FindItemByPath(pEditInfo->m_szPath)) {
 		int nSize = m_pShareData->m_sHistory.m_aExceptMRU.size();
-		for (int i = 0 ; i < nSize; ++i) {
+		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
 			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pEditInfo->m_szPath,  szExceptMRU)) {

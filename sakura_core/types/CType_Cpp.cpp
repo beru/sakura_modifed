@@ -230,14 +230,14 @@ private:
 */
 CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 {
-	int length=_length;
+	int length = _length;
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
 	//	skip whitespace
-	for (p = str; C_IsSpace(*p, bExtEol) && p < lastptr ; ++p)
+	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
 		;
 	if (lastptr <= p)
 		return CLogicInt(length);	//	空行のため処理不要
@@ -257,11 +257,11 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 	++p; // #をスキップ
 	
 	//	skip whitespace
-	for (; C_IsSpace(*p, bExtEol) && p < lastptr ; ++p)
+	for (; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
 		;
 
 	//	ここからPreprocessor directive解析
-	if (p + 2 + 2 < lastptr && wcsncmp_literal(p, L"if") == 0) {
+	if (p+2+2 < lastptr && wcsncmp_literal(p, L"if") == 0) {
 		// if
 		p += 2;
 		
@@ -275,7 +275,7 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 			//	if 0 チェック
 			//	skip whitespace
 			//	2007.12.15 genta
-			for (; (C_IsSpace(*p, bExtEol) || *p == L'(') && p < lastptr ; ++p)
+			for (; (C_IsSpace(*p, bExtEol) || *p==L'(') && p<lastptr; ++p)
 				;
 			if (*p == L'0') {
 				enable = 1;
@@ -283,8 +283,8 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 				enable = 2;
 			}
 		}else if (
-			(p + 3 < lastptr && wcsncmp_literal(p, L"def") == 0) ||
-			(p + 4 < lastptr && wcsncmp_literal(p, L"ndef") == 0)
+			(p+3 < lastptr && wcsncmp_literal(p, L"def") == 0) ||
+			(p+4 < lastptr && wcsncmp_literal(p, L"ndef") == 0)
 		) {
 			enable = 2;
 		}
@@ -297,12 +297,12 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 				m_enablebuf |= m_bitpattern;
 			}
 		}
-	}else if (p + 4 < lastptr && wcsncmp_literal(p, L"else") == 0) {
+	}else if (p+4 < lastptr && wcsncmp_literal(p, L"else") == 0) {
 		//	2007.12.14 genta : #ifが無く#elseが出たときのガード追加
 		if (0 < m_stackptr && m_stackptr < m_maxnestlevel) {
 			m_enablebuf ^= m_bitpattern;
 		}
-	}else if (p + 5 < lastptr && wcsncmp_literal(p, L"endif") == 0) {
+	}else if (p+5 < lastptr && wcsncmp_literal(p, L"endif") == 0) {
 		if (m_stackptr > 0) {
 			--m_stackptr;
 			m_enablebuf &= ~m_bitpattern;
@@ -454,8 +454,8 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 	CCppPreprocessMng cCppPMng;
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 	
-	CLogicInt		nLineCount;
-	for (nLineCount = CLogicInt(0); nLineCount <  m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	CLogicInt nLineCount;
+	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
@@ -472,7 +472,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 #ifdef TRACE_OUTLINE
 		DEBUG_TRACE(_T("line:%ls"), pLine);
 #endif
-		for (; i < nLineLen; ++i) {
+		for (; i<nLineLen; ++i) {
 #ifdef TRACE_OUTLINE
 			DEBUG_TRACE(_T("%2d [%lc] %d %x %d %d %d wd[%ls] pre[%ls] tmp[%ls] til[%ls] %d\n"), int((Int)i), pLine[i], nMode, nMode2,
 				nNestLevel_global, nNestLevel_func, nNestLevel_fparam, szWord, szWordPrev, szTemplateName, szItemName, nWordIdx);
@@ -742,7 +742,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 						) {
 							// C++11 raw string
 							// R"abc(string)abc"
-							for (int k = i + 1; k < nLineLen; ++k) {
+							for (int k=i+1; k<nLineLen; ++k) {
 								if (pLine[k] == L'(') {
 									// i = 1, k = 5, len = 5-1-1=3
 									CLogicInt tagLen = t_min(k - i - 1, CLogicInt(_countof(szRawStringTag) - 1));
@@ -867,9 +867,9 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					bool bOperator = false;
 					if (nMode2 == M2_NORMAL && nNestLevel_fparam == 0 && C_IsOperator(szWordPrev, nLen)) {
 						int k;
-						for (k = i + 1; k < nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
+						for (k=i+1; k<nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
 						if (k < nLineLen && pLine[k] == L')') {
-							for (++k; k < nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
+							for (++k; k<nLineLen && C_IsSpace(pLine[k], bExtEol); ++k) {}
 							if (k < nLineLen && (pLine[k] == L'<' || pLine[k] == L'(')) {
 								// オペレータだった operator()(/ operator()<;
 								if (nLen + 1 < _countof(szWordPrev)) {
@@ -1257,7 +1257,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				*/
 
 				int i;
-				for (i = nCaretPosX_PHY; i < nLineLen; ++i) {
+				for (i=nCaretPosX_PHY; i<nLineLen; ++i) {
 					if (WCODE::TAB != pLine[i] && WCODE::SPACE != pLine[i]) {
 						break;
 					}
@@ -1303,7 +1303,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 		nLevel = 0;	// {}の入れ子レベル
 		
 		nDataLen = CLogicInt(0);
-		for (j = GetCaret().GetCaretLogicPos().GetY2(); j >= CLogicInt(0); --j) {
+		for (j=GetCaret().GetCaretLogicPos().GetY2(); j>=CLogicInt(0); --j) {
 			pLine2 = m_pcEditDoc->m_cDocLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == GetCaret().GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
@@ -1321,7 +1321,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				k = nLineLen2 - nCharChars;
 			}
 
-			for (; k >= 0; /*k--*/) {
+			for (; k>=0; /*k--*/) {
 				if (1 == nCharChars && (L'}' == pLine2[k] || L')' == pLine2[k])) {
 					if (1
 						&& 0 < k
@@ -1382,7 +1382,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				continue;
 			}
 
-			for (m = 0; m < nLineLen2; ++m) {
+			for (m=0; m<nLineLen2; ++m) {
 				if (WCODE::TAB != pLine2[m] && WCODE::SPACE != pLine2[m]) {
 					break;
 				}

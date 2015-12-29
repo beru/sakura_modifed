@@ -718,7 +718,7 @@ CMenuDrawer::CMenuDrawer()
 		const int nAddFuncs = MAX_CUSTMACRO - MAX_CUSTMACRO_ICO;
 		const int nBaseIndex = m_tbMyButton.size();
 		m_tbMyButton.resize(m_tbMyButton.size() + nAddFuncs);
-		for (int k = 0; k < nAddFuncs; ++k) {
+		for (int k=0; k<nAddFuncs; ++k) {
 			const int macroFuncCode = F_USERMACRO_0 + MAX_CUSTMACRO_ICO + k;
 			SetTBBUTTONVal(
 				&m_tbMyButton[k + nBaseIndex],
@@ -1188,7 +1188,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	rcText.right -= nIndentRight;
 
 	/* TAB文字の前と後ろに分割してテキストを描画する */
-	for (j = 0; j < nItemStrLen; ++j) {
+	for (j=0; j<nItemStrLen; ++j) {
 		if (pszItemStr[j] == _T('\t')) {
 			break;
 		}
@@ -1387,7 +1387,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 				const int nBASE = 100 * 100; // 座標,nScale共に0.01単位
 				// 16dot幅しかないので 1.0倍から2.1倍までスケールする(10-23)
 				const int nScale = t_max(100, t_min(210, int((lpdis->rcItem.bottom - lpdis->rcItem.top - 2) * 100) / (16-2)));
-				for (int nBold = 1; nBold <= (281*nScale)/nBASE; ++nBold) {
+				for (int nBold=1; nBold<=(281*nScale)/nBASE; ++nBold) {
 					::MoveToEx(hdc, nX - (187*nScale)/nBASE, nY - (187*nScale)/nBASE, NULL);
 					::LineTo(  hdc, nX -   (0*nScale)/nBASE, nY -   (0*nScale)/nBASE);
 					::LineTo(  hdc, nX + (468*nScale)/nBASE, nY - (468*nScale)/nBASE);

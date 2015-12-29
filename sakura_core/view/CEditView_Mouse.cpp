@@ -2164,7 +2164,7 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 		TCHAR szWork[_MAX_PATH];
 
 		nFiles = ::DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
-		for (UINT i = 0; i < nFiles; ++i) {
+		for (UINT i=0; i<nFiles; ++i) {
 			::DragQueryFile(hDrop, i, szPath, sizeof(szPath)/sizeof(TCHAR));
 			if (!::GetLongFileName(szPath, szWork))
 				continue;

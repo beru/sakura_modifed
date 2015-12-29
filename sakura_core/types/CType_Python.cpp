@@ -196,7 +196,7 @@ int COutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offse
 	assert(m_state == STATE_NORMAL || m_state == STATE_CONTINUE);
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
-	for (int col = start_offset; col < linelen; ++col) {
+	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
@@ -265,7 +265,7 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 
 	int quote_char = m_quote_char;
-	for (int col = start_offset; col < linelen; ++col) {
+	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
 		if (1 < nCharChars) {
 			col += (nCharChars - 1);
@@ -409,7 +409,7 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 			//	indent check
 			//	May 15, 2007 genta 桁位置colはデータオフセットdと独立にしないと
 			//	文字列比較がおかしくなる
-			for (depth = 0, col = CLogicInt(0); col < nLineLen; ++col) {
+			for (depth=0, col=CLogicInt(0); col<nLineLen; ++col) {
 				//	calculate indent level
 				if (pLine[col] == L' ') {
 					++depth;
@@ -462,7 +462,7 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 			//	関数内部の実行文のさらに奧に関数があるケースを考慮
 			//	def/class以外のインデントは記録しない方がいいので
 			//	見出し行と確定してからインデントレベルの判定を行う
-			for (int i = depth_index; i >= 0; --i) {
+			for (int i=depth_index; i>=0; --i) {
 				if (depth == indent_level[i]) {
 					depth_index = i;
 					break;
@@ -482,8 +482,9 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 				++col;
 
 			int w_end;
-			for (w_end = col; w_end < nLineLen
-					&& Python_IsWordChar(pLine[w_end]); ++w_end)
+			for (w_end=col;
+				w_end<nLineLen && Python_IsWordChar(pLine[w_end]);
+				++w_end)
 				;
 			
 			//	2007.02.08 genta 手抜きコメント

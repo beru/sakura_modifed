@@ -97,7 +97,12 @@ void CViewCommander::Command_FILENEW_NEWWINDOW(void)
 	@date 2003.03.30 genta 「閉じて開く」から利用するために引数追加
 	@date 2004.10.09 genta 実装をCEditDocへ移動
 */
-void CViewCommander::Command_FILEOPEN(const WCHAR* filename, ECodeType nCharCode, bool bViewMode, const WCHAR* defaultName)
+void CViewCommander::Command_FILEOPEN(
+	const WCHAR* filename,
+	ECodeType nCharCode,
+	bool bViewMode,
+	const WCHAR* defaultName
+	)
 {
 	if (!IsValidCodeType(nCharCode) && nCharCode != CODE_AUTODETECT) {
 		nCharCode = CODE_AUTODETECT;
@@ -240,7 +245,11 @@ void CViewCommander::Command_FILECLOSE(void)
 	@date 2003.03.30 genta 開くダイアログでキャンセルしたとき元のファイルが残るように。
 				ついでにFILEOPENと同じように引数を追加しておく
 */
-void CViewCommander::Command_FILECLOSE_OPEN(LPCWSTR filename, ECodeType nCharCode, bool bViewMode)
+void CViewCommander::Command_FILECLOSE_OPEN(
+	LPCWSTR filename,
+	ECodeType nCharCode,
+	bool bViewMode
+	)
 {
 	GetDocument()->m_cDocFileOperation.FileCloseOpen(SLoadInfo(to_tchar(filename), nCharCode, bViewMode));
 
@@ -689,7 +698,11 @@ bool CViewCommander::Command_PUTFILE(
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-bool CViewCommander::Command_INSFILE(LPCWSTR filename, ECodeType nCharCode, int nFlgOpt)
+bool CViewCommander::Command_INSFILE(
+	LPCWSTR filename,
+	ECodeType nCharCode,
+	int nFlgOpt
+	)
 {
 	CFileLoad	cfl(m_pCommanderView->m_pTypeData->m_encoding);
 	CEol cEol;

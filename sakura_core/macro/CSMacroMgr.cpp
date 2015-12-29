@@ -319,7 +319,7 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoCommandArr[] =
 
 	// Oct. 9, 2001 genta 追加
 	{F_EXECMD,					LTEXT("ExecCommand"),		{VT_BSTR,  VT_I4,    VT_BSTR,  VT_EMPTY},	VT_EMPTY,	NULL}, // 外部コマンド実行
-	{F_EXECMD_DIALOG,		LTEXT("ExecCommandDialog"),		{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部コマンド実行(ダイアログ)
+	{F_EXECMD_DIALOG,			LTEXT("ExecCommandDialog"),	{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 外部コマンド実行(ダイアログ)
 
 	// カスタムメニュー
 	{F_MENU_RBUTTON,			LTEXT("RMenu"),				{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}, // 右クリックメニュー
@@ -570,7 +570,12 @@ int CSMacroMgr::Append(
 
 	@date 2007.07.16 genta flags追加
 */
-BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int flags)
+BOOL CSMacroMgr::Exec(
+	int idx,
+	HINSTANCE hInstance,
+	CEditView* pcEditView,
+	int flags
+	)
 {
 	if (idx == STAND_KEYMACRO) {
 		// Jun. 16, 2002 genta
@@ -637,7 +642,12 @@ BOOL CSMacroMgr::Exec(int idx , HINSTANCE hInstance, CEditView* pcEditView, int 
 
 	@author Norio Nakatani, YAZAKI, genta
 */
-BOOL CSMacroMgr::Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType)
+BOOL CSMacroMgr::Load(
+	int idx,
+	HINSTANCE hInstance,
+	const TCHAR* pszPath,
+	const TCHAR* pszType
+	)
 {
 	CMacroManagerBase** ppMacro = Idx2Ptr(idx);
 
@@ -719,7 +729,11 @@ void CSMacroMgr::UnloadAll(void)
 
 	@author YAZAKI
 */
-BOOL CSMacroMgr::Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath)
+BOOL CSMacroMgr::Save(
+	int idx,
+	HINSTANCE hInstance,
+	const TCHAR* pszPath
+	)
 {
 	assert(idx == STAND_KEYMACRO);
 	if (idx == STAND_KEYMACRO) {

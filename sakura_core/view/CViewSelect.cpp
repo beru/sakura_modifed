@@ -426,7 +426,7 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 				sRangeA.SetFrom(m_sSelect.GetTo());
 				sRangeA.SetTo  (m_sSelectOld.GetTo());
 			}
-			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=sRangeA.GetFrom().GetY2(); nLineNum<=sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
 					DrawSelectAreaLine(	hdc, nLineNum, sRangeA);
 				}
@@ -440,20 +440,20 @@ void CViewSelect::DrawSelectArea2(HDC hdc) const
 				sRangeA.SetFrom(m_sSelectOld.GetFrom());
 				sRangeA.SetTo  (m_sSelect.GetFrom());
 			}
-			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=sRangeA.GetFrom().GetY2(); nLineNum<=sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, sRangeA);
 				}
 			}
 		}else {
 			sRangeA = m_sSelectOld;
-			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=sRangeA.GetFrom().GetY2(); nLineNum<=sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, sRangeA);
 				}
 			}
 			sRangeA = m_sSelect;
-			for (nLineNum = sRangeA.GetFrom().GetY2(); nLineNum <= sRangeA.GetTo().GetY2(); ++nLineNum) {
+			for (nLineNum=sRangeA.GetFrom().GetY2(); nLineNum<=sRangeA.GetTo().GetY2(); ++nLineNum) {
 				if (nLineNum >= pView->GetTextArea().GetViewTopLine() && nLineNum <= pView->GetTextArea().GetBottomLine() + 1) {
 					DrawSelectAreaLine(hdc, nLineNum, sRangeA);
 				}

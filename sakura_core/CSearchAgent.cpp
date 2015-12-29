@@ -298,14 +298,14 @@ void CSearchAgent::CreateCharCharsArr(
 /*!	単語単位の単語リスト作成
 */
 void CSearchAgent::CreateWordList(
-	std::vector<std::pair<const wchar_t*, CLogicInt> >&	searchWords,
-	const wchar_t*	pszPattern,
+	std::vector<std::pair<const wchar_t*, CLogicInt>>&	searchWords,
+	const wchar_t* pszPattern,
 	int	nPatternLen
 	)
 {
-	for (CLogicInt pos=CLogicInt(0); pos<nPatternLen;) {
+	for (CLogicInt pos=CLogicInt(0); pos<nPatternLen; ) {
 		CLogicInt begin, end; // 検索語に含まれる単語?の posを基準とした相対位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
-		if (CWordParse::WhereCurrentWord_2(pszPattern + pos, nPatternLen - pos, CLogicInt(0), &begin, &end, NULL, NULL)
+		if (CWordParse::WhereCurrentWord_2(pszPattern+pos, nPatternLen-pos, CLogicInt(0), &begin, &end, NULL, NULL)
 			&& begin == 0 && begin < end
 		) {
 			if (!WCODE::IsWordDelimiter(pszPattern[pos])) {
@@ -326,9 +326,9 @@ const wchar_t* CSearchAgent::SearchStringWord(
 	const wchar_t*	pLine,
 	int				nLineLen,
 	int				nIdxPos,
-	const std::vector<std::pair<const wchar_t*, CLogicInt> >& searchWords,
-	bool	bLoHiCase,
-	int*	pnMatchLen
+	const std::vector<std::pair<const wchar_t*, CLogicInt>>& searchWords,
+	bool	 bLoHiCase,
+	int*	 pnMatchLen
 )
 {
 	CLogicInt nNextWordFrom = CLogicInt(nIdxPos);
@@ -469,10 +469,10 @@ bool CSearchAgent::PrevOrNextWord(
 */
 // 見つからない場合は０を返す
 int CSearchAgent::SearchWord(
-	CLogicPoint				ptSerachBegin,	// 検索開始位置
-	ESearchDirection		eDirection,		// 検索方向
-	CLogicRange*			pMatchRange,	// [out] マッチ範囲。ロジック単位。
-	const CSearchStringPattern&	pattern		// 検索パターン
+	CLogicPoint					ptSerachBegin,	// 検索開始位置
+	ESearchDirection			eDirection,		// 検索方向
+	CLogicRange*				pMatchRange,	// [out] マッチ範囲。ロジック単位。
+	const CSearchStringPattern&	pattern			// 検索パターン
 )
 {
 	CDocLine*	pDocLine;
@@ -506,7 +506,7 @@ int CSearchAgent::SearchWord(
 			nIdxPos = 0;
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
-				nHitPos		= -1;	// -1:この行でマッチ位置なし
+				nHitPos = -1;	// -1:この行でマッチ位置なし
 				for (;;) {
 					nHitPosOld = nHitPos;
 					nIdxPosOld = nIdxPos;
@@ -534,7 +534,7 @@ int CSearchAgent::SearchWord(
 					}
 				}
 
-				if (-1 != nHitPosOld) {
+				if (nHitPosOld != -1) {
 					// この行でマッチした位置が存在するので、この行で検索終了
 					pMatchRange->SetFromX(nHitPosOld);	// マッチ位置from
 					pMatchRange->SetToX  (nIdxPosOld);	// マッチ位置to
@@ -645,7 +645,7 @@ int CSearchAgent::SearchWord(
 		}else {
 			nLinePos = ptSerachBegin.GetY2();
 			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
-			CLogicInt	nNextWordFrom = ptSerachBegin.GetX2();
+			CLogicInt nNextWordFrom = ptSerachBegin.GetX2();
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				int nMatchLen;
@@ -669,7 +669,7 @@ int CSearchAgent::SearchWord(
 		goto end_of_func;
 	// 普通の検索 (正規表現でも単語単位でもない)
 	}else {
-		const int	nPatternLen = pattern.GetLen();
+		const int nPatternLen = pattern.GetLen();
 		// 前方検索
 		if (eDirection == SEARCH_BACKWARD) {
 			nLinePos = ptSerachBegin.GetY2();
@@ -693,7 +693,7 @@ int CSearchAgent::SearchWord(
 						nHitPos = pszRes - pLine;
 						nIdxPos = nHitPos + nPatternLen;	// マッチ文字列長進めるように変更 2005.10.28 Karoto
 						if (nHitPos >= nHitTo) {
-							if (-1 != nHitPosOld) {
+							if (nHitPosOld != -1) {
 								pMatchRange->SetFromY(nLinePos);	// マッチ行
 								pMatchRange->SetToY  (nLinePos);	// マッチ行
 								pMatchRange->SetFromX(nHitPosOld);	// マッチ位置from
@@ -705,7 +705,7 @@ int CSearchAgent::SearchWord(
 							}
 						}
 					}else {
-						if (-1 != nHitPosOld) {
+						if (nHitPosOld != -1) {
 							pMatchRange->SetFromY(nLinePos);	// マッチ行
 							pMatchRange->SetToY  (nLinePos);	// マッチ行
 							pMatchRange->SetFromX(nHitPosOld);	// マッチ位置from
@@ -890,7 +890,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			nWorkLen = nLineLen - nWorkPos; // 2002/2/10 aroka CMemory変更
 		}
 
-		if (0 == nWorkLen) {
+		if (nWorkLen == 0) {
 			// 前の行へ
 			goto prev_line;
 		}
@@ -1233,7 +1233,7 @@ prev_line:;
 			}
 			pArg->ptNewPos.x = nLen;	// 挿入された部分の次の位置のデータ位置
 		}else {
-			if (0 == nCount) {
+			if (nCount == 0) {
 				// 行の中間に挿入(削除データがなかった。1文字入力など)
 			}else {
 				// 複数行挿入の最後の行

@@ -69,10 +69,9 @@ bool CBookmarkManager::SearchBookMark(
 */
 void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 {
-	CDocLine*	pCDocLine;
-	wchar_t *p;
+	CDocLine* pCDocLine;
 	wchar_t delim[] = L", ";
-	p = pMarkLines;
+	wchar_t* p = pMarkLines;
 	if (p[0] == L':') {
 		if (p[1] == L'0') {
 			// ver2 形式 [0-9a-v] 0-31(終端バージョン) [w-zA-Z\+\-] 0-31
@@ -142,10 +141,10 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 	wchar_t szBuff[10];
 	wchar_t szBuff2[10];
 	CLogicInt nLinePos = CLogicInt(0);
-	CLogicInt	nLinePosOld=CLogicInt(-1);
-	int			nTextLen = 2;
+	CLogicInt nLinePosOld = CLogicInt(-1);
+	int nTextLen = 2;
 	CDocLine* pCDocLine = m_pcDocLineMgr->GetLine(nLinePos);
-	wcscpy( szText, L":0" );
+	wcscpy(szText, L":0");
 	while (pCDocLine) {
 		if (CBookmarkGetter(pCDocLine).IsBookmarked()) {
 			CLogicInt nDiff = nLinePos - nLinePosOld - CLogicInt(1);
@@ -202,7 +201,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 */
 void CBookmarkManager::MarkSearchWord(
 	const CSearchStringPattern& pattern
-)
+	)
 {
 	const SSearchOption& sSearchOption = pattern.GetSearchOption();
 	int nLineLen;

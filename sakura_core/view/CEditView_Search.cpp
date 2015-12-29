@@ -123,7 +123,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	if (m_pTypeData->m_bUseKeyHelpPrefix)
 		nCmpLen = wcslen(pcmemCurText->GetStringPtr());	// 2006.04.10 fon
 	m_cTipWnd.m_KeyWasHit = FALSE;
-	for (int i =0 ; i < m_pTypeData->m_nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
+	for (int i=0; i<m_pTypeData->m_nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
 		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
 			CNativeW* pcmemRefText;
@@ -232,7 +232,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	CNativeW cmemCurText;
 	CLayoutYInt nTipBeginLine = ptNew.y;
 	CLayoutYInt nTipEndLine = ptNew.y + CLayoutYInt(4);
-	for (CLayoutYInt nCurLine = nTipBeginLine; nCurLine < nTipEndLine; ++nCurLine) {
+	for (CLayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
 		const CLayout* pcLayout = NULL;
 		if (0 <= nCurLine) {
 			pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( nCurLine );
@@ -352,7 +352,7 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 	// 検索文字列は改行まで
 	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 	int i;
-	for (i = 0; i < nTopic2Len; ++i) {
+	for (i=0; i<nTopic2Len; ++i) {
 		if (WCODE::IsLineDelimiter(pTopic2[i], bExtEol)) {
 			break;
 		}
@@ -478,7 +478,7 @@ int CEditView::IsSearchString(
 		// 検索語を単語に分割しながら指定位置の単語と照合する。
 		int wordIndex = 0;
 		const wchar_t* const searchKeyEnd = m_strCurSearchKey.data() + m_strCurSearchKey.size();
-		for (const wchar_t* p = m_strCurSearchKey.data(); p < searchKeyEnd;) {
+		for (const wchar_t* p=m_strCurSearchKey.data(); p<searchKeyEnd; ) {
 			CLogicInt begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 			if (1
 				&& CWordParse::WhereCurrentWord_2(p, CLogicInt(searchKeyEnd - p), CLogicInt(0), &begin, &end, NULL, NULL)

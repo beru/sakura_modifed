@@ -77,13 +77,13 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 		// 一文字ずつ
-		for (i = 0; i < nLineLen - 1; ++i) {
+		for (i=0; i<nLineLen-1; ++i) {
 			if (pLine[i] == L'%') break;	// コメントなら以降はいらない
 			if (nDepth >= nMaxStack) continue;
 			if (pLine[i] != L'\\') continue;	// 「\」がないなら次の文字へ
 			++i;
 			// 見つかった「\」以降の文字列チェック
-			for (j = 0; i + j < nLineLen && j < _countof(szTag) - 1; ++j) {
+			for (j=0; i+j<nLineLen && j<_countof(szTag)-1; ++j) {
 				if (pLine[i + j] == L'{') { // }
 					bNoNumber = (pLine[i + j - 1] == '*');
 					nStartTitlePos = j + i + 1;
@@ -107,7 +107,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 				// さらに{slide}{}まで読みとっておく
 				if (wcsstr(pLine, L"{slide}")) {
 					k = 0;
-					for (j = nStartTitlePos + 1; i + j < nLineLen && j < _countof(szTag) - 1; ++j) {
+					for (j=nStartTitlePos+1; i+j<nLineLen && j<_countof(szTag)-1; ++j) {
 						if (pLine[i + j] == L'{') { // }
 							nStartTitlePos = j + i + 1;
 							break;
@@ -121,7 +121,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 
 			if (thisSection > 0) {
 				// sectionの中身取得
-				for (k = 0; nStartTitlePos + k < nLineLen && k < _countof(szTitle) - 1; ++k) {
+				for (k=0; nStartTitlePos+k<nLineLen && k<_countof(szTitle)-1; ++k) {
 					// {
 					if (pLine[k + nStartTitlePos] == L'}') {
 						break;
@@ -156,7 +156,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 				}
 				tmpstr[0] = L'\0';
 				if (!bNoNumber) {
-					for (k = 0; k <= nDepth; ++k) {
+					for (k=0; k<=nDepth; ++k) {
 						auto_sprintf_s(secstr, L"%d.", stackSection[k]);
 						wcscat(tmpstr, secstr);
 					}

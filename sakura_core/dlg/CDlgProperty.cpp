@@ -58,7 +58,11 @@ const DWORD p_helpids[] = {	//12600
 };	//@@@ 2002.01.07 add end MIK
 
 // モーダルダイアログの表示
-int CDlgProperty::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
+int CDlgProperty::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	LPARAM lParam
+	)
 {
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_PROPERTY_FILE, lParam);
 }
@@ -94,7 +98,7 @@ void CDlgProperty::SetData(void)
 	CNativeT cmemProp;
 	TCHAR szWork[500];
 
-	HANDLE			nFind;
+	HANDLE nFind;
 	WIN32_FIND_DATA	wfd;
 	// Aug. 16, 2000 genta	全角化
 	cmemProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
@@ -139,7 +143,7 @@ void CDlgProperty::SetData(void)
 	auto_sprintf( szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_cDocLineMgr.GetLineCount() );
 	cmemProp.AppendString(szWork);
 
-	if (INVALID_HANDLE_VALUE != (nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd))) {
+	if ((nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pCEditDoc->m_cDocFile.IsFileLocking()) {
 			if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
 				auto_sprintf( szWork, LS(STR_DLGFLPROP_W_LOCK) );

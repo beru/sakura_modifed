@@ -52,13 +52,17 @@ const DWORD p_helpids[] = {
 };
 
 CDlgProfileMgr::CDlgProfileMgr()
-: CDialog(false, false)
+	: CDialog(false, false)
 {
 	return;
 }
 
 /*! モーダルダイアログの表示 */
-int CDlgProfileMgr::DoModal( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
+int CDlgProfileMgr::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	LPARAM lParam
+	)
 {
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_PROFILEMGR, lParam );
 }
@@ -148,7 +152,11 @@ void CDlgProfileMgr::SetData( int nSelIndex )
 
 
 
-static bool MyList_GetText(HWND hwndList, int index, TCHAR* szText)
+static bool MyList_GetText(
+	HWND hwndList,
+	int index,
+	TCHAR* szText
+	)
 {
 	List_GetText( hwndList, index, szText );
 	TCHAR* pos = auto_strchr( szText, _T('*') );
@@ -232,7 +240,7 @@ BOOL CDlgProfileMgr::OnBnClicked( int wID )
 		break;
 
 	case IDC_BUTTON_HELP:
-		/* 「検索」のヘルプ */
+		// 「検索」のヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROFILEMGR) );
 		break;
 
@@ -249,7 +257,12 @@ BOOL CDlgProfileMgr::OnBnClicked( int wID )
 }
 
 
-INT_PTR CDlgProfileMgr::DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
+INT_PTR CDlgProfileMgr::DispatchEvent(
+	HWND hWnd,
+	UINT wMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent( hWnd, wMsg, wParam, lParam );
@@ -298,7 +311,11 @@ void CDlgProfileMgr::UpdateIni()
 }
 
 
-static bool IsProfileDuplicate(HWND hwndList, LPCTSTR szProfName, int skipIndex)
+static bool IsProfileDuplicate(
+	HWND hwndList,
+	LPCTSTR szProfName,
+	int skipIndex
+	)
 {
 	int nCount = List_GetCount( hwndList );
 	for (int i=0; i<nCount; ++i) {
@@ -461,7 +478,10 @@ void CDlgProfileMgr::ClearDefaultProf()
 }
 
 
-static bool IOProfSettings( SProfileSettings& settings, bool bWrite )
+static bool IOProfSettings(
+	SProfileSettings& settings,
+	bool bWrite
+	)
 {
 	CDataProfile cProf;
 	if (bWrite) {
@@ -512,7 +532,7 @@ static bool IOProfSettings( SProfileSettings& settings, bool bWrite )
 }
 
 
-bool CDlgProfileMgr::ReadProfSettings( SProfileSettings& settings )
+bool CDlgProfileMgr::ReadProfSettings(SProfileSettings& settings)
 {
 	auto_strcpy(settings.m_szDllLanguage, _T(""));
 	settings.m_nDefaultIndex = 0;
@@ -523,7 +543,7 @@ bool CDlgProfileMgr::ReadProfSettings( SProfileSettings& settings )
 }
 
 
-bool CDlgProfileMgr::WriteProfSettings( SProfileSettings& settings )
+bool CDlgProfileMgr::WriteProfSettings(SProfileSettings& settings)
 {
 	return IOProfSettings( settings, true );
 }

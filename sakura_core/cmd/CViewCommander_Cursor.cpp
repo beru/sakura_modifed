@@ -1336,7 +1336,7 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();
 	bool bModified = false;
 	bool bLast = false;
-	if (pcDocLine == NULL) {
+	if (!pcDocLine) {
 		// [EOF]
 		const CDocLine* pcDocLineLast = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2() - 1);
 		if (NULL == pcDocLineLast) {

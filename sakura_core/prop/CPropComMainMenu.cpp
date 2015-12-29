@@ -398,7 +398,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 				if (nIdxFIdx == nSpecialFuncsNum) {
 					// 機能一覧に特殊機能をセット
 					List_ResetContent(hwndListFunk);
-					for (i = 0; i < _countof(sSpecialFuncs); ++i) {
+					for (i=0; i<_countof(sSpecialFuncs); ++i) {
 						List_AddString(hwndListFunk, LSW(sSpecialFuncs[i].m_nNameId));
 					}
 				}else {
@@ -882,17 +882,17 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 	nCurLevel = 0;
 	htiParent = TVI_ROOT;
 	htiItem = TreeView_GetRoot(hwndTreeRes);
-	for (int i = 0; i < m_Common.m_sMainMenu.m_nMainMenuNum; ++i) {
+	for (int i=0; i<m_Common.m_sMainMenu.m_nMainMenuNum; ++i) {
 		pcFunc = &pcMenuTBL[i];
 		if (pcFunc->m_nLevel < nCurLevel) {
 			// Level Up
-			for (; pcFunc->m_nLevel < nCurLevel; --nCurLevel) {
+			for (; pcFunc->m_nLevel<nCurLevel; --nCurLevel) {
 				htiParent = (htiParent == TVI_ROOT) ? TVI_ROOT : TreeView_GetParent(hwndTreeRes, htiParent);
 				if (!htiParent)		htiParent = TVI_ROOT;
 			}
 		}else if (pcFunc->m_nLevel > nCurLevel) {
 			// Level Down
-			for (htiParent = htiItem, ++nCurLevel; pcFunc->m_nLevel < nCurLevel; ++nCurLevel) {
+			for (htiParent=htiItem, ++nCurLevel; pcFunc->m_nLevel<nCurLevel; ++nCurLevel) {
 				// 実行されることは無いはず（データが正常ならば）
 				htiParent = TreeView_GetChild(hwndTreeRes, htiItem);
 				if (!htiParent) {
@@ -916,7 +916,7 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 		case T_SPECIAL:
 			pFuncWk->m_sName = pcFunc->m_sName;
 			if (pFuncWk->m_sName.empty()) {
-				for (int j = 0; j < _countof(sSpecialFuncs); ++j) {
+				for (int j=0; j<_countof(sSpecialFuncs); ++j) {
 					if (pcFunc->m_nFunc == sSpecialFuncs[j].m_nFunc) {
 						pFuncWk->m_sName = RemoveAmpersand(LSW(sSpecialFuncs[j].m_nNameId));
 						break;
@@ -987,7 +987,7 @@ bool CPropMainMenu::GetDataTree(HWND hwndTree, HTREEITEM htiTrg, int nLevel)
 		bOptionOk = false;
 	}
 
-	for (s = htiTrg; s; s = TreeView_GetNextSibling(hwndTree, s)) {
+	for (s=htiTrg; s; s=TreeView_GetNextSibling(hwndTree, s)) {
 		if (m_Common.m_sMainMenu.m_nMainMenuNum >= MAX_MAINMENU) {
 			// 登録数 over
 			return false;
@@ -1128,7 +1128,7 @@ static HTREEITEM TreeCopy(HWND hwndTree, HTREEITEM dst, HTREEITEM src, bool fChi
 #endif
 	TCHAR			szLabel[MAX_LABEL_CCH];
 
-	for (s = src; s; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
+	for (s=src; s; s = fOnryOne ? NULL:TreeView_GetNextSibling(hwndTree, s)) {
 		tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
 		tvi.hItem = s;
 		tvi.pszText = szLabel;
@@ -1180,7 +1180,7 @@ static void TreeView_ExpandAll(HWND hwndTree, bool bExpand)
 	htiCur = htiItem = TreeView_GetSelection(hwndTree);
 	if (!bExpand && htiCur) {
 		// 閉じる時はトップに変更
-		for (htiNext = htiCur; htiNext !=  NULL;) {
+		for (htiNext=htiCur; htiNext!=NULL; ) {
 			htiItem = htiNext;
 			htiNext = TreeView_GetParent(hwndTree, htiItem);
 		}
@@ -1191,7 +1191,7 @@ static void TreeView_ExpandAll(HWND hwndTree, bool bExpand)
 	}
 
 
-	for (htiItem = TreeView_GetRoot(hwndTree); htiItem; htiItem = htiNext) {
+	for (htiItem=TreeView_GetRoot(hwndTree); htiItem; htiItem=htiNext) {
 		htiNext = TreeView_GetChild(hwndTree, htiItem);
 		if (htiNext) {
 			TreeView_Expand(hwndTree, htiItem, bExpand ? TVE_EXPAND : TVE_COLLAPSE);
@@ -1282,7 +1282,7 @@ bool CPropMainMenu::Check_MainMenu_Sub(
 	}
 	mKey.clear();
 
-	for (s = htiTrg; s; s = TreeView_GetNextSibling(hwndTree, s)) {
+	for (s=htiTrg; s; s=TreeView_GetNextSibling(hwndTree, s)) {
 		// メニュー数のカウント
 		++nMenuNum;
 		if (nLevel == 0) {

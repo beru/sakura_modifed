@@ -26,7 +26,7 @@ const DWORD p_helpids[] = {
 	IDC_BUTTON_HELP,				HIDC_GREP_BUTTON_HELP,				// ヘルプ
 	IDC_COMBO_CHARSET,				HIDC_OPENDLG_COMBO_CODE,			// 文字コードセット
 	IDC_CHECK_BOM,					HIDC_OPENDLG_CHECK_BOM,				// 条件
-	IDC_CHECK_CP,					HIDC_OPENDLG_CHECK_CP,				//CP
+	IDC_CHECK_CP,					HIDC_OPENDLG_CHECK_CP,				// CP
 	0, 0
 };
 
@@ -40,7 +40,12 @@ CDlgSetCharSet::CDlgSetCharSet()
 
 
 // モーダルダイアログの表示
-int CDlgSetCharSet::DoModal(HINSTANCE hInstance, HWND hwndParent, ECodeType* pnCharSet, bool* pbBom)
+int CDlgSetCharSet::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	ECodeType* pnCharSet,
+	bool* pbBom
+	)
 {
 	m_pnCharSet = pnCharSet;	// 文字コードセット
 	m_pbBom = pbBom;			// BOM
@@ -49,7 +54,11 @@ int CDlgSetCharSet::DoModal(HINSTANCE hInstance, HWND hwndParent, ECodeType* pnC
 }
 
 
-BOOL CDlgSetCharSet::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgSetCharSet::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 	

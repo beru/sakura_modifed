@@ -37,13 +37,13 @@ const DWORD p_helpids[] = {	//11900
 	IDC_CHK_LOHICASE,				HIDC_REP_CHK_LOHICASE,				// 大文字小文字
 	IDC_CHK_REGULAREXP,				HIDC_REP_CHK_REGULAREXP,			// 正規表現
 	IDC_CHECK_NOTIFYNOTFOUND,		HIDC_REP_CHECK_NOTIFYNOTFOUND,		// 見つからないときに通知
-	IDC_CHECK_bAutoCloseDlgReplace,	HIDC_REP_CHECK_bAutoCloseDlgReplace,	// 自動的に閉じる
+	IDC_CHECK_bAutoCloseDlgReplace,	HIDC_REP_CHECK_bAutoCloseDlgReplace,// 自動的に閉じる
 	IDC_COMBO_TEXT,					HIDC_REP_COMBO_TEXT,				// 置換前
 	IDC_COMBO_TEXT2,				HIDC_REP_COMBO_TEXT2,				// 置換後
 	IDC_RADIO_REPLACE,				HIDC_REP_RADIO_REPLACE,				// 置換対象：置換
 	IDC_RADIO_INSERT,				HIDC_REP_RADIO_INSERT,				// 置換対象：挿入
 	IDC_RADIO_ADD,					HIDC_REP_RADIO_ADD,					// 置換対象：追加
-	IDC_RADIO_LINEDELETE,			HIDC_REP_RADIO_LINEDELETE,			//置換対象：行削除
+	IDC_RADIO_LINEDELETE,			HIDC_REP_RADIO_LINEDELETE,			// 置換対象：行削除
 	IDC_RADIO_SELECTEDAREA,			HIDC_REP_RADIO_SELECTEDAREA,		// 範囲：全体
 	IDC_RADIO_ALLAREA,				HIDC_REP_RADIO_ALLAREA,				// 範囲：選択範囲
 	IDC_STATIC_JRE32VER,			HIDC_REP_STATIC_JRE32VER,			// 正規表現バージョン
@@ -71,7 +71,7 @@ CDlgReplace::CDlgReplace()
 
 	@date 2013.03.24 novice 新規作成
 */
-BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
+BOOL CDlgReplace::OnCbnDropDown(HWND hwndCtl, int wID)
 {
 	switch (wID) {
 	case IDC_COMBO_TEXT:
@@ -95,7 +95,12 @@ BOOL CDlgReplace::OnCbnDropDown( HWND hwndCtl, int wID )
 }
 
 // モードレスダイアログの表示
-HWND CDlgReplace::DoModeless(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam, bool bSelected)
+HWND CDlgReplace::DoModeless(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	LPARAM lParam,
+	bool bSelected
+	)
 {
 	auto& csSearch = m_pShareData->m_Common.m_sSearch;
 	m_sSearchOption = csSearch.m_sSearchOption;		// 検索オプション
@@ -328,7 +333,11 @@ int CDlgReplace::GetData(void)
 }
 
 
-BOOL CDlgReplace::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgReplace::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd(hwndDlg);
 	// Jun. 26, 2001 genta
@@ -374,7 +383,6 @@ BOOL CDlgReplace::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	// 基底クラスメンバ
 	return CDialog::OnInitDialog(hwndDlg, wParam, lParam);
-
 }
 
 

@@ -108,7 +108,7 @@ int CSortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 	@retval FALSE 追加失敗
 	@date 2010.07.23 Moca baseDirId 追加
 */
-BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, int no,
+bool CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, int no,
 	ACHAR type, const ACHAR* note, int depth, int baseDirId
 )
 {
@@ -121,7 +121,7 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 	// アイテムを作成する。
 	item = (TagJumpInfo*)malloc(sizeof(TagJumpInfo));
 	if (!item) {
-		return FALSE;
+		return false;
 	}
 	item->keyword  = _tcsdup(to_tchar(keyword));
 	item->filename = _tcsdup(to_tchar(filename));
@@ -162,7 +162,7 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 		m_nCount--;
 		m_bOverflow = true;
 	}
-	return TRUE;
+	return true;
 }
 
 /*
@@ -179,7 +179,16 @@ BOOL CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, 
 
 	@note 不要な情報の場合は引数に NULL を指定する。
 */
-BOOL CSortedTagJumpList::GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir)
+bool CSortedTagJumpList::GetParam(
+	int index,
+	TCHAR* keyword,
+	TCHAR* filename,
+	int* no,
+	TCHAR* type,
+	TCHAR* note,
+	int* depth,
+	TCHAR* baseDir
+	)
 {
 	if (keyword ) keyword[0] = 0;
 	if (filename) filename[0] = 0;
@@ -203,9 +212,9 @@ BOOL CSortedTagJumpList::GetParam(int index, TCHAR* keyword, TCHAR* filename, in
 				auto_strcpy(baseDir, m_baseDirArr[p->baseDirId].c_str());
 			}
 		}
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /*

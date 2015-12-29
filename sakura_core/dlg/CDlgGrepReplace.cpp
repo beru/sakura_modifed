@@ -72,7 +72,12 @@ CDlgGrepReplace::CDlgGrepReplace()
 
 
 // モーダルダイアログの表示
-int CDlgGrepReplace::DoModal( HINSTANCE hInstance, HWND hwndParent, const TCHAR* pszCurrentFilePath, LPARAM lParam )
+int CDlgGrepReplace::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	const TCHAR* pszCurrentFilePath,
+	LPARAM lParam
+	)
 {
 	auto& csSearch = m_pShareData->m_Common.m_sSearch;
 	m_bSubFolder = csSearch.m_bGrepSubFolder;				// Grep: サブフォルダも検索
@@ -97,7 +102,11 @@ int CDlgGrepReplace::DoModal( HINSTANCE hInstance, HWND hwndParent, const TCHAR*
 	return (int)CDialog::DoModal( hInstance, hwndParent, IDD_GREP_REPLACE, lParam );
 }
 
-BOOL CDlgGrepReplace::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
+BOOL CDlgGrepReplace::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	_SetHwnd( hwndDlg );
 
@@ -119,7 +128,7 @@ BOOL CDlgGrepReplace::OnDestroy()
 }
 
 
-BOOL CDlgGrepReplace::OnBnClicked( int wID )
+BOOL CDlgGrepReplace::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -150,7 +159,7 @@ BOOL CDlgGrepReplace::OnBnClicked( int wID )
 
 
 // ダイアログデータの設定
-void CDlgGrepReplace::SetData( void )
+void CDlgGrepReplace::SetData(void)
 {
 	// 置換後
 	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
@@ -167,7 +176,7 @@ void CDlgGrepReplace::SetData( void )
 /*! ダイアログデータの取得
 	TRUE==正常  FALSE==入力エラー
 */
-int CDlgGrepReplace::GetData( void )
+int CDlgGrepReplace::GetData(void)
 {
 	m_bPaste = IsButtonChecked(IDC_CHK_PASTE);
 

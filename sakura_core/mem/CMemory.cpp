@@ -224,9 +224,7 @@ void CMemory::SwapHLByte(void) {
 */
 }
 
-
-
-bool CMemory::SwabHLByte( const CMemory& mem )
+bool CMemory::SwabHLByte(const CMemory& mem)
 {
 	if (this == &mem) {
 		SwapHLByte();
@@ -242,14 +240,13 @@ bool CMemory::SwabHLByte( const CMemory& mem )
 	AllocBuffer(nSize);
 	char* pSrc = reinterpret_cast<char*>(const_cast<void*>(mem.GetRawPtr()));
 	char* pDst = reinterpret_cast<char*>(GetRawPtr());
-	if (pDst == NULL) {
+	if (!pDst) {
 		return false;
 	}
 	_swab(pSrc, pDst, nSize);
 	_SetRawLength(nSize);
 	return true;
 }
-
 
 
 /*
@@ -320,10 +317,10 @@ void CMemory::SetRawData(const CMemory& pcmemData)
 }
 
 /*! バッファの内容を置き換える */
-void CMemory::SetRawDataHoldBuffer( const void* pData, int nDataLen )
+void CMemory::SetRawDataHoldBuffer(const void* pData, int nDataLen)
 {
 	// this 重複不可
-	assert( m_pRawData != pData );
+	assert(m_pRawData != pData);
 	if (m_nRawLen != 0) {
 		_SetRawLength(0);
 	}
@@ -333,7 +330,7 @@ void CMemory::SetRawDataHoldBuffer( const void* pData, int nDataLen )
 }
 
 /*! バッファの内容を置き換える */
-void CMemory::SetRawDataHoldBuffer( const CMemory& pcmemData )
+void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
 {
 	if (this == &pcmemData) {
 		return;

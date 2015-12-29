@@ -606,7 +606,7 @@ bool InitRegexp(
 	// To Here 2007.08.12 genta
 
 	EDllResult eDllResult = rRegexp.InitDll(RegexpDll);
-	if (DLL_SUCCESS != eDllResult) {
+	if (eDllResult != DLL_SUCCESS) {
 		if (bShowMessage) {
 			LPCTSTR pszMsg = _T("");
 			if (eDllResult == DLL_LOADFAILURE) {

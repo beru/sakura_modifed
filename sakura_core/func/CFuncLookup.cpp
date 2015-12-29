@@ -53,24 +53,28 @@ const int LUOFFSET_PLUGIN = 2;
 */
 EFunctionCode CFuncLookup::Pos2FuncCode(int category, int position, bool bGetUnavailable) const
 {
-	if (category < 0 || position < 0)
+	if (category < 0 || position < 0) {
 		return F_DISABLE;
-
+	}
+	
 	if (category < nsFuncCode::nFuncKindNum) {
-		if (position < nsFuncCode::pnFuncListNumArr[category])
+		if (position < nsFuncCode::pnFuncListNumArr[category]) {
 			return nsFuncCode::ppnFuncListArr[category][position];
+		}
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
 		// キー割り当てマクロ
 		if (position < MAX_CUSTMACRO) {
-			if (bGetUnavailable || m_pMacroRec[position].IsEnabled())
+			if (bGetUnavailable || m_pMacroRec[position].IsEnabled()) {
 				return (EFunctionCode)(F_USERMACRO_0 + position);
+			}
 		}
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_CUSTMENU) {
 		// カスタムメニュー
-		if (position == 0)
+		if (position == 0) {
 			return F_MENU_RBUTTON;
-		else if (position < MAX_CUSTOM_MENU)
+		}else if (position < MAX_CUSTOM_MENU) {
 			return (EFunctionCode)(F_CUSTMENU_BASE + position);
+		}
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_PLUGIN) {
 		// プラグイン
 		return CJackManager::getInstance()->GetCommandCode(position);
@@ -159,9 +163,9 @@ bool CFuncLookup::Funccode2Name(int funccode, WCHAR* ptr, int bufsize) const
 */
 const TCHAR* CFuncLookup::Category2Name(int category) const
 {
-	if (category < 0)
+	if (category < 0) {
 		return NULL;
-
+	}
 	if (category < nsFuncCode::nFuncKindNum) {
 		return LS(nsFuncCode::ppszFuncKind[category]);
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
@@ -211,8 +215,9 @@ void CFuncLookup::SetListItem(HWND hListBox, int category) const
 
 	int n = GetItemCount(category);
 	for (int i=0; i<n; ++i) {
-		if (Pos2FuncCode(category, i) == F_DISABLE)
+		if (Pos2FuncCode(category, i) == F_DISABLE) {
 			continue;
+		}
 		Pos2FuncName(category, i, pszLabel, _countof(pszLabel));
 		List_AddString(hListBox, pszLabel);
 	}
@@ -225,9 +230,9 @@ void CFuncLookup::SetListItem(HWND hListBox, int category) const
 */
 int CFuncLookup::GetItemCount(int category) const
 {
-	if (category < 0)
+	if (category < 0) {
 		return 0;
-
+	}
 	if (category < nsFuncCode::nFuncKindNum) {
 		return nsFuncCode::pnFuncListNumArr[category];
 	}else if (category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO) {
@@ -251,9 +256,9 @@ int CFuncLookup::GetItemCount(int category) const
 */
 const WCHAR* CFuncLookup::Custmenu2Name(int index, WCHAR buf[], int bufSize) const
 {
-	if (index < 0 || CUSTMENU_INDEX_FOR_TABWND < index)
+	if (index < 0 || CUSTMENU_INDEX_FOR_TABWND < index) {
 		return NULL;
-
+	}
 	// 共通設定で名称を設定していればそれを返す
 	if (m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[index][0] != '\0') {
 		wcscpyn(buf, m_pCommon->m_sCustomMenu.m_szCustMenuNameArr[index], bufSize);

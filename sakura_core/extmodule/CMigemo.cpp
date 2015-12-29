@@ -77,16 +77,12 @@ bool CMigemo::InitDllImp()
 	GetAppVersionInfo(GetInstance(), VS_VERSION_INFO, &dwVersionMS, &dwVersionLS);
 	
 	DWORD dwver103 = (1 << 16) | 3;
-	if (dwver103 <= dwVersionMS) {
-		m_bStdcall = true;
-	}else {
-		m_bStdcall = false;
-	}
-
+	m_bStdcall = (dwVersionMS >= dwver103);
 	m_bUtf8 = false;
 
-	if (!migemo_open(NULL))
+	if (!migemo_open(NULL)) {
 		return false;
+	}
 	
 	return true;
 }
@@ -142,9 +138,10 @@ long CMigemo::migemo_open(char* dict)
 
 void CMigemo::migemo_close()
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return;
-
+	}
+	
 	if (m_bStdcall) {
 		(*m_migemo_close_s)(m_migemo);
 	}else {
@@ -154,8 +151,9 @@ void CMigemo::migemo_close()
 
 unsigned char* CMigemo::migemo_query(unsigned char* query)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return NULL;
+	}
 	
 	if (m_bStdcall) {
 		return (*m_migemo_query_s)(m_migemo, query);
@@ -186,9 +184,10 @@ std::wstring CMigemo::migemo_query_w(const wchar_t* query)
 
 void CMigemo::migemo_release(unsigned char* str)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return;
-
+	}
+	
 	if (m_bStdcall) {
 		(*m_migemo_release_s)(m_migemo, str);
 	}else {
@@ -198,8 +197,9 @@ void CMigemo::migemo_release(unsigned char* str)
 }
 int CMigemo::migemo_set_operator(int index, unsigned char* op)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return 0;
+	}
 	
 	if (m_bStdcall) {
 		return (*m_migemo_set_operator_s)(m_migemo, index, op);
@@ -209,8 +209,9 @@ int CMigemo::migemo_set_operator(int index, unsigned char* op)
 }
 const unsigned char* CMigemo::migemo_get_operator(int index)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return NULL;
+	}
 	
 	if (m_bStdcall) {
 		return (*m_migemo_get_operator_s)(m_migemo, index);
@@ -221,8 +222,9 @@ const unsigned char* CMigemo::migemo_get_operator(int index)
 
 void CMigemo::migemo_setproc_char2int(MIGEMO_PROC_CHAR2INT proc)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return ;
+	}
 	
 	if (m_bStdcall) {
 		(*m_migemo_setproc_char2int_s)(m_migemo, proc);
@@ -233,9 +235,10 @@ void CMigemo::migemo_setproc_char2int(MIGEMO_PROC_CHAR2INT proc)
 
 void CMigemo::migemo_setproc_int2char(MIGEMO_PROC_INT2CHAR proc)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return;
-
+	}
+	
 	if (m_bStdcall) {
 		(*m_migemo_setproc_int2char_s)(m_migemo, proc);
 	}else {
@@ -245,8 +248,10 @@ void CMigemo::migemo_setproc_int2char(MIGEMO_PROC_INT2CHAR proc)
 
 int CMigemo::migemo_load_a(int dict_id, const char* dict_file)
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return 0;
+	}
+	
 	if (m_bStdcall) {
 		return (*m_migemo_load_s)(m_migemo, dict_id, dict_file);
 	}else {
@@ -263,8 +268,9 @@ int CMigemo::migemo_load_w(int dict_id, const wchar_t* dict_file)
 
 int CMigemo::migemo_is_enable()
 {
-	if (!IsAvailable() || !m_migemo)
+	if (!IsAvailable() || !m_migemo) {
 		return 0;
+	}
 	
 	if (m_bStdcall) {
 		return (*m_migemo_is_enable_s)(m_migemo);
@@ -371,12 +377,14 @@ static int __cdecl pcre_int2char(unsigned int in, unsigned char* out)
 	    case '|': case '(': case ')':
 	    case '+': case '?': case '{': case '}':
 	    case ':': case '-': case '&':
-			if (out)
+			if (out) {
 			    out[len] = '\\';
+			}
 			++len;
 	    default:
-			if (out)
+			if (out) {
 			    out[len] = (unsigned char)(in & 0xFF);
+			}
 			++len;
 			break;
 		}
@@ -432,12 +440,14 @@ int __cdecl pcre_int2char_utf8(unsigned int in, unsigned char* out)
 		case '|': case '(': case ')':
 		case '+': case '?': case '{': case '}':
 		case ':': case '-': case '&':
-			if (out)
+			if (out) {
 				out[len] = '\\';
+			}
 			++len;
 		default:
-			if (out)
+			if (out) {
 				out[len] = (unsigned char)(in & 0xFF);
+			}
 			++len;
 			break;
 		}

@@ -221,7 +221,7 @@ INT_PTR CPropTypesKeyHelp::DispatchEvent(
 				// 重複検査
 				nIndex2 = ListView_GetItemCount(hwndList);
 				TCHAR szPath2[_MAX_PATH];
-				for (int i = 0; i < nIndex2; ++i) {
+				for (int i=0; i<nIndex2; ++i) {
 					auto_memset(szPath2, 0, _countof(szPath2));
 					ListView_GetItemText(hwndList, i, 2, szPath2, _countof(szPath2));
 					if (_tcscmp(szPath, szPath2) == 0) {
@@ -572,7 +572,7 @@ void CPropTypesKeyHelp::SetData(HWND hwndDlg)
 	ListView_SetExtendedListViewStyle(hwndWork, dwStyle);
 	// データ表示
 	LV_ITEM	lvi;
-	for (int i = 0; i < MAX_KEYHELP_FILE; ++i) {
+	for (int i=0; i<MAX_KEYHELP_FILE; ++i) {
 		if (m_Types.m_KeyHelpArr[i].m_szPath[0] == _T('\0')) {
 			break;
 		}
@@ -623,7 +623,7 @@ int CPropTypesKeyHelp::GetData(HWND hwndDlg)
 	// リストに登録されている情報を配列に取り込む
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_KEYHELP);
 	int	nIndex = ListView_GetItemCount(hwndList);
-	for (int i = 0; i < MAX_KEYHELP_FILE; ++i) {
+	for (int i=0; i<MAX_KEYHELP_FILE; ++i) {
 		if (i < nIndex) {
 			bool		bUse = false;						// 辞書ON(1)/OFF(0)
 			szAbout[0]	= _T('\0');

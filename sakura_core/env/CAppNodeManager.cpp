@@ -790,7 +790,7 @@ HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 		int			nCount = CAppNodeManager::getInstance()->GetOpenedWindowArr(&p, FALSE, FALSE);
 		if (nCount > 1) {
 			// search Group No.
-			for (int i = 0; i < nCount; ++i) {
+			for (int i=0; i<nCount; ++i) {
 				if (p[i].GetHwnd() == hWndCur) {
 					nGroup = p[i].m_nGroup;
 					break;

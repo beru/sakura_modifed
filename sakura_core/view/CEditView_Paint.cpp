@@ -74,7 +74,7 @@ void CEditView_Paint::Call_OnPaint(
 	if (rcs.size() == 0) return;
 	CMyRect rc = rcs[0];
 	int nSize = (int)rcs.size();
-	for (int i = 1; i < nSize; ++i)
+	for (int i=1; i<nSize; ++i)
 		rc = MergeRect(rc, rcs[i]);
 
 	// 描画
@@ -276,8 +276,8 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	CMyRect rcBltAll;
 	rcBltAll.SetLTRB(INT_MAX, INT_MAX, -INT_MAX, -INT_MAX);
 	CMyRect rcImagePosOrg = rcImagePos;
-	for (; rcImagePos.top <= nYEnd;) {
-		for (; rcImagePos.left <= nXEnd;) {
+	for (; rcImagePos.top<=nYEnd; ) {
+		for (; rcImagePos.left<=nXEnd; ) {
 			CMyRect rcBlt;
 			if (::IntersectRect(&rcBlt, &rc, &rcImagePos)) {
 				::BitBlt(
@@ -1096,14 +1096,14 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 
 	// 必要ならEOF描画
 	void _DispEOF(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
-	if (pcLayout && pcLayout->GetNextLayout() == NULL && pcLayout->GetLayoutEol().GetLen() == 0) {
+	if (pcLayout && !pcLayout->GetNextLayout() && pcLayout->GetLayoutEol().GetLen() == 0) {
 		// 有文字行のEOF
 		_DispEOF(pInfo->m_gr, pInfo->m_pDispPos, this);
 		bDispEOF = true;
 	}else if (!pcLayout && pInfo->m_pDispPos->GetLayoutLineRef() == m_pcEditDoc->m_cLayoutMgr.GetLineCount()) {
 		// 空行のEOF
 		const CLayout* pBottom = m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
-		if (pBottom == NULL || (pBottom && pBottom->GetLayoutEol().GetLen())) {
+		if (!pBottom || (pBottom && pBottom->GetLayoutEol().GetLen())) {
 			_DispEOF(pInfo->m_gr,pInfo->m_pDispPos,this);
 			bDispEOF = true;
 		}

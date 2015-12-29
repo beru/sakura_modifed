@@ -39,7 +39,10 @@
 
 
 // コマンド・関数を準備する
-void CWSHIfObj::ReadyMethods(CEditView* pView, int flags)
+void CWSHIfObj::ReadyMethods(
+	CEditView* pView,
+	int flags
+	)
 {
 	this->m_pView = pView;
 	// 2007.07.20 genta : コマンドに混ぜ込むフラグを渡す
@@ -53,7 +56,10 @@ void CWSHIfObj::ReadyMethods(CEditView* pView, int flags)
 
 	@date 2007.07.20 genta flags追加．flagはコマンド登録段階で混ぜておく．
 */
-void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
+void CWSHIfObj::ReadyCommands(
+	MacroFuncInfo* Info,
+	int flags
+	)
 {
 	while (Info->m_nFuncID != -1) {	// Aug. 29, 2002 genta 番人の値が変更されたのでここも変更
 		wchar_t FuncName[256];
@@ -103,7 +109,12 @@ void CWSHIfObj::ReadyCommands(MacroFuncInfo *Info, int flags)
 	@date 2005.06.27 zenryaku 戻り値の受け取りが無くてもエラーにせずに関数を実行する
 	@date 2013.06.07 Moca 5つ以上の引数の時ずれるのを修正。NULを含む文字列対応
 */
-HRESULT CWSHIfObj::MacroCommand(int IntID, DISPPARAMS *Arguments, VARIANT* Result, void *Data)
+HRESULT CWSHIfObj::MacroCommand(
+	int IntID,
+	DISPPARAMS* Arguments,
+	VARIANT* Result,
+	void* Data
+	)
 {
 	int ArgCount = Arguments->cArgs;
 

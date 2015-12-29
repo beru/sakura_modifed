@@ -331,7 +331,11 @@ void CViewCommander::Command_EXECCOMMAND_DIALOG(void)
 // Oct. 9, 2001   genta  マクロ対応のため引数追加
 // 2002.2.2       YAZAKI ダイアログ呼び出し部とコマンド実行部を分離
 //void CEditView::Command_EXECCOMMAND(const char* cmd_string)
-void CViewCommander::Command_EXECCOMMAND(LPCWSTR cmd_string, const int nFlgOpt, LPCWSTR pszCurDir)	// 2006.12.03 maru 引数の拡張
+void CViewCommander::Command_EXECCOMMAND(
+	LPCWSTR cmd_string,
+	const int nFlgOpt,
+	LPCWSTR pszCurDir
+	)	// 2006.12.03 maru 引数の拡張
 {
 	// From Here Aug. 21, 2001 genta
 	// パラメータ置換 (超暫定)

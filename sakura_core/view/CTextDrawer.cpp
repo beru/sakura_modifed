@@ -210,7 +210,7 @@ void CTextDrawer::DispVerticalLines(
 		gr.SetPen(cVertType.GetTextColor());
 	}
 
-	for (int k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; ++k) {
+	for (int k=0; k<MAX_VERTLINES && typeData.m_nVertLineIdx[k]!=0; ++k) {
 		// nXColは1開始。GetTextArea().GetViewLeftCol()は0開始なので注意。
 		CLayoutInt nXCol = typeData.m_nVertLineIdx[k];
 		CLayoutInt nXColEnd = nXCol;
@@ -233,7 +233,7 @@ void CTextDrawer::DispVerticalLines(
 				continue;
 			}
 		}
-		for (; nXCol <= nXColEnd; nXCol += nXColAdd) {
+		for (; nXCol<=nXColEnd; nXCol+=nXColAdd) {
 			if (nWrapKetas < nXCol) {
 				break;
 			}
@@ -255,7 +255,7 @@ void CTextDrawer::DispVerticalLines(
 					if (bOddLine) {
 						++y;
 					}
-					for (; y < nBottom; y += 2) {
+					for (; y<nBottom; y+=2) {
 						if (nPosX < nPosXRight) {
 							::MoveToEx(gr, nPosX, y, NULL);
 							::LineTo(gr, nPosX, y + 1);
@@ -306,7 +306,7 @@ void CTextDrawer::DispNoteLine(
 		}
 		int offsetMod = offset % nLineHeight;
 		int y = ((nTop - offset) / nLineHeight * nLineHeight) + offsetMod;
-		for (; y < nBottom; y += nLineHeight) {
+		for (; y<nBottom; y+=nLineHeight) {
 			if (nTop <= y) {
 				::MoveToEx( gr, left, y, NULL );
 				::LineTo( gr, right, y );

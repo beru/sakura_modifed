@@ -134,7 +134,7 @@ void CViewCommander::Command_SHOWSTATUSBAR(void)
 
 	@date 2014.07.14 êVãKçÏê¨
 */
-void CViewCommander::Command_SHOWMINIMAP( void )
+void CViewCommander::Command_SHOWMINIMAP(void)
 {
 	CEditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 

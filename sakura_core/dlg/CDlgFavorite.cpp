@@ -357,7 +357,11 @@ int CDlgFavorite::GetData(void)
 	return TRUE;
 }
 
-BOOL CDlgFavorite::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgFavorite::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	HWND		hwndList;
 	TCITEM		tcitem;
@@ -795,8 +799,8 @@ changed:
 // お気に入りのフラグだけ適用
 void CDlgFavorite::GetFavorite(int nIndex)
 {
-	CRecent* const pRecent  = m_aFavoriteInfo[nIndex].m_pRecent;
-	const HWND      hwndList = m_aListViewInfo[nIndex].hListView;
+	CRecent* const pRecent = m_aFavoriteInfo[nIndex].m_pRecent;
+	const HWND hwndList = m_aListViewInfo[nIndex].hListView;
 	if (m_aFavoriteInfo[nIndex].m_bHaveFavorite) {
 		const int nCount = ListView_GetItemCount(hwndList);
 		for (int i=0; i<nCount; ++i) {
@@ -1065,7 +1069,12 @@ void CDlgFavorite::RightMenu(POINT& menuPos)
 	}
 }
 
-int FormatFavoriteColumn(TCHAR* buf, int size, int index, bool view)
+int FormatFavoriteColumn(
+	TCHAR* buf,
+	int size,
+	int index,
+	bool view
+	)
 {
 	// 2010.03.21 Moca Textに連番を設定することによってアクセスキーにする
 	// 0 - 9 A - Z
@@ -1099,7 +1108,12 @@ static int ListView_GetLParamInt(HWND hwndList, int lvIndex)
 	@param bReverse      ソート済みの場合に降順に切り替える
 */
 // static
-void CDlgFavorite::ListViewSort(ListViewSortInfo& info, const CRecent* pRecent, int column, bool bReverse)
+void CDlgFavorite::ListViewSort(
+	ListViewSortInfo& info,
+	const CRecent* pRecent,
+	int column,
+	bool bReverse
+	)
 {
 	CompareListViewLParam lparamInfo;
 	// ソート順の決定
@@ -1152,7 +1166,11 @@ void CDlgFavorite::ListViewSort(ListViewSortInfo& info, const CRecent* pRecent, 
 }
 
 
-static int CALLBACK CompareListViewFunc(LPARAM lParamItem1, LPARAM lParamItem2, LPARAM lParamSort)
+static int CALLBACK CompareListViewFunc(
+	LPARAM lParamItem1,
+	LPARAM lParamItem2,
+	LPARAM lParamSort
+	)
 {
 	CompareListViewLParam* pCompInfo = reinterpret_cast<CompareListViewLParam*>(lParamSort);
 	int nRet = 0;
@@ -1165,7 +1183,12 @@ static int CALLBACK CompareListViewFunc(LPARAM lParamItem1, LPARAM lParamItem2, 
 	return pCompInfo->bAbsOrder ? nRet : -nRet;
 }
 
-INT_PTR CDlgFavorite::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFavorite::DispatchEvent(
+	HWND hWnd,
+	UINT wMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	INT_PTR result;
 	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);

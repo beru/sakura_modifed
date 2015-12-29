@@ -43,8 +43,8 @@ public:
 	~CSortedTagJumpList();
 
 	int AddBaseDir(const TCHAR* baseDir);
-	BOOL AddParamA(const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId);
-	BOOL GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir);
+	bool AddParamA(const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId);
+	bool GetParam(int index, TCHAR* keyword, TCHAR* filename, int* no, TCHAR* type, TCHAR* note, int* depth, TCHAR* baseDir);
 	int GetCount(void) { return m_nCount; }
 	void Empty(void);
 	bool IsOverflow(void) { return m_bOverflow; }

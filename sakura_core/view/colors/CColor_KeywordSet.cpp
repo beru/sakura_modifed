@@ -47,7 +47,7 @@ bool CColor_KeywordSet::BeginColor(const CStringRef& cStr, int nPos)
 	}
 
 	const int posNextWordHead = NextWordBreak(cStr, nPos);
-	for (int i = 0; i < MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (!m_pTypeData->m_ColorInfoArr[COLORIDX_KEYWORD1 + i].m_bDisp) {
 			continue; // 色設定が非表示なのでスキップ。
 		}

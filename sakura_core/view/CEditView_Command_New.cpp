@@ -416,12 +416,12 @@ void CEditView::DeleteData2(
 	if (pcMem) {
 		int size = (int)memDeleted.size();
 		size_t bufSize = 0;
-		for (int i = 0; i < size; ++i) {
+		for (int i=0; i<size; ++i) {
 			bufSize += memDeleted[i].cmemLine.GetStringLength();
 		}
 		pcMem->SetString(L"");
 		pcMem->AllocStringBuffer(bufSize);
-		for (int i = 0; i < size; ++i) {
+		for (int i=0; i<size; ++i) {
 			pcMem->AppendNativeData(memDeleted[i].cmemLine);
 		}
 	}
@@ -514,7 +514,7 @@ void CEditView::DeleteData(
 
 			nIdxFrom = CLogicInt(0);
 			nIdxTo = CLogicInt(0);
-			for (nLineNum = rcSel.bottom; nLineNum >= rcSel.top - 1; --nLineNum) {
+			for (nLineNum=rcSel.bottom; nLineNum>=rcSel.top-1; --nLineNum) {
 				nDelLenNext	= nIdxTo - nIdxFrom;
 				const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 				if (pLine) {
@@ -525,7 +525,7 @@ void CEditView::DeleteData(
 					nIdxTo	 = LineColumnToIndex(pcLayout, rcSel.right);
 
 					bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
-					for (CLogicInt i = nIdxFrom; i <= nIdxTo; ++i) {
+					for (CLogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
 						if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 							nIdxTo = i;
 							break;

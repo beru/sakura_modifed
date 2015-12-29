@@ -281,7 +281,7 @@ void CPropFileName::SetData(HWND hwndDlg)
 	auto& csFileName = m_Common.m_sFileName;
 	// リストにデータをセット
 	int nIndex = 0;
-	for (int i = 0; i < csFileName.m_nTransformFileNameArrNum; ++i) {
+	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
 		if ('\0' == csFileName.m_szTransformFileNameFrom[i][0]) {
 			continue;
 		}
@@ -335,7 +335,7 @@ int CPropFileName::GetData(HWND hwndDlg)
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);
 	csFileName.m_nTransformFileNameArrNum = ListView_GetItemCount(hListView);
 
-	for (int nIndex = 0, nCount = 0; nIndex < MAX_TRANSFORM_FILENAME ; ++nIndex) {
+	for (int nIndex=0, nCount=0; nIndex<MAX_TRANSFORM_FILENAME; ++nIndex) {
 		if (nIndex < csFileName.m_nTransformFileNameArrNum) {
 			ListView_GetItemText(hListView, nIndex, 0, csFileName.m_szTransformFileNameFrom[nCount], _MAX_PATH);
 

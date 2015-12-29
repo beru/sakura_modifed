@@ -23,10 +23,10 @@
 
 // KEYDATAとほぼ同じ
 struct KEYDATAINIT {
-	short			m_nKeyCode;			// Key Code (0 for non-keybord button)
+	short m_nKeyCode;			// Key Code (0 for non-keybord button)
 	union {
-		const TCHAR*	m_pszKeyName;		// Key Name (for display)
-		UINT			m_nKeyNameId;		// String Resource Id (0x0000 - 0xFFFF)
+		const TCHAR* m_pszKeyName;	// Key Name (for display)
+		UINT m_nKeyNameId;			// String Resource Id (0x0000 - 0xFFFF)
 	};
 	EFunctionCode	m_nFuncCodeArr[8];	// Key Function Number
 //					m_nFuncCodeArr[0]	//                      Key
@@ -186,7 +186,8 @@ int CKeyBind::CreateKeyBindList(
 				// Oct. 31, 2001 genta 
 				if (!pcFuncLookup->Funccode2Name(
 					iFunc,
-					szFuncNameJapanese, 255)
+					szFuncNameJapanese, 255
+					)
 				) {
 					auto_strcpy(szFuncNameJapanese, LSW(STR_ERR_DLGKEYBIND2));
 				}
@@ -363,8 +364,15 @@ int CKeyBind::GetKeyStrList(
 	for (int j=0; j<8; ++j) {
 		for (int i=0; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
 			// 2007.11.04 genta 共通機能のサブルーチン化
-			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j,
-					*((*pppcMemList)[nAssignedKeysNum]), nFuncId, bGetDefFuncCode)
+			if (GetKeyStrSub(
+				i,
+				nKeyNameArrNum,
+				pKeyNameArr,
+				j,
+				*((*pppcMemList)[nAssignedKeysNum]),
+				nFuncId,
+				bGetDefFuncCode
+				)
 			) {
 				++nAssignedKeysNum;
 			}
@@ -380,7 +388,7 @@ int CKeyBind::GetKeyStrList(
 	@return アクセスキー付きの文字列
 	@data 2013.12.09 novice アクセスキーと文字列の比較で小文字も有効にする
 */
-TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
+TCHAR* CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
 	const int MAX_LABEL_CCH = _MAX_PATH*2 + 30;
 	static	TCHAR	sLabel[MAX_LABEL_CCH];
@@ -390,14 +398,18 @@ TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 		return const_cast<TCHAR*>(sName);
 	}else {
 		if (!GetDllShareData().m_Common.m_sMainMenu.m_bMainMenuKeyParentheses
-			  && (((p = auto_strchr(sName, sKey[0]))) || ((p = auto_strchr(sName, _totlower(sKey[0])))))
+			&& (
+				((p = auto_strchr(sName, sKey[0])))
+				|| ((p = auto_strchr(sName, _totlower(sKey[0]))))
+			)
 		) {
 			// 欧文風、使用している文字をアクセスキーに
 			auto_strcpy_s(sLabel, _countof(sLabel), sName);
 			sLabel[p-sName] = _T('&');
 			auto_strcpy_s(sLabel + (p-sName) + 1, _countof(sLabel), p);
-		}else if ((p = auto_strchr(sName, _T('(')))
-			  && (p = auto_strchr(p, sKey[0]))
+		}else if (
+			(p = auto_strchr(sName, _T('(')))
+			&& (p = auto_strchr(p, sKey[0]))
 		) {
 			// (付その後にアクセスキー
 			auto_strcpy_s(sLabel, _countof(sLabel), sName);
@@ -424,24 +436,24 @@ TCHAR*	CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 	@date 2014.05.04 Moca LABEL_MAX=256 => nLabelSize
 */
 TCHAR* CKeyBind::GetMenuLabel(
-	HINSTANCE	hInstance,
-	int			nKeyNameArrNum,
-	KEYDATA*	pKeyNameArr,
-	int			nFuncId,
-	TCHAR*      pszLabel,   // [in,out] バッファは256以上と仮定
+	HINSTANCE		hInstance,
+	int				nKeyNameArrNum,
+	KEYDATA*		pKeyNameArr,
+	int				nFuncId,
+	TCHAR*      	pszLabel,   // [in,out] バッファは256以上と仮定
 	const TCHAR*	pszKey,
-	BOOL		bKeyStr,
-	int			nLabelSize,
-	BOOL		bGetDefFuncCode // = TRUE
-)
+	BOOL			bKeyStr,
+	int				nLabelSize,
+	BOOL			bGetDefFuncCode // = TRUE
+	)
 {
 	const unsigned int LABEL_MAX = nLabelSize;
 
-	if (_T('\0') == pszLabel[0]) {
+	if (pszLabel[0] == _T('\0')) {
 		_tcsncpy(pszLabel, LS(nFuncId), LABEL_MAX - 1);
 		pszLabel[LABEL_MAX - 1] = _T('\0');
 	}
-	if (_T('\0') == pszLabel[0]) {
+	if (pszLabel[0] == _T('\0')) {
 		_tcscpy(pszLabel, _T("-- undefined name --"));
 	}
 	// アクセスキーの追加	2010/5/17 Uchi
@@ -512,10 +524,12 @@ EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
 */
 EFunctionCode CKeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, BOOL bGetDefFuncCode)
 {
-	if (0 != KeyData.m_nFuncCodeArr[nState])
+	if (KeyData.m_nFuncCodeArr[nState] != 0) {
 		return KeyData.m_nFuncCodeArr[nState];
-	if (bGetDefFuncCode)
+	}
+	if (bGetDefFuncCode) {
 		return GetDefFuncCode(KeyData.m_nKeyCode, nState);
+	}
 	return F_DEFAULT;
 }
 

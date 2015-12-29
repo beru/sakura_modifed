@@ -116,7 +116,9 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 
 	try {
 		// ロード前チェック
-		if (CALLBACK_INTERRUPT == m_pcDocRef->NotifyCheckLoad(pLoadInfo)) throw CFlowInterruption();
+		if (m_pcDocRef->NotifyCheckLoad(pLoadInfo) == CALLBACK_INTERRUPT) {
+			throw CFlowInterruption();
+		}
 
 		// ロード処理
 		m_pcDocRef->NotifyBeforeLoad(pLoadInfo);			// 前処理
@@ -138,8 +140,8 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 
 // ファイルを開く
 bool CDocFileOperation::FileLoad(
-	SLoadInfo*	pLoadInfo		// [in/out]
-)
+	SLoadInfo* pLoadInfo		// [in/out]
+	)
 {
 	LARGE_INTEGER start;
 	QueryPerformanceCounter(&start);
@@ -173,16 +175,16 @@ bool CDocFileOperation::FileLoad(
 // ファイルを開く（自動実行マクロを実行しない）
 // 2009.08.11 ryoji FileLoadへのパラメータ追加にしてもいいがANSI版と整合がとりやすいので当面は別関数にしておく
 bool CDocFileOperation::FileLoadWithoutAutoMacro(
-	SLoadInfo*	pLoadInfo		// [in/out]
-)
+	SLoadInfo* pLoadInfo		// [in/out]
+	)
 {
 	return DoLoadFlow(pLoadInfo);
 }
 
 // 同一ファイルの再オープン
 void CDocFileOperation::ReloadCurrentFile(
-	ECodeType	nCharCode		// [in] 文字コード種別
-)
+	ECodeType nCharCode		// [in] 文字コード種別
+	)
 {
 	auto& activeView = m_pcDocRef->m_pcEditWnd->GetActiveView();
 
@@ -231,7 +233,6 @@ void CDocFileOperation::ReloadCurrentFile(
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
 		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
-
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
@@ -255,7 +256,7 @@ void CDocFileOperation::ReloadCurrentFile(
 */
 bool CDocFileOperation::SaveFileDialog(
 	SSaveInfo*	pSaveInfo	// [out]
-)
+	)
 {
 	// 拡張子指定
 	// 一時適用や拡張子なしの場合の拡張子をタイプ別設定から持ってくる
@@ -263,7 +264,6 @@ bool CDocFileOperation::SaveFileDialog(
 	TCHAR szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
 	{
 		LPCTSTR	szExt;
-
 		const STypeConfig& type = m_pcDocRef->m_cDocType.GetDocumentAttribute();
 		// ファイルパスが無い場合は *.txt とする
 		if (!this->m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
@@ -339,7 +339,6 @@ bool CDocFileOperation::SaveFileDialog(LPTSTR szPath)
 bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 {
 	ESaveResult eSaveResult = SAVED_FAILURE;
-
 	try {
 		// オプション：無変更でも上書きするか
 		// 2009.04.12 ryoji CSaveAgent::OnCheckSave()から移動
@@ -361,10 +360,14 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		}
 
 		// セーブ前チェック
-		if (CALLBACK_INTERRUPT == m_pcDocRef->NotifyCheckSave(pSaveInfo)) throw CFlowInterruption();
+		if (m_pcDocRef->NotifyCheckSave(pSaveInfo) == CALLBACK_INTERRUPT) {
+			throw CFlowInterruption();
+		}
 
 		// セーブ前おまけ処理
-		if (CALLBACK_INTERRUPT == m_pcDocRef->NotifyPreBeforeSave(pSaveInfo)) throw CFlowInterruption();
+		if (m_pcDocRef->NotifyPreBeforeSave(pSaveInfo) == CALLBACK_INTERRUPT) {
+			throw CFlowInterruption();
+		}
 
 		// 2006.09.01 ryoji 保存前自動実行マクロを実行する
 		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnSave, pSaveInfo->cFilePath);
@@ -441,7 +444,6 @@ bool CDocFileOperation::FileSave()
 }
 
 
-
 /*! 名前を付けて保存フロー
 
 	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS_DIALOG()から処理本体を切り出し
@@ -469,7 +471,9 @@ bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, E
 		}
 
 		// ダイアログ表示
-		if (!SaveFileDialog(&sSaveInfo)) return false;
+		if (!SaveFileDialog(&sSaveInfo)) {
+			return false;
+		}
 	}
 
 	// セーブ処理

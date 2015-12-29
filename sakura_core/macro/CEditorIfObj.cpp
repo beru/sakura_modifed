@@ -43,13 +43,25 @@ MacroFuncInfoArray CEditorIfObj::GetMacroFuncInfo() const
 }
 
 // ä÷êîÇèàóùÇ∑ÇÈ
-bool CEditorIfObj::HandleFunction(CEditView* View, EFunctionCode ID, const VARIANT* Arguments, const int ArgSize, VARIANT& Result)
+bool CEditorIfObj::HandleFunction(
+	CEditView* View,
+	EFunctionCode ID,
+	const VARIANT* Arguments,
+	const int ArgSize,
+	VARIANT& Result
+	)
 {
 	return CMacro::HandleFunction(View, ID, Arguments, ArgSize, Result);
 }
 
 // ÉRÉ}ÉìÉhÇèàóùÇ∑ÇÈ
-bool CEditorIfObj::HandleCommand(CEditView* View, EFunctionCode ID, const WCHAR* Arguments[], const int ArgLengths[], const int ArgSize)
+bool CEditorIfObj::HandleCommand(
+	CEditView* View,
+	EFunctionCode ID,
+	const WCHAR* Arguments[],
+	const int ArgLengths[],
+	const int ArgSize
+	)
 {
 	return CMacro::HandleCommand(View, ID, Arguments, ArgLengths, ArgSize);
 }

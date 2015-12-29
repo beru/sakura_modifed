@@ -78,7 +78,7 @@ static int AddComboCodePages(HWND hdlg, HWND combo, int nSelCode, bool& bInit);
 
 
 // 2014.05.22 Moca FileDialogの再入サポート
-class CDlgOpenFileMem{
+class CDlgOpenFileMem {
 public:
 	HINSTANCE		m_hInstance;	// アプリケーションインスタンスのハンドル
 	HWND			m_hwndParent;	// オーナーウィンドウのハンドル
@@ -140,7 +140,12 @@ static const TCHAR* s_pszOpenFileDataName = _T("FileOpenData");
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-LRESULT APIENTRY OFNHookProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT APIENTRY OFNHookProcMain(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 //	OFNOTIFY*				pofn;
 	CDlgOpenFileData* pData = (CDlgOpenFileData*)::GetProp( hwnd, s_pszOpenFileDataName );
@@ -198,7 +203,7 @@ UINT_PTR CALLBACK OFNHookProc(
 	UINT uiMsg,		// message identifier
 	WPARAM wParam,	// message parameter
 	LPARAM lParam 	// message parameter
-)
+	)
 {
 	POINT					po;
 	RECT					rc;
@@ -866,7 +871,11 @@ bool CDlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 		拡張子フィルタの管理をCFileExtクラスで行う。
 	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
-bool CDlgOpenFile::DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstring>* pFileNames, bool bOptions )
+bool CDlgOpenFile::DoModalOpenDlg(
+	SLoadInfo* pLoadInfo,
+	std::vector<std::tstring>* pFileNames,
+	bool bOptions
+	)
 {
 	std::auto_ptr<CDlgOpenFileData> pData( new CDlgOpenFileData() );
 	pData->m_bIsSaveDialog = FALSE;	/* 保存のダイアログか */
@@ -966,7 +975,10 @@ bool CDlgOpenFile::DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstrin
 			例）hoge.abc -> hoge.abc.txt
 		自前で補完することでこれを回避する。（実際の処理はフックプロシージャの中）
 */
-bool CDlgOpenFile::DoModalSaveDlg(SSaveInfo* pSaveInfo, bool bSimpleMode)
+bool CDlgOpenFile::DoModalSaveDlg(
+	SSaveInfo* pSaveInfo,
+	bool bSimpleMode
+	)
 {
 	std::auto_ptr<CDlgOpenFileData> pData( new CDlgOpenFileData() );
 	pData->m_bIsSaveDialog = TRUE;	/* 保存のダイアログか */
@@ -1123,7 +1135,11 @@ void CDlgOpenFile::InitOfn(OPENFILENAMEZ* ofn)
 	@author ryoji
 	@date 2005.11.02
 */
-void CDlgOpenFile::InitLayout(HWND hwndOpenDlg, HWND hwndDlg, HWND hwndBaseCtrl)
+void CDlgOpenFile::InitLayout(
+	HWND hwndOpenDlg,
+	HWND hwndDlg,
+	HWND hwndBaseCtrl
+	)
 {
 	HWND hwndFilelabel;
 	// ファイル名ラベルとファイル名ボックスを取得する
