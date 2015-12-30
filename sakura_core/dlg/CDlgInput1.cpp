@@ -23,11 +23,11 @@
 
 // 入力 CDlgInput1.cpp	//@@@ 2002.01.07 add start MIK
 static const DWORD p_helpids[] = {	//13000
-	IDOK,					HIDOK_DLG1,
-	IDCANCEL,				HIDCANCEL_DLG1,
-	IDC_EDIT_INPUT1,		HIDC_DLG1_EDIT1,	// 入力フィールド	IDC_EDIT1->IDC_EDIT_INPUT1	2008/7/3 Uchi
-	IDC_STATIC_MSG,			HIDC_DLG1_EDIT1,	// メッセージ
-//	IDC_STATIC,				-1,
+	IDOK,				HIDOK_DLG1,
+	IDCANCEL,			HIDCANCEL_DLG1,
+	IDC_EDIT_INPUT1,	HIDC_DLG1_EDIT1,	// 入力フィールド	IDC_EDIT1->IDC_EDIT_INPUT1	2008/7/3 Uchi
+	IDC_STATIC_MSG,		HIDC_DLG1_EDIT1,	// メッセージ
+//	IDC_STATIC,			-1,
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
@@ -61,19 +61,16 @@ INT_PTR CALLBACK CDlgInput1Proc(
 }
 
 
-
 CDlgInput1::CDlgInput1()
 {
 	return;
 }
 
 
-
 CDlgInput1::~CDlgInput1()
 {
 	return;
 }
-
 
 
 // モードレスダイアログの表示
@@ -148,7 +145,7 @@ INT_PTR CDlgInput1::DispatchEvent(
 		return TRUE;
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	// 通知コード
-		wID			= LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
+		wID = LOWORD(wParam);	// 項目ID､ コントロールID､ またはアクセラレータID
 		switch (wNotifyCode) {
 		// ボタン／チェックボックスがクリックされた
 		case BN_CLICKED:
@@ -168,7 +165,7 @@ INT_PTR CDlgInput1::DispatchEvent(
 	//@@@ 2002.01.07 add start
 	case WM_HELP:
 		{
-			HELPINFO *p = (HELPINFO *)lParam;
+			HELPINFO* p = (HELPINFO *)lParam;
 			MyWinHelp((HWND)p->hItemHandle, HELP_WM_HELP, (ULONG_PTR)(LPVOID)p_helpids);	// 2006.10.10 ryoji MyWinHelpに変更に変更
 		}
 		return TRUE;

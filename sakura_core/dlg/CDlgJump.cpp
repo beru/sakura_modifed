@@ -186,14 +186,10 @@ BOOL CDlgJump::OnBnClicked(int wID)
 // ダイアログデータの設定
 void CDlgJump::SetData(void)
 {
-	CEditDoc*		pCEditDoc = (CEditDoc*)m_lParam;
-	CFuncInfoArr	cFuncInfoArr;
-	HWND			hwndCtrl;
-	wchar_t			szText[1024];
-	int				nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
-	int				nIndex;
-	int				nWorkLine; //$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
-	int				nPLSQLBlockNum;
+	CEditDoc* pCEditDoc = (CEditDoc*)m_lParam;
+	CFuncInfoArr cFuncInfoArr;
+	wchar_t szText[1024];
+	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
 
 //	GetHwnd() = hwndDlg;
 // From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
@@ -205,17 +201,16 @@ void CDlgJump::SetData(void)
 	}
 // To Here Oct. 7, 2000
 	SetItemInt(IDC_EDIT_PLSQL_E1, m_nPLSQL_E1, FALSE);
-
 	// PL/SQL関数リスト作成
-	hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
-
+	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
 	if (OUTLINE_PLSQL == pCEditDoc->m_cDocType.GetDocumentAttribute().m_eDefaultOutline) {
 		pCEditDoc->m_cDocOutline.MakeFuncList_PLSQL(&cFuncInfoArr);
 	}
-	nWorkLine = -1;
-	nIndex = 0;
-	nPLSQLBlockNum = 0;
+	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
+	int nWorkLine = -1;
+	int nIndex = 0;
+	int nPLSQLBlockNum = 0;
 	for (int i=0; i<cFuncInfoArr.GetNum(); ++i) {
 		CFuncInfo* pFI = cFuncInfoArr.GetAt(i);
 		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {

@@ -143,7 +143,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 
 		// “o˜^Ï‚Ý‚©H
 		int nIndex = cRecentEditNode.FindItemByHwnd(hWnd);
-		if (-1 != nIndex) {
+		if (nIndex != -1) {
 			// ‚à‚¤‚±‚êˆÈã“o˜^‚Å‚«‚È‚¢‚©H
 			if (cRecentEditNode.GetItemCount() >= cRecentEditNode.GetArrayCount()) {
 				cRecentEditNode.Terminate();

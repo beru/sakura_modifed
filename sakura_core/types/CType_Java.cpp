@@ -236,19 +236,19 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					nMode = FL_JAVA_MODE_DOUBLE_QUOTE;
 					continue;
 				}else if (L'{' == pLine[i]) {
-					if (0 < nClassNestArrNum && 2 == nNestLevel2Arr[nClassNestArrNum - 1]) {
+					if (0 < nClassNestArrNum && nNestLevel2Arr[nClassNestArrNum - 1] == 2) {
 						//	Oct. 10, 2002 genta
 						//	メソッド中でさらにメソッドを定義することはないので
 						//	ネストレベル判定追加 class/interfaceの直下の場合のみ判定する
 						if (nClassNestArr[nClassNestArrNum - 1] == nNestLevel - 1
-						 && 0 != wcscmp(L"sizeof", szFuncName)
-						 && 0 != wcscmp(L"if", szFuncName)
-						 && 0 != wcscmp(L"for", szFuncName)
-						 && 0 != wcscmp(L"do", szFuncName)
-						 && 0 != wcscmp(L"while", szFuncName)
-						 && 0 != wcscmp(L"catch", szFuncName)
-						 && 0 != wcscmp(L"switch", szFuncName)
-						 && 0 != wcscmp(L"return", szFuncName)
+						 && wcscmp(L"sizeof", szFuncName) != 0
+						 && wcscmp(L"if", szFuncName) != 0
+						 && wcscmp(L"for", szFuncName) != 0
+						 && wcscmp(L"do", szFuncName) != 0
+						 && wcscmp(L"while", szFuncName) != 0
+						 && wcscmp(L"catch", szFuncName) != 0
+						 && wcscmp(L"switch", szFuncName) != 0
+						 && wcscmp(L"return", szFuncName) != 0
 						) {
 							nFuncId = FL_OBJ_FUNCTION;
 							++nFuncNum;
@@ -301,7 +301,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}else if (L'(' == pLine[i]) {
 					if (0 < nClassNestArrNum /*nNestLevel == 1*/ &&
-						0 != wcscmp(L"new", szWordPrev)
+						wcscmp(L"new", szWordPrev) != 0
 					) {
 						wcscpy_s(szFuncName, szWord);
 						nFuncLine = nLineCount + CLogicInt(1);
@@ -360,7 +360,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 							__iscsym(pLine2[k])
 						) {
 							if (0 < nClassNestArrNum) {
-								if (1 == nNestLevel2Arr[nClassNestArrNum - 1]) {
+								if (nNestLevel2Arr[nClassNestArrNum - 1] == 1) {
 									nNestLevel2Arr[nClassNestArrNum - 1] = 2;
 								}
 							}
@@ -373,19 +373,19 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 					nMode = FL_JAVA_MODE_NORMAL;
 					continue;
 				}else if (L';' == pLine[i]) {
-					if (0 < nClassNestArrNum && 2 == nNestLevel2Arr[nClassNestArrNum - 1]) {
+					if (0 < nClassNestArrNum && nNestLevel2Arr[nClassNestArrNum - 1] == 2) {
 						//	Oct. 10, 2002 genta
 						// 関数の中で別の関数の宣言部を使うことって，Javaであるの？
 						if (1
 							&& nClassNestArr[nClassNestArrNum - 1] == nNestLevel - 1
-							&& 0 != wcscmp(L"sizeof", szFuncName)
-							&& 0 != wcscmp(L"if", szFuncName)
-							&& 0 != wcscmp(L"for", szFuncName)
-							&& 0 != wcscmp(L"do", szFuncName)
-							&& 0 != wcscmp(L"while", szFuncName)
-							&& 0 != wcscmp(L"catch", szFuncName)
-							&& 0 != wcscmp(L"switch", szFuncName)
-							&& 0 != wcscmp(L"return", szFuncName)
+							&& wcscmp(L"sizeof", szFuncName) != 0
+							&& wcscmp(L"if", szFuncName) != 0
+							&& wcscmp(L"for", szFuncName) != 0
+							&& wcscmp(L"do", szFuncName) != 0
+							&& wcscmp(L"while", szFuncName) != 0
+							&& wcscmp(L"catch", szFuncName) != 0
+							&& wcscmp(L"switch", szFuncName) != 0
+							&& wcscmp(L"return", szFuncName) != 0
 						) {
 							nFuncId = FL_OBJ_DECLARE;
 							++nFuncNum;

@@ -122,10 +122,10 @@ void CDlgProperty::SetData(void)
 	// To Here  2008/4/27 Uchi
 	cmemProp.AppendString(_T("\r\n"));
 
-	auto_sprintf( szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_cDocLineMgr.GetLineCount() );
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_cDocLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
-	auto_sprintf( szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount() );
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
 	if (CAppMode::getInstance()->IsViewMode()) {
@@ -137,20 +137,20 @@ void CDlgProperty::SetData(void)
 		cmemProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
 	}
 
-	auto_sprintf( szWork, LS(STR_DLGFLPROP_CMD_COUNT), pCEditDoc->m_nCommandExecNum );
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pCEditDoc->m_nCommandExecNum);
 	cmemProp.AppendString(szWork);
 
-	auto_sprintf( szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_cDocLineMgr.GetLineCount() );
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_cDocLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
 	if ((nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pCEditDoc->m_cDocFile.IsFileLocking()) {
 			if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
-				auto_sprintf( szWork, LS(STR_DLGFLPROP_W_LOCK) );
+				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
 			}else if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
-				auto_sprintf( szWork, LS(STR_DLGFLPROP_RW_LOCK) );
+				auto_sprintf(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
-				auto_sprintf( szWork, LS(STR_DLGFLPROP_LOCK) );
+				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));
 			}
 			cmemProp.AppendString(szWork);
 		}else {
@@ -191,7 +191,7 @@ void CDlgProperty::SetData(void)
 
 		cmemProp.AppendString(LS(STR_DLGFLPROP_CREATE_DT));
 		CFileTime ctimeCreation = wfd.ftCreationTime;
-		auto_sprintf( szWork, LS(STR_DLGFLPROP_YMDHMS),
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeCreation->wYear,
 			ctimeCreation->wMonth,
 			ctimeCreation->wDay,
@@ -204,7 +204,7 @@ void CDlgProperty::SetData(void)
 
 		cmemProp.AppendString(LS(STR_DLGFLPROP_UPDATE_DT));
 		CFileTime ctimeLastWrite = wfd.ftLastWriteTime;
-		auto_sprintf( szWork, LS(STR_DLGFLPROP_YMDHMS),
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeLastWrite->wYear,
 			ctimeLastWrite->wMonth,
 			ctimeLastWrite->wDay,
@@ -215,10 +215,9 @@ void CDlgProperty::SetData(void)
 		cmemProp.AppendString(szWork);
 		cmemProp.AppendString(_T("\r\n"));
 
-
 		cmemProp.AppendString(LS(STR_DLGFLPROP_ACCESS_DT));
 		CFileTime ctimeLastAccess = wfd.ftLastAccessTime;
-		auto_sprintf( szWork, LS(STR_DLGFLPROP_YMDHMS),
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeLastAccess->wYear,
 			ctimeLastAccess->wMonth,
 			ctimeLastAccess->wDay,
@@ -229,7 +228,7 @@ void CDlgProperty::SetData(void)
 		cmemProp.AppendString(szWork);
 		cmemProp.AppendString(_T("\r\n"));
 
-		auto_sprintf( szWork, LS(STR_DLGFLPROP_DOS_NAME), wfd.cAlternateFileName );
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_DOS_NAME), wfd.cAlternateFileName);
 		cmemProp.AppendString(szWork);
 
 		auto_sprintf( szWork, LS(STR_DLGFLPROP_FILE_SIZE), wfd.nFileSizeLow );
@@ -240,26 +239,22 @@ void CDlgProperty::SetData(void)
 
 
 #ifdef _DEBUG/////////////////////////////////////////////////////
-	HGLOBAL					hgData;
-	char*					pBuf;
-	int						nBufLen;
-	CNativeT				ctext;
 	// メモリ確保 & ファイル読み込み
-	hgData = NULL;
+	CNativeT ctext;
 	CBinaryInputStream in(pCEditDoc->m_cDocFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;
 	}
-	nBufLen = in.GetLength();
+	int nBufLen = in.GetLength();
 	if (nBufLen > CheckKanjiCode_MAXREADLENGTH) {
 		nBufLen = CheckKanjiCode_MAXREADLENGTH;
 	}
-	hgData = ::GlobalAlloc(GHND, nBufLen + 1);
+	HGLOBAL hgData = ::GlobalAlloc(GHND, nBufLen + 1);
 	if (!hgData) {
 		in.Close();
 		goto end_of_CodeTest;
 	}
-	pBuf = GlobalLockChar(hgData);
+	char* pBuf = GlobalLockChar(hgData);
 	in.Read(pBuf, nBufLen);
 	in.Close();
 

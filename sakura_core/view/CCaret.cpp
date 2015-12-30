@@ -503,7 +503,7 @@ void CCaret::ShowEditCaret()
 		}else {
 			nCaretWidth = GetHankakuDx();
 		}
-	}else if (1 == pCommon->m_sGeneral.GetCaretType()) {
+	}else if (pCommon->m_sGeneral.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode()) {
 			nCaretHeight = GetHankakuHeight() / 2;
 		}else {
@@ -566,7 +566,7 @@ void CCaret::ShowEditCaret()
 			}
 		}
 	// カーソルのタイプ = dos
-	}else if (1 == pCommon->m_sGeneral.GetCaretType()) {
+	}else if (pCommon->m_sGeneral.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretHeight = GetHankakuHeight() / 2;			// キャレットの高さ
 		}else {
@@ -931,7 +931,7 @@ CLayoutInt CCaret::Cursor_UPDOWN(CLayoutInt nMoveLines, bool bSelect)
 			&& ptCaret.y + nMoveLines == maxLayoutLine
 			&& existsEOFOnlyLine // 移動先が EOFのみの行
 			&& selInfo.IsBoxSelecting()
-			&& 0 != ptCaret.x // かつ矩形選択中なら、
+			&& ptCaret.x != 0 // かつ矩形選択中なら、
 		) {
 			// EOFのみの行には移動しない。下移動でキャレットの X座標を動かしたくないので。
 			nMoveLines = t_max(CLayoutInt(0), nMoveLines - 1); // うっかり上移動しないように 0以上を守る。

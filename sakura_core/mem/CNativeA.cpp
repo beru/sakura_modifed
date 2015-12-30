@@ -214,15 +214,13 @@ void CNativeA::Replace_j(
 // 小文字
 void CNativeA::ToLower()
 {
-	unsigned char*	pBuf = (unsigned char*)GetStringPtr();
-	int				nBufLen = GetStringLength();
-	int				nCharChars;
-	unsigned char	uc;
+	unsigned char* pBuf = (unsigned char*)GetStringPtr();
+	int nBufLen = GetStringLength();
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
-			uc = (unsigned char)tolower(pBuf[i]);
+			unsigned char uc = (unsigned char)tolower(pBuf[i]);
 			pBuf[i] = uc;
 		}else if (nCharChars == 2) {
 			// 全角英大文字→全角英小文字
@@ -259,8 +257,8 @@ void CNativeA::ToLower()
 // 大文字
 void CNativeA::ToUpper()
 {
-	unsigned char*	pBuf = (unsigned char*)GetStringPtr();
-	int				nBufLen = GetStringLength();
+	unsigned char* pBuf = (unsigned char*)GetStringPtr();
+	int nBufLen = GetStringLength();
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
@@ -306,36 +304,35 @@ void CNativeA::ToZenkaku(
 	int bHanKataOnly		// 1== 半角カタカナにのみ作用する
 )
 {
-	unsigned char*			pBuf = (unsigned char*)GetStringPtr();
-	int						nBufLen = GetStringLength();
+	static const unsigned char*	pszHanKataSet = (unsigned char*)"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ";
+	static const unsigned char*	pszDakuSet = (unsigned char*)"ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎ";
+	static const unsigned char*	pszYouSet = (unsigned char*)"ﾊﾋﾌﾍﾎ";
+
+	unsigned char* pBuf = (unsigned char*)GetStringPtr();
+	int nBufLen = GetStringLength();
+	unsigned char* pBufDes = new unsigned char[nBufLen * 2 + 1];
+	if (!pBufDes) {
+		return;
+	}
 //	unsigned char			uc;
 	unsigned short			usSrc;
 	unsigned short			usDes;
-	static unsigned char*	pszHanKataSet = (unsigned char*)"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ";
-	static unsigned char*	pszDakuSet = (unsigned char*)"ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎ";
-	static unsigned char*	pszYouSet = (unsigned char*)"ﾊﾋﾌﾍﾎ";
-	BOOL					bHenkanOK;
-
-	unsigned char* pBufDes = new unsigned char[nBufLen * 2 + 1];
-	if (NULL ==	pBufDes) {
-		return;
-	}
 	int nBufDesLen = 0;
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
-			bHenkanOK = FALSE;
+			bool bHenkanOK = false;
 			if (bHanKataOnly) {	// 1== 半角カタカナにのみ作用する
 				if (strchr((const char*)pszHanKataSet, pBuf[i])) {
-					bHenkanOK = TRUE;
+					bHenkanOK = true;
 				}
 			}else {
 				// 英数変換用に新たな条件を付加 2001/07/30 Misaka
 				if (((unsigned char)0x20 <= pBuf[i] && pBuf[i] <= (unsigned char)0x7E) ||
 					(bHiragana != 2 && (unsigned char)0xA1 <= pBuf[i] && pBuf[i] <= (unsigned char)0xDF)
 				) {
-					bHenkanOK = TRUE;
+					bHenkanOK = true;
 				}
 			}
 			if (bHenkanOK) {
@@ -432,11 +429,10 @@ void CNativeA::ToZenkaku(
 void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 {
 	using namespace ACODE;
-
 	const char*	pLine;
-	int			nLineLen;
+	int nLineLen;
 //	BOOL		bEOL;
-	CEol		cEol;
+	CEol cEol;
 	int nBgn = 0;
 	int nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
@@ -444,7 +440,7 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 		if (0 < nLineLen) {
 			int nPosX = 0;
 			for (int i=0; i<nLineLen; ++i) {
-				if (TAB == pLine[i]) {
+				if (pLine[i] == TAB) {
 					int nWork = nTabSpace - (nPosX % nTabSpace);
 					nPosDes += nWork;
 					nPosX += nWork;
@@ -511,7 +507,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 	int			nPosX;
 	CEol		cEol;
 
-	BOOL		bSpace = FALSE;	// スペースの処理中かどうか
+	bool bSpace = false;	// スペースの処理中かどうか
 	int		nStartPos;
 
 	nBgn = 0;
@@ -533,15 +529,15 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 	while ((pLine = GetNextLine(GetStringPtr(), GetStringLength(), &nLineLen, &nBgn, &cEol))) {
 		if (0 < nLineLen) {
 			nPosX = 0;	// 処理中のiに対応する表示桁位置
-			bSpace = FALSE;	// 直前がスペースか
+			bSpace = false;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			int i;
 			for (i=0; i<nLineLen; ++i) {
 				if (pLine[i] == SPACE || pLine[i] == TAB) {
-					if (bSpace == FALSE) {
+					if (!bSpace) {
 						nStartPos = nPosX;
 					}
-					bSpace = TRUE;
+					bSpace = true;
 					if (SPACE == pLine[i]) {
 						++nPosX;
 					}else if (TAB == pLine[i]) {
@@ -549,7 +545,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 					}
 				}else {
 					if (bSpace) {
-						if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
+						if ((nPosX - nStartPos == 1) && (pLine[i - 1] == SPACE)) {
 							pDes[nPosDes] = SPACE;
 							++nPosDes;
 						}else {
@@ -571,7 +567,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 					++nPosX;
 					pDes[nPosDes] = pLine[i];
 					++nPosDes;
-					bSpace = FALSE;
+					bSpace = false;
 				}
 			}
 			//for (; i<nLineLen; ++i) {
@@ -579,7 +575,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 			//	++nPosDes;
 			//}
 			if (bSpace) {
-				if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
+				if ((nPosX - nStartPos == 1) && (pLine[i - 1] == SPACE)) {
 					pDes[nPosDes] = SPACE;
 					++nPosDes;
 				}else {

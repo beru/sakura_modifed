@@ -249,9 +249,9 @@ void CViewCommander::Command_GREP_REPLACE(void)
 		if (cDlgGrepRep.m_sSearchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
 		if (cDlgGrepRep.m_nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
 		// if (cDlgGrepRep.m_nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
-		if (1 == cDlgGrepRep.m_nGrepOutputStyle		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
-		if (2 == cDlgGrepRep.m_nGrepOutputStyle		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
-		if (3 == cDlgGrepRep.m_nGrepOutputStyle		) _tcscat( pOpt, _T("3") );
+		if (cDlgGrepRep.m_nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
+		if (cDlgGrepRep.m_nGrepOutputStyle == 2		) _tcscat( pOpt, _T("2") );	// Grep: 出力形式
+		if (cDlgGrepRep.m_nGrepOutputStyle == 3		) _tcscat( pOpt, _T("3") );
 		if (cDlgGrepRep.m_bGrepOutputFileOnly		) _tcscat( pOpt, _T("F") );
 		if (cDlgGrepRep.m_bGrepOutputBaseFolder		) _tcscat( pOpt, _T("B") );
 		if (cDlgGrepRep.m_bGrepSeparateFolder		) _tcscat( pOpt, _T("D") );

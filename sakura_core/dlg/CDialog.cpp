@@ -216,16 +216,16 @@ void CDialog::SetDialogPosSize()
 {
 #if 0
 	// ダイアログのサイズ、位置の再現
-	if (-1 != m_xPos && -1 != m_yPos) {
+	if (m_xPos != -1 && m_yPos != -1) {
 		::SetWindowPos(m_hWnd, NULL, m_xPos, m_yPos, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 		DEBUG_TRACE(_T("CDialog::OnInitDialog() m_xPos=%d m_yPos=%d\n"), m_xPos, m_yPos);
 	}
-	if (-1 != m_nWidth && -1 != m_nHeight) {
+	if (m_nWidth != -1 && m_nHeight != -1) {
 		::SetWindowPos(m_hWnd, NULL, 0, 0, m_nWidth, m_nHeight, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 	}
 #endif
 
-	if (-1 != m_xPos && -1 != m_yPos) {
+	if (m_xPos != -1 && m_yPos != -1) {
 		// ウィンドウ位置・サイズを再現
 		// 2014.11.28 フォント変更対応
 		if (m_nWidth == -1) {

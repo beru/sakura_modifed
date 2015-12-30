@@ -102,7 +102,7 @@ const char* GetNextLine(
 	int*			pnLineLen,
 	int*			pnBgn,
 	CEol*			pcEol
-)
+	)
 {
 	int nBgn = *pnBgn;
 
@@ -137,7 +137,7 @@ const wchar_t* GetNextLineW(
 	int*			pnBgn,		//!< [i/o]	検索文字列のオフセット位置
 	CEol*			pcEol,		//!< [out]	EOL
 	bool			bExtEol
-)
+	)
 {
 	int nBgn = *pnBgn;
 
@@ -196,7 +196,7 @@ const wchar_t* GetNextLineWB(
 	int*		pnLineLen,	//!< [out]	1行の文字数を返すただしEOLは含まない
 	int*		pnBgn,		//!< [i/o]	検索文字列のオフセット位置
 	CEol*		pcEol		//!< [i/o]	EOL
-)
+	)
 {
 	int nBgn = *pnBgn;
 
@@ -341,7 +341,7 @@ int scan_ints(
 	const wchar_t*	pszData,	//!< [in]
 	const wchar_t*	pszFormat,	//!< [in]
 	int*			anBuf		//!< [out]
-)
+	)
 {
 	// 要素数
 	int num = 0;

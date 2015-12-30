@@ -250,7 +250,7 @@ LRESULT CFuncKeyWnd::OnCommand(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 //	case BN_PUSHED:
 		for (int i=0; i<_countof(m_hwndButtonArr); ++i) {
 			if (hwndCtl == m_hwndButtonArr[i]) {
-				if (0 != m_nFuncCodeArr[i]) {
+				if (m_nFuncCodeArr[i] != 0) {
 					::SendMessage(GetParentHwnd(), WM_COMMAND, MAKELONG(m_nFuncCodeArr[i], 0),  (LPARAM)hwnd);
 				}
 				break;

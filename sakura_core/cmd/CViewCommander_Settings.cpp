@@ -277,10 +277,10 @@ void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		return;
 	}
 
-	if (0 != fontSize) {
+	if (fontSize != 0) {
 		// フォントサイズを直接選択する場合
 		nPointSize = t_max(sizeTable[0], t_min(sizeTable[_countof(sizeTable) - 1], fontSize));
-	}else if (0 != shift) {
+	}else if (shift != 0) {
 		// 現在のフォントに対して、縮小or拡大したフォント選択する場合
 		nPointSize = (mode == 0 ? csView.m_nPointSize
 			: GetEditWindow()->GetFontPointSize(mode == 2));

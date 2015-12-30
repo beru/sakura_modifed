@@ -454,7 +454,7 @@ void CLayoutMgr::GetEndLayoutPos(
 	CLayoutPoint* ptLayoutEnd // [out]
 )
 {
-	if (-1 != m_nEOFLine) {
+	if (m_nEOFLine != -1) {
 		ptLayoutEnd->x = m_nEOFColumn;
 		ptLayoutEnd->y = m_nEOFLine;
 		return;

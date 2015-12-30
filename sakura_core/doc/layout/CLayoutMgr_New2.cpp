@@ -34,7 +34,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 
 	CLayout* pLayoutWork = SearchLineByLayoutY(pArg->sDelRange.GetFrom().GetY2());
 	if (pLayoutWork) {
-		while (0 != pLayoutWork->GetLogicOffset()) {
+		while (pLayoutWork->GetLogicOffset() != 0) {
 			pLayoutWork = pLayoutWork->GetPrevLayout();
 			--nLineWork;
 		}
@@ -92,7 +92,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 		// 論理行が削除された場合は０より小さい行数
 		// 論理行が挿入された場合は０より大きい行数
-		if (0 != DLRArg.nInsLineNum - DLRArg.nDeletedLineNum) {
+		if (DLRArg.nInsLineNum - DLRArg.nDeletedLineNum != 0) {
 			ShiftLogicalLineNum(
 				pLayoutPrev,
 				DLRArg.nInsLineNum - DLRArg.nDeletedLineNum

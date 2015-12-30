@@ -64,7 +64,7 @@ int CDlgTagsMake::DoModal(
 	HWND			hwndParent,
 	LPARAM			lParam,
 	const TCHAR*	pszPath		// パス
-)
+	)
 {
 	_tcscpy( m_szPath, pszPath );
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_TAG_MAKE, lParam);
@@ -167,7 +167,9 @@ int CDlgTagsMake::GetData(void)
 
 	// CTAGSオプション
 	m_nTagsOpt = 0;
-	if (IsButtonChecked(IDC_CHECK_TAG_MAKE_RECURSE)) m_nTagsOpt |= 0x0001;
+	if (IsButtonChecked(IDC_CHECK_TAG_MAKE_RECURSE)) {
+		m_nTagsOpt |= 0x0001;
+	}
 	m_pShareData->m_nTagsOpt = m_nTagsOpt;
 
 	// コマンドライン

@@ -1638,7 +1638,7 @@ LRESULT CEditWnd::DispatchEvent(
 				) {
 					// 自グループ内の残ウィンドウ数を調べる	// 2007.06.20 ryoji
 					int nGroup = CAppNodeManager::getInstance()->GetEditNode(GetHwnd())->GetGroup();
-					if (1 == CAppNodeGroupHandle(nGroup).GetEditorWindowsNum()) {
+					if (CAppNodeGroupHandle(nGroup).GetEditorWindowsNum() == 1) {
 						EditNode* pEditNode = CAppNodeManager::getInstance()->GetEditNode(GetHwnd());
 						if (pEditNode)
 							pEditNode->m_bClosing = TRUE;	// 自分はタブ表示してもらわなくていい
@@ -4418,7 +4418,7 @@ void CEditWnd::Views_DisableSelectArea(bool bRedraw)
 // すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
 BOOL CEditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
 {
-	if (1 == GetAllViewCount()) {
+	if (GetAllViewCount() == 1) {
 		return GetActiveView().GetTextArea().DetectWidthOfLineNumberArea(bRedraw);
 	}
 	// 以下2,4分割限定

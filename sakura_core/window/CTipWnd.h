@@ -51,7 +51,7 @@ protected: // 2002/2/10 aroka アクセス権変更
 
 public:
 	CNativeW	m_cKey;			// キーの内容データ
-	BOOL		m_KeyWasHit;	// キーがヒットしたか
+	bool		m_KeyWasHit;	// キーがヒットしたか
 	int			m_nSearchLine;	// 辞書のヒット行	// 2006.04.10 fon
 	int			m_nSearchDict;	// ヒット辞書番号	// 2006.04.10 fon
 

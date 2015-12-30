@@ -166,7 +166,7 @@ INT_PTR CPropMacro::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 				{
 					TCHAR szDir[_MAX_PATH];
 					::DlgItem_GetText(hwndDlg, IDC_MACRODIR, szDir, _MAX_PATH);
-					if (1 == AddLastChar(szDir, _MAX_PATH, _T('\\'))) {
+					if (AddLastChar(szDir, _MAX_PATH, _T('\\')) == 1) {
 						::DlgItem_SetText(hwndDlg, IDC_MACRODIR, szDir);
 					}
 				}

@@ -302,7 +302,7 @@ LRESULT CPrintPreview::OnPaint(
 	// メモリＤＣを利用した再描画の場合はメモリＤＣに描画した内容を画面へコピーする
 	RECT rc = ps.rcPaint;
 	::DPtoLP(hdc, (POINT*)&rc, 2);
-	if (1 == (m_nbmpCompatScale / COMPAT_BMP_BASE)) {
+	if ((m_nbmpCompatScale / COMPAT_BMP_BASE) == 1) {
 		::BitBlt(
 			hdcOld,
 			ps.rcPaint.left,
@@ -1050,7 +1050,7 @@ void CPrintPreview::OnPrint(void)
 		}
 		return;
 	}
-	if (0 != memcmp(&m_pPrintSettingOrg->m_mdmDevMode, &m_pPrintSetting->m_mdmDevMode, sizeof(m_pPrintSetting->m_mdmDevMode))) {
+	if (memcmp(&m_pPrintSettingOrg->m_mdmDevMode, &m_pPrintSetting->m_mdmDevMode, sizeof(m_pPrintSetting->m_mdmDevMode)) != 0) {
 		m_pPrintSettingOrg->m_mdmDevMode = m_pPrintSetting->m_mdmDevMode;
 		// 自分はLockで更新しない
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
@@ -1064,7 +1064,7 @@ void CPrintPreview::OnPrint(void)
 	// 印刷開始ページと、印刷ページ数を確認
 	WORD nFrom;
 	WORD nNum;
-	if (0 != (pd.Flags & PD_PAGENUMS)) {	// 2003.05.02 かろと
+	if ((pd.Flags & PD_PAGENUMS) != 0) {	// 2003.05.02 かろと
 		nFrom = pd.nFromPage - 1;
 		nNum  = pd.nToPage - nFrom;
 	}else {
@@ -1539,7 +1539,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 
 		// 2006.08.14 Moca 行番号が縦線の場合は1度に引く
 		if (m_pPrintSetting->m_bPrintLineNumber
-			&& 1 == m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_nLineTermType
+			&& m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_nLineTermType == 1
 		) {
 			// 縦線は本文と行番号の隙間1桁の中心に作画する(画面作画では、右詰め)
 			::MoveToEx(hdc,
@@ -1752,7 +1752,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	// 色を元に戻す	2012-03-07 ossan
 	if (pcLayout) {
 		int nColorIdx = ToColorInfoArrIndex(COLORIDX_TEXT);
-		if (-1 != nColorIdx) {
+		if (nColorIdx != -1) {
 			const ColorInfo& info = m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
 			::SetTextColor(hdc, info.m_sColorAttr.m_cTEXT);
 //			::SetBkColor(hdc, info.m_colBACK);

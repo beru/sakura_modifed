@@ -299,7 +299,7 @@ int CEditView::HokanSearchByFile(
 				std::wstring strWord = std::wstring(word, nWordLen);
 				CHokanMgr::AddKouhoUnique(vKouho, strWord);
 			}
-			if (0 != nMaxKouho && nMaxKouho <= (int)vKouho.size()) {
+			if (nMaxKouho != 0 && nMaxKouho <= (int)vKouho.size()) {
 				return vKouho.size();
 			}
 		}

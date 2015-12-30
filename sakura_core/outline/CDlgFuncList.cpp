@@ -759,7 +759,7 @@ void CDlgFuncList::SetData()
 		Combo_SetCurSel(hWnd_Combo_Sort , m_nSortType);
 		::ShowWindow(GetItemHwnd(IDC_STATIC_nSortType), SW_SHOW);
 		// 2002.11.10 Moca 追加 ソートする
-		if (1 == m_nSortType) {
+		if (m_nSortType == 1) {
 			SortTree(::GetDlgItem(GetHwnd() , IDC_TREE_FL), TVI_ROOT);
 		}
 	}else if (m_nListType == OUTLINE_FILETREE) {
@@ -910,7 +910,7 @@ void CDlgFuncList::SetTreeJava(
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_DECLARE,		LSW(STR_DLGFNCLST_APND_DECLARE),	false);
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_CLASS,		LSW(STR_DLGFNCLST_APND_CLASS),		false);
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_STRUCT,		LSW(STR_DLGFNCLST_APND_STRUCT),		false);
-	m_pcFuncInfoArr->SetAppendText(FL_OBJ_ENUM,		LSW(STR_DLGFNCLST_APND_ENUM),		false);
+	m_pcFuncInfoArr->SetAppendText(FL_OBJ_ENUM,			LSW(STR_DLGFNCLST_APND_ENUM),		false);
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_UNION,		LSW(STR_DLGFNCLST_APND_UNION),		false);
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_NAMESPACE,	LSW(STR_DLGFNCLST_APND_NAMESPACE),	false);
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_INTERFACE,	LSW(STR_DLGFNCLST_APND_INTERFACE),	false);
@@ -921,8 +921,7 @@ void CDlgFuncList::SetTreeJava(
 	int bSelected = FALSE;
 	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
-		const TCHAR*		pWork;
-		pWork = pcFuncInfo->m_cmemFuncName.GetStringPtr();
+		const TCHAR* pWork = pcFuncInfo->m_cmemFuncName.GetStringPtr();
 		int m = 0;
 		int nClassNest = 0;
 		// クラス名::メソッドの場合
@@ -959,20 +958,20 @@ void CDlgFuncList::SetTreeJava(
 					}else {
 						break;
 					}
-				}else if (1 == nCharChars && _T('\\') == pWork[k]) {
+				}else if (nCharChars == 1 && _T('\\') == pWork[k]) {
 					auto_memcpy(szClassArr[nClassNest], &pWork[m], k - m);
 					szClassArr[nClassNest][k - m] = _T('\0');
 					++nClassNest;
 					m = k + 1;
-				}else if (1 == nCharChars && _T('<') == pWork[k]) {
+				}else if (nCharChars == 1 && _T('<') == pWork[k]) {
 					// namesp::function<std::string> のようなものを処理する
 					++nNestTemplate;
-				}else if (1 == nCharChars && _T('>') == pWork[k]) {
+				}else if (nCharChars == 1 && _T('>') == pWork[k]) {
 					if (0 < nNestTemplate) {
 						--nNestTemplate;
 					}
 				}
-				if (2 == nCharChars) {
+				if (nCharChars == 2) {
 					++k;
 				}
 			}
@@ -1183,7 +1182,6 @@ void CDlgFuncList::SetListVB (void)
 	TCHAR			szOption[64];
 	LV_ITEM			item;
 	HWND			hwndList;
-	int				bSelected;
 	CLayoutInt		nFuncLineOld;
 	CLayoutInt		nFuncColOld;
 	int				nSelectedLine = 0;
@@ -1210,7 +1208,7 @@ void CDlgFuncList::SetListVB (void)
 	CLayoutInt nFuncLineTop(INT_MAX);
 	CLayoutInt nFuncColTop(INT_MAX);
 	int nSelectedLineTop = 0;
-	bSelected = FALSE;
+	bool bSelected = false;
 	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		if (!bSelected) {
@@ -1230,13 +1228,13 @@ void CDlgFuncList::SetListVB (void)
 			) {
 				nFuncLineOld = pcFuncInfo->m_nFuncLineLAYOUT;
 				nFuncColOld = pcFuncInfo->m_nFuncColLAYOUT;
-				bSelected = TRUE;
+				bSelected = true;
 				nSelectedLine = i;
 			}
 		}
 	}
 	if (0 < m_pcFuncInfoArr->GetNum() && !bSelected) {
-		bSelected = TRUE;
+		bSelected = true;
 		nSelectedLine =  nSelectedLineTop;
 	}
 
@@ -1286,7 +1284,7 @@ void CDlgFuncList::SetListVB (void)
 		auto_memset(szText, _T('\0'), _countof(szText));
 		auto_memset(szType, _T('\0'), _countof(szType));
 		auto_memset(szOption, _T('\0'), _countof(szOption));
-		if (1 == ((pcFuncInfo->m_nInfo >> 8) & 0x01)) {
+		if (((pcFuncInfo->m_nInfo >> 8) & 0x01) == 1) {
 			// スタティック宣言(Static)
 			// 2006.12.12 Moca 末尾にスペース追加
 			_tcscpy(szOption, LS(STR_DLGFNCLST_VB_STATIC));
@@ -1670,8 +1668,8 @@ void CDlgFuncList::SetTreeFile()
 		// -(nFuncInfo * 10 + 3): Grepルートフォルダ要素
 		// -4: データ・追加操作なし
 		TVINSERTSTRUCT tvis;
-		tvis.hParent      = hParentTree.back();
-		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM;
+		tvis.hParent = hParentTree.back();
+		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 		if (item.m_eFileTreeItemType == EFileTreeItemType_Grep) {
 			m_pcFuncInfoArr->AppendData( CLogicInt(-1), CLogicInt(-1), CLayoutInt(-1), CLayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
@@ -1703,7 +1701,7 @@ void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
-	if (TreeView_GetChild( hwndTree, hParent )) {
+	if (TreeView_GetChild(hwndTree, hParent)) {
 		return;
 	}
 
@@ -1791,12 +1789,11 @@ BOOL CDlgFuncList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 	_SetHwnd(hwndDlg);
 
-	HWND		hwndList;
 	int			nCxVScroll;
 	int			nColWidthArr[] = { 0, 10, 46, 80 };
 	RECT		rc;
 	LV_COLUMN	col;
-	hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_FL);
+	HWND hwndList = ::GetDlgItem(hwndDlg, IDC_LIST_FL);
 	::SetWindowLongPtr(hwndList, GWL_STYLE, ::GetWindowLongPtr(hwndList, GWL_STYLE) | LVS_SHOWSELALWAYS);
 	// 2005.10.21 zenryaku 1行選択
 	ListView_SetExtendedListViewStyle(hwndList,
@@ -2680,9 +2677,9 @@ void CDlgFuncList::GetDockSpaceRect(LPRECT pRect)
 	for (int i=0; i<nCount; ++i) {
 		::GetWindowRect(hwnd[i], &rc[i]);
 	}
-	if (1 == nCount) {
+	if (nCount == 1) {
 		*pRect = rc[0];
-	}else if (2 == nCount) {
+	}else if (nCount == 2) {
 		::UnionRect(pRect, &rc[0], &rc[1]);
 	}else {
 		RECT rcTemp;

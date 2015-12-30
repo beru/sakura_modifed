@@ -55,7 +55,7 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 		nIdx = nIdxTo - CLogicInt(nCharChars);
 	}
 
-	if (1 == nCharChars) {
+	if (nCharChars == 1) {
 		if (WCODE::IsWordDelimiter(pLine[nIdx])) {
 			return 0;
 		}

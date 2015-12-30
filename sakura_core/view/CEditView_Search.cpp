@@ -57,7 +57,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	case LID_SKH_ONTIMER:
 		// 右コメントの１～３でない場合
 		if (!(1
-				&& m_bInMenuLoop == FALSE					// １．メニュー モーダル ループに入っていない
+				&& !m_bInMenuLoop							// １．メニュー モーダル ループに入っていない
 				&& 0 != m_dwTipTimer						// ２．辞書Tipを表示していない
 				&& 300 < ::GetTickCount() - m_dwTipTimer	// ３．一定時間以上、マウスが固定されている
 			)
@@ -66,7 +66,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 		break;
 	case LID_SKH_POPUPMENU_R:
 		if (!(1
-				&& m_bInMenuLoop == FALSE					// １．メニュー モーダル ループに入っていない
+				&& !m_bInMenuLoop							// １．メニュー モーダル ループに入っていない
 			//	&& 0 != m_dwTipTimer			&&			// ２．辞書Tipを表示していない
 			//	&& 1000 < ::GetTickCount() - m_dwTipTimer	// ３．一定時間以上、マウスが固定されている
 			)
@@ -106,7 +106,7 @@ end_of_search:
 
 	@date 2006.04.10 fon KeyWordHelpSearchDictから分離
 */
-BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
+bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 {
 	CNativeW*	pcmemRefKey;
 	int			nCmpLen = STRNCMP_MAX; // 2006.04.10 fon
@@ -122,7 +122,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 	// 途中まで一致を使う場合
 	if (m_pTypeData->m_bUseKeyHelpPrefix)
 		nCmpLen = wcslen(pcmemCurText->GetStringPtr());	// 2006.04.10 fon
-	m_cTipWnd.m_KeyWasHit = FALSE;
+	m_cTipWnd.m_KeyWasHit = false;
 	for (int i=0; i<m_pTypeData->m_nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
 		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
@@ -165,7 +165,7 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 					if (!m_cTipWnd.m_KeyWasHit) {
 						m_cTipWnd.m_nSearchDict = i;	// 辞書を開くとき最初にヒットした辞書を開く
 						m_cTipWnd.m_nSearchLine = nLine;
-						m_cTipWnd.m_KeyWasHit = TRUE;
+						m_cTipWnd.m_KeyWasHit = true;
 					}
 				}else {	// 最初のヒット項目のみ返す場合
 					// キーワードが入っていたらseparator挿入
@@ -185,17 +185,17 @@ BOOL CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 					// タグジャンプ用の情報を残す
 					m_cTipWnd.m_nSearchDict = i;
 					m_cTipWnd.m_nSearchLine = nLine;
-					m_cTipWnd.m_KeyWasHit = TRUE;
-					return TRUE;
+					m_cTipWnd.m_KeyWasHit = true;
+					return true;
 				}
 			}
 		}
 	}
-	if (m_cTipWnd.m_KeyWasHit == TRUE) {
-		return TRUE;
+	if (m_cTipWnd.m_KeyWasHit) {
+		return true;
 	}
 	// 該当するキーがなかった場合
-	return FALSE;
+	return false;
 }
 
 bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
@@ -211,7 +211,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	if (!PtInRect(rc, *po)) {
 		return false;
 	}
-	if (!( m_bInMenuLoop == FALSE	&&			/* １．メニュー モーダル ループに入っていない */
+	if (!( !m_bInMenuLoop &&					/* １．メニュー モーダル ループに入っていない */
 		300 < ::GetTickCount() - m_dwTipTimer	/* ２．一定時間以上、マウスが固定されている */
 	)) {
 		return false;

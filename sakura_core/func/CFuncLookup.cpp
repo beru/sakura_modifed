@@ -94,7 +94,7 @@ bool CFuncLookup::Pos2FuncName(
 	int		position,	// [in]  分類中のindex (0-)
 	WCHAR*	ptr,		// [out] 文字列を格納するバッファの先頭
 	int		bufsize		// [in]  文字列を格納するバッファのサイズ
-) const
+	) const
 {
 	int funccode = Pos2FuncCode(category, position);
 	return Funccode2Name(funccode, ptr, bufsize);

@@ -33,7 +33,7 @@ bool CFile::IsFileExist() const
 
 bool CFile::HasWritablePermission() const
 {
-	return -1 != _taccess(GetFilePath(), 2);
+	return _taccess(GetFilePath(), 2) != -1;
 }
 
 bool CFile::IsFileWritable() const

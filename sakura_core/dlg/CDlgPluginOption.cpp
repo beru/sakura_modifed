@@ -118,7 +118,7 @@ void CDlgPluginOption::SetData(void)
 	bool bLoadDefault = false;
 
 	// タイトル
-	auto_sprintf( buf, LS(STR_DLGPLUGINOPT_TITLE), m_cPlugin->m_sName.c_str());
+	auto_sprintf(buf, LS(STR_DLGPLUGINOPT_TITLE), m_cPlugin->m_sName.c_str());
 	::SetWindowText(GetHwnd(), buf);
 
 	// リスト
@@ -490,7 +490,6 @@ void CDlgPluginOption::ChangeListPosition(void)
 
 	// 現在のFocus取得
 	int current = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
-
 	if (current == -1 || current == m_Line) {
 		return;
 	}
@@ -508,7 +507,7 @@ void CDlgPluginOption::ChangeListPosition(void)
 	// 編集領域に書き込み
 	SetToEdit(current);
 
-	memset_raw( &lvi, 0, sizeof( lvi ));
+	memset_raw(&lvi, 0, sizeof(lvi));
 	lvi.mask       = LVIF_TEXT;
 	lvi.iItem      = current;
 	lvi.iSubItem   = 1;
@@ -529,7 +528,7 @@ void CDlgPluginOption::MoveFocusToEdit(void)
 	if (iLine >= 0) {
 		// Focusの切り替え
 		sType = m_cPlugin->m_options[iLine]->GetType();
-		transform( sType.begin(), sType.end(), sType.begin(), my_towlower2 );
+		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			hwndCtrl = GetItemHwnd(IDC_CHECK_PLUGIN_OPTION);
 		}else if (sType == OPTION_TYPE_INT) {
@@ -566,7 +565,7 @@ void CDlgPluginOption::SetToEdit(int iLine)
 		ListView_GetItem(hwndList, &lvi);
 
 		sType = m_cPlugin->m_options[iLine]->GetType();
-		transform( sType.begin(), sType.end(), sType.begin(), my_towlower2 );
+		transform(sType.begin(), sType.end(), sType.begin(), my_towlower2);
 		if (sType == OPTION_TYPE_BOOL) {
 			::CheckDlgButtonBool(GetHwnd(), IDC_CHECK_PLUGIN_OPTION, _tcscmp(buf,  BOOL_DISP_FALSE) != 0);
 			SetItemText(IDC_CHECK_PLUGIN_OPTION, m_cPlugin->m_options[iLine]->GetLabel().c_str());
@@ -580,7 +579,7 @@ void CDlgPluginOption::SetToEdit(int iLine)
 			SelectEdit(IDC_EDIT_PLUGIN_OPTION_NUM);
 		}else if (sType == OPTION_TYPE_SEL) {
 			// CONBO 設定
-			std::vector<wstring>	selects;
+			std::vector<wstring> selects;
 			selects = m_cPlugin->m_options[iLine]->GetSelects();
 
 			HWND hwndCombo = GetItemHwnd(IDC_COMBO_PLUGIN_OPTION);
@@ -702,7 +701,6 @@ void CDlgPluginOption::SelectDirectory(int iLine)
 
 	// 検索フォルダ
 	GetItemText(IDC_EDIT_PLUGIN_OPTION_DIR, szDir, _countof(szDir));
-
 	if (_IS_REL_PATH(szDir)) {
 		TCHAR	folder[_MAX_PATH];
 		_tcscpy(folder, szDir);
@@ -721,8 +719,8 @@ void CDlgPluginOption::SelectDirectory(int iLine)
 	lvi.cchTextMax = MAX_LENGTH_VALUE + 1;
 	ListView_GetItem(hwndList, &lvi);
 
-	TCHAR	sTitle[MAX_LENGTH_VALUE + 10];
-	auto_sprintf( sTitle, LS(STR_DLGPLUGINOPT_SELECT), buf);
+	TCHAR sTitle[MAX_LENGTH_VALUE + 10];
+	auto_sprintf(sTitle, LS(STR_DLGPLUGINOPT_SELECT), buf);
 	if (SelectDir(GetHwnd(), (const TCHAR*)sTitle /*_T("ディレクトリの選択")*/, szDir, szDir)) {
 		// 末尾に\マークを追加する．
 		AddLastChar(szDir, _countof(szDir), _T('\\'));

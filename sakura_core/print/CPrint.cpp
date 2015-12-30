@@ -430,14 +430,14 @@ BOOL CPrint::GetPaperSize(
 			return FALSE;
 		}
 	}
-	if (pDEVMODE->dmFields & DM_PAPERLENGTH && 0 != pDEVMODE->dmPaperLength) {
+	if (pDEVMODE->dmFields & DM_PAPERLENGTH && pDEVMODE->dmPaperLength != 0) {
 		// pDEVMODE->dmPaperLength‚Í1/10mm’PˆÊ‚Å‚ ‚é
 		*pnPaperAllHeight = pDEVMODE->dmPaperLength/* * 10*/;
 	}else {
 		pDEVMODE->dmPaperLength = *pnPaperAllHeight;
 		pDEVMODE->dmFields |= DM_PAPERLENGTH;
 	}
-	if (pDEVMODE->dmFields & DM_PAPERWIDTH && 0 != pDEVMODE->dmPaperWidth) {
+	if (pDEVMODE->dmFields & DM_PAPERWIDTH && pDEVMODE->dmPaperWidth != 0) {
 		// pDEVMODE->dmPaperWidth‚Í1/10mm’PˆÊ‚Å‚ ‚é
 		*pnPaperAllWidth = pDEVMODE->dmPaperWidth/* * 10*/;
 	}else {

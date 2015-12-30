@@ -104,7 +104,7 @@ public:
 			
 			bool bRelPath = _IS_REL_PATH(token);
 			int nValidStatus = ValidateKey(token);
-			if (0 != nValidStatus) {
+			if (nValidStatus != 0) {
 				delete [] pWildCard;
 				return nValidStatus;
 			}

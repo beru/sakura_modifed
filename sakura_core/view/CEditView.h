@@ -428,7 +428,7 @@ public:
 	//	Jan. 10, 2005 インクリメンタルサーチ
 	bool IsISearchEnabled(int nCommand) const;
 
-	BOOL KeySearchCore(const CNativeW* pcmemCurText);	// 2006.04.10 fon
+	bool KeySearchCore(const CNativeW* pcmemCurText);	// 2006.04.10 fon
 	bool MiniMapCursorLineTip( POINT* po, RECT* rc, bool* pbHide );
 
 	/*!	CEditView::KeyWordHelpSearchDictのコール元指定用ローカルID

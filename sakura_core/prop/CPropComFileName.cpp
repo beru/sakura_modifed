@@ -176,7 +176,7 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_FNAME_FROM, szFrom, _MAX_PATH);
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_FNAME_TO,   szTo,   _MAX_PATH);
 
-					if (-1 != SetListViewItem_FILENAME(hListView, nIndex, szFrom, szTo, true)) {
+					if (SetListViewItem_FILENAME(hListView, nIndex, szFrom, szTo, true) != -1) {
 						return TRUE;
 					}
 					break;
@@ -186,52 +186,52 @@ INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_FNAME_FROM, szFrom, _MAX_PATH);
 					::DlgItem_GetText(hwndDlg, IDC_EDIT_FNAME_TO,   szTo,   _MAX_PATH);
 					
-					if (-1 != SetListViewItem_FILENAME(hListView, nCount, szFrom, szTo, true)) {
+					if (SetListViewItem_FILENAME(hListView, nCount, szFrom, szTo, true) != -1) {
 						return TRUE;
 					}
 					break;
 
 				case IDC_BUTTON_FNAME_UPD:	// 更新
-					if (-1 != nIndex) {
+					if (nIndex != -1) {
 						::DlgItem_GetText(hwndDlg, IDC_EDIT_FNAME_FROM, szFrom, _MAX_PATH);
 						::DlgItem_GetText(hwndDlg, IDC_EDIT_FNAME_TO,   szTo,   _MAX_PATH);
-						if (-1 != SetListViewItem_FILENAME(hListView, nIndex, szFrom, szTo, false)) {
+						if (SetListViewItem_FILENAME(hListView, nIndex, szFrom, szTo, false) != -1) {
 							return TRUE;
 						}
 					}else {
 						// 未選択でリストにひとつも項目がない場合は追加しておく
 						if (ListView_GetItemCount(hListView) == 0) {
-							if (-1 != SetListViewItem_FILENAME(hListView, 0, szFrom, szTo, true)) {
+							if (SetListViewItem_FILENAME(hListView, 0, szFrom, szTo, true) != -1) {
 								return TRUE;
 							}
 						}
 					}
 					break;
 				case IDC_BUTTON_FNAME_DEL:	// 削除
-					if (-1 != nIndex) {
+					if (nIndex != -1) {
 						ListView_DeleteItem(hListView, nIndex);	// 古いキーを削除
 						ListView_SetItemState(hListView, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 						return TRUE;
 					}
 					break;
 				case IDC_BUTTON_FNAME_TOP:	// 先頭
-					if (-1 != MoveListViewItem_FILENAME(hListView, nIndex, 0)) {
+					if (MoveListViewItem_FILENAME(hListView, nIndex, 0) != -1) {
 						return TRUE;
 					}
 					break;
 				case IDC_BUTTON_FNAME_UP: 	// 上へ
-					if (-1 != MoveListViewItem_FILENAME(hListView, nIndex, nIndex - 1)) {
+					if (MoveListViewItem_FILENAME(hListView, nIndex, nIndex - 1) != -1) {
 						return TRUE;
 					}
 					break;
 				case IDC_BUTTON_FNAME_DOWN:	// 下へ
-					if (-1 != MoveListViewItem_FILENAME(hListView, nIndex, nIndex + 1)) {
+					if (MoveListViewItem_FILENAME(hListView, nIndex, nIndex + 1) != -1) {
 						return TRUE;
 					}
 					break;
 				case IDC_BUTTON_FNAME_LAST:	// 最終
 					nCount = ListView_GetItemCount(hListView);
-					if (-1 != MoveListViewItem_FILENAME(hListView, nIndex, nCount - 1)) {
+					if (MoveListViewItem_FILENAME(hListView, nIndex, nCount - 1) != -1) {
 						return TRUE;
 					}
 					break;
@@ -305,7 +305,7 @@ void CPropFileName::SetData(HWND hwndDlg)
 	}
 
 	// 一番上を選択しておく
-	if (0 != nIndex) {
+	if (nIndex != 0) {
 		ListView_SetItemState(hListView, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 	}
 	//	リストビューの行選択を可能にする．

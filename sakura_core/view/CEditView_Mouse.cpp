@@ -679,11 +679,11 @@ void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	// マウス左サイドボタンに対応する機能コードはm_Common.m_pKeyNameArr[2]に入っている
 	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_CENTER].m_nFuncCodeArr[nIdx];
 	if (nFuncID == F_AUTOSCROLL) {
-		if (1 == m_nAutoScrollMode) {
+		if (m_nAutoScrollMode == 1) {
 			m_bAutoScrollDragMode = false;
 			AutoScrollEnter();
 			return;
-		}else if (2 == m_nAutoScrollMode && m_bAutoScrollDragMode) {
+		}else if (m_nAutoScrollMode == 2 && m_bAutoScrollDragMode) {
 			AutoScrollExit();
 			return;
 		}
@@ -730,7 +730,7 @@ void CEditView::AutoScrollExit()
 	if (m_nAutoScrollMode) {
 		::ReleaseCapture();
 	}
-	if (2 == m_nAutoScrollMode) {
+	if (m_nAutoScrollMode == 2) {
 		KillTimer(GetHwnd(), 2);
 		m_cAutoScrollWnd.Close();
 	}
@@ -938,7 +938,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 	CLayoutRange sSelect_Old    = GetSelectionInfo().m_sSelect;
 
 	// オートスクロール
-	if (1 == m_nAutoScrollMode) {
+	if (m_nAutoScrollMode == 1) {
 		if (::GetSystemMetrics(SM_CXDOUBLECLK) < abs(ptMouse.x - m_cAutoScrollMousePos.x) ||
 		    ::GetSystemMetrics(SM_CYDOUBLECLK) < abs(ptMouse.y - m_cAutoScrollMousePos.y)
 		) {
@@ -946,7 +946,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			AutoScrollEnter();
 		}
 		return;
-	}else if (2 == m_nAutoScrollMode) {
+	}else if (m_nAutoScrollMode == 2) {
 		AutoScrollMove(ptMouse);
 		return;
 	}
@@ -1231,7 +1231,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					if (nWorkF == -1) {
 						// 始点が前方に移動。現在のカーソル位置によって選択範囲を変更
 						GetSelectionInfo().ChangeSelectAreaByCurrentCursor(sRange.GetFrom());
-					}else if (1 == nWorkT) {
+					}else if (nWorkT == 1) {
 						// 終点が後方に移動。現在のカーソル位置によって選択範囲を変更
 						GetSelectionInfo().ChangeSelectAreaByCurrentCursor(sRange.GetTo());
 					}else if (sSelect_Old.GetFrom() == sSelect.GetFrom()) {

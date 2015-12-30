@@ -148,8 +148,8 @@ bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
 	}
 
 	int nLen1;
-	const wchar_t* psz1 = cmem1.GetStringPtr(&nLen1);
 	int nLen2;
+	const wchar_t* psz1 = cmem1.GetStringPtr(&nLen1);
 	const wchar_t* psz2 = cmem2.GetStringPtr(&nLen2);
 	
 	if (nLen1 == nLen2) {
@@ -175,7 +175,7 @@ void CNativeW::Replace(const wchar_t* pszFrom, const wchar_t* pszTo)
 
 void CNativeW::Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* pszTo, int nToLen )
 {
-	CNativeW	cmemWork;
+	CNativeW cmemWork;
 	int nBgnOld = 0;
 	int nBgn = 0;
 	while (nBgn <= GetStringLength() - nFromLen) {
@@ -194,7 +194,7 @@ void CNativeW::Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* psz
 		}
 	}
 	if (nBgnOld != 0) {
-		if (0  < GetStringLength() - nBgnOld) {
+		if (0 < GetStringLength() - nBgnOld) {
 			cmemWork.AppendString(&GetStringPtr()[nBgnOld], GetStringLength() - nBgnOld);
 		}
 		SetNativeData(cmemWork);

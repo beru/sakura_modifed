@@ -109,7 +109,7 @@ HWND CDlgReplace::DoModeless(
 	m_bNOTIFYNOTFOUND = csSearch.m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	m_bSelected = bSelected;
 	m_ptEscCaretPos_PHY = ((CEditView*)lParam)->GetCaret().GetCaretLogicPos();	// 検索/置換開始時のカーソル位置退避
-	((CEditView*)lParam)->m_bSearch = TRUE;							// 検索/置換開始位置の登録有無			02/07/28 ai
+	((CEditView*)lParam)->m_bSearch = true;			// 検索/置換開始位置の登録有無			02/07/28 ai
 	return CDialog::DoModeless(hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW);
 }
 
@@ -289,7 +289,7 @@ int CDlgReplace::GetData(void)
 			csSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
 		}
 		// 2011.12.18 viewに直接設定
-		CEditView*	pcEditView = (CEditView*)m_lParam;
+		CEditView* pcEditView = (CEditView*)m_lParam;
 		if (pcEditView->m_strCurSearchKey == m_strText && pcEditView->m_sCurSearchOption == m_sSearchOption) {
 		}else {
 			pcEditView->m_strCurSearchKey = m_strText;
@@ -310,13 +310,13 @@ int CDlgReplace::GetData(void)
 		m_nPaste = IsButtonChecked(IDC_CHK_PASTE);
 		EnableItem(IDC_COMBO_TEXT2, !m_nPaste);
 		// 置換対象
-		m_nReplaceTarget=0;
+		m_nReplaceTarget = 0;
 		if (IsButtonChecked(IDC_RADIO_INSERT)) {
-			m_nReplaceTarget=1;
+			m_nReplaceTarget = 1;
 		}else if (IsButtonChecked(IDC_RADIO_ADD)) {
-			m_nReplaceTarget=2;
+			m_nReplaceTarget = 2;
 		}else if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
-			m_nReplaceTarget=3;
+			m_nReplaceTarget = 3;
 			m_nPaste = false;
 			EnableItem(IDC_COMBO_TEXT2, false);
 		}
@@ -396,8 +396,8 @@ BOOL CDlgReplace::OnDestroy()
 
 BOOL CDlgReplace::OnBnClicked(int wID)
 {
-	int			nRet;
-	CEditView*	pcEditView = (CEditView*)m_lParam;
+	int nRet;
+	CEditView* pcEditView = (CEditView*)m_lParam;
 
 	switch (wID) {
 	case IDC_CHK_PASTE:
@@ -534,9 +534,9 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 検索開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch != FALSE) {
+			if (pcEditView->m_bSearch) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = FALSE;
+				pcEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
 			// コマンドコードによる処理振り分け
@@ -562,9 +562,9 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		if (0 < nRet) {
 
 			// 置換開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch != FALSE) {
+			if (pcEditView->m_bSearch) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = FALSE;
+				pcEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
 			// 置換
@@ -581,9 +581,9 @@ BOOL CDlgReplace::OnBnClicked(int wID)
 		nRet = GetData();
 		if (0 < nRet) {
 			// 置換開始位置を登録 02/07/28 ai start
-			if (pcEditView->m_bSearch != FALSE) {
+			if (pcEditView->m_bSearch) {
 				pcEditView->m_ptSrchStartPos_PHY = m_ptEscCaretPos_PHY;
-				pcEditView->m_bSearch = FALSE;
+				pcEditView->m_bSearch = false;
 			}// 02/07/28 ai end
 
 			// すべて行置換時の処置は「すべて置換」は置換の繰返しオプションOFFの場合にして削除 2007.01.16 ryoji

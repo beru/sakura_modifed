@@ -1128,7 +1128,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 
 
 	// 2002/11/02 Moca 比較方法変更
-//	if (0 != strcmp("カーソル行アンダーライン", pColorInfo->m_szName))
+//	if (strcmp("カーソル行アンダーライン", pColorInfo->m_szName) != 0)
 	if ((g_ColorAttributeArr[pColorInfo->m_nColorIdx].fAttribute & COLOR_ATTRIB_NO_BACK) == 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 		// 背景色 見本矩形
 		rc1 = pDis->rcItem;

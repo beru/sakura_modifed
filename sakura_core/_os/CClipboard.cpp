@@ -583,7 +583,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 	}
 	if (nMode == -2) {
 		bool bret = false;
-		if (-1 != GetDataType()) {
+		if (GetDataType() != -1) {
 			bret = GetText(&mem, NULL, NULL, cEol, uFormat);
 			if (!bret) {
 				mem.SetString(L"");

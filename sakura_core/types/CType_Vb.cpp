@@ -254,7 +254,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 						&& wcsicmp(szWordPrev, L"End") == 0
 					) {
 						bProcedure	= false;	// プロシージャフラグをクリア
-					}else if (1 == nParseCnt) {
+					}else if (nParseCnt == 1) {
 						wcscpy_s(szFuncName, szWord);
 						/*
 						  カーソル位置変換
@@ -305,7 +305,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					nMode = 0;
 					--i;
 					continue;
-				}else if (1 == nCharChars && L'"' == pLine[i]) {
+				}else if (nCharChars == 1 && L'"' == pLine[i]) {
 					// Aug 7, 2003 little YOSHI  追加
 					// テキストの中は無視します。
 					nMode	= 3;
@@ -339,20 +339,20 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 					continue;
 				}else if (i < nLineLen && L'\'' == pLine[i]) {
 					break;
-				}else if (1 == nCharChars && L'"' == pLine[i]) {
+				}else if (nCharChars == 1 && L'"' == pLine[i]) {
 					// Aug 7, 2003 little YOSHI  追加
 					// テキストの中は無視します。
-					nMode	= 3;
+					nMode = 3;
 				}else {
-					if ((1 == nCharChars && (
-						L'_' == pLine[i] ||
-						L'~' == pLine[i] ||
-						(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
-						(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
-						(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
+					if ((nCharChars == 1 && (
+						pLine[i] == L'_' ||
+						pLine[i] == L'~' ||
+						(L'a' <= pLine[i] && pLine[i] <= L'z')||
+						(L'A' <= pLine[i] && pLine[i] <= L'Z')||
+						(L'0' <= pLine[i] && pLine[i] <= L'9')||
 						(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
 						))
-					 || 2 == nCharChars
+					 || nCharChars == 2
 					) {
 						nWordIdx = 0;
 
@@ -366,22 +366,21 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 						auto_memcpy(&szWord[nWordIdx], &pLine[i], nCharChars);
 						szWord[nWordIdx + nCharChars] = L'\0';
 						nWordIdx += (nCharChars);
-
 						nMode = 2;
 					}
 				}
 			/* テキストが閉じるまで読み飛ばす */	// Aug 7, 2003 little YOSHI  追加
 			}else if (nMode == 3) {
 				// 連続するダブルクォーテーションは無視する
-				if (1 == nCharChars && L'"' == pLine[i]) {
+				if (nCharChars == 1 && pLine[i] == L'"') {
 					// ダブルクォーテーションが現れたらフラグを反転する
 					bDQuote	= !bDQuote;
 				}else if (bDQuote) {
 					// ダブルクォーテーションの次に
 					// ダブルクォーテーション以外の文字が現れたらノーマルモードに移行
 					--i;
-					nMode	= 0;
-					bDQuote	= false;
+					nMode = 0;
+					bDQuote = false;
 					continue;
 				}
 			}

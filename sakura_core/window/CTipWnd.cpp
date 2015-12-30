@@ -146,7 +146,7 @@ void CTipWnd::ComputeWindowSize(
 	for (int i=0; i<=nTextLength; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
-		if ((1 == nCharChars && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
+		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
 				TCHAR*	pszWork = new TCHAR[i - nBgn + 1];
 				auto_memcpy(pszWork, &pszText[nBgn], i - nBgn);
@@ -172,7 +172,7 @@ void CTipWnd::ComputeWindowSize(
 
 			nBgn = i + 2;
 		}
-		if (2 == nCharChars) {
+		if (nCharChars == 2) {
 			++i;
 		}
 	}
@@ -208,7 +208,7 @@ void CTipWnd::DrawTipText(
 //		int nCharChars = &pszText[i] - CMemory::MemCharPrev(pszText, nTextLength, &pszText[i]);
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
-		if ((1 == nCharChars && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
+		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
 				TCHAR* pszWork;
 				pszWork = new TCHAR[i - nBgn + 1];
@@ -238,7 +238,7 @@ void CTipWnd::DrawTipText(
 
 			nBgn = i + 2;
 		}
-		if (2 == nCharChars) {
+		if (nCharChars == 2) {
 			++i;
 		}
 	}

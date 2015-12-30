@@ -102,7 +102,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 				}
 				if (bSeparete) {
 					nLineNum += nLineTemp;
-					pCDocLine = m_pcDocLineMgr->GetLine( CLogicInt(nLineNum) );
+					pCDocLine = m_pcDocLineMgr->GetLine(CLogicInt(nLineNum));
 					if (pCDocLine) {
 						CBookmarkSetter(pCDocLine).SetBookmark(true);
 					}
@@ -120,7 +120,7 @@ void CBookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 		// 旧形式 行番号,区切り
 		while (wcstok(p, delim)) {
 			while (wcschr(delim, *p)) ++p;
-			pCDocLine=m_pcDocLineMgr->GetLine( CLogicInt(_wtol(p)) );
+			pCDocLine = m_pcDocLineMgr->GetLine(CLogicInt(_wtol(p)));
 			if (pCDocLine) {
 				CBookmarkSetter(pCDocLine).SetBookmark(true);
 			}
@@ -185,7 +185,7 @@ LPCWSTR CBookmarkManager::GetBookMarks()
 			}
 			int nBuff2Len = wcslen(szBuff2);
 			if (nBuff2Len + nTextLen > MAX_MARKLINES_LEN) break;	//2002.01.17
-			wcscpy( szText + nTextLen, szBuff2 );
+			wcscpy(szText + nTextLen, szBuff2);
 			nTextLen += nBuff2Len;
 		}
 		++nLinePos;
@@ -227,7 +227,6 @@ void CBookmarkManager::MarkSearchWord(
 		// 検索語を単語に分割して searchWordsに格納する。
 		std::vector<std::pair<const wchar_t*, CLogicInt> > searchWords; // 単語の開始位置と長さの配列。
 		CSearchAgent::CreateWordList(searchWords, pszPattern, nPatternLen);
-
 		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(CLogicInt(0));
 		while (pDocLine) {
 			if (!CBookmarkGetter(pDocLine).IsBookmarked()) {

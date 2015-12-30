@@ -605,7 +605,7 @@ BOOL CDlgFavorite::OnNotify(WPARAM wParam, LPARAM lParam)
 			case NM_RCLICK:
 				{
 					POINT po;
-					if (0 != GetCursorPos(&po)) {
+					if (GetCursorPos(&po) != 0) {
 						RightMenu(po);
 					}
 				}
@@ -849,7 +849,7 @@ int CDlgFavorite::DeleteSelected()
 			pRecent->UpdateView();
 			if (0 < nDelItemCount) {
 				int nItem = nLastSelectedItem;
-				if (-1 != nItem) {
+				if (nItem != -1) {
 					nItem += 1; // 削除したアイテムの次のアイテム
 					nItem -= nDelItemCount; // 新しい位置は、削除した分だけずれる
 					if (pRecent->GetItemCount() <= nItem) {
@@ -860,7 +860,7 @@ int CDlgFavorite::DeleteSelected()
 				}
 				int nLvTopIndex = ListView_GetTopIndex(hwndList);
 				SetDataOne(m_nCurrentTab, nItem);
-				if (1 == nDelItemCount) {
+				if (nDelItemCount == 1) {
 					// 1つ削除のときは、Yスクロール位置を保持
 					// 2つ以上は複雑なのでSetDataOneにおまかせする
 					nLvTopIndex = t_max(0, t_min(pRecent->GetItemCount() - 1, nLvTopIndex));
@@ -945,7 +945,7 @@ void CDlgFavorite::EditItem()
 	if (0 < nSelectedCount) {
 		int nLvItem = -1;
 		nLvItem = ListView_GetNextItem(hwndList, nLvItem, LVNI_SELECTED);
-		if (-1 != nLvItem) {
+		if (nLvItem != -1) {
 			int nRecIndex = ListView_GetLParamInt(hwndList, nLvItem);
 			CRecent& recent = *(m_aFavoriteInfo[m_nCurrentTab].m_pRecent);
 			TCHAR szText[_MAX_PATH];
@@ -1127,7 +1127,7 @@ void CDlgFavorite::ListViewSort(
 	// ヘッダ書き換え
 	TCHAR szHeader[200];
 	LV_COLUMN	col;
-	if (-1 != info.nSortColumn) {
+	if (info.nSortColumn != -1) {
 		// 元のソートの「 ▼」を取り除く
 		col.mask = LVCF_TEXT;
 		col.pszText = szHeader;

@@ -163,7 +163,7 @@ BOOL CDlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 		// タイプ別設定から背景色を重複しないように取り出す
 		::SetWindowText(GetHwnd(), LS(STR_DLGSMCLR_BTN2));
 		for (int i=0; i<COLORIDX_LAST; ++i) {
-			if (0 != (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK)) {	// 2006.12.18 ryoji フラグ利用で簡素化
+			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 				continue;
 			}
 			if (m_cr != m_pTypes->m_ColorInfoArr[i].m_sColorAttr.m_cBACK) {

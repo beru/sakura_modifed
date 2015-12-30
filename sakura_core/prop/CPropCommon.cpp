@@ -424,7 +424,7 @@ void CPropCommon::OnHelp(HWND hwndParent, int nPageID)
 		nContextID = -1;
 		break;
 	}
-	if (-1 != nContextID) {
+	if (nContextID != -1) {
 		MyWinHelp(hwndParent, HELP_CONTEXT, nContextID);	// 2006.10.10 ryoji MyWinHelp�ɕύX�ɕύX
 	}
 	return;

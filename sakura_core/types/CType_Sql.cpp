@@ -51,7 +51,6 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
 	CLogicInt		nLineLen;
-	int			i;
 	int			nCharChars;
 	wchar_t		szWordPrev[100];
 	wchar_t		szWord[100];
@@ -70,10 +69,10 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 	szWord[nWordIdx] = L'\0';
 	nMode = 0;
 	nFuncNum = 0;
-	CLogicInt	nLineCount;
+	CLogicInt nLineCount;
 	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		for (i=0; i<nLineLen; ++i) {
+		for (int i=0; i<nLineLen; ++i) {
 			// 1バイト文字だけを処理する
 			// 2005-09-02 D.S.Koba GetSizeOfChar
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
@@ -97,7 +96,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 				}
 			}else
 			// コメント読み込み中
-			if (8 == nMode) {
+			if (nMode == 8) {
 				if (i + 1 < nLineLen && L'*' == pLine[i] &&  L'/' == pLine[i + 1]) {
 					++i;
 					nMode = 0;
@@ -106,16 +105,16 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 				}
 			}else
 			// 単語読み込み中
-			if (1 == nMode) {
-				if ((1 == nCharChars && (
-					L'_' == pLine[i] ||
-					L'~' == pLine[i] ||
+			if (nMode == 1) {
+				if ((nCharChars == 1 && (
+					pLine[i] == L'_' ||
+					pLine[i] == L'~' ||
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
 					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
 					))
-				 || 2 == nCharChars
+				 || nCharChars == 2
 				) {
 //					++nWordIdx;
 					if (nWordIdx >= nMaxWordLeng) {
@@ -235,17 +234,17 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
 					(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i]))|| // 2013.05.08 日本語対応
 					L'\t' == pLine[i] ||
-					 L' ' == pLine[i] ||
-					 WCODE::IsLineDelimiter(pLine[i], bExtEol) ||
-					 L'{' == pLine[i] ||
-					 L'}' == pLine[i] ||
-					 L'(' == pLine[i] ||
-					 L')' == pLine[i] ||
-					 L';' == pLine[i] ||
+					L' ' == pLine[i] ||
+					WCODE::IsLineDelimiter(pLine[i], bExtEol) ||
+					L'{' == pLine[i] ||
+					L'}' == pLine[i] ||
+					L'(' == pLine[i] ||
+					L')' == pLine[i] ||
+					L';' == pLine[i] ||
 					L'\'' == pLine[i] ||
-					 L'/' == pLine[i] ||
-					 L'-' == pLine[i] ||
-					 2 == nCharChars
+					L'/' == pLine[i] ||
+					L'-' == pLine[i] ||
+					nCharChars == 2
 				) {
 					wcscpy_s(szWordPrev, szWord);
 					nWordIdx = 0;
@@ -269,8 +268,8 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 			// 長過ぎる単語無視中
 			}else if (nMode == 999) {
 				// 空白やタブ記号等を飛ばす
-				if (L'\t' == pLine[i] ||
-					L' ' == pLine[i] ||
+				if (pLine[i] == L'\t' ||
+					pLine[i] == L' ' ||
 					WCODE::IsLineDelimiter(pLine[i], bExtEol)
 				) {
 					nMode = 0;
@@ -279,23 +278,23 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 			// ノーマルモード
 			}else if (nMode == 0) {
 				// 空白やタブ記号等を飛ばす
-				if (L'\t' == pLine[i] ||
-					L' ' == pLine[i] ||
+				if (pLine[i] == L'\t' ||
+					pLine[i] == L' ' ||
 					WCODE::IsLineDelimiter(pLine[i], bExtEol)
 				) {
 					continue;
-				}else if (i < nLineLen - 1 && L'-' == pLine[i] &&  L'-' == pLine[i + 1]) {
+				}else if (i < nLineLen - 1 && pLine[i] == L'-' && pLine[i + 1] == L'-') {
 					break;
-				}else if (i < nLineLen - 1 && L'/' == pLine[i] &&  L'*' == pLine[i + 1]) {
+				}else if (i < nLineLen - 1 && pLine[i] == L'/' && pLine[i + 1] == L'*') {
 					++i;
 					nMode = 8;
 					continue;
-				}else if (L'\'' == pLine[i]) {
+				}else if (pLine[i] == L'\'') {
 					nMode = 20;
 					continue;
-				}else if (L';' == pLine[i]) {
-					if (2 == nParseCnt) {
-						if (1 == nFuncOrProc) {
+				}else if (pLine[i] == L';') {
+					if (nParseCnt == 2) {
+						if (nFuncOrProc == 1) {
 							nFuncId = 10;	// ファンクション宣言
 						}else {
 							nFuncId = 20;	// プロシージャ宣言
@@ -320,17 +319,17 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 				}else {
 					if (
 						(
-							1 == nCharChars
+							nCharChars == 1
 							&& (
-								L'_' == pLine[i] ||
-								L'~' == pLine[i] ||
-								(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
-								(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||
-								(L'0' <= pLine[i] &&	pLine[i] <= L'9')||
+								pLine[i] == L'_' ||
+								pLine[i] == L'~' ||
+								(L'a' <= pLine[i] && pLine[i] <= L'z')||
+								(L'A' <= pLine[i] && pLine[i] <= L'Z')||
+								(L'0' <= pLine[i] && pLine[i] <= L'9')||
 								(L'\u00a1' <= pLine[i] && !iswcntrl(pLine[i]) && !iswspace(pLine[i])) // 2013.05.08 日本語対応
 							)
 						)
-						|| 2 == nCharChars
+						|| nCharChars == 2
 					) {
 						wcscpy_s(szWordPrev, szWord);
 						nWordIdx = 0;

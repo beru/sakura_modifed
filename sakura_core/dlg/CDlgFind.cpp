@@ -284,7 +284,7 @@ int CDlgFind::GetData(void)
 
 BOOL CDlgFind::OnBnClicked(int wID)
 {
-	int			nRet;
+	int nRet;
 	CEditView*	pcEditView = (CEditView*)m_lParam;
 	switch (wID) {
 	case IDC_BUTTON_HELP:

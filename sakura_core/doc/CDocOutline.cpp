@@ -477,7 +477,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
 		while (k < nLineLen) {
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, k);
-			if (1 == nCharChars) {
+			if (nCharChars == 1) {
 				if (!(
 						WCODE::IsLineDelimiter(pLine[k], bExtEol) ||
 						pLine[k] == WCODE::SPACE ||

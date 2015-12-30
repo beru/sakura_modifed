@@ -23,7 +23,7 @@ CTextInputStream::CTextInputStream(const TCHAR* tszPath)
 		// BOMŠm”F -> m_bIsUtf8
 		static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 		BYTE buf[3];
-		if (sizeof(UTF8_BOM) == fread(&buf, 1, sizeof(UTF8_BOM), GetFp())) {
+		if (fread(&buf, 1, sizeof(UTF8_BOM), GetFp()) == sizeof(UTF8_BOM)) {
 			m_bIsUtf8 = (memcmp(buf, UTF8_BOM, sizeof(UTF8_BOM)) == 0);
 		}
 
@@ -88,9 +88,6 @@ wstring CTextInputStream::ReadLineW()
 
 	return wstring().assign( line.GetStringPtr(), line.GetStringLength() );	// EOL ‚Ü‚Å NULL •¶Žš‚àŠÜ‚ß‚é
 }
-
-
-
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -204,6 +201,7 @@ const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
 	}
 	return fname;
 }
+
 
 CTextInputStream_AbsIni::CTextInputStream_AbsIni(const TCHAR* fname, bool bOrExedir)
 	:

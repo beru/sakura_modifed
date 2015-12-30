@@ -763,14 +763,14 @@ int CDlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 {
 	int nIdx = -1;
 	switch (nCtrlId) {
-	case IDC_EDIT_FONTHEIGHT:	nIdx = 0;		break;
-	case IDC_EDIT_LINESPACE:	nIdx = 1;		break;
-	case IDC_EDIT_DANSUU:		nIdx = 2;		break;
-	case IDC_EDIT_DANSPACE:		nIdx = 3;		break;
-	case IDC_EDIT_MARGINTY:		nIdx = 4;		break;
-	case IDC_EDIT_MARGINBY:		nIdx = 5;		break;
-	case IDC_EDIT_MARGINLX:		nIdx = 6;		break;
-	case IDC_EDIT_MARGINRX:		nIdx = 7;		break;
+	case IDC_EDIT_FONTHEIGHT:	nIdx = 0;	break;
+	case IDC_EDIT_LINESPACE:	nIdx = 1;	break;
+	case IDC_EDIT_DANSUU:		nIdx = 2;	break;
+	case IDC_EDIT_DANSPACE:		nIdx = 3;	break;
+	case IDC_EDIT_MARGINTY:		nIdx = 4;	break;
+	case IDC_EDIT_MARGINBY:		nIdx = 5;	break;
+	case IDC_EDIT_MARGINLX:		nIdx = 6;	break;
+	case IDC_EDIT_MARGINRX:		nIdx = 7;	break;
 	}
 	if (nIdx >= 0) {
 		if (nData <= sDataRange[nIdx].minval) {
@@ -791,16 +791,15 @@ int CDlgPrintSetting::DataCheckAndCorrect(int nCtrlId, int nData)
 */
 BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 {
-	int				nEnableColumns;		// 行あたりの文字数
-	int				nEnableLines;		// 縦方向の行数
-	MYDEVMODE		dmDummy;			// 2003.05.18 かろと 型変更
-	short			nPaperAllWidth;		// 用紙幅
-	short			nPaperAllHeight;	// 用紙高さ
-	PRINTSETTING*	pPS;
+	int			nEnableColumns;		// 行あたりの文字数
+	int			nEnableLines;		// 縦方向の行数
+	MYDEVMODE	dmDummy;			// 2003.05.18 かろと 型変更
+	short		nPaperAllWidth;		// 用紙幅
+	short		nPaperAllHeight;	// 用紙高さ
 
 	// ダイアログデータの取得
 	GetData();
-	pPS = &m_PrintSettingArr[m_nCurrentPrintSetting];
+	PRINTSETTING* pPS = &m_PrintSettingArr[m_nCurrentPrintSetting];
 
 	dmDummy.dmFields = DM_PAPERSIZE | DMORIENT_LANDSCAPE;
 	dmDummy.dmPaperSize = pPS->m_nPrintPaperSize;
@@ -827,8 +826,8 @@ BOOL CDlgPrintSetting::CalcPrintableLineAndColumn()
 
 	// フォントのポイント数	2013/5/9 Uchi
 	// 1pt = 1/72in = 25.4/72mm
-	int		nFontPoints = pPS->m_nPrintFontHeight * 720 / 254;
-	TCHAR	szFontPoints[20];
+	int nFontPoints = pPS->m_nPrintFontHeight * 720 / 254;
+	TCHAR szFontPoints[20];
 	auto_sprintf_s(szFontPoints, _countof(szFontPoints), _T("%d.%dpt"), nFontPoints/10, nFontPoints%10);
 	SetItemText(IDC_STATIC_FONTSIZE, szFontPoints);
 
@@ -868,8 +867,8 @@ void CDlgPrintSetting::SetFontName(
 	int nPointSize
 	)
 {
-	TCHAR	szName[100];
-	bool	bUseFont = lf.lfFaceName[0] != _T('\0');
+	TCHAR szName[100];
+	bool bUseFont = lf.lfFaceName[0] != _T('\0');
 
 	CheckDlgButtonBool(GetHwnd(), idUse, bUseFont);
 	EnableItem(idUse, bUseFont);
@@ -877,11 +876,9 @@ void CDlgPrintSetting::SetFontName(
 		LOGFONT	lft;
 		lft = lf;
 		lft.lfHeight = m_nFontHeight;		// フォントサイズをダイアログに合せる
-
-		HFONT	hFontOld = (HFONT)::SendMessage(GetItemHwnd(idTxt), WM_GETFONT, 0, 0);
-
+		HFONT hFontOld = (HFONT)::SendMessage(GetItemHwnd(idTxt), WM_GETFONT, 0, 0);
 		// 論理フォントを作成
-		HFONT	hFont = ::CreateFontIndirect(&lft);
+		HFONT hFont = ::CreateFontIndirect(&lft);
 		if (hFont) {
 			// フォントの設定
 			::SendMessage(GetItemHwnd(idTxt), WM_SETFONT, (WPARAM)hFont, MAKELPARAM(FALSE, 0));
@@ -890,10 +887,9 @@ void CDlgPrintSetting::SetFontName(
 			// 古いフォントの破棄
 			::DeleteObject(hFontOld);
 		}
-
 		// フォント名/サイズの作成
-		int		nMM = MulDiv(nPointSize, 254, 720);	// フォントサイズ計算(pt->1/10mm)
-		auto_sprintf(szName, nPointSize%10 ? _T("%.32s(%.1fpt/%d.%dmm)") : _T("%.32s(%.0fpt/%d.%dmm)"),
+		int nMM = MulDiv(nPointSize, 254, 720);	// フォントサイズ計算(pt->1/10mm)
+		auto_sprintf(szName, (nPointSize%10) ? _T("%.32s(%.1fpt/%d.%dmm)") : _T("%.32s(%.0fpt/%d.%dmm)"),
 					lf.lfFaceName,
 					double(nPointSize)/10,
 					nMM/10, nMM/10);

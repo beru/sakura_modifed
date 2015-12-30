@@ -53,9 +53,9 @@ void CViewCommander::Command_HOKAN(void)
 retry:;
 	// 補完候補一覧ファイルが設定されていないときは、設定するように促す。
 	// 2003.06.22 Moca ファイル内から検索する場合には補完ファイルの設定は必須ではない
-	if (m_pCommanderView->m_pTypeData->m_bUseHokanByFile == FALSE &&
+	if (!m_pCommanderView->m_pTypeData->m_bUseHokanByFile &&
 		!m_pCommanderView->m_pTypeData->m_bUseHokanByKeyword &&
-		_T('\0') == m_pCommanderView->m_pTypeData->m_szHokanFile[0]
+		m_pCommanderView->m_pTypeData->m_szHokanFile[0] == _T('\0')
 	) {
 		ConfirmBeep();
 		if (IDYES == ::ConfirmMessage(
@@ -177,7 +177,7 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 		NULL
 	);
 	::DestroyMenu(hMenu);
-	if (0 != nId) {
+	if (nId != 0) {
 		// コマンドコードによる処理振り分け
 //		HandleCommand(nFuncID, true, 0, 0, 0, 0);
 		::PostMessage(GetMainWindow(), WM_COMMAND, MAKELONG(nId, 0), (LPARAM)NULL);

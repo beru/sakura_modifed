@@ -552,7 +552,7 @@ DWORD CGrepAgent::DoGrep(
 	if (!CEditWnd::getInstance()->UpdateTextWrap()) {	// 折り返し方法関連の更新
 		CEditWnd::getInstance()->RedrawAllViews(pcViewDst);	//	他のペインの表示を更新
 	}
-	const bool bDrawSwitchOld = pcViewDst->SetDrawSwitch(0 != GetDllShareData().m_Common.m_sSearch.m_bGrepRealTimeView);
+	const bool bDrawSwitchOld = pcViewDst->SetDrawSwitch(GetDllShareData().m_Common.m_sSearch.m_bGrepRealTimeView != 0);
 
 	CGrepEnumOptions cGrepEnumOptions;
 	CGrepEnumFiles cGrepExceptAbsFiles;

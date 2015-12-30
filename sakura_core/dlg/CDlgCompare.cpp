@@ -126,33 +126,27 @@ BOOL CDlgCompare::OnBnClicked(int wID)
 // ダイアログデータの設定
 void CDlgCompare::SetData(void)
 {
-	HWND			hwndList;
-	int				nRowNum;
-	EditNode*		pEditNodeArr;
-	EditInfo*		pfi;
-	int				i;
-	TCHAR			szMenu[512];
-	int				nItem;
-	int				selIndex = 0;
+	EditNode*	pEditNodeArr;
+	TCHAR		szMenu[512];
+	int			selIndex = 0;
 
-	hwndList = GetItemHwnd(IDC_LIST_FILES);
-
+	HWND hwndList = GetItemHwnd(IDC_LIST_FILES);
 // 2002/2/10 aroka ファイル名で比較しないため不用 (2001.12.26 YAZAKIさん)
 //	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
 //	setlocale (LC_ALL, "C");
 
 	// 現在開いている編集窓のリストをメニューにする
-	nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
+	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
 	if (nRowNum > 0) {
 		// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 		CTextWidthCalc calc(hwndList);
 		int score = 0;
 		TCHAR szFile1[_MAX_PATH];
 		SplitPath_FolderAndFile(m_pszPath, NULL, szFile1);
-		for (i=0; i<nRowNum; ++i) {
+		for (int i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-			pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
+			EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
 			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
@@ -164,7 +158,7 @@ void CDlgCompare::SetData(void)
 			// 番号は ウィンドウリストと同じになるようにする
 			CFileNameManager::getInstance()->GetMenuFullLabel_WinListNoEscape( szMenu, _countof(szMenu), pfi, pEditNodeArr[i].m_nId, i, calc.GetDC() );
 
-			nItem = ::List_AddString(hwndList, szMenu);
+			int nItem = ::List_AddString(hwndList, szMenu);
 			List_SetItemData(hwndList, nItem, pEditNodeArr[i].GetHwnd());
 
 			// 横幅を計算する
@@ -204,17 +198,15 @@ void CDlgCompare::SetData(void)
 // TRUE==正常  FALSE==入力エラー
 int CDlgCompare::GetData(void)
 {
-	int				nItem;
-	EditInfo*		pfi;
 	HWND hwndList = GetItemHwnd(IDC_LIST_FILES);
-	nItem = List_GetCurSel(hwndList);
-	if (LB_ERR == nItem) {
+	int nItem = List_GetCurSel(hwndList);
+	if (nItem == LB_ERR) {
 		return FALSE;
 	}else {
 		*m_phwndCompareWnd = (HWND)List_GetItemData(hwndList, nItem);
 		// トレイからエディタへの編集ファイル名要求通知
 		::SendMessage(*m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
-		pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
+		EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
 		int nId = CAppNodeManager::getInstance()->GetEditNode(*m_phwndCompareWnd)->GetId();
@@ -237,9 +229,7 @@ LPVOID CDlgCompare::GetHelpIdTable(void)
 
 INT_PTR CDlgCompare::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
-
+	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	if (wMsg == WM_GETMINMAXINFO) {
 		return OnMinMaxInfo(lParam);
 	}
@@ -286,12 +276,11 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 
 	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
 
-	RECT  rc;
-	POINT ptNew;
+	RECT rc;
 	GetWindowRect(&rc);
+	POINT ptNew;
 	ptNew.x = rc.right - rc.left;
 	ptNew.y = rc.bottom - rc.top;
-
 	for (int i=0; i<_countof(anchorList); ++i) {
 		ResizeItem(GetItemHwnd(anchorList[i].id), m_ptDefaultSize, ptNew, m_rcItems[i], anchorList[i].anchor);
 	}
@@ -302,7 +291,6 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 BOOL CDlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
-	
 	return CDialog::OnMove(wParam, lParam);
 }
 

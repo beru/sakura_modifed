@@ -384,12 +384,12 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, FALSE);
 	}else
-	if (1 == m_Types.m_nLineTermType) {
+	if (m_Types.m_nLineTermType == 1) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE0, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, TRUE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, FALSE);
 	}else
-	if (2 == m_Types.m_nLineTermType) {
+	if (m_Types.m_nLineTermType == 2) {
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE0, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE);
 		::CheckDlgButton(hwndDlg, IDC_RADIO_LINETERMTYPE2, TRUE);

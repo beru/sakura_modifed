@@ -178,10 +178,9 @@ BOOL CDlgGrep::OnInitDialog(
 
 	// ダイアログのアイコン
 // 2002.02.08 Grepアイコンも大きいアイコンと小さいアイコンを別々にする。
-	HICON	hIconBig, hIconSmall;
 	// Dec, 2, 2002 genta アイコン読み込み方法変更
-	hIconBig   = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, false);
-	hIconSmall = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, true);
+	HICON hIconBig   = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, false);
+	HICON hIconSmall = GetAppIcon(m_hInstance, ICON_DEFAULT_GREP, FN_GREP_ICON, true);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall);
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIconBig);
 
@@ -437,8 +436,8 @@ void CDlgGrep::SetData(void)
 		&& (m_szFolder[0] == _T('\0') || m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder)
 		&& m_szCurrentFilePath[0] != _T('\0')
 	) {
-		TCHAR	szWorkFolder[MAX_PATH];
-		TCHAR	szWorkFile[MAX_PATH];
+		TCHAR szWorkFolder[MAX_PATH];
+		TCHAR szWorkFile[MAX_PATH];
 		SplitPath_FolderAndFile(m_szCurrentFilePath, szWorkFolder, szWorkFile);
 		SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
 	}
@@ -449,7 +448,7 @@ void CDlgGrep::SetData(void)
 	// この編集中のテキストから検索する
 	CheckButton(IDC_CHK_FROMTHISTEXT, m_bFromThisText);
 	// 2010.05.30 関数化
-	SetDataFromThisText(m_bFromThisText != FALSE);
+	SetDataFromThisText(m_bFromThisText);
 
 	// 英大文字と英小文字を区別する
 	CheckButton(IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase);
@@ -468,7 +467,7 @@ void CDlgGrep::SetData(void)
 	{
 		int	nIdx, nCurIdx = -1;
 		ECodeType nCharSet;
-		HWND	hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
+		HWND hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
 		nCurIdx = Combo_GetCurSel(hWndCombo);
 		CCodeTypesForCombobox cCodeTypes;
 		for (nIdx=0; nIdx<cCodeTypes.GetCount(); ++nIdx) {
@@ -554,15 +553,14 @@ void CDlgGrep::SetData(void)
 void CDlgGrep::SetDataFromThisText(bool bChecked)
 {
 	bool bEnableControls = true;
-	if (0 != m_szCurrentFilePath[0] && bChecked) {
-		TCHAR	szWorkFolder[MAX_PATH];
-		TCHAR	szWorkFile[MAX_PATH];
+	if (m_szCurrentFilePath[0] != 0 && bChecked) {
+		TCHAR szWorkFolder[MAX_PATH];
+		TCHAR szWorkFile[MAX_PATH];
 		// 2003.08.01 Moca ファイル名はスペースなどは区切り記号になるので、""で囲い、エスケープする
 		szWorkFile[0] = _T('"');
 		SplitPath_FolderAndFile(m_szCurrentFilePath, szWorkFolder, szWorkFile + 1);
 		_tcscat(szWorkFile, _T("\"")); // 2003.08.01 Moca
 		SetItemText(IDC_COMBO_FILE, szWorkFile);
-		
 		SetGrepFolder(GetItemHwnd(IDC_COMBO_FOLDER), szWorkFolder);
 
 		CheckButton(IDC_CHK_SUBFOLDER, false);
@@ -656,10 +654,10 @@ int CDlgGrep::GetData(void)
 //		WarningMessage(	GetHwnd(), _T("検索のキーワードを指定してください。"));
 //		return FALSE;
 //	}
-	if (0 != auto_strlen(m_szFile)) {
+	if (auto_strlen(m_szFile) != 0) {
 		CGrepEnumKeys enumKeys;
 		int nErrorNo = enumKeys.SetFileKeys(m_szFile);
-		if (1 == nErrorNo) {
+		if (nErrorNo == 1) {
 			WarningMessage(	GetHwnd(), LS(STR_DLGGREP2));
 			return FALSE;
 		}else if (nErrorNo == 2) {

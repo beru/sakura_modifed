@@ -58,7 +58,7 @@ bool CUxTheme::InitThemeDll(TCHAR* str)
 		return IsAvailable();
 	}
 	m_bInitialized = true;
-	return DLL_SUCCESS == CDllImp::InitDll(str);
+	return CDllImp::InitDll(str) == DLL_SUCCESS;
 }
 
 /*!

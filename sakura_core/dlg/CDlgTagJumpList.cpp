@@ -1119,7 +1119,7 @@ int CDlgTagJumpList::find_key_core(
 		return -1;
 	}
 	// 往復変換してみて一致しなかったら、検索キーには一致しないということにする
-	if (0 != wcscmp(to_wchar(paszKeyword), keyword)) {
+	if (wcscmp(to_wchar(paszKeyword), keyword) != 0) {
 		ClearPrevFindInfo();
 		return -1;
 	}
@@ -1203,8 +1203,8 @@ int CDlgTagJumpList::find_key_core(
 				int  nRet;
 				// fgetsが行すべてを読み込めていない場合の考慮
 				if (1
-					&& '\0' != szLineData[nLINEDATA_LAST_CHAR]
-				    && '\n' != szLineData[nLINEDATA_LAST_CHAR]
+					&& szLineData[nLINEDATA_LAST_CHAR] != '\0'
+				    && szLineData[nLINEDATA_LAST_CHAR] != '\n'
 				) {
 					// 改行コードまでを捨てる
 					int ch = fgetc(fp);
@@ -1212,11 +1212,11 @@ int CDlgTagJumpList::find_key_core(
 						ch = fgetc(fp);
 					}
 				}
-				if (1 == nLines && szLineData[0] == '\x0c') {
+				if (nLines == 1 && szLineData[0] == '\x0c') {
 					// etagsなので次のファイル
 					break;
 				}
-				if ('!' == szLineData[0]) {
+				if (szLineData[0] == '!') {
 					if (strncmp_literal(szLineData + 1, "_TAG_") == 0) {
 						s[0][0] = s[1][0] = s[2][0] = 0;
 						nRet = sscanf(
@@ -1233,8 +1233,8 @@ int CDlgTagJumpList::find_key_core(
 							}
 						}else if (strncmp_literal(pTag, "FILE_SORTED") == 0) {
 							n2 = atoi(s[1]);
-							bSorted   = (1 == n2);
-							bFoldcase = (2 == n2);
+							bSorted = (n2 == 1);
+							bFoldcase = (n2 == 2);
 							if (bTagJumpICaseByTags) {
 								bTagJumpICase = bFoldcase;
 							}
@@ -1272,13 +1272,15 @@ int CDlgTagJumpList::find_key_core(
 					}
 					goto next_line;	// コメントならスキップ
 				}
-				if (szLineData[0] < '!') goto next_line;
+				if (szLineData[0] < '!') {
+					goto next_line;
+				}
 				//chop(szLineData);
 
 				s[0][0] = s[1][0] = s[2][0] = s[3][0] = '\0';
 				n2 = 0;
 				// @@ 2005.03.31 MIK TAG_FORMAT定数化
-				if (2 == nTagFormat) {
+				if (nTagFormat == 2) {
 					nRet = sscanf(
 						szLineData, 
 						TAG_FORMAT_2_A,	// 拡張tagsフォーマット

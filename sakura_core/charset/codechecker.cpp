@@ -714,12 +714,12 @@ int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bo
 	echarset = echarset1;
 	c0 = pS[0];
 	if (echarset1 == CHARSET_BINARY) {
-		if (1 == nLen && (c0 & 0xe0) == 0xc0) {	// 第１バイトが110aaabbの場合
+		if (nLen == 1 && (c0 & 0xe0) == 0xc0) {	// 第１バイトが110aaabbの場合
 			echarset = CHARSET_BINARY2;
 			ncwidth = 1;
 			goto EndFunc;
 		}else
-		if (2 == nLen && (c0 & 0xf0) == 0xe0) {	// 第１バイトが1110aaaaの場合
+		if (nLen == 2 && (c0 & 0xf0) == 0xe0) {	// 第１バイトが1110aaaaの場合
 			c1 = pS[1];
 			// 第２バイトが10bbbbcc、第３バイトが10ccddddの場合
 			if ((c1 & 0xc0) == 0x80) {
@@ -742,7 +742,7 @@ int CheckUtf8Char2(const char* pS, const int nLen, ECharSet* peCharset, const bo
 				goto EndFunc;
 			}
 		}else
-		if (1 == nLen && (c0 & 0xf0) == 0xe0) {
+		if (nLen == 1 && (c0 & 0xf0) == 0xe0) {
 			echarset = CHARSET_BINARY2;
 			ncwidth = 1;
 			goto EndFunc;

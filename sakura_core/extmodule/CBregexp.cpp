@@ -54,8 +54,8 @@ const wchar_t CBregexp::m_tmpBuf[2] = L"\0";
 
 
 CBregexp::CBregexp()
-: m_pRegExp(NULL)
-, m_ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
+	: m_pRegExp(NULL)
+	, m_ePatType(PAT_NORMAL)	// Jul, 25, 2002 genta
 {
 	m_szMsg[0] = L'\0';
 }

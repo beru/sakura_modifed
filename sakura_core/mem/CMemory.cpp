@@ -105,8 +105,8 @@ void CMemory::_AddData(const void* pData, int nDataLen)
 	}
 	memcpy(&m_pRawData[m_nRawLen], pData, nDataLen);
 	m_nRawLen += nDataLen;
-	m_pRawData[m_nRawLen]   = '\0';
-	m_pRawData[m_nRawLen + 1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
+	m_pRawData[m_nRawLen] = '\0';
+	m_pRawData[m_nRawLen+1] = '\0'; // 終端'\0'を2つ付加する('\0''\0' == L'\0')。 2007.08.13 kobake 追加
 	return;
 }
 
@@ -114,8 +114,8 @@ void CMemory::_AddData(const void* pData, int nDataLen)
 // 等しい内容か
 int CMemory::IsEqual(CMemory& cmem1, CMemory& cmem2)
 {
-	int		nLen1;
-	int		nLen2;
+	int nLen1;
+	int nLen2;
 	const char*	psz1 = (const char*)cmem1.GetRawPtr(&nLen1);
 	const char*	psz2 = (const char*)cmem2.GetRawPtr(&nLen2);
 	if (nLen1 == nLen2) {
@@ -284,7 +284,7 @@ void CMemory::AllocBuffer(int nNewDataLen)
 		::MYMESSAGEBOX(	NULL, MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
 			LS(STR_ERR_DLGMEM1), nNewDataLen
 		);
-		if (m_pRawData && 0 != nWorkLen) {
+		if (m_pRawData && nWorkLen != 0) {
 			// 古いバッファを解放して初期化
 			_Empty();
 		}

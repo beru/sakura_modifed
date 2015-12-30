@@ -325,7 +325,7 @@ void CColorStrategyPool::OnChangeSetting(void)
 	int nKeyword1;
 	int bUnuseKeyword = false;
 	for (int n=0; n<_countof(bSkipColorTypeTable); ++n) {
-		if (COLORIDX_KEYWORD1 == bSkipColorTypeTable[n]) {
+		if (bSkipColorTypeTable[n] == COLORIDX_KEYWORD1) {
 			nKeyword1 = n;
 		}
 		if (COLORIDX_KEYWORD1 <= bSkipColorTypeTable[n]

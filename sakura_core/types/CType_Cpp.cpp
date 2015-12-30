@@ -461,7 +461,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
 		//	コメント中でなければプリプロセッサ指令を先に判定させる
-		if (8 != nMode && 10 != nMode) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
+		if (nMode != 8 && nMode != 10) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
 			i = cCppPMng.ScanLine(pLine, nLineLen);
 		}else {
 			i = CLogicInt(0);
@@ -931,7 +931,7 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 					continue;
 				}else if (')' == pLine[i]) {
 					//  2002/10/27 frozen ここから
-//					if (1 == nNestLevel2) {
+//					if (nNestLevel2 == 1) {
 //						nNestLevel2 = 2;
 //					}
 //					nMode = 0;

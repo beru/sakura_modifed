@@ -213,7 +213,7 @@ ECodeType CFileLoad::FileOpen(
 	bool bEolEx = false;
 	int nMaxEolLen = 0;
 	for (int k=0; k<(int)_countof(m_memEols); ++k) {
-		if (0 != m_memEols[k].GetRawLength()) {
+		if (m_memEols[k].GetRawLength() != 0) {
 			bEolEx = true;
 			nMaxEolLen = t_max(nMaxEolLen, m_memEols[k].GetRawLength());
 		}
@@ -502,7 +502,7 @@ const char* CFileLoad::GetNextLineCharCode(
 				if (m_bEolEx) {
 					int k;
 					for (k=0; k<(int)_countof(eEolEx); ++k) {
-						if (0 != m_memEols[k].GetRawLength()
+						if (m_memEols[k].GetRawLength() != 0
 							&& i + m_memEols[k].GetRawLength() - 1 < nDataLen
 							&& memcmp( m_memEols[k].GetRawPtr(), pData + i, m_memEols[k].GetRawLength()) == 0
 						) {

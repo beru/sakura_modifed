@@ -107,7 +107,6 @@ int CDlgDiff::DoModal(
 )
 {
 	_tcscpy(m_szFile1, pszPath);
-
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_DIFF, lParam);
 }
 
@@ -121,8 +120,8 @@ BOOL CDlgDiff::OnBnClicked(int wID)
 
 	case IDC_BUTTON_DIFF_DST:	// 参照
 		{
-			CDlgOpenFile	cDlgOpenFile;
-			TCHAR			szPath[_MAX_PATH];
+			CDlgOpenFile cDlgOpenFile;
+			TCHAR szPath[_MAX_PATH];
 			_tcscpy(szPath, m_szFile2);
 			// ファイルオープンダイアログの初期化
 			cDlgOpenFile.Create(
@@ -228,11 +227,7 @@ void CDlgDiff::SetData(void)
 
 	// 編集中のファイル一覧を作成する
 	{
-		HWND		hwndList;
-		int			nRowNum;
 		EditNode*	pEditNode;
-		EditInfo*	pFileInfo;
-		int			i;
 		int			nItem;
 		WIN_CHAR	szName[_MAX_PATH];
 		int			count = 0;
@@ -242,21 +237,21 @@ void CDlgDiff::SetData(void)
 
 		// 自分の文字コードを取得
 		::SendMessage(CEditWnd::getInstance()->GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-		pFileInfo = &m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
+		EditInfo* pFileInfo = &m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 		code = pFileInfo->m_nCharCode;
 
 		// リストのハンドル取得
-		hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
+		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 
 		// 現在開いている編集窓のリストをメニューにする
-		nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
+		int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNode, TRUE);
 		if (nRowNum > 0) {
 			// 水平スクロール幅は実際に表示する文字列の幅を計測して決める	// 2009.09.26 ryoji
 			CTextWidthCalc calc(hwndList);
 			int score = 0;
 			TCHAR szFile1[_MAX_PATH];
 			SplitPath_FolderAndFile(m_szFile1, NULL, szFile1);
-			for (i=0; i<nRowNum; ++i) {
+			for (int i=0; i<nRowNum; ++i) {
 				// トレイからエディタへの編集ファイル名要求通知
 				::SendMessage(pEditNode[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
 				pFileInfo = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
@@ -360,20 +355,15 @@ int CDlgDiff::GetData(void)
 		if (m_szFile2[0] == '\0') ret = FALSE;
 
 	}else if (IsButtonChecked(IDC_RADIO_DIFF_DST2)) {
-		HWND		hwndList;
-		int			nItem;
-		EditInfo*	pFileInfo;
-
 		// リストから相手のウインドウハンドルを取得
-		hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
-		nItem = List_GetCurSel(hwndList);
+		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
+		int nItem = List_GetCurSel(hwndList);
 		if (nItem != LB_ERR) {
 			m_hWnd_Dst = (HWND)List_GetItemData(hwndList, nItem);
 
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(m_hWnd_Dst, MYWM_GETFILEINFO, 0, 0);
-			pFileInfo = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
-
+			EditInfo* pFileInfo = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
 			_tcscpy(m_szFile2, pFileInfo->m_szPath);
 			m_bIsModifiedDst = pFileInfo->m_bIsModified;
 			m_nCodeTypeDst = pFileInfo->m_nCharCode;

@@ -1107,7 +1107,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		if (bMenuIconDraw
 #ifdef DRAW_MENU_ICON_BACKGROUND_3DFACE
 #else
-			&& -1 != m_menuItems[nItemIndex].m_nBitmapIdx || lpdis->itemState & ODS_CHECKED
+			&& m_menuItems[nItemIndex].m_nBitmapIdx != -1 || lpdis->itemState & ODS_CHECKED
 #endif
 		) {
 			//rc1.left += (nIndentLeft - 3);
@@ -1322,7 +1322,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	}
 
 	/* 機能の画像が存在するならメニューアイコン?を描画する */
-	if (bMenuIconDraw && -1 != m_menuItems[nItemIndex].m_nBitmapIdx) {
+	if (bMenuIconDraw && m_menuItems[nItemIndex].m_nBitmapIdx != -1) {
 		/* 3D枠を描画する */
 		/* アイテムが選択されている */
 		if (lpdis->itemState & ODS_SELECTED) {

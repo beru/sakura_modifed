@@ -503,7 +503,7 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 		int	nCharChars = &common.m_sBackup.m_szBackUpFolder[nDummy]
 			- CNativeT::GetCharPrev(common.m_sBackup.m_szBackUpFolder, nDummy, &common.m_sBackup.m_szBackUpFolder[nDummy]);
 		if (1
-			&& 1 == nCharChars
+			&& nCharChars == 1
 			&& common.m_sBackup.m_szBackUpFolder[nDummy - 1] == '\\'
 		) {
 		}else {
@@ -519,7 +519,7 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 		nCharChars = &common.m_sBackup.m_szBackUpFolder[nDummy]
 			- CNativeT::GetCharPrev(common.m_sBackup.m_szBackUpFolder, nDummy, &common.m_sBackup.m_szBackUpFolder[nDummy]);
 		if (1
-			&& 1 == nCharChars
+			&& nCharChars == 1
 			&& common.m_sBackup.m_szBackUpFolder[nDummy - 1] == '\\'
 		) {
 		}else {
@@ -2281,11 +2281,11 @@ void CShareData_IO::IO_ColorSet(CDataProfile* pcProfile, const WCHAR* pszSecName
 			// 2006.12.18 ryoji
 			// ñµèÇê›íËÇ™Ç†ÇÍÇŒèCïúÇ∑ÇÈ
 			unsigned int fAttribute = g_ColorAttributeArr[j].fAttribute;
-			if (0 != (fAttribute & COLOR_ATTRIB_FORCE_DISP))
+			if ((fAttribute & COLOR_ATTRIB_FORCE_DISP) != 0)
 				pColorInfoArr[j].m_bDisp = true;
-			if (0 != (fAttribute & COLOR_ATTRIB_NO_BOLD))
+			if ((fAttribute & COLOR_ATTRIB_NO_BOLD) != 0)
 				pColorInfoArr[j].m_sFontAttr.m_bBoldFont = false;
-			if (0 != (fAttribute & COLOR_ATTRIB_NO_UNDERLINE))
+			if ((fAttribute & COLOR_ATTRIB_NO_UNDERLINE) != 0)
 				pColorInfoArr[j].m_sFontAttr.m_bUnderLine = false;
 		}else {
 			auto_sprintf(szKeyData, pszForm,

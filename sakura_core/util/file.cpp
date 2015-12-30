@@ -62,7 +62,7 @@ bool IsFilePath(
 	int*			pnBgn,		// [out] 先頭offset。pLine + *pnBgnがファイル名先頭へのポインタ。
 	int*			pnPathLen,	// [out] ファイル名の長さ
 	bool			bFileOnly	// [in]  true: ファイルのみ対象 / false: ディレクトリも対象
-)
+	)
 {
 	wchar_t	szJumpToFile[_MAX_PATH];
 	wmemset(szJumpToFile, 0, _countof(szJumpToFile));
@@ -221,10 +221,11 @@ FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, BOOL bOrExedir/*=TRUE*/)
 {
 	if (_IS_REL_PATH(fname)) {
 		TCHAR path[_MAX_PATH];
-		if (bOrExedir)
+		if (bOrExedir) {
 			GetInidirOrExedir(path, fname);
-		else
+		}else {
 			GetInidir(path, fname);
+		}
 		return _tfopen(path, mode);
 	}
 	return _tfopen(fname, mode);
@@ -314,7 +315,7 @@ void SplitPath_FolderAndFile(const TCHAR* pszFilePath, TCHAR* pszFolder, TCHAR* 
 		int nFolderLen = _tcslen(pszFolder);
 		if (0 < nFolderLen) {
 			int nCharChars = &pszFolder[nFolderLen] - CNativeT::GetCharPrev(pszFolder, nFolderLen, &pszFolder[nFolderLen]);
-			if (1 == nCharChars && _T('\\') == pszFolder[nFolderLen - 1]) {
+			if (nCharChars == 1 && pszFolder[nFolderLen - 1] == _T('\\')) {
 				pszFolder[nFolderLen - 1] = _T('\0');
 			}
 		}
@@ -342,7 +343,7 @@ void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* psz
 	if (*(out-1) != '\\') { *out++ = '\\'; }
 #else
 	if (*(out-1) != '\\' ||
-		(1 == out - CNativeT::GetCharPrev(pszDir, out - pszDir, out))
+		(out - CNativeT::GetCharPrev(pszDir, out - pszDir, out) == 1)
 	) {
 		*out++ = '\\';
 	}

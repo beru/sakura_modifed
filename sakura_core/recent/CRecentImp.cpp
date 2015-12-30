@@ -248,7 +248,7 @@ bool CRecentImp<T, S>::AppendItemText(LPCTSTR pText)
 		return false;
 	}
 	int findIndex = FindItem(receiveData);
-	if (-1 != findIndex) {
+	if (findIndex != -1) {
 		return false;
 	}
 	return AppendItem(receiveData);
@@ -267,7 +267,7 @@ bool CRecentImp<T, S>::EditItemText(int nIndex, LPCTSTR pText)
 		return false;
 	}
 	int findIndex = FindItem(receiveData);
-	if (-1 != findIndex && nIndex != findIndex) {
+	if (findIndex != -1 && nIndex != findIndex) {
 		// 重複不可。ただし同じ場合は大文字小文字の変更かもしれないのでOK
 		return false;
 	}

@@ -1677,7 +1677,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 
 	case TWNT_DEL:	// ウインドウ削除
 		nIndex = FindTabIndexByHWND((HWND)lParam);
-		if (-1 != nIndex) {
+		if (nIndex != -1) {
 			if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
 				if (!::IsWindowVisible(GetParentHwnd())) {
 					ShowHideWindow(GetParentHwnd(), TRUE);
@@ -2972,7 +2972,7 @@ void CTabWnd::MoveLeft(void)
 {
 	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd) {
 		int nIndex = FindTabIndexByHWND(GetParentHwnd());
-		if (-1 != nIndex) {
+		if (nIndex != -1) {
 			if (0 < nIndex) {
 				if (ReorderTab(nIndex, nIndex - 1)) {
 					BroadcastRefreshToGroup();

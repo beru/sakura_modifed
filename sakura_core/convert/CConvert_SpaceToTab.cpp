@@ -18,7 +18,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 	int			nPosX;
 	CEol		cEol;
 
-	BOOL		bSpace = FALSE;	// スペースの処理中かどうか
+	bool		bSpace = false;	// スペースの処理中かどうか
 	int		j;
 	int		nStartPos;
 
@@ -42,14 +42,14 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 		if (0 < nLineLen) {
 			// 先頭行については開始桁位置を考慮する（さらに折り返し関連の対策が必要？）
 			nPosX = (pcData->GetStringPtr() == pLine)? m_nStartColumn: 0;	// 処理中のiに対応する表示桁位置
-			bSpace = FALSE;	// 直前がスペースか
+			bSpace = false;	// 直前がスペースか
 			nStartPos = 0;	// スペースの先頭
 			for (i=0; i<nLineLen; ++i) {
 				if (SPACE == pLine[i] || TAB == pLine[i]) {
-					if (bSpace == FALSE) {
+					if (!bSpace) {
 						nStartPos = nPosX;
 					}
-					bSpace = TRUE;
+					bSpace = true;
 					if (SPACE == pLine[i]) {
 						++nPosX;
 					}else if (TAB == pLine[i]) {
@@ -57,7 +57,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					}
 				}else {
 					if (bSpace) {
-						if ((1 == nPosX - nStartPos) && (SPACE == pLine[i - 1])) {
+						if ((nPosX - nStartPos == 1) && (pLine[i - 1] == SPACE)) {
 							pDes[nPosDes] = SPACE;
 							++nPosDes;
 						}else {
@@ -79,7 +79,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 					if (WCODE::IsZenkaku(pLine[i])) ++nPosX;		// 全角文字ずれ対応 2008.10.17 matsumo
 					pDes[nPosDes] = pLine[i];
 					++nPosDes;
-					bSpace = FALSE;
+					bSpace = false;
 				}
 			}
 			//for (; i<nLineLen; ++i) {

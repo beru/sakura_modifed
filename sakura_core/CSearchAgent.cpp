@@ -848,7 +848,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 			// 行挿入
 			bLastEOLReplace = true; // 仮。後で修正
 		}else {
-			if (1 == pArg->pInsData->size()) {
+			if (pArg->pInsData->size() == 1) {
 				bChangeOneLine = true; // 「abc\ndef」=>「123」のような置換もtrueなのに注意
 			}
 		}

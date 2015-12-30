@@ -507,7 +507,7 @@ void CTextDrawer::DispLineNumber(
 			nLineNumCols = nLineCols; // 2010.08.17 Moca ˆÊ’uŒˆ’è‚És”Ô†‹æØ‚è‚ÍŠÜ‚ß‚È‚¢
 
 			// s”Ô†‹æØ‚è 0=‚È‚µ 1=cü 2=”CˆÓ
-			if (2 == pTypes->m_nLineTermType) {
+			if (pTypes->m_nLineTermType == 2) {
 				//	Sep. 22, 2002 genta
 				szLineNum[nLineCols] = pTypes->m_cLineTermChar;
 				szLineNum[++nLineCols] = '\0';
@@ -527,7 +527,7 @@ void CTextDrawer::DispLineNumber(
 		);
 
 		// s”Ô†‹æØ‚è 0=‚È‚µ 1=cü 2=”CˆÓ
-		if (1 == pTypes->m_nLineTermType) {
+		if (pTypes->m_nLineTermType == 1) {
 			RECT rc;
 			rc.left = nLineNumAreaWidth - 2;
 			rc.top = y;

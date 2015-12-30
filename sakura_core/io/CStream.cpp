@@ -130,14 +130,14 @@ void CStream::Close()
 
 void CStream::SeekSet(	// シーク
 	long offset	// ストリーム先頭からのオフセット 
-)
+	)
 {
 	fseek(m_fp, offset, SEEK_SET);
 }
 
 void CStream::SeekEnd(  // シーク
 	long offset // ストリーム終端からのオフセット
-)
+	)
 {
 	fseek(m_fp, offset, SEEK_END);
 }

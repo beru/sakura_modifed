@@ -311,7 +311,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 			// ロングファイル名にする
 			nPathLen = _tcslen(szPath);
 			LPTSTR pStr2 = szPath;
-			if (nPathLen < _MAX_PATH && 0 != nPathLen) {
+			if (nPathLen < _MAX_PATH && nPathLen != 0) {
 				if (FALSE != GetLongFileName(szPath, szMeta)) {
 					pStr2 = szMeta;
 				}
@@ -332,7 +332,7 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 				}
 			}
 
-			if (pd + nPathLen < pd_end && 0 != nPathLen) {
+			if (pd + nPathLen < pd_end && nPathLen != 0) {
 				auto_memcpy(pd, pStr2, nPathLen);
 				pd += nPathLen;
 				ps += nMetaLen;

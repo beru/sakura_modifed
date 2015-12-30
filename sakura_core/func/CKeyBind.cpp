@@ -390,9 +390,9 @@ int CKeyBind::GetKeyStrList(
 */
 TCHAR* CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 {
-	const int MAX_LABEL_CCH = _MAX_PATH*2 + 30;
-	static	TCHAR	sLabel[MAX_LABEL_CCH];
-	const	TCHAR*	p;
+	const int MAX_LABEL_CCH = _MAX_PATH * 2 + 30;
+	static TCHAR sLabel[MAX_LABEL_CCH];
+	const TCHAR* p;
 
 	if (!sKey || sKey[0] == L'\0') {
 		return const_cast<TCHAR*>(sName);
@@ -425,7 +425,6 @@ TCHAR* CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 		}else {
 			auto_sprintf_s(sLabel, _countof(sLabel), _T("%ts(&%ts)"), sName, sKey);
 		}
-
 		return sLabel;
 	}
 }
@@ -448,7 +447,6 @@ TCHAR* CKeyBind::GetMenuLabel(
 	)
 {
 	const unsigned int LABEL_MAX = nLabelSize;
-
 	if (pszLabel[0] == _T('\0')) {
 		_tcsncpy(pszLabel, LS(nFuncId), LABEL_MAX - 1);
 		pszLabel[LABEL_MAX - 1] = _T('\0');
@@ -489,8 +487,9 @@ TCHAR* CKeyBind::GetMenuLabel(
 EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();
-	if (!pShareData)
+	if (!pShareData) {
 		return F_DEFAULT;
+	}
 
 	EFunctionCode nDefFuncCode = F_DEFAULT;
 	if (nKeyCode == VK_F4) {
@@ -827,7 +826,6 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	for (int i=nKeyDataInitNum-1; i>=0; --i) {
 		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
 	}
-
 	for (int i=0; i<nKeyDataInitNum; ++i) {
 		SetKeyNameArrVal(pShareData, i, &KeyDataInit[i]);
 	}
@@ -839,15 +837,12 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
-
 	for (int i=0; i<nKeyDataInitNum; ++i) {
 		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];
-
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {
 			_tcscpy(pKeydata->m_szKeyName, LS(KeyDataInit[i].m_nKeyNameId));
 		}
 	}
-
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -859,10 +854,9 @@ static void SetKeyNameArrVal(
 	DLLSHAREDATA*		pShareData,
 	int					nIdx,
 	const KEYDATAINIT*	pKeydataInit
-)
+	)
 {
 	KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[nIdx];
-
 	pKeydata->m_nKeyCode = pKeydataInit->m_nKeyCode;
 	if (0xFFFF < pKeydataInit->m_nKeyNameId) {
 		_tcscpy(pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName);

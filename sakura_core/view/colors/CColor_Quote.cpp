@@ -261,7 +261,7 @@ int CColor_Quote::Match_Quote(
 		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
 		if (escapeType == STRING_LITERAL_CPP) {
 			// エスケープ \"
-			if (1 == nCharChars && cLineStr.At(i) == L'\\') {
+			if (nCharChars == 1 && cLineStr.At(i) == L'\\') {
 				++i;
 				if (
 					i < cLineStr.GetLength()
@@ -274,12 +274,12 @@ int CColor_Quote::Match_Quote(
 						*pbEscapeEnd = true;
 					}
 				}
-			}else if (1 == nCharChars && cLineStr.At(i) == wcQuote) {
+			}else if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
 				return i + 1;
 			}
 		}else if (escapeType == STRING_LITERAL_PLSQL) {
 			// エスケープ ""
-			if (1 == nCharChars && cLineStr.At(i) == wcQuote) {
+			if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
 				if (i + 1 < cLineStr.GetLength() && cLineStr.At(i + 1) == wcQuote) {
 					++i;
 				}else {
@@ -288,11 +288,11 @@ int CColor_Quote::Match_Quote(
 			}
 		}else {
 			// エスケープなし
-			if (1 == nCharChars && cLineStr.At(i) == wcQuote) {
+			if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
 				return i + 1;
 			}
 		}
-		if (2 == nCharChars) {
+		if (nCharChars == 2) {
 			++i;
 		}
 	}

@@ -177,7 +177,7 @@ void CDlgSetCharSet::SetData(void)
 	// 文字コードセット
 	CCodeTypesForCombobox cCodeTypes;
 
-	int nIdxOld = Combo_GetCurSel( m_hwndCharSet );
+	int nIdxOld = Combo_GetCurSel(m_hwndCharSet);
 	int nCurIdx = -1;
 	for (int nIdx=0; nIdx<Combo_GetCount(m_hwndCharSet); ++nIdx) {
 		ECodeType nCharSet = (ECodeType)Combo_GetItemData( m_hwndCharSet, nIdx );
@@ -189,7 +189,7 @@ void CDlgSetCharSet::SetData(void)
 		m_bCP = true;
 		CheckButton(IDC_CHECK_CP, true);
 		EnableItem(IDC_CHECK_CP, false);
-		nCurIdx = CCodePage::AddComboCodePages( GetHwnd(), m_hwndCharSet, *m_pnCharSet );
+		nCurIdx = CCodePage::AddComboCodePages(GetHwnd(), m_hwndCharSet, *m_pnCharSet);
 		if (nCurIdx == -1) {
 			nCurIdx = nIdxOld;
 		}

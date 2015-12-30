@@ -918,7 +918,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	// 取得にステップがかかりそうな変数などを、一時変数化する。
 	// とはいえ、これらの操作をすることによって得をするクロック数は合わせても 1 ループで数十だと思います。
 	// 数百クロック毎ループのオーダーから考えてもそんなに得はしないように思いますけど・・・。
-	BOOL& bCANCEL = cDlgCancel.m_bCANCEL;
+	bool& bCANCEL = cDlgCancel.m_bCANCEL;
 	CDocLineMgr& rDocLineMgr = GetDocument()->m_cDocLineMgr;
 
 	// クラス関係をループの中で宣言してしまうと、毎ループごとにコンストラクタ、デストラクタが
@@ -1429,7 +1429,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	}
 	// To Here 2001.12.03 hor
 
-	dlgReplace.m_bCanceled = (cDlgCancel.IsCanceled() != FALSE);
+	dlgReplace.m_bCanceled = cDlgCancel.IsCanceled();
 	dlgReplace.m_nReplaceCnt = nReplaceNum;
 	m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 	ActivateFrameWindow(GetMainWindow());

@@ -155,7 +155,7 @@ ECharKind CWordParse::WhatKindOfChar(
 	}else if (nCharChars == 2) {
 		// サロゲートペア 2008/7/8 Uchi
 		if (IsUTF16High(pData[nIdx]) && IsUTF16Low(pData[nIdx + 1])) {
-			int		nCode = 0x10000 + ((pData[nIdx] & 0x3FF)<<10) + (pData[nIdx + 1] & 0x3FF);	// コードポイント
+			int nCode = 0x10000 + ((pData[nIdx] & 0x3FF)<<10) + (pData[nIdx + 1] & 0x3FF);	// コードポイント
 			if (nCode >= 0x20000 && nCode <= 0x2FFFF) {	// CJKV 拡張予約域 Ext-B/Ext-C...
 				return CK_ZEN_ETC;				// 全角のその他(漢字など)
 			}
@@ -179,7 +179,7 @@ ECharKind CWordParse::WhatKindOfTwoChars(
 
 	// 全角長音・全角濁点は前後の全角ひらがな・全角カタカナに引きずられる
 	if ((kindPre == CK_ZEN_NOBASU || kindPre == CK_ZEN_DAKU) &&
-		(kindCur == CK_ZEN_KATA   || kindCur == CK_HIRA     )
+		(kindCur == CK_ZEN_KATA   || kindCur == CK_HIRA)
 	) {
 		return kindCur;
 	}
@@ -260,8 +260,8 @@ bool CWordParse::SearchNextWordPosition(
 	const wchar_t*	pLine,
 	CLogicInt		nLineLen,
 	CLogicInt		nIdx,			//	桁数
-	CLogicInt*		pnColumnNew,		//	見つかった位置
-	BOOL				bStopsBothEnds	//	単語の両端で止まる
+	CLogicInt*		pnColumnNew,	//	見つかった位置
+	BOOL			bStopsBothEnds	//	単語の両端で止まる
 )
 {
 	// 文字種類が変わるまで後方へサーチ

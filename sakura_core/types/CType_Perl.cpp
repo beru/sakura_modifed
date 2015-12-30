@@ -111,7 +111,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 					i += 3;
 				}else
 					break;
-			}else if (2 == nMode) {
+			}else if (nMode == 2) {
 				if (L'\t' == pLine[i] ||
 					L' ' == pLine[i] ||
 					WCODE::IsLineDelimiter(pLine[i], bExtEol)
@@ -132,7 +132,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 				}else {
 					break;
 				}
-			}else if (1 == nMode) {
+			}else if (nMode == 1) {
 				if (L'_' == pLine[i] ||
 					(L'a' <= pLine[i] &&	pLine[i] <= L'z')||
 					(L'A' <= pLine[i] &&	pLine[i] <= L'Z')||

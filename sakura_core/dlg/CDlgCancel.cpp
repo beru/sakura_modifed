@@ -15,7 +15,7 @@
 
 CDlgCancel::CDlgCancel()
 {
-	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
+	m_bCANCEL = false;	// IDCANCELボタンが押された
 	m_bAutoCleanup = false;
 }
 
@@ -29,8 +29,7 @@ INT_PTR CDlgCancel::DispatchEvent(
 	LPARAM lParam
 	)
 {
-	INT_PTR result;
-	result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
+	INT_PTR result = CDialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
 	switch (wMsg) {
 	case WM_CLOSE:
 		if (m_bAutoCleanup) {
@@ -64,7 +63,7 @@ int CDlgCancel::DoModal(
 	int nDlgTemplete
 	)
 {
-	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
+	m_bCANCEL = false;	// IDCANCELボタンが押された
 	return (int)CDialog::DoModal(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL);
 }
 
@@ -75,7 +74,7 @@ HWND CDlgCancel::DoModeless(
 	int nDlgTemplete
 	)
 {
-	m_bCANCEL = FALSE;	// IDCANCELボタンが押された
+	m_bCANCEL = false;	// IDCANCELボタンが押された
 	return CDialog::DoModeless(hInstance, hwndParent, nDlgTemplete, (LPARAM)NULL, SW_SHOW);
 }
 
@@ -104,7 +103,7 @@ BOOL CDlgCancel::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDCANCEL:
-		m_bCANCEL = TRUE;	// IDCANCELボタンが押された
+		m_bCANCEL = true;	// IDCANCELボタンが押された
 //		CloseDialog(0);
 		return TRUE;
 	}

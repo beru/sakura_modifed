@@ -2390,7 +2390,7 @@ void CEditView::CaretUnderLineON(bool bDraw, bool bDrawPaint, bool DisalbeUnderL
 		&& bCursorLineBg
 		&& GetDrawSwitch()
 		&& GetCaret().GetCaretLayoutPos().GetY2() >= GetTextArea().GetViewTopLine()
-		&& m_bDoing_UndoRedo == FALSE	// アンドゥ・リドゥの実行中か
+		&& !m_bDoing_UndoRedo	// アンドゥ・リドゥの実行中か
 	) {
 		bCursorLineBgDraw = true;
 
@@ -2508,7 +2508,7 @@ void CEditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, 
 	) {
 		return;
 	}
-	if (-1 != m_nOldUnderLineY) {
+	if (m_nOldUnderLineY != -1) {
 		if (1
 			&& bDraw
 			&& GetDrawSwitch()
@@ -2571,7 +2571,7 @@ void CEditView::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag, 
 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	// カーソル位置縦線
-	if (-1 != m_nOldCursorLineX) {
+	if (m_nOldCursorLineX != -1) {
 		if (1
 			&& bDraw
 			&& GetDrawSwitch()
