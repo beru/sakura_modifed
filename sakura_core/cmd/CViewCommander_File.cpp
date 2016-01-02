@@ -176,8 +176,9 @@ bool CViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 
 	// ファイル名が指定されていない場合は「名前を付けて保存」のフローへ遷移
 	if (!GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		if (!askname)
+		if (!askname) {
 			return false;	// 保存しない
+		}
 		return pcDoc->m_cDocFileOperation.FileSaveAs();
 	}
 
@@ -278,7 +279,7 @@ void CViewCommander::Command_FILE_REOPEN(
 			LS(STR_ERR_CEDITVIEW_CMD29),
 			pcDoc->m_cDocFile.GetFilePath()
 		);
-		if (IDOK == nDlgResult) {
+		if (nDlgResult == IDOK) {
 			// 継続。下へ進む
 		}else {
 			return; // 中断

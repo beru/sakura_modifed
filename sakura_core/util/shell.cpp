@@ -224,7 +224,7 @@ static LRESULT CALLBACK PropSheetWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 					GSTR_APPNAME,
 					LS(STR_SHELL_IMPEXPDIR)
 				);
-				if (IDOK == nMsgResult) {
+				if (nMsgResult == IDOK) {
 					DLLSHAREDATA *pShareData = &GetDllShareData();
 					GetInidir(pShareData->m_sHistory.m_szIMPORTFOLDER);
 					AddLastChar(pShareData->m_sHistory.m_szIMPORTFOLDER, _countof2(pShareData->m_sHistory.m_szIMPORTFOLDER), _T('\\'));

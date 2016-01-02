@@ -508,8 +508,8 @@ bool CViewCommander::Command_TagsMake(void)
 		bool	bLoopFlag = true;
 
 		// 中断ダイアログ表示
-		HWND	hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING);
-		HWND	hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_CMD);
+		HWND hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), m_pCommanderView->m_hwndParent, IDD_EXECRUNNING);
+		HWND hwndMsg = ::GetDlgItem(hwndCancel, IDC_STATIC_CMD);
 		SetWindowText(hwndMsg, LS(STR_ERR_CEDITVIEW_CMD05));
 
 		// 実行結果の取り込み

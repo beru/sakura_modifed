@@ -96,7 +96,7 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 	WORD	wNotifyCode;
 	WORD	wID;
 	NMHDR*	pNMHDR;
-	NM_UPDOWN*			pMNUD;		// ’Ç‰Á 2014.08.02 katze
+	NM_UPDOWN* pMNUD;		// ’Ç‰Á 2014.08.02 katze
 
 	switch (uMsg) {
 	case WM_INITDIALOG:

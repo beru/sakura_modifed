@@ -3307,9 +3307,11 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 			PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)hwndEdit);	// 他ウィンドウにドッキング配置変更を通知する
 		}
 	}else if (nId == 305) {	// 設定コピー
-		if (IDOK == ::MYMESSAGEBOX(hwndEdit,
-						MB_OKCANCEL | MB_ICONINFORMATION, GSTR_APPNAME,
-						LS(STR_DLGFNCLST_UNIFY))
+		if (::MYMESSAGEBOX(
+				hwndEdit,
+				MB_OKCANCEL | MB_ICONINFORMATION, GSTR_APPNAME,
+				LS(STR_DLGFNCLST_UNIFY
+			) == IDOK)
 		) {
 			CommonSet().m_bOutlineDockDisp = GetHwnd()? TRUE: FALSE;
 			CommonSet().m_eOutlineDockSide = GetDockSide();

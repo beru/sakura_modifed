@@ -725,9 +725,9 @@ void CViewCommander::Command_REPLACE_ALL()
 	// 2002.02.10 hor
 	BOOL nPaste			= dlgReplace.m_nPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
-	BOOL bRegularExp	= m_pCommanderView->m_sCurSearchOption.bRegularExp;
-	BOOL bSelectedArea	= dlgReplace.m_bSelectedArea;
-	BOOL bConsecutiveAll = dlgReplace.m_bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	bool bRegularExp	= m_pCommanderView->m_sCurSearchOption.bRegularExp;
+	bool bSelectedArea	= dlgReplace.m_bSelectedArea;
+	bool bConsecutiveAll = dlgReplace.m_bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	if (nPaste && nReplaceTarget == 3) {
 		// 置換対象：行削除のときは、クリップボードから貼り付けを無効にする
 		nPaste = FALSE;
@@ -744,12 +744,11 @@ void CViewCommander::Command_REPLACE_ALL()
 		return;	// TRUE;
 	}
 	// To Here 2001.12.03 hor
-
-	bool		bBeginBoxSelect; // 矩形選択？
+	bool bBeginBoxSelect; // 矩形選択？
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
 		bBeginBoxSelect = m_pCommanderView->GetSelectionInfo().IsBoxSelecting();
 	}else {
-		bSelectedArea = FALSE;
+		bSelectedArea = false;
 		bBeginBoxSelect = false;
 	}
 

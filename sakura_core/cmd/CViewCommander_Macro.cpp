@@ -92,8 +92,8 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
 		ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD26));
 	}
 
-	TCHAR			szPath[_MAX_PATH + 1];
-	TCHAR			szInitDir[_MAX_PATH + 1];
+	TCHAR szPath[_MAX_PATH + 1];
+	TCHAR szInitDir[_MAX_PATH + 1];
 	szPath[0] = 0;
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
@@ -138,8 +138,8 @@ void CViewCommander::Command_LOADKEYMACRO(void)
 	sFlags.m_bRecordingKeyMacro = FALSE;
 	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
-	TCHAR			szPath[_MAX_PATH + 1];
-	TCHAR			szInitDir[_MAX_PATH + 1];
+	TCHAR szPath[_MAX_PATH + 1];
+	TCHAR szInitDir[_MAX_PATH + 1];
 	const TCHAR* pszFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
 	szPath[0] = 0;
 	

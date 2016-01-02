@@ -136,7 +136,7 @@ void CViewCommander::Command_CASCADE(void)
 		};
 
 		WNDARR*	pWndArr = new WNDARR[nRowNum];
-		int		count = 0;	// 処理対象ウィンドウカウント
+		int count = 0;	// 処理対象ウィンドウカウント
 		// Mar. 20, 2004 genta 現在のウィンドウを末尾に持っていくのに使う
 		int		current_win_index = -1;
 
@@ -314,8 +314,8 @@ void CViewCommander::Command_TILE_V(void)
 void CViewCommander::Command_TILE_H(void)
 {
 	// 現在開いている編集窓のリストを取得する
-	EditNode*	pEditNodeArr;
-	int			nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
+	EditNode* pEditNodeArr;
+	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
 
 	if (nRowNum > 0) {
 		HWND* phwndArr = new HWND[nRowNum];
@@ -557,10 +557,9 @@ void CViewCommander::Command_TAB_CLOSERIGHT(void)
 // 縦方向に最大化
 void CViewCommander::Command_MAXIMIZE_V(void)
 {
-	HWND	hwndFrame;
-	RECT	rcOrg;
-	RECT	rcDesktop;
-	hwndFrame = GetMainWindow();
+	RECT rcOrg;
+	RECT rcDesktop;
+	HWND hwndFrame = GetMainWindow();
 	::GetWindowRect(hwndFrame, &rcOrg);
 	// May 01, 2004 genta マルチモニタ対応
 	::GetMonitorWorkRect(hwndFrame, &rcDesktop);
@@ -578,11 +577,10 @@ void CViewCommander::Command_MAXIMIZE_V(void)
 // 横方向に最大化
 void CViewCommander::Command_MAXIMIZE_H(void)
 {
-	HWND	hwndFrame;
-	RECT	rcOrg;
-	RECT	rcDesktop;
+	RECT rcOrg;
+	RECT rcDesktop;
 
-	hwndFrame = GetMainWindow();
+	HWND hwndFrame = GetMainWindow();
 	::GetWindowRect(hwndFrame, &rcOrg);
 	// May 01, 2004 genta マルチモニタ対応
 	::GetMonitorWorkRect(hwndFrame, &rcDesktop);

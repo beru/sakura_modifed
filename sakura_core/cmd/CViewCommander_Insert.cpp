@@ -53,7 +53,7 @@ void CViewCommander::Command_INS_TIME(void)
 */
 void CViewCommander::Command_CtrlCode_Dialog(void)
 {
-	CDlgCtrlCode	cDlgCtrlCode;
+	CDlgCtrlCode cDlgCtrlCode;
 
 	// コントロールコード入力ダイアログを表示する
 	if (cDlgCtrlCode.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument())) {
