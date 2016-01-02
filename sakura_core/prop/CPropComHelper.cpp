@@ -127,7 +127,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szExtHelp)) {
-						GetInidirOrExedir(szPath, csHelper.m_szExtHelp, TRUE);
+						GetInidirOrExedir(szPath, csHelper.m_szExtHelp, true);
 					}else {
 						_tcscpy(szPath, csHelper.m_szExtHelp);
 					}
@@ -151,7 +151,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szExtHtmlHelp)) {
-						GetInidirOrExedir(szPath, csHelper.m_szExtHtmlHelp, TRUE);
+						GetInidirOrExedir(szPath, csHelper.m_szExtHtmlHelp, true);
 					}else {
 						_tcscpy(szPath, csHelper.m_szExtHtmlHelp);
 					}
@@ -194,7 +194,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szMigemoDll)) {
-						GetInidirOrExedir(szPath, csHelper.m_szMigemoDll, TRUE);
+						GetInidirOrExedir(szPath, csHelper.m_szMigemoDll, true);
 					}else {
 						_tcscpy(szPath, csHelper.m_szMigemoDll);
 					}
@@ -217,7 +217,7 @@ INT_PTR CPropHelper::DispatchEvent(
 					// 検索フォルダ
 					// 2007.05.27 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(csHelper.m_szMigemoDict)) {
-						GetInidirOrExedir(szPath, csHelper.m_szMigemoDict, TRUE);
+						GetInidirOrExedir(szPath, csHelper.m_szMigemoDict, true);
 					}else {
 						_tcscpy(szPath, csHelper.m_szMigemoDict);
 					}

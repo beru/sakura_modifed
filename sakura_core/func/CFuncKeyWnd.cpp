@@ -225,7 +225,7 @@ LRESULT CFuncKeyWnd::DispatchEvent(
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 //	if (!GetHwnd()) {
 //		return 0L;

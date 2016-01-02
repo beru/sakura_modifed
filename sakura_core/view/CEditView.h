@@ -169,7 +169,7 @@ public:
 
 	// 利用
 	void CopyCurLine(bool bAddCRLFWhenCopy, EEolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする	// 2007.10.08 ryoji
-	void CopySelectedAllLines(const wchar_t*, BOOL);			// 選択範囲内の全行をクリップボードにコピーする
+	void CopySelectedAllLines(const wchar_t*, bool);			// 選択範囲内の全行をクリップボードにコピーする
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -314,7 +314,7 @@ public:
 	// 2002/01/19 novice public属性に変更
 	bool GetSelectedDataSimple(CNativeW&);// 選択範囲のデータを取得
 	bool GetSelectedDataOne(CNativeW& cmemBuf, int nMaxLen);
-	bool GetSelectedData(CNativeW*, BOOL, const wchar_t*, BOOL, bool bAddCRLFWhenCopy, EEolType neweol = EOL_UNKNOWN);	// 選択範囲のデータを取得
+	bool GetSelectedData(CNativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EEolType neweol = EOL_UNKNOWN);	// 選択範囲のデータを取得
 	int IsCurrentPositionSelected(CLayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
 	int IsCurrentPositionSelectedTEST(const CLayoutPoint& ptCaretPos, const CLayoutRange& sSelect) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
@@ -328,7 +328,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	bool IsCurrentPositionURL(const CLayoutPoint& ptCaretPos, CLogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
-	BOOL CheckTripleClick(CMyPoint ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
+	bool CheckTripleClick(CMyPoint ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
 	
 	bool ExecCmd(const TCHAR*, int, const TCHAR*, COutputAdapter* = NULL) ;			// 子プロセスの標準出力をリダイレクトする
 	void AddToCmdArr(const TCHAR*);
@@ -429,7 +429,7 @@ public:
 	bool IsISearchEnabled(int nCommand) const;
 
 	bool KeySearchCore(const CNativeW* pcmemCurText);	// 2006.04.10 fon
-	bool MiniMapCursorLineTip( POINT* po, RECT* rc, bool* pbHide );
+	bool MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide);
 
 	/*!	CEditView::KeyWordHelpSearchDictのコール元指定用ローカルID
 		@date 2006.04.10 fon 新規作成
@@ -480,7 +480,7 @@ public:
 	void PostprocessCommand_hokan(void);
 
 	// 補完ウィンドウを表示する。Ctrl+Spaceや、文字の入力/削除時に呼び出されます。 YAZAKI 2002/03/11
-	void ShowHokanMgr(CNativeW& cmemData, BOOL bAutoDecided);
+	void ShowHokanMgr(CNativeW& cmemData, bool bAutoDecided);
 
 	int HokanSearchByFile(const wchar_t*, bool, vector_ex<std::wstring>&, int); // 2003.06.25 Moca
 
@@ -530,7 +530,7 @@ public:
 	//                          その他                             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	bool OPEN_ExtFromtoExt(BOOL, BOOL, const TCHAR* [], const TCHAR* [], int, int, const TCHAR*); // 指定拡張子のファイルに対応するファイルを開く補助関数 // 2003.08.12 Moca
+	bool OPEN_ExtFromtoExt(bool, bool, const TCHAR* [], const TCHAR* [], int, int, const TCHAR*); // 指定拡張子のファイルに対応するファイルを開く補助関数 // 2003.08.12 Moca
 	//	Jan.  8, 2006 genta 折り返しトグル動作判定
 	enum TOGGLE_WRAP_ACTION {
 		TGWRAP_NONE = 0,
@@ -542,7 +542,7 @@ public:
 	void SmartIndent_CPP(wchar_t);				// C/C++スマートインデント処理
 	// コマンド操作
 	void SetFont(void);							// フォントの変更
-	void SplitBoxOnOff(BOOL, BOOL, BOOL);		// 縦・横の分割ボックス・サイズボックスのＯＮ／ＯＦＦ
+	void SplitBoxOnOff(bool, bool, bool);		// 縦・横の分割ボックス・サイズボックスのＯＮ／ＯＦＦ
 
 //	2001/06/18 asa-o
 	bool  ShowKeywordHelp(POINT po, LPCWSTR pszHelp, LPRECT prcHokanWin);	// 補完ウィンドウ用のキーワードヘルプ表示

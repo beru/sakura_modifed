@@ -53,7 +53,7 @@ void CViewCommander::Command_CUT(void)
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 	CNativeW cmemBuf;
-	if (!m_pCommanderView->GetSelectedData(&cmemBuf, FALSE, NULL, FALSE, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
+	if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
@@ -99,7 +99,7 @@ void CViewCommander::Command_COPY(
 		bool bBeginBoxSelect = selInfo.IsBoxSelecting();
 		// 選択範囲のデータを取得
 		// 正常時はTRUE,範囲未選択の場合はFALSEを返す
-		if (!m_pCommanderView->GetSelectedData(&cmemBuf, FALSE, NULL, FALSE, bAddCRLFWhenCopy, neweol)) {
+		if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, bAddCRLFWhenCopy, neweol)) {
 			ErrorBeep();
 			return;
 		}
@@ -314,7 +314,7 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 			GetCaret().MoveCursor(ptCurOld + CLayoutPoint(CLayoutInt(0), nCount), false);
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 			// カーソル行が最後の行かつ行末に改行が無く、挿入すべきデータがまだある場合
-			BOOL bAddLastCR = FALSE;
+			bool bAddLastCR = false;
 			const CLayout*	pcLayout;
 			CLogicInt		nLineLen = CLogicInt(0);
 			const wchar_t* pLine = GetDocument()->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
@@ -322,10 +322,10 @@ void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
 			if (pLine && 1 <= nLineLen) {
 				if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
 				}else {
-					bAddLastCR = TRUE;
+					bAddLastCR = true;
 				}
 			}else { // 2001/10/02 novice
-				bAddLastCR = TRUE;
+				bAddLastCR = true;
 			}
 
 			if (bAddLastCR) {
@@ -622,7 +622,7 @@ void CViewCommander::Command_COPYLINES(void)
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
 		NULL,	// 引用符
-		FALSE	// 行番号を付与する
+		false	// 行番号を付与する
 	);
 	return;
 }
@@ -634,7 +634,7 @@ void CViewCommander::Command_COPYLINESASPASSAGE(void)
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
 		GetDllShareData().m_Common.m_sFormat.m_szInyouKigou,	// 引用符
-		FALSE 									// 行番号を付与する
+		false 									// 行番号を付与する
 	);
 	return;
 }
@@ -646,7 +646,7 @@ void CViewCommander::Command_COPYLINESWITHLINENUMBER(void)
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
 		NULL,	// 引用符
-		TRUE	// 行番号を付与する
+		true	// 行番号を付与する
 	);
 	return;
 }

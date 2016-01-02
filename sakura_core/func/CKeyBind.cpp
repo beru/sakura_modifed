@@ -115,7 +115,7 @@ EFunctionCode CKeyBind::GetFuncCode(
 	WORD		nAccelCmd,
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr,
-	BOOL		bGetDefFuncCode // = TRUE
+	bool		bGetDefFuncCode // = true
 	)
 {
 	int nCmd = (int)LOBYTE(nAccelCmd);
@@ -147,8 +147,8 @@ int CKeyBind::CreateKeyBindList(
 	KEYDATA*		pKeyNameArr,	// [out]
 	CNativeW&		cMemList,		//
 	CFuncLookup*	pcFuncLookup,	// [in] 機能番号→名前の対応を取る
-	BOOL			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:TRUE
-)
+	bool			bGetDefFuncCode // [in] ON:デフォルト機能割り当てを使う/OFF:使わない デフォルト:true
+	)
 {
 	WCHAR	szStr[256];
 	WCHAR	szFuncName[256];
@@ -260,7 +260,7 @@ bool CKeyBind::GetKeyStrSub(
 	int			nShiftState,
 	CNativeT&	cMemList,
 	int			nFuncId,
-	BOOL		bGetDefFuncCode // = TRUE
+	bool		bGetDefFuncCode // = true
 )
 {
 	static const TCHAR*	pszSHIFT = _T("Shift+");
@@ -300,7 +300,7 @@ int CKeyBind::GetKeyStr(
 	KEYDATA*	pKeyNameArr,
 	CNativeT&	cMemList,
 	int			nFuncId,
-	BOOL		bGetDefFuncCode // = TRUE
+	bool		bGetDefFuncCode // = true
 )
 {
 	cMemList.SetString(_T(""));
@@ -336,7 +336,7 @@ int CKeyBind::GetKeyStrList(
 	KEYDATA*	pKeyNameArr,
 	CNativeT***	pppcMemList,
 	int			nFuncId,
-	BOOL		bGetDefFuncCode // = TRUE
+	bool		bGetDefFuncCode // = true
 )
 {
 	int nAssignedKeysNum = 0;
@@ -443,7 +443,7 @@ TCHAR* CKeyBind::GetMenuLabel(
 	const TCHAR*	pszKey,
 	BOOL			bKeyStr,
 	int				nLabelSize,
-	BOOL			bGetDefFuncCode // = TRUE
+	bool			bGetDefFuncCode // = true
 	)
 {
 	const unsigned int LABEL_MAX = nLabelSize;
@@ -521,7 +521,7 @@ EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
 
 	@date 2007.03.07 ryoji インライン関数から通常の関数に変更（BCCの最適化バグ対策）
 */
-EFunctionCode CKeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, BOOL bGetDefFuncCode)
+EFunctionCode CKeyBind::GetFuncCodeAt(KEYDATA& KeyData, int nState, bool bGetDefFuncCode)
 {
 	if (KeyData.m_nFuncCodeArr[nState] != 0) {
 		return KeyData.m_nFuncCodeArr[nState];

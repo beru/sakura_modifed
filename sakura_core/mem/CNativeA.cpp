@@ -314,9 +314,9 @@ void CNativeA::ToZenkaku(
 	if (!pBufDes) {
 		return;
 	}
-//	unsigned char			uc;
-	unsigned short			usSrc;
-	unsigned short			usDes;
+//	unsigned char	uc;
+	unsigned short	usSrc;
+	unsigned short	usDes;
 	int nBufDesLen = 0;
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
@@ -508,7 +508,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 	CEol		cEol;
 
 	bool bSpace = false;	// スペースの処理中かどうか
-	int		nStartPos;
+	int nStartPos;
 
 	nBgn = 0;
 	nPosDes = 0;

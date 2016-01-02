@@ -44,12 +44,12 @@ bool CPPAMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
 /*! キーボードマクロの読み込み（ファイルから）
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
+bool CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	CTextInputStream in(pszPath);
 	if (!in) {
 		m_nReady = false;
-		return FALSE;
+		return false;
 	}
 
 	CNativeW cmemWork;
@@ -65,18 +65,18 @@ BOOL CPPAMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	m_cBuffer.SetNativeData(cmemWork);	// m_cBufferにコピー
 
 	m_nReady = true;
-	return TRUE;
+	return true;
 }
 
 /*! キーボードマクロの読み込み（文字列から）
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CPPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
+bool CPPAMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	m_cBuffer.SetNativeData(to_wchar(pszCode));	// m_cBufferにコピー
 
 	m_nReady = true;
-	return TRUE;
+	return true;
 }
 
 // From Here Apr. 29, 2002 genta

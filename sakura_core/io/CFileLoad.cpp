@@ -288,13 +288,13 @@ EConvertResult CFileLoad::ReadLine(CNativeW* pUnicodeBuffer, CEol* pcEol)
 		// 途中に改行がない限りは、swapを使って中身のコピーを省略する
 		pUnicodeBuffer->swap(m_cLineTemp);
 		if (0 < m_cLineTemp.GetStringLength()) {
-			m_cLineTemp._GetMemory()->SetRawDataHoldBuffer( L"", 0 );
+			m_cLineTemp._GetMemory()->SetRawDataHoldBuffer(L"", 0);
 		}
 		m_nReadOffset2 = 0;
 	}else {
 		// 改行が途中にあった。必要分をコピー
-		pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
-		pUnicodeBuffer->AppendString( pRet, nRetLineLen + cEolTemp.GetLen() );
+		pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer(L"", 0);
+		pUnicodeBuffer->AppendString(pRet, nRetLineLen + cEolTemp.GetLen());
 	}
 	*pcEol = cEolTemp;
 	return m_nTempResult;
@@ -358,7 +358,7 @@ EConvertResult CFileLoad::ReadLine_core(
 				break;
 			}
 		}else {
-			m_cLineBuffer.AppendRawData( pLine, nBufLineLen + nEolLen );
+			m_cLineBuffer.AppendRawData(pLine, nBufLineLen + nEolLen);
 			break;
 		}
 	}
@@ -396,8 +396,7 @@ void CFileLoad::Buffering(void)
 {
 	// メモリー確保
 	if (!m_pReadBuf) {
-		int nBufSize;
-		nBufSize = (m_nFileSize < gm_nBufSizeDef) ? (static_cast<int>(m_nFileSize)) : (gm_nBufSizeDef);
+		int nBufSize = (m_nFileSize < gm_nBufSizeDef) ? (static_cast<int>(m_nFileSize)) : (gm_nBufSizeDef);
 		// Borland C++では0バイトのmallocを獲得失敗と見なすため
 		// 最低1バイトは取得することで0バイトのファイルを開けるようにする
 		if (0 >= nBufSize) {
@@ -421,11 +420,11 @@ void CFileLoad::Buffering(void)
 		m_nReadDataLen = 0;
 	}
 	// ファイルの読み込み
-	DWORD ReadSize = Read(&m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen);
-	if (ReadSize == 0) {
+	DWORD readSize = Read(&m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen);
+	if (readSize == 0) {
 		m_eMode = FLMODE_READBUFEND;	// ファイルなどの終わりに達したらしい
 	}
-	m_nReadDataLen += ReadSize;
+	m_nReadDataLen += readSize;
 }
 
 /*!

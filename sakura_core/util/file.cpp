@@ -217,7 +217,7 @@ FILE* _tfopen_absexe(LPCTSTR fname, LPCTSTR mode)
 	@author ryoji
 	@date 2007.05.19 新規作成（_tfopen_absexeベース）
 */
-FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, BOOL bOrExedir/*=TRUE*/)
+FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, bool bOrExedir/*=true*/)
 {
 	if (_IS_REL_PATH(fname)) {
 		TCHAR path[_MAX_PATH];
@@ -533,7 +533,7 @@ void GetInidirOrExedir(
 	LPTSTR	pDir,								// [out] INIファイルまたはEXEファイルのあるディレクトリを返す場所．
 												//       予め_MAX_PATHのバッファを用意しておくこと．
 	LPCTSTR	szFile					/*=NULL*/,	// [in] ディレクトリ名に結合するファイル名．
-	BOOL	bRetExedirIfFileEmpty	/*=FALSE*/	// [in] ファイル名の指定が空の場合はEXEファイルのフルパスを返す．
+	bool	bRetExedirIfFileEmpty	/*=false*/	// [in] ファイル名の指定が空の場合はEXEファイルのフルパスを返す．
 )
 {
 	// ファイル名の指定が空の場合はEXEファイルのフルパスを返す（オプション）

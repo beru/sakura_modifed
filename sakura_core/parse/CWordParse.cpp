@@ -261,8 +261,8 @@ bool CWordParse::SearchNextWordPosition(
 	CLogicInt		nLineLen,
 	CLogicInt		nIdx,			//	桁数
 	CLogicInt*		pnColumnNew,	//	見つかった位置
-	BOOL			bStopsBothEnds	//	単語の両端で止まる
-)
+	bool			bStopsBothEnds	//	単語の両端で止まる
+	)
 {
 	// 文字種類が変わるまで後方へサーチ
 	// 空白とタブは無視する
@@ -307,8 +307,8 @@ bool CWordParse::SearchNextWordPosition4KW(
 	CLogicInt		nLineLen,
 	CLogicInt		nIdx,			//	桁数
 	CLogicInt*		pnColumnNew,	//	見つかった位置
-	BOOL			bStopsBothEnds	//	単語の両端で止まる
-)
+	bool			bStopsBothEnds	//	単語の両端で止まる
+	)
 {
 	// 文字種類が変わるまで後方へサーチ
 	// 空白とタブは無視する

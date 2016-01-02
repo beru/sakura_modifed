@@ -334,10 +334,10 @@ HDC CPrint::CreateDC(
 	// →プリンタから得られた dmFieldsが1でないLength,Width情報に、間違った長さが入っているプリンタドライバでは、
 	//   縦・横が正しく印刷されない不具合となっていた(2003.07.03 かろと)
 	pMYDEVMODE->dmFields = pDEVMODE->dmFields & (DM_ORIENTATION | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
-	pMYDEVMODE->dmOrientation		= pDEVMODE->dmOrientation;
-	pMYDEVMODE->dmPaperSize			= pDEVMODE->dmPaperSize;
-	pMYDEVMODE->dmPaperLength		= pDEVMODE->dmPaperLength;
-	pMYDEVMODE->dmPaperWidth		= pDEVMODE->dmPaperWidth;
+	pMYDEVMODE->dmOrientation	= pDEVMODE->dmOrientation;
+	pMYDEVMODE->dmPaperSize		= pDEVMODE->dmPaperSize;
+	pMYDEVMODE->dmPaperLength	= pDEVMODE->dmPaperLength;
+	pMYDEVMODE->dmPaperWidth	= pDEVMODE->dmPaperWidth;
 
 	::GlobalUnlock(m_hDevMode);
 
@@ -360,7 +360,7 @@ BOOL CPrint::GetPrintMetrics(
 	short*		pnPaperOffsetLeft,	// 用紙余白左端
 	short*		pnPaperOffsetTop,	// 用紙余白上端
 	TCHAR*		pszErrMsg			// エラーメッセージ格納場所
-)
+	)
 {
 	BOOL bRet = TRUE;
 
@@ -414,7 +414,7 @@ BOOL CPrint::GetPaperSize(
 	short*		pnPaperAllWidth,
 	short*		pnPaperAllHeight,
 	MYDEVMODE*	pDEVMODE
-)
+	)
 {
 	short	nWork;
 	
@@ -460,7 +460,7 @@ BOOL CPrint::PrintOpen(
 	MYDEVMODE*	pMYDEVMODE,
 	HDC*		phdc,
 	TCHAR*		pszErrMsg		// エラーメッセージ格納場所
-)
+	)
 {
 	BOOL bRet = TRUE;
 	DOCINFO di = {0};
@@ -506,7 +506,6 @@ end_of_func:;
 void CPrint::PrintStartPage(HDC hdc)
 {
 	::StartPage(hdc);
-
 }
 
 

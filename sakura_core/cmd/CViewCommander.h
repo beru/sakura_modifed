@@ -104,9 +104,9 @@ public:
 	void Command_PRINT(void);					// 印刷
 	void Command_PRINT_PREVIEW(void);			// 印刷プレビュー
 	void Command_PRINT_PAGESETUP(void);			// 印刷ページ設定	// Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	bool Command_OPEN_HfromtoC(BOOL);			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
-	bool Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
-	bool Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss);				// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+	bool Command_OPEN_HfromtoC(bool);			// 同名のC/C++ヘッダ(ソース)を開く	// Feb. 7, 2001 JEPRO 追加
+	bool Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss);				// 同名のC/C++ヘッダファイルを開く	// Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	bool Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss);				// 同名のC/C++ソースファイルを開く	// Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	void Command_ACTIVATE_SQLPLUS(void);			// Oracle SQL*Plusをアクティブ表示
 	void Command_PLSQL_COMPILE_ON_SQLPLUS(void);	// Oracle SQL*Plusで実行
 	void Command_BROWSE(void);					// ブラウズ

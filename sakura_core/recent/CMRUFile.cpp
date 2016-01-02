@@ -69,7 +69,7 @@ HMENU CMRUFile::CreateMenu(CMenuDrawer* pCMenuDrawer) const
 
 	2010/5/21 Uchi 組み直し
 */
-HMENU CMRUFile::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
+HMENU CMRUFile::CreateMenu(HMENU hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
 	const BOOL bMenuIcon = m_pShareData->m_Common.m_sWindow.m_bMenuIcon;

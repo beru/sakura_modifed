@@ -33,7 +33,7 @@ BOOL GetOpenFolderNameDialog(HWND hWnd, LPCWSTR lpszTitle, LPCWSTR lpszInitFolde
 BOOL GetOpenFileNameDialog(HINSTANCE hInstance, HWND hWnd, LPCWSTR lpszTitle, LPCWSTR lpszInitFolder, LPCWSTR lpszFilter, WideString& strFileName);
 BOOL GetOpenFileNameDialog(HINSTANCE hInstance, HWND hWnd, LPCWSTR lpszTitle, LPCWSTR lpszInitFolder, LPCWSTR lpszFilter, WideString& strFileName);
 WideString GetParentFolder(WideString& strPath);
-WideString GetTempFileName(LPCWSTR lpszPathName, LPCWSTR lpszPrefix, BOOL bFullPath = TRUE);
+WideString GetTempFileName(LPCWSTR lpszPathName, LPCWSTR lpszPrefix, bool bFullPath = true);
 WideString GetCurrentDirectory();
 WideString GetSystemDirectory();
 

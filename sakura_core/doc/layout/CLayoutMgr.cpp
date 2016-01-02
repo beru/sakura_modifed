@@ -660,8 +660,8 @@ int CLayoutMgr::PrevOrNextWord(
 	CLayoutInt		nLineNum,
 	CLogicInt		nIdx,
 	CLayoutPoint*	pptLayoutNew,
-	BOOL			bLEFT,
-	BOOL			bStopsBothEnds
+	bool			bLEFT,
+	bool			bStopsBothEnds
 )
 {
 	const CLayout* pLayout = SearchLineByLayoutY(nLineNum);

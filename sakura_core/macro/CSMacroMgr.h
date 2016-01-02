@@ -127,8 +127,8 @@ public:
 	}
 
 	// キーボードマクロの読み込み
-	BOOL Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType);
-	BOOL Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath);
+	bool Load(int idx, HINSTANCE hInstance, const TCHAR* pszPath, const TCHAR* pszType);
+	bool Save(int idx, HINSTANCE hInstance, const TCHAR* pszPath);
 	void UnloadAll(void);
 
 	// キーマクロのバッファにデータ追加

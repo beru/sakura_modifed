@@ -58,7 +58,7 @@ public:
 	HWND Open(HINSTANCE, HWND);	//!< ウィンドウ オープン
 	void Close(void);				//!< ウィンドウ クローズ
 	void TabWindowNotify(WPARAM wParam, LPARAM lParam);
-	void Refresh(BOOL bEnsureVisible = TRUE, BOOL bRebuild = FALSE);			// 2006.02.06 ryoji 引数削除
+	void Refresh(bool bEnsureVisible = true, bool bRebuild = false);			// 2006.02.06 ryoji 引数削除
 	void NextGroup(void);			// 次のグループ			// 2007.06.20 ryoji
 	void PrevGroup(void);			// 前のグループ			// 2007.06.20 ryoji
 	void MoveRight(void);			// タブを右に移動		// 2007.06.20 ryoji

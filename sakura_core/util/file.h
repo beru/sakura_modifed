@@ -38,8 +38,8 @@ int CalcDirectoryDepth(const TCHAR* path);
 bool IsLocalDrive(const TCHAR* pszDrive);
 
 // ※サクラ依存
-FILE *_tfopen_absexe(LPCTSTR fname, LPCTSTR mode); // 2003.06.23 Moca
-FILE *_tfopen_absini(LPCTSTR fname, LPCTSTR mode, BOOL bOrExedir = TRUE); // 2007.05.19 ryoji
+FILE* _tfopen_absexe(LPCTSTR fname, LPCTSTR mode); // 2003.06.23 Moca
+FILE* _tfopen_absini(LPCTSTR fname, LPCTSTR mode, bool bOrExedir = true); // 2007.05.19 ryoji
 
 // パス文字列処理
 void CutLastYenFromDirectoryPath(TCHAR*);						// フォルダの最後が半角かつ'\\'の場合は、取り除く "c:\\"等のルートは取り除かない
@@ -55,7 +55,7 @@ bool _IS_REL_PATH(const TCHAR* path);							// 相対パスか判定する。2003.06.23 Mo
 // ※サクラ依存
 void GetExedir(LPTSTR pDir, LPCTSTR szFile = NULL);
 void GetInidir(LPTSTR pDir, LPCTSTR szFile = NULL); // 2007.05.19 ryoji
-void GetInidirOrExedir(LPTSTR pDir, LPCTSTR szFile = NULL, BOOL bRetExedirIfFileEmpty = FALSE); // 2007.05.22 ryoji
+void GetInidirOrExedir(LPTSTR pDir, LPCTSTR szFile = NULL, bool bRetExedirIfFileEmpty = false); // 2007.05.22 ryoji
 
 LPCTSTR GetRelPath(LPCTSTR pszPath);
 

@@ -128,7 +128,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(m_Types.m_szExtHelp)) {
-						GetInidirOrExedir(szPath, m_Types.m_szExtHelp, TRUE);
+						GetInidirOrExedir(szPath, m_Types.m_szExtHelp, true);
 					}else {
 						_tcscpy(szPath, m_Types.m_szExtHelp);
 					}
@@ -152,7 +152,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 					// 2003.06.23 Moca 相対パスは実行ファイルからのパスとして開く
 					// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先
 					if (_IS_REL_PATH(m_Types.m_szExtHtmlHelp)) {
-						GetInidirOrExedir(szPath, m_Types.m_szExtHtmlHelp, TRUE);
+						GetInidirOrExedir(szPath, m_Types.m_szExtHtmlHelp, true);
 					}else {
 						_tcscpy(szPath, m_Types.m_szExtHtmlHelp);
 					}

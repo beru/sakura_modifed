@@ -43,8 +43,8 @@ public:
 	virtual ~CPluginMacroManager();
 
 	virtual bool ExecKeyMacro(class CEditView* pcEditView, int flags) const;
-	virtual BOOL LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path);
-	virtual BOOL LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code);
+	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path);
+	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code);
 
 	static CMacroManagerBase* Creator(const TCHAR* Ext);
 	static void declare(void);

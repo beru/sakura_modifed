@@ -153,10 +153,10 @@ public:
 	//                           検索                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 protected:
-	int PrevOrNextWord(CLayoutInt, CLogicInt, CLayoutPoint* pptLayoutNew, BOOL, BOOL bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevOrNextWord(CLayoutInt, CLogicInt, CLayoutPoint* pptLayoutNew, bool, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 public:
-	int PrevWord(CLayoutInt nLineNum, CLogicInt nIdx, CLayoutPoint* pptLayoutNew, BOOL bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, TRUE, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
-	int NextWord(CLayoutInt nLineNum, CLogicInt nIdx, CLayoutPoint* pptLayoutNew, BOOL bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, FALSE, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int PrevWord(CLayoutInt nLineNum, CLogicInt nIdx, CLayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
+	int NextWord(CLayoutInt nLineNum, CLogicInt nIdx, CLayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
 	int SearchWord(CLayoutInt nLine, CLogicInt nIdx, ESearchDirection eSearchDirection, CLayoutRange* pMatchRange, const CSearchStringPattern&);	// 単語検索
 
@@ -213,7 +213,7 @@ public:
 		LayoutReplaceArg*	pArg
 	);
 
-	BOOL CalculateTextWidth(BOOL bCalLineLen = TRUE, CLayoutInt nStart = CLayoutInt(-1), CLayoutInt nEnd = CLayoutInt(-1));	// テキスト最大幅を算出する		// 2009.08.28 nasukoji
+	BOOL CalculateTextWidth(bool bCalLineLen = true, CLayoutInt nStart = CLayoutInt(-1), CLayoutInt nEnd = CLayoutInt(-1));	// テキスト最大幅を算出する		// 2009.08.28 nasukoji
 	void ClearLayoutLineWidth(void);				// 各行のレイアウト行長の記憶をクリアする		// 2009.08.28 nasukoji
 
 protected:

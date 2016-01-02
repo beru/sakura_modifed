@@ -156,7 +156,7 @@ public:
 	//                           計算                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 計算
-	BOOL GetAdjustCursorPos(CLayoutPoint* pptPosXY); // 正しいカーソル位置を算出する
+	bool GetAdjustCursorPos(CLayoutPoint* pptPosXY); // 正しいカーソル位置を算出する
 
 	void ClearCaretPosInfoCache();
 

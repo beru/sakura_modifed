@@ -46,7 +46,7 @@ static bool Commander_COMPARE_core(
 	const wchar_t*	pLineSrc;
 	CLogicInt		nLineLenSrc;
 	const wchar_t*	pLineDes;
-	int			nLineLenDes;
+	int nLineLenDes;
 	int max_size = (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>();
 	const CDocLineMgr& docMgr = commander.GetDocument()->m_cDocLineMgr;
 
@@ -225,14 +225,12 @@ void CViewCommander::Command_COMPARE(void)
 }
 
 
-
 static ECodeType GetFileCharCode( LPCTSTR pszFile )
 {
 	const STypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
 	return CCodeMediator(typeMini->m_encoding).CheckKanjiCodeOfFile( pszFile );
 }
-
 
 
 static ECodeType GetDiffCreateTempFileCode(ECodeType code)
@@ -243,7 +241,6 @@ static ECodeType GetDiffCreateTempFileCode(ECodeType code)
 	}
 	return code;
 }
-
 
 
 /*!	差分表示
@@ -412,12 +409,11 @@ void CViewCommander::Command_Diff_Dialog(void)
 }
 
 
-
 //	次の差分を探し，見つかったら移動する
 void CViewCommander::Command_Diff_Next(void)
 {
-	BOOL bFound = FALSE;
-	BOOL bRedo = TRUE;
+	bool bFound = false;
+	bool bRedo = true;
 
 	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld_Logic = ptXY.y;
@@ -427,7 +423,7 @@ void CViewCommander::Command_Diff_Next(void)
 re_do:;	
 	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SEARCH_FORWARD, &tmp_y)) {
 		ptXY.y = tmp_y;
-		bFound = TRUE;
+		bFound = true;
 		CLayoutPoint ptXY_Layout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
@@ -446,7 +442,7 @@ re_do:;
 		// 見つからなかった。かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			ptXY.y = 0 - 1;	// 1個手前を指定
-			bRedo = FALSE;
+			bRedo = false;
 			goto re_do;		// 先頭から再検索
 		}
 	}
@@ -464,12 +460,11 @@ re_do:;
 }
 
 
-
 // 前の差分を探し，見つかったら移動する
 void CViewCommander::Command_Diff_Prev(void)
 {
-	BOOL bFound = FALSE;
-	BOOL bRedo = TRUE;
+	bool bFound = false;
+	bool bRedo = true;
 
 	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int			nYOld_Logic = ptXY.y;
@@ -479,7 +474,7 @@ void CViewCommander::Command_Diff_Prev(void)
 re_do:;
 	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SEARCH_BACKWARD, &tmp_y)) {
 		ptXY.y = tmp_y;
-		bFound = TRUE;
+		bFound = true;
 		CLayoutPoint ptXY_Layout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
@@ -499,7 +494,7 @@ re_do:;
 		if (!bFound	&& bRedo) {
 			// 2011.02.02 m_cLayoutMgr→m_cDocLineMgr
 			ptXY.y = GetDocument()->m_cDocLineMgr.GetLineCount();	// 1個手前を指定
-			bRedo = FALSE;
+			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}
 	}

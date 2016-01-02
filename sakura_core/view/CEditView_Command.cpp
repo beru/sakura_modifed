@@ -168,8 +168,8 @@ bool CEditView::TagJumpSub(
 	@date 2008.04.09 ryoji 処理対象(file_ext)と開く対象(open_ext)の扱いが逆になっていたのを修正
 */
 bool CEditView::OPEN_ExtFromtoExt(
-	BOOL			bCheckOnly,		//!< [in] true: チェックのみ行ってファイルは開かない
-	BOOL			bBeepWhenMiss,	//!< [in] true: ファイルを開けなかった場合に警告音を出す
+	bool			bCheckOnly,		//!< [in] true: チェックのみ行ってファイルは開かない
+	bool			bBeepWhenMiss,	//!< [in] true: ファイルを開けなかった場合に警告音を出す
 	const TCHAR*	file_ext[],		//!< [in] 処理対象とする拡張子
 	const TCHAR*	open_ext[],		//!< [in] 開く対象とする拡張子
 	int				file_extno,		//!< [in] 処理対象拡張子リストの要素数

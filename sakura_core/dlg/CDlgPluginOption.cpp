@@ -56,7 +56,7 @@ static inline void CtrlShow(
 	)
 {
 	HWND hWnd = ::GetDlgItem(hwndDlg, id);
-	::ShowWindow(hWnd, bShow? SW_SHOW: SW_HIDE);
+	::ShowWindow(hWnd, bShow ? SW_SHOW: SW_HIDE);
 	::EnableWindow(hWnd, bShow);
 }
 

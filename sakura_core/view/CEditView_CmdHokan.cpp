@@ -59,7 +59,7 @@ void CEditView::PostprocessCommand_hokan(void)
 
 		// カーソル直前の単語を取得
 		if (0 < GetParser().GetLeftWord(&cmemData, 100)) {
-			ShowHokanMgr(cmemData, FALSE);
+			ShowHokanMgr(cmemData, false);
 		}else {
 			if (m_bHokan) {
 				m_pcEditWnd->m_cHokanMgr.Hide();
@@ -77,7 +77,7 @@ void CEditView::PostprocessCommand_hokan(void)
 
 	@date 2005.01.10 genta CEditView_Commandから移動
 */
-void CEditView::ShowHokanMgr(CNativeW& cmemData, BOOL bAutoDecided)
+void CEditView::ShowHokanMgr(CNativeW& cmemData, bool bAutoDecided)
 {
 	// 補完対象ワードリストを調べる
 	CNativeW	cmemHokanWord;
@@ -106,7 +106,7 @@ void CEditView::ShowHokanMgr(CNativeW& cmemData, BOOL bAutoDecided)
 	);
 
 	/*	補完ウィンドウを表示
-		ただし、bAutoDecided == TRUEの場合は、補完候補が1つのときは、ウィンドウを表示しない。
+		ただし、bAutoDecided == trueの場合は、補完候補が1つのときは、ウィンドウを表示しない。
 		詳しくは、Search()の説明を参照のこと。
 	*/
 	CNativeW* pcmemHokanWord;

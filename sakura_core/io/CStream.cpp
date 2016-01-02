@@ -34,7 +34,7 @@ public:
 			if (m_dwAttribute & dwPopAttribute) {
 				DWORD dwNewAttribute = m_dwAttribute & ~dwPopAttribute;
 				::SetFileAttributes(m_strPath.c_str(), dwNewAttribute);
-				m_bAttributeChanged=true;
+				m_bAttributeChanged = true;
 			}
 		}
 	}

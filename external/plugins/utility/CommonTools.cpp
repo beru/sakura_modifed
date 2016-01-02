@@ -170,7 +170,7 @@ WideString GetParentFolder(WideString& strPath)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-WideString GetTempFileName(LPCWSTR lpszPathName, LPCWSTR lpszPrefix, BOOL bFullPath)
+WideString GetTempFileName(LPCWSTR lpszPathName, LPCWSTR lpszPrefix, bool bFullPath)
 {
 	WideString strResult = L"";
 	wchar_t* lpszBuffer = new wchar_t[MAX_PATH_LENGTH];
@@ -179,9 +179,9 @@ WideString GetTempFileName(LPCWSTR lpszPathName, LPCWSTR lpszPrefix, BOOL bFullP
 		wsprintf(lpszBuffer, L"%s\\%s\\%08x", lpszPathName, lpszPrefix, (DWORD)time(NULL));
 	}
 	wchar_t* p = lpszBuffer;
-	if(bFullPath == FALSE){
+	if (!bFullPath) {
 		p = wcsrchr(lpszBuffer, L'\\');
-		if(p != NULL){
+		if (p) {
 			p++;
 		}
 	}

@@ -167,7 +167,7 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 	if (bSelect) {
 		bUnderlineDoNotOFF = false;		// 選択状態ならアンダーライン消去を行う
 	}
-	bool	bMoveCaretLine = false;
+	bool bMoveCaretLine = false;
 	int nRepeat = bRepeat ? 2 : 1;
 	int nRes = 0;
 	CLayoutPoint ptCaretMove = GetCaret().GetCaretLayoutPos();
@@ -268,7 +268,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 	if (bSelect) {
 		bUnderlineDoNotOFF = false;		// 選択状態ならアンダーライン消去を行う
 	}
-	bool	bMoveCaretLine = false;
+	bool bMoveCaretLine = false;
 	int nRepeat = bRepeat ? 2 : 1; // 移動する回数
 	CLayoutPoint ptCaretMove = GetCaret().GetCaretLayoutPos();
 	for (int nRepCount=0; nRepCount<nRepeat; ++nRepCount) {
@@ -398,14 +398,12 @@ void CViewCommander::Command_UP2(bool bSelect)
 }
 
 
-
 // カーソル下移動(２行づつ)
 void CViewCommander::Command_DOWN2(bool bSelect)
 {
 	GetCaret().Cursor_UPDOWN(CLayoutInt(2), bSelect);
 	return;
 }
-
 
 
 // 単語の左端に移動
@@ -493,12 +491,12 @@ void CViewCommander::Command_WORDLEFT(bool bSelect)
 // 単語の右端に移動
 void CViewCommander::Command_WORDRIGHT(bool bSelect)
 {
-	bool	bUnderlineDoNotOFF = true;	// アンダーラインを消去しない
+	bool bUnderlineDoNotOFF = true;	// アンダーラインを消去しない
 	if (bSelect) {
 		bUnderlineDoNotOFF = false;		// 選択状態ならアンダーライン消去を行う
 	}
-	CLogicInt	nIdx;
-	CLayoutInt	nCurLine;
+	CLogicInt nIdx;
+	CLayoutInt nCurLine;
 	auto& si = m_pCommanderView->GetSelectionInfo();
 	if (bSelect) {
 		if (!si.IsTextSelected()) {	// テキストが選択されているか
@@ -666,7 +664,6 @@ void CViewCommander::Command_GOLINETOP(
 }
 
 
-
 /*! 行末に移動(折り返し単位)
 	@praram nOption	0x08 改行単位(合成可)
 */
@@ -743,7 +740,6 @@ void CViewCommander::Command_HalfPageDown( bool bSelect, CLayoutYInt nScrollNum 
 }
 
 
-
 /*! １ページアップ
 
 	@date 2000.10.10 JEPRO 作成
@@ -773,7 +769,6 @@ void CViewCommander::Command_1PageUp( bool bSelect, CLayoutYInt nScrollNum )
 	}
 	return;
 }
-
 
 
 /*!	１ページダウン
@@ -807,7 +802,6 @@ void CViewCommander::Command_1PageDown( bool bSelect, CLayoutYInt nScrollNum )
 }
 
 
-
 // ファイルの先頭に移動
 void CViewCommander::Command_GOFILETOP(bool bSelect)
 {
@@ -822,7 +816,6 @@ void CViewCommander::Command_GOFILETOP(bool bSelect)
 	);
 	m_pCommanderView->MoveCursorSelecting(pt, bSelect);	// 通常は、(0, 0)へ移動。ボックス選択中は、(GetCaret().GetCaretLayoutPos().GetX2(), 0)へ移動
 }
-
 
 
 // ファイルの最後に移動
@@ -882,9 +875,7 @@ void CViewCommander::Command_CURLINECENTER(void)
 }
 
 
-
 // 移動履歴を前へたどる
-//
 void CViewCommander::Command_JUMPHIST_PREV(void)
 {
 	// 2001.12.13 hor
@@ -908,7 +899,6 @@ void CViewCommander::Command_JUMPHIST_PREV(void)
 		m_pCommanderView->MoveCursorSelecting(pt, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
 }
-
 
 
 // 移動履歴を次へたどる
@@ -946,8 +936,9 @@ void CViewCommander::Command_WndScrollDown(void)
 
 	auto& textArea = m_pCommanderView->GetTextArea();
 	nCaretMarginY = textArea.m_nViewRowNum / _CARETMARGINRATE;
-	if (nCaretMarginY < 1)
+	if (nCaretMarginY < 1) {
 		nCaretMarginY = CLayoutInt(1);
+	}
 
 	nCaretMarginY += 2;
 
@@ -978,7 +969,6 @@ void CViewCommander::Command_WndScrollDown(void)
 	}
 	caret.m_cUnderLine.CaretUnderLineON(true, true);
 }
-
 
 
 // from CViewCommander_New.cpp
@@ -1020,7 +1010,6 @@ void CViewCommander::Command_WndScrollUp(void)
 }
 
 // 2001/06/20 End
-
 
 
 // from CViewCommander_New.cpp
@@ -1093,7 +1082,6 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 
 	GetCaret().Cursor_UPDOWN(ptCaretPos_Layo_CaretPointer.y - ptCaretPos_Layo.y, bSelect);
 }
-
 
 
 // from CViewCommander_New.cpp
@@ -1255,7 +1243,7 @@ void CViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 */
 void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 {
-	CLogicInt   nYOld = GetCaret().GetCaretLogicPos().y;
+	CLogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	CLogicPoint ptXY(0, nYOld);
 	const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2());
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();
@@ -1332,8 +1320,8 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 */
 void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 {
-	CLogicInt   nYOld = GetCaret().GetCaretLogicPos().y;
-	CLogicInt   nYOld2 = nYOld;
+	CLogicInt nYOld = GetCaret().GetCaretLogicPos().y;
+	CLogicInt nYOld2 = nYOld;
 	CLogicPoint ptXY(0, nYOld);
 	const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2());
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();

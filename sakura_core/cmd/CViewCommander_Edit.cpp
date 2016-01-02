@@ -878,7 +878,7 @@ void CViewCommander::Command_DELETE_BACK(void)
 void CViewCommander::DelCharForOverwrite(const wchar_t* pszInput, int nLen)
 {
 	bool bEol = false;
-	BOOL bDelete = TRUE;
+	bool bDelete = true;
 	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	int nDelLen = CLogicInt(0);
 	CLayoutInt nKetaDiff = CLayoutInt(0);
@@ -891,7 +891,7 @@ void CViewCommander::DelCharForOverwrite(const wchar_t* pszInput, int nLen)
 			if (pcLayout->GetLayoutEol() != EOL_NONE) {
 				if (GetDllShareData().m_Common.m_sEdit.m_bNotOverWriteCRLF) {	// ‰üs‚Íã‘‚«‚µ‚È‚¢
 					// Œ»İˆÊ’u‚ª‰üs‚È‚ç‚Îíœ‚µ‚È‚¢
-					bDelete = FALSE;
+					bDelete = false;
 				}
 			}
 		}else {

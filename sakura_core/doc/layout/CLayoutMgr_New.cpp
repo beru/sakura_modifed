@@ -278,10 +278,10 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayoutInt nEnd)
+BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayoutInt nEnd)
 {
-	BOOL bRet = FALSE;
-	BOOL bOnlyExpansion = TRUE;		// 最大幅の拡大のみをチェックする
+	bool bRet = false;
+	bool bOnlyExpansion = true;		// 最大幅の拡大のみをチェックする
 	CLayoutInt nMaxLen = CLayoutInt(0);
 	CLayoutInt nMaxLineNum = CLayoutInt(0);
 
@@ -289,7 +289,7 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 
 	// 開始・終了位置がどちらも指定されていない
 	if (nStart < 0 && nEnd < 0) {
-		bOnlyExpansion = FALSE;		// 最大幅の拡大・縮小をチェックする
+		bOnlyExpansion = false;		// 最大幅の拡大・縮小をチェックする
 	}
 	if (nStart < 0) {			// 算出開始行の指定なし
 		nStart = 0;
@@ -368,14 +368,14 @@ BOOL CLayoutMgr::CalculateTextWidth(BOOL bCalLineLen, CLayoutInt nStart, CLayout
 			m_nTextWidthMaxLine = nMaxLineNum;
 			if (m_nTextWidth != nMaxLen) {	// 最大幅変化あり
 				m_nTextWidth = nMaxLen;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 	}else if (Int(m_nTextWidth) && !Int(nLines)) {
 		// 全削除されたら幅の記憶をクリア
 		m_nTextWidthMaxLine = 0;
 		m_nTextWidth = 0;
-		bRet = TRUE;
+		bRet = true;
 	}
 	
 	return bRet;

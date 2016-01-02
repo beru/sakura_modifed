@@ -74,7 +74,7 @@ retry:;
 	CNativeW cmemData;
 	// カーソル直前の単語を取得
 	if (0 < m_pCommanderView->GetParser().GetLeftWord(&cmemData, 100)) {
-		m_pCommanderView->ShowHokanMgr(cmemData, TRUE);
+		m_pCommanderView->ShowHokanMgr(cmemData, true);
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示

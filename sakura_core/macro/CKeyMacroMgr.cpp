@@ -145,7 +145,7 @@ bool CKeyMacroMgr::ExecKeyMacro(CEditView* pcEditView, int flags) const
 /*! キーボードマクロの読み込み
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
+bool CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	// キーマクロのバッファをクリアする
 	ClearAll();
@@ -153,7 +153,7 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	CTextInputStream in(pszPath);
 	if (!in) {
 		m_nReady = false;
-		return FALSE;
+		return false;
 	}
 
 	WCHAR	szFuncName[100];
@@ -433,11 +433,11 @@ BOOL CKeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 
 	// Jun. 16, 2002 genta
 	// マクロ中にエラーがあったら異常終了できるようにする．
-	return m_nReady ? TRUE : FALSE;
+	return m_nReady;
 }
 
 // キーボードマクロを文字列から読み込み
-BOOL CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
+bool CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	// 一時ファイル名を作成
 	TCHAR szTempDir[_MAX_PATH];
@@ -450,7 +450,7 @@ BOOL CKeyMacroMgr::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 	out.Close();
 
 	// マクロ読み込み
-	BOOL bRet = LoadKeyMacro(hInstance, szTempFile);
+	bool bRet = LoadKeyMacro(hInstance, szTempFile);
 
 	::DeleteFile(szTempFile);			// 一時ファイル削除
 

@@ -193,26 +193,18 @@ void CImageListMgr::MyBitBlt(
 ) const
 {
 //	HBRUSH	brShadow, brHilight;
-	HDC		hdcMask;
-	HBITMAP bmpMask;
-	HBITMAP bmpMaskOld;
-	HDC		hdcMem;
-	HBITMAP	bmpMemOld;
-	HDC		hdcMem2;
-	HBITMAP bmpMem2;
-	HBITMAP bmpMem2Old;
 	// create a monochrome memory DC
-	hdcMask = CreateCompatibleDC(drawdc);
-	bmpMask = CreateCompatibleBitmap(hdcMask, nWidth, nHeight);
-	bmpMaskOld = (HBITMAP)SelectObject(hdcMask, bmpMask);
+	HDC hdcMask = CreateCompatibleDC(drawdc);
+	HBITMAP bmpMask = CreateCompatibleBitmap(hdcMask, nWidth, nHeight);
+	HBITMAP bmpMaskOld = (HBITMAP)SelectObject(hdcMask, bmpMask);
 	/* 元ビットマップ用DC */
-	hdcMem = ::CreateCompatibleDC(drawdc);
-	bmpMemOld = (HBITMAP)::SelectObject(hdcMem, bmp);
+	HDC hdcMem = ::CreateCompatibleDC(drawdc);
+	HBITMAP bmpMemOld = (HBITMAP)::SelectObject(hdcMem, bmp);
 	/* 作業用DC */
-	hdcMem2 = ::CreateCompatibleDC(drawdc);
-	bmpMem2 = CreateCompatibleBitmap(drawdc, nWidth, nHeight);
-	bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
-
+	HDC hdcMem2 = ::CreateCompatibleDC(drawdc);
+	HBITMAP bmpMem2 = CreateCompatibleBitmap(drawdc, nWidth, nHeight);
+	HBITMAP bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
+	
 	// build a mask
 //	2003.09.04 Moca bmpMaskとbmpの転送する大きさが同じなので不要
 //	PatBlt(hdcMask, 0, 0, nWidth, nHeight, WHITENESS);
@@ -253,31 +245,23 @@ void CImageListMgr::MyBitBlt(
 void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth, 
                         int nHeight, HBITMAP bmp, int nXSrc, int nYSrc) const
 {
-	HDC		hdcMask;
-	HBITMAP	bmpMask;
-	HBITMAP	bmpMaskOld;
-	HDC		hdcMem;
-	HBITMAP	bmpMemOld;
-	HDC		hdcMem2;
-	HBITMAP bmpMem2;
-	HBITMAP bmpMem2Old;
 
 	//COLORREF colToTransParent = RGB(192, 192, 192);	/* BMPの中の透明にする色 */
 	COLORREF colToTransParent = m_cTrans;
 
 	// create a monochrome memory DC
-	hdcMask = CreateCompatibleDC(drawdc);
-	bmpMask = CreateCompatibleBitmap(hdcMask, nWidth, nHeight);
-	bmpMaskOld = (HBITMAP)SelectObject(hdcMask, bmpMask);
+	HDC hdcMask = CreateCompatibleDC(drawdc);
+	HBITMAP bmpMask = CreateCompatibleBitmap(hdcMask, nWidth, nHeight);
+	HBITMAP bmpMaskOld = (HBITMAP)SelectObject(hdcMask, bmpMask);
 
-	hdcMem = CreateCompatibleDC(drawdc);
-	bmpMemOld = (HBITMAP)SelectObject(hdcMem, bmp);
+	HDC hdcMem = CreateCompatibleDC(drawdc);
+	HBITMAP bmpMemOld = (HBITMAP)SelectObject(hdcMem, bmp);
 
 	//	Jul. 21, 2003 genta
 	//	hdcMemに書き込むと元のbitmapを破壊してしまう
-	hdcMem2 = ::CreateCompatibleDC(drawdc);
-	bmpMem2 = CreateCompatibleBitmap(drawdc, nWidth, nHeight);
-	bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
+	HDC hdcMem2 = ::CreateCompatibleDC(drawdc);
+	HBITMAP bmpMem2 = CreateCompatibleBitmap(drawdc, nWidth, nHeight);
+	HBITMAP bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
 
 	// build a mask
 	//	2003.09.04 Moca bmpMaskとbmpの転送する大きさが同じなので不要

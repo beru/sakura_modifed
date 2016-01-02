@@ -642,7 +642,7 @@ BOOL CSMacroMgr::Exec(
 
 	@author Norio Nakatani, YAZAKI, genta
 */
-BOOL CSMacroMgr::Load(
+bool CSMacroMgr::Load(
 	int idx,
 	HINSTANCE hInstance,
 	const TCHAR* pszPath,
@@ -681,9 +681,9 @@ BOOL CSMacroMgr::Load(
 	m_sMacroPath = _T("");
 	*ppMacro = CMacroFactory::getInstance()->Create(ext);
 	if (!*ppMacro) {
-		return FALSE;
+		return false;
 	}
-	BOOL bRet;
+	bool bRet;
 	if (!pszType) {
 		bRet = (*ppMacro)->LoadKeyMacro(hInstance, pszPath);
 		if (idx == STAND_KEYMACRO || idx == TEMP_KEYMACRO) {
@@ -696,13 +696,13 @@ BOOL CSMacroMgr::Load(
 	// From Here Jun. 16, 2002 genta
 	// 読み込みエラー時はインスタンス削除
 	if (bRet) {
-		return TRUE;
+		return true;
 	}else {
 		delete *ppMacro;
 		*ppMacro = NULL;
 	}
 	// To Here Jun. 16, 2002 genta
-	return FALSE;
+	return false;
 }
 
 /** マクロオブジェクトをすべて破棄する(キーボードマクロ以外)
@@ -729,7 +729,7 @@ void CSMacroMgr::UnloadAll(void)
 
 	@author YAZAKI
 */
-BOOL CSMacroMgr::Save(
+bool CSMacroMgr::Save(
 	int idx,
 	HINSTANCE hInstance,
 	const TCHAR* pszPath
@@ -744,14 +744,14 @@ BOOL CSMacroMgr::Save(
 		// Jun. 27, 2002 genta
 		// 空マクロの場合は正常終了と見なす．
 		if (!m_pKeyMacro) {
-			return TRUE;
+			return true;
 		}
 
 	}
 //	else if (0 <= idx && idx < MAX_CUSTMACRO) {
 //		return m_cSavedKeyMacro[idx]->SaveKeyMacro(hInstance, pszPath);
 //	}
-	return FALSE;
+	return false;
 }
 
 /*

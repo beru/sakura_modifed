@@ -1007,7 +1007,7 @@ void CEditView::OnSize(int cx, int cy)
 	// To Here 2007.09.09 Moca
 
 	// 2008.06.06 nasukoji	サイズ変更時の折り返し位置再計算
-	BOOL wrapChanged = FALSE;
+	bool wrapChanged = false;
 	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_WINDOW_WIDTH) {
 		if (m_nMyIndex == 0) {	// 左上隅のビューのサイズ変更時のみ処理する
 			// 右端で折り返すモードなら右端で折り返す	// 2008.06.08 ryoji
@@ -1015,8 +1015,9 @@ void CEditView::OnSize(int cx, int cy)
 		}
 	}
 
-	if (!wrapChanged)	// 折り返し位置が変更されていない
+	if (!wrapChanged) {	// 折り返し位置が変更されていない
 		AdjustScrollBars();				// スクロールバーの状態を更新する
+	}
 
 	// キャレットの表示(右・下に隠れていた場合)
 	GetCaret().ShowEditCaret();
@@ -1767,7 +1768,7 @@ void CEditView::CopyViewStatus(CEditView* pView) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 縦・横の分割ボックス・サイズボックスのＯＮ／ＯＦＦ
-void CEditView::SplitBoxOnOff(BOOL bVert, BOOL bHorz, BOOL bSizeBox)
+void CEditView::SplitBoxOnOff(bool bVert, bool bHorz, bool bSizeBox)
 {
 	RECT	rc;
 	if (bVert) {
@@ -1843,7 +1844,7 @@ void CEditView::SplitBoxOnOff(BOOL bVert, BOOL bHorz, BOOL bSizeBox)
 */
 bool CEditView::GetSelectedDataSimple(CNativeW &cmemBuf)
 {
-	return GetSelectedData(&cmemBuf, FALSE, NULL, FALSE, false, EOL_UNKNOWN);
+	return GetSelectedData(&cmemBuf, false, NULL, false, false, EOL_UNKNOWN);
 }
 
 /* 選択範囲のデータを取得
@@ -1851,9 +1852,9 @@ bool CEditView::GetSelectedDataSimple(CNativeW &cmemBuf)
 */
 bool CEditView::GetSelectedData(
 	CNativeW*		cmemBuf,
-	BOOL			bLineOnly,
+	bool			bLineOnly,
 	const wchar_t*	pszQuote,			// 先頭に付ける引用符
-	BOOL			bWithLineNumber,	// 行番号を付与する
+	bool			bWithLineNumber,	// 行番号を付与する
 	bool			bAddCRLFWhenCopy,	// 折り返し位置で改行記号を入れる
 	EEolType		neweol				// コピー後の改行コード EOL_NONEはコード保存
 )
@@ -2251,7 +2252,7 @@ int CEditView::IsCurrentPositionSelectedTEST(
 // 選択範囲内の全行をクリップボードにコピーする
 void CEditView::CopySelectedAllLines(
 	const wchar_t*	pszQuote,		//!< 先頭に付ける引用符
-	BOOL			bWithLineNumber	//!< 行番号を付与する
+	bool			bWithLineNumber	//!< 行番号を付与する
 )
 {
 	CNativeW	cmemBuf;
@@ -2289,7 +2290,7 @@ void CEditView::CopySelectedAllLines(
 	// 正常時はTRUE,範囲未選択の場合は終了する
 	if (!GetSelectedData(
 			&cmemBuf,
-			FALSE,
+			false,
 			pszQuote, // 引用符
 			bWithLineNumber, // 行番号を付与する
 			GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy // 折り返し位置に改行記号を入れる

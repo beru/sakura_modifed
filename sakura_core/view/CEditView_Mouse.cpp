@@ -76,7 +76,6 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	CLogicInt	nIdx;
 	int			nWork;
-	BOOL		tripleClickMode = FALSE;	// 2007.10.02 nasukoji	トリプルクリックであることを示す
 	int			nFuncID = 0;				// 2007.12.02 nasukoji	マウス左クリックに対応する機能コード
 
 	if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() == 0) {
@@ -95,14 +94,14 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 		m_dwTipTimer = ::GetTickCount();		// 辞書Tip起動タイマー
 	}
 
+	// 2007.10.02 nasukoji	トリプルクリックであることを示す
 	// 2007.12.02 nasukoji	トリプルクリックをチェック
-	tripleClickMode = CheckTripleClick(ptMouse);
-
+	bool tripleClickMode = CheckTripleClick(ptMouse);
 	if (tripleClickMode) {
 		// マウス左トリプルクリックに対応する機能コードはm_Common.m_pKeyNameArr[5]に入っている
 		nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_TRIPLECLICK].m_nFuncCodeArr[getCtrlKeyState()];
 		if (nFuncID == 0) {
-			tripleClickMode = 0;	// 割り当て機能無しの時はトリプルクリック OFF
+			tripleClickMode = false;	// 割り当て機能無しの時はトリプルクリック OFF
 		}
 	}else {
 		m_dwTripleClickCheck = 0;	// トリプルクリックチェック OFF
@@ -146,7 +145,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					return;
 				}
 				// 選択範囲のデータを取得
-				if (GetSelectedData(&cmemCurText, FALSE, NULL, FALSE, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
+				if (GetSelectedData(&cmemCurText, false, NULL, false, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
 					DWORD dwEffects;
 					DWORD dwEffectsSrc = (!m_pcEditDoc->IsEditable()) ?
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
@@ -182,7 +181,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 normal_action:;
 
 	// ALTキーが押されている、かつトリプルクリックでない		// 2007.11.15 nasukoji	トリプルクリック対応
-	if (GetKeyState_Alt() &&(! tripleClickMode)) {
+	if (GetKeyState_Alt() && !tripleClickMode) {
 		if (GetSelectionInfo().IsTextSelected()) {	// テキストが選択されているか
 			// 現在の選択範囲を非選択状態に戻す
 			GetSelectionInfo().DisableSelectArea(true);
@@ -333,7 +332,7 @@ normal_action:;
 
 		bool bSelectWord = false;
 		// CTRLキーが押されている、かつトリプルクリックでない		// 2007.11.15 nasukoji	トリプルクリック対応
-		if (GetKeyState_Control() &&(! tripleClickMode)) {
+		if (GetKeyState_Control() && !tripleClickMode) {
 			GetSelectionInfo().m_bBeginWordSelect = true;		// 単語単位選択中
 			if (!GetSelectionInfo().IsTextSelected()) {
 				// 現在位置の単語選択
@@ -528,14 +527,14 @@ normal_action:;
 	
 	@date 2007.11.15 nasukoji	新規作成
 */
-BOOL CEditView::CheckTripleClick(CMyPoint ptMouse)
+bool CEditView::CheckTripleClick(CMyPoint ptMouse)
 {
 
 	// トリプルクリックチェック有効でない（時刻がセットされていない）
 	if (!m_dwTripleClickCheck)
-		return FALSE;
+		return false;
 
-	BOOL result = FALSE;
+	bool result = false;
 
 	// 前回クリックとのクリック位置のずれを算出
 	CMyPoint dpos(GetSelectionInfo().m_ptMouseRollPosOld.x - ptMouse.x,
@@ -555,7 +554,7 @@ BOOL CEditView::CheckTripleClick(CMyPoint ptMouse)
 		(dpos.x <= GetSystemMetrics(SM_CXDOUBLECLK)) &&
 		(dpos.y <= GetSystemMetrics(SM_CYDOUBLECLK))
 	) {
-		result = TRUE;
+		result = true;
 	}else {
 		m_dwTripleClickCheck = 0;	// トリプルクリックチェック OFF
 	}
@@ -1812,7 +1811,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 	DEBUG_TRACE(_T("CEditView::Drop()\n"));
 	BOOL		bBoxData;
 	BOOL		bMove;
-	BOOL		bMoveToPrev = FALSE;
+	bool		bMoveToPrev = false;
 	RECT		rcSel;
 	CNativeW	cmemBuf;
 	bool		bBeginBoxSelect_Old = false;
@@ -1896,25 +1895,25 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 			);
 			++rcSel.bottom;
 			if (GetCaret().GetCaretLayoutPos().GetY() >= rcSel.bottom) {
-				bMoveToPrev = FALSE;
+				bMoveToPrev = false;
 			}else if (GetCaret().GetCaretLayoutPos().GetY() + rcSel.bottom - rcSel.top < rcSel.top) {
-				bMoveToPrev = TRUE;
+				bMoveToPrev = true;
 			}else if (GetCaret().GetCaretLayoutPos().GetX2() < rcSel.left) {
-				bMoveToPrev = TRUE;
+				bMoveToPrev = true;
 			}else {
-				bMoveToPrev = FALSE;
+				bMoveToPrev = false;
 			}
 		}else {
 			if (pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom().y > GetCaret().GetCaretLayoutPos().GetY()) {
-				bMoveToPrev = TRUE;
+				bMoveToPrev = true;
 			}else if (pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom().y == GetCaret().GetCaretLayoutPos().GetY()) {
 				if (pcDragSourceView->GetSelectionInfo().m_sSelect.GetFrom().x > GetCaret().GetCaretLayoutPos().GetX2()) {
-					bMoveToPrev = TRUE;
+					bMoveToPrev = true;
 				}else {
-					bMoveToPrev = FALSE;
+					bMoveToPrev = false;
 				}
 			}else {
-				bMoveToPrev = FALSE;
+				bMoveToPrev = false;
 			}
 		}
 	}

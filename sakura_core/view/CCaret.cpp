@@ -418,15 +418,15 @@ CLayoutInt CCaret::MoveCursorToClientPoint(const POINT& ptClientPos, bool test, 
 			EOFだけの行は、先頭位置のみ正しい。
 	@date 2004.04.02 Moca 関数化
 */
-BOOL CCaret::GetAdjustCursorPos(
+bool CCaret::GetAdjustCursorPos(
 	CLayoutPoint* pptPosXY
-)
+	)
 {
 	// 2004.03.28 Moca EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
 	CLayoutInt nLayoutLineCount = m_pEditDoc->m_cLayoutMgr.GetLineCount();
 
 	CLayoutPoint ptPosXY2 = *pptPosXY;
-	BOOL ret = FALSE;
+	bool ret = false;
 	if (ptPosXY2.y >= nLayoutLineCount) {
 		if (0 < nLayoutLineCount) {
 			ptPosXY2.y = nLayoutLineCount - 1;
@@ -453,7 +453,7 @@ BOOL CCaret::GetAdjustCursorPos(
 		}
 		if (*pptPosXY != ptPosXY2) {
 			*pptPosXY = ptPosXY2;
-			ret = TRUE;
+			ret = true;
 		}
 	}
 	return ret;

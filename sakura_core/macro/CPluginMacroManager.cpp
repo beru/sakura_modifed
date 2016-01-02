@@ -67,7 +67,7 @@ bool CPluginMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //	ファイルからマクロを読み込む
-BOOL CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
+bool CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 {
 	m_Source = L"";
 	CTextInputStream in(Path);
@@ -75,17 +75,17 @@ BOOL CPluginMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* Path)
 		while (in) {
 			m_Source += in.ReadLineW() + L"\r\n";
 		}
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // 文字列からマクロを読み込む
-BOOL CPluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
+bool CPluginMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* Code)
 {
 	m_Source = to_wchar(Code);
-	return TRUE;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

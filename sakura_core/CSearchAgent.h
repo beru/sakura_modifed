@@ -121,7 +121,7 @@ public:
 
 	bool WhereCurrentWord(CLogicInt , CLogicInt , CLogicInt* , CLogicInt*, CNativeW*, CNativeW*);	// 現在位置の単語の範囲を調べる
 
-	bool PrevOrNextWord(CLogicInt , CLogicInt , CLogicInt* , BOOL bLEFT, BOOL bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	bool PrevOrNextWord(CLogicInt , CLogicInt , CLogicInt* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 	int SearchWord(CLogicPoint ptSerachBegin, ESearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern); // 単語検索
 

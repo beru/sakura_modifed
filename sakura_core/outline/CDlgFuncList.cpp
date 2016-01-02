@@ -433,7 +433,7 @@ void CDlgFuncList::SetData()
 	SetDocLineFuncList();
 	if (OUTLINE_CPP == m_nListType) {	// C++メソッドリスト
 		m_nViewType = VIEWTYPE_TREE;
-		SetTreeJava(GetHwnd(), TRUE);	// Jan. 04, 2002 genta Java Method Treeに統合
+		SetTreeJava(GetHwnd(), true);	// Jan. 04, 2002 genta Java Method Treeに統合
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_CPP));
 	}else if (OUTLINE_FILE == m_nListType) {	//@@@ 2002.04.01 YAZAKI アウトライン解析にルールファイル導入
 		m_nViewType = VIEWTYPE_TREE;
@@ -457,7 +457,7 @@ void CDlgFuncList::SetData()
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_TEXT));
 	}else if (OUTLINE_JAVA == m_nListType) { // Javaメソッドツリー
 		m_nViewType = VIEWTYPE_TREE;
-		SetTreeJava(GetHwnd(), TRUE);
+		SetTreeJava(GetHwnd(), true);
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_JAVA));
 	//	2007.02.08 genta Python追加
 	}else if (OUTLINE_PYTHON == m_nListType) { // Python メソッドツリー
@@ -466,7 +466,7 @@ void CDlgFuncList::SetData()
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_PYTHON));
 	}else if (OUTLINE_COBOL == m_nListType) { // COBOL アウトライン
 		m_nViewType = VIEWTYPE_TREE;
-		SetTreeJava(GetHwnd(), FALSE);
+		SetTreeJava(GetHwnd(), false);
 		::SetWindowText(GetHwnd(), LS(STR_DLGFNCLST_TITLE_COBOL));
 	}else if (OUTLINE_VB == m_nListType) {	// VisualBasic アウトライン
 		m_nViewType = VIEWTYPE_LIST;
@@ -486,7 +486,7 @@ void CDlgFuncList::SetData()
 		::SetWindowText(GetHwnd(), _T(""));
 	}else if (OUTLINE_CLSTREE == m_nListType) { // 汎用クラスツリー
 		m_nViewType = VIEWTYPE_TREE;
-		SetTreeJava(GetHwnd(), TRUE);
+		SetTreeJava(GetHwnd(), true);
 		::SetWindowText(GetHwnd(), _T(""));
 	}else {
 		m_nViewType = VIEWTYPE_LIST;
@@ -874,7 +874,7 @@ int CDlgFuncList::GetData(void)
 */
 void CDlgFuncList::SetTreeJava(
 	HWND hwndDlg,
-	BOOL bAddClass
+	bool bAddClass
 	)
 {
 	CLayoutInt		nFuncLineTop(INT_MAX);
@@ -1697,7 +1697,7 @@ void CDlgFuncList::SetTreeFile()
 }
 
 
-void CDlgFuncList::SetTreeFileSub( HTREEITEM hParent, const TCHAR* pszFile )
+void CDlgFuncList::SetTreeFileSub(HTREEITEM hParent, const TCHAR* pszFile)
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
@@ -2446,8 +2446,7 @@ void  CDlgFuncList::SortTree(HWND hWndTree, HTREEITEM htiParent)
 }
 
 
-
-bool CDlgFuncList::TagJumpTimer( const TCHAR* pFile, CMyPoint point, bool bCheckAutoClose )
+bool CDlgFuncList::TagJumpTimer(const TCHAR* pFile, CMyPoint point, bool bCheckAutoClose)
 {
 	CEditView* pcView = reinterpret_cast<CEditView*>(m_lParam);
 
@@ -2476,7 +2475,7 @@ bool CDlgFuncList::TagJumpTimer( const TCHAR* pFile, CMyPoint point, bool bCheck
 }
 
 
-BOOL CDlgFuncList::OnJump( bool bCheckAutoClose, bool bFileJump )	//2002.02.08 hor 引数追加
+BOOL CDlgFuncList::OnJump(bool bCheckAutoClose, bool bFileJump)	//2002.02.08 hor 引数追加
 {
 	int nLineTo;
 	int nColTo;
@@ -3750,7 +3749,7 @@ BOOL CDlgFuncList::Track(POINT ptDrag)
 	RECT rc;
 	RECT rcDragLast;
 	SIZE sizeLast = sizeClear;
-	BOOL bDragging = false;	// まだ本格開始しない
+	bool bDragging = false;	// まだ本格開始しない
 	int cxDragSm = ::GetSystemMetrics(SM_CXDRAG);
 	int cyDragSm = ::GetSystemMetrics(SM_CYDRAG);
 

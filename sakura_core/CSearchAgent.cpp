@@ -347,7 +347,7 @@ const wchar_t* CSearchAgent::SearchStringWord(
 				}
 			}
 		}
-		if (!CWordParse::SearchNextWordPosition(pLine, CLogicInt(nLineLen), nNextWordFrom, &nNextWordFrom, FALSE)) {
+		if (!CWordParse::SearchNextWordPosition(pLine, CLogicInt(nLineLen), nNextWordFrom, &nNextWordFrom, false)) {
 			break;	//	次の単語が無い。
 		}
 	}
@@ -388,8 +388,8 @@ bool CSearchAgent::PrevOrNextWord(
 	CLogicInt	nLineNum,		//	行数
 	CLogicInt	nIdx,			//	桁数
 	CLogicInt*	pnColumnNew,	//	見つかった位置
-	BOOL		bLEFT,			//	TRUE:前方（左）へ向かう。FALSE:後方（右）へ向かう。
-	BOOL		bStopsBothEnds	//	単語の両端で止まる
+	bool		bLEFT,			//	TRUE:前方（左）へ向かう。FALSE:後方（右）へ向かう。
+	bool		bStopsBothEnds	//	単語の両端で止まる
 )
 {
 	using namespace WCODE;

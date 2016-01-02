@@ -130,7 +130,7 @@ LRESULT CPrintPreview::OnPaint(
 	UINT			uMsg,	// message identifier
 	WPARAM			wParam,	// first message parameter
 	LPARAM			lParam 	// second message parameter
-)
+	)
 {
 	PAINTSTRUCT		ps;
 	HDC				hdcOld = ::BeginPaint(hwnd, &ps);
@@ -1418,7 +1418,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 	int				nPageNum,
 	CDlgCancel*		pCDlgCancel,
 	CColorStrategy* pStrategyStart
-)
+	)
 {
 	int				nDirectY = -1;
 
@@ -1633,7 +1633,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	CLayoutInt		nIndent,  // 2006.08.14 Moca 追加
 	const CLayout*	pcLayout,	//!< 色付用Layout
 	CColorStrategy*	pStrategyStart
-)
+	)
 {
 	if (nLineLen == 0) {
 		return pStrategyStart;
@@ -1779,7 +1779,7 @@ void CPrintPreview::Print_DrawBlock(
 	CLayoutInt		nLayoutX,
 	int				nDx,
 	const int*		pDxArray
-)
+	)
 {
 	if (nKind == 2 && !pcLayout) {
 		// TABはカラーで無ければ印字不要
@@ -1834,7 +1834,7 @@ CColorStrategy* CPrintPreview::GetColorStrategy(
 	int					iLogic,
 	CColorStrategy*		pStrategy,
 	bool&				bChange
-)
+	)
 {
 	if (pStrategy) {
 		if (pStrategy->EndColor(cStringLine, iLogic)) {
@@ -1901,7 +1901,7 @@ int CALLBACK CPrintPreview::MyEnumFontFamProc(
 	NEWTEXTMETRIC*	pntm,		// pointer to physical-font data
 	int				nFontType,	// type of font
 	LPARAM			lParam 		// address of application-defined data
-)
+	)
 {
 	CPrintPreview* pCPrintPreview = (CPrintPreview*)lParam;
 	if (_tcscmp(pelf->elfLogFont.lfFaceName, pCPrintPreview->m_pPrintSetting->m_szPrintFontFaceHan) == 0) {
@@ -2077,7 +2077,7 @@ INT_PTR CPrintPreview::DispatchEvent_PPB(
 	UINT				uMsg,		// message
 	WPARAM				wParam,		// first message parameter
 	LPARAM				lParam 		// second message parameter
-)
+	)
 {
 	WORD wNotifyCode;
 	WORD wID;

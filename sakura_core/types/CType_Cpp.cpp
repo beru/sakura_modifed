@@ -103,7 +103,7 @@ bool C_IsWordChar(wchar_t c)
 	本質的には不要であるが、高速化のために既にある値を利用する。
 */
 static
-bool C_IsOperator(wchar_t* szStr, int nLen	)
+bool C_IsOperator(wchar_t* szStr, int nLen)
 {
 	if (nLen >= 8 && szStr[nLen - 1] == L'r') {
 		if (nLen > 8 ?
@@ -181,7 +181,11 @@ public:
 	CCppPreprocessMng(void) :
 		// 2007.12.15 genta : m_bitpatternを0にしないと，
 		// いきなり#elseが現れたときにパターンがおかしくなる
-		m_ismultiline(false), m_maxnestlevel(32), m_stackptr(0), m_bitpattern(0), m_enablebuf(0)
+		m_ismultiline(false),
+		m_maxnestlevel(32),
+		m_stackptr(0),
+		m_bitpattern(0),
+		m_enablebuf(0)
 	{}
 
 	CLogicInt ScanLine(const wchar_t*, CLogicInt);

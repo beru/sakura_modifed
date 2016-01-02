@@ -157,7 +157,7 @@ void CTextOutputStream::WriteString(
 			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 
 			// éüÇ÷
-			p = lf+1;
+			p = lf + 1;
 		}else {
 			// écÇËÇ∫ÇÒÇ‘èoóÕ
 			CNativeW cSrc(p, pEnd - p);

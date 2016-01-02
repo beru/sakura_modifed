@@ -321,10 +321,10 @@ void CViewCommander::Command_PRINT_PAGESETUP(void)
 
 // From Here Feb. 10, 2001 JEPRO 追加
 // C/C++ヘッダファイルまたはソースファイル オープン機能
-bool CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
+bool CViewCommander::Command_OPEN_HfromtoC(bool bCheckOnly)
 {
-	if (Command_OPEN_HHPP(bCheckOnly, FALSE))	return true;
-	if (Command_OPEN_CCPP(bCheckOnly, FALSE))	return true;
+	if (Command_OPEN_HHPP(bCheckOnly, false))	return true;
+	if (Command_OPEN_CCPP(bCheckOnly, false))	return true;
 	ErrorBeep();
 	return false;
 // 2002/03/24 YAZAKI コードの重複を削減
@@ -333,8 +333,8 @@ bool CViewCommander::Command_OPEN_HfromtoC(BOOL bCheckOnly)
 
 
 // C/C++ヘッダファイル オープン機能		// Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
-//BOOL CViewCommander::Command_OPENINCLUDEFILE(BOOL bCheckOnly)
-bool CViewCommander::Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
+//BOOL CViewCommander::Command_OPENINCLUDEFILE(bool bCheckOnly)
+bool CViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -347,8 +347,8 @@ bool CViewCommander::Command_OPEN_HHPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
 
 
 // C/C++ソースファイル オープン機能
-//BOOL CViewCommander::Command_OPENCCPP(BOOL bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
-bool CViewCommander::Command_OPEN_CCPP(BOOL bCheckOnly, BOOL bBeepWhenMiss)
+//BOOL CViewCommander::Command_OPENCCPP(bool bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
+bool CViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };

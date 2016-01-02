@@ -425,7 +425,7 @@ LRESULT CTabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 					// TABまとめる => 自分だけ更新して後でRefresh通知
 					// TABまとめない場合は、Refresh通知をした方がいいがマウスキャプチャが終了するので、まとめると同じ動きにする
 					ReorderTab(m_nSrcTab, nDstTab);
-					Refresh(FALSE);
+					Refresh(false);
 					if (m_nTabHover == m_nSrcTab) {
 						m_nTabHover = nDstTab;	// 自動表示の閉じるボタンも一緒に移動する
 					}
@@ -1764,7 +1764,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case TWNT_REFRESH:	// 再表示
-		Refresh((BOOL)lParam);
+		Refresh(lParam != 0);
 		break;
 
 	// Start 2004.07.14 Kazika 追加
@@ -1844,7 +1844,7 @@ int CTabWnd::FindTabIndexByHWND(HWND hWnd)
 	@date 2006.02.06 ryoji 選択タブを指定するHWND引数およびその処理は不要なので削除（自ウィンドウを常時選択）
 	@date 2006.06.24 ryoji スクロールしないで更新する方法を変更
 */
-void CTabWnd::Refresh(BOOL bEnsureVisible/* = TRUE*/, BOOL bRebuild/* = FALSE*/)
+void CTabWnd::Refresh(bool bEnsureVisible/* = true*/, bool bRebuild/* = false*/)
 {
 	TCITEM		tcitem;
 	EditNode*	pEditNode;
@@ -2180,7 +2180,7 @@ void CTabWnd::LayoutTab(void)
 	HIMAGELIST hImg = TabCtrl_GetImageList(m_hwndTab);
 	if (!hImg && bDispTabIcon) {
 		if (InitImageList())
-			Refresh(TRUE, TRUE);
+			Refresh(true, true);
 	}else if (hImg && !bDispTabIcon) {
 		InitImageList();
 	}
@@ -2198,8 +2198,8 @@ void CTabWnd::LayoutTab(void)
 	}
 
 	// オーナードロー状態を共通設定に追随させる
-	BOOL bDispTabClose = csTabBar.m_bDispTabClose;
-	BOOL bOwnerDraw = bDispTabClose;
+	EDispTabClose bDispTabClose = csTabBar.m_bDispTabClose;
+	bool bOwnerDraw = (bDispTabClose != DISPTABCLOSE_NO);
 	if (bOwnerDraw && !(lStyle & TCS_OWNERDRAWFIXED)) {
 		lStyle |= TCS_OWNERDRAWFIXED;
 	}else if (!bOwnerDraw && (lStyle & TCS_OWNERDRAWFIXED)) {

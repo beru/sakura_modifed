@@ -101,7 +101,7 @@ public:
 		CLogicInt		nLineLen,
 		CLogicInt		nIdx,			//	桁数
 		CLogicInt*		pnColumnNew,	//	見つかった位置
-		BOOL			bStopsBothEnds	//	単語の両端で止まる
+		bool			bStopsBothEnds	//	単語の両端で止まる
 	);
 
 	//	pLine（長さ：nLineLen）の文字列から次の単語を探す。探し始める位置はnIdxで指定。 for 強調キーワード
@@ -110,7 +110,7 @@ public:
 		CLogicInt		nLineLen,
 		CLogicInt		nIdx,			//	桁数
 		CLogicInt*		pnColumnNew,	//	見つかった位置
-		BOOL			bStopsBothEnds	//	単語の両端で止まる
+		bool			bStopsBothEnds	//	単語の両端で止まる
 	);
 
 

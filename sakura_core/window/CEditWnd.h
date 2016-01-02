@@ -174,7 +174,7 @@ public:
 	void InitMenu_Function(HMENU , EFunctionCode, const wchar_t*, const wchar_t*);
 	bool InitMenu_Special(HMENU , EFunctionCode);
 	void InitMenubarMessageFont(void);			//	メニューバーへのメッセージ表示機能をCEditWndより移管	//	Dec. 4, 2002 genta
-	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, BOOL bFull);	//!< ウィンドウ一覧メニュー作成処理		2006.03.23 fon
+	LRESULT WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull);	//!< ウィンドウ一覧メニュー作成処理		2006.03.23 fon
 	LRESULT PopupWinList(bool bMousePos);		//!< ウィンドウ一覧ポップアップ表示処理		2006.03.23 fon	// 2007.02.28 ryoji フルパス指定のパラメータを削除
 	void RegisterPluginCommand();				// プラグインコマンドをエディタに登録する
 	void RegisterPluginCommand(int id);			// プラグインコマンドをエディタに登録する
@@ -250,7 +250,7 @@ public:
 	void RedrawAllViews(CEditView* pcViewExclude);				// すべてのペインをRedrawする
 	void Views_DisableSelectArea(bool bRedraw);
 	BOOL DetectWidthOfLineNumberAreaAllPane(bool bRedraw);	// すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する）
-	BOOL WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
+	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
 	BOOL UpdateTextWrap(void);		// 折り返し方法関連の更新	2008.06.10 ryoji
 	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
 	void ChangeLayoutParam(bool bShowProgress, CLayoutInt nTabSize, CLayoutInt nMaxLineKetas);

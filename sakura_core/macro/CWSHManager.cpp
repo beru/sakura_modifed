@@ -90,20 +90,20 @@ bool CWSHMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 	@param hInstance [in] インスタンスハンドル(未使用)
 	@param pszPath   [in] ファイルのパス
 */
-BOOL CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
+bool CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 {
 	// ソース読み込み -> m_Source
 	m_Source = L"";
 	
 	CTextInputStream in(pszPath);
 	if (!in) {
-		return FALSE;
+		return false;
 	}
 
 	while (in) {
 		m_Source += in.ReadLineW() + L"\r\n";
 	}
-	return TRUE;
+	return true;
 }
 
 /*!
@@ -112,11 +112,11 @@ BOOL CWSHMacroManager::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 	@param hInstance [in] インスタンスハンドル(未使用)
 	@param pszCode   [in] マクロコード
 */
-BOOL CWSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
+bool CWSHMacroManager::LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode)
 {
 	// ソース読み込み -> m_Source
 	m_Source = to_wchar(pszCode);
-	return TRUE;
+	return true;
 }
 
 CMacroManagerBase* CWSHMacroManager::Creator(const TCHAR* FileExt)

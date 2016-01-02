@@ -37,8 +37,8 @@ public:
 
 	// 2007.07.20 genta : flags’Ç‰Á
 	virtual bool ExecKeyMacro(CEditView *EditView, int flags) const;
-	virtual BOOL LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);
-	virtual BOOL LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);
+	virtual bool LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath);
+	virtual bool LoadKeyMacroStr(HINSTANCE hInstance, const TCHAR* pszCode);
 
 	static CMacroManagerBase* Creator(const TCHAR* FileExt);
 	static void declare();

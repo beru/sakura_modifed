@@ -85,7 +85,7 @@ bool CWSHPlugin::InvokePlug(
 			return false;
 		}
 
-		BOOL bLoadResult = pWsh->LoadKeyMacro(G_AppInstance(), path);
+		bool bLoadResult = pWsh->LoadKeyMacro(G_AppInstance(), path);
 		if (!bLoadResult) {
 			ErrorMessage(NULL, LS(STR_WSHPLUG_LOADMACRO), static_cast<const TCHAR*>(path));
 			delete pWsh;
@@ -100,11 +100,8 @@ bool CWSHPlugin::InvokePlug(
 	cPluginIfo.AddRef();
 	cPluginIfo.SetPlugIndex(plug.m_id);	// 実行中プラグ番号を提供
 	pWsh->AddParam(&cPluginIfo);
-
 	pWsh->AddParam(params);			// パラメータを追加
-
 	pWsh->ExecKeyMacro2(view, FA_NONRECORD | FA_FROMMACRO);
-
 	pWsh->ClearParam();
 
 	if (m_bUseCache) {

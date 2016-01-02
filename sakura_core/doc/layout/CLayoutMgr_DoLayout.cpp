@@ -585,7 +585,7 @@ void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {	// 「折り返さない」
 		CLayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
 		CLayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
-		BOOL bCalTextWidth        = TRUE;		// テキスト最大幅の算出要求をON
+		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON
 		CLayoutInt nInsLineNum    = m_nLines - pctwArg->nAllLinesOld;		// 追加削除行数
 
 		// 削除行なし時：最大幅の行を行頭以外にて改行付きで編集した
@@ -630,7 +630,7 @@ void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 			}
 		}else {
 			// 最大幅以外の行を改行を含まずに（1行内で）編集した
-			bCalTextWidth = FALSE;		// テキスト最大幅の算出要求をOFF
+			bCalTextWidth = false;		// テキスト最大幅の算出要求をOFF
 		}
 
 #if defined(_DEBUG) && defined(_UNICODE)
@@ -640,7 +640,7 @@ void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 		// テキスト最大幅を算出する
 		if (bCalTextWidth) {
 //			MYTRACE_W(L"CLayoutMgr::DoLayout_Range(%d) nCalTextWidthLinesFrom=%d nCalTextWidthLinesTo=%d\n", testcount, nCalTextWidthLinesFrom, nCalTextWidthLinesTo);
-			CalculateTextWidth(FALSE, nCalTextWidthLinesFrom, nCalTextWidthLinesTo);
+			CalculateTextWidth(false, nCalTextWidthLinesFrom, nCalTextWidthLinesTo);
 //			MYTRACE_W(L"CLayoutMgr::DoLayout_Range() m_nTextWidthMaxLine=%d\n", m_nTextWidthMaxLine);
 		}else {
 //			MYTRACE_W(L"CLayoutMgr::DoLayout_Range(%d) FALSE\n", testcount);
@@ -648,7 +648,7 @@ void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 #else
 		// テキスト最大幅を算出する
 		if (bCalTextWidth)
-			CalculateTextWidth(FALSE, nCalTextWidthLinesFrom, nCalTextWidthLinesTo);
+			CalculateTextWidth(false, nCalTextWidthLinesFrom, nCalTextWidthLinesTo);
 #endif
 	}
 }

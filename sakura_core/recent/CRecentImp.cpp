@@ -49,7 +49,7 @@ bool CRecentImp<T, S>::Create(
 	bool*			pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
 	int				nArrayCount,	// 最大管理可能なアイテム数
 	int*			pnViewCount		// 表示個数(NULL許可)
-)
+	)
 {
 	Terminate();
 

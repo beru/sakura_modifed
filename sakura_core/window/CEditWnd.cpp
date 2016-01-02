@@ -1730,7 +1730,7 @@ LRESULT CEditWnd::DispatchEvent(
 			
 			if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd) {
 				// タブ表示のままグループ化する／しないが変更されていたらタブを更新する必要がある
-				m_cTabWnd.Refresh(FALSE);
+				m_cTabWnd.Refresh(false);
 			}
 			if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
 				if (CAppNodeManager::getInstance()->GetEditNode(GetHwnd())->IsTopInGroup()) {
@@ -3249,7 +3249,7 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 			(eDockSideFL == DOCKSIDE_TOP || eDockSideFL == DOCKSIDE_BOTTOM)? nHeight - nFuncListHeight: nHeight,
 			TRUE
 		);
-		GetMiniMap().SplitBoxOnOff( FALSE, FALSE, bMiniMapSizeBox );
+		GetMiniMap().SplitBoxOnOff(false, false, bMiniMapSizeBox);
 	}
 
 	::MoveWindow(
@@ -4077,7 +4077,7 @@ LRESULT CEditWnd::PopupWinList(bool bMousePos)
 		EditNode* pEditNodeArr;
 		HMENU hMenu = ::CreatePopupMenu();	// 2006.03.23 fon
 		int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE);
-		WinListMenu(hMenu, pEditNodeArr, nRowNum, TRUE);
+		WinListMenu(hMenu, pEditNodeArr, nRowNum, true);
 		// メニューを表示する
 		RECT rcWork;
 		GetMonitorWorkRect(pt, &rcWork);	// モニタのワークエリア
@@ -4097,7 +4097,7 @@ LRESULT CEditWnd::PopupWinList(bool bMousePos)
 	@date  2006.03.23 fon CEditWnd::InitMenuから移動。////が元からあるコメント。//>は追加コメントアウト。
 	@date 2009.06.02 ryoji アイテム数が多いときはアクセスキーを 1-9,A-Z の範囲で再使用する（従来は36個未満を仮定）
 */
-LRESULT CEditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, BOOL bFull)
+LRESULT CEditWnd::WinListMenu(HMENU hMenu, EditNode* pEditNodeArr, int nRowNum, bool bFull)
 {
 	if (nRowNum > 0) {
 		TCHAR szMenu[_MAX_PATH * 2 + 3];
@@ -4451,16 +4451,16 @@ BOOL CEditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
 	@retval 折り返しを変更したかどうか
 	@date 2008.06.08 ryoji 新規作成
 */
-BOOL CEditWnd::WrapWindowWidth(int nPane)
+bool CEditWnd::WrapWindowWidth(int nPane)
 {
 	// 右端で折り返す
 	CLayoutInt nWidth = GetView(nPane).ViewColNumToWrapColNum(GetView(nPane).GetTextArea().m_nViewColNum);
 	if (GetDocument()->m_cLayoutMgr.GetMaxLineKetas() != nWidth) {
 		ChangeLayoutParam(false, GetDocument()->m_cLayoutMgr.GetTabSpace(), nWidth);
 		ClearViewCaretPosInfo();
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /** 折り返し方法関連の更新
@@ -4472,7 +4472,7 @@ BOOL CEditWnd::UpdateTextWrap(void)
 	// この関数はコマンド実行ごとに処理の最終段階で利用する
 	// （アンドゥ登録＆全ビュー更新のタイミング）
 	if (GetDocument()->m_nTextWrapMethodCur == WRAP_WINDOW_WIDTH) {
-		BOOL bWrap = WrapWindowWidth(0);	// 右端で折り返す
+		bool bWrap = WrapWindowWidth(0);	// 右端で折り返す
 		if (bWrap) {
 			// WrapWindowWidth() で追加した更新リージョンで画面更新する
 			for (int i=0; i<GetAllViewCount(); ++i) {
