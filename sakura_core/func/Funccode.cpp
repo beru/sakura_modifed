@@ -1188,6 +1188,9 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	case F_TAB_4:
 	case F_TAB_5:
 	case F_TAB_6:
+	case F_TAB_7:
+	case F_TAB_8:
+	case F_TAB_9:
 		// 非タブモード時はウィンドウを結合して表示できない
 		return pShareData->m_Common.m_sTabBar.m_bDispTabWnd != FALSE;
 	case F_GROUPCLOSE:		// 2007.06.20 ryoji 追加
