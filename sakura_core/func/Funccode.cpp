@@ -481,6 +481,15 @@ const EFunctionCode pnFuncList_Win[] = {	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(List7
 	F_MINIMIZE_ALL		,	// ‚·‚×‚ÄÅ¬‰»	//Sept. 17, 2000 jepro à–¾‚Ìu‘S‚Äv‚ðu‚·‚×‚Äv‚É“ˆê
 	F_REDRAW			,	// Ä•`‰æ
 	F_WIN_OUTPUT		,	// ƒAƒEƒgƒvƒbƒgƒEƒBƒ“ƒhƒE•\Ž¦
+	F_TAB_1				,	// Tab1
+	F_TAB_2				,	// Tab2
+	F_TAB_3				,	// Tab3
+	F_TAB_4				,	// Tab4
+	F_TAB_5				,	// Tab5
+	F_TAB_6				,	// Tab6
+	F_TAB_7				,	// Tab7
+	F_TAB_8				,	// Tab8
+	F_TAB_9				,	// Tab9
 };
 const int nFincList_Win_Num = _countof(pnFuncList_Win);	//Oct. 16, 2000 JEPRO •Ï”–¼•ÏX(List7¨List_Win)
 
@@ -1173,6 +1182,12 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	case F_TAB_MOVELEFT:	// 2007.06.20 ryoji ’Ç‰Á
 	case F_TAB_CLOSELEFT:	// 2009.12.26 syat ’Ç‰Á
 	case F_TAB_CLOSERIGHT:	// 2009.12.26 syat ’Ç‰Á
+	case F_TAB_1:
+	case F_TAB_2:
+	case F_TAB_3:
+	case F_TAB_4:
+	case F_TAB_5:
+	case F_TAB_6:
 		// ”ñƒ^ƒuƒ‚[ƒhŽž‚ÍƒEƒBƒ“ƒhƒE‚ðŒ‹‡‚µ‚Ä•\Ž¦‚Å‚«‚È‚¢
 		return pShareData->m_Common.m_sTabBar.m_bDispTabWnd != FALSE;
 	case F_GROUPCLOSE:		// 2007.06.20 ryoji ’Ç‰Á

@@ -604,6 +604,26 @@ bool CViewCommander::HandleCommand(
 	case F_TAB_CLOSEOTHER:	Command_TAB_CLOSEOTHER(); break;	// このタブ以外を閉じる 	// 2008.11.22 syat 追加
 	case F_TAB_CLOSELEFT:	Command_TAB_CLOSELEFT(); break;		// 左をすべて閉じる 		// 2008.11.22 syat 追加
 	case F_TAB_CLOSERIGHT:	Command_TAB_CLOSERIGHT(); break;	// 右をすべて閉じる 		// 2008.11.22 syat 追加
+	case F_TAB_1:
+	case F_TAB_2:
+	case F_TAB_3:
+	case F_TAB_4:
+	case F_TAB_5:
+	case F_TAB_6:
+	case F_TAB_7:
+	case F_TAB_8:
+	case F_TAB_9:
+		{
+			int idx = nCommand - F_TAB_1 + 1;
+			auto sd = &GetDllShareData();
+			for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
+				if (sd->m_sNodes.m_pEditArr[i].m_nIndex == idx) {
+					ActivateFrameWindow(sd->m_sNodes.m_pEditArr[i].GetHwnd());
+					break;
+				}
+			}
+		}
+		break;
 
 	// 支援
 	case F_HOKAN:			Command_HOKAN(); break;			// 入力補完

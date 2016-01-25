@@ -3310,8 +3310,8 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		if (::MYMESSAGEBOX(
 				hwndEdit,
 				MB_OKCANCEL | MB_ICONINFORMATION, GSTR_APPNAME,
-				LS(STR_DLGFNCLST_UNIFY
-			) == IDOK)
+				LS(STR_DLGFNCLST_UNIFY)
+			) == IDOK
 		) {
 			CommonSet().m_bOutlineDockDisp = GetHwnd()? TRUE: FALSE;
 			CommonSet().m_eOutlineDockSide = GetDockSide();

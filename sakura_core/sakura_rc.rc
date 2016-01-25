@@ -3415,6 +3415,15 @@ BEGIN
 	F_TAB_GROUPIZE			"グループ化"				// LMP -- added
     F_TAB_CLOSELEFT         "左をすべて閉じる"
     F_TAB_CLOSERIGHT        "右をすべて閉じる"
+    F_TAB_1                 "Tab1"
+    F_TAB_2                 "Tab2"
+    F_TAB_3                 "Tab3"
+    F_TAB_4                 "Tab4"
+    F_TAB_5                 "Tab5"
+    F_TAB_6                 "Tab6"
+    F_TAB_7                 "Tab7"
+    F_TAB_8                 "Tab8"
+    F_TAB_9                 "Tab9"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -431,6 +431,15 @@ F_TAB_JOINTPREV		= 31387,	// 前のグループに移動						なし
 F_TAB_CLOSEOTHER	= 31388,	// このタブ以外を閉じる						なし
 F_TAB_CLOSELEFT		= 31389,	// 左をすべて閉じる							なし
 F_TAB_CLOSERIGHT	= 31390,	// 右をすべて閉じる							なし
+F_TAB_1	= 31391,	// Tab1							なし
+F_TAB_2	= 31392,	// Tab2							なし
+F_TAB_3	= 31393,	// Tab3							なし
+F_TAB_4	= 31394,	// Tab4							なし
+F_TAB_5	= 31395,	// Tab5							なし
+F_TAB_6	= 31396,	// Tab6							なし
+F_TAB_7 = 31397,	// Tab7							なし
+F_TAB_8	= 31398,	// Tab8							なし
+F_TAB_9	= 31399,	// Tab9							なし
 
 
 // 支援

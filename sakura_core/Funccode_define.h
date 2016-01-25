@@ -344,6 +344,15 @@
 #define F_TAB_CLOSEOTHER 31388
 #define F_TAB_CLOSELEFT 31389
 #define F_TAB_CLOSERIGHT 31390
+#define F_TAB_1 31391
+#define F_TAB_2 31392
+#define F_TAB_3 31393
+#define F_TAB_4 31394
+#define F_TAB_5 31395
+#define F_TAB_6 31396
+#define F_TAB_7 31397
+#define F_TAB_8 31398
+#define F_TAB_9 31399
 #define F_HOKAN 31430
 #define F_TOGGLE_KEY_SEARCH 31431
 #define F_HELP_CONTENTS 31440
