@@ -604,6 +604,8 @@ bool CViewCommander::HandleCommand(
 	case F_TAB_CLOSEOTHER:	Command_TAB_CLOSEOTHER(); break;	// このタブ以外を閉じる 	// 2008.11.22 syat 追加
 	case F_TAB_CLOSELEFT:	Command_TAB_CLOSELEFT(); break;		// 左をすべて閉じる 		// 2008.11.22 syat 追加
 	case F_TAB_CLOSERIGHT:	Command_TAB_CLOSERIGHT(); break;	// 右をすべて閉じる 		// 2008.11.22 syat 追加
+
+	// 同一グループ内の左からn番目のタブにフォーカス切替
 	case F_TAB_1:
 	case F_TAB_2:
 	case F_TAB_3:
@@ -614,12 +616,35 @@ bool CViewCommander::HandleCommand(
 	case F_TAB_8:
 	case F_TAB_9:
 		{
-			int idx = nCommand - F_TAB_1 + 1;
 			auto sd = &GetDllShareData();
+			HWND hActiveWnd = GetActiveWindow();
+			int activeWndGroup = -1;
 			for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
-				if (sd->m_sNodes.m_pEditArr[i].m_nIndex == idx) {
-					ActivateFrameWindow(sd->m_sNodes.m_pEditArr[i].GetHwnd());
+				auto& editNode = sd->m_sNodes.m_pEditArr[i];
+				if (editNode.GetHwnd() == hActiveWnd) {
+					activeWndGroup = editNode.m_nGroup;
 					break;
+				}
+			}
+			if (activeWndGroup != -1) {
+				std::vector<int> indices;
+				for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
+					auto& editNode = sd->m_sNodes.m_pEditArr[i];
+					if (editNode.m_nGroup == activeWndGroup) {
+						indices.push_back(editNode.m_nIndex);
+					}
+				}
+				std::sort(indices.begin(), indices.end());
+				int idx = nCommand - F_TAB_1;
+				if (idx < indices.size()) {
+					int nodeIdx = indices[idx];
+					for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
+						auto& editNode = sd->m_sNodes.m_pEditArr[i];
+						if (editNode.m_nIndex == nodeIdx) {
+							ActivateFrameWindow(editNode.m_hWnd);
+							break;
+						}
+					}
 				}
 			}
 		}
