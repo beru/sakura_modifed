@@ -87,7 +87,7 @@ const int nsFuncCode::nFuncKindNum = _countof(nsFuncCode::ppszFuncKind);
 // ファイル操作系
 const EFunctionCode pnFuncList_File[] = {	// Oct. 16, 2000 JEPRO 変数名変更(List5→List_File)
 	F_FILENEW			,	// 新規作成
-	F_FILENEW_NEWWINDOW	,	// 新規ウインドウを開く
+	F_FILENEW_NEWWINDOW	,	// 新規ウィンドウを開く
 	F_FILEOPEN			,	// 開く
 	F_FILEOPEN_DROPDOWN	,	// 開く(ドロップダウン)
 	F_FILESAVE			,	// 上書き保存
@@ -590,7 +590,7 @@ int FuncID_To_HelpContextID(EFunctionCode nFuncID)
 
 	// ファイル操作系
 	case F_FILENEW:				return HLP000025;			// 新規作成
-	case F_FILENEW_NEWWINDOW:	return HLP000339;			// 新規ウインドウで開く
+	case F_FILENEW_NEWWINDOW:	return HLP000339;			// 新規ウィンドウで開く
 	case F_FILEOPEN:			return HLP000015;			// 開く
 	case F_FILEOPEN_DROPDOWN:	return HLP000015;			// 開く(ドロップダウン)	//@@@ 2002.06.15 MIK
 	case F_FILESAVE:			return HLP000020;			// 上書き保存
@@ -1170,7 +1170,7 @@ bool IsFuncEnable(const CEditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 			&& pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()
 		);
 		
-	// タブモード時はウインドウ並べ替え禁止です。	@@@ 2003.06.12 MIK
+	// タブモード時はウィンドウ並べ替え禁止です。	@@@ 2003.06.12 MIK
 	case F_TILE_H:
 	case F_TILE_V:
 	case F_CASCADE:

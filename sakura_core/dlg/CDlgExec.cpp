@@ -190,9 +190,9 @@ int CDlgExec::GetData(void)
 		// マクロからの呼び出しではShareDataに保存させないように，ShareDataとの受け渡しはExecCmdの外で
 		int nFlgOpt = 0;
 		nFlgOpt |= (IsButtonChecked(IDC_CHECK_GETSTDOUT)) ? 0x01 : 0;	// 標準出力を得る
-		nFlgOpt |= (IsButtonChecked(IDC_RADIO_EDITWINDOW)) ? 0x02 : 0;	// 標準出力を編集中のウインドウへ
+		nFlgOpt |= (IsButtonChecked(IDC_RADIO_EDITWINDOW)) ? 0x02 : 0;	// 標準出力を編集中のウィンドウへ
 		nFlgOpt |= (IsButtonChecked(IDC_CHECK_SENDSTDIN)) ? 0x04 : 0;	// 編集中ファイルを標準入力へ
-		nFlgOpt |= (IsButtonChecked(IDC_CHECK_CUR_DIR)) ? 0x200 : 0;		// カレントディレクトリ指定
+		nFlgOpt |= (IsButtonChecked(IDC_CHECK_CUR_DIR)) ? 0x200 : 0;	// カレントディレクトリ指定
 		int sel;
 		sel = Combo_GetCurSel(GetItemHwnd(IDC_COMBO_CODE_GET));
 		nFlgOpt |= codeTable1[sel];

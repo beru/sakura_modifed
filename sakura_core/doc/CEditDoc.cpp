@@ -509,7 +509,7 @@ void CEditDoc::GetEditInfo(
 	pfi->m_bIsGrep = CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode;
 	wcscpy(pfi->m_szGrepKey, CAppMode::getInstance()->m_szGrepKey);
 
-	// デバッグモニタ (アウトプットウインドウ) モード
+	// デバッグモニタ (アウトプットウィンドウ) モード
 	pfi->m_bIsDebug = CAppMode::getInstance()->IsDebugMode();
 }
 

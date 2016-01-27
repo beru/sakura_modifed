@@ -116,7 +116,7 @@ void CViewCommander::Command_WINLIST(int nCommandFrom)
 
 	@date 2002.01.08 YAZAKI 「左右に並べて表示」すると、
 		裏で最大化されているエクスプローラが「元の大きさ」になるバグ修正。
-	@date 2003.06.12 MIK タブウインドウ時は動作しないように
+	@date 2003.06.12 MIK タブウィンドウ時は動作しないように
 	@date 2004.03.19 crayonzen カレントウィンドウを最後に配置．
 		ウィンドウが多い場合に2周目以降は右にずらして配置．
 	@date 2004.03.20 genta Z-Orderの上から順に並べていくように．(SetWindowPosを利用)
@@ -637,7 +637,7 @@ void CViewCommander::Command_WIN_OUTPUT(void)
 
 
 // from CViewCommander_New.cpp
-/*!	@brief マクロ用アウトプットウインドウに表示
+/*!	@brief マクロ用アウトプットウィンドウに表示
 	@date 2006.04.26 maru 新規作成
 */
 void CViewCommander::Command_TRACEOUT(const wchar_t* outputstr, int nLen, int nFlgOpt)

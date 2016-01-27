@@ -304,8 +304,8 @@ bool CShareData::InitShareData()
 		{
 			CommonSetting_TabBar& sTabBar = m_pShareData->m_Common.m_sTabBar;
 
-			sTabBar.m_bDispTabWnd = false;				// タブウインドウ表示	//@@@ 2003.05.31 MIK
-			sTabBar.m_bDispTabWndMultiWin = false;		// タブウインドウ表示	//@@@ 2003.05.31 MIK
+			sTabBar.m_bDispTabWnd = false;				// タブウィンドウ表示	//@@@ 2003.05.31 MIK
+			sTabBar.m_bDispTabWndMultiWin = false;		// タブウィンドウ表示	//@@@ 2003.05.31 MIK
 			wcscpy(	//@@@ 2003.06.13 MIK
 				sTabBar.m_szTabWndCaption,
 				L"${w?【Grep】$h$:【アウトプット】$:$f$n$}${U?(更新)$}${R?(ビューモード)$:(上書き禁止)$}${M?【キーマクロの記録中】$}"
@@ -318,7 +318,7 @@ bool CShareData::InitShareData()
 			sTabBar.m_bTab_CloseOneWin = false;			// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
 			sTabBar.m_bTab_ListFull = false;			// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
 			sTabBar.m_bChgWndByWheel = false;			// マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
-			sTabBar.m_bNewWindow = false;				// 外部から起動するときは新しいウインドウで開く
+			sTabBar.m_bNewWindow = false;				// 外部から起動するときは新しいウィンドウで開く
 			sTabBar.m_bTabMultiLine = false;			// タブ多段
 			sTabBar.m_eTabPosition = TabPosition_Top;	// タブ位置
 
@@ -1001,9 +1001,9 @@ bool CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 
 
 /*!
-	アウトプットウインドウに出力(書式付)
+	アウトプットウィンドウに出力(書式付)
 
-	アウトプットウインドウが無ければオープンする
+	アウトプットウィンドウが無ければオープンする
 	@param lpFmt [in] 書式指定文字列(wchar_t版)
 	@date 2010.02.22 Moca auto_vsprintfから tchar_vsnprintf_s に変更.長すぎるときは切り詰められる
 */
@@ -1032,10 +1032,10 @@ void CShareData::TraceOut(LPCTSTR lpFmt, ...)
 }
 
 /*!
-	アウトプットウインドウに出力(文字列指定)
+	アウトプットウィンドウに出力(文字列指定)
 
 	長い場合は分割して送る
-	アウトプットウインドウが無ければオープンする
+	アウトプットウィンドウが無ければオープンする
 	@param  pStr  出力する文字列
 	@param  len   pStrの文字数(終端NULを含まない) -1で自動計算
 	@date 2010.05.11 Moca 新設
@@ -1115,7 +1115,7 @@ bool CShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 		sLoadInfo.bViewMode = false;
 		ret = CControlTray::OpenNewEditor(NULL, hwnd, sLoadInfo, _T("-DEBUGMODE"), true);
 		// 2001/06/23 N.Nakatani 窓が出るまでウエイトをかけるように修正
-		// アウトプットウインドウが出来るまで5秒ぐらい待つ。
+		// アウトプットウィンドウが出来るまで5秒ぐらい待つ。
 		// Jun. 25, 2001 genta OpenNewEditorの同期機能を利用するように変更
 		bAllwaysActive = true; // 新しく作ったときはactive
 	}

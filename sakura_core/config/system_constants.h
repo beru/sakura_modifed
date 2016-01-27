@@ -153,7 +153,7 @@
 	タグファイル作成用コマンドオプション保存領域(m_nTagsOpt,m_szTagsCmdLine)を追加 2003.05.12 MIK
 
 	Version 46:
-	編集ウインドウ数修正、タブウインドウ用情報追加
+	編集ウィンドウ数修正、タブウインドウ用情報追加
 
 	Version 47:
 	ファイルからの補完をSTypeConfigに追加 2003.06.28 Moca
@@ -639,7 +639,7 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 // ヘルプっぽい何か
 #define	MYWM_HTMLHELP			(WM_APP+212)
 
-//! タブウインドウ用メッセージ
+//! タブウィンドウ用メッセージ
 #define	MYWM_TAB_WINDOW_NOTIFY	(WM_APP+213)	//@@@ 2003.05.31 MIK
 
 //! バーの表示・非表示変更メッセージ

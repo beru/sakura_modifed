@@ -564,8 +564,8 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 	cProfile.IOProfileData( pszSecName, LTEXT("nMiniMapQuality")		, common.m_sWindow.m_nMiniMapQuality );
 	cProfile.IOProfileData( pszSecName, LTEXT("nMiniMapWidth")			, common.m_sWindow.m_nMiniMapWidth );
 	
-	cProfile.IOProfileData(pszSecName, LTEXT("bDispTabWnd")			, common.m_sTabBar.m_bDispTabWnd);	// タブウインドウ	//@@@ 2003.05.31 MIK
-	cProfile.IOProfileData(pszSecName, LTEXT("bDispTabWndMultiWin")	, common.m_sTabBar.m_bDispTabWndMultiWin);	// タブウインドウ	//@@@ 2003.05.31 MIK
+	cProfile.IOProfileData(pszSecName, LTEXT("bDispTabWnd")			, common.m_sTabBar.m_bDispTabWnd);	// タブウィンドウ	//@@@ 2003.05.31 MIK
+	cProfile.IOProfileData(pszSecName, LTEXT("bDispTabWndMultiWin")	, common.m_sTabBar.m_bDispTabWndMultiWin);	// タブウィンドウ	//@@@ 2003.05.31 MIK
 	cProfile.IOProfileData(pszSecName, LTEXT("szTabWndCaption")		, MakeStringBufferW(common.m_sTabBar.m_szTabWndCaption));	//@@@ 2003.06.13 MIK
 	cProfile.IOProfileData(pszSecName, LTEXT("bSameTabWidth")			, common.m_sTabBar.m_bSameTabWidth);	// 2006.01.28 ryoji タブを等幅にする
 	cProfile.IOProfileData(pszSecName, LTEXT("bDispTabIcon")			, common.m_sTabBar.m_bDispTabIcon);	// 2006.01.28 ryoji タブにアイコンを表示する
@@ -575,7 +575,7 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 	cProfile.IOProfileData(pszSecName, LTEXT("bTab_CloseOneWin")	, common.m_sTabBar.m_bTab_CloseOneWin);	// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
 	cProfile.IOProfileData(pszSecName, LTEXT("bTab_ListFull")			, common.m_sTabBar.m_bTab_ListFull);	// タブ一覧をフルパス表示する	// 2007.02.28 ryoji
 	cProfile.IOProfileData(pszSecName, LTEXT("bChgWndByWheel")		, common.m_sTabBar.m_bChgWndByWheel);	// 2006.03.26 ryoji マウスホイールでウィンドウ切り替え
-	cProfile.IOProfileData(pszSecName, LTEXT("bNewWindow")			, common.m_sTabBar.m_bNewWindow);	// 外部から起動するときは新しいウインドウで開く
+	cProfile.IOProfileData(pszSecName, LTEXT("bNewWindow")			, common.m_sTabBar.m_bNewWindow);	// 外部から起動するときは新しいウィンドウで開く
 	cProfile.IOProfileData( pszSecName, L"bTabMultiLine"			, common.m_sTabBar.m_bTabMultiLine );	// タブ多段
 	cProfile.IOProfileData_WrapInt( pszSecName, L"eTabPosition"		, common.m_sTabBar.m_eTabPosition );	// タブ位置
 
@@ -1923,7 +1923,7 @@ void CShareData_IO::ShareData_IO_MainMenu(CDataProfile& cProfile)
 	if (cProfile.IsReadingMode() && nVersion < nCurrentVer) {
 		CommonSetting_MainMenu& mainmenu = GetDllShareData().m_Common.m_sMainMenu;
 		SMainMenuAddItemInfo addInfos[] = {
-			{1, F_FILENEW_NEWWINDOW, F_FILENEW, L'M', false, false},	// 新しいウインドウを開く
+			{1, F_FILENEW_NEWWINDOW, F_FILENEW, L'M', false, false},	// 新しいウィンドウを開く
 			{1, F_CHG_CHARSET, F_TOGGLE_KEY_SEARCH, L'A', false, false},	// 文字コード変更
 			{1, F_CHG_CHARSET, F_VIEWMODE, L'A', false, false}, 	// 文字コード変更(Sub)
 			{1, F_FILE_REOPEN_LATIN1, F_FILE_REOPEN_EUC, L'L', false, false}, 	// Latin1で開き直す

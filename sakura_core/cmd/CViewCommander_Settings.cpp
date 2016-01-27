@@ -42,7 +42,7 @@ void CViewCommander::Command_SHOWTOOLBAR(void)
 	pCEditWnd->LayoutToolBar();
 	pCEditWnd->EndLayoutBars();
 
-	// 全ウインドウに変更を通知する。
+	// 全ウィンドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_TOOLBAR,
@@ -64,7 +64,7 @@ void CViewCommander::Command_SHOWFUNCKEY(void)
 	pCEditWnd->LayoutFuncKey();
 	pCEditWnd->EndLayoutBars();
 
-	// 全ウインドウに変更を通知する。
+	// 全ウィンドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_FUNCKEY,
@@ -74,7 +74,7 @@ void CViewCommander::Command_SHOWFUNCKEY(void)
 }
 
 
-/*! タブ(ウインドウ)の表示/非表示
+/*! タブ(ウィンドウ)の表示/非表示
 
 	@author MIK
 	@date 2003.06.10 新規作成
@@ -98,7 +98,7 @@ void CViewCommander::Command_SHOWTAB(void)
 		);
 	}
 
-	// 全ウインドウに変更を通知する。
+	// 全ウィンドウに変更を通知する。
 	CAppNodeManager::getInstance()->ResetGroupId();
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
@@ -121,7 +121,7 @@ void CViewCommander::Command_SHOWSTATUSBAR(void)
 	pCEditWnd->LayoutStatusBar();
 	pCEditWnd->EndLayoutBars();
 
-	// 全ウインドウに変更を通知する。
+	// 全ウィンドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_STATUSBAR,
@@ -142,7 +142,7 @@ void CViewCommander::Command_SHOWMINIMAP(void)
 	pCEditWnd->LayoutMiniMap();
 	pCEditWnd->EndLayoutBars();
 
-	//全ウインドウに変更を通知する。
+	//全ウィンドウに変更を通知する。
 	CAppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
 		(WPARAM)MYBCN_MINIMAP,

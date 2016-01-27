@@ -53,12 +53,12 @@ extern const int		SELECTEDAREA_ROP2;
 
 
 //@@@ From Here 2003.05.31 MIK
-// タブウインドウ用メッセージサブコマンド
+// タブウィンドウ用メッセージサブコマンド
 enum ETabWndNotifyType {
 	TWNT_REFRESH	= 0,		// 再表示
-	TWNT_ADD		= 1,		// ウインドウ登録
-	TWNT_DEL		= 2,		// ウインドウ削除
-	TWNT_ORDER		= 3,		// ウインドウ順序変更
+	TWNT_ADD		= 1,		// ウィンドウ登録
+	TWNT_DEL		= 2,		// ウィンドウ削除
+	TWNT_ORDER		= 3,		// ウィンドウ順序変更
 	TWNT_FILE		= 4,		// ファイル名変更
 	TWNT_MODE_ENABLE= 5,		// タブモード有効化	// 2004.07.14 Kazika 追加
 	TWNT_MODE_DISABLE= 6,		// タブモード無効化	// 2004.08.27 Kazika 追加

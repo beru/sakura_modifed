@@ -355,7 +355,7 @@ int CDlgDiff::GetData(void)
 		if (m_szFile2[0] == '\0') ret = FALSE;
 
 	}else if (IsButtonChecked(IDC_RADIO_DIFF_DST2)) {
-		// リストから相手のウインドウハンドルを取得
+		// リストから相手のウィンドウハンドルを取得
 		HWND hwndList = GetItemHwnd(IDC_LIST_DIFF_FILES);
 		int nItem = List_GetCurSel(hwndList);
 		if (nItem != LB_ERR) {

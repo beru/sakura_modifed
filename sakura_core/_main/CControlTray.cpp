@@ -1076,7 +1076,7 @@ void CControlTray::OnNewEditor(bool bNewWindow)
 				 && csTabBar.m_bDispTabWnd
 				 && !csTabBar.m_bDispTabWndMultiWin;
 
-	// 編集ウインドウを開く
+	// 編集ウィンドウを開く
 	SLoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_NONE;
@@ -1102,7 +1102,7 @@ bool CControlTray::OpenNewEditor(
 	const TCHAR*		szCmdLineOption,	//!< [in] 追加のコマンドラインオプション
 	bool				sync,				//!< [in] trueなら新規エディタの起動まで待機する
 	const TCHAR*		pszCurDir,			//!< [in] 新規エディタのカレントディレクトリ(NULL可)
-	bool				bNewWindow			//!< [in] 新規エディタを新しいウインドウで開く
+	bool				bNewWindow			//!< [in] 新規エディタを新しいウィンドウで開く
 )
 {
 	// 共有データ構造体のアドレスを返す
@@ -1138,7 +1138,7 @@ bool CControlTray::OpenNewEditor(
 	}
 
 	// グループID
-	if (!bNewWindow) {	// 新規エディタをウインドウで開く
+	if (!bNewWindow) {	// 新規エディタをウィンドウで開く
 		// グループIDを親ウィンドウから取得
 		HWND hwndAncestor = MyGetAncestor(hWndParent, GA_ROOTOWNER2);	// 2007.10.22 ryoji GA_ROOTOWNER -> GA_ROOTOWNER2
 		int nGroup = CAppNodeManager::getInstance()->GetEditNode(hwndAncestor)->GetGroup();
@@ -1326,7 +1326,7 @@ bool CControlTray::OpenNewEditor2(
 	const EditInfo*	pfi,
 	bool			bViewMode,
 	bool			sync,
-	bool			bNewWindow			//!< [in] 新規エディタを新しいウインドウで開く
+	bool			bNewWindow			//!< [in] 新規エディタを新しいウィンドウで開く
 )
 {
 

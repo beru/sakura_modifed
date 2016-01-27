@@ -583,11 +583,11 @@
 #define HIDC_CHECK_bMenuIcon					11214 //アイコン付きメニュー
 #define HIDC_CHECK_SplitterWndVScroll			11216 //垂直スクロールの同期
 #define HIDC_CHECK_SplitterWndHScroll			11217 //水平スクロールの同期
-#define HIDC_CHECK_DispTabWnd					11218 //タブウインドウ表示	//@@@ 2003.05.31 MIK
-#define HIDC_CHECK_DispTabWndMultiWin			11219 //タブウインドウ表示	//@@@ 2003.05.31 MIK
-#define HIDC_WINCAPTION_ACTIVE					11220 //ウインドアクティブ時ウキャプション	//@@@ 2003.06.15 MIK
-#define HIDC_WINCAPTION_INACTIVE				11221 //ウインドア非クティブ時ウキャプション	//@@@ 2003.06.15 MIK
-#define HIDC_TABWND_CAPTION						11222 //タブウインドウキャプション	//@@@ 2003.06.15 MIK
+#define HIDC_CHECK_DispTabWnd					11218 //タブウィンドウ表示	//@@@ 2003.05.31 MIK
+#define HIDC_CHECK_GroupMultiTabWnd				11219 //ウィンドウをまとめてグループ化する	//@@@ 2003.05.31 MIK
+#define HIDC_WINCAPTION_ACTIVE					11220 //ウィンドウアクティブ時キャプション	//@@@ 2003.06.15 MIK
+#define HIDC_WINCAPTION_INACTIVE				11221 //ウィンドウ非アクティブ時キャプション	//@@@ 2003.06.15 MIK
+#define HIDC_TABWND_CAPTION						11222 //タブウィンドウキャプション	//@@@ 2003.06.15 MIK
 #define HIDC_EDIT_nRulerBottomSpace				11240 //ルーラー（テキストとの隙間）
 #define HIDC_EDIT_nRulerHeight					11241 //ルーラー（高さ）
 #define HIDC_EDIT_nLineNumberRightSpace			11242 //行番号とテキストの隙間
@@ -601,7 +601,7 @@
 #define HIDC_CHECK_RetainEmptyWindow			11273 //最後のファイルを閉じたとき(無題)文書を残す	// 2007.02.13 ryoji
 #define HIDC_CHECK_CloseOneWin					11274 //ウィンドウの閉じるボタンは現在のファイルのみ閉じる	// 2007.02.13 ryoji
 #define HIDC_CHECK_ChgWndByWheel				11275 //マウスホイールでタブ切替	// 2007.04.03 ryoji
-#define HIDC_CHECK_OpenNewWin					11276 //外部から起動するときは新しいウインドウ開く	// 2009.06.19
+#define HIDC_CHECK_OpenNewWin					11276 //外部から起動するときは新しいウィンドウ開く	// 2009.06.19
 #define HIDC_BUTTON_TABFONT						11277 //タブフォント
 #define HIDC_CHECK_INHERIT_KEY_OTHER_VIEW		11278 //次・前検索で他のビューの検索条件を引き継ぐ
 #define HIDC_CHECK_DispTabClose					11279 //タブを閉じるボタン表示	// 2012.04.14 syat

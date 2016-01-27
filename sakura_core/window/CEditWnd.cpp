@@ -302,7 +302,7 @@ void CEditWnd::UpdateCaption()
 	::SetWindowText(this->GetHwnd(), to_tchar(pszCap));
 
 	//@@@ From Here 2003.06.13 MIK
-	// タブウインドウのファイル名を通知
+	// タブウィンドウのファイル名を通知
 	CSakuraEnvironment::ExpandParameter(GetDllShareData().m_Common.m_sTabBar.m_szTabWndCaption, pszCap, _countof(pszCap));
 	this->ChangeFileNameNotify(to_tchar(pszCap), GetListeningDoc()->m_cDocFile.GetFilePath(), CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode);	// 2006.01.28 ryoji ファイル名、Grepモードパラメータを追加
 	//@@@ To Here 2003.06.13 MIK
@@ -427,7 +427,7 @@ void CEditWnd::_GetTabGroupInfo(STabGroupInfo* pTabGroupInfo, int& nGroup)
 	WINDOWPLACEMENT	wpTop = {0};
 
 	// From Here @@@ 2003.05.31 MIK
-	// タブウインドウの場合は現状値を指定
+	// タブウィンドウの場合は現状値を指定
 	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
 		if (nGroup < 0)	// 不正なグループID
 			nGroup = 0;	// グループ指定無し（最近アクティブのグループに入れる）
@@ -503,7 +503,7 @@ void CEditWnd::_AdjustInMonitor(const STabGroupInfo& sTabGroupInfo)
 		DWORD dwExStyle = (DWORD)::GetWindowLongPtr(sTabGroupInfo.hwndTop, GWL_EXSTYLE);
 		::SetWindowPos(GetHwnd(), (dwExStyle & WS_EX_TOPMOST)? HWND_TOPMOST: HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-		// タブウインドウ時は現状を維持
+		// タブウィンドウ時は現状を維持
 		// ウィンドウサイズ継承
 		// Vista 以降の初回表示アニメーション効果を抑止する
 		if (!IsWinVista_or_later()) {
@@ -719,7 +719,7 @@ HWND CEditWnd::Create(
 	// ファンクションキー バー
 	LayoutFuncKey();
 
-	// タブウインドウ
+	// タブウィンドウ
 	LayoutTabBar();
 
 	// ミニマップ
@@ -1950,7 +1950,7 @@ LRESULT CEditWnd::DispatchEvent(
 		}
 		return 0L;
 
-	// タブウインドウ	//@@@ 2003.05.31 MIK
+	// タブウィンドウ	//@@@ 2003.05.31 MIK
 	case MYWM_TAB_WINDOW_NOTIFY:
 		m_cTabWnd.TabWindowNotify(wParam, lParam);
 		{
@@ -3104,11 +3104,11 @@ LRESULT CEditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	::GetClientRect(GetHwnd(), &rcClient);
 
 	//@@@ From 2003.05.31 MIK
-	// タブウインドウ追加に伴い，ファンクションキー表示位置も調整
+	// タブウィンドウ追加に伴い，ファンクションキー表示位置も調整
 
-	// タブウインドウ
+	// タブウィンドウ
 	int nTabHeightBottom = 0;
-	int nTabWndHeight = 0;		//タブウインドウ	//@@@ 2003.05.31 MIK
+	int nTabWndHeight = 0;		//タブウィンドウ	//@@@ 2003.05.31 MIK
 	if (m_cTabWnd.GetHwnd()) {
 		// タブ多段はSizeBox/ウィンドウ幅で高さが変わる可能性がある
 		ETabPosition tabPosition = m_pShareData->m_Common.m_sTabBar.m_eTabPosition;

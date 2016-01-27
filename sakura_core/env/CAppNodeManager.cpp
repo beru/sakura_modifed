@@ -192,7 +192,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 		cRecentEditNode.Terminate();
 	}	// 2007.07.07 genta Lock領域終わり
 
-	// ウインドウ登録メッセージをブロードキャストする。
+	// ウィンドウ登録メッセージをブロードキャストする。
 	CAppNodeGroupHandle(hWnd).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)nSubCommand, (LPARAM)hWnd, hWnd);
 
 	return TRUE;
@@ -206,7 +206,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 */
 void CAppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 {
-	// ウインドウをリストから削除する。
+	// ウィンドウをリストから削除する。
 	{	// 2007.07.07 genta Lock領域
 		LockGuard<CMutex> guard(g_cEditArrMutex);
 
@@ -215,7 +215,7 @@ void CAppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 		cRecentEditNode.Terminate();
 	}
 
-	// ウインドウ削除メッセージをブロードキャストする。
+	// ウィンドウ削除メッセージをブロードキャストする。
 	CAppNodeGroupHandle(m_nGroup).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)TWNT_DEL, (LPARAM)hWnd, hWnd);
 }
 
@@ -278,7 +278,7 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, boo
 		hWndActive = GetDllShareData().m_sHandles.m_hwndTray;	// タスクトレイが担当
 	}
 
-	// アクティブ化制御ウインドウをアクティブにしておく
+	// アクティブ化制御ウィンドウをアクティブにしておく
 	if (IsSakuraMainWindow(hWndActive)) {
 		ActivateFrameWindow(hWndActive);	// エディタウィンドウ
 	}else {
@@ -548,12 +548,12 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 	DLLSHAREDATA* pShare = &GetDllShareData();
 	auto& sNodes = pShare->m_sNodes;
 
-	// 編集ウインドウ数を取得する。
+	// 編集ウィンドウ数を取得する。
 	*ppEditNode = nullptr;
 	if (sNodes.m_nEditArrNum <= 0)
 		return 0;
 
-	// 編集ウインドウリスト格納領域を作成する。
+	// 編集ウィンドウリスト格納領域を作成する。
 	*ppEditNode = new EditNode[sNodes.m_nEditArrNum];
 	if (!(*ppEditNode))
 		return 0;
@@ -568,7 +568,7 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 	}
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
-	int nRowNum = 0;	// 編集ウインドウ数
+	int nRowNum = 0;	// 編集ウィンドウ数
 	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
 		auto& node = sNodes.m_pEditArr[i];
 		if (IsSakuraMainWindow(node.m_hWnd)) {
@@ -611,7 +611,7 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 	s_bGSort = bGSort;
 	qsort(pNode, nRowNum, sizeof(EditNodeEx), cmpGetOpenedWindowArr);
 
-	// 拡張リストのソート結果をもとに編集ウインドウリスト格納領域に結果を格納する
+	// 拡張リストのソート結果をもとに編集ウィンドウリスト格納領域に結果を格納する
 	for (int i=0; i<nRowNum; ++i) {
 		(*ppEditNode)[i] = *pNode[i].p;
 

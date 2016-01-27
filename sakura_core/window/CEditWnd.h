@@ -350,7 +350,7 @@ private:
 public:
 	// 子ウィンドウ
 	CMainToolBar	m_cToolbar;			//!< ツールバー
-	CTabWnd			m_cTabWnd;			//!< タブウインドウ	//@@@ 2003.05.31 MIK
+	CTabWnd			m_cTabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
 	CFuncKeyWnd		m_cFuncKeyWnd;		//!< ファンクションバー
 	CMainStatusBar	m_cStatusBar;		//!< ステータスバー
 	CPrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。

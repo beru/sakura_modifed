@@ -253,7 +253,7 @@ LRESULT CTabWnd::OnTabLButtonUp(WPARAM wParam, LPARAM lParam)
 	switch (m_eDragState) {
 	case DRAG_CHECK:
 		if (m_nSrcTab == nDstTab && m_nSrcTab != nSelfTab) {
-			// 指定のウインドウをアクティブに
+			// 指定のウィンドウをアクティブに
 			TCITEM	tcitem;
 			tcitem.mask   = TCIF_PARAM;
 			tcitem.lParam = 0;
@@ -764,10 +764,10 @@ LRESULT CTabWnd::ExecTabCommand(int nId, POINTS pts)
 		return 1L;
 	HWND hWnd = (HWND)tcitem.lParam;
 
-	// 対象ウインドウをアクティブにする。
+	// 対象ウィンドウをアクティブにする。
 	ShowHideWindow(hWnd, TRUE);
 
-	// コマンドを対象ウインドウに送る。
+	// コマンドを対象ウィンドウに送る。
 	::PostMessage(hWnd, WM_COMMAND, MAKEWPARAM(nId, 0), (LPARAM)NULL);
 
 	return 0L;
@@ -862,7 +862,7 @@ HWND CTabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 		NULL								// handle to menu, or child-window identifier
 	);
 
-	// タブウインドウを作成する。
+	// タブウィンドウを作成する。
 	m_hwndTab = ::CreateWindow(
 		WC_TABCONTROL,
 		_T(""),
@@ -1633,14 +1633,14 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 	nCount = TabCtrl_GetItemCount(m_hwndTab);
 	if (nCount <= 0) {
 		bFlag = true;
-		// 最初のときはすでに存在するウインドウの情報も登録する必要がある。
+		// 最初のときはすでに存在するウィンドウの情報も登録する必要がある。
 		// 起動時、CTabWnd::Open()内のRefresh()ではまだグループ入り前のため既に別ウィンドウがあってもタブは空
 		if (wParam == TWNT_ADD)
 			Refresh();	// 続けてTWNT_ADD処理で自分以外のウィンドウを隠す
 	}
 
 	switch (wParam) {
-	case TWNT_ADD:	// ウインドウ登録
+	case TWNT_ADD:	// ウィンドウ登録
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex == -1) {
 			TCITEM	tcitem;
@@ -1675,7 +1675,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case TWNT_DEL:	// ウインドウ削除
+	case TWNT_DEL:	// ウィンドウ削除
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex != -1) {
 			if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
@@ -1698,7 +1698,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case TWNT_ORDER:	// ウインドウ順序変更
+	case TWNT_ORDER:	// ウィンドウ順序変更
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex != -1) {
 			if (CAppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
@@ -1720,7 +1720,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 				HideOtherWindows(GetParentHwnd());
 			}
 		}else {
-			// 指定のウインドウがないので再表示
+			// 指定のウィンドウがないので再表示
 			if (!CAppNodeManager::IsSameGroup(GetParentHwnd(), (HWND)lParam))
 				Refresh();
 		}
@@ -1757,7 +1757,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 				TabCtrl_SetItem(m_hwndTab, nIndex, &tcitem);
 			}
 		}else {
-			// 指定のウインドウがないので再表示
+			// 指定のウィンドウがないので再表示
 			if (!CAppNodeManager::IsSameGroup(GetParentHwnd(), (HWND)lParam))
 				Refresh();
 		}
@@ -1819,7 +1819,7 @@ void CTabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 	return;
 }
 
-/*! 指定のウインドウハンドル情報を持つタブ位置を探す */
+/*! 指定のウィンドウハンドル情報を持つタブ位置を探す */
 int CTabWnd::FindTabIndexByHWND(HWND hWnd)
 {
 	if (!m_hwndTab) {
@@ -2090,7 +2090,7 @@ void CTabWnd::HideOtherWindows(HWND hwndExclude)
 	}
 }
 
-// ウインドウを強制的に前面に持ってくる
+// ウィンドウを強制的に前面に持ってくる
 void CTabWnd::ForceActiveWindow(HWND hwnd)
 {
 	int nId2 = ::GetWindowThreadProcessId(::GetForegroundWindow(), NULL);
@@ -2820,7 +2820,7 @@ LRESULT CTabWnd::TabListMenu(POINT pt, bool bSel/* = true*/, bool bFull/* = fals
 									0, GetHwnd(), NULL);
 		::DestroyMenu(hMenu);
 
-		// メニュー選択されたタブのウインドウをアクティブにする
+		// メニュー選択されたタブのウィンドウをアクティブにする
 		bRepeat = false;
 		if (nId == 100) {	// 表示切替
 			bFull = !bFull;

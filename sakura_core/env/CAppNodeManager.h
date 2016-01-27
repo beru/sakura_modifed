@@ -34,8 +34,8 @@ struct EditNode {
 	int				m_nGroup;					// グループID								//@@@ 2007.06.20 ryoji
 	HWND			m_hWnd;
 	int				m_nId;						// 無題Id
-	WIN_CHAR		m_szTabCaption[_MAX_PATH];	// タブウインドウ用：キャプション名		//@@@ 2003.05.31 MIK
-	SFilePath		m_szFilePath;				// タブウインドウ用：ファイル名			//@@@ 2006.01.28 ryoji
+	WIN_CHAR		m_szTabCaption[_MAX_PATH];	// タブウィンドウ用：キャプション名		//@@@ 2003.05.31 MIK
+	SFilePath		m_szFilePath;				// タブウィンドウ用：ファイル名			//@@@ 2006.01.28 ryoji
 	bool			m_bIsGrep;					// Grepのウィンドウか						//@@@ 2006.01.28 ryoji
 	UINT			m_showCmdRestore;			// 元のサイズに戻すときのサイズ種別		//@@@ 2007.06.20 ryoji
 	BOOL			m_bClosing;					// 終了中か（「最後のファイルを閉じても(無題)を残す」用）	//@@@ 2007.06.20 ryoji

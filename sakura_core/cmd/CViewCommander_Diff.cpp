@@ -136,7 +136,7 @@ void CViewCommander::Command_COMPARE(void)
 	// 比較後、左右に並べて表示
 	csCompare.m_bCompareAndTileHorz = cDlgCompare.m_bCompareAndTileHorz;
 
-	// タブウインドウ時は禁止	//@@@ 2003.06.12 MIK
+	// タブウィンドウ時は禁止	//@@@ 2003.06.12 MIK
 	if (commonSetting.m_sTabBar.m_bDispTabWnd
 		&& !commonSetting.m_sTabBar.m_bDispTabWndMultiWin
 	) {

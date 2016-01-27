@@ -848,7 +848,7 @@ bool CMacro::HandleCommand(
 		}
 		break;
 
-	case F_TRACEOUT:		// 2006.05.01 マクロ用アウトプットウインドウに出力
+	case F_TRACEOUT:		// 2006.05.01 マクロ用アウトプットウィンドウに出力
 		// Argument[0]を出力。オプションはArgument[1]に。
 		// Argument[1]:
 		//		次の数値の和。

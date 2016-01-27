@@ -84,7 +84,7 @@ typedef struct tagSAKURA_DLL_PLUGIN_OBJ {
 	DWORD						m_dwVersionShare;		// 共有メモリバージョン
 	LANGID						m_wLangId;				// 言語ID
 	WORD						m_wPadding1;			// 予備(パディング)
-	HWND						m_hParentHwnd;			// 親ウインドウハンドル
+	HWND						m_hParentHwnd;			// 親ウィンドウハンドル
 	LPVOID						m_lpDllPluginObj;		// プラグイン情報(CWSHIfObj::List)
 	LPVOID						m_lpEditView;			// EditView情報
 	HandleFunctionCallback		m_fnFunctionHandler;	// 関数ハンドラ

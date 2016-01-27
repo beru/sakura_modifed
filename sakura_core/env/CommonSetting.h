@@ -168,15 +168,15 @@ enum ETabPosition{
 };
 
 struct CommonSetting_TabBar {
-	bool		m_bDispTabWnd;					// タブウインドウ表示する	//@@@ 2003.05.31 MIK
+	bool		m_bDispTabWnd;					// タブウィンドウ表示する	//@@@ 2003.05.31 MIK
 	bool		m_bDispTabWndMultiWin;			// タブをまとめない	//@@@ 2003.05.31 MIK
 	bool		m_bTab_RetainEmptyWin;			// 最後の文書が閉じられたとき(無題)を残す
 	bool		m_bTab_CloseOneWin;				// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる
-	bool		m_bNewWindow;					// 外部から起動するときは新しいウインドウで開く
+	bool		m_bNewWindow;					// 外部から起動するときは新しいウィンドウで開く
 	bool		m_bTabMultiLine;				// タブ多段
 	ETabPosition	m_eTabPosition;				// タブ位置
 
-	wchar_t		m_szTabWndCaption[MAX_CAPTION_CONF_LEN];	// タブウインドウキャプション	//@@@ 2003.06.13 MIK
+	wchar_t		m_szTabWndCaption[MAX_CAPTION_CONF_LEN];	// タブウィンドウキャプション	//@@@ 2003.06.13 MIK
 	bool		m_bSameTabWidth;				// タブを等幅にする			//@@@ 2006.01.28 ryoji
 	bool		m_bDispTabIcon;					// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
 	EDispTabClose	m_bDispTabClose;			// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat

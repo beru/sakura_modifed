@@ -73,7 +73,7 @@ void CViewCommander::Command_FILENEW(void)
 }
 
 
-// 新規作成（新しいウインドウで開く）
+// 新規作成（新しいウィンドウで開く）
 void CViewCommander::Command_FILENEW_NEWWINDOW(void)
 {
 	// 新たな編集ウィンドウを起動
