@@ -138,7 +138,7 @@ void CViewCommander::Command_SHOWMINIMAP(void)
 {
 	CEditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
-	GetDllShareData().m_Common.m_sWindow.m_bDispMiniMap = ((NULL == pCEditWnd->GetMiniMap().GetHwnd())? true: false);
+	GetDllShareData().m_Common.m_sWindow.m_bDispMiniMap = (pCEditWnd->GetMiniMap().GetHwnd() == NULL);
 	pCEditWnd->LayoutMiniMap();
 	pCEditWnd->EndLayoutBars();
 
@@ -305,7 +305,7 @@ void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		csView.m_nPointSize = nPointSize;
 	}else if (mode == 1) {
 		CTypeConfig nDocType = GetDocument()->m_cDocType.GetDocumentType();
-		STypeConfig* type = new STypeConfig();
+		auto type = std::make_unique<STypeConfig>();
 		if (!CDocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// “ä‚ÌƒGƒ‰[
 			return;
@@ -315,7 +315,6 @@ void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		type->m_lf.lfHeight = lfHeight;
 		type->m_nPointSize = nPointSize;
 		CDocTypeManager().SetTypeConfig(nDocType, *type);
-		delete type;
 		nTypeIndex = nDocType.GetIndex();
 	}else if (mode == 2) {
 		GetDocument()->m_blfCurTemp = true;

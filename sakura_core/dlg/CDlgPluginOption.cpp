@@ -126,7 +126,7 @@ void CDlgPluginOption::SetData(void)
 	ListView_DeleteAllItems(hwndList);	// リストを空にする
 	m_Line = -1;							// 行非選択
 
-	std::auto_ptr<CDataProfile> cProfile(new CDataProfile);
+	auto cProfile = std::make_unique<CDataProfile>();
 	cProfile->SetReadingMode();
 	cProfile->ReadProfile(m_cPlugin->GetOptionPath().c_str());
 
@@ -224,7 +224,7 @@ int CDlgPluginOption::GetData(void)
 	// リスト
 	HWND hwndList = GetItemHwnd(IDC_LIST_PLUGIN_OPTIONS);
 
-	std::auto_ptr<CDataProfile> cProfile(new CDataProfile);
+	auto cProfile = std::make_unique<CDataProfile>();
 	cProfile->SetReadingMode();
 	cProfile->ReadProfile(m_cPlugin->GetOptionPath().c_str());
 	cProfile->SetWritingMode();

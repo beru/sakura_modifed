@@ -819,11 +819,12 @@ void CMenuDrawer::MyAppendMenu(
 	}
 	auto_strcpy(szKey, pszKey); 
 	if (nFuncId != 0) {
-		/* メニューラベルの作成 */
+		// メニューラベルの作成
+		auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 		CKeyBind::GetMenuLabel(
 			m_hInstance,
-			m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-			m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr,
+			csKeyBind.m_nKeyNameArrNum,
+			csKeyBind.m_pKeyNameArr,
 			nFuncId,
 			szLabel,
 			szKey,

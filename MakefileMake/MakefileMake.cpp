@@ -328,8 +328,7 @@ int main(int argc, char* argv[])
 					} while ((fl_nm = getFile()));
 				}
 				mode = 2;
-			}
-			else {
+			}else {
 				fl_nm = getFile();
 				if (!fl_nm) {
 					// ファイルが減った
@@ -367,8 +366,7 @@ int main(int argc, char* argv[])
 			printf("Error: 一時ファイル[%s]をmakfile[%s]に出来ません\n", tmp_file, makefile);
 			return 1;
 		}
-	}
-	else {
+	}else {
 		if (remove(tmp_file)) {
 			printf("Warning: 一時ファイル[%s]を削除出来ません\n", tmp_file);
 		}

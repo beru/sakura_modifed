@@ -1448,12 +1448,12 @@ bool CMacro::HandleCommand(
 
 inline bool VariantToBStr(Variant& varCopy, const VARIANT& arg)
 {
-	return VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(arg)), 0, VT_BSTR) == S_OK;
+	return VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(arg)), 0, VT_BSTR) == S_OK;
 }
 
 inline bool VariantToI4(Variant& varCopy, const VARIANT& arg)
 {
-	return VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(arg)), 0, VT_I4) == S_OK;
+	return VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(arg)), 0, VT_I4) == S_OK;
 }
 
 /**	値を返す関数を処理する
@@ -1473,83 +1473,87 @@ inline bool VariantToI4(Variant& varCopy, const VARIANT& arg)
 	@date 2005.11.29 FILE VariantChangeType対応
 */
 bool CMacro::HandleFunction(
-	CEditView* View,
-	EFunctionCode ID,
-	const VARIANT* Arguments,
-	int ArgSize,
-	VARIANT& Result
+	CEditView* view,
+	EFunctionCode id,
+	const VARIANT* args,
+	int numArgs,
+	VARIANT& result
 	)
 {
 	Variant varCopy;	// VT_BYREFだと困るのでコピー用
 
 	// 2003-02-21 鬼
-	switch (LOWORD(ID)) {
+	switch (LOWORD(id)) {
 	case F_GETFILENAME:
 		{
-			const TCHAR* FileName = View->m_pcEditDoc->m_cDocFile.GetFilePath();
+			const TCHAR* FileName = view->m_pcEditDoc->m_cDocFile.GetFilePath();
 			SysString S(FileName, _tcslen(FileName));
-			Wrap(&Result)->Receive(S);
+			Wrap(&result)->Receive(S);
 		}
 		return true;
 	case F_GETSAVEFILENAME:
 		// 2006.09.04 ryoji 保存時のファイルのパス
 		{
-			const TCHAR* FileName = View->m_pcEditDoc->m_cDocFile.GetSaveFilePath();
+			const TCHAR* FileName = view->m_pcEditDoc->m_cDocFile.GetSaveFilePath();
 			SysString S(FileName, lstrlen(FileName));
-			Wrap(&Result)->Receive(S);
+			Wrap(&result)->Receive(S);
 		}
 		return true;
 	case F_GETSELECTED:
 		{
-			if (View->GetSelectionInfo().IsTextSelected()) {
+			if (view->GetSelectionInfo().IsTextSelected()) {
 				CNativeW cMem;
-				if (!View->GetSelectedDataSimple(cMem)) return false;
+				if (!view->GetSelectedDataSimple(cMem)) return false;
 				SysString S(cMem.GetStringPtr(), cMem.GetStringLength());
-				Wrap(&Result)->Receive(S);
+				Wrap(&result)->Receive(S);
 			}else {
-				Result.vt = VT_BSTR;
-				Result.bstrVal = SysAllocString(L"");
+				result.vt = VT_BSTR;
+				result.bstrVal = SysAllocString(L"");
 			}
 		}
 		return true;
 	case F_EXPANDPARAMETER:
 		// 2003.02.24 Moca
 		{
-			if (ArgSize != 1) return false;
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			if (numArgs != 1) {
+				return false;
+			}
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) {
+				return false;	// VT_BSTRとして解釈
+			}
 			//void ExpandParameter(const char* pszSource, char* pszBuffer, int nBufferLen);
 			// pszSourceを展開して、pszBufferにコピー
-			wchar_t* Source;
-			int SourceLength;
-			Wrap(&varCopy.Data.bstrVal)->GetW(&Source, &SourceLength);
-			wchar_t Buffer[2048];
-			CSakuraEnvironment::ExpandParameter(Source, Buffer, 2047);
-			delete[] Source;
-			SysString S(Buffer, wcslen(Buffer));
-			Wrap(&Result)->Receive(S);
+			wchar_t* source;
+			int sourceLength;
+			Wrap(&varCopy.data.bstrVal)->GetW(&source, &sourceLength);
+			wchar_t buffer[2048];
+			CSakuraEnvironment::ExpandParameter(source, buffer, 2047);
+			delete[] source;
+			SysString s(buffer, wcslen(buffer));
+			Wrap(&result)->Receive(s);
 		}
 		return true;
 	case F_GETLINESTR:
 		// 2003.06.01 Moca マクロ追加
 		{
-			if (ArgSize != 1) return false;
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-			if (-1 < varCopy.Data.lVal) {
+			if (numArgs != 1) return false;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+			if (-1 < varCopy.data.lVal) {
 				const wchar_t* Buffer;
 				CLogicInt nLength;
 				CLogicInt nLine;
-				if (varCopy.Data.lVal == 0) {
-					nLine = View->GetCaret().GetCaretLogicPos().GetY2();
+				if (varCopy.data.lVal == 0) {
+					nLine = view->GetCaret().GetCaretLogicPos().GetY2();
 				}else {
-					nLine = CLogicInt(varCopy.Data.lVal - 1);
+					nLine = CLogicInt(varCopy.data.lVal - 1);
 				}
-				Buffer = View->m_pcEditDoc->m_cDocLineMgr.GetLine(nLine)->GetDocLineStrWithEOL(&nLength);
+				Buffer = view->m_pcEditDoc->m_cDocLineMgr.GetLine(nLine)->GetDocLineStrWithEOL(&nLength);
 				if (Buffer) {
 					SysString S(Buffer, nLength);
-					Wrap(&Result)->Receive(S);
+					Wrap(&result)->Receive(S);
 				}else {
-					Result.vt = VT_BSTR;
-					Result.bstrVal = SysAllocString(L"");
+					result.vt = VT_BSTR;
+					result.bstrVal = SysAllocString(L"");
 				}
 			}else {
 				return false;
@@ -1559,12 +1563,12 @@ bool CMacro::HandleFunction(
 	case F_GETLINECOUNT:
 		// 2003.06.01 Moca マクロ追加
 		{
-			if (ArgSize != 1) return false;
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-			if (varCopy.Data.lVal == 0) {
+			if (numArgs != 1) return false;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+			if (varCopy.data.lVal == 0) {
 				int nLineCount;
-				nLineCount = View->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
-				Wrap(&Result)->Receive(nLineCount);
+				nLineCount = view->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
+				Wrap(&result)->Receive(nLineCount);
 			}else {
 				return false;
 			}
@@ -1573,83 +1577,83 @@ bool CMacro::HandleFunction(
 	case F_CHGTABWIDTH:
 		// 2004.03.16 zenryaku マクロ追加
 		{
-			if (ArgSize != 1) return false;
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-			int nTab = (Int)View->m_pcEditDoc->m_cLayoutMgr.GetTabSpace();
-			Wrap(&Result)->Receive(nTab);
+			if (numArgs != 1) return false;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+			int nTab = (Int)view->m_pcEditDoc->m_cLayoutMgr.GetTabSpace();
+			Wrap(&result)->Receive(nTab);
 			// 2013.04.30 Moca 条件追加。不要な場合はChangeLayoutParamを呼ばない
-			if (0 < varCopy.Data.iVal && nTab != varCopy.Data.iVal) {
-				View->GetDocument()->m_bTabSpaceCurTemp = true;
-				View->m_pcEditWnd->ChangeLayoutParam(
+			if (0 < varCopy.data.iVal && nTab != varCopy.data.iVal) {
+				view->GetDocument()->m_bTabSpaceCurTemp = true;
+				view->m_pcEditWnd->ChangeLayoutParam(
 					false, 
-					CLayoutInt(varCopy.Data.iVal),
-					View->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas()
+					CLayoutInt(varCopy.data.iVal),
+					view->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas()
 				);
 
 				// 2009.08.28 nasukoji	「折り返さない」選択時にTAB幅が変更されたらテキスト最大幅の再算出が必要
-				if (View->m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+				if (view->m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
 					// 最大幅の再算出時に各行のレイアウト長の計算も行う
-					View->m_pcEditDoc->m_cLayoutMgr.CalculateTextWidth();
+					view->m_pcEditDoc->m_cLayoutMgr.CalculateTextWidth();
 				}
-				View->m_pcEditWnd->RedrawAllViews(NULL);		// TAB幅が変わったので再描画が必要
+				view->m_pcEditWnd->RedrawAllViews(NULL);		// TAB幅が変わったので再描画が必要
 			}
 		}
 		return true;
 	case F_ISTEXTSELECTED:
 		// 2005.07.30 maru マクロ追加
 		{
-			if (View->GetSelectionInfo().IsTextSelected()) {
-				if (View->GetSelectionInfo().IsBoxSelecting()) {
-					Wrap(&Result)->Receive(2);	// 矩形選択中
+			if (view->GetSelectionInfo().IsTextSelected()) {
+				if (view->GetSelectionInfo().IsBoxSelecting()) {
+					Wrap(&result)->Receive(2);	// 矩形選択中
 				}else {
-					Wrap(&Result)->Receive(1);	// 選択中
+					Wrap(&result)->Receive(1);	// 選択中
 				}
 			}else {
-				Wrap(&Result)->Receive(0);		// 非選択中
+				Wrap(&result)->Receive(0);		// 非選択中
 			}
 		}
 		return true;
 	case F_GETSELLINEFROM:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetFrom().y + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetFrom().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNFROM:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetFrom().x + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetFrom().x + 1);
 		}
 		return true;
 	case F_GETSELLINETO:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetTo().y + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetTo().y + 1);
 		}
 		return true;
 	case F_GETSELCOLUMNTO:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&Result)->Receive((Int)View->GetSelectionInfo().m_sSelect.GetTo().x + 1);
+			Wrap(&result)->Receive((Int)view->GetSelectionInfo().m_sSelect.GetTo().x + 1);
 		}
 		return true;
 	case F_ISINSMODE:
 		// 2005.07.30 maru マクロ追加
 		{
-			Wrap(&Result)->Receive(View->IsInsMode() /* Oct. 2, 2005 genta */);
+			Wrap(&result)->Receive(view->IsInsMode() /* Oct. 2, 2005 genta */);
 		}
 		return true;
 	case F_GETCHARCODE:
 		// 2005.07.31 maru マクロ追加
 		{
-			Wrap(&Result)->Receive(View->m_pcEditDoc->GetDocumentEncoding());
+			Wrap(&result)->Receive(view->m_pcEditDoc->GetDocumentEncoding());
 		}
 		return true;
 	case F_GETLINECODE:
 		// 2005.08.04 maru マクロ追加
 		{
 			int n = 0;
-			switch (View->m_pcEditDoc->m_cDocEditor.GetNewLineCode()) {
+			switch (view->m_pcEditDoc->m_cDocEditor.GetNewLineCode()) {
 			case EOL_CRLF:
 				n = 0;
 				break;
@@ -1669,118 +1673,124 @@ bool CMacro::HandleFunction(
 				n = 5;
 				break;
 			}
-			Wrap(&Result)->Receive(n);
+			Wrap(&result)->Receive(n);
 		}
 		return true;
 	case F_ISPOSSIBLEUNDO:
 		// 2005.08.04 maru マクロ追加
 		{
-			Wrap(&Result)->Receive(View->m_pcEditDoc->m_cDocEditor.IsEnableUndo());
+			Wrap(&result)->Receive(view->m_pcEditDoc->m_cDocEditor.IsEnableUndo());
 		}
 		return true;
 	case F_ISPOSSIBLEREDO:
 		// 2005.08.04 maru マクロ追加
 		{
-			Wrap(&Result)->Receive(View->m_pcEditDoc->m_cDocEditor.IsEnableRedo());
+			Wrap(&result)->Receive(view->m_pcEditDoc->m_cDocEditor.IsEnableRedo());
 		}
 		return true;
 	case F_CHGWRAPCOLUMN:
 		// 2008.06.19 ryoji マクロ追加
 		{
-			if (ArgSize != 1) return false;
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-			Wrap(&Result)->Receive((Int)View->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas());
-			if (varCopy.Data.iVal < MINLINEKETAS || varCopy.Data.iVal > MAXLINEKETAS) {
+			if (numArgs != 1) return false;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+			Wrap(&result)->Receive((Int)view->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas());
+			if (varCopy.data.iVal < MINLINEKETAS || varCopy.data.iVal > MAXLINEKETAS) {
 				return true;
 			}
-			View->m_pcEditDoc->m_nTextWrapMethodCur = WRAP_SETTING_WIDTH;
-			View->m_pcEditDoc->m_bTextWrapMethodCurTemp = !(View->m_pcEditDoc->m_nTextWrapMethodCur == View->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod);
-			View->m_pcEditWnd->ChangeLayoutParam(
+			view->m_pcEditDoc->m_nTextWrapMethodCur = WRAP_SETTING_WIDTH;
+			view->m_pcEditDoc->m_bTextWrapMethodCurTemp = !(view->m_pcEditDoc->m_nTextWrapMethodCur == view->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod);
+			view->m_pcEditWnd->ChangeLayoutParam(
 				false, 
-				View->m_pcEditDoc->m_cLayoutMgr.GetTabSpace(),
-				CLayoutInt(varCopy.Data.iVal)
+				view->m_pcEditDoc->m_cLayoutMgr.GetTabSpace(),
+				CLayoutInt(varCopy.data.iVal)
 			);
 		}
 		return true;
 	case F_ISCURTYPEEXT:
 		// 2006.09.04 ryoji 指定した拡張子が現在のタイプ別設定に含まれているかどうかを調べる
 		{
-			if (ArgSize != 1) return false;
+			if (numArgs != 1) {
+				return false;
+			}
 
-			TCHAR* Source;
-			int SourceLength;
+			TCHAR* source;
+			int sourceLength;
 
-			int nType1 = View->m_pcEditDoc->m_cDocType.GetDocumentType().GetIndex();	// 現在のタイプ
+			int nType1 = view->m_pcEditDoc->m_cDocType.GetDocumentType().GetIndex();	// 現在のタイプ
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			int nType2 = CDocTypeManager().GetDocumentTypeOfExt(Source).GetIndex();	// 指定拡張子のタイプ
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) {
+				return false;	// VT_BSTRとして解釈
+			}
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			int nType2 = CDocTypeManager().GetDocumentTypeOfExt(source).GetIndex();	// 指定拡張子のタイプ
+			delete[] source;
 
-			Wrap(&Result)->Receive((nType1 == nType2)? 1: 0);	// タイプ別設定の一致／不一致
+			Wrap(&result)->Receive((nType1 == nType2)? 1: 0);	// タイプ別設定の一致／不一致
 		}
 		return true;
 	case F_ISSAMETYPEEXT:
 		// 2006.09.04 ryoji ２つの拡張子が同じタイプ別設定に含まれているかどうかを調べる
 		{
-			if (ArgSize != 2) return false;
+			if (numArgs != 2) {
+				return false;
+			}
 
-			TCHAR* Source;
-			int SourceLength;
+			TCHAR* source;
+			int sourceLength;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			int nType1 = CDocTypeManager().GetDocumentTypeOfExt(Source).GetIndex();	// 拡張子１のタイプ
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			int nType1 = CDocTypeManager().GetDocumentTypeOfExt(source).GetIndex();	// 拡張子１のタイプ
+			delete[] source;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			int nType2 = CDocTypeManager().GetDocumentTypeOfExt(Source).GetIndex();	// 拡張子２のタイプ
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			int nType2 = CDocTypeManager().GetDocumentTypeOfExt(source).GetIndex();	// 拡張子２のタイプ
+			delete[] source;
 
-			Wrap(&Result)->Receive((nType1 == nType2)? 1: 0);	// タイプ別設定の一致／不一致
+			Wrap(&result)->Receive((nType1 == nType2)? 1: 0);	// タイプ別設定の一致／不一致
 		}
 		return true;
 	case F_INPUTBOX:
 		// 2011.03.18 syat テキスト入力ダイアログの表示
 		{
-			if (ArgSize < 1) return false;
-			TCHAR* Source;
-			int SourceLength;
+			if (numArgs < 1) return false;
+			TCHAR* source;
+			int sourceLength;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			std::tstring sMessage = Source;	// 表示メッセージ
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			std::tstring sMessage = source;	// 表示メッセージ
+			delete[] source;
 
 			std::tstring sDefaultValue = _T("");
-			if (ArgSize >= 2) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-				Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-				sDefaultValue = Source;	// デフォルト値
-				delete[] Source;
+			if (numArgs >= 2) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+				Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+				sDefaultValue = source;	// デフォルト値
+				delete[] source;
 			}
 
 			int nMaxLen = _MAX_PATH;
-			if (ArgSize >= 3) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[2])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-				nMaxLen = varCopy.Data.intVal;	// 最大入力長
+			if (numArgs >= 3) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[2])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+				nMaxLen = varCopy.data.intVal;	// 最大入力長
 				if (nMaxLen <= 0) {
 					nMaxLen = _MAX_PATH;
 				}
 			}
 
-			TCHAR* Buffer = new TCHAR[nMaxLen + 1];
-			_tcscpy( Buffer, sDefaultValue.c_str() );
+			std::vector<TCHAR> buffer(nMaxLen + 1);
+			TCHAR* pBuffer = &buffer[0];
+			_tcscpy( pBuffer, sDefaultValue.c_str() );
 			CDlgInput1 cDlgInput1;
-			if (cDlgInput1.DoModal(G_AppInstance(), View->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, Buffer)) {
-				SysString S(Buffer, _tcslen(Buffer));
-				Wrap(&Result)->Receive(S);
+			if (cDlgInput1.DoModal(G_AppInstance(), view->GetHwnd(), _T("sakura macro"), sMessage.c_str(), nMaxLen, pBuffer)) {
+				SysString S(pBuffer, _tcslen(pBuffer));
+				Wrap(&result)->Receive(S);
 			}else {
-				Result.vt = VT_BSTR;
-				Result.bstrVal = SysAllocString(L"");
+				result.vt = VT_BSTR;
+				result.bstrVal = SysAllocString(L"");
 			}
-			delete[] Buffer;
 		}
 		return true;
 	case F_MESSAGEBOX:	// メッセージボックスの表示
@@ -1791,21 +1801,21 @@ bool CMacro::HandleFunction(
 	case F_YESNOBOX:	// メッセージボックス（確認：はい／いいえ）の表示
 		// 2011.03.18 syat メッセージボックスの表示
 		{
-			if (ArgSize < 1) return false;
-			TCHAR* Source;
-			int SourceLength;
+			if (numArgs < 1) return false;
+			TCHAR* source;
+			int sourceLength;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			std::tstring sMessage = Source;	// 表示文字列
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			std::tstring sMessage = source;	// 表示文字列
+			delete[] source;
 
 			UINT uType = 0;		// メッセージボックス種別
-			switch (LOWORD(ID)) {
+			switch (LOWORD(id)) {
 			case F_MESSAGEBOX:
-				if (ArgSize >= 2) {
-					if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-					uType = varCopy.Data.uintVal;
+				if (numArgs >= 2) {
+					if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+					uType = varCopy.data.uintVal;
 				}else {
 					uType = MB_OK;
 				}
@@ -1826,117 +1836,121 @@ bool CMacro::HandleFunction(
 				uType |= MB_YESNO | MB_ICONQUESTION;
 				break;
 			}
-			int ret = ::MessageBox(View->GetHwnd(), sMessage.c_str(), _T("sakura macro"), uType);
-			Wrap(&Result)->Receive(ret);
+			int ret = ::MessageBox(view->GetHwnd(), sMessage.c_str(), _T("sakura macro"), uType);
+			Wrap(&result)->Receive(ret);
 		}
 		return true;
 	case F_COMPAREVERSION:
 		// 2011.03.18 syat バージョン番号の比較
 		{
-			if (ArgSize != 2) return false;
-			TCHAR* Source;
-			int SourceLength;
+			if (numArgs != 2) return false;
+			TCHAR* source;
+			int sourceLength;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			std::tstring sVerA = Source;	// バージョンA
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			std::tstring sVerA = source;	// バージョンA
+			delete[] source;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-			Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-			std::tstring sVerB = Source;	// バージョンB
-			delete[] Source;
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+			Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+			std::tstring sVerB = source;	// バージョンB
+			delete[] source;
 
-			Wrap(&Result)->Receive(CompareVersion(sVerA.c_str(), sVerB.c_str()));
+			Wrap(&result)->Receive(CompareVersion(sVerA.c_str(), sVerB.c_str()));
 		}
 		return true;
 	case F_MACROSLEEP:
 		// 2011.03.18 syat 指定した時間（ミリ秒）停止する
 		{
-			if (ArgSize != 1) return false;
+			if (numArgs != 1) return false;
 
-			if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_UI4) != S_OK) return false;	// VT_UI4として解釈
-			CWaitCursor cWaitCursor(View->GetHwnd());	// カーソルを砂時計にする
-			::Sleep(varCopy.Data.uintVal);
-			Wrap(&Result)->Receive(0);	// 戻り値は今のところ0固定
+			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_UI4) != S_OK) {
+				return false;	// VT_UI4として解釈
+			}
+			CWaitCursor cWaitCursor(view->GetHwnd());	// カーソルを砂時計にする
+			::Sleep(varCopy.data.uintVal);
+			Wrap(&result)->Receive(0);	// 戻り値は今のところ0固定
 		}
 		return true;
 	case F_FILEOPENDIALOG:
 	case F_FILESAVEDIALOG:
 		// 2011.03.18 syat ファイルダイアログの表示
 		{
-			TCHAR* Source;
-			int SourceLength;
+			TCHAR* source;
+			int sourceLength;
 			std::tstring sDefault;
 			std::tstring sFilter;
 
-			if (ArgSize >= 1) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-				Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-				sDefault = Source;	// 既定のファイル名
-				delete[] Source;
+			if (numArgs >= 1) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) {
+					return false;	// VT_BSTRとして解釈
+				}
+				Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+				sDefault = source;	// 既定のファイル名
+				delete[] source;
 			}
 
-			if (ArgSize >= 2) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-				Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-				sFilter = Source;	// フィルタ文字列
-				delete[] Source;
+			if (numArgs >= 2) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+				Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+				sFilter = source;	// フィルタ文字列
+				delete[] source;
 			}
 
 			CDlgOpenFile cDlgOpenFile;
 			cDlgOpenFile.Create(
-				G_AppInstance(), View->GetHwnd(),
+				G_AppInstance(), view->GetHwnd(),
 				sFilter.c_str(),
 				sDefault.c_str()
 			);
 			bool bRet;
 			TCHAR szPath[_MAX_PATH];
 			_tcscpy( szPath, sDefault.c_str() );
-			if (LOWORD(ID) == F_FILEOPENDIALOG) {
+			if (LOWORD(id) == F_FILEOPENDIALOG) {
 				bRet = cDlgOpenFile.DoModal_GetOpenFileName(szPath);
 			}else {
 				bRet = cDlgOpenFile.DoModal_GetSaveFileName(szPath);
 			}
 			if (bRet) {
 				SysString S(szPath, _tcslen(szPath));
-				Wrap(&Result)->Receive(S);
+				Wrap(&result)->Receive(S);
 			}else {
-				Result.vt = VT_BSTR;
-				Result.bstrVal = SysAllocString(L"");
+				result.vt = VT_BSTR;
+				result.bstrVal = SysAllocString(L"");
 			}
 		}
 		return true;
 	case F_FOLDERDIALOG:
 		// 2011.03.18 syat フォルダダイアログの表示
 		{
-			TCHAR* Source;
-			int SourceLength;
+			TCHAR* source;
+			int sourceLength;
 			std::tstring sMessage;
 			std::tstring sDefault;
 
-			if (ArgSize >= 1) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-				Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-				sMessage = Source;	// 表示メッセージ
-				delete[] Source;
+			if (numArgs >= 1) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+				Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+				sMessage = source;	// 表示メッセージ
+				delete[] source;
 			}
 
-			if (ArgSize >= 2) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-				Wrap(&varCopy.Data.bstrVal)->GetT(&Source, &SourceLength);
-				sDefault = Source;	// 既定のファイル名
-				delete[] Source;
+			if (numArgs >= 2) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+				Wrap(&varCopy.data.bstrVal)->GetT(&source, &sourceLength);
+				sDefault = source;	// 既定のファイル名
+				delete[] source;
 			}
 
 			TCHAR szPath[_MAX_PATH];
-			int nRet = SelectDir(View->GetHwnd(), sMessage.c_str(), sDefault.c_str(), szPath);
+			int nRet = SelectDir(view->GetHwnd(), sMessage.c_str(), sDefault.c_str(), szPath);
 			if (nRet == IDOK) {
 				SysString S(szPath, _tcslen(szPath));
-				Wrap(&Result)->Receive(S);
+				Wrap(&result)->Receive(S);
 			}else {
-				Result.vt = VT_BSTR;
-				Result.bstrVal = SysAllocString(L"");
+				result.vt = VT_BSTR;
+				result.bstrVal = SysAllocString(L"");
 			}
 		}
 		return true;
@@ -1945,21 +1959,21 @@ bool CMacro::HandleFunction(
 		{
 			int nOpt = 0;
 
-			if (ArgSize >= 1) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-				nOpt = varCopy.Data.intVal;	// オプション
+			if (numArgs >= 1) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+				nOpt = varCopy.data.intVal;	// オプション
 			}
 
 			CNativeW memBuff;
 			bool bColumnSelect = false;
 			bool bLineSelect = false;
-			bool bRet = View->MyGetClipboardData(memBuff, &bColumnSelect, &bLineSelect);
+			bool bRet = view->MyGetClipboardData(memBuff, &bColumnSelect, &bLineSelect);
 			if (bRet) {
 				SysString S(memBuff.GetStringPtr(), memBuff.GetStringLength());
-				Wrap(&Result)->Receive(S);
+				Wrap(&result)->Receive(S);
 			}else {
-				Result.vt = VT_BSTR;
-				Result.bstrVal = SysAllocString(L"");
+				result.vt = VT_BSTR;
+				result.bstrVal = SysAllocString(L"");
 			}
 		}
 		return true;
@@ -1969,72 +1983,72 @@ bool CMacro::HandleFunction(
 			std::tstring sValue;
 			int nOpt = 0;
 
-			if (ArgSize >= 1) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
-				nOpt = varCopy.Data.intVal;	// オプション
+			if (numArgs >= 1) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
+				nOpt = varCopy.data.intVal;	// オプション
 			}
 
-			if (ArgSize >= 2) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
-				Wrap(&varCopy.Data.bstrVal)->GetT(&sValue);
+			if (numArgs >= 2) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;	// VT_BSTRとして解釈
+				Wrap(&varCopy.data.bstrVal)->GetT(&sValue);
 			}
 
 			// 2013.06.12 オプション設定
 			bool bColumnSelect = ((nOpt & 0x01) == 0x01);
 			bool bLineSelect = ((nOpt & 0x02) == 0x02);
-			bool bRet = View->MySetClipboardData(sValue.c_str(), sValue.size(), bColumnSelect, bLineSelect);
-			Wrap(&Result)->Receive(bRet);
+			bool bRet = view->MySetClipboardData(sValue.c_str(), sValue.size(), bColumnSelect, bLineSelect);
+			Wrap(&result)->Receive(bRet);
 		}
 		return true;
 
 	case F_LAYOUTTOLOGICLINENUM:
 		// レイアウト→ロジック行
 		{
-			if (ArgSize < 1) {
+			if (numArgs < 1) {
 				return false;
 			}
-			if (!VariantToI4(varCopy, Arguments[0])) {
+			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			CLayoutInt nLineNum = CLayoutInt(varCopy.Data.lVal - 1);
+			CLayoutInt nLineNum = CLayoutInt(varCopy.data.lVal - 1);
 			int ret = 0;
-			if (View->m_pcEditDoc->m_cLayoutMgr.GetLineCount() == nLineNum) {
-				ret = (Int)View->m_pcEditDoc->m_cDocLineMgr.GetLineCount() + 1;
+			if (view->m_pcEditDoc->m_cLayoutMgr.GetLineCount() == nLineNum) {
+				ret = (Int)view->m_pcEditDoc->m_cDocLineMgr.GetLineCount() + 1;
 			}else {
-				const CLayout* pcLayout = View->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
+				const CLayout* pcLayout = view->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 				if (pcLayout) {
 					ret = pcLayout->GetLogicLineNo() + 1;
 				}else {
 					return false;
 				}
 			}
-			Wrap(&Result)->Receive(ret);
+			Wrap(&result)->Receive(ret);
 		}
 		return true;
 
 	case F_LINECOLUMNTOINDEX:
 		// レイアウト→ロジック桁
 		{
-			if (ArgSize < 2) {
+			if (numArgs < 2) {
 				return false;
 			}
-			if (!VariantToI4(varCopy, Arguments[0])) {
+			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			CLayoutInt nLineNum = CLayoutInt(varCopy.Data.lVal - 1);
-			if (!VariantToI4(varCopy, Arguments[1])) {
+			CLayoutInt nLineNum = CLayoutInt(varCopy.data.lVal - 1);
+			if (!VariantToI4(varCopy, args[1])) {
 				return false;
 			}
-			CLayoutInt nLineCol = CLayoutInt(varCopy.Data.lVal - 1);
+			CLayoutInt nLineCol = CLayoutInt(varCopy.data.lVal - 1);
 			if (nLineNum < 0) {
 				return false;
 			}
 
 			CLayoutPoint nLayoutPos(nLineCol, nLineNum);
 			CLogicPoint nLogicPos(CLogicInt(0), CLogicInt(0));
-			View->m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(nLayoutPos, &nLogicPos);
+			view->m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(nLayoutPos, &nLogicPos);
 			int ret = nLogicPos.GetX() + 1;
-			Wrap(&Result)->Receive(ret);
+			Wrap(&result)->Receive(ret);
 		}
 		return true;
 
@@ -2042,37 +2056,37 @@ bool CMacro::HandleFunction(
 	case F_LINEINDEXTOCOLUMN:
 		// ロジック→レイアウト行/桁
 		{
-			if (ArgSize < 2) {
+			if (numArgs < 2) {
 				return false;
 			}
-			if (!VariantToI4(varCopy, Arguments[0])) {
+			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			CLogicInt nLineNum = CLogicInt(varCopy.Data.lVal - 1);
-			if (!VariantToI4(varCopy, Arguments[1])) {
+			CLogicInt nLineNum = CLogicInt(varCopy.data.lVal - 1);
+			if (!VariantToI4(varCopy, args[1])) {
 				return false;
 			}
-			CLogicInt nLineIdx = CLogicInt(varCopy.Data.lVal - 1);
+			CLogicInt nLineIdx = CLogicInt(varCopy.data.lVal - 1);
 			if (nLineNum < 0) {
 				return false;
 			}
 
 			CLogicPoint nLogicPos(nLineIdx, nLineNum);
 			CLayoutPoint nLayoutPos(CLayoutInt(0), CLayoutInt(0));
-			View->m_pcEditDoc->m_cLayoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
-			int ret = ((LOWORD(ID) == F_LOGICTOLAYOUTLINENUM) ? (Int)nLayoutPos.GetY2() : (Int)nLayoutPos.GetX2()) + 1;
-			Wrap(&Result)->Receive(ret);
+			view->m_pcEditDoc->m_cLayoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
+			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? (Int)nLayoutPos.GetY2() : (Int)nLayoutPos.GetX2()) + 1;
+			Wrap(&result)->Receive(ret);
 		}
 		return true;
 
 	case F_GETCOOKIE:
 		{
 			Variant varCopy2;
-			if (ArgSize >= 2) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;
-				if (VariantChangeType(&varCopy2.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;
-				SysString ret = View->GetDocument()->m_cCookie.GetCookie(varCopy.Data.bstrVal, varCopy2.Data.bstrVal);
-				Wrap(&Result)->Receive(ret);
+			if (numArgs >= 2) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
+				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;
+				SysString ret = view->GetDocument()->m_cCookie.GetCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal);
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
@@ -2080,13 +2094,13 @@ bool CMacro::HandleFunction(
 	case F_GETCOOKIEDEFAULT:
 		{
 			Variant varCopy2, varCopy3;
-			if (ArgSize >= 3) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;
-				if (VariantChangeType(&varCopy2.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;
-				if (VariantChangeType(&varCopy3.Data, const_cast<VARIANTARG*>(&(Arguments[2])), 0, VT_BSTR) != S_OK) return false;
-				SysString ret = View->GetDocument()->m_cCookie.GetCookieDefault(varCopy.Data.bstrVal, varCopy2.Data.bstrVal,
-					varCopy3.Data.bstrVal, SysStringLen(varCopy3.Data.bstrVal));
-				Wrap(&Result)->Receive(ret);
+			if (numArgs >= 3) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
+				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;
+				if (VariantChangeType(&varCopy3.data, const_cast<VARIANTARG*>(&(args[2])), 0, VT_BSTR) != S_OK) return false;
+				SysString ret = view->GetDocument()->m_cCookie.GetCookieDefault(varCopy.data.bstrVal, varCopy2.data.bstrVal,
+					varCopy3.data.bstrVal, SysStringLen(varCopy3.data.bstrVal));
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
@@ -2094,13 +2108,13 @@ bool CMacro::HandleFunction(
 	case F_SETCOOKIE:
 		{
 			Variant varCopy2, varCopy3;
-			if (ArgSize >= 3) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;
-				if (VariantChangeType(&varCopy2.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;
-				if (VariantChangeType(&varCopy3.Data, const_cast<VARIANTARG*>(&(Arguments[2])), 0, VT_BSTR) != S_OK) return false;
-				int ret = View->GetDocument()->m_cCookie.SetCookie(varCopy.Data.bstrVal, varCopy2.Data.bstrVal,
-					varCopy3.Data.bstrVal, SysStringLen(varCopy3.Data.bstrVal));
-				Wrap(&Result)->Receive(ret);
+			if (numArgs >= 3) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
+				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;
+				if (VariantChangeType(&varCopy3.data, const_cast<VARIANTARG*>(&(args[2])), 0, VT_BSTR) != S_OK) return false;
+				int ret = view->GetDocument()->m_cCookie.SetCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal,
+					varCopy3.data.bstrVal, SysStringLen(varCopy3.data.bstrVal));
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
@@ -2108,66 +2122,66 @@ bool CMacro::HandleFunction(
 	case F_DELETECOOKIE:
 		{
 			Variant varCopy2;
-			if (ArgSize >= 2) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;
-				if (VariantChangeType(&varCopy2.Data, const_cast<VARIANTARG*>(&(Arguments[1])), 0, VT_BSTR) != S_OK) return false;
-				int ret = View->GetDocument()->m_cCookie.DeleteCookie(varCopy.Data.bstrVal, varCopy2.Data.bstrVal);
-				Wrap(&Result)->Receive(ret);
+			if (numArgs >= 2) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
+				if (VariantChangeType(&varCopy2.data, const_cast<VARIANTARG*>(&(args[1])), 0, VT_BSTR) != S_OK) return false;
+				int ret = view->GetDocument()->m_cCookie.DeleteCookie(varCopy.data.bstrVal, varCopy2.data.bstrVal);
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
 		}
 	case F_GETCOOKIENAMES:
 		{
-			if (ArgSize >= 1) {
-				if (VariantChangeType(&varCopy.Data, const_cast<VARIANTARG*>(&(Arguments[0])), 0, VT_BSTR) != S_OK) return false;
-				SysString ret = View->GetDocument()->m_cCookie.GetCookieNames(varCopy.Data.bstrVal);
-				Wrap(&Result)->Receive(ret);
+			if (numArgs >= 1) {
+				if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_BSTR) != S_OK) return false;
+				SysString ret = view->GetDocument()->m_cCookie.GetCookieNames(varCopy.data.bstrVal);
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
 		}
 	case F_SETDRAWSWITCH:
 		{
-			if (1 <= ArgSize) {
-				if (!VariantToI4(varCopy, Arguments[0])) return false;
-				int ret = (View->m_pcEditWnd->SetDrawSwitchOfAllViews(varCopy.Data.iVal != 0) ? 1: 0);
-				Wrap(&Result)->Receive(ret);
+			if (1 <= numArgs) {
+				if (!VariantToI4(varCopy, args[0])) return false;
+				int ret = (view->m_pcEditWnd->SetDrawSwitchOfAllViews(varCopy.data.iVal != 0) ? 1: 0);
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
 		}
 	case F_GETDRAWSWITCH:
 		{
-			int ret = (View->GetDrawSwitch() ? 1: 0);
-			Wrap(&Result)->Receive(ret);
+			int ret = (view->GetDrawSwitch() ? 1: 0);
+			Wrap(&result)->Receive(ret);
 			return true;
 		}
 	case F_ISSHOWNSTATUS:
 		{
-			int ret = (View->m_pcEditWnd->m_cStatusBar.GetStatusHwnd() ? 1: 0);
-			Wrap(&Result)->Receive(ret);
+			int ret = (view->m_pcEditWnd->m_cStatusBar.GetStatusHwnd() ? 1: 0);
+			Wrap(&result)->Receive(ret);
 			return true;
 		}
 	case F_GETSTRWIDTH:
 		{
 			Variant varCopy2;
-			if (1 <= ArgSize) {
-				if (!VariantToBStr(varCopy, Arguments[0])) { return false; }
-				if (2 <= ArgSize) {
-					if (!VariantToI4(varCopy2, Arguments[1])) { return false; }
+			if (1 <= numArgs) {
+				if (!VariantToBStr(varCopy, args[0])) { return false; }
+				if (2 <= numArgs) {
+					if (!VariantToI4(varCopy2, args[1])) { return false; }
 				}else {
-					varCopy2.Data.lVal = 1;
+					varCopy2.data.lVal = 1;
 				}
-				const wchar_t* pLine = varCopy.Data.bstrVal;
-				int nLen = ::SysStringLen(varCopy.Data.bstrVal);
+				const wchar_t* pLine = varCopy.data.bstrVal;
+				int nLen = ::SysStringLen(varCopy.data.bstrVal);
 				if (2 <= nLen) {
 					if (pLine[nLen-2] == WCODE::CR && pLine[nLen-1] == WCODE::LF) {
 						--nLen;
 					}
 				}
-				const int nTabWidth = (Int)View->GetDocument()->m_cLayoutMgr.GetTabSpaceKetas();
-				int nPosX = varCopy2.Data.lVal - 1;
+				const int nTabWidth = (Int)view->GetDocument()->m_cLayoutMgr.GetTabSpaceKetas();
+				int nPosX = varCopy2.data.lVal - 1;
 				for (int i=0; i<nLen;) {
 					if (pLine[i] == WCODE::TAB) {
 						nPosX += nTabWidth - (nPosX % nTabWidth);
@@ -2176,8 +2190,8 @@ bool CMacro::HandleFunction(
 					}
 					i += t_max(1, (int)(Int)CNativeW::GetSizeOfChar(pLine, nLen, i));
 				}
-				nPosX -=  varCopy2.Data.lVal - 1;
-				Wrap(&Result)->Receive(nPosX);
+				nPosX -=  varCopy2.data.lVal - 1;
+				Wrap(&result)->Receive(nPosX);
 				return true;
 			}
 			return false;
@@ -2185,17 +2199,17 @@ bool CMacro::HandleFunction(
 	case F_GETSTRLAYOUTLENGTH:
 		{
 			Variant varCopy2;
-			if (1 <= ArgSize) {
-				if (!VariantToBStr(varCopy, Arguments[0])) { return false; }
-				if (2 <= ArgSize) {
-					if (!VariantToI4(varCopy2, Arguments[1])) { return false; }
+			if (1 <= numArgs) {
+				if (!VariantToBStr(varCopy, args[0])) { return false; }
+				if (2 <= numArgs) {
+					if (!VariantToI4(varCopy2, args[1])) { return false; }
 				}else {
-					varCopy2.Data.lVal = 1;
+					varCopy2.data.lVal = 1;
 				}
 				CDocLine tmpDocLine;
-				tmpDocLine.SetDocLineString(varCopy.Data.bstrVal, ::SysStringLen(varCopy.Data.bstrVal));
+				tmpDocLine.SetDocLineString(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
 				const int tmpLenWithEol1 = tmpDocLine.GetLengthWithoutEOL() + (0 < tmpDocLine.GetEol().GetLen() ? 1: 0);
-				const CLayoutXInt offset(varCopy2.Data.lVal - 1);
+				const CLayoutXInt offset(varCopy2.data.lVal - 1);
 				const CLayout tmpLayout(
 					&tmpDocLine,
 					CLogicPoint(0, 0),
@@ -2204,25 +2218,25 @@ bool CMacro::HandleFunction(
 					offset,
 					NULL
 				);
-				CLayoutXInt width = View->LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
-				Wrap(&Result)->Receive((Int)width);
+				CLayoutXInt width = view->LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
+				Wrap(&result)->Receive((Int)width);
 				return true;
 			}
 			return false;
 		}
 	case F_GETDEFAULTCHARLENGTH:
 		{
-			CLayoutXInt width = View->GetTextMetrics().GetLayoutXDefault();
-			Wrap(&Result)->Receive((Int)width);
+			CLayoutXInt width = view->GetTextMetrics().GetLayoutXDefault();
+			Wrap(&result)->Receive((Int)width);
 			return true;
 		}
 	case F_ISINCLUDECLIPBOARDFORMAT:
 		{
-			if (1 <= ArgSize) {
-				if (!VariantToBStr(varCopy, Arguments[0])) return false;
-				CClipboard cClipboard(View->GetHwnd());
-				bool bret = cClipboard.IsIncludeClipboradFormat(varCopy.Data.bstrVal);
-				Wrap(&Result)->Receive(bret ? 1 : 0);
+			if (1 <= numArgs) {
+				if (!VariantToBStr(varCopy, args[0])) return false;
+				CClipboard cClipboard(view->GetHwnd());
+				bool bret = cClipboard.IsIncludeClipboradFormat(varCopy.data.bstrVal);
+				Wrap(&result)->Receive(bret ? 1 : 0);
 				return true;
 			}
 			return false;
@@ -2230,20 +2244,20 @@ bool CMacro::HandleFunction(
 	case F_GETCLIPBOARDBYFORMAT:
 		{
 			Variant varCopy2, varCopy3;
-			if (2 <= ArgSize) {
-				if (!VariantToBStr(varCopy, Arguments[0])) return false;
-				if (!VariantToI4(varCopy2, Arguments[1])) return false;
-				if (3 <= ArgSize) {
-					if (!VariantToI4(varCopy3, Arguments[2])) return false;
+			if (2 <= numArgs) {
+				if (!VariantToBStr(varCopy, args[0])) return false;
+				if (!VariantToI4(varCopy2, args[1])) return false;
+				if (3 <= numArgs) {
+					if (!VariantToI4(varCopy3, args[2])) return false;
 				}else {
-					varCopy3.Data.lVal = -1;
+					varCopy3.data.lVal = -1;
 				}
-				CClipboard cClipboard(View->GetHwnd());
+				CClipboard cClipboard(view->GetHwnd());
 				CNativeW mem;
-				CEol cEol = View->m_pcEditDoc->m_cDocEditor.GetNewLineCode();
-				cClipboard.GetClipboradByFormat(mem, varCopy.Data.bstrVal, varCopy2.Data.lVal, varCopy3.Data.lVal, cEol);
+				CEol cEol = view->m_pcEditDoc->m_cDocEditor.GetNewLineCode();
+				cClipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, cEol);
 				SysString ret = SysString(mem.GetStringPtr(), mem.GetStringLength());
-				Wrap(&Result)->Receive(ret);
+				Wrap(&result)->Receive(ret);
 				return true;
 			}
 			return false;
@@ -2251,19 +2265,19 @@ bool CMacro::HandleFunction(
 	case F_SETCLIPBOARDBYFORMAT:
 		{
 			Variant varCopy2, varCopy3, varCopy4;
-			if (3 <= ArgSize) {
-				if (!VariantToBStr(varCopy, Arguments[0])) return false;
-				if (!VariantToBStr(varCopy2, Arguments[1])) return false;
-				if (!VariantToI4(varCopy3, Arguments[2])) return false;
-				if (3 <= ArgSize) {
-					if (!VariantToI4(varCopy4, Arguments[3])) return false;
+			if (3 <= numArgs) {
+				if (!VariantToBStr(varCopy, args[0])) return false;
+				if (!VariantToBStr(varCopy2, args[1])) return false;
+				if (!VariantToI4(varCopy3, args[2])) return false;
+				if (3 <= numArgs) {
+					if (!VariantToI4(varCopy4, args[3])) return false;
 				}else {
-					varCopy4.Data.lVal = -1;
+					varCopy4.data.lVal = -1;
 				}
-				CClipboard cClipboard(View->GetHwnd());
-				CStringRef cstr(varCopy.Data.bstrVal, ::SysStringLen(varCopy.Data.bstrVal));
-				bool bret = cClipboard.SetClipboradByFormat(cstr, varCopy2.Data.bstrVal, varCopy3.Data.lVal, varCopy4.Data.lVal);
-				Wrap(&Result)->Receive(bret ? 1 : 0);
+				CClipboard cClipboard(view->GetHwnd());
+				CStringRef cstr(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
+				bool bret = cClipboard.SetClipboradByFormat(cstr, varCopy2.data.bstrVal, varCopy3.data.lVal, varCopy4.data.lVal);
+				Wrap(&result)->Receive(bret ? 1 : 0);
 				return true;
 			}
 			return false;
@@ -2272,27 +2286,27 @@ bool CMacro::HandleFunction(
 		{
 			int nLineNum;
 			int nAttType;
-			if (ArgSize < 2) {
+			if (numArgs < 2) {
 				return false;
 			}
-			if (!variant_to_int(Arguments[0], nLineNum)) return false;
-			if (!variant_to_int(Arguments[1], nAttType)) return false;
+			if (!variant_to_int(args[0], nLineNum)) return false;
+			if (!variant_to_int(args[1], nAttType)) return false;
 			CLogicInt nLine;
 			if (nLineNum == 0) {
-				nLine = View->GetCaret().GetCaretLogicPos().GetY2();
+				nLine = view->GetCaret().GetCaretLogicPos().GetY2();
 			}else if (nLineNum < 0) {
 				return false;
 			}else {
 				nLine = CLogicInt(nLineNum - 1); // nLineNumは1開始
 			}
-			const CDocLine* pcDocLine = View->GetDocument()->m_cDocLineMgr.GetLine(nLine);
+			const CDocLine* pcDocLine = view->GetDocument()->m_cDocLineMgr.GetLine(nLine);
 			if (!pcDocLine) {
 				return false;
 			}
 			int nRet;
 			switch (nAttType) {
 			case 0:
-				nRet = (CModifyVisitor().IsLineModified(pcDocLine, View->GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()) ? 1: 0);
+				nRet = (CModifyVisitor().IsLineModified(pcDocLine, view->GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()) ? 1: 0);
 				break;
 			case 1:
 				nRet = pcDocLine->m_sMark.m_cModified.GetSeq();
@@ -2309,44 +2323,44 @@ bool CMacro::HandleFunction(
 			default:
 				return false;
 			}
-			Wrap( &Result )->Receive( nRet );
+			Wrap( &result )->Receive( nRet );
 			return true;
 		}
 	case F_ISTEXTSELECTINGLOCK:
 		{
-			if (View->GetSelectionInfo().m_bSelectingLock) {
-				if (View->GetSelectionInfo().IsBoxSelecting()) {
-					Wrap( &Result )->Receive( 2 );	//選択ロック+矩形選択中
+			if (view->GetSelectionInfo().m_bSelectingLock) {
+				if (view->GetSelectionInfo().IsBoxSelecting()) {
+					Wrap( &result )->Receive( 2 );	//選択ロック+矩形選択中
 				}else {
-					Wrap( &Result )->Receive( 1 );	//選択ロック中
+					Wrap( &result )->Receive( 1 );	//選択ロック中
 				}
 			}else {
-				Wrap( &Result )->Receive( 0 );		//非ロック中
+				Wrap( &result )->Receive( 0 );		//非ロック中
 			}
 		}
 		return true;
 	case F_GETVIEWLINES:
 		{
-			int nLines = (Int)View->GetTextArea().m_nViewRowNum;
-			Wrap( &Result )->Receive( nLines );
+			int nLines = (Int)view->GetTextArea().m_nViewRowNum;
+			Wrap( &result )->Receive( nLines );
 			return true;
 		}
 	case F_GETVIEWCOLUMNS:
 		{
-			int nColumns = (Int)View->GetTextArea().m_nViewColNum;
-			Wrap( &Result )->Receive( nColumns );
+			int nColumns = (Int)view->GetTextArea().m_nViewColNum;
+			Wrap( &result )->Receive( nColumns );
 			return true;
 		}
 	case F_CREATEMENU:
 		{
 			Variant varCopy2;
-			if (2 <= ArgSize) {
-				if (!VariantToI4(varCopy, Arguments[0])) return false;
-				if (!VariantToBStr(varCopy2, Arguments[1])) return false;
+			if (2 <= numArgs) {
+				if (!VariantToI4(varCopy, args[0])) return false;
+				if (!VariantToBStr(varCopy2, args[1])) return false;
 				std::vector<wchar_t> vStrMenu;
-				int nLen = (int)auto_strlen(varCopy2.Data.bstrVal);
+				int nLen = (int)auto_strlen(varCopy2.data.bstrVal);
 				vStrMenu.assign( nLen + 1, L'\0' );
-				auto_strcpy(&vStrMenu[0], varCopy2.Data.bstrVal);
+				auto_strcpy(&vStrMenu[0], varCopy2.data.bstrVal);
 				HMENU hMenu = ::CreatePopupMenu();
 				std::vector<HMENU> vHmenu;
 				vHmenu.push_back( hMenu );
@@ -2426,16 +2440,16 @@ bool CMacro::HandleFunction(
 					}
 				}
 				POINT pt;
-				int nViewPointType = varCopy.Data.lVal;
+				int nViewPointType = varCopy.data.lVal;
 				if (nViewPointType == 1) {
 					// キャレット位置
-					pt = View->GetCaret().CalcCaretDrawPos( View->GetCaret().GetCaretLayoutPos() );
-					if (View->GetTextArea().GetAreaLeft() <= pt.x
-						&& View->GetTextArea().GetAreaTop() <= pt.y
-						&& pt.x < View->GetTextArea().GetAreaRight()
-						&& pt.y < View->GetTextArea().GetAreaBottom()
+					pt = view->GetCaret().CalcCaretDrawPos( view->GetCaret().GetCaretLayoutPos() );
+					if (view->GetTextArea().GetAreaLeft() <= pt.x
+						&& view->GetTextArea().GetAreaTop() <= pt.y
+						&& pt.x < view->GetTextArea().GetAreaRight()
+						&& pt.y < view->GetTextArea().GetAreaBottom()
 					) {
-						::ClientToScreen( View->GetHwnd(), &pt );
+						::ClientToScreen( view->GetHwnd(), &pt );
 					}else {
 						::GetCursorPos( &pt );
 					}
@@ -2448,9 +2462,9 @@ bool CMacro::HandleFunction(
 				int nId = ::TrackPopupMenu( hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD,
 											( pt.x > rcWork.left )? pt.x: rcWork.left,
 											( pt.y < rcWork.bottom )? pt.y: rcWork.bottom,
-											0, View->GetHwnd(), NULL);
+											0, view->GetHwnd(), NULL);
 				::DestroyMenu( hMenu );
-				Wrap( &Result )->Receive( nId );
+				Wrap( &result )->Receive( nId );
 				return true;
 			}
 			return false;

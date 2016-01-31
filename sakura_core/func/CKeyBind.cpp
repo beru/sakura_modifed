@@ -64,14 +64,15 @@ CKeyBind::~CKeyBind()
 HACCEL CKeyBind::CreateAccerelator(
 	int			nKeyNameArrNum,
 	KEYDATA*	pKeyNameArr
-)
+	)
 {
 	// 機能が割り当てられているキーの数をカウント -> nAccelArrNum
 	int nAccelArrNum = 0;
 	for (int i=0; i<nKeyNameArrNum; ++i) {
-		if (pKeyNameArr[i].m_nKeyCode != 0) {
+		auto& keyName = pKeyNameArr[i];
+		if (keyName.m_nKeyCode != 0) {
 			for (int j=0; j<8; ++j) {
-				if (GetFuncCodeAt(pKeyNameArr[i], j) != 0) {
+				if (GetFuncCodeAt(keyName, j) != 0) {
 					++nAccelArrNum;
 				}
 			}
@@ -82,18 +83,21 @@ HACCEL CKeyBind::CreateAccerelator(
 		// 機能割り当てがゼロ
 		return NULL;
 	}
-	ACCEL* pAccelArr = new ACCEL[nAccelArrNum];
+	std::vector<ACCEL> accels(nAccelArrNum);
+	ACCEL* pAccelArr = &accels[0];
 	int k = 0;
 	for (int i=0; i<nKeyNameArrNum; ++i) {
-		if (pKeyNameArr[i].m_nKeyCode != 0) {
+		auto& keyName = pKeyNameArr[i];
+		if (keyName.m_nKeyCode != 0) {
 			for (int j=0; j<8; ++j) {
-				if (GetFuncCodeAt(pKeyNameArr[i], j) != 0) {
-					pAccelArr[k].fVirt = FNOINVERT | FVIRTKEY;
-					pAccelArr[k].fVirt |= (j & _SHIFT) ? FSHIFT   : 0;
-					pAccelArr[k].fVirt |= (j & _CTRL ) ? FCONTROL : 0;
-					pAccelArr[k].fVirt |= (j & _ALT  ) ? FALT     : 0;
-					pAccelArr[k].key = pKeyNameArr[i].m_nKeyCode;
-					pAccelArr[k].cmd = pKeyNameArr[i].m_nKeyCode | (((WORD)j)<<8) ;
+				if (GetFuncCodeAt(keyName, j) != 0) {
+					auto& accel = pAccelArr[k];
+					accel.fVirt = FNOINVERT | FVIRTKEY;
+					accel.fVirt |= (j & _SHIFT) ? FSHIFT   : 0;
+					accel.fVirt |= (j & _CTRL ) ? FCONTROL : 0;
+					accel.fVirt |= (j & _ALT  ) ? FALT     : 0;
+					accel.key = keyName.m_nKeyCode;
+					accel.cmd = keyName.m_nKeyCode | (((WORD)j)<<8) ;
 
 					++k;
 				}
@@ -101,7 +105,6 @@ HACCEL CKeyBind::CreateAccerelator(
 		}
 	}
 	HACCEL hAccel = ::CreateAcceleratorTable(pAccelArr, nAccelArrNum);
-	delete[] pAccelArr;
 	return hAccel;
 }
 
@@ -122,8 +125,9 @@ EFunctionCode CKeyBind::GetFuncCode(
 	int nSts = (int)HIBYTE(nAccelCmd);
 	if (nCmd == 0) { // mouse command
 		for (int i=0; i<nKeyNameArrNum; ++i) {
-			if (nCmd == pKeyNameArr[i].m_nKeyCode) {
-				return GetFuncCodeAt(pKeyNameArr[i], nSts, bGetDefFuncCode);
+			auto& keyName = pKeyNameArr[i];
+			if (nCmd == keyName.m_nKeyCode) {
+				return GetFuncCodeAt(keyName, nSts, bGetDefFuncCode);
 			}
 		}
 	}else {
@@ -269,7 +273,8 @@ bool CKeyBind::GetKeyStrSub(
 
 	int i;
 	for (i=nKeyNameArrBegin; i<nKeyNameArrEnd; ++i) {
-		if (nFuncId == GetFuncCodeAt(pKeyNameArr[i], nShiftState, bGetDefFuncCode)) {
+		auto& keyName = pKeyNameArr[i];
+		if (nFuncId == GetFuncCodeAt(keyName, nShiftState, bGetDefFuncCode)) {
 			if (nShiftState & _SHIFT) {
 				cMemList.AppendString(pszSHIFT);
 			}
@@ -279,7 +284,7 @@ bool CKeyBind::GetKeyStrSub(
 			if (nShiftState & _ALT) {
 				cMemList.AppendString(pszALT);
 			}
-			cMemList.AppendString(pKeyNameArr[i].m_szKeyName);
+			cMemList.AppendString(keyName.m_szKeyName);
 			nKeyNameArrBegin = i + 1;
 			return true;
 		}

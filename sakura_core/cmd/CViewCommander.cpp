@@ -636,7 +636,7 @@ bool CViewCommander::HandleCommand(
 				}
 				std::sort(indices.begin(), indices.end());
 				int idx = nCommand - F_TAB_1;
-				if (idx < indices.size()) {
+				if (idx < (int)indices.size()) {
 					int nodeIdx = indices[idx];
 					for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
 						auto& editNode = sd->m_sNodes.m_pEditArr[i];

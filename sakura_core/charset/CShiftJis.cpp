@@ -108,32 +108,23 @@ int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 /* コード変換 SJIS→Unicode */
 EConvertResult CShiftJis::SJISToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
-	// エラー状態
-	bool bError;
-
 	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	if (nSrcLen == 0) {
+		return RESULT_LOSESOME;
+	}
 
 	// 変換先バッファサイズを設定してメモリ領域確保
-	wchar_t* pDst;
-	try {
-		pDst = new wchar_t[nSrcLen];
-	}catch (...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
-
+	std::vector<wchar_t> dst(nSrcLen);
+	wchar_t* pDst = &dst[0];
+	
 	// 変換
+	bool bError;
 	int nDstLen = SjisToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pDstを更新
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
-
-	// 後始末
-	delete [] pDst;
 
 	if (!bError) {
 		return RESULT_COMPLETE;
@@ -212,32 +203,25 @@ int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 EConvertResult CShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
 {
 	// 状態
-	bool berror;
 	const CMemory* pMem = cSrc._GetMemory();
 
 	// ソース取得
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
 	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
+	if (nSrcLen == 0) {
+		return RESULT_LOSESOME;
+	}
 
 	// 変換先バッファサイズを設定してバッファを確保
-	char* pDst;
-	try {
-		pDst = new char[nSrcLen * 2];
-	}catch (...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
+	std::vector<char> dst(nSrcLen * 2);
+	char* pDst = &dst[0];
 
 	// 変換
+	bool berror;
 	int nDstLen = UniToSjis(pSrc, nSrcLen, pDst, &berror);
 
 	// pMemを更新
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
-
-	// 後始末
-	delete[] pDst;
 
 	// 結果
 	if (berror) {

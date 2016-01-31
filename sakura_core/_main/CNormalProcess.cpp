@@ -471,7 +471,7 @@ bool CNormalProcess::InitializeProcess()
 		(*it)->Invoke(&activeView, params);
 	}
 
-	return pEditWnd->GetHwnd() ? true : false;
+	return pEditWnd->GetHwnd() != NULL;
 }
 
 /*!

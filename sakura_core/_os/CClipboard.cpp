@@ -506,7 +506,7 @@ bool CClipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFo
 			nTextByteLen = cstr.GetLength() * sizeof(wchar_t);
 		}else {
 			CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode());
-			if (RESULT_FAILURE == pCode->UnicodeToCode(cstr, &cmemBuf)) {
+			if (pCode->UnicodeToCode(cstr, &cmemBuf) == RESULT_FAILURE) {
 				return false;
 			}
 			delete pCode;
@@ -638,7 +638,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 				cmem.SetRawData(pData, nLength);
 				if (cmem.GetRawPtr()) {
 					CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode());
-					if (RESULT_FAILURE == pCode->CodeToUnicode(cmem, &mem)) {
+					if (pCode->CodeToUnicode(cmem, &mem) == RESULT_FAILURE) {
 						mem.SetString(L"");
 						retVal = false;
 					}

@@ -10,11 +10,12 @@
 bool CConvert_HankataToZenhira::DoConvert(CNativeW* pcData)
 {
 	// 半角カナ→全角ひらがな
-	wchar_t* pBuf = new wchar_t[pcData->GetStringLength()+1]; // 文字数が減ることはあっても増えることは無いので、これでＯＫ
+	// 文字数が減ることはあっても増えることは無いので、これでＯＫ
+	std::vector<wchar_t> buf(pcData->GetStringLength() + 1);
+	wchar_t* pBuf = &buf[0];
 	int nDstLen = 0;
 	Convert_HankataToZenhira(pcData->GetStringPtr(), pcData->GetStringLength(), pBuf, &nDstLen);
 	pcData->SetString(pBuf, nDstLen);
-	delete[] pBuf;
 
 	return true;
 }

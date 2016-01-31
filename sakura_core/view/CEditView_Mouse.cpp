@@ -1613,9 +1613,9 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 
 				unsigned int nThreadId;
 				LPCTSTR szUrl = to_tchar(wstrOPEN.c_str());
-				LPTSTR szUrlDup = new TCHAR[_tcslen(szUrl) + 1];
-				_tcscpy(szUrlDup, szUrl);
-				HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, ShellExecuteProc, (LPVOID)szUrlDup, 0, &nThreadId);
+				LPTSTR pszUrlDup = new TCHAR[_tcslen(szUrl) + 1];
+				_tcscpy(pszUrlDup, szUrl);
+				HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, ShellExecuteProc, (LPVOID)pszUrlDup, 0, &nThreadId);
 				if (hThread != INVALID_HANDLE_VALUE) {
 					// ユーザーのURL起動指示に反応した目印としてちょっとの時間だけ砂時計カーソルを表示しておく
 					// ShellExecute は即座にエラー終了することがちょくちょくあるので WaitForSingleObject ではなく Sleep を使用（ex.存在しないパスの起動）
@@ -1624,7 +1624,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 					::CloseHandle(hThread);
 				}else {
 					// スレッド作成失敗
-					delete[] szUrlDup;
+					delete[] pszUrlDup;
 				}
 			}
 			return;

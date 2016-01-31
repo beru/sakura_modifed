@@ -37,8 +37,6 @@ void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
 	}
 
 	CLogicInt nPos;
-	CLogicInt nCharChars;
-
 	auto* pDoc = GetDocument();
 	pDoc->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 

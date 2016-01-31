@@ -499,9 +499,10 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 	DEBUG_TRACE(_T("CHokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
-	if (nVKey == VK_RETURN	&& !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
-	if (nVKey == VK_TAB		&& !m_pShareData->m_Common.m_sHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
-	if (nVKey == VK_RIGHT	&& !m_pShareData->m_Common.m_sHelper.m_bHokanKey_RIGHT)		return FALSE; // VK_RIGHT  補完決定キーが有効/無効
+	auto& csHelper = m_pShareData->m_Common.m_sHelper;
+	if (nVKey == VK_RETURN	&& !csHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
+	if (nVKey == VK_TAB		&& !csHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
+	if (nVKey == VK_RIGHT	&& !csHelper.m_bHokanKey_RIGHT)		return FALSE; // VK_RIGHT  補完決定キーが有効/無効
 
 	HWND hwndList = GetItemHwnd(IDC_LIST_WORDS);
 	int nItem = List_GetCurSel(hwndList);

@@ -88,8 +88,7 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 				*pw = static_cast<unsigned short>(*pr);
 			}
 			++pw;
-		}
-		else {
+		}else {
 			*pw++ = static_cast<unsigned short>(*pr);
 		}
 	}
@@ -102,32 +101,23 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 // コード変換 Latin1→Unicode
 EConvertResult CLatin1::Latin1ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
-	// エラー状態
-	bool bError;
-
 	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	if (nSrcLen == 0) {
+		return RESULT_LOSESOME;
+	}
 
 	// 変換先バッファサイズを設定してメモリ領域確保
-	wchar_t* pDst;
-	try {
-		pDst = new wchar_t[nSrcLen];
-	}catch (...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
+	std::vector<wchar_t> dst(nSrcLen);
+	wchar_t* pDst = &dst[0];
 
 	// 変換
+	bool bError;
 	int nDstLen = Latin1ToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pDstMemを更新
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
-
-	// 後始末
-	delete [] pDst;
 
 	if (!bError) {
 		return RESULT_COMPLETE;
@@ -204,32 +194,23 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 // コード変換 Unicode→Latin1
 EConvertResult CLatin1::UnicodeToLatin1( const CNativeW& cSrc, CMemory* pDstMem )
 {
-	// 状態
-	bool berror;
-
 	// ソース取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
+	if (nSrcLen == 0) {
+		return RESULT_LOSESOME;
+	}
 
 	// 変換先バッファサイズを設定してバッファを確保
-	char* pDst;
-	try {
-		pDst = new char[nSrcLen * 2];
-	}catch (...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
+	std::vector<char> dst(nSrcLen * 2);
+	char* pDst = &dst[0];
 
 	// 変換
+	bool berror;
 	int nDstLen = UniToLatin1(pSrc, nSrcLen, pDst, &berror);
 
 	// pDstMemを更新
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
-
-	// 後始末
-	delete[] pDst;
 
 	// 結果
 	if (berror) {

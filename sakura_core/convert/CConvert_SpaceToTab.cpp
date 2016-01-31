@@ -10,15 +10,14 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 	using namespace WCODE;
 
 	const wchar_t*	pLine;
-	int			nLineLen;
-	wchar_t*	pDes;
-	int			nBgn;
-	int			i;
-	int			nPosDes;
-	int			nPosX;
-	CEol		cEol;
+	int		nLineLen;
+	int		nBgn;
+	int		i;
+	int		nPosDes;
+	int		nPosX;
+	CEol	cEol;
 
-	bool		bSpace = false;	// スペースの処理中かどうか
+	bool	bSpace = false;	// スペースの処理中かどうか
 	int		j;
 	int		nStartPos;
 
@@ -34,7 +33,8 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 	if (0 >= nPosDes) {
 		return false;
 	}
-	pDes = new wchar_t[nPosDes + 1];
+	std::vector<wchar_t> des(nPosDes + 1);
+	wchar_t* pDes = &des[0];
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
@@ -115,8 +115,6 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 	pDes[nPosDes] = L'\0';
 
 	pcData->SetString(pDes, nPosDes);
-	delete [] pDes;
-	pDes = NULL;
 	return true;
 }
 

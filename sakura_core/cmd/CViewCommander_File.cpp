@@ -68,7 +68,15 @@ void CViewCommander::Command_FILENEW(void)
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
 	std::tstring curDir = CSakuraEnvironment::GetDlgInitialDir();
-	CControlTray::OpenNewEditor(G_AppInstance(), m_pCommanderView->GetHwnd(), sLoadInfo, NULL, false, curDir.c_str(), false);
+	CControlTray::OpenNewEditor(
+		G_AppInstance(),
+		m_pCommanderView->GetHwnd(),
+		sLoadInfo,
+		NULL,
+		false,
+		curDir.c_str(),
+		false
+	);
 	return;
 }
 
@@ -82,12 +90,15 @@ void CViewCommander::Command_FILENEW_NEWWINDOW(void)
 	sLoadInfo.eCharCode = CODE_DEFAULT;
 	sLoadInfo.bViewMode = false;
 	std::tstring curDir = CSakuraEnvironment::GetDlgInitialDir();
-	CControlTray::OpenNewEditor(G_AppInstance(), m_pCommanderView->GetHwnd(), sLoadInfo,
+	CControlTray::OpenNewEditor(
+		G_AppInstance(),
+		m_pCommanderView->GetHwnd(),
+		sLoadInfo,
 		NULL,
 		false,
 		curDir.c_str(),
 		true
-		);
+	);
 	return;
 }
 
@@ -547,7 +558,15 @@ void CViewCommander::Command_PROFILEMGR( void )
 		sLoadInfo.cFilePath = _T("");
 		sLoadInfo.eCharCode = CODE_DEFAULT;
 		sLoadInfo.bViewMode = false;
-		CControlTray::OpenNewEditor( G_AppInstance(), m_pCommanderView->GetHwnd(), sLoadInfo, szOpt, false, NULL, false );
+		CControlTray::OpenNewEditor(
+			G_AppInstance(),
+			m_pCommanderView->GetHwnd(),
+			sLoadInfo,
+			szOpt,
+			false,
+			NULL,
+			false
+		);
 	}
 }
 
@@ -600,7 +619,7 @@ bool CViewCommander::Command_PUTFILE(
 	// 2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
-	std::auto_ptr<CCodeBase> pcSaveCode(CCodeFactory::CreateCodeBase(nSaveCharCode, 0));
+	std::unique_ptr<CCodeBase> pcSaveCode(CCodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
 	bool bBom = false;
 	if (CCodeTypeName(nSaveCharCode).UseBom()) {
@@ -620,7 +639,7 @@ bool CViewCommander::Command_PUTFILE(
 			const CNativeW* pConvBuffer;
 			if (bBom) {
 				CNativeW cmemBom;
-				std::auto_ptr<CCodeBase> pcUtf16(CCodeFactory::CreateCodeBase(CODE_UNICODE, 0));
+				std::unique_ptr<CCodeBase> pcUtf16(CCodeFactory::CreateCodeBase(CODE_UNICODE, 0));
 				pcUtf16->GetBom(cmemBom._GetMemory());
 				cMem2.AppendNativeData(cmemBom);
 				cMem2.AppendNativeData(cMem);

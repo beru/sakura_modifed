@@ -854,6 +854,7 @@ void CEditWnd::LayoutMainMenu()
 	LPCTSTR		pszName;
 
 	hMenu = ::CreateMenu();
+	auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 	for (int i=0; i<MAX_MAINMENU_TOP && pcMenu->m_nMenuTopIdx[i] >= 0; ++i) {
 		nCount = (i >= MAX_MAINMENU_TOP || pcMenu->m_nMenuTopIdx[i + 1] < 0 ? pcMenu->m_nMainMenuNum : pcMenu->m_nMenuTopIdx[i+1])
 				- pcMenu->m_nMenuTopIdx[i];		// メニュー項目数
@@ -878,8 +879,8 @@ void CEditWnd::LayoutMainMenu()
 			auto_strcpy(szKey, to_tchar(cMainMenu->m_sKey));
 			if (!CKeyBind::GetMenuLabel(
 				G_AppInstance(),
-				m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-				m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr,
+				csKeyBind.m_nKeyNameArrNum,
+				csKeyBind.m_pKeyNameArr,
 				cMainMenu->m_nFunc,
 				szLabel,
 				to_tchar(cMainMenu->m_sKey),
@@ -1131,7 +1132,6 @@ LRESULT CEditWnd::DispatchEvent(
 	int					nPane;
 	EditInfo*			pfi;
 	LPHELPINFO			lphi;
-	CLogicInt			nLineLen;
 	
 	UINT				idCtl;	// コントロールのID
 	MEASUREITEMSTRUCT*	lpmis;
@@ -1183,10 +1183,11 @@ LRESULT CEditWnd::DispatchEvent(
 
 			// 機能に対応するキー名の取得(複数)
 			CNativeT** ppcAssignedKeyList;
+			auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 			int nAssignedKeyNum = CKeyBind::GetKeyStrList(
 				G_AppInstance(),
-				m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-				(KEYDATA*)m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr,
+				csKeyBind.m_nKeyNameArrNum,
+				(KEYDATA*)csKeyBind.m_pKeyNameArr,
 				&ppcAssignedKeyList,
 				uItem
 			);
@@ -1508,9 +1509,7 @@ LRESULT CEditWnd::DispatchEvent(
 		// 2008.11.03 syat   矩形範囲選択開始のツールチップで80文字超えていたのでlpszTextに変更。
 		case TTN_NEEDTEXT:
 			{
-				static TCHAR szText[256];
-				memset(szText, 0, sizeof(szText));
-
+				static TCHAR szText[256] = {0};
 				// ツールチップテキスト取得、設定
 				LPTOOLTIPTEXT lptip = (LPTOOLTIPTEXT)pnmh;
 				GetTooltipText(szText, _countof(szText), lptip->hdr.idFrom);
@@ -2208,12 +2207,17 @@ void CEditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 				size_t nSize = files.size();
 				for (size_t f=1; f<nSize; ++f) {
 					sLoadInfo.cFilePath = files[f].c_str();
-					CControlTray::OpenNewEditor(G_AppInstance(), GetHwnd(), sLoadInfo, NULL, true);
+					CControlTray::OpenNewEditor(
+						G_AppInstance(),
+						GetHwnd(),
+						sLoadInfo,
+						NULL,
+						true
+					);
 				}
 			}
-		}
-		// その他コマンド
-		else {
+		}else {
+			// その他コマンド
 			// ビューにフォーカスを移動しておく
 			if (wID != F_SEARCH_BOX && m_nCurrentFocus == F_SEARCH_BOX) {
 				::SetFocus(GetActiveView().GetHwnd());
@@ -2231,11 +2235,11 @@ void CEditWnd::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 			// ビューにフォーカスを移動しておく
 			if (wID != F_SEARCH_BOX && m_nCurrentFocus == F_SEARCH_BOX)
 				::SetFocus(GetActiveView().GetHwnd());
-
+			auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 			EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
 				wID,
-				m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-				m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
+				csKeyBind.m_nKeyNameArrNum,
+				csKeyBind.m_pKeyNameArr
 			);
 			GetDocument()->HandleCommand((EFunctionCode)(nFuncCode | FA_FROMKEYBOARD));
 		}
@@ -2316,8 +2320,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 					pMenuName, cMainMenu->m_sKey);
 				if (hSubMenu.size() > (size_t)nLv) {
 					hSubMenu[nLv] = hMenuPopUp;
-				}
-				else {
+				}else {
 					hSubMenu.push_back(hMenuPopUp);
 				}
 				break;
@@ -3611,9 +3614,9 @@ LRESULT CEditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 		ReleaseCapture();
 		m_IconClicked = icNone;
 		Result = 0;
-	}else if (wp == HTSYSMENU)
+	}else if (wp == HTSYSMENU) {
 		Result = 0;
-	else {
+	}else {
 		//	2004.05.23 Moca メッセージミス修正
 		//	フレームのダブルクリック時後にウィンドウサイズ
 		//	変更モードなっていた
@@ -4133,11 +4136,12 @@ void CEditWnd::GetTooltipText(TCHAR* wszBuf, size_t nBufCount, int nID) const
 	nLen = _wcstotcs(wszBuf, tmp, nBufCount);
 
 	// 機能に対応するキー名の取得(複数)
+	auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 	CNativeT** ppcAssignedKeyList;
 	int nAssignedKeyNum = CKeyBind::GetKeyStrList(
 		G_AppInstance(),
-		m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-		m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr,
+		csKeyBind.m_nKeyNameArrNum,
+		csKeyBind.m_pKeyNameArr,
 		&ppcAssignedKeyList,
 		nID
 	);
@@ -4694,9 +4698,10 @@ void CEditWnd::ClearMouseState(void)
 void CEditWnd::CreateAccelTbl(void)
 {
 	if (IsWine()) {
+		auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 		m_hAccelWine = CKeyBind::CreateAccerelator(
-			m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-			m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
+			csKeyBind.m_nKeyNameArrNum,
+			csKeyBind.m_pKeyNameArr
 		);
 
 		if (!m_hAccelWine) {

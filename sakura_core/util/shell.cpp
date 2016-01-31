@@ -202,8 +202,7 @@ static LRESULT CALLBACK PropSheetWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 //						pwszDisplayName = wszPath;
 //#endif
 						if (SUCCEEDED(pDesktopFolder->ParseDisplayName(NULL, NULL, pwszDisplayName, NULL, &pIDL, NULL))) {
-							SHELLEXECUTEINFO si;
-							::ZeroMemory(&si, sizeof(si));
+							SHELLEXECUTEINFO si = {0};
 							si.cbSize   = sizeof(si);
 							si.fMask    = SEE_MASK_IDLIST;
 							si.lpVerb   = _T("open");
@@ -322,8 +321,7 @@ DWORD NetConnect (const TCHAR strNetWorkPass[])
 
 	TCHAR sDrive[] = _T("");
 	// NETRESOURCE作成
-	NETRESOURCE nr;
-	ZeroMemory(&nr, sizeof(nr));
+	NETRESOURCE nr = {0};
 	nr.dwScope       = RESOURCE_GLOBALNET;
 	nr.dwType        = RESOURCETYPE_DISK;
 	nr.dwDisplayType = RESOURCEDISPLAYTYPE_SHARE;
@@ -479,7 +477,6 @@ BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData)
 {
 	UINT uCommandOrg = uCommand;	// WinHelp のコマンド
 	bool bDesktop = false;	// デスクトップを親にしてヘルプ画面を出すかどうか
-	HH_POPUP hp;	// ポップアップヘルプ用の構造体
 
 	// Note: HH_TP_HELP_CONTEXTMENU や HELP_WM_HELP ではヘルプコンパイル時の
 	// トピックファイルを Cshelp.txt 以外にしている場合、
@@ -512,7 +509,7 @@ BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData)
 			int nCtrlID;	// 対象コントロールの ID
 			DWORD* pHelpIDs;	// コントロール ID とヘルプ ID の対応表へのポインタ
 
-			memset(&hp, 0, sizeof(hp));	// 構造体をゼロクリア
+			HH_POPUP hp = {0};	// ポップアップヘルプ用の構造体
 			hp.cbStruct = sizeof(hp);
 			hp.pszFont = _T("ＭＳ Ｐゴシック, 9");
 			hp.clrForeground = hp.clrBackground = -1;
@@ -585,9 +582,8 @@ BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData)
 BOOL MySelectFont(LOGFONT* plf, INT* piPointSize, HWND hwndDlgOwner, bool FixedFontOnly)
 {
 	// 2004.02.16 Moca CHOOSEFONTをメンバから外す
-	CHOOSEFONT cf;
+	CHOOSEFONT cf = {0};
 	// CHOOSEFONTの初期化
-	::ZeroMemory(&cf, sizeof(cf));
 	cf.lStructSize = sizeof(cf);
 	cf.hwndOwner = hwndDlgOwner;
 	cf.hDC = NULL;

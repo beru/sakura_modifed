@@ -66,21 +66,20 @@ CWSHMacroManager::~CWSHMacroManager()
 */
 bool CWSHMacroManager::ExecKeyMacro(CEditView* EditView, int flags) const
 {
-	CWSHClient* Engine = new CWSHClient(m_EngineName.c_str(), MacroError, EditView);
+	auto engine = std::make_unique<CWSHClient>(m_EngineName.c_str(), MacroError, EditView);
 	bool bRet = false;
-	if (Engine->m_Valid) {
+	if (engine->m_Valid) {
 		// インタフェースオブジェクトの登録
 		CWSHIfObj* objEditor = new CEditorIfObj();
 		objEditor->ReadyMethods(EditView, flags);
-		Engine->AddInterfaceObject(objEditor);
+		engine->AddInterfaceObject(objEditor);
 		for (auto it=m_Params.begin(); it!=m_Params.end(); ++it) {
 			(*it)->ReadyMethods(EditView, flags);
-			Engine->AddInterfaceObject(*it);
+			engine->AddInterfaceObject(*it);
 		}
 
-		bRet = Engine->Execute(m_Source.c_str());
+		bRet = engine->Execute(m_Source.c_str());
 	}
-	delete Engine;
 	return bRet;
 }
 

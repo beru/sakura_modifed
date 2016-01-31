@@ -120,22 +120,15 @@ EConvertResult CCodePage::CPToUnicode(const CMemory& cSrc, CNativeW* pDst, int c
 	UINT codepage = CodePageExToMSCP(codepageEx);
 	int nDstCch = MultiByteToWideChar2(codepage, nToWideCharFlags, pSrc, nSrcLen, NULL, 0);
 	// 変換先バッファサイズとその確保
-	wchar_t* pDstBuffer;
-	try {
-		pDstBuffer = new wchar_t[nDstCch];
-	}catch ( ... ) {
-		pDstBuffer = NULL;
-	}
-	if (!pDstBuffer) {
-		return RESULT_FAILURE;
-	}
+	assert(nDstCch != 0);
+	std::vector<wchar_t> dstBuffer(nDstCch);
+	wchar_t* pDstBuffer = &dstBuffer[0];
 
 	// 変換
 	int nDstLen; // cch
 	EConvertResult ret = CPToUni(pSrc, nSrcLen, pDstBuffer, nDstCch, nDstLen, codepage);
 
 	pDst->_GetMemory()->SetRawDataHoldBuffer( pDstBuffer, nDstLen*sizeof(wchar_t) );
-	delete [] pDstBuffer;
 
 	return ret;
 }
@@ -209,22 +202,15 @@ EConvertResult CCodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int c
 #endif
 		return RESULT_FAILURE;
 	}
-	char* pDstBuffer;
-	try{
-		pDstBuffer = new char[nBuffSize];
-	}catch( ... ){
-		pDstBuffer = NULL;
-	}
-	if (!pDstBuffer) {
-		return RESULT_FAILURE;
-	}
+	assert(nBuffSize != 0);
+	std::vector<char> dstBuffer(nBuffSize);
+	char* pDstBuffer = &dstBuffer[0];
 
 	// 変換
 	int nDstLen;
 	EConvertResult ret = UniToCP(pSrc, nSrcLen, pDstBuffer, nBuffSize, nDstLen, codepage);
 	// pMem を更新
 	pDst->SetRawDataHoldBuffer(pDstBuffer, nDstLen);
-	delete [] pDstBuffer;
 	return ret;
 }
 

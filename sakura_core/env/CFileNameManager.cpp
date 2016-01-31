@@ -61,9 +61,10 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 	}
 
 	int nPxWidth = -1;
-	if (m_pShareData->m_Common.m_sFileName.m_bTransformShortPath && cchMaxWidth != -1) {
+	auto& csFileName = m_pShareData->m_Common.m_sFileName;
+	if (csFileName.m_bTransformShortPath && cchMaxWidth != -1) {
 		if (cchMaxWidth == 0) {
-			cchMaxWidth = m_pShareData->m_Common.m_sFileName.m_nTransformShortMaxWidth;
+			cchMaxWidth = csFileName.m_nTransformShortMaxWidth;
 		}
 		CTextWidthCalc calc(hDC);
 		nPxWidth = calc.GetTextWidth(_T("x")) * cchMaxWidth;
@@ -72,13 +73,13 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 	if (0 < m_nTransformFileNameCount) {
 		GetFilePathFormat(pszSrc, pszDest, nDestLen,
 			m_szTransformFileNameFromExp[0],
-			m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
+			csFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[0]]
 		);
 		for (int i=1; i<m_nTransformFileNameCount; ++i) {
 			_tcscpy(szBuf, pszDest);
 			GetFilePathFormat(szBuf, pszDest, nDestLen,
 				m_szTransformFileNameFromExp[i],
-				m_pShareData->m_Common.m_sFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
+				csFileName.m_szTransformFileNameTo[m_nTransformFileNameOrgId[i]]);
 		}
 		if (nPxWidth != -1) {
 			_tcscpy( szBuf, pszDest );
@@ -135,30 +136,13 @@ LPCTSTR CFileNameManager::GetFilePathFormat(LPCTSTR pszSrc, LPTSTR pszDest, int 
 
 	int j = 0;
 	for (int i=0; i<nSrcLen && j<nDestLen; ++i) {
-#if defined(_MBCS)
-		if (strnicmp(&pszSrc[i], pszFrom, nFromLen) == 0)
-#else
 		if (_tcsncicmp(&pszSrc[i], pszFrom, nFromLen) == 0)
-#endif
 		{
 			int nCopy = t_min(nToLen, nDestLen - j);
 			memcpy(&pszDest[j], pszTo, nCopy * sizeof(TCHAR));
 			j += nCopy;
 			i += nFromLen - 1;
 		}else {
-#if defined(_MBCS)
-// SJIS 専用処理
-			if (_IS_SJIS_1((unsigned char)pszSrc[i]) && i + 1 < nSrcLen && _IS_SJIS_2((unsigned char)pszSrc[i + 1])) {
-				if (j + 1 < nDestLen) {
-					pszDest[j] = pszSrc[i];
-					++j;
-					++i;
-				}else {
-					// SJISの先行バイトだけコピーされるのを防ぐ
-					break;// goto end_of_func;
-				}
-			}
-#endif
 			pszDest[j] = pszSrc[i];
 			++j;
 		}
@@ -320,12 +304,6 @@ bool CFileNameManager::ExpandMetaToFolder(LPCTSTR pszSrc, LPTSTR pszDes, int nDe
 			// 最後のフォルダ区切り記号を削除する
 			// [A:\]などのルートであっても削除
 			for (nPathLen=0; pStr2[nPathLen]!=_T('\0'); ++nPathLen) {
-#ifdef _MBCS
-				if (_IS_SJIS_1((unsigned char)pStr2[nPathLen]) && _IS_SJIS_2((unsigned char)pStr2[nPathLen + 1])) {
-					// SJIS読み飛ばし
-					++nPathLen; // 2003/01/17 sui
-				}else
-#endif
 				if (_T('\\') == pStr2[nPathLen] && _T('\0') == pStr2[nPathLen + 1]) {
 					pStr2[nPathLen] = _T('\0');
 					break;

@@ -107,8 +107,10 @@ void CDocType::SetDocumentTypeIdx(int id, bool force)
 */
 void CDocType::SetDocumentIcon()
 {
-	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)	// Grepモードの時はアイコンを変更しない
+	// Grepモードの時はアイコンを変更しない
+	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
 		return;
+	}
 	
 	HICON hIconBig, hIconSmall;
 	if (this->GetDocumentAttribute().m_bUseDocumentIcon) {

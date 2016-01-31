@@ -81,24 +81,15 @@ EConvertResult CEuc::EUCToUnicode(const CMemory& cSrc, CNativeW* pDstMem)
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 
 	// 変換先バッファサイズとその確保
-	wchar_t* pDst;
-	try {
-		pDst = new wchar_t[nSrcLen];
-	}catch(...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
+	assert(nSrcLen != 0);
+	std::vector<wchar_t> dst(nSrcLen);
+	wchar_t* pDst = &dst[0];
 
 	// 変換
 	int nDstLen = EucjpToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
-
-	// 後始末
-	delete [] pDst;
 
 	//$$ SJISを介しているので無駄にデータを失うかも？
 	// エラーを返すようにする。	2008/5/12 Uchi
@@ -171,24 +162,15 @@ EConvertResult CEuc::UnicodeToEUC(const CNativeW& cSrc, CMemory* pDstMem)
 	int nSrcLen = cSrc.GetStringLength();
 
 	// 必要なバッファサイズを調べてメモリを確保
-	char* pDst;
-	try {
-		pDst = new char[nSrcLen * 2];
-	}catch (...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
+	assert(nSrcLen != 0);
+	std::vector<char> dst(nSrcLen * 2);
+	char* pDst = &dst[0];
 
 	// 変換
 	int nDstLen = UniToEucjp(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
-
-	// 後始末
-	delete [] pDst;
 
 	if (!bError) {
 		return RESULT_COMPLETE;

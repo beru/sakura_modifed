@@ -148,7 +148,8 @@ void CTipWnd::ComputeWindowSize(
 		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
-				TCHAR*	pszWork = new TCHAR[i - nBgn + 1];
+				std::vector<TCHAR> szWork(i - nBgn + 1);
+				TCHAR* pszWork = &szWork[0];
 				auto_memcpy(pszWork, &pszText[nBgn], i - nBgn);
 				pszWork[i - nBgn] = _T('\0');
 
@@ -159,7 +160,6 @@ void CTipWnd::ComputeWindowSize(
 				::DrawText(hdc, pszWork, _tcslen(pszWork), &rc,
 					DT_CALCRECT | DT_EXTERNALLEADING | DT_EXPANDTABS | DT_WORDBREAK /*| DT_TABSTOP | (0x0000ff00 & (4 << 8))*/
 				);
-				delete [] pszWork;
 				if (nCurMaxWidth < rc.right) {
 					nCurMaxWidth = rc.right;
 				}
@@ -210,8 +210,8 @@ void CTipWnd::DrawTipText(
 		int nCharChars = CNativeT::GetSizeOfChar(pszText, nTextLength, i);
 		if ((nCharChars == 1 && _T('\\') == pszText[i] && _T('n') == pszText[i + 1]) || _T('\0') == pszText[i]) {
 			if (0 < i - nBgn) {
-				TCHAR* pszWork;
-				pszWork = new TCHAR[i - nBgn + 1];
+				std::vector<TCHAR> szWork(i - nBgn + 1);
+				TCHAR* pszWork = &szWork[0];
 				auto_memcpy(pszWork, &pszText[nBgn], i - nBgn);
 				pszWork[i - nBgn] = _T('\0');
 
@@ -222,7 +222,6 @@ void CTipWnd::DrawTipText(
 				nCurHeight += ::DrawText(hdc, pszWork, _tcslen(pszWork), &rc,
 					DT_EXTERNALLEADING | DT_EXPANDTABS | DT_WORDBREAK /*| DT_TABSTOP | (0x0000ff00 & (4 << 8))*/
 				);
-				delete [] pszWork;
 				if (nCurMaxWidth < rc.right) {
 					nCurMaxWidth = rc.right;
 				}

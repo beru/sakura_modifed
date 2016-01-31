@@ -107,9 +107,11 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 	bool b278a = false;
 	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
-		CLogicInt		nLineLen;
-		const wchar_t*	pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
-		if (!pLine) break;
+		CLogicInt nLineLen;
+		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		if (!pLine) {
+			break;
+		}
 
 		// 行頭の空白飛ばし
 		int i;
@@ -183,7 +185,8 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		*/
 
 		// 行文字列から改行を取り除く pLine -> pszText
-		wchar_t* pszText = new wchar_t[nLineLen + 1];
+		std::vector<wchar_t> szText(nLineLen + 1);
+		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';
 		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
@@ -206,7 +209,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 			&ptPos
 		);
 
-		/* nDepthを計算 */
+		// nDepthを計算
 		int k;
 		bool bAppend = true;
 		for (k=0; k<nDepth; ++k) {
@@ -230,11 +233,15 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		}
 		
 		if (bAppend) {
-			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , pszText, 0, nDepth);
+			pcFuncInfoArr->AppendData(
+				nLineCount + CLogicInt(1),
+				ptPos.GetY2() + CLayoutInt(1),
+				pszText,
+				0,
+				nDepth
+			);
 			++nDepth;
 		}
-		delete [] pszText;
-
 	}
 	return;
 }

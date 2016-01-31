@@ -108,16 +108,6 @@ std::tstring CGrepAgent::ChopYen( const std::tstring& str )
 	// 最後のフォルダ区切り記号を削除する
 	// [A:\]などのルートであっても削除
 	for (size_t i=0; i<nPathLen; ++i) {
-#ifdef _MBCS
-		if (1
-			&& _IS_SJIS_1( (unsigned char)dst[i] )
-			&& (i + 1 < nPathLen)
-			&& _IS_SJIS_2( (unsigned char)dst[i + 1] )
-		) {
-			// SJIS読み飛ばし
-			++i;
-		} else
-#endif
 		if (1
 			&& _T('\\') == dst[i]
 			&& i == nPathLen - 1
@@ -136,7 +126,7 @@ void CGrepAgent::AddTail( CEditView* pcEditView, const CNativeW& cmem, bool bAdd
 		HANDLE out = ::GetStdHandle(STD_OUTPUT_HANDLE);
 		if (out && out != INVALID_HANDLE_VALUE) {
 			CMemory cmemOut;
-			std::auto_ptr<CCodeBase> pcCodeBase( CCodeFactory::CreateCodeBase(
+			std::unique_ptr<CCodeBase> pcCodeBase( CCodeFactory::CreateCodeBase(
 					pcEditView->GetDocument()->GetDocumentEncoding(), 0) );
 			pcCodeBase->UnicodeToCode( cmem, &cmemOut );
 			DWORD dwWrite = 0;
@@ -246,10 +236,10 @@ DWORD CGrepAgent::DoGrep(
 			}
 			if (GetDllShareData().m_Common.m_sEdit.m_bConvertEOLPaste) {
 				CLogicInt len = cmemReplace.GetStringLength();
-				wchar_t	*pszConvertedText = new wchar_t[len * 2]; // 全文字\n→\r\n変換で最大の２倍になる
+				std::vector<wchar_t> convertedText(len * 2); // 全文字\n→\r\n変換で最大の２倍になる
+				wchar_t* pszConvertedText = &convertedText[0];
 				CLogicInt nConvertedTextLen = pcViewDst->m_cCommander.ConvertEol(cmemReplace.GetStringPtr(), len, pszConvertedText);
 				cmemReplace.SetString(pszConvertedText, nConvertedTextLen);
-				delete [] pszConvertedText;
 			}
 		}else {
 			cmemReplace = *pcmGrepReplace;
@@ -1622,7 +1612,7 @@ private:
 	size_t bufferSize;
 	std::deque<CNativeW> buffer;
 	CBinaryOutputStream* out;
-	std::auto_ptr<CCodeBase> pcCodeBase;
+	std::unique_ptr<CCodeBase> pcCodeBase;
 	CNativeW&	memMessage;
 };
 

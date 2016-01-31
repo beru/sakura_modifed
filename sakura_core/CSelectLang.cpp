@@ -323,7 +323,6 @@ int CLoadString::CLoadStrBuffer::LoadString(UINT uid)
 			// 読みきれなかった場合、バッファを拡張して読み直す
 			int nTemp = m_nBufferSize + LOADSTR_ADD_SIZE;		// 拡張したサイズ
 			LPTSTR pTemp;
-
 			try {
 				pTemp = new TCHAR[nTemp];
 			}catch (std::bad_alloc) {

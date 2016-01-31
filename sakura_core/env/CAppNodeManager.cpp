@@ -560,12 +560,8 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 
 	// 拡張リストを作成する
 	// ソート処理用の拡張リスト
-	EditNodeEx*	pNode = new EditNodeEx[sNodes.m_nEditArrNum];
-	if (!pNode) {
-		delete [](*ppEditNode);
-		*ppEditNode = nullptr;
-		return 0;
-	}
+	std::vector<EditNodeEx> nodes(sNodes.m_nEditArrNum);
+	EditNodeEx*	pNode = &nodes[0];
 
 	// 拡張リストの各要素に編集ウィンドウリストの各要素へのポインタを格納する
 	int nRowNum = 0;	// 編集ウィンドウ数
@@ -578,7 +574,6 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 		}
 	}
 	if (nRowNum <= 0) {
-		delete []pNode;
 		delete [](*ppEditNode);
 		*ppEditNode = nullptr;
 		return 0;
@@ -620,7 +615,6 @@ int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, 
 		(*ppEditNode)[i].m_nIndex = pNode[i].p - sNodes.m_pEditArr;	// ポインタ減算＝配列番号
 	}
 
-	delete[] pNode;
 	return nRowNum;
 }
 
@@ -812,7 +806,9 @@ HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 				}
 			}
 		}
-		if (p) delete []p;
+		if (p) {
+			delete []p;
+		}
 	}
 
 	return hWnd;

@@ -120,7 +120,6 @@ void CMainToolBar::CreateToolBar(void)
 	if (m_hwndToolBar)
 		return;
 	
-	REBARINFO		rbi;
 	REBARBANDINFO	rbBand;
 	int				nFlag;
 	TBBUTTON		tbb;
@@ -155,7 +154,7 @@ void CMainToolBar::CreateToolBar(void)
 			PreventVisualStyle(m_hwndReBar);	// ビジュアルスタイル非適用のフラットな Rebar にする
 		}
 
-		::ZeroMemory(&rbi, sizeof(rbi));
+		REBARINFO rbi = {0};
 		rbi.cbSize = sizeof(rbi);
 		Rebar_SetbarInfo(m_hwndReBar, &rbi);
 
@@ -205,7 +204,8 @@ void CMainToolBar::CreateToolBar(void)
 		int nToolBarButtonNum = 0;// 2005/8/29 aroka
 		//	From Here 2005.08.29 aroka
 		// はじめにツールバー構造体の配列を作っておく
-		TBBUTTON *pTbbArr = new TBBUTTON[csToolBar.m_nToolBarButtonNum];
+		std::vector<TBBUTTON> tbButtons(csToolBar.m_nToolBarButtonNum);
+		TBBUTTON* pTbbArr = &tbButtons[0];
 		for (i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 			nIdx = csToolBar.m_nToolBarButtonIdxArr[i];
 			pTbbArr[nToolBarButtonNum] = m_pOwner->GetMenuDrawer().getButton(nIdx);
@@ -338,7 +338,6 @@ void CMainToolBar::CreateToolBar(void)
 			::SetWindowLongPtr(m_hwndToolBar, GWL_STYLE, lToolType);
 			::InvalidateRect(m_hwndToolBar, NULL, TRUE);
 		}
-		delete[] pTbbArr; // 2005/8/29 aroka
 	}
 
 	// 2006.06.17 ryoji

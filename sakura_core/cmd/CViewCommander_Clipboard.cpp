@@ -109,7 +109,7 @@ void CViewCommander::Command_COPY(
 			cmemBuf.GetStringPtr(),
 			cmemBuf.GetStringLength(),
 			bBeginBoxSelect,
-			FALSE
+			false
 			)
 		) {
 			ErrorBeep();
@@ -219,11 +219,11 @@ void CViewCommander::Command_PASTE(int option)
 
 	if (bConvertEol) {
 		CLogicInt nConvertedTextLen = ConvertEol(pszText, nTextLen, NULL);
-		wchar_t	*pszConvertedText = new wchar_t[nConvertedTextLen];
+		std::vector<wchar_t> szConvertedText(nConvertedTextLen);
+		wchar_t* pszConvertedText = &szConvertedText[0];
 		ConvertEol(pszText, nTextLen, pszConvertedText);
 		// テキストを貼り付け
 		Command_INSTEXT(true, pszConvertedText, nConvertedTextLen, true, bLineSelect);	// 2010.09.17 ryoji
-		delete [] pszConvertedText;
 	}else {
 		// テキストを貼り付け
 		Command_INSTEXT(true, pszText, nTextLen, true, bLineSelect);	// 2010.09.17 ryoji

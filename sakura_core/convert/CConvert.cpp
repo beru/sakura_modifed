@@ -100,7 +100,7 @@ void CConvertMediator::ConvMemory(
 	case F_CODECNV_AUTO2SJIS:
 		{
 			int nFlag = true;
-			std::auto_ptr<CCodeBase> pcCode( CCodeFactory::CreateCodeBase(ecode, nFlag) );
+			std::unique_ptr<CCodeBase> pcCode( CCodeFactory::CreateCodeBase(ecode, nFlag) );
 			pcCode->CodeToUnicode(*(pCMemory->_GetMemory()), pCMemory);
 		}
 		break;

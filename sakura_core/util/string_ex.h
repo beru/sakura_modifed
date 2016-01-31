@@ -159,7 +159,7 @@ inline errno_t auto_strcpy_s(ACHAR* dst, size_t nDstCount, const ACHAR* src) { r
 inline errno_t auto_strcpy_s(WCHAR* dst, size_t nDstCount, const WCHAR* src) { return wcscpy_s(dst, nDstCount, src); }
 inline ACHAR* auto_strncpy(ACHAR* dst, const ACHAR* src, size_t count) { return strncpy(dst, src, count); }
 inline WCHAR* auto_strncpy(WCHAR* dst, const WCHAR* src, size_t count) { return wcsncpy(dst, src, count); }
-inline ACHAR* auto_memset(ACHAR* dest, ACHAR c, size_t count) {        memset(dest, c, count); return dest; }
+inline ACHAR* auto_memset(ACHAR* dest, ACHAR c, size_t count) { memset(dest, c, count); return dest; }
 inline WCHAR* auto_memset(WCHAR* dest, WCHAR c, size_t count) { return wmemset(dest, c, count);              }
 inline ACHAR* auto_strcat(ACHAR* dst, const ACHAR* src) { return strcat(dst, src); }
 inline WCHAR* auto_strcat(WCHAR* dst, const WCHAR* src) { return wcscat(dst, src); }

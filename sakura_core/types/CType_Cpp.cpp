@@ -1097,9 +1097,8 @@ void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMembe
 								}
 								wcscpy_s(szWord, szWordPrev);
 								nWordIdx = wcslen(szWord);
-							}
-							//	To Here Apr. 1, 2001 genta
-							else {
+							}else {
+								//	To Here Apr. 1, 2001 genta
 								nWordIdx = 0;
 							}
 						}

@@ -1456,8 +1456,9 @@ LRESULT CTabWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		pszTip = NULL;	// ボタンの外に出るときは消す
 		if (m_bCloseBtnHilighted) {	// ボタンに入ってきた?
 			pszTip = szText;
-			if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
-				if (!m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin) {
+			auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
+			if (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin) {
+				if (!csTabBar.m_bTab_CloseOneWin) {
 					_tcscpy_s(szText, LS(STR_TABWND_CLOSETAB));
 				}else {
 					::LoadString(GetAppInstance(), F_GROUPCLOSE, szText, _countof(szText));
@@ -1472,8 +1473,7 @@ LRESULT CTabWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	
 	// ツールチップ更新	// 2007.03.05 ryoji
 	if (pszTip != (LPTSTR)-1L) {	// ボタンへの出入りがあった?
-		TOOLINFO ti;
-		::ZeroMemory(&ti, sizeof(ti));
+		TOOLINFO ti = {0};
 		ti.cbSize       = CCSIZEOF_STRUCT(TOOLINFO, lpszText);
 		ti.hwnd         = GetHwnd();
 		ti.hinst        = GetAppInstance();
@@ -1576,9 +1576,11 @@ LRESULT CTabWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	// サイズボックスを描画する
-	if (!m_pShareData->m_Common.m_sWindow.m_bDispSTATUSBAR 
-		&& !m_pShareData->m_Common.m_sWindow.m_bDispFUNCKEYWND
-		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom) {
+	auto& csWindow = m_pShareData->m_Common.m_sWindow;
+	if (!csWindow.m_bDispSTATUSBAR 
+		&& !csWindow.m_bDispFUNCKEYWND
+		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+	) {
 		SizeBox_ONOFF(true);
 	}
 
@@ -2653,7 +2655,8 @@ void CTabWnd::GetTabCloseBtnRect(const LPRECT lprcTab, LPRECT lprc, bool selecte
 */
 void CTabWnd::GetTabName(EditNode* pEditNode, BOOL bFull, BOOL bDupamp, LPTSTR pszName, int nLen)
 {
-	LPTSTR pszText = new TCHAR[nLen];
+	std::vector<TCHAR> szText(nLen);
+	LPTSTR pszText = &szText[0];
 
 	if (!pEditNode) {
 		::lstrcpyn(pszText, LS(STR_NO_TITLE1), nLen);
@@ -2680,15 +2683,14 @@ void CTabWnd::GetTabName(EditNode* pEditNode, BOOL bFull, BOOL bDupamp, LPTSTR p
 
 	if (bDupamp) {
 		// &を&&に置き換える
-		LPTSTR pszText_amp = new TCHAR[nLen * 2];
+		std::vector<TCHAR> szText_amp(nLen * 2);
+		LPTSTR pszText_amp = &szText_amp[0];
 		dupamp(pszText, pszText_amp);
 		::lstrcpyn(pszName, pszText_amp, nLen);
-		delete []pszText_amp;
 	}else {
 		::lstrcpyn(pszName, pszText, nLen);
 	}
 
-	delete []pszText;
 }
 
 

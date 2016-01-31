@@ -603,8 +603,8 @@ bool CDlgTypeList::UpType()
 		// Šî–{‚Ìê‡‚É‚Í‰½‚à‚µ‚È‚¢
 		return true;
 	}
-	std::auto_ptr<STypeConfig> type1(new STypeConfig());
-	std::auto_ptr<STypeConfig> type2(new STypeConfig());
+	auto type1 = std::make_unique<STypeConfig>();
+	auto type2 = std::make_unique<STypeConfig>();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType - 1), *type2);
 	--(type1->m_nIdx);
@@ -625,8 +625,8 @@ bool CDlgTypeList::DownType()
 		// Šî–{AÅŒã‚Ìê‡‚É‚Í‰½‚à‚µ‚È‚¢
 		return true;
 	}
-	std::auto_ptr<STypeConfig> type1(new STypeConfig());
-	std::auto_ptr<STypeConfig> type2(new STypeConfig());
+	auto type1 = std::make_unique<STypeConfig>();
+	auto type2 = std::make_unique<STypeConfig>();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType + 1), *type2);
 	++(type1->m_nIdx);

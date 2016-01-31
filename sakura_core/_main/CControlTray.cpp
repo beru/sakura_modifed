@@ -148,8 +148,15 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
-	OpenNewEditor(hinst, msgParent, sLoadInfo, cCmdLine.GetStringPtr(),
-		false, NULL, GetDllShareData().m_Common.m_sTabBar.m_bNewWindow? true : false);
+	OpenNewEditor(
+		hinst,
+		msgParent,
+		sLoadInfo,
+		cCmdLine.GetStringPtr(),
+		false,
+		NULL,
+		GetDllShareData().m_Common.m_sTabBar.m_bNewWindow
+	);
 }
 
 
@@ -881,8 +888,15 @@ LRESULT CControlTray::DispatchEvent(
 					size_t nSize = files.size();
 					for (size_t f=0; f<nSize; ++f) {
 						sLoadInfo.cFilePath = files[f].c_str();
-						CControlTray::OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo,
-							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false);
+						CControlTray::OpenNewEditor(
+							m_hInstance,
+							GetTrayHwnd(),
+							sLoadInfo,
+							NULL,
+							true,
+							NULL,
+							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
+						);
 					}
 				}
 				break;
@@ -936,7 +950,7 @@ LRESULT CControlTray::DispatchEvent(
 							NULL,
 							false,
 							NULL,
-							m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false
+							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
 						);
 
 					}
@@ -979,8 +993,15 @@ LRESULT CControlTray::DispatchEvent(
 					size_t nSize = files.size();
 					for (size_t f=0; f<nSize; ++f) {
 						sLoadInfo.cFilePath = files[f].c_str();
-						CControlTray::OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo,
-							NULL, true, NULL, m_pShareData->m_Common.m_sTabBar.m_bNewWindow? true : false);
+						CControlTray::OpenNewEditor(
+							m_hInstance,
+							GetTrayHwnd(),
+							sLoadInfo,
+							NULL,
+							true,
+							NULL,
+							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
+						);
 					}
 				}
 				break;
@@ -1082,7 +1103,15 @@ void CControlTray::OnNewEditor(bool bNewWindow)
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
 	std::tstring tstrCurDir = CSakuraEnvironment::GetDlgInitialDir(true);
-	OpenNewEditor(m_hInstance, GetTrayHwnd(), sLoadInfo, NULL, false, tstrCurDir.c_str(), bNewWindow);
+	OpenNewEditor(
+		m_hInstance,
+		GetTrayHwnd(),
+		sLoadInfo,
+		NULL,
+		false,
+		tstrCurDir.c_str(),
+		bNewWindow
+	);
 }
 
 /*!
@@ -1103,7 +1132,7 @@ bool CControlTray::OpenNewEditor(
 	bool				sync,				//!< [in] trueなら新規エディタの起動まで待機する
 	const TCHAR*		pszCurDir,			//!< [in] 新規エディタのカレントディレクトリ(NULL可)
 	bool				bNewWindow			//!< [in] 新規エディタを新しいウィンドウで開く
-)
+	)
 {
 	// 共有データ構造体のアドレスを返す
 	DLLSHAREDATA* pShareData = &GetDllShareData();
@@ -1351,7 +1380,15 @@ bool CControlTray::OpenNewEditor2(
 	sLoadInfo.cFilePath = pfi ? pfi->m_szPath : _T("");
 	sLoadInfo.eCharCode = pfi ? pfi->m_nCharCode : CODE_NONE;
 	sLoadInfo.bViewMode = bViewMode;
-	return OpenNewEditor(hInstance, hWndParent, sLoadInfo, cCmdLine.c_str(), sync, NULL, bNewWindow);
+	return OpenNewEditor(
+		hInstance,
+		hWndParent,
+		sLoadInfo,
+		cCmdLine.c_str(),
+		sync,
+		NULL,
+		bNewWindow
+	);
 }
 // To Here Oct. 24, 2000 genta
 
@@ -1697,9 +1734,10 @@ int	CControlTray::CreatePopUpMenu_R(void)
 */
 void CControlTray::CreateAccelTbl(void)
 {
+	auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 	m_pShareData->m_sHandles.m_hAccel = CKeyBind::CreateAccerelator(
-		m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-		m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
+		csKeyBind.m_nKeyNameArrNum,
+		csKeyBind.m_pKeyNameArr
 	);
 
 	if (!m_pShareData->m_sHandles.m_hAccel) {

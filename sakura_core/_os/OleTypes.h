@@ -20,50 +20,53 @@
 	データ構造はBSTRと互換性あり
 */
 struct SysString {
-	BSTR Data;
+	BSTR data;
 
-	SysString()                         { Data = NULL; }
-	SysString(const SysString& Source)  { Data = ::SysAllocStringLen(Source.Data, SysStringLen(Source.Data)); }
-	SysString(BSTR& Source)             { Data = ::SysAllocStringLen(Source, SysStringLen(Source)); }
-	SysString(const wchar_t* S, int L)  { Data = ::SysAllocStringLen(S, L); }
-	SysString(const char* S, int L) { 
-		wchar_t* buf = new wchar_t[L + 1];
-		int L2 = ::MultiByteToWideChar(CP_ACP, 0, S, L, buf, L);
-		Data = ::SysAllocStringLen(buf, L2); 
+	SysString()                         { data = NULL; }
+	SysString(const SysString& source)  { data = ::SysAllocStringLen(source.data, SysStringLen(source.data)); }
+	SysString(BSTR& source)             { data = ::SysAllocStringLen(source, SysStringLen(source)); }
+	SysString(const wchar_t* s, int l)  { data = ::SysAllocStringLen(s, l); }
+	SysString(const char* s, int l) { 
+		wchar_t* buf = new wchar_t[l + 1];
+		int l2 = ::MultiByteToWideChar(CP_ACP, 0, s, l, buf, l);
+		data = ::SysAllocStringLen(buf, l2); 
 		delete[] buf;
 	}
-	~SysString()                        { ::SysFreeString(Data); }
-	SysString& operator = (const SysString& Source) { Data = ::SysAllocStringLen(Source.Data, SysStringLen(Source.Data)); return *this; }
-	int Length()                        { return ::SysStringLen(Data); }
-	void Get(char** S, int* L) {
-		int Len = ::SysStringLen(Data);
-		*S = new char[Len * 2 + 1];
-		*L = ::WideCharToMultiByte(CP_ACP, 0, Data, Len, *S, Len * 2, NULL, NULL);
-		(*S)[*L] = 0;
+	~SysString()                        { ::SysFreeString(data); }
+	SysString& operator = (const SysString& source) {
+		data = ::SysAllocStringLen(source.data, SysStringLen(source.data));
+		return *this;
 	}
-	void GetW(wchar_t** S, int* L) {
-		int Len = ::SysStringLen(Data);
-		*S = new wchar_t[Len + 1];
-		*L = Len;
-		wmemcpy(*S, Data, Len);
-		(*S)[Len] = L'\0';
+	int Length()                        { return ::SysStringLen(data); }
+	void Get(char** s, int* l) {
+		int len = ::SysStringLen(data);
+		*s = new char[len * 2 + 1];
+		*l = ::WideCharToMultiByte(CP_ACP, 0, data, len, *s, len * 2, NULL, NULL);
+		(*s)[*l] = 0;
+	}
+	void GetW(wchar_t** s, int* l) {
+		int len = ::SysStringLen(data);
+		*s = new wchar_t[len + 1];
+		*l = len;
+		wmemcpy(*s, data, len);
+		(*s)[len] = L'\0';
 	}
 	void Get(std::string* str) {
-		char* S;
-		int Len;
-		Get(&S, &Len);
-		str->assign(S, Len);
-		delete [] S;
+		char* s;
+		int len;
+		Get(&s, &len);
+		str->assign(s, len);
+		delete [] s;
 	}
 	void GetW(std::wstring* str) {
-		int Len = ::SysStringLen(Data);
-		str->assign(Data, Len);
+		int len = ::SysStringLen(data);
+		str->assign(data, len);
 	}
 #ifdef _UNICODE
-	void GetT(TCHAR** S, int* L) {GetW(S, L);}
+	void GetT(TCHAR** s, int* l) {GetW(s, l);}
 	void GetT(std::wstring* str) {GetW(str);}
 #else
-	void GetT(TCHAR** S, int* L) {Get(S, L);}
+	void GetT(TCHAR** s, int* l) {Get(s, l);}
 	void GetT(std::string* str) {Get(str);}
 #endif
 };
@@ -73,29 +76,29 @@ struct SysString {
 	データ構造はVARIANTと互換性あり
 */
 struct Variant {
-	VARIANT Data;
-	Variant()                       { ::VariantInit(&Data); }
-	Variant(Variant& Source)        { ::VariantCopyInd(&Data, &Source.Data); }
-	Variant(VARIANT& Source)        { ::VariantCopyInd(&Data, &Source); }
-	~Variant()                      { ::VariantClear(&Data); }
-	Variant& operator = (Variant& Source) { ::VariantCopyInd(&Data, &Source.Data); return *this; }
+	VARIANT data;
+	Variant()                       { ::VariantInit(&data); }
+	Variant(Variant& Source)        { ::VariantCopyInd(&data, &Source.data); }
+	Variant(VARIANT& Source)        { ::VariantCopyInd(&data, &Source); }
+	~Variant()                      { ::VariantClear(&data); }
+	Variant& operator = (Variant& Source) { ::VariantCopyInd(&data, &Source.data); return *this; }
 	/*! SysStringをVariantにセットする
 	
 		セット後、SysStringの方は中身がNULLになる。
 	*/
 	void Receive(SysString& Source) {
-		::VariantClear(&Data); 
-		Data.vt = VT_BSTR; 
-		Data.bstrVal = Source.Data; 
-		Source.Data = NULL; 
+		::VariantClear(&data); 
+		data.vt = VT_BSTR; 
+		data.bstrVal = Source.data; 
+		Source.data = NULL; 
 	}
 
 	// 2003.06.25 Moca
 	// intを戻り値として返す場合に対応
 	int Receive(int i) {
-		::VariantClear(&Data); 
-		Data.vt = VT_I4;
-		return Data.lVal = i;
+		::VariantClear(&data); 
+		data.vt = VT_I4;
+		return data.lVal = i;
 	}
 };
 /*

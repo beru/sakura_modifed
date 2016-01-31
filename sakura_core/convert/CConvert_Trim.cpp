@@ -21,7 +21,6 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 {
 	const wchar_t*	pLine;
 	int			nLineLen;
-	wchar_t*	pDes;
 	int			nBgn;
 	int			i, j;
 	int			nPosDes;
@@ -40,7 +39,8 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 	if (0 >= nPosDes) {
 		return true;
 	}
-	pDes = new wchar_t[nPosDes + 1];
+	std::vector<wchar_t> des(nPosDes + 1);
+	wchar_t* pDes = &des[0];
 	nBgn = 0;
 	nPosDes = 0;
 	// LTRIM
@@ -62,9 +62,8 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 			wmemcpy(&pDes[nPosDes], cEol.GetValue2(), cEol.GetLen());
 			nPosDes += cEol.GetLen();
 		}
-	}
-	// RTRIM
-	else {
+	}else {
+		// RTRIM
 		while ((pLine = GetNextLineW(pcData->GetStringPtr(), pcData->GetStringLength(), &nLineLen, &nBgn, &cEol, m_bExtEol))) { // 2002/2/10 aroka CMemory変更
 			if (0 < nLineLen) {
 				// 2005.10.11 ryoji 右から遡るのではなく左から探すように修正（"ａ@" の右２バイトが全角空白と判定される問題の対処）
@@ -88,8 +87,6 @@ bool CConvert_Trim::DoConvert(CNativeW* pcData)
 	pDes[nPosDes] = L'\0';
 
 	pcData->SetString(pDes, nPosDes);
-	delete [] pDes;
-	pDes = NULL;
 	return true;
 }
 

@@ -74,8 +74,12 @@ int WINAPI _tWinMain(
 	
 	// プロセスの生成とメッセージループ
 	CProcessFactory aFactory;
-	CProcess* process = 0;
+	CProcess* process = nullptr;
+
+#ifndef _DEBUG
 	try {
+#endif
+
 #ifdef __MINGW32__
 		LPTSTR pszCommandLine;
 		pszCommandLine = ::GetCommandLine();
@@ -106,10 +110,14 @@ int WINAPI _tWinMain(
 		process = aFactory.Create(hInstance, lpCmdLine);
 #endif
 		MY_TRACETIME(cRunningTimer, "ProcessObject Created");
+
+#ifndef _DEBUG
 	}catch (...) {
 		;
 	}
-	if (0 != process) {
+#endif
+
+	if (process) {
 		process->Run();
 		delete process;
 	}

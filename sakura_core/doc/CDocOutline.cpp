@@ -491,18 +491,15 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 			k += nCharChars;
 		}
 		// Nov. 3, 2005 genta ï∂éöóÒí∑åvéZéÆÇÃèCê≥
-		wchar_t* pszText;
-		{
-			int nLen = pos_wo_space - leftspace;
-			pszText = new wchar_t[nLen + 1];
-			wmemcpy(pszText, &pLine[leftspace], nLen);
-			pszText[nLen] = L'\0';
-		}
+		int nLen = pos_wo_space - leftspace;
+		std::vector<wchar_t> szText(nLen + 1);
+		wchar_t* pszText = &szText[0];
+		wmemcpy(pszText, &pLine[leftspace], nLen);
+		pszText[nLen] = L'\0';
 		CLayoutPoint ptXY;
 		//int nX,nY
 		m_pcDocRef->m_cLayoutMgr.LogicToLayout(	CLogicPoint(CLogicInt(0), nLineCount), &ptXY);
 		pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptXY.GetY2()+CLayoutInt(1) , pszText, 0);
-		delete [] pszText;
 	}
 	return;
 }

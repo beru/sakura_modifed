@@ -423,12 +423,10 @@ bool CViewCommander::Command_TagsMake(void)
 	CDlgCancel	cDlgCancel;
 	CWaitCursor	cWaitCursor(m_pCommanderView->GetHwnd());
 
-	PROCESS_INFORMATION	pi;
-	ZeroMemory(&pi, sizeof(pi));
+	PROCESS_INFORMATION	pi = {0};
 
 	// 子プロセスの標準出力と接続するパイプを作成
-	SECURITY_ATTRIBUTES	sa;
-	ZeroMemory(&sa, sizeof(sa));
+	SECURITY_ATTRIBUTES	sa = {0};
 	sa.nLength              = sizeof(sa);
 	sa.bInheritHandle       = TRUE;
 	sa.lpSecurityDescriptor = NULL;
@@ -444,8 +442,7 @@ bool CViewCommander::Command_TagsMake(void)
 				0, FALSE, DUPLICATE_SAME_ACCESS);
 
 	// CreateProcessに渡すSTARTUPINFOを作成
-	STARTUPINFO	sui;
-	ZeroMemory(&sui, sizeof(sui));
+	STARTUPINFO	sui = {0};
 	sui.cb          = sizeof(sui);
 	sui.dwFlags     = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 	sui.wShowWindow = SW_HIDE;

@@ -1781,7 +1781,8 @@ void CShareData_IO::ShareData_IO_KeyWords(CDataProfile& cProfile)
 			nMemLen ++;
 			auto_sprintf(szKeyName, LTEXT("szKW[%02d].Size"), i);
 			cProfile.IOProfileData(pszSecName, szKeyName, nMemLen);
-			wchar_t* pszMem = new wchar_t[nMemLen + 1];	// May 25, 2003 genta 区切りをTABに変更したので，最後の\0の分を追加
+			std::vector<wchar_t> szMem(nMemLen + 1); // May 25, 2003 genta 区切りをTABに変更したので，最後の\0の分を追加
+			wchar_t* pszMem = &szMem[0];
 			wchar_t* pMem = pszMem;
 			for (int j=0; j<pCKeyWordSetMgr->m_nKeyWordNumArr[i]; ++j) {
 				// May 25, 2003 genta 区切りをTABに変更
@@ -1793,7 +1794,6 @@ void CShareData_IO::ShareData_IO_KeyWords(CDataProfile& cProfile)
 			*pMem = L'\0';
 			auto_sprintf(szKeyName, LTEXT("szKW[%02d]"), i);
 			cProfile.IOProfileData(pszSecName, szKeyName, StringBufferW(pszMem, nMemLen));
-			delete [] pszMem;
 		}
 	}
 }

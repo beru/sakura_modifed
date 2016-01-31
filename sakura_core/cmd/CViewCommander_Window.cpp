@@ -134,8 +134,8 @@ void CViewCommander::Command_CASCADE(void)
 			int		newX;
 			int		newY;
 		};
-
-		WNDARR*	pWndArr = new WNDARR[nRowNum];
+		std::vector<WNDARR> wndArr(nRowNum);
+		WNDARR*	pWndArr = &wndArr[0];
 		int count = 0;	// 処理対象ウィンドウカウント
 		// Mar. 20, 2004 genta 現在のウィンドウを末尾に持っていくのに使う
 		int		current_win_index = -1;
@@ -251,7 +251,6 @@ void CViewCommander::Command_CASCADE(void)
 			);
 		}
 
-		delete [] pWndArr;
 		delete [] pEditNodeArr;
 	}
 	return;
@@ -266,7 +265,8 @@ void CViewCommander::Command_TILE_V(void)
 	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
 
 	if (nRowNum > 0) {
-		HWND* phwndArr = new HWND[nRowNum];
+		std::vector<HWND> hWnds(nRowNum);
+		HWND* phwndArr = &hWnds[0];
 		int count = 0;
 		// デスクトップサイズを得る
 		RECT rcDesktop;
@@ -303,7 +303,6 @@ void CViewCommander::Command_TILE_V(void)
 		}
 		::SetFocus(phwndArr[0]);	// Aug. 17, 2002 MIK
 
-		delete [] phwndArr;
 		delete [] pEditNodeArr;
 	}
 	return;
@@ -318,7 +317,8 @@ void CViewCommander::Command_TILE_H(void)
 	int nRowNum = CAppNodeManager::getInstance()->GetOpenedWindowArr(&pEditNodeArr, TRUE/*FALSE*/, TRUE);
 
 	if (nRowNum > 0) {
-		HWND* phwndArr = new HWND[nRowNum];
+		std::vector<HWND> hWnds(nRowNum);
+		HWND* phwndArr = &hWnds[0];
 		int count = 0;
 		// デスクトップサイズを得る
 		RECT rcDesktop;
@@ -354,7 +354,6 @@ void CViewCommander::Command_TILE_H(void)
 			);
 		}
 		::SetFocus(phwndArr[0]);	// Aug. 17, 2002 MIK
-		delete [] phwndArr;
 		delete [] pEditNodeArr;
 	}
 	return;
@@ -602,7 +601,8 @@ void CViewCommander::Command_MINIMIZE_ALL(void)
 	if (j == 0) {
 		return;
 	}
-	HWND* phWndArr = new HWND[j];
+	std::vector<HWND> wnds(j);
+	HWND* phWndArr = &wnds[0];
 	for (int i=0; i<j; ++i) {
 		phWndArr[i] = GetDllShareData().m_sNodes.m_pEditArr[i].GetHwnd();
 	}
@@ -612,8 +612,6 @@ void CViewCommander::Command_MINIMIZE_ALL(void)
 				::ShowWindow(phWndArr[i], SW_MINIMIZE);
 		}
 	}
-	delete [] phWndArr;
-	return;
 }
 
 // 再描画

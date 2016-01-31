@@ -153,8 +153,8 @@ HRESULT CWSHIfObj::MacroCommand(
 		Variant varCopy;							// VT_BYREFだと困るのでコピー用
 		int Len;
 		for (int i=0; i<ArgCount; ++i) {
-			if (VariantChangeType(&varCopy.Data, &(Arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
-				Wrap(&varCopy.Data.bstrVal)->GetW(&s, &Len);
+			if (VariantChangeType(&varCopy.data, &(Arguments->rgvarg[i]), 0, VT_BSTR) == S_OK) {
+				Wrap(&varCopy.data.bstrVal)->GetW(&s, &Len);
 			}else {
 				s = new WCHAR[1];
 				s[0] = 0;

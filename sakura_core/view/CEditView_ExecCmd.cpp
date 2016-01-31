@@ -71,7 +71,7 @@ public:
 	bool OutputA(const ACHAR* pBuf, int size = -1);
 
 protected:
-	std::auto_ptr<CCodeBase> pcCodeBase;
+	std::unique_ptr<CCodeBase> pcCodeBase;
 };
 
 /*!	@brief	外部コマンドの実行
@@ -110,8 +110,7 @@ protected:
 bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir, COutputAdapter* customOa )
 {
 	HANDLE hStdOutWrite, hStdOutRead;
-	PROCESS_INFORMATION	pi;
-	ZeroMemory(&pi, sizeof(pi));
+	PROCESS_INFORMATION	pi = {0};
 	CDlgCancel cDlgCancel;
 	COutputAdapter* oaInst = NULL;
 
@@ -218,8 +217,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	// To Here 2007.03.18 maru 子プロセスの標準入力ハンドル
 	
 	// CreateProcessに渡すSTARTUPINFOを作成
-	STARTUPINFO	sui;
-	ZeroMemory(&sui, sizeof(sui));
+	STARTUPINFO	sui = {0};
 	sui.cb = sizeof(sui);
 	if (bGetStdout || bSendStdin) {
 		sui.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;

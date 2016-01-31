@@ -171,18 +171,19 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 	int nRepeat = bRepeat ? 2 : 1;
 	int nRes = 0;
 	CLayoutPoint ptCaretMove = GetCaret().GetCaretLayoutPos();
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	for (int nRepCount=0; nRepCount<nRepeat; ++nRepCount) {
-		if (bSelect && ! m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+		if (bSelect && ! selInfo.IsTextSelected()) {
 			// 現在のカーソル位置から選択を開始する
-			m_pCommanderView->GetSelectionInfo().BeginSelectArea();
+			selInfo.BeginSelectArea();
 		}
 		if (!bSelect) {
-			if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+			if (selInfo.IsTextSelected()) {
 				this->Command_CANCEL_MODE(1);
 				nRes = 1;
 				continue; // 選択のキャンセルで左移動を 1消費。この後の移動処理はスキップする。
-			}else if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
-				m_pCommanderView->GetSelectionInfo().SetBoxSelect(false);
+			}else if (selInfo.IsBoxSelecting()) {
+				selInfo.SetBoxSelect(false);
 			}
 		}
 		// (これから求める)カーソルの移動先。
@@ -193,7 +194,7 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 		// カーソルが左端にある
 		if (ptCaretMove.GetX2() == (pcLayout ? pcLayout->GetIndent() : CLayoutInt(0))) {
 			if (0 < ptCaretMove.GetY2()
-			   && ! m_pCommanderView->GetSelectionInfo().IsBoxSelecting()
+			   && ! selInfo.IsBoxSelecting()
 			) {
 				// 前のレイアウト行の、折り返し桁一つ手前または改行文字の手前に移動する。
 				pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( ptCaretMove.GetY2() - CLayoutInt(1) );
@@ -245,7 +246,7 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 				引数で与えた座標とは異なることがあるため，
 				ptPosの代わりに実際の移動結果を使うように．
 			*/
-			m_pCommanderView->GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptPos);
+			selInfo.ChangeSelectAreaByCurrentCursor(ptPos);
 		}
 		if (bMoveCaretLine || nRepeat - 1 == nRepCount) {
 			GetCaret().MoveCursor( ptPos, true, _CARETMARGINRATE, bUnderlineDoNotOFF );
@@ -271,20 +272,21 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 	bool bMoveCaretLine = false;
 	int nRepeat = bRepeat ? 2 : 1; // 移動する回数
 	CLayoutPoint ptCaretMove = GetCaret().GetCaretLayoutPos();
+	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	for (int nRepCount=0; nRepCount<nRepeat; ++nRepCount) {
 		// 2003.06.28 Moca [EOF]のみの行にカーソルがあるときに右を押しても選択を解除できない問題に
 		// 対応するため、現在行のデータを取得を移動
 		if (!bIgnoreCurrentSelection) {
-			if (bSelect && ! m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+			if (bSelect && ! selInfo.IsTextSelected()) {
 				/* 現在のカーソル位置から選択を開始する */
-				m_pCommanderView->GetSelectionInfo().BeginSelectArea();
+				selInfo.BeginSelectArea();
 			}
 			if (!bSelect) {
-				if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
+				if (selInfo.IsTextSelected()) {
 					this->Command_CANCEL_MODE(2);
 					continue; // 選択のキャンセルで右移動を 1消費。この後の移動処理はスキップする。
-				}else if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
-					m_pCommanderView->GetSelectionInfo().SetBoxSelect(false);
+				}else if (selInfo.IsBoxSelecting()) {
+					selInfo.SetBoxSelect(false);
 				}
 			}
 		}
@@ -321,7 +323,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 				MOVE_NEXTLINE_NEXTTIME_AND_MOVE_RIGHT // 右端に止まり、次に次の行頭の一つ右に移動する。(折り返しなど)
 			} on_x_max;
 
-			if (m_pCommanderView->GetSelectionInfo().IsBoxSelecting()) {
+			if (selInfo.IsBoxSelecting()) {
 				x_max = t_max(x_wrap, GetDocument()->m_cLayoutMgr.GetMaxLineKetas());
 				on_x_max = STOP;
 			}else if (GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode) {
@@ -376,7 +378,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 		GetCaret().GetAdjustCursorPos( &ptTo );
 		if (bSelect) {
 			/* 現在のカーソル位置によって選択範囲を変更 */
-			m_pCommanderView->GetSelectionInfo().ChangeSelectAreaByCurrentCursor( ptTo );
+			selInfo.ChangeSelectAreaByCurrentCursor( ptTo );
 		}
 
 		if (bMoveCaretLine || nRepeat - 1 == nRepCount) {

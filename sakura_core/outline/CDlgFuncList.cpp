@@ -1024,7 +1024,9 @@ void CDlgFuncList::SetTreeJava(
 				// クラス名のアイテムが登録されていないので登録
 				if (!htiClass) {
 					// 2002/10/28 frozen 上からここへ移動
-					TCHAR* pClassName = new TCHAR[_tcslen(szClassArr[k]) + 1 + m_pcFuncInfoArr->AppendTextLenMax()]; // 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）// 2011.09.25 syat プラグインによる拡張対応
+					// 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）// 2011.09.25 syat プラグインによる拡張対応
+					std::vector<TCHAR> className(_tcslen(szClassArr[k]) + 1 + m_pcFuncInfoArr->AppendTextLenMax());
+					TCHAR* pClassName = &className[0];
 					_tcscpy(pClassName, szClassArr[k]);
 
 					tvis.item.lParam = -1;
@@ -1047,10 +1049,6 @@ void CDlgFuncList::SetTreeJava(
 					tvis.item.pszText = const_cast<TCHAR*>(to_tchar(pClassName));
 
 					htiClass = TreeView_InsertItem(hwndTree, &tvis);
-					//	Jan. 04, 2001 genta
-					//	不要になったらさっさと削除
-					delete [] pClassName; // 2002/10/28 frozen 下からここへ移動
-
 				}else {
 					// none
 				}
@@ -1073,10 +1071,8 @@ void CDlgFuncList::SetTreeJava(
 			}else {
 			// 2002/10/27 frozen ここまで
 				if (!htiGlobal) {
-					TV_INSERTSTRUCT	tvg;
+					TV_INSERTSTRUCT	tvg = {0};
 					std::tstring sGlobal = to_tchar(m_pcFuncInfoArr->GetAppendText(FL_OBJ_GLOBAL).c_str());
-
-					::ZeroMemory(&tvg, sizeof(tvg));
 					tvg.hParent = TVI_ROOT;
 					tvg.hInsertAfter = TVI_LAST;
 					tvg.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -1089,7 +1085,8 @@ void CDlgFuncList::SetTreeJava(
 				htiClass = htiGlobal;
 			}
 		}
-		TCHAR* pFuncName = new TCHAR[_tcslen(pWork) + m_pcFuncInfoArr->AppendTextLenMax()];	// ↓で追加する文字列が収まるだけ確保
+		std::vector<TCHAR> funcName(_tcslen(pWork) + m_pcFuncInfoArr->AppendTextLenMax());	// ↓で追加する文字列が収まるだけ確保
+		TCHAR* pFuncName = &funcName[0];
 		_tcscpy(pFuncName, pWork);
 
 		// 2002/10/27 frozen 追加文字列の種類を増やした
@@ -1109,7 +1106,6 @@ void CDlgFuncList::SetTreeJava(
 		tvis.item.pszText = pFuncName;
 		tvis.item.lParam = i;
 		htiItem = TreeView_InsertItem(hwndTree, &tvis);
-		delete [] pFuncName;
 
 		// クリップボードにコピーするテキストを編集
 		WCHAR szText[2048];
@@ -2134,12 +2130,11 @@ BOOL CDlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 			}
 			m_nSortColOld = m_nSortCol;
 			{
-				STypeConfig* type = new STypeConfig();
+				auto type = std::make_unique<STypeConfig>();
 				CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), *type);
 				type->m_nOutlineSortCol = m_nSortCol;
 				type->m_bOutlineSortDesc = m_bSortDesc;
 				SetTypeConfig(CTypeConfig(m_nDocType), *type);
-				delete type;
 			}
 			//	Apr. 23, 2005 genta 関数として独立させた
 			SortListView(hwndList, m_nSortCol);
@@ -2417,11 +2412,10 @@ BOOL CDlgFuncList::OnCbnSelChange(HWND hwndCtl, int wID)
 	case IDC_COMBO_nSortType:
 		if (m_nSortType != nSelect) {
 			m_nSortType = nSelect;
-			STypeConfig* type = new STypeConfig();
+			auto type = std::make_unique<STypeConfig>();
 			CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), *type);
 			type->m_nOutlineSortType = m_nSortType;
 			SetTypeConfig(CTypeConfig(m_nDocType), *type);
-			delete type;
 			SortTree(GetItemHwnd(IDC_TREE_FL), TVI_ROOT);
 		}
 		return TRUE;
@@ -2554,10 +2548,11 @@ void CDlgFuncList::Key2Command(WORD KeyCode)
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	int nIdx = getCtrlKeyState();
-	EFunctionCode nFuncCode=CKeyBind::GetFuncCode(
-			((WORD)(((BYTE)(KeyCode)) | ((WORD)((BYTE)(nIdx))) << 8)),
-			m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-			m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
+	auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
+	EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
+		((WORD)(((BYTE)(KeyCode)) | ((WORD)((BYTE)(nIdx))) << 8)),
+		csKeyBind.m_nKeyNameArrNum,
+		csKeyBind.m_pKeyNameArr
 	);
 	switch (nFuncCode) {
 	case F_REDRAW:
@@ -2907,8 +2902,7 @@ INT_PTR CDlgFuncList::OnNcMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 		::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW | RDW_NOINTERNALPAINT);
 
 		// ツールチップ更新
-		TOOLINFO ti;
-		::ZeroMemory(&ti, sizeof(ti));
+		TOOLINFO ti = {0};
 		ti.cbSize       = CCSIZEOF_STRUCT(TOOLINFO, lpszText);
 		ti.hwnd         = GetHwnd();
 		ti.hinst        = m_hInstance;
@@ -3178,8 +3172,7 @@ INT_PTR CDlgFuncList::OnNcPaint(
 	NONCLIENTMETRICS ncm;
 	ncm.cbSize = CCSIZEOF_STRUCT(NONCLIENTMETRICS, lfMessageFont);	// 以前のプラットフォームに WINVER >= 0x0600 で定義される構造体のフルサイズを渡すと失敗する
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm.cbSize, (PVOID)&ncm, 0);
-	LOGFONT lf;
-	memset(&lf, 0, sizeof(LOGFONT));
+	LOGFONT lf = {0};
 	lf.lfCharSet = DEFAULT_CHARSET;
 	lf.lfHeight = ncm.lfCaptionFont.lfHeight;
 	::lstrcpy(lf.lfFaceName, _T("Marlett"));
@@ -3325,7 +3318,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				case DOCKSIDE_BOTTOM:	CommonSet().m_cyOutlineDockBottom = rc.bottom - rc.top;	break;
 				}
 			}
-			STypeConfig* type = new STypeConfig();
+			auto type = std::make_unique<STypeConfig>();
 			for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 				CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 				type->m_bOutlineDockDisp = CommonSet().m_bOutlineDockDisp;
@@ -3336,7 +3329,6 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				type->m_cyOutlineDockBottom = CommonSet().m_cyOutlineDockBottom;
 				CDocTypeManager().SetTypeConfig(CTypeConfig(i), *type);
 			}
-			delete type;
 			ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 			PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)hwndEdit);	// 他ウィンドウにドッキング配置変更を通知する
 		}

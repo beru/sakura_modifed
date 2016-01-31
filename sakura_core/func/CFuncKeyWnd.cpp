@@ -283,12 +283,13 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		// ファンクションキーの機能名を取得
+		auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji CKeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
 				(WORD)(((VK_F1 + i) | ((WORD)((BYTE)(nIdx))) << 8)),
-				m_pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum,
-				m_pShareData->m_Common.m_sKeyBind.m_pKeyNameArr
+				csKeyBind.m_nKeyNameArrNum,
+				csKeyBind.m_pKeyNameArr
 			);
 			if (nFuncCode != m_nFuncCodeArr[i]) {
 				m_nFuncCodeArr[i] = nFuncCode;

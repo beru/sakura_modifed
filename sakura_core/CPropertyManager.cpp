@@ -50,7 +50,7 @@ bool CPropertyManager::OpenPropertySheet(
 )
 {
 	bool bRet;
-	CPropCommon* pcPropCommon = new CPropCommon();
+	auto pcPropCommon = std::make_unique<CPropCommon>();
 	pcPropCommon->Create(m_hwndOwner, m_pImageList, m_pMenuDrawer);
 
 	// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
@@ -103,8 +103,6 @@ bool CPropertyManager::OpenPropertySheet(
 	// 最後にアクセスしたシートを覚えておく
 	m_nPropComPageNum = pcPropCommon->GetPageNum();
 
-	delete pcPropCommon;
-
 	return bRet;
 }
 
@@ -114,13 +112,13 @@ bool CPropertyManager::OpenPropertySheetTypes(
 	HWND		hWnd,
 	int			nPageNum,
 	CTypeConfig	nSettingType
-)
+	)
 {
 	bool bRet;
-	CPropTypes* pcPropTypes = new CPropTypes();
+	auto pcPropTypes = std::make_unique<CPropTypes>();
 	pcPropTypes->Create(G_AppInstance(), m_hwndOwner);
 
-	std::auto_ptr<STypeConfig> pType(new STypeConfig());
+	auto pType = std::make_unique<STypeConfig>();
 	CDocTypeManager().GetTypeConfig(nSettingType, *pType);
 	pcPropTypes->SetTypeData(*pType);
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更しProperySheet内で取得するように
@@ -167,8 +165,6 @@ bool CPropertyManager::OpenPropertySheetTypes(
 
 	// 最後にアクセスしたシートを覚えておく
 	m_nPropTypePageNum = pcPropTypes->GetPageNum();
-
-	delete pcPropTypes;
 
 	return bRet;
 }

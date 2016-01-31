@@ -107,7 +107,7 @@ bool CControlProcess::InitializeProcess()
 	MY_TRACETIME(cRunningTimer, "Before new CControlTray");
 
 	// タスクトレイにアイコン作成
-	m_pcTray = new CControlTray;
+	m_pcTray = new CControlTray();
 
 	MY_TRACETIME(cRunningTimer, "After new CControlTray");
 

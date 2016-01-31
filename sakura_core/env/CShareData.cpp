@@ -1113,7 +1113,13 @@ bool CShareData::OpenDebugWindow(HWND hwnd, bool bAllwaysActive)
 		// CODE_UNICODE->CODE_NONE	2010.05.11 Moca デフォルト文字コードで設定できるように無指定に変更
 		sLoadInfo.eCharCode = CODE_NONE;
 		sLoadInfo.bViewMode = false;
-		ret = CControlTray::OpenNewEditor(NULL, hwnd, sLoadInfo, _T("-DEBUGMODE"), true);
+		ret = CControlTray::OpenNewEditor(
+			NULL,
+			hwnd,
+			sLoadInfo,
+			_T("-DEBUGMODE"),
+			true
+		);
 		// 2001/06/23 N.Nakatani 窓が出るまでウエイトをかけるように修正
 		// アウトプットウィンドウが出来るまで5秒ぐらい待つ。
 		// Jun. 25, 2001 genta OpenNewEditorの同期機能を利用するように変更

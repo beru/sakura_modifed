@@ -98,11 +98,11 @@ void CKeyMacroMgr::Append(CMacro* macro)
 /*! キーボードマクロの保存
 	エラーメッセージは出しません。呼び出し側でよきにはからってください。
 */
-BOOL CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
+bool CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 {
 	CTextOutputStream out(pszPath);
 	if (!out) {
-		return FALSE;
+		return false;
 	}
 
 	// 最初のコメント
@@ -116,7 +116,7 @@ BOOL CKeyMacroMgr::SaveKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath) const
 	}
 
 	out.Close();
-	return TRUE;
+	return true;
 }
 
 

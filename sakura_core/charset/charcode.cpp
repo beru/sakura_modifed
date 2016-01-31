@@ -197,7 +197,7 @@ namespace WCODE
 		}
 		bool GetCache(wchar_t c) const
 		{
-			return _GetRaw(c) == 0x1 ? true:false;
+			return _GetRaw(c) == 0x1;
 		}
 		bool ExistCache(wchar_t c) const
 		{

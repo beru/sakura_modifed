@@ -290,7 +290,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					static TCHAR		pszLabel[1024];
 					pszLabel[0] = 0;
 					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
-						std::auto_ptr<STypeConfig> type(new STypeConfig());
+						auto type = std::make_unique<STypeConfig>();
 						CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 						// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
 						if (nIndex1 == m_Types_nKeyWordSetIdx[i].index[0]

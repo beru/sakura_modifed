@@ -572,6 +572,7 @@
     <ResourceCompile Include="..\sakura_core\sakura_rc.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\sakura_core\CGrepEnumKeys.cpp" />
     <ClCompile Include="..\sakura_core\charset\CCodePage.cpp" />
     <ClCompile Include="..\sakura_core\dlg\CDlgGrepReplace.cpp" />
     <ClCompile Include="..\sakura_core\dlg\CDlgProfileMgr.cpp" />

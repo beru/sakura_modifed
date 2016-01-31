@@ -99,13 +99,13 @@ struct {
 // 2010/4/23 Uchi Importの外出し
 bool CPropTypesColor::Import(HWND hwndDlg)
 {
-	ColorInfo		ColorInfoArr[64];
-	CImpExpColors	cImpExpColors(ColorInfoArr);
+	ColorInfo colorInfoArr[64];
+	CImpExpColors cImpExpColors(colorInfoArr);
 
 	// 色設定 I/O
 	for (int i=0; i<m_Types.m_nColorInfoArrNum; ++i) {
-		ColorInfoArr[i] = m_Types.m_ColorInfoArr[i];
-		_tcscpy(ColorInfoArr[i].m_szName, m_Types.m_ColorInfoArr[i].m_szName);
+		colorInfoArr[i] = m_Types.m_ColorInfoArr[i];
+		_tcscpy(colorInfoArr[i].m_szName, m_Types.m_ColorInfoArr[i].m_szName);
 	}
 
 	// インポート
@@ -117,8 +117,8 @@ bool CPropTypesColor::Import(HWND hwndDlg)
 	// データのコピー
 	m_Types.m_nColorInfoArrNum = COLORIDX_LAST;
 	for (int i=0; i<m_Types.m_nColorInfoArrNum; ++i) {
-		m_Types.m_ColorInfoArr[i] =  ColorInfoArr[i];
-		_tcscpy(m_Types.m_ColorInfoArr[i].m_szName, ColorInfoArr[i].m_szName);
+		m_Types.m_ColorInfoArr[i] = colorInfoArr[i];
+		_tcscpy(m_Types.m_ColorInfoArr[i].m_szName, colorInfoArr[i].m_szName);
 	}
 	// ダイアログデータの設定 color
 	SetData(hwndDlg);
@@ -434,8 +434,8 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			// 強調キーワードの選択
 			case IDC_BUTTON_EDITKEYWORD:
 				{
-					CPropKeyword* pPropKeyword = new CPropKeyword;
-					CPropCommon* pCommon = (CPropCommon*)pPropKeyword;
+					auto pPropKeyword = std::make_unique<CPropKeyword>();
+					CPropCommon* pCommon = (CPropCommon*)pPropKeyword.get();
 					pCommon->m_hwndParent = ::GetParent(hwndDlg);
 					pCommon->InitData();
 					pCommon->m_nKeywordSet1 = m_nSet[0];
@@ -444,7 +444,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 						MAKEINTRESOURCE(IDD_PROP_KEYWORD),
 						hwndDlg,
 						CPropKeyword::DlgProc_dialog,
-						(LPARAM)pPropKeyword
+						(LPARAM)pPropKeyword.get()
 					);
 					if (res == IDOK) {
 						CShareDataLockCounter::WaitLock(pCommon->m_hwndParent);
@@ -452,7 +452,6 @@ INT_PTR CPropTypesColor::DispatchEvent(
 						SetData(hwndDlg);
 						m_bChangeKeyWordSet = true;
 					}
-					delete pPropKeyword;
 					return TRUE;
 				}
 			case IDC_CHECK_STRINGLINEONLY:

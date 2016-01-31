@@ -391,40 +391,46 @@ void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 	@date 2007.07.20 genta Index‚Æˆê‚Éƒtƒ‰ƒO‚ð“n‚·
 */
 void __stdcall CPPA::stdProc(
-	const char*		FuncName,
-	const int		_Index,
-	const char*		Argument[],
-	const int		ArgSize,
-	int*			Err_CD
-)
+	const char*	funcName,
+	const int	index,
+	const char*	args[],
+	const int	numArgs,
+	int*		err_CD
+	)
 {
-	NEVER_USED_PARAM(FuncName);
-	EFunctionCode Index=(EFunctionCode)_Index;
+	NEVER_USED_PARAM(funcName);
+	EFunctionCode eIndex = (EFunctionCode)index;
 
-	*Err_CD = 0;
+	*err_CD = 0;
 
 	// Argument‚ðwchar_t[]‚É•ÏŠ· -> tmpArguments
-	WCHAR** tmpArguments2=new WCHAR*[ArgSize];
-	int* tmpArgLengths = new int[ArgSize];
-	for (int i=0; i<ArgSize; ++i) {
-		if (Argument[i]) {
-			tmpArguments2[i]=mbstowcs_new(Argument[i]);
-			tmpArgLengths[i]=wcslen(tmpArguments2[i]);
+	WCHAR** tmpArguments2 = new WCHAR*[numArgs];
+	int* tmpArgLengths = new int[numArgs];
+	for (int i=0; i<numArgs; ++i) {
+		if (args[i]) {
+			tmpArguments2[i] = mbstowcs_new(args[i]);
+			tmpArgLengths[i] = wcslen(tmpArguments2[i]);
 		}else {
-			tmpArguments2[i]=NULL;
-			tmpArgLengths[i]=0;
+			tmpArguments2[i] = NULL;
+			tmpArgLengths[i] = 0;
 		}
 	}
-	const WCHAR** tmpArguments=(const WCHAR**)tmpArguments2;
+	const WCHAR** tmpArguments = (const WCHAR**)tmpArguments2;
 
 	// ˆ—
-	bool bRet = CMacro::HandleCommand(m_CurInstance->m_pcEditView, (EFunctionCode)(Index | m_CurInstance->m_commandflags), tmpArguments, tmpArgLengths, ArgSize);
+	bool bRet = CMacro::HandleCommand(
+		m_CurInstance->m_pcEditView,
+		(EFunctionCode)(eIndex | m_CurInstance->m_commandflags),
+		tmpArguments,
+		tmpArgLengths,
+		numArgs
+	);
 	if (!bRet) {
-		*Err_CD = Index + 1;
+		*err_CD = eIndex + 1;
 	}
 
 	// tmpArguments‚ð‰ð•ú
-	for (int i=0; i<ArgSize; ++i) {
+	for (int i=0; i<numArgs; ++i) {
 		if (tmpArguments2[i]) {
 			WCHAR* p = const_cast<WCHAR*>(tmpArguments2[i]);
 			delete[] p;

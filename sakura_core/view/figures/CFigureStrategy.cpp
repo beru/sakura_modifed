@@ -159,7 +159,8 @@ void CFigureSpace::DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos& sPo
 		pInfo->m_gr.PushMyFont(sFont);
 
 		int nLength = (Int)(pInfo->m_pDispPos->GetDrawCol() - sPos.GetDrawCol());
-		wchar_t* pszText = new wchar_t[nLength];
+		std::vector<wchar_t> szText(nLength);
+		wchar_t* pszText = &szText[0];
 		for (int i=0; i<nLength; ++i)
 			pszText[i] = L' ';
 		pInfo->m_pcView->GetTextDrawer().DispText(
@@ -169,8 +170,6 @@ void CFigureSpace::DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos& sPo
 			nLength,
 			true		// ”wŒi‚Í“§–¾
 		);
-		delete []pszText;
-
 		pInfo->m_gr.PopMyFont();
 	}
 }

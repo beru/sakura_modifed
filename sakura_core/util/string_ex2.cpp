@@ -352,8 +352,7 @@ int scan_ints(
 	}
 
 	// ƒXƒLƒƒƒ“
-	int dummy[32];
-	memset(dummy, 0, sizeof(dummy));
+	int dummy[32] = {0};
 	int nRet = swscanf(
 		pszData, pszFormat,
 		&dummy[0],&dummy[1],&dummy[2],&dummy[3],&dummy[4],&dummy[5],&dummy[6],&dummy[7],&dummy[8],&dummy[9],

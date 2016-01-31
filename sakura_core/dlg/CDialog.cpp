@@ -540,7 +540,8 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 
 	// ï∂éöóÒÇëﬁî
 	int nLength = ::GetWindowTextLength(hwndCtl);
-	LPTSTR sBuf = new TCHAR[nLength + 1];
+	std::vector<TCHAR> buf(nLength + 1);
+	LPTSTR sBuf = &buf[0];
 	::GetWindowText(hwndCtl, sBuf, nLength + 1);
 	sBuf[nLength] = _T('\0');
 
@@ -550,7 +551,6 @@ BOOL CDialog::OnCbnSelEndOk(HWND hwndCtl, int wID)
 	// ï∂éöóÒÇïúå≥ÅEëSëIë
 	::SetWindowText(hwndCtl, sBuf);
 	Combo_SetEditSel(hwndCtl, 0, -1);
-	delete[] sBuf;
 
 	return TRUE;
 }
@@ -589,13 +589,12 @@ BOOL CDialog::OnCbnDropDown(HWND hwndCtl, bool scrollBar)
 	for (int iItem=0; iItem<nItem; ++iItem) {
 		int nTextLen = Combo_GetLBTextLen(hwndCtl, iItem);
 		if (0 < nTextLen) {
-			TCHAR* pszText = new TCHAR[nTextLen + 1];
+			std::vector<TCHAR> szText(nTextLen + 1);
+			TCHAR* pszText = &szText[0];
 			Combo_GetLBText(hwndCtl, iItem, pszText);
 			if (::GetTextExtentPoint32(hDC, pszText, nTextLen, &sizeText)) {
-				if (nWidth < sizeText.cx + nScrollWidth)
-					nWidth = sizeText.cx + nScrollWidth;
+				nWidth = std::max(nWidth, sizeText.cx + nScrollWidth);
 			}
-			delete []pszText;
 		}
 	}
 	Combo_SetDroppedWidth(hwndCtl, nWidth + nMargin);

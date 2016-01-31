@@ -310,10 +310,8 @@ void CNativeA::ToZenkaku(
 
 	unsigned char* pBuf = (unsigned char*)GetStringPtr();
 	int nBufLen = GetStringLength();
-	unsigned char* pBufDes = new unsigned char[nBufLen * 2 + 1];
-	if (!pBufDes) {
-		return;
-	}
+	std::vector<unsigned char> bufDes(nBufLen * 2 + 1);
+	unsigned char* pBufDes = &bufDes[0];
 //	unsigned char	uc;
 	unsigned short	usSrc;
 	unsigned short	usDes;
@@ -419,9 +417,7 @@ void CNativeA::ToZenkaku(
 	}
 	pBufDes[nBufDesLen] = '\0';
 	SetRawData(pBufDes, nBufDesLen);
-	delete [] pBufDes;
-	
-	return;
+
 }
 
 
@@ -455,7 +451,8 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 	if (0 >= nPosDes) {
 		return;
 	}
-	char* pDes = new char[nPosDes + 1];
+	std::vector<char> des(nPosDes + 1);
+	char* pDes = &des[0];
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
@@ -482,8 +479,6 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 	pDes[nPosDes] = '\0';
 
 	SetRawData(pDes, nPosDes);
-	delete [] pDes;
-	pDes = NULL;
 	return;
 }
 
@@ -522,7 +517,8 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 	if (0 >= nPosDes) {
 		return;
 	}
-	char* pDes = new char[nPosDes + 1];
+	std::vector<char> des(nPosDes + 1);
+	char* pDes = &des[0];
 	nBgn = 0;
 	nPosDes = 0;
 	// CRLFで区切られる「行」を返す。CRLFは行長に加えない
@@ -605,8 +601,6 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 	pDes[nPosDes] = '\0';
 
 	SetRawData(pDes, nPosDes);
-	delete [] pDes;
-	pDes = NULL;
 	return;
 }
 

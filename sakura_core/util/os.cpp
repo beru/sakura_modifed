@@ -115,15 +115,14 @@ bool GetMonitorWorkRect(POINT pt, LPRECT prcWork, LPRECT prcMonitor/* = NULL*/)
 
 bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NULL*/)
 {
-	MONITORINFO mi;
-	::ZeroMemory(&mi, sizeof(mi));
+	MONITORINFO mi = {0};
 	mi.cbSize = sizeof(mi);
 	::GetMonitorInfo(hMon, &mi);
 	if (prcWork)
 		*prcWork = mi.rcWork;		// work area rectangle of the display monitor
 	if (prcMonitor)
 		*prcMonitor = mi.rcMonitor;	// display monitor rectangle
-	return (mi.dwFlags == MONITORINFOF_PRIMARY) ? true : false;
+	return (mi.dwFlags == MONITORINFOF_PRIMARY);
 }
 //	To Here 2006.04.21 ryoji MutiMonitor
 

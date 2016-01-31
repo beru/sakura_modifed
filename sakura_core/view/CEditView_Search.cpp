@@ -85,14 +85,17 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	}else
 		goto end_of_search;
 
-	if (CNativeW::IsEqual(cmemCurText, m_cTipWnd.m_cKey) &&	// 既に検索済みか
-		(!m_cTipWnd.m_KeyWasHit))								// 該当するキーがなかった
+	if (CNativeW::IsEqual(cmemCurText, m_cTipWnd.m_cKey)	// 既に検索済みか
+		&& !m_cTipWnd.m_KeyWasHit							// 該当するキーがなかった
+	) {
 		goto end_of_search;
+	}
 	m_cTipWnd.m_cKey = cmemCurText;
 
 	// 検索実行
-	if (!KeySearchCore(&m_cTipWnd.m_cKey))
+	if (!KeySearchCore(&m_cTipWnd.m_cKey)) {
 		goto end_of_search;
+	}
 	m_dwTipTimer = 0;		// 辞書Tipを表示している
 	m_poTipCurPos = *po;	// 現在のマウスカーソル位置
 	return TRUE;			// ここまで来ていればヒット・ワード
@@ -124,7 +127,8 @@ bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 		nCmpLen = wcslen(pcmemCurText->GetStringPtr());	// 2006.04.10 fon
 	m_cTipWnd.m_KeyWasHit = false;
 	for (int i=0; i<m_pTypeData->m_nKeyHelpNum; ++i) {	// 最大数：MAX_KEYHELP_FILE
-		if (m_pTypeData->m_KeyHelpArr[i].m_bUse) {
+		auto& keyHelpInfo = m_pTypeData->m_KeyHelpArr[i];
+		if (keyHelpInfo.m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
 			CNativeW* pcmemRefText;
 			int nSearchResult = m_cDicMgr.CDicMgr::Search(
@@ -132,7 +136,7 @@ bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 				nCmpLen,
 				&pcmemRefKey,
 				&pcmemRefText,
-				m_pTypeData->m_KeyHelpArr[i].m_szPath,
+				keyHelpInfo.m_szPath,
 				&nLine
 			);
 			if (nSearchResult) {
@@ -149,7 +153,7 @@ bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 					{
 						TCHAR szFile[MAX_PATH];
 						// 2013.05.08 表示するのはファイル名(拡張子なし)のみにする
-						_tsplitpath(m_pTypeData->m_KeyHelpArr[i].m_szPath, NULL, NULL, szFile, NULL);
+						_tsplitpath(keyHelpInfo.m_szPath, NULL, NULL, szFile, NULL);
 						m_cTipWnd.m_cInfo.AppendString(szFile);
 					}
 					m_cTipWnd.m_cInfo.AppendString(_T("\n"));

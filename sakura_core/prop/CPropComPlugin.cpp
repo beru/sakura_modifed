@@ -572,9 +572,7 @@ bool CPropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 	STARTUPINFO	sui;
 	::GetStartupInfo(&sui);
 
-	PROCESS_INFORMATION	pi;
-	ZeroMemory(&pi, sizeof(pi));
-
+	PROCESS_INFORMATION	pi = {0};
 	TCHAR	szCmdLine[1024];
 	auto_strcpy_s(szCmdLine, _countof(szCmdLine), cCmdLineBuf.c_str());
 	return (::CreateProcess(NULL, szCmdLine, NULL, NULL, TRUE,

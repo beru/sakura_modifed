@@ -253,7 +253,9 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	}
 
 	CNativeT cmResponseFile = _T("");
-	LPTSTR pszCmdLineWork = new TCHAR[lstrlen(pszCmdLineSrc) + 1];
+	assert(lstrlen(pszCmdLineSrc) + 1 != 0);
+	std::vector<TCHAR> szCmdLineWork(lstrlen(pszCmdLineSrc) + 1);
+	LPTSTR pszCmdLineWork = &szCmdLineWork[0];
 	_tcscpy(pszCmdLineWork, pszCmdLineSrc);
 	int nCmdLineWorkLen = lstrlen(pszCmdLineWork);
 	LPTSTR pszToken = my_strtok<TCHAR>(pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" "));
@@ -381,7 +383,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_GREPMODE:	// GREPMODE
 				m_bGrepMode = true;
-				if (_T('\0') == m_fi.m_szDocType[0]) {
+				if (m_fi.m_szDocType[0] == _T('\0')) {
 					auto_strcpy(m_fi.m_szDocType , _T("grepout"));
 				}
 				break;
@@ -470,7 +472,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 			case CMDLINEOPT_DEBUGMODE:
 				m_bDebugMode = true;
 				// 2010.06.16 Moca -TYPE=output 扱いとする
-				if (_T('\0') == m_fi.m_szDocType[0]) {
+				if (m_fi.m_szDocType[0] == _T('\0')) {
 					auto_strcpy(m_fi.m_szDocType , _T("output"));
 				}
 				break;
@@ -495,7 +497,6 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 		}
 		pszToken = my_strtok<TCHAR>(pszCmdLineWork, nCmdLineWorkLen, &nPos, _T(" "));
 	}
-	delete [] pszCmdLineWork;
 
 	// レスポンスファイル解析
 	if (cmResponseFile.GetStringLength() && bResponse) {

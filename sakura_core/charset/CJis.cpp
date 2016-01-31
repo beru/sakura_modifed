@@ -250,6 +250,9 @@ EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool b
 	// ソースを取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	if (nSrcLen == 0) {
+		return RESULT_LOSESOME;
+	}
 
 	// ソースバッファポインタとソースの長さ
 	const char* psrc = pSrc;
@@ -266,15 +269,8 @@ EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool b
 	}
 
 	// 変換先バッファを取得
-	wchar_t* pDst;
-	try {
-		pDst = new wchar_t[nsrclen * 3 + 1];
-		if (!pDst) {
-			return RESULT_FAILURE;
-		}
-	}catch (...) {
-		return RESULT_FAILURE;
-	}
+	std::vector<wchar_t> dst(nsrclen * 3 + 1);
+	wchar_t* pDst = &dst[0];
 
 	// 変換
 	bool berror; // エラー状態
@@ -283,8 +279,6 @@ EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool b
 	// pDstMem にセット
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen * sizeof(wchar_t) );
 	
-	delete [] pDst;
-
 	if (!berror) {
 		return RESULT_COMPLETE;
 	}else {
@@ -452,30 +446,23 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 
 EConvertResult CJis::UnicodeToJIS(const CNativeW& cSrc, CMemory* pDstMem)
 {
-	bool berror = false;
-
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
+	if (nSrcLen == 0) {
+		return RESULT_LOSESOME;
+	}
 
 	// 必要なバッファ容量を確認してバッファを確保
-	char* pDst;
-	try {
-		pDst = new char[nSrcLen * 8];
-	}catch (...) {
-		pDst = NULL;
-	}
-	if (!pDst) {
-		return RESULT_FAILURE;
-	}
+	std::vector<char> dst(nSrcLen * 8);
+	char* pDst = &dst[0];
 
 	// 変換
+	bool berror = false;
 	int nDstLen = UniToJis(pSrc, nSrcLen, pDst, &berror);
 
 	// pDstMem をセット
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
-
-	delete [] pDst;
 
 	if (berror) {
 		return RESULT_LOSESOME;

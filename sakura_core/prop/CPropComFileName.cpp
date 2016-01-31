@@ -286,8 +286,7 @@ void CPropFileName::SetData(HWND hwndDlg)
 			continue;
 		}
 
-		LVITEM lvItem;
-		::ZeroMemory(&lvItem, sizeof_raw(lvItem));
+		LVITEM lvItem = {0};
 		lvItem.mask     = LVIF_TEXT;
 		lvItem.iItem    = nIndex;
 		lvItem.iSubItem = 0;
@@ -370,8 +369,7 @@ int CPropFileName::SetListViewItem_FILENAME(HWND hListView, int nIndex, LPTSTR s
 		return -1;
 	}
 
-	LV_ITEM	Item;
-	::ZeroMemory(&Item, sizeof_raw(Item));
+	LV_ITEM	Item = {0};
 	Item.mask     = LVIF_TEXT;
 	Item.iItem    = nIndex;
 	Item.iSubItem = 0;

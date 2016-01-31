@@ -20,6 +20,8 @@
 #include "CViewCommander.h"
 #include "CViewCommander_inline.h"
 
+#include <vector>
+
 // 右クリックメニュー
 void CViewCommander::Command_MENU_RBUTTON(void)
 {
@@ -35,7 +37,8 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 		{
 			int nLength;
 			const TCHAR* pszStr = m_pCommanderView->m_cTipWnd.m_cInfo.GetStringPtr(&nLength);
-			TCHAR* pszWork = new TCHAR[nLength + 1];
+			std::vector<TCHAR> szWork(nLength + 1);
+			TCHAR* pszWork = &szWork[0];
 			auto_memcpy(pszWork, pszStr, nLength);
 			pszWork[nLength] = _T('\0');
 
@@ -48,7 +51,6 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 			}
 			// クリップボードにデータを設定
 			m_pCommanderView->MySetClipboardData(pszWork, nLength, false);
-			delete[] pszWork;
 		}
 		break;
 	case IDM_JUMPDICT:

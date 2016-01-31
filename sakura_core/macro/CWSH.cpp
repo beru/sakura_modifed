@@ -171,8 +171,9 @@ public:
 	// Nov. 3, 2002 鬼
 	// エラー行番号表示対応
 	virtual HRESULT STDMETHODCALLTYPE OnScriptError(
-	  /* [in] */ IActiveScriptError *pscripterror)
-	{ 
+	  /* [in] */ IActiveScriptError* pscripterror
+		)
+	{
 		EXCEPINFO Info;
 		if (pscripterror->GetExceptionInfo(&Info) == S_OK) {
 			DWORD Context;
@@ -182,12 +183,12 @@ public:
 				Info.bstrDescription = SysAllocString(LSW(STR_ERR_CWSH09));
 			}
 			if (pscripterror->GetSourcePosition(&Context, &Line, &Pos) == S_OK) {
-				wchar_t* Message = new wchar_t[SysStringLen(Info.bstrDescription) + 128];
+				std::vector<wchar_t> msgBuf(SysStringLen(Info.bstrDescription) + 128);
+				wchar_t* message = &msgBuf[0];
 				// Nov. 10, 2003 FILE Win9Xでは、[wsprintfW]が無効のため、[auto_sprintf]に修正
 				const wchar_t* szDesc = Info.bstrDescription;
-				auto_sprintf(Message, L"[Line %d] %ls", Line + 1, szDesc);
-				SysReAllocString(&Info.bstrDescription, Message);
-				delete[] Message;
+				auto_sprintf(message, L"[Line %d] %ls", Line + 1, szDesc);
+				SysReAllocString(&Info.bstrDescription, message);
 			}
 			m_Client->Error(Info.bstrDescription, Info.bstrSource);
 			SysFreeString(Info.bstrSource);
@@ -251,9 +252,9 @@ CWSHClient::CWSHClient(
 		if (CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&m_Engine)) != S_OK) {
 			Error(LSW(STR_ERR_CWSH02));
 		}else {
-			IActiveScriptSite* Site = new CWSHSite(this);
-			if (m_Engine->SetScriptSite(Site) != S_OK) {
-				delete Site;
+			IActiveScriptSite* site = new CWSHSite(this);
+			if (m_Engine->SetScriptSite(site) != S_OK) {
+				delete site;
 				Error(LSW(STR_ERR_CWSH03));
 			}else {
 				m_Valid = true;

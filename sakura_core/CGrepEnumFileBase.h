@@ -118,10 +118,8 @@ public:
 
 		for (int i=0; i<(int)vecKeys.size(); ++i) {
 			int baseLen = _tcslen(lpBaseFolder);
-			LPTSTR lpPath = new TCHAR[ baseLen + _tcslen(vecKeys[ i ]) + 2 ];
-			if (!lpPath) {
-				break;
-			}
+			std::vector<TCHAR> path( baseLen + _tcslen(vecKeys[ i ]) + 2 );
+			LPTSTR lpPath = &path[0];
 			auto_strcpy(lpPath, lpBaseFolder);
 			auto_strcpy(lpPath + baseLen, _T("\\"));
 			auto_strcpy(lpPath + baseLen + 1, vecKeys[ i ]);
@@ -153,10 +151,12 @@ public:
 					if (option.m_bIgnoreSystem && (w32fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
 						continue;
 					}
-					LPTSTR lpName = new TCHAR[ nKeyDirLen + _tcslen(w32fd.cFileName) + 1 ];
+					std::vector<TCHAR> name( nKeyDirLen + _tcslen(w32fd.cFileName) + 1 );
+					LPTSTR lpName = &name[0];
 					_tcsncpy(lpName, vecKeys[ i ], nKeyDirLen);
 					_tcscpy(lpName + nKeyDirLen, w32fd.cFileName);
-					LPTSTR lpFullPath = new TCHAR[ baseLen + _tcslen(lpName) + 2 ];
+					std::vector<TCHAR> fullPath( baseLen + _tcslen(lpName) + 2 );
+					LPTSTR lpFullPath = &fullPath[0];
 					auto_strcpy(lpFullPath, lpBaseFolder);
 					auto_strcpy(lpFullPath + baseLen, _T("\\"));
 					auto_strcpy(lpFullPath + baseLen + 1, lpName);
@@ -168,18 +168,13 @@ public:
 							if (pExceptItems && nKeyDirLen) {
 								// フォルダを含んだパスなら検索済みとして除外指定に追加する
 								pExceptItems->m_vpItems.push_back(PairGrepEnumItem(lpFullPath, w32fd.nFileSizeLow));
-							}else {
-								delete[] lpFullPath;
 							}
 							continue;
 						}
 					}
-					delete[] lpName;
-					delete[] lpFullPath;
 				}while (::FindNextFile(handle, &w32fd));
 				::FindClose(handle);
 			}
-			delete [] lpPath;
 		}
 		return found;
 	}

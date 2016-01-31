@@ -352,7 +352,7 @@ inline bool IsUtf7Direct(const CHAR_TYPE c) {
 template < class CHAR_TYPE >
 inline bool IsBase64(const CHAR_TYPE c) {
 	unsigned int c_ = c;
-	return (c_ < 0x80 && (int)TABLE_BASE64CharToValue[c_] < 64)? true : false;
+	return (c_ < 0x80 && (int)TABLE_BASE64CharToValue[c_] < 64);
 }
 
 inline bool IsBinaryOnSurrogate(const wchar_t wc) {

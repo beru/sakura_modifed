@@ -907,11 +907,11 @@ void CViewCommander::Command_REPLACE_ALL()
 
 	if (GetDllShareData().m_Common.m_sEdit.m_bConvertEOLPaste) {
 		CLogicInt nConvertedTextLen = ConvertEol(szREPLACEKEY, nREPLACEKEY, NULL);
-		wchar_t	*pszConvertedText = new wchar_t[nConvertedTextLen];
+		std::vector<wchar_t> szConvertedText(nConvertedTextLen);
+		wchar_t* pszConvertedText = &szConvertedText[0];
 		ConvertEol(szREPLACEKEY, nREPLACEKEY, pszConvertedText);
 		cmemClip.SetString(pszConvertedText, nConvertedTextLen);
 		szREPLACEKEY = cmemClip.GetStringPtr(&nREPLACEKEY);
-		delete [] pszConvertedText;
 	}
 
 	// 取得にステップがかかりそうな変数などを、一時変数化する。
