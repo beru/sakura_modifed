@@ -339,7 +339,9 @@ EConvertResult CFileLoad::ReadLine_core(
 			&nEolLen,
 			&nBufferNext
 		);
-		if (!pLine) break;
+		if (!pLine) {
+			break;
+		}
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
 		if (m_nReadDataLen <= m_nReadBufOffSet && FLMODE_READY == m_eMode) {// From Here Jun. 13, 2003 Moca
@@ -381,7 +383,7 @@ EConvertResult CFileLoad::ReadLine_core(
 			}
 		}
 	}
-	if (pUnicodeBuffer->GetStringLength() == 0) {
+	if (pUnicodeBuffer->GetStringLength() == CLogicInt(0)) {
 		eRet = RESULT_FAILURE;
 	}
 

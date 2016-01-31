@@ -251,7 +251,8 @@ EConvertResult CJis::JISToUnicode(const CMemory& cSrc, CNativeW* pDstMem, bool b
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 
 	// ソースバッファポインタとソースの長さ
@@ -450,7 +451,8 @@ EConvertResult CJis::UnicodeToJIS(const CNativeW& cSrc, CMemory* pDstMem)
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
 	if (nSrcLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 
 	// 必要なバッファ容量を確認してバッファを確保

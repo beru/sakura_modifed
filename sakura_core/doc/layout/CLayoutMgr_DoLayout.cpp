@@ -586,7 +586,7 @@ void CLayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 		CLayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
 		CLayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
 		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON
-		CLayoutInt nInsLineNum    = m_nLines - pctwArg->nAllLinesOld;		// 追加削除行数
+		CLayoutInt nInsLineNum = m_nLines - pctwArg->nAllLinesOld;		// 追加削除行数
 
 		// 削除行なし時：最大幅の行を行頭以外にて改行付きで編集した
 		// 削除行あり時：最大幅の行を含んで編集した

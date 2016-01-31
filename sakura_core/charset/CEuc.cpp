@@ -73,19 +73,20 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 // 2007.08.13 kobake 追加
 EConvertResult CEuc::EUCToUnicode(const CMemory& cSrc, CNativeW* pDstMem)
 {
-	// エラー状態
-	bool bError = false;
-
 	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	if (nSrcLen == 0) {
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
+	}
 
 	// 変換先バッファサイズとその確保
-	assert(nSrcLen != 0);
 	std::vector<wchar_t> dst(nSrcLen);
 	wchar_t* pDst = &dst[0];
 
 	// 変換
+	bool bError = false;
 	int nDstLen = EucjpToUni(pSrc, nSrcLen, pDst, &bError);
 
 	// pMem を更新
@@ -178,9 +179,6 @@ EConvertResult CEuc::UnicodeToEUC(const CNativeW& cSrc, CMemory* pDstMem)
 		return RESULT_LOSESOME;
 	}
 }
-
-
-
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
 EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)

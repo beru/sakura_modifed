@@ -187,7 +187,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 
 	CLayout*	pLayout;
 	CLayoutInt	nCount;
-	if (CLayoutInt(0) == m_nLines) {
+	if (m_nLines == CLayoutInt(0)) {
 		return NULL;
 	}
 
@@ -295,7 +295,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 //@@@ 2002.09.23 YAZAKI CLayout*を作成するところは分離して、InsertLineNext()と共通化
 void CLayoutMgr::AddLineBottom(CLayout* pLayout)
 {
-	if (CLayoutInt(0) == m_nLines) {
+	if (m_nLines == CLayoutInt(0)) {
 		m_pLayoutBot = m_pLayoutTop = pLayout;
 		m_pLayoutTop->m_pPrev = NULL;
 	}else {
@@ -311,7 +311,7 @@ void CLayoutMgr::AddLineBottom(CLayout* pLayout)
 //@@@ 2002.09.23 YAZAKI CLayout*を作成するところは分離して、AddLineBottom()と共通化
 CLayout* CLayoutMgr::InsertLineNext(CLayout* pLayoutPrev, CLayout* pLayout)
 {
-	if (CLayoutInt(0) == m_nLines) {
+	if (m_nLines == CLayoutInt(0)) {
 		// 初
 		m_pLayoutBot = m_pLayoutTop = pLayout;
 		m_pLayoutTop->m_pPrev = NULL;
@@ -460,7 +460,7 @@ void CLayoutMgr::GetEndLayoutPos(
 		return;
 	}
 
-	if (CLayoutInt(0) == m_nLines || !m_pLayoutBot) {
+	if (m_nLines == CLayoutInt(0) || !m_pLayoutBot) {
 		// データが空
 		ptLayoutEnd->x = CLayoutInt(0);
 		ptLayoutEnd->y = CLayoutInt(0);
@@ -505,7 +505,7 @@ CLayout* CLayoutMgr::DeleteLayoutAsLogical(
 )
 {
 	*pnDeleteLines = CLayoutInt(0);
-	if (CLayoutInt(0) == m_nLines) {	// 全物理行数
+	if (m_nLines == CLayoutInt(0)) {	// 全物理行数
 		return NULL;
 	}
 	if (!pLayoutInThisArea) {

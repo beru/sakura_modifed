@@ -112,7 +112,8 @@ EConvertResult CShiftJis::SJISToUnicode( const CMemory& cSrc, CNativeW* pDstMem 
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 
 	// 変換先バッファサイズを設定してメモリ領域確保
@@ -209,7 +210,8 @@ EConvertResult CShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem 
 	const wchar_t* pSrc = reinterpret_cast<const wchar_t*>(pMem->GetRawPtr());
 	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
 	if (nSrcLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 
 	// 変換先バッファサイズを設定してバッファを確保

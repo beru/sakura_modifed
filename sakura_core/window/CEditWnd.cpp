@@ -1410,7 +1410,7 @@ LRESULT CEditWnd::DispatchEvent(
 		m_nTimerCount = 9;
 
 		// ビューにフォーカスを移動する	// 2007.10.16 ryoji
-		if (!m_pPrintPreview) {
+		if (!m_pPrintPreview && m_pcEditView) {
 			::SetFocus(GetActiveView().GetHwnd());
 		}
 		lRes = 0;

@@ -123,7 +123,7 @@ void CDocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
 
 	// 行数減算
 	--m_nLines;
-	if (CLogicInt(0) == m_nLines) {
+	if (m_nLines == CLogicInt(0)) {
 		// データがなくなった
 		_Init();
 	}
@@ -142,11 +142,11 @@ void CDocLineMgr::DeleteLine(CDocLine* pcDocLineDel)
 */
 const CDocLine* CDocLineMgr::GetLine(CLogicInt nLine) const
 {
-	if (CLogicInt(0) == m_nLines) {
+	if (m_nLines == CLogicInt(0)) {
 		return NULL;
 	}
 	// 2004.03.28 Moca nLineが負の場合のチェックを追加
-	if (CLogicInt(0) > nLine || nLine >= m_nLines) {
+	if (nLine < CLogicInt(0) || nLine >= m_nLines) {
 		return NULL;
 	}
 	CLogicInt nCounter;

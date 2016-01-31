@@ -312,7 +312,7 @@ bool CProfile::WriteProfile(
 bool CProfile::_WriteFile(
 	const tstring&			strFilename,	// [in]  ƒtƒ@ƒCƒ‹–¼
 	const vector<wstring>&	vecLine			// [out] •¶š—ñŠi”[æ
-)
+	)
 {
 	CTextOutputStream out(strFilename.c_str());
 	if (!out) {

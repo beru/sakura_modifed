@@ -93,7 +93,8 @@ EConvertResult CUtf8::_UTF8ToUnicode( const CMemory& cSrc, CNativeW* pDstMem, bo
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 	
 	const char* psrc = pSrc;
@@ -181,7 +182,8 @@ EConvertResult CUtf8::_UnicodeToUTF8( const CNativeW& cSrc, CMemory* pDstMem, bo
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
 	if (nSrcLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 	
 	// 必要なバッファサイズを調べてメモリを確保

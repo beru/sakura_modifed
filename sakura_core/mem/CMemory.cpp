@@ -324,9 +324,10 @@ void CMemory::SetRawDataHoldBuffer(const void* pData, int nDataLen)
 	if (m_nRawLen != 0) {
 		_SetRawLength(0);
 	}
-	AllocBuffer( nDataLen );
-	_AddData( pData, nDataLen );
-	return;
+	if (nDataLen != 0) {
+		AllocBuffer( nDataLen );
+		_AddData( pData, nDataLen );
+	}
 }
 
 /*! バッファの内容を置き換える */
@@ -338,14 +339,15 @@ void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
 	int nDataLen;
 	const void*	pData = pcmemData.GetRawPtr( &nDataLen );
 	SetRawDataHoldBuffer( pData, nDataLen );
-	return;
 }
 
 
 /* バッファの最後にデータを追加する（publicメンバ）*/
 void CMemory::AppendRawData(const void* pData, int nDataLenBytes)
 {
-	if (nDataLenBytes <= 0) return;
+	if (nDataLenBytes <= 0) {
+		return;
+	}
 	AllocBuffer(m_nRawLen + nDataLenBytes);
 	_AddData(pData, nDataLenBytes);
 }

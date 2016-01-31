@@ -125,7 +125,8 @@ EConvertResult CUtf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 	int nDataLen;
 	const char* pData = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nDataLen) );
 	if (nDataLen == 0) {
-		return RESULT_LOSESOME;
+		pDstMem->Clear();
+		return RESULT_COMPLETE;
 	}
 	
 	// 必要なバッファサイズを調べて確保
