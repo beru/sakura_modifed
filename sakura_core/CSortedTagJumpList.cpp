@@ -108,9 +108,15 @@ int CSortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 	@retval FALSE ’Ç‰ÁŽ¸”s
 	@date 2010.07.23 Moca baseDirId ’Ç‰Á
 */
-bool CSortedTagJumpList::AddParamA(const ACHAR* keyword, const ACHAR* filename, int no,
-	ACHAR type, const ACHAR* note, int depth, int baseDirId
-)
+bool CSortedTagJumpList::AddParamA(
+	const ACHAR* keyword,
+	const ACHAR* filename,
+	int no,
+	ACHAR type,
+	const ACHAR* note,
+	int depth,
+	int baseDirId
+	)
 {
 	TagJumpInfo*	p;
 	TagJumpInfo*	prev;

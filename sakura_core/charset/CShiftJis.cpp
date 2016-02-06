@@ -105,7 +105,7 @@ int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 
 
 
-/* コード変換 SJIS→Unicode */
+// コード変換 SJIS→Unicode
 EConvertResult CShiftJis::SJISToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
 	// ソース取得
@@ -200,7 +200,7 @@ int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 
 
-/* コード変換 Unicode→SJIS */
+// コード変換 Unicode→SJIS
 EConvertResult CShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
 {
 	// 状態

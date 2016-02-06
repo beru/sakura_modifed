@@ -46,7 +46,7 @@ struct IniFolder {
 
 // 共有メモリ内構造体
 struct SShare_FileNameManagement {
-	IniFolder	m_IniFolder;	/**** iniフォルダ設定 ****/
+	IniFolder	m_IniFolder;	// **** iniフォルダ設定 ****
 };
 
 
@@ -87,8 +87,8 @@ public:
 	
 	static TCHAR GetAccessKeyByIndex(int index, bool bZeroOrigin);
 
-	static void GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName );	/* 構成設定ファイルからiniファイル名を取得する */	// 2007.09.04 ryoji
-	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead = FALSE );	/* iniファイル名の取得 */	// 2007.05.19 ryoji
+	static void GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR pszIniFile, LPCTSTR pszProfName );	// 構成設定ファイルからiniファイル名を取得する		// 2007.09.04 ryoji
+	void GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead = FALSE );	// iniファイル名の取得		// 2007.05.19 ryoji
 
 private:
 	DLLSHAREDATA* m_pShareData;

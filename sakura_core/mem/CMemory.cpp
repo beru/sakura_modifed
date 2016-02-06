@@ -316,7 +316,7 @@ void CMemory::SetRawData(const CMemory& pcmemData)
 	return;
 }
 
-/*! バッファの内容を置き換える */
+//! バッファの内容を置き換える
 void CMemory::SetRawDataHoldBuffer(const void* pData, int nDataLen)
 {
 	// this 重複不可
@@ -330,7 +330,7 @@ void CMemory::SetRawDataHoldBuffer(const void* pData, int nDataLen)
 	}
 }
 
-/*! バッファの内容を置き換える */
+//! バッファの内容を置き換える
 void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
 {
 	if (this == &pcmemData) {
@@ -342,7 +342,7 @@ void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
 }
 
 
-/* バッファの最後にデータを追加する（publicメンバ）*/
+// バッファの最後にデータを追加する（publicメンバ）
 void CMemory::AppendRawData(const void* pData, int nDataLenBytes)
 {
 	if (nDataLenBytes <= 0) {

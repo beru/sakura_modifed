@@ -197,10 +197,10 @@ void CImageListMgr::MyBitBlt(
 	HDC hdcMask = CreateCompatibleDC(drawdc);
 	HBITMAP bmpMask = CreateCompatibleBitmap(hdcMask, nWidth, nHeight);
 	HBITMAP bmpMaskOld = (HBITMAP)SelectObject(hdcMask, bmpMask);
-	/* 元ビットマップ用DC */
+	// 元ビットマップ用DC
 	HDC hdcMem = ::CreateCompatibleDC(drawdc);
 	HBITMAP bmpMemOld = (HBITMAP)::SelectObject(hdcMem, bmp);
-	/* 作業用DC */
+	// 作業用DC
 	HDC hdcMem2 = ::CreateCompatibleDC(drawdc);
 	HBITMAP bmpMem2 = CreateCompatibleBitmap(drawdc, nWidth, nHeight);
 	HBITMAP bmpMem2Old = (HBITMAP)SelectObject(hdcMem2, bmpMem2);
@@ -211,13 +211,13 @@ void CImageListMgr::MyBitBlt(
 	SetBkColor(hdcMem, colToTransParent);
 	BitBlt(hdcMask, 0, 0, nWidth, nHeight, hdcMem, nXSrc, nYSrc, SRCCOPY);
 
-	/* マスク描画(透明にしない部分だけ黒く描画) */
+	// マスク描画(透明にしない部分だけ黒く描画)
 	::SetBkColor(drawdc, RGB(255, 255, 255) /* colBkColor */); // 2003.08.27 Moca 作画方法変更
 	::SetTextColor(drawdc, RGB(0, 0, 0));
 	// 2003.08.27 Moca 作画方法変更
 	::BitBlt(drawdc, nXDest, nYDest, nWidth, nHeight, hdcMask, 0, 0, SRCAND /* SRCCOPY */); 
 
-	/* ビットマップ描画(透明にする色を黒くしてマスクとOR描画) */
+	// ビットマップ描画(透明にする色を黒くしてマスクとOR描画)
 	::SetBkColor(hdcMem2, colToTransParent/*RGB(0, 0, 0)*/);
 	::SetTextColor(hdcMem2, RGB(0, 0, 0));
 	::BitBlt(hdcMem2, 0, 0, nWidth, nHeight, hdcMask, 0, 0, SRCCOPY);
@@ -246,7 +246,7 @@ void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth,
                         int nHeight, HBITMAP bmp, int nXSrc, int nYSrc) const
 {
 
-	//COLORREF colToTransParent = RGB(192, 192, 192);	/* BMPの中の透明にする色 */
+	//COLORREF colToTransParent = RGB(192, 192, 192);	// BMPの中の透明にする色
 	COLORREF colToTransParent = m_cTrans;
 
 	// create a monochrome memory DC
@@ -330,10 +330,12 @@ void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth,
 */
 bool CImageListMgr::Draw(int index, HDC dc, int x, int y, int fstyle) const
 {
-	if (!m_hIconBitmap)
+	if (!m_hIconBitmap) {
 		return false;
-	if (index < 0)
+	}
+	if (index < 0) {
 		return false;
+	}
 
 	if (fstyle == ILD_MASK) {
 		DitherBlt2(dc, x, y, cx(), cy(), m_hIconBitmap,
@@ -395,8 +397,9 @@ int CImageListMgr::Add(const TCHAR* szPath)
 void CImageListMgr::Extend(bool bExtend)
 {
 	int curY = m_nIconCount / MAX_X;
-	if (curY < MAX_Y)
+	if (curY < MAX_Y) {
 		curY = MAX_Y;
+	}
 
 	HDC hSrcDC = ::CreateCompatibleDC(0);
 	HBITMAP hSrcBmpOld = (HBITMAP)::SelectObject(hSrcDC, m_hIconBitmap);

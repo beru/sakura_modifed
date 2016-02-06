@@ -533,8 +533,8 @@ void CShareData_IO::ShareData_IO_Common(CDataProfile& cProfile)
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpType2_Opt3")		, common.m_sBackup.m_nBackUpType_Opt3);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpType2_Opt4")		, common.m_sBackup.m_nBackUpType_Opt4);
 	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpDustBox")			, common.m_sBackup.m_bBackUpDustBox);	//@@@ 2001.12.11 add MIK
-	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpPathAdvanced")		, common.m_sBackup.m_bBackUpPathAdvanced);	/* 20051107 aroka */
-	cProfile.IOProfileData(pszSecName, LTEXT("szBackUpPathAdvanced")	, common.m_sBackup.m_szBackUpPathAdvanced);	/* 20051107 aroka */
+	cProfile.IOProfileData(pszSecName, LTEXT("bBackUpPathAdvanced")		, common.m_sBackup.m_bBackUpPathAdvanced);	// 20051107 aroka
+	cProfile.IOProfileData(pszSecName, LTEXT("szBackUpPathAdvanced")	, common.m_sBackup.m_szBackUpPathAdvanced);	// 20051107 aroka
 	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("nFileShareMode")			, common.m_sFile.m_nFileShareMode);
 	cProfile.IOProfileData(pszSecName, LTEXT("szExtHelp"), MakeStringBufferT(common.m_sHelper.m_szExtHelp));
 	cProfile.IOProfileData(pszSecName, LTEXT("szExtHtmlHelp"), MakeStringBufferT(common.m_sHelper.m_szExtHtmlHelp));
@@ -1403,7 +1403,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 		}
 	}
 
-	/* 行番号の最小桁数 */	// 加追 2014.08.02 katze
+	// 行番号の最小桁数		// 加追 2014.08.02 katze
 	cProfile.IOProfileData( pszSecName, LTEXT("nLineNumWidth"), types.m_nLineNumWidth );
 	if (cProfile.IsReadingMode()) {
 		if (types.m_nLineNumWidth < LINENUMWIDTH_MIN) {
@@ -1502,8 +1502,8 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 	cProfile.IOProfileData(pszSecName, LTEXT("szIndentChars")		, MakeStringBufferW(types.m_szIndentChars));
 	cProfile.IOProfileData(pszSecName, LTEXT("cLineTermChar")		, types.m_cLineTermChar);
 
-	cProfile.IOProfileData(pszSecName, LTEXT("bOutlineDockDisp")			, types.m_bOutlineDockDisp);/* アウトライン解析表示の有無 */
-	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("eOutlineDockSide")	, types.m_eOutlineDockSide);/* アウトライン解析ドッキング配置 */
+	cProfile.IOProfileData(pszSecName, LTEXT("bOutlineDockDisp")			, types.m_bOutlineDockDisp);	// アウトライン解析表示の有無
+	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("eOutlineDockSide")	, types.m_eOutlineDockSide);	// アウトライン解析ドッキング配置
 	{
 		const WCHAR* pszKeyName = LTEXT("xyOutlineDock");
 		const WCHAR* pszForm = LTEXT("%d,%d,%d,%d");
@@ -1529,20 +1529,20 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 			cProfile.IOProfileData(pszSecName, pszKeyName, MakeStringBufferW(szKeyData));
 		}
 	}
-	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("nDockOutline")	, 	types.m_nDockOutline);			// アウトライン解析方法
-	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("nDefaultOutline")	, types.m_eDefaultOutline);	// アウトライン解析方法
+	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("nDockOutline")	, types.m_nDockOutline);			// アウトライン解析方法
+	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("nDefaultOutline")	, types.m_eDefaultOutline);			// アウトライン解析方法
 	cProfile.IOProfileData(pszSecName, LTEXT("szOutlineRuleFilename")	, types.m_szOutlineRuleFilename);	// アウトライン解析ルールファイル
-	cProfile.IOProfileData(pszSecName, LTEXT("nOutlineSortCol")		, types.m_nOutlineSortCol);		// アウトライン解析ソート列番号
+	cProfile.IOProfileData(pszSecName, LTEXT("nOutlineSortCol")			, types.m_nOutlineSortCol);			// アウトライン解析ソート列番号
 	cProfile.IOProfileData(pszSecName, LTEXT("bOutlineSortDesc")		, types.m_bOutlineSortDesc);		// アウトライン解析ソート降順
 	cProfile.IOProfileData(pszSecName, LTEXT("nOutlineSortType")		, types.m_nOutlineSortType);		// アウトライン解析ソート基準
 	ShareData_IO_FileTree( cProfile, types.m_sFileTree, pszSecName );
-	cProfile.IOProfileData_WrapInt( pszSecName, LTEXT("nSmartIndent")		, types.m_eSmartIndent );/* スマートインデント種別 */
+	cProfile.IOProfileData_WrapInt( pszSecName, LTEXT("nSmartIndent")	, types.m_eSmartIndent );			// スマートインデント種別
 	// Nov. 20, 2000 genta
-	cProfile.IOProfileData(pszSecName, LTEXT("nImeState")			, types.m_nImeState);	// IME制御
+	cProfile.IOProfileData(pszSecName, LTEXT("nImeState")				, types.m_nImeState);	// IME制御
 
 	// 2001/06/14 Start By asa-o: タイプ別の補完ファイル
 	// Oct. 5, 2002 genta _countof()で誤ってポインタのサイズを取得していたのを修正
-	cProfile.IOProfileData(pszSecName, LTEXT("szHokanFile")		, types.m_szHokanFile);		// 補完ファイル
+	cProfile.IOProfileData(pszSecName, LTEXT("szHokanFile")			, types.m_szHokanFile);		// 補完ファイル
 	// 2001/06/14 End
 	cProfile.IOProfileData(pszSecName, LTEXT("nHokanType")			, types.m_nHokanType);		// 補完種別
 
@@ -1551,7 +1551,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 
 	// 2003.06.23 Moca ファイル内からの入力補完機能
 	cProfile.IOProfileData(pszSecName, LTEXT("bUseHokanByFile")		, types.m_bUseHokanByFile);
-	cProfile.IOProfileData(pszSecName, LTEXT("bUseHokanByKeyword")		, types.m_bUseHokanByKeyword);
+	cProfile.IOProfileData(pszSecName, LTEXT("bUseHokanByKeyword")	, types.m_bUseHokanByKeyword);
 
 	//@@@ 2002.2.4 YAZAKI
 	cProfile.IOProfileData(pszSecName, LTEXT("szExtHelp")			, types.m_szExtHelp);
@@ -1559,12 +1559,12 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 	cProfile.IOProfileData(pszSecName, LTEXT("szExtHtmlHelp")		, types.m_szExtHtmlHelp);
 	cProfile.IOProfileData(pszSecName, LTEXT("bTypeHtmlHelpIsSingle"), types.m_bHtmlHelpIsSingle); // 2012.06.30 Fix m_bHokanLoHiCase -> m_bHtmlHelpIsSingle
 
-	cProfile.IOProfileData(pszSecName, LTEXT("bPriorCesu8")		, types.m_encoding.m_bPriorCesu8);
+	cProfile.IOProfileData(pszSecName, LTEXT("bPriorCesu8")					, types.m_encoding.m_bPriorCesu8);
 	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("eDefaultCodetype")	, types.m_encoding.m_eDefaultCodetype);
-	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("eDefaultEoltype")	, types.m_encoding.m_eDefaultEoltype);
-	cProfile.IOProfileData(pszSecName, LTEXT("bDefaultBom")		, types.m_encoding.m_bDefaultBom);
+	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("eDefaultEoltype")		, types.m_encoding.m_eDefaultEoltype);
+	cProfile.IOProfileData(pszSecName, LTEXT("bDefaultBom")					, types.m_encoding.m_bDefaultBom);
 
-	cProfile.IOProfileData(pszSecName, LTEXT("bAutoIndent")			, types.m_bAutoIndent);
+	cProfile.IOProfileData(pszSecName, LTEXT("bAutoIndent")				, types.m_bAutoIndent);
 	cProfile.IOProfileData(pszSecName, LTEXT("bAutoIndent_ZENSPACE")	, types.m_bAutoIndent_ZENSPACE);
 	cProfile.IOProfileData(pszSecName, LTEXT("bRTrimPrevLine")			, types.m_bRTrimPrevLine);			// 2005.10.08 ryoji
 	cProfile.IOProfileData(pszSecName, LTEXT("nIndentLayout")			, types.m_nIndentLayout);
@@ -1643,7 +1643,7 @@ void CShareData_IO::ShareData_IO_Type_One(CDataProfile& cProfile, STypeConfig& t
 	}
 //@@@ 2001.11.17 add end MIK
 
-	/* 禁則 */
+	// 禁則
 	cProfile.IOProfileData(pszSecName, LTEXT("bKinsokuHead")	, types.m_bKinsokuHead);
 	cProfile.IOProfileData(pszSecName, LTEXT("bKinsokuTail")	, types.m_bKinsokuTail);
 	cProfile.IOProfileData(pszSecName, LTEXT("bKinsokuRet")	, types.m_bKinsokuRet);	//@@@ 2002.04.13 MIK
@@ -2197,7 +2197,7 @@ void CShareData_IO::ShareData_IO_Other(CDataProfile& cProfile)
 	static const WCHAR* pszSecName = LTEXT("Other");	// セクションを1個作成した。2003.05.12 MIK
 	WCHAR szKeyName[64];
 
-	/* **** その他のダイアログ **** */
+	// **** その他のダイアログ ****
 	// 外部コマンド実行の「標準出力を得る」
 	if (!cProfile.IOProfileData(pszSecName, LTEXT("nExecFlgOpt")	, pShare->m_nExecFlgOpt)) { // 2006.12.03 maru オプション拡張
 		cProfile.IOProfileData(pszSecName, LTEXT("bGetStdout")		, pShare->m_nExecFlgOpt);

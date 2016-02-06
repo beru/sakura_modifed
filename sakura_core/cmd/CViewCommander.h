@@ -274,8 +274,8 @@ public:
 
 	void Command_GREP_DIALOG(void);						// Grepダイアログの表示
 	void Command_GREP(void);							// Grep
-	void Command_GREP_REPLACE_DLG( void );				/* Grep置換ダイアログの表示 */
-	void Command_GREP_REPLACE( void );					/* Grep置換 */
+	void Command_GREP_REPLACE_DLG( void );				// Grep置換ダイアログの表示
+	void Command_GREP_REPLACE( void );					// Grep置換
 	void Command_JUMP_DIALOG(void);						// 指定行ヘジャンプダイアログの表示
 	void Command_JUMP(void);							// 指定行ヘジャンプ
 // From Here 2001.12.03 hor

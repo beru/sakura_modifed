@@ -326,7 +326,7 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 		);
 		TrayMessage(GetTrayHwnd(), NIM_ADD, 0,  hIcon, pszTips);
 // To Here Jan. 12, 2001
-		m_bCreatedTrayIcon = TRUE;	/* トレイにアイコンを作った */
+		m_bCreatedTrayIcon = TRUE;	// トレイにアイコンを作った
 	}
 	return true;
 }
@@ -639,10 +639,10 @@ LRESULT CControlTray::DispatchEvent(
 				wHotKeyCode
 			);
 
-//@@			/* 共有データの保存 */
+//@@			// 共有データの保存
 //@@			m_cShareData.SaveShareData();
 
-			/* アクセラレータテーブルの再作成 */
+			// アクセラレータテーブルの再作成
 			// アクセラレータテーブル破棄
 			DeleteAccelTbl();
 			// アクセラレータテーブル作成
@@ -1008,7 +1008,7 @@ LRESULT CControlTray::DispatchEvent(
 			}
 			return 0L;
 		case WM_LBUTTONDBLCLK:
-			bLDClick = true;		/* 03/02/20 ai */
+			bLDClick = true;		// 03/02/20 ai
 			// 新規編集ウィンドウの追加
 			OnNewEditor(m_pShareData->m_Common.m_sTabBar.m_bNewWindow != FALSE);
 			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる

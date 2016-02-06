@@ -2391,7 +2391,7 @@ void CEditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t* pszName, const wchar_t* pszKey)
 {
 	const wchar_t* psName = NULL;
-	/* メニューラベルの作成 */
+	// メニューラベルの作成
 	// カスタムメニュー
 	if (eFunc == F_MENU_RBUTTON
 	  || eFunc >= F_CUSTMENU_1 && eFunc <= F_CUSTMENU_24
@@ -3537,7 +3537,7 @@ BOOL CEditWnd::OnPrintPageSetting(void)
 		G_AppInstance(),
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
 		GetHwnd(),
-		&nCurrentPrintSetting, /* 現在選択している印刷設定 */
+		&nCurrentPrintSetting, // 現在選択している印刷設定
 		m_pShareData->m_PrintSettingArr, // 現在の設定はダイアログ側で保持する 2013.5.1 aroka
 		nLineNumberColumns // 行番号表示用に桁数を渡す 2013.5.10 aroka
 	);

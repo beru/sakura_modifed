@@ -201,7 +201,7 @@ protected:
 	HBITMAP			m_hbmpCompatBMPOld;	// 再描画用メモリBMP(OLD)
 	int				m_nbmpCompatScale;	// BMPの画面の10(COMPAT_BMP_BASE)ピクセル幅あたりのBMPのピクセル幅
 
-	/*	コントロール制御用	*/
+	//	コントロール制御用
 	//	操作バー
 	HWND			m_hwndPrintPreviewBar;	// 印刷プレビュー 操作バー
 	//	スクロールバー
@@ -255,7 +255,7 @@ protected:
 	CColorStrategyPool*	m_pool;					// 色定義管理情報
 
 public:
-	class CLayoutMgr*	m_pLayoutMgr_Print;		/* 印刷用のレイアウト管理情報 */
+	class CLayoutMgr*	m_pLayoutMgr_Print;		// 印刷用のレイアウト管理情報
 protected:
 	STypeConfig m_typePrint;
 

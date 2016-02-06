@@ -65,7 +65,7 @@ HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical
 	m_hCenterImg = (HBITMAP)::LoadImage(hInstance, MAKEINTRESOURCE(idb), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 	HCURSOR hCursor = ::LoadCursor(GetModuleHandle(NULL), MAKEINTRESOURCE(idc));
 
-	/* ウィンドウクラス作成 */
+	// ウィンドウクラス作成
 	RegisterWC(
 		hInstance,
 		NULL,
@@ -76,9 +76,9 @@ HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical
 		pszClassName
 	);
 
-	/* 基底クラスメンバ呼び出し */
+	// 基底クラスメンバ呼び出し
 	return CWnd::Create(
-		/* 初期化 */
+		// 初期化
 		hwndParent,
 		0,
 		pszClassName,	// Pointer to a null-terminated string or is an atom.

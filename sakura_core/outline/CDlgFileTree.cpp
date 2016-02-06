@@ -129,7 +129,7 @@ static TCHAR* GetFileTreeLabel(const SFileTreeItem& item)
 	return const_cast<TCHAR*>(pszLabel);
 }
 
-/* ダイアログデータの設定 */
+// ダイアログデータの設定
 void CDlgFileTree::SetData()
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
@@ -240,8 +240,8 @@ void CDlgFileTree::ChangeEnableAddInsert()
 	}
 }
 
-/* ダイアログデータの取得 */
-/* TRUE==正常  FALSE==入力エラー */
+// ダイアログデータの取得
+// TRUE==正常  FALSE==入力エラー
 int CDlgFileTree::GetData()
 {
 	HWND hwndDlg = GetHwnd();
@@ -367,7 +367,7 @@ BOOL CDlgFileTree::OnInitDialog(
 	m_pcDlgFuncList->LoadFileTreeSetting(m_fileTreeSetting, path);
 	SetDataInit();
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnInitDialog(GetHwnd(), wParam, lParam);
 }
 
@@ -942,7 +942,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 		return TRUE;
 
 	case IDC_BUTTON_HELP:
-		/* ヘルプ */
+		// ヘルプ
 		MyWinHelp( GetHwnd(), HELP_CONTEXT, ::FuncID_To_HelpContextID(F_FILETREE) );
 		return TRUE;
 
@@ -956,7 +956,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 
 	}
 
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnBnClicked(wID);
 }
 
@@ -1000,7 +1000,7 @@ BOOL CDlgFileTree::OnNotify(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	/* 基底クラスメンバ */
+	// 基底クラスメンバ
 	return CDialog::OnNotify(wParam, lParam);
 }
 

@@ -228,7 +228,7 @@ const wchar_t* CKeyWordSetMgr::UpdateKeyWord(
 	int				nIdx,		// [in] キーワードセット番号
 	int				nIdx2,		// [in] キーワード番号
 	const WCHAR*	pszKeyWord	// [in] 設定するキーワード
-)
+	)
 {
 	if (nIdx < 0 || m_nKeyWordSetNum <= nIdx) {
 		return NULL;
@@ -385,7 +385,11 @@ void CKeyWordSetMgr::KeywordMaxLen(int nIdx)
 	@retval -2     見つからなかったが、pszKeywordから始まるキーワードが存在している。
 	@retval intmax 見つかったが、pszKeywordから始まる、より長いキーワードが存在している。
 */
-int CKeyWordSetMgr::SearchKeyWord2(int nIdx, const wchar_t* pszKeyWord, int nKeyWordLen)
+int CKeyWordSetMgr::SearchKeyWord2(
+	int nIdx,
+	const wchar_t* pszKeyWord,
+	int nKeyWordLen
+	)
 {
 	// sort
 	if (m_IsSorted[nIdx] == 0) {
@@ -498,7 +502,7 @@ int CKeyWordSetMgr::SetKeyWordArr(
 	int				nIdx,				// [in] キーワードセット番号
 	int				nSize,				// [in] ppszKeyWordArrの要素数
 	const wchar_t*	ppszKeyWordArr[]	// [in] キーワードの配列(重複・長さ制限等、考慮済みであること)
-)
+	)
 {
 	if (!KeyWordReAlloc(nIdx, nSize)) {
 		return 0;

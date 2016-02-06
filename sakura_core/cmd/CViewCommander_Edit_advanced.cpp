@@ -31,7 +31,6 @@
 #include "mem/CMemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
 #include "_os/COsVersionInfo.h"
 
-
 using namespace std; // 2002/2/3 aroka to here
 
 #ifndef FID_RECONVERT_VERSION  // 2002.04.10 minfu 
@@ -43,7 +42,6 @@ using namespace std; // 2002/2/3 aroka to here
 #define SCS_SETRECONVERTSTRING 0x00010000
 #endif
 
-
 // インデント ver1
 void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 {
@@ -54,7 +52,10 @@ void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
 	// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	if (eIndent != INDENT_NONE && selInfo.IsBoxSelecting() && GetSelect().GetFrom().x == GetSelect().GetTo().x) {
+	if (eIndent != INDENT_NONE
+		&& selInfo.IsBoxSelecting()
+		&& GetSelect().GetFrom().x == GetSelect().GetTo().x
+	) {
 		GetSelect().SetToX(GetDocument()->m_cLayoutMgr.GetMaxLineKetas());
 		m_pCommanderView->RedrawAll();
 		return;
@@ -344,7 +345,10 @@ void CViewCommander::Command_INDENT(
 		// 現在の選択範囲を非選択状態に戻す
 		selInfo.DisableSelectArea(false);
 
-		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
+		CWaitCursor cWaitCursor(
+			m_pCommanderView->GetHwnd(),
+			1000 < sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2()
+		);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (cWaitCursor.IsEnable()) {
@@ -560,7 +564,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 */
 void CViewCommander::Command_TRIM(
 	BOOL bLeft	//  [in] FALSE: 右TRIM / それ以外: 左TRIM
-)
+	)
 {
 	bool bBeDisableSelectArea = false;
 	CViewSelect& cViewSelect = m_pCommanderView->GetSelectionInfo();
@@ -581,11 +585,7 @@ void CViewCommander::Command_TRIM(
 		bBeDisableSelectArea = true;
 	}
 
-	if (bLeft) {
-		m_pCommanderView->ConvSelectedArea(F_LTRIM);
-	}else {
-		m_pCommanderView->ConvSelectedArea(F_RTRIM);
-	}
+	m_pCommanderView->ConvSelectedArea(bLeft ? F_LTRIM : F_RTRIM);
 
 	if (bBeDisableSelectArea) {
 		cViewSelect.DisableSelectArea(true);
@@ -603,8 +603,11 @@ struct SORTDATA {
 inline int CNativeW_comp(const CNativeW& lhs, const CNativeW& rhs)
 {
 	// 比較長には終端NULを含めないといけない
-	return wmemcmp(lhs.GetStringPtr(), rhs.GetStringPtr(),
-			t_min(lhs.GetStringLength() + 1, rhs.GetStringLength() + 1));
+	return wmemcmp(
+		lhs.GetStringPtr(),
+		rhs.GetStringPtr(),
+		t_min(lhs.GetStringLength() + 1, rhs.GetStringLength() + 1)
+	);
 }
 
 // 物理行のソートに使う関数(昇順)
@@ -615,7 +618,11 @@ bool SortByLineDesc(SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1-
 
 inline int CStringRef_comp(const CStringRef& c1, const CStringRef& c2)
 {
-	int ret = wmemcmp(c1.GetPtr(), c2.GetPtr(), t_min(c1.GetLength(), c2.GetLength()));
+	int ret = wmemcmp(
+		c1.GetPtr(),
+		c2.GetPtr(),
+		t_min(c1.GetLength(), c2.GetLength())
+	);
 	if (ret == 0) {
 		return c1.GetLength() - c2.GetLength();
 	}

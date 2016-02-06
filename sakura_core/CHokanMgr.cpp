@@ -29,7 +29,12 @@
 WNDPROC gm_wpHokanListProc;
 
 
-LRESULT APIENTRY HokanList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT APIENTRY HokanList_SubclassProc(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	// Modified by KEITA for WIN64 2003.9.6
 	CDialog* pCDialog = (CDialog*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
@@ -85,7 +90,11 @@ CHokanMgr::~CHokanMgr()
 }
 
 // モードレスダイアログの表示
-HWND CHokanMgr::DoModeless(HINSTANCE hInstance , HWND hwndParent, LPARAM lParam)
+HWND CHokanMgr::DoModeless(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	LPARAM lParam
+	)
 {
 	HWND hwndWork = CDialog::DoModeless(hInstance, hwndParent, IDD_HOKAN, lParam, SW_HIDE);
 	OnSize(0, 0);
@@ -642,7 +651,10 @@ void CHokanMgr::ShowTip()
 }
 //	2001/06/18 End
 
-bool CHokanMgr::AddKouhoUnique(vector_ex<std::wstring>& kouhoList, const std::wstring& strWord)
+bool CHokanMgr::AddKouhoUnique(
+	vector_ex<std::wstring>& kouhoList,
+	const std::wstring& strWord
+	)
 {
 	return kouhoList.push_back_unique(strWord);
 }

@@ -78,7 +78,7 @@ void CViewCommander::Command_COPY(
 	bool		bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
 	bool		bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
 	EEolType	neweol					// [in] コピーするときのEOL。
-)
+	)
 {
 	CNativeW cmemBuf;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
@@ -463,8 +463,10 @@ void CViewCommander::Command_INSTEXT(
 		nTextLen = CLogicInt(wcslen(pszText));
 	}
 
-	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(),
-		10000 < nTextLen && !selInfo.IsBoxSelecting());
+	CWaitCursor cWaitCursor(
+		m_pCommanderView->GetHwnd(),
+		10000 < nTextLen && !selInfo.IsBoxSelecting()
+	);
 
 	GetDocument()->m_cDocEditor.SetModified(true, bRedraw);	// Jan. 22, 2002 genta
 
@@ -658,8 +660,11 @@ static bool AppendHTMLColor(
 	const WCHAR* pAppendStr, int nLen,
 	CNativeW& cmemClip)
 {
-	if (sFontAttrLast.m_bBoldFont != sFontAttrLast2.m_bBoldFont || sFontAttrLast.m_bUnderLine != sFontAttrLast2.m_bUnderLine
-	  || sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT || sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK) {
+	if (sFontAttrLast.m_bBoldFont != sFontAttrLast2.m_bBoldFont
+		|| sFontAttrLast.m_bUnderLine != sFontAttrLast2.m_bUnderLine
+		|| sColorAttrLast.m_cTEXT != sColorAttrLast2.m_cTEXT
+		|| sColorAttrLast.m_cBACK != sColorAttrLast2.m_cBACK
+	) {
 		if (sFontAttrLast2.m_bBoldFont) {
 			cmemClip.AppendString(L"</b>", 4);
 		}
@@ -709,8 +714,10 @@ static bool AppendHTMLColor(
 	cmemBuf.Replace(L">", L"&gt;");
 	cmemClip.AppendNativeData(cmemBuf);
 	if (0 < nLen) {
-		return WCODE::IsLineDelimiter(pAppendStr[nLen-1],
-									  GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol);
+		return WCODE::IsLineDelimiter(
+			pAppendStr[nLen-1],
+			GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+		);
 	}
 	return false;
 }
@@ -1171,6 +1178,10 @@ void CViewCommander::Command_CREATEKEYBINDLIST(void)
 
 	// Windowsクリップボードにコピー
 	// 2004.02.17 Moca 関数化
-	SetClipboardText(CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(), cMemKeyList.GetStringPtr(), cMemKeyList.GetStringLength());
+	SetClipboardText(
+		CEditWnd::getInstance()->m_cSplitterWnd.GetHwnd(),
+		cMemKeyList.GetStringPtr(),
+		cMemKeyList.GetStringLength()
+	);
 }
 

@@ -604,7 +604,7 @@ void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
 		CAppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
 	}
 
-	/* 親ウィンドウのタイトルを更新 */
+	// 親ウィンドウのタイトルを更新
 	m_pcDocRef->m_pcEditWnd->UpdateCaption();
 
 	// オープン後自動実行マクロを実行する

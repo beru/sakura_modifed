@@ -1,3 +1,5 @@
+#pragma once
+
 /*!	@file
 	@brief GREP置換ダイアログボックス
 
@@ -15,9 +17,6 @@
 
 class CDlgGrep;
 
-#ifndef SAKURA_CDLGGREP_REPLACE_H_
-#define SAKURA_CDLGGREP_REPLACE_H_
-
 #include "dlg/CDialog.h"
 #include "dlg/CDlgGrep.h"
 
@@ -32,7 +31,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int DoModal( HINSTANCE, HWND, const TCHAR*, LPARAM );	/* モーダルダイアログの表示 */
+	int DoModal( HINSTANCE, HWND, const TCHAR*, LPARAM );	// モーダルダイアログの表示
 
 	bool		m_bPaste;
 	bool		m_bBackup;
@@ -51,14 +50,7 @@ protected:
 	BOOL OnBnClicked( int );
 	LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 
-	void SetData( void );	/* ダイアログデータの設定 */
-	int GetData( void );	/* ダイアログデータの取得 */
+	void SetData( void );	// ダイアログデータの設定
+	int GetData( void );	// ダイアログデータの取得
 };
-
-
-
-///////////////////////////////////////////////////////////////////////
-#endif /* SAKURA_CDLGGREP_REPLACE_H_ */
-
-
 

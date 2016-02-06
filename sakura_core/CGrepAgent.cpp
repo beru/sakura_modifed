@@ -763,7 +763,7 @@ int CGrepAgent::DoGrepTree(
 			}
 		}
 		if (*pnHitCount - nHitCountOld  >= 10) {
-			/* 結果出力 */
+			// 結果出力
 			if (0 < cmemMessage.GetStringLength()) {
 				AddTail( pcViewDst, cmemMessage, sGrepOption.bGrepStdout );
 				pcViewDst->GetCommander().Command_GOFILEEND(FALSE);
@@ -879,7 +879,7 @@ void CGrepAgent::SetGrepResult(
 	const TCHAR*		pszFilePath,	//!< [in] フルパス or 相対パス
 	const TCHAR*		pszCodeName,	//!< [in] 文字コード情報．" [SJIS]"とか
 	// マッチした行の情報
-	LONGLONG	nLine,				/*!< [in] マッチした行番号(1～) */
+	LONGLONG	nLine,					//!< [in] マッチした行番号(1～)
 	int			nColumn,				//!< [in] マッチした桁番号(1～)
 	const wchar_t*	pCompareData,		//!< [in] 行の文字列
 	int			nLineLen,				//!< [in] 行の文字列の長さ
@@ -1103,7 +1103,7 @@ int CGrepAgent::DoGrepFile(
 				pszFormatFilePath   = L"・\"%ts\"%ts\r\n";
 				pszFormatFilePath2  = L"・\"%ts\"%ts\r\n";
 			}else if (sGrepOption.nGrepOutputStyle == 2) {
-				/* WZ風 */
+				// WZ風
 				pszFormatFullPath   = L"■\"%ts\"%ts\r\n";
 				pszFormatBasePath2  = L"◎\"%ts\"\r\n";
 				pszFormatFilePath   = L"◆\"%ts\"%ts\r\n";
@@ -1676,11 +1676,11 @@ int CGrepAgent::DoGrepReplaceFile(
 				}
 			}
 		}
-		/* 処理中のユーザー操作を可能にする */
+		// 処理中のユーザー操作を可能にする
 		if (!::BlockingHook( pcDlgCancel->GetHwnd() )) {
 			return -1;
 		}
-		/* 中断ボタン押下チェック */
+		// 中断ボタン押下チェック
 		if (pcDlgCancel->IsCanceled()) {
 			return -1;
 		}
@@ -1701,13 +1701,13 @@ int CGrepAgent::DoGrepReplaceFile(
 			nEolCodeLen = cEol.GetLen();
 			++nLine;
 	
-			/* 処理中のユーザー操作を可能にする */
+			// 処理中のユーザー操作を可能にする
 			// 2010.08.31 間隔を1/32にする
 			if (((nLine%32 == 0)|| 10000 < nLineLen ) && !::BlockingHook( pcDlgCancel->GetHwnd() )) {
 				return -1;
 			}
 			if (nLine%64 == 0) {
-				/* 中断ボタン押下チェック */
+				// 中断ボタン押下チェック
 				if (pcDlgCancel->IsCanceled()) {
 					return -1;
 				}
@@ -1734,7 +1734,7 @@ int CGrepAgent::DoGrepReplaceFile(
 				bOutput = false;
 			}
 	
-			/* 正規表現検索 */
+			// 正規表現検索
 			if (sSearchOption.bRegularExp) {
 				int nIndex = 0;
 				int nIndexOld = nIndex;
@@ -1831,7 +1831,7 @@ int CGrepAgent::DoGrepReplaceFile(
 							pszFullPath, pszBaseFolder, pszFolder, pszRelPath, pszCodeName,
 							bOutputBaseFolder, bOutputFolderName, bOutFileName
 						);
-						/* Grep結果を、cmemMessageに格納する */
+						// Grep結果を、cmemMessageに格納する
 						SetGrepResult(
 							cmemMessage, pszDispFilePath, pszCodeName,
 							//	Jun. 25, 2002 genta
@@ -1859,7 +1859,7 @@ int CGrepAgent::DoGrepReplaceFile(
 				}
 				cOutBuffer.AppendString( &pLine[nOutputPos], nLineLen - nOutputPos );
 			}else {
-				/* 文字列検索 */
+				// 文字列検索
 				int nColumnPrev = 0;
 				const wchar_t*	pCompareData = pLine;
 				int nCompareLen = nLineLen;

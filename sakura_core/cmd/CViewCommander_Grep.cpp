@@ -187,7 +187,7 @@ void CViewCommander::Command_GREP_REPLACE(void)
 	if (( CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode &&
 		  !CEditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning ) ||
 		( !GetDocument()->m_cDocEditor.IsModified() &&
-		  !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() &&		/* 現在編集中のファイルのパス */
+		  !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
 		  !CAppMode::getInstance()->IsDebugMode()
 		)
 	) {
@@ -218,8 +218,8 @@ void CViewCommander::Command_GREP_REPLACE(void)
 			OkMessage( m_pCommanderView->GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
 			return;
 		}
-		/*======= Grepの実行 =============*/
-		/* Grep結果ウィンドウの表示 */
+		// ======= Grepの実行 =============
+		// Grep結果ウィンドウの表示
 		cmWork1.Replace( L"\"", L"\"\"" );
 		cmWork2.Replace( _T("\""), _T("\"\"") );
 		cmWork3.Replace( _T("\""), _T("\"\"") );

@@ -78,3 +78,4 @@ int CGrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 	}
 	return 0;
 }
+

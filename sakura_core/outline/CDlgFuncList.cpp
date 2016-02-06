@@ -333,7 +333,7 @@ INT_PTR CDlgFuncList::DispatchEvent(
 }
 
 
-/* モードレスダイアログの表示 */
+// モードレスダイアログの表示
 /*
  * @note 2011.06.25 syat nOutlineTypeを追加
  *   nOutlineTypeとnListTypeはほとんどの場合同じ値だが、プラグインの場合は例外で、

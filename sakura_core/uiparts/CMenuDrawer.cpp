@@ -59,7 +59,7 @@ void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 CMenuDrawer::CMenuDrawer()
 {
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 
 	m_hInstance = NULL;
@@ -832,7 +832,7 @@ void CMenuDrawer::MyAppendMenu(
 			_countof(szLabel)
 		);
 
-		/* アイコン用ビットマップを持つものは、オーナードロウにする */
+		// アイコン用ビットマップを持つものは、オーナードロウにする
 		{
 			MyMenuItemInfo item;
 			item.m_nBitmapIdx = -1;
@@ -844,7 +844,7 @@ void CMenuDrawer::MyAppendMenu(
 			if (m_pShareData->m_Common.m_sWindow.m_bMenuIcon || !IsWinVista_or_later()) {
 				nFlagAdd = MF_OWNERDRAW;
 			}
-			/* 機能のビットマップの情報を覚えておく */
+			// 機能のビットマップの情報を覚えておく
 			item.m_nBitmapIdx = GetIconIdByFuncId(nForceIconId);
 			m_menuItems.push_back(item);
 		}
@@ -1130,7 +1130,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		::DeleteObject(hBrush);
 #else
 		hBrush = ::GetSysColorBrush(COLOR_HIGHLIGHT);
-		/* 選択ハイライト矩形 */
+		// 選択ハイライト矩形
 		::FillRect(hdc, &rc1, hBrush);
 #endif
 
@@ -1188,16 +1188,16 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	rcText.left += nIndentLeft + 1;
 	rcText.right -= nIndentRight;
 
-	/* TAB文字の前と後ろに分割してテキストを描画する */
+	// TAB文字の前と後ろに分割してテキストを描画する
 	for (j=0; j<nItemStrLen; ++j) {
 		if (pszItemStr[j] == _T('\t')) {
 			break;
 		}
 	}
-	/* TAB文字の後ろ側のテキストを描画する */
+	// TAB文字の後ろ側のテキストを描画する
 	if (j < nItemStrLen) {
 #ifdef DRAW_MENU_3DSTYLE
-		/* アイテムが使用不可 */
+		// アイテムが使用不可
 		if (lpdis->itemState & ODS_DISABLED && !(lpdis->itemState & ODS_SELECTED)) {
 			COLORREF colOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_3DHIGHLIGHT));
 			rcText.left++;
@@ -1226,9 +1226,9 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			DT_SINGLELINE | DT_VCENTER | DT_EXPANDTABS | DT_RIGHT
 		);
 	}
-	/* TAB文字の前側のテキストを描画する */
+	// TAB文字の前側のテキストを描画する
 #ifdef DRAW_MENU_3DSTYLE
-	/* アイテムが使用不可 */
+	// アイテムが使用不可
 	if (lpdis->itemState & ODS_DISABLED && !(lpdis->itemState & ODS_SELECTED)) {
 		COLORREF colOld = ::SetTextColor(hdc, ::GetSysColor(COLOR_3DHIGHLIGHT));
 
@@ -1261,7 +1261,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	// 枠は アイコン横幅xメニュー縦幅で表示し真ん中にアイコンを置く
 
 	if (bMenuIconDraw && (lpdis->itemState & ODS_CHECKED)) {
-		/* アイコンを囲む枠 */
+		// アイコンを囲む枠
 // 2010.07.12 Moca グレーの3D表示をやめる
 #ifdef DRAW_MENU_ICON_3DBUTTON
 		// チェック状態なら凹んだ3D枠を描画する
@@ -1310,7 +1310,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 
 // 2010.07.12 Moca グレーの3D表示をやめる
 #ifdef DRAW_MENU_ICON_3DBUTTON
-		/* アイテムが選択されていない場合は3D枠の中を明るく塗りつぶす */
+		// アイテムが選択されていない場合は3D枠の中を明るく塗りつぶす
 		if (lpdis->itemState & ODS_SELECTED) {
 		}else {
 			HBRUSH hbr = ::GetSysColorBrush(COLOR_3DLIGHT);
@@ -1322,12 +1322,12 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 #endif
 	}
 
-	/* 機能の画像が存在するならメニューアイコン?を描画する */
+	// 機能の画像が存在するならメニューアイコン?を描画する
 	if (bMenuIconDraw && m_menuItems[nItemIndex].m_nBitmapIdx != -1) {
-		/* 3D枠を描画する */
-		/* アイテムが選択されている */
+		// 3D枠を描画する
+		// アイテムが選択されている
 		if (lpdis->itemState & ODS_SELECTED) {
-			/* アイテムが使用不可 */
+			// アイテムが使用不可
 			if (lpdis->itemState & ODS_DISABLED /*&& !(lpdis->itemState & ODS_SELECTED)*/) {
 			}else {
 				if (lpdis->itemState & ODS_CHECKED) {
@@ -1346,9 +1346,9 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			}
 		}
 
-		/* アイテムが使用不可 */
+		// アイテムが使用不可
 		if (lpdis->itemState & ODS_DISABLED) {
-			/* 淡色アイコン */
+			// 淡色アイコン
 			m_pcIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
@@ -1357,7 +1357,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 				ILD_MASK
 			);
 		}else {
-			/* 通常のアイコン */
+			// 通常のアイコン
 			m_pcIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
@@ -1369,7 +1369,7 @@ void CMenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	}else {
 		// チェックボックスを表示
 		if (lpdis->itemState & ODS_CHECKED) {
-			/* チェックマークの表示 */
+			// チェックマークの表示
 			if (bMenuIconDraw) {
 				// だいたい中心座標
 				int nX = lpdis->rcItem.left + 16/2;
@@ -1642,7 +1642,7 @@ LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 //	コメントアウトされていた部分を削除 (CImageListで再利用)
 
 
-/* TBBUTTON構造体にデータをセット */
+// TBBUTTON構造体にデータをセット
 void CMenuDrawer::SetTBBUTTONVal(
 	TBBUTTON*	ptb,
 	int			iBitmap,
@@ -1687,13 +1687,14 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 	}
 
 	if (iCommand >= F_PLUGCOMMAND_FIRST && iCommand <= F_PLUGCOMMAND_LAST) {
+		auto& cmdIcons = m_pShareData->m_PlugCmdIcon;
 		iCmdNo = iCommand - F_PLUGCOMMAND_FIRST;
-		if (m_pShareData->m_PlugCmdIcon[iCmdNo] != 0) {
-			if (m_tbMyButton.size() <= (size_t)(int)m_pShareData->m_PlugCmdIcon[iCmdNo]) {
+		if (cmdIcons[iCmdNo] != 0) {
+			if (m_tbMyButton.size() <= (size_t)(int)cmdIcons[iCmdNo]) {
 				// このウィンドウで未登録
 				// 空きを詰め込む
 				SetTBBUTTONVal(&tbb, TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1, 0, 0, TBSTYLE_BUTTON, 0, 0);
-				for (i=m_tbMyButton.size(); i<m_pShareData->m_PlugCmdIcon[iCmdNo]; ++i) {
+				for (i=m_tbMyButton.size(); i<cmdIcons[iCmdNo]; ++i) {
 					m_tbMyButton.push_back(tbb);
 					++m_nMyButtonNum;
 				}
@@ -1705,7 +1706,7 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 				++m_nMyButtonNum;
 			}else {
 				// 再設定
-				SetTBBUTTONVal(&m_tbMyButton[m_pShareData->m_PlugCmdIcon[iCmdNo]],
+				SetTBBUTTONVal(&m_tbMyButton[cmdIcons[iCmdNo]],
 					iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 			}
 		}else {
@@ -1721,7 +1722,7 @@ void CMenuDrawer::AddToolButton(int iBitmap, int iCommand)
 			// 新規登録
 			SetTBBUTTONVal(&tbb, iBitmap, iCommand, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0);
 
-			m_pShareData->m_PlugCmdIcon[iCmdNo] = (short)m_tbMyButton.size();
+			cmdIcons[iCmdNo] = (short)m_tbMyButton.size();
 			// 最後から２番目に挿入する。一番最後は番兵で固定。
 			// 2010.06.23 Moca 最後に追加に変更
 			m_tbMyButton.push_back(tbb);

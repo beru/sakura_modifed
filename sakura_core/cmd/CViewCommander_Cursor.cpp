@@ -263,7 +263,11 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 /* カーソル右移動
 	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
 */
-void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, bool bRepeat)
+void CViewCommander::Command_RIGHT(
+	bool bSelect,
+	bool bIgnoreCurrentSelection,
+	bool bRepeat
+	)
 {
 	bool bUnderlineDoNotOFF = true;	// アンダーラインを消去しない
 	if (bSelect) {
@@ -278,7 +282,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 		// 対応するため、現在行のデータを取得を移動
 		if (!bIgnoreCurrentSelection) {
 			if (bSelect && ! selInfo.IsTextSelected()) {
-				/* 現在のカーソル位置から選択を開始する */
+				// 現在のカーソル位置から選択を開始する
 				selInfo.BeginSelectArea();
 			}
 			if (!bSelect) {
@@ -377,7 +381,7 @@ void CViewCommander::Command_RIGHT(bool bSelect, bool bIgnoreCurrentSelection, b
 
 		GetCaret().GetAdjustCursorPos( &ptTo );
 		if (bSelect) {
-			/* 現在のカーソル位置によって選択範囲を変更 */
+			// 現在のカーソル位置によって選択範囲を変更
 			selInfo.ChangeSelectAreaByCurrentCursor( ptTo );
 		}
 
@@ -593,12 +597,12 @@ void CViewCommander::Command_GOLINETOP(
 								  @li 4: 選択して移動(合成可)
 								  @li 8: 改行単位で先頭に移動(合成可)
 						*/
-)
+	)
 {
 	using namespace WCODE;
 
 	// lparamの解釈
-	bool	bLineTopOnly = ((lparam & 1) != 0);
+	bool bLineTopOnly = ((lparam & 1) != 0);
 	if (lparam & 4) {
 		bSelect = true;
 	}
@@ -669,7 +673,11 @@ void CViewCommander::Command_GOLINETOP(
 /*! 行末に移動(折り返し単位)
 	@praram nOption	0x08 改行単位(合成可)
 */
-void CViewCommander::Command_GOLINEEND(bool bSelect, int bIgnoreCurrentSelection, int nOption)
+void CViewCommander::Command_GOLINEEND(
+	bool bSelect,
+	int bIgnoreCurrentSelection,
+	int nOption
+	)
 {
 	if (nOption & 4) {
 		bSelect = true;
@@ -721,7 +729,10 @@ void CViewCommander::Command_GOLINEEND(bool bSelect, int bIgnoreCurrentSelection
 
 
 // 半ページアップ		// Oct. 6, 2000 JEPRO added (実は従来のスクロールダウンそのもの)
-void CViewCommander::Command_HalfPageUp( bool bSelect, CLayoutYInt nScrollNum )
+void CViewCommander::Command_HalfPageUp(
+	bool bSelect,
+	CLayoutYInt nScrollNum
+	)
 {
 	if (nScrollNum <= 0) {
 		nScrollNum = m_pCommanderView->GetTextArea().m_nViewRowNum / 2;
@@ -732,7 +743,10 @@ void CViewCommander::Command_HalfPageUp( bool bSelect, CLayoutYInt nScrollNum )
 
 
 // 半ページダウン		// Oct. 6, 2000 JEPRO added (実は従来のスクロールアップそのもの)
-void CViewCommander::Command_HalfPageDown( bool bSelect, CLayoutYInt nScrollNum )
+void CViewCommander::Command_HalfPageDown(
+	bool bSelect,
+	CLayoutYInt nScrollNum
+	)
 {
 	if (nScrollNum <= 0) {
 		nScrollNum = m_pCommanderView->GetTextArea().m_nViewRowNum / 2;
@@ -749,7 +763,10 @@ void CViewCommander::Command_HalfPageDown( bool bSelect, CLayoutYInt nScrollNum 
 		１ページアップに動作変更
 	@date 2014.01.10 Moca カーソルが動かないときも画面をスクロールするように
 */	// Oct. 10, 2000 JEPRO added
-void CViewCommander::Command_1PageUp( bool bSelect, CLayoutYInt nScrollNum )
+void CViewCommander::Command_1PageUp(
+	bool bSelect,
+	CLayoutYInt nScrollNum
+	)
 {
 // GetCaret().Cursor_UPDOWN(-m_pCommanderView->GetTextArea().m_nViewRowNum, bSelect);
 
@@ -780,7 +797,10 @@ void CViewCommander::Command_1PageUp( bool bSelect, CLayoutYInt nScrollNum )
 		１ページダウンに動作変更
 	@date 2014.01.10 Moca カーソルが動かないときも画面をスクロールするように
 */
-void CViewCommander::Command_1PageDown( bool bSelect, CLayoutYInt nScrollNum )
+void CViewCommander::Command_1PageDown(
+	bool bSelect,
+	CLayoutYInt nScrollNum
+	)
 {
 // GetCaret().Cursor_UPDOWN(m_pCommanderView->GetTextArea().m_nViewRowNum, bSelect);
 
@@ -1023,10 +1043,11 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 {
 	CDocLine* pcDocLine;
 	int nCaretPointer = 0;
+	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	
 	bool nFirstLineIsEmptyLine = false;
 	// まずは、現在位置が空行（スペース、タブ、改行記号のみの行）かどうか判別
-	if ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
+	if ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		nFirstLineIsEmptyLine = pcDocLine->IsEmptyLine();
 		++nCaretPointer;
 	}else {
@@ -1035,7 +1056,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	}
 
 	// 次に、nFirstLineIsEmptyLineと異なるところまで読み飛ばす
-	while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
+	while ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		if (pcDocLine->IsEmptyLine() == nFirstLineIsEmptyLine) {
 			++nCaretPointer;
 		}else {
@@ -1053,7 +1074,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 		if (GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
 		}else {
 			// 仕上げに、空行じゃないところまで進む
-			while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
+			while ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 				if (pcDocLine->IsEmptyLine()) {
 					++nCaretPointer;
 				}else {
@@ -1093,12 +1114,13 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 */
 void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 {
+	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	CDocLine* pcDocLine;
 	int nCaretPointer = -1;
 
 	bool nFirstLineIsEmptyLine = false;
 	// まずは、現在位置が空行（スペース、タブ、改行記号のみの行）かどうか判別
-	if ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
+	if ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		nFirstLineIsEmptyLine = pcDocLine->IsEmptyLine();
 		--nCaretPointer;
 	}else {
@@ -1107,7 +1129,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	}
 
 	// 次に、nFirstLineIsEmptyLineと異なるところまで読み飛ばす
-	while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
+	while ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 		if (pcDocLine->IsEmptyLine() == nFirstLineIsEmptyLine) {
 			--nCaretPointer;
 		}else {
@@ -1125,7 +1147,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 			++nCaretPointer;	// 空行の最上行（段落の末端の次の行）で止まる。
 		}else {
 			// 仕上げに、空行じゃないところまで進む
-			while ((pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
+			while ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
 				if (pcDocLine->IsEmptyLine()) {
 					break;
 				}else {
@@ -1245,12 +1267,13 @@ void CViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 */
 void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 {
+	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	CLogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	CLogicPoint ptXY(0, nYOld);
-	const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2());
+	const CDocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();
 	bool bModified = false;
-	if (GetDocument()->m_cDocLineMgr.GetLineCount() == 0) {
+	if (docLineMgr.GetLineCount() == 0) {
 		return;
 	}
 	if (pcDocLine) {
@@ -1278,14 +1301,14 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 			pcDocLine = pcDocLine->GetNextLine();
 		}
 		if (n == 0 && bModified) {
-			const CDocLine* pcDocLineLast = GetDocument()->m_cDocLineMgr.GetDocLineBottom();
+			const CDocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
 			bool bSkip = false;
 			CLogicPoint pos;
 			if (pcDocLineLast) {
 				if (pcDocLineLast->GetEol() == EOL_NONE) {
 					// ぶら下がり[EOF]
 					pos.x = pcDocLineLast->GetLengthWithoutEOL();
-					pos.y = GetDocument()->m_cDocLineMgr.GetLineCount() - 1;
+					pos.y = docLineMgr.GetLineCount() - 1;
 					if (GetCaret().GetCaretLogicPos() == pos) {
 						bSkip = true;
 					}
@@ -1305,7 +1328,7 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 		}
 		if (n == 0) {
 			ptXY.y = CLogicInt(0);
-			pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2());
+			pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 			bModified = false;
 		}
 		if (!GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
@@ -1322,16 +1345,17 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 */
 void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 {
+	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	CLogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	CLogicInt nYOld2 = nYOld;
 	CLogicPoint ptXY(0, nYOld);
-	const CDocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2());
+	const CDocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 	const int nSaveSeq = GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq();
 	bool bModified = false;
 	bool bLast = false;
 	if (!pcDocLine) {
 		// [EOF]
-		const CDocLine* pcDocLineLast = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2() - 1);
+		const CDocLine* pcDocLineLast = docLineMgr.GetLine(ptXY.GetY2() - 1);
 		if (!pcDocLineLast) {
 			// 1行もない
 			return;
@@ -1342,11 +1366,11 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		bLast = true;
 	}
 	if (!bLast) {
-		const CDocLine* pcDocLineLast = GetDocument()->m_cDocLineMgr.GetDocLineBottom();
+		const CDocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
 		if (pcDocLineLast && pcDocLineLast->GetEol() == EOL_NONE) {
 			CLogicPoint pos;
 			pos.x = pcDocLine->GetLengthWithoutEOL();
-			pos.y = GetDocument()->m_cDocLineMgr.GetLineCount() - 1;
+			pos.y = docLineMgr.GetLineCount() - 1;
 			if (GetCaret().GetCaretLogicPos() == pos) {
 				// ぶら下がり[EOF]の位置だった
 				bLast = true;
@@ -1384,7 +1408,7 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 		}
 		if (n == 0) {
 			// 先頭行チェック
-			const CDocLine* pcDocLineTemp = GetDocument()->m_cDocLineMgr.GetDocLineTop();
+			const CDocLine* pcDocLineTemp = docLineMgr.GetDocLineTop();
 			assert( pcDocLineTemp );
 			if (CModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
 				if (GetCaret().GetCaretLogicPos() != CLogicPoint(0,0)) {
@@ -1395,27 +1419,27 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 					return;
 				}
 			}
-			ptXY.y = GetDocument()->m_cDocLineMgr.GetLineCount() - CLogicInt(1);
+			ptXY.y = docLineMgr.GetLineCount() - CLogicInt(1);
 			nYOld2 = ptXY.y;
-			pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2());
+			pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 			bModified = false;
 		}
 		if (!GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
 			break;
 		}
 		if (n == 0) {
-			const CDocLine* pcDocLineTemp = GetDocument()->m_cDocLineMgr.GetDocLineBottom();
+			const CDocLine* pcDocLineTemp = docLineMgr.GetDocLineBottom();
 			assert( pcDocLineTemp );
 			if (CModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
 				// 最終行が変更行の場合は、[EOF]に止まる
 				CLogicPoint pos;
 				if (pcDocLineTemp->GetEol() != EOL_NONE) {
 					pos.x = 0;
-					pos.y = GetDocument()->m_cDocLineMgr.GetLineCount();
+					pos.y = docLineMgr.GetLineCount();
 					pos.y++;
 				}else {
 					pos.x = pcDocLine->GetLengthWithoutEOL();
-					pos.y = GetDocument()->m_cDocLineMgr.GetLineCount() - 1;
+					pos.y = docLineMgr.GetLineCount() - 1;
 				}
 				if (GetCaret().GetCaretLogicPos() != pos) {
 					ptXY = pos;

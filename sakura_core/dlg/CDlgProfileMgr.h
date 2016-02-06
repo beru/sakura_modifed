@@ -52,17 +52,17 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	int		DoModal( HINSTANCE, HWND, LPARAM );	/* モーダルダイアログの表示 */
+	int		DoModal( HINSTANCE, HWND, LPARAM );	// モーダルダイアログの表示
 
 protected:
 
 	BOOL	OnBnClicked( int );
 	INT_PTR	DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam );
 
-	void	SetData();	/* ダイアログデータの設定 */
-	void	SetData( int );	/* ダイアログデータの設定 */
-	int		GetData();	/* ダイアログデータの取得 */
-	int		GetData( bool );	/* ダイアログデータの取得 */
+	void	SetData();			// ダイアログデータの設定
+	void	SetData( int );		// ダイアログデータの設定
+	int		GetData();			// ダイアログデータの取得
+	int		GetData( bool );	// ダイアログデータの取得
 	LPVOID	GetHelpIdTable(void);
 
 	void	UpdateIni();

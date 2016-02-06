@@ -105,7 +105,10 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 		m_psLangInfoList.push_back(psLangInfo);
 	}
 
-	if (m_psLangInfo && m_psLangInfo->hInstance && m_psLangInfo->hInstance != GetModuleHandle(NULL)) {
+	if (m_psLangInfo
+		&& m_psLangInfo->hInstance
+		&& m_psLangInfo->hInstance != GetModuleHandle(NULL)
+	) {
 		// 読み込み済みのDLLを解放する
 		::FreeLibrary(m_psLangInfo->hInstance);
 		m_psLangInfo->hInstance = NULL;
@@ -161,11 +164,8 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 
 /*!
 	@brief メッセージリソースDLLをロードする
-	
 	@retval メッセージリソースDLLのインスタンスハンドル
-
 	@note メッセージリソースDLLが未指定、または読み込みエラー発生の時はNULLが返る
-
 	@date 2011.04.10 nasukoji	新規作成
 */
 HINSTANCE CSelectLang::LoadLangRsrcLibrary(SSelLangInfo& lang)
@@ -366,7 +366,9 @@ void CSelectLang::ChangeLang(TCHAR* pszDllName)
 
 HINSTANCE CSelectLang::ChangeLang(UINT nIndex)
 {
-	if (m_psLangInfoList.size() <= nIndex || m_psLangInfoList.at(nIndex) == m_psLangInfo) {
+	if (m_psLangInfoList.size() <= nIndex
+		|| m_psLangInfoList.at(nIndex) == m_psLangInfo
+	) {
 		return m_psLangInfo->hInstance;
 	}
 

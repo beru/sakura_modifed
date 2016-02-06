@@ -198,7 +198,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 		}
 		return NULL;
 	}
-//	/*+++++++ ’á‘¬”Å +++++++++*/
+//	// +++++++ ’á‘¬”Å +++++++++
 //	if (nLineNum < (m_nLines / 2)) {
 //		nCount = 0;
 //		pLayout = m_pLayoutTop;
@@ -226,7 +226,7 @@ const CLayout* CLayoutMgr::SearchLineByLayoutY(
 //	}
 
 
-	/*+++++++‚í‚¸‚©‚É‚‘¬”Å+++++++*/
+	// +++++++‚í‚¸‚©‚É‚‘¬”Å+++++++
 	// 2004.03.28 Moca m_pLayoutPrevRefer‚æ‚èATop,Bot‚Ì‚Ù‚¤‚ª‹ß‚¢ê‡‚ÍA‚»‚¿‚ç‚ð—˜—p‚·‚é
 	CLayoutInt nPrevToLineNumDiff = t_abs(m_nPrevReferLine - nLineNum);
 	if (0

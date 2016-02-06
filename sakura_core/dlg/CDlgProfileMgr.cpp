@@ -57,7 +57,7 @@ CDlgProfileMgr::CDlgProfileMgr()
 	return;
 }
 
-/*! モーダルダイアログの表示 */
+//! モーダルダイアログの表示
 int CDlgProfileMgr::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
@@ -106,7 +106,7 @@ static std::tstring GetProfileMgrFileName(LPCTSTR profName = NULL)
 }
 
 
-/*! ダイアログデータの設定 */
+//! ダイアログデータの設定
 void CDlgProfileMgr::SetData()
 {
 	SetData(-1);
@@ -167,7 +167,7 @@ static bool MyList_GetText(
 }
 
 
-/*! ダイアログデータの取得 */
+//! ダイアログデータの取得
 int CDlgProfileMgr::GetData()
 {
 	return GetData(true);

@@ -125,7 +125,7 @@ int CBackupAgent::MakeBackUp(
 	}
 	//@@@ 2002.03.23 end
 
-	if (bup_setting.m_bBackUpDialog) {	/* バックアップの作成前に確認 */
+	if (bup_setting.m_bBackUpDialog) {	// バックアップの作成前に確認
 		ConfirmBeep();
 		int nRet;
 		if (bup_setting.m_bBackUpDustBox && !dustflag) {	// 共通設定：バックアップファイルをごみ箱に放り込む	//@@@ 2001.12.11 add start MIK	// 2002.03.23

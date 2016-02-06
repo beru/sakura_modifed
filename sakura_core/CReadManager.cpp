@@ -50,7 +50,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	// 文字コード種別
 	const STypeConfigMini* type;
 	CDocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
-	ECodeType	eCharCode = sLoadInfo.eCharCode;
+	ECodeType eCharCode = sLoadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
 		CCodeMediator cmediator( type->m_encoding );
 		eCharCode = cmediator.CheckKanjiCodeOfFile( pszPath );
@@ -58,7 +58,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	if (!IsValidCodeOrCPType(eCharCode)) {
 		eCharCode = type->m_encoding.m_eDefaultCodetype;	// 2011.01.24 ryoji デフォルト文字コード
 	}
-	bool	bBom;
+	bool bBom;
 	if (eCharCode == type->m_encoding.m_eDefaultCodetype) {
 		bBom = type->m_encoding.m_bDefaultBom;	// 2011.01.24 ryoji デフォルトBOM
 	}else {
@@ -92,9 +92,9 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		pFileInfo->SetBomExist( bBom );
 
 		// ファイル時刻の取得
-		FILETIME	FileTime;
-		if (cfl.GetFileTime(NULL, NULL, &FileTime)) {
-			pFileInfo->SetFileTime( FileTime );
+		FILETIME fileTime;
+		if (cfl.GetFileTime(NULL, NULL, &fileTime)) {
+			pFileInfo->SetFileTime( fileTime );
 		}
 
 		// ReadLineはファイルから 文字コード変換された1行を読み出します

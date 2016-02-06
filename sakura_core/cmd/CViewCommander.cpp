@@ -433,8 +433,8 @@ bool CViewCommander::HandleCommand(
 		Command_GREP_DIALOG();
 		return bRet;
 	case F_GREP:			Command_GREP(); break;							// Grep
-	case F_GREP_REPLACE_DLG:	//Grep置換ダイアログの表示
-		/* 再帰処理対策 */
+	case F_GREP_REPLACE_DLG:	// Grep置換ダイアログの表示
+		// 再帰処理対策
 		m_pCommanderView->SetUndoBuffer( true );
 		Command_GREP_REPLACE_DLG();
 		return bRet;
@@ -680,7 +680,7 @@ bool CViewCommander::HandleCommand(
 			CJackManager::getInstance()->GetUsablePlug(PP_COMMAND, nCommand, &plugs);
 
 			if (plugs.size() > 0) {
-				assert_warning(1 == plugs.size());
+				assert_warning(plugs.size() == 1);
 				// インタフェースオブジェクト準備
 				CWSHIfObj::List params;
 				// プラグイン呼び出し
@@ -719,7 +719,11 @@ void CViewCommander::Sub_BoxSelectLock( int flags )
 }
 
 
-CLogicInt CViewCommander::ConvertEol(const wchar_t* pszText, CLogicInt nTextLen, wchar_t* pszConvertedText)
+CLogicInt CViewCommander::ConvertEol(
+	const wchar_t* pszText,
+	CLogicInt nTextLen,
+	wchar_t* pszConvertedText
+	)
 {
 	// original by 2009.02.28 salarm
 	CLogicInt nConvertedTextLen;
@@ -764,7 +768,12 @@ CLogicInt CViewCommander::ConvertEol(const wchar_t* pszText, CLogicInt nTextLen,
 
 	@date 2010.04.21 ryoji	新規作成（数カ所で用いられていた類似コードの共通化）
 */
-void CViewCommander::AlertNotFound(HWND hwnd, bool bReplaceAll, LPCTSTR format, ...)
+void CViewCommander::AlertNotFound(
+	HWND hwnd,
+	bool bReplaceAll,
+	LPCTSTR format,
+	...
+	)
 {
 	if (GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND
 		&& !bReplaceAll

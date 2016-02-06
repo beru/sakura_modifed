@@ -32,7 +32,7 @@ void CPropertyManager::Create(
 	HWND			hwndOwner,
 	CImageListMgr*	pImageList,
 	CMenuDrawer*	pMenuDrawer
-)
+	)
 {
 	m_hwndOwner = hwndOwner;
 	m_pImageList = pImageList;
@@ -47,7 +47,7 @@ bool CPropertyManager::OpenPropertySheet(
 	HWND	hWnd,
 	int		nPageNum,
 	bool	bTrayProc
-)
+	)
 {
 	bool bRet;
 	auto pcPropCommon = std::make_unique<CPropCommon>();
@@ -67,7 +67,8 @@ bool CPropertyManager::OpenPropertySheet(
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
 		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
-		bool bGroup = (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd && !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin);
+		auto& csTabBar = GetDllShareData().m_Common.m_sTabBar;
+		bool bGroup = (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin);
 
 		// 印刷中にキーワードを上書きしないように
 		CShareDataLockCounter* pLock = NULL;
@@ -78,7 +79,7 @@ bool CPropertyManager::OpenPropertySheet(
 		// 自ウィンドウには最後に通知されます。大抵は、OnChangeSetting にあります。
 		// ここでしか適用しないと、ほかのウィンドウが変更されません。
 
-		if (bGroup != (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd && !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin )) {
+		if (bGroup != (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin )) {
 			CAppNodeManager::getInstance()->ResetGroupId();
 		}
 

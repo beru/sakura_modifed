@@ -27,8 +27,7 @@
 #include <stdio.h>
 #define	MYDBGMSG(s) \
 {\
-	FILE	*fp;\
-	fp = fopen("debug.log", "a");\
+	FILE* fp = fopen("debug.log", "a");\
 	fprintf(fp, "%08x: %ls  BMatch(%d)=%d, Use=%d, Idx=%d\n", &m_pTypes, s, &BMatch, BMatch, m_bUseRegexKeyword, m_nTypeIndex);\
 	fclose(fp);\
 }

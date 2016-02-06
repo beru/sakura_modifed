@@ -838,7 +838,7 @@ void CPrintPreview::OnChangePrintSetting(void)
 
 	// 2014.07.23 レイアウト行番号で行番号幅が合わない時は再計算
 	if (m_pPrintSetting->m_bPrintLineNumber) {
-		/* 行番号表示に必要な桁数を計算 */
+		// 行番号表示に必要な桁数を計算
 		int tempLineNum = m_pParentWnd->GetActiveView().GetTextArea().DetectWidthOfLineNumberArea_calculate(m_pLayoutMgr_Print);
 		if (m_nPreview_LineNumberColumns != tempLineNum) {
 			OnChangeSetting();

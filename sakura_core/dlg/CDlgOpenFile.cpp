@@ -458,25 +458,25 @@ UINT_PTR CALLBACK OFNHookProc(
 				// 文字コード選択コンボボックス 値を取得
 				nIdx = Combo_GetCurSel(pData->m_hwndComboCODES);
 				lRes = Combo_GetItemData(pData->m_hwndComboCODES, nIdx);
-				pData->m_nCharCode = (ECodeType)lRes;	/* 文字コード */
+				pData->m_nCharCode = (ECodeType)lRes;	// 文字コード
 				// Feb. 9, 2001 genta
 				if (pData->m_bUseEol) {
 					nIdx = Combo_GetCurSel(pData->m_hwndComboEOL);
 					lRes = Combo_GetItemData(pData->m_hwndComboEOL, nIdx);
-					pData->m_cEol = (EEolType)lRes;	/* 文字コード */
+					pData->m_cEol = (EEolType)lRes;	// 文字コード
 				}
 				// From Here Jul. 26, 2003 ryoji
 				// BOMチェックボックスの状態を取得
 				if (pData->m_bUseBom) {
 					lRes = BtnCtl_GetCheck(pData->m_hwndCheckBOM);
-					pData->m_bBom = (lRes == BST_CHECKED);	/* BOM */
+					pData->m_bBom = (lRes == BST_CHECKED);	// BOM
 				}
 				// To Here Jul. 26, 2003 ryoji
 
 //			MYTRACE(_T("文字コード  lRes=%d\n"), lRes);
 //			MYTRACE(_T("pofn->hdr.code=CDN_FILEOK        \n"));break;
 			}
-			break;	/* CDN_FILEOK */
+			break;	// CDN_FILEOK
 
 		case CDN_FOLDERCHANGE  :
 //			MYTRACE(_T("pofn->hdr.code=CDN_FOLDERCHANGE  \n"));
@@ -602,7 +602,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					CDialog::OnCbnDropDown(hwndCtl, true);
 					break;
 				}
-				break;	/* CBN_DROPDOWN */
+				break;	// CBN_DROPDOWN
 			}
 		case BN_CLICKED:
 			switch (wID) {
@@ -660,10 +660,10 @@ CDlgOpenFile::CDlgOpenFile()
 	// メンバの初期化
 	m_mem = new CDlgOpenFileMem();
 
-	m_mem->m_hInstance = NULL;		/* アプリケーションインスタンスのハンドル */
-	m_mem->m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
+	m_mem->m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
+	m_mem->m_hwndParent = NULL;		// オーナーウィンドウのハンドル
 
-	/* 共有データ構造体のアドレスを返す */
+	// 共有データ構造体のアドレスを返す
 	m_mem->m_pShareData = &GetDllShareData();
 
 	TCHAR szFile[_MAX_PATH + 1];
@@ -677,7 +677,7 @@ CDlgOpenFile::CDlgOpenFile()
 	_tcscpy(m_mem->m_szInitialDir, szDrive);
 	_tcscat(m_mem->m_szInitialDir, szDir);
 
-	_tcscpy(m_mem->m_szDefaultWildCard, _T("*.*"));	/*「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される） */
+	_tcscpy(m_mem->m_szDefaultWildCard, _T("*.*"));	//「開く」での最初のワイルドカード（保存時の拡張子補完でも使用される）
 
 	return;
 }
@@ -872,7 +872,7 @@ bool CDlgOpenFile::DoModalOpenDlg(
 	)
 {
 	auto pData = std::make_unique<CDlgOpenFileData>();
-	pData->m_bIsSaveDialog = FALSE;	/* 保存のダイアログか */
+	pData->m_bIsSaveDialog = FALSE;	// 保存のダイアログか
 
 	bool bMultiSelect = pFileNames != NULL;
 
@@ -888,7 +888,7 @@ bool CDlgOpenFile::DoModalOpenDlg(
 
 	// メンバの初期化
 	pData->m_bViewMode = pLoadInfo->bViewMode;
-	pData->m_nCharCode = pLoadInfo->eCharCode;	/* 文字コード自動判別 */
+	pData->m_nCharCode = pLoadInfo->eCharCode;	// 文字コード自動判別
 	pData->m_nHelpTopicID = ::FuncID_To_HelpContextID(F_FILEOPEN);	//Stonee, 2001/05/18 機能番号からヘルプトピック番号を調べるようにした
 	pData->m_bUseCharCode = true;
 	pData->m_bUseEol = false;	//	Feb. 9, 2001 genta
@@ -1115,7 +1115,7 @@ void CDlgOpenFile::InitOfn(OPENFILENAMEZ* ofn)
 	ofn->lStructSize = IsWinV5forOfn() ? sizeof(OPENFILENAMEZ): OPENFILENAME_SIZE_VERSION_400;
 	ofn->lpfnHook = OFNHookProc;
 	ofn->lpTemplateName = MAKEINTRESOURCE(IDD_FILEOPEN);	// <-_T("IDD_FILEOPEN"); 2008/7/26 Uchi
-	ofn->nFilterIndex = 1;	//Jul. 09, 2001 JEPRO		/* 「開く」での最初のワイルドカード */
+	ofn->nFilterIndex = 1;	//Jul. 09, 2001 JEPRO		// 「開く」での最初のワイルドカード
 }
 
 /*! 初期レイアウト設定処理

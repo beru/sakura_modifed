@@ -838,7 +838,7 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	return true;
 }
 
-/*!	@brief 言語選択後の文字列更新処理 */
+//!	@brief 言語選択後の文字列更新処理
 void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);

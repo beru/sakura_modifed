@@ -269,7 +269,7 @@ std::vector<std::wstring> wstring_split(std::wstring sTrg, wchar_t cSep)
     return splitVec;
 }
 
-/*!	プラグイン定義ファイルのStringセクションを読み込む */
+//!	プラグイン定義ファイルのStringセクションを読み込む
 bool CPlugin::ReadPluginDefString(CDataProfile *cProfile, CDataProfile *cProfileMlang)
 {
 	WCHAR bufKey[64];

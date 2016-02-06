@@ -870,7 +870,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	}
 	bool bFirstLine = true;
 	bool bSetMark = false;
-	/* 後ろから処理していく */
+	// 後ろから処理していく
 	for (; i >= pArg->sDelRange.GetFrom().y && pCDocLine; --i) {
 		pLine = pCDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
 		nLineLen = pCDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
@@ -1002,7 +1002,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				CNativeW tmp;
 				tmp.SetString(pLine, nWorkPos);
 				pCDocLine->SetDocLineStringMove(&tmp);
-				CModifyVisitor().SetLineModified(pCDocLine, pArg->nDelSeq);	/* 変更フラグ */
+				CModifyVisitor().SetLineModified(pCDocLine, pArg->nDelSeq);	// 変更フラグ
 			}
 		}else {
 			// 行内だけの削除

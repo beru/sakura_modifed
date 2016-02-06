@@ -332,7 +332,9 @@ re_do:;								// hor
 		}
 	}
 	if (bFound) {
-		if (nYOld >= ptXY.y) m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT1));
+		if (nYOld >= ptXY.y) {
+			m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT1));
+		}
 	}else {
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_SRNEXT2));
 		AlertNotFound(m_pCommanderView->GetHwnd(), false, LS(STR_BOOKMARK_NEXT_NOT_FOUND));

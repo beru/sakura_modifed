@@ -290,7 +290,7 @@ LRESULT CSplitBoxWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		}
 	}else {
 		::GetClientRect(::GetParent(GetParentHwnd()), &rc);
-		nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);	/* 垂直スクロールバーの幅 */
+		nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL);	// 垂直スクロールバーの幅
 		rc.right -= nCxVScroll;
 
 		::GetCursorPos(&po);

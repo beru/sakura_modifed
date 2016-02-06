@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "types/CType.h"
 
-/* awk */
+// awk
 void CType_Awk::InitTypeConfigImp(STypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq

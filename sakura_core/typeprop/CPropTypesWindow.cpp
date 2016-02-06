@@ -185,7 +185,7 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 		pMNUD  = (NM_UPDOWN*)lParam;
 		switch ((int)wParam) {
 		case IDC_SPIN_LINENUMWIDTH:
-			/* s”Ô†‚ÌÅ¬Œ…” */
+			// s”Ô†‚ÌÅ¬Œ…”
 //			MYTRACE( _T("IDC_SPIN_LINENUMWIDTH\n") );
 			int nVal = ::GetDlgItemInt(hwndDlg, IDC_EDIT_LINENUMWIDTH, NULL, FALSE);
 			if (pMNUD->iDelta < 0) {

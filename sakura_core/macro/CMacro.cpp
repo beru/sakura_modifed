@@ -956,7 +956,7 @@ bool CMacro::HandleCommand(
 				nBackupSearchKeySequence = pcEditView->m_nCurSearchKeySequence;
 				bAddHistory = false;
 			}
-			/* 正規表現 */
+			// 正規表現
 			if (lFlag & 0x04
 				&& !CheckRegexpSyntax(Argument[0], NULL, true)
 			) {
@@ -1075,8 +1075,8 @@ bool CMacro::HandleCommand(
 				return false;
 			}
 			//	常に外部ウィンドウに。
-			/*======= Grepの実行 =============*/
-			/* Grep結果ウィンドウの表示 */
+			// ======= Grepの実行 =============
+			// Grep結果ウィンドウの表示
 			CNativeW cmWork1;	cmWork1.SetString( Argument[0] );	cmWork1.Replace( L"\"", L"\"\"" );	//	検索文字列
 			CNativeW cmWork4;
 			if (bGrepReplace) {
@@ -1122,14 +1122,14 @@ bool CMacro::HandleCommand(
 			auto_sprintf( szTemp, _T("%d"), nCharSet );
 			cCmdLine.AppendString(szTemp);
 
-			//GOPTオプション
+			// GOPTオプション
 			pOpt[0] = '\0';
-			if (lFlag & 0x01) _tcscat( pOpt, _T("S") );	/* サブフォルダからも検索する */
-			if (lFlag & 0x04) _tcscat( pOpt, _T("L") );	/* 英大文字と英小文字を区別する */
-			if (lFlag & 0x08) _tcscat( pOpt, _T("R") );	/* 正規表現 */
-			if ((lFlag & 0x400020) == 0x20) _tcscat( pOpt, _T("P") );	// 行を出力する
+			if (lFlag & 0x01) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
+			if (lFlag & 0x04) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
+			if (lFlag & 0x08) _tcscat( pOpt, _T("R") );	// 正規表現
+			if ((lFlag & 0x400020) == 0x20) _tcscat( pOpt, _T("P") );			// 行を出力する
 			else if ((lFlag & 0x400020) == 0x400000) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する
-			if ((lFlag & 0xC0) == 0x40) _tcscat( pOpt, _T("2") );	/* Grep: 出力形式 */
+			if ((lFlag & 0xC0) == 0x40) _tcscat( pOpt, _T("2") );				// Grep: 出力形式
 			else if ((lFlag & 0xC0) == 0x80) _tcscat( pOpt, _T("3") );
 			else _tcscat( pOpt, _T("1") );
 			if (lFlag & 0x10000) _tcscat( pOpt, _T("W") );
@@ -1156,8 +1156,8 @@ bool CMacro::HandleCommand(
 				sLoadInfo,
 				cCmdLine.GetStringPtr()
 			);
-			/*======= Grepの実行 =============*/
-			/* Grep結果ウィンドウの表示 */
+			// ======= Grepの実行 =============
+			// Grep結果ウィンドウの表示
 		}
 		break;
 	case F_FILEOPEN2:

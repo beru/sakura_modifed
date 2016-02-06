@@ -215,8 +215,8 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	if (!PtInRect(rc, *po)) {
 		return false;
 	}
-	if (!( !m_bInMenuLoop &&					/* １．メニュー モーダル ループに入っていない */
-		300 < ::GetTickCount() - m_dwTipTimer	/* ２．一定時間以上、マウスが固定されている */
+	if (!( !m_bInMenuLoop &&					// １．メニュー モーダル ループに入っていない
+		300 < ::GetTickCount() - m_dwTipTimer	// ２．一定時間以上、マウスが固定されている
 	)) {
 		return false;
 	}
@@ -287,8 +287,8 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 	m_cTipWnd.m_cKey = cmemCurText;
 	m_cTipWnd.m_cInfo = cmemCurText.GetStringT();
 	m_cTipWnd.m_nSearchLine = (Int)ptNew.y;
-	m_dwTipTimer = 0;		// 辞書Tipを表示している */
-	m_poTipCurPos = *po;	// 現在のマウスカーソル位置 */
+	m_dwTipTimer = 0;		// 辞書Tipを表示している
+	m_poTipCurPos = *po;	// 現在のマウスカーソル位置
 	return true;			// ここまで来ていればヒット・ワード
 }
 

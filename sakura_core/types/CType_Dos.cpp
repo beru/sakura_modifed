@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "types/CType.h"
 
-/* MS-DOSバッチファイル */
+// MS-DOSバッチファイル
 void CType_Dos::InitTypeConfigImp(STypeConfig* pType)
 {
 	// 名前と拡張子

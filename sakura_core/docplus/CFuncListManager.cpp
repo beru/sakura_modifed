@@ -60,7 +60,7 @@ bool CFuncListManager::SearchFuncListMark(
 		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
-				*pnLineNum = nLinePos;				/* マッチ行 */
+				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
 			--nLinePos;
@@ -72,7 +72,7 @@ bool CFuncListManager::SearchFuncListMark(
 		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
-				*pnLineNum = nLinePos;				/* マッチ行 */
+				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
 			++nLinePos;

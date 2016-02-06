@@ -62,7 +62,7 @@ bool CEditView::IsImeON(void)
 	return bRet;
 }
 
-/* IME編集エリアの位置を変更 */
+// IME編集エリアの位置を変更
 void CEditView::SetIMECompFormPos(void)
 {
 	//
@@ -88,7 +88,7 @@ void CEditView::SetIMECompFormPos(void)
 }
 
 
-/* IME編集エリアの表示フォントを変更 */
+// IME編集エリアの表示フォントを変更
 void CEditView::SetIMECompFormFont(void)
 {
 	//

@@ -125,11 +125,11 @@ protected:
 	||  実装ヘルパ関数
 	*/
 	BOOL OnJump( bool bCheckAutoClose = true, bool bFileJump = true );	//	bCheckAutoClose：「このダイアログを自動的に閉じる」をチェックするかどうか
-	void SetTreeCpp(HWND);	// ツリーコントロールの初期化：C++メソッドツリー
+	void SetTreeCpp(HWND);			// ツリーコントロールの初期化：C++メソッドツリー
 	void SetTreeJava(HWND, bool);	// ツリーコントロールの初期化：Javaメソッドツリー
-	void SetTree(bool tagjump = false, bool nolabel = false);		/* ツリーコントロールの初期化：汎用品 */
+	void SetTree(bool tagjump = false, bool nolabel = false);		// ツリーコントロールの初期化：汎用品
 	void SetTreeFile();				// ツリーコントロールの初期化：ファイルツリー
-	void SetListVB( void );			/* リストビューコントロールの初期化：VisualBasic */		// Jul 10, 2003  little YOSHI
+	void SetListVB( void );			// リストビューコントロールの初期化：VisualBasic		// Jul 10, 2003  little YOSHI
 	void SetDocLineFuncList();
 
 	void SetTreeFileSub( HTREEITEM, const TCHAR* );

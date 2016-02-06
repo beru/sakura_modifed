@@ -30,7 +30,7 @@
 #include "outline/CFuncInfoArr.h"
 #include "view/Colors/EColorIndexType.h"
 
-/* COBOL */
+// COBOL
 void CType_Cobol::InitTypeConfigImp(STypeConfig* pType)
 {
 	// 名前と拡張子
@@ -53,7 +53,7 @@ void CType_Cobol::InitTypeConfigImp(STypeConfig* pType)
 }
 
 
-/*! COBOL アウトライン解析 */
+//! COBOL アウトライン解析
 void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
@@ -77,11 +77,11 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 		if (!pLine) {
 			break;
 		}
-		/* コメント行か */
+		// コメント行か
 		if (7 <= nLineLen && pLine[6] == L'*') {
 			continue;
 		}
-		/* ラベル行か */
+		// ラベル行か
 		if (8 <= nLineLen && pLine[7] != L' ') {
 			k = 0;
 			for (i=7; i<nLineLen; ) {

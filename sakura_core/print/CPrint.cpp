@@ -157,7 +157,7 @@ BOOL CPrint::PrintDlg(
 	m_hDevNames = pPD->hDevNames;
 
 	pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
-	/* プリンタ設定 DEVNAMES用*/
+	// プリンタ設定 DEVNAMES用
 	DEVNAMES* pDEVNAMES = (DEVNAMES*)::GlobalLock(m_hDevNames);
 
 	// プリンタドライバ名
@@ -234,7 +234,7 @@ BOOL CPrint::GetDefaultPrinter(MYDEVMODE* pMYDEVMODE)
 
 	// MYDEVMODEへのコピー
 	DEVMODE* pDEVMODE = (DEVMODE*)::GlobalLock(m_hDevMode);
-	/* プリンタ設定 DEVNAMES用*/
+	// プリンタ設定 DEVNAMES用
 	DEVNAMES* pDEVNAMES = (DEVNAMES*)::GlobalLock(m_hDevNames);
 
 	// プリンタドライバ名

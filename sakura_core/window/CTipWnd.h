@@ -30,7 +30,7 @@ public:
 	*/
 	CTipWnd();
 	~CTipWnd();
-	void Create(HINSTANCE, HWND);	/* ‰Šú‰» */
+	void Create(HINSTANCE, HWND);	// ‰Šú‰»
 
 	/*
 	||  Attributes & Operations

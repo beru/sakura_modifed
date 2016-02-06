@@ -170,7 +170,7 @@ void CViewCommander::Command_COMPARE(void)
 	// 本処理
 	Commander_COMPARE_core(*this, bDifferent, hwndCompareWnd, poSrc, poDes);
 
-	/* 比較後、左右に並べて表示 */
+	// 比較後、左右に並べて表示
 // From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
 	if (GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz) {

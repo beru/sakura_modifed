@@ -171,18 +171,21 @@ void CViewCommander::Command_LineCutToEnd(void)
 		Command_CUT();
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(
+		GetCaret().GetCaretLayoutPos().GetY2()
+	);
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
 	CLayoutPoint ptPos;
-
-	if (EOL_NONE == pCLayout->GetDocLineRef()->GetEol()) {	// 改行コードの種類
+	auto& docLineRef = *pCLayout->GetDocLineRef();
+	if (docLineRef.GetEol() == EOL_NONE) {	// 改行コードの種類
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
-				pCLayout->GetDocLineRef()->GetLengthWithEOL(),
+				docLineRef.GetLengthWithEOL(),
 				pCLayout->GetLogicLineNo()
 			),
 			&ptPos
@@ -190,7 +193,7 @@ void CViewCommander::Command_LineCutToEnd(void)
 	}else {
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
-				pCLayout->GetDocLineRef()->GetLengthWithEOL() - pCLayout->GetDocLineRef()->GetEol().GetLen(),
+				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pCLayout->GetLogicLineNo()
 			),
 			&ptPos
@@ -254,7 +257,9 @@ void CViewCommander::Command_LineDeleteToEnd(void)
 		m_pCommanderView->DeleteData(true);
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+
+	auto& caretLayoutPos = GetCaret().GetCaretLayoutPos();
+	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(caretLayoutPos.GetY2());	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
@@ -262,10 +267,11 @@ void CViewCommander::Command_LineDeleteToEnd(void)
 
 	CLayoutPoint ptPos;
 
-	if (EOL_NONE == pCLayout->GetDocLineRef()->GetEol()) {	// 改行コードの種類
+	auto& docLineRef = *pCLayout->GetDocLineRef();
+	if (docLineRef.GetEol() == EOL_NONE) {	// 改行コードの種類
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
-				pCLayout->GetDocLineRef()->GetLengthWithEOL(),
+				docLineRef.GetLengthWithEOL(),
 				pCLayout->GetLogicLineNo()
 			),
 			&ptPos
@@ -273,21 +279,23 @@ void CViewCommander::Command_LineDeleteToEnd(void)
 	}else {
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			CLogicPoint(
-				pCLayout->GetDocLineRef()->GetLengthWithEOL() - pCLayout->GetDocLineRef()->GetEol().GetLen(),
+				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pCLayout->GetLogicLineNo()
 			),
 			&ptPos
 		);
 	}
 
-	if (GetCaret().GetCaretLayoutPos().GetY2() == ptPos.y && GetCaret().GetCaretLayoutPos().GetX2() >= ptPos.x) {
+	if (caretLayoutPos.GetY2() == ptPos.y
+		&& caretLayoutPos.GetX2() >= ptPos.x
+	) {
 		ErrorBeep();
 		return;
 	}
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
+	CLayoutRange sRange(caretLayoutPos, ptPos);
 	selInfo.SetSelectArea(sRange);
 
 	// 選択領域削除
