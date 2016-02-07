@@ -33,7 +33,7 @@
 #include <string>
 
 #include "CStream.h"
-class CCodeBase;
+class CodeBase;
 
 // テキスト入力ストリーム (UTF-8, SJIS)
 class CTextInputStream : public CStream {
@@ -66,7 +66,7 @@ public:
 	void WriteInt(int n);
 
 private:
-	CCodeBase* m_pcCodeBase;
+	CodeBase* m_pcCodeBase;
 };
 
 

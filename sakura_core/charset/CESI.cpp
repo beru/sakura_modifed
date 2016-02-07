@@ -1185,7 +1185,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 
 	// テスト実行
 	cesi.SetInformation(pS, nLen/*, CODE_SJIS*/);
-	ECodeType ecode_result = CCodeMediator::CheckKanjiCode(&cesi);
+	ECodeType ecode_result = CodeMediator::CheckKanjiCode(&cesi);
 
 	//
 	// 判別結果を分析
@@ -1212,7 +1212,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(LS(STR_ESI_DEFAULT_CHARCODE));	// "デフォルト文字コード\r\n"
 
 	TCHAR szCpName[100];
-	CCodePage::GetNameNormal(szCpName, doc.m_cDocType.GetDocumentAttribute().m_encoding.m_eDefaultCodetype);
+	CodePage::GetNameNormal(szCpName, doc.m_cDocType.GetDocumentAttribute().m_encoding.m_eDefaultCodetype);
 	auto_sprintf(szWork, _T("\t%ts\r\n"), szCpName);
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_SAMPLE_LEN));	// "サンプルデータ長\r\n"
@@ -1247,7 +1247,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 		}
 		cesi.GetEvaluation(cesi.m_apMbcInfo[i]->eCodeID, &v1, &v2);
 		auto_sprintf(szWork, LS(STR_ESI_OTHER_B_AND_P),	// "\t\t%d.%ts\t固有バイト数 %d\tポイント数 %d\r\n"
-			i + 1, CCodeTypeName(cesi.m_apMbcInfo[i]->eCodeID).Normal(), v1, v2
+			i + 1, CodeTypeName(cesi.m_apMbcInfo[i]->eCodeID).Normal(), v1, v2
 		);
 		pcmtxtOut->AppendString(szWork);
 	}
@@ -1257,7 +1257,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(LS(STR_ESI_RESULT));	// "判定結果\r\n"
 
 
-	auto_sprintf( szWork, _T("\t%ts\r\n"), CCodeTypeName(ecode_result).Normal() );
+	auto_sprintf( szWork, _T("\t%ts\r\n"), CodeTypeName(ecode_result).Normal() );
 	pcmtxtOut->AppendString(szWork);
 
 

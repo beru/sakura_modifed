@@ -3,14 +3,14 @@
 #include "charset/charcode.h"
 #include "charset/CharPointer.h"
 
-void CMyString::set(const char* szData)
+void String::set(const char* szData)
 {
 	wchar_t* wszData = mbstowcs_new(szData);
 	set(wszData);
 	delete[] wszData;
 }
 
-void CMyString::set(const char* szData, int nLength)
+void String::set(const char* szData, int nLength)
 {
 	int nLen;
 	wchar_t* wszData = mbstowcs_new(szData, nLength, &nLen);
@@ -18,14 +18,14 @@ void CMyString::set(const char* szData, int nLength)
 	delete[] wszData;
 }
 
-const char* CMyString::c_astr() const
+const char* String::c_astr() const
 {
 	if (!m_str_cache)
 		m_str_cache = wcstombs_new(m_wstr.c_str());
 	return m_str_cache;
 }
 
-CMyString::~CMyString()
+String::~String()
 {
 	m_delete2(m_str_cache);
 }

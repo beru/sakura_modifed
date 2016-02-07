@@ -111,7 +111,7 @@ protected:
 	||	また、DrawXXXXX()から抜けてきたときは、半角フォントに設定されていることを期待してよい。
 	||	フォントは、半角フォントと全角フォントしかないことも期待してよい。
 	*/
-	void DrawHeaderFooter(HDC hdc, const CMyRect& rect , bool bHeader);
+	void DrawHeaderFooter(HDC hdc, const Rect& rect , bool bHeader);
 	CColorStrategy* DrawPageTextFirst(int nPageNum);
 	CColorStrategy* DrawPageText(HDC, int, int, int nPageNum, CDlgCancel*, CColorStrategy* pStrategyStart);
 

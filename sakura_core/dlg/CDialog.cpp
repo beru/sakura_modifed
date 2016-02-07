@@ -109,7 +109,7 @@ INT_PTR CDialog::DoModal(
 	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_lParam = lParam;
-	m_hLangRsrcInstance = CSelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
+	m_hLangRsrcInstance = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
 	return ::DialogBoxParam(
 		m_hLangRsrcInstance,
 		MAKEINTRESOURCE(nDlgTemplete),
@@ -139,7 +139,7 @@ HWND CDialog::DoModeless(
 	m_hInstance = hInstance;	// アプリケーションインスタンスのハンドル
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
 	m_lParam = lParam;
-	m_hLangRsrcInstance = CSelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
+	m_hLangRsrcInstance = SelectLang::getLangRsrcInstance();		// メッセージリソースDLLのインスタンスハンドル
 	m_hWnd = ::CreateDialogParam(
 		m_hLangRsrcInstance,
 		MAKEINTRESOURCE(nDlgTemplete),
@@ -410,7 +410,7 @@ void CDialog::CreateSizeBox(void)
 		0,													// default height
 		m_hWnd/*hdlg*/, 									// handle of main window
 		(HMENU) NULL,										// no menu for a scroll bar
-		CSelectLang::getLangRsrcInstance(),					// instance owning this window
+		SelectLang::getLangRsrcInstance(),					// instance owning this window
 		(LPVOID) NULL										// pointer not needed
 	);
 	::ShowWindow(m_hwndSizeBox, SW_SHOW);

@@ -35,7 +35,7 @@
 	#include "CStrictInteger.h"
 
 	// ロジック単位
-	typedef CStrictInteger <
+	typedef StrictInteger <
 		0,		// 型を分けるための数値。
 		true,	// intとの比較を許すかどうか
 		true,	// intとの加減算を許すかどうか
@@ -45,7 +45,7 @@
 	CLogicInt;
 
 	// レイアウト単位
-	typedef CStrictInteger <
+	typedef StrictInteger <
 		1,		// 型を分けるための数値。
 		true,	// intとの比較を許すかどうか
 		true,	// intとの加減算を許すかどうか
@@ -91,19 +91,19 @@ typedef CLayoutXInt CKetaXInt;
 
 // ロジック単位
 struct LogicPoint { CLogicInt x; CLogicInt y; }; // 基底構造体
-typedef CStrictPoint<LogicPoint, CLogicInt>	CLogicPoint;
-typedef CRangeBase<CLogicPoint>					CLogicRange;
-typedef CStrictRect<CLogicInt, CLogicPoint>		CLogicRect;
+typedef StrictPoint<LogicPoint, CLogicInt>	CLogicPoint;
+typedef RangeBase<CLogicPoint>					CLogicRange;
+typedef StrictRect<CLogicInt, CLogicPoint>		CLogicRect;
 
 // レイアウト単位
 struct LayoutPoint { CLayoutInt x; CLayoutInt y; }; // 基底構造体
-typedef CStrictPoint<LayoutPoint, CLayoutInt>	CLayoutPoint;
-typedef CRangeBase<CLayoutPoint>				CLayoutRange;
-typedef CStrictRect<CLayoutInt, CLayoutPoint>	CLayoutRect;
+typedef StrictPoint<LayoutPoint, CLayoutInt>	CLayoutPoint;
+typedef RangeBase<CLayoutPoint>				CLayoutRange;
+typedef StrictRect<CLayoutInt, CLayoutPoint>	CLayoutRect;
 
 // ゆるい単位
 #include "CMyPoint.h"
-typedef CRangeBase<CMyPoint>     SelectionRange;
+typedef RangeBase<Point>     SelectionRange;
 
 
 
@@ -115,12 +115,12 @@ typedef CRangeBase<CMyPoint>     SelectionRange;
 // 変換関数
 template <class POINT_T>
 inline void TwoPointToRange(
-	CRangeBase<POINT_T>* prangeDst,
+	RangeBase<POINT_T>* prangeDst,
 	POINT_T pt1,
 	POINT_T pt2
 	)
 {
-	CMyRect rc;
+	Rect rc;
 	TwoPointToRect(&rc, pt1, pt2);
 	prangeDst->SetFrom(POINT_T(rc.UpperLeft()));
 	prangeDst->SetTo(POINT_T(rc.LowerRight()));
@@ -130,9 +130,9 @@ inline void TwoPointToRange(
 // 2点を対角とする矩形を求める
 template <class T, class INT_TYPE>
 inline void TwoPointToRect(
-	CStrictRect<INT_TYPE, CStrictPoint<T, INT_TYPE> >*	prcRect,
-	CStrictPoint<T, INT_TYPE>							pt1,
-	CStrictPoint<T, INT_TYPE>							pt2
+	StrictRect<INT_TYPE, StrictPoint<T, INT_TYPE> >*	prcRect,
+	StrictPoint<T, INT_TYPE>							pt1,
+	StrictPoint<T, INT_TYPE>							pt2
 	)
 {
 	if (pt1.y < pt2.y) {

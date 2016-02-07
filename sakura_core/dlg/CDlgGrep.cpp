@@ -185,7 +185,7 @@ BOOL CDlgGrep::OnInitDialog(
 	::SendMessage(GetHwnd(), WM_SETICON, ICON_BIG, (LPARAM)hIconBig);
 
 	// 文字コードセット選択コンボボックス初期化
-	CCodeTypesForCombobox cCodeTypes;
+	CodeTypesForCombobox cCodeTypes;
 	for (int i=0; i<cCodeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString(GetItemHwnd(IDC_COMBO_CHARSET), cCodeTypes.GetName(i));
 		Combo_SetItemData(GetItemHwnd(IDC_COMBO_CHARSET), idx, cCodeTypes.GetCode(i));
@@ -379,7 +379,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 			if (IsButtonChecked(IDC_CHECK_CP)) {
 				EnableItem(IDC_CHECK_CP, false);
 				HWND combo = GetItemHwnd(IDC_COMBO_CHARSET );
-				CCodePage::AddComboCodePages(GetHwnd(), combo, -1);
+				CodePage::AddComboCodePages(GetHwnd(), combo, -1);
 			}
 		}
 		return TRUE;
@@ -469,7 +469,7 @@ void CDlgGrep::SetData(void)
 		ECodeType nCharSet;
 		HWND hWndCombo = GetItemHwnd(IDC_COMBO_CHARSET);
 		nCurIdx = Combo_GetCurSel(hWndCombo);
-		CCodeTypesForCombobox cCodeTypes;
+		CodeTypesForCombobox cCodeTypes;
 		for (nIdx=0; nIdx<cCodeTypes.GetCount(); ++nIdx) {
 			nCharSet = (ECodeType)Combo_GetItemData(hWndCombo, nIdx);
 			if (nCharSet == m_nGrepCharSet) {
@@ -481,7 +481,7 @@ void CDlgGrep::SetData(void)
 		}else {
 			CheckButton(IDC_CHECK_CP, true);
 			EnableItem(IDC_CHECK_CP, false);
-			nCurIdx = CCodePage::AddComboCodePages(GetHwnd(), hWndCombo, m_nGrepCharSet);
+			nCurIdx = CodePage::AddComboCodePages(GetHwnd(), hWndCombo, m_nGrepCharSet);
 			if (nCurIdx == -1) {
 				Combo_SetCurSel( hWndCombo, 0 );
 			}

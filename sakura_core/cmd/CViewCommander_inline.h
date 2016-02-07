@@ -29,38 +29,38 @@
 #include "COpeBlk.h"
 
 // ŠO•”ˆË‘¶
-inline CEditDoc* CViewCommander::GetDocument()
+inline CEditDoc* ViewCommander::GetDocument()
 {
 	return m_pCommanderView->m_pcEditDoc;
 }
 
-inline CEditWnd* CViewCommander::GetEditWindow()
+inline CEditWnd* ViewCommander::GetEditWindow()
 {
 	return m_pCommanderView->m_pcEditWnd;
 }
 
-inline HWND CViewCommander::GetMainWindow()
+inline HWND ViewCommander::GetMainWindow()
 {
 	return ::GetParent(m_pCommanderView->m_hwndParent);
 }
 
-inline COpeBlk* CViewCommander::GetOpeBlk()
+inline COpeBlk* ViewCommander::GetOpeBlk()
 {
 	return GetDocument()->m_cDocEditor.m_pcOpeBlk;
 }
 
-inline void CViewCommander::SetOpeBlk(COpeBlk* p)
+inline void ViewCommander::SetOpeBlk(COpeBlk* p)
 {
 	GetDocument()->m_cDocEditor.m_pcOpeBlk = p;
 	GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount = 0;
 }
 
-inline CLayoutRange& CViewCommander::GetSelect()
+inline CLayoutRange& ViewCommander::GetSelect()
 {
 	return m_pCommanderView->GetSelectionInfo().m_sSelect;
 }
 
-inline CCaret& CViewCommander::GetCaret()
+inline CCaret& ViewCommander::GetCaret()
 {
 	return m_pCommanderView->GetCaret();
 }

@@ -162,12 +162,12 @@ ECodeType CFileLoad::FileOpen(
 	// ÉfÅ[É^ì«Ç›çûÇ›
 	Buffering();
 
-	ECodeType nBomCode = CCodeMediator::DetectUnicodeBom(m_pReadBuf, m_nReadDataLen);
+	ECodeType nBomCode = CodeMediator::DetectUnicodeBom(m_pReadBuf, m_nReadDataLen);
 	if (charCode == CODE_AUTODETECT) {
 		if (nBomCode != CODE_NONE) {
 			charCode = nBomCode;
 		}else {
-			CCodeMediator mediator(*m_pEencoding);
+			CodeMediator mediator(*m_pEencoding);
 			charCode = mediator.CheckKanjiCode(m_pReadBuf, m_nReadDataLen);
 		}
 	}
@@ -177,8 +177,8 @@ ECodeType CFileLoad::FileOpen(
 		charCode = CODE_DEFAULT;
 	}
 	m_CharCode = charCode;
-	m_pCodeBase = CCodeFactory::CreateCodeBase(m_CharCode, m_nFlag);
-	m_encodingTrait = CCodePage::GetEncodingTrait(m_CharCode);
+	m_pCodeBase = CodeFactory::CreateCodeBase(m_CharCode, m_nFlag);
+	m_encodingTrait = CodePage::GetEncodingTrait(m_CharCode);
 	m_nFlag = nFlag;
 
 	m_nFileDataLen = m_nFileSize;

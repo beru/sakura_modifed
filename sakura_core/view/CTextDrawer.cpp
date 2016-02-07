@@ -68,7 +68,7 @@ void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int
 	int nTextWidth = pMetrics->CalcTextWidth(pData, nLength, pDxArray);
 
 	// テキストの描画範囲の矩形を求める -> rcClip
-	CMyRect rcClip;
+	Rect rcClip;
 	rcClip.left   = x;
 	rcClip.right  = x + nTextWidth;
 	rcClip.top    = y;

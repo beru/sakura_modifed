@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(モード切り替え系)関数群
+@brief ViewCommanderクラスのコマンド(モード切り替え系)関数群
 
 	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -39,7 +39,7 @@
 
 	@date 2005.10.02 genta InsMode関数化
 */
-void CViewCommander::Command_CHGMOD_INS(void)
+void ViewCommander::Command_CHGMOD_INS(void)
 {
 	// 挿入モードか？
 	m_pCommanderView->SetInsMode(!m_pCommanderView->IsInsMode());
@@ -56,7 +56,7 @@ void CViewCommander::Command_CHGMOD_INS(void)
 	@author moca
 	@date 2003.06.23 新規作成
 */
-void CViewCommander::Command_CHGMOD_EOL(EEolType e)
+void ViewCommander::Command_CHGMOD_EOL(EEolType e)
 {
 	if (EOL_NONE < e && e < EOL_CODEMAX) {
 		GetDocument()->m_cDocEditor.SetNewLineCode(e);
@@ -68,7 +68,7 @@ void CViewCommander::Command_CHGMOD_EOL(EEolType e)
 
 
 // 文字コードセット指定
-void CViewCommander::Command_CHG_CHARSET(
+void ViewCommander::Command_CHG_CHARSET(
 	ECodeType	eCharSet,	// [in] 設定する文字コードセット
 	bool		bBom		// [in] 設定するBOM(Unicode系以外は無視)
 	)
@@ -86,7 +86,7 @@ void CViewCommander::Command_CHG_CHARSET(
 	}
 
 	// 文字コードの設定
-	GetDocument()->m_cDocFile.SetCodeSetChg(eCharSet, CCodeTypeName(eCharSet).UseBom() & bBom);
+	GetDocument()->m_cDocFile.SetCodeSetChg(eCharSet, CodeTypeName(eCharSet).UseBom() & bBom);
 
 	// ステータス表示
 	GetCaret().ShowCaretPosInfo();
@@ -96,7 +96,7 @@ void CViewCommander::Command_CHG_CHARSET(
 /** 各種モードの取り消し
 	@param whereCursorIs 選択をキャンセルした後、キャレットをどこに置くか。0=動かさない。1=左上。2=右下。
 */
-void CViewCommander::Command_CANCEL_MODE(int whereCursorIs)
+void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 {
 	bool bBoxSelect = false;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();

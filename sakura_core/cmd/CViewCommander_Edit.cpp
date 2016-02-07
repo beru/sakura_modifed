@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(編集系 基本形)関数群
+@brief ViewCommanderクラスのコマンド(編集系 基本形)関数群
 
 	2012/12/16	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -28,7 +28,7 @@
 #include "debug/CRunningTimer.h"
 
 // wchar_t1個分の文字を入力
-void CViewCommander::Command_WCHAR(
+void ViewCommander::Command_WCHAR(
 	wchar_t wcChar,
 	bool bConvertEOL
 	)
@@ -228,7 +228,7 @@ end_of_for:;
 	@date 2002.10.06 genta 引数の上下バイトの意味を逆転．
 		WM_IME_CHARのwParamに合わせた．
 */
-void CViewCommander::Command_IME_CHAR(WORD wChar)
+void ViewCommander::Command_IME_CHAR(WORD wChar)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -289,7 +289,7 @@ void CViewCommander::Command_IME_CHAR(WORD wChar)
 
 // from CViewCommander_New.cpp
 // Undo 元に戻す
-void CViewCommander::Command_UNDO(void)
+void ViewCommander::Command_UNDO(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -314,7 +314,7 @@ void CViewCommander::Command_UNDO(void)
 		return;
 	}
 
-	MY_RUNNINGTIMER(cRunningTimer, "CViewCommander::Command_UNDO()");
+	MY_RUNNINGTIMER(cRunningTimer, "ViewCommander::Command_UNDO()");
 
 	COpe*		pcOpe = NULL;
 
@@ -543,7 +543,7 @@ void CViewCommander::Command_UNDO(void)
 
 // from CViewCommander_New.cpp
 // Redo やり直し
-void CViewCommander::Command_REDO(void)
+void ViewCommander::Command_REDO(void)
 {
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -568,7 +568,7 @@ void CViewCommander::Command_REDO(void)
 	if (!docEditor.IsEnableRedo()) {	// Redo(やり直し)可能な状態か？
 		return;
 	}
-	MY_RUNNINGTIMER(cRunningTimer, "CViewCommander::Command_REDO()");
+	MY_RUNNINGTIMER(cRunningTimer, "ViewCommander::Command_REDO()");
 
 	COpe*		pcOpe = NULL;
 	COpeBlk*	pcOpeBlk;
@@ -783,7 +783,7 @@ void CViewCommander::Command_REDO(void)
 
 
 // カーソル位置または選択エリアを削除
-void CViewCommander::Command_DELETE(void)
+void ViewCommander::Command_DELETE(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {		// マウスによる範囲選択中
@@ -835,7 +835,7 @@ void CViewCommander::Command_DELETE(void)
 
 
 // カーソル前を削除
-void CViewCommander::Command_DELETE_BACK(void)
+void ViewCommander::Command_DELETE_BACK(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -881,7 +881,7 @@ void CViewCommander::Command_DELETE_BACK(void)
 
 
 // 	上書き用の一文字削除	2009.04.11 ryoji
-void CViewCommander::DelCharForOverwrite(
+void ViewCommander::DelCharForOverwrite(
 	const wchar_t* pszInput,
 	int nLen
 	)

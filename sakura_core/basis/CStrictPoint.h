@@ -26,20 +26,20 @@
 // 単位が明示的に区別されたポイント型。※POINTは継承しないことにした
 /*
 template <int TYPE>
-class CStrictPoint : public CMyPoint {
+class StrictPoint : public CMyPoint {
 public:
-	CStrictPoint() : CMyPoint() { }
-	CStrictPoint(int _x, int _y) : CMyPoint(_x, _y) { }
-	CStrictPoint(const CStrictPoint& rhs) : CMyPoint(rhs) { }
+	StrictPoint() : CMyPoint() { }
+	StrictPoint(int _x, int _y) : CMyPoint(_x, _y) { }
+	StrictPoint(const StrictPoint& rhs) : CMyPoint(rhs) { }
 
 	// ※POINTからの変換は、「明示的に指定されたときのみ」許可する。
-	explicit CStrictPoint(const POINT& rhs) : CMyPoint(rhs) { }
+	explicit StrictPoint(const POINT& rhs) : CMyPoint(rhs) { }
 };
 */
 template <class SUPER, class INT_TYPE, class SUPER_INT_TYPE = INT_TYPE>
-class CStrictPoint : public SUPER {
+class StrictPoint : public SUPER {
 private:
-	typedef CStrictPoint<SUPER, INT_TYPE> Me;
+	typedef StrictPoint<SUPER, INT_TYPE> Me;
 public:
 	typedef INT_TYPE       IntType;
 	typedef SUPER_INT_TYPE SuperIntType;
@@ -47,31 +47,31 @@ public:
 	using SUPER::x;
 	using SUPER::y;
 	// コンストラクタ・デストラクタ
-	CStrictPoint() { x = SuperIntType(0); y = SuperIntType(0); }
-	CStrictPoint(int _x, int _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
+	StrictPoint() { x = SuperIntType(0); y = SuperIntType(0); }
+	StrictPoint(int _x, int _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
 #ifdef USE_STRICT_INT
-	CStrictPoint(IntType _x, IntType _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
+	StrictPoint(IntType _x, IntType _y) { x = SuperIntType(_x); y = SuperIntType(_y); }
 #endif
-	CStrictPoint(const SUPER& rhs) { x = rhs.x; y = rhs.y; }
+	StrictPoint(const SUPER& rhs) { x = rhs.x; y = rhs.y; }
 
 	// 他の型からも、「明示的に指定すれば」変換が可能
 	template <class SRC>
-	explicit CStrictPoint(const SRC& rhs) { x = (SuperIntType)rhs.x; y = (SuperIntType)rhs.y; }
+	explicit StrictPoint(const SRC& rhs) { x = (SuperIntType)rhs.x; y = (SuperIntType)rhs.y; }
 
 	// 算術演算子
-	CStrictPoint& operator += (const SUPER& rhs) { x += rhs.x; y += rhs.y; return *this; }
-	CStrictPoint& operator -= (const SUPER& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
-	CStrictPoint& operator *= (int n) { x *= n; y *= n; return *this; }
-	CStrictPoint& operator /= (int n) { x /= n; y /= n; return *this; }
+	StrictPoint& operator += (const SUPER& rhs) { x += rhs.x; y += rhs.y; return *this; }
+	StrictPoint& operator -= (const SUPER& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
+	StrictPoint& operator *= (int n) { x *= n; y *= n; return *this; }
+	StrictPoint& operator /= (int n) { x /= n; y /= n; return *this; }
 
 	// 算術演算子２
-	CStrictPoint operator + (const SUPER& rhs) const { CStrictPoint tmp = *this; tmp += rhs; return tmp; }
-	CStrictPoint operator - (const SUPER& rhs) const { CStrictPoint tmp = *this; tmp -= rhs; return tmp; }
-	CStrictPoint operator * (int n) const { CStrictPoint tmp = *this; tmp *= n; return tmp; }
-	CStrictPoint operator / (int n) const { CStrictPoint tmp = *this; tmp /= n; return tmp; }
+	StrictPoint operator + (const SUPER& rhs) const { StrictPoint tmp = *this; tmp += rhs; return tmp; }
+	StrictPoint operator - (const SUPER& rhs) const { StrictPoint tmp = *this; tmp -= rhs; return tmp; }
+	StrictPoint operator * (int n) const { StrictPoint tmp = *this; tmp *= n; return tmp; }
+	StrictPoint operator / (int n) const { StrictPoint tmp = *this; tmp /= n; return tmp; }
 
 	// 代入演算子
-	CStrictPoint& operator = (const SUPER& rhs) { x = rhs.x; y = rhs.y; return *this; }
+	StrictPoint& operator = (const SUPER& rhs) { x = rhs.x; y = rhs.y; return *this; }
 
 	// 比較演算子
 	bool operator == (const SUPER& rhs) const { return x == rhs.x && y == rhs.y; }

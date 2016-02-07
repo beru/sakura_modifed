@@ -28,10 +28,10 @@
 
 struct CommonSetting_Statusbar;
 
-class CUtf8 : public CCodeBase {
+class CUtf8 : public CodeBase {
 public:
 
-	// CCodeBaseインターフェース
+	// CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	//!< 特定コード → UNICODE    変換
 		return UTF8ToUnicode(cSrc, pDst);
 	}

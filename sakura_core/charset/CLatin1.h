@@ -31,10 +31,10 @@
 
 #include "CCodeBase.h"
 
-class CLatin1 : public CCodeBase {
+class CLatin1 : public CodeBase {
 
 public:
-	// CCodeBaseインターフェース
+	// CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){ return Latin1ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
 	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst){ return UnicodeToLatin1(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換

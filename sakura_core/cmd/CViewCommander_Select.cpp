@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(選択系/矩形選択系)関数群
+@brief ViewCommanderクラスのコマンド(選択系/矩形選択系)関数群
 
 	2012/12/20	CViewCommander.cppから分離
 */
@@ -20,7 +20,7 @@
 
 
 // 現在位置の単語選択
-bool CViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
+bool ViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
 {
 	auto& si = m_pCommanderView->GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
@@ -66,7 +66,7 @@ bool CViewCommander::Command_SELECTWORD(CLayoutPoint* pptCaretPos)
 
 
 // すべて選択
-void CViewCommander::Command_SELECTALL(void)
+void ViewCommander::Command_SELECTALL(void)
 {
 	auto& si = m_pCommanderView->GetSelectionInfo();
 	if (si.IsTextSelected()) {	// テキストが選択されているか
@@ -100,7 +100,7 @@ void CViewCommander::Command_SELECTALL(void)
 
 	@date 2007.11.15 nasukoji	新規作成
 */
-void CViewCommander::Command_SELECTLINE(int lparam)
+void ViewCommander::Command_SELECTLINE(int lparam)
 {
 	// 改行単位で1行選択する
 	Command_GOLINETOP(false, 0x9);	// 物理行頭に移動
@@ -145,7 +145,7 @@ void CViewCommander::Command_SELECTLINE(int lparam)
 }
 
 // 範囲選択開始
-void CViewCommander::Command_BEGIN_SELECT(void)
+void ViewCommander::Command_BEGIN_SELECT(void)
 {
 	auto& si = m_pCommanderView->GetSelectionInfo();
 	if (!si.IsTextSelected()) {	// テキストが選択されているか
@@ -168,7 +168,7 @@ void CViewCommander::Command_BEGIN_SELECT(void)
 
 
 // 矩形範囲選択開始
-void CViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
+void ViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
 {
 	if (!GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;

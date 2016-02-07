@@ -558,7 +558,7 @@ std::tstring CPropPlugin::GetReadMeFile(const std::tstring& sName)
 bool CPropPlugin::BrowseReadMe(const std::tstring& sReadMeName)
 {
 	// -- -- -- -- コマンドライン文字列を生成 -- -- -- -- //
-	CCommandLineString cCmdLineBuf;
+	CommandLineString cCmdLineBuf;
 
 	// アプリケーションパス
 	TCHAR szExePath[MAX_PATH + 1];

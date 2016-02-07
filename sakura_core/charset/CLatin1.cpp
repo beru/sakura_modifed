@@ -230,7 +230,7 @@ EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInSjis) {
 		// Unicode‚Å•\Ž¦
-		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
+		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
 	CNativeW cCharBuffer;

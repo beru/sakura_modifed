@@ -207,7 +207,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			}else {
 				rc.UnionStrictRect(rcOld, rcNew);
 			}
-			CMyRect rcPx;
+			Rect rcPx;
 			if (pView->IsBkBitmap() || drawRight == -1) {
 				// 背景表示のクリッピングが甘いので左右を指定しない
 				rcPx.left   =  0;
@@ -219,7 +219,7 @@ void CViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 			rcPx.top    = area.GenerateYPx(rc.top);
 			rcPx.bottom = area.GenerateYPx(rc.bottom + 1);
 
-			CMyRect rcArea;
+			Rect rcArea;
 			pView->GetTextArea().GenerateTextAreaRect(&rcArea);
 			RECT rcUpdate;
 			CEditView& view = *pView;
@@ -529,7 +529,7 @@ void CViewSelect::DrawSelectAreaLine(
 	}
 	int		nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	int		nCharWidth = pView->GetTextMetrics().GetHankakuDx();
-	CMyRect	rcClip; // px
+	Rect	rcClip; // px
 	rcClip.left		= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)nSelectFrom * nCharWidth;
 	rcClip.right	= (pView->GetTextArea().GetAreaLeft() - (Int)pView->GetTextArea().GetViewLeftCol() * nCharWidth) + (Int)nSelectTo   * nCharWidth;
 	rcClip.top		= pView->GetTextArea().GenerateYPx(nLineNum);
@@ -741,7 +741,7 @@ void CViewSelect::PrintSelectionInfoMsg() const
 					thiz->m_nLastSelectedByteLen = 0;
 				}
 				//  現在の文字コードに変換し、バイト長を取得する
-				CCodeBase* pCode = CCodeFactory::CreateCodeBase(pView->m_pcEditDoc->GetDocumentEncoding(), false);
+				CodeBase* pCode = CodeFactory::CreateCodeBase(pView->m_pcEditDoc->GetDocumentEncoding(), false);
 				pCode->UnicodeToCode(cmemW, &cmemCode);
 				delete pCode;
 

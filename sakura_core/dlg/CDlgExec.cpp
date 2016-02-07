@@ -78,11 +78,11 @@ BOOL CDlgExec::OnInitDialog(
 	HWND hwndCombo;
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_GET);
 	for (int i=0; i<_countof(codes); ++i) {
-		Combo_AddString(hwndCombo, CCodeTypeName(codes[i]).Normal());
+		Combo_AddString(hwndCombo, CodeTypeName(codes[i]).Normal());
 	}
 	hwndCombo = GetItemHwnd(IDC_COMBO_CODE_SEND);
 	for (int i=0; i<_countof(codes); ++i) {
-		Combo_AddString(hwndCombo, CCodeTypeName(codes[i]).Normal());
+		Combo_AddString(hwndCombo, CodeTypeName(codes[i]).Normal());
 	}
 
 	BOOL bRet = CDialog::OnInitDialog(hwnd, wParam, lParam);

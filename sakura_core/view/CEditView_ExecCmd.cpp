@@ -57,21 +57,21 @@ protected:
 	BOOL			m_bWindow;
 	CEditView*		m_view;
 	CShareData*		m_pCShareData;
-	CViewCommander*	m_pCommander;
+	ViewCommander*	m_pCommander;
 };
 
 class COutputAdapterUTF8: public COutputAdapterDefault
 {
 public:
 	COutputAdapterUTF8(CEditView* view, BOOL bToEditWindow) : COutputAdapterDefault(view, bToEditWindow)
-		,pcCodeBase(CCodeFactory::CreateCodeBase(CODE_UTF8,0))
+		,pcCodeBase(CodeFactory::CreateCodeBase(CODE_UTF8,0))
 	{}
 	~COutputAdapterUTF8(){};
 
 	bool OutputA(const ACHAR* pBuf, int size = -1);
 
 protected:
-	std::unique_ptr<CCodeBase> pcCodeBase;
+	std::unique_ptr<CodeBase> pcCodeBase;
 };
 
 /*!	@brief	外部コマンドの実行

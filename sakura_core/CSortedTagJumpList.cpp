@@ -34,7 +34,7 @@
 /*!
 	@date 2005.04.23 genta 管理数の最大値を指定する引数追加
 */
-CSortedTagJumpList::CSortedTagJumpList(int max)
+SortedTagJumpList::SortedTagJumpList(int max)
 	:
 	m_pTagjump(NULL),
 	m_nCount(0),
@@ -45,7 +45,7 @@ CSortedTagJumpList::CSortedTagJumpList(int max)
 	m_baseDirArr.push_back(_T(""));
 }
 
-CSortedTagJumpList::~CSortedTagJumpList()
+SortedTagJumpList::~SortedTagJumpList()
 {
 	Empty();
 }
@@ -55,7 +55,7 @@ CSortedTagJumpList::~CSortedTagJumpList()
 
 	@param[in] item 削除するアイテム
 */
-void CSortedTagJumpList::Free(TagJumpInfo* item)
+void SortedTagJumpList::Free(TagJumpInfo* item)
 {
 	free(item->keyword);
 	free(item->filename);
@@ -67,7 +67,7 @@ void CSortedTagJumpList::Free(TagJumpInfo* item)
 /*
 	リストをすべて解放する。
 */
-void CSortedTagJumpList::Empty(void)
+void SortedTagJumpList::Empty(void)
 {
 	auto p = m_pTagjump;
 	while (p) {
@@ -86,7 +86,7 @@ void CSortedTagJumpList::Empty(void)
 	基準フォルダを登録し、基準フォルダIDを取得
 	@date 2010.07.23 Moca 新規追加
 */
-int CSortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
+int SortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 {
 	m_baseDirArr.push_back(baseDir);
 	return m_baseDirArr.size() -1;
@@ -108,7 +108,7 @@ int CSortedTagJumpList::AddBaseDir(const TCHAR* baseDir)
 	@retval FALSE 追加失敗
 	@date 2010.07.23 Moca baseDirId 追加
 */
-bool CSortedTagJumpList::AddParamA(
+bool SortedTagJumpList::AddParamA(
 	const ACHAR* keyword,
 	const ACHAR* filename,
 	int no,
@@ -185,7 +185,7 @@ bool CSortedTagJumpList::AddParamA(
 
 	@note 不要な情報の場合は引数に NULL を指定する。
 */
-bool CSortedTagJumpList::GetParam(
+bool SortedTagJumpList::GetParam(
 	int index,
 	TCHAR* keyword,
 	TCHAR* filename,
@@ -204,7 +204,7 @@ bool CSortedTagJumpList::GetParam(
 	if (depth   ) *depth = 0;
 	if (baseDir ) baseDir[0] = 0;
 
-	CSortedTagJumpList::TagJumpInfo* p;
+	SortedTagJumpList::TagJumpInfo* p;
 	p = GetPtr(index);
 	if (p) {
 		if (keyword ) _tcscpy(keyword, p->keyword);
@@ -230,7 +230,7 @@ bool CSortedTagJumpList::GetParam(
 	@param[in] index 要素番号
 	@return タグジャンプ情報
 */
-CSortedTagJumpList::TagJumpInfo* CSortedTagJumpList::GetPtr(int index)
+SortedTagJumpList::TagJumpInfo* SortedTagJumpList::GetPtr(int index)
 {
 	int	i = 0;
 	for (auto p=m_pTagjump; p; p=p->next) {

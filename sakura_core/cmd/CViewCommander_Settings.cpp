@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(設定系)関数群
+@brief ViewCommanderクラスのコマンド(設定系)関数群
 
 	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -34,7 +34,7 @@
 
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutToolBar(), CEditWnd::EndLayoutBars() で行うように変更
 */
-void CViewCommander::Command_SHOWTOOLBAR(void)
+void ViewCommander::Command_SHOWTOOLBAR(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -56,7 +56,7 @@ void CViewCommander::Command_SHOWTOOLBAR(void)
 
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutFuncKey(), CEditWnd::EndLayoutBars() で行うように変更
 */
-void CViewCommander::Command_SHOWFUNCKEY(void)
+void ViewCommander::Command_SHOWFUNCKEY(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -81,7 +81,7 @@ void CViewCommander::Command_SHOWFUNCKEY(void)
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutTabBar(), CEditWnd::EndLayoutBars() で行うように変更
 	@date 2007.06.20 ryoji グループIDリセット
  */
-void CViewCommander::Command_SHOWTAB(void)
+void ViewCommander::Command_SHOWTAB(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -113,7 +113,7 @@ void CViewCommander::Command_SHOWTAB(void)
 
 	@date 2006.12.19 ryoji 表示切替は CEditWnd::LayoutStatusBar(), CEditWnd::EndLayoutBars() で行うように変更
 */
-void CViewCommander::Command_SHOWSTATUSBAR(void)
+void ViewCommander::Command_SHOWSTATUSBAR(void)
 {
 	CEditWnd* pCEditWnd = GetEditWindow();	// Sep. 10, 2002 genta
 
@@ -134,7 +134,7 @@ void CViewCommander::Command_SHOWSTATUSBAR(void)
 
 	@date 2014.07.14 新規作成
 */
-void CViewCommander::Command_SHOWMINIMAP(void)
+void ViewCommander::Command_SHOWMINIMAP(void)
 {
 	CEditWnd*	pCEditWnd = GetEditWindow();	//	Sep. 10, 2002 genta
 
@@ -153,7 +153,7 @@ void CViewCommander::Command_SHOWMINIMAP(void)
 
 
 // タイプ別設定一覧
-void CViewCommander::Command_TYPE_LIST(void)
+void ViewCommander::Command_TYPE_LIST(void)
 {
 	CDlgTypeList cDlgTypeList;
 	CDlgTypeList::Result sResult;
@@ -174,7 +174,7 @@ void CViewCommander::Command_TYPE_LIST(void)
 
 
 // タイプ別設定一時適用
-void CViewCommander::Command_CHANGETYPE(int nTypePlusOne)
+void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 {
 	CTypeConfig type = CTypeConfig(nTypePlusOne - 1);
 	if (nTypePlusOne == 0) {
@@ -191,14 +191,14 @@ void CViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 
 
 // タイプ別設定
-void CViewCommander::Command_OPTION_TYPE(void)
+void ViewCommander::Command_OPTION_TYPE(void)
 {
 	CEditApp::getInstance()->OpenPropertySheetTypes(-1, GetDocument()->m_cDocType.GetDocumentType());
 }
 
 
 // 共通設定
-void CViewCommander::Command_OPTION(void)
+void ViewCommander::Command_OPTION(void)
 {
 	// 設定プロパティシート テスト用
 	CEditApp::getInstance()->OpenPropertySheet(-1);
@@ -206,7 +206,7 @@ void CViewCommander::Command_OPTION(void)
 
 
 // フォント設定
-void CViewCommander::Command_FONT(void)
+void ViewCommander::Command_FONT(void)
 {
 	HWND hwndFrame = GetMainWindow();
 
@@ -259,7 +259,7 @@ void CViewCommander::Command_FONT(void)
 
 	@date 2013.04.10 novice 新規作成
 */
-void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
+void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 {
 	// The point sizes recommended by "The Windows Interface: An Application Design Guide", 1/10ポイント単位
 	static const INT sizeTable[] = { 8*10, 9*10, 10*10, (INT)(10.5*10), 11*10, 12*10, 14*10, 16*10, 18*10, 20*10, 22*10, 24*10, 26*10, 28*10, 36*10, 48*10, 72*10 };
@@ -353,7 +353,7 @@ void CViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 	@note 変更する順序を変更したときはCEditWnd::InitMenu()も変更すること
 	@sa CEditWnd::InitMenu()
 */
-void CViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
 	// Jan. 8, 2006 genta 判定処理をm_pCommanderView->GetWrapMode()へ移動
 	CEditView::TOGGLE_WRAP_ACTION nWrapMode;
@@ -385,7 +385,7 @@ void CViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIN
 	@author	MIK
 	@date	2003/04/07
 */
-void CViewCommander::Command_Favorite(void)
+void ViewCommander::Command_Favorite(void)
 {
 	CDlgFavorite	cDlgFavorite;
 
@@ -411,7 +411,7 @@ void CViewCommander::Command_Favorite(void)
 	@date 2008.05.31 nasukoji	新規作成
 	@date 2009.08.28 nasukoji	テキストの最大幅を算出する
 */
-void CViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
+void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 {
 	CEditDoc* pcDoc = GetDocument();
 
@@ -465,7 +465,7 @@ void CViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 		eSelectCountMode::ByChar ; 文字数でカウント
 		eSelectCountMode::ByByte ; バイト数でカウント
 */
-void CViewCommander::Command_SELECT_COUNT_MODE(int nMode)
+void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
 	// 設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte;
@@ -493,7 +493,7 @@ void CViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 /*!	@brief 引用符の設定
 	@date Jan. 29, 2005 genta 新規作成
 */
-void CViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
+void ViewCommander::Command_SET_QUOTESTRING(const wchar_t* quotestr)
 {
 	if (!quotestr)
 		return;

@@ -178,7 +178,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	CLayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
-	CMySize GetCaretSize() const			{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
+	Size GetCaretSize() const			{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
 	bool ExistCaretFocus() const			{ return m_sizeCaret.cx>0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
 	CLogicPoint GetCaretLogicPos() const	{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
@@ -217,7 +217,7 @@ public:
 
 	// キャレット見た目
 private:
-	CMySize			m_sizeCaret;		// キャレットのサイズ。ピクセル単位。
+	Size			m_sizeCaret;		// キャレットのサイズ。ピクセル単位。
 	COLORREF		m_crCaret;			// キャレットの色				// 2006.12.07 ryoji
 	HBITMAP			m_hbmpCaret;		// キャレットのビットマップ		// 2006.11.28 ryoji
 	bool			m_bCaretShowFlag;

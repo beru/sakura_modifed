@@ -37,10 +37,10 @@
 /*!	@brief ダイレクトタグジャンプ用検索結果をソートして保持する．
 	@author MIK
 */
-class CSortedTagJumpList {
+class SortedTagJumpList {
 public:
-	CSortedTagJumpList(int max);
-	~CSortedTagJumpList();
+	SortedTagJumpList(int max);
+	~SortedTagJumpList();
 
 	int AddBaseDir(const TCHAR* baseDir);
 	bool AddParamA(const ACHAR* keyword, const ACHAR* filename, int no, ACHAR type, const ACHAR* note, int depth, const int baseDirId);
@@ -80,6 +80,6 @@ private:
 	void Free(TagJumpInfo* item);
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CSortedTagJumpList);
+	DISALLOW_COPY_AND_ASSIGN(SortedTagJumpList);
 };
 

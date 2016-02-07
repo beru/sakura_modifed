@@ -28,29 +28,29 @@
 
 #define m_delete2(p) { if (p) { delete[] p; p = 0; } }
 
-class CMyString {
+class String {
 public:
 	// コンストラクタ・デストラクタ
-	CMyString(WCHAR wc)								: m_wstr(1, wc),		m_str_cache(NULL) { }
-	CMyString(const WCHAR* szData = L"")			: m_wstr(szData),		m_str_cache(NULL) { }
-	CMyString(const WCHAR* pData, size_t nLength)	: m_wstr(pData, nLength), m_str_cache(NULL) { }
-	CMyString(const ACHAR* szData)					: m_wstr(L""), m_str_cache(NULL) { set(szData); }
-	CMyString(const ACHAR* pData, size_t nLength)	: m_wstr(L""), m_str_cache(NULL) { set(pData, nLength); }
-	CMyString(ACHAR wc)								: m_wstr(L""), m_str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
-	CMyString(const CMyString& rhs) : m_wstr(rhs.c_wstr()), m_str_cache(NULL) { }
-	~CMyString();
+	String(WCHAR wc)								: m_wstr(1, wc),		m_str_cache(NULL) { }
+	String(const WCHAR* szData = L"")				: m_wstr(szData),		m_str_cache(NULL) { }
+	String(const WCHAR* pData, size_t nLength)		: m_wstr(pData, nLength), m_str_cache(NULL) { }
+	String(const ACHAR* szData)						: m_wstr(L""), m_str_cache(NULL) { set(szData); }
+	String(const ACHAR* pData, size_t nLength)		: m_wstr(L""), m_str_cache(NULL) { set(pData, nLength); }
+	String(ACHAR wc)								: m_wstr(L""), m_str_cache(NULL) { ACHAR buf[2] = {wc, 0}; set(buf); }
+	String(const String& rhs) : m_wstr(rhs.c_wstr()), m_str_cache(NULL) { }
+	~String();
 
 	// 演算子
 	operator const wchar_t* () const { return c_wstr(); }
 	operator const char* () const { return c_astr(); }
-	CMyString& operator = (const CMyString& rhs) { set(rhs); return *this; }
+	String& operator = (const String& rhs) { set(rhs); return *this; }
 
 	// 設定
 	void set(const wchar_t* wszData) { m_wstr = wszData; m_delete2(m_str_cache); }
 	void set(const wchar_t* wszData, int nLength) { m_wstr.assign(wszData, nLength); m_delete2(m_str_cache); }
 	void set(const char* szData);
 	void set(const char* szData, int nLength);
-	void set(const CMyString& cszData) { set(cszData.c_wstr()); }
+	void set(const String& cszData) { set(cszData.c_wstr()); }
 
 	// 取得
 	const wchar_t* c_wstr() const { return m_wstr.c_str(); }
@@ -123,9 +123,9 @@ public:
 
 
 //$$ 仮
-class CCommandLineString {
+class CommandLineString {
 public:
-	CCommandLineString() {
+	CommandLineString() {
 		m_szCmdLine[0] = _T('\0');
 		m_pHead = m_szCmdLine;
 	}

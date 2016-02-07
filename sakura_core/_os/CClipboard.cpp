@@ -41,13 +41,13 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CClipboard::CClipboard(HWND hwnd)
+Clipboard::Clipboard(HWND hwnd)
 {
 	m_hwnd = hwnd;
 	m_bOpenResult = ::OpenClipboard(hwnd);
 }
 
-CClipboard::~CClipboard()
+Clipboard::~Clipboard()
 {
 	Close();
 }
@@ -56,12 +56,12 @@ CClipboard::~CClipboard()
 //                     インターフェース                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CClipboard::Empty()
+void Clipboard::Empty()
 {
 	::EmptyClipboard();
 }
 
-void CClipboard::Close()
+void Clipboard::Close()
 {
 	if (m_bOpenResult) {
 		::CloseClipboard();
@@ -69,7 +69,7 @@ void CClipboard::Close()
 	}
 }
 
-bool CClipboard::SetText(
+bool Clipboard::SetText(
 	const wchar_t*	pData,			// コピーするUNICODE文字列
 	int				nDataLen,		// pDataの長さ（文字単位）
 	bool			bColumnSelect,
@@ -126,7 +126,7 @@ bool CClipboard::SetText(
 	//「データ」
 	HGLOBAL hgClipSakura = NULL;
 	// サクラエディタ専用フォーマットを取得
-	CLIPFORMAT	uFormatSakuraClip = CClipboard::GetSakuraFormat();
+	CLIPFORMAT	uFormatSakuraClip = Clipboard::GetSakuraFormat();
 	bool bSakuraText = (uFormat == (UINT)-1 || uFormat == uFormatSakuraClip);
 	while (bSakuraText) {
 		if (uFormatSakuraClip == 0) {
@@ -219,7 +219,7 @@ bool CClipboard::SetText(
 	return true;
 }
 
-bool CClipboard::SetHtmlText(const CNativeW& cmemBUf)
+bool Clipboard::SetHtmlText(const CNativeW& cmemBUf)
 {
 	if (!m_bOpenResult) {
 		return false;
@@ -273,7 +273,7 @@ bool CClipboard::SetHtmlText(const CNativeW& cmemBUf)
 	@param [in] cEol HDROP形式のときの改行コード
 	@param [in] uGetFormat クリップボード形式
 */
-bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const CEol& cEol, UINT uGetFormat)
+bool Clipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSelect, const CEol& cEol, UINT uGetFormat)
 {
 	if (!m_bOpenResult) {
 		return false;
@@ -309,7 +309,7 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 	}
 
 	// サクラ形式のデータがあれば取得
-	CLIPFORMAT uFormatSakuraClip = CClipboard::GetSakuraFormat();
+	CLIPFORMAT uFormatSakuraClip = Clipboard::GetSakuraFormat();
 	if (
 		(uGetFormat == -1 || uGetFormat == uFormatSakuraClip)
 		&& ::IsClipboardFormatAvailable(uFormatSakuraClip)
@@ -437,7 +437,7 @@ static CLIPFORMAT GetClipFormat(const wchar_t* pFormatName)
 	return uFormat;
 }
 
-bool CClipboard::IsIncludeClipboradFormat(const wchar_t* pFormatName)
+bool Clipboard::IsIncludeClipboradFormat(const wchar_t* pFormatName)
 {
 	CLIPFORMAT uFormat = GetClipFormat(pFormatName);
 	if (::IsClipboardFormatAvailable(uFormat)) {
@@ -466,7 +466,7 @@ static int GetEndModeByMode(int nMode, int nEndMode)
 	return nEndMode;
 }
 
-bool CClipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFormatName, int nMode, int nEndMode)
+bool Clipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFormatName, int nMode, int nEndMode)
 {
 	CLIPFORMAT uFormat = GetClipFormat(pFormatName);
 	if (uFormat == (CLIPFORMAT)-1) {
@@ -505,7 +505,7 @@ bool CClipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFo
 			pBuf = (char*)cstr.GetPtr();
 			nTextByteLen = cstr.GetLength() * sizeof(wchar_t);
 		}else {
-			CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
+			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
 			if (pCode->UnicodeToCode(cstr, &cmemBuf) == RESULT_FAILURE) {
 				return false;
 			}
@@ -571,7 +571,7 @@ static int GetLengthByMode(HGLOBAL hClipData, const BYTE* pData, int nMode, int 
 	@param nEndMode -1:文字コードに依存 0:GlobalSize 1:strlen 2:wcslen 4:wchar32_tの文字列
 	@date 2013.06.12 Moca 新規作成
 */
-bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const CEol& cEol)
+bool Clipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const CEol& cEol)
 {
 	mem.SetString(L"");
 	CLIPFORMAT uFormat = GetClipFormat(pFormatName);
@@ -615,12 +615,12 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 			ECodeType eMode = (ECodeType)nMode;
 			if (!IsValidCodeType(eMode)) {
 				// コード不明と99は自動判別
-				ECodeType nBomCode = CCodeMediator::DetectUnicodeBom((const char*)pData, nLength);
+				ECodeType nBomCode = CodeMediator::DetectUnicodeBom((const char*)pData, nLength);
 				if (nBomCode != CODE_NONE) {
 					eMode = nBomCode;
 				}else {
 					const TypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
-					CCodeMediator mediator(type.m_encoding);
+					CodeMediator mediator(type.m_encoding);
 					eMode = mediator.CheckKanjiCode((const char*)pData, nLength);
 				}
 				if (!IsValidCodeType(eMode)) {
@@ -637,7 +637,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 				CMemory cmem;
 				cmem.SetRawData(pData, nLength);
 				if (cmem.GetRawPtr()) {
-					CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
+					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
 					if (pCode->CodeToUnicode(cmem, &mem) == RESULT_FAILURE) {
 						mem.SetString(L"");
 						retVal = false;
@@ -660,7 +660,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 
 
 // クリップボード内に、サクラエディタで扱えるデータがあればtrue
-bool CClipboard::HasValidData()
+bool Clipboard::HasValidData()
 {
 	// 扱える形式が１つでもあればtrue
 	if (::IsClipboardFormatAvailable(CF_OEMTEXT)) return true;
@@ -672,7 +672,7 @@ bool CClipboard::HasValidData()
 }
 
 // サクラエディタ独自のクリップボードデータ形式
-CLIPFORMAT CClipboard::GetSakuraFormat()
+CLIPFORMAT Clipboard::GetSakuraFormat()
 {
 	/*
 		2007.09.30 kobake
@@ -685,7 +685,7 @@ CLIPFORMAT CClipboard::GetSakuraFormat()
 }
 
 // クリップボードデータ形式(CF_UNICODETEXT等)の取得
-int CClipboard::GetDataType()
+int Clipboard::GetDataType()
 {
 	// 扱える形式が１つでもあればtrue
 	// 2013.06.11 GetTextの取得順に変更

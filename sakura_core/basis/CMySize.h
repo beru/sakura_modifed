@@ -25,12 +25,12 @@
 
 #include <Windows.h> // SIZE
 
-class CMySize : public SIZE {
+class Size : public SIZE {
 public:
 	// コンストラクタ・デストラクタ
-	CMySize() {} // ※初期化なし
-	CMySize(int _cx, int _cy) { cx = _cx; cy = _cy; }
-	CMySize(const SIZE& rhs) { cx = rhs.cx; cy = rhs.cy; }
+	Size() {} // ※初期化なし
+	Size(int _cx, int _cy) { cx = _cx; cy = _cy; }
+	Size(const SIZE& rhs) { cx = rhs.cx; cy = rhs.cy; }
 
 	// 関数
 	void Set(int _cx, int _cy) { cx = _cx; cy = _cy; }

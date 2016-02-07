@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(支援)関数群
+@brief ViewCommanderクラスのコマンド(支援)関数群
 
 	2012/12/16	CViewCommander_Hokan.cppにcppCViewCommander.cppから支援関連を分離しCViewCommander_Support.cppに名称変更
 */
@@ -43,7 +43,7 @@
 	@date 2000/09/15 JEPRO [Esc]キーと[x]ボタンでも中止できるように変更
 	@date 2005/01/10 genta CEditView_Commandから移動
 */
-void CViewCommander::Command_HOKAN(void)
+void ViewCommander::Command_HOKAN(void)
 {
 	if (!GetDllShareData().m_common.m_sHelper.m_bUseHokan) {
 		GetDllShareData().m_common.m_sHelper.m_bUseHokan = TRUE;
@@ -88,7 +88,7 @@ retry:;
 
 	@date 2006.03.24 fon 新規作成
 */
-void CViewCommander::Command_ToggleKeySearch(int option)
+void ViewCommander::Command_ToggleKeySearch(int option)
 {	// 共通設定ダイアログの設定をキー割り当てでも切り替えられるように
 	auto& bUseCaretKeyword = GetDllShareData().m_common.m_sSearch.m_bUseCaretKeyWord;
 	if (option == 0) {
@@ -102,7 +102,7 @@ void CViewCommander::Command_ToggleKeySearch(int option)
 
 
 // ヘルプ目次
-void CViewCommander::Command_HELP_CONTENTS(void)
+void ViewCommander::Command_HELP_CONTENTS(void)
 {
 	ShowWinHelpContents(m_pCommanderView->GetHwnd());	// 目次を表示する
 	return;
@@ -110,7 +110,7 @@ void CViewCommander::Command_HELP_CONTENTS(void)
 
 
 // ヘルプキーワード検索
-void CViewCommander::Command_HELP_SEARCH(void)
+void ViewCommander::Command_HELP_SEARCH(void)
 {
 	MyWinHelp(m_pCommanderView->GetHwnd(), HELP_KEY, (ULONG_PTR)_T(""));	// 2006.10.10 ryoji MyWinHelpに変更に変更
 	return;
@@ -118,7 +118,7 @@ void CViewCommander::Command_HELP_SEARCH(void)
 
 
 // コマンド一覧
-void CViewCommander::Command_MENU_ALLFUNC(void)
+void ViewCommander::Command_MENU_ALLFUNC(void)
 {
 	POINT	po;
 	RECT	rc;
@@ -189,7 +189,7 @@ void CViewCommander::Command_MENU_ALLFUNC(void)
 /* 外部ヘルプ１
 	@date 2012.09.26 Moca HTMLHELP対応
 */
-void CViewCommander::Command_EXTHELP1(void)
+void ViewCommander::Command_EXTHELP1(void)
 {
 retry:;
 	if (!CHelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
@@ -249,7 +249,7 @@ retry:;
 	@param kwd [in] 検索キーワード．NULLのときはカーソル位置or選択されたワード
 	@date 2002.07.05 genta 任意のファイル・キーワードの指定ができるよう引数追加
 */
-void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd)
+void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd)
 {
 	std::tstring helpfile;
 	if (_helpfile) {
@@ -362,7 +362,7 @@ void CViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kw
 
 
 // バージョン情報
-void CViewCommander::Command_ABOUT(void)
+void ViewCommander::Command_ABOUT(void)
 {
 	CDlgAbout cDlgAbout;
 	cDlgAbout.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd());

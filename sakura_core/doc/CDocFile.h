@@ -56,7 +56,7 @@ public:
 	void			SetCodeSet(ECodeType eCodeSet, bool bBomExist)		{ m_sFileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
 	void			SetCodeSetChg(ECodeType eCodeSet, bool bBomExist)	{ m_sFileInfo.eCharCode = eCodeSet; m_sFileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
 	ECodeType		GetCodeSet() const			{ return m_sFileInfo.eCharCode; }		// 文字コードセットを取得
-	void			SetBomDefoult()				{ m_sFileInfo.bBomExist= CCodeTypeName(m_sFileInfo.eCharCode).IsBomDefOn(); }	// BOM付加のデフォルト値を設定する
+	void			SetBomDefoult()				{ m_sFileInfo.bBomExist= CodeTypeName(m_sFileInfo.eCharCode).IsBomDefOn(); }	// BOM付加のデフォルト値を設定する
 	void			CancelChgCodeSet()			{ m_sFileInfo.eCharCode = m_sFileInfo.eCharCodeLoad; m_sFileInfo.bBomExist = m_sFileInfo.bBomExistLoad; }		// 文字コードセット1の変更をキャンセルする
 	bool			IsBomExist() const			{ return m_sFileInfo.bBomExist; }		// 保存時にBOMを付加するかどうかを取得
 	bool			IsChgCodeSet() const		{ return (!IsFileTimeZero()) && ((m_sFileInfo.eCharCode != m_sFileInfo.eCharCodeLoad) || (m_sFileInfo.bBomExist != m_sFileInfo.bBomExistLoad)); }		// 文字コードセットが変更されたか？

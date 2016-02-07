@@ -73,7 +73,7 @@ int WINAPI _tWinMain(
 	DEBUG_TRACE(_T("sizeof(DLLSHAREDATA) = %d\n"), sizeof(DLLSHAREDATA));
 	
 	// プロセスの生成とメッセージループ
-	CProcessFactory aFactory;
+	ProcessFactory aFactory;
 	Process* process = nullptr;
 
 #ifndef _DEBUG

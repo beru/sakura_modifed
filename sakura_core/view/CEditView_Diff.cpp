@@ -395,7 +395,7 @@ bool MakeDiffTmpFile_core(CTextOutputStream& out, HWND hwnd, CEditView& view, bo
 			int nLineLen = 0; //初回用仮値
 			do {
 				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
-				LockGuard<CMutex> guard(CShareData::GetMutexShareWork());
+				LockGuard<Mutex> guard(CShareData::GetMutexShareWork());
 				{
 					nLineLen = ::SendMessage(hwnd, MYWM_GETLINEDATA, y, nLineOffset);
 					if (nLineLen == 0) { return true; } // EOF => 正常終了
@@ -450,7 +450,7 @@ BOOL CEditView::MakeDiffTmpFile(
 
 	// 自分か？
 	if (!hWnd) {
-		EConvertResult eWriteResult = CWriteManager().WriteFile_From_CDocLineMgr(
+		EConvertResult eWriteResult = WriteManager().WriteFile_From_CDocLineMgr(
 			m_pcEditDoc->m_cDocLineMgr,
 			SaveInfo(
 				filename,

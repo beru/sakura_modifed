@@ -1,5 +1,5 @@
 /*!	@file
-	@brief COsVersionInfo
+	@brief OsVersionInfo
 
 	OSVERSIONINFOをラッピング
 
@@ -58,15 +58,15 @@
 #endif
 #endif
 
-class COsVersionInfo {
+class OsVersionInfo {
 public:
 	// 初期化を行う(引数はダミー)
 	// 呼出は基本1回のみ
-	COsVersionInfo(bool pbStart);
+	OsVersionInfo(bool pbStart);
 
 	// 通常のコンストラクタ
 	// 何もしない
-	COsVersionInfo() {}
+	OsVersionInfo() {}
 
 	// OsVersionが取得できたか？
 	BOOL GetVersion() {
@@ -214,7 +214,7 @@ inline bool IsWin32NT() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return true;
 #else
-	return COsVersionInfo()._IsWin32NT();
+	return OsVersionInfo()._IsWin32NT();
 #endif
 }
 
@@ -222,7 +222,7 @@ inline bool HasWinHelpContentsProblem() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return false;
 #else
-	return COsVersionInfo()._HasWinHelpContentsProblem();
+	return OsVersionInfo()._HasWinHelpContentsProblem();
 #endif
 }
 
@@ -230,7 +230,7 @@ inline bool OsSupportReconvert() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return true;
 #else
-	return COsVersionInfo()._OsSupportReconvert();
+	return OsVersionInfo()._OsSupportReconvert();
 #endif
 }
 
@@ -238,7 +238,7 @@ inline bool IsWinV5forOfn() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return true;
 #else
-	return COsVersionInfo()._IsWinV5forOfn();
+	return OsVersionInfo()._IsWinV5forOfn();
 #endif
 }
 
@@ -246,7 +246,7 @@ inline bool IsWinVista_or_later() {
 #if (WINVER >= _WIN32_WINNT_VISTA)
 	return true;
 #else
-	return COsVersionInfo()._IsWinVista_or_later();
+	return OsVersionInfo()._IsWinVista_or_later();
 #endif
 }
 
@@ -254,7 +254,7 @@ inline bool IsWinXP_or_later() {
 #if (WINVER >= _WIN32_WINNT_WINXP)
 	return true;
 #else
-	return COsVersionInfo()._IsWinXP_or_later();
+	return OsVersionInfo()._IsWinXP_or_later();
 #endif
 }
 
@@ -262,7 +262,7 @@ inline bool IsWin2000_or_later() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return true;
 #else
-	return COsVersionInfo()._IsWin2000_or_later();
+	return OsVersionInfo()._IsWin2000_or_later();
 #endif
 }
 
@@ -270,11 +270,11 @@ inline bool IsWinMe() {
 #if (WINVER >= _WIN32_WINNT_WIN2K)
 	return false;
 #else
-	return COsVersionInfo()._IsWinMe();
+	return OsVersionInfo()._IsWinMe();
 #endif
 }
 
 inline bool IsWine() {
-	return COsVersionInfo()._IsWine();
+	return OsVersionInfo()._IsWine();
 }
 

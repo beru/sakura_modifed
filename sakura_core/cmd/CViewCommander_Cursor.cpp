@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(カーソル移動系)関数群
+@brief ViewCommanderクラスのコマンド(カーソル移動系)関数群
 
 	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -26,7 +26,7 @@
 #include "mem/CMemoryIterator.h"	// @@@ 2002.09.28 YAZAKI
 
 
-void CViewCommander::Command_MOVECURSOR(CLogicPoint pos, int option)
+void ViewCommander::Command_MOVECURSOR(CLogicPoint pos, int option)
 {
 	if (pos.GetX2() < 0 || pos.GetY2() < 0) {
 		ErrorBeep();
@@ -37,7 +37,7 @@ void CViewCommander::Command_MOVECURSOR(CLogicPoint pos, int option)
 	Command_MOVECURSORLAYOUT(layoutPos, option);
 }
 
-void CViewCommander::Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option)
+void ViewCommander::Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option)
 {
 	if (pos.GetX2() < 0 || pos.GetY2() < 0) {
 		ErrorBeep();
@@ -84,7 +84,7 @@ void CViewCommander::Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option)
 /////////////////////////////////// 以下はコマンド群 (Oct. 17, 2000 jepro note) ///////////////////////////////////////////
 
 // カーソル上移動
-int CViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
+int ViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 {
 	auto& caret = GetCaret();
 	// From Here Oct. 24, 2001 genta
@@ -123,7 +123,7 @@ int CViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 
 
 // カーソル下移動
-int CViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
+int ViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 {
 	auto& caret = GetCaret();
 	int nRepeat = 0;
@@ -161,7 +161,7 @@ int CViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 			位置に移動させられる．
 	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
 */
-int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
+int ViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 {
 	bool bUnderlineDoNotOFF = true;		// アンダーラインを消去しない
 	if (bSelect) {
@@ -262,7 +262,7 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 /* カーソル右移動
 	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
 */
-void CViewCommander::Command_RIGHT(
+void ViewCommander::Command_RIGHT(
 	bool bSelect,
 	bool bIgnoreCurrentSelection,
 	bool bRepeat
@@ -395,7 +395,7 @@ void CViewCommander::Command_RIGHT(
 
 
 // カーソル上移動(２行づつ)
-void CViewCommander::Command_UP2(bool bSelect)
+void ViewCommander::Command_UP2(bool bSelect)
 {
 	GetCaret().Cursor_UPDOWN(CLayoutInt(-2), bSelect);
 	return;
@@ -403,7 +403,7 @@ void CViewCommander::Command_UP2(bool bSelect)
 
 
 // カーソル下移動(２行づつ)
-void CViewCommander::Command_DOWN2(bool bSelect)
+void ViewCommander::Command_DOWN2(bool bSelect)
 {
 	GetCaret().Cursor_UPDOWN(CLayoutInt(2), bSelect);
 	return;
@@ -411,7 +411,7 @@ void CViewCommander::Command_DOWN2(bool bSelect)
 
 
 // 単語の左端に移動
-void CViewCommander::Command_WORDLEFT(bool bSelect)
+void ViewCommander::Command_WORDLEFT(bool bSelect)
 {
 	bool bUnderlineDoNotOFF = true;		// アンダーラインを消去しない
 	if (bSelect) {
@@ -493,7 +493,7 @@ void CViewCommander::Command_WORDLEFT(bool bSelect)
 
 
 // 単語の右端に移動
-void CViewCommander::Command_WORDRIGHT(bool bSelect)
+void ViewCommander::Command_WORDRIGHT(bool bSelect)
 {
 	bool bUnderlineDoNotOFF = true;	// アンダーラインを消去しない
 	if (bSelect) {
@@ -586,7 +586,7 @@ try_again:;
 	@date Oct.  7, 2002 YAZAKI 冗長な引数 bLineTopOnly を削除
 	@date Jun. 18, 2007 maru 行頭判定に全角空白のインデント設定も考慮する
 */
-void CViewCommander::Command_GOLINETOP(
+void ViewCommander::Command_GOLINETOP(
 	bool	bSelect,	// [in] 選択の有無。true: 選択しながら移動。false: 選択しないで移動。
 	int		lparam		/* [in] マクロから使用する拡張フラグ
 								  @li 0: キー操作と同一(default)
@@ -670,7 +670,7 @@ void CViewCommander::Command_GOLINETOP(
 /*! 行末に移動(折り返し単位)
 	@praram nOption	0x08 改行単位(合成可)
 */
-void CViewCommander::Command_GOLINEEND(
+void ViewCommander::Command_GOLINEEND(
 	bool bSelect,
 	int bIgnoreCurrentSelection,
 	int nOption
@@ -726,7 +726,7 @@ void CViewCommander::Command_GOLINEEND(
 
 
 // 半ページアップ		// Oct. 6, 2000 JEPRO added (実は従来のスクロールダウンそのもの)
-void CViewCommander::Command_HalfPageUp(
+void ViewCommander::Command_HalfPageUp(
 	bool bSelect,
 	CLayoutYInt nScrollNum
 	)
@@ -740,7 +740,7 @@ void CViewCommander::Command_HalfPageUp(
 
 
 // 半ページダウン		// Oct. 6, 2000 JEPRO added (実は従来のスクロールアップそのもの)
-void CViewCommander::Command_HalfPageDown(
+void ViewCommander::Command_HalfPageDown(
 	bool bSelect,
 	CLayoutYInt nScrollNum
 	)
@@ -760,7 +760,7 @@ void CViewCommander::Command_HalfPageDown(
 		１ページアップに動作変更
 	@date 2014.01.10 Moca カーソルが動かないときも画面をスクロールするように
 */	// Oct. 10, 2000 JEPRO added
-void CViewCommander::Command_1PageUp(
+void ViewCommander::Command_1PageUp(
 	bool bSelect,
 	CLayoutYInt nScrollNum
 	)
@@ -794,7 +794,7 @@ void CViewCommander::Command_1PageUp(
 		１ページダウンに動作変更
 	@date 2014.01.10 Moca カーソルが動かないときも画面をスクロールするように
 */
-void CViewCommander::Command_1PageDown(
+void ViewCommander::Command_1PageDown(
 	bool bSelect,
 	CLayoutYInt nScrollNum
 	)
@@ -822,7 +822,7 @@ void CViewCommander::Command_1PageDown(
 
 
 // ファイルの先頭に移動
-void CViewCommander::Command_GOFILETOP(bool bSelect)
+void ViewCommander::Command_GOFILETOP(bool bSelect)
 {
 	// 先頭へカーソルを移動
 	// Sep. 8, 2000 genta
@@ -838,7 +838,7 @@ void CViewCommander::Command_GOFILETOP(bool bSelect)
 
 
 // ファイルの最後に移動
-void CViewCommander::Command_GOFILEEND(bool bSelect)
+void ViewCommander::Command_GOFILEEND(bool bSelect)
 {
 	auto& si = m_pCommanderView->GetSelectionInfo();
 // 2001.12.13 hor BOX選択中にファイルの最後にジャンプすると[EOF]の行が反転したままになるの修正
@@ -874,7 +874,7 @@ void CViewCommander::Command_GOFILEEND(bool bSelect)
 
 
 // カーソル行をウィンドウ中央へ
-void CViewCommander::Command_CURLINECENTER(void)
+void ViewCommander::Command_CURLINECENTER(void)
 {
 	CLayoutInt nViewTopLine;
 	auto& textArea = m_pCommanderView->GetTextArea();
@@ -895,7 +895,7 @@ void CViewCommander::Command_CURLINECENTER(void)
 
 
 // 移動履歴を前へたどる
-void CViewCommander::Command_JUMPHIST_PREV(void)
+void ViewCommander::Command_JUMPHIST_PREV(void)
 {
 	// 2001.12.13 hor
 	// 移動履歴の最後に現在の位置を記憶する
@@ -921,7 +921,7 @@ void CViewCommander::Command_JUMPHIST_PREV(void)
 
 
 // 移動履歴を次へたどる
-void CViewCommander::Command_JUMPHIST_NEXT(void)
+void ViewCommander::Command_JUMPHIST_NEXT(void)
 {
 	if (m_pCommanderView->m_cHistory->CheckNext()) {
 		if (!m_pCommanderView->m_cHistory->NextValid()) {
@@ -939,7 +939,7 @@ void CViewCommander::Command_JUMPHIST_NEXT(void)
 
 
 // 現在位置を移動履歴に登録する
-void CViewCommander::Command_JUMPHIST_SET(void)
+void ViewCommander::Command_JUMPHIST_SET(void)
 {
 	m_pCommanderView->AddCurrentLineToHistory();
 }
@@ -949,7 +949,7 @@ void CViewCommander::Command_JUMPHIST_SET(void)
 
 // from CViewCommander_New.cpp
 // テキストを１行下へスクロール
-void CViewCommander::Command_WndScrollDown(void)
+void ViewCommander::Command_WndScrollDown(void)
 {
 	CLayoutInt	nCaretMarginY;
 
@@ -992,7 +992,7 @@ void CViewCommander::Command_WndScrollDown(void)
 
 // from CViewCommander_New.cpp
 // テキストを１行上へスクロール
-void CViewCommander::Command_WndScrollUp(void)
+void ViewCommander::Command_WndScrollUp(void)
 {
 	CLayoutInt	nCaretMarginY;
 
@@ -1036,7 +1036,7 @@ void CViewCommander::Command_WndScrollUp(void)
 	2002/04/26 段落の両端で止まるオプションを追加
 	2002/04/19 新規
 */
-void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
+void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 {
 	CDocLine* pcDocLine;
 	int nCaretPointer = 0;
@@ -1109,7 +1109,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 	2002/04/26 段落の両端で止まるオプションを追加
 	2002/04/19 新規
 */
-void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
+void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 {
 	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	CDocLine* pcDocLine;
@@ -1183,7 +1183,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	GetCaret().Cursor_UPDOWN(ptCaretPos_Layo_CaretPointer.y - ptCaretPos_Layo.y, bSelect);
 }
 
-void CViewCommander::Command_AUTOSCROLL()
+void ViewCommander::Command_AUTOSCROLL()
 {
 	if (m_pCommanderView->m_nAutoScrollMode == 0) {
 		GetCursorPos(&m_pCommanderView->m_cAutoScrollMousePos);
@@ -1195,7 +1195,7 @@ void CViewCommander::Command_AUTOSCROLL()
 	}
 }
 
-void CViewCommander::Command_WHEELUP(int zDelta)
+void ViewCommander::Command_WHEELUP(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1203,7 +1203,7 @@ void CViewCommander::Command_WHEELUP(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELUP);
 }
 
-void CViewCommander::Command_WHEELDOWN(int zDelta)
+void ViewCommander::Command_WHEELDOWN(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1211,7 +1211,7 @@ void CViewCommander::Command_WHEELDOWN(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELDOWN);
 }
 
-void CViewCommander::Command_WHEELLEFT(int zDelta)
+void ViewCommander::Command_WHEELLEFT(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1219,7 +1219,7 @@ void CViewCommander::Command_WHEELLEFT(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, true, F_WHEELLEFT);
 }
 
-void CViewCommander::Command_WHEELRIGHT(int zDelta)
+void ViewCommander::Command_WHEELRIGHT(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1227,7 +1227,7 @@ void CViewCommander::Command_WHEELRIGHT(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, true, F_WHEELRIGHT);
 }
 
-void CViewCommander::Command_WHEELPAGEUP(int zDelta)
+void ViewCommander::Command_WHEELPAGEUP(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1235,7 +1235,7 @@ void CViewCommander::Command_WHEELPAGEUP(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELPAGEUP);
 }
 
-void CViewCommander::Command_WHEELPAGEDOWN(int zDelta)
+void ViewCommander::Command_WHEELPAGEDOWN(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1243,7 +1243,7 @@ void CViewCommander::Command_WHEELPAGEDOWN(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, false, F_WHEELPAGEDOWN);
 }
 
-void CViewCommander::Command_WHEELPAGELEFT(int zDelta)
+void ViewCommander::Command_WHEELPAGELEFT(int zDelta)
 {
 	int zDelta2 = -1 * (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1251,7 +1251,7 @@ void CViewCommander::Command_WHEELPAGELEFT(int zDelta)
 	m_pCommanderView->OnMOUSEWHEEL2(wParam, lParam, true, F_WHEELPAGELEFT);
 }
 
-void CViewCommander::Command_WHEELPAGERIGHT(int zDelta)
+void ViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 {
 	int zDelta2 = (zDelta == 0 ? 120: zDelta);
 	WPARAM wParam = MAKELONG(0, zDelta2);
@@ -1262,7 +1262,7 @@ void CViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 /*! 次の変更行へ
 	変更行のブロックの先頭行と、変更行のブロックの末尾(次の行頭)に移動する
 */
-void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
+void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 {
 	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	CLogicInt nYOld = GetCaret().GetCaretLogicPos().y;
@@ -1340,7 +1340,7 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 	変更行のブロックの先頭行と、変更行のブロックの末尾(次の行頭)に移動する
 	Command_MODIFYLINE_NEXTと同じ位置に止まる
 */
-void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
+void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 {
 	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
 	CLogicInt nYOld = GetCaret().GetCaretLogicPos().y;

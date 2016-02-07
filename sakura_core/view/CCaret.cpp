@@ -511,7 +511,7 @@ void CCaret::ShowEditCaret()
 		}
 		nCaretWidth = GetHankakuDx();
 	}
-	CMySize caretSizeOld = GetCaretSize();
+	Size caretSizeOld = GetCaretSize();
 	SetCaretSize(nCaretWidth, nCaretHeight);
 	POINT ptDrawPos = CalcCaretDrawPos(GetCaretLayoutPos());
 	SetCaretSize(caretSizeOld.cx, caretSizeOld.cy); // 後で比較するので戻す
@@ -612,7 +612,7 @@ void CCaret::ShowEditCaret()
 		m_bCaretShowFlag = false; // 2002/07/22 novice
 	}else {
 		if (
-			GetCaretSize() != CMySize(nCaretWidth, nCaretHeight)
+			GetCaretSize() != Size(nCaretWidth, nCaretHeight)
 			|| m_crCaret != crCaret
 			|| m_pEditView->m_crBack != crBack
 		) {
@@ -679,14 +679,14 @@ void CCaret::ShowCaretPosInfo()
 	CNativeT cmemCodeName;
 	if (hwndStatusBar) {
 		TCHAR szCodeName[100];
-		CCodePage::GetNameNormal(szCodeName, m_pEditDoc->GetDocumentEncoding());
+		CodePage::GetNameNormal(szCodeName, m_pEditDoc->GetDocumentEncoding());
 		cmemCodeName.AppendString(szCodeName);
 		if (m_pEditDoc->GetDocumentBomExist()) {
 			cmemCodeName.AppendString(LS(STR_CARET_WITHBOM));
 		}
 	}else {
 		TCHAR szCodeName[100];
-		CCodePage::GetNameShort(szCodeName, m_pEditDoc->GetDocumentEncoding());
+		CodePage::GetNameShort(szCodeName, m_pEditDoc->GetDocumentEncoding());
 		cmemCodeName.AppendString(szCodeName);
 		if (m_pEditDoc->GetDocumentBomExist()) {
 			cmemCodeName.AppendString(_T("#"));		// BOM付(メニューバーなので小さく)	// 2013/4/17 Uchi
@@ -704,7 +704,7 @@ void CCaret::ShowCaretPosInfo()
 
 	// -- -- -- -- キャレット位置 -> ptCaret -- -- -- -- //
 	//
-	CMyPoint ptCaret;
+	Point ptCaret;
 	// 行番号をロジック単位で表示
 	if (pTypes->m_bLineNumIsCRLF) {
 		ptCaret.x = 0;
@@ -792,13 +792,13 @@ void CCaret::ShowCaretPosInfo()
 			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
-				CCodeBase* pCode = CCodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
+				CodeBase* pCode = CodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
 				CommonSetting_Statusbar* psStatusbar = &GetDllShareData().m_common.m_sStatusbar;
 				EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 				delete pCode;
 				if (ret != RESULT_COMPLETE) {
 					// うまくコードが取れなかった(Unicodeで表示)
-					pCode = CCodeFactory::CreateCodeBase(CODE_UNICODE, false);
+					pCode = CodeFactory::CreateCodeBase(CODE_UNICODE, false);
 					/* EConvertResult ret = */ pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 					delete pCode;
 				}
@@ -1111,7 +1111,7 @@ POINT CCaret::CalcCaretDrawPos(const CLayoutPoint& ptCaretPos) const
 		+ m_pEditView->GetTextMetrics().GetHankakuHeight() - GetCaretSize().cy; // 下寄せ
 	}
 
-	return CMyPoint(nPosX, nPosY);
+	return Point(nPosX, nPosY);
 }
 
 

@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(検索系 アウトライン解析)関数群
+@brief ViewCommanderクラスのコマンド(検索系 アウトライン解析)関数群
 
 	2012/12/17	CViewCommander.cppから分離
 */
@@ -33,7 +33,7 @@
 	2002/3/13 YAZAKI nOutlineTypeとnListTypeを統合。
 */
 // トグル用のフラグに変更 20060201 aroka
-bool CViewCommander::Command_FUNCLIST(
+bool ViewCommander::Command_FUNCLIST(
 	int nAction,
 	int _nOutlineType = OUTLINE_DEFAULT
 	)

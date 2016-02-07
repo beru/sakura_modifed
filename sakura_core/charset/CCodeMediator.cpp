@@ -16,7 +16,7 @@
 
 	@date 2007.08.11 charcode.cpp から移動
 */
-ECodeType CCodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
+ECodeType CodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
 {
 	uchar_t* pBuf;
 
@@ -54,7 +54,7 @@ ECodeType CCodeMediator::DetectUnicodeBom(const char* pS, const int nLen)
 
 	@note 適切な検出が行われた場合は、m_dwStatus に CESI_MB_DETECTED フラグが格納される。
 */
-ECodeType CCodeMediator::DetectMBCode(CESI* pcesi)
+ECodeType CodeMediator::DetectMBCode(CESI* pcesi)
 {
 //	pcesi->m_dwStatus = ESI_NOINFORMATION;
 
@@ -85,7 +85,7 @@ ECodeType CCodeMediator::DetectMBCode(CESI* pcesi)
 	@retval 0               UTF-16 LE/BE ともに検出されなかった
 
 */
-ECodeType CCodeMediator::DetectUnicode(CESI* pcesi)
+ECodeType CodeMediator::DetectUnicode(CESI* pcesi)
 {
 //	pcesi->m_dwStatus = ESI_NOINFORMATION;
 
@@ -111,7 +111,7 @@ ECodeType CCodeMediator::DetectUnicode(CESI* pcesi)
 /*
 	日本語コードセット判定
 */
-ECodeType CCodeMediator::CheckKanjiCode(CESI* pcesi)
+ECodeType CodeMediator::CheckKanjiCode(CESI* pcesi)
 {
 	/*
 		判定状況は、
@@ -152,7 +152,7 @@ ECodeType CCodeMediator::CheckKanjiCode(CESI* pcesi)
 	UTF-7		CODE_UTF7
 	UnicodeBE	CODE_UNICODEBE
 */
-ECodeType CCodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
+ECodeType CodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 {
 	CESI cesi(*m_pEncodingConfig);
 
@@ -181,7 +181,7 @@ ECodeType CCodeMediator::CheckKanjiCode(const char* pBuf, int nBufLen)
 ||	UnicodeBE	CODE_UNICODEBE
 ||	エラー		CODE_ERROR
 */
-ECodeType CCodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
+ECodeType CodeMediator::CheckKanjiCodeOfFile(const TCHAR* pszFile)
 {
 	// オープン
 	CBinaryInputStream in(pszFile);

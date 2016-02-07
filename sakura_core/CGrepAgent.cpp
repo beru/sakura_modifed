@@ -126,7 +126,7 @@ void CGrepAgent::AddTail( CEditView* pcEditView, const CNativeW& cmem, bool bAdd
 		HANDLE out = ::GetStdHandle(STD_OUTPUT_HANDLE);
 		if (out && out != INVALID_HANDLE_VALUE) {
 			CMemory cmemOut;
-			std::unique_ptr<CCodeBase> pcCodeBase( CCodeFactory::CreateCodeBase(
+			std::unique_ptr<CodeBase> pcCodeBase( CodeFactory::CreateCodeBase(
 					pcEditView->GetDocument()->GetDocumentEncoding(), 0) );
 			pcCodeBase->UnicodeToCode( cmem, &cmemOut );
 			DWORD dwWrite = 0;
@@ -495,7 +495,7 @@ DWORD CGrepAgent::DoGrep(
 	}else if (IsValidCodeOrCPType(sGrepOption.nGrepCharSet)) {
 		cmemMessage.AppendString(LSW(STR_GREP_CHARSET));	// L"    (文字コードセット："
 		TCHAR szCpName[100];
-		CCodePage::GetNameNormal(szCpName, sGrepOption.nGrepCharSet);
+		CodePage::GetNameNormal(szCpName, sGrepOption.nGrepCharSet);
 		cmemMessage.AppendStringT( szCpName );
 		cmemMessage.AppendString(L")\r\n");
 	}
@@ -1080,14 +1080,14 @@ int CGrepAgent::DoGrepFile(
 			// 判別エラーでもファイル数にカウントするため
 			// ファイルの日本語コードセット判別
 			// 2014.06.19 Moca ファイル名のタイプ別のm_encodingに変更
-			CCodeMediator cmediator( type->m_encoding );
+			CodeMediator cmediator( type->m_encoding );
 			nCharCode = cmediator.CheckKanjiCodeOfFile(pszFullPath);
 			if (!IsValidCodeOrCPType(nCharCode)) {
 				pszCodeName = _T("  [(DetectError)]");
 			}else if (IsValidCodeType(nCharCode)) {
-				pszCodeName = CCodeTypeName(nCharCode).Bracket();
+				pszCodeName = CodeTypeName(nCharCode).Bracket();
 			}else {
-				CCodePage::GetNameBracket(szCpName, nCharCode);
+				CodePage::GetNameBracket(szCpName, nCharCode);
 				pszCodeName = szCpName;
 			}
 		}
@@ -1169,10 +1169,10 @@ int CGrepAgent::DoGrepFile(
 		{
 			if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
 				if (IsValidCodeType(nCharCode)) {
-					auto_strcpy( szCpName, CCodeTypeName(nCharCode).Bracket() );
+					auto_strcpy( szCpName, CodeTypeName(nCharCode).Bracket() );
 					pszCodeName = szCpName;
 				}else {
-					CCodePage::GetNameBracket(szCpName, nCharCode);
+					CodePage::GetNameBracket(szCpName, nCharCode);
 					pszCodeName = szCpName;
 				}
 			}
@@ -1496,7 +1496,7 @@ public:
 		bOldSave(bOldSave_),
 		bufferSize(0),
 		out(NULL),
-		pcCodeBase(CCodeFactory::CreateCodeBase(code_,0)),
+		pcCodeBase(CodeFactory::CreateCodeBase(code_,0)),
 		memMessage(message)
 	{
 	}
@@ -1612,7 +1612,7 @@ private:
 	size_t bufferSize;
 	std::deque<CNativeW> buffer;
 	CBinaryOutputStream* out;
-	std::unique_ptr<CCodeBase> pcCodeBase;
+	std::unique_ptr<CodeBase> pcCodeBase;
 	CNativeW&	memMessage;
 };
 
@@ -1668,10 +1668,10 @@ int CGrepAgent::DoGrepReplaceFile(
 		{
 			if (sGrepOption.nGrepCharSet == CODE_AUTODETECT) {
 				if (IsValidCodeType(nCharCode)) {
-					auto_strcpy( szCpName, CCodeTypeName(nCharCode).Bracket() );
+					auto_strcpy( szCpName, CodeTypeName(nCharCode).Bracket() );
 					pszCodeName = szCpName;
 				}else {
-					CCodePage::GetNameBracket(szCpName, nCharCode);
+					CodePage::GetNameBracket(szCpName, nCharCode);
 					pszCodeName = szCpName;
 				}
 			}

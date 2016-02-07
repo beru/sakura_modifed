@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(マクロ系)関数群
+@brief ViewCommanderクラスのコマンド(マクロ系)関数群
 
 	2012/12/20	CViewCommander.cppから分離
 */
@@ -34,7 +34,7 @@
 
 
 // キーマクロの記録開始／終了
-void CViewCommander::Command_RECKEYMACRO(void)
+void ViewCommander::Command_RECKEYMACRO(void)
 {
 	auto& sFlags = GetDllShareData().m_flags;
 	if (sFlags.m_bRecordingKeyMacro) {									// キーボードマクロの記録中
@@ -80,7 +80,7 @@ void CViewCommander::Command_RECKEYMACRO(void)
 
 
 // キーマクロの保存
-void CViewCommander::Command_SAVEKEYMACRO(void)
+void ViewCommander::Command_SAVEKEYMACRO(void)
 {
 	auto& sFlags = GetDllShareData().m_flags;
 	sFlags.m_bRecordingKeyMacro = FALSE;
@@ -132,7 +132,7 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
 /*! キーマクロの読み込み
 	@date 2005.02.20 novice デフォルトの拡張子変更
  */
-void CViewCommander::Command_LOADKEYMACRO(void)
+void ViewCommander::Command_LOADKEYMACRO(void)
 {
 	auto& sFlags = GetDllShareData().m_flags;
 	sFlags.m_bRecordingKeyMacro = FALSE;
@@ -173,7 +173,7 @@ void CViewCommander::Command_LOADKEYMACRO(void)
 
 
 // キーマクロの実行
-void CViewCommander::Command_EXECKEYMACRO(void)
+void ViewCommander::Command_EXECKEYMACRO(void)
 {
 	auto& sFlags = GetDllShareData().m_flags;
 	//@@@ 2002.1.24 YAZAKI 記録中は終了してから実行
@@ -213,7 +213,7 @@ void CViewCommander::Command_EXECKEYMACRO(void)
 	@date 2008.10.23 syat 新規作成
 	@date 2008.12.21 syat 引数「種別」を追加
  */
-void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* pszTypeW)
+void ViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* pszTypeW)
 {
 	TCHAR			szPath[_MAX_PATH + 1];
 	const TCHAR*	pszPath = NULL;				// 第1引数をTCHAR*に変換した文字列
@@ -300,7 +300,7 @@ void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* ps
 /*! 外部コマンド実行ダイアログ表示
 	@date 2002.02.02 YAZAKI.
 */
-void CViewCommander::Command_EXECCOMMAND_DIALOG(void)
+void ViewCommander::Command_EXECCOMMAND_DIALOG(void)
 {
 	CDlgExec cDlgExec;
 
@@ -331,7 +331,7 @@ void CViewCommander::Command_EXECCOMMAND_DIALOG(void)
 // Oct. 9, 2001   genta  マクロ対応のため引数追加
 // 2002.2.2       YAZAKI ダイアログ呼び出し部とコマンド実行部を分離
 //void CEditView::Command_EXECCOMMAND(const char* cmd_string)
-void CViewCommander::Command_EXECCOMMAND(
+void ViewCommander::Command_EXECCOMMAND(
 	LPCWSTR cmd_string,
 	const int nFlgOpt,
 	LPCWSTR pszCurDir

@@ -30,7 +30,7 @@ class CAutoScrollWnd : public CWnd {
 public:
 	CAutoScrollWnd();
 	virtual ~CAutoScrollWnd();
-	HWND Create(HINSTANCE, HWND , bool, bool, const CMyPoint&, CEditView*);
+	HWND Create(HINSTANCE, HWND , bool, bool, const Point&, CEditView*);
 	void Close();
 
 private:

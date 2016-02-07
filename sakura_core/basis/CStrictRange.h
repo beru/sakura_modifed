@@ -24,33 +24,33 @@
 #pragma once
 
 template <class PointType>
-class CRangeBase {
+class RangeBase {
 public:
 	typedef typename PointType::IntType IntType;
 public:
 	// コンストラクタ
-	CRangeBase() {
+	RangeBase() {
 	}
-	CRangeBase(const CRangeBase& rhs) {
+	RangeBase(const RangeBase& rhs) {
 		operator = (rhs);
 	}
-	CRangeBase(const PointType& _ptFrom, const PointType& _ptTo) {
+	RangeBase(const PointType& _ptFrom, const PointType& _ptTo) {
 		m_ptFrom = _ptFrom;
 		m_ptTo = _ptTo;
 	}
 
 	// 代入
-	CRangeBase& operator = (const CRangeBase& rhs) {
+	RangeBase& operator = (const RangeBase& rhs) {
 		m_ptFrom = rhs.m_ptFrom;
 		m_ptTo = rhs.m_ptTo;
 		return *this;
 	}
 
 	// 比較
-	bool operator == (const CRangeBase& rhs) const {
+	bool operator == (const RangeBase& rhs) const {
 		return m_ptFrom == rhs.m_ptFrom && m_ptTo == rhs.m_ptTo;
 	}
-	bool operator != (const CRangeBase& rhs) const {
+	bool operator != (const RangeBase& rhs) const {
 		return !(operator == (rhs));
 	}
 

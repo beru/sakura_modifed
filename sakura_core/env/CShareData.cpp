@@ -85,9 +85,9 @@ CShareData::~CShareData()
 }
 
 
-static CMutex g_cMutexShareWork( FALSE, GSTR_MUTEX_SAKURA_SHAREWORK );
+static Mutex g_cMutexShareWork( FALSE, GSTR_MUTEX_SAKURA_SHAREWORK );
  
-CMutex& CShareData::GetMutexShareWork(){
+Mutex& CShareData::GetMutexShareWork(){
 	return g_cMutexShareWork;
 }
 
@@ -963,9 +963,9 @@ bool CShareData::ActiveAlreadyOpenedWindow(const TCHAR* pszPath, HWND* phwndOwne
 		EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 		if (nCharCode != CODE_AUTODETECT) {
 			TCHAR szCpNameCur[100];
-			CCodePage::GetNameLong(szCpNameCur, pfi->m_nCharCode);
+			CodePage::GetNameLong(szCpNameCur, pfi->m_nCharCode);
 			TCHAR szCpNameNew[100];
-			CCodePage::GetNameLong(szCpNameNew, pfi->m_nCharCode);
+			CodePage::GetNameLong(szCpNameNew, pfi->m_nCharCode);
 			if (szCpNameCur[0] && szCpNameNew[0]) {
 				if (nCharCode != pfi->m_nCharCode) {
 					TopWarningMessage(*phwndOwner,
@@ -1055,7 +1055,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 	int outPos = 0;
 	if (len == 0) {
 		// 0のときは何も追加しないが、カーソル移動が発生する
-		LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
+		LockGuard<Mutex> guard( CShareData::GetMutexShareWork() );
 		pOutBuffer[0] = L'\0';
 		::SendMessage(m_pShareData->m_handles.m_hwndDebug, MYWM_ADDSTRINGLEN_W, 0, 0);
 	}else {
@@ -1074,7 +1074,7 @@ void CShareData::TraceOutString(const wchar_t* pStr, int len)
 					--outLen;
 				}
 			}
-			LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
+			LockGuard<Mutex> guard( CShareData::GetMutexShareWork() );
 			wmemcpy(pOutBuffer, pStr + outPos, outLen);
 			pOutBuffer[outLen] = L'\0';
 			DWORD_PTR dwMsgResult;

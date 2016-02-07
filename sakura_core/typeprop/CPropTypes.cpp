@@ -158,7 +158,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 		memset_raw(p, 0, sizeof_raw(*p));
 		p->dwSize      = sizeof_raw(*p);
 		p->dwFlags     = PSP_USETITLE | PSP_HASHELP;
-		p->hInstance   = CSelectLang::getLangRsrcInstance();
+		p->hInstance   = SelectLang::getLangRsrcInstance();
 		p->pszTemplate = MAKEINTRESOURCE(TypePropSheetInfoList[nIdx].resId);
 		p->pszIcon     = NULL;
 		p->pfnDlgProc  = TypePropSheetInfoList[nIdx].DProc;
@@ -176,7 +176,7 @@ INT_PTR CPropTypes::DoPropertySheet(int nPageNum)
 	// JEPROtest Sept. 30, 2000 タイプ別設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 	psh.dwFlags    = /*PSH_USEICONID |*/ PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE/* | PSH_HASHELP*/ | PSH_USEPAGELANG;
 	psh.hwndParent = m_hwndParent;
-	psh.hInstance  = CSelectLang::getLangRsrcInstance();
+	psh.hInstance  = SelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
 	psh.pszCaption = LS(STR_PROPTYPE);	// _T("タイプ別設定");	// Sept. 8, 2000 jepro 単なる「設定」から変更
 	psh.nPages     = nIdx;

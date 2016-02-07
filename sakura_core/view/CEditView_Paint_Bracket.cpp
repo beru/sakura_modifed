@@ -243,7 +243,7 @@ void CEditView::DrawBracketPair(bool bDraw)
 						::DeleteDC(hdcBgImg);
 					}
 					DispPos sPos(nWidth, nHeight);
-					sPos.InitDrawPos(CMyPoint(nLeft, nTop));
+					sPos.InitDrawPos(Point(nLeft, nTop));
 					GetTextDrawer().DispText(gr, &sPos,  &pLine[OutputX], 1, bTrans);
 					GetTextDrawer().DispNoteLine(gr, nTop, nTop + nHeight, nLeft, nLeft + (Int)charsWidth * nWidth);
 					// 2006.04.30 Moca ‘ÎŠ‡ŒÊ‚Ìcü‘Î‰

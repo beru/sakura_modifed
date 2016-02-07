@@ -18,7 +18,7 @@
 
 #define MAX_SELLANG_NAME_STR	128		// メッセージリソースの言語名の最大文字列長（サイズは適当）
 
-class CSelectLang {
+class SelectLang {
 public:
 	// メッセージリソース用構造体
 	struct SelLangInfo {
@@ -40,8 +40,8 @@ public:
 	/*
 	||  Constructors
 	*/
-	CSelectLang() {}
-	~CSelectLang();
+	SelectLang() {}
+	~SelectLang();
 
 	/*
 	||  Attributes & Operations
@@ -72,12 +72,12 @@ private:
 
 #define LOADSTR_ADD_SIZE		256			// 文字列リソース用バッファの初期または追加サイズ（TCHAR単位）
 
-class CLoadString {
+class ResourceString {
 protected:
 	// 文字列リソース読み込み用バッファクラス
-	class CLoadStrBuffer {
+	class LoadStrBuffer {
 	public:
-		CLoadStrBuffer() {
+		LoadStrBuffer() {
 			m_pszString   = m_szString;				// 変数内に準備したバッファを接続
 			m_nBufferSize = _countof(m_szString);	// 配列個数
 			m_nLength     = 0;
@@ -85,7 +85,7 @@ protected:
 		}
 
 		// virtual
-		~CLoadStrBuffer() {
+		~LoadStrBuffer() {
 			// バッファを取得していた場合は解放する。
 			if ( m_pszString && m_pszString != m_szString ) {
 				delete[] m_pszString;
@@ -96,7 +96,7 @@ protected:
 		/*virtual*/ int GetBufferSize() const { return m_nBufferSize; }		// 読み込みバッファのサイズ（TCHAR単位）を返す
 		/*virtual*/ int GetStringLength() const { return m_nLength; }		// 読み込んだ文字数（TCHAR単位）を返す
 
-		/*virtual*/ int LoadString( UINT uid );								// 文字列リソースを読み込む（読み込み実行部）
+		/*virtual*/ int Load( UINT uid );								// 文字列リソースを読み込む（読み込み実行部）
 
 	protected:
 		LPTSTR m_pszString;						// 文字列読み込みバッファのポインタ
@@ -105,21 +105,21 @@ protected:
 		TCHAR m_szString[LOADSTR_ADD_SIZE];		// 文字列読み込みバッファ（バッファ拡張後は使用されない）
 
 	private:
-		CLoadStrBuffer( const CLoadStrBuffer& );					// コピー禁止とする
-		CLoadStrBuffer operator = ( const CLoadStrBuffer& );		// 代入禁止とする
+		LoadStrBuffer( const LoadStrBuffer& );					// コピー禁止とする
+		LoadStrBuffer operator = ( const LoadStrBuffer& );		// 代入禁止とする
 	};
 
-	static CLoadStrBuffer m_acLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（CLoadString::LoadStringSt() が使用する）
-	static int m_nDataTempArrayIndex;					// 最後に使用したバッファのインデックス（CLoadString::LoadStringSt() が使用する）
-	CLoadStrBuffer m_cLoadStrBuffer;					// 文字列読み込みバッファ（CLoadString::LoadString() が使用する）
+	static LoadStrBuffer m_acLoadStrBufferTemp[4];		// 文字列読み込みバッファの配列（ResourceString::LoadStringSt() が使用する）
+	static int m_nDataTempArrayIndex;					// 最後に使用したバッファのインデックス（ResourceString::LoadStringSt() が使用する）
+	LoadStrBuffer m_cLoadStrBuffer;					// 文字列読み込みバッファ（ResourceString::LoadString() が使用する）
 
 public:
 	/*
 	||  Constructors
 	*/
-	CLoadString() {}
-	CLoadString( UINT uid ) { LoadString( uid ); }		// 文字列読み込み付きコンストラクタ
-	/*virtual*/ ~CLoadString() {}
+	ResourceString() {}
+	ResourceString( UINT uid ) { Load( uid ); }		// 文字列読み込み付きコンストラクタ
+	/*virtual*/ ~ResourceString() {}
 
 
 	/*
@@ -130,16 +130,16 @@ public:
 	/*virtual*/ int GetStringLength() const { return m_cLoadStrBuffer.GetStringLength(); }	// 読み込んだ文字数（TCHAR単位）を返す
 
 	static LPCTSTR LoadStringSt( UINT uid );			// 静的バッファに文字列リソースを読み込む（各国語メッセージリソース対応）
-	/*virtual*/ LPCTSTR LoadString( UINT uid );			// 文字列リソースを読み込む（各国語メッセージリソース対応）
+	/*virtual*/ LPCTSTR Load( UINT uid );			// 文字列リソースを読み込む（各国語メッセージリソース対応）
 
 protected:
 
 private:
-	CLoadString( const CLoadString& );					// コピー禁止とする
-	CLoadString operator = ( const CLoadString& );		// 代入禁止とする
+	ResourceString( const ResourceString& );					// コピー禁止とする
+	ResourceString operator = ( const ResourceString& );		// 代入禁止とする
 };
 
 // 文字列ロード簡易化マクロ
-#define LS( id ) ( CLoadString::LoadStringSt( id ) )
-#define LSW( id ) to_wchar( CLoadString::LoadStringSt( id ) )
+#define LS( id ) ( ResourceString::LoadStringSt( id ) )
+#define LSW( id ) to_wchar( ResourceString::LoadStringSt( id ) )
 

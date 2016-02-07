@@ -20,7 +20,7 @@
 #include "_main/global.h"
 #include "CClipboard.h"
 
-COleLibrary CYbInterfaceBase::m_olelib;
+OleLibrary CYbInterfaceBase::m_olelib;
 
 CYbInterfaceBase::CYbInterfaceBase()
 {
@@ -52,12 +52,12 @@ HRESULT CYbInterfaceBase::QueryInterfaceImpl(
 
 /////////////////////////////////////////
 
-COleLibrary::COleLibrary()//:m_dwCount(0)	// 2009.01.08 ryoji m_dwCount削除
+OleLibrary::OleLibrary()//:m_dwCount(0)	// 2009.01.08 ryoji m_dwCount削除
 {
 	return;
 }
 
-COleLibrary::~COleLibrary()
+OleLibrary::~OleLibrary()
 {
 // 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
 //	if (m_dwCount > 0)
@@ -66,7 +66,7 @@ COleLibrary::~COleLibrary()
 }
 
 
-void COleLibrary::Initialize()
+void OleLibrary::Initialize()
 {
 // 2009.01.08 ryoji OleInitialize削除（WinMainにOleInitialize/OleUninitialize追加）
 //	if (m_dwCount++ == 0)
@@ -74,7 +74,7 @@ void COleLibrary::Initialize()
 	return;
 }
 
-void COleLibrary::UnInitialize()
+void OleLibrary::UnInitialize()
 {
 // 2009.01.08 ryoji OleUninitialize削除（WinMainにOleInitialize/OleUninitialize追加）
 //	if (m_dwCount > 0 && --m_dwCount == 0)
@@ -172,7 +172,7 @@ STDMETHODIMP CDropTarget::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINT
 }
 
 
-STDMETHODIMP CDropSource::QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyState)
+STDMETHODIMP DropSource::QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyState)
 {
 	if (bEscapePressed || (dwKeyState & (m_bLeft ? MK_RBUTTON : MK_LBUTTON))) {
 		return DRAGDROP_S_CANCEL;
@@ -183,7 +183,7 @@ STDMETHODIMP CDropSource::QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyStat
 	return S_OK;
 }
 
-STDMETHODIMP CDropSource::GiveFeedback(DWORD dropEffect)
+STDMETHODIMP DropSource::GiveFeedback(DWORD dropEffect)
 {
 	return DRAGDROP_S_USEDEFAULTCURSORS;
 }
@@ -196,7 +196,7 @@ STDMETHODIMP CDropSource::GiveFeedback(DWORD dropEffect)
 
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
+void DataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (m_pData) {
@@ -225,7 +225,7 @@ void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 		::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)m_pData[0].data, m_pData[0].size/sizeof(wchar_t), (LPSTR)m_pData[i].data, m_pData[i].size, NULL, NULL);
 
 		++i;
-		m_pData[i].cfFormat = CClipboard::GetSakuraFormat();
+		m_pData[i].cfFormat = Clipboard::GetSakuraFormat();
 		m_pData[i].size = sizeof(int) + nTextLen * sizeof(wchar_t);
 		m_pData[i].data = new BYTE[m_pData[i].size];
 		*(int*)m_pData[i].data = nTextLen;
@@ -241,10 +241,10 @@ void CDataObject::SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect)
 	}
 }
 
-DWORD CDataObject::DragDrop(BOOL bLeft, DWORD dwEffects)
+DWORD DataObject::DragDrop(BOOL bLeft, DWORD dwEffects)
 {
 	DWORD dwEffect;
-	CDropSource drop(bLeft);
+	DropSource drop(bLeft);
 	if (SUCCEEDED(::DoDragDrop(this, &drop, dwEffects, &dwEffect))) {
 		return dwEffect;
 	}
@@ -254,7 +254,7 @@ DWORD CDataObject::DragDrop(BOOL bLeft, DWORD dwEffects)
 /** IDataObject::GetData
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-STDMETHODIMP CDataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
+STDMETHODIMP DataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm)
@@ -292,7 +292,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 /** IDataObject::GetDataHere
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
+STDMETHODIMP DataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 {
 	// Feb. 26, 2001, fixed by yebisuya sugoroku
 	if (!lpfe || !lpsm || !lpsm->hGlobal)
@@ -327,7 +327,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpfe, LPSTGMEDIUM lpsm)
 /** IDataObject::QueryGetData
 	@date 2008.03.26 ryoji 複数フォーマット対応
 */
-STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpfe)
+STDMETHODIMP DataObject::QueryGetData(LPFORMATETC lpfe)
 {
 	if (!lpfe)
 		return E_INVALIDARG;
@@ -351,12 +351,12 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpfe)
 	return S_OK;
 }
 
-STDMETHODIMP CDataObject::GetCanonicalFormatEtc(LPFORMATETC, LPFORMATETC)
+STDMETHODIMP DataObject::GetCanonicalFormatEtc(LPFORMATETC, LPFORMATETC)
 {
 	return DATA_S_SAMEFORMATETC;
 }
 
-STDMETHODIMP CDataObject::SetData(LPFORMATETC, LPSTGMEDIUM, BOOL)
+STDMETHODIMP DataObject::SetData(LPFORMATETC, LPSTGMEDIUM, BOOL)
 {
 	return E_NOTIMPL;
 }
@@ -364,25 +364,25 @@ STDMETHODIMP CDataObject::SetData(LPFORMATETC, LPSTGMEDIUM, BOOL)
 /** IDataObject::EnumFormatEtc
 	@date 2008.03.26 ryoji IEnumFORMATETCをサポート
 */
-STDMETHODIMP CDataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc)
+STDMETHODIMP DataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc)
 {
 	if (dwDirection != DATADIR_GET)
 		return S_FALSE;
-	*ppenumFormatetc = new CEnumFORMATETC(this);
+	*ppenumFormatetc = new EnumFORMATETC(this);
 	return *ppenumFormatetc? S_OK: S_FALSE;
 }
 
-STDMETHODIMP CDataObject::DAdvise(LPFORMATETC, DWORD, LPADVISESINK, LPDWORD)
+STDMETHODIMP DataObject::DAdvise(LPFORMATETC, DWORD, LPADVISESINK, LPDWORD)
 {
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-STDMETHODIMP CDataObject::DUnadvise(DWORD)
+STDMETHODIMP DataObject::DUnadvise(DWORD)
 {
 	return OLE_E_ADVISENOTSUPPORTED;
 }
 
-STDMETHODIMP CDataObject::EnumDAdvise(LPENUMSTATDATA*)
+STDMETHODIMP DataObject::EnumDAdvise(LPENUMSTATDATA*)
 {
 	return OLE_E_ADVISENOTSUPPORTED;
 }
@@ -391,7 +391,7 @@ STDMETHODIMP CDataObject::EnumDAdvise(LPENUMSTATDATA*)
 /** IEnumFORMATETC::Next
 	@date 2008.03.26 ryoji 新規作成
 */
-STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
+STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
 	if (celt <= 0 || !rgelt || m_nIndex >= m_pcDataObject->m_nFormat)
 		return S_FALSE;
@@ -418,7 +418,7 @@ STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetc
 /** IEnumFORMATETC::Skip
 	@date 2008.03.26 ryoji 新規作成
 */
-STDMETHODIMP CEnumFORMATETC::Skip(ULONG celt)
+STDMETHODIMP EnumFORMATETC::Skip(ULONG celt)
 {
 	while (m_nIndex < m_pcDataObject->m_nFormat && celt > 0) {
 		++m_nIndex;
@@ -431,7 +431,7 @@ STDMETHODIMP CEnumFORMATETC::Skip(ULONG celt)
 /** IEnumFORMATETC::Reset
 	@date 2008.03.26 ryoji 新規作成
 */
-STDMETHODIMP CEnumFORMATETC::Reset(void)
+STDMETHODIMP EnumFORMATETC::Reset(void)
 {
 	m_nIndex = 0;
 	return S_OK;
@@ -440,7 +440,7 @@ STDMETHODIMP CEnumFORMATETC::Reset(void)
 /** IEnumFORMATETC::Clone
 	@date 2008.03.26 ryoji 新規作成
 */
-STDMETHODIMP CEnumFORMATETC::Clone(IEnumFORMATETC** ppenum)
+STDMETHODIMP EnumFORMATETC::Clone(IEnumFORMATETC** ppenum)
 {
 	return E_NOTIMPL;
 }

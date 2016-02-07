@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(ファイル操作系)関数群
+@brief ViewCommanderクラスのコマンド(ファイル操作系)関数群
 
 	2012/12/20	CViewCommander.cppから分離
 */
@@ -60,7 +60,7 @@
 
 
 // 新規作成
-void CViewCommander::Command_FILENEW(void)
+void ViewCommander::Command_FILENEW(void)
 {
 	// 新たな編集ウィンドウを起動
 	LoadInfo sLoadInfo;
@@ -82,7 +82,7 @@ void CViewCommander::Command_FILENEW(void)
 
 
 // 新規作成（新しいウィンドウで開く）
-void CViewCommander::Command_FILENEW_NEWWINDOW(void)
+void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 {
 	// 新たな編集ウィンドウを起動
 	LoadInfo sLoadInfo;
@@ -108,7 +108,7 @@ void CViewCommander::Command_FILENEW_NEWWINDOW(void)
 	@date 2003.03.30 genta 「閉じて開く」から利用するために引数追加
 	@date 2004.10.09 genta 実装をCEditDocへ移動
 */
-void CViewCommander::Command_FILEOPEN(
+void ViewCommander::Command_FILEOPEN(
 	const WCHAR* filename,
 	ECodeType nCharCode,
 	bool bViewMode,
@@ -181,7 +181,7 @@ void CViewCommander::Command_FILEOPEN(
 	@date 2005.01.24 genta 引数askname追加
 
 */
-bool CViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
+bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 {
 	CEditDoc* pcDoc = GetDocument();
 
@@ -209,7 +209,7 @@ bool CViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 
 
 // 名前を付けて保存ダイアログ
-bool CViewCommander::Command_FILESAVEAS_DIALOG(
+bool ViewCommander::Command_FILESAVEAS_DIALOG(
 	const WCHAR* fileNameDef,
 	ECodeType eCodeType,
 	EEolType eEolType
@@ -222,7 +222,7 @@ bool CViewCommander::Command_FILESAVEAS_DIALOG(
 /* 名前を付けて保存
 	filenameで保存。NULLは厳禁。
 */
-bool CViewCommander::Command_FILESAVEAS(
+bool ViewCommander::Command_FILESAVEAS(
 	const WCHAR* filename,
 	EEolType eEolType
 	)
@@ -240,7 +240,7 @@ bool CViewCommander::Command_FILESAVEAS(
 
 	@date 2005.01.24 genta 新規作成
 */
-bool CViewCommander::Command_FILESAVEALL(void)
+bool ViewCommander::Command_FILESAVEALL(void)
 {
 	CAppNodeGroupHandle(0).SendMessageToAllEditors(
 		WM_COMMAND,
@@ -253,7 +253,7 @@ bool CViewCommander::Command_FILESAVEALL(void)
 
 
 // 閉じて(無題)	// Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
-void CViewCommander::Command_FILECLOSE(void)
+void ViewCommander::Command_FILECLOSE(void)
 {
 	GetDocument()->m_cDocFileOperation.FileClose();
 }
@@ -264,7 +264,7 @@ void CViewCommander::Command_FILECLOSE(void)
 	@date 2003.03.30 genta 開くダイアログでキャンセルしたとき元のファイルが残るように。
 				ついでにFILEOPENと同じように引数を追加しておく
 */
-void CViewCommander::Command_FILECLOSE_OPEN(
+void ViewCommander::Command_FILECLOSE_OPEN(
 	LPCWSTR filename,
 	ECodeType nCharCode,
 	bool bViewMode
@@ -283,7 +283,7 @@ void CViewCommander::Command_FILECLOSE_OPEN(
 
 
 // ファイルの再オープン
-void CViewCommander::Command_FILE_REOPEN(
+void ViewCommander::Command_FILE_REOPEN(
 	ECodeType	nCharCode,	// [in] 開き直す際の文字コード
 	bool		bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 	)
@@ -310,7 +310,7 @@ void CViewCommander::Command_FILE_REOPEN(
 
 
 // 印刷
-void CViewCommander::Command_PRINT(void)
+void ViewCommander::Command_PRINT(void)
 {
 	// 使っていない処理を削除 2003.05.04 かろと
 	Command_PRINT_PREVIEW();
@@ -321,7 +321,7 @@ void CViewCommander::Command_PRINT(void)
 
 
 // 印刷プレビュー
-void CViewCommander::Command_PRINT_PREVIEW(void)
+void ViewCommander::Command_PRINT_PREVIEW(void)
 {
 	// 印刷プレビューモードのオン/オフ
 	GetEditWindow()->PrintPreviewModeONOFF();
@@ -330,7 +330,7 @@ void CViewCommander::Command_PRINT_PREVIEW(void)
 
 
 // 印刷のページレイアウトの設定
-void CViewCommander::Command_PRINT_PAGESETUP(void)
+void ViewCommander::Command_PRINT_PAGESETUP(void)
 {
 	// 印刷ページ設定
 	GetEditWindow()->OnPrintPageSetting();
@@ -340,7 +340,7 @@ void CViewCommander::Command_PRINT_PAGESETUP(void)
 
 // From Here Feb. 10, 2001 JEPRO 追加
 // C/C++ヘッダファイルまたはソースファイル オープン機能
-bool CViewCommander::Command_OPEN_HfromtoC(bool bCheckOnly)
+bool ViewCommander::Command_OPEN_HfromtoC(bool bCheckOnly)
 {
 	if (Command_OPEN_HHPP(bCheckOnly, false))	return true;
 	if (Command_OPEN_CCPP(bCheckOnly, false))	return true;
@@ -352,8 +352,8 @@ bool CViewCommander::Command_OPEN_HfromtoC(bool bCheckOnly)
 
 
 // C/C++ヘッダファイル オープン機能		// Feb. 10, 2001 jepro	説明を「インクルードファイル」から変更
-//BOOL CViewCommander::Command_OPENINCLUDEFILE(bool bCheckOnly)
-bool CViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
+//BOOL ViewCommander::Command_OPENINCLUDEFILE(bool bCheckOnly)
+bool ViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -366,8 +366,8 @@ bool CViewCommander::Command_OPEN_HHPP(bool bCheckOnly, bool bBeepWhenMiss)
 
 
 // C/C++ソースファイル オープン機能
-//BOOL CViewCommander::Command_OPENCCPP(bool bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
-bool CViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
+//BOOL ViewCommander::Command_OPENCCPP(bool bCheckOnly)	//Feb. 10, 2001 JEPRO	コマンド名を若干変更
+bool ViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 {
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const TCHAR* source_ext[] = { _T("c"), _T("cpp"), _T("cxx"), _T("cc"), _T("cp"), _T("c++") };
@@ -380,7 +380,7 @@ bool CViewCommander::Command_OPEN_CCPP(bool bCheckOnly, bool bBeepWhenMiss)
 
 
 // Oracle SQL*Plusをアクティブ表示
-void CViewCommander::Command_ACTIVATE_SQLPLUS(void)
+void ViewCommander::Command_ACTIVATE_SQLPLUS(void)
 {
 	HWND hwndSQLPLUS = ::FindWindow(_T("SqlplusWClass"), _T("Oracle SQL*Plus"));
 	if (!hwndSQLPLUS) {
@@ -395,7 +395,7 @@ void CViewCommander::Command_ACTIVATE_SQLPLUS(void)
 
 
 // Oracle SQL*Plusで実行
-void CViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
+void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 {
 //	HGLOBAL		hgClip;
 //	char*		pszClip;
@@ -477,7 +477,7 @@ void CViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 
 
 // ブラウズ
-void CViewCommander::Command_BROWSE(void)
+void ViewCommander::Command_BROWSE(void)
 {
 	if (!GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		ErrorBeep();
@@ -511,7 +511,7 @@ void CViewCommander::Command_BROWSE(void)
 
 
 // ビューモード
-void CViewCommander::Command_VIEWMODE(void)
+void ViewCommander::Command_VIEWMODE(void)
 {
 	// ビューモードを反転
 	AppMode::getInstance()->SetViewMode(!AppMode::getInstance()->IsViewMode());
@@ -530,14 +530,14 @@ void CViewCommander::Command_VIEWMODE(void)
 
 
 // ファイルのプロパティ
-void CViewCommander::Command_PROPERTY_FILE(void)
+void ViewCommander::Command_PROPERTY_FILE(void)
 {
 #ifdef _DEBUG
 	{
 		// 全行データを返すテスト
 		wchar_t*	pDataAll;
 		int		nDataAllLen;
-		CRunningTimer cRunningTimer("CViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
+		CRunningTimer cRunningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
 		cRunningTimer.Reset();
 		pDataAll = CDocReader(GetDocument()->m_cDocLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, cRunningTimer.Read());
@@ -555,7 +555,7 @@ void CViewCommander::Command_PROPERTY_FILE(void)
 }
 
 
-void CViewCommander::Command_PROFILEMGR( void )
+void ViewCommander::Command_PROFILEMGR( void )
 {
 	CDlgProfileMgr profMgr;
 	if (profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
@@ -578,7 +578,7 @@ void CViewCommander::Command_PROFILEMGR( void )
 }
 
 // 編集の全終了	// 2007.02.13 ryoji 追加
-void CViewCommander::Command_EXITALLEDITORS(void)
+void ViewCommander::Command_EXITALLEDITORS(void)
 {
 	ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, 0);
 	return;
@@ -586,7 +586,7 @@ void CViewCommander::Command_EXITALLEDITORS(void)
 
 
 // サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
-void CViewCommander::Command_EXITALL(void)
+void ViewCommander::Command_EXITALL(void)
 {
 	ControlTray::TerminateApplication(GetMainWindow());	// 2006.12.25 ryoji 引数追加
 	return;
@@ -604,7 +604,7 @@ void CViewCommander::Command_EXITALL(void)
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-bool CViewCommander::Command_PUTFILE(
+bool ViewCommander::Command_PUTFILE(
 	LPCWSTR		filename,	// [in] filename 出力ファイル名
 	ECodeType	nCharCode,	// [in] nCharCode 文字コード指定
 							//  @li CODE_xxxxxxxxxx:各種文字コード
@@ -626,10 +626,10 @@ bool CViewCommander::Command_PUTFILE(
 	// 2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
-	std::unique_ptr<CCodeBase> pcSaveCode(CCodeFactory::CreateCodeBase(nSaveCharCode, 0));
+	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
 	bool bBom = false;
-	if (CCodeTypeName(nSaveCharCode).UseBom()) {
+	if (CodeTypeName(nSaveCharCode).UseBom()) {
 		bBom = GetDocument()->GetDocumentBomExist();
 	}
 
@@ -646,7 +646,7 @@ bool CViewCommander::Command_PUTFILE(
 			const CNativeW* pConvBuffer;
 			if (bBom) {
 				CNativeW cmemBom;
-				std::unique_ptr<CCodeBase> pcUtf16(CCodeFactory::CreateCodeBase(CODE_UNICODE, 0));
+				std::unique_ptr<CodeBase> pcUtf16(CodeFactory::CreateCodeBase(CODE_UNICODE, 0));
 				pcUtf16->GetBom(cmemBom._GetMemory());
 				cMem2.AppendNativeData(cmemBom);
 				cMem2.AppendNativeData(cMem);
@@ -691,7 +691,7 @@ bool CViewCommander::Command_PUTFILE(
 		}
 
 		// 一時ファイル出力
-		EConvertResult eRet = CWriteManager().WriteFile_From_CDocLineMgr(
+		EConvertResult eRet = WriteManager().WriteFile_From_CDocLineMgr(
 			GetDocument()->m_cDocLineMgr,
 			SaveInfo(
 				to_tchar(filename),
@@ -725,7 +725,7 @@ bool CViewCommander::Command_PUTFILE(
 	@author	maru
 	@date	2006.12.10 maru 新規作成
 */
-bool CViewCommander::Command_INSFILE(
+bool ViewCommander::Command_INSFILE(
 	LPCWSTR filename,
 	ECodeType nCharCode,
 	int nFlgOpt

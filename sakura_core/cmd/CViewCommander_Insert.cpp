@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(挿入系)関数群
+@brief ViewCommanderクラスのコマンド(挿入系)関数群
 
 	2012/12/15	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -19,7 +19,7 @@
 #include "env/CFormatManager.h"
 
 // 日付挿入
-void CViewCommander::Command_INS_DATE(void)
+void ViewCommander::Command_INS_DATE(void)
 {
 	// 日付をフォーマット
 	TCHAR szText[1024];
@@ -33,7 +33,7 @@ void CViewCommander::Command_INS_DATE(void)
 
 
 // 時刻挿入
-void CViewCommander::Command_INS_TIME(void)
+void ViewCommander::Command_INS_TIME(void)
 {
 	// 時刻をフォーマット
 	TCHAR szText[1024];
@@ -51,7 +51,7 @@ void CViewCommander::Command_INS_TIME(void)
 	@author	MIK
 	@date	2002/06/02
 */
-void CViewCommander::Command_CtrlCode_Dialog(void)
+void ViewCommander::Command_CtrlCode_Dialog(void)
 {
 	CDlgCtrlCode cDlgCtrlCode;
 

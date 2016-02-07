@@ -62,17 +62,17 @@ void CEditView_Paint::Call_OnPaint(
 	CEditView* pView = GetEditView();
 
 	// 各要素
-	CMyRect rcLineNumber(0, pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaBottom());
-	CMyRect rcRuler(pView->GetTextArea().GetAreaLeft(), 0, pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaTop());
-	CMyRect rcBody(pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaBottom());
+	Rect rcLineNumber(0, pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaBottom());
+	Rect rcRuler(pView->GetTextArea().GetAreaLeft(), 0, pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaTop());
+	Rect rcBody(pView->GetTextArea().GetAreaLeft(), pView->GetTextArea().GetAreaTop(), pView->GetTextArea().GetAreaRight(), pView->GetTextArea().GetAreaBottom());
 
 	// 領域を作成 -> rc
-	std::vector<CMyRect> rcs;
+	std::vector<Rect> rcs;
 	if (nPaintFlag & PAINT_LINENUMBER) rcs.push_back(rcLineNumber);
 	if (nPaintFlag & PAINT_RULER) rcs.push_back(rcRuler);
 	if (nPaintFlag & PAINT_BODY) rcs.push_back(rcBody);
 	if (rcs.size() == 0) return;
-	CMyRect rc = rcs[0];
+	Rect rc = rcs[0];
 	int nSize = (int)rcs.size();
 	for (int i=1; i<nSize; ++i)
 		rc = MergeRect(rc, rcs[i]);
@@ -200,7 +200,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	const CEditDoc& doc  = *m_pcEditDoc;
 	const TypeConfig& typeConfig = doc.m_cDocType.GetDocumentAttribute();
 
-	CMyRect rcImagePos;
+	Rect rcImagePos;
 	switch (typeConfig.m_backImgPos) {
 	case BGIMAGE_TOP_LEFT:
 	case BGIMAGE_BOTTOM_LEFT:
@@ -273,12 +273,12 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	rc.top  = t_max((int)rc.top,  area.GetRulerHeight()); // ルーラーを除外
 	const int nXEnd = area.GetAreaRight();
 	const int nYEnd = area.GetAreaBottom();
-	CMyRect rcBltAll;
+	Rect rcBltAll;
 	rcBltAll.SetLTRB(INT_MAX, INT_MAX, -INT_MAX, -INT_MAX);
-	CMyRect rcImagePosOrg = rcImagePos;
+	Rect rcImagePosOrg = rcImagePos;
 	for (; rcImagePos.top<=nYEnd; ) {
 		for (; rcImagePos.left<=nXEnd; ) {
-			CMyRect rcBlt;
+			Rect rcBlt;
 			if (::IntersectRect(&rcBlt, &rc, &rcImagePos)) {
 				::BitBlt(
 					hdc,
@@ -312,7 +312,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	}
 	if (rcBltAll.left != INT_MAX) {
 		// 上下左右ななめの隙間を埋める
-		CMyRect rcFill;
+		Rect rcFill;
 		LONG& x1 = rc.left;
 		LONG& x2 = rcBltAll.left;
 		LONG& x3 = rcBltAll.right;
@@ -749,7 +749,7 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	//                         描画座標                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	DispPos sPos(GetTextMetrics().GetHankakuDx(), GetTextMetrics().GetHankakuDy());
-	sPos.InitDrawPos(CMyPoint(
+	sPos.InitDrawPos(Point(
 		GetTextArea().GetAreaLeft() - (Int)GetTextArea().GetViewLeftCol() * nCharDx,
 		GetTextArea().GetAreaTop() + (Int)(nLayoutLine - GetTextArea().GetViewTopLine()) * nLineHeight
 	));
@@ -1184,7 +1184,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 		DispTextSelected(
 			pInfo->m_gr,
 			pInfo->m_pDispPos->GetLayoutLineRef(),
-			CMyPoint(pInfo->m_sDispPosBegin.GetDrawPos().x, pInfo->m_pDispPos->GetDrawPos().y),
+			Point(pInfo->m_sDispPosBegin.GetDrawPos().x, pInfo->m_pDispPos->GetDrawPos().y),
 			pcLayout->CalcLayoutWidth(CEditDoc::GetInstance(0)->m_cLayoutMgr) + CLayoutInt(pcLayout->GetLayoutEol().GetLen() ? 1 : 0)
 		);
 	}
@@ -1210,7 +1210,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 void CEditView::DispTextSelected(
 	HDC				hdc,		// 作画対象ビットマップを含むデバイス
 	CLayoutInt		nLineNum,	// 反転処理対象レイアウト行番号(0開始)
-	const CMyPoint&	ptXY,		// (相対レイアウト0桁目の左端座標, 対象行の上端座標)
+	const Point&	ptXY,		// (相対レイアウト0桁目の左端座標, 対象行の上端座標)
 	CLayoutInt		nX_Layout	// 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
 )
 {

@@ -239,7 +239,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 		memset_raw(p, 0, sizeof_raw(*p));
 		p->dwSize      = sizeof_raw(*p);
 		p->dwFlags     = PSP_USETITLE | PSP_HASHELP;
-		p->hInstance   = CSelectLang::getLangRsrcInstance();
+		p->hInstance   = SelectLang::getLangRsrcInstance();
 		p->pszTemplate = MAKEINTRESOURCE(ComPropSheetInfoList[nIdx].resId);
 		p->pszIcon     = NULL;
 		p->pfnDlgProc  = ComPropSheetInfoList[nIdx].DProc;
@@ -259,7 +259,7 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 	//	JEPROtest Sept. 30, 2000 共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 	psh.dwFlags    = PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE | PSH_USEPAGELANG;
 	psh.hwndParent = m_hwndParent;
-	psh.hInstance  = CSelectLang::getLangRsrcInstance();
+	psh.hInstance  = SelectLang::getLangRsrcInstance();
 	psh.pszIcon    = NULL;
 	psh.pszCaption = LS(STR_PROPCOMMON);	//_T("共通設定");
 	psh.nPages     = nIdx;

@@ -246,7 +246,7 @@ EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCH
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInSjis) {
 		// Unicode‚Å•\Ž¦
-		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
+		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
 	cCharBuffer.AppendString(cSrc, 1);

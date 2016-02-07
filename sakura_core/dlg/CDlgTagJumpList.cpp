@@ -157,7 +157,7 @@ CDlgTagJumpList::CDlgTagJumpList(bool bDirectTagJump)
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
 	// 2010.07.22 Moca ページング採用で 最大値を100→50に減らす
-	m_pcList = new CSortedTagJumpList(50);
+	m_pcList = new SortedTagJumpList(50);
 	m_psFindPrev = new TagFindState();
 	m_psFind0Match = new TagFindState();
 	m_ptDefaultSize.x = -1;
@@ -303,7 +303,7 @@ void CDlgTagJumpList::UpdateData(bool bInit)
 
 	TCHAR	tmp[32];
 	for (nIndex=0; nIndex<count; ++nIndex) {
-		CSortedTagJumpList::TagJumpInfo* item;
+		SortedTagJumpList::TagJumpInfo* item;
 		item = m_pcList->GetPtr(nIndex);
 		if (!item) break;
 
@@ -1122,7 +1122,7 @@ int CDlgTagJumpList::find_key_core(
 		ClearPrevFindInfo();
 		return -1;
 	}
-	CSortedTagJumpList& cList = *m_pcList;
+	SortedTagJumpList& cList = *m_pcList;
 	const int nCap = cList.GetCapacity();
 	TagFindState state;
 	state.m_nDepth    = 0;

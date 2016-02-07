@@ -34,22 +34,22 @@
 // GetDllShareData用グローバル変数
 DLLSHAREDATA* g_theDLLSHAREDATA = NULL;
 
-static CMutex g_cKeywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
+static Mutex g_cKeywordMutex(FALSE, GSTR_MUTEX_SAKURA_KEYWORD);
 
 ShareDataLockCounter::ShareDataLockCounter() {
-	LockGuard<CMutex> guard(g_cKeywordMutex);
+	LockGuard<Mutex> guard(g_cKeywordMutex);
 	assert_warning(0 <= GetDllShareData().m_nLockCount);
 	GetDllShareData().m_nLockCount++;
 }
 
 ShareDataLockCounter::~ShareDataLockCounter() {
-	LockGuard<CMutex> guard(g_cKeywordMutex);
+	LockGuard<Mutex> guard(g_cKeywordMutex);
 	GetDllShareData().m_nLockCount--;
 	assert_warning(0 <= GetDllShareData().m_nLockCount);
 }
 
 int ShareDataLockCounter::GetLockCounter() {
-	LockGuard<CMutex> guard(g_cKeywordMutex);
+	LockGuard<Mutex> guard(g_cKeywordMutex);
 	assert_warning(0 <= GetDllShareData().m_nLockCount);
 	return GetDllShareData().m_nLockCount;
 }
@@ -91,7 +91,7 @@ public:
 static
 int GetCountIf0Lock(ShareDataLockCounter** ppLock)
 {
-	LockGuard<CMutex> guard(g_cKeywordMutex);
+	LockGuard<Mutex> guard(g_cKeywordMutex);
 	int count = GetDllShareData().m_nLockCount;
 	if (count <= 0) {
 		if (ppLock) {

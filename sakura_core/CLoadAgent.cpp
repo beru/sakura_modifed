@@ -222,7 +222,7 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 		const TypeConfig& types = pcDoc->m_cDocType.GetDocumentAttribute();
 		pcDoc->m_cDocFile.SetCodeSet( sLoadInfo.eCharCode, 
 			( sLoadInfo.eCharCode == types.m_encoding.m_eDefaultCodetype ) ?
-				types.m_encoding.m_bDefaultBom : CCodeTypeName( sLoadInfo.eCharCode ).IsBomDefOn() );
+				types.m_encoding.m_bDefaultBom : CodeTypeName( sLoadInfo.eCharCode ).IsBomDefOn() );
 	}
 
 	// レイアウト情報の変更

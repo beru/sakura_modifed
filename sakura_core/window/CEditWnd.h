@@ -113,7 +113,7 @@ public:
 		int				nGroup
 	);
 	void _GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup);
-	void _GetWindowRectForInit(CMyRect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
+	void _GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
 	HWND _CreateMainWindow(int nGroup, const TabGroupInfo& sTabGroupInfo);
 	void _AdjustInMonitor(const TabGroupInfo& sTabGroupInfo);
 
@@ -317,10 +317,10 @@ protected:
 
 public:
 	// D&Dフラグ管理
-	void SetDragPosOrg(CMyPoint ptDragPosOrg)	{ m_ptDragPosOrg = ptDragPosOrg; }
+	void SetDragPosOrg(Point ptDragPosOrg)	{ m_ptDragPosOrg = ptDragPosOrg; }
 	void SetDragMode(bool bDragMode)			{ m_bDragMode = bDragMode; }
 	bool GetDragMode() const					{ return m_bDragMode; }
-	const CMyPoint& GetDragPosOrg() const		{ return m_ptDragPosOrg; }
+	const Point& GetDragPosOrg() const		{ return m_ptDragPosOrg; }
 	
 	// IDropTarget実装		2008.06.20 ryoji
 	STDMETHODIMP DragEnter(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
@@ -412,7 +412,7 @@ private:
 
 	// D&Dフラグ
 	bool			m_bDragMode;
-	CMyPoint		m_ptDragPosOrg;
+	Point		m_ptDragPosOrg;
 	CDropTarget*	m_pcDropTarget;
 
 	// その他フラグ

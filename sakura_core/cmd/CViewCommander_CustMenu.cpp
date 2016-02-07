@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(カスタムメニュー)関数群
+@brief ViewCommanderクラスのコマンド(カスタムメニュー)関数群
 
 	2012/12/20	CViewCommander.cppから分離
 */
@@ -23,7 +23,7 @@
 #include <vector>
 
 // 右クリックメニュー
-void CViewCommander::Command_MENU_RBUTTON(void)
+void ViewCommander::Command_MENU_RBUTTON(void)
 {
 //	HGLOBAL		hgClip;
 //	char*		pszClip;
@@ -59,7 +59,7 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
 			m_pCommanderView->TagJumpSub(
 				m_pCommanderView->m_pTypeData->m_KeyHelpArr[m_pCommanderView->m_cTipWnd.m_nSearchDict].m_szPath,
-				CMyPoint(1, m_pCommanderView->m_cTipWnd.m_nSearchLine),
+				Point(1, m_pCommanderView->m_cTipWnd.m_nSearchLine),
 				0,
 				true
 			);
@@ -77,7 +77,7 @@ void CViewCommander::Command_MENU_RBUTTON(void)
 
 
 // カスタムメニュー表示
-int CViewCommander::Command_CUSTMENU(int nMenuIdx)
+int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 {
 	GetEditWindow()->GetMenuDrawer().ResetContents();
 

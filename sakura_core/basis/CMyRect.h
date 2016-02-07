@@ -26,16 +26,16 @@
 #include <Windows.h> // RECT
 #include "CMyPoint.h"
 
-class CMyRect : public RECT {
+class Rect : public RECT {
 public:
 	// コンストラクタ・デストラクタ
-	CMyRect() {
+	Rect() {
 		SetLTRB(0, 0, 0, 0);
 	}
-	CMyRect(int l, int t, int r, int b) {
+	Rect(int l, int t, int r, int b) {
 		SetLTRB(l, t, r, b);
 	}
-	CMyRect(const RECT& rc) {
+	Rect(const RECT& rc) {
 		RECT* p = this;
 		*p = rc;
 	}
@@ -75,16 +75,16 @@ public:
 		return bottom - top;
 	}
 	// 左上座標 (TopLeft)
-	CMyPoint UpperLeft() const {
-		return CMyPoint(left, top);
+	Point UpperLeft() const {
+		return Point(left, top);
 	}
 	// 右下座標 (BottomRight)
-	CMyPoint LowerRight() const {
-		return CMyPoint(right, bottom);
+	Point LowerRight() const {
+		return Point(right, bottom);
 	}
 
 };
 
 // CRect合成。rc1,rc2を含む最小の矩形を生成する。
-CMyRect MergeRect(const CMyRect& rc1, const CMyRect& rc2);
+Rect MergeRect(const Rect& rc1, const Rect& rc2);
 

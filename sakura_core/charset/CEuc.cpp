@@ -187,7 +187,7 @@ EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* p
 	// 2008/6/21 Uchi
 	if (psStatusbar->m_bDispUniInEuc) {
 		// Unicodeで表示
-		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
+		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 
 	// 1文字データバッファ

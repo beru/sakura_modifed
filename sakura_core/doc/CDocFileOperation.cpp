@@ -200,7 +200,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	if (!fexist(m_pcDocRef->m_cDocFile.GetFilePath())) {
 		// ファイルが存在しない
 		// Jul. 26, 2003 ryoji BOMを標準設定に	// IsBomDefOn使用 2013/5/17	Uchi
-		m_pcDocRef->m_cDocFile.SetCodeSet(nCharCode,  CCodeTypeName(nCharCode).IsBomDefOn());
+		m_pcDocRef->m_cDocFile.SetCodeSet(nCharCode,  CodeTypeName(nCharCode).IsBomDefOn());
 		// カーソル位置表示を更新する	// 2008.07.22 ryoji
 		caret.ShowCaretPosInfo();
 		return;
@@ -462,7 +462,7 @@ bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, E
 		}
 		if (IsValidCodeType(eCodeType) && eCodeType != sSaveInfo.eCharCode) {
 			sSaveInfo.eCharCode = eCodeType;
-			sSaveInfo.bBomExist = CCodeTypeName(eCodeType).IsBomDefOn();
+			sSaveInfo.bBomExist = CodeTypeName(eCodeType).IsBomDefOn();
 		}
 	}
 	if (bDialog) {

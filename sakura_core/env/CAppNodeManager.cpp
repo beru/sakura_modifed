@@ -65,7 +65,7 @@ static BOOL s_bGSort;	// グループ指定
 	@date 2007.07.05 ryoji 新規導入
 	@date 2007.07.07 genta CShareDataのメンバへ移動
 */
-static CMutex g_cEditArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
+static Mutex g_cEditArrMutex(FALSE, GSTR_MUTEX_SAKURA_EDITARR);
 
 // GetOpenedWindowArr用ソート関数
 static int __cdecl cmpGetOpenedWindowArr(const void *e1, const void *e2)
@@ -137,7 +137,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 	sMyEditNode.m_hWnd = hWnd;
 
 	{	// 2007.07.07 genta Lock領域
-		LockGuard<CMutex> guard(g_cEditArrMutex);
+		LockGuard<Mutex> guard(g_cEditArrMutex);
 
 		CRecentEditNode	cRecentEditNode;
 
@@ -208,7 +208,7 @@ void CAppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 {
 	// ウィンドウをリストから削除する。
 	{	// 2007.07.07 genta Lock領域
-		LockGuard<CMutex> guard(g_cEditArrMutex);
+		LockGuard<Mutex> guard(g_cEditArrMutex);
 
 		CRecentEditNode	cRecentEditNode;
 		cRecentEditNode.DeleteItemByHwnd(hWnd);
@@ -537,7 +537,7 @@ int CAppNodeManager::GetNoNameNumber(HWND hWnd)
 */
 int CAppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
 {
-	LockGuard<CMutex> guard(g_cEditArrMutex);
+	LockGuard<Mutex> guard(g_cEditArrMutex);
 	int nRet = _GetOpenedWindowArrCore(ppEditNode, bSort, bGSort);
 	return nRet;
 }
@@ -632,7 +632,7 @@ bool CAppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	EditNode* p = NULL;
 	int nSrcTab = -1;
 	int nDstTab = -1;
-	LockGuard<CMutex> guard(g_cEditArrMutex);
+	LockGuard<Mutex> guard(g_cEditArrMutex);
 	int nCount = _GetOpenedWindowArrCore(&p, TRUE);	// ロックは自分でやっているので直接コア部呼び出し
 	for (int i=0; i<nCount; ++i) {
 		if (hwndSrc == p[i].m_hWnd) {
@@ -696,7 +696,7 @@ HWND CAppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, 
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	LockGuard<CMutex> guard(g_cEditArrMutex);
+	LockGuard<Mutex> guard(g_cEditArrMutex);
 
 	EditNode* pSrcEditNode = GetEditNode(hwndSrc);
 	EditNode* pDstEditNode = GetEditNode(hwndDst);

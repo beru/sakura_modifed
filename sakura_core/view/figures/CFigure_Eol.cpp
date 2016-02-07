@@ -263,7 +263,7 @@ void _DispEOF(
 //@@@ 2001.12.21 YAZAKI 改行記号の書きかたが変だったので修正
 void _DrawEOL(
 	CGraphics&		gr,
-	const CMyRect&	rcEol,
+	const Rect&	rcEol,
 	CEol			cEol,
 	bool			bBold,
 	COLORREF		pColor
@@ -294,7 +294,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 			gr.SetClipping(rcClip2);
 			
 			// 描画領域
-			CMyRect rcEol;
+			Rect rcEol;
 			rcEol.SetPos(pDispPos->GetDrawPos().x + 1, pDispPos->GetDrawPos().y);
 			rcEol.SetSize(pcView->GetTextMetrics().GetHankakuWidth(), pcView->GetTextMetrics().GetHankakuHeight());
 
@@ -329,7 +329,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcVi
 */
 void _DrawEOL(
 	CGraphics&		gr,			// Device Context Handle
-	const CMyRect&	rcEol,		// 描画領域
+	const Rect&	rcEol,		// 描画領域
 	CEol			cEol,		// 行末コード種別
 	bool			bBold,		// TRUE: 太字
 	COLORREF		pColor		// 色

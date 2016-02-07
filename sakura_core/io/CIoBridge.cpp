@@ -8,7 +8,7 @@
 EConvertResult CIoBridge::FileToImpl(
 	const CMemory&	cSrc,		// [in]  変換元メモリ
 	CNativeW*		pDst,		// [out] 変換先メモリ(UNICODE)
-	CCodeBase*		pCode,		// [in]  変換元メモリの文字コード
+	CodeBase*		pCode,		// [in]  変換元メモリの文字コード
 	int				nFlag		// [in]  bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 	)
 {
@@ -22,7 +22,7 @@ EConvertResult CIoBridge::FileToImpl(
 EConvertResult CIoBridge::ImplToFile(
 	const CNativeW&	cSrc,		// [in]  変換元メモリ(UNICODE)
 	CMemory*		pDst,		// [out] 変換先メモリ
-	CCodeBase*		pCode		// [in]  変換先メモリの文字コード
+	CodeBase*		pCode		// [in]  変換先メモリの文字コード
 	)
 {
 	// Unicodeから任意の文字コードへ変換する

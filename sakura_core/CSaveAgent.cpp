@@ -115,7 +115,7 @@ void CSaveAgent::OnSave(const SaveInfo& sSaveInfo)
 	CEditDoc* pcDoc = GetListeningDoc();
 
 	// ƒJƒLƒR
-	CWriteManager cWriter;
+	WriteManager cWriter;
 	CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(&cWriter);
 	cWriter.WriteFile_From_CDocLineMgr(
 		pcDoc->m_cDocLineMgr,

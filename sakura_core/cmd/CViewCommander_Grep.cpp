@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(Grep)関数群
+@brief ViewCommanderクラスのコマンド(Grep)関数群
 
 */
 /*
@@ -26,7 +26,7 @@
 	@date 2005.01.10 genta CEditView_Commandより移動
 	@author Yazaki
 */
-void CViewCommander::Command_GREP_DIALOG(void)
+void ViewCommander::Command_GREP_DIALOG(void)
 {
 	CNativeW cmemCurText;
 	// 2014.07.01 複数Grepウィンドウを使い分けている場合などに影響しないように、未設定のときだけHistoryを見る
@@ -53,7 +53,7 @@ void CViewCommander::Command_GREP_DIALOG(void)
 
 	@date 2005.01.10 genta CEditView_Commandより移動
 */
-void CViewCommander::Command_GREP(void)
+void ViewCommander::Command_GREP(void)
 {
 	CNativeW cmWork1;
 	CNativeT cmWork2;
@@ -138,7 +138,7 @@ void CViewCommander::Command_GREP(void)
 
 /*! GREP置換ダイアログの表示
 */
-void CViewCommander::Command_GREP_REPLACE_DLG( void )
+void ViewCommander::Command_GREP_REPLACE_DLG( void )
 {
 	CNativeW cmemCurText;
 	CDlgGrepReplace& cDlgGrepRep = GetEditWindow()->m_cDlgGrepReplace;
@@ -167,7 +167,7 @@ void CViewCommander::Command_GREP_REPLACE_DLG( void )
 
 /*! GREP置換実行
 */
-void CViewCommander::Command_GREP_REPLACE(void)
+void ViewCommander::Command_GREP_REPLACE(void)
 {
 	CNativeW cmWork1;
 	CNativeT cmWork2;

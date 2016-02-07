@@ -52,9 +52,9 @@ template <
 	bool ALLOW_CAST_INT,	// intへの暗黙の変換を許すかどうか
 	bool ALLOW_ASSIGNOP_INT	// intの代入を許すかどうか
 >
-class CStrictInteger {
+class StrictInteger {
 private:
-	typedef CStrictInteger<
+	typedef StrictInteger<
 		STRICT_ID,
 		ALLOW_CMP_INT,
 		ALLOW_ADDSUB_INT,
@@ -83,11 +83,11 @@ private:
 	};
 public:
 	// コンストラクタ・デストラクタ
-	CStrictInteger() { m_value = 0; }
-	CStrictInteger(const Me& rhs) { m_value = rhs.m_value; }
+	StrictInteger() { m_value = 0; }
+	StrictInteger(const Me& rhs) { m_value = rhs.m_value; }
 
 	// intからの変換は、「明示的に指定したときのみ」可能
-	explicit CStrictInteger(int value) { m_value = value; }
+	explicit StrictInteger(int value) { m_value = value; }
 
 	// 算術演算子 (加算、減算は同クラス同士でしか許さない)
 	Me& operator += (const Me& rhs)	{ m_value += rhs.m_value; return *this; }
@@ -137,19 +137,19 @@ public:
 	STRICTINT_OTHER_TYPE_AS_INT(size_t)
 	STRICTINT_OTHER_TYPE_AS_INT(LONG)
 
-	// -- -- -- -- 別種のCStrictIntegerとの演算は絶対許さん(やりたきゃintでも介してください) -- -- -- -- //
+	// -- -- -- -- 別種のStrictIntegerとの演算は絶対許さん(やりたきゃintでも介してください) -- -- -- -- //
 private:
-	template <bool B0, bool B1, bool B2, bool B3> Me&  operator += (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
-	template <bool B0, bool B1, bool B2, bool B3> Me&  operator -= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
-	template <bool B0, bool B1, bool B2, bool B3> Me   operator +  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> Me   operator -  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> Me&  operator =  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
-	template <bool B0, bool B1, bool B2, bool B3> bool operator <  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> bool operator <= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> bool operator >  (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> bool operator >= (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> bool operator == (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
-	template <bool B0, bool B1, bool B2, bool B3> bool operator != (const CStrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> Me&  operator += (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
+	template <bool B0, bool B1, bool B2, bool B3> Me&  operator -= (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
+	template <bool B0, bool B1, bool B2, bool B3> Me   operator +  (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> Me   operator -  (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> Me&  operator =  (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&);
+	template <bool B0, bool B1, bool B2, bool B3> bool operator <  (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator <= (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator >  (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator >= (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator == (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
+	template <bool B0, bool B1, bool B2, bool B3> bool operator != (const StrictInteger<NOT_STRICT_ID, B0, B1, B2, B3>&) const;
 
 	// -- -- -- -- ALLOW_ADDSUB_INTがtrueの場合は、intとの加減算を許す -- -- -- -- //
 private:
@@ -218,15 +218,15 @@ private:
 
 // 左辺がint等の場合の演算子
 #define STRICTINT_LEFT_INT_CMP(TYPE) \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator <  (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs >  lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator <= (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs >= lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator >  (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs <  lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator >= (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs <= lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator == (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs == lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator != (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs != lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline CStrictInteger<N, B0, B1, B2, B3> operator + (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return  rhs + lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline CStrictInteger<N, B0, B1, B2, B3> operator - (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return -rhs + lhs; } \
-	template <int N, bool B0, bool B1, bool B2, bool B3> inline CStrictInteger<N, B0, B1, B2, B3> operator * (TYPE lhs, const CStrictInteger<N, B0, B1, B2, B3>& rhs) { return  rhs * lhs; }
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator <  (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs >  lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator <= (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs >= lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator >  (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs <  lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator >= (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs <= lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator == (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs == lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline bool operator != (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return rhs != lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline StrictInteger<N, B0, B1, B2, B3> operator + (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return  rhs + lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline StrictInteger<N, B0, B1, B2, B3> operator - (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return -rhs + lhs; } \
+	template <int N, bool B0, bool B1, bool B2, bool B3> inline StrictInteger<N, B0, B1, B2, B3> operator * (TYPE lhs, const StrictInteger<N, B0, B1, B2, B3>& rhs) { return  rhs * lhs; }
 STRICTINT_LEFT_INT_CMP(int)
 STRICTINT_LEFT_INT_CMP(short)
 STRICTINT_LEFT_INT_CMP(size_t)

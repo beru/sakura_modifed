@@ -174,7 +174,7 @@ bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 	//	Sep 18, 2002 genta
 	nViewAlignLeftNew += GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace;
 	if (nViewAlignLeftNew != GetAreaLeft()) {
-		CMyRect			rc;
+		Rect			rc;
 		SetAreaLeft(nViewAlignLeftNew);
 		pView->GetClientRect(&rc);
 		int nCxVScroll = ::GetSystemMetrics(SM_CXVSCROLL); // 垂直スクロールバーの横幅
@@ -265,7 +265,7 @@ int CTextArea::DetectWidthOfLineNumberArea_calculate(const CLayoutMgr* pLayoutMg
 }
 
 void CTextArea::TextArea_OnSize(
-	const CMySize& sizeClient, // ウィンドウのクライアントサイズ
+	const Size& sizeClient, // ウィンドウのクライアントサイズ
 	int nCxVScroll,            // 垂直スクロールバーの横幅
 	int nCyHScroll             // 水平スクロールバーの縦幅
 )
@@ -282,7 +282,7 @@ int CTextArea::GetDocumentLeftClientPointX() const
 }
 
 // クライアント座標からレイアウト位置に変換する
-void CTextArea::ClientToLayout(CMyPoint ptClient, CLayoutPoint* pptLayout) const
+void CTextArea::ClientToLayout(Point ptClient, CLayoutPoint* pptLayout) const
 {
 	const CEditView* pView = m_pEditView;
 	pptLayout->Set(

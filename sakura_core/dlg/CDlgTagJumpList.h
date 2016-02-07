@@ -40,7 +40,7 @@
 
 // 2010.07.22 いくつかcppへ移動
 
-class CSortedTagJumpList;
+class SortedTagJumpList;
 
 /*!	@brief ダイレクトタグジャンプ候補一覧ダイアログ
 
@@ -136,7 +136,7 @@ private:
 	TCHAR	*m_pszFileName;			// 編集中のファイル名
 	wchar_t	*m_pszKeyword;			// キーワード(DoModalのlParam != 0を指定した場合に指定できる)
 	int		m_nLoop;				// さかのぼれる階層数
-	CSortedTagJumpList*	m_pcList;	// タグジャンプ情報
+	SortedTagJumpList*	m_pcList;	// タグジャンプ情報
 	UINT	m_nTimerId;				// タイマ番号
 	bool	m_bTagJumpICase;		// 大文字小文字を同一視
 	bool	m_bTagJumpAnyWhere;		// 文字列の途中にマッチ

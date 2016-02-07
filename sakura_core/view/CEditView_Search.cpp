@@ -224,7 +224,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 		return false;
 	}
 
-	CMyPoint ptClient(*po);
+	Point ptClient(*po);
 	ScreenToClient(GetHwnd(), &ptClient);
 	CLayoutPoint ptNew;
 	GetTextArea().ClientToLayout(ptClient, &ptNew);

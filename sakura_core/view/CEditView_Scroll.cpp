@@ -510,7 +510,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 		(nScrollRowNum != 0 && !m_pTypeData->m_backImgScrollY ||
 		 nScrollColNum != 0 && !m_pTypeData->m_backImgScrollX);
 	if (bBackImgFixed) {
-		CMyRect rcBody = area.GetAreaRect();
+		Rect rcBody = area.GetAreaRect();
 		rcBody.left = 0; // 行番号も移動
 		rcBody.top = area.GetRulerHeight();
 		InvalidateRect(&rcBody, FALSE);
@@ -540,7 +540,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 			&& (nScrollRowNum != 0 && m_pTypeData->m_backImgScrollY || nScrollColNum != 0 && m_pTypeData->m_backImgScrollX)
 		) {
 			// Scrollのときにルーラー余白更新
-			CMyRect rcTopYohaku;
+			Rect rcTopYohaku;
 			if (CTypeSupport(this, COLORIDX_TEXT).GetBackColor() == CTypeSupport(this, COLORIDX_GYOU).GetBackColor()) {
 				rcTopYohaku.left = 0;
 			}else {
@@ -564,7 +564,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 			&& m_pTypeData->m_backImgScrollX
 		) {
 			// 行番号背景のために更新
-			CMyRect rcLineNum;
+			Rect rcLineNum;
 			area.GenerateLineNumberRect(&rcLineNum);
 			InvalidateRect(&rcLineNum, FALSE);
 		}

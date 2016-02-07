@@ -866,7 +866,7 @@ int CDlgFavorite::DeleteSelected()
 					nLvTopIndex = t_max(0, t_min(pRecent->GetItemCount() - 1, nLvTopIndex));
 					int nNowLvTopIndex = ListView_GetTopIndex(hwndList);
 					if (nNowLvTopIndex != nLvTopIndex) {
-						CMyRect rect;
+						Rect rect;
 						if (ListView_GetItemRect(hwndList, nNowLvTopIndex, &rect, LVIR_BOUNDS)) {
 							// ListView_ScrollのY座標はpixel単位でスクロール変化分を指定
 							ListView_Scroll(hwndList, 0,

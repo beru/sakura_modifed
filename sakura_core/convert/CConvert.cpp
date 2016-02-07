@@ -63,7 +63,7 @@ void CConvertMediator::ConvMemory(
 
 	ECodeType ecode = CODE_NONE;
 	if (nFuncCode == F_CODECNV_AUTO2SJIS) {
-		CCodeMediator ccode(CEditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding);
+		CodeMediator ccode(CEditWnd::getInstance()->GetDocument()->m_cDocType.GetDocumentAttribute().m_encoding);
 		ecode = ccode.CheckKanjiCode(
 			reinterpret_cast<const char*>(pCMemory->_GetMemory()->GetRawPtr()),
 			pCMemory->_GetMemory()->GetRawLength());
@@ -100,7 +100,7 @@ void CConvertMediator::ConvMemory(
 	case F_CODECNV_AUTO2SJIS:
 		{
 			int nFlag = true;
-			std::unique_ptr<CCodeBase> pcCode( CCodeFactory::CreateCodeBase(ecode, nFlag) );
+			std::unique_ptr<CodeBase> pcCode( CodeFactory::CreateCodeBase(ecode, nFlag) );
 			pcCode->CodeToUnicode(*(pCMemory->_GetMemory()), pCMemory);
 		}
 		break;

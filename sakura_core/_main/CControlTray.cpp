@@ -284,7 +284,7 @@ HWND ControlTray::Create(HINSTANCE hInstance)
 	
 	// タスクトレイアイコン作成
 	m_hIcons.Create(m_hInstance);	// Oct. 16, 2000 genta
-	m_cMenuDrawer.Create(CSelectLang::getLangRsrcInstance(), GetTrayHwnd(), &m_hIcons);
+	m_cMenuDrawer.Create(SelectLang::getLangRsrcInstance(), GetTrayHwnd(), &m_hIcons);
 	if (GetTrayHwnd()) {
 		CreateTrayIcon(GetTrayHwnd());
 	}
@@ -628,7 +628,7 @@ LRESULT ControlTray::DispatchEvent(
 					CShareData::getInstance()->ConvertLangValues(values, true);
 				}
 				// 言語を選択する
-				CSelectLang::ChangeLang(csWindow.m_szLanguageDll);
+				SelectLang::ChangeLang(csWindow.m_szLanguageDll);
 				if (bChangeLang) {
 					CShareData::getInstance()->ConvertLangValues(values, false);
 				}
@@ -1160,7 +1160,7 @@ bool ControlTray::OpenNewEditor(
 	}
 
 	// -- -- -- -- コマンドライン文字列を生成 -- -- -- -- //
-	CCommandLineString cCmdLineBuf;
+	CommandLineString cCmdLineBuf;
 
 	// アプリケーションパス
 	TCHAR szEXE[MAX_PATH + 1];
@@ -1385,7 +1385,7 @@ bool ControlTray::OpenNewEditor2(
 	}
 
 	// 追加のコマンドラインオプション
-	CCommandLineString cCmdLine;
+	CommandLineString cCmdLine;
 	if (pfi) {
 		if (pfi->m_ptCursor.x >= 0				) cCmdLine.AppendF(_T(" -X=%d"), pfi->m_ptCursor.x + 1);
 		if (pfi->m_ptCursor.y >= 0				) cCmdLine.AppendF(_T(" -Y=%d"), pfi->m_ptCursor.y + 1);

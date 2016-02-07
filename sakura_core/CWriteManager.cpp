@@ -18,13 +18,13 @@
 	@note Windows用にコーディングしてある
 	@date 2003.07.26 ryoji BOM引数追加
 */
-EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
+EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 	const CDocLineMgr&	pcDocLineMgr,	// [in]
 	const SaveInfo&	sSaveInfo		// [in]
 	)
 {
 	EConvertResult nRetVal = RESULT_COMPLETE;
-	std::unique_ptr<CCodeBase> pcCodeBase(CCodeFactory::CreateCodeBase(sSaveInfo.eCharCode, 0));
+	std::unique_ptr<CodeBase> pcCodeBase(CodeFactory::CreateCodeBase(sSaveInfo.eCharCode, 0));
 
 	{
 		// 変換テスト

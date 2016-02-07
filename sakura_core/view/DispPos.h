@@ -53,8 +53,8 @@ public:
 	}
 
 	// Žæ“¾
-	CMyPoint GetDrawPos() const {
-		return CMyPoint(
+	Point GetDrawPos() const {
+		return Point(
 			m_ptDrawOrigin.x + (Int)m_ptDrawLayout.x * m_nDx,
 			m_ptDrawOrigin.y + (Int)m_ptDrawLayout.y * m_nDy
 		);

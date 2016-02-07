@@ -169,7 +169,7 @@ protected:
 	EDockSide GetDropRect(POINT ptDrag, POINT ptDrop, LPRECT pRect, bool bForceFloat);
 	BOOL Track(POINT ptDrag);
 	bool GetTreeFileFullName(HWND, HTREEITEM, std::tstring*, int*);
-	bool TagJumpTimer(const TCHAR*, CMyPoint, bool);
+	bool TagJumpTimer(const TCHAR*, Point, bool);
 
 private:
 	//	May 18, 2001 genta
@@ -195,7 +195,7 @@ private:
 	std::tstring m_sJumpFile;
 
 	const TCHAR* m_pszTimerJumpFile;
-	CMyPoint	m_pointTimerJump;
+	Point	m_pointTimerJump;
 	bool		m_bTimerJumpAutoClose;
 
 	EDockSide	m_eDockSide;	// åªç›ÇÃâÊñ ÇÃï\é¶à íu

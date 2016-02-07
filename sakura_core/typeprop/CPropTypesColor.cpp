@@ -440,7 +440,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 					pCommon->InitData();
 					pCommon->m_nKeywordSet1 = m_nSet[0];
 					INT_PTR res = ::DialogBoxParam(
-						CSelectLang::getLangRsrcInstance(),
+						SelectLang::getLangRsrcInstance(),
 						MAKEINTRESOURCE(IDD_PROP_KEYWORD),
 						hwndDlg,
 						CPropKeyword::DlgProc_dialog,

@@ -26,7 +26,7 @@
 #include "charset/CESI.h"
 class CEditDoc;
 
-class CCodeMediator {
+class CodeMediator {
 protected:
 	// CESI.cpp ‚Ì”»’èŠÖ”‚ğ‚±‚±‚ÉˆÚ‚·
 	static ECodeType DetectMBCode(CESI*);
@@ -34,7 +34,7 @@ protected:
 
 public:
 
-	explicit CCodeMediator(const EncodingConfig& ref) : m_pEncodingConfig(&ref) { }
+	explicit CodeMediator(const EncodingConfig& ref) : m_pEncodingConfig(&ref) { }
 
 	static ECodeType DetectUnicodeBom(const char* pS, const int nLen);
 

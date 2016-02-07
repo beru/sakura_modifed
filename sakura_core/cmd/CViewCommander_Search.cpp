@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(検索系 基本形)関数群
+@brief ViewCommanderクラスのコマンド(検索系 基本形)関数群
 
 	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -37,14 +37,14 @@
 ツールバーの検索ボックスにフォーカスを移動する.
 	@date 2006.06.04 yukihane 新規作成
 */
-void CViewCommander::Command_SEARCH_BOX(void)
+void ViewCommander::Command_SEARCH_BOX(void)
 {
 	GetEditWindow()->m_cToolbar.SetFocusSearchBox();
 }
 
 
 // 検索(単語検索ダイアログ)
-void CViewCommander::Command_SEARCH_DIALOG(void)
+void ViewCommander::Command_SEARCH_DIALOG(void)
 {
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	CNativeW cmemCurText;
@@ -72,7 +72,7 @@ void CViewCommander::Command_SEARCH_DIALOG(void)
 	@date 2003.05.22 かろと 無限マッチ対策．行頭・行末処理見直し．
 	@date 2004.05.30 Moca bChangeCurRegexp=trueで従来通り。falseで、CEditViewの現在設定されている検索パターンを使う
 */
-void CViewCommander::Command_SEARCH_NEXT(
+void ViewCommander::Command_SEARCH_NEXT(
 	bool			bChangeCurRegexp,
 	bool			bRedraw,
 	bool			bReplaceAll,
@@ -321,7 +321,7 @@ end_of_func:;
 
 
 // 前を検索
-void CViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
+void ViewCommander::Command_SEARCH_PREV(bool bReDraw, HWND hwndParent)
 {
 	bool		bSelectingLock_Old = false;
 	bool		bFound = false;
@@ -477,7 +477,7 @@ end_of_func:;
 
 
 // 置換(置換ダイアログ)
-void CViewCommander::Command_REPLACE_DIALOG(void)
+void ViewCommander::Command_REPLACE_DIALOG(void)
 {
 	bool bSelected = false;
 
@@ -527,7 +527,7 @@ void CViewCommander::Command_REPLACE_DIALOG(void)
 	@date 2003.05.17 かろと 長さ０マッチの無限置換回避など
 	@date 2011.12.18 Moca オプション・検索キーをDllShareDataからm_cDlgReplace/EditViewベースに変更。文字列長制限の撤廃
 */
-void CViewCommander::Command_REPLACE(HWND hwndParent)
+void ViewCommander::Command_REPLACE(HWND hwndParent)
 {
 	if (!hwndParent) {	// 親ウィンドウが指定されていなければ、CEditViewが親。
 		hwndParent = m_pCommanderView->GetHwnd();
@@ -713,7 +713,7 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 	@date 2011.12.18 Moca オプション・検索キーをDllShareDataからm_cDlgReplace/EditViewベースに変更。文字列長制限の撤廃
 	@date 2013.05.10 Moca fastMode
 */
-void CViewCommander::Command_REPLACE_ALL()
+void ViewCommander::Command_REPLACE_ALL()
 {
 
 	// m_sSearchOption選択のための先に適用
@@ -1436,7 +1436,7 @@ void CViewCommander::Command_REPLACE_ALL()
 
 
 // 検索マークの切替え	// 2001.12.03 hor クリア を 切替え に変更
-void CViewCommander::Command_SEARCH_CLEARMARK(void)
+void ViewCommander::Command_SEARCH_CLEARMARK(void)
 {
 // From Here 2001.12.03 hor
 
@@ -1482,7 +1482,7 @@ void CViewCommander::Command_SEARCH_CLEARMARK(void)
 
 // Jun. 16, 2000 genta
 // 対括弧の検索
-void CViewCommander::Command_BRACKETPAIR(void)
+void ViewCommander::Command_BRACKETPAIR(void)
 {
 	CLayoutPoint ptColLine;
 	//int nLine, nCol;

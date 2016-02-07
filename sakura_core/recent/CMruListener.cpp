@@ -81,7 +81,7 @@ void CMruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
 			const TypeConfigMini* type;
 			CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
-			CCodeMediator cmediator(type->m_encoding);
+			CodeMediator cmediator(type->m_encoding);
 			pLoadInfo->eCharCode = cmediator.CheckKanjiCodeOfFile(pLoadInfo->cFilePath);
 		}else {
 			pLoadInfo->eCharCode = ePrevCode;
@@ -104,8 +104,8 @@ void CMruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 		if (GetDllShareData().m_common.m_sFile.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			TCHAR szCpNameNew[260];
 			TCHAR szCpNameOld[260];
-			CCodePage::GetNameLong(szCpNameOld, ePrevCode);
-			CCodePage::GetNameLong(szCpNameNew, pLoadInfo->eCharCode);
+			CodePage::GetNameLong(szCpNameOld, ePrevCode);
+			CodePage::GetNameLong(szCpNameNew, pLoadInfo->eCharCode);
 			ConfirmBeep();
 			int nRet = MYMESSAGEBOX(
 				CEditWnd::getInstance()->GetHwnd(),

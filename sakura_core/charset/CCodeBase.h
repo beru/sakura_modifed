@@ -39,11 +39,11 @@ enum EEolType;
 	文字コード基底クラス。
 	
 	ここで言う「特定コード」とは、
-	CCodeBaseを継承した子クラスが定める、一意の文字コードのことです。
+	CodeBaseを継承した子クラスが定める、一意の文字コードのことです。
 */
-class CCodeBase {
+class CodeBase {
 public:
-	virtual ~CCodeBase() {}
+	virtual ~CodeBase() {}
 //	virtual bool IsCode(const CMemory* pMem) {return false;}  // 特定コードであればtrue
 
 	// 文字コード変換
@@ -79,7 +79,7 @@ protected:
 /*!
 	バイナリ１バイトを U+DC00 から U+DCFF までに対応付ける
 */
-inline int CCodeBase::BinToText(const unsigned char* pSrc, const int nLen, unsigned short* pDst)
+inline int CodeBase::BinToText(const unsigned char* pSrc, const int nLen, unsigned short* pDst)
 {
 	int i;
 
@@ -94,7 +94,7 @@ inline int CCodeBase::BinToText(const unsigned char* pSrc, const int nLen, unsig
 /*!
 	U+DC00 から U+DCFF からバイナリ1バイトを復元
 */
-inline int CCodeBase::TextToBin(const unsigned short cSrc)
+inline int CodeBase::TextToBin(const unsigned short cSrc)
 {
 	return static_cast<int>((cSrc - 0xdc00) & 0x00ff);
 }

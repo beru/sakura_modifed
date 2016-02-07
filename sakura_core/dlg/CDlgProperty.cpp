@@ -112,7 +112,7 @@ void CDlgProperty::SetData(void)
 	cmemProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
 	{
 		TCHAR szCpName[100];
-		CCodePage::GetNameNormal(szCpName, pCEditDoc->GetDocumentEncoding());
+		CodePage::GetNameNormal(szCpName, pCEditDoc->GetDocumentEncoding());
 		cmemProp.AppendString( szCpName );
 	}
 	// From Here  2008/4/27 Uchi

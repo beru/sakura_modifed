@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(Diff)関数群
+@brief ViewCommanderクラスのコマンド(Diff)関数群
 
 	2007.10.25 kobake CEditView_Diffから分離
 */
@@ -36,7 +36,7 @@
 	@return true:正常終了 / false:エラー終了
 */
 static bool Commander_COMPARE_core(
-	CViewCommander& commander,
+	ViewCommander& commander,
 	bool& bDifferent,
 	HWND hwnd,
 	CLogicPoint& poSrc,
@@ -58,7 +58,7 @@ static bool Commander_COMPARE_core(
 			pLineSrc = docMgr.GetLine(poSrc.y)->GetDocLineStrWithEOL(&nLineLenSrc);
 			do {
 				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
-				LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
+				LockGuard<Mutex> guard( CShareData::GetMutexShareWork() );
 				// 行(改行単位)データの要求
 				nLineLenDes = ::SendMessage( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
 				if (nLineLenDes < 0) {
@@ -112,7 +112,7 @@ static bool Commander_COMPARE_core(
 }
 
 // ファイル内容比較
-void CViewCommander::Command_COMPARE(void)
+void ViewCommander::Command_COMPARE(void)
 {
 	HWND		hwndCompareWnd = NULL;
 	TCHAR		szPath[_MAX_PATH + 1];
@@ -228,14 +228,14 @@ ECodeType GetFileCharCode( LPCTSTR pszFile )
 {
 	const TypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
-	return CCodeMediator(typeMini->m_encoding).CheckKanjiCodeOfFile( pszFile );
+	return CodeMediator(typeMini->m_encoding).CheckKanjiCodeOfFile( pszFile );
 }
 
 
 static
 ECodeType GetDiffCreateTempFileCode(ECodeType code)
 {
-	EEncodingTrait e = CCodePage::GetEncodingTrait(code);
+	EEncodingTrait e = CodePage::GetEncodingTrait(code);
 	if (e != ENCODING_TRAIT_ASCII) {
 		return CODE_UTF8;
 	}
@@ -248,7 +248,7 @@ ECodeType GetDiffCreateTempFileCode(ECodeType code)
 	@author	maru
 	@date	2005/10/28 これまでのCommand_Diffはm_pCommanderView->ViewDiffInfoに名称変更
 */
-void CViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
+void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 {
 	const std::tstring strDiffFile2 = to_tchar(_szDiffFile2);
 	const TCHAR* szDiffFile2 = strDiffFile2.c_str();
@@ -320,7 +320,7 @@ void CViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 	@date	2002/11/09 編集中ファイルを許可
 	@date	2005/10/29 maru 一時ファイル作成処理をm_pCommanderView->MakeDiffTmpFileへ移動
 */
-void CViewCommander::Command_Diff_Dialog(void)
+void ViewCommander::Command_Diff_Dialog(void)
 {
 	CDlgDiff cDlgDiff;
 	bool bTmpFile1 = false, bTmpFile2 = false;
@@ -410,7 +410,7 @@ void CViewCommander::Command_Diff_Dialog(void)
 
 
 //	次の差分を探し，見つかったら移動する
-void CViewCommander::Command_Diff_Next(void)
+void ViewCommander::Command_Diff_Next(void)
 {
 	bool bFound = false;
 	bool bRedo = true;
@@ -461,7 +461,7 @@ re_do:;
 
 
 // 前の差分を探し，見つかったら移動する
-void CViewCommander::Command_Diff_Prev(void)
+void ViewCommander::Command_Diff_Prev(void)
 {
 	bool bFound = false;
 	bool bRedo = true;
@@ -514,7 +514,7 @@ re_do:;
 	@author	MIK
 	@date	2002/05/26
 */
-void CViewCommander::Command_Diff_Reset(void)
+void ViewCommander::Command_Diff_Reset(void)
 {
 	CDiffLineMgr(&GetDocument()->m_cDocLineMgr).ResetAllDiffMark();
 

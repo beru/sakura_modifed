@@ -1,9 +1,9 @@
 #include "StdAfx.h"
 #include "CMyRect.h"
 
-CMyRect MergeRect(const CMyRect& rc1, const CMyRect& rc2)
+Rect MergeRect(const Rect& rc1, const Rect& rc2)
 {
-	return CMyRect(
+	return Rect(
 		t_min(rc1.left,		rc2.left),
 		t_min(rc1.top,		rc2.top),
 		t_max(rc1.right,	rc2.right),

@@ -10,10 +10,10 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 
-void CCodeBase::GetBom(CMemory* pcmemBom) { pcmemBom->Clear(); }					// BOMデータ取得
+void CodeBase::GetBom(CMemory* pcmemBom) { pcmemBom->Clear(); }					// BOMデータ取得
 
 // 表示用16表示	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult CCodeBase::UnicodeToHex(
+EConvertResult CodeBase::UnicodeToHex(
 	const wchar_t* cSrc,
 	const int iSLen,
 	TCHAR* pDst,
@@ -40,7 +40,7 @@ EConvertResult CCodeBase::UnicodeToHex(
 
 	@param[out] pcMem デコード済みの文字列を格納
 */
-bool CCodeBase::MIMEHeaderDecode(
+bool CodeBase::MIMEHeaderDecode(
 	const char* pSrc,
 	const int nSrcLen,
 	CMemory* pcMem,
@@ -96,7 +96,7 @@ bool CCodeBase::MIMEHeaderDecode(
 	改行データ取得
 */
 // CShiftJisより移動 2010/6/13 Uchi
-void CCodeBase::S_GetEol(
+void CodeBase::S_GetEol(
 	CMemory* pcmemEol,
 	EEolType eEolType
 	)

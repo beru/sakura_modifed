@@ -932,7 +932,7 @@ inline int CMenuDrawer::GetIconIdByFuncId(int nFuncID) const
 int CMenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 {
 	const TCHAR* pszLabel;
-	CMyRect rc, rcSp;
+	Rect rc, rcSp;
 	HDC hdc;
 	HFONT hFontOld;
 

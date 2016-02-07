@@ -1,5 +1,5 @@
 /*!	@file
-	@brief COsVersionInfo
+	@brief OsVersionInfo
 */
 /*
 	Copyright (C) 2013, novice
@@ -30,20 +30,20 @@
 #include "util/RegKey.h"
 #include "util/window.h"
 
-// COsVersionInfoの内部static変数の定義
+// OsVersionInfoの内部static変数の定義
 // 初期化はIsValidVersion()で行う
-BOOL	 		COsVersionInfo::m_bSuccess;
-OSVERSIONINFO	COsVersionInfo::m_cOsVersionInfo;
+BOOL	 		OsVersionInfo::m_bSuccess;
+OSVERSIONINFO	OsVersionInfo::m_cOsVersionInfo;
 #ifdef USE_SSE2
 bool			COsVersionInfo::m_bSSE2;
 #endif
-bool			COsVersionInfo::m_bWine;
+bool			OsVersionInfo::m_bWine;
 
 /*!
 	初期化を行う(引数はダミー)
 	呼出は基本1回のみ
 */
-COsVersionInfo::COsVersionInfo(bool pbStart)
+OsVersionInfo::OsVersionInfo(bool pbStart)
 {
 	memset_raw(&m_cOsVersionInfo, 0, sizeof(m_cOsVersionInfo));
 	m_cOsVersionInfo.dwOSVersionInfoSize = sizeof(m_cOsVersionInfo);

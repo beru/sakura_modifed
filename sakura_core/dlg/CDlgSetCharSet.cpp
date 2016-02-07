@@ -69,7 +69,7 @@ BOOL CDlgSetCharSet::OnInitDialog(
 	Combo_SetExtendedUI(m_hwndCharSet, TRUE);
 
 	// 文字コードセット選択コンボボックス初期化
-	CCodeTypesForCombobox cCodeTypes;
+	CodeTypesForCombobox cCodeTypes;
 	Combo_ResetContent(m_hwndCharSet);
 	for (int i=1; i<cCodeTypes.GetCount(); ++i) {
 		int idx = Combo_AddString(m_hwndCharSet, cCodeTypes.GetName(i));
@@ -88,7 +88,7 @@ BOOL CDlgSetCharSet::OnBnClicked(int wID)
 		if (!m_bCP) {
 			m_bCP = true;
 			EnableItem(IDC_CHECK_CP, false);
-			CCodePage::AddComboCodePages( GetHwnd(), m_hwndCharSet, -1 );
+			CodePage::AddComboCodePages( GetHwnd(), m_hwndCharSet, -1 );
 		}
 		return TRUE;
 	case IDC_BUTTON_HELP:
@@ -117,7 +117,7 @@ void CDlgSetCharSet::SetBOM(void)
 	WPARAM fCheck;
 	int nIdx = Combo_GetCurSel(m_hwndCharSet);
 	LRESULT lRes = Combo_GetItemData(m_hwndCharSet, nIdx);
-	CCodeTypeName	cCodeTypeName(lRes);
+	CodeTypeName	cCodeTypeName(lRes);
 	if (cCodeTypeName.UseBom()) {
 		::EnableWindow(m_hwndCheckBOM, TRUE);
 		if (lRes == *m_pnCharSet) {
@@ -146,7 +146,7 @@ BOOL CDlgSetCharSet::OnCbnSelChange(HWND hwndCtl, int wID)
 		SetBOM();
 		nIdx = Combo_GetCurSel(hwndCtl);
 		lRes = Combo_GetItemData(hwndCtl, nIdx);
-		CCodeTypeName	cCodeTypeName(lRes);
+		CodeTypeName	cCodeTypeName(lRes);
 		if (cCodeTypeName.UseBom()) {
 			::EnableWindow(m_hwndCheckBOM, TRUE);
 			if (lRes == *m_pnCharSet) {
@@ -175,7 +175,7 @@ LPVOID CDlgSetCharSet::GetHelpIdTable(void)
 void CDlgSetCharSet::SetData(void)
 {
 	// 文字コードセット
-	CCodeTypesForCombobox cCodeTypes;
+	CodeTypesForCombobox cCodeTypes;
 
 	int nIdxOld = Combo_GetCurSel(m_hwndCharSet);
 	int nCurIdx = -1;
@@ -189,7 +189,7 @@ void CDlgSetCharSet::SetData(void)
 		m_bCP = true;
 		CheckButton(IDC_CHECK_CP, true);
 		EnableItem(IDC_CHECK_CP, false);
-		nCurIdx = CCodePage::AddComboCodePages(GetHwnd(), m_hwndCharSet, *m_pnCharSet);
+		nCurIdx = CodePage::AddComboCodePages(GetHwnd(), m_hwndCharSet, *m_pnCharSet);
 		if (nCurIdx == -1) {
 			nCurIdx = nIdxOld;
 		}

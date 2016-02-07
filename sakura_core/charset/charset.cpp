@@ -102,7 +102,7 @@ extern bool IsValidCodeType(int code)
 //                           名前                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-LPCTSTR CCodeTypeName::Normal() const
+LPCTSTR CodeTypeName::Normal() const
 {
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		return NULL;
@@ -110,7 +110,7 @@ LPCTSTR CCodeTypeName::Normal() const
 	return to_tchar(msCodeSet[m_eCodeType].m_sNormal);
 }
 
-LPCTSTR CCodeTypeName::Short() const
+LPCTSTR CodeTypeName::Short() const
 {
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		return NULL;
@@ -118,7 +118,7 @@ LPCTSTR CCodeTypeName::Short() const
 	return to_tchar(msCodeSet[m_eCodeType].m_sShort);
 }
 
-LPCTSTR CCodeTypeName::Bracket() const
+LPCTSTR CodeTypeName::Bracket() const
 {
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		return NULL;
@@ -132,11 +132,11 @@ LPCTSTR CCodeTypeName::Bracket() const
 }
 
 
-bool CCodeTypeName::UseBom()
+bool CodeTypeName::UseBom()
 {
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		if (IsValidCodeOrCPType(m_eCodeType)) {
-			CCodePage encoding(m_eCodeType);
+			CodePage encoding(m_eCodeType);
 			CMemory mem;
 			encoding.GetBom(&mem);
 			return 0 < mem.GetRawLength();
@@ -147,7 +147,7 @@ bool CCodeTypeName::UseBom()
 	return msCodeSet[m_eCodeType].m_bUseBom;
 }
 
-bool CCodeTypeName::IsBomDefOn()
+bool CodeTypeName::IsBomDefOn()
 {
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		return false;
@@ -156,7 +156,7 @@ bool CCodeTypeName::IsBomDefOn()
 	return msCodeSet[m_eCodeType].m_bIsBomDefOn;
 }
 
-bool CCodeTypeName::CanDefault()
+bool CodeTypeName::CanDefault()
 {
 	if (msCodeSet.find(m_eCodeType) == msCodeSet.end()) {
 		if (IsValidCodeOrCPType(m_eCodeType)) {
@@ -173,17 +173,17 @@ bool CCodeTypeName::CanDefault()
 //                      コンボボックス                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-int CCodeTypesForCombobox::GetCount() const
+int CodeTypesForCombobox::GetCount() const
 {
 	return vDispIdx.size();
 }
 
-ECodeType CCodeTypesForCombobox::GetCode(int nIndex) const
+ECodeType CodeTypesForCombobox::GetCode(int nIndex) const
 {
 	return vDispIdx[nIndex];
 }
 
-LPCTSTR CCodeTypesForCombobox::GetName(int nIndex) const
+LPCTSTR CodeTypesForCombobox::GetName(int nIndex) const
 {
 	if (nIndex == 0) {
 		return LS(STR_ERR_GLOBAL01);

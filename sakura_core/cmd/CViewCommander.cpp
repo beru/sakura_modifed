@@ -23,7 +23,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
-// 2007.10.25 kobake CViewCommanderクラスに分離
+// 2007.10.25 kobake ViewCommanderクラスに分離
 
 #include "StdAfx.h"
 #include "CViewCommander.h"
@@ -34,7 +34,7 @@
 #include "CEditApp.h"
 #include "plugin/CJackManager.h"
 
-CViewCommander::CViewCommander(CEditView* pEditView)
+ViewCommander::ViewCommander(CEditView* pEditView)
 	: m_pCommanderView(pEditView)
 {
 	m_bPrevCommand = 0;
@@ -51,7 +51,7 @@ CViewCommander::CViewCommander(CEditView* pEditView)
 	@param lparam3 parameter3(内容はコマンドコードによって変わります)
 	@param lparam4 parameter4(内容はコマンドコードによって変わります)
 */
-bool CViewCommander::HandleCommand(
+bool ViewCommander::HandleCommand(
 	EFunctionCode	nCommand,
 	bool			bRedraw,
 	LPARAM			lparam1,
@@ -703,7 +703,7 @@ bool CViewCommander::HandleCommand(
 /*!
 	@date 2014.07.11 新規追加
 */
-void CViewCommander::Sub_BoxSelectLock( int flags )
+void ViewCommander::Sub_BoxSelectLock( int flags )
 {
 	bool bSelLock;
 	if (flags == 0x00) {
@@ -719,7 +719,7 @@ void CViewCommander::Sub_BoxSelectLock( int flags )
 }
 
 
-CLogicInt CViewCommander::ConvertEol(
+CLogicInt ViewCommander::ConvertEol(
 	const wchar_t* pszText,
 	CLogicInt nTextLen,
 	wchar_t* pszConvertedText
@@ -768,7 +768,7 @@ CLogicInt CViewCommander::ConvertEol(
 
 	@date 2010.04.21 ryoji	新規作成（数カ所で用いられていた類似コードの共通化）
 */
-void CViewCommander::AlertNotFound(
+void ViewCommander::AlertNotFound(
 	HWND hwnd,
 	bool bReplaceAll,
 	LPCTSTR format,

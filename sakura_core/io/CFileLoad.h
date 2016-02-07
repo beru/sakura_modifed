@@ -42,7 +42,7 @@
 #endif // INVALID_SET_FILE_POINTER
 
 struct EncodingConfig;
-class CCodeBase;
+class CodeBase;
 
 /*!
 	文字コードを変換してデータを行単位で取得するためのクラス
@@ -109,7 +109,7 @@ protected:
 	LONGLONG	m_nReadLength;	// 現在までにロードしたデータの合計バイト数(BOM長を含まない)
 	int		m_nLineIndex;	// 現在ロードしている論理行(0開始)
 	ECodeType	m_CharCode;		// 文字コード
-	CCodeBase*	m_pCodeBase;	////
+	CodeBase*	m_pCodeBase;	////
 	EEncodingTrait	m_encodingTrait;
 	CMemory			m_memEols[3];
 	bool	m_bEolEx;		//!< CR/LF以外のEOLが有効か

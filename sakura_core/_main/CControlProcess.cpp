@@ -101,7 +101,7 @@ bool ControlProcess::InitializeProcess()
 	}
 
 	// Œ¾Œê‚ð‘I‘ð‚·‚é
-	CSelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
 	RefreshString();
 
 	MY_TRACETIME(cRunningTimer, "Before new ControlTray");

@@ -125,7 +125,7 @@ bool CShareData_IO::ShareData_IO_2(bool bRead)
 	if (bRead) {
 		DLLSHAREDATA* pShareData = &GetDllShareData();
 		cProfile.IOProfileData(L"Common", L"szLanguageDll", MakeStringBufferT(pShareData->m_common.m_sWindow.m_szLanguageDll));
-		CSelectLang::ChangeLang(pShareData->m_common.m_sWindow.m_szLanguageDll);
+		SelectLang::ChangeLang(pShareData->m_common.m_sWindow.m_szLanguageDll);
 		pcShare->RefreshString();
 	}
 

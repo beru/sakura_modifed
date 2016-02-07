@@ -40,14 +40,14 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CNormalProcess::CNormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine)
+NormalProcess::NormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 	:
 	Process(hInstance, lpCmdLine),
 	m_pcEditApp(NULL)
 {
 }
 
-CNormalProcess::~CNormalProcess()
+NormalProcess::~NormalProcess()
 {
 }
 
@@ -68,7 +68,7 @@ CNormalProcess::~CNormalProcess()
 	@date 2007.06.26 ryoji グループIDを指定して編集ウィンドウを作成する
 	@date 2012.02.25 novice 複数ファイル読み込み
 */
-bool CNormalProcess::InitializeProcess()
+bool NormalProcess::InitializeProcess()
 {
 	MY_RUNNINGTIMER(cRunningTimer, "NormalProcess::Init");
 
@@ -84,7 +84,7 @@ bool CNormalProcess::InitializeProcess()
 	}
 
 	// 言語を選択する
-	CSelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
 
 	// コマンドラインオプション
 	bool			bViewMode = false;
@@ -480,7 +480,7 @@ bool CNormalProcess::InitializeProcess()
 	@author aroka
 	@date 2002/01/07
 */
-bool CNormalProcess::MainLoop()
+bool NormalProcess::MainLoop()
 {
 	if (GetMainWindow()) {
 		m_pcEditApp->GetEditWindow()->MessageLoop();	// メッセージループ
@@ -496,7 +496,7 @@ bool CNormalProcess::MainLoop()
 	@date 2002/01/07
 	こいつはなにもしない。後始末はdtorで。
 */
-void CNormalProcess::OnExitProcess()
+void NormalProcess::OnExitProcess()
 {
 	// プラグイン解放
 	CPluginManager::getInstance()->UnloadAllPlugin();		// Mpve here	2010/7/11 Uchi
@@ -516,7 +516,7 @@ void CNormalProcess::OnExitProcess()
 	@retval Mutex のハンドルを返す
 	@retval 失敗した時はリリースしてから NULL を返す
 */
-HANDLE CNormalProcess::_GetInitializeMutex() const
+HANDLE NormalProcess::_GetInitializeMutex() const
 {
 	MY_RUNNINGTIMER(cRunningTimer, "NormalProcess::_GetInitializeMutex");
 	HANDLE hMutex;

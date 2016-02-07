@@ -26,13 +26,13 @@ class CEditView;// 2002/2/3 aroka ヘッダ軽量化
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class COleLibrary {
+class OleLibrary {
 	friend class CYbInterfaceBase;
 private:
 //	DWORD m_dwCount;	// 2009.01.08 ryoji m_dwCount削除
-	COleLibrary();
+	OleLibrary();
 public:
-	~COleLibrary();
+	~OleLibrary();
 private:
 	void Initialize();
 	void UnInitialize();
@@ -42,7 +42,7 @@ private:
 
 class CYbInterfaceBase {
 private:
-	static COleLibrary m_olelib;
+	static OleLibrary m_olelib;
 protected:
 	CYbInterfaceBase();
 	~CYbInterfaceBase();
@@ -98,20 +98,20 @@ protected:
 };
 
 
-class CDropSource : public CYbInterfaceImpl<IDropSource> {
+class DropSource : public CYbInterfaceImpl<IDropSource> {
 private:
 	BOOL m_bLeft;
 public:
-	CDropSource(BOOL bLeft):m_bLeft(bLeft) {}
+	DropSource(BOOL bLeft):m_bLeft(bLeft) {}
 
 	STDMETHOD(QueryContinueDrag)(BOOL bEscapePressed, DWORD dwKeyState);
 	STDMETHOD(GiveFeedback)(DWORD dropEffect);
 };
 
 
-class CDataObject : public CYbInterfaceImpl<IDataObject> {
+class DataObject : public CYbInterfaceImpl<IDataObject> {
 private:
-	friend class CEnumFORMATETC;	// 2008.03.26 ryoji
+	friend class EnumFORMATETC;	// 2008.03.26 ryoji
 
 	typedef struct {
 		CLIPFORMAT cfFormat;
@@ -124,13 +124,13 @@ private:
 	PDATA m_pData;
 
 public:
-	CDataObject (LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect ):
+	DataObject (LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect ):
 		m_nFormat(0),
 		m_pData(NULL)
 	{
 		SetText(lpszText, nTextLen, bColumnSelect);
 	}
-	~CDataObject() { SetText(NULL, 0, FALSE); }
+	~DataObject() { SetText(NULL, 0, FALSE); }
 	void	SetText(LPCWSTR lpszText, int nTextLen, BOOL bColumnSelect);
 	DWORD	DragDrop(BOOL bLeft, DWORD dwEffects);
 
@@ -145,19 +145,19 @@ public:
 	STDMETHOD(EnumDAdvise)(LPENUMSTATDATA*);
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CDataObject);
+	DISALLOW_COPY_AND_ASSIGN(DataObject);
 };
 
 
-// CEnumFORMATETC クラス
+// EnumFORMATETC クラス
 // 2008.03.26 ryoji 新規作成
-class CEnumFORMATETC : public CYbInterfaceImpl<IEnumFORMATETC> {
+class EnumFORMATETC : public CYbInterfaceImpl<IEnumFORMATETC> {
 private:
 	LONG m_lRef;
 	int m_nIndex;
-	CDataObject* m_pcDataObject;
+	DataObject* m_pcDataObject;
 public:
-	CEnumFORMATETC(CDataObject* pcDataObject) : m_lRef(1), m_nIndex(0), m_pcDataObject(pcDataObject) {}
+	EnumFORMATETC(DataObject* pcDataObject) : m_lRef(1), m_nIndex(0), m_pcDataObject(pcDataObject) {}
 	STDMETHOD_(ULONG, AddRef)(void)
 	{return ::InterlockedIncrement(&m_lRef);}
 	STDMETHOD_(ULONG, Release)(void)

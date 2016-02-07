@@ -24,9 +24,9 @@
 #pragma once
 
 template <class INT_TYPE, class POINT_TYPE>
-class CStrictRect {
+class StrictRect {
 private:
-	typedef CStrictRect<INT_TYPE, POINT_TYPE> Me;
+	typedef StrictRect<INT_TYPE, POINT_TYPE> Me;
 public:
 	typedef INT_TYPE	IntType;
 	typedef POINT_TYPE	PointType;

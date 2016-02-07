@@ -166,7 +166,7 @@ public:
 	CLayoutRange m_sSelect;    // 範囲選択
 	CLayoutRange m_sSelectOld; // 範囲選択Old
 
-	CMyPoint	m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
+	Point	m_ptMouseRollPosOld;	// マウス範囲選択前回位置(XY座標)
 };
 
 /*

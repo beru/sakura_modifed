@@ -216,7 +216,7 @@ EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 
 	if (psStatusbar->m_bDispUtf8Codepoint) {
 		// Unicodeで表示
-		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
+		return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 	}
 	cBuff.AllocStringBuffer(4);
 	// 1文字データバッファ

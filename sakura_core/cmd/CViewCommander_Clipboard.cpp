@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(クリップボード系)関数群
+@brief ViewCommanderクラスのコマンド(クリップボード系)関数群
 
 	2012/12/20	CViewCommander.cppから分離
 */
@@ -30,7 +30,7 @@
 
 	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
 */
-void CViewCommander::Command_CUT(void)
+void ViewCommander::Command_CUT(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -74,7 +74,7 @@ void CViewCommander::Command_CUT(void)
 
 	@date 2007.11.18 ryoji 「選択なしでコピーを可能にする」オプション処理追加
 */
-void CViewCommander::Command_COPY(
+void ViewCommander::Command_COPY(
 	bool		bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
 	bool		bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
 	EEolType	neweol					// [in] コピーするときのEOL。
@@ -151,7 +151,7 @@ void CViewCommander::Command_COPY(
 
 	@date 2007.10.04 ryoji MSDEVLineSelect形式の行コピー対応処理を追加（VS2003/2005のエディタと類似の挙動に）
 */
-void CViewCommander::Command_PASTE(int option)
+void ViewCommander::Command_PASTE(int option)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
@@ -253,7 +253,7 @@ void CViewCommander::Command_PASTE(int option)
 //  なお、これらを呼び出し側に期待するわけは、「すべて置換」のような何回も連続で呼び出す
 // ときに、最初に一回チェックすればよいものを何回もチェックするのは無駄と判断したためです。
 // @note 2004.06.30 現在、すべて置換では使用していない
-void CViewCommander::Command_PASTEBOX(
+void ViewCommander::Command_PASTEBOX(
 	const wchar_t* szPaste,
 	int nPasteSize
 	)
@@ -396,7 +396,7 @@ void CViewCommander::Command_PASTEBOX(
 	@date 2004.06.29 Moca 未使用だったものを有効にする
 	オリジナルのCommand_PASTEBOX(void)はばっさり削除 (genta)
 */
-void CViewCommander::Command_PASTEBOX(int option)
+void ViewCommander::Command_PASTEBOX(int option)
 {
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -424,7 +424,7 @@ void CViewCommander::Command_PASTEBOX(int option)
 
 
 // 矩形文字列挿入
-void CViewCommander::Command_INSBOXTEXT(
+void ViewCommander::Command_INSBOXTEXT(
 	const wchar_t* pszPaste,
 	int nPasteSize
 	)
@@ -449,7 +449,7 @@ void CViewCommander::Command_INSBOXTEXT(
 	@date 2010.09.17 ryoji ラインモード貼り付けオプションを追加して以前の Command_PASTE() との重複部を整理・統合
 	@date 2013.05.10 Moca 高速モード
 */
-void CViewCommander::Command_INSTEXT(
+void ViewCommander::Command_INSTEXT(
 	bool			bRedraw,		// 
 	const wchar_t*	pszText,		// [in] 貼り付ける文字列。
 	CLogicInt		nTextLen,		// [in] pszTextの長さ。-1を指定すると、pszTextをNUL終端文字列とみなして長さを自動計算する
@@ -592,7 +592,7 @@ end_of_func:
 
 
 // 最後にテキストを追加
-void CViewCommander::Command_ADDTAIL(
+void ViewCommander::Command_ADDTAIL(
 	const wchar_t*	pszData,	// 追加するテキスト
 	int				nDataLen	// 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
 	)
@@ -625,7 +625,7 @@ void CViewCommander::Command_ADDTAIL(
 
 
 // 選択範囲内全行コピー
-void CViewCommander::Command_COPYLINES(void)
+void ViewCommander::Command_COPYLINES(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
@@ -637,7 +637,7 @@ void CViewCommander::Command_COPYLINES(void)
 
 
 // 選択範囲内全行引用符付きコピー
-void CViewCommander::Command_COPYLINESASPASSAGE(void)
+void ViewCommander::Command_COPYLINESASPASSAGE(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
@@ -649,7 +649,7 @@ void CViewCommander::Command_COPYLINESASPASSAGE(void)
 
 
 // 選択範囲内全行行番号付きコピー
-void CViewCommander::Command_COPYLINESWITHLINENUMBER(void)
+void ViewCommander::Command_COPYLINESWITHLINENUMBER(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
@@ -731,7 +731,7 @@ static bool AppendHTMLColor(
 
 
 // 選択範囲内色付きHTMLコピー
-void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
+void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (!selInfo.IsTextSelected()
@@ -1047,7 +1047,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	}
 	cmemClip.AppendString(L"</pre>", 6);
 
-	CClipboard cClipboard(GetEditWindow()->GetHwnd());
+	Clipboard cClipboard(GetEditWindow()->GetHwnd());
 	if (!cClipboard) {
 		return;
 	}
@@ -1061,7 +1061,7 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 /*!
 	@date 2014.12.30 Moca 同じCColorStrategyで違う色に切り替わったときに対応
 */
-CColorStrategy* CViewCommander::GetColorStrategyHTML(
+CColorStrategy* ViewCommander::GetColorStrategyHTML(
 	const CStringRef&	cStringLine,
 	int					iLogic,
 	const CColorStrategyPool*	pool,
@@ -1113,7 +1113,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 }
 
 // 選択範囲内行番号色付きHTMLコピー
-void CViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
+void ViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
 {
 	Command_COPY_COLOR_HTML(true);
 }
@@ -1122,7 +1122,7 @@ void CViewCommander::Command_COPY_COLOR_HTML_LINENUMBER()
 /*!	現在編集中のファイル名をクリップボードにコピー
 	2002/2/3 aroka
 */
-void CViewCommander::Command_COPYFILENAME(void)
+void ViewCommander::Command_COPYFILENAME(void)
 {
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
@@ -1135,7 +1135,7 @@ void CViewCommander::Command_COPYFILENAME(void)
 
 
 // 現在編集中のファイルのパス名をクリップボードにコピー
-void CViewCommander::Command_COPYPATH(void)
+void ViewCommander::Command_COPYPATH(void)
 {
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		// クリップボードにデータを設定
@@ -1149,7 +1149,7 @@ void CViewCommander::Command_COPYPATH(void)
 
 // May 9, 2000 genta
 // 現在編集中のファイルのパス名とカーソル位置をクリップボードにコピー
-void CViewCommander::Command_COPYTAG(void)
+void ViewCommander::Command_COPYTAG(void)
 {
 	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		wchar_t	buf[MAX_PATH + 20];
@@ -1170,7 +1170,7 @@ void CViewCommander::Command_COPYTAG(void)
 
 //// キー割り当て一覧をコピー
 // Dec. 26, 2000 JEPRO // Jan. 24, 2001 JEPRO debug version (directed by genta)
-void CViewCommander::Command_CREATEKEYBINDLIST(void)
+void ViewCommander::Command_CREATEKEYBINDLIST(void)
 {
 	CNativeW cMemKeyList;
 	auto& csKeyBind = GetDllShareData().m_common.m_sKeyBind;

@@ -28,7 +28,7 @@
 #include "CEditApp.h"
 #include "CGrepAgent.h" // use CEditApp.h
 #include "window/CEditWnd.h"
-#include "_os/CDropTarget.h" // CDataObject
+#include "_os/CDropTarget.h" // DataObject
 #include "_os/CClipboard.h"
 #include "COpeBlk.h"
 #include "doc/layout/CLayout.h"
@@ -46,7 +46,7 @@
 // マウス左ボタン押下
 void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 {
-	CMyPoint ptMouse(_xPos, _yPos);
+	Point ptMouse(_xPos, _yPos);
 
 	if (m_bHokan) {
 		m_pcEditWnd->m_cHokanMgr.Hide();
@@ -139,7 +139,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 						) {
 							GetCaret().MoveCursorToClientPoint(ptMouse);
 						}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-							GetCaret().MoveCursorToClientPoint(CMyPoint(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y));
+							GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y));
 						}
 					}
 					return;
@@ -151,7 +151,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
 					int nOpe = m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer();
 					m_pcEditWnd->SetDragSourceView(this);
-					CDataObject data(cmemCurText.GetStringPtr(), cmemCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
+					DataObject data(cmemCurText.GetStringPtr(), cmemCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
 					dwEffects = data.DragDrop(TRUE, dwEffectsSrc);
 					m_pcEditWnd->SetDragSourceView(NULL);
 					if (m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
@@ -190,7 +190,7 @@ normal_action:;
 			if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
 				GetCaret().MoveCursorToClientPoint(ptMouse);
 			}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-				GetCaret().MoveCursorToClientPoint(CMyPoint(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y));
+				GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y));
 			}else {
 				return;
 			}
@@ -292,7 +292,7 @@ normal_action:;
 				if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
 					GetCaret().MoveCursorToClientPoint(ptMouse, true, &ptNewCaret);
 				}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-					GetCaret().MoveCursorToClientPoint(CMyPoint(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
+					GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
 				}
 				bSetPtNewCaret = true;
 			}
@@ -306,7 +306,7 @@ normal_action:;
 				if (ptMouse.x >= GetTextArea().GetAreaLeft() && ptMouse.x < GetTextArea().GetAreaRight()) {
 					GetCaret().MoveCursorToClientPoint(ptMouse, true, &ptNewCaret);
 				}else if (ptMouse.x < GetTextArea().GetAreaLeft()) {
-					GetCaret().MoveCursorToClientPoint(CMyPoint(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
+					GetCaret().MoveCursorToClientPoint(Point(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y), true, &ptNewCaret);
 				}
 				bSetPtNewCaret = true;
 			}
@@ -527,7 +527,7 @@ normal_action:;
 	
 	@date 2007.11.15 nasukoji	新規作成
 */
-bool CEditView::CheckTripleClick(CMyPoint ptMouse)
+bool CEditView::CheckTripleClick(Point ptMouse)
 {
 
 	// トリプルクリックチェック有効でない（時刻がセットされていない）
@@ -537,7 +537,7 @@ bool CEditView::CheckTripleClick(CMyPoint ptMouse)
 	bool result = false;
 
 	// 前回クリックとのクリック位置のずれを算出
-	CMyPoint dpos(GetSelectionInfo().m_ptMouseRollPosOld.x - ptMouse.x,
+	Point dpos(GetSelectionInfo().m_ptMouseRollPosOld.x - ptMouse.x,
 				   GetSelectionInfo().m_ptMouseRollPosOld.y - ptMouse.y);
 
 	if (dpos.x < 0)
@@ -574,7 +574,7 @@ void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	// 現在のマウスカーソル位置→レイアウト位置
 
 	CLayoutPoint ptNew;
-	GetTextArea().ClientToLayout(CMyPoint(xPos, yPos), &ptNew);
+	GetTextArea().ClientToLayout(Point(xPos, yPos), &ptNew);
 	/*
 	ptNew.x = GetTextArea().GetViewLeftCol() + (xPos - GetTextArea().GetAreaLeft()) / GetTextMetrics().GetHankakuDx();
 	ptNew.y = GetTextArea().GetViewTopLine() + (yPos - GetTextArea().GetAreaTop()) / GetTextMetrics().GetHankakuDy();
@@ -636,7 +636,7 @@ void CEditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 			return;
 		}else {
 			m_nAutoScrollMode = 1;
-			m_cAutoScrollMousePos = CMyPoint(xPos, yPos);
+			m_cAutoScrollMousePos = Point(xPos, yPos);
 			::SetCapture(GetHwnd());
 		}
 	}
@@ -736,9 +736,9 @@ void CEditView::AutoScrollExit()
 	m_nAutoScrollMode = 0;
 }
 
-void CEditView::AutoScrollMove(CMyPoint& point)
+void CEditView::AutoScrollMove(Point& point)
 {
-	const CMyPoint relPos = point - m_cAutoScrollMousePos;
+	const Point relPos = point - m_cAutoScrollMousePos;
 	int idcX, idcY;
 	if (!m_bAutoScrollHorizontal || abs(relPos.x) < 16) {
 		idcX = 0;
@@ -772,12 +772,12 @@ void CEditView::AutoScrollMove(CMyPoint& point)
 
 void CEditView::AutoScrollOnTimer()
 {
-	CMyPoint cursorPos;
+	Point cursorPos;
 	::GetCursorPos(&cursorPos);
 	::ScreenToClient(GetHwnd(), &cursorPos);
 	
-	const CMyPoint relPos = cursorPos - m_cAutoScrollMousePos;
-	CMyPoint scrollPos = relPos / 8;
+	const Point relPos = cursorPos - m_cAutoScrollMousePos;
+	Point scrollPos = relPos / 8;
 	if (m_bAutoScrollHorizontal) {
 		if (scrollPos.x < 0) {
 			scrollPos.x += 1;
@@ -925,7 +925,7 @@ void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 // マウス移動のメッセージ処理
 void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 {
-	CMyPoint ptMouse(xPos_, yPos_);
+	Point ptMouse(xPos_, yPos_);
 
 	if (m_cMousePousePos != ptMouse) {
 		m_cMousePousePos = ptMouse;
@@ -1098,7 +1098,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 	// 2010.07.15 Moca ドラッグ開始位置から移動していない場合はMOVEとみなさない
 	// 遊びは 2px固定とする
-	CMyPoint ptMouseMove = ptMouse - m_cMouseDownPos;
+	Point ptMouseMove = ptMouse - m_cMouseDownPos;
 	if (m_cMouseDownPos.x != -INT_MAX && abs(ptMouseMove.x) <= 2 && abs(ptMouseMove.y) <= 2) {
 		return;
 	}
@@ -1117,7 +1117,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		// 座標指定によるカーソル移動
 		if ((ptMouse.x < GetTextArea().GetAreaLeft() || m_dwTripleClickCheck)&& GetSelectionInfo().m_bBeginLineSelect) {	// 行単位選択中
 			// 2007.11.15 nasukoji	上方向の行選択時もマウスカーソルの位置の行が選択されるようにする
-			CMyPoint nNewPos(0, ptMouse.y);
+			Point nNewPos(0, ptMouse.y);
 
 			// 1行の高さ
 			int nLineHeight = GetTextMetrics().GetHankakuHeight() + m_pTypeData->m_nLineSpace;
@@ -1575,7 +1575,7 @@ static unsigned __stdcall ShellExecuteProc(LPVOID lpParameter)
 // 2007.01.18 kobake IsCurrentPositionURL仕様変更に伴い、処理の書き換え
 void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 {
-	CMyPoint ptMouse(_xPos, _yPos);
+	Point ptMouse(_xPos, _yPos);
 
 	CLogicRange		cUrlRange;	// URL範囲
 	std::wstring	wstrURL;
@@ -1867,7 +1867,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 		return E_INVALIDARG;
 	LPVOID pData = ::GlobalLock(hData);
 	SIZE_T nSize = ::GlobalSize(hData);
-	if (cf == CClipboard::GetSakuraFormat()) {
+	if (cf == Clipboard::GetSakuraFormat()) {
 		if (nSize > sizeof(int)) {
 			wchar_t* pszData = (wchar_t*)((BYTE*)pData + sizeof(int));
 			cmemBuf.SetString(pszData, t_min((SIZE_T)*(int*)pData, nSize / sizeof(wchar_t)));	// 途中のNUL文字も含める
@@ -2227,7 +2227,7 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 CLIPFORMAT CEditView::GetAvailableClipFormat(LPDATAOBJECT pDataObject)
 {
 	CLIPFORMAT cf = 0;
-	CLIPFORMAT cfSAKURAClip = CClipboard::GetSakuraFormat();
+	CLIPFORMAT cfSAKURAClip = Clipboard::GetSakuraFormat();
 
 	if (IsDataAvailable(pDataObject, cfSAKURAClip))
 		cf = cfSAKURAClip;

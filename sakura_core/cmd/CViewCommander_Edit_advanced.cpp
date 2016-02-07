@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(編集系 高度な操作(除単語/行操作))関数群
+@brief ViewCommanderクラスのコマンド(編集系 高度な操作(除単語/行操作))関数群
 
 	2012/12/17	CViewCommander.cpp,CViewCommander_New.cppから分離
 */
@@ -43,7 +43,7 @@ using namespace std; // 2002/2/3 aroka to here
 #endif
 
 // インデント ver1
-void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
+void ViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 {
 	using namespace WCODE;
 
@@ -72,7 +72,7 @@ void CViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 	選択された各行の範囲の直前に、与えられた文字列(pData)を挿入する。
 	@param eIndent インデントの種別
 */
-void CViewCommander::Command_INDENT(
+void ViewCommander::Command_INDENT(
 	const wchar_t* const pData,
 	const CLogicInt nDataLen,
 	EIndentType eIndent
@@ -421,7 +421,7 @@ void CViewCommander::Command_INDENT(
 
 
 // 逆インデント
-void CViewCommander::Command_UNINDENT(wchar_t wcChar)
+void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 {
 	// Aug. 9, 2003 genta
 	// 選択されていない場合に逆インデントした場合に
@@ -562,7 +562,7 @@ void CViewCommander::Command_UNINDENT(wchar_t wcChar)
 	@author hor
 	@date 2001.12.03 hor 新規作成
 */
-void CViewCommander::Command_TRIM(
+void ViewCommander::Command_TRIM(
 	BOOL bLeft	//  [in] FALSE: 右TRIM / それ以外: 左TRIM
 	)
 {
@@ -655,7 +655,7 @@ bool SortByKeyDesc(SortData* pst1, SortData* pst2) {return CStringRef_comp(pst1-
 	@date 2010.07.27 行ソートでコピーを減らす/NULより後ろも比較対照に
 	@date 2013.06.19 Moca 矩形選択時最終行に改行がない場合は付加+ソート後の最終行の改行を削除
 */
-void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
+void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 {
 	CLayoutRange sRangeA;
 	CLogicRange sSelectOld;
@@ -836,7 +836,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	@date 2001.12.03 hor 新規作成
 	@date 2001.12.21 hor 選択範囲の調整ロジックを訂正
 */
-void CViewCommander::Command_MERGE(void)
+void ViewCommander::Command_MERGE(void)
 {
 	CLayoutInt	nCaretPosYOLD;
 	CLogicInt	nLineLen;
@@ -967,7 +967,7 @@ void CViewCommander::Command_MERGE(void)
 	@date 2010.03.17 ATOK用はSCS_SETRECONVERTSTRING => ATRECONVERTSTRING_SETに変更
 		2002.11.20 Stoneeさんの情報
 */
-void CViewCommander::Command_Reconvert(void)
+void ViewCommander::Command_Reconvert(void)
 {
 	const int ATRECONVERTSTRING_SET = 1;
 

@@ -114,10 +114,10 @@ inline bool IsValidCodeOrCPTypeExceptSJIS(int code)
 //                           名前                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CCodeTypeName {
+class CodeTypeName {
 public:
-	CCodeTypeName(ECodeType eCodeType) : m_eCodeType(eCodeType) { InitCodeSet(); }
-	CCodeTypeName(int eCodeType) : m_eCodeType((ECodeType)eCodeType) { InitCodeSet(); }
+	CodeTypeName(ECodeType eCodeType) : m_eCodeType(eCodeType) { InitCodeSet(); }
+	CodeTypeName(int eCodeType) : m_eCodeType((ECodeType)eCodeType) { InitCodeSet(); }
 	ECodeType GetCode() const { return m_eCodeType; }
 	LPCTSTR	Normal() const;
 	LPCTSTR	Short() const;
@@ -134,9 +134,9 @@ private:
 //                      コンボボックス                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CCodeTypesForCombobox {
+class CodeTypesForCombobox {
 public:
-	CCodeTypesForCombobox() { InitCodeSet(); }
+	CodeTypesForCombobox() { InitCodeSet(); }
 	int			GetCount() const;
 	ECodeType	GetCode(int nIndex) const;
 	LPCTSTR		GetName(int nIndex) const;

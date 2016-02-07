@@ -156,7 +156,7 @@ static void ShowCodeBox(HWND hWnd, CEditDoc* pcEditDoc)
 					if (i == CODE_SJIS || i == CODE_JIS || i == CODE_EUC || i == CODE_LATIN1 || i == CODE_UNICODE || i == CODE_UTF8 || i == CODE_CESU8) {
 						//auto_sprintf(szCaretChar, _T("%04x"),);
 						// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
-						CCodeBase* pCode = CCodeFactory::CreateCodeBase((ECodeType)i, false);
+						CodeBase* pCode = CodeFactory::CreateCodeBase((ECodeType)i, false);
 						EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCode[i], &sStatusbar);
 						delete pCode;
 						if (ret != RESULT_COMPLETE) {
@@ -168,7 +168,7 @@ static void ShowCodeBox(HWND hWnd, CEditDoc* pcEditDoc)
 				// コードポイント部（サロゲートペアも）
 				TCHAR szCodeCP[32];
 				sStatusbar.m_bDispSPCodepoint = true;
-				CCodeBase* pCode = CCodeFactory::CreateCodeBase(CODE_UNICODE, false);
+				CodeBase* pCode = CodeFactory::CreateCodeBase(CODE_UNICODE, false);
 				EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCodeCP, &sStatusbar);
 				delete pCode;
 				if (ret != RESULT_COMPLETE) {
@@ -311,7 +311,7 @@ void CEditWnd::UpdateCaption()
 
 
 // ウィンドウ生成用の矩形を取得
-void CEditWnd::_GetWindowRectForInit(CMyRect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo)
+void CEditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo)
 {
 	// ウィンドウサイズ継承
 	int	nWinCX, nWinCY;
@@ -400,7 +400,7 @@ HWND CEditWnd::_CreateMainWindow(int nGroup, const TabGroupInfo& sTabGroupInfo)
 	}
 
 	// 矩形取得
-	CMyRect rc;
+	Rect rc;
 	_GetWindowRectForInit(&rc, nGroup, sTabGroupInfo);
 
 	// 作成
@@ -823,7 +823,7 @@ void CEditWnd::SetDocumentTypeWhenCreate(
 			GetDocument()->SetDocumentEncoding(nCharCode, types.m_encoding.m_bDefaultBom);
 			GetDocument()->m_cDocEditor.m_cNewLineCode = static_cast<EEolType>(types.m_encoding.m_eDefaultEoltype);
 		}else {
-			GetDocument()->SetDocumentEncoding(nCharCode, CCodeTypeName(nCharCode).IsBomDefOn());
+			GetDocument()->SetDocumentEncoding(nCharCode, CodeTypeName(nCharCode).IsBomDefOn());
 			GetDocument()->m_cDocEditor.m_cNewLineCode = EOL_CRLF;
 		}
 	}
@@ -1675,7 +1675,7 @@ LRESULT CEditWnd::DispatchEvent(
 		switch ((e_PM_CHANGESETTING_SELECT)lParam) {
 		case PM_CHANGESETTING_ALL:
 			// 言語を選択する
-			CSelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
+			SelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
 			CShareData::getInstance()->RefreshString();
 
 			// メインメニュー	2010/5/16 Uchi
@@ -3413,7 +3413,7 @@ LRESULT CEditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 #endif
 							// 移動は禁止
 							DWORD R;
-							CDropSource drop(TRUE);
+							DropSource drop(TRUE);
 							DoDragDrop(DataObject, &drop, DROPEFFECT_COPY | DROPEFFECT_LINK, &R);
 							DataObject->Release();
 						}

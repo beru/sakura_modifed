@@ -41,7 +41,7 @@ CAutoScrollWnd::~CAutoScrollWnd()
 }
 
 
-HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const CMyPoint& point, CEditView* view)
+HWND CAutoScrollWnd::Create(HINSTANCE hInstance, HWND hwndParent, bool bVertical, bool bHorizontal, const Point& point, CEditView* view)
 {
 	LPCTSTR pszClassName;
 

@@ -22,10 +22,10 @@ bool CFigure_HanSpace::Match(const wchar_t* pText, int nTextLen) const
 void CFigure_HanSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
-	CMyRect rcClip;
+	Rect rcClip;
 	if (pcView->GetTextArea().GenerateClipRect(&rcClip, *pDispPos, 1)) {
 		// 小文字"o"の下半分を出力
-		CMyRect rcClipBottom = rcClip;
+		Rect rcClipBottom = rcClip;
 		rcClipBottom.top = rcClip.top + pcView->GetTextMetrics().GetHankakuHeight() / 2;
 		::ExtTextOutW_AnyBuild(
 			gr,
@@ -39,7 +39,7 @@ void CFigure_HanSpace::DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pc
 		);
 		
 		// 上半分は普通の空白で出力（"o"の上半分を消す）
-		CMyRect rcClipTop = rcClip;
+		Rect rcClipTop = rcClip;
 		rcClipTop.bottom = rcClip.top + pcView->GetTextMetrics().GetHankakuHeight() / 2;
 		::ExtTextOutW_AnyBuild(
 			gr,

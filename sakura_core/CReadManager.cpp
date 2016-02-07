@@ -52,7 +52,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	CDocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
 	ECodeType eCharCode = sLoadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
-		CCodeMediator cmediator( type->m_encoding );
+		CodeMediator cmediator( type->m_encoding );
 		eCharCode = cmediator.CheckKanjiCodeOfFile( pszPath );
 	}
 	if (!IsValidCodeOrCPType(eCharCode)) {
@@ -62,7 +62,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	if (eCharCode == type->m_encoding.m_eDefaultCodetype) {
 		bBom = type->m_encoding.m_bDefaultBom;	// 2011.01.24 ryoji デフォルトBOM
 	}else {
-		bBom = CCodeTypeName( eCharCode ).IsBomDefOn();
+		bBom = CodeTypeName( eCharCode ).IsBomDefOn();
 	}
 	pFileInfo->SetCodeSet( eCharCode, bBom );
 

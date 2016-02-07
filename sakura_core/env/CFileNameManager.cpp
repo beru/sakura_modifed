@@ -448,9 +448,9 @@ bool CFileNameManager::GetMenuFullLabel(
 	const TCHAR* pszCharset = _T("");
 	TCHAR szCodePageName[100];
 	if (IsValidCodeTypeExceptSJIS(nCharCode)) {
-		pszCharset = CCodeTypeName(nCharCode).Bracket();
+		pszCharset = CodeTypeName(nCharCode).Bracket();
 	}else if (IsValidCodeOrCPTypeExceptSJIS(nCharCode)) {
-		CCodePage::GetNameBracket(szCodePageName, nCharCode);
+		CodePage::GetNameBracket(szCodePageName, nCharCode);
 		pszCharset = szCodePageName;
 	}
 	

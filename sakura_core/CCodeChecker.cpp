@@ -49,7 +49,7 @@ static EConvertResult _CheckSavingCharcode(
 {
 	const CDocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
 	const bool bCodePageMode = IsValidCodeOrCPType(eCodeType) && !IsValidCodeType(eCodeType);
-	CCodeBase* pCodeBase = CCodeFactory::CreateCodeBase(eCodeType, 0);
+	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	CMemory cmemTmp;	// バッファを再利用
 	CNativeW cmemTmp2;
 	CLogicInt nLine = CLogicInt(0);
@@ -172,7 +172,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		TCHAR szCpName[100];
 		TCHAR  szLineNum[60];  // 123桁
 		TCHAR  szCharCode[12]; // U+12ab or 1234abcd
-		CCodePage::GetNameNormal(szCpName, pSaveInfo->eCharCode);
+		CodePage::GetNameNormal(szCpName, pSaveInfo->eCharCode);
 		_tcscpy( szCharCode, _T("") );
 		_tcscpy( szLineNum, _T("") );
 		if (point.x == -1) {

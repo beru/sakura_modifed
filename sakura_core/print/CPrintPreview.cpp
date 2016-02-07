@@ -422,7 +422,7 @@ LRESULT CPrintPreview::OnSize(WPARAM wParam, LPARAM lParam)
 	
 	// 印刷プレビュー スクロールバーの初期化
 	
-	m_pParentWnd->SetDragPosOrg(CMyPoint(0, 0));
+	m_pParentWnd->SetDragPosOrg(Point(0, 0));
 	m_pParentWnd->SetDragMode(true);
 	OnMouseMove(0, MAKELONG(0, 0));
 	m_pParentWnd->SetDragMode(false);
@@ -642,7 +642,7 @@ LRESULT CPrintPreview::OnMouseMove(WPARAM wParam, LPARAM lParam)
 		nMoveX = 0;
 	}
 
-	m_pParentWnd->SetDragPosOrg(CMyPoint(xPos, yPos));
+	m_pParentWnd->SetDragPosOrg(Point(xPos, yPos));
 	// 描画
 	ScrollWindowEx(m_pParentWnd->GetHwnd(), nMoveX, nMoveY, NULL, NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE);
 	return 0;
@@ -1218,7 +1218,7 @@ static void Tab2Space(wchar_t* pTrg)
 
 /*! 印刷/印刷プレビュー ヘッダ･フッタの描画
 */
-void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
+void CPrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 {
 	bool		bFontSetting = (bHeader ? m_pPrintSetting->m_lfHeader.lfFaceName[0] : m_pPrintSetting->m_lfFooter.lfFaceName[0]) != _T('\0');
 	const int	nWorkLen = 1024;
@@ -1310,7 +1310,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 		nLen = wcslen(szWork);
 		Print_DrawLine(
 			hdc,
-			CMyPoint(
+			Point(
 				rect.left,
 				nY
 			),
@@ -1329,7 +1329,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 		int nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); // テキスト幅
 		Print_DrawLine(
 			hdc,
-			CMyPoint(
+			Point(
 				(rect.right + rect.left - nTextWidth) / 2,
 				nY
 			),
@@ -1348,7 +1348,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const CMyRect& rect, bool bHeader)
 		nTextWidth = CTextMetrics::CalcTextWidth2(szWork, nLen, nDx); // テキスト幅
 		Print_DrawLine(
 			hdc,
-			CMyPoint(
+			Point(
 				rect.right - nTextWidth,
 				nY
 			),
@@ -1523,7 +1523,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 			// 印刷／プレビュー 行描画
 			pStrategy = Print_DrawLine(
 				hdc,
-				CMyPoint(
+				Point(
 					nBasePosX,
 					nDirectY * (nOffY + nLineHeight * i)
 				),
@@ -1921,7 +1921,7 @@ void CPrintPreview::CreatePrintPreviewControls(void)
 {
 	// 印刷プレビュー 操作バー
 	m_hwndPrintPreviewBar = ::CreateDialogParam(
-		CSelectLang::getLangRsrcInstance(),					// handle to application instance
+		SelectLang::getLangRsrcInstance(),					// handle to application instance
 		MAKEINTRESOURCE(IDD_PRINTPREVIEWBAR),				// identifies dialog box template name
 		m_pParentWnd->GetHwnd(),							// handle to owner window
 		CPrintPreview::PrintPreviewBar_DlgProc,	// pointer to dialog box procedure

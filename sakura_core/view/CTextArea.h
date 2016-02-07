@@ -82,8 +82,8 @@ public:
 	int GetAreaBottom() const {
 		return m_nViewAlignTop + m_nViewCy;
 	}
-	CMyRect GetAreaRect() const {
-		return CMyRect(GetAreaLeft(), GetAreaTop(), GetAreaRight(), GetAreaBottom());
+	Rect GetAreaRect() const {
+		return Rect(GetAreaLeft(), GetAreaTop(), GetAreaRight(), GetAreaBottom());
 	}
 
 	int GetAreaWidth() const {
@@ -112,7 +112,7 @@ public:
 
 	//! クライアントサイズ更新
 	void TextArea_OnSize(
-		const CMySize& sizeClient, //!< ウィンドウのクライアントサイズ
+		const Size& sizeClient, //!< ウィンドウのクライアントサイズ
 		int nCxVScroll,            //!< 垂直スクロールバーの横幅
 		int nCyHScroll             //!< 水平スクロールバーの縦幅
 	);
@@ -150,7 +150,7 @@ public:
 
 	// 計算
 	// ! クライアント座標からレイアウト位置に変換する
-	void ClientToLayout(CMyPoint ptClient, CLayoutPoint* pptLayout) const;
+	void ClientToLayout(Point ptClient, CLayoutPoint* pptLayout) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //

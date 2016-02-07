@@ -312,7 +312,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			// From Here Jul. 26, 2003 ryoji BOMチェックボックスの初期化
 			if (pData->m_bUseBom) {
 				// 使うときは有効／無効を切り替え、チェック状態を初期値に設定する
-				if (CCodeTypeName(pData->m_nCharCode).UseBom()) {
+				if (CodeTypeName(pData->m_nCharCode).UseBom()) {
 					::EnableWindow(pData->m_hwndCheckBOM, TRUE);
 					fCheck = pData->m_bBom? BST_CHECKED: BST_UNCHECKED;
 				}else {
@@ -338,7 +338,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			}else {
 				i = 0;
 			}
-			CCodeTypesForCombobox cCodeTypes;
+			CodeTypesForCombobox cCodeTypes;
 			for (/*i = 0*/; i<cCodeTypes.GetCount(); ++i) {
 				nIdx = Combo_AddString(pData->m_hwndComboCODES, cCodeTypes.GetName(i));
 				Combo_SetItemData(pData->m_hwndComboCODES, nIdx, cCodeTypes.GetCode(i));
@@ -535,7 +535,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					CDlgOpenFileData* pData = (CDlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 					nIdx = Combo_GetCurSel((HWND) lParam);
 					lRes = Combo_GetItemData((HWND) lParam, nIdx);
-					CCodeTypeName cCodeTypeName(lRes);
+					CodeTypeName cCodeTypeName(lRes);
 					if (cCodeTypeName.UseBom()) {
 						::EnableWindow(pData->m_hwndCheckBOM, TRUE);
 						if (lRes == pData->m_nCharCode){
@@ -646,7 +646,7 @@ int AddComboCodePages(HWND hdlg, HWND combo, int nSelCode, bool& bInit)
 		::EnableWindow(GetDlgItem(hdlg, IDC_CHECK_CP), FALSE);
 		// コードページ追加
 		bInit = true;
-		nSel = CCodePage::AddComboCodePages(hdlg, combo, nSelCode);
+		nSel = CodePage::AddComboCodePages(hdlg, combo, nSelCode);
 	}
 	return nSel;
 }
@@ -756,7 +756,7 @@ bool CDlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
-	pData->m_ofn.hInstance = CSelectLang::getLangRsrcInstance();
+	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
 	// From Here Jun. 23, 2002 genta
 	//「開く」での初期フォルダチェック強化
@@ -838,7 +838,7 @@ bool CDlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 	pData->m_pcDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
-	pData->m_ofn.hInstance = CSelectLang::getLangRsrcInstance();
+	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pszPath; // 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	pData->m_ofn.nMaxFile = _MAX_PATH;
@@ -903,7 +903,7 @@ bool CDlgOpenFile::DoModalOpenDlg(
 	pData->m_pcDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
-	pData->m_ofn.hInstance = CSelectLang::getLangRsrcInstance();
+	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pszPathBuf;
 	pData->m_ofn.nMaxFile = 2000;
@@ -992,7 +992,7 @@ bool CDlgOpenFile::DoModalSaveDlg(
 	pData->m_pcDlgOpenFile = this;
 	pData->m_ofn.lCustData = (LPARAM)(pData.get());
 	pData->m_ofn.hwndOwner = m_mem->m_hwndParent;
-	pData->m_ofn.hInstance = CSelectLang::getLangRsrcInstance();
+	pData->m_ofn.hInstance = SelectLang::getLangRsrcInstance();
 	pData->m_ofn.lpstrFilter = cFileExt.GetExtFilter();
 	pData->m_ofn.lpstrFile = pSaveInfo->cFilePath;	// 2005/02/20 novice デフォルトのファイル名は何も設定しない
 	pData->m_ofn.nMaxFile = _MAX_PATH;

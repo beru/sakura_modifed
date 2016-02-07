@@ -35,16 +35,16 @@
 /** ミューテックスを扱うクラス
 	@date 2007.07.05 ryoji 新規作成
 */
-class CMutex {
+class Mutex {
 public:
-	CMutex(
+	Mutex(
 		BOOL bInitialOwner,
 		LPCTSTR pszName,
 		LPSECURITY_ATTRIBUTES psa = NULL
 	) {
 		m_hObj = ::CreateMutex(psa, bInitialOwner, pszName);
 	}
-	~CMutex() {
+	~Mutex() {
 		if (m_hObj) {
 			::CloseHandle(m_hObj);
 			m_hObj = NULL;
@@ -67,13 +67,13 @@ protected:
 	@date 2007.07.07 genta 新規作成
 
 	@code
-	CMutex aMutex;
+	Mutex aMutex;
 	
     void function()
     {
         //  other processing
         {
-            LockGuard<CMutex> aGuard(aMutex);
+            LockGuard<Mutex> aGuard(aMutex);
             //  aMutex is locked
             //  do something protected by "aMutex"
 

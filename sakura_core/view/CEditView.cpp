@@ -995,7 +995,7 @@ void CEditView::OnSize(int cx, int cy)
 
 	// エリア情報更新
 	GetTextArea().TextArea_OnSize(
-		CMySize(cx, cy),
+		Size(cx, cy),
 		nCxVScroll,
 		m_hwndHScrollBar ? nCyHScroll : 0
 	);
@@ -2318,10 +2318,10 @@ bool CEditView::MyGetClipboardData(CNativeW& cmemBuf, bool* pbColumnSelect, bool
 	if (pbLineSelect)
 		*pbLineSelect = false;
 
-	if (!CClipboard::HasValidData())
+	if (!Clipboard::HasValidData())
 		return false;
 	
-	CClipboard cClipboard(GetHwnd());
+	Clipboard cClipboard(GetHwnd());
 	if (!cClipboard)
 		return false;
 
@@ -2347,7 +2347,7 @@ bool CEditView::MySetClipboardData(const ACHAR* pszText, int nTextLen, bool bCol
 bool CEditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bColumnSelect, bool bLineSelect /*= false*/)
 {
 	// Windowsクリップボードにコピー
-	CClipboard cClipboard(GetHwnd());
+	Clipboard cClipboard(GetHwnd());
 	if (!cClipboard) {
 		return false;
 	}

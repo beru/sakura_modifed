@@ -48,7 +48,7 @@
 */
 bool CEditView::TagJumpSub(
 	const TCHAR*	pszFileName,
-	CMyPoint		ptJumpTo,		//!< ジャンプ位置(1開始)
+	Point		ptJumpTo,		//!< ジャンプ位置(1開始)
 	bool			bClose,			//!< [in] true: 元ウィンドウを閉じる / false: 元ウィンドウを閉じない
 	bool			bRelFromIni,
 	bool*			pbJumpToSelf	//!< [out] オプションNULL可。自分にジャンプしたか
@@ -153,7 +153,7 @@ bool CEditView::TagJumpSub(
 	// Apr. 2003 genta 閉じるかどうかは引数による
 	// grep結果からEnterでジャンプするところにCtrl判定移動
 	if (bClose) {
-		CViewCommander& commander = GetCommander();
+		ViewCommander& commander = GetCommander();
 		commander.Command_WINCLOSE();	// 挑戦するだけ。
 	}
 

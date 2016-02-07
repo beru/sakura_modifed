@@ -45,7 +45,7 @@ class Process;
 	@date 2002/01/08
 	@date 2006/04/10 ryoji
 */
-Process* CProcessFactory::Create(
+Process* ProcessFactory::Create(
 	HINSTANCE hInstance,
 	LPCTSTR lpCmdLine
 	)
@@ -80,14 +80,14 @@ Process* CProcessFactory::Create(
 			StartControlProcess();
 		}
 		if (WaitForInitializedControlProcess()) {	// 2006.04.10 ryoji コントロールプロセスの初期化完了待ち
-			process = new CNormalProcess(hInstance, lpCmdLine);
+			process = new NormalProcess(hInstance, lpCmdLine);
 		}
 	}
 	return process;
 }
 
 
-bool CProcessFactory::ProfileSelect(
+bool ProcessFactory::ProfileSelect(
 	HINSTANCE hInstance,
 	LPCTSTR lpCmdLine
 	)
@@ -96,8 +96,8 @@ bool CProcessFactory::ProfileSelect(
 	ProfileSettings settings;
 
 	CDlgProfileMgr::ReadProfSettings( settings );
-	CSelectLang::InitializeLanguageEnvironment();
-	CSelectLang::ChangeLang( settings.m_szDllLanguage );
+	SelectLang::InitializeLanguageEnvironment();
+	SelectLang::ChangeLang( settings.m_szDllLanguage );
 
 	CommandLine::getInstance()->ParseCommandLine(lpCmdLine);
 
@@ -137,10 +137,10 @@ bool CProcessFactory::ProfileSelect(
 	@author aroka
 	@date 2002/01/03
 */
-bool CProcessFactory::IsValidVersion()
+bool ProcessFactory::IsValidVersion()
 {
 	// Windowsバージョンのチェック
-	COsVersionInfo cOsVer(true);	// 初期化を行う
+	OsVersionInfo cOsVer(true);	// 初期化を行う
 	if (cOsVer.GetVersion()) {
 		if (!cOsVer.OsIsEnableVersion()) {
 			InfoMessage(NULL,
@@ -186,7 +186,7 @@ bool CProcessFactory::IsValidVersion()
 	@author aroka
 	@date 2002/01/03 作成 2002/01/18 変更
 */
-bool CProcessFactory::IsStartingControlProcess()
+bool ProcessFactory::IsStartingControlProcess()
 {
 	return CommandLine::getInstance()->IsNoWindow();
 }
@@ -198,7 +198,7 @@ bool CProcessFactory::IsStartingControlProcess()
 	@date 2002/01/03
 	@date 2006/04/10 ryoji
 */
-bool CProcessFactory::IsExistControlProcess()
+bool ProcessFactory::IsExistControlProcess()
 {
 	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	std::tstring strMutexSakuraCp = GSTR_MUTEX_SAKURA_CP;
@@ -223,7 +223,7 @@ bool CProcessFactory::IsExistControlProcess()
 	@date Aug. 28, 2001
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
-bool CProcessFactory::StartControlProcess()
+bool ProcessFactory::StartControlProcess()
 {
 	MY_RUNNINGTIMER(cRunningTimer, "StartControlProcess" );
 
@@ -312,7 +312,7 @@ bool CProcessFactory::StartControlProcess()
 	@author ryoji by assitance with karoto
 	@date 2006/04/10
 */
-bool CProcessFactory::WaitForInitializedControlProcess()
+bool ProcessFactory::WaitForInitializedControlProcess()
 {
 	// 初期化完了イベントを待つ
 	//
@@ -357,7 +357,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 	@author ryoji
 	@date 2007.09.04
 */
-bool CProcessFactory::TestWriteQuit()
+bool ProcessFactory::TestWriteQuit()
 {
 	if (CommandLine::getInstance()->IsWriteQuit()) {
 		TCHAR szIniFileIn[_MAX_PATH];

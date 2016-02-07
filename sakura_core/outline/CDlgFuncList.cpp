@@ -384,7 +384,7 @@ HWND CDlgFuncList::DoModeless(
 	HWND hwndRet;
 	if (IsDocking()) {
 		// ドッキング用にダイアログテンプレートに手を加えてから表示する（WS_CHILD化）
-		HINSTANCE hInstance2 = CSelectLang::getLangRsrcInstance();
+		HINSTANCE hInstance2 = SelectLang::getLangRsrcInstance();
 		if (!m_pDlgTemplate || m_lastRcInstance != hInstance2) {
 			HRSRC hResInfo = ::FindResource(hInstance2, MAKEINTRESOURCE(IDD_FUNCLIST), RT_DIALOG);
 			if (!hResInfo) return NULL;
@@ -2469,7 +2469,7 @@ void  CDlgFuncList::SortTree(HWND hWndTree, HTREEITEM htiParent)
 
 bool CDlgFuncList::TagJumpTimer(
 	const TCHAR* pFile,
-	CMyPoint point,
+	Point point,
 	bool bCheckAutoClose
 	)
 {
@@ -2521,7 +2521,7 @@ BOOL CDlgFuncList::OnJump(
 						// モーダル表示する場合は、m_cFuncInfoを取得するアクセサを実装して結果取得すること。
 						::EndDialog(GetHwnd(), 1);
 					}
-					CMyPoint poCaret;
+					Point poCaret;
 					poCaret.x = -1;
 					poCaret.y = -1;
 					bFileJumpSelf = TagJumpTimer(m_sJumpFile.c_str(), poCaret, bCheckAutoClose);
@@ -2532,7 +2532,7 @@ BOOL CDlgFuncList::OnJump(
 					nLineTo = m_cFuncInfo->m_nFuncLineCRLF;
 					nColTo = m_cFuncInfo->m_nFuncColCRLF;
 					// 別のファイルへジャンプ
-					CMyPoint poCaret; // TagJumpSubも1開始
+					Point poCaret; // TagJumpSubも1開始
 					poCaret.x = nColTo;
 					poCaret.y = nLineTo;
 					bFileJumpSelf = TagJumpTimer(m_cFuncInfo->m_cmemFileName.GetStringPtr(), poCaret, bCheckAutoClose);
@@ -3763,7 +3763,7 @@ EDockSide CDlgFuncList::GetDropRect(
 			if (rcFloat.right < cx) rcFloat.right = cx;
 			if (rcFloat.bottom < cy) rcFloat.bottom = cy;
 		}else {
-			HINSTANCE hInstance2 = CSelectLang::getLangRsrcInstance();
+			HINSTANCE hInstance2 = SelectLang::getLangRsrcInstance();
 			if (m_lastRcInstance != hInstance2) {
 				HRSRC hResInfo = ::FindResource(hInstance2, MAKEINTRESOURCE(IDD_FUNCLIST), RT_DIALOG);
 				if (!hResInfo) return eDockSide;

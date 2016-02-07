@@ -50,11 +50,11 @@ enum EEncodingTrait {
 /*
 	システムコードページによる文字コード変換
 */
-class CCodePage : public CCodeBase{
+class CodePage : public CodeBase{
 public:
-	CCodePage(int codepageEx) : m_nCodePageEx(codepageEx) { }
+	CodePage(int codepageEx) : m_nCodePageEx(codepageEx) { }
 	
-	//CCodeBaseインターフェース
+	//CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){ return CPToUnicode(cSrc, pDst, m_nCodePageEx); }	//!< 特定コード → UNICODE    変換
 	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst){ return UnicodeToCP(cSrc, pDst, m_nCodePageEx); }	//!< UNICODE    → 特定コード 変換
 	void GetEol(CMemory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
@@ -69,7 +69,7 @@ public:
 	typedef std::vector<std::pair<int, std::wstring> > CodePageList;
 	
 	//GUI用補助関数
-	static CCodePage::CodePageList& GetCodePageList();
+	static CodePage::CodePageList& GetCodePageList();
 	static int GetNameNormal(LPTSTR outName, int charcodeEx);
 	static int GetNameShort(LPTSTR outName, int charcodeEx);
 	static int GetNameLong(LPTSTR outName, int charcodeEx);

@@ -102,7 +102,7 @@ CTextOutputStream::CTextOutputStream(
 	)
 	: COutputStream(tszPath, _T("wb"), bExceptionMode)
 {
-	m_pcCodeBase = CCodeFactory::CreateCodeBase(eCodeType, 0);
+	m_pcCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	if (Good() && bBom) {
 		// BOM•t‰Á
 		CMemory cmemBom;

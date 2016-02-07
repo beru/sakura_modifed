@@ -244,7 +244,7 @@ public:
 	void DeleteCompatibleBitmap();							//!< メモリBMPを削除
 
 public:
-	void DispTextSelected(HDC hdc, CLayoutInt nLineNum, const CMyPoint& ptXY, CLayoutInt nX_Layout);	// テキスト反転
+	void DispTextSelected(HDC hdc, CLayoutInt nLineNum, const Point& ptXY, CLayoutInt nX_Layout);	// テキスト反転
 	void RedrawAll();										// フォーカス移動時の再描画
 	void Redraw();											// 2001/06/21 asa-o 再描画
 	void RedrawLines( CLayoutYInt top, CLayoutYInt bottom );
@@ -297,7 +297,7 @@ public:
 
 	void AutoScrollEnter();
 	void AutoScrollExit();
-	void AutoScrollMove(CMyPoint& point);
+	void AutoScrollMove(Point& point);
 	void AutoScrollOnTimer();
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -328,7 +328,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	bool IsCurrentPositionURL(const CLayoutPoint& ptCaretPos, CLogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
-	bool CheckTripleClick(CMyPoint ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
+	bool CheckTripleClick(Point ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
 	
 	bool ExecCmd(const TCHAR*, int, const TCHAR*, COutputAdapter* = NULL) ;			// 子プロセスの標準出力をリダイレクトする
 	void AddToCmdArr(const TCHAR*);
@@ -493,7 +493,7 @@ public:
 	//	Feb. 17, 2007 genta 相対パスの基準ディレクトリ指示を追加
 	bool TagJumpSub(
 		const TCHAR* pszJumpToFile,
-		CMyPoint ptJumpTo,
+		Point ptJumpTo,
 		bool bClose = false,
 		bool bRelFromIni = false,
 		bool* pbJumpToSelf = NULL
@@ -574,7 +574,7 @@ public:
 	// 主要ヘルパアクセス
 	const CViewParser& GetParser() const { return m_cParser; }
 	const CTextDrawer& GetTextDrawer() const { return m_cTextDrawer; }
-	CViewCommander& GetCommander() { return m_cCommander; }
+	ViewCommander& GetCommander() { return m_cCommander; }
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -601,7 +601,7 @@ public:
 	// 主要ヘルパ
 	CViewParser		m_cParser;
 	CTextDrawer		m_cTextDrawer;
-	CViewCommander	m_cCommander;
+	ViewCommander	m_cCommander;
 
 public:
 	// ウィンドウ
@@ -652,16 +652,16 @@ public:
 	// マウス
 	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	// 2007.10.02 nasukoji
 	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
-	CMyPoint		m_cMouseDownPos;		//!< クリック時のマウス座標
+	Point		m_cMouseDownPos;		//!< クリック時のマウス座標
 	int				m_nWheelDelta;			//!< ホイール変化量
 	EFunctionCode	m_eWheelScroll; 		//!< スクロールの種類
 	int				m_nMousePouse;			// マウス停止時間
-	CMyPoint		m_cMousePousePos;		// マウスの停止位置
+	Point		m_cMousePousePos;		// マウスの停止位置
 	bool			m_bHideMouse;
 
 	int				m_nAutoScrollMode;			//!< オートスクロールモード
 	bool			m_bAutoScrollDragMode;		//!< ドラッグモード
-	CMyPoint		m_cAutoScrollMousePos;		//!< オートスクロールのマウス基準位置
+	Point		m_cAutoScrollMousePos;		//!< オートスクロールのマウス基準位置
 	bool			m_bAutoScrollVertical;		//!< 垂直スクロール可
 	bool			m_bAutoScrollHorizontal;	//!< 水平スクロール可
 

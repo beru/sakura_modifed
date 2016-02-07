@@ -1192,7 +1192,7 @@ bool CMacro::HandleCommand(
 			}
 			if (LOWORD(Index) == F_FILESAVEAS && IsValidCodeOrCPType(nCharCode) && nCharCode != pcEditView->m_pcEditDoc->GetDocumentEncoding()) {
 				// From Here Jul. 26, 2003 ryoji BOMó‘Ô‚ð‰Šú‰»
-				pcEditView->m_pcEditDoc->SetDocumentEncoding(nCharCode, CCodeTypeName(pcEditView->m_pcEditDoc->GetDocumentEncoding()).IsBomDefOn());
+				pcEditView->m_pcEditDoc->SetDocumentEncoding(nCharCode, CodeTypeName(pcEditView->m_pcEditDoc->GetDocumentEncoding()).IsBomDefOn());
 				// To Here Jul. 26, 2003 ryoji BOMó‘Ô‚ð‰Šú‰»
 			}
 
@@ -1397,7 +1397,7 @@ bool CMacro::HandleCommand(
 		break;
 	case F_CLIPBOARDEMPTY:
 		{
-			CClipboard cClipboard(pcEditView->GetHwnd());
+			Clipboard cClipboard(pcEditView->GetHwnd());
 			cClipboard.Empty();
 		}
 		break;
@@ -2286,7 +2286,7 @@ bool CMacro::HandleFunction(
 		{
 			if (1 <= numArgs) {
 				if (!VariantToBStr(varCopy, args[0])) return false;
-				CClipboard cClipboard(view->GetHwnd());
+				Clipboard cClipboard(view->GetHwnd());
 				bool bret = cClipboard.IsIncludeClipboradFormat(varCopy.data.bstrVal);
 				Wrap(&result)->Receive(bret ? 1 : 0);
 				return true;
@@ -2304,7 +2304,7 @@ bool CMacro::HandleFunction(
 				}else {
 					varCopy3.data.lVal = -1;
 				}
-				CClipboard cClipboard(view->GetHwnd());
+				Clipboard cClipboard(view->GetHwnd());
 				CNativeW mem;
 				CEol cEol = view->m_pcEditDoc->m_cDocEditor.GetNewLineCode();
 				cClipboard.GetClipboradByFormat(mem, varCopy.data.bstrVal, varCopy2.data.lVal, varCopy3.data.lVal, cEol);
@@ -2326,7 +2326,7 @@ bool CMacro::HandleFunction(
 				}else {
 					varCopy4.data.lVal = -1;
 				}
-				CClipboard cClipboard(view->GetHwnd());
+				Clipboard cClipboard(view->GetHwnd());
 				CStringRef cstr(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
 				bool bret = cClipboard.SetClipboradByFormat(cstr, varCopy2.data.bstrVal, varCopy3.data.lVal, varCopy4.data.lVal);
 				Wrap(&result)->Receive(bret ? 1 : 0);

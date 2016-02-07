@@ -1,5 +1,5 @@
 /*!	@file
-@brief CViewCommanderクラスのコマンド(タグジャンプ)関数群
+@brief ViewCommanderクラスのコマンド(タグジャンプ)関数群
 
 	2012/12/17	CViewCommander.cppから分離
 */
@@ -75,7 +75,7 @@ bool IsFileExists2(const wchar_t* pszFile)
 	@date 2004.05.13 Moca 行桁位置の指定が無い場合は、行桁を移動しない
 	@date 2011.11.24 Moca Grepフォルダ毎表示対応
 */
-bool CViewCommander::Command_TAGJUMP(bool bClose)
+bool ViewCommander::Command_TAGJUMP(bool bClose)
 {
 	// 2004.05.13 Moca 初期値を1ではなく元の位置を継承するように
 	// 0以下は未指定扱い。(1開始)
@@ -345,7 +345,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 
 	// Apr. 21, 2003 genta bClose追加
 	if (szJumpToFile[0]) {
-		if (m_pCommanderView->TagJumpSub(to_tchar(szJumpToFile), CMyPoint(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
+		if (m_pCommanderView->TagJumpSub(to_tchar(szJumpToFile), Point(nJumpToColumn, nJumpToLine), bClose)) {	//@@@ 2003.04.13
 			return true;
 		}
 	}
@@ -357,7 +357,7 @@ can_not_tagjump:;
 
 
 // タグジャンプバック
-void CViewCommander::Command_TAGJUMPBACK(void)
+void ViewCommander::Command_TAGJUMPBACK(void)
 {
 // 2004/06/21 novice タグジャンプ機能追加
 	TagJump tagJump;
@@ -389,7 +389,7 @@ void CViewCommander::Command_TAGJUMPBACK(void)
 	@date	2003.05.12	ダイアログ表示でフォルダ等を細かく指定できるようにした。
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
-bool CViewCommander::Command_TagsMake(void)
+bool ViewCommander::Command_TagsMake(void)
 {
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
@@ -593,7 +593,7 @@ finish:
 
 	@date	2010.07.22	新規作成
 */
-bool CViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
+bool ViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 {
 	bool ret = Command_TagJumpByTagsFile(false);
 	if (!ret && bMsg) {
@@ -611,7 +611,7 @@ bool CViewCommander::Command_TagJumpByTagsFileMsg(bool bMsg)
 	@date	2003.05.12	フォルダ階層も考慮して探す
 	@date	
 */
-bool CViewCommander::Command_TagJumpByTagsFile(bool bClose)
+bool ViewCommander::Command_TagJumpByTagsFile(bool bClose)
 {
 	CNativeW cmemKeyW;
 	m_pCommanderView->GetCurrentTextForSearch(cmemKeyW, true, true);
@@ -647,7 +647,7 @@ bool CViewCommander::Command_TagJumpByTagsFile(bool bClose)
 		if (!cDlgTagJumpList.GetSelectedFullPathAndLine(fileName, _countof(fileName), &fileLine , NULL)) {
 			return false;
 		}
-		return m_pCommanderView->TagJumpSub(fileName, CMyPoint(0, fileLine), bClose);
+		return m_pCommanderView->TagJumpSub(fileName, Point(0, fileLine), bClose);
 	}
 
 	return false;
@@ -661,7 +661,7 @@ bool CViewCommander::Command_TagJumpByTagsFile(bool bClose)
 	@date 2005.03.31 新規作成
 	@date 2010.04.02 Moca 無題でも使えるように
 */
-bool CViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
+bool ViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 {
 	TCHAR szCurrentPath[1024];
 
@@ -684,7 +684,7 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 		return false;
 	}
 
-	return m_pCommanderView->TagJumpSub(fileName, CMyPoint(0, fileLine));
+	return m_pCommanderView->TagJumpSub(fileName, Point(0, fileLine));
 }
 
 
@@ -692,7 +692,7 @@ bool CViewCommander::Command_TagJumpByTagsFileKeyword(const wchar_t* keyword)
 	タグジャンプの前処理
 	実行可能確認と、基準ファイル名の設定
 */
-bool CViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count)
+bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count)
 {
 	if (count) {
 		szCurrentPath[0] = _T('\0');

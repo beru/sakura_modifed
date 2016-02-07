@@ -27,9 +27,9 @@
 #include "CUnicode.h"
 #include "CEol.h"
 
-class CUnicodeBe : public CCodeBase {
+class CUnicodeBe : public CodeBase {
 public:
-	// CCodeBaseインターフェース
+	// CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){ return UnicodeBEToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
 	EConvertResult UnicodeToCode(const CNativeW& cSrc, CMemory* pDst){ return UnicodeToUnicodeBE(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 	void GetBom(CMemory* pcmemBom);	//!< BOMデータ取得

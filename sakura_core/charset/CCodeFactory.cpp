@@ -15,8 +15,8 @@
 // move end
 #include "CLatin1.h"
 
-// eCodeTypeに適合する CCodeBaseインスタンス を生成
-CCodeBase* CCodeFactory::CreateCodeBase(
+// eCodeTypeに適合する CodeBaseインスタンス を生成
+CodeBase* CodeFactory::CreateCodeBase(
 	ECodeType	eCodeType,		// 文字コード
 	int			nFlag			// bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 )
@@ -31,11 +31,11 @@ CCodeBase* CCodeFactory::CreateCodeBase(
 	case CODE_UNICODEBE:	return new CUnicodeBe();
 	case CODE_CESU8:		return new CCesu8();
 	case CODE_LATIN1:		return new CLatin1();	// 2010/3/20 Uchi
-	case CODE_CPACP:		return new CCodePage(eCodeType);
-	case CODE_CPOEM:		return new CCodePage(eCodeType);
+	case CODE_CPACP:		return new CodePage(eCodeType);
+	case CODE_CPOEM:		return new CodePage(eCodeType);
 	default:
 		if (IsValidCodePageEx(eCodeType)) {
-			return new CCodePage(eCodeType);
+			return new CodePage(eCodeType);
 		}
 		assert_warning(0);
 	}

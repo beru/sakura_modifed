@@ -88,7 +88,7 @@ inline UINT CodePageExToMSCP(int codepageEx)
 	@param pbError NULL許容
 	@return 変換した文字列の長さ(WCHAR単位)
 */
-EConvertResult CCodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, int nDstCchLen, int& nRetLen, UINT codepage)
+EConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, int nDstCchLen, int& nRetLen, UINT codepage)
 {
 	if (nSrcLen < 1) {
 		nRetLen = 0;
@@ -108,7 +108,7 @@ EConvertResult CCodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* 
 
 /*!	CODEPAGE→Unicodeコード変換
 */
-EConvertResult CCodePage::CPToUnicode(const CMemory& cSrc, CNativeW* pDst, int codepageEx)
+EConvertResult CodePage::CPToUnicode(const CMemory& cSrc, CNativeW* pDst, int codepageEx)
 {
 	// エラー状態
 	bool bError = false;
@@ -135,7 +135,7 @@ EConvertResult CCodePage::CPToUnicode(const CMemory& cSrc, CNativeW* pDst, int c
 
 
 
-EConvertResult CCodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* pDst, int nDstByteLen, int& nRetLen, UINT codepage)
+EConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* pDst, int nDstByteLen, int& nRetLen, UINT codepage)
 {
 	if (nSrcLen < 1) {
 		nRetLen = 0;
@@ -170,7 +170,7 @@ EConvertResult CCodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* 
 }
 
 
-EConvertResult CCodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int codepageEx)
+EConvertResult CodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int codepageEx)
 {
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
@@ -214,7 +214,7 @@ EConvertResult CCodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int c
 	return ret;
 }
 
-void CCodePage::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void CodePage::GetEol(CMemory* pcmemEol, EEolType eEolType)
 {
 	CNativeW temp;
 	CUnicode().GetEol(temp._GetMemory(), eEolType);
@@ -227,7 +227,7 @@ void CCodePage::GetEol(CMemory* pcmemEol, EEolType eEolType)
 	}
 }
 
-void CCodePage::GetBom(CMemory* pcmemBom)
+void CodePage::GetBom(CMemory* pcmemBom)
 {
 	CNativeW temp;
 	CUnicode().GetBom(temp._GetMemory());
@@ -241,16 +241,16 @@ void CCodePage::GetBom(CMemory* pcmemBom)
 
 
 // 文字コード表示用	UNICODE → Hex 変換
-EConvertResult CCodePage::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+EConvertResult CodePage::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	// コードの特性がわからないので何もしない
-	return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
+	return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);
 }
 
-int CCodePage::GetNameNormal(LPTSTR outName, int charcodeEx)
+int CodePage::GetNameNormal(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CCodeTypeName(static_cast<ECodeType>(charcodeEx)).Normal());
+		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Normal());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -264,10 +264,10 @@ int CCodePage::GetNameNormal(LPTSTR outName, int charcodeEx)
 	return 2;
 }
 
-int CCodePage::GetNameShort(LPTSTR outName, int charcodeEx)
+int CodePage::GetNameShort(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CCodeTypeName(static_cast<ECodeType>(charcodeEx)).Short());
+		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Short());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -281,10 +281,10 @@ int CCodePage::GetNameShort(LPTSTR outName, int charcodeEx)
 	return 2;
 }
 
-int CCodePage::GetNameLong(LPTSTR outName, int charcodeEx)
+int CodePage::GetNameLong(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CCodeTypeName(static_cast<ECodeType>(charcodeEx)).Normal());
+		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Normal());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -312,10 +312,10 @@ int CCodePage::GetNameLong(LPTSTR outName, int charcodeEx)
 	return 2;
 }
 
-int CCodePage::GetNameBracket(LPTSTR outName, int charcodeEx)
+int CodePage::GetNameBracket(LPTSTR outName, int charcodeEx)
 {
 	if (IsValidCodeType(charcodeEx)) {
-		auto_strcpy(outName, CCodeTypeName(static_cast<ECodeType>(charcodeEx)).Bracket());
+		auto_strcpy(outName, CodeTypeName(static_cast<ECodeType>(charcodeEx)).Bracket());
 		return 1;
 	}
 	UINT codepage = CodePageExToMSCP(charcodeEx);
@@ -329,7 +329,7 @@ int CCodePage::GetNameBracket(LPTSTR outName, int charcodeEx)
 	return 2;
 }
 
-EEncodingTrait CCodePage::GetEncodingTrait(int charcodeEx)
+EEncodingTrait CodePage::GetEncodingTrait(int charcodeEx)
 {
 	switch (charcodeEx) {
 	case CODE_SJIS:
@@ -390,7 +390,7 @@ EEncodingTrait CCodePage::GetEncodingTrait(int charcodeEx)
 	}
 }
 
-volatile CCodePage::CodePageList* s_list = NULL;
+volatile CodePage::CodePageList* s_list = NULL;
 
 struct sortByCodePage{
 	bool operator() (const std::pair<int, std::wstring>& left, const std::pair<int, std::wstring>& right) const {
@@ -399,9 +399,9 @@ struct sortByCodePage{
 };
 
 // static
-CCodePage::CodePageList& CCodePage::GetCodePageList()
+CodePage::CodePageList& CodePage::GetCodePageList()
 {
-	static CCodePage::CodePageList result;
+	static CodePage::CodePageList result;
 	// マルチスレッド:s_listにロックが必要
 	if (s_list) {
 		return result;
@@ -436,23 +436,23 @@ CCodePage::CodePageList& CCodePage::GetCodePageList()
 		}
 	}
 	// 独自実装部分を定義
-	result.push_back( CCodePage::CodePageList::value_type(12000, L"12000 (UTF-32LE)") );
-	result.push_back( CCodePage::CodePageList::value_type(12001, L"12001 (UTF-32BE)") );
+	result.push_back( CodePage::CodePageList::value_type(12000, L"12000 (UTF-32LE)") );
+	result.push_back( CodePage::CodePageList::value_type(12001, L"12001 (UTF-32BE)") );
 
 	std::sort(result.begin(),result.end(), sortByCodePage());
 	return result;
 }
 
 //static
-BOOL CALLBACK CCodePage::CallBackEnumCodePages( LPCTSTR pCodePageString )
+BOOL CALLBACK CodePage::CallBackEnumCodePages( LPCTSTR pCodePageString )
 {
 	// pCodePageString は文字列に格納された数字
-	CCodePage::CodePageList* pList = const_cast<CCodePage::CodePageList*>(s_list);
-	pList->push_back(CCodePage::CodePageList::value_type(_ttoi( pCodePageString ), to_wchar(pCodePageString)));
+	CodePage::CodePageList* pList = const_cast<CodePage::CodePageList*>(s_list);
+	pList->push_back(CodePage::CodePageList::value_type(_ttoi( pCodePageString ), to_wchar(pCodePageString)));
 	return TRUE;
 }
 
-int CCodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
+int CodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 {
 	int nSel = -1;
 	int nIdx = Combo_AddString( combo, _T("CP_ACP") );
@@ -467,7 +467,7 @@ int CCodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 		nSel = nIdx;
 	}
 	Combo_SetItemData( combo, nIdx, CODE_CPOEM );
-	CCodePage::CodePageList& cpList = CCodePage::GetCodePageList();
+	CodePage::CodePageList& cpList = CodePage::GetCodePageList();
 	for (auto it=cpList.begin(); it!=cpList.end(); ++it) {
 		nIdx = Combo_AddString(combo, it->second.c_str());
 		Combo_SetItemData(combo, nIdx, it->first);
@@ -481,7 +481,7 @@ int CCodePage::AddComboCodePages(HWND hwnd, HWND combo, int nSelCode)
 	return nSel;
 }
 
-int CCodePage::MultiByteToWideChar2( UINT codepage, int flags, const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
+int CodePage::MultiByteToWideChar2( UINT codepage, int flags, const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
 {
 	if (codepage == 12000) {
 		return S_UTF32LEToUnicode(pSrc, nSrcLen, pDst, nDstLen);
@@ -490,7 +490,7 @@ int CCodePage::MultiByteToWideChar2( UINT codepage, int flags, const char* pSrc,
 	}
 	return MultiByteToWideChar(codepage, flags, pSrc, nSrcLen, pDst, nDstLen);
 }
-int CCodePage::WideCharToMultiByte2( UINT codepage, int flags, const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
+int CodePage::WideCharToMultiByte2( UINT codepage, int flags, const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
 {
 	if (codepage == 12000) {
 		return S_UnicodeToUTF32LE(pSrc, nSrcLen, pDst, nDstLen);
@@ -508,7 +508,7 @@ int CCodePage::WideCharToMultiByte2( UINT codepage, int flags, const wchar_t* pS
 	return ret;
 }
 
-int CCodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
+int CodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
 {
 	const unsigned char* pSrcByte = reinterpret_cast<const unsigned char*>(pSrc);
 	if (!pDst) {
@@ -599,7 +599,7 @@ int CCodePage::S_UTF32LEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst,
 	return nDstUseLen;
 }
 
-int CCodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
+int CodePage::S_UTF32BEToUnicode( const char* pSrc, int nSrcLen, wchar_t* pDst, int nDstLen )
 {
 	const unsigned char* pSrcByte = reinterpret_cast<const unsigned char*>(pSrc);
 	if (!pDst) {
@@ -693,7 +693,7 @@ static bool BinToUTF32( const unsigned short* pSrc, int Len, char* pDst, int nDs
 {
 	if (4 <= nDstLen) {
 		for (int i=0; i<Len; ++i) {
-			pDst[i] = CCodeBase::TextToBin(pSrc[i]);
+			pDst[i] = CodeBase::TextToBin(pSrc[i]);
 		}
 		for (int k=Len; k<4; ++k) {
 			pDst[k] = 0;
@@ -704,7 +704,7 @@ static bool BinToUTF32( const unsigned short* pSrc, int Len, char* pDst, int nDs
 	return true;
 }
 
-int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
+int CodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
 {
 	if (!pDst) {
 		int nDstUseLen = 0;
@@ -818,7 +818,7 @@ int CCodePage::S_UnicodeToUTF32LE( const wchar_t* pSrc, int nSrcLen, char* pDst,
 	return nDstUseLen;
 }
 
-int CCodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
+int CodePage::S_UnicodeToUTF32BE( const wchar_t* pSrc, int nSrcLen, char* pDst, int nDstLen )
 {
 	if (!pDst) {
 		int nDstUseLen = 0;

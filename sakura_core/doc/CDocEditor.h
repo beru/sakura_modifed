@@ -78,7 +78,7 @@ public:
 
 	//! クリップボードから貼り付け可能か？
 	bool IsEnablePaste(void) const {
-		return CClipboard::HasValidData();
+		return Clipboard::HasValidData();
 	}
 
 public:

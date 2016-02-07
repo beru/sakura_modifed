@@ -23,12 +23,12 @@
 */
 #pragma once
 
-class CCodeBase;
+class CodeBase;
 
-class CCodeFactory {
+class CodeFactory {
 public:
-	// eCodeTypeに適合する CCodeBaseインスタンス を生成
-	static CCodeBase* CreateCodeBase(
+	// eCodeTypeに適合する CodeBaseインスタンス を生成
+	static CodeBase* CreateCodeBase(
 		ECodeType	eCodeType,		// 文字コード
 		int			nFlag			// bit 0: MIME Encodeされたヘッダをdecodeするかどうか
 	);
