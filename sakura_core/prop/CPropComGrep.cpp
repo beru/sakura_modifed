@@ -48,14 +48,23 @@ static const DWORD p_helpids[] = {	//10500
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropGrep::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropGrep::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
-INT_PTR CPropGrep::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CPropGrep::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 //	WORD		wNotifyCode;
 //	WORD		wID;

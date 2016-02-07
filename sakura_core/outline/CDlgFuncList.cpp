@@ -349,7 +349,7 @@ HWND CDlgFuncList::DoModeless(
 	int				nOutlineType,		
 	int				nListType,
 	bool			bLineNumIsCRLF		// 行番号の表示 false=折り返し単位／true=改行単位
-)
+	)
 {
 	CEditView* pcEditView = (CEditView*)lParam;
 	if (!pcEditView) {
@@ -797,8 +797,6 @@ void CDlgFuncList::SetData()
 }
 
 
-
-
 bool CDlgFuncList::GetTreeFileFullName(
 	HWND hwndTree,
 	HTREEITEM target,
@@ -1193,7 +1191,7 @@ void CDlgFuncList::SetTreeJava(
 
   @date Jul 10, 2003  little YOSHI
 */
-void CDlgFuncList::SetListVB (void)
+void CDlgFuncList::SetListVB(void)
 {
 	TCHAR			szType[64];
 	TCHAR			szOption[64];
@@ -1361,7 +1359,7 @@ void CDlgFuncList::SetListVB (void)
 				nInfo	= 0;
 
 		}
-		if (2 == ((nInfo >> 8) & 0x02)) {
+		if (((nInfo >> 8) & 0x02) == 2) {
 			// 宣言(Declareなど)
 			_tcsncat(szType, LS(STR_DLGFNCLST_VB_DECL), _countof(szType) - _tcslen(szType));
 		}
@@ -1603,7 +1601,6 @@ end_of_func:;
 }
 
 
-
 void CDlgFuncList::SetDocLineFuncList()
 {
 	if (m_nOutlineType == OUTLINE_BOOKMARK) {
@@ -1627,7 +1624,6 @@ void CDlgFuncList::SetDocLineFuncList()
 		}
 	}
 }
-
 
 
 /*! ファイルツリー作成
@@ -1714,7 +1710,10 @@ void CDlgFuncList::SetTreeFile()
 }
 
 
-void CDlgFuncList::SetTreeFileSub(HTREEITEM hParent, const TCHAR* pszFile)
+void CDlgFuncList::SetTreeFileSub(
+	HTREEITEM hParent,
+	const TCHAR* pszFile
+	)
 {
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
@@ -1797,7 +1796,11 @@ void CDlgFuncList::SetTreeFileSub(HTREEITEM hParent, const TCHAR* pszFile)
 }
 
 
-BOOL CDlgFuncList::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL CDlgFuncList::OnInitDialog(
+	HWND hwndDlg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	m_bStretching = false;
 	m_bHovering = false;
@@ -2240,9 +2243,12 @@ BOOL CDlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 	@date 2005.04.29 genta ソート後の表示位置調整
 	@date 2010.03.17 syat 桁追加
 */
-void CDlgFuncList::SortListView(HWND hwndList, int sortcol)
+void CDlgFuncList::SortListView(
+	HWND hwndList,
+	int sortcol
+	)
 {
-	LV_COLUMN		col;
+	LV_COLUMN col;
 	int col_no;
 
 	//	Apr. 23, 2005 genta 行番号を左端へ
@@ -2461,7 +2467,11 @@ void  CDlgFuncList::SortTree(HWND hWndTree, HTREEITEM htiParent)
 }
 
 
-bool CDlgFuncList::TagJumpTimer(const TCHAR* pFile, CMyPoint point, bool bCheckAutoClose)
+bool CDlgFuncList::TagJumpTimer(
+	const TCHAR* pFile,
+	CMyPoint point,
+	bool bCheckAutoClose
+	)
 {
 	CEditView* pcView = reinterpret_cast<CEditView*>(m_lParam);
 
@@ -2490,7 +2500,10 @@ bool CDlgFuncList::TagJumpTimer(const TCHAR* pFile, CMyPoint point, bool bCheckA
 }
 
 
-BOOL CDlgFuncList::OnJump(bool bCheckAutoClose, bool bFileJump)	//2002.02.08 hor 引数追加
+BOOL CDlgFuncList::OnJump(
+	bool bCheckAutoClose,
+	bool bFileJump
+	)	// 2002.02.08 hor 引数追加
 {
 	int nLineTo;
 	int nColTo;
@@ -2603,7 +2616,13 @@ void CDlgFuncList::Key2Command(WORD KeyCode)
 /*!
 	@date 2002.10.05 genta
 */
-void CDlgFuncList::Redraw(int nOutLineType, int nListType, CFuncInfoArr* pcFuncInfoArr, CLayoutInt nCurLine, CLayoutInt nCurCol)
+void CDlgFuncList::Redraw(
+	int nOutLineType,
+	int nListType,
+	CFuncInfoArr* pcFuncInfoArr,
+	CLayoutInt nCurLine,
+	CLayoutInt nCurCol
+	)
 {
 	CEditView* pcEditView = (CEditView*)m_lParam;
 	m_nDocType = pcEditView->GetDocument()->m_cDocType.GetDocumentType().GetIndex();
@@ -2815,7 +2834,12 @@ INT_PTR CDlgFuncList::OnNcCalcSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 /** WM_NCHITTEST 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnNcHitTest(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnNcHitTest(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	if (!IsDocking()) {
 		return 0L;
@@ -2845,7 +2869,12 @@ INT_PTR CDlgFuncList::OnNcHitTest(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 /** WM_TIMER 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnTimer(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	if (wParam == 2) {
 		CEditView* pcView = reinterpret_cast<CEditView*>(m_lParam);
@@ -2891,7 +2920,12 @@ INT_PTR CDlgFuncList::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 /** WM_NCMOUSEMOVE 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnNcMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnNcMouseMove(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	if (!IsDocking()) {
 		return 0L;
@@ -2943,7 +2977,12 @@ INT_PTR CDlgFuncList::OnNcMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 /** WM_MOUSEMOVE 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnMouseMove(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	if (!IsDocking()) {
 		return 0L;
@@ -3031,7 +3070,12 @@ INT_PTR CDlgFuncList::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 /** WM_NCLBUTTONDOWN 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnNcLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnNcLButtonDown(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	POINT pt;
 	pt.x = MAKEPOINTS(lParam).x;
@@ -3082,7 +3126,12 @@ INT_PTR CDlgFuncList::OnNcLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 /** WM_LBUTTONUP 処理
 	@date 2010.06.05 ryoji 新規作成
 */
-INT_PTR CDlgFuncList::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CDlgFuncList::OnLButtonUp(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	if (!IsDocking()) {
 		return 0L;

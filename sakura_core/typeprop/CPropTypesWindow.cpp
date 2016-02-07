@@ -91,7 +91,7 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
 	LPARAM	lParam 		// second message parameter
-)
+	)
 {
 	WORD	wNotifyCode;
 	WORD	wID;
@@ -228,7 +228,12 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 }
 
 
-void CPropTypesWindow::SetCombobox(HWND hwndWork, const int* nIds, int nCount, int select)
+void CPropTypesWindow::SetCombobox(
+	HWND hwndWork,
+	const int* nIds,
+	int nCount,
+	int select
+	)
 {
 	Combo_ResetContent(hwndWork);
 	for (int i=0; i<nCount; ++i) {

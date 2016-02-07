@@ -1464,7 +1464,7 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				// 行番号の表示 false=折り返し単位／true=改行単位
 				if (m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute().m_bLineNumIsCRLF) {
 					// 論理行番号表示モード
-					if (0 != pcLayout->GetLogicOffset()) { // 折り返しレイアウト行
+					if (pcLayout->GetLogicOffset() != 0) { // 折り返しレイアウト行
 						wcscpy_s(szLineNum, L" ");
 					}else {
 						_itow(pcLayout->GetLogicLineNo() + 1, szLineNum, 10);	// 対応する論理行番号

@@ -70,7 +70,10 @@ void CPluginManager::UnloadAllPlugin()
 }
 
 // 新規プラグインを追加する
-bool CPluginManager::SearchNewPlugin(CommonSetting& common, HWND hWndOwner)
+bool CPluginManager::SearchNewPlugin(
+	CommonSetting& common,
+	HWND hWndOwner
+	)
 {
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter SearchNewPlugin\n"));

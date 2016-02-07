@@ -15,7 +15,10 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! CDocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
-static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
+static bool _CheckSavingEolcode(
+	const CDocLineMgr& pcDocLineMgr,
+	CEol cEolType
+	)
 {
 	bool bMix = false;
 	if (cEolType == EOL_NONE) {	// 改行コード変換なし
@@ -37,7 +40,12 @@ static bool _CheckSavingEolcode(const CDocLineMgr& pcDocLineMgr, CEol cEolType)
 }
 
 //! CDocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
-static EConvertResult _CheckSavingCharcode(const CDocLineMgr& pcDocLineMgr, ECodeType eCodeType, CLogicPoint& point, CNativeW& wc)
+static EConvertResult _CheckSavingCharcode(
+	const CDocLineMgr& pcDocLineMgr,
+	ECodeType eCodeType,
+	CLogicPoint& point,
+	CNativeW& wc
+	)
 {
 	const CDocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
 	const bool bCodePageMode = IsValidCodeOrCPType(eCodeType) && !IsValidCodeType(eCodeType);

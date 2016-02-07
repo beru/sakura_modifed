@@ -119,7 +119,12 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 	@date 2007.05.20 ryoji iniファイルパスを優先
 	@author genta
 */
-HICON GetAppIcon(HINSTANCE hInst, int nResource, const TCHAR* szFile, bool bSmall)
+HICON GetAppIcon(
+	HINSTANCE hInst,
+	int nResource,
+	const TCHAR* szFile,
+	bool bSmall
+	)
 {
 	// サイズの設定
 	int size = (bSmall ? 16 : 32);
@@ -171,7 +176,7 @@ void GetAppVersionInfo(
 	int			nVersionResourceID,
 	DWORD*		pdwProductVersionMS,
 	DWORD*		pdwProductVersionLS
-)
+	)
 {
 	// リソースから製品バージョンの取得
 	*pdwProductVersionMS = 0;

@@ -66,7 +66,11 @@ static const DWORD p_helpids[] = {	//11700
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropPlugin::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropPlugin::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -77,13 +81,18 @@ INT_PTR CALLBACK CPropPlugin::DlgProc_page(
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CPropPlugin::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CPropPlugin::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
-	NMHDR*		pNMHDR;
-	int			idCtrl;
+	NMHDR*	pNMHDR;
+	int		idCtrl;
 
-	WORD		wNotifyCode;
-	WORD		wID;
+	WORD	wNotifyCode;
+	WORD	wID;
 	PluginRec* pluginTable = m_Common.m_sPlugin.m_PluginTable;
 
 	switch (uMsg) {

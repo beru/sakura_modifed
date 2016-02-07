@@ -86,14 +86,23 @@ TYPE_NAME_ID<ETabPosition> TabPosArr[] = {
 	@param lParam[in] パラメータ2
 */
 INT_PTR CALLBACK CPropTab::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropTab::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 //	To Here Jun. 2, 2001 genta
 
 // メッセージ処理
-INT_PTR CPropTab::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CPropTab::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	NMHDR*		pNMHDR;
 //	int			idCtrl;

@@ -2163,7 +2163,7 @@ void CTabWnd::LayoutTab(void)
 {
 	auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
 	// ƒtƒHƒ“ƒg‚ğØ‚è‘Ö‚¦‚é 2011.12.01 Moca
-	bool bChgFont = (0 != memcmp(&m_lf, &csTabBar.m_lf, sizeof(m_lf)));
+	bool bChgFont = (memcmp(&m_lf, &csTabBar.m_lf, sizeof(m_lf)) != 0);
 	int nSizeBoxWidth = 0;
 	if (m_hwndSizeBox) {
 		nSizeBoxWidth = ::GetSystemMetrics( SM_CXVSCROLL );

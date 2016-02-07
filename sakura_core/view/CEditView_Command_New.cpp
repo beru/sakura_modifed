@@ -258,7 +258,7 @@ void CEditView::InsertData_CEditView(
 			// 2011.12.26 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
 			{
 				const CLayout* pcLayoutLineFirst = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(ptInsertPos.GetY2());
-				while (pcLayoutLineFirst && 0 != pcLayoutLineFirst->GetLogicOffset()) {
+				while (pcLayoutLineFirst && pcLayoutLineFirst->GetLogicOffset() != 0) {
 					pcLayoutLineFirst = pcLayoutLineFirst->GetPrevLayout();
 					if (bHintPrev) {
 						bHintPrev = false;
@@ -269,7 +269,7 @@ void CEditView::InsertData_CEditView(
 			}
 			CLayoutYInt nLayoutTop;
 			CLayoutYInt nLayoutBottom;
-			if (0 != nInsLineNum) {
+			if (nInsLineNum != 0) {
 				// スクロールバーの状態を更新する
 				AdjustScrollBars();
 
@@ -871,7 +871,7 @@ bool CEditView::ReplaceData_CEditView3(
 				// 2011.12.26 正規表現キーワード・検索文字列などは、ロジック行頭までさかのぼって更新する必要がある
 				{
 					const CLayout* pcLayoutLineFirst = layoutMgr.SearchLineByLayoutY(LRArg.nModLineFrom);
-					while (pcLayoutLineFirst && 0 != pcLayoutLineFirst->GetLogicOffset()) {
+					while (pcLayoutLineFirst && pcLayoutLineFirst->GetLogicOffset() != 0) {
 						pcLayoutLineFirst = pcLayoutLineFirst->GetPrevLayout();
 						ps.rcPaint.top -= GetTextMetrics().GetHankakuDy();
 						if (ps.rcPaint.top < 0) {

@@ -62,7 +62,11 @@ TYPE_NAME_ID<EShareMode> ShareModeArr[] = {
 	@param lParam ÉpÉâÉÅÅ[É^2
 */
 INT_PTR CALLBACK CPropFile::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropFile::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -74,7 +78,7 @@ INT_PTR CPropFile::DispatchEvent(
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;

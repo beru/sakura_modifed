@@ -253,7 +253,10 @@ void CViewCommander::Command_PASTE(int option)
 //  なお、これらを呼び出し側に期待するわけは、「すべて置換」のような何回も連続で呼び出す
 // ときに、最初に一回チェックすればよいものを何回もチェックするのは無駄と判断したためです。
 // @note 2004.06.30 現在、すべて置換では使用していない
-void CViewCommander::Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize)
+void CViewCommander::Command_PASTEBOX(
+	const wchar_t* szPaste,
+	int nPasteSize
+	)
 {
 	/* これらの動作は残しておきたいのだが、呼び出し側で責任を持ってやってもらうことに変更。
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting())	// マウスによる範囲選択中
@@ -421,7 +424,10 @@ void CViewCommander::Command_PASTEBOX(int option)
 
 
 // 矩形文字列挿入
-void CViewCommander::Command_INSBOXTEXT(const wchar_t* pszPaste, int nPasteSize)
+void CViewCommander::Command_INSBOXTEXT(
+	const wchar_t* pszPaste,
+	int nPasteSize
+	)
 {
 	if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {	// マウスによる範囲選択中
 		ErrorBeep();
@@ -451,7 +457,7 @@ void CViewCommander::Command_INSTEXT(
 	bool			bLinePaste,		// [in] ラインモード貼り付け
 	bool			bFastMode,		// [in] 高速モード(レイアウト座標は無視する)
 	const CLogicRange*	pcSelectLogic	// [in] オプション。高速モードのときの削除範囲ロジック単位
-)
+	)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -589,7 +595,7 @@ end_of_func:
 void CViewCommander::Command_ADDTAIL(
 	const wchar_t*	pszData,	// 追加するテキスト
 	int				nDataLen	// 追加するテキストの長さ。文字単位。-1を指定すると、テキスト終端まで。
-)
+	)
 {
 	// テキスト長自動計算
 	if (nDataLen == -1 && pszData) {
@@ -658,7 +664,8 @@ static bool AppendHTMLColor(
 	const SColorAttr& sColorAttrLast, SColorAttr& sColorAttrLast2,
 	const SFontAttr& sFontAttrLast, SFontAttr& sFontAttrLast2,
 	const WCHAR* pAppendStr, int nLen,
-	CNativeW& cmemClip)
+	CNativeW& cmemClip
+	)
 {
 	if (sFontAttrLast.m_bBoldFont != sFontAttrLast2.m_bBoldFont
 		|| sFontAttrLast.m_bUnderLine != sFontAttrLast2.m_bUnderLine
@@ -1061,7 +1068,7 @@ CColorStrategy* CViewCommander::GetColorStrategyHTML(
 	CColorStrategy**	ppStrategy,
 	CColorStrategy**	ppStrategyFound,		// [in,out]
 	bool& bChange
-)
+	)
 {
 	// 検索色終了
 	if (*ppStrategyFound) {

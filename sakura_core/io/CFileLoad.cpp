@@ -110,7 +110,7 @@ CFileLoad::~CFileLoad(void)
 ECodeType CFileLoad::FileOpen(
 	LPCTSTR pFileName,
 	bool bBigFile,
-	ECodeType CharCode,
+	ECodeType charCode,
 	int nFlag,
 	bool* pbBomExist
 	)
@@ -142,7 +142,7 @@ ECodeType CFileLoad::FileOpen(
 
 	// GetFileSizeEx は Win2K以上
 	fileSize.LowPart = ::GetFileSize( hFile, &fileSize.HighPart );
-	if (0xFFFFFFFF == fileSize.LowPart) {
+	if (fileSize.LowPart == 0xFFFFFFFF) {
 		DWORD lastError = ::GetLastError();
 		if (NO_ERROR != lastError) {
 			FileClose();
@@ -163,20 +163,20 @@ ECodeType CFileLoad::FileOpen(
 	Buffering();
 
 	ECodeType nBomCode = CCodeMediator::DetectUnicodeBom(m_pReadBuf, m_nReadDataLen);
-	if (CharCode == CODE_AUTODETECT) {
+	if (charCode == CODE_AUTODETECT) {
 		if (nBomCode != CODE_NONE) {
-			CharCode = nBomCode;
+			charCode = nBomCode;
 		}else {
 			CCodeMediator mediator(*m_pEencoding);
-			CharCode = mediator.CheckKanjiCode(m_pReadBuf, m_nReadDataLen);
+			charCode = mediator.CheckKanjiCode(m_pReadBuf, m_nReadDataLen);
 		}
 	}
 	// To Here Jun. 08, 2003
 	// 不正な文字コードのときはデフォルト(SJIS:無変換)を設定
-	if (!IsValidCodeType(CharCode)) {
-		CharCode = CODE_DEFAULT;
+	if (!IsValidCodeType(charCode)) {
+		charCode = CODE_DEFAULT;
 	}
-	m_CharCode = CharCode;
+	m_CharCode = charCode;
 	m_pCodeBase = CCodeFactory::CreateCodeBase(m_CharCode, m_nFlag);
 	m_encodingTrait = CCodePage::GetEncodingTrait(m_CharCode);
 	m_nFlag = nFlag;
@@ -258,14 +258,17 @@ void CFileLoad::FileClose(void)
 /*! 1行読み込み
 	UTF-7場合、データ内のNEL,PS,LS等の改行までを1行として取り出す
 */
-EConvertResult CFileLoad::ReadLine(CNativeW* pUnicodeBuffer, CEol* pcEol)
+EConvertResult CFileLoad::ReadLine(
+	CNativeW* pUnicodeBuffer,
+	CEol* pcEol
+	)
 {
 	if (m_CharCode != CODE_UTF7 && m_CharCode != CP_UTF7) {
 		return ReadLine_core( pUnicodeBuffer, pcEol );
 	}
 	if (m_nReadOffset2 == m_cLineTemp.GetStringLength()) {
 		CEol cEol;
-		EConvertResult e = ReadLine_core( &m_cLineTemp, &cEol );
+		EConvertResult e = ReadLine_core(&m_cLineTemp, &cEol);
 		if (e == RESULT_FAILURE) {
 			pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
 			*pcEol = cEol;
@@ -311,7 +314,7 @@ EConvertResult CFileLoad::ReadLine(CNativeW* pUnicodeBuffer, CEol* pcEol)
 EConvertResult CFileLoad::ReadLine_core(
 	CNativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
 	CEol*		pcEol			//!< [i/o]
-)
+	)
 {
 	EConvertResult eRet = RESULT_COMPLETE;
 
@@ -468,7 +471,8 @@ const char* CFileLoad::GetNextLineCharCode(
 	CEol*		pcEol,			//!< [i/o]	EOL
 	int*		pnEolLen,		//!< [out]	EOLのバイト数 (Unicodeで困らないように)
 	int*		pnBufferNext	//!< [out]	次回持越しバッファ長(EOLの断片)
-) {
+	)
+{
 	int nbgn = *pnBgn;
 	int i;
 
@@ -505,7 +509,7 @@ const char* CFileLoad::GetNextLineCharCode(
 					for (k=0; k<(int)_countof(eEolEx); ++k) {
 						if (m_memEols[k].GetRawLength() != 0
 							&& i + m_memEols[k].GetRawLength() - 1 < nDataLen
-							&& memcmp( m_memEols[k].GetRawPtr(), pData + i, m_memEols[k].GetRawLength()) == 0
+							&& memcmp(m_memEols[k].GetRawPtr(), pData+i, m_memEols[k].GetRawLength()) == 0
 						) {
 							pcEol->SetType(eEolEx[k]);
 							neollen = m_memEols[k].GetRawLength();
@@ -522,9 +526,9 @@ const char* CFileLoad::GetNextLineCharCode(
 				for (i=t_max(0, nDataLen - m_nMaxEolLen - 1); i < nDataLen; ++i) {
 					bool bSet = false;
 					for (int k=0; k<(int)_countof(eEolEx); ++k) {
-						int nCompLen = t_min(nDataLen - i, m_memEols[k].GetRawLength());
+						int nCompLen = t_min(nDataLen-i, m_memEols[k].GetRawLength());
 						if (nCompLen != 0
-							&& memcmp(m_memEols[k].GetRawPtr(), pData + i, nCompLen) == 0
+							&& memcmp(m_memEols[k].GetRawPtr(), pData+i, nCompLen) == 0
 						) {
 							*pnBufferNext = t_max(*pnBufferNext, nCompLen);
 							bSet = true;
@@ -633,7 +637,7 @@ const char* CFileLoad::GetNextLineCharCode(
 							(i + 1 < nDataLen ? pData[i+1] : 0))),
 					0
 				};
-				pcEol->SetTypeByStringForFile( szEof, t_min(nDataLen - i,2) );
+				pcEol->SetTypeByStringForFile( szEof, t_min(nDataLen - i, 2) );
 				neollen = (Int)pcEol->GetLen();
 				break;
 			}

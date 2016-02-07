@@ -58,12 +58,12 @@ ECallbackResult CBackupAgent::OnPreBeforeSave(SSaveInfo* pSaveInfo)
 		case 2:	//	中断指示
 			return CALLBACK_INTERRUPT;
 		case 3: //	ファイルエラー
-			if (IDYES != ::MYMESSAGEBOX(
+			if (::MYMESSAGEBOX(
 					CEditWnd::getInstance()->GetHwnd(),
 					MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
 					LS(STR_BACKUP_ERR_TITLE),
 					LS(STR_BACKUP_ERR_MSG)
-				)
+				) != IDYES
 			) {
 				return CALLBACK_INTERRUPT;
 			}
@@ -302,7 +302,7 @@ bool CBackupAgent::FormatBackUpPath(
 	TCHAR*			szNewPath,
 	size_t 			newPathCount,
 	const TCHAR*	target_file
-)
+	)
 {
 	TCHAR	szDrive[_MAX_DIR];
 	TCHAR	szDir[_MAX_DIR];
@@ -317,7 +317,7 @@ bool CBackupAgent::FormatBackUpPath(
 
 	if (bup_setting.m_bBackUpFolder
 	  && (!bup_setting.m_bBackUpFolderRM || !IsLocalDrive(target_file))
-	 ) {	// 指定フォルダにバックアップを作成する	// m_bBackUpFolderRM 追加	2010/5/27 Uchi
+	) {	// 指定フォルダにバックアップを作成する	// m_bBackUpFolderRM 追加	2010/5/27 Uchi
 		TCHAR selDir[_MAX_PATH];
 		CFileNameManager::ExpandMetaToFolder(bup_setting.m_szBackUpFolder, selDir, _countof(selDir));
 		if (GetFullPathName(selDir, _MAX_PATH, szNewPath, &psNext) == 0) {
@@ -550,5 +550,4 @@ bool CBackupAgent::FormatBackUpPath(
 	}
 	return true;
 }
-
 

@@ -18,7 +18,7 @@ bool CWordParse::WhereCurrentWord_2(
 	CLogicInt*		pnIdxTo,		// [out] 単語が見つかった場合は、単語の終端の次のバイトの先頭インデックスを返す。
 	CNativeW*		pcmcmWord,		// [out] 単語が見つかった場合は、現在単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
 	CNativeW*		pcmcmWordLeft	// [out] 単語が見つかった場合は、現在単語の左に位置する単語を切り出して指定されたCMemoryオブジェクトに格納する。情報が不要な場合はNULLを指定する。
-)
+	)
 {
 	using namespace WCODE;
 
@@ -112,7 +112,7 @@ ECharKind CWordParse::WhatKindOfChar(
 	const wchar_t*	pData,
 	int				pDataLen,
 	int				nIdx
-)
+	)
 {
 	using namespace WCODE;
 

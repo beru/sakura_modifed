@@ -141,7 +141,10 @@ wchar_t CNativeW::operator[](int nIndex) const
 
 
 // “™‚µ‚¢“à—e‚©
-bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
+bool CNativeW::IsEqual(
+	const CNativeW& cmem1,
+	const CNativeW& cmem2
+	)
 {
 	if (&cmem1 == &cmem2) {
 		return true;
@@ -166,14 +169,22 @@ bool CNativeW::IsEqual(const CNativeW& cmem1, const CNativeW& cmem2)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // •¶Žš—ñ’uŠ·
-void CNativeW::Replace(const wchar_t* pszFrom, const wchar_t* pszTo)
+void CNativeW::Replace(
+	const wchar_t* pszFrom,
+	const wchar_t* pszTo
+	)
 {
 	int nFromLen = wcslen(pszFrom);
 	int nToLen = wcslen(pszTo);
 	Replace( pszFrom, nFromLen, pszTo, nToLen );
 }
 
-void CNativeW::Replace( const wchar_t* pszFrom, int nFromLen, const wchar_t* pszTo, int nToLen )
+void CNativeW::Replace(
+	const wchar_t* pszFrom,
+	int nFromLen,
+	const wchar_t* pszTo,
+	int nToLen
+	)
 {
 	CNativeW cmemWork;
 	int nBgnOld = 0;

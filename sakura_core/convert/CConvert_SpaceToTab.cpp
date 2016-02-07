@@ -9,7 +9,7 @@ bool CConvert_SpaceToTab::DoConvert(CNativeW* pcData)
 {
 	using namespace WCODE;
 
-	const wchar_t*	pLine;
+	const wchar_t* pLine;
 	int		nLineLen;
 	int		nBgn;
 	int		i;

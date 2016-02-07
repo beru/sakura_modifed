@@ -89,7 +89,7 @@ void CFuncInfoArr::AppendData(
 	const TCHAR*	pszFileName,		//!< ファイル名
 	int				nInfo,				//!< 付加情報
 	int				nDepth				//!< 深さ
-)
+	)
 {
 	CFuncInfo* pcFuncInfo = new CFuncInfo(nFuncLineCRLF,
 										  nFuncColCRLF,
@@ -112,7 +112,7 @@ void CFuncInfoArr::AppendData(
 	const NOT_TCHAR*	pszFileName,		//!< ファイル名
 	int					nInfo,				//!< 付加情報
 	int					nDepth				//!< 深さ
-)
+	)
 {
 	AppendData(nFuncLineCRLF,
 			  nFuncColCRLF,
@@ -131,7 +131,7 @@ void CFuncInfoArr::AppendData(
 	const TCHAR*	pszFuncName,		//!< 関数名
 	int				nInfo,				//!< 付加情報
 	int				nDepth				//!< 深さ
-)
+	)
 {
 	AppendData(nFuncLineCRLF,
 			  CLogicInt(1),
@@ -150,7 +150,7 @@ void CFuncInfoArr::AppendData(
 	const NOT_TCHAR*	pszFuncName,		//!< 関数名
 	int					nInfo,				//!< 付加情報
 	int					nDepth				//!< 深さ
-)
+	)
 {
 	AppendData(nFuncLineCRLF, nFuncLineLAYOUT, to_tchar(pszFuncName), nInfo, nDepth);
 }

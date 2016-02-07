@@ -218,7 +218,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 		rcImagePos.left = area.GetAreaLeft() + area.GetAreaWidth()/2 - doc.m_nBackImgWidth/2;
 		break;
 	default:
-		assert_warning(0 != typeConfig.m_backImgPos);
+		assert_warning(typeConfig.m_backImgPos != 0);
 		break;
 	}
 	switch (typeConfig.m_backImgPos) {
@@ -238,7 +238,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 		rcImagePos.top  = area.GetAreaTop() + area.GetAreaHeight()/2 - doc.m_nBackImgHeight/2;
 		break;
 	default:
-		assert_warning(0 != typeConfig.m_backImgPos);
+		assert_warning(typeConfig.m_backImgPos != 0);
 		break;
 	}
 	rcImagePos.left += typeConfig.m_backImgPosOffset.x;
@@ -377,7 +377,7 @@ CColor3Setting CEditView::GetColorIndex(
 		pInfo->m_pLineOfLogic = pcLayout->GetDocLineRef()->GetPtr();
 
 		// 論理行の最初のレイアウト情報を取得 -> pcLayoutLineFirst
-		while (0 != pcLayoutLineFirst->GetLogicOffset()) {
+		while (pcLayoutLineFirst->GetLogicOffset() != 0) {
 			pcLayoutLineFirst = pcLayoutLineFirst->GetPrevLayout();
 			--nLineNumFirst;
 

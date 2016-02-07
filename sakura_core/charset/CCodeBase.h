@@ -71,6 +71,9 @@ public:
 
 	// CShiftJisより移動 2010/6/13 Uchi
 	static void S_GetEol(CMemory* pcmemEol, EEolType eEolType);	// 改行データ取得
+	
+protected:
+
 };
 
 /*!

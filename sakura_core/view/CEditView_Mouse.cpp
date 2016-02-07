@@ -1503,15 +1503,15 @@ bool CEditView::IsSpecialScrollMode(int nSelect)
 		break;
 
 	case MOUSEFUNCTION_CENTER:		// マウス中ボタン
-		bSpecialScrollMode = (0 != (0x8000 & ::GetAsyncKeyState(VK_MBUTTON)));
+		bSpecialScrollMode = ((::GetAsyncKeyState(VK_MBUTTON) & 0x8000) != 0);
 		break;
 
 	case MOUSEFUNCTION_LEFTSIDE:	// マウスサイドボタン1
-		bSpecialScrollMode = (0 != (0x8000 & ::GetAsyncKeyState(VK_XBUTTON1)));
+		bSpecialScrollMode = ((::GetAsyncKeyState(VK_XBUTTON1) & 0x8000) != 0);
 		break;
 
 	case MOUSEFUNCTION_RIGHTSIDE:	// マウスサイドボタン2
-		bSpecialScrollMode = (0 != (0x8000 & ::GetAsyncKeyState(VK_XBUTTON2)));
+		bSpecialScrollMode = ((::GetAsyncKeyState(VK_XBUTTON2) & 0x8000) != 0);
 		break;
 
 	case VK_CONTROL:	// Controlキー

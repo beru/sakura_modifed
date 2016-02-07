@@ -39,7 +39,10 @@ CWSHPlugin::~CWSHPlugin(void)
 }
 
 // プラグイン定義ファイルを読み込む
-bool CWSHPlugin::ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CWSHPlugin::ReadPluginDef(
+	CDataProfile* cProfile,
+	CDataProfile* cProfileMlang
+	)
 {
 	ReadPluginDefCommon(cProfile, cProfileMlang);
 
@@ -62,7 +65,9 @@ bool CWSHPlugin::ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMla
 }
 
 // オプションファイルを読み込む
-bool CWSHPlugin::ReadPluginOption(CDataProfile *cProfile)
+bool CWSHPlugin::ReadPluginOption(
+	CDataProfile* cProfile
+	)
 {
 	return true;
 }

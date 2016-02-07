@@ -266,7 +266,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 	UINT				uMsg,		// message
 	WPARAM				wParam,		// first message parameter
 	LPARAM				lParam 		// second message parameter
-)
+	)
 {
 	WORD				wNotifyCode;
 	WORD				wID;
@@ -589,7 +589,6 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 {
 
 	HWND	hwndWork;
-	int		i;
 	int		nItem;
 
 	m_nCurrentColorType = 0;	// 現在選択されている色タイプ
@@ -612,7 +611,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// From Here May 12, 2001 genta
 	// 行コメントの開始桁位置設定
 	// May 21, 2001 genta 桁位置を1から数えるように
-	for (i=0; i<COMMENT_DELIMITER_NUM; ++i) {
+	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		// テキスト
 		::DlgItem_SetText(hwndDlg, cLineComment[i].nEditID, m_Types.m_cLineComment.getLineComment(i));	
 
@@ -630,7 +629,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	HWND	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_STRINGLITERAL);
 	Combo_ResetContent(hwndCombo);
 	int		nSelPos = 0;
-	for (i=0; i<_countof(StringLitteralArr); ++i) {
+	for (int i=0; i<_countof(StringLitteralArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(StringLitteralArr[i].nNameId));
 		if (StringLitteralArr[i].nMethod == m_Types.m_nStringType) {		// テキストの折り返し方法
 			nSelPos = i;
@@ -649,7 +648,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	Combo_AddString(hwndWork, L" ");
 	//	Mar. 31, 2003 genta KeyWordSetMgrをポインタに
 	if (0 < m_pCKeyWordSetMgr->m_nKeyWordSetNum) {
-		for (i=0; i<m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
+		for (int i=0; i<m_pCKeyWordSetMgr->m_nKeyWordSetNum; ++i) {
 			Combo_AddString(hwndWork, m_pCKeyWordSetMgr->GetTypeName(i));
 		}
 		if (m_Types.m_nKeyWordSetIdx[0] == -1) {
@@ -662,7 +661,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	}
 
 	// 強調キーワード1～10の設定
-	for (i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
+	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		m_nSet[i] = m_Types.m_nKeyWordSetIdx[i];
 	}
 
@@ -672,7 +671,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// 2014.11.25 大きいフォント対応
 	int nItemHeight = CTextWidthCalc(hwndWork).GetTextHeight();
 	List_SetItemHeight(hwndWork, 0, nItemHeight + 4);
-	for (i=0; i<COLORIDX_LAST; ++i) {
+	for (int i=0; i<COLORIDX_LAST; ++i) {
 		GetDefaultColorInfoName(&m_Types.m_ColorInfoArr[i], i);
 		nItem = ::List_AddString(hwndWork, m_Types.m_ColorInfoArr[i].m_szName);
 		List_SetItemData(hwndWork, nItem, &m_Types.m_ColorInfoArr[i]);
@@ -684,7 +683,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 	// from here 2005.11.30 Moca 指定位置縦線の設定
 	WCHAR szVertLine[MAX_VERTLINES * 15] = L"";
 	int offset = 0;
-	for (i=0; i<MAX_VERTLINES && m_Types.m_nVertLineIdx[i]!=0; ++i) {
+	for (int i=0; i<MAX_VERTLINES && m_Types.m_nVertLineIdx[i]!=0; ++i) {
 		CLayoutInt nXCol = m_Types.m_nVertLineIdx[i];
 		CLayoutInt nXColEnd = nXCol;
 		CLayoutInt nXColAdd = CLayoutInt(1);
@@ -1156,7 +1155,11 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 
 
 // 色選択ダイアログ
-BOOL CPropTypesColor::SelectColor(HWND hwndParent, COLORREF* pColor, DWORD* pCustColors)
+BOOL CPropTypesColor::SelectColor(
+	HWND hwndParent,
+	COLORREF* pColor,
+	DWORD* pCustColors
+	)
 {
 	CHOOSECOLOR cc;
 	cc.lStructSize = sizeof_raw(cc);

@@ -44,11 +44,11 @@
 */
 template <class T, class S>
 bool CRecentImp<T, S>::Create(
-	DataType*		pszItemArray,	// アイテム配列へのポインタ
-	int*			pnItemCount,	// アイテム個数へのポインタ
-	bool*			pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
-	int				nArrayCount,	// 最大管理可能なアイテム数
-	int*			pnViewCount		// 表示個数(NULL許可)
+	DataType*	pszItemArray,	// アイテム配列へのポインタ
+	int*		pnItemCount,	// アイテム個数へのポインタ
+	bool*		pbItemFavorite,	// お気に入りへのポインタ(NULL許可)
+	int			nArrayCount,	// 最大管理可能なアイテム数
+	int*		pnViewCount		// 表示個数(NULL許可)
 	)
 {
 	Terminate();
@@ -110,11 +110,11 @@ bool CRecentImp<T, S>::IsAvailable() const
 template <class T, class S>
 void CRecentImp<T, S>::_Recovery()
 {
-	if (*m_pnUserItemCount < 0           ) *m_pnUserItemCount = 0;
+	if (*m_pnUserItemCount < 0) *m_pnUserItemCount = 0;
 	if (*m_pnUserItemCount > m_nArrayCount) *m_pnUserItemCount = m_nArrayCount;
 
 	if (m_pnUserViewCount) {
-		if (*m_pnUserViewCount < 0           ) *m_pnUserViewCount = 0;
+		if (*m_pnUserViewCount < 0) *m_pnUserViewCount = 0;
 		if (*m_pnUserViewCount > m_nArrayCount) *m_pnUserViewCount = m_nArrayCount;
 	}
 }
@@ -187,8 +187,6 @@ bool CRecentImp<T, S>::IsFavorite(int nIndex) const
 template <class T, class S>
 bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 {
-	int		i;
-
 	if (!IsAvailable()) return false;
 	if (!pItemData) return false;
 
@@ -212,7 +210,7 @@ bool CRecentImp<T, S>::AppendItem(ReceiveType pItemData)
 		DeleteItem(nIndex);
 	}
 
-	for (i=*m_pnUserItemCount; i>0; --i) {
+	for (int i=*m_pnUserItemCount; i>0; --i) {
 		CopyItem(i - 1, i);
 	}
 
@@ -376,7 +374,6 @@ void CRecentImp<T, S>::DeleteAllItem()
 template <class T, class S>
 bool CRecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 {
-	int	i;
 	bool	bFavorite;
 
 	if (! IsAvailable()) return false;
@@ -392,11 +389,11 @@ bool CRecentImp<T, S>::MoveItem(int nSrcIndex, int nDstIndex)
 	bFavorite = IsFavorite(nSrcIndex);
 
 	if (nSrcIndex < nDstIndex) {
-		for (i=nSrcIndex; i<nDstIndex; ++i) {
+		for (int i=nSrcIndex; i<nDstIndex; ++i) {
 			CopyItem(i + 1, i);
 		}
 	}else {
-		for (i=nSrcIndex; i>nDstIndex; --i) {
+		for (int i=nSrcIndex; i>nDstIndex; --i) {
 			CopyItem(i - 1, i);
 		}
 	}

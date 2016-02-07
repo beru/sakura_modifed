@@ -55,7 +55,11 @@ CDlgTypeAscertain::CDlgTypeAscertain()
 }
 
 // モーダルダイアログの表示
-int CDlgTypeAscertain::DoModal(HINSTANCE hInstance, HWND hwndParent, SAscertainInfo* psAscertainInfo)
+int CDlgTypeAscertain::DoModal(
+	HINSTANCE hInstance,
+	HWND hwndParent,
+	SAscertainInfo* psAscertainInfo
+	)
 {
 	m_psi = psAscertainInfo;
 

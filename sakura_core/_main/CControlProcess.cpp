@@ -73,7 +73,7 @@ bool CControlProcess::InitializeProcess()
 		TopErrorMessage(NULL, _T("CreateMutex()é∏îsÅB\nèIóπÇµÇ‹Ç∑ÅB"));
 		return false;
 	}
-	if (ERROR_ALREADY_EXISTS == ::GetLastError()) {
+	if (::GetLastError() == ERROR_ALREADY_EXISTS) {
 		return false;
 	}
 	

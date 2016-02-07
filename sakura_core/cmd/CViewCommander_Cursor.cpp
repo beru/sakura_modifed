@@ -259,7 +259,6 @@ int CViewCommander::Command_LEFT(bool bSelect, bool bRepeat)
 }
 
 
-
 /* カーソル右移動
 	@date 2014.01.10 Moca キーリピート時、MoveCursorを一度にまとめる
 */
@@ -393,7 +392,6 @@ void CViewCommander::Command_RIGHT(
 	}
 	return;
 }
-
 
 
 // カーソル上移動(２行づつ)
@@ -579,7 +577,6 @@ try_again:;
 	}
 	return;
 }
-
 
 
 /*! @brief 行頭に移動

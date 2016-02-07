@@ -59,7 +59,10 @@ CPlugin::~CPlugin(void)
 }
 
 // プラグイン定義ファイルのCommonセクションを読み込む
-bool CPlugin::ReadPluginDefCommon(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CPlugin::ReadPluginDefCommon(
+	CDataProfile *cProfile,
+	CDataProfile *cProfileMlang
+	)
 {
 	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
 	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_NAME, m_sName);
@@ -86,7 +89,10 @@ bool CPlugin::ReadPluginDefCommon(CDataProfile *cProfile, CDataProfile *cProfile
 
 // プラグイン定義ファイルのPlugセクションを読み込む
 // @date 2011.08.20 syat Plugセクションも複数定義可能とする
-bool CPlugin::ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CPlugin::ReadPluginDefPlug(
+	CDataProfile *cProfile,
+	CDataProfile *cProfileMlang
+	)
 {
 	std::vector<JackDef> jacks = CJackManager::getInstance()->GetJackDef();
 	wchar_t szIndex[8];
@@ -124,7 +130,10 @@ bool CPlugin::ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMl
 }
 
 // プラグイン定義ファイルのCommandセクションを読み込む
-bool CPlugin::ReadPluginDefCommand(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CPlugin::ReadPluginDefCommand(
+	CDataProfile *cProfile,
+	CDataProfile *cProfileMlang
+	)
 {
 	wstring sHandler;
 	WCHAR bufKey[64];
@@ -161,7 +170,10 @@ bool CPlugin::ReadPluginDefCommand(CDataProfile *cProfile, CDataProfile *cProfil
 }
 
 // プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
-bool CPlugin::ReadPluginDefOption(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CPlugin::ReadPluginDefOption(
+	CDataProfile *cProfile,
+	CDataProfile *cProfileMlang
+	)
 {
 	wstring sLabel;
 	wstring sSection;
@@ -231,7 +243,12 @@ CPlugin::tstring CPlugin::GetFolderName() const
 }
 
 // コマンドを追加する
-int CPlugin::AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* icon, bool doRegister)
+int CPlugin::AddCommand(
+	const WCHAR* handler,
+	const WCHAR* label,
+	const WCHAR* icon,
+	bool doRegister
+	)
 {
 	if (!handler) { handler = L""; }
 	if (!label) { label = L""; }
@@ -253,7 +270,10 @@ int CPlugin::AddCommand(const WCHAR* handler, const WCHAR* label, const WCHAR* i
 
 // 文字列分割	2010/4/4 Uchi
 //	独立させたほうがいいのだが
-std::vector<std::wstring> wstring_split(std::wstring sTrg, wchar_t cSep)
+std::vector<std::wstring> wstring_split(
+	std::wstring sTrg,
+	wchar_t cSep
+	)
 {
     std::vector<std::wstring> splitVec;
     int idx;
@@ -270,7 +290,10 @@ std::vector<std::wstring> wstring_split(std::wstring sTrg, wchar_t cSep)
 }
 
 //!	プラグイン定義ファイルのStringセクションを読み込む
-bool CPlugin::ReadPluginDefString(CDataProfile *cProfile, CDataProfile *cProfileMlang)
+bool CPlugin::ReadPluginDefString(
+	CDataProfile* cProfile,
+	CDataProfile* cProfileMlang
+	)
 {
 	WCHAR bufKey[64];
 	m_aStrings.clear();

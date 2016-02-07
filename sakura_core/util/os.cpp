@@ -130,11 +130,11 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NUL
 /*!
 	@brief レジストリから文字列を読み出す．
 	
-	@param Hive        [in]  HIVE
-	@param Path        [in]  レジストリキーへのパス
-	@param Item        [in]  レジストリアイテム名．NULLで標準のアイテム．
-	@param Buffer      [out] 取得文字列を格納する場所
-	@param BufferCount [in]  Bufferの指す領域のサイズ。文字単位。
+	@param hive        [in]  HIVE
+	@param path        [in]  レジストリキーへのパス
+	@param item        [in]  レジストリアイテム名．NULLで標準のアイテム．
+	@param buffer      [out] 取得文字列を格納する場所
+	@param bufferCount [in]  bufferの指す領域のサイズ。文字単位。
 	
 	@retval true 値の取得に成功
 	@retval false 値の取得に失敗
@@ -142,18 +142,24 @@ bool GetMonitorWorkRect(HMONITOR hMon, LPRECT prcWork, LPRECT prcMonitor/* = NUL
 	@author 鬼
 	@date 2002.09.10 genta CWSH.cppから移動
 */
-bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer, unsigned BufferCount)
+bool ReadRegistry(
+	HKEY hive,
+	const TCHAR* path,
+	const TCHAR* item,
+	TCHAR* buffer,
+	unsigned bufferCount
+	)
 {
 	bool Result = false;
 	
 	HKEY Key;
-	if (RegOpenKeyEx(Hive, Path, 0, KEY_READ, &Key) == ERROR_SUCCESS) {
-		auto_memset(Buffer, 0, BufferCount);
+	if (RegOpenKeyEx(hive, path, 0, KEY_READ, &Key) == ERROR_SUCCESS) {
+		auto_memset(buffer, 0, bufferCount);
 
 		DWORD dwType = REG_SZ;
-		DWORD dwDataLen = (BufferCount - 1) * sizeof(TCHAR); // ※バイト単位！
+		DWORD dwDataLen = (bufferCount - 1) * sizeof(TCHAR); // ※バイト単位！
 		
-		Result = (RegQueryValueEx(Key, Item, NULL, &dwType, reinterpret_cast<LPBYTE>(Buffer), &dwDataLen) == ERROR_SUCCESS);
+		Result = (RegQueryValueEx(Key, item, NULL, &dwType, reinterpret_cast<LPBYTE>(buffer), &dwDataLen) == ERROR_SUCCESS);
 		
 		RegCloseKey(Key);
 	}
@@ -178,7 +184,11 @@ bool ReadRegistry(HKEY Hive, const TCHAR* Path, const TCHAR* Item, TCHAR* Buffer
 	@date 2004.02.17 Moca 各所のソースを統合
 */
 template <class T>
-bool SetClipboardTextImp(HWND hwnd, const T* pszText, int nLength)
+bool SetClipboardTextImp(
+	HWND hwnd,
+	const T* pszText,
+	int nLength
+	)
 {
 	HGLOBAL	hgClip = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, (nLength + 1) * sizeof(T));
 	if (!hgClip) {

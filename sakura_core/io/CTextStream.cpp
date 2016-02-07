@@ -121,7 +121,7 @@ CTextOutputStream::~CTextOutputStream()
 void CTextOutputStream::WriteString(
 	const wchar_t*	szData,	//!< 書き込む文字列
 	int				nLen	//!< 書き込む文字列長。-1を渡すと自動計算。
-)
+	)
 {
 	//$$メモ: 文字変換時にいちいちコピーを作ってるので効率が悪い。後々効率改善予定。
 
@@ -188,7 +188,10 @@ void CTextOutputStream::WriteF(const wchar_t* format, ...)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 static
-const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
+const TCHAR* _Resolve(
+	const TCHAR* fname,
+	bool bOrExedir
+	)
 {
 	if (_IS_REL_PATH(fname)) {
 		static TCHAR path[_MAX_PATH];
@@ -203,7 +206,10 @@ const TCHAR* _Resolve(const TCHAR* fname, bool bOrExedir)
 }
 
 
-CTextInputStream_AbsIni::CTextInputStream_AbsIni(const TCHAR* fname, bool bOrExedir)
+CTextInputStream_AbsIni::CTextInputStream_AbsIni(
+	const TCHAR* fname,
+	bool bOrExedir
+	)
 	:
 	CTextInputStream(_Resolve(fname, bOrExedir))
 {

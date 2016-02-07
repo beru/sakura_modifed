@@ -70,7 +70,11 @@ static const DWORD p_helpids[] = {	//11700
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropMacro::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropMacro::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -81,7 +85,12 @@ INT_PTR CALLBACK CPropMacro::DlgProc_page(
 	@param wParam パラメータ1
 	@param lParam パラメータ2
 */
-INT_PTR CPropMacro::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CPropMacro::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	NMHDR*		pNMHDR;
 	int			idCtrl;

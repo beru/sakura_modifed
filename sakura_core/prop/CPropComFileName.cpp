@@ -59,12 +59,21 @@ static const DWORD p_helpids[] = {	//13400
 
 
 INT_PTR CALLBACK CPropFileName::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropFileName::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
-INT_PTR CPropFileName::DispatchEvent(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CPropFileName::DispatchEvent(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	HWND hListView;
 	int nIndex;
@@ -355,7 +364,13 @@ int CPropFileName::GetData(HWND hwndDlg)
 }
 
 
-int CPropFileName::SetListViewItem_FILENAME(HWND hListView, int nIndex, LPTSTR szFrom, LPTSTR szTo, bool bInsMode)
+int CPropFileName::SetListViewItem_FILENAME(
+	HWND hListView,
+	int nIndex,
+	LPTSTR szFrom,
+	LPTSTR szTo,
+	bool bInsMode
+	)
 {
 	if (szFrom[0] == _T('\0') || nIndex == -1) {
 		return -1;
@@ -392,14 +407,23 @@ int CPropFileName::SetListViewItem_FILENAME(HWND hListView, int nIndex, LPTSTR s
 }
 
 
-void CPropFileName::GetListViewItem_FILENAME(HWND hListView, int nIndex, LPTSTR szFrom, LPTSTR szTo)
+void CPropFileName::GetListViewItem_FILENAME(
+	HWND hListView,
+	int nIndex,
+	LPTSTR szFrom,
+	LPTSTR szTo
+	)
 {
 	ListView_GetItemText(hListView, nIndex, 0, szFrom, _MAX_PATH);
 	ListView_GetItemText(hListView, nIndex, 1, szTo, _MAX_PATH);
 }
 
 
-int CPropFileName::MoveListViewItem_FILENAME(HWND hListView, int nIndex, int nIndex2)
+int CPropFileName::MoveListViewItem_FILENAME(
+	HWND hListView,
+	int nIndex,
+	int nIndex2
+	)
 {
 	TCHAR szFrom[_MAX_PATH];
 	TCHAR szTo[_MAX_PATH];

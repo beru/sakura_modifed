@@ -79,7 +79,10 @@ std::vector<JackDef> CJackManager::GetJackDef() const
 }
 
 // プラグをジャックに関連付ける
-ERegisterPlugResult CJackManager::RegisterPlug(wstring pszJack, CPlug* plug)
+ERegisterPlugResult CJackManager::RegisterPlug(
+	wstring pszJack,
+	CPlug* plug
+	)
 {
 	EJack ppId = GetJackFromName(pszJack);
 	if (ppId == PP_NONE) {
@@ -124,7 +127,10 @@ ERegisterPlugResult CJackManager::RegisterPlug(wstring pszJack, CPlug* plug)
 }
 
 // プラグの関連付けを解除する
-bool CJackManager::UnRegisterPlug(wstring pszJack, CPlug* plug)
+bool CJackManager::UnRegisterPlug(
+	wstring pszJack,
+	CPlug* plug
+	)
 {
 	EJack ppId = GetJackFromName(pszJack);
 
@@ -204,7 +210,11 @@ EFunctionCode CJackManager::GetCommandCode(int index) const
 }
 
 // プラグインコマンドの名前を返す
-int CJackManager::GetCommandName(int funccode, WCHAR* buf, int size) const
+int CJackManager::GetCommandName(
+	int funccode,
+	WCHAR* buf,
+	int size
+	) const
 {
 	auto& plugs = m_Jacks[PP_COMMAND].plugs;
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {

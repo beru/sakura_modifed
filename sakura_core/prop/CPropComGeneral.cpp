@@ -68,7 +68,11 @@ static const DWORD p_helpids[] = {	//10900
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropGeneral::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropGeneral::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -80,7 +84,7 @@ INT_PTR CPropGeneral::DispatchEvent(
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
 	LPARAM	lParam 		// second message parameter
-)
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;
@@ -331,12 +335,11 @@ void CPropGeneral::SetData(HWND hwndDlg)
 	// 2009.01.17 nasukoji	組み合わせてホイール操作した時ページスクロールする
 	HWND	hwndCombo;
 	int		nSelPos;
-	int		i;
 
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (i=0; i<_countof(SpecialScrollModeArr); ++i) {
+	for (int i=0; i<_countof(SpecialScrollModeArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(SpecialScrollModeArr[i].nNameId));
 		if (SpecialScrollModeArr[i].nMethod == csGeneral.m_nPageScrollByWheel) {	// ページスクロールとする組み合わせ操作
 			nSelPos = i;
@@ -348,7 +351,7 @@ void CPropGeneral::SetData(HWND hwndDlg)
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_HSCROLL);
 	Combo_ResetContent(hwndCombo);
 	nSelPos = 0;
-	for (i=0; i<_countof(SpecialScrollModeArr); ++i) {
+	for (int i=0; i<_countof(SpecialScrollModeArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(SpecialScrollModeArr[i].nNameId));
 		if (SpecialScrollModeArr[i].nMethod == csGeneral.m_nHorizontalScrollByWheel) {	// 横スクロールとする組み合わせ操作
 			nSelPos = i;

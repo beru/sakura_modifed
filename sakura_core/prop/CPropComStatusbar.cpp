@@ -41,20 +41,24 @@ static const DWORD p_helpids[] = {
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropStatusbar::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropStatusbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
 
 // メッセージ処理
 INT_PTR CPropStatusbar::DispatchEvent(
-    HWND		hwndDlg,	// handle to dialog box
-    UINT		uMsg,		// message
-    WPARAM		wParam,		// first message parameter
-    LPARAM		lParam 		// second message parameter
-)
+    HWND	hwndDlg,	// handle to dialog box
+    UINT	uMsg,		// message
+    WPARAM	wParam,		// first message parameter
+    LPARAM	lParam 		// second message parameter
+	)
 {
-	NMHDR*		pNMHDR;
+	NMHDR* pNMHDR;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:

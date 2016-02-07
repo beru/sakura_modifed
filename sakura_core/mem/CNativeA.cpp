@@ -301,8 +301,8 @@ void CNativeA::ToUpper()
 // 半角→全角
 void CNativeA::ToZenkaku(
 	int bHiragana,		// 1== ひらがな 0==カタカナ // 2==英数専用 2001/07/30 Misaka 追加
-	int bHanKataOnly		// 1== 半角カタカナにのみ作用する
-)
+	int bHanKataOnly	// 1== 半角カタカナにのみ作用する
+	)
 {
 	static const unsigned char*	pszHanKataSet = (unsigned char*)"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ";
 	static const unsigned char*	pszDakuSet = (unsigned char*)"ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎ";
@@ -610,7 +610,11 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 指定した位置の文字が何バイト文字かを返す
-int CNativeA::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
+int CNativeA::GetSizeOfChar(
+	const char* pData,
+	int nDataLen,
+	int nIdx
+	)
 {
 	return CShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);
 }

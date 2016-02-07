@@ -48,7 +48,7 @@ BOOL CDicMgr::Search(
 	CNativeW**			ppcmemMean,			// 見つかったキーワードに対応する辞書内容．呼び出し元の責任で解放する．
 	const TCHAR*		pszKeyWordHelpFile,	// キーワードヘルプファイルのパス名
 	int*				pLine				// 見つかったキーワードのキーワードヘルプファイル内での行番号
-)
+	)
 {
 #ifdef _DEBUG
 	CRunningTimer cRunningTimer("CDicMgr::Search");
@@ -124,7 +124,7 @@ int CDicMgr::HokanSearch(
 	vector_ex<std::wstring>&		vKouho,	// [out] 候補リスト
 	int				nMaxKouho,		// Max候補数(0==無制限)
 	const TCHAR*	pszKeyWordFile
-)
+	)
 {
 	if (pszKeyWordFile[0] == _T('\0')) {
 		return 0;

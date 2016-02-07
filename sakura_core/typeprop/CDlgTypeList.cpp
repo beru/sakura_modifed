@@ -686,7 +686,12 @@ bool CDlgTypeList::DelType()
 
 
 // 再帰的レジストリコピー
-int CopyRegistry(HKEY srcRoot, const tstring& srcPath, HKEY destRoot, const tstring& destPath)
+int CopyRegistry(
+	HKEY srcRoot,
+	const tstring& srcPath,
+	HKEY destRoot,
+	const tstring& destPath
+	)
 {
 	int errorCode;
 	CRegKey keySrc;
@@ -1074,10 +1079,11 @@ int CheckExt(LPCTSTR sExt, bool* pbRMenu, bool* pbDblClick)
 bool CDlgTypeList::AlertFileAssociation()
 {
 	if (m_bAlertFileAssociation) {
-		if (IDYES == ::MYMESSAGEBOX(
-						NULL, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
-						GSTR_APPNAME,
-						LS(STR_DLGTYPELIST_ACC))
+		if (::MYMESSAGEBOX(
+				NULL, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST,
+				GSTR_APPNAME,
+				LS(STR_DLGTYPELIST_ACC)
+			) == IDYES
 		) {
 			m_bAlertFileAssociation = false;	//「はい」なら最初の一度だけ確認する
 			return true;

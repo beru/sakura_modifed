@@ -538,7 +538,7 @@ void CMainToolBar::AcceptSharedSearchKey()
 		}
 		std::wstring strText;
 		GetSearchKey(strText);
-		if (0 < nSize && 0 != wcscmp(strText.c_str(), pszText)) {
+		if (0 < nSize && wcscmp(strText.c_str(), pszText) != 0) {
 			::SetWindowText(m_hwndSearchBox, to_tchar(pszText));
 		}
 	}

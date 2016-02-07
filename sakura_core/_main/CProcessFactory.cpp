@@ -45,7 +45,10 @@ class CProcess;
 	@date 2002/01/08
 	@date 2006/04/10 ryoji
 */
-CProcess* CProcessFactory::Create(HINSTANCE hInstance, LPCTSTR lpCmdLine)
+CProcess* CProcessFactory::Create(
+	HINSTANCE hInstance,
+	LPCTSTR lpCmdLine
+	)
 {
 	if (!ProfileSelect( hInstance, lpCmdLine )) {
 		return 0;
@@ -84,7 +87,10 @@ CProcess* CProcessFactory::Create(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 }
 
 
-bool CProcessFactory::ProfileSelect( HINSTANCE hInstance, LPCTSTR lpCmdLine )
+bool CProcessFactory::ProfileSelect(
+	HINSTANCE hInstance,
+	LPCTSTR lpCmdLine
+	)
 {
 	CDlgProfileMgr dlgProf;
 	SProfileSettings settings;
@@ -286,7 +292,7 @@ bool CProcessFactory::StartControlProcess()
 	// 唯一生き残ったコントロールプロセスが多重起動防止用ミューテックスを作成しているはず。
 	//
 	int nResult = ::WaitForInputIdle(p.hProcess, 10000);	// 最大10秒間待つ
-	if (0 != nResult) {
+	if (nResult != 0) {
 		ErrorMessage(NULL, _T("\'%ls\'\nコントロールプロセスの起動に失敗しました。"), szEXE);
 		::CloseHandle(p.hThread);
 		::CloseHandle(p.hProcess);

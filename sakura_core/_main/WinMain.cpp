@@ -43,14 +43,14 @@ int WINAPI WinMain(
 	HINSTANCE	hPrevInstance,	// handle to previous instance
 	LPSTR		lpCmdLineA,		// pointer to command line
 	int			nCmdShow		// show state of window
-)
+	)
 #else
 int WINAPI _tWinMain(
 	HINSTANCE	hInstance,		// handle to current instance
 	HINSTANCE	hPrevInstance,	// handle to previous instance
 	LPTSTR		lpCmdLine,		// pointer to command line
 	int			nCmdShow		// show state of window
-)
+	)
 #endif
 {
 #ifdef USE_LEAK_CHECK_WITH_CRTDBG
@@ -84,25 +84,25 @@ int WINAPI _tWinMain(
 		LPTSTR pszCommandLine;
 		pszCommandLine = ::GetCommandLine();
 		// 実行ファイル名をスキップする
-		if (_T('\"') == *pszCommandLine) {
+		if (*pszCommandLine == _T('\"')) {
 			++pszCommandLine;
-			while (_T('\"') != *pszCommandLine && _T('\0') != *pszCommandLine) {
+			while (*pszCommandLine != _T('\"') && *pszCommandLine != _T('\0')) {
 				++pszCommandLine;
 			}
-			if (_T('\"') == *pszCommandLine) {
+			if (*pszCommandLine == _T('\"')) {
 				++pszCommandLine;
 			}
 		}else {
 			while (
 				_T(' ') != *pszCommandLine
-				&& _T('\t') != *pszCommandLine
-				&& _T('\0') != *pszCommandLine
+				&& *pszCommandLine != _T('\t')
+				&& *pszCommandLine != _T('\0')
 			) {
 				++pszCommandLine;
 			}
 		}
 		// 次のトークンまで進める
-		while (_T(' ') == *pszCommandLine || _T('\t') == *pszCommandLine) {
+		while (*pszCommandLine == _T(' ') || *pszCommandLine == _T('\t')) {
 			++pszCommandLine;
 		}
 		process = aFactory.Create(hInstance, pszCommandLine);

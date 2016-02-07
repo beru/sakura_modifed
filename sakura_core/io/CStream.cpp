@@ -88,7 +88,10 @@ CStream::~CStream()
 //                    オープン・クローズ                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //
-void CStream::Open(const TCHAR* tszPath, const TCHAR* tszMode)
+void CStream::Open(
+	const TCHAR* tszPath,
+	const TCHAR* tszMode
+	)
 {
 	Close(); // 既に開いていたら、一度閉じる
 

@@ -236,7 +236,7 @@ void CGraphics::PopPen()
 	// 選択する候補
 	HPEN hpnNew = NULL;
 	if (m_vPens.size() >= 2) {
-		hpnNew = m_vPens[m_vPens.size()-2];
+		hpnNew = m_vPens[m_vPens.size() - 2];
 	}else {
 		hpnNew = m_hpnOrg;
 	}
@@ -404,7 +404,12 @@ HBRUSH GetDropRectBrush()
 }
 
 // ドロップ先の矩形を描画する
-void CGraphics::DrawDropRect(LPCRECT lpRectNew, SIZE sizeNew, LPCRECT lpRectLast, SIZE sizeLast)
+void CGraphics::DrawDropRect(
+	LPCRECT lpRectNew,
+	SIZE sizeNew,
+	LPCRECT lpRectLast,
+	SIZE sizeLast
+	)
 {
 	if (!lpRectNew && !lpRectLast)
 		return;

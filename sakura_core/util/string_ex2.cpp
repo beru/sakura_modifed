@@ -47,7 +47,12 @@ wchar_t* wcs_pushA(wchar_t* dst, size_t dst_count, const char* src)
 	@date 2002/02/01 genta bugfix エスケープする文字とされる文字の出力順序が逆だった
 	@date 2004/06/19 genta Generic mapping対応
 */
-int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith)
+int cescape(
+	const TCHAR* org,
+	TCHAR* buf,
+	TCHAR cesc,
+	TCHAR cwith
+	)
 {
 	TCHAR* out = buf;
 	for (; *org!=_T('\0'); ++org, ++out) {
@@ -73,7 +78,12 @@ int cescape(const TCHAR* org, TCHAR* buf, TCHAR cesc, TCHAR cwith)
 	@retval -1 バッファが足りず、\を付加できなかった
 	@date 2003.06.24 Moca 新規作成
 */
-int AddLastChar(TCHAR* pszPath, int nMaxLen, TCHAR c) {
+int AddLastChar(
+	TCHAR* pszPath,
+	int nMaxLen,
+	TCHAR c
+	)
+{
 	int pos = _tcslen(pszPath);
 	// 何もないときは\を付加
 	if (pos == 0) {
@@ -229,7 +239,13 @@ const wchar_t* GetNextLineWB(
 
 	@note 2003.05.25 未使用のようだ
 */
-const char* GetNextLimitedLengthText(const char* pText, int nTextLen, int nLimitLen, int* pnLineLen, int* pnBgn)
+const char* GetNextLimitedLengthText(
+	const char* pText,
+	int nTextLen,
+	int nLimitLen,
+	int* pnLineLen,
+	int* pnBgn
+	)
 {
 	int nBgn = *pnBgn;
 	if (nBgn >= nTextLen) {
@@ -259,7 +275,7 @@ int LimitStringLengthW(
 	int				nDataLength,	//!< [in]
 	int				nLimitLength,	//!< [in]
 	CNativeW&		cmemDes			//!< [out]
-)
+	)
 {
 	int n = nDataLength;
 	if (n > nLimitLength) {
@@ -276,7 +292,11 @@ int LimitStringLengthW(
 }
 
 
-void GetLineColumn(const wchar_t* pLine, int* pnJumpToLine, int* pnJumpToColumn)
+void GetLineColumn(
+	const wchar_t* pLine,
+	int* pnJumpToLine,
+	int* pnJumpToColumn
+	)
 {
 	int nLineLen = wcslen(pLine);
 	int i = 0;

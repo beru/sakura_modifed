@@ -59,7 +59,11 @@ static const DWORD p_helpids[] = {	//10210
 	@param lParam ÉpÉâÉÅÅ[É^2
 */
 INT_PTR CALLBACK CPropEdit::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropEdit::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -71,7 +75,7 @@ INT_PTR CPropEdit::DispatchEvent(
     UINT		uMsg,		// message
     WPARAM		wParam,		// first message parameter
     LPARAM		lParam 		// second message parameter
-)
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;

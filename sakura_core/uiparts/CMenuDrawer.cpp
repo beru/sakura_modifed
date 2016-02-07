@@ -743,7 +743,11 @@ CMenuDrawer::~CMenuDrawer()
 	return;
 }
 
-void CMenuDrawer::Create(HINSTANCE hInstance, HWND hWndOwner, CImageListMgr* pcIcons)
+void CMenuDrawer::Create(
+	HINSTANCE hInstance,
+	HWND hWndOwner,
+	CImageListMgr* pcIcons
+	)
 {
 	m_hInstance = hInstance;
 	m_hWndOwner = hWndOwner;
@@ -804,13 +808,15 @@ void CMenuDrawer::MyAppendMenu(
 	const TCHAR*	pszKey,			// 2010/5/18 Uchi
 	BOOL			bAddKeyStr,
 	int				nForceIconId	//お気に入り	//@@@ 2003.04.08 MIK
-)
+	)
 {
 	TCHAR	szLabel[_MAX_PATH * 2+ 30];
 	TCHAR	szKey[10];
 	int		nFlagAdd = 0;
 
-	if (nForceIconId == -1) nForceIconId = nFuncId;	// お気に入り	//@@@ 2003.04.08 MIK
+	if (nForceIconId == -1) {
+		nForceIconId = nFuncId;	// お気に入り	//@@@ 2003.04.08 MIK
+	}
 
 	szLabel[0] = _T('\0');
 	if (pszLabel) {
@@ -1574,7 +1580,12 @@ struct WorkData {
 };
 
 // メニューアクセスキー押下時の処理(WM_MENUCHAR処理)
-LRESULT CMenuDrawer::OnMenuChar(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CMenuDrawer::OnMenuChar(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	TCHAR chUser;
 	HMENU hmenu;
@@ -1651,7 +1662,7 @@ void CMenuDrawer::SetTBBUTTONVal(
 	BYTE		fsStyle,
 	DWORD_PTR	dwData,
 	INT_PTR		iString
-) const
+	) const
 {
 	/*
 typedef struct _TBBUTTON {

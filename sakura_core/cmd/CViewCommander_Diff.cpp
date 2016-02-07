@@ -223,7 +223,8 @@ void CViewCommander::Command_COMPARE(void)
 }
 
 
-static ECodeType GetFileCharCode( LPCTSTR pszFile )
+static
+ECodeType GetFileCharCode( LPCTSTR pszFile )
 {
 	const STypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
@@ -231,7 +232,8 @@ static ECodeType GetFileCharCode( LPCTSTR pszFile )
 }
 
 
-static ECodeType GetDiffCreateTempFileCode(ECodeType code)
+static
+ECodeType GetDiffCreateTempFileCode(ECodeType code)
 {
 	EEncodingTrait e = CCodePage::GetEncodingTrait(code);
 	if (e != ENCODING_TRAIT_ASCII) {

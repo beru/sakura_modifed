@@ -58,7 +58,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 		// 右コメントの１～３でない場合
 		if (!(1
 				&& !m_bInMenuLoop							// １．メニュー モーダル ループに入っていない
-				&& 0 != m_dwTipTimer						// ２．辞書Tipを表示していない
+				&& m_dwTipTimer != 0						// ２．辞書Tipを表示していない
 				&& 300 < ::GetTickCount() - m_dwTipTimer	// ３．一定時間以上、マウスが固定されている
 			)
 		)
@@ -67,7 +67,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	case LID_SKH_POPUPMENU_R:
 		if (!(1
 				&& !m_bInMenuLoop							// １．メニュー モーダル ループに入っていない
-			//	&& 0 != m_dwTipTimer			&&			// ２．辞書Tipを表示していない
+			//	&& m_dwTipTimer != 0			&&			// ２．辞書Tipを表示していない
 			//	&& 1000 < ::GetTickCount() - m_dwTipTimer	// ３．一定時間以上、マウスが固定されている
 			)
 		)

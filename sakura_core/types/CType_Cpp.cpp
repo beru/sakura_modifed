@@ -77,14 +77,14 @@ void CType_Cpp::InitTypeConfigImp(STypeConfig* pType)
 inline
 bool C_IsWordChar(wchar_t c)
 {
-	return (
-		L'_' == c ||
-		L':' == c ||
-		L'~' == c ||
-		(L'a' <= c && c <= L'z')||
-		(L'A' <= c && c <= L'Z')||
-		(L'0' <= c && c <= L'9')||
-		(0xa1 <= c && !iswcntrl(c) && !iswspace(c))
+	return (0
+		|| c == L'_'
+		|| c == L':'
+		|| c == L'~'
+		|| (L'a' <= c && c <= L'z')
+		|| (L'A' <= c && c <= L'Z')
+		|| (L'0' <= c && c <= L'9')
+		|| (0xa1 <= c && !iswcntrl(c) && !iswspace(c))
 	);
 }
 //	To Here
@@ -134,7 +134,9 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 	) {
 		--len;
 	}
-	if (len > 0 && s[len-1] == L'\r') --len;
+	if (len > 0 && s[len-1] == L'\r') {
+		--len;
+	}
 
 	if (len > 0 && s[len-1] == L'\\') {
 		if (len == 1) {
@@ -155,15 +157,15 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 static
 bool CPP_IsFunctionAfterKeyword(const wchar_t* s)
 {
-	return
-		wcscmp(s, L"const") == 0 ||
-		wcscmp(s, L"volatile") == 0 ||
-		wcscmp(s, L"throw") == 0 ||
-		wcscmp(s, L"default") == 0 ||
-		wcscmp(s, L"delete") == 0 ||
-		wcscmp(s, L"override") == 0 ||
-		wcscmp(s, L"final") == 0 ||
-		wcscmp(s, L"noexcept") == 0
+	return 0
+		|| wcscmp(s, L"const") == 0
+		|| wcscmp(s, L"volatile") == 0
+		|| wcscmp(s, L"throw") == 0
+		|| wcscmp(s, L"default") == 0
+		|| wcscmp(s, L"delete") == 0
+		|| wcscmp(s, L"override") == 0
+		|| wcscmp(s, L"final") == 0
+		|| wcscmp(s, L"noexcept") == 0
 	;
 }
 
@@ -232,7 +234,10 @@ private:
 	@date 2007.12.13 じゅうじ : ifの直後にスペースがない場合の対応
 
 */
-CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
+CLogicInt CCppPreprocessMng::ScanLine(
+	const wchar_t* str,
+	CLogicInt _length
+	)
 {
 	int length = _length;
 
@@ -347,7 +352,10 @@ CLogicInt CCppPreprocessMng::ScanLine(const wchar_t* str, CLogicInt _length)
 	@param pcFuncInfoArr [out] 関数一覧を返すためのクラス。
 	ここに関数のリストを登録する。
 */
-void CDocOutline::MakeFuncList_C(CFuncInfoArr* pcFuncInfoArr, bool bVisibleMemberFunc)
+void CDocOutline::MakeFuncList_C(
+	CFuncInfoArr* pcFuncInfoArr,
+	bool bVisibleMemberFunc
+	)
 {
 #ifdef _DEBUG
 // #define TRACE_OUTLINE

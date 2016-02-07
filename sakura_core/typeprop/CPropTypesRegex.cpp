@@ -83,7 +83,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 	UINT		uMsg,		// message
 	WPARAM		wParam,		// first message parameter
 	LPARAM		lParam 		// second message parameter
-)
+	)
 {
 	WORD	wNotifyCode;
 	WORD	wID;
@@ -684,7 +684,11 @@ BOOL CPropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 }
 //@@@ 2001.11.17 add end MIK
 
-bool CPropTypesRegex::CheckKeywordList(HWND hwndDlg, const TCHAR* szNewKeyWord, int nUpdateItem)
+bool CPropTypesRegex::CheckKeywordList(
+	HWND hwndDlg,
+	const TCHAR* szNewKeyWord,
+	int nUpdateItem
+	)
 {
 	int nRet;
 	// 書式をチェックする。

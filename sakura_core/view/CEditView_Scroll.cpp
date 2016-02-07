@@ -507,8 +507,8 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 
 	// 背景は画面に対して固定か
 	bool bBackImgFixed = IsBkBitmap() &&
-		(0 != nScrollRowNum && !m_pTypeData->m_backImgScrollY ||
-		 0 != nScrollColNum && !m_pTypeData->m_backImgScrollX);
+		(nScrollRowNum != 0 && !m_pTypeData->m_backImgScrollY ||
+		 nScrollColNum != 0 && !m_pTypeData->m_backImgScrollX);
 	if (bBackImgFixed) {
 		CMyRect rcBody = area.GetAreaRect();
 		rcBody.left = 0; // 行番号も移動
@@ -537,7 +537,7 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 		if (1
 			&& 0 < area.GetTopYohaku()
 			&& IsBkBitmap()
-			&& (0 != nScrollRowNum && m_pTypeData->m_backImgScrollY || 0 != nScrollColNum && m_pTypeData->m_backImgScrollX)
+			&& (nScrollRowNum != 0 && m_pTypeData->m_backImgScrollY || nScrollColNum != 0 && m_pTypeData->m_backImgScrollX)
 		) {
 			// Scrollのときにルーラー余白更新
 			CMyRect rcTopYohaku;
@@ -559,7 +559,10 @@ void CEditView::ScrollDraw(CLayoutInt nScrollRowNum, CLayoutInt nScrollColNum, c
 				DeleteObject(hdcBgImg);
 			}
 		}
-		if (IsBkBitmap() && 0 != nScrollColNum && m_pTypeData->m_backImgScrollX) {
+		if (IsBkBitmap()
+			&& nScrollColNum != 0
+			&& m_pTypeData->m_backImgScrollX
+		) {
 			// 行番号背景のために更新
 			CMyRect rcLineNum;
 			area.GenerateLineNumberRect(&rcLineNum);

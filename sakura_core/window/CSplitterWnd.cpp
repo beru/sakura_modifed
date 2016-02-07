@@ -1054,10 +1054,10 @@ LRESULT CSplitterWnd::DispatchEvent_WM_APP(HWND hwnd, UINT uMsg, WPARAM wParam, 
 //		MYTRACE(_T("MYWM_DOSPLIT nPosX=%d nPosY=%d\n"), nPosX, nPosY);
 
 		// ウィンドウの分割
-		if (0 != m_nHSplitPos) {
+		if (m_nHSplitPos != 0) {
 			nPosX = m_nHSplitPos;
 		}
-		if (0 != m_nVSplitPos) {
+		if (m_nVSplitPos != 0) {
 			nPosY = m_nVSplitPos;
 		}
 		DoSplit(nPosX , nPosY);

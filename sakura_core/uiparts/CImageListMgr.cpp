@@ -44,7 +44,14 @@ CImageListMgr::CImageListMgr()
 	@author Nakatani
 */
 static
-void FillSolidRect(HDC hdc, int x, int y, int cx, int cy, COLORREF clr)
+void FillSolidRect(
+	HDC hdc,
+	int x,
+	int y,
+	int cx,
+	int cy,
+	COLORREF clr
+	)
 {
 //	ASSERT_VALID(this);
 //	ASSERT(m_hDC);
@@ -190,7 +197,7 @@ void CImageListMgr::MyBitBlt(
 	int nXSrc, 
 	int nYSrc,
 	COLORREF colToTransParent	// BMP‚Ì’†‚Ì“§–¾‚É‚·‚éF
-) const
+	) const
 {
 //	HBRUSH	brShadow, brHilight;
 	// create a monochrome memory DC
@@ -242,8 +249,16 @@ void CImageListMgr::MyBitBlt(
 	@date 2003.07.21 genta ˆÈ‘O‚ÌCMenuDrawer‚æ‚èˆÚ“]•œŠˆ
 	@date 2003.08.27 Moca ”wŒiF‚Í“§‰ßˆ—‚·‚é
 */
-void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth, 
-                        int nHeight, HBITMAP bmp, int nXSrc, int nYSrc) const
+void CImageListMgr::DitherBlt2(
+	HDC drawdc,
+	int nXDest,
+	int nYDest,
+	int nWidth, 
+    int nHeight,
+    HBITMAP bmp,
+    int nXSrc,
+    int nYSrc
+    ) const
 {
 
 	//COLORREF colToTransParent = RGB(192, 192, 192);	// BMP‚Ì’†‚Ì“§–¾‚É‚·‚éF
@@ -328,7 +343,13 @@ void CImageListMgr::DitherBlt2(HDC drawdc, int nXDest, int nYDest, int nWidth,
 	@date 2003.09.06 genta Moca‚³‚ñ‚Ì”wŒiF“§‰ßˆ—‚É”º‚¢C”wŒiFˆø”íœ
 	@date 2007.11.02 ryoji ƒAƒCƒRƒ“”Ô†‚ª•‰‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
 */
-bool CImageListMgr::Draw(int index, HDC dc, int x, int y, int fstyle) const
+bool CImageListMgr::Draw(
+	int index,
+	HDC dc,
+	int x,
+	int y,
+	int fstyle
+	) const
 {
 	if (!m_hIconBitmap) {
 		return false;

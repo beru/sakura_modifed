@@ -60,7 +60,7 @@ CMemory::CMemory()
 CMemory::CMemory(
 	const void*	pData,			// 格納データアドレス
 	int			nDataLenBytes	// 格納データの有効長
-)
+	)
 {
 	_init_members();
 	SetRawData(pData, nDataLenBytes);
@@ -296,7 +296,10 @@ void CMemory::AllocBuffer(int nNewDataLen)
 
 
 // バッファの内容を置き換える
-void CMemory::SetRawData(const void* pData, int nDataLen)
+void CMemory::SetRawData(
+	const void* pData,
+	int nDataLen
+	)
 {
 	_Empty();
 	AllocBuffer(nDataLen);
@@ -317,7 +320,10 @@ void CMemory::SetRawData(const CMemory& pcmemData)
 }
 
 //! バッファの内容を置き換える
-void CMemory::SetRawDataHoldBuffer(const void* pData, int nDataLen)
+void CMemory::SetRawDataHoldBuffer(
+	const void* pData,
+	int nDataLen
+	)
 {
 	// this 重複不可
 	assert(m_pRawData != pData);
@@ -343,7 +349,10 @@ void CMemory::SetRawDataHoldBuffer(const CMemory& pcmemData)
 
 
 // バッファの最後にデータを追加する（publicメンバ）
-void CMemory::AppendRawData(const void* pData, int nDataLenBytes)
+void CMemory::AppendRawData(
+	const void* pData,
+	int nDataLenBytes
+	)
 {
 	if (nDataLenBytes <= 0) {
 		return;

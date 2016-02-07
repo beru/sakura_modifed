@@ -209,7 +209,11 @@ bool CViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 
 
 // 名前を付けて保存ダイアログ
-bool CViewCommander::Command_FILESAVEAS_DIALOG(const WCHAR* fileNameDef, ECodeType eCodeType, EEolType eEolType)
+bool CViewCommander::Command_FILESAVEAS_DIALOG(
+	const WCHAR* fileNameDef,
+	ECodeType eCodeType,
+	EEolType eEolType
+	)
 {
 	return GetDocument()->m_cDocFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
 }
@@ -218,7 +222,10 @@ bool CViewCommander::Command_FILESAVEAS_DIALOG(const WCHAR* fileNameDef, ECodeTy
 /* 名前を付けて保存
 	filenameで保存。NULLは厳禁。
 */
-bool CViewCommander::Command_FILESAVEAS(const WCHAR* filename, EEolType eEolType)
+bool CViewCommander::Command_FILESAVEAS(
+	const WCHAR* filename,
+	EEolType eEolType
+	)
 {
 	return GetDocument()->m_cDocFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
 }
@@ -279,7 +286,7 @@ void CViewCommander::Command_FILECLOSE_OPEN(
 void CViewCommander::Command_FILE_REOPEN(
 	ECodeType	nCharCode,	// [in] 開き直す際の文字コード
 	bool		bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
-)
+	)
 {
 	CEditDoc* pcDoc = GetDocument();
 	if (!bNoConfirm && fexist(pcDoc->m_cDocFile.GetFilePath()) && pcDoc->m_cDocEditor.IsModified()) {

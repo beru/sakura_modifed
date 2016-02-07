@@ -301,7 +301,11 @@ void AddLastYenFromDirectoryPath(WCHAR* pszFolder)
 
 // ファイルのフルパスを、フォルダとファイル名に分割
 // [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
-void SplitPath_FolderAndFile(const TCHAR* pszFilePath, TCHAR* pszFolder, TCHAR* pszFile)
+void SplitPath_FolderAndFile(
+	const TCHAR* pszFilePath,
+	TCHAR* pszFolder,
+	TCHAR* pszFile
+	)
 {
 	TCHAR	szDrive[_MAX_DRIVE];
 	TCHAR	szDir[_MAX_DIR];
@@ -331,7 +335,11 @@ void SplitPath_FolderAndFile(const TCHAR* pszFilePath, TCHAR* pszFolder, TCHAR* 
  * [c:\work\test] + [aaa.txt] → [c:\work\test\aaa.txt]
  * フォルダ末尾に円記号があってもなくても良い。
  */
-void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* pszPath)
+void Concat_FolderAndFile(
+	const TCHAR* pszDir,
+	const TCHAR* pszTitle,
+	TCHAR* pszPath
+	)
 {
 	TCHAR* out = pszPath;
 	// フォルダをコピー
@@ -366,7 +374,10 @@ void Concat_FolderAndFile(const TCHAR* pszDir, const TCHAR* pszTitle, TCHAR* psz
 	@date Oct. 4, 2005 genta 相対パスが絶対パスに直されなかった
 	@date Oct. 5, 2005 Moca  相対パスを絶対パスに変換するように
 */
-BOOL GetLongFileName(const TCHAR* pszFilePathSrc, TCHAR* pszFilePathDes)
+BOOL GetLongFileName(
+	const TCHAR* pszFilePathSrc,
+	TCHAR* pszFilePathDes
+	)
 {
 	TCHAR* name;
 	TCHAR szBuf[_MAX_PATH + 1];
@@ -387,7 +398,10 @@ BOOL GetLongFileName(const TCHAR* pszFilePathSrc, TCHAR* pszFilePathDes)
 
 
 // 拡張子を調べる
-BOOL CheckEXT(const TCHAR* pszPath, const TCHAR* pszExt)
+BOOL CheckEXT(
+	const TCHAR* pszPath,
+	const TCHAR* pszExt
+	)
 {
 	TCHAR szExt[_MAX_EXT];
 	_tsplitpath(pszPath, NULL, NULL, NULL, szExt);
@@ -429,7 +443,7 @@ bool _IS_REL_PATH(const TCHAR* path)
 */
 int CalcDirectoryDepth(
 	const TCHAR* path	// [in] 深さを調べたいファイル/ディレクトリのフルパス
-)
+	)
 {
 	int depth = 0;
  
@@ -477,7 +491,7 @@ int CalcDirectoryDepth(
 void GetExedir(
 	LPTSTR	pDir,	// [out] EXEファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
 	LPCTSTR	szFile	// [in]  ディレクトリ名に結合するファイル名．
-)
+	)
 {
 	if (!pDir)
 		return;
@@ -503,7 +517,7 @@ void GetExedir(
 void GetInidir(
 	LPTSTR	pDir,				// [out] INIファイルのあるディレクトリを返す場所．予め_MAX_PATHのバッファを用意しておくこと．
 	LPCTSTR szFile	/*=NULL*/	// [in] ディレクトリ名に結合するファイル名．
-)
+	)
 {
 	if (!pDir)
 		return;
@@ -534,7 +548,7 @@ void GetInidirOrExedir(
 												//       予め_MAX_PATHのバッファを用意しておくこと．
 	LPCTSTR	szFile					/*=NULL*/,	// [in] ディレクトリ名に結合するファイル名．
 	bool	bRetExedirIfFileEmpty	/*=false*/	// [in] ファイル名の指定が空の場合はEXEファイルのフルパスを返す．
-)
+	)
 {
 	// ファイル名の指定が空の場合はEXEファイルのフルパスを返す（オプション）
 	if (bRetExedirIfFileEmpty && (!szFile || szFile[0] == _T('\0'))) {
@@ -656,7 +670,7 @@ bool IsDirectory(LPCTSTR pszPath)
 bool GetLastWriteTimestamp(
 	const TCHAR*	pszFileName,	// [in]  ファイルのパス
 	CFileTime*		pcFileTime		// [out] 更新日時を返す場所
-)
+	)
 {
 	WIN32_FIND_DATA ffd;
 	HANDLE hFindFile = ::FindFirstFile(pszFileName, &ffd);
@@ -998,7 +1012,7 @@ void my_splitpath_w(
 	wchar_t* dir,
 	wchar_t* fnm,
 	wchar_t* ext
-)
+	)
 {
 	wchar_t	ppp[_MAX_PATH];		// パス格納（作業用）
 	wchar_t* pd;
@@ -1084,7 +1098,11 @@ int FileMatchScore(const TCHAR* file1, const TCHAR* file2);
 // フルパスからファイル名の.以降を分離する
 // 2014.06.15 フォルダ名に.が含まれた場合、フォルダが分離されたのを修正
 static
-void FileNameSepExt(const TCHAR *file, TCHAR* pszFile, TCHAR* pszExt)
+void FileNameSepExt(
+	const TCHAR *file,
+	TCHAR* pszFile,
+	TCHAR* pszExt
+	)
 {
 	const TCHAR* folderPos = file;
 	const TCHAR* x = folderPos;
@@ -1106,7 +1124,10 @@ void FileNameSepExt(const TCHAR *file, TCHAR* pszFile, TCHAR* pszExt)
 	}
 }
 
-int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2)
+int FileMatchScoreSepExt(
+	const TCHAR* file1,
+	const TCHAR* file2
+	)
 {
 	TCHAR szFile1[_MAX_PATH];
 	TCHAR szFile2[_MAX_PATH];
@@ -1120,7 +1141,10 @@ int FileMatchScoreSepExt(const TCHAR* file1, const TCHAR* file2)
 }
 
 // 2つのファイル名の最長一致部分の長さを返す
-int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
+int FileMatchScore(
+	const TCHAR* file1,
+	const TCHAR* file2
+	)
 {
 	int score = 0;
 	int len1 = auto_strlen(file1);
@@ -1172,7 +1196,13 @@ int FileMatchScore(const TCHAR* file1, const TCHAR* file2)
 /*! 指定幅までに文字列を省略
 	@date 2014.06.12 新規作成 Moca
 */
-void GetStrTrancateWidth(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth)
+void GetStrTrancateWidth(
+	TCHAR* dest,
+	int nSize,
+	const TCHAR* path,
+	HDC hDC,
+	int nPxWidth
+	)
 {
 	// できるだけ左側から表示
 	// \\server\dir...
@@ -1207,7 +1237,14 @@ void GetStrTrancateWidth(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int
 	out C:\...\sub3\file.ext
 	@date 2014.06.12 新規作成 Moca
 */
-void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nPxWidth, bool bFitMode)
+void GetShortViewPath(
+	TCHAR* dest,
+	int nSize,
+	const TCHAR* path,
+	HDC hDC,
+	int nPxWidth,
+	bool bFitMode
+	)
 {
 	int nLeft = 0; // 左側固定表示部分
 	int nSkipLevel = 1;
@@ -1346,3 +1383,4 @@ void GetShortViewPath(TCHAR* dest, int nSize, const TCHAR* path, HDC hDC, int nP
 	}
 	_tcsncpy_s(dest, nSize, strTemp.c_str(), _TRUNCATE);
 }
+

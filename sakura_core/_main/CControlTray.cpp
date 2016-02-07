@@ -190,12 +190,13 @@ static LRESULT CALLBACK CControlTrayWndProc(
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 CControlTray::CControlTray()
 // Apr. 24, 2001 genta
-: m_pcPropertyManager(NULL)
-, m_hInstance(NULL)
-, m_hWnd(NULL)
-, m_bCreatedTrayIcon(FALSE)	// トレイにアイコンを作った
-, m_nCurSearchKeySequence(-1)
-, m_uCreateTaskBarMsg(::RegisterWindowMessage(TEXT("TaskbarCreated")))
+	:
+	m_pcPropertyManager(NULL),
+	m_hInstance(NULL),
+	m_hWnd(NULL),
+	m_bCreatedTrayIcon(FALSE),	// トレイにアイコンを作った
+	m_nCurSearchKeySequence(-1),
+	m_uCreateTaskBarMsg(::RegisterWindowMessage(TEXT("TaskbarCreated")))
 {
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
@@ -274,7 +275,12 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 	);
 
 	// 最前面にする（トレイからのポップアップウィンドウが最前面になるように）
-	::SetWindowPos(GetTrayHwnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+	::SetWindowPos(
+		GetTrayHwnd(),
+		HWND_TOPMOST,
+		0, 0, 0, 0,
+		SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE
+	);
 	
 	// タスクトレイアイコン作成
 	m_hIcons.Create(m_hInstance);	// Oct. 16, 2000 genta
@@ -305,8 +311,12 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 		TCHAR	pszTips[64 + _MAX_PATH];
 		// 2004.05.13 Moca バージョン番号は、プロセスごとに取得する
 		DWORD dwVersionMS, dwVersionLS;
-		GetAppVersionInfo(NULL, VS_VERSION_INFO,
-			&dwVersionMS, &dwVersionLS);
+		GetAppVersionInfo(
+			NULL,
+			VS_VERSION_INFO,
+			&dwVersionMS,
+			&dwVersionLS
+		);
 
 		std::wstring profname;
 		if (CCommandLine::getInstance()->GetProfileName()[0] != L'\0') {
@@ -353,7 +363,13 @@ void CControlTray::MessageLoop(void)
 
 
 // タスクトレイのアイコンに関する処理
-BOOL CControlTray::TrayMessage(HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon, const TCHAR* pszTip)
+BOOL CControlTray::TrayMessage(
+	HWND hDlg,
+	DWORD dwMessage,
+	UINT uID,
+	HICON hIcon,
+	const TCHAR* pszTip
+	)
 {
 	NOTIFYICONDATA	tnd;
 	tnd.cbSize				= sizeof_raw(tnd);
@@ -382,7 +398,7 @@ LRESULT CControlTray::DispatchEvent(
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 	int			nId;
 	HWND		hwndWork;
@@ -1356,7 +1372,7 @@ bool CControlTray::OpenNewEditor2(
 	bool			bViewMode,
 	bool			sync,
 	bool			bNewWindow			//!< [in] 新規エディタを新しいウィンドウで開く
-)
+	)
 {
 
 	// 共有データ構造体のアドレスを返す
@@ -1483,7 +1499,7 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 */
 void CControlTray::TerminateApplication(
 	HWND hWndFrom	//!< [in] 呼び出し元のウィンドウハンドル
-)
+	)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
 
@@ -1821,7 +1837,7 @@ INT_PTR CALLBACK CControlTray::ExitingDlgProc(
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
 	LPARAM	lParam		// second message parameter
-)
+	)
 {
 	switch (uMsg) {
 	case WM_INITDIALOG:

@@ -62,7 +62,11 @@ static const DWORD p_helpids[] = {	//11200
 	@param lParam ÉpÉâÉÅÅ[É^2
 */
 INT_PTR CALLBACK CPropWin::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropWin::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 	}
@@ -75,7 +79,7 @@ INT_PTR CPropWin::DispatchEvent(
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 // From Here Sept. 9, 2000 JEPRO
 	WORD		wNotifyCode;

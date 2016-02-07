@@ -58,7 +58,7 @@ bool CViewCommander::HandleCommand(
 	LPARAM			lparam2,
 	LPARAM			lparam3,
 	LPARAM			lparam4
-)
+	)
 {
 	bool	bRet = true;
 	bool	bRepeat = false;

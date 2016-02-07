@@ -41,7 +41,12 @@
 	
 	@todo 出力バッファのサイズチェックを行う
 */
-bool GetDateTimeFormat(TCHAR* szResult, int size, const TCHAR* format, const SYSTEMTIME& systime)
+bool GetDateTimeFormat(
+	TCHAR* szResult,
+	int size,
+	const TCHAR* format,
+	const SYSTEMTIME& systime
+	)
 {
 	TCHAR szTime[10];
 	const TCHAR* p = format;

@@ -28,7 +28,10 @@
 #include "debug/CRunningTimer.h"
 
 // wchar_t1個分の文字を入力
-void CViewCommander::Command_WCHAR(wchar_t wcChar, bool bConvertEOL)
+void CViewCommander::Command_WCHAR(
+	wchar_t wcChar,
+	bool bConvertEOL
+	)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (selInfo.IsMouseSelecting()) {	// マウスによる範囲選択中
@@ -878,7 +881,10 @@ void CViewCommander::Command_DELETE_BACK(void)
 
 
 // 	上書き用の一文字削除	2009.04.11 ryoji
-void CViewCommander::DelCharForOverwrite(const wchar_t* pszInput, int nLen)
+void CViewCommander::DelCharForOverwrite(
+	const wchar_t* pszInput,
+	int nLen
+	)
 {
 	bool bEol = false;
 	bool bDelete = true;

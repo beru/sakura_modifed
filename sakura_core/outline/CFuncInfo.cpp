@@ -23,7 +23,7 @@ CFuncInfo::CFuncInfo(
 	const TCHAR*	pszFuncName,		//!< ŠÖ”–¼
 	const TCHAR*	pszFileName,
 	int				nInfo				//!< •t‰Áî•ñ
-)
+	)
 	:
 	m_nDepth(0) // [‚³
 {

@@ -65,7 +65,11 @@ static const DWORD p_helpids[] = {	//10000
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropBackup::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropBackup::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -445,7 +449,12 @@ int CPropBackup::GetData(HWND hwndDlg)
 	                       ・詳細設定OFF項目が非表示ではなかったので隠れていてもTooltipヘルプが表示される
 	                       ・詳細設定ONなのにバックアップ作成OFFだと詳細設定OFF項目のほうが表示される
 */
-static inline void ShowEnable(HWND hWnd, BOOL bShow, BOOL bEnable)
+static inline
+void ShowEnable(
+	HWND hWnd,
+	BOOL bShow,
+	BOOL bEnable
+	)
 {
 	::ShowWindow(hWnd, bShow? SW_SHOW: SW_HIDE);
 	::EnableWindow(hWnd, bEnable && bShow);		// bShow=false,bEnable=trueの場合ショートカットキーが変な動きをするので修正	2010/5/27 Uchi

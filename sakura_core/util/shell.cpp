@@ -57,7 +57,12 @@ int CALLBACK MYBrowseCallbackProc(
 
 
 // フォルダ選択ダイアログ
-BOOL SelectDir(HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TCHAR* strFolderName)
+BOOL SelectDir(
+	HWND hWnd,
+	const TCHAR* pszTitle,
+	const TCHAR* pszInitFolder,
+	TCHAR* strFolderName
+	)
 {
 	TCHAR szInitFolder[MAX_PATH];
 	_tcscpy_s(szInitFolder, pszInitFolder);
@@ -102,7 +107,10 @@ BOOL SelectDir(HWND hWnd, const TCHAR* pszTitle, const TCHAR* pszInitFolder, TCH
 	@author ryoji
 	@date 2007.05.19 新規
 */
-BOOL GetSpecialFolderPath(int nFolder, LPTSTR pszPath)
+BOOL GetSpecialFolderPath(
+	int nFolder,
+	LPTSTR pszPath
+	)
 {
 	LPMALLOC pMalloc;
 
@@ -133,7 +141,13 @@ static WNDPROC s_pOldPropSheetWndProc;	// プロパティシートの元のウィンドウプロシ
 	@author ryoji
 	@date 2007.05.25 新規
 */
-static LRESULT CALLBACK PropSheetWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static
+LRESULT CALLBACK PropSheetWndProc(
+	HWND hwnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	switch (uMsg) {
 	case WM_SHOWWINDOW:
@@ -245,7 +259,12 @@ static LRESULT CALLBACK PropSheetWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 	@author ryoji
 	@date 2007.05.25 新規
 */
-static int CALLBACK PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam)
+static
+int CALLBACK PropSheetProc(
+	HWND hwndDlg,
+	UINT uMsg,
+	LPARAM lParam
+	)
 {
 	// プロパティシートの初期化時にボタン追加、プロパティシートのサブクラス化を行う
 	if (uMsg == PSCB_INITIALIZED) {
@@ -358,9 +377,9 @@ HWND OpenHtmlHelp(
 	UINT		uCmd,	// [in] HTML Help に渡すコマンド
 	DWORD_PTR	data,	// [in] コマンドに応じたデータ
 	bool		msgflag	// [in] エラーメッセージを表示するか。省略時はtrue。
-)
+	)
 {
-	if (DLL_SUCCESS == g_cHtmlHelp.InitDll()) {
+	if (g_cHtmlHelp.InitDll() == DLL_SUCCESS) {
 		return g_cHtmlHelp.HtmlHelp(hWnd, szFile, uCmd, data);
 	}
 	if (msgflag) {
@@ -380,7 +399,11 @@ HWND OpenHtmlHelp(
 /*! ショートカット(.lnk)の解決
 	@date 2009.01.08 ryoji CoInitialize/CoUninitializeを削除（WinMainにOleInitialize/OleUninitializeを追加）
 */
-BOOL ResolveShortcutLink(HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath)
+BOOL ResolveShortcutLink(
+	HWND hwnd,
+	LPCTSTR lpszLinkFile,
+	LPTSTR lpszPath
+	)
 {
 	// 初期化
 	*lpszPath = 0; // assume failure
@@ -459,7 +482,8 @@ BOOL ResolveShortcutLink(HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath)
 	@date 2007/10/23 kobake CEditAppのメンバ関数に変更
 	@date 2007/10/23 kobake シグニチャ変更。constポインタを返すだけのインターフェースにしました。
 */
-static LPCTSTR GetHelpFilePath()
+static
+LPCTSTR GetHelpFilePath()
 {
 	static TCHAR szHelpFile[_MAX_PATH] = _T("");
 	if (szHelpFile[0] == _T('\0')) {
@@ -473,7 +497,11 @@ static LPCTSTR GetHelpFilePath()
 	@author ryoji
 	@date 2006.07.22 ryoji 新規
 */
-BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData)
+BOOL MyWinHelp(
+	HWND hwndCaller,
+	UINT uCommand,
+	DWORD_PTR dwData
+	)
 {
 	UINT uCommandOrg = uCommand;	// WinHelp のコマンド
 	bool bDesktop = false;	// デスクトップを親にしてヘルプ画面を出すかどうか
@@ -579,7 +607,12 @@ BOOL MyWinHelp(HWND hwndCaller, UINT uCommand, DWORD_PTR dwData)
 	2008.04.27 kobake CEditDoc::SelectFont から分離
 	2009.10.01 ryoji ポイントサイズ（1/10ポイント単位）引数追加
 */
-BOOL MySelectFont(LOGFONT* plf, INT* piPointSize, HWND hwndDlgOwner, bool FixedFontOnly)
+BOOL MySelectFont(
+	LOGFONT* plf,
+	INT* piPointSize,
+	HWND hwndDlgOwner,
+	bool FixedFontOnly
+	)
 {
 	// 2004.02.16 Moca CHOOSEFONTをメンバから外す
 	CHOOSEFONT cf = {0};

@@ -43,7 +43,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	CDocLineMgr*		pcDocLineMgr,	// [out]
 	const SLoadInfo&	sLoadInfo,		// [in]
 	SFileInfo*			pFileInfo		// [out]
-)
+	)
 {
 	LPCTSTR pszPath = sLoadInfo.cFilePath.c_str();
 
@@ -103,7 +103,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		CEol			cEol;
 		CNativeW		cUnicodeBuffer;
 		EConvertResult	eRead;
-		while (RESULT_FAILURE != (eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol ))) {
+		while ((eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol )) != RESULT_FAILURE) {
 			if (eRead == RESULT_LOSESOME) {
 				eRet = RESULT_LOSESOME;
 			}

@@ -55,7 +55,11 @@ static const DWORD p_helpids[] = {	//11000
 	@param lParam ÉpÉâÉÅÅ[É^2
 */
 INT_PTR CALLBACK CPropToolbar::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropToolbar::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -81,7 +85,7 @@ int Listbox_INSERTDATA(
 	HWND hWnd,				// handle to destination window 
 	int index,				// item index
 	int value
-)
+	)
 {
 	int nIndex1 = List_InsertItemData(hWnd, index, 1);
 	if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
@@ -112,7 +116,7 @@ int Listbox_INSERTDATA(
 int Listbox_ADDDATA(
 	HWND hWnd,              // handle to destination window 
 	int value
-)
+	)
 {
 	int nIndex1 = List_AddItemData(hWnd, 1);
 	if (nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE) {
@@ -135,7 +139,7 @@ INT_PTR CPropToolbar::DispatchEvent(
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
 	LPARAM	lParam 		// second message parameter
-)
+	)
 {
 	WORD				wNotifyCode;
 	WORD				wID;

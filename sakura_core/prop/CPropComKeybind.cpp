@@ -61,7 +61,11 @@ static const DWORD p_helpids[] = {	//10700
 	@param lParam パラメータ2
 */
 INT_PTR CALLBACK CPropKeybind::DlgProc_page(
-	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	return DlgProc(reinterpret_cast<pDispatchPage>(&CPropKeybind::DispatchEvent), hwndDlg, uMsg, wParam, lParam);
 }
@@ -69,7 +73,12 @@ INT_PTR CALLBACK CPropKeybind::DlgProc_page(
 
 // From Here Oct. 13, 2000 Studio CでMr.コーヒー氏に教わったやり方ですがうまくいってません
 // ウィンドウプロシージャの中で・・・
-LRESULT CALLBACK CPropComKeybindWndProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CPropComKeybindWndProc(
+	HWND hwndDlg,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam
+	)
 {
 	switch (uMsg) {
 	// WM_CTLCOLORSTATIC メッセージに対して
@@ -90,7 +99,7 @@ INT_PTR CPropKeybind::DispatchEvent(
 	UINT	uMsg,	// message
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;

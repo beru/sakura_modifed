@@ -75,7 +75,7 @@ bool CClipboard::SetText(
 	bool			bColumnSelect,
 	bool			bLineSelect,
 	UINT			uFormat
-)
+	)
 {
 	if (!m_bOpenResult) {
 		return false;
@@ -146,7 +146,7 @@ bool CClipboard::SetText(
 		BYTE* pClip = GlobalLockBYTE(hgClipSakura);
 		*((int*)pClip) = nDataLen; pClip += sizeof(int);									// データの長さ
 		wmemcpy((wchar_t*)pClip, pData, nDataLen ); pClip += nDataLen * sizeof(wchar_t);	// データ
-		*((wchar_t*)pClip) = L'\0'; pClip += sizeof(wchar_t);								// 終端ヌル
+		*((wchar_t*)pClip) = L'\0'; pClip += sizeof(wchar_t);								// 終端Null
 		::GlobalUnlock(hgClipSakura);
 
 		// クリップボードに設定
@@ -159,7 +159,7 @@ bool CClipboard::SetText(
 	HGLOBAL hgClipMSDEVColumn = NULL;
 	if (bColumnSelect) {
 		UINT uFormat = ::RegisterClipboardFormat(_T("MSDEVColumnSelect"));
-		if (0 != uFormat) {
+		if (uFormat != 0) {
 			hgClipMSDEVColumn = ::GlobalAlloc(
 				GMEM_MOVEABLE | GMEM_DDESHARE,
 				1
@@ -177,7 +177,7 @@ bool CClipboard::SetText(
 	HGLOBAL hgClipMSDEVLine = NULL;		// VS2008 以前の形式
 	if (bLineSelect) {
 		UINT uFormat = ::RegisterClipboardFormat(_T("MSDEVLineSelect"));
-		if (0 != uFormat) {
+		if (uFormat != 0) {
 			hgClipMSDEVLine = ::GlobalAlloc(
 				GMEM_MOVEABLE | GMEM_DDESHARE,
 				1
@@ -193,7 +193,7 @@ bool CClipboard::SetText(
 	HGLOBAL hgClipMSDEVLine2 = NULL;	// VS2010 形式
 	if (bLineSelect) {
 		UINT uFormat = ::RegisterClipboardFormat(_T("VisualStudioEditorOperationsLineCutCopyClipboardTag"));
-		if (0 != uFormat) {
+		if (uFormat != 0) {
 			hgClipMSDEVLine2 = ::GlobalAlloc(
 				GMEM_MOVEABLE | GMEM_DDESHARE,
 				1

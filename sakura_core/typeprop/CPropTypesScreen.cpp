@@ -145,7 +145,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 	UINT		uMsg,		// message
 	WPARAM		wParam,		// first message parameter
 	LPARAM		lParam 		// second message parameter
-)
+	)
 {
 	WORD		wNotifyCode;
 	WORD		wID;
