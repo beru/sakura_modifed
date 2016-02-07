@@ -104,28 +104,28 @@ int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 }
 
 
-
 // コード変換 SJIS→Unicode
-EConvertResult CShiftJis::SJISToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
+EConvertResult CShiftJis::SJISToUnicode(
+	const CMemory& cSrc,
+	CNativeW* pDstMem
+	)
 {
 	// ソース取得
 	int nSrcLen;
-	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
+	const char* pSrc = reinterpret_cast<const char*>(cSrc.GetRawPtr(&nSrcLen));
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
 		return RESULT_COMPLETE;
 	}
 
 	// 変換先バッファサイズを設定してメモリ領域確保
-	std::vector<wchar_t> dst(nSrcLen);
-	wchar_t* pDst = &dst[0];
+	pDstMem->AllocStringBuffer(nSrcLen + 1);
+	wchar_t* pDst = pDstMem->GetStringPtr();
 	
 	// 変換
 	bool bError;
 	int nDstLen = SjisToUni(pSrc, nSrcLen, pDst, &bError);
-
-	// pDstを更新
-	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
+	pDstMem->_SetStringLength(nDstLen);
 
 	if (!bError) {
 		return RESULT_COMPLETE;
@@ -133,7 +133,6 @@ EConvertResult CShiftJis::SJISToUnicode( const CMemory& cSrc, CNativeW* pDstMem 
 		return RESULT_LOSESOME;
 	}
 }
-
 
 
 /*
