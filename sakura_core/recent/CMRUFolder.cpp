@@ -80,7 +80,7 @@ HMENU CMRUFolder::CreateMenu(HMENU	hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 
 		const TCHAR* pszFolder = m_cRecentFolder.GetItemText(i);
 		bool bFavorite = m_cRecentFolder.IsFavorite(i);
-		bool bFavoriteLabel = bFavorite && !m_pShareData->m_Common.m_sWindow.m_bMenuIcon;
+		bool bFavoriteLabel = bFavorite && !m_pShareData->m_common.m_sWindow.m_bMenuIcon;
 		CFileNameManager::getInstance()->GetMenuFullLabel(szMenu, _countof(szMenu), true, pszFolder, -1, false, CODE_NONE, bFavoriteLabel, i, true, dcFont.GetHDC());
 
 		// メニューに追加
@@ -134,10 +134,10 @@ void CMRUFolder::Add(const TCHAR* pszFolder)
 
 	// すでに登録されている場合は、除外指定を無視する
 	if (m_cRecentFolder.FindItemByText(pszFolder) == -1) {
-		int nSize = m_pShareData->m_sHistory.m_aExceptMRU.size();
+		int nSize = m_pShareData->m_history.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pszFolder, szExceptMRU)) {
 				return;
 			}

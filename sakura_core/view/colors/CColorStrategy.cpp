@@ -23,7 +23,7 @@
 */
 
 #include "StdAfx.h"
-#include "view/CEditView.h" // SColorStrategyInfo
+#include "view/CEditView.h" // ColorStrategyInfo
 #include "view/colors/CColorStrategy.h"
 #include "CColor_Comment.h"
 #include "CColor_Quote.h"
@@ -48,7 +48,7 @@ bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
 	@retval true 色の変更あり
 	@retval false 色の変更なし
 */
-bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
+bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 {
 	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pcView);
@@ -164,7 +164,7 @@ bool SColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 
 	@date 2013.05.11 novice 実際の変更は呼び出し側で行う
 */
-void SColorStrategyInfo::DoChangeColor(CColor3Setting *pcColor)
+void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 {
 	if (m_pStrategySelect) {
 		m_cIndex.eColorIndex = m_pStrategySelect->GetStrategyColor();
@@ -302,7 +302,7 @@ void CColorStrategyPool::OnChangeSetting(void)
 	m_pcDoubleQuote = static_cast<CColor_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
 
 	// 色分けをしない場合に、処理をスキップできるように確認する
-	const STypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+	const TypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
 	EColorIndexType bSkipColorTypeTable[] = {
 		COLORIDX_DIGIT,
 		COLORIDX_COMMENT,
@@ -376,7 +376,7 @@ bool CColorStrategyPool::IsSkipBeforeLayout()
   日本語名などは  ColorInfo_DEFAULT CDocTypeSetting.cpp
   CShareDataからglobalに移動
 */
-const SColorAttributeData g_ColorAttributeArr[] =
+const ColorAttributeData g_ColorAttributeArr[] =
 {
 	{_T("TXT"), COLOR_ATTRIB_FORCE_DISP | COLOR_ATTRIB_NO_EFFECTS},
 	{_T("RUL"), COLOR_ATTRIB_NO_EFFECTS},

@@ -298,9 +298,9 @@ INT_PTR CPropKeyword::DispatchEvent(
 					static TCHAR		pszLabel[1024];
 					pszLabel[0] = 0;
 					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
-						auto type = std::make_unique<STypeConfig>();
+						auto type = std::make_unique<TypeConfig>();
 						CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
-						// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
+						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
 						if (nIndex1 == m_Types_nKeyWordSetIdx[i].index[0]
 						||  nIndex1 == m_Types_nKeyWordSetIdx[i].index[1]
 						||  nIndex1 == m_Types_nKeyWordSetIdx[i].index[2]
@@ -330,7 +330,7 @@ INT_PTR CPropKeyword::DispatchEvent(
 					}
 					// 削除対象のセットを使用しているファイルタイプのセットをクリア
 					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
-						// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
+						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 						for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 							if (nIndex1 == m_Types_nKeyWordSetIdx[i].index[j]) {
 								m_Types_nKeyWordSetIdx[i].index[j] = -1;

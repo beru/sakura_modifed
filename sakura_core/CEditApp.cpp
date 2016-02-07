@@ -57,7 +57,7 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_pcGrepAgent = new CGrepAgent();
 
 	// 編集モード
-	CAppMode::getInstance();	// ウィンドウよりも前にイベントを受け取るためにここでインスタンス作成
+	AppMode::getInstance();	// ウィンドウよりも前にイベントを受け取るためにここでインスタンス作成
 
 	// マクロ
 	m_pcSMacroMgr = new CSMacroMgr();

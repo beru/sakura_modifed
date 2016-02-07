@@ -54,7 +54,7 @@ void CViewCommander::Command_WCHAR(
 	// 現在位置にデータを挿入
 	CNativeW cmemDataW2;
 	cmemDataW2 = wcChar;
-	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) { 
+	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
 			CEol cWork = pDoc->m_cDocEditor.GetNewLineCode();
@@ -204,7 +204,7 @@ end_of_for:;
 	// 2005.10.11 ryoji 改行時に末尾の空白を削除
 	if (WCODE::IsLineDelimiter(
 			wcChar,
-			GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+			GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
 		)
 		&& typeData->m_bRTrimPrevLine
 	) {	// 改行時に末尾の空白を削除
@@ -370,7 +370,7 @@ void CViewCommander::Command_UNDO(void)
 			}
 
 			switch (pcOpe->GetCode()) {
-			case OPE_INSERT:
+			case eOpeCode::Insert:
 				{
 					CInsertOpe* pcInsertOpe = static_cast<CInsertOpe*>(pcOpe);
 
@@ -404,7 +404,7 @@ void CViewCommander::Command_UNDO(void)
 					selInfo.m_sSelect.Clear(-1);
 				}
 				break;
-			case OPE_DELETE:
+			case eOpeCode::Delete:
 				{
 					CDeleteOpe* pcDeleteOpe = static_cast<CDeleteOpe*>(pcOpe);
 
@@ -430,7 +430,7 @@ void CViewCommander::Command_UNDO(void)
 					pcDeleteOpe->m_cOpeLineData.clear();
 				}
 				break;
-			case OPE_REPLACE:
+			case eOpeCode::Replace:
 				{
 					CReplaceOpe* pcReplaceOpe = static_cast<CReplaceOpe*>(pcOpe);
 
@@ -456,7 +456,7 @@ void CViewCommander::Command_UNDO(void)
 					pcReplaceOpe->m_pcmemDataDel.clear();
 				}
 				break;
-			case OPE_MOVECARET:
+			case eOpeCode::MoveCaret:
 				// カーソルを移動
 				if (bFastMode) {
 					caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_After);
@@ -470,7 +470,7 @@ void CViewCommander::Command_UNDO(void)
 				if (i == 0) {
 					layoutMgr._DoLayout();
 					GetEditWindow()->ClearViewCaretPosInfo();
-					if (GetDocument()->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+					if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
@@ -623,7 +623,7 @@ void CViewCommander::Command_REDO(void)
 				caret.MoveCursor(ptCaretPos_Before, (i == 0));
 			}
 			switch (pcOpe->GetCode()) {
-			case OPE_INSERT:
+			case eOpeCode::Insert:
 				{
 					CInsertOpe* pcInsertOpe = static_cast<CInsertOpe*>(pcOpe);
 
@@ -650,7 +650,7 @@ void CViewCommander::Command_REDO(void)
 					pcInsertOpe->m_cOpeLineData.clear();
 				}
 				break;
-			case OPE_DELETE:
+			case eOpeCode::Delete:
 				{
 					CDeleteOpe* pcDeleteOpe = static_cast<CDeleteOpe*>(pcOpe);
 
@@ -679,7 +679,7 @@ void CViewCommander::Command_REDO(void)
 					);
 				}
 				break;
-			case OPE_REPLACE:
+			case eOpeCode::Replace:
 				{
 					CReplaceOpe* pcReplaceOpe = static_cast<CReplaceOpe*>(pcOpe);
 
@@ -709,14 +709,14 @@ void CViewCommander::Command_REDO(void)
 					pcReplaceOpe->m_pcmemDataIns.clear();
 				}
 				break;
-			case OPE_MOVECARET:
+			case eOpeCode::MoveCaret:
 				break;
 			}
 			if (bFastMode) {
 				if (i == nOpeBlkNum - 1) {
 					layoutMgr._DoLayout();
 					GetEditWindow()->ClearViewCaretPosInfo();
-					if (GetDocument()->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+					if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
@@ -898,14 +898,14 @@ void CViewCommander::DelCharForOverwrite(
 		if (nIdxTo >= pcLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pcLayout->GetLayoutEol() != EOL_NONE) {
-				if (GetDllShareData().m_Common.m_sEdit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
+				if (GetDllShareData().m_common.m_sEdit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
 					// 現在位置が改行ならば削除しない
 					bDelete = false;
 				}
 			}
 		}else {
 			// 文字幅に合わせてスペースを詰める
-			if (GetDllShareData().m_Common.m_sEdit.m_bOverWriteFixMode) {
+			if (GetDllShareData().m_common.m_sEdit.m_bOverWriteFixMode) {
 				const CStringRef line = pcLayout->GetDocLineRef()->GetStringRefWithEOL();
 				CLogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
@@ -919,7 +919,7 @@ void CViewCommander::DelCharForOverwrite(
 						if (c != WCODE::TAB
 							&& !WCODE::IsLineDelimiter(
 								c,
-								GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+								GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
 							)
 						) {
 							nDelLen = 2;

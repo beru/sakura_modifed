@@ -17,7 +17,7 @@
 #include "global.h"
 #include "CProcess.h"
 
-class CControlTray;
+class ControlTray;
 
 /*-----------------------------------------------------------------------
 クラスの宣言
@@ -25,14 +25,14 @@ class CControlTray;
 /*!
 	@brief コントロールプロセスクラス
 	
-	コントロールプロセスはCControlTrayクラスのインスタンスを作る。
+	コントロールプロセスはControlTrayクラスのインスタンスを作る。
 	
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
-class CControlProcess : public CProcess {
+class ControlProcess : public Process {
 public:
-	CControlProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine) :
-		CProcess(hInstance, lpCmdLine),
+	ControlProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine) :
+		Process(hInstance, lpCmdLine),
 		// 2006.04.10 ryoji 同期オブジェクトのハンドルを初期化
 		m_hMutex(NULL),
 		m_hMutexCP(NULL),
@@ -41,9 +41,9 @@ public:
 	{
 	}
 
-	virtual ~CControlProcess();
+	virtual ~ControlProcess();
 protected:
-	CControlProcess();
+	ControlProcess();
 	virtual bool InitializeProcess();
 	virtual bool MainLoop();
 	virtual void OnExitProcess();
@@ -52,6 +52,6 @@ private:
 	HANDLE			m_hMutex;				// アプリケーション実行検出用ミューテックス
 	HANDLE			m_hMutexCP;				// コントロールプロセスミューテックス
 	HANDLE			m_hEventCPInitialized;	// コントロールプロセス初期化完了イベント 2006.04.10 ryoji
-	CControlTray*	m_pcTray;
+	ControlTray*	m_pcTray;
 };
 

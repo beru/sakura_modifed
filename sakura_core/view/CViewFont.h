@@ -40,7 +40,7 @@ public:
 		CreateFont(plf);
 	}
 
-	HFONT ChooseFontHandle(SFontAttr sFontAttr) const;		// フォントを選ぶ
+	HFONT ChooseFontHandle(FontAttr sFontAttr) const;		// フォントを選ぶ
 
 	HFONT GetFontHan() const {
 		return m_hFont_HAN;

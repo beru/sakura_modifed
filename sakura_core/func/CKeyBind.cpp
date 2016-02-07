@@ -133,7 +133,7 @@ EFunctionCode CKeyBind::GetFuncCode(
 	}else {
 		// 2012.12.10 aroka キーコード検索時のループを除去
 		DLLSHAREDATA* pShareData = &GetDllShareData();
-		return GetFuncCodeAt(pKeyNameArr[pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
+		return GetFuncCodeAt(pKeyNameArr[pShareData->m_common.m_sKeyBind.m_VKeyToKeyNameArr[nCmd]], nSts, bGetDefFuncCode);
 	}
 	return F_DEFAULT;
 }
@@ -312,7 +312,7 @@ int CKeyBind::GetKeyStr(
 
 	// 先にキー部分を調査する
 	for (int j=0; j<8; ++j) {
-		for (int i=MOUSEFUNCTION_KEYBEGIN; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
+		for (int i=(int)eMouseFunction::KeyBegin; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
@@ -321,7 +321,7 @@ int CKeyBind::GetKeyStr(
 
 	// 後にマウス部分を調査する
 	for (int j=0; j<8; ++j) {
-		for (int i=0; i<MOUSEFUNCTION_KEYBEGIN; /* 1を加えてはいけない */) {
+		for (int i=0; i<(int)eMouseFunction::KeyBegin; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
@@ -402,7 +402,7 @@ TCHAR* CKeyBind::MakeMenuLabel(const TCHAR* sName, const TCHAR* sKey)
 	if (!sKey || sKey[0] == L'\0') {
 		return const_cast<TCHAR*>(sName);
 	}else {
-		if (!GetDllShareData().m_Common.m_sMainMenu.m_bMainMenuKeyParentheses
+		if (!GetDllShareData().m_common.m_sMainMenu.m_bMainMenuKeyParentheses
 			&& (
 				((p = auto_strchr(sName, sKey[0])))
 				|| ((p = auto_strchr(sName, _totlower(sKey[0]))))
@@ -500,13 +500,13 @@ EFunctionCode CKeyBind::GetDefFuncCode(int nKeyCode, int nState)
 	if (nKeyCode == VK_F4) {
 		if (nState == _CTRL) {
 			nDefFuncCode = F_FILECLOSE;	// 閉じて(無題)
-			if (pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
+			if (pShareData->m_common.m_sTabBar.m_bDispTabWnd && !pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin) {
 				nDefFuncCode = F_WINCLOSE;	// 閉じる
 			}
 		}else if (nState == _ALT) {
 			nDefFuncCode = F_WINCLOSE;	// 閉じる
-			if (pShareData->m_Common.m_sTabBar.m_bDispTabWnd && !pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin) {
-				if (!pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin) {
+			if (pShareData->m_common.m_sTabBar.m_bDispTabWnd && !pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin) {
+				if (!pShareData->m_common.m_sTabBar.m_bTab_CloseOneWin) {
 					nDefFuncCode = F_GROUPCLOSE;	// グループを閉じる	// 2007.06.20 ryoji
 				}
 			}
@@ -808,7 +808,7 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	/* 共通設定の規定値 */
 	/********************/
 	const int nKeyDataInitNum = _countof(KeyDataInit);
-	const int KEYNAME_SIZE = _countof(pShareData->m_Common.m_sKeyBind.m_pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
+	const int KEYNAME_SIZE = _countof(pShareData->m_common.m_sKeyBind.m_pKeyNameArr) -1;// 最後の１要素はダミー用に予約 2012.11.25 aroka
 	// From Here 2007.11.04 genta バッファオーバーラン防止
 	assert(!(nKeyDataInitNum > KEYNAME_SIZE));
 //	if (nKeyDataInitNum > KEYNAME_SIZE) {
@@ -825,16 +825,16 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	// インデックス用ダミー作成
 	SetKeyNameArrVal(pShareData, KEYNAME_SIZE, &dummy[0]);
 	// インデックス作成 重複した場合は先頭にあるものを優先
-	for (int ii=0; ii<_countof(pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr); ++ii) {
-		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[ii] = KEYNAME_SIZE;
+	for (int ii=0; ii<_countof(pShareData->m_common.m_sKeyBind.m_VKeyToKeyNameArr); ++ii) {
+		pShareData->m_common.m_sKeyBind.m_VKeyToKeyNameArr[ii] = KEYNAME_SIZE;
 	}
 	for (int i=nKeyDataInitNum-1; i>=0; --i) {
-		pShareData->m_Common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
+		pShareData->m_common.m_sKeyBind.m_VKeyToKeyNameArr[KeyDataInit[i].m_nKeyCode] = (BYTE)i;
 	}
 	for (int i=0; i<nKeyDataInitNum; ++i) {
 		SetKeyNameArrVal(pShareData, i, &KeyDataInit[i]);
 	}
-	pShareData->m_Common.m_sKeyBind.m_nKeyNameArrNum = nKeyDataInitNum;
+	pShareData->m_common.m_sKeyBind.m_nKeyNameArrNum = nKeyDataInitNum;
 	return true;
 }
 
@@ -843,7 +843,7 @@ void CShareData::RefreshKeyAssignString(DLLSHAREDATA* pShareData)
 {
 	const int nKeyDataInitNum = _countof(KeyDataInit);
 	for (int i=0; i<nKeyDataInitNum; ++i) {
-		KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[i];
+		KEYDATA* pKeydata = &pShareData->m_common.m_sKeyBind.m_pKeyNameArr[i];
 		if (KeyDataInit[i].m_nKeyNameId <= 0xFFFF) {
 			_tcscpy(pKeydata->m_szKeyName, LS(KeyDataInit[i].m_nKeyNameId));
 		}
@@ -861,7 +861,7 @@ static void SetKeyNameArrVal(
 	const KEYDATAINIT*	pKeydataInit
 	)
 {
-	KEYDATA* pKeydata = &pShareData->m_Common.m_sKeyBind.m_pKeyNameArr[nIdx];
+	KEYDATA* pKeydata = &pShareData->m_common.m_sKeyBind.m_pKeyNameArr[nIdx];
 	pKeydata->m_nKeyCode = pKeydataInit->m_nKeyCode;
 	if (0xFFFF < pKeydataInit->m_nKeyNameId) {
 		_tcscpy(pKeydata->m_szKeyName, pKeydataInit->m_pszKeyName);

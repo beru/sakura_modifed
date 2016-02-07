@@ -29,13 +29,13 @@ class CMemory;
 */
 struct GrepInfo {
 	CNativeW		cmGrepKey;				//!< 検索キー
-	CNativeW		cmGrepRep;			//!< 置換キー
+	CNativeW		cmGrepRep;				//!< 置換キー
 	CNativeT		cmGrepFile;				//!< 検索対象ファイル
 	CNativeT		cmGrepFolder;			//!< 検索対象フォルダ
-	SSearchOption	sGrepSearchOption;		//!< 検索オプション
+	SearchOption	grepSearchOption;		//!< 検索オプション
 	bool			bGrepCurFolder;			//!< カレントディレクトリを維持
-	bool			bGrepStdout;		//!< 標準出力モード
-	bool			bGrepHeader;		//!< ヘッダ情報表示
+	bool			bGrepStdout;			//!< 標準出力モード
+	bool			bGrepHeader;			//!< ヘッダ情報表示
 	bool			bGrepSubFolder;			//!< サブフォルダを検索する
 	ECodeType		nGrepCharSet;			//!< 文字コードセット
 	int				nGrepOutputStyle;		//!< 結果出力形式
@@ -43,9 +43,9 @@ struct GrepInfo {
 	bool			bGrepOutputFileOnly;	//!< ファイル毎最初のみ検索
 	bool			bGrepOutputBaseFolder;	//!< ベースフォルダ表示
 	bool			bGrepSeparateFolder;	//!< フォルダ毎に表示
-	bool			bGrepReplace;		//!< Grep置換
-	bool			bGrepPaste;			//!< クリップボードから貼り付け
-	bool			bGrepBackup;		//!< 置換でバックアップを保存
+	bool			bGrepReplace;			//!< Grep置換
+	bool			bGrepPaste;				//!< クリップボードから貼り付け
+	bool			bGrepBackup;			//!< 置換でバックアップを保存
 };
 
 
@@ -56,9 +56,9 @@ struct GrepInfo {
 /*!
 	@brief コマンドラインパーサ クラス
 */
-class CCommandLine : public TSingleton<CCommandLine> {
-	friend class TSingleton<CCommandLine>;
-	CCommandLine();
+class CommandLine : public TSingleton<CommandLine> {
+	friend class TSingleton<CommandLine>;
+	CommandLine();
 
 	static int CheckCommandLine(
 		LPTSTR	str,		//!< [in] 検証する文字列（先頭の-は含まない）

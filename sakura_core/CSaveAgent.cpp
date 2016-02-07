@@ -40,14 +40,14 @@ CSaveAgent::CSaveAgent()
 }
 
 
-ECallbackResult CSaveAgent::OnCheckSave(SSaveInfo* pSaveInfo)
+ECallbackResult CSaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
 	//	Jun.  5, 2004 genta
 	//	ビューモードのチェックをCEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
-	if (CAppMode::getInstance()->IsViewMode()
+	if (AppMode::getInstance()->IsViewMode()
 		&& pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())
 	) {
 		ErrorBeep();
@@ -102,7 +102,7 @@ ECallbackResult CSaveAgent::OnCheckSave(SSaveInfo* pSaveInfo)
 	return CALLBACK_CONTINUE;
 }
 
-void CSaveAgent::OnBeforeSave(const SSaveInfo& sSaveInfo)
+void CSaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -110,7 +110,7 @@ void CSaveAgent::OnBeforeSave(const SSaveInfo& sSaveInfo)
 	CDocVisitor(pcDoc).SetAllEol(sSaveInfo.cEol);
 }
 
-void CSaveAgent::OnSave(const SSaveInfo& sSaveInfo)
+void CSaveAgent::OnSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -130,7 +130,7 @@ void CSaveAgent::OnSave(const SSaveInfo& sSaveInfo)
 	}
 }
 
-void CSaveAgent::OnAfterSave(const SSaveInfo& sSaveInfo)
+void CSaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 

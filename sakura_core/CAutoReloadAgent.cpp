@@ -45,14 +45,14 @@ CAutoReloadAgent::CAutoReloadAgent()
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CAutoReloadAgent::OnBeforeSave(const SSaveInfo& sSaveInfo)
+void CAutoReloadAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
 	//	Sep. 7, 2003 genta
 	//	保存が完了するまではファイル更新の通知を抑制する
 	PauseWatching();
 }
 
-void CAutoReloadAgent::OnAfterSave(const SSaveInfo& sSaveInfo)
+void CAutoReloadAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	//	Sep. 7, 2003 genta
 	//	ファイル更新の通知を元に戻す
@@ -69,7 +69,7 @@ void CAutoReloadAgent::OnAfterSave(const SSaveInfo& sSaveInfo)
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CAutoReloadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
+void CAutoReloadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	//pcDoc->m_cDocFile.m_sFileInfo.cFileTime.SetFILETIME(ftime); //#####既に設定済みのはず
 }
@@ -80,7 +80,7 @@ void CAutoReloadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 bool CAutoReloadAgent::_ToDoChecking() const
 {
-	const CommonSetting_File& setting = GetDllShareData().m_Common.m_sFile;
+	const CommonSetting_File& setting = GetDllShareData().m_common.m_sFile;
 	HWND hwndActive = ::GetActiveWindow();
 	if (0
 		|| IsPausing()
@@ -121,7 +121,7 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 {
 	// 未編集で再ロード時の遅延
 	if (m_eWatchUpdate == WU_AUTOLOAD) {
-		if (++m_nDelayCount < GetDllShareData().m_Common.m_sFile.m_nAutoloadDelay) {
+		if (++m_nDelayCount < GetDllShareData().m_common.m_sFile.m_nAutoloadDelay) {
 			return;
 		}
 		m_nDelayCount = 0;

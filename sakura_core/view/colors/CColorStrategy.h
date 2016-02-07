@@ -81,14 +81,14 @@ class CColor_Found;
 class CColor_Select;
 
 // 色設定
-struct CColor3Setting {
+struct Color3Setting {
 	EColorIndexType eColorIndex;    // 選択を含む現在の色
 	EColorIndexType eColorIndex2;   // 選択以外の現在の色
 	EColorIndexType eColorIndexBg;  // 背景色
 };
 
-struct SColorStrategyInfo {
-	SColorStrategyInfo()
+struct ColorStrategyInfo {
+	ColorStrategyInfo()
 		:
 		m_sDispPosBegin(0, 0),
 		m_pStrategy(NULL),
@@ -118,11 +118,11 @@ struct SColorStrategyInfo {
 	CColor_Found*		m_pStrategyFound;
 	CColor_Select*		m_pStrategySelect;
 	EColorIndexType		m_colorIdxBackLine;
-	CColor3Setting		m_cIndex;
+	Color3Setting		m_cIndex;
 
 	// 色の切り替え
 	bool CheckChangeColor(const CStringRef& cLineStr);
-	void DoChangeColor(CColor3Setting *pcColor);
+	void DoChangeColor(Color3Setting *pcColor);
 	EColorIndexType GetCurrentColor() const { return m_cIndex.eColorIndex; }
 	EColorIndexType GetCurrentColor2() const { return m_cIndex.eColorIndex2; }
 	EColorIndexType GetCurrentColorBg() const { return m_cIndex.eColorIndexBg; }
@@ -175,7 +175,7 @@ public:
 	}
 
 protected:
-	const STypeConfig* m_pTypeData;
+	const TypeConfig* m_pTypeData;
 };
 
 #include "util/design_template.h"

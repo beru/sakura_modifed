@@ -38,7 +38,7 @@ class CModifyManager :
 	CModifyManager() {}
 
 public:
-	void OnAfterSave(const SSaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& sSaveInfo);
 
 };
 

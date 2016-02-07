@@ -484,7 +484,7 @@ bool CPluginManager::LoadAllPlugin(CommonSetting* common)
 #ifdef _UNICODE
 	DEBUG_TRACE(_T("Enter LoadAllPlugin\n"));
 #endif
-	CommonSetting_Plugin& pluginSetting = (common ? common->m_sPlugin : GetDllShareData().m_Common.m_sPlugin);
+	CommonSetting_Plugin& pluginSetting = (common ? common->m_sPlugin : GetDllShareData().m_common.m_sPlugin);
 
 	if (!pluginSetting.m_bEnablePlugin) {
 		return true;
@@ -492,7 +492,7 @@ bool CPluginManager::LoadAllPlugin(CommonSetting* common)
 
 	std::tstring szLangName;
 	{
-		std::tstring szDllName = GetDllShareData().m_Common.m_sWindow.m_szLanguageDll;
+		std::tstring szDllName = GetDllShareData().m_common.m_sWindow.m_szLanguageDll;
 		if (szDllName == _T("")) {
 			szLangName = _T("ja_JP");
 		}else {

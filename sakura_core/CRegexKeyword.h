@@ -22,7 +22,7 @@
 #include "extmodule/CBregexp.h"
 #include "config/maxdata.h" // MAX_REGEX_KEYWORD
 
-struct STypeConfig;
+struct TypeConfig;
 
 #define USE_PARENT	// 親を使ってキーワード格納領域を削減する。
 
@@ -64,7 +64,7 @@ public:
 	// 行検索
 	bool RegexIsKeyword(const CStringRef& cStr, int nPos, int* nMatchLen, int* nMatchColor);
 	// タイプ設定
-	bool RegexKeySetTypes(const STypeConfig* pTypesPtr);
+	bool RegexKeySetTypes(const TypeConfig* pTypesPtr);
 
 	// 書式(囲み)チェック
 	static bool RegexKeyCheckSyntax(const wchar_t* s);
@@ -82,7 +82,7 @@ public:
 	bool			m_bUseRegexKeyword;			// 正規表現キーワードを使用する・しない
 
 private:
-	const STypeConfig*	m_pTypes;				// タイプ設定へのポインタ(呼び出し側が持っているもの)
+	const TypeConfig*	m_pTypes;				// タイプ設定へのポインタ(呼び出し側が持っているもの)
 	int				m_nTypeId;					// タイプ設定ID
 	DWORD			m_nCompiledMagicNumber;		// コンパイル済みか？
 	int				m_nRegexKeyCount;			// 現在のキーワード数

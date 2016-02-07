@@ -39,7 +39,7 @@ public:
 	HWND DoModeless(HINSTANCE, HWND, LPARAM, bool);	// モーダルダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：置換・検索対象となるビューの変更
 
-	SSearchOption	m_sSearchOption;	// 検索オプション
+	SearchOption	m_searchOption;	// 検索オプション
 	bool			m_bConsecutiveAll;	//「すべて置換」は置換の繰返し  2007.01.16 ryoji
 	std::wstring	m_strText;			// 検索文字列
 	std::wstring	m_strText2;			// 置換後文字列
@@ -56,9 +56,9 @@ public:
 
 protected:
 	CRecentSearch			m_cRecentSearch;
-	SComboBoxItemDeleter	m_comboDelText;
+	ComboBoxItemDeleter	m_comboDelText;
 	CRecentReplace			m_cRecentReplace;
-	SComboBoxItemDeleter	m_comboDelText2;
+	ComboBoxItemDeleter	m_comboDelText2;
 	CFontAutoDeleter		m_cFontText;
 	CFontAutoDeleter		m_cFontText2;
 

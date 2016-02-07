@@ -32,7 +32,7 @@
 */
 #pragma once
 
-struct SEncodingConfig;
+struct EncodingConfig;
 
 #include "_main/global.h"
 
@@ -89,7 +89,7 @@ class CESI {
 public:
 
 	virtual ~CESI() { ; }
-	explicit CESI(const SEncodingConfig& ref) : m_pEncodingConfig(&ref) {
+	explicit CESI(const EncodingConfig& ref) : m_pEncodingConfig(&ref) {
 		m_dwStatus = ESI_NOINFORMATION;
 		m_nTargetDataLen = -1;
 		m_eMetaName = CODE_NONE;
@@ -212,7 +212,7 @@ protected:
 
 
 public:
-	const SEncodingConfig* m_pEncodingConfig;
+	const EncodingConfig* m_pEncodingConfig;
 
 #ifdef _DEBUG
 public:

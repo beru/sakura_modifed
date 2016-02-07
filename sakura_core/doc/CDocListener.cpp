@@ -35,11 +35,11 @@
 #include "doc/CDocListener.h"
 #include "doc/CEditDoc.h"
 
-bool SLoadInfo::IsSamePath(LPCTSTR pszPath) const
+bool LoadInfo::IsSamePath(LPCTSTR pszPath) const
 {
 	return _tcsicmp(this->cFilePath, pszPath) == 0;
 }
-bool SSaveInfo::IsSamePath(LPCTSTR pszPath) const
+bool SaveInfo::IsSamePath(LPCTSTR pszPath) const
 {
 	return _tcsicmp(this->cFilePath, pszPath) == 0;
 }
@@ -104,19 +104,19 @@ CDocSubject::~CDocSubject()
 	return eRet; \
 }
 
-DEF_NOTIFY2(CheckLoad, SLoadInfo*)
-VOID_NOTIFY2(BeforeLoad, SLoadInfo*)
-CORE_NOTIFY2(Load, const SLoadInfo&)
+DEF_NOTIFY2(CheckLoad, LoadInfo*)
+VOID_NOTIFY2(BeforeLoad, LoadInfo*)
+CORE_NOTIFY2(Load, const LoadInfo&)
 VOID_NOTIFY2(Loading, int)
-VOID_NOTIFY2(AfterLoad, const SLoadInfo&)
+VOID_NOTIFY2(AfterLoad, const LoadInfo&)
 VOID_NOTIFY2(FinalLoad, ELoadResult)
 
-DEF_NOTIFY2(CheckSave, SSaveInfo*)
-DEF_NOTIFY2(PreBeforeSave, SSaveInfo*)
-VOID_NOTIFY2(BeforeSave, const SSaveInfo&)
-VOID_NOTIFY2(Save, const SSaveInfo&)
+DEF_NOTIFY2(CheckSave, SaveInfo*)
+DEF_NOTIFY2(PreBeforeSave, SaveInfo*)
+VOID_NOTIFY2(BeforeSave, const SaveInfo&)
+VOID_NOTIFY2(Save, const SaveInfo&)
 VOID_NOTIFY2(Saving, int)
-VOID_NOTIFY2(AfterSave, const SSaveInfo&)
+VOID_NOTIFY2(AfterSave, const SaveInfo&)
 VOID_NOTIFY2(FinalSave, ESaveResult)
 
 DEF_NOTIFY(BeforeClose)

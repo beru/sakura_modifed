@@ -41,7 +41,7 @@ static void StringToOpeLineData(const wchar_t* pLineData, int nLineDataLen, COpe
 {
 	int nBegin = 0;
 	int i;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	for (i=0; i<nLineDataLen; ++i) {
 		if (WCODE::IsLineDelimiter(pLineData[i], bExtEol)) {
 			if (i + 1 < nLineDataLen && WCODE::CR == pLineData[i] && WCODE::LF == pLineData[i + 1]) {
@@ -524,7 +524,7 @@ void CEditView::DeleteData(
 					nIdxFrom = LineColumnToIndex(pcLayout, rcSel.left);
 					nIdxTo	 = LineColumnToIndex(pcLayout, rcSel.right);
 
-					bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+					bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 					for (CLogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
 						if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 							nIdxTo = i;
@@ -613,7 +613,7 @@ void CEditView::DeleteData(
 		// 指定された桁の文字のバイト数を調べる
 		CLogicInt	nNxtIdx;
 		CLayoutInt	nNxtPos;
-		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		if (WCODE::IsLineDelimiter(pLine[nCurIdx], bExtEol)) {
 			// 改行
 			nNxtIdx = nCurIdx + pcLayout->GetLayoutEol().GetLen();

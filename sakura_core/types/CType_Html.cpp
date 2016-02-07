@@ -35,7 +35,7 @@
 // Feb. 7, 2001 JEPRO .cc/cp/c++/.hpp/hxx/hh/hp/h++を追加	//Mar. 15, 2001 JEPRO .hmを追加
 // Feb. 2, 2005 genta 苦情が多いのでシングルクォートの色分けはHTMLでは行わない
 // 2012.01.03 シングルクォートの色分けをする
-void CType_Html::InitTypeConfigImp(STypeConfig* pType)
+void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 {
 	_tcscpy(pType->m_szTypeName, _T("HTML"));
 	_tcscpy(pType->m_szTypeExts, _T("html,htm,shtml,plg"));
@@ -251,7 +251,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							}
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
-								bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+								bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 								for (j-=k-1; i+j+k<nLineLen && k<_countof(szTitle)-1; ++k) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k], bExtEol)) {
 										break;

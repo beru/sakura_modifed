@@ -76,8 +76,8 @@ class CAutoMarkMgr; /// 2002/2/3 aroka ヘッダ軽量化 to here
 class CEditDoc;	//	2002/5/13 YAZAKI ヘッダ軽量化
 class CLayout;	//	2002/5/13 YAZAKI ヘッダ軽量化
 class CMigemo;	// 2004.09.14 isearch
-struct SColorStrategyInfo;
-struct CColor3Setting;
+struct ColorStrategyInfo;
+struct Color3Setting;
 class COutputAdapter;
 
 // struct DispPos; //	誰かがincludeしてます
@@ -177,7 +177,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// ドキュメントイベント
-	void OnAfterLoad(const SLoadInfo& sLoadInfo);
+	void OnAfterLoad(const LoadInfo& sLoadInfo);
 	// メッセージディスパッチャ
 	LRESULT DispatchEvent(HWND, UINT, WPARAM, LPARAM);
 	//
@@ -227,11 +227,11 @@ protected:
 	);
 
 	//! レイアウト行を1行描画
-	bool DrawLayoutLine(SColorStrategyInfo* pInfo);
+	bool DrawLayoutLine(ColorStrategyInfo* pInfo);
 
 	// 色分け
 public:
-	CColor3Setting GetColorIndex(const CLayout* pcLayout, CLayoutYInt nLineNum, int nIndex, SColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
+	Color3Setting GetColorIndex(const CLayout* pcLayout, CLayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
 	void SetCurrentColor(CGraphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
@@ -448,7 +448,7 @@ public:
 private:
 	// インクリメンタルサーチ 
 	// 2004.10.24 isearch migemo
-	void ISearchEnter(int mode, ESearchDirection direction);
+	void ISearchEnter(int mode, eSearchDirection direction);
 	void ISearchExit();
 	void ISearchExec(DWORD wChar);
 	void ISearchExec(LPCWSTR pszText);
@@ -584,7 +584,7 @@ public:
 	// 参照
 	CEditWnd*			m_pcEditWnd;	//!< ウィンドウ
 	CEditDoc*			m_pcEditDoc;	//!< ドキュメント
-	const STypeConfig*	m_pTypeData;
+	const TypeConfig*	m_pTypeData;
 
 	// 主要構成部品
 	CTextArea*		m_pcTextArea;
@@ -672,10 +672,10 @@ public:
 	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
 	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
 	std::wstring		m_strCurSearchKey;			// 検索文字列
-	SSearchOption		m_sCurSearchOption;			// 検索／置換  オプション
+	SearchOption		m_curSearchOption;			// 検索／置換  オプション
 	CLogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bool				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
-	ESearchDirection	m_nISearchDirection;
+	eSearchDirection	m_nISearchDirection;
 	int					m_nISearchMode;
 	bool				m_bISearchWrap;
 	bool				m_bISearchFlagHistory[256];

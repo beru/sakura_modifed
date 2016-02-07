@@ -172,7 +172,7 @@ namespace WCODE
 			// -- -- ”¼ŠpŠî€ -- -- //
 			GetTextExtentPoint32W_AnyBuild(m_hdc, L"x", 1, &m_han_size);
 		}
-		void SelectCache(SCharWidthCache* pCache)
+		void SelectCache(CharWidthCache* pCache)
 		{
 			m_pCache = pCache;
 		}
@@ -221,7 +221,7 @@ namespace WCODE
 		HFONT				m_hFont;
 		SIZE				m_han_size;
 		LOGFONT				m_lf;				// 2008/5/15 Uchi
-		SCharWidthCache*	m_pCache;
+		CharWidthCache*	m_pCache;
 	};
 
 	class LocalCacheSelector {
@@ -258,7 +258,7 @@ namespace WCODE
 				pcache->SelectCache(&(GetDllShareData().m_sCharWidth));
 			}else {
 				if (m_parCache[fMode] == 0) {
-					m_parCache[fMode] = new SCharWidthCache;
+					m_parCache[fMode] = new CharWidthCache;
 				}
 				pcache->SelectCache(m_parCache[fMode]);
 			}
@@ -268,7 +268,7 @@ namespace WCODE
 	private:
 		LocalCache* pcache;
 		LocalCache m_localcache[3];
-		SCharWidthCache* m_parCache[3];
+		CharWidthCache* m_parCache[3];
 		ECharWidthCacheMode m_eLastEditCacheMode;
 	private:
 		DISALLOW_COPY_AND_ASSIGN(LocalCacheSelector);

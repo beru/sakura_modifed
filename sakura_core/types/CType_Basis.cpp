@@ -27,7 +27,7 @@
 #include "doc/CDocOutline.h"
 #include "view/colors/EColorIndexType.h"
 
-void CType_Basis::InitTypeConfigImp(STypeConfig* pType)
+void CType_Basis::InitTypeConfigImp(TypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq
 	_tcscpy(pType->m_szTypeName, _T("Šî–{"));

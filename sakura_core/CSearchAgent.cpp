@@ -29,7 +29,7 @@ int CSearchStringPattern::GetMapIndex(wchar_t c)
 CSearchStringPattern::CSearchStringPattern()
 	: 
 	m_pszKey(NULL),
-	m_psSearchOption(NULL),
+	m_pSearchOption(NULL),
 	m_pRegexp(NULL),
 	m_pszCaseKeyRef(NULL),
 	m_pszPatternCase(NULL),
@@ -46,12 +46,12 @@ CSearchStringPattern::CSearchStringPattern(
 	HWND hwnd,
 	const wchar_t* pszPattern,
 	int nPatternLen,
-	const SSearchOption& sSearchOption,
+	const SearchOption& searchOption,
 	CBregexp* pRegexp
 	)
 	:
 	m_pszKey(NULL),
-	m_psSearchOption(NULL),
+	m_pSearchOption(NULL),
 	m_pRegexp(NULL),
 	m_pszCaseKeyRef(NULL),
 	m_pszPatternCase(NULL),
@@ -62,7 +62,7 @@ CSearchStringPattern::CSearchStringPattern(
 	m_pnUseCharSkipArr(NULL)
 #endif
 {
-	SetPattern(hwnd, pszPattern, nPatternLen, sSearchOption, pRegexp);
+	SetPattern(hwnd, pszPattern, nPatternLen, searchOption, pRegexp);
 }
 
 CSearchStringPattern::~CSearchStringPattern()
@@ -73,7 +73,7 @@ CSearchStringPattern::~CSearchStringPattern()
 void CSearchStringPattern::Reset() {
 	m_pszKey = NULL;
 	m_pszCaseKeyRef = NULL;
-	m_psSearchOption = NULL;
+	m_pSearchOption = NULL;
 	m_pRegexp = NULL;
 
 	delete[] m_pszPatternCase;
@@ -93,16 +93,16 @@ bool CSearchStringPattern::SetPattern(
 	const wchar_t* pszPattern,
 	int nPatternLen,
 	const wchar_t* pszPattern2,
-	const SSearchOption& sSearchOption,
+	const SearchOption& searchOption,
 	CBregexp* regexp
 	)
 {
 	Reset();
 	m_pszCaseKeyRef = m_pszKey = pszPattern;
 	m_nPatternLen = nPatternLen;
-	m_psSearchOption = &sSearchOption;
+	m_pSearchOption = &searchOption;
 	m_pRegexp = regexp;
-	if (m_psSearchOption->bRegularExp) {
+	if (m_pSearchOption->bRegularExp) {
 		if (!m_pRegexp) {
 			return false;
 		}
@@ -120,7 +120,7 @@ bool CSearchStringPattern::SetPattern(
 				return false;
 			}
 		}
-	}else if (m_psSearchOption->bWordOnly) {
+	}else if (m_pSearchOption->bWordOnly) {
 	}else {
 		if (GetIgnoreCase()) {
 			m_pszPatternCase = new wchar_t[nPatternLen + 1];
@@ -412,7 +412,7 @@ bool CSearchAgent::PrevOrNextWord(
 		}
 	}
 	// 現在位置の文字の種類によっては選択不能
-	if (!bLEFT && WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+	if (!bLEFT && WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 		return false;
 	}
 	// 前の単語か？後ろの単語か？
@@ -470,7 +470,7 @@ bool CSearchAgent::PrevOrNextWord(
 // 見つからない場合は０を返す
 int CSearchAgent::SearchWord(
 	CLogicPoint					ptSerachBegin,	// 検索開始位置
-	ESearchDirection			eDirection,		// 検索方向
+	eSearchDirection			eDirection,		// 検索方向
 	CLogicRange*				pMatchRange,	// [out] マッチ範囲。ロジック単位。
 	const CSearchStringPattern&	pattern			// 検索パターン
 )
@@ -486,7 +486,7 @@ int CSearchAgent::SearchWord(
 	CLogicInt	nHitPos;
 	CLogicInt	nHitPosOld;
 	int			nRetVal = 0;
-	const SSearchOption&	sSearchOption = pattern.GetSearchOption();
+	const SearchOption&	searchOption = pattern.GetSearchOption();
 	CBregexp*	pRegexp = pattern.GetRegexp();
 #ifdef MEASURE_SEARCH_TIME
 	long clockStart, clockEnd;
@@ -494,11 +494,11 @@ int CSearchAgent::SearchWord(
 #endif
 
 	// 正規表現
-	if (sSearchOption.bRegularExp) {
+	if (searchOption.bRegularExp) {
 		nLinePos = ptSerachBegin.GetY2();		// 検索行＝検索開始行
 		pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		// 前方検索
-		if (eDirection == SEARCH_BACKWARD) {
+		if (eDirection == eSearchDirection::Backward) {
 			//
 			// 前方(↑)検索(正規表現)
 			//
@@ -586,7 +586,7 @@ int CSearchAgent::SearchWord(
 			}
 		}
 	// 単語のみ検索
-	}else if (sSearchOption.bWordOnly) {
+	}else if (searchOption.bWordOnly) {
 		// 検索語を単語に分割して searchWordsに格納する。
 		const wchar_t* pszPattern = pattern.GetKey();
 		const int	nPatternLen = pattern.GetLen();
@@ -599,7 +599,7 @@ int CSearchAgent::SearchWord(
 		*/
 
 		// 前方検索
-		if (eDirection == SEARCH_BACKWARD) {
+		if (eDirection == eSearchDirection::Backward) {
 			nLinePos = ptSerachBegin.GetY2();
 			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 			CLogicInt nNextWordFrom;
@@ -616,8 +616,8 @@ int CSearchAgent::SearchWord(
 							if (searchWords[iSW].second == nNextWordTo2 - nNextWordFrom2) {
 								const wchar_t* pData = pDocLine->GetPtr();	// 2002/2/10 aroka CMemory変更
 								// 1 == 大文字小文字の区別
-								if ((!sSearchOption.bLoHiCase && auto_memicmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0) ||
-									(sSearchOption.bLoHiCase && auto_memcmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0)
+								if ((!searchOption.bLoHiCase && auto_memicmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0) ||
+									(searchOption.bLoHiCase && auto_memcmp(&(pData[nNextWordFrom2]), searchWords[iSW].first, searchWords[iSW].second) == 0)
 								) {
 									pMatchRange->SetFromY(nLinePos);	// マッチ行
 									pMatchRange->SetToY  (nLinePos);	// マッチ行
@@ -649,7 +649,7 @@ int CSearchAgent::SearchWord(
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				int nMatchLen;
-				pszRes = SearchStringWord(pLine, nLineLen, nNextWordFrom, searchWords, sSearchOption.bLoHiCase, &nMatchLen);
+				pszRes = SearchStringWord(pLine, nLineLen, nNextWordFrom, searchWords, searchOption.bLoHiCase, &nMatchLen);
 				if (pszRes) {
 					pMatchRange->SetFromY(nLinePos);	// マッチ行
 					pMatchRange->SetToY  (nLinePos);	// マッチ行
@@ -671,7 +671,7 @@ int CSearchAgent::SearchWord(
 	}else {
 		const int nPatternLen = pattern.GetLen();
 		// 前方検索
-		if (eDirection == SEARCH_BACKWARD) {
+		if (eDirection == eSearchDirection::Backward) {
 			nLinePos = ptSerachBegin.GetY2();
 			nHitTo = ptSerachBegin.x;
 
@@ -843,7 +843,7 @@ void CSearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		const CNativeW& cmemLine = pArg->pInsData->back().cmemLine;
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
-		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 			// 行挿入
 			bLastEOLReplace = true; // 仮。後で修正
 		}else {
@@ -1108,7 +1108,7 @@ prev_line:;
 		CNativeW& cmemLine = pArg->pInsData->back().cmemLine;
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
-		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 			if (pArg->sDelRange.GetFrom().x == 0) {
 				// 挿入データの最後が改行で行頭に挿入するとき、現在行を維持する
 				bInsertLineMode = true;
@@ -1149,7 +1149,7 @@ prev_line:;
 #ifdef _DEBUG
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
-		assert( 0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol) );
+		assert( 0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol) );
 #endif
 		{
 			if (!pCDocLine) {

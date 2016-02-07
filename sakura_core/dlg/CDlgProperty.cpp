@@ -128,7 +128,7 @@ void CDlgProperty::SetData(void)
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
-	if (CAppMode::getInstance()->IsViewMode()) {
+	if (AppMode::getInstance()->IsViewMode()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
 	if (pCEditDoc->m_cDocEditor.IsModified()) {
@@ -145,9 +145,9 @@ void CDlgProperty::SetData(void)
 
 	if ((nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
 		if (pCEditDoc->m_cDocFile.IsFileLocking()) {
-			if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
+			if (m_pShareData->m_common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
-			}else if (m_pShareData->m_Common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
+			}else if (m_pShareData->m_common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));

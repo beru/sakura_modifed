@@ -447,7 +447,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 						(LPARAM)pPropKeyword.get()
 					);
 					if (res == IDOK) {
-						CShareDataLockCounter::WaitLock(pCommon->m_hwndParent);
+						ShareDataLockCounter::WaitLock(pCommon->m_hwndParent);
 						pCommon->ApplyData();
 						SetData(hwndDlg);
 						m_bChangeKeyWordSet = true;

@@ -26,8 +26,8 @@
 #include "basis/CMyString.h"
 #include "dlg/CDialog.h"
 
-struct SLoadInfo;	// doc/CDocListener.h
-struct SSaveInfo;	// doc/CDocListener.h
+struct LoadInfo;	// doc/CDocListener.h
+struct SaveInfo;	// doc/CDocListener.h
 struct OPENFILENAMEZ;
 class CDlgOpenFileMem;
 
@@ -54,8 +54,8 @@ public:
 	// 操作
 	bool DoModal_GetOpenFileName(TCHAR*, bool bSetCurDir = false);	// 開くダイアログ モーダルダイアログの表示	// 2002/08/21 moca	引数追加
 	bool DoModal_GetSaveFileName(TCHAR*, bool bSetCurDir = false);	// 保存ダイアログ モーダルダイアログの表示	// 2002/08/21 30,2002 moca	引数追加
-	bool DoModalOpenDlg( SLoadInfo* pLoadInfo, std::vector<std::tstring>*, bool bOptions = true );	// 開くダイアグ モーダルダイアログの表示
-	bool DoModalSaveDlg(SSaveInfo*	pSaveInfo, bool bSimpleMode);		// 保存ダイアログ モーダルダイアログの表示
+	bool DoModalOpenDlg( LoadInfo* pLoadInfo, std::vector<std::tstring>*, bool bOptions = true );	// 開くダイアグ モーダルダイアログの表示
+	bool DoModalSaveDlg(SaveInfo*	pSaveInfo, bool bSimpleMode);		// 保存ダイアログ モーダルダイアログの表示
 
 protected:
 	CDlgOpenFileMem*	m_mem;

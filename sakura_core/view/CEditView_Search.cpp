@@ -79,7 +79,7 @@ BOOL CEditView::KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc)
 	// 選択範囲のデータを取得(複数行選択の場合は先頭の行のみ)
 	if (GetSelectedDataOne(cmemCurText, STRNCMP_MAX + 1)) {
 	// キャレット位置の単語を取得する処理		2006.03.24 fon
-	}else if (GetDllShareData().m_Common.m_sSearch.m_bUseCaretKeyWord) {
+	}else if (GetDllShareData().m_common.m_sSearch.m_bUseCaretKeyWord) {
 		if (!GetParser().GetCurrentWord(&cmemCurText))
 			goto end_of_search;
 	}else
@@ -354,7 +354,7 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 	}
 	int nTopic2Len = (int)wcslen(pTopic2);
 	// 検索文字列は改行まで
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	int i;
 	for (i=0; i<nTopic2Len; ++i) {
 		if (WCODE::IsLineDelimiter(pTopic2[i], bExtEol)) {
@@ -392,7 +392,7 @@ bool CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText, bool bGetHisto
 		GetCurrentTextForSearch(cmemCurText, bStripMaxPath);
 	}else {	// テキストが選択されていない
 		bool bGet = false;
-		if (GetDllShareData().m_Common.m_sSearch.m_bCaretTextForSearch) {
+		if (GetDllShareData().m_common.m_sSearch.m_bCaretTextForSearch) {
 			GetCurrentTextForSearch(cmemCurText, bStripMaxPath);	// カーソル位置単語を取得
 			if (cmemCurText.GetStringLength() == 0 && bGetHistory) {
 				bGet = true;
@@ -402,10 +402,10 @@ bool CEditView::GetCurrentTextForSearchDlg(CNativeW& cmemCurText, bool bGetHisto
 		}
 		if (bGet) {
 			if (1
-				&& 0 < GetDllShareData().m_sSearchKeywords.m_aSearchKeys.size()
-				&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
+				&& 0 < GetDllShareData().m_searchKeywords.m_aSearchKeys.size()
+				&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence
 			) {
-				cmemCurText.SetString(GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0]);	// 履歴からとってくる
+				cmemCurText.SetString(GetDllShareData().m_searchKeywords.m_aSearchKeys[0]);	// 履歴からとってくる
 				return true; // ""でもtrue	
 			}else {
 				cmemCurText.SetString(m_strCurSearchKey.c_str());
@@ -448,7 +448,7 @@ int CEditView::IsSearchString(
 {
 	*pnSearchStart = nPos;	// 2002.02.08 hor
 
-	if (m_sCurSearchOption.bRegularExp) {
+	if (m_curSearchOption.bRegularExp) {
 		// 行頭ではない?
 		// 行頭検索チェックは、CBregexpクラス内部で実施するので不要 2003.11.01 かろと
 
@@ -464,7 +464,7 @@ int CEditView::IsSearchString(
 		}else {
 			return 0;
 		}
-	}else if (m_sCurSearchOption.bWordOnly) { // 単語検索
+	}else if (m_curSearchOption.bWordOnly) { // 単語検索
 		// 指定位置の単語の範囲を調べる
 		CLogicInt posWordHead, posWordEnd;
 		if (!CWordParse::WhereCurrentWord_2(cStr.GetPtr(), CLogicInt(cStr.GetLength()), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
@@ -477,7 +477,7 @@ int CEditView::IsSearchString(
 		const wchar_t* const pWordHead = cStr.GetPtr() + posWordHead;
 
 		// 比較関数
-		int (*const fcmp)(const wchar_t*, const wchar_t*, size_t) = m_sCurSearchOption.bLoHiCase ? wcsncmp : wcsnicmp;
+		int (*const fcmp)(const wchar_t*, const wchar_t*, size_t) = m_curSearchOption.bLoHiCase ? wcsncmp : wcsnicmp;
 
 		// 検索語を単語に分割しながら指定位置の単語と照合する。
 		int wordIndex = 0;

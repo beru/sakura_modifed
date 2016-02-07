@@ -104,8 +104,8 @@ bool CViewCommander::HandleCommand(
 		bRepeat = true;
 	}
 	m_bPrevCommand = nCommand;
-	if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro &&									// キーボードマクロの記録中
-		GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro == GetMainWindow() &&	// キーボードマクロを記録中のウィンドウ
+	if (GetDllShareData().m_flags.m_bRecordingKeyMacro &&									// キーボードマクロの記録中
+		GetDllShareData().m_flags.m_hwndRecordingKeyMacro == GetMainWindow() &&	// キーボードマクロを記録中のウィンドウ
 		(nCommandFrom & FA_NONRECORD) != FA_NONRECORD	// 2007.07.07 genta 記録抑制フラグ off
 	) {
 		// キーリピート状態をなくする
@@ -197,7 +197,7 @@ bool CViewCommander::HandleCommand(
 		// Feb. 28, 2004 genta 保存＆閉じる
 		// 保存が不要なら単に閉じる
 		{	// Command_FILESAVE()とは別に保存不要をチェック	//### Command_FILESAVE() は実際に保存した場合だけ true を返すようになった（仕様変更？）
-			if (!GetDllShareData().m_Common.m_sFile.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_cDocEditor.IsModified()) {
+			if (!GetDllShareData().m_common.m_sFile.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_cDocEditor.IsModified()) {
 				Command_WINCLOSE();
 				break;
 			}
@@ -364,9 +364,9 @@ bool CViewCommander::HandleCommand(
 
 	// クリップボード系
 	case F_CUT:						Command_CUT(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)
-	case F_COPY:					Command_COPY(false, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
+	case F_COPY:					Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
 	case F_COPY_ADDCRLF:			Command_COPY(false, true); break;		// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
-	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy, EOL_CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
+	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy, EOL_CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
 	case F_PASTE:					Command_PASTE((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
 	case F_PASTEBOX:				Command_PASTEBOX((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
 	case F_INSBOXTEXT:				Command_INSBOXTEXT((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
@@ -442,7 +442,7 @@ bool CViewCommander::HandleCommand(
 	case F_JUMP_DIALOG:		Command_JUMP_DIALOG(); break;					// 指定行ヘジャンプダイアログの表示
 	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
 	case F_OUTLINE:			bRet = Command_FUNCLIST((int)lparam1, OUTLINE_DEFAULT); break;	// アウトライン解析
-	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST(SHOW_TOGGLE, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
+	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST((int)eShowDialog::Toggle, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
 	case F_FILETREE:		bRet = Command_FUNCLIST( (BOOL)lparam1 ,OUTLINE_FILETREE ); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
 	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
@@ -500,9 +500,9 @@ bool CViewCommander::HandleCommand(
 	case F_FAVORITE:		Command_Favorite(); break;		// 履歴の管理	//@@@ 2003.04.08 MIK
 	// Jan. 29, 2005 genta 引用符の設定
 	case F_SET_QUOTESTRING:	Command_SET_QUOTESTRING((const WCHAR*)lparam1);	break;
-	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, WRAP_NO_TEXT_WRAP, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
-	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, WRAP_SETTING_WIDTH, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
-	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, WRAP_WINDOW_WIDTH, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
+	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)eTextWrappingMethod::NoWrapping, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
+	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)eTextWrappingMethod::SettingWidth, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
+	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)eTextWrappingMethod::WindowWidth, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
 	case F_TEXTWRAPMETHOD:	Command_TEXTWRAPMETHOD((int)lparam1); break;			// テキストの折り返し方法	// 2008.05.30 nasukoji
 	case F_SELECT_COUNT_MODE:	Command_SELECT_COUNT_MODE((int)lparam1); break;		// 文字カウントの方法		// 2009.07.06 syat
 
@@ -619,8 +619,8 @@ bool CViewCommander::HandleCommand(
 			auto sd = &GetDllShareData();
 			HWND hActiveWnd = GetActiveWindow();
 			int activeWndGroup = -1;
-			for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
-				auto& editNode = sd->m_sNodes.m_pEditArr[i];
+			for (int i=0; i<sd->m_nodes.m_nEditArrNum; ++i) {
+				auto& editNode = sd->m_nodes.m_pEditArr[i];
 				if (editNode.GetHwnd() == hActiveWnd) {
 					activeWndGroup = editNode.m_nGroup;
 					break;
@@ -628,8 +628,8 @@ bool CViewCommander::HandleCommand(
 			}
 			if (activeWndGroup != -1) {
 				std::vector<int> indices;
-				for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
-					auto& editNode = sd->m_sNodes.m_pEditArr[i];
+				for (int i=0; i<sd->m_nodes.m_nEditArrNum; ++i) {
+					auto& editNode = sd->m_nodes.m_pEditArr[i];
 					if (editNode.m_nGroup == activeWndGroup) {
 						indices.push_back(editNode.m_nIndex);
 					}
@@ -638,8 +638,8 @@ bool CViewCommander::HandleCommand(
 				int idx = nCommand - F_TAB_1;
 				if (idx < (int)indices.size()) {
 					int nodeIdx = indices[idx];
-					for (int i=0; i<sd->m_sNodes.m_nEditArrNum; ++i) {
-						auto& editNode = sd->m_sNodes.m_pEditArr[i];
+					for (int i=0; i<sd->m_nodes.m_nEditArrNum; ++i) {
+						auto& editNode = sd->m_nodes.m_pEditArr[i];
 						if (editNode.m_nIndex == nodeIdx) {
 							ActivateFrameWindow(editNode.m_hWnd);
 							break;
@@ -707,7 +707,7 @@ void CViewCommander::Sub_BoxSelectLock( int flags )
 {
 	bool bSelLock;
 	if (flags == 0x00) {
-		bSelLock = GetDllShareData().m_Common.m_sEdit.m_bBoxSelectLock;
+		bSelLock = GetDllShareData().m_common.m_sEdit.m_bBoxSelectLock;
 	}else if (flags == 0x01) {
 		bSelLock = true;
 	}else if (flags == 0x02) {
@@ -730,7 +730,7 @@ CLogicInt CViewCommander::ConvertEol(
 	CEol eol = GetDocument()->m_cDocEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	if (!pszConvertedText) {
 		for (int i=0; i<nTextLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
@@ -775,7 +775,7 @@ void CViewCommander::AlertNotFound(
 	...
 	)
 {
-	if (GetDllShareData().m_Common.m_sSearch.m_bNOTIFYNOTFOUND
+	if (GetDllShareData().m_common.m_sSearch.m_bNOTIFYNOTFOUND
 		&& !bReplaceAll
 	) {
 		if (!hwnd) {

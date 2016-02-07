@@ -34,9 +34,9 @@
 /*! ルールファイルの1行を管理する構造体
 
 	@date 2002.04.01 YAZAKI
-	@date 2007.11.29 kobake 名前変更: oneRule→SOneRule
+	@date 2007.11.29 kobake 名前変更: oneRule→OneRule
 */
-struct SOneRule {
+struct OneRule {
 	wchar_t szMatch[256];
 	int		nLength;
 	wchar_t szText[256]; // RegexReplace時の置換後文字列
@@ -56,7 +56,7 @@ struct SOneRule {
 */
 int CDocOutline::ReadRuleFile(
 	const TCHAR*	pszFilename,
-	SOneRule*		pcOneRule,
+	OneRule*		pcOneRule,
 	int				nMaxCount,
 	bool&			bRegex,
 	std::wstring&	title
@@ -215,12 +215,12 @@ int CDocOutline::ReadRuleFile(
 	@date 2002.04.01 YAZAKI
 	@date 2002.11.03 Moca ネストの深さが最大値を超えるとバッファオーバーランするのを修正
 		最大値以上は追加せずに無視する
-	@date 2007.11.29 kobake SOneRule test[1024] でスタックが溢れていたのを修正
+	@date 2007.11.29 kobake OneRule test[1024] でスタックが溢れていたのを修正
 */
 void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstring& sTitleOverride)
 {
 	// ルールファイルの内容をバッファに読み込む
-	auto_array_ptr<SOneRule> test(new SOneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
+	auto_array_ptr<OneRule> test(new OneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
 	bool bRegex;
 	std::wstring title;
 	int nCount = ReadRuleFile(m_pcDocRef->m_cDocType.GetDocumentAttribute().m_szOutlineRuleFilename, test.get(), 1024, bRegex, title);
@@ -361,7 +361,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 			pszText = new wchar_t[nLineLen + 1];
 			wmemcpy(pszText, &pLine[i], nLineLen);
 			pszText[nLineLen] = L'\0';
-			bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+			bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 			for (i=0; pszText[i]!=L'\0'; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					pszText[i] = L'\0';
@@ -438,7 +438,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 {
 	CLogicInt nLineLen;
-	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_Common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
+	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
 	int nNewLineLen	= m_pcDocRef->m_cDocEditor.m_cNewLineCode.GetLen();
 	CLogicInt nLineLast	= m_pcDocRef->m_cDocLineMgr.GetLineCount();
 	int nCharChars;
@@ -474,7 +474,7 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 		int	k;
 		int pos_wo_space;
 		k = pos_wo_space = leftspace;
-		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		while (k < nLineLen) {
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, k);
 			if (nCharChars == 1) {

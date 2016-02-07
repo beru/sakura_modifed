@@ -61,7 +61,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 	}
 
 	int nPxWidth = -1;
-	auto& csFileName = m_pShareData->m_Common.m_sFileName;
+	auto& csFileName = m_pShareData->m_common.m_sFileName;
 	if (csFileName.m_bTransformShortPath && cchMaxWidth != -1) {
 		if (cchMaxWidth == 0) {
 			cchMaxWidth = csFileName.m_nTransformShortMaxWidth;
@@ -102,7 +102,7 @@ LPTSTR CFileNameManager::GetTransformFileNameFast( LPCTSTR pszSrc, LPTSTR pszDes
 */
 int CFileNameManager::TransformFileName_MakeCache(void) {
 	int nCount = 0;
-	auto& csFileName = m_pShareData->m_Common.m_sFileName;
+	auto& csFileName = m_pShareData->m_common.m_sFileName;
 	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
 		if (L'\0' != csFileName.m_szTransformFileNameFrom[i][0]) {
 			if (ExpandMetaToFolder(
@@ -549,7 +549,7 @@ void CFileNameManager::GetIniFileNameDirect( LPTSTR pszPrivateIniFile, LPTSTR ps
 */
 void CFileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfName, BOOL bRead/*=FALSE*/ )
 {
-	auto& iniFolder = m_pShareData->m_sFileNameManagement.m_IniFolder;
+	auto& iniFolder = m_pShareData->m_fileNameManagement.m_IniFolder;
 	if (!iniFolder.m_bInit) {
 		iniFolder.m_bInit = true;			// 初期化済フラグ
 		iniFolder.m_bReadPrivate = false;	// マルチユーザ用iniからの読み出しフラグ
@@ -559,7 +559,7 @@ void CFileNameManager::GetIniFileName( LPTSTR pszIniFileName, LPCTSTR pszProfNam
 		if (iniFolder.m_szPrivateIniFile[0] != _T('\0')) {
 			iniFolder.m_bReadPrivate = true;
 			iniFolder.m_bWritePrivate = true;
-			if (CCommandLine::getInstance()->IsNoWindow() && CCommandLine::getInstance()->IsWriteQuit())
+			if (CommandLine::getInstance()->IsNoWindow() && CommandLine::getInstance()->IsWriteQuit())
 				iniFolder.m_bWritePrivate = false;
 
 			// マルチユーザ用のiniフォルダを作成しておく

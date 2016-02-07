@@ -79,13 +79,13 @@ void CViewCommander::Command_GREP(void)
 		|| (
 			!doc.m_cDocEditor.IsModified()
 			&& !doc.m_cDocFile.GetFilePathClass().IsValidPath()		// 現在編集中のファイルのパス
-			&& !CAppMode::getInstance()->IsDebugMode()
+			&& !AppMode::getInstance()->IsDebugMode()
 		)
 	) {
 		// 2011.01.23 Grepタイプ別適用
 		if (!doc.m_cDocEditor.IsModified() && doc.m_cDocLineMgr.GetLineCount() == 0) {
 			CTypeConfig cTypeGrep = CDocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
-			const STypeConfigMini* pConfig;
+			const TypeConfigMini* pConfig;
 			CDocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);
 			doc.m_cDocType.SetDocumentTypeIdx(pConfig->m_id);
 			doc.m_cDocType.LockDocumentType();
@@ -103,7 +103,7 @@ void CViewCommander::Command_GREP(void)
 			dlgGrep.m_bSubFolder,
 			false,
 			true, // Header
-			dlgGrep.m_sSearchOption,
+			dlgGrep.m_searchOption,
 			dlgGrep.m_nGrepCharSet,
 			dlgGrep.m_nGrepOutputLineType,
 			dlgGrep.m_nGrepOutputStyle,
@@ -123,14 +123,14 @@ void CViewCommander::Command_GREP(void)
 		}
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 			OkMessage(m_pCommanderView->GetHwnd(), LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 			return;
 		}
 
 		//======= Grepの実行 =============
 		// Grep結果ウィンドウの表示
-		CControlTray::DoGrepCreateWindow(G_AppInstance(), m_pCommanderView->GetHwnd(), dlgGrep);
+		ControlTray::DoGrepCreateWindow(G_AppInstance(), m_pCommanderView->GetHwnd(), dlgGrep);
 	}
 	return;
 }
@@ -152,9 +152,9 @@ void CViewCommander::Command_GREP_REPLACE_DLG( void )
 		cDlgGrepRep.m_strText = cmemCurText.GetStringPtr();
 		cDlgGrepRep.m_bSetText = true;
 	}
-	if (0 < GetDllShareData().m_sSearchKeywords.m_aReplaceKeys.size()) {
-		if (cDlgGrepRep.m_nReplaceKeySequence < GetDllShareData().m_Common.m_sSearch.m_nReplaceKeySequence) {
-			cDlgGrepRep.m_strText2 = GetDllShareData().m_sSearchKeywords.m_aReplaceKeys[0];
+	if (0 < GetDllShareData().m_searchKeywords.m_aReplaceKeys.size()) {
+		if (cDlgGrepRep.m_nReplaceKeySequence < GetDllShareData().m_common.m_sSearch.m_nReplaceKeySequence) {
+			cDlgGrepRep.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];
 		}
 	}
 
@@ -188,7 +188,7 @@ void CViewCommander::Command_GREP_REPLACE(void)
 		  !CEditApp::getInstance()->m_pcGrepAgent->m_bGrepRunning ) ||
 		( !GetDocument()->m_cDocEditor.IsModified() &&
 		  !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() &&		// 現在編集中のファイルのパス
-		  !CAppMode::getInstance()->IsDebugMode()
+		  !AppMode::getInstance()->IsDebugMode()
 		)
 	) {
 		CEditApp::getInstance()->m_pcGrepAgent->DoGrep(
@@ -202,7 +202,7 @@ void CViewCommander::Command_GREP_REPLACE(void)
 			cDlgGrepRep.m_bSubFolder,
 			false, // Stdout
 			true, // Header
-			cDlgGrepRep.m_sSearchOption,
+			cDlgGrepRep.m_searchOption,
 			cDlgGrepRep.m_nGrepCharSet,
 			cDlgGrepRep.m_nGrepOutputLineType,
 			cDlgGrepRep.m_nGrepOutputStyle,
@@ -214,7 +214,7 @@ void CViewCommander::Command_GREP_REPLACE(void)
 		);
 	}else {
 		// 編集ウィンドウの上限チェック
-		if (GetDllShareData().m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
+		if (GetDllShareData().m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
 			OkMessage( m_pCommanderView->GetHwnd(), _T("編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"), MAX_EDITWINDOWS );
 			return;
 		}
@@ -244,9 +244,9 @@ void CViewCommander::Command_GREP_REPLACE(void)
 		TCHAR	pOpt[64];
 		pOpt[0] = _T('\0');
 		if (cDlgGrepRep.m_bSubFolder				) _tcscat( pOpt, _T("S") );	// サブフォルダからも検索する
-		if (cDlgGrepRep.m_sSearchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
-		if (cDlgGrepRep.m_sSearchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
-		if (cDlgGrepRep.m_sSearchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
+		if (cDlgGrepRep.m_searchOption.bWordOnly	) _tcscat( pOpt, _T("W") );	// 単語単位で探す
+		if (cDlgGrepRep.m_searchOption.bLoHiCase	) _tcscat( pOpt, _T("L") );	// 英大文字と英小文字を区別する
+		if (cDlgGrepRep.m_searchOption.bRegularExp	) _tcscat( pOpt, _T("R") );	// 正規表現
 		if (cDlgGrepRep.m_nGrepOutputLineType == 1	) _tcscat( pOpt, _T("P") );	// 行を出力する
 		// if (cDlgGrepRep.m_nGrepOutputLineType == 2) _tcscat( pOpt, _T("N") );	// 否ヒット行を出力する 2014.09.23
 		if (cDlgGrepRep.m_nGrepOutputStyle == 1		) _tcscat( pOpt, _T("1") );	// Grep: 出力形式
@@ -262,18 +262,18 @@ void CViewCommander::Command_GREP_REPLACE(void)
 			cCmdLine.AppendString( pOpt );
 		}
 
-		SLoadInfo sLoadInfo;
+		LoadInfo sLoadInfo;
 		sLoadInfo.cFilePath = _T("");
 		sLoadInfo.eCharCode = CODE_NONE;
 		sLoadInfo.bViewMode = false;
-		CControlTray::OpenNewEditor(
+		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
 			sLoadInfo,
 			cCmdLine.GetStringPtr(),
 			false,
 			NULL,
-			GetDllShareData().m_Common.m_sTabBar.m_bNewWindow
+			GetDllShareData().m_common.m_sTabBar.m_bNewWindow
 		);
 	}
 	return;

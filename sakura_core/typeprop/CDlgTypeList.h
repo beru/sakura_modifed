@@ -28,14 +28,14 @@ using std::wstring;
 class CDlgTypeList : public CDialog {
 public:
 	// 型
-	struct SResult {
+	struct Result {
 		CTypeConfig	cDocumentType;	// 文書種類
 		bool		bTempChange;	// 旧PROP_TEMPCHANGE_FLAG
 	};
 
 public:
 	// インターフェース
-	int DoModal(HINSTANCE, HWND, SResult*);	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, Result*);	// モーダルダイアログの表示
 
 protected:
 	// 実装ヘルパ関数

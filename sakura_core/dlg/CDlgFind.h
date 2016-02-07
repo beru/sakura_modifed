@@ -35,14 +35,14 @@ public:
 
 	void ChangeView(LPARAM);
 
-	SSearchOption m_sSearchOption;	// 検索オプション
+	SearchOption m_searchOption;	// 検索オプション
 	bool	m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	std::wstring	m_strText;	// 検索文字列
 
 	CLogicPoint	m_ptEscCaretPos_PHY;	// 検索開始時のカーソル位置退避エリア
 
 	CRecentSearch			m_cRecentSearch;
-	SComboBoxItemDeleter	m_comboDel;
+	ComboBoxItemDeleter	m_comboDel;
 	CFontAutoDeleter		m_cFontText;
 
 protected:

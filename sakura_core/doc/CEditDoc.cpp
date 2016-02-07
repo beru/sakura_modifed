@@ -177,9 +177,9 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
-	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
+	const TypeConfig& ref = m_cDocType.GetDocumentAttribute();
 	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != WRAP_SETTING_WIDTH) {
+	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 	m_cLayoutMgr.SetLayoutInfo(true, ref, ref.m_nTabSpace, nMaxLineKetas);
@@ -206,7 +206,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	m_cDocEditor.m_cNewLineCode = ref.m_encoding.m_eDefaultEoltype;
 
 	// 排他制御オプションを初期化
-	m_cDocFile.SetShareMode(GetDllShareData().m_Common.m_sFile.m_nFileShareMode);
+	m_cDocFile.SetShareMode(GetDllShareData().m_common.m_sFile.m_nFileShareMode);
 
 #ifdef _DEBUG
 	{
@@ -260,9 +260,9 @@ void CEditDoc::Clear()
 	m_pcEditWnd->m_pcViewFont->UpdateFont(&m_pcEditWnd->GetLogfont());
 
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
-	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
+	const TypeConfig& ref = m_cDocType.GetDocumentAttribute();
 	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != WRAP_SETTING_WIDTH) {
+	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 	m_cLayoutMgr.SetLayoutInfo(true, ref, ref.m_nTabSpace, nMaxLineKetas);
@@ -272,16 +272,16 @@ void CEditDoc::Clear()
 // 既存データのクリア
 void CEditDoc::InitDoc()
 {
-	CAppMode::getInstance()->SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
-	CAppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
+	AppMode::getInstance()->SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
+	AppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
 
 	CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode = false;	// Grepモード	//$$同上
 	m_cAutoReloadAgent.m_eWatchUpdate = WU_QUERY; // Dec. 4, 2002 genta 更新監視方法 $$
 
 	// 2005.06.24 Moca バグ修正
 	// アウトプットウィンドウで「閉じて(無題)」を行ってもアウトプットウィンドウのまま
-	if (CAppMode::getInstance()->IsDebugMode()) {
-		CAppMode::getInstance()->SetDebugModeOFF();
+	if (AppMode::getInstance()->IsDebugMode()) {
+		AppMode::getInstance()->SetDebugModeOFF();
 	}
 
 	// Sep. 10, 2002 genta
@@ -293,12 +293,12 @@ void CEditDoc::InitDoc()
 	m_cDocEditor.SetModified(false, false);	// Jan. 22, 2002 genta
 
 	// 文字コード種別
-	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
+	const TypeConfig& ref = m_cDocType.GetDocumentAttribute();
 	m_cDocFile.SetCodeSet(ref.m_encoding.m_eDefaultCodetype, ref.m_encoding.m_bDefaultBom);
 	m_cDocEditor.m_cNewLineCode = ref.m_encoding.m_eDefaultEoltype;
 
 	// Oct. 2, 2005 genta 挿入モード
-	m_cDocEditor.SetInsMode(GetDllShareData().m_Common.m_sGeneral.m_bIsINSMode);
+	m_cDocEditor.SetInsMode(GetDllShareData().m_common.m_sGeneral.m_bIsINSMode);
 
 	m_cCookie.DeleteAll(L"document");
 }
@@ -389,7 +389,7 @@ void CEditDoc::InitAllView(void)
 	m_bTabSpaceCurTemp = false;
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+	if (m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 		m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
 		m_cLayoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
@@ -412,7 +412,7 @@ BOOL CEditDoc::Create(CEditWnd* pcEditWnd)
 	m_pcEditWnd = pcEditWnd;
 
 	// Oct. 2, 2001 genta
-	m_cFuncLookup.Init(GetDllShareData().m_Common.m_sMacro.m_MacroTable, &GetDllShareData().m_Common);
+	m_cFuncLookup.Init(GetDllShareData().m_common.m_sMacro.m_MacroTable, &GetDllShareData().m_common);
 
 	SetBackgroundImage();
 
@@ -474,7 +474,7 @@ void CEditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 }
 
 
-void CEditDoc::GetSaveInfo(SSaveInfo* pSaveInfo) const
+void CEditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
 {
 	pSaveInfo->cFilePath   = m_cDocFile.GetFilePath();
 	pSaveInfo->eCharCode   = m_cDocFile.GetCodeSet();
@@ -507,10 +507,10 @@ void CEditDoc::GetEditInfo(
 
 	// GREPモード
 	pfi->m_bIsGrep = CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode;
-	wcscpy(pfi->m_szGrepKey, CAppMode::getInstance()->m_szGrepKey);
+	wcscpy(pfi->m_szGrepKey, AppMode::getInstance()->m_szGrepKey);
 
 	// デバッグモニタ (アウトプットウィンドウ) モード
-	pfi->m_bIsDebug = CAppMode::getInstance()->IsDebugMode();
+	pfi->m_bIsDebug = AppMode::getInstance()->IsDebugMode();
 }
 
 
@@ -569,7 +569,7 @@ bool CEditDoc::IsAcceptLoad() const
 		m_cDocEditor.IsModified()
 		|| m_cDocFile.GetFilePathClass().IsValidPath()
 		|| CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
-		|| CAppMode::getInstance()->IsDebugMode()
+		|| AppMode::getInstance()->IsDebugMode()
 	) {
 		return false;
 	}
@@ -599,7 +599,7 @@ bool CEditDoc::HandleCommand(EFunctionCode nCommand)
 			if (nPane != -1) {
 				m_pcEditWnd->SetActivePane(nPane);
 			}else {
-				CControlTray::ActiveNextWindow(m_pcEditWnd->GetHwnd());
+				ControlTray::ActiveNextWindow(m_pcEditWnd->GetHwnd());
 			}
 		}
 		return TRUE;
@@ -609,7 +609,7 @@ bool CEditDoc::HandleCommand(EFunctionCode nCommand)
 			if (nPane != -1) {
 				m_pcEditWnd->SetActivePane(nPane);
 			}else {
-				CControlTray::ActivePrevWindow(m_pcEditWnd->GetHwnd());
+				ControlTray::ActivePrevWindow(m_pcEditWnd->GetHwnd());
 			}
 		}
 		return TRUE;
@@ -635,7 +635,7 @@ void CEditDoc::OnChangeType()
 	// 新規で無変更ならデフォルト文字コードを適用する	// 2011.01.24 ryoji
 	if (!m_cDocFile.GetFilePathClass().IsValidPath()) {
 		if (!m_cDocEditor.IsModified() && m_cDocLineMgr.GetLineCount() == 0) {
-			const STypeConfig& types = m_cDocType.GetDocumentAttribute();
+			const TypeConfig& types = m_cDocType.GetDocumentAttribute();
 			m_cDocFile.SetCodeSet(types.m_encoding.m_eDefaultCodetype, types.m_encoding.m_bDefaultBom);
 			m_cDocEditor.m_cNewLineCode = types.m_encoding.m_eDefaultEoltype;
 			m_pcEditWnd->GetActiveView().GetCaret().ShowCaretPosInfo();
@@ -643,7 +643,7 @@ void CEditDoc::OnChangeType()
 	}
 
 	// 2006.09.01 ryoji タイプ変更後自動実行マクロを実行する
-	RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnTypeChanged);
+	RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnTypeChanged);
 }
 
 /*! ビューに設定変更を反映させる
@@ -670,15 +670,15 @@ void CEditDoc::OnChangeSetting(
 	}
 
 	// ファイルの排他モード変更
-	if (m_cDocFile.GetShareMode() != GetDllShareData().m_Common.m_sFile.m_nFileShareMode) {
-		m_cDocFile.SetShareMode(GetDllShareData().m_Common.m_sFile.m_nFileShareMode);
+	if (m_cDocFile.GetShareMode() != GetDllShareData().m_common.m_sFile.m_nFileShareMode) {
+		m_cDocFile.SetShareMode(GetDllShareData().m_common.m_sFile.m_nFileShareMode);
 
 		// ファイルの排他ロック解除
 		m_cDocFileOperation.DoFileUnlock();
 
 		// ファイル書込可能のチェック処理
 		bool bOld = m_cDocLocker.IsDocWritable();
-		m_cDocLocker.CheckWritable(bOld && !CAppMode::getInstance()->IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
+		m_cDocLocker.CheckWritable(bOld && !AppMode::getInstance()->IsViewMode());	// 書込可から不可に遷移したときだけメッセージを出す（出過ぎると鬱陶しいよね？）
 		if (bOld != m_cDocLocker.IsDocWritable()) {
 			pCEditWnd->UpdateCaption();
 		}
@@ -719,7 +719,7 @@ void CEditDoc::OnChangeSetting(
 
 	// 文書種別
 	m_cDocType.SetDocumentType(CDocTypeManager().GetDocumentTypeOfPath(m_cDocFile.GetFilePath()), false);
-	const STypeConfig& ref = m_cDocType.GetDocumentAttribute();
+	const TypeConfig& ref = m_cDocType.GetDocumentAttribute();
 
 	// タイプ別設定の種類が変更されたら、一時適用を元に戻す
 	if (nTypeId != ref.m_id) {
@@ -758,7 +758,7 @@ void CEditDoc::OnChangeSetting(
 		// 2008.06.07 nasukoji	折り返し方法の追加に対応
 		// 折り返し方法の一時設定とタイプ別設定が一致したら一時設定適用中は解除
 		if (m_nTextWrapMethodCur == ref.m_nTextWrapMethod) {
-			if (m_nTextWrapMethodCur == WRAP_SETTING_WIDTH
+			if (m_nTextWrapMethodCur == (int)eTextWrappingMethod::SettingWidth
 				&& m_cLayoutMgr.GetMaxLineKetas() != ref.m_nMaxLineKetas
 			) {
 				// 2013.05.29 折り返し幅が違うのでそのままにする
@@ -774,16 +774,16 @@ void CEditDoc::OnChangeSetting(
 		// 右端で折り返す：仮に現在の折り返し幅を使用
 		// 上記以外：MAXLINEKETASを使用
 		switch (m_nTextWrapMethodCur) {
-		case WRAP_NO_TEXT_WRAP:
+		case eTextWrappingMethod::NoWrapping:
 			nMaxLineKetas = MAXLINEKETAS;
 			break;
-		case WRAP_SETTING_WIDTH:
+		case eTextWrappingMethod::SettingWidth:
 			if (m_bTextWrapMethodCurTemp) {
 				// 2013.05.29 現在の一時適用の折り返し幅を使うように
 				nMaxLineKetas = m_cLayoutMgr.GetMaxLineKetas();
 			}
 			break;
-		case WRAP_WINDOW_WIDTH:
+		case eTextWrappingMethod::WindowWidth:
 			nMaxLineKetas = m_cLayoutMgr.GetMaxLineKetas();	// 現在の折り返し幅
 			break;
 		}
@@ -808,7 +808,7 @@ void CEditDoc::OnChangeSetting(
 	m_pcEditWnd->ClearViewCaretPosInfo();
 	
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+	if (m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 		m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
 		m_cLayoutMgr.ClearLayoutLineWidth();	// 各行のレイアウト行長の記憶をクリアする
@@ -846,7 +846,7 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 	}
 	
 	// デバッグモニタモードのときは保存確認しない
-	if (CAppMode::getInstance()->IsDebugMode()) {
+	if (AppMode::getInstance()->IsDebugMode()) {
 		return TRUE;
 	}
 
@@ -856,7 +856,7 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 		if (bGrepNoConfirm) { // Grepで保存確認しないモード
 			return TRUE;
 		}
-		if (!GetDllShareData().m_Common.m_sSearch.m_bGrepExitConfirm) {
+		if (!GetDllShareData().m_common.m_sSearch.m_bGrepExitConfirm) {
 			return TRUE;
 		}
 	}else {
@@ -870,7 +870,7 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 	TCHAR szGrepTitle[90];
 	LPCTSTR pszTitle = m_cDocFile.GetFilePathClass().IsValidPath() ? m_cDocFile.GetFilePath() : NULL;
 	if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
-		LPCWSTR		pszGrepKey = CAppMode::getInstance()->m_szGrepKey;
+		LPCWSTR		pszGrepKey = AppMode::getInstance()->m_szGrepKey;
 		int			nLen = (int)wcslen(pszGrepKey);
 		CNativeW	cmemDes;
 		LimitStringLengthW(pszGrepKey , nLen, 64, cmemDes);
@@ -889,7 +889,7 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 	HWND hwndMainFrame = CEditWnd::getInstance()->GetHwnd();
 	ActivateFrameWindow(hwndMainFrame);
 	int nBool;
-	if (CAppMode::getInstance()->IsViewMode()) {	// ビューモード
+	if (AppMode::getInstance()->IsViewMode()) {	// ビューモード
 		ConfirmBeep();
 		int nRet = ::MYMESSAGEBOX(
 			hwndMainFrame,
@@ -988,7 +988,7 @@ void CEditDoc::SetCurDirNotitle()
 	if (m_cDocFile.GetFilePathClass().IsValidPath()) {
 		return; // ファイルがあるときは何もしない
 	}
-	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_Common.m_sEdit.m_eOpenDialogDir;
+	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.m_sEdit.m_eOpenDialogDir;
 	TCHAR szSelDir[_MAX_PATH];
 	const TCHAR* pszDir = NULL;
 	if (eOpenDialogDir == OPENDIALOGDIR_MRU) {
@@ -1003,7 +1003,7 @@ void CEditDoc::SetCurDirNotitle()
 			}
 		}
 	}else if (eOpenDialogDir == OPENDIALOGDIR_SEL) {
-		CFileNameManager::ExpandMetaToFolder( GetDllShareData().m_Common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir) );
+		CFileNameManager::ExpandMetaToFolder( GetDllShareData().m_common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir) );
 		pszDir = szSelDir;
 	}
 	if (pszDir) {

@@ -200,7 +200,7 @@ void CViewCommander::Command_JUMP(void)
 				if (0
 					|| let == L'\t'
 					|| let == L' '
-					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
 				) {
 					continue;
 				}else
@@ -232,7 +232,7 @@ void CViewCommander::Command_JUMP(void)
 				bValidLine = TRUE;
 			}
 			// コメントブロック内の改行だけの行
-			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 				bValidLine = FALSE;
 			}
 		}
@@ -313,7 +313,7 @@ void CViewCommander::Command_BOOKMARK_NEXT(void)
 	nYOld = ptXY.y;					// hor
 
 re_do:;								// hor
-	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), SEARCH_FORWARD, &tmp_y)) {
+	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		CLayoutPoint ptLayout;
@@ -322,7 +322,7 @@ re_do:;								// hor
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
-	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		if (!bFound	&&		// 見つからなかった
 			bRedo			// 最初の検索
 		) {
@@ -357,7 +357,7 @@ void CViewCommander::Command_BOOKMARK_PREV(void)
 	nYOld = ptXY.y;						// hor
 
 re_do:;								// hor
-	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), SEARCH_BACKWARD, &tmp_y)) {
+	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;				// hor
 		CLayoutPoint ptLayout;
@@ -366,7 +366,7 @@ re_do:;								// hor
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
-	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		if (!bFound	&&	// 見つからなかった
 			bRedo		// 最初の検索
 		) {
@@ -424,7 +424,7 @@ void CViewCommander::Command_FUNCLIST_NEXT(void)
 
 	for (int n=0; n<2; ++n) {
 		if (CFuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
-				ptXY.GetY2(), SEARCH_FORWARD, &ptXY.y)) {
+				ptXY.GetY2(), eSearchDirection::Forward, &ptXY.y)) {
 			CLayoutPoint ptLayout;
 			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
 			m_pCommanderView->MoveCursorSelecting( ptLayout,
@@ -434,7 +434,7 @@ void CViewCommander::Command_FUNCLIST_NEXT(void)
 			}
 			return;
 		}
-		if (!GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+		if (!GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 			break;
 		}
 		ptXY.y = -1;
@@ -457,7 +457,7 @@ void CViewCommander::Command_FUNCLIST_PREV(void)
 		if (CFuncListManager().SearchFuncListMark(
 			&GetDocument()->m_cDocLineMgr,
 			ptXY.GetY2(),
-			SEARCH_BACKWARD,
+			eSearchDirection::Backward,
 			&ptXY.y
 			)
 		) {
@@ -472,7 +472,7 @@ void CViewCommander::Command_FUNCLIST_PREV(void)
 			}
 			return;
 		}
-		if (!GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+		if (!GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 			break;
 		}
 		ptXY.y= GetDocument()->m_cDocLineMgr.GetLineCount();

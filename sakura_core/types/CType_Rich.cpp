@@ -29,7 +29,7 @@
 // リッチテキスト
 // JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
 // Jul. 10, 2001 JEPRO 追加
-void CType_Rich::InitTypeConfigImp(STypeConfig* pType)
+void CType_Rich::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("リッチテキスト"));

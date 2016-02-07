@@ -522,7 +522,7 @@ void GetInidir(
 	if (!pDir)
 		return;
 	
-	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	TCHAR szPath[_MAX_PATH];
 
 	// sakura.ini ‚ÌƒpƒX‚ðŽæ“¾

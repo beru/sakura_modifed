@@ -23,7 +23,7 @@
 // 文字列置換
 void CLayoutMgr::ReplaceData_CLayoutMgr(
 	LayoutReplaceArg* pArg
-)
+	)
 {
 	CLayoutInt nWork_nLines = m_nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
 

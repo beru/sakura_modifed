@@ -31,7 +31,7 @@
 #include "view/Colors/EColorIndexType.h"
 
 // COBOL
-void CType_Cobol::InitTypeConfigImp(STypeConfig* pType)
+void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq
 	_tcscpy(pType->m_szTypeName, _T("COBOL"));
@@ -65,7 +65,7 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 	const wchar_t*	pszKeyWord;
 	int				nKeyWordLen;
 	BOOL			bDivision;
-	bool			bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool			bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	szDivision[0] = L'\0';
 	szLabel[0] =  L'\0';

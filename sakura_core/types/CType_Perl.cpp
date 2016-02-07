@@ -33,7 +33,7 @@
 // Perl
 // Jul. 08, 2001 JEPRO Perl ユーザに贈る
 // Jul. 08, 2001 JEPRO 追加
-void CType_Perl::InitTypeConfigImp(STypeConfig* pType)
+void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("Perl"));
@@ -75,7 +75,7 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 	int			nWordIdx = 0;
 	int			nMaxWordLeng = 70;
 	int			nMode;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	CLogicInt	nLineCount;
 	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {

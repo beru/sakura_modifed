@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-struct SProfileSettings
+struct ProfileSettings
 {
 	TCHAR m_szDllLanguage[_MAX_PATH];
 	int	m_nDefaultIndex;
@@ -74,8 +74,8 @@ protected:
 public:
 	std::tstring m_strProfileName;
 
-	static bool ReadProfSettings( SProfileSettings& );
-	static bool WriteProfSettings( SProfileSettings& );
+	static bool ReadProfSettings( ProfileSettings& );
+	static bool WriteProfSettings( ProfileSettings& );
 };
 
 

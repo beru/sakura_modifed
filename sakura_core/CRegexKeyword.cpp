@@ -153,7 +153,7 @@ bool CRegexKeyword::RegexKeyInit(void)
 
 	@note タイプ設定が変わったら再ロードしコンパイルする。
 */
-bool CRegexKeyword::RegexKeySetTypes(const STypeConfig *pTypesPtr)
+bool CRegexKeyword::RegexKeySetTypes(const TypeConfig *pTypesPtr)
 {
 	MYDBGMSG("RegexKeySetTypes")
 	if (!pTypesPtr)  {

@@ -130,11 +130,11 @@ public:
 	CommonSetting	m_Common;
 
 	// 2005.01.13 MIK セット数増加
-	struct SKeywordSetIndex {
+	struct KeywordSetIndex {
 		int typeId;
 		int index[MAX_KEYWORDSET_PER_TYPE];
 	};
-	std::vector<SKeywordSetIndex>	m_Types_nKeyWordSetIdx;
+	std::vector<KeywordSetIndex>	m_Types_nKeyWordSetIdx;
 	bool			m_bTrayProc;
 	HFONT			m_hKeywordHelpFont;		// キーワードヘルプ フォント ハンドル
 	HFONT			m_hTabFont;				// タブ フォント ハンドル

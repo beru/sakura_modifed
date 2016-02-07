@@ -39,7 +39,7 @@
 // Feb. 12, 2001 JEPRO .err エラーメッセージ
 // Nov.  6, 2002 genta docはMS Wordに譲ってここからは外す（関連づけ防止のため）
 // Nov.  6, 2002 genta log を追加
-void CType_Text::InitTypeConfigImp(STypeConfig* pType)
+void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("テキスト"));
@@ -93,7 +93,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 	using namespace WCODE;
 
 	// 見出し記号
-	const wchar_t*	pszStarts = GetDllShareData().m_Common.m_sFormat.m_szMidashiKigou;
+	const wchar_t*	pszStarts = GetDllShareData().m_common.m_sFormat.m_szMidashiKigou;
 	int				nStartsLen = wcslen(pszStarts);
 
 	/*	ネストの深さは、nMaxStackレベルまで、ひとつのヘッダは、最長32文字まで区別
@@ -189,7 +189,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[i], nLineLen);
 		pszText[nLineLen] = L'\0';
-		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		for (i=0; i<nLineLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 				pszText[i] = L'\0';
@@ -257,7 +257,7 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 {
 	int levelPrev = 0;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;

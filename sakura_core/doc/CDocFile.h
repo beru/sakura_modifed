@@ -29,7 +29,7 @@
 class CEditDoc;
 
 //####本来はここにあるべきでは無い
-struct SFileInfo {
+struct FileInfo {
 	friend class CDocFile;
 protected:
 	ECodeType	eCharCode;
@@ -39,7 +39,7 @@ protected:
 	CFileTime	cFileTime;
 
 public:
-	SFileInfo() {
+	FileInfo() {
 		eCharCode = eCharCodeLoad = CODE_DEFAULT;
 		bBomExist = bBomExistLoad = false;
 		cFileTime.ClearFILETIME();
@@ -72,7 +72,7 @@ public:
 	void			SetSaveFilePath(LPCTSTR pszPath)	{ m_szSaveFilePath.Assign(pszPath); }
 public: //####
 	CEditDoc*	m_pcDocRef;
-	SFileInfo	m_sFileInfo;
+	FileInfo	m_sFileInfo;
 	CFilePath	m_szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
 };
 

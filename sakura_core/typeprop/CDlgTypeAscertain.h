@@ -45,7 +45,7 @@ using std::tstring;
 class CDlgTypeAscertain : public CDialog {
 public:
 	// 型
-	struct SAscertainInfo {
+	struct AscertainInfo {
 		tstring	sImportFile;	// in インポートファイル名
 		wstring	sTypeNameTo;	// in タイプ名（インポート先）
 		wstring	sTypeNameFile;	// in タイプ名（ファイルから）
@@ -58,7 +58,7 @@ public:
 	// Constructors
 	CDlgTypeAscertain();
 	// モーダルダイアログの表示
-	int DoModal(HINSTANCE, HWND, SAscertainInfo*);	// モーダルダイアログの表示
+	int DoModal(HINSTANCE, HWND, AscertainInfo*);	// モーダルダイアログの表示
 
 protected:
 	// 実装ヘルパ関数
@@ -67,6 +67,6 @@ protected:
 	LPVOID GetHelpIdTable(void);
 
 private:
-	SAscertainInfo* m_psi;			// インターフェイス
+	AscertainInfo* m_psi;			// インターフェイス
 };
 

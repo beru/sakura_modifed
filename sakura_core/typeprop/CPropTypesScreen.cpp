@@ -118,9 +118,9 @@ TYPE_NAME_ID<int> IndentTypeArr[] = {
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
 TYPE_NAME_ID<int> WrapMethodArr[] = {
-	{ WRAP_NO_TEXT_WRAP,	STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
-	{ WRAP_SETTING_WIDTH,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
-	{ WRAP_WINDOW_WIDTH,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
+	{ (int)eTextWrappingMethod::NoWrapping,		STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
+	{ (int)eTextWrappingMethod::SettingWidth,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
+	{ (int)eTextWrappingMethod::WindowWidth,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
 };
 
 // 静的メンバ
@@ -250,11 +250,11 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 					if (m_Types.m_bUseTypeFont) {
 						lf = m_Types.m_lf;
 					}else {
-						lf = m_pShareData->m_Common.m_sView.m_lf;
+						lf = m_pShareData->m_common.m_sView.m_lf;
 					}
 
 					bool bFixedFont = true;
-					if (m_pShareData->m_Common.m_sView.m_lf.lfPitchAndFamily & FIXED_PITCH) {
+					if (m_pShareData->m_common.m_sView.m_lf.lfPitchAndFamily & FIXED_PITCH) {
 					}else {
 						bool bFixedFont = false;
 					}
@@ -715,7 +715,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		if (m_Types.m_bUseTypeFont) {
 			lf = m_Types.m_lf;
 		}else {
-			lf = m_pShareData->m_Common.m_sView.m_lf;
+			lf = m_pShareData->m_common.m_sView.m_lf;
 		}
 	}
 

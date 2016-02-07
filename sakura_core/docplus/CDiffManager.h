@@ -89,7 +89,7 @@ class CDiffLineMgr {
 public:
 	CDiffLineMgr(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 	void ResetAllDiffMark();															// ·•ª•\¦‚Ì‘S‰ğœ
-	bool SearchDiffMark(CLogicInt , ESearchDirection , CLogicInt*);						// ·•ªŒŸõ
+	bool SearchDiffMark(CLogicInt , eSearchDirection, CLogicInt*);						// ·•ªŒŸõ
 	void SetDiffMarkRange(EDiffMark nMode, CLogicInt nStartLine, CLogicInt nEndLine);	// ·•ª”ÍˆÍ‚Ì“o˜^
 private:
 	CDocLineMgr* m_pcDocLineMgr;

@@ -58,12 +58,12 @@ enum EExpParamName
 	EExpParamName_end
 };
 
-struct SExpParamName
+struct ExpParamName
 {
 	const wchar_t* m_szName;
 	int m_nLen;
 };
-static SExpParamName SExpParamNameTable[] = {
+static ExpParamName SExpParamNameTable[] = {
 	{L"profile", 7},
 	{NULL, 0}
 };
@@ -217,7 +217,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		case L'n':
 			if (!pcDoc->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
-				}else if (CAppMode::getInstance()->IsDebugMode()) {
+				}else if (AppMode::getInstance()->IsDebugMode()) {
 				}else {
 					WCHAR szText[10];
 					const EditNode* node = CAppNodeManager::getInstance()->GetEditNode(GetMainWindow()->GetHwnd());
@@ -282,7 +282,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 		// From Here Jan. 15, 2002 hor
 		case L'B':	// タイプ別設定の名前			2013/03/28 Uchi
 			{
-				const STypeConfig& sTypeCongig = pcDoc->m_cDocType.GetDocumentAttribute();
+				const TypeConfig& sTypeCongig = pcDoc->m_cDocType.GetDocumentAttribute();
 				if (sTypeCongig.m_nIdx > 0) {	// 基本は表示しない
 					q = wcs_pushT(q, q_max - q, sTypeCongig.m_szTypeName);
 				}
@@ -442,8 +442,8 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			{
 				CNativeW cmemDes;
 				// m_szGrepKey → cmemDes
-				LimitStringLengthW(CAppMode::getInstance()->m_szGrepKey, wcslen(CAppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), cmemDes);
-				if ((int)wcslen(CAppMode::getInstance()->m_szGrepKey) > cmemDes.GetStringLength()) {
+				LimitStringLengthW(AppMode::getInstance()->m_szGrepKey, wcslen(AppMode::getInstance()->m_szGrepKey), (q_max - q > 32 ? 32 : q_max - q - 3), cmemDes);
+				if ((int)wcslen(AppMode::getInstance()->m_szGrepKey) > cmemDes.GetStringLength()) {
 					cmemDes.AppendString(L"...");
 				}
 				q = wcs_pushW(q, q_max - q, cmemDes.GetStringPtr(), cmemDes.GetStringLength());
@@ -463,7 +463,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 			// iniファイルのフルパス
 			{
 				TCHAR	szPath[_MAX_PATH + 1];
-				std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+				std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 				CFileNameManager::getInstance()->GetIniFileName( szPath, strProfileName.c_str() );
 				q = wcs_pushT( q, q_max - q, szPath );
 				++p;
@@ -482,7 +482,7 @@ void CSakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszB
 					break;
 				case STAND_KEYMACRO:
 					{
-						TCHAR* pszMacroFilePath = GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName;
+						TCHAR* pszMacroFilePath = GetDllShareData().m_common.m_sMacro.m_szKeyMacroFileName;
 						q = wcs_pushT(q, q_max - q, pszMacroFilePath);
 					}
 					break;
@@ -624,7 +624,7 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 
 	switch (*pCond) {
 	case L'R': // $R ビューモードおよび読み取り専用属性
-		if (CAppMode::getInstance()->IsViewMode()) {
+		if (AppMode::getInstance()->IsViewMode()) {
 			return 0; // ビューモード
 		}else if (!CEditDoc::GetInstance(0)->m_cDocLocker.IsDocWritable()) {
 			return 1; // 上書き禁止
@@ -634,13 +634,13 @@ int CSakuraEnvironment::_ExParam_Evaluate(const wchar_t* pCond)
 	case L'w': // $w Grepモード/Output Mode
 		if (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
 			return 0;
-		}else if (CAppMode::getInstance()->IsDebugMode()) {
+		}else if (AppMode::getInstance()->IsDebugMode()) {
 			return 1;
 		}else {
 			return 2;
 		}
 	case L'M': // $M キーボードマクロの記録中
-		if (GetDllShareData().m_sFlags.m_bRecordingKeyMacro && GetDllShareData().m_sFlags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
+		if (GetDllShareData().m_flags.m_bRecordingKeyMacro && GetDllShareData().m_flags.m_hwndRecordingKeyMacro == CEditWnd::getInstance()->GetHwnd()) { /* ウィンドウ */
 			return 0;
 		}else {
 			return 1;
@@ -675,7 +675,7 @@ wchar_t* ExParam_LongName( wchar_t* q, wchar_t* q_max, EExpParamName eLongParam 
 	switch (eLongParam) {
 	case EExpParamName_profile:
 		{
-			LPCWSTR pszProf = CCommandLine::getInstance()->GetProfileName();
+			LPCWSTR pszProf = CommandLine::getInstance()->GetProfileName();
 			q = wcs_pushW( q, q_max - q, pszProf );
 		}
 		break;
@@ -698,7 +698,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 		return to_tchar(pcDoc->m_cDocFile.GetFilePathClass().GetDirPath().c_str());
 	}
 
-	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_Common.m_sEdit.m_eOpenDialogDir;
+	EOpenDialogDir eOpenDialogDir = GetDllShareData().m_common.m_sEdit.m_eOpenDialogDir;
 	if (bControlProcess && eOpenDialogDir == OPENDIALOGDIR_CUR) {
 		eOpenDialogDir = OPENDIALOGDIR_MRU;
 	}
@@ -740,7 +740,7 @@ std::tstring CSakuraEnvironment::GetDlgInitialDir(bool bControlProcess)
 	case OPENDIALOGDIR_SEL:
 		{
 			TCHAR szSelDir[_MAX_PATH];
-			CFileNameManager::ExpandMetaToFolder(GetDllShareData().m_Common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
+			CFileNameManager::ExpandMetaToFolder(GetDllShareData().m_common.m_sEdit.m_OpenDialogSelDir, szSelDir, _countof(szSelDir));
 			return szSelDir;
 		}
 		break;

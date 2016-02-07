@@ -106,7 +106,7 @@ int CDlgFileTree::DoModal(
 
 
 // LS()を使用しているのですぐ使うこと
-static TCHAR* GetFileTreeLabel(const SFileTreeItem& item)
+static TCHAR* GetFileTreeLabel(const FileTreeItem& item)
 {
 	const TCHAR* pszLabel;
 	if (item.m_eFileTreeItemType != EFileTreeItemType_Folder) {
@@ -140,11 +140,11 @@ void CDlgFileTree::SetData()
 	TreeView_DeleteAllItems(hwndTree);
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
 	for (int i=0; i<(int)m_fileTreeSetting.m_aItems.size(); ++i) {
-		int nMaxCount = _countof(GetDllShareData().m_Common.m_sOutline.m_sFileTree.m_aItems);
+		int nMaxCount = _countof(GetDllShareData().m_common.m_sOutline.m_sFileTree.m_aItems);
 		if (bSaveShareData && nMaxCount < i + 1) {
 			::InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT), nMaxCount);
 		}
-		const SFileTreeItem& item = m_fileTreeSetting.m_aItems[i];
+		const FileTreeItem& item = m_fileTreeSetting.m_aItems[i];
 		while (item.m_nDepth < (int)hParentTree.size() - 1) {
 			hParentTree.resize(hParentTree.size() - 1);
 		}
@@ -178,8 +178,8 @@ void CDlgFileTree::SetDataItem(int nItemIndex)
 	if (nItemIndex < 0 || (int)m_fileTreeSetting.m_aItems.size() <= nItemIndex) {
 		bDummy = true;
 	}
-	SFileTreeItem itemDummy;
-	const SFileTreeItem& item = (bDummy ? itemDummy : m_fileTreeSetting.m_aItems[nItemIndex]);
+	FileTreeItem itemDummy;
+	const FileTreeItem& item = (bDummy ? itemDummy : m_fileTreeSetting.m_aItems[nItemIndex]);
 	itemDummy.m_szTargetFile = _T("*.*");
 	int nIDs[] ={IDC_RADIO_GREP, IDC_RADIO_FILE, IDC_RADIO_FOLDER};
 	int nID1;
@@ -230,7 +230,7 @@ void CDlgFileTree::ChangeEnableAddInsert()
 	if (bSaveShareData) {
 		int nCount = TreeView_GetCount(GetItemHwnd(IDC_TREE_FL));
 		bool bEnable = true;
-		int nMaxCount = _countof(GetDllShareData().m_Common.m_sOutline.m_sFileTree.m_aItems);
+		int nMaxCount = _countof(GetDllShareData().m_common.m_sOutline.m_sFileTree.m_aItems);
 		if (nMaxCount < nCount) {
 			bEnable = false;
 		}
@@ -245,11 +245,11 @@ void CDlgFileTree::ChangeEnableAddInsert()
 int CDlgFileTree::GetData()
 {
 	HWND hwndDlg = GetHwnd();
-	SFileTree* pFileTree;
-	STypeConfig type;
+	FileTree* pFileTree;
+	TypeConfig type;
 	bool bTypeError = false;
 	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Common) {
-		pFileTree = &GetDllShareData().m_Common.m_sOutline.m_sFileTree;
+		pFileTree = &GetDllShareData().m_common.m_sOutline.m_sFileTree;
 	}else {
 		if (!CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), type)) {
 			bTypeError = true;
@@ -259,7 +259,7 @@ int CDlgFileTree::GetData()
 		}
 	}
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
-	std::vector<SFileTreeItem> items;
+	std::vector<FileTreeItem> items;
 	if (!GetDataTree(items, TreeView_GetRoot(GetItemHwnd(IDC_TREE_FL)), 0, (bSaveShareData ? _countof(pFileTree->m_aItems) : 0))) {
 		InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT));
 	}
@@ -290,7 +290,7 @@ int CDlgFileTree::GetData()
 }
 
 bool CDlgFileTree::GetDataTree(
-	std::vector<SFileTreeItem>& data,
+	std::vector<FileTreeItem>& data,
 	HTREEITEM hItem,
 	int nLevel,
 	int nMaxCount
@@ -321,9 +321,9 @@ bool CDlgFileTree::GetDataTree(
 	return true;
 }
 
-int CDlgFileTree::GetDataItem(SFileTreeItem& item)
+int CDlgFileTree::GetDataItem(FileTreeItem& item)
 {
-	item = SFileTreeItem(); // 初期化
+	item = FileTreeItem(); // 初期化
 	BOOL bGrepEnable = FALSE;
 	BOOL bPathEnable = FALSE;
 	if (IsButtonChecked(IDC_RADIO_GREP)) {
@@ -356,7 +356,7 @@ BOOL CDlgFileTree::OnInitDialog(
 	)
 {
 	_SetHwnd(hwndDlg);
-	SFileTreeItem item;
+	FileTreeItem item;
 
 	EditCtl_LimitText(GetItemHwnd(IDC_EDIT_DEFINI), m_fileTreeSetting.m_szDefaultProjectIni.GetBufferCount() -1);
 	EditCtl_LimitText(GetItemHwnd(IDC_EDIT_PATH), item.m_szTargetPath.GetBufferCount() -1);
@@ -409,7 +409,7 @@ void CDlgFileTree::SetDataInit()
 }
 
 HTREEITEM CDlgFileTree::InsertTreeItem(
-	SFileTreeItem& item,
+	FileTreeItem& item,
 	HTREEITEM htiParent,
 	HTREEITEM htiInsert
 	)
@@ -700,7 +700,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 			if (!htiInsert) {
 				htiInsert = TVI_LAST;
 			}
-			SFileTreeItem item;
+			FileTreeItem item;
 			GetDataItem(item);
 			HTREEITEM htiItem = InsertTreeItem(item, htiParent, htiInsert);
 			// 展開
@@ -719,7 +719,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 			tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 			tvi.hItem = htiSelect;
 			if (TreeView_GetItem(hwndTree, &tvi)) {
-				SFileTreeItem item;
+				FileTreeItem item;
 				GetDataItem(item);
 				m_fileTreeSetting.m_aItems[tvi.lParam] = item;
 				
@@ -733,7 +733,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 	case IDC_BUTTON_FILEADD:
 		{
 			CDlgOpenFile dlg;
-			SLoadInfo sLoadInfo;
+			LoadInfo sLoadInfo;
 			std::vector<std::tstring> aFileNames;
 			dlg.Create( G_AppInstance(), GetHwnd(), _T("*.*"), _T("."),
 				std::vector<LPCTSTR>(), std::vector<LPCTSTR>() );
@@ -772,7 +772,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 					for (int i=0; i<(int)aFileNames.size(); ++i) {
 						CNativeT cmemFile = aFileNames[i].c_str();
 						cmemFile.ReplaceT(_T("%"), _T("%%"));
-						SFileTreeItem item;
+						FileTreeItem item;
 						item.m_eFileTreeItemType = EFileTreeItemType_File;
 						item.m_szTargetPath = cmemFile.GetStringPtr();
 						item.m_szLabelName = GetFileTitlePointer(aFileNames[i].c_str());
@@ -804,7 +804,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 				if (dlgInput.DoModal( G_AppInstance(), GetHwnd(), strTitle.c_str(), strMsg.c_str(), _countof(szPathTo), szPathTo)) {
 					int nItemsCount = (int)m_fileTreeSetting.m_aItems.size();
 					for (int i=0; i<nItemsCount; ++i) {
-						SFileTreeItem& item =  m_fileTreeSetting.m_aItems[i];
+						FileTreeItem& item =  m_fileTreeSetting.m_aItems[i];
 						CNativeT str(item.m_szTargetPath);
 						str.Replace(szPathFrom, szPathTo);
 						if (str.GetStringLength() < (int)item.m_szTargetPath.GetBufferCount()) {
@@ -934,7 +934,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_EXPORT:
 		{
-			std::vector<SFileTreeItem> items;
+			std::vector<FileTreeItem> items;
 			GetDataTree(items, TreeView_GetRoot(GetItemHwnd(IDC_TREE_FL)), 0, 0);
 			CImpExpFileTree cImpExp(items);
 			cImpExp.ExportUI(G_AppInstance(), GetHwnd());

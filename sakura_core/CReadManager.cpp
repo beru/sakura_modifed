@@ -41,14 +41,14 @@
 */
 EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 	CDocLineMgr*		pcDocLineMgr,	// [out]
-	const SLoadInfo&	sLoadInfo,		// [in]
-	SFileInfo*			pFileInfo		// [out]
+	const LoadInfo&	sLoadInfo,		// [in]
+	FileInfo*			pFileInfo		// [out]
 	)
 {
 	LPCTSTR pszPath = sLoadInfo.cFilePath.c_str();
 
 	// 文字コード種別
-	const STypeConfigMini* type;
+	const TypeConfigMini* type;
 	CDocTypeManager().GetTypeConfigMini( sLoadInfo.nType, &type );
 	ECodeType eCharCode = sLoadInfo.eCharCode;
 	if (eCharCode == CODE_AUTODETECT) {
@@ -88,7 +88,7 @@ EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
 		// ファイルを開く
 		// ファイルを閉じるにはFileCloseメンバ又はデストラクタのどちらかで処理できます
 		//	Jul. 28, 2003 ryoji BOMパラメータ追加
-		cfl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode(), &bBom );
+		cfl.FileOpen( pszPath, bBigFile, eCharCode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode(), &bBom );
 		pFileInfo->SetBomExist( bBom );
 
 		// ファイル時刻の取得

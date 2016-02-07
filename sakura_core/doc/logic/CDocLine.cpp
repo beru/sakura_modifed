@@ -51,7 +51,7 @@ void CDocLine::SetEol()
 	int nLength = m_cLine.GetStringLength();
 	// 改行コード設定
 	const wchar_t* p = &pData[nLength] - 1;
-	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) --p;
+	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) --p;
 	++p;
 	if (p >= pData) {
 		m_cEol.SetTypeByString(p, &pData[nLength] - p);

@@ -74,9 +74,9 @@ bool CViewCommander::Command_FUNCLIST(
 	}
 
 	auto& dlgFuncList = GetEditWindow()->m_cDlgFuncList;
-	if (dlgFuncList.GetHwnd() && nAction != SHOW_RELOAD) {
+	if (dlgFuncList.GetHwnd() && nAction != (int)eShowDialog::Reload) {
 		switch (nAction) {
-		case SHOW_NORMAL: // アクティブにする
+		case eShowDialog::Normal: // アクティブにする
 			// 開いているものと種別が同じならActiveにするだけ．異なれば再解析
 			dlgFuncList.SyncColor();
 			if (dlgFuncList.CheckListType(nOutlineType)) {
@@ -87,7 +87,7 @@ bool CViewCommander::Command_FUNCLIST(
 				return true;
 			}
 			break;
-		case SHOW_TOGGLE: // 閉じる
+		case eShowDialog::Toggle: // 閉じる
 			// 開いているものと種別が同じなら閉じる．異なれば再解析
 			if (dlgFuncList.CheckListType(nOutlineType)) {
 				if (dlgFuncList.IsDocking())

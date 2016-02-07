@@ -17,9 +17,9 @@
 
 
 // COpeクラス構築
-COpe::COpe(EOpeCode eCode)
+COpe::COpe(eOpeCode eCode)
 {
-	assert( eCode != OPE_UNKNOWN );
+	assert( eCode != eOpeCode::Unknown );
 	m_nOpe = eCode;		// 操作種別
 
 	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1), CLogicInt(-1));	// カーソル位置

@@ -58,7 +58,7 @@ bool CColor_KeywordSet::BeginColor(const CStringRef& cStr, int nPos)
 		int posWordEnd = nPos; ///< nPos...posWordEndがキーワード。
 		int posWordEndCandidate = posNextWordHead; ///< nPos...posWordEndCandidateはキーワード候補。
 		do {
-			const int ret = GetDllShareData().m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SearchKeyWord2(iKwdSet, cStr.GetPtr() + nPos, posWordEndCandidate - nPos);
+			const int ret = GetDllShareData().m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.SearchKeyWord2(iKwdSet, cStr.GetPtr() + nPos, posWordEndCandidate - nPos);
 			if (0 <= ret) {
 				// 登録されたキーワードだった。
 				posWordEnd = posWordEndCandidate;

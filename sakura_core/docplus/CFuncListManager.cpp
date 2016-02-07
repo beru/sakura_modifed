@@ -48,13 +48,13 @@ void CFuncListManager::SetLineFuncList(CDocLine* pcDocLine, bool bFlag)
 bool CFuncListManager::SearchFuncListMark(
 	const CDocLineMgr*	pcDocLineMgr,
 	CLogicInt			nLineNum,		//!< 検索開始行
-	ESearchDirection	bPrevOrNext,
+	eSearchDirection	bPrevOrNext,
 	CLogicInt*			pnLineNum 		//!< マッチ行
 	) const
 {
 	CLogicInt nLinePos = nLineNum;
 
-	if (bPrevOrNext == SEARCH_BACKWARD) {
+	if (bPrevOrNext == eSearchDirection::Backward) {
 		// 後方検索(↑)
 		--nLinePos;
 		const CDocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );

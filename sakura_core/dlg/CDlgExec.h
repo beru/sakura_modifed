@@ -36,9 +36,9 @@ public:
 
 
 protected:
-	SComboBoxItemDeleter m_comboDel;
+	ComboBoxItemDeleter m_comboDel;
 	CRecentCmd m_cRecentCmd;
-	SComboBoxItemDeleter m_comboDelCur;
+	ComboBoxItemDeleter m_comboDelCur;
 	CRecentCurDir m_cRecentCur;
 
 	// オーバーライド?

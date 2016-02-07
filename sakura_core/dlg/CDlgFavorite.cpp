@@ -69,7 +69,7 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-static const SAnchorList anchorList[] = {
+static const AnchorListItem anchorList[] = {
 	{IDC_TAB_FAVORITE,              ANCHOR_LEFT_RIGHT},
 	{IDC_STATIC_BUTTONS,			ANCHOR_BOTTOM},
 	{IDC_BUTTON_CLEAR, 				ANCHOR_BOTTOM},
@@ -382,7 +382,7 @@ BOOL CDlgFavorite::OnInitDialog(
 	CreateSizeBox();
 	CDialog::OnSize();
 
-	RECT rcDialog = GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog;
+	RECT rcDialog = GetDllShareData().m_common.m_sOthers.m_rcFavoriteDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -1204,7 +1204,7 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 	// äÓíÍÉNÉâÉXÉÅÉìÉo
 	CDialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcFavoriteDialog);
 
 	RECT rc;
 	POINT ptNew;
@@ -1226,7 +1226,7 @@ BOOL CDlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgFavorite::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcFavoriteDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcFavoriteDialog);
 	
 	return CDialog::OnMove(wParam, lParam);
 }

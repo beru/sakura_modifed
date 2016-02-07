@@ -16,7 +16,7 @@
 
 #include "global.h"
 
-class CProcess;
+class Process;
 
 /*-----------------------------------------------------------------------
 ÉNÉâÉXÇÃêÈåæ
@@ -32,7 +32,7 @@ class CProcess;
 */
 class CProcessFactory {
 public:
-	CProcess* Create(HINSTANCE hInstance, LPCTSTR lpCmdLine);
+	Process* Create(HINSTANCE hInstance, LPCTSTR lpCmdLine);
 protected:
 private:
 	bool IsValidVersion();

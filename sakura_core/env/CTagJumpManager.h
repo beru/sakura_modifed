@@ -41,7 +41,7 @@ struct TagJump {
 // 共有メモリ内構造体
 // 2004/06/21 タグジャンプ機能追加
 // 2005.04.03 MIK キーワード指定タグジャンプ
-struct SShare_TagJump {
+struct Share_TagJump {
 	// 型
 	typedef StaticVector<
 		StaticString<WCHAR, _MAX_PATH>,

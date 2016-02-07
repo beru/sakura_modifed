@@ -221,7 +221,7 @@ void CPropMacro::SetData(HWND hwndDlg)
 
 	// マクロデータ
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
-	auto& csMacro = m_pShareData->m_Common.m_sMacro;
+	auto& csMacro = m_pShareData->m_common.m_sMacro;
 	
 	for (index=0; index<MAX_CUSTMACRO; ++index) {
 		auto& macroRec = csMacro.m_MacroTable[index];

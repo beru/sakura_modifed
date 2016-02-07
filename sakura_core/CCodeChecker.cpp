@@ -131,7 +131,7 @@ static EConvertResult _CheckSavingCharcode(
 }
 
 
-ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
+ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -181,7 +181,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SSaveInfo* pSaveInfo)
 			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
 			CUnicode().UnicodeToHex( cmemChar.GetStringPtr(), cmemChar.GetStringLength(),
-				szCharCode, &GetDllShareData().m_Common.m_sStatusbar );
+				szCharCode, &GetDllShareData().m_common.m_sStatusbar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
 			CEditWnd::getInstance()->GetHwnd(),

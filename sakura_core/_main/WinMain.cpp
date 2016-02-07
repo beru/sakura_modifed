@@ -74,7 +74,7 @@ int WINAPI _tWinMain(
 	
 	// プロセスの生成とメッセージループ
 	CProcessFactory aFactory;
-	CProcess* process = nullptr;
+	Process* process = nullptr;
 
 #ifndef _DEBUG
 	try {

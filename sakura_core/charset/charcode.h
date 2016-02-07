@@ -282,7 +282,7 @@ namespace TCODE {
 }
 
 // 文字幅の動的計算用キャッシュ関連
-struct SCharWidthCache {
+struct CharWidthCache {
 	// 文字半角全角キャッシュ
 	TCHAR		m_lfFaceName[LF_FACESIZE];
 	BYTE		m_bCharWidthCache[0x10000/4];		// 16KB 文字半角全角キャッシュ 2008/5/16 Uchi

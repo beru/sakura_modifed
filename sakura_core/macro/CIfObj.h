@@ -73,14 +73,14 @@ public:
 class CIfObj : public ImplementsIUnknown<IDispatch> {
 public:
 	// 型定義
-	struct CMethodInfo {
+	struct MethodInfo {
 		FUNCDESC		Desc;
 		wchar_t			Name[64];
 		CIfObjMethod	Method;
 		ELEMDESC		Arguments[9];
 		int				ID;
 	};
-	typedef std::vector<CMethodInfo> CMethodInfoList;
+	typedef std::vector<MethodInfo> CMethodInfoList;
 
 	// コンストラクタ・デストラクタ
 	CIfObj(const wchar_t* name, bool isGlobal);

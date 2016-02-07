@@ -26,12 +26,13 @@
 #include "util/design_template.h"
 #include "doc/CDocListener.h"
 
-class CAppMode :
-	public TSingleton<CAppMode>,
+class AppMode
+	:
+	public TSingleton<AppMode>,
 	public CDocListenerEx
 { // ###仮
-	friend class TSingleton<CAppMode>;
-	CAppMode()
+	friend class TSingleton<AppMode>;
+	AppMode()
 		:
 		m_bViewMode(false),	// ビューモード
 		m_bDebugMode(false)	// デバッグモニタモード
@@ -48,7 +49,7 @@ public:
 	void	SetDebugModeOFF();	// デバッグモニタモード解除
 
 	// イベント
-	void OnAfterSave(const SSaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& sSaveInfo);
 
 protected:
 	void _SetDebugMode(bool bDebugMode) { m_bDebugMode = bDebugMode; }

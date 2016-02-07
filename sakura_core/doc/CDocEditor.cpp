@@ -42,7 +42,7 @@ CDocEditor::CDocEditor(CEditDoc* pcDoc)
 	m_bIsDocModified(false)	// 変更フラグ // Jan. 22, 2002 genta 型変更
 {
 	// Oct. 2, 2005 genta 挿入モード
-	this->SetInsMode(GetDllShareData().m_Common.m_sGeneral.m_bIsINSMode);
+	this->SetInsMode(GetDllShareData().m_common.m_sGeneral.m_bIsINSMode);
 }
 
 
@@ -64,20 +64,20 @@ void CDocEditor::SetModified(bool flag, bool redraw)
 		m_pcDocRef->m_pcEditWnd->UpdateCaption();
 }
 
-void CDocEditor::OnBeforeLoad(SLoadInfo* sLoadInfo)
+void CDocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
 {
 	// ビューのテキスト選択解除
 	GetListeningDoc()->m_pcEditWnd->Views_DisableSelectArea(true);
 }
 
-void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
+void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
 	// May 12, 2000 genta
 	// 編集用改行コードの設定
 	{
-		const STypeConfig& type = pcDoc->m_cDocType.GetDocumentAttribute();
+		const TypeConfig& type = pcDoc->m_cDocType.GetDocumentAttribute();
 		if (pcDoc->m_cDocFile.GetCodeSet() == type.m_encoding.m_eDefaultCodetype) {
 			SetNewLineCode(type.m_encoding.m_eDefaultEoltype);	// 2011.01.24 ryoji デフォルトEOL
 		}else {
@@ -98,10 +98,10 @@ void CDocEditor::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 	// カレントディレクトリの変更
 	::SetCurrentDirectory(pcDoc->m_cDocFile.GetFilePathClass().GetDirPath().c_str());
-	CAppMode::getInstance()->SetViewMode(sLoadInfo.bViewMode);		// ビューモード	##ここも、アリかな
+	AppMode::getInstance()->SetViewMode(sLoadInfo.bViewMode);		// ビューモード	##ここも、アリかな
 }
 
-void CDocEditor::OnAfterSave(const SSaveInfo& sSaveInfo)
+void CDocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 

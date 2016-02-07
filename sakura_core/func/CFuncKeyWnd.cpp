@@ -117,7 +117,7 @@ HWND CFuncKeyWnd::Open(
 	m_nCurrentKeyState = -1;
 
 	// 2002.11.04 Moca 変更できるように
-	m_nButtonGroupNum = m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_GroupNum;
+	m_nButtonGroupNum = m_pShareData->m_common.m_sWindow.m_nFUNCKEYWND_GroupNum;
 	if (m_nButtonGroupNum < 1 || 12 < m_nButtonGroupNum) {
 		m_nButtonGroupNum = 4;
 	}
@@ -283,7 +283,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		// ファンクションキーの機能名を取得
-		auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
+		auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji CKeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = CKeyBind::GetFuncCode(

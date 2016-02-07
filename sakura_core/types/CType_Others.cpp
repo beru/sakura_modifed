@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "types/CType.h"
 
-void CType_Other::InitTypeConfigImp(STypeConfig* pType)
+void CType_Other::InitTypeConfigImp(TypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq
 	auto_sprintf_s(pType->m_szTypeName, _T("Ý’è%d"), pType->m_nIdx + 1);

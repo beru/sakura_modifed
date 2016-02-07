@@ -24,7 +24,7 @@
 #pragma once
 
 // 定数
-enum EConvertResult{
+enum EConvertResult : char {
 	RESULT_COMPLETE, // データを失うことなく変換が完了した。
 	RESULT_LOSESOME, // 変換が完了したが、一部のデータが失われた。
 	RESULT_FAILURE,  // 何らかの原因により失敗した。

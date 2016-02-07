@@ -110,9 +110,9 @@ public:
 
 	bool			m_bInitCodePage;
 
-	SComboBoxItemDeleter	m_combDelFile;
+	ComboBoxItemDeleter	m_combDelFile;
 	CRecentFile				m_cRecentFile;
-	SComboBoxItemDeleter	m_combDelFolder;
+	ComboBoxItemDeleter	m_combDelFolder;
 	CRecentFolder			m_cRecentFolder;
 
 	OPENFILENAME*	m_pOf;
@@ -154,7 +154,7 @@ LRESULT APIENTRY OFNHookProcMain(
 	case WM_MOVE:
 		//「開く」ダイアログのサイズと位置
 		pShareData = &GetDllShareData();
-		::GetWindowRect(hwnd, &pShareData->m_Common.m_sOthers.m_rcOpenDialog);
+		::GetWindowRect(hwnd, &pShareData->m_common.m_sOthers.m_rcOpenDialog);
 //		MYTRACE(_T("WM_MOVE 1\n"));
 		break;
 	case WM_COMMAND:
@@ -245,7 +245,7 @@ UINT_PTR CALLBACK OFNHookProc(
 			//「開く」ダイアログのサイズと位置
 			CDlgOpenFileData* pData = (CDlgOpenFileData*)::GetWindowLongPtr(hdlg, DWLP_USER);
 			HWND hwndFrame = ::GetParent(hdlg);
-			::GetWindowRect(hwndFrame, &pData->m_pcDlgOpenFile->m_mem->m_pShareData->m_Common.m_sOthers.m_rcOpenDialog);
+			::GetWindowRect(hwndFrame, &pData->m_pcDlgOpenFile->m_mem->m_pShareData->m_common.m_sOthers.m_rcOpenDialog);
 			// 2005.10.29 ryoji 最近のファイル／フォルダ コンボの右端を子ダイアログの右端に合わせる
 			::GetWindowRect(pData->m_hwndComboMRU, &rc);
 			po.x = rc.left;
@@ -361,10 +361,10 @@ UINT_PTR CALLBACK OFNHookProc(
 
 			// ビューモードの初期値セット
 			::CheckDlgButton(pData->m_hwndOpenDlg, chx1, pData->m_bViewMode);
-			pData->m_combDelFile = SComboBoxItemDeleter();
+			pData->m_combDelFile = ComboBoxItemDeleter();
 			pData->m_combDelFile.pRecent = &pData->m_cRecentFile;
 			CDialog::SetComboBoxDeleter(pData->m_hwndComboMRU, &pData->m_combDelFile);
-			pData->m_combDelFolder = SComboBoxItemDeleter();
+			pData->m_combDelFolder = ComboBoxItemDeleter();
 			pData->m_combDelFolder.pRecent = &pData->m_cRecentFolder;
 			CDialog::SetComboBoxDeleter(pData->m_hwndComboOPENFOLDER, &pData->m_combDelFolder);
 		}
@@ -866,7 +866,7 @@ bool CDlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
 bool CDlgOpenFile::DoModalOpenDlg(
-	SLoadInfo* pLoadInfo,
+	LoadInfo* pLoadInfo,
 	std::vector<std::tstring>* pFileNames,
 	bool bOptions
 	)
@@ -881,7 +881,7 @@ bool CDlgOpenFile::DoModalOpenDlg(
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
-		const STypeConfigMini* type;
+		const TypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(i), &type);
 		cFileExt.AppendExt(type->m_szTypeName, type->m_szTypeExts);
 	}
@@ -970,7 +970,7 @@ bool CDlgOpenFile::DoModalOpenDlg(
 		自前で補完することでこれを回避する。（実際の処理はフックプロシージャの中）
 */
 bool CDlgOpenFile::DoModalSaveDlg(
-	SSaveInfo* pSaveInfo,
+	SaveInfo* pSaveInfo,
 	bool bSimpleMode
 	)
 {

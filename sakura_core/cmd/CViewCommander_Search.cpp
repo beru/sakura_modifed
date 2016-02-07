@@ -195,14 +195,14 @@ re_do:;
 		nSearchResult = layoutMgr.SearchWord(
 			nLineNum,						// 検索開始レイアウト行
 			nIdx,							// 検索開始データ位置
-			SEARCH_FORWARD,					// 0==前方検索 1==後方検索
+			eSearchDirection::Forward,		// 0==前方検索 1==後方検索
 			&sRangeA,						// マッチレイアウト範囲
 			m_pCommanderView->m_sSearchPattern
 		);
 	}else {
 		nSearchResult = CSearchAgent(&GetDocument()->m_cDocLineMgr).SearchWord(
 			CLogicPoint(nIdx, nLineNumLogic),
-			SEARCH_FORWARD,					// 0==前方検索 1==後方検索
+			eSearchDirection::Forward,		// 0==前方検索 1==後方検索
 			pcSelectLogic,
 			m_pCommanderView->m_sSearchPattern
 		);
@@ -277,7 +277,7 @@ re_do:;
 
 end_of_func:;
 // From Here 2002.01.26 hor 先頭（末尾）から再検索
-	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		if (!bFound	&&		// 見つからなかった
 			bRedo	&&		// 最初の検索
 			!bReplaceAll	// 全て置換の実行中じゃない
@@ -396,7 +396,7 @@ re_do:;							// hor
 	if (layoutMgr.SearchWord(
 			nLineNum,								// 検索開始レイアウト行
 			nIdx,									// 検索開始データ位置
-			SEARCH_BACKWARD,						// 0==前方検索 1==後方検索
+			eSearchDirection::Backward,				// 0==前方検索 1==後方検索
 			&sRangeA,								// マッチレイアウト範囲
 			m_pCommanderView->m_sSearchPattern
 		)
@@ -441,7 +441,7 @@ re_do:;							// hor
 	}
 end_of_func:;
 // From Here 2002.01.26 hor 先頭（末尾）から再検索
-	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		if (!bFound	&&	// 見つからなかった
 			bRedo		// 最初の検索
 		) {
@@ -491,9 +491,9 @@ void CViewCommander::Command_REPLACE_DIALOG(void)
 	if (0 < cmemCurText.GetStringLength()) {
 		dlgReplace.m_strText = cmemCurText.GetStringPtr();
 	}
-	if (0 < GetDllShareData().m_sSearchKeywords.m_aReplaceKeys.size()) {
-		if (dlgReplace.m_nReplaceKeySequence < GetDllShareData().m_Common.m_sSearch.m_nReplaceKeySequence) {
-			dlgReplace.m_strText2 = GetDllShareData().m_sSearchKeywords.m_aReplaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
+	if (0 < GetDllShareData().m_searchKeywords.m_aReplaceKeys.size()) {
+		if (dlgReplace.m_nReplaceKeySequence < GetDllShareData().m_common.m_sSearch.m_nReplaceKeySequence) {
+			dlgReplace.m_strText2 = GetDllShareData().m_searchKeywords.m_aReplaceKeys[0];	// 2006.08.23 ryoji 前回の置換後文字列を引き継ぐ
 		}
 	}
 	
@@ -578,8 +578,8 @@ void CViewCommander::Command_REPLACE(HWND hwndParent)
 	// 次を検索
 	Command_SEARCH_NEXT(true, true, false, hwndParent, NULL);
 
-	BOOL	bRegularExp = m_pCommanderView->m_sCurSearchOption.bRegularExp;
-	int 	nFlag       = m_pCommanderView->m_sCurSearchOption.bLoHiCase ? 0x01 : 0x00;
+	BOOL	bRegularExp = m_pCommanderView->m_curSearchOption.bRegularExp;
+	int 	nFlag       = m_pCommanderView->m_curSearchOption.bLoHiCase ? 0x01 : 0x00;
 
 	// テキストが選択されているか
 	if (m_pCommanderView->GetSelectionInfo().IsTextSelected()) {
@@ -725,7 +725,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	// 2002.02.10 hor
 	BOOL nPaste			= dlgReplace.m_nPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
-	bool bRegularExp	= m_pCommanderView->m_sCurSearchOption.bRegularExp;
+	bool bRegularExp	= m_pCommanderView->m_curSearchOption.bRegularExp;
 	bool bSelectedArea	= dlgReplace.m_bSelectedArea;
 	bool bConsecutiveAll = dlgReplace.m_bConsecutiveAll;	// 「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
 	if (nPaste && nReplaceTarget == 3) {
@@ -855,7 +855,7 @@ void CViewCommander::Command_REPLACE_ALL()
 	// クリップボードからのデータ貼り付けかどうか。
 	if (nPaste != 0) {
 		// クリップボードからデータを取得。
-		if (!m_pCommanderView->MyGetClipboardData(cmemClip, &bColumnSelect, GetDllShareData().m_Common.m_sEdit.m_bEnableLineModePaste ? &bLineSelect : NULL)) {
+		if (!m_pCommanderView->MyGetClipboardData(cmemClip, &bColumnSelect, GetDllShareData().m_common.m_sEdit.m_bEnableLineModePaste ? &bLineSelect : NULL)) {
 			ErrorBeep();
 			m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 
@@ -866,7 +866,7 @@ void CViewCommander::Command_REPLACE_ALL()
 		}
 
 		// 矩形貼り付けが許可されていて、クリップボードのデータが矩形選択のとき。
-		if (GetDllShareData().m_Common.m_sEdit.m_bAutoColumnPaste && bColumnSelect) {
+		if (GetDllShareData().m_common.m_sEdit.m_bAutoColumnPaste && bColumnSelect) {
 			// マウスによる範囲選択中
 			if (m_pCommanderView->GetSelectionInfo().IsMouseSelecting()) {
 				ErrorBeep();
@@ -878,7 +878,7 @@ void CViewCommander::Command_REPLACE_ALL()
 			}
 
 			// 現在のフォントは固定幅フォントである
-			if (!GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {
+			if (!GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {
 				m_pCommanderView->SetDrawSwitch(bDrawSwitchOld);
 				::EnableWindow(m_pCommanderView->GetHwnd(), TRUE);
 				::EnableWindow(::GetParent(m_pCommanderView->GetHwnd()), TRUE);
@@ -899,13 +899,13 @@ void CViewCommander::Command_REPLACE_ALL()
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(szREPLACEKEY[nREPLACEKEY - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+		if (!WCODE::IsLineDelimiter(szREPLACEKEY[nREPLACEKEY - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 			cmemClip.AppendString(GetDocument()->m_cDocEditor.GetNewLineCode().GetValue2());
 			szREPLACEKEY = cmemClip.GetStringPtr(&nREPLACEKEY);
 		}
 	}
 
-	if (GetDllShareData().m_Common.m_sEdit.m_bConvertEOLPaste) {
+	if (GetDllShareData().m_common.m_sEdit.m_bConvertEOLPaste) {
 		CLogicInt nConvertedTextLen = ConvertEol(szREPLACEKEY, nREPLACEKEY, NULL);
 		std::vector<wchar_t> szConvertedText(nConvertedTextLen);
 		wchar_t* pszConvertedText = &szConvertedText[0];
@@ -947,7 +947,7 @@ void CViewCommander::Command_REPLACE_ALL()
 			cMemRepKey2 = cmemClip;
 		}
 		// 正規表現オプションの設定2006.04.01 かろと
-		int nFlag = (m_pCommanderView->m_sCurSearchOption.bLoHiCase ? CBregexp::optCaseSensitive : CBregexp::optNothing);
+		int nFlag = (m_pCommanderView->m_curSearchOption.bLoHiCase ? CBregexp::optCaseSensitive : CBregexp::optNothing);
 		nFlag |= (bConsecutiveAll ? CBregexp::optNothing : CBregexp::optGlobal);	// 2007.01.16 ryoji
 		cRegexp.Compile(m_pCommanderView->m_strCurSearchKey.c_str(), cMemRepKey2.GetStringPtr(), nFlag);
 	}
@@ -1366,7 +1366,7 @@ void CViewCommander::Command_REPLACE_ALL()
 			// CLayoutMgrの更新(変更有の場合)
 			layoutMgr._DoLayout();
 			GetEditWindow()->ClearViewCaretPosInfo();
-			if (GetDocument()->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+			if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 				layoutMgr.CalculateTextWidth();
 			}
 		}
@@ -1447,19 +1447,19 @@ void CViewCommander::Command_SEARCH_CLEARMARK(void)
 		// 検索文字列取得
 		CNativeW	cmemCurText;
 		m_pCommanderView->GetCurrentTextForSearch(cmemCurText, false);
-		auto& csSearch = GetDllShareData().m_Common.m_sSearch;
+		auto& csSearch = GetDllShareData().m_common.m_sSearch;
 
 		m_pCommanderView->m_strCurSearchKey = cmemCurText.GetStringPtr();
 		if (m_pCommanderView->m_nCurSearchKeySequence < csSearch.m_nSearchKeySequence) {
-			m_pCommanderView->m_sCurSearchOption = csSearch.m_sSearchOption;
+			m_pCommanderView->m_curSearchOption = csSearch.m_searchOption;
 		}
-		m_pCommanderView->m_sCurSearchOption.bRegularExp = false;	// 正規表現使わない
-		m_pCommanderView->m_sCurSearchOption.bWordOnly = false;		// 単語で検索しない
+		m_pCommanderView->m_curSearchOption.bRegularExp = false;	// 正規表現使わない
+		m_pCommanderView->m_curSearchOption.bWordOnly = false;		// 単語で検索しない
 
 		// 共有データへ登録
 		if (cmemCurText.GetStringLength() < _MAX_PATH) {
 			CSearchKeywordManager().AddToSearchKeyArr(cmemCurText.GetStringPtr());
-			csSearch.m_sSearchOption = m_pCommanderView->m_sCurSearchOption;
+			csSearch.m_searchOption = m_pCommanderView->m_curSearchOption;
 		}
 		m_pCommanderView->m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;
 		m_pCommanderView->m_bCurSearchUpdate = true;

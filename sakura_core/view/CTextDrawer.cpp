@@ -175,7 +175,7 @@ void CTextDrawer::DispVerticalLines(
 {
 	const CEditView* pView = m_pEditView;
 	
-	const STypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 	
 	CTypeSupport cVertType(pView, COLORIDX_VERTLINE);
 	CTypeSupport cTextType(pView, COLORIDX_TEXT);
@@ -191,7 +191,7 @@ void CTextDrawer::DispVerticalLines(
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
-	const int nPosXOffset = GetDllShareData().m_Common.m_sWindow.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
+	const int nPosXOffset = GetDllShareData().m_common.m_sWindow.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
 	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
 	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -363,13 +363,13 @@ void CTextDrawer::DispLineNumber(
 	const CLayout*	pcLayout = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 
 	const CEditView* pView = m_pEditView;
-	const STypeConfig* pTypes = &pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig* pTypes = &pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 
 	int				nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
-	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace;	// 2009.03.26 ryoji
+	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace;	// 2009.03.26 ryoji
 
 	CTypeSupport cTextType(pView, COLORIDX_TEXT);
 	CTypeSupport cCaretLineBg(pView, COLORIDX_CARETLINEBG);
@@ -464,7 +464,7 @@ void CTextDrawer::DispLineNumber(
 		}
 		bDispLineNumTrans = true;
 	}else if (CTypeSupport(pView, COLORIDX_GYOU).IsDisp()) { // 行番号表示／非表示
-		SFONT sFont = cColorType.GetTypeFont();
+		Font sFont = cColorType.GetTypeFont();
 	 	// 2013.12.30 変更行の色・フォント属性をDIFFブックマーク行に継承するように
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 			bool bChange = true;

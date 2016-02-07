@@ -98,8 +98,8 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	// 2007.12.02 nasukoji	トリプルクリックをチェック
 	bool tripleClickMode = CheckTripleClick(ptMouse);
 	if (tripleClickMode) {
-		// マウス左トリプルクリックに対応する機能コードはm_Common.m_pKeyNameArr[5]に入っている
-		nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_TRIPLECLICK].m_nFuncCodeArr[getCtrlKeyState()];
+		// マウス左トリプルクリックに対応する機能コードはm_common.m_pKeyNameArr[5]に入っている
+		nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::TripleClick].m_nFuncCodeArr[getCtrlKeyState()];
 		if (nFuncID == 0) {
 			tripleClickMode = false;	// 割り当て機能無しの時はトリプルクリック OFF
 		}
@@ -116,8 +116,8 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	// OLEによるドラッグ & ドロップを使う
 	// 2007.12.02 nasukoji	トリプルクリック時はドラッグを開始しない
-	if (!tripleClickMode && GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop) {
-		if (GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DropSource) {		// OLEによるドラッグ元にするか
+	if (!tripleClickMode && GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) {
+		if (GetDllShareData().m_common.m_sEdit.m_bUseOLE_DropSource) {		// OLEによるドラッグ元にするか
 			// 行選択エリアをドラッグした
 			if (ptMouse.x < GetTextArea().GetAreaLeft() - GetTextMetrics().GetHankakuDx()) {
 				goto normal_action;
@@ -145,7 +145,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					return;
 				}
 				// 選択範囲のデータを取得
-				if (GetSelectedData(&cmemCurText, false, NULL, false, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
+				if (GetSelectedData(&cmemCurText, false, NULL, false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy)) {
 					DWORD dwEffects;
 					DWORD dwEffectsSrc = (!m_pcEditDoc->IsEditable()) ?
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
@@ -465,7 +465,7 @@ normal_action:;
 			}
 		}else {
 			// URLがクリックされたら選択するか
-			if (GetDllShareData().m_Common.m_sEdit.m_bSelectClickedURL) {
+			if (GetDllShareData().m_common.m_sEdit.m_bSelectClickedURL) {
 
 				CLogicRange cUrlRange;	// URL範囲
 				// カーソル位置にURLが有る場合のその範囲を調べる
@@ -603,8 +603,8 @@ void CEditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
-	// マウス右クリックに対応する機能コードはm_Common.m_pKeyNameArr[1]に入っている
-	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_RIGHT].m_nFuncCodeArr[nIdx];
+	// マウス右クリックに対応する機能コードはm_common.m_pKeyNameArr[1]に入っている
+	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::RightClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -630,7 +630,7 @@ void CEditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 void CEditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	int nIdx = getCtrlKeyState();
-	if (F_AUTOSCROLL == GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_CENTER].m_nFuncCodeArr[nIdx]) {
+	if (GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::CenterClick].m_nFuncCodeArr[nIdx] == F_AUTOSCROLL) {
 		if (m_nAutoScrollMode) {
 			AutoScrollExit();
 			return;
@@ -658,7 +658,7 @@ void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_Common.m_sGeneral.m_nPageScrollByWheel == MOUSEFUNCTION_CENTER &&
+	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)eMouseFunction::CenterClick &&
 	    m_pcEditWnd->IsPageScrollByWheel()
 	) {
 		m_pcEditWnd->SetPageScrollByWheel(FALSE);
@@ -666,7 +666,7 @@ void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_Common.m_sGeneral.m_nHorizontalScrollByWheel == MOUSEFUNCTION_CENTER &&
+	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)eMouseFunction::CenterClick &&
 	    m_pcEditWnd->IsHScrollByWheel()
 	) {
 		m_pcEditWnd->SetHScrollByWheel(FALSE);
@@ -675,8 +675,8 @@ void CEditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
-	// マウス左サイドボタンに対応する機能コードはm_Common.m_pKeyNameArr[2]に入っている
-	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_CENTER].m_nFuncCodeArr[nIdx];
+	// マウス左サイドボタンに対応する機能コードはm_common.m_pKeyNameArr[2]に入っている
+	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::CenterClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID == F_AUTOSCROLL) {
 		if (m_nAutoScrollMode == 1) {
 			m_bAutoScrollDragMode = false;
@@ -830,7 +830,7 @@ void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_Common.m_sGeneral.m_nPageScrollByWheel == MOUSEFUNCTION_LEFTSIDE &&
+	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)eMouseFunction::LeftSideClick &&
 	    m_pcEditWnd->IsPageScrollByWheel()
 	) {
 		m_pcEditWnd->SetPageScrollByWheel(FALSE);
@@ -838,7 +838,7 @@ void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_Common.m_sGeneral.m_nHorizontalScrollByWheel == MOUSEFUNCTION_LEFTSIDE &&
+	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)eMouseFunction::LeftSideClick &&
 	    m_pcEditWnd->IsHScrollByWheel()
 	) {
 		m_pcEditWnd->SetHScrollByWheel(FALSE);
@@ -847,8 +847,8 @@ void CEditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
-	// マウスサイドボタン1に対応する機能コードはm_Common.m_pKeyNameArr[3]に入っている
-	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_LEFTSIDE].m_nFuncCodeArr[nIdx];
+	// マウスサイドボタン1に対応する機能コードはm_common.m_pKeyNameArr[3]に入っている
+	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::LeftSideClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -892,7 +892,7 @@ void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_Common.m_sGeneral.m_nPageScrollByWheel == MOUSEFUNCTION_RIGHTSIDE &&
+	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)eMouseFunction::RightSideClick &&
 	    m_pcEditWnd->IsPageScrollByWheel()
 	) {
 		// ホイール操作によるページスクロールありをOFF
@@ -901,7 +901,7 @@ void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_Common.m_sGeneral.m_nHorizontalScrollByWheel == MOUSEFUNCTION_RIGHTSIDE &&
+	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)eMouseFunction::RightSideClick &&
 	    m_pcEditWnd->IsHScrollByWheel()
 	) {
 		// ホイール操作による横スクロールありをOFF
@@ -911,8 +911,8 @@ void CEditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
-	// マウスサイドボタン2に対応する機能コードはm_Common.m_pKeyNameArr[4]に入っている
-	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_RIGHTSIDE].m_nFuncCodeArr[nIdx];
+	// マウスサイドボタン2に対応する機能コードはm_common.m_pKeyNameArr[4]に入っている
+	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::RightSideClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -1045,7 +1045,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 		// 選択テキストのドラッグ中か
 		if (m_bDragMode) {
-			if (GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
+			if (GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
 				// 座標指定によるカーソル移動
 				GetCaret().MoveCursorToClientPoint(ptMouse);
 			}
@@ -1058,8 +1058,8 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				else
 					::SetCursor(::LoadCursor(NULL, IDC_ARROW));
 			}else if (1
-				&& GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop	// OLEによるドラッグ & ドロップを使う
-				&& GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DropSource	// OLEによるドラッグ元にするか
+				&& GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop	// OLEによるドラッグ & ドロップを使う
+				&& GetDllShareData().m_common.m_sEdit.m_bUseOLE_DropSource	// OLEによるドラッグ元にするか
 				&& IsCurrentPositionSelected(ptNew) == 0					// 指定カーソル位置が選択エリア内にあるか
 			) {
 				// 矢印カーソル
@@ -1077,7 +1077,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			}else {
 				// migemo isearch 2004.10.22
 				if (m_nISearchMode > 0) {
-					if (m_nISearchDirection == 1) {
+					if (m_nISearchDirection == eSearchDirection::Forward) {
 						::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
 					}else {
 						::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
@@ -1305,8 +1305,8 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 		bool bKeyPageScroll = false;
 		if (nCmdFuncID == F_0) {
 			// 通常スクロールの時だけ適用
-			bHorizontal = IsSpecialScrollMode(GetDllShareData().m_Common.m_sGeneral.m_nHorizontalScrollByWheel);
-			bKeyPageScroll = IsSpecialScrollMode(GetDllShareData().m_Common.m_sGeneral.m_nPageScrollByWheel);
+			bHorizontal = IsSpecialScrollMode(GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel);
+			bKeyPageScroll = IsSpecialScrollMode(GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel);
 		}
 
 		// 2013.05.30 Moca ホイールスクロールにキー割り当て
@@ -1315,15 +1315,15 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 		if (nFuncID != F_0) {
 		}else if (bHorizontalMsg) {
 			if (nScrollCode == SB_LINEUP) {
-				nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_WHEELLEFT].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::WheelLeft].m_nFuncCodeArr[nIdx];
 			}else {
-				nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_WHEELRIGHT].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::WheelRight].m_nFuncCodeArr[nIdx];
 			}
 		}else {
 			if (nScrollCode == SB_LINEUP) {
-				nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_WHEELUP].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::WheelUp].m_nFuncCodeArr[nIdx];
 			}else {
-				nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_WHEELDOWN].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::WheelDown].m_nFuncCodeArr[nIdx];
 			}
 		}
 		bool bExecCmd = false;
@@ -1444,7 +1444,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 			return bHorizontalMsg ? TRUE: 0;
 		}
 
-		const bool bSmooth = !! GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScroll_Smooth;
+		const bool bSmooth = !! GetDllShareData().m_common.m_sGeneral.m_nRepeatedScroll_Smooth;
 		const int nRollActions = bSmooth ? nRollNum : 1;
 		const CLayoutInt nCount = CLayoutInt(((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum));
 
@@ -1502,15 +1502,15 @@ bool CEditView::IsSpecialScrollMode(int nSelect)
 		bSpecialScrollMode = false;
 		break;
 
-	case MOUSEFUNCTION_CENTER:		// マウス中ボタン
+	case eMouseFunction::CenterClick:		// マウス中ボタン
 		bSpecialScrollMode = ((::GetAsyncKeyState(VK_MBUTTON) & 0x8000) != 0);
 		break;
 
-	case MOUSEFUNCTION_LEFTSIDE:	// マウスサイドボタン1
+	case eMouseFunction::LeftSideClick:	// マウスサイドボタン1
 		bSpecialScrollMode = ((::GetAsyncKeyState(VK_XBUTTON1) & 0x8000) != 0);
 		break;
 
-	case MOUSEFUNCTION_RIGHTSIDE:	// マウスサイドボタン2
+	case eMouseFunction::RightSideClick:	// マウスサイドボタン2
 		bSpecialScrollMode = ((::GetAsyncKeyState(VK_XBUTTON2) & 0x8000) != 0);
 		break;
 
@@ -1633,8 +1633,8 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		// GREP出力モードまたはデバッグモード かつ マウス左ボタンダブルクリックでタグジャンプ の場合
 		//	2004.09.20 naoh 外部コマンドの出力からTagjumpできるように
 		if (1
-			&& (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode || CAppMode::getInstance()->IsDebugMode())
-			&& GetDllShareData().m_Common.m_sSearch.m_bGTJW_LDBLCLK
+			&& (CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode || AppMode::getInstance()->IsDebugMode())
+			&& GetDllShareData().m_common.m_sSearch.m_bGTJW_LDBLCLK
 		) {
 			// タグジャンプ機能
 			if (GetCommander().Command_TAGJUMP()) {
@@ -1648,9 +1648,9 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	// Shift,Ctrl,Altキーが押されていたか
 	int	nIdx = getCtrlKeyState();
 
-	// マウス左クリックに対応する機能コードはm_Common.m_pKeyNameArr[?]に入っている 2007.11.15 nasukoji
-	EFunctionCode	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[
-		m_dwTripleClickCheck ? MOUSEFUNCTION_QUADCLICK : MOUSEFUNCTION_DOUBLECLICK
+	// マウス左クリックに対応する機能コードはm_common.m_pKeyNameArr[?]に入っている 2007.11.15 nasukoji
+	EFunctionCode nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[
+		(int)(m_dwTripleClickCheck ? eMouseFunction::QuadrapleClick : eMouseFunction::DoubleClick)
 	].m_nFuncCodeArr[nIdx];
 	if (m_dwTripleClickCheck) {
 		// 非選択状態にした後左クリックしたことにする
@@ -1663,7 +1663,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 
 		if (!nFuncID) {
 			m_dwTripleClickCheck = 0;	// トリプルクリックチェック OFF
-			nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_DOUBLECLICK].m_nFuncCodeArr[nIdx];
+			nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)eMouseFunction::DoubleClick].m_nFuncCodeArr[nIdx];
 			OnLBUTTONDOWN(fwKeys, ptMouse.x , ptMouse.y);	// カーソルをクリック位置へ移動する
 		}
 	}
@@ -1698,7 +1698,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	// 範囲選択開始 & マウスキャプチャー
 	GetSelectionInfo().SelectBeginWord();
 
-	if (GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		// ALTキーが押されていたか
 		if (GetKeyState_Alt()) {
 			GetSelectionInfo().SetBoxSelect(true);	// 矩形範囲選択中
@@ -1726,7 +1726,7 @@ STDMETHODIMP CEditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, PO
 {
 	DEBUG_TRACE(_T("CEditView::DragEnter()\n"));
 	//「OLEによるドラッグ & ドロップを使う」オプションが無効の場合にはドロップを受け付けない
-	if (!GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop) return E_UNEXPECTED;
+	if (!GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) return E_UNEXPECTED;
 
 	// 編集禁止の場合はドロップを受け付けない
 	if (!m_pcEditDoc->IsEditable()) return E_UNEXPECTED;

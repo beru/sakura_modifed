@@ -26,8 +26,8 @@ CTextArea::CTextArea(CEditView* pEditView)
 	m_nViewRowNum = CLayoutInt(0);			// 表示域の行数
 	m_nViewTopLine = CLayoutInt(0);			// 表示域の一番上の行
 	m_nViewLeftCol = CLayoutInt(0);			// 表示域の一番左の桁
-	SetTopYohaku(pShareData->m_Common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
-	SetLeftYohaku(pShareData->m_Common.m_sWindow.m_nLineNumRightSpace);
+	SetTopYohaku(pShareData->m_common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	SetLeftYohaku(pShareData->m_common.m_sWindow.m_nLineNumRightSpace);
 	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
@@ -172,7 +172,7 @@ bool CTextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 	}
 
 	//	Sep 18, 2002 genta
-	nViewAlignLeftNew += GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace;
+	nViewAlignLeftNew += GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace;
 	if (nViewAlignLeftNew != GetAreaLeft()) {
 		CMyRect			rc;
 		SetAreaLeft(nViewAlignLeftNew);

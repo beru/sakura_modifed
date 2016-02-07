@@ -25,7 +25,7 @@
 	@author aroka
 	@date 2002/01/07
 */
-CProcess::CProcess(
+Process::Process(
 	HINSTANCE	hInstance,		// handle to process instance
 	LPCTSTR		lpCmdLine		// pointer to command line
 	)
@@ -44,7 +44,7 @@ CProcess::CProcess(
 
 	共有メモリを初期化する
 */
-bool CProcess::InitializeProcess()
+bool Process::InitializeProcess()
 {
 	// 共有データ構造体のアドレスを返す
 	if (!GetShareData().InitShareData()) {
@@ -67,7 +67,7 @@ bool CProcess::InitializeProcess()
 	@author aroka
 	@date 2002/01/16
 */
-bool CProcess::Run()
+bool Process::Run()
 {
 	if (InitializeProcess()) {
 #ifdef USE_CRASHDUMP
@@ -103,7 +103,7 @@ bool CProcess::Run()
 	@author ryoji
 	@date 2009.01.21
 */
-int CProcess::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
+int Process::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 {
 	if (!m_pfnMiniDumpWriteDump) {
 		return EXCEPTION_CONTINUE_SEARCH;
@@ -148,7 +148,7 @@ int CProcess::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 /*!
 	言語選択後に共有メモリ内の文字列を更新する
 */
-void CProcess::RefreshString()
+void Process::RefreshString()
 {
 	m_pcShareData->RefreshString();
 }

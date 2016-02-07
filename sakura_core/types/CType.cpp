@@ -29,16 +29,16 @@
 #include "env/CShareData.h"
 #include "env/DLLSHAREDATA.h"
 
-void _DefaultConfig(STypeConfig* pType);
+void _DefaultConfig(TypeConfig* pType);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          CType                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-void CType::InitTypeConfig(int nIdx, STypeConfig& type)
+void CType::InitTypeConfig(int nIdx, TypeConfig& type)
 {
 	// 規定値をコピー
-	static STypeConfig sDefault;
+	static TypeConfig sDefault;
 	static bool bLoadedDefault = false;
 	if (!bLoadedDefault) {
 		_DefaultConfig(&sDefault);
@@ -67,7 +67,7 @@ void CType::InitTypeConfig(int nIdx, STypeConfig& type)
 */
 void CShareData::InitTypeConfigs(
 	DLLSHAREDATA* pShareData,
-	std::vector<STypeConfig*>& types
+	std::vector<TypeConfig*>& types
 	)
 {
 	CType* table[] = {
@@ -91,7 +91,7 @@ void CShareData::InitTypeConfigs(
 	types.clear();
 	assert(_countof(table) <= MAX_TYPES);
 	for (int i=0; i<_countof(table) && i<MAX_TYPES; ++i) {
-		STypeConfig* type = new STypeConfig;
+		TypeConfig* type = new TypeConfig;
 		types.push_back(type);
 		table[i]->InitTypeConfig(i, *type);
 		auto& typeMini = pShareData->m_TypeMini[i];
@@ -115,15 +115,15 @@ void CShareData::InitTypeConfigs(
 void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
+	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
-	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
+	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加
@@ -150,14 +150,14 @@ void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 //                        デフォルト                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void _DefaultConfig(STypeConfig* pType)
+void _DefaultConfig(TypeConfig* pType)
 {
 // キーワード：デフォルトカラー設定
 /************************/
 /* タイプ別設定の規定値 */
 /************************/
 
-	pType->m_nTextWrapMethod = WRAP_SETTING_WIDTH;		// テキストの折り返し方法		// 2008.05.30 nasukoji
+	pType->m_nTextWrapMethod = (int)eTextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
 	pType->m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);	// 折り返し桁数
 	pType->m_nColumnSpace = 0;							// 文字と文字の隙間
 	pType->m_nLineSpace = 1;							// 行間のすきま

@@ -379,9 +379,9 @@ void CIfObj::AddMethod(
 )
 {
 	// this->m_TypeInfo‚ª NULL‚Å‚È‚¯‚ê‚Î AddMethod()‚Í”½‰f‚³‚ê‚È‚¢B
-	m_Methods.push_back(CMethodInfo());
-	CMethodInfo* info = &m_Methods[m_Methods.size() - 1];
-	ZeroMemory(info, sizeof(CMethodInfo));
+	m_Methods.push_back(MethodInfo());
+	MethodInfo* info = &m_Methods[m_Methods.size() - 1];
+	ZeroMemory(info, sizeof(MethodInfo));
 	info->Desc.invkind = INVOKE_FUNC;
 	info->Desc.cParams = (SHORT)ArgumentCount + 1; // –ß‚è’l‚Ì•ª
 	info->Desc.lprgelemdescParam = info->Arguments;

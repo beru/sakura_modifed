@@ -98,8 +98,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           Ý’è                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	SFONT GetTypeFont() {
-		SFONT sFont;
+	Font GetTypeFont() {
+		Font sFont;
 		sFont.m_sFontAttr = m_pColorInfoArr->m_sFontAttr;
 		sFont.m_hFont = m_pFontset->ChooseFontHandle( m_pColorInfoArr->m_sFontAttr );
 		return sFont;
@@ -131,7 +131,7 @@ public:
 
 private:
 	const CViewFont*	m_pFontset;
-	const STypeConfig*	m_pTypes;
+	const TypeConfig*	m_pTypes;
 	int					m_nColorIdx;
 	const ColorInfo*	m_pColorInfoArr;
 

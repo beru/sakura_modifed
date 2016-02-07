@@ -98,7 +98,7 @@ int CViewCommander::Command_UP(bool bSelect, bool bRepeat, int lines)
 	int nRepeat = 0;
 
 	// キーリピート時のスクロールを滑らかにするか
-	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;
+	auto& csGeneral = GetDllShareData().m_common.m_sGeneral;
 	if (!csGeneral.m_nRepeatedScroll_Smooth) {
 		CLayoutInt i;
 		if (!bRepeat) {
@@ -127,7 +127,7 @@ int CViewCommander::Command_DOWN(bool bSelect, bool bRepeat)
 {
 	auto& caret = GetCaret();
 	int nRepeat = 0;
-	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;
+	auto& csGeneral = GetDllShareData().m_common.m_sGeneral;
 	// キーリピート時のスクロールを滑らかにするか
 	if (!csGeneral.m_nRepeatedScroll_Smooth) {
 		CLayoutInt i;
@@ -329,7 +329,7 @@ void CViewCommander::Command_RIGHT(
 			if (selInfo.IsBoxSelecting()) {
 				x_max = t_max(x_wrap, GetDocument()->m_cLayoutMgr.GetMaxLineKetas());
 				on_x_max = STOP;
-			}else if (GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode) {
+			}else if (GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode) {
 				// フリーカーソルモードでは折り返し位置だけをみて、改行文字の位置はみない。
 				if (wrapped) {
 					if (nextline_exists) {
@@ -434,7 +434,7 @@ void CViewCommander::Command_WORDLEFT(bool bSelect)
 	}
 
 	auto& caret = GetCaret();
-	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;
+	auto& csGeneral = GetDllShareData().m_common.m_sGeneral;
 
 	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
@@ -533,7 +533,7 @@ try_again:;
 	// 指定された桁に対応する行のデータ内の位置を調べる
 	nIdx = m_pCommanderView->LineColumnToIndex(pcLayout, caret.GetCaretLayoutPos().GetX2());
 
-	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;	
+	auto& csGeneral = GetDllShareData().m_common.m_sGeneral;	
 	// 現在位置の右の単語の先頭位置を調べる
 	CLayoutPoint ptLayoutNew;
 	int nResult = GetDocument()->m_cLayoutMgr.NextWord(
@@ -626,7 +626,7 @@ void CViewCommander::Command_GOLINETOP(
 		nPosY_Layout = ptCaretPos.y - 1;
 		const CLayout*	pcLayout;
 		bool			bZenSpace = m_pCommanderView->m_pTypeData->m_bAutoIndent_ZENSPACE;
-		bool			bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		bool			bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		
 		CLogicInt		nLineLen;
 		do {
@@ -1068,7 +1068,7 @@ void CViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 		// おしまい。
 	}else {
 		// いま見ているところは空行の1行目
-		if (GetDllShareData().m_Common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
+		if (GetDllShareData().m_common.m_sGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
 		}else {
 			// 仕上げに、空行じゃないところまで進む
 			while ((pcDocLine = docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2() + CLogicInt(nCaretPointer)))) {
@@ -1137,7 +1137,7 @@ void CViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 	/*	nFirstLineIsEmptyLineが空行だったら、今見ているところは非空行。すなわちおしまい。
 		nFirstLineIsEmptyLineが非空行だったら、今見ているところは空行。
 	*/
-	auto& csGeneral = GetDllShareData().m_Common.m_sGeneral;	
+	auto& csGeneral = GetDllShareData().m_common.m_sGeneral;	
 	if (nFirstLineIsEmptyLine) {
 		// おしまい。
 		if (csGeneral.m_bStopsBothEndsWhenSearchParagraph) {	// 段落の両端で止まる
@@ -1328,7 +1328,7 @@ void CViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 			pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 			bModified = false;
 		}
-		if (!GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+		if (!GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 			break;
 		}
 	}
@@ -1421,7 +1421,7 @@ void CViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 			pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
 			bModified = false;
 		}
-		if (!GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+		if (!GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 			break;
 		}
 		if (n == 0) {

@@ -28,7 +28,7 @@ class CEditWnd;
 	
 	エディタプロセスはCEditWndクラスのインスタンスを作る。
 */
-class CNormalProcess : public CProcess {
+class CNormalProcess : public Process {
 public:
 	// コンストラクタ・デストラクタ
 	CNormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine);

@@ -49,7 +49,7 @@ bool IsHeadCppKeyword(const wchar_t* pData)
 // VC++の生成するテキストファイルも読めるようにする			Oct. 31, 2000 JEPRO
 // 関連づけ上好ましくないのでdsw,dsp,dep,makははずす		Jan. 24, 2004 genta
 // ファイル内からの入力補完機能								2003.06.23 Moca
-void CType_Cpp::InitTypeConfigImp(STypeConfig* pType)
+void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("C/C++"));
@@ -129,7 +129,7 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 		len > 0
 		&& WCODE::IsLineDelimiter(
 			s[len-1],
-			GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+			GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
 		)
 	) {
 		--len;
@@ -243,7 +243,7 @@ CLogicInt CCppPreprocessMng::ScanLine(
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	//	skip whitespace
 	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
@@ -464,7 +464,7 @@ void CDocOutline::MakeFuncList_C(
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
 	CCppPreprocessMng cCppPMng;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	
 	CLogicInt nLineCount;
 	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {

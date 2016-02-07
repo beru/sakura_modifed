@@ -46,11 +46,11 @@ const TCHAR* CRecentFile::GetItemText(int nIndex) const
 CRecentFile::CRecentFile()
 {
 	Create(
-		GetShareData()->m_sHistory.m_fiMRUArr,
-		&GetShareData()->m_sHistory.m_nMRUArrNum,
-		GetShareData()->m_sHistory.m_bMRUArrFavorite,
+		GetShareData()->m_history.m_fiMRUArr,
+		&GetShareData()->m_history.m_nMRUArrNum,
+		GetShareData()->m_history.m_bMRUArrFavorite,
 		MAX_MRU,
-		&(GetShareData()->m_Common.m_sGeneral.m_nMRUArrNum_MAX)
+		&(GetShareData()->m_common.m_sGeneral.m_nMRUArrNum_MAX)
 	);
 }
 

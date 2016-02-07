@@ -577,7 +577,7 @@ user_cancel:
 			}
 			// 2004.09.20 naoh 終了コードが1以上の時はアウトプットをアクティブにする
 			if (!bToEditWindow && result > 0 && oa.IsActiveDebugWindow()) {
-				ActivateFrameWindow( GetDllShareData().m_sHandles.m_hwndDebug );
+				ActivateFrameWindow( GetDllShareData().m_handles.m_hwndDebug );
 			}
 		}
 		if (bToEditWindow) {

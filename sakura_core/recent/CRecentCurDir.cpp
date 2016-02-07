@@ -36,8 +36,8 @@
 CRecentCurDir::CRecentCurDir()
 {
 	Create(
-		GetShareData()->m_sHistory.m_aCurDirs.dataPtr(),
-		&GetShareData()->m_sHistory.m_aCurDirs._GetSizeRef(),
+		GetShareData()->m_history.m_aCurDirs.dataPtr(),
+		&GetShareData()->m_history.m_aCurDirs._GetSizeRef(),
 		NULL,
 		MAX_CMDARR,
 		NULL

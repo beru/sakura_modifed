@@ -35,8 +35,8 @@
 CRecentEditNode::CRecentEditNode()
 {
 	Create(
-		GetShareData()->m_sNodes.m_pEditArr,
-		&GetShareData()->m_sNodes.m_nEditArrNum,
+		GetShareData()->m_nodes.m_pEditArr,
+		&GetShareData()->m_nodes.m_nEditArrNum,
 		NULL,
 		MAX_EDITWINDOWS,
 		NULL

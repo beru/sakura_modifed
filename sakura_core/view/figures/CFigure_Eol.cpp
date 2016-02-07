@@ -61,7 +61,7 @@ bool CFigure_Eol::Match(const wchar_t* pText, int nTextLen) const
 
 // 2006.04.29 Moca ‘I‘ðˆ—‚Ì‚½‚ßcüˆ—‚ð’Ç‰Á
 //$$ ‚‘¬‰»‰Â”\B
-bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
+bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 {
 	CEditView* pcView = pInfo->m_pcView;
 
@@ -106,7 +106,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		pInfo->m_gr.PushTextForeColor(crText);
 		pInfo->m_gr.PushTextBackColor(crBack);
 		bool bTrans = pcView->IsBkBitmap() && cTextType.GetBackColor() == crBack;
-		SFONT sFont;
+		Font sFont;
 		sFont.m_sFontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || currentStyle.IsBoldFont();
 		sFont.m_sFontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
 		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);

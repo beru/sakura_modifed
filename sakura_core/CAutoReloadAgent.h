@@ -36,9 +36,9 @@ enum WatchUpdate {
 class CAutoReloadAgent : public CDocListenerEx {
 public:
 	CAutoReloadAgent();
-	void OnBeforeSave(const SSaveInfo& sSaveInfo);
-	void OnAfterSave(const SSaveInfo& sSaveInfo);
-	void OnAfterLoad(const SLoadInfo& sLoadInfo);
+	void OnBeforeSave(const SaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& sSaveInfo);
+	void OnAfterLoad(const LoadInfo& sLoadInfo);
 	
 	// ŠÄŽ‹‚ÌˆêŽž’âŽ~
 	void PauseWatching() { ++m_nPauseCount; }

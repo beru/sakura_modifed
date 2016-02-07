@@ -46,7 +46,7 @@
 #include "env/CShareData_IO.h"
 #include "env/CSakuraEnvironment.h"
 #include "env/CHelpManager.h"
-#include "doc/CDocListener.h" // SLoadInfo,EditInfo
+#include "doc/CDocListener.h" // LoadInfo,EditInfo
 #include "recent/CMRUFile.h"
 #include "recent/CMRUFolder.h"
 #include "_main/CCommandLine.h"
@@ -58,11 +58,11 @@
 /////////////////////////////////////////////////////////////////////////
 static LRESULT CALLBACK CControlTrayWndProc(HWND, UINT, WPARAM, LPARAM);
 
-static CControlTray* g_m_pCControlTray;
+static ControlTray* g_m_pCControlTray;
 
 // Stonee, 2001/03/21
 // Stonee, 2001/07/01  多重起動された場合は前回のダイアログを前面に出すようにした。
-void CControlTray::DoGrep()
+void ControlTray::DoGrep()
 {
 	// Stonee, 2001/06/30
 	// 前回のダイアログがあれば前面に (suggested by genta)
@@ -72,8 +72,8 @@ void CControlTray::DoGrep()
 		return;
 	}
 
-	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
-	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	auto& searchKeywords = m_pShareData->m_searchKeywords;
+	auto& csSearch = m_pShareData->m_common.m_sSearch;
 	if (0 < searchKeywords.m_aSearchKeys.size()
 		&& m_nCurSearchKeySequence < csSearch.m_nSearchKeySequence
 	) {
@@ -92,10 +92,10 @@ void CControlTray::DoGrep()
 		return;
 	}
 	m_nCurSearchKeySequence = csSearch.m_nSearchKeySequence;
-	DoGrepCreateWindow(m_hInstance, m_pShareData->m_sHandles.m_hwndTray, m_cDlgGrep);
+	DoGrepCreateWindow(m_hInstance, m_pShareData->m_handles.m_hwndTray, m_cDlgGrep);
 }
 
-void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep& cDlgGrep)
+void ControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep& cDlgGrep)
 {
 
 	// ======= Grepの実行 =============
@@ -127,11 +127,11 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	// GOPTオプション
 	TCHAR pOpt[64] = _T("");
 	if (cDlgGrep.m_bSubFolder				) _tcscat(pOpt, _T("S"));	// サブフォルダからも検索する
-	if (cDlgGrep.m_sSearchOption.bLoHiCase	) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
-	if (cDlgGrep.m_sSearchOption.bRegularExp) _tcscat(pOpt, _T("R"));	// 正規表現
+	if (cDlgGrep.m_searchOption.bLoHiCase	) _tcscat(pOpt, _T("L"));	// 英大文字と英小文字を区別する
+	if (cDlgGrep.m_searchOption.bRegularExp) _tcscat(pOpt, _T("R"));	// 正規表現
 	if (cDlgGrep.m_nGrepOutputLineType == 1	) _tcscat(pOpt, _T("P"));	// 行を出力する
 	if (cDlgGrep.m_nGrepOutputLineType == 2	) _tcscat(pOpt, _T("N"));	// 否ヒット行を出力する 2014.09.23
-	if (cDlgGrep.m_sSearchOption.bWordOnly	) _tcscat(pOpt, _T("W"));	// 単語単位で探す
+	if (cDlgGrep.m_searchOption.bWordOnly	) _tcscat(pOpt, _T("W"));	// 単語単位で探す
 	if (cDlgGrep.m_nGrepOutputStyle == 1	) _tcscat(pOpt, _T("1"));	// Grep: 出力形式
 	if (cDlgGrep.m_nGrepOutputStyle == 2	) _tcscat(pOpt, _T("2"));	// Grep: 出力形式
 	if (cDlgGrep.m_nGrepOutputStyle == 3	) _tcscat(pOpt, _T("3"));
@@ -144,7 +144,7 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 	}
 
 	// 新規編集ウィンドウの追加 ver 0
-	SLoadInfo sLoadInfo;
+	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
@@ -155,7 +155,7 @@ void CControlTray::DoGrepCreateWindow(HINSTANCE hinst, HWND msgParent, CDlgGrep&
 		cCmdLine.GetStringPtr(),
 		false,
 		NULL,
-		GetDllShareData().m_Common.m_sTabBar.m_bNewWindow
+		GetDllShareData().m_common.m_sTabBar.m_bNewWindow
 	);
 }
 
@@ -168,15 +168,15 @@ static LRESULT CALLBACK CControlTrayWndProc(
 	LPARAM	lParam 	// second message parameter
 )
 {
-	CControlTray* pSApp;
+	ControlTray* pSApp;
 	switch (uMsg) {
 	case WM_CREATE:
-		pSApp = (CControlTray*)g_m_pCControlTray;
+		pSApp = (ControlTray*)g_m_pCControlTray;
 		return pSApp->DispatchEvent(hwnd, uMsg, wParam, lParam);
 	default:
 		// Modified by KEITA for WIN64 2003.9.6
 		// RELPRINT(_T("dispatch\n"));
-		pSApp = (CControlTray*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+		pSApp = (ControlTray*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 		if (pSApp) {
 			return pSApp->DispatchEvent(hwnd, uMsg, wParam, lParam);
 		}
@@ -186,9 +186,9 @@ static LRESULT CALLBACK CControlTrayWndProc(
 
 
 /////////////////////////////////////////////////////////////////////////////
-// CControlTray
+// ControlTray
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-CControlTray::CControlTray()
+ControlTray::ControlTray()
 // Apr. 24, 2001 genta
 	:
 	m_pcPropertyManager(NULL),
@@ -210,24 +210,24 @@ CControlTray::CControlTray()
 }
 
 
-CControlTray::~CControlTray()
+ControlTray::~ControlTray()
 {
 	delete m_pcPropertyManager;
 	return;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CControlTray メンバ関数
+// ControlTray メンバ関数
 
 
 // 作成
-HWND CControlTray::Create(HINSTANCE hInstance)
+HWND ControlTray::Create(HINSTANCE hInstance)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CControlTray::Create");
+	MY_RUNNINGTIMER(cRunningTimer, "ControlTray::Create");
 
 	// 同名同クラスのウィンドウが既に存在していたら、失敗
 	m_hInstance = hInstance;
-	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	std::tstring strCEditAppName = GSTR_CEDITAPP;
 	strCEditAppName += strProfileName;
 	HWND hwndWork = ::FindWindow(strCEditAppName.c_str(), strCEditAppName.c_str());
@@ -292,16 +292,16 @@ HWND CControlTray::Create(HINSTANCE hInstance)
 	m_pcPropertyManager = new CPropertyManager();
 	m_pcPropertyManager->Create(GetTrayHwnd(), &m_hIcons, &m_cMenuDrawer);
 
-	auto_strcpy(m_szLanguageDll, m_pShareData->m_Common.m_sWindow.m_szLanguageDll);
+	auto_strcpy(m_szLanguageDll, m_pShareData->m_common.m_sWindow.m_szLanguageDll);
 
 	return GetTrayHwnd();
 }
 
 //! タスクトレイにアイコンを登録する
-bool CControlTray::CreateTrayIcon(HWND hWnd)
+bool ControlTray::CreateTrayIcon(HWND hWnd)
 {
 	// タスクトレイのアイコンを作る
-	if (m_pShareData->m_Common.m_sGeneral.m_bUseTaskTray) {	// タスクトレイのアイコンを使う
+	if (m_pShareData->m_common.m_sGeneral.m_bUseTaskTray) {	// タスクトレイのアイコンを使う
 		// Dec. 02, 2002 genta
 		HICON hIcon = GetAppIcon(m_hInstance, ICON_DEFAULT_APP, FN_APP_ICON, true);
 // From Here Jan. 12, 2001 JEPRO トレイアイコンにポイントするとバージョンno.が表示されるように修正
@@ -319,9 +319,9 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 		);
 
 		std::wstring profname;
-		if (CCommandLine::getInstance()->GetProfileName()[0] != L'\0') {
+		if (CommandLine::getInstance()->GetProfileName()[0] != L'\0') {
 			profname = L" ";
-			profname += CCommandLine::getInstance()->GetProfileName();
+			profname += CommandLine::getInstance()->GetProfileName();
 		}
 		auto_snprintf_s(
 			pszTips,
@@ -343,7 +343,7 @@ bool CControlTray::CreateTrayIcon(HWND hWnd)
 
 
 // メッセージループ
-void CControlTray::MessageLoop(void)
+void ControlTray::MessageLoop(void)
 {
 	// 複数プロセス版
 	MSG	msg;
@@ -363,7 +363,7 @@ void CControlTray::MessageLoop(void)
 
 
 // タスクトレイのアイコンに関する処理
-BOOL CControlTray::TrayMessage(
+BOOL ControlTray::TrayMessage(
 	HWND hDlg,
 	DWORD dwMessage,
 	UINT uID,
@@ -393,7 +393,7 @@ BOOL CControlTray::TrayMessage(
 
 // メッセージ処理
 // @@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-LRESULT CControlTray::DispatchEvent(
+LRESULT ControlTray::DispatchEvent(
 	HWND	hwnd,	// handle of window
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
@@ -480,7 +480,7 @@ LRESULT CControlTray::DispatchEvent(
 			// 2010.08.26 ウィンドウ存在確認。消えたウィンドウを抹消する
 			bool bDelete = false;
 			bool bDelFound;
-			auto& sNodes = m_pShareData->m_sNodes;
+			auto& sNodes = m_pShareData->m_nodes;
 			do {
 				bDelFound = false;
 				for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
@@ -506,7 +506,7 @@ LRESULT CControlTray::DispatchEvent(
 
 	case MYWM_HTMLHELP:
 		{
-			TCHAR* pWork = m_pShareData->m_sWorkBuffer.GetWorkBuffer<TCHAR>();
+			TCHAR* pWork = m_pShareData->m_workBuffer.GetWorkBuffer<TCHAR>();
 			// szHtmlFile取得
 			TCHAR szHtmlHelpFile[1024];
 			_tcscpy_s(szHtmlHelpFile, pWork);
@@ -542,7 +542,7 @@ LRESULT CControlTray::DispatchEvent(
 	// 編集ウィンドウオブジェクトからのオブジェクト削除要求
 	case MYWM_DELETE_ME:
 		{
-			auto& csGeneral = m_pShareData->m_Common.m_sGeneral;
+			auto& csGeneral = m_pShareData->m_common.m_sGeneral;
 			// タスクトレイのアイコンを常駐しない、または、トレイにアイコンを作っていない
 			if (!(csGeneral.m_bStayTaskTray && csGeneral.m_bUseTaskTray) || !m_bCreatedTrayIcon) {
 				// 現在開いている編集窓のリスト
@@ -560,7 +560,7 @@ LRESULT CControlTray::DispatchEvent(
 
 	case WM_CREATE:
 		{
-			auto& csGeneral = m_pShareData->m_Common.m_sGeneral;
+			auto& csGeneral = m_pShareData->m_common.m_sGeneral;
 			m_hWnd = hwnd;
 			hwndHtmlHelp = NULL;
 			// Modified by KEITA for WIN64 2003.9.6
@@ -620,7 +620,7 @@ LRESULT CControlTray::DispatchEvent(
 	case MYWM_CHANGESETTING:
 		if ((e_PM_CHANGESETTING_SELECT)lParam == PM_CHANGESETTING_ALL) {
 			{
-				auto& csWindow = GetDllShareData().m_Common.m_sWindow;
+				auto& csWindow = GetDllShareData().m_common.m_sWindow;
 				bool bChangeLang = auto_strcmp(csWindow.m_szLanguageDll, m_szLanguageDll) != 0;
 				auto_strcpy(m_szLanguageDll, csWindow.m_szLanguageDll);
 				std::vector<std::wstring> values;
@@ -637,7 +637,7 @@ LRESULT CControlTray::DispatchEvent(
 			::UnregisterHotKey(GetTrayHwnd(), ID_HOTKEY_TRAYMENU);
 			// タスクトレイ左クリックメニューへのショートカットキー登録
 			wHotKeyMods = 0;
-			auto& csGeneral = m_pShareData->m_Common.m_sGeneral;
+			auto& csGeneral = m_pShareData->m_common.m_sGeneral;
 			if (csGeneral.m_wTrayMenuHotKeyMods & HOTKEYF_SHIFT) {
 				wHotKeyMods |= MOD_SHIFT;
 			}
@@ -670,7 +670,7 @@ LRESULT CControlTray::DispatchEvent(
 		{
 			int nIdx = (int)wParam;
 			if (0 <= nIdx && m_pShareData->m_nTypesCount) {
-				STypeConfig& type = m_pShareData->m_sWorkBuffer.m_TypeConfig;
+				TypeConfig& type = m_pShareData->m_workBuffer.m_TypeConfig;
 				if (nIdx == 0) {
 					m_pShareData->m_TypeBasis = type;
 					m_pShareData->m_TypeBasis.m_nIdx = 0;
@@ -691,7 +691,7 @@ LRESULT CControlTray::DispatchEvent(
 		{
 			int nIdx = (int)wParam;
 			if (0 <= nIdx && m_pShareData->m_nTypesCount) {
-				m_pShareData->m_sWorkBuffer.m_TypeConfig = *(CShareData::getInstance()->GetTypeSettings()[nIdx]);
+				m_pShareData->m_workBuffer.m_TypeConfig = *(CShareData::getInstance()->GetTypeSettings()[nIdx]);
 			}else {
 				return FALSE;
 			}
@@ -702,8 +702,8 @@ LRESULT CControlTray::DispatchEvent(
 			int nInsert = (int)wParam;
 			// "共通"の前には入れない
 			if (0 < nInsert && nInsert <= m_pShareData->m_nTypesCount && nInsert < MAX_TYPES) {
-				std::vector<STypeConfig*>& types = CShareData::getInstance()->GetTypeSettings();
-				STypeConfig* type = new STypeConfig();
+				std::vector<TypeConfig*>& types = CShareData::getInstance()->GetTypeSettings();
+				TypeConfig* type = new TypeConfig();
 				*type = *types[0]; // 基本をコピー
 				type->m_nIdx = nInsert;
 				type->m_id = (::GetTickCount() & 0x3fffffff) + nInsert * 0x10000;
@@ -804,7 +804,7 @@ LRESULT CControlTray::DispatchEvent(
 			case F_TYPE_LIST:	// タイプ別設定一覧
 				{
 					CDlgTypeList			cDlgTypeList;
-					CDlgTypeList::SResult	sResult;
+					CDlgTypeList::Result	sResult;
 					sResult.cDocumentType = CTypeConfig(0);
 					sResult.bTempChange = false;
 					if (cDlgTypeList.DoModal(G_AppInstance(), GetTrayHwnd(), &sResult)) {
@@ -846,7 +846,7 @@ LRESULT CControlTray::DispatchEvent(
 //				case IDM_EXITALL:
 			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
 				// サクラエディタの全終了
-				CControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
+				ControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
 				break;
 			default:
 				break;
@@ -878,7 +878,7 @@ LRESULT CControlTray::DispatchEvent(
 			case F_FILEOPEN:	// 開く
 				{
 					// ファイルオープンダイアログの初期化
-					SLoadInfo sLoadInfo;
+					LoadInfo sLoadInfo;
 					sLoadInfo.cFilePath = _T("");
 					sLoadInfo.eCharCode = CODE_AUTODETECT;	// 文字コード自動判別
 					sLoadInfo.bViewMode = false;
@@ -904,14 +904,14 @@ LRESULT CControlTray::DispatchEvent(
 					size_t nSize = files.size();
 					for (size_t f=0; f<nSize; ++f) {
 						sLoadInfo.cFilePath = files[f].c_str();
-						CControlTray::OpenNewEditor(
+						ControlTray::OpenNewEditor(
 							m_hInstance,
 							GetTrayHwnd(),
 							sLoadInfo,
 							NULL,
 							true,
 							NULL,
-							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
+							m_pShareData->m_common.m_sTabBar.m_bNewWindow
 						);
 					}
 				}
@@ -930,17 +930,17 @@ LRESULT CControlTray::DispatchEvent(
 				break;
 			case F_EXITALLEDITORS:	// Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	// 2007.02.13 ryoji →F_EXITALLEDITORS
 				// 編集の全終了
-				CControlTray::CloseAllEditor(true, GetTrayHwnd(), true, 0);	// 2006.12.25, 2007.02.13 ryoji 引数追加
+				ControlTray::CloseAllEditor(true, GetTrayHwnd(), true, 0);	// 2006.12.25, 2007.02.13 ryoji 引数追加
 				break;
 			case F_EXITALL:	// Dec. 26, 2000 JEPRO F_に変更
 				// サクラエディタの全終了
-				CControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
+				ControlTray::TerminateApplication(GetTrayHwnd());	// 2006.12.25 ryoji 引数追加
 				break;
 			default:
 				if (nId - IDM_SELWINDOW >= 0
-					&& nId - IDM_SELWINDOW < m_pShareData->m_sNodes.m_nEditArrNum
+					&& nId - IDM_SELWINDOW < m_pShareData->m_nodes.m_nEditArrNum
 				) {
-					hwndWork = m_pShareData->m_sNodes.m_pEditArr[nId - IDM_SELWINDOW].GetHwnd();
+					hwndWork = m_pShareData->m_nodes.m_pEditArr[nId - IDM_SELWINDOW].GetHwnd();
 
 					// アクティブにする
 					ActivateFrameWindow(hwndWork);
@@ -952,21 +952,21 @@ LRESULT CControlTray::DispatchEvent(
 					EditInfo openEditInfo;
 					cMRU.GetEditInfo(nId - IDM_SELMRU, &openEditInfo);
 
-					if (m_pShareData->m_Common.m_sFile.GetRestoreCurPosition()) {
-						CControlTray::OpenNewEditor2(m_hInstance, GetTrayHwnd(), &openEditInfo, false);
+					if (m_pShareData->m_common.m_sFile.GetRestoreCurPosition()) {
+						ControlTray::OpenNewEditor2(m_hInstance, GetTrayHwnd(), &openEditInfo, false);
 					}else {
-						SLoadInfo sLoadInfo;
+						LoadInfo sLoadInfo;
 						sLoadInfo.cFilePath = openEditInfo.m_szPath;
 						sLoadInfo.eCharCode = openEditInfo.m_nCharCode;
 						sLoadInfo.bViewMode = false;
-						CControlTray::OpenNewEditor(
+						ControlTray::OpenNewEditor(
 							m_hInstance,
 							GetTrayHwnd(),
 							sLoadInfo,
 							NULL,
 							false,
 							NULL,
-							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
+							m_pShareData->m_common.m_sTabBar.m_bNewWindow
 						);
 
 					}
@@ -996,7 +996,7 @@ LRESULT CControlTray::DispatchEvent(
 						vMRU,
 						vOPENFOLDER
 					);
-					SLoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
+					LoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
 					std::vector<std::tstring> files;
 					if (!cDlgOpenFile.DoModalOpenDlg(&sLoadInfo, &files)) {
 						break;
@@ -1009,14 +1009,14 @@ LRESULT CControlTray::DispatchEvent(
 					size_t nSize = files.size();
 					for (size_t f=0; f<nSize; ++f) {
 						sLoadInfo.cFilePath = files[f].c_str();
-						CControlTray::OpenNewEditor(
+						ControlTray::OpenNewEditor(
 							m_hInstance,
 							GetTrayHwnd(),
 							sLoadInfo,
 							NULL,
 							true,
 							NULL,
-							m_pShareData->m_Common.m_sTabBar.m_bNewWindow
+							m_pShareData->m_common.m_sTabBar.m_bNewWindow
 						);
 					}
 				}
@@ -1026,7 +1026,7 @@ LRESULT CControlTray::DispatchEvent(
 		case WM_LBUTTONDBLCLK:
 			bLDClick = true;		// 03/02/20 ai
 			// 新規編集ウィンドウの追加
-			OnNewEditor(m_pShareData->m_Common.m_sTabBar.m_bNewWindow != FALSE);
+			OnNewEditor(m_pShareData->m_common.m_sTabBar.m_bNewWindow != FALSE);
 			// Apr. 1, 2003 genta この後で表示されたメニューは閉じる
 			::PostMessage(GetTrayHwnd(), WM_CANCELMODE, 0, 0);
 			return 0L;
@@ -1088,7 +1088,7 @@ LRESULT CControlTray::DispatchEvent(
 
 
 // WM_COMMANDメッセージ処理
-void CControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
+void ControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 {
 	switch (wNotifyCode) {
 	// メニューからのメッセージ
@@ -1105,16 +1105,16 @@ void CControlTray::OnCommand(WORD wNotifyCode, WORD wID , HWND hwndCtl)
 	@date 2003.05.30 新規作成
 	@date 2013.03.21 novice MRUは使用しない
 */
-void CControlTray::OnNewEditor(bool bNewWindow)
+void ControlTray::OnNewEditor(bool bNewWindow)
 {
 	// 新規ウィンドウで開くオプションは、タブバー＆グループ化を前提とする
-	auto& csTabBar = m_pShareData->m_Common.m_sTabBar;
+	auto& csTabBar = m_pShareData->m_common.m_sTabBar;
 	bNewWindow = bNewWindow
 				 && csTabBar.m_bDispTabWnd
 				 && !csTabBar.m_bDispTabWndMultiWin;
 
 	// 編集ウィンドウを開く
-	SLoadInfo sLoadInfo;
+	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
@@ -1140,10 +1140,10 @@ void CControlTray::OnNewEditor(bool bNewWindow)
 	@date 2008.04.19 ryoji MYWM_FIRST_IDLE 待ちを追加
 	@date 2008.05.05 novice GetModuleHandle(NULL)→NULLに変更
 */
-bool CControlTray::OpenNewEditor(
+bool ControlTray::OpenNewEditor(
 	HINSTANCE			hInstance,			//!< [in] インスタンスID (実は未使用)
 	HWND				hWndParent,			//!< [in] 親ウィンドウハンドル．エラーメッセージ表示用
-	const SLoadInfo&	sLoadInfo,			//!< [in]
+	const LoadInfo&	sLoadInfo,			//!< [in]
 	const TCHAR*		szCmdLineOption,	//!< [in] 追加のコマンドラインオプション
 	bool				sync,				//!< [in] trueなら新規エディタの起動まで待機する
 	const TCHAR*		pszCurDir,			//!< [in] 新規エディタのカレントディレクトリ(NULL可)
@@ -1154,7 +1154,7 @@ bool CControlTray::OpenNewEditor(
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
-	if (pShareData->m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (pShareData->m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return false;
 	}
@@ -1195,23 +1195,23 @@ bool CControlTray::OpenNewEditor(
 		cCmdLineBuf.AppendF(_T(" -GROUP=%d"), CAppNodeManager::getInstance()->GetFreeGroupId());
 	}
 
-	if (CCommandLine::getInstance()->IsSetProfile()) {
-		cCmdLineBuf.AppendF( _T(" -PROF=\"%ls\""), CCommandLine::getInstance()->GetProfileName() );
+	if (CommandLine::getInstance()->IsSetProfile()) {
+		cCmdLineBuf.AppendF( _T(" -PROF=\"%ls\""), CommandLine::getInstance()->GetProfileName() );
 	}
 
 	// 追加のコマンドラインオプション
 	TCHAR szResponseFile[_MAX_PATH] = _T("");
-	struct CResponsefileDeleter{
+	struct ResponseFileDeleter {
 		LPCTSTR fileName;
-		CResponsefileDeleter(): fileName(NULL) {}
-		~CResponsefileDeleter() {
+		ResponseFileDeleter(): fileName(NULL) {}
+		~ResponseFileDeleter() {
 			if (fileName && fileName[0]) {
 				::DeleteFile(fileName);
 				fileName = NULL;
 			}
 		}
 	};
-	CResponsefileDeleter respDeleter;
+	ResponseFileDeleter respDeleter;
 	if (szCmdLineOption) {
 		// Grepなどで入りきらない場合はレスポンスファイルを利用する
 		if (cCmdLineBuf.max_size() < cCmdLineBuf.size() + auto_strlen(szCmdLineOption)) {
@@ -1320,8 +1320,8 @@ bool CControlTray::OpenNewEditor(
 		}
 	}else {
 		// タブまとめ時は起動したプロセスが立ち上がるまでしばらくタイトルバーをアクティブに保つ	// 2007.02.03 ryoji
-		if (pShareData->m_Common.m_sTabBar.m_bDispTabWnd
-			&& !pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin
+		if (pShareData->m_common.m_sTabBar.m_bDispTabWnd
+			&& !pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin
 		) {
 			WaitForInputIdle(p.hProcess, 3000);
 			sync = true;
@@ -1365,7 +1365,7 @@ bool CControlTray::OpenNewEditor(
 	@date Oct. 24, 2000 genta create.
 	@date Feb. 25, 2012 novice -CODE/-RはOpenNewEditor側で処理するので削除
 */
-bool CControlTray::OpenNewEditor2(
+bool ControlTray::OpenNewEditor2(
 	HINSTANCE		hInstance,
 	HWND			hWndParent,
 	const EditInfo*	pfi,
@@ -1379,7 +1379,7 @@ bool CControlTray::OpenNewEditor2(
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
 	// 編集ウィンドウの上限チェック
-	if (pShareData->m_sNodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
+	if (pShareData->m_nodes.m_nEditArrNum >= MAX_EDITWINDOWS) {	// 最大値修正	//@@@ 2003.05.31 MIK
 		OkMessage(NULL, LS(STR_MAXWINDOW), MAX_EDITWINDOWS);
 		return false;
 	}
@@ -1392,7 +1392,7 @@ bool CControlTray::OpenNewEditor2(
 		if (pfi->m_nViewLeftCol >= CLayoutInt(0)) cCmdLine.AppendF(_T(" -VX=%d"), (Int)pfi->m_nViewLeftCol + 1);
 		if (pfi->m_nViewTopLine >= CLayoutInt(0)) cCmdLine.AppendF(_T(" -VY=%d"), (Int)pfi->m_nViewTopLine + 1);
 	}
-	SLoadInfo sLoadInfo;
+	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = pfi ? pfi->m_szPath : _T("");
 	sLoadInfo.eCharCode = pfi ? pfi->m_nCharCode : CODE_NONE;
 	sLoadInfo.bViewMode = bViewMode;
@@ -1410,7 +1410,7 @@ bool CControlTray::OpenNewEditor2(
 
 
 
-void CControlTray::ActiveNextWindow(HWND hwndParent)
+void ControlTray::ActiveNextWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode*	pEditNodeArr;
@@ -1450,7 +1450,7 @@ void CControlTray::ActiveNextWindow(HWND hwndParent)
 	}
 }
 
-void CControlTray::ActivePrevWindow(HWND hwndParent)
+void ControlTray::ActivePrevWindow(HWND hwndParent)
 {
 	// 現在開いている編集窓のリストを得る
 	EditNode* pEditNodeArr;
@@ -1497,14 +1497,14 @@ void CControlTray::ActivePrevWindow(HWND hwndParent)
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
 */
-void CControlTray::TerminateApplication(
+void ControlTray::TerminateApplication(
 	HWND hWndFrom	//!< [in] 呼び出し元のウィンドウハンドル
 	)
 {
 	DLLSHAREDATA* pShareData = &GetDllShareData();	// 共有データ構造体のアドレスを返す
 
 	// 現在の編集ウィンドウの数を調べる
-	if (pShareData->m_Common.m_sGeneral.m_bExitConfirm) {	// 終了時の確認
+	if (pShareData->m_common.m_sGeneral.m_bExitConfirm) {	// 終了時の確認
 		if (0 < CAppNodeGroupHandle(0).GetEditorWindowsNum()) {
 			if (::MYMESSAGEBOX(
 					hWndFrom,
@@ -1518,9 +1518,9 @@ void CControlTray::TerminateApplication(
 		}
 	}
 	// 「すべてのウィンドウを閉じる」要求	// Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	bool bCheckConfirm = pShareData->m_Common.m_sGeneral.m_bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
+	bool bCheckConfirm = pShareData->m_common.m_sGeneral.m_bExitConfirm;	// 2006.12.25 ryoji 終了確認済みならそれ以上は確認しない
 	if (CloseAllEditor(bCheckConfirm, hWndFrom, true, 0)) {	// 2006.12.25, 2007.02.13 ryoji 引数追加
-		::PostMessage(pShareData->m_sHandles.m_hwndTray, WM_CLOSE, 0, 0);
+		::PostMessage(pShareData->m_handles.m_hwndTray, WM_CLOSE, 0, 0);
 	}
 	return;
 }
@@ -1534,7 +1534,7 @@ void CControlTray::TerminateApplication(
 	@date 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加
 	@date 2007.06.20 ryoji nGroup引数を追加
 */
-BOOL CControlTray::CloseAllEditor(
+BOOL ControlTray::CloseAllEditor(
 	bool	bCheckConfirm,	//!< [in] [すべて閉じる]確認オプションに従って問い合わせをするかどうか
 	HWND	hWndFrom,		//!< [in] 呼び出し元のウィンドウハンドル
 	bool	bExit,			//!< [in] TRUE: 編集の全終了 / FALSE: すべて閉じる
@@ -1555,7 +1555,7 @@ BOOL CControlTray::CloseAllEditor(
 
 
 //! ポップアップメニュー(トレイ左ボタン)
-int	CControlTray::CreatePopUpMenu_L(void)
+int	ControlTray::CreatePopUpMenu_L(void)
 {
 	// 本当はセマフォにしないとだめ
 	if (m_bUseTrayMenu) {
@@ -1596,8 +1596,8 @@ int	CControlTray::CreatePopUpMenu_L(void)
 
 	// 現在開いている編集窓のリストをメニューにする
 	int j = 0;
-	for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
-		if (IsSakuraMainWindow(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd())) {
+	for (int i=0; i<m_pShareData->m_nodes.m_nEditArrNum; ++i) {
+		if (IsSakuraMainWindow(m_pShareData->m_nodes.m_pEditArr[i].GetHwnd())) {
 			++j;
 		}
 	}
@@ -1612,18 +1612,18 @@ int	CControlTray::CreatePopUpMenu_L(void)
 
 		j = 0;
 		TCHAR szMenu[100 + MAX_PATH * 2];	// Jan. 19, 2001 genta
-		for (int i=0; i<m_pShareData->m_sNodes.m_nEditArrNum; ++i) {
-			if (IsSakuraMainWindow(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd())) {
+		for (int i=0; i<m_pShareData->m_nodes.m_nEditArrNum; ++i) {
+			if (IsSakuraMainWindow(m_pShareData->m_nodes.m_pEditArr[i].GetHwnd())) {
 				// トレイからエディタへの編集ファイル名要求通知
-				::SendMessage(m_pShareData->m_sNodes.m_pEditArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-				EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
+				::SendMessage(m_pShareData->m_nodes.m_pEditArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
+				EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 				// メニューラベル。1からアクセスキーを振る
 				CFileNameManager::getInstance()->GetMenuFullLabel_WinList(
 					szMenu,
 					_countof(szMenu),
 					pfi,
-					m_pShareData->m_sNodes.m_pEditArr[i].m_nId,
+					m_pShareData->m_nodes.m_pEditArr[i].m_nId,
 					i,
 					dcFont.GetHDC()
 				);
@@ -1682,7 +1682,7 @@ int	CControlTray::CreatePopUpMenu_L(void)
 // Oct. 12, 2000 JEPRO ポップアップメニュー(トレイ左ボタン) を参考にして新たに追加した部分
 
 //! ポップアップメニュー(トレイ右ボタン)
-int	CControlTray::CreatePopUpMenu_R(void)
+int	ControlTray::CreatePopUpMenu_R(void)
 {
 	// 本当はセマフォにしないとだめ
 	if (m_bUseTrayMenu) {
@@ -1748,15 +1748,15 @@ int	CControlTray::CreatePopUpMenu_R(void)
 /*! アクセラレータテーブル作成
 	@date 2013.04.20 novice 共通処理を関数化
 */
-void CControlTray::CreateAccelTbl(void)
+void ControlTray::CreateAccelTbl(void)
 {
-	auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
-	m_pShareData->m_sHandles.m_hAccel = CKeyBind::CreateAccerelator(
+	auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
+	m_pShareData->m_handles.m_hAccel = CKeyBind::CreateAccerelator(
 		csKeyBind.m_nKeyNameArrNum,
 		csKeyBind.m_pKeyNameArr
 	);
 
-	if (!m_pShareData->m_sHandles.m_hAccel) {
+	if (!m_pShareData->m_handles.m_hAccel) {
 		ErrorMessage(
 			NULL,
 			LS(STR_TRAY_ACCELTABLE)
@@ -1767,11 +1767,11 @@ void CControlTray::CreateAccelTbl(void)
 /*! アクセラレータテーブル破棄
 	@date 2013.04.20 novice 共通処理を関数化
 */
-void CControlTray::DeleteAccelTbl(void)
+void ControlTray::DeleteAccelTbl(void)
 {
-	if (m_pShareData->m_sHandles.m_hAccel) {
-		::DestroyAcceleratorTable(m_pShareData->m_sHandles.m_hAccel);
-		m_pShareData->m_sHandles.m_hAccel = NULL;
+	if (m_pShareData->m_handles.m_hAccel) {
+		::DestroyAcceleratorTable(m_pShareData->m_handles.m_hAccel);
+		m_pShareData->m_handles.m_hAccel = NULL;
 	}
 }
 
@@ -1779,7 +1779,7 @@ void CControlTray::DeleteAccelTbl(void)
 	@brief WM_DESTROY 処理
 	@date 2006.07.09 ryoji 新規作成
 */
-void CControlTray::OnDestroy()
+void ControlTray::OnDestroy()
 {
 	HWND hwndExitingDlg = 0;
 
@@ -1798,7 +1798,7 @@ void CControlTray::OnDestroy()
 	//
 
 	// 終了ダイアログを表示する
-	if (m_pShareData->m_Common.m_sGeneral.m_bDispExitingDialog) {
+	if (m_pShareData->m_common.m_sGeneral.m_bDispExitingDialog) {
 		// 終了中ダイアログの表示
 		hwndExitingDlg = ::CreateDialog(
 			m_hInstance,
@@ -1813,7 +1813,7 @@ void CControlTray::OnDestroy()
 	CShareData_IO::SaveShareData();
 
 	// 終了ダイアログを表示する
-	if (m_pShareData->m_Common.m_sGeneral.m_bDispExitingDialog) {
+	if (m_pShareData->m_common.m_sGeneral.m_bDispExitingDialog) {
 		// 終了中ダイアログの破棄
 		::DestroyWindow(hwndExitingDlg);
 	}
@@ -1832,7 +1832,7 @@ void CControlTray::OnDestroy()
 	@brief 終了ダイアログ用プロシージャ
 	@date 2006.07.02 ryoji CControlProcess から移動
 */
-INT_PTR CALLBACK CControlTray::ExitingDlgProc(
+INT_PTR CALLBACK ControlTray::ExitingDlgProc(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter

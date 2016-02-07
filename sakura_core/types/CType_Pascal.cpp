@@ -28,7 +28,7 @@
 
 // Pascal
 // Mar. 10, 2001 JEPRO	半角数値を色分け表示
-void CType_Pascal::InitTypeConfigImp(STypeConfig* pType)
+void CType_Pascal::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("Pascal"));

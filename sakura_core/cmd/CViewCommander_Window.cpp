@@ -68,7 +68,7 @@ void CViewCommander::Command_WINCLOSE(void)
 void CViewCommander::Command_FILECLOSEALL(void)
 {
 	int nGroup = CAppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
-	CControlTray::CloseAllEditor(TRUE, GetMainWindow(), FALSE, nGroup);	// 2006.12.25, 2007.02.13 ryoji 引数追加
+	ControlTray::CloseAllEditor(TRUE, GetMainWindow(), FALSE, nGroup);	// 2006.12.25, 2007.02.13 ryoji 引数追加
 	return;
 }
 
@@ -382,7 +382,7 @@ void CViewCommander::Command_WINTOPMOST(LPARAM lparam)
 void CViewCommander::Command_BIND_WINDOW(void)
 {
 	// タブモードであるならば
-	auto& csTabBar = GetDllShareData().m_Common.m_sTabBar;
+	auto& csTabBar = GetDllShareData().m_common.m_sTabBar;
 	if (csTabBar.m_bDispTabWnd) {
 		// タブウィンドウの設定を変更
 		csTabBar.m_bDispTabWndMultiWin = !csTabBar.m_bDispTabWndMultiWin;
@@ -399,7 +399,7 @@ void CViewCommander::Command_BIND_WINDOW(void)
 		CAppNodeManager::getInstance()->ResetGroupId();
 		CAppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
-			(WPARAM)((csTabBar.m_bDispTabWndMultiWin) ? TWNT_MODE_DISABLE : TWNT_MODE_ENABLE), // タブモード有効/無効化イベント
+			(WPARAM)((csTabBar.m_bDispTabWndMultiWin) ? eTabWndNotifyType::Disable : eTabWndNotifyType::Enable), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow()->GetHwnd(),	// CEditWndのウィンドウハンドル
 			m_pCommanderView->GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika
@@ -411,13 +411,13 @@ void CViewCommander::Command_BIND_WINDOW(void)
 // グループを閉じる		// 2007.06.20 ryoji 追加
 void CViewCommander::Command_GROUPCLOSE(void)
 {
-	auto& csTabBar = GetDllShareData().m_Common.m_sTabBar;
+	auto& csTabBar = GetDllShareData().m_common.m_sTabBar;
 	if (
 		csTabBar.m_bDispTabWnd
 		&& !csTabBar.m_bDispTabWndMultiWin
 	) {
 		int nGroup = CAppNodeManager::getInstance()->GetEditNode(GetMainWindow())->GetGroup();
-		CControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, nGroup);
+		ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, nGroup);
 	}
 	return;
 }
@@ -496,7 +496,7 @@ void CViewCommander::Command_TAB_JOINTPREV(void)
 // 左をすべて閉じる		// 2008.11.22 syat
 void CViewCommander::Command_TAB_CLOSELEFT(void)
 {
-	if (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.m_sTabBar.m_bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する
@@ -526,7 +526,7 @@ void CViewCommander::Command_TAB_CLOSELEFT(void)
 // 右をすべて閉じる		// 2008.11.22 syat
 void CViewCommander::Command_TAB_CLOSERIGHT(void)
 {
-	if (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.m_sTabBar.m_bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する
@@ -597,14 +597,14 @@ void CViewCommander::Command_MAXIMIZE_H(void)
 // すべて最小化		// Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 void CViewCommander::Command_MINIMIZE_ALL(void)
 {
-	int j = GetDllShareData().m_sNodes.m_nEditArrNum;
+	int j = GetDllShareData().m_nodes.m_nEditArrNum;
 	if (j == 0) {
 		return;
 	}
 	std::vector<HWND> wnds(j);
 	HWND* phWndArr = &wnds[0];
 	for (int i=0; i<j; ++i) {
-		phWndArr[i] = GetDllShareData().m_sNodes.m_pEditArr[i].GetHwnd();
+		phWndArr[i] = GetDllShareData().m_nodes.m_pEditArr[i].GetHwnd();
 	}
 	for (int i=0; i<j; ++i) {
 		if (IsSakuraMainWindow(phWndArr[i])) {

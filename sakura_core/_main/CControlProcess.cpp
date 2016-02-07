@@ -6,7 +6,7 @@
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
-	Copyright (C) 2002, aroka CProcessより分離, YAZAKI
+	Copyright (C) 2002, aroka Processより分離, YAZAKI
 	Copyright (C) 2006, ryoji
 	Copyright (C) 2007, ryoji
 
@@ -32,17 +32,17 @@
 	@brief コントロールプロセスを初期化する
 	
 	MutexCPを作成・ロックする。
-	CControlTrayを作成する。
+	ControlTrayを作成する。
 	
 	@author aroka
 	@date 2002/01/07
-	@date 2002/02/17 YAZAKI 共有メモリを初期化するのはCProcessに移動。
+	@date 2002/02/17 YAZAKI 共有メモリを初期化するのはProcessに移動。
 	@date 2006/04/10 ryoji 初期化完了イベントの処理を追加、異常時の後始末はデストラクタに任せる
 	@date 2013.03.20 novice コントロールプロセスのカレントディレクトリをシステムディレクトリに変更
 */
-bool CControlProcess::InitializeProcess()
+bool ControlProcess::InitializeProcess()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CControlProcess::InitializeProcess");
+	MY_RUNNINGTIMER(cRunningTimer, "ControlProcess::InitializeProcess");
 
 	// アプリケーション実行検出用(インストーラで使用)
 	m_hMutex = ::CreateMutex(NULL, FALSE, GSTR_MUTEX_SAKURA);
@@ -52,7 +52,7 @@ bool CControlProcess::InitializeProcess()
 		return false;
 	}
 
-	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 
 	// 初期化完了イベントを作成する
 	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
@@ -78,7 +78,7 @@ bool CControlProcess::InitializeProcess()
 	}
 	
 	// 共有メモリを初期化
-	if (!CProcess::InitializeProcess()) {
+	if (!Process::InitializeProcess()) {
 		return false;
 	}
 
@@ -92,24 +92,24 @@ bool CControlProcess::InitializeProcess()
 	TCHAR szIniFile[_MAX_PATH];
 	CShareData_IO::LoadShareData();
 	CFileNameManager::getInstance()->GetIniFileName( szIniFile, strProfileName.c_str() );	// 出力iniファイル名
-	if (!fexist(szIniFile) || CCommandLine::getInstance()->IsWriteQuit()) {
+	if (!fexist(szIniFile) || CommandLine::getInstance()->IsWriteQuit()) {
 		// レジストリ項目 作成
 		CShareData_IO::SaveShareData();
-		if (CCommandLine::getInstance()->IsWriteQuit()) {
+		if (CommandLine::getInstance()->IsWriteQuit()) {
 			return false;
 		}
 	}
 
 	// 言語を選択する
-	CSelectLang::ChangeLang(GetDllShareData().m_Common.m_sWindow.m_szLanguageDll);
+	CSelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
 	RefreshString();
 
-	MY_TRACETIME(cRunningTimer, "Before new CControlTray");
+	MY_TRACETIME(cRunningTimer, "Before new ControlTray");
 
 	// タスクトレイにアイコン作成
-	m_pcTray = new CControlTray();
+	m_pcTray = new ControlTray();
 
-	MY_TRACETIME(cRunningTimer, "After new CControlTray");
+	MY_TRACETIME(cRunningTimer, "After new ControlTray");
 
 	HWND hwnd = m_pcTray->Create(GetProcessInstance());
 	if (!hwnd) {
@@ -118,7 +118,7 @@ bool CControlProcess::InitializeProcess()
 		return false;
 	}
 	SetMainWindow(hwnd);
-	GetDllShareData().m_sHandles.m_hwndTray = hwnd;
+	GetDllShareData().m_handles.m_hwndTray = hwnd;
 
 	// 初期化完了イベントをシグナル状態にする
 	if (!::SetEvent(m_hEventCPInitialized)) {
@@ -135,7 +135,7 @@ bool CControlProcess::InitializeProcess()
 	@author aroka
 	@date 2002/01/07
 */
-bool CControlProcess::MainLoop()
+bool ControlProcess::MainLoop()
 {
 	if (m_pcTray && GetMainWindow()) {
 		m_pcTray->MessageLoop();	// メッセージループ
@@ -149,14 +149,14 @@ bool CControlProcess::MainLoop()
 	
 	@author aroka
 	@date 2002/01/07
-	@date 2006/07/02 ryoji 共有データ保存を CControlTray へ移動
+	@date 2006/07/02 ryoji 共有データ保存を ControlTray へ移動
 */
-void CControlProcess::OnExitProcess()
+void ControlProcess::OnExitProcess()
 {
-	GetDllShareData().m_sHandles.m_hwndTray = NULL;
+	GetDllShareData().m_handles.m_hwndTray = NULL;
 }
 
-CControlProcess::~CControlProcess()
+ControlProcess::~ControlProcess()
 {
 	delete m_pcTray;
 

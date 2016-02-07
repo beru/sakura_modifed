@@ -19,7 +19,7 @@
 
 #include <new>
 
-CSelectLang::SSelLangInfo* CSelectLang::m_psLangInfo = NULL;	// メッセージリソース用構造体
+CSelectLang::SelLangInfo* CSelectLang::m_psLangInfo = NULL;	// メッセージリソース用構造体
 CSelectLang::PSSelLangInfoList CSelectLang::m_psLangInfoList;
 
 /*!
@@ -92,11 +92,11 @@ WORD CSelectLang::getDefaultLangId(void)
 */
 HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 {
-	SSelLangInfo* psLangInfo;
+	SelLangInfo* psLangInfo;
 
 	if (m_psLangInfoList.size() == 0) {
 		// デフォルト情報を作成する
-		psLangInfo = new SSelLangInfo();
+		psLangInfo = new SelLangInfo();
 		psLangInfo->hInstance = GetModuleHandle(NULL);
 
 		// 言語情報ダイアログで "System default" に表示する文字列を作成する
@@ -128,7 +128,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 	while (result) {
 		if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {		// フォルダでない
 			// バッファに登録する。
-			psLangInfo = new SSelLangInfo();
+			psLangInfo = new SelLangInfo();
 			_tcscpy(psLangInfo->szDllName, w32fd.cFileName);
 			psLangInfo->hInstance = CSelectLang::LoadLangRsrcLibrary(*psLangInfo);
 
@@ -168,7 +168,7 @@ HINSTANCE CSelectLang::InitializeLanguageEnvironment(void)
 	@note メッセージリソースDLLが未指定、または読み込みエラー発生の時はNULLが返る
 	@date 2011.04.10 nasukoji	新規作成
 */
-HINSTANCE CSelectLang::LoadLangRsrcLibrary(SSelLangInfo& lang)
+HINSTANCE CSelectLang::LoadLangRsrcLibrary(SelLangInfo& lang)
 {
 	if (lang.szDllName[0] == _T('\0')) {
 		return NULL;		// DLLが指定されていなければNULLを返す
@@ -356,7 +356,7 @@ void CSelectLang::ChangeLang(TCHAR* pszDllName)
 {
 	// 言語を選択する
 	for (size_t unIndex=0; unIndex<CSelectLang::m_psLangInfoList.size(); ++unIndex) {
-		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(unIndex);
+		CSelectLang::SelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(unIndex);
 		if (_tcsncmp(pszDllName, psLangInfo->szDllName, MAX_PATH) == 0) {
 			CSelectLang::ChangeLang(unIndex);
 			break;
@@ -372,7 +372,7 @@ HINSTANCE CSelectLang::ChangeLang(UINT nIndex)
 		return m_psLangInfo->hInstance;
 	}
 
-	SSelLangInfo *psLangInfo = m_psLangInfoList.at(nIndex);
+	SelLangInfo *psLangInfo = m_psLangInfoList.at(nIndex);
 	if (psLangInfo->hInstance != GetModuleHandle(NULL)) {
 		psLangInfo->hInstance = LoadLangRsrcLibrary(*psLangInfo);
 		if (!psLangInfo->hInstance) {

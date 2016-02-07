@@ -19,7 +19,7 @@ CDocLocker::CDocLocker()
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CDocLocker::OnAfterLoad(const SLoadInfo& sLoadInfo)
+void CDocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -37,7 +37,7 @@ void CDocLocker::OnAfterLoad(const SLoadInfo& sLoadInfo)
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CDocLocker::OnBeforeSave(const SSaveInfo& sSaveInfo)
+void CDocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -45,7 +45,7 @@ void CDocLocker::OnBeforeSave(const SSaveInfo& sSaveInfo)
 	pcDoc->m_cDocFileOperation.DoFileUnlock();
 }
 
-void CDocLocker::OnAfterSave(const SSaveInfo& sSaveInfo)
+void CDocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 

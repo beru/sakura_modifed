@@ -38,7 +38,7 @@
 
 /** Erlang アウトライン解析 管理＆解析
 */
-struct COutlineErlang {
+struct OutlineErlang {
 	enum {
 		STATE_NORMAL,				// 解析中でない
 		STATE_FUNC_CANDIDATE_FIN,	// 関数らしきもの(行頭のatom)を解析済み
@@ -54,7 +54,7 @@ struct COutlineErlang {
 	wchar_t m_parenthesis[32];	// 括弧のネストを管理するもの
 	int m_parenthesis_ptr;		// 括弧のネストレベル
 	
-	COutlineErlang();
+	OutlineErlang();
 	bool parse(const wchar_t* buf, int linelen, CLogicInt linenum);
 	
 	const wchar_t* ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p);
@@ -91,7 +91,7 @@ private:
 	void build_arity(int);
 };
 
-COutlineErlang::COutlineErlang() :
+OutlineErlang::OutlineErlang() :
 	m_state(STATE_NORMAL), m_lnum(0), m_argcount(0)
 {
 }
@@ -105,7 +105,7 @@ COutlineErlang::COutlineErlang() :
 	関数名はatom．atomは 小文字アルファベット，_, @ のいずれかから始まる
 	英数文字列か，あるいはシングルクォーテーションで囲まれた文字列．
 */
-const wchar_t* COutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p)
+const wchar_t* OutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p)
 {
 	assert(m_state == STATE_NORMAL);
 
@@ -149,7 +149,7 @@ const wchar_t* COutlineErlang::ScanFuncName(const wchar_t* buf, const wchar_t* e
 	
 	関数名の取得が完了し，パラメータ先頭の括弧を探す．
 */
-const wchar_t* COutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
+const wchar_t* OutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 {
 	assert(m_state == STATE_FUNC_CANDIDATE_FIN);
 
@@ -181,7 +181,7 @@ const wchar_t* COutlineErlang::EnterArgs(const wchar_t* end, const wchar_t* p)
 	
 	パラメータが0個と1個以上の判別のために状態を設けている．
 */
-const wchar_t* COutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
+const wchar_t* OutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 {
 	assert(m_state == STATE_FUNC_ARGS1);
 	
@@ -214,7 +214,7 @@ const wchar_t* COutlineErlang::ScanArgs1(const wchar_t* end, const wchar_t* p)
 	引用符，括弧，パラメータの区切りのカンマに着目する．
 	引用符は改行を含むことができない．
 */
-const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
+const wchar_t* OutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 {
 	assert(m_state == STATE_FUNC_ARGS);
 
@@ -298,7 +298,7 @@ const wchar_t* COutlineErlang::ScanArgs(const wchar_t* end, const wchar_t* p)
 	見つけたら，関数発見とする．
 	それ以外の場合は関数ではなかったと考える．
 */
-const wchar_t* COutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
+const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 {
 	while (IS_SPACE(*p) && p < end)
 		++p;
@@ -326,7 +326,7 @@ const wchar_t* COutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 	@param[in] linelen 行の長さ
 	@param[in] linenum 行番号
 */
-bool COutlineErlang::parse(const wchar_t* buf, int linelen, CLogicInt linenum)
+bool OutlineErlang::parse(const wchar_t* buf, int linelen, CLogicInt linenum)
 {
 	const wchar_t* pos = buf;
 	const wchar_t* const end = buf + linelen;
@@ -350,7 +350,7 @@ bool COutlineErlang::parse(const wchar_t* buf, int linelen, CLogicInt linenum)
 		case STATE_FUNC_ARGS_FIN:
 			pos = EnterCond(end, pos); break;
 		default:
-			PleaseReportToAuthor(NULL, _T("COutlineErlang::parse Unknown State: %d"), m_state);
+			PleaseReportToAuthor(NULL, _T("OutlineErlang::parse Unknown State: %d"), m_state);
 			break;
 		}
 		if (m_state == STATE_FUNC_FOUND) {
@@ -369,7 +369,7 @@ bool COutlineErlang::parse(const wchar_t* buf, int linelen, CLogicInt linenum)
 	バッファが不足する場合はできるところまで書き込む．
 	そのため，10個以上の引数がある場合に，引数の数の下位桁が欠けることがある．
 */ 
-void COutlineErlang::build_arity(int arity)
+void OutlineErlang::build_arity(int arity)
 {
 	int len = wcslen(m_func);
 	const int buf_size = _countof(m_func);
@@ -401,7 +401,7 @@ void COutlineErlang::build_arity(int arity)
 void CDocOutline::MakeFuncList_Erlang(CFuncInfoArr* pcFuncInfoArr)
 {
 
-	COutlineErlang erl_state_machine;
+	OutlineErlang erl_state_machine;
 	CLogicInt	nLineCount;
 
 	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {

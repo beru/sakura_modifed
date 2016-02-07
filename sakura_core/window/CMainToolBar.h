@@ -73,7 +73,7 @@ private:
 	// フォント
 	HFONT		m_hFontSearchBox;	// 検索コンボボックスのフォント
 
-	SComboBoxItemDeleter	m_comboDel;
+	ComboBoxItemDeleter	m_comboDel;
 	CRecentSearch			m_cRecentSearch;
 	CImageListMgr*			m_pcIcons;
 };

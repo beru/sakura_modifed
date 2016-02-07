@@ -158,7 +158,7 @@ public:
 	int PrevWord(CLayoutInt nLineNum, CLogicInt nIdx, CLayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 	int NextWord(CLayoutInt nLineNum, CLogicInt nIdx, CLayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
-	int SearchWord(CLayoutInt nLine, CLogicInt nIdx, ESearchDirection eSearchDirection, CLayoutRange* pMatchRange, const CSearchStringPattern&);	// 単語検索
+	int SearchWord(CLayoutInt nLine, CLogicInt nIdx, eSearchDirection eSearchDirection, CLayoutRange* pMatchRange, const CSearchStringPattern&);	// 単語検索
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        単位の変換                           //
@@ -199,11 +199,11 @@ public:
 	/* レイアウト情報の変更
 		@date Jun. 01, 2001 JEPRO char* (行コメントデリミタ3用)を1つ追加
 		@date 2002.04.13 MIK 禁則,改行文字をぶら下げる,句読点ぶらさげを追加
-		@date 2002/04/27 YAZAKI STypeConfigを渡すように変更。
+		@date 2002/04/27 YAZAKI TypeConfigを渡すように変更。
 	*/
 	void SetLayoutInfo(
 		bool			bDoLayout,
-		const STypeConfig&	refType,
+		const TypeConfig&	refType,
 		CLayoutInt		nTabSpace,
 		CLayoutInt		nMaxLineKetas
 	);
@@ -238,7 +238,7 @@ protected:
 	void ShiftLogicalLineNum(CLayout* , CLogicInt);	// 指定行より後の行のレイアウト情報について、論理行番号を指定行数だけシフトする
 
 	// 部品
-	struct SLayoutWork {
+	struct LayoutWork {
 		// 毎ループ初期化
 		EKinsokuType	eKinsokuType;
 		CLogicInt		nPos;
@@ -273,19 +273,19 @@ protected:
 		CLayout* _CreateLayout(CLayoutMgr* mgr);
 	};
 	// 関数ポインタ
-	typedef void (CLayoutMgr::*PF_OnLine)(SLayoutWork*);
+	typedef void (CLayoutMgr::*PF_OnLine)(LayoutWork*);
 	// DoLayout用
-	bool _DoKinsokuSkip(SLayoutWork* pWork, PF_OnLine pfOnLine);
-	void _DoWordWrap(SLayoutWork* pWork, PF_OnLine pfOnLine);
-	void _DoKutoBurasage(SLayoutWork* pWork);
-	void _DoGyotoKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine);
-	void _DoGyomatsuKinsoku(SLayoutWork* pWork, PF_OnLine pfOnLine);
-	bool _DoTab(SLayoutWork* pWork, PF_OnLine pfOnLine);
-	void _MakeOneLine(SLayoutWork* pWork, PF_OnLine pfOnLine);
+	bool _DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine);
+	void _DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine);
+	void _DoKutoBurasage(LayoutWork* pWork);
+	void _DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine);
+	void _DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine);
+	bool _DoTab(LayoutWork* pWork, PF_OnLine pfOnLine);
+	void _MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine);
 	// DoLayout用コア
-	void _OnLine1(SLayoutWork* pWork);
+	void _OnLine1(LayoutWork* pWork);
 	// DoLayout_Range用コア
-	void _OnLine2(SLayoutWork* pWork);
+	void _OnLine2(LayoutWork* pWork);
 	
 private:
 	bool _ExistKinsokuKuto(wchar_t wc) const { return m_pszKinsokuKuto_1.exist(wc); }
@@ -338,7 +338,7 @@ protected:
 	CLayout*				m_pLayoutBot;
 
 	// タイプ別設定
-	const STypeConfig*		m_pTypeConfig;
+	const TypeConfig*		m_pTypeConfig;
 	CLayoutInt				m_nMaxLineKetas;
 	CLayoutInt				m_nTabSpace;
 	vector_ex<wchar_t>		m_pszKinsokuHead_1;			// 行頭禁則文字	//@@@ 2002.04.08 MIK

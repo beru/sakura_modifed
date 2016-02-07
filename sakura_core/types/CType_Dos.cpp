@@ -26,7 +26,7 @@
 #include "types/CType.h"
 
 // MS-DOSバッチファイル
-void CType_Dos::InitTypeConfigImp(STypeConfig* pType)
+void CType_Dos::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("MS-DOSバッチファイル"));

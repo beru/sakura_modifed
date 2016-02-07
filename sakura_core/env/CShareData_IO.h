@@ -29,7 +29,7 @@ struct CommonSetting_CustomMenu;	// defined CommonSetting.h
 struct CommonSetting_MainMenu;		// defined CommonSetting.h
 struct CommonSetting_KeyBind;		// defined CommonSetting.h
 struct ColorInfo; // defined doc/CDocTypeSetting.h
-struct SFileTree;
+struct FileTree;
 
 // 2008.XX.XX kobake CShareDataÇ©ÇÁï™ó£
 // 2008.05.24 Uchi   ShareData_IO_CustMenu, ShareData_IO_KeyBind  move ExportÅAImportÇ…égóp
@@ -65,9 +65,9 @@ protected:
 	static void ShareData_IO_Other(CDataProfile&);
 
 public:
-	static void ShareData_IO_FileTree( CDataProfile&, SFileTree&, const WCHAR* );
-	static void ShareData_IO_FileTreeItem( CDataProfile&, SFileTreeItem&, const WCHAR*, int i );
-	static void ShareData_IO_Type_One(CDataProfile&, STypeConfig& , const WCHAR*);	// 2010/04/12 Uchi ï™ó£
+	static void ShareData_IO_FileTree( CDataProfile&, FileTree&, const WCHAR* );
+	static void ShareData_IO_FileTreeItem( CDataProfile&, FileTreeItem&, const WCHAR*, int i );
+	static void ShareData_IO_Type_One(CDataProfile&, TypeConfig& , const WCHAR*);	// 2010/04/12 Uchi ï™ó£
 
 public:
 	static void IO_CustMenu(CDataProfile&, CommonSetting_CustomMenu&, bool);

@@ -79,7 +79,7 @@ inline bool Python_IsWordChar(wchar_t c) {
 
 	@date 2007.02.12 genta
 */
-struct COutlinePython {
+struct OutlinePython {
 	enum {
 		STATE_NORMAL,	// 通常行 : 行頭を含む
 		STATE_STRING,	// 文字列中
@@ -90,7 +90,7 @@ struct COutlinePython {
 	bool m_raw_string;	// エスケープ記号無視ならtrue
 	bool m_long_string;	// 長い文字列中ならtrue
 
-	COutlinePython();
+	OutlinePython();
 
 	/*	各状態における文字列スキャンを行う
 		Scan*が呼びだされるときは既にその状態になっていることが前提．
@@ -109,7 +109,7 @@ struct COutlinePython {
 
 	初期状態をSTATE_NORMALに設定する．
 */
-COutlinePython::COutlinePython()
+OutlinePython::OutlinePython()
 	: m_state(STATE_NORMAL),
 	m_raw_string(false),
 	m_long_string(false)
@@ -137,7 +137,7 @@ COutlinePython::COutlinePython()
 	@note 引用符の位置で呼びだせば，抜けた後は必ずSTATE_STRINGになっているはず．
 		引用符以外の位置で呼びだした場合は何もしないで抜ける．
 */
-int COutlinePython::EnterString(const wchar_t* data, int linelen, int start_offset)
+int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(m_state != STATE_STRING);
 
@@ -191,10 +191,10 @@ int COutlinePython::EnterString(const wchar_t* data, int linelen, int start_offs
 	
 	@return 調査後の位置
 */
-int COutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
+int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(m_state == STATE_NORMAL || m_state == STATE_CONTINUE);
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = CNativeW::GetSizeOfChar(data, linelen, col);
@@ -259,10 +259,10 @@ int COutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offse
 	@date 2007.03.23 genta 文字列の継続行の処理を追加
 
 */
-int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
+int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(m_state == STATE_STRING);
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	int quote_char = m_quote_char;
 	for (int col=start_offset; col<linelen; ++col) {
@@ -341,7 +341,7 @@ int COutlinePython::ScanString(const wchar_t* data, int linelen, int start_offse
 	@param[in] start_offset 調査開始位置
 
 */
-void COutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offset)
+void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offset)
 {
 	int col = start_offset;
 	while (col < linelen) {
@@ -389,10 +389,10 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 	CLogicInt	nLineLen;
 	CLogicInt	nLineCount;
 
-	COutlinePython python_analyze_state;
+	OutlinePython python_analyze_state;
 
 	const int MAX_DEPTH = 10;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	int indent_level[MAX_DEPTH]; // 各レベルのインデント桁位置()
 	indent_level[0] = 0;	// do as python does.

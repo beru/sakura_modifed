@@ -20,7 +20,7 @@
 */
 EConvertResult CWriteManager::WriteFile_From_CDocLineMgr(
 	const CDocLineMgr&	pcDocLineMgr,	// [in]
-	const SSaveInfo&	sSaveInfo		// [in]
+	const SaveInfo&	sSaveInfo		// [in]
 	)
 {
 	EConvertResult nRetVal = RESULT_COMPLETE;

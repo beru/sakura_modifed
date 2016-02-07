@@ -29,14 +29,14 @@ void CBookmarkManager::ResetAllBookMark(void)
 */
 bool CBookmarkManager::SearchBookMark(
 	CLogicInt			nLineNum,		// 検索開始行
-	ESearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	eSearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
 	CLogicInt*			pnLineNum 		// マッチ行
 	)
 {
 	CLogicInt nLinePos = nLineNum;
 	
 	// 前方検索
-	if (bPrevOrNext == SEARCH_BACKWARD) {
+	if (bPrevOrNext == eSearchDirection::Backward) {
 		--nLinePos;
 		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
@@ -203,11 +203,11 @@ void CBookmarkManager::MarkSearchWord(
 	const CSearchStringPattern& pattern
 	)
 {
-	const SSearchOption& sSearchOption = pattern.GetSearchOption();
+	const SearchOption& searchOption = pattern.GetSearchOption();
 	int nLineLen;
 
 	// 1 == 正規表現
-	if (sSearchOption.bRegularExp) {
+	if (searchOption.bRegularExp) {
 		CBregexp* pRegexp = pattern.GetRegexp();
 		CDocLine* pDocLine = m_pcDocLineMgr->GetLine(CLogicInt(0));
 		while (pDocLine) {
@@ -221,7 +221,7 @@ void CBookmarkManager::MarkSearchWord(
 			pDocLine = pDocLine->GetNextLine();
 		}
 	// 1 == 単語のみ検索
-	}else if (sSearchOption.bWordOnly) {
+	}else if (searchOption.bWordOnly) {
 		const wchar_t* pszPattern = pattern.GetKey();
 		const int nPatternLen = pattern.GetLen();
 		// 検索語を単語に分割して searchWordsに格納する。
@@ -232,7 +232,7 @@ void CBookmarkManager::MarkSearchWord(
 			if (!CBookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				int nMatchLen;
-				if (CSearchAgent::SearchStringWord(pLine, nLineLen, 0, searchWords, sSearchOption.bLoHiCase, &nMatchLen)) {
+				if (CSearchAgent::SearchStringWord(pLine, nLineLen, 0, searchWords, searchOption.bLoHiCase, &nMatchLen)) {
 					CBookmarkSetter(pDocLine).SetBookmark(true);
 				}
 			}

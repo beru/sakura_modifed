@@ -796,7 +796,7 @@ void CPrintPreview::OnChangePrintSetting(void)
 	// 印刷用のレイアウト情報の変更
 	// タイプ別設定をコピー
 	m_typePrint = m_pParentWnd->GetDocument()->m_cDocType.GetDocumentAttribute();
-	STypeConfig& ref = m_typePrint;
+	TypeConfig& ref = m_typePrint;
 
 	ref.m_nMaxLineKetas = 	m_bPreview_EnableColumns;
 	ref.m_bWordWrap =		m_pPrintSetting->m_bPrintWordWrap;	// 英文ワードラップをする
@@ -1082,7 +1082,7 @@ void CPrintPreview::OnPrint(void)
 	::EnableWindow(m_pParentWnd->GetHwnd(), FALSE);
 
 	// 2013.06.10 Moca キーワード強調設定をロックして、印刷中に共通設定を更新されないようにする
-	CShareDataLockCounter lock;
+	ShareDataLockCounter lock;
 
 	// 印刷 ジョブ開始
 	HDC hdc;

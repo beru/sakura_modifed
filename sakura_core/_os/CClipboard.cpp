@@ -385,12 +385,12 @@ bool CClipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSe
 }
 
 
-struct SSystemClipFormatNames {
+struct SystemClipFormatNames {
 	CLIPFORMAT m_nClipFormat;
 	const wchar_t* m_pszName;
 };
 
-static const SSystemClipFormatNames sClipFormatNames[] = {
+static const SystemClipFormatNames sClipFormatNames[] = {
 	{CF_TEXT        ,L"CF_TEXT"},
 	{CF_BITMAP      ,L"CF_BITMAP"},
 	{CF_METAFILEPICT,L"CF_METAFILEPICT"},
@@ -505,7 +505,7 @@ bool CClipboard::SetClipboradByFormat(const CStringRef& cstr, const wchar_t* pFo
 			pBuf = (char*)cstr.GetPtr();
 			nTextByteLen = cstr.GetLength() * sizeof(wchar_t);
 		}else {
-			CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode());
+			CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
 			if (pCode->UnicodeToCode(cstr, &cmemBuf) == RESULT_FAILURE) {
 				return false;
 			}
@@ -619,7 +619,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 				if (nBomCode != CODE_NONE) {
 					eMode = nBomCode;
 				}else {
-					const STypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+					const TypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
 					CCodeMediator mediator(type.m_encoding);
 					eMode = mediator.CheckKanjiCode((const char*)pData, nLength);
 				}
@@ -637,7 +637,7 @@ bool CClipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName,
 				CMemory cmem;
 				cmem.SetRawData(pData, nLength);
 				if (cmem.GetRawPtr()) {
-					CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode());
+					CCodeBase* pCode = CCodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
 					if (pCode->CodeToUnicode(cmem, &mem) == RESULT_FAILURE) {
 						mem.SetString(L"");
 						retVal = false;

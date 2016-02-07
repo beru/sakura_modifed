@@ -72,7 +72,7 @@ HMENU CMRUFile::CreateMenu(CMenuDrawer* pCMenuDrawer) const
 HMENU CMRUFile::CreateMenu(HMENU hMenuPopUp, CMenuDrawer* pCMenuDrawer) const
 {
 	TCHAR szMenu[_MAX_PATH * 2 + 10];				//	メニューキャプション
-	const BOOL bMenuIcon = m_pShareData->m_Common.m_sWindow.m_bMenuIcon;
+	const BOOL bMenuIcon = m_pShareData->m_common.m_sWindow.m_bMenuIcon;
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
 
 	NONCLIENTMETRICS met;
@@ -208,10 +208,10 @@ void CMRUFile::Add(EditInfo* pEditInfo)
 	
 	// すでに登録されている場合は、除外指定を無視する
 	if (m_cRecentFile.FindItemByPath(pEditInfo->m_szPath) == -1) {
-		int nSize = m_pShareData->m_sHistory.m_aExceptMRU.size();
+		int nSize = m_pShareData->m_history.m_aExceptMRU.size();
 		for (int i=0; i<nSize; ++i) {
 			TCHAR szExceptMRU[_MAX_PATH];
-			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_sHistory.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
+			CFileNameManager::ExpandMetaToFolder(m_pShareData->m_history.m_aExceptMRU[i], szExceptMRU, _countof(szExceptMRU));
 			if (_tcsistr(pEditInfo->m_szPath,  szExceptMRU)) {
 				return;
 			}

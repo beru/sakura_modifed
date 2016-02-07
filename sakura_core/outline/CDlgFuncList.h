@@ -41,7 +41,7 @@ enum EFileTreeSettingFrom{
 
 class CFileTreeSetting{
 public:
-	std::vector<SFileTreeItem>	m_aItems;		//!< ツリーアイテム
+	std::vector<FileTreeItem>	m_aItems;		//!< ツリーアイテム
 	bool		m_bProject;				//!< プロジェクトファイルモード
 	SFilePath	m_szDefaultProjectIni;	//!< デフォルトiniファイル名
 	SFilePath	m_szLoadProjectIni;		//!< 現在読み込んでいるiniファイル名
@@ -68,8 +68,8 @@ public:
 protected:
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
 
-	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->m_Common.m_sOutline; }
-	STypeConfig& TypeSet(void) { return m_type; }
+	CommonSetting_OutLine& CommonSet(void) { return m_pShareData->m_common.m_sOutline; }
+	TypeConfig& TypeSet(void) { return m_type; }
 	int& ProfDockSet() { return CommonSet().m_nOutlineDockSet; }
 	bool& ProfDockSync() { return CommonSet().m_bOutlineDockSync; }
 	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().m_bOutlineDockDisp: TypeSet().m_bOutlineDockDisp; }
@@ -78,7 +78,7 @@ protected:
 	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockTop: TypeSet().m_cyOutlineDockTop; }
 	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockRight: TypeSet().m_cxOutlineDockRight; }
 	int& ProfDockBottom() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockBottom: TypeSet().m_cyOutlineDockBottom; }
-	void SetTypeConfig(CTypeConfig, const STypeConfig&);
+	void SetTypeConfig(CTypeConfig, const TypeConfig&);
 
 public:
 	//! 現在の種別と同じなら
@@ -205,7 +205,7 @@ private:
 	int			m_nHilightedBtn;
 	int			m_nCapturingBtn;
 	
-	STypeConfig m_type;
+	TypeConfig m_type;
 	CFileTreeSetting	m_fileTreeSetting;
 
 	static LPDLGTEMPLATE m_pDlgTemplate;

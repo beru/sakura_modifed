@@ -29,7 +29,7 @@
 #include <io.h>
 #include <tchar.h>
 
-class CProcess;
+class Process;
 
 
 /*!
@@ -45,7 +45,7 @@ class CProcess;
 	@date 2002/01/08
 	@date 2006/04/10 ryoji
 */
-CProcess* CProcessFactory::Create(
+Process* CProcessFactory::Create(
 	HINSTANCE hInstance,
 	LPCTSTR lpCmdLine
 	)
@@ -54,7 +54,7 @@ CProcess* CProcessFactory::Create(
 		return 0;
 	}
 
-	CProcess* process = 0;
+	Process* process = 0;
 	if (!IsValidVersion()) {
 		return 0;
 	}
@@ -73,7 +73,7 @@ CProcess* CProcessFactory::Create(
 			return 0;
 		}
 		if (!IsExistControlProcess()) {
-			process = new CControlProcess(hInstance, lpCmdLine);
+			process = new ControlProcess(hInstance, lpCmdLine);
 		}
 	}else {
 		if (!IsExistControlProcess()) {
@@ -93,34 +93,34 @@ bool CProcessFactory::ProfileSelect(
 	)
 {
 	CDlgProfileMgr dlgProf;
-	SProfileSettings settings;
+	ProfileSettings settings;
 
 	CDlgProfileMgr::ReadProfSettings( settings );
 	CSelectLang::InitializeLanguageEnvironment();
 	CSelectLang::ChangeLang( settings.m_szDllLanguage );
 
-	CCommandLine::getInstance()->ParseCommandLine(lpCmdLine);
+	CommandLine::getInstance()->ParseCommandLine(lpCmdLine);
 
 	bool bDialog;
-	if (CCommandLine::getInstance()->IsProfileMgr()) {
+	if (CommandLine::getInstance()->IsProfileMgr()) {
 		bDialog = true;
-	}else if (CCommandLine::getInstance()->IsSetProfile()) {
+	}else if (CommandLine::getInstance()->IsSetProfile()) {
 		bDialog = false;
 	}else if (settings.m_nDefaultIndex == -1) {
 		bDialog = true;
 	}else {
 		assert( 0 <= settings.m_nDefaultIndex );
 		if (0 < settings.m_nDefaultIndex) {
-			CCommandLine::getInstance()->SetProfileName( to_wchar(
+			CommandLine::getInstance()->SetProfileName( to_wchar(
 					settings.m_vProfList[settings.m_nDefaultIndex - 1].c_str()) );
 		}else {
-			CCommandLine::getInstance()->SetProfileName( L"" );
+			CommandLine::getInstance()->SetProfileName( L"" );
 		}
 		bDialog = false;
 	}
 	if (bDialog) {
 		if (dlgProf.DoModal(hInstance, NULL, 0)) {
-			CCommandLine::getInstance()->SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
+			CommandLine::getInstance()->SetProfileName( to_wchar(dlgProf.m_strProfileName.c_str()) );
 		}else {
 			return false; // プロファイルマネージャで「閉じる」を選んだ。プロセス終了
 		}
@@ -188,7 +188,7 @@ bool CProcessFactory::IsValidVersion()
 */
 bool CProcessFactory::IsStartingControlProcess()
 {
-	return CCommandLine::getInstance()->IsNoWindow();
+	return CommandLine::getInstance()->IsNoWindow();
 }
 
 /*!
@@ -200,7 +200,7 @@ bool CProcessFactory::IsStartingControlProcess()
 */
 bool CProcessFactory::IsExistControlProcess()
 {
-	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	std::tstring strMutexSakuraCp = GSTR_MUTEX_SAKURA_CP;
 	strMutexSakuraCp += strProfileName;
  	HANDLE hMutexCP;
@@ -244,9 +244,9 @@ bool CProcessFactory::StartControlProcess()
 	TCHAR szEXE[MAX_PATH + 1];	// アプリケーションパス名
 
 	::GetModuleFileName(NULL, szEXE, _countof(szEXE));
-	if (CCommandLine::getInstance()->IsSetProfile()) {
+	if (CommandLine::getInstance()->IsSetProfile()) {
 		::auto_sprintf( szCmdLineBuf, _T("\"%ts\" -NOWIN -PROF=\"%ls\""),
-			szEXE, CCommandLine::getInstance()->GetProfileName() );
+			szEXE, CommandLine::getInstance()->GetProfileName() );
 	}else {
 		::auto_sprintf( szCmdLineBuf, _T("\"%ts\" -NOWIN"), szEXE ); // ""付加
 	}
@@ -324,7 +324,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 		return false;
 	}
 
-	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	std::tstring strInitEvent = GSTR_EVENT_SAKURA_CP_INITIALIZED;
 	strInitEvent += strProfileName;
 	HANDLE hEvent;
@@ -359,7 +359,7 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 */
 bool CProcessFactory::TestWriteQuit()
 {
-	if (CCommandLine::getInstance()->IsWriteQuit()) {
+	if (CommandLine::getInstance()->IsWriteQuit()) {
 		TCHAR szIniFileIn[_MAX_PATH];
 		TCHAR szIniFileOut[_MAX_PATH];
 		CFileNameManager::getInstance()->GetIniFileNameDirect( szIniFileIn, szIniFileOut, _T("") );

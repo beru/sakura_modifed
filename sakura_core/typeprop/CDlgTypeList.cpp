@@ -68,7 +68,7 @@ const DWORD p_helpids[] = {	//12700
 };	//@@@ 2002.01.07 add end MIK
 
 // モーダルダイアログの表示
-int CDlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, SResult* psResult)
+int CDlgTypeList::DoModal(HINSTANCE hInstance, HWND hwndParent, Result* psResult)
 {
 	int	nRet;
 	m_nSettingType = psResult->cDocumentType;
@@ -185,7 +185,7 @@ INT_PTR CDlgTypeList::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM 
 	if (wMsg == WM_COMMAND) {
 		HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 		int nIdx = List_GetCurSel(hwndList);
-		const STypeConfigMini* type = NULL;
+		const TypeConfigMini* type = NULL;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (LOWORD(wParam) == IDC_LIST_TYPES) {
 			switch (HIWORD(wParam)) {
@@ -320,7 +320,7 @@ void CDlgTypeList::SetData(int selIdx)
 	}
 	List_ResetContent(hwndList);	// リストを空にする
 	for (nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
-		const STypeConfigMini* type;
+		const TypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),
@@ -405,12 +405,12 @@ bool CDlgTypeList::Import()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int nIdx = List_GetCurSel(hwndList);
-	STypeConfig type;
+	TypeConfig type;
 	// ベースのデータは基本
 	CDocTypeManager().GetTypeConfig(CTypeConfig(0), type);
 
 	CImpExpType	cImpExpType(nIdx, type, hwndList);
-	const STypeConfigMini* typeMini;
+	const TypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &typeMini);
 	int id = typeMini->m_id;
 
@@ -452,7 +452,7 @@ bool CDlgTypeList::Export()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_TYPES);
 	int nIdx = List_GetCurSel(hwndList);
-	STypeConfig types;
+	TypeConfig types;
 	CDocTypeManager().GetTypeConfig(CTypeConfig(nIdx), types);
 
 	CImpExpType	cImpExpType(nIdx, types, hwndList);
@@ -478,7 +478,7 @@ bool CDlgTypeList::InitializeType(void)
 		// 基本の場合には何もしない
 		return true;
 	}
-	const STypeConfigMini* typeMini;
+	const TypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini);
 	int nRet;
 	if (typeMini->m_szTypeExts[0] != _T('\0')) { 
@@ -498,7 +498,7 @@ bool CDlgTypeList::InitializeType(void)
 		return false;
 	}
 //	_DefaultConfig(&types);		// 規定値をコピー
-	STypeConfig type;
+	TypeConfig type;
 	CDocTypeManager().GetTypeConfig(CTypeConfig(0), type); 	// 基本をコピー
 
 	// 同じ名前にならないように数字をつける
@@ -513,7 +513,7 @@ bool CDlgTypeList::InitializeType(void)
 		if (i == iDocType) {
 			continue;
 		}
-		const STypeConfigMini* typeMini2;
+		const TypeConfigMini* typeMini2;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(i), &typeMini2);
 		if (auto_strcmp(typeMini2->m_szTypeName, type.m_szTypeName) == 0) {
 			i = 0;
@@ -543,7 +543,7 @@ bool CDlgTypeList::CopyType()
 	HWND hwndDlg = GetHwnd();
 	HWND hwndList = GetDlgItem(hwndDlg, IDC_LIST_TYPES);
 	int iDocType = List_GetCurSel(hwndList);
-	STypeConfig type;
+	TypeConfig type;
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), type);
 	// 名前に2等を付ける
 	int n = 1;
@@ -577,7 +577,7 @@ bool CDlgTypeList::CopyType()
 			auto_strcat(type.m_szTypeName, szNum);
 			bUpdate = false;
 		}
-		const STypeConfigMini* typeMini;
+		const TypeConfigMini* typeMini;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(i), &typeMini);
 		if (auto_strcmp(typeMini->m_szTypeName, type.m_szTypeName) == 0) {
 			i = -1;
@@ -603,8 +603,8 @@ bool CDlgTypeList::UpType()
 		// 基本の場合には何もしない
 		return true;
 	}
-	auto type1 = std::make_unique<STypeConfig>();
-	auto type2 = std::make_unique<STypeConfig>();
+	auto type1 = std::make_unique<TypeConfig>();
+	auto type2 = std::make_unique<TypeConfig>();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType - 1), *type2);
 	--(type1->m_nIdx);
@@ -625,8 +625,8 @@ bool CDlgTypeList::DownType()
 		// 基本、最後の場合には何もしない
 		return true;
 	}
-	auto type1 = std::make_unique<STypeConfig>();
-	auto type2 = std::make_unique<STypeConfig>();
+	auto type1 = std::make_unique<TypeConfig>();
+	auto type2 = std::make_unique<TypeConfig>();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType), *type1);
 	CDocTypeManager().GetTypeConfig(CTypeConfig(iDocType + 1), *type2);
 	++(type1->m_nIdx);
@@ -658,12 +658,12 @@ bool CDlgTypeList::DelType()
 		// 基本の場合には何もしない
 		return true;
 	}
-	const STypeConfigMini* typeMini;
+	const TypeConfigMini* typeMini;
 	if (!CDocTypeManager().GetTypeConfigMini(CTypeConfig(iDocType), &typeMini)) {
 		// 謎のエラー
 		return false;
 	}
-	const STypeConfigMini type = *typeMini; // ダイアログを出している間に変更されるかもしれないのでコピーする
+	const TypeConfigMini type = *typeMini; // ダイアログを出している間に変更されるかもしれないのでコピーする
 	int nRet = ConfirmMessage(hwndDlg,
 		LS(STR_DLGTYPELIST_DEL), type.m_szTypeName);
 	if (nRet != IDYES) {

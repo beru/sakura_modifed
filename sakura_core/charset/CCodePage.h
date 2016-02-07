@@ -35,8 +35,7 @@
 #include <string>
 #include "CShiftJis.h"
 
-enum EEncodingTrait
-{
+enum EEncodingTrait {
 	ENCODING_TRAIT_ERROR, // error
 	ENCODING_TRAIT_ASCII,// ASCII comportible 1byte
 	ENCODING_TRAIT_UTF16LE,// UTF-16LE

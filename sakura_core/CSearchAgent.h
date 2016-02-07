@@ -35,19 +35,19 @@ class CBregexp;
 class CSearchStringPattern {
 public:
 	CSearchStringPattern();
-	CSearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* pRegexp);
+	CSearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp);
 	~CSearchStringPattern();
 	void Reset();
-	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SSearchOption& sSearchOption, CBregexp* pRegexp){
-		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, sSearchOption, pRegexp);
+	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp){
+		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, searchOption, pRegexp);
 	}
-	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SSearchOption& sSearchOption, CBregexp* pRegexp);
+	bool SetPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const wchar_t* pszPattern2, const SearchOption& searchOption, CBregexp* pRegexp);
 	const wchar_t* GetKey() const { return m_pszKey; }
 	const wchar_t* GetCaseKey() const { return m_pszCaseKeyRef; }
 	int GetLen() const { return m_nPatternLen; }
-	bool GetIgnoreCase() const { return !m_psSearchOption->bLoHiCase; }
-	bool GetLoHiCase() const { return m_psSearchOption->bLoHiCase; }
-	const SSearchOption& GetSearchOption() const { return *m_psSearchOption; }
+	bool GetIgnoreCase() const { return !m_pSearchOption->bLoHiCase; }
+	bool GetLoHiCase() const { return m_pSearchOption->bLoHiCase; }
+	const SearchOption& GetSearchOption() const { return *m_pSearchOption; }
 	CBregexp* GetRegexp() const { return m_pRegexp; }
 #ifdef SEARCH_STRING_KMP
 	const int* GetKMPNextTable() const { return m_pnNextPossArr; }
@@ -61,7 +61,7 @@ public:
 private:
 	// 外部依存
 	const wchar_t* m_pszKey;
-	const SSearchOption* m_psSearchOption;
+	const SearchOption* m_pSearchOption;
 	mutable CBregexp* m_pRegexp;
 
 	const wchar_t* m_pszCaseKeyRef;
@@ -123,7 +123,7 @@ public:
 
 	bool PrevOrNextWord(CLogicInt , CLogicInt , CLogicInt* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-	int SearchWord(CLogicPoint ptSerachBegin, ESearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern); // 単語検索
+	int SearchWord(CLogicPoint ptSerachBegin, eSearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern); // 単語検索
 
 	void ReplaceData(DocLineReplaceArg*);
 private:

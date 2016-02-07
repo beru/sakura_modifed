@@ -63,7 +63,7 @@ void CMainStatusBar::DestroyStatusBar()
 
 	if (m_pOwner->m_cFuncKeyWnd.GetHwnd()) {
 		bool bSizeBox;
-		if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
+		if (GetDllShareData().m_common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 			// サイズボックスの表示／非表示切り替え
 			bSizeBox = false;
 		}else {

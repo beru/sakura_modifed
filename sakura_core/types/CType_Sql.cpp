@@ -30,7 +30,7 @@
 #include "outline/CFuncInfoArr.h"
 
 // PL/SQL
-void CType_Sql::InitTypeConfigImp(STypeConfig* pType)
+void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq
 	_tcscpy(pType->m_szTypeName, _T("PL/SQL"));
@@ -63,7 +63,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 	int			nFuncNum;
 	int			nFuncOrProc = 0;
 	int			nParseCnt = 0;
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	szWordPrev[0] = L'\0';
 	szWord[nWordIdx] = L'\0';

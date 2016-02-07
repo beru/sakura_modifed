@@ -57,11 +57,11 @@ enum EJack {
 };
 
 // ジャック定義構造体
-typedef struct tagJackDef {
+struct JackDef {
 	EJack			ppId;
 	const WCHAR*	szName;
 	CPlug::Array	plugs;	// ジャックに関連付けられたプラグ
-} JackDef;
+};
 
 // プラグ登録結果
 enum ERegisterPlugResult {

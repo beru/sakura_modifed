@@ -35,7 +35,7 @@
 #include "uiparts/CVisualProgress.h"
 #include "util/file.h"
 
-ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
+ECallbackResult CLoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -47,7 +47,7 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 	// フォルダが指定された場合は「ファイルを開く」ダイアログを表示し、実際のファイル入力を促す
 	if (IsDirectory(pLoadInfo->cFilePath)) {
 		std::vector<std::tstring> files;
-		SLoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
+		LoadInfo sLoadInfo(_T(""), CODE_AUTODETECT, false);
 		bool bDlgResult = pcDoc->m_cDocFileOperation.OpenFileDialog(
 			CEditWnd::getInstance()->GetHwnd(),
 			pLoadInfo->cFilePath,	// 指定されたフォルダ
@@ -62,9 +62,9 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 			sLoadInfo.cFilePath = files[0].c_str();
 			// 他のファイルは新規ウィンドウ
 			for (size_t i=1; i<nSize; ++i) {
-				SLoadInfo sFilesLoadInfo = sLoadInfo;
+				LoadInfo sFilesLoadInfo = sLoadInfo;
 				sFilesLoadInfo.cFilePath = files[i].c_str();
-				CControlTray::OpenNewEditor(
+				ControlTray::OpenNewEditor(
 					G_AppInstance(),
 					CEditWnd::getInstance()->GetHwnd(),
 					sFilesLoadInfo,
@@ -85,7 +85,7 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 
 	// 現在のウィンドウに対してファイルを読み込めない場合は、新たなウィンドウを開き、そこにファイルを読み込ませる
 	if (!pcDoc->IsAcceptLoad()) {
-		CControlTray::OpenNewEditor(
+		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			CEditWnd::getInstance()->GetHwnd(),
 			*pLoadInfo
@@ -94,7 +94,7 @@ ECallbackResult CLoadAgent::OnCheckLoad(SLoadInfo* pLoadInfo)
 	}
 
 next:
-	auto& csFile = GetDllShareData().m_Common.m_sFile;
+	auto& csFile = GetDllShareData().m_common.m_sFile;
 	// オプション：開こうとしたファイルが存在しないとき警告する
 	if (csFile.GetAlertIfFileNotExist()) {
 		if (!fexist(pLoadInfo->cFilePath)) {
@@ -168,11 +168,11 @@ next:
 	return CALLBACK_CONTINUE;
 }
 
-void CLoadAgent::OnBeforeLoad(SLoadInfo* pLoadInfo)
+void CLoadAgent::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 }
 
-ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
+ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 {
 	ELoadResult eRet = LOADED_OK;
 	CEditDoc* pcDoc = GetListeningDoc();
@@ -219,7 +219,7 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 		CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(pOld);
 	}else {
 		// 存在しないときもドキュメントに文字コードを反映する
-		const STypeConfig& types = pcDoc->m_cDocType.GetDocumentAttribute();
+		const TypeConfig& types = pcDoc->m_cDocType.GetDocumentAttribute();
 		pcDoc->m_cDocFile.SetCodeSet( sLoadInfo.eCharCode, 
 			( sLoadInfo.eCharCode == types.m_encoding.m_eDefaultCodetype ) ?
 				types.m_encoding.m_bDefaultBom : CCodeTypeName( sLoadInfo.eCharCode ).IsBomDefOn() );
@@ -229,9 +229,9 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
-	const STypeConfig& ref = pcDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig& ref = pcDoc->m_cDocType.GetDocumentAttribute();
 	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != WRAP_SETTING_WIDTH) {
+	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
@@ -245,7 +245,7 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 }
 
 
-void CLoadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
+void CLoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -262,7 +262,7 @@ void CLoadAgent::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	pcDoc->m_bTabSpaceCurTemp = false;
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (pcDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+	if (pcDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 		pcDoc->m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
 		pcDoc->m_cLayoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
@@ -279,7 +279,7 @@ void CLoadAgent::OnFinalLoad(ELoadResult eLoadResult)
 		pcDoc->m_cDocFile.SetBomDefoult();
 	}
 	if (eLoadResult == LOADED_LOSESOME) {
-		CAppMode::getInstance()->SetViewMode(true);
+		AppMode::getInstance()->SetViewMode(true);
 	}
 
 	// 再描画 $$不足

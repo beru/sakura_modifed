@@ -30,8 +30,8 @@
 void CViewFont::CreateFont(const LOGFONT *plf)
 {
 	LOGFONT	lf;
-	int miniSize = GetDllShareData().m_Common.m_sWindow.m_nMiniMapFontSize;
-	int quality = GetDllShareData().m_Common.m_sWindow.m_nMiniMapQuality;
+	int miniSize = GetDllShareData().m_common.m_sWindow.m_nMiniMapFontSize;
+	int quality = GetDllShareData().m_common.m_sWindow.m_nMiniMapQuality;
 	int outPrec = OUT_TT_ONLY_PRECIS;	// FixedSys等でMiniMapのフォントが小さくならない修正
 
 	// フォント作成
@@ -96,7 +96,7 @@ void CViewFont::DeleteFont()
 	@param m_bBoldFont trueで太字
 	@param m_bUnderLine trueで下線
 */
-HFONT CViewFont::ChooseFontHandle(SFontAttr sFontAttr) const
+HFONT CViewFont::ChooseFontHandle(FontAttr sFontAttr) const
 {
 	if (sFontAttr.m_bBoldFont) {		// 太字か
 		if (sFontAttr.m_bUnderLine) {	// 下線か

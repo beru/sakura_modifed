@@ -43,7 +43,7 @@ public:
 		EColorIndexType	nTypePrev,
 		CLayoutInt		nTypeIndent,
 		CLayoutColorInfo*	pColorInfo
-	)
+		)
 	{
 		m_pPrev			= NULL;
 		m_pNext			= NULL;
@@ -126,5 +126,4 @@ private:
 private:
 	DISALLOW_COPY_AND_ASSIGN(CLayout);
 };
-
 

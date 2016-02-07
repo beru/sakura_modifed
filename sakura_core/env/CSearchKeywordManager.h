@@ -30,7 +30,7 @@
 // #include "DLLSHAREDATA.h"
 
 // 共有メモリ内構造体
-struct SShare_SearchKeywords {
+struct Share_SearchKeywords {
 	// -- -- 検索キー -- -- //
 	StaticVector< StaticString<WCHAR, _MAX_PATH>, MAX_SEARCHKEY,  const WCHAR*>	m_aSearchKeys;
 	StaticVector< StaticString<WCHAR, _MAX_PATH>, MAX_REPLACEKEY, const WCHAR*>	m_aReplaceKeys;

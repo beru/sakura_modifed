@@ -33,7 +33,7 @@
 // Visual Basic
 // JUl. 10, 2001 JEPRO VB   ユーザに贈る
 // Jul. 09, 2001 JEPRO 追加 //Dec. 16, 2002 MIK追加 // Feb. 19, 2006 genta .vb追加
-void CType_Vb::InitTypeConfigImp(STypeConfig* pType)
+void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("Visual Basic"));
@@ -78,7 +78,7 @@ void CDocOutline::MakeFuncList_VisualBasic(CFuncInfoArr* pcFuncInfoArr)
 	int			nParseCnt = 0;
 	bool		bClass;			// クラスモジュールフラグ
 	bool		bDQuote;		// ダブルクォーテーションフラグ（ダブルクォーテーションがきたらTrue）
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	
 	// 調べるファイルがクラスモジュールのときはType、Constの挙動が異なるのでフラグを立てる
 	bClass = false;

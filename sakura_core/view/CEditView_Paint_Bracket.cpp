@@ -169,21 +169,21 @@ void CEditView::DrawBracketPair(bool bDraw)
 			CLogicInt		nLineLen;
 			const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pcLayout);
 			if (pLine) {
-				EColorIndexType		nColorIndex;
+				EColorIndexType nColorIndex;
 				CLogicInt	OutputX = LineColumnToIndex(pcLayout, ptColLine.GetX2());
 				if (bDraw) {
 					nColorIndex = COLORIDX_BRACKET_PAIR;
 				}else {
 					if (IsBracket(pLine, OutputX, CLogicInt(1))) {
 						DispPos _sPos(0, 0); // 注意：この値はダミー。CheckChangeColorでの参照位置は不正確
-						SColorStrategyInfo _sInfo;
-						SColorStrategyInfo* pInfo = &_sInfo;
+						ColorStrategyInfo _sInfo;
+						ColorStrategyInfo* pInfo = &_sInfo;
 						pInfo->m_pDispPos = &_sPos;
 						pInfo->m_pcView = this;
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
-						CColor3Setting cColor = GetColorIndex(pcLayout, ptColLine.GetY2(), OutputX, pInfo);
+						Color3Setting cColor = GetColorIndex(pcLayout, ptColLine.GetY2(), OutputX, pInfo);
 						nColorIndex = cColor.eColorIndex2;
 					}else {
 						SetBracketPairPos(false);

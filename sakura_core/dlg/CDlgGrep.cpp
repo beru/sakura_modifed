@@ -69,7 +69,7 @@ CDlgGrep::CDlgGrep()
 {
 	m_bSubFolder = FALSE;				// サブフォルダからも検索する
 	m_bFromThisText = FALSE;			// この編集中のテキストから検索する
-	m_sSearchOption.Reset();			// 検索オプション
+	m_searchOption.Reset();			// 検索オプション
 	m_nGrepCharSet = CODE_SJIS;			// 文字コードセット
 	m_nGrepOutputLineType = 1;			// 行を出力/該当部分/否マッチ行 を出力
 	m_nGrepOutputStyle = 1;				// Grep: 出力形式
@@ -90,7 +90,7 @@ CDlgGrep::CDlgGrep()
 */
 BOOL CDlgGrep::OnCbnDropDown(HWND hwndCtl, int wID)
 {
-	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
+	auto& searchKeywords = m_pShareData->m_searchKeywords;
 	switch (wID) {
 	case IDC_COMBO_TEXT:
 		if (::SendMessage(hwndCtl, CB_GETCOUNT, 0L, 0L) == 0) {
@@ -127,9 +127,9 @@ int CDlgGrep::DoModal(
 	const TCHAR* pszCurrentFilePath
 	)
 {
-	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	auto& csSearch = m_pShareData->m_common.m_sSearch;
 	m_bSubFolder = csSearch.m_bGrepSubFolder;			// Grep: サブフォルダも検索
-	m_sSearchOption = csSearch.m_sSearchOption;			// 検索オプション
+	m_searchOption = csSearch.m_searchOption;			// 検索オプション
 	m_nGrepCharSet = csSearch.m_nGrepCharSet;			// 文字コードセット
 	m_nGrepOutputLineType = csSearch.m_nGrepOutputLineType;	// 行を出力/該当部分/否マッチ行 を出力
 	m_nGrepOutputStyle = csSearch.m_nGrepOutputStyle;	// Grep: 出力形式
@@ -139,7 +139,7 @@ int CDlgGrep::DoModal(
 
 	// 2013.05.21 コンストラクタからDoModalに移動
 	// m_strText は呼び出し元で設定済み
-	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
+	auto& searchKeywords = m_pShareData->m_searchKeywords;
 	if (m_szFile[0] == _T('\0') && searchKeywords.m_aGrepFiles.size()) {
 		_tcscpy(m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
 	}
@@ -196,13 +196,13 @@ BOOL CDlgGrep::OnInitDialog(
 	g_pOnFolderProc = (WNDPROC)GetWindowLongPtr(hFolder, GWLP_WNDPROC);
 	SetWindowLongPtr(hFolder, GWLP_WNDPROC, (LONG_PTR)OnFolderProc);
 
-	m_comboDelText = SComboBoxItemDeleter();
+	m_comboDelText = ComboBoxItemDeleter();
 	m_comboDelText.pRecent = &m_cRecentSearch;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_TEXT), &m_comboDelText);
-	m_comboDelFile = SComboBoxItemDeleter();
+	m_comboDelFile = ComboBoxItemDeleter();
 	m_comboDelFile.pRecent = &m_cRecentGrepFile;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FILE), &m_comboDelFile);
-	m_comboDelFolder = SComboBoxItemDeleter();
+	m_comboDelFolder = ComboBoxItemDeleter();
 	m_comboDelFolder.pRecent = &m_cRecentGrepFolder;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_FOLDER), &m_comboDelFolder);
 
@@ -386,7 +386,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 	case IDC_CHK_DEFAULTFOLDER:
 		// フォルダの初期値をカレントフォルダにする
 		{
-			m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
+			m_pShareData->m_common.m_sSearch.m_bGrepDefaultFolder = IsButtonChecked(IDC_CHK_DEFAULTFOLDER);
 		}
 		return TRUE;
 	case IDC_RADIO_OUTPUTSTYLE3:
@@ -433,7 +433,7 @@ void CDlgGrep::SetData(void)
 	SetItemText(IDC_COMBO_FOLDER, m_szFolder);
 
 	if (1
-		&& (m_szFolder[0] == _T('\0') || m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder)
+		&& (m_szFolder[0] == _T('\0') || m_pShareData->m_common.m_sSearch.m_bGrepDefaultFolder)
 		&& m_szCurrentFilePath[0] != _T('\0')
 	) {
 		TCHAR szWorkFolder[MAX_PATH];
@@ -451,12 +451,12 @@ void CDlgGrep::SetData(void)
 	SetDataFromThisText(m_bFromThisText);
 
 	// 英大文字と英小文字を区別する
-	CheckButton(IDC_CHK_LOHICASE, m_sSearchOption.bLoHiCase);
+	CheckButton(IDC_CHK_LOHICASE, m_searchOption.bLoHiCase);
 
 	// 2001/06/23 N.Nakatani 現時点ではGrepでは単語単位の検索はサポートできていません
 	// 2002/03/07 テストサポート
 	// 一致する単語のみ検索する
-	CheckButton(IDC_CHK_WORD, m_sSearchOption.bWordOnly);
+	CheckButton(IDC_CHK_WORD, m_searchOption.bWordOnly);
 //	EnableItem(IDC_CHK_WORD) , false);	// チェックボックスを使用不可にすも
 
 	// 文字コード自動判別
@@ -518,7 +518,7 @@ void CDlgGrep::SetData(void)
 	// 無関係にCheckRegexpVersionを通過するようにした。
 	if (1
 		&& CheckRegexpVersion(GetHwnd(), IDC_STATIC_JRE32VER, false)
-		&& m_sSearchOption.bRegularExp
+		&& m_searchOption.bRegularExp
 	) {
 		// 英大文字と英小文字を区別する
 		CheckButton(IDC_CHK_REGULAREXP, true);
@@ -541,7 +541,7 @@ void CDlgGrep::SetData(void)
 	CheckDlgButtonBool(GetHwnd(), IDC_CHECK_SEP_FOLDER, m_bGrepSeparateFolder);
 
 	// フォルダの初期値をカレントフォルダにする
-	CheckButton(IDC_CHK_DEFAULTFOLDER, m_pShareData->m_Common.m_sSearch.m_bGrepDefaultFolder);
+	CheckButton(IDC_CHK_DEFAULTFOLDER, m_pShareData->m_common.m_sSearch.m_bGrepDefaultFolder);
 
 	return;
 }
@@ -580,20 +580,20 @@ int CDlgGrep::GetData(void)
 	// サブフォルダからも検索する
 	m_bSubFolder = IsButtonChecked(IDC_CHK_SUBFOLDER);
 
-	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	auto& csSearch = m_pShareData->m_common.m_sSearch;
 	csSearch.m_bGrepSubFolder = m_bSubFolder;		// Grep：サブフォルダも検索
 
 	// この編集中のテキストから検索する
 	m_bFromThisText = IsButtonChecked(IDC_CHK_FROMTHISTEXT);
 	// 英大文字と英小文字を区別する
-	m_sSearchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
+	m_searchOption.bLoHiCase = IsButtonChecked(IDC_CHK_LOHICASE);
 
 	// 2001/06/23 N.Nakatani
 	// 単語単位で検索
-	m_sSearchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
+	m_searchOption.bWordOnly = IsButtonChecked(IDC_CHK_WORD);
 
 	// 正規表現
-	m_sSearchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
+	m_searchOption.bRegularExp = IsButtonChecked(IDC_CHK_REGULAREXP);
 
 	// 文字コード自動判別
 //	m_bKanjiCode_AutoDetect = IsButtonChecked(IDC_CHK_KANJICODEAUTODETECT);
@@ -721,14 +721,14 @@ int CDlgGrep::GetData(void)
 		// From Here Jun. 26, 2001 genta
 		// 正規表現ライブラリの差し替えに伴う処理の見直し
 		int nFlag = 0;
-		nFlag |= m_sSearchOption.bLoHiCase ? 0x01 : 0x00;
-		if (m_sSearchOption.bRegularExp  && !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)) {
+		nFlag |= m_searchOption.bLoHiCase ? 0x01 : 0x00;
+		if (m_searchOption.bRegularExp  && !CheckRegexpSyntax(m_strText.c_str(), GetHwnd(), true, nFlag)) {
 			return FALSE;
 		}
 		// To Here Jun. 26, 2001 genta 正規表現ライブラリ差し替え
 		if (m_strText.size() < _MAX_PATH) {
 			CSearchKeywordManager().AddToSearchKeyArr(m_strText.c_str());
-			csSearch.m_sSearchOption = m_sSearchOption;		// 検索オプション
+			csSearch.m_searchOption = m_searchOption;		// 検索オプション
 		}
 	}else {
 		// 2014.07.01 空キーも登録する

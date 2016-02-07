@@ -47,7 +47,7 @@ const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
 //	固定データ
 //-----------------------------------------------
 
-struct SEolDefinition {
+struct EolDefinition {
 	const TCHAR*	m_szName;
 	const WCHAR*	m_szDataW;
 	const ACHAR*	m_szDataA;
@@ -57,7 +57,7 @@ struct SEolDefinition {
 	bool StartsWith(const ACHAR* pData, int nLen) const { return m_nLen <= nLen && m_szDataA[0] != '\0' && auto_memcmp(pData, m_szDataA, m_nLen) == 0; }
 };
 
-static const SEolDefinition g_aEolTable[] = {
+static const EolDefinition g_aEolTable[] = {
 	{ _T("改行無"),	L"",			"",			0 },
 	{ _T("CRLF"),	L"\x0d\x0a",	"\x0d\x0a",	2 },
 	{ _T("LF"),		L"\x0a",		"\x0a",		1 },
@@ -67,7 +67,7 @@ static const SEolDefinition g_aEolTable[] = {
 	{ _T("PS"),		L"\u2029",		"",			1 },
 };
 
-struct SEolDefinitionForUniFile {
+struct EolDefinitionForUniFile {
 	const char*	m_szDataW;
 	const char* m_szDataWB;
 	int			m_nLen;
@@ -75,7 +75,7 @@ struct SEolDefinitionForUniFile {
 	bool StartsWithW(const char* pData, int nLen) const { return m_nLen <= nLen && memcmp(pData, m_szDataW, m_nLen) == 0; }
 	bool StartsWithWB(const char* pData, int nLen) const { return m_nLen <= nLen && memcmp(pData, m_szDataWB, m_nLen) == 0; }
 };
-static const SEolDefinitionForUniFile g_aEolTable_uni_file[] = {
+static const EolDefinitionForUniFile g_aEolTable_uni_file[] = {
 	{ "",					"", 					0 },
 	{ "\x0d\x00\x0a\x00",	"\x00\x0d\x00\x0a",		4 },
 	{ "\x0a\x00",			"\x00\x0a",				2 },

@@ -112,7 +112,7 @@ bool CEditView::TagJumpSub(
 			}else {
 				poCaret.x = 0;
 			}
-			GetDllShareData().m_sWorkBuffer.m_LogicPoint.Set(CLogicInt(poCaret.x), CLogicInt(poCaret.y));
+			GetDllShareData().m_workBuffer.m_LogicPoint.Set(CLogicInt(poCaret.x), CLogicInt(poCaret.y));
 			::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 		}
 		// アクティブにする
@@ -131,7 +131,7 @@ bool CEditView::TagJumpSub(
 		inf.m_nViewTopLine = CLayoutInt(-1);
 		inf.m_nCharCode    = CODE_AUTODETECT;
 
-		bool bSuccess = CControlTray::OpenNewEditor2(
+		bool bSuccess = ControlTray::OpenNewEditor2(
 			G_AppInstance(),
 			GetHwnd(),
 			&inf,
@@ -221,11 +221,11 @@ open_c:;
 	if (CShareData::getInstance()->IsPathOpened(szPath, &hwndOwner)) {
 	}else {
 		// 文字コードはこのファイルに合わせる
-		SLoadInfo sLoadInfo;
+		LoadInfo sLoadInfo;
 		sLoadInfo.cFilePath = szPath;
 		sLoadInfo.eCharCode = GetDocument()->GetDocumentEncoding();
 		sLoadInfo.bViewMode = false;
-		CControlTray::OpenNewEditor(
+		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			this->GetHwnd(),
 			sLoadInfo,
@@ -364,14 +364,14 @@ BOOL CEditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
-	if (GetDllShareData().m_Common.m_sSearch.m_bInheritKeyOtherView
-			&& m_nCurSearchKeySequence < GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence
+	if (GetDllShareData().m_common.m_sSearch.m_bInheritKeyOtherView
+			&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence
 		|| m_strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
-		m_strCurSearchKey = GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0];		// 検索文字列
-		m_sCurSearchOption = GetDllShareData().m_Common.m_sSearch.m_sSearchOption;// 検索／置換  オプション
-		m_nCurSearchKeySequence = GetDllShareData().m_Common.m_sSearch.m_nSearchKeySequence;
+		m_strCurSearchKey = GetDllShareData().m_searchKeywords.m_aSearchKeys[0];		// 検索文字列
+		m_curSearchOption = GetDllShareData().m_common.m_sSearch.m_searchOption;// 検索／置換  オプション
+		m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
 		bChangeState = true;
 	}else if (m_bCurSearchUpdate) {
 		bChangeState = true;
@@ -379,7 +379,7 @@ BOOL CEditView::ChangeCurRegexp(bool bRedrawIfChanged)
 	m_bCurSearchUpdate = false;
 	if (bChangeState) {
 		if (!m_sSearchPattern.SetPattern(this->GetHwnd(), m_strCurSearchKey.c_str(), m_strCurSearchKey.size(),
-			m_sCurSearchOption, &m_CurRegexp)
+			m_curSearchOption, &m_CurRegexp)
 		) {
 				m_bCurSrchKeyMark = false;
 				return FALSE;

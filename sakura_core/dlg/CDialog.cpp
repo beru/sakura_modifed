@@ -680,7 +680,7 @@ HFONT CDialog::SetMainFont(HWND hTarget)
 	LONG nfHeight = lf.lfHeight;
 
 	// LOGFONT�̍쐬
-	lf = m_pShareData->m_Common.m_sView.m_lf;
+	lf = m_pShareData->m_common.m_sView.m_lf;
 	lf.lfHeight			= nfHeight;
 	lf.lfWidth			= 0;
 	lf.lfEscapement		= 0;
@@ -796,7 +796,7 @@ LRESULT CALLBACK SubEditProc(
 	LPARAM lParam
 	)
 {
-	SComboBoxItemDeleter* data = (SComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
+	ComboBoxItemDeleter* data = (ComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
 	switch (uMsg) {
 	case WM_KEYDOWN:
 	{
@@ -831,7 +831,7 @@ LRESULT CALLBACK SubListBoxProc(
 	LPARAM lParam
 	)
 {
-	SComboBoxItemDeleter* data = (SComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
+	ComboBoxItemDeleter* data = (ComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
 	switch (uMsg) {
 	case WM_KEYDOWN:
 	{
@@ -865,7 +865,7 @@ LRESULT CALLBACK SubComboBoxProc(
 	LPARAM lParam
 	)
 {
-	SComboBoxItemDeleter* data = (SComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
+	ComboBoxItemDeleter* data = (ComboBoxItemDeleter*)::GetProp(hwnd, TSTR_SUBCOMBOBOXDATA);
 	switch (uMsg) {
 	case WM_CTLCOLOREDIT:
 	{
@@ -902,7 +902,7 @@ LRESULT CALLBACK SubComboBoxProc(
 }
 
 
-void CDialog::SetComboBoxDeleter(HWND hwndCtl, SComboBoxItemDeleter* data)
+void CDialog::SetComboBoxDeleter(HWND hwndCtl, ComboBoxItemDeleter* data)
 {
 	if (!data->pRecent) {
 		return;

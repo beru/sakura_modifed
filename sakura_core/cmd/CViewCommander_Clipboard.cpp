@@ -41,7 +41,7 @@ void CViewCommander::Command_CUT(void)
 	// 範囲選択がされていない
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行を切り取り
-		if (!GetDllShareData().m_Common.m_sEdit.m_bEnableNoSelectCopy) {	// 2007.11.18 ryoji
+		if (!GetDllShareData().m_common.m_sEdit.m_bEnableNoSelectCopy) {	// 2007.11.18 ryoji
 			return;	// 何もしない（音も鳴らさない）
 		}
 		// 行切り取り(折り返し単位)
@@ -53,7 +53,7 @@ void CViewCommander::Command_CUT(void)
 	// 選択範囲のデータを取得
 	// 正常時はTRUE,範囲未選択の場合はFALSEを返す
 	CNativeW cmemBuf;
-	if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy)) {
+	if (!m_pCommanderView->GetSelectedData(&cmemBuf, false, NULL, false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy)) {
 		ErrorBeep();
 		return;
 	}
@@ -82,7 +82,7 @@ void CViewCommander::Command_COPY(
 {
 	CNativeW cmemBuf;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	auto& csEdit = GetDllShareData().m_Common.m_sEdit;
+	auto& csEdit = GetDllShareData().m_common.m_sEdit;
 	// クリップボードに入れるべきテキストデータを、cmemBufに格納する
 	if (!selInfo.IsTextSelected()) {
 		// 非選択時は、カーソル行をコピーする
@@ -160,7 +160,7 @@ void CViewCommander::Command_PASTE(int option)
 		return;
 	}
 
-	auto& commonSetting = GetDllShareData().m_Common;
+	auto& commonSetting = GetDllShareData().m_common;
 	// クリップボードからデータを取得 -> cmemClip, bColumnSelect
 	CNativeW	cmemClip;
 	bool		bColumnSelect;
@@ -211,7 +211,7 @@ void CViewCommander::Command_PASTE(int option)
 	// 行コピー（MSDEVLineSelect形式）のテキストで末尾が改行になっていなければ改行を追加する
 	// ※レイアウト折り返しの行コピーだった場合は末尾が改行になっていない
 	if (bLineSelect) {
-		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+		if (!WCODE::IsLineDelimiter(pszText[nTextLen-1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 			cmemClip.AppendString(GetDocument()->m_cDocEditor.GetNewLineCode().GetValue2());
 			pszText = cmemClip.GetStringPtr(&nTextLen);
 		}
@@ -264,7 +264,7 @@ void CViewCommander::Command_PASTEBOX(
 		ErrorBeep();
 		return;
 	}
-	if (!GetDllShareData().m_Common.m_bFontIs_FIXED_PITCH)	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.m_bFontIs_FIXED_PITCH)	// 現在のフォントは固定幅フォントである
 	{
 		return;
 	}
@@ -290,7 +290,7 @@ void CViewCommander::Command_PASTEBOX(
 	CLayoutPoint ptCurOld = GetCaret().GetCaretLayoutPos();
 
 	CLayoutInt nCount = CLayoutInt(0);
-	bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
 	// Jul. 10, 2005 genta 貼り付けデータの最後にCR/LFが無い場合の対策
 	// データの最後まで処理 i.e. nBgnがnPasteSizeを超えたら終了
@@ -403,7 +403,7 @@ void CViewCommander::Command_PASTEBOX(int option)
 		return;
 	}
 
-	if (!GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
@@ -434,7 +434,7 @@ void CViewCommander::Command_INSBOXTEXT(
 		return;
 	}
 
-	if (!GetDllShareData().m_Common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 
@@ -482,7 +482,7 @@ void CViewCommander::Command_INSTEXT(
 		if (selInfo.IsBoxSelecting()) {
 			// 改行までを抜き出す
 			CLogicInt i;
-			bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+			bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 			for (i=CLogicInt(0); i<nTextLen; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					break;
@@ -641,7 +641,7 @@ void CViewCommander::Command_COPYLINESASPASSAGE(void)
 {
 	// 選択範囲内の全行をクリップボードにコピーする
 	m_pCommanderView->CopySelectedAllLines(
-		GetDllShareData().m_Common.m_sFormat.m_szInyouKigou,	// 引用符
+		GetDllShareData().m_common.m_sFormat.m_szInyouKigou,	// 引用符
 		false 									// 行番号を付与する
 	);
 	return;
@@ -661,8 +661,8 @@ void CViewCommander::Command_COPYLINESWITHLINENUMBER(void)
 
 
 static bool AppendHTMLColor(
-	const SColorAttr& sColorAttrLast, SColorAttr& sColorAttrLast2,
-	const SFontAttr& sFontAttrLast, SFontAttr& sFontAttrLast2,
+	const ColorAttr& sColorAttrLast, ColorAttr& sColorAttrLast2,
+	const FontAttr& sFontAttrLast, FontAttr& sFontAttrLast2,
 	const WCHAR* pAppendStr, int nLen,
 	CNativeW& cmemClip
 	)
@@ -723,7 +723,7 @@ static bool AppendHTMLColor(
 	if (0 < nLen) {
 		return WCODE::IsLineDelimiter(
 			pAppendStr[nLen-1],
-			GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol
+			GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
 		);
 	}
 	return false;
@@ -739,8 +739,8 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	) {
 		return;
 	}
-	const STypeConfig& type = GetDocument()->m_cDocType.GetDocumentAttribute();
-	bool bLineNumLayout = GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy
+	const TypeConfig& type = GetDocument()->m_cDocType.GetDocumentAttribute();
+	bool bLineNumLayout = GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy
 		|| selInfo.IsBoxSelecting();
 	CLayoutRect rcSel;
 	TwoPointToRect(
@@ -858,14 +858,14 @@ void CViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	while (pcLayout && pcLayout->GetLogicOffset()) {
 		pcLayout = pcLayout->GetPrevLayout();
 	}
-	SColorAttr sColorAttr = { (COLORREF)-1, (COLORREF)-1 };
-	SColorAttr sColorAttrNext = { (COLORREF)-1, (COLORREF)-1 };
-	SColorAttr sColorAttrLast = { (COLORREF)-1, (COLORREF)-1 };
-	SColorAttr sColorAttrLast2 = { (COLORREF)-1, (COLORREF)-1 };
-	SFontAttr sFontAttr = { false, false };
-	SFontAttr sFontAttrNext = { false, false };
-	SFontAttr sFontAttrLast = { false, false };
-	SFontAttr sFontAttrLast2 = { false, false };
+	ColorAttr sColorAttr = { (COLORREF)-1, (COLORREF)-1 };
+	ColorAttr sColorAttrNext = { (COLORREF)-1, (COLORREF)-1 };
+	ColorAttr sColorAttrLast = { (COLORREF)-1, (COLORREF)-1 };
+	ColorAttr sColorAttrLast2 = { (COLORREF)-1, (COLORREF)-1 };
+	FontAttr sFontAttr = { false, false };
+	FontAttr sFontAttrNext = { false, false };
+	FontAttr sFontAttrLast = { false, false };
+	FontAttr sFontAttrLast2 = { false, false };
 	CColorStrategyPool* pool = CColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pCommanderView);
 	for (auto nLineNum = sSelectLogic.GetFrom().y;
@@ -1173,7 +1173,7 @@ void CViewCommander::Command_COPYTAG(void)
 void CViewCommander::Command_CREATEKEYBINDLIST(void)
 {
 	CNativeW cMemKeyList;
-	auto& csKeyBind = GetDllShareData().m_Common.m_sKeyBind;
+	auto& csKeyBind = GetDllShareData().m_common.m_sKeyBind;
 	CKeyBind::CreateKeyBindList(
 		G_AppInstance(),
 		csKeyBind.m_nKeyNameArrNum,

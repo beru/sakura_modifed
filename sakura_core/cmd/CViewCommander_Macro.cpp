@@ -36,7 +36,7 @@
 // キーマクロの記録開始／終了
 void CViewCommander::Command_RECKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_sFlags;
+	auto& sFlags = GetDllShareData().m_flags;
 	if (sFlags.m_bRecordingKeyMacro) {									// キーボードマクロの記録中
 		sFlags.m_bRecordingKeyMacro = FALSE;
 		sFlags.m_hwndRecordingKeyMacro = NULL;							// キーボードマクロを記録中のウィンドウ
@@ -45,7 +45,7 @@ void CViewCommander::Command_RECKEYMACRO(void)
 		int nRet;
 		// 2003.06.23 Moca 記録用キーマクロのフルパスをCShareData経由で取得
 		nRet = CShareData::getInstance()->GetMacroFilename(-1, szInitDir, MAX_PATH);
-		auto& csMacro = GetDllShareData().m_Common.m_sMacro;
+		auto& csMacro = GetDllShareData().m_common.m_sMacro;
 		if (nRet <= 0) {
 			ErrorMessage(m_pCommanderView->GetHwnd(), LS(STR_ERR_CEDITVIEW_CMD24), nRet);
 			return;
@@ -82,7 +82,7 @@ void CViewCommander::Command_RECKEYMACRO(void)
 // キーマクロの保存
 void CViewCommander::Command_SAVEKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_sFlags;
+	auto& sFlags = GetDllShareData().m_flags;
 	sFlags.m_bRecordingKeyMacro = FALSE;
 	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
@@ -97,7 +97,7 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
 	szPath[0] = 0;
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-	auto& macroFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
+	auto& macroFolder = GetDllShareData().m_common.m_sMacro.m_szMACROFOLDER;
 	if (_IS_REL_PATH(macroFolder)) {
 		GetInidirOrExedir(szInitDir, macroFolder);
 	}else {
@@ -134,13 +134,13 @@ void CViewCommander::Command_SAVEKEYMACRO(void)
  */
 void CViewCommander::Command_LOADKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_sFlags;
+	auto& sFlags = GetDllShareData().m_flags;
 	sFlags.m_bRecordingKeyMacro = FALSE;
 	sFlags.m_hwndRecordingKeyMacro = NULL;	// キーボードマクロを記録中のウィンドウ
 
 	TCHAR szPath[_MAX_PATH + 1];
 	TCHAR szInitDir[_MAX_PATH + 1];
-	const TCHAR* pszFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
+	const TCHAR* pszFolder = GetDllShareData().m_common.m_sMacro.m_szMACROFOLDER;
 	szPath[0] = 0;
 	
 	// 2003.06.23 Moca 相対パスは実行ファイルからのパス
@@ -166,7 +166,7 @@ void CViewCommander::Command_LOADKEYMACRO(void)
 
 	// キーボードマクロの読み込み
 	//@@@ 2002.1.24 YAZAKI 読み込みといいつつも、ファイル名をコピーするだけ。実行直前に読み込む
-	_tcscpy(GetDllShareData().m_Common.m_sMacro.m_szKeyMacroFileName, szPath);
+	_tcscpy(GetDllShareData().m_common.m_sMacro.m_szKeyMacroFileName, szPath);
 //	GetDllShareData().m_CKeyMacroMgr.LoadKeyMacro(G_AppInstance(), m_pCommanderView->GetHwnd(), szPath);
 	return;
 }
@@ -175,7 +175,7 @@ void CViewCommander::Command_LOADKEYMACRO(void)
 // キーマクロの実行
 void CViewCommander::Command_EXECKEYMACRO(void)
 {
-	auto& sFlags = GetDllShareData().m_sFlags;
+	auto& sFlags = GetDllShareData().m_flags;
 	//@@@ 2002.1.24 YAZAKI 記録中は終了してから実行
 	if (sFlags.m_bRecordingKeyMacro) {
 		Command_RECKEYMACRO();
@@ -185,7 +185,7 @@ void CViewCommander::Command_EXECKEYMACRO(void)
 
 	// キーボードマクロの実行
 	//@@@ 2002.1.24 YAZAKI
-	auto& csMacro = GetDllShareData().m_Common.m_sMacro;
+	auto& csMacro = GetDllShareData().m_common.m_sMacro;
 	if (csMacro.m_szKeyMacroFileName[0]) {
 		// ファイルが保存されていたら
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
@@ -229,7 +229,7 @@ void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* ps
 		// ファイルが指定されていない場合、ダイアログを表示する
 		szPath[0] = 0;
 		// マクロフォルダ
-		const TCHAR* pszFolder = GetDllShareData().m_Common.m_sMacro.m_szMACROFOLDER;
+		const TCHAR* pszFolder = GetDllShareData().m_common.m_sMacro.m_szMACROFOLDER;
 
 		// ファイル選択ダイアログの初期フォルダ
 		TCHAR szInitDir[_MAX_PATH + 1];
@@ -253,7 +253,7 @@ void CViewCommander::Command_EXECEXTMACRO(const WCHAR* pszPathW, const WCHAR* ps
 		pszType = NULL;
 	}
 
-	auto& sFlags = GetDllShareData().m_sFlags;
+	auto& sFlags = GetDllShareData().m_flags;
 	// キーマクロ記録中の場合、追加する
 	if (sFlags.m_bRecordingKeyMacro &&						// キーボードマクロの記録中
 		sFlags.m_hwndRecordingKeyMacro == GetMainWindow()	// キーボードマクロを記録中のウィンドウ

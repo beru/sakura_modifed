@@ -24,14 +24,14 @@
 #pragma once
 
 #include <vector>
-#include "view/colors/CColorStrategy.h" // SColorStrategyInfo
+#include "view/colors/CColorStrategy.h" // ColorStrategyInfo
 
 
 //$$レイアウト構築フロー(DoLayout)も CFigure で行うと整理しやすい
 class CFigure {
 public:
 	virtual ~CFigure() {}
-	virtual bool DrawImp(SColorStrategyInfo* pInfo) = 0;
+	virtual bool DrawImp(ColorStrategyInfo* pInfo) = 0;
 	virtual bool Match(const wchar_t* pText, int nTextLen) const = 0;
 
 	// 色分け表示対象判定
@@ -43,13 +43,13 @@ public:
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	}
 protected:
-	const STypeConfig* m_pTypeData;
+	const TypeConfig* m_pTypeData;
 };
 
 // 通常テキスト描画
 class CFigure_Text : public CFigure {
 public:
-	bool DrawImp(SColorStrategyInfo* pInfo);
+	bool DrawImp(ColorStrategyInfo* pInfo);
 	bool Match(const wchar_t* pText, int nTextLen) const {
 		return true;
 	}
@@ -63,7 +63,7 @@ public:
 // 各種空白（半角空白／全角空白／タブ／改行）描画用の基本クラス
 class CFigureSpace : public CFigure {
 public:
-	virtual bool DrawImp(SColorStrategyInfo* pInfo);
+	virtual bool DrawImp(ColorStrategyInfo* pInfo);
 protected:
 	virtual void DispSpace(CGraphics& gr, DispPos* pDispPos, CEditView* pcView, bool bTrans) const = 0;
 	virtual EColorIndexType GetColorIdx(void) const = 0;
@@ -88,9 +88,9 @@ protected:
 	EColorIndexType GetDispColorIdx(void) const { return m_nDispColorIndex; }
 
 	// 実装補助
-	bool DrawImp_StyleSelect(SColorStrategyInfo* pInfo);
-	void DrawImp_StylePop(SColorStrategyInfo* pInfo);
-	void DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos&);
+	bool DrawImp_StyleSelect(ColorStrategyInfo* pInfo);
+	void DrawImp_StylePop(ColorStrategyInfo* pInfo);
+	void DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos&);
 
 protected:
 	EColorIndexType m_nDispColorIndex;

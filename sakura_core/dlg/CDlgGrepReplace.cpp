@@ -63,8 +63,8 @@ const DWORD p_helpids[] = {
 
 CDlgGrepReplace::CDlgGrepReplace()
 {
-	if (0 < m_pShareData->m_sSearchKeywords.m_aReplaceKeys.size()) {
-		m_strText2 = m_pShareData->m_sSearchKeywords.m_aReplaceKeys[0];
+	if (0 < m_pShareData->m_searchKeywords.m_aReplaceKeys.size()) {
+		m_strText2 = m_pShareData->m_searchKeywords.m_aReplaceKeys[0];
 	}
 	return;
 }
@@ -79,16 +79,16 @@ int CDlgGrepReplace::DoModal(
 	LPARAM lParam
 	)
 {
-	auto& csSearch = m_pShareData->m_Common.m_sSearch;
+	auto& csSearch = m_pShareData->m_common.m_sSearch;
 	m_bSubFolder = csSearch.m_bGrepSubFolder;				// Grep: サブフォルダも検索
-	m_sSearchOption = csSearch.m_sSearchOption;				// 検索オプション
+	m_searchOption = csSearch.m_searchOption;				// 検索オプション
 	m_nGrepCharSet = csSearch.m_nGrepCharSet;				// 文字コードセット
 	m_nGrepOutputLineType = csSearch.m_nGrepOutputLineType;	// 行を出力するか該当部分だけ出力するか
 	m_nGrepOutputStyle = csSearch.m_nGrepOutputStyle;		// Grep: 出力形式
 	m_bPaste = false;
 	m_bBackup = csSearch.m_bGrepBackup;
 
-	auto& searchKeywords = m_pShareData->m_sSearchKeywords;
+	auto& searchKeywords = m_pShareData->m_searchKeywords;
 	if (m_szFile[0] == _T('\0') && searchKeywords.m_aGrepFiles.size()) {
 		_tcscpy(m_szFile, searchKeywords.m_aGrepFiles[0]);		// 検索ファイル
 	}
@@ -164,7 +164,7 @@ void CDlgGrepReplace::SetData(void)
 	// 置換後
 	SetItemText(IDC_COMBO_TEXT2, m_strText2.c_str() );
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_TEXT2);
-	auto& replaceKeys = m_pShareData->m_sSearchKeywords.m_aReplaceKeys;
+	auto& replaceKeys = m_pShareData->m_searchKeywords.m_aReplaceKeys;
 	for (int i=0; i<replaceKeys.size(); ++i) {
 		Combo_AddString(hwndCombo, replaceKeys[i]);
 	}
@@ -192,7 +192,7 @@ int CDlgGrepReplace::GetData(void)
 	}
 
 	m_bBackup = IsButtonChecked(IDC_CHK_BACKUP);
-	m_pShareData->m_Common.m_sSearch.m_bGrepBackup = m_bBackup;
+	m_pShareData->m_common.m_sSearch.m_bGrepBackup = m_bBackup;
 
 	if (!CDlgGrep::GetData()) {
 		return FALSE;
@@ -201,7 +201,7 @@ int CDlgGrepReplace::GetData(void)
 	if (m_strText2.size() < _MAX_PATH) {
 		CSearchKeywordManager().AddToReplaceKeyArr( m_strText2.c_str() );
 	}
-	m_nReplaceKeySequence = GetDllShareData().m_Common.m_sSearch.m_nReplaceKeySequence;
+	m_nReplaceKeySequence = GetDllShareData().m_common.m_sSearch.m_nReplaceKeySequence;
 
 	return TRUE;
 }

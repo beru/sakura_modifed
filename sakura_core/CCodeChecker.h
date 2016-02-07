@@ -35,7 +35,7 @@ class CCodeChecker :
 	
 public:
 	// セーブ時チェック
-	ECallbackResult OnCheckSave(SSaveInfo* pSaveInfo);
+	ECallbackResult OnCheckSave(SaveInfo* pSaveInfo);
 	void OnFinalSave(ESaveResult eSaveResult);
 
 	// ロード時チェック

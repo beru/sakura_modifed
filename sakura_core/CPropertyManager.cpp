@@ -67,12 +67,12 @@ bool CPropertyManager::OpenPropertySheet(
 		// 2002.12.11 Moca この部分で行われていたデータのコピーをCPropCommonに移動・関数化
 		// ShareData に 設定を適用・コピーする
 		// 2007.06.20 ryoji グループ化に変更があったときはグループIDをリセットする
-		auto& csTabBar = GetDllShareData().m_Common.m_sTabBar;
+		auto& csTabBar = GetDllShareData().m_common.m_sTabBar;
 		bool bGroup = (csTabBar.m_bDispTabWnd && !csTabBar.m_bDispTabWndMultiWin);
 
 		// 印刷中にキーワードを上書きしないように
-		CShareDataLockCounter* pLock = NULL;
-		CShareDataLockCounter::WaitLock(pcPropCommon->m_hwndParent, &pLock);
+		ShareDataLockCounter* pLock = NULL;
+		ShareDataLockCounter::WaitLock(pcPropCommon->m_hwndParent, &pLock);
 
 		pcPropCommon->ApplyData();
 		// note: 基本的にここで適用しないで、MYWM_CHANGESETTINGからたどって適用してください。
@@ -84,7 +84,7 @@ bool CPropertyManager::OpenPropertySheet(
 		}
 
 		// アクセラレータテーブルの再作成
-		::SendMessage(GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
+		::SendMessage(GetDllShareData().m_handles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする
@@ -119,7 +119,7 @@ bool CPropertyManager::OpenPropertySheetTypes(
 	auto pcPropTypes = std::make_unique<CPropTypes>();
 	pcPropTypes->Create(G_AppInstance(), m_hwndOwner);
 
-	auto pType = std::make_unique<STypeConfig>();
+	auto pType = std::make_unique<TypeConfig>();
 	CDocTypeManager().GetTypeConfig(nSettingType, *pType);
 	pcPropTypes->SetTypeData(*pType);
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更しProperySheet内で取得するように
@@ -131,15 +131,15 @@ bool CPropertyManager::OpenPropertySheetTypes(
 	// プロパティシートの作成
 	if (pcPropTypes->DoPropertySheet(m_nPropTypePageNum)) {
 		// 2013.06.10 Moca 印刷終了まで待機する
-		CShareDataLockCounter* pLock = NULL;
-		CShareDataLockCounter::WaitLock(pcPropTypes->GetHwndParent(), &pLock);
+		ShareDataLockCounter* pLock = NULL;
+		ShareDataLockCounter::WaitLock(pcPropTypes->GetHwndParent(), &pLock);
 
 		pcPropTypes->GetTypeData(*pType);
 
 		CDocTypeManager().SetTypeConfig(nSettingType, *pType);
 
 		// アクセラレータテーブルの再作成
-		// ::SendMessage(GetDllShareData().m_sHandles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
+		// ::SendMessage(GetDllShareData().m_handles.m_hwndTray, MYWM_CHANGESETTING,  (WPARAM)0, (LPARAM)PM_CHANGESETTING_ALL);
 
 		// 設定変更を反映させる
 		// 全編集ウィンドウへメッセージをポストする

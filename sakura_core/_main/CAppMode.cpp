@@ -3,7 +3,7 @@
 #include "window/CEditWnd.h"
 #include "env/CSakuraEnvironment.h"
 
-void CAppMode::OnAfterSave(const SSaveInfo& sSaveInfo)
+void AppMode::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	m_bViewMode = false;	// ビューモード
 	// 名前を付けて保存から再ロードが除去された分の不足処理を追加（ANSI版との差異）	// 2009.08.12 ryoji
@@ -13,15 +13,15 @@ void CAppMode::OnAfterSave(const SSaveInfo& sSaveInfo)
 }
 
 // デバッグモニタモードに設定
-void CAppMode::SetDebugModeON()
+void AppMode::SetDebugModeON()
 {
 	auto& shared = GetDllShareData();
-	if (shared.m_sHandles.m_hwndDebug) {
-		if (IsSakuraMainWindow(shared.m_sHandles.m_hwndDebug)) {
+	if (shared.m_handles.m_hwndDebug) {
+		if (IsSakuraMainWindow(shared.m_handles.m_hwndDebug)) {
 			return;
 		}
 	}
-	shared.m_sHandles.m_hwndDebug = CEditWnd::getInstance()->GetHwnd();
+	shared.m_handles.m_hwndDebug = CEditWnd::getInstance()->GetHwnd();
 	this->_SetDebugMode(true);
 	this->SetViewMode(false);	// ビューモード	// 2001/06/23 N.Nakatani アウトプット窓への出力テキストの追加F_ADDTAIL_Wが抑止されるのでとりあえずビューモードは辞めました
 	CEditWnd::getInstance()->UpdateCaption();
@@ -29,11 +29,11 @@ void CAppMode::SetDebugModeON()
 
 // 2005.06.24 Moca
 // デバックモニタモードの解除
-void CAppMode::SetDebugModeOFF()
+void AppMode::SetDebugModeOFF()
 {
 	auto& shared = GetDllShareData();
-	if (shared.m_sHandles.m_hwndDebug == CEditWnd::getInstance()->GetHwnd()) {
-		shared.m_sHandles.m_hwndDebug = NULL;
+	if (shared.m_handles.m_hwndDebug == CEditWnd::getInstance()->GetHwnd()) {
+		shared.m_handles.m_hwndDebug = NULL;
 		this->_SetDebugMode(false);
 		CEditWnd::getInstance()->UpdateCaption();
 	}

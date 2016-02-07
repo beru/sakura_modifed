@@ -29,11 +29,11 @@
 using namespace std;
 
 // 特別機能
-struct SSpecialFunc	{
+struct SpecialFunc	{
 	EFunctionCode	m_nFunc;		// Function
 	int			 	m_nNameId;		// 名前
 };
-extern const	SSpecialFunc	sSpecialFuncs[];
+extern const	SpecialFunc	sSpecialFuncs[];
 extern const int nSpecialFuncsCount;
 
 static	int 	nSpecialFuncsNum;		// 特別機能のコンボボックス内での番号

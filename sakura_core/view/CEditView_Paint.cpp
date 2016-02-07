@@ -198,7 +198,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
 	const CTextArea& area = GetTextArea();
 	const CEditDoc& doc  = *m_pcEditDoc;
-	const STypeConfig& typeConfig = doc.m_cDocType.GetDocumentAttribute();
+	const TypeConfig& typeConfig = doc.m_cDocType.GetDocumentAttribute();
 
 	CMyRect rcImagePos;
 	switch (typeConfig.m_backImgPos) {
@@ -349,23 +349,23 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	CEditView::DrawLogicLineを元にしたためCEditView::DrawLogicLineに
 	修正があった場合は、ここも修正が必要。
 */
-CColor3Setting CEditView::GetColorIndex(
+Color3Setting CEditView::GetColorIndex(
 	const CLayout*			pcLayout,
 	CLayoutYInt				nLineNum,
 	int						nIndex,
-	SColorStrategyInfo* 	pInfo,			// 2010.03.31 ryoji 追加
+	ColorStrategyInfo* 	pInfo,			// 2010.03.31 ryoji 追加
 	bool					bPrev			// 指定位置の色変更直前まで	2010.06.19 ryoji 追加
-)
+	)
 {
 	EColorIndexType eRet = COLORIDX_TEXT;
 
 	if (!pcLayout) {
-		CColor3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
+		Color3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
 		return cColor;
 	}
 	// 2014.12.30 Skipモードの時もCOLORIDX_TEXT
 	if (CColorStrategyPool::getInstance()->IsSkipBeforeLayout()) {
-		CColor3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
+		Color3Setting cColor = { COLORIDX_TEXT, COLORIDX_TEXT, COLORIDX_TEXT };
 		return cColor;
 	}
 
@@ -452,7 +452,7 @@ CColor3Setting CEditView::GetColorIndex(
 		}
 	}
 
-	CColor3Setting cColor;
+	Color3Setting cColor;
 	pInfo->DoChangeColor(&cColor);
 
 	return cColor;
@@ -465,12 +465,17 @@ CColor3Setting CEditView::GetColorIndex(
 
 	@date 2013.05.08 novice 範囲外チェック削除
 */
-void CEditView::SetCurrentColor(CGraphics& gr, EColorIndexType eColorIndex,  EColorIndexType eColorIndex2, EColorIndexType eColorIndexBg)
+void CEditView::SetCurrentColor(
+	CGraphics& gr,
+	EColorIndexType eColorIndex,
+	EColorIndexType eColorIndex2,
+	EColorIndexType eColorIndexBg
+	)
 {
 	// インデックス決定
-	int		nColorIdx = ToColorInfoArrIndex(eColorIndex);
-	int		nColorIdx2 = ToColorInfoArrIndex(eColorIndex2);
-	int		nColorIdxBg = ToColorInfoArrIndex(eColorIndexBg);
+	int nColorIdx = ToColorInfoArrIndex(eColorIndex);
+	int nColorIdx2 = ToColorInfoArrIndex(eColorIndex2);
+	int nColorIdxBg = ToColorInfoArrIndex(eColorIndexBg);
 
 	// 実際に色を設定
 	const ColorInfo& info  = m_pTypeData->m_ColorInfoArr[nColorIdx];
@@ -482,7 +487,7 @@ void CEditView::SetCurrentColor(CGraphics& gr, EColorIndexType eColorIndex,  ECo
 	const ColorInfo& info3 = (info2.m_sColorAttr.m_cBACK == m_crBack ? infoBg : info2);
 	COLORREF bkcolor = (nColorIdx == nColorIdx2) ? info3.m_sColorAttr.m_cBACK : GetBackColorByColorInfo2(info, info3);
 	gr.SetTextBackColor(bkcolor);
-	SFONT sFont;
+	Font sFont;
 	sFont.m_sFontAttr = (info.m_sColorAttr.m_cTEXT != info.m_sColorAttr.m_cBACK) ? info.m_sFontAttr : info2.m_sFontAttr;
 	sFont.m_hFont = GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
 	gr.SetMyFont(sFont);
@@ -880,8 +885,8 @@ bool CEditView::DrawLogicLine(
 {
 //	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DrawLogicLine");
 	bool bDispEOF = false;
-	SColorStrategyInfo _sInfo;
-	SColorStrategyInfo* pInfo = &_sInfo;
+	ColorStrategyInfo _sInfo;
+	ColorStrategyInfo* pInfo = &_sInfo;
 	pInfo->m_gr.Init(_hdc);
 	pInfo->m_pDispPos = _pDispPos;
 	pInfo->m_pcView = this;
@@ -917,7 +922,7 @@ bool CEditView::DrawLogicLine(
 				pInfo->m_pStrategy->SetStrategyColorInfo(colorInfo);
 			}
 		}else {
-			CColor3Setting cColor = GetColorIndex(pcLayout, pInfo->m_pDispPos->GetLayoutLineRef(), 0, pInfo, true);
+			Color3Setting cColor = GetColorIndex(pcLayout, pInfo->m_pDispPos->GetLayoutLineRef(), 0, pInfo, true);
 			SetCurrentColor(pInfo->m_gr, cColor.eColorIndex, cColor.eColorIndex2, cColor.eColorIndexBg);
 		}
 	}
@@ -964,7 +969,7 @@ bool CEditView::DrawLogicLine(
 	レイアウト行を1行描画
 */
 // 改行記号を描画した場合はtrueを返す？
-bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
+bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 {
 	bool bDispEOF = false;
 	CTypeSupport cTextType(this, COLORIDX_TEXT);
@@ -987,7 +992,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 		if (pcLayout) {
 			bool bChange = false;
 			int nPosTo = pcLayout->GetLogicOffset() + pcLayout->GetLengthWithEOL();
-			CColor3Setting cColor;
+			Color3Setting cColor;
 			while (pInfo->m_nPosInLogic < nPosTo) {
 				// 色切替
 				bChange |= pInfo->CheckChangeColor(cLineStr);
@@ -1076,7 +1081,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 		while (pInfo->m_nPosInLogic < nPosTo) {
 			// 色切替
 			if (pInfo->CheckChangeColor(cLineStr)) {
-				CColor3Setting cColor;
+				Color3Setting cColor;
 				pInfo->DoChangeColor(&cColor);
 				SetCurrentColor(pInfo->m_gr, cColor.eColorIndex, cColor.eColorIndex2, cColor.eColorIndexBg);
 			}

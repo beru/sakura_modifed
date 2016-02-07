@@ -56,9 +56,9 @@ private:
 	void	SetDataItem(int);
 	void	ChangeEnableItemType();
 	void	ChangeEnableAddInsert();
-	int		GetDataItem(SFileTreeItem&);
-	bool	GetDataTree(std::vector<SFileTreeItem>&, HTREEITEM, int, int);
-	HTREEITEM InsertTreeItem(SFileTreeItem&, HTREEITEM, HTREEITEM);
+	int		GetDataItem(FileTreeItem&);
+	bool	GetDataTree(std::vector<FileTreeItem>&, HTREEITEM, int, int);
+	HTREEITEM InsertTreeItem(FileTreeItem&, HTREEITEM, HTREEITEM);
 
 private:
 	CDlgFuncList*		m_pcDlgFuncList;

@@ -60,7 +60,7 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-static const SAnchorList anchorList[] = {
+static const AnchorListItem anchorList[] = {
 	{IDC_STATIC_BASEDIR,	ANCHOR_BOTTOM},
 	{IDC_STATIC_KEYWORD,	ANCHOR_BOTTOM},
 	{IDC_KEYWORD,			ANCHOR_BOTTOM},
@@ -158,8 +158,8 @@ CDlgTagJumpList::CDlgTagJumpList(bool bDirectTagJump)
 
 	// 2010.07.22 Moca ページング採用で 最大値を100→50に減らす
 	m_pcList = new CSortedTagJumpList(50);
-	m_psFindPrev = new STagFindState();
-	m_psFind0Match = new STagFindState();
+	m_psFindPrev = new TagFindState();
+	m_psFind0Match = new TagFindState();
 	m_ptDefaultSize.x = -1;
 	m_ptDefaultSize.y = -1;
 	ClearPrevFindInfo();
@@ -255,9 +255,9 @@ void CDlgTagJumpList::SetData(void)
 		HWND hwndKey;
 		hwndKey = GetItemHwnd(IDC_KEYWORD);
 
-		m_bTagJumpICase = m_pShareData->m_sTagJump.m_bTagJumpICase;
+		m_bTagJumpICase = m_pShareData->m_tagJump.m_bTagJumpICase;
 		CheckButton(IDC_CHECK_ICASE, m_bTagJumpICase);
-		m_bTagJumpAnyWhere = m_pShareData->m_sTagJump.m_bTagJumpAnyWhere;
+		m_bTagJumpAnyWhere = m_pShareData->m_tagJump.m_bTagJumpAnyWhere;
 		CheckButton(IDC_CHECK_ANYWHERE, m_bTagJumpAnyWhere);
 		m_bTagJumpExactMatch = FALSE;
 		Combo_LimitText(hwndKey, _MAX_PATH-1);
@@ -388,8 +388,8 @@ int CDlgTagJumpList::GetData(void)
 
 	// From Here 2005.04.03 MIK 設定値の保存
 	if (!IsDirectTagJump()) {
-		m_pShareData->m_sTagJump.m_bTagJumpICase = m_bTagJumpICase;
-		m_pShareData->m_sTagJump.m_bTagJumpAnyWhere = m_bTagJumpAnyWhere;
+		m_pShareData->m_tagJump.m_bTagJumpICase = m_bTagJumpICase;
+		m_pShareData->m_tagJump.m_bTagJumpAnyWhere = m_bTagJumpAnyWhere;
 		// 2010.07.22 候補が空でもジャンプで閉じたときは、オプションを保存する
 		if (m_nIndex == -1 || m_nIndex >= m_pcList->GetCapacity()) {
 			return FALSE;
@@ -440,7 +440,7 @@ BOOL CDlgTagJumpList::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog;
+	RECT rcDialog = GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -525,7 +525,7 @@ BOOL CDlgTagJumpList::OnInitDialog(
 		bRet = FALSE;	// for set focus
 	}
 
-	m_comboDel = SComboBoxItemDeleter();
+	m_comboDel = ComboBoxItemDeleter();
 	m_comboDel.pRecent = &m_cRecentKeyword;
 	SetComboBoxDeleter(hwndKey, &m_comboDel);
 
@@ -605,7 +605,7 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	CDialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog);
 
 	RECT  rc;
 	POINT ptNew;
@@ -623,7 +623,7 @@ BOOL CDlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog);
 
 	return CDialog::OnMove(wParam, lParam);
 }
@@ -1059,7 +1059,7 @@ int CDlgTagJumpList::FindDirectTagJump()
 		true,  // 完全一致
 		false, // 大小を区別
 		true,  // 自動モード
-		m_pShareData->m_Common.m_sSearch.m_nTagJumpMode
+		m_pShareData->m_common.m_sSearch.m_nTagJumpMode
 	);
 }
 
@@ -1075,7 +1075,7 @@ void CDlgTagJumpList::find_key(const wchar_t* keyword)
 		FALSE != m_bTagJumpExactMatch,
 		FALSE != m_bTagJumpICase,
 		IsDirectTagJump(),
-		IsDirectTagJump() ? (m_pShareData->m_Common.m_sSearch.m_nTagJumpMode) : m_pShareData->m_Common.m_sSearch.m_nTagJumpModeKeyword
+		IsDirectTagJump() ? (m_pShareData->m_common.m_sSearch.m_nTagJumpMode) : m_pShareData->m_common.m_sSearch.m_nTagJumpModeKeyword
 	);
 	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
@@ -1124,7 +1124,7 @@ int CDlgTagJumpList::find_key_core(
 	}
 	CSortedTagJumpList& cList = *m_pcList;
 	const int nCap = cList.GetCapacity();
-	STagFindState state;
+	TagFindState state;
 	state.m_nDepth    = 0;
 	state.m_nMatchAll = 0;
 	state.m_nNextMode = nDefaultNextMode;

@@ -276,17 +276,17 @@ CWSHClient::~CWSHClient()
 }
 
 // AbortMacroProcのパラメータ構造体
-typedef struct {
+struct AbortMacroParam {
 	HANDLE hEvent;
 	IActiveScript* pEngine;				// ActiveScript
 	int nCancelTimer;
 	CEditView* view;
-} SAbortMacroParam;
+};
 
 // WSHマクロ実行を中止するスレッド
 static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 {
-	SAbortMacroParam* pParam = (SAbortMacroParam*) lpParameter;
+	AbortMacroParam* pParam = (AbortMacroParam*) lpParameter;
 
 	// 停止ダイアログ表示前に数秒待つ
 	if (::WaitForSingleObject(pParam->hEvent, pParam->nCancelTimer * 1000) == WAIT_TIMEOUT) {
@@ -364,9 +364,9 @@ bool CWSHClient::Execute(const wchar_t* AScript)
 			}
 			if (!bAddNamedItemError) {
 				// マクロ停止スレッドの起動
-				SAbortMacroParam sThreadParam;
+				AbortMacroParam sThreadParam;
 				sThreadParam.pEngine = m_Engine;
-				sThreadParam.nCancelTimer = GetDllShareData().m_Common.m_sMacro.m_nMacroCancelTimer;
+				sThreadParam.nCancelTimer = GetDllShareData().m_common.m_sMacro.m_nMacroCancelTimer;
 				sThreadParam.view = (CEditView*)m_Data;
 
 				HANDLE hThread = NULL;

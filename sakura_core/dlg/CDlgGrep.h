@@ -39,7 +39,7 @@ public:
 	bool		m_bSubFolder;		//!< サブフォルダからも検索する
 	bool		m_bFromThisText;	//!< この編集中のテキストから検索する
 
-	SSearchOption	m_sSearchOption;	//!< 検索オプション
+	SearchOption	m_searchOption;	//!< 検索オプション
 
 	ECodeType	m_nGrepCharSet;				//!< 文字コードセット
 	int			m_nGrepOutputStyle;			//!< Grep: 出力形式
@@ -55,11 +55,11 @@ public:
 	SFilePath	m_szFolder;					//!< 検索フォルダ
 	SFilePath	m_szCurrentFilePath;
 protected:
-	SComboBoxItemDeleter	m_comboDelText;
+	ComboBoxItemDeleter	m_comboDelText;
 	CRecentSearch			m_cRecentSearch;
-	SComboBoxItemDeleter	m_comboDelFile;
+	ComboBoxItemDeleter	m_comboDelFile;
 	CRecentGrepFile			m_cRecentGrepFile;
-	SComboBoxItemDeleter	m_comboDelFolder;
+	ComboBoxItemDeleter	m_comboDelFolder;
 	CRecentGrepFolder		m_cRecentGrepFolder;
 	CFontAutoDeleter		m_cFontText;
 

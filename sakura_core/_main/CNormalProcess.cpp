@@ -7,7 +7,7 @@
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
 	Copyright (C) 2000-2001, genta
-	Copyright (C) 2002, aroka CProcessより分離
+	Copyright (C) 2002, aroka Processより分離
 	Copyright (C) 2002, YAZAKI, Moca, genta
 	Copyright (C) 2003, genta, Moca, MIK
 	Copyright (C) 2004, Moca, naoh
@@ -42,7 +42,7 @@
 
 CNormalProcess::CNormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 	:
-	CProcess(hInstance, lpCmdLine),
+	Process(hInstance, lpCmdLine),
 	m_pcEditApp(NULL)
 {
 }
@@ -63,7 +63,7 @@ CNormalProcess::~CNormalProcess()
 	@author aroka
 	@date 2002/01/07
 
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 	@date 2004.05.13 Moca CEditWnd::Create()に失敗した場合にfalseを返すように．
 	@date 2007.06.26 ryoji グループIDを指定して編集ウィンドウを作成する
 	@date 2012.02.25 novice 複数ファイル読み込み
@@ -79,12 +79,12 @@ bool CNormalProcess::InitializeProcess()
 	}
 
 	// 共有メモリを初期化する
-	if (!CProcess::InitializeProcess()) {
+	if (!Process::InitializeProcess()) {
 		return false;
 	}
 
 	// 言語を選択する
-	CSelectLang::ChangeLang(GetDllShareData().m_Common.m_sWindow.m_szLanguageDll);
+	CSelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
 
 	// コマンドラインオプション
 	bool			bViewMode = false;
@@ -94,7 +94,7 @@ bool CNormalProcess::InitializeProcess()
 	GrepInfo		gi;
 	EditInfo		fi;
 	
-	auto& cmdLine = *CCommandLine::getInstance();
+	auto& cmdLine = *CommandLine::getInstance();
 	// コマンドラインで受け取ったファイルが開かれている場合は
 	// その編集ウィンドウをアクティブにする
 	cmdLine.GetEditInfo(&fi); // 2002/2/8 aroka ここに移動
@@ -110,7 +110,7 @@ bool CNormalProcess::InitializeProcess()
 			// From Here Oct. 19, 2001 genta
 			// カーソル位置が引数に指定されていたら指定位置にジャンプ
 			if (fi.m_ptCursor.y >= 0) {	// 行の指定があるか
-				CLogicPoint& pt = GetDllShareData().m_sWorkBuffer.m_LogicPoint;
+				CLogicPoint& pt = GetDllShareData().m_workBuffer.m_LogicPoint;
 				if (fi.m_ptCursor.x < 0) {
 					// 桁の指定が無い場合
 					::SendMessage(hwndOwner, MYWM_GETCARETPOS, 0, 0);
@@ -144,7 +144,7 @@ bool CNormalProcess::InitializeProcess()
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
-	if (GetDllShareData().m_Common.m_sTabBar.m_bNewWindow && nGroupId == -1) {
+	if (GetDllShareData().m_common.m_sTabBar.m_bNewWindow && nGroupId == -1) {
 		nGroupId = CAppNodeManager::getInstance()->GetFreeGroupId();
 	}
 	// CEditAppを作成
@@ -171,8 +171,8 @@ bool CNormalProcess::InitializeProcess()
 	if (bDebugMode) {
 		// デバッグモニタモードに設定
 		pEditWnd->GetDocument()->SetCurDirNotitle();
-		CAppMode::getInstance()->SetDebugModeON();
-		if (!CAppMode::getInstance()->IsDebugMode()) {
+		AppMode::getInstance()->SetDebugModeON();
+		if (!AppMode::getInstance()->IsDebugMode()) {
 			// デバッグではなくて(無題)
 			CAppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
@@ -213,7 +213,7 @@ bool CNormalProcess::InitializeProcess()
 				gi.bGrepSubFolder,
 				gi.bGrepStdout,
 				gi.bGrepHeader,
-				gi.sGrepSearchOption,
+				gi.grepSearchOption,
 				gi.nGrepCharSet,	// 2002/09/21 Moca
 				gi.nGrepOutputLineType,
 				gi.nGrepOutputStyle,
@@ -246,9 +246,9 @@ bool CNormalProcess::InitializeProcess()
 					cmemGrepFolder.SetString(szCurDir);
 				}
 			}
-			auto& csSearch = GetDllShareData().m_Common.m_sSearch;
+			auto& csSearch = GetDllShareData().m_common.m_sSearch;
 			csSearch.m_bGrepSubFolder = gi.bGrepSubFolder;
-			csSearch.m_sSearchOption = gi.sGrepSearchOption;
+			csSearch.m_searchOption = gi.grepSearchOption;
 			csSearch.m_nGrepCharSet = gi.nGrepCharSet;
 			csSearch.m_nGrepOutputLineType = gi.nGrepOutputLineType;
 			csSearch.m_nGrepOutputStyle = gi.nGrepOutputStyle;
@@ -311,7 +311,7 @@ bool CNormalProcess::InitializeProcess()
 		if (fi.m_szPath[0] != _T('\0')) {
 			// Mar. 9, 2002 genta 文書タイプ指定
 			pEditWnd->OpenDocumentWhenStart(
-				SLoadInfo(
+				LoadInfo(
 					fi.m_szPath,
 					fi.m_nCharCode,
 					bViewMode,
@@ -430,7 +430,7 @@ bool CNormalProcess::InitializeProcess()
 
 	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
 	if (!(bDebugMode || bGrepMode)) {
-		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
+		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
 	}
 
 	// 起動時マクロオプション
@@ -446,7 +446,7 @@ bool CNormalProcess::InitializeProcess()
 	// 複数ファイル読み込み
 	int fileNum = cmdLine.GetFileNum();
 	if (fileNum > 0) {
-		int nDropFileNumMax = GetDllShareData().m_Common.m_sFile.m_nDropFileNumMax - 1;
+		int nDropFileNumMax = GetDllShareData().m_common.m_sFile.m_nDropFileNumMax - 1;
 		// ファイルドロップ数の上限に合わせる
 		if (fileNum > nDropFileNumMax) {
 			fileNum = nDropFileNumMax;
@@ -455,7 +455,7 @@ bool CNormalProcess::InitializeProcess()
 		for (int i=0; i<fileNum; ++i) {
 			// ファイル名差し替え
 			_tcscpy_s(openFileInfo.m_szPath, cmdLine.GetFileName(i));
-			bool ret = CControlTray::OpenNewEditor2(GetProcessInstance(), pEditWnd->GetHwnd(), &openFileInfo, bViewMode);
+			bool ret = ControlTray::OpenNewEditor2(GetProcessInstance(), pEditWnd->GetHwnd(), &openFileInfo, bViewMode);
 			if (!ret) {
 				break;
 			}
@@ -520,7 +520,7 @@ HANDLE CNormalProcess::_GetInitializeMutex() const
 {
 	MY_RUNNINGTIMER(cRunningTimer, "NormalProcess::_GetInitializeMutex");
 	HANDLE hMutex;
-	std::tstring strProfileName = to_tchar(CCommandLine::getInstance()->GetProfileName());
+	std::tstring strProfileName = to_tchar(CommandLine::getInstance()->GetProfileName());
 	std::tstring strMutexInitName = GSTR_MUTEX_SAKURA_INIT;
 	strMutexInitName += strProfileName;
 	hMutex = ::CreateMutex( NULL, TRUE, strMutexInitName.c_str() );

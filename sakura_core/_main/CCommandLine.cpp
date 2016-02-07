@@ -65,7 +65,7 @@
 /*!
 	コマンドラインのチェックを行って、オプション番号と
 	引数がある場合はその先頭アドレスを返す。
-	CCommandLine::ParseCommandLine()で使われる。
+	CommandLine::ParseCommandLine()で使われる。
 
 	@return オプションの番号。どれにも該当しないときは0を返す。
 
@@ -73,7 +73,7 @@
 	@date Apr. 6, 2001
 	@date 2006.10.25 ryoji オプション文字列の大文字小文字を区別しない
 */
-int CCommandLine::CheckCommandLine(
+int CommandLine::CheckCommandLine(
 	LPTSTR	str,		//!< [in] 検証する文字列（先頭の-は含まない）
 	TCHAR** arg,		//!< [out] 引数がある場合はその先頭へのポインタ
 	int*	arglen		//!< [out] 引数の長さ
@@ -188,9 +188,9 @@ int CCommandLine::CheckCommandLine(
 	これが呼び出された時点では共有メモリの初期化が完了していないため，
 	共有メモリにアクセスしてはならない．
 */
-void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
+void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CCommandLine::Parse");
+	MY_RUNNINGTIMER(cRunningTimer, "CommandLine::Parse");
 
 	// May 30, 2000 genta
 	// 実行ファイル名をもとに漢字コードを固定する．
@@ -424,10 +424,10 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 						m_gi.bGrepSubFolder = true;	break;
 					case 'L':
 						// 英大文字と英小文字を区別する
-						m_gi.sGrepSearchOption.bLoHiCase = true;	break;
+						m_gi.grepSearchOption.bLoHiCase = true;	break;
 					case 'R':
 						// 正規表現
-						m_gi.sGrepSearchOption.bRegularExp = true;	break;
+						m_gi.grepSearchOption.bRegularExp = true;	break;
 					case 'K':
 						// 文字コード自動判別
 						// 2002/09/21 Moca 互換性保持のための処理
@@ -440,7 +440,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 						m_gi.nGrepOutputLineType = 2;	break;
 					case 'W':
 						// 単語単位で探す
-						m_gi.sGrepSearchOption.bWordOnly = true;	break;
+						m_gi.grepSearchOption.bWordOnly = true;	break;
 					case '1':
 						// Grep: 出力形式
 						m_gi.nGrepOutputStyle = 1;	break;
@@ -519,7 +519,7 @@ void CCommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 	
 	@date 2005-08-24 D.S.Koba ParseCommandLine()変更によりメンバ変数に初期値代入
 */
-CCommandLine::CCommandLine()
+CommandLine::CommandLine()
 {
 	m_bGrepMode				= false;
 	m_bGrepDlg				= false;
@@ -529,7 +529,7 @@ CCommandLine::CCommandLine()
 	m_bProfileMgr			= false;
 	m_bSetProfile			= false;
 	m_gi.bGrepSubFolder		= false;
-	m_gi.sGrepSearchOption.Reset();
+	m_gi.grepSearchOption.Reset();
 	/*
 	m_gi.sGrepSearchOption.bLoHiCase	= false;
 	m_gi.bGrepRegularExp	= false;

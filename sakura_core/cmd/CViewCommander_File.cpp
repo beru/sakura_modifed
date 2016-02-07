@@ -63,12 +63,12 @@
 void CViewCommander::Command_FILENEW(void)
 {
 	// 新たな編集ウィンドウを起動
-	SLoadInfo sLoadInfo;
+	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_NONE;
 	sLoadInfo.bViewMode = false;
 	std::tstring curDir = CSakuraEnvironment::GetDlgInitialDir();
-	CControlTray::OpenNewEditor(
+	ControlTray::OpenNewEditor(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 		sLoadInfo,
@@ -85,12 +85,12 @@ void CViewCommander::Command_FILENEW(void)
 void CViewCommander::Command_FILENEW_NEWWINDOW(void)
 {
 	// 新たな編集ウィンドウを起動
-	SLoadInfo sLoadInfo;
+	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = _T("");
 	sLoadInfo.eCharCode = CODE_DEFAULT;
 	sLoadInfo.bViewMode = false;
 	std::tstring curDir = CSakuraEnvironment::GetDlgInitialDir();
-	CControlTray::OpenNewEditor(
+	ControlTray::OpenNewEditor(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 		sLoadInfo,
@@ -119,7 +119,7 @@ void CViewCommander::Command_FILEOPEN(
 		nCharCode = CODE_AUTODETECT;
 	}
 	// ロード情報
-	SLoadInfo sLoadInfo(filename ? to_tchar(filename) : _T(""), nCharCode, bViewMode);
+	LoadInfo sLoadInfo(filename ? to_tchar(filename) : _T(""), nCharCode, bViewMode);
 	std::vector<std::tstring> files;
 	std::tstring defName = (defaultName ? to_tchar(defaultName) : _T(""));
 
@@ -154,9 +154,9 @@ void CViewCommander::Command_FILEOPEN(
 		// 他のファイルは新規ウィンドウ
 		int nSize = (int)files.size();
 		for (int i=1; i<nSize; ++i) {
-			SLoadInfo sFilesLoadInfo = sLoadInfo;
+			LoadInfo sFilesLoadInfo = sLoadInfo;
 			sFilesLoadInfo.cFilePath = files[i].c_str();
-			CControlTray::OpenNewEditor(
+			ControlTray::OpenNewEditor(
 				G_AppInstance(),
 				CEditWnd::getInstance()->GetHwnd(),
 				sFilesLoadInfo,
@@ -194,7 +194,7 @@ bool CViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	}
 
 	// セーブ情報
-	SSaveInfo sSaveInfo;
+	SaveInfo sSaveInfo;
 	pcDoc->GetSaveInfo(&sSaveInfo);
 	sSaveInfo.cEol = EOL_NONE; // 改行コード無変換
 	sSaveInfo.bOverwriteMode = true; // 上書き要求
@@ -270,7 +270,7 @@ void CViewCommander::Command_FILECLOSE_OPEN(
 	bool bViewMode
 	)
 {
-	GetDocument()->m_cDocFileOperation.FileCloseOpen(SLoadInfo(to_tchar(filename), nCharCode, bViewMode));
+	GetDocument()->m_cDocFileOperation.FileCloseOpen(LoadInfo(to_tchar(filename), nCharCode, bViewMode));
 
 	// プラグイン：DocumentOpenイベント実行
 	CPlug::Array plugs;
@@ -514,12 +514,12 @@ void CViewCommander::Command_BROWSE(void)
 void CViewCommander::Command_VIEWMODE(void)
 {
 	// ビューモードを反転
-	CAppMode::getInstance()->SetViewMode(!CAppMode::getInstance()->IsViewMode());
+	AppMode::getInstance()->SetViewMode(!AppMode::getInstance()->IsViewMode());
 
 	// 排他制御の切り替え
 	// ※ビューモード ON 時は排他制御 OFF、ビューモード OFF 時は排他制御 ON の仕様（>>data:5262）を即時反映する
 	GetDocument()->m_cDocFileOperation.DoFileUnlock();	// ファイルの排他ロック解除
-	GetDocument()->m_cDocLocker.CheckWritable(!CAppMode::getInstance()->IsViewMode());	// ファイル書込可能のチェック
+	GetDocument()->m_cDocLocker.CheckWritable(!AppMode::getInstance()->IsViewMode());	// ファイル書込可能のチェック
 	if (GetDocument()->m_cDocLocker.IsDocWritable()) {
 		GetDocument()->m_cDocFileOperation.DoFileLock();	// ファイルの排他ロック
 	}
@@ -561,11 +561,11 @@ void CViewCommander::Command_PROFILEMGR( void )
 	if (profMgr.DoModal( G_AppInstance(), m_pCommanderView->GetHwnd(), 0 )) {
 		TCHAR szOpt[MAX_PATH+10];
 		auto_sprintf( szOpt, _T("-PROF=\"%ts\""), profMgr.m_strProfileName.c_str() );
-		SLoadInfo sLoadInfo;
+		LoadInfo sLoadInfo;
 		sLoadInfo.cFilePath = _T("");
 		sLoadInfo.eCharCode = CODE_DEFAULT;
 		sLoadInfo.bViewMode = false;
-		CControlTray::OpenNewEditor(
+		ControlTray::OpenNewEditor(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
 			sLoadInfo,
@@ -580,7 +580,7 @@ void CViewCommander::Command_PROFILEMGR( void )
 // 編集の全終了	// 2007.02.13 ryoji 追加
 void CViewCommander::Command_EXITALLEDITORS(void)
 {
-	CControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, 0);
+	ControlTray::CloseAllEditor(TRUE, GetMainWindow(), TRUE, 0);
 	return;
 }
 
@@ -588,7 +588,7 @@ void CViewCommander::Command_EXITALLEDITORS(void)
 // サクラエディタの全終了	// Dec. 27, 2000 JEPRO 追加
 void CViewCommander::Command_EXITALL(void)
 {
-	CControlTray::TerminateApplication(GetMainWindow());	// 2006.12.25 ryoji 引数追加
+	ControlTray::TerminateApplication(GetMainWindow());	// 2006.12.25 ryoji 引数追加
 	return;
 }
 
@@ -693,7 +693,7 @@ bool CViewCommander::Command_PUTFILE(
 		// 一時ファイル出力
 		EConvertResult eRet = CWriteManager().WriteFile_From_CDocLineMgr(
 			GetDocument()->m_cDocLineMgr,
-			SSaveInfo(
+			SaveInfo(
 				to_tchar(filename),
 				nSaveCharCode,
 				EOL_NONE,

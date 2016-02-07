@@ -128,7 +128,7 @@ bool CImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 		hInstance,
 		hwndParent,
 		GetDefaultExtension(),
-		GetDllShareData().m_sHistory.m_szIMPORTFOLDER // インポート用フォルダ
+		GetDllShareData().m_history.m_szIMPORTFOLDER // インポート用フォルダ
 	);
 	TCHAR szPath[_MAX_PATH + 1];
 	szPath[0] = _T('\0');
@@ -175,7 +175,7 @@ bool CImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
 		hInstance,
 		hwndParent,
 		GetDefaultExtension(),
-		GetDllShareData().m_sHistory.m_szIMPORTFOLDER // インポート用フォルダ
+		GetDllShareData().m_history.m_szIMPORTFOLDER // インポート用フォルダ
 	);
 	TCHAR szPath[_MAX_PATH + 1];
 	szPath[0] = _T('\0');
@@ -264,10 +264,10 @@ bool CImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const ws
 	}
 
 	// 確認＆色指定
-	CDlgTypeAscertain::SAscertainInfo sAscertainInfo;
+	CDlgTypeAscertain::AscertainInfo sAscertainInfo;
 	CDlgTypeAscertain cDlgTypeAscertain;
 	wchar_t wszLabel[1024];
-	STypeConfig TmpType;
+	TypeConfig TmpType;
 
 	// パラメータの設定
 	sAscertainInfo.sImportFile = sPath;
@@ -309,7 +309,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 		}
 	}else if (m_nColorType >= 0) {
 		// 色指定(内部)
-		STypeConfig type;
+		TypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(m_nColorType), type);
 		memcpy(&colorInfoArr, type.m_ColorInfoArr, sizeof(colorInfoArr));
 	}
@@ -347,7 +347,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	wchar_t	szFileName[_MAX_PATH + 1];
 	bool	bCase;
 	wstring	sErrMag;
-	CommonSetting& common = m_pShareData->m_Common;
+	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
 	CKeyWordSetMgr&	cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
@@ -449,7 +449,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	wchar_t	szFileName[_MAX_PATH + 1];
 	wstring	files = L"";
 	wstring	sTmpMsg;
-	CommonSetting& common = m_pShareData->m_Common;
+	CommonSetting& common = m_pShareData->m_common;
 
 	// 強調キーワード
 	auto& cKeyWordSetMgr = common.m_sSpecialKeyword.m_CKeyWordSetMgr;
@@ -513,10 +513,10 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 	int nStructureVersion;
 	wchar_t	wbuff[_MAX_PATH + 1];
 	auto_sprintf_s(wbuff, L"%d.%d.%d.%d", 
-				HIWORD(pShare->m_sVersion.m_dwProductVersionMS),
-				LOWORD(pShare->m_sVersion.m_dwProductVersionMS),
-				HIWORD(pShare->m_sVersion.m_dwProductVersionLS),
-				LOWORD(pShare->m_sVersion.m_dwProductVersionLS));
+				HIWORD(pShare->m_version.m_dwProductVersionMS),
+				LOWORD(pShare->m_version.m_dwProductVersionMS),
+				HIWORD(pShare->m_version.m_dwProductVersionLS),
+				LOWORD(pShare->m_version.m_dwProductVersionLS));
 	cProfile.IOProfileData(szSecInfo, szKeyVersion, MakeStringBufferW(wbuff));
 	nStructureVersion = int(pShare->m_vStructureVersion);
 	cProfile.IOProfileData(szSecInfo, szKeyStructureVersion, nStructureVersion);
@@ -974,7 +974,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	int nKeyNameArrUsed = m_Common.m_sKeyBind.m_nKeyNameArrNum; // 使用済み領域
 	for (int j=sKeyBind.m_nKeyNameArrNum-1; j>=0; --j) {
 		if ((bVer2 || bVer3) && sKeyBind.m_pKeyNameArr[j].m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
-			for (int im=0; im<MOUSEFUNCTION_KEYBEGIN; ++im) {
+			for (int im=0; im<(int)eMouseFunction::KeyBegin; ++im) {
 				if (_tcscmp(sKeyBind.m_pKeyNameArr[j].m_szKeyName, m_Common.m_sKeyBind.m_pKeyNameArr[im].m_szKeyName) == 0) {
 					m_Common.m_sKeyBind.m_pKeyNameArr[im] = sKeyBind.m_pKeyNameArr[j];
 				}
@@ -1308,7 +1308,7 @@ bool CImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 	return true;
 }
 
-void CImpExpFileTree::IO_FileTreeIni( CDataProfile& cProfile, std::vector<SFileTreeItem>& data )
+void CImpExpFileTree::IO_FileTreeIni( CDataProfile& cProfile, std::vector<FileTreeItem>& data )
 {
 	const WCHAR* pszSecName = L"FileTree";
 	int nItemCount = (int)data.size();

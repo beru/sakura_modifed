@@ -602,7 +602,7 @@ bool InitRegexp(
 	// From Here 2007.08.12 genta
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
-	LPCTSTR RegexpDll = pShareData->m_Common.m_sSearch.m_szRegexpLib;
+	LPCTSTR RegexpDll = pShareData->m_common.m_sSearch.m_szRegexpLib;
 	// To Here 2007.08.12 genta
 
 	EDllResult eDllResult = rRegexp.InitDll(RegexpDll);

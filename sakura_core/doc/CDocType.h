@@ -47,10 +47,10 @@ public:
 	CTypeConfig GetDocumentType() const {					// •¶‘í•Ê‚Ìæ“¾
 		return m_nSettingType;
 	}
-	const STypeConfig& GetDocumentAttribute() const {		// •¶‘í•Ê‚ÌÚ×î•ñ
+	const TypeConfig& GetDocumentAttribute() const {		// •¶‘í•Ê‚ÌÚ×î•ñ
 		return m_typeConfig;
 	}
-	STypeConfig& GetDocumentAttributeWrite() {				// •¶‘í•Ê‚ÌÚ×î•ñ
+	TypeConfig& GetDocumentAttributeWrite() {				// •¶‘í•Ê‚ÌÚ×î•ñ
 		return m_typeConfig;
 	}
 
@@ -60,7 +60,7 @@ public:
 private:
 	CEditDoc*		m_pcDocRef;
 	CTypeConfig		m_nSettingType;
-	STypeConfig		m_typeConfig;
+	TypeConfig		m_typeConfig;
 	bool			m_nSettingTypeLocked;		// •¶‘í•Ê‚Ìˆêİ’èó‘Ô
 };
 

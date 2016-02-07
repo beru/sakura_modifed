@@ -262,12 +262,12 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	if (!pCEditWnd
 		|| (
 			pCEditWnd->m_cFuncKeyWnd.GetHwnd()
-	 		&& m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
+	 		&& m_pShareData->m_common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
 	 	)
 	) {
 		bSizeBox = false;
 	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
 	) {
 		bSizeBox = false;
 	}else {
@@ -824,12 +824,12 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (!pCEditWnd
 	 	|| (
 	 		pCEditWnd->m_cFuncKeyWnd.GetHwnd()
-	  		&& m_pShareData->m_Common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
+	  		&& m_pShareData->m_common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
 	 	)
 	) {
 		bSizeBox = false;
 	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_Common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
 	) {
 		bSizeBox = false;
 	}else {

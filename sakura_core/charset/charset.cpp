@@ -39,7 +39,7 @@
 #include <vector>
 #include <map>
 
-struct SCodeSet {
+struct CodeSet {
 	ECodeType		m_eCodeSet;
 	const WCHAR*	m_sNormal;
 	const WCHAR*	m_sShort;
@@ -50,7 +50,7 @@ struct SCodeSet {
 };
 
 // 文字コードセット(初期データ)
-static	SCodeSet	ASCodeSet[] = {
+static CodeSet ASCodeSet[] = {
 	{ CODE_AUTODETECT,	L"Auto",	L"Auto",	L"自動選択",	false,	false,	false },	// 文字コード自動判別	// mapには入れない
 	{ CODE_SJIS,		L"SJIS",	L"SJIS",	L"SJIS",		false,	false,	true  },	// SJIS				(MS-CP932(Windows-31J), シフトJIS(Shift_JIS))
 	{ CODE_JIS,			L"JIS",		L"JIS",		L"JIS",			false,	false,	false },	// JIS				(MS-CP5022x(ISO-2022-JP-MS))
@@ -64,7 +64,7 @@ static	SCodeSet	ASCodeSet[] = {
 };
 
 // 文字コードセット
-typedef	std::map<int, SCodeSet>	MSCodeSet;
+typedef	std::map<int, CodeSet>	MSCodeSet;
 static MSCodeSet				msCodeSet;
 // 表示順
 static std::vector<ECodeType>	vDispIdx;

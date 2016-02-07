@@ -316,7 +316,7 @@ bool CViewCommander::Command_TAGJUMP(bool bClose)
 		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			// skip space
-			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)); ++p)
+			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)); ++p)
 				;
 			if (p >= p_end)
 				break;
@@ -374,7 +374,7 @@ void CViewCommander::Command_TAGJUMPBACK(void)
 	ActivateFrameWindow(tagJump.hwndReferer);
 
 	// カーソルを移動させる
-	memcpy_raw(GetDllShareData().m_sWorkBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof(tagJump.point));
+	memcpy_raw(GetDllShareData().m_workBuffer.GetWorkBuffer<void>(), &(tagJump.point), sizeof(tagJump.point));
 	::SendMessage(tagJump.hwndReferer, MYWM_SETCARETPOS, 0, 0);
 
 	return;
@@ -704,7 +704,7 @@ bool CViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int coun
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
 			CEditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
-		    || CAppMode::getInstance()->IsDebugMode()
+		    || AppMode::getInstance()->IsDebugMode()
 		) {
 		    return false;
 		}

@@ -28,7 +28,7 @@
 
 // 設定ファイル
 // Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
-void CType_Ini::InitTypeConfigImp(STypeConfig* pType)
+void CType_Ini::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("設定ファイル"));

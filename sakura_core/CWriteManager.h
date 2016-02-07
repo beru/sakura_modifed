@@ -27,7 +27,7 @@
 #include "charset/CCodeBase.h"
 
 class CDocLineMgr;
-struct SSaveInfo;
+struct SaveInfo;
 
 class CWriteManager : public CProgressSubject {
 public:
@@ -35,7 +35,7 @@ public:
 	//	Jul. 26, 2003 ryoji BOMà¯êîí«â¡
 	EConvertResult WriteFile_From_CDocLineMgr(
 		const CDocLineMgr&	pcDocLineMgr,	// [in]
-		const SSaveInfo&	sSaveInfo		// [in]
+		const SaveInfo&	sSaveInfo		// [in]
 	);
 };
 

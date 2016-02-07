@@ -26,7 +26,7 @@
 #include "types/CType.h"
 
 // awk
-void CType_Awk::InitTypeConfigImp(STypeConfig* pType)
+void CType_Awk::InitTypeConfigImp(TypeConfig* pType)
 {
 	// –¼‘O‚ÆŠg’£Žq
 	_tcscpy(pType->m_szTypeName, _T("AWK"));

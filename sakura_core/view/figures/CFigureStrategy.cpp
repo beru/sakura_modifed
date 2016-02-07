@@ -23,14 +23,14 @@
 */
 
 #include "StdAfx.h"
-#include "view/CEditView.h" // SColorStrategyInfo
+#include "view/CEditView.h" // ColorStrategyInfo
 #include "view/CViewFont.h"
 #include "CFigureStrategy.h"
 #include "doc/layout/CLayout.h"
 #include "charset/charcode.h"
 #include "types/CTypeSupport.h"
 
-bool CFigure_Text::DrawImp(SColorStrategyInfo* pInfo)
+bool CFigure_Text::DrawImp(ColorStrategyInfo* pInfo)
 {
 	int nIdx = pInfo->GetPosInLogic();
 	int nLength = CNativeW::GetSizeOfChar(	// サロゲートペア対策	2008.10.12 ryoji
@@ -58,7 +58,7 @@ bool CFigure_Text::DrawImp(SColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      CFigureSpace                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-bool CFigureSpace::DrawImp(SColorStrategyInfo* pInfo)
+bool CFigureSpace::DrawImp(ColorStrategyInfo* pInfo)
 {
 	bool bTrans = DrawImp_StyleSelect(pInfo);
 	DispPos sPos(*pInfo->m_pDispPos);	// 現在位置を覚えておく
@@ -74,7 +74,7 @@ bool CFigureSpace::DrawImp(SColorStrategyInfo* pInfo)
 	return true;
 }
 
-bool CFigureSpace::DrawImp_StyleSelect(SColorStrategyInfo* pInfo)
+bool CFigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 {
 	// この DrawImp はここ（基本クラス）でデフォルト動作を実装しているが
 	// 仮想関数なので派生クラス側のオーバーライドで個別に仕様変更可能
@@ -124,7 +124,7 @@ bool CFigureSpace::DrawImp_StyleSelect(SColorStrategyInfo* pInfo)
 	pInfo->m_gr.PushTextForeColor(crText);
 	pInfo->m_gr.PushTextBackColor(crBack);
 	// Figureが下線指定ならこちらで下線を指定。元の色のほうが下線指定なら、DrawImp_DrawUnderlineで下線だけ指定
-	SFONT sFont;
+	Font sFont;
 	sFont.m_sFontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || bBold;
 	sFont.m_sFontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
 	sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
@@ -133,14 +133,14 @@ bool CFigureSpace::DrawImp_StyleSelect(SColorStrategyInfo* pInfo)
 	return bTrans;
 }
 
-void CFigureSpace::DrawImp_StylePop(SColorStrategyInfo* pInfo)
+void CFigureSpace::DrawImp_StylePop(ColorStrategyInfo* pInfo)
 {
 	pInfo->m_gr.PopTextForeColor();
 	pInfo->m_gr.PopTextBackColor();
 	pInfo->m_gr.PopMyFont();
 }
 
-void CFigureSpace::DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos& sPos)
+void CFigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
 {
 	CEditView* pcView = pInfo->m_pcView;
 
@@ -152,7 +152,7 @@ void CFigureSpace::DrawImp_DrawUnderline(SColorStrategyInfo* pInfo, DispPos& sPo
 
 	if (!cSpaceType.HasUnderLine() && colorStyle.HasUnderLine()) {
 		// 下線を周辺の前景色で描画する
-		SFONT sFont;
+		Font sFont;
 		sFont.m_sFontAttr.m_bBoldFont = false;
 		sFont.m_sFontAttr.m_bUnderLine = true;
 		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);

@@ -325,9 +325,9 @@ void CViewCommander::Command_CUT_LINE(void)
 
 	// 2007.10.04 ryoji 処理簡素化
 	m_pCommanderView->CopyCurLine(
-		GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy,
+		GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy,
 		EOL_UNKNOWN,
-		GetDllShareData().m_Common.m_sEdit.m_bEnableLineModePaste
+		GetDllShareData().m_common.m_sEdit.m_bEnableLineModePaste
 	);
 	Command_DELETE_LINE();
 	return;
@@ -363,7 +363,7 @@ void CViewCommander::Command_DELETE_LINE(void)
 		// 2003-04-30 かろと
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
-		if (!GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode) {
+		if (!GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode) {
 			CLogicInt nIndex;
 
 			CLayoutInt tmp;

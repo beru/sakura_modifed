@@ -84,7 +84,7 @@ void CRuler::DrawRulerCaret(CGraphics& gr)
 void CRuler::DrawRulerBg(CGraphics& gr)
 {
 	// 必要なインターフェース
-	CommonSetting* pCommon = &GetDllShareData().m_Common;
+	CommonSetting* pCommon = &GetDllShareData().m_common;
 
 	// サポート
 	CTypeSupport cRulerType(m_pEditView, COLORIDX_RULER);

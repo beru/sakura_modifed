@@ -89,9 +89,9 @@ void CViewCommander::Command_INDENT(
 		bool operator()(const wchar_t ch) const
 		{ return ch == WCODE::SPACE || ch == WCODE::TAB; }
 	} IsIndentChar;
-	struct SSoftTabData {
-		SSoftTabData(CLayoutInt nTab) : m_szTab(NULL), m_nTab((Int)nTab) {}
-		~SSoftTabData() { delete []m_szTab; }
+	struct SoftTabData {
+		SoftTabData(CLayoutInt nTab) : m_szTab(NULL), m_nTab((Int)nTab) {}
+		~SoftTabData() { delete []m_szTab; }
 		operator const wchar_t* ()
 		{
 			if (!m_szTab) {
@@ -595,7 +595,7 @@ void CViewCommander::Command_TRIM(
 
 // from CViewCommander_New.cpp
 // 物理行のソートに使う構造体
-struct SORTDATA {
+struct SortData {
 	const CNativeW* pCmemLine;
 	CStringRef sKey;
 };
@@ -615,10 +615,10 @@ int CNativeW_comp(
 }
 
 // 物理行のソートに使う関数(昇順)
-bool SortByLineAsc (SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) < 0;}
+bool SortByLineAsc (SortData* pst1, SortData* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) < 0;}
 
 // 物理行のソートに使う関数(降順)
-bool SortByLineDesc(SORTDATA* pst1, SORTDATA* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) > 0;}
+bool SortByLineDesc(SortData* pst1, SortData* pst2) {return CNativeW_comp(*pst1->pCmemLine, *pst2->pCmemLine) > 0;}
 
 inline
 int CStringRef_comp(
@@ -638,10 +638,10 @@ int CStringRef_comp(
 }
 
 // 物理行のソートに使う関数(昇順)
-bool SortByKeyAsc(SORTDATA* pst1, SORTDATA* pst2)  {return CStringRef_comp(pst1->sKey, pst2->sKey) < 0 ;}
+bool SortByKeyAsc(SortData* pst1, SortData* pst2)  {return CStringRef_comp(pst1->sKey, pst2->sKey) < 0 ;}
 
 // 物理行のソートに使う関数(降順)
-bool SortByKeyDesc(SORTDATA* pst1, SORTDATA* pst2) {return CStringRef_comp(pst1->sKey, pst2->sKey) > 0 ;}
+bool SortByKeyDesc(SortData* pst1, SortData* pst2) {return CStringRef_comp(pst1->sKey, pst2->sKey) > 0 ;}
 
 /*!	@brief 物理行のソート
 
@@ -665,7 +665,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	CLayoutInt	nCaretPosYOLD;
 	bool		bBeginBoxSelectOld;
 	CLogicInt	nLineLen;
-	std::vector<SORTDATA*> sta;
+	std::vector<SortData*> sta;
 
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
@@ -723,7 +723,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		if (!pLine) {
 			continue;
 		}
-		SORTDATA* pst = new SORTDATA;
+		SortData* pst = new SortData;
 		if (bBeginBoxSelectOld) {
 			nColumnFrom = m_pCommanderView->LineColumnToIndex(pcDocLine, nCF);
 			nColumnTo   = m_pCommanderView->LineColumnToIndex(pcDocLine, nCT);
@@ -745,7 +745,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		pStrLast = sta[sta.size() - 1]->pCmemLine->GetStringPtr();
 		int nlen = sta[sta.size() - 1]->pCmemLine->GetStringLength();
 		if (0 < nlen) {
-			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)) {
+			if (WCODE::IsLineDelimiter(pStrLast[nlen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
 				pStrLast = NULL;
 			}
 		}
@@ -774,7 +774,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		// 最終行の改行を削除
 		CLineData& lastData = repData[repData.size() - 1];
 		int nLen = lastData.cmemLine.GetStringLength();
-		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		while (0 <nLen && WCODE::IsLineDelimiter(lastData.cmemLine[nLen-1], bExtEol)) {
 			--nLen;
 		}
@@ -782,7 +782,7 @@ void CViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	}
 	// 2010.08.22 Moca swapで削除
 	{
-		std::vector<SORTDATA*> temp;
+		std::vector<SortData*> temp;
 		temp.swap(sta);
 	}
 

@@ -134,7 +134,7 @@ void CViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 			// ファイルの最後に移動
 			Command_GOFILEEND(false);
 		}else {
-			if (!GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect) {
+			if (!GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
 				const CLayout*	pcLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pcLayout) {

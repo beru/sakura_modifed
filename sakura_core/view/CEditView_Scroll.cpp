@@ -63,7 +63,7 @@ BOOL CEditView::CreateScrollBar()
 
 	// スクロールバーの作成
 	m_hwndHScrollBar = NULL;
-	if (GetDllShareData().m_Common.m_sWindow.m_bScrollBarHorz) {	// 水平スクロールバーを使う
+	if (GetDllShareData().m_common.m_sWindow.m_bScrollBarHorz) {	// 水平スクロールバーを使う
 		m_hwndHScrollBar = ::CreateWindowEx(
 			0L,									// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
@@ -90,7 +90,7 @@ BOOL CEditView::CreateScrollBar()
 	}
 
 	// サイズボックス
-	if (GetDllShareData().m_Common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
+	if (GetDllShareData().m_common.m_sWindow.m_nFUNCKEYWND_Place == 0) {	// ファンクションキー表示位置／0:上 1:下
 		m_hwndSizeBox = ::CreateWindowEx(
 			WS_EX_CONTROLPARENT/*0L*/, 			// no extended styles
 			_T("SCROLLBAR"),					// scroll bar control class
@@ -177,13 +177,13 @@ CLayoutInt CEditView::OnVScroll(int nScrollCode, int nPos)
 //		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() + 1);
 //		}
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() + GetDllShareData().m_common.m_sGeneral.m_nRepeatedScrollLineNum);
 		break;
 	case SB_LINEUP:
 //		for (i=0; i<4; ++i) {
 //			ScrollAtV(GetTextArea().GetViewTopLine() - 1);
 //		}
-		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().m_Common.m_sGeneral.m_nRepeatedScrollLineNum);
+		nScrollVal = ScrollAtV(GetTextArea().GetViewTopLine() - GetDllShareData().m_common.m_sGeneral.m_nRepeatedScrollLineNum);
 		break;
 	case SB_PAGEDOWN:
 		nScrollVal = ScrollAtV(GetTextArea().GetBottomLine());
@@ -678,7 +678,7 @@ void CEditView::MiniMapRedraw(bool bUpdateAll)
 */
 void CEditView::SyncScrollV(CLayoutInt line)
 {
-	if (GetDllShareData().m_Common.m_sWindow.m_bSplitterWndVScroll && line != 0 
+	if (GetDllShareData().m_common.m_sWindow.m_bSplitterWndVScroll && line != 0 
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x01) 
 		&& 0 <= m_nMyIndex
 	) {
@@ -706,7 +706,7 @@ void CEditView::SyncScrollV(CLayoutInt line)
 */
 void CEditView::SyncScrollH(CLayoutInt col)
 {
-	if (GetDllShareData().m_Common.m_sWindow.m_bSplitterWndHScroll && col != 0
+	if (GetDllShareData().m_common.m_sWindow.m_bSplitterWndHScroll && col != 0
 		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
@@ -784,7 +784,7 @@ CLayoutInt CEditView::GetRightEdgeForScrollBar(void)
 	// 折り返し桁以後のぶら下げ余白計算
 	CLayoutInt nWidth = m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
-	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_NO_TEXT_WRAP) {
+	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
 		CLayoutInt nRightEdge = m_pcEditDoc->m_cLayoutMgr.GetMaxTextWidth();	// テキストの最大幅
 
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側
@@ -801,7 +801,7 @@ CLayoutInt CEditView::GetRightEdgeForScrollBar(void)
 		}
 
 		// フリーカーソルモード かつ キャレット位置がテキストの幅より右側
-		if (GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
+		if (GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode && nRightEdge < GetCaret().GetCaretLayoutPos().GetX2())
 			nRightEdge = GetCaret().GetCaretLayoutPos().GetX2();
 
 		// 右マージン分（3桁）を考慮しつつnWidthを超えないようにする

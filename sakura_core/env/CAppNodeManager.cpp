@@ -107,11 +107,11 @@ EditNode* CAppNodeGroupHandle::GetEditNodeAt(int nIndex)
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
 	int iIndex = 0;
-	for (int i = 0; i < pShare->m_sNodes.m_nEditArrNum; ++i) {
-		if (m_nGroup == 0 || m_nGroup == pShare->m_sNodes.m_pEditArr[i].m_nGroup) {
-			if (IsSakuraMainWindow(pShare->m_sNodes.m_pEditArr[i].m_hWnd)) {
+	for (int i = 0; i < pShare->m_nodes.m_nEditArrNum; ++i) {
+		if (m_nGroup == 0 || m_nGroup == pShare->m_nodes.m_pEditArr[i].m_nGroup) {
+			if (IsSakuraMainWindow(pShare->m_nodes.m_pEditArr[i].m_hWnd)) {
 				if (iIndex == nIndex)
-					return &pShare->m_sNodes.m_pEditArr[i];
+					return &pShare->m_nodes.m_pEditArr[i];
 				++iIndex;
 			}
 		}
@@ -132,7 +132,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	int nSubCommand = TWNT_ADD;
+	eTabWndNotifyType subCommand = eTabWndNotifyType::Add;
 	EditNode sMyEditNode = {0};
 	sMyEditNode.m_hWnd = hWnd;
 
@@ -149,7 +149,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 				cRecentEditNode.Terminate();
 				return FALSE;
 			}
-			nSubCommand = TWNT_ORDER;
+			subCommand = eTabWndNotifyType::Reorder;
 
 			// 以前の情報をコピーする。
 			EditNode* p = cRecentEditNode.GetItem(nIndex);
@@ -160,24 +160,24 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 
 		// ウィンドウ連番
 		if (::GetWindowLongPtr(hWnd, sizeof(LONG_PTR)) == 0) {
-			pShare->m_sNodes.m_nSequences++;
-			::SetWindowLongPtr(hWnd, sizeof(LONG_PTR) , (LONG_PTR)pShare->m_sNodes.m_nSequences);
+			pShare->m_nodes.m_nSequences++;
+			::SetWindowLongPtr(hWnd, sizeof(LONG_PTR) , (LONG_PTR)pShare->m_nodes.m_nSequences);
 
 			// 連番を更新する。
-			sMyEditNode.m_nIndex = pShare->m_sNodes.m_nSequences;
+			sMyEditNode.m_nIndex = pShare->m_nodes.m_nSequences;
 			sMyEditNode.m_nId = -1;
 
 			// タブグループ連番
 			if (m_nGroup > 0) {
 				sMyEditNode.m_nGroup = m_nGroup;	// 指定のグループ
-				if (pShare->m_sNodes.m_nGroupSequences < m_nGroup) {
+				if (pShare->m_nodes.m_nGroupSequences < m_nGroup) {
 					// 指定グループが現在のGroup Sequencesを超えていた場合の補正
-					pShare->m_sNodes.m_nGroupSequences = m_nGroup;
+					pShare->m_nodes.m_nGroupSequences = m_nGroup;
 				}
 			}else {
 				EditNode* p = cRecentEditNode.GetItem(0);
 				if (!p) {
-					sMyEditNode.m_nGroup = ++pShare->m_sNodes.m_nGroupSequences;	// 新規グループ
+					sMyEditNode.m_nGroup = ++pShare->m_nodes.m_nGroupSequences;	// 新規グループ
 				}else {
 					sMyEditNode.m_nGroup = p->m_nGroup;	// 最近アクティブのグループ
 				}
@@ -193,7 +193,7 @@ BOOL CAppNodeGroupHandle::AddEditWndList(HWND hWnd)
 	}	// 2007.07.07 genta Lock領域終わり
 
 	// ウィンドウ登録メッセージをブロードキャストする。
-	CAppNodeGroupHandle(hWnd).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)nSubCommand, (LPARAM)hWnd, hWnd);
+	CAppNodeGroupHandle(hWnd).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)subCommand, (LPARAM)hWnd, hWnd);
 
 	return TRUE;
 }
@@ -216,7 +216,7 @@ void CAppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	}
 
 	// ウィンドウ削除メッセージをブロードキャストする。
-	CAppNodeGroupHandle(m_nGroup).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)TWNT_DEL, (LPARAM)hWnd, hWnd);
+	CAppNodeGroupHandle(m_nGroup).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)eTabWndNotifyType::Delete, (LPARAM)hWnd, hWnd);
 }
 
 /** いくつかのウィンドウへ終了要求を出す
@@ -253,7 +253,7 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, boo
 		}
 	}
 
-	if (bCheckConfirm && GetDllShareData().m_Common.m_sGeneral.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
+	if (bCheckConfirm && GetDllShareData().m_common.m_sGeneral.m_bCloseAllConfirm) {	// [すべて閉じる]で他に編集用のウィンドウがあれば確認する
 		if (1 < nCloseCount) {
 			if (IDYES != ::MYMESSAGEBOX(
 				hWndFrom,
@@ -271,11 +271,11 @@ BOOL CAppNodeGroupHandle::RequestCloseEditor(EditNode* pWndArr, int nArrCnt, boo
 	// ・閉じられるエディタが保存確認のメッセージを表示する場合は、この制御ウィンドウにアクティブ化要求（MYWM_ALLOWACTIVATE）を出してアクティブにしてもらう
 	// ・タブグループ表示かどうかなどの条件に応じて、ちらつきを最小限にするのに都合の良いウィンドウをここで選択しておく
 	HWND hWndActive;
-	bool bTabGroup = (GetDllShareData().m_Common.m_sTabBar.m_bDispTabWnd && !GetDllShareData().m_Common.m_sTabBar.m_bDispTabWndMultiWin);
+	bool bTabGroup = (GetDllShareData().m_common.m_sTabBar.m_bDispTabWnd && !GetDllShareData().m_common.m_sTabBar.m_bDispTabWndMultiWin);
 	if (bTabGroup) {
 		hWndActive = hWndLast;	// 最後に閉じるウィンドウが担当
 	}else {
-		hWndActive = GetDllShareData().m_sHandles.m_hwndTray;	// タスクトレイが担当
+		hWndActive = GetDllShareData().m_handles.m_hwndTray;	// タスクトレイが担当
 	}
 
 	// アクティブ化制御ウィンドウをアクティブにしておく
@@ -337,8 +337,8 @@ int CAppNodeGroupHandle::GetEditorWindowsNum(bool bExcludeClosing/* = true */)
 	DLLSHAREDATA* pShare = &GetDllShareData();
 	int cnt = 0;
 	auto appNodeMgr = CAppNodeManager::getInstance();
-	for (int i=0; i<pShare->m_sNodes.m_nEditArrNum; ++i) {
-		auto& node = pShare->m_sNodes.m_pEditArr[i];
+	for (int i=0; i<pShare->m_nodes.m_nEditArrNum; ++i) {
+		auto& node = pShare->m_nodes.m_pEditArr[i];
 		if (IsSakuraMainWindow(node.m_hWnd)) {
 			if (1
 				&& m_nGroup != 0
@@ -460,7 +460,7 @@ bool CAppNodeGroupHandle::SendMessageToAllEditors(
 void CAppNodeManager::ResetGroupId()
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	auto& sNodes = pShare->m_sNodes;
+	auto& sNodes = pShare->m_nodes;
 	int nGroup = ++sNodes.m_nGroupSequences;
 	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
 		auto& node = sNodes.m_pEditArr[i];
@@ -482,7 +482,7 @@ void CAppNodeManager::ResetGroupId()
 EditNode* CAppNodeManager::GetEditNode(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	auto& sNodes = pShare->m_sNodes;
+	auto& sNodes = pShare->m_nodes;
 	for (int i=0; i<sNodes.m_nEditArrNum; ++i) {
 		auto& node = sNodes.m_pEditArr[i];
 		if (hWnd == node.m_hWnd) {
@@ -502,8 +502,8 @@ int CAppNodeManager::GetNoNameNumber(HWND hWnd)
 	EditNode* editNode = GetEditNode(hWnd);
 	if (editNode) {
 		if (editNode->m_nId == -1) {
-			pShare->m_sNodes.m_nNonameSequences++;
-			editNode->m_nId = pShare->m_sNodes.m_nNonameSequences;
+			pShare->m_nodes.m_nNonameSequences++;
+			editNode->m_nId = pShare->m_nodes.m_nNonameSequences;
 		}
 		return editNode->m_nId;
 	}
@@ -546,7 +546,7 @@ int CAppNodeManager::GetOpenedWindowArr(EditNode** ppEditNode, BOOL bSort, BOOL 
 int CAppNodeManager::_GetOpenedWindowArrCore(EditNode** ppEditNode, BOOL bSort, BOOL bGSort/* = FALSE */)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	auto& sNodes = pShare->m_sNodes;
+	auto& sNodes = pShare->m_nodes;
 
 	// 編集ウィンドウ数を取得する。
 	*ppEditNode = nullptr;
@@ -655,7 +655,7 @@ bool CAppNodeManager::ReorderTab(HWND hwndSrc, HWND hwndDst)
 	int	nIndex;
 
 	nArr0 = p[nDstTab].m_nIndex;
-	auto& sNodes = pShare->m_sNodes;
+	auto& sNodes = pShare->m_nodes;
 	nIndex = sNodes.m_pEditArr[nArr0].m_nIndex;
 	if (nSrcTab < nDstTab) {
 		// タブ左方向ローテート
@@ -704,13 +704,13 @@ HWND CAppNodeManager::SeparateGroup(HWND hwndSrc, HWND hwndDst, bool bSrcIsTop, 
 	int nDstGroup;
 	if (!pDstEditNode) {
 		hwndDst = NULL;
-		nDstGroup = ++pShare->m_sNodes.m_nGroupSequences;	// 新規グループ
+		nDstGroup = ++pShare->m_nodes.m_nGroupSequences;	// 新規グループ
 	}else {
 		nDstGroup = pDstEditNode->m_nGroup;	// 既存グループ
 	}
 
 	pSrcEditNode->m_nGroup = nDstGroup;
-	pSrcEditNode->m_nIndex = ++pShare->m_sNodes.m_nSequences;	// タブ並びの最後（起動順の最後）にもっていく
+	pSrcEditNode->m_nIndex = ++pShare->m_nodes.m_nSequences;	// タブ並びの最後（起動順の最後）にもっていく
 
 	// 非表示のタブを既存グループに移動するときは非表示のままにするので
 	// 内部情報も先頭にはならないよう、必要なら先頭ウィンドウと位置を交換する。
@@ -757,7 +757,7 @@ bool CAppNodeManager::IsSameGroup(HWND hWnd1, HWND hWnd2)
 int CAppNodeManager::GetFreeGroupId(void)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
-	return ++pShare->m_sNodes.m_nGroupSequences;	// 新規グループ
+	return ++pShare->m_nodes.m_nGroupSequences;	// 新規グループ
 }
 
 // Close した時の次のWindowを取得する
@@ -773,7 +773,7 @@ int CAppNodeManager::GetFreeGroupId(void)
 HWND CAppNodeManager::GetNextTab(HWND hWndCur)
 {
 	HWND hWnd = NULL;
-	auto& tabBar = GetDllShareData().m_Common.m_sTabBar;
+	auto& tabBar = GetDllShareData().m_common.m_sTabBar;
 	if (1
 		&& tabBar.m_bDispTabWnd
 		&& !tabBar.m_bDispTabWndMultiWin

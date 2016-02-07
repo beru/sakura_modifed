@@ -46,14 +46,14 @@ enum EMacroParamType{
 	EMacroParamTypeStr,
 };
 
-struct CMacroParam{
+struct MacroParam {
 	WCHAR*			m_pData;
-	CMacroParam*	m_pNext;
+	MacroParam*		m_pNext;
 	int				m_nDataLen;
 	EMacroParamType m_eType;
 
-	CMacroParam():m_pData(NULL), m_pNext(NULL), m_nDataLen(0), m_eType(EMacroParamTypeNull){}
-	CMacroParam( const CMacroParam& obj ){
+	MacroParam():m_pData(NULL), m_pNext(NULL), m_nDataLen(0), m_eType(EMacroParamTypeNull){}
+	MacroParam( const MacroParam& obj ){
 		if (obj.m_pData) {
 			m_pData = new WCHAR[obj.m_nDataLen + 1];
 		}else {
@@ -63,7 +63,7 @@ struct CMacroParam{
 		m_nDataLen = obj.m_nDataLen;
 		m_eType = obj.m_eType;
 	}
-	~CMacroParam(){
+	~MacroParam(){
 		Clear();
 	}
 	void Clear(){
@@ -125,14 +125,14 @@ public:
 #endif
 
 protected:
-	static WCHAR* GetParamAt(CMacroParam*, int);
+	static WCHAR* GetParamAt(MacroParam*, int);
 
 	/*
 	||  実装ヘルパ関数
 	*/
 	EFunctionCode	m_nFuncID;		// 機能ID
-	CMacroParam*	m_pParamTop;	// パラメータ
-	CMacroParam*	m_pParamBot;
+	MacroParam*	m_pParamTop;	// パラメータ
+	MacroParam*	m_pParamBot;
 	CMacro*			m_pNext;		// 次のマクロへのポインタ
 };
 

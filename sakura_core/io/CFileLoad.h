@@ -41,7 +41,7 @@
  #define INVALID_SET_FILE_POINTER 0xFFFFFFFF
 #endif // INVALID_SET_FILE_POINTER
 
-struct SEncodingConfig;
+struct EncodingConfig;
 class CCodeBase;
 
 /*!
@@ -52,7 +52,7 @@ class CCodeBase;
 class CFileLoad {
 public:
 
-	CFileLoad(const SEncodingConfig& encode);
+	CFileLoad(const EncodingConfig& encode);
 	~CFileLoad(void);
 
 	// Jul. 26, 2003 ryoji BOM引数追加
@@ -100,7 +100,7 @@ protected:
 	DWORD FilePointer(DWORD, DWORD); // inline
 
 	// メンバオブジェクト
-	const SEncodingConfig* m_pEencoding;
+	const EncodingConfig* m_pEencoding;
 
 //	LPTSTR	m_pszFileName;	// ファイル名
 	HANDLE	m_hFile;		// ファイルハンドル

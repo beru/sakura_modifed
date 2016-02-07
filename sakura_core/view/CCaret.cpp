@@ -467,8 +467,8 @@ void CCaret::ShowEditCaret()
 	}
 	// 必要なインターフェース
 	const CLayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
-	CommonSetting* pCommon = &GetDllShareData().m_Common;
-	const STypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
+	CommonSetting* pCommon = &GetDllShareData().m_common;
+	const TypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
 
 	using namespace WCODE;
 
@@ -553,7 +553,7 @@ void CCaret::ShowEditCaret()
 				int nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
-					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
 					|| pLine[nIdxFrom] == TAB
 				) {
 					nCaretWidth = GetHankakuDx();
@@ -586,7 +586,7 @@ void CCaret::ShowEditCaret()
 			int nIdxFrom = m_pEditView->LineColumnToIndex(pcLayout, GetCaretLayoutPos().GetX2());
 			if (0
 				|| nIdxFrom >= nLineLen
-				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol)
+				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {
 				nCaretWidth = GetHankakuDx();
@@ -660,7 +660,7 @@ void CCaret::ShowCaretPosInfo()
 {
 	// 必要なインターフェース
 	const CLayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
-	const STypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
 
 	if (!m_pEditView->GetDrawSwitch()) {
 		return;
@@ -793,7 +793,7 @@ void CCaret::ShowCaretPosInfo()
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CCodeBase* pCode = CCodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
-				CommonSetting_Statusbar* psStatusbar = &GetDllShareData().m_Common.m_sStatusbar;
+				CommonSetting_Statusbar* psStatusbar = &GetDllShareData().m_common.m_sStatusbar;
 				EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 				delete pCode;
 				if (ret != RESULT_COMPLETE) {
@@ -909,7 +909,7 @@ CLayoutInt CCaret::Cursor_UPDOWN(CLayoutInt nMoveLines, bool bSelect)
 {
 	// 必要なインターフェース
 	const CLayoutMgr* const pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
-	const CommonSetting* const pCommon = &GetDllShareData().m_Common;
+	const CommonSetting* const pCommon = &GetDllShareData().m_common;
 
 	const CLayoutPoint ptCaret = GetCaretLayoutPos();
 
@@ -1205,7 +1205,7 @@ CLayoutInt CCaret::MoveCursorProperly(
 			// 2011.12.26 フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
 			// フリーカーソルモードか
 			if (0
-				|| GetDllShareData().m_Common.m_sGeneral.m_bIsFreeCursorMode
+				|| GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode
 				|| (selectionInfo.IsMouseSelecting() && selectionInfo.IsBoxSelecting())	/* マウス範囲選択中 && 矩形範囲選択中 */
 				|| (m_pEditView->m_bDragMode && m_pEditView->m_bDragBoxData) /* OLE DropTarget && 矩形データ */
 			) {

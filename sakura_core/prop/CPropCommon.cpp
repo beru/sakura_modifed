@@ -311,12 +311,12 @@ INT_PTR CPropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 */
 void CPropCommon::InitData(void)
 {
-	m_Common = m_pShareData->m_Common;
+	m_Common = m_pShareData->m_common;
 
-	// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。	;
+	// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。	;
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
-		SKeywordSetIndex indexs;
-		STypeConfig type;
+		KeywordSetIndex indexs;
+		TypeConfig type;
 		CDocTypeManager().GetTypeConfig(CTypeConfig(i), type);
 		indexs.typeId = type.m_id;
 		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
@@ -332,15 +332,15 @@ void CPropCommon::InitData(void)
 */
 void CPropCommon::ApplyData(void)
 {
-	m_pShareData->m_Common = m_Common;
+	m_pShareData->m_common = m_Common;
 
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {
 		CTypeConfig configIdx = CDocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
 		if (configIdx.IsValidType()) {
-			STypeConfig type;
+			TypeConfig type;
 			CDocTypeManager().GetTypeConfig(configIdx, type);
-			// 2002/04/25 YAZAKI STypeConfig全体を保持する必要はない。
+			// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。
 			// 変更された設定値のコピー
 			for (int j = 0; j < MAX_KEYWORDSET_PER_TYPE; ++j) {
 				type.m_nKeyWordSetIdx[j] = m_Types_nKeyWordSetIdx[i].index[j];

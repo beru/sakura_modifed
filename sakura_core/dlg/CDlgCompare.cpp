@@ -38,7 +38,7 @@ const DWORD p_helpids[] = {	//12300
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-static const SAnchorList anchorList[] = {
+static const AnchorListItem anchorList[] = {
 	{IDOK,					ANCHOR_BOTTOM},
 	{IDCANCEL,				ANCHOR_BOTTOM},
 	{IDC_BUTTON_HELP,		ANCHOR_BOTTOM},
@@ -146,7 +146,7 @@ void CDlgCompare::SetData(void)
 		for (int i=0; i<nRowNum; ++i) {
 			// トレイからエディタへの編集ファイル名要求通知
 			::SendMessage(pEditNodeArr[i].GetHwnd(), MYWM_GETFILEINFO, 0, 0);
-			EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
+			EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 //@@@ 2001.12.26 YAZAKI ファイル名で比較すると(無題)だったときに問題同士の比較ができない
 			if (pEditNodeArr[i].GetHwnd() == CEditWnd::getInstance()->GetHwnd()) {
@@ -183,8 +183,8 @@ void CDlgCompare::SetData(void)
 	// 左右に並べて表示
 	//@@@ 2003.06.12 MIK
 	// TAB 1ウィンドウ表示のときは並べて比較できなくする
-	if (m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd
-		&& !m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin
+	if (m_pShareData->m_common.m_sTabBar.m_bDispTabWnd
+		&& !m_pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin
 	) {
 		m_bCompareAndTileHorz = false;
 		EnableItem(IDC_CHECK_TILE_H, false);
@@ -206,7 +206,7 @@ int CDlgCompare::GetData(void)
 		*m_phwndCompareWnd = (HWND)List_GetItemData(hwndList, nItem);
 		// トレイからエディタへの編集ファイル名要求通知
 		::SendMessage(*m_phwndCompareWnd, MYWM_GETFILEINFO, 0, 0);
-		EditInfo* pfi = (EditInfo*)&m_pShareData->m_sWorkBuffer.m_EditInfo_MYWM_GETFILEINFO;
+		EditInfo* pfi = (EditInfo*)&m_pShareData->m_workBuffer.m_EditInfo_MYWM_GETFILEINFO;
 
 		// 2010.07.30 パス名はやめて表示名に変更
 		int nId = CAppNodeManager::getInstance()->GetEditNode(*m_phwndCompareWnd)->GetId();
@@ -256,7 +256,7 @@ BOOL CDlgCompare::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog;
+	RECT rcDialog = GetDllShareData().m_common.m_sOthers.m_rcCompareDialog;
 	if (rcDialog.left != 0
 		|| rcDialog.bottom != 0
 	) {
@@ -274,7 +274,7 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	CDialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcCompareDialog);
 
 	RECT rc;
 	GetWindowRect(&rc);
@@ -290,7 +290,7 @@ BOOL CDlgCompare::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL CDlgCompare::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_Common.m_sOthers.m_rcCompareDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcCompareDialog);
 	return CDialog::OnMove(wParam, lParam);
 }
 

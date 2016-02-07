@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "types/CType.h" // STypeConfig
+#include "types/CType.h" // TypeConfig
 
 class CPropTypes;
 class CKeyWordSetMgr;
@@ -78,8 +78,8 @@ public:
 	INT_PTR DoPropertySheet(int);		// プロパティシートの作成
 
 	// インターフェース	
-	void SetTypeData(const STypeConfig& t) { m_Types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
-	void GetTypeData(STypeConfig& t) const { t = m_Types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
+	void SetTypeData(const TypeConfig& t) { m_Types = t; }	// タイプ別設定データの設定  Jan. 23, 2005 genta
+	void GetTypeData(TypeConfig& t) const { t = m_Types; }	// タイプ別設定データの取得  Jan. 23, 2005 genta
 	HWND GetHwndParent()const { return m_hwndParent; }
 	int GetPageNum() { return m_nPageNum; }
 	bool GetChangeKeyWordSet() const { return m_bChangeKeyWordSet; }
@@ -97,7 +97,7 @@ protected:
 	// ダイアログデータ
 	PropTypeSheetOrder	m_nPageNum;
 	DLLSHAREDATA*		m_pShareData;
-	STypeConfig			m_Types;
+	TypeConfig			m_Types;
 
 	// スクリーン用データ	2010/5/10 CPropTypes_P1_Screen.cppから移動
 	static std::vector<TYPE_NAME_ID2<EOutlineType> > m_OlmArr;			// アウトライン解析ルール配列

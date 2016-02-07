@@ -187,7 +187,7 @@ BOOL CEditView::Create(
 	m_bCurSrchKeyMark = false;				// 検索文字列
 	//	Jun. 27, 2001 genta
 	m_strCurSearchKey.clear();
-	m_sCurSearchOption.Reset();				// 検索／置換 オプション
+	m_curSearchOption.Reset();				// 検索／置換 オプション
 	m_bCurSearchUpdate = false;
 	m_nCurSearchKeySequence = -1;
 
@@ -222,7 +222,7 @@ BOOL CEditView::Create(
 
 	auto& textArea = GetTextArea();
 	// ルーラー表示
-	textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
+	textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
 	GetRuler().SetRedrawFlag();	// ルーラー全体を描き直す時=true   2002.02.25 Add By KK
 	m_hdcCompatDC = NULL;		// 再描画用コンパチブルＤＣ
 	m_hbmpCompatBMP = NULL;		// 再描画用メモリＢＭＰ
@@ -239,7 +239,7 @@ BOOL CEditView::Create(
 
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	//	2007.08.12 genta 初期化にShareDataの値が必要になった
-	m_CurRegexp.InitDll(GetDllShareData().m_Common.m_sSearch.m_szRegexpLib);
+	m_CurRegexp.InitDll(GetDllShareData().m_common.m_sSearch.m_szRegexpLib);
 
 	// 2004.02.08 m_hFont_ZENは未使用により削除
 	m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
@@ -294,14 +294,14 @@ BOOL CEditView::Create(
 	m_nMyIndex = nMyIndex;
 
 	//	2007.08.18 genta 初期化にShareDataの値が必要になった
-	m_cRegexKeyword = new CRegexKeyword(GetDllShareData().m_Common.m_sSearch.m_szRegexpLib);	//@@@ 2001.11.17 add MIK
+	m_cRegexKeyword = new CRegexKeyword(GetDllShareData().m_common.m_sSearch.m_szRegexpLib);	//@@@ 2001.11.17 add MIK
 	m_cRegexKeyword->RegexKeySetTypes(m_pTypeData);	//@@@ 2001.11.17 add MIK
 
-	textArea.SetTopYohaku(GetDllShareData().m_Common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	textArea.SetTopYohaku(GetDllShareData().m_common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	textArea.SetAreaTop(textArea.GetTopYohaku());								// 表示域の上端座標
 	// ルーラー表示
 	if (m_pTypeData->m_ColorInfoArr[COLORIDX_RULER].m_bDisp) {
-		textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_Common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
+		textArea.SetAreaTop(textArea.GetAreaTop() + GetDllShareData().m_common.m_sWindow.m_nRulerHeight);	// ルーラー高さ
 	}
 
 	// ウィンドウクラスの登録
@@ -354,7 +354,7 @@ BOOL CEditView::Create(
 	// 再描画用コンパチブルＤＣ
 	// 2007.09.09 Moca 互換BMPによる画面バッファ
 	// 2007.09.30 genta 関数化
-	UseCompatibleDC(GetDllShareData().m_Common.m_sWindow.m_bUseCompatibleBMP);
+	UseCompatibleDC(GetDllShareData().m_common.m_sWindow.m_bUseCompatibleBMP);
 
 	// 垂直分割ボックス
 	m_pcsbwVSplitBox = new CSplitBoxWnd;
@@ -855,7 +855,7 @@ LRESULT CEditView::DispatchEvent(
 		// マウスクリックによりバックグラウンドウィンドウがアクティベートされた
 		//	2007.10.08 genta オプション追加
 		if (1
-			&& GetDllShareData().m_Common.m_sGeneral.m_bNoCaretMoveByActivation
+			&& GetDllShareData().m_common.m_sGeneral.m_bNoCaretMoveByActivation
 			&& !m_pcEditWnd->IsActiveApp()
 		) {
 			m_bActivateByMouse = TRUE;		// マウスによるアクティベート
@@ -1009,7 +1009,7 @@ void CEditView::OnSize(int cx, int cy)
 
 	// 2008.06.06 nasukoji	サイズ変更時の折り返し位置再計算
 	bool wrapChanged = false;
-	if (m_pcEditDoc->m_nTextWrapMethodCur == WRAP_WINDOW_WIDTH) {
+	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::WindowWidth) {
 		if (m_nMyIndex == 0) {	// 左上隅のビューのサイズ変更時のみ処理する
 			// 右端で折り返すモードなら右端で折り返す	// 2008.06.08 ryoji
 			wrapChanged = m_pcEditWnd->WrapWindowWidth(0);
@@ -1330,7 +1330,7 @@ VOID CEditView::OnTimer(
 	DWORD dwTime 	// current system time
 	)
 {
-	if (GetDllShareData().m_Common.m_sEdit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
+	if (GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
 		if (IsDragSource()) {
 			return;
 		}
@@ -1422,7 +1422,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				nIdxFrom	= LineColumnToIndex(pcLayout, rcSelLayout.left);
 				nIdxTo		= LineColumnToIndex(pcLayout, rcSelLayout.right);
 
-				bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+				bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 				for (CLogicInt i=nIdxFrom; i<=nIdxTo; ++i) {
 					if (WCODE::IsLineDelimiter(pLine[i], bExtEol)) {
 						nIdxTo = i;
@@ -1586,7 +1586,7 @@ int	CEditView::CreatePopUpMenuSub(HMENU hMenu, int nMenuIdx, int* pParentMenus)
 		}
 		pNextParam[nParamIndex] = nThisCode;
 	}
-	auto& csCustomMenu = GetDllShareData().m_Common.m_sCustomMenu;
+	auto& csCustomMenu = GetDllShareData().m_common.m_sCustomMenu;
 	for (int i=0; i<csCustomMenu.m_nCustMenuItemNumArr[nMenuIdx]; ++i) {
 		EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nMenuIdx][i];
 		bool bAppend = false;
@@ -1697,7 +1697,7 @@ void CEditView::OnChangeSetting()
 	if (!GetHwnd()) {
 		return;
 	}
-	auto& csWindow = GetDllShareData().m_Common.m_sWindow;
+	auto& csWindow = GetDllShareData().m_common.m_sWindow;
 	GetTextArea().SetTopYohaku(csWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
 	GetTextArea().SetAreaTop(GetTextArea().GetTopYohaku());									// 表示域の上端座標
 
@@ -1729,7 +1729,7 @@ void CEditView::OnChangeSetting()
 	OnSize(rc.right, rc.bottom);
 
 	// フォントが変わった
-	m_cTipWnd.ChangeFont(&(GetDllShareData().m_Common.m_sHelper.m_lf));
+	m_cTipWnd.ChangeFont(&(GetDllShareData().m_common.m_sHelper.m_lf));
 	
 	// 再描画
 	if (!m_pcEditWnd->m_pPrintPreview) {
@@ -1922,7 +1922,7 @@ bool CEditView::GetSelectedData(
 		cmemBuf->AllocStringBuffer(nBufSize);
 		//>> 2002/04/18 Azumaiya
 
-		bool bExtEol = GetDllShareData().m_Common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 		nRowNum = 0;
 		for (nLineNum=rcSel.top; nLineNum<=rcSel.bottom; ++nLineNum) {
 			const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
@@ -2294,7 +2294,7 @@ void CEditView::CopySelectedAllLines(
 			false,
 			pszQuote, // 引用符
 			bWithLineNumber, // 行番号を付与する
-			GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy // 折り返し位置に改行記号を入れる
+			GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy // 折り返し位置に改行記号を入れる
 		)
 	) {
 		ErrorBeep();
@@ -2365,7 +2365,7 @@ bool CEditView::MySetClipboardData(const WCHAR* pszText, int nTextLen, bool bCol
 inline bool CEditView::IsDrawCursorVLinePos(int posX)
 {
 	return posX >= GetTextArea().GetAreaLeft() - 2	// 2010.08.10 ryoji テキストと行番号の隙間が半角文字幅より大きいと隙間位置にあるカーソルの縦線が描画される問題修正
-		&& posX >  GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
+		&& posX >  GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace // 隙間(+1)がないときは線を引かない判定
 		&& posX <= GetTextArea().GetAreaRight();
 }
 
@@ -2646,7 +2646,7 @@ void CEditView::SetInsMode(bool mode)
 //                         イベント                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CEditView::OnAfterLoad(const SLoadInfo& sLoadInfo)
+void CEditView::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	if (!GetHwnd()) {
 		// MiniMap 非表示

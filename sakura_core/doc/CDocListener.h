@@ -66,7 +66,7 @@ enum ECallbackResult {
 };
 
 //###
-struct SLoadInfo {
+struct LoadInfo {
 	// 入力
 	CFilePath	cFilePath;
 	ECodeType	eCharCode;
@@ -80,7 +80,7 @@ struct SLoadInfo {
 	// 出力
 	bool		bOpened;
 
-	SLoadInfo()
+	LoadInfo()
 		:
 		cFilePath(_T("")),
 		eCharCode(CODE_AUTODETECT),
@@ -92,7 +92,7 @@ struct SLoadInfo {
 	{
 	}
 
-	SLoadInfo(
+	LoadInfo(
 		const CFilePath&	_cFilePath,
 		ECodeType			_eCodeType,
 		bool				_bReadOnly,
@@ -113,7 +113,7 @@ struct SLoadInfo {
 	bool IsSamePath(LPCTSTR pszPath) const;
 };
 
-struct SSaveInfo {
+struct SaveInfo {
 	CFilePath	cFilePath;	// 保存ファイル名
 	ECodeType	eCharCode;	// 保存文字コードセット
 	bool		bBomExist;	// 保存時BOM付加
@@ -123,7 +123,7 @@ struct SSaveInfo {
 	// モード
 	bool		bOverwriteMode;	// 上書き要求
 
-	SSaveInfo()
+	SaveInfo()
 		:
 		cFilePath(_T("")),
 		eCharCode(CODE_AUTODETECT),
@@ -134,7 +134,7 @@ struct SSaveInfo {
 	{
 	}
 
-	SSaveInfo(
+	SaveInfo(
 		const CFilePath& _cFilePath,
 		ECodeType _eCodeType,
 		const CEol& _cEol,
@@ -177,20 +177,20 @@ public:
 	virtual ~CDocSubject();
 
 	// ロード前後
-	ECallbackResult NotifyCheckLoad	(SLoadInfo* pLoadInfo);
-	void NotifyBeforeLoad			(SLoadInfo* sLoadInfo);
-	ELoadResult NotifyLoad			(const SLoadInfo& sLoadInfo);
+	ECallbackResult NotifyCheckLoad	(LoadInfo* pLoadInfo);
+	void NotifyBeforeLoad			(LoadInfo* sLoadInfo);
+	ELoadResult NotifyLoad			(const LoadInfo& sLoadInfo);
 	void NotifyLoading				(int nPer);
-	void NotifyAfterLoad			(const SLoadInfo& sLoadInfo);
+	void NotifyAfterLoad			(const LoadInfo& sLoadInfo);
 	void NotifyFinalLoad			(ELoadResult eLoadResult);
 
 	// セーブ前後
-	ECallbackResult NotifyCheckSave	(SSaveInfo* pSaveInfo);
-	ECallbackResult NotifyPreBeforeSave(SSaveInfo* pSaveInfo);
-	void NotifyBeforeSave			(const SSaveInfo& sSaveInfo);
-	void NotifySave					(const SSaveInfo& sSaveInfo);
+	ECallbackResult NotifyCheckSave	(SaveInfo* pSaveInfo);
+	ECallbackResult NotifyPreBeforeSave(SaveInfo* pSaveInfo);
+	void NotifyBeforeSave			(const SaveInfo& sSaveInfo);
+	void NotifySave					(const SaveInfo& sSaveInfo);
 	void NotifySaving				(int nPer);
-	void NotifyAfterSave			(const SSaveInfo& sSaveInfo);
+	void NotifyAfterSave			(const SaveInfo& sSaveInfo);
 	void NotifyFinalSave			(ESaveResult eSaveResult);
 
 	// クローズ前後
@@ -208,20 +208,20 @@ public:
 
 	// -- -- 各種イベント -- -- //
 	// ロード前後
-	virtual ECallbackResult	OnCheckLoad	(SLoadInfo* pLoadInfo)		{ return CALLBACK_CONTINUE; }	// 本当にロードを行うかの判定を行う
-	virtual void			OnBeforeLoad(SLoadInfo* sLoadInfo)		{ return ; }	// ロード事前処理
-	virtual ELoadResult		OnLoad		(const SLoadInfo& sLoadInfo) { return LOADED_NOIMPLEMENT; }	// ロード処理
+	virtual ECallbackResult	OnCheckLoad	(LoadInfo* pLoadInfo)		{ return CALLBACK_CONTINUE; }	// 本当にロードを行うかの判定を行う
+	virtual void			OnBeforeLoad(LoadInfo* sLoadInfo)		{ return ; }	// ロード事前処理
+	virtual ELoadResult		OnLoad		(const LoadInfo& sLoadInfo) { return LOADED_NOIMPLEMENT; }	// ロード処理
 	virtual void			OnLoading	(int nPer)					{ return ; }	// ロード処理の経過情報を受信
-	virtual void			OnAfterLoad	(const SLoadInfo& sLoadInfo) { return ; }	// ロード事後処理
+	virtual void			OnAfterLoad	(const LoadInfo& sLoadInfo) { return ; }	// ロード事後処理
 	virtual void			OnFinalLoad	(ELoadResult eLoadResult)	{ return ; }	// ロードフローの最後に必ず呼ばれる
 
 	// セーブ前後
-	virtual ECallbackResult OnCheckSave	(SSaveInfo* pSaveInfo)		{ return CALLBACK_CONTINUE; }	// 本当にセーブを行うかの判定を行う
-	virtual ECallbackResult OnPreBeforeSave	(SSaveInfo* pSaveInfo)	{ return CALLBACK_CONTINUE; }	// セーブ事前おまけ処理 ($$ 仮)
-	virtual void			OnBeforeSave(const SSaveInfo& sSaveInfo) { return ; }	// セーブ事前処理
-	virtual void			OnSave		(const SSaveInfo& sSaveInfo) { return ; }	// セーブ処理
+	virtual ECallbackResult OnCheckSave	(SaveInfo* pSaveInfo)		{ return CALLBACK_CONTINUE; }	// 本当にセーブを行うかの判定を行う
+	virtual ECallbackResult OnPreBeforeSave	(SaveInfo* pSaveInfo)	{ return CALLBACK_CONTINUE; }	// セーブ事前おまけ処理 ($$ 仮)
+	virtual void			OnBeforeSave(const SaveInfo& sSaveInfo) { return ; }	// セーブ事前処理
+	virtual void			OnSave		(const SaveInfo& sSaveInfo) { return ; }	// セーブ処理
 	virtual void			OnSaving	(int nPer)					{ return ; }	// セーブ処理の経過情報を受信
-	virtual void			OnAfterSave	(const SSaveInfo& sSaveInfo) { return ; }	// セーブ事後処理
+	virtual void			OnAfterSave	(const SaveInfo& sSaveInfo) { return ; }	// セーブ事後処理
 	virtual void			OnFinalSave	(ESaveResult eSaveResult)	{ return ; }	// セーブフローの最後に必ず呼ばれる
 
 	// クローズ前後

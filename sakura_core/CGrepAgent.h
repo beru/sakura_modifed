@@ -31,7 +31,7 @@ class CGrepEnumKeys;
 class CGrepEnumFiles;
 class CGrepEnumFolders;
 
-struct SGrepOption {
+struct GrepOption {
 	bool		bGrepReplace;			//!< Grep置換
 	bool		bGrepSubFolder;			//!< サブフォルダからも検索する
 	bool		bGrepStdout;			//!< 標準出力モード
@@ -45,7 +45,7 @@ struct SGrepOption {
 	bool		bGrepPaste;				//!< Grep置換：クリップボードから貼り付ける
 	bool		bGrepBackup;			//!< Grep置換：バックアップ
 
-	SGrepOption() : 
+	GrepOption() : 
 		 bGrepReplace(false)
 		,bGrepSubFolder(true)
 		,bGrepStdout(false)
@@ -69,7 +69,7 @@ public:
 
 	// イベント
 	ECallbackResult OnBeforeClose();
-	void OnAfterSave(const SSaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& sSaveInfo);
 
 	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );
 	static std::tstring ChopYen( const std::tstring& str );
@@ -87,7 +87,7 @@ public:
 		bool					bGrepSubFolder,
 		bool					bGrepStdout,
 		bool					bGrepHeader,
-		const SSearchOption&	sSearchOption,
+		const SearchOption&		searchOption,
 		ECodeType				nGrepCharSet,	// 2002/09/21 Moca 文字コードセット選択
 		int						nGrepOutputLineType,
 		int						nGrepOutputStyle,
@@ -110,8 +110,8 @@ private:
 		CGrepEnumFolders&		cGrepExceptAbsFolders,
 		const TCHAR*			pszPath,			//!< [in] 検索対象パス
 		const TCHAR*			pszBasePath,		//!< [in] 検索対象パス(ベース)
-		const SSearchOption&	sSearchOption,		//!< [in] 検索オプション
-		const SGrepOption&		sGrepOption,		//!< [in] Grepオプション
+		const SearchOption&		searchOption,		//!< [in] 検索オプション
+		const GrepOption&		sGrepOption,		//!< [in] Grepオプション
 		const CSearchStringPattern& pattern,		//!< [in] 検索パターン
 		CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 		int						nNest,				//!< [in] ネストレベル
@@ -125,8 +125,8 @@ private:
 		CDlgCancel*				pcDlgCancel,
 		const wchar_t*			pszKey,
 		const TCHAR*			pszFile,
-		const SSearchOption&	sSearchOption,
-		const SGrepOption&		sGrepOption,
+		const SearchOption&		searchOption,
+		const GrepOption&		sGrepOption,
 		const CSearchStringPattern& pattern,
 		CBregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 		int*					pnHitCount,
@@ -145,8 +145,8 @@ private:
 		const wchar_t*			pszKey,
 		const CNativeW&			cmGrepReplace,
 		const TCHAR*			pszFile,
-		const SSearchOption&	sSearchOption,
-		const SGrepOption&		sGrepOption,
+		const SearchOption&		searchOption,
+		const GrepOption&		sGrepOption,
 		const CSearchStringPattern& pattern,
 		CBregexp*				pRegexp,
 		int*					pnHitCount,
@@ -176,7 +176,7 @@ private:
 		const wchar_t*	pMatchData,		//	マッチした文字列
 		int				nMatchLen,		//	マッチした文字列の長さ
 		// オプション
-		const SGrepOption&	sGrepOption
+		const GrepOption&	sGrepOption
 	);
 
 public: //$$ 仮

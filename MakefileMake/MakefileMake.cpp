@@ -108,7 +108,7 @@ enum exp_type {
 	EXP_DIR,
 };
 
-struct SExpList {
+struct ExpList {
 	char*		exp;
 	exp_type	type;
 } s_exp_list[] = {
@@ -121,7 +121,7 @@ struct SExpList {
 std::vector<std::string> file_list;  // filename_list
 
 // ファイルリストを作成する
-int makeFileList(std::string top_dir, std::string dir, SExpList sexp)
+int makeFileList(std::string top_dir, std::string dir, ExpList sexp)
 {
 	std::string			path;
 	std::string			fl_nm;

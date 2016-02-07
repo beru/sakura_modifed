@@ -61,8 +61,8 @@ private:
 
 
 // フォント情報管理
-struct SFONT {
-	SFontAttr	m_sFontAttr;
+struct Font {
+	FontAttr	m_sFontAttr;
 	HFONT		m_hFont;      // フォントハンドル
 };
 
@@ -130,14 +130,14 @@ public:
 	// フォント
 public:
 	void PushMyFont(HFONT hFont) {
-		SFONT sFont = { { false, false }, hFont };
+		Font sFont = { { false, false }, hFont };
 		PushMyFont(sFont);
 	}
-	void PushMyFont(const SFONT& sFont);
+	void PushMyFont(const Font& sFont);
 	void PopMyFont();
 	void ClearMyFont();
 	// フォント設定
-	void SetMyFont(const SFONT& sFont) {
+	void SetMyFont(const Font& sFont) {
 		ClearMyFont();
 		PushMyFont(sFont);
 	}
@@ -213,7 +213,7 @@ private:
 	// テキスト
 	std::vector<COLORREF>	m_vTextForeColors;
 	std::vector<COLORREF>	m_vTextBackColors;
-	std::vector<SFONT>		m_vFonts;
+	std::vector<Font>		m_vFonts;
 
 	// テキスト
 	COrgInt				m_nTextModeOrg;

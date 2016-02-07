@@ -132,14 +132,14 @@ void CDiffLineMgr::ResetAllDiffMark()
 */
 bool CDiffLineMgr::SearchDiffMark(
 	CLogicInt			nLineNum,		// 検索開始行
-	ESearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	eSearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
 	CLogicInt*			pnLineNum 		// マッチ行
 	)
 {
 	CLogicInt nLinePos = nLineNum;
 
 	// 前方検索
-	if (bPrevOrNext == SEARCH_BACKWARD) {
+	if (bPrevOrNext == eSearchDirection::Backward) {
 		--nLinePos;
 		const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {

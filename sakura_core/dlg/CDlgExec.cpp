@@ -87,10 +87,10 @@ BOOL CDlgExec::OnInitDialog(
 
 	BOOL bRet = CDialog::OnInitDialog(hwnd, wParam, lParam);
 
-	m_comboDel = SComboBoxItemDeleter();
+	m_comboDel = ComboBoxItemDeleter();
 	m_comboDel.pRecent = &m_cRecentCmd;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_m_szCommand), &m_comboDel);
-	m_comboDelCur = SComboBoxItemDeleter();
+	m_comboDelCur = ComboBoxItemDeleter();
 	m_comboDelCur.pRecent = &m_cRecentCur;
 	SetComboBoxDeleter(GetItemHwnd(IDC_COMBO_CUR_DIR), &m_comboDelCur);
 	return bRet;
@@ -136,22 +136,22 @@ void CDlgExec::SetData(void)
 	/*****************************
 	*         ƒf[ƒ^Ý’è         *
 	*****************************/
-	_tcscpy(m_szCommand, m_pShareData->m_sHistory.m_aCommands[0]);
+	_tcscpy(m_szCommand, m_pShareData->m_history.m_aCommands[0]);
 	HWND hwndCombo = GetItemHwnd(IDC_COMBO_m_szCommand);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, m_szCommand);
-	int nSize = m_pShareData->m_sHistory.m_aCommands.size();
+	int nSize = m_pShareData->m_history.m_aCommands.size();
 	for (int i=0; i<nSize; ++i) {
-		Combo_AddString(hwndCombo, m_pShareData->m_sHistory.m_aCommands[i]);
+		Combo_AddString(hwndCombo, m_pShareData->m_history.m_aCommands[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 
-	_tcscpy(m_szCurDir, m_pShareData->m_sHistory.m_aCurDirs[0]);
+	_tcscpy(m_szCurDir, m_pShareData->m_history.m_aCurDirs[0]);
 	hwndCombo = GetItemHwnd(IDC_COMBO_CUR_DIR);
 	Combo_ResetContent(hwndCombo);
 	SetItemText(IDC_COMBO_TEXT, m_szCurDir);
-	for (int i=0; i<m_pShareData->m_sHistory.m_aCurDirs.size(); ++i) {
-		Combo_AddString(hwndCombo, m_pShareData->m_sHistory.m_aCurDirs[i]);
+	for (int i=0; i<m_pShareData->m_history.m_aCurDirs.size(); ++i) {
+		Combo_AddString(hwndCombo, m_pShareData->m_history.m_aCurDirs[i]);
 	}
 	Combo_SetCurSel(hwndCombo, 0);
 	

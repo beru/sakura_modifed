@@ -34,7 +34,7 @@
 
 CRecentExceptMRU::CRecentExceptMRU()
 {
-	auto& exceptMRU = GetShareData()->m_sHistory.m_aExceptMRU;
+	auto& exceptMRU = GetShareData()->m_history.m_aExceptMRU;
 	Create(
 		exceptMRU.dataPtr(),
 		&exceptMRU._GetSizeRef(),

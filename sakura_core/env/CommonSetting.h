@@ -377,7 +377,7 @@ struct CommonSetting_Format {
 struct CommonSetting_Search {
 	
 	int				m_nSearchKeySequence;		// 検索シーケンス(未保存)
-	SSearchOption	m_sSearchOption;			// 検索／置換  条件
+	SearchOption	m_searchOption;			// 検索／置換  条件
 
 	int				m_nReplaceKeySequence;		// 置換後シーケンス(未保存)
 	bool			m_bConsecutiveAll;			//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
@@ -526,13 +526,13 @@ enum EDockSide {
 	DOCKSIDE_UNDOCKABLE = -1,//!< ドッキング禁止
 };
 
-enum EFileTreeItemType{
+enum EFileTreeItemType {
 	EFileTreeItemType_Grep,
 	EFileTreeItemType_File,
 	EFileTreeItemType_Folder
 };
 
-struct SFileTreeItem{
+struct FileTreeItem {
 public:
 	EFileTreeItemType m_eFileTreeItemType;
 	SFilePath	m_szTargetPath;	//!< フォルダorファイルパス
@@ -545,7 +545,7 @@ public:
 	bool		m_bIgnoreReadOnly;		//!< 読み取り専用ファイルを除く
 	bool		m_bIgnoreSystem;		//!< システムファイルを除く
 
-	SFileTreeItem()
+	FileTreeItem()
 		: m_eFileTreeItemType(EFileTreeItemType_Grep)
 		, m_nDepth(0)
 		, m_bIgnoreHidden(true)
@@ -554,11 +554,11 @@ public:
 		{}
 };
 
-struct SFileTree{
+struct FileTree {
 	bool		m_bProject;			//!< プロジェクトファイルモード
 	SFilePath	m_szProjectIni;		//!< デフォルトiniパス
 	int			m_nItemCount;		//!< ファイルパス数
-	SFileTreeItem	m_aItems[20];	//!< ツリーアイテム
+	FileTreeItem	m_aItems[20];	//!< ツリーアイテム
 };
 
 
@@ -585,7 +585,7 @@ struct CommonSetting_OutLine {
 	bool		m_bFunclistSetFocusOnJump;	// フォーカスを移す 2002.02.08 hor
 	bool		m_bMarkUpBlankLineEnable;	// 空行を無視する 2002.02.08 aroka,hor
 
-	SFileTree	m_sFileTree;				// ファイルツリー設定
+	FileTree	m_sFileTree;				// ファイルツリー設定
 	SFilePath	m_sFileTreeDefIniName;		// ファイルツリー設定のデフォルトファイル名(GUIなし)
 };
 

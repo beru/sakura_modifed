@@ -340,7 +340,7 @@ void CPropWin::SetData(HWND hwndDlg)
 	int nSelPos = 0;
 	UINT uiIndex = 0;
 	for (uiIndex=0; uiIndex<CSelectLang::m_psLangInfoList.size(); ++uiIndex) {
-		CSelectLang::SSelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(uiIndex);
+		CSelectLang::SelLangInfo* psLangInfo = CSelectLang::m_psLangInfoList.at(uiIndex);
 		Combo_InsertString(hwndCombo, uiIndex, psLangInfo->szLangName);
 		if (_tcscmp(csWindow.m_szLanguageDll, psLangInfo->szDllName) == 0) {
 			nSelPos = uiIndex;
@@ -441,7 +441,7 @@ int CPropWin::GetData(HWND hwndDlg)
 	// Œ¾Œê‘I‘ð
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_LANGUAGE);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	CSelectLang::SSelLangInfo *psLangInfo = CSelectLang::m_psLangInfoList.at(nSelPos);
+	CSelectLang::SelLangInfo *psLangInfo = CSelectLang::m_psLangInfoList.at(nSelPos);
 	if (_tcscmp(csWindow.m_szLanguageDll, psLangInfo->szDllName) != 0) {
 		_tcsncpy(csWindow.m_szLanguageDll, psLangInfo->szDllName, _countof(csWindow.m_szLanguageDll));
 	}

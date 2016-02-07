@@ -68,7 +68,7 @@ static const int keyword_select_target_combo[KEYWORD_SELECT_NUM] = {
 
 CDlgKeywordSelect::CDlgKeywordSelect()
 {
-	m_pCKeyWordSetMgr = &(m_pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr);
+	m_pCKeyWordSetMgr = &(m_pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr);
 
 	return;
 }

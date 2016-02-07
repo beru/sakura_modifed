@@ -90,14 +90,14 @@ typedef CLayoutXInt CKetaXInt;
 #include "CStrictRect.h"
 
 // ロジック単位
-struct SLogicPoint { CLogicInt x; CLogicInt y; }; // 基底構造体
-typedef CStrictPoint<SLogicPoint, CLogicInt>	CLogicPoint;
+struct LogicPoint { CLogicInt x; CLogicInt y; }; // 基底構造体
+typedef CStrictPoint<LogicPoint, CLogicInt>	CLogicPoint;
 typedef CRangeBase<CLogicPoint>					CLogicRange;
 typedef CStrictRect<CLogicInt, CLogicPoint>		CLogicRect;
 
 // レイアウト単位
-struct SLayoutPoint { CLayoutInt x; CLayoutInt y; }; // 基底構造体
-typedef CStrictPoint<SLayoutPoint, CLayoutInt>	CLayoutPoint;
+struct LayoutPoint { CLayoutInt x; CLayoutInt y; }; // 基底構造体
+typedef CStrictPoint<LayoutPoint, CLayoutInt>	CLayoutPoint;
 typedef CRangeBase<CLayoutPoint>				CLayoutRange;
 typedef CStrictRect<CLayoutInt, CLayoutPoint>	CLayoutRect;
 

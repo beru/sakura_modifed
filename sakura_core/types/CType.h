@@ -96,7 +96,7 @@ enum EBackgroundImagePos {
 };
 
 //! エンコードオプション
-struct SEncodingConfig {
+struct EncodingConfig {
 	bool				m_bPriorCesu8;					//!< 自動判別時に CESU-8 を優先するかどうか
 	ECodeType			m_eDefaultCodetype;				//!< デフォルト文字コード
 	EEolType			m_eDefaultEoltype;				//!< デフォルト改行コード	// 2011.01.24 ryoji
@@ -117,7 +117,7 @@ enum EStringLiteralType {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! タイプ別設定
-struct STypeConfig {
+struct TypeConfig {
 	// 2007.09.07 変数名変更: m_nMaxLineSize→m_nMaxLineKetas
 	int					m_nIdx;
 	int					m_id;
@@ -184,7 +184,7 @@ struct STypeConfig {
 	int					m_nOutlineSortCol;				//!< アウトライン解析ソート列番号
 	bool				m_bOutlineSortDesc;				//!< アウトライン解析ソート降順
 	int					m_nOutlineSortType;				//!< アウトライン解析ソート基準
-	SFileTree			m_sFileTree;					/*!< ファイルツリー設定 */
+	FileTree			m_sFileTree;					/*!< ファイルツリー設定 */
 
 	ESmartIndentType	m_eSmartIndent;					//!< スマートインデント種別
 	int					m_nImeState;					//!< 初期IME状態	Nov. 20, 2000 genta
@@ -205,7 +205,7 @@ struct STypeConfig {
 
 	bool				m_bChkEnterAtEnd;				//!< 保存時に改行コードの混在を警告する	2013/4/14 Uchi
 
-	SEncodingConfig		m_encoding;						//!< エンコードオプション
+	EncodingConfig		m_encoding;						//!< エンコードオプション
 
 
 //@@@ 2001.11.17 add start MIK
@@ -237,28 +237,28 @@ struct STypeConfig {
 	LOGFONT				m_lf;							//!< フォント // 2013.03.18 aroka
 	INT					m_nPointSize;					//!< フォントサイズ（1/10ポイント単位）
 
-	STypeConfig()
+	TypeConfig()
 		:
 		m_nMaxLineKetas(10) //	画面折り返し幅がTAB幅以下にならないことを初期値でも保証する	//	2004.04.03 Moca
 	{
 	}
 
 	int					m_nLineNumWidth;				//!< 行番号の最小桁数 2014.08.02 katze
-}; // STypeConfig
+}; // TypeConfig
 
 // タイプ別設定(mini)
-struct STypeConfigMini {
+struct TypeConfigMini {
 	int			m_id;
 	TCHAR		m_szTypeName[64];				//!< タイプ属性：名称
 	TCHAR		m_szTypeExts[MAX_TYPES_EXTS];	//!< タイプ属性：拡張子リスト
-	SEncodingConfig		m_encoding;				//!< エンコードオプション
+	EncodingConfig		m_encoding;				//!< エンコードオプション
 };
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                   タイプ別設定アクセサ                      //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//!ドキュメント種類。共有データ内 STypeConfig へのアクセサも兼ねる。
+//!ドキュメント種類。共有データ内 TypeConfig へのアクセサも兼ねる。
 // 2007.12.13 kobake 作成
 class CTypeConfig {
 public:
@@ -280,8 +280,8 @@ public:
 	int GetIndex() const { /*assert(IsValid());*/ return m_nType; }
 
 	// 共有データへの簡易アクセサ
-//	STypeConfig* operator->() { return GetTypeConfig(); }
-//	STypeConfig* GetTypeConfig();
+//	TypeConfig* operator->() { return GetTypeConfig(); }
+//	TypeConfig* GetTypeConfig();
 private:
 	int m_nType;
 };
@@ -294,15 +294,15 @@ private:
 class CType {
 public:
 	virtual ~CType() { }
-	void InitTypeConfig(int nIdx, STypeConfig&);
+	void InitTypeConfig(int nIdx, TypeConfig&);
 protected:
-	virtual void InitTypeConfigImp(STypeConfig* pType) = 0;
+	virtual void InitTypeConfigImp(TypeConfig* pType) = 0;
 };
 
 #define GEN_CTYPE(CLASS_NAME) \
 class CLASS_NAME : public CType { \
 protected: \
-	void InitTypeConfigImp(STypeConfig* pType); \
+	void InitTypeConfigImp(TypeConfig* pType); \
 };
 
 GEN_CTYPE(CType_Asm)

@@ -80,11 +80,11 @@ struct DLLSHAREDATA;
 #define IDT_SYSMENU		1357
 #define ID_TOOLBAR		100
 
-struct STabGroupInfo {
+struct TabGroupInfo {
 	HWND			hwndTop;
 	WINDOWPLACEMENT	wpTop;
 
-	STabGroupInfo() : hwndTop(NULL) { }
+	TabGroupInfo() : hwndTop(NULL) { }
 	bool IsValid() const { return hwndTop != NULL; }
 };
 
@@ -112,13 +112,13 @@ public:
 		CImageListMgr*	pcIcons,
 		int				nGroup
 	);
-	void _GetTabGroupInfo(STabGroupInfo* pTabGroupInfo, int& nGroup);
-	void _GetWindowRectForInit(CMyRect* rcResult, int nGroup, const STabGroupInfo& sTabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
-	HWND _CreateMainWindow(int nGroup, const STabGroupInfo& sTabGroupInfo);
-	void _AdjustInMonitor(const STabGroupInfo& sTabGroupInfo);
+	void _GetTabGroupInfo(TabGroupInfo* pTabGroupInfo, int& nGroup);
+	void _GetWindowRectForInit(CMyRect* rcResult, int nGroup, const TabGroupInfo& sTabGroupInfo);	//!< ウィンドウ生成用の矩形を取得
+	HWND _CreateMainWindow(int nGroup, const TabGroupInfo& sTabGroupInfo);
+	void _AdjustInMonitor(const TabGroupInfo& sTabGroupInfo);
 
 	void OpenDocumentWhenStart(
-		const SLoadInfo& sLoadInfo		//!< [in]
+		const LoadInfo& sLoadInfo		//!< [in]
 	);
 
 	void SetDocumentTypeWhenCreate(
@@ -131,7 +131,7 @@ public:
 	//                         イベント                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// ドキュメントイベント
-	void OnAfterSave(const SSaveInfo& sSaveInfo);
+	void OnAfterSave(const SaveInfo& sSaveInfo);
 
 	// 管理
 	void MessageLoop(void);								// メッセージループ
@@ -420,7 +420,7 @@ private:
 	EIconClickStatus	m_IconClicked;
 
 public:
-	ESelectCountMode	m_nSelectCountMode; // 選択文字カウント方法
+	eSelectCountMode	m_nSelectCountMode; // 選択文字カウント方法
 
 };
 

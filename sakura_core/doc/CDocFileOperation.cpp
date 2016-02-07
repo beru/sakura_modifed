@@ -53,12 +53,12 @@ bool CDocFileOperation::_ToDoLock() const
 	}
 
 	// ビューモード
-	if (CAppMode::getInstance()->IsViewMode()) {
+	if (AppMode::getInstance()->IsViewMode()) {
 		return false;
 	}
 
 	// 排他設定
-	if (GetDllShareData().m_Common.m_sFile.m_nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) {
+	if (GetDllShareData().m_common.m_sFile.m_nFileShareMode == SHAREMODE_NOT_EXCLUSIVE) {
 		return false;
 	}
 	return true;
@@ -67,7 +67,7 @@ bool CDocFileOperation::_ToDoLock() const
 void CDocFileOperation::DoFileLock(bool bMsg)
 {
 	if (this->_ToDoLock()) {
-		m_pcDocRef->m_cDocFile.FileLock(GetDllShareData().m_Common.m_sFile.m_nFileShareMode, bMsg);
+		m_pcDocRef->m_cDocFile.FileLock(GetDllShareData().m_common.m_sFile.m_nFileShareMode, bMsg);
 	}
 }
 
@@ -86,7 +86,7 @@ void CDocFileOperation::DoFileUnlock()
 bool CDocFileOperation::OpenFileDialog(
 	HWND			hwndParent,		// [in]
 	const TCHAR*	pszOpenFolder,	// [in]     NULL以外を指定すると初期フォルダを指定できる
-	SLoadInfo*		pLoadInfo,		// [in/out] ロード情報
+	LoadInfo*		pLoadInfo,		// [in/out] ロード情報
 	std::vector<std::tstring>&	files
 )
 {
@@ -110,7 +110,7 @@ bool CDocFileOperation::OpenFileDialog(
 //                       ロードフロー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
+bool CDocFileOperation::DoLoadFlow(LoadInfo* pLoadInfo)
 {
 	ELoadResult eLoadResult = LOADED_FAILURE;
 
@@ -140,7 +140,7 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 
 // ファイルを開く
 bool CDocFileOperation::FileLoad(
-	SLoadInfo* pLoadInfo		// [in/out]
+	LoadInfo* pLoadInfo		// [in/out]
 	)
 {
 	LARGE_INTEGER start;
@@ -149,7 +149,7 @@ bool CDocFileOperation::FileLoad(
 	bool bRet = DoLoadFlow(pLoadInfo);
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
-		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
@@ -175,7 +175,7 @@ bool CDocFileOperation::FileLoad(
 // ファイルを開く（自動実行マクロを実行しない）
 // 2009.08.11 ryoji FileLoadへのパラメータ追加にしてもいいがANSI版と整合がとりやすいので当面は別関数にしておく
 bool CDocFileOperation::FileLoadWithoutAutoMacro(
-	SLoadInfo* pLoadInfo		// [in/out]
+	LoadInfo* pLoadInfo		// [in/out]
 	)
 {
 	return DoLoadFlow(pLoadInfo);
@@ -213,10 +213,10 @@ void CDocFileOperation::ReloadCurrentFile(
 	CLayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	// ロード
-	SLoadInfo sLoadInfo;
+	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = m_pcDocRef->m_cDocFile.GetFilePath();
 	sLoadInfo.eCharCode = nCharCode;
-	sLoadInfo.bViewMode = CAppMode::getInstance()->IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
+	sLoadInfo.bViewMode = AppMode::getInstance()->IsViewMode(); // 2014.06.13 IsEditable->IsViewModeに戻す。かわりに bForceNoMsgを追加
 	sLoadInfo.bWritableNoMsg = !m_pcDocRef->IsEditable(); // すでに編集できない状態ならファイルロックのメッセージを表示しない
 	sLoadInfo.bRequestReload = true;
 	bool bRet = this->DoLoadFlow(&sLoadInfo);
@@ -232,7 +232,7 @@ void CDocFileOperation::ReloadCurrentFile(
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	if (bRet) {
-		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
 		CWSHIfObj::List params;
@@ -255,7 +255,7 @@ void CDocFileOperation::ReloadCurrentFile(
 	@date 2006.11.10 ryoji	ユーザー指定の拡張子を状況依存で変化させる
 */
 bool CDocFileOperation::SaveFileDialog(
-	SSaveInfo*	pSaveInfo	// [out]
+	SaveInfo*	pSaveInfo	// [out]
 	)
 {
 	// 拡張子指定
@@ -264,7 +264,7 @@ bool CDocFileOperation::SaveFileDialog(
 	TCHAR szDefaultWildCard[_MAX_PATH + 10];	// ユーザー指定拡張子
 	{
 		LPCTSTR	szExt;
-		const STypeConfig& type = m_pcDocRef->m_cDocType.GetDocumentAttribute();
+		const TypeConfig& type = m_pcDocRef->m_cDocType.GetDocumentAttribute();
 		// ファイルパスが無い場合は *.txt とする
 		if (!this->m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
 			szExt = _T("");
@@ -288,11 +288,11 @@ bool CDocFileOperation::SaveFileDialog(
 
 		if (!this->m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
 			//「新規から保存時は全ファイル表示」オプション	// 2008/6/15 バグフィックス Uchi
-			if (GetDllShareData().m_Common.m_sFile.m_bNoFilterSaveNew)
+			if (GetDllShareData().m_common.m_sFile.m_bNoFilterSaveNew)
 				_tcscat(szDefaultWildCard, _T(";*.*"));	// 全ファイル表示
 		}else {
 			//「新規以外から保存時は全ファイル表示」オプション
-			if (GetDllShareData().m_Common.m_sFile.m_bNoFilterSaveFile)
+			if (GetDllShareData().m_common.m_sFile.m_bNoFilterSaveFile)
 				_tcscat(szDefaultWildCard, _T(";*.*"));	// 全ファイル表示
 		}
 	}
@@ -323,7 +323,7 @@ bool CDocFileOperation::SaveFileDialog(
 //「ファイル名を付けて保存」ダイアログ
 bool CDocFileOperation::SaveFileDialog(LPTSTR szPath)
 {
-	SSaveInfo sSaveInfo;
+	SaveInfo sSaveInfo;
 	sSaveInfo.cFilePath = szPath;
 	sSaveInfo.eCharCode = CODE_CODEMAX; //###トリッキー
 	bool bRet = SaveFileDialog(&sSaveInfo);
@@ -336,7 +336,7 @@ bool CDocFileOperation::SaveFileDialog(LPTSTR szPath)
 //                       セーブフロー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
+bool CDocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 {
 	ESaveResult eSaveResult = SAVED_FAILURE;
 	try {
@@ -345,7 +345,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		// ### 無変更なら上書きしないで抜ける処理はどの CDocListener の OnCheckSave() よりも前に
 		// ### （保存するかどうか問い合わせたりするよりも前に）やるぺきことなので、
 		// ### スマートじゃない？かもしれないけど、とりあえずここに配置しておく
-		if (!GetDllShareData().m_Common.m_sFile.m_bEnableUnmodifiedOverwrite) {
+		if (!GetDllShareData().m_common.m_sFile.m_bEnableUnmodifiedOverwrite) {
 			// 上書きの場合
 			if (pSaveInfo->bOverwriteMode) {
 				// 無変更の場合は警告音を出し、終了
@@ -370,7 +370,7 @@ bool CDocFileOperation::DoSaveFlow(SSaveInfo* pSaveInfo)
 		}
 
 		// 2006.09.01 ryoji 保存前自動実行マクロを実行する
-		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnSave, pSaveInfo->cFilePath);
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnSave, pSaveInfo->cFilePath);
 
 		// プラグイン：DocumentBeforeSaveイベント実行
 		CPlug::Array plugs;
@@ -434,7 +434,7 @@ bool CDocFileOperation::FileSave()
 	}
 
 	// セーブ情報
-	SSaveInfo sSaveInfo;
+	SaveInfo sSaveInfo;
 	m_pcDocRef->GetSaveInfo(&sSaveInfo);
 	sSaveInfo.cEol = EOL_NONE;			// 改行コード無変換
 	sSaveInfo.bOverwriteMode = true;	// 上書き要求
@@ -451,7 +451,7 @@ bool CDocFileOperation::FileSave()
 bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, EEolType eEolType, bool bDialog)
 {
 	// セーブ情報
-	SSaveInfo sSaveInfo;
+	SaveInfo sSaveInfo;
 	m_pcDocRef->GetSaveInfo(&sSaveInfo);
 	sSaveInfo.cEol = EOL_NONE; // 初期値は変換しない
 	if (filename) {
@@ -466,7 +466,7 @@ bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, E
 		}
 	}
 	if (bDialog) {
-		if (!filename && CAppMode::getInstance()->IsViewMode()) {
+		if (!filename && AppMode::getInstance()->IsViewMode()) {
 			sSaveInfo.cFilePath = _T(""); //※読み込み専用モードのときはファイル名を指定しない
 		}
 
@@ -481,7 +481,7 @@ bool CDocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, E
 		// オープン後自動実行マクロを実行する（ANSI版ではここで再ロード実行→自動実行マクロが実行される）
 		// 提案時の Patches#1550557 に、「名前を付けて保存」でオープン後自動実行マクロが実行されることの是非について議論の経緯あり
 		//   →”ファイル名に応じて表示を変化させるマクロとかを想定すると、これはこれでいいように思います。”
-		m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
+		m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
 
 		// プラグイン：DocumentOpenイベント実行
 		CPlug::Array plugs;
@@ -539,7 +539,7 @@ bool CDocFileOperation::FileClose()
 	m_pcDocRef->m_pcEditWnd->UpdateCaption();
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
-	m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
+	m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
 
 	return true;
 }
@@ -552,7 +552,7 @@ bool CDocFileOperation::FileClose()
 /* 閉じて開く
 	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS()から処理本体を切り出し
 */
-void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
+void CDocFileOperation::FileCloseOpen(const LoadInfo& _sLoadInfo)
 {
 	// ファイルを閉じるときのMRU登録 & 保存確認 & 保存実行
 	if (!m_pcDocRef->OnFileClose(false)) {
@@ -568,7 +568,7 @@ void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
 	}
 
 	// ファイル名指定が無い場合はダイアログで入力させる
-	SLoadInfo sLoadInfo = _sLoadInfo;
+	LoadInfo sLoadInfo = _sLoadInfo;
 	if (sLoadInfo.cFilePath.Length() == 0) {
 		std::vector<std::tstring> files;
 		if (!OpenFileDialog(CEditWnd::getInstance()->GetHwnd(), NULL, &sLoadInfo, files)) {
@@ -578,9 +578,9 @@ void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
 		// 他のファイルは新規ウィンドウ
 		size_t nSize = files.size();
 		for (size_t i=1; i<nSize; ++i) {
-			SLoadInfo sFilesLoadInfo = sLoadInfo;
+			LoadInfo sFilesLoadInfo = sLoadInfo;
 			sFilesLoadInfo.cFilePath = files[i].c_str();
-			CControlTray::OpenNewEditor(
+			ControlTray::OpenNewEditor(
 				G_AppInstance(),
 				CEditWnd::getInstance()->GetHwnd(),
 				sFilesLoadInfo,
@@ -609,7 +609,7 @@ void CDocFileOperation::FileCloseOpen(const SLoadInfo& _sLoadInfo)
 
 	// オープン後自動実行マクロを実行する
 	// ※ロードしてなくても(無題)には変更済み
-	m_pcDocRef->RunAutoMacro(GetDllShareData().m_Common.m_sMacro.m_nMacroOnOpened);
+	m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
 
 	// プラグイン：DocumentOpenイベント実行
 	plugs.clear();

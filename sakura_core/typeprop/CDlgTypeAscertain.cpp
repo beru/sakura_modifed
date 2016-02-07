@@ -58,7 +58,7 @@ CDlgTypeAscertain::CDlgTypeAscertain()
 int CDlgTypeAscertain::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
-	SAscertainInfo* psAscertainInfo
+	AscertainInfo* psAscertainInfo
 	)
 {
 	m_psi = psAscertainInfo;
@@ -121,7 +121,7 @@ void CDlgTypeAscertain::SetData(void)
 
 	// エディタ内の設定
 	for (int nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
-		const STypeConfigMini* type;
+		const TypeConfigMini* type;
 		CDocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),

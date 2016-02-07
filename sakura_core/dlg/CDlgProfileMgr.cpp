@@ -119,7 +119,7 @@ void CDlgProfileMgr::SetData( int nSelIndex )
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
 
 	List_ResetContent( hwndList );
-	SProfileSettings settings;
+	ProfileSettings settings;
 	ReadProfSettings(settings);
 	std::tstring strdef = _T("(default)");
 	if (settings.m_nDefaultIndex == 0) {
@@ -184,7 +184,7 @@ int CDlgProfileMgr::GetData(bool bStart)
 		m_strProfileName = _T("");
 	}
 	bool bDefaultSelect = IsButtonChecked(IDC_CHECK_PROF_DEFSTART);
-	SProfileSettings settings;
+	ProfileSettings settings;
 	ReadProfSettings(settings);
 	bool bWrtie = false;
 	if (settings.m_bDefaultSelect != bDefaultSelect) {
@@ -287,7 +287,7 @@ INT_PTR CDlgProfileMgr::DispatchEvent(
 void CDlgProfileMgr::UpdateIni()
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_PROFILE);
-	SProfileSettings settings;
+	ProfileSettings settings;
 	ReadProfSettings(settings);
 	int nCount = List_GetCount(hwndList);
 	settings.m_vProfList.clear();
@@ -478,7 +478,7 @@ void CDlgProfileMgr::ClearDefaultProf()
 
 
 static bool IOProfSettings(
-	SProfileSettings& settings,
+	ProfileSettings& settings,
 	bool bWrite
 	)
 {
@@ -531,7 +531,7 @@ static bool IOProfSettings(
 }
 
 
-bool CDlgProfileMgr::ReadProfSettings(SProfileSettings& settings)
+bool CDlgProfileMgr::ReadProfSettings(ProfileSettings& settings)
 {
 	auto_strcpy(settings.m_szDllLanguage, _T(""));
 	settings.m_nDefaultIndex = 0;
@@ -542,7 +542,7 @@ bool CDlgProfileMgr::ReadProfSettings(SProfileSettings& settings)
 }
 
 
-bool CDlgProfileMgr::WriteProfSettings(SProfileSettings& settings)
+bool CDlgProfileMgr::WriteProfSettings(ProfileSettings& settings)
 {
 	return IOProfSettings( settings, true );
 }

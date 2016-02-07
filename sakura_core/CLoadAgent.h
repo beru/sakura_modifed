@@ -28,10 +28,10 @@
 
 class CLoadAgent : public CDocListenerEx {
 public:
-	ECallbackResult OnCheckLoad(SLoadInfo* pLoadInfo);
-	void OnBeforeLoad(SLoadInfo* sLoadInfo);
-	ELoadResult OnLoad(const SLoadInfo& sLoadInfo);
-	void OnAfterLoad(const SLoadInfo& sLoadInfo);
+	ECallbackResult OnCheckLoad(LoadInfo* pLoadInfo);
+	void OnBeforeLoad(LoadInfo* sLoadInfo);
+	ELoadResult OnLoad(const LoadInfo& sLoadInfo);
+	void OnAfterLoad(const LoadInfo& sLoadInfo);
 	void OnFinalLoad(ELoadResult eLoadResult);
 };
 

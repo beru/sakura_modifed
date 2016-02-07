@@ -33,7 +33,7 @@
 /* TeX */
 // Oct. 31, 2000 JEPRO TeX  ユーザに贈る
 // Oct. 31, 2000 JEPRO TeX ユーザに贈る	//Mar. 10, 2001 JEPRO 追加
-void CType_Tex::InitTypeConfigImp(STypeConfig* pType)
+void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 {
 	// 名前と拡張子
 	_tcscpy(pType->m_szTypeName, _T("TeX"));

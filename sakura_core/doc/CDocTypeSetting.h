@@ -28,13 +28,13 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // フォント属性
-struct SFontAttr {
+struct FontAttr {
 	bool		m_bBoldFont;		// 太字
 	bool		m_bUnderLine;		// 下線
 };
 
 // 色属性
-struct SColorAttr {
+struct ColorAttr {
 	COLORREF	m_cTEXT;			// 文字色
 	COLORREF	m_cBACK;			// 背景色
 };
@@ -42,8 +42,8 @@ struct SColorAttr {
 // 色設定
 struct ColorInfoBase {
 	bool		m_bDisp;			// 表示
-	SFontAttr	m_sFontAttr;		// フォント属性
-	SColorAttr	m_sColorAttr;		// 色属性
+	FontAttr	m_sFontAttr;		// フォント属性
+	ColorAttr	m_sColorAttr;		// 色属性
 };
 
 // 名前とインデックス付き色設定

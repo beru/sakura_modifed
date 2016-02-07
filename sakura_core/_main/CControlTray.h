@@ -7,7 +7,7 @@
 	@author Norio Nakatani
 	@date 1998/05/13 新規作成
 	@date 2001/06/03 N.Nakatani grep単語単位で検索を実装するときのためにコマンドラインオプションの処理追加
-	@date 2007/10/23 kobake     クラス名、ファイル名変更: CEditApp→CControlTray
+	@date 2007/10/23 kobake     クラス名、ファイル名変更: CEditApp→ControlTray
 */
 /*
 	Copyright (C) 1998-2001, Norio Nakatani
@@ -29,7 +29,7 @@
 #include "uiparts/CImageListMgr.h" // 2002/2/10 aroka
 #include "dlg/CDlgGrep.h" // 2002/2/10 aroka
 
-struct SLoadInfo;
+struct LoadInfo;
 struct EditInfo;
 struct DLLSHAREDATA;
 class CPropertyManager;
@@ -41,13 +41,13 @@ class CPropertyManager;
 	
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CControlTray {
+class ControlTray {
 public:
 	/*
 	||  Constructors
 	*/
-	CControlTray();
-	~CControlTray();
+	ControlTray();
+	~ControlTray();
 
 	/*
 	|| メンバ関数
@@ -66,7 +66,7 @@ public:
 	static bool OpenNewEditor(							// 新規編集ウィンドウの追加 ver 0
 		HINSTANCE			hInstance,					// [in] インスタンスID (実は未使用)
 		HWND				hWndParent,					// [in] 親ウィンドウハンドル．エラーメッセージ表示用
-		const SLoadInfo&	sLoadInfo,					// [in]
+		const LoadInfo&	sLoadInfo,					// [in]
 		const TCHAR*		szCmdLineOption	= NULL,		// [in] 追加のコマンドラインオプション
 		bool				sync			= false,	// [in] trueなら新規エディタの起動まで待機する
 		const TCHAR*		pszCurDir		= NULL,		// [in] 新規エディタのカレントディレクトリ

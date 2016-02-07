@@ -66,7 +66,7 @@ static const DWORD p_helpids[] = {
 
 // 内部使用変数
 // 機能格納(Work)
-struct SMainMenuWork {
+struct MainMenuWork {
 	wstring			m_sName;		// 名前
 	EFunctionCode	m_nFunc;		// Function
 	WCHAR			m_sKey[2];		// アクセスキー
@@ -74,22 +74,22 @@ struct SMainMenuWork {
 	bool			m_bIsNode;		// ノードか否か（ノードでもm_nFuncがF_NODE(0)でないものがあるため）
 };
 
-static	std::map<int, SMainMenuWork>	msMenu;	// 一時データ
+static	std::map<int, MainMenuWork>	msMenu;	// 一時データ
 static	int		nMenuCnt = 0;					// 一時データ番号
 
 
 // ローカル関数定義
 static HTREEITEM TreeCopy(HWND, HTREEITEM, HTREEITEM, bool, bool);
 static void TreeView_ExpandAll(HWND, bool);
-static const TCHAR* MakeDispLabel(SMainMenuWork*);
+static const TCHAR* MakeDispLabel(MainMenuWork*);
 
 // 特別機能
-struct SSpecialFunc	{
+struct SpecialFunc	{
 	EFunctionCode	m_nFunc;		// Function
 	int			 	m_nNameId;		// 名前
 };
 
-extern const	SSpecialFunc	sSpecialFuncs[] = {
+extern const	SpecialFunc	sSpecialFuncs[] = {
 	{F_WINDOW_LIST,				STR_SPECIAL_FUNC_WINDOW },
 	{F_FILE_USED_RECENTLY,		STR_SPECIAL_FUNC_RECENT_FILE },
 	{F_FOLDER_USED_RECENTLY,	STR_SPECIAL_FUNC_RECENT_FOLDER },
@@ -137,7 +137,7 @@ static LRESULT CALLBACK TreeViewProc(
 	HTREEITEM		htiItem;
 	TV_ITEM			tvi;		// 取得用
 	WCHAR			cKey;
-	SMainMenuWork*	pFuncWk;	// 機能
+	MainMenuWork*	pFuncWk;	// 機能
 
 	switch (uMsg) {
 	case WM_GETDLGCODE:
@@ -228,7 +228,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 	WCHAR		szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 
 	EFunctionCode	eFuncCode;
-	SMainMenuWork*	pFuncWk;	// 機能
+	MainMenuWork*	pFuncWk;	// 機能
 	TCHAR			szKey[2];
 
 	TV_INSERTSTRUCT	tvis;		// 挿入用
@@ -864,7 +864,7 @@ void CPropMainMenu::SetData(HWND hwndDlg)
 	HTREEITEM	htiItem;
 	HTREEITEM	htiParent;
 	TV_INSERTSTRUCT	tvis;			// 挿入用
-	SMainMenuWork*	pFuncWk;		// 機能(work)
+	MainMenuWork*	pFuncWk;		// 機能(work)
 
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
@@ -992,7 +992,7 @@ bool CPropMainMenu::GetDataTree(
 	HTREEITEM		s;
 	HTREEITEM		ts;
 	TV_ITEM			tvi;			// 取得用
-	SMainMenuWork*	pFuncWk;		// 機能(work)
+	MainMenuWork*	pFuncWk;		// 機能(work)
 	int 			nTopCount = 0;
 
 	if (nLevel == 0) {
@@ -1239,7 +1239,7 @@ static void TreeView_ExpandAll(HWND hwndTree, bool bExpand)
 
 
 // 表示用データの作成（アクセスキー付加）
-static const TCHAR* MakeDispLabel(SMainMenuWork* pFunc)
+static const TCHAR* MakeDispLabel(MainMenuWork* pFunc)
 {
 	static	WCHAR	szLabel[MAX_MAIN_MENU_NAME_LEN + 10];
 
@@ -1293,7 +1293,7 @@ bool CPropMainMenu::Check_MainMenu_Sub(
 	HTREEITEM		s;
 	HTREEITEM		ts;
 	TV_ITEM			tvi;							// 取得用
-	SMainMenuWork*	pFuncWk;						// 機能(work)
+	MainMenuWork*	pFuncWk;						// 機能(work)
 	std::map< WCHAR, HTREEITEM >	mKey;			// 重複エラー検出用
 
 	if (nLevel == 0) {

@@ -66,21 +66,21 @@ void SetDllShareData(DLLSHAREDATA* pShareData)
 
 #include "config/maxdata.h"
 
-#include "env/CAppNodeManager.h"	// SShare_Nodes
+#include "env/CAppNodeManager.h"	// Share_Nodes
 // 2007.09.28 kobake Common構造体をCShareData.hから分離
 #include "env/CommonSetting.h"
-#include "env/CSearchKeywordManager.h"	// SShare_SearchKeywords
-#include "env/CTagJumpManager.h"		// SShare_TagJump
-#include "env/CFileNameManager.h"		// SShare_FileNameManagement
+#include "env/CSearchKeywordManager.h"	// Share_SearchKeywords
+#include "env/CTagJumpManager.h"		// Share_TagJump
+#include "env/CFileNameManager.h"		// Share_FileNameManagement
 
 #include "EditInfo.h"
-#include "types/CType.h" // STypeConfig
+#include "types/CType.h" // TypeConfig
 #include "print/CPrint.h" // PRINTSETTING
 #include "recent/SShare_History.h"	// SShare_History
 
 
 // 共有フラグ
-struct SShare_Flags {
+struct Share_Flags {
 	BOOL				m_bEditWndChanging;				// 編集ウィンドウ切替中	// 2007.04.03 ryoji
 	/*	@@@ 2002.1.24 YAZAKI
 		キーボードマクロは、記録終了した時点でファイル「m_szKeyMacroFileName」に書き出すことにする。
@@ -91,7 +91,7 @@ struct SShare_Flags {
 };
 
 // 共有ワークバッファ
-struct SShare_WorkBuffer {
+struct Share_WorkBuffer {
 	// 2007.09.16 kobake char型だと、常に文字列であるという誤解を招くので、BYTE型に変更。変数名も変更。
 	//           UNICODE版では、余分に領域を使うことが予想されるため、ANSI版の2倍確保。
 private:
@@ -106,18 +106,18 @@ public:
 public:
 	EditInfo	m_EditInfo_MYWM_GETFILEINFO;	// MYWM_GETFILEINFOデータ受け渡し用	####美しくない
 	CLogicPoint			m_LogicPoint;
-	STypeConfig	m_TypeConfig;
+	TypeConfig	m_TypeConfig;
 };
 
 // 共有ハンドル
-struct SShare_Handles {
+struct Share_Handles {
 	HWND	m_hwndTray;
 	HWND	m_hwndDebug;
 	HACCEL	m_hAccel;
 };
 
 // EXE情報
-struct SShare_Version {
+struct Share_Version {
 	DWORD	m_dwProductVersionMS;
 	DWORD	m_dwProductVersionLS;
 };
@@ -138,13 +138,13 @@ struct DLLSHAREDATA {
 	unsigned int				m_nSize;
 
 	// -- -- 非保存対象 -- -- //
-	SShare_Version				m_sVersion;		// ※読込は行わないが、書込は行う
-	SShare_WorkBuffer			m_sWorkBuffer;
-	SShare_Flags				m_sFlags;
-	SShare_Nodes				m_sNodes;
-	SShare_Handles				m_sHandles;
+	Share_Version				m_version;		// ※読込は行わないが、書込は行う
+	Share_WorkBuffer			m_workBuffer;
+	Share_Flags					m_flags;
+	Share_Nodes					m_nodes;
+	Share_Handles				m_handles;
 
-	SCharWidthCache				m_sCharWidth;							//!< 文字半角全角キャッシュ
+	CharWidthCache				m_sCharWidth;							//!< 文字半角全角キャッシュ
 	DWORD						m_dwCustColors[16];						//!< フォントDialogカスタムパレット
 
 	// プラグイン
@@ -153,18 +153,18 @@ struct DLLSHAREDATA {
 
 	// -- -- 保存対象 -- -- //
 	// 設定
-	CommonSetting				m_Common;								// 共通設定
+	CommonSetting				m_common;								// 共通設定
 	int							m_nTypesCount;							// タイプ別設定数
-	STypeConfig					m_TypeBasis;							// タイプ別設定: 共通
-	STypeConfigMini				m_TypeMini[MAX_TYPES];					// タイプ別設定(mini)
+	TypeConfig					m_TypeBasis;							// タイプ別設定: 共通
+	TypeConfigMini				m_TypeMini[MAX_TYPES];					// タイプ別設定(mini)
 	PRINTSETTING				m_PrintSettingArr[MAX_PRINTSETTINGARR];	// 印刷ページ設定
 	int							m_nLockCount;							//!< ロックカウント
 	
 	// その他
-	SShare_SearchKeywords		m_sSearchKeywords;
-	SShare_TagJump				m_sTagJump;
-	SShare_FileNameManagement	m_sFileNameManagement;
-	SShare_History				m_sHistory;
+	Share_SearchKeywords		m_searchKeywords;
+	Share_TagJump				m_tagJump;
+	Share_FileNameManagement	m_fileNameManagement;
+	SShare_History				m_history;
 
 	// 外部コマンド実行ダイアログのオプション
 	int							m_nExecFlgOpt;				// 外部コマンド実行オプション	// 2006.12.03 maru オプションの拡張のため
@@ -179,13 +179,13 @@ struct DLLSHAREDATA {
 	bool						m_bLineNumIsCRLF_ForJump;	// 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か
 };
 
-class CShareDataLockCounter {
+class ShareDataLockCounter {
 public:
-	CShareDataLockCounter();
-	~CShareDataLockCounter();
+	ShareDataLockCounter();
+	~ShareDataLockCounter();
 
 	static int GetLockCounter();
-	static void WaitLock(HWND, CShareDataLockCounter** = NULL);
+	static void WaitLock(HWND, ShareDataLockCounter** = NULL);
 private:
 };
 

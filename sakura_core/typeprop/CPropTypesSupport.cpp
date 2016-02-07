@@ -49,14 +49,14 @@ static const DWORD p_helpids3[] = {	//11500
 };
 
 
-struct SHokanMethod {
+struct HokanMethod {
 	int nMethod;
 	std::wstring name;
 };
 
-static std::vector<SHokanMethod>* GetHokanMethodList()
+static std::vector<HokanMethod>* GetHokanMethodList()
 {
-	static std::vector<SHokanMethod> methodList;
+	static std::vector<HokanMethod> methodList;
 	return &methodList;
 }
 
@@ -222,7 +222,7 @@ void CPropTypesSupport::SetData(HWND hwndDlg)
 
 	{
 		HWND hCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_HOKAN_TYPE);
-		std::vector<SHokanMethod>* pMedothList = GetHokanMethodList();
+		std::vector<HokanMethod>* pMedothList = GetHokanMethodList();
 		ApiWrap::Combo_AddString(hCombo, LS(STR_SMART_INDENT_NONE));
 		Combo_SetCurSel(hCombo, 0);
 		size_t nSize = pMedothList->size();
@@ -291,7 +291,7 @@ int CPropTypesSupport::GetData(HWND hwndDlg)
 // •âŠ®Ží•Ê‚Ì’Ç‰Á
 void CPropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
 {
-	SHokanMethod item = { nMethod, std::wstring(szName) };
+	HokanMethod item = { nMethod, std::wstring(szName) };
 	GetHokanMethodList()->push_back(item);
 }
 

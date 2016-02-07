@@ -5,7 +5,7 @@
 #include "doc/logic/CDocLine.h"
 
 
-void CModifyManager::OnAfterSave(const SSaveInfo& sSaveInfo)
+void CModifyManager::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 

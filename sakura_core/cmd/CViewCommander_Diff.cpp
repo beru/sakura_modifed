@@ -47,17 +47,17 @@ static bool Commander_COMPARE_core(
 	CLogicInt		nLineLenSrc;
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
-	int max_size = (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<EDIT_CHAR>();
+	int max_size = (int)GetDllShareData().m_workBuffer.GetWorkBufferCount<EDIT_CHAR>();
 	const CDocLineMgr& docMgr = commander.GetDocument()->m_cDocLineMgr;
 
 	bDifferent = true;
 	{
-		pLineDes = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<const EDIT_CHAR>();
+		pLineDes = GetDllShareData().m_workBuffer.GetWorkBuffer<const EDIT_CHAR>();
 		int nLineOffset = 0;
 		for (;;) {
 			pLineSrc = docMgr.GetLine(poSrc.y)->GetDocLineStrWithEOL(&nLineLenSrc);
 			do {
-				// m_sWorkBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
+				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
 				LockGuard<CMutex> guard( CShareData::GetMutexShareWork() );
 				// 行(改行単位)データの要求
 				nLineLenDes = ::SendMessage( hwnd, MYWM_GETLINEDATA, poDes.y, nLineOffset );
@@ -118,7 +118,7 @@ void CViewCommander::Command_COMPARE(void)
 	TCHAR		szPath[_MAX_PATH + 1];
 	CDlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
-	auto& commonSetting = GetDllShareData().m_Common;
+	auto& commonSetting = GetDllShareData().m_common;
 	auto& csCompare = commonSetting.m_sCompare;
 	// 比較後、左右に並べて表示
 	cDlgCompare.m_bCompareAndTileHorz = csCompare.m_bCompareAndTileHorz;
@@ -162,7 +162,7 @@ void CViewCommander::Command_COMPARE(void)
 	CLogicPoint	poDes;
 	{
 		::SendMessage(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
-		CLogicPoint* ppoCaretDes = &(GetDllShareData().m_sWorkBuffer.m_LogicPoint);
+		CLogicPoint* ppoCaretDes = &(GetDllShareData().m_workBuffer.m_LogicPoint);
 		poDes.x = ppoCaretDes->x;
 		poDes.y = ppoCaretDes->y;
 	}
@@ -173,7 +173,7 @@ void CViewCommander::Command_COMPARE(void)
 	// 比較後、左右に並べて表示
 // From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
-	if (GetDllShareData().m_Common.m_sCompare.m_bCompareAndTileHorz) {
+	if (GetDllShareData().m_common.m_sCompare.m_bCompareAndTileHorz) {
 		HWND hWndArr[2];
 		hWndArr[0] = GetMainWindow();
 		hWndArr[1] = hwndCompareWnd;
@@ -207,11 +207,11 @@ void CViewCommander::Command_COMPARE(void)
 		/* カーソルを移動させる
 			比較相手は、別プロセスなのでメッセージを飛ばす。
 		*/
-		GetDllShareData().m_sWorkBuffer.m_LogicPoint = poDes;
+		GetDllShareData().m_workBuffer.m_LogicPoint = poDes;
 		::SendMessage(hwndCompareWnd, MYWM_SETCARETPOS, 0, 0);
 
 		// カーソルを移動させる
-		GetDllShareData().m_sWorkBuffer.m_LogicPoint = poSrc;
+		GetDllShareData().m_workBuffer.m_LogicPoint = poSrc;
 		::PostMessage(GetMainWindow(), MYWM_SETCARETPOS, 0, 0);
 		TopWarningMessage(hwndMsgBox, LS(STR_ERR_CEDITVIEW_CMD23));	// 位置を変更してからメッセージ	2008/4/27 Uchi
 	}
@@ -226,7 +226,7 @@ void CViewCommander::Command_COMPARE(void)
 static
 ECodeType GetFileCharCode( LPCTSTR pszFile )
 {
-	const STypeConfigMini* typeMini;
+	const TypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini( CDocTypeManager().GetDocumentTypeOfPath( pszFile ), &typeMini );
 	return CCodeMediator(typeMini->m_encoding).CheckKanjiCodeOfFile( pszFile );
 }
@@ -421,7 +421,7 @@ void CViewCommander::Command_Diff_Next(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;	
-	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SEARCH_FORWARD, &tmp_y)) {
+	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		CLayoutPoint ptXY_Layout;
@@ -438,7 +438,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		// 見つからなかった。かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			ptXY.y = 0 - 1;	// 1個手前を指定
@@ -472,7 +472,7 @@ void CViewCommander::Command_Diff_Prev(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;
-	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SEARCH_BACKWARD, &tmp_y)) {
+	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		CLayoutPoint ptXY_Layout;
@@ -489,7 +489,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_Common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			// 2011.02.02 m_cLayoutMgr→m_cDocLineMgr

@@ -121,7 +121,7 @@ public:
 
 private:
 
-	struct STagFindState {
+	struct TagFindState {
 		int   m_nDepth;
 		int   m_nMatchAll;
 		int   m_nNextMode;
@@ -146,14 +146,14 @@ private:
 	bool	m_bNextItem;			// まだ次にヒットするものがある
 
 	// 絞り込み検索用
-	STagFindState* m_psFindPrev;	// 前回の最後に検索した状態
-	STagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
+	TagFindState* m_psFindPrev;	// 前回の最後に検索した状態
+	TagFindState* m_psFind0Match;	// 前回の1つもHitしなかった最後のtags
 
 	CNativeW	m_strOldKeyword;	// 前回のキーワード
 	bool	m_bOldTagJumpICase;		// 前回の大文字小文字を同一視
 	bool	m_bOldTagJumpAnyWhere;	// 前回の文字列の途中にマッチ
 
-	SComboBoxItemDeleter	m_comboDel;
+	ComboBoxItemDeleter	m_comboDel;
 	CRecentTagjumpKeyword	m_cRecentKeyword;
 	
 	POINT	m_ptDefaultSize;

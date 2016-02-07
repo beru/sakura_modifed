@@ -388,13 +388,13 @@ bool MakeDiffTmpFile_core(CTextOutputStream& out, HWND hwnd, CEditView& view, bo
 			++y;
 		}
 	}else if (IsSakuraMainWindow(hwnd)) {
-		const int max_size = (int)GetDllShareData().m_sWorkBuffer.GetWorkBufferCount<const EDIT_CHAR>();
-		pLineData = GetDllShareData().m_sWorkBuffer.GetWorkBuffer<const EDIT_CHAR>();
+		const int max_size = (int)GetDllShareData().m_workBuffer.GetWorkBufferCount<const EDIT_CHAR>();
+		pLineData = GetDllShareData().m_workBuffer.GetWorkBuffer<const EDIT_CHAR>();
 		for (;;) {
 			int nLineOffset = 0;
 			int nLineLen = 0; //初回用仮値
 			do {
-				// m_sWorkBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
+				// m_workBuffer#m_Workの排他制御。外部コマンド出力/TraceOut/Diffが対象
 				LockGuard<CMutex> guard(CShareData::GetMutexShareWork());
 				{
 					nLineLen = ::SendMessage(hwnd, MYWM_GETLINEDATA, y, nLineOffset);
@@ -452,7 +452,7 @@ BOOL CEditView::MakeDiffTmpFile(
 	if (!hWnd) {
 		EConvertResult eWriteResult = CWriteManager().WriteFile_From_CDocLineMgr(
 			m_pcEditDoc->m_cDocLineMgr,
-			SSaveInfo(
+			SaveInfo(
 				filename,
 				code,
 				EOL_NONE,
@@ -508,7 +508,7 @@ BOOL CEditView::MakeDiffTmpFile2(
 	free( pszTmpName );
 
 	bool bBom = false;
-	const STypeConfigMini* typeMini;
+	const TypeConfigMini* typeMini;
 	CDocTypeManager().GetTypeConfigMini(CDocTypeManager().GetDocumentTypeOfPath( orgName ), &typeMini);
 	CFileLoad cfl(typeMini->m_encoding);
 	CTextOutputStream out(tmpName, saveCode, true, false);
@@ -527,7 +527,7 @@ BOOL CEditView::MakeDiffTmpFile2(
 			orgName,
 			bBigFile,
 			code,
-			GetDllShareData().m_Common.m_sFile.GetAutoMIMEdecode(),
+			GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode(),
 			&bBom
 		);
 		CNativeW cLine;

@@ -46,11 +46,11 @@ public:
 	void SetBaseName(const wstring&);
 	// フルパス名を取得
 	inline wstring GetFullPath() {
-		return to_wchar(GetDllShareData().m_sHistory.m_szIMPORTFOLDER) + m_sOriginName;
+		return to_wchar(GetDllShareData().m_history.m_szIMPORTFOLDER) + m_sOriginName;
 	}
 	// フルパス名を取得
 	inline wstring MakeFullPath(wstring sFileName) {
-		return to_wchar(GetDllShareData().m_sHistory.m_szIMPORTFOLDER) + sFileName;
+		return to_wchar(GetDllShareData().m_history.m_szIMPORTFOLDER) + sFileName;
 	}
 	// ファイル名を取得
 	inline wstring GetFileName()	{ return m_sOriginName; }
@@ -60,8 +60,8 @@ protected:
 	inline void SetImportFolder(const TCHAR* szPath) {
 		// ファイルのフルパスをフォルダとファイル名に分割
 		// [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt]
-		::SplitPath_FolderAndFile(szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL);
-		_tcscat(GetDllShareData().m_sHistory.m_szIMPORTFOLDER, _T("\\"));
+		::SplitPath_FolderAndFile(szPath, GetDllShareData().m_history.m_szIMPORTFOLDER, NULL);
+		_tcscat(GetDllShareData().m_history.m_szIMPORTFOLDER, _T("\\"));
 	}
 
 	// デフォルト拡張子の取得(「*.txt」形式)
@@ -81,7 +81,7 @@ protected:
 class CImpExpType : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpType(int nIdx, STypeConfig& types, HWND hwndList)
+	CImpExpType(int nIdx, TypeConfig& types, HWND hwndList)
 		: m_nIdx(nIdx)
 		, m_Types(types)
 		, m_hwndList(hwndList)
@@ -104,7 +104,7 @@ public:
 private:
 	// インターフェース用
 	int 			m_nIdx;
-	STypeConfig&	m_Types;
+	TypeConfig&	m_Types;
 	HWND			m_hwndList;
 
 	// 内部使用
@@ -148,7 +148,7 @@ private:
 class CImpExpRegex : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpRegex(STypeConfig& types)
+	CImpExpRegex(TypeConfig& types)
 		:
 		m_Types(types)
 	{
@@ -164,7 +164,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"rkw"; }
 
 private:
-	STypeConfig&	m_Types;
+	TypeConfig&	m_Types;
 };
 
 
@@ -174,7 +174,7 @@ private:
 class CImpExpKeyHelp : public CImpExpManager {
 public:
 	// Constructor
-	CImpExpKeyHelp(STypeConfig& types)
+	CImpExpKeyHelp(TypeConfig& types)
 		:
 		m_Types(types)
 	{
@@ -190,7 +190,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"txt"; }
 
 private:
-	STypeConfig&	m_Types;
+	TypeConfig&	m_Types;
 };
 
 
@@ -309,7 +309,7 @@ class CImpExpFileTree : public CImpExpManager
 {
 public:
 	// Constructor
-	CImpExpFileTree(std::vector<SFileTreeItem>& items)
+	CImpExpFileTree(std::vector<FileTreeItem>& items)
 		:
 		m_aFileTreeItems(items)
 	{
@@ -318,7 +318,7 @@ public:
 public:
 	bool Import(const wstring&, wstring&);
 	bool Export(const wstring&, wstring&);
-	static void IO_FileTreeIni(CDataProfile&, std::vector<SFileTreeItem>&);
+	static void IO_FileTreeIni(CDataProfile&, std::vector<FileTreeItem>&);
 
 public:
 	// デフォルト拡張子の取得
@@ -326,6 +326,6 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
 
 private:
-	std::vector<SFileTreeItem>&	m_aFileTreeItems;
+	std::vector<FileTreeItem>&	m_aFileTreeItems;
 };
 

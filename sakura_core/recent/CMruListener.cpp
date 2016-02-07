@@ -36,7 +36,7 @@
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CMruListener::OnAfterSave(const SSaveInfo& sSaveInfo)
+void CMruListener::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	_HoldBookmarks_And_AddToMRU();
 }
@@ -47,7 +47,7 @@ void CMruListener::OnAfterSave(const SSaveInfo& sSaveInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
+void CMruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 	// 再ロード用に現在ファイルをMRU登録しておく
 	// Mar. 30, 2003 genta ブックマーク保存のためMRUへ登録
@@ -79,7 +79,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 	if (CODE_AUTODETECT == pLoadInfo->eCharCode) {
 		if (fexist(pLoadInfo->cFilePath)) {
 			// デフォルト文字コード認識のために一時的に読み込み対象ファイルのファイルタイプを適用する
-			const STypeConfigMini* type;
+			const TypeConfigMini* type;
 			CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type);
 			CCodeMediator cmediator(type->m_encoding);
 			pLoadInfo->eCharCode = cmediator.CheckKanjiCodeOfFile(pLoadInfo->cFilePath);
@@ -90,7 +90,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 		pLoadInfo->eCharCode = ePrevCode;
 	}
 	if (CODE_NONE == pLoadInfo->eCharCode) {
-		const STypeConfigMini* type;
+		const TypeConfigMini* type;
 		if (CDocTypeManager().GetTypeConfigMini(pLoadInfo->nType, &type)) {
 			pLoadInfo->eCharCode = type->m_encoding.m_eDefaultCodetype;	// 無効値の回避	// 2011.01.24 ryoji CODE_DEFAULT -> m_eDefaultCodetype
 		}else {
@@ -101,7 +101,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 	// 食い違う場合
 	if (IsValidCodeOrCPType(ePrevCode) && pLoadInfo->eCharCode != ePrevCode) {
 		// オプション：前回と文字コードが異なるときに問い合わせを行う
-		if (GetDllShareData().m_Common.m_sFile.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
+		if (GetDllShareData().m_common.m_sFile.m_bQueryIfCodeChange && !pLoadInfo->bRequestReload) {
 			TCHAR szCpNameNew[260];
 			TCHAR szCpNameOld[260];
 			CCodePage::GetNameLong(szCpNameOld, ePrevCode);
@@ -140,7 +140,7 @@ void CMruListener::OnBeforeLoad(SLoadInfo* pLoadInfo)
 }
 
 
-void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
+void CMruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	CEditDoc* pcDoc = GetListeningDoc();
 
@@ -150,7 +150,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	bool bIsExistInMRU = cMRU.GetEditInfo(pcDoc->m_cDocFile.GetFilePath(), &eiOld);
 
 	// キャレット位置の復元
-	if (bIsExistInMRU && GetDllShareData().m_Common.m_sFile.GetRestoreCurPosition()) {
+	if (bIsExistInMRU && GetDllShareData().m_common.m_sFile.GetRestoreCurPosition()) {
 		// キャレット位置取得
 		CLayoutPoint ptCaretPos;
 		pcDoc->m_cLayoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
@@ -180,7 +180,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
-		if (GetDllShareData().m_Common.m_sFile.GetRestoreBookmarks()) {
+		if (GetDllShareData().m_common.m_sFile.GetRestoreBookmarks()) {
 			CBookmarkManager(&pcDoc->m_cDocLineMgr).SetBookMarks(eiOld.m_szMarkLines);
 		}
 	}else {
@@ -192,7 +192,7 @@ void CMruListener::OnAfterLoad(const SLoadInfo& sLoadInfo)
 	pcDoc->GetEditInfo(&eiNew);
 	// 2014.07.04 ブックマークの保持(エディタが落ちたときブックマークが消えるため)
 	if (bIsExistInMRU) {
-		if (GetDllShareData().m_Common.m_sFile.GetRestoreBookmarks()) {
+		if (GetDllShareData().m_common.m_sFile.GetRestoreBookmarks()) {
 			// SetBookMarksでデータがNUL区切りに書き換わっているので再取得
 			cMRU.GetEditInfo(pcDoc->m_cDocFile.GetFilePath(), &eiOld);
 			auto_strcpy(eiNew.m_szMarkLines, eiOld.m_szMarkLines);

@@ -38,9 +38,9 @@ public:
 	CTypeConfig GetDocumentTypeOfExt(const TCHAR* pszExt);		// 拡張子を渡して、ドキュメントタイプ（数値）を取得する
 	CTypeConfig GetDocumentTypeOfId(int id);
 
-	bool GetTypeConfig(CTypeConfig cDocumentType, STypeConfig& type);
-	bool SetTypeConfig(CTypeConfig cDocumentType, const STypeConfig& type);
-	bool GetTypeConfigMini(CTypeConfig cDocumentType, const STypeConfigMini** type);
+	bool GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type);
+	bool SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig& type);
+	bool GetTypeConfigMini(CTypeConfig cDocumentType, const TypeConfigMini** type);
 	bool AddTypeConfig(CTypeConfig cDocumentType);
 	bool DelTypeConfig(CTypeConfig cDocumentType);
 

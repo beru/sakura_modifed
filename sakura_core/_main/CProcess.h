@@ -26,14 +26,14 @@
 /*!
 	@brief プロセス基底クラス
 */
-class CProcess : public TSingleInstance<CProcess> {
+class Process : public TSingleInstance<Process> {
 public:
-	CProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine);
+	Process(HINSTANCE hInstance, LPCTSTR lpCmdLine);
 	bool Run();
-	virtual ~CProcess() {}
+	virtual ~Process() {}
 	virtual void RefreshString();
 protected:
-	CProcess();
+	Process();
 	virtual bool InitializeProcess();
 	virtual bool MainLoop() = 0;
 	virtual void OnExitProcess() = 0;

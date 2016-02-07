@@ -45,7 +45,7 @@ struct IniFolder {
 
 
 // 共有メモリ内構造体
-struct SShare_FileNameManagement {
+struct Share_FileNameManagement {
 	IniFolder	m_IniFolder;	// **** iniフォルダ設定 ****
 };
 

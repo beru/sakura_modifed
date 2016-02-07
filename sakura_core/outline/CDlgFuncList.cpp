@@ -79,7 +79,7 @@ const DWORD p_helpids[] = {	//12200
 	0, 0
 };	//@@@ 2002.01.07 add end MIK
 
-static const SAnchorList anchorList[] = {
+static const AnchorListItem anchorList[] = {
 	{IDC_BUTTON_COPY, ANCHOR_BOTTOM},
 	{IDOK, ANCHOR_BOTTOM},
 	{IDCANCEL, ANCHOR_BOTTOM},
@@ -720,20 +720,20 @@ void CDlgFuncList::SetData()
 		}
 	}
 	// アウトライン ダイアログを自動的に閉じる
-	CheckButton(IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList);
+	CheckButton(IDC_CHECK_bAutoCloseDlgFuncList, m_pShareData->m_common.m_sOutline.m_bAutoCloseDlgFuncList);
 	// アウトライン ブックマーク一覧で空行を無視する
-	CheckButton(IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable);
+	CheckButton(IDC_CHECK_bMarkUpBlankLineEnable, m_pShareData->m_common.m_sOutline.m_bMarkUpBlankLineEnable);
 	// アウトライン ジャンプしたらフォーカスを移す
-	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump);
+	CheckButton(IDC_CHECK_bFunclistSetFocusOnJump, m_pShareData->m_common.m_sOutline.m_bFunclistSetFocusOnJump);
 
 	// アウトライン ■位置とサイズを記憶する // 20060201 aroka
-	CheckButton(IDC_BUTTON_WINSIZE, m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos);
+	CheckButton(IDC_BUTTON_WINSIZE, m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos);
 	// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 	SetItemText(IDC_BUTTON_WINSIZE, 
-		m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
+		m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 
 	// ダイアログを自動的に閉じるならフォーカス移動オプションは関係ない
-	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList);
+	EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.m_sOutline.m_bAutoCloseDlgFuncList);
 
 	// 2002.02.08 hor
 	//（IDC_LIST_FLもIDC_TREE_FLも常に存在していて、m_nViewTypeによって、どちらを表示するかを選んでいる）
@@ -1643,7 +1643,7 @@ void CDlgFuncList::SetTreeFile()
 	for (int i=0; i<(int)m_fileTreeSetting.m_aItems.size(); ++i) {
 		TCHAR szPath[_MAX_PATH];
 		TCHAR szPath2[_MAX_PATH];
-		const SFileTreeItem& item = m_fileTreeSetting.m_aItems[i];
+		const FileTreeItem& item = m_fileTreeSetting.m_aItems[i];
 		// item.m_szTargetPath => szPath メタ文字の展開
 		if (!CFileNameManager::ExpandMetaToFolder(item.m_szTargetPath, szPath, _countof(szPath))) {
 			auto_strcpy_s(szPath, _countof(szPath), _T("<Error:Long Path>"));
@@ -1856,15 +1856,15 @@ BOOL CDlgFuncList::OnInitDialog(
 	// アウトライン位置とサイズを初期化する // 20060201 aroka
 	CEditView* pcEditView=(CEditView*)m_lParam;
 	if (pcEditView) {
-		if (!IsDocking() && m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos) {
+		if (!IsDocking() && m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos) {
 			WINDOWPLACEMENT cWindowPlacement;
 			cWindowPlacement.length = sizeof(cWindowPlacement);
 			if (::GetWindowPlacement(pcEditView->m_pcEditWnd->GetHwnd(), &cWindowPlacement)) {
 				// ウィンドウ位置・サイズを-1以外の値にしておくと、CDialogで使用される．
-				m_xPos = m_pShareData->m_Common.m_sOutline.m_xOutlineWindowPos + cWindowPlacement.rcNormalPosition.left;
-				m_yPos = m_pShareData->m_Common.m_sOutline.m_yOutlineWindowPos + cWindowPlacement.rcNormalPosition.top;
-				m_nWidth =  m_pShareData->m_Common.m_sOutline.m_widthOutlineWindow;
-				m_nHeight = m_pShareData->m_Common.m_sOutline.m_heightOutlineWindow;
+				m_xPos = m_pShareData->m_common.m_sOutline.m_xOutlineWindowPos + cWindowPlacement.rcNormalPosition.left;
+				m_yPos = m_pShareData->m_common.m_sOutline.m_yOutlineWindowPos + cWindowPlacement.rcNormalPosition.top;
+				m_nWidth =  m_pShareData->m_common.m_sOutline.m_widthOutlineWindow;
+				m_nHeight = m_pShareData->m_common.m_sOutline.m_heightOutlineWindow;
 			}
 		}else if (IsDocking()) {
 			m_xPos = 0;
@@ -2042,20 +2042,20 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_WINSIZE:
 		{// ウィンドウの位置とサイズを記憶 // 20060201 aroka
-			m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
+			m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos = IsButtonChecked(IDC_BUTTON_WINSIZE);
 		}
 		// ボタンが押されているかはっきりさせる 2008/6/5 Uchi
 		SetItemText(IDC_BUTTON_WINSIZE,
-			m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
+			m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos ? _T("■") : _T("□"));
 		return TRUE;
 	// 2002.02.08 オプション切替後List/Treeにフォーカス移動
 	case IDC_CHECK_bAutoCloseDlgFuncList:
 	case IDC_CHECK_bMarkUpBlankLineEnable:
 	case IDC_CHECK_bFunclistSetFocusOnJump:
-		m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
-		m_pShareData->m_Common.m_sOutline.m_bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
-		m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
-		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList);
+		m_pShareData->m_common.m_sOutline.m_bAutoCloseDlgFuncList = IsButtonChecked(IDC_CHECK_bAutoCloseDlgFuncList);
+		m_pShareData->m_common.m_sOutline.m_bMarkUpBlankLineEnable = IsButtonChecked(IDC_CHECK_bMarkUpBlankLineEnable);
+		m_pShareData->m_common.m_sOutline.m_bFunclistSetFocusOnJump = IsButtonChecked(IDC_CHECK_bFunclistSetFocusOnJump);
+		EnableItem(IDC_CHECK_bFunclistSetFocusOnJump, !m_pShareData->m_common.m_sOutline.m_bAutoCloseDlgFuncList);
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OUTLINE_BOOKMARK) {
 			CEditView* pcEditView=(CEditView*)m_lParam;
 			pcEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
@@ -2076,7 +2076,7 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 			if (nRet == TRUE) {
 				EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 				CEditView* pcEditView = (CEditView*)m_lParam;
-				pcEditView->GetCommander().HandleCommand(nFuncCode, true, SHOW_RELOAD, 0, 0, 0);
+				pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0);
 			}
 		}
 	}
@@ -2136,7 +2136,7 @@ BOOL CDlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 		case NM_KILLFOCUS:
 			// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 4/4
 			if (m_bWaitTreeProcess) {
-				if (m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump) {
+				if (m_pShareData->m_common.m_sOutline.m_bFunclistSetFocusOnJump) {
 					::SetFocus(pcEditView->GetHwnd());
 				}
 				m_bWaitTreeProcess=false;
@@ -2154,7 +2154,7 @@ BOOL CDlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 			}
 			m_nSortColOld = m_nSortCol;
 			{
-				auto type = std::make_unique<STypeConfig>();
+				auto type = std::make_unique<TypeConfig>();
 				CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), *type);
 				type->m_nOutlineSortCol = m_nSortCol;
 				type->m_bOutlineSortDesc = m_bSortDesc;
@@ -2193,7 +2193,7 @@ BOOL CDlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 					break;
 				case CDDS_ITEMPREPAINT:
 					{	// 選択アイテムを反転表示にする
-						const STypeConfig* TypeDataPtr = &(pcEditView->m_pcEditDoc->m_cDocType.GetDocumentAttribute());
+						const TypeConfig* TypeDataPtr = &(pcEditView->m_pcEditDoc->m_cDocType.GetDocumentAttribute());
 						COLORREF clrText = TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
 						COLORREF clrTextBk = TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
 						if (hwndList == pnmh->hwndFrom) {
@@ -2386,16 +2386,16 @@ BOOL CDlgFuncList::OnDestroy(void)
 	// 前提条件：m_lParam が CDialog::OnDestroy でクリアされないこと
 	CEditView* pcEditView=(CEditView*)m_lParam;
 	HWND hwndEdit = pcEditView->m_pcEditWnd->GetHwnd();
-	if (!IsDocking() && m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos) {
+	if (!IsDocking() && m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos) {
 		// 親のウィンドウ位置・サイズを記憶
 		WINDOWPLACEMENT cWindowPlacement;
 		cWindowPlacement.length = sizeof(cWindowPlacement);
 		if (::GetWindowPlacement(hwndEdit, &cWindowPlacement)) {
 			// ウィンドウ位置・サイズを記憶
-			m_pShareData->m_Common.m_sOutline.m_xOutlineWindowPos = m_xPos - cWindowPlacement.rcNormalPosition.left;
-			m_pShareData->m_Common.m_sOutline.m_yOutlineWindowPos = m_yPos - cWindowPlacement.rcNormalPosition.top;
-			m_pShareData->m_Common.m_sOutline.m_widthOutlineWindow = m_nWidth;
-			m_pShareData->m_Common.m_sOutline.m_heightOutlineWindow = m_nHeight;
+			m_pShareData->m_common.m_sOutline.m_xOutlineWindowPos = m_xPos - cWindowPlacement.rcNormalPosition.left;
+			m_pShareData->m_common.m_sOutline.m_yOutlineWindowPos = m_yPos - cWindowPlacement.rcNormalPosition.top;
+			m_pShareData->m_common.m_sOutline.m_widthOutlineWindow = m_nWidth;
+			m_pShareData->m_common.m_sOutline.m_heightOutlineWindow = m_nHeight;
 		}
 	}
 
@@ -2439,7 +2439,7 @@ BOOL CDlgFuncList::OnCbnSelChange(HWND hwndCtl, int wID)
 	case IDC_COMBO_nSortType:
 		if (m_nSortType != nSelect) {
 			m_nSortType = nSelect;
-			auto type = std::make_unique<STypeConfig>();
+			auto type = std::make_unique<TypeConfig>();
 			CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), *type);
 			type->m_nOutlineSortType = m_nSortType;
 			SetTypeConfig(CTypeConfig(m_nDocType), *type);
@@ -2478,7 +2478,7 @@ bool CDlgFuncList::TagJumpTimer(
 	// ファイルを開いていない場合は自分で開く
 	if (pcView->GetDocument()->IsAcceptLoad()) {
 		std::wstring strFile = to_wchar(pFile);
-		pcView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, CAppMode::getInstance()->IsViewMode(), NULL );
+		pcView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance()->IsViewMode(), NULL );
 		if (point.y != -1) {
 			if (pcView->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 				CLogicPoint pt;
@@ -2545,7 +2545,7 @@ BOOL CDlgFuncList::OnJump(
 				poCaret.x = nColTo - 1;
 				poCaret.y = nLineTo - 1;
 
-				m_pShareData->m_sWorkBuffer.m_LogicPoint = poCaret;
+				m_pShareData->m_workBuffer.m_LogicPoint = poCaret;
 
 				//	2006.07.09 genta 移動時に選択状態を保持するように
 				::SendMessage(((CEditView*)m_lParam)->m_pcEditWnd->GetHwnd(),
@@ -2555,9 +2555,9 @@ BOOL CDlgFuncList::OnJump(
 				// アウトライン ダイアログを自動的に閉じる
 				if (IsDocking()) {
 					::PostMessage( ((CEditView*)m_lParam)->GetHwnd(), MYWM_SETACTIVEPANE, 0, 0 );
-				}else if (m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList) {
+				}else if (m_pShareData->m_common.m_sOutline.m_bAutoCloseDlgFuncList) {
 					::DestroyWindow( GetHwnd() );
-				}else if (m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump) {
+				}else if (m_pShareData->m_common.m_sOutline.m_bFunclistSetFocusOnJump) {
 					::SetFocus( ((CEditView*)m_lParam)->GetHwnd() );
 				}
 			}
@@ -2582,7 +2582,7 @@ void CDlgFuncList::Key2Command(WORD KeyCode)
 // novice 2004/10/10
 	// Shift,Ctrl,Altキーが押されていたか
 	int nIdx = getCtrlKeyState();
-	auto& csKeyBind = m_pShareData->m_Common.m_sKeyBind;
+	auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
 	EFunctionCode nFuncCode = CKeyBind::GetFuncCode(
 		((WORD)(((BYTE)(KeyCode)) | ((WORD)((BYTE)(nIdx))) << 8)),
 		csKeyBind.m_nKeyNameArrNum,
@@ -2597,7 +2597,7 @@ void CDlgFuncList::Key2Command(WORD KeyCode)
 	case F_BOOKMARK_VIEW:
 	case F_FILETREE:
 		pcEditView=(CEditView*)m_lParam;
-		pcEditView->GetCommander().HandleCommand(nFuncCode, true, SHOW_RELOAD, 0, 0, 0); // 引数の変更 20060201 aroka
+		pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0); // 引数の変更 20060201 aroka
 
 		break;
 	case F_BOOKMARK_SET:
@@ -2663,7 +2663,7 @@ void CDlgFuncList::SyncColor(void)
 #ifdef DEFINE_SYNCCOLOR
 	// テキスト色・背景色をビューと同色にする
 	CEditView* pcEditView = (CEditView*)m_lParam;
-	const STypeConfig* TypeDataPtr = &(pcEditView->m_pcEditDoc->m_cDocType.GetDocumentAttribute());
+	const TypeConfig* TypeDataPtr = &(pcEditView->m_pcEditDoc->m_cDocType.GetDocumentAttribute());
 	COLORREF clrText = TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
 	COLORREF clrBack = TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
 
@@ -2888,9 +2888,9 @@ INT_PTR CDlgFuncList::OnTimer(
 					if (bSelf) {
 						::PostMessage( pcView->GetHwnd(), MYWM_SETACTIVEPANE, 0, 0 );
 					}
-				}else if (m_pShareData->m_Common.m_sOutline.m_bAutoCloseDlgFuncList) {
+				}else if (m_pShareData->m_common.m_sOutline.m_bAutoCloseDlgFuncList) {
 					::DestroyWindow( GetHwnd() );
-				}else if (m_pShareData->m_Common.m_sOutline.m_bFunclistSetFocusOnJump) {
+				}else if (m_pShareData->m_common.m_sOutline.m_bFunclistSetFocusOnJump) {
 					if (bSelf) {
 						::SetFocus( pcView->GetHwnd() );
 					}
@@ -3162,7 +3162,7 @@ INT_PTR CDlgFuncList::OnLButtonUp(
 			}else if (m_nCapturingBtn == 2) {	// 更新
 				EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 				CEditView* pcEditView = (CEditView*)m_lParam;
-				pcEditView->GetCommander().HandleCommand(nFuncCode, true, SHOW_RELOAD, 0, 0, 0);
+				pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0);
 			}
 		}
 		m_nCapturingBtn = -1;
@@ -3357,7 +3357,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	if (nId == 450) {	// 更新
 		EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 		CEditView* pcEditView = (CEditView*)m_lParam;
-		pcEditView->GetCommander().HandleCommand(nFuncCode, true, SHOW_RELOAD, 0, 0, 0);
+		pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0);
 	}else if (nId == 451) {	// コピー
 		// Windowsクリップボードにコピー 
 		SetClipboardText(GetHwnd(), m_cmemClipText.GetStringPtr(), m_cmemClipText.GetStringLength());
@@ -3388,7 +3388,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				case DOCKSIDE_BOTTOM:	CommonSet().m_cyOutlineDockBottom = rc.bottom - rc.top;	break;
 				}
 			}
-			auto type = std::make_unique<STypeConfig>();
+			auto type = std::make_unique<TypeConfig>();
 			for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 				CDocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
 				type->m_bOutlineDockDisp = CommonSet().m_bOutlineDockDisp;
@@ -3470,7 +3470,7 @@ void CDlgFuncList::Refresh(void)
 	BOOL bReloaded = ChangeLayout(OUTLINE_LAYOUT_FILECHANGED);	// 現在設定に従ってアウトライン画面を再配置する
 	if (!bReloaded && pcEditWnd->m_cDlgFuncList.GetHwnd()) {
 		int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-		pcEditWnd->GetActiveView().GetCommander().Command_FUNCLIST(SHOW_RELOAD, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+		pcEditWnd->GetActiveView().GetCommander().Command_FUNCLIST((int)eShowDialog::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 	}
 	if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == pcEditWnd->GetHwnd()) {
 		::SetFocus(pcEditWnd->GetActiveView().GetHwnd());	// フォーカスを戻す
@@ -3486,11 +3486,11 @@ void CDlgFuncList::Refresh(void)
 */
 bool CDlgFuncList::ChangeLayout(int nId)
 {
-	struct SAutoSwitch {
-		SAutoSwitch(bool* pbSwitch): m_pbSwitch(pbSwitch) { *m_pbSwitch = true; }
-		~SAutoSwitch() { *m_pbSwitch = false; }
+	struct AutoSwitch {
+		AutoSwitch(bool* pbSwitch): m_pbSwitch(pbSwitch) { *m_pbSwitch = true; }
+		~AutoSwitch() { *m_pbSwitch = false; }
 		bool* m_pbSwitch;
-	} SAutoSwitch(&m_bInChangeLayout);	// 処理中は m_bInChangeLayout フラグを ON にしておく
+	} autoSwitch(&m_bInChangeLayout);	// 処理中は m_bInChangeLayout フラグを ON にしておく
 
 	CEditDoc* pDoc = CEditDoc::GetInstance(0);	// 今は非表示かもしれないので (CEditView*)m_lParam は使えない
 	m_nDocType = pDoc->m_cDocType.GetDocumentType().GetIndex();
@@ -3520,7 +3520,7 @@ bool CDlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
-			pcEditView->GetCommander().Command_FUNCLIST(SHOW_NORMAL, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pcEditView->GetCommander().Command_FUNCLIST((int)eShowDialog::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pcEditView->m_pcEditWnd->GetHwnd(), TRUE);
 			}
@@ -3561,7 +3561,7 @@ bool CDlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-			pcEditView->GetCommander().Command_FUNCLIST(SHOW_NORMAL, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pcEditView->GetCommander().Command_FUNCLIST((int)eShowDialog::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pcEditView->m_pcEditWnd->GetHwnd(), TRUE);
 			}
@@ -3643,7 +3643,7 @@ BOOL CDlgFuncList::PostOutlineNotifyToAllEditors(WPARAM wParam, LPARAM lParam)
 	return CAppNodeGroupHandle(0).PostMessageToAllEditors(MYWM_OUTLINE_NOTIFY, (WPARAM)wParam, (LPARAM)lParam, GetHwnd());
 }
 
-void CDlgFuncList::SetTypeConfig(CTypeConfig docType, const STypeConfig& type)
+void CDlgFuncList::SetTypeConfig(CTypeConfig docType, const TypeConfig& type)
 {
 	CDocTypeManager().SetTypeConfig(docType, type);
 }
@@ -3686,7 +3686,7 @@ EDockSide CDlgFuncList::GetDropRect(
 	bool bForceFloat
 	)
 {
-	struct CDockStretch {
+	struct DockStretch {
 		static int GetIdealStretch(int nStretch, int nMaxStretch)
 		{
 			if (nStretch == 0) {
@@ -3717,10 +3717,10 @@ EDockSide CDlgFuncList::GetDropRect(
 	RECT rcDock;
 	GetDockSpaceRect(&rcDock);
 	if (!bForceFloat && ::PtInRect(&rcDock, ptDrop)) {
-		int cxLeft		= CDockStretch::GetIdealStretch(ProfDockLeft(), rcDock.right - rcDock.left);
-		int cyTop		= CDockStretch::GetIdealStretch(ProfDockTop(), rcDock.bottom - rcDock.top);
-		int cxRight		= CDockStretch::GetIdealStretch(ProfDockRight(), rcDock.right - rcDock.left);
-		int cyBottom	= CDockStretch::GetIdealStretch(ProfDockBottom(), rcDock.bottom - rcDock.top);
+		int cxLeft		= DockStretch::GetIdealStretch(ProfDockLeft(), rcDock.right - rcDock.left);
+		int cyTop		= DockStretch::GetIdealStretch(ProfDockTop(), rcDock.bottom - rcDock.top);
+		int cxRight		= DockStretch::GetIdealStretch(ProfDockRight(), rcDock.right - rcDock.left);
+		int cyBottom	= DockStretch::GetIdealStretch(ProfDockBottom(), rcDock.bottom - rcDock.top);
 
 		int nDock = ::GetSystemMetrics(SM_CXCURSOR);
 		if (ptDrop.x - rcDock.left < nDock) {
@@ -3751,13 +3751,13 @@ EDockSide CDlgFuncList::GetDropRect(
 		RECT rcFloat;
 		rcFloat.left = 0;
 		rcFloat.top = 0;
-		if (m_pShareData->m_Common.m_sOutline.m_bRememberOutlineWindowPos
-				&& m_pShareData->m_Common.m_sOutline.m_widthOutlineWindow	// 初期値だと 0 になっている
-				&& m_pShareData->m_Common.m_sOutline.m_heightOutlineWindow	// 初期値だと 0 になっている
+		if (m_pShareData->m_common.m_sOutline.m_bRememberOutlineWindowPos
+				&& m_pShareData->m_common.m_sOutline.m_widthOutlineWindow	// 初期値だと 0 になっている
+				&& m_pShareData->m_common.m_sOutline.m_heightOutlineWindow	// 初期値だと 0 になっている
 		) {
 			// 記憶しているサイズ
-			rcFloat.right = m_pShareData->m_Common.m_sOutline.m_widthOutlineWindow;
-			rcFloat.bottom = m_pShareData->m_Common.m_sOutline.m_heightOutlineWindow;
+			rcFloat.right = m_pShareData->m_common.m_sOutline.m_widthOutlineWindow;
+			rcFloat.bottom = m_pShareData->m_common.m_sOutline.m_heightOutlineWindow;
 			cx = ::GetSystemMetrics(SM_CXMIN);
 			cy = ::GetSystemMetrics(SM_CYMIN);
 			if (rcFloat.right < cx) rcFloat.right = cx;
@@ -3800,9 +3800,9 @@ BOOL CDlgFuncList::Track(POINT ptDrag)
 	}
 
 	// 画面にゴミが残らないように
-	struct SLockWindowUpdate {
-		SLockWindowUpdate() { ::LockWindowUpdate(::GetDesktopWindow()); }
-		~SLockWindowUpdate() { ::LockWindowUpdate(NULL); }
+	struct LockWindowUpdate {
+		LockWindowUpdate() { ::LockWindowUpdate(::GetDesktopWindow()); }
+		~LockWindowUpdate() { ::LockWindowUpdate(NULL); }
 	} sLockWindowUpdate;
 
 	const SIZE sizeFull = {8, 8};	// フローティング配置用の枠線の太さ
@@ -3941,7 +3941,7 @@ void CDlgFuncList::LoadFileTreeSetting(
 	SFilePath& IniDirPath
 	)
 {
-	const SFileTree* pFileTree;
+	const FileTree* pFileTree;
 	if (ProfDockSet() == 0) {
 		pFileTree = &(CommonSet().m_sFileTree);
 		data.m_eFileTreeSettingOrgType = EFileTreeSettingFrom_Common;

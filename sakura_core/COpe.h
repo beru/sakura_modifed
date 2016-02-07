@@ -15,12 +15,12 @@
 #pragma once
 
 // アンドゥバッファ用 操作コード
-enum EOpeCode {
-	OPE_UNKNOWN		= 0, //!< 不明(未使用)
-	OPE_INSERT		= 1, //!< 挿入
-	OPE_DELETE		= 2, //!< 削除
-	OPE_REPLACE		= 3, //!< 置換
-	OPE_MOVECARET	= 4, //!< キャレット移動
+enum class eOpeCode {
+	Unknown,	//!< 不明(未使用)
+	Insert,		//!< 挿入
+	Delete,		//!< 削除
+	Replace,	//!< 置換
+	MoveCaret,	//!< キャレット移動
 };
 
 class CLineData {
@@ -51,15 +51,15 @@ typedef std::vector<CLineData> COpeLineData;
 // 2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
 class COpe {
 public:
-	COpe(EOpeCode eCode);	// COpeクラス構築
+	COpe(eOpeCode eCode);	// COpeクラス構築
 	virtual ~COpe();		// COpeクラス消滅
 
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 
-	EOpeCode	GetCode() const { return m_nOpe; }
+	eOpeCode GetCode() const { return m_nOpe; }
 
 private:
-	EOpeCode	m_nOpe;						//!< 操作種別
+	eOpeCode m_nOpe;						//!< 操作種別
 
 public:
 	CLogicPoint	m_ptCaretPos_PHY_Before;	//!< キャレット位置。文字単位。			[共通]
@@ -69,7 +69,7 @@ public:
 //! 削除
 class CDeleteOpe : public COpe {
 public:
-	CDeleteOpe() : COpe(OPE_DELETE) {
+	CDeleteOpe() : COpe(eOpeCode::Delete) {
 		m_ptCaretPos_PHY_To.Set(CLogicInt(0),CLogicInt(0));
 	}
 	virtual void DUMP(void);	// 編集操作要素のダンプ
@@ -82,7 +82,7 @@ public:
 //! 挿入
 class CInsertOpe : public COpe {
 public:
-	CInsertOpe() : COpe(OPE_INSERT) { }
+	CInsertOpe() : COpe(eOpeCode::Insert) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
 	COpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
@@ -94,7 +94,7 @@ class CReplaceOpe : public COpe {
 public:
 	CReplaceOpe()
 		:
-		COpe(OPE_REPLACE)
+		COpe(eOpeCode::Replace)
 	{
 		m_ptCaretPos_PHY_To.Set(CLogicInt(0), CLogicInt(0));
 	}
@@ -109,17 +109,17 @@ public:
 //! キャレット移動
 class CMoveCaretOpe : public COpe {
 public:
-	CMoveCaretOpe() : COpe(OPE_MOVECARET) { }
+	CMoveCaretOpe() : COpe(eOpeCode::MoveCaret) { }
 	CMoveCaretOpe(const CLogicPoint& ptBefore, const CLogicPoint& ptAfter)
 		:
-		COpe(OPE_MOVECARET)
+		COpe(eOpeCode::MoveCaret)
 	{
 		m_ptCaretPos_PHY_Before = ptBefore;
 		m_ptCaretPos_PHY_After = ptAfter;
 	}
 	CMoveCaretOpe(const CLogicPoint& ptCaretPos)
 		:
-		COpe(OPE_MOVECARET)
+		COpe(eOpeCode::MoveCaret)
 	{
 		m_ptCaretPos_PHY_Before = ptCaretPos;
 		m_ptCaretPos_PHY_After = ptCaretPos;
