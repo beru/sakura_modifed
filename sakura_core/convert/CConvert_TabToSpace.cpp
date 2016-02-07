@@ -5,7 +5,7 @@
 #include "util/string_ex2.h"
 
 // TABÅ®ãÛîí
-bool CConvert_TabToSpace::DoConvert(CNativeW* pcData)
+bool Converter_TabToSpace::DoConvert(CNativeW* pcData)
 {
 	using namespace WCODE;
 

@@ -182,7 +182,7 @@ BOOL CEditView::Create(
 	m_cRegexKeyword = NULL;				// 2007.04.08 ryoji
 
 	SetDrawSwitch(true);
-	m_pcDropTarget = new CDropTarget(this);
+	m_pcDropTarget = new DropTarget(this);
 	_SetDragMode(FALSE);					// 選択テキストのドラッグ中か
 	m_bCurSrchKeyMark = false;				// 検索文字列
 	//	Jun. 27, 2001 genta
@@ -1452,7 +1452,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 				
 				{
 					// 機能種別によるバッファの変換
-					CConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)sPos.GetX2());
+					ConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)sPos.GetX2());
 
 					// 現在位置にデータを挿入
 					CLayoutPoint ptLayoutNew;	// 挿入された部分の次の位置
@@ -1488,7 +1488,7 @@ void CEditView::ConvSelectedArea(EFunctionCode nFuncCode)
 		GetSelectedDataSimple(cmemBuf);
 
 		// 機能種別によるバッファの変換
-		CConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)GetSelectionInfo().m_sSelect.GetFrom().GetX2());
+		ConvertMediator::ConvMemory(&cmemBuf, nFuncCode, (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(), (Int)GetSelectionInfo().m_sSelect.GetFrom().GetX2());
 
 		// データ置換 削除&挿入にも使える
 		ReplaceData_CEditView(

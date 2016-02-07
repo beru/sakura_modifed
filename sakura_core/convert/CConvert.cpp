@@ -28,7 +28,7 @@
 #include "window/CEditWnd.h"
 
 // 機能種別によるバッファの変換
-void CConvertMediator::ConvMemory(
+void ConvertMediator::ConvMemory(
 	CNativeW* pCMemory,
 	EFunctionCode nFuncCode,
 	int nTabWidth,
@@ -80,21 +80,21 @@ void CConvertMediator::ConvMemory(
 
 	switch (nFuncCode) {
 	// 文字種変換、整形
-	case F_TOLOWER:					CConvert_ToLower().CallConvert(pCMemory);			break;	// 小文字
-	case F_TOUPPER:					CConvert_ToUpper().CallConvert(pCMemory);			break;	// 大文字
-	case F_TOHANKAKU:				CConvert_ToHankaku().CallConvert(pCMemory);			break;	// 全角→半角
-	case F_TOHANKATA:				CConvert_ZenkataToHankata().CallConvert(pCMemory);	break;	// 全角カタカナ→半角カタカナ
-	case F_TOZENEI:					CConvert_HaneisuToZeneisu().CallConvert(pCMemory);	break;	// 半角英数→全角英数
-	case F_TOHANEI:					CConvert_ZeneisuToHaneisu().CallConvert(pCMemory);	break;	// 全角英数→半角英数
-	case F_TOZENKAKUKATA:			CConvert_ToZenkata().CallConvert(pCMemory);			break;	// 半角＋全ひら→全角・カタカナ
-	case F_TOZENKAKUHIRA:			CConvert_ToZenhira().CallConvert(pCMemory);			break;	// 半角＋全カタ→全角・ひらがな
-	case F_HANKATATOZENKATA:		CConvert_HankataToZenkata().CallConvert(pCMemory);	break;	// 半角カタカナ→全角カタカナ
-	case F_HANKATATOZENHIRA:		CConvert_HankataToZenhira().CallConvert(pCMemory);	break;	// 半角カタカナ→全角ひらがな
+	case F_TOLOWER:					Converter_ToLower().CallConvert(pCMemory);			break;	// 小文字
+	case F_TOUPPER:					Converter_ToUpper().CallConvert(pCMemory);			break;	// 大文字
+	case F_TOHANKAKU:				Converter_ToHankaku().CallConvert(pCMemory);			break;	// 全角→半角
+	case F_TOHANKATA:				Converter_ZenkataToHankata().CallConvert(pCMemory);	break;	// 全角カタカナ→半角カタカナ
+	case F_TOZENEI:					Converter_HaneisuToZeneisu().CallConvert(pCMemory);	break;	// 半角英数→全角英数
+	case F_TOHANEI:					Converter_ZeneisuToHaneisu().CallConvert(pCMemory);	break;	// 全角英数→半角英数
+	case F_TOZENKAKUKATA:			Converter_ToZenkata().CallConvert(pCMemory);			break;	// 半角＋全ひら→全角・カタカナ
+	case F_TOZENKAKUHIRA:			Converter_ToZenhira().CallConvert(pCMemory);			break;	// 半角＋全カタ→全角・ひらがな
+	case F_HANKATATOZENKATA:		Converter_HankataToZenkata().CallConvert(pCMemory);	break;	// 半角カタカナ→全角カタカナ
+	case F_HANKATATOZENHIRA:		Converter_HankataToZenhira().CallConvert(pCMemory);	break;	// 半角カタカナ→全角ひらがな
 	// 文字種変換、整形
-	case F_TABTOSPACE:				CConvert_TabToSpace(nTabWidth, nStartColumn, bExtEol).CallConvert(pCMemory);break;	// TAB→空白
-	case F_SPACETOTAB:				CConvert_SpaceToTab(nTabWidth, nStartColumn, bExtEol).CallConvert(pCMemory);break;	// 空白→TAB
-	case F_LTRIM:					CConvert_Trim(true, bExtEol).CallConvert(pCMemory);		break;	// 2001.12.03 hor
-	case F_RTRIM:					CConvert_Trim(false, bExtEol).CallConvert(pCMemory);	break;	// 2001.12.03 hor
+	case F_TABTOSPACE:				Converter_TabToSpace(nTabWidth, nStartColumn, bExtEol).CallConvert(pCMemory);break;	// TAB→空白
+	case F_SPACETOTAB:				Converter_SpaceToTab(nTabWidth, nStartColumn, bExtEol).CallConvert(pCMemory);break;	// 空白→TAB
+	case F_LTRIM:					Converter_Trim(true, bExtEol).CallConvert(pCMemory);		break;	// 2001.12.03 hor
+	case F_RTRIM:					Converter_Trim(false, bExtEol).CallConvert(pCMemory);	break;	// 2001.12.03 hor
 	// コード変換(xxx2SJIS)
 	// 2014.02.10 Moca F_CODECNV_AUTO2SJIS追加。自動判別でSJIS, Latin1, CESU8になった場合をサポート
 	case F_CODECNV_AUTO2SJIS:

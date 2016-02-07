@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 全角カナ→半角カナ
-bool CConvert_ZenkataToHankata::DoConvert(CNativeW* pcData)
+bool Converter_ZenkataToHankata::DoConvert(CNativeW* pcData)
 {
 	// 全角カタカナ→半角カタカナ
 	// 濁点等の影響で、最大2倍にまで膨れ上がる可能性があるので、2倍のバッファを確保

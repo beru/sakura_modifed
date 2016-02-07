@@ -155,19 +155,19 @@ struct SaveInfo {
 };
 
 
-class CProgressListener;
+class ProgressListener;
 
-// 複数のCProgressSubjectからウォッチされる
-class CProgressSubject : public CSubjectT<CProgressListener> {
+// 複数のProgressSubjectからウォッチされる
+class ProgressSubject : public CSubjectT<ProgressListener> {
 public:
-	virtual ~CProgressSubject() {}
+	virtual ~ProgressSubject() {}
 	void NotifyProgress(int nPer);
 };
 
-// 1つのCProgressSubjectをウォッチする
-class CProgressListener : public CListenerT<CProgressSubject> {
+// 1つのProgressSubjectをウォッチする
+class ProgressListener : public CListenerT<ProgressSubject> {
 public:
-	virtual ~CProgressListener() {}
+	virtual ~ProgressListener() {}
 	virtual void OnProgress(int nPer) = 0;
 };
 

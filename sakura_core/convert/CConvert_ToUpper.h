@@ -25,7 +25,7 @@
 
 #include "CConvert.h"
 
-class CConvert_ToUpper : public CConvert {
+class Converter_ToUpper : public Converter {
 public:
 	bool DoConvert(CNativeW* pcData);
 };

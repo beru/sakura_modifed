@@ -29,7 +29,7 @@ class CWaitCursor;
 
 class CVisualProgress :
 	public CDocListenerEx,
-	public CProgressListener
+	public ProgressListener
 {
 public:
 	// コンストラクタ・デストラクタ

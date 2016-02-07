@@ -49,13 +49,13 @@
 
 	@date 2002/10/16  genta WriteTrace及びマクロ追加
 */
-class CRunningTimer {
+class RunningTimer {
 public:
 	/*
 	||  Constructors
 	*/
-	CRunningTimer(const char* Text = NULL);
-	~CRunningTimer();
+	RunningTimer(const char* Text = NULL);
+	~RunningTimer();
 
 	/*
 	|| 関数
@@ -79,7 +79,7 @@ protected:
 //#ifdef _DEBUG～#endifで逐一囲まなくても簡単にタイマーのON/OFFを行うためのマクロ
 #if defined(_DEBUG) && defined(TIME_MEASURE)
   #define MY_TRACETIME(c, m) (c).WriteTrace(m)
-  #define MY_RUNNINGTIMER(c, m) CRunningTimer c(m)
+  #define MY_RUNNINGTIMER(c, m) RunningTimer c(m)
 #else
   #define MY_TRACETIME(c, m)
   #define MY_RUNNINGTIMER(c, m)

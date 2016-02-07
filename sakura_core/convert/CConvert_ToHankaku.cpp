@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 半角にできるものは全部半角に変換
-bool CConvert_ToHankaku::DoConvert(CNativeW* pcData)
+bool Converter_ToHankaku::DoConvert(CNativeW* pcData)
 {
 	// 全角→半角
 	// 濁点等の影響で、最大2倍にまで膨れ上がる可能性があるので、2倍のバッファを確保

@@ -27,7 +27,7 @@
 
 
 // できる限り全角カタカナにする
-class CConvert_ToZenkata : public CConvert {
+class Converter_ToZenkata : public Converter {
 public:
 	bool DoConvert(CNativeW* pcData);
 };

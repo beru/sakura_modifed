@@ -18,7 +18,7 @@
 #include <Unknwn.h>
 #include "util/design_template.h"
 
-class CDropTarget;
+class DropTarget;
 class CYbInterfaceBase;
 class CEditWnd;	// 2008.06.20 ryoji
 class CEditView;// 2002/2/3 aroka ƒwƒbƒ_Œy—Ê‰»
@@ -68,14 +68,14 @@ public:
 };
 
 
-class CDropTarget : public CYbInterfaceImpl<IDropTarget> {
+class DropTarget : public CYbInterfaceImpl<IDropTarget> {
 public:
 	/*
 	||  Constructors
 	*/
-	CDropTarget(CEditWnd*);	// 2008.06.20 ryoji
-	CDropTarget(CEditView*);
-	~CDropTarget();
+	DropTarget(CEditWnd*);	// 2008.06.20 ryoji
+	DropTarget(CEditView*);
+	~DropTarget();
 	/*
 	||  Attributes & Operations
 	*/

@@ -153,9 +153,9 @@ CEditDoc* CDocListenerEx::GetListeningDoc() const
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CProgressSubject                        //
+//                     ProgressSubject                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-void CProgressSubject::NotifyProgress(int nPer)
+void ProgressSubject::NotifyProgress(int nPer)
 {
 	int n = GetListenerCount();
 	for (int i=0; i<n; ++i) {

@@ -23,9 +23,9 @@
 
 #pragma comment(lib, "winmm.lib")
 
-int CRunningTimer::m_nNestCount = 0;
+int RunningTimer::m_nNestCount = 0;
 
-CRunningTimer::CRunningTimer(const char* pszText)
+RunningTimer::RunningTimer(const char* pszText)
 {
 	Reset();
 	if (pszText)
@@ -38,7 +38,7 @@ CRunningTimer::CRunningTimer(const char* pszText)
 }
 
 
-CRunningTimer::~CRunningTimer()
+RunningTimer::~RunningTimer()
 {
 	WriteTrace("Exit Scope");
 	--m_nNestCount;
@@ -46,13 +46,13 @@ CRunningTimer::~CRunningTimer()
 }
 
 
-void CRunningTimer::Reset()
+void RunningTimer::Reset()
 {
 	m_nStartTime = timeGetTime();
 }
 
 
-DWORD CRunningTimer::Read()
+DWORD RunningTimer::Read()
 {
 	return timeGetTime() - m_nStartTime;
 }
@@ -60,7 +60,7 @@ DWORD CRunningTimer::Read()
 /*!
 	@date 2002.10.15 genta
 */
-void CRunningTimer::WriteTrace(const char* msg) const
+void RunningTimer::WriteTrace(const char* msg) const
 {
 	MYTRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), m_nDeapth, m_szText, timeGetTime() - m_nStartTime, msg);
 }

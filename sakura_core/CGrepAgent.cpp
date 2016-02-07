@@ -170,7 +170,7 @@ DWORD CGrepAgent::DoGrep(
 )
 {
 #ifdef _DEBUG
-	CRunningTimer cRunningTimer("CEditView::DoGrep");
+	RunningTimer cRunningTimer("CEditView::DoGrep");
 #endif
 
 	// Ä“ü•s‰Â

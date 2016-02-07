@@ -7,7 +7,7 @@
 #include "CEol.h"
 
 // Uudecode (デコード）
-bool CDecode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
+bool Decode_UuDecode::DoDecode(const CNativeW& pcSrc, CMemory* pcDst)
 {
 	const WCHAR *psrc, *pline;
 	int nsrclen;

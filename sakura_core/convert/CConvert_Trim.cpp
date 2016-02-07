@@ -15,9 +15,9 @@
 	
 	@author hor
 	@date 2001.12.03 hor    V‹Kì¬
-	@date 2007.10.18 kobake CConvert_Trim‚ÉˆÚ“®
+	@date 2007.10.18 kobake Converter_Trim‚ÉˆÚ“®
 */
-bool CConvert_Trim::DoConvert(CNativeW* pcData)
+bool Converter_Trim::DoConvert(CNativeW* pcData)
 {
 	const wchar_t*	pLine;
 	int			nLineLen;

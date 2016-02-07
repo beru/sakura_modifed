@@ -59,10 +59,10 @@ public:
 
 // WSH一般
 
-class CIfObj;
-typedef HRESULT (CIfObj::*CIfObjMethod)(int ID, DISPPARAMS* Arguments, VARIANT* Result, void* Data);
+class IfObj;
+typedef HRESULT (IfObj::*CIfObjMethod)(int ID, DISPPARAMS* Arguments, VARIANT* Result, void* Data);
 
-// CIfObjが必要とするWSHClientのインタフェース
+// IfObjが必要とするWSHClientのインタフェース
 class IWSHClient {
 public:
 	virtual void* GetData() const = 0;
@@ -70,7 +70,7 @@ public:
 
 // スクリプトに渡されるオブジェクト
 
-class CIfObj : public ImplementsIUnknown<IDispatch> {
+class IfObj : public ImplementsIUnknown<IDispatch> {
 public:
 	// 型定義
 	struct MethodInfo {
@@ -83,8 +83,8 @@ public:
 	typedef std::vector<MethodInfo> CMethodInfoList;
 
 	// コンストラクタ・デストラクタ
-	CIfObj(const wchar_t* name, bool isGlobal);
-	virtual ~CIfObj();
+	IfObj(const wchar_t* name, bool isGlobal);
+	virtual ~IfObj();
 
 	// フィールド・アクセサ
 	const std::wstring::value_type* Name() const { return this->m_sName.c_str(); } // インタフェースオブジェクト名

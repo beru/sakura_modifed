@@ -45,11 +45,11 @@
 // スクリプトに渡されるオブジェクトの型情報
 class CIfObjTypeInfo: public ImplementsIUnknown<ITypeInfo> {
 private:
-	const CIfObj::CMethodInfoList& m_MethodsRef;
+	const IfObj::CMethodInfoList& m_MethodsRef;
 	const std::wstring& m_sName;
 	TYPEATTR m_TypeAttr;
 public:
-	CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods, const std::wstring& sName);
+	CIfObjTypeInfo(const IfObj::CMethodInfoList& methods, const std::wstring& sName);
 
 	virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(
 					/* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr)
@@ -217,7 +217,7 @@ public:
 	}
 };
 
-CIfObjTypeInfo::CIfObjTypeInfo(const CIfObj::CMethodInfoList& methods,
+CIfObjTypeInfo::CIfObjTypeInfo(const IfObj::CMethodInfoList& methods,
 							   const std::wstring& sName)
 	:
 	ImplementsIUnknown<ITypeInfo>(),
@@ -260,7 +260,7 @@ HRESULT STDMETHODCALLTYPE CIfObjTypeInfo::GetNames(
 // インタフェースオブジェクト
 
 // コンストラクタ
-CIfObj::CIfObj(const wchar_t* name, bool isGlobal)
+IfObj::IfObj(const wchar_t* name, bool isGlobal)
 	:
 	ImplementsIUnknown<IDispatch>(),
 	m_sName(name),
@@ -272,7 +272,7 @@ CIfObj::CIfObj(const wchar_t* name, bool isGlobal)
 };
 
 // デストラクタ
-CIfObj::~CIfObj()
+IfObj::~IfObj()
 {
 	if (m_TypeInfo) {
 		m_TypeInfo->Release();
@@ -280,7 +280,7 @@ CIfObj::~CIfObj()
 }
 	
 // IUnknown実装
-HRESULT STDMETHODCALLTYPE CIfObj::QueryInterface(REFIID iid, void ** ppvObject) 
+HRESULT STDMETHODCALLTYPE IfObj::QueryInterface(REFIID iid, void ** ppvObject) 
 {
 	if (!ppvObject) {
 		return E_POINTER;
@@ -294,7 +294,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::QueryInterface(REFIID iid, void ** ppvObject)
 }
 
 // IDispatch実装
-HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
+HRESULT STDMETHODCALLTYPE IfObj::Invoke(
 	DISPID dispidMember,
 	REFIID riid,
 	LCID lcid,
@@ -317,7 +317,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::Invoke(
 	}
 }
 
-HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
+HRESULT STDMETHODCALLTYPE IfObj::GetTypeInfo(
 	/* [in] */ UINT iTInfo,
 	/* [in] */ LCID lcid,
 	/* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo)
@@ -331,7 +331,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfo(
 	return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfoCount(
+HRESULT STDMETHODCALLTYPE IfObj::GetTypeInfoCount(
 	/* [out] */ UINT __RPC_FAR *pctinfo)
 {
 	*pctinfo = 1;
@@ -341,7 +341,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetTypeInfoCount(
 #ifdef __BORLANDC__
 #pragma argsused
 #endif
-HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
+HRESULT STDMETHODCALLTYPE IfObj::GetIDsOfNames(
 	REFIID riid,
 	OLECHAR FAR* FAR* rgszNames,
 	UINT cNames,
@@ -369,7 +369,7 @@ HRESULT STDMETHODCALLTYPE CIfObj::GetIDsOfNames(
 }
 
 // 型情報にメソッドを追加する
-void CIfObj::AddMethod(
+void IfObj::AddMethod(
 	const wchar_t*	Name,
 	int				ID,
 	VARTYPE*		ArgumentTypes,

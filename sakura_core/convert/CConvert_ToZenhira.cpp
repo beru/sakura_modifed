@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // できる限り全角ひらがなにする
-bool CConvert_ToZenhira::DoConvert(CNativeW* pcData)
+bool Converter_ToZenhira::DoConvert(CNativeW* pcData)
 {
 	// 半カナ→全角カナ
 	// 文字数が減ることはあっても増えることは無いので、これでＯＫ

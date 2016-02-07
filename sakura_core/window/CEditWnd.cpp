@@ -631,7 +631,7 @@ HWND CEditWnd::Create(
 	//	Dec. 4, 2002 genta
 	InitMenubarMessageFont();
 
-	m_pcDropTarget = new CDropTarget(this);	// 右ボタンドロップ用	// 2008.06.20 ryoji
+	m_pcDropTarget = new DropTarget(this);	// 右ボタンドロップ用	// 2008.06.20 ryoji
 
 	// 2009.01.17 nasukoji	ホイールスクロール有無状態をクリア
 	ClearMouseState();

@@ -26,7 +26,7 @@
 #include "CConvert.h"
 
 // ‘SŠp‰p”¨”¼Šp‰p”
-class CConvert_ZeneisuToHaneisu : public CConvert {
+class Converter_ZeneisuToHaneisu : public Converter {
 public:
 	bool DoConvert(CNativeW* pcData);
 };

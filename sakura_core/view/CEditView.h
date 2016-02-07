@@ -68,7 +68,7 @@
 
 class CViewFont;
 class CRuler;
-class CDropTarget; /// 2002/2/3 aroka ヘッダ軽量化
+class DropTarget; /// 2002/2/3 aroka ヘッダ軽量化
 class COpeBlk;///
 class CSplitBoxWnd;///
 class CRegexKeyword;///
@@ -637,7 +637,7 @@ public:
 
 public:
 	// D&D
-	CDropTarget*	m_pcDropTarget;
+	DropTarget*	m_pcDropTarget;
 	bool			m_bDragMode;					// 選択テキストのドラッグ中か
 	CLIPFORMAT		m_cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
 	bool			m_bDragBoxData;					// ドラッグデータは矩形か

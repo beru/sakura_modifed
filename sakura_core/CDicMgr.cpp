@@ -51,7 +51,7 @@ BOOL CDicMgr::Search(
 	)
 {
 #ifdef _DEBUG
-	CRunningTimer cRunningTimer("CDicMgr::Search");
+	RunningTimer cRunningTimer("CDicMgr::Search");
 #endif
 	const wchar_t*	pszDelimit = L" /// ";
 	const wchar_t*	pszKeySeps = L",\0";

@@ -66,7 +66,7 @@ static const int MENUBAR_MESSAGE_MAX_LEN = 30;
 
 //@@@ 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
 class CPrintPreview; // 2002/2/10 aroka
-class CDropTarget;
+class DropTarget;
 class CPlug;
 class CEditDoc;
 struct DLLSHAREDATA;
@@ -413,7 +413,7 @@ private:
 	// D&Dフラグ
 	bool			m_bDragMode;
 	Point		m_ptDragPosOrg;
-	CDropTarget*	m_pcDropTarget;
+	DropTarget*	m_pcDropTarget;
 
 	// その他フラグ
 	BOOL				m_bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji

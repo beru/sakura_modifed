@@ -428,7 +428,7 @@ void CWSHClient::Error(const wchar_t* Description)
 }
 
 // インタフェースオブジェクトの追加
-void CWSHClient::AddInterfaceObject(CIfObj* obj)
+void CWSHClient::AddInterfaceObject(IfObj* obj)
 {
 	if (!obj) return;
 	m_IfObjArr.push_back(obj);

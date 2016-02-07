@@ -207,7 +207,7 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	if (fexist(sLoadInfo.cFilePath)) {
 		// CDocLineMgrの構成
 		CReadManager cReader;
-		CProgressSubject* pOld = CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(&cReader);
+		ProgressSubject* pOld = CEditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cReader);
 		EConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
 			&pcDoc->m_cDocLineMgr,
 			sLoadInfo,
@@ -216,7 +216,7 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 		if (eReadResult == RESULT_LOSESOME) {
 			eRet = LOADED_LOSESOME;
 		}
-		CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(pOld);
+		CEditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(pOld);
 	}else {
 		// 存在しないときもドキュメントに文字コードを反映する
 		const TypeConfig& types = pcDoc->m_cDocType.GetDocumentAttribute();
@@ -235,11 +235,11 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
-	CProgressSubject* pOld = CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(&pcDoc->m_cLayoutMgr);
+	ProgressSubject* pOld = CEditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&pcDoc->m_cLayoutMgr);
 	pcDoc->m_cLayoutMgr.SetLayoutInfo( true, ref, ref.m_nTabSpace, nMaxLineKetas );
 	pcDoc->m_pcEditWnd->ClearViewCaretPosInfo();
 	
-	CEditApp::getInstance()->m_pcVisualProgress->CProgressListener::Listen(pOld);
+	CEditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(pOld);
 
 	return eRet;
 }

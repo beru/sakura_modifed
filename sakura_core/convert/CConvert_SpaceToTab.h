@@ -25,9 +25,9 @@
 
 #include "CConvert.h"
 
-class CConvert_SpaceToTab : public CConvert {
+class Converter_SpaceToTab : public Converter {
 public:
-	CConvert_SpaceToTab(int nTabWidth, int nStartColumn, bool bExtEol)
+	Converter_SpaceToTab(int nTabWidth, int nStartColumn, bool bExtEol)
 		:
 		m_nTabWidth(nTabWidth),
 		m_nStartColumn(nStartColumn),

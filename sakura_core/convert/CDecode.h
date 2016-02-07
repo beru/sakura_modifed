@@ -28,9 +28,9 @@
 */
 #pragma once
 
-class CDecode {
+class Decode {
 public:
-	virtual ~CDecode() { }
+	virtual ~Decode() { }
 
 	// インターフェース
 	bool CallDecode(const CNativeW& pcData, CMemory* pDest)

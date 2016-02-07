@@ -246,7 +246,7 @@ void ViewCommander::Command_BASE64DECODE(void)
 
 	// Base64デコード
 	CMemory cmemBuf;
-	bool bret = CDecode_Base64Decode().CallDecode(ctextBuf, &cmemBuf);
+	bool bret = Decode_Base64Decode().CallDecode(ctextBuf, &cmemBuf);
 	if (!bret) {
 		return;
 	}
@@ -295,7 +295,7 @@ void ViewCommander::Command_UUDECODE(void)
 	// uudecode(デコード)  ctextBuf -> cmemBin, szPath
 	CMemory cmemBin;
 	TCHAR szPath[_MAX_PATH] = _T("");
-	CDecode_UuDecode decoder;
+	Decode_UuDecode decoder;
 	if (!decoder.CallDecode(ctextBuf, &cmemBin)) {
 		return;
 	}

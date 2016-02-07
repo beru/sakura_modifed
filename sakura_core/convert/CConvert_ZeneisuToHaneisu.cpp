@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ‘SŠp‰p”¨”¼Šp‰p”
-bool CConvert_ZeneisuToHaneisu::DoConvert(CNativeW* pcData)
+bool Converter_ZeneisuToHaneisu::DoConvert(CNativeW* pcData)
 {
 	// ‘SŠp‰p”¨”¼Šp‰p”
 	Convert_ZeneisuToHaneisu(pcData->GetStringPtr(), pcData->GetStringLength());

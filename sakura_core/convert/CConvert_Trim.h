@@ -26,9 +26,9 @@
 #include "CConvert.h"
 
 
-class CConvert_Trim : public CConvert {
+class Converter_Trim : public Converter {
 public:
-	CConvert_Trim(bool bLeft, bool bExtEol) : m_bLeft(bLeft), m_bExtEol(bExtEol) { }
+	Converter_Trim(bool bLeft, bool bExtEol) : m_bLeft(bLeft), m_bExtEol(bExtEol) { }
 
 public:
 	bool DoConvert(CNativeW* pcData);

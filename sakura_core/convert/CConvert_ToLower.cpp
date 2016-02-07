@@ -4,7 +4,7 @@
 // 小文字へ変換
 // 変換できないキリル文字Ёの修正	2010/6/5 Uchi
 // ラテンアルファベットの拡張対応(ラテン補助、拡張AB、拡張追加)	2010/6/5 Uchi
-bool CConvert_ToLower::DoConvert(CNativeW* pcData)
+bool Converter_ToLower::DoConvert(CNativeW* pcData)
 {
 	WCHAR* p = pcData->GetStringPtr();
 	WCHAR* end = p + pcData->GetStringLength();

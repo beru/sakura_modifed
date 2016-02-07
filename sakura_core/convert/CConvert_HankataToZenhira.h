@@ -27,7 +27,7 @@
 
 
 // ”¼ŠpƒJƒi¨‘SŠp‚Ğ‚ç‚ª‚È
-class CConvert_HankataToZenhira : public CConvert {
+class Converter_HankataToZenhira : public Converter {
 public:
 	bool DoConvert(CNativeW* pcData);
 };

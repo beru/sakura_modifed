@@ -28,9 +28,9 @@
 
 #include <vector>
 class CSubject;
-class CListener;
+class Listener;
 
-// 複数のCListenerからウォッチされる
+// 複数のListenerからウォッチされる
 class CSubject {
 public:
 	// コンストラクタ・デストラクタ
@@ -39,22 +39,22 @@ public:
 
 	// 公開インターフェース
 	int GetListenerCount() const { return (int)m_vListenersRef.size(); }
-	CListener* GetListener(int nIndex) const { return m_vListenersRef[nIndex]; }
+	Listener* GetListener(int nIndex) const { return m_vListenersRef[nIndex]; }
 
 public:
 	// 管理用
-	void _AddListener(CListener* pcListener);
-	void _RemoveListener(CListener* pcListener);
+	void _AddListener(Listener* pcListener);
+	void _RemoveListener(Listener* pcListener);
 
 private:
-	std::vector<CListener*> m_vListenersRef;
+	std::vector<Listener*> m_vListenersRef;
 };
 
 // 1つのCSubjectをウォッチする
-class CListener {
+class Listener {
 public:
-	CListener();
-	virtual ~CListener();
+	Listener();
+	virtual ~Listener();
 
 	// 公開インターフェース
 	CSubject* Listen(CSubject* pcSubject); // 直前にウォッチしていたサブジェクトを返す
@@ -74,13 +74,13 @@ public:
 };
 
 template <class SUBJECT>
-class CListenerT : public CListener {
+class CListenerT : public Listener {
 public:
 	SUBJECT* Listen(SUBJECT* pcSubject) {
-		return static_cast<SUBJECT*>(CListener::Listen(static_cast<CSubject*>(pcSubject)));
+		return static_cast<SUBJECT*>(Listener::Listen(static_cast<CSubject*>(pcSubject)));
 	}
 	SUBJECT* GetListeningSubject() const {
-		return static_cast<SUBJECT*>(CListener::GetListeningSubject());
+		return static_cast<SUBJECT*>(Listener::GetListeningSubject());
 	}
 };
 

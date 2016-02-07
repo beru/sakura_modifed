@@ -27,7 +27,7 @@
 
 
 // ”¼Šp‚É‚Å‚«‚é‚à‚Ì‚Í‘S•””¼Šp‚É•ÏŠ·
-class CConvert_ToHankaku : public CConvert {
+class Converter_ToHankaku : public Converter {
 public:
 	bool DoConvert(CNativeW* pcData);
 };

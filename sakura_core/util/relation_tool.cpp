@@ -19,7 +19,7 @@ CSubject::~CSubject()
 	m_vListenersRef.clear();
 }
 
-void CSubject::_AddListener(CListener* pcListener)
+void CSubject::_AddListener(Listener* pcListener)
 {
 	// Šù‚É’Ç‰ÁÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
@@ -31,7 +31,7 @@ void CSubject::_AddListener(CListener* pcListener)
 	m_vListenersRef.push_back(pcListener);
 }
 
-void CSubject::_RemoveListener(CListener* pcListener)
+void CSubject::_RemoveListener(Listener* pcListener)
 {
 	// ”z—ñ‚©‚çíœ
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
@@ -43,20 +43,20 @@ void CSubject::_RemoveListener(CListener* pcListener)
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                         CListener                           //
+//                         Listener                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CListener::CListener()
+Listener::Listener()
 : m_pcSubjectRef(NULL)
 {
 }
 
-CListener::~CListener()
+Listener::~Listener()
 {
 	Listen(NULL);
 }
 
-CSubject* CListener::Listen(CSubject* pcSubject)
+CSubject* Listener::Listen(CSubject* pcSubject)
 {
 	CSubject* pOld = GetListeningSubject();
 
