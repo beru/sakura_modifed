@@ -27,12 +27,12 @@
 #include "_os/CClipboard.h"
 #include "COpeBuf.h"
 
-class CEditDoc;
-class CDocLineMgr;
+class EditDoc;
+class DocLineMgr;
 
-class CDocEditor : public CDocListenerEx {
+class CDocEditor : public DocListenerEx {
 public:
-	CDocEditor(CEditDoc* pcDoc);
+	CDocEditor(EditDoc* pcDoc);
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         イベント                            //
@@ -82,10 +82,10 @@ public:
 	}
 
 public:
-	CEditDoc*		m_pcDocRef;
+	EditDoc*		m_pcDocRef;
 	CEol 			m_cNewLineCode;				//!< Enter押下時に挿入する改行コード種別
-	COpeBuf			m_cOpeBuf;					//!< アンドゥバッファ
-	COpeBlk*		m_pcOpeBlk;					//!< 操作ブロック
+	OpeBuf			m_cOpeBuf;					//!< アンドゥバッファ
+	OpeBlk*		m_pcOpeBlk;					//!< 操作ブロック
 	int				m_nOpeBlkRedawCount;		//!< OpeBlkの再描画非対象数
 	bool			m_bInsMode;					//!< 挿入・上書きモード Oct. 2, 2005 genta
 	bool			m_bIsDocModified;
@@ -94,7 +94,7 @@ public:
 
 class CDocEditAgent {
 public:
-	CDocEditAgent(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	CDocEditAgent(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           操作                              //
@@ -103,6 +103,6 @@ public:
 	void AddLineStrX(const wchar_t*, int);	// 末尾に行を追加 Ver1.5
 
 private:
-	CDocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pcDocLineMgr;
 };
 

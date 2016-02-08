@@ -226,7 +226,7 @@ bool Clipboard::SetHtmlText(const CNativeW& cmemBUf)
 	}
 
 	CNativeA cmemUtf8;
-	CUtf8().UnicodeToCode(cmemBUf, cmemUtf8._GetMemory());
+	Utf8().UnicodeToCode(cmemBUf, cmemUtf8._GetMemory());
 
 	CNativeA cmemHeader;
 	char szFormat[32];
@@ -350,7 +350,7 @@ bool Clipboard::GetText(CNativeW* cmemBuf, bool* pbColumnSelect, bool* pbLineSel
 		// SJIS¨UNICODE
 		CMemory cmemSjis(szData, GlobalSize(hText));
 		CNativeW cmemUni;
-		CShiftJis::SJISToUnicode(cmemSjis, &cmemUni);
+		ShiftJis::SJISToUnicode(cmemSjis, &cmemUni);
 		cmemSjis.Clean();
 		// '\0'‚Ü‚Å‚ðŽæ“¾
 		cmemUni._SetStringLength(auto_strlen(cmemUni.GetStringPtr()));
@@ -619,7 +619,7 @@ bool Clipboard::GetClipboradByFormat(CNativeW& mem, const wchar_t* pFormatName, 
 				if (nBomCode != CODE_NONE) {
 					eMode = nBomCode;
 				}else {
-					const TypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+					const TypeConfig& type = EditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
 					CodeMediator mediator(type.m_encoding);
 					eMode = mediator.CheckKanjiCode((const char*)pData, nLength);
 				}

@@ -25,7 +25,7 @@
 #pragma once
 
 class CDocLine;
-class CDocLineMgr;
+class DocLineMgr;
 
 //! 行に付加するModified情報
 class CLineFuncList{
@@ -48,9 +48,9 @@ public:
 	bool IsLineFuncList(const CDocLine* pcDocLine, bool bFlag) const;
 	bool GetLineFuncList(const CDocLine* pcDocLine) const;
 	void SetLineFuncList(CDocLine* pcDocLine, bool bFlag);
-	bool SearchFuncListMark(const CDocLineMgr*, CLogicInt, eSearchDirection, CLogicInt* ) const;					//!< 関数リストマーク検索
+	bool SearchFuncListMark(const DocLineMgr*, LogicInt, eSearchDirection, LogicInt* ) const;					//!< 関数リストマーク検索
 
 	//一括操作
-	void ResetAllFucListMark(CDocLineMgr* pcDocLineMgr, bool bFlag);	// 関数リストマークをすべてリセット
+	void ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag);	// 関数リストマークをすべてリセット
 };
 

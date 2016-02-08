@@ -26,7 +26,7 @@
 
 #include "io/CFile.h"
 #include "util/file.h"
-class CEditDoc;
+class EditDoc;
 
 //####本来はここにあるべきでは無い
 struct FileInfo {
@@ -51,7 +51,7 @@ public:
 
 class CDocFile : public CFile {
 public:
-	CDocFile(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) {}
+	CDocFile(EditDoc* pcDoc) : m_pcDocRef(pcDoc) {}
 
 	void			SetCodeSet(ECodeType eCodeSet, bool bBomExist)		{ m_sFileInfo.SetCodeSet(eCodeSet, bBomExist); }	// 文字コードセットを設定
 	void			SetCodeSetChg(ECodeType eCodeSet, bool bBomExist)	{ m_sFileInfo.eCharCode = eCodeSet; m_sFileInfo.bBomExist = bBomExist; }	// 文字コードセットを設定(文字コード指定用)
@@ -71,7 +71,7 @@ public:
 	const TCHAR*	GetSaveFilePath(void) const;
 	void			SetSaveFilePath(LPCTSTR pszPath)	{ m_szSaveFilePath.Assign(pszPath); }
 public: //####
-	CEditDoc*	m_pcDocRef;
+	EditDoc*	m_pcDocRef;
 	FileInfo	m_sFileInfo;
 	CFilePath	m_szSaveFilePath;	// 保存時のファイルのパス（マクロ用）	// 2006.09.04 ryoji
 };

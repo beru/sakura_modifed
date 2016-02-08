@@ -5,7 +5,7 @@
 // $$$高速化
 void DispPos::ForwardLayoutLineRef(int nOffsetLine)
 {
-	m_nLineRef += CLayoutInt(nOffsetLine);
+	m_nLineRef += LayoutInt(nOffsetLine);
 	// キャッシュ更新
 	int n = nOffsetLine;
 	if (m_pcLayoutRef) {
@@ -18,7 +18,7 @@ void DispPos::ForwardLayoutLineRef(int nOffsetLine)
 			++n;
 		}
 	}else {
-		m_pcLayoutRef = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(m_nLineRef);
+		m_pcLayoutRef = EditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(m_nLineRef);
 	}
 }
 

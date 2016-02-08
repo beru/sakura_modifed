@@ -25,7 +25,7 @@
 
 class CViewFont;
 class CEditView;
-class CLayoutMgr;
+class LayoutMgr;
 #include "DispPos.h"
 
 class CTextArea {
@@ -42,28 +42,28 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	//! 表示される最初の行
-	CLayoutInt GetViewTopLine() const {
+	LayoutInt GetViewTopLine() const {
 		return m_nViewTopLine;
 	}
-	void SetViewTopLine(CLayoutInt nLine) {
+	void SetViewTopLine(LayoutInt nLine) {
 		m_nViewTopLine = nLine;
 	}
 
 	//! 表示域の一番左の桁
-	CLayoutInt GetViewLeftCol() const {
+	LayoutInt GetViewLeftCol() const {
 		return m_nViewLeftCol;
 	}
-	void SetViewLeftCol(CLayoutInt nLeftCol) {
+	void SetViewLeftCol(LayoutInt nLeftCol) {
 		m_nViewLeftCol = nLeftCol;
 	}
 
 	//!右にはみ出した最初の列を返す
-	CLayoutInt GetRightCol() const {
+	LayoutInt GetRightCol() const {
 		return m_nViewLeftCol + m_nViewColNum;
 	}
 
 	//!下にはみ出した最初の行を返す
-	CLayoutInt GetBottomLine() const {
+	LayoutInt GetBottomLine() const {
 		return m_nViewTopLine + m_nViewRowNum;
 	}
 
@@ -121,7 +121,7 @@ public:
 	bool DetectWidthOfLineNumberArea(bool bRedraw);
 
 	//! 行番号表示に必要な桁数を計算
-	int  DetectWidthOfLineNumberArea_calculate(const CLayoutMgr*, bool bLayout=false) const;
+	int  DetectWidthOfLineNumberArea_calculate(const LayoutMgr*, bool bLayout=false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           判定                              //
@@ -150,7 +150,7 @@ public:
 
 	// 計算
 	// ! クライアント座標からレイアウト位置に変換する
-	void ClientToLayout(Point ptClient, CLayoutPoint* pptLayout) const;
+	void ClientToLayout(Point ptClient, LayoutPoint* pptLayout) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           設定                              //
@@ -162,7 +162,7 @@ public:
 	void SetAreaTop(int nAreaTop) {
 		m_nViewAlignTop = nAreaTop;
 	}
-	void OffsetViewTopLine(CLayoutInt nOff) {
+	void OffsetViewTopLine(LayoutInt nOff) {
 		m_nViewTopLine += nOff;
 	}
 protected:
@@ -182,16 +182,16 @@ public:
 	bool GenerateClipRectRight(RECT* rc, const DispPos& sPos) const; //!< 右端まで全部
 	bool GenerateClipRectLine(RECT* rc, const DispPos& sPos) const;  //!< 行全部
 
-	void GenerateTopRect   (RECT* rc, CLayoutInt nLineCount) const;
-	void GenerateBottomRect(RECT* rc, CLayoutInt nLineCount) const;
-	void GenerateLeftRect  (RECT* rc, CLayoutInt nColCount) const;
-	void GenerateRightRect (RECT* rc, CLayoutInt nColCount) const;
+	void GenerateTopRect   (RECT* rc, LayoutInt nLineCount) const;
+	void GenerateBottomRect(RECT* rc, LayoutInt nLineCount) const;
+	void GenerateLeftRect  (RECT* rc, LayoutInt nColCount) const;
+	void GenerateRightRect (RECT* rc, LayoutInt nColCount) const;
 
 	void GenerateLineNumberRect(RECT* rc) const;
 
 	void GenerateTextAreaRect(RECT* rc) const;
 
-	int GenerateYPx(CLayoutYInt nLineNum) const;
+	int GenerateYPx(LayoutYInt nLineNum) const;
 
 private:
 	// 参照
@@ -212,14 +212,14 @@ private:
 
 	// テキスト
 private:
-	CLayoutInt	m_nViewTopLine;		// 表示域の一番上の行(0開始)
+	LayoutInt	m_nViewTopLine;		// 表示域の一番上の行(0開始)
 public:
-	CLayoutInt	m_nViewRowNum;		// 表示域の行数
+	LayoutInt	m_nViewRowNum;		// 表示域の行数
 
 private:
-	CLayoutInt	m_nViewLeftCol;		// 表示域の一番左の桁(0開始)
+	LayoutInt	m_nViewLeftCol;		// 表示域の一番左の桁(0開始)
 public:
-	CLayoutInt	m_nViewColNum;		// 表示域の桁数
+	LayoutInt	m_nViewColNum;		// 表示域の桁数
 
 	// その他
 	int		m_nViewAlignLeftCols;	// 行番号域の桁数

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "charset/CESI.h"
-class CEditDoc;
+class EditDoc;
 
 class CodeMediator {
 protected:

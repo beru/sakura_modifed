@@ -50,7 +50,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	int			nCharChars;
 	wchar_t		szWordPrev[100];
 	wchar_t		szWord[100];
@@ -58,7 +58,7 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 	int			nMaxWordLeng = 70;
 	int			nMode;
 	wchar_t		szFuncName[100];
-	CLogicInt	nFuncLine(0);
+	LogicInt	nFuncLine(0);
 	int			nFuncId = 0;
 	int			nFuncNum;
 	int			nFuncOrProc = 0;
@@ -69,8 +69,8 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 	szWord[nWordIdx] = L'\0';
 	nMode = 0;
 	nFuncNum = 0;
-	CLogicInt nLineCount;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	LogicInt nLineCount;
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (int i=0; i<nLineLen; ++i) {
 			// 1バイト文字だけを処理する
@@ -132,15 +132,15 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 					if (nParseCnt == 0 && wcsicmp(szWord, L"FUNCTION") == 0) {
 						nFuncOrProc = 1;
 						nParseCnt = 1;
-						nFuncLine = nLineCount + CLogicInt(1);
+						nFuncLine = nLineCount + LogicInt(1);
 					}else if (nParseCnt == 0 && wcsicmp(szWord, L"PROCEDURE") == 0) {
 						nFuncOrProc = 2;
 						nParseCnt = 1;
-						nFuncLine = nLineCount + CLogicInt(1);
+						nFuncLine = nLineCount + LogicInt(1);
 					}else if (nParseCnt == 0 && wcsicmp(szWord, L"PACKAGE") == 0) {
 						nFuncOrProc = 3;
 						nParseCnt = 1;
-						nFuncLine = nLineCount + CLogicInt(1);
+						nFuncLine = nLineCount + LogicInt(1);
 					}else if (nParseCnt == 1 && nFuncOrProc == 3 && wcsicmp(szWord, L"BODY") == 0) {
 						nFuncOrProc = 4;
 						nParseCnt = 1;
@@ -174,12 +174,12 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							CLayoutPoint ptPos;
+							LayoutPoint ptPos;
 							m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-								CLogicPoint(0, nFuncLine - 1),
+								LogicPoint(0, nFuncLine - 1),
 								&ptPos
 							);
-							pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + CLayoutInt(1), szFuncName, nFuncId);
+							pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1), szFuncName, nFuncId);
 							nParseCnt = 0;
 						}
 						if (wcsicmp(szWord, L"AS") == 0) {
@@ -192,12 +192,12 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 								  →
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
-								CLayoutPoint ptPos;
+								LayoutPoint ptPos;
 								m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-									CLogicPoint(0, nFuncLine - 1),
+									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
-								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + CLayoutInt(1) , szFuncName, nFuncId);
+								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}else if (nFuncOrProc == 4) {
 								nFuncId = 41;	// パッケージ本体
@@ -208,12 +208,12 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 								  →
 								  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 								*/
-								CLayoutPoint ptPos;
+								LayoutPoint ptPos;
 								m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-									CLogicPoint(0, nFuncLine - 1),
+									LogicPoint(0, nFuncLine - 1),
 									&ptPos
 								);
-								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + CLayoutInt(1) , szFuncName, nFuncId);
+								pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 								nParseCnt = 0;
 							}
 						}
@@ -306,12 +306,12 @@ void CDocOutline::MakeFuncList_PLSQL(CFuncInfoArr* pcFuncInfoArr)
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						CLayoutPoint ptPos;
+						LayoutPoint ptPos;
 						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-							CLogicPoint(0, nFuncLine - 1),
+							LogicPoint(0, nFuncLine - 1),
 							&ptPos
 						);
-						pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + CLayoutInt(1) , szFuncName, nFuncId);
+						pcFuncInfoArr->AppendData(nFuncLine, ptPos.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 						nParseCnt = 0;
 					}
 					nMode = 0;

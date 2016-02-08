@@ -69,7 +69,7 @@ private:
 };
 
 
-class CAutoSaveAgent : public CDocListenerEx {
+class CAutoSaveAgent : public DocListenerEx {
 public:
 	void CheckAutoSave();
 	void ReloadAutoSaveParam();	// İ’è‚ğSharedArea‚©‚ç“Ç‚İo‚·

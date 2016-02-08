@@ -1389,8 +1389,8 @@ bool ControlTray::OpenNewEditor2(
 	if (pfi) {
 		if (pfi->m_ptCursor.x >= 0				) cCmdLine.AppendF(_T(" -X=%d"), pfi->m_ptCursor.x + 1);
 		if (pfi->m_ptCursor.y >= 0				) cCmdLine.AppendF(_T(" -Y=%d"), pfi->m_ptCursor.y + 1);
-		if (pfi->m_nViewLeftCol >= CLayoutInt(0)) cCmdLine.AppendF(_T(" -VX=%d"), (Int)pfi->m_nViewLeftCol + 1);
-		if (pfi->m_nViewTopLine >= CLayoutInt(0)) cCmdLine.AppendF(_T(" -VY=%d"), (Int)pfi->m_nViewTopLine + 1);
+		if (pfi->m_nViewLeftCol >= LayoutInt(0)) cCmdLine.AppendF(_T(" -VX=%d"), (Int)pfi->m_nViewLeftCol + 1);
+		if (pfi->m_nViewTopLine >= LayoutInt(0)) cCmdLine.AppendF(_T(" -VY=%d"), (Int)pfi->m_nViewTopLine + 1);
 	}
 	LoadInfo sLoadInfo;
 	sLoadInfo.cFilePath = pfi ? pfi->m_szPath : _T("");

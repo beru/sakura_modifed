@@ -37,7 +37,7 @@
 */
 ECallbackResult CBackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 新しくファイルを作る場合は何もしない
 	if (!fexist(pSaveInfo->cFilePath)) {

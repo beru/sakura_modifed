@@ -28,7 +28,7 @@ void ViewCommander::Command_INS_DATE(void)
 	CFormatManager().MyGetDateFormat(systime, szText, _countof(szText) - 1);
 
 	// テキストを貼り付け ver1
-	Command_INSTEXT(true, to_wchar(szText), CLogicInt(-1), TRUE);
+	Command_INSTEXT(true, to_wchar(szText), LogicInt(-1), TRUE);
 }
 
 
@@ -42,7 +42,7 @@ void ViewCommander::Command_INS_TIME(void)
 	CFormatManager().MyGetTimeFormat(systime, szText, _countof(szText) - 1);
 
 	// テキストを貼り付け ver1
-	Command_INSTEXT(true, to_wchar(szText), CLogicInt(-1), TRUE);
+	Command_INSTEXT(true, to_wchar(szText), LogicInt(-1), TRUE);
 }
 
 

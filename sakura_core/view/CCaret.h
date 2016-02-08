@@ -26,7 +26,7 @@
 #define _CARETMARGINRATE 20
 class CTextArea;
 class CEditView;
-class CEditDoc;
+class EditDoc;
 class CTextMetrics;
 class CCaret;
 class CEditWnd;
@@ -79,7 +79,7 @@ private:
 
 class CCaret {
 public:
-	CCaret(CEditView* pEditView, const CEditDoc* pEditDoc);
+	CCaret(CEditView* pEditView, const EditDoc* pEditDoc);
 	
 	virtual
 	~CCaret();
@@ -93,12 +93,12 @@ public:
 	int GetHankakuHeight() const;
 
 	// ドキュメントのインスタンスを求める
-	const CEditDoc* GetDocument() const { return m_pEditDoc; }
+	const EditDoc* GetDocument() const { return m_pEditDoc; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	POINT CalcCaretDrawPos(const CLayoutPoint& ptCaretPos) const;
+	POINT CalcCaretDrawPos(const LayoutPoint& ptCaretPos) const;
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -127,23 +127,23 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 	// 設定
-	CLayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, CLayoutPoint* = NULL);		// マウス等による座標指定によるカーソル移動
-	CLayoutInt Cursor_UPDOWN(CLayoutInt nMoveLines, bool bSelect);		// カーソル上下移動処理
-	CLayoutInt MoveCursor(												// 行桁指定によるカーソル移動
-		CLayoutPoint	ptWk_CaretPos,									// [in] 移動先レイアウト位置
+	LayoutInt MoveCursorToClientPoint(const POINT& ptClientPos, bool = false, LayoutPoint* = NULL);		// マウス等による座標指定によるカーソル移動
+	LayoutInt Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect);		// カーソル上下移動処理
+	LayoutInt MoveCursor(												// 行桁指定によるカーソル移動
+		LayoutPoint	ptWk_CaretPos,									// [in] 移動先レイアウト位置
 		bool			bScroll,										// [in] true: 画面位置調整有り  false: 画面位置調整無し
 		int				nCaretMarginRate	= _CARETMARGINRATE,			// [in] 縦スクロール開始位置を決める値
 		bool			bUnderlineDoNotOFF	= false,					// [in] アンダーラインを消去しない
 		bool			bVertLineDoNotOFF	= false						// [in] カーソル位置縦線を消去しない
 	);
-	CLayoutInt MoveCursorFastMode(
-		const CLogicPoint&	pptWk_CaretPosLogic							// [in] 移動先ロジック位置
+	LayoutInt MoveCursorFastMode(
+		const LogicPoint&	pptWk_CaretPosLogic							// [in] 移動先ロジック位置
 	);
-	CLayoutInt MoveCursorProperly(CLayoutPoint ptNewXY, bool, bool = false, CLayoutPoint* = NULL, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
+	LayoutInt MoveCursorProperly(LayoutPoint ptNewXY, bool, bool = false, LayoutPoint* = NULL, int = _CARETMARGINRATE, int = 0);	// 行桁指定によるカーソル移動（座標調整付き）
 
 	//$ 設計思想的に微妙
-	void SetCaretLayoutPos(const CLayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
-	void SetCaretLogicPos(const CLogicPoint pt) { m_ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
+	void SetCaretLayoutPos(const LayoutPoint& pt) { m_ptCaretPos_Layout = pt; }	// キャレット位置(レイアウト)を設定
+	void SetCaretLogicPos(const LogicPoint pt) { m_ptCaretPos_Logic = pt; }		// キャレット位置(ロジック)を設定
 
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -156,7 +156,7 @@ public:
 	//                           計算                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 計算
-	bool GetAdjustCursorPos(CLayoutPoint* pptPosXY); // 正しいカーソル位置を算出する
+	bool GetAdjustCursorPos(LayoutPoint* pptPosXY); // 正しいカーソル位置を算出する
 
 	void ClearCaretPosInfoCache();
 
@@ -177,10 +177,10 @@ public:
 	//                           取得                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	CLayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
+	LayoutPoint GetCaretLayoutPos() const	{ return m_ptCaretPos_Layout; }	// キャレット位置(レイアウト)を取得
 	Size GetCaretSize() const			{ return m_sizeCaret; }			// キャレットサイズを取得。※正確には高さは違うらしい (この半分のこともある？)
 	bool ExistCaretFocus() const			{ return m_sizeCaret.cx>0; }	// キャレットのフォーカスがあるか。※横幅値で判定してるらしい。
-	CLogicPoint GetCaretLogicPos() const	{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
+	LogicPoint GetCaretLogicPos() const	{ return m_ptCaretPos_Logic; }	// キャレット位置(ロジック)を取得
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -195,25 +195,25 @@ public:
 private:
 	// 参照
 	CEditView*				m_pEditView;
-	const CEditDoc*			m_pEditDoc;
+	const EditDoc*			m_pEditDoc;
 
 	// キャレット位置
-	CLayoutPoint	m_ptCaretPos_Layout;	// ビュー左上端からのカーソル位置。レイアウト単位。
-	CLogicPoint		m_ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
+	LayoutPoint	m_ptCaretPos_Layout;	// ビュー左上端からのカーソル位置。レイアウト単位。
+	LogicPoint		m_ptCaretPos_Logic;		// カーソル位置。ロジック単位。データ内文字単位。
 
 	// カーソル位置計算キャッシュ
-	CLayoutInt m_nOffsetCache;
-	CLayoutInt m_nLineNoCache;
-	CLogicInt  m_nLogicOffsetCache;
-	CLogicInt  m_nLineLogicNoCache;
-	CLayoutInt m_nLineNo50Cache;
-	CLayoutInt m_nOffset50Cache;
-	CLogicInt  m_nLogicOffset50Cache;
+	LayoutInt m_nOffsetCache;
+	LayoutInt m_nLineNoCache;
+	LogicInt  m_nLogicOffsetCache;
+	LogicInt  m_nLineLogicNoCache;
+	LayoutInt m_nLineNo50Cache;
+	LayoutInt m_nOffset50Cache;
+	LogicInt  m_nLogicOffset50Cache;
 	int m_nLineLogicModCache;
 
 	
 public:
-	CLayoutInt		m_nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。
+	LayoutInt		m_nCaretPosX_Prev;	// 直前のX座標記憶用。レイアウト単位。このソースの下部に詳細説明があります。
 
 	// キャレット見た目
 private:

@@ -19,7 +19,7 @@
 	@date 2003.07.26 ryoji BOM引数追加
 */
 EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
-	const CDocLineMgr&	pcDocLineMgr,	// [in]
+	const DocLineMgr&	pcDocLineMgr,	// [in]
 	const SaveInfo&	sSaveInfo		// [in]
 	)
 {
@@ -60,7 +60,7 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				pcCodeBase->GetBom(&cstrBomCheck);
 				if (sSaveInfo.bBomExist && 0 < cstrBomCheck.GetRawLength()) {
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
-					CUnicode().GetBom(cstrSrc._GetMemory());
+					Unicode().GetBom(cstrSrc._GetMemory());
 				}
 				if (pcDocLine) {
 					cstrSrc.AppendNativeData(pcDocLine->_GetDocLineDataWithEOL());

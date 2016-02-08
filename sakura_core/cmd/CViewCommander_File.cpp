@@ -106,7 +106,7 @@ void ViewCommander::Command_FILENEW_NEWWINDOW(void)
 /*! @brief ファイルを開く
 
 	@date 2003.03.30 genta 「閉じて開く」から利用するために引数追加
-	@date 2004.10.09 genta 実装をCEditDocへ移動
+	@date 2004.10.09 genta 実装をEditDocへ移動
 */
 void ViewCommander::Command_FILEOPEN(
 	const WCHAR* filename,
@@ -183,7 +183,7 @@ void ViewCommander::Command_FILEOPEN(
 */
 bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 {
-	CEditDoc* pcDoc = GetDocument();
+	EditDoc* pcDoc = GetDocument();
 
 	// ファイル名が指定されていない場合は「名前を付けて保存」のフローへ遷移
 	if (!GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
@@ -288,7 +288,7 @@ void ViewCommander::Command_FILE_REOPEN(
 	bool		bNoConfirm	// [in] ファイルが更新された場合に確認を行わ「ない」かどうか。true:確認しない false:確認する
 	)
 {
-	CEditDoc* pcDoc = GetDocument();
+	EditDoc* pcDoc = GetDocument();
 	if (!bNoConfirm && fexist(pcDoc->m_cDocFile.GetFilePath()) && pcDoc->m_cDocEditor.IsModified()) {
 		int nDlgResult = MYMESSAGEBOX(
 			m_pCommanderView->GetHwnd(),
@@ -623,7 +623,7 @@ bool ViewCommander::Command_PUTFILE(
 		nSaveCharCode = GetDocument()->GetDocumentEncoding();
 	}
 
-	// 2007.09.08 genta CEditDoc::FileWrite()にならって砂時計カーソル
+	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
 	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
@@ -745,12 +745,12 @@ bool ViewCommander::Command_INSFILE(
 		return false;
 	}
 
-	// 2007.09.08 genta CEditDoc::FileLoad()にならって砂時計カーソル
+	// 2007.09.08 genta EditDoc::FileLoad()にならって砂時計カーソル
 	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
 	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
 	BOOL	bBeforeTextSelected = m_pCommanderView->GetSelectionInfo().IsTextSelected();
-	CLayoutPoint ptFrom;
+	LayoutPoint ptFrom;
 	if (bBeforeTextSelected) {
 		ptFrom = m_pCommanderView->GetSelectionInfo().m_sSelect.GetFrom();
 	}
@@ -799,7 +799,7 @@ bool ViewCommander::Command_INSFILE(
 			int			nLineLen = cBuf.GetStringLength();
 
 			++nLineNum;
-			Command_INSTEXT(false, pLine, CLogicInt(nLineLen), true);
+			Command_INSTEXT(false, pLine, LogicInt(nLineLen), true);
 
 			// 進捗ダイアログ有無
 			if (!pcDlgCancel) {
@@ -836,7 +836,7 @@ bool ViewCommander::Command_INSFILE(
 
 	if (bBeforeTextSelected) {	// 挿入された部分を選択状態に
 		m_pCommanderView->GetSelectionInfo().SetSelectArea(
-			CLayoutRange(
+			LayoutRange(
 				ptFrom,
 				GetCaret().GetCaretLayoutPos()
 				/*

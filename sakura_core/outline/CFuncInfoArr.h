@@ -14,7 +14,7 @@
 
 #pragma once
 
-class CFuncInfo;
+class FuncInfo;
 #include <string>
 #include <map>
 #include "util/design_template.h"
@@ -37,12 +37,12 @@ class CFuncInfoArr {
 public:
 	CFuncInfoArr();		// CFuncInfoArrクラス構築
 	~CFuncInfoArr();	// CFuncInfoArrクラス消滅
-	CFuncInfo* GetAt(int);		// 0<=の指定番号のデータを返す
-	void AppendData(CFuncInfo*);	// 配列の最後にデータを追加する
-	void AppendData(CLogicInt, CLayoutInt, const TCHAR*, int, int nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData(CLogicInt, CLayoutInt, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
-	void AppendData(CLogicInt nLogicLine, CLogicInt nLogicCol, CLayoutInt nLayoutLine, CLayoutInt nLayoutCol, const TCHAR*, const TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
-	void AppendData(CLogicInt nLogicLine, CLogicInt nLogicCol, CLayoutInt nLayoutLine, CLayoutInt nLayoutCol, const NOT_TCHAR*, const NOT_TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
+	FuncInfo* GetAt(int);		// 0<=の指定番号のデータを返す
+	void AppendData(FuncInfo*);	// 配列の最後にデータを追加する
+	void AppendData(LogicInt, LayoutInt, const TCHAR*, int, int nDepth = 0);		// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(LogicInt, LayoutInt, const NOT_TCHAR*, int, int nDepth = 0);	// 配列の最後にデータを追加する 2002.04.01 YAZAKI 深さ導入
+	void AppendData(LogicInt nLogicLine, LogicInt nLogicCol, LayoutInt nLayoutLine, LayoutInt nLayoutCol, const TCHAR*, const TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
+	void AppendData(LogicInt nLogicLine, LogicInt nLogicCol, LayoutInt nLayoutLine, LayoutInt nLayoutCol, const NOT_TCHAR*, const NOT_TCHAR*, int, int nDepth = 0);	/* 配列の最後にデータを追加する 2010.03.01 syat 桁導入*/
 	int	GetNum(void) {	return m_nFuncInfoArrNum; }	// 配列要素数を返す
 	void Empty(void);
 	void DUMP(void);
@@ -54,7 +54,7 @@ public:
 	SFilePath	m_szFilePath;	// 解析対象ファイル名
 private:
 	int			m_nFuncInfoArrNum;	// 配列要素数
-	CFuncInfo**	m_ppcFuncInfoArr;	// 配列
+	FuncInfo**	m_ppcFuncInfoArr;	// 配列
 	std::map<int, std::wstring>	m_AppendTextArr;	// 追加文字列のリスト
 	int			m_nAppendTextLenMax;
 

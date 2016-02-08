@@ -34,7 +34,7 @@
 // タグジャンプ情報
 struct TagJump {
 	HWND		hwndReferer;				// 参照元ウィンドウ
-	CLogicPoint	point;						// ライン, カラム
+	LogicPoint	point;						// ライン, カラム
 };
 
 

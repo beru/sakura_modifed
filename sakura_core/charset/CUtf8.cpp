@@ -9,7 +9,7 @@
 #include "env/DLLSHAREDATA.h"
 
 //! BOMデータ取得
-void CUtf8::GetBom(CMemory* pcmemBom)
+void Utf8::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
 	pcmemBom->SetRawData(UTF8_BOM, sizeof(UTF8_BOM));
@@ -17,7 +17,7 @@ void CUtf8::GetBom(CMemory* pcmemBom)
 
 
 
-void CUtf8::GetEol(CMemory* pcmemEol, EEolType eEolType){
+void Utf8::GetEol(CMemory* pcmemEol, EEolType eEolType){
 	static const struct{
 		const char* szData;
 		int nLen;
@@ -40,7 +40,7 @@ void CUtf8::GetEol(CMemory* pcmemEol, EEolType eEolType){
 
 	@param[in] bCESU8Mode CESU-8 を処理する場合 true
 */
-int CUtf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCESU8Mode)
+int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCESU8Mode)
 {
 	const unsigned char *pr, *pr_end;
 	unsigned short* pw;
@@ -87,7 +87,7 @@ int CUtf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bC
 
 //! UTF-8→Unicodeコード変換
 // 2007.08.13 kobake 作成
-EConvertResult CUtf8::_UTF8ToUnicode( const CMemory& cSrc, CNativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
+EConvertResult Utf8::_UTF8ToUnicode( const CMemory& cSrc, CNativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
 	// データ取得
 	int nSrcLen;
@@ -129,7 +129,7 @@ EConvertResult CUtf8::_UTF8ToUnicode( const CMemory& cSrc, CNativeW* pDstMem, bo
 
 	@param[in] bCESU8Mode CESU-8 を処理する場合 true
 */
-int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError, bool bCESU8Mode)
+int Utf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError, bool bCESU8Mode)
 {
 	const unsigned short* pr = reinterpret_cast<const unsigned short*>(pSrc);
 	const unsigned short* pr_end = reinterpret_cast<const unsigned short*>(pSrc + nSrcLen);
@@ -176,7 +176,7 @@ int CUtf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 
 
 //! コード変換 Unicode→UTF-8
-EConvertResult CUtf8::_UnicodeToUTF8( const CNativeW& cSrc, CMemory* pDstMem, bool bCesu8Mode )
+EConvertResult Utf8::_UnicodeToUTF8( const CNativeW& cSrc, CMemory* pDstMem, bool bCesu8Mode )
 {
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
@@ -205,7 +205,7 @@ EConvertResult CUtf8::_UnicodeToUTF8( const CNativeW& cSrc, CMemory* pDstMem, bo
 }
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/21 Uchi
-EConvertResult CUtf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool bCESUMode)
+EConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool bCESUMode)
 {
 	CNativeW		cBuff;
 	EConvertResult	res;

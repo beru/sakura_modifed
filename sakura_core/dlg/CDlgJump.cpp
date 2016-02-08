@@ -170,7 +170,7 @@ BOOL CDlgJump::OnBnClicked(int wID)
 		}
 // To Here Feb. 20, 2001
 		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
-			CEditDoc* pCEditDoc = (CEditDoc*)m_lParam;
+			EditDoc* pCEditDoc = (EditDoc*)m_lParam;
 			pCEditDoc->m_pcEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
 		return TRUE;
@@ -186,7 +186,7 @@ BOOL CDlgJump::OnBnClicked(int wID)
 // ダイアログデータの設定
 void CDlgJump::SetData(void)
 {
-	CEditDoc* pCEditDoc = (CEditDoc*)m_lParam;
+	EditDoc* pCEditDoc = (EditDoc*)m_lParam;
 	CFuncInfoArr cFuncInfoArr;
 	wchar_t szText[1024];
 	int nIndexCurSel = 0;	// Sep. 11, 2004 genta 初期化
@@ -212,7 +212,7 @@ void CDlgJump::SetData(void)
 	int nIndex = 0;
 	int nPLSQLBlockNum = 0;
 	for (int i=0; i<cFuncInfoArr.GetNum(); ++i) {
-		CFuncInfo* pFI = cFuncInfoArr.GetAt(i);
+		FuncInfo* pFI = cFuncInfoArr.GetAt(i);
 		if (pFI->m_nInfo == 31 || pFI->m_nInfo == 41) {
 		}
 		if (pFI->m_nInfo == 31) {

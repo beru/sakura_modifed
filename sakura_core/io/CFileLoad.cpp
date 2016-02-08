@@ -386,7 +386,7 @@ EConvertResult CFileLoad::ReadLine_core(
 			}
 		}
 	}
-	if (pUnicodeBuffer->GetStringLength() == CLogicInt(0)) {
+	if (pUnicodeBuffer->GetStringLength() == LogicInt(0)) {
 		eRet = RESULT_FAILURE;
 	}
 

@@ -25,14 +25,14 @@
 
 #include "CEol.h"
 
-class CEditDoc;
+class EditDoc;
 
 class CDocVisitor {
 public:
-	CDocVisitor(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
+	CDocVisitor(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 
 	void SetAllEol(CEol cEol); // 改行コードを統一する
 private:
-	CEditDoc* m_pcDocRef;
+	EditDoc* m_pcDocRef;
 };
 

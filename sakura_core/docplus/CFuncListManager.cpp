@@ -46,13 +46,13 @@ void CFuncListManager::SetLineFuncList(CDocLine* pcDocLine, bool bFlag)
 	@date	2002.05.25
 */
 bool CFuncListManager::SearchFuncListMark(
-	const CDocLineMgr*	pcDocLineMgr,
-	CLogicInt			nLineNum,		//!< 検索開始行
+	const DocLineMgr*	pcDocLineMgr,
+	LogicInt			nLineNum,		//!< 検索開始行
 	eSearchDirection	bPrevOrNext,
-	CLogicInt*			pnLineNum 		//!< マッチ行
+	LogicInt*			pnLineNum 		//!< マッチ行
 	) const
 {
-	CLogicInt nLinePos = nLineNum;
+	LogicInt nLinePos = nLineNum;
 
 	if (bPrevOrNext == eSearchDirection::Backward) {
 		// 後方検索(↑)
@@ -83,7 +83,7 @@ bool CFuncListManager::SearchFuncListMark(
 }
 
 // 関数リストマークをすべてリセット
-void CFuncListManager::ResetAllFucListMark(CDocLineMgr* pcDocLineMgr, bool bFlag)
+void CFuncListManager::ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag)
 {
 	CDocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
 	while (pDocLine) {

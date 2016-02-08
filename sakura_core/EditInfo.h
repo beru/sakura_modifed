@@ -42,11 +42,11 @@ struct EditInfo {
 	int 		m_nTypeId;								//!< 文書タイプ(MRU)
 
 	// 表示域
-	CLayoutInt	m_nViewTopLine;							//!< 表示域の一番上の行(0開始)
-	CLayoutInt	m_nViewLeftCol;							//!< 表示域の一番左の桁(0開始)
+	LayoutInt	m_nViewTopLine;							//!< 表示域の一番上の行(0開始)
+	LayoutInt	m_nViewLeftCol;							//!< 表示域の一番左の桁(0開始)
 
 	// キャレット
-	CLogicPoint m_ptCursor;								//!< キャレット位置
+	LogicPoint m_ptCursor;								//!< キャレット位置
 
 	// 各種状態
 	bool		m_bIsModified;							//!< 変更フラグ
@@ -76,7 +76,7 @@ struct EditInfo {
 		m_nTypeId(-1),
 		m_nViewTopLine(-1),
 		m_nViewLeftCol(-1),
-		m_ptCursor(CLogicInt(-1), CLogicInt(-1)),
+		m_ptCursor(LogicInt(-1), LogicInt(-1)),
 		m_bIsModified(false),
 		m_bIsGrep(false),
 		m_bIsDebug(false),

@@ -391,7 +391,7 @@ int CPluginManager::InstallPlugin(
 	bool bUpdate
 	)
 {
-	CDataProfile cProfDef;				// プラグイン定義ファイル
+	DataProfile cProfDef;				// プラグイン定義ファイル
 
 	// プラグイン定義ファイルを読み込む
 	cProfDef.SetReadingMode();
@@ -553,10 +553,10 @@ CPlugin* CPluginManager::LoadPlugin(
 	TCHAR pszBasePath[_MAX_PATH];
 	TCHAR pszPath[_MAX_PATH];
 	std::tstring strMlang;
-	CDataProfile cProfDef;				// プラグイン定義ファイル
-	CDataProfile cProfDefMLang;			// プラグイン定義ファイル(L10N)
-	CDataProfile* pcProfDefMLang = &cProfDefMLang; 
-	CDataProfile cProfOption;			// オプションファイル
+	DataProfile cProfDef;				// プラグイン定義ファイル
+	DataProfile cProfDefMLang;			// プラグイン定義ファイル(L10N)
+	DataProfile* pcProfDefMLang = &cProfDefMLang; 
+	DataProfile cProfOption;			// オプションファイル
 	CPlugin* plugin = NULL;
 
 #ifdef _UNICODE

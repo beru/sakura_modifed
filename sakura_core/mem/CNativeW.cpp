@@ -222,29 +222,29 @@ void CNativeW::Replace(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 指定した位置の文字がwchar_t何個分かを返す
-CLogicInt CNativeW::GetSizeOfChar(
+LogicInt CNativeW::GetSizeOfChar(
 	const wchar_t* pData,
 	int nDataLen,
 	int nIdx
 	)
 {
 	if (nIdx >= nDataLen) {
-		return CLogicInt(0);
+		return LogicInt(0);
 	}
 
 	// サロゲートチェック					2008/7/5 Uchi
 	if (IsUTF16High(pData[nIdx])) {
 		if (nIdx + 1 < nDataLen && IsUTF16Low(pData[nIdx + 1])) {
 			// サロゲートペア 2個分
-			return CLogicInt(2);
+			return LogicInt(2);
 		}
 	}
 
-	return CLogicInt(1);
+	return LogicInt(1);
 }
 
 // 指定した位置の文字が半角何個分かを返す
-CLayoutInt CNativeW::GetKetaOfChar(
+LayoutInt CNativeW::GetKetaOfChar(
 	const wchar_t* pData,
 	int nDataLen,
 	int nIdx
@@ -252,33 +252,33 @@ CLayoutInt CNativeW::GetKetaOfChar(
 {
 	// 文字列範囲外なら 0
 	if (nIdx >= nDataLen) {
-		return CLayoutInt(0);
+		return LayoutInt(0);
 	}
 
 	// サロゲートチェック BMP 以外は全角扱い		2008/7/5 Uchi
 	if (IsUTF16High(pData[nIdx])) {
-		return CLayoutInt(2);	// 仮
+		return LayoutInt(2);	// 仮
 	}
 	if (IsUTF16Low(pData[nIdx])) {
 		if (nIdx > 0 && IsUTF16High(pData[nIdx - 1])) {
 			// サロゲートペア（下位）
-			return CLayoutInt(0);
+			return LayoutInt(0);
 		}
 		// 単独（ブロークンペア）
-		// return CLayoutInt(2);
+		// return LayoutInt(2);
 		if (IsBinaryOnSurrogate(pData[nIdx])) {
-			return CLayoutInt(1);
+			return LayoutInt(1);
 		}else {
-			return CLayoutInt(2);
+			return LayoutInt(2);
 		}
 	}
 
 	// 半角文字なら 1
 	if (WCODE::IsHankaku(pData[nIdx])) {
-		return CLayoutInt(1);
+		return LayoutInt(1);
 	// 全角文字なら 2
 	}else {
-		return CLayoutInt(2);
+		return LayoutInt(2);
 	}
 }
 

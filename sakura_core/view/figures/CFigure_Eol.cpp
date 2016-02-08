@@ -66,7 +66,7 @@ bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 	CEditView* pcView = pInfo->m_pcView;
 
 	// 改行取得
-	const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
+	const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
 	CEol cEol = pcLayout->GetLayoutEol();
 	if (cEol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
@@ -132,7 +132,7 @@ bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 折り返し描画
-void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum)
+void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, LayoutYInt nLineNum)
 {
 	RECT rcClip2;
 	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {

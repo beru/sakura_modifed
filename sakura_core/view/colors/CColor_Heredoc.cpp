@@ -26,10 +26,10 @@
 #include "CColor_Heredoc.h"
 #include "doc/layout/CLayout.h"
 
-class CLayoutColorHeredocInfo : public CLayoutColorInfo {
+class CLayoutColorHeredocInfo : public LayoutColorInfo {
 public:
 	std::wstring m_id;
-	bool IsEqual(const CLayoutColorInfo* p) const {
+	bool IsEqual(const LayoutColorInfo* p) const {
 		if (!p) {
 			return false;
 		}
@@ -41,7 +41,7 @@ public:
 	}
 };
 
-void CColor_Heredoc::SetStrategyColorInfo(const CLayoutColorInfo* colorInfo)
+void CColor_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 {
 	if (colorInfo) {
 		const CLayoutColorHeredocInfo* info = dynamic_cast<const CLayoutColorHeredocInfo*>(colorInfo);
@@ -53,7 +53,7 @@ void CColor_Heredoc::SetStrategyColorInfo(const CLayoutColorInfo* colorInfo)
 	}
 }
 
-CLayoutColorInfo* CColor_Heredoc::GetStrategyColorInfo() const
+LayoutColorInfo* CColor_Heredoc::GetStrategyColorInfo() const
 {
 	CLayoutColorHeredocInfo* info = new CLayoutColorHeredocInfo();
 	info->m_id.assign(m_pszId, m_nSize);

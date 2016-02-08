@@ -131,7 +131,7 @@ bool CEditView::KeySearchCore(const CNativeW* pcmemCurText)
 		if (keyHelpInfo.m_bUse) {
 			// 2006.04.10 fon (nCmpLen, pcmemRefKey,nSearchLine)引数を追加
 			CNativeW* pcmemRefText;
-			int nSearchResult = m_cDicMgr.CDicMgr::Search(
+			int nSearchResult = m_cDicMgr.DicMgr::Search(
 				pcmemCurText->GetStringPtr(),
 				nCmpLen,
 				&pcmemRefKey,
@@ -226,7 +226,7 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 
 	Point ptClient(*po);
 	ScreenToClient(GetHwnd(), &ptClient);
-	CLayoutPoint ptNew;
+	LayoutPoint ptNew;
 	GetTextArea().ClientToLayout(ptClient, &ptNew);
 	// 同じ行ならなにもしない
 	if (m_dwTipTimer == 0 && m_cTipWnd.m_nSearchLine == (Int)ptNew.y) {
@@ -234,17 +234,17 @@ bool CEditView::MiniMapCursorLineTip(POINT* po, RECT* rc, bool* pbHide)
 		return false;
 	}
 	CNativeW cmemCurText;
-	CLayoutYInt nTipBeginLine = ptNew.y;
-	CLayoutYInt nTipEndLine = ptNew.y + CLayoutYInt(4);
-	for (CLayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
-		const CLayout* pcLayout = NULL;
+	LayoutYInt nTipBeginLine = ptNew.y;
+	LayoutYInt nTipEndLine = ptNew.y + LayoutYInt(4);
+	for (LayoutYInt nCurLine=nTipBeginLine; nCurLine<nTipEndLine; ++nCurLine) {
+		const Layout* pcLayout = NULL;
 		if (0 <= nCurLine) {
 			pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( nCurLine );
 		}
 		if (pcLayout) {
 			CNativeW cmemCurLine;
 			{
-				CLogicInt nLineLen = pcLayout->GetLengthWithoutEOL();
+				LogicInt nLineLen = pcLayout->GetLengthWithoutEOL();
 				const wchar_t* pszData = pcLayout->GetPtr();
 				int nLimitLength = 80;
 				int pre = 0;
@@ -309,15 +309,15 @@ void CEditView::GetCurrentTextForSearch(CNativeW& cmemCurText, bool bStripMaxPat
 			}
 		}
 	}else {
-		CLogicInt nLineLen;
-		const CLayout* pcLayout;
+		LogicInt nLineLen;
+		const Layout* pcLayout;
 		const wchar_t* pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
 		if (pLine) {
 			// 指定された桁に対応する行のデータ内の位置を調べる
-			CLogicInt nIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
+			LogicInt nIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
 
 			// 現在位置の単語の範囲を調べる
-			CLayoutRange sRange;
+			LayoutRange sRange;
 			bool bWhere = m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
 				GetCaret().GetCaretLayoutPos().GetY2(),
 				nIdx,
@@ -441,9 +441,9 @@ int CEditView::IsSearchString(
 	const wchar_t*	pszData,
 	CLogicInt		nDataLen,
 	*/
-	CLogicInt		nPos,
-	CLogicInt*		pnSearchStart,
-	CLogicInt*		pnSearchEnd
+	LogicInt		nPos,
+	LogicInt*		pnSearchStart,
+	LogicInt*		pnSearchEnd
 ) const
 {
 	*pnSearchStart = nPos;	// 2002.02.08 hor
@@ -466,14 +466,14 @@ int CEditView::IsSearchString(
 		}
 	}else if (m_curSearchOption.bWordOnly) { // 単語検索
 		// 指定位置の単語の範囲を調べる
-		CLogicInt posWordHead, posWordEnd;
-		if (!CWordParse::WhereCurrentWord_2(cStr.GetPtr(), CLogicInt(cStr.GetLength()), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
+		LogicInt posWordHead, posWordEnd;
+		if (!CWordParse::WhereCurrentWord_2(cStr.GetPtr(), LogicInt(cStr.GetLength()), nPos, &posWordHead, &posWordEnd, NULL, NULL)) {
 			return 0; // 指定位置に単語が見つからなかった。
  		}
 		if (nPos != posWordHead) {
 			return 0; // 指定位置は単語の始まりではなかった。
 		}
-		const CLogicInt wordLength = posWordEnd - posWordHead;
+		const LogicInt wordLength = posWordEnd - posWordHead;
 		const wchar_t* const pWordHead = cStr.GetPtr() + posWordHead;
 
 		// 比較関数
@@ -483,9 +483,9 @@ int CEditView::IsSearchString(
 		int wordIndex = 0;
 		const wchar_t* const searchKeyEnd = m_strCurSearchKey.data() + m_strCurSearchKey.size();
 		for (const wchar_t* p=m_strCurSearchKey.data(); p<searchKeyEnd; ) {
-			CLogicInt begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
+			LogicInt begin, end; // 検索語に含まれる単語?の位置。WhereCurrentWord_2()の仕様では空白文字列も単語に含まれる。
 			if (1
-				&& CWordParse::WhereCurrentWord_2(p, CLogicInt(searchKeyEnd - p), CLogicInt(0), &begin, &end, NULL, NULL)
+				&& CWordParse::WhereCurrentWord_2(p, LogicInt(searchKeyEnd - p), LogicInt(0), &begin, &end, NULL, NULL)
 				&& begin == 0
 				&& begin < end
 			) {
@@ -505,7 +505,7 @@ int CEditView::IsSearchString(
 		}
 		return 0; // 指定位置の単語と検索文字列に含まれる単語は一致しなかった。
 	}else {
-		const wchar_t* pHit = CSearchAgent::SearchString(cStr.GetPtr(), cStr.GetLength(), nPos, m_sSearchPattern);
+		const wchar_t* pHit = SearchAgent::SearchString(cStr.GetPtr(), cStr.GetLength(), nPos, m_sSearchPattern);
 		if (pHit) {
 			*pnSearchStart = pHit - cStr.GetPtr();
 			*pnSearchEnd = *pnSearchStart + m_sSearchPattern.GetLen();

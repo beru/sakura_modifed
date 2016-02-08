@@ -46,7 +46,7 @@
 #endif
 #endif
 
-void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, CLayoutYInt nLineNum);
+void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView, LayoutYInt nLineNum);
 
 /*
 	PAINT_LINENUMBER = (1<<0), // 行番号
@@ -144,7 +144,7 @@ void CEditView::Redraw()
 }
 // 2001/06/21 End
 
-void CEditView::RedrawLines(CLayoutYInt top, CLayoutYInt bottom)
+void CEditView::RedrawLines(LayoutYInt top, LayoutYInt bottom)
 {
 	if (!GetHwnd()) {
 		return;
@@ -197,7 +197,7 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	CTypeSupport cTextType(this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
 	const CTextArea& area = GetTextArea();
-	const CEditDoc& doc  = *m_pcEditDoc;
+	const EditDoc& doc  = *m_pcEditDoc;
 	const TypeConfig& typeConfig = doc.m_cDocType.GetDocumentAttribute();
 
 	Rect rcImagePos;
@@ -350,8 +350,8 @@ void CEditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	修正があった場合は、ここも修正が必要。
 */
 Color3Setting CEditView::GetColorIndex(
-	const CLayout*			pcLayout,
-	CLayoutYInt				nLineNum,
+	const Layout*			pcLayout,
+	LayoutYInt				nLineNum,
 	int						nIndex,
 	ColorStrategyInfo* 	pInfo,			// 2010.03.31 ryoji 追加
 	bool					bPrev			// 指定位置の色変更直前まで	2010.06.19 ryoji 追加
@@ -369,9 +369,9 @@ Color3Setting CEditView::GetColorIndex(
 		return cColor;
 	}
 
-	const CLayoutColorInfo* colorInfo;
-	const CLayout* pcLayoutLineFirst = pcLayout;
-	CLayoutYInt nLineNumFirst = nLineNum;
+	const LayoutColorInfo* colorInfo;
+	const Layout* pcLayoutLineFirst = pcLayout;
+	LayoutYInt nLineNumFirst = nLineNum;
 	{
 		// 2002/2/10 aroka CMemory変更
 		pInfo->m_pLineOfLogic = pcLayout->GetDocLineRef()->GetPtr();
@@ -402,7 +402,7 @@ Color3Setting CEditView::GetColorIndex(
 		////############超仮。本当はVisitorを使うべき
 		//class TmpVisitor{
 		//public:
-		//	static int CalcLayoutIndex(const CLayout* pcLayout)
+		//	static int CalcLayoutIndex(const Layout* pcLayout)
 		//	{
 		//		int n = -1;
 		//		while (pcLayout) {
@@ -412,7 +412,7 @@ Color3Setting CEditView::GetColorIndex(
 		//		return n;
 		//	}
 		//};
-		//pInfo->pDispPos->SetLayoutLineRef(CLayoutInt(TmpVisitor::CalcLayoutIndex(pcLayout)));
+		//pInfo->pDispPos->SetLayoutLineRef(LayoutInt(TmpVisitor::CalcLayoutIndex(pcLayout)));
 		// 2013.12.11 Moca カレント行の色替えで必要になりました
 		pInfo->m_pDispPos->SetLayoutLineRef(nLineNumFirst);
 	}
@@ -429,8 +429,8 @@ Color3Setting CEditView::GetColorIndex(
 		pInfo->m_pStrategy->SetStrategyColorInfo(colorInfo);
 	}
 
-	const CLayout* pcLayoutNext = pcLayoutLineFirst->GetNextLayout();
-	CLayoutYInt nLineNumScan = nLineNumFirst;
+	const Layout* pcLayoutNext = pcLayoutLineFirst->GetNextLayout();
+	LayoutYInt nLineNumScan = nLineNumFirst;
 	int nPosTo = pcLayout->GetLogicOffset() + t_min(nIndex, (int)pcLayout->GetLengthWithEOL() - 1);
 	while (pInfo->m_nPosInLogic <= nPosTo) {
 		if (bPrev && pInfo->m_nPosInLogic == nPosTo)
@@ -729,11 +729,11 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//           描画開始レイアウト絶対行 -> nLayoutLine             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	CLayoutInt nLayoutLine;
+	LayoutInt nLayoutLine;
 	if (0 > nTop - GetTextArea().GetAreaTop()) {
 		nLayoutLine = GetTextArea().GetViewTopLine(); // ビュー上部から描画
 	}else {
-		nLayoutLine = GetTextArea().GetViewTopLine() + CLayoutInt((nTop - GetTextArea().GetAreaTop()) / nLineHeight); // ビュー途中から描画
+		nLayoutLine = GetTextArea().GetViewTopLine() + LayoutInt((nTop - GetTextArea().GetAreaTop()) / nLineHeight); // ビュー途中から描画
 	}
 
 	// ※ ここにあった描画範囲の 260 文字ロールバック処理は GetColorIndex() に吸収	// 2009.02.11 ryoji
@@ -741,8 +741,8 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          描画終了レイアウト絶対行 -> nLayoutLineTo            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	CLayoutInt nLayoutLineTo = GetTextArea().GetViewTopLine()
-		+ CLayoutInt((pPs->rcPaint.bottom - GetTextArea().GetAreaTop() + (nLineHeight - 1)) / nLineHeight) - 1;	// 2007.02.17 ryoji 計算を精密化
+	LayoutInt nLayoutLineTo = GetTextArea().GetViewTopLine()
+		+ LayoutInt((pPs->rcPaint.bottom - GetTextArea().GetAreaTop() + (nLineHeight - 1)) / nLineHeight) - 1;	// 2007.02.17 ryoji 計算を精密化
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -814,7 +814,7 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 			GetTextDrawer().DispNoteLine(gr, sPos.GetDrawPos().y, pPs->rcPaint.bottom, pPs->rcPaint.left, pPs->rcPaint.right);
 		}
 		// 2006.04.29 行部分は行ごとに作画し、ここでは縦線の残りを作画
-		GetTextDrawer().DispVerticalLines(gr, sPos.GetDrawPos().y, pPs->rcPaint.bottom, CLayoutInt(0), CLayoutInt(-1));
+		GetTextDrawer().DispVerticalLines(gr, sPos.GetDrawPos().y, pPs->rcPaint.bottom, LayoutInt(0), LayoutInt(-1));
 		GetTextDrawer().DispWrapLine(gr, sPos.GetDrawPos().y, pPs->rcPaint.bottom);	// 2009.10.24 ryoji
 	}
 
@@ -880,7 +880,7 @@ void CEditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 bool CEditView::DrawLogicLine(
 	HDC				_hdc,			// [in]     作画対象
 	DispPos*		_pDispPos,		// [in/out] 描画する箇所、描画元ソース
-	CLayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
+	LayoutInt		nLineTo			// [in]     作画終了するレイアウト行番号
 )
 {
 //	MY_RUNNINGTIMER(cRunningTimer, "CEditView::DrawLogicLine");
@@ -901,17 +901,17 @@ bool CEditView::DrawLogicLine(
 	pInfo->m_sDispPosBegin = *pInfo->m_pDispPos;
 
 	// 処理する文字位置
-	pInfo->m_nPosInLogic = CLogicInt(0); // ☆開始
+	pInfo->m_nPosInLogic = LogicInt(0); // ☆開始
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          論理行データの取得 -> pLine, pLineLen              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 前行の最終設定色
 	{
-		const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
+		const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
 		if (bSkipBeforeLayout) {
 			EColorIndexType eRet = COLORIDX_TEXT;
-			const CLayoutColorInfo* colorInfo = NULL;
+			const LayoutColorInfo* colorInfo = NULL;
 			if (pcLayout) {
 				eRet = pcLayout->GetColorTypePrev(); // COLORIDX_TEXTのはず
 				colorInfo = pcLayout->GetColorInfo();
@@ -929,14 +929,14 @@ bool CEditView::DrawLogicLine(
 
 	// 開始ロジック位置を算出
 	{
-		const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
-		pInfo->m_nPosInLogic = pcLayout ? pcLayout->GetLogicOffset() : CLogicInt(0);
+		const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
+		pInfo->m_nPosInLogic = pcLayout ? pcLayout->GetLogicOffset() : LogicInt(0);
 	}
 
 	for (;;) {
 		// 対象行が描画範囲外だったら終了
 		if (GetTextArea().GetBottomLine() < pInfo->m_pDispPos->GetLayoutLineRef()) {
-			pInfo->m_pDispPos->SetLayoutLineRef(nLineTo + CLayoutInt(1));
+			pInfo->m_pDispPos->SetLayoutLineRef(nLineTo + LayoutInt(1));
 			break;
 		}
 		if (nLineTo < pInfo->m_pDispPos->GetLayoutLineRef()) {
@@ -947,7 +947,7 @@ bool CEditView::DrawLogicLine(
 		bDispEOF = DrawLayoutLine(pInfo);
 
 		// 行を進める
-		CLogicInt nOldLogicLineNo = pInfo->m_pDispPos->GetLayoutRef()->GetLogicLineNo();
+		LogicInt nOldLogicLineNo = pInfo->m_pDispPos->GetLayoutRef()->GetLogicLineNo();
 		pInfo->m_pDispPos->ForwardDrawLine(1);		// 描画Y座標＋＋
 		pInfo->m_pDispPos->ForwardLayoutLineRef(1);	// レイアウト行＋＋
 
@@ -957,7 +957,7 @@ bool CEditView::DrawLogicLine(
 		}
 
 		// nLineToを超えたら抜ける
-		if (pInfo->m_pDispPos->GetLayoutLineRef() >= nLineTo + CLayoutInt(1)) {
+		if (pInfo->m_pDispPos->GetLayoutLineRef() >= nLineTo + LayoutInt(1)) {
 			break;
 		}
 	}
@@ -974,7 +974,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	bool bDispEOF = false;
 	CTypeSupport cTextType(this, COLORIDX_TEXT);
 
-	const CLayout* pcLayout = pInfo->m_pDispPos->GetLayoutRef(); //m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
+	const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef(); //m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
 
 	// レイアウト情報
 	if (pcLayout) {
@@ -1064,7 +1064,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	bool bSkipRight = false; // 続きを描画しなくていい場合はスキップする
 	if (pcLayout) {
-		const CLayout* pcLayoutNext = pcLayout->GetNextLayout();
+		const Layout* pcLayoutNext = pcLayout->GetNextLayout();
 		if (!pcLayoutNext) {
 			bSkipRight = true;
 		}else if (pcLayoutNext->GetLogicOffset() == 0) {
@@ -1107,7 +1107,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 		bDispEOF = true;
 	}else if (!pcLayout && pInfo->m_pDispPos->GetLayoutLineRef() == m_pcEditDoc->m_cLayoutMgr.GetLineCount()) {
 		// 空行のEOF
-		const CLayout* pBottom = m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
+		const Layout* pBottom = m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
 		if (!pBottom || (pBottom && pBottom->GetLayoutEol().GetLen())) {
 			_DispEOF(pInfo->m_gr,pInfo->m_pDispPos,this);
 			bDispEOF = true;
@@ -1129,7 +1129,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 		CTypeSupport cSelectType(this, COLORIDX_SELECT);
 		if (GetSelectionInfo().IsTextSelected() && cSelectType.IsDisp()) {
 			// 選択範囲の指定色：必要ならテキストのない部分の矩形選択を作画
-			CLayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(pInfo->m_pDispPos->GetLayoutLineRef(), pcLayout);
+			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(pInfo->m_pDispPos->GetLayoutLineRef(), pcLayout);
 			// 2010.10.04 スクロール分の足し忘れ
 			int nSelectFromPx = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetFrom().x - GetTextArea().GetViewLeftCol());
 			int nSelectToPx   = GetTextMetrics().GetHankakuDx() * (Int)(selectArea.GetTo().x - GetTextArea().GetViewLeftCol());
@@ -1166,8 +1166,8 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 		pInfo->m_gr,
 		pInfo->m_pDispPos->GetDrawPos().y,
 		pInfo->m_pDispPos->GetDrawPos().y + nLineHeight,
-		CLayoutInt(0),
-		CLayoutInt(-1)
+		LayoutInt(0),
+		LayoutInt(-1)
 	);
 
 	// 折り返し桁縦線描画
@@ -1185,7 +1185,7 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			pInfo->m_gr,
 			pInfo->m_pDispPos->GetLayoutLineRef(),
 			Point(pInfo->m_sDispPosBegin.GetDrawPos().x, pInfo->m_pDispPos->GetDrawPos().y),
-			pcLayout->CalcLayoutWidth(CEditDoc::GetInstance(0)->m_cLayoutMgr) + CLayoutInt(pcLayout->GetLayoutEol().GetLen() ? 1 : 0)
+			pcLayout->CalcLayoutWidth(EditDoc::GetInstance(0)->m_cLayoutMgr) + LayoutInt(pcLayout->GetLayoutEol().GetLen() ? 1 : 0)
 		);
 	}
 
@@ -1209,24 +1209,24 @@ bool CEditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 */
 void CEditView::DispTextSelected(
 	HDC				hdc,		// 作画対象ビットマップを含むデバイス
-	CLayoutInt		nLineNum,	// 反転処理対象レイアウト行番号(0開始)
+	LayoutInt		nLineNum,	// 反転処理対象レイアウト行番号(0開始)
 	const Point&	ptXY,		// (相対レイアウト0桁目の左端座標, 対象行の上端座標)
-	CLayoutInt		nX_Layout	// 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
+	LayoutInt		nX_Layout	// 対象行の終了桁位置。　[ABC\n]なら改行の後ろで4
 )
 {
-	CLayoutInt	nSelectFrom;
-	CLayoutInt	nSelectTo;
+	LayoutInt	nSelectFrom;
+	LayoutInt	nSelectTo;
 	RECT		rcClip;
 	int			nLineHeight = GetTextMetrics().GetHankakuDy();
 	int			nCharWidth = GetTextMetrics().GetHankakuDx();
 	HRGN		hrgnDraw;
-	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
-	CLayoutRange& sSelect = GetSelectionInfo().m_sSelect;
+	const Layout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
+	LayoutRange& sSelect = GetSelectionInfo().m_sSelect;
 
 	// 選択範囲内の行かな
 //	if (IsTextSelected()) {
 		if (nLineNum >= sSelect.GetFrom().y && nLineNum <= sSelect.GetTo().y) {
-			CLayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
+			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
 			nSelectFrom = selectArea.GetFrom().x;
 			nSelectTo   = selectArea.GetTo().x;
 			if (nSelectFrom == INT_MAX) {

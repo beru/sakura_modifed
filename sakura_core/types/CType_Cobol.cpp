@@ -46,10 +46,10 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_eDefaultOutline = OUTLINE_COBOL;			// アウトライン解析方法
 	// 指定桁縦線	// 2005.11.08 Moca
 	pType->m_ColorInfoArr[COLORIDX_VERTLINE].m_bDisp = true;
-	pType->m_nVertLineIdx[0] = CLayoutInt(7);
-	pType->m_nVertLineIdx[1] = CLayoutInt(8);
-	pType->m_nVertLineIdx[2] = CLayoutInt(12);
-	pType->m_nVertLineIdx[3] = CLayoutInt(73);
+	pType->m_nVertLineIdx[0] = LayoutInt(7);
+	pType->m_nVertLineIdx[1] = LayoutInt(8);
+	pType->m_nVertLineIdx[2] = LayoutInt(12);
+	pType->m_nVertLineIdx[3] = LayoutInt(73);
 }
 
 
@@ -57,7 +57,7 @@ void CType_Cobol::InitTypeConfigImp(TypeConfig* pType)
 void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	int				i;
 	int				k;
 	wchar_t			szDivision[1024];
@@ -71,8 +71,8 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 	szLabel[0] =  L'\0';
 
 
-	CLogicInt	nLineCount;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	LogicInt	nLineCount;
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -126,14 +126,14 @@ void CDocOutline::MakeTopicList_cobol(CFuncInfoArr* pcFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 
-			CLayoutPoint ptPos;
+			LayoutPoint ptPos;
 			wchar_t	szWork[1024];
 			m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-				CLogicPoint(0, nLineCount),
+				LogicPoint(0, nLineCount),
 				&ptPos
 			);
 			auto_sprintf_s(szWork, L"%ls::%ls", szDivision, szLabel);
-			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , szWork, 0);
+			pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , szWork, 0);
 		}
 	}
 	return;

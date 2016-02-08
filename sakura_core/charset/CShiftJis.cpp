@@ -22,7 +22,7 @@
 	@note nIdxは予め文字の先頭位置とわかっていなければならない．
 	2バイト文字の2バイト目をnIdxに与えると正しい結果が得られない．
 */
-int CShiftJis::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
+int ShiftJis::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 {
 	if (nIdx >= nDataLen) {
 		return 0;
@@ -42,7 +42,7 @@ int CShiftJis::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 /*!
 	SJIS → Unicode 変換
 */
-int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int ShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	ECharSet echarset;
 	int nclen;
@@ -105,7 +105,7 @@ int CShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 
 
 // コード変換 SJIS→Unicode
-EConvertResult CShiftJis::SJISToUnicode(
+EConvertResult ShiftJis::SJISToUnicode(
 	const CMemory& cSrc,
 	CNativeW* pDstMem
 	)
@@ -138,7 +138,7 @@ EConvertResult CShiftJis::SJISToUnicode(
 /*
 	Unicode -> SJIS
 */
-int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int ShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;
@@ -200,7 +200,7 @@ int CShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 
 // コード変換 Unicode→SJIS
-EConvertResult CShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
+EConvertResult ShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem )
 {
 	// 状態
 	const CMemory* pMem = cSrc._GetMemory();
@@ -234,7 +234,7 @@ EConvertResult CShiftJis::UnicodeToSJIS( const CNativeW& cSrc, CMemory* pDstMem 
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+EConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	CNativeW		cCharBuffer;
 	EConvertResult	res;

@@ -8,9 +8,9 @@
 
 void CColor_Select::OnStartScanLogic()
 {
-	m_nSelectLine	= CLayoutInt(-1);
-	m_nSelectStart	= CLogicInt(-1);
-	m_nSelectEnd	= CLogicInt(-1);
+	m_nSelectLine	= LayoutInt(-1);
+	m_nSelectStart	= LogicInt(-1);
+	m_nSelectEnd	= LogicInt(-1);
 }
 
 bool CColor_Select::BeginColor(const CStringRef& cStr, int nPos)
@@ -19,7 +19,7 @@ bool CColor_Select::BeginColor(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nLineNum, const CLayout* pcLayout)
+bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, LayoutInt nLineNum, const Layout* pcLayout)
 {
 	if (!cStr.IsValid()) return false;
 
@@ -33,16 +33,16 @@ bool CColor_Select::BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt nL
 		return (m_nSelectStart <= nPos && nPos < m_nSelectEnd);
 	}
 	m_nSelectLine = nLineNum;
-	CLayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
-	CLayoutInt nSelectFrom = selectArea.GetFrom().x;
-	CLayoutInt nSelectTo = selectArea.GetTo().x;
+	LayoutRange selectArea = view.GetSelectionInfo().GetSelectAreaLine(nLineNum, pcLayout);
+	LayoutInt nSelectFrom = selectArea.GetFrom().x;
+	LayoutInt nSelectTo = selectArea.GetTo().x;
 	if (nSelectFrom == nSelectTo || nSelectFrom == -1) {
 		m_nSelectStart = -1;
 		m_nSelectEnd = -1;
 		return false;
 	}
-	CLogicInt nIdxFrom = view.LineColumnToIndex(pcLayout, nSelectFrom) + pcLayout->GetLogicOffset();
-	CLogicInt nIdxTo = view.LineColumnToIndex(pcLayout, nSelectTo) + pcLayout->GetLogicOffset();
+	LogicInt nIdxFrom = view.LineColumnToIndex(pcLayout, nSelectFrom) + pcLayout->GetLogicOffset();
+	LogicInt nIdxTo = view.LineColumnToIndex(pcLayout, nSelectTo) + pcLayout->GetLogicOffset();
 	m_nSelectStart = nIdxFrom;
 	m_nSelectEnd = nIdxTo;
 	if (m_nSelectStart <= nPos && nPos < m_nSelectEnd) {
@@ -67,8 +67,8 @@ CColor_Found::CColor_Found()
 void CColor_Found::OnStartScanLogic()
 {
 	m_nSearchResult	= 1;
-	m_nSearchStart	= CLogicInt(-1);
-	m_nSearchEnd	= CLogicInt(-1);
+	m_nSearchStart	= LogicInt(-1);
+	m_nSearchEnd	= LogicInt(-1);
 
 	this->validColorNum = 0;
 	for (int color=COLORIDX_SEARCH; color<=COLORIDX_SEARCHTAIL; ++color) {
@@ -93,7 +93,7 @@ bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 	if (pcView->m_curSearchOption.bWordOnly || (m_nSearchResult && m_nSearchStart < nPos)) {
 		m_nSearchResult = pcView->IsSearchString(
 			cStr,
-			CLogicInt(nPos),
+			LogicInt(nPos),
 			&m_nSearchStart,
 			&m_nSearchEnd
 		);

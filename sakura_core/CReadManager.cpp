@@ -39,8 +39,8 @@
 	@date	2002/08/30 Moca 旧ReadFileを元に作成 ファイルアクセスに関する部分をCFileLoadで行う
 	@date	2003/07/26 ryoji BOMの状態の取得を追加
 */
-EConvertResult CReadManager::ReadFile_To_CDocLineMgr(
-	CDocLineMgr*		pcDocLineMgr,	// [out]
+EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
+	DocLineMgr*		pcDocLineMgr,	// [out]
 	const LoadInfo&	sLoadInfo,		// [in]
 	FileInfo*			pFileInfo		// [out]
 	)

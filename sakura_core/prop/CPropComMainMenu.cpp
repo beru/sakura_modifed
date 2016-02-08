@@ -444,7 +444,7 @@ INT_PTR CPropMainMenu::DispatchEvent(
 					}
 					// èâä˙èÛë‘Ç…ñﬂÇ∑
 					{
-						CDataProfile	cProfile;
+						DataProfile	cProfile;
 						cProfile.SetReadingMode();
 						cProfile.ReadProfileRes(MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI));
 

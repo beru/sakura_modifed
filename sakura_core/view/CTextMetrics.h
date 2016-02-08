@@ -51,8 +51,8 @@ public:
 	int GetHankakuDy() const { return m_nDyBasis; }			// Y方向文字間隔。文字縦幅＋行間隔。単位はピクセル。
 
 	// 固定文字x桁のレイアウト幅を取得する
-	CLayoutXInt GetLayoutXDefault(CKetaXInt chars = CKetaXInt(1)) const {
-		return CLayoutXInt(chars);
+	LayoutXInt GetLayoutXDefault(KetaXInt chars = KetaXInt(1)) const {
+		return LayoutXInt(chars);
 	}
 
 	// 文字間隔配列を取得

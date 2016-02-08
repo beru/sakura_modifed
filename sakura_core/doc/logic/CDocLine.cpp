@@ -78,7 +78,7 @@ void CDocLine::SetDocLineStringMove(CNativeW* pcDataFrom)
 	SetEol();
 }
 
-void CDocLine::SetEol(const CEol& cEol, COpeBlk* pcOpeBlk)
+void CDocLine::SetEol(const CEol& cEol, OpeBlk* pcOpeBlk)
 {
 	// 改行コードを削除
 	for (int i=0; i<(Int)m_cEol.GetLen(); ++i) {

@@ -33,7 +33,7 @@
 #include "window/CEditWnd.h"
 #include "debug/CRunningTimer.h"
 
-CDocEditor::CDocEditor(CEditDoc* pcDoc)
+CDocEditor::CDocEditor(EditDoc* pcDoc)
 	:
 	m_pcDocRef(pcDoc),
 	m_cNewLineCode(EOL_CRLF),	// New Line Type
@@ -72,7 +72,7 @@ void CDocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
 
 void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// May 12, 2000 genta
 	// 編集用改行コードの設定
@@ -83,7 +83,7 @@ void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 		}else {
 			SetNewLineCode(EOL_CRLF);
 		}
-		CDocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine(CLogicInt(0));
+		CDocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine(LogicInt(0));
 		if (pFirstlineinfo) {
 			EEolType t = pFirstlineinfo->GetEol();
 			if (t != EOL_NONE && t != EOL_UNKNOWN) {
@@ -103,7 +103,7 @@ void CDocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 
 void CDocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	this->SetModified(false, false);	// Jan. 22, 2002 genta 関数化 更新フラグのクリア
 

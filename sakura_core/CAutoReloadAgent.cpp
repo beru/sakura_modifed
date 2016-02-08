@@ -131,7 +131,7 @@ void CAutoReloadAgent::CheckFileTimeStamp()
 		return;
 	}
 
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// タイムスタンプ監視
 	FILETIME ftime;

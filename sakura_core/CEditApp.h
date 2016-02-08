@@ -28,15 +28,15 @@
 #include "util/design_template.h"
 #include "uiparts/CSoundSet.h"
 #include "uiparts/CImageListMgr.h"
-class CEditDoc;
+class EditDoc;
 class CEditWnd;
-class CLoadAgent;
-class CSaveAgent;
-class CVisualProgress;
-class CMruListener;
+class LoadAgent;
+class SaveAgent;
+class VisualProgress;
+class MruListener;
 class CSMacroMgr;
 class CPropertyManager;
-class CGrepAgent;
+class GrepAgent;
 enum EFunctionCode;
 
 // エディタ部分アプリケーションクラス。CNormalProcess1個につき、1個存在。
@@ -54,7 +54,7 @@ public:
 	// ウィンドウ情報
 	CEditWnd* GetEditWindow() { return m_pcEditWnd; }		// ウィンドウ取得
 
-	CEditDoc*		GetDocument() { return m_pcEditDoc; }
+	EditDoc*		GetDocument() { return m_pcEditDoc; }
 	CImageListMgr&	GetIcons() { return m_cIcons; }
 
 	bool OpenPropertySheet(int nPageNum);
@@ -64,23 +64,23 @@ public:
 	HINSTANCE			m_hInst;
 
 	// ドキュメント
-	CEditDoc*			m_pcEditDoc;
+	EditDoc*			m_pcEditDoc;
 
 	// ウィンドウ
 	CEditWnd*			m_pcEditWnd;
 
 	// IO管理
-	CLoadAgent*			m_pcLoadAgent;
-	CSaveAgent*			m_pcSaveAgent;
-	CVisualProgress*	m_pcVisualProgress;
+	LoadAgent*			m_pcLoadAgent;
+	SaveAgent*			m_pcSaveAgent;
+	VisualProgress*	m_pcVisualProgress;
 
 	// その他ヘルパ
-	CMruListener*		m_pcMruListener;		// MRU管理
+	MruListener*		m_pcMruListener;		// MRU管理
 	CSMacroMgr*			m_pcSMacroMgr;			// マクロ管理
 private:
 	CPropertyManager*	m_pcPropertyManager;	// プロパティ管理
 public:
-	CGrepAgent*			m_pcGrepAgent;			// GREPモード
+	GrepAgent*			m_pcGrepAgent;			// GREPモード
 	CSoundSet			m_cSoundSet;			// サウンド管理
 
 	// GUIオブジェクト

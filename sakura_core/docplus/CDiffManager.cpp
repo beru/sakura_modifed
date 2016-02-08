@@ -131,12 +131,12 @@ void CDiffLineMgr::ResetAllDiffMark()
 	@date	2002.05.25
 */
 bool CDiffLineMgr::SearchDiffMark(
-	CLogicInt			nLineNum,		// 検索開始行
+	LogicInt			nLineNum,		// 検索開始行
 	eSearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
-	CLogicInt*			pnLineNum 		// マッチ行
+	LogicInt*			pnLineNum 		// マッチ行
 	)
 {
-	CLogicInt nLinePos = nLineNum;
+	LogicInt nLinePos = nLineNum;
 
 	// 前方検索
 	if (bPrevOrNext == eSearchDirection::Backward) {
@@ -170,17 +170,17 @@ bool CDiffLineMgr::SearchDiffMark(
 	@author	MIK
 	@date	2002/05/25
 */
-void CDiffLineMgr::SetDiffMarkRange(EDiffMark nMode, CLogicInt nStartLine, CLogicInt nEndLine)
+void CDiffLineMgr::SetDiffMarkRange(EDiffMark nMode, LogicInt nStartLine, LogicInt nEndLine)
 {
 	CDiffManager::getInstance()->SetDiffUse(true);
 
-	if (nStartLine < CLogicInt(0)) {
-		nStartLine = CLogicInt(0);
+	if (nStartLine < LogicInt(0)) {
+		nStartLine = LogicInt(0);
 	}
 	// 最終行より後に削除行あり
-	CLogicInt nLines = m_pcDocLineMgr->GetLineCount();
+	LogicInt nLines = m_pcDocLineMgr->GetLineCount();
 	if (nLines <= nEndLine) {
-		nEndLine = nLines - CLogicInt(1);
+		nEndLine = nLines - LogicInt(1);
 		CDocLine* pCDocLine = m_pcDocLineMgr->GetLine(nEndLine);
 		if (pCDocLine) {
 			CDiffLineSetter(pCDocLine).SetLineDiffMark(MARK_DIFF_DEL_EX);
@@ -188,7 +188,7 @@ void CDiffLineMgr::SetDiffMarkRange(EDiffMark nMode, CLogicInt nStartLine, CLogi
 	}
 
 	// 行範囲にマークをつける
-	for (CLogicInt i=nStartLine; i<=nEndLine; ++i) {
+	for (LogicInt i=nStartLine; i<=nEndLine; ++i) {
 		CDocLine* pCDocLine = m_pcDocLineMgr->GetLine(i);
 		if (pCDocLine) {
 			CDiffLineSetter(pCDocLine).SetLineDiffMark(nMode);

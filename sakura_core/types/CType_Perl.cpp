@@ -68,7 +68,7 @@ void CType_Perl::InitTypeConfigImp(TypeConfig* pType)
 void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	int			i;
 	int			nCharChars;
 	wchar_t		szWord[100];
@@ -77,8 +77,8 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 	int			nMode;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
-	CLogicInt	nLineCount;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	LogicInt	nLineCount;
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nMode = 0;
 		for (i=0; i<nLineLen; ++i) {
@@ -156,13 +156,13 @@ void CDocOutline::MakeFuncList_Perl(CFuncInfoArr* pcFuncInfoArr)
 					  →
 					  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 					*/
-					CLayoutPoint ptPosXY;
+					LayoutPoint ptPosXY;
 					m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-						CLogicPoint(CLogicInt(0), nLineCount),
+						LogicPoint(LogicInt(0), nLineCount),
 						&ptPosXY
 					);
 					//	Mar. 9, 2001
-					pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPosXY.GetY2() + CLayoutInt(1), szWord, 0);
+					pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPosXY.GetY2() + LayoutInt(1), szWord, 0);
 
 					break;
 				}

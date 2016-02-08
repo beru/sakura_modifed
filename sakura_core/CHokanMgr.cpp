@@ -158,7 +158,7 @@ int CHokanMgr::Search(
 	||
 	*/
 	m_vKouho.clear();
-	CDicMgr::HokanSearch(
+	DicMgr::HokanSearch(
 		pszCurWord,
 		bHokanLoHiCase,								// ˆø”‚©‚ç‚É•ÏX	2001/06/19 asa-o
 		m_vKouho,

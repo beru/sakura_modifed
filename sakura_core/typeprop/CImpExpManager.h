@@ -112,7 +112,7 @@ private:
 	int				m_nColorType;
 	wstring 		m_sColorFile;
 	bool			m_bAddType;
-	CDataProfile	m_cProfile;
+	DataProfile	m_cProfile;
 };
 
 
@@ -318,7 +318,7 @@ public:
 public:
 	bool Import(const wstring&, wstring&);
 	bool Export(const wstring&, wstring&);
-	static void IO_FileTreeIni(CDataProfile&, std::vector<FileTreeItem>&);
+	static void IO_FileTreeIni(DataProfile&, std::vector<FileTreeItem>&);
 
 public:
 	// デフォルト拡張子の取得

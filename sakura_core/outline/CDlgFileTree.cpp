@@ -507,7 +507,7 @@ BOOL CDlgFileTree::OnBnClicked(int wID)
 		{
 			GetItemText(IDC_EDIT_DEFINI, m_fileTreeSetting.m_szDefaultProjectIni, m_fileTreeSetting.m_szDefaultProjectIni.GetBufferCount() );
 			if (m_fileTreeSetting.m_szDefaultProjectIni[0] != _T('\0')) {
-				CDataProfile cProfile;
+				DataProfile cProfile;
 				cProfile.SetReadingMode();
 				const TCHAR* pszIniFileName;
 				TCHAR szDir[_MAX_PATH * 2];

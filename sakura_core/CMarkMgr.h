@@ -59,10 +59,10 @@ public:
 	class CMark {
 	public:
 		//	constructor
-		CMark(const CLogicPoint& pt) : m_ptLogic(pt) { }
+		CMark(const LogicPoint& pt) : m_ptLogic(pt) { }
 
-		CLogicPoint GetPosition() const { return m_ptLogic; }
-		void SetPosition(const CLogicPoint& pt) { m_ptLogic = pt; }
+		LogicPoint GetPosition() const { return m_ptLogic; }
+		void SetPosition(const LogicPoint& pt) { m_ptLogic = pt; }
 
 		bool IsValid(void) const { return true; }
 
@@ -70,7 +70,7 @@ public:
 		bool operator != (CMark &r) const { return m_ptLogic.y != r.m_ptLogic.y; }
 
 	private:
-		CLogicPoint m_ptLogic;
+		LogicPoint m_ptLogic;
 	};
 
 	// GENERATE_FACTORY(CMark, CMarkFactory);	//	CMark—pFactory class

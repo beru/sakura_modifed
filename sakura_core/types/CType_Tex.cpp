@@ -58,7 +58,7 @@ void CType_Tex::InitTypeConfigImp(TypeConfig* pType)
 void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	int				i;
 	int				j;
 	int				k;
@@ -72,8 +72,8 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 	int bNoNumber = 0;					// * 付の場合はセクション番号を付けない
 
 	// 一行ずつ
-	CLogicInt	nLineCount;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	LogicInt	nLineCount;
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 		// 一文字ずつ
@@ -130,13 +130,13 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 				}
 				szTitle[k] = '\0';
 
-				CLayoutPoint ptPos;
+				LayoutPoint ptPos;
 
 				WCHAR tmpstr[256];
 				WCHAR secstr[4];
 
 				m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-					CLogicPoint(i, nLineCount),
+					LogicPoint(i, nLineCount),
 					&ptPos
 				);
 
@@ -163,7 +163,7 @@ void CDocOutline::MakeTopicList_tex(CFuncInfoArr* pcFuncInfoArr)
 					wcscat(tmpstr, L" ");
 				}
 				wcscat(tmpstr, szTitle);
-				pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), tmpstr, 0, nDepth);
+				pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), tmpstr, 0, nDepth);
 				if (!bNoNumber) lastSection = thisSection;
 			}
 			i += j;

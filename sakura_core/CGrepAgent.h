@@ -26,10 +26,10 @@
 #include "doc/CDocListener.h"
 class CDlgCancel;
 class CEditView;
-class CSearchStringPattern;
-class CGrepEnumKeys;
-class CGrepEnumFiles;
-class CGrepEnumFolders;
+class SearchStringPattern;
+class GrepEnumKeys;
+class GrepEnumFiles;
+class GrepEnumFolders;
 
 struct GrepOption {
 	bool		bGrepReplace;			//!< Grep置換
@@ -63,9 +63,9 @@ struct GrepOption {
 
 //	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 //	Mar. 28, 2004 genta DoGrepFileから不要な引数を削除
-class CGrepAgent : public CDocListenerEx {
+class GrepAgent : public DocListenerEx {
 public:
-	CGrepAgent();
+	GrepAgent();
 
 	// イベント
 	ECallbackResult OnBeforeClose();
@@ -105,14 +105,14 @@ private:
 		CDlgCancel*				pcDlgCancel,		//!< [in] Cancelダイアログへのポインタ
 		const wchar_t*			pszKey,				//!< [in] 検索パターン
 		const CNativeW&			cmGrepReplace,
-		CGrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン(!で除外指定)
-		CGrepEnumFiles&			cGrepExceptAbsFiles,
-		CGrepEnumFolders&		cGrepExceptAbsFolders,
+		GrepEnumKeys&			cGrepEnumKeys,		//!< [in] 検索対象ファイルパターン(!で除外指定)
+		GrepEnumFiles&			cGrepExceptAbsFiles,
+		GrepEnumFolders&		cGrepExceptAbsFolders,
 		const TCHAR*			pszPath,			//!< [in] 検索対象パス
 		const TCHAR*			pszBasePath,		//!< [in] 検索対象パス(ベース)
 		const SearchOption&		searchOption,		//!< [in] 検索オプション
 		const GrepOption&		sGrepOption,		//!< [in] Grepオプション
-		const CSearchStringPattern& pattern,		//!< [in] 検索パターン
+		const SearchStringPattern& pattern,		//!< [in] 検索パターン
 		CBregexp*				pRegexp,			//!< [in] 正規表現コンパイルデータ。既にコンパイルされている必要がある
 		int						nNest,				//!< [in] ネストレベル
 		bool&					bOutputBaseFolder,
@@ -127,7 +127,7 @@ private:
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		sGrepOption,
-		const CSearchStringPattern& pattern,
+		const SearchStringPattern& pattern,
 		CBregexp*				pRegexp,		//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,
@@ -147,7 +147,7 @@ private:
 		const TCHAR*			pszFile,
 		const SearchOption&		searchOption,
 		const GrepOption&		sGrepOption,
-		const CSearchStringPattern& pattern,
+		const SearchStringPattern& pattern,
 		CBregexp*				pRegexp,
 		int*					pnHitCount,
 		const TCHAR*			pszFullPath,

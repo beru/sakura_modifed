@@ -29,7 +29,7 @@
 #include "COpeBlk.h"
 
 // ŠO•”ˆË‘¶
-inline CEditDoc* ViewCommander::GetDocument()
+inline EditDoc* ViewCommander::GetDocument()
 {
 	return m_pCommanderView->m_pcEditDoc;
 }
@@ -44,18 +44,18 @@ inline HWND ViewCommander::GetMainWindow()
 	return ::GetParent(m_pCommanderView->m_hwndParent);
 }
 
-inline COpeBlk* ViewCommander::GetOpeBlk()
+inline OpeBlk* ViewCommander::GetOpeBlk()
 {
 	return GetDocument()->m_cDocEditor.m_pcOpeBlk;
 }
 
-inline void ViewCommander::SetOpeBlk(COpeBlk* p)
+inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 {
 	GetDocument()->m_cDocEditor.m_pcOpeBlk = p;
 	GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount = 0;
 }
 
-inline CLayoutRange& ViewCommander::GetSelect()
+inline LayoutRange& ViewCommander::GetSelect()
 {
 	return m_pCommanderView->GetSelectionInfo().m_sSelect;
 }

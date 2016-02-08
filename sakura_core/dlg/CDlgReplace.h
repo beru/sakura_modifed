@@ -52,7 +52,7 @@ public:
 	int				m_nReplaceCnt;		// すべて置換の実行結果		// 2002.02.08 hor
 	bool			m_bCanceled;		// すべて置換で中断したか	// 2002.02.08 hor
 
-	CLogicPoint		m_ptEscCaretPos_PHY;	// 検索/置換開始時のカーソル位置退避エリア
+	LogicPoint		m_ptEscCaretPos_PHY;	// 検索/置換開始時のカーソル位置退避エリア
 
 protected:
 	CRecentSearch			m_cRecentSearch;

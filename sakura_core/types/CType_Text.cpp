@@ -46,7 +46,7 @@ void CType_Text::InitTypeConfigImp(TypeConfig* pType)
 	_tcscpy(pType->m_szTypeExts, _T("txt,log,1st,err,ps"));
 
 	// 設定
-	pType->m_nMaxLineKetas = CLayoutInt(120);					// 折り返し桁数
+	pType->m_nMaxLineKetas = LayoutInt(120);					// 折り返し桁数
 	pType->m_eDefaultOutline = OUTLINE_TEXT;					// アウトライン解析方法
 	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
 	pType->m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;	// Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
@@ -103,11 +103,11 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 	int nDepth = 0;				//	いまのアイテムの深さを表す数値。
 	wchar_t pszStack[nMaxStack][32];
 	wchar_t szTitle[32];			//	一時領域
-	CLogicInt				nLineCount;
+	LogicInt				nLineCount;
 	bool b278a = false;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
-		CLogicInt nLineLen;
+		LogicInt nLineLen;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -203,9 +203,9 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		CLayoutPoint ptPos;
+		LayoutPoint ptPos;
 		m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-			CLogicPoint(0, nLineCount),
+			LogicPoint(0, nLineCount),
 			&ptPos
 		);
 
@@ -234,8 +234,8 @@ void CDocOutline::MakeTopicList_txt(CFuncInfoArr* pcFuncInfoArr)
 		
 		if (bAppend) {
 			pcFuncInfoArr->AppendData(
-				nLineCount + CLogicInt(1),
-				ptPos.GetY2() + CLayoutInt(1),
+				nLineCount + LogicInt(1),
+				ptPos.GetY2() + LayoutInt(1),
 				pszText,
 				0,
 				nDepth
@@ -259,9 +259,9 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
-	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
-		CLogicInt		nLineLen;
+		LogicInt		nLineLen;
 
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
@@ -277,9 +277,9 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 			for (pPos=pLine+1; *pPos==L'.'; ++pPos)
 				;
 
-			CLayoutPoint ptPos;
+			LayoutPoint ptPos;
 			m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-				CLogicPoint(0, nLineCount),
+				LogicPoint(0, nLineCount),
 				&ptPos
 			);
 			
@@ -292,8 +292,8 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 				//	ただし，TAG一覧には出力されないように
 				for (dummyLevel=levelPrev+1; dummyLevel<level; ++dummyLevel) {
 					pcFuncInfoArr->AppendData(
-						nLineCount + CLogicInt(1),
-						ptPos.GetY2() + CLayoutInt(1),
+						nLineCount + LogicInt(1),
+						ptPos.GetY2() + LayoutInt(1),
 						LSW(STR_NO_TITLE1),
 						FUNCINFO_NOCLIPTEXT,
 						dummyLevel - 1
@@ -315,7 +315,7 @@ void CDocOutline::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 				}
 			}
 			*pDest = L'\0';
-			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, level - 1);
+			pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, level - 1);
 		}
 	}
 }

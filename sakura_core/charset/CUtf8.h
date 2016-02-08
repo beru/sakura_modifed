@@ -28,7 +28,7 @@
 
 struct CommonSetting_Statusbar;
 
-class CUtf8 : public CodeBase {
+class Utf8 : public CodeBase {
 public:
 
 	// CodeBaseインターフェース
@@ -71,7 +71,7 @@ protected:
 	高速化のため、インライン化
 
 */
-inline int CUtf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, bool bCESUMode )
+inline int Utf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, bool bCESUMode )
 {
 	int nret;
 
@@ -123,7 +123,7 @@ inline int CUtf8::_Utf8ToUni_char( const unsigned char* pSrc, const int nSrcLen,
 
 	高速化のため、インライン化
 */
-inline int CUtf8::_UniToUtf8_char( const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst, bool bCESU8Mode )
+inline int Utf8::_UniToUtf8_char( const unsigned short* pSrc, const int nSrcLen, unsigned char* pDst, bool bCESU8Mode )
 {
 	int nret;
 

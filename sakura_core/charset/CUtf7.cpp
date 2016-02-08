@@ -14,7 +14,7 @@
 /*!
 	UTF-7 Set D 部分の読み込み。
 */
-int CUtf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDst)
+int Utf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDst)
 {
 	const char* pr = pSrc;
 	wchar_t* pw = pDst;
@@ -33,7 +33,7 @@ int CUtf7::_Utf7SetDToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 /*!
 	UTF-7 Set B 部分の読み込み
 */
-int CUtf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Utf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	if (nSrcLen == 0) {
 		return 0;
@@ -63,7 +63,7 @@ int CUtf7::_Utf7SetBToUni_block(const char* pSrc, const int nSrcLen, wchar_t* pD
 	return ndecoded_len / sizeof(wchar_t);
 }
 
-int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Utf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	const char *pr, *pr_end;
 	char* pr_next;
@@ -119,7 +119,7 @@ int CUtf7::Utf7ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 
 // UTF-7→Unicodeコード変換
 // 2007.08.13 kobake 作成
-EConvertResult CUtf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
+EConvertResult Utf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 {
 	// データ取得
 	int nDataLen;
@@ -149,7 +149,7 @@ EConvertResult CUtf7::UTF7ToUnicode( const CMemory& cSrc, CNativeW* pDstMem )
 
 
 
-int CUtf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pDst)
+int Utf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 {
 	if (nSrcLen < 1) {
 		return 0;
@@ -165,7 +165,7 @@ int CUtf7::_UniToUtf7SetD_block(const wchar_t* pSrc, const int nSrcLen, char* pD
 
 
 
-int CUtf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pDst)
+int Utf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 {
 	if (nSrcLen < 1) {
 		return 0;
@@ -192,7 +192,7 @@ int CUtf7::_UniToUtf7SetB_block(const wchar_t* pSrc, const int nSrcLen, char* pD
 
 
 
-int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
+int Utf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 {
 	const wchar_t *pr, *pr_base;
 	const wchar_t* pr_end;
@@ -237,7 +237,7 @@ int CUtf7::UniToUtf7(const wchar_t* pSrc, const int nSrcLen, char* pDst)
 /*! コード変換 Unicode→UTF-7
 	@date 2002.10.25 Moca UTF-7で直接エンコードできる文字をRFCに合わせて制限した
 */
-EConvertResult CUtf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
+EConvertResult Utf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
 {
 
 	// データ取得
@@ -262,13 +262,13 @@ EConvertResult CUtf7::UnicodeToUTF7(const CNativeW& cSrc, CMemory* pDstMem)
 }
 
 // BOMデータ取得
-void CUtf7::GetBom(CMemory* pcmemBom)
+void Utf7::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF7_BOM[]= {'+', '/', 'v', '8', '-'};
 	pcmemBom->SetRawData(UTF7_BOM, sizeof(UTF7_BOM));
 }
 
-void CUtf7::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void Utf7::GetEol(CMemory* pcmemEol, EEolType eEolType)
 {
 	static const struct{
 		const char* szData;

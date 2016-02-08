@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CDicMgrクラス定義
+	@brief DicMgrクラス定義
 
 	@author Norio Nakatani
 	@date	1998/11/05 作成
@@ -20,13 +20,13 @@
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CDicMgr {
+class DicMgr {
 public:
 	/*
 	||  Constructors
 	*/
-	CDicMgr();
-	~CDicMgr();
+	DicMgr();
+	~DicMgr();
 
 	/*
 	||  Attributes & Operations

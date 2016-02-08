@@ -28,7 +28,7 @@ class CTextArea;
 class CViewFont;
 class CEol;
 class CEditView;
-class CLayout;
+class Layout;
 #include "DispPos.h"
 
 class CGraphics;
@@ -57,13 +57,13 @@ public:
 
 	// -- -- w’èŒ…cü•`‰æ -- -- //
 	// w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
-	void DispVerticalLines(CGraphics& gr, int nTop, int nBottom, CLayoutInt nLeftCol, CLayoutInt nRightCol) const;
+	void DispVerticalLines(CGraphics& gr, int nTop, int nBottom, LayoutInt nLeftCol, LayoutInt nRightCol) const;
 
 	// -- -- Ü‚è•Ô‚µŒ…cü•`‰æ -- -- //
 	void DispWrapLine(CGraphics& gr, int nTop, int nBottom) const;
 
 	// -- -- s”Ô† -- -- //
-	void DispLineNumber(CGraphics& gr, CLayoutInt nLineNum, int y) const;		// s”Ô†•\¦
+	void DispLineNumber(CGraphics& gr, LayoutInt nLineNum, int y) const;		// s”Ô†•\¦
 
 private:
 	const CEditView* m_pEditView;

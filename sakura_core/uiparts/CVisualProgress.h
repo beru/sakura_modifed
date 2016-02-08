@@ -27,14 +27,14 @@
 #include "util/design_template.h"
 class CWaitCursor;
 
-class CVisualProgress :
-	public CDocListenerEx,
+class VisualProgress :
+	public DocListenerEx,
 	public ProgressListener
 {
 public:
 	// コンストラクタ・デストラクタ
-	CVisualProgress();
-	virtual ~CVisualProgress();
+	VisualProgress();
+	virtual ~VisualProgress();
 
 	// ロード前後
 	void OnBeforeLoad(LoadInfo* sLoadInfo);
@@ -57,6 +57,6 @@ private:
 	int	nOldValue;
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CVisualProgress);
+	DISALLOW_COPY_AND_ASSIGN(VisualProgress);
 };
 

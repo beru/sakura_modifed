@@ -357,7 +357,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 {
 	// Jan. 8, 2006 genta 判定処理をm_pCommanderView->GetWrapMode()へ移動
 	CEditView::TOGGLE_WRAP_ACTION nWrapMode;
-	CLayoutInt newKetas;
+	LayoutInt newKetas;
 	
 	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
 	GetDocument()->m_nTextWrapMethodCur = (int)eTextWrappingMethod::SettingWidth;
@@ -372,7 +372,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 //	m_pCommanderView->m_pTypeData->m_nMaxLineKetas = m_nViewColNum;
 
 // 2013.12.30 左隅に移動しないように
-//	m_pCommanderView->GetTextArea().SetViewLeftCol(CLayoutInt(0));		// 表示域の一番左の桁(0開始)
+//	m_pCommanderView->GetTextArea().SetViewLeftCol(LayoutInt(0));		// 表示域の一番左の桁(0開始)
 
 	// フォーカス移動時の再描画
 	m_pCommanderView->RedrawAll();
@@ -413,7 +413,7 @@ void ViewCommander::Command_Favorite(void)
 */
 void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 {
-	CEditDoc* pcDoc = GetDocument();
+	EditDoc* pcDoc = GetDocument();
 
 	// 現在の設定値と同じなら何もしない
 	if (pcDoc->m_nTextWrapMethodCur == nWrapMethod)
@@ -445,7 +445,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 	pcDoc->m_bTextWrapMethodCurTemp = !(pcDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod == nWrapMethod);
 
 	// 折り返し位置を変更
-	GetEditWindow()->ChangeLayoutParam(false, pcDoc->m_cLayoutMgr.GetTabSpace(), (CLayoutInt)nWidth);
+	GetEditWindow()->ChangeLayoutParam(false, pcDoc->m_cLayoutMgr.GetTabSpace(), (LayoutInt)nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
 	if (pcDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {

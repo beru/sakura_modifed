@@ -19,12 +19,12 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-COpeBlk::COpeBlk()
+OpeBlk::OpeBlk()
 {
 	m_refCount = 0;
 }
 
-COpeBlk::~COpeBlk()
+OpeBlk::~OpeBlk()
 {
 	// 操作の配列を削除する
 	int size = (int)m_ppCOpeArr.size();
@@ -39,7 +39,7 @@ COpeBlk::~COpeBlk()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 操作の追加
-bool COpeBlk::AppendOpe(COpe* pcOpe)
+bool OpeBlk::AppendOpe(Ope* pcOpe)
 {
 	if (pcOpe->m_ptCaretPos_PHY_Before.HasNegative() || pcOpe->m_ptCaretPos_PHY_After.HasNegative()) {
 		TopErrorMessage(NULL,
@@ -61,7 +61,7 @@ bool COpeBlk::AppendOpe(COpe* pcOpe)
 
 
 // 操作を返す
-COpe* COpeBlk::GetOpe(int nIndex)
+Ope* OpeBlk::GetOpe(int nIndex)
 {
 	if (GetNum() <= nIndex) {
 		return NULL;
@@ -74,7 +74,7 @@ COpe* COpeBlk::GetOpe(int nIndex)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 編集操作要素ブロックのダンプ
-void COpeBlk::DUMP(void)
+void OpeBlk::DUMP(void)
 {
 #ifdef _DEBUG
 	int size = GetNum();

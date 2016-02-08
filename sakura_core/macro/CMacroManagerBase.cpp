@@ -40,7 +40,7 @@ void CMacroBeforeAfter::ExecKeyMacroBefore(
 	int flags
 	)
 {
-	COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
+	OpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 	if (opeBlk) {
 		m_nOpeBlkCount = opeBlk->GetRefCount();
 	}else {
@@ -55,10 +55,10 @@ void CMacroBeforeAfter::ExecKeyMacroAfter(
 	bool bRet
 	)
 {
-	COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
+	OpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 	if (0 < m_nOpeBlkCount) {
 		if (!opeBlk) {
-			pcEditView->m_cCommander.SetOpeBlk(new COpeBlk());
+			pcEditView->m_cCommander.SetOpeBlk(new OpeBlk());
 		}
 		if (pcEditView->m_cCommander.GetOpeBlk()->GetRefCount() != m_nOpeBlkCount) {
 			pcEditView->m_cCommander.GetOpeBlk()->SetRefCount(m_nOpeBlkCount);

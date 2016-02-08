@@ -11,18 +11,18 @@
 */
 int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 {
-	CLogicInt	nLineLen;
-	CLogicInt	nIdx;
-	CLogicInt	nIdxTo;
+	LogicInt	nLineLen;
+	LogicInt	nIdx;
+	LogicInt	nIdxTo;
 
 	int			nCharChars;
-	const CLayout* pcLayout;
+	const Layout* pcLayout;
 
-	CLayoutInt nCurLine = m_pEditView->GetCaret().GetCaretLayoutPos().GetY2();
+	LayoutInt nCurLine = m_pEditView->GetCaret().GetCaretLayoutPos().GetY2();
 	const wchar_t* pLine = m_pEditView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nCurLine, &nLineLen, &pcLayout);
 	if (!pLine) {
 //		return 0;
-		nIdxTo = CLogicInt(0);
+		nIdxTo = LogicInt(0);
 	}else {
 		// 指定された桁に対応する行のデータ内の位置を調べる Ver1
 		nIdxTo = m_pEditView->LineColumnToIndex(pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
@@ -46,13 +46,13 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 			return 0;
 		}
 		nIdxTo = nLineLen;
-		nIdx = nIdxTo - CLogicInt(nCharChars);
+		nIdx = nIdxTo - LogicInt(nCharChars);
 	}else {
 		nCharChars = &pLine[nIdxTo] - CNativeW::GetCharPrev(pLine, nLineLen, &pLine[nIdxTo]);
 		if (nCharChars == 0) {
 			return 0;
 		}
-		nIdx = nIdxTo - CLogicInt(nCharChars);
+		nIdx = nIdxTo - LogicInt(nCharChars);
 	}
 
 	if (nCharChars == 1) {
@@ -63,7 +63,7 @@ int CViewParser::GetLeftWord(CNativeW* pcmemWord, int nMaxWordLen) const
 
 	// 現在位置の単語の範囲を調べる
 	CNativeW cmemWord;
-	CLayoutRange sRange;
+	LayoutRange sRange;
 	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
 		nCurLine,
 		nIdx,
@@ -93,16 +93,16 @@ bool CViewParser::GetCurrentWord(
 	CNativeW* pcmemWord
 ) const
 {
-	const CLayout* pcLayout = m_pEditView->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = m_pEditView->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
 		return false;	// 単語選択に失敗
 	}
 	
 	// 指定された桁に対応する行のデータ内の位置を調べる
-	CLogicInt nIdx = m_pEditView->LineColumnToIndex(pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
+	LogicInt nIdx = m_pEditView->LineColumnToIndex(pcLayout, m_pEditView->GetCaret().GetCaretLayoutPos().GetX2());
 	
 	// 現在位置の単語の範囲を調べる
-	CLayoutRange sRange;
+	LayoutRange sRange;
 	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
 		m_pEditView->GetCaret().GetCaretLayoutPos().GetY2(),
 		nIdx,

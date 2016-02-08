@@ -110,7 +110,7 @@ bool NormalProcess::InitializeProcess()
 			// From Here Oct. 19, 2001 genta
 			// カーソル位置が引数に指定されていたら指定位置にジャンプ
 			if (fi.m_ptCursor.y >= 0) {	// 行の指定があるか
-				CLogicPoint& pt = GetDllShareData().m_workBuffer.m_LogicPoint;
+				LogicPoint& pt = GetDllShareData().m_workBuffer.m_LogicPoint;
 				if (fi.m_ptCursor.x < 0) {
 					// 桁の指定が無い場合
 					::SendMessage(hwndOwner, MYWM_GETCARETPOS, 0, 0);
@@ -338,7 +338,7 @@ bool NormalProcess::InitializeProcess()
 			// 未設定＝-1になるようにしたので，安全のため両者が指定されたときだけ
 			// 移動するようにする． || → &&
 			if (
-				(CLayoutInt(0) <= fi.m_nViewTopLine && CLayoutInt(0) <= fi.m_nViewLeftCol)
+				(LayoutInt(0) <= fi.m_nViewTopLine && LayoutInt(0) <= fi.m_nViewLeftCol)
 				&& fi.m_nViewTopLine < pEditWnd->GetDocument()->m_cLayoutMgr.GetLineCount()
 			) {
 				activeView.GetTextArea().SetViewTopLine(fi.m_nViewTopLine);
@@ -355,7 +355,7 @@ bool NormalProcess::InitializeProcess()
 				  →
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
-				CLayoutPoint ptPos;
+				LayoutPoint ptPos;
 				pEditWnd->GetDocument()->m_cLayoutMgr.LogicToLayout(
 					fi.m_ptCursor,
 					&ptPos

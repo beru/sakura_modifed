@@ -41,7 +41,7 @@
 void CAutoSaveAgent::CheckAutoSave()
 {
 	if (m_cPassiveTimer.CheckAction()) {
-		CEditDoc* pcDoc = GetListeningDoc();
+		EditDoc* pcDoc = GetListeningDoc();
 
 		//	ã‘‚«•Û‘¶
 

@@ -607,12 +607,12 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		m_Types.m_nTextWrapMethod = WrapMethodArr[nSelPos].nMethod;		// テキストの折り返し方法
 
 		// 折り返し桁数
-		m_Types.m_nMaxLineKetas = CLayoutInt(::GetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, NULL, FALSE));
-		if (m_Types.m_nMaxLineKetas < CLayoutInt(MINLINEKETAS)) {
-			m_Types.m_nMaxLineKetas = CLayoutInt(MINLINEKETAS);
+		m_Types.m_nMaxLineKetas = LayoutInt(::GetDlgItemInt(hwndDlg, IDC_EDIT_MAXLINELEN, NULL, FALSE));
+		if (m_Types.m_nMaxLineKetas < LayoutInt(MINLINEKETAS)) {
+			m_Types.m_nMaxLineKetas = LayoutInt(MINLINEKETAS);
 		}
-		if (m_Types.m_nMaxLineKetas > CLayoutInt(MAXLINEKETAS)) {
-			m_Types.m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);
+		if (m_Types.m_nMaxLineKetas > LayoutInt(MAXLINEKETAS)) {
+			m_Types.m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);
 		}
 
 		// 文字の間隔
@@ -634,12 +634,12 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 		}
 
 		// TAB幅
-		m_Types.m_nTabSpace = CLayoutInt(::GetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE));
-		if (m_Types.m_nTabSpace < CLayoutInt(1)) {
-			m_Types.m_nTabSpace = CLayoutInt(1);
+		m_Types.m_nTabSpace = LayoutInt(::GetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, NULL, FALSE));
+		if (m_Types.m_nTabSpace < LayoutInt(1)) {
+			m_Types.m_nTabSpace = LayoutInt(1);
 		}
-		if (m_Types.m_nTabSpace > CLayoutInt(64)) {
-			m_Types.m_nTabSpace = CLayoutInt(64);
+		if (m_Types.m_nTabSpace > LayoutInt(64)) {
+			m_Types.m_nTabSpace = LayoutInt(64);
 		}
 
 		// TAB表示文字列

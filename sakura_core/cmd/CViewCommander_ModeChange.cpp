@@ -103,12 +103,12 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 	auto& caret = GetCaret();
 	if (selInfo.IsTextSelected()) {
 		// 選択解除後のカーソル位置を決める。
-		CLayoutPoint ptTo;
-		CLayoutRange rcMoveTo = GetSelect();
+		LayoutPoint ptTo;
+		LayoutRange rcMoveTo = GetSelect();
 		if (selInfo.IsBoxSelecting()) { // 矩形選択ではキャレットが改行の後ろに取り残されないように、左上。
 			bBoxSelect = true;
 			// 2点を対角とする矩形を求める
-			CLayoutRange rcSel;
+			LayoutRange rcSel;
 			TwoPointToRange(
 				&rcSel,
 				GetSelect().GetFrom(),	// 範囲選択開始
@@ -136,7 +136,7 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 		}else {
 			if (!GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
-				const CLayout*	pcLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
+				const Layout*	pcLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pcLayout) {
 					ptTo.x = t_min(ptTo.x, pcLayout->CalcLayoutWidth(layoutMgr));
 				}

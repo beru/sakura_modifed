@@ -40,7 +40,7 @@
 
 typedef std::vector< LPCTSTR > VGrepEnumKeys;
 
-class CGrepEnumKeys {
+class GrepEnumKeys {
 public:
 	VGrepEnumKeys m_vecSearchFileKeys;
 	VGrepEnumKeys m_vecSearchFolderKeys;
@@ -52,10 +52,10 @@ public:
 	VGrepEnumKeys m_vecExceptAbsFolderKeys;
 
 public:
-	CGrepEnumKeys() {
+	GrepEnumKeys() {
 	}
 
-	~CGrepEnumKeys() {
+	~GrepEnumKeys() {
 		ClearItems();
 	}
 

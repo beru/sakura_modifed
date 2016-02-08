@@ -96,7 +96,7 @@ private:
 	};
 
 	struct FavoriteInfo {
-		CRecent*	m_pRecent;			// オブジェクトへのポインタ
+		Recent*	m_pRecent;			// オブジェクトへのポインタ
 		std::tstring	m_strCaption;	// キャプション
 		const TCHAR*	m_pszCaption;	// キャプション
 		int			m_nId;				// コントロールのID
@@ -135,6 +135,6 @@ private:
 	int		m_nExceptTab;
 	TCHAR	m_szMsg[1024];
 
-	static void  ListViewSort(ListViewSortInfo&, const CRecent* , int, bool);
+	static void  ListViewSort(ListViewSortInfo&, const Recent* , int, bool);
 };
 

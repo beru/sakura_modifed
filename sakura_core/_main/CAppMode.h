@@ -29,7 +29,7 @@
 class AppMode
 	:
 	public TSingleton<AppMode>,
-	public CDocListenerEx
+	public DocListenerEx
 { // ###‰¼
 	friend class TSingleton<AppMode>;
 	AppMode()

@@ -26,11 +26,11 @@
 #include "doc/CDocListener.h" // LoadInfo
 #include "CEol.h"
 
-class CEditDoc;
+class EditDoc;
 
 class CDocFileOperation {
 public:
-	CDocFileOperation(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
+	CDocFileOperation(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 
 	// ÉçÉbÉN
 	bool _ToDoLock() const;
@@ -76,6 +76,6 @@ public:
 	);
 
 private:
-	CEditDoc* m_pcDocRef;
+	EditDoc* m_pcDocRef;
 };
 

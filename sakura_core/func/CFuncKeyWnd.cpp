@@ -105,7 +105,7 @@ CFuncKeyWnd::~CFuncKeyWnd()
 HWND CFuncKeyWnd::Open(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
-	CEditDoc*	pCEditDoc,
+	EditDoc*	pCEditDoc,
 	bool		bSizeBox
 )
 {
@@ -316,7 +316,7 @@ LRESULT CFuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			::EnableWindow(
 				m_hwndButtonArr[i],
-				IsFuncEnable((CEditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
+				IsFuncEnable((EditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
 				);
 		}
 	}

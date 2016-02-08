@@ -27,27 +27,27 @@
 	X値の単位変換関数群。
 */
 
-class CLayout;
+class Layout;
 class CDocLine;
 class CEditView;
 
 class CViewCalc {
 protected:
 	// 外部依存
-	CLayoutInt GetTabSpace() const;
+	LayoutInt GetTabSpace() const;
 
 public:
 	CViewCalc(const CEditView* pOwner) : m_pOwner(pOwner) { }
 	virtual ~CViewCalc() {}
 
 	// 単位変換: レイアウト→ロジック
-	CLogicInt  LineColumnToIndex (const CLayout*  pcLayout,  CLayoutInt nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
-	CLogicInt  LineColumnToIndex (const CDocLine* pcDocLine, CLayoutInt nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
-	CLogicInt  LineColumnToIndex2(const CLayout*  pcLayout,  CLayoutInt nColumn, CLayoutInt* pnLineAllColLen) const;	// 指定された桁に対応する行のデータ内の位置を調べる Ver0		// @@@ 2002.09.28 YAZAKI
+	LogicInt  LineColumnToIndex (const Layout*  pcLayout,  LayoutInt nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
+	LogicInt  LineColumnToIndex (const CDocLine* pcDocLine, LayoutInt nColumn) const;		// 指定された桁に対応する行のデータ内の位置を調べる Ver1		// @@@ 2002.09.28 YAZAKI
+	LogicInt  LineColumnToIndex2(const Layout*  pcLayout,  LayoutInt nColumn, LayoutInt* pnLineAllColLen) const;	// 指定された桁に対応する行のデータ内の位置を調べる Ver0		// @@@ 2002.09.28 YAZAKI
 
 	// 単位変換: ロジック→レイアウト
-	CLayoutInt LineIndexToColumn (const CLayout*  pcLayout,  CLogicInt nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
-	CLayoutInt LineIndexToColumn (const CDocLine* pcLayout,  CLogicInt nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
+	LayoutInt LineIndexToColumn (const Layout*  pcLayout,  LogicInt nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
+	LayoutInt LineIndexToColumn (const CDocLine* pcLayout,  LogicInt nIndex) const;		// 指定された行のデータ内の位置に対応する桁の位置を調べる	// @@@ 2002.09.28 YAZAKI
 
 private:
 	const CEditView* m_pOwner;

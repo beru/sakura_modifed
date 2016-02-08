@@ -26,15 +26,15 @@
 #include "doc/CDocListener.h" // CProgressSubject
 #include "charset/CCodeBase.h" // EConvertResult
 
-class CDocLineMgr;
+class DocLineMgr;
 struct FileInfo; // doc/CDocFile.h
 
-class CReadManager : public ProgressSubject {
+class ReadManager : public ProgressSubject {
 public:
 	//	Nov. 12, 2000 genta à¯êîí«â¡
 	//	Jul. 26, 2003 ryoji BOMà¯êîí«â¡
 	EConvertResult ReadFile_To_CDocLineMgr(
-		CDocLineMgr*		pcDocLineMgr,
+		DocLineMgr*		pcDocLineMgr,
 		const LoadInfo&	sLoadInfo,
 		FileInfo*			pFileInfo
 	);

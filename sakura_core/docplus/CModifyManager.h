@@ -24,15 +24,15 @@
 #pragma once
 
 #include "util/design_template.h" // TSingleton
-#include "doc/CDocListener.h" // CDocListenerEx
+#include "doc/CDocListener.h" // DocListenerEx
 
 class CDocLine;
-class CDocLineMgr;
+class DocLineMgr;
 
 // Modified管理
 class CModifyManager :
 	public TSingleton<CModifyManager>,
-	public CDocListenerEx
+	public DocListenerEx
 {
 	friend class TSingleton<CModifyManager>;
 	CModifyManager() {}
@@ -64,6 +64,6 @@ public:
 	void SetLineModified(CDocLine* pcDocLine, int nModifiedSeq);
 
 	// 一括操作
-	void ResetAllModifyFlag(CDocLineMgr* pcDocLineMgr, int nSeq);	// 行変更状態をすべてリセット
+	void ResetAllModifyFlag(DocLineMgr* pcDocLineMgr, int nSeq);	// 行変更状態をすべてリセット
 };
 

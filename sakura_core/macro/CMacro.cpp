@@ -1353,13 +1353,13 @@ bool CMacro::HandleCommand(
 		break;
 	case F_COMMITUNDOBUFFER:
 		{
-			COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
+			OpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 			if (opeBlk) {
 				int nCount = opeBlk->GetRefCount();
 				opeBlk->SetRefCount(1); // 強制的にリセットするため1を指定
 				pcEditView->SetUndoBuffer();
 				if (!pcEditView->m_cCommander.GetOpeBlk() && 0 < nCount) {
-					pcEditView->m_cCommander.SetOpeBlk(new COpeBlk());
+					pcEditView->m_cCommander.SetOpeBlk(new OpeBlk());
 					pcEditView->m_cCommander.GetOpeBlk()->SetRefCount(nCount);
 				}
 			}
@@ -1367,9 +1367,9 @@ bool CMacro::HandleCommand(
 		break;
 	case F_ADDREFUNDOBUFFER:
 		{
-			COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
+			OpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 			if (!opeBlk) {
-				pcEditView->m_cCommander.SetOpeBlk(new COpeBlk());
+				pcEditView->m_cCommander.SetOpeBlk(new OpeBlk());
 			}
 			pcEditView->m_cCommander.GetOpeBlk()->AddRef();
 		}
@@ -1381,14 +1381,14 @@ bool CMacro::HandleCommand(
 		break;
 	case F_APPENDUNDOBUFFERCURSOR:
 		{
-			COpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
+			OpeBlk* opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 			if (!opeBlk) {
-				pcEditView->m_cCommander.SetOpeBlk(new COpeBlk());
+				pcEditView->m_cCommander.SetOpeBlk(new OpeBlk());
 			}
 			opeBlk = pcEditView->m_cCommander.GetOpeBlk();
 			opeBlk->AddRef();
 			opeBlk->AppendOpe(
-				new CMoveCaretOpe(
+				new MoveCaretOpe(
 					pcEditView->GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
@@ -1412,9 +1412,9 @@ bool CMacro::HandleCommand(
 			if (!WCODE::Is09( Argument[0][0] )) {
 				return false;
 			}
-			CLayoutYInt nLineNum = CLayoutYInt(_wtoi(Argument[0]) - 1);
+			LayoutYInt nLineNum = LayoutYInt(_wtoi(Argument[0]) - 1);
 			if (nLineNum < 0) {
-				nLineNum = CLayoutYInt(0);
+				nLineNum = LayoutYInt(0);
 			}
 			pcEditView->SyncScrollV( pcEditView->ScrollAtV( nLineNum ));
 		}
@@ -1430,9 +1430,9 @@ bool CMacro::HandleCommand(
 			if (!WCODE::Is09( Argument[0][0] )) {
 				return false;
 			}
-			CLayoutXInt nColumn = CLayoutXInt(_wtoi(Argument[0]) - 1);
+			LayoutXInt nColumn = LayoutXInt(_wtoi(Argument[0]) - 1);
 			if (nColumn < 0) {
-				nColumn = CLayoutXInt(0);
+				nColumn = LayoutXInt(0);
 			}
 			pcEditView->SyncScrollH( pcEditView->ScrollAtH( nColumn ) );
 		}
@@ -1540,12 +1540,12 @@ bool CMacro::HandleFunction(
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_I4) != S_OK) return false;	// VT_I4として解釈
 			if (-1 < varCopy.data.lVal) {
 				const wchar_t* Buffer;
-				CLogicInt nLength;
-				CLogicInt nLine;
+				LogicInt nLength;
+				LogicInt nLine;
 				if (varCopy.data.lVal == 0) {
 					nLine = view->GetCaret().GetCaretLogicPos().GetY2();
 				}else {
-					nLine = CLogicInt(varCopy.data.lVal - 1);
+					nLine = LogicInt(varCopy.data.lVal - 1);
 				}
 				Buffer = view->m_pcEditDoc->m_cDocLineMgr.GetLine(nLine)->GetDocLineStrWithEOL(&nLength);
 				if (Buffer) {
@@ -1586,7 +1586,7 @@ bool CMacro::HandleFunction(
 				view->GetDocument()->m_bTabSpaceCurTemp = true;
 				view->m_pcEditWnd->ChangeLayoutParam(
 					false, 
-					CLayoutInt(varCopy.data.iVal),
+					LayoutInt(varCopy.data.iVal),
 					view->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas()
 				);
 
@@ -1706,7 +1706,7 @@ bool CMacro::HandleFunction(
 			view->m_pcEditWnd->ChangeLayoutParam(
 				false, 
 				view->m_pcEditDoc->m_cLayoutMgr.GetTabSpace(),
-				CLayoutInt(varCopy.data.iVal)
+				LayoutInt(varCopy.data.iVal)
 			);
 		}
 		return true;
@@ -2050,12 +2050,12 @@ bool CMacro::HandleFunction(
 			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			CLayoutInt nLineNum = CLayoutInt(varCopy.data.lVal - 1);
+			LayoutInt nLineNum = LayoutInt(varCopy.data.lVal - 1);
 			int ret = 0;
 			if (view->m_pcEditDoc->m_cLayoutMgr.GetLineCount() == nLineNum) {
 				ret = (Int)view->m_pcEditDoc->m_cDocLineMgr.GetLineCount() + 1;
 			}else {
-				const CLayout* pcLayout = view->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
+				const Layout* pcLayout = view->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 				if (pcLayout) {
 					ret = pcLayout->GetLogicLineNo() + 1;
 				}else {
@@ -2075,17 +2075,17 @@ bool CMacro::HandleFunction(
 			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			CLayoutInt nLineNum = CLayoutInt(varCopy.data.lVal - 1);
+			LayoutInt nLineNum = LayoutInt(varCopy.data.lVal - 1);
 			if (!VariantToI4(varCopy, args[1])) {
 				return false;
 			}
-			CLayoutInt nLineCol = CLayoutInt(varCopy.data.lVal - 1);
+			LayoutInt nLineCol = LayoutInt(varCopy.data.lVal - 1);
 			if (nLineNum < 0) {
 				return false;
 			}
 
-			CLayoutPoint nLayoutPos(nLineCol, nLineNum);
-			CLogicPoint nLogicPos(CLogicInt(0), CLogicInt(0));
+			LayoutPoint nLayoutPos(nLineCol, nLineNum);
+			LogicPoint nLogicPos(LogicInt(0), LogicInt(0));
 			view->m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(nLayoutPos, &nLogicPos);
 			int ret = nLogicPos.GetX() + 1;
 			Wrap(&result)->Receive(ret);
@@ -2102,17 +2102,17 @@ bool CMacro::HandleFunction(
 			if (!VariantToI4(varCopy, args[0])) {
 				return false;
 			}
-			CLogicInt nLineNum = CLogicInt(varCopy.data.lVal - 1);
+			LogicInt nLineNum = LogicInt(varCopy.data.lVal - 1);
 			if (!VariantToI4(varCopy, args[1])) {
 				return false;
 			}
-			CLogicInt nLineIdx = CLogicInt(varCopy.data.lVal - 1);
+			LogicInt nLineIdx = LogicInt(varCopy.data.lVal - 1);
 			if (nLineNum < 0) {
 				return false;
 			}
 
-			CLogicPoint nLogicPos(nLineIdx, nLineNum);
-			CLayoutPoint nLayoutPos(CLayoutInt(0), CLayoutInt(0));
+			LogicPoint nLogicPos(nLineIdx, nLineNum);
+			LayoutPoint nLayoutPos(LayoutInt(0), LayoutInt(0));
 			view->m_pcEditDoc->m_cLayoutMgr.LogicToLayout(nLogicPos, &nLayoutPos);
 			int ret = ((LOWORD(id) == F_LOGICTOLAYOUTLINENUM) ? (Int)nLayoutPos.GetY2() : (Int)nLayoutPos.GetX2()) + 1;
 			Wrap(&result)->Receive(ret);
@@ -2261,16 +2261,16 @@ bool CMacro::HandleFunction(
 				CDocLine tmpDocLine;
 				tmpDocLine.SetDocLineString(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
 				const int tmpLenWithEol1 = tmpDocLine.GetLengthWithoutEOL() + (0 < tmpDocLine.GetEol().GetLen() ? 1: 0);
-				const CLayoutXInt offset(varCopy2.data.lVal - 1);
-				const CLayout tmpLayout(
+				const LayoutXInt offset(varCopy2.data.lVal - 1);
+				const Layout tmpLayout(
 					&tmpDocLine,
-					CLogicPoint(0, 0),
-					CLogicXInt(tmpLenWithEol1),
+					LogicPoint(0, 0),
+					LogicXInt(tmpLenWithEol1),
 					COLORIDX_TEXT,
 					offset,
 					NULL
 				);
-				CLayoutXInt width = view->LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
+				LayoutXInt width = view->LineIndexToColumn(&tmpLayout, tmpDocLine.GetLengthWithEOL()) - offset;
 				Wrap(&result)->Receive((Int)width);
 				return true;
 			}
@@ -2278,7 +2278,7 @@ bool CMacro::HandleFunction(
 		}
 	case F_GETDEFAULTCHARLENGTH:
 		{
-			CLayoutXInt width = view->GetTextMetrics().GetLayoutXDefault();
+			LayoutXInt width = view->GetTextMetrics().GetLayoutXDefault();
 			Wrap(&result)->Receive((Int)width);
 			return true;
 		}
@@ -2343,13 +2343,13 @@ bool CMacro::HandleFunction(
 			}
 			if (!variant_to_int(args[0], nLineNum)) return false;
 			if (!variant_to_int(args[1], nAttType)) return false;
-			CLogicInt nLine;
+			LogicInt nLine;
 			if (nLineNum == 0) {
 				nLine = view->GetCaret().GetCaretLogicPos().GetY2();
 			}else if (nLineNum < 0) {
 				return false;
 			}else {
-				nLine = CLogicInt(nLineNum - 1); // nLineNumは1開始
+				nLine = LogicInt(nLineNum - 1); // nLineNumは1開始
 			}
 			const CDocLine* pcDocLine = view->GetDocument()->m_cDocLineMgr.GetLine(nLine);
 			if (!pcDocLine) {

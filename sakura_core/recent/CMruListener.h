@@ -25,7 +25,7 @@
 
 #include "doc/CDocListener.h"
 
-class CMruListener : public CDocListenerEx {
+class MruListener : public DocListenerEx {
 public:
 	// ÉçÅ[ÉhëOå„
 //	ECallbackResult OnCheckLoad(SLoadInfo* pLoadInfo);

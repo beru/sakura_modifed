@@ -1,7 +1,7 @@
 /*
-	ObserverパターンのCEditDoc特化版。
-	CDocSubjectは観察され、CDocListnerは観察を行う。
-	観察の開始は CDocListener::Listen で行う。
+	ObserverパターンのEditDoc特化版。
+	DocSubjectは観察され、CDocListnerは観察を行う。
+	観察の開始は DocListener::Listen で行う。
 
 	$Note:
 		Listener (Observer) と Subject のリレーション管理は
@@ -45,16 +45,16 @@ bool SaveInfo::IsSamePath(LPCTSTR pszPath) const
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                       CDocSubject                           //
+//                       DocSubject                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //(1)
 
-CDocSubject::~CDocSubject()
+DocSubject::~DocSubject()
 {
 }
 
 
-#define DEF_NOTIFY(NAME) ECallbackResult CDocSubject::Notify##NAME() \
+#define DEF_NOTIFY(NAME) ECallbackResult DocSubject::Notify##NAME() \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0; i<n; ++i) { \
@@ -64,7 +64,7 @@ CDocSubject::~CDocSubject()
 	return CALLBACK_CONTINUE; \
 }
 
-#define DEF_NOTIFY2(NAME, ARGTYPE) ECallbackResult CDocSubject::Notify##NAME(ARGTYPE a) \
+#define DEF_NOTIFY2(NAME, ARGTYPE) ECallbackResult DocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0; i<n; ++i) { \
@@ -74,7 +74,7 @@ CDocSubject::~CDocSubject()
 	return CALLBACK_CONTINUE; \
 }
 
-#define VOID_NOTIFY(NAME) void CDocSubject::Notify##NAME() \
+#define VOID_NOTIFY(NAME) void DocSubject::Notify##NAME() \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0; i<n; ++i) { \
@@ -82,7 +82,7 @@ CDocSubject::~CDocSubject()
 	} \
 }
 
-#define VOID_NOTIFY2(NAME, ARGTYPE) void CDocSubject::Notify##NAME(ARGTYPE a) \
+#define VOID_NOTIFY2(NAME, ARGTYPE) void DocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0; i<n; ++i) { \
@@ -91,7 +91,7 @@ CDocSubject::~CDocSubject()
 }
 
 //######仮
-#define CORE_NOTIFY2(NAME, ARGTYPE) ELoadResult CDocSubject::Notify##NAME(ARGTYPE a) \
+#define CORE_NOTIFY2(NAME, ARGTYPE) ELoadResult DocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	ELoadResult eRet = LOADED_FAILURE; \
@@ -123,32 +123,32 @@ DEF_NOTIFY(BeforeClose)
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                       CDocListener                          //
+//                       DocListener                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // (多)
 
-CDocListener::CDocListener(CDocSubject* pcDoc)
+DocListener::DocListener(DocSubject* pcDoc)
 {
 	if (!pcDoc) {
-		pcDoc = CEditDoc::GetInstance(0); //$$ インチキ
+		pcDoc = EditDoc::GetInstance(0); //$$ インチキ
 	}
 	assert(pcDoc);
 	Listen(pcDoc);
 }
 
-CDocListener::~CDocListener()
+DocListener::~DocListener()
 {
 }
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                      CDocListenerEx                         //
+//                      DocListenerEx                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 #include "doc/CEditDoc.h"
 
-CEditDoc* CDocListenerEx::GetListeningDoc() const
+EditDoc* DocListenerEx::GetListeningDoc() const
 {
-	return static_cast<CEditDoc*>(CDocListener::GetListeningDoc());
+	return static_cast<EditDoc*>(DocListener::GetListeningDoc());
 }
 
 

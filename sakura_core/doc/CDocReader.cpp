@@ -42,11 +42,11 @@ wchar_t* CDocReader::GetAllData(int* pnDataLen)
 	return pData;
 }
 
-const wchar_t* CDocReader::GetLineStr(CLogicInt nLine, CLogicInt* pnLineLen)
+const wchar_t* CDocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
 {
 	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
-		*pnLineLen = CLogicInt(0);
+		*pnLineLen = LogicInt(0);
 		return NULL;
 	}
 	// 2002/2/10 aroka CMemory のメンバ変数に直接アクセスしない(inline化されているので速度的な問題はない)
@@ -59,7 +59,7 @@ const wchar_t* CDocReader::GetLineStr(CLogicInt nLine, CLogicInt* pnLineLen)
 	@author Moca
 	@date 2003.06.22
 */
-const wchar_t* CDocReader::GetLineStrWithoutEOL(CLogicInt nLine, int* pnLineLen)
+const wchar_t* CDocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
 {
 	const CDocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
@@ -81,7 +81,7 @@ const wchar_t* CDocReader::GetLineStrWithoutEOL(CLogicInt nLine, int* pnLineLen)
 const wchar_t* CDocReader::GetFirstLinrStr(int* pnLineLen)
 {
 	const wchar_t* pszLine;
-	if (m_pcDocLineMgr->GetLineCount() == CLogicInt(0)) {
+	if (m_pcDocLineMgr->GetLineCount() == LogicInt(0)) {
 		pszLine = NULL;
 		*pnLineLen = 0;
 	}else {

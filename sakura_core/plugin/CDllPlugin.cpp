@@ -53,8 +53,8 @@ CPlug* CDllPlugin::CreatePlug(
 
 // プラグイン定義ファイルの読み込み
 bool CDllPlugin::ReadPluginDef(
-	CDataProfile* cProfile,
-	CDataProfile* cProfileMlang
+	DataProfile* cProfile,
+	DataProfile* cProfileMlang
 	)
 {
 	ReadPluginDefCommon(cProfile, cProfileMlang);

@@ -28,12 +28,12 @@
 #include "docplus/CFuncListManager.h"
 
 class CDocLine;
-class COpeBlk;
+class OpeBlk;
 
 // 文書データ1行
 class CDocLine {
 protected:
-	friend class CDocLineMgr; //######仮
+	friend class DocLineMgr; //######仮
 public:
 	// コンストラクタ・デストラクタ
 	CDocLine();
@@ -43,18 +43,18 @@ public:
 	bool			IsEmptyLine() const;		// このCDocLineが空行（スペース、タブ、改行記号のみの行）かどうか。
 
 	// データ取得
-	CLogicInt		GetLengthWithoutEOL() const			{ return m_cLine.GetStringLength() - m_cEol.GetLen(); } // 戻り値は文字単位。
+	LogicInt		GetLengthWithoutEOL() const			{ return m_cLine.GetStringLength() - m_cEol.GetLen(); } // 戻り値は文字単位。
 	const wchar_t*	GetPtr() const						{ return m_cLine.GetStringPtr(); }
-	CLogicInt		GetLengthWithEOL() const			{ return m_cLine.GetStringLength(); }	// CMemoryIterator用
+	LogicInt		GetLengthWithEOL() const			{ return m_cLine.GetStringLength(); }	// CMemoryIterator用
 #ifdef USE_STRICT_INT
 	const wchar_t*	GetDocLineStrWithEOL(int* pnLen) const {	//###仮の名前、仮の対処
-		CLogicInt n;
+		LogicInt n;
 		const wchar_t* p = GetDocLineStrWithEOL(&n);
 		*pnLen = n;
 		return p;
 	}
 #endif
-	const wchar_t*	GetDocLineStrWithEOL(CLogicInt* pnLen) const {	//###仮の名前、仮の対処
+	const wchar_t*	GetDocLineStrWithEOL(LogicInt* pnLen) const {	//###仮の名前、仮の対処
 		if (this) {
 			*pnLen = GetLengthWithEOL();
 			return GetPtr();
@@ -71,7 +71,7 @@ public:
 		}
 	}
 	const CEol& GetEol() const { return m_cEol; }
-	void SetEol(const CEol& cEol, COpeBlk* pcOpeBlk);
+	void SetEol(const CEol& cEol, OpeBlk* pcOpeBlk);
 	void SetEol(); // 現在のバッファから設定
 
 	const CNativeW& _GetDocLineDataWithEOL() const { return m_cLine; } //###仮

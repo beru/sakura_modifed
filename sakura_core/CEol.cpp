@@ -138,9 +138,9 @@ EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 
 
 // Œ»İ‚ÌEOL’·‚ğæ“¾B•¶š’PˆÊB
-CLogicInt CEol::GetLen() const
+LogicInt CEol::GetLen() const
 {
-	return CLogicInt(g_aEolTable[m_eEolType].m_nLen);
+	return LogicInt(g_aEolTable[m_eEolType].m_nLen);
 }
 
 // Œ»İ‚ÌEOL‚Ì–¼Ìæ“¾

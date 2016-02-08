@@ -158,10 +158,10 @@ void _DefaultConfig(TypeConfig* pType)
 /************************/
 
 	pType->m_nTextWrapMethod = (int)eTextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
-	pType->m_nMaxLineKetas = CLayoutInt(MAXLINEKETAS);	// 折り返し桁数
+	pType->m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);	// 折り返し桁数
 	pType->m_nColumnSpace = 0;							// 文字と文字の隙間
 	pType->m_nLineSpace = 1;							// 行間のすきま
-	pType->m_nTabSpace = CLayoutInt(4);					// TABの文字数
+	pType->m_nTabSpace = LayoutInt(4);					// TABの文字数
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		pType->m_nKeyWordSetIdx[i] = -1;
 	}
@@ -283,7 +283,7 @@ void _DefaultConfig(TypeConfig* pType)
 
 	// 2005.11.08 Moca 指定位置縦線の設定
 	for (int i=0; i<MAX_VERTLINES; ++i) {
-		pType->m_nVertLineIdx[i] = CLayoutInt(0);
+		pType->m_nVertLineIdx[i] = LayoutInt(0);
 	}
 	pType->m_nNoteLineOffset = 0;
 

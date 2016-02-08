@@ -25,7 +25,7 @@
 
 #include "CCodeBase.h"
 
-class CUtf7 : public CodeBase {
+class Utf7 : public CodeBase {
 public:
 	// CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst){ return UTF7ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換

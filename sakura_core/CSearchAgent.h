@@ -25,18 +25,18 @@
 
 #include "_main/global.h"
 
-class CDocLineMgr;
+class DocLineMgr;
 struct DocLineReplaceArg;
 class CBregexp;
 
 // #define SEARCH_STRING_KMP
 #define SEARCH_STRING_SUNDAY_QUICK
 
-class CSearchStringPattern {
+class SearchStringPattern {
 public:
-	CSearchStringPattern();
-	CSearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp);
-	~CSearchStringPattern();
+	SearchStringPattern();
+	SearchStringPattern(HWND, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp);
+	~SearchStringPattern();
 	void Reset();
 	bool SetPattern(HWND hwnd, const wchar_t* pszPattern, int nPatternLen, const SearchOption& searchOption, CBregexp* pRegexp){
 		return SetPattern(hwnd, pszPattern, nPatternLen, NULL, searchOption, pRegexp);
@@ -77,10 +77,10 @@ private:
 #endif
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CSearchStringPattern);
+	DISALLOW_COPY_AND_ASSIGN(SearchStringPattern);
 };
 
-class CSearchAgent {
+class SearchAgent {
 public:
 	// 文字列検索
 	static
@@ -88,7 +88,7 @@ public:
 		const wchar_t*	pLine,
 		int				nLineLen,
 		int				nIdxPos,
-		const CSearchStringPattern& pattern
+		const SearchStringPattern& pattern
 	);
 	// 単語単位で文字列検索
 	static
@@ -96,7 +96,7 @@ public:
 		const wchar_t*	pLine,
 		int				nLineLen,
 		int				nIdxPos,
-		const std::vector<std::pair<const wchar_t*, CLogicInt> >& searchWords,
+		const std::vector<std::pair<const wchar_t*, LogicInt> >& searchWords,
 		bool	bLoHiCase,
 		int*	pnMatchLen
 	);
@@ -111,22 +111,22 @@ public:
 	
 	static
 	void CreateWordList(
-		std::vector<std::pair<const wchar_t*, CLogicInt> >&	searchWords,
+		std::vector<std::pair<const wchar_t*, LogicInt> >&	searchWords,
 		const wchar_t*	pszPattern,
 		int	nPatternLen
 	);
 
 public:
-	CSearchAgent(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	SearchAgent(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
-	bool WhereCurrentWord(CLogicInt , CLogicInt , CLogicInt* , CLogicInt*, CNativeW*, CNativeW*);	// 現在位置の単語の範囲を調べる
+	bool WhereCurrentWord(LogicInt , LogicInt , LogicInt* , LogicInt*, CNativeW*, CNativeW*);	// 現在位置の単語の範囲を調べる
 
-	bool PrevOrNextWord(CLogicInt , CLogicInt , CLogicInt* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
+	bool PrevOrNextWord(LogicInt , LogicInt , LogicInt* , bool bLEFT, bool bStopsBothEnds);	// 現在位置の左右の単語の先頭位置を調べる
 	//	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
-	int SearchWord(CLogicPoint ptSerachBegin, eSearchDirection eDirection, CLogicRange* pMatchRange, const CSearchStringPattern& pattern); // 単語検索
+	int SearchWord(LogicPoint ptSerachBegin, eSearchDirection eDirection, LogicRange* pMatchRange, const SearchStringPattern& pattern); // 単語検索
 
 	void ReplaceData(DocLineReplaceArg*);
 private:
-	CDocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pcDocLineMgr;
 };
 

@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CDicMgrクラス
+	@brief DicMgrクラス
 
 	@author Norio Nakatani
 	@date	1998/11/05 作成
@@ -23,13 +23,13 @@
 #include "io/CTextStream.h"
 using namespace std;
 
-CDicMgr::CDicMgr()
+DicMgr::DicMgr()
 {
 	return;
 }
 
 
-CDicMgr::~CDicMgr()
+DicMgr::~DicMgr()
 {
 	return;
 }
@@ -41,7 +41,7 @@ CDicMgr::~CDicMgr()
 
 	@date 2006.04.10 fon 検索ヒット行を返す引数pLineを追加
 */
-BOOL CDicMgr::Search(
+BOOL DicMgr::Search(
 	const wchar_t*		pszKey,				// 検索キーワード
 	const int			nCmpLen,			// 検索キーワードの長さ
 	CNativeW**			ppcmemKey,			// 見つかったキーワード．呼び出し元の責任で解放する．
@@ -51,7 +51,7 @@ BOOL CDicMgr::Search(
 	)
 {
 #ifdef _DEBUG
-	RunningTimer cRunningTimer("CDicMgr::Search");
+	RunningTimer cRunningTimer("DicMgr::Search");
 #endif
 	const wchar_t*	pszDelimit = L" /// ";
 	const wchar_t*	pszKeySeps = L",\0";
@@ -118,7 +118,7 @@ BOOL CDicMgr::Search(
 ||  ・見つかった数を返す
 ||
 */
-int CDicMgr::HokanSearch(
+int DicMgr::HokanSearch(
 	const wchar_t*	pszKey,
 	bool			bHokanLoHiCase,	// 英大文字小文字を同一視する
 	vector_ex<std::wstring>&		vKouho,	// [out] 候補リスト

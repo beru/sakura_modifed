@@ -27,7 +27,7 @@
 void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 {
 	if (m_pCommanderView->m_ptSrchStartPos_PHY.BothNatural()) {
-		CLayoutPoint pt;
+		LayoutPoint pt;
 		// 範囲選択中か
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
 			m_pCommanderView->m_ptSrchStartPos_PHY,
@@ -79,8 +79,8 @@ void ViewCommander::Command_JUMP(void)
 	if (!dlgJump.m_bPLSQL) {	// PL/SQLソースの有効行か
 		// 行番号の表示 false=折り返し単位／true=改行単位
 		if (GetDllShareData().m_bLineNumIsCRLF_ForJump) {
-			if (CLogicInt(0) >= nLineNum) {
-				nLineNum = CLogicInt(1);
+			if (LogicInt(0) >= nLineNum) {
+				nLineNum = LogicInt(1);
 			}
 			/*
 			  カーソル位置変換
@@ -88,9 +88,9 @@ void ViewCommander::Command_JUMP(void)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			CLayoutPoint ptPosXY;
+			LayoutPoint ptPosXY;
 			layoutMgr.LogicToLayout(
-				CLogicPoint(0, nLineNum - 1),
+				LogicPoint(0, nLineNum - 1),
 				&ptPosXY
 			);
 			nLineNum = (Int)ptPosXY.y + 1;
@@ -106,7 +106,7 @@ void ViewCommander::Command_JUMP(void)
 		m_pCommanderView->AddCurrentLineToHistory();
 		// 2006.07.09 genta 選択状態を解除しないように
 		m_pCommanderView->MoveCursorSelecting(
-			CLayoutPoint(0, nLineNum - 1),
+			LayoutPoint(0, nLineNum - 1),
 			m_pCommanderView->GetSelectionInfo().m_bSelectingLock,
 			_CARETMARGINRATE / 3
 		);
@@ -129,9 +129,9 @@ void ViewCommander::Command_JUMP(void)
 		  →
 		  物理位置(行頭からのバイト数、折り返し無し行位置)
 		*/
-		CLogicPoint ptPosXY;
+		LogicPoint ptPosXY;
 		layoutMgr.LayoutToLogic(
-			CLayoutPoint(0, nLineCount),
+			LayoutPoint(0, nLineCount),
 			&ptPosXY
 		);
 		nLineCount = ptPosXY.y;
@@ -139,11 +139,11 @@ void ViewCommander::Command_JUMP(void)
 
 	auto& lineMgr = GetDocument()->m_cDocLineMgr;
 	for (; nLineCount<lineMgr.GetLineCount(); ++nLineCount) {
-		CLogicInt nLineLen;
-		const wchar_t* pLine = lineMgr.GetLine(CLogicInt(nLineCount))->GetDocLineStrWithEOL(&nLineLen);
+		LogicInt nLineLen;
+		const wchar_t* pLine = lineMgr.GetLine(LogicInt(nLineCount))->GetDocLineStrWithEOL(&nLineLen);
 		bValidLine = FALSE;
-		CLogicInt i;
-		for (i=CLogicInt(0); i<nLineLen; ++i) {
+		LogicInt i;
+		for (i=LogicInt(0); i<nLineLen; ++i) {
 			wchar_t let = pLine[i];
 			if (1
 				&& let != L' '
@@ -152,7 +152,7 @@ void ViewCommander::Command_JUMP(void)
 				break;
 			}
 		}
-		CLogicInt nBgn = i;
+		LogicInt nBgn = i;
 		wchar_t let = 0;
 		wchar_t prevLet;
 		for (i=nBgn; i<nLineLen; ++i) {
@@ -249,9 +249,9 @@ void ViewCommander::Command_JUMP(void)
 	  →
 	  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 	*/
-	CLayoutPoint ptPos;
+	LayoutPoint ptPos;
 	layoutMgr.LogicToLayout(
-		CLogicPoint(0, nLineCount),
+		LogicPoint(0, nLineCount),
 		&ptPos
 	);
 	// Sep. 8, 2000 genta
@@ -272,18 +272,18 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 	if (selInfo.IsTextSelected()
 		&& sSelect.GetFrom().y < sSelect.GetTo().y
 	) {
-		CLogicPoint ptFrom;
-		CLogicPoint ptTo;
+		LogicPoint ptFrom;
+		LogicPoint ptTo;
 		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 		layoutMgr.LayoutToLogic(
-			CLayoutPoint(CLayoutInt(0), sSelect.GetFrom().y),
+			LayoutPoint(LayoutInt(0), sSelect.GetFrom().y),
 			&ptFrom
 		);
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
-			CLayoutPoint(CLayoutInt(0), sSelect.GetTo().y),
+			LayoutPoint(LayoutInt(0), sSelect.GetTo().y),
 			&ptTo
 		);
-		for (CLogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
+		for (LogicInt nY=ptFrom.GetY2(); nY<=ptTo.y; ++nY) {
 			pCDocLine = lineMgr.GetLine(nY);
 			CBookmarkSetter cBookmark(pCDocLine);
 			if (pCDocLine) cBookmark.SetBookmark(!cBookmark.IsBookmarked());
@@ -307,8 +307,8 @@ void ViewCommander::Command_BOOKMARK_NEXT(void)
 	BOOL	bFound	=	FALSE;	// hor
 	BOOL	bRedo	=	TRUE;	// hor
 
-	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
-	CLogicInt tmp_y;
+	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	LogicInt tmp_y;
 
 	nYOld = ptXY.y;					// hor
 
@@ -316,7 +316,7 @@ re_do:;								// hor
 	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;
-		CLayoutPoint ptLayout;
+		LayoutPoint ptLayout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
@@ -351,8 +351,8 @@ void ViewCommander::Command_BOOKMARK_PREV(void)
 	BOOL	bFound	=	FALSE;	// hor
 	BOOL	bRedo	=	TRUE;	// hor
 
-	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
-	CLogicInt tmp_y;
+	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	LogicInt tmp_y;
 
 	nYOld = ptXY.y;						// hor
 
@@ -360,7 +360,7 @@ re_do:;								// hor
 	if (CBookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;				// hor
-		CLayoutPoint ptLayout;
+		LayoutPoint ptLayout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
@@ -419,13 +419,13 @@ void ViewCommander::Command_BOOKMARK_PATTERN(void)
 //! 次の関数リストマークを探し，見つかったら移動する
 void ViewCommander::Command_FUNCLIST_NEXT(void)
 {
-	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
 		if (CFuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
 				ptXY.GetY2(), eSearchDirection::Forward, &ptXY.y)) {
-			CLayoutPoint ptLayout;
+			LayoutPoint ptLayout;
 			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
 			m_pCommanderView->MoveCursorSelecting( ptLayout,
 				m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
@@ -450,7 +450,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 void ViewCommander::Command_FUNCLIST_PREV(void)
 {
 
-	CLogicPoint	ptXY(0,GetCaret().GetCaretLogicPos().y);
+	LogicPoint	ptXY(0,GetCaret().GetCaretLogicPos().y);
 	int nYOld = ptXY.y;
 
 	for (int n=0; n<2; ++n) {
@@ -461,7 +461,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 			&ptXY.y
 			)
 		) {
-			CLayoutPoint ptLayout;
+			LayoutPoint ptLayout;
 			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
 			m_pCommanderView->MoveCursorSelecting(
 				ptLayout,

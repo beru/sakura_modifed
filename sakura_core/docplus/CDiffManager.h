@@ -29,7 +29,7 @@
 #include "util/design_template.h" // TSingleton
 
 class CDocLine;
-class CDocLineMgr;
+class DocLineMgr;
 class CGraphics;
 
 // DIFFî•ñ’è”
@@ -87,11 +87,11 @@ private:
 // s‘S‘Ì‚ÌDIFFî•ñŠÇ—
 class CDiffLineMgr {
 public:
-	CDiffLineMgr(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	CDiffLineMgr(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 	void ResetAllDiffMark();															// ·•ª•\¦‚Ì‘S‰ğœ
-	bool SearchDiffMark(CLogicInt , eSearchDirection, CLogicInt*);						// ·•ªŒŸõ
-	void SetDiffMarkRange(EDiffMark nMode, CLogicInt nStartLine, CLogicInt nEndLine);	// ·•ª”ÍˆÍ‚Ì“o˜^
+	bool SearchDiffMark(LogicInt , eSearchDirection, LogicInt*);						// ·•ªŒŸõ
+	void SetDiffMarkRange(EDiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// ·•ª”ÍˆÍ‚Ì“o˜^
 private:
-	CDocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pcDocLineMgr;
 };
 

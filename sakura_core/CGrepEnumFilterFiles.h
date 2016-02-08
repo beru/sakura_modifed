@@ -32,22 +32,22 @@
 
 #include "CGrepEnumFiles.h"
 
-class CGrepEnumFilterFiles : public CGrepEnumFiles {
+class GrepEnumFilterFiles : public GrepEnumFiles {
 private:
 
 public:
-	CGrepEnumFiles m_cGrepEnumExceptFiles;
+	GrepEnumFiles m_cGrepEnumExceptFiles;
 
 public:
-	CGrepEnumFilterFiles() {
+	GrepEnumFilterFiles() {
 	}
 
-	virtual ~CGrepEnumFilterFiles() {
+	virtual ~GrepEnumFilterFiles() {
 	}
 
 	virtual
 	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
-		if (CGrepEnumFiles::IsValid(w32fd, pFile)) {
+		if (GrepEnumFiles::IsValid(w32fd, pFile)) {
 			if (m_cGrepEnumExceptFiles.IsValid(w32fd, pFile)) {
 				return TRUE;
 			}
@@ -55,9 +55,9 @@ public:
 		return FALSE;
 	}
 
-	int Enumerates( LPCTSTR lpBaseFolder, CGrepEnumKeys& cGrepEnumKeys, CGrepEnumOptions option, CGrepEnumFiles& pExcept ){
+	int Enumerates( LPCTSTR lpBaseFolder, GrepEnumKeys& cGrepEnumKeys, GrepEnumOptions option, GrepEnumFiles& pExcept ){
 		m_cGrepEnumExceptFiles.Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecExceptFileKeys, option, NULL );
-		return CGrepEnumFiles::Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecSearchFileKeys, option, &pExcept );
+		return GrepEnumFiles::Enumerates( lpBaseFolder, cGrepEnumKeys.m_vecSearchFileKeys, option, &pExcept );
 	}
 };
 

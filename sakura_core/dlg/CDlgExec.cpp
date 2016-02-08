@@ -61,7 +61,7 @@ static const int codeTable2[] = { 0x00, 0x10, 0x100 };
 int CDlgExec::DoModal(HINSTANCE hInstance, HWND hwndParent, LPARAM lParam)
 {
 	m_szCommand[0] = _T('\0');	// コマンドライン
-	m_bEditable = CEditDoc::GetInstance(0)->IsEditable();
+	m_bEditable = EditDoc::GetInstance(0)->IsEditable();
 	return (int)CDialog::DoModal(hInstance, hwndParent, IDD_EXEC, lParam);
 }
 

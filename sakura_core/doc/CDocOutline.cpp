@@ -287,12 +287,12 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		}
 		CNativeW mem;
 		mem.SetString(g, len);
-		pcFuncInfoArr->AppendData(CLogicInt(1), CLayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
+		pcFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
-		CLogicInt nLineLen;
+		LogicInt nLineLen;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
@@ -376,9 +376,9 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		  →
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
-		CLayoutPoint ptPos;
+		LayoutPoint ptPos;
 		m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-			CLogicPoint(0, nLineCount),
+			LogicPoint(0, nLineCount),
 			&ptPos
 		);
 
@@ -417,7 +417,7 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 		}
 		
 		if (bAppend) {
-			pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1) , pszText, 0, nDepth);
+			pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1) , pszText, 0, nDepth);
 			++nDepth;
 		}
 		delete [] pszText;
@@ -437,13 +437,13 @@ void CDocOutline::MakeFuncList_RuleFile(CFuncInfoArr* pcFuncInfoArr, std::tstrin
 */
 void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 {
-	CLogicInt nLineLen;
+	LogicInt nLineLen;
 	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
 	int nNewLineLen	= m_pcDocRef->m_cDocEditor.m_cNewLineCode.GetLen();
-	CLogicInt nLineLast	= m_pcDocRef->m_cDocLineMgr.GetLineCount();
+	LogicInt nLineLast	= m_pcDocRef->m_cDocLineMgr.GetLineCount();
 	int nCharChars;
 
-	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<nLineLast; ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<nLineLast; ++nLineCount) {
 		if (!CBookmarkGetter(m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
@@ -496,10 +496,10 @@ void CDocOutline::MakeFuncList_BookMark(CFuncInfoArr* pcFuncInfoArr)
 		wchar_t* pszText = &szText[0];
 		wmemcpy(pszText, &pLine[leftspace], nLen);
 		pszText[nLen] = L'\0';
-		CLayoutPoint ptXY;
+		LayoutPoint ptXY;
 		//int nX,nY
-		m_pcDocRef->m_cLayoutMgr.LogicToLayout(	CLogicPoint(CLogicInt(0), nLineCount), &ptXY);
-		pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptXY.GetY2()+CLayoutInt(1) , pszText, 0);
+		m_pcDocRef->m_cLayoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
+		pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptXY.GetY2()+LayoutInt(1) , pszText, 0);
 	}
 	return;
 }

@@ -27,7 +27,7 @@
 
 class CEditWnd;
 
-class CMainStatusBar : public CDocListenerEx {
+class CMainStatusBar : public DocListenerEx {
 public:
 	// ì¬E”jŠü
 	CMainStatusBar(CEditWnd* pOwner);

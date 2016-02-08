@@ -39,7 +39,7 @@ void ViewCommander::Command_WordDeleteToStart(void)
 	}
 
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
-		CMoveCaretOpe*	pcOpe = new CMoveCaretOpe();
+		MoveCaretOpe*	pcOpe = new MoveCaretOpe();
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
 			GetSelect().GetTo(),
 			&pcOpe->m_ptCaretPos_PHY_Before
@@ -76,7 +76,7 @@ void ViewCommander::Command_WordDeleteToEnd(void)
 		return;
 	}
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
-		CMoveCaretOpe*	pcOpe = new CMoveCaretOpe();
+		MoveCaretOpe*	pcOpe = new MoveCaretOpe();
 		GetDocument()->m_cLayoutMgr.LayoutToLogic(
 			GetSelect().GetFrom(),
 			&pcOpe->m_ptCaretPos_PHY_Before
@@ -131,20 +131,20 @@ void ViewCommander::Command_WordDelete(void)
 void ViewCommander::Command_LineCutToStart(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	CLayout* pCLayout;
+	Layout* pCLayout;
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
 		Command_CUT();
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
-	CLayoutPoint ptPos;
-	GetDocument()->m_cLayoutMgr.LogicToLayout(CLogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
+	LayoutPoint ptPos;
+	GetDocument()->m_cLayoutMgr.LogicToLayout(LogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
 	if (GetCaret().GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
@@ -152,7 +152,7 @@ void ViewCommander::Command_LineCutToStart(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	CLayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
+	LayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
 	selInfo.SetSelectArea(sRange);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
@@ -165,13 +165,13 @@ void ViewCommander::Command_LineCutToStart(void)
 void ViewCommander::Command_LineCutToEnd(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	CLayout* pCLayout;
+	Layout* pCLayout;
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		// 切り取り(選択範囲をクリップボードにコピーして削除)
 		Command_CUT();
 		return;
 	}
-	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(
 		GetCaret().GetCaretLayoutPos().GetY2()
 	);
@@ -180,11 +180,11 @@ void ViewCommander::Command_LineCutToEnd(void)
 		return;
 	}
 
-	CLayoutPoint ptPos;
+	LayoutPoint ptPos;
 	auto& docLineRef = *pCLayout->GetDocLineRef();
 	if (docLineRef.GetEol() == EOL_NONE) {	// 改行コードの種類
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
-			CLogicPoint(
+			LogicPoint(
 				docLineRef.GetLengthWithEOL(),
 				pCLayout->GetLogicLineNo()
 			),
@@ -192,7 +192,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 		);
 	}else {
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
-			CLogicPoint(
+			LogicPoint(
 				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pCLayout->GetLogicLineNo()
 			),
@@ -207,7 +207,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	CLayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
+	LayoutRange sRange(GetCaret().GetCaretLayoutPos(), ptPos);
 	selInfo.SetSelectArea(sRange);
 
 	// 切り取り(選択範囲をクリップボードにコピーして削除)
@@ -219,20 +219,20 @@ void ViewCommander::Command_LineCutToEnd(void)
 void ViewCommander::Command_LineDeleteToStart(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	CLayout* pCLayout;
+	Layout* pCLayout;
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		m_pCommanderView->DeleteData(true);
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
-	CLayoutPoint ptPos;
+	LayoutPoint ptPos;
 
-	GetDocument()->m_cLayoutMgr.LogicToLayout(CLogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
+	GetDocument()->m_cLayoutMgr.LogicToLayout(LogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
 	if (GetCaret().GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
@@ -240,7 +240,7 @@ void ViewCommander::Command_LineDeleteToStart(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	CLayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
+	LayoutRange sRange(ptPos, GetCaret().GetCaretLayoutPos());
 	selInfo.SetSelectArea(sRange);
 
 	// 選択領域削除
@@ -252,25 +252,25 @@ void ViewCommander::Command_LineDeleteToStart(void)
 void ViewCommander::Command_LineDeleteToEnd(void)
 {
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
-	CLayout* pCLayout;
+	Layout* pCLayout;
 	if (selInfo.IsTextSelected()) {	// テキストが選択されているか
 		m_pCommanderView->DeleteData(true);
 		return;
 	}
 
 	auto& caretLayoutPos = GetCaret().GetCaretLayoutPos();
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(caretLayoutPos.GetY2());	// 指定された物理行のレイアウトデータ(CLayout)へのポインタを返す
+	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(caretLayoutPos.GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
-	CLayoutPoint ptPos;
+	LayoutPoint ptPos;
 
 	auto& docLineRef = *pCLayout->GetDocLineRef();
 	if (docLineRef.GetEol() == EOL_NONE) {	// 改行コードの種類
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
-			CLogicPoint(
+			LogicPoint(
 				docLineRef.GetLengthWithEOL(),
 				pCLayout->GetLogicLineNo()
 			),
@@ -278,7 +278,7 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 		);
 	}else {
 		GetDocument()->m_cLayoutMgr.LogicToLayout(
-			CLogicPoint(
+			LogicPoint(
 				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pCLayout->GetLogicLineNo()
 			),
@@ -295,7 +295,7 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 
 	// 選択範囲の変更
 	// 2005.06.24 Moca
-	CLayoutRange sRange(caretLayoutPos, ptPos);
+	LayoutRange sRange(caretLayoutPos, ptPos);
 	selInfo.SetSelectArea(sRange);
 
 	// 選択領域削除
@@ -317,7 +317,7 @@ void ViewCommander::Command_CUT_LINE(void)
 		return;
 	}
 
-	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
+	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
 	if (!pcLayout) {
 		ErrorBeep();
 		return;
@@ -347,15 +347,15 @@ void ViewCommander::Command_DELETE_LINE(void)
 		ErrorBeep();
 		return;
 	}
-	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
 		ErrorBeep();
 		return;
 	}
-	GetSelect().SetFrom(CLayoutPoint(CLayoutInt(0), GetCaret().GetCaretLayoutPos().GetY2()  ));	// 範囲選択開始位置
-	GetSelect().SetTo  (CLayoutPoint(CLayoutInt(0), GetCaret().GetCaretLayoutPos().GetY2() + 1));	// 範囲選択終了位置
+	GetSelect().SetFrom(LayoutPoint(LayoutInt(0), GetCaret().GetCaretLayoutPos().GetY2()  ));	// 範囲選択開始位置
+	GetSelect().SetTo  (LayoutPoint(LayoutInt(0), GetCaret().GetCaretLayoutPos().GetY2() + 1));	// 範囲選択終了位置
 
-	CLayoutPoint ptCaretPos_OLD = GetCaret().GetCaretLayoutPos();
+	LayoutPoint ptCaretPos_OLD = GetCaret().GetCaretLayoutPos();
 
 	Command_DELETE();
 	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
@@ -364,9 +364,9 @@ void ViewCommander::Command_DELETE_LINE(void)
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
 		if (!GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode) {
-			CLogicInt nIndex;
+			LogicInt nIndex;
 
-			CLayoutInt tmp;
+			LayoutInt tmp;
 			nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, ptCaretPos_OLD.GetX2(), &tmp);
 			ptCaretPos_OLD.x = tmp;
 
@@ -382,7 +382,7 @@ void ViewCommander::Command_DELETE_LINE(void)
 		if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			// 操作の追加
 			GetOpeBlk()->AppendOpe(
-				new CMoveCaretOpe(
+				new MoveCaretOpe(
 					GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);
@@ -405,7 +405,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 		selInfo.DisableSelectArea(true);
 	}
 
-	const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
 		ErrorBeep();
 		return;
@@ -414,13 +414,13 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
-			new CMoveCaretOpe(
+			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
 	}
 
-	CLayoutPoint ptCaretPosOld = GetCaret().GetCaretLayoutPos() + CLayoutPoint(0, 1);
+	LayoutPoint ptCaretPosOld = GetCaret().GetCaretLayoutPos() + LayoutPoint(0, 1);
 
 	// 行頭に移動(折り返し単位)
 	Command_GOLINETOP(selInfo.m_bSelectingLock, 0x1 /* カーソル位置に関係なく行頭に移動 */);
@@ -428,7 +428,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
-			new CMoveCaretOpe(
+			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);
@@ -460,7 +460,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	}
 
 	// 現在位置にデータを挿入
-	CLayoutPoint ptLayoutNew;
+	LayoutPoint ptLayoutNew;
 	m_pCommanderView->InsertData_CEditView(
 		GetCaret().GetCaretLayoutPos(),
 		cmemBuf.GetStringPtr(),
@@ -476,7 +476,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		// 操作の追加
 		GetOpeBlk()->AppendOpe(
-			new CMoveCaretOpe(
+			new MoveCaretOpe(
 				GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 			)
 		);

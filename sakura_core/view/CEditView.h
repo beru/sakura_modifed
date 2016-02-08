@@ -62,19 +62,19 @@
 #include "cmd/CViewCommander.h"
 #include "mfclike/CMyWnd.h"		// parent
 #include "doc/CDocListener.h"	// parent
-#include "basis/SakuraBasis.h"	// CLogicInt, CLayoutInt
+#include "basis/SakuraBasis.h"	// LogicInt, LayoutInt
 #include "util/container.h"		// vector_ex
 #include "util/design_template.h"
 
 class CViewFont;
 class CRuler;
 class DropTarget; /// 2002/2/3 aroka ヘッダ軽量化
-class COpeBlk;///
+class OpeBlk;///
 class CSplitBoxWnd;///
 class CRegexKeyword;///
 class CAutoMarkMgr; /// 2002/2/3 aroka ヘッダ軽量化 to here
-class CEditDoc;	//	2002/5/13 YAZAKI ヘッダ軽量化
-class CLayout;	//	2002/5/13 YAZAKI ヘッダ軽量化
+class EditDoc;	//	2002/5/13 YAZAKI ヘッダ軽量化
+class Layout;	//	2002/5/13 YAZAKI ヘッダ軽量化
 class CMigemo;	// 2004.09.14 isearch
 struct ColorStrategyInfo;
 struct Color3Setting;
@@ -102,8 +102,8 @@ const int CMD_FROM_MOUSE = 2;
 /*!
 	@brief 文書ウィンドウの管理
 	
-	1つの文書ウィンドウにつき1つのCEditDocオブジェクトが割り当てられ、
-	1つのCEditDocオブジェクトにつき、4つのCEditViweオブジェクトが割り当てられる。
+	1つの文書ウィンドウにつき1つのEditDocオブジェクトが割り当てられ、
+	1つのEditDocオブジェクトにつき、4つのCEditViweオブジェクトが割り当てられる。
 	ウィンドウメッセージの処理、コマンドメッセージの処理、
 	画面表示などを行う。
 	
@@ -116,13 +116,13 @@ class CEditView :
 	public CViewCalc, //$$ これが親クラスである必要は無いが、このクラスのメソッド呼び出しが多いので、暫定的に親クラスとする。
 	public CEditView_Paint,
 	public CMyWnd,
-	public CDocListenerEx
+	public DocListenerEx
 {
 public:
-	const CEditDoc* GetDocument() const {
+	const EditDoc* GetDocument() const {
 		return m_pcEditDoc;
 	}
-	CEditDoc* GetDocument() {
+	EditDoc* GetDocument() {
 		return m_pcEditDoc;
 	}
 public:
@@ -149,7 +149,7 @@ public:
 	// 初期化系メンバ関数
 	BOOL Create(
 		HWND		hwndParent,	//!< 親
-		CEditDoc*	pcEditDoc,	//!< 参照するドキュメント
+		EditDoc*	pcEditDoc,	//!< 参照するドキュメント
 		int			nMyIndex,	//!< ビューのインデックス
 		BOOL		bShow,		//!< 作成時に表示するかどうか
 		bool		bMiniMap
@@ -193,8 +193,8 @@ public:
 	void OnSetFocus(void);
 	void OnKillFocus(void);
 	// スクロール
-	CLayoutInt OnVScroll(int, int);					// 垂直スクロールバーメッセージ処理
-	CLayoutInt OnHScroll(int, int);					// 水平スクロールバーメッセージ処理
+	LayoutInt OnVScroll(int, int);					// 垂直スクロールバーメッセージ処理
+	LayoutInt OnHScroll(int, int);					// 水平スクロールバーメッセージ処理
 	// マウス
 	void OnLBUTTONDOWN(WPARAM, int, int);			// マウス左ボタン押下
 	void OnMOUSEMOVE(WPARAM, int, int);				// マウス移動のメッセージ処理
@@ -223,7 +223,7 @@ protected:
 	bool DrawLogicLine(
 		HDC				hdc,			//!< [in]     作画対象
 		DispPos*		pDispPos,		//!< [in/out] 描画する箇所、描画元ソース
-		CLayoutInt		nLineTo			//!< [in]     作画終了するレイアウト行番号
+		LayoutInt		nLineTo			//!< [in]     作画終了するレイアウト行番号
 	);
 
 	//! レイアウト行を1行描画
@@ -231,7 +231,7 @@ protected:
 
 	// 色分け
 public:
-	Color3Setting GetColorIndex(const CLayout* pcLayout, CLayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
+	Color3Setting GetColorIndex(const Layout* pcLayout, LayoutYInt nLineNum, int nIndex, ColorStrategyInfo* pInfo, bool bPrev = false);	// 指定位置のColorIndexの取得 02/12/13 ai
 	void SetCurrentColor(CGraphics& gr, EColorIndexType, EColorIndexType, EColorIndexType);
 	COLORREF GetTextColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
 	COLORREF GetBackColorByColorInfo2(const ColorInfo& info, const ColorInfo& info2);
@@ -244,10 +244,10 @@ public:
 	void DeleteCompatibleBitmap();							//!< メモリBMPを削除
 
 public:
-	void DispTextSelected(HDC hdc, CLayoutInt nLineNum, const Point& ptXY, CLayoutInt nX_Layout);	// テキスト反転
+	void DispTextSelected(HDC hdc, LayoutInt nLineNum, const Point& ptXY, LayoutInt nX_Layout);	// テキスト反転
 	void RedrawAll();										// フォーカス移動時の再描画
 	void Redraw();											// 2001/06/21 asa-o 再描画
-	void RedrawLines( CLayoutYInt top, CLayoutYInt bottom );
+	void RedrawLines( LayoutYInt top, LayoutYInt bottom );
 	void CaretUnderLineON(bool, bool, bool);				// カーソル行アンダーラインのON
 	void CaretUnderLineOFF(bool, bool, bool, bool);			// カーソル行アンダーラインのOFF
 	bool GetDrawSwitch() const {
@@ -268,9 +268,9 @@ public:
 	void AdjustScrollBars();											// スクロールバーの状態を更新する
 	BOOL CreateScrollBar();												// スクロールバー作成	// 2006.12.19 ryoji
 	void DestroyScrollBar();											// スクロールバー破棄	// 2006.12.19 ryoji
-	CLayoutInt GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
-	CLayoutInt ViewColNumToWrapColNum(CLayoutInt nViewColNum) const;	//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
-	CLayoutInt GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
+	LayoutInt GetWrapOverhang(void) const;								// 折り返し桁以後のぶら下げ余白計算	// 2008.06.08 ryoji
+	LayoutInt ViewColNumToWrapColNum(LayoutInt nViewColNum) const;	//「右端で折り返す」用にビューの桁数から折り返し桁数を計算する	// 2008.06.08 ryoji
+	LayoutInt GetRightEdgeForScrollBar(void);							// スクロールバー制御用に右端座標を取得する		// 2009.08.28 nasukoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           IME                               //
@@ -282,16 +282,16 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        スクロール                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	CLayoutInt  ScrollAtV(CLayoutInt);								// 指定上端行位置へスクロール
-	CLayoutInt  ScrollAtH(CLayoutInt);								// 指定左端桁位置へスクロール
+	LayoutInt  ScrollAtV(LayoutInt);								// 指定上端行位置へスクロール
+	LayoutInt  ScrollAtH(LayoutInt);								// 指定左端桁位置へスクロール
 	//	From Here Sep. 11, 2004 genta ずれ維持の同期スクロール
-	CLayoutInt  ScrollByV(CLayoutInt vl) {	return ScrollAtV(GetTextArea().GetViewTopLine() + vl);}	// 指定行スクロール
-	CLayoutInt  ScrollByH(CLayoutInt hl) {	return ScrollAtH(GetTextArea().GetViewLeftCol() + hl);}	// 指定桁スクロール
-	void ScrollDraw(CLayoutInt, CLayoutInt, const RECT&, const RECT&, const RECT&);
+	LayoutInt  ScrollByV(LayoutInt vl) {	return ScrollAtV(GetTextArea().GetViewTopLine() + vl);}	// 指定行スクロール
+	LayoutInt  ScrollByH(LayoutInt hl) {	return ScrollAtH(GetTextArea().GetViewLeftCol() + hl);}	// 指定桁スクロール
+	void ScrollDraw(LayoutInt, LayoutInt, const RECT&, const RECT&, const RECT&);
 	void MiniMapRedraw(bool);
 public:
-	void SyncScrollV(CLayoutInt);										// 垂直同期スクロール
-	void SyncScrollH(CLayoutInt);										// 水平同期スクロール
+	void SyncScrollV(LayoutInt);										// 垂直同期スクロール
+	void SyncScrollH(LayoutInt);										// 水平同期スクロール
 
 	void SetBracketPairPos(bool);										// 対括弧の強調表示位置設定 03/02/18 ai
 
@@ -315,19 +315,19 @@ public:
 	bool GetSelectedDataSimple(CNativeW&);// 選択範囲のデータを取得
 	bool GetSelectedDataOne(CNativeW& cmemBuf, int nMaxLen);
 	bool GetSelectedData(CNativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EEolType neweol = EOL_UNKNOWN);	// 選択範囲のデータを取得
-	int IsCurrentPositionSelected(CLayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
-	int IsCurrentPositionSelectedTEST(const CLayoutPoint& ptCaretPos, const CLayoutRange& sSelect) const; // 指定カーソル位置が選択エリア内にあるか
+	int IsCurrentPositionSelected(LayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
+	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& sSelect) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)
-	void MoveCursorSelecting(CLayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
+	void MoveCursorSelecting(LayoutPoint ptWk_CaretPos, bool bSelect, int = _CARETMARGINRATE);
 	void ConvSelectedArea(EFunctionCode);								// 選択エリアのテキストを指定方法で変換
 	//!指定位置または指定範囲がテキストの存在しないエリアかチェックする		// 2008.08.03 nasukoji
-	bool IsEmptyArea(CLayoutPoint ptFrom, CLayoutPoint ptTo = CLayoutPoint(CLayoutInt(-1), CLayoutInt(-1)), bool bSelect = false, bool bBoxSelect = false) const;
+	bool IsEmptyArea(LayoutPoint ptFrom, LayoutPoint ptTo = LayoutPoint(LayoutInt(-1), LayoutInt(-1)), bool bSelect = false, bool bBoxSelect = false) const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         各種判定                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	bool IsCurrentPositionURL(const CLayoutPoint& ptCaretPos, CLogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
+	bool IsCurrentPositionURL(const LayoutPoint& ptCaretPos, LogicRange* pUrlRange, std::wstring* pwstrURL); // カーソル位置にURLが有る場合のその範囲を調べる
 	bool CheckTripleClick(Point ptMouse);							// トリプルクリックをチェックする	// 2007.10.02 nasukoji
 	
 	bool ExecCmd(const TCHAR*, int, const TCHAR*, COutputAdapter* = NULL) ;			// 子プロセスの標準出力をリダイレクトする
@@ -362,8 +362,8 @@ public: // テスト用にアクセス属性を変更
 public:
 	// 指定位置の指定長データ削除
 	void DeleteData2(
-		const CLayoutPoint&	ptCaretPos,
-		CLogicInt			nDelLen,
+		const LayoutPoint&	ptCaretPos,
+		LogicInt			nDelLen,
 		CNativeW*			pcMem
 	);
 
@@ -372,41 +372,41 @@ public:
 
 	// 現在位置にデータを挿入
 	void InsertData_CEditView(
-		CLayoutPoint	ptInsertPos,
+		LayoutPoint	ptInsertPos,
 		const wchar_t*	pData,
 		int				nDataLen,
-		CLayoutPoint*	pptNewPos,	// 挿入された部分の次の位置のデータ位置
+		LayoutPoint*	pptNewPos,	// 挿入された部分の次の位置のデータ位置
 		bool			bRedraw
 	);
 
 	// データ置換 削除&挿入にも使える
 	void ReplaceData_CEditView(
-		const CLayoutRange&	sDelRange,			// 削除範囲。レイアウト単位。
+		const LayoutRange&	sDelRange,			// 削除範囲。レイアウト単位。
 		const wchar_t*		pInsData,			// 挿入するデータ
-		CLogicInt			nInsDataLen,		// 挿入するデータの長さ
+		LogicInt			nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
-		COpeBlk*			pcOpeBlk,
+		OpeBlk*			pcOpeBlk,
 		bool				bFastMode = false,
-		const CLogicRange*	psDelRangeLogicFast = NULL
+		const LogicRange*	psDelRangeLogicFast = NULL
 	);
 	void ReplaceData_CEditView2(
-		const CLogicRange&	sDelRange,			// 削除範囲。ロジック単位。
+		const LogicRange&	sDelRange,			// 削除範囲。ロジック単位。
 		const wchar_t*		pInsData,			// 挿入するデータ
-		CLogicInt			nInsDataLen,		// 挿入するデータの長さ
+		LogicInt			nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
-		COpeBlk*			pcOpeBlk,
+		OpeBlk*			pcOpeBlk,
 		bool				bFastMode = false
 	);
 	bool ReplaceData_CEditView3(
-		CLayoutRange	sDelRange,			// 削除範囲。レイアウト単位。
-		COpeLineData*	pcmemCopyOfDeleted,	// 削除されたデータのコピー(NULL可能)
-		COpeLineData*	pInsData,
+		LayoutRange	sDelRange,			// 削除範囲。レイアウト単位。
+		OpeLineData*	pcmemCopyOfDeleted,	// 削除されたデータのコピー(NULL可能)
+		OpeLineData*	pInsData,
 		bool			bRedraw,
-		COpeBlk*		pcOpeBlk,
+		OpeBlk*		pcOpeBlk,
 		int				nDelSeq,
 		int*			pnInsSeq,
 		bool			bFastMode = false,
-		const CLogicRange*	psDelRangeLogicFast = NULL
+		const LogicRange*	psDelRangeLogicFast = NULL
 	);
 	void RTrimPrevLine(void);		// 2005.10.11 ryoji 前の行にある末尾の空白を削除
 
@@ -440,7 +440,7 @@ public:
 	};
 	BOOL KeyWordHelpSearchDict(LID_SKH nID, POINT* po, RECT* rc);	// 2006.04.10 fon
 
-	int IsSearchString(const CStringRef& cStr, CLogicInt, CLogicInt*, CLogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
+	int IsSearchString(const CStringRef& cStr, LogicInt, LogicInt*, LogicInt*) const;	// 現在位置が検索文字列に該当するか	// 2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch(CNativeW&, bool bStripMaxPath = true, bool bTrimSpaceTab = false);			// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	bool GetCurrentTextForSearchDlg(CNativeW&, bool bGetHistory = false);		// 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji
@@ -462,13 +462,13 @@ private:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	//	Jun. 16, 2000 genta
-	bool  SearchBracket(const CLayoutPoint& ptPos, CLayoutPoint* pptLayoutNew, int* mode);	// 対括弧の検索		// modeの追加 02/09/18 ai
-	bool  SearchBracketForward(CLogicPoint ptPos, CLayoutPoint* pptLayoutNew,
+	bool  SearchBracket(const LayoutPoint& ptPos, LayoutPoint* pptLayoutNew, int* mode);	// 対括弧の検索		// modeの追加 02/09/18 ai
+	bool  SearchBracketForward(LogicPoint ptPos, LayoutPoint* pptLayoutNew,
 						const wchar_t* upChar, const wchar_t* dnChar, int mode);	//	対括弧の前方検索	// modeの追加 02/09/19 ai
-	bool  SearchBracketBackward(CLogicPoint ptPos, CLayoutPoint* pptLayoutNew,
+	bool  SearchBracketBackward(LogicPoint ptPos, LayoutPoint* pptLayoutNew,
 						const wchar_t* dnChar, const wchar_t* upChar, int mode);	//	対括弧の後方検索	// modeの追加 02/09/19 ai
 	void DrawBracketPair(bool);								// 対括弧の強調表示 02/09/18 ai
-	bool IsBracket(const wchar_t*, CLogicInt, CLogicInt);					// 括弧判定 03/01/09 ai
+	bool IsBracket(const wchar_t*, LogicInt, LogicInt);					// 括弧判定 03/01/09 ai
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           補完                              //
@@ -538,7 +538,7 @@ public:
 		TGWRAP_WINDOW,
 		TGWRAP_PROP,
 	};
-	TOGGLE_WRAP_ACTION GetWrapMode(CLayoutInt* newKetas);
+	TOGGLE_WRAP_ACTION GetWrapMode(LayoutInt* newKetas);
 	void SmartIndent_CPP(wchar_t);				// C/C++スマートインデント処理
 	// コマンド操作
 	void SetFont(void);							// フォントの変更
@@ -583,7 +583,7 @@ public:
 public:
 	// 参照
 	CEditWnd*			m_pcEditWnd;	//!< ウィンドウ
-	CEditDoc*			m_pcEditDoc;	//!< ドキュメント
+	EditDoc*			m_pcEditDoc;	//!< ドキュメント
 	const TypeConfig*	m_pTypeData;
 
 	// 主要構成部品
@@ -619,8 +619,8 @@ public:
 	bool			m_bDrawSWITCH;
 	COLORREF		m_crBack;				// テキストの背景色			// 2006.12.07 ryoji
 	COLORREF		m_crBack2;				// テキストの背景(キャレット用)
-	CLayoutInt		m_nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
-	CLayoutInt		m_nOldUnderLineYBg;
+	LayoutInt		m_nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
+	LayoutInt		m_nOldUnderLineYBg;
 	int				m_nOldUnderLineYMargin;
 	int				m_nOldUnderLineYHeight;
 	int				m_nOldUnderLineYHeightReal;
@@ -641,12 +641,12 @@ public:
 	bool			m_bDragMode;					// 選択テキストのドラッグ中か
 	CLIPFORMAT		m_cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
 	bool			m_bDragBoxData;					// ドラッグデータは矩形か
-	CLayoutPoint	m_ptCaretPos_DragEnter;			// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
-	CLayoutInt		m_nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
+	LayoutPoint	m_ptCaretPos_DragEnter;			// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
+	LayoutInt		m_nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
 
 	// 括弧
-	CLogicPoint		m_ptBracketCaretPos_PHY;	// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
-	CLogicPoint		m_ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	LogicPoint		m_ptBracketCaretPos_PHY;	// 前カーソル位置の括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	LogicPoint		m_ptBracketPairPos_PHY;		// 対括弧の位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bool			m_bDrawBracketPairFlag;		// 対括弧の強調表示を行なうか						// 03/02/18 ai
 
 	// マウス
@@ -666,14 +666,14 @@ public:
 	bool			m_bAutoScrollHorizontal;	//!< 水平スクロール可
 
 	// 検索
-	CSearchStringPattern m_sSearchPattern;
+	SearchStringPattern m_sSearchPattern;
 	mutable CBregexp	m_CurRegexp;				// コンパイルデータ
 	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
 	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
 	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
 	std::wstring		m_strCurSearchKey;			// 検索文字列
 	SearchOption		m_curSearchOption;			// 検索／置換  オプション
-	CLogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
+	LogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bool				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
 	eSearchDirection	m_nISearchDirection;
 	int					m_nISearchMode;
@@ -681,7 +681,7 @@ public:
 	bool				m_bISearchFlagHistory[256];
 	int					m_nISearchHistoryCount;
 	bool				m_bISearchFirst;
-	CLayoutRange		m_sISearchHistory[256];
+	LayoutRange		m_sISearchHistory[256];
 
 	// マクロ
 	bool			m_bExecutingKeyMacro;	// キーボードマクロの実行中
@@ -698,7 +698,7 @@ public:
 	CTipWnd			m_cTipWnd;				// Tip表示ウィンドウ
 	POINT			m_poTipCurPos;			// Tip起動時のマウスカーソル位置
 	bool			m_bInMenuLoop;			// メニュー モーダル ループに入っています
-	CDicMgr			m_cDicMgr;				// 辞書マネージャ
+	DicMgr			m_cDicMgr;				// 辞書マネージャ
 
 	TCHAR			m_szComposition[512];	// IMR_DOCUMENTFEED用入力中文字列データ
 
@@ -725,8 +725,8 @@ public:
 	CMigemo*		m_pcmigemo;
 	bool			m_bMiniMap;
 	bool			m_bMiniMapMouseDown;
-	CLayoutInt		m_nPageViewTop;
-	CLayoutInt		m_nPageViewBottom;
+	LayoutInt		m_nPageViewTop;
+	LayoutInt		m_nPageViewBottom;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(CEditView);

@@ -5,11 +5,11 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     クォーテーション                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CLayoutColorQuoteInfo : public CLayoutColorInfo {
+class CLayoutColorQuoteInfo : public LayoutColorInfo {
 public:
 	std::wstring m_tag;
 	int m_nColorTypeIndex;
-	bool IsEqual(const CLayoutColorInfo* p) const {
+	bool IsEqual(const LayoutColorInfo* p) const {
 		if (!p) {
 			return false;
 		}
@@ -23,7 +23,7 @@ public:
 
 void CColor_Quote::Update(void)
 {
-	const CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);
+	const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
 	m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	m_nStringType = m_pTypeData->m_nStringType;
 	int nEspaceTypeList[] = {
@@ -44,7 +44,7 @@ void CColor_Quote::Update(void)
 	m_pbEscapeEnd = pbEscapeEndList[m_nStringType];
 }
 
-void CColor_Quote::SetStrategyColorInfo(const CLayoutColorInfo* colorInfo)
+void CColor_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 {
 	if (colorInfo) {
 		const CLayoutColorQuoteInfo* info = dynamic_cast<const CLayoutColorQuoteInfo*>(colorInfo);
@@ -58,7 +58,7 @@ void CColor_Quote::SetStrategyColorInfo(const CLayoutColorInfo* colorInfo)
 	}
 }
 
-CLayoutColorInfo* CColor_Quote::GetStrategyColorInfo() const
+LayoutColorInfo* CColor_Quote::GetStrategyColorInfo() const
 {
 	if (0 < m_nColorTypeIndex) {
 		CLayoutColorQuoteInfo* info = new CLayoutColorQuoteInfo();
@@ -258,7 +258,7 @@ int CColor_Quote::Match_Quote(
 	int nCharChars;
 	for (int i=nPos; i<cLineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
+		nCharChars = (Int)t_max(LogicInt(1), CNativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
 		if (escapeType == STRING_LITERAL_CPP) {
 			// エスケープ \"
 			if (nCharChars == 1 && cLineStr.At(i) == L'\\') {
@@ -309,9 +309,9 @@ int CColor_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPo
 		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;
 		}
-		nCharChars = (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i));
+		nCharChars = (Int)t_max(LogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i));
 		if (bEscape && pLine[i] == L'\\') {
-			i += (Int)t_max(CLogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i + nCharChars));
+			i += (Int)t_max(LogicInt(1), CNativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i + nCharChars));
 		}
 	}
 	return cLineStr.GetLength();

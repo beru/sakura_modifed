@@ -34,15 +34,15 @@ public:
 	virtual bool Disp() const { return true; }
 	virtual bool EndColor(const CStringRef& cStr, int nPos);
 
-	virtual bool BeginColorEx(const CStringRef& cStr, int nPos, CLayoutInt, const CLayout*);
+	virtual bool BeginColorEx(const CStringRef& cStr, int nPos, LayoutInt, const Layout*);
 
 	// イベント
 	virtual void OnStartScanLogic();
 
 private:
-	CLayoutInt	m_nSelectLine;
-	CLogicInt	m_nSelectStart;
-	CLogicInt	m_nSelectEnd;
+	LayoutInt	m_nSelectLine;
+	LogicInt	m_nSelectStart;
+	LogicInt	m_nSelectEnd;
 };
 
 class CColor_Found : public CColorStrategy {
@@ -65,8 +65,8 @@ public:
 
 private:
 	int				m_nSearchResult;
-	CLogicInt		m_nSearchStart;
-	CLogicInt		m_nSearchEnd;
+	LogicInt		m_nSearchStart;
+	LogicInt		m_nSearchEnd;
 	EColorIndexType highlightColors[ COLORIDX_SEARCHTAIL - COLORIDX_SEARCH + 1 ]; ///< チェックが付いている検索文字列色の配列。
 	unsigned validColorNum; ///< highlightColorsの何番目の要素までが有効か。
 };

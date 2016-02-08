@@ -1180,7 +1180,7 @@ void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	TCHAR szWork[10240];
 	int v1, v2, v3, v4;
 
-	CEditDoc& doc = *CEditWnd::getInstance()->GetDocument();
+	EditDoc& doc = *CEditWnd::getInstance()->GetDocument();
 	CESI cesi(doc.m_cDocType.GetDocumentAttribute().m_encoding);
 
 	// テスト実行

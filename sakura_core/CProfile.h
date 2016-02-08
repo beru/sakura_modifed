@@ -44,7 +44,7 @@
 /*!
 	@brief INIファイル入出力
 */
-class CProfile {
+class Profile {
 	// 文字列型
 	typedef std::wstring wstring;
 	typedef std::string string;
@@ -57,8 +57,8 @@ class CProfile {
 	};
 
 public:
-	CProfile() {}
-	~CProfile() {}
+	Profile() {}
+	~Profile() {}
 	void Init(void);
 	bool IsReadingMode(void) { return m_bRead; }
 	void SetReadingMode(void) { m_bRead = true; }

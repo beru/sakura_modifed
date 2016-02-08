@@ -6,7 +6,7 @@
 #include "mem/CMemory.h"
 #include "CEol.h"
 
-EConvertResult CUnicode::_UnicodeToUnicode_in( const CMemory& cSrc, CNativeW* pDstMem, const bool bBigEndian )
+EConvertResult Unicode::_UnicodeToUnicode_in( const CMemory& cSrc, CNativeW* pDstMem, const bool bBigEndian )
 {
 	// ƒ\[ƒXŽæ“¾
 	int nSrcLen;
@@ -46,7 +46,7 @@ EConvertResult CUnicode::_UnicodeToUnicode_in( const CMemory& cSrc, CNativeW* pD
 }
 
 
-EConvertResult CUnicode::_UnicodeToUnicode_out( const CNativeW& cSrc, CMemory* pDstMem, const bool bBigEndian )
+EConvertResult Unicode::_UnicodeToUnicode_out( const CNativeW& cSrc, CMemory* pDstMem, const bool bBigEndian )
 {
 	if (bBigEndian == true) {
 		if (cSrc._GetMemory() == pDstMem) {
@@ -68,14 +68,14 @@ EConvertResult CUnicode::_UnicodeToUnicode_out( const CNativeW& cSrc, CMemory* p
 
 
 
-void CUnicode::GetBom(CMemory* pcmemBom)
+void Unicode::GetBom(CMemory* pcmemBom)
 {
 	static const BYTE UTF16LE_BOM[] = {0xFF, 0xFE};
 	pcmemBom->SetRawData(UTF16LE_BOM, sizeof(UTF16LE_BOM));
 }
 
 
-void CUnicode::GetEol(CMemory* pcmemEol, EEolType eEolType)
+void Unicode::GetEol(CMemory* pcmemEol, EEolType eEolType)
 {
 	static const struct{
 		const void* pData;

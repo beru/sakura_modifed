@@ -208,9 +208,9 @@ void CDocFileOperation::ReloadCurrentFile(
 
 	auto& textArea = activeView.GetTextArea();
 	// カーソル位置保存
-	CLayoutInt		nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
-	CLayoutInt		nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
-	CLayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
+	LayoutInt		nViewTopLine = textArea.GetViewTopLine();	// 表示域の一番上の行(0開始)
+	LayoutInt		nViewLeftCol = textArea.GetViewLeftCol();	// 表示域の一番左の桁(0開始)
+	LayoutPoint	ptCaretPosXY = caret.GetCaretLayoutPos();
 
 	// ロード
 	LoadInfo sLoadInfo;

@@ -386,8 +386,8 @@ void OutlinePython::DoScanLine(const wchar_t* data, int linelen, int start_offse
 */
 void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 {
-	CLogicInt	nLineLen;
-	CLogicInt	nLineCount;
+	LogicInt	nLineLen;
+	LogicInt	nLineCount;
 
 	OutlinePython python_analyze_state;
 
@@ -398,10 +398,10 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
-		CLogicInt col = CLogicInt(0);	//	current working column position
+		LogicInt col = LogicInt(0);	//	current working column position
 
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
@@ -409,7 +409,7 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 			//	indent check
 			//	May 15, 2007 genta 桁位置colはデータオフセットdと独立にしないと
 			//	文字列比較がおかしくなる
-			for (depth=0, col=CLogicInt(0); col<nLineLen; ++col) {
+			for (depth=0, col=LogicInt(0); col<nLineLen; ++col) {
 				//	calculate indent level
 				if (pLine[col] == L' ') {
 					++depth;
@@ -429,19 +429,19 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 			
 			int nItemFuncId = 0;	// topic type
 			if (
-				nLineLen - col > CLogicInt(3 + 1)
+				nLineLen - col > LogicInt(3 + 1)
 				&& wcsncmp_literal(pLine + col, L"def") == 0
 			) {
 				//	"def"
 				nItemFuncId = 1;
-				col += CLogicInt(3); // strlen(def)
+				col += LogicInt(3); // strlen(def)
 			}else if (
-				nLineLen - col > CLogicInt(5 + 1)
+				nLineLen - col > LogicInt(5 + 1)
 				&& wcsncmp_literal(pLine + col, L"class") == 0
 			) {
 				// class
 				nItemFuncId = 4;
-				col += CLogicInt(5); // strlen(class)
+				col += LogicInt(5); // strlen(class)
 			}else {
 				python_analyze_state.DoScanLine(pLine, nLineLen, col);
 				continue;
@@ -524,19 +524,19 @@ void CDocOutline::MakeFuncList_python(CFuncInfoArr* pcFuncInfoArr)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			CLayoutPoint ptPosXY;
+			LayoutPoint ptPosXY;
 			m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-				CLogicPoint(CLogicInt(0), nLineCount),
+				LogicPoint(LogicInt(0), nLineCount),
 				&ptPosXY
 			);
 			pcFuncInfoArr->AppendData(
-				nLineCount + CLogicInt(1),
-				ptPosXY.GetY2() + CLayoutInt(1),
+				nLineCount + LogicInt(1),
+				ptPosXY.GetY2() + LayoutInt(1),
 				szWord,
 				nItemFuncId,
 				depth_index
 			);
-			col = CLogicInt(w_end); // クラス・関数定義の続きはここから
+			col = LogicInt(w_end); // クラス・関数定義の続きはここから
 		}
 		python_analyze_state.DoScanLine(pLine, nLineLen, col);
 	}

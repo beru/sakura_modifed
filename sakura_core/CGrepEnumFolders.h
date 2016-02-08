@@ -32,15 +32,15 @@
 
 #include "CGrepEnumFileBase.h"
 
-class CGrepEnumFolders : public CGrepEnumFileBase {
+class GrepEnumFolders : public GrepEnumFileBase {
 private:
 
 public:
-	CGrepEnumFolders() {
+	GrepEnumFolders() {
 	}
 
 	virtual
-	~CGrepEnumFolders() {
+	~GrepEnumFolders() {
 	}
 
 	virtual
@@ -50,7 +50,7 @@ public:
 			&& (_tcscmp(w32fd.cFileName, _T(".")) != 0)
 			&& (_tcscmp(w32fd.cFileName, _T("..")) != 0)
 		) {
-			if (CGrepEnumFileBase::IsValid(w32fd, pFile)) {
+			if (GrepEnumFileBase::IsValid(w32fd, pFile)) {
 				return TRUE;
 			}
 		}

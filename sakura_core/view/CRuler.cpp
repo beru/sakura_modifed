@@ -5,7 +5,7 @@
 #include "doc/CEditDoc.h"
 #include "types/CTypeSupport.h"
 
-CRuler::CRuler(const CEditView* pEditView, const CEditDoc* pEditDoc)
+CRuler::CRuler(const CEditView* pEditView, const EditDoc* pEditDoc)
 : m_pEditView(pEditView)
 , m_pEditDoc(pEditDoc)
 {
@@ -128,7 +128,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	// 下線 (ルーラーと本文の境界)
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	//	2005.11.10 Moca 1dot足りない
-	CLayoutInt	nMaxLineKetas = m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas();
+	LayoutInt	nMaxLineKetas = m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas();
 	int nToX = m_pEditView->GetTextArea().GetAreaLeft() + (Int)(nMaxLineKetas - m_pEditView->GetTextArea().GetViewLeftCol()) * m_pEditView->GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > m_pEditView->GetTextArea().GetAreaRight()) {
 		nToX = m_pEditView->GetTextArea().GetAreaRight();
@@ -137,7 +137,7 @@ void CRuler::DrawRulerBg(CGraphics& gr)
 	::LineTo(gr, nToX, nY + 1);
 
 	// 目盛を描画
-	CLayoutInt i = m_pEditView->GetTextArea().GetViewLeftCol();
+	LayoutInt i = m_pEditView->GetTextArea().GetViewLeftCol();
 	while (i <= m_pEditView->GetTextArea().GetRightCol() + 1 && i <= nMaxLineKetas) {
 		// ルーラー終端の区切り(大)
 		if (i == nMaxLineKetas) {

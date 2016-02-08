@@ -42,7 +42,7 @@
 		true,	// intへの暗黙の変換を許すかどうか
 		true	// intの代入を許すかどうか
 	>
-	CLogicInt;
+	LogicInt;
 
 	// レイアウト単位
 	typedef StrictInteger <
@@ -52,32 +52,32 @@
 		false,	// intへの暗黙の変換を許すかどうか
 		true	// intの代入を許すかどうか
 	>
-	CLayoutInt;
+	LayoutInt;
 
 #else
 	// -- -- 通常のintで単位型を定義
 
 	// ロジック単位
-	typedef int CLogicInt;
+	typedef int LogicInt;
 
 	// レイアウト単位
-	typedef int CLayoutInt;
+	typedef int LayoutInt;
 
 #endif
 
-typedef CLogicInt  CLogicXInt;
-typedef CLogicInt  CLogicYInt;
-typedef CLayoutInt CLayoutXInt;
-typedef CLayoutInt CLayoutYInt;
-typedef int CPixelYInt;
-typedef int CPixelXInt;
+typedef LogicInt  LogicXInt;
+typedef LogicInt  LogicYInt;
+typedef LayoutInt LayoutXInt;
+typedef LayoutInt LayoutYInt;
+typedef int PixelYInt;
+typedef int PixelXInt;
 
 #ifdef BUILD_OPT_ENALBE_PPFONT_SUPPORT
-typedef CLayoutXInt CHabaXInt;
-typedef int         CKetaXInt;
+typedef LayoutXInt HabaXInt;
+typedef int        KetaXInt;
 #else
-typedef CPixelXInt  CHabaXInt;
-typedef CLayoutXInt CKetaXInt;
+typedef PixelXInt  HabaXInt;
+typedef LayoutXInt KetaXInt;
 #endif
 
 
@@ -90,16 +90,16 @@ typedef CLayoutXInt CKetaXInt;
 #include "CStrictRect.h"
 
 // ロジック単位
-struct LogicPoint { CLogicInt x; CLogicInt y; }; // 基底構造体
-typedef StrictPoint<LogicPoint, CLogicInt>	CLogicPoint;
-typedef RangeBase<CLogicPoint>					CLogicRange;
-typedef StrictRect<CLogicInt, CLogicPoint>		CLogicRect;
+struct LogicIntXY { LogicInt x; LogicInt y; }; // 基底構造体
+typedef StrictPoint<LogicIntXY, LogicInt>	LogicPoint;
+typedef RangeBase<LogicPoint>				LogicRange;
+typedef StrictRect<LogicInt, LogicPoint>	LogicRect;
 
 // レイアウト単位
-struct LayoutPoint { CLayoutInt x; CLayoutInt y; }; // 基底構造体
-typedef StrictPoint<LayoutPoint, CLayoutInt>	CLayoutPoint;
-typedef RangeBase<CLayoutPoint>				CLayoutRange;
-typedef StrictRect<CLayoutInt, CLayoutPoint>	CLayoutRect;
+struct LayoutIntXY { LayoutInt x; LayoutInt y; }; // 基底構造体
+typedef StrictPoint<LayoutIntXY, LayoutInt>	LayoutPoint;
+typedef RangeBase<LayoutPoint>				LayoutRange;
+typedef StrictRect<LayoutInt, LayoutPoint>	LayoutRect;
 
 // ゆるい単位
 #include "CMyPoint.h"

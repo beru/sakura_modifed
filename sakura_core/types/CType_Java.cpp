@@ -64,7 +64,7 @@ enum EFuncListJavaMode {
 void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLine;
-	CLogicInt	nLineLen;
+	LogicInt	nLineLen;
 	int			i;
 	int			nNestLevel;
 	int			nCharChars;
@@ -74,7 +74,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 	int			nMaxWordLeng = 70;
 	EFuncListJavaMode	nMode;
 	wchar_t		szFuncName[100];
-	CLogicInt	nFuncLine = CLogicInt(0);
+	LogicInt	nFuncLine = LogicInt(0);
 	int			nFuncId;
 	int			nFuncNum;
 	wchar_t		szClass[1024];
@@ -91,11 +91,11 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 	nFuncNum = 0;
 	szClass[0] = L'\0';
 	nClassNestArrNum = 0;
-	CLogicInt		nLineCount;
+	LogicInt		nLineCount;
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i=0; i<nLineLen; i+=nCharChars) {
 			nCharChars = CNativeW::GetSizeOfChar(pLine, nLineLen, i);
@@ -163,15 +163,15 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						CLogicPoint  ptPosXY_Logic = CLogicPoint(CLogicInt(0), nLineCount);
-						CLayoutPoint ptPosXY_Layout;
+						LogicPoint  ptPosXY_Logic = LogicPoint(LogicInt(0), nLineCount);
+						LayoutPoint ptPosXY_Layout;
 						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
 							ptPosXY_Logic,
 							&ptPosXY_Layout
 						);
 						wchar_t szWork[256];
 						if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, LSW(STR_OUTLINE_JAVA_DEFPOS))) {
-							pcFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + CLogicInt(1), ptPosXY_Layout.GetY2() + CLayoutInt(1), szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
+							pcFuncInfoArr->AppendData(ptPosXY_Logic.GetY2() + LogicInt(1), ptPosXY_Layout.GetY2() + LayoutInt(1), szWork, nFuncId); //2007.10.09 kobake レイアウト・ロジックの混在バグ修正
 						}
 					}
 
@@ -258,14 +258,14 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							CLayoutPoint ptPosXY;
+							LayoutPoint ptPosXY;
 							m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-								CLogicPoint(CLogicInt(0), nFuncLine - CLogicInt(1)),
+								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
 								&ptPosXY
 							);
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
-								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + CLayoutInt(1), szWork, nFuncId);
+								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
 							}
 						}
 					}
@@ -304,7 +304,7 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 						wcscmp(L"new", szWordPrev) != 0
 					) {
 						wcscpy_s(szFuncName, szWord);
-						nFuncLine = nLineCount + CLogicInt(1);
+						nFuncLine = nLineCount + LogicInt(1);
 						if (0 < nClassNestArrNum) {
 							nNestLevel2Arr[nClassNestArrNum - 1] = 1;
 						}
@@ -314,8 +314,8 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 				}else if (L')' == pLine[i]) {
 					int			k;
 					const wchar_t*	pLine2;
-					CLogicInt		nLineLen2;
-					CLogicInt	nLineCount2;
+					LogicInt		nLineLen2;
+					LogicInt	nLineCount2;
 					nLineCount2 = nLineCount;
 					pLine2 = pLine;
 					nLineLen2 = nLineLen;
@@ -395,14 +395,14 @@ void CDocOutline::MakeFuncList_Java(CFuncInfoArr* pcFuncInfoArr)
 							  →
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
-							CLayoutPoint ptPosXY;
+							LayoutPoint ptPosXY;
 							m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-								CLogicPoint(CLogicInt(0), nFuncLine - CLogicInt(1)),
+								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
 								&ptPosXY
 							);
 							wchar_t szWork[256];
 							if (0 < auto_snprintf_s(szWork, _countof(szWork), L"%ls::%ls", szClass, szFuncName)) {
-								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + CLayoutInt(1), szWork, nFuncId);
+								pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1), szWork, nFuncId);
 							}
 						}
 					}

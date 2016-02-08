@@ -420,12 +420,12 @@ int CPropGeneral::GetData(HWND hwndDlg)
 	csGeneral.m_bExitConfirm = DlgButton_IsChecked(hwndDlg, IDC_CHECK_EXITCONFIRM);
 
 	// キーリピート時のスクロール行数
-	csGeneral.m_nRepeatedScrollLineNum = (CLayoutInt)::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
-	if (csGeneral.m_nRepeatedScrollLineNum < CLayoutInt(1)) {
-		csGeneral.m_nRepeatedScrollLineNum = CLayoutInt(1);
+	csGeneral.m_nRepeatedScrollLineNum = (LayoutInt)::GetDlgItemInt(hwndDlg, IDC_EDIT_REPEATEDSCROLLLINENUM, NULL, FALSE);
+	if (csGeneral.m_nRepeatedScrollLineNum < LayoutInt(1)) {
+		csGeneral.m_nRepeatedScrollLineNum = LayoutInt(1);
 	}
-	if (csGeneral.m_nRepeatedScrollLineNum > CLayoutInt(10)) {
-		csGeneral.m_nRepeatedScrollLineNum = CLayoutInt(10);
+	if (csGeneral.m_nRepeatedScrollLineNum > LayoutInt(10)) {
+		csGeneral.m_nRepeatedScrollLineNum = LayoutInt(10);
 	}
 
 	// キーリピート時のスクロールを滑らかにするか

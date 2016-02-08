@@ -342,11 +342,11 @@ void CommandLine::ParseCommandLine(LPCTSTR pszCmdLineSrc, bool bResponse)
 				break;
 			case CMDLINEOPT_VX:	// VX
 				// 行桁指定を1開始にした
-				m_fi.m_nViewLeftCol = CLayoutInt(AtoiOptionInt(arg) - 1);
+				m_fi.m_nViewLeftCol = LayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_VY:	// VY
 				// 行桁指定を1開始にした
-				m_fi.m_nViewTopLine = CLayoutInt(AtoiOptionInt(arg) - 1);
+				m_fi.m_nViewTopLine = LayoutInt(AtoiOptionInt(arg) - 1);
 				break;
 			case CMDLINEOPT_SX: // SX
 				m_fi.m_nWindowSizeX = AtoiOptionInt(arg) - 1;

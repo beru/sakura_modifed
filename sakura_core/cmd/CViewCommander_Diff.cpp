@@ -39,16 +39,16 @@ static bool Commander_COMPARE_core(
 	ViewCommander& commander,
 	bool& bDifferent,
 	HWND hwnd,
-	CLogicPoint& poSrc,
-	CLogicPoint& poDes
+	LogicPoint& poSrc,
+	LogicPoint& poDes
 	)
 {
 	const wchar_t*	pLineSrc;
-	CLogicInt		nLineLenSrc;
+	LogicInt		nLineLenSrc;
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
 	int max_size = (int)GetDllShareData().m_workBuffer.GetWorkBufferCount<EDIT_CHAR>();
-	const CDocLineMgr& docMgr = commander.GetDocument()->m_cDocLineMgr;
+	const DocLineMgr& docMgr = commander.GetDocument()->m_cDocLineMgr;
 
 	bDifferent = true;
 	{
@@ -152,17 +152,17 @@ void ViewCommander::Command_COMPARE(void)
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	CLogicPoint	poSrc;
+	LogicPoint	poSrc;
 	GetDocument()->m_cLayoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&poSrc
 	);
 
 	// カーソル位置取得 -> poDes
-	CLogicPoint	poDes;
+	LogicPoint	poDes;
 	{
 		::SendMessage(hwndCompareWnd, MYWM_GETCARETPOS, 0, 0);
-		CLogicPoint* ppoCaretDes = &(GetDllShareData().m_workBuffer.m_LogicPoint);
+		LogicPoint* ppoCaretDes = &(GetDllShareData().m_workBuffer.m_LogicPoint);
 		poDes.x = ppoCaretDes->x;
 		poDes.y = ppoCaretDes->y;
 	}
@@ -415,16 +415,16 @@ void ViewCommander::Command_Diff_Next(void)
 	bool bFound = false;
 	bool bRedo = true;
 
-	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int nYOld_Logic = ptXY.y;
-	CLogicInt tmp_y;
+	LogicInt tmp_y;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;	
 	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		CLayoutPoint ptXY_Layout;
+		LayoutPoint ptXY_Layout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
 			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
@@ -466,16 +466,16 @@ void ViewCommander::Command_Diff_Prev(void)
 	bool bFound = false;
 	bool bRedo = true;
 
-	CLogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
+	LogicPoint	ptXY(0, GetCaret().GetCaretLogicPos().y);
 	int			nYOld_Logic = ptXY.y;
-	CLogicInt tmp_y;
+	LogicInt tmp_y;
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;
 	if (CDiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
-		CLayoutPoint ptXY_Layout;
+		LayoutPoint ptXY_Layout;
 		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
 			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();

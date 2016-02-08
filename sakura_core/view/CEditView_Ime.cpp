@@ -138,8 +138,8 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	//                      選択範囲を取得                         //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 選択範囲を取得 -> ptSelect, ptSelectTo, nSelectedLen
-	CLogicPoint	ptSelect;
-	CLogicPoint	ptSelectTo;
+	LogicPoint	ptSelect;
+	LogicPoint	ptSelectTo;
 	int			nSelectedLen;
 	if (GetSelectionInfo().IsTextSelected()) {
 		// テキストが選択されているとき
@@ -156,7 +156,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 			}else {
 				// 2010.04.06 対象をptSelect.yの行からカーソル行に変更
 				const CDocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
-				CLogicInt targetY = GetCaret().GetCaretLogicPos().y;
+				LogicInt targetY = GetCaret().GetCaretLogicPos().y;
 				// カーソル行が実質無選択なら、直前・直後の行を選択
 				if (ptSelect.y == GetCaret().GetCaretLogicPos().y
 					&& pDocLine && pDocLine->GetLengthWithoutEOL() == GetCaret().GetCaretLogicPos().x
@@ -211,7 +211,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 	// フリーカーソル選択でも行末より後ろにカーソルがある
 	if (nLineLen < ptSelect.x) {
 		// 改行直前をIMEに渡すカーソル位置ということにする
-		ptSelect.x = CLogicInt(nLineLen);
+		ptSelect.x = LogicInt(nLineLen);
 		nSelectedLen = 0;
 	}
 	if (nLineLen <  ptSelect.x + nSelectedLen) {
@@ -313,7 +313,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		// 考慮文字列の開始から対象文字列の開始まで -> dwCompStrOffset
 		if (ptSelect.x - nReconvIndex > 0) {
 			cmemBuf1.SetString(pszReconvSrc, ptSelect.x - nReconvIndex);
-			CShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
+			ShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
 			dwCompStrOffset = cmemBuf2._GetMemory()->GetRawLength();				//compオフセット。バイト単位。
 		}else {
 			dwCompStrOffset = 0;
@@ -323,7 +323,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		// 対象文字列の開始から対象文字列の終了まで -> dwCompStrLen
 		if (nSelectedLen > 0) {
 			cmemBuf1.SetString(pszReconvSrc + ptSelect.x, nSelectedLen);  
-			CShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
+			ShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
 			dwCompStrLen = cmemBuf2._GetMemory()->GetRawLength();					// comp文字列長。文字単位。
 		}else if (nInsertCompLen > 0) {
 			// nSelectedLen と nInsertCompLen が両方指定されることはないはず
@@ -337,7 +337,7 @@ LRESULT CEditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, b
 		
 		// 考慮文字列すべて
 		cmemBuf1.SetString(pszReconvSrc , nReconvLen);
-		CShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
+		ShiftJis::UnicodeToSJIS(cmemBuf1, cmemBuf2._GetMemory());
 		
 		dwReconvTextLen    = cmemBuf2._GetMemory()->GetRawLength();				// reconv文字列長。文字単位。
 		dwReconvTextInsLen = dwReconvTextLen + dwInsByteCount;						// reconv文字列長。文字単位。
@@ -457,7 +457,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p = ((const char*)(pReconv)) + pReconv->dwStrOffset;
 			cmemBuf._GetMemory()->SetRawData(p, pReconv->dwCompStrOffset );
-			CShiftJis::SJISToUnicode(*(cmemBuf._GetMemory()), &cmemBuf);
+			ShiftJis::SJISToUnicode(*(cmemBuf._GetMemory()), &cmemBuf);
 			dwOffset = cmemBuf.GetStringLength();
 		}else {
 			dwOffset = 0;
@@ -473,7 +473,7 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 			// 2010.03.17 sizeof(pReconv)+1ではなくdwStrOffsetを利用するように
 			const char* p= ((const char*)pReconv) + pReconv->dwStrOffset;
 			cmemBuf._GetMemory()->SetRawData(p + pReconv->dwCompStrOffset, pReconv->dwCompStrLen);
-			CShiftJis::SJISToUnicode(*(cmemBuf._GetMemory()), &cmemBuf);
+			ShiftJis::SJISToUnicode(*(cmemBuf._GetMemory()), &cmemBuf);
 			dwLen = cmemBuf.GetStringLength();
 		}else {
 			dwLen = 0;
@@ -482,13 +482,13 @@ LRESULT CEditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool
 	
 	// 選択開始の位置を取得
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
-		CLogicPoint(m_nLastReconvIndex + dwOffset, m_nLastReconvLine),
+		LogicPoint(m_nLastReconvIndex + dwOffset, m_nLastReconvLine),
 		GetSelectionInfo().m_sSelect.GetFromPointer()
 	);
 
 	// 選択終了の位置を取得
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
-		CLogicPoint(m_nLastReconvIndex + dwOffset + dwLen, m_nLastReconvLine),
+		LogicPoint(m_nLastReconvIndex + dwOffset + dwLen, m_nLastReconvLine),
 		GetSelectionInfo().m_sSelect.GetToPointer()
 	);
 

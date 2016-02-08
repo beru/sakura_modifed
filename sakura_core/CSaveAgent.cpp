@@ -35,17 +35,17 @@
 #include "_main/CAppMode.h"
 #include "env/CShareData.h"
 
-CSaveAgent::CSaveAgent()
+SaveAgent::SaveAgent()
 {
 }
 
 
-ECallbackResult CSaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
+ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	//	Jun.  5, 2004 genta
-	//	ビューモードのチェックをCEditDocから上書き保存処理に移動
+	//	ビューモードのチェックをEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
 	if (AppMode::getInstance()->IsViewMode()
 		&& pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())
@@ -102,17 +102,17 @@ ECallbackResult CSaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	return CALLBACK_CONTINUE;
 }
 
-void CSaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
+void SaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 改行コード統一
 	CDocVisitor(pcDoc).SetAllEol(sSaveInfo.cEol);
 }
 
-void CSaveAgent::OnSave(const SaveInfo& sSaveInfo)
+void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// カキコ
 	WriteManager cWriter;
@@ -130,9 +130,9 @@ void CSaveAgent::OnSave(const SaveInfo& sSaveInfo)
 	}
 }
 
-void CSaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
+void SaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	/* 更新後のファイル時刻の取得
 	 * CloseHandle前ではFlushFileBuffersを呼んでもタイムスタンプが更新
@@ -148,7 +148,7 @@ void CSaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 	}
 }
 
-void CSaveAgent::OnFinalSave(ESaveResult eSaveResult)
+void SaveAgent::OnFinalSave(ESaveResult eSaveResult)
 {
 }
 

@@ -26,7 +26,7 @@
 #include "doc/CDocListener.h"
 #include "charset/CCodeBase.h"
 
-class CDocLineMgr;
+class DocLineMgr;
 struct SaveInfo;
 
 class WriteManager : public ProgressSubject {
@@ -34,7 +34,7 @@ public:
 	//	Feb. 6, 2001 genta 引数追加(改行コード設定)
 	//	Jul. 26, 2003 ryoji BOM引数追加
 	EConvertResult WriteFile_From_CDocLineMgr(
-		const CDocLineMgr&	pcDocLineMgr,	// [in]
+		const DocLineMgr&	pcDocLineMgr,	// [in]
 		const SaveInfo&	sSaveInfo		// [in]
 	);
 };

@@ -32,21 +32,21 @@
 
 #include "CGrepEnumFileBase.h"
 
-class CGrepEnumFiles : public CGrepEnumFileBase {
+class GrepEnumFiles : public GrepEnumFileBase {
 private:
 
 public:
-	CGrepEnumFiles() {
+	GrepEnumFiles() {
 	}
 
 	virtual
-	~CGrepEnumFiles() {
+	~GrepEnumFiles() {
 	}
 
 	virtual
 	BOOL IsValid(WIN32_FIND_DATA& w32fd, LPCTSTR pFile = NULL) {
 		if (!(w32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-			if (CGrepEnumFileBase::IsValid(w32fd, pFile)) {
+			if (GrepEnumFileBase::IsValid(w32fd, pFile)) {
 				return TRUE;
 			}
 		}

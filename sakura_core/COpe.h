@@ -23,11 +23,11 @@ enum class eOpeCode {
 	MoveCaret,	//!< キャレット移動
 };
 
-class CLineData {
+class LineData {
 public:
 	CNativeW cmemLine;
 	int nSeq;
-	void swap(CLineData& o) {
+	void swap(LineData& o) {
 		std::swap(cmemLine, o.cmemLine);
 		std::swap(nSeq, o.nSeq);
 	}
@@ -35,12 +35,12 @@ public:
 
 namespace std {
 template <>
-	inline void swap(CLineData& n1, CLineData& n2) {
+	inline void swap(LineData& n1, LineData& n2) {
 		n1.swap(n2);
 	}
 }
 
-typedef std::vector<CLineData> COpeLineData;
+typedef std::vector<LineData> OpeLineData;
 
 /*!
 	編集操作要素
@@ -49,10 +49,10 @@ typedef std::vector<CLineData> COpeLineData;
 	1オブジェクトが１つの操作を表す。
 */
 // 2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
-class COpe {
+class Ope {
 public:
-	COpe(eOpeCode eCode);	// COpeクラス構築
-	virtual ~COpe();		// COpeクラス消滅
+	Ope(eOpeCode eCode);	// Opeクラス構築
+	virtual ~Ope();		// Opeクラス消滅
 
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 
@@ -62,64 +62,64 @@ private:
 	eOpeCode m_nOpe;						//!< 操作種別
 
 public:
-	CLogicPoint	m_ptCaretPos_PHY_Before;	//!< キャレット位置。文字単位。			[共通]
-	CLogicPoint	m_ptCaretPos_PHY_After;		//!< キャレット位置。文字単位。			[共通]
+	LogicPoint	m_ptCaretPos_PHY_Before;	//!< キャレット位置。文字単位。			[共通]
+	LogicPoint	m_ptCaretPos_PHY_After;		//!< キャレット位置。文字単位。			[共通]
 };
 
 //! 削除
-class CDeleteOpe : public COpe {
+class DeleteOpe : public Ope {
 public:
-	CDeleteOpe() : COpe(eOpeCode::Delete) {
-		m_ptCaretPos_PHY_To.Set(CLogicInt(0),CLogicInt(0));
+	DeleteOpe() : Ope(eOpeCode::Delete) {
+		m_ptCaretPos_PHY_To.Set(LogicInt(0),LogicInt(0));
 	}
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	CLogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	COpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	LogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
+	OpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
 //! 挿入
-class CInsertOpe : public COpe {
+class InsertOpe : public Ope {
 public:
-	CInsertOpe() : COpe(eOpeCode::Insert) { }
+	InsertOpe() : Ope(eOpeCode::Insert) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
-	COpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
+	OpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
 	int				m_nOrgSeq;
 };
 
 //! 挿入
-class CReplaceOpe : public COpe {
+class ReplaceOpe : public Ope {
 public:
-	CReplaceOpe()
+	ReplaceOpe()
 		:
-		COpe(eOpeCode::Replace)
+		Ope(eOpeCode::Replace)
 	{
-		m_ptCaretPos_PHY_To.Set(CLogicInt(0), CLogicInt(0));
+		m_ptCaretPos_PHY_To.Set(LogicInt(0), LogicInt(0));
 	}
 public:
-	CLogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
-	COpeLineData	m_pcmemDataIns;			//!< 操作に関連するデータ				[INSERT]
-	COpeLineData	m_pcmemDataDel;			//!< 操作に関連するデータ				[DELETE]
+	LogicPoint	m_ptCaretPos_PHY_To;		//!< 操作前のキャレット位置。文字単位。	[DELETE]
+	OpeLineData	m_pcmemDataIns;			//!< 操作に関連するデータ				[INSERT]
+	OpeLineData	m_pcmemDataDel;			//!< 操作に関連するデータ				[DELETE]
 	int				m_nOrgInsSeq;
 	int				m_nOrgDelSeq;
 };
 
 //! キャレット移動
-class CMoveCaretOpe : public COpe {
+class MoveCaretOpe : public Ope {
 public:
-	CMoveCaretOpe() : COpe(eOpeCode::MoveCaret) { }
-	CMoveCaretOpe(const CLogicPoint& ptBefore, const CLogicPoint& ptAfter)
+	MoveCaretOpe() : Ope(eOpeCode::MoveCaret) { }
+	MoveCaretOpe(const LogicPoint& ptBefore, const LogicPoint& ptAfter)
 		:
-		COpe(eOpeCode::MoveCaret)
+		Ope(eOpeCode::MoveCaret)
 	{
 		m_ptCaretPos_PHY_Before = ptBefore;
 		m_ptCaretPos_PHY_After = ptAfter;
 	}
-	CMoveCaretOpe(const CLogicPoint& ptCaretPos)
+	MoveCaretOpe(const LogicPoint& ptCaretPos)
 		:
-		COpe(eOpeCode::MoveCaret)
+		Ope(eOpeCode::MoveCaret)
 	{
 		m_ptCaretPos_PHY_Before = ptCaretPos;
 		m_ptCaretPos_PHY_After = ptCaretPos;

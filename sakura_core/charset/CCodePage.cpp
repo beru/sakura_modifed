@@ -217,7 +217,7 @@ EConvertResult CodePage::UnicodeToCP(const CNativeW& cSrc, CMemory* pDst, int co
 void CodePage::GetEol(CMemory* pcmemEol, EEolType eEolType)
 {
 	CNativeW temp;
-	CUnicode().GetEol(temp._GetMemory(), eEolType);
+	Unicode().GetEol(temp._GetMemory(), eEolType);
 	UnicodeToCode(temp, pcmemEol);
 	CNativeW temp2;
 	CodeToUnicode(*pcmemEol, &temp2);
@@ -230,7 +230,7 @@ void CodePage::GetEol(CMemory* pcmemEol, EEolType eEolType)
 void CodePage::GetBom(CMemory* pcmemBom)
 {
 	CNativeW temp;
-	CUnicode().GetBom(temp._GetMemory());
+	Unicode().GetBom(temp._GetMemory());
 	UnicodeToCode(temp, pcmemBom);
 	CNativeW temp2;
 	CodeToUnicode(*pcmemBom, &temp2);

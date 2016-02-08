@@ -35,9 +35,9 @@
 #include "uiparts/CVisualProgress.h"
 #include "util/file.h"
 
-ECallbackResult CLoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
+ECallbackResult LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// リロード要求の場合は、継続。
 	if (pLoadInfo->bRequestReload) {
@@ -168,14 +168,14 @@ next:
 	return CALLBACK_CONTINUE;
 }
 
-void CLoadAgent::OnBeforeLoad(LoadInfo* pLoadInfo)
+void LoadAgent::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 }
 
-ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
+ELoadResult LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 {
 	ELoadResult eRet = LOADED_OK;
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 既存データのクリア
 	pcDoc->InitDoc(); //$$
@@ -206,7 +206,7 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	// ファイルが存在する場合はファイルを読む
 	if (fexist(sLoadInfo.cFilePath)) {
 		// CDocLineMgrの構成
-		CReadManager cReader;
+		ReadManager cReader;
 		ProgressSubject* pOld = CEditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cReader);
 		EConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
 			&pcDoc->m_cDocLineMgr,
@@ -230,7 +230,7 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = pcDoc->m_cDocType.GetDocumentAttribute();
-	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
+	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
 	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
@@ -245,9 +245,9 @@ ELoadResult CLoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 }
 
 
-void CLoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
+void LoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 親ウィンドウのタイトルを更新
 	pcDoc->m_pcEditWnd->UpdateCaption();
@@ -270,9 +270,9 @@ void CLoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 }
 
 
-void CLoadAgent::OnFinalLoad(ELoadResult eLoadResult)
+void LoadAgent::OnFinalLoad(ELoadResult eLoadResult)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	if (eLoadResult == LOADED_FAILURE) {
 		pcDoc->SetFilePathAndIcon(_T(""));

@@ -19,15 +19,15 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-// COpeBufクラス構築
-COpeBuf::COpeBuf()
+// OpeBufクラス構築
+OpeBuf::OpeBuf()
 {
 	m_nCurrentPointer = 0;	// 現在位置
 	m_nNoModifiedIndex = 0;	// 無変更な状態になった位置
 }
 
-// COpeBufクラス消滅
-COpeBuf::~COpeBuf()
+// OpeBufクラス消滅
+OpeBuf::~OpeBuf()
 {
 	// 操作ブロックの配列を削除する
 	int size = (int)m_vCOpeBlkArr.size();
@@ -42,13 +42,13 @@ COpeBuf::~COpeBuf()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // Undo可能な状態か
-bool COpeBuf::IsEnableUndo() const
+bool OpeBuf::IsEnableUndo() const
 {
 	return 0 < m_vCOpeBlkArr.size() && 0 < m_nCurrentPointer;
 }
 
 // Redo可能な状態か
-bool COpeBuf::IsEnableRedo() const
+bool OpeBuf::IsEnableRedo() const
 {
 	return 0 < m_vCOpeBlkArr.size() && m_nCurrentPointer < (int)m_vCOpeBlkArr.size();
 }
@@ -58,7 +58,7 @@ bool COpeBuf::IsEnableRedo() const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 操作の追加
-bool COpeBuf::AppendOpeBlk(COpeBlk* pcOpeBlk)
+bool OpeBuf::AppendOpeBlk(OpeBlk* pcOpeBlk)
 {
 	// 現在位置より後ろ（アンドゥ対象）がある場合は、消去
 	int size = (int)m_vCOpeBlkArr.size();
@@ -75,7 +75,7 @@ bool COpeBuf::AppendOpeBlk(COpeBlk* pcOpeBlk)
 }
 
 // 全要素のクリア
-void COpeBuf::ClearAll()
+void OpeBuf::ClearAll()
 {
 	// 操作ブロックの配列を削除する
 	int size = (int)m_vCOpeBlkArr.size();
@@ -88,7 +88,7 @@ void COpeBuf::ClearAll()
 }
 
 // 現在位置で無変更な状態になったことを通知
-void COpeBuf::SetNoModified()
+void OpeBuf::SetNoModified()
 {
 	m_nNoModifiedIndex = m_nCurrentPointer;	// 無変更な状態になった位置
 }
@@ -99,7 +99,7 @@ void COpeBuf::SetNoModified()
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 現在のUndo対象の操作ブロックを返す
-COpeBlk* COpeBuf::DoUndo(bool* pbModified)
+OpeBlk* OpeBuf::DoUndo(bool* pbModified)
 {
 	// Undo可能な状態か
 	if (!IsEnableUndo()) {
@@ -115,13 +115,13 @@ COpeBlk* COpeBuf::DoUndo(bool* pbModified)
 }
 
 // 現在のRedo対象の操作ブロックを返す
-COpeBlk* COpeBuf::DoRedo(bool* pbModified)
+OpeBlk* OpeBuf::DoRedo(bool* pbModified)
 {
 	// Redo可能な状態か
 	if (!IsEnableRedo()) {
 		return NULL;
 	}
-	COpeBlk* pcOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
+	OpeBlk* pcOpeBlk = m_vCOpeBlkArr[m_nCurrentPointer];
 	++m_nCurrentPointer;
 	if (m_nCurrentPointer == m_nNoModifiedIndex) {		// 無変更な状態になった位置
 		*pbModified = false;
@@ -137,16 +137,16 @@ COpeBlk* COpeBuf::DoRedo(bool* pbModified)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // アンドゥ・リドゥバッファのダンプ
-void COpeBuf::DUMP()
+void OpeBuf::DUMP()
 {
 #ifdef _DEBUG
-	MYTRACE(_T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
+	MYTRACE(_T("OpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
 	int size = (int)m_vCOpeBlkArr.size();
 	for (int i=0; i<size; ++i) {
-		MYTRACE(_T("COpeBuf.m_vCOpeBlkArr[%d]----\n"), i);
+		MYTRACE(_T("OpeBuf.m_vCOpeBlkArr[%d]----\n"), i);
 		m_vCOpeBlkArr[i]->DUMP();
 	}
-	MYTRACE(_T("COpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
+	MYTRACE(_T("OpeBuf.m_nCurrentPointer=[%d]----\n"), m_nCurrentPointer);
 #endif
 }
 

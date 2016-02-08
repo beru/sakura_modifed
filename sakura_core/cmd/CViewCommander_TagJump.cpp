@@ -97,7 +97,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	CLogicPoint ptXY, ptXYOrg;
+	LogicPoint ptXY, ptXYOrg;
 	GetDocument()->m_cLayoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&ptXY
@@ -105,7 +105,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	ptXYOrg = ptXY;
 
 	// 現在行のデータを取得
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	const wchar_t*	pLine;
 	pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {

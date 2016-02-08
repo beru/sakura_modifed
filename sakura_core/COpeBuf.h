@@ -11,13 +11,13 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class COpeBuf;
+class OpeBuf;
 
 #pragma once
 
 #include <vector>
 #include "_main/global.h"
-class COpeBlk;/// 2002/2/10 aroka
+class OpeBlk;/// 2002/2/10 aroka
 
 
 /*-----------------------------------------------------------------------
@@ -26,11 +26,11 @@ class COpeBlk;/// 2002/2/10 aroka
 /*!
 	@brief アンドゥ・リドゥバッファ
 */
-class COpeBuf {
+class OpeBuf {
 public:
 	// コンストラクタ・デストラクタ
-	COpeBuf();
-	~COpeBuf();
+	OpeBuf();
+	~OpeBuf();
 
 	// 状態
 	bool IsEnableUndo() const;					// Undo可能な状態か
@@ -41,18 +41,18 @@ public:
 
 	// 操作
 	void ClearAll();							// 全要素のクリア
-	bool AppendOpeBlk(COpeBlk* pcOpeBlk);		// 操作ブロックの追加
+	bool AppendOpeBlk(OpeBlk* pcOpeBlk);		// 操作ブロックの追加
 	void SetNoModified();						// 現在位置で無変更な状態になったことを通知
 
 	// 使用
-	COpeBlk* DoUndo(bool* pbModified);			// 現在のUndo対象の操作ブロックを返す
-	COpeBlk* DoRedo(bool* pbModified);			// 現在のRedo対象の操作ブロックを返す
+	OpeBlk* DoUndo(bool* pbModified);			// 現在のUndo対象の操作ブロックを返す
+	OpeBlk* DoRedo(bool* pbModified);			// 現在のRedo対象の操作ブロックを返す
 
 	// デバッグ
 	void DUMP();								// 編集操作要素ブロックのダンプ
 
 private:
-	std::vector<COpeBlk*>	m_vCOpeBlkArr;		// 操作ブロックの配列
+	std::vector<OpeBlk*>	m_vCOpeBlkArr;		// 操作ブロックの配列
 	int						m_nCurrentPointer;	// 現在位置
 	int						m_nNoModifiedIndex;	// 無変更な状態になった位置
 };

@@ -1,7 +1,7 @@
 /*
-	ObserverパターンのCEditDoc特化版。
-	CDocSubjectは観察され、CDocListnerは観察を行う。
-	観察の開始は CDocListener::Listen で行う。
+	ObserverパターンのEditDoc特化版。
+	DocSubjectは観察され、CDocListnerは観察を行う。
+	観察の開始は DocListener::Listen で行う。
 
 	$Note:
 		Listener (Observer) と Subject のリレーション管理は
@@ -33,7 +33,7 @@
 */
 #pragma once
 
-class CDocListener;
+class DocListener;
 #include "basis/CMyString.h"
 #include "charset/charset.h"
 #include "CEol.h"
@@ -158,23 +158,23 @@ struct SaveInfo {
 class ProgressListener;
 
 // 複数のProgressSubjectからウォッチされる
-class ProgressSubject : public CSubjectT<ProgressListener> {
+class ProgressSubject : public SubjectT<ProgressListener> {
 public:
 	virtual ~ProgressSubject() {}
 	void NotifyProgress(int nPer);
 };
 
 // 1つのProgressSubjectをウォッチする
-class ProgressListener : public CListenerT<ProgressSubject> {
+class ProgressListener : public ListenerT<ProgressSubject> {
 public:
 	virtual ~ProgressListener() {}
 	virtual void OnProgress(int nPer) = 0;
 };
 
 // Subjectは複数のListenerから観察される
-class CDocSubject : public CSubjectT<CDocListener> {
+class DocSubject : public SubjectT<DocListener> {
 public:
-	virtual ~CDocSubject();
+	virtual ~DocSubject();
 
 	// ロード前後
 	ECallbackResult NotifyCheckLoad	(LoadInfo* pLoadInfo);
@@ -198,13 +198,13 @@ public:
 };
 
 // Listenerは1つのSubjectを観察する
-class CDocListener : public CListenerT<CDocSubject> {
+class DocListener : public ListenerT<DocSubject> {
 public:
-	CDocListener(CDocSubject* pcDoc = NULL);
-	virtual ~CDocListener();
+	DocListener(DocSubject* pcDoc = NULL);
+	virtual ~DocListener();
 
 	// -- -- 属性 -- -- //
-	CDocSubject* GetListeningDoc() const { return GetListeningSubject(); }
+	DocSubject* GetListeningDoc() const { return GetListeningSubject(); }
 
 	// -- -- 各種イベント -- -- //
 	// ロード前後
@@ -229,11 +229,11 @@ public:
 };
 
 // GetListeningDocの利便性をアップ
-class CEditDoc;
-class CDocListenerEx : public CDocListener {
+class EditDoc;
+class DocListenerEx : public DocListener {
 public:
-	CDocListenerEx(CDocSubject* pcDoc = NULL) : CDocListener(pcDoc) { }
-	CEditDoc* GetListeningDoc() const;
+	DocListenerEx(DocSubject* pcDoc = NULL) : DocListener(pcDoc) { }
+	EditDoc* GetListeningDoc() const;
 };
 
 

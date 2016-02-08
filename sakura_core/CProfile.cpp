@@ -46,7 +46,7 @@ using namespace std;
 	
 	@date 2003-10-21 D.S.Koba STLで書き直す
 */
-void CProfile::Init(void)
+void Profile::Init(void)
 {
 	m_strProfileName = _T("");
 	m_ProfileData.clear();
@@ -61,7 +61,7 @@ void CProfile::Init(void)
 	
 	@param line [in] 読み込んだ行
 */
-void CProfile::ReadOneline(
+void Profile::ReadOneline(
 	const wstring& line
 	)
 {
@@ -107,7 +107,7 @@ void CProfile::ReadOneline(
 	@date 2004-01-31 genta 行の解析の方を別関数にしてReadFileをReadProfileに
 		
 */
-bool CProfile::ReadProfile(const TCHAR* pszProfileName)
+bool Profile::ReadProfile(const TCHAR* pszProfileName)
 {
 	m_strProfileName = pszProfileName;
 
@@ -156,7 +156,7 @@ bool CProfile::ReadProfile(const TCHAR* pszProfileName)
 
 	1行300文字までに制限
 */
-bool CProfile::ReadProfileRes(
+bool Profile::ReadProfileRes(
 	const TCHAR* pName,
 	const TCHAR* pType,
 	std::vector<std::wstring>* pData
@@ -208,7 +208,7 @@ bool CProfile::ReadProfileRes(
 			
 			// UTF-8 -> UNICODE
 			cmLine.SetRawDataHoldBuffer( sLine, lnsz );
-			CUtf8::UTF8ToUnicode( cmLine, &cmLineW );
+			Utf8::UTF8ToUnicode( cmLine, &cmLineW );
 			line = cmLineW.GetStringPtr();
 
 			if (pData) {
@@ -234,7 +234,7 @@ bool CProfile::ReadProfileRes(
 	@date 2004-01-28 D.S.Koba ファイル書き込み部を分離
 	@date 2009.06.24 ryoji 別ファイルに書き込んでから置き換える処理を追加
 */
-bool CProfile::WriteProfile(
+bool Profile::WriteProfile(
 	const TCHAR* pszProfileName,
 	const WCHAR* pszComment
 	)
@@ -309,7 +309,7 @@ bool CProfile::WriteProfile(
 	@date 2004-01-28 D.S.Koba WriteProfile()から分離
 	@date 2004-01-29 genta stream使用をやめてCライブラリ使用に．
 */
-bool CProfile::_WriteFile(
+bool Profile::_WriteFile(
 	const tstring&			strFilename,	// [in]  ファイル名
 	const vector<wstring>&	vecLine			// [out] 文字列格納先
 	)
@@ -343,7 +343,7 @@ bool CProfile::_WriteFile(
 
 	@date 2003-10-22 D.S.Koba 作成
 */
-bool CProfile::GetProfileDataImp(
+bool Profile::GetProfileDataImp(
 	const wstring&	strSectionName,	// [in] セクション名
 	const wstring&	strEntryKey,	// [in] エントリ名
 	wstring&		strEntryValue	// [out] エントリ値
@@ -369,7 +369,7 @@ bool CProfile::GetProfileDataImp(
 
 	@date 2003-10-21 D.S.Koba 作成
 */
-bool CProfile::SetProfileDataImp(
+bool Profile::SetProfileDataImp(
 	const wstring&	strSectionName,	// [in] セクション名
 	const wstring&	strEntryKey,	// [in] エントリ名
 	const wstring&	strEntryValue	// [in] エントリ値
@@ -403,7 +403,7 @@ bool CProfile::SetProfileDataImp(
 }
 
 
-void CProfile::DUMP(void)
+void Profile::DUMP(void)
 {
 #ifdef _DEBUG
 	auto iterEnd = m_ProfileData.end();

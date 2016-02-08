@@ -40,9 +40,9 @@
 typedef std::pair< LPTSTR, DWORD > PairGrepEnumItem;
 typedef std::vector< PairGrepEnumItem > VPGrepEnumItem;
 
-class CGrepEnumOptions {
+class GrepEnumOptions {
 public:
-	CGrepEnumOptions()
+	GrepEnumOptions()
 		:m_bIgnoreHidden(false)
 		,m_bIgnoreReadOnly(false)
 		,m_bIgnoreSystem(false)
@@ -52,15 +52,15 @@ public:
 	bool	m_bIgnoreSystem;
 };
 
-class CGrepEnumFileBase {
+class GrepEnumFileBase {
 private:
 	VPGrepEnumItem m_vpItems;
 
 public:
-	CGrepEnumFileBase() {
+	GrepEnumFileBase() {
 	}
 
-	virtual ~CGrepEnumFileBase(){
+	virtual ~GrepEnumFileBase(){
 		ClearItems();
 	}
 
@@ -111,8 +111,8 @@ public:
 	int Enumerates(
 		LPCTSTR				lpBaseFolder,
 		VGrepEnumKeys&		vecKeys,
-		CGrepEnumOptions&	option,
-		CGrepEnumFileBase*	pExceptItems = NULL
+		GrepEnumOptions&	option,
+		GrepEnumFileBase*	pExceptItems = NULL
 	) {
 		int found = 0;
 

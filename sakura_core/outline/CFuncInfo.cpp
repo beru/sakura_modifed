@@ -14,12 +14,12 @@
 #include "StdAfx.h"
 #include "CFuncInfo.h"
 
-//! CFuncInfoクラス構築
-CFuncInfo::CFuncInfo(
-	CLogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	CLogicInt		nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
-	CLayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	CLayoutInt		nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
+//! FuncInfoクラス構築
+FuncInfo::FuncInfo(
+	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
+	LogicInt		nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
+	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
+	LayoutInt		nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
 	const TCHAR*	pszFuncName,		//!< 関数名
 	const TCHAR*	pszFileName,
 	int				nInfo				//!< 付加情報
@@ -41,8 +41,8 @@ CFuncInfo::CFuncInfo(
 }
 
 
-// CFuncInfoクラス消滅
-CFuncInfo::~CFuncInfo()
+// FuncInfoクラス消滅
+FuncInfo::~FuncInfo()
 {
 
 }

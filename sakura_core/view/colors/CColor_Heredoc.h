@@ -28,9 +28,9 @@
 class CColor_Heredoc : public CColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_HEREDOC; }
-	virtual CLayoutColorInfo* GetStrategyColorInfo() const;
+	virtual LayoutColorInfo* GetStrategyColorInfo() const;
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
-	virtual void SetStrategyColorInfo(const CLayoutColorInfo*);
+	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_HEREDOC].m_bDisp; }
 	virtual bool EndColor(const CStringRef& cStr, int nPos);

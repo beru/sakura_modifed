@@ -49,13 +49,13 @@ struct OutlineErlang {
 	} m_state;
 
 	wchar_t m_func[64];			// 関数名(Arity含む) = 表示名
-	CLogicInt m_lnum;			// 関数の行番号
+	LogicInt m_lnum;			// 関数の行番号
 	int m_argcount;				// 発見した引数の数
 	wchar_t m_parenthesis[32];	// 括弧のネストを管理するもの
 	int m_parenthesis_ptr;		// 括弧のネストレベル
 	
 	OutlineErlang();
-	bool parse(const wchar_t* buf, int linelen, CLogicInt linenum);
+	bool parse(const wchar_t* buf, int linelen, LogicInt linenum);
 	
 	const wchar_t* ScanFuncName(const wchar_t* buf, const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterArgs(const wchar_t* end, const wchar_t* p);
@@ -63,7 +63,7 @@ struct OutlineErlang {
 	const wchar_t* ScanArgs(const wchar_t* end, const wchar_t* p);
 	const wchar_t* EnterCond(const wchar_t* end, const wchar_t* p);
 	const wchar_t* GetFuncName() const { return m_func; }
-	CLogicInt GetFuncLine() const { return m_lnum; }
+	LogicInt GetFuncLine() const { return m_lnum; }
 
 private:
 	// helper functions
@@ -326,7 +326,7 @@ const wchar_t* OutlineErlang::EnterCond(const wchar_t* end, const wchar_t* p)
 	@param[in] linelen 行の長さ
 	@param[in] linenum 行番号
 */
-bool OutlineErlang::parse(const wchar_t* buf, int linelen, CLogicInt linenum)
+bool OutlineErlang::parse(const wchar_t* buf, int linelen, LogicInt linenum)
 {
 	const wchar_t* pos = buf;
 	const wchar_t* const end = buf + linelen;
@@ -402,10 +402,10 @@ void CDocOutline::MakeFuncList_Erlang(CFuncInfoArr* pcFuncInfoArr)
 {
 
 	OutlineErlang erl_state_machine;
-	CLogicInt	nLineCount;
+	LogicInt	nLineCount;
 
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		CLogicInt nLineLen;
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+		LogicInt nLineLen;
 
 		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
@@ -415,14 +415,14 @@ void CDocOutline::MakeFuncList_Erlang(CFuncInfoArr* pcFuncInfoArr)
 			  →
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			CLayoutPoint ptPosXY;
+			LayoutPoint ptPosXY;
 			m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-				CLogicPoint(CLogicInt(0), erl_state_machine.GetFuncLine()),
+				LogicPoint(LogicInt(0), erl_state_machine.GetFuncLine()),
 				&ptPosXY
 			);
 			pcFuncInfoArr->AppendData(
-				erl_state_machine.GetFuncLine() + CLogicInt(1),
-				ptPosXY.GetY2() + CLayoutInt(1),
+				erl_state_machine.GetFuncLine() + LogicInt(1),
+				ptPosXY.GetY2() + LayoutInt(1),
 				erl_state_machine.GetFuncName(),
 				0,
 				0

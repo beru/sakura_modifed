@@ -52,13 +52,13 @@ void ConvertMediator::ConvMemory(
 	case F_CODECNV_UNICODEBE2SJIS:
 	case F_CODECNV_UTF82SJIS:
 	case F_CODECNV_UTF72SJIS:
-		CShiftJis::UnicodeToSJIS(*pCMemory, pCMemory->_GetMemory());
+		ShiftJis::UnicodeToSJIS(*pCMemory, pCMemory->_GetMemory());
 		break;
 	// コード変換(SJIS2xxx)
 	case F_CODECNV_SJIS2JIS:		CJis::UnicodeToJIS(*pCMemory, pCMemory->_GetMemory());			break;
 	case F_CODECNV_SJIS2EUC:		CEuc::UnicodeToEUC(*pCMemory, pCMemory->_GetMemory());			break;
-	case F_CODECNV_SJIS2UTF8:		CUtf8::UnicodeToUTF8(*pCMemory, pCMemory->_GetMemory());		break;
-	case F_CODECNV_SJIS2UTF7:		CUtf7::UnicodeToUTF7(*pCMemory, pCMemory->_GetMemory());		break;
+	case F_CODECNV_SJIS2UTF8:		Utf8::UnicodeToUTF8(*pCMemory, pCMemory->_GetMemory());		break;
+	case F_CODECNV_SJIS2UTF7:		Utf7::UnicodeToUTF7(*pCMemory, pCMemory->_GetMemory());		break;
 	}
 
 	ECodeType ecode = CODE_NONE;
@@ -107,15 +107,15 @@ void ConvertMediator::ConvMemory(
 	case F_CODECNV_EMAIL:			CJis::JISToUnicode(*(pCMemory->_GetMemory()), pCMemory, true);	break;
 	case F_CODECNV_EUC2SJIS:		CEuc::EUCToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
 	case F_CODECNV_UNICODE2SJIS:	/* 無変換 */										break;
-	case F_CODECNV_UNICODEBE2SJIS:	CUnicodeBe::UnicodeBEToUnicode(*(pCMemory->_GetMemory()), pCMemory);	break;
-	case F_CODECNV_UTF82SJIS:		CUtf8::UTF8ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
-	case F_CODECNV_UTF72SJIS:		CUtf7::UTF7ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
+	case F_CODECNV_UNICODEBE2SJIS:	UnicodeBe::UnicodeBEToUnicode(*(pCMemory->_GetMemory()), pCMemory);	break;
+	case F_CODECNV_UTF82SJIS:		Utf8::UTF8ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
+	case F_CODECNV_UTF72SJIS:		Utf7::UTF7ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
 	// コード変換(SJIS2xxx)
 	case F_CODECNV_SJIS2JIS:
 	case F_CODECNV_SJIS2EUC:
 	case F_CODECNV_SJIS2UTF8:
 	case F_CODECNV_SJIS2UTF7:
-		CShiftJis::SJISToUnicode(*(pCMemory->_GetMemory()), pCMemory);
+		ShiftJis::SJISToUnicode(*(pCMemory->_GetMemory()), pCMemory);
 		break;
 	}
 

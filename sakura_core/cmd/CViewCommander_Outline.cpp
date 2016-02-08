@@ -162,15 +162,15 @@ bool ViewCommander::Command_FUNCLIST(
 	_tcscpy(cFuncInfoArr.m_szFilePath, GetDocument()->m_cDocFile.GetFilePath());
 
 	// アウトライン ダイアログの表示
-	CLayoutPoint poCaret = GetCaret().GetCaretLayoutPos();
+	LayoutPoint poCaret = GetCaret().GetCaretLayoutPos();
 	if (!dlgFuncList.GetHwnd()) {
 		dlgFuncList.DoModeless(
 			G_AppInstance(),
 			m_pCommanderView->GetHwnd(),
 			(LPARAM)m_pCommanderView,
 			&cFuncInfoArr,
-			poCaret.GetY2() + CLayoutInt(1),
-			poCaret.GetX2() + CLayoutInt(1),
+			poCaret.GetY2() + LayoutInt(1),
+			poCaret.GetX2() + LayoutInt(1),
 			nOutlineType,
 			nListType,
 			m_pCommanderView->m_pTypeData->m_bLineNumIsCRLF	// 行番号の表示 false=折り返し単位／true=改行単位

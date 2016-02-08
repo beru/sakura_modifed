@@ -85,7 +85,7 @@ CPrintPreview::CPrintPreview(CEditWnd* pParentWnd)
 	m_bDemandUpdateSetting(false)
 {
 	// 印刷用のレイアウト情報の作成
-	m_pLayoutMgr_Print = new CLayoutMgr;
+	m_pLayoutMgr_Print = new LayoutMgr;
 
 	// 印刷プレビュー コントロール 作成
 	CreatePrintPreviewControls();
@@ -778,7 +778,7 @@ void CPrintPreview::OnChangePrintSetting(void)
 	m_nPreview_ViewMarginTop = 8 * 10;		// 印刷プレビュー：ビュー左端と用紙の間隔(1/10mm単位)
 
 	// 行あたりの文字数(行番号込み)
-	m_bPreview_EnableColumns = CLayoutInt(CPrint::CalculatePrintableColumns(m_pPrintSetting, m_nPreview_PaperAllWidth, m_nPreview_LineNumberColumns));	// 印字可能桁数/ページ
+	m_bPreview_EnableColumns = LayoutInt(CPrint::CalculatePrintableColumns(m_pPrintSetting, m_nPreview_PaperAllWidth, m_nPreview_LineNumberColumns));	// 印字可能桁数/ページ
 	// 縦方向の行数
 	m_bPreview_EnableLines = CPrint::CalculatePrintableLines(m_pPrintSetting, m_nPreview_PaperAllHeight);			// 印字可能行数/ページ
 
@@ -1147,8 +1147,8 @@ void CPrintPreview::OnPrint(void)
 			DrawHeaderFooter(hdc, cRect, true);
 		}
 
-		const CLayoutInt	nPageTopLineNum = CLayoutInt(((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
-		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
+		const LayoutInt	nPageTopLineNum = LayoutInt(((nFrom + i) * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
+		const Layout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 		if (m_pPrintSetting->m_bColorPrint
 			&& !(i == 0)
 			&& pcPageTopLayout->GetLogicOffset() == 0
@@ -1318,7 +1318,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 			nLen,
 			0,
 			nLen,
-			CLayoutInt(0)
+			LayoutInt(0)
 		);
 
 		// 中央寄せ
@@ -1337,7 +1337,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 			nLen,
 			0,
 			nLen,
-			CLayoutInt(0)
+			LayoutInt(0)
 		);
 
 		// 右寄せ
@@ -1356,7 +1356,7 @@ void CPrintPreview::DrawHeaderFooter(HDC hdc, const Rect& rect, bool bHeader)
 			nLen,
 			0,
 			nLen,
-			CLayoutInt(0)
+			LayoutInt(0)
 		);
 	}
 }
@@ -1373,11 +1373,11 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 		m_pool = CColorStrategyPool::getInstance();
 		m_pool->SetCurrentView(&(m_pParentWnd->GetActiveView()));
 
-		const CLayoutInt	nPageTopLineNum = CLayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
-		const CLayout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
+		const LayoutInt	nPageTopLineNum = LayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu) * m_bPreview_EnableLines);
+		const Layout*		pcPageTopLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nPageTopLineNum);
 
 		if (pcPageTopLayout) {
-			const CLogicInt		nPageTopOff = pcPageTopLayout->GetLogicOffset();
+			const LogicInt		nPageTopOff = pcPageTopLayout->GetLogicOffset();
 
 			// ページトップの物理行の先頭を検索
 			while (pcPageTopLayout->GetLogicOffset()) {
@@ -1393,7 +1393,7 @@ CColorStrategy* CPrintPreview::DrawPageTextFirst(int nPageNum)
 			}
 			if (nPageTopOff) {
 				CStringRef	csr = pcPageTopLayout->GetDocLineRef()->GetStringRefWithEOL();
-				CLogicInt	iLogic;
+				LogicInt	iLogic;
 				for (iLogic=0; iLogic<nPageTopOff; ++iLogic) {
 					bool bChange;
 					pStrategy = GetColorStrategy(csr, iLogic, pStrategy, bChange);
@@ -1453,8 +1453,8 @@ CColorStrategy* CPrintPreview::DrawPageText(
 				「段数（m_pPrintSetting->m_nPrintDansuu）」
 				「段数が1のときに、1ページあたりに何行入るか（m_bPreview_EnableLines）」
 			*/
-			const CLayoutInt nLineNum = CLayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu + nDan) * m_bPreview_EnableLines + i);
-			const CLayout* pcLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nLineNum);
+			const LayoutInt nLineNum = LayoutInt((nPageNum * m_pPrintSetting->m_nPrintDansuu + nDan) * m_bPreview_EnableLines + i);
+			const Layout* pcLayout = m_pLayoutMgr_Print->SearchLineByLayoutY(nLineNum);
 			if (!pcLayout) {
 				break;
 			}
@@ -1630,8 +1630,8 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	int				nDocLineLen,
 	int				nLineStart,
 	int				nLineLen,
-	CLayoutInt		nIndent,  // 2006.08.14 Moca 追加
-	const CLayout*	pcLayout,	//!< 色付用Layout
+	LayoutInt		nIndent,  // 2006.08.14 Moca 追加
+	const Layout*	pcLayout,	//!< 色付用Layout
 	CColorStrategy*	pStrategyStart
 	)
 {
@@ -1646,7 +1646,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 	int nDx = m_pPrintSetting->m_nPrintFontWidth;
 
 	// タブ幅取得
-	CLayoutInt nTabSpace = m_pParentWnd->GetDocument()->m_cLayoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
+	LayoutInt nTabSpace = m_pParentWnd->GetDocument()->m_cLayoutMgr.GetTabSpace(); //	Sep. 23, 2002 genta LayoutMgrの値を使う
 
 	// 文字間隔配列を生成
 	vector<int> vDxArray;
@@ -1661,7 +1661,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 
 	int nBgnLogic = nLineStart;	// TABを展開する前のバイト数で、pLineの何バイト目まで描画したか？
 	int iLogic;					// pLineの何文字目をスキャン？
-	CLayoutInt nLayoutX = nIndent;	// TABを展開した後のバイト数で、テキストの何バイト目まで描画したか？
+	LayoutInt nLayoutX = nIndent;	// TABを展開した後のバイト数で、テキストの何バイト目まで描画したか？
 
 	// 文字種判定フラグ
 	int nKind     = 0; // 0:半角 1:全角 2:タブ
@@ -1717,7 +1717,7 @@ CColorStrategy* CPrintPreview::Print_DrawLine(
 					for (int i=nBgnLogic-nLineStart; i<iLogic-nLineStart; ++i) {
 						nIncrement += pDxArray[i];
 					}
-					nLayoutX += CLayoutInt(nIncrement/nDx);
+					nLayoutX += LayoutInt(nIncrement/nDx);
 				}
 				// ロジック進め
 				nBgnLogic = iLogic;
@@ -1773,10 +1773,10 @@ void CPrintPreview::Print_DrawBlock(
 	const wchar_t*	pPhysicalLine,
 	int				nBlockLen,	// iLogic - nBgnLogic
 	int				nKind,
-	const CLayout*	pcLayout,	//!< 色設定用Layout
+	const Layout*	pcLayout,	//!< 色設定用Layout
 	int				nColorIdx,
 	int				nBgnPhysical,	// nBgnLogic - nLineStart
-	CLayoutInt		nLayoutX,
+	LayoutInt		nLayoutX,
 	int				nDx,
 	const int*		pDxArray
 	)

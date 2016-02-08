@@ -168,11 +168,11 @@ std::wstring CMigemo::migemo_query_w(const wchar_t* query)
 		CNativeW cnvStr;
 		CNativeA utf8Str;
 		cnvStr.SetString(query);
-		CUtf8::UnicodeToUTF8(cnvStr, utf8Str._GetMemory());
+		Utf8::UnicodeToUTF8(cnvStr, utf8Str._GetMemory());
 		unsigned char* ret;
 		ret = migemo_query((unsigned char*)utf8Str.GetStringPtr());
 		utf8Str.SetString((const char*)ret);
-		CUtf8::UTF8ToUnicode(*(utf8Str._GetMemory()), &cnvStr);
+		Utf8::UTF8ToUnicode(*(utf8Str._GetMemory()), &cnvStr);
 		migemo_release(ret);
 		return cnvStr.GetStringPtr();
 	}

@@ -38,9 +38,9 @@
 #include "_main/global.h"
 #include "env/DLLSHAREDATA.h"
 
-class CRecent {
+class Recent {
 public:
-	virtual ~CRecent() {}
+	virtual ~Recent() {}
 
 	// インスタンス管理
 	virtual void Terminate() = 0;

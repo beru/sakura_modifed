@@ -232,7 +232,7 @@ bool CShareData::InitShareData()
 
 			sGeneral.m_bCloseAllConfirm = false;		// [すべて閉じる]で他に編集用のウィンドウがあれば確認する		// 2006.12.25 ryoji
 			sGeneral.m_bExitConfirm = false;			// 終了時の確認をする
-			sGeneral.m_nRepeatedScrollLineNum = CLayoutInt(3);	// キーリピート時のスクロール行数
+			sGeneral.m_nRepeatedScrollLineNum = LayoutInt(3);	// キーリピート時のスクロール行数
 			sGeneral.m_nRepeatedScroll_Smooth = false;	// キーリピート時のスクロールを滑らかにするか
 			sGeneral.m_nPageScrollByWheel = 0;			// キー/マウスボタン + ホイールスクロールでページスクロールする	// 2009.01.17 nasukoji
 			sGeneral.m_nHorizontalScrollByWheel = 0;	// キー/マウスボタン + ホイールスクロールで横スクロールする		// 2009.01.17 nasukoji
@@ -647,7 +647,7 @@ bool CShareData::InitShareData()
 
 		// [メインメニュー]タブ
 		{
-			CDataProfile	cProfile;
+			DataProfile	cProfile;
 			std::vector<std::wstring> data;
 			cProfile.SetReadingMode();
 			cProfile.ReadProfileRes( MAKEINTRESOURCE(IDR_MENU1), MAKEINTRESOURCE(ID_RC_TYPE_INI), &data );

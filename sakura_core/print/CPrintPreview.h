@@ -40,8 +40,8 @@ class CColorStrategy;
 class CColorStrategyPool;
 class CDlgCancel;
 class CEditWnd;
-class CLayout;
-class CLayoutMgr;
+class Layout;
+class LayoutMgr;
 
 class CPrintPreview {
 // メンバ関数宣言
@@ -123,8 +123,8 @@ protected:
 		int				nDocLineLen,
 		int				nLineStart,
 		int				nLineLen,
-		CLayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
-		const CLayout*	pcLayout = NULL,	// 色付用Layout
+		LayoutInt		nIndent,	// 折り返しインデント桁数 // 2006.08.14 Moca
+		const Layout*	pcLayout = NULL,	// 色付用Layout
 		CColorStrategy*	pStrategyStart = NULL
 	);
 
@@ -135,10 +135,10 @@ protected:
 		const wchar_t*	pPhysicalLine,
 		int				nBlockLen,
 		int				nKind,		// 0:半角, 1:全角
-		const CLayout*	pcLayout,	// 色設定用Layout
+		const Layout*	pcLayout,	// 色設定用Layout
 		int				nColorIndex,
 		int				nBgnPhysical,
-		CLayoutInt		nLayoutX,
+		LayoutInt		nLayoutX,
 		int				nDx,
 		const int*		pDxArray
 	);
@@ -229,7 +229,7 @@ protected:
 	short			m_nPreview_PaperHeight;		// 用紙印刷有効高さ(1/10mm単位)
 	short			m_nPreview_PaperOffsetLeft;	// 用紙余白左端(1/10mm単位)
 	short			m_nPreview_PaperOffsetTop;	// 用紙余白上端(1/10mm単位)
-	CLayoutInt		m_bPreview_EnableColumns;	// 印字可能桁数/ページ
+	LayoutInt		m_bPreview_EnableColumns;	// 印字可能桁数/ページ
 	int				m_bPreview_EnableLines;		// 印字可能行数/ページ
 	int				m_nPreview_LineNumberColumns;	// 行番号エリアの幅（文字数）
 	WORD			m_nAllPageNum;				// 全ページ数
@@ -255,7 +255,7 @@ protected:
 	CColorStrategyPool*	m_pool;					// 色定義管理情報
 
 public:
-	class CLayoutMgr*	m_pLayoutMgr_Print;		// 印刷用のレイアウト管理情報
+	class LayoutMgr*	m_pLayoutMgr_Print;		// 印刷用のレイアウト管理情報
 protected:
 	TypeConfig m_typePrint;
 

@@ -21,7 +21,7 @@ CDocLocker::CDocLocker()
 
 void CDocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 書き込めるか検査
 	CheckWritable(!sLoadInfo.bViewMode && !sLoadInfo.bWritableNoMsg);
@@ -39,7 +39,7 @@ void CDocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 
 void CDocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// ファイルの排他ロック解除
 	pcDoc->m_cDocFileOperation.DoFileUnlock();
@@ -47,7 +47,7 @@ void CDocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 
 void CDocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 書き込めるか検査
 	m_bIsDocWritable = true;
@@ -63,7 +63,7 @@ void CDocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
 // 書き込めるか検査
 void CDocLocker::CheckWritable(bool bMsg)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// ファイルが存在しない場合 (「開く」で新しくファイルを作成した扱い) は、以下の処理は行わない
 	if (!fexist(pcDoc->m_cDocFile.GetFilePath())) {

@@ -14,9 +14,9 @@
 //                     セーブ時チェック                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! CDocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
+//! DocLineMgrが保持するデータに異なる改行コードが混在しているかどうか判定する
 static bool _CheckSavingEolcode(
-	const CDocLineMgr& pcDocLineMgr,
+	const DocLineMgr& pcDocLineMgr,
 	CEol cEolType
 	)
 {
@@ -39,11 +39,11 @@ static bool _CheckSavingEolcode(
 	return bMix;
 }
 
-//! CDocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
+//! DocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
 static EConvertResult _CheckSavingCharcode(
-	const CDocLineMgr& pcDocLineMgr,
+	const DocLineMgr& pcDocLineMgr,
 	ECodeType eCodeType,
-	CLogicPoint& point,
+	LogicPoint& point,
 	CNativeW& wc
 	)
 {
@@ -52,7 +52,7 @@ static EConvertResult _CheckSavingCharcode(
 	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	CMemory cmemTmp;	// バッファを再利用
 	CNativeW cmemTmp2;
-	CLogicInt nLine = CLogicInt(0);
+	LogicInt nLine = LogicInt(0);
 	while (pcDocLine) {
 		// コード変換 pcDocLine -> cmemTmp
 		EConvertResult e = CIoBridge::ImplToFile(
@@ -85,7 +85,7 @@ static EConvertResult _CheckSavingCharcode(
 			}
 			if (nPos != -1) {
 				point.y = nLine;
-				point.x = CLogicInt(nPos);
+				point.x = LogicInt(nPos);
 				// 変換できなかった位置の1文字取得
 				wc.SetString( p + nPos, (Int)CNativeW::GetSizeOfChar( p, nDocLineLen, nPos ) );
 				delete pCodeBase;
@@ -96,11 +96,11 @@ static EConvertResult _CheckSavingCharcode(
 			if (e == RESULT_LOSESOME) {
 				// 行内の位置を特定
 				point.y = nLine;
-				point.x = CLogicInt(-1);
+				point.x = LogicInt(-1);
 				const WCHAR* pLine = pcDocLine->GetPtr();
-				const CLogicInt nLineLen = pcDocLine->GetLengthWithEOL();
-				CLogicInt chars = CNativeW::GetSizeOfChar( pLine, nLineLen, 0 );
-				CLogicInt nPos = CLogicInt(0);
+				const LogicInt nLineLen = pcDocLine->GetLengthWithEOL();
+				LogicInt chars = CNativeW::GetSizeOfChar( pLine, nLineLen, 0 );
+				LogicInt nPos = LogicInt(0);
 				CNativeW mem;
 				while (0 < chars) {
 					mem.SetStringHoldBuffer( pLine + nPos, chars );
@@ -133,7 +133,7 @@ static EConvertResult _CheckSavingCharcode(
 
 ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 改行コードが混在しているかどうか判定
 	bool bTmpResult = false;
@@ -160,7 +160,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	}
 
 	// 指定文字コードで安全に保存できるかどうか判定
-	CLogicPoint point;
+	LogicPoint point;
 	CNativeW cmemChar(L"", 0);
 	EConvertResult nTmpResult = _CheckSavingCharcode(
 		pcDoc->m_cDocLineMgr, pSaveInfo->eCharCode,
@@ -180,7 +180,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		}else {
 			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
-			CUnicode().UnicodeToHex( cmemChar.GetStringPtr(), cmemChar.GetStringLength(),
+			Unicode().UnicodeToHex( cmemChar.GetStringPtr(), cmemChar.GetStringLength(),
 				szCharCode, &GetDllShareData().m_common.m_sStatusbar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
@@ -199,7 +199,7 @@ ECallbackResult CCodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDNO:		return CALLBACK_INTERRUPT; // 中断
 		case IDCANCEL:
 			{
-				CLogicPoint pt(point.x < 0 ? CLogicInt(0) : point.x, point.y);
+				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
 				pcDoc->m_pcEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
 			}
 			return CALLBACK_INTERRUPT; //中断

@@ -16,24 +16,24 @@
 #include "mem/CMemory.h"// 2002/2/10 aroka
 
 
-// COpeクラス構築
-COpe::COpe(eOpeCode eCode)
+// Opeクラス構築
+Ope::Ope(eOpeCode eCode)
 {
 	assert( eCode != eOpeCode::Unknown );
 	m_nOpe = eCode;		// 操作種別
 
-	m_ptCaretPos_PHY_Before.Set(CLogicInt(-1), CLogicInt(-1));	// カーソル位置
-	m_ptCaretPos_PHY_After.Set(CLogicInt(-1), CLogicInt(-1));	// カーソル位置
+	m_ptCaretPos_PHY_Before.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
+	m_ptCaretPos_PHY_After.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置
 
 }
 
-// COpeクラス消滅
-COpe::~COpe()
+// Opeクラス消滅
+Ope::~Ope()
 {
 }
 
 // 編集操作要素のダンプ
-void COpe::DUMP(void)
+void Ope::DUMP(void)
 {
 	DEBUG_TRACE(_T("\t\tm_nOpe                  = [%d]\n"), m_nOpe               );
 	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_Before = [%d,%d]\n"), m_ptCaretPos_PHY_Before.x, m_ptCaretPos_PHY_Before.y   );
@@ -42,9 +42,9 @@ void COpe::DUMP(void)
 }
 
 // 編集操作要素のダンプ
-void CDeleteOpe::DUMP(void)
+void DeleteOpe::DUMP(void)
 {
-	COpe::DUMP();
+	Ope::DUMP();
 	DEBUG_TRACE(_T("\t\tm_ptCaretPos_PHY_To     = [%d,%d]\n"), m_ptCaretPos_PHY_To.x, m_ptCaretPos_PHY_To.y);
 	DEBUG_TRACE(_T("\t\tm_cOpeLineData.size         = [%d]\n"), m_cOpeLineData.size());
 	for (size_t i=0; i<m_cOpeLineData.size(); ++i) {
@@ -55,9 +55,9 @@ void CDeleteOpe::DUMP(void)
 }
 
 // 編集操作要素のダンプ
-void CInsertOpe::DUMP(void)
+void InsertOpe::DUMP(void)
 {
-	COpe::DUMP();
+	Ope::DUMP();
 	DEBUG_TRACE(_T("\t\tm_cOpeLineData.size         = [%d]\n"), m_cOpeLineData.size());
 	for (size_t i=0; i<m_cOpeLineData.size(); ++i) {
 		DEBUG_TRACE(_T("\t\tm_cOpeLineData[%d].nSeq         = [%d]\n"), m_cOpeLineData[i].nSeq);

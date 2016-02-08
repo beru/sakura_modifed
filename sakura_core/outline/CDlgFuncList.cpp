@@ -111,11 +111,11 @@ int CALLBACK CDlgFuncList::CompareFunc_Asc(
 {
 	CDlgFuncList* pcDlgFuncList = (CDlgFuncList*)lParamSort;
 
-	CFuncInfo* pcFuncInfo1 = pcDlgFuncList->m_pcFuncInfoArr->GetAt(lParam1);
+	FuncInfo* pcFuncInfo1 = pcDlgFuncList->m_pcFuncInfoArr->GetAt(lParam1);
 	if (!pcFuncInfo1) {
 		return -1;
 	}
-	CFuncInfo* pcFuncInfo2 = pcDlgFuncList->m_pcFuncInfoArr->GetAt(lParam2);
+	FuncInfo* pcFuncInfo2 = pcDlgFuncList->m_pcFuncInfoArr->GetAt(lParam2);
 	if (!pcFuncInfo2) {
 		return -1;
 	}
@@ -202,7 +202,7 @@ CDlgFuncList::CDlgFuncList() : CDialog(true)
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
 	m_pcFuncInfoArr = NULL;		// 関数情報配列
-	m_nCurLine = CLayoutInt(0);				// 現在行
+	m_nCurLine = LayoutInt(0);				// 現在行
 	m_nOutlineType = OUTLINE_DEFAULT;
 	m_nListType = OUTLINE_DEFAULT;
 	//	Apr. 23, 2005 genta 行番号を左端へ
@@ -344,8 +344,8 @@ HWND CDlgFuncList::DoModeless(
 	HWND			hwndParent,
 	LPARAM			lParam,
 	CFuncInfoArr*	pcFuncInfoArr,
-	CLayoutInt		nCurLine,
-	CLayoutInt		nCurCol,
+	LayoutInt		nCurLine,
+	LayoutInt		nCurCol,
 	int				nOutlineType,		
 	int				nListType,
 	bool			bLineNumIsCRLF		// 行番号の表示 false=折り返し単位／true=改行単位
@@ -550,13 +550,13 @@ void CDlgFuncList::SetData()
 		//::DestroyWindow(hwndTree);
 //		::ShowWindow(hwndTree, SW_HIDE);
 		TCHAR			szText[2048];
-		const CFuncInfo*	pcFuncInfo;
+		const FuncInfo*	pcFuncInfo;
 		LV_ITEM			item;
 		bool			bSelected;
-		CLayoutInt		nFuncLineOld(-1);
-		CLayoutInt		nFuncColOld(-1);
-		CLayoutInt		nFuncLineTop(INT_MAX);
-		CLayoutInt		nFuncColTop(INT_MAX);
+		LayoutInt		nFuncLineOld(-1);
+		LayoutInt		nFuncColOld(-1);
+		LayoutInt		nFuncLineTop(INT_MAX);
+		LayoutInt		nFuncColTop(INT_MAX);
 		int				nSelectedLineTop = 0;
 		int				nSelectedLine = 0;
 		RECT			rc;
@@ -567,7 +567,7 @@ void CDlgFuncList::SetData()
 			const int nNum = m_pcFuncInfoArr->GetNum();
 			int nBuffLen = 0;
 			for (int i=0; i<nNum; ++i) {
-				const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+				const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 				nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 			}
 			m_cmemClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nNum);
@@ -896,8 +896,8 @@ void CDlgFuncList::SetTreeJava(
 	bool bAddClass
 	)
 {
-	CLayoutInt		nFuncLineTop(INT_MAX);
-	CLayoutInt		nFuncColTop(INT_MAX);
+	LayoutInt		nFuncLineTop(INT_MAX);
+	LayoutInt		nFuncColTop(INT_MAX);
 	TV_INSERTSTRUCT	tvis;
 	const TCHAR*	pPos;
     TCHAR           szLabel[64 + 6];  // Jan. 07, 2001 genta クラス名エリアの拡大
@@ -920,7 +920,7 @@ void CDlgFuncList::SetTreeJava(
 		const int nNum = m_pcFuncInfoArr->GetNum();
 		int nBuffLen = 0;
 		for (int i=0; i<nNum; ++i) {
-			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+			const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 		}
 		m_cmemClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nNum);
@@ -935,11 +935,11 @@ void CDlgFuncList::SetTreeJava(
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_INTERFACE,	LSW(STR_DLGFNCLST_APND_INTERFACE),	false);
 	m_pcFuncInfoArr->SetAppendText(FL_OBJ_GLOBAL,		LSW(STR_DLGFNCLST_APND_GLOBAL),		false);
 	
-	CLayoutInt nFuncLineOld = CLayoutInt(-1);
-	CLayoutInt nFuncColOld = CLayoutInt(-1);
+	LayoutInt nFuncLineOld = LayoutInt(-1);
+	LayoutInt nFuncColOld = LayoutInt(-1);
 	int bSelected = FALSE;
 	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
-		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+		const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		const TCHAR* pWork = pcFuncInfo->m_cmemFuncName.GetStringPtr();
 		int m = 0;
 		int nClassNest = 0;
@@ -1197,8 +1197,8 @@ void CDlgFuncList::SetListVB(void)
 	TCHAR			szOption[64];
 	LV_ITEM			item;
 	HWND			hwndList;
-	CLayoutInt		nFuncLineOld;
-	CLayoutInt		nFuncColOld;
+	LayoutInt		nFuncLineOld;
+	LayoutInt		nFuncColOld;
 	int				nSelectedLine = 0;
 	RECT			rc;
 
@@ -1212,20 +1212,20 @@ void CDlgFuncList::SetListVB(void)
 		const int nNum = m_pcFuncInfoArr->GetNum();
 		int nBuffLen = 0;
 		for (int i=0; i<nNum; ++i) {
-			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+			const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength();
 		}
 		m_cmemClipText.AllocStringBuffer(nBuffLen + nBuffLenTag * nNum);
 	}
 
-	nFuncLineOld = CLayoutInt(-1);
-	nFuncColOld = CLayoutInt(-1);
-	CLayoutInt nFuncLineTop(INT_MAX);
-	CLayoutInt nFuncColTop(INT_MAX);
+	nFuncLineOld = LayoutInt(-1);
+	nFuncColOld = LayoutInt(-1);
+	LayoutInt nFuncLineTop(INT_MAX);
+	LayoutInt nFuncColTop(INT_MAX);
 	int nSelectedLineTop = 0;
 	bool bSelected = false;
 	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
-		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+		const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		if (!bSelected) {
 			if (pcFuncInfo->m_nFuncLineLAYOUT < nFuncLineTop
 				|| (pcFuncInfo->m_nFuncLineLAYOUT == nFuncLineTop && pcFuncInfo->m_nFuncColLAYOUT <= nFuncColTop)
@@ -1256,7 +1256,7 @@ void CDlgFuncList::SetListVB(void)
 	TCHAR szText[2048];
 	for (int i=0; i<m_pcFuncInfoArr->GetNum(); ++i) {
 		// 現在の解析結果要素
-		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+		const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
 		//	From Here Apr. 23, 2005 genta 行番号を左端へ
 		// 行番号の表示 false=折り返し単位／true=改行単位
@@ -1431,7 +1431,7 @@ void CDlgFuncList::SetListVB(void)
 	return;
 }
 
-/*! 汎用ツリーコントロールの初期化：CFuncInfo::m_nDepthを利用して親子を設定
+/*! 汎用ツリーコントロールの初期化：FuncInfo::m_nDepthを利用して親子を設定
 
 	@param[in] tagjump タグジャンプ形式で出力する
 
@@ -1453,10 +1453,10 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 	HTREEITEM* phParentStack;
 	phParentStack = (HTREEITEM*)malloc(nStackDepth * sizeof(HTREEITEM));
 	phParentStack[nStackPointer] = TVI_ROOT;
-	CLayoutInt nFuncLineOld(-1);
-	CLayoutInt nFuncColOld(-1);
-	CLayoutInt nFuncLineTop(INT_MAX);
-	CLayoutInt nFuncColTop(INT_MAX);
+	LayoutInt nFuncLineOld(-1);
+	LayoutInt nFuncColOld(-1);
+	LayoutInt nFuncLineTop(INT_MAX);
+	LayoutInt nFuncColTop(INT_MAX);
 	bool bSelected = false;
 
 	m_cmemClipText.SetString(L"");
@@ -1468,7 +1468,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 			nBuffLenTag = 10 + wcslen(to_wchar(m_pcFuncInfoArr->m_szFilePath));
 		}
 		for (int i=0; i<nFuncInfoArrNum; ++i) {
-			const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+			const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 			if (pcFuncInfo->IsAddClipText()) {
 				nBuffLen += pcFuncInfo->m_cmemFuncName.GetStringLength() + pcFuncInfo->m_nDepth * 2;
 				++nCount;
@@ -1478,7 +1478,7 @@ void CDlgFuncList::SetTree(bool tagjump, bool nolabel)
 	}
 
 	for (int i=0; i<nFuncInfoArrNum; ++i) {
-		CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+		FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 
 		/*	新しいアイテムを作成
 			現在の親の下にぶら下げる形で、最後に追加する。
@@ -1610,12 +1610,12 @@ void CDlgFuncList::SetDocLineFuncList()
 		return;
 	}
 	CEditView* pcEditView=(CEditView*)m_lParam;
-	CDocLineMgr* pcDocLineMgr = &pcEditView->GetDocument()->m_cDocLineMgr;
+	DocLineMgr* pcDocLineMgr = &pcEditView->GetDocument()->m_cDocLineMgr;
 	
 	CFuncListManager().ResetAllFucListMark(pcDocLineMgr, false);
 	int num = m_pcFuncInfoArr->GetNum();
 	for (int i=0; i<num; ++i) {
-		const CFuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
+		const FuncInfo* pcFuncInfo = m_pcFuncInfoArr->GetAt(i);
 		if (0 < pcFuncInfo->m_nFuncLineCRLF) {
 			CDocLine* pcDocLine = pcDocLineMgr->GetLine( pcFuncInfo->m_nFuncLineCRLF - 1 );
 			if (pcDocLine) {
@@ -1684,14 +1684,14 @@ void CDlgFuncList::SetTreeFile()
 		tvis.hParent = hParentTree.back();
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
 		if (item.m_eFileTreeItemType == EFileTreeItemType_Grep) {
-			m_pcFuncInfoArr->AppendData( CLogicInt(-1), CLogicInt(-1), CLayoutInt(-1), CLayoutInt(-1), _T(""), szPath, 0, 0 );
+			m_pcFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = -(nFuncInfo * 10 + 3);
 			HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
 			++nFuncInfo;
 			SetTreeFileSub( hParent, NULL );
 		}else if (item.m_eFileTreeItemType == EFileTreeItemType_File) {
-			m_pcFuncInfoArr->AppendData( CLogicInt(-1), CLogicInt(-1), CLayoutInt(-1), CLayoutInt(-1), _T(""), szPath, 0, 0 );
+			m_pcFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = nFuncInfo;
 			TreeView_InsertItem(hwndTree, &tvis);
@@ -1730,7 +1730,7 @@ void CDlgFuncList::SetTreeFileSub(
 	}
 
 	int count = 0;
-	CGrepEnumKeys cGrepEnumKeys;
+	GrepEnumKeys cGrepEnumKeys;
 	int errNo = cGrepEnumKeys.SetFileKeys( m_fileTreeSetting.m_aItems[nItem].m_szTargetFile );
 	if (errNo != 0) {
 		TVINSERTSTRUCT tvis;
@@ -1741,17 +1741,17 @@ void CDlgFuncList::SetTreeFileSub(
 		TreeView_InsertItem(hwndTree, &tvis);
 		return;
 	}
-	CGrepEnumOptions cGrepEnumOptions;
+	GrepEnumOptions cGrepEnumOptions;
 	cGrepEnumOptions.m_bIgnoreHidden   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreHidden;
 	cGrepEnumOptions.m_bIgnoreReadOnly = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreReadOnly;
 	cGrepEnumOptions.m_bIgnoreSystem   = m_fileTreeSetting.m_aItems[nItem].m_bIgnoreSystem;
-	CGrepEnumFiles cGrepExceptAbsFiles;
+	GrepEnumFiles cGrepExceptAbsFiles;
 	cGrepExceptAbsFiles.Enumerates(_T(""), cGrepEnumKeys.m_vecExceptAbsFileKeys, cGrepEnumOptions);
-	CGrepEnumFolders cGrepExceptAbsFolders;
+	GrepEnumFolders cGrepExceptAbsFolders;
 	cGrepExceptAbsFolders.Enumerates(_T(""), cGrepEnumKeys.m_vecExceptAbsFolderKeys, cGrepEnumOptions);
 
 	//フォルダ一覧作成
-	CGrepEnumFilterFolders cGrepEnumFilterFolders;
+	GrepEnumFilterFolders cGrepEnumFilterFolders;
 	cGrepEnumFilterFolders.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFolders );
 	int nItemCount = cGrepEnumFilterFolders.GetCount();
 	count = nItemCount;
@@ -1766,7 +1766,7 @@ void CDlgFuncList::SetTreeFileSub(
 	}
 
 	//ファイル一覧作成
-	CGrepEnumFilterFiles cGrepEnumFilterFiles;
+	GrepEnumFilterFiles cGrepEnumFilterFiles;
 	cGrepEnumFilterFiles.Enumerates( basePath.c_str(), cGrepEnumKeys, cGrepEnumOptions, cGrepExceptAbsFiles );
 	nItemCount = cGrepEnumFilterFiles.GetCount();
 	count += nItemCount;
@@ -2059,7 +2059,7 @@ BOOL CDlgFuncList::OnBnClicked(int wID)
 		if (wID == IDC_CHECK_bMarkUpBlankLineEnable&&m_nListType == OUTLINE_BOOKMARK) {
 			CEditView* pcEditView=(CEditView*)m_lParam;
 			pcEditView->GetCommander().HandleCommand(F_BOOKMARK_VIEW, true, TRUE, 0, 0, 0);
-			m_nCurLine=pcEditView->GetCaret().GetCaretLayoutPos().GetY2() + CLayoutInt(1);
+			m_nCurLine=pcEditView->GetCaret().GetCaretLayoutPos().GetY2() + LayoutInt(1);
 			CDocTypeManager().GetTypeConfig(pcEditView->GetDocument()->m_cDocType.GetDocumentType(), m_type);
 			SetData();
 		}else
@@ -2481,9 +2481,9 @@ bool CDlgFuncList::TagJumpTimer(
 		pcView->GetCommander().Command_FILEOPEN( strFile.c_str(), CODE_AUTODETECT, AppMode::getInstance()->IsViewMode(), NULL );
 		if (point.y != -1) {
 			if (pcView->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-				CLogicPoint pt;
-				pt.x = CLogicInt(point.GetX() - 1);
-				pt.y = CLogicInt(point.GetY() - 1);
+				LogicPoint pt;
+				pt.x = LogicInt(point.GetX() - 1);
+				pt.y = LogicInt(point.GetY() - 1);
 				if (pt.x < 0) {
 					pt.x = 0;
 				}
@@ -2541,7 +2541,7 @@ BOOL CDlgFuncList::OnJump(
 				nLineTo = m_cFuncInfo->m_nFuncLineCRLF;
 				nColTo = m_cFuncInfo->m_nFuncColCRLF;
 				// カーソルを移動させる
-				CLogicPoint	poCaret;
+				LogicPoint	poCaret;
 				poCaret.x = nColTo - 1;
 				poCaret.y = nLineTo - 1;
 
@@ -2620,8 +2620,8 @@ void CDlgFuncList::Redraw(
 	int nOutLineType,
 	int nListType,
 	CFuncInfoArr* pcFuncInfoArr,
-	CLayoutInt nCurLine,
-	CLayoutInt nCurCol
+	LayoutInt nCurLine,
+	LayoutInt nCurCol
 	)
 {
 	CEditView* pcEditView = (CEditView*)m_lParam;
@@ -3290,7 +3290,7 @@ INT_PTR CDlgFuncList::OnNcPaint(
 void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 {
 	// メニューを作成する
-	CEditView* pcEditView = &CEditDoc::GetInstance(0)->m_pcEditWnd->GetActiveView();
+	CEditView* pcEditView = &EditDoc::GetInstance(0)->m_pcEditWnd->GetActiveView();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
 	EDockSide eDockSide = ProfDockSide();	// 設定上の配置
 	UINT uFlags = MF_BYPOSITION | MF_STRING;
@@ -3466,7 +3466,7 @@ void CDlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 */
 void CDlgFuncList::Refresh(void)
 {
-	CEditWnd* pcEditWnd = CEditDoc::GetInstance(0)->m_pcEditWnd;
+	CEditWnd* pcEditWnd = EditDoc::GetInstance(0)->m_pcEditWnd;
 	BOOL bReloaded = ChangeLayout(OUTLINE_LAYOUT_FILECHANGED);	// 現在設定に従ってアウトライン画面を再配置する
 	if (!bReloaded && pcEditWnd->m_cDlgFuncList.GetHwnd()) {
 		int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
@@ -3492,7 +3492,7 @@ bool CDlgFuncList::ChangeLayout(int nId)
 		bool* m_pbSwitch;
 	} autoSwitch(&m_bInChangeLayout);	// 処理中は m_bInChangeLayout フラグを ON にしておく
 
-	CEditDoc* pDoc = CEditDoc::GetInstance(0);	// 今は非表示かもしれないので (CEditView*)m_lParam は使えない
+	EditDoc* pDoc = EditDoc::GetInstance(0);	// 今は非表示かもしれないので (CEditView*)m_lParam は使えない
 	m_nDocType = pDoc->m_cDocType.GetDocumentType().GetIndex();
 	CDocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
 
@@ -3623,7 +3623,7 @@ bool CDlgFuncList::ChangeLayout(int nId)
 */
 void CDlgFuncList::OnOutlineNotify(WPARAM wParam, LPARAM lParam)
 {
-	CEditDoc* pDoc = CEditDoc::GetInstance(0);	// 今は非表示かもしれないので (CEditView*)m_lParam は使えない
+	EditDoc* pDoc = EditDoc::GetInstance(0);	// 今は非表示かもしれないので (CEditView*)m_lParam は使えない
 	switch (wParam) {
 	case 0:	// 設定変更通知（ドッキングモード or サイズ）, lParam: 通知元の HWND
 		if ((HWND)lParam == pDoc->m_pcEditWnd->GetHwnd()) {
@@ -3961,7 +3961,7 @@ void CDlgFuncList::LoadFileTreeSetting(
 		auto_strcat( szPath, _T("\\") );
 		int maxDir = CDlgTagJumpList::CalcMaxUpDirectory( szPath );
 		for (int i=0; i<=maxDir; ++i) {
-			CDataProfile cProfile;
+			DataProfile cProfile;
 			cProfile.SetReadingMode();
 			std::tstring strIniFileName;
 			strIniFileName += szPath;
@@ -3981,7 +3981,7 @@ void CDlgFuncList::LoadFileTreeSetting(
 		// デフォルトプロジェクトファイル読み込み
 		bool bReadIni = false;
 		if (pFileTree->m_szProjectIni[0] != _T('\0')) {
-			CDataProfile cProfile;
+			DataProfile cProfile;
 			cProfile.SetReadingMode();
 			const TCHAR* pszIniFileName;
 			TCHAR szDir[_MAX_PATH * 2];

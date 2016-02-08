@@ -46,15 +46,15 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_cIcons.Create(m_hInst);	//	CreateImage List
 
 	// ドキュメントの作成
-	m_pcEditDoc = new CEditDoc(this);
+	m_pcEditDoc = new EditDoc(this);
 
 	// IO管理
-	m_pcLoadAgent = new CLoadAgent();
-	m_pcSaveAgent = new CSaveAgent();
-	m_pcVisualProgress = new CVisualProgress();
+	m_pcLoadAgent = new LoadAgent();
+	m_pcSaveAgent = new SaveAgent();
+	m_pcVisualProgress = new VisualProgress();
 
 	// GREPモード管理
-	m_pcGrepAgent = new CGrepAgent();
+	m_pcGrepAgent = new GrepAgent();
 
 	// 編集モード
 	AppMode::getInstance();	// ウィンドウよりも前にイベントを受け取るためにここでインスタンス作成
@@ -69,7 +69,7 @@ void CEditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_pcEditWnd->Create(m_pcEditDoc, &m_cIcons, nGroupId);
 
 	// MRU管理
-	m_pcMruListener = new CMruListener();
+	m_pcMruListener = new MruListener();
 
 	// プロパティ管理
 	m_pcPropertyManager = new CPropertyManager();

@@ -350,25 +350,25 @@ void CEditView::ISearchExec(bool bNext)
 	
 	ISearchWordMake();
 	
-	CLayoutInt nLine(0);
-	CLayoutInt nIdx1(0);
+	LayoutInt nLine(0);
+	LayoutInt nIdx1(0);
 	
 	if (bNext && m_bISearchWrap) {
 		switch (m_nISearchDirection) {
 		case 1:
-			nLine = CLayoutInt(0);
-			nIdx1 = CLayoutInt(0);
+			nLine = LayoutInt(0);
+			nIdx1 = LayoutInt(0);
 			break;
 		case 0:
 			// 最後から検索
-			CLogicInt nLineP;
+			LogicInt nLineP;
 			int nIdxP;
 			auto& docLineMgr = m_pcEditDoc->m_cDocLineMgr;
-			nLineP =  docLineMgr.GetLineCount() - CLogicInt(1);
+			nLineP =  docLineMgr.GetLineCount() - LogicInt(1);
 			CDocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
-			CLayoutPoint ptTmp;
-			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nIdxP, nLineP), &ptTmp);
+			LayoutPoint ptTmp;
+			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nIdxP, nLineP), &ptTmp);
 			nIdx1 = ptTmp.GetX2();
 			nLine = ptTmp.GetY2();
 		}
@@ -395,8 +395,8 @@ void CEditView::ISearchExec(bool bNext)
 	}
 
 	// 桁位置からindexに変換
-	CLayout* pCLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLine);
-	CLogicInt nIdx = LineColumnToIndex(pCLayout, nIdx1);
+	Layout* pCLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLine);
+	LogicInt nIdx = LineColumnToIndex(pCLayout, nIdx1);
 
 	m_nISearchHistoryCount ++ ;
 
@@ -412,7 +412,7 @@ void CEditView::ISearchExec(bool bNext)
 	}
 	m_bISearchFlagHistory[m_nISearchHistoryCount] = bNext;
 
-	CLayoutRange sMatchRange;
+	LayoutRange sMatchRange;
 
 	int nSearchResult = m_pcEditDoc->m_cLayoutMgr.SearchWord(
 		nLine,						// 検索開始レイアウト行
@@ -479,7 +479,7 @@ void CEditView::ISearchBack(void) {
 	}
 	m_nISearchHistoryCount --;
 
-	CLayoutRange sRange = m_sISearchHistory[m_nISearchHistoryCount];
+	LayoutRange sRange = m_sISearchHistory[m_nISearchHistoryCount];
 
 	if (m_nISearchHistoryCount == 0) {
 		GetSelectionInfo().DisableSelectArea(true);

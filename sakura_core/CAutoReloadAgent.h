@@ -33,7 +33,7 @@ enum WatchUpdate {
 	WU_AUTOLOAD,// 更新され未編集の場合に再ロード
 };
 
-class CAutoReloadAgent : public CDocListenerEx {
+class CAutoReloadAgent : public DocListenerEx {
 public:
 	CAutoReloadAgent();
 	void OnBeforeSave(const SaveInfo& sSaveInfo);

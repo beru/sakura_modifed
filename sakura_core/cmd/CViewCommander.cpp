@@ -165,7 +165,7 @@ bool ViewCommander::HandleCommand(
 	// 文書の操作を行ってはいけない
 	//@@@ 2002.2.2 YAZAKI HandleCommand内でHandleCommandを呼び出せない問題に対処（何か副作用がある？）
 	if (!GetOpeBlk()) {	// 操作ブロック
-		SetOpeBlk(new COpeBlk);
+		SetOpeBlk(new OpeBlk);
 	}
 	GetOpeBlk()->AddRef();	// 参照カウンタ増加
 
@@ -271,8 +271,8 @@ bool ViewCommander::HandleCommand(
 
 	// カーソル移動系
 	case F_IME_CHAR:			Command_IME_CHAR((WORD)lparam1); break;					// 全角文字入力
-	case F_MOVECURSOR:			Command_MOVECURSOR(CLogicPoint(CLogicInt((int)lparam2), CLogicInt((int)lparam1)), (int)lparam3); break;
-	case F_MOVECURSORLAYOUT:	Command_MOVECURSORLAYOUT(CLayoutPoint(CLayoutInt((int)lparam2), CLayoutInt((int)lparam1)), (int)lparam3); break;
+	case F_MOVECURSOR:			Command_MOVECURSOR(LogicPoint(LogicInt((int)lparam2), LogicInt((int)lparam1)), (int)lparam3); break;
+	case F_MOVECURSORLAYOUT:	Command_MOVECURSORLAYOUT(LayoutPoint(LayoutInt((int)lparam2), LayoutInt((int)lparam1)), (int)lparam3); break;
 	case F_UP:					Command_UP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;				// カーソル上移動
 	case F_DOWN:				Command_DOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル下移動
 	case F_LEFT:				Command_LEFT(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, bRepeat); break;			// カーソル左移動
@@ -286,10 +286,10 @@ bool ViewCommander::HandleCommand(
 	case F_GOLINEEND:			Command_GOLINEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock, 0, lparam1); break;	// 行末に移動(折り返し単位)
 //	case F_ROLLDOWN:			Command_ROLLDOWN(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールダウン
 //	case F_ROLLUP:				Command_ROLLUP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;					// スクロールアップ
-	case F_HalfPageUp:			Command_HalfPageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, CLayoutYInt(lparam1) ); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_HalfPageDown:		Command_HalfPageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, CLayoutYInt(lparam1) ); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	case F_1PageUp:				Command_1PageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, CLayoutYInt(lparam1) ); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	case F_1PageDown:			Command_1PageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, CLayoutYInt(lparam1) ); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	case F_HalfPageUp:			Command_HalfPageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_HalfPageDown:		Command_HalfPageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;			//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	case F_1PageUp:				Command_1PageUp( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;					//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	case F_1PageDown:			Command_1PageDown( m_pCommanderView->GetSelectionInfo().m_bSelectingLock, LayoutYInt(lparam1) ); break;				//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	case F_GOFILETOP:			Command_GOFILETOP(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの先頭に移動
 	case F_GOFILEEND:			Command_GOFILEEND(m_pCommanderView->GetSelectionInfo().m_bSelectingLock); break;				// ファイルの最後に移動
 	case F_CURLINECENTER:		Command_CURLINECENTER(); break;								// カーソル行をウィンドウ中央へ
@@ -329,10 +329,10 @@ bool ViewCommander::HandleCommand(
 	case F_GOLINEEND_SEL:	Command_GOLINEEND(true, 0, lparam1); break;		// (範囲選択)行末に移動(折り返し単位)
 //	case F_ROLLDOWN_SEL:	Command_ROLLDOWN(TRUE); break;					// (範囲選択)スクロールダウン
 //	case F_ROLLUP_SEL:		Command_ROLLUP(TRUE); break;					// (範囲選択)スクロールアップ
-	case F_HalfPageUp_Sel:	Command_HalfPageUp( true, CLayoutYInt(lparam1) ); break;				//(範囲選択)半ページアップ
-	case F_HalfPageDown_Sel:Command_HalfPageDown( true, CLayoutYInt(lparam1) ); break;			//(範囲選択)半ページダウン
-	case F_1PageUp_Sel:		Command_1PageUp( true, CLayoutYInt(lparam1) ); break;					//(範囲選択)１ページアップ
-	case F_1PageDown_Sel:	Command_1PageDown( true, CLayoutYInt(lparam1) ); break;				//(範囲選択)１ページダウン
+	case F_HalfPageUp_Sel:	Command_HalfPageUp( true, LayoutYInt(lparam1) ); break;				//(範囲選択)半ページアップ
+	case F_HalfPageDown_Sel:Command_HalfPageDown( true, LayoutYInt(lparam1) ); break;			//(範囲選択)半ページダウン
+	case F_1PageUp_Sel:		Command_1PageUp( true, LayoutYInt(lparam1) ); break;					//(範囲選択)１ページアップ
+	case F_1PageDown_Sel:	Command_1PageDown( true, LayoutYInt(lparam1) ); break;				//(範囲選択)１ページダウン
 	case F_GOFILETOP_SEL:	Command_GOFILETOP(true); break;					// (範囲選択)ファイルの先頭に移動
 	case F_GOFILEEND_SEL:	Command_GOFILEEND(true); break;					// (範囲選択)ファイルの最後に移動
 	case F_GONEXTPARAGRAPH_SEL:	Command_GONEXTPARAGRAPH(true); break;		// 次の段落へ進む
@@ -355,10 +355,10 @@ bool ViewCommander::HandleCommand(
 //	case F_GOLOGICALLINEEND_BOX:Sub_BoxSelectLock(lparam2); this->Command_GOLINEEND( true, 0, 8 | lparam1 );break;	//(矩形選択)行末に移動(改行単位)
 	case F_GOLINETOP_BOX:	Sub_BoxSelectLock(lparam2); this->Command_GOLINETOP( true, lparam1 );break;	//(矩形選択)行頭に移動(折り返し単位/改行単位)
 	case F_GOLINEEND_BOX:	Sub_BoxSelectLock(lparam2); this->Command_GOLINEEND( true, 0, lparam1 );break;	//(矩形選択)行末に移動(折り返し単位/改行単位)
-	case F_HalfPageUp_BOX:	Sub_BoxSelectLock(lparam2); this->Command_HalfPageUp( true, CLayoutYInt(lparam1) ); break;		//(矩形選択)半ページアップ
-	case F_HalfPageDown_BOX:Sub_BoxSelectLock(lparam2); this->Command_HalfPageDown( true, CLayoutYInt(lparam1) ); break;		//(矩形選択)半ページダウン
-	case F_1PageUp_BOX:		Sub_BoxSelectLock(lparam2); this->Command_1PageUp( true, CLayoutYInt(lparam1) ); break;			//(矩形選択)１ページアップ
-	case F_1PageDown_BOX:	Sub_BoxSelectLock(lparam2); this->Command_1PageDown( true, CLayoutYInt(lparam1) ); break;			//(矩形選択)１ページダウン
+	case F_HalfPageUp_BOX:	Sub_BoxSelectLock(lparam2); this->Command_HalfPageUp( true, LayoutYInt(lparam1) ); break;		//(矩形選択)半ページアップ
+	case F_HalfPageDown_BOX:Sub_BoxSelectLock(lparam2); this->Command_HalfPageDown( true, LayoutYInt(lparam1) ); break;		//(矩形選択)半ページダウン
+	case F_1PageUp_BOX:		Sub_BoxSelectLock(lparam2); this->Command_1PageUp( true, LayoutYInt(lparam1) ); break;			//(矩形選択)１ページアップ
+	case F_1PageDown_BOX:	Sub_BoxSelectLock(lparam2); this->Command_1PageDown( true, LayoutYInt(lparam1) ); break;			//(矩形選択)１ページダウン
 	case F_GOFILETOP_BOX:	Sub_BoxSelectLock(lparam1); this->Command_GOFILETOP( true );break;			//(矩形選択)ファイルの先頭に移動
 	case F_GOFILEEND_BOX:	Sub_BoxSelectLock(lparam1); this->Command_GOFILEEND( true );break;			//(矩形選択)ファイルの最後に移動
 
@@ -370,7 +370,7 @@ bool ViewCommander::HandleCommand(
 	case F_PASTE:					Command_PASTE((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
 	case F_PASTEBOX:				Command_PASTEBOX((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
 	case F_INSBOXTEXT:				Command_INSBOXTEXT((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
-	case F_INSTEXT_W:				Command_INSTEXT(bRedraw, (const wchar_t*)lparam1, (CLogicInt)lparam2, lparam3 != FALSE); break; // テキストを貼り付け // 2004.05.14 Moca 長さを示す引数追加
+	case F_INSTEXT_W:				Command_INSTEXT(bRedraw, (const wchar_t*)lparam1, (LogicInt)lparam2, lparam3 != FALSE); break; // テキストを貼り付け // 2004.05.14 Moca 長さを示す引数追加
 	case F_ADDTAIL_W:				Command_ADDTAIL((const wchar_t*)lparam1, (int)lparam2); break;	// 最後にテキストを追加
 	case F_COPYFNAME:				Command_COPYFILENAME(); break;						// このファイル名をクリップボードにコピー / /2002/2/3 aroka
 	case F_COPYPATH:				Command_COPYPATH(); break;							// このファイルのパス名をクリップボードにコピー
@@ -719,14 +719,14 @@ void ViewCommander::Sub_BoxSelectLock( int flags )
 }
 
 
-CLogicInt ViewCommander::ConvertEol(
+LogicInt ViewCommander::ConvertEol(
 	const wchar_t* pszText,
-	CLogicInt nTextLen,
+	LogicInt nTextLen,
 	wchar_t* pszConvertedText
 	)
 {
 	// original by 2009.02.28 salarm
-	CLogicInt nConvertedTextLen;
+	LogicInt nConvertedTextLen;
 	CEol eol = GetDocument()->m_cDocEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;

@@ -21,18 +21,18 @@
 
 
 // 文字列置換
-void CLayoutMgr::ReplaceData_CLayoutMgr(
+void LayoutMgr::ReplaceData_CLayoutMgr(
 	LayoutReplaceArg* pArg
 	)
 {
-	CLayoutInt nWork_nLines = m_nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
+	LayoutInt nWork_nLines = m_nLines;	// 変更前の全行数の保存	@@@ 2002.04.19 MIK
 
 	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
-	CLayoutColorInfo* colorInfo = NULL;
-	CLayoutInt nLineWork = pArg->sDelRange.GetFrom().GetY2();
+	LayoutColorInfo* colorInfo = NULL;
+	LayoutInt nLineWork = pArg->sDelRange.GetFrom().GetY2();
 
-	CLayout* pLayoutWork = SearchLineByLayoutY(pArg->sDelRange.GetFrom().GetY2());
+	Layout* pLayoutWork = SearchLineByLayoutY(pArg->sDelRange.GetFrom().GetY2());
 	if (pLayoutWork) {
 		while (pLayoutWork->GetLogicOffset() != 0) {
 			pLayoutWork = pLayoutWork->GetPrevLayout();
@@ -51,8 +51,8 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	||  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置) →
 	||  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	CLogicPoint ptFrom;
-	CLogicPoint ptTo;
+	LogicPoint ptFrom;
+	LogicPoint ptTo;
 	LayoutToLogic(pArg->sDelRange.GetFrom(), &ptFrom);
 	LayoutToLogic(pArg->sDelRange.GetTo(), &ptTo);
 
@@ -66,7 +66,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	DLRArg.pcmemDeleted = pArg->pcmemDeleted;	// 削除されたデータを保存
 	DLRArg.pInsData = pArg->pInsData;			// 挿入するデータ
 	DLRArg.nDelSeq = pArg->nDelSeq;
-	CSearchAgent(m_pcDocLineMgr).ReplaceData(
+	SearchAgent(m_pcDocLineMgr).ReplaceData(
 		&DLRArg
 	);
 	pArg->nInsSeq = DLRArg.nInsSeq;
@@ -75,9 +75,9 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	// 論理行の指定範囲に該当するレイアウト情報を削除して
 	// 削除した範囲の直前のレイアウト情報のポインタを返す
 
-	CLayoutInt	nModifyLayoutLinesOld = CLayoutInt(0);
-	CLayout* pLayoutPrev;
-	CLogicInt nWork = t_max(DLRArg.nDeletedLineNum, DLRArg.nInsLineNum);
+	LayoutInt	nModifyLayoutLinesOld = LayoutInt(0);
+	Layout* pLayoutPrev;
+	LogicInt nWork = t_max(DLRArg.nDeletedLineNum, DLRArg.nInsLineNum);
 
 	if (pLayoutWork) {
 		pLayoutPrev = DeleteLayoutAsLogical(
@@ -103,7 +103,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	}
 
 	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
-	CLogicInt nRowNum;
+	LogicInt nRowNum;
 	if (!pLayoutPrev) {
 		if (!m_pLayoutTop) {
 			nRowNum = m_pcDocLineMgr->GetLineCount();
@@ -114,11 +114,11 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		if (!pLayoutPrev->GetNextLayout()) {
 			nRowNum =
 				m_pcDocLineMgr->GetLineCount() -
-				pLayoutPrev->GetLogicLineNo() - CLogicInt(1);
+				pLayoutPrev->GetLogicLineNo() - LogicInt(1);
 		}else {
 			nRowNum =
 				pLayoutPrev->m_pNext->GetLogicLineNo() -
-				pLayoutPrev->GetLogicLineNo() - CLogicInt(1);
+				pLayoutPrev->GetLogicLineNo() - LogicInt(1);
 		}
 	}
 
@@ -130,7 +130,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 	ctwArg.bInsData     = (pArg->pInsData && pArg->pInsData->size()) ? TRUE : FALSE;			// 追加文字列の有無
 
 	// 指定レイアウト行に対応する論理行の次の論理行から指定論理行数だけ再レイアウトする
-	CLayoutInt nAddInsLineNum;
+	LayoutInt nAddInsLineNum;
 	pArg->nModLineTo = DoLayout_Range(
 		pLayoutPrev,
 		nRowNum,
@@ -146,7 +146,7 @@ void CLayoutMgr::ReplaceData_CLayoutMgr(
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}
 	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From
-	pArg->nModLineTo += (pArg->nModLineFrom - CLayoutInt(1)) ;	// 再描画ヒント 変更されたレイアウト行To
+	pArg->nModLineTo += (pArg->nModLineFrom - LayoutInt(1)) ;	// 再描画ヒント 変更されたレイアウト行To
 
 	// 2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい
 	LogicToLayout(DLRArg.ptNewPos, &pArg->ptLayoutNew); // 挿入された部分の次の位置

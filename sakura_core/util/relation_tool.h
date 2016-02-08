@@ -27,15 +27,15 @@
 #pragma once
 
 #include <vector>
-class CSubject;
+class Subject;
 class Listener;
 
 // 複数のListenerからウォッチされる
-class CSubject {
+class Subject {
 public:
 	// コンストラクタ・デストラクタ
-	CSubject();
-	virtual ~CSubject();
+	Subject();
+	virtual ~Subject();
 
 	// 公開インターフェース
 	int GetListenerCount() const { return (int)m_vListenersRef.size(); }
@@ -50,34 +50,34 @@ private:
 	std::vector<Listener*> m_vListenersRef;
 };
 
-// 1つのCSubjectをウォッチする
+// 1つのSubjectをウォッチする
 class Listener {
 public:
 	Listener();
 	virtual ~Listener();
 
 	// 公開インターフェース
-	CSubject* Listen(CSubject* pcSubject); // 直前にウォッチしていたサブジェクトを返す
-	CSubject* GetListeningSubject() const { return m_pcSubjectRef; }
+	Subject* Listen(Subject* pcSubject); // 直前にウォッチしていたサブジェクトを返す
+	Subject* GetListeningSubject() const { return m_pcSubjectRef; }
 
 private:
-	CSubject* m_pcSubjectRef;
+	Subject* m_pcSubjectRef;
 };
 
 
 template <class LISTENER>
-class CSubjectT : public CSubject {
+class SubjectT : public Subject {
 public:
 	LISTENER* GetListener(int nIndex) const {
-		return static_cast<LISTENER*>(CSubject::GetListener(nIndex));
+		return static_cast<LISTENER*>(Subject::GetListener(nIndex));
 	}
 };
 
 template <class SUBJECT>
-class CListenerT : public Listener {
+class ListenerT : public Listener {
 public:
 	SUBJECT* Listen(SUBJECT* pcSubject) {
-		return static_cast<SUBJECT*>(Listener::Listen(static_cast<CSubject*>(pcSubject)));
+		return static_cast<SUBJECT*>(Listener::Listen(static_cast<Subject*>(pcSubject)));
 	}
 	SUBJECT* GetListeningSubject() const {
 		return static_cast<SUBJECT*>(Listener::GetListeningSubject());

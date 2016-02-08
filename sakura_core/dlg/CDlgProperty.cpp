@@ -94,7 +94,7 @@ BOOL CDlgProperty::OnBnClicked(int wID)
 */
 void CDlgProperty::SetData(void)
 {
-	CEditDoc* pCEditDoc = (CEditDoc*)m_lParam;
+	EditDoc* pCEditDoc = (EditDoc*)m_lParam;
 	CNativeT cmemProp;
 	TCHAR szWork[500];
 

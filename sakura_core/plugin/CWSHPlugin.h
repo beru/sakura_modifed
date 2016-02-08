@@ -68,8 +68,8 @@ public:
 
 	// ŽÀ‘•
 public:
-	bool ReadPluginDef(CDataProfile *cProfile, CDataProfile *cProfileMlang);
-	bool ReadPluginOption(CDataProfile *cProfile);
+	bool ReadPluginDef(DataProfile *cProfile, DataProfile *cProfileMlang);
+	bool ReadPluginOption(DataProfile *cProfile);
 	CPlug::Array GetPlugs() const {
 		return m_plugs;
 	}

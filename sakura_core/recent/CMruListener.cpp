@@ -36,7 +36,7 @@
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CMruListener::OnAfterSave(const SaveInfo& sSaveInfo)
+void MruListener::OnAfterSave(const SaveInfo& sSaveInfo)
 {
 	_HoldBookmarks_And_AddToMRU();
 }
@@ -47,7 +47,7 @@ void CMruListener::OnAfterSave(const SaveInfo& sSaveInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
-void CMruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
+void MruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 	// 再ロード用に現在ファイルをMRU登録しておく
 	// Mar. 30, 2003 genta ブックマーク保存のためMRUへ登録
@@ -140,9 +140,9 @@ void CMruListener::OnBeforeLoad(LoadInfo* pLoadInfo)
 }
 
 
-void CMruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
+void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	CMRUFile cMRU;
 
@@ -152,7 +152,7 @@ void CMruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 	// キャレット位置の復元
 	if (bIsExistInMRU && GetDllShareData().m_common.m_sFile.GetRestoreCurPosition()) {
 		// キャレット位置取得
-		CLayoutPoint ptCaretPos;
+		LayoutPoint ptCaretPos;
 		pcDoc->m_cLayoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
 
 		// ビュー取得
@@ -206,7 +206,7 @@ void CMruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 //                       クローズ前後                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-ECallbackResult CMruListener::OnBeforeClose()
+ECallbackResult MruListener::OnBeforeClose()
 {
 	// Mar. 30, 2003 genta サブルーチンにまとめた
 	_HoldBookmarks_And_AddToMRU();
@@ -226,10 +226,10 @@ ECallbackResult CMruListener::OnBeforeClose()
 	@date 2003.03.30 genta 作成
 
 */
-void CMruListener::_HoldBookmarks_And_AddToMRU()
+void MruListener::_HoldBookmarks_And_AddToMRU()
 {
 	// EditInfo取得
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 	EditInfo fi;
 	pcDoc->GetEditInfo(&fi);
 

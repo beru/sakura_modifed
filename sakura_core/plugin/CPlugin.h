@@ -257,11 +257,11 @@ public:
 	int 	GetCommandCount()	{ return m_nCommandCount; }			// コマンド数を返す	2010/7/4 Uchi
 
 protected:
-	bool ReadPluginDefCommon(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
-	bool ReadPluginDefPlug(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのPlugセクションを読み込む
-	bool ReadPluginDefCommand(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのCommandセクションを読み込む
-	bool ReadPluginDefOption(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
-	bool ReadPluginDefString(CDataProfile *cProfile, CDataProfile *cProfileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
+	bool ReadPluginDefCommon(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのCommonセクションを読み込む
+	bool ReadPluginDefPlug(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのPlugセクションを読み込む
+	bool ReadPluginDefCommand(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのCommandセクションを読み込む
+	bool ReadPluginDefOption(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
+	bool ReadPluginDefString(DataProfile *cProfile, DataProfile *cProfileMlang);	// プラグイン定義ファイルのStringセクションを読み込む
 
 	// CPlugインスタンスの作成。ReadPluginDefPlug/Command から呼ばれる。
 	virtual CPlug* CreatePlug(CPlugin& plugin, PlugId id, wstring sJack, wstring sHandler, wstring sLabel) {
@@ -301,7 +301,7 @@ protected:
 	// 非実装提供
 public:
 	virtual bool InvokePlug(CEditView* view, CPlug& plug, CWSHIfObj::List& param) = 0;			// プラグを実行する
-	virtual bool ReadPluginDef(CDataProfile* cProfile, CDataProfile* cProfileMlang) = 0;		// プラグイン定義ファイルを読み込む
-	virtual bool ReadPluginOption(CDataProfile* cProfile) = 0;									// オプションファイルを読み込む
+	virtual bool ReadPluginDef(DataProfile* cProfile, DataProfile* cProfileMlang) = 0;		// プラグイン定義ファイルを読み込む
+	virtual bool ReadPluginOption(DataProfile* cProfile) = 0;									// オプションファイルを読み込む
 };
 

@@ -107,7 +107,7 @@ struct ColorStrategyInfo {
 
 	// スキャン位置
 	LPCWSTR			m_pLineOfLogic;
-	CLogicInt		m_nPosInLogic;
+	LogicInt		m_nPosInLogic;
 
 	// 描画位置
 	DispPos*		m_pDispPos;
@@ -128,7 +128,7 @@ struct ColorStrategyInfo {
 	EColorIndexType GetCurrentColorBg() const { return m_cIndex.eColorIndexBg; }
 
 	// 現在のスキャン位置
-	CLogicInt GetPosInLogic() const {
+	LogicInt GetPosInLogic() const {
 		return m_nPosInLogic;
 	}
 	
@@ -136,7 +136,7 @@ struct ColorStrategyInfo {
 		return m_pDispPos->GetLayoutRef()->GetDocLineRef();
 	}
 	
-	const CLayout* GetLayout() const {
+	const Layout* GetLayout() const {
 		return m_pDispPos->GetLayoutRef();
 	}
 	
@@ -147,12 +147,12 @@ public:
 	virtual ~CColorStrategy() {}
 	// 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
-	virtual CLayoutColorInfo* GetStrategyColorInfo() const {
+	virtual LayoutColorInfo* GetStrategyColorInfo() const {
 		return NULL;
 	}
 	// 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual void InitStrategyStatus() = 0;
-	virtual void SetStrategyColorInfo(const CLayoutColorInfo* = NULL) {};
+	virtual void SetStrategyColorInfo(const LayoutColorInfo* = NULL) {};
 	virtual bool BeginColor(const CStringRef& cStr, int nPos) { return false; }
 	virtual bool EndColor(const CStringRef& cStr, int nPos) { return true; }
 	virtual bool Disp() const = 0;
@@ -161,13 +161,13 @@ public:
 
 	// 設定更新
 	virtual void Update(void) {
-		const CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);
+		const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	}
 
 	//#######ラップ
 	EColorIndexType GetStrategyColorSafe() const { if (this) return GetStrategyColor(); else return COLORIDX_TEXT; }
-	CLayoutColorInfo* GetStrategyColorInfoSafe() const {
+	LayoutColorInfo* GetStrategyColorInfoSafe() const {
 		if (this) {
 			return GetStrategyColorInfo();
 		}

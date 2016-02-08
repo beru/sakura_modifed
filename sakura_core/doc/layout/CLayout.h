@@ -22,27 +22,27 @@
 #include "CLayoutExInfo.h"
 #include "view/colors/EColorIndexType.h"
 
-class CLayout;
-class CLayoutMgr;
+class Layout;
+class LayoutMgr;
 
 /*-----------------------------------------------------------------------
 クラスの宣言
 -----------------------------------------------------------------------*/
-class CLayout {
+class Layout {
 protected:
-	friend class CLayoutMgr; //####仮
+	friend class LayoutMgr; //####仮
 public:
 	/*
 	||  Constructors
 	*/
 	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
-	CLayout(
+	Layout(
 		const CDocLine*	pcDocLine,		//!< 実データへの参照
-		CLogicPoint		ptLogicPos,		//!< 実データ参照位置
-		CLogicInt		nLength,		//!< 実データ内データ長
+		LogicPoint		ptLogicPos,		//!< 実データ参照位置
+		LogicInt		nLength,		//!< 実データ内データ長
 		EColorIndexType	nTypePrev,
-		CLayoutInt		nTypeIndent,
-		CLayoutColorInfo*	pColorInfo
+		LayoutInt		nTypeIndent,
+		LayoutColorInfo*	pColorInfo
 		)
 	{
 		m_pPrev			= NULL;
@@ -54,76 +54,76 @@ public:
 		m_nIndent		= nTypeIndent;	// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
 		m_cExInfo.SetColorInfo(pColorInfo);
 	}
-	~CLayout();
+	~Layout();
 	void DUMP(void);
 	
 	// m_ptLogicPos.xで補正したあとの文字列を得る
 	const wchar_t* GetPtr() const { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; }
-	CLogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
-	CLogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	}
-	//CLogicInt GetLength() const { return m_nLength; }	// CMemoryIterator用（EOL含む）
-	CLayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
+	LogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
+	LogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	}
+	//LogicInt GetLength() const { return m_nLength; }	// CMemoryIterator用（EOL含む）
+	LayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	// 取得インターフェース
-	CLogicInt GetLogicLineNo() const { if (this) return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
-	CLogicInt GetLogicOffset() const { return m_ptLogicPos.GetX2(); }
-	CLogicPoint GetLogicPos() const { return m_ptLogicPos; }
+	LogicInt GetLogicLineNo() const { if (this) return m_ptLogicPos.GetY2(); else return LogicInt(-1); } //$$$高速化
+	LogicInt GetLogicOffset() const { return m_ptLogicPos.GetX2(); }
+	LogicPoint GetLogicPos() const { return m_ptLogicPos; }
 	EColorIndexType GetColorTypePrev() const { return m_nTypePrev; } //#########汚っ
-	CLayoutInt GetLayoutWidth() const { return m_nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
+	LayoutInt GetLayoutWidth() const { return m_nLayoutWidth; }		// 2009.08.28 nasukoji	このレイアウト行の改行を含むレイアウト長を返す
 
 	// 変更インターフェース
-	void OffsetLogicLineNo(CLogicInt n) { m_ptLogicPos.y += n; }
+	void OffsetLogicLineNo(LogicInt n) { m_ptLogicPos.y += n; }
 	void SetColorTypePrev(EColorIndexType n) {
 		m_nTypePrev = n;
 	}
-	void SetLayoutWidth(CLayoutInt nWidth) { m_nLayoutWidth = nWidth; }
+	void SetLayoutWidth(LayoutInt nWidth) { m_nLayoutWidth = nWidth; }
 
 	//! レイアウト幅を計算。改行は含まない。2007.10.11 kobake
-	CLayoutInt CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const;
+	LayoutInt CalcLayoutWidth(const LayoutMgr& cLayoutMgr) const;
 
 	//! オフセット値をレイアウト単位に変換して取得。2007.10.17 kobake
-	CLayoutInt CalcLayoutOffset(const CLayoutMgr& cLayoutMgr,
-								CLogicInt nStartPos = CLogicInt(0),
-								CLayoutInt nStartOffset = CLayoutInt(0)) const;
+	LayoutInt CalcLayoutOffset(const LayoutMgr& cLayoutMgr,
+								LogicInt nStartPos = LogicInt(0),
+								LayoutInt nStartOffset = LayoutInt(0)) const;
 
 	//! 文字列参照を取得
 	CStringRef GetStringRef() const { return CStringRef(GetPtr(), GetLengthWithEOL()); }
 
 	// チェーン属性
-	CLayout* GetPrevLayout() { return m_pPrev; }
-	const CLayout* GetPrevLayout() const { return m_pPrev; }
-	CLayout* GetNextLayout() { return m_pNext; }
-	const CLayout* GetNextLayout() const { return m_pNext; }
-	void _SetPrevLayout(CLayout* pcLayout) { m_pPrev = pcLayout; }
-	void _SetNextLayout(CLayout* pcLayout) { m_pNext = pcLayout; }
+	Layout* GetPrevLayout() { return m_pPrev; }
+	const Layout* GetPrevLayout() const { return m_pPrev; }
+	Layout* GetNextLayout() { return m_pNext; }
+	const Layout* GetNextLayout() const { return m_pNext; }
+	void _SetPrevLayout(Layout* pcLayout) { m_pPrev = pcLayout; }
+	void _SetNextLayout(Layout* pcLayout) { m_pNext = pcLayout; }
 
 	// 実データ参照
 	const CDocLine* GetDocLineRef() const { if (this) return m_pCDocLine; else return NULL; } //$$note:高速化
 
 	// その他属性参照
 	const CEol& GetLayoutEol() const { return m_cEol; }
-	const CLayoutColorInfo* GetColorInfo() const { return m_cExInfo.GetColorInfo(); }
-	CLayoutExInfo* GetLayoutExInfo() {
+	const LayoutColorInfo* GetColorInfo() const { return m_cExInfo.GetColorInfo(); }
+	LayoutExInfo* GetLayoutExInfo() {
 		return &m_cExInfo;
 	}
 	
 private:
-	CLayout*			m_pPrev;
-	CLayout*			m_pNext;
+	Layout*			m_pPrev;
+	Layout*			m_pNext;
 
 	// データ参照範囲
 	const CDocLine*		m_pCDocLine;		//!< 実データへの参照
-	CLogicPoint			m_ptLogicPos;		//!< 対応するロジック参照位置
-	CLogicInt			m_nLength;			//!< このレイアウト行の長さ。文字単位。
+	LogicPoint			m_ptLogicPos;		//!< 対応するロジック参照位置
+	LogicInt			m_nLength;			//!< このレイアウト行の長さ。文字単位。
 	
 	// その他属性
 	EColorIndexType		m_nTypePrev;		//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	CLayoutInt			m_nIndent;			//!< このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
+	LayoutInt			m_nIndent;			//!< このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
 	CEol				m_cEol;
-	CLayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
-	CLayoutExInfo		m_cExInfo;			//!< 色分け詳細情報
+	LayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
+	LayoutExInfo		m_cExInfo;			//!< 色分け詳細情報
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CLayout);
+	DISALLOW_COPY_AND_ASSIGN(Layout);
 };
 

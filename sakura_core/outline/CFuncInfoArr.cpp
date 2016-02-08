@@ -54,7 +54,7 @@ void CFuncInfoArr::Empty(void)
 
 // 0<=の指定番号のデータを返す
 // データがない場合はNULLを返す
-CFuncInfo* CFuncInfoArr::GetAt(int nIdx)
+FuncInfo* CFuncInfoArr::GetAt(int nIdx)
 {
 	if (nIdx >= m_nFuncInfoArrNum) {
 		return NULL;
@@ -63,12 +63,12 @@ CFuncInfo* CFuncInfoArr::GetAt(int nIdx)
 }
 
 //! 配列の最後にデータを追加する
-void CFuncInfoArr::AppendData(CFuncInfo* pcFuncInfo)
+void CFuncInfoArr::AppendData(FuncInfo* pcFuncInfo)
 {
 	if (m_nFuncInfoArrNum == 0) {
-		m_ppcFuncInfoArr = (CFuncInfo**)malloc(sizeof(CFuncInfo*) * (m_nFuncInfoArrNum + 1));
+		m_ppcFuncInfoArr = (FuncInfo**)malloc(sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
 	}else {
-		m_ppcFuncInfoArr = (CFuncInfo**)realloc(m_ppcFuncInfoArr, sizeof(CFuncInfo*) * (m_nFuncInfoArrNum + 1));
+		m_ppcFuncInfoArr = (FuncInfo**)realloc(m_ppcFuncInfoArr, sizeof(FuncInfo*) * (m_nFuncInfoArrNum + 1));
 	}
 	m_ppcFuncInfoArr[m_nFuncInfoArrNum] = pcFuncInfo;
 	++m_nFuncInfoArrNum;
@@ -81,17 +81,17 @@ void CFuncInfoArr::AppendData(CFuncInfo* pcFuncInfo)
 	@date 2002.04.01 YAZAKI 深さ導入
 */
 void CFuncInfoArr::AppendData(
-	CLogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	CLogicInt		nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
-	CLayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	CLayoutInt		nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
+	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
+	LogicInt		nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
+	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
+	LayoutInt		nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
 	const TCHAR*	pszFuncName,		//!< 関数名
 	const TCHAR*	pszFileName,		//!< ファイル名
 	int				nInfo,				//!< 付加情報
 	int				nDepth				//!< 深さ
 	)
 {
-	CFuncInfo* pcFuncInfo = new CFuncInfo(nFuncLineCRLF,
+	FuncInfo* pcFuncInfo = new FuncInfo(nFuncLineCRLF,
 										  nFuncColCRLF,
 										  nFuncLineLAYOUT,
 										  nFuncColLAYOUT,
@@ -104,10 +104,10 @@ void CFuncInfoArr::AppendData(
 }
 
 void CFuncInfoArr::AppendData(
-	CLogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	CLogicInt			nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
-	CLayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
-	CLayoutInt			nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
+	LogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
+	LogicInt			nFuncColCRLF,		//!< 関数のある桁(CRLF単位)
+	LayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
+	LayoutInt			nFuncColLAYOUT,		//!< 関数のある桁(折り返し単位)
 	const NOT_TCHAR*	pszFuncName,		//!< 関数名
 	const NOT_TCHAR*	pszFileName,		//!< ファイル名
 	int					nInfo,				//!< 付加情報
@@ -126,17 +126,17 @@ void CFuncInfoArr::AppendData(
 
 
 void CFuncInfoArr::AppendData(
-	CLogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	CLayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
+	LogicInt		nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
+	LayoutInt		nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
 	const TCHAR*	pszFuncName,		//!< 関数名
 	int				nInfo,				//!< 付加情報
 	int				nDepth				//!< 深さ
 	)
 {
 	AppendData(nFuncLineCRLF,
-			  CLogicInt(1),
+			  LogicInt(1),
 			  nFuncLineLAYOUT,
-			  CLayoutInt(1),
+			  LayoutInt(1),
 			  pszFuncName,
 			  NULL,
 			  nInfo,
@@ -145,8 +145,8 @@ void CFuncInfoArr::AppendData(
 }
 
 void CFuncInfoArr::AppendData(
-	CLogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
-	CLayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
+	LogicInt			nFuncLineCRLF,		//!< 関数のある行(CRLF単位)
+	LayoutInt			nFuncLineLAYOUT,	//!< 関数のある行(折り返し単位)
 	const NOT_TCHAR*	pszFuncName,		//!< 関数名
 	int					nInfo,				//!< 付加情報
 	int					nDepth				//!< 深さ

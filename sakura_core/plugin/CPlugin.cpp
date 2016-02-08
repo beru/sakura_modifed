@@ -60,8 +60,8 @@ CPlugin::~CPlugin(void)
 
 // プラグイン定義ファイルのCommonセクションを読み込む
 bool CPlugin::ReadPluginDefCommon(
-	CDataProfile *cProfile,
-	CDataProfile *cProfileMlang
+	DataProfile *cProfile,
+	DataProfile *cProfileMlang
 	)
 {
 	cProfile->IOProfileData(PII_PLUGIN, PII_PLUGIN_ID, m_sId);
@@ -90,8 +90,8 @@ bool CPlugin::ReadPluginDefCommon(
 // プラグイン定義ファイルのPlugセクションを読み込む
 // @date 2011.08.20 syat Plugセクションも複数定義可能とする
 bool CPlugin::ReadPluginDefPlug(
-	CDataProfile *cProfile,
-	CDataProfile *cProfileMlang
+	DataProfile *cProfile,
+	DataProfile *cProfileMlang
 	)
 {
 	std::vector<JackDef> jacks = CJackManager::getInstance()->GetJackDef();
@@ -131,8 +131,8 @@ bool CPlugin::ReadPluginDefPlug(
 
 // プラグイン定義ファイルのCommandセクションを読み込む
 bool CPlugin::ReadPluginDefCommand(
-	CDataProfile *cProfile,
-	CDataProfile *cProfileMlang
+	DataProfile *cProfile,
+	DataProfile *cProfileMlang
 	)
 {
 	wstring sHandler;
@@ -171,8 +171,8 @@ bool CPlugin::ReadPluginDefCommand(
 
 // プラグイン定義ファイルのOptionセクションを読み込む	// 2010/3/24 Uchi
 bool CPlugin::ReadPluginDefOption(
-	CDataProfile *cProfile,
-	CDataProfile *cProfileMlang
+	DataProfile *cProfile,
+	DataProfile *cProfileMlang
 	)
 {
 	wstring sLabel;
@@ -291,8 +291,8 @@ std::vector<std::wstring> wstring_split(
 
 //!	プラグイン定義ファイルのStringセクションを読み込む
 bool CPlugin::ReadPluginDefString(
-	CDataProfile* cProfile,
-	CDataProfile* cProfileMlang
+	DataProfile* cProfile,
+	DataProfile* cProfileMlang
 	)
 {
 	WCHAR bufKey[64];

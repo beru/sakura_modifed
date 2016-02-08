@@ -65,8 +65,8 @@ public:
 
 	// ŽÀ‘•
 public:
-	bool ReadPluginDef(CDataProfile* cProfile, CDataProfile* cProfileMlang);
-	bool ReadPluginOption(CDataProfile* cProfile) {
+	bool ReadPluginDef(DataProfile* cProfile, DataProfile* cProfileMlang);
+	bool ReadPluginOption(DataProfile* cProfile) {
 		return true;
 	}
 	CPlug* CreatePlug(CPlugin& plugin, PlugId id, const wstring& sJack, const wstring& sHandler, const wstring& sLabel);

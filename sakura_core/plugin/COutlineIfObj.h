@@ -82,8 +82,8 @@ public:
 				if (!Arguments[1]) return false;
 				if (!Arguments[2]) return false;
 				if (!Arguments[3]) return false;
-				CLogicPoint ptLogic( _wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1 );
-				CLayoutPoint ptLayout;
+				LogicPoint ptLogic( _wtoi(Arguments[1])-1, _wtoi(Arguments[0])-1 );
+				LayoutPoint ptLayout;
 				if (ptLogic.x < 0 || ptLogic.y < 0) {
 					ptLayout.x = (Int)ptLogic.x;
 					ptLayout.y = (Int)ptLogic.y;

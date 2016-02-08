@@ -32,7 +32,7 @@
 #include "view/figures/CFigureManager.h"
 #include "env/DllShareData.h"
 
-CDocType::CDocType(CEditDoc* pcDoc)
+CDocType::CDocType(EditDoc* pcDoc)
 	:
 	m_pcDocRef(pcDoc),
 	m_nSettingType(0),			// Sep. 11, 2002 genta

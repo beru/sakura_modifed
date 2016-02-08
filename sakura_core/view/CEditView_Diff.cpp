@@ -351,13 +351,13 @@ void CEditView::AnalyzeDiffInfo(
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
-		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, CLogicInt(s1   ), CLogicInt(e1   ));
-		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, CLogicInt(s1 - 1), CLogicInt(e1 - 1));
-		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, CLogicInt(s1 - 1), CLogicInt(e1 - 1));
+		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, LogicInt(s1   ), LogicInt(e1   ));
+		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, LogicInt(s1 - 1), LogicInt(e1 - 1));
 	}else {	// 編集中ファイルは新ファイル
-		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, CLogicInt(s2 - 1), CLogicInt(e2 - 1));
-		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, CLogicInt(s2 - 1), CLogicInt(e2 - 1));
-		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, CLogicInt(s2   ), CLogicInt(e2   ));
+		if      (mode == 'a') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'c') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'd') CDiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, LogicInt(s2   ), LogicInt(e2   ));
 	}
 	
 	return;
@@ -366,12 +366,12 @@ void CEditView::AnalyzeDiffInfo(
 static
 bool MakeDiffTmpFile_core(CTextOutputStream& out, HWND hwnd, CEditView& view, bool bBom)
 {
-	CLogicInt y = CLogicInt(0);
+	LogicInt y = LogicInt(0);
 	const wchar_t*	pLineData;
 	if (!hwnd) {
-		const CDocLineMgr& docMgr = view.m_pcEditDoc->m_cDocLineMgr;
+		const DocLineMgr& docMgr = view.m_pcEditDoc->m_cDocLineMgr;
 		for (;;){
-			CLogicInt		nLineLen;
+			LogicInt		nLineLen;
 			pLineData = docMgr.GetLine(y)->GetDocLineStrWithEOL(&nLineLen);
 			// 正常終了
 			if (nLineLen == 0 || !pLineData) {
@@ -534,7 +534,7 @@ BOOL CEditView::MakeDiffTmpFile2(
 		CEol cEol;
 		while (cfl.ReadLine(&cLine, &cEol) != RESULT_FAILURE) {
 			const wchar_t*	pLineData;
-			CLogicInt		nLineLen;
+			LogicInt		nLineLen;
 			pLineData= cLine.GetStringPtr(&nLineLen);
 			if (nLineLen == 0 || !pLineData) {
 				break;

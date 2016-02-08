@@ -53,13 +53,13 @@ void CType_Asm::InitTypeConfigImp(TypeConfig* pType)
 */
 void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 {
-	CLogicInt nTotalLine;
+	LogicInt nTotalLine;
 
 	nTotalLine = m_pcDocRef->m_cDocLineMgr.GetLineCount();
 
-	for (CLogicInt nLineCount=CLogicInt(0); nLineCount<nTotalLine; ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<nTotalLine; ++nLineCount) {
 		const WCHAR* pLine;
-		CLogicInt nLineLen;
+		LogicInt nLineLen;
 		WCHAR* pTmpLine;
 		int length;
 		int offset;
@@ -136,12 +136,12 @@ void CDocOutline::MakeTopicList_asm(CFuncInfoArr* pcFuncInfoArr)
 				  →
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
-				CLayoutPoint ptPos;
+				LayoutPoint ptPos;
 				m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-					CLogicPoint(0, nLineCount),
+					LogicPoint(0, nLineCount),
 					&ptPos
 				);
-				pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), entry_token, nFuncId);
+				pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), entry_token, nFuncId);
 			}
 		}
 

@@ -25,9 +25,9 @@
 
 class CEditView;
 enum EFunctionCode;
-class CEditDoc;
+class EditDoc;
 struct DLLSHAREDATA;
-class COpeBlk;
+class OpeBlk;
 class CCaret;
 class CEditWnd;
 class CColorStrategy;
@@ -41,12 +41,12 @@ public:
 
 public:
 	// 外部依存
-	CEditDoc* GetDocument();
+	EditDoc* GetDocument();
 	CEditWnd* GetEditWindow();
 	HWND GetMainWindow();
-	COpeBlk* GetOpeBlk();
-	void SetOpeBlk(COpeBlk* p);
-	CLayoutRange& GetSelect();
+	OpeBlk* GetOpeBlk();
+	void SetOpeBlk(OpeBlk* p);
+	LayoutRange& GetSelect();
 	CCaret& GetCaret();
 
 private:
@@ -139,7 +139,7 @@ public:
 	void Command_INDENT(wchar_t cChar, EIndentType = INDENT_NONE); // インデント ver 1
 // From Here 2001.12.03 hor
 //	void Command_INDENT(const char*, int);// インデント ver0
-	void Command_INDENT(const wchar_t*, CLogicInt , EIndentType = INDENT_NONE);// インデント ver0
+	void Command_INDENT(const wchar_t*, LogicInt , EIndentType = INDENT_NONE);// インデント ver0
 // To Here 2001.12.03 hor
 	void Command_UNINDENT(wchar_t wcChar);// 逆インデント
 //	void Command_WORDSREFERENCE(void);	// 単語リファレンス
@@ -152,8 +152,8 @@ public:
 
 	// カーソル移動系
 	// Oct. 24, 2001 genta 機能拡張のため引数追加
-	void Command_MOVECURSOR(CLogicPoint pos, int option);
-	void Command_MOVECURSORLAYOUT(CLayoutPoint pos, int option);
+	void Command_MOVECURSOR(LogicPoint pos, int option);
+	void Command_MOVECURSORLAYOUT(LayoutPoint pos, int option);
 	int Command_UP(bool bSelect, bool bRepeat, int line = 0);			// カーソル上移動
 	int Command_DOWN(bool bSelect, bool bRepeat);	// カーソル下移動
 	int Command_LEFT(bool, bool);					// カーソル左移動
@@ -167,10 +167,10 @@ public:
 	void Command_GOLINEEND(bool bSelect, int , int);	// 行末に移動（折り返し単位）
 //	void Command_ROLLDOWN(int);						// スクロールダウン
 //	void Command_ROLLUP(int);						// スクロールアップ
-	void Command_HalfPageUp( bool bSelect, CLayoutYInt );			//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_HalfPageDown( bool bSelect, CLayoutYInt );		//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
-	void Command_1PageUp( bool bSelect, CLayoutYInt );			//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
-	void Command_1PageDown( bool bSelect, CLayoutYInt );			//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
+	void Command_HalfPageUp( bool bSelect, LayoutYInt );			//半ページアップ	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_HalfPageDown( bool bSelect, LayoutYInt );		//半ページダウン	//Oct. 6, 2000 JEPRO 名称をPC-AT互換機系に変更(ROLL→PAGE) //Oct. 10, 2000 JEPRO 名称変更
+	void Command_1PageUp( bool bSelect, LayoutYInt );			//１ページアップ	//Oct. 10, 2000 JEPRO 従来のページアップを半ページアップと名称変更し１ページアップを追加
+	void Command_1PageDown( bool bSelect, LayoutYInt );			//１ページダウン	//Oct. 10, 2000 JEPRO 従来のページダウンを半ページダウンと名称変更し１ページダウンを追加
 	void Command_GOFILETOP(bool bSelect);			// ファイルの先頭に移動
 	void Command_GOFILEEND(bool bSelect);			// ファイルの最後に移動
 	void Command_CURLINECENTER(void);				// カーソル行をウィンドウ中央へ
@@ -194,7 +194,7 @@ public:
 	void Command_MODIFYLINE_PREV( bool bSelect );	// 前の変更行へ
 
 	// 選択系
-	bool Command_SELECTWORD(CLayoutPoint* pptCaretPos = NULL);		// 現在位置の単語選択
+	bool Command_SELECTWORD(LayoutPoint* pptCaretPos = NULL);		// 現在位置の単語選択
 	void Command_SELECTALL(void);			// すべて選択
 	void Command_SELECTLINE(int lparam);	// 1行選択	// 2007.10.13 nasukoji
 	void Command_BEGIN_SELECT(void);		// 範囲選択開始
@@ -214,8 +214,8 @@ public:
 	void Command_PASTEBOX(const wchar_t* szPaste, int nPasteSize);
 	//>> 2002/03/29 Azumaiya
 	void Command_INSBOXTEXT(const wchar_t*, int); // 矩形貼り付け
-	void Command_INSTEXT(bool bRedraw, const wchar_t*, CLogicInt, bool bNoWaitCursor,
-		bool bLinePaste = false, bool bFastMode = false, const CLogicRange*	psDelRangeLogicFast = NULL); // 2004.05.14 Moca テキストを貼り付け '\0'対応
+	void Command_INSTEXT(bool bRedraw, const wchar_t*, LogicInt, bool bNoWaitCursor,
+		bool bLinePaste = false, bool bFastMode = false, const LogicRange*	psDelRangeLogicFast = NULL); // 2004.05.14 Moca テキストを貼り付け '\0'対応
 	void Command_ADDTAIL(const wchar_t* pszData, int nDataLen);	// 最後にテキストを追加
 	void Command_COPYFILENAME(void);				// このファイル名をクリップボードにコピー // 2002/2/3 aroka
 	void Command_COPYPATH(void);					// このファイルのパス名をクリップボードにコピー
@@ -263,7 +263,7 @@ public:
 	// 検索系
 	void Command_SEARCH_BOX(void);						// 検索(ボックス)	// 2006.06.04 yukihane
 	void Command_SEARCH_DIALOG(void);					// 検索(単語検索ダイアログ)
-	void Command_SEARCH_NEXT(bool, bool, bool, HWND, const WCHAR*, CLogicRange* = NULL);// 次を検索
+	void Command_SEARCH_NEXT(bool, bool, bool, HWND, const WCHAR*, LogicRange* = NULL);// 次を検索
 	void Command_SEARCH_PREV(bool bReDraw, HWND);		// 前を検索
 	void Command_REPLACE_DIALOG(void);					// 置換(置換ダイアログ)
 	void Command_REPLACE(HWND hwndParent);				// 置換(実行) 2002/04/08 YAZAKI 親ウィンドウを指定するように変更
@@ -403,7 +403,7 @@ private:
 	void DelCharForOverwrite(const wchar_t* pszInput, int nLen);	// 上書き用の一文字削除	// 2009.04.11 ryoji
 	bool Sub_PreProcTagJumpByTagsFile( TCHAR* szCurrentPath, int count ); // タグジャンプの前処理
 public:
-	CLogicInt ConvertEol(const wchar_t* pszText, CLogicInt nTextLen, wchar_t* pszConvertedText);
+	LogicInt ConvertEol(const wchar_t* pszText, LogicInt nTextLen, wchar_t* pszConvertedText);
 	void Sub_BoxSelectLock( int flags );
 
 };

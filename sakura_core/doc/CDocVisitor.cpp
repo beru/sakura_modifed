@@ -15,22 +15,22 @@ void CDocVisitor::SetAllEol(CEol cEol)
 	// アンドゥ記録開始
 	if (!pcView->m_bDoing_UndoRedo) {
 		if (!pcView->m_cCommander.GetOpeBlk()) {
-			pcView->m_cCommander.SetOpeBlk(new COpeBlk());
+			pcView->m_cCommander.SetOpeBlk(new OpeBlk());
 		}
 		pcView->m_cCommander.GetOpeBlk()->AddRef();
 	}
 
 	// カーソル位置記憶
-	CLayoutInt		nViewTopLine = pcView->GetTextArea().GetViewTopLine();
-	CLayoutInt		nViewLeftCol = pcView->GetTextArea().GetViewLeftCol();
-	CLayoutPoint	ptCaretPosXY = pcView->GetCaret().GetCaretLayoutPos();
-	CLayoutInt		nCaretPosX_Prev = pcView->GetCaret().m_nCaretPosX_Prev;
+	LayoutInt		nViewTopLine = pcView->GetTextArea().GetViewTopLine();
+	LayoutInt		nViewLeftCol = pcView->GetTextArea().GetViewLeftCol();
+	LayoutPoint	ptCaretPosXY = pcView->GetCaret().GetCaretLayoutPos();
+	LayoutInt		nCaretPosX_Prev = pcView->GetCaret().m_nCaretPosX_Prev;
 
 	bool bReplace = false;
 	// 改行コードを統一する
 	if (cEol.IsValid()) {
-		CLogicInt nLine = CLogicInt(0);
-		COpeBlk* pcOpeBlk = pcView->m_bDoing_UndoRedo ? NULL : pcView->m_cCommander.GetOpeBlk();
+		LogicInt nLine = LogicInt(0);
+		OpeBlk* pcOpeBlk = pcView->m_bDoing_UndoRedo ? NULL : pcView->m_cCommander.GetOpeBlk();
 		for (;;) {
 			CDocLine* pcDocLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLine); //#######非効率
 			if (!pcDocLine) {
@@ -38,9 +38,9 @@ void CDocVisitor::SetAllEol(CEol cEol)
 			}
 			// 改行を置換
 			if (pcDocLine->GetEol() != EOL_NONE && pcDocLine->GetEol() != cEol) {
-				CLogicRange sRange;
-				sRange.SetFrom(CLogicPoint(pcDocLine->GetLengthWithoutEOL(), nLine));
-				sRange.SetTo(CLogicPoint(pcDocLine->GetLengthWithEOL(), nLine));
+				LogicRange sRange;
+				sRange.SetFrom(LogicPoint(pcDocLine->GetLengthWithoutEOL(), nLine));
+				sRange.SetTo(LogicPoint(pcDocLine->GetLengthWithEOL(), nLine));
 				pcView->ReplaceData_CEditView2(
 					sRange,
 					cEol.GetValue2(),
@@ -54,7 +54,7 @@ void CDocVisitor::SetAllEol(CEol cEol)
 			++nLine;
 		}
 		// 編集時入力改行コード
-		CEditDoc::GetInstance(0)->m_cDocEditor.SetNewLineCode(cEol);
+		EditDoc::GetInstance(0)->m_cDocEditor.SetNewLineCode(cEol);
 	}
 
 	if (bReplace) {
@@ -75,7 +75,7 @@ void CDocVisitor::SetAllEol(CEol cEol)
 			pcView->GetCaret().MoveCursor(ptCaretPosXY, true);
 			pcView->GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
 			pcView->m_cCommander.GetOpeBlk()->AppendOpe(
-				new CMoveCaretOpe(
+				new MoveCaretOpe(
 					pcView->GetCaret().GetCaretLogicPos()
 				)
 			);

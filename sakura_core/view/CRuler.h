@@ -25,13 +25,13 @@
 
 class CTextArea;
 class CEditView;
-class CEditDoc;
+class EditDoc;
 class CTextMetrics;
 class CGraphics;
 
 class CRuler {
 public:
-	CRuler(const CEditView* pEditView, const CEditDoc* pEditDoc);
+	CRuler(const CEditView* pEditView, const EditDoc* pEditDoc);
 	virtual ~CRuler();
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -59,7 +59,7 @@ private:
 private:
 	// 参照
 	const CEditView*	m_pEditView;
-	const CEditDoc*		m_pEditDoc;
+	const EditDoc*		m_pEditDoc;
 	
 	// 状態
 	bool	m_bRedrawRuler;		// ルーラー全体を描き直す時 = true      2002.02.25 Add By KK

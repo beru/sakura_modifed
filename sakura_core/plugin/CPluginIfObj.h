@@ -93,7 +93,7 @@ public:
 		case F_PL_GETDEF:				// 設定ファイルから値を読む
 		case F_PL_GETOPTION:			// オプションファイルから値を読む
 			{
-				CDataProfile cProfile;
+				DataProfile cProfile;
 				wstring sSection;
 				wstring sKey;
 				wstring sValue;
@@ -163,7 +163,7 @@ public:
 				if (!Arguments[0]) return false;
 				if (!Arguments[1]) return false;
 				if (!Arguments[2]) return false;
-				CDataProfile cProfile;
+				DataProfile cProfile;
 
 				cProfile.ReadProfile(m_cPlugin.GetOptionPath().c_str());
 				cProfile.SetWritingMode();

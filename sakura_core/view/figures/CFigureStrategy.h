@@ -39,7 +39,7 @@ public:
 
 	// Ý’èXV
 	virtual void Update(void) {
-		CEditDoc* pCEditDoc = CEditDoc::GetInstance(0);
+		EditDoc* pCEditDoc = EditDoc::GetInstance(0);
 		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	}
 protected:

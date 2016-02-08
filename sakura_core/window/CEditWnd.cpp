@@ -121,21 +121,21 @@ static const FuncMenuName	sFuncMenuName[] = {
 	{F_TOGGLE_KEY_SEARCH,	{F_TOGGLE_KEY_SEARCH_ON,		F_TOGGLE_KEY_SEARCH_OFF}},
 };
 
-static void ShowCodeBox(HWND hWnd, CEditDoc* pcEditDoc)
+static void ShowCodeBox(HWND hWnd, EditDoc* pcEditDoc)
 {
 	// カーソル位置の文字列を取得
-	const CLayout*	pcLayout;
-	CLogicInt		nLineLen;
+	const Layout*	pcLayout;
+	LogicInt		nLineLen;
 	const CEditView* pcView = &pcEditDoc->m_pcEditWnd->GetActiveView();
 	const CCaret* pcCaret = &pcView->GetCaret();
-	const CLayoutMgr* pLayoutMgr = &pcEditDoc->m_cLayoutMgr;
+	const LayoutMgr* pLayoutMgr = &pcEditDoc->m_cLayoutMgr;
 	const wchar_t* pLine = pLayoutMgr->GetLineStr(pcCaret->GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
 
 	// -- -- -- -- キャレット位置の文字情報 -> szCaretChar -- -- -- -- //
 	//
 	if (pLine) {
 		// 指定された桁に対応する行のデータ内の位置を調べる
-		CLogicInt nIdx = pcView->LineColumnToIndex(pcLayout, pcCaret->GetCaretLayoutPos().GetX2());
+		LogicInt nIdx = pcView->LineColumnToIndex(pcLayout, pcCaret->GetCaretLayoutPos().GetX2());
 		if (nIdx < nLineLen) {
 			if (nIdx < nLineLen - (pcLayout->GetLayoutEol().GetLen() ? 1 : 0)) {
 				// 一時的に表示方法の設定を変更する
@@ -601,7 +601,7 @@ void CEditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 	@date 2008.04.19 ryoji 初回アイドリング検出用ゼロ秒タイマーのセット処理を追加
 */
 HWND CEditWnd::Create(
-	CEditDoc*		pcEditDoc,
+	EditDoc*		pcEditDoc,
 	CImageListMgr*	pcIcons,	// [in] Image List
 	int				nGroup		// [in] グループID
 )
@@ -1866,8 +1866,8 @@ LRESULT CEditWnd::DispatchEvent(
 			→
 			 レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
-			CLogicPoint* ppoCaret = &(m_pShareData->m_workBuffer.m_LogicPoint);
-			CLayoutPoint ptCaretPos;
+			LogicPoint* ppoCaret = &(m_pShareData->m_workBuffer.m_LogicPoint);
+			LayoutPoint ptCaretPos;
 			GetDocument()->m_cLayoutMgr.LogicToLayout(
 				*ppoCaret,
 				&ptCaretPos
@@ -1899,7 +1899,7 @@ LRESULT CEditWnd::DispatchEvent(
 		物理位置(行頭からのバイト数、折り返し無し行位置)
 		*/
 		{
-			CLogicPoint* ppoCaret = &(m_pShareData->m_workBuffer.m_LogicPoint);
+			LogicPoint* ppoCaret = &(m_pShareData->m_workBuffer.m_LogicPoint);
 			GetDocument()->m_cLayoutMgr.LayoutToLogic(
 				GetActiveView().GetCaret().GetCaretLayoutPos(),
 				ppoCaret
@@ -1912,12 +1912,12 @@ LRESULT CEditWnd::DispatchEvent(
 		// 共有データ：自分Write→相手Read
 		// return 0以上：行データあり。wParamオフセットを除いた行データ長。0はEOFかOffsetがちょうどバッファ長だった
 		//       -1以下：エラー
-		CLogicInt	nLineNum = CLogicInt(wParam);
-		CLogicInt	nLineOffset = CLogicInt(lParam);
+		LogicInt	nLineNum = LogicInt(wParam);
+		LogicInt	nLineOffset = LogicInt(lParam);
 		if (nLineNum < 0 || GetDocument()->m_cDocLineMgr.GetLineCount() < nLineNum) {
 			return -2; // 行番号不正。LineCount == nLineNum はEOF行として下で処理
 		}
-		CLogicInt nLineLen = CLogicInt(0);
+		LogicInt nLineLen = LogicInt(0);
 		const wchar_t* pLine = GetDocument()->m_cDocLineMgr.GetLine(nLineNum)->GetDocLineStrWithEOL( &nLineLen );
 		if (nLineOffset < 0 || nLineLen < nLineOffset) {
 			return -3; // オフセット位置不正
@@ -1931,7 +1931,7 @@ LRESULT CEditWnd::DispatchEvent(
 		if (nLineLen == nLineOffset) {
  			return 0;
  		}
-		pLine = GetDocument()->m_cDocLineMgr.GetLine(CLogicInt(wParam))->GetDocLineStrWithEOL( &nLineLen );
+		pLine = GetDocument()->m_cDocLineMgr.GetLine(LogicInt(wParam))->GetDocLineStrWithEOL( &nLineLen );
 		pLine += nLineOffset;
 		nLineLen -= nLineOffset;
 		size_t nEnd = t_min<size_t>(nLineLen, m_pShareData->m_workBuffer.GetWorkBufferCount<EDIT_CHAR>());
@@ -2501,7 +2501,7 @@ void CEditWnd::InitMenu_Function(HMENU hMenu, EFunctionCode eFunc, const wchar_t
 			break;
 		case F_WRAPWINDOWWIDTH:
 			{
-				CLayoutInt ketas;
+				LayoutInt ketas;
 				WCHAR*	pszLabel;
 				CEditView::TOGGLE_WRAP_ACTION mode = GetActiveView().GetWrapMode(&ketas);
 				if (mode == CEditView::TGWRAP_NONE) {
@@ -4261,7 +4261,7 @@ bool CEditWnd::CreateEditViewBySplit(int nViewCount)
 
 /*
 	ビューの再初期化
-	@date 2010.04.10 CEditDoc::InitAllViewから移動
+	@date 2010.04.10 EditDoc::InitAllViewから移動
 */
 void CEditWnd::InitAllViews()
 {
@@ -4275,8 +4275,8 @@ void CEditWnd::InitAllViews()
 		GetView(i).GetSelectionInfo().DisableSelectArea(false);
 
 		GetView(i).OnChangeSetting();
-		GetView(i).GetCaret().MoveCursor(CLayoutPoint(0, 0), true);
-		GetView(i).GetCaret().m_nCaretPosX_Prev = CLayoutInt(0);
+		GetView(i).GetCaret().MoveCursor(LayoutPoint(0, 0), true);
+		GetView(i).GetCaret().m_nCaretPosX_Prev = LayoutInt(0);
 	}
 	GetMiniMap().OnChangeSetting();
 }
@@ -4458,7 +4458,7 @@ BOOL CEditWnd::DetectWidthOfLineNumberAreaAllPane(bool bRedraw)
 bool CEditWnd::WrapWindowWidth(int nPane)
 {
 	// 右端で折り返す
-	CLayoutInt nWidth = GetView(nPane).ViewColNumToWrapColNum(GetView(nPane).GetTextArea().m_nViewColNum);
+	LayoutInt nWidth = GetView(nPane).ViewColNumToWrapColNum(GetView(nPane).GetTextArea().m_nViewColNum);
 	if (GetDocument()->m_cLayoutMgr.GetMaxLineKetas() != nWidth) {
 		ChangeLayoutParam(false, GetDocument()->m_cLayoutMgr.GetTabSpace(), nWidth);
 		ClearViewCaretPosInfo();
@@ -4499,7 +4499,7 @@ BOOL CEditWnd::UpdateTextWrap(void)
 	@date 2005.08.14 genta 新規作成
 	@date 2008.06.18 ryoji レイアウト変更途中はカーソル移動の画面スクロールを見せない（画面のちらつき抑止）
 */
-void CEditWnd::ChangeLayoutParam(bool bShowProgress, CLayoutInt nTabSize, CLayoutInt nMaxLineKetas)
+void CEditWnd::ChangeLayoutParam(bool bShowProgress, LayoutInt nTabSize, LayoutInt nMaxLineKetas)
 {
 	HWND hwndProgress = NULL;
 	if (bShowProgress && this) {
@@ -4512,7 +4512,7 @@ void CEditWnd::ChangeLayoutParam(bool bShowProgress, CLayoutInt nTabSize, CLayou
 	}
 
 	// 座標の保存
-	CLogicPointEx* posSave = SavePhysPosOfAllView();
+	LogicPointEx* posSave = SavePhysPosOfAllView();
 
 	// レイアウトの更新
 	GetDocument()->m_cLayoutMgr.ChangeLayoutParam(nTabSize, nMaxLineKetas);
@@ -4551,28 +4551,28 @@ void CEditWnd::ChangeLayoutParam(bool bShowProgress, CLayoutInt nTabSize, CLayou
 	渡し忘れるとメモリリークとなる．
 
 	@date 2005.08.11 genta  新規作成
-	@date 2007.09.06 kobake 戻り値をCLogicPoint*に変更
-	@date 2011.12.28 CLogicPointをCLogicPointExに変更。改行より右側でも復帰できるように
+	@date 2007.09.06 kobake 戻り値をLogicPoint*に変更
+	@date 2011.12.28 LogicPointをLogicPointExに変更。改行より右側でも復帰できるように
 */
-CLogicPointEx* CEditWnd::SavePhysPosOfAllView()
+LogicPointEx* CEditWnd::SavePhysPosOfAllView()
 {
 	const int NUM_OF_VIEW = GetAllViewCount();
 	const int NUM_OF_POS = 6;
 	
-	CLogicPointEx* pptPosArray = new CLogicPointEx[NUM_OF_VIEW * NUM_OF_POS];
+	LogicPointEx* pptPosArray = new LogicPointEx[NUM_OF_VIEW * NUM_OF_POS];
 	
 	for (int i=0; i<NUM_OF_VIEW; ++i) {
-		CLayoutPoint tmp = CLayoutPoint(CLayoutInt(0), GetView(i).m_pcTextArea->GetViewTopLine());
-		const CLayout* layoutLine = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(tmp.GetY2());
+		LayoutPoint tmp = LayoutPoint(LayoutInt(0), GetView(i).m_pcTextArea->GetViewTopLine());
+		const Layout* layoutLine = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(tmp.GetY2());
 		if (layoutLine) {
-			CLogicInt nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
+			LogicInt nLineCenter = layoutLine->GetLogicOffset() + layoutLine->GetLengthWithoutEOL() / 2;
 			pptPosArray[i * NUM_OF_POS + 0].x = nLineCenter;
 			pptPosArray[i * NUM_OF_POS + 0].y = layoutLine->GetLogicLineNo();
 		}else {
-			pptPosArray[i * NUM_OF_POS + 0].x = CLogicInt(0);
-			pptPosArray[i * NUM_OF_POS + 0].y = CLogicInt(0);
+			pptPosArray[i * NUM_OF_POS + 0].x = LogicInt(0);
+			pptPosArray[i * NUM_OF_POS + 0].y = LogicInt(0);
 		}
-		pptPosArray[i * NUM_OF_POS + 0].ext = CLayoutInt(0);
+		pptPosArray[i * NUM_OF_POS + 0].ext = LayoutInt(0);
 		if (GetView(i).GetSelectionInfo().m_sSelectBgn.GetFrom().y >= 0) {
 			GetDocument()->m_cLayoutMgr.LayoutToLogicEx(
 				GetView(i).GetSelectionInfo().m_sSelectBgn.GetFrom(),
@@ -4611,16 +4611,16 @@ CLogicPointEx* CEditWnd::SavePhysPosOfAllView()
 	CEditWnd::SavePhysPosOfAllViewで保存したデータを元に座標値を再計算する．
 
 	@date 2005.08.11 genta  新規作成
-	@date 2007.09.06 kobake 引数をCLogicPoint*に変更
-	@date 2011.12.28 CLogicPointをCLogicPointExに変更。改行より右側でも復帰できるように
+	@date 2007.09.06 kobake 引数をLogicPoint*に変更
+	@date 2011.12.28 LogicPointをLogicPointExに変更。改行より右側でも復帰できるように
 */
-void CEditWnd::RestorePhysPosOfAllView(CLogicPointEx* pptPosArray)
+void CEditWnd::RestorePhysPosOfAllView(LogicPointEx* pptPosArray)
 {
 	const int NUM_OF_VIEW = GetAllViewCount();
 	const int NUM_OF_POS = 6;
 
 	for (int i=0; i<NUM_OF_VIEW; ++i) {
-		CLayoutPoint tmp;
+		LayoutPoint tmp;
 		GetDocument()->m_cLayoutMgr.LogicToLayoutEx(
 			pptPosArray[i * NUM_OF_POS + 0],
 			&tmp
@@ -4651,7 +4651,7 @@ void CEditWnd::RestorePhysPosOfAllView(CLogicPointEx* pptPosArray)
 				GetView(i).GetSelectionInfo().m_sSelect.GetToPointer()
 			);
 		}
-		CLayoutPoint ptPosXY;
+		LayoutPoint ptPosXY;
 		GetDocument()->m_cLayoutMgr.LogicToLayoutEx(
 			pptPosArray[i * NUM_OF_POS + 5],
 			&ptPosXY
@@ -4659,7 +4659,7 @@ void CEditWnd::RestorePhysPosOfAllView(CLogicPointEx* pptPosArray)
 		GetView(i).GetCaret().MoveCursor(ptPosXY, false); // 2013.06.05 bScrollをtrue=>falase
 		GetView(i).GetCaret().m_nCaretPosX_Prev = GetView(i).GetCaret().GetCaretLayoutPos().GetX2();
 
-		CLayoutInt nLeft = CLayoutInt(0);
+		LayoutInt nLeft = LayoutInt(0);
 		if (GetView(i).GetTextArea().m_nViewColNum < GetView(i).GetRightEdgeForScrollBar()) {
 			nLeft = GetView(i).GetRightEdgeForScrollBar() - GetView(i).GetTextArea().m_nViewColNum;
 		}

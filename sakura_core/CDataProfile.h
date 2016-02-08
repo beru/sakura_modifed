@@ -68,8 +68,8 @@ typedef const StringBufferW_ StringBufferW;
 
 
 // 2007.09.24 kobake データ変換部を子クラスに分離
-// 各種データ変換付きCProfile
-class CDataProfile : public CProfile {
+// 各種データ変換付きProfile
+class DataProfile : public Profile {
 private:
 	// 専用型
 	typedef std::wstring wstring;
@@ -114,12 +114,12 @@ protected:
 	AS_INT(WORD)
 
 #ifdef USE_STRICT_INT
-	// CLayoutInt
-	void profile_to_value(const wstring& profile, CLayoutInt* value) { *value = (CLayoutInt)_wtoi(profile.c_str()); }
-	void value_to_profile(const CLayoutInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
-	// CLogicInt
-	void profile_to_value(const wstring& profile, CLogicInt* value) { *value = (CLogicInt)_wtoi(profile.c_str()); }
-	void value_to_profile(const CLogicInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
+	// LayoutInt
+	void profile_to_value(const wstring& profile, LayoutInt* value) { *value = (LayoutInt)_wtoi(profile.c_str()); }
+	void value_to_profile(const LayoutInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
+	// LogicInt
+	void profile_to_value(const wstring& profile, LogicInt* value) { *value = (LogicInt)_wtoi(profile.c_str()); }
+	void value_to_profile(const LogicInt& value, wstring* profile) { *profile = _work_itow((Int)value);    }
 #endif
 	// ACHAR
 	void profile_to_value(const wstring& profile, ACHAR* value) {

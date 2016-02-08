@@ -141,7 +141,7 @@ bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		CTypeSupport cPageViewBg(m_pcView, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
 			CEditView& cActiveView = m_pcView->m_pcEditWnd->GetActiveView();
-			CLayoutInt curLine = m_pDispPos->GetLayoutLineRef();
+			LayoutInt curLine = m_pDispPos->GetLayoutLineRef();
 			if (m_colorIdxBackLine == COLORIDX_PAGEVIEW) {
 				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
 				}else {
@@ -302,7 +302,7 @@ void CColorStrategyPool::OnChangeSetting(void)
 	m_pcDoubleQuote = static_cast<CColor_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
 
 	// 色分けをしない場合に、処理をスキップできるように確認する
-	const TypeConfig& type = CEditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+	const TypeConfig& type = EditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
 	EColorIndexType bSkipColorTypeTable[] = {
 		COLORIDX_DIGIT,
 		COLORIDX_COMMENT,

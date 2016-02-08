@@ -40,9 +40,9 @@ public:
 	}
 	virtual void Update(void);
 	virtual EColorIndexType GetStrategyColor() const = 0;
-	virtual CLayoutColorInfo* GetStrategyColorInfo() const;
+	virtual LayoutColorInfo* GetStrategyColorInfo() const;
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = -1; }
-	virtual void SetStrategyColorInfo(const CLayoutColorInfo*);
+	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
 	virtual bool BeginColor(const CStringRef& cStr, int nPos);
 	virtual bool EndColor(const CStringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[this->GetStrategyColor()].m_bDisp; }

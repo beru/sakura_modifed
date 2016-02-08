@@ -1,5 +1,5 @@
 /*!	@file
-	@brief CLayoutとCDocLineのイテレータ
+	@brief LayoutとCDocLineのイテレータ
 
 	@author Yazaki
 	@date 2002/09/25 新規作成
@@ -30,33 +30,33 @@
 class CMemoryIterator {
 public:
 	// CDocLine用コンストラクタ
-	CMemoryIterator(const CDocLine* pcT, CLayoutInt nTabSpace)
+	CMemoryIterator(const CDocLine* pcT, LayoutInt nTabSpace)
 		:
 		m_pLine(pcT ? pcT->GetPtr() : NULL),
 		m_nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
 		m_nTabSpace(nTabSpace),
-		m_nIndent(CLayoutInt(0))
+		m_nIndent(LayoutInt(0))
 	{
 		first();
 	}
 
-	// CLayout用コンストラクタ
-	CMemoryIterator(const CLayout* pcT, CLayoutInt nTabSpace)
+	// Layout用コンストラクタ
+	CMemoryIterator(const Layout* pcT, LayoutInt nTabSpace)
 		:
 		m_pLine(pcT ? pcT->GetPtr() : NULL),
 		m_nLineLen(pcT ? pcT->GetLengthWithEOL() : 0),
 		m_nTabSpace(nTabSpace),
-		m_nIndent(pcT ? pcT->GetIndent() : CLayoutInt(0))
+		m_nIndent(pcT ? pcT->GetIndent() : LayoutInt(0))
 	{
 		first();
 	}
 
 	// 桁位置を行の先頭にセット
 	void first() {
-		m_nIndex = CLogicInt(0);
+		m_nIndex = LogicInt(0);
 		m_nColumn = m_nIndent;
-		m_nIndex_Delta = CLogicInt(0);
-		m_nColumn_Delta = CLayoutInt(0);
+		m_nIndex_Delta = LogicInt(0);
+		m_nColumn_Delta = LayoutInt(0);
 	}
 
 	/*! 行末かどうか
@@ -72,18 +72,18 @@ public:
 		// 2007.09.04 kobake UNICODE化：データ増分と桁増分を別々の値として計算する。
 
 		// データ増分を計算
-		m_nIndex_Delta = CLogicInt(CNativeW::GetSizeOfChar(m_pLine, m_nLineLen, m_nIndex));
+		m_nIndex_Delta = LogicInt(CNativeW::GetSizeOfChar(m_pLine, m_nLineLen, m_nIndex));
 		if (m_nIndex_Delta == 0) {
-			m_nIndex_Delta = CLogicInt(1);
+			m_nIndex_Delta = LogicInt(1);
 		}
 
 		// 桁増分を計算
 		if (m_pLine[m_nIndex] == WCODE::TAB) {
 			m_nColumn_Delta = m_nTabSpace - (m_nColumn % m_nTabSpace);
 		}else {
-			m_nColumn_Delta = CLayoutInt(CNativeW::GetKetaOfChar(m_pLine, m_nLineLen, m_nIndex));
+			m_nColumn_Delta = LayoutInt(CNativeW::GetKetaOfChar(m_pLine, m_nLineLen, m_nIndex));
 //			if (m_nColumn_Delta == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
-//				m_nColumn_Delta = CLayoutInt(1);
+//				m_nColumn_Delta = LayoutInt(1);
 //			}
 		}
 	}
@@ -96,10 +96,10 @@ public:
 		m_nIndex += m_nIndex_Delta;
 	}	// ポインタをずらす
 	
-	CLogicInt	getIndex()			const {	return m_nIndex;	}
-	CLayoutInt	getColumn()			const {	return m_nColumn;	}
-	CLogicInt	getIndexDelta()		const {	return m_nIndex_Delta;	}
-	CLayoutInt	getColumnDelta()	const {	return m_nColumn_Delta;	}
+	LogicInt	getIndex()			const {	return m_nIndex;	}
+	LayoutInt	getColumn()			const {	return m_nColumn;	}
+	LogicInt	getIndexDelta()		const {	return m_nIndex_Delta;	}
+	LayoutInt	getColumnDelta()	const {	return m_nColumn_Delta;	}
 
 	// 2002.10.07 YAZAKI
 	const wchar_t getCurrentChar() {	return m_pLine[m_nIndex];	}
@@ -112,14 +112,14 @@ private:
 	// コンストラクタで受け取ったパラメータ (固定)
 	const wchar_t*		m_pLine;
 	const int			m_nLineLen;  // データ長。文字単位。
-	const CLayoutInt	m_nTabSpace;
-	const CLayoutInt	m_nIndent;
+	const LayoutInt	m_nTabSpace;
+	const LayoutInt	m_nIndent;
 
 	// 状態変数
-	CLogicInt	m_nIndex;        // データ位置。文字単位。
-	CLayoutInt	m_nColumn;       // レイアウト位置。桁(半角幅)単位。
-	CLogicInt	m_nIndex_Delta;  // index増分
-	CLayoutInt	m_nColumn_Delta; // column増分
+	LogicInt	m_nIndex;        // データ位置。文字単位。
+	LayoutInt	m_nColumn;       // レイアウト位置。桁(半角幅)単位。
+	LogicInt	m_nIndex_Delta;  // index増分
+	LayoutInt	m_nColumn_Delta; // column増分
 
 };
 

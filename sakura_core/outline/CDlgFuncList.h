@@ -24,9 +24,9 @@
 #include "dlg/CDialog.h"
 #include "doc/CEditDoc.h"
 
-class CFuncInfo;
+class FuncInfo;
 class CFuncInfoArr; // 2002/2/10 aroka
-class CDataProfile;
+class DataProfile;
 
 #define OUTLINE_LAYOUT_FOREGROUND (0)
 #define OUTLINE_LAYOUT_BACKGROUND (1)
@@ -60,7 +60,7 @@ public:
 	/*
 	||  Attributes & Operations
 	*/
-	HWND DoModeless(HINSTANCE, HWND, LPARAM, CFuncInfoArr*, CLayoutInt, CLayoutInt, int, int, bool); // モードレスダイアログの表示
+	HWND DoModeless(HINSTANCE, HWND, LPARAM, CFuncInfoArr*, LayoutInt, LayoutInt, int, int, bool); // モードレスダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：検索対象となるビューの変更
 	bool IsDocking() { return m_eDockSide > DOCKSIDE_FLOAT; }
 	EDockSide GetDockSide() { return m_eDockSide; }
@@ -83,7 +83,7 @@ protected:
 public:
 	//! 現在の種別と同じなら
 	bool CheckListType(int nOutLineType) const { return nOutLineType == m_nOutlineType; }
-	void Redraw(int nOutLineType, int nListType, CFuncInfoArr*, CLayoutInt nCurLine, CLayoutInt nCurCol);
+	void Redraw(int nOutLineType, int nListType, CFuncInfoArr*, LayoutInt nCurLine, LayoutInt nCurCol);
 	void Refresh(void);
 	bool ChangeLayout(int nId);
 	void OnOutlineNotify(WPARAM wParam, LPARAM lParam);
@@ -91,14 +91,14 @@ public:
 	void SetWindowText(const TCHAR* szTitle);		// ダイアログタイトルの設定
 	EFunctionCode GetFuncCodeRedraw(int outlineType);
 	void LoadFileTreeSetting( CFileTreeSetting&, SFilePath& );
-	static void ReadFileTreeIni( CDataProfile&, CFileTreeSetting& );
+	static void ReadFileTreeIni( DataProfile&, CFileTreeSetting& );
 
 protected:
 	bool m_bInChangeLayout;
 
 	CFuncInfoArr*	m_pcFuncInfoArr;	// 関数情報配列
-	CLayoutInt		m_nCurLine;			// 現在行
-	CLayoutInt		m_nCurCol;			// 現在桁
+	LayoutInt		m_nCurLine;			// 現在行
+	LayoutInt		m_nCurCol;			// 現在桁
 	int				m_nSortCol;			// ソートする列番号
 	int				m_nSortColOld;		//!< ソートする列番号(OLD)
 	bool			m_bSortDesc;		//!< 降順
@@ -191,7 +191,7 @@ private:
 	int m_nSortType;
 
 	// 選択中の関数情報
-	CFuncInfo* m_cFuncInfo;
+	FuncInfo* m_cFuncInfo;
 	std::tstring m_sJumpFile;
 
 	const TCHAR* m_pszTimerJumpFile;

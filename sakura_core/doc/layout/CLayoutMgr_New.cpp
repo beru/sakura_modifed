@@ -33,7 +33,7 @@
 	@retval true 禁則文字に該当
 	@retval false 禁則文字に該当しない
 */
-bool CLayoutMgr::IsKinsokuHead(wchar_t wc)
+bool LayoutMgr::IsKinsokuHead(wchar_t wc)
 {
 	return m_pszKinsokuHead_1.exist(wc);
 }
@@ -46,7 +46,7 @@ bool CLayoutMgr::IsKinsokuHead(wchar_t wc)
 	@retval true 禁則文字に該当
 	@retval false 禁則文字に該当しない
 */
-bool CLayoutMgr::IsKinsokuTail(wchar_t wc)
+bool LayoutMgr::IsKinsokuTail(wchar_t wc)
 {
 	return m_pszKinsokuTail_1.exist(wc);
 }
@@ -60,7 +60,7 @@ bool CLayoutMgr::IsKinsokuTail(wchar_t wc)
 	@retval true 禁則文字に該当
 	@retval false 禁則文字に該当しない
 */
-bool CLayoutMgr::IsKinsokuKuto(wchar_t wc)
+bool LayoutMgr::IsKinsokuKuto(wchar_t wc)
 {
 	return m_pszKinsokuKuto_1.exist(wc);
 }
@@ -68,10 +68,10 @@ bool CLayoutMgr::IsKinsokuKuto(wchar_t wc)
 /*!
 	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
 */
-bool CLayoutMgr::IsKinsokuPosHead(
-	CLayoutInt nRest,		// [in] 行の残り文字数
-	CLayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
-	CLayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
+bool LayoutMgr::IsKinsokuPosHead(
+	LayoutInt nRest,		// [in] 行の残り文字数
+	LayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
+	LayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
 )
 {
 	switch ((Int)nRest) {
@@ -108,10 +108,10 @@ bool CLayoutMgr::IsKinsokuPosHead(
 /*!
 	@date 2005-08-20 D.S.Koba _DoLayout()とDoLayout_Range()から分離
 */
-bool CLayoutMgr::IsKinsokuPosTail(
-	CLayoutInt nRest,		// [in] 行の残り文字数
-	CLayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
-	CLayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
+bool LayoutMgr::IsKinsokuPosTail(
+	LayoutInt nRest,		// [in] 行の残り文字数
+	LayoutInt nCharKetas,	// [in] 現在位置の文字サイズ
+	LayoutInt nCharKetas2	// [in] 現在位置の次の文字サイズ
 )
 {
 	switch ((Int)nRest) {
@@ -152,9 +152,9 @@ bool CLayoutMgr::IsKinsokuPosTail(
 	@author genta
 	@date 2002.10.01
 */
-CLayoutInt CLayoutMgr::getIndentOffset_Normal(CLayout*)
+LayoutInt LayoutMgr::getIndentOffset_Normal(Layout*)
 {
-	return CLayoutInt(0);
+	return LayoutInt(0);
 }
 
 /*!
@@ -169,13 +169,13 @@ CLayoutInt CLayoutMgr::getIndentOffset_Normal(CLayout*)
 	@date 2002.10.01 
 	@date 2002.10.07 YAZAKI 名称変更, 処理見直し
 */
-CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
+LayoutInt LayoutMgr::getIndentOffset_Tx2x(Layout* pLayoutPrev)
 {
 	// 前の行が無いときは、インデント不要。
 	if (!pLayoutPrev) {
-		return CLayoutInt(0);
+		return LayoutInt(0);
 	}
-	CLayoutInt nIpos = pLayoutPrev->GetIndent();
+	LayoutInt nIpos = pLayoutPrev->GetIndent();
 
 	// 前の行が折り返し行ならばそれに合わせる
 	if (pLayoutPrev->GetLogicOffset() > 0) {
@@ -192,7 +192,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
 	}
 	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
-		nIpos = t_max(CLayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
+		nIpos = t_max(LayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
 	return nIpos;	// インデント
 }
@@ -208,14 +208,14 @@ CLayoutInt CLayoutMgr::getIndentOffset_Tx2x(CLayout* pLayoutPrev)
 	
 	@date 2002.10.01 
 */
-CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
+LayoutInt LayoutMgr::getIndentOffset_LeftSpace(Layout* pLayoutPrev)
 {
 	// 前の行が無いときは、インデント不要。
 	if (!pLayoutPrev) {
-		return CLayoutInt(0);
+		return LayoutInt(0);
 	}
 	// インデントの計算
-	CLayoutInt nIpos = pLayoutPrev->GetIndent();
+	LayoutInt nIpos = pLayoutPrev->GetIndent();
 	
 	// Oct. 5, 2002 genta
 	// 折り返しの3行目以降は1つ前の行のインデントに合わせる．
@@ -255,7 +255,7 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
 	}
 	// 2010.07.06 Moca TAB=8などの場合に折り返すと無限ループする不具合の修正. 6固定を m_nTabSpace + 2に変更
 	if (GetMaxLineKetas() - nIpos < GetTabSpace() + 2) {
-		nIpos = t_max(CLayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
+		nIpos = t_max(LayoutInt(0), GetMaxLineKetas() - (GetTabSpace() + 2)); // 2013.05.12 Chg:0だったのを最大幅に変更
 	}
 	return nIpos;	// インデント
 }
@@ -278,14 +278,14 @@ CLayoutInt CLayoutMgr::getIndentOffset_LeftSpace(CLayout* pLayoutPrev)
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayoutInt nEnd)
+BOOL LayoutMgr::CalculateTextWidth(bool bCalLineLen, LayoutInt nStart, LayoutInt nEnd)
 {
 	bool bRet = false;
 	bool bOnlyExpansion = true;		// 最大幅の拡大のみをチェックする
-	CLayoutInt nMaxLen = CLayoutInt(0);
-	CLayoutInt nMaxLineNum = CLayoutInt(0);
+	LayoutInt nMaxLen = LayoutInt(0);
+	LayoutInt nMaxLineNum = LayoutInt(0);
 
-	CLayoutInt nLines = GetLineCount();		// テキストのレイアウト行数
+	LayoutInt nLines = GetLineCount();		// テキストのレイアウト行数
 
 	// 開始・終了位置がどちらも指定されていない
 	if (nStart < 0 && nEnd < 0) {
@@ -301,7 +301,7 @@ BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayout
 	}else {
 		++nEnd;					// 算出終了行の次行
 	}
-	CLayout* pLayout;
+	Layout* pLayout;
 	// 算出開始レイアウト行を探す
 	// 2013.05.13 SearchLineByLayoutYを使う
 	if (nStart == 0) {
@@ -312,7 +312,7 @@ BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayout
 #if 0
 	if (nStart * 2 < nLines) {
 		// 前方からサーチ
-		CLayoutInt nCount = CLayoutInt(0);
+		LayoutInt nCount = LayoutInt(0);
 		pLayout = m_pLayoutTop;
 		while (pLayout) {
 			if (nStart == nCount) {
@@ -323,7 +323,7 @@ BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayout
 		}
 	}else {
 		// 後方からサーチ
-		CLayoutInt nCount = CLayoutInt(m_nLines - 1);
+		LayoutInt nCount = LayoutInt(m_nLines - 1);
 		pLayout = m_pLayoutBot;
 		while (pLayout) {
 			if (nStart == nCount) {
@@ -336,13 +336,13 @@ BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayout
 #endif
 
 	// レイアウト行の最大幅を取り出す
-	for (CLayoutInt i=nStart; i<nEnd; ++i) {
+	for (LayoutInt i=nStart; i<nEnd; ++i) {
 		if (!pLayout) {
 			break;
 		}
 		// レイアウト行の長さを算出する
 		if (bCalLineLen) {
-			CLayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + CLayoutInt(pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0);
+			LayoutInt nWidth = pLayout->CalcLayoutWidth(*this) + LayoutInt(pLayout->GetLayoutEol().GetLen() > 0 ? 1 : 0);
 			pLayout->SetLayoutWidth(nWidth);
 		}
 
@@ -393,9 +393,9 @@ BOOL CLayoutMgr::CalculateTextWidth(bool bCalLineLen, CLayoutInt nStart, CLayout
 
 	@date 2009.08.28 nasukoji	新規作成
 */
-void CLayoutMgr::ClearLayoutLineWidth(void)
+void LayoutMgr::ClearLayoutLineWidth(void)
 {
-	CLayout* pLayout = m_pLayoutTop;
+	Layout* pLayout = m_pLayoutTop;
 	while (pLayout) {
 		pLayout->m_nLayoutWidth = 0;			// レイアウト行長をクリア
 		pLayout = pLayout->GetNextLayout();		// 次のレイアウト行のデータ

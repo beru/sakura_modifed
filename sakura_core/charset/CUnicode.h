@@ -27,7 +27,7 @@
 
 #include "CCodeBase.h"
 
-class CUnicode : public CodeBase {
+class Unicode : public CodeBase {
 public:
 	EConvertResult CodeToUnicode(const CMemory& cSrc, CNativeW* pDst) {	//!< “Á’èƒR[ƒh ¨ UNICODE    •ÏŠ·
 		return UnicodeToUnicode_in(cSrc, pDst);

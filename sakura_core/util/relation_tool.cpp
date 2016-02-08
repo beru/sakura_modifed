@@ -3,14 +3,14 @@
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                         CSubject                            //
+//                         Subject                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CSubject::CSubject()
+Subject::Subject()
 {
 }
 
-CSubject::~CSubject()
+Subject::~Subject()
 {
 	// リスナを解除
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
@@ -19,7 +19,7 @@ CSubject::~CSubject()
 	m_vListenersRef.clear();
 }
 
-void CSubject::_AddListener(Listener* pcListener)
+void Subject::_AddListener(Listener* pcListener)
 {
 	// 既に追加済みなら何もしない
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
@@ -31,7 +31,7 @@ void CSubject::_AddListener(Listener* pcListener)
 	m_vListenersRef.push_back(pcListener);
 }
 
-void CSubject::_RemoveListener(Listener* pcListener)
+void Subject::_RemoveListener(Listener* pcListener)
 {
 	// 配列から削除
 	for (int i=0; i<(int)m_vListenersRef.size(); ++i) {
@@ -56,9 +56,9 @@ Listener::~Listener()
 	Listen(NULL);
 }
 
-CSubject* Listener::Listen(CSubject* pcSubject)
+Subject* Listener::Listen(Subject* pcSubject)
 {
-	CSubject* pOld = GetListeningSubject();
+	Subject* pOld = GetListeningSubject();
 
 	// 古いサブジェクトを解除
 	if (m_pcSubjectRef) {

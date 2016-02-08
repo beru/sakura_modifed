@@ -1,4 +1,4 @@
-// 各CRecent実装クラスのベースクラス
+// 各Recent実装クラスのベースクラス
 
 // エディタ系ファイルからincludeするときは CRecent.h をinclude
 /*
@@ -30,7 +30,7 @@
 
 
 template <class DATA_TYPE, class RECEIVE_TYPE = const DATA_TYPE*>
-class CRecentImp : public CRecent {
+class CRecentImp : public Recent {
 private:
 	typedef CRecentImp<DATA_TYPE, RECEIVE_TYPE>	Me;
 	typedef DATA_TYPE							DataType;

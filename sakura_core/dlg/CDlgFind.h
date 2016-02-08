@@ -39,7 +39,7 @@ public:
 	bool	m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	std::wstring	m_strText;	// 検索文字列
 
-	CLogicPoint	m_ptEscCaretPos_PHY;	// 検索開始時のカーソル位置退避エリア
+	LogicPoint	m_ptEscCaretPos_PHY;	// 検索開始時のカーソル位置退避エリア
 
 	CRecentSearch			m_cRecentSearch;
 	ComboBoxItemDeleter	m_comboDel;

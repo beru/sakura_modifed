@@ -218,7 +218,7 @@ void CNativeA::ToLower()
 	int nBufLen = GetStringLength();
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		int nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			unsigned char uc = (unsigned char)tolower(pBuf[i]);
 			pBuf[i] = uc;
@@ -261,7 +261,7 @@ void CNativeA::ToUpper()
 	int nBufLen = GetStringLength();
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		int nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			unsigned char uc = (unsigned char)toupper(pBuf[i]);
 			pBuf[i] = uc;
@@ -318,7 +318,7 @@ void CNativeA::ToZenkaku(
 	int nBufDesLen = 0;
 	for (int i=0; i<nBufLen; ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		int nCharChars = CShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
+		int nCharChars = ShiftJis::GetSizeOfChar((const char*)pBuf, nBufLen, i);
 		if (nCharChars == 1) {
 			bool bHenkanOK = false;
 			if (bHanKataOnly) {	// 1== 半角カタカナにのみ作用する
@@ -472,7 +472,7 @@ void CNativeA::TABToSPACE(int nTabSpace	/* TABの文字数 */)
 				}
 			}
 		}
-		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem, cEol.GetType());
+		CMemory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
 		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -594,7 +594,7 @@ void CNativeA::SPACEToTAB(int nTabSpace)
 		}
 
 		// 行末の処理
-		CMemory cEolMem; CShiftJis::S_GetEol(&cEolMem, cEol.GetType());
+		CMemory cEolMem; ShiftJis::S_GetEol(&cEolMem, cEol.GetType());
 		auto_memcpy(&pDes[nPosDes], (const char*)cEolMem.GetRawPtr(), cEolMem.GetRawLength());
 		nPosDes += cEolMem.GetRawLength();
 	}
@@ -616,7 +616,7 @@ int CNativeA::GetSizeOfChar(
 	int nIdx
 	)
 {
-	return CShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);
+	return ShiftJis::GetSizeOfChar(pData, nDataLen, nIdx);
 }
 
 // ポインタで示した文字の次にある文字の位置を返します

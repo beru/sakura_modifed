@@ -80,10 +80,10 @@ wstring CTextInputStream::ReadLineW()
 
 	// UTF-8 Å® UNICODE
 	if (m_bIsUtf8) {
-		CUtf8::UTF8ToUnicode(*(line._GetMemory()), &line);
+		Utf8::UTF8ToUnicode(*(line._GetMemory()), &line);
 	// Shift_JIS Å® UNICODE
 	}else {
-		CShiftJis::SJISToUnicode(*(line._GetMemory()), &line);
+		ShiftJis::SJISToUnicode(*(line._GetMemory()), &line);
 	}
 
 	return wstring().assign( line.GetStringPtr(), line.GetStringLength() );	// EOL Ç‹Ç≈ NULL ï∂éöÇ‡ä‹ÇﬂÇÈ

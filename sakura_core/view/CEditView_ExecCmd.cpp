@@ -146,7 +146,7 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 	bool bCurDir = (nFlgOpt & 0x200) == 0x200;
 
 	// 編集中のウィンドウに出力する場合の選択範囲処理用	// 2007.04.29 maru
-	CLayoutPoint ptFrom(0, 0);
+	LayoutPoint ptFrom(0, 0);
 	bool bBeforeTextSelected = GetSelectionInfo().IsTextSelected();
 	if (bBeforeTextSelected) {
 		ptFrom = this->GetSelectionInfo().m_sSelect.GetFrom();
@@ -272,9 +272,9 @@ bool CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDi
 		&& bToEditWindow
 	) {
 		GetSelectionInfo().SetSelectArea(
-			CLayoutRange(
-				CLayoutPoint(CLayoutInt(0), CLayoutInt(0)),
-				CLayoutPoint(CLayoutInt(0), m_pcEditDoc->m_cLayoutMgr.GetLineCount())
+			LayoutRange(
+				LayoutPoint(LayoutInt(0), LayoutInt(0)),
+				LayoutPoint(LayoutInt(0), m_pcEditDoc->m_cLayoutMgr.GetLineCount())
 			)
 		);
 		DeleteData(true);
@@ -583,9 +583,9 @@ user_cancel:
 		if (bToEditWindow) {
 			if (bBeforeTextSelected) {	// 挿入された部分を選択状態に
 				GetSelectionInfo().SetSelectArea(
-					CLayoutRange(
+					LayoutRange(
 						ptFrom,
-						GetCaret().GetCaretLayoutPos()// CLayoutPoint(m_nCaretPosY, m_nCaretPosX)
+						GetCaret().GetCaretLayoutPos()// LayoutPoint(m_nCaretPosY, m_nCaretPosX)
 					)
 				);
 				GetSelectionInfo().DrawSelectArea();
@@ -619,7 +619,7 @@ finish:
 void COutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 {
 	if (m_bWindow) {
-		m_pCommander->Command_INSTEXT(false, pBuf, CLogicInt(size), true);
+		m_pCommander->Command_INSTEXT(false, pBuf, LogicInt(size), true);
 	}else {
 		m_pCShareData->TraceOutString(pBuf , size);
 	}

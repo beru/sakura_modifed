@@ -68,7 +68,7 @@ static const int MENUBAR_MESSAGE_MAX_LEN = 30;
 class CPrintPreview; // 2002/2/10 aroka
 class DropTarget;
 class CPlug;
-class CEditDoc;
+class EditDoc;
 struct DLLSHAREDATA;
 
 
@@ -94,7 +94,7 @@ struct TabGroupInfo {
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
 class CEditWnd :
 	public TSingleton<CEditWnd>,
-	public CDocListenerEx
+	public DocListenerEx
 {
 	friend class TSingleton<CEditWnd>;
 	CEditWnd();
@@ -108,7 +108,7 @@ public:
 	// 2007.06.26 ryoji グループ指定引数追加
 	//! 作成
 	HWND Create(
-		CEditDoc*		pcEditDoc,
+		EditDoc*		pcEditDoc,
 		CImageListMgr*	pcIcons,
 		int				nGroup
 	);
@@ -253,10 +253,10 @@ public:
 	bool WrapWindowWidth(int nPane);	// 右端で折り返す			2008.06.08 ryoji
 	BOOL UpdateTextWrap(void);		// 折り返し方法関連の更新	2008.06.10 ryoji
 	//	Aug. 14, 2005 genta TAB幅と折り返し位置の更新
-	void ChangeLayoutParam(bool bShowProgress, CLayoutInt nTabSize, CLayoutInt nMaxLineKetas);
+	void ChangeLayoutParam(bool bShowProgress, LayoutInt nTabSize, LayoutInt nMaxLineKetas);
 	//	Aug. 14, 2005 genta
-	CLogicPointEx* SavePhysPosOfAllView();
-	void RestorePhysPosOfAllView(CLogicPointEx* pptPosArray);
+	LogicPointEx* SavePhysPosOfAllView();
+	void RestorePhysPosOfAllView(LogicPointEx* pptPosArray);
 	// 互換BMPによる画面バッファ 2007.09.09 Moca
 	void Views_DeleteCompatibleBitmap(); //!< CEditViewの画面バッファを削除
 	
@@ -265,8 +265,8 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	HWND			GetHwnd() const			{ return m_hWnd; }
 	CMenuDrawer&	GetMenuDrawer()			{ return m_cMenuDrawer; }
-	CEditDoc*		GetDocument()			{ return m_pcEditDoc; }
-	const CEditDoc*	GetDocument() const		{ return m_pcEditDoc; }
+	EditDoc*		GetDocument()			{ return m_pcEditDoc; }
+	const EditDoc*	GetDocument() const		{ return m_pcEditDoc; }
 
 	// ビュー
 	const CEditView&	GetActiveView() const		{ return *m_pcEditView; }
@@ -372,7 +372,7 @@ public:
 
 private:
 	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
-	CEditDoc* 		m_pcEditDoc;
+	EditDoc* 		m_pcEditDoc;
 	CEditView*		m_pcEditViewArr[4];		//!< ビュー
 	CEditView*		m_pcEditView;			//!< 有効なビュー
 	CEditView*		m_pcEditViewMiniMap;	//!< ミニマップ
@@ -396,7 +396,7 @@ private:
 	LPTSTR			m_pszMenubarMessage;	//!< メニューバー右端に表示するメッセージ
 public:
 	int				m_nTimerCount;			//!< OnTimer用 2003.08.29 wmlhq
-	CLogicPointEx*	m_posSaveAry;
+	LogicPointEx*	m_posSaveAry;
 private:
 	int				m_nCurrentFocus;	//!< 現在のフォーカス情報
 	int				m_nWinSizeType;		//!< サイズ変更のタイプ。SIZE_MAXIMIZED, SIZE_MINIMIZED 等。

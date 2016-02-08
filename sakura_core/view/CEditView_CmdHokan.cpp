@@ -83,7 +83,7 @@ void CEditView::ShowHokanMgr(CNativeW& cmemData, bool bAutoDecided)
 	CNativeW	cmemHokanWord;
 	POINT		poWin;
 	/* 補完ウィンドウの表示位置を算出 */
-	CLayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol();
+	LayoutXInt nX = GetCaret().GetCaretLayoutPos().GetX2() - GetTextArea().GetViewLeftCol();
 	if (nX < 0) {
 		poWin.x = 0;
 	}else if (GetTextArea().m_nViewColNum < nX) {
@@ -91,7 +91,7 @@ void CEditView::ShowHokanMgr(CNativeW& cmemData, bool bAutoDecided)
 	}else {
 		poWin.x = GetTextArea().GetAreaLeft() + (Int)(nX) * GetTextMetrics().GetHankakuDx();
 	}
-	CLayoutYInt nY = GetCaret().GetCaretLayoutPos().GetY2() - GetTextArea().GetViewTopLine();
+	LayoutYInt nY = GetCaret().GetCaretLayoutPos().GetY2() - GetTextArea().GetViewTopLine();
 	if (nY < 0) {
 		poWin.y = 0;
 	}else if (GetTextArea().m_nViewRowNum < nY) {
@@ -195,13 +195,13 @@ int CEditView::HokanSearchByFile(
 	int nLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
-	CLogicPoint ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
+	LogicPoint ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
 
 	// キーが記号で始まるか
 	// キーの先頭が記号(#$@\)かどうか判定
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
-	for (CLogicInt i=CLogicInt(0); i<nLines; ++i) {
+	for (LogicInt i=LogicInt(0); i<nLines; ++i) {
 		const wchar_t* pszLine = CDocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
 		for (j=0; j<nLineLen; j+=nCharSize) {

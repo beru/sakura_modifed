@@ -71,15 +71,15 @@ class CEditApp;
 	@date 2007.12.13 kobake SetDocumentEncoding作成
 	@date 2007.12.13 kobake IsViewMode作成
 */
-class CEditDoc
+class EditDoc
 	:
-	public CDocSubject,
-	public TInstanceHolder<CEditDoc>
+	public DocSubject,
+	public TInstanceHolder<EditDoc>
 {
 public:
 	// コンストラクタ・デストラクタ
-	CEditDoc(CEditApp* pcApp);
-	~CEditDoc();
+	EditDoc(CEditApp* pcApp);
+	~EditDoc();
 
 	// 初期化
 	BOOL Create(CEditWnd* pcEditWnd);
@@ -122,8 +122,8 @@ public:
 	CEditWnd*		m_pcEditWnd;	// Sep. 10, 2002
 
 	// データ構造
-	CDocLineMgr		m_cDocLineMgr;
-	CLayoutMgr		m_cLayoutMgr;
+	DocLineMgr		m_cDocLineMgr;
+	LayoutMgr		m_cLayoutMgr;
 
 	// 各種機能
 public:

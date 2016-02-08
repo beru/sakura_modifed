@@ -158,7 +158,7 @@ static const EFunctionCode EIsModificationForbidden[] = {
 	@date 2002.01.14 YAZAKI 印刷プレビューをCPrintPreviewに独立させたことによる変更
 	@date 2004.06.21 novice タグジャンプ機能追加
 */
-CEditDoc::CEditDoc(CEditApp* pcApp)
+EditDoc::EditDoc(CEditApp* pcApp)
 	:
 	m_cDocFile(this),					// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
 	m_cDocFileOperation(this),			// warning C4355: 'this' : ベース メンバー初期化子リストで使用されました。
@@ -168,7 +168,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	m_nCommandExecNum(0),				// コマンド実行回数
 	m_hBackImg(NULL)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CEditDoc::CEditDoc");
+	MY_RUNNINGTIMER(cRunningTimer, "EditDoc::EditDoc");
 	
 	// レイアウト管理情報の初期化
 	m_cLayoutMgr.Create(this, &m_cDocLineMgr);
@@ -178,7 +178,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 	// 「指定桁で折り返す」以外の時は折り返し幅をMAXLINEKETASで初期化する
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = m_cDocType.GetDocumentAttribute();
-	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
+	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
 	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
@@ -219,7 +219,7 @@ CEditDoc::CEditDoc(CEditApp* pcApp)
 }
 
 
-CEditDoc::~CEditDoc()
+EditDoc::~EditDoc()
 {
 	if (m_hBackImg) {
 		::DeleteObject(m_hBackImg);
@@ -230,7 +230,7 @@ CEditDoc::~CEditDoc()
 //                        生成と破棄                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CEditDoc::Clear()
+void EditDoc::Clear()
 {
 	// ファイルの排他ロック解除
 	m_cDocFileOperation.DoFileUnlock();
@@ -261,7 +261,7 @@ void CEditDoc::Clear()
 
 	// 2008.06.07 nasukoji	折り返し方法の追加に対応
 	const TypeConfig& ref = m_cDocType.GetDocumentAttribute();
-	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
+	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
 	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
@@ -270,7 +270,7 @@ void CEditDoc::Clear()
 }
 
 // 既存データのクリア
-void CEditDoc::InitDoc()
+void EditDoc::InitDoc()
 {
 	AppMode::getInstance()->SetViewMode(false);	// ビューモード $$ 今後OnClearDocを用意したい
 	AppMode::getInstance()->m_szGrepKey[0] = 0;	//$$
@@ -303,7 +303,7 @@ void CEditDoc::InitDoc()
 	m_cCookie.DeleteAll(L"document");
 }
 
-void CEditDoc::SetBackgroundImage()
+void EditDoc::SetBackgroundImage()
 {
 	CFilePath path = m_cDocType.GetDocumentAttribute().m_szBackImgPath.c_str();
 	if (m_hBackImg) {
@@ -378,7 +378,7 @@ void CEditDoc::SetBackgroundImage()
 }
 
 // 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する
-void CEditDoc::InitAllView(void)
+void EditDoc::InitAllView(void)
 {
 	m_nCommandExecNum = 0;	// コマンド実行回数
 	
@@ -405,9 +405,9 @@ void CEditDoc::InitAllView(void)
 	@date 2001.09.29 genta マクロクラスを渡すように
 	@date 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 */
-BOOL CEditDoc::Create(CEditWnd* pcEditWnd)
+BOOL EditDoc::Create(CEditWnd* pcEditWnd)
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CEditDoc::Create");
+	MY_RUNNINGTIMER(cRunningTimer, "EditDoc::Create");
 
 	m_pcEditWnd = pcEditWnd;
 
@@ -436,7 +436,7 @@ BOOL CEditDoc::Create(CEditWnd* pcEditWnd)
 	@author genta
 	@date 2002.09.09
 */
-void CEditDoc::SetFilePathAndIcon(const TCHAR* szFile)
+void EditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 {
 	TCHAR szWork[MAX_PATH];
 	if (::GetLongFileName(szFile, szWork)) {
@@ -452,19 +452,19 @@ void CEditDoc::SetFilePathAndIcon(const TCHAR* szFile)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ドキュメントの文字コードを取得
-ECodeType CEditDoc::GetDocumentEncoding() const
+ECodeType EditDoc::GetDocumentEncoding() const
 {
 	return m_cDocFile.GetCodeSet();
 }
 
 // ドキュメントのBOM付加を取得
-bool CEditDoc::GetDocumentBomExist() const
+bool EditDoc::GetDocumentBomExist() const
 {
 	return m_cDocFile.IsBomExist();
 }
 
 // ドキュメントの文字コードを設定
-void CEditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
+void EditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 {
 	if (!IsValidCodeType(eCharCode)) {
 		return; // 無効な範囲を受け付けない
@@ -474,7 +474,7 @@ void CEditDoc::SetDocumentEncoding(ECodeType eCharCode, bool bBom)
 }
 
 
-void CEditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
+void EditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
 {
 	pSaveInfo->cFilePath   = m_cDocFile.GetFilePath();
 	pSaveInfo->eCharCode   = m_cDocFile.GetCodeSet();
@@ -485,7 +485,7 @@ void CEditDoc::GetSaveInfo(SaveInfo* pSaveInfo) const
 
 
 // 編集ファイル情報を格納
-void CEditDoc::GetEditInfo(
+void EditDoc::GetEditInfo(
 	EditInfo* pfi	// [out]
 ) const
 {
@@ -522,7 +522,7 @@ void CEditDoc::GetEditInfo(
 	@date 2000.08.14 genta 新規作成
 	@date 2014.07.27 novice 編集禁止の場合の検索方法変更
 */
-bool CEditDoc::IsModificationForbidden(EFunctionCode nCommand) const
+bool EditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 {
 	// 編集可能の場合
 	if (IsEditable()) {
@@ -563,7 +563,7 @@ bool CEditDoc::IsModificationForbidden(EFunctionCode nCommand) const
 	@author Moca
 	@date 2005.06.24 Moca
 */
-bool CEditDoc::IsAcceptLoad() const
+bool EditDoc::IsAcceptLoad() const
 {
 	if (
 		m_cDocEditor.IsModified()
@@ -588,7 +588,7 @@ bool CEditDoc::IsAcceptLoad() const
 	@date 2006.05.19 genta 上位16bitに送信元の識別子が入るように変更
 	@date 2007.06.20 ryoji グループ内で巡回するように変更
 */
-bool CEditDoc::HandleCommand(EFunctionCode nCommand)
+bool EditDoc::HandleCommand(EFunctionCode nCommand)
 {
 	// May. 19, 2006 genta 上位16bitに送信元の識別子が入るように変更したので
 	// 下位16ビットのみを取り出す
@@ -624,7 +624,7 @@ bool CEditDoc::HandleCommand(EFunctionCode nCommand)
 /*!	タイプ別設定の適用を変更
 	@date 2011.12.15 CViewCommander::Command_TYPE_LISTから移動
 */
-void CEditDoc::OnChangeType()
+void EditDoc::OnChangeType()
 {
 	// 設定変更を反映させる
 	m_bTextWrapMethodCurTemp = false;	// 折り返し方法の一時設定適用中を解除	// 2008.06.08 ryoji
@@ -653,7 +653,7 @@ void CEditDoc::OnChangeType()
 	@date 2008.05.30 nasukoji	テキストの折り返し方法の変更処理を追加
 	@date 2013.04.22 novice レイアウト情報の再作成を設定できるようにした
 */
-void CEditDoc::OnChangeSetting(
+void EditDoc::OnChangeSetting(
 	bool bDoLayout
 )
 {
@@ -692,7 +692,7 @@ void CEditDoc::OnChangeSetting(
 	// 共有データ構造体のアドレスを返す
 	CFileNameManager::getInstance()->TransformFileName_MakeCache();
 
-	CLogicPointEx* posSaveAry = NULL;
+	LogicPointEx* posSaveAry = NULL;
 	if (m_pcEditWnd->m_posSaveAry) {
 		if (bDoLayout) {
 			posSaveAry = m_pcEditWnd->m_posSaveAry;
@@ -715,7 +715,7 @@ void CEditDoc::OnChangeSetting(
 	if (bFontTypeOld) {
 		nFontPointSizeOld = m_cDocType.GetDocumentAttribute().m_nPointSize;
 	}
-	const CKetaXInt nTabSpaceOld = m_cDocType.GetDocumentAttribute().m_nTabSpace;
+	const KetaXInt nTabSpaceOld = m_cDocType.GetDocumentAttribute().m_nTabSpace;
 
 	// 文書種別
 	m_cDocType.SetDocumentType(CDocTypeManager().GetDocumentTypeOfPath(m_cDocFile.GetFilePath()), false);
@@ -752,8 +752,8 @@ void CEditDoc::OnChangeSetting(
 	SelectCharWidthCache(CWM_FONT_EDIT, m_pcEditWnd->GetLogfontCacheMode());
 	InitCharWidthCache(m_pcEditWnd->GetLogfont());
 
-	CLayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	CLayoutInt nTabSpace = ref.m_nTabSpace;
+	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
+	LayoutInt nTabSpace = ref.m_nTabSpace;
 	if (bDoLayout) {
 		// 2008.06.07 nasukoji	折り返し方法の追加に対応
 		// 折り返し方法の一時設定とタイプ別設定が一致したら一時設定適用中は解除
@@ -837,7 +837,7 @@ void CEditDoc::OnChangeSetting(
 
 	@retval TRUE: 終了して良い / FALSE: 終了しない
 */
-BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
+BOOL EditDoc::OnFileClose(bool bGrepNoConfirm)
 {
 	// クローズ事前処理
 	ECallbackResult eBeforeCloseResult = NotifyBeforeClose();
@@ -958,7 +958,7 @@ BOOL CEditDoc::OnFileClose(bool bGrepNoConfirm)
 	@date 2007.07.20 genta HandleCommandに追加情報を渡す．
 		自動実行マクロで発行したコマンドはキーマクロに保存しない
 */
-void CEditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
+void EditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 {
 	// 開ファイル／タイプ変更時はアウトラインを再解析する
 	if (!pszSaveFilePath) {
@@ -983,7 +983,7 @@ void CEditDoc::RunAutoMacro(int idx, LPCTSTR pszSaveFilePath)
 }
 
 // (無題)の時のカレントディレクトリを設定する
-void CEditDoc::SetCurDirNotitle()
+void EditDoc::SetCurDirNotitle()
 {
 	if (m_cDocFile.GetFilePathClass().IsValidPath()) {
 		return; // ファイルがあるときは何もしない

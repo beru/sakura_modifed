@@ -86,8 +86,8 @@ public:
 
 	// ネイティブ取得インターフェース
 	wchar_t operator [] (int nIndex) const;					//!< 任意位置の文字取得。nIndexは文字単位。
-	CLogicInt GetStringLength() const {						//!< 文字列長を返す。文字単位。
-		return CLogicInt(CNative::GetRawLength() / sizeof(wchar_t));
+	LogicInt GetStringLength() const {						//!< 文字列長を返す。文字単位。
+		return LogicInt(CNative::GetRawLength() / sizeof(wchar_t));
 	}
 	const wchar_t* GetStringPtr() const {
 		return reinterpret_cast<const wchar_t*>(GetRawPtr());
@@ -100,10 +100,10 @@ public:
 		return reinterpret_cast<const wchar_t*>(GetRawPtr());
 	}
 #ifdef USE_STRICT_INT
-	const wchar_t* GetStringPtr(CLogicInt* pnLength) const { // [out]pnLengthは文字単位。
+	const wchar_t* GetStringPtr(LogicInt* pnLength) const { // [out]pnLengthは文字単位。
 		int n;
 		const wchar_t* p = GetStringPtr(&n);
-		*pnLength = CLogicInt(n);
+		*pnLength = LogicInt(n);
 		return p;
 	}
 #endif
@@ -192,12 +192,12 @@ private:
 
 public:
 	// -- -- staticインターフェース -- -- //
-	static CLogicInt GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字がwchar_t何個分かを返す
-	static CLayoutInt GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が半角何個分かを返す
+	static LogicInt GetSizeOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字がwchar_t何個分かを返す
+	static LayoutInt GetKetaOfChar(const wchar_t* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が半角何個分かを返す
 	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の次にある文字の位置を返します
 	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の直前にある文字の位置を返します
 
-	static CLayoutInt GetKetaOfChar(const CStringRef& cStr, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
+	static LayoutInt GetKetaOfChar(const CStringRef& cStr, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
 		return GetKetaOfChar(cStr.GetPtr(), cStr.GetLength(), nIdx);
 	}
 };

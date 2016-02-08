@@ -190,7 +190,7 @@ public:
 		m_enablebuf(0)
 	{}
 
-	CLogicInt ScanLine(const wchar_t*, CLogicInt);
+	LogicInt ScanLine(const wchar_t*, LogicInt);
 
 private:
 	bool m_ismultiline; // 複数行のディレクティブ
@@ -234,9 +234,9 @@ private:
 	@date 2007.12.13 じゅうじ : ifの直後にスペースがない場合の対応
 
 */
-CLogicInt CCppPreprocessMng::ScanLine(
+LogicInt CCppPreprocessMng::ScanLine(
 	const wchar_t* str,
-	CLogicInt _length
+	LogicInt _length
 	)
 {
 	int length = _length;
@@ -249,18 +249,18 @@ CLogicInt CCppPreprocessMng::ScanLine(
 	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
 		;
 	if (lastptr <= p)
-		return CLogicInt(length);	//	空行のため処理不要
+		return LogicInt(length);	//	空行のため処理不要
 
 	if (m_ismultiline) { // 複数行のディレクティブは無視
 		m_ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
-		return CLogicInt(length);
+		return LogicInt(length);
 	}
 
 	if (*p != L'#') {	//	プリプロセッサ以外の処理はメイン部に任せる
 		if (m_enablebuf) {
-			return CLogicInt(length);	//	1ビットでも1となっていたら無視
+			return LogicInt(length);	//	1ビットでも1となっていたら無視
 		}
-		return CLogicInt(p - str);
+		return LogicInt(p - str);
 	}
 
 	++p; // #をスキップ
@@ -321,7 +321,7 @@ CLogicInt CCppPreprocessMng::ScanLine(
 		m_ismultiline = C_IsLineEsc(str, length); // 行末が \ で終わっていないか
 	}
 
-	return CLogicInt(length);	//	基本的にプリプロセッサ指令は無視
+	return LogicInt(length);	//	基本的にプリプロセッサ指令は無視
 }
 
 /*!
@@ -361,8 +361,8 @@ void CDocOutline::MakeFuncList_C(
 // #define TRACE_OUTLINE
 #endif
 	const wchar_t*	pLine;
-	CLogicInt	nLineLen;
-	CLogicInt	i;
+	LogicInt	nLineLen;
+	LogicInt	i;
 
 	// 2002/10/27 frozen　ここから
 	// nNestLevelを nNestLevel_global を nNestLevel_func に分割した。
@@ -451,7 +451,7 @@ void CDocOutline::MakeFuncList_C(
 	int nRawStringTagLen = 0;
 	int nRawStringTagCompLen = 0;
 
-	CLogicInt	nItemLine(0);		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
+	LogicInt	nItemLine(0);		// すぐ前の 関数 or クラス or 構造体 or 共用体 or 列挙体 or ネームスペースのある行
 	int			nItemFuncId = 0;
 
 	szWordPrev[0] = L'\0';
@@ -466,8 +466,8 @@ void CDocOutline::MakeFuncList_C(
 	CCppPreprocessMng cCppPMng;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	
-	CLogicInt nLineCount;
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	LogicInt nLineCount;
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
@@ -476,7 +476,7 @@ void CDocOutline::MakeFuncList_C(
 		if (nMode != 8 && nMode != 10) {	// chg 2005/12/6 じゅうじ 次の行が空白でもよい
 			i = cCppPMng.ScanLine(pLine, nLineLen);
 		}else {
-			i = CLogicInt(0);
+			i = LogicInt(0);
 		}
 		//	C/C++としての処理が不要なケースでは i == nLineLenとなっているので
 		//	以下の解析処理はSKIPされる．
@@ -618,7 +618,7 @@ void CDocOutline::MakeFuncList_C(
 							bDefinedTypedef = true;
 						if (nItemFuncId != 0 && nItemFuncId != FL_OBJ_FUNCTION) {	//  2010.07.08 ryoji nMode2 == M2_FUNC_NAME_END のときは nItemFuncId == 2 のはず
 							nMode2 = M2_NAMESPACE_SAVE;
-							nItemLine = nLineCount + CLogicInt(1);
+							nItemLine = nLineCount + LogicInt(1);
 							wcscpy_s(szItemName, LSW(STR_OUTLINE_CPP_NONAME));
 						}
 					}
@@ -757,7 +757,7 @@ void CDocOutline::MakeFuncList_C(
 							for (int k=i+1; k<nLineLen; ++k) {
 								if (pLine[k] == L'(') {
 									// i = 1, k = 5, len = 5-1-1=3
-									CLogicInt tagLen = t_min(k - i - 1, CLogicInt(_countof(szRawStringTag) - 1));
+									LogicInt tagLen = t_min(k - i - 1, LogicInt(_countof(szRawStringTag) - 1));
 									nRawStringTagLen = tagLen + 1;
 									szRawStringTag[0] = L')';
 									wcsncpy(szRawStringTag + 1, &pLine[i + 1], tagLen);
@@ -817,15 +817,15 @@ void CDocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						CLayoutPoint ptPosXY;
+						LayoutPoint ptPosXY;
 						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-							CLogicPoint(0, nItemLine - 1),
+							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pcFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + CLayoutInt(1) , szNamespace, nItemFuncId);
+						pcFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1) , szNamespace, nItemFuncId);
 						bDefinedTypedef = false;
 						nItemLine = -1;
 						//	Jan. 30, 2005 genta M2_KR_FUNC 追加
@@ -927,7 +927,7 @@ void CDocOutline::MakeFuncList_C(
 								}else {
 									wcscpy_s(szItemName, szWordPrev);
 								}
-								nItemLine = nLineCount + CLogicInt(1);
+								nItemLine = nLineCount + LogicInt(1);
 							}
 						}
 						++nNestLevel_fparam;
@@ -1039,15 +1039,15 @@ void CDocOutline::MakeFuncList_C(
 						  →
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
-						CLayoutPoint ptPosXY;
+						LayoutPoint ptPosXY;
 						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-							CLogicPoint(0, nItemLine - 1),
+							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
 #ifdef TRACE_OUTLINE
 						DEBUG_TRACE(_T("AppendData %d %ls\n"), nItemLine, szNamespace);
 #endif
-						pcFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + CLayoutInt(1), szNamespace, nItemFuncId);
+						pcFuncInfoArr->AppendData(nItemLine, ptPosXY.GetY2() + LayoutInt(1), szNamespace, nItemFuncId);
 					}
 					nItemLine = -1;
 					nNestLevel_template = 0;
@@ -1210,20 +1210,20 @@ void CDocOutline::MakeFuncList_C(
 void CEditView::SmartIndent_CPP(wchar_t wcChar)
 {
 	const wchar_t*	pLine;
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	int			k;
 	int			m;
 	const wchar_t*	pLine2;
-	CLogicInt	nLineLen2;
+	LogicInt	nLineLen2;
 	int			nLevel;
-	CLogicInt j;
+	LogicInt j;
 
 	// 調整によって置換される箇所
-	CLogicRange sRangeA;
+	LogicRange sRangeA;
 	sRangeA.Clear(-1);
 
 	wchar_t*	pszData = NULL;
-	CLogicInt	nDataLen;
+	LogicInt	nDataLen;
 
 	int			nWork = 0;
 	int			nCharChars;
@@ -1233,7 +1233,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 
 	int			nCaretPosX_PHY;
 
-	CLogicPoint	ptCP;
+	LogicPoint	ptCP;
 
 	if (wcChar == WCODE::CR || wcschr(L":{}()", wcChar) != NULL) {
 		// 次へ進む
@@ -1255,7 +1255,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				return;
 			}
 			// 調整によって置換される箇所
-			sRangeA.Set(CLogicPoint(0, GetCaret().GetCaretLogicPos().y));
+			sRangeA.Set(LogicPoint(0, GetCaret().GetCaretLogicPos().y));
 		}else {
 			//	nWorkに処理の基準桁位置を設定する
 			if (wcChar != WCODE::CR) {
@@ -1306,15 +1306,15 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 			// 調整によって置換される箇所
-			sRangeA.SetFrom(CLogicPoint(0, GetCaret().GetCaretLogicPos().GetY2()));
-			sRangeA.SetTo(CLogicPoint(i, GetCaret().GetCaretLogicPos().GetY2()));
+			sRangeA.SetFrom(LogicPoint(0, GetCaret().GetCaretLogicPos().GetY2()));
+			sRangeA.SetTo(LogicPoint(i, GetCaret().GetCaretLogicPos().GetY2()));
 		}
 		
 		// 対応する括弧をさがす
 		nLevel = 0;	// {}の入れ子レベル
 		
-		nDataLen = CLogicInt(0);
-		for (j=GetCaret().GetCaretLogicPos().GetY2(); j>=CLogicInt(0); --j) {
+		nDataLen = LogicInt(0);
+		for (j=GetCaret().GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
 			pLine2 = m_pcEditDoc->m_cDocLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == GetCaret().GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
@@ -1323,12 +1323,12 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						continue;	// EOF のみの行
 					break;
 				}
-				nCharChars = CLogicInt(&pLine2[nWork] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nWork]));
+				nCharChars = LogicInt(&pLine2[nWork] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nWork]));
 				k = nWork - nCharChars;
 			}else {
 				if (!pLine2)
 					break;
-				nCharChars = CLogicInt(&pLine2[nLineLen2] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nLineLen2]));
+				nCharChars = LogicInt(&pLine2[nLineLen2] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[nLineLen2]));
 				k = nLineLen2 - nCharChars;
 			}
 
@@ -1382,9 +1382,9 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 						}
 					}
 				}
-				nCharChars = CLogicInt(&pLine2[k] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]));
+				nCharChars = LogicInt(&pLine2[k] - CNativeW::GetCharPrev(pLine2, nLineLen2, &pLine2[k]));
 				if (nCharChars == 0) {
-					nCharChars = CLogicInt(1);
+					nCharChars = LogicInt(1);
 				}
 				k -= nCharChars;
 			}
@@ -1399,7 +1399,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 				}
 			}
 
-			nDataLen = CLogicInt(m);
+			nDataLen = LogicInt(m);
 			nCharChars = (m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bInsSpace)? (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(): 1;
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
@@ -1412,18 +1412,18 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 					while (i < nDataLen) {
 						nCharChars = CNativeW::GetSizeOfChar(pszData, nDataLen, i);
 						if (nCharChars == 1 && pszData[i] == WCODE::TAB) {
-							m += (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(CLayoutInt(m));
+							m += (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(LayoutInt(m));
 						}else {
 							m += nCharChars;
 						}
 						i += nCharChars;
 					}
-					nCharChars = (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(CLayoutInt(m));
+					nCharChars = (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(LayoutInt(m));
 					for (int i=0; i<nCharChars; ++i) {
 						pszData[nDataLen + i] = WCODE::SPACE;
 					}
 					pszData[nDataLen + nCharChars] = L'\0';
-					nDataLen += CLogicInt(nCharChars);
+					nDataLen += LogicInt(nCharChars);
 				}else {
 					pszData[nDataLen] = WCODE::TAB;
 					pszData[nDataLen + 1] = L'\0';
@@ -1439,7 +1439,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 			if (WCODE::CR == wcChar) {
 				return;
 			}else {
-				nDataLen = CLogicInt(0);
+				nDataLen = LogicInt(0);
 				pszData = new wchar_t[nDataLen + 1];
 				pszData[nDataLen] = L'\0';
 			}
@@ -1463,7 +1463,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 		
 		// 調整によって置換される箇所
-		CLayoutRange sRangeLayout;
+		LayoutRange sRangeLayout;
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(sRangeA, &sRangeLayout);
 
 		if (0
@@ -1485,7 +1485,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 		}
 
 		// カーソル位置調整
-		CLayoutPoint ptCP_Layout;
+		LayoutPoint ptCP_Layout;
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
 
 		// 選択エリアの先頭へカーソルを移動
@@ -1495,7 +1495,7 @@ void CEditView::SmartIndent_CPP(wchar_t wcChar)
 		if (bChange && !m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			// 操作の追加
 			m_cCommander.GetOpeBlk()->AppendOpe(
-				new CMoveCaretOpe(
+				new MoveCaretOpe(
 					GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)
 			);

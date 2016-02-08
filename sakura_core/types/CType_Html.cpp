@@ -62,7 +62,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 {
 	const wchar_t*	pLineBuf;	//	pLineBuf は行全体を指し、
 	const wchar_t*	pLine;		//	pLine は処理中の文字以降の部分を指します。
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 	int				i;
 	int				j;
 	int				k;
@@ -84,7 +84,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 		LT_BLOCK,		LT_PARAGRAPH,	LT_HEADING
 	};
 	enum ELabelType	nLabelType;				// ラベルの種別
-	CLogicInt		nLineCount;
+	LogicInt		nLineCount;
 	/*	同じ見出し要素（hy）を次に上位レベルの見出し(hx)が現れるまで同じ深さにそろえます。
 		このため、見出しの深さを記憶しておきます。
 		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
@@ -93,7 +93,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 	for (k=0; k<=6; ++k) {
 		nHeadDepth[k] = -1;
 	}
-	for (nLineCount=CLogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
 		pLineBuf = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLineBuf) {
 			break;
@@ -230,9 +230,9 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 						bParaTag = false;
 					}
 
-					CLayoutPoint ptPos;
+					LayoutPoint ptPos;
 					m_pcDocRef->m_cLayoutMgr.LogicToLayout(
-						CLogicPoint(i, nLineCount),
+						LogicPoint(i, nLineCount),
 						&ptPos
 					);
 
@@ -262,7 +262,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							}
 						}
 						szTitle[k] = L'\0';
-						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, ++nDepth);
+						pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, ++nDepth);
 					}else {
 						for (; i+j<nLineLen && j<_countof(szTitle)-1; ++j) {
 							if (pLine[j] == L'>') {
@@ -271,7 +271,7 @@ void CDocOutline::MakeTopicList_html(CFuncInfoArr* pcFuncInfoArr)
 							szTitle[j] = pLine[j];
 						}
 						szTitle[j]	=	L'\0';
-						pcFuncInfoArr->AppendData(nLineCount + CLogicInt(1), ptPos.GetY2() + CLayoutInt(1), szTitle, 0, nDepth);
+						pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptPos.GetY2() + LayoutInt(1), szTitle, 0, nDepth);
 					}
 				}
 			}

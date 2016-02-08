@@ -13,7 +13,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CFuncInfo;
+class FuncInfo;
 
 #pragma once
 
@@ -26,10 +26,10 @@ class CFuncInfo;
 
 //! アウトライン解析  データ要素
 //@date 2002.04.01 YAZAKI 深さ導入
-class CFuncInfo {
+class FuncInfo {
 public:
-	CFuncInfo(CLogicInt, CLogicInt, CLayoutInt, CLayoutInt, const TCHAR*, const TCHAR*, int);	// CFuncInfoクラス構築
-	~CFuncInfo();	// CFuncInfoクラス消滅
+	FuncInfo(LogicInt, LogicInt, LayoutInt, LayoutInt, const TCHAR*, const TCHAR*, int);	// FuncInfoクラス構築
+	~FuncInfo();	// FuncInfoクラス消滅
 
 	//! クリップボードに追加する要素か？
 	//	2003.06.27 Moca
@@ -38,10 +38,10 @@ public:
 	}
 
 //	private:
-	CLogicInt	m_nFuncLineCRLF;	// 関数のある行(CRLF単位)
-	CLayoutInt	m_nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
-	CLogicInt	m_nFuncColCRLF;		// 関数のある桁(CRLF単位)
-	CLayoutInt	m_nFuncColLAYOUT;	// 関数のある桁(折り返し単位)
+	LogicInt	m_nFuncLineCRLF;	// 関数のある行(CRLF単位)
+	LayoutInt	m_nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
+	LogicInt	m_nFuncColCRLF;		// 関数のある桁(CRLF単位)
+	LayoutInt	m_nFuncColLAYOUT;	// 関数のある桁(折り返し単位)
 	CNativeT	m_cmemFuncName;		// 関数名
 	CNativeT	m_cmemFileName;		// ファイル名
 	int			m_nInfo;			// 付加情報

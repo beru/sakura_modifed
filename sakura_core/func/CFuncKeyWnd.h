@@ -18,7 +18,7 @@
 #include "env/DLLSHAREDATA.h"
 
 struct DLLSHAREDATA;
-class CEditDoc; // 2002/2/10 aroka
+class EditDoc; // 2002/2/10 aroka
 
 //! ファンクションキーウィンドウ
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
@@ -32,7 +32,7 @@ public:
 	/*
 	|| メンバ関数
 	*/
-	HWND Open(HINSTANCE, HWND, CEditDoc*, bool);	// ウィンドウ オープン
+	HWND Open(HINSTANCE, HWND, EditDoc*, bool);	// ウィンドウ オープン
 	void Close(void);	// ウィンドウ クローズ
 	void SizeBox_ONOFF(bool);	// サイズボックスの表示／非表示切り替え
 	void Timer_ONOFF(bool); // 更新の開始／停止 20060126 aroka
@@ -41,7 +41,7 @@ public:
 	*/
 private:
 	// 20060126 aroka すべてPrivateにして、初期化順序に合わせて並べ替え
-	CEditDoc*		m_pcEditDoc;
+	EditDoc*		m_pcEditDoc;
 	DLLSHAREDATA*	m_pShareData;
 	int				m_nCurrentKeyState;
 	WCHAR			m_szFuncNameArr[12][256];

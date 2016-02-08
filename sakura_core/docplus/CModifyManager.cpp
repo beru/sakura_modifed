@@ -7,7 +7,7 @@
 
 void CModifyManager::OnAfterSave(const SaveInfo& sSaveInfo)
 {
-	CEditDoc* pcDoc = GetListeningDoc();
+	EditDoc* pcDoc = GetListeningDoc();
 
 	// 行変更状態をすべてリセット
 	CModifyVisitor().ResetAllModifyFlag(&pcDoc->m_cDocLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
@@ -42,7 +42,7 @@ void CModifyVisitor::SetLineModified(CDocLine* pcDocLine, int seq)
   変更回数はUndoしたときに-1される
   変更回数が0になった場合は変更フラグをFALSEにする
 */
-void CModifyVisitor::ResetAllModifyFlag(CDocLineMgr* pcDocLineMgr, int seq)
+void CModifyVisitor::ResetAllModifyFlag(DocLineMgr* pcDocLineMgr, int seq)
 {
 	CDocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
 	while (pDocLine) {

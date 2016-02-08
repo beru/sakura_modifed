@@ -28,7 +28,7 @@
 
 struct CommonSetting_Statusbar;
 
-class CShiftJis : public CodeBase {
+class ShiftJis : public CodeBase {
 
 public:
 	// CodeBaseインターフェース
@@ -43,7 +43,7 @@ public:
 	static EConvertResult UnicodeToSJIS(const CNativeW& cSrc, CMemory* pDstMem);		// Unicode   → SJISコード変換
 // S_GetEolはCodeBaseに移動	2010/6/13 Uchi
 	// 2005-09-02 D.S.Koba
-	// 2007.08.14 kobake CMemoryからCShiftJisへ移動
+	// 2007.08.14 kobake CMemoryからShiftJisへ移動
 	static int GetSizeOfChar(const char* pData, int nDataLen, int nIdx); //!< 指定した位置の文字が何バイト文字かを返す
 
 protected:
@@ -64,7 +64,7 @@ protected:
 
 	高速化のため、インライン化
 */
-inline int CShiftJis::_SjisToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError)
+inline int ShiftJis::_SjisToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError)
 {
 	int nret;
 	bool berror = false;
@@ -110,7 +110,7 @@ inline int CShiftJis::_SjisToUni_char(const unsigned char* pSrc, unsigned short*
 
 	高速化のため、インライン化
 */
-inline int CShiftJis::_UniToSjis_char(const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError)
+inline int ShiftJis::_UniToSjis_char(const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError)
 {
 	int nret;
 	bool berror = false;

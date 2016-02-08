@@ -9,14 +9,14 @@
 //               コンストラクタ・デストラクタ                  //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-CVisualProgress::CVisualProgress()
+VisualProgress::VisualProgress()
 	:
 	m_pcWaitCursor(NULL),
 	nOldValue(-1)
 {
 }
 
-CVisualProgress::~CVisualProgress()
+VisualProgress::~VisualProgress()
 {
 	SAFE_DELETE(m_pcWaitCursor);
 }
@@ -26,12 +26,12 @@ CVisualProgress::~CVisualProgress()
 //                        ロード前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CVisualProgress::OnBeforeLoad(LoadInfo* sLoadInfo)
+void VisualProgress::OnBeforeLoad(LoadInfo* sLoadInfo)
 {
 	_Begin();
 }
 
-void CVisualProgress::OnAfterLoad(const LoadInfo& sLoadInfo)
+void VisualProgress::OnAfterLoad(const LoadInfo& sLoadInfo)
 {
 	_End();
 }
@@ -41,12 +41,12 @@ void CVisualProgress::OnAfterLoad(const LoadInfo& sLoadInfo)
 //                        セーブ前後                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CVisualProgress::OnBeforeSave(const SaveInfo& sSaveInfo)
+void VisualProgress::OnBeforeSave(const SaveInfo& sSaveInfo)
 {
 	_Begin();
 }
 
-void CVisualProgress::OnFinalSave(ESaveResult eSaveResult)
+void VisualProgress::OnFinalSave(ESaveResult eSaveResult)
 {
 	_End();
 }
@@ -56,7 +56,7 @@ void CVisualProgress::OnFinalSave(ESaveResult eSaveResult)
 //                      プログレス受信                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CVisualProgress::OnProgress(int nPer)
+void VisualProgress::OnProgress(int nPer)
 {
 	_Doing(nPer);
 }
@@ -66,7 +66,7 @@ void CVisualProgress::OnProgress(int nPer)
 //                         実装補助                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CVisualProgress::_Begin()
+void VisualProgress::_Begin()
 {
 	// 砂時計
 	if (!m_pcWaitCursor) {
@@ -83,7 +83,7 @@ void CVisualProgress::_Begin()
 	}
 }
 
-void CVisualProgress::_Doing(int nPer)
+void VisualProgress::_Doing(int nPer)
 {
 	// プログレスバー更新
 	HWND hwndProgress = CEditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
@@ -96,7 +96,7 @@ void CVisualProgress::_Doing(int nPer)
 	}
 }
 
-void CVisualProgress::_End()
+void VisualProgress::_End()
 {
 	// プログレスバー
 	HWND hwndProgress = CEditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();

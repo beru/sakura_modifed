@@ -23,9 +23,9 @@
 */
 #pragma once
 
-class CSaveAgent : public CDocListenerEx {
+class SaveAgent : public DocListenerEx {
 public:
-	CSaveAgent();
+	SaveAgent();
 	ECallbackResult OnCheckSave(SaveInfo* pSaveInfo);
 	void OnBeforeSave(const SaveInfo& sSaveInfo);
 	void OnSave(const SaveInfo& sSaveInfo);

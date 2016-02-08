@@ -292,7 +292,7 @@ BOOL CDlgGrep::OnBnClicked(int wID)
 			TCHAR szFolder[_MAX_PATH];
 			::GetWindowText(hwnd, szFolder, _countof(szFolder));
 			std::vector<std::tstring> vPaths;
-			CGrepAgent::CreateFolders(szFolder, vPaths);
+			GrepAgent::CreateFolders(szFolder, vPaths);
 			if (0 < vPaths.size()) {
 				// 最後のパスが操作対象
 				auto_strncpy(szFolder, vPaths.rbegin()->c_str(), _MAX_PATH);
@@ -655,7 +655,7 @@ int CDlgGrep::GetData(void)
 //		return FALSE;
 //	}
 	if (auto_strlen(m_szFile) != 0) {
-		CGrepEnumKeys enumKeys;
+		GrepEnumKeys enumKeys;
 		int nErrorNo = enumKeys.SetFileKeys(m_szFile);
 		if (nErrorNo == 1) {
 			WarningMessage(	GetHwnd(), LS(STR_DLGGREP2));
@@ -683,7 +683,7 @@ int CDlgGrep::GetData(void)
 
 		// 2011.11.24 Moca 複数フォルダ指定
 		std::vector<std::tstring> vPaths;
-		CGrepAgent::CreateFolders(m_szFolder, vPaths);
+		GrepAgent::CreateFolders(m_szFolder, vPaths);
 		int nFolderLen = 0;
 		TCHAR szFolder[_MAX_PATH];
 		szFolder[0] = _T('\0');

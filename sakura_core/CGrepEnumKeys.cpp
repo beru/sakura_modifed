@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "CGrepEnumKeys.h"
 
-int CGrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
+int GrepEnumKeys::SetFileKeys(LPCTSTR lpKeys)
 {
 	const TCHAR* WILDCARD_DELIMITER = _T(" ;,");	// リストの区切り
 	const TCHAR* WILDCARD_ANY = _T("*.*");			// サブフォルダ探索用

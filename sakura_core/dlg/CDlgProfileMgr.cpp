@@ -482,7 +482,7 @@ static bool IOProfSettings(
 	bool bWrite
 	)
 {
-	CDataProfile cProf;
+	DataProfile cProf;
 	if (bWrite) {
 		cProf.SetWritingMode();
 	}else {

@@ -70,11 +70,11 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 
 	CNativeW	cmemCurText;
 	const wchar_t*	pLine;
-	CLogicInt		nLineLen;
+	LogicInt		nLineLen;
 
-	CLayoutRange sRange;
+	LayoutRange sRange;
 
-	CLogicInt	nIdx;
+	LogicInt	nIdx;
 	int			nWork;
 	int			nFuncID = 0;				// 2007.12.02 nasukoji	マウス左クリックに対応する機能コード
 
@@ -108,7 +108,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	}
 
 	// 現在のマウスカーソル位置→レイアウト位置
-	CLayoutPoint ptNew;
+	LayoutPoint ptNew;
 	GetTextArea().ClientToLayout(ptMouse, &ptNew);
 
 	// 2010.07.15 Moca マウスダウン時の座標を覚えて利用する
@@ -161,7 +161,7 @@ void CEditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
 							// →ドロップ先は外部のウィンドウである
 							if (!m_cCommander.GetOpeBlk()) {
-								m_cCommander.SetOpeBlk(new COpeBlk);
+								m_cCommander.SetOpeBlk(new OpeBlk);
 							}
 							m_cCommander.GetOpeBlk()->AddRef();
 
@@ -233,7 +233,7 @@ normal_action:;
 		::SetCapture(GetHwnd());
 		GetCaret().HideCaret_(GetHwnd()); // 2002/07/22 novice
 
-		CLayoutPoint ptNewCaret = GetCaret().GetCaretLayoutPos();
+		LayoutPoint ptNewCaret = GetCaret().GetCaretLayoutPos();
 		bool bSetPtNewCaret = false;
 		if (tripleClickMode) {		// 2007.11.15 nasukoji	トリプルクリックを処理する
 			// 1行選択でない場合は選択文字列を解除
@@ -346,7 +346,7 @@ normal_action:;
 				GetSelectionInfo().DrawSelectArea();
 
 				// 指定された桁に対応する行のデータ内の位置を調べる
-				const CLayout* pcLayout;
+				const Layout* pcLayout;
 				pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(
 					GetSelectionInfo().m_sSelect.GetFrom().GetY2(),
 					&nLineLen,
@@ -428,14 +428,14 @@ normal_action:;
 			// 2009.02.22 ryoji 
 			// Command_GOLINEEND()/Command_RIGHT()ではなく次のレイアウトを調べて移動選択する方法に変更
 			// ※Command_GOLINEEND()/Command_RIGHT()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
-			const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(ptNewCaret.GetY2());
+			const Layout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(ptNewCaret.GetY2());
 			if (pcLayout) {
-				CLayoutPoint ptCaret;
-				const CLayout* pNext = pcLayout->GetNextLayout();
+				LayoutPoint ptCaret;
+				const Layout* pNext = pcLayout->GetNextLayout();
 				if (pNext) {
 					ptCaret.x = pNext->GetIndent();
 				}else {
-					ptCaret.x = CLayoutInt(0);
+					ptCaret.x = LayoutInt(0);
 				}
 				ptCaret.y = ptNewCaret.GetY2() + 1;	// 改行無しEOF行でも MoveCursor() が有効な座標に調整してくれる
 				GetCaret().GetAdjustCursorPos(&ptCaret);
@@ -467,7 +467,7 @@ normal_action:;
 			// URLがクリックされたら選択するか
 			if (GetDllShareData().m_common.m_sEdit.m_bSelectClickedURL) {
 
-				CLogicRange cUrlRange;	// URL範囲
+				LogicRange cUrlRange;	// URL範囲
 				// カーソル位置にURLが有る場合のその範囲を調べる
 				bool bIsUrl = IsCurrentPositionURL(
 					ptNewCaret,	// カーソル位置
@@ -484,11 +484,11 @@ normal_action:;
 					  →レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						2002/04/08 YAZAKI 少しでもわかりやすく。
 					*/
-					CLayoutRange sRangeB;
+					LayoutRange sRangeB;
 					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(cUrlRange, &sRangeB);
 					/*
-					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nUrlIdxBgn          , nUrlLine), sRangeB.GetFromPointer());
-					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(nUrlIdxBgn + nUrlLen, nUrlLine), sRangeB.GetToPointer());
+					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn          , nUrlLine), sRangeB.GetFromPointer());
+					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn + nUrlLen, nUrlLine), sRangeB.GetToPointer());
 					*/
 
 					GetSelectionInfo().m_sSelectBgn = sRangeB;
@@ -573,7 +573,7 @@ void CEditView::OnRBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 	}
 	// 現在のマウスカーソル位置→レイアウト位置
 
-	CLayoutPoint ptNew;
+	LayoutPoint ptNew;
 	GetTextArea().ClientToLayout(Point(xPos, yPos), &ptNew);
 	/*
 	ptNew.x = GetTextArea().GetViewLeftCol() + (xPos - GetTextArea().GetAreaLeft()) / GetTextMetrics().GetHankakuDx();
@@ -934,7 +934,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		}
 	}
 
-	CLayoutRange sSelect_Old    = GetSelectionInfo().m_sSelect;
+	LayoutRange sSelect_Old    = GetSelectionInfo().m_sSelect;
 
 	// オートスクロール
 	if (m_nAutoScrollMode == 1) {
@@ -963,15 +963,15 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			m_dwTipTimer = ::GetTickCount();
 		}
 		if (m_bMiniMapMouseDown) {
-			CLayoutPoint ptNew;
+			LayoutPoint ptNew;
 			CTextArea& area = GetTextArea();
 			area.ClientToLayout( ptMouse, &ptNew );
 			// ミニマップの上下スクロール
 			if (ptNew.y < 0) {
-				ptNew.y = CLayoutYInt(0);
+				ptNew.y = LayoutYInt(0);
 			}
-			CLayoutYInt nScrollRow = CLayoutYInt(0);
-			CLayoutYInt nScrollMargin = CLayoutYInt(15);
+			LayoutYInt nScrollRow = LayoutYInt(0);
+			LayoutYInt nScrollMargin = LayoutYInt(15);
 			nScrollMargin  = t_min(nScrollMargin,  (GetTextArea().m_nViewRowNum) / 2);
 			if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() > area.m_nViewRowNum
 				&& ptNew.y > area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin
@@ -989,11 +989,11 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 			GetTextArea().ClientToLayout( ptMouse, &ptNew );
 			if (ptNew.y < 0) {
-				ptNew.y = CLayoutYInt(0);
+				ptNew.y = LayoutYInt(0);
 			}
 			CEditView& view = m_pcEditWnd->GetActiveView();
 			ptNew.x = 0;
-			CLogicPoint ptNewLogic;
+			LogicPoint ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
 			GetDocument()->m_cLayoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
 			GetDocument()->m_cLayoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
@@ -1038,10 +1038,10 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			}
 		}
 		// 現在のマウスカーソル位置→レイアウト位置
-		CLayoutPoint ptNew;
+		LayoutPoint ptNew;
 		GetTextArea().ClientToLayout(ptMouse, &ptNew);
 
-		CLogicRange	cUrlRange;	// URL範囲
+		LogicRange	cUrlRange;	// URL範囲
 
 		// 選択テキストのドラッグ中か
 		if (m_bDragMode) {
@@ -1105,7 +1105,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 	// 一度移動したら戻ってきたときも、移動とみなすように設定
 	m_cMouseDownPos.Set(-INT_MAX, -INT_MAX);
 	
-	CLayoutPoint ptNewCursor(CLayoutInt(-1), CLayoutInt(-1));
+	LayoutPoint ptNewCursor(LayoutInt(-1), LayoutInt(-1));
 	if (GetSelectionInfo().IsBoxSelecting()) {	// 矩形範囲選択中
 		// 座標指定によるカーソル移動
 		GetCaret().MoveCursorToClientPoint(ptMouse, true, &ptNewCursor);
@@ -1135,10 +1135,10 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				// 選択開始行以上にドラッグした
 				if (ptNewCursor.GetY() <= GetSelectionInfo().m_sSelectBgn.GetTo().y) {
 					// GetCommander().Command_GOLINETOP(true, 0x09);		// 改行単位の行頭へ移動
-					CLogicInt nLineLen;
-					const CLayout*	pcLayout;
+					LogicInt nLineLen;
+					const Layout*	pcLayout;
 					const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptNewCursor.GetY2(), &nLineLen, &pcLayout);
-					ptNewCursor.x = CLayoutInt(0);
+					ptNewCursor.x = LayoutInt(0);
 					if (pLine) {
 						while (pcLayout->GetLogicOffset()) {
 							ptNewCursor.y--;
@@ -1146,23 +1146,23 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 						}
 					}
 				}else {
-					CLayoutPoint ptCaret;
+					LayoutPoint ptCaret;
 
-					CLogicPoint ptCaretPrevLog(0, GetCaret().GetCaretLogicPos().y);
+					LogicPoint ptCaretPrevLog(0, GetCaret().GetCaretLogicPos().y);
 
 					// 選択開始行より下にカーソルがある時は1行前と物理行番号の違いをチェックする
 					// 選択開始行にカーソルがある時はチェック不要
 					if (ptNewCursor.GetY() > GetSelectionInfo().m_sSelectBgn.GetTo().y) {
 						// 1行前の物理行を取得する
-						m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(CLayoutPoint(CLayoutInt(0), ptNewCursor.GetY() - 1), &ptCaretPrevLog);
+						m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(LayoutPoint(LayoutInt(0), ptNewCursor.GetY() - 1), &ptCaretPrevLog);
 					}
 
-					CLogicPoint ptNewCursorLogic;
+					LogicPoint ptNewCursorLogic;
 					m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(ptNewCursor, &ptNewCursorLogic);
 					// 前の行と同じ物理行
 					if (ptCaretPrevLog.y == ptNewCursorLogic.y) {
 						// 1行先の物理行からレイアウト行を求める
-						m_pcEditDoc->m_cLayoutMgr.LogicToLayout(CLogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
+						m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
 
 						// カーソルを次の物理行頭へ移動する
 						ptNewCursor = ptCaret;
@@ -1181,7 +1181,7 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			GetSelectionInfo().ChangeSelectAreaByCurrentCursor(ptNewCursor);
 			GetCaret().MoveCursor(ptNewCursor, true, 1000);
 		}else {
-			CLayoutRange sSelect;
+			LayoutRange sSelect;
 			
 			// 現在のカーソル位置によって選択範囲を変更(テストのみ)
 			GetSelectionInfo().ChangeSelectAreaByCurrentCursorTEST(
@@ -1196,11 +1196,11 @@ void CEditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				GetCaret().MoveCursor(ptNewCursor, true, 1000);
 				return;
 			}
-			CLogicInt nLineLen;
-			const CLayout* pcLayout;
+			LogicInt nLineLen;
+			const Layout* pcLayout;
 			if (m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout)) {
-				CLogicInt	nIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
-				CLayoutRange sRange;
+				LogicInt	nIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
+				LayoutRange sRange;
 
 				// 現在位置の単語の範囲を調べる
 				bool bResult = m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
@@ -1446,7 +1446,7 @@ LRESULT CEditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalM
 
 		const bool bSmooth = !! GetDllShareData().m_common.m_sGeneral.m_nRepeatedScroll_Smooth;
 		const int nRollActions = bSmooth ? nRollNum : 1;
-		const CLayoutInt nCount = CLayoutInt(((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum));
+		const LayoutInt nCount = LayoutInt(((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum));
 
 		for (i=0; i<nRollActions; ++i) {
 			//	Sep. 11, 2004 genta 同期スクロール行数
@@ -1577,7 +1577,7 @@ void CEditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 {
 	Point ptMouse(_xPos, _yPos);
 
-	CLogicRange		cUrlRange;	// URL範囲
+	LogicRange		cUrlRange;	// URL範囲
 	std::wstring	wstrURL;
 	const wchar_t*	pszMailTo = L"mailto:";
 
@@ -1816,8 +1816,8 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 	CNativeW	cmemBuf;
 	bool		bBeginBoxSelect_Old = false;
 
-	CLayoutRange sSelectBgn_Old;
-	CLayoutRange sSelect_Old;
+	LayoutRange sSelectBgn_Old;
+	LayoutRange sSelect_Old;
 
 	// 選択テキストのドラッグ中か
 	_SetDragMode(FALSE);
@@ -1880,7 +1880,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 
 	// アンドゥバッファの準備
 	if (!m_cCommander.GetOpeBlk()) {
-		m_cCommander.SetOpeBlk(new COpeBlk);
+		m_cCommander.SetOpeBlk(new OpeBlk);
 	}
 	m_cCommander.GetOpeBlk()->AddRef();
 
@@ -1918,7 +1918,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 		}
 	}
 
-	CLayoutPoint ptCaretPos_Old = GetCaret().GetCaretLayoutPos();
+	LayoutPoint ptCaretPos_Old = GetCaret().GetCaretLayoutPos();
 	if (!bMove) {
 		// コピーモード
 		// 現在の選択範囲を非選択状態に戻す
@@ -1951,14 +1951,14 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 
 		// 挿入前のキャレット位置を記憶する
 		// （キャレットが行終端より右の場合は埋め込まれる空白分だけ桁位置をシフト）
-		CLogicPoint ptCaretLogicPos_Old = GetCaret().GetCaretLogicPos();
-		const CLayout* pcLayout;
-		CLogicInt nLineLen;
-		CLayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
+		LogicPoint ptCaretLogicPos_Old = GetCaret().GetCaretLogicPos();
+		const Layout* pcLayout;
+		LogicInt nLineLen;
+		LayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
 		if (m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pcLayout)) {
-			CLayoutInt nLineAllColLen;
+			LayoutInt nLineAllColLen;
 			LineColumnToIndex2(pcLayout, ptCaretLayoutPos_Old.GetX2(), &nLineAllColLen);
-			if (nLineAllColLen > CLayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
+			if (nLineAllColLen > LayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
 				ptCaretLogicPos_Old.SetX(
 					ptCaretLogicPos_Old.GetX2()
 					+ (Int)(ptCaretLayoutPos_Old.GetX2() - nLineAllColLen)
@@ -1969,12 +1969,12 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 		GetCommander().Command_INSTEXT(true, cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), FALSE);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
-		CLayoutPoint ptSelectFrom;
+		LayoutPoint ptSelectFrom;
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
 			ptCaretLogicPos_Old,
 			&ptSelectFrom
 		);
-		GetSelectionInfo().SetSelectArea(CLayoutRange(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetSelectionInfo().SetSelectArea(LayoutRange(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
 	}else {
 		// 2004.07.12 Moca クリップボードを書き換えないように
 		// TRUE == bBoxSelected
@@ -1990,14 +1990,14 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 			// 移動モード & 後ろに移動
 
 			// 現在の選択範囲を記憶する	// 2008.03.26 ryoji
-			CLogicRange sSelLogic;
+			LogicRange sSelLogic;
 			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
 				GetSelectionInfo().m_sSelect,
 				&sSelLogic
 			);
 
 			// 以前の選択範囲を記憶する	// 2008.03.26 ryoji
-			CLogicRange sDelLogic;
+			LogicRange sDelLogic;
 			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
 				sSelect_Old,
 				&sDelLogic
@@ -2038,7 +2038,7 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 				sSelLogic.SetToY(sSelLogic.GetTo().GetY2() - (nLines_Old - nLines));
 
 				// 調整後の選択範囲を設定する
-				CLayoutRange sSelect;
+				LayoutRange sSelect;
 				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
 					sSelLogic,
 					&sSelect
@@ -2052,13 +2052,13 @@ STDMETHODIMP CEditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL 
 			GetCaret().m_nCaretPosX_Prev = GetCaret().GetCaretLayoutPos().GetX2();
 
 			// 削除位置から移動先へのカーソル移動をアンドゥ操作に追加する	// 2008.03.26 ryoji
-			CLogicPoint ptBefore;
+			LogicPoint ptBefore;
 			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
 				GetSelectionInfo().m_sSelect.GetFrom(),
 				&ptBefore
 			);
 			m_cCommander.GetOpeBlk()->AppendOpe(
-				new CMoveCaretOpe(
+				new MoveCaretOpe(
 					sDelLogic.GetFrom(),
 					GetCaret().GetCaretLogicPos()
 				)
@@ -2191,14 +2191,14 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 
 		// 挿入前のキャレット位置を記憶する
 		// （キャレットが行終端より右の場合は埋め込まれる空白分だけ桁位置をシフト）
-		CLogicPoint ptCaretLogicPos_Old = GetCaret().GetCaretLogicPos();
-		const CLayout* pcLayout;
-		CLogicInt nLineLen;
-		CLayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
+		LogicPoint ptCaretLogicPos_Old = GetCaret().GetCaretLogicPos();
+		const Layout* pcLayout;
+		LogicInt nLineLen;
+		LayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
 		if (m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pcLayout)) {
-			CLayoutInt nLineAllColLen;
+			LayoutInt nLineAllColLen;
 			LineColumnToIndex2(pcLayout, ptCaretLayoutPos_Old.GetX2(), &nLineAllColLen);
-			if (nLineAllColLen > CLayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
+			if (nLineAllColLen > LayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
 				ptCaretLogicPos_Old.SetX(
 					ptCaretLogicPos_Old.GetX2()
 					+ (Int)(ptCaretLayoutPos_Old.GetX2() - nLineAllColLen)
@@ -2210,12 +2210,12 @@ void CEditView::OnMyDropFiles(HDROP hDrop)
 		GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)cmemBuf.GetStringPtr(), cmemBuf.GetStringLength(), TRUE, 0);
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
-		CLayoutPoint ptSelectFrom;
+		LayoutPoint ptSelectFrom;
 		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
 			ptCaretLogicPos_Old,
 			&ptSelectFrom
 		);
-		GetSelectionInfo().SetSelectArea(CLayoutRange(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
+		GetSelectionInfo().SetSelectArea(LayoutRange(ptSelectFrom, GetCaret().GetCaretLayoutPos()));	// 2009.07.25 ryoji
 		GetSelectionInfo().DrawSelectArea();
 		break;
 	}

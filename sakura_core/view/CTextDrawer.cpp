@@ -91,7 +91,7 @@ void CTextDrawer::DispText(HDC hdc, DispPos* pDispPos, const wchar_t* pData, int
 		// 2007.09.08 kobake注 「ウィンドウの左」ではなく「クリップの左」を元に計算したほうが描画領域を節約できるが、
 		//                        バグが出るのが怖いのでとりあえずこのまま。
 		int nBeforeLogic = 0;
-		CLayoutInt nBeforeLayout = CLayoutInt(0);
+		LayoutInt nBeforeLayout = LayoutInt(0);
 		if (x < 0) {
 			int nLeftLayout = (0 - x) / nDx - 1;
 			while (nBeforeLayout < nLeftLayout) {
@@ -169,8 +169,8 @@ void CTextDrawer::DispVerticalLines(
 	CGraphics&	gr,			// 作画するウィンドウのDC
 	int			nTop,		// 線を引く上端のクライアント座標y
 	int			nBottom,	// 線を引く下端のクライアント座標y
-	CLayoutInt	nLeftCol,	// 線を引く範囲の左桁の指定
-	CLayoutInt	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
+	LayoutInt	nLeftCol,	// 線を引く範囲の左桁の指定
+	LayoutInt	nRightCol	// 線を引く範囲の右桁の指定(-1で未指定)
 ) const
 {
 	const CEditView* pView = m_pEditView;
@@ -186,7 +186,7 @@ void CTextDrawer::DispVerticalLines(
 	
 	nLeftCol = t_max(pView->GetTextArea().GetViewLeftCol(), nLeftCol);
 	
-	const CLayoutInt nWrapKetas  = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
+	const LayoutInt nWrapKetas  = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
 	const int nCharDx  = pView->GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
@@ -212,9 +212,9 @@ void CTextDrawer::DispVerticalLines(
 
 	for (int k=0; k<MAX_VERTLINES && typeData.m_nVertLineIdx[k]!=0; ++k) {
 		// nXColは1開始。GetTextArea().GetViewLeftCol()は0開始なので注意。
-		CLayoutInt nXCol = typeData.m_nVertLineIdx[k];
-		CLayoutInt nXColEnd = nXCol;
-		CLayoutInt nXColAdd = CLayoutInt(1);
+		LayoutInt nXCol = typeData.m_nVertLineIdx[k];
+		LayoutInt nXColEnd = nXCol;
+		LayoutInt nXColAdd = LayoutInt(1);
 		// nXColがマイナスだと繰り返し。k+1を終了値、k+2をステップ幅として利用する
 		if (nXCol < 0) {
 			if (k < MAX_VERTLINES - 2) {
@@ -333,7 +333,7 @@ void CTextDrawer::DispWrapLine(
 	if (!cWrapType.IsDisp()) return;
 
 	const CTextArea& rArea = *GetTextArea();
-	const CLayoutInt nWrapKetas = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
+	const LayoutInt nWrapKetas = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
 	const int nCharDx = pView->GetTextMetrics().GetHankakuDx();
 	int nXPos = rArea.GetAreaLeft() + (Int)(nWrapKetas - rArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca 作画条件変更
@@ -355,12 +355,12 @@ void CTextDrawer::DispWrapLine(
 
 void CTextDrawer::DispLineNumber(
 	CGraphics&		gr,
-	CLayoutInt		nLineNum,
+	LayoutInt		nLineNum,
 	int				y
 ) const
 {
 	//$$ 高速化：SearchLineByLayoutYにキャッシュを持たせる
-	const CLayout*	pcLayout = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
+	const Layout*	pcLayout = EditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
 
 	const CEditView* pView = m_pEditView;
 	const TypeConfig* pTypes = &pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();

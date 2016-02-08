@@ -87,7 +87,7 @@ bool CEditView::TagJumpSub(
 // その前で保存するように変更。
 
 	// カーソル位置変換
-	CEditDoc* pDoc = GetDocument();
+	EditDoc* pDoc = GetDocument();
 	CCaret& caret = GetCaret();
 	pDoc->m_cLayoutMgr.LayoutToLogic(
 		caret.GetCaretLayoutPos(),
@@ -112,7 +112,7 @@ bool CEditView::TagJumpSub(
 			}else {
 				poCaret.x = 0;
 			}
-			GetDllShareData().m_workBuffer.m_LogicPoint.Set(CLogicInt(poCaret.x), CLogicInt(poCaret.y));
+			GetDllShareData().m_workBuffer.m_LogicPoint.Set(LogicInt(poCaret.x), LogicInt(poCaret.y));
 			::SendMessage(hwndOwner, MYWM_SETCARETPOS, 0, 0);
 		}
 		// アクティブにする
@@ -126,9 +126,9 @@ bool CEditView::TagJumpSub(
 		// 新しく開く
 		EditInfo inf;
 		_tcscpy(inf.m_szPath, szJumpToFile);
-		inf.m_ptCursor.Set(CLogicInt(ptJumpTo.x - 1), CLogicInt(ptJumpTo.y - 1));
-		inf.m_nViewLeftCol = CLayoutInt(-1);
-		inf.m_nViewTopLine = CLayoutInt(-1);
+		inf.m_ptCursor.Set(LogicInt(ptJumpTo.x - 1), LogicInt(ptJumpTo.y - 1));
+		inf.m_nViewLeftCol = LayoutInt(-1);
+		inf.m_nViewTopLine = LayoutInt(-1);
 		inf.m_nCharCode    = CODE_AUTODETECT;
 
 		bool bSuccess = ControlTray::OpenNewEditor2(
@@ -280,9 +280,9 @@ open_c:;
 	@date 2006.01.08 genta 判定条件を見直し
 	@date 2008.06.08 ryoji ウィンドウ幅設定にぶら下げ余白を追加
 */
-CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode(CLayoutInt* _newKetas)
+CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode(LayoutInt* _newKetas)
 {
-	CLayoutInt& newKetas = *_newKetas;
+	LayoutInt& newKetas = *_newKetas;
 	//@@@ 2002.01.14 YAZAKI 現在のウィンドウ幅で折り返されているときは、最大値にするコマンド。
 	// 2002/04/08 YAZAKI ときどきウィンドウ幅で折り返されないことがあるバグ修正。
 	// 20051022 aroka 現在のウィンドウ幅→最大値→文書タイプの初期値 をトグルにするコマンド
@@ -316,19 +316,19 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode(CLayoutInt* _newKetas)
 	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().m_nViewColNum)) {
 		// a)
-		newKetas = CLayoutInt(MAXLINEKETAS);
+		newKetas = LayoutInt(MAXLINEKETAS);
 		return TGWRAP_FULL;
 	}else if (MINLINEKETAS > GetTextArea().m_nViewColNum - GetWrapOverhang()) { // 2)
 		// 3)
 		if (layoutMgr.GetMaxLineKetas() != MAXLINEKETAS) {
 			// 4)
-			newKetas = CLayoutInt(MAXLINEKETAS);
+			newKetas = LayoutInt(MAXLINEKETAS);
 			return TGWRAP_FULL;
 		}else if (m_pTypeData->m_nMaxLineKetas == MAXLINEKETAS) { // 5)
 			// 6)
 			return TGWRAP_NONE;
 		}else { // 7)
-			newKetas = CLayoutInt(m_pTypeData->m_nMaxLineKetas);
+			newKetas = LayoutInt(m_pTypeData->m_nMaxLineKetas);
 			return TGWRAP_PROP;
 		}
 	}else { // 8)
@@ -337,7 +337,7 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode(CLayoutInt* _newKetas)
 			&& m_pTypeData->m_nMaxLineKetas != MAXLINEKETAS
 		) {
 			// a)
-			newKetas = CLayoutInt(m_pTypeData->m_nMaxLineKetas);
+			newKetas = LayoutInt(m_pTypeData->m_nMaxLineKetas);
 			return TGWRAP_PROP;
 			
 		}else {	// b) c)
@@ -418,7 +418,7 @@ void CEditView::CopyCurLine(
 		return;
 	}
 
-	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
+	const Layout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
 	if (!pcLayout) {
 		return;
 	}

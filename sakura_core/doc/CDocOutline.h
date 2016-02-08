@@ -23,13 +23,13 @@
 */
 #pragma once
 
-class CEditDoc;
+class EditDoc;
 class CFuncInfoArr;
 struct OneRule;
 
 class CDocOutline {
 public:
-	CDocOutline(CEditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
+	CDocOutline(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
 	void	MakeFuncList_C(CFuncInfoArr*, bool bVisibleMemberFunc = true);			// C/C++関数リスト作成
 	void	MakeFuncList_PLSQL(CFuncInfoArr*);										// PL/SQL関数リスト作成
 	void	MakeTopicList_txt(CFuncInfoArr*);										// テキスト・トピックリスト作成
@@ -47,6 +47,6 @@ public:
 	int		ReadRuleFile(const TCHAR*, OneRule*, int, bool&, std::wstring&);		// ルールファイル読込 2002.04.01 YAZAKI
 	void	MakeFuncList_BookMark(CFuncInfoArr*);									// ブックマークリスト作成 // 2001.12.03 hor
 private:
-	CEditDoc* m_pcDocRef;
+	EditDoc* m_pcDocRef;
 };
 

@@ -98,8 +98,8 @@ bool CColor_KeywordSet::EndColor(const CStringRef& cStr, int nPos)
 
 static inline int NextWordBreak(const CStringRef& str, const int start)
 {
-	CLogicInt nColumnNew;
-	if (CWordParse::SearchNextWordPosition4KW(str.GetPtr(), CLogicInt(str.GetLength()), CLogicInt(start), &nColumnNew, true)) {
+	LogicInt nColumnNew;
+	if (CWordParse::SearchNextWordPosition4KW(str.GetPtr(), LogicInt(str.GetLength()), LogicInt(start), &nColumnNew, true)) {
 		return nColumnNew;
 	}
 	return start;

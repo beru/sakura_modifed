@@ -21,7 +21,7 @@
 class CDialog;
 
 struct DLLSHAREDATA;
-class CRecent;
+class Recent;
 
 enum EAnchorStyle {
 	ANCHOR_NONE              = 0,
@@ -50,7 +50,7 @@ struct AnchorListItem
 
 struct ComboBoxItemDeleter
 {
-	CRecent*	pRecent;
+	Recent*	pRecent;
 	HWND		hwndCombo;
 	WNDPROC		pComboBoxWndProc;
 	WNDPROC		pEditWndProc;

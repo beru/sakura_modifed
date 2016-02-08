@@ -26,7 +26,7 @@
 #include "_main/global.h" // eSearchDirection, SearchOption
 
 class CDocLine;
-class CDocLineMgr;
+class DocLineMgr;
 class CBregexp;
 
 #include "CSearchAgent.h"
@@ -62,15 +62,15 @@ private:
 // 行全体のブックマーク情報の管理
 class CBookmarkManager {
 public:
-	CBookmarkManager(CDocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	CBookmarkManager(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
 	void ResetAllBookMark();															// ブックマークの全解除
-	bool SearchBookMark(CLogicInt nLineNum, eSearchDirection, CLogicInt* pnLineNum);	// ブックマーク検索
+	bool SearchBookMark(LogicInt nLineNum, eSearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
 	void SetBookMarks(wchar_t*);														// 物理行番号のリストからまとめて行マーク
 	LPCWSTR GetBookMarks();																// 行マークされてる物理行番号のリストを作る
-	void MarkSearchWord(const CSearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする
+	void MarkSearchWord(const SearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする
 
 private:
-	CDocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pcDocLineMgr;
 };
 

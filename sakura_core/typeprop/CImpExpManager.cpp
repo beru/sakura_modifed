@@ -437,7 +437,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 // エクスポート
 bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 {
-	CDataProfile cProfile;
+	DataProfile cProfile;
 
 	cProfile.SetWritingMode();
 
@@ -564,7 +564,7 @@ bool CImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 	}
 	in.Close();
 
-	CDataProfile cProfile;
+	DataProfile cProfile;
 	cProfile.SetReadingMode();
 
 	// 色設定Ver3
@@ -582,7 +582,7 @@ bool CImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 bool CImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	// 色設定 I/O
-	CDataProfile cProfile;
+	DataProfile cProfile;
 	cProfile.SetWritingMode();
 	CShareData_IO::IO_ColorSet(&cProfile, szSecColor, m_ColorInfoArr);
 	if (!cProfile.WriteProfile(to_tchar(sFileName.c_str()), WSTR_COLORDATA_HEAD3)) { // Jan. 15, 2001 Stonee
@@ -858,7 +858,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	CommonSetting_KeyBind sKeyBind = m_Common.m_sKeyBind;
 
 	// オープン
-	CDataProfile in;
+	DataProfile in;
 	in.SetReadingMode();
 	if (!in.ReadProfile(to_tchar(sFileName.c_str()))) {
 		sErrMsg = std::wstring(LSW(STR_IMPEXP_ERR_FILEOPEN)) + sFileName;
@@ -1018,7 +1018,7 @@ bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.Close();
 
 	// キー割り当て情報
-	CDataProfile cProfile;
+	DataProfile cProfile;
 
 	// 書き込みモード設定
 	cProfile.SetWritingMode();
@@ -1056,7 +1056,7 @@ bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	CDataProfile cProfile;
+	DataProfile cProfile;
 	cProfile.SetReadingMode();
 	cProfile.ReadProfile(strPath.c_str());
 
@@ -1089,7 +1089,7 @@ bool CImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 
 	// カスタムメニュー情報
 	// ヘッダ
-	CDataProfile	cProfile;
+	DataProfile	cProfile;
 	CommonSetting_CustomMenu* menu=&m_Common.m_sCustomMenu;
 
 	// 書き込みモード設定
@@ -1215,7 +1215,7 @@ bool CImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 		return false;
 	}
 
-	CDataProfile cProfile;
+	DataProfile cProfile;
 	cProfile.SetReadingMode();
 	cProfile.ReadProfile(strPath.c_str());
 
@@ -1247,7 +1247,7 @@ bool CImpExpMainMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 	out.Close();
 
 	// ヘッダ
-	CDataProfile	cProfile;
+	DataProfile	cProfile;
 	CommonSetting_MainMenu* menu=&m_Common.m_sMainMenu;
 
 	// 書き込みモード設定
@@ -1278,7 +1278,7 @@ bool CImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
-	CDataProfile cProfile;
+	DataProfile cProfile;
 	cProfile.SetReadingMode();
 	cProfile.ReadProfile(strPath.c_str());
 
@@ -1292,7 +1292,7 @@ bool CImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
-	CDataProfile cProfile;
+	DataProfile cProfile;
 
 	// 書き込みモード設定
 	cProfile.SetWritingMode();
@@ -1308,7 +1308,7 @@ bool CImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 	return true;
 }
 
-void CImpExpFileTree::IO_FileTreeIni( CDataProfile& cProfile, std::vector<FileTreeItem>& data )
+void CImpExpFileTree::IO_FileTreeIni( DataProfile& cProfile, std::vector<FileTreeItem>& data )
 {
 	const WCHAR* pszSecName = L"FileTree";
 	int nItemCount = (int)data.size();
