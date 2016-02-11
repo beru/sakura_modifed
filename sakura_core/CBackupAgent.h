@@ -27,7 +27,7 @@
 
 class BackupAgent : public DocListenerEx {
 public:
-	ECallbackResult OnPreBeforeSave(SaveInfo* pSaveInfo);
+	CallbackResultType OnPreBeforeSave(SaveInfo* pSaveInfo);
 
 protected:
 	int MakeBackUp(const TCHAR* target_file);				// バックアップの作成

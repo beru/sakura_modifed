@@ -109,7 +109,7 @@ int DlgFileTree::DoModal(
 static TCHAR* GetFileTreeLabel(const FileTreeItem& item)
 {
 	const TCHAR* pszLabel;
-	if (item.m_eFileTreeItemType != EFileTreeItemType_Folder) {
+	if (item.m_eFileTreeItemType != FileTreeItemType::Folder) {
 		pszLabel = item.m_szLabelName;
 		if (item.m_szLabelName[0] == _T('\0')) {
 			pszLabel = item.m_szTargetPath;
@@ -153,9 +153,9 @@ void DlgFileTree::SetData()
 		tvis.item.mask    = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
 		tvis.item.lParam  = i;
 		tvis.item.pszText = GetFileTreeLabel(item);
-		tvis.item.cChildren = (item.m_eFileTreeItemType == EFileTreeItemType_Folder) ? 1 : 0;
+		tvis.item.cChildren = (item.m_eFileTreeItemType == FileTreeItemType::Folder) ? 1 : 0;
 		HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
-		if (item.m_eFileTreeItemType == EFileTreeItemType_Folder) {
+		if (item.m_eFileTreeItemType == FileTreeItemType::Folder) {
 			hParentTree.push_back(hParent);
 		}
 		if (!hSelect) {
@@ -185,9 +185,9 @@ void DlgFileTree::SetDataItem(int nItemIndex)
 	int nID1;
 	int nID2, nID3;
 	switch (item.m_eFileTreeItemType) {
-	case EFileTreeItemType_Grep:   nID1 = 0; nID2 = 1; nID3 = 2; break;
-	case EFileTreeItemType_File:   nID1 = 1; nID2 = 0; nID3 = 2; break;
-	case EFileTreeItemType_Folder: nID1 = 2; nID2 = 0; nID3 = 1; break;
+	case FileTreeItemType::Grep:   nID1 = 0; nID2 = 1; nID3 = 2; break;
+	case FileTreeItemType::File:   nID1 = 1; nID2 = 0; nID3 = 2; break;
+	case FileTreeItemType::Folder: nID1 = 2; nID2 = 0; nID3 = 1; break;
 	}
 	::CheckDlgButton(hwndDlg, nIDs[nID1], TRUE);
 	::CheckDlgButton(hwndDlg, nIDs[nID2], FALSE);
@@ -248,7 +248,7 @@ int DlgFileTree::GetData()
 	FileTree* pFileTree;
 	TypeConfig type;
 	bool bTypeError = false;
-	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Common) {
+	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == FileTreeSettingFromType::Common) {
 		pFileTree = &GetDllShareData().m_common.m_sOutline.m_sFileTree;
 	}else {
 		if (!DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type)) {
@@ -273,7 +273,7 @@ int DlgFileTree::GetData()
 				pFileTree->m_aItems[i] = items[i];
 			}
 		}
-		if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Type) {
+		if (m_fileTreeSetting.m_eFileTreeSettingOrgType == FileTreeSettingFromType::Type) {
 			DocTypeManager().SetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 	}
@@ -329,12 +329,12 @@ int DlgFileTree::GetDataItem(FileTreeItem& item)
 	if (IsButtonChecked(IDC_RADIO_GREP)) {
 		bGrepEnable = TRUE;
 		bPathEnable = TRUE;
-		item.m_eFileTreeItemType = EFileTreeItemType_Grep;
+		item.m_eFileTreeItemType = FileTreeItemType::Grep;
 	}else if (IsButtonChecked(IDC_RADIO_FILE)) { 
 		bPathEnable = TRUE;
-		item.m_eFileTreeItemType = EFileTreeItemType_File;
+		item.m_eFileTreeItemType = FileTreeItemType::File;
 	}else {
-		item.m_eFileTreeItemType = EFileTreeItemType_Folder;
+		item.m_eFileTreeItemType = FileTreeItemType::Folder;
 	}
 	if (bPathEnable) {
 		GetItemText(IDC_EDIT_PATH, item.m_szTargetPath, item.m_szTargetPath.GetBufferCount());
@@ -375,9 +375,9 @@ void DlgFileTree::SetDataInit()
 {
 	HWND hwndDlg = GetHwnd();
 	bool bEnableDefIni = true;
-	if (m_fileTreeSetting.m_eFileTreeSettingLoadType != EFileTreeSettingFrom_File) {
+	if (m_fileTreeSetting.m_eFileTreeSettingLoadType != FileTreeSettingFromType::File) {
 		int id;
-		if (m_fileTreeSetting.m_eFileTreeSettingLoadType == EFileTreeSettingFrom_Common) {
+		if (m_fileTreeSetting.m_eFileTreeSettingLoadType == FileTreeSettingFromType::Common) {
 			id = STR_FILETREE_FROM_COMMON;
 		}else {
 			id = STR_FILETREE_FROM_TYPE;
@@ -430,7 +430,7 @@ HTREEITEM DlgFileTree::InsertTreeItem(
 	tvis.hInsertAfter = htiInsert;
 	tvis.item.pszText = GetFileTreeLabel(item);
 	tvis.item.lParam = nlParam;
-	tvis.item.cChildren = (item.m_eFileTreeItemType == EFileTreeItemType_Folder) ? 1 : 0;
+	tvis.item.cChildren = (item.m_eFileTreeItemType == FileTreeItemType::Folder) ? 1 : 0;
 	return TreeView_InsertItem(GetItemHwnd(IDC_TREE_FL), &tvis);
 }
 
@@ -540,7 +540,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiItem;
 				if (TreeView_GetItem(hwndTree, &tvi)
-					&& m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder
+					&& m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  FileTreeItemType::Folder
 					&& TreeView_GetChild(hwndTree, htiItem)
 				) {
 					// [Folder]以外を子がいるFolderに上書きするの禁止
@@ -656,7 +656,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiTemp;
 				if (TreeView_GetItem(hwndTree, &tvi)) {
-					if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder) {
+					if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  FileTreeItemType::Folder) {
 						// ノード
 						htiParent = htiTemp;
 					}else {
@@ -670,7 +670,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 				tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 				tvi.hItem = htiTemp;
 				if (TreeView_GetItem(hwndTree, &tvi)) {
-					if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder) {
+					if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  FileTreeItemType::Folder) {
 						// ノード
 						htiParent = htiTemp;
 						htiInsert = TVI_FIRST;
@@ -752,7 +752,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 						tvi.mask = TVIF_HANDLE | TVIF_PARAM;
 						tvi.hItem = htiTemp;
 						if (TreeView_GetItem(hwndTree, &tvi)) {
-							if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  EFileTreeItemType_Folder) {
+							if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType ==  FileTreeItemType::Folder) {
 								// ノード
 								htiParent = htiTemp;
 								htiInsert = TVI_FIRST;
@@ -773,7 +773,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 						CNativeT cmemFile = aFileNames[i].c_str();
 						cmemFile.ReplaceT(_T("%"), _T("%%"));
 						FileTreeItem item;
-						item.m_eFileTreeItemType = EFileTreeItemType_File;
+						item.m_eFileTreeItemType = FileTreeItemType::File;
 						item.m_szTargetPath = cmemFile.GetStringPtr();
 						item.m_szLabelName = GetFileTitlePointer(aFileNames[i].c_str());
 						htiInsert = InsertTreeItem(item, htiParent, htiInsert);
@@ -890,7 +890,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 				// エラー
 				break;
 			}
-			if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType == EFileTreeItemType_Folder) {
+			if (m_fileTreeSetting.m_aItems[tvi.lParam].m_eFileTreeItemType == FileTreeItemType::Folder) {
 				// 直前がノード
 				// コピー
 				m_bInMove = true;

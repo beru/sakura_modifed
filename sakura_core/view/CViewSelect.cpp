@@ -670,9 +670,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
 		bool bCountByByteCommon = GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte;
-		bool bCountByByte = (pView->m_pcEditWnd->m_nSelectCountMode == eSelectCountMode::Toggle ?
+		bool bCountByByte = (pView->m_pcEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
-								pView->m_pcEditWnd->m_nSelectCountMode == eSelectCountMode::ByByte);
+								pView->m_pcEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
 		pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout);

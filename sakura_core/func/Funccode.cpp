@@ -1236,13 +1236,13 @@ bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	case F_SHOWTAB:				return pCEditWnd->m_cTabWnd.GetHwnd() != NULL;	//@@@ 2003.06.10 MIK
 	case F_SHOWSTATUSBAR:		return pCEditWnd->m_cStatusBar.GetStatusHwnd() != NULL;
 	// 2008.05.30 nasukoji	テキストの折り返し方法
-	case F_TMPWRAPNOWRAP:		return (pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping);		// 折り返さない
-	case F_TMPWRAPSETTING:		return (pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::SettingWidth);		// 指定桁で折り返す
-	case F_TMPWRAPWINDOW:		return (pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::WindowWidth);		// 右端で折り返す
+	case F_TMPWRAPNOWRAP:		return (pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping);		// 折り返さない
+	case F_TMPWRAPSETTING:		return (pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::SettingWidth);		// 指定桁で折り返す
+	case F_TMPWRAPWINDOW:		return (pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::WindowWidth);		// 右端で折り返す
 	// 2009.07.06 syat  文字カウント方法
-	case F_SELECT_COUNT_MODE:	return (pCEditWnd->m_nSelectCountMode == eSelectCountMode::Toggle ?
+	case F_SELECT_COUNT_MODE:	return (pCEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
 											pShareData->m_common.m_sStatusbar.m_bDispSelCountByByte != FALSE :
-											pCEditWnd->m_nSelectCountMode == eSelectCountMode::ByByte);
+											pCEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return AppMode::getInstance()->IsViewMode(); // ビューモード
 	// From Here 2003.06.23 Moca

@@ -28,7 +28,7 @@
 class MruListener : public DocListenerEx {
 public:
 	// ロード前後
-//	ECallbackResult OnCheckLoad(SLoadInfo* pLoadInfo);
+//	CallbackResultType OnCheckLoad(SLoadInfo* pLoadInfo);
 	void OnBeforeLoad(LoadInfo* sLoadInfo);
 	void OnAfterLoad(const LoadInfo& sLoadInfo);
 
@@ -36,7 +36,7 @@ public:
 	void OnAfterSave(const SaveInfo& sSaveInfo);
 
 	// クローズ前後
-	ECallbackResult OnBeforeClose();
+	CallbackResultType OnBeforeClose();
 
 protected:
 	// ヘルパ

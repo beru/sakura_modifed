@@ -88,11 +88,11 @@ inline UINT CodePageExToMSCP(int codepageEx)
 	@param pbError NULL許容
 	@return 変換した文字列の長さ(WCHAR単位)
 */
-EConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, int nDstCchLen, int& nRetLen, UINT codepage)
+CodeConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, int nDstCchLen, int& nRetLen, UINT codepage)
 {
 	if (nSrcLen < 1) {
 		nRetLen = 0;
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 	nRetLen = MultiByteToWideChar2(codepage, nToWideCharFlags, pSrc, nSrcLen, pDst, nDstCchLen);
 	if (nRetLen == 0) {
@@ -100,15 +100,15 @@ EConvertResult CodePage::CPToUni(const char* pSrc, const int nSrcLen, wchar_t* p
 		// ERROR_INVALID_FLAGS
 		// ERROR_INVALID_PARAMETER
 		// ERROR_NO_UNICODE_TRANSLATION
-		return RESULT_FAILURE;
+		return CodeConvertResult::Failure;
 	}
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }
 
 
 /*!	CODEPAGE→Unicodeコード変換
 */
-EConvertResult CodePage::CPToUnicode(const Memory& cSrc, NativeW* pDst, int codepageEx)
+CodeConvertResult CodePage::CPToUnicode(const Memory& cSrc, NativeW* pDst, int codepageEx)
 {
 	// エラー状態
 	bool bError = false;
@@ -126,7 +126,7 @@ EConvertResult CodePage::CPToUnicode(const Memory& cSrc, NativeW* pDst, int code
 
 	// 変換
 	int nDstLen; // cch
-	EConvertResult ret = CPToUni(pSrc, nSrcLen, pDstBuffer, nDstCch, nDstLen, codepage);
+	CodeConvertResult ret = CPToUni(pSrc, nSrcLen, pDstBuffer, nDstCch, nDstLen, codepage);
 
 	pDst->_GetMemory()->SetRawDataHoldBuffer( pDstBuffer, nDstLen*sizeof(wchar_t) );
 
@@ -135,11 +135,11 @@ EConvertResult CodePage::CPToUnicode(const Memory& cSrc, NativeW* pDst, int code
 
 
 
-EConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* pDst, int nDstByteLen, int& nRetLen, UINT codepage)
+CodeConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* pDst, int nDstByteLen, int& nRetLen, UINT codepage)
 {
 	if (nSrcLen < 1) {
 		nRetLen = 0;
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	BOOL bDefaultChar = FALSE;
@@ -161,22 +161,22 @@ EConvertResult CodePage::UniToCP(const wchar_t* pSrc, const int nSrcLen, char* p
 			DEBUG_TRACE(_T("UniToCP %x\n"), errorCd); break;
 		}
 #endif
-		return RESULT_FAILURE;
+		return CodeConvertResult::Failure;
 	}
 	if (bDefaultChar) {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }
 
 
-EConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int codepageEx)
+CodeConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int codepageEx)
 {
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
 	
 	if (nSrcLen == 0) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 	UINT codepage = CodePageExToMSCP(codepageEx);
 
@@ -200,7 +200,7 @@ EConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int code
 			DEBUG_TRACE(_T("UnicodeToCP::UniToCP %x\n"), errorCd); break;
 		}
 #endif
-		return RESULT_FAILURE;
+		return CodeConvertResult::Failure;
 	}
 	assert(nBuffSize != 0);
 	std::vector<char> dstBuffer(nBuffSize);
@@ -208,7 +208,7 @@ EConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int code
 
 	// 変換
 	int nDstLen;
-	EConvertResult ret = UniToCP(pSrc, nSrcLen, pDstBuffer, nBuffSize, nDstLen, codepage);
+	CodeConvertResult ret = UniToCP(pSrc, nSrcLen, pDstBuffer, nBuffSize, nDstLen, codepage);
 	// pMem を更新
 	pDst->SetRawDataHoldBuffer(pDstBuffer, nDstLen);
 	return ret;
@@ -241,7 +241,7 @@ void CodePage::GetBom(Memory* pcmemBom)
 
 
 // 文字コード表示用	UNICODE → Hex 変換
-EConvertResult CodePage::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+CodeConvertResult CodePage::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	// コードの特性がわからないので何もしない
 	return CodeBase::UnicodeToHex(cSrc, iSLen, pDst, psStatusbar);

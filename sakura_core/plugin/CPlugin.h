@@ -151,8 +151,8 @@ public:
 		return static_cast<EOutlineType>(nFunctionCode);
 	}
 
-	static ESmartIndentType GetSmartIndentType(EFunctionCode nFunctionCode) {
-		return static_cast<ESmartIndentType>(nFunctionCode);
+	static SmartIndentType GetSmartIndentType(EFunctionCode nFunctionCode) {
+		return static_cast<SmartIndentType>(nFunctionCode);
 	}
 
 	// ƒƒ“ƒo•Ï”

@@ -199,7 +199,7 @@ LRESULT TabWnd::OnTabLButtonDown(WPARAM wParam, LPARAM lParam)
 		return 1L;
 
 	// タブの閉じるボタン押下処理
-	if (m_pShareData->m_common.m_sTabBar.m_bDispTabClose) {
+	if (m_pShareData->m_common.m_sTabBar.m_dispTabClose != DispTabCloseType::No) {
 		// 閉じるボタンのチェック
 		RECT rcItem;
 		RECT rcClose;
@@ -315,8 +315,8 @@ LRESULT TabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 	int nDstTab = TabCtrl_HitTest(m_hwndTab, (LPARAM)&hitinfo);
 
 	// 各タブの閉じるボタン描画用処理
-	EDispTabClose bDispTabClose = m_pShareData->m_common.m_sTabBar.m_bDispTabClose;
-	if (bDispTabClose && ::GetCapture() != m_hwndTab) {
+	DispTabCloseType dispTabClose = m_pShareData->m_common.m_sTabBar.m_dispTabClose;
+	if (dispTabClose != DispTabCloseType::No && ::GetCapture() != m_hwndTab) {
 		int nTabHoverPrev = m_nTabHover;
 		int nTabHoverCur = nDstTab;
 		RECT rcPrev;
@@ -333,7 +333,7 @@ LRESULT TabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 			}
 
 			// 閉じるボタンの自動表示
-			if (bDispTabClose == DISPTABCLOSE_AUTO) {
+			if (dispTabClose == DispTabCloseType::Auto) {
 				if (nTabHoverCur != nTabHoverPrev) {	// タブ外または別のタブから入った
 					if (nTabHoverPrev >= 0) {	// 別のタブから入った
 						// 前回のタブを再描画する
@@ -364,7 +364,7 @@ LRESULT TabWnd::OnTabMouseMove(WPARAM wParam, LPARAM lParam)
 			}
 		}else {	// カーソルがタブ外に出た
 			::KillTimer(m_hwndTab, 1);	// タイマー削除
-			if (bDispTabClose == DISPTABCLOSE_AUTO || m_bTabCloseHover) {
+			if (dispTabClose == DispTabCloseType::Auto || m_bTabCloseHover) {
 				if (nTabHoverPrev >= 0) {
 					// 前回のタブを再描画する
 					::InvalidateRect(m_hwndTab, &rcPrev, TRUE);
@@ -581,7 +581,7 @@ void TabWnd::BroadcastRefreshToGroup()
 	int nGroup = AppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->GetGroup();
 	AppNodeGroupHandle(nGroup).PostMessageToAllEditors(
 		MYWM_TAB_WINDOW_NOTIFY,
-		(WPARAM)eTabWndNotifyType::Refresh,
+		(WPARAM)TabWndNotifyType::Refresh,
 		(LPARAM)FALSE,
 		GetParentHwnd()
 	);
@@ -625,7 +625,7 @@ BOOL TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDro
 			::SendMessageTimeout(
 				pNextEditNode->m_hWnd,
 				MYWM_TAB_WINDOW_NOTIFY,
-				(WPARAM)eTabWndNotifyType::Adjust,
+				(WPARAM)TabWndNotifyType::Adjust,
 				(LPARAM)NULL,
 				SMTO_ABORTIFHUNG | SMTO_BLOCK,
 				10000,
@@ -712,7 +712,7 @@ BOOL TabWnd::SeparateGroup(HWND hwndSrc, HWND hwndDst, POINT ptDrag, POINT ptDro
 	for (int group=0; group<_countof(notifygroups); ++group) {
 		AppNodeGroupHandle(notifygroups[group]).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,
-			(WPARAM)eTabWndNotifyType::Refresh,
+			(WPARAM)TabWndNotifyType::Refresh,
 			(LPARAM)bSrcIsTop,
 			NULL
 		);
@@ -783,7 +783,7 @@ LRESULT TabWnd::ExecTabCommand(int nId, POINTS pts)
 TabWnd::TabWnd()
 	:
 	Wnd(_T("::TabWnd")),
-	m_eTabPosition(TabPosition_None),
+	m_eTabPosition(TabPosition::None),
 	m_eDragState(DRAG_NONE),
 	m_bVisualStyle(FALSE),		// 2007.04.01 ryoji
 	m_bHovering(FALSE),			// 2006.02.01 ryoji
@@ -835,7 +835,7 @@ HWND TabWnd::Open(HINSTANCE hInstance, HWND hwndParent)
 	m_bListBtnHilighted = FALSE;	// 2006.02.01 ryoji
 	m_bCloseBtnHilighted = FALSE;	// 2006.10.21 ryoji
 	m_eCaptureSrc = CAPT_NONE;	// 2006.11.30 ryoji
-	m_eTabPosition = TabPosition_None;
+	m_eTabPosition = TabPosition::None;
 
 	// ウィンドウクラス作成
 	RegisterWC(
@@ -1381,8 +1381,8 @@ LRESULT TabWnd::OnDrawItem(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		// テキスト矩形は最大でもタブを閉じるボタンの左端までに切り詰める
 		// タブを閉じるボタンの矩形は他の箇所と同様 TabCtrl_GetItemRect の矩形から取得（lpdis->rcItem の矩形だと若干ずれる）
-		EDispTabClose bDispTabClose = m_pShareData->m_common.m_sTabBar.m_bDispTabClose;
-		bool bDrawTabCloseBtn = (bDispTabClose == DISPTABCLOSE_ALLWAYS || (bDispTabClose == DISPTABCLOSE_AUTO && nTabIndex == m_nTabHover));
+		DispTabCloseType dispTabClose = m_pShareData->m_common.m_sTabBar.m_dispTabClose;
+		bool bDrawTabCloseBtn = (dispTabClose == DispTabCloseType::Always || (dispTabClose == DispTabCloseType::Auto && nTabIndex == m_nTabHover));
 		RECT rcGetItemRect;
 		TabCtrl_GetItemRect(m_hwndTab, nTabIndex, &rcGetItemRect);
 		if (bDrawTabCloseBtn) {
@@ -1586,7 +1586,7 @@ LRESULT TabWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	auto& csWindow = m_pShareData->m_common.m_sWindow;
 	if (!csWindow.m_bDispSTATUSBAR 
 		&& !csWindow.m_bDispFUNCKEYWND
-		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		SizeBox_ONOFF(true);
 	}
@@ -1644,12 +1644,12 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		bFlag = true;
 		// 最初のときはすでに存在するウィンドウの情報も登録する必要がある。
 		// 起動時、TabWnd::Open()内のRefresh()ではまだグループ入り前のため既に別ウィンドウがあってもタブは空
-		if (wParam == (WPARAM)eTabWndNotifyType::Add)
+		if (wParam == (WPARAM)TabWndNotifyType::Add)
 			Refresh();	// 続けてTWNT_ADD処理で自分以外のウィンドウを隠す
 	}
 
 	switch (wParam) {
-	case eTabWndNotifyType::Add:	// ウィンドウ登録
+	case TabWndNotifyType::Add:	// ウィンドウ登録
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex == -1) {
 			TCITEM	tcitem;
@@ -1684,7 +1684,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case eTabWndNotifyType::Delete:	// ウィンドウ削除
+	case TabWndNotifyType::Delete:	// ウィンドウ削除
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex != -1) {
 			if (AppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
@@ -1707,7 +1707,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case eTabWndNotifyType::Reorder:	// ウィンドウ順序変更
+	case TabWndNotifyType::Reorder:	// ウィンドウ順序変更
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex != -1) {
 			if (AppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
@@ -1735,7 +1735,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case eTabWndNotifyType::Rename:	// ファイル名変更
+	case TabWndNotifyType::Rename:	// ファイル名変更
 		nIndex = FindTabIndexByHWND((HWND)lParam);
 		if (nIndex != -1) {
 			TCITEM	tcitem;
@@ -1772,13 +1772,13 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	case eTabWndNotifyType::Refresh:	// 再表示
+	case TabWndNotifyType::Refresh:	// 再表示
 		Refresh(lParam != 0);
 		break;
 
 	// Start 2004.07.14 Kazika 追加
 	// タブモード有効になった場合、まとめられる側のウィンドウは隠れる
-	case eTabWndNotifyType::Enable:
+	case TabWndNotifyType::Enable:
 		Refresh();
 		if (AppNodeManager::getInstance()->GetEditNode(GetParentHwnd())->IsTopInGroup()) {
 			if (!::IsWindowVisible(GetParentHwnd())) {
@@ -1793,7 +1793,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 
 	// Start 2004.08.27 Kazika 追加
 	// タブモード無効になった場合、隠れていたウィンドウは表示状態となる
-	case eTabWndNotifyType::Disable:
+	case TabWndNotifyType::Disable:
 		Refresh();
 		if (!::IsWindowVisible(GetParentHwnd())) {
 			// 表示状態とする(フォアグラウンドにはしない)
@@ -1802,7 +1802,7 @@ void TabWnd::TabWindowNotify(WPARAM wParam, LPARAM lParam)
 		break;
 	// End 2004.08.27 Kazika
 
-	case eTabWndNotifyType::Adjust:	// ウィンドウ位置合わせ	// 2007.04.03 ryoji
+	case TabWndNotifyType::Adjust:	// ウィンドウ位置合わせ	// 2007.04.03 ryoji
 		AdjustWindowPlacement();
 		return;
 
@@ -2064,7 +2064,7 @@ void TabWnd::ShowHideWindow(HWND hwnd, BOOL bDisp)
 			::SendMessageTimeout(
 				hwnd,
 				MYWM_TAB_WINDOW_NOTIFY,
-				(WPARAM)eTabWndNotifyType::Adjust,
+				(WPARAM)TabWndNotifyType::Adjust,
 				(LPARAM)NULL,
 				SMTO_ABORTIFHUNG | SMTO_BLOCK, 10000, &dwResult);
 		}
@@ -2211,8 +2211,8 @@ void TabWnd::LayoutTab(void)
 	}
 
 	// オーナードロー状態を共通設定に追随させる
-	EDispTabClose bDispTabClose = csTabBar.m_bDispTabClose;
-	bool bOwnerDraw = (bDispTabClose != DISPTABCLOSE_NO);
+	DispTabCloseType dispTabClose = csTabBar.m_dispTabClose;
+	bool bOwnerDraw = (dispTabClose != DispTabCloseType::No);
 	if (bOwnerDraw && !(lStyle & TCS_OWNERDRAWFIXED)) {
 		lStyle |= TCS_OWNERDRAWFIXED;
 	}else if (!bOwnerDraw && (lStyle & TCS_OWNERDRAWFIXED)) {
@@ -2242,7 +2242,7 @@ void TabWnd::LayoutTab(void)
 	// タブ余白設定（「閉じるボタン」や「アイコン」の設定切替時の余白切替）
 	// ※ 画面のちらつきや体感性能にさほど影響は無さそうなので条件を絞らず毎回 TabCtrl_SetPadding() を実行する
 	cx = 6;
-	if (bDispTabClose == DISPTABCLOSE_ALLWAYS) {
+	if (dispTabClose == DispTabCloseType::Always) {
 		// 閉じるボタンの分だけパディングを追加して横幅を広げる
 		int nWidth = rcBtnBase.right - rcBtnBase.left;
 		cx += bDispTabIcon? (nWidth + 2)/3: (nWidth + 1)/2;	// それっぽく調整: ボタン幅の 1/3（アイコン有） or 1/2（アイコン無）

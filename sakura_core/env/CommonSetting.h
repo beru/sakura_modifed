@@ -94,10 +94,10 @@ struct CommonSetting_General {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // 2004.05.13 Moca
 //! ウィンドウサイズ・位置の制御方法
-enum EWinSizeMode {
-	WINSIZEMODE_DEF		= 0,	//!< 指定なし
-	WINSIZEMODE_SAVE	= 1,	//!< 継承(保存)
-	WINSIZEMODE_SET		= 2		//!< 直接指定(固定)
+enum class WinSizeMode {
+	Default		= 0,	//!< 指定なし
+	Save		= 1,	//!< 継承(保存)
+	Set			= 2		//!< 直接指定(固定)
 };
 
 struct CommonSetting_Window {
@@ -111,11 +111,11 @@ struct CommonSetting_Window {
 	bool			m_bUseCompatibleBMP;		// 再作画用互換ビットマップを使う 2007.09.09 Moca
 
 	// 位置と大きさの設定
-	EWinSizeMode	m_eSaveWindowSize;			// ウィンドウサイズ継承・固定 EWinSizeModeに順ずる 2004.05.13 Moca
+	WinSizeMode	m_eSaveWindowSize;			// ウィンドウサイズ継承・固定 WinSizeModeに順ずる 2004.05.13 Moca
 	int				m_nWinSizeType;				// 大きさの指定
 	int				m_nWinSizeCX;				// 直接指定 幅
 	int				m_nWinSizeCY;				// 直接指定 高さ
-	EWinSizeMode	m_eSaveWindowPos;			// ウィンドウ位置継承・固定 EWinSizeModeに順ずる 2004.05.13 Moca
+	WinSizeMode	m_eSaveWindowPos;			// ウィンドウ位置継承・固定 WinSizeModeに順ずる 2004.05.13 Moca
 	int				m_nWinPosX;					// 直接指定 X座標
 	int				m_nWinPosY;					// 直接指定 Y座標
 
@@ -153,18 +153,18 @@ struct CommonSetting_Window {
 //                         タブバー                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //! 閉じるボタン
-enum EDispTabClose {
-	DISPTABCLOSE_NO			= 0, //!< なし
-	DISPTABCLOSE_ALLWAYS	= 1, //!< 常に表示
-	DISPTABCLOSE_AUTO		= 2  //!< 自動表示
+enum class DispTabCloseType {
+	No			= 0, //!< なし
+	Always		= 1, //!< 常に表示
+	Auto		= 2  //!< 自動表示
 };
 
-enum ETabPosition{
-	TabPosition_Top,
-	TabPosition_Bottom,
-	TabPosition_Left,
-	TabPosition_Right,
-	TabPosition_None = -1,
+enum class TabPosition {
+	Top,
+	Bottom,
+	Left,
+	Right,
+	None = -1,
 };
 
 struct CommonSetting_TabBar {
@@ -174,12 +174,12 @@ struct CommonSetting_TabBar {
 	bool		m_bTab_CloseOneWin;				// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる
 	bool		m_bNewWindow;					// 外部から起動するときは新しいウィンドウで開く
 	bool		m_bTabMultiLine;				// タブ多段
-	ETabPosition	m_eTabPosition;				// タブ位置
+	TabPosition	m_eTabPosition;				// タブ位置
 
 	wchar_t		m_szTabWndCaption[MAX_CAPTION_CONF_LEN];	// タブウィンドウキャプション	//@@@ 2003.06.13 MIK
 	bool		m_bSameTabWidth;				// タブを等幅にする			//@@@ 2006.01.28 ryoji
 	bool		m_bDispTabIcon;					// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
-	EDispTabClose	m_bDispTabClose;			// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
+	DispTabCloseType	m_dispTabClose;			// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
 	bool		m_bSortTabList;					// タブ一覧をソートする	//@@@ 2006.03.23 fon
 	bool		m_bTab_ListFull;				// タブ一覧をフルパス表示する	//@@@ 2007.02.28 ryoji
 
@@ -517,24 +517,24 @@ struct CommonSetting_FileName {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ドッキング配置
-enum EDockSide {
-	DOCKSIDE_FLOAT,			//!< フローティング
-	DOCKSIDE_LEFT,			//!< 左ドッキング
-	DOCKSIDE_TOP,			//!< 上ドッキング
-	DOCKSIDE_RIGHT,			//!< 右ドッキング
-	DOCKSIDE_BOTTOM,		//!< 下ドッキング
-	DOCKSIDE_UNDOCKABLE = -1,//!< ドッキング禁止
+enum class DockSideType {
+	Float,				//!< フローティング
+	Left,				//!< 左ドッキング
+	Top,				//!< 上ドッキング
+	Right,				//!< 右ドッキング
+	Bottom,				//!< 下ドッキング
+	Undockable = -1,	//!< ドッキング禁止
 };
 
-enum EFileTreeItemType {
-	EFileTreeItemType_Grep,
-	EFileTreeItemType_File,
-	EFileTreeItemType_Folder
+enum class FileTreeItemType {
+	Grep,
+	File,
+	Folder
 };
 
 struct FileTreeItem {
 public:
-	EFileTreeItemType m_eFileTreeItemType;
+	FileTreeItemType m_eFileTreeItemType;
 	SFilePath	m_szTargetPath;	//!< フォルダorファイルパス
 	StaticString<TCHAR,_MAX_PATH> m_szLabelName; //!< ラベル名(""のときはファイル名を使う)
 	int  m_nDepth;	//!< 階層
@@ -546,7 +546,7 @@ public:
 	bool		m_bIgnoreSystem;		//!< システムファイルを除く
 
 	FileTreeItem()
-		: m_eFileTreeItemType(EFileTreeItemType_Grep)
+		: m_eFileTreeItemType(FileTreeItemType::Grep)
 		, m_nDepth(0)
 		, m_bIgnoreHidden(true)
 		, m_bIgnoreReadOnly(false)
@@ -573,7 +573,7 @@ struct CommonSetting_OutLine {
 	int			m_nOutlineDockSet;			// アウトライン解析のドッキング位置継承方法(0:共通設定, 1:タイプ別設定)
 	bool		m_bOutlineDockSync;			// アウトライン解析のドッキング位置を同期する
 	bool		m_bOutlineDockDisp;			// アウトライン解析表示の有無
-	EDockSide	m_eOutlineDockSide;			// アウトライン解析ドッキング配置
+	DockSideType	m_eOutlineDockSide;			// アウトライン解析ドッキング配置
 	int			m_cxOutlineDockLeft;		// アウトラインの左ドッキング幅
 	int			m_cyOutlineDockTop;			// アウトラインの上ドッキング高
 	int			m_cxOutlineDockRight;		// アウトラインの右ドッキング幅

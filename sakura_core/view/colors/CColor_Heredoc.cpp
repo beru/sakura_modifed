@@ -69,7 +69,7 @@ bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 	// ...
 	// HEREDOC_ID
 	if (1
-		&& m_pTypeData->m_nHeredocType == HEREDOC_PHP
+		&& m_pTypeData->m_nHeredocType == HereDocType::PHP
 		&& cStr.At(nPos) == '<' && nPos + 3 < cStr.GetLength()
 		&& wmemcmp(cStr.GetPtr() + nPos + 1, L"<<", 2) == 0
 	) {
@@ -127,7 +127,7 @@ bool Color_Heredoc::EndColor(const StringRef& cStr, int nPos)
 {
 	if (this->m_nCOMMENTEND == 0) {
 		if (1
-			&& m_pTypeData->m_nHeredocType == HEREDOC_PHP
+			&& m_pTypeData->m_nHeredocType == HereDocType::PHP
 			&& nPos == 0 && m_nSize <= cStr.GetLength()
 			&& wmemcmp(cStr.GetPtr(), m_pszId, m_nSize) == 0
 		) {

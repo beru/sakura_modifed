@@ -195,14 +195,14 @@ re_do:;
 		nSearchResult = layoutMgr.SearchWord(
 			nLineNum,						// 検索開始レイアウト行
 			nIdx,							// 検索開始データ位置
-			eSearchDirection::Forward,		// 0==前方検索 1==後方検索
+			SearchDirection::Forward,		// 0==前方検索 1==後方検索
 			&sRangeA,						// マッチレイアウト範囲
 			m_pCommanderView->m_sSearchPattern
 		);
 	}else {
 		nSearchResult = SearchAgent(&GetDocument()->m_cDocLineMgr).SearchWord(
 			LogicPoint(nIdx, nLineNumLogic),
-			eSearchDirection::Forward,		// 0==前方検索 1==後方検索
+			SearchDirection::Forward,		// 0==前方検索 1==後方検索
 			pcSelectLogic,
 			m_pCommanderView->m_sSearchPattern
 		);
@@ -396,7 +396,7 @@ re_do:;							// hor
 	if (layoutMgr.SearchWord(
 			nLineNum,								// 検索開始レイアウト行
 			nIdx,									// 検索開始データ位置
-			eSearchDirection::Backward,				// 0==前方検索 1==後方検索
+			SearchDirection::Backward,				// 0==前方検索 1==後方検索
 			&sRangeA,								// マッチレイアウト範囲
 			m_pCommanderView->m_sSearchPattern
 		)
@@ -1366,7 +1366,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			// LayoutMgrの更新(変更有の場合)
 			layoutMgr._DoLayout();
 			GetEditWindow()->ClearViewCaretPosInfo();
-			if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+			if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 				layoutMgr.CalculateTextWidth();
 			}
 		}

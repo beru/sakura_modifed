@@ -32,9 +32,9 @@ public:
 	bool DoConvert(NativeW* pcData);
 };
 
-enum EToHankakuMode{
-	TO_KATAKANA	= 0x01, // カタカナに影響アリ
-	TO_HIRAGANA	= 0x02, // ひらがなに影響アリ
-	TO_EISU		= 0x04, // 英数字に影響アリ
+enum class ToHankakuMode {
+	Katakana	= 0x01, // カタカナに影響アリ
+	Hiragana	= 0x02, // ひらがなに影響アリ
+	Alnum		= 0x04, // 英数字に影響アリ
 };
 

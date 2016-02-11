@@ -1009,7 +1009,7 @@ void EditView::OnSize(int cx, int cy)
 
 	// 2008.06.06 nasukoji	サイズ変更時の折り返し位置再計算
 	bool wrapChanged = false;
-	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::WindowWidth) {
+	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::WindowWidth) {
 		if (m_nMyIndex == 0) {	// 左上隅のビューのサイズ変更時のみ処理する
 			// 右端で折り返すモードなら右端で折り返す	// 2008.06.08 ryoji
 			wrapChanged = m_pcEditWnd->WrapWindowWidth(0);

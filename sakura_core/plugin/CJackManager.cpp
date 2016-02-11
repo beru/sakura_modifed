@@ -112,7 +112,7 @@ ERegisterPlugResult JackManager::RegisterPlug(
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
-			int nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
+			SmartIndentType nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
 			PropTypesScreen::AddSIndentMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
@@ -143,7 +143,7 @@ bool JackManager::UnRegisterPlug(
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
-			int nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());
+			SmartIndentType nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());
 			PropTypesScreen::RemoveSIndentMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;

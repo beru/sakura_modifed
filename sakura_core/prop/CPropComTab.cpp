@@ -63,18 +63,18 @@ static const DWORD p_helpids[] = {
 	0, 0
 };
 
-TYPE_NAME_ID<EDispTabClose> DispTabCloseArr[] = {
-	{ DISPTABCLOSE_NO,		STR_PROPCOMTAB_DISP_NO },
-	{ DISPTABCLOSE_ALLWAYS,	STR_PROPCOMTAB_DISP_ALLWAYS },
-	{ DISPTABCLOSE_AUTO,	STR_PROPCOMTAB_DISP_AUTO },
+TYPE_NAME_ID<DispTabCloseType> DispTabCloseArr[] = {
+	{ DispTabCloseType::No,		STR_PROPCOMTAB_DISP_NO },
+	{ DispTabCloseType::Always,	STR_PROPCOMTAB_DISP_ALLWAYS },
+	{ DispTabCloseType::Auto,	STR_PROPCOMTAB_DISP_AUTO },
 };
 
-TYPE_NAME_ID<ETabPosition> TabPosArr[] = {
-	{ TabPosition_Top, STR_PROPCOMTAB_TAB_POS_TOP },
-	{ TabPosition_Bottom, STR_PROPCOMTAB_TAB_POS_BOTTOM },
+TYPE_NAME_ID<TabPosition> TabPosArr[] = {
+	{ TabPosition::Top, STR_PROPCOMTAB_TAB_POS_TOP },
+	{ TabPosition::Bottom, STR_PROPCOMTAB_TAB_POS_BOTTOM },
 #if 0
-	{ TabPosition_Left, STR_PROPCOMTAB_TAB_POS_LEFT },
-	{ TabPosition_Right, STR_PROPCOMTAB_TAB_POS_RIGHT },
+	{ TabPosition::Left, STR_PROPCOMTAB_TAB_POS_LEFT },
+	{ TabPosition::Right, STR_PROPCOMTAB_TAB_POS_RIGHT },
 #endif
 };
 
@@ -219,7 +219,7 @@ void PropTab::SetData(HWND hwndDlg)
 	int nSelPos = 0;
 	for (int i=0; i<_countof(DispTabCloseArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(DispTabCloseArr[i].nNameId));
-		if (DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_bDispTabClose) {
+		if (DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_dispTabClose) {
 			nSelPos = i;
 		}
 	}
@@ -262,7 +262,7 @@ int PropTab::GetData(HWND hwndDlg)
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_DispTabClose);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	csTabBar.m_bDispTabClose = DispTabCloseArr[nSelPos].nMethod;
+	csTabBar.m_dispTabClose = DispTabCloseArr[nSelPos].nMethod;
 
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAB_POSITION);
 	nSelPos = Combo_GetCurSel(hwndCombo);

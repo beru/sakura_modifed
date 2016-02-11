@@ -87,14 +87,14 @@ int Utf8::Utf8ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool bCE
 
 //! UTF-8→Unicodeコード変換
 // 2007.08.13 kobake 作成
-EConvertResult Utf8::_UTF8ToUnicode( const Memory& cSrc, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
+CodeConvertResult Utf8::_UTF8ToUnicode( const Memory& cSrc, NativeW* pDstMem, bool bCESU8Mode/*, bool decodeMime*/ )
 {
 	// データ取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 	
 	const char* psrc = pSrc;
@@ -120,7 +120,7 @@ EConvertResult Utf8::_UTF8ToUnicode( const Memory& cSrc, NativeW* pDstMem, bool 
 	// pDstMem を更新
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }
 
 
@@ -176,14 +176,14 @@ int Utf8::UniToUtf8(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pb
 
 
 //! コード変換 Unicode→UTF-8
-EConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bool bCesu8Mode )
+CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bool bCesu8Mode )
 {
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 	
 	// 必要なバッファサイズを調べてメモリを確保
@@ -198,17 +198,17 @@ EConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bool 
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	if (!bError) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}else {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
 }
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/21 Uchi
-EConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool bCESUMode)
+CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool bCESUMode)
 {
 	NativeW		cBuff;
-	EConvertResult	res;
+	CodeConvertResult	res;
 	int				i;
 	TCHAR*			pd;
 	unsigned char*	ps;
@@ -235,7 +235,7 @@ EConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* 
 	}else {
 		res = UnicodeToCESU8(cBuff, cBuff._GetMemory());
 	}
-	if (res != RESULT_COMPLETE) {
+	if (res != CodeConvertResult::Complete) {
 		return res;
 	}
 
@@ -250,5 +250,5 @@ EConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* 
 		auto_sprintf(pd, _T("?%02X"), *ps);
 	}
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }

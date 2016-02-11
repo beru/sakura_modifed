@@ -40,7 +40,7 @@ static bool _CheckSavingEolcode(
 }
 
 //! DocLineMgrが保持するデータを指定文字コードで安全に保存できるかどうか判定する
-static EConvertResult _CheckSavingCharcode(
+static CodeConvertResult _CheckSavingCharcode(
 	const DocLineMgr& pcDocLineMgr,
 	ECodeType eCodeType,
 	LogicPoint& point,
@@ -55,14 +55,14 @@ static EConvertResult _CheckSavingCharcode(
 	LogicInt nLine = LogicInt(0);
 	while (pcDocLine) {
 		// コード変換 pcDocLine -> cmemTmp
-		EConvertResult e = IoBridge::ImplToFile(
+		CodeConvertResult e = IoBridge::ImplToFile(
 			pcDocLine->_GetDocLineDataWithEOL(),
 			&cmemTmp,
 			pCodeBase
 		);
 		if (bCodePageMode) {
-			// コードページはRESULT_LOSESOMEを返さないので、自分で文字列比較する
-			EConvertResult e2 = IoBridge::FileToImpl(
+			// コードページはCodeConvertResult::LoseSomeを返さないので、自分で文字列比較する
+			CodeConvertResult e2 = IoBridge::FileToImpl(
 				cmemTmp,
 				&cmemTmp2,
 				pCodeBase,
@@ -89,11 +89,11 @@ static EConvertResult _CheckSavingCharcode(
 				// 変換できなかった位置の1文字取得
 				wc.SetString( p + nPos, (Int)NativeW::GetSizeOfChar( p, nDocLineLen, nPos ) );
 				delete pCodeBase;
-				return RESULT_LOSESOME;
+				return CodeConvertResult::LoseSome;
 			}
 		}
-		if (e != RESULT_COMPLETE) {
-			if (e == RESULT_LOSESOME) {
+		if (e != CodeConvertResult::Complete) {
+			if (e == CodeConvertResult::LoseSome) {
 				// 行内の位置を特定
 				point.y = nLine;
 				point.x = LogicInt(-1);
@@ -104,12 +104,12 @@ static EConvertResult _CheckSavingCharcode(
 				NativeW mem;
 				while (0 < chars) {
 					mem.SetStringHoldBuffer( pLine + nPos, chars );
-					EConvertResult e2 = IoBridge::ImplToFile(
+					CodeConvertResult e2 = IoBridge::ImplToFile(
 						mem,
 						&cmemTmp,
 						pCodeBase
 					);
-					if (e2 == RESULT_LOSESOME) {
+					if (e2 == CodeConvertResult::LoseSome) {
 						point.x = nPos;
 						wc = mem;
 						break;
@@ -127,11 +127,11 @@ static EConvertResult _CheckSavingCharcode(
 		++nLine;
 	}
 	delete pCodeBase;
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }
 
 
-ECallbackResult CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
+CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -155,20 +155,20 @@ ECallbackResult CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		switch (nDlgResult) {
 		case IDYES:		pSaveInfo->cEol = pcDoc->m_cDocEditor.GetNewLineCode(); break; // 統一
 		case IDNO:		break; // 続行
-		case IDCANCEL:	return CALLBACK_INTERRUPT; // 中断
+		case IDCANCEL:	return CallbackResultType::Interrupt; // 中断
 		}
 	}
 
 	// 指定文字コードで安全に保存できるかどうか判定
 	LogicPoint point;
 	NativeW cmemChar(L"", 0);
-	EConvertResult nTmpResult = _CheckSavingCharcode(
+	CodeConvertResult nTmpResult = _CheckSavingCharcode(
 		pcDoc->m_cDocLineMgr, pSaveInfo->eCharCode,
 		point, cmemChar
 	);
 
 	// ユーザ問い合わせ
-	if (nTmpResult == RESULT_LOSESOME) {
+	if (nTmpResult == CodeConvertResult::LoseSome) {
 		TCHAR szCpName[100];
 		TCHAR  szLineNum[60];  // 123桁
 		TCHAR  szCharCode[12]; // U+12ab or 1234abcd
@@ -196,22 +196,22 @@ ECallbackResult CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		);
 		switch (nDlgResult) {
 		case IDYES:		break; // 続行
-		case IDNO:		return CALLBACK_INTERRUPT; // 中断
+		case IDNO:		return CallbackResultType::Interrupt; // 中断
 		case IDCANCEL:
 			{
 				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
 				pcDoc->m_pcEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
 			}
-			return CALLBACK_INTERRUPT; //中断
+			return CallbackResultType::Interrupt; //中断
 		}
 	}
-	return CALLBACK_CONTINUE;
+	return CallbackResultType::Continue;
 }
 
-void CodeChecker::OnFinalSave(ESaveResult eSaveResult)
+void CodeChecker::OnFinalSave(SaveResultType eSaveResult)
 {
 	// カキコ結果
-	if (eSaveResult == SAVED_LOSESOME) {
+	if (eSaveResult == SaveResultType::LoseSome) {
 		ErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_CODECHECKER_LOSESOME_SAVE));
 	}
 }
@@ -220,9 +220,9 @@ void CodeChecker::OnFinalSave(ESaveResult eSaveResult)
 //                     ロード時チェック                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void CodeChecker::OnFinalLoad(ELoadResult eLoadResult)
+void CodeChecker::OnFinalLoad(LoadResultType eLoadResult)
 {
-	if (eLoadResult == LOADED_LOSESOME) {
+	if (eLoadResult == LoadResultType::LoseSome) {
 		ErrorMessage(
 			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_CODECHECKER_LOSESOME_ROAD)

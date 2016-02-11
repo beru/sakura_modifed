@@ -89,22 +89,22 @@ ECodeType CodeMediator::DetectUnicode(ESI* pcesi)
 {
 //	pcesi->m_dwStatus = ESI_NOINFORMATION;
 
-	EBOMType ebom_type = pcesi->GetBOMType();
-	if (ebom_type == ESI_BOMTYPE_UNKNOWN) {
+	BOMType ebom_type = pcesi->GetBOMType();
+	if (ebom_type == BOMType::Unknown) {
 		pcesi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
 
 	// 1行の平均桁数が200を超えている場合はUnicode未検出とする
 	int ndatalen = pcesi->GetDataLen();
-	int nlinebreak = pcesi->m_aWcInfo[ebom_type].nSpecific;  // 改行数を nlinebreakに取得
+	int nlinebreak = pcesi->m_aWcInfo[(int)ebom_type].nSpecific;  // 改行数を nlinebreakに取得
 	if (static_cast<double>(ndatalen) / nlinebreak > 200) {
 		pcesi->SetStatus(ESI_NODETECTED);
 		return CODE_NONE;
 	}
 
 	pcesi->SetStatus(ESI_WC_DETECTED);
-	return pcesi->m_aWcInfo[ebom_type].eCodeID;
+	return pcesi->m_aWcInfo[(int)ebom_type].eCodeID;
 }
 
 

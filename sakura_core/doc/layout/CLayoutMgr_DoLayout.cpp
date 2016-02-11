@@ -67,11 +67,11 @@ Layout* LayoutMgr::LayoutWork::_CreateLayout(LayoutMgr* mgr)
 
 bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	if (KINSOKU_TYPE_NONE != pWork->eKinsokuType) {
+	if (KinsokuType::None != pWork->eKinsokuType) {
 		// 禁則処理の最後尾に達したら禁則処理中を解除する
 		if (pWork->nPos >= pWork->nWordBgn + pWork->nWordLen) {
 			if (1
-				&& pWork->eKinsokuType == KINSOKU_TYPE_KINSOKU_KUTO
+				&& pWork->eKinsokuType == KinsokuType::Kuto
 				&& pWork->nPos == pWork->nWordBgn + pWork->nWordLen
 			) {
 				int	nEol = pWork->pcDocLine->GetEol().GetLen();
@@ -89,7 +89,7 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 				}
 			}
 			pWork->nWordLen = LogicInt(0);
-			pWork->eKinsokuType = KINSOKU_TYPE_NONE;	//@@@ 2002.04.20 MIK
+			pWork->eKinsokuType = KinsokuType::None;	//@@@ 2002.04.20 MIK
 		}
 		return true;
 	}else {
@@ -99,7 +99,7 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 
 void LayoutMgr::_DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	if (pWork->eKinsokuType == KINSOKU_TYPE_NONE) {
+	if (pWork->eKinsokuType == KinsokuType::None) {
 		// 英単語の先頭か
 		if (1
 			&& pWork->nPos >= pWork->nBgn
@@ -112,7 +112,7 @@ void LayoutMgr::_DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine)
 				&pWork->nWordBgn, &pWork->nWordLen, &nWordKetas
 			);
 
-			pWork->eKinsokuType = KINSOKU_TYPE_WORDWRAP;	//@@@ 2002.04.20 MIK
+			pWork->eKinsokuType = KinsokuType::WordWrap;	//@@@ 2002.04.20 MIK
 
 			if (1
 				&& pWork->nPosX + nWordKetas >= GetMaxLineKetas()
@@ -128,7 +128,7 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 {
 	if (1
 		&& (GetMaxLineKetas() - pWork->nPosX < 2)
-		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
+		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
 		LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
@@ -139,7 +139,7 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 		) {
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 1;
-			pWork->eKinsokuType = KINSOKU_TYPE_KINSOKU_KUTO;
+			pWork->eKinsokuType = KinsokuType::Kuto;
 		}
 	}
 }
@@ -150,7 +150,7 @@ void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (pWork->nPos + 1 < pWork->cLineStr.GetLength())	// 2007.02.17 ryoji 追加
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
 		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
-		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
+		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
 		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
@@ -164,7 +164,7 @@ void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		) {	// 句読点でない
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 2;
-			pWork->eKinsokuType = KINSOKU_TYPE_KINSOKU_HEAD;
+			pWork->eKinsokuType = KinsokuType::Head;
 
 			(this->*pfOnLine)(pWork);
 		}
@@ -177,7 +177,7 @@ void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		&& (pWork->nPos + 1 < pWork->cLineStr.GetLength())	// 2007.02.17 ryoji 追加
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
 		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
-		&& (pWork->eKinsokuType == KINSOKU_TYPE_NONE)
+		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
 		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
 		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
@@ -188,7 +188,7 @@ void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 		) {
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 1;
-			pWork->eKinsokuType = KINSOKU_TYPE_KINSOKU_TAIL;
+			pWork->eKinsokuType = KinsokuType::Tail;
 			
 			(this->*pfOnLine)(pWork);
 		}
@@ -274,7 +274,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 //			}
 
 			if (pWork->nPosX + nCharKetas > GetMaxLineKetas()) {
-				if (pWork->eKinsokuType != KINSOKU_TYPE_KINSOKU_KUTO) {
+				if (pWork->eKinsokuType != KinsokuType::Kuto) {
 					// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
 					if (!(1
 						&& m_pTypeConfig->m_bKinsokuRet
@@ -355,7 +355,7 @@ void LayoutMgr::_DoLayout()
 
 	while (pWork->pcDocLine) {
 		pWork->cLineStr		= pWork->pcDocLine->GetStringRefWithEOL();
-		pWork->eKinsokuType	= KINSOKU_TYPE_NONE;	//@@@ 2002.04.20 MIK
+		pWork->eKinsokuType	= KinsokuType::None;	//@@@ 2002.04.20 MIK
 		pWork->nBgn			= LogicInt(0);
 		pWork->nPos			= LogicInt(0);
 		pWork->nWordBgn		= LogicInt(0);
@@ -497,7 +497,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 
 	while (pWork->pcDocLine) {
 		pWork->cLineStr		= pWork->pcDocLine->GetStringRefWithEOL();
-		pWork->eKinsokuType	= KINSOKU_TYPE_NONE;	//@@@ 2002.04.20 MIK
+		pWork->eKinsokuType	= KinsokuType::None;	//@@@ 2002.04.20 MIK
 		pWork->nBgn			= LogicInt(0);
 		pWork->nPos			= LogicInt(0);
 		pWork->nWordBgn		= LogicInt(0);
@@ -582,7 +582,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 */
 void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 {
-	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {	// 「折り返さない」
+	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {	// 「折り返さない」
 		LayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
 		LayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
 		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON

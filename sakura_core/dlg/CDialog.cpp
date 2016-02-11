@@ -710,7 +710,7 @@ void Dialog::ResizeItem(
 	const POINT& ptDlgDefault,
 	const POINT& ptDlgNew,
 	const RECT& rcItemDefault,
-	EAnchorStyle anchor,
+	AnchorStyle anchor,
 	bool bUpdate
 	)
 {
@@ -720,9 +720,9 @@ void Dialog::ResizeItem(
 	pt.y = rcItemDefault.top;
 	width = rcItemDefault.right - rcItemDefault.left;
 	height = rcItemDefault.bottom - rcItemDefault.top;
-	if ((anchor & (ANCHOR_LEFT | ANCHOR_RIGHT)) == ANCHOR_LEFT) {
+	if (((int)anchor & ((int)AnchorStyle::Left | (int)AnchorStyle::Right)) == (int)AnchorStyle::Left) {
 		// ‚È‚µ
-	}else if ((anchor & (ANCHOR_LEFT | ANCHOR_RIGHT)) == ANCHOR_RIGHT) {
+	}else if (((int)anchor & ((int)AnchorStyle::Left | (int)AnchorStyle::Right)) == (int)AnchorStyle::Right) {
 		/*
 			[<- rcItemDefault.left ->[ ]     ]
 			[<- rcItemDefault.right  [->]     ]
@@ -731,7 +731,7 @@ void Dialog::ResizeItem(
 			[<-    pt.x                 ->[ ]     ]
 		*/
 		pt.x = rcItemDefault.left + (ptDlgNew.x - ptDlgDefault.x);
-	}else if ((anchor & (ANCHOR_LEFT | ANCHOR_RIGHT)) == (ANCHOR_LEFT | ANCHOR_RIGHT)) {
+	}else if (((int)anchor & ((int)AnchorStyle::Left | (int)AnchorStyle::Right)) == ((int)AnchorStyle::Left | (int)AnchorStyle::Right)) {
 		/*
 			[<-    ptDlgNew.x        [ ]         ->]
 			[                       [<-width->]    ]
@@ -739,11 +739,11 @@ void Dialog::ResizeItem(
 		width = ptDlgNew.x - rcItemDefault.left - (ptDlgDefault.x - rcItemDefault.right);
 	}
 	
-	if ((anchor & (ANCHOR_TOP | ANCHOR_BOTTOM)) == ANCHOR_TOP) {
+	if (((int)anchor & ((int)AnchorStyle::Top | (int)AnchorStyle::Bottom)) == (int)AnchorStyle::Top) {
 		// ‚È‚µ
-	}else if ((anchor & (ANCHOR_TOP | ANCHOR_BOTTOM)) == ANCHOR_BOTTOM) {
+	}else if (((int)anchor & ((int)AnchorStyle::Top | (int)AnchorStyle::Bottom)) == (int)AnchorStyle::Bottom) {
 		pt.y = rcItemDefault.top + (ptDlgNew.y - ptDlgDefault.y);
-	}else if ((anchor & (ANCHOR_TOP | ANCHOR_BOTTOM)) == (ANCHOR_TOP | ANCHOR_BOTTOM)) {
+	}else if (((int)anchor & ((int)AnchorStyle::Top | (int)AnchorStyle::Bottom)) == ((int)AnchorStyle::Top | (int)AnchorStyle::Bottom)) {
 		height = ptDlgNew.y - rcItemDefault.top - (ptDlgDefault.y - rcItemDefault.bottom);
 	}
 //	::MoveWindow(hTarget, pt.x, pt.y, width, height, FALSE);

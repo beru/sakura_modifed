@@ -73,7 +73,7 @@ FileLoad::FileLoad(const EncodingConfig& encode)
 	m_bBomExist		= false;	// Jun. 08, 2003 Moca
 	m_nFlag 		= 0;
 	m_nReadLength	= 0;
-	m_eMode			= FLMODE_CLOSE;	// Jun. 08, 2003 Moca
+	m_eMode			= FileLoadMode::Close;	// Jun. 08, 2003 Moca
 
 	m_nLineIndex	= -1;
 
@@ -205,7 +205,7 @@ ECodeType FileLoad::FileOpen(
 	}
 	
 	// To Here Jun. 13, 2003 Moca BOMの除去
-	m_eMode = FLMODE_READY;
+	m_eMode = FileLoadMode::Ready;
 //	m_cmemLine.AllocBuffer(256);
 	m_pCodeBase->GetEol( &m_memEols[0], EOL_NEL );
 	m_pCodeBase->GetEol( &m_memEols[1], EOL_LS );
@@ -225,7 +225,7 @@ ECodeType FileLoad::FileOpen(
 	}
 
 	m_nReadOffset2 = 0;
-	m_nTempResult = RESULT_FAILURE;
+	m_nTempResult = CodeConvertResult::Failure;
 	m_cLineTemp.SetString(L"");
 	return m_CharCode;
 }
@@ -251,14 +251,14 @@ void FileLoad::FileClose(void)
 	m_bBomExist		= false; // From Here Jun. 08, 2003
 	m_nFlag 		=  0;
 	m_nReadLength	=  0;
-	m_eMode			= FLMODE_CLOSE;
+	m_eMode			= FileLoadMode::Close;
 	m_nLineIndex	= -1;
 }
 
 /*! 1行読み込み
 	UTF-7場合、データ内のNEL,PS,LS等の改行までを1行として取り出す
 */
-EConvertResult FileLoad::ReadLine(
+CodeConvertResult FileLoad::ReadLine(
 	NativeW* pUnicodeBuffer,
 	Eol* pcEol
 	)
@@ -268,11 +268,11 @@ EConvertResult FileLoad::ReadLine(
 	}
 	if (m_nReadOffset2 == m_cLineTemp.GetStringLength()) {
 		Eol cEol;
-		EConvertResult e = ReadLine_core(&m_cLineTemp, &cEol);
-		if (e == RESULT_FAILURE) {
+		CodeConvertResult e = ReadLine_core(&m_cLineTemp, &cEol);
+		if (e == CodeConvertResult::Failure) {
 			pUnicodeBuffer->_GetMemory()->SetRawDataHoldBuffer( L"", 0 );
 			*pcEol = cEol;
-			return RESULT_FAILURE;
+			return CodeConvertResult::Failure;
 		}
 		m_nReadOffset2 = 0;
 		m_nTempResult = e;
@@ -311,17 +311,17 @@ EConvertResult FileLoad::ReadLine(
 	@return	NULL以外	1行を保持しているデータの先頭アドレスを返す。永続的ではない一時的な領域。
 			NULL		データがなかった
 */
-EConvertResult FileLoad::ReadLine_core(
+CodeConvertResult FileLoad::ReadLine_core(
 	NativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ。改行も含めて読み取る。
 	Eol*		pcEol			//!< [i/o]
 	)
 {
-	EConvertResult eRet = RESULT_COMPLETE;
+	CodeConvertResult eRet = CodeConvertResult::Complete;
 
 #ifdef _DEBUG
-	if (m_eMode < FLMODE_READY) {
+	if (m_eMode < FileLoadMode::Ready) {
 		MYTRACE(_T("FileLoad::ReadLine(): m_eMode = %d\n"), m_eMode);
-		return RESULT_FAILURE;
+		return CodeConvertResult::Failure;
 	}
 #endif
 	//行データバッファ (文字コード変換無しの生のデータ)
@@ -347,7 +347,7 @@ EConvertResult FileLoad::ReadLine_core(
 		}
 
 		// ReadBufから1行を取得するとき、改行コードが欠ける可能性があるため
-		if (m_nReadDataLen <= m_nReadBufOffSet && FLMODE_READY == m_eMode) {// From Here Jun. 13, 2003 Moca
+		if (m_nReadDataLen <= m_nReadBufOffSet && FileLoadMode::Ready == m_eMode) {// From Here Jun. 13, 2003 Moca
 			int n = 128;
 			int nMinAllocSize = m_cLineBuffer.GetRawLength() + nEolLen - nBufferNext + 100;
 			while (n < nMinAllocSize) {
@@ -370,9 +370,9 @@ EConvertResult FileLoad::ReadLine_core(
 	m_nReadLength += m_cLineBuffer.GetRawLength();
 
 	// 文字コード変換 cLineBuffer -> pUnicodeBuffer
-	EConvertResult eConvertResult = IoBridge::FileToImpl(m_cLineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
-	if (eConvertResult == RESULT_LOSESOME) {
-		eRet = RESULT_LOSESOME;
+	CodeConvertResult eConvertResult = IoBridge::FileToImpl(m_cLineBuffer, pUnicodeBuffer, m_pCodeBase, m_nFlag);
+	if (eConvertResult == CodeConvertResult::LoseSome) {
+		eRet = CodeConvertResult::LoseSome;
 	}
 
 	++m_nLineIndex;
@@ -387,7 +387,7 @@ EConvertResult FileLoad::ReadLine_core(
 		}
 	}
 	if (pUnicodeBuffer->GetStringLength() == LogicInt(0)) {
-		eRet = RESULT_FAILURE;
+		eRet = CodeConvertResult::Failure;
 	}
 
 	return eRet;
@@ -427,7 +427,7 @@ void FileLoad::Buffering(void)
 	// ファイルの読み込み
 	DWORD readSize = Read(&m_pReadBuf[m_nReadDataLen], m_nReadBufSize - m_nReadDataLen);
 	if (readSize == 0) {
-		m_eMode = FLMODE_READBUFEND;	// ファイルなどの終わりに達したらしい
+		m_eMode = FileLoadMode::ReadBufEnd;	// ファイルなどの終わりに達したらしい
 	}
 	m_nReadDataLen += readSize;
 }

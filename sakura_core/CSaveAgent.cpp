@@ -40,7 +40,7 @@ SaveAgent::SaveAgent()
 }
 
 
-ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
+CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -52,7 +52,7 @@ ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	) {
 		ErrorBeep();
 		TopErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
-		return CALLBACK_INTERRUPT;
+		return CallbackResultType::Interrupt;
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
@@ -64,7 +64,7 @@ ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 				LS(STR_SAVEAGENT_OTHER),
 				(LPCTSTR)pSaveInfo->cFilePath
 			);
-			return CALLBACK_INTERRUPT;
+			return CallbackResultType::Interrupt;
 		}
 	}
 
@@ -93,13 +93,13 @@ ECallbackResult SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 				LS(STR_SAVEAGENT_OTHER_APP),
 				pSaveInfo->cFilePath.c_str()
 			);
-			return CALLBACK_INTERRUPT;
+			return CallbackResultType::Interrupt;
 		}
 		if (bLock) {
 			pcDoc->m_cDocFileOperation.DoFileLock(false);
 		}
 	}
-	return CALLBACK_CONTINUE;
+	return CallbackResultType::Continue;
 }
 
 void SaveAgent::OnBeforeSave(const SaveInfo& sSaveInfo)
@@ -148,7 +148,7 @@ void SaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 	}
 }
 
-void SaveAgent::OnFinalSave(ESaveResult eSaveResult)
+void SaveAgent::OnFinalSave(SaveResultType eSaveResult)
 {
 }
 

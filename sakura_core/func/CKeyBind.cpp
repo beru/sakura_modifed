@@ -312,7 +312,7 @@ int KeyBind::GetKeyStr(
 
 	// 先にキー部分を調査する
 	for (int j=0; j<8; ++j) {
-		for (int i=(int)eMouseFunction::KeyBegin; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
+		for (int i=(int)MouseFunctionType::KeyBegin; i<nKeyNameArrNum; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}
@@ -321,7 +321,7 @@ int KeyBind::GetKeyStr(
 
 	// 後にマウス部分を調査する
 	for (int j=0; j<8; ++j) {
-		for (int i=0; i<(int)eMouseFunction::KeyBegin; /* 1を加えてはいけない */) {
+		for (int i=0; i<(int)MouseFunctionType::KeyBegin; /* 1を加えてはいけない */) {
 			if (GetKeyStrSub(i, nKeyNameArrNum, pKeyNameArr, j, cMemList, nFuncId, bGetDefFuncCode)) {
 				return 1;
 			}

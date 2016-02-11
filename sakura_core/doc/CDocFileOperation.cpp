@@ -112,11 +112,11 @@ bool DocFileOperation::OpenFileDialog(
 
 bool DocFileOperation::DoLoadFlow(LoadInfo* pLoadInfo)
 {
-	ELoadResult eLoadResult = LOADED_FAILURE;
+	LoadResultType eLoadResult = LoadResultType::Failure;
 
 	try {
 		// ロード前チェック
-		if (m_pcDocRef->NotifyCheckLoad(pLoadInfo) == CALLBACK_INTERRUPT) {
+		if (m_pcDocRef->NotifyCheckLoad(pLoadInfo) == CallbackResultType::Interrupt) {
 			throw FlowInterruption();
 		}
 
@@ -125,17 +125,17 @@ bool DocFileOperation::DoLoadFlow(LoadInfo* pLoadInfo)
 		eLoadResult = m_pcDocRef->NotifyLoad(*pLoadInfo);	// 本処理
 		m_pcDocRef->NotifyAfterLoad(*pLoadInfo);			// 後処理
 	}catch (FlowInterruption) {
-		eLoadResult = LOADED_INTERRUPT;
+		eLoadResult = LoadResultType::Interrupt;
 	}catch (...) {
 		// 予期せぬ例外が発生した場合も NotifyFinalLoad は必ず呼ぶ！
-		m_pcDocRef->NotifyFinalLoad(LOADED_FAILURE);
+		m_pcDocRef->NotifyFinalLoad(LoadResultType::Failure);
 		throw;
 	}
 	
 	// 最終処理
 	m_pcDocRef->NotifyFinalLoad(eLoadResult);
 
-	return eLoadResult == LOADED_OK;
+	return eLoadResult == LoadResultType::OK;
 }
 
 // ファイルを開く
@@ -338,7 +338,7 @@ bool DocFileOperation::SaveFileDialog(LPTSTR szPath)
 
 bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 {
-	ESaveResult eSaveResult = SAVED_FAILURE;
+	SaveResultType eSaveResult = SaveResultType::Failure;
 	try {
 		// オプション：無変更でも上書きするか
 		// 2009.04.12 ryoji CSaveAgent::OnCheckSave()から移動
@@ -360,12 +360,12 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		}
 
 		// セーブ前チェック
-		if (m_pcDocRef->NotifyCheckSave(pSaveInfo) == CALLBACK_INTERRUPT) {
+		if (m_pcDocRef->NotifyCheckSave(pSaveInfo) == CallbackResultType::Interrupt) {
 			throw FlowInterruption();
 		}
 
 		// セーブ前おまけ処理
-		if (m_pcDocRef->NotifyPreBeforeSave(pSaveInfo) == CALLBACK_INTERRUPT) {
+		if (m_pcDocRef->NotifyPreBeforeSave(pSaveInfo) == CallbackResultType::Interrupt) {
 			throw FlowInterruption();
 		}
 
@@ -402,19 +402,19 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		}
 
 		// 結果
-		eSaveResult = SAVED_OK; //###仮
+		eSaveResult = SaveResultType::OK; //###仮
 	}catch (FlowInterruption) {
-		eSaveResult = SAVED_INTERRUPT;
+		eSaveResult = SaveResultType::Interrupt;
 	}catch (...) {
 		// 予期せぬ例外が発生した場合も NotifyFinalSave は必ず呼ぶ！
-		m_pcDocRef->NotifyFinalSave(SAVED_FAILURE);
+		m_pcDocRef->NotifyFinalSave(SaveResultType::Failure);
 		throw;
 	}
 
 	// 最終処理
 	m_pcDocRef->NotifyFinalSave(eSaveResult);
 
-	return eSaveResult == SAVED_OK;
+	return eSaveResult == SaveResultType::OK;
 }
 
 

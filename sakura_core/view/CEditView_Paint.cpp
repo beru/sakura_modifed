@@ -562,11 +562,11 @@ void EditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 {
 	bool bChangeFont = m_bMiniMap;
 	if (bChangeFont) {
-		SelectCharWidthCache(CWM_FONT_MINIMAP, CWM_CACHE_LOCAL);
+		SelectCharWidthCache(CharWidthFontMode::MiniMap, CWM_CACHE_LOCAL);
 	}
 	OnPaint2(_hdc, pPs, bDrawFromComptibleBmp);
 	if (bChangeFont) {
-		SelectCharWidthCache(CWM_FONT_EDIT, m_pcEditWnd->GetLogfontCacheMode());
+		SelectCharWidthCache(CharWidthFontMode::Edit, m_pcEditWnd->GetLogfontCacheMode());
 	}
 }
 

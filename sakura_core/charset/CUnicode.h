@@ -29,10 +29,10 @@
 
 class Unicode : public CodeBase {
 public:
-	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
+	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) {	//!< 特定コード → UNICODE    変換
 		return UnicodeToUnicode_in(cSrc, pDst);
 	}
-	EConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
+	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) {	//!< UNICODE    → 特定コード 変換
 		return UnicodeToUnicode_out(cSrc, pDst);
 	}
 	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
@@ -40,10 +40,10 @@ public:
 
 public:
 	// 実装
-	static EConvertResult _UnicodeToUnicode_in(const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian);		// Unicode   → Unicode (入力側)
-	static EConvertResult _UnicodeToUnicode_out(const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian);	// Unicode   → Unicode (出力側)
-	inline static EConvertResult UnicodeToUnicode_in(const Memory& cSrc, NativeW* pDst){ return _UnicodeToUnicode_in(cSrc, pDst, false); }
-	inline static EConvertResult UnicodeToUnicode_out(const NativeW& cSrc, Memory* pDst){ return _UnicodeToUnicode_out(cSrc, pDst, false); }
+	static CodeConvertResult _UnicodeToUnicode_in(const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian);		// Unicode   → Unicode (入力側)
+	static CodeConvertResult _UnicodeToUnicode_out(const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian);	// Unicode   → Unicode (出力側)
+	inline static CodeConvertResult UnicodeToUnicode_in(const Memory& cSrc, NativeW* pDst){ return _UnicodeToUnicode_in(cSrc, pDst, false); }
+	inline static CodeConvertResult UnicodeToUnicode_out(const NativeW& cSrc, Memory* pDst){ return _UnicodeToUnicode_out(cSrc, pDst, false); }
 
 };
 

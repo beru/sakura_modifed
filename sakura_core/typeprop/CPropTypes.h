@@ -101,7 +101,7 @@ protected:
 
 	// スクリーン用データ	2010/5/10 CPropTypes_P1_Screen.cppから移動
 	static std::vector<TYPE_NAME_ID2<EOutlineType> > m_OlmArr;			// アウトライン解析ルール配列
-	static std::vector<TYPE_NAME_ID2<ESmartIndentType> > m_SIndentArr;	// スマートインデントルール配列
+	static std::vector<TYPE_NAME_ID2<SmartIndentType> > m_SIndentArr;	// スマートインデントルール配列
 
 	// カラー用データ
 	DWORD			m_dwCustColors[16];						// フォントDialogカスタムパレット
@@ -147,9 +147,9 @@ protected:
 
 public:
 	static void AddOutlineMethod(int nMethod, const WCHAR* szName);		// アウトライン解析ルールの追加
-	static void AddSIndentMethod(int nMethod, const WCHAR* szName);		// スマートインデントルールの追加
+	static void AddSIndentMethod(SmartIndentType nMethod, const WCHAR* szName);		// スマートインデントルールの追加
 	static void RemoveOutlineMethod(int nMethod, const WCHAR* szName);	// アウトライン解析ルールの追加
-	static void RemoveSIndentMethod(int nMethod, const WCHAR* szName);	// スマートインデントルールの追加
+	static void RemoveSIndentMethod(SmartIndentType nMethod, const WCHAR* szName);	// スマートインデントルールの追加
 	void CPropTypes_Screen();											// スクリーンタブのコンストラクタ
 };
 

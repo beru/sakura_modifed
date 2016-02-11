@@ -162,11 +162,11 @@ end_of_for:;
 	caret.m_nCaretPosX_Prev = caret.GetCaretLayoutPos().GetX2();
 
 	// スマートインデント
-	ESmartIndentType nSIndentType = typeData->m_eSmartIndent;
+	SmartIndentType nSIndentType = typeData->m_eSmartIndent;
 	switch (nSIndentType) {	// スマートインデント種別
-	case SMARTINDENT_NONE:
+	case SmartIndentType::None:
 		break;
-	case SMARTINDENT_CPP:
+	case SmartIndentType::Cpp:
 		// C/C++スマートインデント処理
 		m_pCommanderView->SmartIndent_CPP(wcChar);
 		break;
@@ -174,10 +174,10 @@ end_of_for:;
 		// プラグインから検索する
 		{
 			Plug::Array plugs;
-			JackManager::getInstance()->GetUsablePlug(PP_SMARTINDENT, nSIndentType, &plugs);
+			JackManager::getInstance()->GetUsablePlug(PP_SMARTINDENT, (PlugId)nSIndentType, &plugs);
 
 			if (plugs.size() > 0) {
-				assert_warning(1 == plugs.size());
+				assert_warning(plugs.size() == 1);
 				// インタフェースオブジェクト準備
 				WSHIfObj::List params;
 				SmartIndentIfObj* objIndent = new SmartIndentIfObj(wcChar);	// スマートインデントオブジェクト
@@ -370,7 +370,7 @@ void ViewCommander::Command_UNDO(void)
 			}
 
 			switch (pcOpe->GetCode()) {
-			case eOpeCode::Insert:
+			case OpeCode::Insert:
 				{
 					InsertOpe* pcInsertOpe = static_cast<InsertOpe*>(pcOpe);
 
@@ -404,7 +404,7 @@ void ViewCommander::Command_UNDO(void)
 					selInfo.m_sSelect.Clear(-1);
 				}
 				break;
-			case eOpeCode::Delete:
+			case OpeCode::Delete:
 				{
 					DeleteOpe* pcDeleteOpe = static_cast<DeleteOpe*>(pcOpe);
 
@@ -430,7 +430,7 @@ void ViewCommander::Command_UNDO(void)
 					pcDeleteOpe->m_cOpeLineData.clear();
 				}
 				break;
-			case eOpeCode::Replace:
+			case OpeCode::Replace:
 				{
 					ReplaceOpe* pcReplaceOpe = static_cast<ReplaceOpe*>(pcOpe);
 
@@ -456,7 +456,7 @@ void ViewCommander::Command_UNDO(void)
 					pcReplaceOpe->m_pcmemDataDel.clear();
 				}
 				break;
-			case eOpeCode::MoveCaret:
+			case OpeCode::MoveCaret:
 				// カーソルを移動
 				if (bFastMode) {
 					caret.MoveCursorFastMode(pcOpe->m_ptCaretPos_PHY_After);
@@ -470,7 +470,7 @@ void ViewCommander::Command_UNDO(void)
 				if (i == 0) {
 					layoutMgr._DoLayout();
 					GetEditWindow()->ClearViewCaretPosInfo();
-					if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+					if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(
@@ -623,7 +623,7 @@ void ViewCommander::Command_REDO(void)
 				caret.MoveCursor(ptCaretPos_Before, (i == 0));
 			}
 			switch (pcOpe->GetCode()) {
-			case eOpeCode::Insert:
+			case OpeCode::Insert:
 				{
 					InsertOpe* pcInsertOpe = static_cast<InsertOpe*>(pcOpe);
 
@@ -650,7 +650,7 @@ void ViewCommander::Command_REDO(void)
 					pcInsertOpe->m_cOpeLineData.clear();
 				}
 				break;
-			case eOpeCode::Delete:
+			case OpeCode::Delete:
 				{
 					DeleteOpe* pcDeleteOpe = static_cast<DeleteOpe*>(pcOpe);
 
@@ -679,7 +679,7 @@ void ViewCommander::Command_REDO(void)
 					);
 				}
 				break;
-			case eOpeCode::Replace:
+			case OpeCode::Replace:
 				{
 					ReplaceOpe* pcReplaceOpe = static_cast<ReplaceOpe*>(pcOpe);
 
@@ -709,14 +709,14 @@ void ViewCommander::Command_REDO(void)
 					pcReplaceOpe->m_pcmemDataIns.clear();
 				}
 				break;
-			case eOpeCode::MoveCaret:
+			case OpeCode::MoveCaret:
 				break;
 			}
 			if (bFastMode) {
 				if (i == nOpeBlkNum - 1) {
 					layoutMgr._DoLayout();
 					GetEditWindow()->ClearViewCaretPosInfo();
-					if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+					if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 						layoutMgr.CalculateTextWidth();
 					}
 					layoutMgr.LogicToLayout(

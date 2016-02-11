@@ -43,12 +43,12 @@ class SearchStringPattern;
 class ColorStrategy;
 
 // レイアウト中の禁則タイプ	//@@@ 2002.04.20 MIK
-enum EKinsokuType {
-	KINSOKU_TYPE_NONE = 0,			// なし
-	KINSOKU_TYPE_WORDWRAP,			// 英文ワードラップ中
-	KINSOKU_TYPE_KINSOKU_HEAD,		// 行頭禁則中
-	KINSOKU_TYPE_KINSOKU_TAIL,		// 行末禁則中
-	KINSOKU_TYPE_KINSOKU_KUTO,		// 句読点ぶら下げ中
+enum class KinsokuType {
+	None = 0,	// なし
+	WordWrap,	// 英文ワードラップ中
+	Head,		// 行頭禁則中
+	Tail,		// 行末禁則中
+	Kuto,		// 句読点ぶら下げ中
 };
 
 struct LayoutReplaceArg {
@@ -158,7 +158,7 @@ public:
 	int PrevWord(LayoutInt nLineNum, LogicInt nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, true, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 	int NextWord(LayoutInt nLineNum, LogicInt nIdx, LayoutPoint* pptLayoutNew, bool bStopsBothEnds) { return PrevOrNextWord(nLineNum, nIdx, pptLayoutNew, false, bStopsBothEnds); }	// 現在位置の左右の単語の先頭位置を調べる
 
-	int SearchWord(LayoutInt nLine, LogicInt nIdx, eSearchDirection eSearchDirection, LayoutRange* pMatchRange, const SearchStringPattern&);	// 単語検索
+	int SearchWord(LayoutInt nLine, LogicInt nIdx, SearchDirection SearchDirection, LayoutRange* pMatchRange, const SearchStringPattern&);	// 単語検索
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        単位の変換                           //
@@ -240,7 +240,7 @@ protected:
 	// 部品
 	struct LayoutWork {
 		// 毎ループ初期化
-		EKinsokuType	eKinsokuType;
+		KinsokuType	eKinsokuType;
 		LogicInt		nPos;
 		LogicInt		nBgn;
 		StringRef		cLineStr;

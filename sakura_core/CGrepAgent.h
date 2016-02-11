@@ -68,7 +68,7 @@ public:
 	GrepAgent();
 
 	// ƒCƒxƒ“ƒg
-	ECallbackResult OnBeforeClose();
+	CallbackResultType OnBeforeClose();
 	void OnAfterSave(const SaveInfo& sSaveInfo);
 
 	static void CreateFolders( const TCHAR* pszPath, std::vector<std::tstring>& vPaths );

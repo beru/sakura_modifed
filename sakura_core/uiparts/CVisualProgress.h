@@ -42,7 +42,7 @@ public:
 
 	// セーブ前後
 	void OnBeforeSave(const SaveInfo& sSaveInfo);
-	void OnFinalSave(ESaveResult eSaveResult);
+	void OnFinalSave(SaveResultType eSaveResult);
 
 	// プログレス受信
 	void OnProgress(int nPer);

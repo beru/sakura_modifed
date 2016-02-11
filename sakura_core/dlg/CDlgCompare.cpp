@@ -39,12 +39,12 @@ const DWORD p_helpids[] = {	//12300
 };	//@@@ 2002.01.07 add end MIK
 
 static const AnchorListItem anchorList[] = {
-	{IDOK,					ANCHOR_BOTTOM},
-	{IDCANCEL,				ANCHOR_BOTTOM},
-	{IDC_BUTTON_HELP,		ANCHOR_BOTTOM},
-	{IDC_CHECK_TILE_H,		ANCHOR_LEFT},
-	{IDC_LIST_FILES,        ANCHOR_ALL},
-	{IDC_STATIC_COMPARESRC, ANCHOR_LEFT_RIGHT},
+	{IDOK,					AnchorStyle::Bottom},
+	{IDCANCEL,				AnchorStyle::Bottom},
+	{IDC_BUTTON_HELP,		AnchorStyle::Bottom},
+	{IDC_CHECK_TILE_H,		AnchorStyle::Left},
+	{IDC_LIST_FILES,        AnchorStyle::All},
+	{IDC_STATIC_COMPARESRC, AnchorStyle::LeftRight},
 };
 
 DlgCompare::DlgCompare()

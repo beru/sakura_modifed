@@ -113,22 +113,22 @@ bool EditView::ProcessCommand_isearch(
 
 	// 検索モードへの移行
 	case F_ISEARCH_NEXT:
-		ISearchEnter(1, eSearchDirection::Forward);		// 前方インクリメンタルサーチ // 2004.10.13 isearch
+		ISearchEnter(1, SearchDirection::Forward);		// 前方インクリメンタルサーチ // 2004.10.13 isearch
 		return true;
 	case F_ISEARCH_PREV:
-		ISearchEnter(1, eSearchDirection::Backward);	// 後方インクリメンタルサーチ // 2004.10.13 isearch
+		ISearchEnter(1, SearchDirection::Backward);	// 後方インクリメンタルサーチ // 2004.10.13 isearch
 		return true;
 	case F_ISEARCH_REGEXP_NEXT:
-		ISearchEnter(2, eSearchDirection::Forward);		// 前方正規表現インクリメンタルサーチ  // 2004.10.13 isearch
+		ISearchEnter(2, SearchDirection::Forward);		// 前方正規表現インクリメンタルサーチ  // 2004.10.13 isearch
 		return true;
 	case F_ISEARCH_REGEXP_PREV:
-		ISearchEnter(2, eSearchDirection::Backward);	// 後方正規表現インクリメンタルサーチ  // 2004.10.13 isearch
+		ISearchEnter(2, SearchDirection::Backward);	// 後方正規表現インクリメンタルサーチ  // 2004.10.13 isearch
 		return true;
 	case F_ISEARCH_MIGEMO_NEXT:
-		ISearchEnter(3, eSearchDirection::Forward);		// 前方MIGEMOインクリメンタルサーチ    // 2004.10.13 isearch
+		ISearchEnter(3, SearchDirection::Forward);		// 前方MIGEMOインクリメンタルサーチ    // 2004.10.13 isearch
 		return true;
 	case F_ISEARCH_MIGEMO_PREV:
-		ISearchEnter(3, eSearchDirection::Backward);	// 後方MIGEMOインクリメンタルサーチ    // 2004.10.13 isearch
+		ISearchEnter(3, SearchDirection::Backward);	// 後方MIGEMOインクリメンタルサーチ    // 2004.10.13 isearch
 		return true;
 	}
 	return false;
@@ -145,7 +145,7 @@ bool EditView::ProcessCommand_isearch(
 	@date 2012.10.11 novice m_sCurSearchOption/m_sSearchOptionの同期をswitchの前に変更
 	@date 2012.10.11 novice MIGEMOの処理をcase内に移動
 */
-void EditView::ISearchEnter(int mode, eSearchDirection direction)
+void EditView::ISearchEnter(int mode, SearchDirection direction)
 {
 
 	if (m_nISearchMode == mode) {
@@ -238,7 +238,7 @@ void EditView::ISearchEnter(int mode, eSearchDirection direction)
 	}
 
 	// マウスカーソル変更
-	if (direction == eSearchDirection::Forward) {
+	if (direction == SearchDirection::Forward) {
 		::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_F)));
 	}else {
 		::SetCursor(::LoadCursor(G_AppInstance(), MAKEINTRESOURCE(IDC_CURSOR_ISEARCH_B)));
@@ -255,7 +255,7 @@ void EditView::ISearchExit()
 	m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
 	GetDllShareData().m_common.m_sSearch.m_searchOption = m_curSearchOption;
 	m_pcEditWnd->m_cToolbar.AcceptSharedSearchKey();
-	m_nISearchDirection = eSearchDirection::Backward;
+	m_nISearchDirection = SearchDirection::Backward;
 	m_nISearchMode = 0;
 	
 	if (m_nISearchHistoryCount == 0) {
@@ -575,17 +575,17 @@ bool EditView::IsISearchEnabled(int nCommand) const
 {
 	switch (nCommand) {
 	case F_ISEARCH_NEXT:
-		return m_nISearchMode == 1 && m_nISearchDirection == eSearchDirection::Forward;
+		return m_nISearchMode == 1 && m_nISearchDirection == SearchDirection::Forward;
 	case F_ISEARCH_PREV:
-		return m_nISearchMode == 1 && m_nISearchDirection == eSearchDirection::Backward;
+		return m_nISearchMode == 1 && m_nISearchDirection == SearchDirection::Backward;
 	case F_ISEARCH_REGEXP_NEXT:
-		return m_nISearchMode == 2 && m_nISearchDirection == eSearchDirection::Forward;
+		return m_nISearchMode == 2 && m_nISearchDirection == SearchDirection::Forward;
 	case F_ISEARCH_REGEXP_PREV:
-		return m_nISearchMode == 2 && m_nISearchDirection == eSearchDirection::Backward;
+		return m_nISearchMode == 2 && m_nISearchDirection == SearchDirection::Backward;
 	case F_ISEARCH_MIGEMO_NEXT:
-		return m_nISearchMode == 3 && m_nISearchDirection == eSearchDirection::Forward;
+		return m_nISearchMode == 3 && m_nISearchDirection == SearchDirection::Forward;
 	case F_ISEARCH_MIGEMO_PREV:
-		return m_nISearchMode == 3 && m_nISearchDirection == eSearchDirection::Backward;
+		return m_nISearchMode == 3 && m_nISearchDirection == SearchDirection::Backward;
 	}
 	return false;
 }

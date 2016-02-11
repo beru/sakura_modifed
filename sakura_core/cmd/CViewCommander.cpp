@@ -257,9 +257,9 @@ bool ViewCommander::HandleCommand(
 	case F_CUT_LINE:			Command_CUT_LINE(); break;			// 行切り取り(折り返し単位)
 	case F_DELETE_LINE:			Command_DELETE_LINE(); break;		// 行削除(折り返し単位)
 	case F_DUPLICATELINE:		Command_DUPLICATELINE(); break;		// 行の二重化(折り返し単位)
-	case F_INDENT_TAB:			Command_INDENT(WCODE::TAB, INDENT_TAB); break;		// TABインデント
+	case F_INDENT_TAB:			Command_INDENT(WCODE::TAB, IndentType::Tab); break;		// TABインデント
 	case F_UNINDENT_TAB:		Command_UNINDENT(WCODE::TAB); break;				// 逆TABインデント
-	case F_INDENT_SPACE:		Command_INDENT(WCODE::SPACE, INDENT_SPACE); break;	// SPACEインデント
+	case F_INDENT_SPACE:		Command_INDENT(WCODE::SPACE, IndentType::Space); break;	// SPACEインデント
 	case F_UNINDENT_SPACE:		Command_UNINDENT(WCODE::SPACE); break;			// 逆SPACEインデント
 //	case F_WORDSREFERENCE:		Command_WORDSREFERENCE(); break;		// 単語リファレンス
 	case F_LTRIM:				Command_TRIM(TRUE); break;			// 2001.12.03 hor
@@ -442,7 +442,7 @@ bool ViewCommander::HandleCommand(
 	case F_JUMP_DIALOG:		Command_JUMP_DIALOG(); break;					// 指定行ヘジャンプダイアログの表示
 	case F_JUMP:			Command_JUMP(); break;							// 指定行ヘジャンプ
 	case F_OUTLINE:			bRet = Command_FUNCLIST((int)lparam1, OUTLINE_DEFAULT); break;	// アウトライン解析
-	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST((int)eShowDialog::Toggle, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
+	case F_OUTLINE_TOGGLE:	bRet = Command_FUNCLIST((int)ShowDialogType::Toggle, OUTLINE_DEFAULT); break;	// アウトライン解析(toggle) // 20060201 aroka
 	case F_FILETREE:		bRet = Command_FUNCLIST( (BOOL)lparam1 ,OUTLINE_FILETREE ); break;	//ファイルツリー
 	case F_TAGJUMP:			Command_TAGJUMP(lparam1 != 0); break;			// タグジャンプ機能 // Apr. 03, 2003 genta 引数追加
 	case F_TAGJUMP_CLOSE:	Command_TAGJUMP(true); break;					// タグジャンプ(元ウィンドウClose)	// Apr. 03, 2003 genta
@@ -500,9 +500,9 @@ bool ViewCommander::HandleCommand(
 	case F_FAVORITE:		Command_Favorite(); break;		// 履歴の管理	//@@@ 2003.04.08 MIK
 	// Jan. 29, 2005 genta 引用符の設定
 	case F_SET_QUOTESTRING:	Command_SET_QUOTESTRING((const WCHAR*)lparam1);	break;
-	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)eTextWrappingMethod::NoWrapping, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
-	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)eTextWrappingMethod::SettingWidth, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
-	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)eTextWrappingMethod::WindowWidth, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
+	case F_TMPWRAPNOWRAP:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::NoWrapping, 0, 0, 0); break;	// 折り返さない（一時設定）			// 2008.05.30 nasukoji
+	case F_TMPWRAPSETTING:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::SettingWidth, 0, 0, 0); break;	// 指定桁で折り返す（一時設定）		// 2008.05.30 nasukoji
+	case F_TMPWRAPWINDOW:	HandleCommand(F_TEXTWRAPMETHOD, bRedraw, (LPARAM)TextWrappingMethod::WindowWidth, 0, 0, 0); break;	// 右端で折り返す（一時設定）		// 2008.05.30 nasukoji
 	case F_TEXTWRAPMETHOD:	Command_TEXTWRAPMETHOD((int)lparam1); break;			// テキストの折り返し方法	// 2008.05.30 nasukoji
 	case F_SELECT_COUNT_MODE:	Command_SELECT_COUNT_MODE((int)lparam1); break;		// 文字カウントの方法		// 2009.07.06 syat
 

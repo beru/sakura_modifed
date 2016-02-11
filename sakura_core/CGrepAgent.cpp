@@ -29,7 +29,7 @@ GrepAgent::GrepAgent()
 {
 }
 
-ECallbackResult GrepAgent::OnBeforeClose()
+CallbackResultType GrepAgent::OnBeforeClose()
 {
 	// GREPèàóùíÜÇÕèIóπÇ≈Ç´Ç»Ç¢
 	if (m_bGrepRunning) {
@@ -39,9 +39,9 @@ ECallbackResult GrepAgent::OnBeforeClose()
 			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_GREP_RUNNINNG)
 		);
-		return CALLBACK_INTERRUPT;
+		return CallbackResultType::Interrupt;
 	}
-	return CALLBACK_CONTINUE;
+	return CallbackResultType::Continue;
 }
 
 void GrepAgent::OnAfterSave(const SaveInfo& sSaveInfo)
@@ -1198,7 +1198,7 @@ int GrepAgent::DoGrepFile(
 
 		// íçà” : cfl.ReadLine Ç™ throw Ç∑ÇÈâ¬î\ê´Ç™Ç†ÇÈ
 		NativeW cUnicodeBuffer;
-		while (RESULT_FAILURE != cfl.ReadLine(&cUnicodeBuffer, &cEol)) {
+		while (CodeConvertResult::Failure != cfl.ReadLine(&cUnicodeBuffer, &cEol)) {
 			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
 			int		nLineLen = cUnicodeBuffer.GetStringLength();
 
@@ -1694,7 +1694,7 @@ int GrepAgent::DoGrepReplaceFile(
 		NativeW cOutBuffer;
 		// íçà” : cfl.ReadLine Ç™ throw Ç∑ÇÈâ¬î\ê´Ç™Ç†ÇÈ
 		NativeW cUnicodeBuffer;
-		while (cfl.ReadLine(&cUnicodeBuffer, &cEol) != RESULT_FAILURE) {
+		while (cfl.ReadLine(&cUnicodeBuffer, &cEol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLine = cUnicodeBuffer.GetStringPtr();
 			int nLineLen = cUnicodeBuffer.GetStringLength();
 	

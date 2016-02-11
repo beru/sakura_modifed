@@ -23,29 +23,29 @@ class Dialog;
 struct DLLSHAREDATA;
 class Recent;
 
-enum EAnchorStyle {
-	ANCHOR_NONE              = 0,
-	ANCHOR_LEFT              = 1,
-	ANCHOR_RIGHT             = 2,
-	ANCHOR_LEFT_RIGHT        = 3,
-	ANCHOR_TOP               = 4,
-	ANCHOR_TOP_LEFT          = 5,
-	ANCHOR_TOP_RIGHT         = 6,
-	ANCHOR_TOP_LEFT_RIGHT    = 7,
-	ANCHOR_BOTTOM            = 8,
-	ANCHOR_BOTTOM_LEFT       = 9,
-	ANCHOR_BOTTOM_RIGHT      = 10,
-	ANCHOR_BOTTOM_LEFT_RIGHT = 11,
-	ANCHOR_TOP_BOTTOM        = 12,
-	ANCHOR_TOP_BOTTOM_LEFT   = 13,
-	ANCHOR_TOP_BOTTOM_RIGHT  = 14,
-	ANCHOR_ALL               = 15
+enum class AnchorStyle {
+	None			= 0,
+	Left			= 1,
+	Right			= 2,
+	LeftRight		= 3,
+	Top				= 4,
+	TopLeft			= 5,
+	TopRight		= 6,
+	TopLeftRight	= 7,
+	Bottom			= 8,
+	BottomLeft		= 9,
+	BottomRight		= 10,
+	BottomLeftRight	= 11,
+	TopBottom		= 12,
+	TopBottomLeft	= 13,
+	TopBottomRight	= 14,
+	All				= 15
 };
 
 struct AnchorListItem
 {
 	int id;
-	EAnchorStyle anchor;
+	AnchorStyle anchor;
 };
 
 struct ComboBoxItemDeleter
@@ -118,7 +118,7 @@ public:
 	virtual BOOL OnContextMenu(WPARAM, LPARAM);	//@@@ 2002.01.18 add
 	virtual LPVOID GetHelpIdTable(void);	//@@@ 2002.01.18 add
 
-	void ResizeItem(HWND hTarget, const POINT& ptDlgDefalut, const POINT& ptDlgNew, const RECT& rcItemDefault, EAnchorStyle anchor, bool bUpdate = true);
+	void ResizeItem(HWND hTarget, const POINT& ptDlgDefalut, const POINT& ptDlgNew, const RECT& rcItemDefault, AnchorStyle anchor, bool bUpdate = true);
 	void GetItemClientRect(int wID, RECT& rc);
 	static void SetComboBoxDeleter(HWND hwndCtl, ComboBoxItemDeleter* data);
 public:

@@ -60,7 +60,7 @@ public:
 	void FileClose(void);					// 明示的にファイルをクローズする
 
 	//! 1行データをロードする 順アクセス用
-	EConvertResult ReadLine(
+	CodeConvertResult ReadLine(
 		NativeW*	pUnicodeBuffer,	//!< [out] UNICODEデータ受け取りバッファ
 		Eol*		pcEol			//!< [i/o]
 	);
@@ -94,7 +94,7 @@ protected:
 
 	// GetLextLine の 文字コード考慮版
 	const char* GetNextLineCharCode( const char*, int, int*, int*, Eol*, int*, int* );
-	EConvertResult ReadLine_core( NativeW*, Eol* );
+	CodeConvertResult ReadLine_core( NativeW*, Eol* );
 
 	int Read(void*, size_t); // inline
 	DWORD FilePointer(DWORD, DWORD); // inline
@@ -118,13 +118,13 @@ protected:
 	int		m_nFlag;		// 文字コードの変換オプション
 	// Jun. 13, 2003 Moca
 	// 状態をenumとしてわかりやすく．
-	enum enumFileLoadMode{
-		FLMODE_CLOSE = 0,	//!< 初期状態
-		FLMODE_OPEN,		//!< ファイルオープンのみ
-		FLMODE_READY,		//!< 順アクセスOK
-		FLMODE_READBUFEND	//!<ファイルの終端までバッファに入れた
+	enum class FileLoadMode {
+		Close,		//!< 初期状態
+		Open,		//!< ファイルオープンのみ
+		Ready,		//!< 順アクセスOK
+		ReadBufEnd	//!<ファイルの終端までバッファに入れた
 	};
-	enumFileLoadMode	m_eMode;	// 現在の読み込み状態
+	FileLoadMode	m_eMode;	// 現在の読み込み状態
 
 	// 読み込みバッファ系
 	char*	m_pReadBuf;			// 読み込みバッファへのポインタ
@@ -135,7 +135,7 @@ protected:
 	Memory m_cLineBuffer;
 	NativeW m_cLineTemp;
 	int		m_nReadOffset2;
-	EConvertResult m_nTempResult;
+	CodeConvertResult m_nTempResult;
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(FileLoad);

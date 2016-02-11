@@ -18,21 +18,21 @@
 	@note Windows用にコーディングしてある
 	@date 2003.07.26 ryoji BOM引数追加
 */
-EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
+CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 	const DocLineMgr&	pcDocLineMgr,	// [in]
 	const SaveInfo&	sSaveInfo		// [in]
 	)
 {
-	EConvertResult nRetVal = RESULT_COMPLETE;
+	CodeConvertResult nRetVal = CodeConvertResult::Complete;
 	std::unique_ptr<CodeBase> pcCodeBase(CodeFactory::CreateCodeBase(sSaveInfo.eCharCode, 0));
 
 	{
 		// 変換テスト
 		NativeW buffer = L"abcde";
 		Memory tmp;
-		EConvertResult e = pcCodeBase->UnicodeToCode( buffer, &tmp );
-		if (e == RESULT_FAILURE) {
-			nRetVal=RESULT_FAILURE;
+		CodeConvertResult e = pcCodeBase->UnicodeToCode( buffer, &tmp );
+		if (e == CodeConvertResult::Failure) {
+			nRetVal=CodeConvertResult::Failure;
 			ErrorMessage(
 				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_FILESAVE_CONVERT_ERROR),
@@ -65,12 +65,12 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 				if (pcDocLine) {
 					cstrSrc.AppendNativeData(pcDocLine->_GetDocLineDataWithEOL());
 				}
-				EConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
-				if (e == RESULT_LOSESOME) {
-					nRetVal = RESULT_LOSESOME;
+				CodeConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
+				if (e == CodeConvertResult::LoseSome) {
+					nRetVal = CodeConvertResult::LoseSome;
 				}
-				if (e == RESULT_FAILURE) {
-					nRetVal = RESULT_FAILURE;
+				if (e == CodeConvertResult::Failure) {
+					nRetVal = CodeConvertResult::Failure;
 					ErrorMessage(
 						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
@@ -100,17 +100,17 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 			Memory cmemOutputBuffer;
 			{
 				// 書き込み時のコード変換 cstrSrc -> cmemOutputBuffer
-				EConvertResult e = pcCodeBase->UnicodeToCode(
+				CodeConvertResult e = pcCodeBase->UnicodeToCode(
 					pcDocLine->_GetDocLineDataWithEOL(),
 					&cmemOutputBuffer
 				);
-				if (e == RESULT_LOSESOME) {
-					if (nRetVal == RESULT_COMPLETE) {
-						nRetVal = RESULT_LOSESOME;
+				if (e == CodeConvertResult::LoseSome) {
+					if (nRetVal == CodeConvertResult::Complete) {
+						nRetVal = CodeConvertResult::LoseSome;
 					}
 				}
-				if (e == RESULT_FAILURE) {
-					nRetVal = RESULT_FAILURE;
+				if (e == CodeConvertResult::Failure) {
+					nRetVal = CodeConvertResult::Failure;
 					ErrorMessage(
 						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
@@ -135,12 +135,12 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 			LS(STR_SAVEAGENT_OTHER_APP),
 			sSaveInfo.cFilePath.c_str()
 		);
-		nRetVal = RESULT_FAILURE;
+		nRetVal = CodeConvertResult::Failure;
 	}catch (Error_FileWrite) {
-		nRetVal = RESULT_FAILURE;
+		nRetVal = CodeConvertResult::Failure;
 	}catch (AppExitException) {
 		// 中断検出
-		return RESULT_FAILURE;
+		return CodeConvertResult::Failure;
 	}
 	return nRetVal;
 }

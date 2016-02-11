@@ -216,7 +216,7 @@ public:
 	// int‚ğ‰î‚µ‚Ä”CˆÓŒ^‚Ì“üo—Í‚ğs‚¤
 	template <class T>
 	bool IOProfileData_WrapInt(const WCHAR* pszSectionName, const WCHAR* pszEntryKey, T& nEntryValue) {
-		int n = nEntryValue;
+		int n = (int)nEntryValue;
 		bool ret = this->IOProfileData(pszSectionName, pszEntryKey, n);
 		nEntryValue = (T)n;
 		return ret;

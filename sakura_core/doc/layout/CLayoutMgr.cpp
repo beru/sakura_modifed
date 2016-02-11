@@ -387,7 +387,7 @@ Layout* LayoutMgr::CreateLayout(
 	// パフォーマンスの低下が気にならない程なら全ての折り返し方法で計算する
 	// ようにしても良いと思う。
 	// （その場合LayoutMgr::CalculateTextWidth()の呼び出し箇所をチェック）
-	pLayout->SetLayoutWidth((m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
+	pLayout->SetLayoutWidth((m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
 
 	return pLayout;
 }
@@ -714,7 +714,7 @@ int LayoutMgr::PrevOrNextWord(
 int LayoutMgr::SearchWord(
 	LayoutInt				nLine,				// [in] 検索開始レイアウト行
 	LogicInt				nIdx,				// [in] 検索開始データ位置
-	eSearchDirection		searchDirection,	// [in] 検索方向
+	SearchDirection		searchDirection,	// [in] 検索方向
 	LayoutRange*			pMatchRange,		// [out] マッチレイアウト範囲
 	const SearchStringPattern&	pattern
 	)

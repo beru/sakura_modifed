@@ -71,14 +71,14 @@ int Euc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pb
 
 // EUC→Unicodeコード変換
 // 2007.08.13 kobake 追加
-EConvertResult Euc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
+CodeConvertResult Euc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
 {
 	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// 変換先バッファサイズとその確保
@@ -95,9 +95,9 @@ EConvertResult Euc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
 	//$$ SJISを介しているので無駄にデータを失うかも？
 	// エラーを返すようにする。	2008/5/12 Uchi
 	if (!bError) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}else {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
 }
 
@@ -154,7 +154,7 @@ int Euc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pb
 }
 
 
-EConvertResult Euc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
+CodeConvertResult Euc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
 {
 	// エラー状態
 	bool bError = false;
@@ -174,14 +174,14 @@ EConvertResult Euc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	if (!bError) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}else {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
 }
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+CodeConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	NativeW cCharBuffer;
 	// 2008/6/21 Uchi
@@ -199,8 +199,8 @@ EConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pD
 	}
 
 	// EUC-JP 変換
-	EConvertResult res = UnicodeToEUC(cCharBuffer, cCharBuffer._GetMemory());
-	if (res != RESULT_COMPLETE) {
+	CodeConvertResult res = UnicodeToEUC(cCharBuffer, cCharBuffer._GetMemory());
+	if (res != CodeConvertResult::Complete) {
 		return res;
 	}
 
@@ -215,5 +215,5 @@ EConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pD
 		auto_sprintf(pd, _T("?%02X"), *ps);
 	}
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }

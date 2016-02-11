@@ -245,14 +245,14 @@ int Jis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbEr
 
 // E-Mail(JIS→Unicode)コード変換
 // 2007.08.13 kobake 追加
-EConvertResult Jis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base64decode)
+CodeConvertResult Jis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base64decode)
 {
 	// ソースを取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// ソースバッファポインタとソースの長さ
@@ -281,9 +281,9 @@ EConvertResult Jis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen * sizeof(wchar_t) );
 	
 	if (!berror) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}else {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
 }
 
@@ -445,14 +445,14 @@ int Jis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbEr
 }
 
 
-EConvertResult Jis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
+CodeConvertResult Jis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
 {
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// 必要なバッファ容量を確認してバッファを確保
@@ -467,15 +467,15 @@ EConvertResult Jis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
 	pDstMem->SetRawDataHoldBuffer( pDst, nDstLen );
 
 	if (berror) {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}else {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 }
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+CodeConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 
 	// 2008/6/21 Uchi
@@ -489,8 +489,8 @@ EConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pD
 	cCharBuffer.SetString(cSrc, 1);
 
 	// JIS 変換
-	EConvertResult res = UnicodeToJIS(cCharBuffer, cCharBuffer._GetMemory());
-	if (res != RESULT_COMPLETE) {
+	CodeConvertResult res = UnicodeToJIS(cCharBuffer, cCharBuffer._GetMemory());
+	if (res != CodeConvertResult::Complete) {
 		return res;
 	}
 
@@ -512,5 +512,5 @@ EConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pD
 		}
 	}
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }

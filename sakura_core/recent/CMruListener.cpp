@@ -206,12 +206,12 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 //                       クローズ前後                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-ECallbackResult MruListener::OnBeforeClose()
+CallbackResultType MruListener::OnBeforeClose()
 {
 	// Mar. 30, 2003 genta サブルーチンにまとめた
 	_HoldBookmarks_And_AddToMRU();
 
-	return CALLBACK_CONTINUE;
+	return CallbackResultType::Continue;
 }
 
 

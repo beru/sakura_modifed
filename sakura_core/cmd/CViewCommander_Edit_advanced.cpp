@@ -43,7 +43,7 @@ using namespace std; // 2002/2/3 aroka to here
 #endif
 
 // インデント ver1
-void ViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
+void ViewCommander::Command_INDENT(wchar_t wcChar, IndentType eIndent)
 {
 	using namespace WCODE;
 
@@ -52,7 +52,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 	// From Here 2001.12.03 hor
 	// SPACEorTABインンデントで矩形選択桁がゼロの時は選択範囲を最大にする
 	// Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	if (eIndent != INDENT_NONE
+	if (eIndent != IndentType::None
 		&& selInfo.IsBoxSelecting()
 		&& GetSelect().GetFrom().x == GetSelect().GetTo().x
 	) {
@@ -75,7 +75,7 @@ void ViewCommander::Command_INDENT(wchar_t wcChar, EIndentType eIndent)
 void ViewCommander::Command_INDENT(
 	const wchar_t* const pData,
 	const LogicInt nDataLen,
-	EIndentType eIndent
+	IndentType eIndent
 	)
 {
 	if (nDataLen <= 0) {
@@ -105,14 +105,14 @@ void ViewCommander::Command_INDENT(
 		int m_nTab;
 	} stabData(GetDocument()->m_cLayoutMgr.GetTabSpace());
 
-	const bool bSoftTab = (eIndent == INDENT_TAB && m_pCommanderView->m_pTypeData->m_bInsSpace);
+	const bool bSoftTab = (eIndent == IndentType::Tab && m_pCommanderView->m_pTypeData->m_bInsSpace);
 	GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	auto& caret = GetCaret();
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 	if (!selInfo.IsTextSelected()) {			// テキストが選択されているか
-		if (eIndent != INDENT_NONE && !bSoftTab) {
+		if (eIndent != IndentType::None && !bSoftTab) {
 			// ※矩形選択ではないので Command_WCHAR から呼び戻しされるようなことはない
 			Command_WCHAR(pData[0]);	// 1文字入力
 		}else {
@@ -165,22 +165,22 @@ void ViewCommander::Command_INDENT(
 		LayoutInt minOffset(-1);
 		/*
 			■全角文字の左側の桁揃えについて
-			(1) eIndent == INDENT_TAB のとき
+			(1) eIndent == IndentType::Tab のとき
 				選択範囲がタブ境界にあるときにタブを入力すると、全角文字の前半が選択範囲から
 				はみ出している行とそうでない行でタブの幅が、1から設定された最大までと大きく異なり、
 				最初に選択されていた文字を選択範囲内にとどめておくことができなくなる。
 				最初は矩形選択範囲内にきれいに収まっている行にはタブを挿入せず、ちょっとだけはみ
 				出している行にだけタブを挿入することとし、それではどの行にもタブが挿入されない
 				とわかったときはやり直してタブを挿入する。
-			(2) eIndent == INDENT_SPACE のとき（※従来互換的な動作）
+			(2) eIndent == IndentType::Space のとき（※従来互換的な動作）
 				幅1で選択している場合のみ全角文字の左側を桁揃えする。
 				最初は矩形選択範囲内にきれいに収まっている行にはスペースを挿入せず、ちょっとだけはみ
 				出している行にだけスペースを挿入することとし、それではどの行にもスペースが挿入されない
 				とわかったときはやり直してスペースを挿入する。
 		*/
-		bool alignFullWidthChar = (eIndent == INDENT_TAB) && ((rcSel.GetFrom().x % this->GetDocument()->m_cLayoutMgr.GetTabSpace()) == 0);
+		bool alignFullWidthChar = (eIndent == IndentType::Tab) && ((rcSel.GetFrom().x % this->GetDocument()->m_cLayoutMgr.GetTabSpace()) == 0);
 #if 1	// ↓ここを残せば選択幅1のSPACEインデントで全角文字を揃える機能(2)が追加される。
-		alignFullWidthChar = alignFullWidthChar || (eIndent == INDENT_SPACE && 1 == rcSel.GetTo().x - rcSel.GetFrom().x);
+		alignFullWidthChar = alignFullWidthChar || (eIndent == IndentType::Space && 1 == rcSel.GetTo().x - rcSel.GetFrom().x);
 #endif
 		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < rcSel.GetTo().y - rcSel.GetFrom().y);
 		HWND hwndProgress = NULL;
@@ -237,7 +237,7 @@ void ViewCommander::Command_INDENT(
 				const LayoutPoint ptInsert(selectionIsOutOfLine ? rcSel.GetFrom().x : xLayoutFrom, nLineNum);
 
 				// TABやスペースインデントの時
-				if (eIndent != INDENT_NONE) {
+				if (eIndent != IndentType::None) {
 					if (emptyLine || selectionIsOutOfLine) {
 						continue; // インデント文字をインデント対象が存在しない部分(改行文字の後ろや空行)に挿入しない。
 					}
@@ -319,7 +319,7 @@ void ViewCommander::Command_INDENT(
 		GetSelect().SetTo(rcSel.GetTo());		// 範囲選択終了位置
 		selInfo.SetBoxSelect(true);
 	}else if (GetSelect().IsLineOne()) {	// 通常選択(1行内)
-		if (eIndent != INDENT_NONE && !bSoftTab) {
+		if (eIndent != IndentType::None && !bSoftTab) {
 			// ※矩形選択ではないので Command_WCHAR から呼び戻しされるようなことはない
 			Command_WCHAR(pData[0]);	// 1文字入力
 		}else {
@@ -428,16 +428,16 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 	// 注意メッセージを出す
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
-		EIndentType eIndent;
+		IndentType eIndent;
 		switch (wcChar) {
 		case WCODE::TAB:
-			eIndent = INDENT_TAB;	// ※[SPACEの挿入]オプションが ON ならソフトタブにする（Wiki BugReport/66）
+			eIndent = IndentType::Tab;	// ※[SPACEの挿入]オプションが ON ならソフトタブにする（Wiki BugReport/66）
 			break;
 		case WCODE::SPACE:
-			eIndent = INDENT_SPACE;
+			eIndent = IndentType::Space;
 			break;
 		default:
-			eIndent = INDENT_NONE;
+			eIndent = IndentType::None;
 		}
 		Command_INDENT(wcChar, eIndent);
 		m_pCommanderView->SendStatusMessage(LS(STR_ERR_UNINDENT1));

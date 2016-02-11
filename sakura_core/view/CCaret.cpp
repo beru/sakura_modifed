@@ -794,12 +794,12 @@ void Caret::ShowCaretPosInfo()
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CodeBase* pCode = CodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
 				CommonSetting_Statusbar* psStatusbar = &GetDllShareData().m_common.m_sStatusbar;
-				EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
+				CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 				delete pCode;
-				if (ret != RESULT_COMPLETE) {
+				if (ret != CodeConvertResult::Complete) {
 					// うまくコードが取れなかった(Unicodeで表示)
 					pCode = CodeFactory::CreateCodeBase(CODE_UNICODE, false);
-					/* EConvertResult ret = */ pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
+					/* CodeConvertResult ret = */ pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 					delete pCode;
 				}
 			}else {

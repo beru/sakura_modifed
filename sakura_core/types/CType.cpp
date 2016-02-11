@@ -157,7 +157,7 @@ void _DefaultConfig(TypeConfig* pType)
 /* タイプ別設定の規定値 */
 /************************/
 
-	pType->m_nTextWrapMethod = (int)eTextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
+	pType->m_nTextWrapMethod = (int)TextWrappingMethod::SettingWidth;		// テキストの折り返し方法		// 2008.05.30 nasukoji
 	pType->m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);	// 折り返し桁数
 	pType->m_nColumnSpace = 0;							// 文字と文字の隙間
 	pType->m_nLineSpace = 1;							// 行間のすきま
@@ -166,7 +166,7 @@ void _DefaultConfig(TypeConfig* pType)
 		pType->m_nKeyWordSetIdx[i] = -1;
 	}
 	wcscpy_s(pType->m_szTabViewString, _EDITL("^       "));	// TAB表示文字列
-	pType->m_bTabArrow = TABARROW_STRING;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
+	pType->m_bTabArrow = TabArrowType::String;	// タブ矢印表示	// 2001.12.03 hor	// default on 2013/4/11 Uchi
 	pType->m_bInsSpace = false;				// スペースの挿入	// 2001.12.03 hor
 	
 	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_cBlockCommentsを使うように修正
@@ -179,7 +179,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->m_nStringType = STRING_LITERAL_CPP;					// 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""]['']
 	pType->m_bStringLineOnly = false;
 	pType->m_bStringEndLine  = false;
-	pType->m_nHeredocType = HEREDOC_PHP;
+	pType->m_nHeredocType = HereDocType::PHP;
 	pType->m_szIndentChars[0] = 0;		// その他のインデント対象文字
 
 	pType->m_nColorInfoArrNum = COLORIDX_LAST;
@@ -235,7 +235,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->m_bWordWrap = false;						// 英文ワードラップをする
 	pType->m_nCurrentPrintSetting = 0;				// 現在選択している印刷設定
 	pType->m_bOutlineDockDisp = false;				// アウトライン解析表示の有無
-	pType->m_eOutlineDockSide = DOCKSIDE_FLOAT;		// アウトライン解析ドッキング配置
+	pType->m_eOutlineDockSide = DockSideType::Float;		// アウトライン解析ドッキング配置
 	pType->m_cxOutlineDockLeft = 0;					// アウトラインの左ドッキング幅
 	pType->m_cyOutlineDockTop = 0;					// アウトラインの上ドッキング高
 	pType->m_cxOutlineDockRight = 0;				// アウトラインの右ドッキング幅
@@ -244,7 +244,7 @@ void _DefaultConfig(TypeConfig* pType)
 	pType->m_nOutlineSortCol = 0;					// アウトライン解析ソート列番号
 	pType->m_bOutlineSortDesc = false;				// アウトライン解析ソート降順
 	pType->m_nOutlineSortType = 0;					// アウトライン解析ソート基準
-	pType->m_eSmartIndent = SMARTINDENT_NONE;		// スマートインデント種別
+	pType->m_eSmartIndent = SmartIndentType::None;		// スマートインデント種別
 	pType->m_nImeState = IME_CMODE_NOCONVERSION;	// IME入力
 
 	pType->m_szOutlineRuleFilename[0] = L'\0';		//Dec. 4, 2000 MIK

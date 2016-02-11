@@ -94,15 +94,15 @@ TYPE_NAME_ID<EOutlineType> OlmArr[] = {
 	{ OUTLINE_TEXT,		STR_OUTLINE_TEXT }			// Jul. 08, 2001 JEPRO 常に最後尾におく
 };
 
-TYPE_NAME_ID<ETabArrow> TabArrowArr[] = {
-	{ TABARROW_STRING,	STR_TAB_SYMBOL_CHARA },			// _T("文字指定")
-	{ TABARROW_SHORT,	STR_TAB_SYMBOL_SHORT_ARROW },	// _T("短い矢印")
-	{ TABARROW_LONG,	STR_TAB_SYMBOL_LONG_ARROW },	// _T("長い矢印")
+TYPE_NAME_ID<TabArrowType> TabArrowArr[] = {
+	{ TabArrowType::String,	STR_TAB_SYMBOL_CHARA },			// _T("文字指定")
+	{ TabArrowType::Short,	STR_TAB_SYMBOL_SHORT_ARROW },	// _T("短い矢印")
+	{ TabArrowType::Long,	STR_TAB_SYMBOL_LONG_ARROW },	// _T("長い矢印")
 };
 
-TYPE_NAME_ID<ESmartIndentType> SmartIndentArr[] = {
-	{ SMARTINDENT_NONE,	STR_SMART_INDENT_NONE },
-	{ SMARTINDENT_CPP,	STR_SMART_INDENT_C_CPP },
+TYPE_NAME_ID<SmartIndentType> SmartIndentArr[] = {
+	{ SmartIndentType::None,	STR_SMART_INDENT_NONE },
+	{ SmartIndentType::Cpp,	STR_SMART_INDENT_C_CPP },
 };
 
 /*!	2行目以降のインデント方法
@@ -118,14 +118,14 @@ TYPE_NAME_ID<int> IndentTypeArr[] = {
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
 TYPE_NAME_ID<int> WrapMethodArr[] = {
-	{ (int)eTextWrappingMethod::NoWrapping,		STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
-	{ (int)eTextWrappingMethod::SettingWidth,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
-	{ (int)eTextWrappingMethod::WindowWidth,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
+	{ (int)TextWrappingMethod::NoWrapping,		STR_WRAP_METHOD_NO_WRAP },		// _T("折り返さない")
+	{ (int)TextWrappingMethod::SettingWidth,	STR_WRAP_METHOD_SPEC_WIDTH },	// _T("指定桁で折り返す")
+	{ (int)TextWrappingMethod::WindowWidth,	STR_WRAP_METHOD_WIN_WIDTH },	// _T("右端で折り返す")
 };
 
 // 静的メンバ
 std::vector<TYPE_NAME_ID2<EOutlineType> > PropTypes::m_OlmArr;	// アウトライン解析ルール配列
-std::vector<TYPE_NAME_ID2<ESmartIndentType> > PropTypes::m_SIndentArr;	// スマートインデントルール配列
+std::vector<TYPE_NAME_ID2<SmartIndentType> > PropTypes::m_SIndentArr;	// スマートインデントルール配列
 
 // スクリーンタブの初期化
 void PropTypesScreen::CPropTypes_Screen()
@@ -187,7 +187,7 @@ INT_PTR PropTypesScreen::DispatchEvent(
 					// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
 					HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
 					int nSelPos = Combo_GetCurSel(hwndCombo);
-					if (TABARROW_STRING == TabArrowArr[nSelPos].nMethod) {
+					if (TabArrowType::String == TabArrowArr[nSelPos].nMethod) {
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), TRUE);
 					}else {
 						::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), FALSE);
@@ -458,7 +458,7 @@ void PropTypesScreen::SetData(HWND hwndDlg)
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_LINESPACE, m_Types.m_nLineSpace, FALSE);			// 行の間隔
 		::SetDlgItemInt(hwndDlg, IDC_EDIT_TABSPACE, (Int)m_Types.m_nTabSpace, FALSE);			// TAB幅	//	Sep. 22, 2002 genta
 		::DlgItem_SetText(hwndDlg, IDC_EDIT_TABVIEWSTRING, m_Types.m_szTabViewString);		// TAB表示(8文字)
-		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), m_Types.m_bTabArrow == TABARROW_STRING);	// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
+		::EnableWindow(::GetDlgItem(hwndDlg, IDC_EDIT_TABVIEWSTRING), m_Types.m_bTabArrow == TabArrowType::String);	// Mar. 31, 2003 genta 矢印表示のON/OFFをTAB文字列設定に連動させる
 
 		// 矢印表示	//@@@ 2003.03.26 MIK
 		hwndCombo = ::GetDlgItem(hwndDlg, IDC_CHECK_TAB_ARROW);
@@ -770,13 +770,13 @@ void PropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
 }
 
 // スマートインデントルールの追加
-void PropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::AddSIndentMethod(SmartIndentType nMethod, const WCHAR* szName)
 {
 	if (m_SIndentArr.empty()) {
 		InitTypeNameId2(m_SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	// スマートインデントルール
 	}
-	TYPE_NAME_ID2<ESmartIndentType> method;
-	method.nMethod = (ESmartIndentType)nMethod;
+	TYPE_NAME_ID2<SmartIndentType> method;
+	method.nMethod = (SmartIndentType)nMethod;
 	method.nNameId = 0;
 	const TCHAR* tszName = to_tchar(szName);
 	TCHAR* pszName = new TCHAR[_tcslen(tszName) + 1];
@@ -785,11 +785,11 @@ void PropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
 	m_SIndentArr.push_back(method);
 }
 
-void PropTypesScreen::RemoveSIndentMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::RemoveSIndentMethod(SmartIndentType nMethod, const WCHAR* szName)
 {
 	int nSize = (int)m_SIndentArr.size();
 	for (int i=0; i<nSize; ++i) {
-		if (m_SIndentArr[i].nMethod == (ESmartIndentType)nMethod) {
+		if (m_SIndentArr[i].nMethod == (SmartIndentType)nMethod) {
 			delete [] m_SIndentArr[i].pszName;
 			m_SIndentArr.erase(m_SIndentArr.begin() + i);
 			break;

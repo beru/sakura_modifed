@@ -33,10 +33,10 @@ class DataProfile;
 #define OUTLINE_LAYOUT_FILECHANGED (2)
 
 // ファイルツリー関連クラス
-enum EFileTreeSettingFrom{
-	EFileTreeSettingFrom_Common,
-	EFileTreeSettingFrom_Type,
-	EFileTreeSettingFrom_File
+enum class FileTreeSettingFromType {
+	Common,
+	Type,
+	File,
 };
 
 class FileTreeSetting {
@@ -45,8 +45,8 @@ public:
 	bool		m_bProject;				//!< プロジェクトファイルモード
 	SFilePath	m_szDefaultProjectIni;	//!< デフォルトiniファイル名
 	SFilePath	m_szLoadProjectIni;		//!< 現在読み込んでいるiniファイル名
-	EFileTreeSettingFrom	m_eFileTreeSettingOrgType;
-	EFileTreeSettingFrom	m_eFileTreeSettingLoadType;
+	FileTreeSettingFromType	m_eFileTreeSettingOrgType;
+	FileTreeSettingFromType	m_eFileTreeSettingLoadType;
 };
 
 
@@ -62,8 +62,8 @@ public:
 	*/
 	HWND DoModeless(HINSTANCE, HWND, LPARAM, FuncInfoArr*, LayoutInt, LayoutInt, int, int, bool); // モードレスダイアログの表示
 	void ChangeView(LPARAM);	// モードレス時：検索対象となるビューの変更
-	bool IsDocking() { return m_eDockSide > DOCKSIDE_FLOAT; }
-	EDockSide GetDockSide() { return m_eDockSide; }
+	bool IsDocking() { return m_eDockSide > DockSideType::Float; }
+	DockSideType GetDockSide() { return m_eDockSide; }
 
 protected:
 	INT_PTR DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
@@ -73,7 +73,7 @@ protected:
 	int& ProfDockSet() { return CommonSet().m_nOutlineDockSet; }
 	bool& ProfDockSync() { return CommonSet().m_bOutlineDockSync; }
 	bool& ProfDockDisp() { return (ProfDockSet() == 0)? CommonSet().m_bOutlineDockDisp: TypeSet().m_bOutlineDockDisp; }
-	EDockSide& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().m_eOutlineDockSide: TypeSet().m_eOutlineDockSide; }
+	DockSideType& ProfDockSide() { return (ProfDockSet() == 0)? CommonSet().m_eOutlineDockSide: TypeSet().m_eOutlineDockSide; }
 	int& ProfDockLeft() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockLeft: TypeSet().m_cxOutlineDockLeft; }
 	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockTop: TypeSet().m_cyOutlineDockTop; }
 	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockRight: TypeSet().m_cxOutlineDockRight; }
@@ -166,7 +166,7 @@ protected:
 	bool GetCaptionButtonRect(int nButton, LPRECT pRect);
 	void DoMenu(POINT pt, HWND hwndFrom);
 	BOOL PostOutlineNotifyToAllEditors(WPARAM wParam, LPARAM lParam);
-	EDockSide GetDropRect(POINT ptDrag, POINT ptDrop, LPRECT pRect, bool bForceFloat);
+	DockSideType GetDropRect(POINT ptDrag, POINT ptDrop, LPRECT pRect, bool bForceFloat);
 	BOOL Track(POINT ptDrag);
 	bool GetTreeFileFullName(HWND, HTREEITEM, std::tstring*, int*);
 	bool TagJumpTimer(const TCHAR*, Point, bool);
@@ -198,7 +198,7 @@ private:
 	Point	m_pointTimerJump;
 	bool		m_bTimerJumpAutoClose;
 
-	EDockSide	m_eDockSide;	// 現在の画面の表示位置
+	DockSideType	m_eDockSide;	// 現在の画面の表示位置
 	HWND		m_hwndToolTip;	//!< ツールチップ（ボタン用）
 	bool		m_bStretching;
 	bool		m_bHovering;

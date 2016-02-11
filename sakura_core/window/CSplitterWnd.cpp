@@ -267,7 +267,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	) {
 		bSizeBox = false;
 	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		bSizeBox = false;
 	}else {
@@ -278,8 +278,8 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 		}
 	}
 	if (pCEditWnd->m_cDlgFuncList.GetHwnd()) {
-		EDockSide eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
-		if (eDockSideFL == DOCKSIDE_RIGHT || eDockSideFL == DOCKSIDE_BOTTOM) {
+		DockSideType eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
+		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bSizeBox = false;
 		}
 	}
@@ -829,7 +829,7 @@ LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	) {
 		bSizeBox = false;
 	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition_Bottom
+		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		bSizeBox = false;
 	}else {
@@ -840,8 +840,8 @@ LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 	if (pCEditWnd->m_cDlgFuncList.GetHwnd()) {
-		EDockSide eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
-		if (eDockSideFL == DOCKSIDE_RIGHT || eDockSideFL == DOCKSIDE_BOTTOM) {
+		DockSideType eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
+		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bSizeBox = false;
 		}
 	}

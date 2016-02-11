@@ -17,9 +17,9 @@
 // sakura
 #include "_main/global.h"
 
-enum ECommentType {
-	COMMENT_TYPE_0	= 0,
-	COMMENT_TYPE_1	= 1,
+enum class CommentType {
+	Zero	= 0,
+	One		= 1,
 };
 
 /*-----------------------------------------------------------------------

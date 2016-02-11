@@ -32,16 +32,16 @@
 /*! セーブ前おまけ処理
 	@param pSaveInfo [in] 保存ファイル情報
 
-	@retval CALLBACK_CONTINUE 続ける
-	@retval CALLBACK_INTERRUPT 中断
+	@retval CallbackResultType::Continue 続ける
+	@retval CallbackResultType::Interrupt 中断
 */
-ECallbackResult BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
+CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 新しくファイルを作る場合は何もしない
 	if (!fexist(pSaveInfo->cFilePath)) {
-		return CALLBACK_CONTINUE;
+		return CallbackResultType::Continue;
 	}
 
 	// 共通設定：保存時にバックアップを作成する
@@ -56,7 +56,7 @@ ECallbackResult BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 		}
 		switch (nBackupResult) {
 		case 2:	//	中断指示
-			return CALLBACK_INTERRUPT;
+			return CallbackResultType::Interrupt;
 		case 3: //	ファイルエラー
 			if (::MYMESSAGEBOX(
 					EditWnd::getInstance()->GetHwnd(),
@@ -65,12 +65,12 @@ ECallbackResult BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 					LS(STR_BACKUP_ERR_MSG)
 				) != IDYES
 			) {
-				return CALLBACK_INTERRUPT;
+				return CallbackResultType::Interrupt;
 			}
 			break;
 		}
 	}
-	return CALLBACK_CONTINUE;
+	return CallbackResultType::Continue;
 }
 
 

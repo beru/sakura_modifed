@@ -32,15 +32,15 @@ class ShiftJis : public CodeBase {
 
 public:
 	// CodeBaseインターフェース
-	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return SJISToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
-	EConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToSJIS(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
+	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return SJISToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToSJIS(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 // GetEolはCodeBaseに移動	2010/6/13 Uchi
-	EConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:
 	// 実装
-	static EConvertResult SJISToUnicode(const Memory& cSrc, NativeW* pDstMem);		// SJIS      → Unicodeコード変換
-	static EConvertResult UnicodeToSJIS(const NativeW& cSrc, Memory* pDstMem);		// Unicode   → SJISコード変換
+	static CodeConvertResult SJISToUnicode(const Memory& cSrc, NativeW* pDstMem);		// SJIS      → Unicodeコード変換
+	static CodeConvertResult UnicodeToSJIS(const NativeW& cSrc, Memory* pDstMem);		// Unicode   → SJISコード変換
 // S_GetEolはCodeBaseに移動	2010/6/13 Uchi
 	// 2005-09-02 D.S.Koba
 	// 2007.08.14 kobake MemoryからShiftJisへ移動

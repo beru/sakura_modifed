@@ -691,7 +691,7 @@ bool ViewCommander::Command_PUTFILE(
 		}
 
 		// 一時ファイル出力
-		EConvertResult eRet = WriteManager().WriteFile_From_CDocLineMgr(
+		CodeConvertResult eRet = WriteManager().WriteFile_From_CDocLineMgr(
 			GetDocument()->m_cDocLineMgr,
 			SaveInfo(
 				to_tchar(filename),
@@ -700,7 +700,7 @@ bool ViewCommander::Command_PUTFILE(
 				bBom
 			)
 		);
-		bResult = (eRet != RESULT_FAILURE);
+		bResult = (eRet != CodeConvertResult::Failure);
 		if (hwndProgress) {
 			::ShowWindow(hwndProgress, SW_HIDE);
 		}
@@ -793,7 +793,7 @@ bool ViewCommander::Command_INSFILE(
 		// ReadLineはファイルから 文字コード変換された1行を読み出します
 		// エラー時はthrow Error_FileRead を投げます
 		NativeW cBuf;
-		while (RESULT_FAILURE != cfl.ReadLine(&cBuf, &cEol)) {
+		while (CodeConvertResult::Failure != cfl.ReadLine(&cBuf, &cEol)) {
 
 			const wchar_t*	pLine = cBuf.GetStringPtr();
 			int			nLineLen = cBuf.GetStringLength();

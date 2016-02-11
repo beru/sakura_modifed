@@ -23,9 +23,9 @@
 //@@@ 2001.02.04 Start by MIK: Popup Help
 TYPE_NAME_ID<int> SpecialScrollModeArr[] = {
 	{ 0,									STR_SCROLL_WITH_NO_KEY },		// _T("組み合わせなし") },
-	{ (int)eMouseFunction::CenterClick,		STR_SCROLL_WITH_MID_BTN },		// _T("マウス中ボタン") },
-	{ (int)eMouseFunction::LeftSideClick,	STR_SCROLL_WITH_SIDE_1_BTN },	// _T("マウスサイドボタン1") },
-	{ (int)eMouseFunction::RightSideClick,	STR_SCROLL_WITH_SIDE_2_BTN },	// _T("マウスサイドボタン2") },
+	{ (int)MouseFunctionType::CenterClick,		STR_SCROLL_WITH_MID_BTN },		// _T("マウス中ボタン") },
+	{ (int)MouseFunctionType::LeftSideClick,	STR_SCROLL_WITH_SIDE_1_BTN },	// _T("マウスサイドボタン1") },
+	{ (int)MouseFunctionType::RightSideClick,	STR_SCROLL_WITH_SIDE_2_BTN },	// _T("マウスサイドボタン2") },
 	{ VK_CONTROL,							STR_SCROLL_WITH_CTRL_KEY },		// _T("CONTROLキー") },
 	{ VK_SHIFT,								STR_SCROLL_WITH_SHIFT_KEY },	// _T("SHIFTキー") },
 };

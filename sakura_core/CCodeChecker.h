@@ -35,10 +35,10 @@ class CodeChecker :
 	
 public:
 	// セーブ時チェック
-	ECallbackResult OnCheckSave(SaveInfo* pSaveInfo);
-	void OnFinalSave(ESaveResult eSaveResult);
+	CallbackResultType OnCheckSave(SaveInfo* pSaveInfo);
+	void OnFinalSave(SaveResultType eSaveResult);
 
 	// ロード時チェック
-	void OnFinalLoad(ELoadResult eLoadResult);
+	void OnFinalLoad(LoadResultType eLoadResult);
 };
 

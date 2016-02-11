@@ -7,7 +7,7 @@
 //                     DiffLineGetter                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EDiffMark DiffLineGetter::GetLineDiffMark() const { return (EDiffMark)m_pcDocLine->m_sMark.m_cDiffmarked; }
+DiffMark DiffLineGetter::GetLineDiffMark() const { return (DiffMark)m_pcDocLine->m_sMark.m_cDiffmarked; }
 
 /*! 行の差分マークに対応した色を返す -> pnColorIndex
 	
@@ -15,26 +15,26 @@ EDiffMark DiffLineGetter::GetLineDiffMark() const { return (EDiffMark)m_pcDocLin
 */
 bool DiffLineGetter::GetDiffColor(EColorIndexType* pnColorIndex) const
 {
-	EDiffMark type = GetLineDiffMark();
+	DiffMark type = GetLineDiffMark();
 	EditView* pView = &EditWnd::getInstance()->GetActiveView();
 
 	// DIFF差分マーク表示	//@@@ 2002.05.25 MIK
-	if (type) {
+	if (type != DiffMark::None) {
 		switch (type) {
-		case MARK_DIFF_APPEND:	// 追加
+		case DiffMark::Append:	// 追加
 			if (TypeSupport(pView, COLORIDX_DIFF_APPEND).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_APPEND;
 				return true;
 			}
 			break;
-		case MARK_DIFF_CHANGE:	// 変更
+		case DiffMark::Change:	// 変更
 			if (TypeSupport(pView, COLORIDX_DIFF_CHANGE).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_CHANGE;
 				return true;
 			}
 			break;
-		case MARK_DIFF_DELETE:	// 削除
-		case MARK_DIFF_DEL_EX:	// 削除
+		case DiffMark::Delete:	// 削除
+		case DiffMark::DeleteEx:	// 削除
 			if (TypeSupport(pView, COLORIDX_DIFF_DELETE).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_DELETE;
 				return true;
@@ -52,29 +52,29 @@ bool DiffLineGetter::GetDiffColor(EColorIndexType* pnColorIndex) const
 */
 bool DiffLineGetter::DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF color) const
 {
-	EDiffMark type = GetLineDiffMark();
+	DiffMark type = GetLineDiffMark();
 
-	if (type) {	// DIFF差分マーク表示	//@@@ 2002.05.25 MIK
+	if (type != DiffMark::None) {	// DIFF差分マーク表示	//@@@ 2002.05.25 MIK
 		int	cy = y + nLineHeight / 2;
 
 		gr.PushPen(color, 0);
 
 		switch (type) {
-		case MARK_DIFF_APPEND:	// 追加
+		case DiffMark::Append:	// 追加
 			::MoveToEx(gr, 3, cy, NULL);
 			::LineTo  (gr, 6, cy);
 			::MoveToEx(gr, 4, cy - 2, NULL);
 			::LineTo  (gr, 4, cy + 3);
 			break;
 
-		case MARK_DIFF_CHANGE:	// 変更
+		case DiffMark::Change:	// 変更
 			::MoveToEx(gr, 3, cy - 4, NULL);
 			::LineTo  (gr, 3, cy);
 			::MoveToEx(gr, 3, cy + 2, NULL);
 			::LineTo  (gr, 3, cy + 3);
 			break;
 
-		case MARK_DIFF_DELETE:	// 削除
+		case DiffMark::Delete:	// 削除
 			cy -= 3;
 			::MoveToEx(gr, 3, cy, NULL);
 			::LineTo  (gr, 5, cy);
@@ -83,7 +83,7 @@ bool DiffLineGetter::DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF
 			::LineTo  (gr, 7, cy + 4);
 			break;
 		
-		case MARK_DIFF_DEL_EX:	// 削除(EOF)
+		case DiffMark::DeleteEx:	// 削除(EOF)
 			cy += 3;
 			::MoveToEx(gr, 3, cy, NULL);
 			::LineTo  (gr, 5, cy);
@@ -104,7 +104,7 @@ bool DiffLineGetter::DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF
 //                     DiffLineSetter                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void DiffLineSetter::SetLineDiffMark(EDiffMark mark) { m_pcDocLine->m_sMark.m_cDiffmarked = mark; }
+void DiffLineSetter::SetLineDiffMark(DiffMark mark) { m_pcDocLine->m_sMark.m_cDiffmarked = mark; }
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -119,7 +119,7 @@ void DiffLineMgr::ResetAllDiffMark()
 {
 	DocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
 	while (pDocLine) {
-		pDocLine->m_sMark.m_cDiffmarked = MARK_DIFF_NONE;
+		pDocLine->m_sMark.m_cDiffmarked = DiffMark::None;
 		pDocLine = pDocLine->GetNextLine();
 	}
 
@@ -132,18 +132,18 @@ void DiffLineMgr::ResetAllDiffMark()
 */
 bool DiffLineMgr::SearchDiffMark(
 	LogicInt			nLineNum,		// 検索開始行
-	eSearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	SearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
 	LogicInt*			pnLineNum 		// マッチ行
 	)
 {
 	LogicInt nLinePos = nLineNum;
 
 	// 前方検索
-	if (bPrevOrNext == eSearchDirection::Backward) {
+	if (bPrevOrNext == SearchDirection::Backward) {
 		--nLinePos;
 		const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
-			if (DiffLineGetter(pDocLine).GetLineDiffMark() != 0) {
+			if (DiffLineGetter(pDocLine).GetLineDiffMark() != DiffMark::None) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
@@ -155,7 +155,7 @@ bool DiffLineMgr::SearchDiffMark(
 		++nLinePos;
 		const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
-			if (DiffLineGetter(pDocLine).GetLineDiffMark() != 0) {
+			if (DiffLineGetter(pDocLine).GetLineDiffMark() != DiffMark::None) {
 				*pnLineNum = nLinePos;				// マッチ行
 				return true;
 			}
@@ -170,7 +170,7 @@ bool DiffLineMgr::SearchDiffMark(
 	@author	MIK
 	@date	2002/05/25
 */
-void DiffLineMgr::SetDiffMarkRange(EDiffMark nMode, LogicInt nStartLine, LogicInt nEndLine)
+void DiffLineMgr::SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine)
 {
 	DiffManager::getInstance()->SetDiffUse(true);
 
@@ -183,7 +183,7 @@ void DiffLineMgr::SetDiffMarkRange(EDiffMark nMode, LogicInt nStartLine, LogicIn
 		nEndLine = nLines - LogicInt(1);
 		DocLine* pCDocLine = m_pcDocLineMgr->GetLine(nEndLine);
 		if (pCDocLine) {
-			DiffLineSetter(pCDocLine).SetLineDiffMark(MARK_DIFF_DEL_EX);
+			DiffLineSetter(pCDocLine).SetLineDiffMark(DiffMark::DeleteEx);
 		}
 	}
 

@@ -506,7 +506,7 @@ bool Clipboard::SetClipboradByFormat(const StringRef& cstr, const wchar_t* pForm
 			nTextByteLen = cstr.GetLength() * sizeof(wchar_t);
 		}else {
 			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
-			if (pCode->UnicodeToCode(cstr, &cmemBuf) == RESULT_FAILURE) {
+			if (pCode->UnicodeToCode(cstr, &cmemBuf) == CodeConvertResult::Failure) {
 				return false;
 			}
 			delete pCode;
@@ -638,7 +638,7 @@ bool Clipboard::GetClipboradByFormat(NativeW& mem, const wchar_t* pFormatName, i
 				cmem.SetRawData(pData, nLength);
 				if (cmem.GetRawPtr()) {
 					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
-					if (pCode->CodeToUnicode(cmem, &mem) == RESULT_FAILURE) {
+					if (pCode->CodeToUnicode(cmem, &mem) == CodeConvertResult::Failure) {
 						mem.SetString(L"");
 						retVal = false;
 					}

@@ -132,7 +132,7 @@ BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 {
 	DLLSHAREDATA* pShare = &GetDllShareData();
 
-	eTabWndNotifyType subCommand = eTabWndNotifyType::Add;
+	TabWndNotifyType subCommand = TabWndNotifyType::Add;
 	EditNode sMyEditNode = {0};
 	sMyEditNode.m_hWnd = hWnd;
 
@@ -149,7 +149,7 @@ BOOL AppNodeGroupHandle::AddEditWndList(HWND hWnd)
 				cRecentEditNode.Terminate();
 				return FALSE;
 			}
-			subCommand = eTabWndNotifyType::Reorder;
+			subCommand = TabWndNotifyType::Reorder;
 
 			// 以前の情報をコピーする。
 			EditNode* p = cRecentEditNode.GetItem(nIndex);
@@ -216,7 +216,7 @@ void AppNodeGroupHandle::DeleteEditWndList(HWND hWnd)
 	}
 
 	// ウィンドウ削除メッセージをブロードキャストする。
-	AppNodeGroupHandle(m_nGroup).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)eTabWndNotifyType::Delete, (LPARAM)hWnd, hWnd);
+	AppNodeGroupHandle(m_nGroup).PostMessageToAllEditors(MYWM_TAB_WINDOW_NOTIFY, (WPARAM)TabWndNotifyType::Delete, (LPARAM)hWnd, hWnd);
 }
 
 /** いくつかのウィンドウへ終了要求を出す

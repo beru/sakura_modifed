@@ -470,7 +470,7 @@ bool SearchAgent::PrevOrNextWord(
 // 見つからない場合は０を返す
 int SearchAgent::SearchWord(
 	LogicPoint					ptSerachBegin,	// 検索開始位置
-	eSearchDirection			eDirection,		// 検索方向
+	SearchDirection			eDirection,		// 検索方向
 	LogicRange*				pMatchRange,	// [out] マッチ範囲。ロジック単位。
 	const SearchStringPattern&	pattern			// 検索パターン
 )
@@ -498,7 +498,7 @@ int SearchAgent::SearchWord(
 		nLinePos = ptSerachBegin.GetY2();		// 検索行＝検索開始行
 		pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		// 前方検索
-		if (eDirection == eSearchDirection::Backward) {
+		if (eDirection == SearchDirection::Backward) {
 			//
 			// 前方(↑)検索(正規表現)
 			//
@@ -599,7 +599,7 @@ int SearchAgent::SearchWord(
 		*/
 
 		// 前方検索
-		if (eDirection == eSearchDirection::Backward) {
+		if (eDirection == SearchDirection::Backward) {
 			nLinePos = ptSerachBegin.GetY2();
 			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 			LogicInt nNextWordFrom;
@@ -671,7 +671,7 @@ int SearchAgent::SearchWord(
 	}else {
 		const int nPatternLen = pattern.GetLen();
 		// 前方検索
-		if (eDirection == eSearchDirection::Backward) {
+		if (eDirection == SearchDirection::Backward) {
 			nLinePos = ptSerachBegin.GetY2();
 			nHitTo = ptSerachBegin.x;
 

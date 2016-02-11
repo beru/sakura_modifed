@@ -61,7 +61,7 @@ void CType_Cpp::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_cBlockComments[1].SetBlockCommentRule(L"#if 0", L"#endif");	// ブロックコメントデリミタ2		Jul. 11, 2001 JEPRO
 	pType->m_nKeyWordSetIdx[0] = 0;											// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_CPP;									// アウトライン解析方法
-	pType->m_eSmartIndent = SMARTINDENT_CPP;								// スマートインデント種別
+	pType->m_eSmartIndent = SmartIndentType::Cpp;								// スマートインデント種別
 	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;					// 半角数値を色分け表示				Mar. 10, 2001 JEPRO
 	pType->m_ColorInfoArr[COLORIDX_BRACKET_PAIR].m_bDisp = true;			// 対括弧の強調をデフォルトONに		Sep. 21, 2002 genta 
 	pType->m_bUseHokanByFile = true;										// 入力補完 開いているファイル内から候補を探す

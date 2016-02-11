@@ -28,15 +28,15 @@
 class Utf7 : public CodeBase {
 public:
 	// CodeBaseインターフェース
-	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return UTF7ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
-	EConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToUTF7(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
+	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return UTF7ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
+	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToUTF7(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
 	void GetEol(Memory* pcmemEol, EEolType eEolType);
 
 public:
 	// 実装
-	static EConvertResult UTF7ToUnicode(const Memory& cSrc, NativeW* pDstMem);		// UTF-7     → Unicodeコード変換 //2007.08.13 kobake 追加
-	static EConvertResult UnicodeToUTF7(const NativeW& cSrc, Memory* pDstMem);		// Unicode   → UTF-7コード変換
+	static CodeConvertResult UTF7ToUnicode(const Memory& cSrc, NativeW* pDstMem);		// UTF-7     → Unicodeコード変換 //2007.08.13 kobake 追加
+	static CodeConvertResult UnicodeToUTF7(const NativeW& cSrc, Memory* pDstMem);		// Unicode   → UTF-7コード変換
 //	static int MemBASE64_Encode(const char*, int, char**, int, int);/* Base64エンコード */  // convert/convert_util2.h へ移動
 
 protected:

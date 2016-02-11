@@ -70,16 +70,16 @@ const DWORD p_helpids[] = {
 };
 
 static const AnchorListItem anchorList[] = {
-	{IDC_TAB_FAVORITE,              ANCHOR_LEFT_RIGHT},
-	{IDC_STATIC_BUTTONS,			ANCHOR_BOTTOM},
-	{IDC_BUTTON_CLEAR, 				ANCHOR_BOTTOM},
-	{IDC_BUTTON_DELETE_NOFAVORATE,	ANCHOR_BOTTOM},
-	{IDC_BUTTON_DELETE_NOTFOUND,	ANCHOR_BOTTOM},
-	{IDC_BUTTON_DELETE_SELECTED,	ANCHOR_BOTTOM},
-	{IDC_BUTTON_ADD_FAVORITE, 		ANCHOR_BOTTOM},
-	{IDOK, 							ANCHOR_BOTTOM},
-	{IDC_BUTTON_HELP, 				ANCHOR_BOTTOM},
-	{IDC_STATIC_FAVORITE_MSG, 		ANCHOR_BOTTOM},
+	{IDC_TAB_FAVORITE,              AnchorStyle::LeftRight},
+	{IDC_STATIC_BUTTONS,			AnchorStyle::Bottom},
+	{IDC_BUTTON_CLEAR, 				AnchorStyle::Bottom},
+	{IDC_BUTTON_DELETE_NOFAVORATE,	AnchorStyle::Bottom},
+	{IDC_BUTTON_DELETE_NOTFOUND,	AnchorStyle::Bottom},
+	{IDC_BUTTON_DELETE_SELECTED,	AnchorStyle::Bottom},
+	{IDC_BUTTON_ADD_FAVORITE, 		AnchorStyle::Bottom},
+	{IDOK, 							AnchorStyle::Bottom},
+	{IDC_BUTTON_HELP, 				AnchorStyle::Bottom},
+	{IDC_STATIC_FAVORITE_MSG, 		AnchorStyle::Bottom},
 };
 
 // SDKÇ…ÇµÇ©íËã`Ç≥ÇÍÇƒÇ¢Ç»Ç¢ÅB
@@ -1218,7 +1218,7 @@ BOOL DlgFavorite::OnSize(WPARAM wParam, LPARAM lParam)
 
 	for (int i=0; i<FAVORITE_INFO_MAX; ++i) {
 		HWND hwndList = GetItemHwnd(m_aFavoriteInfo[i].m_nId);
-		ResizeItem(hwndList, m_ptDefaultSize, ptNew, m_rcListDefault, ANCHOR_ALL, (i == m_nCurrentTab));
+		ResizeItem(hwndList, m_ptDefaultSize, ptNew, m_rcListDefault, AnchorStyle::All, (i == m_nCurrentTab));
 	}
 	::InvalidateRect(GetHwnd(), NULL, TRUE);
 	return TRUE;

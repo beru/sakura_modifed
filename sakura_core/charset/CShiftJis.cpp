@@ -105,7 +105,7 @@ int ShiftJis::SjisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool
 
 
 // コード変換 SJIS→Unicode
-EConvertResult ShiftJis::SJISToUnicode(
+CodeConvertResult ShiftJis::SJISToUnicode(
 	const Memory& cSrc,
 	NativeW* pDstMem
 	)
@@ -115,7 +115,7 @@ EConvertResult ShiftJis::SJISToUnicode(
 	const char* pSrc = reinterpret_cast<const char*>(cSrc.GetRawPtr(&nSrcLen));
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// 変換先バッファサイズを設定してメモリ領域確保
@@ -128,9 +128,9 @@ EConvertResult ShiftJis::SJISToUnicode(
 	pDstMem->_SetStringLength(nDstLen);
 
 	if (!bError) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}else {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
 }
 
@@ -200,7 +200,7 @@ int ShiftJis::UniToSjis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool
 
 
 // コード変換 Unicode→SJIS
-EConvertResult ShiftJis::UnicodeToSJIS( const NativeW& cSrc, Memory* pDstMem )
+CodeConvertResult ShiftJis::UnicodeToSJIS( const NativeW& cSrc, Memory* pDstMem )
 {
 	// 状態
 	const Memory* pMem = cSrc._GetMemory();
@@ -210,7 +210,7 @@ EConvertResult ShiftJis::UnicodeToSJIS( const NativeW& cSrc, Memory* pDstMem )
 	int nSrcLen = pMem->GetRawLength() / sizeof(wchar_t);
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// 変換先バッファサイズを設定してバッファを確保
@@ -226,18 +226,18 @@ EConvertResult ShiftJis::UnicodeToSJIS( const NativeW& cSrc, Memory* pDstMem )
 
 	// 結果
 	if (berror) {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}else {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 }
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+CodeConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	NativeW		cCharBuffer;
-	EConvertResult	res;
+	CodeConvertResult	res;
 	int				i;
 	unsigned char*	ps;
 	TCHAR*			pd;
@@ -257,8 +257,8 @@ EConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHA
 
 	// SJIS 変換
 	res = UnicodeToSJIS(cCharBuffer, cCharBuffer._GetMemory());
-	if (res != RESULT_COMPLETE) {
-		return RESULT_LOSESOME;
+	if (res != CodeConvertResult::Complete) {
+		return CodeConvertResult::LoseSome;
 	}
 
 	// Hex変換
@@ -272,5 +272,5 @@ EConvertResult ShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHA
 		auto_sprintf(pd, _T("?%02X"), *ps);
 	}
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }

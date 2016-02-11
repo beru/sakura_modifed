@@ -421,7 +421,7 @@ void ViewCommander::Command_Diff_Next(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;	
-	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -472,7 +472,7 @@ void ViewCommander::Command_Diff_Prev(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;
-	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;

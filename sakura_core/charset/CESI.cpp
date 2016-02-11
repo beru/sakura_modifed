@@ -686,16 +686,16 @@ void ESI::GuessUtf16Bom(void)
 {
 	int i = m_aWcInfo[ESI_WCIDX_UTF16LE].nSpecific;  // UTF-16 LE の改行の個数
 	int j = m_aWcInfo[ESI_WCIDX_UTF16BE].nSpecific;  // UTF-16 BE の改行の個数
-	EBOMType ebom_type = ESI_BOMTYPE_UNKNOWN;
+	BOMType ebom_type = BOMType::Unknown;
 	if (i > j && j < 1) {
-		ebom_type = ESI_BOMTYPE_LE;   // LE
+		ebom_type = BOMType::LittleEndian;   // LE
 	}else if (i < j && i < 1) {
-		ebom_type = ESI_BOMTYPE_BE;   // BE
+		ebom_type = BOMType::BigEndian;   // BE
 	}
-	if (ebom_type != ESI_BOMTYPE_UNKNOWN) {
-		if (m_aWcInfo[ebom_type].nSpecific - m_aWcInfo[ebom_type].nPoints > 0) {
+	if (ebom_type != BOMType::Unknown) {
+		if (m_aWcInfo[(int)ebom_type].nSpecific - m_aWcInfo[(int)ebom_type].nPoints > 0) {
 			// 不正バイトが検出されている場合は、BOM タイプ不明とする。
-			ebom_type = ESI_BOMTYPE_UNKNOWN;
+			ebom_type = BOMType::Unknown;
 		}
 	}
 
@@ -1230,10 +1230,10 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_BOM));	// "\t\tBOM の推測結果　"
 	switch (cesi.m_eWcBomType) {
-	case ESI_BOMTYPE_LE:
+	case BOMType::LittleEndian:
 		auto_sprintf( szWork, _T("LE\r\n") );
 		break;
-	case ESI_BOMTYPE_BE:
+	case BOMType::BigEndian:
 		auto_sprintf( szWork, _T("BE\r\n") );
 		break;
 	default:

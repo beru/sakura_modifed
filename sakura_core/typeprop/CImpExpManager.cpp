@@ -974,7 +974,7 @@ bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 	int nKeyNameArrUsed = m_Common.m_sKeyBind.m_nKeyNameArrNum; // 使用済み領域
 	for (int j=sKeyBind.m_nKeyNameArrNum-1; j>=0; --j) {
 		if ((bVer2 || bVer3) && sKeyBind.m_pKeyNameArr[j].m_nKeyCode <= 0) { // マウスコードは先頭に固定されている KeyCodeが同じなのでKeyNameで判別
-			for (int im=0; im<(int)eMouseFunction::KeyBegin; ++im) {
+			for (int im=0; im<(int)MouseFunctionType::KeyBegin; ++im) {
 				if (_tcscmp(sKeyBind.m_pKeyNameArr[j].m_szKeyName, m_Common.m_sKeyBind.m_pKeyNameArr[im].m_szKeyName) == 0) {
 					m_Common.m_sKeyBind.m_pKeyNameArr[im] = sKeyBind.m_pKeyNameArr[j];
 				}

@@ -351,13 +351,13 @@ void EditView::AnalyzeDiffInfo(
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
-		if      (mode == 'a') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, LogicInt(s1   ), LogicInt(e1   ));
-		else if (mode == 'c') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, LogicInt(s1 - 1), LogicInt(e1 - 1));
-		else if (mode == 'd') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		if      (mode == 'a') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
+		else if (mode == 'c') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		else if (mode == 'd') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
 	}else {	// 編集中ファイルは新ファイル
-		if      (mode == 'a') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_APPEND, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'c') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_CHANGE, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'd') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(MARK_DIFF_DELETE, LogicInt(s2   ), LogicInt(e2   ));
+		if      (mode == 'a') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'c') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'd') DiffLineMgr(&m_pcEditDoc->m_cDocLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
 	}
 	
 	return;
@@ -450,7 +450,7 @@ BOOL EditView::MakeDiffTmpFile(
 
 	// 自分か？
 	if (!hWnd) {
-		EConvertResult eWriteResult = WriteManager().WriteFile_From_CDocLineMgr(
+		CodeConvertResult eWriteResult = WriteManager().WriteFile_From_CDocLineMgr(
 			m_pcEditDoc->m_cDocLineMgr,
 			SaveInfo(
 				filename,
@@ -459,7 +459,7 @@ BOOL EditView::MakeDiffTmpFile(
 				bBom
 			)
 		);
-		return RESULT_FAILURE != eWriteResult;
+		return CodeConvertResult::Failure != eWriteResult;
 	}
 
 	TextOutputStream out(filename, code, true, false);
@@ -532,7 +532,7 @@ BOOL EditView::MakeDiffTmpFile2(
 		);
 		NativeW cLine;
 		Eol cEol;
-		while (cfl.ReadLine(&cLine, &cEol) != RESULT_FAILURE) {
+		while (cfl.ReadLine(&cLine, &cEol) != CodeConvertResult::Failure) {
 			const wchar_t*	pLineData;
 			LogicInt		nLineLen;
 			pLineData= cLine.GetStringPtr(&nLineLen);

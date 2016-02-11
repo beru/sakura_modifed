@@ -58,7 +58,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 	rcClip2.bottom = sPos.GetDrawPos().y + nLineHeight;
 
 	if (pArea->IsRectIntersected(rcClip2)) {
-		if (cTabType.IsDisp() && TABARROW_STRING == m_pTypeData->m_bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
+		if (cTabType.IsDisp() && TabArrowType::String == m_pTypeData->m_bTabArrow) {	// タブ通常表示	//@@@ 2003.03.26 MIK
 			//@@@ 2001.03.16 by MIK
 			::ExtTextOutW_AnyBuild(
 				gr,
@@ -90,7 +90,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 				//	太字かどうか設定も見る様にする 2013/4/11 Uchi
 				// 2013.06.21 novice 文字色、太字をGraphicsから取得
 
-				if (TABARROW_SHORT == m_pTypeData->m_bTabArrow) {
+				if (TabArrowType::Short == m_pTypeData->m_bTabArrow) {
 					if (rcClip2.left <= sPos.GetDrawPos().x) { // Apr. 1, 2003 MIK 行番号と重なる
 						_DrawTabArrow(
 							gr,
@@ -102,7 +102,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 							gr.GetCurrentTextForeColor()
 						);
 					}
-				}else if (TABARROW_LONG == m_pTypeData->m_bTabArrow) {
+				}else if (TabArrowType::Long == m_pTypeData->m_bTabArrow) {
 					int	nPosLeft = rcClip2.left > sPos.GetDrawPos().x ? rcClip2.left : sPos.GetDrawPos().x;
 					_DrawTabArrow(
 						gr,

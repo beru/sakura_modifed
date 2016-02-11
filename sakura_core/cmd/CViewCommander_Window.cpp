@@ -399,7 +399,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 		AppNodeManager::getInstance()->ResetGroupId();
 		AppNodeGroupHandle(0).PostMessageToAllEditors(
 			MYWM_TAB_WINDOW_NOTIFY,						// タブウィンドウイベント
-			(WPARAM)((csTabBar.m_bDispTabWndMultiWin) ? eTabWndNotifyType::Disable : eTabWndNotifyType::Enable), // タブモード有効/無効化イベント
+			(WPARAM)((csTabBar.m_bDispTabWndMultiWin) ? TabWndNotifyType::Disable : TabWndNotifyType::Enable), // タブモード有効/無効化イベント
 			(LPARAM)GetEditWindow()->GetHwnd(),	// EditWndのウィンドウハンドル
 			m_pCommanderView->GetHwnd());									// 自分自身
 		// End 2004.08.27 Kazika

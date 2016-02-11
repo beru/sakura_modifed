@@ -33,12 +33,12 @@ class DocLineMgr;
 class Graphics;
 
 // DIFF情報定数
-enum EDiffMark{
-	MARK_DIFF_NONE		= 0,	// 無変更
-	MARK_DIFF_APPEND	= 1,	// 追加
-	MARK_DIFF_CHANGE	= 2,	// 変更
-	MARK_DIFF_DELETE	= 3,	// 削除
-	MARK_DIFF_DEL_EX	= 4,	// 削除(EOF以降)
+enum class DiffMark {
+	None		= 0,	// 無変更
+	Append		= 1,	// 追加
+	Change		= 2,	// 変更
+	Delete		= 3,	// 削除
+	DeleteEx	= 4,	// 削除(EOF以降)
 };
 
 // DIFF挙動の管理
@@ -57,18 +57,18 @@ private:
 // 行に付加するDIFF情報
 class LineDiffed {
 public:
-	LineDiffed() : m_nDiffed(MARK_DIFF_NONE) { }
-	operator EDiffMark() const { return m_nDiffed; }
-	LineDiffed& operator = (EDiffMark e) { m_nDiffed = e; return *this; }
+	LineDiffed() : m_nDiffed(DiffMark::None) { }
+	operator DiffMark() const { return m_nDiffed; }
+	LineDiffed& operator = (DiffMark e) { m_nDiffed = e; return *this; }
 private:
-	EDiffMark m_nDiffed;
+	DiffMark m_nDiffed;
 };
 
 // 行のDIFF情報取得
 class DiffLineGetter {
 public:
 	DiffLineGetter(const DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
-	EDiffMark GetLineDiffMark() const;
+	DiffMark GetLineDiffMark() const;
 	bool GetDiffColor(EColorIndexType* nColor) const;
 	bool DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF color) const;
 private:
@@ -79,7 +79,7 @@ private:
 class DiffLineSetter {
 public:
 	DiffLineSetter(DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
-	void SetLineDiffMark(EDiffMark mark);
+	void SetLineDiffMark(DiffMark mark);
 private:
 	DocLine* m_pcDocLine;
 };
@@ -89,8 +89,8 @@ class DiffLineMgr {
 public:
 	DiffLineMgr(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 	void ResetAllDiffMark();															// 差分表示の全解除
-	bool SearchDiffMark(LogicInt , eSearchDirection, LogicInt*);						// 差分検索
-	void SetDiffMarkRange(EDiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// 差分範囲の登録
+	bool SearchDiffMark(LogicInt , SearchDirection, LogicInt*);						// 差分検索
+	void SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// 差分範囲の登録
 private:
 	DocLineMgr* m_pcDocLineMgr;
 };

@@ -784,7 +784,7 @@ LayoutInt EditView::GetRightEdgeForScrollBar(void)
 	// 折り返し桁以後のぶら下げ余白計算
 	LayoutInt nWidth = m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas() + GetWrapOverhang();
 	
-	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 		LayoutInt nRightEdge = m_pcEditDoc->m_cLayoutMgr.GetMaxTextWidth();	// テキストの最大幅
 
 		// 選択範囲あり かつ 範囲の右端がテキストの幅より右側

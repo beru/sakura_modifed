@@ -105,7 +105,7 @@ PrintPreview::~PrintPreview()
 	delete m_pLayoutMgr_Print;
 	
 	// フォント幅キャッシュを編集モードに戻す
-	SelectCharWidthCache(CWM_FONT_EDIT, CWM_CACHE_NEUTRAL);
+	SelectCharWidthCache(CharWidthFontMode::Edit, CWM_CACHE_NEUTRAL);
 
 	// 2006.08.17 Moca CompatDC削除。EditWndから移設
 	// 再描画用メモリBMP
@@ -1883,8 +1883,8 @@ void PrintPreview::SetPreviewFontHan(const LOGFONT* lf)
 	m_lfPreviewHan.lfWidth			= m_pPrintSetting->m_nPrintFontWidth;
 	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan);
 
-	SelectCharWidthCache(CWM_FONT_PRINT, CWM_CACHE_LOCAL);
-	InitCharWidthCache(m_lfPreviewHan, CWM_FONT_PRINT);
+	SelectCharWidthCache(CharWidthFontMode::Print, CWM_CACHE_LOCAL);
+	InitCharWidthCache(m_lfPreviewHan, CharWidthFontMode::Print);
 }
 
 void PrintPreview::SetPreviewFontZen(const LOGFONT* lf)

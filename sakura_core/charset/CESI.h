@@ -73,10 +73,10 @@ enum EStoreID4WCInfo {
 	ESI_WCIDX_MAX,
 };
 // BOM タイプ
-enum EBOMType {
-	ESI_BOMTYPE_UNKNOWN = -1,
-	ESI_BOMTYPE_LE =0,
-	ESI_BOMTYPE_BE =1,
+enum class BOMType {
+	Unknown = -1,
+	LittleEndian =0,
+	BigEndian = 1,
 };
 
 
@@ -197,10 +197,10 @@ public:
 	// 	**** UTF-16 判定関係の変数その他
 	//
 	WCCODE_INFO m_aWcInfo[ESI_WCIDX_MAX];  //!< UTF-16 LE/BE 情報
-	EBOMType m_eWcBomType;          //!< m_pWcInfo から推測される BOM の種類
+	BOMType m_eWcBomType;          //!< m_pWcInfo から推測される BOM の種類
 	ECodeType m_eMetaName;          //!< エンコーディング名からの種類判別
 
-	EBOMType GetBOMType(void) const { return m_eWcBomType; }
+	BOMType GetBOMType(void) const { return m_eWcBomType; }
 	ECodeType GetMetaName() const { return m_eMetaName; }
 
 protected:

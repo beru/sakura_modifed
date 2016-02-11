@@ -113,7 +113,7 @@ void ActivateFrameWindow(HWND hwnd)
 			::SendMessageTimeout(
 				hwnd,
 				MYWM_TAB_WINDOW_NOTIFY,
-				(WPARAM)eTabWndNotifyType::Adjust,
+				(WPARAM)TabWndNotifyType::Adjust,
 				(LPARAM)NULL,
 				SMTO_ABORTIFHUNG | SMTO_BLOCK,
 				10000,

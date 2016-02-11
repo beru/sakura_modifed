@@ -289,11 +289,11 @@ struct CharWidthCache {
 	int			m_nCharWidthCacheTest;				// cache溢れ検出
 };
 
-enum ECharWidthFontMode {
-	CWM_FONT_EDIT,
-	CWM_FONT_PRINT,
-	CWM_FONT_MINIMAP,
-	CWM_FONT_MAX,
+enum class CharWidthFontMode {
+	Edit,
+	Print,
+	MiniMap,
+	Max,
 };
 
 enum ECharWidthCacheMode {
@@ -303,6 +303,6 @@ enum ECharWidthCacheMode {
 };
 
 // キャッシュの初期化関数群
-void SelectCharWidthCache(ECharWidthFontMode fMode, ECharWidthCacheMode cMode);  //<! モードを変更したいとき
-void InitCharWidthCache(const LOGFONT& lf, ECharWidthFontMode fMode = CWM_FONT_EDIT); //<! フォントを変更したとき
+void SelectCharWidthCache(CharWidthFontMode fMode, ECharWidthCacheMode cMode);  //<! モードを変更したいとき
+void InitCharWidthCache(const LOGFONT& lf, CharWidthFontMode fMode = CharWidthFontMode::Edit); //<! フォントを変更したとき
 

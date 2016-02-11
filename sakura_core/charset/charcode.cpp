@@ -229,40 +229,40 @@ namespace WCODE
 		LocalCacheSelector()
 		{
 			pcache = &m_localcache[0];
-			for (int i=0; i<CWM_FONT_MAX; ++i) {
+			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
 				m_parCache[i] = 0;
 			}
 			m_eLastEditCacheMode = CWM_CACHE_NEUTRAL;
 		}
 		~LocalCacheSelector()
 		{
-			for (int i=0; i<CWM_FONT_MAX; ++i) {
+			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
 				delete m_parCache[i];
 				m_parCache[i] = 0;
 			}
 		}
-		void Init(const LOGFONT& lf, ECharWidthFontMode fMode)
+		void Init(const LOGFONT& lf, CharWidthFontMode fMode)
 	 	{
 			// Fontfaceが変更されていたらキャッシュをクリアする	2013.04.08 aroka
-			m_localcache[fMode].Init(lf);
-			if (!m_localcache[fMode].IsSameFontFace(lf)) {
-				m_localcache[fMode].Clear();
+			m_localcache[(int)fMode].Init(lf);
+			if (!m_localcache[(int)fMode].IsSameFontFace(lf)) {
+				m_localcache[(int)fMode].Clear();
 			}
 		}
-		void Select(ECharWidthFontMode fMode, ECharWidthCacheMode cMode)
+		void Select(CharWidthFontMode fMode, ECharWidthCacheMode cMode)
 		{
 			ECharWidthCacheMode cmode = (cMode == CWM_CACHE_NEUTRAL) ? m_eLastEditCacheMode : cMode;
 
-			pcache = &m_localcache[fMode];
+			pcache = &m_localcache[(int)fMode];
 			if (cmode == CWM_CACHE_SHARE) {
 				pcache->SelectCache(&(GetDllShareData().m_sCharWidth));
 			}else {
-				if (m_parCache[fMode] == 0) {
-					m_parCache[fMode] = new CharWidthCache;
+				if (m_parCache[(int)fMode] == 0) {
+					m_parCache[(int)fMode] = new CharWidthCache;
 				}
-				pcache->SelectCache(m_parCache[fMode]);
+				pcache->SelectCache(m_parCache[(int)fMode]);
 			}
-			if (fMode == CWM_FONT_EDIT) { m_eLastEditCacheMode = cmode; }
+			if (fMode == CharWidthFontMode::Edit) { m_eLastEditCacheMode = cmode; }
 		}
 		LocalCache* GetCache() { return pcache; }
 	private:
@@ -282,7 +282,9 @@ namespace WCODE
 	{
 		LocalCache* pcache = selector.GetCache();
 		// -- -- キャッシュが存在すれば、それをそのまま返す -- -- //
-		if (pcache->ExistCache(c)) return pcache->GetCache(c);
+		if (pcache->ExistCache(c)) {
+			return pcache->GetCache(c);
+		}
 
 		// -- -- 相対比較 -- -- //
 		bool value;
@@ -296,15 +298,15 @@ namespace WCODE
 }
 
 // 文字幅の動的計算用キャッシュの初期化。	2007/5/18 Uchi
-void InitCharWidthCache(const LOGFONT& lf, ECharWidthFontMode fMode)
+void InitCharWidthCache(const LOGFONT& lf, CharWidthFontMode fMode)
 {
 	WCODE::selector.Init(lf, fMode);
 }
 
 // 文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
-void SelectCharWidthCache(ECharWidthFontMode fMode, ECharWidthCacheMode cMode)
+void SelectCharWidthCache(CharWidthFontMode fMode, ECharWidthCacheMode cMode)
 {
-	assert(fMode == CWM_FONT_EDIT || cMode == CWM_CACHE_LOCAL);
+	assert(fMode == CharWidthFontMode::Edit || cMode == CWM_CACHE_LOCAL);
 
 	WCODE::selector.Select(fMode, cMode);
 }

@@ -26,11 +26,11 @@
 class SaveAgent : public DocListenerEx {
 public:
 	SaveAgent();
-	ECallbackResult OnCheckSave(SaveInfo* pSaveInfo);
+	CallbackResultType OnCheckSave(SaveInfo* pSaveInfo);
 	void OnBeforeSave(const SaveInfo& sSaveInfo);
 	void OnSave(const SaveInfo& sSaveInfo);
 	void OnAfterSave(const SaveInfo& sSaveInfo);
-	void OnFinalSave(ESaveResult eSaveResult);
+	void OnFinalSave(SaveResultType eSaveResult);
 private:
 	SaveInfo	m_sSaveInfoForRollback;
 };

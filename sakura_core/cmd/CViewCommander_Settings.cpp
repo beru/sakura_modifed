@@ -45,7 +45,7 @@ void ViewCommander::Command_SHOWTOOLBAR(void)
 	// 全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
-		(WPARAM)eBarChangeNotifyType::Toolbar,
+		(WPARAM)BarChangeNotifyType::Toolbar,
 		(LPARAM)pCEditWnd->GetHwnd(),
 		pCEditWnd->GetHwnd()
 	);
@@ -67,7 +67,7 @@ void ViewCommander::Command_SHOWFUNCKEY(void)
 	// 全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
-		(WPARAM)eBarChangeNotifyType::FuncKey,
+		(WPARAM)BarChangeNotifyType::FuncKey,
 		(LPARAM)pCEditWnd->GetHwnd(),
 		pCEditWnd->GetHwnd()
 	);
@@ -102,7 +102,7 @@ void ViewCommander::Command_SHOWTAB(void)
 	AppNodeManager::getInstance()->ResetGroupId();
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
-		(WPARAM)eBarChangeNotifyType::Tab,
+		(WPARAM)BarChangeNotifyType::Tab,
 		(LPARAM)pCEditWnd->GetHwnd(),
 		pCEditWnd->GetHwnd()
 	);
@@ -124,7 +124,7 @@ void ViewCommander::Command_SHOWSTATUSBAR(void)
 	// 全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
-		(WPARAM)eBarChangeNotifyType::StatusBar,
+		(WPARAM)BarChangeNotifyType::StatusBar,
 		(LPARAM)pCEditWnd->GetHwnd(),
 		pCEditWnd->GetHwnd()
 	);
@@ -145,7 +145,7 @@ void ViewCommander::Command_SHOWMINIMAP(void)
 	//全ウィンドウに変更を通知する。
 	AppNodeGroupHandle(0).PostMessageToAllEditors(
 		MYWM_BAR_CHANGE_NOTIFY,
-		(WPARAM)eBarChangeNotifyType::MiniMap,
+		(WPARAM)BarChangeNotifyType::MiniMap,
 		(LPARAM)pCEditWnd->GetHwnd(),
 		pCEditWnd->GetHwnd()
 	);
@@ -360,7 +360,7 @@ void ViewCommander::Command_WRAPWINDOWWIDTH(void)	// Oct. 7, 2000 JEPRO WRAPWIND
 	LayoutInt newKetas;
 	
 	nWrapMode = m_pCommanderView->GetWrapMode(&newKetas);
-	GetDocument()->m_nTextWrapMethodCur = (int)eTextWrappingMethod::SettingWidth;
+	GetDocument()->m_nTextWrapMethodCur = (int)TextWrappingMethod::SettingWidth;
 	GetDocument()->m_bTextWrapMethodCurTemp = !(GetDocument()->m_nTextWrapMethodCur == m_pCommanderView->m_pTypeData->m_nTextWrapMethod);
 	if (nWrapMode == EditView::TGWRAP_NONE) {
 		return;	// 折り返し桁は元のまま
@@ -422,15 +422,15 @@ void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 	int nWidth;
 
 	switch (nWrapMethod) {
-	case eTextWrappingMethod::NoWrapping:		// 折り返さない
+	case TextWrappingMethod::NoWrapping:		// 折り返さない
 		nWidth = MAXLINEKETAS;	// アプリケーションの最大幅で折り返し
 		break;
 
-	case eTextWrappingMethod::SettingWidth:	// 指定桁で折り返す
+	case TextWrappingMethod::SettingWidth:	// 指定桁で折り返す
 		nWidth = (Int)pcDoc->m_cDocType.GetDocumentAttribute().m_nMaxLineKetas;
 		break;
 
-	case eTextWrappingMethod::WindowWidth:		// 右端で折り返す
+	case TextWrappingMethod::WindowWidth:		// 右端で折り返す
 		// ウィンドウが左右に分割されている場合は左側のウィンドウ幅を使用する
 		nWidth = (Int)m_pCommanderView->ViewColNumToWrapColNum(GetEditWindow()->GetView(0).GetTextArea().m_nViewColNum);
 		break;
@@ -448,7 +448,7 @@ void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 	GetEditWindow()->ChangeLayoutParam(false, pcDoc->m_cLayoutMgr.GetTabSpace(), (LayoutInt)nWidth);
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (pcDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+	if (pcDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 		pcDoc->m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 		GetEditWindow()->RedrawAllViews(NULL);		// スクロールバーの更新が必要なので再表示を実行する
 	}else {
@@ -461,31 +461,31 @@ void ViewCommander::Command_TEXTWRAPMETHOD(int nWrapMethod)
 	@brief 文字カウント方法を変更する
 	
 	@param[in] nMode 文字カウント方法
-		eSelectCountMode::Toggle : 文字カウント方法をトグル
-		eSelectCountMode::ByChar ; 文字数でカウント
-		eSelectCountMode::ByByte ; バイト数でカウント
+		SelectCountMode::Toggle : 文字カウント方法をトグル
+		SelectCountMode::ByChar ; 文字数でカウント
+		SelectCountMode::ByByte ; バイト数でカウント
 */
 void ViewCommander::Command_SELECT_COUNT_MODE(int nMode)
 {
 	// 設定には保存せず、View毎に持つフラグを設定
 	//BOOL* pbDispSelCountByByte = &GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte;
-	eSelectCountMode* pnSelectCountMode = &GetEditWindow()->m_nSelectCountMode;
+	SelectCountMode* pnSelectCountMode = &GetEditWindow()->m_nSelectCountMode;
 
-	if (nMode == (int)eSelectCountMode::Toggle) {
+	if (nMode == (int)SelectCountMode::Toggle) {
 		// 文字数⇔バイト数トグル
-		eSelectCountMode nCurrentMode;
-		if (*pnSelectCountMode == eSelectCountMode::Toggle) {
+		SelectCountMode nCurrentMode;
+		if (*pnSelectCountMode == SelectCountMode::Toggle) {
 			nCurrentMode = (GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte ?
-								eSelectCountMode::ByByte :
-								eSelectCountMode::ByChar);
+								SelectCountMode::ByByte :
+								SelectCountMode::ByChar);
 		}else {
 			nCurrentMode = *pnSelectCountMode;
 		}
-		*pnSelectCountMode = (nCurrentMode == eSelectCountMode::ByByte ?
-								eSelectCountMode::ByChar :
-								eSelectCountMode::ByByte);
-	}else if (nMode == (int)eSelectCountMode::ByByte || nMode == (int)eSelectCountMode::ByChar) {
-		*pnSelectCountMode = (eSelectCountMode)nMode;
+		*pnSelectCountMode = (nCurrentMode == SelectCountMode::ByByte ?
+								SelectCountMode::ByChar :
+								SelectCountMode::ByByte);
+	}else if (nMode == (int)SelectCountMode::ByByte || nMode == (int)SelectCountMode::ByChar) {
+		*pnSelectCountMode = (SelectCountMode)nMode;
 	}
 }
 

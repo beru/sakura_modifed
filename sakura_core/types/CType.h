@@ -33,10 +33,10 @@
 
 
 //! タブ表示方法
-enum ETabArrow {
-	TABARROW_STRING = 0,	//!< 文字指定
-	TABARROW_SHORT,			//!< 短い矢印
-	TABARROW_LONG,			//!< 長い矢印
+enum class TabArrowType {
+	String,		//!< 文字指定
+	Short,		//!< 短い矢印
+	Long,		//!< 長い矢印
 };
 
 //! アウトライン解析の種類
@@ -70,16 +70,16 @@ enum EOutlineType {
 };
 
 //! スマートインデント種別
-enum ESmartIndentType {
-	SMARTINDENT_NONE,		//!< なし
-	SMARTINDENT_CPP			//!< C/C++
+enum class SmartIndentType {
+	None,		//!< なし
+	Cpp			//!< C/C++
 };
 
 //! ヒアドキュメント種別
-enum EHereDocType {
-	HEREDOC_PHP,			//!< PHP
-	HEREDOC_RUBY,			//!< Ruby
-	HEREDOC_PERL			//!< Perl
+enum class HereDocType {
+	PHP,			//!< PHP
+	Ruby,			//!< Ruby
+	Perl			//!< Perl
 };
 
 //! 背景画像表示位置
@@ -128,7 +128,7 @@ struct TypeConfig {
 	int					m_nColumnSpace;					//!< 文字と文字の隙間
 	int					m_nLineSpace;					//!< 行間のすきま
 	LayoutInt			m_nTabSpace;					//!< TABの文字数
-	ETabArrow			m_bTabArrow;					//!< タブ矢印表示		//@@@ 2003.03.26 MIK
+	TabArrowType			m_bTabArrow;					//!< タブ矢印表示		//@@@ 2003.03.26 MIK
 	EDIT_CHAR			m_szTabViewString[8 + 1];		//!< TAB表示文字列	// 2003.1.26 aroka サイズ拡張	// 2009.02.11 ryoji サイズ戻し(17->8+1)
 	bool				m_bInsSpace;					//!< スペースの挿入	// 2001.12.03 hor
 	// 2005.01.13 MIK 配列化
@@ -140,7 +140,7 @@ struct TypeConfig {
 	int					m_nStringType;					//!< 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	bool				m_bStringLineOnly;				//!< 文字列は行内のみ
 	bool				m_bStringEndLine;				//!< (終了文字列がない場合)行末まで色分け
-	int					m_nHeredocType;
+	HereDocType			m_nHeredocType;
 	wchar_t				m_szIndentChars[64];			//!< その他のインデント対象文字
 
 	int					m_nColorInfoArrNum;				//!< 色設定配列の有効数
@@ -173,7 +173,7 @@ struct TypeConfig {
 	int					m_nCurrentPrintSetting;			//!< 現在選択している印刷設定
 
 	bool				m_bOutlineDockDisp;				//!< アウトライン解析表示の有無
-	EDockSide			m_eOutlineDockSide;				//!< アウトライン解析ドッキング配置
+	DockSideType			m_eOutlineDockSide;				//!< アウトライン解析ドッキング配置
 	int					m_cxOutlineDockLeft;			//!< アウトラインの左ドッキング幅
 	int					m_cyOutlineDockTop;				//!< アウトラインの上ドッキング高
 	int					m_cxOutlineDockRight;			//!< アウトラインの右ドッキング幅
@@ -186,7 +186,7 @@ struct TypeConfig {
 	int					m_nOutlineSortType;				//!< アウトライン解析ソート基準
 	FileTree			m_sFileTree;					/*!< ファイルツリー設定 */
 
-	ESmartIndentType	m_eSmartIndent;					//!< スマートインデント種別
+	SmartIndentType	m_eSmartIndent;					//!< スマートインデント種別
 	int					m_nImeState;					//!< 初期IME状態	Nov. 20, 2000 genta
 
 	//	2001/06/14 asa-o 補完のタイプ別設定

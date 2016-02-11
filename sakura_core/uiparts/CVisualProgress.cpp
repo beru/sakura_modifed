@@ -46,7 +46,7 @@ void VisualProgress::OnBeforeSave(const SaveInfo& sSaveInfo)
 	_Begin();
 }
 
-void VisualProgress::OnFinalSave(ESaveResult eSaveResult)
+void VisualProgress::OnFinalSave(SaveResultType eSaveResult)
 {
 	_End();
 }

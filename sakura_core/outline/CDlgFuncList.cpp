@@ -80,18 +80,18 @@ const DWORD p_helpids[] = {	//12200
 };	//@@@ 2002.01.07 add end MIK
 
 static const AnchorListItem anchorList[] = {
-	{IDC_BUTTON_COPY, ANCHOR_BOTTOM},
-	{IDOK, ANCHOR_BOTTOM},
-	{IDCANCEL, ANCHOR_BOTTOM},
-	{IDC_BUTTON_HELP, ANCHOR_BOTTOM},
-	{IDC_CHECK_bAutoCloseDlgFuncList, ANCHOR_BOTTOM},
-	{IDC_LIST_FL, ANCHOR_ALL},
-	{IDC_TREE_FL, ANCHOR_ALL},
-	{IDC_CHECK_bFunclistSetFocusOnJump, ANCHOR_BOTTOM},
-	{IDC_CHECK_bMarkUpBlankLineEnable , ANCHOR_BOTTOM},
-	{IDC_COMBO_nSortType, ANCHOR_TOP},
-	{IDC_BUTTON_WINSIZE, ANCHOR_BOTTOM}, // 20060201 aroka
-	{IDC_BUTTON_MENU, ANCHOR_BOTTOM},
+	{IDC_BUTTON_COPY,		AnchorStyle::Bottom},
+	{IDOK,					AnchorStyle::Bottom},
+	{IDCANCEL,				AnchorStyle::Bottom},
+	{IDC_BUTTON_HELP,		AnchorStyle::Bottom},
+	{IDC_CHECK_bAutoCloseDlgFuncList, AnchorStyle::Bottom},
+	{IDC_LIST_FL,			AnchorStyle::All},
+	{IDC_TREE_FL,			AnchorStyle::All},
+	{IDC_CHECK_bFunclistSetFocusOnJump, AnchorStyle::Bottom},
+	{IDC_CHECK_bMarkUpBlankLineEnable , AnchorStyle::Bottom},
+	{IDC_COMBO_nSortType,	AnchorStyle::Top},
+	{IDC_BUTTON_WINSIZE,	AnchorStyle::Bottom}, // 20060201 aroka
+	{IDC_BUTTON_MENU,		AnchorStyle::Bottom},
 };
 
 // 関数リストの列
@@ -1634,8 +1634,8 @@ void DlgFuncList::SetTreeFile()
 	HWND hwndTree = GetItemHwnd(IDC_TREE_FL);
 
 	m_cmemClipText.SetString(L"");
-	SFilePath IniDirPath;
-	LoadFileTreeSetting( m_fileTreeSetting, IniDirPath );
+	SFilePath iniDirPath;
+	LoadFileTreeSetting( m_fileTreeSetting, iniDirPath );
 	m_pcFuncInfoArr->Empty();
 	int nFuncInfo = 0;
 	std::vector<HTREEITEM> hParentTree;
@@ -1652,7 +1652,7 @@ void DlgFuncList::SetTreeFile()
 		const TCHAR* pszFrom = szPath;
 		if (m_fileTreeSetting.m_szLoadProjectIni[0] != _T('\0')) {
 			CNativeT strTemp(pszFrom);
-			strTemp.Replace(_T("<iniroot>"), IniDirPath);
+			strTemp.Replace(_T("<iniroot>"), iniDirPath);
 			if (_countof(szPath2) <= strTemp.GetStringLength()) {
 				auto_strcpy_s(szPath2, _countof(szPath), _T("<Error:Long Path>"));
 			}else {
@@ -1683,20 +1683,20 @@ void DlgFuncList::SetTreeFile()
 		TVINSERTSTRUCT tvis;
 		tvis.hParent = hParentTree.back();
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
-		if (item.m_eFileTreeItemType == EFileTreeItemType_Grep) {
+		if (item.m_eFileTreeItemType == FileTreeItemType::Grep) {
 			m_pcFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = -(nFuncInfo * 10 + 3);
 			HTREEITEM hParent = TreeView_InsertItem(hwndTree, &tvis);
 			++nFuncInfo;
 			SetTreeFileSub( hParent, NULL );
-		}else if (item.m_eFileTreeItemType == EFileTreeItemType_File) {
+		}else if (item.m_eFileTreeItemType == FileTreeItemType::File) {
 			m_pcFuncInfoArr->AppendData( LogicInt(-1), LogicInt(-1), LayoutInt(-1), LayoutInt(-1), _T(""), szPath, 0, 0 );
 			tvis.item.pszText = const_cast<TCHAR*>(pszLabel);
 			tvis.item.lParam  = nFuncInfo;
 			TreeView_InsertItem(hwndTree, &tvis);
 			++nFuncInfo;
-		}else if (item.m_eFileTreeItemType == EFileTreeItemType_Folder) {
+		}else if (item.m_eFileTreeItemType == FileTreeItemType::Folder) {
 			pszLabel = item.m_szLabelName;
 			if (pszLabel[0] == _T('\0')) {
 				pszLabel = _T("Folder");
@@ -1871,14 +1871,14 @@ BOOL DlgFuncList::OnInitDialog(
 			m_yPos = 0;
 			m_nShowCmd = SW_HIDE;
 			::GetWindowRect(::GetParent(pcEditView->GetHwnd()), &rc);	// ここではまだ GetDockSpaceRect() は使えない
-			EDockSide eDockSide = GetDockSide();
-			switch (eDockSide) {
-			case DOCKSIDE_LEFT:		m_nWidth = ProfDockLeft();		break;
-			case DOCKSIDE_TOP:		m_nHeight = ProfDockTop();		break;
-			case DOCKSIDE_RIGHT:	m_nWidth = ProfDockRight();		break;
-			case DOCKSIDE_BOTTOM:	m_nHeight = ProfDockBottom();	break;
+			DockSideType dockSideType = GetDockSide();
+			switch (dockSideType) {
+			case DockSideType::Left:	m_nWidth = ProfDockLeft();		break;
+			case DockSideType::Top:		m_nHeight = ProfDockTop();		break;
+			case DockSideType::Right:	m_nWidth = ProfDockRight();		break;
+			case DockSideType::Bottom:	m_nHeight = ProfDockBottom();	break;
 			}
-			if (eDockSide == DOCKSIDE_LEFT || eDockSide == DOCKSIDE_RIGHT) {
+			if (dockSideType == DockSideType::Left || dockSideType == DockSideType::Right) {
 				if (m_nWidth == 0) { // 初回
 					m_nWidth = (rc.right - rc.left) / 3;
 				}
@@ -1995,7 +1995,7 @@ BOOL DlgFuncList::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 		// ドッキング中はウィンドウ幅いっぱいまで伸ばす
 		if (IsDocking()) {
-			if (anchorList[i].anchor == ANCHOR_ALL) {
+			if (anchorList[i].anchor == AnchorStyle::All) {
 				::GetClientRect(hwndDlg, &rc);
 				m_rcItems[i].right = rc.right;
 				m_rcItems[i].bottom = rc.bottom;
@@ -2076,7 +2076,7 @@ BOOL DlgFuncList::OnBnClicked(int wID)
 			if (nRet == TRUE) {
 				EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 				EditView* pcEditView = (EditView*)m_lParam;
-				pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0);
+				pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Reload, 0, 0, 0);
 			}
 		}
 	}
@@ -2332,9 +2332,9 @@ BOOL DlgFuncList::OnSize(WPARAM wParam, LPARAM lParam)
 
 	for (int i=0; i<_countof(anchorList); ++i) {
 		HWND hwndCtrl = GetItemHwnd(anchorList[i].id);
-		ResizeItem(hwndCtrl, m_ptDefaultSizeClient, ptNew, m_rcItems[i], anchorList[i].anchor, (anchorList[i].anchor != ANCHOR_ALL));
+		ResizeItem(hwndCtrl, m_ptDefaultSizeClient, ptNew, m_rcItems[i], anchorList[i].anchor, (anchorList[i].anchor != AnchorStyle::All));
 //	2013.2.6 aroka ちらつき防止用の試行錯誤
-		if (anchorList[i].anchor == ANCHOR_ALL) {
+		if (anchorList[i].anchor == AnchorStyle::All) {
 			::UpdateWindow(hwndCtrl);
 		}
 	}
@@ -2597,7 +2597,7 @@ void DlgFuncList::Key2Command(WORD KeyCode)
 	case F_BOOKMARK_VIEW:
 	case F_FILETREE:
 		pcEditView=(EditView*)m_lParam;
-		pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0); // 引数の変更 20060201 aroka
+		pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Reload, 0, 0, 0); // 引数の変更 20060201 aroka
 
 		break;
 	case F_BOOKMARK_SET:
@@ -2729,10 +2729,10 @@ void DlgFuncList::GetCaptionRect(LPRECT pRect)
 {
 	RECT rc;
 	GetWindowRect(&rc);
-	EDockSide eDockSide = GetDockSide();
-	pRect->left = rc.left + ((eDockSide == DOCKSIDE_RIGHT)? DOCK_SPLITTER_WIDTH: 0);
-	pRect->top = rc.top + ((eDockSide == DOCKSIDE_BOTTOM)? DOCK_SPLITTER_WIDTH: 0);
-	pRect->right = rc.right - ((eDockSide == DOCKSIDE_LEFT)? DOCK_SPLITTER_WIDTH: 0);
+	DockSideType dockSideType = GetDockSide();
+	pRect->left = rc.left + ((dockSideType == DockSideType::Right)? DOCK_SPLITTER_WIDTH: 0);
+	pRect->top = rc.top + ((dockSideType == DockSideType::Bottom)? DOCK_SPLITTER_WIDTH: 0);
+	pRect->right = rc.right - ((dockSideType == DockSideType::Left)? DOCK_SPLITTER_WIDTH: 0);
 	pRect->bottom = pRect->top + (::GetSystemMetrics(SM_CYSMCAPTION) + 1);
 }
 
@@ -2768,12 +2768,12 @@ bool DlgFuncList::HitTestSplitter(int xPos, int yPos)
 	RECT rc;
 	GetWindowRect(&rc);
 
-	EDockSide eDockSide = GetDockSide();
-	switch (eDockSide) {
-	case DOCKSIDE_LEFT:		bRet = (rc.right - xPos < DOCK_SPLITTER_WIDTH);		break;
-	case DOCKSIDE_TOP:		bRet = (rc.bottom - yPos < DOCK_SPLITTER_WIDTH);	break;
-	case DOCKSIDE_RIGHT:	bRet = (xPos - rc.left< DOCK_SPLITTER_WIDTH);		break;
-	case DOCKSIDE_BOTTOM:	bRet = (yPos - rc.top < DOCK_SPLITTER_WIDTH);		break;
+	DockSideType dockSideType = GetDockSide();
+	switch (dockSideType) {
+	case DockSideType::Left:	bRet = (rc.right - xPos < DOCK_SPLITTER_WIDTH);		break;
+	case DockSideType::Top:		bRet = (rc.bottom - yPos < DOCK_SPLITTER_WIDTH);	break;
+	case DockSideType::Right:	bRet = (xPos - rc.left< DOCK_SPLITTER_WIDTH);		break;
+	case DockSideType::Bottom:	bRet = (yPos - rc.top < DOCK_SPLITTER_WIDTH);		break;
 	}
 
 	return bRet;
@@ -2823,10 +2823,10 @@ INT_PTR DlgFuncList::OnNcCalcSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	NCCALCSIZE_PARAMS* pNCS = (NCCALCSIZE_PARAMS*)lParam;
 	pNCS->rgrc[0].top += (::GetSystemMetrics(SM_CYSMCAPTION) + 1);
 	switch (GetDockSide()) {
-	case DOCKSIDE_LEFT:		pNCS->rgrc[0].right -= DOCK_SPLITTER_WIDTH;		break;
-	case DOCKSIDE_TOP:		pNCS->rgrc[0].bottom -= DOCK_SPLITTER_WIDTH;	break;
-	case DOCKSIDE_RIGHT:	pNCS->rgrc[0].left += DOCK_SPLITTER_WIDTH;		break;
-	case DOCKSIDE_BOTTOM:	pNCS->rgrc[0].top += DOCK_SPLITTER_WIDTH;		break;
+	case DockSideType::Left:	pNCS->rgrc[0].right -= DOCK_SPLITTER_WIDTH;		break;
+	case DockSideType::Top:		pNCS->rgrc[0].bottom -= DOCK_SPLITTER_WIDTH;	break;
+	case DockSideType::Right:	pNCS->rgrc[0].left += DOCK_SPLITTER_WIDTH;		break;
+	case DockSideType::Bottom:	pNCS->rgrc[0].top += DOCK_SPLITTER_WIDTH;		break;
 	}
 	return 1L;
 }
@@ -2851,10 +2851,10 @@ INT_PTR DlgFuncList::OnNcHitTest(
 	pt.y = MAKEPOINTS(lParam).y;
 	if (HitTestSplitter(pt.x, pt.y)) {
 		switch (GetDockSide()) {
-		case DOCKSIDE_LEFT:		nRet = HTRIGHT;		break;
-		case DOCKSIDE_TOP:		nRet = HTBOTTOM;	break;
-		case DOCKSIDE_RIGHT:	nRet = HTLEFT;		break;
-		case DOCKSIDE_BOTTOM:	nRet = HTTOP;		break;
+		case DockSideType::Left:	nRet = HTRIGHT;		break;
+		case DockSideType::Top:		nRet = HTBOTTOM;	break;
+		case DockSideType::Right:	nRet = HTLEFT;		break;
+		case DockSideType::Bottom:	nRet = HTTOP;		break;
 		}
 	}else {
 		RECT rc;
@@ -2998,8 +2998,8 @@ INT_PTR DlgFuncList::OnMouseMove(
 		GetDockSpaceRect(&rc);
 
 		// 画面サイズが小さすぎるときは何もしない
-		EDockSide eDockSide = GetDockSide();
-		if (eDockSide == DOCKSIDE_LEFT || eDockSide == DOCKSIDE_RIGHT) {
+		DockSideType dockSideType = GetDockSide();
+		if (dockSideType == DockSideType::Left || dockSideType == DockSideType::Right) {
 			if (rc.right - rc.left < DOCK_MIN_SIZE) {
 				return 0L;
 			}
@@ -3022,11 +3022,11 @@ INT_PTR DlgFuncList::OnMouseMove(
 		::ScreenToClient(m_hwndParent, &ptLT);
 		::OffsetRect(&rc, ptLT.x - rc.left, ptLT.y - rc.top);
 		::ScreenToClient(m_hwndParent, &pt);
-		switch (eDockSide) {
-		case DOCKSIDE_LEFT:		rc.right = pt.x - DOCK_SPLITTER_WIDTH / 2 + DOCK_SPLITTER_WIDTH;	break;
-		case DOCKSIDE_TOP:		rc.bottom = pt.y - DOCK_SPLITTER_WIDTH / 2 + DOCK_SPLITTER_WIDTH;	break;
-		case DOCKSIDE_RIGHT:	rc.left = pt.x - DOCK_SPLITTER_WIDTH / 2;	break;
-		case DOCKSIDE_BOTTOM:	rc.top = pt.y - DOCK_SPLITTER_WIDTH / 2;	break;
+		switch (dockSideType) {
+		case DockSideType::Left:	rc.right = pt.x - DOCK_SPLITTER_WIDTH / 2 + DOCK_SPLITTER_WIDTH;	break;
+		case DockSideType::Top:		rc.bottom = pt.y - DOCK_SPLITTER_WIDTH / 2 + DOCK_SPLITTER_WIDTH;	break;
+		case DockSideType::Right:	rc.left = pt.x - DOCK_SPLITTER_WIDTH / 2;	break;
+		case DockSideType::Bottom:	rc.top = pt.y - DOCK_SPLITTER_WIDTH / 2;	break;
 		}
 
 		// 以前と同じ配置なら無駄に移動しない
@@ -3053,10 +3053,10 @@ INT_PTR DlgFuncList::OnMouseMove(
 			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		switch (GetDockSide()) {
-		case DOCKSIDE_LEFT:		ProfDockLeft() = rc.right - rc.left;	break;
-		case DOCKSIDE_TOP:		ProfDockTop() = rc.bottom - rc.top;		break;
-		case DOCKSIDE_RIGHT:	ProfDockRight() = rc.right - rc.left;	break;
-		case DOCKSIDE_BOTTOM:	ProfDockBottom() = rc.bottom - rc.top;	break;
+		case DockSideType::Left:	ProfDockLeft() = rc.right - rc.left;	break;
+		case DockSideType::Top:		ProfDockTop() = rc.bottom - rc.top;		break;
+		case DockSideType::Right:	ProfDockRight() = rc.right - rc.left;	break;
+		case DockSideType::Bottom:	ProfDockBottom() = rc.bottom - rc.top;	break;
 		}
 		if (bType) {
 			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
@@ -3082,7 +3082,7 @@ INT_PTR DlgFuncList::OnNcLButtonDown(
 	pt.y = MAKEPOINTS(lParam).y;
 
 	if (!IsDocking()) {
-		if (GetDockSide() == DOCKSIDE_FLOAT) {
+		if (GetDockSide() == DockSideType::Float) {
 			if (wParam == HTCAPTION  && !::IsZoomed(GetHwnd()) && !::IsIconic(GetHwnd())) {
 				::SetActiveWindow(GetHwnd());
 				// 上の SetActiveWindow() で WM_ACTIVATEAPP へ行くケースでは、WM_ACTIVATEAPP に入れた特殊処理（エディタ本体を一時的にアクティブ化して戻す）
@@ -3162,7 +3162,7 @@ INT_PTR DlgFuncList::OnLButtonUp(
 			}else if (m_nCapturingBtn == 2) {	// 更新
 				EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 				EditView* pcEditView = (EditView*)m_lParam;
-				pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0);
+				pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Reload, 0, 0, 0);
 			}
 		}
 		m_nCapturingBtn = -1;
@@ -3186,7 +3186,7 @@ INT_PTR DlgFuncList::OnNcPaint(
 		return 0L;
 	}
 
-	EDockSide eDockSide = GetDockSide();
+	DockSideType dockSideType = GetDockSide();
 
 	HDC hdc;
 	RECT rc, rcScr, rcWk;
@@ -3203,11 +3203,11 @@ INT_PTR DlgFuncList::OnNcPaint(
 
 	// 分割線を描画する
 	rcWk = rc;
-	switch (eDockSide) {
-	case DOCKSIDE_LEFT:		rcWk.left = rcWk.right - DOCK_SPLITTER_WIDTH; break;
-	case DOCKSIDE_TOP:		rcWk.top = rcWk.bottom - DOCK_SPLITTER_WIDTH; break;
-	case DOCKSIDE_RIGHT:	rcWk.right = rcWk.left + DOCK_SPLITTER_WIDTH; break;
-	case DOCKSIDE_BOTTOM:	rcWk.bottom = rcWk.top + DOCK_SPLITTER_WIDTH; break;
+	switch (dockSideType) {
+	case DockSideType::Left:	rcWk.left = rcWk.right - DOCK_SPLITTER_WIDTH; break;
+	case DockSideType::Top:		rcWk.top = rcWk.bottom - DOCK_SPLITTER_WIDTH; break;
+	case DockSideType::Right:	rcWk.right = rcWk.left + DOCK_SPLITTER_WIDTH; break;
+	case DockSideType::Bottom:	rcWk.bottom = rcWk.top + DOCK_SPLITTER_WIDTH; break;
 	}
 	::FillRect(gr, &rcWk, (HBRUSH)(COLOR_3DFACE + 1));
 	::DrawEdge(gr, &rcWk, EDGE_ETCHED, BF_TOPLEFT);
@@ -3292,7 +3292,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	// メニューを作成する
 	EditView* pcEditView = &EditDoc::GetInstance(0)->m_pcEditWnd->GetActiveView();
 	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
-	EDockSide eDockSide = ProfDockSide();	// 設定上の配置
+	DockSideType dockSideType = ProfDockSide();	// 設定上の配置
 	UINT uFlags = MF_BYPOSITION | MF_STRING;
 	HMENU hMenu = ::CreatePopupMenu();
 	HMENU hMenuSub = ::CreatePopupMenu();
@@ -3315,15 +3315,15 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	}
 
 	int iFrom = iPosRef;
-	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_LEFT,       LS(STR_DLGFNCLST_MENU_LEFTDOC));
-	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_RIGHT,      LS(STR_DLGFNCLST_MENU_RIGHTDOC));
-	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_TOP,        LS(STR_DLGFNCLST_MENU_TOPDOC));
-	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_BOTTOM,     LS(STR_DLGFNCLST_MENU_BOTDOC));
-	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_FLOAT,      LS(STR_DLGFNCLST_MENU_FLOATING));
-	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + DOCKSIDE_UNDOCKABLE, LS(STR_DLGFNCLST_MENU_NODOCK));
+	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + (int)DockSideType::Left,       LS(STR_DLGFNCLST_MENU_LEFTDOC));
+	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + (int)DockSideType::Right,      LS(STR_DLGFNCLST_MENU_RIGHTDOC));
+	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + (int)DockSideType::Top,        LS(STR_DLGFNCLST_MENU_TOPDOC));
+	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + (int)DockSideType::Bottom,     LS(STR_DLGFNCLST_MENU_BOTDOC));
+	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + (int)DockSideType::Float,      LS(STR_DLGFNCLST_MENU_FLOATING));
+	::InsertMenu(hMenuRef, iPosRef++, uFlags, 100 + (int)DockSideType::Undockable, LS(STR_DLGFNCLST_MENU_NODOCK));
 	int iTo = iPosRef - 1;
 	for (int i=iFrom; i<=iTo; ++i) {
-		if (::GetMenuItemID(hMenuRef, i) == (100 + eDockSide)) {
+		if (::GetMenuItemID(hMenuRef, i) == (100 + (int)dockSideType)) {
 			::CheckMenuRadioItem(hMenuRef, iFrom, iTo, i, MF_BYPOSITION);
 			break;
 		}
@@ -3357,7 +3357,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 	if (nId == 450) {	// 更新
 		EFunctionCode nFuncCode = GetFuncCodeRedraw(m_nOutlineType);
 		EditView* pcEditView = (EditView*)m_lParam;
-		pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Reload, 0, 0, 0);
+		pcEditView->GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Reload, 0, 0, 0);
 	}else if (nId == 451) {	// コピー
 		// Windowsクリップボードにコピー 
 		SetClipboardText(GetHwnd(), m_cmemClipText.GetStringPtr(), m_cmemClipText.GetStringLength());
@@ -3382,10 +3382,10 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 				RECT rc;
 				GetWindowRect(&rc);
 				switch (GetDockSide()) {	// 現在のドッキングモード
-				case DOCKSIDE_LEFT:		CommonSet().m_cxOutlineDockLeft = rc.right - rc.left;	break;
-				case DOCKSIDE_TOP:		CommonSet().m_cyOutlineDockTop = rc.bottom - rc.top;	break;
-				case DOCKSIDE_RIGHT:	CommonSet().m_cxOutlineDockRight = rc.right - rc.left;	break;
-				case DOCKSIDE_BOTTOM:	CommonSet().m_cyOutlineDockBottom = rc.bottom - rc.top;	break;
+				case DockSideType::Left:	CommonSet().m_cxOutlineDockLeft = rc.right - rc.left;	break;
+				case DockSideType::Top:		CommonSet().m_cyOutlineDockTop = rc.bottom - rc.top;	break;
+				case DockSideType::Right:	CommonSet().m_cxOutlineDockRight = rc.right - rc.left;	break;
+				case DockSideType::Bottom:	CommonSet().m_cyOutlineDockBottom = rc.bottom - rc.top;	break;
 				}
 			}
 			auto type = std::make_unique<TypeConfig>();
@@ -3408,24 +3408,24 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		if (ProfDockSync()) {
 			PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)hwndEdit);	// 他ウィンドウにドッキング配置変更を通知する
 		}
-	}else if (nId >= 100 - 1) {	// ドッキングモード （※ DOCKSIDE_UNDOCKABLE は -1 です） */
+	}else if (nId >= 100 - 1) {	// ドッキングモード （※ DockSideType::Undockable は -1 です） */
 		int* pnWidth = NULL;
 		int* pnHeight = NULL;
 		RECT rc;
 		GetDockSpaceRect(&rc);
-		eDockSide = EDockSide(nId - 100);	// 新しいドッキングモード
+		dockSideType = DockSideType(nId - 100);	// 新しいドッキングモード
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
 			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
-		if (eDockSide > DOCKSIDE_FLOAT) {
-			switch (eDockSide) {
-			case DOCKSIDE_LEFT:		pnWidth = &ProfDockLeft();		break;
-			case DOCKSIDE_TOP:		pnHeight = &ProfDockTop();		break;
-			case DOCKSIDE_RIGHT:	pnWidth = &ProfDockRight();		break;
-			case DOCKSIDE_BOTTOM:	pnHeight = &ProfDockBottom();	break;
+		if (dockSideType > DockSideType::Float) {
+			switch (dockSideType) {
+			case DockSideType::Left:	pnWidth = &ProfDockLeft();		break;
+			case DockSideType::Top:		pnHeight = &ProfDockTop();		break;
+			case DockSideType::Right:	pnWidth = &ProfDockRight();		break;
+			case DockSideType::Bottom:	pnHeight = &ProfDockBottom();	break;
 			}
-			if (eDockSide == DOCKSIDE_LEFT || eDockSide == DOCKSIDE_RIGHT) {
+			if (dockSideType == DockSideType::Left || dockSideType == DockSideType::Right) {
 				if (*pnWidth == 0) {	// 初回
 					*pnWidth = (rc.right - rc.left) / 3;
 				}
@@ -3450,7 +3450,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 
 		// ドッキング配置変更
 		ProfDockDisp() = GetHwnd()? TRUE: FALSE;
-		ProfDockSide() = eDockSide;	// 新しいドッキングモードを適用
+		ProfDockSide() = dockSideType;	// 新しいドッキングモードを適用
 		if (bType) {
 			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
@@ -3470,7 +3470,7 @@ void DlgFuncList::Refresh(void)
 	BOOL bReloaded = ChangeLayout(OUTLINE_LAYOUT_FILECHANGED);	// 現在設定に従ってアウトライン画面を再配置する
 	if (!bReloaded && pcEditWnd->m_cDlgFuncList.GetHwnd()) {
 		int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-		pcEditWnd->GetActiveView().GetCommander().Command_FUNCLIST((int)eShowDialog::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+		pcEditWnd->GetActiveView().GetCommander().Command_FUNCLIST((int)ShowDialogType::Reload, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 	}
 	if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == pcEditWnd->GetHwnd()) {
 		::SetFocus(pcEditWnd->GetActiveView().GetHwnd());	// フォーカスを戻す
@@ -3497,11 +3497,11 @@ bool DlgFuncList::ChangeLayout(int nId)
 	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 
 	BOOL bDockDisp = ProfDockDisp();
-	EDockSide eDockSideNew = ProfDockSide();
+	DockSideType eDockSideNew = ProfDockSide();
 
 	if (!GetHwnd()) {	// 現在は非表示
 		if (bDockDisp) {	// 新設定は表示
-			if (eDockSideNew <= DOCKSIDE_FLOAT) {
+			if (eDockSideNew <= DockSideType::Float) {
 				if (nId == OUTLINE_LAYOUT_BACKGROUND) return false;	// 裏ではフローティングは開かない（従来互換）※無理に開くとタブモード時は画面が切り替わってしまう
 				if (nId == OUTLINE_LAYOUT_FILECHANGED) return false;	// ファイル切替ではフローティングは開かない（従来互換）
 			}
@@ -3520,29 +3520,29 @@ bool DlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);	// ブックマークかアウトライン解析かは最後に開いていた時の状態を引き継ぐ（初期状態はアウトライン解析）
-			pcEditView->GetCommander().Command_FUNCLIST((int)eShowDialog::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pcEditView->GetCommander().Command_FUNCLIST((int)ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pcEditView->m_pcEditWnd->GetHwnd(), TRUE);
 			}
 			return true;	// 解析した
 		}
 	}else {	// 現在は表示
-		EDockSide eDockSideOld = GetDockSide();
+		DockSideType eDockSideOld = GetDockSide();
 
 		EditView* pcEditView = (EditView*)m_lParam;
 		if (!bDockDisp) {	// 新設定は非表示
-			if (eDockSideOld <= DOCKSIDE_FLOAT) {	// 現在はフローティング
+			if (eDockSideOld <= DockSideType::Float) {	// 現在はフローティング
 				if (nId == OUTLINE_LAYOUT_BACKGROUND) return false;	// 裏ではフローティングは閉じない（従来互換）
-				if (nId == OUTLINE_LAYOUT_FILECHANGED && eDockSideNew <= DOCKSIDE_FLOAT) return false;	// ファイル切替では新設定もフローティングなら再利用（従来互換）
+				if (nId == OUTLINE_LAYOUT_FILECHANGED && eDockSideNew <= DockSideType::Float) return false;	// ファイル切替では新設定もフローティングなら再利用（従来互換）
 			}
 			::DestroyWindow(GetHwnd());	// 閉じる
 			return false;
 		}
 
 		// ドッキング⇔フローティング切替では閉じて開く
-		if ((eDockSideOld <= DOCKSIDE_FLOAT) != (eDockSideNew <= DOCKSIDE_FLOAT)) {
+		if ((eDockSideOld <= DockSideType::Float) != (eDockSideNew <= DockSideType::Float)) {
 			::DestroyWindow(GetHwnd());	// 閉じる
-			if (eDockSideNew <= DOCKSIDE_FLOAT) {	// 新設定はフローティング
+			if (eDockSideNew <= DockSideType::Float) {	// 新設定はフローティング
 				m_xPos = m_yPos = -1;	// 画面位置を初期化する
 				if (nId == OUTLINE_LAYOUT_BACKGROUND) return false;	// 裏ではフローティングは開かない（従来互換）※無理に開くとタブモード時は画面が切り替わってしまう
 				if (nId == OUTLINE_LAYOUT_FILECHANGED) return false;	// ファイル切替ではフローティングは開かない（従来互換）
@@ -3561,7 +3561,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				}
 			}
 			int nOutlineType = GetOutlineTypeRedraw(m_nOutlineType);
-			pcEditView->GetCommander().Command_FUNCLIST((int)eShowDialog::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
+			pcEditView->GetCommander().Command_FUNCLIST((int)ShowDialogType::Normal, nOutlineType);	// 開く	※ HandleCommand(F_OUTLINE,...) だと印刷プレビュー状態で実行されないので Command_FUNCLIST()
 			if (nId == OUTLINE_LAYOUT_BACKGROUND) {
 				::EnableWindow(pcEditView->m_pcEditWnd->GetHwnd(), TRUE);
 			}
@@ -3569,7 +3569,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 		}
 
 		// フローティング→フローティングでは配置同期せずに現状維持
-		if (eDockSideOld <= DOCKSIDE_FLOAT) {
+		if (eDockSideOld <= DockSideType::Float) {
 			m_eDockSide = eDockSideNew;
 			return false;
 		}
@@ -3584,10 +3584,10 @@ bool DlgFuncList::ChangeLayout(int nId)
 		::OffsetRect(&rc, ptLT.x - rc.left, ptLT.y - rc.top);
 
 		switch (eDockSideNew) {
-		case DOCKSIDE_LEFT:		rc.right = rc.left + ProfDockLeft();	break;
-		case DOCKSIDE_TOP:		rc.bottom = rc.top + ProfDockTop();		break;
-		case DOCKSIDE_RIGHT:	rc.left = rc.right - ProfDockRight();	break;
-		case DOCKSIDE_BOTTOM:	rc.top = rc.bottom - ProfDockBottom();	break;
+		case DockSideType::Left:	rc.right = rc.left + ProfDockLeft();	break;
+		case DockSideType::Top:		rc.bottom = rc.top + ProfDockTop();		break;
+		case DockSideType::Right:	rc.left = rc.right - ProfDockRight();	break;
+		case DockSideType::Bottom:	rc.top = rc.bottom - ProfDockBottom();	break;
 		}
 
 		// 以前と同じ配置なら無駄に移動しない
@@ -3679,7 +3679,7 @@ BOOL DlgFuncList::OnContextMenu(WPARAM wParam, LPARAM lParam)
 /** タイトルバーのドラッグ＆ドロップでドッキング配置する際の移動先矩形を求める
 	@date 2010.06.17 ryoji 新規作成
 */
-EDockSide DlgFuncList::GetDropRect(
+DockSideType DlgFuncList::GetDropRect(
 	POINT ptDrag,
 	POINT ptDrop,
 	LPRECT pRect,
@@ -3713,7 +3713,7 @@ EDockSide DlgFuncList::GetDropRect(
 	}
 
 	// ドッキング用の矩形を取得する
-	EDockSide eDockSide = DOCKSIDE_FLOAT;	// フローティングに仮決め
+	DockSideType dockSideType = DockSideType::Float;	// フローティングに仮決め
 	RECT rcDock;
 	GetDockSpaceRect(&rcDock);
 	if (!bForceFloat && ::PtInRect(&rcDock, ptDrop)) {
@@ -3724,21 +3724,21 @@ EDockSide DlgFuncList::GetDropRect(
 
 		int nDock = ::GetSystemMetrics(SM_CXCURSOR);
 		if (ptDrop.x - rcDock.left < nDock) {
-			eDockSide = DOCKSIDE_LEFT;
+			dockSideType = DockSideType::Left;
 			rcDock.right = rcDock.left + cxLeft;
 		}else if (rcDock.right - ptDrop.x < nDock) {
-			eDockSide = DOCKSIDE_RIGHT;
+			dockSideType = DockSideType::Right;
 			rcDock.left = rcDock.right - cxRight;
 		}else if (ptDrop.y - rcDock.top < nDock) {
-			eDockSide = DOCKSIDE_TOP;
+			dockSideType = DockSideType::Top;
 			rcDock.bottom = rcDock.top + cyTop;
 		}else if (rcDock.bottom - ptDrop.y < nDock) {
-			eDockSide = DOCKSIDE_BOTTOM;
+			dockSideType = DockSideType::Bottom;
 			rcDock.top = rcDock.bottom - cyBottom;
 		}
-		if (eDockSide != DOCKSIDE_FLOAT) {
+		if (dockSideType != DockSideType::Float) {
 			*pRect = rcDock;
-			return eDockSide;	// ドッキング位置だった
+			return dockSideType;	// ドッキング位置だった
 		}
 	}
 
@@ -3766,11 +3766,11 @@ EDockSide DlgFuncList::GetDropRect(
 			HINSTANCE hInstance2 = SelectLang::getLangRsrcInstance();
 			if (m_lastRcInstance != hInstance2) {
 				HRSRC hResInfo = ::FindResource(hInstance2, MAKEINTRESOURCE(IDD_FUNCLIST), RT_DIALOG);
-				if (!hResInfo) return eDockSide;
+				if (!hResInfo) return dockSideType;
 				HGLOBAL hResData = ::LoadResource(hInstance2, hResInfo);
-				if (!hResData) return eDockSide;
+				if (!hResData) return dockSideType;
 				m_pDlgTemplate = (LPDLGTEMPLATE)::LockResource(hResData);
-				if (!m_pDlgTemplate) return eDockSide;
+				if (!m_pDlgTemplate) return dockSideType;
 				m_dwDlgTmpSize = ::SizeofResource(hInstance2, hResInfo);
 				// 言語切り替えでリソースがアンロードされていないか確認するためインスタンスを記憶する
 				m_lastRcInstance = hInstance2;
@@ -3787,7 +3787,7 @@ EDockSide DlgFuncList::GetDropRect(
 		*pRect = rcFloat;
 	}
 
-	return DOCKSIDE_FLOAT;	// フローティング位置だった
+	return DockSideType::Float;	// フローティング位置だった
 }
 
 /** タイトルバーのドラッグ＆ドロップでドッキング配置を変更する
@@ -3840,8 +3840,8 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 			}
 			if (bDragging) {	// ドラッグ中
 				// ドロップ先矩形を描画する
-				EDockSide eDockSide = GetDropRect(ptDrag, pt, &rc, GetKeyState_Control());
-				SIZE sizeNew = (eDockSide <= DOCKSIDE_FLOAT)? sizeFull: sizeHalf;
+				DockSideType dockSideType = GetDropRect(ptDrag, pt, &rc, GetKeyState_Control());
+				SIZE sizeNew = (dockSideType <= DockSideType::Float)? sizeFull: sizeHalf;
 				Graphics::DrawDropRect(&rc, sizeNew, bStart? NULL : &rcDragLast, sizeLast);
 				rcDragLast = rc;
 				sizeLast = sizeNew;
@@ -3854,7 +3854,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 			::ReleaseCapture();
 			if (bDragging) {
 				// ドッキング配置を変更する
-				EDockSide eDockSide = GetDropRect(ptDrag, pt, &rc, GetKeyState_Control());
+				DockSideType dockSideType = GetDropRect(ptDrag, pt, &rc, GetKeyState_Control());
 				Graphics::DrawDropRect(NULL, sizeClear, &rcDragLast, sizeLast);
 
 				bool bType = (ProfDockSet() != 0);
@@ -3862,12 +3862,12 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 					DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}
 				ProfDockDisp() = GetHwnd()? TRUE: FALSE;
-				ProfDockSide() = eDockSide;	// 新しいドッキングモードを適用
-				switch (eDockSide) {
-				case DOCKSIDE_LEFT:		ProfDockLeft() = rc.right - rc.left;	break;
-				case DOCKSIDE_TOP:		ProfDockTop() = rc.bottom - rc.top;		break;
-				case DOCKSIDE_RIGHT:	ProfDockRight() = rc.right - rc.left;	break;
-				case DOCKSIDE_BOTTOM:	ProfDockBottom() = rc.bottom - rc.top;	break;
+				ProfDockSide() = dockSideType;	// 新しいドッキングモードを適用
+				switch (dockSideType) {
+				case DockSideType::Left:	ProfDockLeft() = rc.right - rc.left;	break;
+				case DockSideType::Top:		ProfDockTop() = rc.bottom - rc.top;		break;
+				case DockSideType::Right:	ProfDockRight() = rc.right - rc.left;	break;
+				case DockSideType::Bottom:	ProfDockBottom() = rc.bottom - rc.top;	break;
 				}
 				if (bType) {
 					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
@@ -3888,8 +3888,8 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 				if (msg.wParam == VK_CONTROL) {
 					// フローティングを強制するモードを抜ける
 					::GetCursorPos(&pt);
-					EDockSide eDockSide = GetDropRect(ptDrag, pt, &rc, false);
-					SIZE sizeNew = (eDockSide <= DOCKSIDE_FLOAT)? sizeFull: sizeHalf;
+					DockSideType dockSideType = GetDropRect(ptDrag, pt, &rc, false);
+					SIZE sizeNew = (dockSideType <= DockSideType::Float)? sizeFull: sizeHalf;
 					Graphics::DrawDropRect(&rc, sizeNew, &rcDragLast, sizeLast);
 					rcDragLast = rc;
 					sizeLast = sizeNew;
@@ -3938,17 +3938,17 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 
 void DlgFuncList::LoadFileTreeSetting(
 	FileTreeSetting& data,
-	SFilePath& IniDirPath
+	SFilePath& iniDirPath
 	)
 {
 	const FileTree* pFileTree;
 	if (ProfDockSet() == 0) {
 		pFileTree = &(CommonSet().m_sFileTree);
-		data.m_eFileTreeSettingOrgType = EFileTreeSettingFrom_Common;
+		data.m_eFileTreeSettingOrgType = FileTreeSettingFromType::Common;
 	}else {
 		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		pFileTree = &(TypeSet().m_sFileTree);
-		data.m_eFileTreeSettingOrgType = EFileTreeSettingFrom_Type;
+		data.m_eFileTreeSettingOrgType = FileTreeSettingFromType::Type;
 	}
 	data.m_eFileTreeSettingLoadType = data.m_eFileTreeSettingOrgType;
 	data.m_bProject = pFileTree->m_bProject;
@@ -3968,9 +3968,9 @@ void DlgFuncList::LoadFileTreeSetting(
 			strIniFileName += CommonSet().m_sFileTreeDefIniName;
 			if (cProfile.ReadProfile(strIniFileName.c_str())) {
 				ImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
-				data.m_eFileTreeSettingLoadType = EFileTreeSettingFrom_File;
-				IniDirPath = szPath;
-				CutLastYenFromDirectoryPath( IniDirPath );
+				data.m_eFileTreeSettingLoadType = FileTreeSettingFromType::File;
+				iniDirPath = szPath;
+				CutLastYenFromDirectoryPath( iniDirPath );
 				data.m_szLoadProjectIni = strIniFileName.c_str();
 				break;
 			}

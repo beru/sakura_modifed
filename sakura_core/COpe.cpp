@@ -17,9 +17,9 @@
 
 
 // Opeクラス構築
-Ope::Ope(eOpeCode eCode)
+Ope::Ope(OpeCode eCode)
 {
-	assert( eCode != eOpeCode::Unknown );
+	assert( eCode != OpeCode::Unknown );
 	m_nOpe = eCode;		// 操作種別
 
 	m_ptCaretPos_PHY_Before.Set(LogicInt(-1), LogicInt(-1));	// カーソル位置

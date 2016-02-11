@@ -41,28 +41,28 @@ class DocListener;
 #include "util/relation_tool.h"
 
 //###
-enum ESaveResult {
-	SAVED_OK,
-	SAVED_FAILURE,
-	SAVED_INTERRUPT,	// 中断された
-	SAVED_LOSESOME,		// 文字の一部が失われた
+enum class SaveResultType {
+	OK,
+	Failure,
+	Interrupt,	// 中断された
+	LoseSome,	// 文字の一部が失われた
 };
 
 //###
-enum ELoadResult {
-	LOADED_OK,
-	LOADED_FAILURE,
-	LOADED_INTERRUPT,	// 中断された
-	LOADED_LOSESOME,	// 文字の一部が失われた
+enum class LoadResultType {
+	OK,
+	Failure,
+	Interrupt,		// 中断された
+	LoseSome,		// 文字の一部が失われた
 
 	// 特殊
-	LOADED_NOIMPLEMENT,	// 実装無し
+	NoImplement,	// 実装無し
 };
 
 //###
-enum ECallbackResult {
-	CALLBACK_CONTINUE,	// 続ける
-	CALLBACK_INTERRUPT,	// 中断
+enum class CallbackResultType {
+	Continue,	// 続ける
+	Interrupt,	// 中断
 };
 
 //###
@@ -177,24 +177,24 @@ public:
 	virtual ~DocSubject();
 
 	// ロード前後
-	ECallbackResult NotifyCheckLoad	(LoadInfo* pLoadInfo);
+	CallbackResultType NotifyCheckLoad	(LoadInfo* pLoadInfo);
 	void NotifyBeforeLoad			(LoadInfo* sLoadInfo);
-	ELoadResult NotifyLoad			(const LoadInfo& sLoadInfo);
+	LoadResultType NotifyLoad		(const LoadInfo& sLoadInfo);
 	void NotifyLoading				(int nPer);
 	void NotifyAfterLoad			(const LoadInfo& sLoadInfo);
-	void NotifyFinalLoad			(ELoadResult eLoadResult);
+	void NotifyFinalLoad			(LoadResultType eLoadResult);
 
 	// セーブ前後
-	ECallbackResult NotifyCheckSave	(SaveInfo* pSaveInfo);
-	ECallbackResult NotifyPreBeforeSave(SaveInfo* pSaveInfo);
+	CallbackResultType NotifyCheckSave	(SaveInfo* pSaveInfo);
+	CallbackResultType NotifyPreBeforeSave(SaveInfo* pSaveInfo);
 	void NotifyBeforeSave			(const SaveInfo& sSaveInfo);
 	void NotifySave					(const SaveInfo& sSaveInfo);
 	void NotifySaving				(int nPer);
 	void NotifyAfterSave			(const SaveInfo& sSaveInfo);
-	void NotifyFinalSave			(ESaveResult eSaveResult);
+	void NotifyFinalSave			(SaveResultType eSaveResult);
 
 	// クローズ前後
-	ECallbackResult NotifyBeforeClose();
+	CallbackResultType NotifyBeforeClose();
 };
 
 // Listenerは1つのSubjectを観察する
@@ -208,24 +208,24 @@ public:
 
 	// -- -- 各種イベント -- -- //
 	// ロード前後
-	virtual ECallbackResult	OnCheckLoad	(LoadInfo* pLoadInfo)		{ return CALLBACK_CONTINUE; }	// 本当にロードを行うかの判定を行う
-	virtual void			OnBeforeLoad(LoadInfo* sLoadInfo)		{ return ; }	// ロード事前処理
-	virtual ELoadResult		OnLoad		(const LoadInfo& sLoadInfo) { return LOADED_NOIMPLEMENT; }	// ロード処理
-	virtual void			OnLoading	(int nPer)					{ return ; }	// ロード処理の経過情報を受信
-	virtual void			OnAfterLoad	(const LoadInfo& sLoadInfo) { return ; }	// ロード事後処理
-	virtual void			OnFinalLoad	(ELoadResult eLoadResult)	{ return ; }	// ロードフローの最後に必ず呼ばれる
+	virtual CallbackResultType	OnCheckLoad	(LoadInfo* pLoadInfo)		{ return CallbackResultType::Continue; }	// 本当にロードを行うかの判定を行う
+	virtual void			OnBeforeLoad(LoadInfo* sLoadInfo)			{ return ; }	// ロード事前処理
+	virtual LoadResultType		OnLoad		(const LoadInfo& sLoadInfo) { return LoadResultType::NoImplement; }	// ロード処理
+	virtual void			OnLoading	(int nPer)						{ return ; }	// ロード処理の経過情報を受信
+	virtual void			OnAfterLoad	(const LoadInfo& sLoadInfo) 	{ return ; }	// ロード事後処理
+	virtual void			OnFinalLoad	(LoadResultType eLoadResult)	{ return ; }	// ロードフローの最後に必ず呼ばれる
 
 	// セーブ前後
-	virtual ECallbackResult OnCheckSave	(SaveInfo* pSaveInfo)		{ return CALLBACK_CONTINUE; }	// 本当にセーブを行うかの判定を行う
-	virtual ECallbackResult OnPreBeforeSave	(SaveInfo* pSaveInfo)	{ return CALLBACK_CONTINUE; }	// セーブ事前おまけ処理 ($$ 仮)
-	virtual void			OnBeforeSave(const SaveInfo& sSaveInfo) { return ; }	// セーブ事前処理
-	virtual void			OnSave		(const SaveInfo& sSaveInfo) { return ; }	// セーブ処理
-	virtual void			OnSaving	(int nPer)					{ return ; }	// セーブ処理の経過情報を受信
-	virtual void			OnAfterSave	(const SaveInfo& sSaveInfo) { return ; }	// セーブ事後処理
-	virtual void			OnFinalSave	(ESaveResult eSaveResult)	{ return ; }	// セーブフローの最後に必ず呼ばれる
+	virtual CallbackResultType OnCheckSave	(SaveInfo* pSaveInfo)		{ return CallbackResultType::Continue; }	// 本当にセーブを行うかの判定を行う
+	virtual CallbackResultType OnPreBeforeSave	(SaveInfo* pSaveInfo)	{ return CallbackResultType::Continue; }	// セーブ事前おまけ処理 ($$ 仮)
+	virtual void			OnBeforeSave(const SaveInfo& sSaveInfo)		{ return ; }	// セーブ事前処理
+	virtual void			OnSave		(const SaveInfo& sSaveInfo)		{ return ; }	// セーブ処理
+	virtual void			OnSaving	(int nPer)						{ return ; }	// セーブ処理の経過情報を受信
+	virtual void			OnAfterSave	(const SaveInfo& sSaveInfo)		{ return ; }	// セーブ事後処理
+	virtual void			OnFinalSave	(SaveResultType eSaveResult)	{ return ; }	// セーブフローの最後に必ず呼ばれる
 
 	// クローズ前後
-	virtual ECallbackResult OnBeforeClose()							{ return CALLBACK_CONTINUE; }
+	virtual CallbackResultType OnBeforeClose()							{ return CallbackResultType::Continue; }
 };
 
 // GetListeningDocの利便性をアップ

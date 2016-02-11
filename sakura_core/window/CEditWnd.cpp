@@ -157,9 +157,9 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pcEditDoc)
 						//auto_sprintf(szCaretChar, _T("%04x"),);
 						// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 						CodeBase* pCode = CodeFactory::CreateCodeBase((ECodeType)i, false);
-						EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCode[i], &sStatusbar);
+						CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCode[i], &sStatusbar);
 						delete pCode;
-						if (ret != RESULT_COMPLETE) {
+						if (ret != CodeConvertResult::Complete) {
 							// うまくコードが取れなかった
 							auto_strcpy(szCode[i], _T("-"));
 						}
@@ -169,9 +169,9 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pcEditDoc)
 				TCHAR szCodeCP[32];
 				sStatusbar.m_bDispSPCodepoint = true;
 				CodeBase* pCode = CodeFactory::CreateCodeBase(CODE_UNICODE, false);
-				EConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCodeCP, &sStatusbar);
+				CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCodeCP, &sStatusbar);
 				delete pCode;
-				if (ret != RESULT_COMPLETE) {
+				if (ret != CodeConvertResult::Complete) {
 					// うまくコードが取れなかった
 					auto_strcpy(szCodeCP, _T("-"));
 				}
@@ -224,7 +224,7 @@ EditWnd::EditWnd()
 	, m_hAccel(NULL)
 	, m_bDragMode(false)
 	, m_IconClicked(icNone) // by 鬼(2)
-	, m_nSelectCountMode(eSelectCountMode::Toggle)	// 文字カウント方法の初期値はSELECT_COUNT_TOGGLE→共通設定に従う
+	, m_nSelectCountMode(SelectCountMode::Toggle)	// 文字カウント方法の初期値はSELECT_COUNT_TOGGLE→共通設定に従う
 {
 	g_pcEditWnd = this;
 }
@@ -317,7 +317,7 @@ void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupIn
 	int	nWinCX, nWinCY;
 	//	2004.05.13 Moca m_common.m_eSaveWindowSizeをBOOLからenumに変えたため
 	auto& csWindow = m_pShareData->m_common.m_sWindow;
-	if (csWindow.m_eSaveWindowSize != WINSIZEMODE_DEF) {
+	if (csWindow.m_eSaveWindowSize != WinSizeMode::Default) {
 		nWinCX = csWindow.m_nWinSizeCX;
 		nWinCY = csWindow.m_nWinSizeCY;
 	}else {
@@ -340,7 +340,7 @@ void EditWnd::_GetWindowRectForInit(Rect* rcResult, int nGroup, const TabGroupIn
 	int nWinOY = 0;
 	// ウィンドウ位置固定
 	//	2004.05.13 Moca 保存したウィンドウ位置を使う場合は共有メモリからセット
-	if (csWindow.m_eSaveWindowPos != WINSIZEMODE_DEF) {
+	if (csWindow.m_eSaveWindowPos != WinSizeMode::Default) {
 		nWinOX =  csWindow.m_nWinPosX;
 		nWinOY =  csWindow.m_nWinPosY;
 	}
@@ -576,13 +576,13 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 
 		// ウィンドウサイズ継承
 		auto& csWindow = m_pShareData->m_common.m_sWindow;
-		if (csWindow.m_eSaveWindowSize != WINSIZEMODE_DEF &&
+		if (csWindow.m_eSaveWindowSize != WinSizeMode::Default &&
 			csWindow.m_nWinSizeType == SIZE_MAXIMIZED
 		) {
 			::ShowWindow(GetHwnd(), SW_SHOWMAXIMIZED);
 		}else
 		// 2004.05.14 Moca ウィンドウサイズを直接指定する場合は、最小化表示を受け入れる
-		if (csWindow.m_eSaveWindowSize == WINSIZEMODE_SET &&
+		if (csWindow.m_eSaveWindowSize == WinSizeMode::Set &&
 			csWindow.m_nWinSizeType == SIZE_MINIMIZED
 		) {
 			::ShowWindow(GetHwnd(), SW_SHOWMINIMIZED);
@@ -681,9 +681,9 @@ HWND EditWnd::Create(
 	// プラグインコマンドを登録する
 	RegisterPluginCommand();
 
-	SelectCharWidthCache(CWM_FONT_MINIMAP, CWM_CACHE_LOCAL); // Init
-	InitCharWidthCache(m_pcViewFontMiniMap->GetLogfont(), CWM_FONT_MINIMAP);
-	SelectCharWidthCache(CWM_FONT_EDIT, GetLogfontCacheMode());
+	SelectCharWidthCache(CharWidthFontMode::MiniMap, CWM_CACHE_LOCAL); // Init
+	InitCharWidthCache(m_pcViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap);
+	SelectCharWidthCache(CharWidthFontMode::Edit, GetLogfontCacheMode());
 	InitCharWidthCache(GetLogfont());
 
 
@@ -1337,7 +1337,7 @@ LRESULT EditWnd::DispatchEvent(
 	case WM_MOVE:
 		// From Here 2004.05.13 Moca ウィンドウ位置継承
 		//	最後の位置を復元するため，移動されるたびに共有メモリに位置を保存する．
-		if (WINSIZEMODE_SAVE == m_pShareData->m_common.m_sWindow.m_eSaveWindowPos) {
+		if (WinSizeMode::Save == m_pShareData->m_common.m_sWindow.m_eSaveWindowPos) {
 			if (!::IsZoomed(GetHwnd()) && !::IsIconic(GetHwnd())) {
 				// 2005.11.23 Moca ワークエリア座標だとずれるのでスクリーン座標に変更
 				// Aero Snapで縦方向最大化で終了して次回起動するときは元のサイズにする必要があるので、
@@ -1791,7 +1791,7 @@ LRESULT EditWnd::DispatchEvent(
 				if (m_cDlgFuncList.GetHwnd() && !bAnalyzed) {	// アウトラインを開いていれば再解析
 					// SHOW_NORMAL: 解析方法が変化していれば再解析される。そうでなければ描画更新（変更されたカラーの適用）のみ。
 					EFunctionCode nFuncCode = m_cDlgFuncList.GetFuncCodeRedraw(m_cDlgFuncList.m_nOutlineType);
-					GetActiveView().GetCommander().HandleCommand(nFuncCode, true, (LPARAM)eShowDialog::Normal, 0, 0, 0);
+					GetActiveView().GetCommander().HandleCommand(nFuncCode, true, (LPARAM)ShowDialogType::Normal, 0, 0, 0);
 				}
 				if (MyGetAncestor(::GetForegroundWindow(), GA_ROOTOWNER2) == GetHwnd())
 					::SetFocus(GetActiveView().GetHwnd());	// フォーカスを戻す
@@ -1825,13 +1825,13 @@ LRESULT EditWnd::DispatchEvent(
 		{
 			if (m_pPrintPreview) {
 				// 一時的に設定を戻す
-				SelectCharWidthCache(CWM_FONT_EDIT, CWM_CACHE_NEUTRAL);
+				SelectCharWidthCache(CharWidthFontMode::Edit, CWM_CACHE_NEUTRAL);
 			}
 			// フォント変更前の座標の保存
 			m_posSaveAry = SavePhysPosOfAllView();
 			if (m_pPrintPreview) {
 				// 設定を戻す
-				SelectCharWidthCache(CWM_FONT_PRINT, CWM_CACHE_LOCAL);
+				SelectCharWidthCache(CharWidthFontMode::Print, CWM_CACHE_LOCAL);
 			}
 		}
 		return 0L; 
@@ -1969,13 +1969,13 @@ LRESULT EditWnd::DispatchEvent(
 	case MYWM_BAR_CHANGE_NOTIFY:
 		if (GetHwnd() != (HWND)lParam) {
 			switch (wParam) {
-			case eBarChangeNotifyType::Toolbar:
+			case BarChangeNotifyType::Toolbar:
 				LayoutToolBar();	// 2006.12.19 ryoji
 				break;
-			case eBarChangeNotifyType::FuncKey:
+			case BarChangeNotifyType::FuncKey:
 				LayoutFuncKey();	// 2006.12.19 ryoji
 				break;
-			case eBarChangeNotifyType::Tab:
+			case BarChangeNotifyType::Tab:
 				LayoutTabBar();		// 2006.12.19 ryoji
 				if (m_pShareData->m_common.m_sTabBar.m_bDispTabWnd
 					&& !m_pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin
@@ -1988,10 +1988,10 @@ LRESULT EditWnd::DispatchEvent(
 									| SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 				}
 				break;
-			case eBarChangeNotifyType::StatusBar:
+			case BarChangeNotifyType::StatusBar:
 				LayoutStatusBar();		// 2006.12.19 ryoji
 				break;
-			case eBarChangeNotifyType::MiniMap:
+			case BarChangeNotifyType::MiniMap:
 				LayoutMiniMap();
 				break;
 			}
@@ -2991,7 +2991,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	// ウィンドウサイズ継承
 	if (wParam != SIZE_MINIMIZED) {						// 最小化は継承しない
 		//	2004.05.13 Moca m_eSaveWindowSizeの解釈追加のため
-		if (csWindow.m_eSaveWindowSize == WINSIZEMODE_SAVE) {		// ウィンドウサイズ継承をするか
+		if (csWindow.m_eSaveWindowSize == WinSizeMode::Save) {		// ウィンドウサイズ継承をするか
 			if (wParam == SIZE_MAXIMIZED) {					// 最大化はサイズを記録しない
 				if (csWindow.m_nWinSizeType != (int)wParam) {
 					csWindow.m_nWinSizeType = wParam;
@@ -3114,11 +3114,11 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	int nTabWndHeight = 0;		//タブウィンドウ	//@@@ 2003.05.31 MIK
 	if (m_cTabWnd.GetHwnd()) {
 		// タブ多段はSizeBox/ウィンドウ幅で高さが変わる可能性がある
-		ETabPosition tabPosition = m_pShareData->m_common.m_sTabBar.m_eTabPosition;
+		TabPosition tabPosition = m_pShareData->m_common.m_sTabBar.m_eTabPosition;
 		bool bHidden = false;
-		if (tabPosition == TabPosition_Top) {
+		if (tabPosition == TabPosition::Top) {
 			// 上から下に移動するとゴミが表示されるので一度非表示にする
-			if (m_cTabWnd.m_eTabPosition != TabPosition_None && m_cTabWnd.m_eTabPosition != TabPosition_Top) {
+			if (m_cTabWnd.m_eTabPosition != TabPosition::None && m_cTabWnd.m_eTabPosition != TabPosition::Top) {
 				bHidden = true;
 				::ShowWindow( m_cTabWnd.GetHwnd(), SW_HIDE );
 			}
@@ -3140,9 +3140,9 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 					::MoveWindow( m_cTabWnd.GetHwnd(), 0, nToolBarHeight, cx, nTabWndHeight, TRUE );
 				}
 			}
-		}else if (tabPosition == TabPosition_Bottom) {
+		}else if (tabPosition == TabPosition::Bottom) {
 			// 上から下に移動するとゴミが表示されるので一度非表示にする
-			if (m_cTabWnd.m_eTabPosition != TabPosition_None && m_cTabWnd.m_eTabPosition != TabPosition_Bottom) {
+			if (m_cTabWnd.m_eTabPosition != TabPosition::None && m_cTabWnd.m_eTabPosition != TabPosition::Bottom) {
 				bHidden = true;
 				ShowWindow( m_cTabWnd.GetHwnd(), SW_HIDE );
 			}
@@ -3222,7 +3222,7 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 		nFuncListHeight = rc.bottom - rc.top;
 	}
 
-	EDockSide eDockSideFL = m_cDlgFuncList.GetDockSide();
+	DockSideType eDockSideFL = m_cDlgFuncList.GetDockSide();
 	int nTop = nToolBarHeight + nTabWndHeight;
 	if (csWindow.m_nFUNCKEYWND_Place == 0)
 		nTop += nFuncKeyWndHeight;
@@ -3230,13 +3230,13 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	if (m_cDlgFuncList.GetHwnd() && m_cDlgFuncList.IsDocking()) {
 		::MoveWindow(
 			m_cDlgFuncList.GetHwnd(),
-			(eDockSideFL == DOCKSIDE_RIGHT)? cx - nFuncListWidth: 0,
-			(eDockSideFL == DOCKSIDE_BOTTOM)? nTop + nHeight - nFuncListHeight: nTop,
-			(eDockSideFL == DOCKSIDE_LEFT || eDockSideFL == DOCKSIDE_RIGHT)? nFuncListWidth: cx,
-			(eDockSideFL == DOCKSIDE_TOP || eDockSideFL == DOCKSIDE_BOTTOM)? nFuncListHeight: nHeight,
+			(eDockSideFL == DockSideType::Right)? cx - nFuncListWidth: 0,
+			(eDockSideFL == DockSideType::Bottom)? nTop + nHeight - nFuncListHeight: nTop,
+			(eDockSideFL == DockSideType::Left || eDockSideFL == DockSideType::Right)? nFuncListWidth: cx,
+			(eDockSideFL == DockSideType::Top || eDockSideFL == DockSideType::Bottom)? nFuncListHeight: nHeight,
 			TRUE
 		);
-		if (eDockSideFL == DOCKSIDE_RIGHT || eDockSideFL == DOCKSIDE_BOTTOM) {
+		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bMiniMapSizeBox = false;
 		}
 	}
@@ -3246,10 +3246,10 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 	if (GetMiniMap().GetHwnd()) {
 		nMiniMapWidth = GetDllShareData().m_common.m_sWindow.m_nMiniMapWidth;
 		::MoveWindow( m_pcEditViewMiniMap->GetHwnd(), 
-			(eDockSideFL == DOCKSIDE_RIGHT)? cx - nFuncListWidth - nMiniMapWidth: cx - nMiniMapWidth,
-			(eDockSideFL == DOCKSIDE_TOP)? nTop + nFuncListHeight: nTop,
+			(eDockSideFL == DockSideType::Right)? cx - nFuncListWidth - nMiniMapWidth: cx - nMiniMapWidth,
+			(eDockSideFL == DockSideType::Top)? nTop + nFuncListHeight: nTop,
 			nMiniMapWidth,
-			(eDockSideFL == DOCKSIDE_TOP || eDockSideFL == DOCKSIDE_BOTTOM)? nHeight - nFuncListHeight: nHeight,
+			(eDockSideFL == DockSideType::Top || eDockSideFL == DockSideType::Bottom)? nHeight - nFuncListHeight: nHeight,
 			TRUE
 		);
 		GetMiniMap().SplitBoxOnOff(false, false, bMiniMapSizeBox);
@@ -3257,10 +3257,10 @@ LRESULT EditWnd::OnSize2( WPARAM wParam, LPARAM lParam, bool bUpdateStatus )
 
 	::MoveWindow(
 		m_cSplitterWnd.GetHwnd(),
-		(eDockSideFL == DOCKSIDE_LEFT)? nFuncListWidth: 0,
-		(eDockSideFL == DOCKSIDE_TOP)? nTop + nFuncListHeight: nTop,	//@@@ 2003.05.31 MIK
-		((eDockSideFL == DOCKSIDE_LEFT || eDockSideFL == DOCKSIDE_RIGHT)? cx - nFuncListWidth: cx) - nMiniMapWidth,
-		(eDockSideFL == DOCKSIDE_TOP || eDockSideFL == DOCKSIDE_BOTTOM)? nHeight - nFuncListHeight: nHeight,	//@@@ 2003.05.31 MIK
+		(eDockSideFL == DockSideType::Left)? nFuncListWidth: 0,
+		(eDockSideFL == DockSideType::Top)? nTop + nFuncListHeight: nTop,	//@@@ 2003.05.31 MIK
+		((eDockSideFL == DockSideType::Left || eDockSideFL == DockSideType::Right)? cx - nFuncListWidth: cx) - nMiniMapWidth,
+		(eDockSideFL == DockSideType::Top || eDockSideFL == DockSideType::Bottom)? nHeight - nFuncListHeight: nHeight,	//@@@ 2003.05.31 MIK
 		TRUE
 	);
 	//@@@ To 2003.05.31 MIK
@@ -3972,7 +3972,7 @@ void EditWnd::ChangeFileNameNotify(const TCHAR* pszTabCaption, const TCHAR* _psz
 	int nGroup = AppNodeManager::getInstance()->GetEditNode(GetHwnd())->GetGroup();
 	AppNodeGroupHandle(nGroup).PostMessageToAllEditors(
 		MYWM_TAB_WINDOW_NOTIFY,
-		(WPARAM)eTabWndNotifyType::Rename,
+		(WPARAM)TabWndNotifyType::Rename,
 		(LPARAM)GetHwnd(),
 		GetHwnd()
 	);
@@ -4475,7 +4475,7 @@ BOOL EditWnd::UpdateTextWrap(void)
 {
 	// この関数はコマンド実行ごとに処理の最終段階で利用する
 	// （アンドゥ登録＆全ビュー更新のタイミング）
-	if (GetDocument()->m_nTextWrapMethodCur == (int)eTextWrappingMethod::WindowWidth) {
+	if (GetDocument()->m_nTextWrapMethodCur == (int)TextWrappingMethod::WindowWidth) {
 		bool bWrap = WrapWindowWidth(0);	// 右端で折り返す
 		if (bWrap) {
 			// WrapWindowWidth() で追加した更新リージョンで画面更新する

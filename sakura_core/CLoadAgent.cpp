@@ -35,7 +35,7 @@
 #include "uiparts/CVisualProgress.h"
 #include "util/file.h"
 
-ECallbackResult LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
+CallbackResultType LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
@@ -55,7 +55,7 @@ ECallbackResult LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 			files
 		);
 		if (!bDlgResult) {
-			return CALLBACK_INTERRUPT; // キャンセルされた場合は中断
+			return CallbackResultType::Interrupt; // キャンセルされた場合は中断
 		}
 		size_t nSize = files.size();
 		if (0 < nSize) {
@@ -80,7 +80,7 @@ ECallbackResult LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 	HWND hWndOwner;
 	if (ShareData::getInstance()->ActiveAlreadyOpenedWindow(pLoadInfo->cFilePath, &hWndOwner, pLoadInfo->eCharCode)) {
 		pLoadInfo->bOpened = true;
-		return CALLBACK_INTERRUPT;
+		return CallbackResultType::Interrupt;
 	}
 
 	// 現在のウィンドウに対してファイルを読み込めない場合は、新たなウィンドウを開き、そこにファイルを読み込ませる
@@ -90,7 +90,7 @@ ECallbackResult LoadAgent::OnCheckLoad(LoadInfo* pLoadInfo)
 			EditWnd::getInstance()->GetHwnd(),
 			*pLoadInfo
 		);
-		return CALLBACK_INTERRUPT;
+		return CallbackResultType::Interrupt;
 	}
 
 next:
@@ -135,7 +135,7 @@ next:
 				LS(STR_LOADAGENT_ERR_OPEN),
 				pLoadInfo->cFilePath.c_str()
 			);
-			return CALLBACK_INTERRUPT; // ファイルが存在しているのに読み取れない場合は中断
+			return CallbackResultType::Interrupt; // ファイルが存在しているのに読み取れない場合は中断
 		}
 		if (bLock) {
 			pcDoc->m_cDocFileOperation.DoFileLock(false);
@@ -159,22 +159,22 @@ next:
 					LS(STR_LOADAGENT_BIG_FILE),
 					csFile.m_nAlertFileSize );
 				if (nRet != IDYES) {
-					return CALLBACK_INTERRUPT;
+					return CallbackResultType::Interrupt;
 				}
 			}
 		}
 	}
 
-	return CALLBACK_CONTINUE;
+	return CallbackResultType::Continue;
 }
 
 void LoadAgent::OnBeforeLoad(LoadInfo* pLoadInfo)
 {
 }
 
-ELoadResult LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
+LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 {
-	ELoadResult eRet = LOADED_OK;
+	LoadResultType eRet = LoadResultType::OK;
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 既存データのクリア
@@ -186,8 +186,8 @@ ELoadResult LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	// 文書種別確定
 	pcDoc->m_cDocType.SetDocumentType( sLoadInfo.nType, true );
 	pcDoc->m_pcEditWnd->m_pcViewFontMiniMap->UpdateFont(&pcDoc->m_pcEditWnd->GetLogfont());
-	InitCharWidthCache( pcDoc->m_pcEditWnd->m_pcViewFontMiniMap->GetLogfont(), CWM_FONT_MINIMAP );
-	SelectCharWidthCache( CWM_FONT_EDIT, pcDoc->m_pcEditWnd->GetLogfontCacheMode() );
+	InitCharWidthCache( pcDoc->m_pcEditWnd->m_pcViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
+	SelectCharWidthCache( CharWidthFontMode::Edit, pcDoc->m_pcEditWnd->GetLogfontCacheMode() );
 	InitCharWidthCache( pcDoc->m_pcEditWnd->GetLogfont() );
 	pcDoc->m_pcEditWnd->m_pcViewFont->UpdateFont(&pcDoc->m_pcEditWnd->GetLogfont());
 
@@ -208,13 +208,13 @@ ELoadResult LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 		// CDocLineMgrの構成
 		ReadManager cReader;
 		ProgressSubject* pOld = EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cReader);
-		EConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
+		CodeConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
 			&pcDoc->m_cDocLineMgr,
 			sLoadInfo,
 			&pcDoc->m_cDocFile.m_sFileInfo
 		);
-		if (eReadResult == RESULT_LOSESOME) {
-			eRet = LOADED_LOSESOME;
+		if (eReadResult == CodeConvertResult::LoseSome) {
+			eRet = LoadResultType::LoseSome;
 		}
 		EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(pOld);
 	}else {
@@ -231,7 +231,7 @@ ELoadResult LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 	// 「右端で折り返す」は、この後のOnSize()で再設定される
 	const TypeConfig& ref = pcDoc->m_cDocType.GetDocumentAttribute();
 	LayoutInt nMaxLineKetas = ref.m_nMaxLineKetas;
-	if (ref.m_nTextWrapMethod != (int)eTextWrappingMethod::SettingWidth) {
+	if (ref.m_nTextWrapMethod != (int)TextWrappingMethod::SettingWidth) {
 		nMaxLineKetas = MAXLINEKETAS;
 	}
 
@@ -262,7 +262,7 @@ void LoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 	pcDoc->m_bTabSpaceCurTemp = false;
 
 	// 2009.08.28 nasukoji	「折り返さない」ならテキスト最大幅を算出、それ以外は変数をクリア
-	if (pcDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+	if (pcDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 		pcDoc->m_cLayoutMgr.CalculateTextWidth();		// テキスト最大幅を算出する
 	}else {
 		pcDoc->m_cLayoutMgr.ClearLayoutLineWidth();		// 各行のレイアウト行長の記憶をクリアする
@@ -270,15 +270,15 @@ void LoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 }
 
 
-void LoadAgent::OnFinalLoad(ELoadResult eLoadResult)
+void LoadAgent::OnFinalLoad(LoadResultType eLoadResult)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
-	if (eLoadResult == LOADED_FAILURE) {
+	if (eLoadResult == LoadResultType::Failure) {
 		pcDoc->SetFilePathAndIcon(_T(""));
 		pcDoc->m_cDocFile.SetBomDefoult();
 	}
-	if (eLoadResult == LOADED_LOSESOME) {
+	if (eLoadResult == LoadResultType::LoseSome) {
 		AppMode::getInstance()->SetViewMode(true);
 	}
 

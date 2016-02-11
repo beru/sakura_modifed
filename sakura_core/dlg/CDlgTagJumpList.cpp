@@ -61,17 +61,17 @@ const DWORD p_helpids[] = {
 };
 
 static const AnchorListItem anchorList[] = {
-	{IDC_STATIC_BASEDIR,	ANCHOR_BOTTOM},
-	{IDC_STATIC_KEYWORD,	ANCHOR_BOTTOM},
-	{IDC_KEYWORD,			ANCHOR_BOTTOM},
-	{IDC_LIST_TAGJUMP,		ANCHOR_ALL},
-	{IDC_BUTTON_PREVTAG,	ANCHOR_BOTTOM},
-	{IDC_BUTTON_NEXTTAG,	ANCHOR_BOTTOM},
-	{IDC_BUTTON_HELP,		ANCHOR_BOTTOM},
-	{IDOK,					ANCHOR_BOTTOM},
-	{IDCANCEL,				ANCHOR_BOTTOM},
-	{IDC_CHECK_ICASE,		ANCHOR_BOTTOM},
-	{IDC_CHECK_ANYWHERE,	ANCHOR_BOTTOM},
+	{IDC_STATIC_BASEDIR,	AnchorStyle::Bottom},
+	{IDC_STATIC_KEYWORD,	AnchorStyle::Bottom},
+	{IDC_KEYWORD,			AnchorStyle::Bottom},
+	{IDC_LIST_TAGJUMP,		AnchorStyle::All},
+	{IDC_BUTTON_PREVTAG,	AnchorStyle::Bottom},
+	{IDC_BUTTON_NEXTTAG,	AnchorStyle::Bottom},
+	{IDC_BUTTON_HELP,		AnchorStyle::Bottom},
+	{IDOK,					AnchorStyle::Bottom},
+	{IDCANCEL,				AnchorStyle::Bottom},
+	{IDC_CHECK_ICASE,		AnchorStyle::Bottom},
+	{IDC_CHECK_ANYWHERE,	AnchorStyle::Bottom},
 };
 
 

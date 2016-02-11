@@ -60,7 +60,7 @@ void DocVisitor::SetAllEol(Eol cEol)
 	if (bReplace) {
 		m_pcDocRef->m_cLayoutMgr._DoLayout();
 		m_pcDocRef->m_pcEditWnd->ClearViewCaretPosInfo();
-		if (m_pcDocRef->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+		if (m_pcDocRef->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 			m_pcDocRef->m_cLayoutMgr.CalculateTextWidth();
 		}else {
 			m_pcDocRef->m_cLayoutMgr.ClearLayoutLineWidth();

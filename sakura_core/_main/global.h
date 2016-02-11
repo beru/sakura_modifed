@@ -40,7 +40,7 @@
 #include "charset/charset.h"
 
 // ダイアログ表示方法	 アウトラインウィンドウ用に作成 20060201 aroka
-enum class eShowDialog {
+enum class ShowDialogType {
 	Normal,
 	Reload,
 	Toggle,
@@ -53,7 +53,7 @@ extern const int		SELECTEDAREA_ROP2;
 
 //@@@ From Here 2003.05.31 MIK
 // タブウィンドウ用メッセージサブコマンド
-enum class eTabWndNotifyType {
+enum class TabWndNotifyType {
 	Refresh,		// 再表示
 	Add,			// ウィンドウ登録
 	Delete,			// ウィンドウ削除
@@ -65,7 +65,7 @@ enum class eTabWndNotifyType {
 };
 
 // バーの表示・非表示
-enum class eBarChangeNotifyType {
+enum class BarChangeNotifyType {
 	Toolbar,		// ツールバー
 	FuncKey,		// ファンクションキー
 	Tab,			// タブ
@@ -107,7 +107,7 @@ const int IDC_SPIN_nRulerHeight_MAX = 32;
 
 	@date 2007.11.04 genta 新規作成．即値回避と範囲サイズ定義のため
 */
-enum class eMouseFunction {
+enum class MouseFunctionType {
 	DoubleClick,	// ダブルクリック
 	RightClick,		// 右クリック
 	CenterClick,	// 中クリック
@@ -123,14 +123,14 @@ enum class eMouseFunction {
 };
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
-enum class eTextWrappingMethod {
+enum class TextWrappingMethod {
 	NoWrapping,		// 折り返さない（スクロールバーをテキスト幅に合わせる）
 	SettingWidth,	// 指定桁で折り返す
 	WindowWidth,	// 右端で折り返す
 };
 
 // 2009.07.06 syat	文字カウント方法
-enum class eSelectCountMode {
+enum class SelectCountMode {
 	Toggle,		// 文字カウント方法をトグル
 	ByChar,		// 文字数でカウント
 	ByByte,		// バイト数でカウント
@@ -138,14 +138,14 @@ enum class eSelectCountMode {
 
 // 2007.09.06 kobake 追加
 // 検索方向
-enum class eSearchDirection {
+enum class SearchDirection {
 	Backward,	// 前方検索 (前を検索)
 	Forward,	// 後方検索 (次を検索) (普通)
 };
 
 // 2007.09.06 kobake 追加
 struct SearchOption {
-//	eSearchDirection	eDirection;
+//	SearchDirection	eDirection;
 //	bool	bPrevOrNext;	// false==前方検索 true==後方検索
 	bool	bRegularExp;	// true==正規表現
 	bool	bLoHiCase;		// true==英大文字小文字の区別

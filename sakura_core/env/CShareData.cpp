@@ -270,14 +270,14 @@ bool ShareData::InitShareData()
 
 			// 2001/06/14 asa-o 補完とキーワードヘルプはタイプ別に移動したので削除
 			//	2004.05.13 Moca ウィンドウサイズ固定指定追加に伴う指定方法変更
-			sWindow.m_eSaveWindowSize = WINSIZEMODE_SAVE;	// ウィンドウサイズ継承
+			sWindow.m_eSaveWindowSize = WinSizeMode::Save;	// ウィンドウサイズ継承
 			sWindow.m_nWinSizeType = SIZE_RESTORED;
 			sWindow.m_nWinSizeCX = CW_USEDEFAULT;
 			sWindow.m_nWinSizeCY = 0;
 
 			sWindow.m_bScrollBarHorz = true;				// 水平スクロールバーを使う
 			//	2004.05.13 Moca ウィンドウ位置
-			sWindow.m_eSaveWindowPos = WINSIZEMODE_DEF;		// ウィンドウ位置固定・継承
+			sWindow.m_eSaveWindowPos = WinSizeMode::Default;		// ウィンドウ位置固定・継承
 			sWindow.m_nWinPosX = CW_USEDEFAULT;
 			sWindow.m_nWinPosY = 0;
 
@@ -312,7 +312,7 @@ bool ShareData::InitShareData()
 			);
 			sTabBar.m_bSameTabWidth = false;			// タブを等幅にする			//@@@ 2006.01.28 ryoji
 			sTabBar.m_bDispTabIcon = false;				// タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
-			sTabBar.m_bDispTabClose = DISPTABCLOSE_NO;	// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
+			sTabBar.m_dispTabClose = DispTabCloseType::No;	// タブに閉じるボタンを表示する	//@@@ 2012.04.14 syat
 			sTabBar.m_bSortTabList = true;				// タブ一覧をソートする		//@@@ 2006.05.10 ryoji
 			sTabBar.m_bTab_RetainEmptyWin = true;		// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
 			sTabBar.m_bTab_CloseOneWin = false;			// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
@@ -320,7 +320,7 @@ bool ShareData::InitShareData()
 			sTabBar.m_bChgWndByWheel = false;			// マウスホイールでウィンドウ切替	//@@@ 2006.03.26 ryoji
 			sTabBar.m_bNewWindow = false;				// 外部から起動するときは新しいウィンドウで開く
 			sTabBar.m_bTabMultiLine = false;			// タブ多段
-			sTabBar.m_eTabPosition = TabPosition_Top;	// タブ位置
+			sTabBar.m_eTabPosition = TabPosition::Top;	// タブ位置
 
 			sTabBar.m_lf = lfIconTitle;
 			sTabBar.m_nPointSize = nIconPointSize;
@@ -526,7 +526,7 @@ bool ShareData::InitShareData()
 			sOutline.m_nOutlineDockSet = 0;					// アウトライン解析のドッキング位置継承方法
 			sOutline.m_bOutlineDockSync = true;				// アウトライン解析のドッキング位置を同期する
 			sOutline.m_bOutlineDockDisp = FALSE;			// アウトライン解析表示の有無
-			sOutline.m_eOutlineDockSide = DOCKSIDE_FLOAT;	// アウトライン解析ドッキング配置
+			sOutline.m_eOutlineDockSide = DockSideType::Float;	// アウトライン解析ドッキング配置
 			sOutline.m_cxOutlineDockLeft		=	0;		// アウトラインの左ドッキング幅
 			sOutline.m_cyOutlineDockTop			=	0;		// アウトラインの上ドッキング高
 			sOutline.m_cxOutlineDockRight		=	0;		// アウトラインの右ドッキング幅
@@ -724,7 +724,7 @@ bool ShareData::InitShareData()
 		);
 		SetDllShareData(m_pShareData);
 
-		SelectCharWidthCache(CWM_FONT_EDIT, CWM_CACHE_SHARE);
+		SelectCharWidthCache(CharWidthFontMode::Edit, CWM_CACHE_SHARE);
 		InitCharWidthCache(m_pShareData->m_common.m_sView.m_lf);	// 2008/5/15 Uchi
 
 		// From Here Oct. 27, 2000 genta
@@ -1510,7 +1510,7 @@ void ShareData::InitFileTree( FileTree* setting )
 	setting->m_bProject = true;
 	for (int i=0; i<(int)_countof(setting->m_aItems); ++i) {
 		FileTreeItem& item = setting->m_aItems[i];
-		item.m_eFileTreeItemType = EFileTreeItemType_Grep;
+		item.m_eFileTreeItemType = FileTreeItemType::Grep;
 		item.m_szTargetPath = _T("");
 		item.m_szLabelName = _T("");
 		item.m_szTargetPath = _T("");

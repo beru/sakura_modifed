@@ -48,7 +48,7 @@ public:
 	bool IsLineFuncList(const DocLine* pcDocLine, bool bFlag) const;
 	bool GetLineFuncList(const DocLine* pcDocLine) const;
 	void SetLineFuncList(DocLine* pcDocLine, bool bFlag);
-	bool SearchFuncListMark(const DocLineMgr*, LogicInt, eSearchDirection, LogicInt* ) const;					//!< 関数リストマーク検索
+	bool SearchFuncListMark(const DocLineMgr*, LogicInt, SearchDirection, LogicInt* ) const;					//!< 関数リストマーク検索
 
 	//一括操作
 	void ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag);	// 関数リストマークをすべてリセット

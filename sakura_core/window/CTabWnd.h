@@ -171,7 +171,7 @@ public:
 	HWND			m_hwndTab;			// タブコントロール
 	HWND			m_hwndToolTip;		// ツールチップ（ボタン用）
 	TCHAR			m_szTextTip[1024];	// ツールチップのテキスト（タブ用）
-	ETabPosition	m_eTabPosition;		// タブ表示位置
+	TabPosition	m_eTabPosition;		// タブ表示位置
 
 private:
 	DragState	m_eDragState;			// ドラッグ状態

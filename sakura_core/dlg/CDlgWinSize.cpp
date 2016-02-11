@@ -68,8 +68,8 @@ DlgWinSize::~DlgWinSize()
 int DlgWinSize::DoModal(
 	HINSTANCE		hInstance,
 	HWND			hwndParent,
-	EWinSizeMode&	eSaveWinSize,	// [in/out] ウィンドウ位置継承
-	EWinSizeMode&	eSaveWinPos,	// [in/out] ウィンドウサイズ継承
+	WinSizeMode&	eSaveWinSize,	// [in/out] ウィンドウ位置継承
+	WinSizeMode&	eSaveWinPos,	// [in/out] ウィンドウサイズ継承
 	int&			nWinSizeType,	// [in/out] ウィンドウの実行時の大きさ
 	RECT&			rc				// [in/out] 幅、高さ、左、上
 )
@@ -178,19 +178,19 @@ void DlgWinSize::SetData(void)
 int DlgWinSize::GetData(void)
 {
 	if (IsButtonChecked(IDC_RADIO_WINSIZE_DEF)) {
-		m_eSaveWinSize = WINSIZEMODE_DEF;
+		m_eSaveWinSize = WinSizeMode::Default;
 	}else if (IsButtonChecked(IDC_RADIO_WINSIZE_SAVE)) {
-		m_eSaveWinSize = WINSIZEMODE_SAVE;
+		m_eSaveWinSize = WinSizeMode::Save;
 	}else if (IsButtonChecked(IDC_RADIO_WINSIZE_SET)) {
-		m_eSaveWinSize = WINSIZEMODE_SET;
+		m_eSaveWinSize = WinSizeMode::Set;
 	}
 	
 	if (IsButtonChecked(IDC_RADIO_WINPOS_DEF)) {
-		m_eSaveWinPos = WINSIZEMODE_DEF;
+		m_eSaveWinPos = WinSizeMode::Default;
 	}else if (IsButtonChecked(IDC_RADIO_WINPOS_SAVE)) {
-		m_eSaveWinPos = WINSIZEMODE_SAVE;
+		m_eSaveWinPos = WinSizeMode::Save;
 	}else if (IsButtonChecked(IDC_RADIO_WINPOS_SET)) {
-		m_eSaveWinPos = WINSIZEMODE_SET;
+		m_eSaveWinPos = WinSizeMode::Set;
 	}
 
 	int nCurIdx;

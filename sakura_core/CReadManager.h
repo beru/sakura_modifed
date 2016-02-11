@@ -24,7 +24,7 @@
 #pragma once
 
 #include "doc/CDocListener.h" // CProgressSubject
-#include "charset/CCodeBase.h" // EConvertResult
+#include "charset/CCodeBase.h" // CodeConvertResult
 
 class DocLineMgr;
 struct FileInfo; // doc/CDocFile.h
@@ -33,7 +33,7 @@ class ReadManager : public ProgressSubject {
 public:
 	//	Nov. 12, 2000 genta à¯êîí«â¡
 	//	Jul. 26, 2003 ryoji BOMà¯êîí«â¡
-	EConvertResult ReadFile_To_CDocLineMgr(
+	CodeConvertResult ReadFile_To_CDocLineMgr(
 		DocLineMgr*		pcDocLineMgr,
 		const LoadInfo&	sLoadInfo,
 		FileInfo*			pFileInfo

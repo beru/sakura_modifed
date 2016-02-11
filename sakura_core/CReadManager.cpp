@@ -39,7 +39,7 @@
 	@date	2002/08/30 Moca 旧ReadFileを元に作成 ファイルアクセスに関する部分をFileLoadで行う
 	@date	2003/07/26 ryoji BOMの状態の取得を追加
 */
-EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
+CodeConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	DocLineMgr*		pcDocLineMgr,	// [out]
 	const LoadInfo&	sLoadInfo,		// [in]
 	FileInfo*			pFileInfo		// [out]
@@ -71,10 +71,10 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 
 	// 処理中のユーザー操作を可能にする
 	if (!::BlockingHook(NULL)) {
-		return RESULT_FAILURE; //######INTERRUPT
+		return CodeConvertResult::Failure; //######INTERRUPT
 	}
 
-	EConvertResult eRet = RESULT_COMPLETE;
+	CodeConvertResult eRet = CodeConvertResult::Complete;
 
 	try {
 		FileLoad cfl(type->m_encoding);
@@ -102,10 +102,10 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		int				nLineNum = 0;
 		Eol			cEol;
 		NativeW		cUnicodeBuffer;
-		EConvertResult	eRead;
-		while ((eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol )) != RESULT_FAILURE) {
-			if (eRead == RESULT_LOSESOME) {
-				eRet = RESULT_LOSESOME;
+		CodeConvertResult	eRead;
+		while ((eRead = cfl.ReadLine( &cUnicodeBuffer, &cEol )) != CodeConvertResult::Failure) {
+			if (eRead == CodeConvertResult::LoseSome) {
+				eRet = CodeConvertResult::LoseSome;
 			}
 			const wchar_t* pLine = cUnicodeBuffer.GetStringPtr();
 			int nLineLen = cUnicodeBuffer.GetStringLength();
@@ -125,9 +125,9 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 		cfl.FileClose();
 	}catch (AppExitException) {
 		// WM_QUITが発生した
-		return RESULT_FAILURE;
+		return CodeConvertResult::Failure;
 	}catch (Error_FileOpen) {
-		eRet = RESULT_FAILURE;
+		eRet = CodeConvertResult::Failure;
 		if (!fexist(pszPath)) {
 			// ファイルがない
 			ErrorMessage(
@@ -150,7 +150,7 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 			 );
 		}
 	}catch (Error_FileRead) {
-		eRet = RESULT_FAILURE;
+		eRet = CodeConvertResult::Failure;
 		ErrorMessage(
 			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_ERR_DLGDOCLM4),
@@ -163,7 +163,7 @@ EConvertResult ReadManager::ReadFile_To_CDocLineMgr(
 	NotifyProgress(0);
 	// 処理中のユーザー操作を可能にする
 	if (!::BlockingHook(NULL)) {
-		return RESULT_FAILURE; //####INTERRUPT
+		return CodeConvertResult::Failure; //####INTERRUPT
 	}
 
 	// 行変更状態をすべてリセット

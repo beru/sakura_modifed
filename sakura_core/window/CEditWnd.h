@@ -420,7 +420,7 @@ private:
 	EIconClickStatus	m_IconClicked;
 
 public:
-	eSelectCountMode	m_nSelectCountMode; // 選択文字カウント方法
+	SelectCountMode	m_nSelectCountMode; // 選択文字カウント方法
 
 };
 

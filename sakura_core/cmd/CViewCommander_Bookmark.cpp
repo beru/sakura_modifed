@@ -313,7 +313,7 @@ void ViewCommander::Command_BOOKMARK_NEXT(void)
 	nYOld = ptXY.y;					// hor
 
 re_do:;								// hor
-	if (BookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Forward, &tmp_y)) {
+	if (BookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		LayoutPoint ptLayout;
@@ -357,7 +357,7 @@ void ViewCommander::Command_BOOKMARK_PREV(void)
 	nYOld = ptXY.y;						// hor
 
 re_do:;								// hor
-	if (BookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), eSearchDirection::Backward, &tmp_y)) {
+	if (BookmarkManager(&GetDocument()->m_cDocLineMgr).SearchBookMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = TRUE;				// hor
 		LayoutPoint ptLayout;
@@ -424,7 +424,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 
 	for (int n=0; n<2; ++n) {
 		if (FuncListManager().SearchFuncListMark(&GetDocument()->m_cDocLineMgr,
-				ptXY.GetY2(), eSearchDirection::Forward, &ptXY.y)) {
+				ptXY.GetY2(), SearchDirection::Forward, &ptXY.y)) {
 			LayoutPoint ptLayout;
 			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
 			m_pCommanderView->MoveCursorSelecting( ptLayout,
@@ -457,7 +457,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 		if (FuncListManager().SearchFuncListMark(
 			&GetDocument()->m_cDocLineMgr,
 			ptXY.GetY2(),
-			eSearchDirection::Backward,
+			SearchDirection::Backward,
 			&ptXY.y
 			)
 		) {

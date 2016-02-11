@@ -13,7 +13,7 @@
 void CodeBase::GetBom(Memory* pcmemBom) { pcmemBom->Clear(); }					// BOMデータ取得
 
 // 表示用16表示	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult CodeBase::UnicodeToHex(
+CodeConvertResult CodeBase::UnicodeToHex(
 	const wchar_t* cSrc,
 	const int iSLen,
 	TCHAR* pDst,
@@ -31,7 +31,7 @@ EConvertResult CodeBase::UnicodeToHex(
 		auto_sprintf(pDst, _T("U+%04X"), cSrc[0]);
 	}
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }
 
 

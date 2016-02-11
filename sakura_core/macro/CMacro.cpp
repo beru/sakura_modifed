@@ -335,7 +335,7 @@ void MacroParam::SetStringParam( const WCHAR* szParam, int nLength )
 	auto_memcpy( m_pData, szParam, nLen );
 	m_pData[nLen] = LTEXT('\0');
 	m_nDataLen = nLen;
-	m_eType = EMacroParamTypeStr;
+	m_type = MacroParamType::Str;
 }
 
 void MacroParam::SetIntParam(const int nParam)
@@ -344,7 +344,7 @@ void MacroParam::SetIntParam(const int nParam)
 	m_pData = new WCHAR[16];	//	数値格納（最大16桁）用
 	_itow(nParam, m_pData, 10);
 	m_nDataLen = auto_strlen(m_pData);
-	m_eType = EMacroParamTypeInt;
+	m_type = MacroParamType::Int;
 }
 
 // 引数に文字列を追加。
@@ -473,18 +473,18 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 
 	// 2002.2.2 YAZAKI SMacroMgrに頼む
 	if (SMacroMgr::GetFuncInfoByID( hInstance, nFuncID, szFuncName, szFuncNameJapanese)){
-		// 2014.01.24 Moca マクロ書き出しをm_eTypeを追加して統合
+		// 2014.01.24 Moca マクロ書き出しをm_typeを追加して統合
 		out.WriteF( L"S_%ls(", szFuncName );
 		MacroParam* pParam = m_pParamTop;
 		while (pParam) {
 			if (pParam != m_pParamTop) {
 				out.WriteString( L", " );
 			}
-			switch (pParam->m_eType) {
-			case EMacroParamTypeInt:
+			switch (pParam->m_type) {
+			case MacroParamType::Int:
 				out.WriteString( pParam->m_pData );
 				break;
-			case EMacroParamTypeStr:
+			case MacroParamType::Str:
 				pText = pParam->m_pData;
 				nTextLen = pParam->m_nDataLen;
 				cmemWork.SetString( pText, nTextLen );
@@ -1591,7 +1591,7 @@ bool Macro::HandleFunction(
 				);
 
 				// 2009.08.28 nasukoji	「折り返さない」選択時にTAB幅が変更されたらテキスト最大幅の再算出が必要
-				if (view->m_pcEditDoc->m_nTextWrapMethodCur == (int)eTextWrappingMethod::NoWrapping) {
+				if (view->m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 					// 最大幅の再算出時に各行のレイアウト長の計算も行う
 					view->m_pcEditDoc->m_cLayoutMgr.CalculateTextWidth();
 				}
@@ -1701,7 +1701,7 @@ bool Macro::HandleFunction(
 			if (varCopy.data.iVal < MINLINEKETAS || varCopy.data.iVal > MAXLINEKETAS) {
 				return true;
 			}
-			view->m_pcEditDoc->m_nTextWrapMethodCur = (int)eTextWrappingMethod::SettingWidth;
+			view->m_pcEditDoc->m_nTextWrapMethodCur = (int)TextWrappingMethod::SettingWidth;
 			view->m_pcEditDoc->m_bTextWrapMethodCurTemp = !(view->m_pcEditDoc->m_nTextWrapMethodCur == view->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nTextWrapMethod);
 			view->m_pcEditWnd->ChangeLayoutParam(
 				false, 
@@ -2367,7 +2367,7 @@ bool Macro::HandleFunction(
 				nRet = (pcDocLine->m_sMark.m_cBookmarked ? 1: 0);
 				break;
 			case 3:
-				nRet = pcDocLine->m_sMark.m_cDiffmarked;
+				nRet = (int)(DiffMark)(pcDocLine->m_sMark.m_cDiffmarked);
 				break;
 			case 4:
 				nRet = (pcDocLine->m_sMark.m_cFuncList.GetFuncListMark() ? 1: 0 );

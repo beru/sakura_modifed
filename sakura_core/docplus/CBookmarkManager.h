@@ -23,7 +23,7 @@
 */
 #pragma once
 
-#include "_main/global.h" // eSearchDirection, SearchOption
+#include "_main/global.h" // SearchDirection, SearchOption
 
 class DocLine;
 class DocLineMgr;
@@ -65,7 +65,7 @@ public:
 	BookmarkManager(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
 
 	void ResetAllBookMark();															// ブックマークの全解除
-	bool SearchBookMark(LogicInt nLineNum, eSearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
+	bool SearchBookMark(LogicInt nLineNum, SearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
 	void SetBookMarks(wchar_t*);														// 物理行番号のリストからまとめて行マーク
 	LPCWSTR GetBookMarks();																// 行マークされてる物理行番号のリストを作る
 	void MarkSearchWord(const SearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする

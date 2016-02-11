@@ -99,14 +99,14 @@ int Latin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool
 
 
 // コード変換 Latin1→Unicode
-EConvertResult Latin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
+CodeConvertResult Latin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
 {
 	// ソース取得
 	int nSrcLen;
 	const char* pSrc = reinterpret_cast<const char*>( cSrc.GetRawPtr(&nSrcLen) );
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// 変換先バッファサイズを設定してメモリ領域確保
@@ -121,9 +121,9 @@ EConvertResult Latin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
 	pDstMem->_GetMemory()->SetRawDataHoldBuffer( pDst, nDstLen*sizeof(wchar_t) );
 
 	if (!bError) {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}else {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}
 }
 
@@ -193,14 +193,14 @@ int Latin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool
 
 
 // コード変換 Unicode→Latin1
-EConvertResult Latin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
+CodeConvertResult Latin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
 {
 	// ソース取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
 	int nSrcLen = cSrc.GetStringLength();
 	if (nSrcLen == 0) {
 		pDstMem->Clear();
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 
 	// 変換先バッファサイズを設定してバッファを確保
@@ -216,15 +216,15 @@ EConvertResult Latin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
 
 	// 結果
 	if (berror) {
-		return RESULT_LOSESOME;
+		return CodeConvertResult::LoseSome;
 	}else {
-		return RESULT_COMPLETE;
+		return CodeConvertResult::Complete;
 	}
 }
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+CodeConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 
 	// 2008/6/21 Uchi
@@ -242,9 +242,9 @@ EConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 	}
 
 	// Latin1 変換
-	EConvertResult res = UnicodeToLatin1(cCharBuffer, cCharBuffer._GetMemory());
-	if (res != RESULT_COMPLETE) {
-		return RESULT_LOSESOME;
+	CodeConvertResult res = UnicodeToLatin1(cCharBuffer, cCharBuffer._GetMemory());
+	if (res != CodeConvertResult::Complete) {
+		return CodeConvertResult::LoseSome;
 	}
 
 	// Hex変換
@@ -258,5 +258,5 @@ EConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR*
 		auto_sprintf(pd, _T("?%02x"), *ps);
 	}
 
-	return RESULT_COMPLETE;
+	return CodeConvertResult::Complete;
 }

@@ -29,14 +29,14 @@ void BookmarkManager::ResetAllBookMark(void)
 */
 bool BookmarkManager::SearchBookMark(
 	LogicInt			nLineNum,		// 検索開始行
-	eSearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
+	SearchDirection	bPrevOrNext,	// 0==前方検索 1==後方検索
 	LogicInt*			pnLineNum 		// マッチ行
 	)
 {
 	LogicInt nLinePos = nLineNum;
 	
 	// 前方検索
-	if (bPrevOrNext == eSearchDirection::Backward) {
+	if (bPrevOrNext == SearchDirection::Backward) {
 		--nLinePos;
 		DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {

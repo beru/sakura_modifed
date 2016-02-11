@@ -15,7 +15,7 @@
 #pragma once
 
 // アンドゥバッファ用 操作コード
-enum class eOpeCode {
+enum class OpeCode {
 	Unknown,	//!< 不明(未使用)
 	Insert,		//!< 挿入
 	Delete,		//!< 削除
@@ -51,15 +51,15 @@ typedef std::vector<LineData> OpeLineData;
 // 2007.10.17 kobake 解放漏れを防ぐため、データをポインタではなくインスタンス実体で持つように変更
 class Ope {
 public:
-	Ope(eOpeCode eCode);	// Opeクラス構築
+	Ope(OpeCode eCode);	// Opeクラス構築
 	virtual ~Ope();		// Opeクラス消滅
 
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 
-	eOpeCode GetCode() const { return m_nOpe; }
+	OpeCode GetCode() const { return m_nOpe; }
 
 private:
-	eOpeCode m_nOpe;						//!< 操作種別
+	OpeCode m_nOpe;						//!< 操作種別
 
 public:
 	LogicPoint	m_ptCaretPos_PHY_Before;	//!< キャレット位置。文字単位。			[共通]
@@ -69,7 +69,7 @@ public:
 //! 削除
 class DeleteOpe : public Ope {
 public:
-	DeleteOpe() : Ope(eOpeCode::Delete) {
+	DeleteOpe() : Ope(OpeCode::Delete) {
 		m_ptCaretPos_PHY_To.Set(LogicInt(0),LogicInt(0));
 	}
 	virtual void DUMP(void);	// 編集操作要素のダンプ
@@ -82,7 +82,7 @@ public:
 //! 挿入
 class InsertOpe : public Ope {
 public:
-	InsertOpe() : Ope(eOpeCode::Insert) { }
+	InsertOpe() : Ope(OpeCode::Insert) { }
 	virtual void DUMP(void);	// 編集操作要素のダンプ
 public:
 	OpeLineData	m_cOpeLineData;			//!< 操作に関連するデータ				[DELETE/INSERT]
@@ -94,7 +94,7 @@ class ReplaceOpe : public Ope {
 public:
 	ReplaceOpe()
 		:
-		Ope(eOpeCode::Replace)
+		Ope(OpeCode::Replace)
 	{
 		m_ptCaretPos_PHY_To.Set(LogicInt(0), LogicInt(0));
 	}
@@ -109,17 +109,17 @@ public:
 //! キャレット移動
 class MoveCaretOpe : public Ope {
 public:
-	MoveCaretOpe() : Ope(eOpeCode::MoveCaret) { }
+	MoveCaretOpe() : Ope(OpeCode::MoveCaret) { }
 	MoveCaretOpe(const LogicPoint& ptBefore, const LogicPoint& ptAfter)
 		:
-		Ope(eOpeCode::MoveCaret)
+		Ope(OpeCode::MoveCaret)
 	{
 		m_ptCaretPos_PHY_Before = ptBefore;
 		m_ptCaretPos_PHY_After = ptAfter;
 	}
 	MoveCaretOpe(const LogicPoint& ptCaretPos)
 		:
-		Ope(eOpeCode::MoveCaret)
+		Ope(OpeCode::MoveCaret)
 	{
 		m_ptCaretPos_PHY_Before = ptCaretPos;
 		m_ptCaretPos_PHY_After = ptCaretPos;

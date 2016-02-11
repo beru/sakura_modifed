@@ -6,14 +6,14 @@
 #include "mem/CMemory.h"
 #include "CEol.h"
 
-EConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian )
+CodeConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pDstMem, const bool bBigEndian )
 {
 	// ソース取得
 	int nSrcLen;
 	const unsigned char* pSrc = reinterpret_cast<const unsigned char*>( cSrc.GetRawPtr(&nSrcLen) );
 	Memory* pDstMem2 = pDstMem->_GetMemory();
 
-	EConvertResult res = RESULT_COMPLETE;
+	CodeConvertResult res = CodeConvertResult::Complete;
 	bool bCopy = false;
 	if (nSrcLen % 2 == 1) {
 		// 不足分の最終1バイトとして 0x00 を補う。
@@ -26,9 +26,9 @@ EConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pDstM
 			}
 			pDst[nSrcLen] = 0;
 			pDstMem2->_SetRawLength(nSrcLen + 1);
-			res = RESULT_LOSESOME;
+			res = CodeConvertResult::LoseSome;
 		}else {
-			return RESULT_FAILURE;
+			return CodeConvertResult::Failure;
 		}
 	}
 
@@ -46,7 +46,7 @@ EConvertResult Unicode::_UnicodeToUnicode_in( const Memory& cSrc, NativeW* pDstM
 }
 
 
-EConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian )
+CodeConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& cSrc, Memory* pDstMem, const bool bBigEndian )
 {
 	if (bBigEndian == true) {
 		if (cSrc._GetMemory() == pDstMem) {
@@ -62,7 +62,7 @@ EConvertResult Unicode::_UnicodeToUnicode_out( const NativeW& cSrc, Memory* pDst
 		}
 	}
 
-	return RESULT_COMPLETE;   // 何もしない
+	return CodeConvertResult::Complete;   // 何もしない
 }
 
 

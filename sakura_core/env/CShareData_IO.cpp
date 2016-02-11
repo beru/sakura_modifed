@@ -569,7 +569,7 @@ void ShareData_IO::ShareData_IO_Common(DataProfile& cProfile)
 	cProfile.IOProfileData(pszSecName, LTEXT("szTabWndCaption")		, MakeStringBufferW(common.m_sTabBar.m_szTabWndCaption));	//@@@ 2003.06.13 MIK
 	cProfile.IOProfileData(pszSecName, LTEXT("bSameTabWidth")			, common.m_sTabBar.m_bSameTabWidth);	// 2006.01.28 ryoji タブを等幅にする
 	cProfile.IOProfileData(pszSecName, LTEXT("bDispTabIcon")			, common.m_sTabBar.m_bDispTabIcon);	// 2006.01.28 ryoji タブにアイコンを表示する
-	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("bDispTabClose")	, common.m_sTabBar.m_bDispTabClose);	// 2012.04.14 syat
+	cProfile.IOProfileData_WrapInt(pszSecName, LTEXT("bDispTabClose")	, common.m_sTabBar.m_dispTabClose);	// 2012.04.14 syat
 	cProfile.IOProfileData(pszSecName, LTEXT("bSortTabList")			, common.m_sTabBar.m_bSortTabList);	// 2006.05.10 ryoji タブ一覧をソートする
 	cProfile.IOProfileData(pszSecName, LTEXT("bTab_RetainEmptyWin")	, common.m_sTabBar.m_bTab_RetainEmptyWin);	// 最後のファイルが閉じられたとき(無題)を残す	// 2007.02.11 genta
 	cProfile.IOProfileData(pszSecName, LTEXT("bTab_CloseOneWin")	, common.m_sTabBar.m_bTab_CloseOneWin);	// タブモードでもウィンドウの閉じるボタンで現在のファイルのみ閉じる	// 2007.02.11 genta
@@ -2378,16 +2378,16 @@ void ShareData_IO::ShareData_IO_FileTreeItem(
 	auto_sprintf( szKey, L"FileTree(%d).eItemType", i );
 	cProfile.IOProfileData_WrapInt( pszSecName, szKey, item.m_eFileTreeItemType );
 	if (cProfile.IsReadingMode()
-		|| item.m_eFileTreeItemType == EFileTreeItemType_Grep
-		|| item.m_eFileTreeItemType == EFileTreeItemType_File
+		|| item.m_eFileTreeItemType == FileTreeItemType::Grep
+		|| item.m_eFileTreeItemType == FileTreeItemType::File
 	) {
 		auto_sprintf( szKey, L"FileTree(%d).szTargetPath", i );
 		cProfile.IOProfileData( pszSecName, szKey, item.m_szTargetPath );
 	}
 	if (cProfile.IsReadingMode()
-		|| ((item.m_eFileTreeItemType == EFileTreeItemType_Grep || item.m_eFileTreeItemType == EFileTreeItemType_File)
+		|| ((item.m_eFileTreeItemType == FileTreeItemType::Grep || item.m_eFileTreeItemType == FileTreeItemType::File)
 			&& item.m_szLabelName[0] != _T('\0') )
-		|| item.m_eFileTreeItemType == EFileTreeItemType_Folder
+		|| item.m_eFileTreeItemType == FileTreeItemType::Folder
 	) {
 		auto_sprintf( szKey, L"FileTree(%d).szLabelName", i );
 		cProfile.IOProfileData( pszSecName, szKey, item.m_szLabelName );
@@ -2395,7 +2395,7 @@ void ShareData_IO::ShareData_IO_FileTreeItem(
 	auto_sprintf( szKey, L"FileTree(%d).nDepth", i );
 	cProfile.IOProfileData( pszSecName, szKey, item.m_nDepth );
 	if (cProfile.IsReadingMode()
-		|| item.m_eFileTreeItemType == EFileTreeItemType_Grep
+		|| item.m_eFileTreeItemType == FileTreeItemType::Grep
 	) {
 		auto_sprintf( szKey, L"FileTree(%d).szTargetFile", i );
 		cProfile.IOProfileData( pszSecName, szKey, item.m_szTargetFile );

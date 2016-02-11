@@ -54,24 +54,24 @@ DocSubject::~DocSubject()
 }
 
 
-#define DEF_NOTIFY(NAME) ECallbackResult DocSubject::Notify##NAME() \
+#define DEF_NOTIFY(NAME) CallbackResultType DocSubject::Notify##NAME() \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0; i<n; ++i) { \
-		ECallbackResult eRet = GetListener(i)->On##NAME(); \
-		if (eRet != CALLBACK_CONTINUE) return eRet; \
+		CallbackResultType eRet = GetListener(i)->On##NAME(); \
+		if (eRet != CallbackResultType::Continue) return eRet; \
 	} \
-	return CALLBACK_CONTINUE; \
+	return CallbackResultType::Continue; \
 }
 
-#define DEF_NOTIFY2(NAME, ARGTYPE) ECallbackResult DocSubject::Notify##NAME(ARGTYPE a) \
+#define DEF_NOTIFY2(NAME, ARGTYPE) CallbackResultType DocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
 	for (int i=0; i<n; ++i) { \
-		ECallbackResult eRet = GetListener(i)->On##NAME(a); \
-		if (eRet != CALLBACK_CONTINUE) return eRet; \
+		CallbackResultType eRet = GetListener(i)->On##NAME(a); \
+		if (eRet != CallbackResultType::Continue) return eRet; \
 	} \
-	return CALLBACK_CONTINUE; \
+	return CallbackResultType::Continue; \
 }
 
 #define VOID_NOTIFY(NAME) void DocSubject::Notify##NAME() \
@@ -91,14 +91,14 @@ DocSubject::~DocSubject()
 }
 
 //######‰¼
-#define CORE_NOTIFY2(NAME, ARGTYPE) ELoadResult DocSubject::Notify##NAME(ARGTYPE a) \
+#define CORE_NOTIFY2(NAME, ARGTYPE) LoadResultType DocSubject::Notify##NAME(ARGTYPE a) \
 { \
 	int n = GetListenerCount(); \
-	ELoadResult eRet = LOADED_FAILURE; \
+	LoadResultType eRet = LoadResultType::Failure; \
 	for (int i=0; i<n; ++i) { \
-		ELoadResult e = GetListener(i)->On##NAME(a); \
-		if (e == LOADED_NOIMPLEMENT) continue; \
-		if (e == LOADED_FAILURE) return e; \
+		LoadResultType e = GetListener(i)->On##NAME(a); \
+		if (e == LoadResultType::NoImplement) continue; \
+		if (e == LoadResultType::Failure) return e; \
 		eRet = e; \
 	} \
 	return eRet; \
@@ -109,7 +109,7 @@ VOID_NOTIFY2(BeforeLoad, LoadInfo*)
 CORE_NOTIFY2(Load, const LoadInfo&)
 VOID_NOTIFY2(Loading, int)
 VOID_NOTIFY2(AfterLoad, const LoadInfo&)
-VOID_NOTIFY2(FinalLoad, ELoadResult)
+VOID_NOTIFY2(FinalLoad, LoadResultType)
 
 DEF_NOTIFY2(CheckSave, SaveInfo*)
 DEF_NOTIFY2(PreBeforeSave, SaveInfo*)
@@ -117,7 +117,7 @@ VOID_NOTIFY2(BeforeSave, const SaveInfo&)
 VOID_NOTIFY2(Save, const SaveInfo&)
 VOID_NOTIFY2(Saving, int)
 VOID_NOTIFY2(AfterSave, const SaveInfo&)
-VOID_NOTIFY2(FinalSave, ESaveResult)
+VOID_NOTIFY2(FinalSave, SaveResultType)
 
 DEF_NOTIFY(BeforeClose)
 
