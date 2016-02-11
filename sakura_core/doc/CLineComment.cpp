@@ -18,7 +18,7 @@ LineComment::LineComment()
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		m_pszLineComment[i][0] = '\0';
-		m_nLineCommentPos[i] = -1;
+		m_lineCommentPos[i] = -1;
 	}
 }
 
@@ -26,31 +26,31 @@ LineComment::LineComment()
 	行コメントデリミタをコピーする
 	@param n [in]           コピー対象のコメント番号
 	@param buffer [in]      コメント文字列
-	@param nCommentPos [in] コメント位置．-1のときは指定無し．
+	@param commentPos [in] コメント位置．-1のときは指定無し．
 */
-void LineComment::CopyTo(const int n, const wchar_t* buffer, int nCommentPos)
+void LineComment::CopyTo(const int n, const wchar_t* buffer, int commentPos)
 {
 	int nStrLen = wcslen(buffer);
 	if (0 < nStrLen && nStrLen < COMMENT_DELIMITER_BUFFERSIZE) {
 		wcscpy(m_pszLineComment[n], buffer);
-		m_nLineCommentPos[n] = nCommentPos;
-		m_nLineCommentLen[n] = nStrLen;
+		m_lineCommentPos[n] = commentPos;
+		m_lineCommentLen[n] = nStrLen;
 	}else {
 		m_pszLineComment[n][0] = L'\0';
-		m_nLineCommentPos[n] = -1;
-		m_nLineCommentLen[n] = 0;
+		m_lineCommentPos[n] = -1;
+		m_lineCommentLen[n] = 0;
 	}
 }
 
-bool LineComment::Match(int nPos, const StringRef& cStr) const
+bool LineComment::Match(int pos, const StringRef& str) const
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		if (1
 			&& m_pszLineComment[i][0] != L'\0'	// 行コメントデリミタ
-			&& (m_nLineCommentPos[i] < 0 || m_nLineCommentPos[i] == nPos)	// 位置指定ON.
-			&& nPos <= cStr.GetLength() - m_nLineCommentLen[i]	// 行コメントデリミタ
-			//&& auto_memicmp(&cStr.GetPtr()[nPos], m_pszLineComment[i], m_nLineCommentLen[i]) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
-			&& wmemicmp_ascii(&cStr.GetPtr()[nPos], m_pszLineComment[i], m_nLineCommentLen[i]) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
+			&& (m_lineCommentPos[i] < 0 || m_lineCommentPos[i] == pos)	// 位置指定ON.
+			&& pos <= str.GetLength() - m_lineCommentLen[i]	// 行コメントデリミタ
+			//&& auto_memicmp(&str.GetPtr()[pos], m_pszLineComment[i], m_lineCommentLen[i]) == 0	// 非ASCIIも大文字小文字を区別しない	//###locale 依存
+			&& wmemicmp_ascii(&str.GetPtr()[pos], m_pszLineComment[i], m_lineCommentLen[i]) == 0	// ASCIIのみ大文字小文字を区別しない（高速）
 		) {
 			return true;
 		}

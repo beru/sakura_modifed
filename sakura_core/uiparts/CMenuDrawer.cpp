@@ -67,7 +67,7 @@ MenuDrawer::MenuDrawer()
 	m_nMenuHeight = 0;
 	m_nMenuFontHeight = 0;
 	m_hFontMenu = NULL;
-	m_pcIcons = NULL;
+	m_pIcons = NULL;
 	m_hCompBitmap = NULL;
 	m_hCompDC = NULL;
 
@@ -751,7 +751,7 @@ void MenuDrawer::Create(
 {
 	m_hInstance = hInstance;
 	m_hWndOwner = hWndOwner;
-	m_pcIcons = pcIcons;
+	m_pIcons = pcIcons;
 
 	return;
 }
@@ -785,7 +785,7 @@ void MenuDrawer::ResetContents(void)
 		}
 	}
 	m_nMenuHeight = m_nMenuFontHeight + 4; // margin
-	if (m_pShareData->m_common.m_sWindow.m_bMenuIcon) {
+	if (m_pShareData->m_common.m_window.m_bMenuIcon) {
 		// 最低アイコン分の高さを確保
 		if (20 > m_nMenuHeight) {
 			m_nMenuHeight = 20;
@@ -826,7 +826,7 @@ void MenuDrawer::MyAppendMenu(
 	auto_strcpy(szKey, pszKey); 
 	if (nFuncId != 0) {
 		// メニューラベルの作成
-		auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
+		auto& csKeyBind = m_pShareData->m_common.m_keyBind;
 		KeyBind::GetMenuLabel(
 			m_hInstance,
 			csKeyBind.m_nKeyNameArrNum,
@@ -847,7 +847,7 @@ void MenuDrawer::MyAppendMenu(
 			// メニュー項目をオーナー描画にして、アイコンを表示する
 			// 2010.03.29 アクセスキーの分を詰めるためいつもオーナードローにする。ただしVista未満限定
 			// Vista以上ではメニューもテーマが適用されるので、オーナードローにすると見た目がXP風になってしまう。
-			if (m_pShareData->m_common.m_sWindow.m_bMenuIcon || !IsWinVista_or_later()) {
+			if (m_pShareData->m_common.m_window.m_bMenuIcon || !IsWinVista_or_later()) {
 				nFlagAdd = MF_OWNERDRAW;
 			}
 			// 機能のビットマップの情報を覚えておく
@@ -858,7 +858,7 @@ void MenuDrawer::MyAppendMenu(
 #ifdef DRAW_MENU_ICON_BACKGROUND_3DFACE
 		// セパレータかサブメニュー
 		if (nFlag & (MF_SEPARATOR | MF_POPUP)) {
-			if (m_pShareData->m_common.m_sWindow.m_bMenuIcon || !IsWinVista_or_later()) {
+			if (m_pShareData->m_common.m_window.m_bMenuIcon || !IsWinVista_or_later()) {
 					nFlagAdd = MF_OWNERDRAW;
 			}
 		}
@@ -958,7 +958,7 @@ int MenuDrawer::MeasureItem(int nFuncID, int* pnItemHeight)
 	//@@@ 2002.2.2 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
 
 	int nMenuWidth = rc.Width() + 3;
-	if (m_pShareData->m_common.m_sWindow.m_bMenuIcon) {
+	if (m_pShareData->m_common.m_window.m_bMenuIcon) {
 		nMenuWidth += 28+ DpiScaleX(8); // アイコンと枠 + アクセスキー隙間
 	}else {
 		// WM_MEASUREITEMで報告するメニュー幅より実際の幅は1文字分相当位広いので、その分は加えない
@@ -985,7 +985,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 	int			nBkModeOld;
 	int			nTxSysColor;
 
-	const bool bMenuIconDraw = !!m_pShareData->m_common.m_sWindow.m_bMenuIcon;
+	const bool bMenuIconDraw = !!m_pShareData->m_common.m_window.m_bMenuIcon;
 	const int nCxCheck = ::GetSystemMetrics(SM_CXMENUCHECK);
 	const int nCyCheck = ::GetSystemMetrics(SM_CYMENUCHECK);
 
@@ -1355,7 +1355,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 		// アイテムが使用不可
 		if (lpdis->itemState & ODS_DISABLED) {
 			// 淡色アイコン
-			m_pcIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
+			m_pIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
 				//@@@ 2002.1.29 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処
@@ -1364,7 +1364,7 @@ void MenuDrawer::DrawItem(DRAWITEMSTRUCT* lpdis)
 			);
 		}else {
 			// 通常のアイコン
-			m_pcIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
+			m_pIcons->Draw(m_menuItems[nItemIndex].m_nBitmapIdx,
 				hdc,	//	Target DC
 				lpdis->rcItem.left + 2,	//	X
 				//@@@ 2002.1.29 YAZAKI Windowsの設定でメニューのフォントを大きくすると表示が崩れる問題に対処

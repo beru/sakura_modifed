@@ -33,7 +33,7 @@
 // 上下に分割	// Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
 void ViewCommander::Command_SPLIT_V(void)
 {
-	GetEditWindow()->m_cSplitterWnd.VSplitOnOff();
+	GetEditWindow()->m_splitterWnd.VSplitOnOff();
 	return;
 }
 
@@ -41,7 +41,7 @@ void ViewCommander::Command_SPLIT_V(void)
 // 左右に分割	// Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
 void ViewCommander::Command_SPLIT_H(void)
 {
-	GetEditWindow()->m_cSplitterWnd.HSplitOnOff();
+	GetEditWindow()->m_splitterWnd.HSplitOnOff();
 	return;
 }
 
@@ -49,7 +49,7 @@ void ViewCommander::Command_SPLIT_H(void)
 // 縦横に分割	// Sept. 17, 2000 jepro 説明に「に」を追加
 void ViewCommander::Command_SPLIT_VH(void)
 {
-	GetEditWindow()->m_cSplitterWnd.VHSplitOnOff();
+	GetEditWindow()->m_splitterWnd.VHSplitOnOff();
 	return;
 }
 
@@ -382,7 +382,7 @@ void ViewCommander::Command_WINTOPMOST(LPARAM lparam)
 void ViewCommander::Command_BIND_WINDOW(void)
 {
 	// タブモードであるならば
-	auto& csTabBar = GetDllShareData().m_common.m_sTabBar;
+	auto& csTabBar = GetDllShareData().m_common.m_tabBar;
 	if (csTabBar.m_bDispTabWnd) {
 		// タブウィンドウの設定を変更
 		csTabBar.m_bDispTabWndMultiWin = !csTabBar.m_bDispTabWndMultiWin;
@@ -411,7 +411,7 @@ void ViewCommander::Command_BIND_WINDOW(void)
 // グループを閉じる		// 2007.06.20 ryoji 追加
 void ViewCommander::Command_GROUPCLOSE(void)
 {
-	auto& csTabBar = GetDllShareData().m_common.m_sTabBar;
+	auto& csTabBar = GetDllShareData().m_common.m_tabBar;
 	if (
 		csTabBar.m_bDispTabWnd
 		&& !csTabBar.m_bDispTabWndMultiWin
@@ -426,7 +426,7 @@ void ViewCommander::Command_GROUPCLOSE(void)
 // 次のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_NEXTGROUP(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->NextGroup();
@@ -436,7 +436,7 @@ void ViewCommander::Command_NEXTGROUP(void)
 // 前のグループ			// 2007.06.20 ryoji
 void ViewCommander::Command_PREVGROUP(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->PrevGroup();
@@ -446,7 +446,7 @@ void ViewCommander::Command_PREVGROUP(void)
 // タブを右に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVERIGHT(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->MoveRight();
@@ -456,7 +456,7 @@ void ViewCommander::Command_TAB_MOVERIGHT(void)
 // タブを左に移動		// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_MOVELEFT(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->MoveLeft();
@@ -466,7 +466,7 @@ void ViewCommander::Command_TAB_MOVELEFT(void)
 // 新規グループ			// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_SEPARATE(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->Separate();
@@ -476,7 +476,7 @@ void ViewCommander::Command_TAB_SEPARATE(void)
 // 次のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTNEXT(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->JoinNext();
@@ -486,7 +486,7 @@ void ViewCommander::Command_TAB_JOINTNEXT(void)
 // 前のグループに移動	// 2007.06.20 ryoji
 void ViewCommander::Command_TAB_JOINTPREV(void)
 {
-	TabWnd* pcTabWnd = &GetEditWindow()->m_cTabWnd;
+	TabWnd* pcTabWnd = &GetEditWindow()->m_tabWnd;
 	if (!pcTabWnd->GetHwnd())
 		return;
 	pcTabWnd->JoinPrev();
@@ -496,7 +496,7 @@ void ViewCommander::Command_TAB_JOINTPREV(void)
 // 左をすべて閉じる		// 2008.11.22 syat
 void ViewCommander::Command_TAB_CLOSELEFT(void)
 {
-	if (GetDllShareData().m_common.m_sTabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.m_tabBar.m_bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する
@@ -526,7 +526,7 @@ void ViewCommander::Command_TAB_CLOSELEFT(void)
 // 右をすべて閉じる		// 2008.11.22 syat
 void ViewCommander::Command_TAB_CLOSERIGHT(void)
 {
-	if (GetDllShareData().m_common.m_sTabBar.m_bDispTabWnd) {
+	if (GetDllShareData().m_common.m_tabBar.m_bDispTabWnd) {
 		int nGroup = 0;
 
 		// ウィンドウ一覧を取得する

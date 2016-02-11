@@ -59,7 +59,7 @@ void ViewCommander::Command_CHGMOD_INS(void)
 void ViewCommander::Command_CHGMOD_EOL(EolType e)
 {
 	if (EolType::None < e && e < EolType::CodeMax) {
-		GetDocument()->m_cDocEditor.SetNewLineCode(e);
+		GetDocument()->m_docEditor.SetNewLineCode(e);
 		// ステータスバーを更新するため
 		// キャレットの行桁位置を表示する関数を呼び出す
 		GetCaret().ShowCaretPosInfo();
@@ -78,7 +78,7 @@ void ViewCommander::Command_CHG_CHARSET(
 		// 文字コードの確認
 		eCharSet = GetDocument()->GetDocumentEncoding();	// 設定する文字コードセット
 		bBom     = GetDocument()->GetDocumentBomExist();	// 設定するBOM
-		int nRet = GetEditWindow()->m_cDlgSetCharSet.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 
+		int nRet = GetEditWindow()->m_dlgSetCharSet.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), 
 						&eCharSet, &bBom);
 		if (!nRet) {
 			return;
@@ -86,7 +86,7 @@ void ViewCommander::Command_CHG_CHARSET(
 	}
 
 	// 文字コードの設定
-	GetDocument()->m_cDocFile.SetCodeSetChg(eCharSet, CodeTypeName(eCharSet).UseBom() & bBom);
+	GetDocument()->m_docFile.SetCodeSetChg(eCharSet, CodeTypeName(eCharSet).UseBom() & bBom);
 
 	// ステータス表示
 	GetCaret().ShowCaretPosInfo();
@@ -129,12 +129,12 @@ void ViewCommander::Command_CANCEL_MODE(int whereCursorIs)
 		selInfo.DisableSelectArea(true);
 
 		// カーソルを移動
-		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		if (ptTo.y >= layoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
 			Command_GOFILEEND(false);
 		}else {
-			if (!GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode && bBoxSelect) {
+			if (!GetDllShareData().m_common.m_general.m_bIsFreeCursorMode && bBoxSelect) {
 				// 2013.04.22 Moca 矩形選択のとき左上固定をやめたので代わりにEOLより右だった場合にEOLに補正する
 				const Layout*	pcLayout = layoutMgr.SearchLineByLayoutY(ptTo.y);
 				if (pcLayout) {

@@ -23,7 +23,7 @@ bool Color_LineComment::EndColor(const StringRef& cStr, int nPos)
 	}
 
 	// 改行
-	if (WCODE::IsLineDelimiter(cStr.At(nPos), GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
+	if (WCODE::IsLineDelimiter(cStr.At(nPos), GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
 		return true;
 	}
 
@@ -40,11 +40,11 @@ bool Color_BlockComment::BeginColor(const StringRef& cStr, int nPos)
 	if (!cStr.IsValid()) return false;
 
 	// ブロックコメント
-	if (m_pcBlockComment->Match_CommentFrom(nPos, cStr)	//@@@ 2002.09.22 YAZAKI
+	if (m_pBlockComment->Match_CommentFrom(nPos, cStr)	//@@@ 2002.09.22 YAZAKI
 	) {
 		// この物理行にブロックコメントの終端があるか		//@@@ 2002.09.22 YAZAKI
-		this->m_nCOMMENTEND = m_pcBlockComment->Match_CommentTo(
-			nPos + m_pcBlockComment->getBlockFromLen(),
+		this->m_nCOMMENTEND = m_pBlockComment->Match_CommentTo(
+			nPos + m_pBlockComment->getBlockFromLen(),
 			cStr
 		);
 
@@ -57,7 +57,7 @@ bool Color_BlockComment::EndColor(const StringRef& cStr, int nPos)
 {
 	if (this->m_nCOMMENTEND == 0) {
 		// この物理行にブロックコメントの終端があるか
-		this->m_nCOMMENTEND = m_pcBlockComment->Match_CommentTo(
+		this->m_nCOMMENTEND = m_pBlockComment->Match_CommentTo(
 			nPos,
 			cStr
 		);

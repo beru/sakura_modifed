@@ -51,7 +51,7 @@ public:
 
 private:
 	EditView*		m_pCommanderView;
-	SMacroMgr*		m_pcSMacroMgr;
+	SMacroMgr*		m_pSMacroMgr;
 
 public:
 	// キーリピート状態

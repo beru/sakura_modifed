@@ -52,7 +52,7 @@ enum class KinsokuType {
 };
 
 struct LayoutReplaceArg {
-	LayoutRange	sDelRange;		// [in]削除範囲。レイアウト単位。
+	LayoutRange	delRange;		// [in]削除範囲。レイアウト単位。
 	OpeLineData*	pcmemDeleted;	// [out]削除されたデータ
 	OpeLineData*	pInsData;		// [in/out]挿入するデータ
 	LayoutInt		nAddLineNum;	// [out] 再描画ヒント レイアウト行の増減
@@ -115,14 +115,14 @@ public:
 	const wchar_t*	GetLineStr(LayoutInt nLine, LogicInt* pnLineLen, const Layout** ppcLayoutDes) const;	// 指定された物理行のデータへのポインタとその長さを返す
 
 	// 先頭と末尾
-	Layout*		GetTopLayout()		{ return m_pLayoutTop; }
-	Layout*		GetBottomLayout()	{ return m_pLayoutBot; }
+	Layout*			GetTopLayout()		{ return m_pLayoutTop; }
+	Layout*			GetBottomLayout()	{ return m_pLayoutBot; }
 	const Layout*	GetTopLayout() const { return m_pLayoutTop; }
 	const Layout*	GetBottomLayout() const { return m_pLayoutBot; }
 
 	// レイアウトを探す
 	const Layout*	SearchLineByLayoutY(LayoutInt nLineLayout) const;	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
-	Layout*		SearchLineByLayoutY(LayoutInt nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
+	Layout*			SearchLineByLayoutY(LayoutInt nLineLayout) { return const_cast<Layout*>(static_cast<const LayoutMgr*>(this)->SearchLineByLayoutY(nLineLayout)); }
 
 	// ワードを探す
 	bool			WhereCurrentWord(LayoutInt , LogicInt , LayoutRange* pSelect, NativeW*, NativeW*);	// 現在位置の単語の範囲を調べる
@@ -243,17 +243,17 @@ protected:
 		KinsokuType	eKinsokuType;
 		LogicInt		nPos;
 		LogicInt		nBgn;
-		StringRef		cLineStr;
+		StringRef		lineStr;
 		LogicInt		nWordBgn;
 		LogicInt		nWordLen;
 		LayoutInt		nPosX;
 		LayoutInt		nIndent;
-		Layout*		pLayoutCalculated;
+		Layout*			pLayoutCalculated;
 
 		// ループ外
-		DocLine*		pcDocLine;
-		Layout*		pLayout;
-		ColorStrategy*	pcColorStrategy;
+		DocLine*		pDocLine;
+		Layout*			pLayout;
+		ColorStrategy*	pColorStrategy;
 		EColorIndexType	colorPrev;
 		LayoutExInfo	exInfoPrev;
 		LogicInt		nCurLine;
@@ -323,7 +323,7 @@ protected:
 	//                        メンバ変数                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	DocLineMgr*			m_pcDocLineMgr;	// 行バッファ管理マネージャ
+	DocLineMgr*			m_pDocLineMgr;	// 行バッファ管理マネージャ
 
 protected:
 	// 2002.10.07 YAZAKI add m_nLineTypeBot
@@ -331,7 +331,7 @@ protected:
 	// 2007.10.08 kobake 変数名変更: getIndentOffset→m_getIndentOffset
 
 	// 参照
-	EditDoc*		m_pcEditDoc;
+	EditDoc*			m_pEditDoc;
 
 	// 実データ
 	Layout*				m_pLayoutTop;
@@ -348,11 +348,11 @@ protected:
 
 	// フラグ等
 	EColorIndexType			m_nLineTypeBot;				// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
-	LayoutExInfo			m_cLayoutExInfoBot;
+	LayoutExInfo			m_layoutExInfoBot;
 	LayoutInt				m_nLines;					// 全レイアウト行数
 
 	mutable LayoutInt		m_nPrevReferLine;
-	mutable Layout*		m_pLayoutPrevRefer;
+	mutable Layout*			m_pLayoutPrevRefer;
 	
 	// EOFカーソル位置を記憶する(_DoLayout/DoLayout_Rangeで無効にする)	//2006.10.01 Moca
 	LayoutInt				m_nEOFLine;		// EOF行数

@@ -35,13 +35,13 @@ void EditView::TranslateCommand_grep(
 	LPARAM&			lparam4
 )
 {
-	if (!EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode)
+	if (!EditApp::getInstance()->m_pGrepAgent->m_bGrepMode)
 		return;
 
 	if (nCommand == F_WCHAR) {
 		//	Jan. 23, 2005 genta •¶Žš”»’è–Y‚ê
-		if (WCODE::IsLineDelimiter((wchar_t)lparam1, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
-			&& GetDllShareData().m_common.m_sSearch.m_bGTJW_RETURN
+		if (WCODE::IsLineDelimiter((wchar_t)lparam1, GetDllShareData().m_common.m_edit.m_bEnableExtEol)
+			&& GetDllShareData().m_common.m_search.m_bGTJW_RETURN
 		) {
 			nCommand = F_TAGJUMP;
 			lparam1 = GetKeyState_Control() ? 1 : 0;

@@ -99,8 +99,8 @@ int DlgFileTree::DoModal(
 	LPARAM		lParam
 	)
 {
-	m_pcDlgFuncList = reinterpret_cast<DlgFuncList*>(lParam);
-	m_nDocType = m_pcDlgFuncList->m_nDocType;
+	m_pDlgFuncList = reinterpret_cast<DlgFuncList*>(lParam);
+	m_nDocType = m_pDlgFuncList->m_nDocType;
 	return (int)Dialog::DoModal(hInstance, hwndParent, IDD_FILETREE, lParam);
 }
 
@@ -140,7 +140,7 @@ void DlgFileTree::SetData()
 	TreeView_DeleteAllItems(hwndTree);
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
 	for (int i=0; i<(int)m_fileTreeSetting.m_aItems.size(); ++i) {
-		int nMaxCount = _countof(GetDllShareData().m_common.m_sOutline.m_sFileTree.m_aItems);
+		int nMaxCount = _countof(GetDllShareData().m_common.m_outline.m_fileTree.m_aItems);
 		if (bSaveShareData && nMaxCount < i + 1) {
 			::InfoMessage(GetHwnd(), LS(STR_FILETREE_MAXCOUNT), nMaxCount);
 		}
@@ -230,7 +230,7 @@ void DlgFileTree::ChangeEnableAddInsert()
 	if (bSaveShareData) {
 		int nCount = TreeView_GetCount(GetItemHwnd(IDC_TREE_FL));
 		bool bEnable = true;
-		int nMaxCount = _countof(GetDllShareData().m_common.m_sOutline.m_sFileTree.m_aItems);
+		int nMaxCount = _countof(GetDllShareData().m_common.m_outline.m_fileTree.m_aItems);
 		if (nMaxCount < nCount) {
 			bEnable = false;
 		}
@@ -249,13 +249,13 @@ int DlgFileTree::GetData()
 	TypeConfig type;
 	bool bTypeError = false;
 	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == FileTreeSettingFromType::Common) {
-		pFileTree = &GetDllShareData().m_common.m_sOutline.m_sFileTree;
+		pFileTree = &GetDllShareData().m_common.m_outline.m_fileTree;
 	}else {
 		if (!DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type)) {
 			bTypeError = true;
 			pFileTree = NULL;
 		}else {
-			pFileTree = &type.m_sFileTree;
+			pFileTree = &type.m_fileTree;
 		}
 	}
 	bool bSaveShareData = (m_fileTreeSetting.m_szLoadProjectIni[0] == _T('\0'));
@@ -364,7 +364,7 @@ BOOL DlgFileTree::OnInitDialog(
 	EditCtl_LimitText(GetItemHwnd(IDC_EDIT_FILE), item.m_szTargetFile.GetBufferCount() -1);
 
 	FilePath path;
-	m_pcDlgFuncList->LoadFileTreeSetting(m_fileTreeSetting, path);
+	m_pDlgFuncList->LoadFileTreeSetting(m_fileTreeSetting, path);
 	SetDataInit();
 
 	// Šî’êƒNƒ‰ƒXƒƒ“ƒo

@@ -67,31 +67,31 @@ private:
 // 行のDIFF情報取得
 class DiffLineGetter {
 public:
-	DiffLineGetter(const DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
+	DiffLineGetter(const DocLine* pDocLine) : m_pDocLine(pDocLine) { }
 	DiffMark GetLineDiffMark() const;
 	bool GetDiffColor(EColorIndexType* nColor) const;
 	bool DrawDiffMark(Graphics& gr, int y, int nLineHeight, COLORREF color) const;
 private:
-	const DocLine* m_pcDocLine;
+	const DocLine* m_pDocLine;
 };
 
 // 行のDIFF情報設定
 class DiffLineSetter {
 public:
-	DiffLineSetter(DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
+	DiffLineSetter(DocLine* pDocLine) : m_pDocLine(pDocLine) { }
 	void SetLineDiffMark(DiffMark mark);
 private:
-	DocLine* m_pcDocLine;
+	DocLine* m_pDocLine;
 };
 
 // 行全体のDIFF情報管理
 class DiffLineMgr {
 public:
-	DiffLineMgr(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	DiffLineMgr(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
 	void ResetAllDiffMark();															// 差分表示の全解除
 	bool SearchDiffMark(LogicInt , SearchDirection, LogicInt*);						// 差分検索
 	void SetDiffMarkRange(DiffMark nMode, LogicInt nStartLine, LogicInt nEndLine);	// 差分範囲の登録
 private:
-	DocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pDocLineMgr;
 };
 

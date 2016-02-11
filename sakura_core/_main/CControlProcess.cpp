@@ -101,17 +101,17 @@ bool ControlProcess::InitializeProcess()
 	}
 
 	// 言語を選択する
-	SelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().m_common.m_window.m_szLanguageDll);
 	RefreshString();
 
 	MY_TRACETIME(cRunningTimer, "Before new ControlTray");
 
 	// タスクトレイにアイコン作成
-	m_pcTray = new ControlTray();
+	m_pTray = new ControlTray();
 
 	MY_TRACETIME(cRunningTimer, "After new ControlTray");
 
-	HWND hwnd = m_pcTray->Create(GetProcessInstance());
+	HWND hwnd = m_pTray->Create(GetProcessInstance());
 	if (!hwnd) {
 		ErrorBeep();
 		TopErrorMessage(NULL, LS(STR_ERR_CTRLMTX3));
@@ -137,8 +137,8 @@ bool ControlProcess::InitializeProcess()
 */
 bool ControlProcess::MainLoop()
 {
-	if (m_pcTray && GetMainWindow()) {
-		m_pcTray->MessageLoop();	// メッセージループ
+	if (m_pTray && GetMainWindow()) {
+		m_pTray->MessageLoop();	// メッセージループ
 		return true;
 	}
 	return false;
@@ -158,7 +158,7 @@ void ControlProcess::OnExitProcess()
 
 ControlProcess::~ControlProcess()
 {
-	delete m_pcTray;
+	delete m_pTray;
 
 	if (m_hEventCPInitialized) {
 		::ResetEvent(m_hEventCPInitialized);

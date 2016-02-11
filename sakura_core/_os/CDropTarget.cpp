@@ -95,7 +95,7 @@ DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 DropTarget::DropTarget(EditWnd* pCEditWnd)
 {
 	m_pEditWnd = pCEditWnd;	// 2008.06.20 ryoji
-	m_pcEditView = NULL;
+	m_pEditView = NULL;
 	m_hWnd_DropTarget = NULL;
 	return;
 }
@@ -103,7 +103,7 @@ DropTarget::DropTarget(EditWnd* pCEditWnd)
 DropTarget::DropTarget(EditView* pCEditView)
 {
 	m_pEditWnd = NULL;	// 2008.06.20 ryoji
-	m_pcEditView = pCEditView;
+	m_pEditView = pCEditView;
 	m_hWnd_DropTarget = NULL;
 	return;
 }
@@ -148,7 +148,7 @@ STDMETHODIMP DropTarget::DragEnter(
 	if (m_pEditWnd) {	// 2008.06.20 ryoji
 		return m_pEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 	}
-	return m_pcEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
+	return m_pEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
 STDMETHODIMP DropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
@@ -156,7 +156,7 @@ STDMETHODIMP DropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect
 	if (m_pEditWnd) {	// 2008.06.20 ryoji
 		return m_pEditWnd->DragOver(dwKeyState, pt, pdwEffect);
 	}
-	return m_pcEditView->DragOver(dwKeyState, pt, pdwEffect);
+	return m_pEditView->DragOver(dwKeyState, pt, pdwEffect);
 }
 
 STDMETHODIMP DropTarget::DragLeave(void)
@@ -164,7 +164,7 @@ STDMETHODIMP DropTarget::DragLeave(void)
 	if (m_pEditWnd) {	// 2008.06.20 ryoji
 		return m_pEditWnd->DragLeave();
 	}
-	return m_pcEditView->DragLeave();
+	return m_pEditView->DragLeave();
 }
 
 
@@ -178,7 +178,7 @@ STDMETHODIMP DropTarget::Drop(
 	if (m_pEditWnd) {	// 2008.06.20 ryoji
 		return m_pEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 	}
-	return m_pcEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
+	return m_pEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
 
@@ -403,14 +403,14 @@ STDMETHODIMP DataObject::EnumDAdvise(LPENUMSTATDATA*)
 */
 STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
-	if (celt <= 0 || !rgelt || m_nIndex >= m_pcDataObject->m_nFormat)
+	if (celt <= 0 || !rgelt || m_nIndex >= m_pDataObject->m_nFormat)
 		return S_FALSE;
 	if (celt != 1 && !pceltFetched)
 		return S_FALSE;
 
 	ULONG i = celt;
-	while (m_nIndex < m_pcDataObject->m_nFormat && i > 0) {
-		(*rgelt).cfFormat = m_pcDataObject->m_pData[m_nIndex].cfFormat;
+	while (m_nIndex < m_pDataObject->m_nFormat && i > 0) {
+		(*rgelt).cfFormat = m_pDataObject->m_pData[m_nIndex].cfFormat;
 		(*rgelt).ptd = NULL;
 		(*rgelt).dwAspect = DVASPECT_CONTENT;
 		(*rgelt).lindex = -1;
@@ -430,7 +430,7 @@ STDMETHODIMP EnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetch
 */
 STDMETHODIMP EnumFORMATETC::Skip(ULONG celt)
 {
-	while (m_nIndex < m_pcDataObject->m_nFormat && celt > 0) {
+	while (m_nIndex < m_pDataObject->m_nFormat && celt > 0) {
 		++m_nIndex;
 		--celt;
 	}

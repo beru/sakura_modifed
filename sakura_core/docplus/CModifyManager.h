@@ -59,9 +59,9 @@ private:
 class ModifyVisitor {
 public:
 	// 状態
-	bool IsLineModified(const DocLine* pcDocLine, int nSaveSeq) const;
-	int GetLineModifiedSeq(const DocLine* pcDocLine) const;
-	void SetLineModified(DocLine* pcDocLine, int nModifiedSeq);
+	bool IsLineModified(const DocLine* pDocLine, int nSaveSeq) const;
+	int GetLineModifiedSeq(const DocLine* pDocLine) const;
+	void SetLineModified(DocLine* pDocLine, int nModifiedSeq);
 
 	// 一括操作
 	void ResetAllModifyFlag(DocLineMgr* pcDocLineMgr, int nSeq);	// 行変更状態をすべてリセット

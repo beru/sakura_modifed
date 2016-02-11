@@ -98,7 +98,7 @@ INT_PTR PropMacro::DispatchEvent(
 	WORD		wNotifyCode;
 	WORD		wID;
 
-	auto& csMacro = m_Common.m_sMacro;
+	auto& csMacro = m_common.m_macro;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -109,8 +109,8 @@ INT_PTR PropMacro::DispatchEvent(
 		::SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
 		//	Oct. 5, 2002 genta エディット コントロールに入力できるテキストの長さを制限する
-		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRONAME), _countof(csMacro.m_MacroTable[0].m_szName) - 1);
-		Combo_LimitText(::GetDlgItem(hwndDlg, IDC_MACROPATH), _countof(csMacro.m_MacroTable[0].m_szFile) - 1);
+		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRONAME), _countof(csMacro.m_macroTable[0].m_szName) - 1);
+		Combo_LimitText(::GetDlgItem(hwndDlg, IDC_MACROPATH), _countof(csMacro.m_macroTable[0].m_szFile) - 1);
 		// 2003.06.23 Moca
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACRODIR), _countof2(csMacro.m_szMACROFOLDER) - 1);
 		EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_MACROCANCELTIMER), 4);
@@ -221,10 +221,10 @@ void PropMacro::SetData(HWND hwndDlg)
 
 	// マクロデータ
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_MACROLIST);
-	auto& csMacro = m_pShareData->m_common.m_sMacro;
+	auto& csMacro = m_pShareData->m_common.m_macro;
 	
 	for (index=0; index<MAX_CUSTMACRO; ++index) {
-		auto& macroRec = csMacro.m_MacroTable[index];
+		auto& macroRec = csMacro.m_macroTable[index];
 		memset_raw(&sItem, 0, sizeof(sItem));
 		sItem.iItem = index;
 		sItem.mask = LVIF_TEXT;
@@ -267,7 +267,7 @@ void PropMacro::SetData(HWND hwndDlg)
 	}
 	
 	//	マクロディレクトリ
-	::DlgItem_SetText(hwndDlg, IDC_MACRODIR, /*m_pShareData->*/m_Common.m_sMacro.m_szMACROFOLDER);
+	::DlgItem_SetText(hwndDlg, IDC_MACRODIR, /*m_pShareData->*/m_common.m_macro.m_szMACROFOLDER);
 
 	nLastPos_Macro = -1;
 	
@@ -281,7 +281,7 @@ void PropMacro::SetData(HWND hwndDlg)
 	
 	//	マクロ停止ダイアログ表示待ち時間
 	TCHAR szCancelTimer[16] = {0};
-	::DlgItem_SetText(hwndDlg, IDC_MACROCANCELTIMER, _itot(m_Common.m_sMacro.m_nMacroCancelTimer, szCancelTimer, 10));
+	::DlgItem_SetText(hwndDlg, IDC_MACROCANCELTIMER, _itot(m_common.m_macro.m_nMacroCancelTimer, szCancelTimer, 10));
 
 	return;
 }
@@ -297,7 +297,7 @@ int PropMacro::GetData(HWND hwndDlg)
 	int index;
 	LVITEM sItem;
 
-	auto& csMacro = m_Common.m_sMacro;
+	auto& csMacro = m_common.m_macro;
 
 	// 自動実行マクロ変数初期化	// 2006.09.01 ryoji
 	csMacro.m_nMacroOnOpened = -1;
@@ -314,7 +314,7 @@ int PropMacro::GetData(HWND hwndDlg)
 		sItem.iSubItem = 1;
 		sItem.cchTextMax = MACRONAME_MAX - 1;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		sItem.pszText = /*m_pShareData->*/csMacro.m_MacroTable[index].m_szName;
+		sItem.pszText = /*m_pShareData->*/csMacro.m_macroTable[index].m_szName;
 		ListView_GetItem(hListView, &sItem);
 
 		memset_raw(&sItem, 0, sizeof(sItem));
@@ -323,7 +323,7 @@ int PropMacro::GetData(HWND hwndDlg)
 		sItem.iSubItem = 2;
 		sItem.cchTextMax = _MAX_PATH;
 //@@@ 2002.01.03 YAZAKI 共通設定『マクロ』がタブを切り替えるだけで設定が保存されないように。
-		sItem.pszText = /*m_pShareData->*/csMacro.m_MacroTable[index].m_szFile;
+		sItem.pszText = /*m_pShareData->*/csMacro.m_macroTable[index].m_szFile;
 		ListView_GetItem(hListView, &sItem);
 
 		memset_raw(&sItem, 0, sizeof(sItem));
@@ -335,9 +335,9 @@ int PropMacro::GetData(HWND hwndDlg)
 		sItem.cchTextMax = MAX_PATH;
 		ListView_GetItem(hListView, &sItem);
 		if (_tcscmp(buf, _T("on")) == 0) {
-			csMacro.m_MacroTable[index].m_bReloadWhenExecute = true;
+			csMacro.m_macroTable[index].m_bReloadWhenExecute = true;
 		}else {
-			csMacro.m_MacroTable[index].m_bReloadWhenExecute = false;
+			csMacro.m_macroTable[index].m_bReloadWhenExecute = false;
 		}
 
 		// 自動実行マクロ	// 2006.09.01 ryoji

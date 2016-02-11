@@ -24,7 +24,7 @@ public:
 void Color_Quote::Update(void)
 {
 	const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
-	m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
+	m_pTypeData = &pCEditDoc->m_docType.GetDocumentAttribute();
 	m_nStringType = m_pTypeData->m_nStringType;
 	StringLiteralType nEspaceTypeList[] = {
 		StringLiteralType::CPP,
@@ -193,7 +193,7 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 					0 < cStr.GetLength()
 					&& WCODE::IsLineDelimiter(
 						cStr.At(cStr.GetLength() - 1),
-						GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
+						GetDllShareData().m_common.m_edit.m_bEnableExtEol
 					)
 				) {
 					if (1 &&
@@ -250,37 +250,37 @@ bool Color_Quote::EndColor(const StringRef& cStr, int nPos)
 int Color_Quote::Match_Quote(
 	wchar_t wcQuote,
 	int nPos,
-	const StringRef& cLineStr,
+	const StringRef& lineStr,
 	StringLiteralType escapeType,
 	bool* pbEscapeEnd
 	)
 {
 	int nCharChars;
-	for (int i=nPos; i<cLineStr.GetLength(); ++i) {
+	for (int i=nPos; i<lineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
-		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
+		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(lineStr.GetPtr(), lineStr.GetLength(), i));
 		if (escapeType == StringLiteralType::CPP) {
 			// エスケープ \"
-			if (nCharChars == 1 && cLineStr.At(i) == L'\\') {
+			if (nCharChars == 1 && lineStr.At(i) == L'\\') {
 				++i;
 				if (
-					i < cLineStr.GetLength()
+					i < lineStr.GetLength()
 					&& WCODE::IsLineDelimiter(
-						cLineStr.At(i),
-						GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
+						lineStr.At(i),
+						GetDllShareData().m_common.m_edit.m_bEnableExtEol
 					)
 				) {
 					if (pbEscapeEnd) {
 						*pbEscapeEnd = true;
 					}
 				}
-			}else if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
+			}else if (nCharChars == 1 && lineStr.At(i) == wcQuote) {
 				return i + 1;
 			}
 		}else if (escapeType == StringLiteralType::PLSQL) {
 			// エスケープ ""
-			if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
-				if (i + 1 < cLineStr.GetLength() && cLineStr.At(i + 1) == wcQuote) {
+			if (nCharChars == 1 && lineStr.At(i) == wcQuote) {
+				if (i + 1 < lineStr.GetLength() && lineStr.At(i + 1) == wcQuote) {
 					++i;
 				}else {
 					return i + 1;
@@ -288,7 +288,7 @@ int Color_Quote::Match_Quote(
 			}
 		}else {
 			// エスケープなし
-			if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
+			if (nCharChars == 1 && lineStr.At(i) == wcQuote) {
 				return i + 1;
 			}
 		}
@@ -296,24 +296,24 @@ int Color_Quote::Match_Quote(
 			++i;
 		}
 	}
-	return cLineStr.GetLength() + 1; // 終端なしはLength + 1
+	return lineStr.GetLength() + 1; // 終端なしはLength + 1
 }
 
-int Color_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPos, const StringRef& cLineStr, bool bEscape)
+int Color_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPos, const StringRef& lineStr, bool bEscape)
 {
 	int nCharChars;
-	const int nCompLen = cLineStr.GetLength() - nQuoteLen + 1;
+	const int nCompLen = lineStr.GetLength() - nQuoteLen + 1;
 	const WCHAR quote1 = pszQuote[0];
-	const WCHAR* pLine = cLineStr.GetPtr();
+	const WCHAR* pLine = lineStr.GetPtr();
 	for (int i=nPos; i<nCompLen; i+=nCharChars) {
 		if (quote1 == pLine[i] && wmemcmp(pszQuote + 1, pLine + i + 1, nQuoteLen - 1) == 0) {
 			return i + nQuoteLen;
 		}
-		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i));
+		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, lineStr.GetLength(), i));
 		if (bEscape && pLine[i] == L'\\') {
-			i += (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, cLineStr.GetLength(), i + nCharChars));
+			i += (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(pLine, lineStr.GetLength(), i + nCharChars));
 		}
 	}
-	return cLineStr.GetLength();
+	return lineStr.GetLength();
 }
 

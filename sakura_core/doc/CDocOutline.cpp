@@ -226,7 +226,7 @@ void DocOutline::MakeFuncList_RuleFile(
 	auto_array_ptr<OneRule> test(new OneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
 	bool bRegex;
 	std::wstring title;
-	int nCount = ReadRuleFile(m_pcDocRef->m_cDocType.GetDocumentAttribute().m_szOutlineRuleFilename, test.get(), 1024, bRegex, title);
+	int nCount = ReadRuleFile(m_pDocRef->m_docType.GetDocumentAttribute().m_szOutlineRuleFilename, test.get(), 1024, bRegex, title);
 	if (nCount < 1) {
 		return;
 	}
@@ -293,10 +293,10 @@ void DocOutline::MakeFuncList_RuleFile(
 		pcFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		LogicInt nLineLen;
-		const wchar_t* pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -364,7 +364,7 @@ void DocOutline::MakeFuncList_RuleFile(
 			pszText = new wchar_t[nLineLen + 1];
 			wmemcpy(pszText, &pLine[i], nLineLen);
 			pszText[nLineLen] = L'\0';
-			bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+			bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 			for (i=0; pszText[i]!=L'\0'; ++i) {
 				if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
 					pszText[i] = L'\0';
@@ -380,7 +380,7 @@ void DocOutline::MakeFuncList_RuleFile(
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 		*/
 		LayoutPoint ptPos;
-		m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+		m_pDocRef->m_layoutMgr.LogicToLayout(
 			LogicPoint(0, nLineCount),
 			&ptPos
 		);
@@ -441,14 +441,14 @@ void DocOutline::MakeFuncList_RuleFile(
 void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
 {
 	LogicInt nLineLen;
-	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
-	int nNewLineLen	= m_pcDocRef->m_cDocEditor.m_cNewLineCode.GetLen();
-	LogicInt nLineLast	= m_pcDocRef->m_docLineMgr.GetLineCount();
+	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_outline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
+	int nNewLineLen	= m_pDocRef->m_docEditor.m_newLineCode.GetLen();
+	LogicInt nLineLast	= m_pDocRef->m_docLineMgr.GetLineCount();
 	int nCharChars;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<nLineLast; ++nLineCount) {
-		if (!BookmarkGetter(m_pcDocRef->m_docLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
-		const wchar_t* pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		if (!BookmarkGetter(m_pDocRef->m_docLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
+		const wchar_t* pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -477,7 +477,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
 		int	k;
 		int pos_wo_space;
 		k = pos_wo_space = leftspace;
-		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 		while (k < nLineLen) {
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, k);
 			if (nCharChars == 1) {
@@ -501,7 +501,7 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
 		pszText[nLen] = L'\0';
 		LayoutPoint ptXY;
 		//int nX,nY
-		m_pcDocRef->m_cLayoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
+		m_pDocRef->m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nLineCount), &ptXY);
 		pcFuncInfoArr->AppendData(nLineCount + LogicInt(1), ptXY.GetY2()+LayoutInt(1) , pszText, 0);
 	}
 	return;

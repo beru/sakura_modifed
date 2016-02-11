@@ -167,15 +167,15 @@ PropCommon::~PropCommon()
 void PropCommon::Create(HWND hwndParent, ImageListMgr* pcIcons, MenuDrawer* pMenuDrawer)
 {
 	m_hwndParent = hwndParent;	// オーナーウィンドウのハンドル
-	m_pcIcons = pcIcons;
+	m_pIcons = pcIcons;
 
 	// 2007.11.02 ryoji マクロ設定を変更したあと、画面を閉じないでカスタムメニュー、ツールバー、
 	//                  キー割り当ての画面に切り替えた時に各画面でマクロ設定の変更が反映されるよう、
-	//                  m_Common.m_sMacro.m_MacroTable（ローカルメンバ）でm_cLookupを初期化する
-	m_cLookup.Init(m_Common.m_sMacro.m_MacroTable, &m_Common);	//	機能名・番号resolveクラス．
+	//                  m_common.m_macro.m_macroTable（ローカルメンバ）でm_lookupを初期化する
+	m_lookup.Init(m_common.m_macro.m_macroTable, &m_common);	//	機能名・番号resolveクラス．
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
-	m_pcMenuDrawer = pMenuDrawer;
+	m_pMenuDrawer = pMenuDrawer;
 
 	return;
 }
@@ -311,7 +311,7 @@ INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 */
 void PropCommon::InitData(void)
 {
-	m_Common = m_pShareData->m_common;
+	m_common = m_pShareData->m_common;
 
 	// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はない。	;
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
@@ -332,7 +332,7 @@ void PropCommon::InitData(void)
 */
 void PropCommon::ApplyData(void)
 {
-	m_pShareData->m_common = m_Common;
+	m_pShareData->m_common = m_common;
 
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {

@@ -99,7 +99,7 @@ INT_PTR PropHelper::DispatchEvent(
 	WORD		wID;
 	NMHDR*		pNMHDR;
 
-	auto& csHelper = m_Common.m_sHelper;
+	auto& csHelper = m_common.m_helper;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -297,7 +297,7 @@ INT_PTR PropHelper::DispatchEvent(
 // ダイアログデータの設定 Helper
 void PropHelper::SetData(HWND hwndDlg)
 {
-	auto& csHelper = m_Common.m_sHelper;
+	auto& csHelper = m_common.m_helper;
 	
 	// 補完候補決定キー
 	::CheckDlgButton(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, csHelper.m_bHokanKey_RETURN);	// VK_RETURN 補完決定キーが有効/無効
@@ -325,7 +325,7 @@ void PropHelper::SetData(HWND hwndDlg)
 // ダイアログデータの取得 Helper
 int PropHelper::GetData(HWND hwndDlg)
 {
-	auto& csHelper = m_Common.m_sHelper;
+	auto& csHelper = m_common.m_helper;
 	
 	// 補完候補決定キー
 	csHelper.m_bHokanKey_RETURN = DlgButton_IsChecked(hwndDlg, IDC_CHECK_m_bHokanKey_RETURN);// VK_RETURN 補完決定キーが有効/無効

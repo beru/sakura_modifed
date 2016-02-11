@@ -11,14 +11,14 @@
 
 VisualProgress::VisualProgress()
 	:
-	m_pcWaitCursor(NULL),
+	m_pWaitCursor(NULL),
 	nOldValue(-1)
 {
 }
 
 VisualProgress::~VisualProgress()
 {
-	SAFE_DELETE(m_pcWaitCursor);
+	SAFE_DELETE(m_pWaitCursor);
 }
 
 
@@ -69,12 +69,12 @@ void VisualProgress::OnProgress(int nPer)
 void VisualProgress::_Begin()
 {
 	// 砂時計
-	if (!m_pcWaitCursor) {
-		m_pcWaitCursor = new WaitCursor(EditWnd::getInstance()->GetHwnd());
+	if (!m_pWaitCursor) {
+		m_pWaitCursor = new WaitCursor(EditWnd::getInstance()->GetHwnd());
 	}
 
 	// プログレスバー
-	HWND hwndProgress = EditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
+	HWND hwndProgress = EditWnd::getInstance()->m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_SHOW);
 		// 範囲設定・リセット
@@ -86,7 +86,7 @@ void VisualProgress::_Begin()
 void VisualProgress::_Doing(int nPer)
 {
 	// プログレスバー更新
-	HWND hwndProgress = EditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
+	HWND hwndProgress = EditWnd::getInstance()->m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		if (nOldValue != nPer) {
 			Progress_SetPos(hwndProgress, nPer + 1); // 2013.06.10 Moca Vista/7等でプログレスバーがアニメーションで遅れる対策
@@ -99,13 +99,13 @@ void VisualProgress::_Doing(int nPer)
 void VisualProgress::_End()
 {
 	// プログレスバー
-	HWND hwndProgress = EditWnd::getInstance()->m_cStatusBar.GetProgressHwnd();
+	HWND hwndProgress = EditWnd::getInstance()->m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		Progress_SetPos(hwndProgress, 0);
 		::ShowWindow(hwndProgress, SW_HIDE);
 	}
 
 	// 砂時計
-	SAFE_DELETE(m_pcWaitCursor);
+	SAFE_DELETE(m_pWaitCursor);
 }
 

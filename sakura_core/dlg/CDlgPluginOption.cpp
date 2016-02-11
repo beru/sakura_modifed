@@ -209,7 +209,7 @@ void DlgPluginOption::SetData(void)
 	}
 
 	// ReadMe Button
-	m_sReadMeName = m_cPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.m_sPlugin.m_PluginTable[m_ID].m_szName));
+	m_sReadMeName = m_cPropPlugin->GetReadMeFile(to_tchar(m_pShareData->m_common.m_plugin.m_pluginTable[m_ID].m_szName));
 	EnableItem(IDC_PLUGIN_README, !m_sReadMeName.empty());
 	return;
 }

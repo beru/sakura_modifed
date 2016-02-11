@@ -40,19 +40,19 @@ CallbackResultType BackupAgent::OnPreBeforeSave(SaveInfo* pSaveInfo)
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 新しくファイルを作る場合は何もしない
-	if (!fexist(pSaveInfo->cFilePath)) {
+	if (!fexist(pSaveInfo->filePath)) {
 		return CallbackResultType::Continue;
 	}
 
 	// 共通設定：保存時にバックアップを作成する
-	if (GetDllShareData().m_common.m_sBackup.m_bBackUp) {
+	if (GetDllShareData().m_common.m_backup.m_bBackUp) {
 		//	Jun.  5, 2004 genta ファイル名を与えるように．戻り値に応じた処理を追加．
 		// ファイル保存前にバックアップ処理
 		int nBackupResult = 0;
 		{
-			pcDoc->m_cDocFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
-			nBackupResult = MakeBackUp(pSaveInfo->cFilePath);
-			pcDoc->m_cDocFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
+			pcDoc->m_docFileOperation.DoFileUnlock();	// バックアップ作成前にロックを解除する #####スマートじゃないよ！
+			nBackupResult = MakeBackUp(pSaveInfo->filePath);
+			pcDoc->m_docFileOperation.DoFileLock();	// バックアップ作成後にロックを戻す #####スマートじゃないよ！
 		}
 		switch (nBackupResult) {
 		case 2:	//	中断指示
@@ -104,7 +104,7 @@ int BackupAgent::MakeBackUp(
 		return 0;
 	}
 
-	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_sBackup;
+	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_backup;
 
 	TCHAR	szPath[_MAX_PATH]; // バックアップ先パス名
 	if (!FormatBackUpPath(szPath, _countof(szPath), target_file)) {
@@ -310,7 +310,7 @@ bool BackupAgent::FormatBackUpPath(
 	TCHAR	szExt[_MAX_EXT];
 	TCHAR*	psNext;
 
-	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_sBackup;
+	const CommonSetting_Backup& bup_setting = GetDllShareData().m_common.m_backup;
 
 	// パスの分解
 	_tsplitpath(target_file, szDrive, szDir, szFname, szExt);

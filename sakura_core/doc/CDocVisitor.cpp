@@ -8,43 +8,43 @@
 
 
 // 改行コードを統一する
-void DocVisitor::SetAllEol(Eol cEol)
+void DocVisitor::SetAllEol(Eol eol)
 {
-	EditView* pcView = &EditWnd::getInstance()->GetActiveView();
+	EditView* pView = &EditWnd::getInstance()->GetActiveView();
 
 	// アンドゥ記録開始
-	if (!pcView->m_bDoing_UndoRedo) {
-		if (!pcView->m_cCommander.GetOpeBlk()) {
-			pcView->m_cCommander.SetOpeBlk(new OpeBlk());
+	if (!pView->m_bDoing_UndoRedo) {
+		if (!pView->m_commander.GetOpeBlk()) {
+			pView->m_commander.SetOpeBlk(new OpeBlk());
 		}
-		pcView->m_cCommander.GetOpeBlk()->AddRef();
+		pView->m_commander.GetOpeBlk()->AddRef();
 	}
 
 	// カーソル位置記憶
-	LayoutInt		nViewTopLine = pcView->GetTextArea().GetViewTopLine();
-	LayoutInt		nViewLeftCol = pcView->GetTextArea().GetViewLeftCol();
-	LayoutPoint		ptCaretPosXY = pcView->GetCaret().GetCaretLayoutPos();
-	LayoutInt		nCaretPosX_Prev = pcView->GetCaret().m_nCaretPosX_Prev;
+	LayoutInt		nViewTopLine = pView->GetTextArea().GetViewTopLine();
+	LayoutInt		nViewLeftCol = pView->GetTextArea().GetViewLeftCol();
+	LayoutPoint		ptCaretPosXY = pView->GetCaret().GetCaretLayoutPos();
+	LayoutInt		nCaretPosX_Prev = pView->GetCaret().m_nCaretPosX_Prev;
 
 	bool bReplace = false;
 	// 改行コードを統一する
-	if (cEol.IsValid()) {
+	if (eol.IsValid()) {
 		LogicInt nLine = LogicInt(0);
-		OpeBlk* pcOpeBlk = pcView->m_bDoing_UndoRedo ? NULL : pcView->m_cCommander.GetOpeBlk();
+		OpeBlk* pcOpeBlk = pView->m_bDoing_UndoRedo ? NULL : pView->m_commander.GetOpeBlk();
 		for (;;) {
-			DocLine* pcDocLine = m_pcDocRef->m_docLineMgr.GetLine(nLine); //#######非効率
-			if (!pcDocLine) {
+			DocLine* pDocLine = m_pDocRef->m_docLineMgr.GetLine(nLine); //#######非効率
+			if (!pDocLine) {
 				break;
 			}
 			// 改行を置換
-			if (pcDocLine->GetEol() != EolType::None && pcDocLine->GetEol() != cEol) {
+			if (pDocLine->GetEol() != EolType::None && pDocLine->GetEol() != eol) {
 				LogicRange sRange;
-				sRange.SetFrom(LogicPoint(pcDocLine->GetLengthWithoutEOL(), nLine));
-				sRange.SetTo(LogicPoint(pcDocLine->GetLengthWithEOL(), nLine));
-				pcView->ReplaceData_CEditView2(
+				sRange.SetFrom(LogicPoint(pDocLine->GetLengthWithoutEOL(), nLine));
+				sRange.SetTo(LogicPoint(pDocLine->GetLengthWithEOL(), nLine));
+				pView->ReplaceData_CEditView2(
 					sRange,
-					cEol.GetValue2(),
-					cEol.GetLen(),
+					eol.GetValue2(),
+					eol.GetLen(),
 					false,
 					pcOpeBlk,
 					true
@@ -54,34 +54,34 @@ void DocVisitor::SetAllEol(Eol cEol)
 			++nLine;
 		}
 		// 編集時入力改行コード
-		EditDoc::GetInstance(0)->m_cDocEditor.SetNewLineCode(cEol);
+		EditDoc::GetInstance(0)->m_docEditor.SetNewLineCode(eol);
 	}
 
 	if (bReplace) {
-		m_pcDocRef->m_cLayoutMgr._DoLayout();
-		m_pcDocRef->m_pEditWnd->ClearViewCaretPosInfo();
-		if (m_pcDocRef->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
-			m_pcDocRef->m_cLayoutMgr.CalculateTextWidth();
+		m_pDocRef->m_layoutMgr._DoLayout();
+		m_pDocRef->m_pEditWnd->ClearViewCaretPosInfo();
+		if (m_pDocRef->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
+			m_pDocRef->m_layoutMgr.CalculateTextWidth();
 		}else {
-			m_pcDocRef->m_cLayoutMgr.ClearLayoutLineWidth();
+			m_pDocRef->m_layoutMgr.ClearLayoutLineWidth();
 		}
 	}
 	// アンドゥ記録
-	if (pcView->m_cCommander.GetOpeBlk()) {
-		if (pcView->m_cCommander.GetOpeBlk()->GetNum()>0) {
+	if (pView->m_commander.GetOpeBlk()) {
+		if (pView->m_commander.GetOpeBlk()->GetNum()>0) {
 			// カーソル位置復元
-			pcView->GetTextArea().SetViewTopLine(nViewTopLine);
-			pcView->GetTextArea().SetViewLeftCol(nViewLeftCol);
-			pcView->GetCaret().MoveCursor(ptCaretPosXY, true);
-			pcView->GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
-			pcView->m_cCommander.GetOpeBlk()->AppendOpe(
+			pView->GetTextArea().SetViewTopLine(nViewTopLine);
+			pView->GetTextArea().SetViewLeftCol(nViewLeftCol);
+			pView->GetCaret().MoveCursor(ptCaretPosXY, true);
+			pView->GetCaret().m_nCaretPosX_Prev = nCaretPosX_Prev;
+			pView->m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
-					pcView->GetCaret().GetCaretLogicPos()
+					pView->GetCaret().GetCaretLogicPos()
 				)
 			);
 
 		}
-		pcView->SetUndoBuffer();
+		pView->SetUndoBuffer();
 	}
 }
 

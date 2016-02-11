@@ -64,7 +64,7 @@ public:
 		m_nIndex = INVALID_MACRO_IDX;
 		if (nMode == MACRO_MODE_EXEC) {
 			// ŒÄ‚Ño‚µ‚Ì’¼‘O‚Åİ’è‚³‚ê‚Ä‚¢‚é”Ô†‚ğ•Û‘¶‚·‚é
-			m_nIndex = EditApp::getInstance()->m_pcSMacroMgr->GetCurrentIdx();
+			m_nIndex = EditApp::getInstance()->m_pSMacroMgr->GetCurrentIdx();
 		}
 	}
 
@@ -136,7 +136,7 @@ public:
 		case F_MA_GET_INDEX:
 			{
 				Wrap(&Result)->Receive(m_nIndex);
-				//Wrap(&Result)->Receive(CEditApp::getInstance()->m_pcSMacroMgr->GetCurrentIdx());
+				//Wrap(&Result)->Receive(CEditApp::getInstance()->m_pSMacroMgr->GetCurrentIdx());
 			}
 			return true;
 		}

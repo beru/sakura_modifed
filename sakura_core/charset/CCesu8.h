@@ -40,7 +40,7 @@ public:
 	
 	void GetBom(Memory* pcmemBom);	//!< BOMƒf[ƒ^Žæ“¾
 	// GetEol‚ÍCodeBase‚ÉˆÚ“®	2010/6/13 Uchi
-	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar) {			//!< UNICODE ¨ Hex •ÏŠ·
+	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar) {			//!< UNICODE ¨ Hex •ÏŠ·
 		return Utf8()._UnicodeToHex(cSrc, iSLen, pDst, psStatusbar, true);
 	}
 

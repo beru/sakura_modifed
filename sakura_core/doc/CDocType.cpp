@@ -34,7 +34,7 @@
 
 DocType::DocType(EditDoc* pcDoc)
 	:
-	m_pcDocRef(pcDoc),
+	m_pDocRef(pcDoc),
 	m_nSettingType(0),			// Sep. 11, 2002 genta
 	m_typeConfig(GetDllShareData().m_TypeBasis),
 	m_nSettingTypeLocked(false)	// 設定値変更可能フラグ
@@ -52,7 +52,7 @@ void DocType::SetDocumentType(
 		m_nSettingType = type;
 		if (!DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
 			// 削除されてる/不正
-			m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
+			m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_pDocRef->m_docFile.GetFilePath());
 			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 		}
 		if (bTypeOnly) {
@@ -68,7 +68,7 @@ void DocType::SetDocumentType(
 		}else {
 			m_nSettingType = type;
 			if (!DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig)) {
-				m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_pcDocRef->m_cDocFile.GetFilePath());
+				m_nSettingType = DocTypeManager().GetDocumentTypeOfPath(m_pDocRef->m_docFile.GetFilePath());
 				DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
 			}
 		}
@@ -81,7 +81,7 @@ void DocType::SetDocumentType(
 	ColorStrategyPool::getInstance()->OnChangeSetting();
 	FigureManager::getInstance()->OnChangeSetting();
 	this->SetDocumentIcon();	// Sep. 11, 2002 genta
-	m_pcDocRef->SetBackgroundImage();
+	m_pDocRef->SetBackgroundImage();
 }
 
 void DocType::SetDocumentTypeIdx(int id, bool force)
@@ -112,17 +112,17 @@ void DocType::SetDocumentTypeIdx(int id, bool force)
 void DocType::SetDocumentIcon()
 {
 	// Grepモードの時はアイコンを変更しない
-	if (EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode) {
+	if (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode) {
 		return;
 	}
 	
 	HICON hIconBig, hIconSmall;
 	if (this->GetDocumentAttribute().m_bUseDocumentIcon) {
-		m_pcDocRef->m_pEditWnd->GetRelatedIcon(m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall);
+		m_pDocRef->m_pEditWnd->GetRelatedIcon(m_pDocRef->m_docFile.GetFilePath(), &hIconBig, &hIconSmall);
 	}else {
-		m_pcDocRef->m_pEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
+		m_pDocRef->m_pEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
 	}
-	m_pcDocRef->m_pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
-	m_pcDocRef->m_pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
+	m_pDocRef->m_pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
+	m_pDocRef->m_pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 }
 

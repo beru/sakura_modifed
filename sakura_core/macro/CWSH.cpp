@@ -216,7 +216,7 @@ public:
 	virtual HRESULT __stdcall GetWindow(
 	    /* [out] */ HWND *phwnd)
 	{
-		*phwnd = EditWnd::getInstance()->m_cSplitterWnd.GetHwnd();
+		*phwnd = EditWnd::getInstance()->m_splitterWnd.GetHwnd();
 		return S_OK;
 	}
 
@@ -299,7 +299,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 		// ダイアログタイトルとファイル名を設定
 		::SendMessage(hwndDlg, WM_SETTEXT, 0, (LPARAM)GSTR_APPNAME);
 		::SendMessage(GetDlgItem(hwndDlg, IDC_STATIC_CMD),
-			WM_SETTEXT, 0, (LPARAM)pParam->view->GetDocument()->m_cDocFile.GetFilePath());
+			WM_SETTEXT, 0, (LPARAM)pParam->view->GetDocument()->m_docFile.GetFilePath());
 		
 		bool bCanceled = false;
 		for (;;) {
@@ -366,7 +366,7 @@ bool WSHClient::Execute(const wchar_t* AScript)
 				// マクロ停止スレッドの起動
 				AbortMacroParam sThreadParam;
 				sThreadParam.pEngine = m_Engine;
-				sThreadParam.nCancelTimer = GetDllShareData().m_common.m_sMacro.m_nMacroCancelTimer;
+				sThreadParam.nCancelTimer = GetDllShareData().m_common.m_macro.m_nMacroCancelTimer;
 				sThreadParam.view = (EditView*)m_Data;
 
 				HANDLE hThread = NULL;

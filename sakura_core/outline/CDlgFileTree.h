@@ -61,7 +61,7 @@ private:
 	HTREEITEM InsertTreeItem(FileTreeItem&, HTREEITEM, HTREEITEM);
 
 private:
-	DlgFuncList*		m_pcDlgFuncList;
+	DlgFuncList*		m_pDlgFuncList;
 	FileTreeSetting	m_fileTreeSetting;
 	std::vector<int>	m_aItemRemoveList;
 	int					m_nlParamCount;

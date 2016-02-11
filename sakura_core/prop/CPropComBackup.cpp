@@ -94,7 +94,7 @@ INT_PTR PropBackup::DispatchEvent(
 //	int			nDummy;
 //	int			nCharChars;
 
-	auto& csBackup = m_Common.m_sBackup;
+	auto& csBackup = m_common.m_backup;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -243,14 +243,14 @@ void PropBackup::SetData(HWND hwndDlg)
 
 //	BOOL	m_bGrepExitConfirm;	// Grepモードで保存確認するか
 
-	auto& csBackup = m_Common.m_sBackup;
+	auto& csBackup = m_common.m_backup;
 
 	// バックアップの作成
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUP, csBackup.m_bBackUp);
 	// バックアップの作成前に確認
 	::CheckDlgButtonBool(hwndDlg, IDC_CHECK_BACKUPDIALOG, csBackup.m_bBackUpDialog);
 //	// 指定フォルダにバックアップを作成する //	20051107 aroka 「バックアップの作成」に連動させる
-//	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUPFOLDER, .m_sBackup.m_bBackUpFolder);
+//	::CheckDlgButton(hwndDlg, IDC_CHECK_BACKUPFOLDER, .m_backup.m_bBackUpFolder);
 
 	// バックアップファイル名のタイプ 1=(.bak) 2=*_日付.*
 	//	Jun.  5, 2004 genta 元の拡張子を残す設定(5,6)を追加．
@@ -337,7 +337,7 @@ void PropBackup::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropBackup::GetData(HWND hwndDlg)
 {
-	auto& csBackup = m_Common.m_sBackup;
+	auto& csBackup = m_common.m_backup;
 
 	// バックアップの作成
 	csBackup.m_bBackUp = DlgButton_IsChecked(hwndDlg, IDC_CHECK_BACKUP);
@@ -521,7 +521,7 @@ void PropBackup::EnableBackupInput(HWND hwndDlg)
 void PropBackup::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設定
 {
 	wchar_t temp[MAX_PATH];
-	auto& csBackup = m_Common.m_sBackup;
+	auto& csBackup = m_common.m_backup;
 	// バックアップを作成するファイル // 20051107 aroka
 	if (!csBackup.m_bBackUp) {
 		temp[0] = 0;

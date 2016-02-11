@@ -34,7 +34,7 @@
 /*!	入力補完
 	Ctrl+Spaceでここに到着。
 	CEditView::m_bHokan： 現在補完ウィンドウが表示されているかを表すフラグ。
-	m_common.m_sHelper.m_bUseHokan：現在補完ウィンドウが表示されているべきか否かをあらわすフラグ。
+	m_common.m_helper.m_bUseHokan：現在補完ウィンドウが表示されているべきか否かをあらわすフラグ。
 
     @date 2001/06/19 asa-o 英大文字小文字を同一視する
                      候補が1つのときはそれに確定する
@@ -45,8 +45,8 @@
 */
 void ViewCommander::Command_HOKAN(void)
 {
-	if (!GetDllShareData().m_common.m_sHelper.m_bUseHokan) {
-		GetDllShareData().m_common.m_sHelper.m_bUseHokan = TRUE;
+	if (!GetDllShareData().m_common.m_helper.m_bUseHokan) {
+		GetDllShareData().m_common.m_helper.m_bUseHokan = TRUE;
 	}
 #if 0
 // 2011.06.24 Moca Plugin導入に従い未設定の確認をやめる
@@ -64,7 +64,7 @@ retry:;
 			) 
 		) {
 			// タイプ別設定 プロパティシート
-			if (!CEditApp::getInstance()->m_pcPropertyManager->OpenPropertySheetTypes(2, GetDocument()->m_cDocType.GetDocumentType())) {
+			if (!CEditApp::getInstance()->m_pPropertyManager->OpenPropertySheetTypes(2, GetDocument()->m_docType.GetDocumentType())) {
 				return;
 			}
 			goto retry;
@@ -78,7 +78,7 @@ retry:;
 	}else {
 		InfoBeep(); // 2010.04.03 Error→Info
 		m_pCommanderView->SendStatusMessage(LS(STR_SUPPORT_NOT_COMPLITE)); // 2010.05.29 ステータスで表示
-		GetDllShareData().m_common.m_sHelper.m_bUseHokan = FALSE;	// 入力補完終了のお知らせ
+		GetDllShareData().m_common.m_helper.m_bUseHokan = FALSE;	// 入力補完終了のお知らせ
 	}
 	return;
 }
@@ -90,7 +90,7 @@ retry:;
 */
 void ViewCommander::Command_ToggleKeySearch(int option)
 {	// 共通設定ダイアログの設定をキー割り当てでも切り替えられるように
-	auto& bUseCaretKeyword = GetDllShareData().m_common.m_sSearch.m_bUseCaretKeyWord;
+	auto& bUseCaretKeyword = GetDllShareData().m_common.m_search.m_bUseCaretKeyWord;
 	if (option == 0) {
 		bUseCaretKeyword = !bUseCaretKeyword;
 	}else if (option == 1) {
@@ -136,13 +136,13 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 	::GetClientRect(pCEditWnd->GetHwnd(), &rc);
 	po.x = t_min(po.x, rc.right);
 	::ClientToScreen(pCEditWnd->GetHwnd(), &po);
-	::GetWindowRect(pCEditWnd->m_cSplitterWnd.GetHwnd() , &rc);
+	::GetWindowRect(pCEditWnd->m_splitterWnd.GetHwnd() , &rc);
 	po.y = rc.top;
 
 	pCEditWnd->GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
-	FuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
+	FuncLookup& FuncLookup = GetDocument()->m_funcLookup;
 	HMENU hMenu = ::CreatePopupMenu();
 // Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
 	// Oct. 3, 2001 genta
@@ -192,7 +192,7 @@ void ViewCommander::Command_MENU_ALLFUNC(void)
 void ViewCommander::Command_EXTHELP1(void)
 {
 retry:;
-	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
+	if (!HelpManager().ExtWinHelpIsSet(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
 //	if (wcslen(GetDllShareData().m_common.m_szExtHelp1) == 0) {
 		ErrorBeep();
 // From Here Sept. 15, 2000 JEPRO
@@ -217,7 +217,7 @@ retry:;
 	}
 
 	NativeW cmemCurText;
-	const TCHAR* helpfile = HelpManager().GetExtWinHelp(&(GetDocument()->m_cDocType.GetDocumentAttribute()));
+	const TCHAR* helpfile = HelpManager().GetExtWinHelp(&(GetDocument()->m_docType.GetDocumentAttribute()));
 
 	// 現在カーソル位置単語または選択範囲より検索等のキーを取得
 	m_pCommanderView->GetCurrentTextForSearch(cmemCurText, false);
@@ -263,7 +263,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 	// From Here Jul. 5, 2002 genta
 	const TCHAR* filename = NULL;
 	if (helpfile.length() == 0) {
-		while (!HelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
+		while (!HelpManager().ExtHTMLHelpIsSet(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
 			ErrorBeep();
 	// From Here Sept. 15, 2000 JEPRO
 	//		[Esc]キーと[x]ボタンでも中止できるように変更
@@ -282,7 +282,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 				return;
 			}
 		}
-		filename = HelpManager().GetExtHTMLHelp(&(GetDocument()->m_cDocType.GetDocumentAttribute()));
+		filename = HelpManager().GetExtHTMLHelp(&(GetDocument()->m_docType.GetDocumentAttribute()));
 	}else {
 		filename = helpfile.c_str();
 	}
@@ -299,7 +299,7 @@ void ViewCommander::Command_EXTHTMLHELP(const WCHAR* _helpfile, const WCHAR* kwd
 	}
 
 	// HtmlHelpビューアはひとつ
-	if (HelpManager().HTMLHelpIsSingle(&(GetDocument()->m_cDocType.GetDocumentAttribute()))) {
+	if (HelpManager().HTMLHelpIsSingle(&(GetDocument()->m_docType.GetDocumentAttribute()))) {
 		// タスクトレイのプロセスにHtmlHelpを起動させる
 		// 2003.06.23 Moca 相対パスは実行ファイルからのパス
 		// 2007.05.21 ryoji 相対パスは設定ファイルからのパスを優先

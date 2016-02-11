@@ -58,10 +58,10 @@ public:
 
 	// 公開インターフェース
 	Subject* Listen(Subject* pcSubject); // 直前にウォッチしていたサブジェクトを返す
-	Subject* GetListeningSubject() const { return m_pcSubjectRef; }
+	Subject* GetListeningSubject() const { return m_pSubjectRef; }
 
 private:
-	Subject* m_pcSubjectRef;
+	Subject* m_pSubjectRef;
 };
 
 

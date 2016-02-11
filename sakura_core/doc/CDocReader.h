@@ -28,7 +28,7 @@ class DocLineMgr;
 // as decorator
 class DocReader {
 public:
-	DocReader(const DocLineMgr& pcDocLineMgr) : m_pcDocLineMgr(&pcDocLineMgr) { }
+	DocReader(const DocLineMgr& pcDocLineMgr) : m_pDocLineMgr(&pcDocLineMgr) { }
 
 	wchar_t* GetAllData(int* pnDataLen);	// 全行データを返す
 	const wchar_t* GetLineStr(LogicInt , LogicInt*);
@@ -37,6 +37,6 @@ public:
 	const wchar_t* GetNextLinrStr(int*);	// 順アクセスモード：次の行を得る
 
 private:
-	const DocLineMgr* m_pcDocLineMgr;
+	const DocLineMgr* m_pDocLineMgr;
 };
 

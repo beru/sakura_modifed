@@ -13,7 +13,7 @@
 // 2008.07.27 kobake
 static
 bool _GetKeywordLength(
-	const StringRef&	cLineStr,		// [in]
+	const StringRef&	lineStr,		// [in]
 	LogicInt			nPos,			// [in]
 	LogicInt*			p_nWordBgn,		// [out]
 	LogicInt*			p_nWordLen,		// [out]
@@ -24,8 +24,8 @@ bool _GetKeywordLength(
 	LogicInt nWordBgn = nPos;
 	LogicInt nWordLen = LogicInt(0);
 	LayoutInt nWordKetas = LayoutInt(0);
-	while (nPos < cLineStr.GetLength() && IS_KEYWORD_CHAR(cLineStr.At(nPos))) {
-		LayoutInt k = NativeW::GetKetaOfChar(cLineStr, nPos);
+	while (nPos < lineStr.GetLength() && IS_KEYWORD_CHAR(lineStr.At(nPos))) {
+		LayoutInt k = NativeW::GetKetaOfChar(lineStr, nPos);
 		if (k == 0) {
 			k = LayoutInt(1);
 		}
@@ -51,7 +51,7 @@ bool _GetKeywordLength(
 Layout* LayoutMgr::LayoutWork::_CreateLayout(LayoutMgr* mgr)
 {
 	return mgr->CreateLayout(
-		this->pcDocLine,
+		this->pDocLine,
 		LogicPoint(this->nBgn, this->nCurLine),
 		this->nPos - this->nBgn,
 		this->colorPrev,
@@ -74,13 +74,13 @@ bool LayoutMgr::_DoKinsokuSkip(LayoutWork* pWork, PF_OnLine pfOnLine)
 				&& pWork->eKinsokuType == KinsokuType::Kuto
 				&& pWork->nPos == pWork->nWordBgn + pWork->nWordLen
 			) {
-				int	nEol = pWork->pcDocLine->GetEol().GetLen();
+				int	nEol = pWork->pDocLine->GetEol().GetLen();
 
 				// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
 				if (
 					!(1
 						&& m_pTypeConfig->m_bKinsokuRet
-						&& (pWork->nPos == pWork->cLineStr.GetLength() - nEol)
+						&& (pWork->nPos == pWork->lineStr.GetLength() - nEol)
 						&& nEol
 					)
 				) {
@@ -103,12 +103,12 @@ void LayoutMgr::_DoWordWrap(LayoutWork* pWork, PF_OnLine pfOnLine)
 		// 英単語の先頭か
 		if (1
 			&& pWork->nPos >= pWork->nBgn
-			&& IS_KEYWORD_CHAR(pWork->cLineStr.At(pWork->nPos))
+			&& IS_KEYWORD_CHAR(pWork->lineStr.At(pWork->nPos))
 		) {
 			// キーワード長を取得
 			LayoutInt nWordKetas = LayoutInt(0);
 			_GetKeywordLength(
-				pWork->cLineStr, pWork->nPos,
+				pWork->lineStr, pWork->nPos,
 				&pWork->nWordBgn, &pWork->nWordLen, &nWordKetas
 			);
 
@@ -131,11 +131,11 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
-		LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
+		LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
 
 		if (1
 			&& IsKinsokuPosKuto(GetMaxLineKetas() - pWork->nPosX, nCharKetas)
-			&& IsKinsokuKuto(pWork->cLineStr.At(pWork->nPos))
+			&& IsKinsokuKuto(pWork->lineStr.At(pWork->nPos))
 		) {
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 1;
@@ -147,20 +147,20 @@ void LayoutMgr::_DoKutoBurasage(LayoutWork* pWork)
 void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
 	if (1
-		&& (pWork->nPos + 1 < pWork->cLineStr.GetLength())	// 2007.02.17 ryoji 追加
+		&& (pWork->nPos + 1 < pWork->lineStr.GetLength())	// 2007.02.17 ryoji 追加
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
 		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {
 		// 2007.09.07 kobake   レイアウトとロジックの区別
-		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
-		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
+		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
+		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
 
 		if (1
 			&& IsKinsokuPosHead(GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3)
-			&& IsKinsokuHead(pWork->cLineStr.At(pWork->nPos + 1))
-			&& ! IsKinsokuHead(pWork->cLineStr.At(pWork->nPos))	// 1文字前が行頭禁則でない
-			&& ! IsKinsokuKuto(pWork->cLineStr.At(pWork->nPos))
+			&& IsKinsokuHead(pWork->lineStr.At(pWork->nPos + 1))
+			&& ! IsKinsokuHead(pWork->lineStr.At(pWork->nPos))	// 1文字前が行頭禁則でない
+			&& ! IsKinsokuKuto(pWork->lineStr.At(pWork->nPos))
 		) {	// 句読点でない
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 2;
@@ -174,17 +174,17 @@ void LayoutMgr::_DoGyotoKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 void LayoutMgr::_DoGyomatsuKinsoku(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
 	if (1
-		&& (pWork->nPos + 1 < pWork->cLineStr.GetLength())	// 2007.02.17 ryoji 追加
+		&& (pWork->nPos + 1 < pWork->lineStr.GetLength())	// 2007.02.17 ryoji 追加
 		&& (GetMaxLineKetas() - pWork->nPosX < 4)
 		&& (pWork->nPosX > pWork->nIndent)	// 2004.04.09 pWork->nPosXの解釈変更のため，行頭チェックも変更
 		&& (pWork->eKinsokuType == KinsokuType::None)
 	) {	// 行末禁則する && 行末付近 && 行頭でないこと(無限に禁則してしまいそう)
-		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
-		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos + 1);
+		LayoutInt nCharKetas2 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
+		LayoutInt nCharKetas3 = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos + 1);
 
 		if (1
 			&& IsKinsokuPosTail(GetMaxLineKetas() - pWork->nPosX, nCharKetas2, nCharKetas3)
-			&& IsKinsokuTail(pWork->cLineStr.At(pWork->nPos))
+			&& IsKinsokuTail(pWork->lineStr.At(pWork->nPos))
 		) {
 			pWork->nWordBgn = pWork->nPos;
 			pWork->nWordLen = 1;
@@ -216,15 +216,15 @@ bool LayoutMgr::_DoTab(LayoutWork* pWork, PF_OnLine pfOnLine)
 
 void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 {
-	int	nEol = pWork->pcDocLine->GetEol().GetLen(); //########そのうち不要になる
+	int	nEol = pWork->pDocLine->GetEol().GetLen(); //########そのうち不要になる
 	int nEol_1 = nEol - 1;
 	if (0 >	nEol_1) {
 		nEol_1 = 0;
 	}
-	LogicInt nLength = pWork->cLineStr.GetLength() - LogicInt(nEol_1);
+	LogicInt nLength = pWork->lineStr.GetLength() - LogicInt(nEol_1);
 
-	if (pWork->pcColorStrategy) {
-		pWork->pcColorStrategy->InitStrategyStatus();
+	if (pWork->pColorStrategy) {
+		pWork->pColorStrategy->InitStrategyStatus();
 	}
 	ColorStrategyPool& color = *ColorStrategyPool::getInstance();
 
@@ -257,18 +257,18 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 		}
 
 		//@@@ 2002.09.22 YAZAKI
-		color.CheckColorMODE(&pWork->pcColorStrategy, pWork->nPos, pWork->cLineStr);
+		color.CheckColorMODE(&pWork->pColorStrategy, pWork->nPos, pWork->lineStr);
 
-		if (pWork->cLineStr.At(pWork->nPos) == WCODE::TAB) {
+		if (pWork->lineStr.At(pWork->nPos) == WCODE::TAB) {
 			if (_DoTab(pWork, pfOnLine)) {
 				continue;
 			}
 		}else {
-			if (pWork->nPos >= pWork->cLineStr.GetLength()) {
+			if (pWork->nPos >= pWork->lineStr.GetLength()) {
 				break;
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
-			LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->cLineStr, pWork->nPos);
+			LayoutInt nCharKetas = NativeW::GetKetaOfChar(pWork->lineStr, pWork->nPos);
 //			if (nCharKetas == 0) {				// 削除 サロゲートペア対策	2008/7/5 Uchi
 //				nCharKetas = LayoutInt(1);
 //			}
@@ -278,7 +278,7 @@ void LayoutMgr::_MakeOneLine(LayoutWork* pWork, PF_OnLine pfOnLine)
 					// 改行文字をぶら下げる		//@@@ 2002.04.14 MIK
 					if (!(1
 						&& m_pTypeConfig->m_bKinsokuRet
-						&& (pWork->nPos == pWork->cLineStr.GetLength() - nEol)
+						&& (pWork->nPos == pWork->lineStr.GetLength() - nEol)
 						&& nEol
 						)
 					) {
@@ -301,8 +301,8 @@ void LayoutMgr::_OnLine1(LayoutWork* pWork)
 {
 	AddLineBottom(pWork->_CreateLayout(this));
 	pWork->pLayout = m_pLayoutBot;
-	pWork->colorPrev = pWork->pcColorStrategy->GetStrategyColorSafe();
-	pWork->exInfoPrev.SetColorInfo(pWork->pcColorStrategy->GetStrategyColorInfoSafe());
+	pWork->colorPrev = pWork->pColorStrategy->GetStrategyColorSafe();
+	pWork->exInfoPrev.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 	pWork->nBgn = pWork->nPos;
 	// 2004.03.28 Moca pWork->nPosXはインデント幅を含むように変更(TAB位置調整のため)
 	pWork->nPosX = pWork->nIndent = (this->*m_getIndentOffset)(pWork->pLayout);
@@ -343,18 +343,18 @@ void LayoutMgr::_DoLayout()
 		m_nTabSpace = LayoutInt(4);
 	}
 
-	nAllLineNum = m_pcDocLineMgr->GetLineCount();
+	nAllLineNum = m_pDocLineMgr->GetLineCount();
 
 	LayoutWork	_sWork;
 	LayoutWork* pWork = &_sWork;
-	pWork->pcDocLine		= m_pcDocLineMgr->GetDocLineTop(); // 2002/2/10 aroka CDocLineMgr変更
+	pWork->pDocLine		= m_pDocLineMgr->GetDocLineTop(); // 2002/2/10 aroka CDocLineMgr変更
 	pWork->pLayout			= NULL;
-	pWork->pcColorStrategy	= NULL;
+	pWork->pColorStrategy	= NULL;
 	pWork->colorPrev		= COLORIDX_DEFAULT;
 	pWork->nCurLine			= LogicInt(0);
 
-	while (pWork->pcDocLine) {
-		pWork->cLineStr		= pWork->pcDocLine->GetStringRefWithEOL();
+	while (pWork->pDocLine) {
+		pWork->lineStr		= pWork->pDocLine->GetStringRefWithEOL();
 		pWork->eKinsokuType	= KinsokuType::None;	//@@@ 2002.04.20 MIK
 		pWork->nBgn			= LogicInt(0);
 		pWork->nPos			= LogicInt(0);
@@ -368,13 +368,13 @@ void LayoutMgr::_DoLayout()
 		if (pWork->nPos - pWork->nBgn > 0) {
 // 2002/03/13 novice
 			AddLineBottom(pWork->_CreateLayout(this));
-			pWork->colorPrev = pWork->pcColorStrategy->GetStrategyColorSafe();
-			pWork->exInfoPrev.SetColorInfo(pWork->pcColorStrategy->GetStrategyColorInfoSafe());
+			pWork->colorPrev = pWork->pColorStrategy->GetStrategyColorSafe();
+			pWork->exInfoPrev.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 		}
 
 		// 次の行へ
 		pWork->nCurLine++;
-		pWork->pcDocLine = pWork->pcDocLine->GetNextLine();
+		pWork->pDocLine = pWork->pDocLine->GetNextLine();
 		
 		// 処理中のユーザー操作を可能にする
 		if (1
@@ -390,8 +390,8 @@ void LayoutMgr::_DoLayout()
 	}
 
 	// 2011.12.31 Botの色分け情報は最後に設定
-	m_nLineTypeBot = pWork->pcColorStrategy->GetStrategyColorSafe();
-	m_cLayoutExInfoBot.SetColorInfo(pWork->pcColorStrategy->GetStrategyColorInfoSafe());
+	m_nLineTypeBot = pWork->pColorStrategy->GetStrategyColorSafe();
+	m_layoutExInfoBot.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 
 	m_nPrevReferLine = LayoutInt(0);
 	m_pLayoutPrevRefer = NULL;
@@ -422,8 +422,8 @@ void LayoutMgr::_OnLine2(LayoutWork* pWork)
 	}else {
 		pWork->pLayout = InsertLineNext(pWork->pLayout, pWork->_CreateLayout(this));
 	}
-	pWork->colorPrev = pWork->pcColorStrategy->GetStrategyColorSafe();
-	pWork->exInfoPrev.SetColorInfo(pWork->pcColorStrategy->GetStrategyColorInfoSafe());
+	pWork->colorPrev = pWork->pColorStrategy->GetStrategyColorSafe();
+	pWork->exInfoPrev.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 
 	pWork->nBgn = pWork->nPos;
 	// 2004.03.28 Moca pWork->nPosXはインデント幅を含むように変更(TAB位置調整のため)
@@ -475,7 +475,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	LayoutWork _sWork;
 	LayoutWork* pWork = &_sWork;
 	pWork->pLayout					= pLayoutPrev;
-	pWork->pcColorStrategy			= ColorStrategyPool::getInstance()->GetStrategyByColor(nCurrentLineType);
+	pWork->pColorStrategy			= ColorStrategyPool::getInstance()->GetStrategyByColor(nCurrentLineType);
 	pWork->colorPrev				= nCurrentLineType;
 	pWork->exInfoPrev.SetColorInfo(colorInfo);
 	pWork->bNeedChangeCOMMENTMODE	= false;
@@ -484,19 +484,19 @@ LayoutInt LayoutMgr::DoLayout_Range(
 	}else {
 		pWork->nCurLine = pWork->pLayout->GetLogicLineNo() + LogicInt(1);
 	}
-	pWork->pcDocLine				= m_pcDocLineMgr->GetLine(pWork->nCurLine);
+	pWork->pDocLine				= m_pDocLineMgr->GetLine(pWork->nCurLine);
 	pWork->nModifyLayoutLinesNew	= LayoutInt(0);
 	// 引数
 	pWork->ptDelLogicalFrom		= _ptDelLogicalFrom;
 	pWork->pnExtInsLineNum		= _pnExtInsLineNum;
 
-	if (pWork->pcColorStrategy) {
-		pWork->pcColorStrategy->InitStrategyStatus();
-		pWork->pcColorStrategy->SetStrategyColorInfo(colorInfo);
+	if (pWork->pColorStrategy) {
+		pWork->pColorStrategy->InitStrategyStatus();
+		pWork->pColorStrategy->SetStrategyColorInfo(colorInfo);
 	}
 
-	while (pWork->pcDocLine) {
-		pWork->cLineStr		= pWork->pcDocLine->GetStringRefWithEOL();
+	while (pWork->pDocLine) {
+		pWork->lineStr		= pWork->pDocLine->GetStringRefWithEOL();
 		pWork->eKinsokuType	= KinsokuType::None;	//@@@ 2002.04.20 MIK
 		pWork->nBgn			= LogicInt(0);
 		pWork->nPos			= LogicInt(0);
@@ -543,17 +543,17 @@ LayoutInt LayoutMgr::DoLayout_Range(
 					break;
 				}
 			}else {
-				break;	// while (pWork->pcDocLine) 終了
+				break;	// while (pWork->pDocLine) 終了
 			}
 		}
-		pWork->pcDocLine = pWork->pcDocLine->GetNextLine();
+		pWork->pDocLine = pWork->pDocLine->GetNextLine();
 // 2002/03/13 novice
 	}
 
 	// 2004.03.28 Moca EOFだけの論理行の直前の行の色分けが確認・更新された
-	if (pWork->nCurLine == m_pcDocLineMgr->GetLineCount()) {
-		m_nLineTypeBot = pWork->pcColorStrategy->GetStrategyColorSafe();
-		m_cLayoutExInfoBot.SetColorInfo(pWork->pcColorStrategy->GetStrategyColorInfoSafe());
+	if (pWork->nCurLine == m_pDocLineMgr->GetLineCount()) {
+		m_nLineTypeBot = pWork->pColorStrategy->GetStrategyColorSafe();
+		m_layoutExInfoBot.SetColorInfo(pWork->pColorStrategy->GetStrategyColorInfoSafe());
 	}
 
 	// 2009.08.28 nasukoji	テキストが編集されたら最大幅を算出する
@@ -582,7 +582,7 @@ LayoutInt LayoutMgr::DoLayout_Range(
 */
 void LayoutMgr::CalculateTextWidth_Range(const CalTextWidthArg* pctwArg)
 {
-	if (m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {	// 「折り返さない」
+	if (m_pEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {	// 「折り返さない」
 		LayoutInt nCalTextWidthLinesFrom(0);	// テキスト最大幅の算出開始レイアウト行
 		LayoutInt nCalTextWidthLinesTo(0);	// テキスト最大幅の算出終了レイアウト行
 		bool bCalTextWidth = true;		// テキスト最大幅の算出要求をON

@@ -17,7 +17,7 @@ CodeConvertResult CodeBase::UnicodeToHex(
 	const wchar_t* cSrc,
 	const int iSLen,
 	TCHAR* pDst,
-	const CommonSetting_Statusbar* psStatusbar
+	const CommonSetting_StatusBar* psStatusbar
 	)
 {
 	if (IsUTF16High(cSrc[0]) && iSLen >= 2 && IsUTF16Low(cSrc[1])) {

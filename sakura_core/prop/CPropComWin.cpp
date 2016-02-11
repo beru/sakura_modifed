@@ -214,7 +214,7 @@ INT_PTR PropWin::DispatchEvent(
 			//	ウィンドウ設定ダイアログにて起動時のウィンドウ状態指定
 			case IDC_BUTTON_WINSIZE:
 				{
-					auto& csWindow = m_Common.m_sWindow;
+					auto& csWindow = m_common.m_window;
 					DlgWinSize cDlgWinSize;
 					RECT rc;
 					rc.right  = csWindow.m_nWinSizeCX;
@@ -268,7 +268,7 @@ INT_PTR PropWin::DispatchEvent(
 void PropWin::SetData(HWND hwndDlg)
 {
 //	BOOL	bRet;
-	auto& csWindow = m_Common.m_sWindow;
+	auto& csWindow = m_common.m_window;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
 	::CheckDlgButton(hwndDlg, IDC_CHECK_DispTOOLBAR, csWindow.m_bDispTOOLBAR);
@@ -355,7 +355,7 @@ void PropWin::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropWin::GetData(HWND hwndDlg)
 {
-	auto& csWindow = m_Common.m_sWindow;
+	auto& csWindow = m_common.m_window;
 
 	// 次回ウィンドウを開いたときツールバーを表示する
 	csWindow.m_bDispTOOLBAR = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTOOLBAR);

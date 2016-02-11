@@ -64,7 +64,7 @@ public:
 	bool IsExceptionMode() const { return m_bExceptionMode; }
 private:
 	FILE*			m_fp;
-	FileAttribute*	m_pcFileAttribute;
+	FileAttribute*	m_pFileAttribute;
 	bool			m_bExceptionMode;
 };
 

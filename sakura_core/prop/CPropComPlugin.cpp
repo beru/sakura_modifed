@@ -93,7 +93,7 @@ INT_PTR PropPlugin::DispatchEvent(
 
 	WORD	wNotifyCode;
 	WORD	wID;
-	PluginRec* pluginTable = m_Common.m_sPlugin.m_PluginTable;
+	PluginRec* pluginTable = m_common.m_plugin.m_pluginTable;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -172,9 +172,9 @@ INT_PTR PropPlugin::DispatchEvent(
 			switch (wID) {
 			case IDC_PLUGIN_SearchNew:		// 新規プラグインを追加
 				GetData(hwndDlg);
-				PluginManager::getInstance()->SearchNewPlugin(m_Common, hwndDlg);
+				PluginManager::getInstance()->SearchNewPlugin(m_common, hwndDlg);
 				if (m_bTrayProc) {
-					LoadPluginTemp(m_Common, *m_pcMenuDrawer);
+					LoadPluginTemp(m_common, *m_pMenuDrawer);
 				}
 				SetData_LIST(hwndDlg);	// リストの再構築
 				break;
@@ -193,9 +193,9 @@ INT_PTR PropPlugin::DispatchEvent(
 					);
 					if (cDlgOpenFile.DoModal_GetOpenFileName(szPath)) {
 						GetData(hwndDlg);
-						PluginManager::getInstance()->InstZipPlugin(m_Common, hwndDlg, szPath);
+						PluginManager::getInstance()->InstZipPlugin(m_common, hwndDlg, szPath);
 						if (m_bTrayProc) {
-							LoadPluginTemp(m_Common, *m_pcMenuDrawer);
+							LoadPluginTemp(m_common, *m_pMenuDrawer);
 						}
 						SetData_LIST(hwndDlg);	// リストの再構築
 					}
@@ -215,7 +215,7 @@ INT_PTR PropPlugin::DispatchEvent(
 					int sel = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 					if (sel >= 0) {
 						if (MYMESSAGEBOX(hwndDlg, MB_YESNO, GSTR_APPNAME, LS(STR_PROPCOMPLG_DELETE), pluginTable[sel].m_szName) == IDYES) {
-							PluginManager::getInstance()->UninstallPlugin(m_Common, sel);
+							PluginManager::getInstance()->UninstallPlugin(m_common, sel);
 							SetData_LIST(hwndDlg);
 						}
 					}
@@ -324,7 +324,7 @@ INT_PTR PropPlugin::DispatchEvent(
 void PropPlugin::SetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_Common.m_sPlugin.m_bEnablePlugin);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_PluginEnable, m_common.m_plugin.m_bEnablePlugin);
 
 	// プラグインリスト
 	SetData_LIST(hwndDlg);
@@ -342,7 +342,7 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 {
 	int index;
 	LVITEM sItem;
-	PluginRec* pluginTable = m_Common.m_sPlugin.m_PluginTable;
+	PluginRec* pluginTable = m_common.m_plugin.m_pluginTable;
 
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_Remove), FALSE);
 	::EnableWindow(::GetDlgItem(hwndDlg, IDC_PLUGIN_OPTION), FALSE);
@@ -450,10 +450,10 @@ void PropPlugin::SetData_LIST(HWND hwndDlg)
 int PropPlugin::GetData(HWND hwndDlg)
 {
 	// プラグインを有効にする
-	m_Common.m_sPlugin.m_bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
+	m_common.m_plugin.m_bEnablePlugin = DlgButton_IsChecked(hwndDlg, IDC_CHECK_PluginEnable);
 
 	// プラグインリストは今のところ変更できる部分がない
-	//「新規プラグイン追加」はm_Commonに直接書き込むので、この関数ですることはない
+	//「新規プラグイン追加」はm_commonに直接書き込むので、この関数ですることはない
 
 	return TRUE;
 }
@@ -595,12 +595,12 @@ static void LoadPluginTemp(CommonSetting& common, MenuDrawer& cMenuDrawer)
 		PluginManager::getInstance()->LoadAllPlugin(&common);
 		// ツールバーアイコンの更新
 		const Plug::Array& plugs = JackManager::getInstance()->GetPlugs(PP_COMMAND);
-		cMenuDrawer.m_pcIcons->ResetExtend();
+		cMenuDrawer.m_pIcons->ResetExtend();
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
 			int iBitmap = MenuDrawer::TOOLBAR_ICON_PLUGCOMMAND_DEFAULT - 1;
 			const Plug* plug = *it;
 			if (!plug->m_sIcon.empty()) {
-				iBitmap = cMenuDrawer.m_pcIcons->Add(
+				iBitmap = cMenuDrawer.m_pIcons->Add(
 					to_tchar(plug->m_cPlugin.GetFilePath(to_tchar(plug->m_sIcon.c_str())).c_str()));
 			}
 			cMenuDrawer.AddToolButton(iBitmap, plug->GetFunctionCode());

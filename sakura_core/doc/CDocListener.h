@@ -68,7 +68,7 @@ enum class CallbackResultType {
 //###
 struct LoadInfo {
 	// 入力
-	FilePath	cFilePath;
+	FilePath	filePath;
 	ECodeType	eCharCode;
 	bool		bViewMode;
 	bool		bWritableNoMsg; //<! 書き込み禁止メッセージを表示しない
@@ -82,7 +82,7 @@ struct LoadInfo {
 
 	LoadInfo()
 		:
-		cFilePath(_T("")),
+		filePath(_T("")),
 		eCharCode(CODE_AUTODETECT),
 		bViewMode(false),
 		bWritableNoMsg(false),
@@ -99,7 +99,7 @@ struct LoadInfo {
 		TypeConfigNum		_nType = TypeConfigNum(-1)
 	)
 		:
-		cFilePath(_cFilePath),
+		filePath(_cFilePath),
 		eCharCode(_eCodeType),
 		bViewMode(_bReadOnly),
 		bWritableNoMsg(false),
@@ -114,7 +114,7 @@ struct LoadInfo {
 };
 
 struct SaveInfo {
-	FilePath	cFilePath;	// 保存ファイル名
+	FilePath	filePath;	// 保存ファイル名
 	ECodeType	eCharCode;	// 保存文字コードセット
 	bool		bBomExist;	// 保存時BOM付加
 	bool		bChgCodeSet;// 文字コードセット変更	2013/5/19 Uchi
@@ -125,7 +125,7 @@ struct SaveInfo {
 
 	SaveInfo()
 		:
-		cFilePath(_T("")),
+		filePath(_T("")),
 		eCharCode(CODE_AUTODETECT),
 		bBomExist(false),
 		bChgCodeSet(false),
@@ -141,7 +141,7 @@ struct SaveInfo {
 		bool _bBomExist
 	)
 		: 
-		cFilePath(_cFilePath),
+		filePath(_cFilePath),
 		eCharCode(_eCodeType),
 		bBomExist(_bBomExist),
 		bChgCodeSet(false),

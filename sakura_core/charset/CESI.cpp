@@ -1181,7 +1181,7 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 	int v1, v2, v3, v4;
 
 	EditDoc& doc = *EditWnd::getInstance()->GetDocument();
-	ESI cesi(doc.m_cDocType.GetDocumentAttribute().m_encoding);
+	ESI cesi(doc.m_docType.GetDocumentAttribute().m_encoding);
 
 	// テスト実行
 	cesi.SetInformation(pS, nLen/*, CODE_SJIS*/);
@@ -1206,13 +1206,13 @@ void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 
 	pcmtxtOut->AppendString(LS(STR_ESI_DOC_TYPE));	// "文書種別\r\n"
 
-	auto_sprintf( szWork, _T("\t%s\r\n"), doc.m_cDocType.GetDocumentAttribute().m_szTypeName );
+	auto_sprintf( szWork, _T("\t%s\r\n"), doc.m_docType.GetDocumentAttribute().m_szTypeName );
 	pcmtxtOut->AppendString(szWork);
 
 	pcmtxtOut->AppendString(LS(STR_ESI_DEFAULT_CHARCODE));	// "デフォルト文字コード\r\n"
 
 	TCHAR szCpName[100];
-	CodePage::GetNameNormal(szCpName, doc.m_cDocType.GetDocumentAttribute().m_encoding.m_eDefaultCodetype);
+	CodePage::GetNameNormal(szCpName, doc.m_docType.GetDocumentAttribute().m_encoding.m_eDefaultCodetype);
 	auto_sprintf(szWork, _T("\t%ts\r\n"), szCpName);
 	pcmtxtOut->AppendString(szWork);
 	pcmtxtOut->AppendString(LS(STR_ESI_SAMPLE_LEN));	// "サンプルデータ長\r\n"

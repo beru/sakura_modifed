@@ -5,27 +5,27 @@
 #include "doc/logic/CDocLine.h"
 
 
-void ModifyManager::OnAfterSave(const SaveInfo& sSaveInfo)
+void ModifyManager::OnAfterSave(const SaveInfo& saveInfo)
 {
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 行変更状態をすべてリセット
-	ModifyVisitor().ResetAllModifyFlag(&pcDoc->m_docLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
+	ModifyVisitor().ResetAllModifyFlag(&pcDoc->m_docLineMgr, pcDoc->m_docEditor.m_opeBuf.GetCurrentPointer());
 }
 
-bool ModifyVisitor::IsLineModified(const DocLine* pcDocLine, int saveSeq) const
+bool ModifyVisitor::IsLineModified(const DocLine* pDocLine, int saveSeq) const
 {
-	return pcDocLine->m_sMark.m_cModified.GetSeq() != saveSeq;
+	return pDocLine->m_mark.m_modified.GetSeq() != saveSeq;
 }
 
-int ModifyVisitor::GetLineModifiedSeq(const DocLine* pcDocLine) const
+int ModifyVisitor::GetLineModifiedSeq(const DocLine* pDocLine) const
 {
-	return pcDocLine->m_sMark.m_cModified.GetSeq();
+	return pDocLine->m_mark.m_modified.GetSeq();
 }
 
-void ModifyVisitor::SetLineModified(DocLine* pcDocLine, int seq)
+void ModifyVisitor::SetLineModified(DocLine* pDocLine, int seq)
 {
-	pcDocLine->m_sMark.m_cModified = seq;
+	pDocLine->m_mark.m_modified = seq;
 }
 
 // 行変更状態をすべてリセット

@@ -54,8 +54,8 @@ public:
 	// ウィンドウ情報
 	EditWnd* GetEditWindow() { return m_pEditWnd; }		// ウィンドウ取得
 
-	EditDoc*		GetDocument() { return m_pcEditDoc; }
-	ImageListMgr&	GetIcons() { return m_cIcons; }
+	EditDoc*		GetDocument() { return m_pEditDoc; }
+	ImageListMgr&	GetIcons() { return m_icons; }
 
 	bool OpenPropertySheet(int nPageNum);
 	bool OpenPropertySheetTypes(int nPageNum, TypeConfigNum nSettingType);
@@ -64,27 +64,27 @@ public:
 	HINSTANCE			m_hInst;
 
 	// ドキュメント
-	EditDoc*			m_pcEditDoc;
+	EditDoc*			m_pEditDoc;
 
 	// ウィンドウ
 	EditWnd*			m_pEditWnd;
 
 	// IO管理
-	LoadAgent*			m_pcLoadAgent;
-	SaveAgent*			m_pcSaveAgent;
-	VisualProgress*	m_pcVisualProgress;
+	LoadAgent*			m_pLoadAgent;
+	SaveAgent*			m_pSaveAgent;
+	VisualProgress*		m_pVisualProgress;
 
 	// その他ヘルパ
-	MruListener*		m_pcMruListener;		// MRU管理
-	SMacroMgr*			m_pcSMacroMgr;			// マクロ管理
+	MruListener*		m_pMruListener;		// MRU管理
+	SMacroMgr*			m_pSMacroMgr;		// マクロ管理
 private:
-	PropertyManager*	m_pcPropertyManager;	// プロパティ管理
+	PropertyManager*	m_pPropertyManager;	// プロパティ管理
 public:
-	GrepAgent*			m_pcGrepAgent;			// GREPモード
-	SoundSet			m_cSoundSet;			// サウンド管理
+	GrepAgent*			m_pGrepAgent;		// GREPモード
+	SoundSet			m_soundSet;			// サウンド管理
 
 	// GUIオブジェクト
-	ImageListMgr		m_cIcons;				// Image List
+	ImageListMgr		m_icons;			// Image List
 };
 
 

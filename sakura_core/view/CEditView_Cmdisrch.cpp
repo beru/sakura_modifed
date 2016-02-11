@@ -165,7 +165,7 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 		if (selInfo.IsTextSelected())	
 			selInfo.DisableSelectArea(true);
 
-		m_curSearchOption = GetDllShareData().m_common.m_sSearch.m_searchOption;
+		m_curSearchOption = GetDllShareData().m_common.m_search.m_searchOption;
 		switch (mode) {
 		case 1: // 通常インクリメンタルサーチ
 			m_curSearchOption.bRegularExp = false;
@@ -189,20 +189,20 @@ void EditView::ISearchEnter(int mode, SearchDirection direction)
 				SendStatusMessage(LS(STR_EDITVWISRCH_REGEX));
 				return;
 			}
-			if (!m_pcmigemo) {
-				m_pcmigemo = Migemo::getInstance();
-				m_pcmigemo->InitDll();
+			if (!m_pMigemo) {
+				m_pMigemo = Migemo::getInstance();
+				m_pMigemo->InitDll();
 			}
 			// migemo dll チェック
 			//	Jan. 10, 2005 genta 設定変更で使えるようになっている
 			//	可能性があるので，使用可能でなければ一応初期化を試みる
-			if (!m_pcmigemo->IsAvailable() && DLL_SUCCESS != m_pcmigemo->InitDll()) {
+			if (!m_pMigemo->IsAvailable() && DLL_SUCCESS != m_pMigemo->InitDll()) {
 				WarningBeep();
 				SendStatusMessage(LS(STR_EDITVWISRCH_MIGEGO1));
 				return;
 			}
-			m_pcmigemo->migemo_load_all();
-			if (m_pcmigemo->migemo_is_enable()) {
+			m_pMigemo->migemo_load_all();
+			if (m_pMigemo->migemo_is_enable()) {
 				m_curSearchOption.bRegularExp = true;
 				m_curSearchOption.bLoHiCase = false;
 				//SendStatusMessage(_T("[MIGEMO] I-Search: "));
@@ -252,9 +252,9 @@ void EditView::ISearchExit()
 	if (m_strCurSearchKey.size() < _MAX_PATH) {
 		SearchKeywordManager().AddToSearchKeyArr(m_strCurSearchKey.c_str());
 	}
-	m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
-	GetDllShareData().m_common.m_sSearch.m_searchOption = m_curSearchOption;
-	m_pEditWnd->m_cToolbar.AcceptSharedSearchKey();
+	m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
+	GetDllShareData().m_common.m_search.m_searchOption = m_curSearchOption;
+	m_pEditWnd->m_toolbar.AcceptSharedSearchKey();
 	m_nISearchDirection = SearchDirection::Backward;
 	m_nISearchMode = 0;
 	
@@ -363,12 +363,12 @@ void EditView::ISearchExec(bool bNext)
 			// 最後から検索
 			LogicInt nLineP;
 			int nIdxP;
-			auto& docLineMgr = m_pcEditDoc->m_docLineMgr;
+			auto& docLineMgr = m_pEditDoc->m_docLineMgr;
 			nLineP =  docLineMgr.GetLineCount() - LogicInt(1);
 			DocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;
 			LayoutPoint ptTmp;
-			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nIdxP, nLineP), &ptTmp);
+			m_pEditDoc->m_layoutMgr.LogicToLayout(LogicPoint(nIdxP, nLineP), &ptTmp);
 			nIdx1 = ptTmp.GetX2();
 			nLine = ptTmp.GetY2();
 		}
@@ -395,7 +395,7 @@ void EditView::ISearchExec(bool bNext)
 	}
 
 	// 桁位置からindexに変換
-	Layout* pCLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nLine);
+	Layout* pCLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(nLine);
 	LogicInt nIdx = LineColumnToIndex(pCLayout, nIdx1);
 
 	m_nISearchHistoryCount ++ ;
@@ -414,7 +414,7 @@ void EditView::ISearchExec(bool bNext)
 
 	LayoutRange sMatchRange;
 
-	int nSearchResult = m_pcEditDoc->m_cLayoutMgr.SearchWord(
+	int nSearchResult = m_pEditDoc->m_layoutMgr.SearchWord(
 		nLine,						// 検索開始レイアウト行
 		nIdx,						// 検索開始データ位置
 		m_nISearchDirection,		// 0==前方検索 1==後方検索
@@ -512,7 +512,7 @@ void EditView::ISearchWordMake(void)
 	case 3: // MIGEMOインクリメンタルサーチ
 		{
 			// migemoで捜す
-			std::wstring strMigemoWord = m_pcmigemo->migemo_query_w(m_strCurSearchKey.c_str());
+			std::wstring strMigemoWord = m_pMigemo->migemo_query_w(m_strCurSearchKey.c_str());
 			
 			// 検索パターンのコンパイル
 			const wchar_t* p = strMigemoWord.c_str();

@@ -37,7 +37,7 @@ public:
 		m_hMutex(NULL),
 		m_hMutexCP(NULL),
 		m_hEventCPInitialized(NULL),
-		m_pcTray(0)
+		m_pTray(0)
 	{
 	}
 
@@ -52,6 +52,6 @@ private:
 	HANDLE			m_hMutex;				// アプリケーション実行検出用ミューテックス
 	HANDLE			m_hMutexCP;				// コントロールプロセスミューテックス
 	HANDLE			m_hEventCPInitialized;	// コントロールプロセス初期化完了イベント 2006.04.10 ryoji
-	ControlTray*	m_pcTray;
+	ControlTray*	m_pTray;
 };
 

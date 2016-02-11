@@ -62,7 +62,7 @@ private:
 
 // フォント情報管理
 struct Font {
-	FontAttr	m_sFontAttr;
+	FontAttr	m_fontAttr;
 	HFONT		m_hFont;      // フォントハンドル
 };
 
@@ -143,7 +143,7 @@ public:
 	}
 	bool GetCurrentMyFontBold() {
 		assert(!m_vFonts.empty());
-		return  m_vFonts.back().m_sFontAttr.m_bBoldFont;
+		return  m_vFonts.back().m_fontAttr.m_bBoldFont;
 	}
 
 	// ペン

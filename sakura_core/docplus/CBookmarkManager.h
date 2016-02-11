@@ -44,25 +44,25 @@ private:
 // 行のブックマーク情報の取得
 class BookmarkGetter {
 public:
-	BookmarkGetter(const DocLine* pcDocLine) : m_pcDocLine(pcDocLine) { }
+	BookmarkGetter(const DocLine* pDocLine) : m_pDocLine(pDocLine) { }
 	bool IsBookmarked() const;
 private:
-	const DocLine* m_pcDocLine;
+	const DocLine* m_pDocLine;
 };
 
 // 行のブックマーク情報の取得・設定
 class BookmarkSetter : public BookmarkGetter {
 public:
-	BookmarkSetter(DocLine* pcDocLine) : BookmarkGetter(pcDocLine), m_pcDocLine(pcDocLine) { }
+	BookmarkSetter(DocLine* pDocLine) : BookmarkGetter(pDocLine), m_pDocLine(pDocLine) { }
 	void SetBookmark(bool bFlag);
 private:
-	DocLine* m_pcDocLine;
+	DocLine* m_pDocLine;
 };
 
 // 行全体のブックマーク情報の管理
 class BookmarkManager {
 public:
-	BookmarkManager(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	BookmarkManager(DocLineMgr* pDocLineMgr) : m_pDocLineMgr(pDocLineMgr) { }
 
 	void ResetAllBookMark();															// ブックマークの全解除
 	bool SearchBookMark(LogicInt nLineNum, SearchDirection, LogicInt* pnLineNum);	// ブックマーク検索
@@ -71,6 +71,6 @@ public:
 	void MarkSearchWord(const SearchStringPattern&);			// 検索条件に該当する行にブックマークをセットする
 
 private:
-	DocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pDocLineMgr;
 };
 

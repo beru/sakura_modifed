@@ -102,11 +102,11 @@ void DlgProperty::SetData(void)
 	WIN32_FIND_DATA	wfd;
 	// Aug. 16, 2000 genta	全角化
 	cmemProp.AppendString(LS(STR_DLGFLPROP_FILENAME));
-	cmemProp.AppendString(pCEditDoc->m_cDocFile.GetFilePath());
+	cmemProp.AppendString(pCEditDoc->m_docFile.GetFilePath());
 	cmemProp.AppendString(_T("\r\n"));
 
 	cmemProp.AppendString(LS(STR_DLGFLPROP_FILETYPE));
-	cmemProp.AppendString(pCEditDoc->m_cDocType.GetDocumentAttribute().m_szTypeName);
+	cmemProp.AppendString(pCEditDoc->m_docType.GetDocumentAttribute().m_szTypeName);
 	cmemProp.AppendString(_T("\r\n"));
 
 	cmemProp.AppendString(LS(STR_DLGFLPROP_ENCODING));
@@ -125,13 +125,13 @@ void DlgProperty::SetData(void)
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_docLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_layoutMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
 	if (AppMode::getInstance()->IsViewMode()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_VIEW_MODE));	// 2009.04.11 ryoji 「上書き禁止モード」→「ビューモード」
 	}
-	if (pCEditDoc->m_cDocEditor.IsModified()) {
+	if (pCEditDoc->m_docEditor.IsModified()) {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_MODIFIED));
 	}else {
 		cmemProp.AppendString(LS(STR_DLGFLPROP_NOT_MODIFIED));
@@ -143,11 +143,11 @@ void DlgProperty::SetData(void)
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_docLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
-	if ((nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
-		if (pCEditDoc->m_cDocFile.IsFileLocking()) {
-			if (m_pShareData->m_common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
+	if ((nFind = ::FindFirstFile(pCEditDoc->m_docFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
+		if (pCEditDoc->m_docFile.IsFileLocking()) {
+			if (m_pShareData->m_common.m_file.m_nFileShareMode == SHAREMODE_DENY_WRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_W_LOCK));
-			}else if (m_pShareData->m_common.m_sFile.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
+			}else if (m_pShareData->m_common.m_file.m_nFileShareMode == SHAREMODE_DENY_READWRITE) {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_RW_LOCK));
 			}else {
 				auto_sprintf(szWork, LS(STR_DLGFLPROP_LOCK));
@@ -241,7 +241,7 @@ void DlgProperty::SetData(void)
 #ifdef _DEBUG/////////////////////////////////////////////////////
 	// メモリ確保 & ファイル読み込み
 	CNativeT ctext;
-	BinaryInputStream in(pCEditDoc->m_cDocFile.GetFilePath());
+	BinaryInputStream in(pCEditDoc->m_docFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;
 	}

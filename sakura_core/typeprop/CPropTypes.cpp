@@ -95,7 +95,7 @@ PropTypes::PropTypes()
 	m_pShareData = &GetDllShareData();
 
 	// Mar. 31, 2003 genta メモリ削減のためポインタに変更
-	m_pCKeyWordSetMgr = &m_pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr;
+	m_pCKeyWordSetMgr = &m_pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr;
 
 	m_hInstance = NULL;		// アプリケーションインスタンスのハンドル
 	m_hwndParent = NULL;	// オーナーウィンドウのハンドル
@@ -145,8 +145,8 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	// カスタム色を共有メモリから取得
 	memcpy_raw( m_dwCustColors, m_pShareData->m_dwCustColors, sizeof(m_dwCustColors) );
 	// 2005.11.30 Moca カスタム色の先頭にテキスト色を設定しておく
-	m_dwCustColors[0] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cTEXT;
-	m_dwCustColors[1] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
+	m_dwCustColors[0] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cTEXT;
+	m_dwCustColors[1] = m_Types.m_ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 
 	std::tstring sTabname[_countof(TypePropSheetInfoList)];
 	m_bChangeKeyWordSet = false;

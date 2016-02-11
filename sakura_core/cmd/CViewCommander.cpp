@@ -39,7 +39,7 @@ ViewCommander::ViewCommander(EditView* pEditView)
 	m_pCommanderView(pEditView)
 {
 	m_bPrevCommand = 0;
-	m_pcSMacroMgr = EditApp::getInstance()->m_pcSMacroMgr;
+	m_pSMacroMgr = EditApp::getInstance()->m_pSMacroMgr;
 }
 
 
@@ -91,7 +91,7 @@ bool ViewCommander::HandleCommand(
 	++GetDocument()->m_nCommandExecNum;		// コマンド実行回数
 //	if (nCommand != F_COPY) {
 		// 辞書Tipを消す
-		m_pCommanderView->m_cTipWnd.Hide();
+		m_pCommanderView->m_tipWnd.Hide();
 		m_pCommanderView->m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 //	}
 	// 印刷プレビューモードか
@@ -120,7 +120,7 @@ bool ViewCommander::HandleCommand(
 			// キーマクロのバッファにデータ追加
 			//@@@ 2002.1.24 m_CKeyMacroMgrをCEditDocへ移動
 			LPARAM lparams[] = {lparam1, lparam2, lparam3, lparam4};
-			m_pcSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, m_pCommanderView);
+			m_pSMacroMgr->Append(STAND_KEYMACRO, nCommand, lparams, m_pCommanderView);
 		}
 	}
 
@@ -138,14 +138,14 @@ bool ViewCommander::HandleCommand(
 	// From Here Sep. 29, 2001 genta マクロの実行機能追加
 	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
 		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一（インターフェースの変更）
-		if (!m_pcSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
+		if (!m_pSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
 			nCommandFrom & FA_NONRECORD)
 		) {
 			InfoMessage(
 				this->m_pCommanderView->m_hwndParent,
 				LS(STR_ERR_MACRO1),
 				nCommand - F_USERMACRO_0,
-				m_pcSMacroMgr->GetFile(nCommand - F_USERMACRO_0)
+				m_pSMacroMgr->GetFile(nCommand - F_USERMACRO_0)
 			);
 		}
 		return true;
@@ -198,7 +198,7 @@ bool ViewCommander::HandleCommand(
 		// Feb. 28, 2004 genta 保存＆閉じる
 		// 保存が不要なら単に閉じる
 		{	// Command_FILESAVE()とは別に保存不要をチェック	//### Command_FILESAVE() は実際に保存した場合だけ true を返すようになった（仕様変更？）
-			if (!GetDllShareData().m_common.m_sFile.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_cDocEditor.IsModified()) {
+			if (!GetDllShareData().m_common.m_file.m_bEnableUnmodifiedOverwrite && !GetDocument()->m_docEditor.IsModified()) {
 				Command_WINCLOSE();
 				break;
 			}
@@ -365,9 +365,9 @@ bool ViewCommander::HandleCommand(
 
 	// クリップボード系
 	case F_CUT:						Command_CUT(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)
-	case F_COPY:					Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
+	case F_COPY:					Command_COPY(false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
 	case F_COPY_ADDCRLF:			Command_COPY(false, true); break;		// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
-	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
+	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
 	case F_PASTE:					Command_PASTE((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
 	case F_PASTEBOX:				Command_PASTEBOX((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
 	case F_INSBOXTEXT:				Command_INSBOXTEXT((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
@@ -708,7 +708,7 @@ void ViewCommander::Sub_BoxSelectLock( int flags )
 {
 	bool bSelLock;
 	if (flags == 0x00) {
-		bSelLock = GetDllShareData().m_common.m_sEdit.m_bBoxSelectLock;
+		bSelLock = GetDllShareData().m_common.m_edit.m_bBoxSelectLock;
 	}else if (flags == 0x01) {
 		bSelLock = true;
 	}else if (flags == 0x02) {
@@ -728,10 +728,10 @@ LogicInt ViewCommander::ConvertEol(
 {
 	// original by 2009.02.28 salarm
 	LogicInt nConvertedTextLen;
-	Eol eol = GetDocument()->m_cDocEditor.GetNewLineCode();
+	Eol eol = GetDocument()->m_docEditor.GetNewLineCode();
 
 	nConvertedTextLen = 0;
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 	if (!pszConvertedText) {
 		for (int i=0; i<nTextLen; ++i) {
 			if (WCODE::IsLineDelimiter(pszText[i], bExtEol)) {
@@ -776,7 +776,7 @@ void ViewCommander::AlertNotFound(
 	...
 	)
 {
-	if (GetDllShareData().m_common.m_sSearch.m_bNOTIFYNOTFOUND
+	if (GetDllShareData().m_common.m_search.m_bNOTIFYNOTFOUND
 		&& !bReplaceAll
 	) {
 		if (!hwnd) {

@@ -202,7 +202,7 @@ public:
 	// Constructor
 	ImpExpKeybind(CommonSetting& common)
 		:
-		m_Common(common)
+		m_common(common)
 	{
 	}
 
@@ -216,7 +216,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"key"; }
 
 private:
-	CommonSetting& m_Common;
+	CommonSetting& m_common;
 };
 
 
@@ -228,7 +228,7 @@ public:
 	// Constructor
 	ImpExpCustMenu(CommonSetting& common)
 		:
-		m_Common(common)
+		m_common(common)
 	{
 	}
 
@@ -242,7 +242,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"mnu"; }
 
 private:
-	CommonSetting& m_Common;
+	CommonSetting& m_common;
 };
 
 
@@ -254,7 +254,7 @@ public:
 	// Constructor
 	ImpExpKeyWord(CommonSetting& common, int nKeyWordSetIdx, bool& bCase)
 		:
-		m_Common(common),
+		m_common(common),
 		m_nIdx(nKeyWordSetIdx),
 		m_bCase(bCase)
 	{
@@ -270,7 +270,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"kwd"; }
 
 private:
-	CommonSetting&	m_Common;
+	CommonSetting&	m_common;
 	int 			m_nIdx;
 	bool&			m_bCase;
 };
@@ -284,7 +284,7 @@ public:
 	// Constructor
 	ImpExpMainMenu(CommonSetting& common)
 		:
-		m_Common(common)
+		m_common(common)
 	{
 	}
 
@@ -298,7 +298,7 @@ public:
 	const wchar_t* GetOriginExtension()	{ return L"ini"; }
 
 private:
-	CommonSetting& m_Common;
+	CommonSetting& m_common;
 };
 
 

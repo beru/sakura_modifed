@@ -26,7 +26,7 @@
 #include "CCodeBase.h"
 #include "charset/codeutil.h"
 
-struct CommonSetting_Statusbar;
+struct CommonSetting_StatusBar;
 
 class Utf8 : public CodeBase {
 public:
@@ -40,8 +40,8 @@ public:
 	}
 	void GetBom(Memory* pcmemBom);																			//!< BOMデータ取得
 	void GetEol(Memory* pcmemEol, EolType eEolType);
-	CodeConvertResult _UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool CESU8Mode);			//!< UNICODE → Hex 変換
-	CodeConvertResult UnicodeToHex(const wchar_t* ps, const int nsl, TCHAR* pd, const CommonSetting_Statusbar* psStatusbar){ return _UnicodeToHex(ps, nsl, pd, psStatusbar, false); }
+	CodeConvertResult _UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool CESU8Mode);			//!< UNICODE → Hex 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* ps, const int nsl, TCHAR* pd, const CommonSetting_StatusBar* psStatusbar){ return _UnicodeToHex(ps, nsl, pd, psStatusbar, false); }
 
 public:
 	// UTF-8 / CESU-8 <-> Unicodeコード変換

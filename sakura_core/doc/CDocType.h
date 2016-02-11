@@ -58,7 +58,7 @@ public:
 	void SetDocumentIcon();						// ƒAƒCƒRƒ“‚Ìİ’è	// Sep. 10, 2002 genta
 
 private:
-	EditDoc*		m_pcDocRef;
+	EditDoc*		m_pDocRef;
 	TypeConfigNum	m_nSettingType;
 	TypeConfig		m_typeConfig;
 	bool			m_nSettingTypeLocked;		// •¶‘í•Ê‚Ìˆêİ’èó‘Ô

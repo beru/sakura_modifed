@@ -30,7 +30,7 @@ void DocLocker::OnAfterLoad(const LoadInfo& sLoadInfo)
 	}
 
 	// ファイルの排他ロック
-	pcDoc->m_cDocFileOperation.DoFileLock();
+	pcDoc->m_docFileOperation.DoFileLock();
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -42,7 +42,7 @@ void DocLocker::OnBeforeSave(const SaveInfo& sSaveInfo)
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// ファイルの排他ロック解除
-	pcDoc->m_cDocFileOperation.DoFileUnlock();
+	pcDoc->m_docFileOperation.DoFileUnlock();
 }
 
 void DocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
@@ -53,7 +53,7 @@ void DocLocker::OnAfterSave(const SaveInfo& sSaveInfo)
 	m_bIsDocWritable = true;
 
 	// ファイルの排他ロック
-	pcDoc->m_cDocFileOperation.DoFileLock();
+	pcDoc->m_docFileOperation.DoFileLock();
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -66,19 +66,19 @@ void DocLocker::CheckWritable(bool bMsg)
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// ファイルが存在しない場合 (「開く」で新しくファイルを作成した扱い) は、以下の処理は行わない
-	if (!fexist(pcDoc->m_cDocFile.GetFilePath())) {
+	if (!fexist(pcDoc->m_docFile.GetFilePath())) {
 		m_bIsDocWritable = true;
 		return;
 	}
 
 	// 読み取り専用ファイルの場合は、以下の処理は行わない
-	if (!pcDoc->m_cDocFile.HasWritablePermission()) {
+	if (!pcDoc->m_docFile.HasWritablePermission()) {
 		m_bIsDocWritable = false;
 		return;
 	}
 
 	// 書き込めるか検査
-	DocFile& cDocFile = pcDoc->m_cDocFile;
+	DocFile& cDocFile = pcDoc->m_docFile;
 	m_bIsDocWritable = cDocFile.IsFileWritable();
 	if (!m_bIsDocWritable && bMsg) {
 		// 排他されている場合だけメッセージを出す

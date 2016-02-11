@@ -45,12 +45,12 @@ private:
 class FuncListManager {
 public:
 	//状態
-	bool IsLineFuncList(const DocLine* pcDocLine, bool bFlag) const;
-	bool GetLineFuncList(const DocLine* pcDocLine) const;
-	void SetLineFuncList(DocLine* pcDocLine, bool bFlag);
+	bool IsLineFuncList(const DocLine* pDocLine, bool bFlag) const;
+	bool GetLineFuncList(const DocLine* pDocLine) const;
+	void SetLineFuncList(DocLine* pDocLine, bool bFlag);
 	bool SearchFuncListMark(const DocLineMgr*, LogicInt, SearchDirection, LogicInt* ) const;					//!< 関数リストマーク検索
 
 	//一括操作
-	void ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag);	// 関数リストマークをすべてリセット
+	void ResetAllFucListMark(DocLineMgr* pDocLineMgr, bool bFlag);	// 関数リストマークをすべてリセット
 };
 

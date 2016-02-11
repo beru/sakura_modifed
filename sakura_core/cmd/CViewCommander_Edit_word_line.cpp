@@ -40,7 +40,7 @@ void ViewCommander::Command_WordDeleteToStart(void)
 
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		MoveCaretOpe*	pcOpe = new MoveCaretOpe();
-		GetDocument()->m_cLayoutMgr.LayoutToLogic(
+		GetDocument()->m_layoutMgr.LayoutToLogic(
 			GetSelect().GetTo(),
 			&pcOpe->m_ptCaretPos_PHY_Before
 		);
@@ -77,7 +77,7 @@ void ViewCommander::Command_WordDeleteToEnd(void)
 	}
 	if (!m_pCommanderView->m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 		MoveCaretOpe*	pcOpe = new MoveCaretOpe();
-		GetDocument()->m_cLayoutMgr.LayoutToLogic(
+		GetDocument()->m_layoutMgr.LayoutToLogic(
 			GetSelect().GetFrom(),
 			&pcOpe->m_ptCaretPos_PHY_Before
 		);
@@ -137,14 +137,14 @@ void ViewCommander::Command_LineCutToStart(void)
 		Command_CUT();
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
+	pCLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
 	}
 
 	LayoutPoint ptPos;
-	GetDocument()->m_cLayoutMgr.LogicToLayout(LogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
+	GetDocument()->m_layoutMgr.LogicToLayout(LogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
 	if (GetCaret().GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
@@ -172,7 +172,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 		return;
 	}
 	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(
+	pCLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(
 		GetCaret().GetCaretLayoutPos().GetY2()
 	);
 	if (!pCLayout) {
@@ -183,7 +183,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 	LayoutPoint ptPos;
 	auto& docLineRef = *pCLayout->GetDocLineRef();
 	if (docLineRef.GetEol() == EolType::None) {	// 改行コードの種類
-		GetDocument()->m_cLayoutMgr.LogicToLayout(
+		GetDocument()->m_layoutMgr.LogicToLayout(
 			LogicPoint(
 				docLineRef.GetLengthWithEOL(),
 				pCLayout->GetLogicLineNo()
@@ -191,7 +191,7 @@ void ViewCommander::Command_LineCutToEnd(void)
 			&ptPos
 		);
 	}else {
-		GetDocument()->m_cLayoutMgr.LogicToLayout(
+		GetDocument()->m_layoutMgr.LogicToLayout(
 			LogicPoint(
 				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pCLayout->GetLogicLineNo()
@@ -224,7 +224,7 @@ void ViewCommander::Command_LineDeleteToStart(void)
 		m_pCommanderView->DeleteData(true);
 		return;
 	}
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
+	pCLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
@@ -232,7 +232,7 @@ void ViewCommander::Command_LineDeleteToStart(void)
 
 	LayoutPoint ptPos;
 
-	GetDocument()->m_cLayoutMgr.LogicToLayout(LogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
+	GetDocument()->m_layoutMgr.LogicToLayout(LogicPoint(0, pCLayout->GetLogicLineNo()), &ptPos);
 	if (GetCaret().GetCaretLayoutPos() == ptPos) {
 		ErrorBeep();
 		return;
@@ -259,7 +259,7 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 	}
 
 	auto& caretLayoutPos = GetCaret().GetCaretLayoutPos();
-	pCLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(caretLayoutPos.GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
+	pCLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(caretLayoutPos.GetY2());	// 指定された物理行のレイアウトデータ(Layout)へのポインタを返す
 	if (!pCLayout) {
 		ErrorBeep();
 		return;
@@ -269,7 +269,7 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 
 	auto& docLineRef = *pCLayout->GetDocLineRef();
 	if (docLineRef.GetEol() == EolType::None) {	// 改行コードの種類
-		GetDocument()->m_cLayoutMgr.LogicToLayout(
+		GetDocument()->m_layoutMgr.LogicToLayout(
 			LogicPoint(
 				docLineRef.GetLengthWithEOL(),
 				pCLayout->GetLogicLineNo()
@@ -277,7 +277,7 @@ void ViewCommander::Command_LineDeleteToEnd(void)
 			&ptPos
 		);
 	}else {
-		GetDocument()->m_cLayoutMgr.LogicToLayout(
+		GetDocument()->m_layoutMgr.LogicToLayout(
 			LogicPoint(
 				docLineRef.GetLengthWithEOL() - docLineRef.GetEol().GetLen(),
 				pCLayout->GetLogicLineNo()
@@ -317,7 +317,7 @@ void ViewCommander::Command_CUT_LINE(void)
 		return;
 	}
 
-	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
+	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
 	if (!pcLayout) {
 		ErrorBeep();
 		return;
@@ -325,9 +325,9 @@ void ViewCommander::Command_CUT_LINE(void)
 
 	// 2007.10.04 ryoji 処理簡素化
 	m_pCommanderView->CopyCurLine(
-		GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy,
+		GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy,
 		EolType::Unknown,
-		GetDllShareData().m_common.m_sEdit.m_bEnableLineModePaste
+		GetDllShareData().m_common.m_edit.m_bEnableLineModePaste
 	);
 	Command_DELETE_LINE();
 	return;
@@ -347,7 +347,7 @@ void ViewCommander::Command_DELETE_LINE(void)
 		ErrorBeep();
 		return;
 	}
-	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
 		ErrorBeep();
 		return;
@@ -358,12 +358,12 @@ void ViewCommander::Command_DELETE_LINE(void)
 	LayoutPoint ptCaretPos_OLD = GetCaret().GetCaretLayoutPos();
 
 	Command_DELETE();
-	pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	if (pcLayout) {
 		// 2003-04-30 かろと
 		// 行削除した後、フリーカーソルでないのにカーソル位置が行端より右になる不具合対応
 		// フリーカーソルモードでない場合は、カーソル位置を調整する
-		if (!GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode) {
+		if (!GetDllShareData().m_common.m_general.m_bIsFreeCursorMode) {
 			LogicInt nIndex;
 
 			LayoutInt tmp;
@@ -405,7 +405,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 		selInfo.DisableSelectArea(true);
 	}
 
-	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
 		ErrorBeep();
 		return;
@@ -447,7 +447,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 
 	bAddCRLF = FALSE;
 	if (!bCRLF) {
-		if (GetCaret().GetCaretLayoutPos().GetY2() == GetDocument()->m_cLayoutMgr.GetLineCount() - 1) {
+		if (GetCaret().GetCaretLayoutPos().GetY2() == GetDocument()->m_layoutMgr.GetLineCount() - 1) {
 			bAddCRLF = TRUE;
 		}
 	}
@@ -455,7 +455,7 @@ void ViewCommander::Command_DUPLICATELINE(void)
 	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL() + pcLayout->GetLayoutEol().GetLen());	// ※pcLayout->GetLengthWithEOL()は、EOLの長さを必ず1にするので使えない。
 	if (bAddCRLF) {
 		// 現在、Enterなどで挿入する改行コードの種類を取得
-		Eol cWork = GetDocument()->m_cDocEditor.GetNewLineCode();
+		Eol cWork = GetDocument()->m_docEditor.GetNewLineCode();
 		cmemBuf.AppendString(cWork.GetValue2(), cWork.GetLen());
 	}
 

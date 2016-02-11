@@ -108,7 +108,7 @@ public:
 	static void InitFileTree(FileTree*);
 
 private:
-	SelectLang		m_cSelectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
+	SelectLang		m_selectLang;			// メッセージリソースDLL読み込み用（プロセスに1個）		// 2011.04.10 nasukoji
 	HANDLE			m_hFileMap;
 	DLLSHAREDATA*	m_pShareData;
 	std::vector<TypeConfig*>* 	m_pvTypeSettings;	// (コントロールプロセスのみ)

@@ -41,7 +41,7 @@ public:
 	*/
 private:
 	// 20060126 aroka ‚·‚×‚ÄPrivate‚É‚µ‚ÄA‰Šú‰»‡˜‚É‡‚í‚¹‚Ä•À‚×‘Ö‚¦
-	EditDoc*		m_pcEditDoc;
+	EditDoc*		m_pEditDoc;
 	DLLSHAREDATA*	m_pShareData;
 	int				m_nCurrentKeyState;
 	WCHAR			m_szFuncNameArr[12][256];

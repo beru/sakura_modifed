@@ -31,9 +31,9 @@ FuncInfo::FuncInfo(
 	m_nFuncColCRLF = nFuncColCRLF;			// 関数のある桁(CRLF単位)
 	m_nFuncLineLAYOUT = nFuncLineLAYOUT;	// 関数のある行(折り返し単位)
 	m_nFuncColLAYOUT = nFuncColLAYOUT;		// 関数のある桁(折り返し単位)
-	m_cmemFuncName.SetString(pszFuncName);
+	m_memFuncName.SetString(pszFuncName);
 	if (pszFileName) {
-		m_cmemFileName.SetString( pszFileName );
+		m_memFileName.SetString( pszFileName );
 	}
 
 	m_nInfo = nInfo;

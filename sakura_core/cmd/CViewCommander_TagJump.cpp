@@ -98,7 +98,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
 	LogicPoint ptXY, ptXYOrg;
-	GetDocument()->m_cLayoutMgr.LayoutToLogic(
+	GetDocument()->m_layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&ptXY
 	);
@@ -316,7 +316,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		// Borland 形式のメッセージからのTAG JUMP
 		while (p < p_end) {
 			// skip space
-			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)); ++p)
+			for (; p < p_end && (*p == L' ' || *p == L'\t' || WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_edit.m_bEnableExtEol)); ++p)
 				;
 			if (p >= p_end)
 				break;
@@ -394,9 +394,9 @@ bool ViewCommander::Command_TagsMake(void)
 #define	CTAGS_COMMAND	_T("ctags.exe")
 
 	TCHAR	szTargetPath[1024 /*_MAX_PATH+1*/];
-	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		_tcscpy_s(szTargetPath, GetDocument()->m_cDocFile.GetFilePath());
-		szTargetPath[_tcslen(szTargetPath) - _tcslen(GetDocument()->m_cDocFile.GetFileName())] = _T('\0');
+	if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+		_tcscpy_s(szTargetPath, GetDocument()->m_docFile.GetFilePath());
+		szTargetPath[_tcslen(szTargetPath) - _tcslen(GetDocument()->m_docFile.GetFileName())] = _T('\0');
 	}else {
 		// 20100722 Moca サクラのフォルダからカレントディレクトリに変更
 		::GetCurrentDirectory(_countof(szTargetPath), szTargetPath);
@@ -699,11 +699,11 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 	}
 
 	// 実行可能確認
-	if (! GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
+	if (! GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 		// 2010.04.02 (無題)でもタグジャンプできるように
 		// Grep、アウトプットは行番号タグジャンプがあるので無効にする(要検討)
 		if (
-			EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
+			EditApp::getInstance()->m_pGrepAgent->m_bGrepMode
 		    || AppMode::getInstance()->IsDebugMode()
 		) {
 		    return false;
@@ -711,8 +711,8 @@ bool ViewCommander::Sub_PreProcTagJumpByTagsFile(TCHAR* szCurrentPath, int count
 	}
 	
 	// 基準ファイル名の設定
-	if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
-		auto_strcpy(szCurrentPath, GetDocument()->m_cDocFile.GetFilePath());
+	if (GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
+		auto_strcpy(szCurrentPath, GetDocument()->m_docFile.GetFilePath());
 	}else {
 		if (::GetCurrentDirectory(count - _countof(_T("\\dmy")) - MAX_TYPES_EXTS, szCurrentPath) == 0) {
 			return false;

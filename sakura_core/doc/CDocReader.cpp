@@ -10,7 +10,7 @@
 */
 wchar_t* DocReader::GetAllData(int* pnDataLen)
 {
-	const DocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	const DocLine* pDocLine = m_pDocLineMgr->GetDocLineTop();
 	int nDataLen = 0;
 	while (pDocLine) {
 		// Oct. 7, 2002 YAZAKI
@@ -23,7 +23,7 @@ wchar_t* DocReader::GetAllData(int* pnDataLen)
 		TopErrorMessage(NULL, LS(STR_ERR_DLGDOCLM6), nDataLen + 1);
 		return NULL;
 	}
-	pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	pDocLine = m_pDocLineMgr->GetDocLineTop();
 	
 	nDataLen = 0;
 	while (pDocLine) {
@@ -44,7 +44,7 @@ wchar_t* DocReader::GetAllData(int* pnDataLen)
 
 const wchar_t* DocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
 {
-	const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
+	const DocLine* pDocLine = m_pDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
 		*pnLineLen = LogicInt(0);
 		return NULL;
@@ -61,7 +61,7 @@ const wchar_t* DocReader::GetLineStr(LogicInt nLine, LogicInt* pnLineLen)
 */
 const wchar_t* DocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
 {
-	const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLine);
+	const DocLine* pDocLine = m_pDocLineMgr->GetLine(nLine);
 	if (!pDocLine) {
 		*pnLineLen = 0;
 		return NULL;
@@ -81,12 +81,12 @@ const wchar_t* DocReader::GetLineStrWithoutEOL(LogicInt nLine, int* pnLineLen)
 const wchar_t* DocReader::GetFirstLinrStr(int* pnLineLen)
 {
 	const wchar_t* pszLine;
-	if (m_pcDocLineMgr->GetLineCount() == LogicInt(0)) {
+	if (m_pDocLineMgr->GetLineCount() == LogicInt(0)) {
 		pszLine = NULL;
 		*pnLineLen = 0;
 	}else {
-		pszLine = m_pcDocLineMgr->GetDocLineTop()->GetDocLineStrWithEOL(pnLineLen);
-		m_pcDocLineMgr->m_pDocLineCurrent = const_cast<DocLine*>(m_pcDocLineMgr->GetDocLineTop()->GetNextLine());
+		pszLine = m_pDocLineMgr->GetDocLineTop()->GetDocLineStrWithEOL(pnLineLen);
+		m_pDocLineMgr->m_pDocLineCurrent = const_cast<DocLine*>(m_pDocLineMgr->GetDocLineTop()->GetNextLine());
 	}
 	return pszLine;
 }
@@ -103,12 +103,12 @@ const wchar_t* DocReader::GetFirstLinrStr(int* pnLineLen)
 const wchar_t* DocReader::GetNextLinrStr(int* pnLineLen)
 {
 	const wchar_t* pszLine;
-	if (!m_pcDocLineMgr->m_pDocLineCurrent) {
+	if (!m_pDocLineMgr->m_pDocLineCurrent) {
 		pszLine = NULL;
 		*pnLineLen = 0;
 	}else {
-		pszLine = m_pcDocLineMgr->m_pDocLineCurrent->GetDocLineStrWithEOL(pnLineLen);
-		m_pcDocLineMgr->m_pDocLineCurrent = m_pcDocLineMgr->m_pDocLineCurrent->GetNextLine();
+		pszLine = m_pDocLineMgr->m_pDocLineCurrent->GetDocLineStrWithEOL(pnLineLen);
+		m_pDocLineMgr->m_pDocLineCurrent = m_pDocLineMgr->m_pDocLineCurrent->GetNextLine();
 	}
 	return pszLine;
 }

@@ -98,8 +98,8 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 	for (k=0; k<=6; ++k) {
 		nHeadDepth[k] = -1;
 	}
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLineBuf = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLineBuf = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLineBuf) {
 			break;
 		}
@@ -236,7 +236,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 					}
 
 					LayoutPoint ptPos;
-					m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+					m_pDocRef->m_layoutMgr.LogicToLayout(
 						LogicPoint(i, nLineCount),
 						&ptPos
 					);
@@ -256,7 +256,7 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 							}
 							if (!bEndTag) {
 								szTitle[k++] = L' ';
-								bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+								bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 								for (j-=k-1; i+j+k<nLineLen && k<_countof(szTitle)-1; ++k) {
 									if (pLine[j + k] == L'<' || WCODE::IsLineDelimiter(pLine[j + k], bExtEol)) {
 										break;

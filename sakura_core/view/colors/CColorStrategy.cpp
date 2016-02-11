@@ -48,24 +48,24 @@ bool _IsPosKeywordHead(const StringRef& cStr, int nPos)
 	@retval true 色の変更あり
 	@retval false 色の変更なし
 */
-bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
+bool ColorStrategyInfo::CheckChangeColor(const StringRef& lineStr)
 {
 	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
-	pool->SetCurrentView(m_pcView);
+	pool->SetCurrentView(m_pView);
 	Color_Found*  pcFound  = pool->GetFoundStrategy();
 	Color_Select* pcSelect = pool->GetSelectStrategy();
 	bool bChange = false;
 
 	// 選択範囲色終了
 	if (m_pStrategySelect) {
-		if (m_pStrategySelect->EndColor(cLineStr, this->GetPosInLogic())) {
+		if (m_pStrategySelect->EndColor(lineStr, this->GetPosInLogic())) {
 			m_pStrategySelect = NULL;
 			bChange = true;
 		}
 	}
 	// 選択範囲色開始
 	if (!m_pStrategySelect) {
-		if (pcSelect->BeginColorEx(cLineStr, this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
+		if (pcSelect->BeginColorEx(lineStr, this->GetPosInLogic(), m_pDispPos->GetLayoutLineRef(), this->GetLayout())) {
 			m_pStrategySelect = pcSelect;
 			bChange = true;
 		}
@@ -73,7 +73,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 
 	// 検索色終了
 	if (m_pStrategyFound) {
-		if (m_pStrategyFound->EndColor(cLineStr, this->GetPosInLogic())) {
+		if (m_pStrategyFound->EndColor(lineStr, this->GetPosInLogic())) {
 			m_pStrategyFound = NULL;
 			bChange = true;
 		}
@@ -81,7 +81,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 
 	// 検索色開始
 	if (!m_pStrategyFound) {
-		if (pcFound->BeginColor(cLineStr, this->GetPosInLogic())) {
+		if (pcFound->BeginColor(lineStr, this->GetPosInLogic())) {
 			m_pStrategyFound = pcFound;
 			bChange = true;
 		}
@@ -89,7 +89,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 
 	// 色終了
 	if (m_pStrategy) {
-		if (m_pStrategy->EndColor(cLineStr, this->GetPosInLogic())) {
+		if (m_pStrategy->EndColor(lineStr, this->GetPosInLogic())) {
 			m_pStrategy = NULL;
 			bChange = true;
 		}
@@ -99,7 +99,7 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 	if (!m_pStrategy) {
 		int size = pool->GetStrategyCount();
 		for (int i=0; i<size; ++i) {
-			if (pool->GetStrategy(i)->BeginColor(cLineStr, this->GetPosInLogic())) {
+			if (pool->GetStrategy(i)->BeginColor(lineStr, this->GetPosInLogic())) {
 				m_pStrategy = pool->GetStrategy(i);
 				bChange = true;
 				break;
@@ -108,23 +108,23 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 	}
 
 	// カーソル行背景色
-	TypeSupport cCaretLineBg(m_pcView, COLORIDX_CARETLINEBG);
-	if (cCaretLineBg.IsDisp() && !m_pcView->m_bMiniMap) {
+	TypeSupport cCaretLineBg(m_pView, COLORIDX_CARETLINEBG);
+	if (cCaretLineBg.IsDisp() && !m_pView->m_bMiniMap) {
 		if (m_colorIdxBackLine == COLORIDX_CARETLINEBG) {
-			if (m_pDispPos->GetLayoutLineRef() != m_pcView->GetCaret().GetCaretLayoutPos().GetY2()) {
+			if (m_pDispPos->GetLayoutLineRef() != m_pView->GetCaret().GetCaretLayoutPos().GetY2()) {
 				m_colorIdxBackLine = COLORIDX_TEXT;
 				bChange = true;
 			}
 		}else {
-			if (m_pDispPos->GetLayoutLineRef() == m_pcView->GetCaret().GetCaretLayoutPos().GetY2()) {
+			if (m_pDispPos->GetLayoutLineRef() == m_pView->GetCaret().GetCaretLayoutPos().GetY2()) {
 				m_colorIdxBackLine = COLORIDX_CARETLINEBG;
 				bChange = true;
 			}
 		}
 	}
 	// 偶数行の背景色
-	TypeSupport cEvenLineBg(m_pcView, COLORIDX_EVENLINEBG);
-	if (cEvenLineBg.IsDisp() && !m_pcView->m_bMiniMap && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
+	TypeSupport cEvenLineBg(m_pView, COLORIDX_EVENLINEBG);
+	if (cEvenLineBg.IsDisp() && !m_pView->m_bMiniMap && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
 		if (m_colorIdxBackLine == COLORIDX_EVENLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() % 2 == 0) {
 				m_colorIdxBackLine = COLORIDX_TEXT;
@@ -137,10 +137,10 @@ bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 			}
 		}
 	}
-	if (m_pcView->m_bMiniMap) {
-		TypeSupport cPageViewBg(m_pcView, COLORIDX_PAGEVIEW);
+	if (m_pView->m_bMiniMap) {
+		TypeSupport cPageViewBg(m_pView, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
-			EditView& cActiveView = m_pcView->m_pEditWnd->GetActiveView();
+			EditView& cActiveView = m_pView->m_pEditWnd->GetActiveView();
 			LayoutInt curLine = m_pDispPos->GetLayoutLineRef();
 			if (m_colorIdxBackLine == COLORIDX_PAGEVIEW) {
 				if (cActiveView.GetTextArea().GetViewTopLine() <= curLine && curLine < cActiveView.GetTextArea().GetBottomLine()) {
@@ -192,7 +192,7 @@ void ColorStrategyInfo::DoChangeColor(Color3Setting *pcColor)
 
 ColorStrategyPool::ColorStrategyPool()
 {
-	m_pcView = &(EditWnd::getInstance()->GetView(0));
+	m_pView = &(EditWnd::getInstance()->GetView(0));
 	m_pcSelectStrategy = new Color_Select();
 	m_pcFoundStrategy = new Color_Found();
 //	m_vStrategies.push_back(new Color_Found);				// マッチ文字列
@@ -251,12 +251,12 @@ void ColorStrategyPool::NotifyOnStartScanLogic()
 void ColorStrategyPool::CheckColorMODE(
 	ColorStrategy**	ppcColorStrategy,	// [in/out]
 	int					nPos,
-	const StringRef&	cLineStr
+	const StringRef&	lineStr
 )
 {
 	// 色終了
 	if (*ppcColorStrategy) {
-		if ((*ppcColorStrategy)->EndColor(cLineStr, nPos)) {
+		if ((*ppcColorStrategy)->EndColor(lineStr, nPos)) {
 			*ppcColorStrategy = NULL;
 		}
 	}
@@ -266,12 +266,12 @@ void ColorStrategyPool::CheckColorMODE(
 		// CheckColorMODE はレイアウト処理全体のボトルネックになるくらい頻繁に呼び出される
 		// 基本クラスからの動的仮想関数呼び出しを使用すると無視できないほどのオーバヘッドになる模様
 		// ここはエレガントさよりも性能優先で個々の派生クラスから BeginColor() を呼び出す
-		if (m_pcHeredoc && m_pcHeredoc->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcHeredoc; return; }
-		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment1; return; }
-		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment2; return; }
-		if (m_pcLineComment && m_pcLineComment->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcLineComment; return; }
-		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcSingleQuote; return; }
-		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(cLineStr, nPos)) { *ppcColorStrategy = m_pcDoubleQuote; return; }
+		if (m_pcHeredoc && m_pcHeredoc->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcHeredoc; return; }
+		if (m_pcBlockComment1 && m_pcBlockComment1->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment1; return; }
+		if (m_pcBlockComment2 && m_pcBlockComment2->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcBlockComment2; return; }
+		if (m_pcLineComment && m_pcLineComment->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcLineComment; return; }
+		if (m_pcSingleQuote && m_pcSingleQuote->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcSingleQuote; return; }
+		if (m_pcDoubleQuote && m_pcDoubleQuote->BeginColor(lineStr, nPos)) { *ppcColorStrategy = m_pcDoubleQuote; return; }
 	}
 }
 
@@ -302,7 +302,7 @@ void ColorStrategyPool::OnChangeSetting(void)
 	m_pcDoubleQuote = static_cast<Color_DoubleQuote*>(GetStrategyByColor(COLORIDX_WSTRING));	// ダブルクォーテーション文字列
 
 	// 色分けをしない場合に、処理をスキップできるように確認する
-	const TypeConfig& type = EditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+	const TypeConfig& type = EditDoc::GetInstance(0)->m_docType.GetDocumentAttribute();
 	EColorIndexType bSkipColorTypeTable[] = {
 		COLORIDX_DIGIT,
 		COLORIDX_COMMENT,
@@ -362,7 +362,7 @@ bool ColorStrategyPool::IsSkipBeforeLayout()
 	if (!m_bSkipBeforeLayoutGeneral) {
 		return false;
 	}
-	if (!m_bSkipBeforeLayoutFound && m_pcView->m_bCurSrchKeyMark) {
+	if (!m_bSkipBeforeLayoutFound && m_pView->m_bCurSrchKeyMark) {
 		return false;
 	}
 	return true;

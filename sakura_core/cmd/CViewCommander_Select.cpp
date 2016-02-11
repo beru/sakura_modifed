@@ -28,7 +28,7 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 		si.DisableSelectArea(true);
 	}
 	LayoutPoint ptCaretPos = ((!pptCaretPos) ? GetCaret().GetCaretLayoutPos() : *pptCaretPos);
-	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
+	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(ptCaretPos.GetY2());
 	if (!pcLayout) {
 		return false;	// 単語選択に失敗
 	}
@@ -37,14 +37,14 @@ bool ViewCommander::Command_SELECTWORD(LayoutPoint* pptCaretPos)
 
 	// 現在位置の単語の範囲を調べる
 	LayoutRange sRange;
-	if (GetDocument()->m_cLayoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &sRange, NULL, NULL)) {
+	if (GetDocument()->m_layoutMgr.WhereCurrentWord(	ptCaretPos.GetY2(), nIdx, &sRange, NULL, NULL)) {
 
 		// 指定された行のデータ内の位置に対応する桁の位置を調べる
 		// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 		/*
-		pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(sRange.GetFrom().GetY2());
+		pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(sRange.GetFrom().GetY2());
 		sRange.SetFromX(m_pCommanderView->LineIndexToColumn(pcLayout, sRange.GetFrom().x));
-		pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(sRange.GetTo().GetY2());
+		pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(sRange.GetTo().GetY2());
 		sRange.SetToX(m_pCommanderView->LineIndexToColumn(pcLayout, sRange.GetTo().x));
 		*/
 
@@ -84,7 +84,7 @@ void ViewCommander::Command_SELECTALL(void)
 	//int nX, nY;
 	LayoutRange sRange;
 	sRange.SetFrom(LayoutPoint(0, 0));
-	GetDocument()->m_cLayoutMgr.GetEndLayoutPos(sRange.GetToPointer());
+	GetDocument()->m_layoutMgr.GetEndLayoutPos(sRange.GetToPointer());
 	si.SetSelectArea(sRange);
 
 	// 選択領域描画
@@ -113,7 +113,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 	// 最下行（物理行）でない
 	if (GetCaret().GetCaretLogicPos().y < GetDocument()->m_docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
-		GetDocument()->m_cLayoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
+		GetDocument()->m_layoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
 
 		// カーソルを次の物理行頭へ移動する
 		m_pCommanderView->MoveCursorSelecting(ptCaret, TRUE);
@@ -122,7 +122,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		ptCaret = GetCaret().GetCaretLayoutPos().Get();
 	}else {
 		// カーソルを最下行（レイアウト行）へ移動する
-		m_pCommanderView->MoveCursorSelecting(LayoutPoint(LayoutInt(0), GetDocument()->m_cLayoutMgr.GetLineCount()), TRUE);
+		m_pCommanderView->MoveCursorSelecting(LayoutPoint(LayoutInt(0), GetDocument()->m_layoutMgr.GetLineCount()), TRUE);
 		Command_GOLINEEND(true, 0, 0);	// 行末に移動
 
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
@@ -170,7 +170,7 @@ void ViewCommander::Command_BEGIN_SELECT(void)
 // 矩形範囲選択開始
 void ViewCommander::Command_BEGIN_BOXSELECT(bool bSelectingLock)
 {
-	if (!GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (!GetDllShareData().m_common.m_view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		return;
 	}
 

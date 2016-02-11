@@ -346,8 +346,8 @@ void HokanMgr::HokanSearchByKeyword(
 	vector_ex<std::wstring>& 	vKouho
 ) {
 	const EditView* pcEditView = reinterpret_cast<const EditView*>(m_lParam);
-	const TypeConfig& type = pcEditView->GetDocument()->m_cDocType.GetDocumentAttribute();
-	KeyWordSetMgr& keywordMgr = m_pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr;
+	const TypeConfig& type = pcEditView->GetDocument()->m_docType.GetDocumentAttribute();
+	KeyWordSetMgr& keywordMgr = m_pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr;
 	const int nKeyLen = wcslen(pszCurWord);
 	for (int n=0; n<MAX_KEYWORDSET_PER_TYPE; ++n) {
 		int kwdset = type.m_nKeyWordSetIdx[n];
@@ -508,7 +508,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 	DEBUG_TRACE(_T("HokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
-	auto& csHelper = m_pShareData->m_common.m_sHelper;
+	auto& csHelper = m_pShareData->m_common.m_helper;
 	if (nVKey == VK_RETURN	&& !csHelper.m_bHokanKey_RETURN)	return FALSE; // VK_RETURN 補完決定キーが有効/無効
 	if (nVKey == VK_TAB		&& !csHelper.m_bHokanKey_TAB)		return FALSE; // VK_TAB    補完決定キーが有効/無効
 	if (nVKey == VK_RIGHT	&& !csHelper.m_bHokanKey_RIGHT)		return FALSE; // VK_RIGHT  補完決定キーが有効/無効
@@ -532,7 +532,7 @@ BOOL HokanMgr::DoHokan(int nVKey)
 //	pcEditView->GetCommander().HandleCommand(F_INSTEXT_W, true, (LPARAM)(wszLabel + m_cmemCurWord.GetLength()), TRUE, 0, 0);
 	Hide();
 
-	m_pShareData->m_common.m_sHelper.m_bUseHokan = FALSE;	//	補完したら
+	m_pShareData->m_common.m_helper.m_bUseHokan = FALSE;	//	補完したら
 	return TRUE;
 }
 
@@ -607,7 +607,7 @@ int HokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 		}
 	case VK_ESCAPE:
 	case VK_LEFT:
-		m_pShareData->m_common.m_sHelper.m_bUseHokan = FALSE;
+		m_pShareData->m_common.m_helper.m_bUseHokan = FALSE;
 		return -2;
 	}
 	return -2;
@@ -630,7 +630,7 @@ void HokanMgr::ShowTip()
 	// すでに辞書Tipが表示されていたら
 	if (pcEditView->m_dwTipTimer == 0) {
 		// 辞書Tipを消す
-		pcEditView -> m_cTipWnd.Hide();
+		pcEditView -> m_tipWnd.Hide();
 		pcEditView -> m_dwTipTimer = ::GetTickCount();
 	}
 

@@ -45,8 +45,8 @@ const TCHAR* FormatManager::MyGetDateFormat(const SYSTEMTIME& systime, TCHAR* ps
 		systime,
 		pszDest,
 		nDestLen,
-		m_pShareData->m_common.m_sFormat.m_nDateFormatType,
-		m_pShareData->m_common.m_sFormat.m_szDateFormat
+		m_pShareData->m_common.m_format.m_nDateFormatType,
+		m_pShareData->m_common.m_format.m_szDateFormat
 	);
 }
 
@@ -79,8 +79,8 @@ const TCHAR* FormatManager::MyGetTimeFormat(const SYSTEMTIME& systime, TCHAR* ps
 		systime,
 		pszDest,
 		nDestLen,
-		m_pShareData->m_common.m_sFormat.m_nTimeFormatType,
-		m_pShareData->m_common.m_sFormat.m_szTimeFormat
+		m_pShareData->m_common.m_format.m_nTimeFormatType,
+		m_pShareData->m_common.m_format.m_szTimeFormat
 	);
 }
 

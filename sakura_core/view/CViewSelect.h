@@ -30,8 +30,8 @@ class EditView;
 
 class ViewSelect {
 public:
-	EditView* GetEditView() { return m_pcEditView; }
-	const EditView* GetEditView() const { return m_pcEditView; }
+	EditView* GetEditView() { return m_pEditView; }
+	const EditView* GetEditView() const { return m_pEditView; }
 
 public:
 	ViewSelect(EditView* pcEditView);
@@ -142,7 +142,7 @@ public:
 
 private:
 	// éQè∆
-	EditView*	m_pcEditView;
+	EditView*	m_pEditView;
 
 public:
 

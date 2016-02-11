@@ -115,15 +115,15 @@ void ShareData::InitTypeConfigs(
 void ShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
 	// 強調キーワードのテストデータ
-	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
+	pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name, case_sensitive, aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
-	pShareData->m_common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
+	pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr.AddKeyWordSet((name), (case_sensitive));	\
+	pShareData->m_common.m_specialKeyword.m_CKeyWordSetMgr.SetKeyWordArr(++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname);
 	
 	PopulateKeyword(L"C/C++",			true,	CPP);			// セット 0の追加
 	PopulateKeyword(L"HTML",			false,	HTML);			// セット 1の追加

@@ -49,7 +49,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	Point ptMouse(_xPos, _yPos);
 
 	if (m_bHokan) {
-		m_pEditWnd->m_cHokanMgr.Hide();
+		m_pEditWnd->m_hokanMgr.Hide();
 		m_bHokan = FALSE;
 	}
 
@@ -78,7 +78,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	int			nWork;
 	int			nFuncID = 0;				// 2007.12.02 nasukoji	マウス左クリックに対応する機能コード
 
-	if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() == 0) {
+	if (m_pEditDoc->m_layoutMgr.GetLineCount() == 0) {
 		return;
 	}
 	if (!GetCaret().ExistCaretFocus()) { // フォーカスがないとき
@@ -88,7 +88,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	// 辞書Tipが起動されている
 	if (m_dwTipTimer == 0) {
 		// 辞書Tipを消す
-		m_cTipWnd.Hide();
+		m_tipWnd.Hide();
 		m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 	}else {
 		m_dwTipTimer = ::GetTickCount();		// 辞書Tip起動タイマー
@@ -99,7 +99,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	bool tripleClickMode = CheckTripleClick(ptMouse);
 	if (tripleClickMode) {
 		// マウス左トリプルクリックに対応する機能コードはm_common.m_pKeyNameArr[5]に入っている
-		nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::TripleClick].m_nFuncCodeArr[getCtrlKeyState()];
+		nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::TripleClick].m_nFuncCodeArr[getCtrlKeyState()];
 		if (nFuncID == 0) {
 			tripleClickMode = false;	// 割り当て機能無しの時はトリプルクリック OFF
 		}
@@ -112,12 +112,12 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	GetTextArea().ClientToLayout(ptMouse, &ptNew);
 
 	// 2010.07.15 Moca マウスダウン時の座標を覚えて利用する
-	m_cMouseDownPos = ptMouse;
+	m_mouseDownPos = ptMouse;
 
 	// OLEによるドラッグ & ドロップを使う
 	// 2007.12.02 nasukoji	トリプルクリック時はドラッグを開始しない
-	if (!tripleClickMode && GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) {
-		if (GetDllShareData().m_common.m_sEdit.m_bUseOLE_DropSource) {		// OLEによるドラッグ元にするか
+	if (!tripleClickMode && GetDllShareData().m_common.m_edit.m_bUseOLE_DragDrop) {
+		if (GetDllShareData().m_common.m_edit.m_bUseOLE_DropSource) {		// OLEによるドラッグ元にするか
 			// 行選択エリアをドラッグした
 			if (ptMouse.x < GetTextArea().GetAreaLeft() - GetTextMetrics().GetHankakuDx()) {
 				goto normal_action;
@@ -145,25 +145,25 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					return;
 				}
 				// 選択範囲のデータを取得
-				if (GetSelectedData(&cmemCurText, false, NULL, false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy)) {
+				if (GetSelectedData(&cmemCurText, false, NULL, false, GetDllShareData().m_common.m_edit.m_bAddCRLFWhenCopy)) {
 					DWORD dwEffects;
-					DWORD dwEffectsSrc = (!m_pcEditDoc->IsEditable()) ?
+					DWORD dwEffectsSrc = (!m_pEditDoc->IsEditable()) ?
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
-					int nOpe = m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer();
+					int nOpe = m_pEditDoc->m_docEditor.m_opeBuf.GetCurrentPointer();
 					m_pEditWnd->SetDragSourceView(this);
 					DataObject data(cmemCurText.GetStringPtr(), cmemCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
 					dwEffects = data.DragDrop(TRUE, dwEffectsSrc);
 					m_pEditWnd->SetDragSourceView(NULL);
-					if (m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
+					if (m_pEditDoc->m_docEditor.m_opeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
 						m_pEditWnd->SetActivePane(m_nMyIndex);
 						if (DROPEFFECT_MOVE == (dwEffectsSrc & dwEffects)) {
 							// 移動範囲を削除する
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
 							// →ドロップ先は外部のウィンドウである
-							if (!m_cCommander.GetOpeBlk()) {
-								m_cCommander.SetOpeBlk(new OpeBlk);
+							if (!m_commander.GetOpeBlk()) {
+								m_commander.SetOpeBlk(new OpeBlk);
 							}
-							m_cCommander.GetOpeBlk()->AddRef();
+							m_commander.GetOpeBlk()->AddRef();
 
 							// 選択範囲を削除
 							DeleteData(true);
@@ -265,7 +265,7 @@ normal_action:;
 			// 選択するものが無い（[EOF]のみの行）時は通常クリックと同じ処理
 			if (1
 				&& !GetSelectionInfo().IsTextSelected()
-				&& GetCaret().GetCaretLogicPos().y >= m_pcEditDoc->m_docLineMgr.GetLineCount()
+				&& GetCaret().GetCaretLogicPos().y >= m_pEditDoc->m_docLineMgr.GetLineCount()
 			) {
 				GetSelectionInfo().BeginSelectArea();				// 現在のカーソル位置から選択を開始する
 				GetSelectionInfo().m_bBeginLineSelect = false;		// 行単位選択中 OFF
@@ -347,7 +347,7 @@ normal_action:;
 
 				// 指定された桁に対応する行のデータ内の位置を調べる
 				const Layout* pcLayout;
-				pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(
+				pLine = m_pEditDoc->m_layoutMgr.GetLineStr(
 					GetSelectionInfo().m_sSelect.GetFrom().GetY2(),
 					&nLineLen,
 					&pcLayout
@@ -355,7 +355,7 @@ normal_action:;
 				if (pLine) {
 					nIdx = LineColumnToIndex(pcLayout, GetSelectionInfo().m_sSelect.GetFrom().GetX2());
 					// 現在位置の単語の範囲を調べる
-					bool bWhareResult = m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
+					bool bWhareResult = m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 						GetSelectionInfo().m_sSelect.GetFrom().GetY2(),
 						nIdx,
 						&sRange,
@@ -366,9 +366,9 @@ normal_action:;
 						// 指定された行のデータ内の位置に対応する桁の位置を調べる。
 						// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 						/*
-						pLine            = m_pcEditDoc->m_cLayoutMgr.GetLineStr(sRange.GetFrom().GetY2(), &nLineLen, &pcLayout);
+						pLine            = m_pEditDoc->m_layoutMgr.GetLineStr(sRange.GetFrom().GetY2(), &nLineLen, &pcLayout);
 						sRange.SetFromX(LineIndexToColumn(pcLayout, sRange.GetFrom().x));
-						pLine            = m_pcEditDoc->m_cLayoutMgr.GetLineStr(sRange.GetTo().GetY2(), &nLineLen, &pcLayout);
+						pLine            = m_pEditDoc->m_layoutMgr.GetLineStr(sRange.GetTo().GetY2(), &nLineLen, &pcLayout);
 						sRange.SetToX(LineIndexToColumn(pcLayout, sRange.GetTo().x));
 						*/
 
@@ -383,19 +383,19 @@ normal_action:;
 						}
 					}
 				}
-				pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetSelectionInfo().m_sSelect.GetTo().GetY2(), &nLineLen, &pcLayout);
+				pLine = m_pEditDoc->m_layoutMgr.GetLineStr(GetSelectionInfo().m_sSelect.GetTo().GetY2(), &nLineLen, &pcLayout);
 				if (pLine) {
 					nIdx = LineColumnToIndex(pcLayout, GetSelectionInfo().m_sSelect.GetTo().GetX2());
 					// 現在位置の単語の範囲を調べる
-					if (m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
+					if (m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 						GetSelectionInfo().m_sSelect.GetTo().GetY2(), nIdx, &sRange, NULL, NULL)
 					) {
 						// 指定された行のデータ内の位置に対応する桁の位置を調べる
 						// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 						/*
-						pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(sRange.GetFrom().GetY2(), &nLineLen, &pcLayout);
+						pLine = m_pEditDoc->m_layoutMgr.GetLineStr(sRange.GetFrom().GetY2(), &nLineLen, &pcLayout);
 						sRange.SetFromX(LineIndexToColumn(pcLayout, sRange.GetFrom().x));
-						pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(sRange.GetTo().GetY2(), &nLineLen, &pcLayout);
+						pLine = m_pEditDoc->m_layoutMgr.GetLineStr(sRange.GetTo().GetY2(), &nLineLen, &pcLayout);
 						sRange.SetToX(LineIndexToColumn(pcLayout, sRange.GetTo().x));
 						*/
 
@@ -428,7 +428,7 @@ normal_action:;
 			// 2009.02.22 ryoji 
 			// Command_GOLINEEND()/Command_RIGHT()ではなく次のレイアウトを調べて移動選択する方法に変更
 			// ※Command_GOLINEEND()/Command_RIGHT()は[折り返し末尾文字の右へ移動]＋[次行の先頭文字の右に移動]の仕様だとＮＧ
-			const Layout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(ptNewCaret.GetY2());
+			const Layout* pcLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(ptNewCaret.GetY2());
 			if (pcLayout) {
 				LayoutPoint ptCaret;
 				const Layout* pNext = pcLayout->GetNextLayout();
@@ -465,7 +465,7 @@ normal_action:;
 			}
 		}else {
 			// URLがクリックされたら選択するか
-			if (GetDllShareData().m_common.m_sEdit.m_bSelectClickedURL) {
+			if (GetDllShareData().m_common.m_edit.m_bSelectClickedURL) {
 
 				LogicRange cUrlRange;	// URL範囲
 				// カーソル位置にURLが有る場合のその範囲を調べる
@@ -485,10 +485,10 @@ normal_action:;
 						2002/04/08 YAZAKI 少しでもわかりやすく。
 					*/
 					LayoutRange sRangeB;
-					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(cUrlRange, &sRangeB);
+					m_pEditDoc->m_layoutMgr.LogicToLayout(cUrlRange, &sRangeB);
 					/*
-					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn          , nUrlLine), sRangeB.GetFromPointer());
-					m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn + nUrlLen, nUrlLine), sRangeB.GetToPointer());
+					m_pEditDoc->m_layoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn          , nUrlLine), sRangeB.GetFromPointer());
+					m_pEditDoc->m_layoutMgr.LogicToLayout(LogicPoint(nUrlIdxBgn + nUrlLen, nUrlLine), sRangeB.GetToPointer());
 					*/
 
 					GetSelectionInfo().m_sSelectBgn = sRangeB;
@@ -604,7 +604,7 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
 	// マウス右クリックに対応する機能コードはm_common.m_pKeyNameArr[1]に入っている
-	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::RightClick].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::RightClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -630,13 +630,13 @@ void EditView::OnRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 void EditView::OnMBUTTONDOWN(WPARAM fwKeys, int xPos , int yPos)
 {
 	int nIdx = getCtrlKeyState();
-	if (GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::CenterClick].m_nFuncCodeArr[nIdx] == F_AUTOSCROLL) {
+	if (GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::CenterClick].m_nFuncCodeArr[nIdx] == F_AUTOSCROLL) {
 		if (m_nAutoScrollMode) {
 			AutoScrollExit();
 			return;
 		}else {
 			m_nAutoScrollMode = 1;
-			m_cAutoScrollMousePos = Point(xPos, yPos);
+			m_autoScrollMousePos = Point(xPos, yPos);
 			::SetCapture(GetHwnd());
 		}
 	}
@@ -658,7 +658,7 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)MouseFunctionType::CenterClick &&
+	if (GetDllShareData().m_common.m_general.m_nPageScrollByWheel == (int)MouseFunctionType::CenterClick &&
 	    m_pEditWnd->IsPageScrollByWheel()
 	) {
 		m_pEditWnd->SetPageScrollByWheel(FALSE);
@@ -666,7 +666,7 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)MouseFunctionType::CenterClick &&
+	if (GetDllShareData().m_common.m_general.m_nHorizontalScrollByWheel == (int)MouseFunctionType::CenterClick &&
 	    m_pEditWnd->IsHScrollByWheel()
 	) {
 		m_pEditWnd->SetHScrollByWheel(FALSE);
@@ -676,7 +676,7 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
 	// マウス左サイドボタンに対応する機能コードはm_common.m_pKeyNameArr[2]に入っている
-	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::CenterClick].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::CenterClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID == F_AUTOSCROLL) {
 		if (m_nAutoScrollMode == 1) {
 			m_bAutoScrollDragMode = false;
@@ -707,7 +707,7 @@ void CALLBACK AutoScrollTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD 
 
 void EditView::AutoScrollEnter()
 {
-	m_bAutoScrollVertical = GetTextArea().m_nViewRowNum < m_pcEditDoc->m_cLayoutMgr.GetLineCount() + 2;
+	m_bAutoScrollVertical = GetTextArea().m_nViewRowNum < m_pEditDoc->m_layoutMgr.GetLineCount() + 2;
 	m_bAutoScrollHorizontal = GetTextArea().m_nViewColNum < GetRightEdgeForScrollBar();
 	if (m_bMiniMap) {
 		m_bAutoScrollHorizontal = false;
@@ -717,7 +717,7 @@ void EditView::AutoScrollEnter()
 		return;
 	}
 	m_nAutoScrollMode = 2;
-	m_cAutoScrollWnd.Create(G_AppInstance(), GetHwnd(), m_bAutoScrollVertical, m_bAutoScrollHorizontal, m_cAutoScrollMousePos, this);
+	m_autoScrollWnd.Create(G_AppInstance(), GetHwnd(), m_bAutoScrollVertical, m_bAutoScrollHorizontal, m_autoScrollMousePos, this);
 	::SetTimer(GetHwnd(), 2, 200, AutoScrollTimerProc);
 	HCURSOR hCursor;
 	hCursor = ::LoadCursor(GetModuleHandle(NULL), MAKEINTRESOURCE(IDC_CURSOR_AUTOSCROLL_CENTER));
@@ -731,14 +731,14 @@ void EditView::AutoScrollExit()
 	}
 	if (m_nAutoScrollMode == 2) {
 		KillTimer(GetHwnd(), 2);
-		m_cAutoScrollWnd.Close();
+		m_autoScrollWnd.Close();
 	}
 	m_nAutoScrollMode = 0;
 }
 
 void EditView::AutoScrollMove(Point& point)
 {
-	const Point relPos = point - m_cAutoScrollMousePos;
+	const Point relPos = point - m_autoScrollMousePos;
 	int idcX, idcY;
 	if (!m_bAutoScrollHorizontal || abs(relPos.x) < 16) {
 		idcX = 0;
@@ -776,7 +776,7 @@ void EditView::AutoScrollOnTimer()
 	::GetCursorPos(&cursorPos);
 	::ScreenToClient(GetHwnd(), &cursorPos);
 	
-	const Point relPos = cursorPos - m_cAutoScrollMousePos;
+	const Point relPos = cursorPos - m_autoScrollMousePos;
 	Point scrollPos = relPos / 8;
 	if (m_bAutoScrollHorizontal) {
 		if (scrollPos.x < 0) {
@@ -830,7 +830,7 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
+	if (GetDllShareData().m_common.m_general.m_nPageScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
 	    m_pEditWnd->IsPageScrollByWheel()
 	) {
 		m_pEditWnd->SetPageScrollByWheel(FALSE);
@@ -838,7 +838,7 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
+	if (GetDllShareData().m_common.m_general.m_nHorizontalScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
 	    m_pEditWnd->IsHScrollByWheel()
 	) {
 		m_pEditWnd->SetHScrollByWheel(FALSE);
@@ -848,7 +848,7 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
 	// マウスサイドボタン1に対応する機能コードはm_common.m_pKeyNameArr[3]に入っている
-	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::LeftSideClick].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::LeftSideClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -892,7 +892,7 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	int		nFuncID;
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)MouseFunctionType::RightSideClick &&
+	if (GetDllShareData().m_common.m_general.m_nPageScrollByWheel == (int)MouseFunctionType::RightSideClick &&
 	    m_pEditWnd->IsPageScrollByWheel()
 	) {
 		// ホイール操作によるページスクロールありをOFF
@@ -901,7 +901,7 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	}
 
 	// ホイール操作によるページスクロールあり
-	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)MouseFunctionType::RightSideClick &&
+	if (GetDllShareData().m_common.m_general.m_nHorizontalScrollByWheel == (int)MouseFunctionType::RightSideClick &&
 	    m_pEditWnd->IsHScrollByWheel()
 	) {
 		// ホイール操作による横スクロールありをOFF
@@ -912,7 +912,7 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 	// Shift,Ctrl,Altキーが押されていたか
 	nIdx = getCtrlKeyState();
 	// マウスサイドボタン2に対応する機能コードはm_common.m_pKeyNameArr[4]に入っている
-	nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::RightSideClick].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::RightSideClick].m_nFuncCodeArr[nIdx];
 	if (nFuncID != 0) {
 		// コマンドコードによる処理振り分け
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -927,8 +927,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 {
 	Point ptMouse(xPos_, yPos_);
 
-	if (m_cMousePousePos != ptMouse) {
-		m_cMousePousePos = ptMouse;
+	if (m_mousePousePos != ptMouse) {
+		m_mousePousePos = ptMouse;
 		if (m_nMousePouse < 0) {
 			m_nMousePouse = 0;
 		}
@@ -938,8 +938,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 	// オートスクロール
 	if (m_nAutoScrollMode == 1) {
-		if (::GetSystemMetrics(SM_CXDOUBLECLK) < abs(ptMouse.x - m_cAutoScrollMousePos.x) ||
-		    ::GetSystemMetrics(SM_CYDOUBLECLK) < abs(ptMouse.y - m_cAutoScrollMousePos.y)
+		if (::GetSystemMetrics(SM_CXDOUBLECLK) < abs(ptMouse.x - m_autoScrollMousePos.x) ||
+		    ::GetSystemMetrics(SM_CYDOUBLECLK) < abs(ptMouse.y - m_autoScrollMousePos.y)
 		) {
 			m_bAutoScrollDragMode = true;
 			AutoScrollEnter();
@@ -956,7 +956,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 		// 辞書Tipが起動されている
 		if (m_dwTipTimer == 0) {
 			if ((m_poTipCurPos.x != po.x || m_poTipCurPos.y != po.y )) {
-				m_cTipWnd.Hide();
+				m_tipWnd.Hide();
 				m_dwTipTimer = ::GetTickCount();
 			}
 		}else {
@@ -973,7 +973,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			LayoutYInt nScrollRow = LayoutYInt(0);
 			LayoutYInt nScrollMargin = LayoutYInt(15);
 			nScrollMargin  = t_min(nScrollMargin,  (GetTextArea().m_nViewRowNum) / 2);
-			if (m_pcEditDoc->m_cLayoutMgr.GetLineCount() > area.m_nViewRowNum
+			if (m_pEditDoc->m_layoutMgr.GetLineCount() > area.m_nViewRowNum
 				&& ptNew.y > area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin
 			) {
 				nScrollRow = (area.GetViewTopLine() + area.m_nViewRowNum - nScrollMargin) - ptNew.y;
@@ -995,8 +995,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			ptNew.x = 0;
 			LogicPoint ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
-			GetDocument()->m_cLayoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
-			GetDocument()->m_cLayoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
+			GetDocument()->m_layoutMgr.LayoutToLogic(ptNew, &ptNewLogic);
+			GetDocument()->m_layoutMgr.LogicToLayout(ptNewLogic, &ptNew, ptNew.y);
 			if (GetKeyState_Shift()) {
 				if (view.GetSelectionInfo().IsTextSelected()) {
 					if (view.GetSelectionInfo().IsBoxSelecting()) {
@@ -1030,7 +1030,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			if (m_dwTipTimer == 0) {
 				if ((m_poTipCurPos.x != po.x || m_poTipCurPos.y != po.y)) {
 					// 辞書Tipを消す
-					m_cTipWnd.Hide();
+					m_tipWnd.Hide();
 					m_dwTipTimer = ::GetTickCount();	// 辞書Tip起動タイマー
 				}
 			}else {
@@ -1045,7 +1045,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 		// 選択テキストのドラッグ中か
 		if (m_bDragMode) {
-			if (GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
+			if (GetDllShareData().m_common.m_edit.m_bUseOLE_DragDrop) {	// OLEによるドラッグ & ドロップを使う
 				// 座標指定によるカーソル移動
 				GetCaret().MoveCursorToClientPoint(ptMouse);
 			}
@@ -1058,8 +1058,8 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 				else
 					::SetCursor(::LoadCursor(NULL, IDC_ARROW));
 			}else if (1
-				&& GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop	// OLEによるドラッグ & ドロップを使う
-				&& GetDllShareData().m_common.m_sEdit.m_bUseOLE_DropSource	// OLEによるドラッグ元にするか
+				&& GetDllShareData().m_common.m_edit.m_bUseOLE_DragDrop	// OLEによるドラッグ & ドロップを使う
+				&& GetDllShareData().m_common.m_edit.m_bUseOLE_DropSource	// OLEによるドラッグ元にするか
 				&& IsCurrentPositionSelected(ptNew) == 0					// 指定カーソル位置が選択エリア内にあるか
 			) {
 				// 矢印カーソル
@@ -1098,12 +1098,12 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 
 	// 2010.07.15 Moca ドラッグ開始位置から移動していない場合はMOVEとみなさない
 	// 遊びは 2px固定とする
-	Point ptMouseMove = ptMouse - m_cMouseDownPos;
-	if (m_cMouseDownPos.x != -INT_MAX && abs(ptMouseMove.x) <= 2 && abs(ptMouseMove.y) <= 2) {
+	Point ptMouseMove = ptMouse - m_mouseDownPos;
+	if (m_mouseDownPos.x != -INT_MAX && abs(ptMouseMove.x) <= 2 && abs(ptMouseMove.y) <= 2) {
 		return;
 	}
 	// 一度移動したら戻ってきたときも、移動とみなすように設定
-	m_cMouseDownPos.Set(-INT_MAX, -INT_MAX);
+	m_mouseDownPos.Set(-INT_MAX, -INT_MAX);
 	
 	LayoutPoint ptNewCursor(LayoutInt(-1), LayoutInt(-1));
 	if (GetSelectionInfo().IsBoxSelecting()) {	// 矩形範囲選択中
@@ -1137,7 +1137,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					// GetCommander().Command_GOLINETOP(true, 0x09);		// 改行単位の行頭へ移動
 					LogicInt nLineLen;
 					const Layout*	pcLayout;
-					const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptNewCursor.GetY2(), &nLineLen, &pcLayout);
+					const wchar_t*	pLine = m_pEditDoc->m_layoutMgr.GetLineStr(ptNewCursor.GetY2(), &nLineLen, &pcLayout);
 					ptNewCursor.x = LayoutInt(0);
 					if (pLine) {
 						while (pcLayout->GetLogicOffset()) {
@@ -1154,15 +1154,15 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					// 選択開始行にカーソルがある時はチェック不要
 					if (ptNewCursor.GetY() > GetSelectionInfo().m_sSelectBgn.GetTo().y) {
 						// 1行前の物理行を取得する
-						m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(LayoutPoint(LayoutInt(0), ptNewCursor.GetY() - 1), &ptCaretPrevLog);
+						m_pEditDoc->m_layoutMgr.LayoutToLogic(LayoutPoint(LayoutInt(0), ptNewCursor.GetY() - 1), &ptCaretPrevLog);
 					}
 
 					LogicPoint ptNewCursorLogic;
-					m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(ptNewCursor, &ptNewCursorLogic);
+					m_pEditDoc->m_layoutMgr.LayoutToLogic(ptNewCursor, &ptNewCursorLogic);
 					// 前の行と同じ物理行
 					if (ptCaretPrevLog.y == ptNewCursorLogic.y) {
 						// 1行先の物理行からレイアウト行を求める
-						m_pcEditDoc->m_cLayoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
+						m_pEditDoc->m_layoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
 
 						// カーソルを次の物理行頭へ移動する
 						ptNewCursor = ptCaret;
@@ -1198,12 +1198,12 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			}
 			LogicInt nLineLen;
 			const Layout* pcLayout;
-			if (m_pcEditDoc->m_cLayoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout)) {
+			if (m_pEditDoc->m_layoutMgr.GetLineStr(GetCaret().GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout)) {
 				LogicInt	nIdx = LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
 				LayoutRange sRange;
 
 				// 現在位置の単語の範囲を調べる
-				bool bResult = m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
+				bool bResult = m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 					GetCaret().GetCaretLayoutPos().GetY2(),
 					nIdx,
 					&sRange,
@@ -1214,9 +1214,9 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 					// 指定された行のデータ内の位置に対応する桁の位置を調べる
 					// 2007.10.15 kobake 既にレイアウト単位なので変換は不要
 					/*
-					pLine     = m_pcEditDoc->m_cLayoutMgr.GetLineStr(sRange.GetFrom().GetY2(), &nLineLen, &pcLayout);
+					pLine     = m_pEditDoc->m_layoutMgr.GetLineStr(sRange.GetFrom().GetY2(), &nLineLen, &pcLayout);
 					sRange.SetFromX(LineIndexToColumn(pcLayout, sRange.GetFrom().x));
-					pLine     = m_pcEditDoc->m_cLayoutMgr.GetLineStr(sRange.GetTo().GetY2(), &nLineLen, &pcLayout);
+					pLine     = m_pEditDoc->m_layoutMgr.GetLineStr(sRange.GetTo().GetY2(), &nLineLen, &pcLayout);
 					sRange.SetToX(LineIndexToColumn(pcLayout, sRange.GetTo().x));
 					*/
 					int nWorkF = IsCurrentPositionSelectedTEST(
@@ -1305,8 +1305,8 @@ LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMs
 		bool bKeyPageScroll = false;
 		if (nCmdFuncID == F_0) {
 			// 通常スクロールの時だけ適用
-			bHorizontal = IsSpecialScrollMode(GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel);
-			bKeyPageScroll = IsSpecialScrollMode(GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel);
+			bHorizontal = IsSpecialScrollMode(GetDllShareData().m_common.m_general.m_nHorizontalScrollByWheel);
+			bKeyPageScroll = IsSpecialScrollMode(GetDllShareData().m_common.m_general.m_nPageScrollByWheel);
 		}
 
 		// 2013.05.30 Moca ホイールスクロールにキー割り当て
@@ -1315,15 +1315,15 @@ LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMs
 		if (nFuncID != F_0) {
 		}else if (bHorizontalMsg) {
 			if (nScrollCode == SB_LINEUP) {
-				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelLeft].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelLeft].m_nFuncCodeArr[nIdx];
 			}else {
-				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelRight].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelRight].m_nFuncCodeArr[nIdx];
 			}
 		}else {
 			if (nScrollCode == SB_LINEUP) {
-				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelUp].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelUp].m_nFuncCodeArr[nIdx];
 			}else {
-				nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelDown].m_nFuncCodeArr[nIdx];
+				nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::WheelDown].m_nFuncCodeArr[nIdx];
 			}
 		}
 		bool bExecCmd = false;
@@ -1444,7 +1444,7 @@ LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMs
 			return bHorizontalMsg ? TRUE: 0;
 		}
 
-		const bool bSmooth = !! GetDllShareData().m_common.m_sGeneral.m_nRepeatedScroll_Smooth;
+		const bool bSmooth = !! GetDllShareData().m_common.m_general.m_nRepeatedScroll_Smooth;
 		const int nRollActions = bSmooth ? nRollNum : 1;
 		const LayoutInt nCount = LayoutInt(((nScrollCode == SB_LINEUP) ? -1 : 1) * (bSmooth ? 1 : nRollNum));
 
@@ -1545,7 +1545,7 @@ void EditView::OnLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 		GetSelectionInfo().SelectEnd();
 
 		// 20100715 Moca マウスクリック座標をリセット
-		m_cMouseDownPos.Set(-INT_MAX, -INT_MAX);
+		m_mouseDownPos.Set(-INT_MAX, -INT_MAX);
 
 		GetCaret().m_cUnderLine.UnderLineUnLock();
 		if (GetSelectionInfo().m_sSelect.IsOne()) {
@@ -1633,8 +1633,8 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 		// GREP出力モードまたはデバッグモード かつ マウス左ボタンダブルクリックでタグジャンプ の場合
 		//	2004.09.20 naoh 外部コマンドの出力からTagjumpできるように
 		if (1
-			&& (EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode || AppMode::getInstance()->IsDebugMode())
-			&& GetDllShareData().m_common.m_sSearch.m_bGTJW_LDBLCLK
+			&& (EditApp::getInstance()->m_pGrepAgent->m_bGrepMode || AppMode::getInstance()->IsDebugMode())
+			&& GetDllShareData().m_common.m_search.m_bGTJW_LDBLCLK
 		) {
 			// タグジャンプ機能
 			if (GetCommander().Command_TAGJUMP()) {
@@ -1649,7 +1649,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	int	nIdx = getCtrlKeyState();
 
 	// マウス左クリックに対応する機能コードはm_common.m_pKeyNameArr[?]に入っている 2007.11.15 nasukoji
-	EFunctionCode nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[
+	EFunctionCode nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[
 		(int)(m_dwTripleClickCheck ? MouseFunctionType::QuadrapleClick : MouseFunctionType::DoubleClick)
 	].m_nFuncCodeArr[nIdx];
 	if (m_dwTripleClickCheck) {
@@ -1663,7 +1663,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 
 		if (!nFuncID) {
 			m_dwTripleClickCheck = 0;	// トリプルクリックチェック OFF
-			nFuncID = GetDllShareData().m_common.m_sKeyBind.m_pKeyNameArr[(int)MouseFunctionType::DoubleClick].m_nFuncCodeArr[nIdx];
+			nFuncID = GetDllShareData().m_common.m_keyBind.m_pKeyNameArr[(int)MouseFunctionType::DoubleClick].m_nFuncCodeArr[nIdx];
 			OnLBUTTONDOWN(fwKeys, ptMouse.x , ptMouse.y);	// カーソルをクリック位置へ移動する
 		}
 	}
@@ -1698,7 +1698,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 	// 範囲選択開始 & マウスキャプチャー
 	GetSelectionInfo().SelectBeginWord();
 
-	if (GetDllShareData().m_common.m_sView.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
+	if (GetDllShareData().m_common.m_view.m_bFontIs_FIXED_PITCH) {	// 現在のフォントは固定幅フォントである
 		// ALTキーが押されていたか
 		if (GetKeyState_Alt()) {
 			GetSelectionInfo().SetBoxSelect(true);	// 矩形範囲選択中
@@ -1726,10 +1726,10 @@ STDMETHODIMP EditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POI
 {
 	DEBUG_TRACE(_T("EditView::DragEnter()\n"));
 	//「OLEによるドラッグ & ドロップを使う」オプションが無効の場合にはドロップを受け付けない
-	if (!GetDllShareData().m_common.m_sEdit.m_bUseOLE_DragDrop) return E_UNEXPECTED;
+	if (!GetDllShareData().m_common.m_edit.m_bUseOLE_DragDrop) return E_UNEXPECTED;
 
 	// 編集禁止の場合はドロップを受け付けない
-	if (!m_pcEditDoc->IsEditable()) return E_UNEXPECTED;
+	if (!m_pEditDoc->IsEditable()) return E_UNEXPECTED;
 
 
 	if (!pDataObject || !pdwEffect)
@@ -1879,10 +1879,10 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 	}
 
 	// アンドゥバッファの準備
-	if (!m_cCommander.GetOpeBlk()) {
-		m_cCommander.SetOpeBlk(new OpeBlk);
+	if (!m_commander.GetOpeBlk()) {
+		m_commander.SetOpeBlk(new OpeBlk);
 	}
-	m_cCommander.GetOpeBlk()->AddRef();
+	m_commander.GetOpeBlk()->AddRef();
 
 	// 移動の場合、位置関係を算出
 	if (bMove) {
@@ -1955,7 +1955,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		const Layout* pcLayout;
 		LogicInt nLineLen;
 		LayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
-		if (m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pcLayout)) {
+		if (m_pEditDoc->m_layoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pcLayout)) {
 			LayoutInt nLineAllColLen;
 			LineColumnToIndex2(pcLayout, ptCaretLayoutPos_Old.GetX2(), &nLineAllColLen);
 			if (nLineAllColLen > LayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
@@ -1970,7 +1970,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		LayoutPoint ptSelectFrom;
-		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
+		m_pEditDoc->m_layoutMgr.LogicToLayout(
 			ptCaretLogicPos_Old,
 			&ptSelectFrom
 		);
@@ -1991,20 +1991,20 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 
 			// 現在の選択範囲を記憶する	// 2008.03.26 ryoji
 			LogicRange sSelLogic;
-			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
+			m_pEditDoc->m_layoutMgr.LayoutToLogic(
 				GetSelectionInfo().m_sSelect,
 				&sSelLogic
 			);
 
 			// 以前の選択範囲を記憶する	// 2008.03.26 ryoji
 			LogicRange sDelLogic;
-			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
+			m_pEditDoc->m_layoutMgr.LayoutToLogic(
 				sSelect_Old,
 				&sDelLogic
 			);
 
 			// 現在の行数を記憶する	// 2008.03.26 ryoji
-			int nLines_Old = m_pcEditDoc->m_docLineMgr.GetLineCount();
+			int nLines_Old = m_pEditDoc->m_docLineMgr.GetLineCount();
 
 			// 以前の選択範囲を選択する
 			GetSelectionInfo().SetBoxSelect(bBeginBoxSelect_Old);
@@ -2033,13 +2033,13 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 				// (sDelLogic.GetTo().GetY2() - sDelLogic.GetFrom().GetY2()) だと実際の削除行数と同じになる
 				// こともあるが、（削除行数－１）になることもある．
 				// 例）フリーカーソルでの行番号クリック時の１行選択
-				int nLines = m_pcEditDoc->m_docLineMgr.GetLineCount();
+				int nLines = m_pEditDoc->m_docLineMgr.GetLineCount();
 				sSelLogic.SetFromY(sSelLogic.GetFrom().GetY2() - (nLines_Old - nLines));
 				sSelLogic.SetToY(sSelLogic.GetTo().GetY2() - (nLines_Old - nLines));
 
 				// 調整後の選択範囲を設定する
 				LayoutRange sSelect;
-				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
+				m_pEditDoc->m_layoutMgr.LogicToLayout(
 					sSelLogic,
 					&sSelect
 				);
@@ -2053,11 +2053,11 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 
 			// 削除位置から移動先へのカーソル移動をアンドゥ操作に追加する	// 2008.03.26 ryoji
 			LogicPoint ptBefore;
-			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
+			m_pEditDoc->m_layoutMgr.LayoutToLogic(
 				GetSelectionInfo().m_sSelect.GetFrom(),
 				&ptBefore
 			);
-			m_cCommander.GetOpeBlk()->AppendOpe(
+			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					sDelLogic.GetFrom(),
 					GetCaret().GetCaretLogicPos()
@@ -2179,7 +2179,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 			cmemBuf.AppendStringOld(szPath);
 #endif
 			if (nFiles > 1) {
-				cmemBuf.AppendString(m_pcEditDoc->m_cDocEditor.GetNewLineCode().GetValue2());
+				cmemBuf.AppendString(m_pEditDoc->m_docEditor.GetNewLineCode().GetValue2());
 			}
 		}
 		::DragFinish(hDrop);
@@ -2195,7 +2195,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 		const Layout* pcLayout;
 		LogicInt nLineLen;
 		LayoutPoint ptCaretLayoutPos_Old = GetCaret().GetCaretLayoutPos();
-		if (m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pcLayout)) {
+		if (m_pEditDoc->m_layoutMgr.GetLineStr(ptCaretLayoutPos_Old.GetY2(), &nLineLen, &pcLayout)) {
 			LayoutInt nLineAllColLen;
 			LineColumnToIndex2(pcLayout, ptCaretLayoutPos_Old.GetX2(), &nLineAllColLen);
 			if (nLineAllColLen > LayoutInt(0)) {	// 行終端より右の場合には nLineAllColLen に行全体の表示桁数が入っている
@@ -2211,7 +2211,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 
 		// 挿入前のキャレット位置から挿入後のキャレット位置までを選択範囲にする
 		LayoutPoint ptSelectFrom;
-		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
+		m_pEditDoc->m_layoutMgr.LogicToLayout(
 			ptCaretLogicPos_Old,
 			&ptSelectFrom
 		);

@@ -269,7 +269,7 @@ INT_PTR PropFile::DispatchEvent(
 */
 void PropFile::SetData(HWND hwndDlg)
 {
-	auto& csFile = m_Common.m_sFile;
+	auto& csFile = m_common.m_file;
 	//--- File ---
 	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
@@ -302,10 +302,10 @@ void PropFile::SetData(HWND hwndDlg)
 
 	//	From Here Aug. 21, 2000 genta
 	//	自動保存の有効・無効
-	::CheckDlgButton(hwndDlg, IDC_CHECK_AUTOSAVE, m_Common.m_sBackup.IsAutoBackupEnabled());
+	::CheckDlgButton(hwndDlg, IDC_CHECK_AUTOSAVE, m_common.m_backup.IsAutoBackupEnabled());
 
 	TCHAR buf[6];
-	int nN = m_Common.m_sBackup.GetAutoBackupInterval();
+	int nN = m_common.m_backup.GetAutoBackupInterval();
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 35791 ? 35791 : nN;
 
@@ -346,7 +346,7 @@ void PropFile::SetData(HWND hwndDlg)
 */
 int PropFile::GetData(HWND hwndDlg)
 {
-	auto& csFile = m_Common.m_sFile;
+	auto& csFile = m_common.m_file;
 
 	// ファイルの排他制御モード
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FILESHAREMODE);
@@ -378,7 +378,7 @@ int PropFile::GetData(HWND hwndDlg)
 
 	//	From Here Aug. 16, 2000 genta
 	//	自動保存を行うかどうか
-	m_Common.m_sBackup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
+	m_common.m_backup.EnableAutoBackup(DlgButton_IsChecked(hwndDlg, IDC_CHECK_AUTOSAVE));
 
 	//	自動保存間隔の取得
 	TCHAR szNumBuf[/*6*/ 7];	//@@@ 2001.03.21 by MIK
@@ -395,7 +395,7 @@ int PropFile::GetData(HWND hwndDlg)
 	}
 	nN = nN < 1  ?  1 : nN;
 	nN = nN > 35791 ? 35791 : nN;
-	m_Common.m_sBackup.SetAutoBackupInterval(nN);
+	m_common.m_backup.SetAutoBackupInterval(nN);
 
 	//	To Here Aug. 16, 2000 genta
 

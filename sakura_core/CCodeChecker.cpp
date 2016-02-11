@@ -23,17 +23,17 @@ static bool _CheckSavingEolcode(
 	bool bMix = false;
 	if (cEolType == EolType::None) {	// 改行コード変換なし
 		Eol cEolCheck;	// 比較対象EOL
-		const DocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
-		if (pcDocLine) {
-			cEolCheck = pcDocLine->GetEol();
+		const DocLine* pDocLine = pcDocLineMgr.GetDocLineTop();
+		if (pDocLine) {
+			cEolCheck = pDocLine->GetEol();
 		}
-		while (pcDocLine) {
-			Eol cEol = pcDocLine->GetEol();
+		while (pDocLine) {
+			Eol cEol = pDocLine->GetEol();
 			if (cEol != cEolCheck && cEol != EolType::None) {
 				bMix = true;
 				break;
 			}
-			pcDocLine = pcDocLine->GetNextLine();
+			pDocLine = pDocLine->GetNextLine();
 		}
 	}
 	return bMix;
@@ -47,16 +47,16 @@ static CodeConvertResult _CheckSavingCharcode(
 	NativeW& wc
 	)
 {
-	const DocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
+	const DocLine*	pDocLine = pcDocLineMgr.GetDocLineTop();
 	const bool bCodePageMode = IsValidCodeOrCPType(eCodeType) && !IsValidCodeType(eCodeType);
 	CodeBase* pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	Memory cmemTmp;	// バッファを再利用
 	NativeW cmemTmp2;
 	LogicInt nLine = LogicInt(0);
-	while (pcDocLine) {
-		// コード変換 pcDocLine -> cmemTmp
+	while (pDocLine) {
+		// コード変換 pDocLine -> cmemTmp
 		CodeConvertResult e = IoBridge::ImplToFile(
-			pcDocLine->_GetDocLineDataWithEOL(),
+			pDocLine->_GetDocLineDataWithEOL(),
 			&cmemTmp,
 			pCodeBase
 		);
@@ -68,10 +68,10 @@ static CodeConvertResult _CheckSavingCharcode(
 				pCodeBase,
 				0
 			);
-			const int nDocLineLen = (Int)pcDocLine->GetLengthWithEOL();
+			const int nDocLineLen = (Int)pDocLine->GetLengthWithEOL();
 			const int nConvertLen = (Int)cmemTmp2.GetStringLength();
 			const int nDataMinLen = t_min(nDocLineLen, nConvertLen);
-			const wchar_t* p = pcDocLine->GetPtr();
+			const wchar_t* p = pDocLine->GetPtr();
 			const wchar_t* r = cmemTmp2.GetStringPtr();
 			int nPos = -1;
 			for (int i=0; i<nDataMinLen; ++i) {
@@ -97,8 +97,8 @@ static CodeConvertResult _CheckSavingCharcode(
 				// 行内の位置を特定
 				point.y = nLine;
 				point.x = LogicInt(-1);
-				const WCHAR* pLine = pcDocLine->GetPtr();
-				const LogicInt nLineLen = pcDocLine->GetLengthWithEOL();
+				const WCHAR* pLine = pDocLine->GetPtr();
+				const LogicInt nLineLen = pDocLine->GetLengthWithEOL();
 				LogicInt chars = NativeW::GetSizeOfChar( pLine, nLineLen, 0 );
 				LogicInt nPos = LogicInt(0);
 				NativeW mem;
@@ -123,7 +123,7 @@ static CodeConvertResult _CheckSavingCharcode(
 		}
 
 		// 次の行へ
-		pcDocLine = pcDocLine->GetNextLine();
+		pDocLine = pDocLine->GetNextLine();
 		++nLine;
 	}
 	delete pCodeBase;
@@ -137,7 +137,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 
 	// 改行コードが混在しているかどうか判定
 	bool bTmpResult = false;
-	if (pcDoc->m_cDocType.GetDocumentAttribute().m_bChkEnterAtEnd) {
+	if (pcDoc->m_docType.GetDocumentAttribute().m_bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
 			pcDoc->m_docLineMgr, pSaveInfo->cEol
 		);
@@ -150,10 +150,10 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			MB_YESNOCANCEL | MB_ICONWARNING,
 			GSTR_APPNAME,
 			LS(STR_CODECHECKER_EOL_UNIFY),
-			pcDoc->m_cDocEditor.GetNewLineCode().GetName()
+			pcDoc->m_docEditor.GetNewLineCode().GetName()
 		);
 		switch (nDlgResult) {
-		case IDYES:		pSaveInfo->cEol = pcDoc->m_cDocEditor.GetNewLineCode(); break; // 統一
+		case IDYES:		pSaveInfo->cEol = pcDoc->m_docEditor.GetNewLineCode(); break; // 統一
 		case IDNO:		break; // 続行
 		case IDCANCEL:	return CallbackResultType::Interrupt; // 中断
 		}
@@ -181,7 +181,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 			auto_sprintf( szLineNum, _T("%d"), (int)((Int)point.x) + 1 );
 			_tcscat( szLineNum, LS(STR_DLGFNCLST_LIST_COL) );
 			Unicode().UnicodeToHex( cmemChar.GetStringPtr(), cmemChar.GetStringLength(),
-				szCharCode, &GetDllShareData().m_common.m_sStatusbar );
+				szCharCode, &GetDllShareData().m_common.m_statusBar );
 		}
 		int nDlgResult = MYMESSAGEBOX(
 			EditWnd::getInstance()->GetHwnd(),

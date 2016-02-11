@@ -45,7 +45,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 	TypeSupport cTabType(pcView, COLORIDX_TAB);
 
 	// これから描画するタブ幅
-	int tabDispWidth = (Int)pcView->m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(sPos.GetDrawCol());
+	int tabDispWidth = (Int)pcView->m_pEditDoc->m_layoutMgr.GetActualTabSpace(sPos.GetDrawCol());
 
 	// タブ記号領域
 	RECT rcClip2;
@@ -98,7 +98,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 							sPos.GetDrawPos().y,
 							pMetrics->GetHankakuWidth(),
 							pMetrics->GetHankakuHeight(),
-							gr.GetCurrentMyFontBold() || m_pTypeData->m_ColorInfoArr[COLORIDX_TAB].m_sFontAttr.m_bBoldFont,
+							gr.GetCurrentMyFontBold() || m_pTypeData->m_ColorInfoArr[COLORIDX_TAB].m_fontAttr.m_bBoldFont,
 							gr.GetCurrentTextForeColor()
 						);
 					}
@@ -110,7 +110,7 @@ void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bo
 						sPos.GetDrawPos().y,
 						nCharWidth * tabDispWidth - (nPosLeft -  sPos.GetDrawPos().x),	// Tab Area一杯に 2013/4/11 Uchi
 						pMetrics->GetHankakuHeight(),
-						gr.GetCurrentMyFontBold() || m_pTypeData->m_ColorInfoArr[COLORIDX_TAB].m_sFontAttr.m_bBoldFont,
+						gr.GetCurrentMyFontBold() || m_pTypeData->m_ColorInfoArr[COLORIDX_TAB].m_fontAttr.m_bBoldFont,
 						gr.GetCurrentTextForeColor()
 					);
 				}

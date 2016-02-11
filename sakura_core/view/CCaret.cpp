@@ -84,14 +84,14 @@ inline int Caret::GetHankakuDy() const
 void CaretUnderLine::CaretUnderLineON(bool bDraw, bool bPaintDraw)
 {
 	if (m_nLockCounter) return;	//	ロックされていたら何もできない。
-	m_pcEditView->CaretUnderLineON(bDraw, bPaintDraw, m_nUnderLineLockCounter != 0);
+	m_pEditView->CaretUnderLineON(bDraw, bPaintDraw, m_nUnderLineLockCounter != 0);
 }
 
 // カーソル行アンダーラインのOFF
 void CaretUnderLine::CaretUnderLineOFF(bool bDraw, bool bDrawPaint, bool bResetFlag)
 {
 	if (m_nLockCounter) return;	//	ロックされていたら何もできない。
-	m_pcEditView->CaretUnderLineOFF(bDraw, bDrawPaint, bResetFlag, m_nUnderLineLockCounter != 0);
+	m_pEditView->CaretUnderLineOFF(bDraw, bDrawPaint, bResetFlag, m_nUnderLineLockCounter != 0);
 }
 
 
@@ -185,7 +185,7 @@ LayoutInt Caret::MoveCursor(
 	}
 	// 2004.04.02 Moca 行だけ有効な座標に修正するのを厳密に処理する
 	GetAdjustCursorPos(&ptWk_CaretPos);
-	m_pEditDoc->m_cLayoutMgr.LayoutToLogic(
+	m_pEditDoc->m_layoutMgr.LayoutToLogic(
 		ptWk_CaretPos,
 		&m_ptCaretPos_Logic	// カーソル位置。ロジック単位。
 	);
@@ -216,7 +216,7 @@ LayoutInt Caret::MoveCursor(
 	}
 	
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-	if (m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas() > textArea.m_nViewColNum
+	if (m_pEditDoc->m_layoutMgr.GetMaxLineKetas() > textArea.m_nViewColNum
 		&& ptWk_CaretPos.GetX() > textArea.GetViewLeftCol() + textArea.m_nViewColNum - nScrollMarginRight
 	) {
 		nScrollColNum =
@@ -259,7 +259,7 @@ LayoutInt Caret::MoveCursor(
 			}
 		// 移動先は、画面の最大行数－２より下か？（down キー）
 		}else if (ptWk_CaretPos.y - textArea.GetViewTopLine() >= (textArea.m_nViewRowNum - nCaretMarginY - 2)) {
-			LayoutInt ii = m_pEditDoc->m_cLayoutMgr.GetLineCount();
+			LayoutInt ii = m_pEditDoc->m_layoutMgr.GetLineCount();
 			if (1
 				&& ii - ptWk_CaretPos.y < nCaretMarginY + 1
 				&& ii - textArea.GetViewTopLine() < textArea.m_nViewRowNum
@@ -279,7 +279,7 @@ LayoutInt Caret::MoveCursor(
 		}
 	// 移動先は、画面の最大行数－２より下か？（down キー）
 	}else if (ptWk_CaretPos.y - textArea.GetViewTopLine() >= textArea.m_nViewRowNum - nCaretMarginY - 2) {
-		LayoutInt ii = m_pEditDoc->m_cLayoutMgr.GetLineCount();
+		LayoutInt ii = m_pEditDoc->m_layoutMgr.GetLineCount();
 		if (1
 			&& ii - ptWk_CaretPos.y < nCaretMarginY + 1
 			&& ii - textArea.GetViewTopLine() < textArea.m_nViewRowNum
@@ -423,14 +423,14 @@ bool Caret::GetAdjustCursorPos(
 	)
 {
 	// 2004.03.28 Moca EOFのみのレイアウト行は、0桁目のみ有効.EOFより下の行のある場合は、EOF位置にする
-	LayoutInt nLayoutLineCount = m_pEditDoc->m_cLayoutMgr.GetLineCount();
+	LayoutInt nLayoutLineCount = m_pEditDoc->m_layoutMgr.GetLineCount();
 
 	LayoutPoint ptPosXY2 = *pptPosXY;
 	bool ret = false;
 	if (ptPosXY2.y >= nLayoutLineCount) {
 		if (0 < nLayoutLineCount) {
 			ptPosXY2.y = nLayoutLineCount - 1;
-			const Layout* pcLayout = m_pEditDoc->m_cLayoutMgr.SearchLineByLayoutY(ptPosXY2.GetY2());
+			const Layout* pcLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(ptPosXY2.GetY2());
 			if (pcLayout->GetLayoutEol() == EolType::None) {
 				ptPosXY2.x = m_pEditView->LineIndexToColumn(pcLayout, (LogicInt)pcLayout->GetLengthWithEOL());
 				// [EOF]のみ折り返すのはやめる	// 2009.02.17 ryoji
@@ -438,7 +438,7 @@ bool Caret::GetAdjustCursorPos(
 
 				// EOFだけ折り返されているか
 				//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-				//if (ptPosXY2.x >= m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas()) {
+				//if (ptPosXY2.x >= m_pEditDoc->m_layoutMgr.GetMaxLineKetas()) {
 				//	ptPosXY2.y++;
 				//	ptPosXY2.x = LayoutInt(0);
 				//}
@@ -466,9 +466,9 @@ void Caret::ShowEditCaret()
 		return;
 	}
 	// 必要なインターフェース
-	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
+	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_layoutMgr;
 	CommonSetting* pCommon = &GetDllShareData().m_common;
-	const TypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig* pTypes = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	using namespace WCODE;
 
@@ -496,14 +496,14 @@ void Caret::ShowEditCaret()
 	// CalcCaretDrawPosのためにCaretサイズを仮設定
 	int	nCaretWidth = 0;
 	int	nCaretHeight = 0;
-	if (pCommon->m_sGeneral.GetCaretType() == 0) {
+	if (pCommon->m_general.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();
 		if (m_pEditView->IsInsMode()) {
 			nCaretWidth = 2;
 		}else {
 			nCaretWidth = GetHankakuDx();
 		}
-	}else if (pCommon->m_sGeneral.GetCaretType() == 1) {
+	}else if (pCommon->m_general.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode()) {
 			nCaretHeight = GetHankakuHeight() / 2;
 		}else {
@@ -528,7 +528,7 @@ void Caret::ShowEditCaret()
 	}
 	// キャレットの幅、高さを決定
 	// カーソルのタイプ = win
-	if (pCommon->m_sGeneral.GetCaretType() == 0) {
+	if (pCommon->m_general.GetCaretType() == 0) {
 		nCaretHeight = GetHankakuHeight();					// キャレットの高さ
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretWidth = 2; // 2px
@@ -553,7 +553,7 @@ void Caret::ShowEditCaret()
 				int nIdxFrom = GetCaretLogicPos().GetX() - pcLayout->GetLogicOffset();
 				if (0
 					|| nIdxFrom >= nLineLen
-					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
 					|| pLine[nIdxFrom] == TAB
 				) {
 					nCaretWidth = GetHankakuDx();
@@ -566,7 +566,7 @@ void Caret::ShowEditCaret()
 			}
 		}
 	// カーソルのタイプ = dos
-	}else if (pCommon->m_sGeneral.GetCaretType() == 1) {
+	}else if (pCommon->m_general.GetCaretType() == 1) {
 		if (m_pEditView->IsInsMode() /* Oct. 2, 2005 genta */) {
 			nCaretHeight = GetHankakuHeight() / 2;			// キャレットの高さ
 		}else {
@@ -586,7 +586,7 @@ void Caret::ShowEditCaret()
 			int nIdxFrom = m_pEditView->LineColumnToIndex(pcLayout, GetCaretLayoutPos().GetX2());
 			if (0
 				|| nIdxFrom >= nLineLen
-				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
+				|| WCODE::IsLineDelimiter(pLine[nIdxFrom], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
 				|| pLine[nIdxFrom] == TAB
 			) {
 				nCaretWidth = GetHankakuDx();
@@ -602,8 +602,8 @@ void Caret::ShowEditCaret()
 	//	キャレット色の取得
 	const ColorInfo* ColorInfoArr = pTypes->m_ColorInfoArr;
 	int nCaretColor = (ColorInfoArr[COLORIDX_CARET_IME].m_bDisp && m_pEditView->IsImeON())? COLORIDX_CARET_IME: COLORIDX_CARET;
-	COLORREF crCaret = ColorInfoArr[nCaretColor].m_sColorAttr.m_cTEXT;
-	COLORREF crBack = ColorInfoArr[COLORIDX_TEXT].m_sColorAttr.m_cBACK;
+	COLORREF crCaret = ColorInfoArr[nCaretColor].m_colorAttr.m_cTEXT;
+	COLORREF crBack = ColorInfoArr[COLORIDX_TEXT].m_colorAttr.m_cBACK;
 
 	if (!ExistCaretFocus()) {
 		// キャレットがなかった場合
@@ -659,15 +659,15 @@ void Caret::ShowEditCaret()
 void Caret::ShowCaretPosInfo()
 {
 	// 必要なインターフェース
-	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
-	const TypeConfig* pTypes = &m_pEditDoc->m_cDocType.GetDocumentAttribute();
+	const LayoutMgr* pLayoutMgr = &m_pEditDoc->m_layoutMgr;
+	const TypeConfig* pTypes = &m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	if (!m_pEditView->GetDrawSwitch()) {
 		return;
 	}
 
 	// ステータスバーハンドルを取得
-	HWND hwndStatusBar = m_pEditDoc->m_pEditWnd->m_cStatusBar.GetStatusHwnd();
+	HWND hwndStatusBar = m_pEditDoc->m_pEditWnd->m_statusBar.GetStatusHwnd();
 
 	// カーソル位置の文字列を取得
 	const Layout*	pcLayout;
@@ -698,7 +698,7 @@ void Caret::ShowCaretPosInfo()
 	// -- -- -- -- 改行モード -> szEolMode -- -- -- -- //
 	//	May 12, 2000 genta
 	//	改行コードの表示を追加
-	Eol cNlType = m_pEditDoc->m_cDocEditor.GetNewLineCode();
+	Eol cNlType = m_pEditDoc->m_docEditor.GetNewLineCode();
 	const TCHAR* szEolMode = cNlType.GetName();
 
 
@@ -793,7 +793,7 @@ void Caret::ShowCaretPosInfo()
 				//auto_sprintf(szCaretChar, _T("%04x"),);
 				// 任意の文字コードからUnicodeへ変換する		2008/6/9 Uchi
 				CodeBase* pCode = CodeFactory::CreateCodeBase(m_pEditDoc->GetDocumentEncoding(), false);
-				CommonSetting_Statusbar* psStatusbar = &GetDllShareData().m_common.m_sStatusbar;
+				CommonSetting_StatusBar* psStatusbar = &GetDllShareData().m_common.m_statusBar;
 				CodeConvertResult ret = pCode->UnicodeToHex(&pLine[nIdx], nLineLen - nIdx, szCaretChar, psStatusbar);
 				delete pCode;
 				if (ret != CodeConvertResult::Complete) {
@@ -908,7 +908,7 @@ void Caret::ClearCaretPosInfoCache()
 LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 {
 	// 必要なインターフェース
-	const LayoutMgr* const pLayoutMgr = &m_pEditDoc->m_cLayoutMgr;
+	const LayoutMgr* const pLayoutMgr = &m_pEditDoc->m_layoutMgr;
 	const CommonSetting* const pCommon = &GetDllShareData().m_common;
 
 	const LayoutPoint ptCaret = GetCaretLayoutPos();
@@ -982,7 +982,7 @@ LayoutInt Caret::Cursor_UPDOWN(LayoutInt nMoveLines, bool bSelect)
 	}
 	if (i >= nLineLen) {
 		// フリーカーソルモードと矩形選択中は、キャレットの位置を改行や EOFの前に制限しない
-		if (pCommon->m_sGeneral.m_bIsFreeCursorMode
+		if (pCommon->m_general.m_bIsFreeCursorMode
 			|| selInfo.IsBoxSelecting()
 		) {
 			ptTo.x = m_nCaretPosX_Prev;
@@ -1144,7 +1144,7 @@ LayoutInt Caret::MoveCursorProperly(
 	}
 	
 	// 2011.12.26 EOF以下の行だった場合で矩形のときは、最終レイアウト行へ移動する
-	auto& layoutMgr = m_pEditDoc->m_cLayoutMgr;
+	auto& layoutMgr = m_pEditDoc->m_layoutMgr;
 	auto& selectionInfo = m_pEditView->GetSelectionInfo();
 	if (1
 		&& ptNewXY.y >= layoutMgr.GetLineCount()
@@ -1205,7 +1205,7 @@ LayoutInt Caret::MoveCursorProperly(
 			// 2011.12.26 フリーカーソル/矩形でデータ付きEOFの右側へ移動できるように
 			// フリーカーソルモードか
 			if (0
-				|| GetDllShareData().m_common.m_sGeneral.m_bIsFreeCursorMode
+				|| GetDllShareData().m_common.m_general.m_bIsFreeCursorMode
 				|| (selectionInfo.IsMouseSelecting() && selectionInfo.IsBoxSelecting())	/* マウス範囲選択中 && 矩形範囲選択中 */
 				|| (m_pEditView->m_bDragMode && m_pEditView->m_bDragBoxData) /* OLE DropTarget && 矩形データ */
 			) {

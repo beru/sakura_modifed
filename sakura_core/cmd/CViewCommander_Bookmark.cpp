@@ -29,7 +29,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 	if (m_pCommanderView->m_ptSrchStartPos_PHY.BothNatural()) {
 		LayoutPoint pt;
 		// 範囲選択中か
-		GetDocument()->m_cLayoutMgr.LogicToLayout(
+		GetDocument()->m_layoutMgr.LogicToLayout(
 			m_pCommanderView->m_ptSrchStartPos_PHY,
 			&pt
 		);
@@ -47,7 +47,7 @@ void ViewCommander::Command_JUMP_SRCHSTARTPOS(void)
 */
 void ViewCommander::Command_JUMP_DIALOG(void)
 {
-	if (!GetEditWindow()->m_cDlgJump.DoModal(
+	if (!GetEditWindow()->m_dlgJump.DoModal(
 			G_AppInstance(), m_pCommanderView->GetHwnd(), (LPARAM)GetDocument()
 		)
 	) {
@@ -59,7 +59,7 @@ void ViewCommander::Command_JUMP_DIALOG(void)
 // 指定行ヘジャンプ
 void ViewCommander::Command_JUMP(void)
 {
-	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	if (layoutMgr.GetLineCount() == 0) {
 		ErrorBeep();
 		return;
@@ -70,7 +70,7 @@ void ViewCommander::Command_JUMP(void)
 	int nCurrentLine;
 	int nCommentBegin = 0;
 
-	auto& dlgJump = GetEditWindow()->m_cDlgJump;
+	auto& dlgJump = GetEditWindow()->m_dlgJump;
 
 	// 行番号
 	int	nLineNum; //$$ 単位混在
@@ -200,7 +200,7 @@ void ViewCommander::Command_JUMP(void)
 				if (0
 					|| let == L'\t'
 					|| let == L' '
-					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)
+					|| WCODE::IsLineDelimiter(pLine[i], GetDllShareData().m_common.m_edit.m_bEnableExtEol)
 				) {
 					continue;
 				}else
@@ -232,7 +232,7 @@ void ViewCommander::Command_JUMP(void)
 				bValidLine = TRUE;
 			}
 			// コメントブロック内の改行だけの行
-			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
+			if (WCODE::IsLineDelimiter(pLine[nBgn], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
 				bValidLine = FALSE;
 			}
 		}
@@ -274,12 +274,12 @@ void ViewCommander::Command_BOOKMARK_SET(void)
 	) {
 		LogicPoint ptFrom;
 		LogicPoint ptTo;
-		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		layoutMgr.LayoutToLogic(
 			LayoutPoint(LayoutInt(0), sSelect.GetFrom().y),
 			&ptFrom
 		);
-		GetDocument()->m_cLayoutMgr.LayoutToLogic(
+		GetDocument()->m_layoutMgr.LayoutToLogic(
 			LayoutPoint(LayoutInt(0), sSelect.GetTo().y),
 			&ptTo
 		);
@@ -317,12 +317,12 @@ re_do:;								// hor
 		ptXY.y = tmp_y;
 		bFound = TRUE;
 		LayoutPoint ptLayout;
-		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
+		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
-	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
 		if (!bFound	&&		// 見つからなかった
 			bRedo			// 最初の検索
 		) {
@@ -361,16 +361,16 @@ re_do:;								// hor
 		ptXY.y = tmp_y;
 		bFound = TRUE;				// hor
 		LayoutPoint ptLayout;
-		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
+		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 		// 2006.07.09 genta 新規関数にまとめた
 		m_pCommanderView->MoveCursorSelecting(ptLayout, m_pCommanderView->GetSelectionInfo().m_bSelectingLock);
 	}
     // 2002.01.26 hor
-	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
 		if (!bFound	&&	// 見つからなかった
 			bRedo		// 最初の検索
 		) {
-			// 2011.02.02 m_cLayoutMgr→m_docLineMgr
+			// 2011.02.02 m_layoutMgr→m_docLineMgr
 			ptXY.y = GetDocument()->m_docLineMgr.GetLineCount();	// 2002/06/01 MIK
 			bRedo = FALSE;
 			goto re_do;	// 末尾から再検索
@@ -426,7 +426,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 		if (FuncListManager().SearchFuncListMark(&GetDocument()->m_docLineMgr,
 				ptXY.GetY2(), SearchDirection::Forward, &ptXY.y)) {
 			LayoutPoint ptLayout;
-			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY,&ptLayout);
+			GetDocument()->m_layoutMgr.LogicToLayout(ptXY,&ptLayout);
 			m_pCommanderView->MoveCursorSelecting( ptLayout,
 				m_pCommanderView->GetSelectionInfo().m_bSelectingLock );
 			if (nYOld >= ptXY.y) {
@@ -434,7 +434,7 @@ void ViewCommander::Command_FUNCLIST_NEXT(void)
 			}
 			return;
 		}
-		if (!GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
+		if (!GetDllShareData().m_common.m_search.m_bSearchAll) {
 			break;
 		}
 		ptXY.y = -1;
@@ -462,7 +462,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 			)
 		) {
 			LayoutPoint ptLayout;
-			GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptLayout);
+			GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptLayout);
 			m_pCommanderView->MoveCursorSelecting(
 				ptLayout,
 				m_pCommanderView->GetSelectionInfo().m_bSelectingLock
@@ -472,7 +472,7 @@ void ViewCommander::Command_FUNCLIST_PREV(void)
 			}
 			return;
 		}
-		if (!GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
+		if (!GetDllShareData().m_common.m_search.m_bSearchAll) {
 			break;
 		}
 		ptXY.y= GetDocument()->m_docLineMgr.GetLineCount();

@@ -204,8 +204,8 @@ void DlgJump::SetData(void)
 	// PL/SQL関数リスト作成
 	HWND hwndCtrl = GetItemHwnd(IDC_COMBO_PLSQLBLOCKS);
 	// タイプ別に設定されたアウトライン解析方法
-	if (OUTLINE_PLSQL == pCEditDoc->m_cDocType.GetDocumentAttribute().m_eDefaultOutline) {
-		pCEditDoc->m_cDocOutline.MakeFuncList_PLSQL(&cFuncInfoArr);
+	if (OUTLINE_PLSQL == pCEditDoc->m_docType.GetDocumentAttribute().m_eDefaultOutline) {
+		pCEditDoc->m_docOutline.MakeFuncList_PLSQL(&cFuncInfoArr);
 	}
 	//$$ 条件により、レイアウト・ロジックの単位が混在するため、ミスの原因になりやすい
 	int nWorkLine = -1;
@@ -219,12 +219,12 @@ void DlgJump::SetData(void)
 			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
-					pFI->m_cmemFuncName.GetStringPtr()
+					pFI->m_memFuncName.GetStringPtr()
 				);
 			}else {
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineLAYOUT,
-					pFI->m_cmemFuncName.GetStringPtr()
+					pFI->m_memFuncName.GetStringPtr()
 				);
 			}
 			nIndex = Combo_AddString(hwndCtrl, szText);
@@ -239,12 +239,12 @@ void DlgJump::SetData(void)
 			if (m_pShareData->m_bLineNumIsCRLF_ForJump) {	// 行番号の表示 false=折り返し単位／true=改行単位
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineCRLF,
-					pFI->m_cmemFuncName.GetStringPtr()
+					pFI->m_memFuncName.GetStringPtr()
 				);
 			}else {
 				auto_sprintf(szText, LSW(STR_DLGJUMP_PSLQL),
 					pFI->m_nFuncLineLAYOUT,
-					pFI->m_cmemFuncName.GetStringPtr()
+					pFI->m_memFuncName.GetStringPtr()
 				);
 			}
 			nIndexCurSel = nIndex = Combo_AddString(hwndCtrl, szText);

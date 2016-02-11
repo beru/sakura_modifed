@@ -121,7 +121,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 	WCHAR		szLabel2[300];
 
 	DlgInput1	cDlgInput1;
-	auto& csCustomMenu = m_Common.m_sCustomMenu;
+	auto& csCustomMenu = m_common.m_customMenu;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -206,7 +206,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 				//	Combo Boxも変更 削除＆再登録
 				Combo_DeleteString(hwndCOMBO_MENU, nIdx1);
 				Combo_InsertString(hwndCOMBO_MENU, nIdx1,
-					m_cLookup.Custmenu2Name(nIdx1, buf, _countof(buf)));
+					m_lookup.Custmenu2Name(nIdx1, buf, _countof(buf)));
 				// 削除すると選択が解除されるので，元に戻す
 				Combo_SetCurSel(hwndCOMBO_MENU, nIdx1);
 				return TRUE;
@@ -259,7 +259,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 					}
 				}
 				//	Oct. 3, 2001 genta
-				if (!m_cLookup.Funccode2Name(csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel, 255)) {
+				if (!m_lookup.Funccode2Name(csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel, 255)) {
 					SetSpecialFuncName(csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2], szLabel);
 				}
 
@@ -318,7 +318,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 				}else {
 					// Oct. 3, 2001 genta
 					// 専用ルーチンに置き換え
-					m_cLookup.SetListItem(hwndLIST_FUNC, nIdx3);
+					m_lookup.SetListItem(hwndLIST_FUNC, nIdx3);
 				}
 				return TRUE;
 			}
@@ -426,7 +426,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 						// 特殊機能
 						eFuncCode = sSpecialFuncs[nIdx4].m_nFunc;
 					}else {
-						eFuncCode = m_cLookup.Pos2FuncCode(nIdx3, nIdx4);
+						eFuncCode = m_lookup.Pos2FuncCode(nIdx3, nIdx4);
 					}
 					csCustomMenu.m_nCustMenuItemFuncArr[nIdx1][nIdx2] = eFuncCode;
 					csCustomMenu.m_nCustMenuItemKeyArr[nIdx1][nIdx2] = '\0';
@@ -474,7 +474,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 							eFuncCode = sSpecialFuncs[nIdx4].m_nFunc;
 						}
 					}else {
-						eFuncCode = m_cLookup.Pos2FuncCode(nIdx3, nIdx4);
+						eFuncCode = m_lookup.Pos2FuncCode(nIdx3, nIdx4);
 					}
 					//	Oct. 3, 2001 genta
 					if (eFuncCode == F_DISABLE) {
@@ -602,7 +602,7 @@ INT_PTR PropCustmenu::DispatchEvent(
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_ADD), FALSE);
 		}
 		if (CB_ERR != nIdx3 && LB_ERR != nIdx4 &&
-		 	m_cLookup.Pos2FuncCode(nIdx3, nIdx4) == 0 &&
+		 	m_lookup.Pos2FuncCode(nIdx3, nIdx4) == 0 &&
 			!(nIdx3 == nSpecialFuncsNum && 0 <= nIdx4 && nIdx4 < nSpecialFuncsCount)
 		) {
 			::EnableWindow(::GetDlgItem(hwndDlg, IDC_BUTTON_INSERT), FALSE);
@@ -641,7 +641,7 @@ void PropCustmenu::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット（コンボボックス）
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	m_cLookup.SetCategory2Combo(hwndCombo);	//	Oct. 3, 2001 genta
+	m_lookup.SetCategory2Combo(hwndCombo);	//	Oct. 3, 2001 genta
 	// 特別機能追加
 	nSpecialFuncsNum = Combo_AddString(hwndCombo, LS(STR_SPECIAL_FUNC));
 
@@ -652,7 +652,7 @@ void PropCustmenu::SetData(HWND hwndDlg)
 	HWND hwndCOMBO_MENU = ::GetDlgItem(hwndDlg, IDC_COMBO_MENU);
 	WCHAR buf[MAX_CUSTOM_MENU_NAME_LEN + 1];
 	for (int i=0; i<MAX_CUSTOM_MENU; ++i) {
-		Combo_AddString(hwndCOMBO_MENU, m_cLookup.Custmenu2Name(i, buf, _countof(buf)));
+		Combo_AddString(hwndCOMBO_MENU, m_lookup.Custmenu2Name(i, buf, _countof(buf)));
 	}
 	// メニュー一覧の先頭の項目を選択（コンボボックス）
 	Combo_SetCurSel(hwndCOMBO_MENU, 0);
@@ -667,7 +667,7 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 {
 	WCHAR szLabel[300];
 	WCHAR szLabel2[300];
-	auto& csCustomMenu = m_Common.m_sCustomMenu;
+	auto& csCustomMenu = m_common.m_customMenu;
 
 	// メニュー項目一覧に文字列をセット（リストボックス）
 	HWND hwndLIST_RES = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
@@ -679,7 +679,7 @@ void PropCustmenu::SetDataMenuList(HWND hwndDlg, int nIdx)
 		}else {
 			EFunctionCode code = csCustomMenu.m_nCustMenuItemFuncArr[nIdx][i];
 			//	Oct. 3, 2001 genta
-			if (!m_cLookup.Funccode2Name(code, szLabel, 256)) {
+			if (!m_lookup.Funccode2Name(code, szLabel, 256)) {
 				SetSpecialFuncName(code, szLabel);
 			}
 		}
@@ -713,7 +713,7 @@ int PropCustmenu::GetData(HWND hwndDlg)
 // カスタムメニュー設定をインポートする
 void PropCustmenu::Import(HWND hwndDlg)
 {
-	ImpExpCustMenu	cImpExpCustMenu(m_Common);
+	ImpExpCustMenu	cImpExpCustMenu(m_common);
 	// インポート
 	if (!cImpExpCustMenu.ImportUI(G_AppInstance(), hwndDlg)) {
 		// インポートをしていない
@@ -727,7 +727,7 @@ void PropCustmenu::Import(HWND hwndDlg)
 // カスタムメニュー設定をエクスポートする
 void PropCustmenu::Export(HWND hwndDlg)
 {
-	ImpExpCustMenu	cImpExpCustMenu(m_Common);
+	ImpExpCustMenu	cImpExpCustMenu(m_common);
 	// エクスポート
 	if (!cImpExpCustMenu.ExportUI(G_AppInstance(), hwndDlg)) {
 		// エクスポートをしていない

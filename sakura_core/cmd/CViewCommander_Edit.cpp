@@ -41,7 +41,7 @@ void ViewCommander::Command_WCHAR(
 
 	LogicInt nPos;
 	auto* pDoc = GetDocument();
-	pDoc->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	pDoc->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
 	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -54,10 +54,10 @@ void ViewCommander::Command_WCHAR(
 	// 現在位置にデータを挿入
 	NativeW cmemDataW2;
 	cmemDataW2 = wcChar;
-	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) { 
+	if (WCODE::IsLineDelimiter(wcChar, GetDllShareData().m_common.m_edit.m_bEnableExtEol)) { 
 		// 現在、Enterなどで挿入する改行コードの種類を取得
 		if (bConvertEOL) {
-			Eol cWork = pDoc->m_cDocEditor.GetNewLineCode();
+			Eol cWork = pDoc->m_docEditor.GetNewLineCode();
 			cmemDataW2.SetString(cWork.GetValue2(), cWork.GetLen());
 		}
 
@@ -68,11 +68,11 @@ void ViewCommander::Command_WCHAR(
 		if (typeData->m_bAutoIndent) {	// オートインデント
 			const Layout* pCLayout;
 			LogicInt nLineLen;
-			auto& layoutMgr = pDoc->m_cLayoutMgr;
+			auto& layoutMgr = pDoc->m_layoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout);
 			if (pCLayout) {
-				const DocLine* pcDocLine = pDoc->m_docLineMgr.GetLine(pCLayout->GetLogicLineNo());
-				pLine = pcDocLine->GetDocLineStrWithEOL(&nLineLen);
+				const DocLine* pDocLine = pDoc->m_docLineMgr.GetLine(pCLayout->GetLogicLineNo());
+				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (pLine) {
 					/*
 					  カーソル位置変換
@@ -204,7 +204,7 @@ end_of_for:;
 	// 2005.10.11 ryoji 改行時に末尾の空白を削除
 	if (WCODE::IsLineDelimiter(
 			wcChar,
-			GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
+			GetDllShareData().m_common.m_edit.m_bEnableExtEol
 		)
 		&& typeData->m_bRTrimPrevLine
 	) {	// 改行時に末尾の空白を削除
@@ -241,7 +241,7 @@ void ViewCommander::Command_IME_CHAR(WORD wChar)
 		Command_WCHAR(wChar & 0xff);
 		return;
 	}
-	GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 
  	if (m_pCommanderView->m_bHideMouse && 0 <= m_pCommanderView->m_nMousePouse) {
 		m_pCommanderView->m_nMousePouse = -1;
@@ -298,19 +298,19 @@ void ViewCommander::Command_UNDO(void)
 	}
 
 	{
-		OpeBlk* opeBlk = m_pCommanderView->m_cCommander.GetOpeBlk();
+		OpeBlk* opeBlk = m_pCommanderView->m_commander.GetOpeBlk();
 		if (opeBlk) {
 			int nCount = opeBlk->GetRefCount();
 			opeBlk->SetRefCount(1); // 強制的にリセットするため1を指定
 			m_pCommanderView->SetUndoBuffer();
-			if (!m_pCommanderView->m_cCommander.GetOpeBlk() && 0 < nCount) {
-				m_pCommanderView->m_cCommander.SetOpeBlk(new OpeBlk());
-				m_pCommanderView->m_cCommander.GetOpeBlk()->SetRefCount(nCount);
+			if (!m_pCommanderView->m_commander.GetOpeBlk() && 0 < nCount) {
+				m_pCommanderView->m_commander.SetOpeBlk(new OpeBlk());
+				m_pCommanderView->m_commander.GetOpeBlk()->SetRefCount(nCount);
 			}
 		}
 	}
 
-	if (!GetDocument()->m_cDocEditor.IsEnableUndo()) {	// Undo(元に戻す)可能な状態か？
+	if (!GetDocument()->m_docEditor.IsEnableUndo()) {	// Undo(元に戻す)可能な状態か？
 		return;
 	}
 
@@ -334,8 +334,8 @@ void ViewCommander::Command_UNDO(void)
 
 	// 現在のUndo対象の操作ブロックを返す
 	auto& caret = GetCaret();
-	auto& docEditor = GetDocument()->m_cDocEditor;
-	if ((pcOpeBlk = docEditor.m_cOpeBuf.DoUndo(&bIsModified))) {
+	auto& docEditor = GetDocument()->m_docEditor;
+	if ((pcOpeBlk = docEditor.m_opeBuf.DoUndo(&bIsModified))) {
 		nOpeBlkNum = pcOpeBlk->GetNum();
 		bool bDraw = (nOpeBlkNum < 5) && m_pCommanderView->GetDrawSwitch();
 		bool bDrawAll = false;
@@ -350,7 +350,7 @@ void ViewCommander::Command_UNDO(void)
 		}
 
 		const bool bFastMode = (100 < nOpeBlkNum);
-		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		for (int i=nOpeBlkNum-1; i>=0; --i) {
 			Ope* pcOpe = pcOpeBlk->GetOpe(i);
 			if (bFastMode) {
@@ -551,20 +551,20 @@ void ViewCommander::Command_REDO(void)
 	}
 
 	{
-		OpeBlk* opeBlk = m_pCommanderView->m_cCommander.GetOpeBlk();
+		OpeBlk* opeBlk = m_pCommanderView->m_commander.GetOpeBlk();
 		if (opeBlk) {
 			int nCount = opeBlk->GetRefCount();
 			opeBlk->SetRefCount(1); // 強制的にリセットするため1を指定
 			m_pCommanderView->SetUndoBuffer();
-			if (!m_pCommanderView->m_cCommander.GetOpeBlk() && 0 < nCount) {
-				m_pCommanderView->m_cCommander.SetOpeBlk(new OpeBlk());
-				m_pCommanderView->m_cCommander.GetOpeBlk()->SetRefCount(nCount);
+			if (!m_pCommanderView->m_commander.GetOpeBlk() && 0 < nCount) {
+				m_pCommanderView->m_commander.SetOpeBlk(new OpeBlk());
+				m_pCommanderView->m_commander.GetOpeBlk()->SetRefCount(nCount);
 			}
 		}
 		// 注意：Opeを追加するとRedoはできなくなる
 	}
 
-	auto& docEditor = GetDocument()->m_cDocEditor;
+	auto& docEditor = GetDocument()->m_docEditor;
 	if (!docEditor.IsEnableRedo()) {	// Redo(やり直し)可能な状態か？
 		return;
 	}
@@ -588,7 +588,7 @@ void ViewCommander::Command_REDO(void)
 
 	// 現在のRedo対象の操作ブロックを返す
 	auto& caret = GetCaret();
-	if ((pcOpeBlk = docEditor.m_cOpeBuf.DoRedo(&bIsModified))) {
+	if ((pcOpeBlk = docEditor.m_opeBuf.DoRedo(&bIsModified))) {
 		nOpeBlkNum = pcOpeBlk->GetNum();
 		bool bDraw = (nOpeBlkNum < 5) && m_pCommanderView->GetDrawSwitch();
 		bool bDrawAll = false;
@@ -602,7 +602,7 @@ void ViewCommander::Command_REDO(void)
 		}
 
 		const bool bFastMode = (100 < nOpeBlkNum);
-		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		for (int i=0; i<nOpeBlkNum; ++i) {
 			pcOpe = pcOpeBlk->GetOpe(i);
 			if (bFastMode) {
@@ -795,7 +795,7 @@ void ViewCommander::Command_DELETE(void)
 	}
 
 	if (!selInfo.IsTextSelected()) {	// テキストが選択されているか
-		auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+		auto& layoutMgr = GetDocument()->m_layoutMgr;
 		// 2008.08.03 nasukoji	選択範囲なしでDELETEを実行した場合、カーソル位置まで半角スペースを挿入した後改行を削除して次行と連結する
 		auto& caret = GetCaret();
 		if (layoutMgr.GetLineCount() > caret.GetCaretLayoutPos().GetY2()) {
@@ -847,7 +847,7 @@ void ViewCommander::Command_DELETE_BACK(void)
 	}
 
 	// May 29, 2004 genta 実際に削除された文字がないときはフラグをたてないように
-	//GetDocument()->m_cDocEditor.SetModified(true, true);	// Jan. 22, 2002 genta
+	//GetDocument()->m_docEditor.SetModified(true, true);	// Jan. 22, 2002 genta
 	if (selInfo.IsTextSelected()) {				// テキストが選択されているか
 		m_pCommanderView->DeleteData(true);
 	}else {
@@ -856,7 +856,7 @@ void ViewCommander::Command_DELETE_BACK(void)
 		LogicPoint		ptLogicPos_Old = caret.GetCaretLogicPos();
 		BOOL bBool = Command_LEFT(false, false);
 		if (bBool) {
-			const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
+			const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(caret.GetCaretLayoutPos().GetY2());
 			if (pcLayout) {
 				LayoutInt nLineLen;
 				LogicInt nIdx = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
@@ -891,7 +891,7 @@ void ViewCommander::DelCharForOverwrite(
 {
 	bool bEol = false;
 	bool bDelete = true;
-	const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = GetDocument()->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().GetY2());
 	int nDelLen = LogicInt(0);
 	LayoutInt nKetaDiff = LayoutInt(0);
 	LayoutInt nKetaAfterIns = LayoutInt(0);
@@ -901,14 +901,14 @@ void ViewCommander::DelCharForOverwrite(
 		if (nIdxTo >= pcLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
 			if (pcLayout->GetLayoutEol() != EolType::None) {
-				if (GetDllShareData().m_common.m_sEdit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
+				if (GetDllShareData().m_common.m_edit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
 					// 現在位置が改行ならば削除しない
 					bDelete = false;
 				}
 			}
 		}else {
 			// 文字幅に合わせてスペースを詰める
-			if (GetDllShareData().m_common.m_sEdit.m_bOverWriteFixMode) {
+			if (GetDllShareData().m_common.m_edit.m_bOverWriteFixMode) {
 				const StringRef line = pcLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
@@ -922,7 +922,7 @@ void ViewCommander::DelCharForOverwrite(
 						if (c != WCODE::TAB
 							&& !WCODE::IsLineDelimiter(
 								c,
-								GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
+								GetDllShareData().m_common.m_edit.m_bEnableExtEol
 							)
 						) {
 							nDelLen = 2;

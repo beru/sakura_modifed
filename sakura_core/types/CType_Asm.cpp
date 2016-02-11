@@ -55,7 +55,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pcFuncInfoArr)
 {
 	LogicInt nTotalLine;
 
-	nTotalLine = m_pcDocRef->m_docLineMgr.GetLineCount();
+	nTotalLine = m_pDocRef->m_docLineMgr.GetLineCount();
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<nTotalLine; ++nLineCount) {
 		const WCHAR* pLine;
@@ -68,7 +68,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pcFuncInfoArr)
 		WCHAR* p;
 
 		// 1行取得する。
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 
 		// 作業用にコピーを作成する。バイナリがあったらその後ろは知らない。
@@ -137,7 +137,7 @@ void DocOutline::MakeTopicList_asm(FuncInfoArr* pcFuncInfoArr)
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
 				LayoutPoint ptPos;
-				m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+				m_pDocRef->m_layoutMgr.LogicToLayout(
 					LogicPoint(0, nLineCount),
 					&ptPos
 				);

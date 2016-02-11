@@ -269,11 +269,11 @@ private:
 	// 2007.07.26 genta : PPAのネストを許容するために，別データ構造とする．
 	
 	struct PpaExecInfo {
-		NativeA		m_cMemRet;		// コールバックからDLLに渡す文字列を保持
-		EditView*		m_pcEditView;	// 2003.06.01 Moca
+		NativeA		m_memRet;		// コールバックからDLLに渡す文字列を保持
+		EditView*		m_pEditView;	// 2003.06.01 Moca
 		DLLSHAREDATA*	m_pShareData;	// 2003.06.01 Moca
 		bool			m_bError;		// エラーが2回表示されるのを防ぐ	2003.06.01 Moca
-		NativeA		m_cMemDebug;	// デバッグ用変数UserErrorMes 2003.06.01 Moca
+		NativeA		m_memDebug;	// デバッグ用変数UserErrorMes 2003.06.01 Moca
 		/** オプションフラグ
 		
 			EditView::HandleCommand()にコマンドと一緒に渡すことで

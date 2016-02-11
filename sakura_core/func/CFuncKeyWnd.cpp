@@ -53,7 +53,7 @@ FuncKeyWnd::FuncKeyWnd()
 	:
 	Wnd(_T("::FuncKeyWnd"))
 {
-	m_pcEditDoc = NULL;
+	m_pEditDoc = NULL;
 	// 共有データ構造体のアドレスを返す
 	m_pShareData = &GetDllShareData();
 	m_nCurrentKeyState = -1;
@@ -111,13 +111,13 @@ HWND FuncKeyWnd::Open(
 {
 	LPCTSTR pszClassName = _T("FuncKeyWnd");
 
-	m_pcEditDoc = pCEditDoc;
+	m_pEditDoc = pCEditDoc;
 	m_bSizeBox = bSizeBox;
 	m_hwndSizeBox = NULL;
 	m_nCurrentKeyState = -1;
 
 	// 2002.11.04 Moca 変更できるように
-	m_nButtonGroupNum = m_pShareData->m_common.m_sWindow.m_nFUNCKEYWND_GroupNum;
+	m_nButtonGroupNum = m_pShareData->m_common.m_window.m_nFUNCKEYWND_GroupNum;
 	if (m_nButtonGroupNum < 1 || 12 < m_nButtonGroupNum) {
 		m_nButtonGroupNum = 4;
 	}
@@ -283,7 +283,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		m_nTimerCount = TIMER_CHECKFUNCENABLE + 1;
 
 		// ファンクションキーの機能名を取得
-		auto& csKeyBind = m_pShareData->m_common.m_sKeyBind;
+		auto& csKeyBind = m_pShareData->m_common.m_keyBind;
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			// 2007.02.22 ryoji KeyBind::GetFuncCode()を使う
 			EFunctionCode nFuncCode = KeyBind::GetFuncCode(
@@ -297,7 +297,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					m_szFuncNameArr[i][0] = 0;
 				}else {
 					// Oct. 2, 2001 genta
-					m_pcEditDoc->m_cFuncLookup.Funccode2Name(
+					m_pEditDoc->m_funcLookup.Funccode2Name(
 						m_nFuncCodeArr[i],
 						m_szFuncNameArr[i],
 						_countof(m_szFuncNameArr[i]) - 1
@@ -316,7 +316,7 @@ LRESULT FuncKeyWnd::OnTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		for (int i=0; i<_countof(m_szFuncNameArr); ++i) {
 			::EnableWindow(
 				m_hwndButtonArr[i],
-				IsFuncEnable((EditDoc*)m_pcEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
+				IsFuncEnable((EditDoc*)m_pEditDoc, m_pShareData, m_nFuncCodeArr[i] ) ? TRUE : FALSE
 				);
 		}
 	}

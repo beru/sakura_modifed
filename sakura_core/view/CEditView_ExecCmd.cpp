@@ -114,7 +114,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 	DlgCancel cDlgCancel;
 	OutputAdapter* oaInst = NULL;
 
-	bool bEditable = m_pcEditDoc->IsEditable();
+	bool bEditable = m_pEditDoc->IsEditable();
 
 	//	From Here 2006.12.03 maru 引数を拡張のため
 	BOOL	bGetStdout		= nFlgOpt & 0x01 ? TRUE : FALSE;	//	子プロセスの標準出力を得る
@@ -274,7 +274,7 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 		GetSelectionInfo().SetSelectArea(
 			LayoutRange(
 				LayoutPoint(LayoutInt(0), LayoutInt(0)),
-				LayoutPoint(LayoutInt(0), m_pcEditDoc->m_cLayoutMgr.GetLineCount())
+				LayoutPoint(LayoutInt(0), m_pEditDoc->m_layoutMgr.GetLineCount())
 			)
 		);
 		DeleteData(true);

@@ -280,14 +280,14 @@ INT_PTR PropFileName::DispatchEvent(
 */
 void PropFileName::SetData(HWND hwndDlg)
 {
-	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, m_Common.m_sFileName.m_bTransformShortPath );
-	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, m_Common.m_sFileName.m_nTransformShortMaxWidth, FALSE );
+	::CheckDlgButtonBool( hwndDlg, IDC_CHECK_SHORTPATH, m_common.m_fileName.m_bTransformShortPath );
+	::SetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, m_common.m_fileName.m_nTransformShortMaxWidth, FALSE );
 
 	// ファイル名置換リスト
 	HWND hListView = ::GetDlgItem(hwndDlg, IDC_LIST_FNAME);
 	ListView_DeleteAllItems(hListView); // リストを空にする
 
-	auto& csFileName = m_Common.m_sFileName;
+	auto& csFileName = m_common.m_fileName;
 	// リストにデータをセット
 	int nIndex = 0;
 	for (int i=0; i<csFileName.m_nTransformFileNameArrNum; ++i) {
@@ -333,10 +333,10 @@ void PropFileName::SetData(HWND hwndDlg)
 
 int PropFileName::GetData(HWND hwndDlg)
 {
-	auto& csFileName = m_Common.m_sFileName;
+	auto& csFileName = m_common.m_fileName;
 
-	m_Common.m_sFileName.m_bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
-	m_Common.m_sFileName.m_nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
+	m_common.m_fileName.m_bTransformShortPath = ::IsDlgButtonCheckedBool( hwndDlg, IDC_CHECK_SHORTPATH );
+	m_common.m_fileName.m_nTransformShortMaxWidth = ::GetDlgItemInt( hwndDlg, IDC_EDIT_SHORTMAXWIDTH, NULL, FALSE );
 
 
 	// ファイル名置換リスト

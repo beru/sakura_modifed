@@ -89,7 +89,7 @@ bool EditView::TagJumpSub(
 	// カーソル位置変換
 	EditDoc* pDoc = GetDocument();
 	Caret& caret = GetCaret();
-	pDoc->m_cLayoutMgr.LayoutToLogic(
+	pDoc->m_layoutMgr.LayoutToLogic(
 		caret.GetCaretLayoutPos(),
 		&tagJump.point
 	);
@@ -179,7 +179,7 @@ bool EditView::OPEN_ExtFromtoExt(
 {
 	// 編集中ファイルの拡張子を調べる
 	for (int i=0; i<file_extno; ++i) {
-		if (CheckEXT(GetDocument()->m_cDocFile.GetFilePath(), file_ext[i])) {
+		if (CheckEXT(GetDocument()->m_docFile.GetFilePath(), file_ext[i])) {
 			goto open_c;
 		}
 	}
@@ -197,7 +197,7 @@ open_c:;
 	TCHAR	szExt[_MAX_EXT];
 	HWND	hwndOwner;
 
-	_tsplitpath(GetDocument()->m_cDocFile.GetFilePath(), szDrive, szDir, szFname, szExt);
+	_tsplitpath(GetDocument()->m_docFile.GetFilePath(), szDrive, szDir, szFname, szExt);
 
 	for (int i=0; i<open_extno; ++i) {
 		_tmakepath(szPath, szDrive, szDir, szFname, open_ext[i]);
@@ -222,7 +222,7 @@ open_c:;
 	}else {
 		// 文字コードはこのファイルに合わせる
 		LoadInfo sLoadInfo;
-		sLoadInfo.cFilePath = szPath;
+		sLoadInfo.filePath = szPath;
 		sLoadInfo.eCharCode = GetDocument()->GetDocumentEncoding();
 		sLoadInfo.bViewMode = false;
 		ControlTray::OpenNewEditor(
@@ -256,7 +256,7 @@ open_c:;
 	  →
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
-	GetDocument()->m_cLayoutMgr.LayoutToLogic(
+	GetDocument()->m_layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&tagJump.point
 	);
@@ -313,7 +313,7 @@ EditView::TOGGLE_WRAP_ACTION EditView::GetWrapMode(LayoutInt* _newKetas)
 		c)　└→ウィンドウ幅
 	*/
 	
-	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
+	auto& layoutMgr = GetDocument()->m_layoutMgr;
 	if (layoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum(GetTextArea().m_nViewColNum)) {
 		// a)
 		newKetas = LayoutInt(MAXLINEKETAS);
@@ -364,14 +364,14 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 {
 	bool bChangeState = false;
 
-	if (GetDllShareData().m_common.m_sSearch.m_bInheritKeyOtherView
-			&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence
+	if (GetDllShareData().m_common.m_search.m_bInheritKeyOtherView
+			&& m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
 		|| m_strCurSearchKey.size() == 0
 	) {
 		// 履歴の検索キーに更新
 		m_strCurSearchKey = GetDllShareData().m_searchKeywords.m_aSearchKeys[0];		// 検索文字列
-		m_curSearchOption = GetDllShareData().m_common.m_sSearch.m_searchOption;// 検索／置換  オプション
-		m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
+		m_curSearchOption = GetDllShareData().m_common.m_search.m_searchOption;// 検索／置換  オプション
+		m_nCurSearchKeySequence = GetDllShareData().m_common.m_search.m_nSearchKeySequence;
 		bChangeState = true;
 	}else if (m_bCurSearchUpdate) {
 		bChangeState = true;
@@ -388,7 +388,7 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 		if (bRedrawIfChanged) {
 			Redraw();
 		}
-		m_pEditWnd->m_cToolbar.AcceptSharedSearchKey();
+		m_pEditWnd->m_toolbar.AcceptSharedSearchKey();
 		return TRUE;
 	}
 	if (!m_bCurSrchKeyMark) {
@@ -418,7 +418,7 @@ void EditView::CopyCurLine(
 		return;
 	}
 
-	const Layout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
+	const Layout* pcLayout = m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(GetCaret().GetCaretLayoutPos().y);
 	if (!pcLayout) {
 		return;
 	}
@@ -462,7 +462,7 @@ void EditView::DrawBracketCursorLine(bool bDraw)
 
 HWND EditView::StartProgress()
 {
-	HWND hwndProgress = m_pEditWnd->m_cStatusBar.GetProgressHwnd();
+	HWND hwndProgress = m_pEditWnd->m_statusBar.GetProgressHwnd();
 	if (hwndProgress) {
 		::ShowWindow(hwndProgress, SW_SHOW);
 		Progress_SetRange(hwndProgress, 0, 101);

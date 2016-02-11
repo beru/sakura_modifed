@@ -36,7 +36,7 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 	case IDM_COPYDICINFO:
 		{
 			int nLength;
-			const TCHAR* pszStr = m_pCommanderView->m_cTipWnd.m_cInfo.GetStringPtr(&nLength);
+			const TCHAR* pszStr = m_pCommanderView->m_tipWnd.m_cInfo.GetStringPtr(&nLength);
 			std::vector<TCHAR> szWork(nLength + 1);
 			TCHAR* pszWork = &szWork[0];
 			auto_memcpy(pszWork, pszStr, nLength);
@@ -58,8 +58,8 @@ void ViewCommander::Command_MENU_RBUTTON(void)
 		if (m_pCommanderView->m_pTypeData->m_bUseKeyWordHelp) {		// キーワード辞書セレクトを使用する	// 2006.04.10 fon
 			// Feb. 17, 2007 genta 相対パスを実行ファイル基準で開くように
 			m_pCommanderView->TagJumpSub(
-				m_pCommanderView->m_pTypeData->m_KeyHelpArr[m_pCommanderView->m_cTipWnd.m_nSearchDict].m_szPath,
-				Point(1, m_pCommanderView->m_cTipWnd.m_nSearchLine),
+				m_pCommanderView->m_pTypeData->m_KeyHelpArr[m_pCommanderView->m_tipWnd.m_nSearchDict].m_szPath,
+				Point(1, m_pCommanderView->m_tipWnd.m_nSearchLine),
 				0,
 				true
 			);
@@ -82,12 +82,12 @@ int ViewCommander::Command_CUSTMENU(int nMenuIdx)
 	GetEditWindow()->GetMenuDrawer().ResetContents();
 
 	// Oct. 3, 2001 genta
-	FuncLookup& FuncLookup = GetDocument()->m_cFuncLookup;
+	FuncLookup& FuncLookup = GetDocument()->m_funcLookup;
 
 	if (nMenuIdx < 0 || MAX_CUSTOM_MENU <= nMenuIdx) {
 		return 0;
 	}
-	if (GetDllShareData().m_common.m_sCustomMenu.m_nCustMenuItemNumArr[nMenuIdx] == 0) {
+	if (GetDllShareData().m_common.m_customMenu.m_nCustMenuItemNumArr[nMenuIdx] == 0) {
 		return 0;
 	}
 	HMENU hMenu = ::CreatePopupMenu();

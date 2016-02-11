@@ -144,7 +144,7 @@ DlgTagJumpList::DlgTagJumpList(bool bDirectTagJump)
 	m_pszFileName(NULL),
 	m_pszKeyword(NULL),
 	m_nLoop(-1),
-	m_pcList(NULL),
+	m_pList(NULL),
 	m_nTimerId(0),
 	m_bTagJumpICase(FALSE),
 	m_bTagJumpAnyWhere(FALSE),
@@ -158,7 +158,7 @@ DlgTagJumpList::DlgTagJumpList(bool bDirectTagJump)
 	assert(_countof(anchorList) == _countof(m_rcItems));
 
 	// 2010.07.22 Moca ページング採用で 最大値を100→50に減らす
-	m_pcList = new SortedTagJumpList(50);
+	m_pList = new SortedTagJumpList(50);
 	m_psFindPrev = new TagFindState();
 	m_psFind0Match = new TagFindState();
 	m_ptDefaultSize.x = -1;
@@ -176,7 +176,7 @@ DlgTagJumpList::~DlgTagJumpList()
 	m_pszKeyword = NULL;
 
 	StopTimer();
-	SAFE_DELETE(m_pcList);
+	SAFE_DELETE(m_pList);
 	SAFE_DELETE(m_psFindPrev);
 	SAFE_DELETE(m_psFind0Match);
 }
@@ -219,7 +219,7 @@ void DlgTagJumpList::StartTimer(int nDelay = TAGJUMP_TIMER_DELAY)
 void DlgTagJumpList::Empty(void)
 {
 	m_nIndex = -1;
-	m_pcList->Empty();
+	m_pList->Empty();
 }
 
 /*
@@ -300,12 +300,12 @@ void DlgTagJumpList::UpdateData(bool bInit)
 	hwndList = GetItemHwnd(IDC_LIST_TAGJUMP);
 	ListView_DeleteAllItems(hwndList);
 
-	count = m_pcList->GetCount();
+	count = m_pList->GetCount();
 
 	TCHAR	tmp[32];
 	for (nIndex=0; nIndex<count; ++nIndex) {
 		SortedTagJumpList::TagJumpInfo* item;
-		item = m_pcList->GetPtr(nIndex);
+		item = m_pList->GetPtr(nIndex);
 		if (!item) break;
 
 		lvi.mask     = LVIF_TEXT;
@@ -337,11 +337,11 @@ void DlgTagJumpList::UpdateData(bool bInit)
 	const TCHAR* pszMsgText = NULL;
 
 	// 数が多すぎる場合は切り捨てた旨を末尾に挿入
-//	if (m_pcList->IsOverflow()) {
+//	if (m_pList->IsOverflow()) {
 		// 2010.04.03 「次」「前」ボタン追加して Overflowしなくなった
 //		pszMsgText = _T("(これ以降は切り捨てました)");
 //	}
-	if (!bInit && m_pcList->GetCount() == 0) {
+	if (!bInit && m_pList->GetCount() == 0) {
 		pszMsgText = LS(STR_DLGTAGJMP2);
 	}
 	if (pszMsgText) {
@@ -392,7 +392,7 @@ int DlgTagJumpList::GetData(void)
 		m_pShareData->m_tagJump.m_bTagJumpICase = m_bTagJumpICase;
 		m_pShareData->m_tagJump.m_bTagJumpAnyWhere = m_bTagJumpAnyWhere;
 		// 2010.07.22 候補が空でもジャンプで閉じたときは、オプションを保存する
-		if (m_nIndex == -1 || m_nIndex >= m_pcList->GetCapacity()) {
+		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCapacity()) {
 			return FALSE;
 		}
 		wchar_t	tmp[MAX_TAG_STRING_LENGTH];
@@ -406,7 +406,7 @@ int DlgTagJumpList::GetData(void)
 		cRecentTagJumpKeyword.Terminate();
 	}
 	// To Here 2005.04.03 MIK
-	if (m_nIndex == -1 || m_nIndex >= m_pcList->GetCapacity()) return FALSE;
+	if (m_nIndex == -1 || m_nIndex >= m_pList->GetCapacity()) return FALSE;
 
 	return TRUE;
 }
@@ -441,7 +441,7 @@ BOOL DlgTagJumpList::OnInitDialog(
 		GetItemClientRect(anchorList[i].id, m_rcItems[i]);
 	}
 
-	RECT rcDialog = GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog;
+	RECT rcDialog = GetDllShareData().m_common.m_others.m_rcTagJumpDialog;
 	if (0
 		|| rcDialog.left != 0
 		|| rcDialog.bottom != 0
@@ -527,7 +527,7 @@ BOOL DlgTagJumpList::OnInitDialog(
 	}
 
 	m_comboDel = ComboBoxItemDeleter();
-	m_comboDel.pRecent = &m_cRecentKeyword;
+	m_comboDel.pRecent = &m_recentKeyword;
 	SetComboBoxDeleter(hwndKey, &m_comboDel);
 
 	// 基底クラスメンバ
@@ -568,12 +568,12 @@ BOOL DlgTagJumpList::OnBnClicked(int wID)
 	// To Here 2005.04.03 MIK 検索条件設定
 
 	case IDC_BUTTON_NEXTTAG:
-		m_nTop += m_pcList->GetCapacity();
+		m_nTop += m_pList->GetCapacity();
 		StopTimer();
 		FindNext(false);
 		return TRUE;
 	case IDC_BUTTON_PREVTAG:
-		m_nTop = t_max(0, m_nTop - m_pcList->GetCapacity());
+		m_nTop = t_max(0, m_nTop - m_pList->GetCapacity());
 		StopTimer();
 		FindNext(false);
 		return TRUE;
@@ -606,7 +606,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
 
-	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcTagJumpDialog);
 
 	RECT  rc;
 	POINT ptNew;
@@ -624,7 +624,7 @@ BOOL DlgTagJumpList::OnSize(WPARAM wParam, LPARAM lParam)
 
 BOOL DlgTagJumpList::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	GetWindowRect(&GetDllShareData().m_common.m_sOthers.m_rcTagJumpDialog);
+	GetWindowRect(&GetDllShareData().m_common.m_others.m_rcTagJumpDialog);
 
 	return Dialog::OnMove(wParam, lParam);
 }
@@ -728,7 +728,7 @@ bool DlgTagJumpList::AddParamA(
 
 	ClearPrevFindInfo();
 	m_bNextItem = false;
-	m_pcList->AddParamA(s0, s1, n2, s3[0], s4, depth, fileBase);
+	m_pList->AddParamA(s0, s1, n2, s3[0], s4, depth, fileBase);
 
 	return true;
 }
@@ -741,8 +741,8 @@ bool DlgTagJumpList::GetSelectedFullPathAndLine(
 	int* depth
 	)
 {
-	if (m_pcList->GetCount() != 1) {
-		if (m_nIndex == -1 || m_nIndex >= m_pcList->GetCount()) return false;
+	if (m_pList->GetCount() != 1) {
+		if (m_nIndex == -1 || m_nIndex >= m_pList->GetCount()) return false;
 	}else {
 		m_nIndex = 0;
 	}
@@ -769,7 +769,7 @@ bool DlgTagJumpList::GetFullPathAndLine(
 	SplitPath_FolderAndFile(GetFilePath(), path, NULL);
 	AddLastYenFromDirectoryPath(path);
 	
-	m_pcList->GetParam(index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName);
+	m_pList->GetParam(index, NULL, fileName, lineNum, NULL, NULL, &tempDepth, dirFileName);
 	if (depth) {
 		*depth = tempDepth;
 	}
@@ -898,7 +898,7 @@ typedef struct tagTagPathInfo {
 */
 int DlgTagJumpList::SearchBestTag(void)
 {
-	if (m_pcList->GetCount() <= 0) return -1;	// 選べません。
+	if (m_pList->GetCount() <= 0) return -1;	// 選べません。
 	if (!m_pszFileName) return 0;
 
 	auto lpPathInfo = std::make_unique<TagPathInfo>();
@@ -922,7 +922,7 @@ int DlgTagJumpList::SearchBestTag(void)
 	lpPathInfo->nFileSrc = _tcslen(lpPathInfo->szFileSrc);
 	lpPathInfo->nExtSrc = _tcslen(lpPathInfo->szExtSrc);
 
-	count = m_pcList->GetCount();
+	count = m_pList->GetCount();
 
 	for (i=0; i<count; ++i) {
 		// タグのファイル名部分をフルパスにする
@@ -1060,7 +1060,7 @@ int DlgTagJumpList::FindDirectTagJump()
 		true,  // 完全一致
 		false, // 大小を区別
 		true,  // 自動モード
-		m_pShareData->m_common.m_sSearch.m_nTagJumpMode
+		m_pShareData->m_common.m_search.m_nTagJumpMode
 	);
 }
 
@@ -1076,7 +1076,7 @@ void DlgTagJumpList::find_key(const wchar_t* keyword)
 		FALSE != m_bTagJumpExactMatch,
 		FALSE != m_bTagJumpICase,
 		IsDirectTagJump(),
-		IsDirectTagJump() ? (m_pShareData->m_common.m_sSearch.m_nTagJumpMode) : m_pShareData->m_common.m_sSearch.m_nTagJumpModeKeyword
+		IsDirectTagJump() ? (m_pShareData->m_common.m_search.m_nTagJumpMode) : m_pShareData->m_common.m_search.m_nTagJumpModeKeyword
 	);
 	SetItemText(IDC_STATIC_KEYWORD, LS(STR_DLGTAGJMP_LIST1));
 	::UpdateWindow(GetItemHwnd(IDC_STATIC_KEYWORD));
@@ -1123,7 +1123,7 @@ int DlgTagJumpList::find_key_core(
 		ClearPrevFindInfo();
 		return -1;
 	}
-	SortedTagJumpList& cList = *m_pcList;
+	SortedTagJumpList& cList = *m_pList;
 	const int nCap = cList.GetCapacity();
 	TagFindState state;
 	state.m_nDepth    = 0;

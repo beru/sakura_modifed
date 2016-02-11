@@ -47,23 +47,23 @@ bool DocLine::IsEmptyLine() const
 
 void DocLine::SetEol()
 {
-	const wchar_t* pData = m_cLine.GetStringPtr();
-	int nLength = m_cLine.GetStringLength();
+	const wchar_t* pData = m_line.GetStringPtr();
+	int nLength = m_line.GetStringLength();
 	// 改行コード設定
 	const wchar_t* p = &pData[nLength] - 1;
-	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) --p;
+	while (p >= pData && WCODE::IsLineDelimiter(*p, GetDllShareData().m_common.m_edit.m_bEnableExtEol)) --p;
 	++p;
 	if (p >= pData) {
-		m_cEol.SetTypeByString(p, &pData[nLength] - p);
+		m_eol.SetTypeByString(p, &pData[nLength] - p);
 	}else {
-		m_cEol = EolType::None;
+		m_eol = EolType::None;
 	}
 }
 
 
 void DocLine::SetDocLineString(const wchar_t* pData, int nLength)
 {
-	m_cLine.SetString(pData, nLength);
+	m_line.SetString(pData, nLength);
 	SetEol();
 }
 
@@ -74,19 +74,19 @@ void DocLine::SetDocLineString(const NativeW& cData)
 
 void DocLine::SetDocLineStringMove(NativeW* pcDataFrom)
 {
-	m_cLine.swap(*pcDataFrom);
+	m_line.swap(*pcDataFrom);
 	SetEol();
 }
 
 void DocLine::SetEol(const Eol& cEol, OpeBlk* pcOpeBlk)
 {
 	// 改行コードを削除
-	for (int i=0; i<(Int)m_cEol.GetLen(); ++i) {
-		m_cLine.Chop();
+	for (int i=0; i<(Int)m_eol.GetLen(); ++i) {
+		m_line.Chop();
 	}
 
 	// 改行コードを挿入
-	m_cEol = cEol;
-	m_cLine += cEol.GetValue2();
+	m_eol = cEol;
+	m_line += cEol.GetValue2();
 }
 

@@ -6,8 +6,8 @@
 #include "extmodule/CBregexp.h"
 
 
-bool BookmarkGetter::IsBookmarked() const { return m_pcDocLine->m_sMark.m_cBookmarked; }
-void BookmarkSetter::SetBookmark(bool bFlag) { m_pcDocLine->m_sMark.m_cBookmarked = bFlag; }
+bool BookmarkGetter::IsBookmarked() const { return m_pDocLine->m_mark.m_bookmarked; }
+void BookmarkSetter::SetBookmark(bool bFlag) { m_pDocLine->m_mark.m_bookmarked = bFlag; }
 
 // ブックマークの全解除
 /*
@@ -15,7 +15,7 @@ void BookmarkSetter::SetBookmark(bool bFlag) { m_pcDocLine->m_sMark.m_cBookmarke
 */
 void BookmarkManager::ResetAllBookMark(void)
 {
-	DocLine* pDocLine = m_pcDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = m_pDocLineMgr->GetDocLineTop();
 	while (pDocLine) {
 		BookmarkSetter(pDocLine).SetBookmark(false);
 		pDocLine = pDocLine->GetNextLine();
@@ -38,7 +38,7 @@ bool BookmarkManager::SearchBookMark(
 	// 前方検索
 	if (bPrevOrNext == SearchDirection::Backward) {
 		--nLinePos;
-		DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
 			if (BookmarkGetter(pDocLine).IsBookmarked()) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -50,7 +50,7 @@ bool BookmarkManager::SearchBookMark(
 	// 後方検索
 	}else {
 		++nLinePos;
-		DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 		while (pDocLine) {
 			if (BookmarkGetter(pDocLine).IsBookmarked()) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -102,7 +102,7 @@ void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 				}
 				if (bSeparete) {
 					nLineNum += nLineTemp;
-					pCDocLine = m_pcDocLineMgr->GetLine(LogicInt(nLineNum));
+					pCDocLine = m_pDocLineMgr->GetLine(LogicInt(nLineNum));
 					if (pCDocLine) {
 						BookmarkSetter(pCDocLine).SetBookmark(true);
 					}
@@ -120,7 +120,7 @@ void BookmarkManager::SetBookMarks(wchar_t* pMarkLines)
 		// 旧形式 行番号,区切り
 		while (wcstok(p, delim)) {
 			while (wcschr(delim, *p)) ++p;
-			pCDocLine = m_pcDocLineMgr->GetLine(LogicInt(_wtol(p)));
+			pCDocLine = m_pDocLineMgr->GetLine(LogicInt(_wtol(p)));
 			if (pCDocLine) {
 				BookmarkSetter(pCDocLine).SetBookmark(true);
 			}
@@ -143,7 +143,7 @@ LPCWSTR BookmarkManager::GetBookMarks()
 	LogicInt nLinePos = LogicInt(0);
 	LogicInt nLinePosOld = LogicInt(-1);
 	int nTextLen = 2;
-	DocLine* pCDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+	DocLine* pCDocLine = m_pDocLineMgr->GetLine(nLinePos);
 	wcscpy(szText, L":0");
 	while (pCDocLine) {
 		if (BookmarkGetter(pCDocLine).IsBookmarked()) {
@@ -209,7 +209,7 @@ void BookmarkManager::MarkSearchWord(
 	// 1 == 正規表現
 	if (searchOption.bRegularExp) {
 		Bregexp* pRegexp = pattern.GetRegexp();
-		DocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {
 			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
@@ -227,7 +227,7 @@ void BookmarkManager::MarkSearchWord(
 		// 検索語を単語に分割して searchWordsに格納する。
 		std::vector<std::pair<const wchar_t*, LogicInt> > searchWords; // 単語の開始位置と長さの配列。
 		SearchAgent::CreateWordList(searchWords, pszPattern, nPatternLen);
-		DocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {
 			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
@@ -241,7 +241,7 @@ void BookmarkManager::MarkSearchWord(
 		}
 	}else {
 		// 検索条件の情報
-		DocLine* pDocLine = m_pcDocLineMgr->GetLine(LogicInt(0));
+		DocLine* pDocLine = m_pDocLineMgr->GetLine(LogicInt(0));
 		while (pDocLine) {
 			if (!BookmarkGetter(pDocLine).IsBookmarked()) {
 				const wchar_t* pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);

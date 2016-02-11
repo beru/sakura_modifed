@@ -37,11 +37,11 @@
 
 bool LoadInfo::IsSamePath(LPCTSTR pszPath) const
 {
-	return _tcsicmp(this->cFilePath, pszPath) == 0;
+	return _tcsicmp(this->filePath, pszPath) == 0;
 }
 bool SaveInfo::IsSamePath(LPCTSTR pszPath) const
 {
-	return _tcsicmp(this->cFilePath, pszPath) == 0;
+	return _tcsicmp(this->filePath, pszPath) == 0;
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -127,13 +127,13 @@ DEF_NOTIFY(BeforeClose)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // (多)
 
-DocListener::DocListener(DocSubject* pcDoc)
+DocListener::DocListener(DocSubject* pDoc)
 {
-	if (!pcDoc) {
-		pcDoc = EditDoc::GetInstance(0); //$$ インチキ
+	if (!pDoc) {
+		pDoc = EditDoc::GetInstance(0); //$$ インチキ
 	}
-	assert(pcDoc);
-	Listen(pcDoc);
+	assert(pDoc);
+	Listen(pDoc);
 }
 
 DocListener::~DocListener()

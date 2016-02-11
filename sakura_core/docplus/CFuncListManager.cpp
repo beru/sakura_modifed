@@ -28,17 +28,17 @@
 #include "doc/logic/CDocLine.h"
 
 
-bool FuncListManager::IsLineFuncList(const DocLine* pcDocLine, bool bFlag) const
+bool FuncListManager::IsLineFuncList(const DocLine* pDocLine, bool bFlag) const
 {
-	return pcDocLine->m_sMark.m_cFuncList.GetFuncListMark() != bFlag;
+	return pDocLine->m_mark.m_funcList.GetFuncListMark() != bFlag;
 }
-bool FuncListManager::GetLineFuncList(const DocLine* pcDocLine) const
+bool FuncListManager::GetLineFuncList(const DocLine* pDocLine) const
 {
-	return pcDocLine->m_sMark.m_cFuncList.GetFuncListMark();
+	return pDocLine->m_mark.m_funcList.GetFuncListMark();
 }
-void FuncListManager::SetLineFuncList(DocLine* pcDocLine, bool bFlag)
+void FuncListManager::SetLineFuncList(DocLine* pDocLine, bool bFlag)
 {
-	pcDocLine->m_sMark.m_cFuncList = bFlag;
+	pDocLine->m_mark.m_funcList = bFlag;
 }
 
 /*! 差分検索
@@ -46,9 +46,9 @@ void FuncListManager::SetLineFuncList(DocLine* pcDocLine, bool bFlag)
 	@date	2002.05.25
 */
 bool FuncListManager::SearchFuncListMark(
-	const DocLineMgr*	pcDocLineMgr,
+	const DocLineMgr*	pDocLineMgr,
 	LogicInt			nLineNum,		//!< 検索開始行
-	SearchDirection	bPrevOrNext,
+	SearchDirection		bPrevOrNext,
 	LogicInt*			pnLineNum 		//!< マッチ行
 	) const
 {
@@ -57,7 +57,7 @@ bool FuncListManager::SearchFuncListMark(
 	if (bPrevOrNext == SearchDirection::Backward) {
 		// 後方検索(↑)
 		--nLinePos;
-		const DocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
+		const DocLine*	pDocLine = pDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -69,7 +69,7 @@ bool FuncListManager::SearchFuncListMark(
 	}else {
 		// 前方検索(↓)
 		++nLinePos;
-		const DocLine*	pDocLine = pcDocLineMgr->GetLine( nLinePos );
+		const DocLine*	pDocLine = pDocLineMgr->GetLine( nLinePos );
 		while (pDocLine) {
 			if (GetLineFuncList(pDocLine)) {
 				*pnLineNum = nLinePos;				// マッチ行
@@ -83,9 +83,9 @@ bool FuncListManager::SearchFuncListMark(
 }
 
 // 関数リストマークをすべてリセット
-void FuncListManager::ResetAllFucListMark(DocLineMgr* pcDocLineMgr, bool bFlag)
+void FuncListManager::ResetAllFucListMark(DocLineMgr* pDocLineMgr, bool bFlag)
 {
-	DocLine* pDocLine = pcDocLineMgr->GetDocLineTop();
+	DocLine* pDocLine = pDocLineMgr->GetDocLineTop();
 	while (pDocLine) {
 		DocLine* pDocLineNext = pDocLine->GetNextLine();
 		SetLineFuncList(pDocLine, bFlag);

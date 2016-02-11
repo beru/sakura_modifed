@@ -264,21 +264,21 @@ public:
 	//                       各種アクセサ                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	HWND			GetHwnd() const			{ return m_hWnd; }
-	MenuDrawer&	GetMenuDrawer()			{ return m_cMenuDrawer; }
-	EditDoc*		GetDocument()			{ return m_pcEditDoc; }
-	const EditDoc*	GetDocument() const		{ return m_pcEditDoc; }
+	MenuDrawer&	GetMenuDrawer()			{ return m_menuDrawer; }
+	EditDoc*		GetDocument()			{ return m_pEditDoc; }
+	const EditDoc*	GetDocument() const		{ return m_pEditDoc; }
 
 	// ビュー
-	const EditView&	GetActiveView() const		{ return *m_pcEditView; }
-	EditView&			GetActiveView()				{ return *m_pcEditView; }
-	const EditView&	GetView(int n) const		{ return *m_pcEditViewArr[n]; }
-	EditView&			GetView(int n)				{ return *m_pcEditViewArr[n]; }
-	EditView&          GetMiniMap()       { return *m_pcEditViewMiniMap; }
+	const EditView&	GetActiveView() const		{ return *m_pEditView; }
+	EditView&			GetActiveView()				{ return *m_pEditView; }
+	const EditView&	GetView(int n) const		{ return *m_pEditViewArr[n]; }
+	EditView&			GetView(int n)				{ return *m_pEditViewArr[n]; }
+	EditView&          GetMiniMap()       { return *m_pEditViewMiniMap; }
 	bool				IsEnablePane(int n) const	{ return 0 <= n && n < m_nEditViewCount; }
 	int					GetAllViewCount() const		{ return m_nEditViewCount; }
 
-	EditView*			GetDragSourceView() const	{ return m_pcDragSourceView; }
-	void				SetDragSourceView(EditView* pcDragSourceView)	{ m_pcDragSourceView = pcDragSourceView; }
+	EditView*			GetDragSourceView() const	{ return m_pDragSourceView; }
+	void				SetDragSourceView(EditView* pcDragSourceView)	{ m_pDragSourceView = pcDragSourceView; }
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         実装補助                            //
@@ -349,33 +349,33 @@ private:
 
 public:
 	// 子ウィンドウ
-	MainToolBar	m_cToolbar;			//!< ツールバー
-	TabWnd			m_cTabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
-	FuncKeyWnd		m_cFuncKeyWnd;		//!< ファンクションバー
-	MainStatusBar	m_cStatusBar;		//!< ステータスバー
+	MainToolBar		m_toolbar;			//!< ツールバー
+	TabWnd			m_tabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
+	FuncKeyWnd		m_funcKeyWnd;		//!< ファンクションバー
+	MainStatusBar	m_statusBar;		//!< ステータスバー
 	PrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
 
-	SplitterWnd	m_cSplitterWnd;		//!< 分割フレーム
-	EditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
-	ViewFont*		m_pcViewFont;		//!< フォント
-	ViewFont*		m_pcViewFontMiniMap;		//!< フォント
+	SplitterWnd		m_splitterWnd;		//!< 分割フレーム
+	EditView*		m_pDragSourceView;	//!< ドラッグ元のビュー
+	ViewFont*		m_pViewFont;		//!< フォント
+	ViewFont*		m_pViewFontMiniMap;		//!< フォント
 
 	// ダイアログ達
-	DlgFind		m_cDlgFind;			//「検索」ダイアログ
-	DlgReplace		m_cDlgReplace;		//「置換」ダイアログ
-	DlgJump		m_cDlgJump;			//「指定行へジャンプ」ダイアログ
-	DlgGrep		m_cDlgGrep;			// Grepダイアログ
-	DlgGrepReplace	m_cDlgGrepReplace;	// Grep置換ダイアログ
-	DlgFuncList	m_cDlgFuncList;		// アウトライン解析結果ダイアログ
-	HokanMgr		m_cHokanMgr;		// 入力補完
-	DlgSetCharSet	m_cDlgSetCharSet;	//「文字コードセット設定」ダイアログ
+	DlgFind			m_dlgFind;			//「検索」ダイアログ
+	DlgReplace		m_dlgReplace;		//「置換」ダイアログ
+	DlgJump			m_dlgJump;			//「指定行へジャンプ」ダイアログ
+	DlgGrep			m_dlgGrep;			// Grepダイアログ
+	DlgGrepReplace	m_dlgGrepReplace;	// Grep置換ダイアログ
+	DlgFuncList		m_dlgFuncList;		// アウトライン解析結果ダイアログ
+	HokanMgr		m_hokanMgr;		// 入力補完
+	DlgSetCharSet	m_dlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
 private:
 	// 2010.04.10 Moca  public -> private. 起動直後は[0]のみ有効 4つとは限らないので注意
-	EditDoc* 		m_pcEditDoc;
-	EditView*		m_pcEditViewArr[4];		//!< ビュー
-	EditView*		m_pcEditView;			//!< 有効なビュー
-	EditView*		m_pcEditViewMiniMap;	//!< ミニマップ
+	EditDoc* 		m_pEditDoc;
+	EditView*		m_pEditViewArr[4];		//!< ビュー
+	EditView*		m_pEditView;			//!< 有効なビュー
+	EditView*		m_pEditViewMiniMap;	//!< ミニマップ
 	int				m_nActivePaneIndex;		//!< 有効なビューのindex
 	int				m_nEditViewCount;		//!< 有効なビューの数
 	const int		m_nEditViewMaxCount;	//!< ビューの最大数=4
@@ -384,7 +384,7 @@ private:
 	DLLSHAREDATA*	m_pShareData;
 
 	// ヘルパ
-	MenuDrawer		m_cMenuDrawer;
+	MenuDrawer		m_menuDrawer;
 
 	// メッセージID
 	UINT			m_uMSIMEReconvertMsg;
@@ -412,12 +412,12 @@ private:
 
 	// D&Dフラグ
 	bool			m_bDragMode;
-	Point		m_ptDragPosOrg;
-	DropTarget*	m_pcDropTarget;
+	Point			m_ptDragPosOrg;
+	DropTarget*		m_pDropTarget;
 
 	// その他フラグ
-	BOOL				m_bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
-	IconClickStatus	m_IconClicked;
+	BOOL			m_bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
+	IconClickStatus	m_iconClicked;
 
 public:
 	SelectCountMode	m_nSelectCountMode; // 選択文字カウント方法

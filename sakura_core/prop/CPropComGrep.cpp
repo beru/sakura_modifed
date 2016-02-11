@@ -140,7 +140,7 @@ struct tagTagJumpMode{
 // ダイアログデータの設定
 void PropGrep::SetData(HWND hwndDlg)
 {
-	auto& csSearch = m_Common.m_sSearch;
+	auto& csSearch = m_common.m_search;
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	::CheckDlgButton(hwndDlg, IDC_CHECK_bCaretTextForSearch, csSearch.m_bCaretTextForSearch);
 
@@ -176,7 +176,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(TagJumpMode1Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TagJumpMode1Arr[i].m_nNameID));
 		Combo_SetItemData(hwndCombo, i, TagJumpMode1Arr[i].m_nMethod);
-		if (TagJumpMode1Arr[i].m_nMethod == m_Common.m_sSearch.m_nTagJumpMode) {
+		if (TagJumpMode1Arr[i].m_nMethod == m_common.m_search.m_nTagJumpMode) {
 			nSelPos = i;
 		}
 	}
@@ -194,7 +194,7 @@ void PropGrep::SetData(HWND hwndDlg)
 	for (int i=0; i<_countof(TagJumpMode2Arr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TagJumpMode2Arr[i].m_nNameID));
 		Combo_SetItemData(hwndCombo, i, TagJumpMode2Arr[i].m_nMethod);
-		if (TagJumpMode2Arr[i].m_nMethod == m_Common.m_sSearch.m_nTagJumpModeKeyword) {
+		if (TagJumpMode2Arr[i].m_nMethod == m_common.m_search.m_nTagJumpModeKeyword) {
 			nSelPos = i;
 		}
 	}
@@ -207,7 +207,7 @@ void PropGrep::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropGrep::GetData(HWND hwndDlg)
 {
-	auto& csSearch = m_Common.m_sSearch;
+	auto& csSearch = m_common.m_search;
 
 	// 2006.08.23 ryoji カーソル位置の文字列をデフォルトの検索文字列にする
 	csSearch.m_bCaretTextForSearch = DlgButton_IsChecked(hwndDlg, IDC_CHECK_bCaretTextForSearch);
@@ -231,11 +231,11 @@ int PropGrep::GetData(HWND hwndDlg)
 
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_TAGJUMP);
 	int nSelPos = Combo_GetCurSel(hwndCombo);
-	m_Common.m_sSearch.m_nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
+	m_common.m_search.m_nTagJumpMode = Combo_GetItemData(hwndCombo, nSelPos);
 	
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_KEYWORD_TAGJUMP);
 	nSelPos = Combo_GetCurSel(hwndCombo);
-	m_Common.m_sSearch.m_nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
+	m_common.m_search.m_nTagJumpModeKeyword = Combo_GetItemData(hwndCombo, nSelPos);
 
 	return TRUE;
 }

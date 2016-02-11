@@ -40,7 +40,7 @@ public:
 		m_ptDrawLayout.y = LayoutInt(0);
 		m_nLineRef = LayoutInt(0);
 		// キャッシュ
-		m_pcLayoutRef = EditDoc::GetInstance(0)->m_cLayoutMgr.GetTopLayout();
+		m_pLayoutRef = EditDoc::GetInstance(0)->m_layoutMgr.GetTopLayout();
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -79,13 +79,13 @@ public:
 	void SetLayoutLineRef(LayoutInt nOffsetLine) {
 		m_nLineRef = nOffsetLine;
 		// キャッシュ更新
-		m_pcLayoutRef = EditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(m_nLineRef);
+		m_pLayoutRef = EditDoc::GetInstance(0)->m_layoutMgr.SearchLineByLayoutY(m_nLineRef);
 	}
 	void ForwardLayoutLineRef(int nOffsetLine);
 
 	// 取得
 	LayoutInt		GetLayoutLineRef() const { return m_nLineRef; }
-	const Layout*	GetLayoutRef() const { return m_pcLayoutRef; }
+	const Layout*	GetLayoutRef() const { return m_pLayoutRef; }
 
 private:
 	// 固定要素
@@ -94,12 +94,12 @@ private:
 	POINT			m_ptDrawOrigin;	// 描画位置基準。単位はピクセル。固定。
 
 	// 描画位置
-	LayoutPoint	m_ptDrawLayout; // 描画位置。相対レイアウト単位。
+	LayoutPoint		m_ptDrawLayout; // 描画位置。相対レイアウト単位。
 
 	// テキスト参照位置
 	LayoutInt		m_nLineRef;		// 絶対レイアウト単位。
 
 	// キャッシュ############
-	const Layout*		m_pcLayoutRef;
+	const Layout*	m_pLayoutRef;
 };
 

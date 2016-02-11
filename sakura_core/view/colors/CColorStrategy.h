@@ -90,7 +90,7 @@ struct Color3Setting {
 struct ColorStrategyInfo {
 	ColorStrategyInfo()
 		:
-		m_sDispPosBegin(0, 0),
+		m_dispPosBegin(0, 0),
 		m_pStrategy(NULL),
 		m_pStrategyFound(NULL),
 		m_pStrategySelect(NULL),
@@ -102,7 +102,7 @@ struct ColorStrategyInfo {
 	}
 
 	// 参照
-	EditView*	m_pcView;
+	EditView*	m_pView;
 	Graphics	m_gr;	// (SColorInfoでは未使用)
 
 	// スキャン位置
@@ -111,7 +111,7 @@ struct ColorStrategyInfo {
 
 	// 描画位置
 	DispPos*		m_pDispPos;
-	DispPos			m_sDispPosBegin;
+	DispPos			m_dispPosBegin;
 
 	// 色変え
 	ColorStrategy*		m_pStrategy;
@@ -121,7 +121,7 @@ struct ColorStrategyInfo {
 	Color3Setting		m_cIndex;
 
 	// 色の切り替え
-	bool CheckChangeColor(const StringRef& cLineStr);
+	bool CheckChangeColor(const StringRef& lineStr);
 	void DoChangeColor(Color3Setting *pcColor);
 	EColorIndexType GetCurrentColor() const { return m_cIndex.eColorIndex; }
 	EColorIndexType GetCurrentColor2() const { return m_cIndex.eColorIndex2; }
@@ -162,7 +162,7 @@ public:
 	// 設定更新
 	virtual void Update(void) {
 		const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
-		m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
+		m_pTypeData = &pCEditDoc->m_docType.GetDocumentAttribute();
 	}
 
 	//#######ラップ
@@ -211,15 +211,15 @@ public:
 	*/
 	//@@@ 2002.09.22 YAZAKI
 	// 2005.11.21 Moca 引用符の色分け情報を引数から除去
-	void CheckColorMODE(ColorStrategy** ppcColorStrategy, int nPos, const StringRef& cLineStr);
+	void CheckColorMODE(ColorStrategy** ppcColorStrategy, int nPos, const StringRef& lineStr);
 	bool IsSkipBeforeLayout();	// レイアウトが行頭からチェックしなくていいか判定
 
 	// 設定変更
 	void OnChangeSetting(void);
 
 	// ビューの設定・取得
-	EditView* GetCurrentView(void) const { return m_pcView; }
-	void SetCurrentView(EditView* pcView) { m_pcView = pcView; }
+	EditView* GetCurrentView(void) const { return m_pView; }
+	void SetCurrentView(EditView* pcView) { m_pView = pcView; }
 
 private:
 	std::vector<ColorStrategy*>	m_vStrategies;
@@ -228,13 +228,13 @@ private:
 	Color_Select*					m_pcSelectStrategy;
 
 	Color_LineComment*				m_pcLineComment;
-	Color_BlockComment*			m_pcBlockComment1;
-	Color_BlockComment*			m_pcBlockComment2;
+	Color_BlockComment*				m_pcBlockComment1;
+	Color_BlockComment*				m_pcBlockComment2;
 	Color_SingleQuote*				m_pcSingleQuote;
 	Color_DoubleQuote*				m_pcDoubleQuote;
 	Color_Heredoc*					m_pcHeredoc;
 
-	EditView*						m_pcView;
+	EditView*						m_pView;
 
 	bool	m_bSkipBeforeLayoutGeneral;
 	bool	m_bSkipBeforeLayoutFound;

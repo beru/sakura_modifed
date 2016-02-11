@@ -117,7 +117,7 @@ public:
 	);
 
 public:
-	SearchAgent(DocLineMgr* pcDocLineMgr) : m_pcDocLineMgr(pcDocLineMgr) { }
+	SearchAgent(DocLineMgr* pcDocLineMgr) : m_pDocLineMgr(pcDocLineMgr) { }
 
 	bool WhereCurrentWord(LogicInt , LogicInt , LogicInt* , LogicInt*, NativeW*, NativeW*);	// Œ»İˆÊ’u‚Ì’PŒê‚Ì”ÍˆÍ‚ğ’²‚×‚é
 
@@ -127,6 +127,6 @@ public:
 
 	void ReplaceData(DocLineReplaceArg*);
 private:
-	DocLineMgr* m_pcDocLineMgr;
+	DocLineMgr* m_pDocLineMgr;
 };
 

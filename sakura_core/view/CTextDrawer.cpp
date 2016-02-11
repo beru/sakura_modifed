@@ -175,7 +175,7 @@ void TextDrawer::DispVerticalLines(
 {
 	const EditView* pView = m_pEditView;
 	
-	const TypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig& typeData = pView->m_pEditDoc->m_docType.GetDocumentAttribute();
 	
 	TypeSupport cVertType(pView, COLORIDX_VERTLINE);
 	TypeSupport cTextType(pView, COLORIDX_TEXT);
@@ -186,12 +186,12 @@ void TextDrawer::DispVerticalLines(
 	
 	nLeftCol = t_max(pView->GetTextArea().GetViewLeftCol(), nLeftCol);
 	
-	const LayoutInt nWrapKetas  = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
+	const LayoutInt nWrapKetas  = pView->m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
 	const int nCharDx  = pView->GetTextMetrics().GetHankakuDx();
 	if (nRightCol < 0) {
 		nRightCol = nWrapKetas;
 	}
-	const int nPosXOffset = GetDllShareData().m_common.m_sWindow.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
+	const int nPosXOffset = GetDllShareData().m_common.m_window.m_nVertLineOffset + pView->GetTextArea().GetAreaLeft();
 	const int nPosXLeft   = t_max(pView->GetTextArea().GetAreaLeft() + (Int)(nLeftCol  - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaLeft());
 	const int nPosXRight  = t_min(pView->GetTextArea().GetAreaLeft() + (Int)(nRightCol - pView->GetTextArea().GetViewLeftCol()) * nCharDx, pView->GetTextArea().GetAreaRight());
 	const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -333,7 +333,7 @@ void TextDrawer::DispWrapLine(
 	if (!cWrapType.IsDisp()) return;
 
 	const TextArea& rArea = *GetTextArea();
-	const LayoutInt nWrapKetas = pView->m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas();
+	const LayoutInt nWrapKetas = pView->m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
 	const int nCharDx = pView->GetTextMetrics().GetHankakuDx();
 	int nXPos = rArea.GetAreaLeft() + (Int)(nWrapKetas - rArea.GetViewLeftCol()) * nCharDx;
 	//	2005.11.08 Moca 作画条件変更
@@ -360,16 +360,16 @@ void TextDrawer::DispLineNumber(
 ) const
 {
 	//$$ 高速化：SearchLineByLayoutYにキャッシュを持たせる
-	const Layout*	pcLayout = EditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(nLineNum);
+	const Layout*	pcLayout = EditDoc::GetInstance(0)->m_layoutMgr.SearchLineByLayoutY(nLineNum);
 
 	const EditView* pView = m_pEditView;
-	const TypeConfig* pTypes = &pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
+	const TypeConfig* pTypes = &pView->m_pEditDoc->m_docType.GetDocumentAttribute();
 
 	int				nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
 	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
-	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace;	// 2009.03.26 ryoji
+	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_window.m_nLineNumRightSpace;	// 2009.03.26 ryoji
 
 	TypeSupport cTextType(pView, COLORIDX_TEXT);
 	TypeSupport cCaretLineBg(pView, COLORIDX_CARETLINEBG);
@@ -393,10 +393,10 @@ void TextDrawer::DispLineNumber(
 		pCDocLine = pcLayout->GetDocLineRef();
 
 		if (1
-			&& pView->GetDocument()->m_cDocEditor.IsModified()
+			&& pView->GetDocument()->m_docEditor.IsModified()
 			&& ModifyVisitor().IsLineModified(
 				pCDocLine,
-				pView->GetDocument()->m_cDocEditor.m_cOpeBuf.GetNoModifiedSeq()
+				pView->GetDocument()->m_docEditor.m_opeBuf.GetNoModifiedSeq()
 			)
 		) {
 			// 変更フラグ
@@ -469,15 +469,15 @@ void TextDrawer::DispLineNumber(
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 			bool bChange = true;
 			if (cGyouType.IsBoldFont() == cColorType.IsBoldFont()) {
-		 		sFont.m_sFontAttr.m_bBoldFont = cGyouModType.IsBoldFont();
+		 		sFont.m_fontAttr.m_bBoldFont = cGyouModType.IsBoldFont();
 				bChange = true;
 			}
 			if (cGyouType.HasUnderLine() == cColorType.HasUnderLine()) {
-				sFont.m_sFontAttr.m_bUnderLine = cGyouModType.HasUnderLine();
+				sFont.m_fontAttr.m_bUnderLine = cGyouModType.HasUnderLine();
 				bChange = true;
 			}
 			if (bChange) {
-				sFont.m_hFont = pView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
+				sFont.m_hFont = pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 			}
 		}
 		gr.PushTextForeColor(fgcolor);	// テキスト：行番号の色

@@ -40,8 +40,8 @@ void Layout::DUMP(void)
 LayoutInt Layout::CalcLayoutWidth(const LayoutMgr& cLayoutMgr) const
 {
 	// ソース
-	const wchar_t* pText    = m_pCDocLine->GetPtr();
-	LogicInt      nTextLen = m_pCDocLine->GetLengthWithoutEOL();
+	const wchar_t* pText    = m_pDocLine->GetPtr();
+	LogicInt      nTextLen = m_pDocLine->GetLengthWithoutEOL();
 
 	// 計算
 	LayoutInt nWidth = GetIndent();
@@ -63,8 +63,8 @@ LayoutInt Layout::CalcLayoutOffset(
 {
 	LayoutInt nRet = nStartOffset;
 	if (this->GetLogicOffset()) {
-		const wchar_t* pLine = this->m_pCDocLine->GetPtr();
-		int nLineLen = this->m_pCDocLine->GetLengthWithEOL();
+		const wchar_t* pLine = this->m_pDocLine->GetPtr();
+		int nLineLen = this->m_pDocLine->GetLengthWithEOL();
 		const int nOffset = GetLogicOffset();
 		for (int i=(Int)nStartPos; i<nOffset; ++i) {
 			if (pLine[i] == WCODE::TAB) {

@@ -8,17 +8,17 @@ void DispPos::ForwardLayoutLineRef(int nOffsetLine)
 	m_nLineRef += LayoutInt(nOffsetLine);
 	// キャッシュ更新
 	int n = nOffsetLine;
-	if (m_pcLayoutRef) {
-		while (n > 0 && m_pcLayoutRef) {
-			m_pcLayoutRef = m_pcLayoutRef->GetNextLayout();
+	if (m_pLayoutRef) {
+		while (n > 0 && m_pLayoutRef) {
+			m_pLayoutRef = m_pLayoutRef->GetNextLayout();
 			--n;
 		}
-		while (n < 0 && m_pcLayoutRef) {
-			m_pcLayoutRef = m_pcLayoutRef->GetPrevLayout();
+		while (n < 0 && m_pLayoutRef) {
+			m_pLayoutRef = m_pLayoutRef->GetPrevLayout();
 			++n;
 		}
 	}else {
-		m_pcLayoutRef = EditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY(m_nLineRef);
+		m_pLayoutRef = EditDoc::GetInstance(0)->m_layoutMgr.SearchLineByLayoutY(m_nLineRef);
 	}
 }
 

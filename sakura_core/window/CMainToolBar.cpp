@@ -40,13 +40,13 @@ MainToolBar::MainToolBar(EditWnd* pOwner)
 	m_hwndReBar(NULL),
 	m_hwndSearchBox(NULL),
 	m_hFontSearchBox(NULL),
-	m_pcIcons(NULL)
+	m_pIcons(NULL)
 {
 }
 
 void MainToolBar::Create(ImageListMgr* pcIcons)
 {
-	m_pcIcons = pcIcons;
+	m_pIcons = pcIcons;
 }
 
 // 検索ボックスでの処理
@@ -128,7 +128,7 @@ void MainToolBar::CreateToolBar(void)
 	LONG_PTR		lToolType;
 	nFlag = 0;
 
-	auto& csToolBar = GetDllShareData().m_common.m_sToolBar;
+	auto& csToolBar = GetDllShareData().m_common.m_toolBar;
 	// 2006.06.17 ryoji
 	// Rebar ウィンドウの作成
 	if (IsVisualStyle()) {	// ビジュアルスタイル有効
@@ -198,7 +198,7 @@ void MainToolBar::CreateToolBar(void)
 		Toolbar_ButtonStructSize(m_hwndToolBar, sizeof(TBBUTTON));
 		//	Oct. 12, 2000 genta
 		//	既に用意されているImage Listをアイコンとして登録
-		m_pcIcons->SetToolBarImages(m_hwndToolBar);
+		m_pIcons->SetToolBarImages(m_hwndToolBar);
 		// ツールバーにボタンを追加
 		int count = 0;	//@@@ 2002.06.15 MIK
 		int nToolBarButtonNum = 0;// 2005/8/29 aroka
@@ -441,11 +441,11 @@ LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 			// コマンド番号（pnmh->dwItemSpec）からアイコン番号を取得する	// 2007.11.02 ryoji
 			int nIconId = Toolbar_GetBitmap(pnmh->hdr.hwndFrom, (WPARAM)pnmh->dwItemSpec);
 
-			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - m_pcIcons->cy()) / 2;		// アイテム矩形からの画像のオフセット	// 2007.03.25 ryoji
+			int offset = ((pnmh->rc.bottom - pnmh->rc.top) - m_pIcons->cy()) / 2;		// アイテム矩形からの画像のオフセット	// 2007.03.25 ryoji
 			int shift = pnmh->uItemState & (CDIS_SELECTED | CDIS_CHECKED) ? 1 : 0;	//	Aug. 30, 2003 genta ボタンを押されたらちょっと画像をずらす
 
 			//	Sep. 6, 2003 genta 押下時は右だけでなく下にもずらす
-			m_pcIcons->Draw(nIconId, pnmh->hdc, pnmh->rc.left + offset + shift, pnmh->rc.top + offset + shift,
+			m_pIcons->Draw(nIconId, pnmh->hdc, pnmh->rc.left + offset + shift, pnmh->rc.top + offset + shift,
 				(pnmh->uItemState & CDIS_DISABLED) ? ILD_MASK : ILD_NORMAL
 			);
 		}
@@ -487,7 +487,7 @@ void MainToolBar::UpdateToolbar(void)
 	
 	// ツールバーの状態更新
 	if (m_hwndToolBar) {
-		auto& csToolBar = GetDllShareData().m_common.m_sToolBar;
+		auto& csToolBar = GetDllShareData().m_common.m_toolBar;
 		for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 			TBBUTTON tbb = m_pOwner->GetMenuDrawer().getButton(
 				csToolBar.m_nToolBarButtonIdxArr[i]
@@ -524,8 +524,8 @@ void MainToolBar::AcceptSharedSearchKey()
 			Combo_AddString(m_hwndSearchBox, GetDllShareData().m_searchKeywords.m_aSearchKeys[i]);
 		}
 		const wchar_t* pszText;
-		if (GetDllShareData().m_common.m_sSearch.m_bInheritKeyOtherView
-			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence
+		if (GetDllShareData().m_common.m_search.m_bInheritKeyOtherView
+			&& m_pOwner->GetActiveView().m_nCurSearchKeySequence < GetDllShareData().m_common.m_search.m_nSearchKeySequence
 			|| m_pOwner->GetActiveView().m_strCurSearchKey.size() == 0
 		) {
 			if (0 < nSize) {

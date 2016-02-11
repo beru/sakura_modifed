@@ -184,7 +184,7 @@ struct TypeConfig {
 	int					m_nOutlineSortCol;				//!< アウトライン解析ソート列番号
 	bool				m_bOutlineSortDesc;				//!< アウトライン解析ソート降順
 	int					m_nOutlineSortType;				//!< アウトライン解析ソート基準
-	FileTree			m_sFileTree;					/*!< ファイルツリー設定 */
+	FileTree			m_fileTree;					/*!< ファイルツリー設定 */
 
 	SmartIndentType	m_eSmartIndent;					//!< スマートインデント種別
 	int					m_nImeState;					//!< 初期IME状態	Nov. 20, 2000 genta

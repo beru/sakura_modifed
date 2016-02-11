@@ -8,7 +8,7 @@
 // ŠO•”ˆË‘¶
 LayoutInt ViewCalc::GetTabSpace() const
 {
-	return m_pOwner->m_pcEditDoc->m_cLayoutMgr.GetTabSpace();
+	return m_pOwner->m_pEditDoc->m_layoutMgr.GetTabSpace();
 }
 
 
@@ -16,10 +16,10 @@ LayoutInt ViewCalc::GetTabSpace() const
 	
 	@@@ 2002.09.28 YAZAKI DocLine”Å
 */
-LogicInt ViewCalc::LineColumnToIndex(const DocLine* pcDocLine, LayoutInt nColumn) const
+LogicInt ViewCalc::LineColumnToIndex(const DocLine* pDocLine, LayoutInt nColumn) const
 {
 	LogicInt i2 = LogicInt(0);
-	MemoryIterator it(pcDocLine, GetTabSpace());
+	MemoryIterator it(pDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getColumn() + it.getColumnDelta() > nColumn) {
@@ -109,10 +109,10 @@ LayoutInt ViewCalc::LineIndexToColumn(const Layout* pcLayout, LogicInt nIndex) c
 ||
 ||	@@@ 2002.09.28 YAZAKI DocLine”Å
 */
-LayoutInt ViewCalc::LineIndexToColumn(const DocLine* pcDocLine, LogicInt nIndex) const
+LayoutInt ViewCalc::LineIndexToColumn(const DocLine* pDocLine, LogicInt nIndex) const
 {
 	LayoutInt nPosX2 = LayoutInt(0);
-	MemoryIterator it(pcDocLine, GetTabSpace());
+	MemoryIterator it(pDocLine, GetTabSpace());
 	while (!it.end()) {
 		it.scanNext();
 		if (it.getIndex() + it.getIndexDelta() > nIndex) {

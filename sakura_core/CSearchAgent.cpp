@@ -370,7 +370,7 @@ bool SearchAgent::WhereCurrentWord(
 	*pnIdxFrom = nIdx;
 	*pnIdxTo = nIdx;
 	
-	const DocLine* pDocLine = m_pcDocLineMgr->GetLine(nLineNum);
+	const DocLine* pDocLine = m_pDocLineMgr->GetLine(nLineNum);
 	if (!pDocLine) {
 		return false;
 	}
@@ -394,7 +394,7 @@ bool SearchAgent::PrevOrNextWord(
 {
 	using namespace WCODE;
 	
-	const DocLine*	pDocLine = m_pcDocLineMgr->GetLine( nLineNum );
+	const DocLine*	pDocLine = m_pDocLineMgr->GetLine( nLineNum );
 	if (!pDocLine) {
 		return false;
 	}
@@ -412,7 +412,7 @@ bool SearchAgent::PrevOrNextWord(
 		}
 	}
 	// 現在位置の文字の種類によっては選択不能
-	if (!bLEFT && WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
+	if (!bLEFT && WCODE::IsLineDelimiter(pLine[nIdx], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
 		return false;
 	}
 	// 前の単語か？後ろの単語か？
@@ -496,7 +496,7 @@ int SearchAgent::SearchWord(
 	// 正規表現
 	if (searchOption.bRegularExp) {
 		nLinePos = ptSerachBegin.GetY2();		// 検索行＝検索開始行
-		pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+		pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
 			//
@@ -601,7 +601,7 @@ int SearchAgent::SearchWord(
 		// 前方検索
 		if (eDirection == SearchDirection::Backward) {
 			nLinePos = ptSerachBegin.GetY2();
-			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+			pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 			LogicInt nNextWordFrom;
 			LogicInt nNextWordFrom2;
 			LogicInt nNextWordTo2;
@@ -644,7 +644,7 @@ int SearchAgent::SearchWord(
 		// 後方検索
 		}else {
 			nLinePos = ptSerachBegin.GetY2();
-			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+			pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 			LogicInt nNextWordFrom = ptSerachBegin.GetX2();
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
@@ -676,7 +676,7 @@ int SearchAgent::SearchWord(
 			nHitTo = ptSerachBegin.x;
 
 			nIdxPos = 0;
-			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+			pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				nHitPos = -1;
@@ -730,7 +730,7 @@ int SearchAgent::SearchWord(
 		}else {
 			nIdxPos = ptSerachBegin.x;
 			nLinePos = ptSerachBegin.GetY2();
-			pDocLine = m_pcDocLineMgr->GetLine(nLinePos);
+			pDocLine = m_pDocLineMgr->GetLine(nLinePos);
 			while (pDocLine) {
 				pLine = pDocLine->GetDocLineStrWithEOL(&nLineLen);
 				pszRes = SearchString(
@@ -798,7 +798,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	HWND		hwndCancel = NULL;	//	初期化
 	HWND		hwndProgress = NULL;	//	初期化
 
-	pArg->ptNewPos = pArg->sDelRange.GetFrom();
+	pArg->ptNewPos = pArg->delRange.GetFrom();
 
 	// 大量のデータを操作するとき
 	DlgCancel*	pCDlgCancel = NULL;
@@ -817,7 +817,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		}
 	};
 	DlgCancelCloser closer(pCDlgCancel);
-	const LogicInt nDelLines = pArg->sDelRange.GetTo().y - pArg->sDelRange.GetFrom().y;
+	const LogicInt nDelLines = pArg->delRange.GetTo().y - pArg->delRange.GetFrom().y;
 	const LogicInt nEditLines = std::max<LogicInt>(LogicInt(1), nDelLines + LogicInt(pArg->pInsData ? pArg->pInsData->size(): 0));
 	if (3000 < nEditLines) {
 		// 進捗ダイアログの表示
@@ -832,7 +832,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 
 	// バッファを確保
 	if (pArg->pcmemDeleted) {
-		pArg->pcmemDeleted->reserve(pArg->sDelRange.GetTo().y + LogicInt(1) - pArg->sDelRange.GetFrom().y);
+		pArg->pcmemDeleted->reserve(pArg->delRange.GetTo().y + LogicInt(1) - pArg->delRange.GetFrom().y);
 	}
 
 	// 2012.01.10 行内の削除&挿入のときの操作を1つにする
@@ -843,7 +843,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 		const NativeW& cmemLine = pArg->pInsData->back().cmemLine;
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
-		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
+		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
 			// 行挿入
 			bLastEOLReplace = true; // 仮。後で修正
 		}else {
@@ -862,29 +862,29 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 	}
 
 	// 現在行の情報を得る
-	pCDocLine = m_pcDocLineMgr->GetLine(pArg->sDelRange.GetTo().GetY2());
-	int i = pArg->sDelRange.GetTo().y;
-	if (0 < pArg->sDelRange.GetTo().y && !pCDocLine) {
-		pCDocLine = m_pcDocLineMgr->GetLine(pArg->sDelRange.GetTo().GetY2() - LogicInt(1));
+	pCDocLine = m_pDocLineMgr->GetLine(pArg->delRange.GetTo().GetY2());
+	int i = pArg->delRange.GetTo().y;
+	if (0 < pArg->delRange.GetTo().y && !pCDocLine) {
+		pCDocLine = m_pDocLineMgr->GetLine(pArg->delRange.GetTo().GetY2() - LogicInt(1));
 		--i;
 	}
 	bool bFirstLine = true;
 	bool bSetMark = false;
 	// 後ろから処理していく
-	for (; i >= pArg->sDelRange.GetFrom().y && pCDocLine; --i) {
+	for (; i >= pArg->delRange.GetFrom().y && pCDocLine; --i) {
 		pLine = pCDocLine->GetPtr(); // 2002/2/10 aroka CMemory変更
 		nLineLen = pCDocLine->GetLengthWithEOL(); // 2002/2/10 aroka CMemory変更
 		pCDocLinePrev = pCDocLine->GetPrevLine();
 		pCDocLineNext = pCDocLine->GetNextLine();
 		// 現在行の削除開始位置を調べる
-		if (i == pArg->sDelRange.GetFrom().y) {
-			nWorkPos = pArg->sDelRange.GetFrom().x;
+		if (i == pArg->delRange.GetFrom().y) {
+			nWorkPos = pArg->delRange.GetFrom().x;
 		}else {
 			nWorkPos = 0;
 		}
 		// 現在行の削除データ長を調べる
-		if (i == pArg->sDelRange.GetTo().y) {
-			nWorkLen = pArg->sDelRange.GetTo().x - nWorkPos;
+		if (i == pArg->delRange.GetTo().y) {
+			nWorkLen = pArg->delRange.GetTo().x - nWorkPos;
 		}else {
 			nWorkLen = nLineLen - nWorkPos; // 2002/2/10 aroka CMemory変更
 		}
@@ -913,7 +913,7 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				delLine.cmemLine.swap(pCDocLine->_GetDocLineData()); // DocLine書き換え
 				delLine.nSeq = ModifyVisitor().GetLineModifiedSeq(pCDocLine);
 			}
-			m_pcDocLineMgr->DeleteLine(pCDocLine);
+			m_pDocLineMgr->DeleteLine(pCDocLine);
 			pCDocLine = NULL;
 		// 次の行と連結するような削除
 		}else if (nWorkPos + nWorkLen >= nLineLen) { // 2002/2/10 aroka CMemory変更
@@ -987,12 +987,12 @@ void SearchAgent::ReplaceData(DocLineReplaceArg* pArg)
 				}else {
 					ModifyVisitor().SetLineModified(pCDocLine, pArg->nDelSeq);
 					// 削除される行のマーク類を保存
-					markNext = pCDocLineNext->m_sMark;
+					markNext = pCDocLineNext->m_mark;
 					bSetMark = true;
 				}
 
 				// 次の行 行オブジェクトの削除
-				m_pcDocLineMgr->DeleteLine(pCDocLineNext);
+				m_pDocLineMgr->DeleteLine(pCDocLineNext);
 				pCDocLineNext = NULL;
 
 				// 削除した行の総数
@@ -1064,11 +1064,11 @@ prev_line:;
 		// 直前の行のオブジェクトのポインタ
 		pCDocLine = pCDocLinePrev;
 		// 最近参照した行番号と行データ
-		--m_pcDocLineMgr->m_nPrevReferLine;
-		m_pcDocLineMgr->m_pCodePrevRefer = pCDocLine;
+		--m_pDocLineMgr->m_nPrevReferLine;
+		m_pDocLineMgr->m_pCodePrevRefer = pCDocLine;
 
 		if (hwndCancel) {
-			int nLines = pArg->sDelRange.GetTo().y - i;
+			int nLines = pArg->delRange.GetTo().y - i;
 			if ((nLines % 32) == 0) {
 				nProgress = ::MulDiv(nLines, 100, nEditLines);
 				if (nProgressOld != nProgress) {
@@ -1094,12 +1094,12 @@ prev_line:;
 		pArg->nInsSeq = 0;
 		return;
 	}
-	nAllLinesOld= m_pcDocLineMgr->GetLineCount();
-	pArg->ptNewPos.y = pArg->sDelRange.GetFrom().y;	// 挿入された部分の次の位置の行
+	nAllLinesOld= m_pDocLineMgr->GetLineCount();
+	pArg->ptNewPos.y = pArg->delRange.GetFrom().y;	// 挿入された部分の次の位置の行
 	pArg->ptNewPos.x = 0;	// 挿入された部分の次の位置のデータ位置
 
 	// 挿入データを行終端で区切った行数カウンタ
-	pCDocLine = m_pcDocLineMgr->GetLine(pArg->sDelRange.GetFrom().GetY2());
+	pCDocLine = m_pDocLineMgr->GetLine(pArg->delRange.GetFrom().GetY2());
 
 	int nInsSize = pArg->pInsData->size();
 	bool bInsertLineMode = false;
@@ -1108,14 +1108,14 @@ prev_line:;
 		NativeW& cmemLine = pArg->pInsData->back().cmemLine;
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
-		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
-			if (pArg->sDelRange.GetFrom().x == 0) {
+		if (0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
+			if (pArg->delRange.GetFrom().x == 0) {
 				// 挿入データの最後が改行で行頭に挿入するとき、現在行を維持する
 				bInsertLineMode = true;
-				if (pCDocLine && m_pcDocLineMgr->m_pCodePrevRefer == pCDocLine) {
-					m_pcDocLineMgr->m_pCodePrevRefer = pCDocLine->GetPrevLine();
-					if (m_pcDocLineMgr->m_pCodePrevRefer) {
-						m_pcDocLineMgr->m_nPrevReferLine--;
+				if (pCDocLine && m_pDocLineMgr->m_pCodePrevRefer == pCDocLine) {
+					m_pDocLineMgr->m_pCodePrevRefer = pCDocLine->GetPrevLine();
+					if (m_pDocLineMgr->m_pCodePrevRefer) {
+						m_pDocLineMgr->m_nPrevReferLine--;
 					}
 				}
 			}
@@ -1136,8 +1136,8 @@ prev_line:;
 		if (!bInsertLineMode) {
 			cmemCurLine.swap(pCDocLine->_GetDocLineData());
 			pLine = cmemCurLine.GetStringPtr(&nLineLen);
-			cPrevLine = StringRef(pLine, pArg->sDelRange.GetFrom().x);
-			cNextLine = StringRef(&pLine[pArg->sDelRange.GetFrom().x], nLineLen - pArg->sDelRange.GetFrom().x);
+			cPrevLine = StringRef(pLine, pArg->delRange.GetFrom().x);
+			cNextLine = StringRef(&pLine[pArg->delRange.GetFrom().x], nLineLen - pArg->delRange.GetFrom().x);
 			pArg->nInsSeq = ModifyVisitor().GetLineModifiedSeq(pCDocLine);
 		}else {
 			pArg->nInsSeq = 0;
@@ -1149,11 +1149,11 @@ prev_line:;
 #ifdef _DEBUG
 		int nLen = cmemLine.GetStringLength();
 		const wchar_t* pInsLine = cmemLine.GetStringPtr();
-		assert( 0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol) );
+		assert( 0 < nLen && WCODE::IsLineDelimiter(pInsLine[nLen - 1], GetDllShareData().m_common.m_edit.m_bEnableExtEol) );
 #endif
 		{
 			if (!pCDocLine) {
-				DocLine* pCDocLineNew = m_pcDocLineMgr->AddNewLine();
+				DocLine* pCDocLineNew = m_pDocLineMgr->AddNewLine();
 
 				// 挿入データを行終端で区切った行数カウンタ
 				if (nCount == 0) {
@@ -1191,7 +1191,7 @@ prev_line:;
 					ModifyVisitor().SetLineModified(pCDocLine, (*pArg->pInsData)[nCount].nSeq);
 					pCDocLine = pCDocLine->GetNextLine();
 				}else {
-					DocLine* pCDocLineNew = m_pcDocLineMgr->InsertNewLine(pCDocLine);	// pCDocLineの前に挿入
+					DocLine* pCDocLineNew = m_pDocLineMgr->InsertNewLine(pCDocLine);	// pCDocLineの前に挿入
 					pCDocLineNew->SetDocLineStringMove(&cmemLine);
 					ModifyVisitor().SetLineModified(pCDocLineNew, (*pArg->pInsData)[nCount].nSeq);
 				}
@@ -1224,9 +1224,9 @@ prev_line:;
 		tmp.AppendNativeData(cmemLine);
 		tmp.AppendString(cNextLine.GetPtr(), cNextLine.GetLength());
 		if (!pCDocLine) {
-			DocLine* pCDocLineNew = m_pcDocLineMgr->AddNewLine();	// 末尾に追加
+			DocLine* pCDocLineNew = m_pDocLineMgr->AddNewLine();	// 末尾に追加
 			pCDocLineNew->SetDocLineStringMove(&tmp);
-			pCDocLineNew->m_sMark = markNext;
+			pCDocLineNew->m_mark = markNext;
 			if (!bLastEOLReplace || !bSetMark) {
 				ModifyVisitor().SetLineModified(pCDocLineNew, nSeq);
 			}
@@ -1236,8 +1236,8 @@ prev_line:;
 				// 行の中間に挿入(削除データがなかった。1文字入力など)
 			}else {
 				// 複数行挿入の最後の行
-				pCDocLine = m_pcDocLineMgr->InsertNewLine(pCDocLine);	// pCDocLineの前に挿入
-				pCDocLine->m_sMark = markNext;
+				pCDocLine = m_pDocLineMgr->InsertNewLine(pCDocLine);	// pCDocLineの前に挿入
+				pCDocLine->m_mark = markNext;
 			}
 			pCDocLine->SetDocLineStringMove(&tmp);
 			if (!bLastEOLReplace || !bSetMark) {
@@ -1246,7 +1246,7 @@ prev_line:;
 			pArg->ptNewPos.x = cPrevLine2.GetLength() + nLen;	// 挿入された部分の次の位置のデータ位置
 		}
 	}
-	pArg->nInsLineNum = m_pcDocLineMgr->GetLineCount() - nAllLinesOld;
+	pArg->nInsLineNum = m_pDocLineMgr->GetLineCount() - nAllLinesOld;
 	return;
 }
 

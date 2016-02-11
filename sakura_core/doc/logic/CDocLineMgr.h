@@ -29,7 +29,7 @@ class DocLine; // 2002/2/10 aroka
 class Bregexp; // 2002/2/10 aroka
 
 struct DocLineReplaceArg {
-	LogicRange		sDelRange;			//!< [in] 削除範囲。ロジック単位。
+	LogicRange		delRange;			//!< [in] 削除範囲。ロジック単位。
 	OpeLineData*	pcmemDeleted;		//!< [out] 削除されたデータを保存
 	OpeLineData*	pInsData;			//!< [in/out] 挿入するデータ(中身が移動する)
 	LogicInt		nDeletedLineNum;	//!< [out] 削除した行の総数

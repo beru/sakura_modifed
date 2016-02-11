@@ -30,7 +30,7 @@ class EditDoc;
 
 class DocFileOperation {
 public:
-	DocFileOperation(EditDoc* pcDoc) : m_pcDocRef(pcDoc) { }
+	DocFileOperation(EditDoc* pDoc) : m_pDocRef(pDoc) { }
 
 	// ÉçÉbÉN
 	bool _ToDoLock() const;
@@ -72,10 +72,10 @@ public:
 
 	// ÇªÇÃëº
 	void FileCloseOpen(				// ï¬Ç∂ÇƒäJÇ≠	// 2006.12.30 ryoji
-		const LoadInfo& sLoadInfo = LoadInfo(_T(""), CODE_AUTODETECT, false)
+		const LoadInfo& loadInfo = LoadInfo(_T(""), CODE_AUTODETECT, false)
 	);
 
 private:
-	EditDoc* m_pcDocRef;
+	EditDoc* m_pDocRef;
 };
 

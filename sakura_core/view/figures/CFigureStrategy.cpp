@@ -38,8 +38,8 @@ bool Figure_Text::DrawImp(ColorStrategyInfo* pInfo)
 						pInfo->GetDocLine()->GetLengthWithoutEOL(),
 						nIdx
 					);
-	bool bTrans = pInfo->m_pcView->IsBkBitmap() && TypeSupport(pInfo->m_pcView, COLORIDX_TEXT).GetBackColor() == pInfo->m_gr.GetTextBackColor();
-	pInfo->m_pcView->GetTextDrawer().DispText(
+	bool bTrans = pInfo->m_pView->IsBkBitmap() && TypeSupport(pInfo->m_pView, COLORIDX_TEXT).GetBackColor() == pInfo->m_gr.GetTextBackColor();
+	pInfo->m_pView->GetTextDrawer().DispText(
 		pInfo->m_gr,
 		pInfo->m_pDispPos,
 		&pInfo->m_pLineOfLogic[nIdx],
@@ -62,7 +62,7 @@ bool FigureSpace::DrawImp(ColorStrategyInfo* pInfo)
 {
 	bool bTrans = DrawImp_StyleSelect(pInfo);
 	DispPos sPos(*pInfo->m_pDispPos);	// 現在位置を覚えておく
-	DispSpace(pInfo->m_gr, pInfo->m_pDispPos, pInfo->m_pcView, bTrans);	// 空白描画
+	DispSpace(pInfo->m_gr, pInfo->m_pDispPos, pInfo->m_pView, bTrans);	// 空白描画
 	DrawImp_StylePop(pInfo);
 	DrawImp_DrawUnderline(pInfo, sPos);
 	// 1文字前提
@@ -78,7 +78,7 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 {
 	// この DrawImp はここ（基本クラス）でデフォルト動作を実装しているが
 	// 仮想関数なので派生クラス側のオーバーライドで個別に仕様変更可能
-	EditView* pcView = pInfo->m_pcView;
+	EditView* pcView = pInfo->m_pView;
 
 	TypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
 	TypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
@@ -125,9 +125,9 @@ bool FigureSpace::DrawImp_StyleSelect(ColorStrategyInfo* pInfo)
 	pInfo->m_gr.PushTextBackColor(crBack);
 	// Figureが下線指定ならこちらで下線を指定。元の色のほうが下線指定なら、DrawImp_DrawUnderlineで下線だけ指定
 	Font sFont;
-	sFont.m_sFontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || bBold;
-	sFont.m_sFontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
-	sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
+	sFont.m_fontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || bBold;
+	sFont.m_fontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
+	sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 	pInfo->m_gr.PushMyFont(sFont);
 	bool bTrans = pcView->IsBkBitmap() && cTextType.GetBackColor() == crBack;
 	return bTrans;
@@ -142,7 +142,7 @@ void FigureSpace::DrawImp_StylePop(ColorStrategyInfo* pInfo)
 
 void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
 {
-	EditView* pcView = pInfo->m_pcView;
+	EditView* pcView = pInfo->m_pView;
 
 	TypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色
 	bool blendColor = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2() && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
@@ -153,9 +153,9 @@ void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
 	if (!cSpaceType.HasUnderLine() && colorStyle.HasUnderLine()) {
 		// 下線を周辺の前景色で描画する
 		Font sFont;
-		sFont.m_sFontAttr.m_bBoldFont = false;
-		sFont.m_sFontAttr.m_bUnderLine = true;
-		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
+		sFont.m_fontAttr.m_bBoldFont = false;
+		sFont.m_fontAttr.m_bUnderLine = true;
+		sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 
 		int nLength = (Int)(pInfo->m_pDispPos->GetDrawCol() - sPos.GetDrawCol());
@@ -163,7 +163,7 @@ void FigureSpace::DrawImp_DrawUnderline(ColorStrategyInfo* pInfo, DispPos& sPos)
 		wchar_t* pszText = &szText[0];
 		for (int i=0; i<nLength; ++i)
 			pszText[i] = L' ';
-		pInfo->m_pcView->GetTextDrawer().DispText(
+		pInfo->m_pView->GetTextDrawer().DispText(
 			pInfo->m_gr,
 			&sPos,
 			pszText,

@@ -38,7 +38,7 @@ LayoutMgr::LayoutMgr()
 	:
 	m_getIndentOffset(&LayoutMgr::getIndentOffset_Normal)	// Oct. 1, 2002 genta	//	Nov. 16, 2002 メンバー関数ポインタにはクラス名が必要
 {
-	m_pcDocLineMgr = NULL;
+	m_pDocLineMgr = NULL;
 	m_pTypeConfig = NULL;
 	m_nMaxLineKetas = LayoutInt(MAXLINEKETAS);
 	m_nTabSpace = LayoutInt(4);
@@ -76,8 +76,8 @@ void LayoutMgr::Create(
 	_Empty();
 	Init();
 	// Jun. 20, 2003 genta EditDocへのポインタ追加
-	m_pcEditDoc = pcEditDoc;
-	m_pcDocLineMgr = pcDocLineMgr;
+	m_pEditDoc = pcEditDoc;
+	m_pDocLineMgr = pcDocLineMgr;
 }
 
 
@@ -371,14 +371,14 @@ Layout* LayoutMgr::CreateLayout(
 	);
 
 	if (pCDocLine->GetEol() == EolType::None) {
-		pLayout->m_cEol.SetType(EolType::None);	// 改行コードの種類
+		pLayout->m_eol.SetType(EolType::None);	// 改行コードの種類
 	}else {
 		if (pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL() >
 			pCDocLine->GetLengthWithEOL() - pCDocLine->GetEol().GetLen()
 		) {
-			pLayout->m_cEol = pCDocLine->GetEol();	// 改行コードの種類
+			pLayout->m_eol = pCDocLine->GetEol();	// 改行コードの種類
 		}else {
-			pLayout->m_cEol = EolType::None;	// 改行コードの種類
+			pLayout->m_eol = EolType::None;	// 改行コードの種類
 		}
 	}
 
@@ -387,7 +387,7 @@ Layout* LayoutMgr::CreateLayout(
 	// パフォーマンスの低下が気にならない程なら全ての折り返し方法で計算する
 	// ようにしても良いと思う。
 	// （その場合LayoutMgr::CalculateTextWidth()の呼び出し箇所をチェック）
-	pLayout->SetLayoutWidth((m_pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
+	pLayout->SetLayoutWidth((m_pEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) ? nPosX : LayoutInt(0));
 
 	return pLayout;
 }
@@ -424,7 +424,7 @@ const wchar_t* LayoutMgr::GetLineStr(
 		return NULL;
 	}
 	*pnLineLen = (*ppcLayoutDes)->GetLengthWithEOL();
-	return (*ppcLayoutDes)->m_pCDocLine->GetPtr() + (*ppcLayoutDes)->GetLogicOffset();
+	return (*ppcLayoutDes)->m_pDocLine->GetPtr() + (*ppcLayoutDes)->GetLogicOffset();
 }
 
 /*
@@ -483,7 +483,7 @@ void LayoutMgr::GetEndLayoutPos(
 	}
 
 	Layout* btm = m_pLayoutBot;
-	if (btm->m_cEol != EolType::None) {
+	if (btm->m_eol != EolType::None) {
 		// 末尾に改行がある
 		ptLayoutEnd->Set(LayoutInt(0), GetLineCount());
 	}else {
@@ -647,7 +647,7 @@ bool LayoutMgr::WhereCurrentWord(
 	// 現在位置の単語の範囲を調べる -> ロジック単位pSelect, pcmemWord, pcmemWordLeft
 	LogicInt nFromX;
 	LogicInt nToX;
-	bool nRetCode = SearchAgent(m_pcDocLineMgr).WhereCurrentWord(
+	bool nRetCode = SearchAgent(m_pDocLineMgr).WhereCurrentWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + LogicInt(nIdx),
 		&nFromX,
@@ -687,7 +687,7 @@ int LayoutMgr::PrevOrNextWord(
 
 	// 現在位置の左右の単語の先頭位置を調べる
 	LogicInt nPosNew;
-	int nRetCode = SearchAgent(m_pcDocLineMgr).PrevOrNextWord(
+	int nRetCode = SearchAgent(m_pDocLineMgr).PrevOrNextWord(
 		pLayout->GetLogicLineNo(),
 		pLayout->GetLogicOffset() + nIdx,
 		&nPosNew,
@@ -726,7 +726,7 @@ int LayoutMgr::SearchWord(
 
 	// 単語検索 -> cLogicRange (データ位置)
 	LogicRange cLogicRange;
-	int nRetCode = SearchAgent(m_pcDocLineMgr).SearchWord(
+	int nRetCode = SearchAgent(m_pDocLineMgr).SearchWord(
 		LogicPoint(pLayout->GetLogicOffset() + nIdx, pLayout->GetLogicLineNo()),
 		searchDirection,
 		&cLogicRange, //pMatchRange,
@@ -921,7 +921,7 @@ void LayoutMgr::LayoutToLogicEx(
 	if (ptLayout.GetY2() > m_nLines) {
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, m_nLines);
-		pptLogic->Set(LogicInt(0), m_pcDocLineMgr->GetLineCount());
+		pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 		return;
 	}
 
@@ -938,15 +938,15 @@ void LayoutMgr::LayoutToLogicEx(
 		if (0 < ptLayout.y) {
 			pcLayout = SearchLineByLayoutY(ptLayout.GetY2() - LayoutInt(1));
 			if (!pcLayout) {
-				pptLogic->Set(LogicInt(0), m_pcDocLineMgr->GetLineCount());
+				pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 				return;
 			}else {
 				pData = GetLineStr(ptLayout.GetY2() - LayoutInt(1), &nDataLen);
-				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().m_common.m_sEdit.m_bEnableExtEol)) {
-					pptLogic->Set(LogicInt(0), m_pcDocLineMgr->GetLineCount());
+				if (WCODE::IsLineDelimiter(pData[nDataLen - 1], GetDllShareData().m_common.m_edit.m_bEnableExtEol)) {
+					pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 					return;
 				}else {
-					pptLogic->y = m_pcDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
+					pptLogic->y = m_pDocLineMgr->GetLineCount() - 1; // 2002/2/10 aroka DocLineMgr変更
 					bEOF = TRUE;
 					// nX = LayoutInt(MAXLINEKETAS);
 					nX = pcLayout->GetIndent();
@@ -956,7 +956,7 @@ void LayoutMgr::LayoutToLogicEx(
 		}
 		// 2007.10.11 kobake Y値が間違っていたので修正
 		//pptLogic->Set(0, m_nLines);
-		pptLogic->Set(LogicInt(0), m_pcDocLineMgr->GetLineCount());
+		pptLogic->Set(LogicInt(0), m_pDocLineMgr->GetLineCount());
 		return;
 	}else {
 		pptLogic->y = pcLayout->GetLogicLineNo();
@@ -1046,7 +1046,7 @@ void LayoutMgr::DUMP()
 		MYTRACE(_T("\tm_enumEOLType =%ls\n"),	pLayout->GetLayoutEol().GetName());
 		MYTRACE(_T("\tm_nEOLLen =%d\n"),		pLayout->GetLayoutEol().GetLen());
 		MYTRACE(_T("\tm_nTypePrev=%d\n"),		pLayout->GetColorTypePrev());
-		const wchar_t* pData = DocReader(*m_pcDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
+		const wchar_t* pData = DocReader(*m_pDocLineMgr).GetLineStr(pLayout->GetLogicLineNo(), &nDataLen);
 		MYTRACE(_T("\t[%ls]\n"), pData);
 		pLayout = pLayoutNext;
 	}

@@ -65,15 +65,15 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pcFuncInfoArr)
 	const wchar_t*	pszKeyWord;
 	int				nKeyWordLen;
 	BOOL			bDivision;
-	bool			bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool			bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
 	szDivision[0] = L'\0';
 	szLabel[0] =  L'\0';
 
 
 	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -128,7 +128,7 @@ void DocOutline::MakeTopicList_cobol(FuncInfoArr* pcFuncInfoArr)
 
 			LayoutPoint ptPos;
 			wchar_t	szWork[1024];
-			m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+			m_pDocRef->m_layoutMgr.LogicToLayout(
 				LogicPoint(0, nLineCount),
 				&ptPos
 			);

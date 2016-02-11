@@ -110,20 +110,20 @@ protected:
 	|| メンバ変数
 	*/
 private:
-	MenuDrawer			m_cMenuDrawer;
-	PropertyManager*	m_pcPropertyManager;
-	bool					m_bUseTrayMenu;			// トレイメニュー表示中
+	MenuDrawer			m_menuDrawer;
+	PropertyManager*	m_pPropertyManager;
+	bool				m_bUseTrayMenu;			// トレイメニュー表示中
 	HINSTANCE			m_hInstance;
-	HWND					m_hWnd;
-	BOOL					m_bCreatedTrayIcon;		// トレイにアイコンを作った
+	HWND				m_hWnd;
+	bool				m_bCreatedTrayIcon;		// トレイにアイコンを作った
 
 	DLLSHAREDATA*		m_pShareData;
-	DlgGrep				m_cDlgGrep;				// Jul. 2, 2001 genta
+	DlgGrep				m_dlgGrep;				// Jul. 2, 2001 genta
 	int					m_nCurSearchKeySequence;
 
 	ImageListMgr		m_hIcons;
 
-	UINT					m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
+	UINT				m_uCreateTaskBarMsg;	// RegisterMessageで得られるMessage IDの保管場所。Apr. 24, 2001 genta
 
 	TCHAR				m_szLanguageDll[MAX_PATH];
 };

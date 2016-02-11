@@ -40,7 +40,7 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 			&& nCommand != F_WCHAR		//	文字入力
 			&& nCommand != F_IME_CHAR	//	漢字入力
 		) {
-			m_pEditWnd->m_cHokanMgr.Hide();
+			m_pEditWnd->m_hokanMgr.Hide();
 			m_bHokan = FALSE;
 		}
 	}
@@ -54,7 +54,7 @@ void EditView::PreprocessCommand_hokan(int nCommand)
 */
 void EditView::PostprocessCommand_hokan(void)
 {
-	if (GetDllShareData().m_common.m_sHelper.m_bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
+	if (GetDllShareData().m_common.m_helper.m_bUseHokan && !m_bExecutingKeyMacro) { // キーボードマクロの実行中
 		NativeW cmemData;
 
 		// カーソル直前の単語を取得
@@ -62,7 +62,7 @@ void EditView::PostprocessCommand_hokan(void)
 			ShowHokanMgr(cmemData, false);
 		}else {
 			if (m_bHokan) {
-				m_pEditWnd->m_cHokanMgr.Hide();
+				m_pEditWnd->m_hokanMgr.Hide();
 				m_bHokan = FALSE;
 			}
 		}
@@ -121,7 +121,7 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 	// エディタ起動時だとエディタ可視化の途中になぜか不可視の入力補完ウィンドウが一時的にフォアグラウンドになって、
 	// タブバーに新規タブが追加されるときのタブ切替でタイトルバーがちらつく（一瞬非アクティブ表示になるのがはっきり見える）ことがあった。
 	// ※ Vista/7 の特定の PC でだけのちらつきか？ 該当 PC 以外の Vista/7 PC でもたまに微妙に表示が乱れた感じになる程度の症状が見られたが、それらが同一原因かどうかは不明。
-	auto& hokanMgr = m_pEditWnd->m_cHokanMgr;
+	auto& hokanMgr = m_pEditWnd->m_hokanMgr;
 	if (!hokanMgr.GetHwnd()) {
 		hokanMgr.DoModeless(
 			G_AppInstance(),
@@ -165,7 +165,7 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 	
 	//	補完終了。
 	if (!m_bHokan) {
-		GetDllShareData().m_common.m_sHelper.m_bUseHokan = FALSE;	//	入力補完終了の知らせ
+		GetDllShareData().m_common.m_helper.m_bUseHokan = FALSE;	//	入力補完終了の知らせ
 	}
 }
 
@@ -192,7 +192,7 @@ int EditView::HokanSearchByFile(
 	int				nMaxKouho			// [in] Max候補数(0 == 無制限)
 ) {
 	const int nKeyLen = wcslen(pszKey);
-	int nLines = m_pcEditDoc->m_docLineMgr.GetLineCount();
+	int nLines = m_pEditDoc->m_docLineMgr.GetLineCount();
 	int j, nWordLen, nLineLen, nRet, nCharSize, nWordBegin, nWordLenStop;
 
 	LogicPoint ptCur = GetCaret().GetCaretLogicPos(); // 物理カーソル位置
@@ -202,7 +202,7 @@ int EditView::HokanSearchByFile(
 	bool bKeyStartWithMark = wcschr(L"$@#\\", pszKey[0]) != NULL;
 
 	for (LogicInt i=LogicInt(0); i<nLines; ++i) {
-		const wchar_t* pszLine = DocReader(m_pcEditDoc->m_docLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
+		const wchar_t* pszLine = DocReader(m_pEditDoc->m_docLineMgr).GetLineStrWithoutEOL(i, &nLineLen);
 
 		for (j=0; j<nLineLen; j+=nCharSize) {
 			nCharSize = NativeW::GetSizeOfChar(pszLine, nLineLen, j);

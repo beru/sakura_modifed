@@ -149,8 +149,8 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) != 0) {
 				continue;
 			}
-			if (m_cr != m_pTypes->m_ColorInfoArr[i].m_sColorAttr.m_cTEXT) {
-				_ultow(m_pTypes->m_ColorInfoArr[i].m_sColorAttr.m_cTEXT, szText, 10);
+			if (m_cr != m_pTypes->m_ColorInfoArr[i].m_colorAttr.m_cTEXT) {
+				_ultow(m_pTypes->m_ColorInfoArr[i].m_colorAttr.m_cTEXT, szText, 10);
 				if (List_FindStringExact(hwndList, -1, szText) == LB_ERR) {
 					nItem = ::List_AddString(hwndList, szText);
 					List_SetItemData(hwndList, nItem, FALSE); 
@@ -166,8 +166,8 @@ BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 			if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 				continue;
 			}
-			if (m_cr != m_pTypes->m_ColorInfoArr[i].m_sColorAttr.m_cBACK) {
-				_ultow(m_pTypes->m_ColorInfoArr[i].m_sColorAttr.m_cBACK, szText, 10);
+			if (m_cr != m_pTypes->m_ColorInfoArr[i].m_colorAttr.m_cBACK) {
+				_ultow(m_pTypes->m_ColorInfoArr[i].m_colorAttr.m_cBACK, szText, 10);
 				if (List_FindStringExact(hwndList, -1, szText) == LB_ERR) {
 					nItem = ::List_AddString(hwndList, szText);
 					List_SetItemData(hwndList, nItem, FALSE); 
@@ -229,7 +229,7 @@ BOOL DlgSameColor::OnBnClicked(int wID)
 				switch (m_wID) {
 				case IDC_BUTTON_SAMETEXTCOLOR:
 					for (int j=0; j<COLORIDX_LAST; ++j) {
-						auto& colorAttr = m_pTypes->m_ColorInfoArr[j].m_sColorAttr.m_cTEXT;
+						auto& colorAttr = m_pTypes->m_ColorInfoArr[j].m_colorAttr.m_cTEXT;
 						if (cr == colorAttr) {
 							colorAttr = m_cr;
 						}
@@ -238,7 +238,7 @@ BOOL DlgSameColor::OnBnClicked(int wID)
 
 				case IDC_BUTTON_SAMEBKCOLOR:
 					for (int j=0; j<COLORIDX_LAST; ++j) {
-						auto& colorAttr = m_pTypes->m_ColorInfoArr[j].m_sColorAttr.m_cBACK;
+						auto& colorAttr = m_pTypes->m_ColorInfoArr[j].m_colorAttr.m_cBACK;
 						if (cr == colorAttr) {
 							colorAttr = m_cr;
 						}
@@ -347,7 +347,7 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 				if ((g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_TEXT) != 0) {
 					continue;
 				}
-				if (cr == m_pTypes->m_ColorInfoArr[j].m_sColorAttr.m_cTEXT) {
+				if (cr == m_pTypes->m_ColorInfoArr[j].m_colorAttr.m_cTEXT) {
 					::List_AddString(hwndListInfo, m_pTypes->m_ColorInfoArr[j].m_szName);
 				}
 			}
@@ -358,7 +358,7 @@ BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 				if ((g_ColorAttributeArr[j].fAttribute & COLOR_ATTRIB_NO_BACK) != 0) {	// 2006.12.18 ryoji フラグ利用で簡素化
 					continue;
 				}
-				if (cr == m_pTypes->m_ColorInfoArr[j].m_sColorAttr.m_cBACK) {
+				if (cr == m_pTypes->m_ColorInfoArr[j].m_colorAttr.m_cBACK) {
 					::List_AddString(hwndListInfo, m_pTypes->m_ColorInfoArr[j].m_szName);
 				}
 			}

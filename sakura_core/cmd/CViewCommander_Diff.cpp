@@ -119,14 +119,14 @@ void ViewCommander::Command_COMPARE(void)
 	DlgCompare	cDlgCompare;
 	HWND		hwndMsgBox;	//@@@ 2003.06.12 MIK
 	auto& commonSetting = GetDllShareData().m_common;
-	auto& csCompare = commonSetting.m_sCompare;
+	auto& csCompare = commonSetting.m_compare;
 	// 比較後、左右に並べて表示
 	cDlgCompare.m_bCompareAndTileHorz = csCompare.m_bCompareAndTileHorz;
 	BOOL bDlgCompareResult = cDlgCompare.DoModal(
 		G_AppInstance(),
 		m_pCommanderView->GetHwnd(),
 		(LPARAM)GetDocument(),
-		GetDocument()->m_cDocFile.GetFilePath(),
+		GetDocument()->m_docFile.GetFilePath(),
 		szPath,
 		&hwndCompareWnd
 	);
@@ -137,8 +137,8 @@ void ViewCommander::Command_COMPARE(void)
 	csCompare.m_bCompareAndTileHorz = cDlgCompare.m_bCompareAndTileHorz;
 
 	// タブウィンドウ時は禁止	//@@@ 2003.06.12 MIK
-	if (commonSetting.m_sTabBar.m_bDispTabWnd
-		&& !commonSetting.m_sTabBar.m_bDispTabWndMultiWin
+	if (commonSetting.m_tabBar.m_bDispTabWnd
+		&& !commonSetting.m_tabBar.m_bDispTabWndMultiWin
 	) {
 		hwndMsgBox = m_pCommanderView->GetHwnd();
 		csCompare.m_bCompareAndTileHorz = false;
@@ -153,7 +153,7 @@ void ViewCommander::Command_COMPARE(void)
 	  物理位置(行頭からのバイト数、折り返し無し行位置)
 	*/
 	LogicPoint	poSrc;
-	GetDocument()->m_cLayoutMgr.LayoutToLogic(
+	GetDocument()->m_layoutMgr.LayoutToLogic(
 		GetCaret().GetCaretLayoutPos(),
 		&poSrc
 	);
@@ -173,7 +173,7 @@ void ViewCommander::Command_COMPARE(void)
 	// 比較後、左右に並べて表示
 // From Here Oct. 10, 2000 JEPRO	チェックボックスをボタン化すれば以下の行(To Here まで)は不要のはずだが
 // うまくいかなかったので元に戻してある…
-	if (GetDllShareData().m_common.m_sCompare.m_bCompareAndTileHorz) {
+	if (GetDllShareData().m_common.m_compare.m_bCompareAndTileHorz) {
 		HWND hWndArr[2];
 		hWndArr[0] = GetMainWindow();
 		hWndArr[1] = hwndCompareWnd;
@@ -273,16 +273,16 @@ void ViewCommander::Command_Diff(const WCHAR* _szDiffFile2, int nFlgOpt)
 		saveCode2 = CODE_UTF8;
 	}
 
-	if (GetDocument()->m_cDocEditor.IsModified()
+	if (GetDocument()->m_docEditor.IsModified()
 		|| saveCode != code
-		|| !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+		|| !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
 	) {
 		if (!m_pCommanderView->MakeDiffTmpFile(szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist())) {
 			return;
 		}
 		bTmpFile1 = true;
 	}else {
-		_tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath() );
+		_tcscpy( szTmpFile1, GetDocument()->m_docFile.GetFilePath() );
 	}
 
 	bool bTmpFile2 = false;
@@ -325,8 +325,8 @@ void ViewCommander::Command_Diff_Dialog(void)
 	DlgDiff cDlgDiff;
 	bool bTmpFile1 = false, bTmpFile2 = false;
 
-	auto& docFile = GetDocument()->m_cDocFile;
-	auto& docEditor = GetDocument()->m_cDocEditor;
+	auto& docFile = GetDocument()->m_docFile;
+	auto& docEditor = GetDocument()->m_docEditor;
 	// DIFF差分表示ダイアログを表示する
 	int nDiffDlgResult = cDlgDiff.DoModal(
 		G_AppInstance(),
@@ -355,14 +355,14 @@ void ViewCommander::Command_Diff_Dialog(void)
 		saveCode = CODE_UTF8;
 		saveCode2 = CODE_UTF8;
 	}
-	if (GetDocument()->m_cDocEditor.IsModified()
+	if (GetDocument()->m_docEditor.IsModified()
 		|| code != saveCode
-		|| !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
+		|| !GetDocument()->m_docFile.GetFilePathClass().IsValidPath() // 2014.06.25 Grep/アウトプットも対象にする
 	) {
 		if (!m_pCommanderView->MakeDiffTmpFile( szTmpFile1, NULL, saveCode, GetDocument()->GetDocumentBomExist() )) { return; }
 		bTmpFile1 = true;
 	}else {
-		_tcscpy( szTmpFile1, GetDocument()->m_cDocFile.GetFilePath() );
+		_tcscpy( szTmpFile1, GetDocument()->m_docFile.GetFilePath() );
 	}
 		
 	// 相手ファイル
@@ -425,7 +425,7 @@ re_do:;
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
-		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
+		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
 			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
 		}else {
@@ -438,7 +438,7 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
 		// 見つからなかった。かつ、最初の検索
 		if (!bFound	&& bRedo) {
 			ptXY.y = 0 - 1;	// 1個手前を指定
@@ -476,7 +476,7 @@ re_do:;
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
-		GetDocument()->m_cLayoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
+		GetDocument()->m_layoutMgr.LogicToLayout(ptXY, &ptXY_Layout);
 		if (selInfo.m_bSelectingLock) {
 			if (!selInfo.IsTextSelected()) selInfo.BeginSelectArea();
 		}else {
@@ -489,10 +489,10 @@ re_do:;
 		GetCaret().MoveCursor(ptXY_Layout, true);
 	}
 
-	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
+	if (GetDllShareData().m_common.m_search.m_bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
-			// 2011.02.02 m_cLayoutMgr→m_docLineMgr
+			// 2011.02.02 m_layoutMgr→m_docLineMgr
 			ptXY.y = GetDocument()->m_docLineMgr.GetLineCount();	// 1個手前を指定
 			bRedo = false;
 			goto re_do;	// 末尾から再検索

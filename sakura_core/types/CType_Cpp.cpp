@@ -129,7 +129,7 @@ bool C_IsLineEsc(const wchar_t* s, int len)
 		len > 0
 		&& WCODE::IsLineDelimiter(
 			s[len-1],
-			GetDllShareData().m_common.m_sEdit.m_bEnableExtEol
+			GetDllShareData().m_common.m_edit.m_bEnableExtEol
 		)
 	) {
 		--len;
@@ -243,7 +243,7 @@ LogicInt CppPreprocessMng::ScanLine(
 
 	const wchar_t* lastptr = str + length;	//	処理文字列末尾
 	const wchar_t* p;	//	処理中の位置
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
 	//	skip whitespace
 	for (p=str; C_IsSpace(*p, bExtEol) && p<lastptr; ++p)
@@ -464,11 +464,11 @@ void DocOutline::MakeFuncList_C(
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
 	CppPreprocessMng cCppPMng;
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 	
 	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
@@ -818,7 +818,7 @@ void DocOutline::MakeFuncList_C(
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+						m_pDocRef->m_layoutMgr.LogicToLayout(
 							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
@@ -1040,7 +1040,7 @@ void DocOutline::MakeFuncList_C(
 						  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+						m_pDocRef->m_layoutMgr.LogicToLayout(
 							LogicPoint(0, nItemLine - 1),
 							&ptPosXY
 						);
@@ -1249,7 +1249,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 		nCaretPosX_PHY = GetCaret().GetCaretLogicPos().x;
 
-		pLine = m_pcEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			if (wcChar != WCODE::CR) {
 				return;
@@ -1315,11 +1315,11 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		
 		nDataLen = LogicInt(0);
 		for (j=GetCaret().GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
-			pLine2 = m_pcEditDoc->m_docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
+			pLine2 = m_pEditDoc->m_docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == GetCaret().GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
 				if (!pLine2) {
-					if (GetCaret().GetCaretLogicPos().y == m_pcEditDoc->m_docLineMgr.GetLineCount())
+					if (GetCaret().GetCaretLogicPos().y == m_pEditDoc->m_docLineMgr.GetLineCount())
 						continue;	// EOF のみの行
 					break;
 				}
@@ -1400,25 +1400,25 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 			}
 
 			nDataLen = LogicInt(m);
-			nCharChars = (m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bInsSpace)? (Int)m_pcEditDoc->m_cLayoutMgr.GetTabSpace(): 1;
+			nCharChars = (m_pEditDoc->m_docType.GetDocumentAttribute().m_bInsSpace)? (Int)m_pEditDoc->m_layoutMgr.GetTabSpace(): 1;
 			pszData = new wchar_t[nDataLen + nCharChars + 1];
 			wmemcpy(pszData, pLine2, nDataLen);
 			if (wcChar == WCODE::CR || wcChar == L'{' || wcChar == L'(') {
 				// 2005.10.11 ryoji TABキーがSPACE挿入の設定なら追加インデントもSPACEにする
 				//	既存文字列の右端の表示位置を求めた上で挿入するスペースの数を決定する
-				if (m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bInsSpace) {	// SPACE挿入設定
+				if (m_pEditDoc->m_docType.GetDocumentAttribute().m_bInsSpace) {	// SPACE挿入設定
 					int i;
 					i = m = 0;
 					while (i < nDataLen) {
 						nCharChars = NativeW::GetSizeOfChar(pszData, nDataLen, i);
 						if (nCharChars == 1 && pszData[i] == WCODE::TAB) {
-							m += (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(LayoutInt(m));
+							m += (Int)m_pEditDoc->m_layoutMgr.GetActualTabSpace(LayoutInt(m));
 						}else {
 							m += nCharChars;
 						}
 						i += nCharChars;
 					}
-					nCharChars = (Int)m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(LayoutInt(m));
+					nCharChars = (Int)m_pEditDoc->m_layoutMgr.GetActualTabSpace(LayoutInt(m));
 					for (int i=0; i<nCharChars; ++i) {
 						pszData[nDataLen + i] = WCODE::SPACE;
 					}
@@ -1464,7 +1464,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		
 		// 調整によって置換される箇所
 		LayoutRange sRangeLayout;
-		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(sRangeA, &sRangeLayout);
+		m_pEditDoc->m_layoutMgr.LogicToLayout(sRangeA, &sRangeLayout);
 
 		if (0
 			|| (nDataLen == 0 && sRangeLayout.IsOne())
@@ -1480,13 +1480,13 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 				pszData,	// 挿入するデータ
 				nDataLen,	// 挿入するデータの長さ
 				true,
-				m_bDoing_UndoRedo ? NULL : m_cCommander.GetOpeBlk()
+				m_bDoing_UndoRedo ? NULL : m_commander.GetOpeBlk()
 			);
 		}
 
 		// カーソル位置調整
 		LayoutPoint ptCP_Layout;
-		m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
+		m_pEditDoc->m_layoutMgr.LogicToLayout(ptCP, &ptCP_Layout);
 
 		// 選択エリアの先頭へカーソルを移動
 		GetCaret().MoveCursor(ptCP_Layout, true);
@@ -1494,7 +1494,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 		if (bChange && !m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			// 操作の追加
-			m_cCommander.GetOpeBlk()->AppendOpe(
+			m_commander.GetOpeBlk()->AppendOpe(
 				new MoveCaretOpe(
 					GetCaret().GetCaretLogicPos()	// 操作前後のキャレット位置
 				)

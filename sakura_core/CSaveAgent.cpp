@@ -48,7 +48,7 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	//	ビューモードのチェックをEditDocから上書き保存処理に移動
 	//	同名で上書きされるのを防ぐ
 	if (AppMode::getInstance()->IsViewMode()
-		&& pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())
+		&& pSaveInfo->IsSamePath(pcDoc->m_docFile.GetFilePath())
 	) {
 		ErrorBeep();
 		TopErrorMessage(EditWnd::getInstance()->GetHwnd(), LS(STR_SAVEAGENT_VIEW_FILE));
@@ -56,13 +56,13 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	}
 
 	// 他ウィンドウで開いているか確認する	// 2009.04.07 ryoji
-	if (!pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath())) {
+	if (!pSaveInfo->IsSamePath(pcDoc->m_docFile.GetFilePath())) {
 		HWND hwndOwner;
-		if (ShareData::getInstance()->IsPathOpened(pSaveInfo->cFilePath, &hwndOwner)) {
+		if (ShareData::getInstance()->IsPathOpened(pSaveInfo->filePath, &hwndOwner)) {
 			ErrorMessage(
 				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER),
-				(LPCTSTR)pSaveInfo->cFilePath
+				(LPCTSTR)pSaveInfo->filePath
 			);
 			return CallbackResultType::Interrupt;
 		}
@@ -72,31 +72,31 @@ CallbackResultType SaveAgent::OnCheckSave(SaveInfo* pSaveInfo)
 	{
 		// ロックは一時的に解除してチェックする（チェックせずに後戻りできないところまで進めるより安全）
 		// ※ ロックしていてもファイル属性やアクセス許可の変更によって書き込めなくなっていることもある
-		bool bLock = (pSaveInfo->IsSamePath(pcDoc->m_cDocFile.GetFilePath()) && pcDoc->m_cDocFile.IsFileLocking());
+		bool bLock = (pSaveInfo->IsSamePath(pcDoc->m_docFile.GetFilePath()) && pcDoc->m_docFile.IsFileLocking());
 		if (bLock) {
-			pcDoc->m_cDocFileOperation.DoFileUnlock();
+			pcDoc->m_docFileOperation.DoFileUnlock();
 		}
 		try {
-			bool bExist = fexist(pSaveInfo->cFilePath);
-			Stream out(pSaveInfo->cFilePath, _T("ab"), true);	// 実際の保存は "wb" だがここは "ab"（ファイル内容は破棄しない）でチェックする	// 2009.08.21 ryoji
+			bool bExist = fexist(pSaveInfo->filePath);
+			Stream out(pSaveInfo->filePath, _T("ab"), true);	// 実際の保存は "wb" だがここは "ab"（ファイル内容は破棄しない）でチェックする	// 2009.08.21 ryoji
 			out.Close();
 			if (!bExist) {
-				::DeleteFile(pSaveInfo->cFilePath);
+				::DeleteFile(pSaveInfo->filePath);
 			}
 		}catch (Error_FileOpen) {
 			// ※ たとえ上書き保存の場合でもここでの失敗では書込み禁止へは遷移しない
 			if (bLock) {
-				pcDoc->m_cDocFileOperation.DoFileLock(false);
+				pcDoc->m_docFileOperation.DoFileLock(false);
 			}
 			ErrorMessage(
 				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_SAVEAGENT_OTHER_APP),
-				pSaveInfo->cFilePath.c_str()
+				pSaveInfo->filePath.c_str()
 			);
 			return CallbackResultType::Interrupt;
 		}
 		if (bLock) {
-			pcDoc->m_cDocFileOperation.DoFileLock(false);
+			pcDoc->m_docFileOperation.DoFileLock(false);
 		}
 	}
 	return CallbackResultType::Continue;
@@ -116,17 +116,17 @@ void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
 
 	// カキコ
 	WriteManager cWriter;
-	EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cWriter);
+	EditApp::getInstance()->m_pVisualProgress->ProgressListener::Listen(&cWriter);
 	cWriter.WriteFile_From_CDocLineMgr(
 		pcDoc->m_docLineMgr,
 		sSaveInfo
 	);
 
 	// セーブ情報の確定
-	pcDoc->SetFilePathAndIcon(sSaveInfo.cFilePath);
-	pcDoc->m_cDocFile.SetCodeSet(sSaveInfo.eCharCode, sSaveInfo.bBomExist);
+	pcDoc->SetFilePathAndIcon(sSaveInfo.filePath);
+	pcDoc->m_docFile.SetCodeSet(sSaveInfo.eCharCode, sSaveInfo.bBomExist);
 	if (sSaveInfo.cEol.IsValid()) {
-		pcDoc->m_cDocEditor.SetNewLineCode(sSaveInfo.cEol);
+		pcDoc->m_docEditor.SetNewLineCode(sSaveInfo.cEol);
 	}
 }
 
@@ -138,7 +138,7 @@ void SaveAgent::OnAfterSave(const SaveInfo& sSaveInfo)
 	 * CloseHandle前ではFlushFileBuffersを呼んでもタイムスタンプが更新
 	 * されないことがある。
 	 */
-	GetLastWriteTimestamp(pcDoc->m_cDocFile.GetFilePath(), &pcDoc->m_cDocFile.GetFileTime());
+	GetLastWriteTimestamp(pcDoc->m_docFile.GetFilePath(), &pcDoc->m_docFile.GetFileTime());
 
 	// タイプ別設定の変更を指示。
 	// 上書き（明示的な上書きや自動保存）では変更しない

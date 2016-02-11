@@ -164,9 +164,9 @@ void FuncInfoArr::DUMP(void)
 		MYTRACE(_T("[%d]------------------\n"), i);
 		MYTRACE(_T("m_nFuncLineCRLF	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineCRLF);
 		MYTRACE(_T("m_nFuncLineLAYOUT	=%d\n"), m_ppcFuncInfoArr[i]->m_nFuncLineLAYOUT);
-		MYTRACE(_T("m_cmemFuncName	=[%ts]\n"), m_ppcFuncInfoArr[i]->m_cmemFuncName.GetStringPtr());
-		MYTRACE( _T("m_cmemFileName	=[%ts]\n"),
-			(m_ppcFuncInfoArr[i]->m_cmemFileName.GetStringPtr() ? m_ppcFuncInfoArr[i]->m_cmemFileName.GetStringPtr() : _T("NULL")) );
+		MYTRACE(_T("m_memFuncName	=[%ts]\n"), m_ppcFuncInfoArr[i]->m_memFuncName.GetStringPtr());
+		MYTRACE( _T("m_memFileName	=[%ts]\n"),
+			(m_ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() ? m_ppcFuncInfoArr[i]->m_memFileName.GetStringPtr() : _T("NULL")) );
 		MYTRACE(_T("m_nInfo			=%d\n"), m_ppcFuncInfoArr[i]->m_nInfo);
 	}
 	MYTRACE(_T("=============================\n"));

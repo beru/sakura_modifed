@@ -510,7 +510,7 @@ bool Clipboard::SetClipboradByFormat(
 			pBuf = (char*)cstr.GetPtr();
 			nTextByteLen = cstr.GetLength() * sizeof(wchar_t);
 		}else {
-			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
+			CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode());
 			if (pCode->UnicodeToCode(cstr, &cmemBuf) == CodeConvertResult::Failure) {
 				return false;
 			}
@@ -635,7 +635,7 @@ bool Clipboard::GetClipboradByFormat(
 				if (nBomCode != CODE_NONE) {
 					eMode = nBomCode;
 				}else {
-					const TypeConfig& type = EditDoc::GetInstance(0)->m_cDocType.GetDocumentAttribute();
+					const TypeConfig& type = EditDoc::GetInstance(0)->m_docType.GetDocumentAttribute();
 					CodeMediator mediator(type.m_encoding);
 					eMode = mediator.CheckKanjiCode((const char*)pData, nLength);
 				}
@@ -653,7 +653,7 @@ bool Clipboard::GetClipboradByFormat(
 				Memory cmem;
 				cmem.SetRawData(pData, nLength);
 				if (cmem.GetRawPtr()) {
-					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode());
+					CodeBase* pCode = CodeFactory::CreateCodeBase(eMode, GetDllShareData().m_common.m_file.GetAutoMIMEdecode());
 					if (pCode->CodeToUnicode(cmem, &mem) == CodeConvertResult::Failure) {
 						mem.SetString(L"");
 						retVal = false;

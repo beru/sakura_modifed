@@ -91,7 +91,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
-	lf.lfHeight			= 1 - pCommon->m_sWindow.m_nRulerHeight;	//	2002/05/13 ai
+	lf.lfHeight			= 1 - pCommon->m_window.m_nRulerHeight;	//	2002/05/13 ai
 	lf.lfWidth			= 5;
 	lf.lfEscapement		= 0;
 	lf.lfOrientation	= 0;
@@ -128,7 +128,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	// 下線 (ルーラーと本文の境界)
 	//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
 	//	2005.11.10 Moca 1dot足りない
-	LayoutInt	nMaxLineKetas = m_pEditDoc->m_cLayoutMgr.GetMaxLineKetas();
+	LayoutInt	nMaxLineKetas = m_pEditDoc->m_layoutMgr.GetMaxLineKetas();
 	int nToX = m_pEditView->GetTextArea().GetAreaLeft() + (Int)(nMaxLineKetas - m_pEditView->GetTextArea().GetViewLeftCol()) * m_pEditView->GetTextMetrics().GetHankakuDx() + 1;
 	if (nToX > m_pEditView->GetTextArea().GetAreaRight()) {
 		nToX = m_pEditView->GetTextArea().GetAreaRight();

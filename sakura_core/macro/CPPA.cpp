@@ -73,10 +73,10 @@ bool PPA::Execute(EditView* pcEditView, int flags)
 	PPA::m_bIsRunning = true;
 
 	PpaExecInfo info;
-	info.m_pcEditView = pcEditView;
+	info.m_pEditView = pcEditView;
 	info.m_pShareData = &GetDllShareData();
 	info.m_bError = false;			// 2003.06.01 Moca
-	info.m_cMemDebug.SetString("");	// 2003.06.01 Moca
+	info.m_memDebug.SetString("");	// 2003.06.01 Moca
 	info.m_commandflags = flags | FA_FROMMACRO;	// 2007.07.22 genta
 	
 	// 実行前にインスタンスを待避する
@@ -299,10 +299,10 @@ void __stdcall PPA::stdStrObj(
 	case 2:
 		switch (GS_Mode) {
 		case omGet:
-			*Value = m_CurInstance->m_cMemDebug.GetStringPtr();
+			*Value = m_CurInstance->m_memDebug.GetStringPtr();
 			break;
 		case omSet:
-			m_CurInstance->m_cMemDebug.SetString(*Value);
+			m_CurInstance->m_memDebug.SetString(*Value);
 			break;
 		}
 		break;
@@ -378,10 +378,10 @@ void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 			}
 		}
 	}
-	if (m_CurInstance->m_cMemDebug.GetStringLength() == 0) {
-		MYMESSAGEBOX(m_CurInstance->m_pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts"), pszErr);
+	if (m_CurInstance->m_memDebug.GetStringLength() == 0) {
+		MYMESSAGEBOX(m_CurInstance->m_pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts"), pszErr);
 	}else {
-		MYMESSAGEBOX(m_CurInstance->m_pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts\n%hs"), pszErr, m_CurInstance->m_cMemDebug.GetStringPtr());
+		MYMESSAGEBOX(m_CurInstance->m_pEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), _T("%ts\n%hs"), pszErr, m_CurInstance->m_memDebug.GetStringPtr());
 	}
 }
 
@@ -419,7 +419,7 @@ void __stdcall PPA::stdProc(
 
 	// 処理
 	bool bRet = Macro::HandleCommand(
-		m_CurInstance->m_pcEditView,
+		m_CurInstance->m_pEditView,
 		(EFunctionCode)(eIndex | m_CurInstance->m_commandflags),
 		tmpArguments,
 		tmpArgLengths,
@@ -511,9 +511,9 @@ void __stdcall PPA::stdStrFunc(
 			int len;
 			char* buf;
 			Wrap(&Ret.bstrVal)->Get(&buf, &len);
-			m_CurInstance->m_cMemRet.SetString(buf, len); // Mar. 9, 2003 genta
+			m_CurInstance->m_memRet.SetString(buf, len); // Mar. 9, 2003 genta
 			delete[] buf;
-			*ResultValue = m_CurInstance->m_cMemRet.GetStringPtr();
+			*ResultValue = m_CurInstance->m_memRet.GetStringPtr();
 			::VariantClear(&Ret);
 			return;
 		}
@@ -581,7 +581,7 @@ bool PPA::CallHandleFunction(
 	}
 
 	if (Index >= F_FUNCTION_FIRST) {
-		bool Ret = Macro::HandleFunction(m_CurInstance->m_pcEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
+		bool Ret = Macro::HandleFunction(m_CurInstance->m_pEditView, (EFunctionCode)Index, vtArg, ArgCnt, *Result);
 		for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
 			::VariantClear(&vtArg[i]);
 		}

@@ -35,7 +35,7 @@ class CaretUnderLine {
 public:
 	CaretUnderLine(EditView* pcEditView)
 		:
-		m_pcEditView(pcEditView)
+		m_pEditView(pcEditView)
 	{
 		m_nLockCounter = 0;
 		m_nUnderLineLockCounter = 0;
@@ -71,7 +71,7 @@ private:
 	// ロックカウンタ。0のときは、ロックされていない。UnLockが呼ばれすぎても負にはならない
 	int m_nLockCounter;
 	int m_nUnderLineLockCounter;
-	EditView* m_pcEditView;
+	EditView* m_pEditView;
 	bool m_bUnderLineDoNotOFF;
 	bool m_bVertLineDoNotOFF;
 };

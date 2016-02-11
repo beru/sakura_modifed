@@ -120,15 +120,15 @@ class EditView :
 {
 public:
 	const EditDoc* GetDocument() const {
-		return m_pcEditDoc;
+		return m_pEditDoc;
 	}
 	EditDoc* GetDocument() {
-		return m_pcEditDoc;
+		return m_pEditDoc;
 	}
 public:
 	//! 背景にビットマップを使用するかどうか
 	//! 2010.10.03 背景実装
-	bool IsBkBitmap() const { return m_pcEditDoc->m_hBackImg != NULL; }
+	bool IsBkBitmap() const { return m_pEditDoc->m_hBackImg != NULL; }
 
 public:
 	EditView* GetEditView() {
@@ -381,7 +381,7 @@ public:
 
 	// データ置換 削除&挿入にも使える
 	void ReplaceData_CEditView(
-		const LayoutRange&	sDelRange,			// 削除範囲。レイアウト単位。
+		const LayoutRange&	delRange,			// 削除範囲。レイアウト単位。
 		const wchar_t*		pInsData,			// 挿入するデータ
 		LogicInt			nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
@@ -390,7 +390,7 @@ public:
 		const LogicRange*	psDelRangeLogicFast = NULL
 	);
 	void ReplaceData_CEditView2(
-		const LogicRange&	sDelRange,			// 削除範囲。ロジック単位。
+		const LogicRange&	delRange,			// 削除範囲。ロジック単位。
 		const wchar_t*		pInsData,			// 挿入するデータ
 		LogicInt			nInsDataLen,		// 挿入するデータの長さ
 		bool				bRedraw,
@@ -398,7 +398,7 @@ public:
 		bool				bFastMode = false
 	);
 	bool ReplaceData_CEditView3(
-		LayoutRange	sDelRange,			// 削除範囲。レイアウト単位。
+		LayoutRange	delRange,			// 削除範囲。レイアウト単位。
 		OpeLineData*	pcmemCopyOfDeleted,	// 削除されたデータのコピー(NULL可能)
 		OpeLineData*	pInsData,
 		bool			bRedraw,
@@ -554,27 +554,27 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 主要構成部品アクセス
-	TextArea& GetTextArea() { assert(m_pcTextArea); return *m_pcTextArea; }
-	const TextArea& GetTextArea() const { assert(m_pcTextArea); return *m_pcTextArea; }
-	Caret& GetCaret() { assert(m_pcCaret); return *m_pcCaret; }
-	const Caret& GetCaret() const { assert(m_pcCaret); return *m_pcCaret; }
-	Ruler& GetRuler() { assert(m_pcRuler); return *m_pcRuler; }
-	const Ruler& GetRuler() const { assert(m_pcRuler); return *m_pcRuler; }
+	TextArea& GetTextArea() { assert(m_pTextArea); return *m_pTextArea; }
+	const TextArea& GetTextArea() const { assert(m_pTextArea); return *m_pTextArea; }
+	Caret& GetCaret() { assert(m_pCaret); return *m_pCaret; }
+	const Caret& GetCaret() const { assert(m_pCaret); return *m_pCaret; }
+	Ruler& GetRuler() { assert(m_pRuler); return *m_pRuler; }
+	const Ruler& GetRuler() const { assert(m_pRuler); return *m_pRuler; }
 
 	// 主要属性アクセス
-	TextMetrics& GetTextMetrics() { return m_cTextMetrics; }
-	const TextMetrics& GetTextMetrics() const { return m_cTextMetrics; }
-	ViewSelect& GetSelectionInfo() { return m_cViewSelect; }
-	const ViewSelect& GetSelectionInfo() const { return m_cViewSelect; }
+	TextMetrics& GetTextMetrics() { return m_textMetrics; }
+	const TextMetrics& GetTextMetrics() const { return m_textMetrics; }
+	ViewSelect& GetSelectionInfo() { return m_viewSelect; }
+	const ViewSelect& GetSelectionInfo() const { return m_viewSelect; }
 
 	// 主要オブジェクトアクセス
-	ViewFont& GetFontset() { assert(m_pcViewFont); return *m_pcViewFont; }
-	const ViewFont& GetFontset() const { assert(m_pcViewFont); return *m_pcViewFont; }
+	ViewFont& GetFontset() { assert(m_pViewFont); return *m_pViewFont; }
+	const ViewFont& GetFontset() const { assert(m_pViewFont); return *m_pViewFont; }
 
 	// 主要ヘルパアクセス
-	const ViewParser& GetParser() const { return m_cParser; }
-	const TextDrawer& GetTextDrawer() const { return m_cTextDrawer; }
-	ViewCommander& GetCommander() { return m_cCommander; }
+	const ViewParser& GetParser() const { return m_parser; }
+	const TextDrawer& GetTextDrawer() const { return m_textDrawer; }
+	ViewCommander& GetCommander() { return m_commander; }
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -583,25 +583,25 @@ public:
 public:
 	// 参照
 	EditWnd*			m_pEditWnd;	//!< ウィンドウ
-	EditDoc*			m_pcEditDoc;	//!< ドキュメント
+	EditDoc*			m_pEditDoc;	//!< ドキュメント
 	const TypeConfig*	m_pTypeData;
 
 	// 主要構成部品
-	TextArea*		m_pcTextArea;
-	Caret*			m_pcCaret;
-	Ruler*			m_pcRuler;
+	TextArea*		m_pTextArea;
+	Caret*			m_pCaret;
+	Ruler*			m_pRuler;
 
 	// 主要属性
-	TextMetrics	m_cTextMetrics;
-	ViewSelect		m_cViewSelect;
+	TextMetrics		m_textMetrics;
+	ViewSelect		m_viewSelect;
 
 	// 主要オブジェクト
-	ViewFont*		m_pcViewFont;
+	ViewFont*		m_pViewFont;
 
 	// 主要ヘルパ
-	ViewParser		m_cParser;
-	TextDrawer		m_cTextDrawer;
-	ViewCommander	m_cCommander;
+	ViewParser		m_parser;
+	TextDrawer		m_textDrawer;
+	ViewCommander	m_commander;
 
 public:
 	// ウィンドウ
@@ -612,7 +612,7 @@ public:
 	HWND			m_hwndSizeBox;		// サイズボックスウィンドウハンドル
 	SplitBoxWnd*	m_pcsbwVSplitBox;	// 垂直分割ボックス
 	SplitBoxWnd*	m_pcsbwHSplitBox;	// 水平分割ボックス
-	AutoScrollWnd	m_cAutoScrollWnd;	//!< オートスクロール
+	AutoScrollWnd	m_autoScrollWnd;	//!< オートスクロール
 
 public:
 	// 描画
@@ -637,11 +637,11 @@ public:
 
 public:
 	// D&D
-	DropTarget*	m_pcDropTarget;
+	DropTarget*		m_pDropTarget;
 	bool			m_bDragMode;					// 選択テキストのドラッグ中か
 	CLIPFORMAT		m_cfDragData;					// ドラッグデータのクリップ形式	// 2008.06.20 ryoji
 	bool			m_bDragBoxData;					// ドラッグデータは矩形か
-	LayoutPoint	m_ptCaretPos_DragEnter;			// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
+	LayoutPoint		m_ptCaretPos_DragEnter;			// ドラッグ開始時のカーソル位置	// 2007.12.09 ryoji
 	LayoutInt		m_nCaretPosX_Prev_DragEnter;	// ドラッグ開始時のX座標記憶	// 2007.12.09 ryoji
 
 	// 括弧
@@ -652,22 +652,22 @@ public:
 	// マウス
 	bool			m_bActivateByMouse;		//!< マウスによるアクティベート	// 2007.10.02 nasukoji
 	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	// 2007.10.02 nasukoji
-	Point		m_cMouseDownPos;		//!< クリック時のマウス座標
+	Point			m_mouseDownPos;		//!< クリック時のマウス座標
 	int				m_nWheelDelta;			//!< ホイール変化量
 	EFunctionCode	m_eWheelScroll; 		//!< スクロールの種類
 	int				m_nMousePouse;			// マウス停止時間
-	Point		m_cMousePousePos;		// マウスの停止位置
+	Point			m_mousePousePos;		// マウスの停止位置
 	bool			m_bHideMouse;
 
 	int				m_nAutoScrollMode;			//!< オートスクロールモード
 	bool			m_bAutoScrollDragMode;		//!< ドラッグモード
-	Point		m_cAutoScrollMousePos;		//!< オートスクロールのマウス基準位置
+	Point			m_autoScrollMousePos;		//!< オートスクロールのマウス基準位置
 	bool			m_bAutoScrollVertical;		//!< 垂直スクロール可
 	bool			m_bAutoScrollHorizontal;	//!< 水平スクロール可
 
 	// 検索
 	SearchStringPattern m_sSearchPattern;
-	mutable Bregexp	m_CurRegexp;				// コンパイルデータ
+	mutable Bregexp		m_CurRegexp;				// コンパイルデータ
 	bool				m_bCurSrchKeyMark;			// 検索文字列のマーク
 	bool				m_bCurSearchUpdate;			// コンパイルデータ更新要求
 	int					m_nCurSearchKeySequence;	// 検索キーシーケンス
@@ -675,7 +675,7 @@ public:
 	SearchOption		m_curSearchOption;			// 検索／置換  オプション
 	LogicPoint			m_ptSrchStartPos_PHY;		// 検索/置換開始時のカーソル位置 (改行単位行先頭からのバイト数(0開始), 改行単位行の行番号(0開始))
 	bool				m_bSearch;					// 検索/置換開始位置を登録するか											// 02/06/26 ai
-	SearchDirection	m_nISearchDirection;
+	SearchDirection		m_nISearchDirection;
 	int					m_nISearchMode;
 	bool				m_bISearchWrap;
 	bool				m_bISearchFlagHistory[256];
@@ -695,10 +695,10 @@ public:
 
 	// 辞書Tip関連
 	DWORD			m_dwTipTimer;			// Tip起動タイマー
-	TipWnd			m_cTipWnd;				// Tip表示ウィンドウ
+	TipWnd			m_tipWnd;				// Tip表示ウィンドウ
 	POINT			m_poTipCurPos;			// Tip起動時のマウスカーソル位置
 	bool			m_bInMenuLoop;			// メニュー モーダル ループに入っています
-	DicMgr			m_cDicMgr;				// 辞書マネージャ
+	DicMgr			m_dicMgr;				// 辞書マネージャ
 
 	TCHAR			m_szComposition[512];	// IMR_DOCUMENTFEED用入力中文字列データ
 
@@ -722,7 +722,7 @@ public:
 	AutoMarkMgr*	m_cHistory;	//	Jump履歴
 	RegexKeyword*	m_cRegexKeyword;	//@@@ 2001.11.17 add MIK
 	int				m_nMyIndex;	// 分割状態
-	Migemo*		m_pcmigemo;
+	Migemo*			m_pMigemo;
 	bool			m_bMiniMap;
 	bool			m_bMiniMapMouseDown;
 	LayoutInt		m_nPageViewTop;

@@ -102,11 +102,11 @@ TextOutputStream::TextOutputStream(
 	)
 	: OutputStream(tszPath, _T("wb"), bExceptionMode)
 {
-	m_pcCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
+	m_pCodeBase = CodeFactory::CreateCodeBase(eCodeType, 0);
 	if (Good() && bBom) {
 		// BOM付加
 		Memory cmemBom;
-		m_pcCodeBase->GetBom(&cmemBom);
+		m_pCodeBase->GetBom(&cmemBom);
 		if (cmemBom.GetRawLength() > 0) {
 			fwrite(cmemBom.GetRawPtr(), cmemBom.GetRawLength(), 1, GetFp());
 		}
@@ -115,7 +115,7 @@ TextOutputStream::TextOutputStream(
 
 TextOutputStream::~TextOutputStream()
 {
-	delete m_pcCodeBase;
+	delete m_pCodeBase;
 }
 
 void TextOutputStream::WriteString(
@@ -148,12 +148,12 @@ void TextOutputStream::WriteString(
 			// \nの前まで(p～lf)出力
 			NativeW cSrc(p, lf-p);
 			Memory cDst;
-			m_pcCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
+			m_pCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
 			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 
 			// \r\nを出力
 			cSrc.SetString(L"\r\n");
-			m_pcCodeBase->UnicodeToCode(cSrc, &cDst);
+			m_pCodeBase->UnicodeToCode(cSrc, &cDst);
 			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 
 			// 次へ
@@ -162,7 +162,7 @@ void TextOutputStream::WriteString(
 			// 残りぜんぶ出力
 			NativeW cSrc(p, pEnd - p);
 			Memory cDst;
-			m_pcCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
+			m_pCodeBase->UnicodeToCode(cSrc, &cDst); // コード変換
 			fwrite(cDst.GetRawPtr(), 1, cDst.GetRawLength(), GetFp());
 			break;
 		}

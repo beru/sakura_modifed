@@ -150,7 +150,7 @@ INT_PTR PropTab::DispatchEvent(
 					EnableTabPropInput(hwndDlg);
 					break;
 				case IDC_BUTTON_TABFONT:
-					auto& csTabBar = m_Common.m_sTabBar;
+					auto& csTabBar = m_common.m_tabBar;
 					LOGFONT   lf = csTabBar.m_lf;
 					INT nPointSize = csTabBar.m_nPointSize;
 
@@ -202,7 +202,7 @@ INT_PTR PropTab::DispatchEvent(
 // ダイアログデータの設定
 void PropTab::SetData(HWND hwndDlg)
 {
-	auto& csTabBar = m_Common.m_sTabBar;
+	auto& csTabBar = m_common.m_tabBar;
 
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	CheckDlgButtonBool(hwndDlg, IDC_CHECK_DispTabWnd, csTabBar.m_bDispTabWnd);	//@@@ 2003.05.31 MIK
@@ -219,7 +219,7 @@ void PropTab::SetData(HWND hwndDlg)
 	int nSelPos = 0;
 	for (int i=0; i<_countof(DispTabCloseArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(DispTabCloseArr[i].nNameId));
-		if (DispTabCloseArr[i].nMethod == m_Common.m_sTabBar.m_dispTabClose) {
+		if (DispTabCloseArr[i].nMethod == m_common.m_tabBar.m_dispTabClose) {
 			nSelPos = i;
 		}
 	}
@@ -230,7 +230,7 @@ void PropTab::SetData(HWND hwndDlg)
 	nSelPos = 0;
 	for (int i=0; i<_countof(TabPosArr); ++i) {
 		Combo_InsertString(hwndCombo, i, LS(TabPosArr[i].nNameId));
-		if (TabPosArr[i].nMethod == m_Common.m_sTabBar.m_eTabPosition) {
+		if (TabPosArr[i].nMethod == m_common.m_tabBar.m_eTabPosition) {
 			nSelPos = i;
 		}
 	}
@@ -251,7 +251,7 @@ void PropTab::SetData(HWND hwndDlg)
 // ダイアログデータの取得
 int PropTab::GetData(HWND hwndDlg)
 {
-	auto& csTabBar = m_Common.m_sTabBar;
+	auto& csTabBar = m_common.m_tabBar;
 	//	Feb. 11, 2007 genta「ウィンドウ」シートより移動
 	csTabBar.m_bDispTabWnd = DlgButton_IsChecked(hwndDlg, IDC_CHECK_DispTabWnd);
 	csTabBar.m_bSameTabWidth = DlgButton_IsChecked(hwndDlg, IDC_CHECK_SameTabWidth);		// 2006.01.28 ryoji

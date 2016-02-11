@@ -91,7 +91,7 @@ INT_PTR CALLBACK PropFormat::DlgProc_page(
 
 void PropFormat::ChangeDateExample(HWND hwndDlg)
 {
-	auto& csFormat = m_Common.m_sFormat;
+	auto& csFormat = m_common.m_format;
 	// ダイアログデータの取得 Format
 	GetData(hwndDlg);
 
@@ -106,7 +106,7 @@ void PropFormat::ChangeDateExample(HWND hwndDlg)
 
 void PropFormat::ChangeTimeExample(HWND hwndDlg)
 {
-	auto& csFormat = m_Common.m_sFormat;
+	auto& csFormat = m_common.m_format;
 	// ダイアログデータの取得 Format
 	GetData(hwndDlg);
 
@@ -134,7 +134,7 @@ INT_PTR PropFormat::DispatchEvent(
 //	NM_UPDOWN*	pMNUD;
 //	int			idCtrl;
 //	int			nVal;
-	auto& csFormat = m_Common.m_sFormat;
+	auto& csFormat = m_common.m_format;
 
 	switch (uMsg) {
 	case WM_INITDIALOG:
@@ -257,7 +257,7 @@ INT_PTR PropFormat::DispatchEvent(
 // ダイアログデータの設定 Format
 void PropFormat::SetData(HWND hwndDlg)
 {
-	auto& csFormat = m_Common.m_sFormat;
+	auto& csFormat = m_common.m_format;
 	
 	// 見出し記号
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_MIDASHIKIGOU, csFormat.m_szMidashiKigou);
@@ -296,7 +296,7 @@ void PropFormat::SetData(HWND hwndDlg)
 // ダイアログデータの取得 Format
 int PropFormat::GetData(HWND hwndDlg)
 {
-	auto& csFormat = m_Common.m_sFormat;
+	auto& csFormat = m_common.m_format;
 	// 見出し記号
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_MIDASHIKIGOU, csFormat.m_szMidashiKigou, _countof(csFormat.m_szMidashiKigou));
 

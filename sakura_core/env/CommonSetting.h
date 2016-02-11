@@ -492,7 +492,7 @@ struct CommonSetting_Helper {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 struct CommonSetting_Macro {
 	TCHAR		m_szKeyMacroFileName[MAX_PATH];	//!< キーボードマクロのファイル名
-	MacroRec	m_MacroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	 Sep. 14, 2001 genta
+	MacroRec	m_macroTable[MAX_CUSTMACRO];	//!< キー割り当て用マクロテーブル	 Sep. 14, 2001 genta
 	SFilePath	m_szMACROFOLDER;				// マクロ用フォルダ
 	int			m_nMacroOnOpened;				// オープン後自動実行マクロ番号		@@@ 2006.09.01 ryoji
 	int			m_nMacroOnTypeChanged;			// タイプ変更後自動実行マクロ番号	@@@ 2006.09.01 ryoji
@@ -585,8 +585,8 @@ struct CommonSetting_OutLine {
 	bool		m_bFunclistSetFocusOnJump;	// フォーカスを移す 2002.02.08 hor
 	bool		m_bMarkUpBlankLineEnable;	// 空行を無視する 2002.02.08 aroka,hor
 
-	FileTree	m_sFileTree;				// ファイルツリー設定
-	SFilePath	m_sFileTreeDefIniName;		// ファイルツリー設定のデフォルトファイル名(GUIなし)
+	FileTree	m_fileTree;				// ファイルツリー設定
+	SFilePath	m_fileTreeDefIniName;		// ファイルツリー設定のデフォルトファイル名(GUIなし)
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -623,7 +623,7 @@ struct CommonSetting_Others {
 //                          ステータスバー                     //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // 2008/6/21	Uchi
-struct CommonSetting_Statusbar {
+struct CommonSetting_StatusBar {
 	// 表示文字コードの指定
 	bool		m_bDispUniInSjis;				// SJISで文字コード値をUnicodeで表示する
 	bool		m_bDispUniInJis;				// JISで文字コード値をUnicodeで表示する
@@ -656,7 +656,7 @@ struct PluginRec {
 
 struct CommonSetting_Plugin {
 	bool			m_bEnablePlugin;			//!< プラグインを使用するかどうか
-	PluginRec		m_PluginTable[MAX_PLUGIN];	//!< プラグインテーブル
+	PluginRec		m_pluginTable[MAX_PLUGIN];	//!< プラグインテーブル
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -683,7 +683,7 @@ struct CommonSetting_MainMenu {
 	int				m_nVersion;							// メインメニューバージョン
 	int				m_nMenuTopIdx[MAX_MAINMENU_TOP];	// メインメニュートップレベル
 	int 			m_nMainMenuNum;						// メインメニューデータの数
-	MainMenu		m_cMainMenuTbl[MAX_MAINMENU];		// メインメニューデータ
+	MainMenu		m_mainMenuTbl[MAX_MAINMENU];		// メインメニューデータ
 	bool 			m_bMainMenuKeyParentheses;			// アクセスキーを()付で表示
 };
 
@@ -696,31 +696,31 @@ struct CommonSetting_MainMenu {
 
 //! 共通設定
 struct CommonSetting {
-	CommonSetting_General			m_sGeneral;			// 全般
-	CommonSetting_Window			m_sWindow;			// ウィンドウ
-	CommonSetting_TabBar			m_sTabBar;			// タブバー
-	CommonSetting_Edit				m_sEdit;			// 編集
-	CommonSetting_File				m_sFile;			// ファイル
-	CommonSetting_Backup			m_sBackup;			// バックアップ
-	CommonSetting_Format			m_sFormat;			// 書式
-	CommonSetting_Search			m_sSearch;			// 検索
-	CommonSetting_KeyBind			m_sKeyBind;			// キー割り当て
+	CommonSetting_General			m_general;			// 全般
+	CommonSetting_Window			m_window;			// ウィンドウ
+	CommonSetting_TabBar			m_tabBar;			// タブバー
+	CommonSetting_Edit				m_edit;				// 編集
+	CommonSetting_File				m_file;				// ファイル
+	CommonSetting_Backup			m_backup;			// バックアップ
+	CommonSetting_Format			m_format;			// 書式
+	CommonSetting_Search			m_search;			// 検索
+	CommonSetting_KeyBind			m_keyBind;			// キー割り当て
 	//
-	CommonSetting_CustomMenu		m_sCustomMenu;		// カスタムメニュー
-	CommonSetting_ToolBar			m_sToolBar;			// ツールバー
-	CommonSetting_SpecialKeyword	m_sSpecialKeyword;	// 強調キーワード
-	CommonSetting_Helper			m_sHelper;			// 支援
-	CommonSetting_Macro				m_sMacro;			// マクロ
-	CommonSetting_FileName			m_sFileName;		// ファイル名表示
+	CommonSetting_CustomMenu		m_customMenu;		// カスタムメニュー
+	CommonSetting_ToolBar			m_toolBar;			// ツールバー
+	CommonSetting_SpecialKeyword	m_specialKeyword;	// 強調キーワード
+	CommonSetting_Helper			m_helper;			// 支援
+	CommonSetting_Macro				m_macro;			// マクロ
+	CommonSetting_FileName			m_fileName;			// ファイル名表示
 	//
-	CommonSetting_OutLine			m_sOutline;			// アウトライン
-	CommonSetting_Compare			m_sCompare;			// ファイル内容比較
-	CommonSetting_View				m_sView;			// ビュー
-	CommonSetting_Others			m_sOthers;			// その他
+	CommonSetting_OutLine			m_outline;			// アウトライン
+	CommonSetting_Compare			m_compare;			// ファイル内容比較
+	CommonSetting_View				m_view;				// ビュー
+	CommonSetting_Others			m_others;			// その他
 
 	//
-	CommonSetting_Statusbar			m_sStatusbar;		// ステータスバー		// 2008/6/21 Uchi
-	CommonSetting_Plugin			m_sPlugin;			// プラグイン 2009/11/30 syat
-	CommonSetting_MainMenu			m_sMainMenu;		// メインメニュー		// 2010/5/15 Uchi
+	CommonSetting_StatusBar			m_statusBar;		// ステータスバー		// 2008/6/21 Uchi
+	CommonSetting_Plugin			m_plugin;			// プラグイン 2009/11/30 syat
+	CommonSetting_MainMenu			m_mainMenu;			// メインメニュー		// 2010/5/15 Uchi
 };
 

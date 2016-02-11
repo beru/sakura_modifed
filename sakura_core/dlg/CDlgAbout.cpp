@@ -204,15 +204,15 @@ BOOL DlgAbout::OnInitDialog(
 	cmemMsg.AppendString(szMsg);
 
 	// XV“úî•ñ
-	FileTime cFileTime;
-	GetLastWriteTimestamp(szFile, &cFileTime);
+	FileTime fileTime;
+	GetLastWriteTimestamp(szFile, &fileTime);
 	auto_sprintf(szMsg,  _T("      Last Modified: %d/%d/%d %02d:%02d:%02d\r\n"),
-		cFileTime->wYear,
-		cFileTime->wMonth,
-		cFileTime->wDay,
-		cFileTime->wHour,
-		cFileTime->wMinute,
-		cFileTime->wSecond
+		fileTime->wYear,
+		fileTime->wMonth,
+		fileTime->wDay,
+		fileTime->wHour,
+		fileTime->wMinute,
+		fileTime->wSecond
 	);
 	cmemMsg.AppendString(szMsg);
 

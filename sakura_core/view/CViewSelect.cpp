@@ -13,7 +13,7 @@
 #include "types/CTypeSupport.h"
 
 ViewSelect::ViewSelect(EditView* pcEditView)
-: m_pcEditView(pcEditView)
+: m_pEditView(pcEditView)
 {
 	m_bSelectingLock   = false;	// 選択状態のロック
 	m_bBeginSelect     = false;		// 範囲選択中
@@ -294,9 +294,9 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 		// 2001.12.21 hor 矩形エリアにEOFがある場合、RGN_XORで結合すると
 		// EOF以降のエリアも反転してしまうので、この場合はRedrawを使う
 		// 2002.02.16 hor ちらつきを抑止するためEOF以降のエリアが反転したらもう一度反転して元に戻すことにする
-		//if ((GetTextArea().GetViewTopLine()+m_nViewRowNum+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount()) &&
-		//   (m_sSelect.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount() ||
-		//	m_sSelectOld.GetTo().y+1 >= m_pcEditDoc->m_cLayoutMgr.GetLineCount())) {
+		//if ((GetTextArea().GetViewTopLine()+m_nViewRowNum+1 >= m_pEditDoc->m_layoutMgr.GetLineCount()) &&
+		//   (m_sSelect.GetTo().y+1 >= m_pEditDoc->m_layoutMgr.GetLineCount() ||
+		//	m_sSelectOld.GetTo().y+1 >= m_pEditDoc->m_layoutMgr.GetLineCount())) {
 		//	Redraw();
 		//	return;
 		//}
@@ -361,10 +361,10 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 
 				// 2006.10.01 Moca Start EOF位置計算をGetEndLayoutPosに書き換え。
 				LayoutPoint ptLast;
-				pView->m_pcEditDoc->m_cLayoutMgr.GetEndLayoutPos(&ptLast);
+				pView->m_pEditDoc->m_layoutMgr.GetEndLayoutPos(&ptLast);
 				// 2006.10.01 Moca End
 				// 2011.12.26 EOFのぶら下がり行は反転し、EOFのみの行は反転しない
-				const Layout* pBottom = pView->m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
+				const Layout* pBottom = pView->m_pEditDoc->m_layoutMgr.GetBottomLayout();
 				if (pBottom && pBottom->GetLayoutEol() == EolType::None) {
 					ptLast.x = 0;
 					ptLast.y++;
@@ -488,10 +488,10 @@ void ViewSelect::DrawSelectAreaLine(
 	const LayoutRange&	sRange		// [in] 選択範囲(レイアウト単位)
 ) const
 {
-	EditView const * const pView = m_pcEditView;
+	EditView const * const pView = m_pEditView;
 	bool bCompatBMP = pView->m_hbmpCompatBMP && hdc != pView->m_hdcCompatDC;
 
-	const LayoutMgr& layoutMgr = pView->m_pcEditDoc->m_cLayoutMgr;
+	const LayoutMgr& layoutMgr = pView->m_pEditDoc->m_layoutMgr;
 	const Layout* pcLayout = layoutMgr.SearchLineByLayoutY(nLineNum);
 	LayoutRange lineArea;
 	GetSelectAreaLineFromRange(lineArea, nLineNum, pcLayout, sRange);
@@ -576,7 +576,7 @@ void ViewSelect::GetSelectAreaLineFromRange(
 			nSelectTo   = sRange.GetTo().GetX2();
 			// 2006.09.30 Moca From 矩形選択時[EOF]とその右側は反転しないように修正。処理を追加
 			// 2011.12.26 [EOF]単独行以外なら反転する
-			if (view.m_pcEditDoc->m_cLayoutMgr.GetLineCount() <= nLineNum) {
+			if (view.m_pEditDoc->m_layoutMgr.GetLineCount() <= nLineNum) {
 				nSelectFrom = -1;
 				nSelectTo = -1;
 			}
@@ -624,18 +624,18 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	const EditView* pView = GetEditView();
 
 	//	出力されないなら計算を省略
-	if (!pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2IsEffective())
+	if (!pView->m_pEditWnd->m_statusBar.SendStatusMessage2IsEffective())
 		return;
 
-	LayoutInt nLineCount = pView->m_pcEditDoc->m_cLayoutMgr.GetLineCount();
+	LayoutInt nLineCount = pView->m_pEditDoc->m_layoutMgr.GetLineCount();
 	if (!IsTextSelected() || m_sSelect.GetFrom().y >= nLineCount) { // 先頭行が実在しない
 		const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
 		if (IsBoxSelecting()) {
-			pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(_T("box selecting"));
+			pView->m_pEditWnd->m_statusBar.SendStatusMessage2(_T("box selecting"));
 		}else if (m_bSelectingLock) {
-			pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(_T("selecting"));
+			pView->m_pEditWnd->m_statusBar.SendStatusMessage2(_T("selecting"));
 		}else {
-			pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(_T(""));
+			pView->m_pEditWnd->m_statusBar.SendStatusMessage2(_T(""));
 		}
 		return;
 	}
@@ -669,13 +669,13 @@ void ViewSelect::PrintSelectionInfoMsg() const
 		ViewSelect* thiz = const_cast<ViewSelect*>(this);	// const外しthis
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
-		bool bCountByByteCommon = GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte;
+		bool bCountByByteCommon = GetDllShareData().m_common.m_statusBar.m_bDispSelCountByByte;
 		bool bCountByByte = (pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
 								pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
-		pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout);
+		pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout);
 		if (pLine) {
 			if (bCountByByte) {
 				//  バイト数でカウント
@@ -691,7 +691,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 				bool bSelExtend;						// 選択領域拡大フラグ
 
 				// 最終行の処理
-				pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_sSelect.GetTo().y, &nLineLen, &pcLayout);
+				pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(m_sSelect.GetTo().y, &nLineLen, &pcLayout);
 				if (pLine) {
 					if (pView->LineColumnToIndex(pcLayout, m_sSelect.GetTo().GetX2()) == 0) {
 						//	最終行の先頭にキャレットがある場合は
@@ -741,7 +741,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					thiz->m_nLastSelectedByteLen = 0;
 				}
 				//  現在の文字コードに変換し、バイト長を取得する
-				CodeBase* pCode = CodeFactory::CreateCodeBase(pView->m_pcEditDoc->GetDocumentEncoding(), false);
+				CodeBase* pCode = CodeFactory::CreateCodeBase(pView->m_pEditDoc->GetDocumentEncoding(), false);
 				pCode->UnicodeToCode(cmemW, &cmemCode);
 				delete pCode;
 
@@ -778,7 +778,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 						nLineNum < m_sSelect.GetTo().GetY2();
 						++nLineNum
 					) {
-						pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
+						pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 						//	2006.06.06 ryoji 指定行のデータが存在しない場合の対策
 						if (!pLine)
 							break;
@@ -786,7 +786,7 @@ void ViewSelect::PrintSelectionInfoMsg() const
 					}
 
 					//	最終行の処理
-					pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
+					pLine = pView->m_pEditDoc->m_layoutMgr.GetLineStr(nLineNum, &nLineLen, &pcLayout);
 					if (pLine) {
 						int last_line_chars = pView->LineColumnToIndex(pcLayout, m_sSelect.GetTo().GetX2());
 						select_sum += last_line_chars;
@@ -823,6 +823,6 @@ void ViewSelect::PrintSelectionInfoMsg() const
 #endif
 	}
 	const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
-	pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(msg);
+	pView->m_pEditWnd->m_statusBar.SendStatusMessage2(msg);
 }
 

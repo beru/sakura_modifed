@@ -297,7 +297,7 @@ INT_PTR PropGeneral::DispatchEvent(
 // ダイアログデータの設定 General
 void PropGeneral::SetData(HWND hwndDlg)
 {
-	auto& csGeneral = m_Common.m_sGeneral;
+	auto& csGeneral = m_common.m_general;
 
 	// カーソルのタイプ 0=win 1=dos 
 	if (csGeneral.GetCaretType() == 0) {
@@ -361,7 +361,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	::CheckDlgButton(hwndDlg, IDC_CHECK_MEMDC, m_Common.m_sWindow.m_bUseCompatibleBMP);
+	::CheckDlgButton(hwndDlg, IDC_CHECK_MEMDC, m_common.m_window.m_bUseCompatibleBMP);
 
 	// ファイルの履歴MAX
 	::SetDlgItemInt(hwndDlg, IDC_EDIT_MAX_MRU_FILE, csGeneral.m_nMRUArrNum_MAX, FALSE);
@@ -392,7 +392,7 @@ void PropGeneral::SetData(HWND hwndDlg)
 // ダイアログデータの取得 General
 int PropGeneral::GetData(HWND hwndDlg)
 {
-	auto& csGeneral = m_Common.m_sGeneral;
+	auto& csGeneral = m_common.m_general;
 	
 	// カーソルのタイプ 0=win 1=dos 
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_CARETTYPE0)) {
@@ -437,7 +437,7 @@ int PropGeneral::GetData(HWND hwndDlg)
 
 	// 2007.09.09 Moca 画面キャッシュ設定追加
 	// 画面キャッシュを使う
-	m_Common.m_sWindow.m_bUseCompatibleBMP = DlgButton_IsChecked(hwndDlg, IDC_CHECK_MEMDC);
+	m_common.m_window.m_bUseCompatibleBMP = DlgButton_IsChecked(hwndDlg, IDC_CHECK_MEMDC);
 
 	hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_WHEEL_PAGESCROLL);
 	nSelPos = Combo_GetCurSel(hwndCombo);

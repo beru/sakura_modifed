@@ -36,7 +36,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 			ErrorMessage(
 				EditWnd::getInstance()->GetHwnd(),
 				LS(STR_FILESAVE_CONVERT_ERROR),
-				sSaveInfo.cFilePath.c_str()
+				sSaveInfo.filePath.c_str()
 			);
 			return nRetVal;
 		}
@@ -45,11 +45,11 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 
 	try {
 		// ファイルオープン
-		BinaryOutputStream out(sSaveInfo.cFilePath, true);
+		BinaryOutputStream out(sSaveInfo.filePath, true);
 
 		// 各行出力
 		int nLineNumber = 0;
-		const DocLine*	pcDocLine = pcDocLineMgr.GetDocLineTop();
+		const DocLine*	pDocLine = pcDocLineMgr.GetDocLineTop();
 		// 1行目
 		{
 			++nLineNumber;
@@ -62,8 +62,8 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 					// 1行目にはBOMを付加する。エンコーダでbomがある場合のみ付加する。
 					Unicode().GetBom(cstrSrc._GetMemory());
 				}
-				if (pcDocLine) {
-					cstrSrc.AppendNativeData(pcDocLine->_GetDocLineDataWithEOL());
+				if (pDocLine) {
+					cstrSrc.AppendNativeData(pDocLine->_GetDocLineDataWithEOL());
 				}
 				CodeConvertResult e = pcCodeBase->UnicodeToCode(cstrSrc, &cmemOutputBuffer);
 				if (e == CodeConvertResult::LoseSome) {
@@ -74,17 +74,17 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 					ErrorMessage(
 						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
-						sSaveInfo.cFilePath.c_str()
+						sSaveInfo.filePath.c_str()
 					);
 					throw Error_FileWrite();
 				}
 			}
 			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
-			if (pcDocLine) {
-				pcDocLine = pcDocLine->GetNextLine();
+			if (pDocLine) {
+				pDocLine = pDocLine->GetNextLine();
 			}
 		}
-		while (pcDocLine) {
+		while (pDocLine) {
 			++nLineNumber;
 
 			// 経過通知
@@ -101,7 +101,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 			{
 				// 書き込み時のコード変換 cstrSrc -> cmemOutputBuffer
 				CodeConvertResult e = pcCodeBase->UnicodeToCode(
-					pcDocLine->_GetDocLineDataWithEOL(),
+					pDocLine->_GetDocLineDataWithEOL(),
 					&cmemOutputBuffer
 				);
 				if (e == CodeConvertResult::LoseSome) {
@@ -114,7 +114,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 					ErrorMessage(
 						EditWnd::getInstance()->GetHwnd(),
 						LS(STR_FILESAVE_CONVERT_ERROR),
-						sSaveInfo.cFilePath.c_str()
+						sSaveInfo.filePath.c_str()
 					);
 					break;
 				}
@@ -124,7 +124,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 			out.Write(cmemOutputBuffer.GetRawPtr(), cmemOutputBuffer.GetRawLength());
 
 			// 次の行へ
-			pcDocLine = pcDocLine->GetNextLine();
+			pDocLine = pDocLine->GetNextLine();
 		}
 
 		// ファイルクローズ
@@ -133,7 +133,7 @@ CodeConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 		ErrorMessage(
 			EditWnd::getInstance()->GetHwnd(),
 			LS(STR_SAVEAGENT_OTHER_APP),
-			sSaveInfo.cFilePath.c_str()
+			sSaveInfo.filePath.c_str()
 		);
 		nRetVal = CodeConvertResult::Failure;
 	}catch (Error_FileWrite) {

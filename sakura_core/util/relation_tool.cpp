@@ -47,7 +47,7 @@ void Subject::_RemoveListener(Listener* pcListener)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 Listener::Listener()
-: m_pcSubjectRef(NULL)
+: m_pSubjectRef(NULL)
 {
 }
 
@@ -61,15 +61,15 @@ Subject* Listener::Listen(Subject* pcSubject)
 	Subject* pOld = GetListeningSubject();
 
 	// 古いサブジェクトを解除
-	if (m_pcSubjectRef) {
-		m_pcSubjectRef->_RemoveListener(this);
-		m_pcSubjectRef = NULL;
+	if (m_pSubjectRef) {
+		m_pSubjectRef->_RemoveListener(this);
+		m_pSubjectRef = NULL;
 	}
 
 	// 新しく設定
-	m_pcSubjectRef = pcSubject;
-	if (m_pcSubjectRef) {
-		m_pcSubjectRef->_AddListener(this);
+	m_pSubjectRef = pcSubject;
+	if (m_pSubjectRef) {
+		m_pSubjectRef->_AddListener(this);
 	}
 
 	return pOld;

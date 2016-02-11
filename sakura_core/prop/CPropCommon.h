@@ -116,18 +116,18 @@ public:
 	DLLSHAREDATA*		m_pShareData;
 	int					m_nKeywordSet1;
 	//	Oct. 16, 2000 genta
-	ImageListMgr*	m_pcIcons;	//	Image List
+	ImageListMgr*	m_pIcons;	//	Image List
 	
 	//	Oct. 2, 2001 genta 外部マクロ追加に伴う，対応部分の別クラス化
 	//	Oct. 15, 2001 genta Lookupはダイアログボックス内で別インスタンスを作るように
 	//	(検索対象として，設定用common領域を指すようにするため．)
-	FuncLookup			m_cLookup;
+	FuncLookup			m_lookup;
 
-	MenuDrawer*		m_pcMenuDrawer;
+	MenuDrawer*		m_pMenuDrawer;
 	/*
 	|| ダイアログデータ
 	*/
-	CommonSetting	m_Common;
+	CommonSetting	m_common;
 
 	// 2005.01.13 MIK セット数増加
 	struct KeywordSetIndex {

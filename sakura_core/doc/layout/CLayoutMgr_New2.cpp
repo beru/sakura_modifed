@@ -30,9 +30,9 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	// 置換先頭位置のレイアウト情報
 	EColorIndexType	nCurrentLineType = COLORIDX_DEFAULT;
 	LayoutColorInfo* colorInfo = NULL;
-	LayoutInt nLineWork = pArg->sDelRange.GetFrom().GetY2();
+	LayoutInt nLineWork = pArg->delRange.GetFrom().GetY2();
 
-	Layout* pLayoutWork = SearchLineByLayoutY(pArg->sDelRange.GetFrom().GetY2());
+	Layout* pLayoutWork = SearchLineByLayoutY(pArg->delRange.GetFrom().GetY2());
 	if (pLayoutWork) {
 		while (pLayoutWork->GetLogicOffset() != 0) {
 			pLayoutWork = pLayoutWork->GetPrevLayout();
@@ -40,10 +40,10 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 		}
 		nCurrentLineType = pLayoutWork->GetColorTypePrev();
 		colorInfo = pLayoutWork->GetLayoutExInfo()->DetachColorInfo();
-	}else if (GetLineCount() == pArg->sDelRange.GetFrom().GetY2()) {
+	}else if (GetLineCount() == pArg->delRange.GetFrom().GetY2()) {
 		// 2012.01.05 最終行のRedo/Undoでの色分けが正しくないのを修正
 		nCurrentLineType = m_nLineTypeBot;
-		colorInfo = m_cLayoutExInfoBot.DetachColorInfo();
+		colorInfo = m_layoutExInfoBot.DetachColorInfo();
 	}
 
 	/*
@@ -53,20 +53,20 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	*/
 	LogicPoint ptFrom;
 	LogicPoint ptTo;
-	LayoutToLogic(pArg->sDelRange.GetFrom(), &ptFrom);
-	LayoutToLogic(pArg->sDelRange.GetTo(), &ptTo);
+	LayoutToLogic(pArg->delRange.GetFrom(), &ptFrom);
+	LayoutToLogic(pArg->delRange.GetTo(), &ptTo);
 
 	/* 指定範囲のデータを置換(削除 & データを挿入)
 	  Fromを含む位置からToの直前を含むデータを削除する
 	  Fromの位置へテキストを挿入する
 	*/
 	DocLineReplaceArg DLRArg;
-	DLRArg.sDelRange.SetFrom(ptFrom);	// 削除範囲from
-	DLRArg.sDelRange.SetTo(ptTo);		// 削除範囲to
+	DLRArg.delRange.SetFrom(ptFrom);	// 削除範囲from
+	DLRArg.delRange.SetTo(ptTo);		// 削除範囲to
 	DLRArg.pcmemDeleted = pArg->pcmemDeleted;	// 削除されたデータを保存
 	DLRArg.pInsData = pArg->pInsData;			// 挿入するデータ
 	DLRArg.nDelSeq = pArg->nDelSeq;
-	SearchAgent(m_pcDocLineMgr).ReplaceData(
+	SearchAgent(m_pDocLineMgr).ReplaceData(
 		&DLRArg
 	);
 	pArg->nInsSeq = DLRArg.nInsSeq;
@@ -106,14 +106,14 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	LogicInt nRowNum;
 	if (!pLayoutPrev) {
 		if (!m_pLayoutTop) {
-			nRowNum = m_pcDocLineMgr->GetLineCount();
+			nRowNum = m_pDocLineMgr->GetLineCount();
 		}else {
 			nRowNum = m_pLayoutTop->GetLogicLineNo();
 		}
 	}else {
 		if (!pLayoutPrev->GetNextLayout()) {
 			nRowNum =
-				m_pcDocLineMgr->GetLineCount() -
+				m_pDocLineMgr->GetLineCount() -
 				pLayoutPrev->GetLogicLineNo() - LogicInt(1);
 		}else {
 			nRowNum =
@@ -124,8 +124,8 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 
 	// 2009.08.28 nasukoji	テキスト最大幅算出用の引数を設定
 	CalTextWidthArg ctwArg;
-	ctwArg.ptLayout     = pArg->sDelRange.GetFrom();		// 編集開始位置
-	ctwArg.nDelLines    = pArg->sDelRange.GetTo().GetY2() - pArg->sDelRange.GetFrom().GetY2();	// 削除行数 - 1
+	ctwArg.ptLayout     = pArg->delRange.GetFrom();		// 編集開始位置
+	ctwArg.nDelLines    = pArg->delRange.GetTo().GetY2() - pArg->delRange.GetFrom().GetY2();	// 削除行数 - 1
 	ctwArg.nAllLinesOld = nWork_nLines;								// 編集前のテキスト行数
 	ctwArg.bInsData     = (pArg->pInsData && pArg->pInsData->size()) ? TRUE : FALSE;			// 追加文字列の有無
 
@@ -145,7 +145,7 @@ void LayoutMgr::ReplaceData_CLayoutMgr(
 	if (pArg->nAddLineNum == 0) {
 		pArg->nAddLineNum = nModifyLayoutLinesOld - pArg->nModLineTo;	// 再描画ヒント レイアウト行の増減
 	}
-	pArg->nModLineFrom = pArg->sDelRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From
+	pArg->nModLineFrom = pArg->delRange.GetFrom().GetY2();	// 再描画ヒント 変更されたレイアウト行From
 	pArg->nModLineTo += (pArg->nModLineFrom - LayoutInt(1)) ;	// 再描画ヒント 変更されたレイアウト行To
 
 	// 2007.10.18 kobake LayoutReplaceArg::ptLayoutNewはここで算出するのが正しい

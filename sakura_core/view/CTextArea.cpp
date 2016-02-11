@@ -26,8 +26,8 @@ TextArea::TextArea(EditView* pEditView)
 	m_nViewRowNum = LayoutInt(0);			// 表示域の行数
 	m_nViewTopLine = LayoutInt(0);			// 表示域の一番上の行
 	m_nViewLeftCol = LayoutInt(0);			// 表示域の一番左の桁
-	SetTopYohaku(pShareData->m_common.m_sWindow.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
-	SetLeftYohaku(pShareData->m_common.m_sWindow.m_nLineNumRightSpace);
+	SetTopYohaku(pShareData->m_common.m_window.m_nRulerBottomSpace); 	// ルーラーとテキストの隙間
+	SetLeftYohaku(pShareData->m_common.m_window.m_nLineNumRightSpace);
 	m_nViewAlignTop = GetTopYohaku();		// 表示域の上端座標
 }
 
@@ -160,7 +160,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 
 	if (pView->m_pTypeData->m_ColorInfoArr[COLORIDX_GYOU].m_bDisp && !pView->m_bMiniMap) {
 		// 行番号表示に必要な桁数を計算
-		int i = DetectWidthOfLineNumberArea_calculate(&pView->m_pcEditDoc->m_cLayoutMgr);
+		int i = DetectWidthOfLineNumberArea_calculate(&pView->m_pEditDoc->m_layoutMgr);
 		nViewAlignLeftNew = pView->GetTextMetrics().GetHankakuDx() * (i + 1);	// 表示域の左端座標
 		m_nViewAlignLeftCols = i + 1;
 	}else if (pView->m_bMiniMap) {
@@ -172,7 +172,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 	}
 
 	//	Sep 18, 2002 genta
-	nViewAlignLeftNew += GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace;
+	nViewAlignLeftNew += GetDllShareData().m_common.m_window.m_nLineNumRightSpace;
 	if (nViewAlignLeftNew != GetAreaLeft()) {
 		Rect			rc;
 		SetAreaLeft(nViewAlignLeftNew);
@@ -222,7 +222,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 
 	// 行番号の表示 false=折り返し単位／true=改行単位
 	if (pView->m_pTypeData->m_bLineNumIsCRLF && !bLayout) {
-		nAllLines = pView->m_pcEditDoc->m_docLineMgr.GetLineCount();
+		nAllLines = pView->m_pEditDoc->m_docLineMgr.GetLineCount();
 	}else {
 		nAllLines = (Int)pLayoutMgr->GetLineCount();
 	}

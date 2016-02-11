@@ -76,7 +76,7 @@ void EditView::SetBracketPairPos(bool flag)
 			// 表示領域内の場合
 
 			// レイアウト位置から物理位置へ変換(強調表示位置を登録)
-			m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(ptColLine, &m_ptBracketPairPos_PHY);
+			m_pEditDoc->m_layoutMgr.LayoutToLogic(ptColLine, &m_ptBracketPairPos_PHY);
 			m_ptBracketCaretPos_PHY.y = GetCaret().GetCaretLogicPos().y;
 			if ((mode & 4) == 0) {
 				// カーソルの後方文字位置
@@ -147,9 +147,9 @@ void EditView::DrawBracketPair(bool bDraw)
 		LayoutPoint	ptColLine;
 
 		if (i == 0) {
-			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(m_ptBracketPairPos_PHY,  &ptColLine);
+			m_pEditDoc->m_layoutMgr.LogicToLayout(m_ptBracketPairPos_PHY,  &ptColLine);
 		}else {
-			m_pcEditDoc->m_cLayoutMgr.LogicToLayout(m_ptBracketCaretPos_PHY, &ptColLine);
+			m_pEditDoc->m_layoutMgr.LogicToLayout(m_ptBracketCaretPos_PHY, &ptColLine);
 		}
 
 		if (1
@@ -167,7 +167,7 @@ void EditView::DrawBracketPair(bool bDraw)
 			}
 			const Layout* pcLayout;
 			LogicInt		nLineLen;
-			const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pcLayout);
+			const wchar_t*	pLine = m_pEditDoc->m_layoutMgr.GetLineStr(ptColLine.GetY2(), &nLineLen, &pcLayout);
 			if (pLine) {
 				EColorIndexType nColorIndex;
 				LogicInt	OutputX = LineColumnToIndex(pcLayout, ptColLine.GetX2());
@@ -179,7 +179,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						ColorStrategyInfo _sInfo;
 						ColorStrategyInfo* pInfo = &_sInfo;
 						pInfo->m_pDispPos = &_sPos;
-						pInfo->m_pcView = this;
+						pInfo->m_pView = this;
 
 						// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 						// 2009.02.07 ryoji GetColorIndex に渡すインデックスの仕様変更（元はこっちの仕様だった模様）
@@ -237,7 +237,7 @@ void EditView::DrawBracketPair(bool bDraw)
 						rcChar.right = nLeft + (Int)charsWidth * nWidth;
 						rcChar.bottom = nTop + nHeight;
 						HDC hdcBgImg = ::CreateCompatibleDC(gr);
-						HBITMAP hBmpOld = (HBITMAP)::SelectObject(hdcBgImg, m_pcEditDoc->m_hBackImg);
+						HBITMAP hBmpOld = (HBITMAP)::SelectObject(hdcBgImg, m_pEditDoc->m_hBackImg);
 						DrawBackImage(gr, rcChar, hdcBgImg);
 						::SelectObject(hdcBgImg, hBmpOld);
 						::DeleteDC(hdcBgImg);
@@ -340,8 +340,8 @@ bool EditView::SearchBracket(
 
 	LogicPoint ptPos;
 
-	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(ptLayout, &ptPos);
-	const wchar_t* cline = m_pcEditDoc->m_docLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
+	m_pEditDoc->m_layoutMgr.LayoutToLogic(ptLayout, &ptPos);
+	const wchar_t* cline = m_pEditDoc->m_docLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
 
 	//	Jun. 19, 2000 genta
 	if (!cline)	//	最後の行に本文がない場合
@@ -417,9 +417,9 @@ bool EditView::SearchBracketForward(
 	LayoutPoint ptColLine;
 
 	// 初期位置の設定
-	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
+	m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
-	DocLine* ci = m_pcEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = m_pEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* lineend = cline + len;
 	const wchar_t* cPos = cline + ptPos.x;
@@ -444,7 +444,7 @@ bool EditView::SearchBracketForward(
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = cPos - cline;
-				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, pptLayoutNew);
+				m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
 				// Happy Ending
 			}
@@ -503,9 +503,9 @@ bool EditView::SearchBracketBackward(
 	LayoutPoint ptColLine;
 
 	// 初期位置の設定
-	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
+	m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
-	DocLine* ci = m_pcEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = m_pEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* cPos = cline + ptPos.x;
 
@@ -526,7 +526,7 @@ bool EditView::SearchBracketBackward(
 
 			if (level == 0) {	// 見つかった！
 				ptPos.x = pPos - cline;
-				m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, pptLayoutNew);
+				m_pEditDoc->m_layoutMgr.LogicToLayout(ptPos, pptLayoutNew);
 				return true;
 				// Happy Ending
 			}

@@ -63,7 +63,7 @@ bool Figure_Eol::Match(const wchar_t* pText, int nTextLen) const
 //$$ 高速化可能。
 bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 {
-	EditView* pcView = pInfo->m_pcView;
+	EditView* pcView = pInfo->m_pView;
 
 	// 改行取得
 	const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef();
@@ -107,9 +107,9 @@ bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 		pInfo->m_gr.PushTextBackColor(crBack);
 		bool bTrans = pcView->IsBkBitmap() && cTextType.GetBackColor() == crBack;
 		Font sFont;
-		sFont.m_sFontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || currentStyle.IsBoldFont();
-		sFont.m_sFontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
-		sFont.m_hFont = pInfo->m_pcView->GetFontset().ChooseFontHandle(sFont.m_sFontAttr);
+		sFont.m_fontAttr.m_bBoldFont = cSpaceType.IsBoldFont() || currentStyle.IsBoldFont();
+		sFont.m_fontAttr.m_bUnderLine = cSpaceType.HasUnderLine();
+		sFont.m_hFont = pInfo->m_pView->GetFontset().ChooseFontHandle(sFont.m_fontAttr);
 		pInfo->m_gr.PushMyFont(sFont);
 
 		DispPos sPos(*pInfo->m_pDispPos);	// 現在位置を覚えておく

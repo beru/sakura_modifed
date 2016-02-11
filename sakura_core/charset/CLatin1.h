@@ -37,7 +37,7 @@ public:
 	// CodeBaseインターフェース
 	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return Latin1ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
 	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToLatin1(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
-	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:
 	// 実装

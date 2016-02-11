@@ -19,7 +19,7 @@ int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
 	const Layout* pcLayout;
 
 	LayoutInt nCurLine = m_pEditView->GetCaret().GetCaretLayoutPos().GetY2();
-	const wchar_t* pLine = m_pEditView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nCurLine, &nLineLen, &pcLayout);
+	const wchar_t* pLine = m_pEditView->m_pEditDoc->m_layoutMgr.GetLineStr(nCurLine, &nLineLen, &pcLayout);
 	if (!pLine) {
 //		return 0;
 		nIdxTo = LogicInt(0);
@@ -32,11 +32,11 @@ int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
 			return 0;
 		}
 		--nCurLine;
-		pLine = m_pEditView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(nCurLine, &nLineLen);
+		pLine = m_pEditView->m_pEditDoc->m_layoutMgr.GetLineStr(nCurLine, &nLineLen);
 		if (!pLine) {
 			return 0;
 		}
-		bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+		bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 		if (WCODE::IsLineDelimiter(pLine[nLineLen - 1], bExtEol)) {
 			return 0;
 		}
@@ -64,7 +64,7 @@ int ViewParser::GetLeftWord(NativeW* pcmemWord, int nMaxWordLen) const
 	// 現在位置の単語の範囲を調べる
 	NativeW cmemWord;
 	LayoutRange sRange;
-	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
+	bool bResult = m_pEditView->m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 		nCurLine,
 		nIdx,
 		&sRange,
@@ -93,7 +93,7 @@ bool ViewParser::GetCurrentWord(
 	NativeW* pcmemWord
 ) const
 {
-	const Layout* pcLayout = m_pEditView->m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
+	const Layout* pcLayout = m_pEditView->m_pEditDoc->m_layoutMgr.SearchLineByLayoutY(m_pEditView->GetCaret().GetCaretLayoutPos().GetY2());
 	if (!pcLayout) {
 		return false;	// 単語選択に失敗
 	}
@@ -103,7 +103,7 @@ bool ViewParser::GetCurrentWord(
 	
 	// 現在位置の単語の範囲を調べる
 	LayoutRange sRange;
-	bool bResult = m_pEditView->m_pcEditDoc->m_cLayoutMgr.WhereCurrentWord(
+	bool bResult = m_pEditView->m_pEditDoc->m_layoutMgr.WhereCurrentWord(
 		m_pEditView->GetCaret().GetCaretLayoutPos().GetY2(),
 		nIdx,
 		&sRange,

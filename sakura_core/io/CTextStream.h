@@ -66,7 +66,7 @@ public:
 	void WriteInt(int n);
 
 private:
-	CodeBase* m_pcCodeBase;
+	CodeBase* m_pCodeBase;
 };
 
 

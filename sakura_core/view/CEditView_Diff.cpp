@@ -146,7 +146,7 @@ void EditView::ViewDiffInfo(
 	// 今あるDIFF差分を消去する。
 	if (DiffManager::getInstance()->IsDiffUse())
 		GetCommander().Command_Diff_Reset();
-		//m_pcEditDoc->m_docLineMgr.ResetAllDiffMark();
+		//m_pEditDoc->m_docLineMgr.ResetAllDiffMark();
 
 	// オプションを作成する
 	TCHAR	szOption[16];	// "-cwbBt"
@@ -351,13 +351,13 @@ void EditView::AnalyzeDiffInfo(
 
 	// 抽出したDIFF情報から行番号に差分マークを付ける
 	if (nFlgFile12 == 0) {	// 編集中ファイルは旧ファイル
-		if      (mode == 'a') DiffLineMgr(&m_pcEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
-		else if (mode == 'c') DiffLineMgr(&m_pcEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
-		else if (mode == 'd') DiffLineMgr(&m_pcEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		if      (mode == 'a') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s1   ), LogicInt(e1   ));
+		else if (mode == 'c') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s1 - 1), LogicInt(e1 - 1));
+		else if (mode == 'd') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s1 - 1), LogicInt(e1 - 1));
 	}else {	// 編集中ファイルは新ファイル
-		if      (mode == 'a') DiffLineMgr(&m_pcEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'c') DiffLineMgr(&m_pcEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
-		else if (mode == 'd') DiffLineMgr(&m_pcEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
+		if      (mode == 'a') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Append, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'c') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Change, LogicInt(s2 - 1), LogicInt(e2 - 1));
+		else if (mode == 'd') DiffLineMgr(&m_pEditDoc->m_docLineMgr).SetDiffMarkRange(DiffMark::Delete, LogicInt(s2   ), LogicInt(e2   ));
 	}
 	
 	return;
@@ -369,7 +369,7 @@ bool MakeDiffTmpFile_core(TextOutputStream& out, HWND hwnd, EditView& view, bool
 	LogicInt y = LogicInt(0);
 	const wchar_t*	pLineData;
 	if (!hwnd) {
-		const DocLineMgr& docMgr = view.m_pcEditDoc->m_docLineMgr;
+		const DocLineMgr& docMgr = view.m_pEditDoc->m_docLineMgr;
 		for (;;){
 			LogicInt		nLineLen;
 			pLineData = docMgr.GetLine(y)->GetDocLineStrWithEOL(&nLineLen);
@@ -451,7 +451,7 @@ BOOL EditView::MakeDiffTmpFile(
 	// 自分か？
 	if (!hWnd) {
 		CodeConvertResult eWriteResult = WriteManager().WriteFile_From_CDocLineMgr(
-			m_pcEditDoc->m_docLineMgr,
+			m_pEditDoc->m_docLineMgr,
 			SaveInfo(
 				filename,
 				code,
@@ -527,7 +527,7 @@ BOOL EditView::MakeDiffTmpFile2(
 			orgName,
 			bBigFile,
 			code,
-			GetDllShareData().m_common.m_sFile.GetAutoMIMEdecode(),
+			GetDllShareData().m_common.m_file.GetAutoMIMEdecode(),
 			&bBom
 		);
 		NativeW cLine;

@@ -242,10 +242,10 @@ INT_PTR PropToolbar::DispatchEvent(
 
 				// 機能一覧に文字列をセット (リストボックス)
 				//	From Here Oct. 15, 2001 genta Lookupを使うように変更
-				nNum = m_cLookup.GetItemCount(nIndex2);
+				nNum = m_lookup.GetItemCount(nIndex2);
 				for (i=0; i<nNum; ++i) {
-					nIndex1 = m_cLookup.Pos2FuncCode(nIndex2, i);
-					int nbarNo = m_pcMenuDrawer->FindToolbarNoFromCommandId(nIndex1);
+					nIndex1 = m_lookup.Pos2FuncCode(nIndex2, i);
+					int nbarNo = m_pMenuDrawer->FindToolbarNoFromCommandId(nIndex1);
 
 					if (nbarNo >= 0) {
 						// ツールバーボタンの情報をセット (リストボックス)
@@ -466,7 +466,7 @@ void PropToolbar::SetData(HWND hwndDlg)
 {
 	// 機能種別一覧に文字列をセット(コンボボックス)
 	HWND hwndCombo = ::GetDlgItem(hwndDlg, IDC_COMBO_FUNCKIND);
-	m_cLookup.SetCategory2Combo(hwndCombo);	//	Oct. 15, 2001 genta
+	m_lookup.SetCategory2Combo(hwndCombo);	//	Oct. 15, 2001 genta
 	
 	// 種別の先頭の項目を選択(コンボボックス)
 	Combo_SetCurSel(hwndCombo, 0);	// Oct. 14, 2000 JEPRO JEPRO 「--未定義--」を表示させないように大元 Funcode.cpp で変更してある
@@ -484,7 +484,7 @@ void PropToolbar::SetData(HWND hwndDlg)
 	}
 //	nListItemHeight+=2;
 
-	auto& csToolBar = m_Common.m_sToolBar;
+	auto& csToolBar = m_common.m_toolBar;
 	// ツールバーボタンの情報をセット(リストボックス)
 	for (int i=0; i<csToolBar.m_nToolBarButtonNum; ++i) {
 		//	From Here Apr. 13, 2002 genta
@@ -508,7 +508,7 @@ void PropToolbar::SetData(HWND hwndDlg)
 int PropToolbar::GetData(HWND hwndDlg)
 {
 	HWND hwndResList = ::GetDlgItem(hwndDlg, IDC_LIST_RES);
-	auto& csToolBar = m_Common.m_sToolBar;
+	auto& csToolBar = m_common.m_toolBar;
 
 	// ツールバーボタンの数
 	csToolBar.m_nToolBarButtonNum = List_GetCount(hwndResList);
@@ -554,8 +554,8 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからMenuDrawerへ移動したことによる修正。
 //		tbb = m_cShareData.m_tbMyButton[pDis->itemData];
-//		tbb = m_pcMenuDrawer->m_tbMyButton[pDis->itemData];
-		tbb = m_pcMenuDrawer->getButton(pDis->itemData);
+//		tbb = m_pMenuDrawer->m_tbMyButton[pDis->itemData];
+		tbb = m_pMenuDrawer->getButton(pDis->itemData);
 
 		// ボタンとセパレータとで処理を分ける	2007.11.02 ryoji
 		WCHAR	szLabel[256];
@@ -575,8 +575,8 @@ void PropToolbar::DrawToolBarItemList(DRAWITEMSTRUCT* pDis)
 		//	From Here Oct. 15, 2001 genta
 		}else {
 			// アイコンとテキストを表示する
-			m_pcIcons->Draw(tbb.iBitmap, pDis->hDC, rc.left + 2, rc.top + 2, ILD_NORMAL);
-			m_cLookup.Funccode2Name(tbb.idCommand, szLabel, _countof(szLabel));
+			m_pIcons->Draw(tbb.iBitmap, pDis->hDC, rc.left + 2, rc.top + 2, ILD_NORMAL);
+			m_lookup.Funccode2Name(tbb.idCommand, szLabel, _countof(szLabel));
 		}
 		//	To Here Oct. 15, 2001 genta
 

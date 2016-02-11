@@ -205,7 +205,7 @@ CodeConvertResult Utf8::_UnicodeToUTF8( const NativeW& cSrc, Memory* pDstMem, bo
 }
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/21 Uchi
-CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar, const bool bCESUMode)
+CodeConvertResult Utf8::_UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar, const bool bCESUMode)
 {
 	NativeW		cBuff;
 	CodeConvertResult	res;

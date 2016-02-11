@@ -261,24 +261,24 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	*/
 	if (!pCEditWnd
 		|| (
-			pCEditWnd->m_cFuncKeyWnd.GetHwnd()
-	 		&& m_pShareData->m_common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
+			pCEditWnd->m_funcKeyWnd.GetHwnd()
+	 		&& m_pShareData->m_common.m_window.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
 	 	)
 	) {
 		bSizeBox = false;
-	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition::Bottom
+	}else if (pCEditWnd->m_tabWnd.GetHwnd()
+		&& m_pShareData->m_common.m_tabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		bSizeBox = false;
 	}else {
 		bSizeBox = true;
 		// ステータスパーを表示している場合はサイズボックスを表示しない
-		if (pCEditWnd->m_cStatusBar.GetStatusHwnd()) {
+		if (pCEditWnd->m_statusBar.GetStatusHwnd()) {
 			bSizeBox = false;
 		}
 	}
-	if (pCEditWnd->m_cDlgFuncList.GetHwnd()) {
-		DockSideType eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
+	if (pCEditWnd->m_dlgFuncList.GetHwnd()) {
+		DockSideType eDockSideFL = pCEditWnd->m_dlgFuncList.GetDockSide();
 		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bSizeBox = false;
 		}
@@ -823,24 +823,24 @@ LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	*/
 	if (!pCEditWnd
 	 	|| (
-	 		pCEditWnd->m_cFuncKeyWnd.GetHwnd()
-	  		&& m_pShareData->m_common.m_sWindow.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
+	 		pCEditWnd->m_funcKeyWnd.GetHwnd()
+	  		&& m_pShareData->m_common.m_window.m_nFUNCKEYWND_Place == 1	// ファンクションキー表示位置／0:上 1:下
 	 	)
 	) {
 		bSizeBox = false;
-	}else if (pCEditWnd->m_cTabWnd.GetHwnd()
-		&& m_pShareData->m_common.m_sTabBar.m_eTabPosition == TabPosition::Bottom
+	}else if (pCEditWnd->m_tabWnd.GetHwnd()
+		&& m_pShareData->m_common.m_tabBar.m_eTabPosition == TabPosition::Bottom
 	) {
 		bSizeBox = false;
 	}else {
 		bSizeBox = true;
 		// ステータスパーを表示している場合はサイズボックスを表示しない
-		if (pCEditWnd->m_cStatusBar.GetStatusHwnd()) {
+		if (pCEditWnd->m_statusBar.GetStatusHwnd()) {
 			bSizeBox = false;
 		}
 	}
-	if (pCEditWnd->m_cDlgFuncList.GetHwnd()) {
-		DockSideType eDockSideFL = pCEditWnd->m_cDlgFuncList.GetDockSide();
+	if (pCEditWnd->m_dlgFuncList.GetHwnd()) {
+		DockSideType eDockSideFL = pCEditWnd->m_dlgFuncList.GetDockSide();
 		if (eDockSideFL == DockSideType::Right || eDockSideFL == DockSideType::Bottom) {
 			bSizeBox = false;
 		}

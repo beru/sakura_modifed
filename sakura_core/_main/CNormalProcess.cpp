@@ -43,7 +43,7 @@
 NormalProcess::NormalProcess(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 	:
 	Process(hInstance, lpCmdLine),
-	m_pcEditApp(NULL)
+	m_pEditApp(NULL)
 {
 }
 
@@ -84,7 +84,7 @@ bool NormalProcess::InitializeProcess()
 	}
 
 	// 言語を選択する
-	SelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
+	SelectLang::ChangeLang(GetDllShareData().m_common.m_window.m_szLanguageDll);
 
 	// コマンドラインオプション
 	bool		bViewMode = false;
@@ -144,13 +144,13 @@ bool NormalProcess::InitializeProcess()
 	// エディタアプリケーションを作成。2007.10.23 kobake
 	// グループIDを取得
 	int nGroupId = cmdLine.GetGroupId();
-	if (GetDllShareData().m_common.m_sTabBar.m_bNewWindow && nGroupId == -1) {
+	if (GetDllShareData().m_common.m_tabBar.m_bNewWindow && nGroupId == -1) {
 		nGroupId = AppNodeManager::getInstance()->GetFreeGroupId();
 	}
 	// CEditAppを作成
-	m_pcEditApp = EditApp::getInstance();
-	m_pcEditApp->Create(GetProcessInstance(), nGroupId);
-	EditWnd* pEditWnd = m_pcEditApp->GetEditWindow();
+	m_pEditApp = EditApp::getInstance();
+	m_pEditApp->Create(GetProcessInstance(), nGroupId);
+	EditWnd* pEditWnd = m_pEditApp->GetEditWindow();
 	auto& activeView = pEditWnd->GetActiveView();
 	if (!pEditWnd->GetHwnd()) {
 		::ReleaseMutex(hMutex);
@@ -181,14 +181,14 @@ bool NormalProcess::InitializeProcess()
 		// 文字コードを有効とする Uchi 2008/6/8
 		// 2010.06.16 Moca アウトプットは CCommnadLineで -TYPE=output 扱いとする
 		pEditWnd->SetDocumentTypeWhenCreate(fi.m_nCharCode, false, nType);
-		pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを表示する
+		pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを表示する
 	}else if (bGrepMode) {
 		// GREP
 		// 2010.06.16 Moca Grepでもオプション指定を適用
 		pEditWnd->SetDocumentTypeWhenCreate(fi.m_nCharCode, false, nType);
-		pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを予め表示しておく
+		pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを予め表示しておく
 		HWND hEditWnd = pEditWnd->GetHwnd();
-		if (!::IsIconic(hEditWnd) && pEditWnd->m_cDlgFuncList.GetHwnd()) {
+		if (!::IsIconic(hEditWnd) && pEditWnd->m_dlgFuncList.GetHwnd()) {
 			RECT rc;
 			::GetClientRect(hEditWnd, &rc);
 			::SendMessage(hEditWnd, WM_SIZE, ::IsZoomed(hEditWnd) ? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG(rc.right - rc.left, rc.bottom - rc.top));
@@ -202,7 +202,7 @@ bool NormalProcess::InitializeProcess()
 			SetMainWindow(pEditWnd->GetHwnd());
 			::ReleaseMutex(hMutex);
 			::CloseHandle(hMutex);
-			this->m_pcEditApp->m_pcGrepAgent->DoGrep(
+			this->m_pEditApp->m_pGrepAgent->DoGrep(
 				&activeView,
 				gi.bGrepReplace,
 				&gi.cmGrepKey,
@@ -223,7 +223,7 @@ bool NormalProcess::InitializeProcess()
 				gi.bGrepPaste,
 				gi.bGrepBackup
 			);
-			pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを再解析する
+			pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
 		}else {
 			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
@@ -246,7 +246,7 @@ bool NormalProcess::InitializeProcess()
 					cmemGrepFolder.SetString(szCurDir);
 				}
 			}
-			auto& csSearch = GetDllShareData().m_common.m_sSearch;
+			auto& csSearch = GetDllShareData().m_common.m_search;
 			csSearch.m_bGrepSubFolder = gi.bGrepSubFolder;
 			csSearch.m_searchOption = gi.grepSearchOption;
 			csSearch.m_nGrepCharSet = gi.nGrepCharSet;
@@ -261,25 +261,25 @@ bool NormalProcess::InitializeProcess()
 			
 			// Oct. 9, 2003 genta コマンドラインからGERPダイアログを表示させた場合に
 			// 引数の設定がBOXに反映されない
-			pEditWnd->m_cDlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		// 検索文字列
-			pEditWnd->m_cDlgGrep.m_bSetText = true;
-			int nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFile);
-			_tcsncpy(pEditWnd->m_cDlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize);	// 検索ファイル
-			pEditWnd->m_cDlgGrep.m_szFile[nSize - 1] = _T('\0');
-			nSize = _countof2(pEditWnd->m_cDlgGrep.m_szFolder);
-			_tcsncpy(pEditWnd->m_cDlgGrep.m_szFolder, cmemGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
-			pEditWnd->m_cDlgGrep.m_szFolder[nSize - 1] = _T('\0');
+			pEditWnd->m_dlgGrep.m_strText = gi.cmGrepKey.GetStringPtr();		// 検索文字列
+			pEditWnd->m_dlgGrep.m_bSetText = true;
+			int nSize = _countof2(pEditWnd->m_dlgGrep.m_szFile);
+			_tcsncpy(pEditWnd->m_dlgGrep.m_szFile, gi.cmGrepFile.GetStringPtr(), nSize);	// 検索ファイル
+			pEditWnd->m_dlgGrep.m_szFile[nSize - 1] = _T('\0');
+			nSize = _countof2(pEditWnd->m_dlgGrep.m_szFolder);
+			_tcsncpy(pEditWnd->m_dlgGrep.m_szFolder, cmemGrepFolder.GetStringPtr(), nSize);	// 検索フォルダ
+			pEditWnd->m_dlgGrep.m_szFolder[nSize - 1] = _T('\0');
 
 			
 			// Feb. 23, 2003 Moca Owner windowが正しく指定されていなかった
-			int nRet = pEditWnd->m_cDlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
+			int nRet = pEditWnd->m_dlgGrep.DoModal(GetProcessInstance(), pEditWnd->GetHwnd(), NULL);
 			if (FALSE != nRet) {
 				activeView.GetCommander().HandleCommand(F_GREP, true, 0, 0, 0, 0);
 			}else {
 				// 自分はGrepでない
 				pEditWnd->GetDocument()->SetCurDirNotitle();
 			}
-			pEditWnd->m_cDlgFuncList.Refresh();	// アウトラインを再解析する
+			pEditWnd->m_dlgFuncList.Refresh();	// アウトラインを再解析する
 			//return true; // 2003.06.23 Moca
 		}
 
@@ -322,7 +322,7 @@ bool NormalProcess::InitializeProcess()
 			// Note. fi.m_nCharCode で文字コードが明示指定されていても、読み込み中断しない場合は別の文字コードが選択されることがある。
 			//       以前は「(無題)」にならない場合でも無条件に SetDocumentTypeWhenCreate() を呼んでいたが、
 			//       「前回と異なる文字コード」の問い合わせで前回の文字コードが選択された場合におかしくなっていた。
-			if (!pEditWnd->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
+			if (!pEditWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 				// 読み込み中断して「(無題)」になった
 				// ---> 無効になったオプション指定を有効にする
 				pEditWnd->SetDocumentTypeWhenCreate(
@@ -339,7 +339,7 @@ bool NormalProcess::InitializeProcess()
 			// 移動するようにする． || → &&
 			if (
 				(LayoutInt(0) <= fi.m_nViewTopLine && LayoutInt(0) <= fi.m_nViewLeftCol)
-				&& fi.m_nViewTopLine < pEditWnd->GetDocument()->m_cLayoutMgr.GetLineCount()
+				&& fi.m_nViewTopLine < pEditWnd->GetDocument()->m_layoutMgr.GetLineCount()
 			) {
 				activeView.GetTextArea().SetViewTopLine(fi.m_nViewTopLine);
 				activeView.GetTextArea().SetViewLeftCol(fi.m_nViewLeftCol);
@@ -356,7 +356,7 @@ bool NormalProcess::InitializeProcess()
 				  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 				*/
 				LayoutPoint ptPos;
-				pEditWnd->GetDocument()->m_cLayoutMgr.LogicToLayout(
+				pEditWnd->GetDocument()->m_layoutMgr.LogicToLayout(
 					fi.m_ptCursor,
 					&ptPos
 				);
@@ -386,7 +386,7 @@ bool NormalProcess::InitializeProcess()
 				nType
 			);
 		}
-		if (!pEditWnd->GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
+		if (!pEditWnd->GetDocument()->m_docFile.GetFilePathClass().IsValidPath()) {
 			pEditWnd->GetDocument()->SetCurDirNotitle();	// (無題)ウィンドウ
 			AppNodeManager::getInstance()->GetNoNameNumber(pEditWnd->GetHwnd());
 			pEditWnd->UpdateCaption();
@@ -430,7 +430,7 @@ bool NormalProcess::InitializeProcess()
 
 	// 2006.09.03 ryoji オープン後自動実行マクロを実行する
 	if (!(bDebugMode || bGrepMode)) {
-		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
+		pEditWnd->GetDocument()->RunAutoMacro(GetDllShareData().m_common.m_macro.m_nMacroOnOpened);
 	}
 
 	// 起動時マクロオプション
@@ -446,7 +446,7 @@ bool NormalProcess::InitializeProcess()
 	// 複数ファイル読み込み
 	int fileNum = cmdLine.GetFileNum();
 	if (fileNum > 0) {
-		int nDropFileNumMax = GetDllShareData().m_common.m_sFile.m_nDropFileNumMax - 1;
+		int nDropFileNumMax = GetDllShareData().m_common.m_file.m_nDropFileNumMax - 1;
 		// ファイルドロップ数の上限に合わせる
 		if (fileNum > nDropFileNumMax) {
 			fileNum = nDropFileNumMax;
@@ -483,7 +483,7 @@ bool NormalProcess::InitializeProcess()
 bool NormalProcess::MainLoop()
 {
 	if (GetMainWindow()) {
-		m_pcEditApp->GetEditWindow()->MessageLoop();	// メッセージループ
+		m_pEditApp->GetEditWindow()->MessageLoop();	// メッセージループ
 		return true;
 	}
 	return false;

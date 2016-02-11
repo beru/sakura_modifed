@@ -45,22 +45,22 @@ class DllHandler {
 public:
 	// コンストラクタ・デストラクタ
 	DllHandler() {
-		m_pcDllImp = new DLLIMP();
-		m_pcDllImp->InitDll();
+		m_pDllImp = new DLLIMP();
+		m_pDllImp->InitDll();
 	}
 	~DllHandler() {
-		m_pcDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
-		delete m_pcDllImp;
+		m_pDllImp->DeinitDll(true); // ※終了処理に失敗しても強制的にDLL解放
+		delete m_pDllImp;
 	}
 
 	// アクセサ
-	DLLIMP* operator -> () { return m_pcDllImp; }
+	DLLIMP* operator -> () { return m_pDllImp; }
 
 	// 利用状態のチェック（operator版）
-	bool operator!() const { return m_pcDllImp->IsAvailable(); }
+	bool operator!() const { return m_pDllImp->IsAvailable(); }
 
 private:
-	DLLIMP*	m_pcDllImp;
+	DLLIMP*	m_pDllImp;
 };
 
 

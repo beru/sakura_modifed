@@ -75,6 +75,6 @@ private:
 
 	ComboBoxItemDeleter	m_comboDel;
 	RecentSearch			m_cRecentSearch;
-	ImageListMgr*			m_pcIcons;
+	ImageListMgr*			m_pIcons;
 };
 

@@ -33,7 +33,7 @@ public:
 	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return JISToUnicode(cSrc, pDst, m_base64decode); }	//!< 特定コード → UNICODE    変換
 	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToJIS(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 // GetEolはCodeBaseに移動	2010/6/13 Uchi
-	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			//!< UNICODE → Hex 変換
+	CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_StatusBar* psStatusbar);			//!< UNICODE → Hex 変換
 
 public:
 	// 実装

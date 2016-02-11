@@ -93,10 +93,10 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 	nClassNestArrNum = 0;
 	LogicInt		nLineCount;
 	const wchar_t*	szJavaKigou = L"!\"#%&'()=-^|\\`@[{+;*}]<,>?/";	// 識別子に使用できない半角記号。_:~.$は許可
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (i=0; i<nLineLen; i+=nCharChars) {
 			nCharChars = NativeW::GetSizeOfChar(pLine, nLineLen, i);
 
@@ -165,7 +165,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 						*/
 						LogicPoint  ptPosXY_Logic = LogicPoint(LogicInt(0), nLineCount);
 						LayoutPoint ptPosXY_Layout;
-						m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+						m_pDocRef->m_layoutMgr.LogicToLayout(
 							ptPosXY_Logic,
 							&ptPosXY_Layout
 						);
@@ -259,7 +259,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
 							LayoutPoint ptPosXY;
-							m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+							m_pDocRef->m_layoutMgr.LogicToLayout(
 								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
 								&ptPosXY
 							);
@@ -346,7 +346,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 					if (k >= nLineLen2) {
 						k = 0;
 						++nLineCount2;
-						pLine2 = m_pcDocRef->m_docLineMgr.GetLine(nLineCount2)->GetDocLineStrWithEOL(&nLineLen2);
+						pLine2 = m_pDocRef->m_docLineMgr.GetLine(nLineCount2)->GetDocLineStrWithEOL(&nLineLen2);
 						if (pLine2) {
 							goto loop_is_func;
 						}
@@ -396,7 +396,7 @@ void DocOutline::MakeFuncList_Java(FuncInfoArr* pcFuncInfoArr)
 							  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 							*/
 							LayoutPoint ptPosXY;
-							m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+							m_pDocRef->m_layoutMgr.LogicToLayout(
 								LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)),
 								&ptPosXY
 							);

@@ -143,8 +143,8 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 	int			nSelectedLen;
 	if (GetSelectionInfo().IsTextSelected()) {
 		// テキストが選択されているとき
-		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetSelectionInfo().m_sSelect.GetFrom(), &ptSelect);
-		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetSelectionInfo().m_sSelect.GetTo(), &ptSelectTo);
+		m_pEditDoc->m_layoutMgr.LayoutToLogic(GetSelectionInfo().m_sSelect.GetFrom(), &ptSelect);
+		m_pEditDoc->m_layoutMgr.LayoutToLogic(GetSelectionInfo().m_sSelect.GetTo(), &ptSelectTo);
 		
 		// 選択範囲が複数行の時、１ロジック行以内に制限
 		if (ptSelectTo.y != ptSelect.y) {
@@ -155,23 +155,23 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 				ptSelectTo.x = ptSelect.x;
 			}else {
 				// 2010.04.06 対象をptSelect.yの行からカーソル行に変更
-				const DocLine* pDocLine = m_pcEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
+				const DocLine* pDocLine = m_pEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
 				LogicInt targetY = GetCaret().GetCaretLogicPos().y;
 				// カーソル行が実質無選択なら、直前・直後の行を選択
 				if (ptSelect.y == GetCaret().GetCaretLogicPos().y
 					&& pDocLine && pDocLine->GetLengthWithoutEOL() == GetCaret().GetCaretLogicPos().x
 				) {
 					// カーソルが上側行末 => 次の行。行末カーソルでのShift+Upなど
-					targetY = t_min(m_pcEditDoc->m_docLineMgr.GetLineCount(),
+					targetY = t_min(m_pEditDoc->m_docLineMgr.GetLineCount(),
 						GetCaret().GetCaretLogicPos().y + 1);
-					pDocLine = m_pcEditDoc->m_docLineMgr.GetLine(targetY);
+					pDocLine = m_pEditDoc->m_docLineMgr.GetLine(targetY);
 				}else if (1
 					&& ptSelectTo.y == GetCaret().GetCaretLogicPos().y
 					&& GetCaret().GetCaretLogicPos().x == 0
 				) {
 					// カーソルが下側行頭 => 前の行。 行頭でShift+Down/Shift+End→Rightなど
 					targetY = GetCaret().GetCaretLogicPos().y - 1;
-					pDocLine = m_pcEditDoc->m_docLineMgr.GetLine(targetY);
+					pDocLine = m_pEditDoc->m_docLineMgr.GetLine(targetY);
 				}
 				// 選択範囲をxで指定：こちらはカーソルではなく選択範囲基準
 				if (targetY == ptSelect.y) {
@@ -190,14 +190,14 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 		}
 	}else {
 		// テキストが選択されていないとき
-		m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptSelect);
+		m_pEditDoc->m_layoutMgr.LayoutToLogic(GetCaret().GetCaretLayoutPos(), &ptSelect);
 		ptSelectTo = ptSelect;
 	}
 	nSelectedLen = ptSelectTo.x - ptSelect.x;
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
 	// ドキュメント行取得 -> pcCurDocLine
-	DocLine* pcCurDocLine = m_pcEditDoc->m_docLineMgr.GetLine(ptSelect.GetY2());
+	DocLine* pcCurDocLine = m_pEditDoc->m_docLineMgr.GetLine(ptSelect.GetY2());
 	if (!pcCurDocLine)
 		return 0;
 
@@ -481,13 +481,13 @@ LRESULT EditView::SetSelectionFromReonvert(const PRECONVERTSTRING pReconv, bool 
 	}
 	
 	// 選択開始の位置を取得
-	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
+	m_pEditDoc->m_layoutMgr.LogicToLayout(
 		LogicPoint(m_nLastReconvIndex + dwOffset, m_nLastReconvLine),
 		GetSelectionInfo().m_sSelect.GetFromPointer()
 	);
 
 	// 選択終了の位置を取得
-	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(
+	m_pEditDoc->m_layoutMgr.LogicToLayout(
 		LogicPoint(m_nLastReconvIndex + dwOffset + dwLen, m_nLastReconvLine),
 		GetSelectionInfo().m_sSelect.GetToPointer()
 	);

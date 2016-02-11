@@ -1013,14 +1013,14 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
 			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
-			return EditApp::getInstance()->m_pcSMacroMgr->IsSaveOk();
+			return EditApp::getInstance()->m_pSMacroMgr->IsSaveOk();
 		}
 	case F_EXECKEYMACRO:	// キーマクロの実行
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
 			return (pShareData->m_flags.m_hwndRecordingKeyMacro == EditWnd::getInstance()->GetHwnd());	// キーボードマクロを記録中のウィンドウ
 		}else {
 			//@@@ 2002.1.24 YAZAKI m_szKeyMacroFileNameにファイル名がコピーされているかどうか。
-			return (pShareData->m_common.m_sMacro.m_szKeyMacroFileName[0] != NULL);
+			return (pShareData->m_common.m_macro.m_szKeyMacroFileName[0] != NULL);
 		}
 	case F_LOADKEYMACRO:	// キーマクロの読み込み
 		if (pShareData->m_flags.m_bRecordingKeyMacro) {	// キーボードマクロの記録中
@@ -1048,7 +1048,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 		return DiffManager::getInstance()->IsDiffUse();
 	case F_DIFF_DIALOG:	// DIFF差分表示	//@@@ 2002.05.25 MIK
 		//if (pcEditDoc->IsModified()) return false;
-		//if (! pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()) return false;
+		//if (! pcEditDoc->m_docFile.GetFilePathClass().IsValidPath()) return false;
 		return true;
 
 	case F_BEGIN_BOX:	// 矩形範囲選択開始
@@ -1069,15 +1069,15 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_1PageDown_BOX:
 	case F_GOFILETOP_BOX:
 	case F_GOFILEEND_BOX:
-		return (pShareData->m_common.m_sView.m_bFontIs_FIXED_PITCH);	// 現在のフォントは固定幅フォントである
+		return (pShareData->m_common.m_view.m_bFontIs_FIXED_PITCH);	// 現在のフォントは固定幅フォントである
 
 	case F_PASTEBOX:
 		// クリップボードから貼り付け可能か？
-		return (pcEditDoc->m_cDocEditor.IsEnablePaste() && pShareData->m_common.m_sView.m_bFontIs_FIXED_PITCH);
+		return (pcEditDoc->m_docEditor.IsEnablePaste() && pShareData->m_common.m_view.m_bFontIs_FIXED_PITCH);
 		
 	case F_PASTE:
 		// クリップボードから貼り付け可能か？
-		return (pcEditDoc->m_cDocEditor.IsEnablePaste());
+		return (pcEditDoc->m_docEditor.IsEnablePaste());
 
 	case F_FILENEW:		// 新規作成
 	case F_GREP_DIALOG:	// Grep
@@ -1086,13 +1086,13 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 
 	case F_FILESAVE:	// 上書き保存
 		if (!AppMode::getInstance()->IsViewMode()) {	// ビューモード
-			if (pcEditDoc->m_cDocEditor.IsModified()) {	// 変更フラグ
+			if (pcEditDoc->m_docEditor.IsModified()) {	// 変更フラグ
 				return true;
-			}else if (pcEditDoc->m_cDocFile.IsChgCodeSet()) {	// 文字コードの変更
+			}else if (pcEditDoc->m_docFile.IsChgCodeSet()) {	// 文字コードの変更
 				return true;
 			}else {
 				// 無変更でも上書きするか
-				return (pShareData->m_common.m_sFile.m_bEnableUnmodifiedOverwrite);
+				return (pShareData->m_common.m_file.m_bEnableUnmodifiedOverwrite);
 			}
 		}else {
 			return false;
@@ -1138,8 +1138,8 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 		// テキストが選択されていなければtrue
 		return !pcEditDoc->m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
-	case F_UNDO:		return pcEditDoc->m_cDocEditor.IsEnableUndo();	// Undo(元に戻す)可能な状態か？
-	case F_REDO:		return pcEditDoc->m_cDocEditor.IsEnableRedo();	// Redo(やり直し)可能な状態か？
+	case F_UNDO:		return pcEditDoc->m_docEditor.IsEnableUndo();	// Undo(元に戻す)可能な状態か？
+	case F_REDO:		return pcEditDoc->m_docEditor.IsEnableRedo();	// Redo(やり直し)可能な状態か？
 
 	case F_COPYPATH:
 	case F_COPYTAG:
@@ -1151,7 +1151,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_BROWSE:						// ブラウズ
 	//case F_VIEWMODE:					// ビューモード	//	Sep. 10, 2002 genta 常に使えるように
 	//case F_PROPERTY_FILE:				// ファイルのプロパティ	// 2009.04.11 ryoji コメントアウト
-		return pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
+		return pcEditDoc->m_docFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
 
 	case F_JUMPHIST_PREV:	// 移動履歴: 前へ
 		return (pcEditDoc->m_pEditWnd->GetActiveView().m_cHistory->CheckPrev());
@@ -1166,8 +1166,8 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_TAGJUMP_KEYWORD:	// キーワードを指定してダイレクトタグジャンプ	//@@@ 2005.03.31 MIK
 	// 2003.05.12 MIK タグファイル作成先を選べるようにしたので、常に作成可能とする
 //	case F_TAGS_MAKE:	// タグファイルの作成	//@@@ 2003.04.13 MIK
-		return (!EditApp::getInstance()->m_pcGrepAgent->m_bGrepMode
-			&& pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath()
+		return (!EditApp::getInstance()->m_pGrepAgent->m_bGrepMode
+			&& pcEditDoc->m_docFile.GetFilePathClass().IsValidPath()
 		);
 		
 	// タブモード時はウィンドウ並べ替え禁止です。	@@@ 2003.06.12 MIK
@@ -1192,16 +1192,16 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_TAB_8:
 	case F_TAB_9:
 		// 非タブモード時はウィンドウを結合して表示できない
-		return pShareData->m_common.m_sTabBar.m_bDispTabWnd != FALSE;
+		return pShareData->m_common.m_tabBar.m_bDispTabWnd != FALSE;
 	case F_GROUPCLOSE:		// 2007.06.20 ryoji 追加
 	case F_NEXTGROUP:		// 2007.06.20 ryoji 追加
 	case F_PREVGROUP:		// 2007.06.20 ryoji 追加
-		return (pShareData->m_common.m_sTabBar.m_bDispTabWnd && !pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin);
+		return (pShareData->m_common.m_tabBar.m_bDispTabWnd && !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin);
 	case F_TAB_SEPARATE:	// 2007.06.20 ryoji 追加
 	case F_TAB_JOINTNEXT:	// 2007.06.20 ryoji 追加
 	case F_TAB_JOINTPREV:	// 2007.06.20 ryoji 追加
 	case F_FILENEW_NEWWINDOW:	// 2011.11.15 syat 追加
-		return (pShareData->m_common.m_sTabBar.m_bDispTabWnd && !pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin);
+		return (pShareData->m_common.m_tabBar.m_bDispTabWnd && !pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin);
 	}
 	return true;
 }
@@ -1231,29 +1231,29 @@ bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 		}else {
 			return false;
 		}
-	case F_SHOWTOOLBAR:			return pCEditWnd->m_cToolbar.GetToolbarHwnd() != NULL;
-	case F_SHOWFUNCKEY:			return pCEditWnd->m_cFuncKeyWnd.GetHwnd() != NULL;
-	case F_SHOWTAB:				return pCEditWnd->m_cTabWnd.GetHwnd() != NULL;	//@@@ 2003.06.10 MIK
-	case F_SHOWSTATUSBAR:		return pCEditWnd->m_cStatusBar.GetStatusHwnd() != NULL;
+	case F_SHOWTOOLBAR:			return pCEditWnd->m_toolbar.GetToolbarHwnd() != NULL;
+	case F_SHOWFUNCKEY:			return pCEditWnd->m_funcKeyWnd.GetHwnd() != NULL;
+	case F_SHOWTAB:				return pCEditWnd->m_tabWnd.GetHwnd() != NULL;	//@@@ 2003.06.10 MIK
+	case F_SHOWSTATUSBAR:		return pCEditWnd->m_statusBar.GetStatusHwnd() != NULL;
 	// 2008.05.30 nasukoji	テキストの折り返し方法
 	case F_TMPWRAPNOWRAP:		return (pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping);		// 折り返さない
 	case F_TMPWRAPSETTING:		return (pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::SettingWidth);		// 指定桁で折り返す
 	case F_TMPWRAPWINDOW:		return (pcEditDoc->m_nTextWrapMethodCur == (int)TextWrappingMethod::WindowWidth);		// 右端で折り返す
 	// 2009.07.06 syat  文字カウント方法
 	case F_SELECT_COUNT_MODE:	return (pCEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
-											pShareData->m_common.m_sStatusbar.m_bDispSelCountByByte != FALSE :
+											pShareData->m_common.m_statusBar.m_bDispSelCountByByte != FALSE :
 											pCEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return AppMode::getInstance()->IsViewMode(); // ビューモード
 	// From Here 2003.06.23 Moca
-	case F_CHGMOD_EOL_CRLF:		return EolType::CRLF == pcEditDoc->m_cDocEditor.GetNewLineCode();
-	case F_CHGMOD_EOL_LF:		return EolType::LF == pcEditDoc->m_cDocEditor.GetNewLineCode();
-	case F_CHGMOD_EOL_CR:		return EolType::CR == pcEditDoc->m_cDocEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_CRLF:		return EolType::CRLF == pcEditDoc->m_docEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_LF:		return EolType::LF == pcEditDoc->m_docEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_CR:		return EolType::CR == pcEditDoc->m_docEditor.GetNewLineCode();
 	// To Here 2003.06.23 Moca
 	// 2003.07.21 genta
-	case F_CHGMOD_INS:			return pcEditDoc->m_cDocEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
-	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_common.m_sSearch.m_bUseCaretKeyWord != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
-	case F_BIND_WINDOW:			return ((pShareData->m_common.m_sTabBar.m_bDispTabWnd) && !(pShareData->m_common.m_sTabBar.m_bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
+	case F_CHGMOD_INS:			return pcEditDoc->m_docEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した
+	case F_TOGGLE_KEY_SEARCH:	return pShareData->m_common.m_search.m_bUseCaretKeyWord != FALSE;	// 2007.02.03 genta キーワードポップアップのON/OFF状態を反映する
+	case F_BIND_WINDOW:			return ((pShareData->m_common.m_tabBar.m_bDispTabWnd) && !(pShareData->m_common.m_tabBar.m_bDispTabWndMultiWin));	//2004.07.14 Kazika 追加
 	case F_TOPMOST:				return ((DWORD)::GetWindowLongPtr(pCEditWnd->GetHwnd(), GWL_EXSTYLE) & WS_EX_TOPMOST) != 0;	// 2004.09.21 Moca
 	// Jan. 10, 2004 genta インクリメンタルサーチ
 	case F_ISEARCH_NEXT:
@@ -1265,7 +1265,7 @@ bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 		return pcEditDoc->m_pEditWnd->GetActiveView().IsISearchEnabled(nId);
 	case F_OUTLINE_TOGGLE: // 20060201 aroka アウトラインウィンドウ
 		// ToDo:ブックマークリストが出ているときもへこんでしまう。
-		return pcEditDoc->m_pEditWnd->m_cDlgFuncList.GetHwnd() != NULL;
+		return pcEditDoc->m_pEditWnd->m_dlgFuncList.GetHwnd() != NULL;
 	}
 	//End 2004.07.14 Kazika
 

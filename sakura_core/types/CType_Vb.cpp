@@ -78,13 +78,13 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
 	int			nParseCnt = 0;
 	bool		bClass;			// クラスモジュールフラグ
 	bool		bDQuote;		// ダブルクォーテーションフラグ（ダブルクォーテーションがきたらTrue）
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 	
 	// 調べるファイルがクラスモジュールのときはType、Constの挙動が異なるのでフラグを立てる
 	bClass = false;
-	int filelen = _tcslen(m_pcDocRef->m_cDocFile.GetFilePath());
+	int filelen = _tcslen(m_pDocRef->m_docFile.GetFilePath());
 	if (4 < filelen) {
-		if (_tcsicmp((m_pcDocRef->m_cDocFile.GetFilePath() + filelen - 4), _FT(".cls")) == 0) {
+		if (_tcsicmp((m_pDocRef->m_docFile.GetFilePath() + filelen - 4), _FT(".cls")) == 0) {
 			bClass = true;
 		}
 	}
@@ -95,13 +95,13 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
 	const wchar_t* pLine = NULL;
 	// プロシージャフラグ（プロシージャ内ではTrue）
 	bool bProcedure = false;
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
 			}
 		}
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nFuncId = 0;
 		bDQuote	= false;
 		for (int i=0; i<nLineLen; ++i) {
@@ -262,7 +262,7 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
 						  → レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 						*/
 						LayoutPoint ptPosXY;
-						m_pcDocRef->m_cLayoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)), &ptPosXY);
+						m_pDocRef->m_layoutMgr.LogicToLayout(	LogicPoint(LogicInt(0), nFuncLine - LogicInt(1)), &ptPosXY);
 						pcFuncInfoArr->AppendData(nFuncLine, ptPosXY.GetY2() + LayoutInt(1) , szFuncName, nFuncId);
 						nParseCnt = 0;
 						nFuncId	= 0;	// Jul 10, 2003  little YOSHI  論理和を使用するため、必ず初期化

@@ -78,11 +78,11 @@ class EditDoc
 {
 public:
 	// コンストラクタ・デストラクタ
-	EditDoc(EditApp* pcApp);
+	EditDoc(EditApp* pApp);
 	~EditDoc();
 
 	// 初期化
-	BOOL Create(EditWnd* pcEditWnd);
+	BOOL Create(EditWnd* pEditWnd);
 	void InitDoc();		// 既存データのクリア
 	void InitAllView();	// 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する
 	void Clear();
@@ -95,7 +95,7 @@ public:
 	bool		GetDocumentBomExist() const;							// ドキュメントのBOM付加を取得
 	void		SetDocumentEncoding(ECodeType eCharCode, bool bBom);	// ドキュメントの文字コードを設定
 	bool IsModificationForbidden(EFunctionCode nCommand) const;			// 指定コマンドによる書き換えが禁止されているかどうか	// Aug. 14, 2000 genta
-	bool IsEditable() const { return !AppMode::getInstance()->IsViewMode() && !(!m_cDocLocker.IsDocWritable() && GetDllShareData().m_common.m_sFile.m_bUneditableIfUnwritable); }	// 編集可能かどうか
+	bool IsEditable() const { return !AppMode::getInstance()->IsViewMode() && !(!m_docLocker.IsDocWritable() && GetDllShareData().m_common.m_file.m_bUneditableIfUnwritable); }	// 編集可能かどうか
 	void GetSaveInfo(SaveInfo* pSaveInfo) const;			// セーブ情報を取得
 
 	// 状態
@@ -122,27 +122,27 @@ public:
 
 	// データ構造
 	DocLineMgr			m_docLineMgr;
-	LayoutMgr			m_cLayoutMgr;
+	LayoutMgr			m_layoutMgr;
 
 	// 各種機能
-	DocFile				m_cDocFile;
-	DocFileOperation	m_cDocFileOperation;
-	DocEditor			m_cDocEditor;
-	DocType				m_cDocType;
-	CookieManager		m_cCookie;
+	DocFile				m_docFile;
+	DocFileOperation	m_docFileOperation;
+	DocEditor			m_docEditor;
+	DocType				m_docType;
+	CookieManager		m_cookie;
 
 	// ヘルパ
-	BackupAgent			m_cBackupAgent;
-	AutoSaveAgent		m_cAutoSaveAgent;		// 自動保存管理
-	AutoReloadAgent		m_cAutoReloadAgent;
-	DocOutline			m_cDocOutline;
-	DocLocker			m_cDocLocker;
+	BackupAgent			m_backupAgent;
+	AutoSaveAgent		m_autoSaveAgent;		// 自動保存管理
+	AutoReloadAgent		m_autoReloadAgent;
+	DocOutline			m_docOutline;
+	DocLocker			m_docLocker;
 
 	// 動的状態
 	int				m_nCommandExecNum;			// コマンド実行回数
 
 	// 環境情報
-	FuncLookup		m_cFuncLookup;				// 機能名，機能番号などのresolve
+	FuncLookup		m_funcLookup;				// 機能名，機能番号などのresolve
 
 	// 未整理変数
 	int				m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji

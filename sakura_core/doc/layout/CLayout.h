@@ -37,7 +37,7 @@ public:
 	*/
 	// 2007.08.23 kobake コンストラクタでメンバ変数を初期化するようにした
 	Layout(
-		const DocLine*	pcDocLine,		//!< 実データへの参照
+		const DocLine*	pDocLine,		//!< 実データへの参照
 		LogicPoint		ptLogicPos,		//!< 実データ参照位置
 		LogicInt		nLength,		//!< 実データ内データ長
 		EColorIndexType	nTypePrev,
@@ -47,20 +47,20 @@ public:
 	{
 		m_pPrev			= NULL;
 		m_pNext			= NULL;
-		m_pCDocLine		= pcDocLine;
+		m_pDocLine		= pDocLine;
 		m_ptLogicPos	= ptLogicPos;	// 実データ参照位置
 		m_nLength		= nLength;		// 実データ内データ長
 		m_nTypePrev		= nTypePrev;	// タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
 		m_nIndent		= nTypeIndent;	// このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
-		m_cExInfo.SetColorInfo(pColorInfo);
+		m_exInfo.SetColorInfo(pColorInfo);
 	}
 	~Layout();
 	void DUMP(void);
 	
 	// m_ptLogicPos.xで補正したあとの文字列を得る
-	const wchar_t* GetPtr() const { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; }
+	const wchar_t* GetPtr() const { return m_pDocLine->GetPtr() + m_ptLogicPos.x; }
 	LogicInt GetLengthWithEOL() const { return m_nLength;	}	//	ただしEOLは常に1文字とカウント？？
-	LogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	}
+	LogicInt GetLengthWithoutEOL() const { return m_nLength - (m_eol.GetLen() ? 1 : 0);	}
 	//LogicInt GetLength() const { return m_nLength; }	// CMemoryIterator用（EOL含む）
 	LayoutInt GetIndent() const { return m_nIndent; }	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
@@ -98,13 +98,13 @@ public:
 	void _SetNextLayout(Layout* pcLayout) { m_pNext = pcLayout; }
 
 	// 実データ参照
-	const DocLine* GetDocLineRef() const { if (this) return m_pCDocLine; else return NULL; } //$$note:高速化
+	const DocLine* GetDocLineRef() const { if (this) return m_pDocLine; else return NULL; } //$$note:高速化
 
 	// その他属性参照
-	const Eol& GetLayoutEol() const { return m_cEol; }
-	const LayoutColorInfo* GetColorInfo() const { return m_cExInfo.GetColorInfo(); }
+	const Eol& GetLayoutEol() const { return m_eol; }
+	const LayoutColorInfo* GetColorInfo() const { return m_exInfo.GetColorInfo(); }
 	LayoutExInfo* GetLayoutExInfo() {
-		return &m_cExInfo;
+		return &m_exInfo;
 	}
 	
 private:
@@ -112,16 +112,16 @@ private:
 	Layout*			m_pNext;
 
 	// データ参照範囲
-	const DocLine*		m_pCDocLine;		//!< 実データへの参照
+	const DocLine*		m_pDocLine;		//!< 実データへの参照
 	LogicPoint			m_ptLogicPos;		//!< 対応するロジック参照位置
 	LogicInt			m_nLength;			//!< このレイアウト行の長さ。文字単位。
 	
 	// その他属性
 	EColorIndexType		m_nTypePrev;		//!< タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列
 	LayoutInt			m_nIndent;			//!< このレイアウト行のインデント数 @@@ 2002.09.23 YAZAKI
-	Eol				m_cEol;
+	Eol					m_eol;
 	LayoutInt			m_nLayoutWidth;		//!< このレイアウト行の改行を含むレイアウト長（「折り返さない」選択時のみ）	// 2009.08.28 nasukoji
-	LayoutExInfo		m_cExInfo;			//!< 色分け詳細情報
+	LayoutExInfo		m_exInfo;			//!< 色分け詳細情報
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(Layout);

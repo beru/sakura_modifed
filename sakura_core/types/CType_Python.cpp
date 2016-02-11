@@ -194,7 +194,7 @@ int OutlinePython::EnterString(const wchar_t* data, int linelen, int start_offse
 int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(m_state == STATE_NORMAL || m_state == STATE_CONTINUE);
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
 	for (int col=start_offset; col<linelen; ++col) {
 		int nCharChars = NativeW::GetSizeOfChar(data, linelen, col);
@@ -262,7 +262,7 @@ int OutlinePython::ScanNormal(const wchar_t* data, int linelen, int start_offset
 int OutlinePython::ScanString(const wchar_t* data, int linelen, int start_offset)
 {
 	assert(m_state == STATE_STRING);
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
 	int quote_char = m_quote_char;
 	for (int col=start_offset; col<linelen; ++col) {
@@ -392,18 +392,18 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pcFuncInfoArr)
 	OutlinePython python_analyze_state;
 
 	const int MAX_DEPTH = 10;
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
 	int indent_level[MAX_DEPTH]; // 各レベルのインデント桁位置()
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
 		LogicInt col = LogicInt(0);	//	current working column position
 
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
 		if (python_analyze_state.IsLogicalLineTop()) {
 			//	indent check
@@ -525,7 +525,7 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pcFuncInfoArr)
 			  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 			*/
 			LayoutPoint ptPosXY;
-			m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+			m_pDocRef->m_layoutMgr.LogicToLayout(
 				LogicPoint(LogicInt(0), nLineCount),
 				&ptPosXY
 			);

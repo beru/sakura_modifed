@@ -31,7 +31,7 @@
 // ŠO•”ˆË‘¶
 inline EditDoc* ViewCommander::GetDocument()
 {
-	return m_pCommanderView->m_pcEditDoc;
+	return m_pCommanderView->m_pEditDoc;
 }
 
 inline EditWnd* ViewCommander::GetEditWindow()
@@ -46,13 +46,13 @@ inline HWND ViewCommander::GetMainWindow()
 
 inline OpeBlk* ViewCommander::GetOpeBlk()
 {
-	return GetDocument()->m_cDocEditor.m_pcOpeBlk;
+	return GetDocument()->m_docEditor.m_pOpeBlk;
 }
 
 inline void ViewCommander::SetOpeBlk(OpeBlk* p)
 {
-	GetDocument()->m_cDocEditor.m_pcOpeBlk = p;
-	GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount = 0;
+	GetDocument()->m_docEditor.m_pOpeBlk = p;
+	GetDocument()->m_docEditor.m_nOpeBlkRedawCount = 0;
 }
 
 inline LayoutRange& ViewCommander::GetSelect()

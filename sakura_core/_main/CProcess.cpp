@@ -36,7 +36,7 @@ Process::Process(
 	, m_pfnMiniDumpWriteDump(NULL)
 #endif
 {
-	m_pcShareData = ShareData::getInstance();
+	m_pShareData = ShareData::getInstance();
 }
 
 /*!
@@ -150,6 +150,6 @@ int Process::WriteDump(PEXCEPTION_POINTERS pExceptPtrs)
 */
 void Process::RefreshString()
 {
-	m_pcShareData->RefreshString();
+	m_pShareData->RefreshString();
 }
 

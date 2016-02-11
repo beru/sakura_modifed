@@ -42,8 +42,8 @@ struct ColorAttr {
 // 色設定
 struct ColorInfoBase {
 	bool		m_bDisp;			// 表示
-	FontAttr	m_sFontAttr;		// フォント属性
-	ColorAttr	m_sColorAttr;		// 色属性
+	FontAttr	m_fontAttr;			// フォント属性
+	ColorAttr	m_colorAttr;		// 色属性
 };
 
 // 名前とインデックス付き色設定

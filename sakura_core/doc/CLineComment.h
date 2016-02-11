@@ -33,19 +33,19 @@ public:
 	*/
 	LineComment();
 
-	void CopyTo(const int n, const wchar_t* buffer, int nCommentPos);	// 行コメントデリミタをコピーする
-	bool Match(int nPos, const StringRef& cStr) const;				// 行コメントに値するか確認する
+	void CopyTo(const int n, const wchar_t* buffer, int commentPos);	// 行コメントデリミタをコピーする
+	bool Match(int pos, const StringRef& str) const;				// 行コメントに値するか確認する
 
 	const wchar_t* getLineComment(const int n) {
 		return m_pszLineComment[n];
 	}
 	int getLineCommentPos(const int n) const {
-		return m_nLineCommentPos[n];
+		return m_lineCommentPos[n];
 	}
 
 private:
 	wchar_t	m_pszLineComment[COMMENT_DELIMITER_NUM][COMMENT_DELIMITER_BUFFERSIZE];	// 行コメントデリミタ
-	int		m_nLineCommentPos[COMMENT_DELIMITER_NUM];	// 行コメントの開始位置(負数は指定無し)
-	int		m_nLineCommentLen[COMMENT_DELIMITER_NUM];	// 行コメント文字列の長さ
+	int		m_lineCommentPos[COMMENT_DELIMITER_NUM];	// 行コメントの開始位置(負数は指定無し)
+	int		m_lineCommentLen[COMMENT_DELIMITER_NUM];	// 行コメント文字列の長さ
 };
 

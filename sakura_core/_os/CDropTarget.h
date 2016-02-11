@@ -82,7 +82,7 @@ public:
 private: // 2002/2/10 aroka アクセス権変更
 	EditWnd*		m_pEditWnd;	// 2008.06.20 ryoji
 	HWND			m_hWnd_DropTarget;
-	EditView*		m_pcEditView;
+	EditView*		m_pEditView;
 	//	static REFIID	m_owniid;
 public:
 	BOOL			Register_DropTarget(HWND);
@@ -155,9 +155,9 @@ class EnumFORMATETC : public CYbInterfaceImpl<IEnumFORMATETC> {
 private:
 	LONG m_lRef;
 	int m_nIndex;
-	DataObject* m_pcDataObject;
+	DataObject* m_pDataObject;
 public:
-	EnumFORMATETC(DataObject* pcDataObject) : m_lRef(1), m_nIndex(0), m_pcDataObject(pcDataObject) {}
+	EnumFORMATETC(DataObject* pcDataObject) : m_lRef(1), m_nIndex(0), m_pDataObject(pcDataObject) {}
 	STDMETHOD_(ULONG, AddRef)(void)
 	{return ::InterlockedIncrement(&m_lRef);}
 	STDMETHOD_(ULONG, Release)(void)

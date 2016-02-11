@@ -75,11 +75,11 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pcFuncInfoArr)
 	int			nWordIdx = 0;
 	int			nMaxWordLeng = 70;
 	int			nMode;
-	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
+	bool bExtEol = GetDllShareData().m_common.m_edit.m_bEnableExtEol;
 
 	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nMode = 0;
 		for (i=0; i<nLineLen; ++i) {
 			/* 1バイト文字だけを処理する */
@@ -157,7 +157,7 @@ void DocOutline::MakeFuncList_Perl(FuncInfoArr* pcFuncInfoArr)
 					  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
 					*/
 					LayoutPoint ptPosXY;
-					m_pcDocRef->m_cLayoutMgr.LogicToLayout(
+					m_pDocRef->m_layoutMgr.LogicToLayout(
 						LogicPoint(LogicInt(0), nLineCount),
 						&ptPosXY
 					);
