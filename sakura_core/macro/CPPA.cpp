@@ -49,28 +49,28 @@
 #define omSet (1)
 
 // 2007.07.26 genta
-CPPA::PpaExecInfo* CPPA::m_CurInstance = NULL;
-bool CPPA::m_bIsRunning = false;
+PPA::PpaExecInfo* PPA::m_CurInstance = NULL;
+bool PPA::m_bIsRunning = false;
 
-CPPA::CPPA()
+PPA::PPA()
 {
 }
 
-CPPA::~CPPA()
+PPA::~PPA()
 {
 }
 
 // @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-bool CPPA::Execute(EditView* pcEditView, int flags)
+bool PPA::Execute(EditView* pcEditView, int flags)
 {
 	// PPAの多重起動禁止 2008.10.22 syat
-	if (CPPA::m_bIsRunning) {
+	if (PPA::m_bIsRunning) {
 		MYMESSAGEBOX(pcEditView->GetHwnd(), MB_OK, LS(STR_ERR_DLGPPA7), LS(STR_ERR_DLGPPA1));
 		m_fnAbort();
-		CPPA::m_bIsRunning = false;
+		PPA::m_bIsRunning = false;
 		return false;
 	}
-	CPPA::m_bIsRunning = true;
+	PPA::m_bIsRunning = true;
 
 	PpaExecInfo info;
 	info.m_pcEditView = pcEditView;
@@ -88,11 +88,11 @@ bool CPPA::Execute(EditView* pcEditView, int flags)
 	m_CurInstance = old_instance;
 
 	// PPAの多重起動禁止 2008.10.22 syat
-	CPPA::m_bIsRunning = false;
+	PPA::m_bIsRunning = false;
 	return !info.m_bError;
 }
 
-LPCTSTR CPPA::GetDllNameImp(int nIndex)
+LPCTSTR PPA::GetDllNameImp(int nIndex)
 {
 	return _T("PPA.DLL");
 }
@@ -105,7 +105,7 @@ LPCTSTR CPPA::GetDllNameImp(int nIndex)
 	@retval 0 成功
 	@retval 1 アドレス取得に失敗
 */
-bool CPPA::InitDllImp()
+bool PPA::InitDllImp()
 {
 	// PPA.DLLが持っている関数を準備
 
@@ -164,15 +164,15 @@ bool CPPA::InitDllImp()
 		return false;
 	}
 
-	SetIntFunc((void *)CPPA::stdIntFunc);	// 2003.02.24 Moca
-	SetStrFunc((void *)CPPA::stdStrFunc);
-	SetProc((void *)CPPA::stdProc);
+	SetIntFunc((void *)PPA::stdIntFunc);	// 2003.02.24 Moca
+	SetStrFunc((void *)PPA::stdStrFunc);
+	SetProc((void *)PPA::stdProc);
 
 	// 2003.06.01 Moca エラーメッセージを追加
-	SetErrProc((void *)CPPA::stdError);
-	SetStrObj((void *)CPPA::stdStrObj);	// UserErrorMes用
+	SetErrProc((void *)PPA::stdError);
+	SetStrObj((void *)PPA::stdStrObj);	// UserErrorMes用
 #if PPADLL_VER >= 123
-	SetFinishProc((void *)CPPA::stdFinishProc);
+	SetFinishProc((void *)PPA::stdFinishProc);
 #endif
 
 	SetDefine("sakura-editor");	// 2003.06.01 Moca SAKURAエディタ用独自関数を準備
@@ -181,20 +181,20 @@ bool CPPA::InitDllImp()
 	// Jun. 16, 2003 genta 一時作業エリア
 	char buf[1024];
 	// コマンドに置き換えられない関数 ＝ PPA無しでは使えない。。。
-	for (int i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::m_MacroFuncInfoArr[i].m_pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
-		GetDeclarations(CSMacroMgr::m_MacroFuncInfoArr[i], buf);
+		GetDeclarations(SMacroMgr::m_MacroFuncInfoArr[i], buf);
 		SetDefProc(buf);
 	}
 
 	// コマンドに置き換えられる関数 ＝ PPA無しでも使える。
-	for (int i=0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
+	for (int i=0; SMacroMgr::m_MacroFuncInfoCommandArr[i].m_pszFuncName; ++i) {
 		// 2003.06.08 Moca メモリーリークの修正
 		// 2003.06.16 genta バッファを外から与えるように
 		// 関数登録用文字列を作成する
-		GetDeclarations(CSMacroMgr::m_MacroFuncInfoCommandArr[i], buf);
+		GetDeclarations(SMacroMgr::m_MacroFuncInfoCommandArr[i], buf);
 		SetDefProc(buf);
 	}
 	return true; 
@@ -213,7 +213,7 @@ bool CPPA::InitDllImp()
 
 	@date 2003.06.16 genta 無駄なnew/deleteを避けるためバッファを外から与えるように
 */
-char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer )
+char* PPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer )
 {
 	char szType[20];	// procedure/function用バッファ
 	char szReturn[20];	// 戻り値型用バッファ
@@ -285,7 +285,7 @@ char* CPPA::GetDeclarations( const MacroFuncInfo& cMacroFuncInfo, char* szBuffer
 /*! ユーザー定義文字列型オブジェクト
 	現在は、デバッグ用文字列を設定する為のみ
 */
-void __stdcall CPPA::stdStrObj(
+void __stdcall PPA::stdStrObj(
 	const char* ObjName,
 	int Index,
 	BYTE GS_Mode,
@@ -325,7 +325,7 @@ void __stdcall CPPA::stdStrObj(
 
 	@date 2003.06.01 Moca
 */
-void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
+void __stdcall PPA::stdError(int Err_CD, const char* Err_Mes)
 {
 	if (m_CurInstance->m_bError) {
 		return;
@@ -340,16 +340,16 @@ void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 		FuncID = Err_CD - 1;
 		char szFuncDec[1024];
 		szFuncDec[0] = '\0';
-		for (i=0; CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID!=-1; ++i) {
-			if (CSMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID == FuncID) {
-				GetDeclarations(CSMacroMgr::m_MacroFuncInfoCommandArr[i], szFuncDec);
+		for (i=0; SMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID!=-1; ++i) {
+			if (SMacroMgr::m_MacroFuncInfoCommandArr[i].m_nFuncID == FuncID) {
+				GetDeclarations(SMacroMgr::m_MacroFuncInfoCommandArr[i], szFuncDec);
 				break;
 			}
 		}
-		if (CSMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID != -1) {
-			for (i=0; CSMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID!=-1; ++i) {
-				if (CSMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID == FuncID) {
-					GetDeclarations(CSMacroMgr::m_MacroFuncInfoArr[i], szFuncDec);
+		if (SMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID != -1) {
+			for (i=0; SMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID!=-1; ++i) {
+				if (SMacroMgr::m_MacroFuncInfoArr[i].m_nFuncID == FuncID) {
+					GetDeclarations(SMacroMgr::m_MacroFuncInfoArr[i], szFuncDec);
 					break;
 				}
 			}
@@ -390,7 +390,7 @@ void __stdcall CPPA::stdError(int Err_CD, const char* Err_Mes)
 
 	@date 2007.07.20 genta Indexと一緒にフラグを渡す
 */
-void __stdcall CPPA::stdProc(
+void __stdcall PPA::stdProc(
 	const char*	funcName,
 	const int	index,
 	const char*	args[],
@@ -448,7 +448,7 @@ void __stdcall CPPA::stdProc(
 	@author Moca
 	@date 2003.02.24 Moca
 */
-void __stdcall CPPA::stdIntFunc(
+void __stdcall PPA::stdIntFunc(
 	const char* FuncName,
 	const int Index,
 	const char* Argument[],
@@ -492,7 +492,7 @@ void __stdcall CPPA::stdIntFunc(
 	PPAから呼びだされる
 	@date 2003.02.24 Moca CallHandleFunction対応
 */
-void __stdcall CPPA::stdStrFunc(
+void __stdcall PPA::stdStrFunc(
 	const char* FuncName,
 	const int Index,
 	const char* Argument[],
@@ -530,7 +530,7 @@ void __stdcall CPPA::stdStrFunc(
 	文字列で与えられた引数をVARIANT/BSTRに変換してMacro::HandleFunction()を呼びだす
 	@author Moca
 */
-bool CPPA::CallHandleFunction(
+bool PPA::CallHandleFunction(
 	const int Index,
 	const char* Arg[],
 	int ArgSize,
@@ -541,7 +541,7 @@ bool CPPA::CallHandleFunction(
 	const int maxArgSize = 8;
 	VARIANT vtArg[maxArgSize];
 	
-	const MacroFuncInfo* mfi = CSMacroMgr::GetFuncInfoByID(Index);
+	const MacroFuncInfo* mfi = SMacroMgr::GetFuncInfoByID(Index);
 	for (int i=0; i<maxArgSize && i<ArgSize; ++i) {
 		::VariantInit(&vtArg[i]);
 	}
@@ -601,7 +601,7 @@ bool CPPA::CallHandleFunction(
 	
 	@date 2003.06.01 Moca
 */
-void __stdcall CPPA::stdFinishProc()
+void __stdcall PPA::stdFinishProc()
 {
 	// 2007.07.26 genta : 終了処理は不要
 }

@@ -39,10 +39,10 @@ struct TypeConfig;
 	タイプ別設定のカラー設定で，文字色／背景色統一の対象色を指定するために補助的に
 	使用されるダイアログボックス
 */
-class CDlgSameColor : public Dialog {
+class DlgSameColor : public Dialog {
 public:
-	CDlgSameColor();
-	~CDlgSameColor();
+	DlgSameColor();
+	~DlgSameColor();
 	int DoModal(HINSTANCE, HWND, WORD, TypeConfig*, COLORREF);		// モーダルダイアログの表示
 
 protected:

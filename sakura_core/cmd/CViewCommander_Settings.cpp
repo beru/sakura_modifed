@@ -155,8 +155,8 @@ void ViewCommander::Command_SHOWMINIMAP(void)
 // タイプ別設定一覧
 void ViewCommander::Command_TYPE_LIST(void)
 {
-	CDlgTypeList cDlgTypeList;
-	CDlgTypeList::Result sResult;
+	DlgTypeList cDlgTypeList;
+	DlgTypeList::Result sResult;
 	sResult.cDocumentType = GetDocument()->m_cDocType.GetDocumentType();
 	sResult.bTempChange = true;
 	if (cDlgTypeList.DoModal(G_AppInstance(), m_pCommanderView->GetHwnd(), &sResult)) {
@@ -176,7 +176,7 @@ void ViewCommander::Command_TYPE_LIST(void)
 // タイプ別設定一時適用
 void ViewCommander::Command_CHANGETYPE(int nTypePlusOne)
 {
-	CTypeConfig type = CTypeConfig(nTypePlusOne - 1);
+	TypeConfigNum type = TypeConfigNum(nTypePlusOne - 1);
 	if (nTypePlusOne == 0) {
 		type = GetDocument()->m_cDocType.GetDocumentType();
 	}
@@ -304,7 +304,7 @@ void ViewCommander::Command_SETFONTSIZE(int fontSize, int shift, int mode)
 		csView.m_lf.lfHeight = lfHeight;
 		csView.m_nPointSize = nPointSize;
 	}else if (mode == 1) {
-		CTypeConfig nDocType = GetDocument()->m_cDocType.GetDocumentType();
+		TypeConfigNum nDocType = GetDocument()->m_cDocType.GetDocumentType();
 		auto type = std::make_unique<TypeConfig>();
 		if (!DocTypeManager().GetTypeConfig(nDocType, *type)) {
 			// 謎のエラー

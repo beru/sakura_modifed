@@ -317,7 +317,7 @@ void PropCommon::InitData(void)
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 		KeywordSetIndex indexs;
 		TypeConfig type;
-		DocTypeManager().GetTypeConfig(CTypeConfig(i), type);
+		DocTypeManager().GetTypeConfig(TypeConfigNum(i), type);
 		indexs.typeId = type.m_id;
 		for (int j=0; j<MAX_KEYWORDSET_PER_TYPE; ++j) {
 			indexs.index[j] = type.m_nKeyWordSetIdx[j];
@@ -336,7 +336,7 @@ void PropCommon::ApplyData(void)
 
 	const int nSize = (int)m_Types_nKeyWordSetIdx.size();
 	for (int i=0; i<nSize; ++i) {
-		CTypeConfig configIdx = DocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
+		TypeConfigNum configIdx = DocTypeManager().GetDocumentTypeOfId(m_Types_nKeyWordSetIdx[i].typeId);
 		if (configIdx.IsValidType()) {
 			TypeConfig type;
 			DocTypeManager().GetTypeConfig(configIdx, type);

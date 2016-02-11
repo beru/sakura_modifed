@@ -34,10 +34,10 @@
 #include "config/maxdata.h"
 #include "util/design_template.h"
 
-class CFileExt {
+class FileExt {
 public:
-	CFileExt();
-	~CFileExt();
+	FileExt();
+	~FileExt();
 
 	bool AppendExt(const TCHAR* pszName, const TCHAR* pszExt);
 	bool AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt);
@@ -65,6 +65,6 @@ private:
 	std::vector<TCHAR>	m_vstrFilter;
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CFileExt);
+	DISALLOW_COPY_AND_ASSIGN(FileExt);
 };
 

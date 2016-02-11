@@ -382,7 +382,7 @@ BOOL EditView::Create(
 	}
 
 	m_bHideMouse = false;
-	CRegKey reg;
+	RegKey reg;
 	BYTE bUserPref[8] = {0};
 	reg.Open(HKEY_CURRENT_USER, _T("Control Panel\\Desktop"));
 	reg.GetValueBINARY(_T("UserPreferencesMask"), bUserPref, sizeof(bUserPref));
@@ -390,7 +390,7 @@ BOOL EditView::Create(
 		m_bHideMouse = true;
 	}
 
-	CTypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport cTextType(this, COLORIDX_TEXT);
 	m_crBack = cTextType.GetBackColor();
 
 	return TRUE;
@@ -1248,7 +1248,7 @@ bool EditView::IsCurrentPositionURL(
 	MY_RUNNINGTIMER(cRunningTimer, "EditView::IsCurrentPositionURL");
 
 	// URLを強調表示するかどうかチェックする	// 2009.05.27 ryoji
-	bool bDispUrl = CTypeSupport(this, COLORIDX_URL).IsDisp();
+	bool bDispUrl = TypeSupport(this, COLORIDX_URL).IsDisp();
 	bool bUseRegexKeyword = false;
 	if (m_pTypeData->m_bUseRegexKeyword) {
 		const wchar_t* pKeyword = m_pTypeData->m_RegexKeywordList;
@@ -1292,7 +1292,7 @@ bool EditView::IsCurrentPositionURL(
 	//nLineLen = LogicInt(__min(nLineLen, ptXY.GetX2() + _MAX_PATH));
 	while (i <= ptXY.GetX2() && i < nLineLen) {
 		bool bMatch = (bUseRegexKeyword
-					&& m_cRegexKeyword->RegexIsKeyword(CStringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor)
+					&& m_cRegexKeyword->RegexIsKeyword(StringRef(pLine, nLineLen), i, &nUrlLen, &nMatchColor)
 					&& nMatchColor == COLORIDX_URL);
 		if (!bMatch) {
 			bMatch = (bDispUrl
@@ -1388,7 +1388,7 @@ void EditView::ConvSelectedArea(EFunctionCode nFuncCode)
 	LogicInt	nDelLenNext;
 	LogicInt		nLineLen;
 	LogicInt		nLineLen2;
-	CWaitCursor cWaitCursor(GetHwnd());
+	WaitCursor cWaitCursor(GetHwnd());
 
 	LogicPoint ptFromLogic;	// 2009.07.18 ryoji Logicで記憶するように変更
 	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(
@@ -1735,7 +1735,7 @@ void EditView::OnChangeSetting()
 	if (!m_pcEditWnd->m_pPrintPreview) {
 		::InvalidateRect(GetHwnd(), NULL, TRUE);
 	}
-	CTypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport cTextType(this, COLORIDX_TEXT);
 	m_crBack = cTextType.GetBackColor();
 }
 

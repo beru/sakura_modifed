@@ -70,7 +70,7 @@ static TCHAR* GetFileName(const TCHAR* fullpath);
 
 	@date 2006.04.10 fon 新規作成
 */
-INT_PTR CPropTypesKeyHelp::DispatchEvent(
+INT_PTR PropTypesKeyHelp::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
 	WPARAM		wParam,		// first message parameter
@@ -552,7 +552,7 @@ void CheckDlgButtonBOOL(HWND hwnd, int id, BOOL bState) {
 
 	@date 2006.04.10 fon 新規作成
 */
-void CPropTypesKeyHelp::SetData(HWND hwndDlg)
+void PropTypesKeyHelp::SetData(HWND hwndDlg)
 {
 	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_KEYHELP), _countof2(m_Types.m_KeyHelpArr[0].m_szPath) - 1);
@@ -609,7 +609,7 @@ void CPropTypesKeyHelp::SetData(HWND hwndDlg)
 
 	@date 2006.04.10 fon 新規作成
 */
-int CPropTypesKeyHelp::GetData(HWND hwndDlg)
+int PropTypesKeyHelp::GetData(HWND hwndDlg)
 {
 	TCHAR	szAbout[DICT_ABOUT_LEN];	// 辞書の説明(辞書ファイルの1行目から生成)
 	TCHAR	szPath[_MAX_PATH];			// ファイルパス
@@ -649,12 +649,12 @@ int CPropTypesKeyHelp::GetData(HWND hwndDlg)
 
 	@date 2006.04.10 fon 新規作成
 */
-bool CPropTypesKeyHelp::Import(HWND hwndDlg)
+bool PropTypesKeyHelp::Import(HWND hwndDlg)
 {
 	// インポート
 	GetData(hwndDlg);
 
-	CImpExpKeyHelp  cImpExpKeyHelp(m_Types);
+	ImpExpKeyHelp  cImpExpKeyHelp(m_Types);
 	if (!cImpExpKeyHelp.ImportUI(m_hInstance, hwndDlg)) {
 		// インポートをしていない
 		return false;
@@ -669,10 +669,10 @@ bool CPropTypesKeyHelp::Import(HWND hwndDlg)
 
 	@date 2006.04.10 fon 新規作成
 */
-bool CPropTypesKeyHelp::Export(HWND hwndDlg)
+bool PropTypesKeyHelp::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
-	CImpExpKeyHelp	cImpExpKeyHelp(m_Types);
+	ImpExpKeyHelp	cImpExpKeyHelp(m_Types);
 
 	// エクスポート
 	return cImpExpKeyHelp.ExportUI(m_hInstance, hwndDlg);

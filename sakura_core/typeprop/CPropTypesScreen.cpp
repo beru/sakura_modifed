@@ -128,7 +128,7 @@ std::vector<TYPE_NAME_ID2<EOutlineType> > PropTypes::m_OlmArr;	// アウトライン解
 std::vector<TYPE_NAME_ID2<ESmartIndentType> > PropTypes::m_SIndentArr;	// スマートインデントルール配列
 
 // スクリーンタブの初期化
-void CPropTypesScreen::CPropTypes_Screen()
+void PropTypesScreen::CPropTypes_Screen()
 {
 	// プラグイン無効の場合、ここで静的メンバを初期化する。プラグイン有効の場合はAddXXXMethod内で初期化する。
 	if (m_OlmArr.empty()) {
@@ -140,7 +140,7 @@ void CPropTypesScreen::CPropTypes_Screen()
 }
 
 // Screen メッセージ処理
-INT_PTR CPropTypesScreen::DispatchEvent(
+INT_PTR PropTypesScreen::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
 	WPARAM		wParam,		// first message parameter
@@ -434,7 +434,7 @@ INT_PTR CPropTypesScreen::DispatchEvent(
 
 
 // ダイアログデータの設定 Screen
-void CPropTypesScreen::SetData(HWND hwndDlg)
+void PropTypesScreen::SetData(HWND hwndDlg)
 {
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName);	// 設定の名前
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_TYPEEXTS, m_Types.m_szTypeExts);	// ファイル拡張子
@@ -594,7 +594,7 @@ void CPropTypesScreen::SetData(HWND hwndDlg)
 
 
 // ダイアログデータの取得 Screen
-int CPropTypesScreen::GetData(HWND hwndDlg)
+int PropTypesScreen::GetData(HWND hwndDlg)
 {
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName, _countof(m_Types.m_szTypeName));	// 設定の名前
 	::DlgItem_GetText(hwndDlg, IDC_EDIT_TYPEEXTS, m_Types.m_szTypeExts, _countof(m_Types.m_szTypeExts));	// ファイル拡張子
@@ -742,7 +742,7 @@ int CPropTypesScreen::GetData(HWND hwndDlg)
 }
 
 // アウトライン解析ルールの追加
-void CPropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
 {
 	if (m_OlmArr.empty()) {
 		InitTypeNameId2(m_OlmArr, OlmArr, _countof(OlmArr));	// アウトライン解析ルール
@@ -757,7 +757,7 @@ void CPropTypesScreen::AddOutlineMethod(int nMethod, const WCHAR* szName)
 	m_OlmArr.push_back(method);
 }
 
-void CPropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = (int)m_OlmArr.size();
 	for (int i=0; i<nSize; ++i) {
@@ -770,7 +770,7 @@ void CPropTypesScreen::RemoveOutlineMethod(int nMethod, const WCHAR* szName)
 }
 
 // スマートインデントルールの追加
-void CPropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
 {
 	if (m_SIndentArr.empty()) {
 		InitTypeNameId2(m_SIndentArr, SmartIndentArr, _countof(SmartIndentArr));	// スマートインデントルール
@@ -785,7 +785,7 @@ void CPropTypesScreen::AddSIndentMethod(int nMethod, const WCHAR* szName)
 	m_SIndentArr.push_back(method);
 }
 
-void CPropTypesScreen::RemoveSIndentMethod(int nMethod, const WCHAR* szName)
+void PropTypesScreen::RemoveSIndentMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = (int)m_SIndentArr.size();
 	for (int i=0; i<nSize; ++i) {

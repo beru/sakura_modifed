@@ -58,7 +58,7 @@ void BlockComment::SetBlockCommentRule(
 */
 bool BlockComment::Match_CommentFrom(
 	int					nPos,		// [in] 探索開始位置
-	const CStringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	const StringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
 	int				nLineLen,	// [in] pLineの長さ
 	const wchar_t*	pLine		// [in] 探索行の先頭．
@@ -81,7 +81,7 @@ bool BlockComment::Match_CommentFrom(
 */
 int BlockComment::Match_CommentTo(
 	int					nPos,		// [in] 探索開始位置
-	const CStringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	const StringRef&	cStr		// [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
 	/*
 	int				nLineLen,	// [in] pLineの長さ
 	const wchar_t*	pLine		// [in] 探索行の先頭．探索開始位置のポインタではないことに注意

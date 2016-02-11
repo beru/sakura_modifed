@@ -112,7 +112,7 @@ bool PropertyManager::OpenPropertySheet(
 bool PropertyManager::OpenPropertySheetTypes(
 	HWND		hWnd,
 	int			nPageNum,
-	CTypeConfig	nSettingType
+	TypeConfigNum	nSettingType
 	)
 {
 	bool bRet;

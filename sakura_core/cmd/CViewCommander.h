@@ -32,7 +32,7 @@ class Caret;
 class EditWnd;
 class ColorStrategy;
 class ColorStrategyPool;
-class CSMacroMgr;
+class SMacroMgr;
 #include "CEol.h"
 
 class ViewCommander {
@@ -51,7 +51,7 @@ public:
 
 private:
 	EditView*		m_pCommanderView;
-	CSMacroMgr*		m_pcSMacroMgr;
+	SMacroMgr*		m_pcSMacroMgr;
 
 public:
 	// キーリピート状態
@@ -225,7 +225,7 @@ public:
 	void Command_COPYLINESWITHLINENUMBER(void);		// 選択範囲内全行行番号付きコピー
 	void Command_COPY_COLOR_HTML(bool bLineNumber = false);	// 選択範囲内全行行番号付きコピー
 	void Command_COPY_COLOR_HTML_LINENUMBER(void);		// 選択範囲内色付きHTMLコピー
-	ColorStrategy* GetColorStrategyHTML(const CStringRef&, int, const ColorStrategyPool*, ColorStrategy**, ColorStrategy**, bool& bChange);
+	ColorStrategy* GetColorStrategyHTML(const StringRef&, int, const ColorStrategyPool*, ColorStrategy**, ColorStrategy**, bool& bChange);
 	void Command_CREATEKEYBINDLIST(void);				// キー割り当て一覧をコピー // Sept. 15, 2000 JEPRO	Command_の作り方がわからないので殺してある
 
 

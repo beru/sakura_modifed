@@ -85,11 +85,11 @@ enum EBOMType {
 	文字コードを調査する時に生じる情報格納クラス
 //*/
 
-class CESI {
+class ESI {
 public:
 
-	virtual ~CESI() { ; }
-	explicit CESI(const EncodingConfig& ref) : m_pEncodingConfig(&ref) {
+	virtual ~ESI() { ; }
+	explicit ESI(const EncodingConfig& ref) : m_pEncodingConfig(&ref) {
 		m_dwStatus = ESI_NOINFORMATION;
 		m_nTargetDataLen = -1;
 		m_eMetaName = CODE_NONE;

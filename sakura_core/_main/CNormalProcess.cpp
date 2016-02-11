@@ -166,7 +166,7 @@ bool NormalProcess::InitializeProcess()
 	MY_TRACETIME(cRunningTimer, "CheckFile");
 
 	// -1: SetDocumentTypeWhenCreate での強制指定なし
-	const CTypeConfig nType = (fi.m_szDocType[0] == '\0' ? CTypeConfig(-1) : DocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
+	const TypeConfigNum nType = (fi.m_szDocType[0] == '\0' ? TypeConfigNum(-1) : DocTypeManager().GetDocumentTypeOfExt(fi.m_szDocType));
 
 	if (bDebugMode) {
 		// デバッグモニタモードに設定

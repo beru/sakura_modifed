@@ -624,7 +624,7 @@ bool ViewCommander::Command_PUTFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileWrite()にならって砂時計カーソル
-	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
 	std::unique_ptr<CodeBase> pcSaveCode(CodeFactory::CreateCodeBase(nSaveCharCode, 0));
 
@@ -635,7 +635,7 @@ bool ViewCommander::Command_PUTFILE(
 
 	if (nFlgOpt & 0x01) {	// 選択範囲を出力
 		try {
-			CBinaryOutputStream out(to_tchar(filename), true);
+			BinaryOutputStream out(to_tchar(filename), true);
 
 			// 選択範囲の取得 -> cMem
 			NativeW cMem;
@@ -746,7 +746,7 @@ bool ViewCommander::Command_INSFILE(
 	}
 
 	// 2007.09.08 genta EditDoc::FileLoad()にならって砂時計カーソル
-	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor cWaitCursor(m_pCommanderView->GetHwnd());
 
 	// 範囲選択中なら挿入後も選択状態にするため	// 2007.04.29 maru
 	BOOL	bBeforeTextSelected = m_pCommanderView->GetSelectionInfo().IsTextSelected();

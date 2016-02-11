@@ -679,7 +679,7 @@ int DlgGrep::GetData(void)
 
 	{
 		// カレントディレクトリを保存。このブロックから抜けるときに自動でカレントディレクトリは復元される。
-		CCurrentDirectoryBackupPoint cCurDirBackup;
+		CurrentDirectoryBackupPoint cCurDirBackup;
 
 		// 2011.11.24 Moca 複数フォルダ指定
 		std::vector<std::tstring> vPaths;

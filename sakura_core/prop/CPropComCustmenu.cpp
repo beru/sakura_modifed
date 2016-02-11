@@ -713,7 +713,7 @@ int PropCustmenu::GetData(HWND hwndDlg)
 // カスタムメニュー設定をインポートする
 void PropCustmenu::Import(HWND hwndDlg)
 {
-	CImpExpCustMenu	cImpExpCustMenu(m_Common);
+	ImpExpCustMenu	cImpExpCustMenu(m_Common);
 	// インポート
 	if (!cImpExpCustMenu.ImportUI(G_AppInstance(), hwndDlg)) {
 		// インポートをしていない
@@ -727,7 +727,7 @@ void PropCustmenu::Import(HWND hwndDlg)
 // カスタムメニュー設定をエクスポートする
 void PropCustmenu::Export(HWND hwndDlg)
 {
-	CImpExpCustMenu	cImpExpCustMenu(m_Common);
+	ImpExpCustMenu	cImpExpCustMenu(m_Common);
 	// エクスポート
 	if (!cImpExpCustMenu.ExportUI(G_AppInstance(), hwndDlg)) {
 		// エクスポートをしていない

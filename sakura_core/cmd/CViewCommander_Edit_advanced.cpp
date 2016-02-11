@@ -182,7 +182,7 @@ void ViewCommander::Command_INDENT(
 #if 1	// ↓ここを残せば選択幅1のSPACEインデントで全角文字を揃える機能(2)が追加される。
 		alignFullWidthChar = alignFullWidthChar || (eIndent == INDENT_SPACE && 1 == rcSel.GetTo().x - rcSel.GetFrom().x);
 #endif
-		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < rcSel.GetTo().y - rcSel.GetFrom().y);
+		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < rcSel.GetTo().y - rcSel.GetFrom().y);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (cWaitCursor.IsEnable()) {
@@ -345,7 +345,7 @@ void ViewCommander::Command_INDENT(
 		// 現在の選択範囲を非選択状態に戻す
 		selInfo.DisableSelectArea(false);
 
-		CWaitCursor cWaitCursor(
+		WaitCursor cWaitCursor(
 			m_pCommanderView->GetHwnd(),
 			1000 < sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2()
 		);
@@ -463,7 +463,7 @@ void ViewCommander::Command_UNINDENT(wchar_t wcChar)
 		// 現在の選択範囲を非選択状態に戻す
 		selInfo.DisableSelectArea(false);
 
-		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < sSelectOld.GetTo().GetY() - sSelectOld.GetFrom().GetY());
+		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < sSelectOld.GetTo().GetY() - sSelectOld.GetFrom().GetY());
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (cWaitCursor.IsEnable()) {
@@ -597,7 +597,7 @@ void ViewCommander::Command_TRIM(
 // 物理行のソートに使う構造体
 struct SortData {
 	const NativeW* pCmemLine;
-	CStringRef sKey;
+	StringRef sKey;
 };
 
 inline
@@ -622,8 +622,8 @@ bool SortByLineDesc(SortData* pst1, SortData* pst2) {return CNativeW_comp(*pst1-
 
 inline
 int CStringRef_comp(
-	const CStringRef& c1,
-	const CStringRef& c2
+	const StringRef& c1,
+	const StringRef& c2
 	)
 {
 	int ret = wmemcmp(
@@ -729,12 +729,12 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 			nColumnTo   = m_pCommanderView->LineColumnToIndex(pcDocLine, nCT);
 			if (nColumnTo < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行内に収まっている場合
 				// 2006.03.31 genta std::string::assignを使って一時変数削除
-				pst->sKey = CStringRef(&pLine[nColumnFrom], nColumnTo - nColumnFrom);
+				pst->sKey = StringRef(&pLine[nColumnFrom], nColumnTo - nColumnFrom);
 			}else if (nColumnFrom < nLineLenWithoutEOL) {	// BOX選択範囲の右端が行末より右にはみ出している場合
-				pst->sKey = CStringRef(&pLine[nColumnFrom], nLineLenWithoutEOL - nColumnFrom);
+				pst->sKey = StringRef(&pLine[nColumnFrom], nLineLenWithoutEOL - nColumnFrom);
 			}else {
 				// 選択範囲の左端もはみ出している == データなし
-				pst->sKey = CStringRef(L"", 0);
+				pst->sKey = StringRef(L"", 0);
 			}
 		}
 		pst->pCmemLine = &cmemLine;
@@ -891,7 +891,7 @@ void ViewCommander::Command_MERGE(void)
 	GetDocument()->m_cLayoutMgr.LogicToLayout(sSelectOld, &sSelectOld_Layout);
 
 	// 2010.08.22 NUL対応修正
-	std::vector<CStringRef> lineArr;
+	std::vector<StringRef> lineArr;
 	const wchar_t* pLinew = NULL;
 	int nLineLenw = 0;
 	bool bMerge = false;
@@ -900,7 +900,7 @@ void ViewCommander::Command_MERGE(void)
 		const wchar_t* pLine = GetDocument()->m_cDocLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
-			lineArr.push_back(CStringRef(pLine, nLineLen));
+			lineArr.push_back(StringRef(pLine, nLineLen));
 		}else {
 			bMerge = true;
 		}

@@ -251,7 +251,7 @@ int DlgFileTree::GetData()
 	if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Common) {
 		pFileTree = &GetDllShareData().m_common.m_sOutline.m_sFileTree;
 	}else {
-		if (!DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), type)) {
+		if (!DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), type)) {
 			bTypeError = true;
 			pFileTree = NULL;
 		}else {
@@ -274,12 +274,12 @@ int DlgFileTree::GetData()
 			}
 		}
 		if (m_fileTreeSetting.m_eFileTreeSettingOrgType == EFileTreeSettingFrom_Type) {
-			DocTypeManager().SetTypeConfig(CTypeConfig(m_nDocType), type);
+			DocTypeManager().SetTypeConfig(TypeConfigNum(m_nDocType), type);
 		}
 	}
 	if (!bSaveShareData) {
 		// Œ³‚Ìini‚É•Û‘¶
-		CImpExpFileTree cImpExp(items);
+		ImpExpFileTree cImpExp(items);
 		std::wstring strIni = to_wchar(m_fileTreeSetting.m_szLoadProjectIni);
 		std::wstring strError;
 		if (!cImpExp.Export(strIni, strError)) {
@@ -519,7 +519,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 					pszIniFileName = m_fileTreeSetting.m_szDefaultProjectIni;
 				}
 				if (cProfile.ReadProfile(pszIniFileName)) {
-					CImpExpFileTree::IO_FileTreeIni(cProfile, m_fileTreeSetting.m_aItems);
+					ImpExpFileTree::IO_FileTreeIni(cProfile, m_fileTreeSetting.m_aItems);
 					m_fileTreeSetting.m_szLoadProjectIni = pszIniFileName;
 				}
 			}
@@ -927,7 +927,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 		return TRUE;
 	case IDC_BUTTON_IMPORT:
 		{
-			CImpExpFileTree cImpExp(m_fileTreeSetting.m_aItems);
+			ImpExpFileTree cImpExp(m_fileTreeSetting.m_aItems);
 			cImpExp.ImportUI(G_AppInstance(), GetHwnd());
 			SetData();
 		}
@@ -936,7 +936,7 @@ BOOL DlgFileTree::OnBnClicked(int wID)
 		{
 			std::vector<FileTreeItem> items;
 			GetDataTree(items, TreeView_GetRoot(GetItemHwnd(IDC_TREE_FL)), 0, 0);
-			CImpExpFileTree cImpExp(items);
+			ImpExpFileTree cImpExp(items);
 			cImpExp.ExportUI(G_AppInstance(), GetHwnd());
 		}
 		return TRUE;

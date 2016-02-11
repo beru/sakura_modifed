@@ -486,7 +486,7 @@ void EditView::DeleteData(
 
 	// テキストが選択されているか
 	if (selInfo.IsTextSelected()) {
-		CWaitCursor cWaitCursor(this->GetHwnd());  // 2002.02.05 hor
+		WaitCursor cWaitCursor(this->GetHwnd());  // 2002.02.05 hor
 		if (!m_bDoing_UndoRedo) {	// アンドゥ・リドゥの実行中か
 			// 操作の追加
 			m_cCommander.GetOpeBlk()->AppendOpe(

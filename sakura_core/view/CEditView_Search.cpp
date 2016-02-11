@@ -436,7 +436,7 @@ bool EditView::GetCurrentTextForSearchDlg(NativeW& cmemCurText, bool bGetHistory
 		(それ以外) 指定位置が検索文字列の始まりだった。
 */
 int EditView::IsSearchString(
-	const CStringRef&	cStr,
+	const StringRef&	cStr,
 	/*
 	const wchar_t*	pszData,
 	CLogicInt		nDataLen,

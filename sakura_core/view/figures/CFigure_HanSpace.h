@@ -26,7 +26,7 @@
 #include "view/figures/CFigureStrategy.h"
 
 // 半角スペース描画
-class CFigure_HanSpace : public CFigureSpace {
+class Figure_HanSpace : public FigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText, int nTextLen) const;

@@ -35,7 +35,7 @@
 
 using std::wstring;
 
-class CImpExpManager {
+class ImpExpManager {
 public:
 	bool ImportUI(HINSTANCE, HWND);
 	bool ExportUI(HINSTANCE, HWND);
@@ -78,10 +78,10 @@ protected:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          タイプ別設定                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpType : public CImpExpManager {
+class ImpExpType : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpType(int nIdx, TypeConfig& types, HWND hwndList)
+	ImpExpType(int nIdx, TypeConfig& types, HWND hwndList)
 		: m_nIdx(nIdx)
 		, m_Types(types)
 		, m_hwndList(hwndList)
@@ -119,10 +119,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          カラー                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpColors : public CImpExpManager {
+class ImpExpColors : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpColors(ColorInfo * psColorInfoArr)
+	ImpExpColors(ColorInfo * psColorInfoArr)
 		:
 		m_ColorInfoArr(psColorInfoArr)
 	{
@@ -145,10 +145,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                    正規表現キーワード                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpRegex : public CImpExpManager {
+class ImpExpRegex : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpRegex(TypeConfig& types)
+	ImpExpRegex(TypeConfig& types)
 		:
 		m_Types(types)
 	{
@@ -171,10 +171,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpKeyHelp : public CImpExpManager {
+class ImpExpKeyHelp : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpKeyHelp(TypeConfig& types)
+	ImpExpKeyHelp(TypeConfig& types)
 		:
 		m_Types(types)
 	{
@@ -197,10 +197,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キー割り当て                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpKeybind : public CImpExpManager {
+class ImpExpKeybind : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpKeybind(CommonSetting& common)
+	ImpExpKeybind(CommonSetting& common)
 		:
 		m_Common(common)
 	{
@@ -223,10 +223,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     カスタムメニュー                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpCustMenu : public CImpExpManager {
+class ImpExpCustMenu : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpCustMenu(CommonSetting& common)
+	ImpExpCustMenu(CommonSetting& common)
 		:
 		m_Common(common)
 	{
@@ -249,10 +249,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     強調キーワード                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpKeyWord : public CImpExpManager {
+class ImpExpKeyWord : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpKeyWord(CommonSetting& common, int nKeyWordSetIdx, bool& bCase)
+	ImpExpKeyWord(CommonSetting& common, int nKeyWordSetIdx, bool& bCase)
 		:
 		m_Common(common),
 		m_nIdx(nKeyWordSetIdx),
@@ -279,10 +279,10 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     メインメニュー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpMainMenu : public CImpExpManager {
+class ImpExpMainMenu : public ImpExpManager {
 public:
 	// Constructor
-	CImpExpMainMenu(CommonSetting& common)
+	ImpExpMainMenu(CommonSetting& common)
 		:
 		m_Common(common)
 	{
@@ -305,11 +305,11 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     メインメニュー                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CImpExpFileTree : public CImpExpManager
+class ImpExpFileTree : public ImpExpManager
 {
 public:
 	// Constructor
-	CImpExpFileTree(std::vector<FileTreeItem>& items)
+	ImpExpFileTree(std::vector<FileTreeItem>& items)
 		:
 		m_aFileTreeItems(items)
 	{

@@ -67,12 +67,12 @@ INT_PTR CALLBACK FUNC(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) \
 { \
 	return PropTypesCommonProc(hwndDlg, uMsg, wParam, lParam, reinterpret_cast<pDispatchPage>(&CLASS::DispatchEvent)); \
 }
-GEN_PROPTYPES_CALLBACK(PropTypesScreen,		CPropTypesScreen)
-GEN_PROPTYPES_CALLBACK(PropTypesWindow,		CPropTypesWindow)
-GEN_PROPTYPES_CALLBACK(PropTypesColor,		CPropTypesColor)
-GEN_PROPTYPES_CALLBACK(PropTypesSupport,	CPropTypesSupport)
-GEN_PROPTYPES_CALLBACK(PropTypesRegex,		CPropTypesRegex)
-GEN_PROPTYPES_CALLBACK(PropTypesKeyHelp,	CPropTypesKeyHelp)
+GEN_PROPTYPES_CALLBACK(PropTypesScreenDlgProc,		PropTypesScreen)
+GEN_PROPTYPES_CALLBACK(PropTypesWindowDlgProc,		PropTypesWindow)
+GEN_PROPTYPES_CALLBACK(PropTypesColorDlgProc,		PropTypesColor)
+GEN_PROPTYPES_CALLBACK(PropTypesSupportDlgProc,		PropTypesSupport)
+GEN_PROPTYPES_CALLBACK(PropTypesRegexDlgProc,		PropTypesRegex)
+GEN_PROPTYPES_CALLBACK(PropTypesKeyHelpDlgProc,		PropTypesKeyHelp)
 
 
 
@@ -83,12 +83,12 @@ GEN_PROPTYPES_CALLBACK(PropTypesKeyHelp,	CPropTypesKeyHelp)
 PropTypes::PropTypes()
 {
 	{
-		assert(sizeof(CPropTypesScreen)  - sizeof(PropTypes) == 0);
-		assert(sizeof(CPropTypesWindow)  - sizeof(PropTypes) == 0);
-		assert(sizeof(CPropTypesColor)   - sizeof(PropTypes) == 0);
-		assert(sizeof(CPropTypesSupport) - sizeof(PropTypes) == 0);
-		assert(sizeof(CPropTypesRegex)   - sizeof(PropTypes) == 0);
-		assert(sizeof(CPropTypesKeyHelp) - sizeof(PropTypes) == 0);
+		assert(sizeof(PropTypesScreen)  - sizeof(PropTypes) == 0);
+		assert(sizeof(PropTypesWindow)  - sizeof(PropTypes) == 0);
+		assert(sizeof(PropTypesColor)   - sizeof(PropTypes) == 0);
+		assert(sizeof(PropTypesSupport) - sizeof(PropTypes) == 0);
+		assert(sizeof(PropTypesRegex)   - sizeof(PropTypes) == 0);
+		assert(sizeof(PropTypesKeyHelp) - sizeof(PropTypes) == 0);
 	}
 
 	// 共有データ構造体のアドレスを返す
@@ -102,7 +102,7 @@ PropTypes::PropTypes()
 	m_hwndThis  = NULL;		// このダイアログのハンドル
 	m_nPageNum = ID_PROPTYPE_PAGENUM_SCREEN;
 
-	(static_cast<CPropTypesScreen*>(this))->CPropTypes_Screen();
+	(static_cast<PropTypesScreen*>(this))->CPropTypes_Screen();
 }
 
 PropTypes::~PropTypes()
@@ -134,12 +134,12 @@ INT_PTR PropTypes::DoPropertySheet(int nPageNum)
 	// 2006.04.10 fon ADD-start タイプ別設定に「キーワードヘルプ」タブを追加
 	// 2013.03.10 aroka ADD-start タイプ別設定に「ウィンドウ」タブを追加
 	static const TypePropSheetInfo TypePropSheetInfoList[] = {
-		{ STR_PROPTYPE_SCREEN,			IDD_PROP_SCREEN,	PropTypesScreen },
-		{ STR_PROPTYPE_COLOR,			IDD_PROP_COLOR,		PropTypesColor },
-		{ STR_PROPTYPE_WINDOW,			IDD_PROP_WINDOW,	PropTypesWindow },
-		{ STR_PROPTYPE_SUPPORT,			IDD_PROP_SUPPORT,	PropTypesSupport },
-		{ STR_PROPTYPE_REGEX_KEYWORD,	IDD_PROP_REGEX,		PropTypesRegex },
-		{ STR_PROPTYPE_KEYWORD_HELP,	IDD_PROP_KEYHELP,	PropTypesKeyHelp }
+		{ STR_PROPTYPE_SCREEN,			IDD_PROP_SCREEN,	PropTypesScreenDlgProc },
+		{ STR_PROPTYPE_COLOR,			IDD_PROP_COLOR,		PropTypesColorDlgProc },
+		{ STR_PROPTYPE_WINDOW,			IDD_PROP_WINDOW,	PropTypesWindowDlgProc },
+		{ STR_PROPTYPE_SUPPORT,			IDD_PROP_SUPPORT,	PropTypesSupportDlgProc },
+		{ STR_PROPTYPE_REGEX_KEYWORD,	IDD_PROP_REGEX,		PropTypesRegexDlgProc },
+		{ STR_PROPTYPE_KEYWORD_HELP,	IDD_PROP_KEYHELP,	PropTypesKeyHelpDlgProc }
 	};
 
 	// カスタム色を共有メモリから取得

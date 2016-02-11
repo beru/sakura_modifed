@@ -36,7 +36,7 @@ protected:
 	bool		bBomExist;
 	ECodeType	eCharCodeLoad;
 	bool		bBomExistLoad;
-	CFileTime	cFileTime;
+	FileTime	cFileTime;
 
 public:
 	FileInfo() {
@@ -61,7 +61,7 @@ public:
 	bool			IsBomExist() const			{ return m_sFileInfo.bBomExist; }		// 保存時にBOMを付加するかどうかを取得
 	bool			IsChgCodeSet() const		{ return (!IsFileTimeZero()) && ((m_sFileInfo.eCharCode != m_sFileInfo.eCharCodeLoad) || (m_sFileInfo.bBomExist != m_sFileInfo.bBomExistLoad)); }		// 文字コードセットが変更されたか？
 
-	CFileTime&		GetFileTime()					{ return m_sFileInfo.cFileTime; }
+	FileTime&		GetFileTime()					{ return m_sFileInfo.cFileTime; }
 	void			ClearFileTime()					{ m_sFileInfo.cFileTime.ClearFILETIME(); }
 	bool			IsFileTimeZero() const			{ return m_sFileInfo.cFileTime.IsZero(); }	// 新規ファイル？
 	const SYSTEMTIME	GetFileSysTime() const		{ return m_sFileInfo.cFileTime.GetSYSTEMTIME(); }

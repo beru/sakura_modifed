@@ -40,7 +40,7 @@ VARTYPE s_MacroArgEx_s[] = {VT_BSTR};
 MacroFuncInfoEx s_MacroInfoEx_s = {5, 5, s_MacroArgEx_s};
 #endif
 
-MacroFuncInfo CSMacroMgr::m_MacroFuncInfoCommandArr[] = 
+MacroFuncInfo SMacroMgr::m_MacroFuncInfoCommandArr[] = 
 {
 //	機能番号			関数名			引数				作業用バッファ
 
@@ -417,7 +417,7 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoCommandArr[] =
 	{F_INVALID,	NULL, {VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_EMPTY,	NULL}
 };
 
-MacroFuncInfo CSMacroMgr::m_MacroFuncInfoArr[] = 
+MacroFuncInfo SMacroMgr::m_MacroFuncInfoArr[] = 
 {
 	//ID					関数名							引数										戻り値の型	m_pszData
 	{F_GETFILENAME,			LTEXT("GetFilename"),			{VT_EMPTY, VT_EMPTY, VT_EMPTY, VT_EMPTY},	VT_BSTR,	NULL }, // ファイル名を返す
@@ -492,9 +492,9 @@ MacroFuncInfo CSMacroMgr::m_MacroFuncInfoArr[] =
 	@date 2002.02.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
 	@date 2002.04.29 genta オブジェクトの実体は実行時まで生成しない。
 */
-CSMacroMgr::CSMacroMgr()
+SMacroMgr::SMacroMgr()
 {
-	MY_RUNNINGTIMER(cRunningTimer, "CSMacroMgr::CSMacroMgr");
+	MY_RUNNINGTIMER(cRunningTimer, "SMacroMgr::SMacroMgr");
 	
 	m_pShareData = &GetDllShareData();
 	
@@ -513,7 +513,7 @@ CSMacroMgr::CSMacroMgr()
 	SetCurrentIdx(INVALID_MACRO_IDX);
 }
 
-CSMacroMgr::~CSMacroMgr()
+SMacroMgr::~SMacroMgr()
 {
 	//- 20011229 add by aroka
 	ClearAll();
@@ -523,7 +523,7 @@ CSMacroMgr::~CSMacroMgr()
 }
 
 // キーマクロのバッファをクリアする
-void CSMacroMgr::ClearAll(void)
+void SMacroMgr::ClearAll(void)
 {
 	for (int i=0; i<MAX_CUSTMACRO; ++i) {
 		// Apr. 29, 2002 genta
@@ -543,7 +543,7 @@ void CSMacroMgr::ClearAll(void)
 	
 	@date 2002.06.16 genta キーマクロの多種対応のため変更
 */
-int CSMacroMgr::Append(
+int SMacroMgr::Append(
 	int				idx,		//
 	EFunctionCode	nFuncID,	// [in] 機能番号
 	const LPARAM*	lParams,	// [in] パラメータ。
@@ -579,7 +579,7 @@ int CSMacroMgr::Append(
 
 	@date 2007.07.16 genta flags追加
 */
-BOOL CSMacroMgr::Exec(
+BOOL SMacroMgr::Exec(
 	int idx,
 	HINSTANCE hInstance,
 	EditView* pcEditView,
@@ -651,7 +651,7 @@ BOOL CSMacroMgr::Exec(
 
 	@author Norio Nakatani, YAZAKI, genta
 */
-bool CSMacroMgr::Load(
+bool SMacroMgr::Load(
 	int idx,
 	HINSTANCE hInstance,
 	const TCHAR* pszPath,
@@ -661,7 +661,7 @@ bool CSMacroMgr::Load(
 	MacroManagerBase** ppMacro = Idx2Ptr(idx);
 
 	if (!ppMacro) {
-		DEBUG_TRACE(_T("CSMacroMgr::Load() Out of range: idx=%d Path=%ts\n"), idx, pszPath);
+		DEBUG_TRACE(_T("SMacroMgr::Load() Out of range: idx=%d Path=%ts\n"), idx, pszPath);
 	}
 
 	// バッファクリア
@@ -721,7 +721,7 @@ bool CSMacroMgr::Load(
 
 	@date 2007.10.19 genta 新規作成
 */
-void CSMacroMgr::UnloadAll(void)
+void SMacroMgr::UnloadAll(void)
 {
 	for (int idx=0; idx<MAX_CUSTMACRO; ++idx) {
 		delete m_cSavedKeyMacro[idx];
@@ -738,7 +738,7 @@ void CSMacroMgr::UnloadAll(void)
 
 	@author YAZAKI
 */
-bool CSMacroMgr::Save(
+bool SMacroMgr::Save(
 	int idx,
 	HINSTANCE hInstance,
 	const TCHAR* pszPath
@@ -768,7 +768,7 @@ bool CSMacroMgr::Save(
 	
 	@param idx [in] マクロ番号(0-), STAND_KEYMACROは標準キーマクロバッファを表す．
 */
-void CSMacroMgr::Clear(int idx)
+void SMacroMgr::Clear(int idx)
 {
 	MacroManagerBase **ppMacro = Idx2Ptr(idx);
 	if (ppMacro) {
@@ -790,7 +790,7 @@ void CSMacroMgr::Clear(int idx)
 	@date 2002.06.16 genta
 	@date 2003.02.24 m_MacroFuncInfoArrも検索対象にする
 */
-const MacroFuncInfo* CSMacroMgr::GetFuncInfoByID(int nFuncID)
+const MacroFuncInfo* SMacroMgr::GetFuncInfoByID(int nFuncID)
 {
 	// Jun. 27, 2002 genta
 	// 番人をコード0として拾ってしまうので，配列サイズによる判定をやめた．
@@ -821,7 +821,7 @@ const MacroFuncInfo* CSMacroMgr::GetFuncInfoByID(int nFuncID)
 	@date 2002.06.16 genta 新設のGetFuncInfoById(int)を内部で使うように．
 	@date 2011.04.10 nasukoji 各国語メッセージリソース対応
 */
-WCHAR* CSMacroMgr::GetFuncInfoByID(
+WCHAR* SMacroMgr::GetFuncInfoByID(
 	HINSTANCE	hInstance,			// [in] リソース取得のためのInstance Handle
 	int			nFuncID,			// [in] 機能番号
 	WCHAR*		pszFuncName,		// [out] 関数名．この先には最長関数名＋1バイトのメモリが必要．
@@ -861,7 +861,7 @@ WCHAR* CSMacroMgr::GetFuncInfoByID(
 	
 	@date 2002.06.16 genta ループ内の文字列コピーを排除
 */
-EFunctionCode CSMacroMgr::GetFuncInfoByName(
+EFunctionCode SMacroMgr::GetFuncInfoByName(
 	HINSTANCE		hInstance,				// [in]  リソース取得のためのInstance Handle
 	const WCHAR*	pszFuncName,			// [in]  関数名
 	WCHAR*			pszFuncNameJapanese		// [out] 機能名日本語．この先には256バイトのメモリが必要．
@@ -906,7 +906,7 @@ EFunctionCode CSMacroMgr::GetFuncInfoByName(
 }
 
 // キーマクロに記録可能な機能かどうかを調べる
-BOOL CSMacroMgr::CanFuncIsKeyMacro(int nFuncID)
+BOOL SMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 {
 	switch (nFuncID) {
 	// ファイル操作系
@@ -1241,7 +1241,7 @@ BOOL CSMacroMgr::CanFuncIsKeyMacro(int nFuncID)
 	@param idx [in] マクロ番号(0-), STAND_KEYMACROは標準キーマクロバッファ、TEMP_KEYMACROは一時マクロバッファを表す．
 	@return オブジェクト位置へのポインタ．マクロ番号が不当な場合はNULL．
 */
-MacroManagerBase** CSMacroMgr::Idx2Ptr(int idx)
+MacroManagerBase** SMacroMgr::Idx2Ptr(int idx)
 {
 	//	Jun. 16, 2002 genta
 	//	キーマクロ以外のマクロを読み込めるように
@@ -1253,7 +1253,7 @@ MacroManagerBase** CSMacroMgr::Idx2Ptr(int idx)
 		return &m_cSavedKeyMacro[idx];
 	}
 
-	DEBUG_TRACE(_T("CSMacroMgr::Idx2Ptr() Out of range: idx=%d\n"), idx);
+	DEBUG_TRACE(_T("SMacroMgr::Idx2Ptr() Out of range: idx=%d\n"), idx);
 
 	return NULL;
 }
@@ -1264,7 +1264,7 @@ MacroManagerBase** CSMacroMgr::Idx2Ptr(int idx)
 	@retval true 保存可能
 	@retval false 保存不可
 */
-bool CSMacroMgr::IsSaveOk(void)
+bool SMacroMgr::IsSaveOk(void)
 {
 	return !dynamic_cast<KeyMacroMgr*>(m_pKeyMacro) ? false : true;
 }
@@ -1275,7 +1275,7 @@ bool CSMacroMgr::IsSaveOk(void)
 	@param newMacro [in] 新しいマクロバッファのポインタ．
 	@return 前の一時マクロバッファのポインタ．
 */
-MacroManagerBase* CSMacroMgr::SetTempMacro(MacroManagerBase *newMacro)
+MacroManagerBase* SMacroMgr::SetTempMacro(MacroManagerBase *newMacro)
 {
 	MacroManagerBase* oldMacro = m_pTempMacro;
 	m_pTempMacro = newMacro;

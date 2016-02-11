@@ -386,7 +386,7 @@ bool BackupAgent::FormatBackUpPath(
 		//	2001/06/12 Start by asa-o: ファイルに付ける日付を前回の保存時(更新日時)にする
 		case 4:	//	日付，時刻
 			{
-				CFileTime ctimeLastWrite;
+				FileTime ctimeLastWrite;
 				GetLastWriteTimestamp(target_file, &ctimeLastWrite);
 
 				szTime[0] = 0;
@@ -446,7 +446,7 @@ bool BackupAgent::FormatBackUpPath(
 		case 4:	//	ファイルの日付，時刻
 			{
 				// 2005.10.20 ryoji FindFirstFileを使うように変更
-				CFileTime ctimeLastWrite;
+				FileTime ctimeLastWrite;
 				GetLastWriteTimestamp(target_file, &ctimeLastWrite);
 				if (!GetDateTimeFormat(szFormat, _countof(szFormat), bup_setting.m_szBackUpPathAdvanced , ctimeLastWrite.GetSYSTEMTIME())) {
 					return false;

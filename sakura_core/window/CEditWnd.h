@@ -124,7 +124,7 @@ public:
 	void SetDocumentTypeWhenCreate(
 		ECodeType		nCharCode,					//!< [in] 漢字コード
 		bool			bViewMode,					//!< [in] ビューモードで開くかどうか
-		CTypeConfig	nDocumentType = CTypeConfig(-1)	//!< [in] 文書タイプ．-1のとき強制指定無し．
+		TypeConfigNum	nDocumentType = TypeConfigNum(-1)	//!< [in] 文書タイプ．-1のとき強制指定無し．
 	);
 	void UpdateCaption();
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -349,13 +349,13 @@ private:
 
 public:
 	// 子ウィンドウ
-	CMainToolBar	m_cToolbar;			//!< ツールバー
-	CTabWnd			m_cTabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
+	MainToolBar	m_cToolbar;			//!< ツールバー
+	TabWnd			m_cTabWnd;			//!< タブウィンドウ	//@@@ 2003.05.31 MIK
 	FuncKeyWnd		m_cFuncKeyWnd;		//!< ファンクションバー
-	CMainStatusBar	m_cStatusBar;		//!< ステータスバー
+	MainStatusBar	m_cStatusBar;		//!< ステータスバー
 	PrintPreview*	m_pPrintPreview;	//!< 印刷プレビュー表示情報。必要になったときのみインスタンスを生成する。
 
-	CSplitterWnd	m_cSplitterWnd;		//!< 分割フレーム
+	SplitterWnd	m_cSplitterWnd;		//!< 分割フレーム
 	EditView*		m_pcDragSourceView;	//!< ドラッグ元のビュー
 	ViewFont*		m_pcViewFont;		//!< フォント
 	ViewFont*		m_pcViewFontMiniMap;		//!< フォント
@@ -367,7 +367,7 @@ public:
 	DlgGrep		m_cDlgGrep;			// Grepダイアログ
 	DlgGrepReplace	m_cDlgGrepReplace;	// Grep置換ダイアログ
 	DlgFuncList	m_cDlgFuncList;		// アウトライン解析結果ダイアログ
-	CHokanMgr		m_cHokanMgr;		// 入力補完
+	HokanMgr		m_cHokanMgr;		// 入力補完
 	DlgSetCharSet	m_cDlgSetCharSet;	//「文字コードセット設定」ダイアログ
 
 private:

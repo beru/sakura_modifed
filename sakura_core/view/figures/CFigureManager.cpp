@@ -30,21 +30,21 @@
 #include "CFigure_Eol.h"
 #include "CFigure_CtrlCode.h"
 
-CFigureManager::CFigureManager()
+FigureManager::FigureManager()
 {
-	m_vFigures.push_back(new CFigure_Tab());
-	m_vFigures.push_back(new CFigure_HanSpace());
-	m_vFigures.push_back(new CFigure_ZenSpace());
-	m_vFigures.push_back(new CFigure_Eol());
-	m_vFigures.push_back(new CFigure_CtrlCode());
-	m_vFigures.push_back(new CFigure_HanBinary());
-	m_vFigures.push_back(new CFigure_ZenBinary());
-	m_vFigures.push_back(new CFigure_Text());
+	m_vFigures.push_back(new Figure_Tab());
+	m_vFigures.push_back(new Figure_HanSpace());
+	m_vFigures.push_back(new Figure_ZenSpace());
+	m_vFigures.push_back(new Figure_Eol());
+	m_vFigures.push_back(new Figure_CtrlCode());
+	m_vFigures.push_back(new Figure_HanBinary());
+	m_vFigures.push_back(new Figure_ZenBinary());
+	m_vFigures.push_back(new Figure_Text());
 
 	OnChangeSetting();
 }
 
-CFigureManager::~CFigureManager()
+FigureManager::~FigureManager()
 {
 	m_vFiguresDisp.clear();
 
@@ -56,11 +56,11 @@ CFigureManager::~CFigureManager()
 }
 
 //$$ ‚‘¬‰»‰Â”\
-CFigure& CFigureManager::GetFigure(const wchar_t* pText, int nTextLen)
+Figure& FigureManager::GetFigure(const wchar_t* pText, int nTextLen)
 {
 	int size = (int)m_vFiguresDisp.size();
 	for (int i=0; i<size; ++i) {
-		CFigure* pcFigure = m_vFiguresDisp[i];
+		Figure* pcFigure = m_vFiguresDisp[i];
 		if (pcFigure->Match(pText, nTextLen)) {
 			return *pcFigure;
 		}
@@ -71,7 +71,7 @@ CFigure& CFigureManager::GetFigure(const wchar_t* pText, int nTextLen)
 }
 
 // İ’èXV
-void CFigureManager::OnChangeSetting(void)
+void FigureManager::OnChangeSetting(void)
 {
 	m_vFiguresDisp.clear();
 

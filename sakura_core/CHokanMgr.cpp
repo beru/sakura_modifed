@@ -38,7 +38,7 @@ LRESULT APIENTRY HokanList_SubclassProc(
 {
 	// Modified by KEITA for WIN64 2003.9.6
 	Dialog* pCDialog = (Dialog*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
-	CHokanMgr* pCHokanMgr = (CHokanMgr*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
+	HokanMgr* pCHokanMgr = (HokanMgr*)::GetWindowLongPtr(::GetParent(hwnd), DWLP_USER);
 	MSG* pMsg;
 	int nVKey;
 
@@ -77,7 +77,7 @@ LRESULT APIENTRY HokanList_SubclassProc(
 }
 
 
-CHokanMgr::CHokanMgr()
+HokanMgr::HokanMgr()
 {
 	m_cmemCurWord.SetString(L"");
 
@@ -85,12 +85,12 @@ CHokanMgr::CHokanMgr()
 	m_bTimerFlag = TRUE;
 }
 
-CHokanMgr::~CHokanMgr()
+HokanMgr::~HokanMgr()
 {
 }
 
 // モードレスダイアログの表示
-HWND CHokanMgr::DoModeless(
+HWND HokanMgr::DoModeless(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	LPARAM lParam
@@ -107,13 +107,13 @@ HWND CHokanMgr::DoModeless(
 }
 
 // モードレス時：対象となるビューの変更
-void CHokanMgr::ChangeView(LPARAM pcEditView)
+void HokanMgr::ChangeView(LPARAM pcEditView)
 {
 	m_lParam = pcEditView;
 	return;
 }
 
-void CHokanMgr::Hide(void)
+void HokanMgr::Hide(void)
 {
 
 	::ShowWindow(GetHwnd(), SW_HIDE);
@@ -131,7 +131,7 @@ void CHokanMgr::Hide(void)
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-int CHokanMgr::Search(
+int HokanMgr::Search(
 	POINT*			ppoWin,
 	int				nWinHeight,
 	int				nColumnWidth,
@@ -340,7 +340,7 @@ int CHokanMgr::Search(
 	return kouhoNum;
 }
 
-void CHokanMgr::HokanSearchByKeyword(
+void HokanMgr::HokanSearchByKeyword(
 	const wchar_t*	pszCurWord,
 	bool 			bHokanLoHiCase,
 	vector_ex<std::wstring>& 	vKouho
@@ -373,7 +373,7 @@ void CHokanMgr::HokanSearchByKeyword(
 }
 
 
-BOOL CHokanMgr::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL HokanMgr::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	_SetHwnd(hwndDlg);
 	// 基底クラスメンバ
@@ -382,7 +382,7 @@ BOOL CHokanMgr::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 
 }
 
-BOOL CHokanMgr::OnDestroy(void)
+BOOL HokanMgr::OnDestroy(void)
 {
 	// 基底クラスメンバ
 	CreateSizeBox();
@@ -390,7 +390,7 @@ BOOL CHokanMgr::OnDestroy(void)
 }
 
 
-BOOL CHokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
+BOOL HokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	// 基底クラスメンバ
 	Dialog::OnSize(wParam, lParam);
@@ -445,7 +445,7 @@ BOOL CHokanMgr::OnSize(WPARAM wParam, LPARAM lParam)
 
 }
 
-BOOL CHokanMgr::OnBnClicked(int wID)
+BOOL HokanMgr::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDCANCEL:
@@ -462,7 +462,7 @@ BOOL CHokanMgr::OnBnClicked(int wID)
 }
 
 
-BOOL CHokanMgr::OnKeyDown(WPARAM wParam, LPARAM lParam)
+BOOL HokanMgr::OnKeyDown(WPARAM wParam, LPARAM lParam)
 {
 	int nVKey = (int) wParam;	// virtual-key code
 //	lKeyData = lParam;			// key data
@@ -479,14 +479,14 @@ BOOL CHokanMgr::OnKeyDown(WPARAM wParam, LPARAM lParam)
 }
 
 
-BOOL CHokanMgr::OnLbnSelChange(HWND hwndCtl, int wID)
+BOOL HokanMgr::OnLbnSelChange(HWND hwndCtl, int wID)
 {
 //	2001/06/18 asa-o:
 	ShowTip();	// 補完ウィンドウで選択中の単語にキーワードヘルプを表示
 	return TRUE;
 }
 
-BOOL CHokanMgr::OnLbnDblclk(int wID)
+BOOL HokanMgr::OnLbnDblclk(int wID)
 {
 	// 補完実行
 	DoHokan(0);
@@ -495,7 +495,7 @@ BOOL CHokanMgr::OnLbnDblclk(int wID)
 }
 
 
-BOOL CHokanMgr::OnKillFocus(WPARAM wParam, LPARAM lParam)
+BOOL HokanMgr::OnKillFocus(WPARAM wParam, LPARAM lParam)
 {
 //	Hide();
 	return TRUE;
@@ -503,9 +503,9 @@ BOOL CHokanMgr::OnKillFocus(WPARAM wParam, LPARAM lParam)
 
 
 // 補完実行
-BOOL CHokanMgr::DoHokan(int nVKey)
+BOOL HokanMgr::DoHokan(int nVKey)
 {
-	DEBUG_TRACE(_T("CHokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
+	DEBUG_TRACE(_T("HokanMgr::DoHokan(nVKey==%xh)\n"), nVKey);
 
 	// 補完候補決定キー
 	auto& csHelper = m_pShareData->m_common.m_sHelper;
@@ -548,7 +548,7 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 キーストロークに応じてデフォルトの動作を実行することを示します。
 
 */
-//	int CHokanMgr::OnVKeyToItem(WPARAM wParam, LPARAM lParam)
+//	int HokanMgr::OnVKeyToItem(WPARAM wParam, LPARAM lParam)
 //	{
 //		return KeyProc(wParam, lParam);
 //	}
@@ -565,7 +565,7 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 キーストロークに応じてデフォルトの動作を実行することを示します。
 
 */
-//	int CHokanMgr::OnCharToItem(WPARAM wParam, LPARAM lParam)
+//	int HokanMgr::OnCharToItem(WPARAM wParam, LPARAM lParam)
 //	{
 //		WORD vkey;
 //		WORD nCaretPos;
@@ -576,14 +576,14 @@ BOOL CHokanMgr::DoHokan(int nVKey)
 //	//	switch (vkey) {
 //	//	}
 //
-//		MYTRACE(_T("CHokanMgr::OnCharToItem vkey=%xh\n"), vkey);
+//		MYTRACE(_T("HokanMgr::OnCharToItem vkey=%xh\n"), vkey);
 //		return -1;
 //	}
 
-int CHokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
+int HokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 {
 	WORD vkey = LOWORD(wParam);		// virtual-key code
-//	MYTRACE(_T("CHokanMgr::OnVKeyToItem vkey=%xh\n"), vkey);
+//	MYTRACE(_T("HokanMgr::OnVKeyToItem vkey=%xh\n"), vkey);
 	switch (vkey) {
 	case VK_HOME:
 	case VK_END:
@@ -614,7 +614,7 @@ int CHokanMgr::KeyProc(WPARAM wParam, LPARAM lParam)
 }
 
 //	2001/06/18 Start by asa-o: 補完ウィンドウで選択中の単語にキーワードヘルプを表示
-void CHokanMgr::ShowTip()
+void HokanMgr::ShowTip()
 {
 	HWND hwndCtrl = GetItemHwnd(IDC_LIST_WORDS);
 	int nItem = List_GetCurSel(hwndCtrl);
@@ -651,7 +651,7 @@ void CHokanMgr::ShowTip()
 }
 //	2001/06/18 End
 
-bool CHokanMgr::AddKouhoUnique(
+bool HokanMgr::AddKouhoUnique(
 	vector_ex<std::wstring>& kouhoList,
 	const std::wstring& strWord
 	)
@@ -664,7 +664,7 @@ const DWORD p_helpids[] = {
 	0, 0
 };
 
-LPVOID CHokanMgr::GetHelpIdTable(void)
+LPVOID HokanMgr::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

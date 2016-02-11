@@ -30,7 +30,7 @@
 
 	@date 2009.10.01 ryoji 高DPI対応用に作成
 */
-class CDPI {
+class DPI {
 	static void Init() {
 		if (!bInitialized) {
 			HDC hDC = GetDC(NULL);
@@ -64,14 +64,14 @@ public:
 	static int PixelsToPoints(int px, int ptMag = 1) {Init(); return ::MulDiv(px * ptMag, 72, nDpiY);}	// ptMag: 戻り値のポイント数にかける倍率
 };
 
-inline int DpiScaleX(int x) {return CDPI::ScaleX(x);}
-inline int DpiScaleY(int y) {return CDPI::ScaleY(y);}
-inline int DpiUnscaleX(int x) {return CDPI::UnscaleX(x);}
-inline int DpiUnscaleY(int y) {return CDPI::UnscaleY(y);}
-inline void DpiScaleRect(LPRECT lprc) {CDPI::ScaleRect(lprc);}
-inline void DpiUnscaleRect(LPRECT lprc) {CDPI::UnscaleRect(lprc);}
-inline int DpiPointsToPixels(int pt, int ptMag = 1) {return CDPI::PointsToPixels(pt, ptMag);}
-inline int DpiPixelsToPoints(int px, int ptMag = 1) {return CDPI::PixelsToPoints(px, ptMag);}
+inline int DpiScaleX(int x) {return DPI::ScaleX(x);}
+inline int DpiScaleY(int y) {return DPI::ScaleY(y);}
+inline int DpiUnscaleX(int x) {return DPI::UnscaleX(x);}
+inline int DpiUnscaleY(int y) {return DPI::UnscaleY(y);}
+inline void DpiScaleRect(LPRECT lprc) {DPI::ScaleRect(lprc);}
+inline void DpiUnscaleRect(LPRECT lprc) {DPI::UnscaleRect(lprc);}
+inline int DpiPointsToPixels(int pt, int ptMag = 1) {return DPI::PointsToPixels(pt, ptMag);}
+inline int DpiPixelsToPoints(int px, int ptMag = 1) {return DPI::PixelsToPoints(px, ptMag);}
 
 void ActivateFrameWindow(HWND);	// アクティブにする
 

@@ -102,7 +102,7 @@ bool AutoReloadAgent::_IsFileUpdatedByOther(FILETIME* pNewFileTime) const
 {
 	// ファイルスタンプをチェックする
 	// 2005.10.20 ryoji FindFirstFileを使うように変更（ファイルがロックされていてもタイムスタンプ取得可能）
-	CFileTime ftime;
+	FileTime ftime;
 	if (GetLastWriteTimestamp(GetListeningDoc()->m_cDocFile.GetFilePath(), &ftime)) {
 		if (::CompareFileTime(
 				&GetListeningDoc()->m_cDocFile.GetFileTime().GetFILETIME(),
@@ -146,7 +146,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 		{
 			// ファイル更新のお知らせ -> ステータスバー
 			TCHAR szText[40];
-			const CFileTime& ctime = pcDoc->m_cDocFile.GetFileTime();
+			const FileTime& ctime = pcDoc->m_cDocFile.GetFileTime();
 			auto_sprintf_s(szText, LS(STR_AUTORELOAD_NOFITY), ctime->wHour, ctime->wMinute, ctime->wSecond);
 			pcDoc->m_pcEditWnd->SendStatusMessage(szText);
 		}

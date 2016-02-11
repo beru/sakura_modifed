@@ -145,7 +145,7 @@ protected:
 
 	// 指定ロジック位置のColorStrategyを取得
 	ColorStrategy* GetColorStrategy(
-		const CStringRef&	cStringLine,
+		const StringRef&	cStringLine,
 		int					iLogic,
 		ColorStrategy*		pStrategy,
 		bool&				bChange

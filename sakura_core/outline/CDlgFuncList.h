@@ -78,7 +78,7 @@ protected:
 	int& ProfDockTop() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockTop: TypeSet().m_cyOutlineDockTop; }
 	int& ProfDockRight() { return (ProfDockSet() == 0)? CommonSet().m_cxOutlineDockRight: TypeSet().m_cxOutlineDockRight; }
 	int& ProfDockBottom() { return (ProfDockSet() == 0)? CommonSet().m_cyOutlineDockBottom: TypeSet().m_cyOutlineDockBottom; }
-	void SetTypeConfig(CTypeConfig, const TypeConfig&);
+	void SetTypeConfig(TypeConfigNum, const TypeConfig&);
 
 public:
 	//! åªç›ÇÃéÌï Ç∆ìØÇ∂Ç»ÇÁ

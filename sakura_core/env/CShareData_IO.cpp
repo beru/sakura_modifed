@@ -901,7 +901,7 @@ void ShareData_IO::IO_CustMenu(DataProfile& cProfile, CommonSetting_CustomMenu& 
 				) {
 					n = (EFunctionCode)auto_atol(szFuncName);
 				}else {
-					n = CSMacroMgr::GetFuncInfoByName(0, szFuncName, NULL);
+					n = SMacroMgr::GetFuncInfoByName(0, szFuncName, NULL);
 				}
 				if (n == F_INVALID) {
 					n = F_DEFAULT;
@@ -913,7 +913,7 @@ void ShareData_IO::IO_CustMenu(DataProfile& cProfile, CommonSetting_CustomMenu& 
 					cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szFuncName));
 				}else {
 					if (bOutCmdName) {
-						WCHAR* p = CSMacroMgr::GetFuncInfoByID(
+						WCHAR* p = SMacroMgr::GetFuncInfoByID(
 							G_AppInstance(),
 							menu.m_nCustMenuItemFuncArr[i][j],
 							szFuncName,
@@ -1038,7 +1038,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& cProfile, CommonSetting_KeyBind& sKey
 					for (int j=0; j<8; ++j) {
 						EFunctionCode n;
 						// 機能名を数値に置き換える。(数値の機能名もあるかも)
-						// @@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
+						// @@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 						pn = auto_strchr(p, ',');
 						if (!pn)	break;
 						*pn = 0;
@@ -1048,7 +1048,7 @@ void ShareData_IO::IO_KeyBind(DataProfile& cProfile, CommonSetting_KeyBind& sKey
 						}else if (WCODE::Is09(*p) && (p[1] == L'\0' || WCODE::Is09(p[1]))) {
 							n = (EFunctionCode)auto_atol(p);
 						}else {
-							n = CSMacroMgr::GetFuncInfoByName(0, p, NULL);
+							n = SMacroMgr::GetFuncInfoByName(0, p, NULL);
 						}
 						if (n == F_INVALID) {
 							n = F_DEFAULT;
@@ -1109,9 +1109,9 @@ void ShareData_IO::IO_KeyBind(DataProfile& cProfile, CommonSetting_KeyBind& sKey
 					auto_sprintf(szWork, L",%ls", szFuncName);
 				}else {
 					if (bOutCmdName) {
-						//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
+						//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 						// 2010.06.30 Moca 日本語名を取得しないように
-						WCHAR* p = CSMacroMgr::GetFuncInfoByID(
+						WCHAR* p = SMacroMgr::GetFuncInfoByID(
 							0,
 							keydata.m_nFuncCodeArr[j],
 							szFuncName,
@@ -2119,7 +2119,7 @@ void ShareData_IO::IO_MainMenu(
 			  && (WCODE::Is09(p[1]) == L'\0' ||  WCODE::Is09(p[1]))) {
 				n = (EFunctionCode)auto_atol(p);
 			}else {
-				n = CSMacroMgr::GetFuncInfoByName(0, p, NULL);
+				n = SMacroMgr::GetFuncInfoByName(0, p, NULL);
 			}
 			if (n == F_INVALID) {
 				n = F_DEFAULT;
@@ -2153,7 +2153,7 @@ void ShareData_IO::IO_MainMenu(
 			}else {
 				if (bOutCmdName) {
 					// マクロ名対応
-					p = CSMacroMgr::GetFuncInfoByID(
+					p = SMacroMgr::GetFuncInfoByID(
 						G_AppInstance(),
 						pcMenu->m_nFunc,
 						szFuncName,

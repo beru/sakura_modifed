@@ -207,13 +207,13 @@ bool KeyMacroMgr::LoadKeyMacro(HINSTANCE hInstance, const TCHAR* pszPath)
 		// 関数名にS_が付いていたら
 
 		// 関数名→機能ID，機能名日本語
-		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-		nFuncID = CSMacroMgr::GetFuncInfoByName(hInstance, szFuncName, szFuncNameJapanese);
+		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
+		nFuncID = SMacroMgr::GetFuncInfoByName(hInstance, szFuncName, szFuncNameJapanese);
 		if (nFuncID != -1) {
 			macro = new Macro(nFuncID);
 			// Jun. 16, 2002 genta プロトタイプチェック用に追加
 			int nArgs;
-			const MacroFuncInfo* mInfo= CSMacroMgr::GetFuncInfoByID(nFuncID);
+			const MacroFuncInfo* mInfo= SMacroMgr::GetFuncInfoByID(nFuncID);
 			int nArgSizeMax = _countof(mInfo->m_varArguments);
 			if (mInfo->m_pData) {
 				nArgSizeMax = mInfo->m_pData->m_nArgMaxSize;

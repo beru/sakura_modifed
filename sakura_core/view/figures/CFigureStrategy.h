@@ -27,10 +27,10 @@
 #include "view/colors/CColorStrategy.h" // ColorStrategyInfo
 
 
-//$$レイアウト構築フロー(DoLayout)も CFigure で行うと整理しやすい
-class CFigure {
+//$$レイアウト構築フロー(DoLayout)も Figure で行うと整理しやすい
+class Figure {
 public:
-	virtual ~CFigure() {}
+	virtual ~Figure() {}
 	virtual bool DrawImp(ColorStrategyInfo* pInfo) = 0;
 	virtual bool Match(const wchar_t* pText, int nTextLen) const = 0;
 
@@ -47,7 +47,7 @@ protected:
 };
 
 // 通常テキスト描画
-class CFigure_Text : public CFigure {
+class Figure_Text : public Figure {
 public:
 	bool DrawImp(ColorStrategyInfo* pInfo);
 	bool Match(const wchar_t* pText, int nTextLen) const {
@@ -61,7 +61,7 @@ public:
 };
 
 // 各種空白（半角空白／全角空白／タブ／改行）描画用の基本クラス
-class CFigureSpace : public CFigure {
+class FigureSpace : public Figure {
 public:
 	virtual bool DrawImp(ColorStrategyInfo* pInfo);
 protected:
@@ -75,7 +75,7 @@ protected:
 	}
 
 	virtual void Update(void) {
-		CFigure::Update();
+		Figure::Update();
 
 		EColorIndexType nColorIndex = GetColorIdx();
 		if (m_pTypeData->m_ColorInfoArr[nColorIndex].m_bDisp) {

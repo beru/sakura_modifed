@@ -138,7 +138,7 @@ protected:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        スクリーン                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesScreen : PropTypes {
+class PropTypesScreen : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:
@@ -156,7 +156,7 @@ public:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ウィンドウ                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesWindow : PropTypes {
+class PropTypesWindow : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:
@@ -173,7 +173,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          カラー                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesColor : PropTypes {
+class PropTypesColor : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);	// メッセージ処理
 protected:
@@ -195,7 +195,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           支援                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesSupport : PropTypes {
+class PropTypesSupport : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);				// メッセージ処理
 protected:
@@ -209,7 +209,7 @@ public:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                    正規表現キーワード                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesRegex : PropTypes {
+class PropTypesRegex : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:														  
@@ -228,7 +228,7 @@ private:
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     キーワードヘルプ                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CPropTypesKeyHelp : PropTypes {
+class PropTypesKeyHelp : PropTypes {
 public:
 	INT_PTR DispatchEvent(HWND, UINT, WPARAM, LPARAM);			// メッセージ処理
 protected:

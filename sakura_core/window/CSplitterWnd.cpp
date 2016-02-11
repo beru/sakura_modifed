@@ -23,9 +23,9 @@
 
 
 //	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
-CSplitterWnd::CSplitterWnd()
+SplitterWnd::SplitterWnd()
 	:
-	Wnd(_T("::CSplitterWnd")),
+	Wnd(_T("::SplitterWnd")),
 	m_pcEditWnd(NULL),
 	m_nAllSplitRows(1),					// 分割行数
 	m_nAllSplitCols(1),					// 分割桁数
@@ -49,13 +49,13 @@ CSplitterWnd::CSplitterWnd()
 }
 
 
-CSplitterWnd::~CSplitterWnd()
+SplitterWnd::~SplitterWnd()
 {
 }
 
 
 // 初期化
-HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
+HWND SplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 {
 	LPCTSTR pszClassName = _T("SplitterWndClass");
 	
@@ -98,7 +98,7 @@ HWND CSplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 /* 子ウィンドウの設定
 	@param hwndEditViewArr [in] HWND配列 NULL終端
 */
-void CSplitterWnd::SetChildWndArr(HWND* hwndEditViewArr)
+void SplitterWnd::SetChildWndArr(HWND* hwndEditViewArr)
 {
 	int v = 0;
 	for (; v<MAXCOUNTOFVIEW && hwndEditViewArr[v]; ++v) {
@@ -119,7 +119,7 @@ void CSplitterWnd::SetChildWndArr(HWND* hwndEditViewArr)
 
 
 // 分割フレーム描画
-void CSplitterWnd::DrawFrame(HDC hdc, RECT* prc)
+void SplitterWnd::DrawFrame(HDC hdc, RECT* prc)
 {
 	SplitBoxWnd::Draw3dRect(hdc, prc->left, prc->top, prc->right, prc->bottom,
 		::GetSysColor(COLOR_3DSHADOW),
@@ -134,7 +134,7 @@ void CSplitterWnd::DrawFrame(HDC hdc, RECT* prc)
 
 
 // 分割トラッカーの表示
-void CSplitterWnd::DrawSplitter(int xPos, int yPos, int bEraseOld)
+void SplitterWnd::DrawSplitter(int xPos, int yPos, int bEraseOld)
 {
 	RECT		rc;
 	RECT		rc2;
@@ -189,7 +189,7 @@ void CSplitterWnd::DrawSplitter(int xPos, int yPos, int bEraseOld)
 
 
 // 分割バーへのヒットテスト
-int CSplitterWnd::HitTestSplitter(int xPos, int yPos)
+int SplitterWnd::HitTestSplitter(int xPos, int yPos)
 {
 	int		nFrameWidth = 3;
 	int		nMargin = 2;
@@ -231,7 +231,7 @@ int CSplitterWnd::HitTestSplitter(int xPos, int yPos)
 	@param nHorizontal 水平クライアント座標 1以上で分割 0:分割しない  -1: 前の設定を保持
 	@param nVertical   垂直クライアント座標 1以上で分割 0:分割しない  -1: 前の設定を保持
 */
-void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
+void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 {
 	int			nActivePane;
 	int			nLimit = 32;
@@ -581,7 +581,7 @@ void CSplitterWnd::DoSplit(int nHorizontal, int nVertical)
 }
 
 // アクティブペインの設定
-void CSplitterWnd::SetActivePane(int nIndex)
+void SplitterWnd::SetActivePane(int nIndex)
 {
 	assert(nIndex < MAXCOUNTOFVIEW);
 	m_nActivePane = nIndex;
@@ -590,7 +590,7 @@ void CSplitterWnd::SetActivePane(int nIndex)
 
 
 // 縦分割ＯＮ／ＯＦＦ
-void CSplitterWnd::VSplitOnOff(void)
+void SplitterWnd::VSplitOnOff(void)
 {
 	RECT rc;
 	::GetClientRect(GetHwnd(), &rc);
@@ -611,7 +611,7 @@ void CSplitterWnd::VSplitOnOff(void)
 
 
 // 横分割ＯＮ／ＯＦＦ
-void CSplitterWnd::HSplitOnOff(void)
+void SplitterWnd::HSplitOnOff(void)
 {
 	RECT rc;
 	::GetClientRect(GetHwnd(), &rc);
@@ -632,7 +632,7 @@ void CSplitterWnd::HSplitOnOff(void)
 
 
 // 縦横分割ＯＮ／ＯＦＦ
-void CSplitterWnd::VHSplitOnOff(void)
+void SplitterWnd::VHSplitOnOff(void)
 {
 	int		nX;
 	int		nY;
@@ -661,7 +661,7 @@ void CSplitterWnd::VHSplitOnOff(void)
 
 
 // 前のペインを返す
-int CSplitterWnd::GetPrevPane(void)
+int SplitterWnd::GetPrevPane(void)
 {
 	int nPane;
 	nPane = -1;
@@ -708,7 +708,7 @@ int CSplitterWnd::GetPrevPane(void)
 
 
 // 次のペインを返す
-int CSplitterWnd::GetNextPane(void)
+int SplitterWnd::GetNextPane(void)
 {
 	int nPane;
 	nPane = -1;
@@ -755,14 +755,14 @@ int CSplitterWnd::GetNextPane(void)
 
 
 // 最初のペインを返す
-int CSplitterWnd::GetFirstPane(void)
+int SplitterWnd::GetFirstPane(void)
 {
 	return 0;
 }
 
 
 // 最後のペインを返す
-int CSplitterWnd::GetLastPane(void)
+int SplitterWnd::GetLastPane(void)
 {
 	int nPane;
 	if (m_nAllSplitRows == 1 &&	m_nAllSplitCols == 1) {
@@ -781,7 +781,7 @@ int CSplitterWnd::GetLastPane(void)
 
 
 // 描画処理
-LRESULT CSplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC			hdc;
 	PAINTSTRUCT	ps;
@@ -807,7 +807,7 @@ LRESULT CSplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
 
 // ウィンドウサイズの変更処理
-LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	EditWnd*	pCEditWnd = (EditWnd*)m_pcEditWnd;
 	EditView*	pcViewArr[MAXCOUNTOFVIEW];
@@ -911,7 +911,7 @@ LRESULT CSplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 // マウス移動時の処理
-LRESULT CSplitterWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	int xPos = (int)(short)LOWORD(lParam);
 	int yPos = (int)(short)HIWORD(lParam);
@@ -951,7 +951,7 @@ LRESULT CSplitterWnd::OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 
 // マウス左ボタン押下時の処理
-LRESULT CSplitterWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	int xPos = (int)(short)LOWORD(lParam);
 	int yPos = (int)(short)HIWORD(lParam);
@@ -971,7 +971,7 @@ LRESULT CSplitterWnd::OnLButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
 
 // マウス左ボタン解放時の処理
-LRESULT CSplitterWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_bDragging) {
 		// 分割トラッカーの表示
@@ -1011,7 +1011,7 @@ LRESULT CSplitterWnd::OnLButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 
 // マウス左ボタンダブルクリック時の処理
-LRESULT CSplitterWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	int nX;
 	int nY;
@@ -1043,7 +1043,7 @@ LRESULT CSplitterWnd::OnLButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
 
 // アプリケーション定義のメッセージ(WM_APP <= msg <= 0xBFFF)
-LRESULT CSplitterWnd::DispatchEvent_WM_APP(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SplitterWnd::DispatchEvent_WM_APP(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	int nPosX;
 	int nPosY;

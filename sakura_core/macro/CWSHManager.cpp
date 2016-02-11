@@ -66,7 +66,7 @@ WSHMacroManager::~WSHMacroManager()
 */
 bool WSHMacroManager::ExecKeyMacro(EditView* EditView, int flags) const
 {
-	auto engine = std::make_unique<CWSHClient>(m_EngineName.c_str(), MacroError, EditView);
+	auto engine = std::make_unique<WSHClient>(m_EngineName.c_str(), MacroError, EditView);
 	bool bRet = false;
 	if (engine->m_Valid) {
 		// インタフェースオブジェクトの登録

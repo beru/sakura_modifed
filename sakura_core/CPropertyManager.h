@@ -37,7 +37,7 @@ public:
 	|| その他
 	*/
 	bool OpenPropertySheet(HWND hWnd, int nPageNum, bool bTrayProc);	// 共通設定
-	bool OpenPropertySheetTypes(HWND hWnd, int nPageNum, CTypeConfig nSettingType);	// タイプ別設定
+	bool OpenPropertySheetTypes(HWND hWnd, int nPageNum, TypeConfigNum nSettingType);	// タイプ別設定
 
 private:
 	HWND			m_hwndOwner;

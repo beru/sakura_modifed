@@ -47,10 +47,10 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol cEol, const EditView* pcView,
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                        CFigure_Eol                            //
+//                        Figure_Eol                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_Eol::Match(const wchar_t* pText, int nTextLen) const
+bool Figure_Eol::Match(const wchar_t* pText, int nTextLen) const
 {
 	// 2014.06.18 折り返し・最終行だとDrawImpでcEol.GetLen()==0になり無限ループするので
 	// もしも行の途中に改行コードがあった場合はMatchさせない
@@ -61,7 +61,7 @@ bool CFigure_Eol::Match(const wchar_t* pText, int nTextLen) const
 
 // 2006.04.29 Moca 選択処理のため縦線処理を追加
 //$$ 高速化可能。
-bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
+bool Figure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 {
 	EditView* pcView = pInfo->m_pcView;
 
@@ -70,19 +70,19 @@ bool CFigure_Eol::DrawImp(ColorStrategyInfo* pInfo)
 	Eol cEol = pcLayout->GetLayoutEol();
 	if (cEol.GetLen()) {
 		// CFigureSpace::DrawImp_StyleSelectもどき。選択・検索色を優先する
-		CTypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
-		CTypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
-		CTypeSupport cTextType(pcView, COLORIDX_TEXT);				// テキストの指定色
-		CTypeSupport cSpaceType(pcView, GetDispColorIdx());	// 空白の指定色
-		CTypeSupport cSearchType(pcView, COLORIDX_SEARCH);	// 検索色(EOL固有)
-		CTypeSupport cCurrentTypeBg(pcView, pInfo->GetCurrentColorBg());
-		CTypeSupport& cCurrentType3 = (cCurrentType2.GetBackColor() == cTextType.GetBackColor() ? cCurrentTypeBg: cCurrentType2);
+		TypeSupport cCurrentType(pcView, pInfo->GetCurrentColor());	// 周辺の色（現在の指定色/選択色）
+		TypeSupport cCurrentType2(pcView, pInfo->GetCurrentColor2());	// 周辺の色（現在の指定色）
+		TypeSupport cTextType(pcView, COLORIDX_TEXT);				// テキストの指定色
+		TypeSupport cSpaceType(pcView, GetDispColorIdx());	// 空白の指定色
+		TypeSupport cSearchType(pcView, COLORIDX_SEARCH);	// 検索色(EOL固有)
+		TypeSupport cCurrentTypeBg(pcView, pInfo->GetCurrentColorBg());
+		TypeSupport& cCurrentType3 = (cCurrentType2.GetBackColor() == cTextType.GetBackColor() ? cCurrentTypeBg: cCurrentType2);
 		COLORREF crText;
 		COLORREF crBack;
 		bool bSelecting = pInfo->GetCurrentColor() != pInfo->GetCurrentColor2();
 		bool blendColor = bSelecting && cCurrentType.GetTextColor() == cCurrentType.GetBackColor(); // 選択混合色
-		CTypeSupport& currentStyle = blendColor ? cCurrentType2 : cCurrentType;
-		CTypeSupport *pcText, *pcBack;
+		TypeSupport& currentStyle = blendColor ? cCurrentType2 : cCurrentType;
+		TypeSupport *pcText, *pcBack;
 		if (bSelecting && !blendColor) {
 			// 選択文字色固定指定
 			pcText = &cCurrentType;
@@ -137,11 +137,11 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView, LayoutYI
 	RECT rcClip2;
 	if (pcView->GetTextArea().GenerateClipRect(&rcClip2, *pDispPos, 1)) {
 		// サポートクラス
-		CTypeSupport cWrapType(pcView, COLORIDX_WRAP);
-		CTypeSupport cTextType(pcView, COLORIDX_TEXT);
-		CTypeSupport cBgLineType(pcView, COLORIDX_CARETLINEBG);
-		CTypeSupport cEvenBgLineType(pcView, COLORIDX_EVENLINEBG);
-		CTypeSupport cPageViewBgLineType(pcView,COLORIDX_PAGEVIEW);
+		TypeSupport cWrapType(pcView, COLORIDX_WRAP);
+		TypeSupport cTextType(pcView, COLORIDX_TEXT);
+		TypeSupport cBgLineType(pcView, COLORIDX_CARETLINEBG);
+		TypeSupport cEvenBgLineType(pcView, COLORIDX_EVENLINEBG);
+		TypeSupport cPageViewBgLineType(pcView,COLORIDX_PAGEVIEW);
 		bool bBgcolor = cWrapType.GetBackColor() == cTextType.GetBackColor();
 		EColorIndexType eBgcolorOverwrite = COLORIDX_WRAP;
 		bool bTrans = pcView->IsBkBitmap();
@@ -175,7 +175,7 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView, LayoutYI
 			cWrapType.SetGraphicsState_WhileThisObj(gr);
 			if (eBgcolorOverwrite != COLORIDX_WRAP) {
 				bChangeColor = true;
-				gr.PushTextBackColor(CTypeSupport(pcView, eBgcolorOverwrite).GetBackColor());
+				gr.PushTextBackColor(TypeSupport(pcView, eBgcolorOverwrite).GetBackColor());
 			}
 		}else {
 			szText = L" ";
@@ -216,10 +216,10 @@ void _DispEOF(
 )
 {
 	// 描画に使う色情報
-	CTypeSupport cEofType(pcView, COLORIDX_EOF);
+	TypeSupport cEofType(pcView, COLORIDX_EOF);
 	if (!cEofType.IsDisp())
 		return;
-	CTypeSupport cTextType(pcView, COLORIDX_TEXT);
+	TypeSupport cTextType(pcView, COLORIDX_TEXT);
 	bool bTrans = pcView->IsBkBitmap() && cEofType.GetBackColor() == cTextType.GetBackColor();
 
 	// 必要なインターフェースを取得
@@ -287,7 +287,7 @@ void _DispEOL(Graphics& gr, DispPos* pDispPos, Eol cEol, const EditView* pcView,
 		);
 
 		// 改行記号の表示
-		if (CTypeSupport(pcView, COLORIDX_EOL).IsDisp()) {
+		if (TypeSupport(pcView, COLORIDX_EOL).IsDisp()) {
 			// From Here 2003.08.17 ryoji 改行文字が欠けないように
 
 			// リージョン作成、選択。

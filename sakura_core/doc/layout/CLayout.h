@@ -87,7 +87,7 @@ public:
 								LayoutInt nStartOffset = LayoutInt(0)) const;
 
 	//! 文字列参照を取得
-	CStringRef GetStringRef() const { return CStringRef(GetPtr(), GetLengthWithEOL()); }
+	StringRef GetStringRef() const { return StringRef(GetPtr(), GetLengthWithEOL()); }
 
 	// チェーン属性
 	Layout* GetPrevLayout() { return m_pPrev; }

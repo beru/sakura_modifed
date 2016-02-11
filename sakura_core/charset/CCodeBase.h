@@ -50,7 +50,7 @@ public:
 	virtual EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst) = 0;	// 特定コード → UNICODE    変換
 	virtual EConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst) = 0;	// UNICODE    → 特定コード 変換
 	// UNICODE    → 特定コード 変換
-	virtual EConvertResult UnicodeToCode(const CStringRef& cSrc, Memory* pDst) {
+	virtual EConvertResult UnicodeToCode(const StringRef& cSrc, Memory* pDst) {
 		NativeW mem(cSrc.GetPtr(), cSrc.GetLength());
 		return UnicodeToCode(mem, pDst);
 	}

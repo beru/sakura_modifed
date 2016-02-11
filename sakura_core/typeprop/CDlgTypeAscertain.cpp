@@ -48,14 +48,14 @@ const DWORD p_helpids[] = {
 };
 
 // Constructors
-CDlgTypeAscertain::CDlgTypeAscertain()
+DlgTypeAscertain::DlgTypeAscertain()
 	:
 	m_psi(NULL)
 {
 }
 
 // モーダルダイアログの表示
-int CDlgTypeAscertain::DoModal(
+int DlgTypeAscertain::DoModal(
 	HINSTANCE hInstance,
 	HWND hwndParent,
 	AscertainInfo* psAscertainInfo
@@ -69,7 +69,7 @@ int CDlgTypeAscertain::DoModal(
 }
 
 // ボタンクリック
-BOOL CDlgTypeAscertain::OnBnClicked(int wID)
+BOOL DlgTypeAscertain::OnBnClicked(int wID)
 {
 	switch (wID) {
 	case IDC_BUTTON_HELP:
@@ -103,7 +103,7 @@ BOOL CDlgTypeAscertain::OnBnClicked(int wID)
 
 
 // ダイアログデータの設定
-void CDlgTypeAscertain::SetData(void)
+void DlgTypeAscertain::SetData(void)
 {
 	// タイプ名設定
 	std::wstring typeNameTo = m_psi->sTypeNameTo + L"(&B)";
@@ -122,7 +122,7 @@ void CDlgTypeAscertain::SetData(void)
 	// エディタ内の設定
 	for (int nIdx=0; nIdx<GetDllShareData().m_nTypesCount; ++nIdx) {
 		const TypeConfigMini* type;
-		DocTypeManager().GetTypeConfigMini(CTypeConfig(nIdx), &type);
+		DocTypeManager().GetTypeConfigMini(TypeConfigNum(nIdx), &type);
 		if (type->m_szTypeExts[0] != _T('\0')) {		// タイプ属性：拡張子リスト
 			auto_sprintf_s(szText, _T("%ts (%ts)"),
 				type->m_szTypeName,	// タイプ属性：名称
@@ -160,7 +160,7 @@ void CDlgTypeAscertain::SetData(void)
 	return;
 }
 
-LPVOID CDlgTypeAscertain::GetHelpIdTable(void)
+LPVOID DlgTypeAscertain::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }

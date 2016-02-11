@@ -45,7 +45,7 @@ EConvertResult WriteManager::WriteFile_From_CDocLineMgr(
 
 	try {
 		// ファイルオープン
-		CBinaryOutputStream out(sSaveInfo.cFilePath, true);
+		BinaryOutputStream out(sSaveInfo.cFilePath, true);
 
 		// 各行出力
 		int nLineNumber = 0;

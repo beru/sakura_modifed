@@ -190,7 +190,7 @@ void DlgProperty::SetData(void)
 		cmemProp.AppendString(_T("\r\n"));
 
 		cmemProp.AppendString(LS(STR_DLGFLPROP_CREATE_DT));
-		CFileTime ctimeCreation = wfd.ftCreationTime;
+		FileTime ctimeCreation = wfd.ftCreationTime;
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeCreation->wYear,
 			ctimeCreation->wMonth,
@@ -203,7 +203,7 @@ void DlgProperty::SetData(void)
 		cmemProp.AppendString(_T("\r\n"));
 
 		cmemProp.AppendString(LS(STR_DLGFLPROP_UPDATE_DT));
-		CFileTime ctimeLastWrite = wfd.ftLastWriteTime;
+		FileTime ctimeLastWrite = wfd.ftLastWriteTime;
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeLastWrite->wYear,
 			ctimeLastWrite->wMonth,
@@ -216,7 +216,7 @@ void DlgProperty::SetData(void)
 		cmemProp.AppendString(_T("\r\n"));
 
 		cmemProp.AppendString(LS(STR_DLGFLPROP_ACCESS_DT));
-		CFileTime ctimeLastAccess = wfd.ftLastAccessTime;
+		FileTime ctimeLastAccess = wfd.ftLastAccessTime;
 		auto_sprintf(szWork, LS(STR_DLGFLPROP_YMDHMS),
 			ctimeLastAccess->wYear,
 			ctimeLastAccess->wMonth,
@@ -241,7 +241,7 @@ void DlgProperty::SetData(void)
 #ifdef _DEBUG/////////////////////////////////////////////////////
 	// メモリ確保 & ファイル読み込み
 	CNativeT ctext;
-	CBinaryInputStream in(pCEditDoc->m_cDocFile.GetFilePath());
+	BinaryInputStream in(pCEditDoc->m_cDocFile.GetFilePath());
 	if (!in) {
 		goto end_of_CodeTest;
 	}
@@ -258,8 +258,8 @@ void DlgProperty::SetData(void)
 	in.Read(pBuf, nBufLen);
 	in.Close();
 
-	// CESIのデバッグ情報
-	CESI::GetDebugInfo(pBuf, nBufLen, &ctext);
+	// ESIのデバッグ情報
+	ESI::GetDebugInfo(pBuf, nBufLen, &ctext);
 	cmemProp.AppendNativeData(ctext);
 
 	if (hgData) {

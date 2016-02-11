@@ -5,9 +5,9 @@
 #include <limits.h>
 #include "window.h"
 
-int CDPI::nDpiX = 96;
-int CDPI::nDpiY = 96;
-bool CDPI::bInitialized = false;
+int DPI::nDpiX = 96;
+int DPI::nDpiY = 96;
+bool DPI::bInitialized = false;
 
 /**	指定したウィンドウの祖先のハンドルを取得する
 

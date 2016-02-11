@@ -16,7 +16,7 @@
 /*!
 	現在のカーソルを保存し、カーソルを砂時計にする
 */
-CWaitCursor::CWaitCursor(HWND hWnd, bool bEnable)
+WaitCursor::WaitCursor(HWND hWnd, bool bEnable)
 {
 	m_bEnable = bEnable;
 	if (!bEnable) return;
@@ -29,7 +29,7 @@ CWaitCursor::CWaitCursor(HWND hWnd, bool bEnable)
 /*!
 	カーソル形状を元に戻す
 */
-CWaitCursor::~CWaitCursor()
+WaitCursor::~WaitCursor()
 {
 	if (m_bEnable) {
 		ReleaseCapture();

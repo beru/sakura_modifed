@@ -1124,8 +1124,8 @@ prev_line:;
 			nInsSize--;
 		}
 	}
-	CStringRef	cPrevLine;
-	CStringRef	cNextLine;
+	StringRef	cPrevLine;
+	StringRef	cNextLine;
 	NativeW	cmemCurLine;
 	if (!pCDocLine) {
 		// ‚±‚±‚ÅNULL‚ª‹A‚Á‚Ä‚­‚é‚Æ‚¢‚¤‚±‚Æ‚ÍA
@@ -1136,8 +1136,8 @@ prev_line:;
 		if (!bInsertLineMode) {
 			cmemCurLine.swap(pCDocLine->_GetDocLineData());
 			pLine = cmemCurLine.GetStringPtr(&nLineLen);
-			cPrevLine = CStringRef(pLine, pArg->sDelRange.GetFrom().x);
-			cNextLine = CStringRef(&pLine[pArg->sDelRange.GetFrom().x], nLineLen - pArg->sDelRange.GetFrom().x);
+			cPrevLine = StringRef(pLine, pArg->sDelRange.GetFrom().x);
+			cNextLine = StringRef(&pLine[pArg->sDelRange.GetFrom().x], nLineLen - pArg->sDelRange.GetFrom().x);
 			pArg->nInsSeq = ModifyVisitor().GetLineModifiedSeq(pCDocLine);
 		}else {
 			pArg->nInsSeq = 0;
@@ -1180,7 +1180,7 @@ prev_line:;
 						tmp._SetStringLength(cPrevLine.GetLength());
 						tmp.AppendNativeData(cmemLine);
 						pCDocLine->SetDocLineStringMove(&tmp);
-						cNextLine = CStringRef(cmemCurLine.GetStringPtr(), cmemCurLine.GetStringLength());
+						cNextLine = StringRef(cmemCurLine.GetStringPtr(), cmemCurLine.GetStringLength());
 					}else {
 						NativeW tmp;
 						tmp.AllocStringBuffer(cPrevLine.GetLength() + cmemLine.GetStringLength());
@@ -1213,9 +1213,9 @@ prev_line:;
 	}
 	if (bLastInsert || 0 < cNextLine.GetLength()) {
 		NativeW cNull;
-		CStringRef cNullStr(L"", 0);
+		StringRef cNullStr(L"", 0);
 		NativeW& cmemLine = bLastInsert ? pArg->pInsData->back().cmemLine : cNull;
-		const CStringRef& cPrevLine2 = ((nCount == 0) ? cPrevLine: cNullStr);
+		const StringRef& cPrevLine2 = ((nCount == 0) ? cPrevLine: cNullStr);
 		int nSeq = pArg->pInsData->back().nSeq;
 		int nLen = cmemLine.GetStringLength();
 		NativeW tmp;

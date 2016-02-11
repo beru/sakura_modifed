@@ -27,7 +27,7 @@
 #include "charset/CCodeBase.h"
 #include "charset/codeutil.h"
 
-class CEuc : public CodeBase {
+class Euc : public CodeBase {
 public:
 	// CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return EUCToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
@@ -58,7 +58,7 @@ protected:
 
 	高速化のため、インライン化
 */
-inline int CEuc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError, bool* pbHex = NULL)
+inline int Euc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDst, const ECharSet eCharset, bool* pbError, bool* pbHex = NULL)
 {
 	int nret;
 	unsigned char czenkaku[2];
@@ -123,7 +123,7 @@ inline int CEuc::_EucjpToUni_char(const unsigned char* pSrc, unsigned short* pDs
 
 	高速化のため、インライン化
 */
-inline int CEuc::_UniToEucjp_char(const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError)
+inline int Euc::_UniToEucjp_char(const unsigned short* pSrc, unsigned char* pDst, const ECharSet eCharset, bool* pbError)
 {
 	int nret = 0, nclen;
 	unsigned char cbuf[4];

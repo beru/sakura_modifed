@@ -72,7 +72,7 @@ struct LoadInfo {
 	ECodeType	eCharCode;
 	bool		bViewMode;
 	bool		bWritableNoMsg; //<! 書き込み禁止メッセージを表示しない
-	CTypeConfig	nType;
+	TypeConfigNum	nType;
 
 	// モード
 	bool		bRequestReload;	// リロード要求
@@ -96,7 +96,7 @@ struct LoadInfo {
 		const FilePath&	_cFilePath,
 		ECodeType			_eCodeType,
 		bool				_bReadOnly,
-		CTypeConfig			_nType = CTypeConfig(-1)
+		TypeConfigNum		_nType = TypeConfigNum(-1)
 	)
 		:
 		cFilePath(_cFilePath),

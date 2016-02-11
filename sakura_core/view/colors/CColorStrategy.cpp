@@ -39,7 +39,7 @@
 #include "types/CTypeSupport.h"
 
 
-bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
+bool _IsPosKeywordHead(const StringRef& cStr, int nPos)
 {
 	return (nPos == 0 || !IS_KEYWORD_CHAR(cStr.At(nPos - 1)));
 }
@@ -48,7 +48,7 @@ bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
 	@retval true 色の変更あり
 	@retval false 色の変更なし
 */
-bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
+bool ColorStrategyInfo::CheckChangeColor(const StringRef& cLineStr)
 {
 	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
 	pool->SetCurrentView(m_pcView);
@@ -108,7 +108,7 @@ bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 	}
 
 	// カーソル行背景色
-	CTypeSupport cCaretLineBg(m_pcView, COLORIDX_CARETLINEBG);
+	TypeSupport cCaretLineBg(m_pcView, COLORIDX_CARETLINEBG);
 	if (cCaretLineBg.IsDisp() && !m_pcView->m_bMiniMap) {
 		if (m_colorIdxBackLine == COLORIDX_CARETLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() != m_pcView->GetCaret().GetCaretLayoutPos().GetY2()) {
@@ -123,7 +123,7 @@ bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 	// 偶数行の背景色
-	CTypeSupport cEvenLineBg(m_pcView, COLORIDX_EVENLINEBG);
+	TypeSupport cEvenLineBg(m_pcView, COLORIDX_EVENLINEBG);
 	if (cEvenLineBg.IsDisp() && !m_pcView->m_bMiniMap && m_colorIdxBackLine != COLORIDX_CARETLINEBG) {
 		if (m_colorIdxBackLine == COLORIDX_EVENLINEBG) {
 			if (m_pDispPos->GetLayoutLineRef() % 2 == 0) {
@@ -138,7 +138,7 @@ bool ColorStrategyInfo::CheckChangeColor(const CStringRef& cLineStr)
 		}
 	}
 	if (m_pcView->m_bMiniMap) {
-		CTypeSupport cPageViewBg(m_pcView, COLORIDX_PAGEVIEW);
+		TypeSupport cPageViewBg(m_pcView, COLORIDX_PAGEVIEW);
 		if (cPageViewBg.IsDisp()) {
 			EditView& cActiveView = m_pcView->m_pcEditWnd->GetActiveView();
 			LayoutInt curLine = m_pDispPos->GetLayoutLineRef();
@@ -196,16 +196,16 @@ ColorStrategyPool::ColorStrategyPool()
 	m_pcSelectStrategy = new Color_Select();
 	m_pcFoundStrategy = new Color_Found();
 //	m_vStrategies.push_back(new Color_Found);				// マッチ文字列
-	m_vStrategies.push_back(new CColor_RegexKeyword);		// 正規表現キーワード
+	m_vStrategies.push_back(new Color_RegexKeyword);		// 正規表現キーワード
 	m_vStrategies.push_back(new Color_Heredoc);			// ヒアドキュメント
 	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK1));	// ブロックコメント
 	m_vStrategies.push_back(new Color_BlockComment(COLORIDX_BLOCK2));	// ブロックコメント2
 	m_vStrategies.push_back(new Color_LineComment);		// 行コメント
 	m_vStrategies.push_back(new Color_SingleQuote);		// シングルクォーテーション文字列
 	m_vStrategies.push_back(new Color_DoubleQuote);		// ダブルクォーテーション文字列
-	m_vStrategies.push_back(new CColor_Url);				// URL
-	m_vStrategies.push_back(new CColor_Numeric);			// 半角数字
-	m_vStrategies.push_back(new CColor_KeywordSet);			// キーワードセット
+	m_vStrategies.push_back(new Color_Url);				// URL
+	m_vStrategies.push_back(new Color_Numeric);			// 半角数字
+	m_vStrategies.push_back(new Color_KeywordSet);			// キーワードセット
 
 	// 設定更新
 	OnChangeSetting();
@@ -251,7 +251,7 @@ void ColorStrategyPool::NotifyOnStartScanLogic()
 void ColorStrategyPool::CheckColorMODE(
 	ColorStrategy**	ppcColorStrategy,	// [in/out]
 	int					nPos,
-	const CStringRef&	cLineStr
+	const StringRef&	cLineStr
 )
 {
 	// 色終了

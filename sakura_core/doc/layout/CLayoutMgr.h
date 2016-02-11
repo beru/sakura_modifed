@@ -243,7 +243,7 @@ protected:
 		EKinsokuType	eKinsokuType;
 		LogicInt		nPos;
 		LogicInt		nBgn;
-		CStringRef		cLineStr;
+		StringRef		cLineStr;
 		LogicInt		nWordBgn;
 		LogicInt		nWordLen;
 		LayoutInt		nPosX;

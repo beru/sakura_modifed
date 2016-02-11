@@ -53,7 +53,7 @@
 #endif
 
 /* 2009.10.29 syat インタフェースオブジェクト部分をCWSHIfObj.hに分離
-class CInterfaceObjectTypeInfo: public ImplementsIUnknown<ITypeInfo>
+class InterfaceObjectTypeInfo: public ImplementsIUnknown<ITypeInfo>
  */
 
 //IActiveScriptSite, IActiveScriptSiteWindow
@@ -61,16 +61,16 @@ class CInterfaceObjectTypeInfo: public ImplementsIUnknown<ITypeInfo>
 	@date Sep. 15, 2005 FILE IActiveScriptSiteWindow実装．
 		マクロでMsgBoxを使用可能にする．
 */
-class CWSHSite :
+class WSHSite :
 	public IActiveScriptSite,
 	public IActiveScriptSiteWindow
 {
 private:
-	CWSHClient *m_Client;
+	WSHClient *m_Client;
 	ITypeInfo *m_TypeInfo;
 	ULONG m_RefCount;
 public:
-	CWSHSite(CWSHClient *AClient)
+	WSHSite(WSHClient *AClient)
 		:
 		m_Client(AClient),
 		m_RefCount(0)
@@ -123,7 +123,7 @@ public:
 		wcout << L"GetItemInfo:" << pstrName << endl;
 #endif
 		// 指定された名前のインタフェースオブジェクトを検索
-		const CWSHClient::List& objects = m_Client->GetInterfaceObjects();
+		const WSHClient::List& objects = m_Client->GetInterfaceObjects();
 		for (auto it=objects.begin(); it!=objects.end(); ++it) {
 			// Nov. 10, 2003 FILE Win9Xでは、[lstrcmpiW]が無効のため、[_wcsicmp]に修正
 			if (_wcsicmp(pstrName, (*it)->m_sName.c_str()) == 0) {
@@ -230,7 +230,7 @@ public:
 
 // implementation
 
-CWSHClient::CWSHClient(
+WSHClient::WSHClient(
 	const wchar_t* AEngine,
 	ScriptErrorHandler AErrorHandler,
 	void *AData
@@ -242,7 +242,7 @@ CWSHClient::CWSHClient(
 	m_Engine(NULL)
 { 
 	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
-	CCurrentDirectoryBackupPoint dirBack;
+	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 	
 	CLSID ClassID;
@@ -252,7 +252,7 @@ CWSHClient::CWSHClient(
 		if (CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&m_Engine)) != S_OK) {
 			Error(LSW(STR_ERR_CWSH02));
 		}else {
-			IActiveScriptSite* site = new CWSHSite(this);
+			IActiveScriptSite* site = new WSHSite(this);
 			if (m_Engine->SetScriptSite(site) != S_OK) {
 				delete site;
 				Error(LSW(STR_ERR_CWSH03));
@@ -263,7 +263,7 @@ CWSHClient::CWSHClient(
 	}
 }
 
-CWSHClient::~CWSHClient()
+WSHClient::~WSHClient()
 {
 	// インタフェースオブジェクトを解放
 	for (auto it=m_IfObjArr.begin(); it!=m_IfObjArr.end(); ++it) {
@@ -339,7 +339,7 @@ static unsigned __stdcall AbortMacroProc(LPVOID lpParameter)
 }
 
 
-bool CWSHClient::Execute(const wchar_t* AScript)
+bool WSHClient::Execute(const wchar_t* AScript)
 {
 	bool bRet = false;
 	IActiveScriptParse *Parser;
@@ -411,14 +411,14 @@ bool CWSHClient::Execute(const wchar_t* AScript)
 	return bRet;
 }
 
-void CWSHClient::Error(BSTR Description, BSTR Source)
+void WSHClient::Error(BSTR Description, BSTR Source)
 {
 	if (m_OnError) {
 		m_OnError(Description, Source, m_Data);
 	}
 }
 
-void CWSHClient::Error(const wchar_t* Description)
+void WSHClient::Error(const wchar_t* Description)
 {
 	BSTR S = SysAllocString(L"WSH");
 	BSTR D = SysAllocString(Description);
@@ -428,7 +428,7 @@ void CWSHClient::Error(const wchar_t* Description)
 }
 
 // インタフェースオブジェクトの追加
-void CWSHClient::AddInterfaceObject(IfObj* obj)
+void WSHClient::AddInterfaceObject(IfObj* obj)
 {
 	if (!obj) return;
 	m_IfObjArr.push_back(obj);

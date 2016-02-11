@@ -334,7 +334,7 @@ BOOL GetSystemResources(
 
 // コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
 
-CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
+CurrentDirectoryBackupPoint::CurrentDirectoryBackupPoint()
 {
 	int n = ::GetCurrentDirectory(_countof(m_szCurDir), m_szCurDir);
 	if (n>0 && n<_countof(m_szCurDir)) {
@@ -345,7 +345,7 @@ CCurrentDirectoryBackupPoint::CCurrentDirectoryBackupPoint()
 	}
 }
 
-CCurrentDirectoryBackupPoint::~CCurrentDirectoryBackupPoint()
+CurrentDirectoryBackupPoint::~CurrentDirectoryBackupPoint()
 {
 	if (m_szCurDir[0]) {
 		::SetCurrentDirectory(m_szCurDir);

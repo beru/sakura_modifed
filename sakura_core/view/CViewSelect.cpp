@@ -157,7 +157,7 @@ void ViewSelect::DrawSelectArea(bool bDrawBracketCursorLine)
 	}
 	m_bDrawSelectArea = true;
 	
-	bool bDispText = CTypeSupport(pView, COLORIDX_SELECT).IsDisp();
+	bool bDispText = TypeSupport(pView, COLORIDX_SELECT).IsDisp();
 	if (bDispText) {
 		if (m_sSelect != m_sSelectOld) {
 			// 選択色表示の時は、WM_PAINT経由で作画

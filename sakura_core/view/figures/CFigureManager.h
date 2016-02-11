@@ -27,22 +27,22 @@
 #include "util/design_template.h"
 #include "CFigureStrategy.h"
 
-class CFigureManager : public TSingleton<CFigureManager> {
-	friend class TSingleton<CFigureManager>;
-	CFigureManager();
-	virtual ~CFigureManager();
+class FigureManager : public TSingleton<FigureManager> {
+	friend class TSingleton<FigureManager>;
+	FigureManager();
+	virtual ~FigureManager();
 
 public:
-	//! 描画するCFigureを取得
+	//! 描画するFigureを取得
 	//	@param	pText	対象文字列の先頭
 	//	@param	nTextLen	pTextから行末までの長さ(ただしCRLF==2)
-	CFigure& GetFigure(const wchar_t* pText, int nTextLen);
+	Figure& GetFigure(const wchar_t* pText, int nTextLen);
 
 	// 設定変更
 	void OnChangeSetting(void);
 
 private:
-	std::vector<CFigure*>	m_vFigures;
-	std::vector<CFigure*>	m_vFiguresDisp;	// 色分け表示対象
+	std::vector<Figure*>	m_vFigures;
+	std::vector<Figure*>	m_vFiguresDisp;	// 色分け表示対象
 };
 

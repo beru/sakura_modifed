@@ -49,7 +49,7 @@
 
 	エラーでなければ1を返す
 */
-int CLatin1::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
+int Latin1::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 {
 	if (nIdx >= nDataLen) {
 		return 0;
@@ -63,7 +63,7 @@ int CLatin1::GetSizeOfChar(const char* pData, int nDataLen, int nIdx)
 /*!
 	Latin1 → Unicode 変換
 */
-int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Latin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	int nret;
 	const unsigned char *pr, *pr_end;
@@ -99,7 +99,7 @@ int CLatin1::Latin1ToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, boo
 
 
 // コード変換 Latin1→Unicode
-EConvertResult CLatin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
+EConvertResult Latin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
 {
 	// ソース取得
 	int nSrcLen;
@@ -131,7 +131,7 @@ EConvertResult CLatin1::Latin1ToUnicode( const Memory& cSrc, NativeW* pDstMem )
 /*
 	Unicode -> Latin1
 */
-int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int Latin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	const unsigned short *pr, *pr_end;
@@ -193,7 +193,7 @@ int CLatin1::UniToLatin1(const wchar_t* pSrc, const int nSrcLen, char* pDst, boo
 
 
 // コード変換 Unicode→Latin1
-EConvertResult CLatin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
+EConvertResult Latin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
 {
 	// ソース取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
@@ -224,7 +224,7 @@ EConvertResult CLatin1::UnicodeToLatin1( const NativeW& cSrc, Memory* pDstMem )
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult CLatin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+EConvertResult Latin1::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 
 	// 2008/6/21 Uchi

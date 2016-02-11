@@ -26,7 +26,7 @@
 #include "CCodeBase.h"
 #include "CUtf8.h"
 
-class CCesu8 : public CodeBase {
+class Cesu8 : public CodeBase {
 public:
 
 	// CodeBaseインターフェース

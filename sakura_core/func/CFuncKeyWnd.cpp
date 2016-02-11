@@ -36,7 +36,7 @@ LRESULT CALLBACK CFuncKeyWndProc(
 	UINT	uMsg,	// message identifier
 	WPARAM	wParam,	// first message parameter
 	LPARAM	lParam 	// second message parameter
-)
+	)
 {
 	FuncKeyWnd*	pCFuncKeyWnd;
 	pCFuncKeyWnd = (FuncKeyWnd*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -107,7 +107,7 @@ HWND FuncKeyWnd::Open(
 	HWND		hwndParent,
 	EditDoc*	pCEditDoc,
 	bool		bSizeBox
-)
+	)
 {
 	LPCTSTR pszClassName = _T("FuncKeyWnd");
 

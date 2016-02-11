@@ -33,7 +33,7 @@
 #include "util/window.h"
 #include "uiparts/CImageListMgr.h"
 
-CMainToolBar::CMainToolBar(EditWnd* pOwner)
+MainToolBar::MainToolBar(EditWnd* pOwner)
 	:
 	m_pOwner(pOwner),
 	m_hwndToolBar(NULL),
@@ -44,13 +44,13 @@ CMainToolBar::CMainToolBar(EditWnd* pOwner)
 {
 }
 
-void CMainToolBar::Create(ImageListMgr* pcIcons)
+void MainToolBar::Create(ImageListMgr* pcIcons)
 {
 	m_pcIcons = pcIcons;
 }
 
 // 検索ボックスでの処理
-void CMainToolBar::ProcSearchBox(MSG *msg)
+void MainToolBar::ProcSearchBox(MSG *msg)
 {
 	if (msg->message == WM_KEYDOWN /* && ::GetParent(msg->hwnd) == m_hwndSearchBox */) {
 		if (msg->wParam == VK_RETURN) {  // リターンキー
@@ -115,7 +115,7 @@ static LRESULT CALLBACK ToolBarWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 	@date 2005.08.29 aroka ツールバーの折り返し
 	@date 2006.06.17 ryoji ビジュアルスタイルが有効の場合はツールバーを Rebar に入れてサイズ変更時のちらつきを無くす
 */
-void CMainToolBar::CreateToolBar(void)
+void MainToolBar::CreateToolBar(void)
 {
 	if (m_hwndToolBar)
 		return;
@@ -365,7 +365,7 @@ void CMainToolBar::CreateToolBar(void)
 	return;
 }
 
-void CMainToolBar::DestroyToolBar(void)
+void MainToolBar::DestroyToolBar(void)
 {
 	if (m_hwndToolBar) {
 		if (m_hwndSearchBox) {
@@ -396,7 +396,7 @@ void CMainToolBar::DestroyToolBar(void)
 }
 
 // メッセージ処理。なんか処理したなら true を返す。
-bool CMainToolBar::EatMessage(MSG* msg)
+bool MainToolBar::EatMessage(MSG* msg)
 {
 	if (m_hwndSearchBox && ::IsDialogMessage(m_hwndSearchBox, msg)) {	// 検索コンボボックス
 		ProcSearchBox(msg);
@@ -418,7 +418,7 @@ bool CMainToolBar::EatMessage(MSG* msg)
 	@date 2003.07.21 作成
 
 */
-LPARAM CMainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
+LPARAM MainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 {
 	switch (pnmh->dwDrawStage) {
 	case CDDS_PREPAINT:
@@ -465,7 +465,7 @@ LPARAM CMainToolBar::ToolBarOwnerDraw(LPNMCUSTOMDRAW pnmh)
 	@date 2008.10.05 nasukoji ツールバー更新部分を外に出した
 	@date 2012.11.29 aroka OnTimerから分離したときのバグ修正
 */
-void CMainToolBar::OnToolbarTimer(void)
+void MainToolBar::OnToolbarTimer(void)
 {
 	// 2012.11.29 aroka ここではカウントアップ不要
 	// m_pOwner->IncrementTimerCount(10);
@@ -479,7 +479,7 @@ void CMainToolBar::OnToolbarTimer(void)
 	
 	@date 2008.10.05 nasukoji
 */
-void CMainToolBar::UpdateToolbar(void)
+void MainToolBar::UpdateToolbar(void)
 {
 	// 印刷プレビュー中なら、何もしない。
 	if (m_pOwner->IsInPreviewMode())
@@ -511,7 +511,7 @@ void CMainToolBar::UpdateToolbar(void)
 }
 
 // 検索ボックスを更新
-void CMainToolBar::AcceptSharedSearchKey()
+void MainToolBar::AcceptSharedSearchKey()
 {
 	if (m_hwndSearchBox) {
 		int	i;
@@ -544,7 +544,7 @@ void CMainToolBar::AcceptSharedSearchKey()
 	}
 }
 
-int CMainToolBar::GetSearchKey(std::wstring& strText)
+int MainToolBar::GetSearchKey(std::wstring& strText)
 {
 	if (m_hwndSearchBox) {
 		int nBufferSize = ::GetWindowTextLength(m_hwndSearchBox) + 1;
@@ -563,7 +563,7 @@ int CMainToolBar::GetSearchKey(std::wstring& strText)
 ツールバーの検索ボックスにフォーカスを移動する.
 	@date 2006.06.04 yukihane 新規作成
 */
-void CMainToolBar::SetFocusSearchBox(void) const
+void MainToolBar::SetFocusSearchBox(void) const
 {
 	if (m_hwndSearchBox) {
 		::SetFocus(m_hwndSearchBox);

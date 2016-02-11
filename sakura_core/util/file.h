@@ -60,10 +60,10 @@ void GetInidirOrExedir(LPTSTR pDir, LPCTSTR szFile = NULL, bool bRetExedirIfFile
 LPCTSTR GetRelPath(LPCTSTR pszPath);
 
 // ÉtÉ@ÉCÉãéûçè
-class CFileTime {
+class FileTime {
 public:
-	CFileTime() { ClearFILETIME(); }
-	CFileTime(const FILETIME& ftime) { SetFILETIME(ftime); }
+	FileTime() { ClearFILETIME(); }
+	FileTime(const FILETIME& ftime) { SetFILETIME(ftime); }
 	// ê›íË
 	void ClearFILETIME() { m_ftime.dwLowDateTime = m_ftime.dwHighDateTime = 0; m_bModified = true; }
 	void SetFILETIME(const FILETIME& ftime) { m_ftime = ftime; m_bModified = true; }
@@ -93,7 +93,7 @@ private:
 	mutable bool		m_bModified;
 };
 
-bool GetLastWriteTimestamp(const TCHAR* filename, CFileTime* pcFileTime); //	Oct. 22, 2005 genta
+bool GetLastWriteTimestamp(const TCHAR* filename, FileTime* pcFileTime); //	Oct. 22, 2005 genta
 
 // ï∂éöóÒï™äÑ
 void my_splitpath (const char* comln , char* drv, char* dir, char* fnm, char* ext);

@@ -178,9 +178,9 @@ bool CPP_IsFunctionAfterKeyword(const wchar_t* s)
 	@date 2007.12.15 genta : m_enablebufの初期値が悪さをすることがあるので0に
 */
 
-class CCppPreprocessMng {
+class CppPreprocessMng {
 public:
-	CCppPreprocessMng(void) :
+	CppPreprocessMng(void) :
 		// 2007.12.15 genta : m_bitpatternを0にしないと，
 		// いきなり#elseが現れたときにパターンがおかしくなる
 		m_ismultiline(false),
@@ -234,7 +234,7 @@ private:
 	@date 2007.12.13 じゅうじ : ifの直後にスペースがない場合の対応
 
 */
-LogicInt CCppPreprocessMng::ScanLine(
+LogicInt CppPreprocessMng::ScanLine(
 	const wchar_t* str,
 	LogicInt _length
 	)
@@ -463,7 +463,7 @@ void DocOutline::MakeFuncList_C(
 	nMode = 0;
 	
 	//	Aug. 10, 2004 genta プリプロセス処理クラス
-	CCppPreprocessMng cCppPMng;
+	CppPreprocessMng cCppPMng;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	
 	LogicInt nLineCount;

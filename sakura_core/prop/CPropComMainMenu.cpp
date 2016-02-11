@@ -1099,7 +1099,7 @@ bool PropMainMenu::GetDataTree(
 // メインメニュー設定をインポートする
 void PropMainMenu::Import(HWND hwndDlg)
 {
-	CImpExpMainMenu	cImpExp(m_Common);
+	ImpExpMainMenu	cImpExp(m_Common);
 
 	// インポート
 	if (!cImpExp.ImportUI(G_AppInstance(), hwndDlg)) {
@@ -1112,7 +1112,7 @@ void PropMainMenu::Import(HWND hwndDlg)
 // メインメニュー設定をエクスポートする
 void PropMainMenu::Export(HWND hwndDlg)
 {
-	CImpExpMainMenu	cImpExp(m_Common);
+	ImpExpMainMenu	cImpExp(m_Common);
 	GetData(hwndDlg);
 
 	// エクスポート

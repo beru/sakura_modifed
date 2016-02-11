@@ -70,7 +70,7 @@ void VisualProgress::_Begin()
 {
 	// 砂時計
 	if (!m_pcWaitCursor) {
-		m_pcWaitCursor = new CWaitCursor(EditWnd::getInstance()->GetHwnd());
+		m_pcWaitCursor = new WaitCursor(EditWnd::getInstance()->GetHwnd());
 	}
 
 	// プログレスバー

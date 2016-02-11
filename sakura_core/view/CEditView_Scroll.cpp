@@ -541,7 +541,7 @@ void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, cons
 		) {
 			// Scrollのときにルーラー余白更新
 			Rect rcTopYohaku;
-			if (CTypeSupport(this, COLORIDX_TEXT).GetBackColor() == CTypeSupport(this, COLORIDX_GYOU).GetBackColor()) {
+			if (TypeSupport(this, COLORIDX_TEXT).GetBackColor() == TypeSupport(this, COLORIDX_GYOU).GetBackColor()) {
 				rcTopYohaku.left = 0;
 			}else {
 				rcTopYohaku.left = area.GetLineNumberWidth();

@@ -38,10 +38,10 @@ public:
 
 
 //! 文字列への参照を保持するクラス
-class CStringRef : public IStringRef {
+class StringRef : public IStringRef {
 public:
-	CStringRef() : m_pData(NULL), m_nDataLen(0) { }
-	CStringRef(const wchar_t* pData, int nDataLen) : m_pData(pData), m_nDataLen(nDataLen) { }
+	StringRef() : m_pData(NULL), m_nDataLen(0) { }
+	StringRef(const wchar_t* pData, int nDataLen) : m_pData(pData), m_nDataLen(nDataLen) { }
 	const wchar_t*	GetPtr()		const { return m_pData;    }
 	int				GetLength()		const { return m_nDataLen; }
 
@@ -197,7 +197,7 @@ public:
 	static const wchar_t* GetCharNext(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の次にある文字の位置を返します
 	static const wchar_t* GetCharPrev(const wchar_t* pData, int nDataLen, const wchar_t* pDataCurrent); //!< ポインタで示した文字の直前にある文字の位置を返します
 
-	static LayoutInt GetKetaOfChar(const CStringRef& cStr, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
+	static LayoutInt GetKetaOfChar(const StringRef& cStr, int nIdx) { //!< 指定した位置の文字が半角何個分かを返す
 		return GetKetaOfChar(cStr.GetPtr(), cStr.GetLength(), nIdx);
 	}
 };

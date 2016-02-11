@@ -65,10 +65,10 @@ private:
 
 private:
 	// ゴミクラス
-	class CDummy {
+	class Dummy {
 	public:
-		CDummy();
-		CDummy(int);
+		Dummy();
+		Dummy(int);
 	};
 	
 	template <bool t, bool = false>
@@ -79,7 +79,7 @@ private:
 	// クラス内でテンプレートの特殊化をするとG++に怒られるので部分特殊化にする
 	template <bool _>
 	struct ChooseIntOrDummy<false, _> {
-		typedef CDummy Type;
+		typedef Dummy Type;
 	};
 public:
 	// コンストラクタ・デストラクタ

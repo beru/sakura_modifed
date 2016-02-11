@@ -33,12 +33,12 @@
 /*!タイプサポートクラス
 	今のところタイプ別設定の色情報取得の補助
 */
-class CTypeSupport {
+class TypeSupport {
 private:
 	static const COLORREF INVALID_COLOR = 0xFFFFFFFF; // 無効な色定数
 
 public:
-	CTypeSupport(const EditView* pEditView, EColorIndexType eColorIdx)
+	TypeSupport(const EditView* pEditView, EColorIndexType eColorIdx)
 		:
 		m_pFontset(&pEditView->GetFontset()),
 		m_nColorIdx(ToColorInfoArrIndex(eColorIdx))
@@ -49,7 +49,7 @@ public:
 
 		m_gr = NULL;
 	}
-	virtual ~CTypeSupport() {
+	virtual ~TypeSupport() {
 		if (m_gr) {
 			RewindGraphicsState(*m_gr);
 		}

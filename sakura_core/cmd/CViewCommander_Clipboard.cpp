@@ -280,7 +280,7 @@ void ViewCommander::Command_PASTEBOX(
 		m_pCommanderView->DeleteData(false/*true 2002.01.25 hor*/);
 	}
 
-	CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 10000 < nPasteSize);
+	WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 10000 < nPasteSize);
 	HWND hwndProgress = NULL;
 	int nProgressPos = 0;
 	if (cWaitCursor.IsEnable()) {
@@ -469,7 +469,7 @@ void ViewCommander::Command_INSTEXT(
 		nTextLen = LogicInt(wcslen(pszText));
 	}
 
-	CWaitCursor cWaitCursor(
+	WaitCursor cWaitCursor(
 		m_pCommanderView->GetHwnd(),
 		10000 < nTextLen && !selInfo.IsBoxSelecting()
 	);
@@ -879,7 +879,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 		ColorStrategy* pStrategyNormal = nullptr;
 		ColorStrategy* pStrategyFound = nullptr;
 		ColorStrategy* pStrategy = nullptr;
-		CStringRef cStringLine(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
+		StringRef cStringLine(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 		{
 			pStrategy = pStrategyNormal = pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
 			if (pStrategy) {
@@ -1062,7 +1062,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 	@date 2014.12.30 Moca “¯‚¶ColorStrategy‚Åˆá‚¤F‚ÉØ‚è‘Ö‚í‚Á‚½‚Æ‚«‚É‘Î‰
 */
 ColorStrategy* ViewCommander::GetColorStrategyHTML(
-	const CStringRef&	cStringLine,
+	const StringRef&	cStringLine,
 	int					iLogic,
 	const ColorStrategyPool*	pool,
 	ColorStrategy**	ppStrategy,

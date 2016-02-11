@@ -803,9 +803,9 @@ LRESULT ControlTray::DispatchEvent(
 				break;
 			case F_TYPE_LIST:	// タイプ別設定一覧
 				{
-					CDlgTypeList			cDlgTypeList;
-					CDlgTypeList::Result	sResult;
-					sResult.cDocumentType = CTypeConfig(0);
+					DlgTypeList			cDlgTypeList;
+					DlgTypeList::Result	sResult;
+					sResult.cDocumentType = TypeConfigNum(0);
 					sResult.bTempChange = false;
 					if (cDlgTypeList.DoModal(G_AppInstance(), GetTrayHwnd(), &sResult)) {
 						// タイプ別設定

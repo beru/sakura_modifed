@@ -44,7 +44,7 @@ class ComplementIfObj : public WSHIfObj {
 
 	// コンストラクタ
 public:
-	ComplementIfObj(std::wstring& curWord, CHokanMgr* pMgr, int option)
+	ComplementIfObj(std::wstring& curWord, HokanMgr* pMgr, int option)
 		:
 		WSHIfObj(L"Complement", false),
 		m_sCurrentWord(curWord),
@@ -97,7 +97,7 @@ public:
 					return false;
 				}
 				std::wstring strWord = std::wstring(word, nWordLen);
-				if (CHokanMgr::AddKouhoUnique(m_pHokanMgr->m_vKouho, strWord)) {
+				if (HokanMgr::AddKouhoUnique(m_pHokanMgr->m_vKouho, strWord)) {
 					Wrap(&Result)->Receive(m_pHokanMgr->m_vKouho.size());
 				}else {
 					Wrap(&Result)->Receive(-1);
@@ -116,7 +116,7 @@ public:
 	// メンバ変数
 private:
 	std::wstring m_sCurrentWord;
-	CHokanMgr* m_pHokanMgr;
+	HokanMgr* m_pHokanMgr;
 	int m_nOption; // 0x01 == IgnoreCase
 
 private:

@@ -37,15 +37,15 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       外部コマンド                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class COutputAdapterDefault: public OutputAdapter
+class OutputAdapterDefault: public OutputAdapter
 {
 public:
-	COutputAdapterDefault(EditView* view, BOOL bToEditWindow) : m_bWindow(bToEditWindow), m_view(view)
+	OutputAdapterDefault(EditView* view, BOOL bToEditWindow) : m_bWindow(bToEditWindow), m_view(view)
 	{
 		m_pCShareData = ShareData::getInstance();
 		m_pCommander  = &(view->GetCommander());
 	}
-	~COutputAdapterDefault(){};
+	~OutputAdapterDefault(){};
 
 	bool OutputW(const WCHAR* pBuf, int size = -1);
 	bool OutputA(const ACHAR* pBuf, int size = -1);
@@ -60,13 +60,13 @@ protected:
 	ViewCommander*	m_pCommander;
 };
 
-class COutputAdapterUTF8: public COutputAdapterDefault
+class OutputAdapterUTF8: public OutputAdapterDefault
 {
 public:
-	COutputAdapterUTF8(EditView* view, BOOL bToEditWindow) : COutputAdapterDefault(view, bToEditWindow)
+	OutputAdapterUTF8(EditView* view, BOOL bToEditWindow) : OutputAdapterDefault(view, bToEditWindow)
 		,pcCodeBase(CodeFactory::CreateCodeBase(CODE_UTF8,0))
 	{}
-	~COutputAdapterUTF8(){};
+	~OutputAdapterUTF8(){};
 
 	bool OutputA(const ACHAR* pBuf, int size = -1);
 
@@ -294,8 +294,8 @@ bool EditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt, const TCHAR* pszCurDir
 		oaInst =  (customOa
 					? NULL
 					: (outputEncoding == CODE_UTF8
-						? new COutputAdapterUTF8(this, bToEditWindow)
-						: new COutputAdapterDefault(this, bToEditWindow)) );
+						? new OutputAdapterUTF8(this, bToEditWindow)
+						: new OutputAdapterDefault(this, bToEditWindow)) );
 		OutputAdapter& oa = customOa ? *customOa: *oaInst;
 
 		// 中断ダイアログ表示
@@ -616,7 +616,7 @@ finish:
 	@param pBuf size未指定なら要NUL終端
 	@param size WCHAR単位 
 */
-void COutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
+void OutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 {
 	if (m_bWindow) {
 		m_pCommander->Command_INSTEXT(false, pBuf, LogicInt(size), true);
@@ -625,7 +625,7 @@ void COutputAdapterDefault::OutputBuf(const WCHAR* pBuf, int size)
 	}
 }
 
-bool COutputAdapterDefault::OutputW(const WCHAR* pBuf, int size)
+bool OutputAdapterDefault::OutputW(const WCHAR* pBuf, int size)
 {
 	OutputBuf(pBuf, size);
 	return true;
@@ -635,7 +635,7 @@ bool COutputAdapterDefault::OutputW(const WCHAR* pBuf, int size)
 	@param pBuf size未指定なら要NUL終端
 	@param size ACHAR単位 
 */
-bool COutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
+bool OutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
 {
 	NativeW buf;
 	if (size == -1) {
@@ -651,7 +651,7 @@ bool COutputAdapterDefault::OutputA(const ACHAR* pBuf, int size)
 	@param pBuf size未指定なら要NUL終端
 	@param size ACHAR単位 
 */
-bool COutputAdapterUTF8::OutputA(const ACHAR* pBuf, int size)
+bool OutputAdapterUTF8::OutputA(const ACHAR* pBuf, int size)
 {
 	Memory input;
 	NativeW buf;

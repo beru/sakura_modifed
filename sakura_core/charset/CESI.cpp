@@ -79,7 +79,7 @@ static const int gm_aMbcPriority[] =
 /*!
 	デフォルトコンストラクタ
 */
-void CESI::SetInformation(const char* pS, const int nLen)
+void ESI::SetInformation(const char* pS, const int nLen)
 {
 	// 文字情報を収集
 	ScanCode(pS, nLen);
@@ -95,7 +95,7 @@ void CESI::SetInformation(const char* pS, const int nLen)
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo 用の添え字が，
 	それ以外の場合は m_pMbInfo 用の添え字が返却される。
 */
-int CESI::GetIndexById(const ECodeType eCodeType) const
+int ESI::GetIndexById(const ECodeType eCodeType) const
 {
 	int nret;
 	if (eCodeType == CODE_UNICODE) {
@@ -115,7 +115,7 @@ int CESI::GetIndexById(const ECodeType eCodeType) const
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo へ，
 	それ以外の場合は m_pMbInfo へ値が格納されることに注意。
 */
-void CESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
+void ESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 {
 	struct tagEncodingInfo* pcEI;
 
@@ -140,7 +140,7 @@ void CESI::SetEvaluation(const ECodeType eCodeId, const int v1, const int v2)
 	　nCodeType が CODE_UNICODE, CODE_UNICODEBE の場合は m_pWcInfo から，
 	それ以外の場合は m_pMbInfo から値が取得されることに注意。
 */
-void CESI::GetEvaluation(const ECodeType eCodeId, int* pv1, int* pv2) const
+void ESI::GetEvaluation(const ECodeType eCodeId, int* pv1, int* pv2) const
 {
 	const struct tagEncodingInfo* pcEI;
 
@@ -164,7 +164,7 @@ void CESI::GetEvaluation(const ECodeType eCodeId, int* pv1, int* pv2) const
 	m_pMbInfo に格納される文字コード情報の元々の順番は、m_pMbPriority[] テーブルの添え字に従う。
 	バブルソートは、元あった順序を比較的変更しない。
 */
-void CESI::SortMBCInfo(void)
+void ESI::SortMBCInfo(void)
 {
 	/*
 		「特有バイト数 － 不正バイト数＝ポイント数 (.nPoints)」の数の大きい順にソート（バブルソート）
@@ -188,7 +188,7 @@ void CESI::SortMBCInfo(void)
 /*!
 	SJIS の文字コード判定情報を収集する
 */
-void CESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_SJIS, 0, 0);
@@ -238,7 +238,7 @@ void CESI::GetEncodingInfo_sjis(const char* pS, const int nLen)
 /*!
 	JIS の文字コード判定情報を収集する
 */
-void CESI::GetEncodingInfo_jis(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_jis(const char* pS, const int nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_JIS, 0, 0);
@@ -287,7 +287,7 @@ void CESI::GetEncodingInfo_jis(const char* pS, const int nLen)
 /*!
 	EUC-JP の文字コード判定情報を収集する
 */
-void CESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 {
 	int nret;
 	ECharSet echarset;
@@ -317,7 +317,7 @@ void CESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 				}else {
 					bool bRet;
 					unsigned short wc[4];
-					CEuc::_EucjpToUni_char(reinterpret_cast<const unsigned char*>(pr), wc, echarset, NULL, &bRet);
+					Euc::_EucjpToUni_char(reinterpret_cast<const unsigned char*>(pr), wc, echarset, NULL, &bRet);
 					if (bRet) {
 						nillbytes += nret;
 					}
@@ -347,7 +347,7 @@ void CESI::GetEncodingInfo_eucjp(const char* pS, const int nLen)
 	@note
 	　1 バイト以上のエラー（いわゆる ill-formed）が見つかれば UTF-7 と判定されない。
 */
-void CESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
 {
 	char* pr_next;
 	int nlen_setb;
@@ -411,7 +411,7 @@ void CESI::GetEncodingInfo_utf7(const char* pS, const int nLen)
 /*!
 	UTF-8 の文字コード判定情報を収集する
 */
-void CESI::GetEncodingInfo_utf8(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_utf8(const char* pS, const int nLen)
 {
 	int nret;
 	ECharSet echarset;
@@ -449,7 +449,7 @@ void CESI::GetEncodingInfo_utf8(const char* pS, const int nLen)
 /*!
 	CESU-8 の文字コード判定情報を収集する
 */
-void CESI::GetEncodingInfo_cesu8(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_cesu8(const char* pS, const int nLen)
 {
 	if (nLen < 1 || !pS) {
 		SetEvaluation(CODE_CESU8, 0, 0);
@@ -490,7 +490,7 @@ void CESI::GetEncodingInfo_cesu8(const char* pS, const int nLen)
 	@note
 	　必ずFalse。
 */
-void CESI::GetEncodingInfo_latin1(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_latin1(const char* pS, const int nLen)
 {
 	SetEvaluation(CODE_LATIN1, 0, - nLen);
 	return;
@@ -499,7 +499,7 @@ void CESI::GetEncodingInfo_latin1(const char* pS, const int nLen)
 
 
 
-void CESI::GetEncodingInfo_meta( const char* pS, const int nLen )
+void ESI::GetEncodingInfo_meta( const char* pS, const int nLen )
 {
 	// XML宣言は先頭にあるので、最初にチェック
 	ECodeType encoding = AutoDetectByXML( pS, nLen );
@@ -518,7 +518,7 @@ void CESI::GetEncodingInfo_meta( const char* pS, const int nLen )
 /*!
 	UTF-16 チェッカ内で使う改行コード確認関数
 */
-bool CESI::_CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian)
+bool ESI::_CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian)
 {
 	wchar_t wc0;
 	wchar_t wc1;
@@ -556,7 +556,7 @@ bool CESI::_CheckUtf16Eol(const char* pS, const int nLen, const bool bbig_endian
 	@note 改行文字を数える。ついでに ASCII 版の改行コードも数える。
 	　nLen は２で割り切れるものが入ってくることを仮定。
 */
-void CESI::GetEncodingInfo_uni(const char* pS, const int nLen)
+void ESI::GetEncodingInfo_uni(const char* pS, const int nLen)
 {
 	const char *pr1, *pr2, *pr_end;
 	int nillbytes1, nillbytes2;
@@ -650,7 +650,7 @@ void CESI::GetEncodingInfo_uni(const char* pS, const int nLen)
 
 	@return 入力データがない時に false
 */
-void CESI::ScanCode(const char* pS, const int nLen)
+void ESI::ScanCode(const char* pS, const int nLen)
 {
 	// 対象となったデータ長を記録。
 	SetDataLen(nLen);
@@ -682,7 +682,7 @@ void CESI::ScanCode(const char* pS, const int nLen)
 	@retval CESI_BOMTYPE_UTF16BE   Big-Endian(BE)
 	@retval CESI_BOMTYPE_UNKNOWN   不明
 */
-void CESI::GuessUtf16Bom(void)
+void ESI::GuessUtf16Bom(void)
 {
 	int i = m_aWcInfo[ESI_WCIDX_UTF16LE].nSpecific;  // UTF-16 LE の改行の個数
 	int j = m_aWcInfo[ESI_WCIDX_UTF16BE].nSpecific;  // UTF-16 BE の改行の個数
@@ -710,7 +710,7 @@ void CESI::GuessUtf16Bom(void)
 
 	m_bEucFlag が TRUE のとき EUC, FALSE のとき SJIS
 */
-void CESI::GuessEucOrSjis(void)
+void ESI::GuessEucOrSjis(void)
 {
 	if (IsAmbiguousEucAndSjis()
 	 && static_cast<double>(m_nMbcEucZenHirakata) / m_nMbcEucZen >= 0.25
@@ -737,7 +737,7 @@ void CESI::GuessEucOrSjis(void)
 
 	m_bCesu8Flag が TRUE のとき CESU-8, FALSE のとき UTF-8
 */
-void CESI::GuessUtf8OrCesu8(void)
+void ESI::GuessUtf8OrCesu8(void)
 {
 	if (IsAmbiguousUtf8AndCesu8()
 	 && m_pEncodingConfig->m_bPriorCesu8) {
@@ -896,7 +896,7 @@ static bool IsXMLWhiteSpace( int c )
 /*!	ファイル中のエンコーディング指定を利用した文字コード自動選択
  *	@return	決定した文字コード。 未決定は-1を返す
 */
-ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
+ECodeType ESI::AutoDetectByXML( const char* pBuf, int nSize )
 {
 
 	// ASCII comportible encoding XML
@@ -977,7 +977,7 @@ ECodeType CESI::AutoDetectByXML( const char* pBuf, int nSize )
 
 
 
-ECodeType CESI::AutoDetectByHTML( const char* pBuf, int nSize )
+ECodeType ESI::AutoDetectByHTML( const char* pBuf, int nSize )
 {
 	for (int i=0; i+14<nSize; ++i) {
 		// 「<meta http-equiv="Content-Type" content="text/html; Charset=Shift_JIS">」
@@ -1123,7 +1123,7 @@ static bool IsEncodingNameChar( int c )
 /* コーディング文字列の識別
 「# coding: utf-8」等を取得する
 */
-ECodeType CESI::AutoDetectByCoding( const char* pBuf, int nSize )
+ECodeType ESI::AutoDetectByCoding( const char* pBuf, int nSize )
 {
 	bool bComment = false;
 	int nLineNum = 1;
@@ -1175,13 +1175,13 @@ ECodeType CESI::AutoDetectByCoding( const char* pBuf, int nSize )
 
 	@param[out] pcmtxtOut 出力は、このポインタが指すオブジェクトに追加される。
 */
-void CESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
+void ESI::GetDebugInfo(const char* pS, const int nLen, CNativeT* pcmtxtOut)
 {
 	TCHAR szWork[10240];
 	int v1, v2, v3, v4;
 
 	EditDoc& doc = *EditWnd::getInstance()->GetDocument();
-	CESI cesi(doc.m_cDocType.GetDocumentAttribute().m_encoding);
+	ESI cesi(doc.m_cDocType.GetDocumentAttribute().m_encoding);
 
 	// テスト実行
 	cesi.SetInformation(pS, nLen/*, CODE_SJIS*/);

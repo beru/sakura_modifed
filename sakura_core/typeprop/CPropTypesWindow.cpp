@@ -86,7 +86,7 @@ static const EEolType aeEolType[] = {
 };
 
 // window メッセージ処理
-INT_PTR CPropTypesWindow::DispatchEvent(
+INT_PTR PropTypesWindow::DispatchEvent(
 	HWND	hwndDlg,	// handle to dialog box
 	UINT	uMsg,		// message
 	WPARAM	wParam,		// first message parameter
@@ -228,7 +228,7 @@ INT_PTR CPropTypesWindow::DispatchEvent(
 }
 
 
-void CPropTypesWindow::SetCombobox(
+void PropTypesWindow::SetCombobox(
 	HWND hwndWork,
 	const int* nIds,
 	int nCount,
@@ -244,7 +244,7 @@ void CPropTypesWindow::SetCombobox(
 
 
 // ダイアログデータの設定 window
-void CPropTypesWindow::SetData(HWND hwndDlg)
+void PropTypesWindow::SetData(HWND hwndDlg)
 {
 	{
 		// 文書アイコンを使う	// Sep. 10, 2002 genta
@@ -419,7 +419,7 @@ void CPropTypesWindow::SetData(HWND hwndDlg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ダイアログデータの取得 color
-int CPropTypesWindow::GetData(HWND hwndDlg)
+int PropTypesWindow::GetData(HWND hwndDlg)
 {
 	{
 		// 文書アイコンを使う	// Sep. 10, 2002 genta
@@ -506,7 +506,7 @@ int CPropTypesWindow::GetData(HWND hwndDlg)
 //	From Here Sept. 10, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
-void CPropTypesWindow::EnableTypesPropInput(HWND hwndDlg)
+void PropTypesWindow::EnableTypesPropInput(HWND hwndDlg)
 {
 	//	行番号区切りを任意の半角文字にするかどうか
 	if (DlgButton_IsChecked(hwndDlg, IDC_RADIO_LINETERMTYPE2)) {

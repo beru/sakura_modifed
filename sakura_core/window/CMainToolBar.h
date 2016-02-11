@@ -29,9 +29,9 @@
 class EditWnd;
 class ImageListMgr;
 
-class CMainToolBar {
+class MainToolBar {
 public:
-	CMainToolBar(EditWnd* pOwner);
+	MainToolBar(EditWnd* pOwner);
 
 	void Create(ImageListMgr* pcIcons);
 

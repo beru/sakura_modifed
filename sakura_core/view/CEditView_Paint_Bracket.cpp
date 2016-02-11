@@ -190,10 +190,10 @@ void EditView::DrawBracketPair(bool bDraw)
 						break;
 					}
 				}
-				CTypeSupport    cCuretLineBg(this, COLORIDX_CARETLINEBG);
+				TypeSupport    cCuretLineBg(this, COLORIDX_CARETLINEBG);
 				EColorIndexType nColorIndexBg = (cCuretLineBg.IsDisp() && ptColLine.GetY2() == GetCaret().GetCaretLayoutPos().GetY2()
 					? COLORIDX_CARETLINEBG
-					: CTypeSupport(this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
+					: TypeSupport(this, COLORIDX_EVENLINEBG).IsDisp() && ptColLine.GetY2() % 2 == 1
 						? COLORIDX_EVENLINEBG
 						: COLORIDX_TEXT);
 				// 03/03/03 ai カーソルの左に括弧があり括弧が強調表示されている状態でShift+←で選択開始すると
@@ -213,12 +213,12 @@ void EditView::DrawBracketPair(bool bDraw)
 					LayoutInt charsWidth = NativeW::GetKetaOfChar(pLine, nLineLen, OutputX);
 
 					// 色設定
-					CTypeSupport cTextType(this, COLORIDX_TEXT);
+					TypeSupport cTextType(this, COLORIDX_TEXT);
 					cTextType.SetGraphicsState_WhileThisObj(gr);
 					// 2013.05.24 背景色がテキストの背景色と同じならカーソル行の背景色を適用
-					CTypeSupport cColorIndexType(this, nColorIndex);
-					CTypeSupport cColorIndexBgType(this, nColorIndexBg);
-					CTypeSupport* pcColorBack = &cColorIndexType;
+					TypeSupport cColorIndexType(this, nColorIndex);
+					TypeSupport cColorIndexBgType(this, nColorIndexBg);
+					TypeSupport* pcColorBack = &cColorIndexType;
 					if (cColorIndexType.GetBackColor() == cTextType.GetBackColor() && nColorIndexBg != COLORIDX_TEXT) {
 						pcColorBack = &cColorIndexBgType;
 					}

@@ -5,10 +5,10 @@
 #include "types/CTypeSupport.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CFigure_HanSpace                        //
+//                     Figure_HanSpace                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_HanSpace::Match(const wchar_t* pText, int nTextLen) const
+bool Figure_HanSpace::Match(const wchar_t* pText, int nTextLen) const
 {
 	return (pText[0] == L' ');
 }
@@ -19,7 +19,7 @@ bool CFigure_HanSpace::Match(const wchar_t* pText, int nTextLen) const
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 半角スペース描画
-void CFigure_HanSpace::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
+void Figure_HanSpace::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	Rect rcClip;

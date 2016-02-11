@@ -25,9 +25,9 @@
 
 #include "CCodeBase.h"
 
-class CJis : public CodeBase {
+class Jis : public CodeBase {
 public:
-	CJis(bool base64decode = true) : m_base64decode(base64decode) { }
+	Jis(bool base64decode = true) : m_base64decode(base64decode) { }
 public:
 	// CodeBaseインターフェース
 	EConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return JISToUnicode(cSrc, pDst, m_base64decode); }	//!< 特定コード → UNICODE    変換

@@ -34,8 +34,8 @@ class Color_LineComment : public ColorStrategy {
 public:
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_COMMENT; }
 	virtual void InitStrategyStatus() {}
-	virtual bool BeginColor(const CStringRef& cStr, int nPos);
-	virtual bool EndColor(const CStringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& cStr, int nPos);
+	virtual bool EndColor(const StringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }
 };
 
@@ -55,8 +55,8 @@ public:
 	}
 	virtual EColorIndexType GetStrategyColor() const { return m_nType; }
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
-	virtual bool BeginColor(const CStringRef& cStr, int nPos);
-	virtual bool EndColor(const CStringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& cStr, int nPos);
+	virtual bool EndColor(const StringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp; }
 private:
 	EColorIndexType m_nType;

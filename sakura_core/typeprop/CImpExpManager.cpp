@@ -120,7 +120,7 @@ static wchar_t* MakeExportFileName(wchar_t* res, const wchar_t* trg, const wchar
 }
 
 // インポート ファイル指定付き
-bool CImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
+bool ImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 {
 	// ファイルオープンダイアログの初期化
 	DlgOpenFile cDlgOpenFile;
@@ -167,7 +167,7 @@ bool CImpExpManager::ImportUI(HINSTANCE hInstance, HWND hwndParent)
 }
 
 // エクスポート ファイル指定付き
-bool CImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
+bool ImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
 {
 	// ファイルオープンダイアログの初期化
 	DlgOpenFile cDlgOpenFile;
@@ -206,24 +206,24 @@ bool CImpExpManager::ExportUI(HINSTANCE hInstance, HWND hwndParent)
 }
 
 // インポート確認
-bool CImpExpManager::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpManager::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wstring& sFileName, wstring& sErrMsg)
 {
 	return true;
 }
 
 // デフォルト拡張子の取得
-const TCHAR* CImpExpManager::GetDefaultExtension()
+const TCHAR* ImpExpManager::GetDefaultExtension()
 {
 	return _T("");
 }
 
-const wchar_t* CImpExpManager::GetOriginExtension()
+const wchar_t* ImpExpManager::GetOriginExtension()
 {
 	return L"";
 }
 
 // ファイル名の初期値を設定
-void CImpExpManager::SetBaseName(const wstring& sBase)
+void ImpExpManager::SetBaseName(const wstring& sBase)
 {
 	wchar_t wbuff[_MAX_PATH + 1];
 	m_sBase = sBase;
@@ -234,7 +234,7 @@ void CImpExpManager::SetBaseName(const wstring& sBase)
 //                          タイプ別設定                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート確認
-bool CImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring sPath = to_tchar(sFileName.c_str());
 	m_cProfile.SetReadingMode();
@@ -264,8 +264,8 @@ bool CImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const ws
 	}
 
 	// 確認＆色指定
-	CDlgTypeAscertain::AscertainInfo sAscertainInfo;
-	CDlgTypeAscertain cDlgTypeAscertain;
+	DlgTypeAscertain::AscertainInfo sAscertainInfo;
+	DlgTypeAscertain cDlgTypeAscertain;
 	wchar_t wszLabel[1024];
 	TypeConfig TmpType;
 
@@ -290,7 +290,7 @@ bool CImpExpType::ImportAscertain(HINSTANCE hInstance, HWND hwndParent, const ws
 }
 
 // インポート
-bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	wstring	files = L"";
 	wstring TmpMsg;
@@ -299,7 +299,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	// 色の変更
 	if (m_nColorType >= MAX_TYPES) {
 		// 色設定インポート
-		CImpExpColors	cImpExpColors(colorInfoArr);
+		ImpExpColors	cImpExpColors(colorInfoArr);
 		if (cImpExpColors.Import(cImpExpColors.MakeFullPath(m_sColorFile), TmpMsg)) {
 			files += wstring(L"\n") + m_sColorFile;
 		}else {
@@ -310,7 +310,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 	}else if (m_nColorType >= 0) {
 		// 色指定(内部)
 		TypeConfig type;
-		DocTypeManager().GetTypeConfig(CTypeConfig(m_nColorType), type);
+		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nColorType), type);
 		memcpy(&colorInfoArr, type.m_ColorInfoArr, sizeof(colorInfoArr));
 	}
 
@@ -367,7 +367,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 				m_cProfile.IOProfileData(szSecTypeEx, szKeyName, bCase);
 
 				// キーワード定義ファイル入力
-				CImpExpKeyWord	cImpExpKeyWord(common, nIdx, bCase);
+				ImpExpKeyWord	cImpExpKeyWord(common, nIdx, bCase);
 
 				auto_sprintf_s(szKeyName, szKeyKeywordFileTemp, i + 1);
 				szFileName[0] = L'\0';
@@ -435,7 +435,7 @@ bool CImpExpType::Import(const wstring& sFileName, wstring& sErrMsg)
 
 
 // エクスポート
-bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	DataProfile cProfile;
 
@@ -464,7 +464,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 			bool bCase = cKeyWordSetMgr.GetKeyWordCase(nIdx);
 
 			// キーワード定義ファイル出力
-			CImpExpKeyWord	cImpExpKeyWord(common, m_Types.m_nKeyWordSetIdx[i], bCase);
+			ImpExpKeyWord	cImpExpKeyWord(common, m_Types.m_nKeyWordSetIdx[i], bCase);
 			cImpExpKeyWord.SetBaseName(cKeyWordSetMgr.GetTypeName(nIdx));
 
 			if (cImpExpKeyWord.Export(cImpExpKeyWord.GetFullPath(), sTmpMsg)) {
@@ -537,7 +537,7 @@ bool CImpExpType::Export(const wstring& sFileName, wstring& sErrMsg)
 //                          カラー                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート
-bool CImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -579,7 +579,7 @@ bool CImpExpColors::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	// 色設定 I/O
 	DataProfile cProfile;
@@ -598,7 +598,7 @@ bool CImpExpColors::Export(const wstring& sFileName, wstring& sErrMsg)
 //                    正規表現キーワード                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート
-bool CImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	TextInputStream in(to_tchar(sFileName.c_str()));
 	if (!in) {
@@ -678,7 +678,7 @@ bool CImpExpRegex::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	TextOutputStream out(to_tchar(sFileName.c_str()));
 	if (!out) {
@@ -713,7 +713,7 @@ bool CImpExpRegex::Export(const wstring& sFileName, wstring& sErrMsg)
 /*! インポート
 	@date 2010.07.14 Moca ListViewへの設定からm_Typesへの設定に変更
 */
-bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	wchar_t msgBuff[_MAX_PATH + 1];
 	TextInputStream in(to_tchar(sFileName.c_str()));
@@ -824,7 +824,7 @@ bool CImpExpKeyHelp::Import(const wstring& sFileName, wstring& sErrMsg)
 /*! エクスポート
 	@date 2010.07.14 Moca ListViewからm_Typesからのエクスポートに変更
 */
-bool CImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	TextOutputStream out(to_tchar(sFileName.c_str()));
 	if (!out) {
@@ -851,7 +851,7 @@ bool CImpExpKeyHelp::Export(const wstring& sFileName, wstring& sErrMsg)
 //                     キー割り当て                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート
-bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 	const int KEYNAME_SIZE = _countof(m_Common.m_sKeyBind.m_pKeyNameArr) - 1; // 最後の１要素はダミー用に予約 2012.11.25 aroka
@@ -945,8 +945,8 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 					*q = L'\0';
 
 					// 機能名を数値に置き換える。(数値の機能名もあるかも)
-					// @@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
-					EFunctionCode n = CSMacroMgr::GetFuncInfoByName(G_AppInstance(), p, NULL);
+					// @@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
+					EFunctionCode n = SMacroMgr::GetFuncInfoByName(G_AppInstance(), p, NULL);
 					if (n == F_INVALID) {
 						if (WCODE::Is09(*p)) {
 							n = (EFunctionCode)auto_atol(p);
@@ -1005,7 +1005,7 @@ bool CImpExpKeybind::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1045,7 +1045,7 @@ bool CImpExpKeybind::Export(const wstring& sFileName, wstring& sErrMsg)
 //                     カスタムメニュー                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート
-bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1074,7 +1074,7 @@ bool CImpExpCustMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1117,7 +1117,7 @@ bool CImpExpCustMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 //                     強調キーワード                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // インポート
-bool CImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	bool bAddError = false;
 
@@ -1165,7 +1165,7 @@ bool CImpExpKeyWord::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	int nKeyWordNum;
 
@@ -1204,7 +1204,7 @@ bool CImpExpKeyWord::Export(const wstring& sFileName, wstring& sErrMsg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //	2010/5/23 Uchi
 // インポート
-bool CImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1233,7 +1233,7 @@ bool CImpExpMainMenu::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpMainMenu::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpMainMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1274,7 +1274,7 @@ bool CImpExpMainMenu::Export(const wstring& sFileName, wstring& sErrMsg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //	2014.06.07 Moca
 // インポート
-bool CImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1288,7 +1288,7 @@ bool CImpExpFileTree::Import(const wstring& sFileName, wstring& sErrMsg)
 }
 
 // エクスポート
-bool CImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
+bool ImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 {
 	const tstring strPath = to_tchar(sFileName.c_str());
 
@@ -1308,7 +1308,7 @@ bool CImpExpFileTree::Export(const wstring& sFileName, wstring& sErrMsg)
 	return true;
 }
 
-void CImpExpFileTree::IO_FileTreeIni( DataProfile& cProfile, std::vector<FileTreeItem>& data )
+void ImpExpFileTree::IO_FileTreeIni( DataProfile& cProfile, std::vector<FileTreeItem>& data )
 {
 	const WCHAR* pszSecName = L"FileTree";
 	int nItemCount = (int)data.size();

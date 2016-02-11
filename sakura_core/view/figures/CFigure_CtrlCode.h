@@ -26,7 +26,7 @@
 #include "view/figures/CFigureStrategy.h"
 
 // コントロールコード描画
-class CFigure_CtrlCode : public CFigureSpace {
+class Figure_CtrlCode : public FigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText, int nTextLen) const;
@@ -37,7 +37,7 @@ public:
 };
 
 // バイナリ半角描画
-class CFigure_HanBinary : public CFigureSpace {
+class Figure_HanBinary : public FigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText, int nTextLen) const;
@@ -48,7 +48,7 @@ public:
 };
 
 // バイナリ全角描画
-class CFigure_ZenBinary : public CFigureSpace {
+class Figure_ZenBinary : public FigureSpace {
 public:
 	// traits
 	bool Match(const wchar_t* pText, int nTextLen) const;

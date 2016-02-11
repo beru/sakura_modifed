@@ -471,8 +471,8 @@ void Macro::Save(HINSTANCE hInstance, TextOutputStream& out) const
 	NativeW		cmemWork;
 	int nFuncID = m_nFuncID;
 
-	// 2002.2.2 YAZAKI CSMacroMgrに頼む
-	if (CSMacroMgr::GetFuncInfoByID( hInstance, nFuncID, szFuncName, szFuncNameJapanese)){
+	// 2002.2.2 YAZAKI SMacroMgrに頼む
+	if (SMacroMgr::GetFuncInfoByID( hInstance, nFuncID, szFuncName, szFuncNameJapanese)){
 		// 2014.01.24 Moca マクロ書き出しをm_eTypeを追加して統合
 		out.WriteF( L"S_%ls(", szFuncName );
 		MacroParam* pParam = m_pParamTop;
@@ -1898,7 +1898,7 @@ bool Macro::HandleFunction(
 			if (VariantChangeType(&varCopy.data, const_cast<VARIANTARG*>(&(args[0])), 0, VT_UI4) != S_OK) {
 				return false;	// VT_UI4として解釈
 			}
-			CWaitCursor cWaitCursor(view->GetHwnd());	// カーソルを砂時計にする
+			WaitCursor cWaitCursor(view->GetHwnd());	// カーソルを砂時計にする
 			::Sleep(varCopy.data.uintVal);
 			Wrap(&result)->Receive(0);	// 戻り値は今のところ0固定
 		}
@@ -2327,7 +2327,7 @@ bool Macro::HandleFunction(
 					varCopy4.data.lVal = -1;
 				}
 				Clipboard cClipboard(view->GetHwnd());
-				CStringRef cstr(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
+				StringRef cstr(varCopy.data.bstrVal, ::SysStringLen(varCopy.data.bstrVal));
 				bool bret = cClipboard.SetClipboradByFormat(cstr, varCopy2.data.bstrVal, varCopy3.data.lVal, varCopy4.data.lVal);
 				Wrap(&result)->Receive(bret ? 1 : 0);
 				return true;

@@ -34,15 +34,15 @@ public:
 	DocTypeManager() {
 		m_pShareData = &GetDllShareData();
 	}
-	CTypeConfig GetDocumentTypeOfPath(const TCHAR* pszFilePath);	// ファイルパスを渡して、ドキュメントタイプ（数値）を取得する
-	CTypeConfig GetDocumentTypeOfExt(const TCHAR* pszExt);		// 拡張子を渡して、ドキュメントタイプ（数値）を取得する
-	CTypeConfig GetDocumentTypeOfId(int id);
+	TypeConfigNum GetDocumentTypeOfPath(const TCHAR* pszFilePath);	// ファイルパスを渡して、ドキュメントタイプ（数値）を取得する
+	TypeConfigNum GetDocumentTypeOfExt(const TCHAR* pszExt);		// 拡張子を渡して、ドキュメントタイプ（数値）を取得する
+	TypeConfigNum GetDocumentTypeOfId(int id);
 
-	bool GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type);
-	bool SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig& type);
-	bool GetTypeConfigMini(CTypeConfig cDocumentType, const TypeConfigMini** type);
-	bool AddTypeConfig(CTypeConfig cDocumentType);
-	bool DelTypeConfig(CTypeConfig cDocumentType);
+	bool GetTypeConfig(TypeConfigNum cDocumentType, TypeConfig& type);
+	bool SetTypeConfig(TypeConfigNum cDocumentType, const TypeConfig& type);
+	bool GetTypeConfigMini(TypeConfigNum cDocumentType, const TypeConfigMini** type);
+	bool AddTypeConfig(TypeConfigNum cDocumentType);
+	bool DelTypeConfig(TypeConfigNum cDocumentType);
 
 	static bool IsFileNameMatch(const TCHAR* pszTypeExts, const TCHAR* pszFileName);	// タイプ別拡張子にファイル名がマッチするか
 	static void GetFirstExt(const TCHAR* pszTypeExts, TCHAR szFirstExt[], int nBuffSize);	// タイプ別拡張子の先頭拡張子を取得する

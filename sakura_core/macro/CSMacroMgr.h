@@ -55,7 +55,7 @@ struct MacroFuncInfoEx {
 };
 
 // マクロ関数情報構造体
-// 関数名はCSMacroMgrが持つ
+// 関数名はSMacroMgrが持つ
 struct MacroFuncInfo {
 	int				m_nFuncID;
 	const WCHAR*	m_pszFuncName;
@@ -71,7 +71,7 @@ typedef MacroFuncInfo* MacroFuncInfoArray;
 
 @date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 -----------------------------------------------------------------------*/
-class CSMacroMgr {
+class SMacroMgr {
 	// データの型宣言
 	MacroManagerBase* m_cSavedKeyMacro[MAX_CUSTMACRO];	// キーマクロをカスタムメニューの数だけ管理
 	// Jun. 16, 2002 genta
@@ -86,8 +86,8 @@ public:
 	/*
 	||  Constructors
 	*/
-	CSMacroMgr();
-	~CSMacroMgr();
+	SMacroMgr();
+	~SMacroMgr();
 
 	/*
 	||  Attributes & Operations
@@ -175,6 +175,6 @@ public:
 	static MacroFuncInfo	m_MacroFuncInfoArr[];		// 関数情報(戻り値あり)
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CSMacroMgr);
+	DISALLOW_COPY_AND_ASSIGN(SMacroMgr);
 };
 

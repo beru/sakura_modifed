@@ -49,12 +49,12 @@ static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
 	0, 0
 };
 
-LPVOID CDlgSameColor::GetHelpIdTable(void)
+LPVOID DlgSameColor::GetHelpIdTable(void)
 {
 	return (LPVOID)p_helpids;
 }
 
-CDlgSameColor::CDlgSameColor() :
+DlgSameColor::DlgSameColor() :
 	m_wpColorStaticProc(NULL),
 	m_wpColorListProc(NULL),
 	m_wID(0),
@@ -64,7 +64,7 @@ CDlgSameColor::CDlgSameColor() :
 	return;
 }
 
-CDlgSameColor::~CDlgSameColor()
+DlgSameColor::~DlgSameColor()
 {
 	return;
 }
@@ -72,7 +72,7 @@ CDlgSameColor::~CDlgSameColor()
 /*!
 	標準以外のメッセージを捕捉する
 */
-INT_PTR CDlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR DlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
 	INT_PTR result;
 	result = Dialog::DispatchEvent(hWnd, wMsg, wParam, lParam);
@@ -110,7 +110,7 @@ INT_PTR CDlgSameColor::DispatchEvent(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM
 
 	@date 2006.04.26 ryoji 新規作成
 */
-int CDlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
+int DlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeConfig* pTypes, COLORREF cr)
 {
 	m_wID = wID;
 	m_pTypes = pTypes;
@@ -124,7 +124,7 @@ int CDlgSameColor::DoModal(HINSTANCE hInstance, HWND hwndParent, WORD wID, TypeC
 /*! WM_INITDIALOG 処理
 	@date 2006.04.26 ryoji 新規作成
 */
-BOOL CDlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
+BOOL DlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRet = Dialog::OnInitDialog(hwndDlg, wParam, lParam);
 
@@ -192,7 +192,7 @@ BOOL CDlgSameColor::OnInitDialog(HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 /*! BN_CLICKED 処理
 	@date 2006.04.26 ryoji 新規作成
 */
-BOOL CDlgSameColor::OnBnClicked(int wID)
+BOOL DlgSameColor::OnBnClicked(int wID)
 {
 	HWND hwndList = GetItemHwnd(IDC_LIST_COLORS);
 	int nItemNum = List_GetCount(hwndList);
@@ -261,7 +261,7 @@ BOOL CDlgSameColor::OnBnClicked(int wID)
 /*! WM_DRAWITEM 処理
 	@date 2006.04.26 ryoji 新規作成
 */
-BOOL CDlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
+BOOL DlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 {
 	LPDRAWITEMSTRUCT pDis = (LPDRAWITEMSTRUCT)lParam;	// 項目描画情報
 	if (IDC_LIST_COLORS != pDis->CtlID) {	// オーナー描画にしているのは色選択リストだけ
@@ -327,7 +327,7 @@ BOOL CDlgSameColor::OnDrawItem(WPARAM wParam, LPARAM lParam)
 /*! 色選択リストの LBN_SELCHANGE 処理
 	@date 2006.05.01 ryoji 新規作成
 */
-BOOL CDlgSameColor::OnSelChangeListColors(HWND hwndCtl)
+BOOL DlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 {
 	// 色選択リストで現在フォーカスのある色について
 	// タイプ別設定から同色の項目を取り出して項目リストに表示する
@@ -375,12 +375,12 @@ BOOL CDlgSameColor::OnSelChangeListColors(HWND hwndCtl)
 /*! サブクラス化された指定色スタティックのウィンドウプロシージャ
 	@date 2006.04.26 ryoji 新規作成
 */
-LRESULT CALLBACK CDlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK DlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC		hDC;
 	RECT	rc;
 
-	CDlgSameColor* pCDlgSameColor = (CDlgSameColor*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	DlgSameColor* pCDlgSameColor = (DlgSameColor*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 	switch (uMsg) {
 	case WM_PAINT:
@@ -434,14 +434,14 @@ LRESULT CALLBACK CDlgSameColor::ColorStatic_SubclassProc(HWND hwnd, UINT uMsg, W
 /*! サブクラス化された色選択リストのウィンドウプロシージャ
 	@date 2006.04.26 ryoji 新規作成
 */
-LRESULT CALLBACK CDlgSameColor::ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK DlgSameColor::ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	POINT po;
 	RECT rcItem;
 	RECT rc;
 	int nItemNum;
 
-	CDlgSameColor* pCDlgSameColor = (CDlgSameColor*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	DlgSameColor* pCDlgSameColor = (DlgSameColor*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 	switch (uMsg) {
 	case WM_LBUTTONUP:

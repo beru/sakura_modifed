@@ -26,9 +26,9 @@
 #include "view/colors/CColorStrategy.h"
 
 
-class CColor_Quote : public ColorStrategy {
+class Color_Quote : public ColorStrategy {
 public:
-	CColor_Quote(wchar_t cQuote)
+	Color_Quote(wchar_t cQuote)
 		:
 		m_cQuote(cQuote),
 		m_nCOMMENTEND(-1),
@@ -43,13 +43,13 @@ public:
 	virtual LayoutColorInfo* GetStrategyColorInfo() const;
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = -1; }
 	virtual void SetStrategyColorInfo(const LayoutColorInfo*);
-	virtual bool BeginColor(const CStringRef& cStr, int nPos);
-	virtual bool EndColor(const CStringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& cStr, int nPos);
+	virtual bool EndColor(const StringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[this->GetStrategyColor()].m_bDisp; }
 	
-	static bool IsCppRawString(const CStringRef& cStr, int nPos);
-	static int Match_Quote(wchar_t wcQuote, int nPos, const CStringRef& cLineStr, int escapeType, bool* pbEscapeEnd = NULL);
-	static int Match_QuoteStr(const wchar_t* szQuote, int nQuoteLen, int nPos, const CStringRef& cLineStr, bool bEscape);
+	static bool IsCppRawString(const StringRef& cStr, int nPos);
+	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& cLineStr, int escapeType, bool* pbEscapeEnd = NULL);
+	static int Match_QuoteStr(const wchar_t* szQuote, int nQuoteLen, int nPos, const StringRef& cLineStr, bool bEscape);
 private:
 
 	wchar_t m_cQuote;
@@ -66,15 +66,15 @@ protected:
 };
 
 
-class Color_SingleQuote : public CColor_Quote {
+class Color_SingleQuote : public Color_Quote {
 public:
-	Color_SingleQuote() : CColor_Quote(L'\'') { }
+	Color_SingleQuote() : Color_Quote(L'\'') { }
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_SSTRING; }
 };
 
-class Color_DoubleQuote : public CColor_Quote {
+class Color_DoubleQuote : public Color_Quote {
 public:
-	Color_DoubleQuote() : CColor_Quote(L'"') { }
+	Color_DoubleQuote() : Color_Quote(L'"') { }
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_WSTRING; }
 };
 

@@ -44,7 +44,7 @@ static Mutex g_cDocTypeMutex(FALSE, GSTR_MUTEX_SAKURA_DOCTYPE);
 	拡張子を切り出して GetDocumentTypeOfExt に渡すだけ．
 	@date 2014.12.06 syat ワイルドカード対応。２重拡張子対応をやめる
 */
-CTypeConfig DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
+TypeConfigNum DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 {
 	// ファイル名を抽出
 	const TCHAR* pszFileName = pszFilePath;
@@ -55,12 +55,12 @@ CTypeConfig DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 
 	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const TypeConfigMini* mini;
-		GetTypeConfigMini(CTypeConfig(i), &mini);
+		GetTypeConfigMini(TypeConfigNum(i), &mini);
 		if (IsFileNameMatch(mini->m_szTypeExts, pszFileName)) {
-			return CTypeConfig(i);	//	番号
+			return TypeConfigNum(i);	//	番号
 		}
 	}
-	return CTypeConfig(0);
+	return TypeConfigNum(0);
 }
 
 
@@ -75,24 +75,24 @@ CTypeConfig DocTypeManager::GetDocumentTypeOfPath(const TCHAR* pszFilePath)
 	@date 2012.10.22 Moca ２重拡張子, 拡張子なしに対応
 	@date 2014.12.06 syat GetDocumentTypeOfPathに統合
 */
-CTypeConfig DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
+TypeConfigNum DocTypeManager::GetDocumentTypeOfExt(const TCHAR* pszExt)
 {
 	return GetDocumentTypeOfPath(pszExt);
 }
 
-CTypeConfig DocTypeManager::GetDocumentTypeOfId(int id)
+TypeConfigNum DocTypeManager::GetDocumentTypeOfId(int id)
 {
 	for (int i=0; i<m_pShareData->m_nTypesCount; ++i) {
 		const TypeConfigMini* mini;
-		GetTypeConfigMini(CTypeConfig(i), &mini);
+		GetTypeConfigMini(TypeConfigNum(i), &mini);
 		if (mini->m_id == id) {
-			return CTypeConfig(i);
+			return TypeConfigNum(i);
 		}
 	}
-	return CTypeConfig(-1);	// ハズレ
+	return TypeConfigNum(-1);	// ハズレ
 }
 
-bool DocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type)
+bool DocTypeManager::GetTypeConfig(TypeConfigNum cDocumentType, TypeConfig& type)
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
@@ -110,7 +110,7 @@ bool DocTypeManager::GetTypeConfig(CTypeConfig cDocumentType, TypeConfig& type)
 	return false;
 }
 
-bool DocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig& type)
+bool DocTypeManager::SetTypeConfig(TypeConfigNum cDocumentType, const TypeConfig& type)
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
@@ -123,7 +123,7 @@ bool DocTypeManager::SetTypeConfig(CTypeConfig cDocumentType, const TypeConfig& 
 	return false;
 }
 
-bool DocTypeManager::GetTypeConfigMini(CTypeConfig cDocumentType, const TypeConfigMini** type)
+bool DocTypeManager::GetTypeConfigMini(TypeConfigNum cDocumentType, const TypeConfigMini** type)
 {
 	int n = cDocumentType.GetIndex();
 	if (0 <= n && n < m_pShareData->m_nTypesCount) {
@@ -133,13 +133,13 @@ bool DocTypeManager::GetTypeConfigMini(CTypeConfig cDocumentType, const TypeConf
 	return false;
 }
 
-bool DocTypeManager::AddTypeConfig(CTypeConfig cDocumentType)
+bool DocTypeManager::AddTypeConfig(TypeConfigNum cDocumentType)
 {
 	LockGuard<Mutex> guard(g_cDocTypeMutex);
 	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_ADD_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0);
 }
 
-bool DocTypeManager::DelTypeConfig(CTypeConfig cDocumentType)
+bool DocTypeManager::DelTypeConfig(TypeConfigNum cDocumentType)
 {
 	LockGuard<Mutex> guard(g_cDocTypeMutex);
 	return FALSE != SendMessage(m_pShareData->m_handles.m_hwndTray, MYWM_DEL_TYPESETTING, (WPARAM)cDocumentType.GetIndex(), 0);

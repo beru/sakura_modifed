@@ -134,7 +134,7 @@ struct TypeConfig {
 	// 2005.01.13 MIK 配列化
 	int					m_nKeyWordSetIdx[MAX_KEYWORDSET_PER_TYPE];	//!< キーワードセット
 
-	LineComment		m_cLineComment;					//!< 行コメントデリミタ				//@@@ 2002.09.22 YAZAKI
+	LineComment			m_cLineComment;					//!< 行コメントデリミタ				//@@@ 2002.09.22 YAZAKI
 	BlockComment		m_cBlockComments[2];			//!< ブロックコメントデリミタ		//@@@ 2002.09.22 YAZAKI
 
 	int					m_nStringType;					//!< 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
@@ -260,9 +260,9 @@ struct TypeConfigMini {
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //!ドキュメント種類。共有データ内 TypeConfig へのアクセサも兼ねる。
 // 2007.12.13 kobake 作成
-class CTypeConfig {
+class TypeConfigNum {
 public:
-	CTypeConfig()
+	TypeConfigNum()
 	{
 #ifdef _DEBUG
 		// 元がintだったので、未初期化で使うと問題が発生するように、あえて、変な値を入れておく。
@@ -273,7 +273,7 @@ public:
 #endif
 	}
 	
-	explicit CTypeConfig(int n) {
+	explicit TypeConfigNum(int n) {
 		m_nType = n;
 	}
 	bool IsValidType() const { return m_nType >= 0 && m_nType < MAX_TYPES; }
@@ -291,16 +291,16 @@ private:
 //                        タイプ設定                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-class CType {
+class Type {
 public:
-	virtual ~CType() { }
+	virtual ~Type() { }
 	void InitTypeConfig(int nIdx, TypeConfig&);
 protected:
 	virtual void InitTypeConfigImp(TypeConfig* pType) = 0;
 };
 
 #define GEN_CTYPE(CLASS_NAME) \
-class CLASS_NAME : public CType { \
+class CLASS_NAME : public Type { \
 protected: \
 	void InitTypeConfigImp(TypeConfig* pType); \
 };

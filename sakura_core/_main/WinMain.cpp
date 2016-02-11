@@ -61,7 +61,7 @@ int WINAPI _tWinMain(
 	MY_RUNNINGTIMER(cRunningTimer, "WinMain" );
 	{
 		// 2010.08.28 Moca DLLインジェクション対策
-		CCurrentDirectoryBackupPoint dirBack;
+		CurrentDirectoryBackupPoint dirBack;
 		ChangeCurrentDirectoryToExeDir();
 		
 		setlocale(LC_ALL, "Japanese");	// 2007.08.16 kobake 追加

@@ -34,7 +34,7 @@
 #include "CFileExt.h"
 #include "env/CDocTypeManager.h"
 
-CFileExt::CFileExt()
+FileExt::FileExt()
 {
 	m_puFileExtInfo = NULL;
 	m_nCount = 0;
@@ -46,7 +46,7 @@ CFileExt::CFileExt()
 //	AppendExt("テキストファイル", "txt");
 }
 
-CFileExt::~CFileExt()
+FileExt::~FileExt()
 {
 	if (m_puFileExtInfo) {
 		free(m_puFileExtInfo);
@@ -55,7 +55,7 @@ CFileExt::~CFileExt()
 	m_nCount = 0;
 }
 
-bool CFileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
+bool FileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
 {
 	TCHAR szWork[_countof(m_puFileExtInfo[0].m_szExt) + 10];
 
@@ -65,7 +65,7 @@ bool CFileExt::AppendExt(const TCHAR* pszName, const TCHAR* pszExt)
 	return AppendExtRaw(pszName, szWork);
 }
 
-bool CFileExt::AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt)
+bool FileExt::AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt)
 {
 	if (!pszName || pszName[0] == _T('\0')) {
 		return false;
@@ -95,7 +95,7 @@ bool CFileExt::AppendExtRaw(const TCHAR* pszName, const TCHAR* pszExt)
 	return true;
 }
 
-const TCHAR* CFileExt::GetName(int nIndex)
+const TCHAR* FileExt::GetName(int nIndex)
 {
 	if (nIndex < 0 || nIndex >= m_nCount) {
 		return NULL;
@@ -103,7 +103,7 @@ const TCHAR* CFileExt::GetName(int nIndex)
 	return m_puFileExtInfo[nIndex].m_szName;
 }
 
-const TCHAR* CFileExt::GetExt(int nIndex)
+const TCHAR* FileExt::GetExt(int nIndex)
 {
 	if (nIndex < 0 || nIndex >= m_nCount) {
 		return NULL;
@@ -111,7 +111,7 @@ const TCHAR* CFileExt::GetExt(int nIndex)
 	return m_puFileExtInfo[nIndex].m_szExt;
 }
 
-const TCHAR* CFileExt::GetExtFilter(void)
+const TCHAR* FileExt::GetExtFilter(void)
 {
 	std::tstring work;
 

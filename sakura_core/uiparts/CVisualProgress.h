@@ -25,7 +25,7 @@
 
 #include "doc/CDocListener.h"
 #include "util/design_template.h"
-class CWaitCursor;
+class WaitCursor;
 
 class VisualProgress :
 	public DocListenerEx,
@@ -53,7 +53,7 @@ protected:
 	void _Doing(int nPer);
 	void _End();
 private:
-	CWaitCursor* m_pcWaitCursor;
+	WaitCursor* m_pcWaitCursor;
 	int	nOldValue;
 
 private:

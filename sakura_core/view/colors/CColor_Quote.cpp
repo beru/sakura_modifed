@@ -5,7 +5,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     クォーテーション                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-class CLayoutColorQuoteInfo : public LayoutColorInfo {
+class LayoutColorQuoteInfo : public LayoutColorInfo {
 public:
 	std::wstring m_tag;
 	int m_nColorTypeIndex;
@@ -13,7 +13,7 @@ public:
 		if (!p) {
 			return false;
 		}
-		const CLayoutColorQuoteInfo* info = dynamic_cast<const CLayoutColorQuoteInfo*>(p);
+		const LayoutColorQuoteInfo* info = dynamic_cast<const LayoutColorQuoteInfo*>(p);
 		if (!info) {
 			return false;
 		}
@@ -21,7 +21,7 @@ public:
 	}
 };
 
-void CColor_Quote::Update(void)
+void Color_Quote::Update(void)
 {
 	const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
 	m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
@@ -44,10 +44,10 @@ void CColor_Quote::Update(void)
 	m_pbEscapeEnd = pbEscapeEndList[m_nStringType];
 }
 
-void CColor_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
+void Color_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 {
 	if (colorInfo) {
-		const CLayoutColorQuoteInfo* info = dynamic_cast<const CLayoutColorQuoteInfo*>(colorInfo);
+		const LayoutColorQuoteInfo* info = dynamic_cast<const LayoutColorQuoteInfo*>(colorInfo);
 		if (!info) {
 			return;
 		}
@@ -58,10 +58,10 @@ void CColor_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 	}
 }
 
-LayoutColorInfo* CColor_Quote::GetStrategyColorInfo() const
+LayoutColorInfo* Color_Quote::GetStrategyColorInfo() const
 {
 	if (0 < m_nColorTypeIndex) {
-		CLayoutColorQuoteInfo* info = new CLayoutColorQuoteInfo();
+		LayoutColorQuoteInfo* info = new LayoutColorQuoteInfo();
 		info->m_tag = m_tag;
 		info->m_nColorTypeIndex = m_nColorTypeIndex;
 		return info;
@@ -71,7 +71,7 @@ LayoutColorInfo* CColor_Quote::GetStrategyColorInfo() const
 
 // nPos "の位置
 //staic
-bool CColor_Quote::IsCppRawString(const CStringRef& cStr, int nPos)
+bool Color_Quote::IsCppRawString(const StringRef& cStr, int nPos)
 {
 	if (
 		0 < nPos
@@ -109,7 +109,7 @@ bool CColor_Quote::IsCppRawString(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
+bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 {
 	if (!cStr.IsValid()) return false;
 
@@ -219,7 +219,7 @@ bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-bool CColor_Quote::EndColor(const CStringRef& cStr, int nPos)
+bool Color_Quote::EndColor(const StringRef& cStr, int nPos)
 {
 	if (m_nCOMMENTEND == -1) {
 		// ここにくるのは行頭のはず
@@ -247,10 +247,10 @@ bool CColor_Quote::EndColor(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-int CColor_Quote::Match_Quote(
+int Color_Quote::Match_Quote(
 	wchar_t wcQuote,
 	int nPos,
-	const CStringRef& cLineStr,
+	const StringRef& cLineStr,
 	int escapeType,
 	bool* pbEscapeEnd
 	)
@@ -299,7 +299,7 @@ int CColor_Quote::Match_Quote(
 	return cLineStr.GetLength() + 1; // 終端なしはLength + 1
 }
 
-int CColor_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPos, const CStringRef& cLineStr, bool bEscape)
+int Color_Quote::Match_QuoteStr(const wchar_t* pszQuote, int nQuoteLen, int nPos, const StringRef& cLineStr, bool bEscape)
 {
 	int nCharChars;
 	const int nCompLen = cLineStr.GetLength() - nQuoteLen + 1;

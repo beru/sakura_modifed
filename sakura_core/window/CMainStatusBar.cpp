@@ -3,7 +3,7 @@
 #include "window/CEditWnd.h"
 #include "CEditApp.h"
 
-CMainStatusBar::CMainStatusBar(EditWnd* pOwner)
+MainStatusBar::MainStatusBar(EditWnd* pOwner)
 	:
 	m_pOwner(pOwner),
 	m_hwndStatusBar(NULL),
@@ -14,7 +14,7 @@ CMainStatusBar::CMainStatusBar(EditWnd* pOwner)
 
 //	キーワード：ステータスバー順序
 // ステータスバー作成
-void CMainStatusBar::CreateStatusBar()
+void MainStatusBar::CreateStatusBar()
 {
 	if (m_hwndStatusBar) return;
 
@@ -52,7 +52,7 @@ void CMainStatusBar::CreateStatusBar()
 
 
 // ステータスバー破棄
-void CMainStatusBar::DestroyStatusBar()
+void MainStatusBar::DestroyStatusBar()
 {
 	if (m_hwndProgressBar) {
 		::DestroyWindow(m_hwndProgressBar);
@@ -94,7 +94,7 @@ void CMainStatusBar::DestroyStatusBar()
 	
 	@sa SendStatusMessage2IsEffective
 */
-void CMainStatusBar::SendStatusMessage2(const TCHAR* msg)
+void MainStatusBar::SendStatusMessage2(const TCHAR* msg)
 {
 	if (m_hwndStatusBar) {
 		// ステータスバーへ
@@ -103,7 +103,7 @@ void CMainStatusBar::SendStatusMessage2(const TCHAR* msg)
 }
 
 
-void CMainStatusBar::SetStatusText(int nIndex, int nOption, const TCHAR* pszText)
+void MainStatusBar::SetStatusText(int nIndex, int nOption, const TCHAR* pszText)
 {
 	StatusBar_SetText(m_hwndStatusBar, nIndex | nOption, pszText);
 }

@@ -43,7 +43,7 @@
 
 struct DLLSHAREDATA;
 class ImageListMgr;
-class CSMacroMgr;
+class SMacroMgr;
 class MenuDrawer;// 2002/2/10 aroka to here
 
 /*! プロパティシート番号

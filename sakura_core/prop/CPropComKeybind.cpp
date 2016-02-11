@@ -484,7 +484,7 @@ void PropKeybind::ChangeKeyList(HWND hwndDlg) {
 // Keybind:キー割り当て設定をインポートする
 void PropKeybind::Import(HWND hwndDlg)
 {
-	CImpExpKeybind	cImpExpKeybind(m_Common);
+	ImpExpKeybind	cImpExpKeybind(m_Common);
 
 	// インポート
 	if (!cImpExpKeybind.ImportUI(G_AppInstance(), hwndDlg)) {
@@ -506,7 +506,7 @@ void PropKeybind::Import(HWND hwndDlg)
 // Keybind:キー割り当て設定をエクスポートする
 void PropKeybind::Export(HWND hwndDlg)
 {
-	CImpExpKeybind	cImpExpKeybind(m_Common);
+	ImpExpKeybind	cImpExpKeybind(m_Common);
 
 	// エクスポート
 	if (!cImpExpKeybind.ExportUI(G_AppInstance(), hwndDlg)) {

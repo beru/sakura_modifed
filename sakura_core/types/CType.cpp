@@ -33,9 +33,9 @@ void _DefaultConfig(TypeConfig* pType);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                          CType                              //
+//                          Type                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-void CType::InitTypeConfig(int nIdx, TypeConfig& type)
+void Type::InitTypeConfig(int nIdx, TypeConfig& type)
 {
 	// 規定値をコピー
 	static TypeConfig sDefault;
@@ -70,7 +70,7 @@ void ShareData::InitTypeConfigs(
 	std::vector<TypeConfig*>& types
 	)
 {
-	CType* table[] = {
+	Type* table[] = {
 		new CType_Basis(),	// 基本
 		new CType_Text(),	// テキスト
 		new CType_Cpp(),	// C/C++

@@ -130,7 +130,7 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 		);
 		::SetFocus(GetHwnd());	// エディタにフォーカスを戻す
 	}
-	int nKouhoNum = hokanMgr.CHokanMgr::Search(
+	int nKouhoNum = hokanMgr.HokanMgr::Search(
 		&poWin,
 		GetTextMetrics().GetHankakuHeight(),
 		GetTextMetrics().GetHankakuDx(),
@@ -155,7 +155,7 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 			hokanMgr.Hide();
 			m_bHokan = FALSE;
 		}
-		// 2004.05.14 Moca CHokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
+		// 2004.05.14 Moca HokanMgr::Search側で改行を削除するようにし、直接書き換えるのをやめた
 
 		GetCommander().Command_WordDeleteToStart();
 		GetCommander().Command_INSTEXT(true, cmemHokanWord.GetStringPtr(), cmemHokanWord.GetStringLength(), TRUE);
@@ -172,7 +172,7 @@ void EditView::ShowHokanMgr(NativeW& cmemData, bool bAutoDecided)
 
 /*!
 	編集中データから入力補完キーワードの検索
-	CHokanMgrから呼ばれる
+	HokanMgrから呼ばれる
 
 	@return 候補数
 
@@ -297,7 +297,7 @@ int EditView::HokanSearchByFile(
 			// 候補を追加(重複は除く)
 			{
 				std::wstring strWord = std::wstring(word, nWordLen);
-				CHokanMgr::AddKouhoUnique(vKouho, strWord);
+				HokanMgr::AddKouhoUnique(vKouho, strWord);
 			}
 			if (nMaxKouho != 0 && nMaxKouho <= (int)vKouho.size()) {
 				return vKouho.size();

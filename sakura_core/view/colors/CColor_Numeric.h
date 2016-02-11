@@ -25,13 +25,13 @@
 
 #include "view/colors/CColorStrategy.h"
 
-class CColor_Numeric : public ColorStrategy {
+class Color_Numeric : public ColorStrategy {
 public:
-	CColor_Numeric() : m_nCOMMENTEND(0) { }
+	Color_Numeric() : m_nCOMMENTEND(0) { }
 	virtual EColorIndexType GetStrategyColor() const { return COLORIDX_DIGIT; }
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; }
-	virtual bool BeginColor(const CStringRef& cStr, int nPos);
-	virtual bool EndColor(const CStringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& cStr, int nPos);
+	virtual bool EndColor(const StringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp; }
 private:
 	int m_nCOMMENTEND;

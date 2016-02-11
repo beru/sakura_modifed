@@ -13,18 +13,18 @@ void Color_Select::OnStartScanLogic()
 	m_nSelectEnd	= LogicInt(-1);
 }
 
-bool Color_Select::BeginColor(const CStringRef& cStr, int nPos)
+bool Color_Select::BeginColor(const StringRef& cStr, int nPos)
 {
 	assert(0);
 	return false;
 }
 
-bool Color_Select::BeginColorEx(const CStringRef& cStr, int nPos, LayoutInt nLineNum, const Layout* pcLayout)
+bool Color_Select::BeginColorEx(const StringRef& cStr, int nPos, LayoutInt nLineNum, const Layout* pcLayout)
 {
 	if (!cStr.IsValid()) return false;
 
 	const EditView& view = *(ColorStrategyPool::getInstance()->GetCurrentView());
-	if (!view.GetSelectionInfo().IsTextSelected() || !CTypeSupport(&view, COLORIDX_SELECT).IsDisp()) {
+	if (!view.GetSelectionInfo().IsTextSelected() || !TypeSupport(&view, COLORIDX_SELECT).IsDisp()) {
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool Color_Select::BeginColorEx(const CStringRef& cStr, int nPos, LayoutInt nLin
 	return false;
 }
 
-bool Color_Select::EndColor(const CStringRef& cStr, int nPos)
+bool Color_Select::EndColor(const StringRef& cStr, int nPos)
 {
 	// マッチ文字列終了検出
 	return (m_nSelectEnd <= nPos);
@@ -78,7 +78,7 @@ void Color_Found::OnStartScanLogic()
 	}
 }
 
-bool Color_Found::BeginColor(const CStringRef& cStr, int nPos)
+bool Color_Found::BeginColor(const StringRef& cStr, int nPos)
 {
 	if (!cStr.IsValid()) return false;
 	const EditView* pcView = ColorStrategyPool::getInstance()->GetCurrentView();
@@ -102,7 +102,7 @@ bool Color_Found::BeginColor(const CStringRef& cStr, int nPos)
 	return (m_nSearchResult && m_nSearchStart == nPos);
 }
 
-bool Color_Found::EndColor(const CStringRef& cStr, int nPos)
+bool Color_Found::EndColor(const StringRef& cStr, int nPos)
 {
 	// マッチ文字列終了検出
 	return (m_nSearchEnd <= nPos); //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと

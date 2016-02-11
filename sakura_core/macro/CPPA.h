@@ -57,10 +57,10 @@ Pascalインタプリタコンポーネントです。
 
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
-class CPPA : public DllImp {
+class PPA : public DllImp {
 public:
-	CPPA();
-	virtual ~CPPA();
+	PPA();
+	virtual ~PPA();
 
 	const char* GetVersion() {		// DLLのバージョン情報を取得。m_szMsgを壊す
 		if (IsAvailable()) {
@@ -264,7 +264,7 @@ private:
 	static void __stdcall stdFinishProc();	// 2003.06.01 Moca
 
 	// メンバ変数
-	char m_szMsg[80];		// CPPAからのメッセージを保持する
+	char m_szMsg[80];		// PPAからのメッセージを保持する
 
 	// 2007.07.26 genta : PPAのネストを許容するために，別データ構造とする．
 	

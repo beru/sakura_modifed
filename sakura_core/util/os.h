@@ -56,10 +56,10 @@ void MyInitCommonControls();				// コモンコントロールを初期化する							// 2006.
 // カレントディレクトリユーティリティ。
 // コンストラクタでカレントディレクトリを保存し、デストラクタでカレントディレクトリを復元するモノ。
 // 2008.03.01 kobake 作成
-class CCurrentDirectoryBackupPoint {
+class CurrentDirectoryBackupPoint {
 public:
-	CCurrentDirectoryBackupPoint();
-	~CCurrentDirectoryBackupPoint();
+	CurrentDirectoryBackupPoint();
+	~CurrentDirectoryBackupPoint();
 private:
 	TCHAR m_szCurDir[_MAX_PATH];
 };

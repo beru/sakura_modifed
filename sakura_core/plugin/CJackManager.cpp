@@ -107,19 +107,19 @@ ERegisterPlugResult JackManager::RegisterPlug(
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
 			int nMethod = Plug::GetOutlineType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
-			CPropTypesScreen::AddOutlineMethod(nMethod, plug->m_sLabel.c_str());
+			PropTypesScreen::AddOutlineMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
 			int nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());	// 2011/8/20 syat プラグ複数化のためGetOutlineType仕様変更// 2010/5/1 Uchi 関数化
-			CPropTypesScreen::AddSIndentMethod(nMethod, plug->m_sLabel.c_str());
+			PropTypesScreen::AddSIndentMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_COMPLEMENT:
 		{
 			int nMethod = Plug::GetPluginFunctionCode(plug->m_cPlugin.m_id, 0);
-			CPropTypesSupport::AddHokanMethod(nMethod, plug->m_sLabel.c_str());
+			PropTypesSupport::AddHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	}
@@ -138,19 +138,19 @@ bool JackManager::UnRegisterPlug(
 	case PP_OUTLINE:					// アウトライン解析方法を追加
 		{
 			int nMethod = Plug::GetOutlineType(plug->GetFunctionCode());
-			CPropTypesScreen::RemoveOutlineMethod(nMethod, plug->m_sLabel.c_str());
+			PropTypesScreen::RemoveOutlineMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_SMARTINDENT:				// スマートインデント方法を追加
 		{
 			int nMethod = Plug::GetSmartIndentType(plug->GetFunctionCode());
-			CPropTypesScreen::RemoveSIndentMethod(nMethod, plug->m_sLabel.c_str());
+			PropTypesScreen::RemoveSIndentMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	case PP_COMPLEMENT:
 		{
 			int nMethod = Plug::GetPluginFunctionCode(plug->m_cPlugin.m_id, 0);
-			CPropTypesSupport::RemoveHokanMethod(nMethod, plug->m_sLabel.c_str());
+			PropTypesSupport::RemoveHokanMethod(nMethod, plug->m_sLabel.c_str());
 		}
 		break;
 	}

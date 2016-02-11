@@ -55,8 +55,8 @@ void ConvertMediator::ConvMemory(
 		ShiftJis::UnicodeToSJIS(*pCMemory, pCMemory->_GetMemory());
 		break;
 	// ƒR[ƒh•ÏŠ·(SJIS2xxx)
-	case F_CODECNV_SJIS2JIS:		CJis::UnicodeToJIS(*pCMemory, pCMemory->_GetMemory());			break;
-	case F_CODECNV_SJIS2EUC:		CEuc::UnicodeToEUC(*pCMemory, pCMemory->_GetMemory());			break;
+	case F_CODECNV_SJIS2JIS:		Jis::UnicodeToJIS(*pCMemory, pCMemory->_GetMemory());			break;
+	case F_CODECNV_SJIS2EUC:		Euc::UnicodeToEUC(*pCMemory, pCMemory->_GetMemory());			break;
 	case F_CODECNV_SJIS2UTF8:		Utf8::UnicodeToUTF8(*pCMemory, pCMemory->_GetMemory());		break;
 	case F_CODECNV_SJIS2UTF7:		Utf7::UnicodeToUTF7(*pCMemory, pCMemory->_GetMemory());		break;
 	}
@@ -104,8 +104,8 @@ void ConvertMediator::ConvMemory(
 			pcCode->CodeToUnicode(*(pCMemory->_GetMemory()), pCMemory);
 		}
 		break;
-	case F_CODECNV_EMAIL:			CJis::JISToUnicode(*(pCMemory->_GetMemory()), pCMemory, true);	break;
-	case F_CODECNV_EUC2SJIS:		CEuc::EUCToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
+	case F_CODECNV_EMAIL:			Jis::JISToUnicode(*(pCMemory->_GetMemory()), pCMemory, true);	break;
+	case F_CODECNV_EUC2SJIS:		Euc::EUCToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;
 	case F_CODECNV_UNICODE2SJIS:	/* –³•ÏŠ· */										break;
 	case F_CODECNV_UNICODEBE2SJIS:	UnicodeBe::UnicodeBEToUnicode(*(pCMemory->_GetMemory()), pCMemory);	break;
 	case F_CODECNV_UTF82SJIS:		Utf8::UTF8ToUnicode(*(pCMemory->_GetMemory()), pCMemory);		break;

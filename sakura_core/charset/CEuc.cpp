@@ -8,7 +8,7 @@
 /*!
 	EUCJP → Unicode 変換関数
 */
-int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Euc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	int nclen;
 	ECharSet echarset;
@@ -71,7 +71,7 @@ int CEuc::EucjpToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* p
 
 // EUC→Unicodeコード変換
 // 2007.08.13 kobake 追加
-EConvertResult CEuc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
+EConvertResult Euc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
 {
 	// ソース取得
 	int nSrcLen;
@@ -102,7 +102,7 @@ EConvertResult CEuc::EUCToUnicode(const Memory& cSrc, NativeW* pDstMem)
 }
 
 
-int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int Euc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
 {
 	int nclen;
 	bool berror = false, berror_tmp;
@@ -154,7 +154,7 @@ int CEuc::UniToEucjp(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* p
 }
 
 
-EConvertResult CEuc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
+EConvertResult Euc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
 {
 	// エラー状態
 	bool bError = false;
@@ -181,7 +181,7 @@ EConvertResult CEuc::UnicodeToEUC(const NativeW& cSrc, Memory* pDstMem)
 }
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult CEuc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+EConvertResult Euc::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 	NativeW cCharBuffer;
 	// 2008/6/21 Uchi

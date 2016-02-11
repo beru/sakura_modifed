@@ -11,10 +11,10 @@ void _DispTab(Graphics& gr, DispPos* pDispPos, const EditView* pcView);
 void _DrawTabArrow(Graphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                         CFigure_Tab                         //
+//                         Figure_Tab                         //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_Tab::Match(const wchar_t* pText, int nTextLen) const
+bool Figure_Tab::Match(const wchar_t* pText, int nTextLen) const
 {
 	return (pText[0] == WCODE::TAB);
 }
@@ -31,7 +31,7 @@ bool CFigure_Tab::Match(const wchar_t* pText, int nTextLen) const
 	@date 2003.03.26 MIK タブ矢印表示
 	@date 2013.05.31 novice TAB表示対応(文字指定/短い矢印/長い矢印)
 */
-void CFigure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
+void Figure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	DispPos& sPos = *pDispPos;
 
@@ -42,7 +42,7 @@ void CFigure_Tab::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, b
 	int nLineHeight = pMetrics->GetHankakuDy();
 	int nCharWidth = pMetrics->GetHankakuDx();
 
-	CTypeSupport cTabType(pcView, COLORIDX_TAB);
+	TypeSupport cTabType(pcView, COLORIDX_TAB);
 
 	// これから描画するタブ幅
 	int tabDispWidth = (Int)pcView->m_pcEditDoc->m_cLayoutMgr.GetActualTabSpace(sPos.GetDrawCol());

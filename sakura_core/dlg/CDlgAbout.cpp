@@ -204,7 +204,7 @@ BOOL DlgAbout::OnInitDialog(
 	cmemMsg.AppendString(szMsg);
 
 	// XV“úî•ñ
-	CFileTime cFileTime;
+	FileTime cFileTime;
 	GetLastWriteTimestamp(szFile, &cFileTime);
 	auto_sprintf(szMsg,  _T("      Last Modified: %d/%d/%d %02d:%02d:%02d\r\n"),
 		cFileTime->wYear,

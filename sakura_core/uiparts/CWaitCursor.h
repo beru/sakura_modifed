@@ -23,13 +23,13 @@
 	オブジェクトの存続している間カーソル形状を砂時計にする．
 	オブジェクトが破棄されるとカーソル形状は元に戻る
 */
-class CWaitCursor {
+class WaitCursor {
 public:
 	/*
 	||  Constructors
 	*/
-	CWaitCursor(HWND, bool bEnable = true);
-	~CWaitCursor();
+	WaitCursor(HWND, bool bEnable = true);
+	~WaitCursor();
 
 	bool IsEnable() { return m_bEnable; }
 private: // 2002/2/10 aroka

@@ -42,7 +42,7 @@ DocType::DocType(EditDoc* pcDoc)
 }
 
 // 文書種別の設定
-void DocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
+void DocType::SetDocumentType(TypeConfigNum type, bool force, bool bTypeOnly)
 {
 	if (!m_nSettingTypeLocked || force) {
 		m_nSettingType = type;
@@ -57,7 +57,7 @@ void DocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 		UnlockDocumentType();
 	}else {
 		// データは更新しておく
-		CTypeConfig temp = DocTypeManager().GetDocumentTypeOfId(m_typeConfig.m_id);
+		TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(m_typeConfig.m_id);
 		if (temp.IsValidType()) {
 			m_nSettingType = temp;
 			DocTypeManager().GetTypeConfig(m_nSettingType, m_typeConfig);
@@ -75,7 +75,7 @@ void DocType::SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly)
 
 	// タイプ別設定更新を反映
 	ColorStrategyPool::getInstance()->OnChangeSetting();
-	CFigureManager::getInstance()->OnChangeSetting();
+	FigureManager::getInstance()->OnChangeSetting();
 	this->SetDocumentIcon();	// Sep. 11, 2002 genta
 	m_pcDocRef->SetBackgroundImage();
 }
@@ -88,7 +88,7 @@ void DocType::SetDocumentTypeIdx(int id, bool force)
 			setId = id;
 		}
 	}
-	CTypeConfig temp = DocTypeManager().GetDocumentTypeOfId(setId);
+	TypeConfigNum temp = DocTypeManager().GetDocumentTypeOfId(setId);
 	if (temp.IsValidType()) {
 		m_nSettingType = temp;
 		m_typeConfig.m_nIdx = temp.GetIndex();

@@ -299,7 +299,7 @@ INT_PTR PropKeyword::DispatchEvent(
 					pszLabel[0] = 0;
 					for (i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 						auto type = std::make_unique<TypeConfig>();
-						DocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
+						DocTypeManager().GetTypeConfig(TypeConfigNum(i), *type);
 						// 2002/04/25 YAZAKI TypeConfig全体を保持する必要はないし、m_pShareDataを直接見ても問題ない。
 						if (nIndex1 == m_Types_nKeyWordSetIdx[i].index[0]
 						||  nIndex1 == m_Types_nKeyWordSetIdx[i].index[1]
@@ -546,7 +546,7 @@ void PropKeyword::Import_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	bool bCase = false;
 	int nIdx = keywordSetMgr.m_nCurrentKeyWordSetIdx;
 	keywordSetMgr.SetKeyWordCase(nIdx, bCase);
-	CImpExpKeyWord	cImpExpKeyWord(m_Common, nIdx, bCase);
+	ImpExpKeyWord	cImpExpKeyWord(m_Common, nIdx, bCase);
 
 	// インポート
 	if (!cImpExpKeyWord.ImportUI(G_AppInstance(), hwndDlg)) {
@@ -568,7 +568,7 @@ void PropKeyword::Export_List_KeyWord(HWND hwndDlg, HWND hwndLIST_KEYWORD)
 	SetKeyWordSet(hwndDlg, keywordSetMgr.m_nCurrentKeyWordSetIdx);
 
 	bool	bCase;
-	CImpExpKeyWord	cImpExpKeyWord(m_Common, keywordSetMgr.m_nCurrentKeyWordSetIdx, bCase);
+	ImpExpKeyWord	cImpExpKeyWord(m_Common, keywordSetMgr.m_nCurrentKeyWordSetIdx, bCase);
 
 	// エクスポート
 	if (!cImpExpKeyWord.ExportUI(G_AppInstance(), hwndDlg)) {

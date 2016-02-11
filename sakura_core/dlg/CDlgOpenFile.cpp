@@ -735,16 +735,16 @@ void DlgOpenFile::Create(
 	@param[in] bSetCurDir カレントディレクトリを変更するか デフォルト: false
 	@date 2002/08/21 カレントディレクトリを変更するかどうかのオプションを追加
 	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をCFileExtクラスで行う。
+		拡張子フィルタの管理をFileExtクラスで行う。
 	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
 bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 {
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CCurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint cCurDirBackup;
 
 	// 2003.05.12 MIK
-	CFileExt cFileExt;
+	FileExt cFileExt;
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
@@ -808,16 +808,16 @@ bool DlgOpenFile::DoModal_GetOpenFileName(TCHAR* pszPath, bool bSetCurDir)
 	@param bSetCurDir [in] カレントディレクトリを変更するか デフォルト: false
 	@date 2002/08/21 カレントディレクトリを変更するかどうかのオプションを追加
 	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をCFileExtクラスで行う。
+		拡張子フィルタの管理をFileExtクラスで行う。
 	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
 bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 {
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CCurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint cCurDirBackup;
 
 	// 2003.05.12 MIK
-	CFileExt cFileExt;
+	FileExt cFileExt;
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
@@ -862,7 +862,7 @@ bool DlgOpenFile::DoModal_GetSaveFileName(TCHAR* pszPath, bool bSetCurDir)
 
 /*! 「開く」ダイアログ モーダルダイアログの表示
 	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をCFileExtクラスで行う。
+		拡張子フィルタの管理をFileExtクラスで行う。
 	@date 2005.02.20 novice 拡張子を省略したら補完する
 */
 bool DlgOpenFile::DoModalOpenDlg(
@@ -877,12 +877,12 @@ bool DlgOpenFile::DoModalOpenDlg(
 	bool bMultiSelect = pFileNames != NULL;
 
 	// ファイルの種類	2003.05.12 MIK
-	CFileExt cFileExt;
+	FileExt cFileExt;
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
 		const TypeConfigMini* type;
-		DocTypeManager().GetTypeConfigMini(CTypeConfig(i), &type);
+		DocTypeManager().GetTypeConfigMini(TypeConfigNum(i), &type);
 		cFileExt.AppendExt(type->m_szTypeName, type->m_szTypeExts);
 	}
 
@@ -920,7 +920,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 	}
 
 	// カレントディレクトリを保存。関数を抜けるときに自動でカレントディレクトリは復元されます。
-	CCurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint cCurDirBackup;
 
 	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();
@@ -960,7 +960,7 @@ bool DlgOpenFile::DoModalOpenDlg(
 
 	@date 2001.02.09 genta	引数追加
 	@date 2003.05.12 MIK 拡張子フィルタでタイプ別設定の拡張子を使うように。
-		拡張子フィルタの管理をCFileExtクラスで行う。
+		拡張子フィルタの管理をFileExtクラスで行う。
 	@date 2003.07.26 ryoji BOMパラメータ追加
 	@date 2005.02.20 novice 拡張子を省略したら補完する
 	@date 2006.11.10 ryoji フックを使う場合は拡張子の補完を自前で行う
@@ -978,7 +978,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 	pData->m_bIsSaveDialog = true;	// 保存のダイアログか
 
 	// 2003.05.12 MIK
-	CFileExt cFileExt;
+	FileExt cFileExt;
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME1), m_mem->m_szDefaultWildCard);
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME2), _T("*.txt"));
 	cFileExt.AppendExtRaw(LS(STR_DLGOPNFL_EXTNAME3), _T("*.*"));
@@ -1008,7 +1008,7 @@ bool DlgOpenFile::DoModalSaveDlg(
 	pData->m_ofn.lpstrDefExt = (pData->m_ofn.Flags & OFN_ENABLEHOOK) ? NULL: _T("");	// 2006.11.10 ryoji フックを使うときは自前で拡張子を補完する
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CCurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint cCurDirBackup;
 
 	// 2010.08.28 Moca DLLが読み込まれるので移動
 	ChangeCurrentDirectoryToExeDir();

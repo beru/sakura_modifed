@@ -44,13 +44,13 @@ struct EditNode;
 struct DLLSHAREDATA;
 
 //! タブバーウィンドウ
-class CTabWnd : public Wnd {
+class TabWnd : public Wnd {
 public:
 	/*
 	||  Constructors
 	*/
-	CTabWnd();
-	virtual ~CTabWnd();
+	TabWnd();
+	virtual ~TabWnd();
 
 	/*
 	|| メンバ関数
@@ -207,6 +207,6 @@ private:
 	bool		m_bSizeBox;
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CTabWnd);
+	DISALLOW_COPY_AND_ASSIGN(TabWnd);
 };
 

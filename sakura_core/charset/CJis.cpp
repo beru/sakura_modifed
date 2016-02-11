@@ -18,16 +18,16 @@
 
 // @author D. S. Koba
 // 星マークを添えてあるものは、書き込みで使われる。
-const char CJis::JISESCDATA_ASCII7[]			= "\x1b" "(B";  // ☆
-const char CJis::JISESCDATA_JISX0201Latin[]		= "\x1b" "(J";
-const char CJis::JISESCDATA_JISX0201Latin_OLD[]	= "\x1b" "(H";
-const char CJis::JISESCDATA_JISX0201Katakana[]	= "\x1b" "(I";  // ☆
-const char CJis::JISESCDATA_JISX0208_1978[]		= "\x1b" "$@";
-const char CJis::JISESCDATA_JISX0208_1983[]		= "\x1b" "$B";  // ☆
-const char CJis::JISESCDATA_JISX0208_1990[]		= "\x1b" "&@""\x1b""$B";
+const char Jis::JISESCDATA_ASCII7[]			= "\x1b" "(B";  // ☆
+const char Jis::JISESCDATA_JISX0201Latin[]		= "\x1b" "(J";
+const char Jis::JISESCDATA_JISX0201Latin_OLD[]	= "\x1b" "(H";
+const char Jis::JISESCDATA_JISX0201Katakana[]	= "\x1b" "(I";  // ☆
+const char Jis::JISESCDATA_JISX0208_1978[]		= "\x1b" "$@";
+const char Jis::JISESCDATA_JISX0208_1983[]		= "\x1b" "$B";  // ☆
+const char Jis::JISESCDATA_JISX0208_1990[]		= "\x1b" "&@""\x1b""$B";
 
 #if 0 // 未使用
-const int CJis::TABLE_JISESCLEN[] = {
+const int Jis::TABLE_JISESCLEN[] = {
 	0,		// JISESC_UNKNOWN
 	3,		// JISESC_ASCII
 	3,		// JISESC_JISX0201Latin
@@ -37,7 +37,7 @@ const int CJis::TABLE_JISESCLEN[] = {
 	3,		// JISESC_JISX0208_1983
 	6,		// JISESC_JISX0208_1990
 };
-const char* CJis::TABLE_JISESCDATA[] = {
+const char* Jis::TABLE_JISESCDATA[] = {
 	NULL,
 	JISESCDATA_ASCII,
 	JISESCDATA_JISX0201Latin,
@@ -54,7 +54,7 @@ const char* CJis::TABLE_JISESCDATA[] = {
 
 	eMyJisesc は、MYJISESC_HANKATA か MYJISESC_ZENKAKU。
 */
-int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, const EMyJisEscseq eMyJisesc, bool* pbError)
+int Jis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned short* pDst, const EMyJisEscseq eMyJisesc, bool* pbError)
 {
 	const unsigned char* pr;
 	unsigned short* pw;
@@ -168,7 +168,7 @@ int CJis::_JisToUni_block(const unsigned char* pSrc, const int nSrcLen, unsigned
 /*
 	JIS → Unicode 変換
 */
-int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
+int Jis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbError)
 {
 	const unsigned char *pr, *pr_end;
 	const unsigned char* pr_next;
@@ -245,7 +245,7 @@ int CJis::JisToUni(const char* pSrc, const int nSrcLen, wchar_t* pDst, bool* pbE
 
 // E-Mail(JIS→Unicode)コード変換
 // 2007.08.13 kobake 追加
-EConvertResult CJis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base64decode)
+EConvertResult Jis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool base64decode)
 {
 	// ソースを取得
 	int nSrcLen;
@@ -291,7 +291,7 @@ EConvertResult CJis::JISToUnicode(const Memory& cSrc, NativeW* pDstMem, bool bas
 /*!
 	SJIS -> JIS 変換
 */
-int CJis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSet eCharset, bool* pbError)
+int Jis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharSet eCharset, bool* pbError)
 {
 	int nret;
 	bool berror = false;
@@ -340,7 +340,7 @@ int CJis::_SjisToJis_char(const unsigned char* pSrc, unsigned char* pDst, ECharS
 }
 
 
-int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
+int Jis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbError)
 {
 	ECharSet echarset, echarset_cur, echarset_tmp;
 	unsigned char cbuf[4];
@@ -399,9 +399,9 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 				nlen = 1;
 			}
 
-			// const char CJis::JISESCDATA_ASCII[]				= "\x1b" "(B";  // ☆
-			// const char CJis::JISESCDATA_JISX0201Katakana[]	= "\x1b" "(I";  // ☆
-			// const char CJis::JISESCDATA_JISX0208_1983[]		= "\x1b" "$B";  // ☆
+			// const char Jis::JISESCDATA_ASCII[]				= "\x1b" "(B";  // ☆
+			// const char Jis::JISESCDATA_JISX0201Katakana[]	= "\x1b" "(I";  // ☆
+			// const char Jis::JISESCDATA_JISX0208_1983[]		= "\x1b" "$B";  // ☆
 			if (echarset != echarset_cur) {
 				// 文字セットが変われば、
 				// エスケープシーケンス文字列を出力
@@ -445,7 +445,7 @@ int CJis::UniToJis(const wchar_t* pSrc, const int nSrcLen, char* pDst, bool* pbE
 }
 
 
-EConvertResult CJis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
+EConvertResult Jis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
 {
 	// ソースを取得
 	const wchar_t* pSrc = cSrc.GetStringPtr();
@@ -475,7 +475,7 @@ EConvertResult CJis::UnicodeToJIS(const NativeW& cSrc, Memory* pDstMem)
 
 
 // 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
-EConvertResult CJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
+EConvertResult Jis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar)
 {
 
 	// 2008/6/21 Uchi

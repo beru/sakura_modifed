@@ -13,7 +13,7 @@
 // 2008.07.27 kobake
 static
 bool _GetKeywordLength(
-	const CStringRef&	cLineStr,		// [in]
+	const StringRef&	cLineStr,		// [in]
 	LogicInt			nPos,			// [in]
 	LogicInt*			p_nWordBgn,		// [out]
 	LogicInt*			p_nWordLen,		// [out]

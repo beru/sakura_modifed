@@ -4,10 +4,10 @@
 #include "types/CTypeSupport.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CFigure_CtrlCode                        //
+//                     Figure_CtrlCode                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_CtrlCode::Match(const wchar_t* pText, int nTextLen) const
+bool Figure_CtrlCode::Match(const wchar_t* pText, int nTextLen) const
 {
 	// 当面はASCII制御文字（C0 Controls, IsHankaku()で半角扱い）だけを制御文字表示にする
 	// そうしないと IsHankaku(0x0600) == false なのに iswcntrl(0x0600) != 0 のようなケースで表示桁がずれる
@@ -15,7 +15,7 @@ bool CFigure_CtrlCode::Match(const wchar_t* pText, int nTextLen) const
 	return (!(pText[0] & 0xFF80) && WCODE::IsControlCode(pText[0]));
 }
 
-void CFigure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
+void Figure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
@@ -38,10 +38,10 @@ void CFigure_CtrlCode::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcVi
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CFigure_HanBinary                       //
+//                     Figure_HanBinary                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_HanBinary::Match(const wchar_t* pText, int nTextLen) const
+bool Figure_HanBinary::Match(const wchar_t* pText, int nTextLen) const
 {
 	int nLen = pText[1]? 2:1;	// ※ pText は常に終端よりも手前
 	if (NativeW::GetKetaOfChar(pText, nLen, 0) == 1) {	// 半角
@@ -54,7 +54,7 @@ bool CFigure_HanBinary::Match(const wchar_t* pText, int nTextLen) const
 	return false;
 }
 
-void CFigure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
+void Figure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;
@@ -77,10 +77,10 @@ void CFigure_HanBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcV
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                     CFigure_ZenBinary                       //
+//                     Figure_ZenBinary                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_ZenBinary::Match(const wchar_t* pText, int nTextLen) const
+bool Figure_ZenBinary::Match(const wchar_t* pText, int nTextLen) const
 {
 	int nLen = pText[1]? 2:1;	// ※ pText は常に終端よりも手前
 	if (NativeW::GetKetaOfChar(pText, nLen, 0) > 1) {	// 全角
@@ -93,7 +93,7 @@ bool CFigure_ZenBinary::Match(const wchar_t* pText, int nTextLen) const
 	return false;
 }
 
-void CFigure_ZenBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
+void Figure_ZenBinary::DispSpace(Graphics& gr, DispPos* pDispPos, EditView* pcView, bool bTrans) const
 {
 	// クリッピング矩形を計算。画面外なら描画しない
 	RECT rc;

@@ -34,7 +34,7 @@ class LoadAgent;
 class SaveAgent;
 class VisualProgress;
 class MruListener;
-class CSMacroMgr;
+class SMacroMgr;
 class PropertyManager;
 class GrepAgent;
 enum EFunctionCode;
@@ -58,7 +58,7 @@ public:
 	ImageListMgr&	GetIcons() { return m_cIcons; }
 
 	bool OpenPropertySheet(int nPageNum);
-	bool OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType);
+	bool OpenPropertySheetTypes(int nPageNum, TypeConfigNum nSettingType);
 
 public:
 	HINSTANCE			m_hInst;
@@ -76,7 +76,7 @@ public:
 
 	// その他ヘルパ
 	MruListener*		m_pcMruListener;		// MRU管理
-	CSMacroMgr*			m_pcSMacroMgr;			// マクロ管理
+	SMacroMgr*			m_pcSMacroMgr;			// マクロ管理
 private:
 	PropertyManager*	m_pcPropertyManager;	// プロパティ管理
 public:

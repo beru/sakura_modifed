@@ -29,7 +29,7 @@
 #include "CViewCommander.h"
 #include "CViewCommander_inline.h"
 
-//@@@ 2002.2.2 YAZAKI マクロはCSMacroMgrに統一
+//@@@ 2002.2.2 YAZAKI マクロはSMacroMgrに統一
 #include "macro/CSMacroMgr.h"
 #include "CEditApp.h"
 #include "plugin/CJackManager.h"
@@ -111,9 +111,9 @@ bool ViewCommander::HandleCommand(
 		// キーリピート状態をなくする
 		bRepeat = false;
 		// キーマクロに記録可能な機能かどうかを調べる
-		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
+		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一
 		// F_EXECEXTMACROコマンドはファイルを選択した後にマクロ文が確定するため個別に記録する。
-		if (CSMacroMgr::CanFuncIsKeyMacro(nCommand) &&
+		if (SMacroMgr::CanFuncIsKeyMacro(nCommand) &&
 			nCommand != F_EXECEXTMACRO	// F_EXECEXTMACROは個別で記録します
 		) {
 			// キーマクロのバッファにデータ追加
@@ -136,7 +136,7 @@ bool ViewCommander::HandleCommand(
 
 	// From Here Sep. 29, 2001 genta マクロの実行機能追加
 	if (F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO) {
-		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一（インターフェースの変更）
+		//@@@ 2002.2.2 YAZAKI マクロをSMacroMgrに統一（インターフェースの変更）
 		if (!m_pcSMacroMgr->Exec(nCommand - F_USERMACRO_0, G_AppInstance(), m_pCommanderView,
 			nCommandFrom & FA_NONRECORD)
 		) {

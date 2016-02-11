@@ -27,7 +27,7 @@
 #include "CColor_RegexKeyword.h"
 
 
-bool CColor_RegexKeyword::BeginColor(const CStringRef& cStr, int nPos)
+bool Color_RegexKeyword::BeginColor(const StringRef& cStr, int nPos)
 {
 	if (!cStr.IsValid()) {
 		return false;
@@ -48,12 +48,12 @@ bool CColor_RegexKeyword::BeginColor(const CStringRef& cStr, int nPos)
 }
 
 
-bool CColor_RegexKeyword::EndColor(const CStringRef& cStr, int nPos)
+bool Color_RegexKeyword::EndColor(const StringRef& cStr, int nPos)
 {
 	return (nPos == this->m_nCOMMENTEND);
 }
 
-void CColor_RegexKeyword::OnStartScanLogic()
+void Color_RegexKeyword::OnStartScanLogic()
 {
 	EditView* pcView = ColorStrategyPool::getInstance()->GetCurrentView();
 	if (m_pTypeData->m_bUseRegexKeyword) {

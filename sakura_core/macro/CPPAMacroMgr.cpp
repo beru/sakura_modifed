@@ -19,7 +19,7 @@
 #include "io/CTextStream.h"
 using namespace std;
 
-CPPA PPAMacroMgr::m_cPPA;
+PPA PPAMacroMgr::m_cPPA;
 
 PPAMacroMgr::PPAMacroMgr()
 {

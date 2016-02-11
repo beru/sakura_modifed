@@ -26,14 +26,14 @@
 #include "CColor_Heredoc.h"
 #include "doc/layout/CLayout.h"
 
-class CLayoutColorHeredocInfo : public LayoutColorInfo {
+class LayoutColorHeredocInfo : public LayoutColorInfo {
 public:
 	std::wstring m_id;
 	bool IsEqual(const LayoutColorInfo* p) const {
 		if (!p) {
 			return false;
 		}
-		const CLayoutColorHeredocInfo* info = dynamic_cast<const CLayoutColorHeredocInfo*>(p);
+		const LayoutColorHeredocInfo* info = dynamic_cast<const LayoutColorHeredocInfo*>(p);
 		if (!info) {
 			return false;
 		}
@@ -44,7 +44,7 @@ public:
 void Color_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 {
 	if (colorInfo) {
-		const CLayoutColorHeredocInfo* info = dynamic_cast<const CLayoutColorHeredocInfo*>(colorInfo);
+		const LayoutColorHeredocInfo* info = dynamic_cast<const LayoutColorHeredocInfo*>(colorInfo);
 		if (!info) {
 			return;
 		}
@@ -55,12 +55,12 @@ void Color_Heredoc::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
 
 LayoutColorInfo* Color_Heredoc::GetStrategyColorInfo() const
 {
-	CLayoutColorHeredocInfo* info = new CLayoutColorHeredocInfo();
+	LayoutColorHeredocInfo* info = new LayoutColorHeredocInfo();
 	info->m_id.assign(m_pszId, m_nSize);
 	return info;
 }
 
-bool Color_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
+bool Color_Heredoc::BeginColor(const StringRef& cStr, int nPos)
 {
 	if (!cStr.IsValid()) return false;
 
@@ -123,7 +123,7 @@ bool Color_Heredoc::BeginColor(const CStringRef& cStr, int nPos)
 	return false;
 }
 
-bool Color_Heredoc::EndColor(const CStringRef& cStr, int nPos)
+bool Color_Heredoc::EndColor(const StringRef& cStr, int nPos)
 {
 	if (this->m_nCOMMENTEND == 0) {
 		if (1

@@ -64,7 +64,7 @@ static std::vector<HokanMethod>* GetHokanMethodList()
 // 2001/06/13 Start By asa-o: タイプ別設定の支援タブに関する処理
 
 // メッセージ処理
-INT_PTR CPropTypesSupport::DispatchEvent(
+INT_PTR PropTypesSupport::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
 	WPARAM		wParam,		// first message parameter
@@ -215,7 +215,7 @@ INT_PTR CPropTypesSupport::DispatchEvent(
 }
 
 // ダイアログデータの設定
-void CPropTypesSupport::SetData(HWND hwndDlg)
+void PropTypesSupport::SetData(HWND hwndDlg)
 {
 	// 入力補完 単語ファイル
 	::DlgItem_SetText(hwndDlg, IDC_EDIT_HOKANFILE, m_Types.m_szHokanFile);
@@ -252,7 +252,7 @@ void CPropTypesSupport::SetData(HWND hwndDlg)
 }
 
 // ダイアログデータの取得
-int CPropTypesSupport::GetData(HWND hwndDlg)
+int PropTypesSupport::GetData(HWND hwndDlg)
 {
 //	2001/06/19	asa-o
 	// 入力補完機能：英大文字小文字を同一視する
@@ -289,13 +289,13 @@ int CPropTypesSupport::GetData(HWND hwndDlg)
 // 2001/06/13 End
 
 // 補完種別の追加
-void CPropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
+void PropTypesSupport::AddHokanMethod(int nMethod, const WCHAR* szName)
 {
 	HokanMethod item = { nMethod, std::wstring(szName) };
 	GetHokanMethodList()->push_back(item);
 }
 
-void CPropTypesSupport::RemoveHokanMethod(int nMethod, const WCHAR* szName)
+void PropTypesSupport::RemoveHokanMethod(int nMethod, const WCHAR* szName)
 {
 	int nSize = GetHokanMethodList()->size();
 	for (int i=0; i<nSize; ++i) {

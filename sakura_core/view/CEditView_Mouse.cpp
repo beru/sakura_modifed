@@ -1609,7 +1609,7 @@ void EditView::OnLBUTTONDBLCLK(WPARAM fwKeys, int _xPos , int _yPos)
 			{
 				// URLを開く
 				// 2009.05.21 syat UNCパスだと1分以上無応答になることがあるのでスレッド化
-				CWaitCursor cWaitCursor(GetHwnd());	// カーソルを砂時計にする
+				WaitCursor cWaitCursor(GetHwnd());	// カーソルを砂時計にする
 
 				unsigned int nThreadId;
 				LPCTSTR szUrl = to_tchar(wstrOPEN.c_str());

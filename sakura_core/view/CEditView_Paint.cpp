@@ -194,7 +194,7 @@ void EditView::DrawBackImage(HDC hdc, RECT& rcPaint, HDC hdcBgImg)
 	::SetBkColor(hdc, colorOld);
 	++testColorIndex;
 #else
-	CTypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport cTextType(this, COLORIDX_TEXT);
 	COLORREF colorOld = ::SetBkColor(hdc, cTextType.GetBackColor());
 	const TextArea& area = GetTextArea();
 	const EditDoc& doc  = *m_pcEditDoc;
@@ -419,7 +419,7 @@ Color3Setting EditView::GetColorIndex(
 
 	// 文字列参照
 	const DocLine* pcDocLine = pcLayout->GetDocLineRef();
-	CStringRef cLineStr(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
+	StringRef cLineStr(pcDocLine->GetPtr(), pcDocLine->GetLengthWithEOL());
 
 	// color strategy
 	ColorStrategyPool* pool = ColorStrategyPool::getInstance();
@@ -643,7 +643,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 	int				nCharDx = GetTextMetrics().GetHankakuDx();
 
 	// サポート
-	CTypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport cTextType(this, COLORIDX_TEXT);
 
 //@@@ 2001.11.17 add start MIK
 	// 変更があればタイプ設定を行う。
@@ -972,7 +972,7 @@ bool EditView::DrawLogicLine(
 bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 {
 	bool bDispEOF = false;
-	CTypeSupport cTextType(this, COLORIDX_TEXT);
+	TypeSupport cTextType(this, COLORIDX_TEXT);
 
 	const Layout* pcLayout = pInfo->m_pDispPos->GetLayoutRef(); //m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(pInfo->pDispPos->GetLayoutLineRef());
 
@@ -985,7 +985,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 
 	// 文字列参照
 	const DocLine* pcDocLine = pInfo->GetDocLine();
-	CStringRef cLineStr = pcDocLine->GetStringRefWithEOL();
+	StringRef cLineStr = pcDocLine->GetStringRefWithEOL();
 
 	// 描画範囲外の場合は色切替だけで抜ける
 	if (pInfo->m_pDispPos->GetDrawPos().y < GetTextArea().GetAreaTop()) {
@@ -1014,11 +1014,11 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 
 	// コンフィグ
 	int nLineHeight = GetTextMetrics().GetHankakuDy();  // 行の縦幅？
-	CTypeSupport	cCaretLineBg(this, COLORIDX_CARETLINEBG);
-	CTypeSupport	cEvenLineBg(this, COLORIDX_EVENLINEBG);
-	CTypeSupport	cPageViewBg(this, COLORIDX_PAGEVIEW);
+	TypeSupport	cCaretLineBg(this, COLORIDX_CARETLINEBG);
+	TypeSupport	cEvenLineBg(this, COLORIDX_EVENLINEBG);
+	TypeSupport	cPageViewBg(this, COLORIDX_PAGEVIEW);
 	EditView& cActiveView = m_pcEditWnd->GetActiveView();
-	CTypeSupport&	cBackType = (cCaretLineBg.IsDisp() &&
+	TypeSupport&	cBackType = (cCaretLineBg.IsDisp() &&
 		GetCaret().GetCaretLayoutPos().GetY() == pInfo->m_pDispPos->GetLayoutLineRef() && !m_bMiniMap
 			? cCaretLineBg
 			: cEvenLineBg.IsDisp() && pInfo->m_pDispPos->GetLayoutLineRef() % 2 == 1 && !m_bMiniMap
@@ -1077,7 +1077,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	// 行終端または折り返しに達するまでループ
 	if (pcLayout) {
 		int nPosTo = pcLayout->GetLogicOffset() + pcLayout->GetLengthWithEOL();
-		CFigureManager* pcFigureManager = CFigureManager::getInstance();
+		FigureManager* pcFigureManager = FigureManager::getInstance();
 		while (pInfo->m_nPosInLogic < nPosTo) {
 			// 色切替
 			if (pInfo->CheckChangeColor(cLineStr)) {
@@ -1087,7 +1087,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 			}
 
 			// 1文字情報取得 $$高速化可能
-			CFigure& cFigure = pcFigureManager->GetFigure(&cLineStr.GetPtr()[pInfo->GetPosInLogic()],
+			Figure& cFigure = pcFigureManager->GetFigure(&cLineStr.GetPtr()[pInfo->GetPosInLogic()],
 				cLineStr.GetLength() - pInfo->GetPosInLogic());
 
 			// 1文字描画
@@ -1126,7 +1126,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 		if (!bTransText) {
 			cBackType.FillBack(pInfo->m_gr, rcClip);
 		}
-		CTypeSupport cSelectType(this, COLORIDX_SELECT);
+		TypeSupport cSelectType(this, COLORIDX_SELECT);
 		if (GetSelectionInfo().IsTextSelected() && cSelectType.IsDisp()) {
 			// 選択範囲の指定色：必要ならテキストのない部分の矩形選択を作画
 			LayoutRange selectArea = GetSelectionInfo().GetSelectAreaLine(pInfo->m_pDispPos->GetLayoutLineRef(), pcLayout);
@@ -1277,7 +1277,7 @@ void EditView::DispTextSelected(
 			}
 			
 			// 選択色表示なら反転しない
-			if (!bOMatch && CTypeSupport(this, COLORIDX_SELECT).IsDisp()) {
+			if (!bOMatch && TypeSupport(this, COLORIDX_SELECT).IsDisp()) {
 				return;
 			}
 			

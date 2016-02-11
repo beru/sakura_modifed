@@ -26,13 +26,13 @@
 #include "view/colors/CColorStrategy.h"
 
 
-class CColor_RegexKeyword : public ColorStrategy {
+class Color_RegexKeyword : public ColorStrategy {
 public:
-	CColor_RegexKeyword() : m_nCOMMENTEND(0), m_nCOMMENTMODE(ToColorIndexType_RegularExpression(0)) { }
+	Color_RegexKeyword() : m_nCOMMENTEND(0), m_nCOMMENTMODE(ToColorIndexType_RegularExpression(0)) { }
 	virtual EColorIndexType GetStrategyColor() const { return m_nCOMMENTMODE; }
 	virtual void InitStrategyStatus() { m_nCOMMENTEND = 0; m_nCOMMENTMODE = ToColorIndexType_RegularExpression(0); }
-	virtual bool BeginColor(const CStringRef& cStr, int nPos);
-	virtual bool EndColor(const CStringRef& cStr, int nPos);
+	virtual bool BeginColor(const StringRef& cStr, int nPos);
+	virtual bool EndColor(const StringRef& cStr, int nPos);
 	virtual bool Disp() const { return m_pTypeData->m_bUseRegexKeyword; }
 	virtual void OnStartScanLogic();
 private:

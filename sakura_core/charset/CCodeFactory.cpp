@@ -23,14 +23,14 @@ CodeBase* CodeFactory::CreateCodeBase(
 {
   	switch (eCodeType) {
 	case CODE_SJIS:			return new ShiftJis();
-	case CODE_EUC:			return new CEuc();
-	case CODE_JIS:			return new CJis((nFlag&1) == 1);
+	case CODE_EUC:			return new Euc();
+	case CODE_JIS:			return new Jis((nFlag&1) == 1);
 	case CODE_UNICODE:		return new Unicode();
 	case CODE_UTF8:			return new Utf8();
 	case CODE_UTF7:			return new Utf7();
 	case CODE_UNICODEBE:	return new UnicodeBe();
-	case CODE_CESU8:		return new CCesu8();
-	case CODE_LATIN1:		return new CLatin1();	// 2010/3/20 Uchi
+	case CODE_CESU8:		return new Cesu8();
+	case CODE_LATIN1:		return new Latin1();	// 2010/3/20 Uchi
 	case CODE_CPACP:		return new CodePage(eCodeType);
 	case CODE_CPOEM:		return new CodePage(eCodeType);
 	default:

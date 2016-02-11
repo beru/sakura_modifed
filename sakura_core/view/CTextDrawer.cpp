@@ -177,8 +177,8 @@ void TextDrawer::DispVerticalLines(
 	
 	const TypeConfig& typeData = pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 	
-	CTypeSupport cVertType(pView, COLORIDX_VERTLINE);
-	CTypeSupport cTextType(pView, COLORIDX_TEXT);
+	TypeSupport cVertType(pView, COLORIDX_VERTLINE);
+	TypeSupport cTextType(pView, COLORIDX_TEXT);
 	
 	if (!cVertType.IsDisp()) {
 		return;
@@ -293,7 +293,7 @@ void TextDrawer::DispNoteLine(
 {
 	const EditView* pView=m_pEditView;
 
-	CTypeSupport cNoteLine(pView, COLORIDX_NOTELINE);
+	TypeSupport cNoteLine(pView, COLORIDX_NOTELINE);
 	if (cNoteLine.IsDisp()) {
 		gr.SetPen(cNoteLine.GetTextColor());
 		const int nLineHeight = pView->GetTextMetrics().GetHankakuDy();
@@ -329,7 +329,7 @@ void TextDrawer::DispWrapLine(
 ) const
 {
 	const EditView* pView = m_pEditView;
-	CTypeSupport cWrapType(pView, COLORIDX_WRAP);
+	TypeSupport cWrapType(pView, COLORIDX_WRAP);
 	if (!cWrapType.IsDisp()) return;
 
 	const TextArea& rArea = *GetTextArea();
@@ -371,11 +371,11 @@ void TextDrawer::DispLineNumber(
 	//int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
 	int				nLineNumAreaWidth = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_common.m_sWindow.m_nLineNumRightSpace;	// 2009.03.26 ryoji
 
-	CTypeSupport cTextType(pView, COLORIDX_TEXT);
-	CTypeSupport cCaretLineBg(pView, COLORIDX_CARETLINEBG);
-	CTypeSupport cEvenLineBg(pView, COLORIDX_EVENLINEBG);
+	TypeSupport cTextType(pView, COLORIDX_TEXT);
+	TypeSupport cCaretLineBg(pView, COLORIDX_CARETLINEBG);
+	TypeSupport cEvenLineBg(pView, COLORIDX_EVENLINEBG);
 	// 行がないとき・行の背景が透明のときの色
-	CTypeSupport &cBackType = (cCaretLineBg.IsDisp() &&
+	TypeSupport &cBackType = (cCaretLineBg.IsDisp() &&
 		pView->GetCaret().GetCaretLayoutPos().GetY() == nLineNum
 			? cCaretLineBg
 			: cEvenLineBg.IsDisp() && nLineNum % 2 == 1
@@ -400,7 +400,7 @@ void TextDrawer::DispLineNumber(
 			)
 		) {
 			// 変更フラグ
-			if (CTypeSupport(pView, COLORIDX_GYOU_MOD).IsDisp()) {	// 2006.12.12 ryoji
+			if (TypeSupport(pView, COLORIDX_GYOU_MOD).IsDisp()) {	// 2006.12.12 ryoji
 				nColorIndex = COLORIDX_GYOU_MOD;	// 行番号（変更行）
 				bGyouMod = true;
 			}
@@ -414,7 +414,7 @@ void TextDrawer::DispLineNumber(
 		// 02/10/16 ai
 		// ブックマークの表示
 		if (BookmarkGetter(pCDocLine).IsBookmarked()) {
-			if (CTypeSupport(pView, COLORIDX_MARK).IsDisp()) {
+			if (TypeSupport(pView, COLORIDX_MARK).IsDisp()) {
 				nColorIndex = COLORIDX_MARK;
 			}
 		}
@@ -424,8 +424,8 @@ void TextDrawer::DispLineNumber(
 	//             決定されたnColorIndexを使って描画               //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-	CTypeSupport cColorType(pView, nColorIndex);
-	CTypeSupport cMarkType(pView, COLORIDX_MARK);
+	TypeSupport cColorType(pView, nColorIndex);
+	TypeSupport cMarkType(pView, COLORIDX_MARK);
 
 	// 該当行の行番号エリア矩形
 	RECT	rcLineNum;
@@ -440,8 +440,8 @@ void TextDrawer::DispLineNumber(
 
 	COLORREF fgcolor = cColorType.GetTextColor();
 	COLORREF bgcolor = cColorType.GetBackColor();
-	CTypeSupport cGyouType(pView, COLORIDX_GYOU);
-	CTypeSupport cGyouModType(pView, COLORIDX_GYOU_MOD);
+	TypeSupport cGyouType(pView, COLORIDX_GYOU);
+	TypeSupport cGyouModType(pView, COLORIDX_GYOU_MOD);
 	if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {
 		if (cGyouType.GetTextColor() == cColorType.GetTextColor()) {
 			fgcolor = cGyouModType.GetTextColor();
@@ -463,7 +463,7 @@ void TextDrawer::DispLineNumber(
 			cTextType.FillBack(gr, rcLineNum);
 		}
 		bDispLineNumTrans = true;
-	}else if (CTypeSupport(pView, COLORIDX_GYOU).IsDisp()) { // 行番号表示／非表示
+	}else if (TypeSupport(pView, COLORIDX_GYOU).IsDisp()) { // 行番号表示／非表示
 		Font sFont = cColorType.GetTypeFont();
 	 	// 2013.12.30 変更行の色・フォント属性をDIFFブックマーク行に継承するように
 		if (bGyouMod && nColorIndex != COLORIDX_GYOU_MOD) {

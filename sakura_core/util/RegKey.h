@@ -23,22 +23,22 @@
 */
 #pragma once
 
-class CRegKey {
+class RegKey {
 protected:
 	HKEY _root;
 	HKEY _key;
 public:
-	CRegKey() {
+	RegKey() {
 		_root = NULL;
 		_key = NULL;
 	}
 
-	virtual ~CRegKey() {
+	virtual ~RegKey() {
 		Close();
 	}
 
 	static bool ExistsKey(HKEY root, const TCHAR* path, unsigned int access = KEY_READ) {
-		CRegKey test;
+		RegKey test;
 		return (test.Open(root, path, access) == 0);
 	}
 	

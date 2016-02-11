@@ -87,7 +87,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 	CommonSetting* pCommon = &GetDllShareData().m_common;
 
 	// サポート
-	CTypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
+	TypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
 
 	// フォント設定 (ルーラー上の数字用)
 	LOGFONT	lf = {0};
@@ -180,7 +180,7 @@ void Ruler::DrawRulerBg(Graphics& gr)
 void Ruler::DispRuler(HDC hdc)
 {
 	// サポート
-	CTypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
+	TypeSupport cRulerType(m_pEditView, COLORIDX_RULER);
 
 	if (!m_pEditView->GetDrawSwitch()) {
 		return;

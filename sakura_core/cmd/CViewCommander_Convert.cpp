@@ -263,7 +263,7 @@ void ViewCommander::Command_BASE64DECODE(void)
 	const void* pData = cmemBuf.GetRawPtr(&nDataLen);
 
 	// カキコ
-	CBinaryOutputStream out(szPath);
+	BinaryOutputStream out(szPath);
 	if (!out) goto err;
 	if (nDataLen != out.Write(pData, nDataLen)) goto err;
 
@@ -312,7 +312,7 @@ void ViewCommander::Command_UUDECODE(void)
 	const void* pData = cmemBin.GetRawPtr(&nDataLen);
 
 	// カキコ
-	CBinaryOutputStream out(szPath);
+	BinaryOutputStream out(szPath);
 	if (!out) goto err;
 	if (nDataLen != out.Write(pData, nDataLen)) goto err;
 

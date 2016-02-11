@@ -54,9 +54,9 @@ static const DWORD p_helpids[] = {	//11600
 
 // Import
 // 2010/4/23 Uchi Importの外出し
-bool CPropTypesRegex::Import(HWND hwndDlg)
+bool PropTypesRegex::Import(HWND hwndDlg)
 {
-	CImpExpRegex cImpExpRegex(m_Types);
+	ImpExpRegex cImpExpRegex(m_Types);
 
 	// インポート
 	bool bImport = cImpExpRegex.ImportUI(m_hInstance, hwndDlg);
@@ -68,17 +68,17 @@ bool CPropTypesRegex::Import(HWND hwndDlg)
 
 // Export
 // 2010/4/23 Uchi Exportの外出し
-bool CPropTypesRegex::Export(HWND hwndDlg)
+bool PropTypesRegex::Export(HWND hwndDlg)
 {
 	GetData(hwndDlg);
-	CImpExpRegex cImpExpRegex(m_Types);
+	ImpExpRegex cImpExpRegex(m_Types);
 
 	// エクスポート
 	return cImpExpRegex.ExportUI(m_hInstance, hwndDlg);
 }
 
 // 正規表現キーワード メッセージ処理
-INT_PTR CPropTypesRegex::DispatchEvent(
+INT_PTR PropTypesRegex::DispatchEvent(
 	HWND		hwndDlg,	// handle to dialog box
 	UINT		uMsg,		// message
 	WPARAM		wParam,		// first message parameter
@@ -545,7 +545,7 @@ INT_PTR CPropTypesRegex::DispatchEvent(
 }
 
 // ダイアログデータの設定 正規表現キーワード
-void CPropTypesRegex::SetData(HWND hwndDlg)
+void PropTypesRegex::SetData(HWND hwndDlg)
 {
 	// ユーザーがエディット コントロールに入力できるテキストの長さを制限する
 	EditCtl_LimitText(::GetDlgItem(hwndDlg, IDC_EDIT_REGEX), MAX_REGEX_KEYWORDLEN - 1);
@@ -583,7 +583,7 @@ void CPropTypesRegex::SetData(HWND hwndDlg)
 }
 
 // ダイアログデータの設定 正規表現キーワードの一覧部分
-void CPropTypesRegex::SetDataKeywordList(HWND hwndDlg)
+void PropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 {
 	LV_ITEM		lvi;
 
@@ -620,7 +620,7 @@ void CPropTypesRegex::SetDataKeywordList(HWND hwndDlg)
 }
 
 // ダイアログデータの取得 正規表現キーワード
-int CPropTypesRegex::GetData(HWND hwndDlg)
+int PropTypesRegex::GetData(HWND hwndDlg)
 {
 	HWND	hwndList;
 	int	nIndex, i, j;
@@ -678,13 +678,13 @@ int CPropTypesRegex::GetData(HWND hwndDlg)
 /*!
 	@date 2010.07.11 Moca 今のところRegexKeyword::RegexKeyCheckSyntaxと同一なので、中身を削除して転送関数に変更
 */
-BOOL CPropTypesRegex::RegexKakomiCheck(const wchar_t* s)
+BOOL PropTypesRegex::RegexKakomiCheck(const wchar_t* s)
 {
 	return RegexKeyword::RegexKeyCheckSyntax(s);
 }
 //@@@ 2001.11.17 add end MIK
 
-bool CPropTypesRegex::CheckKeywordList(
+bool PropTypesRegex::CheckKeywordList(
 	HWND hwndDlg,
 	const TCHAR* szNewKeyWord,
 	int nUpdateItem

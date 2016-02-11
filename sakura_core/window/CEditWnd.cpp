@@ -519,7 +519,7 @@ void EditWnd::_AdjustInMonitor(const TabGroupInfo& sTabGroupInfo)
 			// ここでは、あとで正式に適用されるはずのドキュメントタイプを仮設定して一時描画しておく（ビューの配色切替によるちらつきを抑える）
 			// さらに、タイプを戻して画面を無効化だけしておく（何らかの原因で途中停止した場合にはもとのタイプ色で再描画されるように ← 例えばファイルサイズが大きすぎる警告を出すときなど）
 			// ※ 正攻法とはいえないかもしれないがあちこち手を入れることなく簡潔に済ませられるのでこうしておく
-			CTypeConfig cTypeOld, cTypeNew(-1);
+			TypeConfigNum cTypeOld, cTypeNew(-1);
 			cTypeOld = GetDocument()->m_cDocType.GetDocumentType();	// 現在のタイプ
 			{
 				EditInfo ei, mruei;
@@ -801,7 +801,7 @@ void EditWnd::OpenDocumentWhenStart(
 void EditWnd::SetDocumentTypeWhenCreate(
 	ECodeType		nCharCode,		// [in] 漢字コード
 	bool			bViewMode,		// [in] ビューモードで開くかどうか
-	CTypeConfig		nDocumentType	// [in] 文書タイプ．-1のとき強制指定無し．
+	TypeConfigNum	nDocumentType	// [in] 文書タイプ．-1のとき強制指定無し．
 	)
 {
 	//	Mar. 7, 2002 genta 文書タイプの強制指定
@@ -1140,7 +1140,7 @@ LRESULT EditWnd::DispatchEvent(
 	int					nItemHeight;
 	UINT				uItem;
 	LRESULT				lRes;
-	CTypeConfig			cTypeNew;
+	TypeConfigNum		cTypeNew;
 
 	switch (uMsg) {
 	case WM_PAINTICON:

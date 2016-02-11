@@ -97,10 +97,10 @@ struct {
 
 // 色の設定をインポート
 // 2010/4/23 Uchi Importの外出し
-bool CPropTypesColor::Import(HWND hwndDlg)
+bool PropTypesColor::Import(HWND hwndDlg)
 {
 	ColorInfo colorInfoArr[64];
-	CImpExpColors cImpExpColors(colorInfoArr);
+	ImpExpColors cImpExpColors(colorInfoArr);
 
 	// 色設定 I/O
 	for (int i=0; i<m_Types.m_nColorInfoArrNum; ++i) {
@@ -129,9 +129,9 @@ bool CPropTypesColor::Import(HWND hwndDlg)
 
 // 色の設定をエクスポート
 // 2010/4/23 Uchi Exportの外出し
-bool CPropTypesColor::Export(HWND hwndDlg)
+bool PropTypesColor::Export(HWND hwndDlg)
 {
-	CImpExpColors	cImpExpColors(m_Types.m_ColorInfoArr);
+	ImpExpColors	cImpExpColors(m_Types.m_ColorInfoArr);
 
 	// エクスポート
 	return cImpExpColors.ExportUI(m_hInstance, hwndDlg);
@@ -231,7 +231,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			// 色選択ダイアログ
 			// 2005.11.30 Moca カスタム色保持
 			DWORD* pColors = (DWORD*)::GetProp(hwnd, _T("ptrCustomColors"));
-			if (CPropTypesColor::SelectColor(hwnd, &pColorInfo->m_sColorAttr.m_cTEXT, pColors)) {
+			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->m_sColorAttr.m_cTEXT, pColors)) {
 				::InvalidateRect(hwnd, &rcItem, TRUE);
 				::InvalidateRect(::GetDlgItem(::GetParent(hwnd), IDC_BUTTON_TEXTCOLOR), NULL, TRUE);
 			}
@@ -243,7 +243,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			// 色選択ダイアログ
 			// 2005.11.30 Moca カスタム色保持
 			DWORD* pColors = (DWORD*)::GetProp(hwnd, _T("ptrCustomColors"));
-			if (CPropTypesColor::SelectColor(hwnd, &pColorInfo->m_sColorAttr.m_cBACK, pColors)) {
+			if (PropTypesColor::SelectColor(hwnd, &pColorInfo->m_sColorAttr.m_cBACK, pColors)) {
 				::InvalidateRect(hwnd, &rcItem, TRUE);
 				::InvalidateRect(::GetDlgItem(::GetParent(hwnd), IDC_BUTTON_BACKCOLOR), NULL, TRUE);
 			}
@@ -261,7 +261,7 @@ LRESULT APIENTRY ColorList_SubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 
 
 // color メッセージ処理
-INT_PTR CPropTypesColor::DispatchEvent(
+INT_PTR PropTypesColor::DispatchEvent(
 	HWND				hwndDlg,	// handle to dialog box
 	UINT				uMsg,		// message
 	WPARAM				wParam,		// first message parameter
@@ -340,7 +340,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			case IDC_BUTTON_SAMETEXTCOLOR: // 文字色統一
 				{
 					// 2006.04.26 ryoji 文字色／背景色統一ダイアログを使う
-					CDlgSameColor cDlgSameColor;
+					DlgSameColor cDlgSameColor;
 					COLORREF cr = m_Types.m_ColorInfoArr[m_nCurrentColorType].m_sColorAttr.m_cTEXT;
 					cDlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_Types, cr);
 				}
@@ -350,7 +350,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 			case IDC_BUTTON_SAMEBKCOLOR:	// 背景色統一
 				{
 					// 2006.04.26 ryoji 文字色／背景色統一ダイアログを使う
-					CDlgSameColor cDlgSameColor;
+					DlgSameColor cDlgSameColor;
 					COLORREF cr = m_Types.m_ColorInfoArr[m_nCurrentColorType].m_sColorAttr.m_cBACK;
 					cDlgSameColor.DoModal(::GetModuleHandle(NULL), hwndDlg, wID, &m_Types, cr);
 				}
@@ -585,7 +585,7 @@ INT_PTR CPropTypesColor::DispatchEvent(
 
 
 // ダイアログデータの設定 color
-void CPropTypesColor::SetData(HWND hwndDlg)
+void PropTypesColor::SetData(HWND hwndDlg)
 {
 
 	HWND	hwndWork;
@@ -723,7 +723,7 @@ void CPropTypesColor::SetData(HWND hwndDlg)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // ダイアログデータの取得 color
-int CPropTypesColor::GetData(HWND hwndDlg)
+int PropTypesColor::GetData(HWND hwndDlg)
 {
 	int		nIdx;
 	HWND	hwndWork;
@@ -851,7 +851,7 @@ int CPropTypesColor::GetData(HWND hwndDlg)
 
 
 // 色ボタンの描画
-void CPropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
+void PropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
 {
 //	MYTRACE(_T("pDis->itemAction = "));
 
@@ -943,7 +943,7 @@ void CPropTypesColor::DrawColorButton(DRAWITEMSTRUCT* pDis, COLORREF cColor)
 //	From Here Sept. 10, 2000 JEPRO
 //	チェック状態に応じてダイアログボックス要素のEnable/Disableを
 //	適切に設定する
-void CPropTypesColor::EnableTypesPropInput(HWND hwndDlg)
+void PropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 {
 	//	From Here Jun. 6, 2001 genta
 	//	行コメント開始桁位置入力ボックスのEnable/Disable設定
@@ -997,7 +997,7 @@ void CPropTypesColor::EnableTypesPropInput(HWND hwndDlg)
 	@date	2005.01.23 genta new
 
 */
-void CPropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
+void PropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 {
 	for (int i=0; i<MAX_KEYWORDSET_PER_TYPE; ++i) {
 		if (m_nSet[i] != -1) {
@@ -1038,7 +1038,7 @@ void CPropTypesColor::RearrangeKeywordSet(HWND hwndDlg)
 
 
 // 色種別リスト オーナー描画
-void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
+void PropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 {
 	ColorInfo*	pColorInfo;
 //	RECT		rc0,rc1,rc2;
@@ -1155,7 +1155,7 @@ void CPropTypesColor::DrawColorListItem(DRAWITEMSTRUCT* pDis)
 
 
 // 色選択ダイアログ
-BOOL CPropTypesColor::SelectColor(
+BOOL PropTypesColor::SelectColor(
 	HWND hwndParent,
 	COLORREF* pColor,
 	DWORD* pCustColors

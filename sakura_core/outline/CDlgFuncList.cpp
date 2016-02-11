@@ -362,7 +362,7 @@ HWND DlgFuncList::DoModeless(
 	m_nListType = nListType;			// 一覧の種類
 	m_bLineNumIsCRLF = bLineNumIsCRLF;	// 行番号の表示 false=折り返し単位／true=改行単位
 	m_nDocType = pcEditView->GetDocument()->m_cDocType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	m_nSortCol = m_type.m_nOutlineSortCol;
 	m_nSortColOld = m_nSortCol;
 	m_bSortDesc = m_type.m_bOutlineSortDesc;
@@ -371,7 +371,7 @@ HWND DlgFuncList::DoModeless(
 	bool bType = (ProfDockSet() != 0);
 	if (bType) {
 		m_type.m_nDockOutline = m_nOutlineType;
-		SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+		SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	}else {
 		CommonSet().m_nDockOutline = m_nOutlineType;
 	}
@@ -1905,11 +1905,11 @@ BOOL DlgFuncList::OnInitDialog(
 	if (!m_bInChangeLayout) {	// ChangeLayout() 処理中は設定変更しない
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		ProfDockDisp() = TRUE;
 		if (bType) {
-			SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 
 		}
 		// 他ウィンドウに変更を通知する
@@ -2155,10 +2155,10 @@ BOOL DlgFuncList::OnNotify(WPARAM wParam, LPARAM lParam)
 			m_nSortColOld = m_nSortCol;
 			{
 				auto type = std::make_unique<TypeConfig>();
-				DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), *type);
+				DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), *type);
 				type->m_nOutlineSortCol = m_nSortCol;
 				type->m_bOutlineSortDesc = m_bSortDesc;
-				SetTypeConfig(CTypeConfig(m_nDocType), *type);
+				SetTypeConfig(TypeConfigNum(m_nDocType), *type);
 			}
 			//	Apr. 23, 2005 genta 関数として独立させた
 			SortListView(hwndList, m_nSortCol);
@@ -2410,11 +2410,11 @@ BOOL DlgFuncList::OnDestroy(void)
 	if (hwndEdit && ::IsWindowVisible(hwndEdit) && !m_bInChangeLayout) {	// ChangeLayout() 処理中は設定変更しない
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		ProfDockDisp() = FALSE;
 		if (bType) {
-			SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		// 他ウィンドウに変更を通知する
 		if (ProfDockSync()) {
@@ -2440,9 +2440,9 @@ BOOL DlgFuncList::OnCbnSelChange(HWND hwndCtl, int wID)
 		if (m_nSortType != nSelect) {
 			m_nSortType = nSelect;
 			auto type = std::make_unique<TypeConfig>();
-			DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), *type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), *type);
 			type->m_nOutlineSortType = m_nSortType;
-			SetTypeConfig(CTypeConfig(m_nDocType), *type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), *type);
 			SortTree(GetItemHwnd(IDC_TREE_FL), TVI_ROOT);
 		}
 		return TRUE;
@@ -2626,7 +2626,7 @@ void DlgFuncList::Redraw(
 {
 	EditView* pcEditView = (EditView*)m_lParam;
 	m_nDocType = pcEditView->GetDocument()->m_cDocType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	SyncColor();
 
 	m_nOutlineType = nOutLineType;
@@ -2638,7 +2638,7 @@ void DlgFuncList::Redraw(
 	bool bType = (ProfDockSet() != 0);
 	if (bType) {
 		m_type.m_nDockOutline = m_nOutlineType;
-		SetTypeConfig( CTypeConfig(m_nDocType), m_type );
+		SetTypeConfig( TypeConfigNum(m_nDocType), m_type );
 	}else {
 		CommonSet().m_nDockOutline = m_nOutlineType;
 	}
@@ -3050,7 +3050,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		GetWindowRect(&rc);
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		switch (GetDockSide()) {
 		case DOCKSIDE_LEFT:		ProfDockLeft() = rc.right - rc.left;	break;
@@ -3059,7 +3059,7 @@ INT_PTR DlgFuncList::OnMouseMove(
 		case DOCKSIDE_BOTTOM:	ProfDockBottom() = rc.bottom - rc.top;	break;
 		}
 		if (bType) {
-			SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		return 1L;
 	}
@@ -3291,7 +3291,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 {
 	// メニューを作成する
 	EditView* pcEditView = &EditDoc::GetInstance(0)->m_pcEditWnd->GetActiveView();
-	DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 	EDockSide eDockSide = ProfDockSide();	// 設定上の配置
 	UINT uFlags = MF_BYPOSITION | MF_STRING;
 	HMENU hMenu = ::CreatePopupMenu();
@@ -3390,14 +3390,14 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 			}
 			auto type = std::make_unique<TypeConfig>();
 			for (int i=0; i<GetDllShareData().m_nTypesCount; ++i) {
-				DocTypeManager().GetTypeConfig(CTypeConfig(i), *type);
+				DocTypeManager().GetTypeConfig(TypeConfigNum(i), *type);
 				type->m_bOutlineDockDisp = CommonSet().m_bOutlineDockDisp;
 				type->m_eOutlineDockSide = CommonSet().m_eOutlineDockSide;
 				type->m_cxOutlineDockLeft = CommonSet().m_cxOutlineDockLeft;
 				type->m_cyOutlineDockTop = CommonSet().m_cyOutlineDockTop;
 				type->m_cxOutlineDockRight = CommonSet().m_cxOutlineDockRight;
 				type->m_cyOutlineDockBottom = CommonSet().m_cyOutlineDockBottom;
-				DocTypeManager().SetTypeConfig(CTypeConfig(i), *type);
+				DocTypeManager().SetTypeConfig(TypeConfigNum(i), *type);
 			}
 			ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 			PostOutlineNotifyToAllEditors((WPARAM)0, (LPARAM)hwndEdit);	// 他ウィンドウにドッキング配置変更を通知する
@@ -3416,7 +3416,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		eDockSide = EDockSide(nId - 100);	// 新しいドッキングモード
 		bool bType = (ProfDockSet() != 0);
 		if (bType) {
-			DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		if (eDockSide > DOCKSIDE_FLOAT) {
 			switch (eDockSide) {
@@ -3452,7 +3452,7 @@ void DlgFuncList::DoMenu(POINT pt, HWND hwndFrom)
 		ProfDockDisp() = GetHwnd()? TRUE: FALSE;
 		ProfDockSide() = eDockSide;	// 新しいドッキングモードを適用
 		if (bType) {
-			SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+			SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		}
 		ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 		if (ProfDockSync()) {
@@ -3494,7 +3494,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 
 	EditDoc* pDoc = EditDoc::GetInstance(0);	// 今は非表示かもしれないので (EditView*)m_lParam は使えない
 	m_nDocType = pDoc->m_cDocType.GetDocumentType().GetIndex();
-	DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+	DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 
 	BOOL bDockDisp = ProfDockDisp();
 	EDockSide eDockSideNew = ProfDockSide();
@@ -3514,7 +3514,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
 					m_nOutlineType = m_type.m_nDockOutline;
-					SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}else {
 					m_nOutlineType = CommonSet().m_nDockOutline;
 				}
@@ -3555,7 +3555,7 @@ bool DlgFuncList::ChangeLayout(int nId)
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
 					m_nOutlineType = m_type.m_nDockOutline;
-					SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}else {
 					m_nOutlineType = CommonSet().m_nDockOutline;
 				}
@@ -3643,7 +3643,7 @@ BOOL DlgFuncList::PostOutlineNotifyToAllEditors(WPARAM wParam, LPARAM lParam)
 	return AppNodeGroupHandle(0).PostMessageToAllEditors(MYWM_OUTLINE_NOTIFY, (WPARAM)wParam, (LPARAM)lParam, GetHwnd());
 }
 
-void DlgFuncList::SetTypeConfig(CTypeConfig docType, const TypeConfig& type)
+void DlgFuncList::SetTypeConfig(TypeConfigNum docType, const TypeConfig& type)
 {
 	DocTypeManager().SetTypeConfig(docType, type);
 }
@@ -3859,7 +3859,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 
 				bool bType = (ProfDockSet() != 0);
 				if (bType) {
-					DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+					DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}
 				ProfDockDisp() = GetHwnd()? TRUE: FALSE;
 				ProfDockSide() = eDockSide;	// 新しいドッキングモードを適用
@@ -3870,7 +3870,7 @@ BOOL DlgFuncList::Track(POINT ptDrag)
 				case DOCKSIDE_BOTTOM:	ProfDockBottom() = rc.bottom - rc.top;	break;
 				}
 				if (bType) {
-					SetTypeConfig(CTypeConfig(m_nDocType), m_type);
+					SetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 				}
 				ChangeLayout(OUTLINE_LAYOUT_FOREGROUND);	// 自分自身への強制変更
 				if (!IsDocking()) {
@@ -3946,7 +3946,7 @@ void DlgFuncList::LoadFileTreeSetting(
 		pFileTree = &(CommonSet().m_sFileTree);
 		data.m_eFileTreeSettingOrgType = EFileTreeSettingFrom_Common;
 	}else {
-		DocTypeManager().GetTypeConfig(CTypeConfig(m_nDocType), m_type);
+		DocTypeManager().GetTypeConfig(TypeConfigNum(m_nDocType), m_type);
 		pFileTree = &(TypeSet().m_sFileTree);
 		data.m_eFileTreeSettingOrgType = EFileTreeSettingFrom_Type;
 	}
@@ -3967,7 +3967,7 @@ void DlgFuncList::LoadFileTreeSetting(
 			strIniFileName += szPath;
 			strIniFileName += CommonSet().m_sFileTreeDefIniName;
 			if (cProfile.ReadProfile(strIniFileName.c_str())) {
-				CImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
+				ImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
 				data.m_eFileTreeSettingLoadType = EFileTreeSettingFrom_File;
 				IniDirPath = szPath;
 				CutLastYenFromDirectoryPath( IniDirPath );
@@ -3993,7 +3993,7 @@ void DlgFuncList::LoadFileTreeSetting(
 				pszIniFileName = pFileTree->m_szProjectIni;
 			}
 			if (cProfile.ReadProfile(pszIniFileName)) {
-				CImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
+				ImpExpFileTree::IO_FileTreeIni(cProfile, data.m_aItems);
 				data.m_szLoadProjectIni = pszIniFileName;
 				bReadIni = true;
 			}

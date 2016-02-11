@@ -1519,7 +1519,7 @@ public:
 			std::tstring name = fileName;
 			name += _T(".skrnew");
 			try {
-				out = new CBinaryOutputStream(name.c_str(), true);
+				out = new BinaryOutputStream(name.c_str(), true);
 			}catch (Error_FileOpen) {
 				throw Error_WriteFileOpen();
 			}
@@ -1611,7 +1611,7 @@ private:
 	bool bOldSave;
 	size_t bufferSize;
 	std::deque<NativeW> buffer;
-	CBinaryOutputStream* out;
+	BinaryOutputStream* out;
 	std::unique_ptr<CodeBase> pcCodeBase;
 	NativeW&	memMessage;
 };

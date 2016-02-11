@@ -57,7 +57,7 @@
 #include "macro/CCookieManager.h"
 #include "util/design_template.h"
 
-class CSMacroMgr; // 2002/2/10 aroka
+class SMacroMgr; // 2002/2/10 aroka
 class EditWnd; // Sep. 10, 2002 genta
 struct EditInfo; // 20050705 aroka
 class FuncInfoArr;

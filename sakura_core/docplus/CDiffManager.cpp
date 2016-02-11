@@ -22,20 +22,20 @@ bool DiffLineGetter::GetDiffColor(EColorIndexType* pnColorIndex) const
 	if (type) {
 		switch (type) {
 		case MARK_DIFF_APPEND:	// í«â¡
-			if (CTypeSupport(pView, COLORIDX_DIFF_APPEND).IsDisp()) {
+			if (TypeSupport(pView, COLORIDX_DIFF_APPEND).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_APPEND;
 				return true;
 			}
 			break;
 		case MARK_DIFF_CHANGE:	// ïœçX
-			if (CTypeSupport(pView, COLORIDX_DIFF_CHANGE).IsDisp()) {
+			if (TypeSupport(pView, COLORIDX_DIFF_CHANGE).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_CHANGE;
 				return true;
 			}
 			break;
 		case MARK_DIFF_DELETE:	// çÌèú
 		case MARK_DIFF_DEL_EX:	// çÌèú
-			if (CTypeSupport(pView, COLORIDX_DIFF_DELETE).IsDisp()) {
+			if (TypeSupport(pView, COLORIDX_DIFF_DELETE).IsDisp()) {
 				*pnColorIndex = COLORIDX_DIFF_DELETE;
 				return true;
 			}

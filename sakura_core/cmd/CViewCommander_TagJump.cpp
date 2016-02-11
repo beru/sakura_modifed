@@ -421,7 +421,7 @@ bool ViewCommander::Command_TagsMake(void)
 
 	HANDLE	hStdOutWrite, hStdOutRead;
 	DlgCancel	cDlgCancel;
-	CWaitCursor	cWaitCursor(m_pCommanderView->GetHwnd());
+	WaitCursor	cWaitCursor(m_pCommanderView->GetHwnd());
 
 	PROCESS_INFORMATION	pi = {0};
 

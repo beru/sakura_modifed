@@ -28,7 +28,7 @@
 		   distribution.
 */
 
-class CDlgTypeAscertain;
+class DlgTypeAscertain;
 
 #pragma once
 
@@ -42,7 +42,7 @@ using std::tstring;
 /*!
 	@brief ファイルタイプ一覧ダイアログ
 */
-class CDlgTypeAscertain : public Dialog {
+class DlgTypeAscertain : public Dialog {
 public:
 	// 型
 	struct AscertainInfo {
@@ -56,7 +56,7 @@ public:
 
 public:
 	// Constructors
-	CDlgTypeAscertain();
+	DlgTypeAscertain();
 	// モーダルダイアログの表示
 	int DoModal(HINSTANCE, HWND, AscertainInfo*);	// モーダルダイアログの表示
 

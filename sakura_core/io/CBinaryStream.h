@@ -25,9 +25,9 @@
 
 #include "CStream.h"
 
-class CBinaryInputStream : public Stream {
+class BinaryInputStream : public Stream {
 public:
-	CBinaryInputStream(LPCTSTR tszFilePath);
+	BinaryInputStream(LPCTSTR tszFilePath);
 
 public:
 	// ストリームの「残り」サイズを取得
@@ -37,8 +37,8 @@ public:
 	int Read(void* pBuffer, int nSizeInBytes);
 };
 
-class CBinaryOutputStream : public OutputStream {
+class BinaryOutputStream : public OutputStream {
 public:
-	CBinaryOutputStream(LPCTSTR tszFilePath, bool bExceptionMode = false);
+	BinaryOutputStream(LPCTSTR tszFilePath, bool bExceptionMode = false);
 };
 

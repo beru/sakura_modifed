@@ -54,7 +54,7 @@ int ShareDataLockCounter::GetLockCounter() {
 	return GetDllShareData().m_nLockCount;
 }
 
-class CLockCancel: public DlgCancel {
+class LockCancel: public DlgCancel {
 public:
 	virtual BOOL OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam) {
 		BOOL ret = DlgCancel::OnInitDialog(hwnd, wParam, lParam);
@@ -104,8 +104,8 @@ int GetCountIf0Lock(ShareDataLockCounter** ppLock)
 void ShareDataLockCounter::WaitLock(HWND hwndParent, ShareDataLockCounter** ppLock) {
 	if (0 < GetCountIf0Lock(ppLock)) {
 		DWORD dwTime = ::GetTickCount();
-		CWaitCursor cWaitCursor(hwndParent);
-		CLockCancel* pDlg = NULL;
+		WaitCursor cWaitCursor(hwndParent);
+		LockCancel* pDlg = NULL;
 		HWND hwndCancel = NULL;
 		::EnableWindow(hwndParent, FALSE);
 		while (0 < GetCountIf0Lock(ppLock)) {
@@ -119,7 +119,7 @@ void ShareDataLockCounter::WaitLock(HWND hwndParent, ShareDataLockCounter** ppLo
 			if (!pDlg) {
 				DWORD dwTimeNow = ::GetTickCount();
 				if (2000 < dwTimeNow - dwTime) {
-					pDlg = new CLockCancel();
+					pDlg = new LockCancel();
 					hwndCancel = pDlg->DoModeless(::GetModuleHandle(NULL), hwndParent, IDD_OPERATIONRUNNING);
 				}
 			}

@@ -356,7 +356,7 @@ bool RegexKeyword::RegexKeyLineStart(void)
 	@note RegexKeyLineStart関数によって初期化されていること。
 */
 bool RegexKeyword::RegexIsKeyword(
-	const CStringRef&	cStr,		// [in] 検索対象文字列
+	const StringRef&	cStr,		// [in] 検索対象文字列
 //	const wchar_t*		pLine,		// [in] １行のデータ
 	int					nPos,		// [in] 検索開始オフセット
 //	int					nLineLen,	// [in] １行の長さ

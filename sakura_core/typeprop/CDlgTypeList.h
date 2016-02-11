@@ -12,7 +12,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 */
 
-class CDlgTypeList;
+class DlgTypeList;
 
 #pragma once
 
@@ -25,12 +25,12 @@ using std::wstring;
 /*!
 	@brief ファイルタイプ一覧ダイアログ
 */
-class CDlgTypeList : public Dialog {
+class DlgTypeList : public Dialog {
 public:
 	// 型
 	struct Result {
-		CTypeConfig	cDocumentType;	// 文書種類
-		bool		bTempChange;	// 旧PROP_TEMPCHANGE_FLAG
+		TypeConfigNum	cDocumentType;	// 文書種類
+		bool			bTempChange;	// 旧PROP_TEMPCHANGE_FLAG
 	};
 
 public:
@@ -57,7 +57,7 @@ protected:
 	bool AlertFileAssociation();	// 2011/8/20 syat
 
 private:
-	CTypeConfig m_nSettingType;
+	TypeConfigNum m_nSettingType;
 	// 関連付け状態
 	bool m_bRegistryChecked[ MAX_TYPES ];	// レジストリ確認 未／済
 	bool m_bExtRMenu[ MAX_TYPES ];			// 右クリック登録 未／済

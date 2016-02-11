@@ -60,7 +60,7 @@ void EditApp::Create(HINSTANCE hInst, int nGroupId)
 	AppMode::getInstance();	// ウィンドウよりも前にイベントを受け取るためにここでインスタンス作成
 
 	// マクロ
-	m_pcSMacroMgr = new CSMacroMgr();
+	m_pcSMacroMgr = new SMacroMgr();
 
 	// ウィンドウの作成
 	m_pcEditWnd = EditWnd::getInstance();
@@ -105,7 +105,7 @@ bool EditApp::OpenPropertySheet(int nPageNum)
 }
 
 // タイプ別設定 プロパティシート
-bool EditApp::OpenPropertySheetTypes(int nPageNum, CTypeConfig nSettingType)
+bool EditApp::OpenPropertySheetTypes(int nPageNum, TypeConfigNum nSettingType)
 {
 	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes(m_pcEditWnd->GetHwnd(), nPageNum, nSettingType);
 

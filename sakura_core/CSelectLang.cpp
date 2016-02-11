@@ -116,7 +116,7 @@ HINSTANCE SelectLang::InitializeLanguageEnvironment(void)
 	}
 
 	// カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
-	CCurrentDirectoryBackupPoint cCurDirBackup;
+	CurrentDirectoryBackupPoint cCurDirBackup;
 	ChangeCurrentDirectoryToExeDir();
 // ★iniまたはexeフォルダとなるように改造が必要
 

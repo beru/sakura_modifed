@@ -26,19 +26,19 @@
 template <class Base>
 class ImplementsIUnknown: public Base
 
-class CInterfaceObject: public ImplementsIUnknown<IDispatch>
+class InterfaceObject: public ImplementsIUnknown<IDispatch>
  */
 typedef void (*ScriptErrorHandler)(BSTR Description, BSTR Source, void *Data);
 
-class CWSHClient : IWSHClient {
+class WSHClient : IWSHClient {
 public:
 	// 型定義
 	typedef std::vector<IfObj*> List;      // 所有しているインタフェースオブジェクトのリスト
 	typedef List::const_iterator ListIter;	// そのイテレータ
 
 	// コンストラクタ・デストラクタ
-	CWSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler, void* AData);
-	~CWSHClient();
+	WSHClient(const wchar_t* AEngine, ScriptErrorHandler AErrorHandler, void* AData);
+	~WSHClient();
 
 	// フィールド・アクセサ
 	ScriptErrorHandler m_OnError;

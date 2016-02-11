@@ -59,7 +59,7 @@ OsVersionInfo::OsVersionInfo(bool pbStart)
 		m_bSSE2 = (data[3] & (1<<26)) != 0;
 #endif
 
-	CRegKey reg;
+	RegKey reg;
 	if (ERROR_SUCCESS == reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ) ) {
 		m_bWine = true;
 	}else {

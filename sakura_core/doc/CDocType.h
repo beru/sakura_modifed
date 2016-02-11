@@ -28,7 +28,7 @@
 */
 #pragma once
 
-#include "types/CType.h" // CTypeConfig
+#include "types/CType.h" // TypeConfig
 #include "env/CDocTypeManager.h"
 
 class DocType {
@@ -42,9 +42,9 @@ public:
 	bool GetDocumentLockState() { return m_nSettingTypeLocked; }
 	
 	// •¶‘í•Ê‚Ìİ’è‚Ææ“¾		// Nov. 23, 2000 genta
-	void SetDocumentType(CTypeConfig type, bool force, bool bTypeOnly = false);	// •¶‘í•Ê‚Ìİ’è
+	void SetDocumentType(TypeConfigNum type, bool force, bool bTypeOnly = false);	// •¶‘í•Ê‚Ìİ’è
 	void SetDocumentTypeIdx(int id = -1, bool force = false);
-	CTypeConfig GetDocumentType() const {					// •¶‘í•Ê‚Ìæ“¾
+	TypeConfigNum GetDocumentType() const {					// •¶‘í•Ê‚Ìæ“¾
 		return m_nSettingType;
 	}
 	const TypeConfig& GetDocumentAttribute() const {		// •¶‘í•Ê‚ÌÚ×î•ñ
@@ -59,7 +59,7 @@ public:
 
 private:
 	EditDoc*		m_pcDocRef;
-	CTypeConfig		m_nSettingType;
+	TypeConfigNum	m_nSettingType;
 	TypeConfig		m_typeConfig;
 	bool			m_nSettingTypeLocked;		// •¶‘í•Ê‚Ìˆêİ’èó‘Ô
 };

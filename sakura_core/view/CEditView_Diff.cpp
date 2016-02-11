@@ -60,10 +60,10 @@
 
 #define	SAKURA_DIFF_TEMP_PREFIX	_T("sakura_diff_")
 
-class COutputAdapterDiff: public OutputAdapter
+class OutputAdapterDiff: public OutputAdapter
 {
 public:
-	COutputAdapterDiff(EditView* view, int nFlgFile12_){
+	OutputAdapterDiff(EditView* view, int nFlgFile12_){
 		m_view = view;
 		bLineHead = true;
 		bDiffInfo = false;
@@ -72,7 +72,7 @@ public:
 		nFlgFile12 = nFlgFile12_;
 		szDiffData[0] = 0;
 	}
-	~COutputAdapterDiff(){};
+	~OutputAdapterDiff(){};
 
 	bool OutputW(const WCHAR* pBuf, int size = -1){ return true; };
 	bool OutputA(const ACHAR* pBuf, int size = -1);
@@ -125,7 +125,7 @@ void EditView::ViewDiffInfo(
 	bool	bFlgFile12,		// 編集中のファイルが旧ファイル
 */
 {
-	CWaitCursor	cWaitCursor(this->GetHwnd());
+	WaitCursor	cWaitCursor(this->GetHwnd());
 	int		nFlgFile12 = 1;
 
 	// exeのあるフォルダ
@@ -183,7 +183,7 @@ void EditView::ViewDiffInfo(
 			nFlgOpt |= 0x100; // UTF-8 in
 		}
 		nFlgOpt |= 0x40;  // 拡張情報出力無効
-		COutputAdapterDiff oa(this, nFlgFile12);
+		OutputAdapterDiff oa(this, nFlgFile12);
 		bool ret = ExecCmd( cmdline, nFlgOpt, NULL, &oa );
 
 		if (ret) {
@@ -208,7 +208,7 @@ void EditView::ViewDiffInfo(
 	return;
 					}
 
-bool COutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
+bool OutputAdapterDiff::OutputA(const ACHAR* pBuf, int size)
 {
 	if (size == -1) {
 		size = auto_strlen(pBuf);

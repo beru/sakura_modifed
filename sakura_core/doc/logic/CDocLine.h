@@ -63,11 +63,11 @@ public:
 			return NULL;
 		}
 	}
-	CStringRef GetStringRefWithEOL() const {	//###仮の名前、仮の対処
+	StringRef GetStringRefWithEOL() const {	//###仮の名前、仮の対処
 		if (this) {
-			return CStringRef(GetPtr(), GetLengthWithEOL());
+			return StringRef(GetPtr(), GetLengthWithEOL());
 		}else {
-			return CStringRef(NULL, 0);
+			return StringRef(NULL, 0);
 		}
 	}
 	const Eol& GetEol() const { return m_cEol; }

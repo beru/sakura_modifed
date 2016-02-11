@@ -342,7 +342,7 @@ void ViewCommander::Command_UNDO(void)
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// hor
 
 
-		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
+		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (cWaitCursor.IsEnable()) {
@@ -594,7 +594,7 @@ void ViewCommander::Command_REDO(void)
 		bool bDrawAll = false;
 		const bool bDrawSwitchOld = m_pCommanderView->SetDrawSwitch(bDraw);	// 2007.07.22 ryoji
 
-		CWaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
+		WaitCursor cWaitCursor(m_pCommanderView->GetHwnd(), 1000 < nOpeBlkNum);
 		HWND hwndProgress = NULL;
 		int nProgressPos = 0;
 		if (cWaitCursor.IsEnable()) {
@@ -906,7 +906,7 @@ void ViewCommander::DelCharForOverwrite(
 		}else {
 			// 文字幅に合わせてスペースを詰める
 			if (GetDllShareData().m_common.m_sEdit.m_bOverWriteFixMode) {
-				const CStringRef line = pcLayout->GetDocLineRef()->GetStringRefWithEOL();
+				const StringRef line = pcLayout->GetDocLineRef()->GetStringRefWithEOL();
 				LogicInt nPos = GetCaret().GetCaretLogicPos().GetX();
 				if (line.At(nPos) != WCODE::TAB) {
 					LayoutInt nKetaBefore = NativeW::GetKetaOfChar(line, nPos);

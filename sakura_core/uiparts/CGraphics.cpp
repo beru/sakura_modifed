@@ -6,10 +6,10 @@
 #include "CGraphics.h"
 #include "util/std_macro.h"
 
-class CGDIStock {
+class GDIStock {
 public:
-	CGDIStock() {}
-	~CGDIStock() {
+	GDIStock() {}
+	~GDIStock() {
 		while (!m_vObjects.empty()) {
 			::DeleteObject(m_vObjects.back());
 			m_vObjects.pop_back();
@@ -26,7 +26,7 @@ protected:
 	std::vector<HGDIOBJ> m_vObjects;
 };
 
-static CGDIStock s_cGDIStock;	// 唯一の CGDIStock オブジェクト
+static GDIStock s_cGDIStock;	// 唯一の GDIStock オブジェクト
 
 void Graphics::Init(HDC hdc)
 {

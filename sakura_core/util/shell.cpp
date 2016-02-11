@@ -70,7 +70,7 @@ BOOL SelectDir(
 	CutLastYenFromDirectoryPath(szInitFolder);
 
 	// 2010.08.28 フォルダを開くとフックも含めて色々DLLが読み込まれるので移動
-	CCurrentDirectoryBackupPoint dirBack;
+	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 
 	// SHBrowseForFolder()関数に渡す構造体
@@ -419,7 +419,7 @@ BOOL ResolveShortcutLink(
 
 	BOOL bRes = FALSE;
 	// 2010.08.28 DLL インジェクション対策としてEXEのフォルダに移動する
-	CCurrentDirectoryBackupPoint dirBack;
+	CurrentDirectoryBackupPoint dirBack;
 	ChangeCurrentDirectoryToExeDir();
 
 	IShellLink* pIShellLink = NULL;

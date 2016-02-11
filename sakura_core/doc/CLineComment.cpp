@@ -42,7 +42,7 @@ void LineComment::CopyTo(const int n, const wchar_t* buffer, int nCommentPos)
 	}
 }
 
-bool LineComment::Match(int nPos, const CStringRef& cStr) const
+bool LineComment::Match(int nPos, const StringRef& cStr) const
 {
 	for (int i=0; i<COMMENT_DELIMITER_NUM; ++i) {
 		if (1
