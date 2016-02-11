@@ -305,8 +305,8 @@ void ViewCommander::Command_RIGHT(
 		if (pcLayout) {
 			// キャレット位置のレイアウト行について。
 			const LayoutInt x_wrap = pcLayout->CalcLayoutWidth(GetDocument()->m_cLayoutMgr); // 改行文字、または折り返しの位置。
-			const bool wrapped = EOL_NONE == pcLayout->GetLayoutEol(); // 折り返しているか、改行文字で終わっているか。これにより x_wrapの意味が変わる。
-			const bool nextline_exists = pcLayout->GetNextLayout() || pcLayout->GetLayoutEol() != EOL_NONE; // EOFのみの行も含め、キャレットが移動可能な次行が存在するか。
+			const bool wrapped = EolType::None == pcLayout->GetLayoutEol(); // 折り返しているか、改行文字で終わっているか。これにより x_wrapの意味が変わる。
+			const bool nextline_exists = pcLayout->GetNextLayout() || pcLayout->GetLayoutEol() != EolType::None; // EOFのみの行も含め、キャレットが移動可能な次行が存在するか。
 
 			// 現在のキャレットの右の位置(to_x)を求める。
 			MemoryIterator it(pcLayout, GetDocument()->m_cLayoutMgr.GetTabSpace());
@@ -1302,7 +1302,7 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 			bool bSkip = false;
 			LogicPoint pos;
 			if (pcDocLineLast) {
-				if (pcDocLineLast->GetEol() == EOL_NONE) {
+				if (pcDocLineLast->GetEol() == EolType::None) {
 					// ぶら下がり[EOF]
 					pos.x = pcDocLineLast->GetLengthWithoutEOL();
 					pos.y = docLineMgr.GetLineCount() - 1;
@@ -1364,7 +1364,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 	}
 	if (!bLast) {
 		const DocLine* pcDocLineLast = docLineMgr.GetDocLineBottom();
-		if (pcDocLineLast && pcDocLineLast->GetEol() == EOL_NONE) {
+		if (pcDocLineLast && pcDocLineLast->GetEol() == EolType::None) {
 			LogicPoint pos;
 			pos.x = pcDocLine->GetLengthWithoutEOL();
 			pos.y = docLineMgr.GetLineCount() - 1;
@@ -1430,7 +1430,7 @@ void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 			if (ModifyVisitor().IsLineModified(pcDocLineTemp, nSaveSeq) != false) {
 				// 最終行が変更行の場合は、[EOF]に止まる
 				LogicPoint pos;
-				if (pcDocLineTemp->GetEol() != EOL_NONE) {
+				if (pcDocLineTemp->GetEol() != EolType::None) {
 					pos.x = 0;
 					pos.y = docLineMgr.GetLineCount();
 					pos.y++;

@@ -56,7 +56,7 @@ void DocLine::SetEol()
 	if (p >= pData) {
 		m_cEol.SetTypeByString(p, &pData[nLength] - p);
 	}else {
-		m_cEol = EOL_NONE;
+		m_cEol = EolType::None;
 	}
 }
 

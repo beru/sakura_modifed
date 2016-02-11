@@ -196,7 +196,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 	// セーブ情報
 	SaveInfo sSaveInfo;
 	pcDoc->GetSaveInfo(&sSaveInfo);
-	sSaveInfo.cEol = EOL_NONE; // 改行コード無変換
+	sSaveInfo.cEol = EolType::None; // 改行コード無変換
 	sSaveInfo.bOverwriteMode = true; // 上書き要求
 
 	// 上書き処理
@@ -212,7 +212,7 @@ bool ViewCommander::Command_FILESAVE(bool warnbeep, bool askname)
 bool ViewCommander::Command_FILESAVEAS_DIALOG(
 	const WCHAR* fileNameDef,
 	ECodeType eCodeType,
-	EEolType eEolType
+	EolType eEolType
 	)
 {
 	return GetDocument()->m_cDocFileOperation.FileSaveAs(fileNameDef, eCodeType, eEolType, true);
@@ -224,7 +224,7 @@ bool ViewCommander::Command_FILESAVEAS_DIALOG(
 */
 bool ViewCommander::Command_FILESAVEAS(
 	const WCHAR* filename,
-	EEolType eEolType
+	EolType eEolType
 	)
 {
 	return GetDocument()->m_cDocFileOperation.FileSaveAs(filename, CODE_NONE, eEolType, false);
@@ -425,7 +425,7 @@ void ViewCommander::Command_PLSQL_COMPILE_ON_SQLPLUS(void)
 				nBool = Command_FILESAVE();
 			}else {
 				//nBool = HandleCommand(F_FILESAVEAS_DIALOG, true, 0, 0, 0, 0);
-				nBool = Command_FILESAVEAS_DIALOG(NULL, CODE_NONE, EOL_NONE);
+				nBool = Command_FILESAVEAS_DIALOG(NULL, CODE_NONE, EolType::None);
 			}
 			if (!nBool) {
 				return;
@@ -696,7 +696,7 @@ bool ViewCommander::Command_PUTFILE(
 			SaveInfo(
 				to_tchar(filename),
 				nSaveCharCode,
-				EOL_NONE,
+				EolType::None,
 				bBom
 			)
 		);

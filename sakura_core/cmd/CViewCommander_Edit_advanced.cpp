@@ -230,7 +230,7 @@ void ViewCommander::Command_INDENT(
 				}
 				const bool emptyLine = ! pcLayout || pcLayout->GetLengthWithoutEOL() == 0;
 				const bool selectionIsOutOfLine = reachEndOfLayout && (
-					(pcLayout && pcLayout->GetLayoutEol() != EOL_NONE) ? xLayoutFrom == xLayoutTo : xLayoutTo < rcSel.GetFrom().x
+					(pcLayout && pcLayout->GetLayoutEol() != EolType::None) ? xLayoutFrom == xLayoutTo : xLayoutTo < rcSel.GetFrom().x
 				);
 
 				// “ü—Í•¶Žš‚Ì‘}“üˆÊ’u
@@ -701,7 +701,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=¸‡,FALSE=~‡
 		if (sSelectOld.GetTo().x > 0) {
 			// 2006.03.31 Moca nSelectLineToOld‚ÍA•¨—s‚È‚Ì‚ÅLayoutŒn‚©‚çDocLineŒn‚ÉC³
 			const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
-			if (pcDocLine && EOL_NONE != pcDocLine->GetEol()) {
+			if (pcDocLine && EolType::None != pcDocLine->GetEol()) {
 				sSelectOld.GetToPointer()->y++;
 			}
 		}
@@ -863,14 +863,14 @@ void ViewCommander::Command_MERGE(void)
 	if (sSelectOld.GetTo().x > 0) {
 #if 0
 		const Layout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY(selInfo.m_sSelect.GetTo().GetY2()); // 2007.10.09 kobake ’PˆÊ¬ÝƒoƒOC³
-		if (pcLayout && EOL_NONE != pcLayout->GetLayoutEol()) {
+		if (pcLayout && EolType::None != pcLayout->GetLayoutEol()) {
 			sSelectOld.GetToPointer()->y++;
 			//sSelectOld.GetTo().y++;
 		}
 #else
 		// 2010.08.22 Moca ƒ\[ƒg‚ÆŽd—l‚ð‡‚í‚¹‚é
 		const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
-		if (pcDocLine && EOL_NONE != pcDocLine->GetEol()) {
+		if (pcDocLine && EolType::None != pcDocLine->GetEol()) {
 			sSelectOld.GetToPointer()->y++;
 		}
 #endif

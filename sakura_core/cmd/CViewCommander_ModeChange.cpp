@@ -56,9 +56,9 @@ void ViewCommander::Command_CHGMOD_INS(void)
 	@author moca
 	@date 2003.06.23 新規作成
 */
-void ViewCommander::Command_CHGMOD_EOL(EEolType e)
+void ViewCommander::Command_CHGMOD_EOL(EolType e)
 {
-	if (EOL_NONE < e && e < EOL_CODEMAX) {
+	if (EolType::None < e && e < EolType::CodeMax) {
 		GetDocument()->m_cDocEditor.SetNewLineCode(e);
 		// ステータスバーを更新するため
 		// キャレットの行桁位置を表示する関数を呼び出す

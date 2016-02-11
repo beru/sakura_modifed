@@ -21,7 +21,7 @@ static bool _CheckSavingEolcode(
 	)
 {
 	bool bMix = false;
-	if (cEolType == EOL_NONE) {	// 改行コード変換なし
+	if (cEolType == EolType::None) {	// 改行コード変換なし
 		Eol cEolCheck;	// 比較対象EOL
 		const DocLine* pcDocLine = pcDocLineMgr.GetDocLineTop();
 		if (pcDocLine) {
@@ -29,7 +29,7 @@ static bool _CheckSavingEolcode(
 		}
 		while (pcDocLine) {
 			Eol cEol = pcDocLine->GetEol();
-			if (cEol != cEolCheck && cEol != EOL_NONE) {
+			if (cEol != cEolCheck && cEol != EolType::None) {
 				bMix = true;
 				break;
 			}

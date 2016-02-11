@@ -31,7 +31,7 @@ public:
 	CodeConvertResult CodeToUnicode(const Memory& cSrc, NativeW* pDst){ return UTF7ToUnicode(cSrc, pDst); }	//!< 特定コード → UNICODE    変換
 	CodeConvertResult UnicodeToCode(const NativeW& cSrc, Memory* pDst){ return UnicodeToUTF7(cSrc, pDst); }	//!< UNICODE    → 特定コード 変換
 	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
-	void GetEol(Memory* pcmemEol, EEolType eEolType);
+	void GetEol(Memory* pcmemEol, EolType eEolType);
 
 public:
 	// 実装

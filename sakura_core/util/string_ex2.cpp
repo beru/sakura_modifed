@@ -117,7 +117,7 @@ const char* GetNextLine(
 	int nBgn = *pnBgn;
 
 	//	May 15, 2000 genta
-	pcEol->SetType(EOL_NONE);
+	pcEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -151,7 +151,7 @@ const wchar_t* GetNextLineW(
 {
 	int nBgn = *pnBgn;
 
-	pcEol->SetType(EOL_NONE);
+	pcEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}
@@ -173,13 +173,13 @@ const wchar_t* GetNextLineW(
 	行端子の種類を調べるUnicodeBE版
 	@param pszData 調査対象文字列へのポインタ
 	@param nDataLen 調査対象文字列の長さ(wchar_tの長さ)
-	@return 改行コードの種類。終端子が見つからなかったときはEOL_NONEを返す。
+	@return 改行コードの種類。終端子が見つからなかったときはEolType::Noneを返す。
 */
-static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
+static EolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 {
 	//! 行終端子のデータの配列(UnicodeBE版) 2000.05.30 Moca
 	static const wchar_t* aEolTable[EOL_TYPE_NUM] = {
-		L"",									// EOL_NONE
+		L"",									// EolType::None
 		(const wchar_t*)"\x00\x0d\x00\x0a\x00",	// EOL_CRLF
 		(const wchar_t*)"\x00\x0a\x00",			// EOL_LF
 		(const wchar_t*)"\x00\x0d\x00"			// EOL_CR
@@ -187,12 +187,12 @@ static EEolType GetEOLTypeUniBE(const wchar_t* pszData, int nDataLen)
 
 	// 改行コードの長さを調べる
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
-		Eol cEol((EEolType)i);
+		Eol cEol((EolType)i);
 		if (cEol.GetLen() <= nDataLen && auto_memcmp(pszData, aEolTable[i], cEol.GetLen()) == 0) {
 			return gm_pnEolTypeArr[i];
 		}
 	}
-	return EOL_NONE;
+	return EolType::None;
 }
 
 /*!
@@ -210,7 +210,7 @@ const wchar_t* GetNextLineWB(
 {
 	int nBgn = *pnBgn;
 
-	pcEol->SetType(EOL_NONE);
+	pcEol->SetType(EolType::None);
 	if (*pnBgn >= nDataLen) {
 		return NULL;
 	}

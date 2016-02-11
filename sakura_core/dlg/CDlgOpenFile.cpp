@@ -217,11 +217,11 @@ UINT_PTR CALLBACK OFNHookProc(
 	WPARAM		fCheck;	// Jul. 26, 2003 ryoji BOM状態用
 
 	// From Here	Feb. 9, 2001 genta
-	static const int nEolValueArr[] = {
-		EOL_NONE,
-		EOL_CRLF,
-		EOL_LF,
-		EOL_CR,
+	static const EolType nEolValueArr[] = {
+		EolType::None,
+		EolType::CRLF,
+		EolType::LF,
+		EolType::CR,
 	};
 	// 文字列はResource内に入れる
 	static const TCHAR*	const	pEolNameArr[] = {
@@ -296,7 +296,7 @@ UINT_PTR CALLBACK OFNHookProc(
 					}else {
 						nIdx = Combo_AddString(pData->m_hwndComboEOL, pEolNameArr[i]);
 					}
-					Combo_SetItemData(pData->m_hwndComboEOL, nIdx, nEolValueArr[i]);
+					Combo_SetItemData(pData->m_hwndComboEOL, nIdx, (int)nEolValueArr[i]);
 					if (nEolValueArr[i] == pData->m_cEol) {
 						nIdxSel = nIdx;
 					}
@@ -463,7 +463,7 @@ UINT_PTR CALLBACK OFNHookProc(
 				if (pData->m_bUseEol) {
 					nIdx = Combo_GetCurSel(pData->m_hwndComboEOL);
 					lRes = Combo_GetItemData(pData->m_hwndComboEOL, nIdx);
-					pData->m_cEol = (EEolType)lRes;	// 文字コード
+					pData->m_cEol = (EolType)lRes;	// 文字コード
 				}
 				// From Here Jul. 26, 2003 ryoji
 				// BOMチェックボックスの状態を取得

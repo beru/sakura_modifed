@@ -410,7 +410,7 @@ BOOL EditView::ChangeCurRegexp(bool bRedrawIfChanged)
 */
 void EditView::CopyCurLine(
 	bool		bAddCRLFWhenCopy,		//!< [in] 折り返し位置に改行コードを挿入するか？
-	EEolType	neweol,					//!< [in] コピーするときのEOL。
+	EolType	neweol,					//!< [in] コピーするときのEOL。
 	bool		bEnableLineModePaste	//!< [in] ラインモード貼り付けを可能にする
 )
 {
@@ -428,12 +428,12 @@ void EditView::CopyCurLine(
 	cmemBuf.SetString(pcLayout->GetPtr(), pcLayout->GetLengthWithoutEOL());
 	if (pcLayout->GetLayoutEol().GetLen() != 0) {
 		cmemBuf.AppendString(
-			(neweol == EOL_UNKNOWN) ?
+			(neweol == EolType::Unknown) ?
 				pcLayout->GetLayoutEol().GetValue2() : Eol(neweol).GetValue2()
 		);
 	}else if (bAddCRLFWhenCopy) {	// 2007.10.08 ryoji bAddCRLFWhenCopy対応処理追加
 		cmemBuf.AppendString(
-			(neweol == EOL_UNKNOWN) ?
+			(neweol == EolType::Unknown) ?
 				WCODE::CRLF : Eol(neweol).GetValue2()
 		);
 	}

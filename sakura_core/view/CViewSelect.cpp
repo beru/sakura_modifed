@@ -365,7 +365,7 @@ void ViewSelect::DrawSelectArea2(HDC hdc) const
 				// 2006.10.01 Moca End
 				// 2011.12.26 EOF‚Ì‚Ô‚ç‰º‚ª‚ès‚Í”½“]‚µAEOF‚Ì‚Ý‚Ìs‚Í”½“]‚µ‚È‚¢
 				const Layout* pBottom = pView->m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
-				if (pBottom && pBottom->GetLayoutEol() == EOL_NONE) {
+				if (pBottom && pBottom->GetLayoutEol() == EolType::None) {
 					ptLast.x = 0;
 					ptLast.y++;
 				}

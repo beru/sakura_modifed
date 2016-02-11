@@ -370,15 +370,15 @@ Layout* LayoutMgr::CreateLayout(
 		colorInfo
 	);
 
-	if (pCDocLine->GetEol() == EOL_NONE) {
-		pLayout->m_cEol.SetType(EOL_NONE);	// 改行コードの種類
+	if (pCDocLine->GetEol() == EolType::None) {
+		pLayout->m_cEol.SetType(EolType::None);	// 改行コードの種類
 	}else {
 		if (pLayout->GetLogicOffset() + pLayout->GetLengthWithEOL() >
 			pCDocLine->GetLengthWithEOL() - pCDocLine->GetEol().GetLen()
 		) {
 			pLayout->m_cEol = pCDocLine->GetEol();	// 改行コードの種類
 		}else {
-			pLayout->m_cEol = EOL_NONE;	// 改行コードの種類
+			pLayout->m_cEol = EolType::None;	// 改行コードの種類
 		}
 	}
 
@@ -442,7 +442,7 @@ bool LayoutMgr::IsEndOfLine(
 		return false;
 	}
 
-	if (pLayout->GetLayoutEol().GetType() == EOL_NONE) {
+	if (pLayout->GetLayoutEol().GetType() == EolType::None) {
 		// この行に改行はない
 		// この行の最後か？
 		if (ptLinePos.x == (Int)pLayout->GetLengthWithEOL()) {
@@ -483,7 +483,7 @@ void LayoutMgr::GetEndLayoutPos(
 	}
 
 	Layout* btm = m_pLayoutBot;
-	if (btm->m_cEol != EOL_NONE) {
+	if (btm->m_cEol != EolType::None) {
 		// 末尾に改行がある
 		ptLayoutEnd->Set(LayoutInt(0), GetLineCount());
 	}else {

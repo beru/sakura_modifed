@@ -35,22 +35,22 @@
 
 // 2002/09/22 Moca EOL_CRLF_UNICODEを廃止
 // 行終端子の種類
-enum EEolType {
-	EOL_NONE,			// 
-	EOL_CRLF,			// 0d0a
-	EOL_LF,				// 0a
-	EOL_CR,				// 0d
-	EOL_NEL,			// 85
-	EOL_LS,				// 2028
-	EOL_PS,				// 2029
-	EOL_CODEMAX,		//
-	EOL_UNKNOWN = -1	//
+enum class EolType {
+	None,			// 
+	CRLF,			// 0d0a
+	LF,				// 0a
+	CR,				// 0d
+	NEL,			// 85
+	LS,				// 2028
+	PS,				// 2029
+	CodeMax,		//
+	Unknown = -1	//
 };
 
-#define EOL_TYPE_NUM	EOL_CODEMAX // 8
+#define EOL_TYPE_NUM	(int)EolType::CodeMax // 8
 
 // 行終端子の配列
-extern const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM];
+extern const EolType gm_pnEolTypeArr[EOL_TYPE_NUM];
 
 #include "basis/SakuraBasis.h"
 
@@ -64,21 +64,21 @@ extern const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM];
 class Eol {
 public:
 	// コンストラクタ・デストラクタ
-	Eol() { m_eEolType = EOL_NONE; }
-	Eol(EEolType t) { SetType(t); }
+	Eol() { m_eEolType = EolType::None; }
+	Eol(EolType t) { SetType(t); }
 
 	// 比較
-	bool operator == (EEolType t) const { return GetType() == t; }
-	bool operator != (EEolType t) const { return GetType() != t; }
+	bool operator == (EolType t) const { return GetType() == t; }
+	bool operator != (EolType t) const { return GetType() != t; }
 
 	// 代入
 	const Eol& operator = (const Eol& t) { m_eEolType = t.m_eEolType; return *this; }
 
 	// 型変換
-	operator EEolType() const { return GetType(); }
+	operator EolType() const { return GetType(); }
 
 	// 設定
-	bool SetType(EEolType t);	//	Typeの設定
+	bool SetType(EolType t);	//	Typeの設定
 	void SetTypeByString(const wchar_t* pszData, int nDataLen);
 	void SetTypeByString(const char* pszData, int nDataLen);
 
@@ -88,17 +88,17 @@ public:
 	void SetTypeByStringForFile_unibe(const char* pszData, int nDataLen);
 
 	// 取得
-	EEolType		GetType()	const { return m_eEolType; }		// 現在のTypeを取得
+	EolType		GetType()	const { return m_eEolType; }		// 現在のTypeを取得
 	LogicInt		GetLen()	const;	// 現在のEOL長を取得。文字単位。
 	const TCHAR*	GetName()	const;	// 現在のEOLの名称取得
 	const wchar_t*	GetValue2()	const;	// 現在のEOL文字列先頭へのポインタを取得
 	//#####
 
 	bool IsValid() const {
-		return m_eEolType >= EOL_CRLF && m_eEolType < EOL_CODEMAX;
+		return m_eEolType >= EolType::CRLF && m_eEolType < EolType::CodeMax;
 	}
 
 private:
-	EEolType	m_eEolType;	// 改行コードの種類
+	EolType	m_eEolType;	// 改行コードの種類
 };
 

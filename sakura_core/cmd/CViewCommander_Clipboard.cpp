@@ -77,7 +77,7 @@ void ViewCommander::Command_CUT(void)
 void ViewCommander::Command_COPY(
 	bool		bIgnoreLockAndDisable,	// [in] 選択範囲を解除するか？
 	bool		bAddCRLFWhenCopy,		// [in] 折り返し位置に改行コードを挿入するか？
-	EEolType	neweol					// [in] コピーするときのEOL。
+	EolType	neweol					// [in] コピーするときのEOL。
 	)
 {
 	NativeW cmemBuf;

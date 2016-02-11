@@ -33,7 +33,7 @@ enum CodeConvertResult {
 class Memory;
 class NativeW;
 struct CommonSetting_Statusbar;
-enum EEolType;
+enum class EolType;
 
 /*!
 	文字コード基底クラス。
@@ -57,7 +57,7 @@ public:
 
 	// ファイル形式
 	virtual void GetBom(Memory* pcmemBom);											// BOMデータ取得
-	void GetEol(Memory* pcmemEol, EEolType eEolType) { S_GetEol(pcmemEol, eEolType); }	// 改行データ取得 virtualから実体へ	2010/6/13 Uchi
+	void GetEol(Memory* pcmemEol, EolType eEolType) { S_GetEol(pcmemEol, eEolType); }	// 改行データ取得 virtualから実体へ	2010/6/13 Uchi
 
 	// 文字コード表示用		2008/6/9 Uchi
 	virtual CodeConvertResult UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst, const CommonSetting_Statusbar* psStatusbar);			// UNICODE → Hex 変換
@@ -70,7 +70,7 @@ public:
 	static bool MIMEHeaderDecode(const char*, const int, Memory*, const ECodeType);
 
 	// CShiftJisより移動 2010/6/13 Uchi
-	static void S_GetEol(Memory* pcmemEol, EEolType eEolType);	// 改行データ取得
+	static void S_GetEol(Memory* pcmemEol, EolType eEolType);	// 改行データ取得
 	
 protected:
 

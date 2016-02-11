@@ -189,8 +189,8 @@ bool ViewCommander::HandleCommand(
 	case F_FILEOPEN2:			Command_FILEOPEN((const WCHAR*)lparam1, (ECodeType)lparam2, lparam3 != 0, (const WCHAR*)lparam4); break;	// ファイルを開く2
 	case F_FILEOPEN_DROPDOWN:	Command_FILEOPEN((const WCHAR*)lparam1); break;			// ファイルを開く(ドロップダウン)	//@@@ 2002.06.15 MIK
 	case F_FILESAVE:			bRet = Command_FILESAVE(); break;	// 上書き保存
-	case F_FILESAVEAS_DIALOG:	bRet = Command_FILESAVEAS_DIALOG((const WCHAR*)lparam1, (ECodeType)lparam2, (EEolType)lparam3); break;	// 名前を付けて保存
-	case F_FILESAVEAS:			bRet = Command_FILESAVEAS((const WCHAR*)lparam1, (EEolType)lparam3); break;	// 名前を付けて保存
+	case F_FILESAVEAS_DIALOG:	bRet = Command_FILESAVEAS_DIALOG((const WCHAR*)lparam1, (ECodeType)lparam2, (EolType)lparam3); break;	// 名前を付けて保存
+	case F_FILESAVEAS:			bRet = Command_FILESAVEAS((const WCHAR*)lparam1, (EolType)lparam3); break;	// 名前を付けて保存
 	case F_FILESAVEALL:			bRet = Command_FILESAVEALL(); break;	// 全ての編集ウィンドウで上書き保存 // Jan. 23, 2005 genta
 	case F_FILESAVE_QUIET:		bRet = Command_FILESAVE(false, false); break;	// 静かに上書き保存 // Jan. 24, 2005 genta
 	case F_FILESAVECLOSE:
@@ -366,7 +366,7 @@ bool ViewCommander::HandleCommand(
 	case F_CUT:						Command_CUT(); break;					// 切り取り(選択範囲をクリップボードにコピーして削除)
 	case F_COPY:					Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy); break;			// コピー(選択範囲をクリップボードにコピー)
 	case F_COPY_ADDCRLF:			Command_COPY(false, true); break;		// 折り返し位置に改行をつけてコピー(選択範囲をクリップボードにコピー)
-	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy, EOL_CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
+	case F_COPY_CRLF:				Command_COPY(false, GetDllShareData().m_common.m_sEdit.m_bAddCRLFWhenCopy, EolType::CRLF); break;	// CRLF改行でコピー(選択範囲をクリップボードにコピー)
 	case F_PASTE:					Command_PASTE((int)lparam1); break;					// 貼り付け(クリップボードから貼り付け)
 	case F_PASTEBOX:				Command_PASTEBOX((int)lparam1); break;				// 矩形貼り付け(クリップボードから矩形貼り付け)
 	case F_INSBOXTEXT:				Command_INSBOXTEXT((const wchar_t*)lparam1, (int)lparam2); break;				// 矩形テキスト挿入
@@ -474,11 +474,11 @@ bool ViewCommander::HandleCommand(
 	case F_CHG_CHARSET:		Command_CHG_CHARSET((ECodeType)lparam1, lparam2 != 0); break;	// 文字コードセット指定	2010/6/14 Uchi
 	// From Here 2003.06.23 Moca
 	// F_CHGMOD_EOL_xxx はマクロに記録されないが、F_CHGMOD_EOLはマクロに記録されるので、マクロ関数を統合できるという手はず
-	case F_CHGMOD_EOL_CRLF:	HandleCommand(F_CHGMOD_EOL, bRedraw, EOL_CRLF, 0, 0, 0); break;	// 入力する改行コードをCRLFに設定
-	case F_CHGMOD_EOL_LF:	HandleCommand(F_CHGMOD_EOL, bRedraw, EOL_LF, 0, 0, 0); break;	// 入力する改行コードをLFに設定
-	case F_CHGMOD_EOL_CR:	HandleCommand(F_CHGMOD_EOL, bRedraw, EOL_CR, 0, 0, 0); break;	// 入力する改行コードをCRに設定
+	case F_CHGMOD_EOL_CRLF:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::CRLF, 0, 0, 0); break;	// 入力する改行コードをCRLFに設定
+	case F_CHGMOD_EOL_LF:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::LF, 0, 0, 0); break;	// 入力する改行コードをLFに設定
+	case F_CHGMOD_EOL_CR:	HandleCommand(F_CHGMOD_EOL, bRedraw, (int)EolType::CR, 0, 0, 0); break;	// 入力する改行コードをCRに設定
 	// 2006.09.03 Moca F_CHGMOD_EOLで break 忘れの修正
-	case F_CHGMOD_EOL:		Command_CHGMOD_EOL((EEolType)lparam1); break;	// 入力する改行コードを設定
+	case F_CHGMOD_EOL:		Command_CHGMOD_EOL((EolType)lparam1); break;	// 入力する改行コードを設定
 	// To Here 2003.06.23 Moca
 	case F_CANCEL_MODE:		Command_CANCEL_MODE(); break;	// 各種モードの取り消し
 

@@ -214,7 +214,7 @@ CodeConvertResult CodePage::UnicodeToCP(const NativeW& cSrc, Memory* pDst, int c
 	return ret;
 }
 
-void CodePage::GetEol(Memory* pcmemEol, EEolType eEolType)
+void CodePage::GetEol(Memory* pcmemEol, EolType eEolType)
 {
 	NativeW temp;
 	Unicode().GetEol(temp._GetMemory(), eEolType);

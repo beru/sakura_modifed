@@ -98,7 +98,7 @@ bool CodeBase::MIMEHeaderDecode(
 // CShiftJis‚æ‚èˆÚ“® 2010/6/13 Uchi
 void CodeBase::S_GetEol(
 	Memory* pcmemEol,
-	EEolType eEolType
+	EolType eEolType
 	)
 {
 	static const struct{
@@ -106,14 +106,14 @@ void CodeBase::S_GetEol(
 		int nLen;
 	}
 	aEolTable[EOL_TYPE_NUM] = {
-		{ "",			0 },	// EOL_NONE
-		{ "\x0d\x0a",	2 },	// EOL_CRLF
-		{ "\x0a",		1 },	// EOL_LF
-		{ "\x0d",		1 },	// EOL_CR
-		{ "",			0 },	// EOL_NEL
-		{ "",			0 },	// EOL_LS
-		{ "",			0 },	// EOL_PS
+		{ "",			0 },	// EolType::None
+		{ "\x0d\x0a",	2 },	// EolType::CRLF
+		{ "\x0a",		1 },	// EolType::LF
+		{ "\x0d",		1 },	// EolType::CR
+		{ "",			0 },	// EolType::NEL
+		{ "",			0 },	// EolType::LS
+		{ "",			0 },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[eEolType].szData, aEolTable[eEolType].nLen);
+	pcmemEol->SetRawData(aEolTable[(int)eEolType].szData, aEolTable[(int)eEolType].nLen);
 }
 

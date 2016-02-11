@@ -13,20 +13,20 @@ void UnicodeBe::GetBom(Memory* pcmemBom)
 	pcmemBom->SetRawData(UTF16BE_BOM, sizeof(UTF16BE_BOM));
 }
 
-void UnicodeBe::GetEol(Memory* pcmemEol, EEolType eEolType)
+void UnicodeBe::GetEol(Memory* pcmemEol, EolType eEolType)
 {
 	static const struct{
 		const void* pData;
 		int nLen;
 	}
 	aEolTable[EOL_TYPE_NUM] = {
-		{ "",					0 * sizeof(wchar_t) },	// EOL_NONE
-		{ "\x00\x0d\x00\x0a",	2 * sizeof(wchar_t) },	// EOL_CRLF
-		{ "\x00\x0a",			1 * sizeof(wchar_t) },	// EOL_LF
-		{ "\x00\x0d",			1 * sizeof(wchar_t) },	// EOL_CR
-		{ "\x00\x85",			1 * sizeof(wchar_t) },	// EOL_NEL
-		{ "\x20\x28",			1 * sizeof(wchar_t) },	// EOL_LS
-		{ "\x20\x29",			1 * sizeof(wchar_t) },	// EOL_PS
+		{ "",					0 * sizeof(wchar_t) },	// EolType::NONE
+		{ "\x00\x0d\x00\x0a",	2 * sizeof(wchar_t) },	// EolType::CRLF
+		{ "\x00\x0a",			1 * sizeof(wchar_t) },	// EolType::LF
+		{ "\x00\x0d",			1 * sizeof(wchar_t) },	// EolType::CR
+		{ "\x00\x85",			1 * sizeof(wchar_t) },	// EolType::NEL
+		{ "\x20\x28",			1 * sizeof(wchar_t) },	// EolType::LS
+		{ "\x20\x29",			1 * sizeof(wchar_t) },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[eEolType].pData, aEolTable[eEolType].nLen);
+	pcmemEol->SetRawData(aEolTable[(int)eEolType].pData, aEolTable[(int)eEolType].nLen);
 }

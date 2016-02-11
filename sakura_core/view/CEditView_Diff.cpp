@@ -455,7 +455,7 @@ BOOL EditView::MakeDiffTmpFile(
 			SaveInfo(
 				filename,
 				code,
-				EOL_NONE,
+				EolType::None,
 				bBom
 			)
 		);

@@ -37,7 +37,7 @@ void DocVisitor::SetAllEol(Eol cEol)
 				break;
 			}
 			// ‰üs‚ð’uŠ·
-			if (pcDocLine->GetEol() != EOL_NONE && pcDocLine->GetEol() != cEol) {
+			if (pcDocLine->GetEol() != EolType::None && pcDocLine->GetEol() != cEol) {
 				LogicRange sRange;
 				sRange.SetFrom(LogicPoint(pcDocLine->GetLengthWithoutEOL(), nLine));
 				sRange.SetTo(LogicPoint(pcDocLine->GetLengthWithEOL(), nLine));

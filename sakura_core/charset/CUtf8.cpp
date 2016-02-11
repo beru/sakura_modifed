@@ -17,21 +17,21 @@ void Utf8::GetBom(Memory* pcmemBom)
 
 
 
-void Utf8::GetEol(Memory* pcmemEol, EEolType eEolType){
+void Utf8::GetEol(Memory* pcmemEol, EolType eEolType){
 	static const struct{
 		const char* szData;
 		int nLen;
 	}
 	aEolTable[EOL_TYPE_NUM] = {
-		"",			0,	// EOL_NONE
-		"\x0d\x0a",	2,	// EOL_CRLF
-		"\x0a",		1,	// EOL_LF
-		"\x0d",		1,	// EOL_CR
-		"\xc2\x85",			2,	// EOL_NEL
-		"\xe2\x80\xa8",		3,	// EOL_LS
-		"\xe2\x80\xa9",		3,	// EOL_PS
+		"",					0,	// EolType::None
+		"\x0d\x0a",			2,	// EolType::CRLF
+		"\x0a",				1,	// EolType::LF
+		"\x0d",				1,	// EolType::CR
+		"\xc2\x85",			2,	// EolType::NEL
+		"\xe2\x80\xa8",		3,	// EolType::LS
+		"\xe2\x80\xa9",		3,	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[eEolType].szData,aEolTable[eEolType].nLen);
+	pcmemEol->SetRawData(aEolTable[(int)eEolType].szData, aEolTable[(int)eEolType].nLen);
 }
 
 

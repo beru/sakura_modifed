@@ -201,7 +201,7 @@ void _DefaultConfig(TypeConfig* pType)
 	auto& encoding = pType->m_encoding;
 	encoding.m_bPriorCesu8 = false;
 	encoding.m_eDefaultCodetype = CODE_SJIS;
-	encoding.m_eDefaultEoltype = EOL_CRLF;
+	encoding.m_eDefaultEoltype = EolType::CRLF;
 	encoding.m_bDefaultBom = false;
 
 	//@@@2002.2.4 YAZAKI

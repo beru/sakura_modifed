@@ -58,7 +58,7 @@
 #include "CDicMgr.h"
 //	Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 #include "extmodule/CBregexp.h"
-#include "CEol.h"				// EEolType
+#include "CEol.h"				// EolType
 #include "cmd/CViewCommander.h"
 #include "mfclike/CMyWnd.h"		// parent
 #include "doc/CDocListener.h"	// parent
@@ -168,7 +168,7 @@ public:
 	bool MySetClipboardData(const WCHAR*, int, bool bColumnSelect, bool = false);	// クリップボードにデータを設定
 
 	// 利用
-	void CopyCurLine(bool bAddCRLFWhenCopy, EEolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする	// 2007.10.08 ryoji
+	void CopyCurLine(bool bAddCRLFWhenCopy, EolType neweol, bool bEnableLineModePaste);	// カーソル行をクリップボードにコピーする	// 2007.10.08 ryoji
 	void CopySelectedAllLines(const wchar_t*, bool);			// 選択範囲内の全行をクリップボードにコピーする
 
 
@@ -314,7 +314,7 @@ public:
 	// 2002/01/19 novice public属性に変更
 	bool GetSelectedDataSimple(NativeW&);// 選択範囲のデータを取得
 	bool GetSelectedDataOne(NativeW& cmemBuf, int nMaxLen);
-	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EEolType neweol = EOL_UNKNOWN);	// 選択範囲のデータを取得
+	bool GetSelectedData(NativeW*, bool, const wchar_t*, bool, bool bAddCRLFWhenCopy, EolType neweol = EolType::Unknown);	// 選択範囲のデータを取得
 	int IsCurrentPositionSelected(LayoutPoint ptCaretPos);					// 指定カーソル位置が選択エリア内にあるか
 	int IsCurrentPositionSelectedTEST(const LayoutPoint& ptCaretPos, const LayoutRange& sSelect) const; // 指定カーソル位置が選択エリア内にあるか
 	// 2006.07.09 genta 行桁指定によるカーソル移動(選択領域を考慮)

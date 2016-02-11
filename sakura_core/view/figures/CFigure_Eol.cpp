@@ -339,7 +339,7 @@ void _DrawEOL(
 	gr.SetPen(pColor);
 
 	switch (cEol.GetType()) {
-	case EOL_CRLF:	// 下左矢印
+	case EolType::CRLF:	// 下左矢印
 		{
 			sx = rcEol.left;						// X左端
 			sy = rcEol.top + (rcEol.Height() / 2);	// Y中心
@@ -376,7 +376,7 @@ void _DrawEOL(
 			}
 		}
 		break;
-	case EOL_CR:	// 左向き矢印	// 2007.08.17 ryoji EOL_LF -> EOL_CR
+	case EolType::CR:	// 左向き矢印	// 2007.08.17 ryoji EolType::LF -> EolType::CR
 		{
 			sx = rcEol.left;
 			sy = rcEol.top + (rcEol.Height() / 2);
@@ -409,7 +409,7 @@ void _DrawEOL(
 			}
 		}
 		break;
-	case EOL_LF:	// 下向き矢印	// 2007.08.17 ryoji EOL_CR -> EOL_LF
+	case EolType::LF:	// 下向き矢印	// 2007.08.17 ryoji EolType::CR -> EolType::LF
 	// 2013.04.22 Moca NEL,LS,PS対応。暫定でLFと同じにする
 		{
 			sx = rcEol.left + (rcEol.Width() / 2);
@@ -443,9 +443,9 @@ void _DrawEOL(
 			}
 		}
 		break;
-	case EOL_NEL:
-	case EOL_LS:
-	case EOL_PS:
+	case EolType::NEL:
+	case EolType::LS:
+	case EolType::PS:
 		{
 			// 左下矢印(折れ曲がりなし)
 			sx = rcEol.left;			//X左端

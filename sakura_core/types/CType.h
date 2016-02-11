@@ -99,7 +99,7 @@ enum EBackgroundImagePos {
 struct EncodingConfig {
 	bool				m_bPriorCesu8;					//!< 自動判別時に CESU-8 を優先するかどうか
 	ECodeType			m_eDefaultCodetype;				//!< デフォルト文字コード
-	EEolType			m_eDefaultEoltype;				//!< デフォルト改行コード	// 2011.01.24 ryoji
+	EolType			m_eDefaultEoltype;				//!< デフォルト改行コード	// 2011.01.24 ryoji
 	bool				m_bDefaultBom;					//!< デフォルトBOM			// 2011.01.24 ryoji
 };
 

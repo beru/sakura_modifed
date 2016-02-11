@@ -821,10 +821,10 @@ void EditWnd::SetDocumentTypeWhenCreate(
 		}
 		if (nCharCode == eDefaultCharCode) {	// デフォルト文字コードと同じ文字コードが選択されたとき
 			GetDocument()->SetDocumentEncoding(nCharCode, types.m_encoding.m_bDefaultBom);
-			GetDocument()->m_cDocEditor.m_cNewLineCode = static_cast<EEolType>(types.m_encoding.m_eDefaultEoltype);
+			GetDocument()->m_cDocEditor.m_cNewLineCode = static_cast<EolType>(types.m_encoding.m_eDefaultEoltype);
 		}else {
 			GetDocument()->SetDocumentEncoding(nCharCode, CodeTypeName(nCharCode).IsBomDefOn());
-			GetDocument()->m_cDocEditor.m_cNewLineCode = EOL_CRLF;
+			GetDocument()->m_cDocEditor.m_cNewLineCode = EolType::CRLF;
 		}
 	}
 
@@ -1483,19 +1483,19 @@ LRESULT EditWnd::DispatchEvent(
 						NULL
 					);
 					::DestroyMenu(hMenuPopUp);
-					int nEOLCode = 0;
+					EolType nEOLCode = EolType::None;
 					switch (nId) {
-					case F_CHGMOD_EOL_CRLF: nEOLCode = EOL_CRLF; break;
-					case F_CHGMOD_EOL_CR: nEOLCode = EOL_CR; break;
-					case F_CHGMOD_EOL_LF: nEOLCode = EOL_LF; break;
-					case F_CHGMOD_EOL_NEL: nEOLCode = EOL_NEL; break;
-					case F_CHGMOD_EOL_PS: nEOLCode = EOL_PS; break;
-					case F_CHGMOD_EOL_LS: nEOLCode = EOL_LS; break;
+					case F_CHGMOD_EOL_CRLF: nEOLCode = EolType::CRLF; break;
+					case F_CHGMOD_EOL_CR: nEOLCode = EolType::CR; break;
+					case F_CHGMOD_EOL_LF: nEOLCode = EolType::LF; break;
+					case F_CHGMOD_EOL_NEL: nEOLCode = EolType::NEL; break;
+					case F_CHGMOD_EOL_PS: nEOLCode = EolType::PS; break;
+					case F_CHGMOD_EOL_LS: nEOLCode = EolType::LS; break;
 					default:
-						nEOLCode = -1;
+						nEOLCode = EolType::Unknown;
 					}
-					if (nEOLCode != -1) {
-						GetActiveView().GetCommander().HandleCommand(F_CHGMOD_EOL, true, nEOLCode, 0, 0, 0);
+					if (nEOLCode != EolType::Unknown) {
+						GetActiveView().GetCommander().HandleCommand(F_CHGMOD_EOL, true, (int)nEOLCode, 0, 0, 0);
 					}
 				}
 			}

@@ -32,14 +32,14 @@
 #include "CEol.h"
 
 // 行終端子の配列
-const EEolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
-	EOL_NONE			,	// == 0
-	EOL_CRLF			,	// == 2
-	EOL_LF				,	// == 1
-	EOL_CR				,	// == 1
-	EOL_NEL				,	// == 1
-	EOL_LS				,	// == 1
-	EOL_PS					// == 1
+const EolType gm_pnEolTypeArr[EOL_TYPE_NUM] = {
+	EolType::None			,	// == 0
+	EolType::CRLF			,	// == 2
+	EolType::LF				,	// == 1
+	EolType::CR				,	// == 1
+	EolType::NEL				,	// == 1
+	EolType::LS				,	// == 1
+	EolType::PS					// == 1
 };
 
 
@@ -94,17 +94,17 @@ static const EolDefinitionForUniFile g_aEolTable_uni_file[] = {
 	行終端子の種類を調べる。
 	@param pszData 調査対象文字列へのポインタ
 	@param nDataLen 調査対象文字列の長さ
-	@return 改行コードの種類。終端子が見つからなかったときはEOL_NONEを返す。
+	@return 改行コードの種類。終端子が見つからなかったときはEolType::Noneを返す。
 */
 template <class T>
-EEolType GetEOLType(const T* pszData, int nDataLen)
+EolType GetEOLType(const T* pszData, int nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable[i].StartsWith(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
 		}
 	}
-	return EOL_NONE;
+	return EolType::None;
 }
 
 
@@ -112,24 +112,24 @@ EEolType GetEOLType(const T* pszData, int nDataLen)
 	ファイルを読み込むときに使用するもの
 */
 
-EEolType _GetEOLType_uni(const char* pszData, int nDataLen)
+EolType _GetEOLType_uni(const char* pszData, int nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithW(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
 		}
 	}
-	return EOL_NONE;
+	return EolType::None;
 }
 
-EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
+EolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 {
 	for (int i=1; i<EOL_TYPE_NUM; ++i) {
 		if (g_aEolTable_uni_file[i].StartsWithWB(pszData, nDataLen)) {
 			return gm_pnEolTypeArr[i];
 		}
 	}
-	return EOL_NONE;
+	return EolType::None;
 }
 
 //-----------------------------------------------
@@ -140,19 +140,19 @@ EEolType _GetEOLType_unibe(const char* pszData, int nDataLen)
 // 現在のEOL長を取得。文字単位。
 LogicInt Eol::GetLen() const
 {
-	return LogicInt(g_aEolTable[m_eEolType].m_nLen);
+	return LogicInt(g_aEolTable[(int)m_eEolType].m_nLen);
 }
 
 // 現在のEOLの名称取得
 const TCHAR* Eol::GetName() const
 {
-	return g_aEolTable[m_eEolType].m_szName;
+	return g_aEolTable[(int)m_eEolType].m_szName;
 }
 
 // 現在のEOL文字列先頭へのポインタを取得
 const wchar_t* Eol::GetValue2() const
 {
-	return g_aEolTable[m_eEolType].m_szDataW;
+	return g_aEolTable[(int)m_eEolType].m_szDataW;
 }
 
 /*!
@@ -161,11 +161,11 @@ const wchar_t* Eol::GetValue2() const
 	@retval true 正常終了。設定が反映された。
 	@retval false 異常終了。強制的にCRLFに設定。
 */
-bool Eol::SetType(EEolType t)
+bool Eol::SetType(EolType t)
 {
-	if (t < EOL_NONE || EOL_CODEMAX <= t) {
+	if (t < EolType::None || EolType::CodeMax <= t) {
 		//	異常値
-		m_eEolType = EOL_CRLF;
+		m_eEolType = EolType::CRLF;
 		return false;
 	}
 	//	正しい値

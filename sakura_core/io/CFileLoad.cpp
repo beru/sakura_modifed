@@ -207,9 +207,9 @@ ECodeType FileLoad::FileOpen(
 	// To Here Jun. 13, 2003 Moca BOMの除去
 	m_eMode = FileLoadMode::Ready;
 //	m_cmemLine.AllocBuffer(256);
-	m_pCodeBase->GetEol( &m_memEols[0], EOL_NEL );
-	m_pCodeBase->GetEol( &m_memEols[1], EOL_LS );
-	m_pCodeBase->GetEol( &m_memEols[2], EOL_PS );
+	m_pCodeBase->GetEol( &m_memEols[0], EolType::NEL );
+	m_pCodeBase->GetEol( &m_memEols[1], EolType::LS );
+	m_pCodeBase->GetEol( &m_memEols[2], EolType::PS );
 	bool bEolEx = false;
 	int nMaxEolLen = 0;
 	for (int k=0; k<(int)_countof(m_memEols); ++k) {
@@ -476,7 +476,7 @@ const char* FileLoad::GetNextLineCharCode(
 	int nbgn = *pnBgn;
 	int i;
 
-	pcEol->SetType(EOL_NONE);
+	pcEol->SetType(EolType::None);
 	*pnBufferNext = 0;
 
 	if (nDataLen <= nbgn) {
@@ -492,10 +492,10 @@ const char* FileLoad::GetNextLineCharCode(
 	case ENCODING_TRAIT_ERROR://
 	case ENCODING_TRAIT_ASCII:
 		{
-			static const EEolType eEolEx[] = {
-				EOL_NEL,
-				EOL_LS,
-				EOL_PS,
+			static const EolType eEolEx[] = {
+				EolType::NEL,
+				EolType::LS,
+				EolType::PS,
 			};
 			nLen = nDataLen;
 			for (i=nbgn; i<nDataLen; ++i) {
@@ -624,7 +624,7 @@ const char* FileLoad::GetNextLineCharCode(
 		for (i=nbgn; i<nDataLen; ++i) {
 			if (m_encodingTrait == ENCODING_TRAIT_EBCDIC && bExtEol) {
 				if (pData[i] == '\x15') {
-					pcEol->SetType(EOL_NEL);
+					pcEol->SetType(EolType::NEL);
 					neollen = 1;
 					break;
 				}
@@ -652,7 +652,7 @@ const char* FileLoad::GetNextLineCharCode(
 		}
 	}else {
 		// CRの場合は、CRLFかもしれないので次のバッファへ送る
-		if (*pcEol == EOL_CR) {
+		if (*pcEol == EolType::CR) {
 			*pnBufferNext = neollen;
 		}
 	}

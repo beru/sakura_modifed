@@ -1845,7 +1845,7 @@ void EditView::SplitBoxOnOff(bool bVert, bool bHorz, bool bSizeBox)
 */
 bool EditView::GetSelectedDataSimple(NativeW &cmemBuf)
 {
-	return GetSelectedData(&cmemBuf, false, NULL, false, false, EOL_UNKNOWN);
+	return GetSelectedData(&cmemBuf, false, NULL, false, false, EolType::Unknown);
 }
 
 /* 選択範囲のデータを取得
@@ -1857,7 +1857,7 @@ bool EditView::GetSelectedData(
 	const wchar_t*	pszQuote,			// 先頭に付ける引用符
 	bool			bWithLineNumber,	// 行番号を付与する
 	bool			bAddCRLFWhenCopy,	// 折り返し位置で改行記号を入れる
-	EEolType		neweol				// コピー後の改行コード EOL_NONEはコード保存
+	EolType		neweol				// コピー後の改行コード EolType::Noneはコード保存
 )
 {
 	LogicInt		nLineLen;
@@ -1972,7 +1972,7 @@ bool EditView::GetSelectedData(
 		}
 
 		// 改行コードについて。
-		if (neweol == EOL_UNKNOWN) {
+		if (neweol == EolType::Unknown) {
 			nBufSize += wcslen(WCODE::CRLF);
 		}else {
 			nBufSize += appendEol.GetLen();
@@ -2023,11 +2023,11 @@ bool EditView::GetSelectedData(
 				cmemBuf->AppendString(pszLineNum);
 			}
 
-			if (EOL_NONE != pcLayout->GetLayoutEol()) {
+			if (EolType::None != pcLayout->GetLayoutEol()) {
 				if (nIdxTo >= nLineLen) {
 					cmemBuf->AppendString(&pLine[nIdxFrom], nLineLen - 1 - nIdxFrom);
 					//	Jul. 25, 2000 genta
-					cmemBuf->AppendString((neweol == EOL_UNKNOWN) ?
+					cmemBuf->AppendString((neweol == EolType::Unknown) ?
 						(pcLayout->GetLayoutEol()).GetValue2() :	//	コード保存
 						appendEol.GetValue2());			//	新規改行コード
 				}else {
@@ -2041,7 +2041,7 @@ bool EditView::GetSelectedData(
 						bWithLineNumber 	// 行番号を付与する
 					) {
 						//	Jul. 25, 2000 genta
-						cmemBuf->AppendString((neweol == EOL_UNKNOWN) ?
+						cmemBuf->AppendString((neweol == EolType::Unknown) ?
 							m_pcEditDoc->m_cDocEditor.GetNewLineCode().GetValue2() :	//	コード保存
 							appendEol.GetValue2());		//	新規改行コード
 					}

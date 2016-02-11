@@ -1246,9 +1246,9 @@ bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	// Mar. 6, 2002 genta
 	case F_VIEWMODE:			return AppMode::getInstance()->IsViewMode(); // ビューモード
 	// From Here 2003.06.23 Moca
-	case F_CHGMOD_EOL_CRLF:		return EOL_CRLF == pcEditDoc->m_cDocEditor.GetNewLineCode();
-	case F_CHGMOD_EOL_LF:		return EOL_LF == pcEditDoc->m_cDocEditor.GetNewLineCode();
-	case F_CHGMOD_EOL_CR:		return EOL_CR == pcEditDoc->m_cDocEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_CRLF:		return EolType::CRLF == pcEditDoc->m_cDocEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_LF:		return EolType::LF == pcEditDoc->m_cDocEditor.GetNewLineCode();
+	case F_CHGMOD_EOL_CR:		return EolType::CR == pcEditDoc->m_cDocEditor.GetNewLineCode();
 	// To Here 2003.06.23 Moca
 	// 2003.07.21 genta
 	case F_CHGMOD_INS:			return pcEditDoc->m_cDocEditor.IsInsMode();	// Oct. 2, 2005 genta 挿入モードはドキュメント毎に補完するように変更した

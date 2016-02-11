@@ -75,20 +75,20 @@ void Unicode::GetBom(Memory* pcmemBom)
 }
 
 
-void Unicode::GetEol(Memory* pcmemEol, EEolType eEolType)
+void Unicode::GetEol(Memory* pcmemEol, EolType eEolType)
 {
 	static const struct{
 		const void* pData;
 		int nLen;
 	}
 	aEolTable[EOL_TYPE_NUM] = {
-		{ L"",			0 * sizeof(wchar_t) },	// EOL_NONE
-		{ L"\x0d\x0a",	2 * sizeof(wchar_t) },	// EOL_CRLF
-		{ L"\x0a",		1 * sizeof(wchar_t) },	// EOL_LF
-		{ L"\x0d",		1 * sizeof(wchar_t) },	// EOL_CR
-		{ L"\x85",		1 * sizeof(wchar_t) },	// EOL_NEL
-		{ L"\u2028",	1 * sizeof(wchar_t) },	// EOL_LS
-		{ L"\u2029",	1 * sizeof(wchar_t) },	// EOL_PS
+		{ L"",			0 * sizeof(wchar_t) },	// EolType::None
+		{ L"\x0d\x0a",	2 * sizeof(wchar_t) },	// EolType::CRLF
+		{ L"\x0a",		1 * sizeof(wchar_t) },	// EolType::LF
+		{ L"\x0d",		1 * sizeof(wchar_t) },	// EolType::CR
+		{ L"\x85",		1 * sizeof(wchar_t) },	// EolType::NEL
+		{ L"\u2028",	1 * sizeof(wchar_t) },	// EolType::LS
+		{ L"\u2029",	1 * sizeof(wchar_t) },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[eEolType].pData, aEolTable[eEolType].nLen);
+	pcmemEol->SetRawData(aEolTable[(int)eEolType].pData, aEolTable[(int)eEolType].nLen);
 }

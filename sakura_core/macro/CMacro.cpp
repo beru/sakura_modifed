@@ -274,13 +274,13 @@ void Macro::AddLParam(
 			// EOLタイプ値をマクロ引数値に変換する	// 2009.08.18 ryoji
 			int nFlag;
 			switch ((int)lParam) {
-			case EOL_CRLF:	nFlag = 1; break;
+			case EolType::CRLF:	nFlag = 1; break;
 //			case EOL_LFCR:	nFlag = 2; break;
-			case EOL_LF:	nFlag = 3; break;
-			case EOL_CR:	nFlag = 4; break;
-			case EOL_NEL:	nFlag = 5; break;
-			case EOL_LS:	nFlag = 6; break;
-			case EOL_PS:	nFlag = 7; break;
+			case EolType::LF:	nFlag = 3; break;
+			case EolType::CR:	nFlag = 4; break;
+			case EolType::NEL:	nFlag = 5; break;
+			case EolType::LS:	nFlag = 6; break;
+			case EolType::PS:	nFlag = 7; break;
 			default:		nFlag = 0; break;
 			}
 			AddIntParam(nFlag);
@@ -627,7 +627,7 @@ bool Macro::HandleCommand(
 			}
 		}
 		break;
-	case F_CHGMOD_EOL:	// 入力改行コード指定。EEolTypeの数値を指定。2003.06.23 Moca
+	case F_CHGMOD_EOL:	// 入力改行コード指定。EolTypeの数値を指定。2003.06.23 Moca
 		// Jun. 16, 2002 genta
 		if (!Argument[0]) {
 			::MYMESSAGEBOX(
@@ -640,19 +640,19 @@ bool Macro::HandleCommand(
 		}
 		{
 			// マクロ引数値をEOLタイプ値に変換する	// 2009.08.18 ryoji
-			int nEol;
+			EolType nEol;
 			switch (Argument[0] ? _wtoi(Argument[0]) : 0) {
-			case 1:		nEol = EOL_CRLF; break;
+			case 1:		nEol = EolType::CRLF; break;
 //			case 2:		nEol = EOL_LFCR; break;
-			case 3:		nEol = EOL_LF; break;
-			case 4:		nEol = EOL_CR; break;
-			case 5:		nEol = EOL_NEL; break;
-			case 6:		nEol = EOL_LS; break;
-			case 7:		nEol = EOL_PS; break;
-			default:	nEol = EOL_NONE; break;
+			case 3:		nEol = EolType::LF; break;
+			case 4:		nEol = EolType::CR; break;
+			case 5:		nEol = EolType::NEL; break;
+			case 6:		nEol = EolType::LS; break;
+			case 7:		nEol = EolType::PS; break;
+			default:	nEol = EolType::None; break;
 			}
-			if (nEol != EOL_NONE) {
-				pcEditView->GetCommander().HandleCommand(Index, true, nEol, 0, 0, 0);
+			if (nEol != EolType::None) {
+				pcEditView->GetCommander().HandleCommand(Index, true, (int)nEol, 0, 0, 0);
 			}
 		}
 		break;
@@ -1201,13 +1201,13 @@ bool Macro::HandleCommand(
 			if (Argument[2]) {
 				nSaveLineCode = _wtoi(Argument[2]);
 			}
-			EEolType eEol;
+			EolType eEol;
 			switch (nSaveLineCode) {
-			case 0:		eEol = EOL_NONE;	break;
-			case 1:		eEol = EOL_CRLF;	break;
-			case 2:		eEol = EOL_LF;		break;
-			case 3:		eEol = EOL_CR;		break;
-			default:	eEol = EOL_NONE;	break;
+			case 0:		eEol = EolType::None;	break;
+			case 1:		eEol = EolType::CRLF;	break;
+			case 2:		eEol = EolType::LF;		break;
+			case 3:		eEol = EolType::CR;		break;
+			default:	eEol = EolType::None;	break;
 			}
 			
 			pcEditView->GetCommander().HandleCommand(Index, true, (LPARAM)Argument[0], (LPARAM)nCharCode, (LPARAM)eEol, 0);
@@ -1654,22 +1654,22 @@ bool Macro::HandleFunction(
 		{
 			int n = 0;
 			switch (view->m_pcEditDoc->m_cDocEditor.GetNewLineCode()) {
-			case EOL_CRLF:
+			case EolType::CRLF:
 				n = 0;
 				break;
-			case EOL_CR:
+			case EolType::CR:
 				n = 1;
 				break;
-			case EOL_LF:
+			case EolType::LF:
 				n = 2;
 				break;
-			case EOL_NEL:
+			case EolType::NEL:
 				n = 3;
 				break;
-			case EOL_LS:
+			case EolType::LS:
 				n = 4;
 				break;
-			case EOL_PS:
+			case EolType::PS:
 				n = 5;
 				break;
 			}

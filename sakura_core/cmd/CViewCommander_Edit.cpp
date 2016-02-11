@@ -802,7 +802,7 @@ void ViewCommander::Command_DELETE(void)
 				LogicInt nIndex;
 				nIndex = m_pCommanderView->LineColumnToIndex2(pcLayout, caret.GetCaretLayoutPos().GetX2(), &nLineLen);
 				if (nLineLen != 0) {	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
-					if (pcLayout->GetLayoutEol().GetType() != EOL_NONE) {	// 行終端は改行コードか?
+					if (pcLayout->GetLayoutEol().GetType() != EolType::None) {	// 行終端は改行コードか?
 						Command_INSTEXT(true, L"", LogicInt(0), FALSE);	// カーソル位置まで半角スペース挿入
 					}else {	// 行終端が折り返し
 						// 折り返し行末ではスペース挿入後、次の文字を削除する	// 2009.02.19 ryoji
@@ -897,7 +897,7 @@ void ViewCommander::DelCharForOverwrite(
 		LogicInt nIdxTo = m_pCommanderView->LineColumnToIndex(pcLayout, GetCaret().GetCaretLayoutPos().GetX2());
 		if (nIdxTo >= pcLayout->GetLengthWithoutEOL()) {
 			bEol = true;	// 現在位置は改行または折り返し以後
-			if (pcLayout->GetLayoutEol() != EOL_NONE) {
+			if (pcLayout->GetLayoutEol() != EolType::None) {
 				if (GetDllShareData().m_common.m_sEdit.m_bNotOverWriteCRLF) {	// 改行は上書きしない
 					// 現在位置が改行ならば削除しない
 					bDelete = false;

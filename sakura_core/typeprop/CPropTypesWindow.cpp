@@ -76,13 +76,13 @@ static const wchar_t* aszEolStr[] = {
 	L"LS",
 	L"PS",
 };
-static const EEolType aeEolType[] = {
-	EOL_CRLF,
-	EOL_LF,
-	EOL_CR,
-	EOL_NEL,
-	EOL_LS,
-	EOL_PS,
+static const EolType aeEolType[] = {
+	EolType::CRLF,
+	EolType::LF,
+	EolType::CR,
+	EolType::NEL,
+	EolType::LS,
+	EolType::PS,
 };
 
 // window メッセージ処理

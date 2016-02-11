@@ -129,7 +129,7 @@ struct SaveInfo {
 		eCharCode(CODE_AUTODETECT),
 		bBomExist(false),
 		bChgCodeSet(false),
-		cEol(EOL_NONE),
+		cEol(EolType::None),
 		bOverwriteMode(false)
 	{
 	}

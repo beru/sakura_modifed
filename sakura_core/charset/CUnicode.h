@@ -36,7 +36,7 @@ public:
 		return UnicodeToUnicode_out(cSrc, pDst);
 	}
 	void GetBom(Memory* pcmemBom);	//!< BOMデータ取得
-	void GetEol(Memory* pcmemEol, EEolType eEolType);	//!< 改行データ取得
+	void GetEol(Memory* pcmemEol, EolType eEolType);	//!< 改行データ取得
 
 public:
 	// 実装

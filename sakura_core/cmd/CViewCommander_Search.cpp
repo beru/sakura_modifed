@@ -1132,7 +1132,7 @@ void ViewCommander::Command_REPLACE_ALL()
 				cSelectLogic.SetTo(LogicPoint(LogicXInt(0), y + LogicInt(1))); // 次行の行頭
 				if (GetDocument()->m_cDocLineMgr.GetLineCount() == y + LogicInt(1)) {
 					const DocLine* pLine = GetDocument()->m_cDocLineMgr.GetLine(y);
-					if (pLine->GetEol() == EOL_NONE) {
+					if (pLine->GetEol() == EolType::None) {
 						// EOFは最終データ行にぶら下がりなので、選択終端は行末
 						cSelectLogic.SetTo(LogicPoint(pLine->GetLengthWithEOL(), y)); // 対象行の行末
 					}

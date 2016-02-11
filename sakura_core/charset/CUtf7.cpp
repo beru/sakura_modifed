@@ -268,20 +268,20 @@ void Utf7::GetBom(Memory* pcmemBom)
 	pcmemBom->SetRawData(UTF7_BOM, sizeof(UTF7_BOM));
 }
 
-void Utf7::GetEol(Memory* pcmemEol, EEolType eEolType)
+void Utf7::GetEol(Memory* pcmemEol, EolType eEolType)
 {
 	static const struct{
 		const char* szData;
 		int nLen;
 	}
 	aEolTable[EOL_TYPE_NUM] = {
-		{ "",			0 },	// EOL_NONE
-		{ "\x0d\x0a",	2 },	// EOL_CRLF
-		{ "\x0a",		1 },	// EOL_LF
-		{ "\x0d",		1 },	// EOL_CR
-		{ "+AIU-",		5 },	// EOL_NEL
-		{ "+ICg-",		5 },	// EOL_LS
-		{ "+ICk-",		5 },	// EOL_PS
+		{ "",			0 },	// EolType::None
+		{ "\x0d\x0a",	2 },	// EolType::CRLF
+		{ "\x0a",		1 },	// EolType::LF
+		{ "\x0d",		1 },	// EolType::CR
+		{ "+AIU-",		5 },	// EolType::NEL
+		{ "+ICg-",		5 },	// EolType::LS
+		{ "+ICk-",		5 },	// EolType::PS
 	};
-	pcmemEol->SetRawData(aEolTable[eEolType].szData,aEolTable[eEolType].nLen);
+	pcmemEol->SetRawData(aEolTable[(int)eEolType].szData, aEolTable[(int)eEolType].nLen);
 }
