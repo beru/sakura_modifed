@@ -100,7 +100,7 @@ void EditView::SetIMECompFormFont(void)
 	//
 	HIMC	hIMC = ::ImmGetContext(GetHwnd());
 	if (hIMC) {
-		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_pcEditWnd->GetLogfont())));
+		::ImmSetCompositionFont(hIMC, const_cast<LOGFONT *>(&(m_pEditWnd->GetLogfont())));
 	}
 	::ImmReleaseContext(GetHwnd() , hIMC);
 }
@@ -155,23 +155,23 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 				ptSelectTo.x = ptSelect.x;
 			}else {
 				// 2010.04.06 対象をptSelect.yの行からカーソル行に変更
-				const DocLine* pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
+				const DocLine* pDocLine = m_pcEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().y);
 				LogicInt targetY = GetCaret().GetCaretLogicPos().y;
 				// カーソル行が実質無選択なら、直前・直後の行を選択
 				if (ptSelect.y == GetCaret().GetCaretLogicPos().y
 					&& pDocLine && pDocLine->GetLengthWithoutEOL() == GetCaret().GetCaretLogicPos().x
 				) {
 					// カーソルが上側行末 => 次の行。行末カーソルでのShift+Upなど
-					targetY = t_min(m_pcEditDoc->m_cDocLineMgr.GetLineCount(),
+					targetY = t_min(m_pcEditDoc->m_docLineMgr.GetLineCount(),
 						GetCaret().GetCaretLogicPos().y + 1);
-					pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(targetY);
+					pDocLine = m_pcEditDoc->m_docLineMgr.GetLine(targetY);
 				}else if (1
 					&& ptSelectTo.y == GetCaret().GetCaretLogicPos().y
 					&& GetCaret().GetCaretLogicPos().x == 0
 				) {
 					// カーソルが下側行頭 => 前の行。 行頭でShift+Down/Shift+End→Rightなど
 					targetY = GetCaret().GetCaretLogicPos().y - 1;
-					pDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(targetY);
+					pDocLine = m_pcEditDoc->m_docLineMgr.GetLine(targetY);
 				}
 				// 選択範囲をxで指定：こちらはカーソルではなく選択範囲基準
 				if (targetY == ptSelect.y) {
@@ -197,7 +197,7 @@ LRESULT EditView::SetReconvertStruct(PRECONVERTSTRING pReconv, bool bUnicode, bo
 	// 以下 ptSelect.y ptSelect.x, nSelectedLen を使用
 
 	// ドキュメント行取得 -> pcCurDocLine
-	DocLine* pcCurDocLine = m_pcEditDoc->m_cDocLineMgr.GetLine(ptSelect.GetY2());
+	DocLine* pcCurDocLine = m_pcEditDoc->m_docLineMgr.GetLine(ptSelect.GetY2());
 	if (!pcCurDocLine)
 		return 0;
 

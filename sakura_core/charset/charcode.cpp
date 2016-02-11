@@ -232,7 +232,7 @@ namespace WCODE
 			for (int i=0; i<(int)CharWidthFontMode::Max; ++i) {
 				m_parCache[i] = 0;
 			}
-			m_eLastEditCacheMode = CWM_CACHE_NEUTRAL;
+			m_eLastEditCacheMode = CharWidthCacheMode::Neutral;
 		}
 		~LocalCacheSelector()
 		{
@@ -249,12 +249,12 @@ namespace WCODE
 				m_localcache[(int)fMode].Clear();
 			}
 		}
-		void Select(CharWidthFontMode fMode, ECharWidthCacheMode cMode)
+		void Select(CharWidthFontMode fMode, CharWidthCacheMode cMode)
 		{
-			ECharWidthCacheMode cmode = (cMode == CWM_CACHE_NEUTRAL) ? m_eLastEditCacheMode : cMode;
+			CharWidthCacheMode cmode = (cMode == CharWidthCacheMode::Neutral) ? m_eLastEditCacheMode : cMode;
 
 			pcache = &m_localcache[(int)fMode];
-			if (cmode == CWM_CACHE_SHARE) {
+			if (cmode == CharWidthCacheMode::Share) {
 				pcache->SelectCache(&(GetDllShareData().m_sCharWidth));
 			}else {
 				if (m_parCache[(int)fMode] == 0) {
@@ -269,7 +269,7 @@ namespace WCODE
 		LocalCache* pcache;
 		LocalCache m_localcache[3];
 		CharWidthCache* m_parCache[3];
-		ECharWidthCacheMode m_eLastEditCacheMode;
+		CharWidthCacheMode m_eLastEditCacheMode;
 	private:
 		DISALLOW_COPY_AND_ASSIGN(LocalCacheSelector);
 	};
@@ -304,9 +304,9 @@ void InitCharWidthCache(const LOGFONT& lf, CharWidthFontMode fMode)
 }
 
 // 文字幅の動的計算用キャッシュの選択	2013.04.08 aroka
-void SelectCharWidthCache(CharWidthFontMode fMode, ECharWidthCacheMode cMode)
+void SelectCharWidthCache(CharWidthFontMode fMode, CharWidthCacheMode cMode)
 {
-	assert(fMode == CharWidthFontMode::Edit || cMode == CWM_CACHE_LOCAL);
+	assert(fMode == CharWidthFontMode::Edit || cMode == CharWidthCacheMode::Local);
 
 	WCODE::selector.Select(fMode, cMode);
 }

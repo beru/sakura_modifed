@@ -466,7 +466,12 @@ static int GetEndModeByMode(int nMode, int nEndMode)
 	return nEndMode;
 }
 
-bool Clipboard::SetClipboradByFormat(const StringRef& cstr, const wchar_t* pFormatName, int nMode, int nEndMode)
+bool Clipboard::SetClipboradByFormat(
+	const StringRef& cstr,
+	const wchar_t* pFormatName,
+	int nMode,
+	int nEndMode
+	)
 {
 	CLIPFORMAT uFormat = GetClipFormat(pFormatName);
 	if (uFormat == (CLIPFORMAT)-1) {
@@ -541,7 +546,12 @@ bool Clipboard::SetClipboradByFormat(const StringRef& cstr, const wchar_t* pForm
 	return true;
 }
 
-static int GetLengthByMode(HGLOBAL hClipData, const BYTE* pData, int nMode, int nEndMode)
+static int GetLengthByMode(
+	HGLOBAL hClipData,
+	const BYTE* pData,
+	int nMode,
+	int nEndMode
+	)
 {
 	size_t nMemLength = ::GlobalSize(hClipData);
 	nEndMode = GetEndModeByMode(nMode, nEndMode);
@@ -571,7 +581,13 @@ static int GetLengthByMode(HGLOBAL hClipData, const BYTE* pData, int nMode, int 
 	@param nEndMode -1:文字コードに依存 0:GlobalSize 1:strlen 2:wcslen 4:wchar32_tの文字列
 	@date 2013.06.12 Moca 新規作成
 */
-bool Clipboard::GetClipboradByFormat(NativeW& mem, const wchar_t* pFormatName, int nMode, int nEndMode, const Eol& cEol)
+bool Clipboard::GetClipboradByFormat(
+	NativeW& mem,
+	const wchar_t* pFormatName,
+	int nMode,
+	int nEndMode,
+	const Eol& cEol
+	)
 {
 	mem.SetString(L"");
 	CLIPFORMAT uFormat = GetClipFormat(pFormatName);

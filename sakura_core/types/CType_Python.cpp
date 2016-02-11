@@ -398,12 +398,12 @@ void DocOutline::MakeFuncList_python(FuncInfoArr* pcFuncInfoArr)
 	indent_level[0] = 0;	// do as python does.
 	int depth_index = 0;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		int depth;	//	indent depth
 		LogicInt col = LogicInt(0);	//	current working column position
 
-		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		
 		if (python_analyze_state.IsLogicalLineTop()) {
 			//	indent check

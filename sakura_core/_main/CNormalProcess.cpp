@@ -87,12 +87,12 @@ bool NormalProcess::InitializeProcess()
 	SelectLang::ChangeLang(GetDllShareData().m_common.m_sWindow.m_szLanguageDll);
 
 	// コマンドラインオプション
-	bool			bViewMode = false;
-	bool			bDebugMode;
-	bool			bGrepMode;
-	bool			bGrepDlg;
-	GrepInfo		gi;
-	EditInfo		fi;
+	bool		bViewMode = false;
+	bool		bDebugMode;
+	bool		bGrepMode;
+	bool		bGrepDlg;
+	GrepInfo	gi;
+	EditInfo	fi;
 	
 	auto& cmdLine = *CommandLine::getInstance();
 	// コマンドラインで受け取ったファイルが開かれている場合は
@@ -364,7 +364,7 @@ bool NormalProcess::InitializeProcess()
 				// From Here Mar. 28, 2003 MIK
 				// 改行の真ん中にカーソルが来ないように。
 				// 2008.08.20 ryoji 改行単位の行番号を渡すように修正
-				const DocLine* pTmpDocLine = pEditWnd->GetDocument()->m_cDocLineMgr.GetLine(fi.m_ptCursor.GetY2());
+				const DocLine* pTmpDocLine = pEditWnd->GetDocument()->m_docLineMgr.GetLine(fi.m_ptCursor.GetY2());
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < fi.m_ptCursor.x) {
 						ptPos.x--;

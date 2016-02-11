@@ -60,10 +60,6 @@ OsVersionInfo::OsVersionInfo(bool pbStart)
 #endif
 
 	RegKey reg;
-	if (ERROR_SUCCESS == reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ) ) {
-		m_bWine = true;
-	}else {
-		m_bWine = false;
-	}
+	m_bWine = (reg.Open(HKEY_CURRENT_USER, _T("Software\\Wine\\Debug"), KEY_READ) == ERROR_SUCCESS);
 }
 

@@ -48,7 +48,7 @@ static bool Commander_COMPARE_core(
 	const wchar_t*	pLineDes;
 	int nLineLenDes;
 	int max_size = (int)GetDllShareData().m_workBuffer.GetWorkBufferCount<EDIT_CHAR>();
-	const DocLineMgr& docMgr = commander.GetDocument()->m_cDocLineMgr;
+	const DocLineMgr& docMgr = commander.GetDocument()->m_docLineMgr;
 
 	bDifferent = true;
 	{
@@ -421,7 +421,7 @@ void ViewCommander::Command_Diff_Next(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;	
-	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument()->m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Forward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -472,7 +472,7 @@ void ViewCommander::Command_Diff_Prev(void)
 	auto& selInfo = m_pCommanderView->GetSelectionInfo();
 
 re_do:;
-	if (DiffLineMgr(&GetDocument()->m_cDocLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
+	if (DiffLineMgr(&GetDocument()->m_docLineMgr).SearchDiffMark(ptXY.GetY2(), SearchDirection::Backward, &tmp_y)) {
 		ptXY.y = tmp_y;
 		bFound = true;
 		LayoutPoint ptXY_Layout;
@@ -492,8 +492,8 @@ re_do:;
 	if (GetDllShareData().m_common.m_sSearch.m_bSearchAll) {
 		// 見つからなかった、かつ、最初の検索
 		if (!bFound	&& bRedo) {
-			// 2011.02.02 m_cLayoutMgr→m_cDocLineMgr
-			ptXY.y = GetDocument()->m_cDocLineMgr.GetLineCount();	// 1個手前を指定
+			// 2011.02.02 m_cLayoutMgr→m_docLineMgr
+			ptXY.y = GetDocument()->m_docLineMgr.GetLineCount();	// 1個手前を指定
 			bRedo = false;
 			goto re_do;	// 末尾から再検索
 		}
@@ -516,7 +516,7 @@ re_do:;
 */
 void ViewCommander::Command_Diff_Reset(void)
 {
-	DiffLineMgr(&GetDocument()->m_cDocLineMgr).ResetAllDiffMark();
+	DiffLineMgr(&GetDocument()->m_docLineMgr).ResetAllDiffMark();
 
 	// 分割したビューも更新
 	GetEditWindow()->Views_Redraw();

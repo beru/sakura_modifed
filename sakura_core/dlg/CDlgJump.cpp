@@ -58,7 +58,7 @@ int DlgJump::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
-)
+	)
 {
 	return Dialog::DoModal(hInstance, hwndParent, IDD_JUMP, lParam);
 }
@@ -171,7 +171,7 @@ BOOL DlgJump::OnBnClicked(int wID)
 // To Here Feb. 20, 2001
 		{	//@@@ 2002.2.2 YAZAKI 指定行へジャンプを、ダイアログを表示するコマンドと、実際にジャンプするコマンドに分離。
 			EditDoc* pCEditDoc = (EditDoc*)m_lParam;
-			pCEditDoc->m_pcEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
+			pCEditDoc->m_pEditWnd->GetActiveView().GetCommander().HandleCommand(F_JUMP, true, 0, 0, 0, 0);	// ジャンプコマンド発行
 		}
 		return TRUE;
 	case IDCANCEL:

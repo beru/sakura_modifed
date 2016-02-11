@@ -467,8 +467,8 @@ void DocOutline::MakeFuncList_C(
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 	
 	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 
 		//	From Here Aug. 10, 2004 genta
 		//	プリプロセス処理
@@ -1249,7 +1249,7 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 
 		nCaretPosX_PHY = GetCaret().GetCaretLogicPos().x;
 
-		pLine = m_pcEditDoc->m_cDocLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pcEditDoc->m_docLineMgr.GetLine(GetCaret().GetCaretLogicPos().GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			if (wcChar != WCODE::CR) {
 				return;
@@ -1315,11 +1315,11 @@ void EditView::SmartIndent_CPP(wchar_t wcChar)
 		
 		nDataLen = LogicInt(0);
 		for (j=GetCaret().GetCaretLogicPos().GetY2(); j>=LogicInt(0); --j) {
-			pLine2 = m_pcEditDoc->m_cDocLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
+			pLine2 = m_pcEditDoc->m_docLineMgr.GetLine(j)->GetDocLineStrWithEOL(&nLineLen2);
 			if (j == GetCaret().GetCaretLogicPos().y) {
 				// 2005.10.11 ryoji EOF のみの行もスマートインデントの対象にする
 				if (!pLine2) {
-					if (GetCaret().GetCaretLogicPos().y == m_pcEditDoc->m_cDocLineMgr.GetLineCount())
+					if (GetCaret().GetCaretLogicPos().y == m_pcEditDoc->m_docLineMgr.GetLineCount())
 						continue;	// EOF のみの行
 					break;
 				}

@@ -48,7 +48,8 @@ static const AnchorListItem anchorList[] = {
 };
 
 DlgCompare::DlgCompare()
-	: Dialog(true)
+	:
+	Dialog(true)
 {
 	// サイズ変更時に位置を制御するコントロール数
 	assert(_countof(anchorList) == _countof(m_rcItems));
@@ -69,7 +70,7 @@ int DlgCompare::DoModal(
 	const TCHAR*	pszPath,
 	TCHAR*			pszCompareLabel,
 	HWND*			phwndCompareWnd
-)
+	)
 {
 	m_pszPath = pszPath;
 	m_pszCompareLabel = pszCompareLabel;

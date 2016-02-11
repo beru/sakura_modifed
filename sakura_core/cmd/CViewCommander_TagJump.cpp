@@ -107,7 +107,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	// 現在行のデータを取得
 	LogicInt		nLineLen;
 	const wchar_t*	pLine;
-	pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+	pLine = GetDocument()->m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 	if (!pLine) {
 		goto can_not_tagjump;
 	}
@@ -240,7 +240,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 		ptXY.y--;
 
 		for (; 0<=ptXY.y; --ptXY.y) {
-			pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+			pLine = GetDocument()->m_docLineMgr.GetLine(ptXY.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 			if (!pLine) {
 				break;
 			}
@@ -304,7 +304,7 @@ bool ViewCommander::Command_TAGJUMP(bool bClose)
 	}while (0);
 
 	if (szJumpToFile[0] == L'\0') {
-		pLine = GetDocument()->m_cDocLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
+		pLine = GetDocument()->m_docLineMgr.GetLine(ptXYOrg.GetY2())->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			goto can_not_tagjump;
 		}

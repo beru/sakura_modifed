@@ -45,7 +45,7 @@ void CType_Vb::InitTypeConfigImp(TypeConfig* pType)
 	pType->m_nKeyWordSetIdx[0]  = 13;							// キーワードセット
 	pType->m_nKeyWordSetIdx[1] = 14;							// キーワードセット2
 	pType->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = true;		// 半角数値を色分け表示
-	pType->m_nStringType = STRING_LITERAL_PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	pType->m_nStringType = StringLiteralType::PLSQL;				// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;	// シングルクォーテーション文字列を色分け表示しない
 	pType->m_bStringLineOnly = true; // 文字列は行内のみ
 }
@@ -95,13 +95,13 @@ void DocOutline::MakeFuncList_VisualBasic(FuncInfoArr* pcFuncInfoArr)
 	const wchar_t* pLine = NULL;
 	// プロシージャフラグ（プロシージャ内ではTrue）
 	bool bProcedure = false;
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		if (pLine) {
 			if (L'_' != pLine[nLineLen-1]) {
 				nParseCnt = 0;
 			}
 		}
-		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		nFuncId = 0;
 		bDQuote	= false;
 		for (int i=0; i<nLineLen; ++i) {

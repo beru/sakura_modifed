@@ -296,13 +296,13 @@ enum class CharWidthFontMode {
 	Max,
 };
 
-enum ECharWidthCacheMode {
-	CWM_CACHE_NEUTRAL,
-	CWM_CACHE_SHARE,
-	CWM_CACHE_LOCAL,
+enum class CharWidthCacheMode {
+	Neutral,
+	Share,
+	Local,
 };
 
 // キャッシュの初期化関数群
-void SelectCharWidthCache(CharWidthFontMode fMode, ECharWidthCacheMode cMode);  //<! モードを変更したいとき
+void SelectCharWidthCache(CharWidthFontMode fMode, CharWidthCacheMode cMode);  //<! モードを変更したいとき
 void InitCharWidthCache(const LOGFONT& lf, CharWidthFontMode fMode = CharWidthFontMode::Edit); //<! フォントを変更したとき
 

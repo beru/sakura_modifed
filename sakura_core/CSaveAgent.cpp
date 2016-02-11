@@ -118,7 +118,7 @@ void SaveAgent::OnSave(const SaveInfo& sSaveInfo)
 	WriteManager cWriter;
 	EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cWriter);
 	cWriter.WriteFile_From_CDocLineMgr(
-		pcDoc->m_cDocLineMgr,
+		pcDoc->m_docLineMgr,
 		sSaveInfo
 	);
 

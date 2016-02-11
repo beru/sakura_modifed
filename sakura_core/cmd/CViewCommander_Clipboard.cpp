@@ -807,7 +807,7 @@ void ViewCommander::Command_COPY_COLOR_HTML(bool bLineNumber)
 			}
 		}
 		if (sSelectLogic.GetTo().x == -1) {
-			sSelectLogic.SetToY(GetDocument()->m_cDocLineMgr.GetLineCount());
+			sSelectLogic.SetToY(GetDocument()->m_docLineMgr.GetLineCount());
 			sSelectLogic.SetToX(LogicInt(0));
 		}
 	}

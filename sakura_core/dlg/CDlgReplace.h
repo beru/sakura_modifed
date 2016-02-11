@@ -48,7 +48,7 @@ public:
 	bool			m_bNOTIFYNOTFOUND;	// 検索／置換  見つからないときメッセージを表示
 	bool			m_bSelected;		// テキスト選択中か
 	int				m_nReplaceTarget;	// 置換対象		2001.12.03 hor
-	bool			m_nPaste;			// 貼り付け？	2001.12.03 hor
+	bool			m_bPaste;			// 貼り付け？	2001.12.03 hor
 	int				m_nReplaceCnt;		// すべて置換の実行結果		// 2002.02.08 hor
 	bool			m_bCanceled;		// すべて置換で中断したか	// 2002.02.08 hor
 

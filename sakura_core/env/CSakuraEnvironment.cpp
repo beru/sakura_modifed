@@ -572,8 +572,9 @@ void SakuraEnvironment::ExpandParameter(const wchar_t* pszSource, wchar_t* pszBu
 */
 const wchar_t* SakuraEnvironment::_ExParam_SkipCond(const wchar_t* pszSource, int part)
 {
-	if (part == 0)
+	if (part == 0) {
 		return pszSource;
+	}
 	
 	int nest = 0;	// 入れ子のレベル
 	bool next = true;	// 継続フラグ

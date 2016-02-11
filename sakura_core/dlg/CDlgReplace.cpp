@@ -57,13 +57,12 @@ const DWORD p_helpids[] = {	//11900
 DlgReplace::DlgReplace()
 {
 	m_searchOption.Reset();	// 検索オプション
-	m_bConsecutiveAll = FALSE;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
-	m_bSelectedArea = FALSE;	// 選択範囲内置換
+	m_bConsecutiveAll = false;	//「すべて置換」は置換の繰返し	// 2007.01.16 ryoji
+	m_bSelectedArea = false;	// 選択範囲内置換
 	m_nReplaceTarget = 0;		// 置換対象		// 2001.12.03 hor
-	m_nPaste = FALSE;			// 貼り付ける？	// 2001.12.03 hor
+	m_bPaste = false;			// 貼り付ける？	// 2001.12.03 hor
 	m_nReplaceCnt = 0;			// すべて置換の実行結果		// 2002.02.08 hor
 	m_bCanceled = false;		// すべて置換を中断したか	// 2002.02.08 hor
-	return;
 }
 
 /*!
@@ -171,7 +170,7 @@ void DlgReplace::SetData(void)
 
 	// From Here 2001.12.03 hor
 	// クリップボードから貼り付ける？
-	CheckButton(IDC_CHK_PASTE, m_nPaste);
+	CheckButton(IDC_CHK_PASTE, m_bPaste);
 	// 置換対象
 	if (m_nReplaceTarget == 0) {
 		CheckButton(IDC_RADIO_REPLACE, true);
@@ -307,8 +306,8 @@ int DlgReplace::GetData(void)
 
 		// From Here 2001.12.03 hor
 		// クリップボードから貼り付ける？
-		m_nPaste = IsButtonChecked(IDC_CHK_PASTE);
-		EnableItem(IDC_COMBO_TEXT2, !m_nPaste);
+		m_bPaste = IsButtonChecked(IDC_CHK_PASTE);
+		EnableItem(IDC_COMBO_TEXT2, !m_bPaste);
 		// 置換対象
 		m_nReplaceTarget = 0;
 		if (IsButtonChecked(IDC_RADIO_INSERT)) {
@@ -317,7 +316,7 @@ int DlgReplace::GetData(void)
 			m_nReplaceTarget = 2;
 		}else if (IsButtonChecked(IDC_RADIO_LINEDELETE )) {
 			m_nReplaceTarget = 3;
-			m_nPaste = false;
+			m_bPaste = false;
 			EnableItem(IDC_COMBO_TEXT2, false);
 		}
 		// To Here 2001.12.03 hor

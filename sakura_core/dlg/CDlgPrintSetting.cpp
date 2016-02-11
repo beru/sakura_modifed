@@ -97,7 +97,7 @@ int CALLBACK SetData_EnumFontFamProc(
 	NEWTEXTMETRIC*	pntm,	// pointer to physical-font data
 	int				nFontType,	// type of font
 	LPARAM			lParam 	// address of application-defined data
-)
+	)
 {
 	DlgPrintSetting* pCDlgPrintSetting = (DlgPrintSetting*)lParam;
 	HWND hwndComboFontHan = ::GetDlgItem(pCDlgPrintSetting->GetHwnd(), IDC_COMBO_FONT_HAN);

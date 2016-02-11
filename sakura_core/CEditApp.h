@@ -52,7 +52,7 @@ public:
 	HINSTANCE GetAppInstance() const { return m_hInst; }	// インスタンスハンドル取得
 
 	// ウィンドウ情報
-	EditWnd* GetEditWindow() { return m_pcEditWnd; }		// ウィンドウ取得
+	EditWnd* GetEditWindow() { return m_pEditWnd; }		// ウィンドウ取得
 
 	EditDoc*		GetDocument() { return m_pcEditDoc; }
 	ImageListMgr&	GetIcons() { return m_cIcons; }
@@ -67,7 +67,7 @@ public:
 	EditDoc*			m_pcEditDoc;
 
 	// ウィンドウ
-	EditWnd*			m_pcEditWnd;
+	EditWnd*			m_pEditWnd;
 
 	// IO管理
 	LoadAgent*			m_pcLoadAgent;

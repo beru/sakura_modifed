@@ -99,7 +99,7 @@ Mutex& ShareData::GetMutexShareWork(){
 	@retval false 初期化失敗
 
 	@note 既に存在する共有メモリのバージョンがこのエディタが使うものと
-	異なる場合は致命的エラーを防ぐためにfalseを返します。CProcess::Initialize()
+	異なる場合は致命的エラーを防ぐためにfalseを返します。Process::Initialize()
 	でInit()に失敗するとメッセージを出してエディタの起動を中止します。
 */
 bool ShareData::InitShareData()
@@ -724,7 +724,7 @@ bool ShareData::InitShareData()
 		);
 		SetDllShareData(m_pShareData);
 
-		SelectCharWidthCache(CharWidthFontMode::Edit, CWM_CACHE_SHARE);
+		SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Share);
 		InitCharWidthCache(m_pShareData->m_common.m_sView.m_lf);	// 2008/5/15 Uchi
 
 		// From Here Oct. 27, 2000 genta

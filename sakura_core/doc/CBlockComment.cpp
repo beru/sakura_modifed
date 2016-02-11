@@ -63,7 +63,7 @@ bool BlockComment::Match_CommentFrom(
 	int				nLineLen,	// [in] pLineの長さ
 	const wchar_t*	pLine		// [in] 探索行の先頭．
 	*/
-) const
+	) const
 {
 	return (1
 		&& m_szBlockCommentFrom[0] != L'\0'
@@ -86,7 +86,7 @@ int BlockComment::Match_CommentTo(
 	int				nLineLen,	// [in] pLineの長さ
 	const wchar_t*	pLine		// [in] 探索行の先頭．探索開始位置のポインタではないことに注意
 	*/
-) const
+	) const
 {
 	for (int i=nPos; i<=cStr.GetLength()-m_nBlockToLen; ++i) {
 		//if (auto_memicmp(&cStr.GetPtr()[i], m_szBlockCommentTo, m_nBlockToLen) == 0) {	// 非ASCIIも大文字小文字を区別しない	//###locale 依存

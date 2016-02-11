@@ -66,7 +66,7 @@ enum PropTypeSheetOrder {
 /*!
 	@brief タイプ別設定ダイアログボックス
 
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 class PropTypes {
 

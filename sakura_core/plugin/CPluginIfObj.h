@@ -175,7 +175,7 @@ public:
 		case F_PL_ADDCOMMAND:			// ƒRƒ}ƒ“ƒh‚ð’Ç‰Á‚·‚é
 			{
 				int id = m_cPlugin.AddCommand(Arguments[0], Arguments[1], Arguments[2], true);
-				View->m_pcEditWnd->RegisterPluginCommand(id);
+				View->m_pEditWnd->RegisterPluginCommand(id);
 			}
 			break;
 		}

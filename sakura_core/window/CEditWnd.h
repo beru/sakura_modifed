@@ -89,7 +89,7 @@ struct TabGroupInfo {
 };
 
 //! 編集ウィンドウ（外枠）管理クラス
-// 2002.02.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+// 2002.02.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 // 2007.10.30 kobake IsFuncEnable,IsFuncCheckedをFunccode.hに移動
 // 2007.10.30 kobake OnHelp_MenuItemをCEditAppに移動
 class EditWnd :
@@ -285,11 +285,11 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // by 鬼
 protected:
-	enum EIconClickStatus{
-		icNone,
-		icDown,
-		icClicked,
-		icDoubleClicked
+	enum class IconClickStatus {
+		None,
+		Down,
+		Clicked,
+		DoubleClicked,
 	};
 
 protected:
@@ -334,7 +334,7 @@ public:
 	
 	const LOGFONT& GetLogfont(bool bTempSetting = true);
 	int GetFontPointSize(bool bTempSetting = true);
-	ECharWidthCacheMode GetLogfontCacheMode();
+	CharWidthCacheMode GetLogfontCacheMode();
 
 	void ClearViewCaretPosInfo();
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -417,7 +417,7 @@ private:
 
 	// その他フラグ
 	BOOL				m_bUIPI;		// エディタ－トレイ間でのUI特権分離確認用フラグ	// 2007.06.07 ryoji
-	EIconClickStatus	m_IconClicked;
+	IconClickStatus	m_IconClicked;
 
 public:
 	SelectCountMode	m_nSelectCountMode; // 選択文字カウント方法

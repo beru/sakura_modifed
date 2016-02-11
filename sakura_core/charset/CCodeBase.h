@@ -24,7 +24,7 @@
 #pragma once
 
 // 定数
-enum CodeConvertResult {
+enum class CodeConvertResult {
 	Complete, // データを失うことなく変換が完了した。
 	LoseSome, // 変換が完了したが、一部のデータが失われた。
 	Failure,  // 何らかの原因により失敗した。

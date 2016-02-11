@@ -91,7 +91,7 @@ bool AutoReloadAgent::_ToDoChecking() const
 		|| hwndActive != EditWnd::getInstance()->GetHwnd()
 		|| !GetListeningDoc()->m_cDocFile.GetFilePathClass().IsValidPath()
 		|| GetListeningDoc()->m_cDocFile.IsFileTimeZero()	// 現在編集中のファイルのタイムスタンプ
-		|| GetListeningDoc()->m_pcEditWnd->m_pPrintPreview	// 印刷プレビュー中	2013/5/8 Uchi
+		|| GetListeningDoc()->m_pEditWnd->m_pPrintPreview	// 印刷プレビュー中	2013/5/8 Uchi
 	) {
 		return false;
 	}
@@ -148,7 +148,7 @@ void AutoReloadAgent::CheckFileTimeStamp()
 			TCHAR szText[40];
 			const FileTime& ctime = pcDoc->m_cDocFile.GetFileTime();
 			auto_sprintf_s(szText, LS(STR_AUTORELOAD_NOFITY), ctime->wHour, ctime->wMinute, ctime->wSecond);
-			pcDoc->m_pcEditWnd->SendStatusMessage(szText);
+			pcDoc->m_pEditWnd->SendStatusMessage(szText);
 		}
 		break;
 	case WU_AUTOLOAD:		// 以後未編集で再ロード

@@ -88,7 +88,7 @@ bool DocFileOperation::OpenFileDialog(
 	const TCHAR*	pszOpenFolder,	// [in]     NULL以外を指定すると初期フォルダを指定できる
 	LoadInfo*		pLoadInfo,		// [in/out] ロード情報
 	std::vector<std::tstring>&	files
-)
+	)
 {
 	// アクティブにする
 	ActivateFrameWindow(hwndParent);
@@ -156,7 +156,7 @@ bool DocFileOperation::FileLoad(
 		WSHIfObj::List params;
 		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+			(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 		}
 	}
 
@@ -186,7 +186,7 @@ void DocFileOperation::ReloadCurrentFile(
 	ECodeType nCharCode		// [in] 文字コード種別
 	)
 {
-	auto& activeView = m_pcDocRef->m_pcEditWnd->GetActiveView();
+	auto& activeView = m_pcDocRef->m_pEditWnd->GetActiveView();
 
 	// プラグイン：DocumentCloseイベント実行
 	Plug::Array plugs;
@@ -238,7 +238,7 @@ void DocFileOperation::ReloadCurrentFile(
 		WSHIfObj::List params;
 		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+			(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 		}
 	}
 }
@@ -298,7 +298,7 @@ bool DocFileOperation::SaveFileDialog(
 	}
 	// 無題に、無題番号を付ける
 	if (pSaveInfo->cFilePath[0] == _T('\0')) {
-		const EditNode* node = AppNodeManager::getInstance()->GetEditNode(m_pcDocRef->m_pcEditWnd->GetHwnd());
+		const EditNode* node = AppNodeManager::getInstance()->GetEditNode(m_pcDocRef->m_pEditWnd->GetHwnd());
 		if (0 < node->m_nId) {
 			TCHAR szText[16];
 			auto_sprintf(szText, _T("%d"), node->m_nId);
@@ -377,7 +377,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		WSHIfObj::List params;
 		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_BEFORE_SAVE, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+			(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 		}
 
 		if (!pSaveInfo->bOverwriteMode) {	// 上書きでなければ前文書のクローズイベントを呼ぶ
@@ -385,7 +385,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 			plugs.clear();
 			JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 			for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-				(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+				(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 			}
 		}
 
@@ -398,7 +398,7 @@ bool DocFileOperation::DoSaveFlow(SaveInfo* pSaveInfo)
 		plugs.clear();
 		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_AFTER_SAVE, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+			(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 		}
 
 		// 結果
@@ -448,7 +448,12 @@ bool DocFileOperation::FileSave()
 
 	@date 2006.12.30 ryoji CEditView::Command_FILESAVEAS_DIALOG()から処理本体を切り出し
 */
-bool DocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, EolType eEolType, bool bDialog)
+bool DocFileOperation::FileSaveAs(
+	const WCHAR* filename,
+	ECodeType eCodeType,
+	EolType eEolType,
+	bool bDialog
+	)
 {
 	// セーブ情報
 	SaveInfo sSaveInfo;
@@ -488,7 +493,7 @@ bool DocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, Eo
 		WSHIfObj::List params;
 		JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 		for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-			(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+			(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 		}
 
 		return true;
@@ -501,7 +506,6 @@ bool DocFileOperation::FileSaveAs(const WCHAR* filename, ECodeType eCodeType, Eo
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         クローズ                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-
 
 /*
 	閉じて(無題)。
@@ -521,7 +525,7 @@ bool DocFileOperation::FileClose()
 	WSHIfObj::List params;
 	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+		(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 	}
 
 	// 既存データのクリア
@@ -533,10 +537,10 @@ bool DocFileOperation::FileClose()
 	m_pcDocRef->SetCurDirNotitle();
 
 	// 無題番号取得
-	AppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
+	AppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pEditWnd->GetHwnd());
 
 	// 親ウィンドウのタイトルを更新
-	m_pcDocRef->m_pcEditWnd->UpdateCaption();
+	m_pcDocRef->m_pEditWnd->UpdateCaption();
 
 	// 2006.09.01 ryoji オープン後自動実行マクロを実行する
 	m_pcDocRef->RunAutoMacro(GetDllShareData().m_common.m_sMacro.m_nMacroOnOpened);
@@ -564,7 +568,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& _sLoadInfo)
 	WSHIfObj::List params;
 	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_CLOSE, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+		(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 	}
 
 	// ファイル名指定が無い場合はダイアログで入力させる
@@ -601,11 +605,11 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& _sLoadInfo)
 
 	if (!m_pcDocRef->m_cDocFile.GetFilePathClass().IsValidPath()) {
 		m_pcDocRef->SetCurDirNotitle();
-		AppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pcEditWnd->GetHwnd());
+		AppNodeManager::getInstance()->GetNoNameNumber(m_pcDocRef->m_pEditWnd->GetHwnd());
 	}
 
 	// 親ウィンドウのタイトルを更新
-	m_pcDocRef->m_pcEditWnd->UpdateCaption();
+	m_pcDocRef->m_pEditWnd->UpdateCaption();
 
 	// オープン後自動実行マクロを実行する
 	// ※ロードしてなくても(無題)には変更済み
@@ -615,7 +619,7 @@ void DocFileOperation::FileCloseOpen(const LoadInfo& _sLoadInfo)
 	plugs.clear();
 	JackManager::getInstance()->GetUsablePlug(PP_DOCUMENT_OPEN, 0, &plugs);
 	for (auto it=plugs.begin(); it!=plugs.end(); ++it) {
-		(*it)->Invoke(&m_pcDocRef->m_pcEditWnd->GetActiveView(), params);
+		(*it)->Invoke(&m_pcDocRef->m_pEditWnd->GetActiveView(), params);
 	}
 }
 

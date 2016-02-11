@@ -26,14 +26,14 @@ void Color_Quote::Update(void)
 	const EditDoc* pCEditDoc = EditDoc::GetInstance(0);
 	m_pTypeData = &pCEditDoc->m_cDocType.GetDocumentAttribute();
 	m_nStringType = m_pTypeData->m_nStringType;
-	int nEspaceTypeList[] = {
-		STRING_LITERAL_CPP,
-		STRING_LITERAL_PLSQL,
-		STRING_LITERAL_HTML,
-		STRING_LITERAL_CPP,
-		STRING_LITERAL_CPP,
+	StringLiteralType nEspaceTypeList[] = {
+		StringLiteralType::CPP,
+		StringLiteralType::PLSQL,
+		StringLiteralType::HTML,
+		StringLiteralType::CPP,
+		StringLiteralType::CPP,
 	};
-	m_nEscapeType = nEspaceTypeList[m_nStringType];
+	m_nEscapeType = nEspaceTypeList[(int)m_nStringType];
 	bool* pbEscapeEndList[] = {
 		&m_bEscapeEnd,
 		NULL,
@@ -41,7 +41,7 @@ void Color_Quote::Update(void)
 		NULL,
 		&m_bEscapeEnd,
 	};
-	m_pbEscapeEnd = pbEscapeEndList[m_nStringType];
+	m_pbEscapeEnd = pbEscapeEndList[(int)m_nStringType];
 }
 
 void Color_Quote::SetStrategyColorInfo(const LayoutColorInfo* colorInfo)
@@ -115,11 +115,11 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 
 	if (cStr.At(nPos) == m_cQuote) {
 		m_nCOMMENTEND = -1;
-		int nStringType = m_pTypeData->m_nStringType;
+		StringLiteralType nStringType = m_pTypeData->m_nStringType;
 		bool bPreString = true;
 		// クォーテーション文字列の終端があるか
 		switch (nStringType) {
-		case STRING_LITERAL_CPP:
+		case StringLiteralType::CPP:
 			if (
 				0 < nPos
 				&& cStr.At(nPos - 1) == 'R'
@@ -142,7 +142,7 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 				}
 			}
 			break;
-		case STRING_LITERAL_HTML:
+		case StringLiteralType::HTML:
 			{
 				int i;
 				for (i=nPos-1; 0<=i; --i) {
@@ -155,14 +155,14 @@ bool Color_Quote::BeginColor(const StringRef& cStr, int nPos)
 				}
 			}
 			break;
-		case STRING_LITERAL_CSHARP:
+		case StringLiteralType::CSharp:
 			if (0 < nPos && cStr.At(nPos - 1) == L'@' && m_cQuote == L'"') {
-				m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, cStr, STRING_LITERAL_PLSQL);
+				m_nCOMMENTEND = Match_Quote(m_cQuote, nPos + 1, cStr, StringLiteralType::PLSQL);
 				m_nColorTypeIndex = 2;
 				return true;
 			}
 			break;
-		case STRING_LITERAL_PYTHON:
+		case StringLiteralType::Python:
 			if (
 				nPos + 2 < cStr.GetLength()
 			 	&& cStr.At(nPos + 1) == m_cQuote
@@ -233,7 +233,7 @@ bool Color_Quote::EndColor(const StringRef& cStr, int nPos)
 			m_nCOMMENTEND = Match_QuoteStr(m_tag.c_str(), m_tag.size(), nPos, cStr, false);
 			break;
 		case 2:
-			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, cStr, STRING_LITERAL_PLSQL);
+			m_nCOMMENTEND = Match_Quote(m_cQuote, nPos, cStr, StringLiteralType::PLSQL);
 			break;
 		case 3:
 			m_nCOMMENTEND = Match_QuoteStr(m_szQuote, 3, nPos, cStr, true);
@@ -251,7 +251,7 @@ int Color_Quote::Match_Quote(
 	wchar_t wcQuote,
 	int nPos,
 	const StringRef& cLineStr,
-	int escapeType,
+	StringLiteralType escapeType,
 	bool* pbEscapeEnd
 	)
 {
@@ -259,7 +259,7 @@ int Color_Quote::Match_Quote(
 	for (int i=nPos; i<cLineStr.GetLength(); ++i) {
 		// 2005-09-02 D.S.Koba GetSizeOfChar
 		nCharChars = (Int)t_max(LogicInt(1), NativeW::GetSizeOfChar(cLineStr.GetPtr(), cLineStr.GetLength(), i));
-		if (escapeType == STRING_LITERAL_CPP) {
+		if (escapeType == StringLiteralType::CPP) {
 			// エスケープ \"
 			if (nCharChars == 1 && cLineStr.At(i) == L'\\') {
 				++i;
@@ -277,7 +277,7 @@ int Color_Quote::Match_Quote(
 			}else if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
 				return i + 1;
 			}
-		}else if (escapeType == STRING_LITERAL_PLSQL) {
+		}else if (escapeType == StringLiteralType::PLSQL) {
 			// エスケープ ""
 			if (nCharChars == 1 && cLineStr.At(i) == wcQuote) {
 				if (i + 1 < cLineStr.GetLength() && cLineStr.At(i + 1) == wcQuote) {

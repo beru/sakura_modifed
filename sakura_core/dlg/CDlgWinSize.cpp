@@ -72,7 +72,7 @@ int DlgWinSize::DoModal(
 	WinSizeMode&	eSaveWinPos,	// [in/out] ウィンドウサイズ継承
 	int&			nWinSizeType,	// [in/out] ウィンドウの実行時の大きさ
 	RECT&			rc				// [in/out] 幅、高さ、左、上
-)
+	)
 {
 	m_eSaveWinSize = eSaveWinSize;
 	m_eSaveWinPos  = eSaveWinPos;

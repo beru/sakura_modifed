@@ -121,7 +121,7 @@ INT_PTR PropCommon::DlgProc2(
 	}
 }
 
-//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+//	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 PropCommon::PropCommon()
 {
 	{
@@ -195,7 +195,7 @@ struct ComPropSheetInfo {
 
 //	キーワード：共通設定タブ順序(プロパティシート)
 /*! プロパティシートの作成
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 INT_PTR PropCommon::DoPropertySheet(int nPageNum, bool bTrayProc)
 {

@@ -77,7 +77,7 @@ int CommandLine::CheckCommandLine(
 	LPTSTR	str,		//!< [in] 検証する文字列（先頭の-は含まない）
 	TCHAR** arg,		//!< [out] 引数がある場合はその先頭へのポインタ
 	int*	arglen		//!< [out] 引数の長さ
-)
+	)
 {
 	/*!
 		コマンドラインオプション解析用構造体配列

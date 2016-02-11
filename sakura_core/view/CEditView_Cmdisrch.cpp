@@ -254,7 +254,7 @@ void EditView::ISearchExit()
 	}
 	m_nCurSearchKeySequence = GetDllShareData().m_common.m_sSearch.m_nSearchKeySequence;
 	GetDllShareData().m_common.m_sSearch.m_searchOption = m_curSearchOption;
-	m_pcEditWnd->m_cToolbar.AcceptSharedSearchKey();
+	m_pEditWnd->m_cToolbar.AcceptSharedSearchKey();
 	m_nISearchDirection = SearchDirection::Backward;
 	m_nISearchMode = 0;
 	
@@ -363,7 +363,7 @@ void EditView::ISearchExec(bool bNext)
 			// ÅŒã‚©‚çŒŸõ
 			LogicInt nLineP;
 			int nIdxP;
-			auto& docLineMgr = m_pcEditDoc->m_cDocLineMgr;
+			auto& docLineMgr = m_pcEditDoc->m_docLineMgr;
 			nLineP =  docLineMgr.GetLineCount() - LogicInt(1);
 			DocLine* pDocLine = docLineMgr.GetLine(nLineP);
 			nIdxP = pDocLine->GetLengthWithEOL() -1;

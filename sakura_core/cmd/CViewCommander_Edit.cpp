@@ -71,7 +71,7 @@ void ViewCommander::Command_WCHAR(
 			auto& layoutMgr = pDoc->m_cLayoutMgr;
 			const wchar_t* pLine = layoutMgr.GetLineStr(caret.GetCaretLayoutPos().GetY2(), &nLineLen, &pCLayout);
 			if (pCLayout) {
-				const DocLine* pcDocLine = pDoc->m_cDocLineMgr.GetLine(pCLayout->GetLogicLineNo());
+				const DocLine* pcDocLine = pDoc->m_docLineMgr.GetLine(pCLayout->GetLogicLineNo());
 				pLine = pcDocLine->GetDocLineStrWithEOL(&nLineLen);
 				if (pLine) {
 					/*
@@ -516,7 +516,7 @@ void ViewCommander::Command_UNDO(void)
 		// ・行番号表示に必要な幅は OPE_INSERT/OPE_DELETE 処理内で更新されており変更があればルーラー再描画フラグに反映されている
 		// ・水平スクロールもルーラー再描画フラグに反映されている
 		const bool bRedrawRuler = m_pCommanderView->GetRuler().GetRedrawFlag();
-		m_pCommanderView->Call_OnPaint(PAINT_LINENUMBER | PAINT_BODY | (bRedrawRuler? PAINT_RULER: 0), false);
+		m_pCommanderView->Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body | (bRedrawRuler? (int)PaintAreaType::Ruler: 0), false);
 		if (!bRedrawRuler) {
 			// ルーラーのキャレットのみを再描画
 			HDC hdc = m_pCommanderView->GetDC();
@@ -757,7 +757,10 @@ void ViewCommander::Command_REDO(void)
 		// ・行番号表示に必要な幅は OPE_INSERT/OPE_DELETE 処理内で更新されており変更があればルーラー再描画フラグに反映されている
 		// ・水平スクロールもルーラー再描画フラグに反映されている
 		const bool bRedrawRuler = m_pCommanderView->GetRuler().GetRedrawFlag();
-		m_pCommanderView->Call_OnPaint(PAINT_LINENUMBER | PAINT_BODY | (bRedrawRuler? PAINT_RULER: 0), false);
+		m_pCommanderView->Call_OnPaint(
+			(int)PaintAreaType::LineNumber | (int)PaintAreaType::Body | (bRedrawRuler? (int)PaintAreaType::Ruler: 0),
+			false
+		);
 		if (!bRedrawRuler) {
 			// ルーラーのキャレットのみを再描画
 			HDC hdc = m_pCommanderView->GetDC();

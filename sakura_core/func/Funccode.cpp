@@ -1036,7 +1036,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 
 	// 02/06/26 ai Start
 	case F_JUMP_SRCHSTARTPOS:	// 検索開始位置へ戻る
-		return (pcEditDoc->m_pcEditWnd->GetActiveView().m_ptSrchStartPos_PHY.BothNatural());
+		return (pcEditDoc->m_pEditWnd->GetActiveView().m_ptSrchStartPos_PHY.BothNatural());
 	// 02/06/26 ai End
 
 	case F_COMPARE:	// ファイル内容比較
@@ -1103,7 +1103,7 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_COPY_COLOR_HTML:				//選択範囲内色付きHTMLコピー
 	case F_COPY_COLOR_HTML_LINENUMBER:	//選択範囲内行番号色付きHTMLコピー
 		// テキストが選択されていればtrue
-		return pcEditDoc->m_pcEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
+		return pcEditDoc->m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
 	case F_TOLOWER:					// 小文字
 	case F_TOUPPER:					// 大文字
@@ -1131,12 +1131,12 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 	case F_BASE64DECODE:			// Base64デコードして保存
 	case F_UUDECODE:				// uudecodeして保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 		// テキストが選択されていればtrue
-		return pcEditDoc->m_pcEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
+		return pcEditDoc->m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
 	case F_CUT_LINE:	// 行切り取り(折り返し単位)
 	case F_DELETE_LINE:	// 行削除(折り返し単位)
 		// テキストが選択されていなければtrue
-		return !pcEditDoc->m_pcEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
+		return !pcEditDoc->m_pEditWnd->GetActiveView().GetSelectionInfo().IsTextSelected();
 
 	case F_UNDO:		return pcEditDoc->m_cDocEditor.IsEnableUndo();	// Undo(元に戻す)可能な状態か？
 	case F_REDO:		return pcEditDoc->m_cDocEditor.IsEnableRedo();	// Redo(やり直し)可能な状態か？
@@ -1154,10 +1154,10 @@ bool IsFuncEnable(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFun
 		return pcEditDoc->m_cDocFile.GetFilePathClass().IsValidPath();	// 現在編集中のファイルのパス名をクリップボードにコピーできるか
 
 	case F_JUMPHIST_PREV:	// 移動履歴: 前へ
-		return (pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckPrev());
+		return (pcEditDoc->m_pEditWnd->GetActiveView().m_cHistory->CheckPrev());
 
 	case F_JUMPHIST_NEXT:	// 移動履歴: 次へ
-		return (pcEditDoc->m_pcEditWnd->GetActiveView().m_cHistory->CheckNext());
+		return (pcEditDoc->m_pEditWnd->GetActiveView().m_cHistory->CheckNext());
 
 	case F_JUMPHIST_SET:	// 現在位置を移動履歴に登録
 		return true;
@@ -1262,10 +1262,10 @@ bool IsFuncChecked(const EditDoc* pcEditDoc, const DLLSHAREDATA* pShareData, EFu
 	case F_ISEARCH_REGEXP_PREV:
 	case F_ISEARCH_MIGEMO_NEXT:
 	case F_ISEARCH_MIGEMO_PREV:
-		return pcEditDoc->m_pcEditWnd->GetActiveView().IsISearchEnabled(nId);
+		return pcEditDoc->m_pEditWnd->GetActiveView().IsISearchEnabled(nId);
 	case F_OUTLINE_TOGGLE: // 20060201 aroka アウトラインウィンドウ
 		// ToDo:ブックマークリストが出ているときもへこんでしまう。
-		return pcEditDoc->m_pcEditWnd->m_cDlgFuncList.GetHwnd() != NULL;
+		return pcEditDoc->m_pEditWnd->m_cDlgFuncList.GetHwnd() != NULL;
 	}
 	//End 2004.07.14 Kazika
 

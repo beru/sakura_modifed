@@ -137,7 +137,8 @@ inline void DlgTagJumpList::ClearPrevFindInfo() {
 
 
 DlgTagJumpList::DlgTagJumpList(bool bDirectTagJump)
-	: Dialog(true),
+	:
+	Dialog(true),
 	m_bDirectTagJump(bDirectTagJump),
 	m_nIndex(-1),
 	m_pszFileName(NULL),
@@ -230,7 +231,7 @@ int DlgTagJumpList::DoModal(
 	HINSTANCE	hInstance,
 	HWND		hwndParent,
 	LPARAM		lParam
-)
+	)
 {
 	int ret = (int)Dialog::DoModal(hInstance, hwndParent, IDD_TAGJUMPLIST, lParam);
 	StopTimer();

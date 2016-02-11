@@ -107,7 +107,7 @@ const int CMD_FROM_MOUSE = 2;
 	ウィンドウメッセージの処理、コマンドメッセージの処理、
 	画面表示などを行う。
 	
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 // 2007.08.25 kobake 文字間隔配列の機能をTextMetricsに移動
 // 2007.10.02 kobake Command_TRIM2をCConvertに移動
@@ -582,7 +582,7 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
 	// 参照
-	EditWnd*			m_pcEditWnd;	//!< ウィンドウ
+	EditWnd*			m_pEditWnd;	//!< ウィンドウ
 	EditDoc*			m_pcEditDoc;	//!< ドキュメント
 	const TypeConfig*	m_pTypeData;
 

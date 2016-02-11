@@ -48,7 +48,7 @@ public:
 	virtual bool Disp() const { return m_pTypeData->m_ColorInfoArr[this->GetStrategyColor()].m_bDisp; }
 	
 	static bool IsCppRawString(const StringRef& cStr, int nPos);
-	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& cLineStr, int escapeType, bool* pbEscapeEnd = NULL);
+	static int Match_Quote(wchar_t wcQuote, int nPos, const StringRef& cLineStr, StringLiteralType escapeType, bool* pbEscapeEnd = NULL);
 	static int Match_QuoteStr(const wchar_t* szQuote, int nQuoteLen, int nPos, const StringRef& cLineStr, bool bEscape);
 private:
 
@@ -57,8 +57,8 @@ private:
 	int m_nCOMMENTEND;
 	std::wstring m_tag;
 
-	int m_nStringType;
-	int m_nEscapeType;
+	StringLiteralType m_nStringType;
+	StringLiteralType m_nEscapeType;
 	bool* m_pbEscapeEnd;
 	bool m_bEscapeEnd;
 protected:

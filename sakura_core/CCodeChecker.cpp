@@ -139,7 +139,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	bool bTmpResult = false;
 	if (pcDoc->m_cDocType.GetDocumentAttribute().m_bChkEnterAtEnd) {
 		bTmpResult = _CheckSavingEolcode(
-			pcDoc->m_cDocLineMgr, pSaveInfo->cEol
+			pcDoc->m_docLineMgr, pSaveInfo->cEol
 		);
 	}
 
@@ -163,7 +163,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 	LogicPoint point;
 	NativeW cmemChar(L"", 0);
 	CodeConvertResult nTmpResult = _CheckSavingCharcode(
-		pcDoc->m_cDocLineMgr, pSaveInfo->eCharCode,
+		pcDoc->m_docLineMgr, pSaveInfo->eCharCode,
 		point, cmemChar
 	);
 
@@ -200,7 +200,7 @@ CallbackResultType CodeChecker::OnCheckSave(SaveInfo* pSaveInfo)
 		case IDCANCEL:
 			{
 				LogicPoint pt(point.x < 0 ? LogicInt(0) : point.x, point.y);
-				pcDoc->m_pcEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
+				pcDoc->m_pEditWnd->GetActiveView().GetCommander().Command_MOVECURSOR(pt, 0);
 			}
 			return CallbackResultType::Interrupt; //’†’f
 		}

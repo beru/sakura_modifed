@@ -49,7 +49,7 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 	Point ptMouse(_xPos, _yPos);
 
 	if (m_bHokan) {
-		m_pcEditWnd->m_cHokanMgr.Hide();
+		m_pEditWnd->m_cHokanMgr.Hide();
 		m_bHokan = FALSE;
 	}
 
@@ -150,12 +150,12 @@ void EditView::OnLBUTTONDOWN(WPARAM fwKeys, int _xPos , int _yPos)
 					DWORD dwEffectsSrc = (!m_pcEditDoc->IsEditable()) ?
 											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
 					int nOpe = m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer();
-					m_pcEditWnd->SetDragSourceView(this);
+					m_pEditWnd->SetDragSourceView(this);
 					DataObject data(cmemCurText.GetStringPtr(), cmemCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting());
 					dwEffects = data.DragDrop(TRUE, dwEffectsSrc);
-					m_pcEditWnd->SetDragSourceView(NULL);
+					m_pEditWnd->SetDragSourceView(NULL);
 					if (m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer() == nOpe) {	// ドキュメント変更なしか？	// 2007.12.09 ryoji
-						m_pcEditWnd->SetActivePane(m_nMyIndex);
+						m_pEditWnd->SetActivePane(m_nMyIndex);
 						if (DROPEFFECT_MOVE == (dwEffectsSrc & dwEffects)) {
 							// 移動範囲を削除する
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
@@ -265,7 +265,7 @@ normal_action:;
 			// 選択するものが無い（[EOF]のみの行）時は通常クリックと同じ処理
 			if (1
 				&& !GetSelectionInfo().IsTextSelected()
-				&& GetCaret().GetCaretLogicPos().y >= m_pcEditDoc->m_cDocLineMgr.GetLineCount()
+				&& GetCaret().GetCaretLogicPos().y >= m_pcEditDoc->m_docLineMgr.GetLineCount()
 			) {
 				GetSelectionInfo().BeginSelectArea();				// 現在のカーソル位置から選択を開始する
 				GetSelectionInfo().m_bBeginLineSelect = false;		// 行単位選択中 OFF
@@ -659,17 +659,17 @@ void EditView::OnMBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)MouseFunctionType::CenterClick &&
-	    m_pcEditWnd->IsPageScrollByWheel()
+	    m_pEditWnd->IsPageScrollByWheel()
 	) {
-		m_pcEditWnd->SetPageScrollByWheel(FALSE);
+		m_pEditWnd->SetPageScrollByWheel(FALSE);
 		return;
 	}
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)MouseFunctionType::CenterClick &&
-	    m_pcEditWnd->IsHScrollByWheel()
+	    m_pEditWnd->IsHScrollByWheel()
 	) {
-		m_pcEditWnd->SetHScrollByWheel(FALSE);
+		m_pEditWnd->SetHScrollByWheel(FALSE);
 		return;
 	}
 
@@ -831,17 +831,17 @@ void EditView::OnXLBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
-	    m_pcEditWnd->IsPageScrollByWheel()
+	    m_pEditWnd->IsPageScrollByWheel()
 	) {
-		m_pcEditWnd->SetPageScrollByWheel(FALSE);
+		m_pEditWnd->SetPageScrollByWheel(FALSE);
 		return;
 	}
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)MouseFunctionType::LeftSideClick &&
-	    m_pcEditWnd->IsHScrollByWheel()
+	    m_pEditWnd->IsHScrollByWheel()
 	) {
-		m_pcEditWnd->SetHScrollByWheel(FALSE);
+		m_pEditWnd->SetHScrollByWheel(FALSE);
 		return;
 	}
 
@@ -893,19 +893,19 @@ void EditView::OnXRBUTTONUP(WPARAM fwKeys, int xPos , int yPos)
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().m_common.m_sGeneral.m_nPageScrollByWheel == (int)MouseFunctionType::RightSideClick &&
-	    m_pcEditWnd->IsPageScrollByWheel()
+	    m_pEditWnd->IsPageScrollByWheel()
 	) {
 		// ホイール操作によるページスクロールありをOFF
-		m_pcEditWnd->SetPageScrollByWheel(FALSE);
+		m_pEditWnd->SetPageScrollByWheel(FALSE);
 		return;
 	}
 
 	// ホイール操作によるページスクロールあり
 	if (GetDllShareData().m_common.m_sGeneral.m_nHorizontalScrollByWheel == (int)MouseFunctionType::RightSideClick &&
-	    m_pcEditWnd->IsHScrollByWheel()
+	    m_pEditWnd->IsHScrollByWheel()
 	) {
 		// ホイール操作による横スクロールありをOFF
-		m_pcEditWnd->SetHScrollByWheel(FALSE);
+		m_pEditWnd->SetHScrollByWheel(FALSE);
 		return;
 	}
 
@@ -991,7 +991,7 @@ void EditView::OnMOUSEMOVE(WPARAM fwKeys, int xPos_, int yPos_)
 			if (ptNew.y < 0) {
 				ptNew.y = LayoutYInt(0);
 			}
-			EditView& view = m_pcEditWnd->GetActiveView();
+			EditView& view = m_pEditWnd->GetActiveView();
 			ptNew.x = 0;
 			LogicPoint ptNewLogic;
 			view.GetCaret().GetAdjustCursorPos(&ptNew);
@@ -1408,14 +1408,14 @@ LRESULT EditView::OnMOUSEWHEEL2(WPARAM wParam, LPARAM lParam, bool bHorizontalMs
 		if (bKeyPageScroll) {
 			if (bHorizontal) {
 				// ホイール操作による横スクロールあり
-				m_pcEditWnd->SetHScrollByWheel(TRUE);
+				m_pEditWnd->SetHScrollByWheel(TRUE);
 			}
 			// ホイール操作によるページスクロールあり
-			m_pcEditWnd->SetPageScrollByWheel(TRUE);
+			m_pEditWnd->SetPageScrollByWheel(TRUE);
 		}else {
 			if (bHorizontal) {
 				// ホイール操作による横スクロールあり
-				m_pcEditWnd->SetHScrollByWheel(TRUE);
+				m_pEditWnd->SetHScrollByWheel(TRUE);
 			}
 		}
 
@@ -1745,7 +1745,7 @@ STDMETHODIMP EditView::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POI
 	}
 	
 	// 自分をアクティブペインにする
-	m_pcEditWnd->SetActivePane(m_nMyIndex);
+	m_pEditWnd->SetActivePane(m_nMyIndex);
 
 	// 現在のカーソル位置を記憶する	// 2007.12.09 ryoji
 	m_ptCaretPos_DragEnter = GetCaret().GetCaretLayoutPos();
@@ -1774,7 +1774,7 @@ STDMETHODIMP EditView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 
 	*pdwEffect = TranslateDropEffect(m_cfDragData, dwKeyState, pt, *pdwEffect);
 
-	EditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
+	EditView* pcDragSourceView = m_pEditWnd->GetDragSourceView();
 
 	// ドラッグ元が他ビューで、このビューのカーソルがドラッグ元の選択範囲内の場合は禁止マークにする
 	// ※自ビューのときは禁止マークにしない（他アプリでも多くはそうなっている模様）	// 2009.06.09 ryoji
@@ -1843,7 +1843,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 		return PostMyDropFiles(pDataObject);
 
 	// 外部からのドロップは以後の処理ではコピーと同様に扱う
-	EditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
+	EditView* pcDragSourceView = m_pEditWnd->GetDragSourceView();
 	bMove = (*pdwEffect == DROPEFFECT_MOVE) && pcDragSourceView;
 	bBoxData = m_bDragBoxData;
 
@@ -2004,7 +2004,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 			);
 
 			// 現在の行数を記憶する	// 2008.03.26 ryoji
-			int nLines_Old = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
+			int nLines_Old = m_pcEditDoc->m_docLineMgr.GetLineCount();
 
 			// 以前の選択範囲を選択する
 			GetSelectionInfo().SetBoxSelect(bBeginBoxSelect_Old);
@@ -2033,7 +2033,7 @@ STDMETHODIMP EditView::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL p
 				// (sDelLogic.GetTo().GetY2() - sDelLogic.GetFrom().GetY2()) だと実際の削除行数と同じになる
 				// こともあるが、（削除行数－１）になることもある．
 				// 例）フリーカーソルでの行番号クリック時の１行選択
-				int nLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
+				int nLines = m_pcEditDoc->m_docLineMgr.GetLineCount();
 				sSelLogic.SetFromY(sSelLogic.GetFrom().GetY2() - (nLines_Old - nLines));
 				sSelLogic.SetToY(sSelLogic.GetTo().GetY2() - (nLines_Old - nLines));
 
@@ -2151,7 +2151,7 @@ void EditView::OnMyDropFiles(HDROP hDrop)
 	switch (nId) {
 	case 110:	// ファイルを開く
 		// 通常のドロップファイル処理を行う
-		::SendMessage(m_pcEditWnd->GetHwnd(), WM_DROPFILES, (WPARAM)hDrop, 0);
+		::SendMessage(m_pEditWnd->GetHwnd(), WM_DROPFILES, (WPARAM)hDrop, 0);
 		break;
 
 	case 100:	// パス名を貼り付ける
@@ -2246,7 +2246,7 @@ DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, 
 	if (cf == CF_HDROP)	// 2008.06.20 ryoji
 		return DROPEFFECT_LINK;
 
-	EditView* pcDragSourceView = m_pcEditWnd->GetDragSourceView();
+	EditView* pcDragSourceView = m_pEditWnd->GetDragSourceView();
 
 	// 2008.06.21 ryoji
 	// Win 98/Me 環境では外部からのドラッグ時に GetKeyState() ではキー状態を正しく取得できないため、
@@ -2269,7 +2269,7 @@ DWORD EditView::TranslateDropEffect(CLIPFORMAT cf, DWORD dwKeyState, POINTL pt, 
 
 bool EditView::IsDragSource(void)
 {
-	return (this == m_pcEditWnd->GetDragSourceView());
+	return (this == m_pEditWnd->GetDragSourceView());
 }
 
 

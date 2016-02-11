@@ -73,8 +73,8 @@ void DocOutline::MakeTopicList_tex(FuncInfoArr* pcFuncInfoArr)
 
 	// ˆês‚¸‚Â
 	LogicInt	nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) break;
 		// ˆê•¶š‚¸‚Â
 		for (i=0; i<nLineLen-1; ++i) {

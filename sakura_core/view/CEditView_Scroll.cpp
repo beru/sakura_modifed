@@ -596,8 +596,8 @@ void EditView::ScrollDraw(LayoutInt nScrollRowNum, LayoutInt nScrollColNum, cons
 
 void EditView::MiniMapRedraw(bool bUpdateAll)
 {
-	if (this == &m_pcEditWnd->GetActiveView() && m_pcEditWnd->GetMiniMap().GetHwnd()) {
-		EditView& miniMap = m_pcEditWnd->GetMiniMap();
+	if (this == &m_pEditWnd->GetActiveView() && m_pEditWnd->GetMiniMap().GetHwnd()) {
+		EditView& miniMap = m_pEditWnd->GetMiniMap();
 		LayoutYInt nViewTop = miniMap.m_nPageViewTop;
 		LayoutYInt nViewBottom = miniMap.m_nPageViewBottom;
 		LayoutYInt nDiff = nViewTop - GetTextArea().GetViewTopLine();
@@ -679,10 +679,10 @@ void EditView::MiniMapRedraw(bool bUpdateAll)
 void EditView::SyncScrollV(LayoutInt line)
 {
 	if (GetDllShareData().m_common.m_sWindow.m_bSplitterWndVScroll && line != 0 
-		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x01) 
+		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x01) 
 		&& 0 <= m_nMyIndex
 	) {
-		EditView&	editView = m_pcEditWnd->GetView(m_nMyIndex^0x01);
+		EditView&	editView = m_pEditWnd->GetView(m_nMyIndex^0x01);
 #if 0
 		//	·•ª‚ð•Û‚Á‚½‚Ü‚ÜƒXƒNƒ[ƒ‹‚·‚éê‡
 		editView.ScrollByV(line);
@@ -707,10 +707,10 @@ void EditView::SyncScrollV(LayoutInt line)
 void EditView::SyncScrollH(LayoutInt col)
 {
 	if (GetDllShareData().m_common.m_sWindow.m_bSplitterWndHScroll && col != 0
-		&& m_pcEditWnd->IsEnablePane(m_nMyIndex^0x02)
+		&& m_pEditWnd->IsEnablePane(m_nMyIndex^0x02)
 		&& 0 <= m_nMyIndex
 	) {
-		EditView& cEditView = m_pcEditWnd->GetView(m_nMyIndex^0x02);
+		EditView& cEditView = m_pEditWnd->GetView(m_nMyIndex^0x02);
 		HDC hdc = ::GetDC(cEditView.GetHwnd());
 		
 #if 0

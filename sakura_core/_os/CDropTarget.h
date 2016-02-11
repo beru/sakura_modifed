@@ -80,7 +80,7 @@ public:
 	||  Attributes & Operations
 	*/
 private: // 2002/2/10 aroka アクセス権変更
-	EditWnd*		m_pcEditWnd;	// 2008.06.20 ryoji
+	EditWnd*		m_pEditWnd;	// 2008.06.20 ryoji
 	HWND			m_hWnd_DropTarget;
 	EditView*		m_pcEditView;
 	//	static REFIID	m_owniid;

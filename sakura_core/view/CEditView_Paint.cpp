@@ -49,9 +49,9 @@
 void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView, LayoutYInt nLineNum);
 
 /*
-	PAINT_LINENUMBER = (1<<0), // 行番号
-	PAINT_RULER      = (1<<1), // ルーラー
-	PAINT_BODY       = (1<<2), // 本文
+	PaintAreaType::LineNumber = (1<<0), // 行番号
+	PaintAreaType::Ruler      = (1<<1), // ルーラー
+	PaintAreaType::Body       = (1<<2), // 本文
 */
 
 void EditView_Paint::Call_OnPaint(
@@ -68,9 +68,9 @@ void EditView_Paint::Call_OnPaint(
 
 	// 領域を作成 -> rc
 	std::vector<Rect> rcs;
-	if (nPaintFlag & PAINT_LINENUMBER) rcs.push_back(rcLineNumber);
-	if (nPaintFlag & PAINT_RULER) rcs.push_back(rcRuler);
-	if (nPaintFlag & PAINT_BODY) rcs.push_back(rcBody);
+	if (nPaintFlag & (int)PaintAreaType::LineNumber) rcs.push_back(rcLineNumber);
+	if (nPaintFlag & (int)PaintAreaType::Ruler) rcs.push_back(rcRuler);
+	if (nPaintFlag & (int)PaintAreaType::Body) rcs.push_back(rcBody);
 	if (rcs.size() == 0) return;
 	Rect rc = rcs[0];
 	int nSize = (int)rcs.size();
@@ -112,7 +112,7 @@ void EditView::RedrawAll()
 	GetCaret().ShowCaretPosInfo();
 
 	// 親ウィンドウのタイトルを更新
-	m_pcEditWnd->UpdateCaption();
+	m_pEditWnd->UpdateCaption();
 
 	//	Jul. 9, 2005 genta	選択範囲の情報をステータスバーへ表示
 	GetSelectionInfo().PrintSelectionInfoMsg();
@@ -562,11 +562,11 @@ void EditView::OnPaint(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 {
 	bool bChangeFont = m_bMiniMap;
 	if (bChangeFont) {
-		SelectCharWidthCache(CharWidthFontMode::MiniMap, CWM_CACHE_LOCAL);
+		SelectCharWidthCache(CharWidthFontMode::MiniMap, CharWidthCacheMode::Local);
 	}
 	OnPaint2(_hdc, pPs, bDrawFromComptibleBmp);
 	if (bChangeFont) {
-		SelectCharWidthCache(CharWidthFontMode::Edit, m_pcEditWnd->GetLogfontCacheMode());
+		SelectCharWidthCache(CharWidthFontMode::Edit, m_pEditWnd->GetLogfontCacheMode());
 	}
 }
 
@@ -618,7 +618,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 			pPs->rcPaint.top,
 			SRCCOPY
 		);
-		if (m_pcEditWnd->GetActivePane() == m_nMyIndex) {
+		if (m_pEditWnd->GetActivePane() == m_nMyIndex) {
 			// アクティブペインは、アンダーライン描画
 			GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
 		}
@@ -678,7 +678,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 		DrawBracketPair(false);
 	}
 
-	EditView& cActiveView = m_pcEditWnd->GetActiveView();
+	EditView& cActiveView = m_pEditWnd->GetActiveView();
 	m_nPageViewTop = cActiveView.GetTextArea().GetViewTopLine();
 	m_nPageViewBottom = cActiveView.GetTextArea().GetBottomLine();
 
@@ -852,7 +852,7 @@ void EditView::OnPaint2(HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp)
 
 	// From Here 2007.09.09 Moca 互換BMPによる画面バッファ
 	//     アンダーライン描画をメモリDCからのコピー前処理から後に移動
-	if (m_pcEditWnd->GetActivePane() == m_nMyIndex) {
+	if (m_pEditWnd->GetActivePane() == m_nMyIndex) {
 		// アクティブペインは、アンダーライン描画
 		GetCaret().m_cUnderLine.CaretUnderLineON(true, false);
 	}
@@ -1017,7 +1017,7 @@ bool EditView::DrawLayoutLine(ColorStrategyInfo* pInfo)
 	TypeSupport	cCaretLineBg(this, COLORIDX_CARETLINEBG);
 	TypeSupport	cEvenLineBg(this, COLORIDX_EVENLINEBG);
 	TypeSupport	cPageViewBg(this, COLORIDX_PAGEVIEW);
-	EditView& cActiveView = m_pcEditWnd->GetActiveView();
+	EditView& cActiveView = m_pEditWnd->GetActiveView();
 	TypeSupport&	cBackType = (cCaretLineBg.IsDisp() &&
 		GetCaret().GetCaretLayoutPos().GetY() == pInfo->m_pDispPos->GetLayoutLineRef() && !m_bMiniMap
 			? cCaretLineBg
@@ -1262,7 +1262,7 @@ void EditView::DispTextSelected(
 				sSelect.GetFrom().x >= GetTextArea().GetViewLeftCol()
 			) {
 				HWND hWnd = ::GetForegroundWindow();
-				if (hWnd && (hWnd == m_pcEditWnd->m_cDlgFind.GetHwnd() || hWnd == m_pcEditWnd->m_cDlgReplace.GetHwnd())) {
+				if (hWnd && (hWnd == m_pEditWnd->m_cDlgFind.GetHwnd() || hWnd == m_pEditWnd->m_cDlgReplace.GetHwnd())) {
 					rcClip.right = rcClip.left + (nCharWidth/3 == 0 ? 1 : nCharWidth/3);
 					bOMatch = true;
 				}

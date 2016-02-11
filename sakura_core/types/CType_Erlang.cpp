@@ -404,10 +404,10 @@ void DocOutline::MakeFuncList_Erlang(FuncInfoArr* pcFuncInfoArr)
 	OutlineErlang erl_state_machine;
 	LogicInt	nLineCount;
 
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		LogicInt nLineLen;
 
-		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (erl_state_machine.parse(pLine, nLineLen, nLineCount)) {
 			/*
 			  カーソル位置変換

@@ -93,7 +93,7 @@ int DlgPluginOption::DoModal(
 	HWND				hwndParent,
 	PropPlugin*		cPropPlugin,
 	int 				ID
-)
+	)
 {
 	// プラグイン番号（エディタがふる番号）
 	m_ID = ID;

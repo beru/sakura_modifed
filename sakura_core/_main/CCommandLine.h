@@ -28,24 +28,24 @@ class Memory;
 	20020118 aroka
 */
 struct GrepInfo {
-	NativeW		cmGrepKey;				//!< 検索キー
-	NativeW		cmGrepRep;				//!< 置換キー
-	CNativeT		cmGrepFile;				//!< 検索対象ファイル
-	CNativeT		cmGrepFolder;			//!< 検索対象フォルダ
-	SearchOption	grepSearchOption;		//!< 検索オプション
-	bool			bGrepCurFolder;			//!< カレントディレクトリを維持
-	bool			bGrepStdout;			//!< 標準出力モード
-	bool			bGrepHeader;			//!< ヘッダ情報表示
-	bool			bGrepSubFolder;			//!< サブフォルダを検索する
-	ECodeType		nGrepCharSet;			//!< 文字コードセット
-	int				nGrepOutputStyle;		//!< 結果出力形式
-	int				nGrepOutputLineType;	//!< 結果出力：行を出力/該当部分/否マッチ行
-	bool			bGrepOutputFileOnly;	//!< ファイル毎最初のみ検索
-	bool			bGrepOutputBaseFolder;	//!< ベースフォルダ表示
-	bool			bGrepSeparateFolder;	//!< フォルダ毎に表示
-	bool			bGrepReplace;			//!< Grep置換
-	bool			bGrepPaste;				//!< クリップボードから貼り付け
-	bool			bGrepBackup;			//!< 置換でバックアップを保存
+	NativeW			cmGrepKey;				// 検索キー
+	NativeW			cmGrepRep;				// 置換キー
+	CNativeT		cmGrepFile;				// 検索対象ファイル
+	CNativeT		cmGrepFolder;			// 検索対象フォルダ
+	SearchOption	grepSearchOption;		// 検索オプション
+	bool			bGrepCurFolder;			// カレントディレクトリを維持
+	bool			bGrepStdout;			// 標準出力モード
+	bool			bGrepHeader;			// ヘッダ情報表示
+	bool			bGrepSubFolder;			// サブフォルダを検索する
+	ECodeType		nGrepCharSet;			// 文字コードセット
+	int				nGrepOutputStyle;		// 結果出力形式
+	int				nGrepOutputLineType;	// 結果出力：行を出力/該当部分/否マッチ行
+	bool			bGrepOutputFileOnly;	// ファイル毎最初のみ検索
+	bool			bGrepOutputBaseFolder;	// ベースフォルダ表示
+	bool			bGrepSeparateFolder;	// フォルダ毎に表示
+	bool			bGrepReplace;			// Grep置換
+	bool			bGrepPaste;				// クリップボードから貼り付け
+	bool			bGrepBackup;			// 置換でバックアップを保存
 };
 
 
@@ -61,9 +61,9 @@ class CommandLine : public TSingleton<CommandLine> {
 	CommandLine();
 
 	static int CheckCommandLine(
-		LPTSTR	str,		//!< [in] 検証する文字列（先頭の-は含まない）
-		TCHAR**	arg,		//!< [out] 引数がある場合はその先頭へのポインタ
-		int*	arglen		//!< [out] 引数の長さ
+		LPTSTR	str,		// [in] 検証する文字列（先頭の-は含まない）
+		TCHAR**	arg,		// [out] 引数がある場合はその先頭へのポインタ
+		int*	arglen		// [out] 引数の長さ
 	);
 
 	/*!
@@ -102,20 +102,20 @@ public:
 
 // member valiables
 private:
-	bool		m_bGrepMode;		//! [out] TRUE: Grep Mode
-	bool		m_bGrepDlg;			//  Grepダイアログ
+	bool		m_bGrepMode;		// [out] TRUE: Grep Mode
+	bool		m_bGrepDlg;			// Grepダイアログ
 	bool		m_bDebugMode;		
-	bool		m_bNoWindow;		//! [out] TRUE: 編集Windowを開かない
-	bool		m_bWriteQuit;		//! [out] TRUE: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
+	bool		m_bNoWindow;		// [out] TRUE: 編集Windowを開かない
+	bool		m_bWriteQuit;		// [out] TRUE: 設定を保存して終了	// 2007.05.19 ryoji sakuext用に追加
 	bool		m_bProfileMgr;
 	bool		m_bSetProfile;
-	EditInfo	m_fi;				//!
-	GrepInfo	m_gi;				//!
-	bool		m_bViewMode;		//! [out] TRUE: Read Only
-	int			m_nGroup;			//! グループID	// 2007.06.26 ryoji
-	NativeW	m_cmMacro;			//! [out] マクロファイル名／マクロ文
-	NativeW	m_cmMacroType;		//! [out] マクロ種別
-	NativeW	m_cmProfile;		//! プロファイル名
+	EditInfo	m_fi;				//
+	GrepInfo	m_gi;				//
+	bool		m_bViewMode;		// [out] TRUE: Read Only
+	int			m_nGroup;			// グループID	// 2007.06.26 ryoji
+	NativeW	m_cmMacro;				// [out] マクロファイル名／マクロ文
+	NativeW	m_cmMacroType;			// [out] マクロ種別
+	NativeW	m_cmProfile;			// プロファイル名
 	std::vector<std::tstring> m_vFiles;	//!< ファイル名(複数)
 };
 

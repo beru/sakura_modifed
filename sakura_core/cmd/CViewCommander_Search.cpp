@@ -200,7 +200,7 @@ re_do:;
 			m_pCommanderView->m_sSearchPattern
 		);
 	}else {
-		nSearchResult = SearchAgent(&GetDocument()->m_cDocLineMgr).SearchWord(
+		nSearchResult = SearchAgent(&GetDocument()->m_docLineMgr).SearchWord(
 			LogicPoint(nIdx, nLineNumLogic),
 			SearchDirection::Forward,		// 0==前方検索 1==後方検索
 			pcSelectLogic,
@@ -504,7 +504,7 @@ void ViewCommander::Command_REPLACE_DIALOG(void)
 	}
 	// 置換オプションの初期化
 	dlgReplace.m_nReplaceTarget = 0;	// 置換対象
-	dlgReplace.m_nPaste = false;		// 貼り付ける？
+	dlgReplace.m_bPaste = false;		// 貼り付ける？
 // To Here 2001.12.03 hor
 
 	// 置換ダイアログの表示
@@ -534,7 +534,7 @@ void ViewCommander::Command_REPLACE(HWND hwndParent)
 	}
 	auto& dlgReplace = GetEditWindow()->m_cDlgReplace;
 	// 2002.02.10 hor
-	int nPaste			=	dlgReplace.m_nPaste;
+	int nPaste			=	dlgReplace.m_bPaste;
 	int nReplaceTarget	=	dlgReplace.m_nReplaceTarget;
 
 	if (nPaste && nReplaceTarget == 3) {
@@ -723,7 +723,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	auto& dlgReplace = GetEditWindow()->m_cDlgReplace;
 	// 2002.02.10 hor
-	BOOL nPaste			= dlgReplace.m_nPaste;
+	BOOL nPaste			= dlgReplace.m_bPaste;
 	BOOL nReplaceTarget	= dlgReplace.m_nReplaceTarget;
 	bool bRegularExp	= m_pCommanderView->m_curSearchOption.bRegularExp;
 	bool bSelectedArea	= dlgReplace.m_bSelectedArea;
@@ -759,7 +759,7 @@ void ViewCommander::Command_REPLACE_ALL()
 
 	auto& layoutMgr = GetDocument()->m_cLayoutMgr;
 	bool bFastMode = false;
-	if (((Int)GetDocument()->m_cDocLineMgr.GetLineCount() * 10 < (Int)layoutMgr.GetLineCount())
+	if (((Int)GetDocument()->m_docLineMgr.GetLineCount() * 10 < (Int)layoutMgr.GetLineCount())
 		&& !(bSelectedArea || nPaste)
 	) {
 		// 1行あたり10レイアウト行以上で、選択・ペーストでない場合
@@ -769,10 +769,10 @@ void ViewCommander::Command_REPLACE_ALL()
 	if (bFastMode) {
 		nAllLineNum = (Int)layoutMgr.GetLineCount();
 	}else {
-		nAllLineNum = (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+		nAllLineNum = (Int)GetDocument()->m_docLineMgr.GetLineCount();
 	}
 	int	nAllLineNumOrg = nAllLineNum;
-	int	nAllLineNumLogicOrg = (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+	int	nAllLineNumLogicOrg = (Int)GetDocument()->m_docLineMgr.GetLineCount();
 
 	// 進捗表示&中止ダイアログの作成
 	DlgCancel	cDlgCancel;
@@ -918,7 +918,7 @@ void ViewCommander::Command_REPLACE_ALL()
 	// とはいえ、これらの操作をすることによって得をするクロック数は合わせても 1 ループで数十だと思います。
 	// 数百クロック毎ループのオーダーから考えてもそんなに得はしないように思いますけど・・・。
 	bool& bCANCEL = cDlgCancel.m_bCANCEL;
-	DocLineMgr& rDocLineMgr = GetDocument()->m_cDocLineMgr;
+	DocLineMgr& rDocLineMgr = GetDocument()->m_docLineMgr;
 
 	// クラス関係をループの中で宣言してしまうと、毎ループごとにコンストラクタ、デストラクタが
 	// 呼ばれて遅くなるので、ここで宣言。
@@ -989,7 +989,7 @@ void ViewCommander::Command_REPLACE_ALL()
 			// と思ったけど、逆にこちらの方が自然ではないので、やめる。
 		
 			if (bFastMode) {
-				int nDiff = nAllLineNumOrg - (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+				int nDiff = nAllLineNumOrg - (Int)GetDocument()->m_docLineMgr.GetLineCount();
 				if (0 <= nDiff) {
 					nNewPos = (nDiff + (Int)cSelectLogic.GetFrom().GetY2()) >> nShiftCount;
 				}else {
@@ -1130,8 +1130,8 @@ void ViewCommander::Command_REPLACE_ALL()
 				const LogicInt y = cSelectLogic.GetFrom().y;
 				cSelectLogic.SetFrom(LogicPoint(LogicXInt(0), y)); // 行頭
 				cSelectLogic.SetTo(LogicPoint(LogicXInt(0), y + LogicInt(1))); // 次行の行頭
-				if (GetDocument()->m_cDocLineMgr.GetLineCount() == y + LogicInt(1)) {
-					const DocLine* pLine = GetDocument()->m_cDocLineMgr.GetLine(y);
+				if (GetDocument()->m_docLineMgr.GetLineCount() == y + LogicInt(1)) {
+					const DocLine* pLine = GetDocument()->m_docLineMgr.GetLine(y);
 					if (pLine->GetEol() == EolType::None) {
 						// EOFは最終データ行にぶら下がりなので、選択終端は行末
 						cSelectLogic.SetTo(LogicPoint(pLine->GetLengthWithEOL(), y)); // 対象行の行末
@@ -1302,17 +1302,17 @@ void ViewCommander::Command_REPLACE_ALL()
 
 		if (!bFastMode && 50 <= nReplaceNum && !(bSelectedArea || nPaste)) {
 			bFastMode = true;
-			nAllLineNum = (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+			nAllLineNum = (Int)GetDocument()->m_docLineMgr.GetLineCount();
 			nAllLineNumOrg = nAllLineNumLogicOrg;
 			for (nShiftCount=0; 300<nAllLineNum; ++nShiftCount) {
 				nAllLineNum /= 2;
 			}
 			Progress_SetRange( hwndProgress, 0, nAllLineNum + 1 );
-			int nDiff = nAllLineNumOrg - (Int)GetDocument()->m_cDocLineMgr.GetLineCount();
+			int nDiff = nAllLineNumOrg - (Int)GetDocument()->m_docLineMgr.GetLineCount();
 			if (0 <= nDiff) {
 				nNewPos = (nDiff + (Int)cSelectLogic.GetFrom().GetY2()) >> nShiftCount;
 			}else {
-				nNewPos = ::MulDiv((Int)cSelectLogic.GetFrom().GetY(), nAllLineNum, (Int)GetDocument()->m_cDocLineMgr.GetLineCount());
+				nNewPos = ::MulDiv((Int)cSelectLogic.GetFrom().GetY(), nAllLineNum, (Int)GetDocument()->m_docLineMgr.GetLineCount());
 			}
 			Progress_SetPos( hwndProgress, nNewPos +1 );
 			Progress_SetPos( hwndProgress, nNewPos );

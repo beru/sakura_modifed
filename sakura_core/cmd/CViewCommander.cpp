@@ -35,7 +35,8 @@
 #include "plugin/CJackManager.h"
 
 ViewCommander::ViewCommander(EditView* pEditView)
-	: m_pCommanderView(pEditView)
+	:
+	m_pCommanderView(pEditView)
 {
 	m_bPrevCommand = 0;
 	m_pcSMacroMgr = EditApp::getInstance()->m_pcSMacroMgr;

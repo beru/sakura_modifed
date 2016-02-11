@@ -243,7 +243,7 @@ void EditView::InsertData_CEditView(
 
 	// 再描画
 	// 行番号表示に必要な幅を設定
-	if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
+	if (m_pEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
 		// キャレットの表示・更新
 		GetCaret().ShowEditCaret();
 	}else {
@@ -310,14 +310,14 @@ void EditView::InsertData_CEditView(
 			this->ReleaseDC(hdc);
 			// 2014.07.16 他のビュー(ミニマップ)の再描画を抑制する
 			if (nInsLineNum == 0) {
-				for (int i=0; i<m_pcEditWnd->GetAllViewCount(); ++i) {
-					EditView* pcView = &m_pcEditWnd->GetView(i);
+				for (int i=0; i<m_pEditWnd->GetAllViewCount(); ++i) {
+					EditView* pcView = &m_pEditWnd->GetView(i);
 					if (pcView == this) {
 						continue;
 					}
 					pcView->RedrawLines(nLayoutTop, nLayoutBottom);
 				}
-				m_pcEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
+				m_pEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
 				if (!m_bDoing_UndoRedo && pcOpe) {
 					GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount++;
 				}
@@ -328,7 +328,7 @@ void EditView::InsertData_CEditView(
 			if (bLineModifiedChange) {	// 無変更だった行が変更された
 				const Layout* pcLayoutWk = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY(nStartLine);
 				if (pcLayoutWk && pcLayoutWk->GetLogicOffset()) {	// 折り返しレイアウト行か？
-					Call_OnPaint(PAINT_LINENUMBER, false);
+					Call_OnPaint(PaintAreaType::LineNumber, false);
 				}
 			}
 #endif
@@ -548,7 +548,7 @@ void EditView::DeleteData(
 			SetDrawSwitch(true);	// 2002.01.25 hor
 
 			// 行番号表示に必要な幅を設定
-			if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane(true)) {
+			if (m_pEditWnd->DetectWidthOfLineNumberAreaAllPane(true)) {
 				// キャレットの表示・更新
 				GetCaret().ShowEditCaret();
 			}
@@ -557,7 +557,7 @@ void EditView::DeleteData(
 				AdjustScrollBars();
 
 				// 再描画
-				Call_OnPaint(PAINT_LINENUMBER | PAINT_BODY, false);
+				Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body, false);
 			}
 			// 選択エリアの先頭へカーソルを移動
 			this->UpdateWindow();
@@ -827,7 +827,7 @@ bool EditView::ReplaceData_CEditView3(
 		DLRArg.pInsData = pInsData;
 		DLRArg.nDelSeq = nDelSeq;
 		// DLRArg.ptNewPos;
-		SearchAgent(&GetDocument()->m_cDocLineMgr).ReplaceData(&DLRArg);
+		SearchAgent(&GetDocument()->m_docLineMgr).ReplaceData(&DLRArg);
 	}else {
 		LRArg.sDelRange    = sDelRange;		//!< 削除範囲レイアウト
 		LRArg.pcmemDeleted = pcMemDeleted;	//!< [out] 削除されたデータ
@@ -845,7 +845,7 @@ bool EditView::ReplaceData_CEditView3(
 	}
 
 	// 行番号表示に必要な幅を設定
-	if (m_pcEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
+	if (m_pEditWnd->DetectWidthOfLineNumberAreaAllPane(bRedraw)) {
 		// キャレットの表示・更新
 		GetCaret().ShowEditCaret();
 	}else {
@@ -854,7 +854,7 @@ bool EditView::ReplaceData_CEditView3(
 			// 再描画ヒント レイアウト行の増減
 			//	Jan. 30, 2001 genta	貼り付けで行数が減る場合の考慮が抜けていた
 			if (LRArg.nAddLineNum != 0) {
-				Call_OnPaint(PAINT_LINENUMBER | PAINT_BODY, false);
+				Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Body, false);
 			}else {
 				// 文書末が改行なし→ありに変化したら				// 2009.11.11 ryoji
 				// EOFのみ行が追加になるので、1行余分に描画する。
@@ -893,14 +893,14 @@ bool EditView::ReplaceData_CEditView3(
 
 				LayoutYInt nLayoutTop = LRArg.nModLineFrom;
 				LayoutYInt nLayoutBottom = LRArg.nModLineTo + 1 + nAddLine;
-				for (int i=0; i<m_pcEditWnd->GetAllViewCount(); ++i) {
-					EditView* pcView = &m_pcEditWnd->GetView(i);
+				for (int i=0; i<m_pEditWnd->GetAllViewCount(); ++i) {
+					EditView* pcView = &m_pEditWnd->GetView(i);
 					if (pcView == this) {
 						continue;
 					}
 					pcView->RedrawLines(nLayoutTop, nLayoutBottom);
 				}
-				m_pcEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
+				m_pEditWnd->GetMiniMap().RedrawLines(nLayoutTop, nLayoutBottom);
 				if (!m_bDoing_UndoRedo && pcOpeBlk) {
 					GetDocument()->m_cDocEditor.m_nOpeBlkRedawCount++;
 				}
@@ -910,7 +910,7 @@ bool EditView::ReplaceData_CEditView3(
 				if (bLineModifiedChange) {	// 無変更だった行が変更された
 					const Layout* pcLayoutWk = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( LRArg.nModLineFrom );
 					if (pcLayoutWk && pcLayoutWk->GetLogicOffset()) {	// 折り返しレイアウト行か？
-						Call_OnPaint(PAINT_LINENUMBER, false);
+						Call_OnPaint(PaintAreaType::LineNumber, false);
 					}
 				}
 #endif
@@ -972,7 +972,7 @@ void EditView::RTrimPrevLine(void)
 
 	if (GetCaret().GetCaretLogicPos().y > 0) {
 		int nLineLen;
-		const wchar_t*	pLine = DocReader(m_pcEditDoc->m_cDocLineMgr).GetLineStrWithoutEOL(GetCaret().GetCaretLogicPos().GetY2() - LogicInt(1), &nLineLen);
+		const wchar_t*	pLine = DocReader(m_pcEditDoc->m_docLineMgr).GetLineStrWithoutEOL(GetCaret().GetCaretLogicPos().GetY2() - LogicInt(1), &nLineLen);
 		if (pLine && nLineLen > 0) {
 			int i = 0;
 			int j = 0;

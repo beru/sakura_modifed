@@ -63,10 +63,10 @@ void EditApp::Create(HINSTANCE hInst, int nGroupId)
 	m_pcSMacroMgr = new SMacroMgr();
 
 	// ウィンドウの作成
-	m_pcEditWnd = EditWnd::getInstance();
+	m_pEditWnd = EditWnd::getInstance();
 
-	m_pcEditDoc->Create(m_pcEditWnd);
-	m_pcEditWnd->Create(m_pcEditDoc, &m_cIcons, nGroupId);
+	m_pcEditDoc->Create(m_pEditWnd);
+	m_pEditWnd->Create(m_pcEditDoc, &m_cIcons, nGroupId);
 
 	// MRU管理
 	m_pcMruListener = new MruListener();
@@ -74,9 +74,9 @@ void EditApp::Create(HINSTANCE hInst, int nGroupId)
 	// プロパティ管理
 	m_pcPropertyManager = new PropertyManager();
 	m_pcPropertyManager->Create(
-		m_pcEditWnd->GetHwnd(),
+		m_pEditWnd->GetHwnd(),
 		&GetIcons(),
-		&m_pcEditWnd->GetMenuDrawer()
+		&m_pEditWnd->GetMenuDrawer()
 	);
 }
 
@@ -96,7 +96,7 @@ EditApp::~EditApp()
 bool EditApp::OpenPropertySheet(int nPageNum)
 {
 	// プロパティシートの作成
-	bool bRet = m_pcPropertyManager->OpenPropertySheet(m_pcEditWnd->GetHwnd(), nPageNum, false);
+	bool bRet = m_pcPropertyManager->OpenPropertySheet(m_pEditWnd->GetHwnd(), nPageNum, false);
 	if (bRet) {
 		// 2007.10.19 genta マクロ登録変更を反映するため，読み込み済みのマクロを破棄する
 		m_pcSMacroMgr->UnloadAll();
@@ -107,7 +107,7 @@ bool EditApp::OpenPropertySheet(int nPageNum)
 // タイプ別設定 プロパティシート
 bool EditApp::OpenPropertySheetTypes(int nPageNum, TypeConfigNum nSettingType)
 {
-	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes(m_pcEditWnd->GetHwnd(), nPageNum, nSettingType);
+	bool bRet = m_pcPropertyManager->OpenPropertySheetTypes(m_pEditWnd->GetHwnd(), nPageNum, nSettingType);
 
 	return bRet;
 }

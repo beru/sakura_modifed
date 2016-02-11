@@ -104,12 +104,12 @@ struct EncodingConfig {
 };
 
 //! 文字列区切り記号エスケープ方法
-enum EStringLiteralType {
-	STRING_LITERAL_CPP,		//!< C/C++言語風
-	STRING_LITERAL_PLSQL,	//!< PL/SQL風
-	STRING_LITERAL_HTML,	//!< HTML/XML風
-	STRING_LITERAL_CSHARP,	//!< C#風
-	STRING_LITERAL_PYTHON,	//!< Python風
+enum class StringLiteralType {
+	CPP,	//!< C/C++言語風
+	PLSQL,	//!< PL/SQL風
+	HTML,	//!< HTML/XML風
+	CSharp,	//!< C#風
+	Python,	//!< Python風
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -137,7 +137,7 @@ struct TypeConfig {
 	LineComment			m_cLineComment;					//!< 行コメントデリミタ				//@@@ 2002.09.22 YAZAKI
 	BlockComment		m_cBlockComments[2];			//!< ブロックコメントデリミタ		//@@@ 2002.09.22 YAZAKI
 
-	int					m_nStringType;					//!< 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	StringLiteralType	m_nStringType;					//!< 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	bool				m_bStringLineOnly;				//!< 文字列は行内のみ
 	bool				m_bStringEndLine;				//!< (終了文字列がない場合)行末まで色分け
 	HereDocType			m_nHeredocType;

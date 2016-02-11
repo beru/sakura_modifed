@@ -915,14 +915,14 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		pFuncWk->m_nFunc = pcFunc->m_nFunc;
 		pFuncWk->m_bIsNode = false;
 		switch (pcFunc->m_nType) {
-		case T_LEAF:
+		case MainMenuType::Leaf:
 			m_cLookup.Funccode2Name(pcFunc->m_nFunc, szLabel, MAX_MAIN_MENU_NAME_LEN);
 			pFuncWk->m_sName = szLabel;
 			break;
-		case T_SEPARATOR:
+		case MainMenuType::Separator:
 			pFuncWk->m_sName = LSW(STR_PROPCOMMAINMENU_SEP);
 			break;
-		case T_SPECIAL:
+		case MainMenuType::Special:
 			pFuncWk->m_sName = pcFunc->m_sName;
 			if (pFuncWk->m_sName.empty()) {
 				for (int j=0; j<_countof(sSpecialFuncs); ++j) {
@@ -933,7 +933,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 				}
 			}
 			break;
-		case T_NODE:
+		case MainMenuType::Node:
 			pFuncWk->m_bIsNode = true;
 			// ラベル編集後のノードはiniから、それ以外はリソースからラベルを取得 2012.10.14 syat 各国語対応
 			if (pFuncWk->m_nFunc == F_NODE) {
@@ -951,7 +951,7 @@ void PropMainMenu::SetData(HWND hwndDlg)
 		tvis.hInsertAfter = TVI_LAST;
 		tvis.item.pszText = const_cast<TCHAR*>(MakeDispLabel(pFuncWk));
 		tvis.item.lParam = nMenuCnt++;								// 内部データインデックスのインクリメント
-		tvis.item.cChildren = (pcFunc->m_nType == T_NODE);
+		tvis.item.cChildren = (pcFunc->m_nType == MainMenuType::Node);
 		htiItem = TreeView_InsertItem(hwndTreeRes, &tvis);
 	}
 }
@@ -1024,29 +1024,29 @@ bool PropMainMenu::GetDataTree(
 
 		switch (pFuncWk->m_nFunc) {
 		case F_NODE:
-			pcFunc->m_nType = T_NODE;
+			pcFunc->m_nType = MainMenuType::Node;
 			auto_strcpy_s(pcFunc->m_sName, MAX_MAIN_MENU_NAME_LEN + 1, SupplementAmpersand(pFuncWk->m_sName).c_str());
 			break;
 		case F_SEPARATOR:
-			pcFunc->m_nType = T_SEPARATOR;
+			pcFunc->m_nType = MainMenuType::Separator;
 			pcFunc->m_sName[0] = L'\0';
 			break;
 		default:
 			if (pFuncWk->m_bIsNode) {
 				// コマンド定義外のIDの場合、ノードとして扱う 2012.10.14 syat 各国語対応
-				pcFunc->m_nType = T_NODE;
+				pcFunc->m_nType = MainMenuType::Node;
 				pcFunc->m_sName[0] = L'\0';	// 名前は、リソースから取得するため空白に設定
 				break;
 			}
 			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
-				pcFunc->m_nType = T_SPECIAL;
+				pcFunc->m_nType = MainMenuType::Special;
 				// 2014.05.04 nLevel == 0 のときも"名前なし"にする
 					pcFunc->m_sName[0] = L'\0';
 			}else {
 				if (pFuncWk->m_nFunc == F_OPTION) {
 					bOptionOk = true;
 				}
-				pcFunc->m_nType = T_LEAF;
+				pcFunc->m_nType = MainMenuType::Leaf;
 				pcFunc->m_sName[0] = L'\0';
 			}
 			break;
@@ -1071,7 +1071,7 @@ bool PropMainMenu::GetDataTree(
 			m_Common.m_sMainMenu.m_nMenuTopIdx[nTopCount++] = m_Common.m_sMainMenu.m_nMainMenuNum;
 			// Top Levelの追加（ダミー）
 			pcFunc = &pcMenuTBL[m_Common.m_sMainMenu.m_nMainMenuNum++];
-			pcFunc->m_nType = T_NODE;
+			pcFunc->m_nType = MainMenuType::Node;
 			pcFunc->m_nFunc = F_NODE;
 			auto_strcpy(pcFunc->m_sName, L"auto_add");
 			pcFunc->m_sKey[0] = L'\0';
@@ -1083,7 +1083,7 @@ bool PropMainMenu::GetDataTree(
 		if (m_Common.m_sMainMenu.m_nMainMenuNum < MAX_MAINMENU) {
 			// 共通設定
 			pcFunc = &pcMenuTBL[m_Common.m_sMainMenu.m_nMainMenuNum++];
-			pcFunc->m_nType = T_LEAF;
+			pcFunc->m_nType = MainMenuType::Leaf;
 			pcFunc->m_nFunc = F_OPTION;
 			pcFunc->m_sName[0] = L'\0';
 			pcFunc->m_sKey[0] = L'\0';
@@ -1289,7 +1289,7 @@ bool PropMainMenu::Check_MainMenu_Sub(
 	static	HTREEITEM	htiErr;
 	//
 	bool			bRet = true;
-	EMainMenuType	nType;
+	MainMenuType	nType;
 	HTREEITEM		s;
 	HTREEITEM		ts;
 	TV_ITEM			tvi;							// 取得用
@@ -1319,26 +1319,26 @@ bool PropMainMenu::Check_MainMenu_Sub(
 		pFuncWk = &msMenu[tvi.lParam];
 		switch (pFuncWk->m_nFunc) {
 		case F_NODE:
-			nType = T_NODE;
+			nType = MainMenuType::Node;
 			break;
 		case F_SEPARATOR:
-			nType = T_SEPARATOR;
+			nType = MainMenuType::Separator;
 			break;
 		default:
 			if (pFuncWk->m_nFunc >= F_SPECIAL_FIRST && pFuncWk->m_nFunc <= F_SPECIAL_LAST) {
-				nType = T_SPECIAL;
+				nType = MainMenuType::Special;
 			}else if (pFuncWk->m_bIsNode) {
-				nType = T_NODE;
+				nType = MainMenuType::Node;
 			}else {
 				if (pFuncWk->m_nFunc == F_OPTION) {
 					bOptionOk = true;
 				}
-				nType = T_LEAF;
+				nType = MainMenuType::Leaf;
 			}
 			break;
 		}
 		if (pFuncWk->m_sKey[0] == '\0') {
-			if (nType == T_NODE || nType == T_LEAF) {
+			if (nType == MainMenuType::Node || nType == MainMenuType::Leaf) {
 				// 未設定
 				if (nNoSetErrNum == 0) {
 					if (!htiErr) {

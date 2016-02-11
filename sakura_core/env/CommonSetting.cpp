@@ -29,27 +29,27 @@ using namespace std;
 
 // CommonValue管理
 struct CommonValueInfo {
-	enum EType {
-		TYPE_UNKNOWN,
-		TYPE_ASTR,    // char文字列 (終端NULL)
-		TYPE_WSTR,    // wchar_t文字列 (終端NULL)
+	enum class Type {
+		Unknown,
+		AStr,    // char文字列 (終端NULL)
+		WStr,    // wchar_t文字列 (終端NULL)
 	};
 
 	void* m_pValue;     // 値へのポインタ
 	int   m_nValueSize; // 値のサイズ。バイト単位。
 	char  m_szEntryKey[32];
-	EType m_eType;
+	Type m_type;
 
 	CommonValueInfo(
 		void* pValue,
 		int nValueSize,
 		const char* szEntryKey,
-		EType eType = TYPE_UNKNOWN
+		Type type = Type::Unknown
 	)
 		:
 		m_pValue(pValue),
 		m_nValueSize(nValueSize),
-		m_eType(eType)
+		m_type(type)
 	{
 		strcpy_s(m_szEntryKey, _countof(m_szEntryKey), szEntryKey);
 	}

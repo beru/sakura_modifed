@@ -75,12 +75,12 @@ static const DWORD p_helpids2[] = {	//11400
 	0, 0
 };
 
-TYPE_NAME_ID<EStringLiteralType> StringLitteralArr[] = {
-	{ STRING_LITERAL_CPP,    STR_STRINGESC_CPP },
-	{ STRING_LITERAL_PLSQL,  STR_STRINGESC_PLSQL },
-	{ STRING_LITERAL_HTML,   STR_STRINGESC_HTML },
-	{ STRING_LITERAL_CSHARP, STR_STRINGESC_CSHARP },
-	{ STRING_LITERAL_PYTHON, STR_STRINGESC_PYTHON },
+TYPE_NAME_ID<StringLiteralType> StringLitteralArr[] = {
+	{ StringLiteralType::CPP,    STR_STRINGESC_CPP },
+	{ StringLiteralType::PLSQL,  STR_STRINGESC_PLSQL },
+	{ StringLiteralType::HTML,   STR_STRINGESC_HTML },
+	{ StringLiteralType::CSharp, STR_STRINGESC_CSHARP },
+	{ StringLiteralType::Python, STR_STRINGESC_PYTHON },
 };
 
 

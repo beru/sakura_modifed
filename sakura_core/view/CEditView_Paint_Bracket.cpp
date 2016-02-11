@@ -127,7 +127,7 @@ void EditView::DrawBracketPair(bool bDraw)
 			|| GetSelectionInfo().IsTextSelected()
 			|| GetSelectionInfo().m_bDrawSelectArea
 			|| !m_bDrawBracketPairFlag
-			|| (m_pcEditWnd->GetActivePane() != m_nMyIndex)
+			|| (m_pEditWnd->GetActivePane() != m_nMyIndex)
 		)
 	) {
 		return;
@@ -252,7 +252,7 @@ void EditView::DrawBracketPair(bool bDraw)
 				}
 
 				if (1
-					&& (m_pcEditWnd->GetActivePane() == m_nMyIndex)
+					&& (m_pEditWnd->GetActivePane() == m_nMyIndex)
 					&& (0
 						|| (ptColLine.y == GetCaret().GetCaretLayoutPos().GetY())
 						|| (ptColLine.y - 1 == GetCaret().GetCaretLayoutPos().GetY())
@@ -341,7 +341,7 @@ bool EditView::SearchBracket(
 	LogicPoint ptPos;
 
 	m_pcEditDoc->m_cLayoutMgr.LayoutToLogic(ptLayout, &ptPos);
-	const wchar_t* cline = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
+	const wchar_t* cline = m_pcEditDoc->m_docLineMgr.GetLine(ptPos.GetY2())->GetDocLineStrWithEOL(&len);
 
 	//	Jun. 19, 2000 genta
 	if (!cline)	//	最後の行に本文がない場合
@@ -419,7 +419,7 @@ bool EditView::SearchBracketForward(
 	// 初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = (GetTextArea().GetBottomLine()) - ptColLine.y;					// 02/09/19 ai
-	DocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = m_pcEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* lineend = cline + len;
 	const wchar_t* cPos = cline + ptPos.x;
@@ -505,7 +505,7 @@ bool EditView::SearchBracketBackward(
 	// 初期位置の設定
 	m_pcEditDoc->m_cLayoutMgr.LogicToLayout(ptPos, &ptColLine);	// 02/09/19 ai
 	LayoutInt nSearchNum = ptColLine.y - GetTextArea().GetViewTopLine();										// 02/09/19 ai
-	DocLine* ci = m_pcEditDoc->m_cDocLineMgr.GetLine(ptPos.GetY2());
+	DocLine* ci = m_pcEditDoc->m_docLineMgr.GetLine(ptPos.GetY2());
 	const wchar_t* cline = ci->GetDocLineStrWithEOL(&len);
 	const wchar_t* cPos = cline + ptPos.x;
 

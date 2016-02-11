@@ -187,7 +187,7 @@ bool TextArea::DetectWidthOfLineNumberArea(bool bRedraw)
 			// Ä•`‰æ
 			pView2->GetCaret().m_cUnderLine.Lock();
 			// From Here 2007.09.09 Moca ŒÝŠ·BMP‚É‚æ‚é‰æ–Êƒoƒbƒtƒ@
-			pView2->Call_OnPaint(PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, false); // ƒƒ‚ƒŠ‚c‚b‚ðŽg—p‚µ‚Ä‚¿‚ç‚Â‚«‚Ì‚È‚¢Ä•`‰æ
+			pView2->Call_OnPaint((int)PaintAreaType::LineNumber | (int)PaintAreaType::Ruler | (int)PaintAreaType::Body, false); // ƒƒ‚ƒŠ‚c‚b‚ðŽg—p‚µ‚Ä‚¿‚ç‚Â‚«‚Ì‚È‚¢Ä•`‰æ
 			// To Here 2007.09.09 Moca
 			pView2->GetCaret().m_cUnderLine.UnLock();
 			pView2->GetCaret().ShowEditCaret();
@@ -222,7 +222,7 @@ int TextArea::DetectWidthOfLineNumberArea_calculate(const LayoutMgr* pLayoutMgr,
 
 	// s”Ô†‚Ì•\Ž¦ false=Ü‚è•Ô‚µ’PˆÊ^true=‰üs’PˆÊ
 	if (pView->m_pTypeData->m_bLineNumIsCRLF && !bLayout) {
-		nAllLines = pView->m_pcEditDoc->m_cDocLineMgr.GetLineCount();
+		nAllLines = pView->m_pcEditDoc->m_docLineMgr.GetLineCount();
 	}else {
 		nAllLines = (Int)pLayoutMgr->GetLineCount();
 	}

@@ -23,7 +23,7 @@ void DocVisitor::SetAllEol(Eol cEol)
 	// カーソル位置記憶
 	LayoutInt		nViewTopLine = pcView->GetTextArea().GetViewTopLine();
 	LayoutInt		nViewLeftCol = pcView->GetTextArea().GetViewLeftCol();
-	LayoutPoint	ptCaretPosXY = pcView->GetCaret().GetCaretLayoutPos();
+	LayoutPoint		ptCaretPosXY = pcView->GetCaret().GetCaretLayoutPos();
 	LayoutInt		nCaretPosX_Prev = pcView->GetCaret().m_nCaretPosX_Prev;
 
 	bool bReplace = false;
@@ -32,7 +32,7 @@ void DocVisitor::SetAllEol(Eol cEol)
 		LogicInt nLine = LogicInt(0);
 		OpeBlk* pcOpeBlk = pcView->m_bDoing_UndoRedo ? NULL : pcView->m_cCommander.GetOpeBlk();
 		for (;;) {
-			DocLine* pcDocLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLine); //#######非効率
+			DocLine* pcDocLine = m_pcDocRef->m_docLineMgr.GetLine(nLine); //#######非効率
 			if (!pcDocLine) {
 				break;
 			}
@@ -59,7 +59,7 @@ void DocVisitor::SetAllEol(Eol cEol)
 
 	if (bReplace) {
 		m_pcDocRef->m_cLayoutMgr._DoLayout();
-		m_pcDocRef->m_pcEditWnd->ClearViewCaretPosInfo();
+		m_pcDocRef->m_pEditWnd->ClearViewCaretPosInfo();
 		if (m_pcDocRef->m_nTextWrapMethodCur == (int)TextWrappingMethod::NoWrapping) {
 			m_pcDocRef->m_cLayoutMgr.CalculateTextWidth();
 		}else {

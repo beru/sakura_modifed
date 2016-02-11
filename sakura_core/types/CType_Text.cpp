@@ -105,10 +105,10 @@ void DocOutline::MakeTopicList_txt(FuncInfoArr* pcFuncInfoArr)
 	wchar_t szTitle[32];			//	ˆêŽž—Ìˆæ
 	LogicInt				nLineCount;
 	bool b278a = false;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		// sŽæ“¾
 		LogicInt nLineLen;
-		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -259,11 +259,11 @@ void DocOutline::MakeTopicList_wztxt(FuncInfoArr* pcFuncInfoArr)
 	int levelPrev = 0;
 	bool bExtEol = GetDllShareData().m_common.m_sEdit.m_bEnableExtEol;
 
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		const wchar_t*	pLine;
 		LogicInt		nLineLen;
 
-		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}

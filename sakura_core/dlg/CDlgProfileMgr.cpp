@@ -52,7 +52,8 @@ const DWORD p_helpids[] = {
 };
 
 DlgProfileMgr::DlgProfileMgr()
-	: Dialog(false, false)
+	:
+	Dialog(false, false)
 {
 	return;
 }

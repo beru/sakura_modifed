@@ -267,13 +267,13 @@ DWORD GrepAgent::DoGrep(
 	}
 
 	// 2014.06.13 別ウィンドウで検索したとき用にGrepダイアログの検索キーを設定
-	pcViewDst->m_pcEditWnd->m_cDlgGrep.m_strText = pcmGrepKey->GetStringPtr();
-	pcViewDst->m_pcEditWnd->m_cDlgGrep.m_bSetText = true;
-	pcViewDst->m_pcEditWnd->m_cDlgGrepReplace.m_strText = pcmGrepKey->GetStringPtr();
+	pcViewDst->m_pEditWnd->m_cDlgGrep.m_strText = pcmGrepKey->GetStringPtr();
+	pcViewDst->m_pEditWnd->m_cDlgGrep.m_bSetText = true;
+	pcViewDst->m_pEditWnd->m_cDlgGrepReplace.m_strText = pcmGrepKey->GetStringPtr();
 	if (bGrepReplace) {
-		pcViewDst->m_pcEditWnd->m_cDlgGrepReplace.m_strText2 = pcmGrepReplace->GetStringPtr();
+		pcViewDst->m_pEditWnd->m_cDlgGrepReplace.m_strText2 = pcmGrepReplace->GetStringPtr();
 	}
-	pcViewDst->m_pcEditWnd->m_cDlgGrepReplace.m_bSetText = true;
+	pcViewDst->m_pEditWnd->m_cDlgGrepReplace.m_bSetText = true;
 	hwndCancel = cDlgCancel.DoModeless(G_AppInstance(), pcViewDst->m_hwndParent, IDD_GREPRUNNING);
 
 	::SetDlgItemInt(hwndCancel, IDC_STATIC_HITCOUNT, 0, FALSE);
@@ -381,13 +381,13 @@ DWORD GrepAgent::DoGrep(
 		if (!type.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp) {
 			// 2011.11.28 色指定が無効ならエスケープしない
 		}else
-		if (type.m_nStringType == STRING_LITERAL_CPP || type.m_nStringType == STRING_LITERAL_CSHARP
-			|| type.m_nStringType == STRING_LITERAL_PYTHON
+		if (type.m_nStringType == StringLiteralType::CPP || type.m_nStringType == StringLiteralType::CSharp
+			|| type.m_nStringType == StringLiteralType::Python
 		) {	// 文字列区切り記号エスケープ方法
 			cmemWork2.Replace(L"\\", L"\\\\");
 			cmemWork2.Replace(L"\'", L"\\\'");
 			cmemWork2.Replace(L"\"", L"\\\"");
-		}else if (type.m_nStringType == STRING_LITERAL_PLSQL) {
+		}else if (type.m_nStringType == StringLiteralType::PLSQL) {
 			cmemWork2.Replace(L"\'", L"\'\'");
 			cmemWork2.Replace(L"\"", L"\"\"");
 		}
@@ -411,14 +411,14 @@ DWORD GrepAgent::DoGrep(
 				// 2011.11.28 色指定が無効ならエスケープしない
 			}else
 			if (0
-				|| type.m_nStringType == STRING_LITERAL_CPP
-				|| type.m_nStringType == STRING_LITERAL_CSHARP
-				|| type.m_nStringType == STRING_LITERAL_PYTHON
+				|| type.m_nStringType == StringLiteralType::CPP
+				|| type.m_nStringType == StringLiteralType::CSharp
+				|| type.m_nStringType == StringLiteralType::Python
 			) {	// 文字列区切り記号エスケープ方法
 				cmemWork2.Replace( L"\\", L"\\\\" );
 				cmemWork2.Replace( L"\'", L"\\\'" );
 				cmemWork2.Replace( L"\"", L"\\\"" );
-			}else if (type.m_nStringType == STRING_LITERAL_PLSQL) {
+			}else if (type.m_nStringType == StringLiteralType::PLSQL) {
 				cmemWork2.Replace( L"\'", L"\'\'" );
 				cmemWork2.Replace( L"\"", L"\"\"" );
 			}
@@ -430,7 +430,7 @@ DWORD GrepAgent::DoGrep(
 
 
 	cmemMessage.AppendString(LSW(STR_GREP_SEARCH_TARGET));	// L"検索対象   "
-	if (pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nStringType == 0) {	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	if (pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nStringType == StringLiteralType::CPP) {	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	}else {
 	}
 	cmemWork.SetStringT(pcmGrepFile->GetStringPtr());
@@ -455,7 +455,7 @@ DWORD GrepAgent::DoGrep(
 		}
 		cmemWork.SetStringT(grepFolder.c_str());
 	}
-	if (pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nStringType == 0) {	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	if (pcViewDst->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nStringType == StringLiteralType::CPP) {	// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	}else {
 	}
 	cmemMessage += cmemWork;

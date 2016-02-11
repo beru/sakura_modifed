@@ -83,7 +83,7 @@ void ViewCommander::Command_GREP(void)
 		)
 	) {
 		// 2011.01.23 Grepタイプ別適用
-		if (!doc.m_cDocEditor.IsModified() && doc.m_cDocLineMgr.GetLineCount() == 0) {
+		if (!doc.m_cDocEditor.IsModified() && doc.m_docLineMgr.GetLineCount() == 0) {
 			TypeConfigNum cTypeGrep = DocTypeManager().GetDocumentTypeOfExt(_T("grepout"));
 			const TypeConfigMini* pConfig;
 			DocTypeManager().GetTypeConfigMini(cTypeGrep, &pConfig);

@@ -146,7 +146,7 @@ void _DispWrap(Graphics& gr, DispPos* pDispPos, const EditView* pcView, LayoutYI
 		EColorIndexType eBgcolorOverwrite = COLORIDX_WRAP;
 		bool bTrans = pcView->IsBkBitmap();
 		if (cWrapType.IsDisp()) {
-			EditView& cActiveView = pcView->m_pcEditWnd->GetActiveView();
+			EditView& cActiveView = pcView->m_pEditWnd->GetActiveView();
 			if (cBgLineType.IsDisp() && pcView->GetCaret().GetCaretLayoutPos().GetY2() == nLineNum) {
 				if (bBgcolor) {
 					eBgcolorOverwrite = COLORIDX_CARETLINEBG;

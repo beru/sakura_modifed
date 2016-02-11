@@ -624,18 +624,18 @@ void ViewSelect::PrintSelectionInfoMsg() const
 	const EditView* pView = GetEditView();
 
 	//	出力されないなら計算を省略
-	if (!pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2IsEffective())
+	if (!pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2IsEffective())
 		return;
 
 	LayoutInt nLineCount = pView->m_pcEditDoc->m_cLayoutMgr.GetLineCount();
 	if (!IsTextSelected() || m_sSelect.GetFrom().y >= nLineCount) { // 先頭行が実在しない
 		const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
 		if (IsBoxSelecting()) {
-			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T("box selecting"));
+			pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(_T("box selecting"));
 		}else if (m_bSelectingLock) {
-			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T("selecting"));
+			pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(_T("selecting"));
 		}else {
-			pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(_T(""));
+			pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(_T(""));
 		}
 		return;
 	}
@@ -670,9 +670,9 @@ void ViewSelect::PrintSelectionInfoMsg() const
 
 		// 共通設定・選択文字数を文字単位ではなくバイト単位で表示する
 		bool bCountByByteCommon = GetDllShareData().m_common.m_sStatusbar.m_bDispSelCountByByte;
-		bool bCountByByte = (pView->m_pcEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
+		bool bCountByByte = (pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::Toggle ?
 								bCountByByteCommon :
-								pView->m_pcEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
+								pView->m_pEditWnd->m_nSelectCountMode == SelectCountMode::ByByte);
 
 		//	1行目
 		pLine = pView->m_pcEditDoc->m_cLayoutMgr.GetLineStr(m_sSelect.GetFrom().GetY2(), &nLineLen, &pcLayout);
@@ -823,6 +823,6 @@ void ViewSelect::PrintSelectionInfoMsg() const
 #endif
 	}
 	const_cast<EditView*>(pView)->GetCaret().m_bClearStatus = false;
-	pView->m_pcEditWnd->m_cStatusBar.SendStatusMessage2(msg);
+	pView->m_pEditWnd->m_cStatusBar.SendStatusMessage2(msg);
 }
 

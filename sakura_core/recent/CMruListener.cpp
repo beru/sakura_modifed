@@ -156,7 +156,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 		pcDoc->m_cLayoutMgr.LogicToLayout(eiOld.m_ptCursor, &ptCaretPos);
 
 		// ビュー取得
-		EditView& cView = pcDoc->m_pcEditWnd->GetActiveView();
+		EditView& cView = pcDoc->m_pEditWnd->GetActiveView();
 
 		if (ptCaretPos.GetY2() >= pcDoc->m_cLayoutMgr.GetLineCount()) {
 			// ファイルの最後に移動
@@ -166,7 +166,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 			cView.GetTextArea().SetViewLeftCol(eiOld.m_nViewLeftCol); // 2001/10/20 novice
 			// From Here Mar. 28, 2003 MIK
 			// 改行の真ん中にカーソルが来ないように。
-			const DocLine *pTmpDocLine = pcDoc->m_cDocLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
+			const DocLine *pTmpDocLine = pcDoc->m_docLineMgr.GetLine(eiOld.m_ptCursor.GetY2());	// 2008.08.22 ryoji 改行単位の行番号を渡すように修正
 			if (pTmpDocLine) {
 				if (pTmpDocLine->GetLengthWithoutEOL() < eiOld.m_ptCursor.x) {
 					ptCaretPos.x--;
@@ -181,7 +181,7 @@ void MruListener::OnAfterLoad(const LoadInfo& sLoadInfo)
 	// ブックマーク復元  // 2002.01.16 hor
 	if (bIsExistInMRU) {
 		if (GetDllShareData().m_common.m_sFile.GetRestoreBookmarks()) {
-			BookmarkManager(&pcDoc->m_cDocLineMgr).SetBookMarks(eiOld.m_szMarkLines);
+			BookmarkManager(&pcDoc->m_docLineMgr).SetBookMarks(eiOld.m_szMarkLines);
 		}
 	}else {
 		eiOld.m_szMarkLines[0] = 0;
@@ -234,7 +234,7 @@ void MruListener::_HoldBookmarks_And_AddToMRU()
 	pcDoc->GetEditInfo(&fi);
 
 	// ブックマーク情報の保存
-	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pcDoc->m_cDocLineMgr).GetBookMarks());
+	wcscpy_s(fi.m_szMarkLines, BookmarkManager(&pcDoc->m_docLineMgr).GetBookMarks());
 
 	// MRUリストに登録
 	MRUFile cMRU;

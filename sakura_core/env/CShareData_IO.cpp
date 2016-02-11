@@ -1356,7 +1356,7 @@ void ShareData_IO::ShareData_IO_Type_One(DataProfile& cProfile, TypeConfig& type
 			types.m_nTabSpace				= buf[3];
 			types.m_nKeyWordSetIdx[0]		= buf[4];
 			types.m_nKeyWordSetIdx[1]		= buf[5];
-			types.m_nStringType				= buf[6];
+			types.m_nStringType				= (StringLiteralType)buf[6];
 			types.m_bLineNumIsCRLF			= (buf[7] != 0);
 			types.m_nLineTermType			= buf[8];
 			types.m_bWordWrap				= (buf[9] != 0);
@@ -1980,7 +1980,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 						MainMenu* pcMenu = &pcMenuTlb[r+1];
 						const int nLevel = pcMenuTlb[r].m_nLevel;
 						if (item.m_bAddPrevSeparete) {
-							pcMenu->m_nType    = T_SEPARATOR;
+							pcMenu->m_nType    = MainMenuType::Separator;
 							pcMenu->m_nFunc    = F_SEPARATOR;
 							pcMenu->m_nLevel   = nLevel;
 							pcMenu->m_sName[0] = L'\0';
@@ -1989,7 +1989,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 							++pcMenu;
 							mainmenu.m_nMainMenuNum++;
 						}
-						pcMenu->m_nType    = T_LEAF;
+						pcMenu->m_nType    = MainMenuType::Leaf;
 						pcMenu->m_nFunc    = item.m_nAddFuncCode;
 						pcMenu->m_nLevel   = nLevel;
 						pcMenu->m_sName[0] = L'\0';
@@ -1998,7 +1998,7 @@ void ShareData_IO::ShareData_IO_MainMenu(DataProfile& cProfile)
 						mainmenu.m_nMainMenuNum++;
 						if (item.m_bAddNextSeparete) {
 							++pcMenu;
-							pcMenu->m_nType    = T_SEPARATOR;
+							pcMenu->m_nType    = MainMenuType::Separator;
 							pcMenu->m_nFunc    = F_SEPARATOR;
 							pcMenu->m_nLevel   = nLevel;
 							pcMenu->m_sName[0] = L'\0';
@@ -2076,7 +2076,7 @@ void ShareData_IO::IO_MainMenu(
 		auto_sprintf(szKeyName, LTEXT("MM[%03d]"), i);
 		if (cProfile.IsReadingMode()) {
 			// “Ç‚Ýž‚ÝŽž‰Šú‰»
-			pcMenu->m_nType    = T_NODE;
+			pcMenu->m_nType    = MainMenuType::Node;
 			pcMenu->m_nFunc    = F_INVALID;
 			pcMenu->m_nLevel   = 0;
 			pcMenu->m_sName[0] = L'\0';
@@ -2103,7 +2103,7 @@ void ShareData_IO::IO_MainMenu(
 			p = pn;
 			pn = wcschr(p, L',');
 			if (pn) *pn++ = L'\0';
-			pcMenu->m_nType = (EMainMenuType)auto_atol(p);
+			pcMenu->m_nType = (MainMenuType)auto_atol(p);
 			if (!pn) {
 				continue;
 			}

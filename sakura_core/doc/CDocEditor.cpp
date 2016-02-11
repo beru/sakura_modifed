@@ -61,13 +61,13 @@ void DocEditor::SetModified(bool flag, bool redraw)
 
 	m_bIsDocModified = flag;
 	if (redraw)
-		m_pcDocRef->m_pcEditWnd->UpdateCaption();
+		m_pcDocRef->m_pEditWnd->UpdateCaption();
 }
 
 void DocEditor::OnBeforeLoad(LoadInfo* sLoadInfo)
 {
 	// ビューのテキスト選択解除
-	GetListeningDoc()->m_pcEditWnd->Views_DisableSelectArea(true);
+	GetListeningDoc()->m_pEditWnd->Views_DisableSelectArea(true);
 }
 
 void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
@@ -83,7 +83,7 @@ void DocEditor::OnAfterLoad(const LoadInfo& sLoadInfo)
 		}else {
 			SetNewLineCode(EolType::CRLF);
 		}
-		DocLine* pFirstlineinfo = pcDoc->m_cDocLineMgr.GetLine(LogicInt(0));
+		DocLine* pFirstlineinfo = pcDoc->m_docLineMgr.GetLine(LogicInt(0));
 		if (pFirstlineinfo) {
 			EolType t = pFirstlineinfo->GetEol();
 			if (t != EolType::None && t != EolType::Unknown) {
@@ -123,7 +123,7 @@ void DocEditor::OnAfterSave(const SaveInfo& sSaveInfo)
 */
 void DocEditor::SetImeMode(int mode)
 {
-	HWND hwnd = m_pcDocRef->m_pcEditWnd->GetActiveView().GetHwnd();
+	HWND hwnd = m_pcDocRef->m_pEditWnd->GetActiveView().GetHwnd();
 	HIMC hIme = ImmGetContext(hwnd); //######大丈夫？ // 2013.06.04 EditWndからViewに変更
 
 	// 最下位ビットはIME自身のOn/Off制御

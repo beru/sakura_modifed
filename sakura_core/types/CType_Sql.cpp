@@ -39,7 +39,7 @@ void CType_Sql::InitTypeConfigImp(TypeConfig* pType)
 	// 設定
 	pType->m_cLineComment.CopyTo(0, L"--", -1);					// 行コメントデリミタ
 	pType->m_cBlockComments[0].SetBlockCommentRule(L"/*", L"*/");	// ブロックコメントデリミタ
-	pType->m_nStringType = STRING_LITERAL_PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	pType->m_nStringType = StringLiteralType::PLSQL;					// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	wcscpy_s(pType->m_szIndentChars, L"|★");						// その他のインデント対象文字
 	pType->m_nKeyWordSetIdx[0] = 2;									// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_PLSQL;						// アウトライン解析方法
@@ -70,8 +70,8 @@ void DocOutline::MakeFuncList_PLSQL(FuncInfoArr* pcFuncInfoArr)
 	nMode = 0;
 	nFuncNum = 0;
 	LogicInt nLineCount;
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		for (int i=0; i<nLineLen; ++i) {
 			// 1バイト文字だけを処理する
 			// 2005-09-02 D.S.Koba GetSizeOfChar

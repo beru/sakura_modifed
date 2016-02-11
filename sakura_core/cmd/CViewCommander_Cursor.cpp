@@ -1040,7 +1040,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 {
 	DocLine* pcDocLine;
 	int nCaretPointer = 0;
-	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
+	auto& docLineMgr = GetDocument()->m_docLineMgr;
 	
 	bool nFirstLineIsEmptyLine = false;
 	// まずは、現在位置が空行（スペース、タブ、改行記号のみの行）かどうか判別
@@ -1111,7 +1111,7 @@ void ViewCommander::Command_GONEXTPARAGRAPH(bool bSelect)
 */
 void ViewCommander::Command_GOPREVPARAGRAPH(bool bSelect)
 {
-	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
+	auto& docLineMgr = GetDocument()->m_docLineMgr;
 	DocLine* pcDocLine;
 	int nCaretPointer = -1;
 
@@ -1264,7 +1264,7 @@ void ViewCommander::Command_WHEELPAGERIGHT(int zDelta)
 */
 void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 {
-	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
+	auto& docLineMgr = GetDocument()->m_docLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	LogicPoint ptXY(0, nYOld);
 	const DocLine* pcDocLine = docLineMgr.GetLine(ptXY.GetY2());
@@ -1342,7 +1342,7 @@ void ViewCommander::Command_MODIFYLINE_NEXT( bool bSelect )
 */
 void ViewCommander::Command_MODIFYLINE_PREV( bool bSelect )
 {
-	auto& docLineMgr = GetDocument()->m_cDocLineMgr;
+	auto& docLineMgr = GetDocument()->m_docLineMgr;
 	LogicInt nYOld = GetCaret().GetCaretLogicPos().y;
 	LogicInt nYOld2 = nYOld;
 	LogicPoint ptXY(0, nYOld);

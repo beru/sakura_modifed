@@ -770,7 +770,6 @@ void Dialog::GetItemClientRect(int wID, RECT& rc)
 	rc.bottom = po.y;
 }
 
-
 static const TCHAR* TSTR_SUBCOMBOBOXDATA = _T("SubComboBoxData");
 
 static

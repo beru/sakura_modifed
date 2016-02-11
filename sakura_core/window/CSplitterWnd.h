@@ -42,7 +42,7 @@ private: // 2002/2/3 aroka
 	||  Attributes & Operations
 	*/
 	DLLSHAREDATA*	m_pShareData;
-	void*			m_pcEditWnd;
+	void*			m_pEditWnd;
 	int				m_nAllSplitRows;		// •ªŠ„s”
 	int				m_nAllSplitCols;		// •ªŠ„Œ…”
 	int				m_nVSplitPos;			// ‚’¼•ªŠ„ˆÊ’u

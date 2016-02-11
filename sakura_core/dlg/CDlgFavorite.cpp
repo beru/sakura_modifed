@@ -111,7 +111,8 @@ struct CompareListViewLParam {
 
 
 DlgFavorite::DlgFavorite()
-	 : Dialog(true)
+	 :
+	 Dialog(true)
 {
 	m_nCurrentTab = 0;
 	m_szMsg[0] = 0;

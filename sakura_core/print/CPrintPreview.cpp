@@ -105,7 +105,7 @@ PrintPreview::~PrintPreview()
 	delete m_pLayoutMgr_Print;
 	
 	// フォント幅キャッシュを編集モードに戻す
-	SelectCharWidthCache(CharWidthFontMode::Edit, CWM_CACHE_NEUTRAL);
+	SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Neutral);
 
 	// 2006.08.17 Moca CompatDC削除。EditWndから移設
 	// 再描画用メモリBMP
@@ -791,7 +791,7 @@ void PrintPreview::OnChangePrintSetting(void)
 	}
 
 	// 印刷用のレイアウト管理情報の初期化
-	m_pLayoutMgr_Print->Create(m_pParentWnd->GetDocument(), &m_pParentWnd->GetDocument()->m_cDocLineMgr);
+	m_pLayoutMgr_Print->Create(m_pParentWnd->GetDocument(), &m_pParentWnd->GetDocument()->m_docLineMgr);
 
 	// 印刷用のレイアウト情報の変更
 	// タイプ別設定をコピー
@@ -810,7 +810,7 @@ void PrintPreview::OnChangePrintSetting(void)
 	ref.m_cBlockComments[0].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ
 	ref.m_cBlockComments[1].SetBlockCommentRule(L"", L"");	// ブロックコメントデリミタ2
 
-	ref.m_nStringType = 0;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
+	ref.m_nStringType = StringLiteralType::CPP;		// 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""]['']
 	ref.m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp = false;
 	ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;
 	ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = false;
@@ -1883,7 +1883,7 @@ void PrintPreview::SetPreviewFontHan(const LOGFONT* lf)
 	m_lfPreviewHan.lfWidth			= m_pPrintSetting->m_nPrintFontWidth;
 	_tcscpy(m_lfPreviewHan.lfFaceName, m_pPrintSetting->m_szPrintFontFaceHan);
 
-	SelectCharWidthCache(CharWidthFontMode::Print, CWM_CACHE_LOCAL);
+	SelectCharWidthCache(CharWidthFontMode::Print, CharWidthCacheMode::Local);
 	InitCharWidthCache(m_lfPreviewHan, CharWidthFontMode::Print);
 }
 

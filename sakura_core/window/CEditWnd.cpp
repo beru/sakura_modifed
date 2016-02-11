@@ -126,7 +126,7 @@ static void ShowCodeBox(HWND hWnd, EditDoc* pcEditDoc)
 	// カーソル位置の文字列を取得
 	const Layout*	pcLayout;
 	LogicInt		nLineLen;
-	const EditView* pcView = &pcEditDoc->m_pcEditWnd->GetActiveView();
+	const EditView* pcView = &pcEditDoc->m_pEditWnd->GetActiveView();
 	const Caret* pcCaret = &pcView->GetCaret();
 	const LayoutMgr* pLayoutMgr = &pcEditDoc->m_cLayoutMgr;
 	const wchar_t* pLine = pLayoutMgr->GetLineStr(pcCaret->GetCaretLayoutPos().GetY2(), &nLineLen, &pcLayout);
@@ -202,7 +202,7 @@ LRESULT CALLBACK CEditWndProc(
 	return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-//	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
+//	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 EditWnd::EditWnd()
 	:
 	m_hWnd(NULL)
@@ -223,7 +223,7 @@ EditWnd::EditWnd()
 	, m_hAccelWine(NULL)
 	, m_hAccel(NULL)
 	, m_bDragMode(false)
-	, m_IconClicked(icNone) // by 鬼(2)
+	, m_IconClicked(IconClickStatus::None) // by 鬼(2)
 	, m_nSelectCountMode(SelectCountMode::Toggle)	// 文字カウント方法の初期値はSELECT_COUNT_TOGGLE→共通設定に従う
 {
 	g_pcEditWnd = this;
@@ -681,7 +681,7 @@ HWND EditWnd::Create(
 	// プラグインコマンドを登録する
 	RegisterPluginCommand();
 
-	SelectCharWidthCache(CharWidthFontMode::MiniMap, CWM_CACHE_LOCAL); // Init
+	SelectCharWidthCache(CharWidthFontMode::MiniMap, CharWidthCacheMode::Local); // Init
 	InitCharWidthCache(m_pcViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap);
 	SelectCharWidthCache(CharWidthFontMode::Edit, GetLogfontCacheMode());
 	InitCharWidthCache(GetLogfont());
@@ -860,14 +860,14 @@ void EditWnd::LayoutMainMenu()
 				- pcMenu->m_nMenuTopIdx[i];		// メニュー項目数
 		cMainMenu = &pcMenu->m_cMainMenuTbl[pcMenu->m_nMenuTopIdx[i]];
 		switch (cMainMenu->m_nType) {
-		case T_NODE:
+		case MainMenuType::Node:
 			// ラベル未設定かつFunctionコードがありならストリングテーブルから取得 2012/10/18 syat 各国語対応
 			pszName = (cMainMenu->m_sName[0] == L'\0' && cMainMenu->m_nFunc != F_NODE)
 								? LS(cMainMenu->m_nFunc) : to_tchar(cMainMenu->m_sName);
 			::AppendMenu(hMenu, MF_POPUP | MF_STRING | (nCount <= 1 ? MF_GRAYED : 0), (UINT_PTR)CreatePopupMenu(), 
 				KeyBind::MakeMenuLabel(pszName, to_tchar(cMainMenu->m_sKey)));
 			break;
-		case T_LEAF:
+		case MainMenuType::Leaf:
 			// メニューラベルの作成
 			// 2014.05.04 Moca プラグイン/マクロ等を置けるようにFunccode2Nameを使うように
 			{
@@ -892,10 +892,10 @@ void EditWnd::LayoutMainMenu()
 			}
 			::AppendMenu(hMenu, MF_STRING, cMainMenu->m_nFunc, szLabel);
 			break;
-		case T_SEPARATOR:
+		case MainMenuType::Separator:
 			::AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
 			break;
-		case T_SPECIAL:
+		case MainMenuType::Special:
 			nCount = 0;
 			switch (cMainMenu->m_nFunc) {
 			case F_WINDOW_LIST:				// ウィンドウリスト
@@ -1767,7 +1767,7 @@ LRESULT EditWnd::DispatchEvent(
 			GetDocument()->OnChangeSetting(true);	// フォントで文字幅が変わるので、レイアウト再構築
 			break;
 		case PM_CHANGESETTING_FONTSIZE:
-			if ((wParam == -1 && GetLogfontCacheMode() == CWM_CACHE_SHARE)
+			if ((wParam == -1 && GetLogfontCacheMode() == CharWidthCacheMode::Share)
 				|| GetDocument()->m_cDocType.GetDocumentType().GetIndex() == wParam
 			) {
 				GetDocument()->OnChangeSetting( false );	// ビューに設定変更を反映させる(レイアウト情報の再作成しない)
@@ -1825,13 +1825,13 @@ LRESULT EditWnd::DispatchEvent(
 		{
 			if (m_pPrintPreview) {
 				// 一時的に設定を戻す
-				SelectCharWidthCache(CharWidthFontMode::Edit, CWM_CACHE_NEUTRAL);
+				SelectCharWidthCache(CharWidthFontMode::Edit, CharWidthCacheMode::Neutral);
 			}
 			// フォント変更前の座標の保存
 			m_posSaveAry = SavePhysPosOfAllView();
 			if (m_pPrintPreview) {
 				// 設定を戻す
-				SelectCharWidthCache(CharWidthFontMode::Print, CWM_CACHE_LOCAL);
+				SelectCharWidthCache(CharWidthFontMode::Print, CharWidthCacheMode::Local);
 			}
 		}
 		return 0L; 
@@ -1878,7 +1878,7 @@ LRESULT EditWnd::DispatchEvent(
 			//       2007.08.22現在ではアウトライン解析ダイアログから桁位置0で呼び出される
 			//       パターンしかないので実用上特に問題は無い。
 			if (!bSelect) {
-				const DocLine *pTmpDocLine = GetDocument()->m_cDocLineMgr.GetLine(ppoCaret->GetY2());
+				const DocLine *pTmpDocLine = GetDocument()->m_docLineMgr.GetLine(ppoCaret->GetY2());
 				if (pTmpDocLine) {
 					if (pTmpDocLine->GetLengthWithoutEOL() < ppoCaret->x) ptCaretPos.x--;
 				}
@@ -1914,15 +1914,15 @@ LRESULT EditWnd::DispatchEvent(
 		//       -1以下：エラー
 		LogicInt	nLineNum = LogicInt(wParam);
 		LogicInt	nLineOffset = LogicInt(lParam);
-		if (nLineNum < 0 || GetDocument()->m_cDocLineMgr.GetLineCount() < nLineNum) {
+		if (nLineNum < 0 || GetDocument()->m_docLineMgr.GetLineCount() < nLineNum) {
 			return -2; // 行番号不正。LineCount == nLineNum はEOF行として下で処理
 		}
 		LogicInt nLineLen = LogicInt(0);
-		const wchar_t* pLine = GetDocument()->m_cDocLineMgr.GetLine(nLineNum)->GetDocLineStrWithEOL( &nLineLen );
+		const wchar_t* pLine = GetDocument()->m_docLineMgr.GetLine(nLineNum)->GetDocLineStrWithEOL( &nLineLen );
 		if (nLineOffset < 0 || nLineLen < nLineOffset) {
 			return -3; // オフセット位置不正
 		}
-		if (nLineNum == GetDocument()->m_cDocLineMgr.GetLineCount()) {
+		if (nLineNum == GetDocument()->m_docLineMgr.GetLineCount()) {
 			return 0; // EOF正常終了
 		}
  		if (!pLine) {
@@ -1931,7 +1931,7 @@ LRESULT EditWnd::DispatchEvent(
 		if (nLineLen == nLineOffset) {
  			return 0;
  		}
-		pLine = GetDocument()->m_cDocLineMgr.GetLine(LogicInt(wParam))->GetDocLineStrWithEOL( &nLineLen );
+		pLine = GetDocument()->m_docLineMgr.GetLine(LogicInt(wParam))->GetDocLineStrWithEOL( &nLineLen );
 		pLine += nLineOffset;
 		nLineLen -= nLineOffset;
 		size_t nEnd = t_min<size_t>(nLineLen, m_pShareData->m_workBuffer.GetWorkBufferCount<EDIT_CHAR>());
@@ -2289,7 +2289,7 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 		// メニュー作成
 		hSubMenu.push_back(hMenu);
 		nLv = 1;
-		if (pcMenu->m_cMainMenuTbl[nIdxStr].m_nType == T_SPECIAL) {
+		if (pcMenu->m_cMainMenuTbl[nIdxStr].m_nType == MainMenuType::Special) {
 			nLv = 0;
 			--nIdxStr;
 		}
@@ -2304,7 +2304,7 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 				hMenu = hSubMenu[nLv-1];
 			}
 			switch (cMainMenu->m_nType) {
-			case T_NODE:
+			case MainMenuType::Node:
 				hMenuPopUp = ::CreatePopupMenu();
 				if (cMainMenu->m_nFunc != 0 && cMainMenu->m_sName[0] == L'\0') {
 					// ストリングテーブルから読み込み
@@ -2324,23 +2324,23 @@ void EditWnd::InitMenu(HMENU hMenu, UINT uPos, BOOL fSystemMenu)
 					hSubMenu.push_back(hMenuPopUp);
 				}
 				break;
-			case T_LEAF:
+			case MainMenuType::Leaf:
 				InitMenu_Function(hMenu, cMainMenu->m_nFunc, cMainMenu->m_sName, cMainMenu->m_sKey);
 				break;
-			case T_SEPARATOR:
+			case MainMenuType::Separator:
 				m_cMenuDrawer.MyAppendMenuSep(hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
 				break;
-			case T_SPECIAL:
+			case MainMenuType::Special:
 				bool	bInList;		// リストが1個以上ある
 				bInList = InitMenu_Special(hMenu, cMainMenu->m_nFunc);
 				// リストが無い場合の処理
 				if (!bInList) {
 					// 分割線に囲まれ、かつリストなし ならば 次の分割線をスキップ
 					if ((i == nIdxStr + 1
-						  || (pcMenu->m_cMainMenuTbl[i - 1].m_nType == T_SEPARATOR 
+						  || (pcMenu->m_cMainMenuTbl[i - 1].m_nType == MainMenuType::Separator 
 							&& pcMenu->m_cMainMenuTbl[i - 1].m_nLevel == cMainMenu->m_nLevel))
 						&& i + 1 < nIdxEnd
-						&& pcMenu->m_cMainMenuTbl[i + 1].m_nType == T_SEPARATOR 
+						&& pcMenu->m_cMainMenuTbl[i + 1].m_nType == MainMenuType::Separator 
 						&& pcMenu->m_cMainMenuTbl[i + 1].m_nLevel == cMainMenu->m_nLevel) {
 						++i;		// スキップ
 					}
@@ -2860,7 +2860,7 @@ void EditWnd::OnSysMenuTimer(void) // by 鬼(2)
 {
 	::KillTimer(GetHwnd(), IDT_SYSMENU);	// 2007.04.03 ryoji
 
-	if (m_IconClicked == icClicked) {
+	if (m_IconClicked == IconClickStatus::Clicked) {
 		ReleaseCapture();
 
 		// システムメニュー表示
@@ -2879,7 +2879,7 @@ void EditWnd::OnSysMenuTimer(void) // by 鬼(2)
 			MAKELPARAM((pt.x > R.left)? pt.x: R.left, (pt.y < R.bottom)? pt.y: R.bottom)
 		);
 	}
-	m_IconClicked = icNone;
+	m_IconClicked = IconClickStatus::None;
 }
 
 
@@ -3319,7 +3319,7 @@ LRESULT EditWnd::OnHScroll(WPARAM wParam, LPARAM lParam)
 LRESULT EditWnd::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
 	// by 鬼(2) キャプチャーして押されたら非クライアントでもこっちに来る
-	if (m_IconClicked != icNone)
+	if (m_IconClicked != IconClickStatus::None)
 		return 0;
 
 	m_ptDragPosOrg.x = LOWORD(lParam);	// horizontal position of cursor
@@ -3333,9 +3333,9 @@ LRESULT EditWnd::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 LRESULT EditWnd::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	// by 鬼 2002/04/18
-	if (m_IconClicked != icNone) {
-		if (m_IconClicked == icDown) {
-			m_IconClicked = icClicked;
+	if (m_IconClicked != IconClickStatus::None) {
+		if (m_IconClicked == IconClickStatus::Down) {
+			m_IconClicked = IconClickStatus::Clicked;
 			// by 鬼(2) タイマー(IDは適当です)
 			SetTimer(GetHwnd(), IDT_SYSMENU, GetDoubleClickTime(), NULL);
 		}
@@ -3356,14 +3356,14 @@ LRESULT EditWnd::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 LRESULT EditWnd::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	// by 鬼
-	if (m_IconClicked != icNone) {
+	if (m_IconClicked != IconClickStatus::None) {
 		// by 鬼(2) 一回押された時だけ
-		if (m_IconClicked == icDown) {
+		if (m_IconClicked == IconClickStatus::Down) {
 			POINT P;
 			GetCursorPos(&P); // スクリーン座標
 			if (SendMessage(GetHwnd(), WM_NCHITTEST, 0, P.x | (P.y << 16)) != HTSYSMENU) {
 				ReleaseCapture();
-				m_IconClicked = icNone;
+				m_IconClicked = IconClickStatus::None;
 
 				if (GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath()) {
 					// 2010.08.22 Moca C:\temp.txt などのtopのファイルがD&Dできないバグの修正
@@ -3598,7 +3598,7 @@ LRESULT EditWnd::OnNcLButtonDown(WPARAM wp, LPARAM lp)
 	LRESULT Result;
 	if (wp == HTSYSMENU) {
 		SetCapture(GetHwnd());
-		m_IconClicked = icDown;
+		m_IconClicked = IconClickStatus::Down;
 		Result = 0;
 	}else
 		Result = DefWindowProc(GetHwnd(), WM_NCLBUTTONDOWN, wp, lp);
@@ -3609,10 +3609,10 @@ LRESULT EditWnd::OnNcLButtonDown(WPARAM wp, LPARAM lp)
 LRESULT EditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 {
 	LRESULT Result;
-	if (m_IconClicked != icNone) {
+	if (m_IconClicked != IconClickStatus::None) {
 		// 念のため
 		ReleaseCapture();
-		m_IconClicked = icNone;
+		m_IconClicked = IconClickStatus::None;
 		Result = 0;
 	}else if (wp == HTSYSMENU) {
 		Result = 0;
@@ -3629,9 +3629,9 @@ LRESULT EditWnd::OnNcLButtonUp(WPARAM wp, LPARAM lp)
 LRESULT EditWnd::OnLButtonDblClk(WPARAM wp, LPARAM lp) // by 鬼(2)
 {
 	LRESULT Result;
-	if (m_IconClicked != icNone) {
+	if (m_IconClicked != IconClickStatus::None) {
 		ReleaseCapture();
-		m_IconClicked = icDoubleClicked;
+		m_IconClicked = IconClickStatus::DoubleClicked;
 
 		SendMessage(GetHwnd(), WM_SYSCOMMAND, SC_CLOSE, 0);
 
@@ -4779,16 +4779,16 @@ int EditWnd::GetFontPointSize(bool bTempSetting)
 	}
 	return m_pShareData->m_common.m_sView.m_nPointSize;
 }
-ECharWidthCacheMode EditWnd::GetLogfontCacheMode()
+CharWidthCacheMode EditWnd::GetLogfontCacheMode()
 {
 	if (GetDocument()->m_blfCurTemp) {
-		return CWM_CACHE_LOCAL;
+		return CharWidthCacheMode::Local;
 	}
 	bool bUseTypeFont = GetDocument()->m_cDocType.GetDocumentAttribute().m_bUseTypeFont;
 	if (bUseTypeFont) {
-		return CWM_CACHE_LOCAL;
+		return CharWidthCacheMode::Local;
 	}
-	return CWM_CACHE_SHARE;
+	return CharWidthCacheMode::Share;
 }
 
 

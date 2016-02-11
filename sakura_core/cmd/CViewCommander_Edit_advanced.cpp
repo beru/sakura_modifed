@@ -700,7 +700,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 		// その行も選択範囲に加える
 		if (sSelectOld.GetTo().x > 0) {
 			// 2006.03.31 Moca nSelectLineToOldは、物理行なのでLayout系からDocLine系に修正
-			const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
+			const DocLine* pcDocLine = GetDocument()->m_docLineMgr.GetLine(sSelectOld.GetTo().GetY2());
 			if (pcDocLine && EolType::None != pcDocLine->GetEol()) {
 				sSelectOld.GetToPointer()->y++;
 			}
@@ -716,7 +716,7 @@ void ViewCommander::Command_SORT(BOOL bAsc)	// bAsc:TRUE=昇順,FALSE=降順
 	
 	sta.reserve(sSelectOld.GetTo().GetY2() - sSelectOld.GetFrom().GetY2());
 	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
-		const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(i);
+		const DocLine* pcDocLine = GetDocument()->m_docLineMgr.GetLine(i);
 		const NativeW& cmemLine = pcDocLine->_GetDocLineDataWithEOL();
 		const wchar_t* pLine = cmemLine.GetStringPtr(&nLineLen);
 		LogicInt nLineLenWithoutEOL = pcDocLine->GetLengthWithoutEOL();
@@ -869,7 +869,7 @@ void ViewCommander::Command_MERGE(void)
 		}
 #else
 		// 2010.08.22 Moca ソートと仕様を合わせる
-		const DocLine* pcDocLine = GetDocument()->m_cDocLineMgr.GetLine(sSelectOld.GetTo().GetY2());
+		const DocLine* pcDocLine = GetDocument()->m_docLineMgr.GetLine(sSelectOld.GetTo().GetY2());
 		if (pcDocLine && EolType::None != pcDocLine->GetEol()) {
 			sSelectOld.GetToPointer()->y++;
 		}
@@ -884,7 +884,7 @@ void ViewCommander::Command_MERGE(void)
 		return;
 	}
 
-	int j = GetDocument()->m_cDocLineMgr.GetLineCount();
+	int j = GetDocument()->m_docLineMgr.GetLineCount();
 	nMergeLayoutLines = GetDocument()->m_cLayoutMgr.GetLineCount();
 
 	LayoutRange sSelectOld_Layout;
@@ -897,7 +897,7 @@ void ViewCommander::Command_MERGE(void)
 	bool bMerge = false;
 	lineArr.reserve(sSelectOld.GetTo().y - sSelectOld.GetFrom().GetY2());
 	for (LogicInt i=sSelectOld.GetFrom().GetY2(); i<sSelectOld.GetTo().y; ++i) {
-		const wchar_t* pLine = GetDocument()->m_cDocLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = GetDocument()->m_docLineMgr.GetLine(i)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) continue;
 		if (!pLinew || nLineLen != nLineLenw || wmemcmp(pLine, pLinew, nLineLen)) {
 			lineArr.push_back(StringRef(pLine, nLineLen));
@@ -929,7 +929,7 @@ void ViewCommander::Command_MERGE(void)
 		// 2010.08.23 未変更なら変更しない
 	}
 
-	j -= GetDocument()->m_cDocLineMgr.GetLineCount();
+	j -= GetDocument()->m_docLineMgr.GetLineCount();
 	nMergeLayoutLines -= GetDocument()->m_cLayoutMgr.GetLineCount();
 
 	// 選択エリアの復元

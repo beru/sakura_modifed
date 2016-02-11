@@ -42,7 +42,11 @@ DocType::DocType(EditDoc* pcDoc)
 }
 
 // •¶‘Ží•Ê‚ÌÝ’è
-void DocType::SetDocumentType(TypeConfigNum type, bool force, bool bTypeOnly)
+void DocType::SetDocumentType(
+	TypeConfigNum type,
+	bool force,
+	bool bTypeOnly
+	)
 {
 	if (!m_nSettingTypeLocked || force) {
 		m_nSettingType = type;
@@ -114,11 +118,11 @@ void DocType::SetDocumentIcon()
 	
 	HICON hIconBig, hIconSmall;
 	if (this->GetDocumentAttribute().m_bUseDocumentIcon) {
-		m_pcDocRef->m_pcEditWnd->GetRelatedIcon(m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall);
+		m_pcDocRef->m_pEditWnd->GetRelatedIcon(m_pcDocRef->m_cDocFile.GetFilePath(), &hIconBig, &hIconSmall);
 	}else {
-		m_pcDocRef->m_pcEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
+		m_pcDocRef->m_pEditWnd->GetDefaultIcon(&hIconBig, &hIconSmall);
 	}
-	m_pcDocRef->m_pcEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
-	m_pcDocRef->m_pcEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
+	m_pcDocRef->m_pEditWnd->SetWindowIcon(hIconBig, ICON_BIG);
+	m_pcDocRef->m_pEditWnd->SetWindowIcon(hIconSmall, ICON_SMALL);
 }
 

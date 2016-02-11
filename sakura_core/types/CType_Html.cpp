@@ -42,7 +42,7 @@ void CType_Html::InitTypeConfigImp(TypeConfig* pType)
 
 	// 設定
 	pType->m_cBlockComments[0].SetBlockCommentRule(L"<!--", L"-->");	// ブロックコメントデリミタ
-	pType->m_nStringType = STRING_LITERAL_HTML;							// 文字列区切り記号エスケープ方法
+	pType->m_nStringType = StringLiteralType::HTML;							// 文字列区切り記号エスケープ方法
 	pType->m_bStringLineOnly = true;									// 文字列は行内のみ
 	pType->m_nKeyWordSetIdx[0] = 1;										// キーワードセット
 	pType->m_eDefaultOutline = OUTLINE_HTML;							// アウトライン解析方法
@@ -80,11 +80,16 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 	wchar_t			szTag[32];				//	一時領域  小文字で保持して高速化しています。
 
 	enum ELabelType {						//	列挙体：ラベルの種別
-		LT_DEFAULT,		LT_INLINE,		LT_IGNORE,		LT_EMPTY,
-		LT_BLOCK,		LT_PARAGRAPH,	LT_HEADING
+		LT_DEFAULT,
+		LT_INLINE,
+		LT_IGNORE,
+		LT_EMPTY,
+		LT_BLOCK,
+		LT_PARAGRAPH,
+		LT_HEADING,
 	};
-	enum ELabelType	nLabelType;				// ラベルの種別
-	LogicInt		nLineCount;
+	ELabelType	nLabelType;				// ラベルの種別
+	LogicInt	nLineCount;
 	/*	同じ見出し要素（hy）を次に上位レベルの見出し(hx)が現れるまで同じ深さにそろえます。
 		このため、見出しの深さを記憶しておきます。
 		下位レベルの見出しの深さは現れるまで不定で、前の章節での深さは影響しません。 2008.08.15 aroka
@@ -93,8 +98,8 @@ void DocOutline::MakeTopicList_html(FuncInfoArr* pcFuncInfoArr)
 	for (k=0; k<=6; ++k) {
 		nHeadDepth[k] = -1;
 	}
-	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
-		pLineBuf = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+	for (nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
+		pLineBuf = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLineBuf) {
 			break;
 		}

@@ -42,9 +42,9 @@ class Mutex;
 
 /*!	@brief 共有データの管理
 
-	ShareDataはCProcessのメンバであるため，両者の寿命は同一です．
-	本来はCProcessオブジェクトを通じてアクセスするべきですが，
-	CProcess内のデータ領域へのポインタをstatic変数に保存することで
+	ShareDataはProcessのメンバであるため，両者の寿命は同一です．
+	本来はProcessオブジェクトを通じてアクセスするべきですが，
+	Process内のデータ領域へのポインタをstatic変数に保存することで
 	Singletonのようにどこからでもアクセスできる構造になっています．
 
 	共有メモリへのポインタをm_pShareDataに保持します．このメンバは

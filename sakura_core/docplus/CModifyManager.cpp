@@ -10,7 +10,7 @@ void ModifyManager::OnAfterSave(const SaveInfo& sSaveInfo)
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 行変更状態をすべてリセット
-	ModifyVisitor().ResetAllModifyFlag(&pcDoc->m_cDocLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
+	ModifyVisitor().ResetAllModifyFlag(&pcDoc->m_docLineMgr, pcDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer());
 }
 
 bool ModifyVisitor::IsLineModified(const DocLine* pcDocLine, int saveSeq) const

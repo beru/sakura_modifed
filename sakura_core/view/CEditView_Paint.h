@@ -27,13 +27,13 @@ class EditView;
 
 
 // クリッピング領域を計算する際のフラグ
-enum EPaintArea{
-	PAINT_LINENUMBER = (1 << 0), // 行番号
-	PAINT_RULER      = (1 << 1), // ルーラー
-	PAINT_BODY       = (1 << 2), // 本文
+enum class PaintAreaType {
+	LineNumber = (1 << 0), // 行番号
+	Ruler      = (1 << 1), // ルーラー
+	Body       = (1 << 2), // 本文
 
 	// 特殊
-	PAINT_ALL        = PAINT_LINENUMBER | PAINT_RULER | PAINT_BODY, // ぜんぶ
+	All        = PaintAreaType::LineNumber | PaintAreaType::Ruler | PaintAreaType::Body, // ぜんぶ
 };
 
 class EditView_Paint {

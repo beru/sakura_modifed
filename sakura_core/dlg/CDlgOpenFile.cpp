@@ -101,7 +101,7 @@ public:
 	bool			m_bIsSaveDialog;	// 保存のダイアログか
 	ECodeType		m_nCharCode;		// 文字コード
 
-	Eol			m_cEol;
+	Eol				m_cEol;
 	bool			m_bUseCharCode;
 	bool			m_bUseEol;
 	bool			m_bBom;		//!< BOMを付けるかどうか	//	Jul. 26, 2003 ryoji BOM
@@ -110,9 +110,9 @@ public:
 
 	bool			m_bInitCodePage;
 
-	ComboBoxItemDeleter	m_combDelFile;
+	ComboBoxItemDeleter		m_combDelFile;
 	RecentFile				m_cRecentFile;
-	ComboBoxItemDeleter	m_combDelFolder;
+	ComboBoxItemDeleter		m_combDelFolder;
 	RecentFolder			m_cRecentFolder;
 
 	OPENFILENAME*	m_pOf;
@@ -124,9 +124,10 @@ public:
 	HWND			m_hwndComboEOL;	//	Feb. 9, 2001 genta
 	HWND			m_hwndCheckBOM;	//	Jul. 26, 2003 ryoji BOMチェックボックス
 
-	DlgOpenFileData():
-		m_pcDlgOpenFile(NULL)
-		,m_nHelpTopicID(0)
+	DlgOpenFileData()
+		:
+		m_pcDlgOpenFile(NULL),
+		m_nHelpTopicID(0)
 	{}
 };
 

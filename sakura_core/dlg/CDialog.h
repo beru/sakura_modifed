@@ -66,7 +66,7 @@ struct ComboBoxItemDeleter
 
 	ダイアログボックスを作るときにはここから継承させる．
 
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 class Dialog {
 public:

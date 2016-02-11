@@ -539,7 +539,7 @@ void ViewCommander::Command_PROPERTY_FILE(void)
 		int		nDataAllLen;
 		RunningTimer cRunningTimer("ViewCommander::Command_PROPERTY_FILE 全行データを返すテスト");
 		cRunningTimer.Reset();
-		pDataAll = DocReader(GetDocument()->m_cDocLineMgr).GetAllData(&nDataAllLen);
+		pDataAll = DocReader(GetDocument()->m_docLineMgr).GetAllData(&nDataAllLen);
 //		MYTRACE(_T("全データ取得             (%dバイト) 所要時間(ミリ秒) = %d\n"), nDataAllLen, cRunningTimer.Read());
 		free(pDataAll);
 		pDataAll = NULL;
@@ -692,7 +692,7 @@ bool ViewCommander::Command_PUTFILE(
 
 		// 一時ファイル出力
 		CodeConvertResult eRet = WriteManager().WriteFile_From_CDocLineMgr(
-			GetDocument()->m_cDocLineMgr,
+			GetDocument()->m_docLineMgr,
 			SaveInfo(
 				to_tchar(filename),
 				nSaveCharCode,

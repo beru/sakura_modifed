@@ -39,7 +39,7 @@ HRESULT CYbInterfaceBase::QueryInterfaceImpl(
 	REFIID		owniid,
 	REFIID		riid,
 	void**		ppvObj
-)
+	)
 {
 	if (riid == IID_IUnknown || riid == owniid) {
 		pThis->AddRef();
@@ -94,7 +94,7 @@ DECLARE_YB_INTERFACEIMPL(IEnumFORMATETC)
 
 DropTarget::DropTarget(EditWnd* pCEditWnd)
 {
-	m_pcEditWnd = pCEditWnd;	// 2008.06.20 ryoji
+	m_pEditWnd = pCEditWnd;	// 2008.06.20 ryoji
 	m_pcEditView = NULL;
 	m_hWnd_DropTarget = NULL;
 	return;
@@ -102,7 +102,7 @@ DropTarget::DropTarget(EditWnd* pCEditWnd)
 
 DropTarget::DropTarget(EditView* pCEditView)
 {
-	m_pcEditWnd = NULL;	// 2008.06.20 ryoji
+	m_pEditWnd = NULL;	// 2008.06.20 ryoji
 	m_pcEditView = pCEditView;
 	m_hWnd_DropTarget = NULL;
 	return;
@@ -137,36 +137,46 @@ BOOL DropTarget::Revoke_DropTarget(void)
 	return bResult;
 }
 
-STDMETHODIMP DropTarget::DragEnter(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
+STDMETHODIMP DropTarget::DragEnter(
+	LPDATAOBJECT pDataObject,
+	DWORD dwKeyState,
+	POINTL pt,
+	LPDWORD pdwEffect
+	)
 {
 	DEBUG_TRACE(_T("DropTarget::DragEnter()\n"));
-	if (m_pcEditWnd) {	// 2008.06.20 ryoji
-		return m_pcEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
+	if (m_pEditWnd) {	// 2008.06.20 ryoji
+		return m_pEditWnd->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 	}
 	return m_pcEditView->DragEnter(pDataObject, dwKeyState, pt, pdwEffect);
 }
 
 STDMETHODIMP DropTarget::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-	if (m_pcEditWnd) {	// 2008.06.20 ryoji
-		return m_pcEditWnd->DragOver(dwKeyState, pt, pdwEffect);
+	if (m_pEditWnd) {	// 2008.06.20 ryoji
+		return m_pEditWnd->DragOver(dwKeyState, pt, pdwEffect);
 	}
 	return m_pcEditView->DragOver(dwKeyState, pt, pdwEffect);
 }
 
 STDMETHODIMP DropTarget::DragLeave(void)
 {
-	if (m_pcEditWnd) {	// 2008.06.20 ryoji
-		return m_pcEditWnd->DragLeave();
+	if (m_pEditWnd) {	// 2008.06.20 ryoji
+		return m_pEditWnd->DragLeave();
 	}
 	return m_pcEditView->DragLeave();
 }
 
 
-STDMETHODIMP DropTarget::Drop(LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
+STDMETHODIMP DropTarget::Drop(
+	LPDATAOBJECT pDataObject,
+	DWORD dwKeyState,
+	POINTL pt,
+	LPDWORD pdwEffect
+	)
 {
-	if (m_pcEditWnd) {	// 2008.06.20 ryoji
-		return m_pcEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
+	if (m_pEditWnd) {	// 2008.06.20 ryoji
+		return m_pEditWnd->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 	}
 	return m_pcEditView->Drop(pDataObject, dwKeyState, pt, pdwEffect);
 }

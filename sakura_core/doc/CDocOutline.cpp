@@ -217,7 +217,10 @@ int DocOutline::ReadRuleFile(
 		最大値以上は追加せずに無視する
 	@date 2007.11.29 kobake OneRule test[1024] でスタックが溢れていたのを修正
 */
-void DocOutline::MakeFuncList_RuleFile(FuncInfoArr* pcFuncInfoArr, std::tstring& sTitleOverride)
+void DocOutline::MakeFuncList_RuleFile(
+	FuncInfoArr* pcFuncInfoArr,
+	std::tstring& sTitleOverride
+	)
 {
 	// ルールファイルの内容をバッファに読み込む
 	auto_array_ptr<OneRule> test(new OneRule[1024]);	// 1024個許可。 2007.11.29 kobake スタック使いすぎなので、ヒープに確保するように修正。
@@ -290,10 +293,10 @@ void DocOutline::MakeFuncList_RuleFile(FuncInfoArr* pcFuncInfoArr, std::tstring&
 		pcFuncInfoArr->AppendData(LogicInt(1), LayoutInt(1), mem.GetStringPtr(), FUNCINFO_NOCLIPTEXT, nDepth);
 		nDepth = 1;
 	}
-	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_cDocLineMgr.GetLineCount(); ++nLineCount) {
+	for (LogicInt nLineCount=LogicInt(0); nLineCount<m_pcDocRef->m_docLineMgr.GetLineCount(); ++nLineCount) {
 		// 行取得
 		LogicInt nLineLen;
-		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		const wchar_t* pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}
@@ -440,12 +443,12 @@ void DocOutline::MakeFuncList_BookMark(FuncInfoArr* pcFuncInfoArr)
 	LogicInt nLineLen;
 	BOOL bMarkUpBlankLineEnable = GetDllShareData().m_common.m_sOutline.m_bMarkUpBlankLineEnable;	// 空行をマーク対象にするフラグ 20020119 aroka
 	int nNewLineLen	= m_pcDocRef->m_cDocEditor.m_cNewLineCode.GetLen();
-	LogicInt nLineLast	= m_pcDocRef->m_cDocLineMgr.GetLineCount();
+	LogicInt nLineLast	= m_pcDocRef->m_docLineMgr.GetLineCount();
 	int nCharChars;
 
 	for (LogicInt nLineCount=LogicInt(0); nLineCount<nLineLast; ++nLineCount) {
-		if (!BookmarkGetter(m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
-		const wchar_t* pLine = m_pcDocRef->m_cDocLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
+		if (!BookmarkGetter(m_pcDocRef->m_docLineMgr.GetLine(nLineCount)).IsBookmarked()) continue;
+		const wchar_t* pLine = m_pcDocRef->m_docLineMgr.GetLine(nLineCount)->GetDocLineStrWithEOL(&nLineLen);
 		if (!pLine) {
 			break;
 		}

@@ -26,7 +26,7 @@
 SplitterWnd::SplitterWnd()
 	:
 	Wnd(_T("::SplitterWnd")),
-	m_pcEditWnd(NULL),
+	m_pEditWnd(NULL),
 	m_nAllSplitRows(1),					// 分割行数
 	m_nAllSplitCols(1),					// 分割桁数
 	m_nVSplitPos(0),					// 垂直分割位置
@@ -60,7 +60,7 @@ HWND SplitterWnd::Create(HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd)
 	LPCTSTR pszClassName = _T("SplitterWndClass");
 	
 	// 初期化
-	m_pcEditWnd	= pCEditWnd;
+	m_pEditWnd	= pCEditWnd;
 
 	// ウィンドウクラス作成
 	ATOM atWork;
@@ -240,7 +240,7 @@ void SplitterWnd::DoSplit(int nHorizontal, int nVertical)
 	int			nAllSplitColsOld = m_nAllSplitCols;	// 分割桁数
 	EditView*	pcViewArr[MAXCOUNTOFVIEW];
 	bool		bSizeBox;
-	EditWnd*	pCEditWnd = (EditWnd*)m_pcEditWnd;
+	EditWnd*	pCEditWnd = (EditWnd*)m_pEditWnd;
 	
 	bool bVUp = false;
 	bool bHUp = false;
@@ -809,7 +809,7 @@ LRESULT SplitterWnd::OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 // ウィンドウサイズの変更処理
 LRESULT SplitterWnd::OnSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	EditWnd*	pCEditWnd = (EditWnd*)m_pcEditWnd;
+	EditWnd*	pCEditWnd = (EditWnd*)m_pEditWnd;
 	EditView*	pcViewArr[MAXCOUNTOFVIEW];
 	int			nFrameWidth = 3;
 	bool		bSizeBox;

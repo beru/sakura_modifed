@@ -187,7 +187,7 @@ static LRESULT CALLBACK CControlTrayWndProc(
 
 /////////////////////////////////////////////////////////////////////////////
 // ControlTray
-// @date 2002.2.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
+// @date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 ControlTray::ControlTray()
 // Apr. 24, 2001 genta
 	:
@@ -1134,7 +1134,7 @@ void ControlTray::OnNewEditor(bool bNewWindow)
 	新規編集ウィンドウの追加 ver 0
 
 	@date 2000.10.24 genta WinExec -> CreateProcess．同期機能を付加
-	@date 2002.02.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.02.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 	@date 2003.05.30 genta 外部プロセス起動時のカレントディレクトリ指定を可能に．
 	@date 2007.06.26 ryoji 新規編集ウィンドウは hWndParent と同じグループを指定して起動する
 	@date 2008.04.19 ryoji MYWM_FIRST_IDLE 待ちを追加
@@ -1494,7 +1494,7 @@ void ControlTray::ActivePrevWindow(HWND hwndParent)
 
 /*!	サクラエディタの全終了
 
-	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
 */
 void ControlTray::TerminateApplication(
@@ -1529,7 +1529,7 @@ void ControlTray::TerminateApplication(
 /*!	すべてのウィンドウを閉じる
 
 	@date Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI ShareDataのインスタンスは、Processにひとつあるのみ。
 	@date 2006.12.25 ryoji 複数の編集ウィンドウを閉じるときの確認（引数追加）
 	@date 2007.02.13 ryoji 「編集の全終了」を示す引数(bExit)を追加
 	@date 2007.06.20 ryoji nGroup引数を追加

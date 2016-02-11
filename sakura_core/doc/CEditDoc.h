@@ -117,40 +117,34 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                       メンバ変数群                          //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-public:
 	// 参照
-	EditWnd*		m_pcEditWnd;	// Sep. 10, 2002
+	EditWnd*			m_pEditWnd;	// Sep. 10, 2002
 
 	// データ構造
-	DocLineMgr		m_cDocLineMgr;
-	LayoutMgr		m_cLayoutMgr;
+	DocLineMgr			m_docLineMgr;
+	LayoutMgr			m_cLayoutMgr;
 
 	// 各種機能
-public:
-	DocFile			m_cDocFile;
+	DocFile				m_cDocFile;
 	DocFileOperation	m_cDocFileOperation;
 	DocEditor			m_cDocEditor;
-	DocType			m_cDocType;
+	DocType				m_cDocType;
 	CookieManager		m_cCookie;
 
 	// ヘルパ
-public:
-	BackupAgent		m_cBackupAgent;
+	BackupAgent			m_cBackupAgent;
 	AutoSaveAgent		m_cAutoSaveAgent;		// 自動保存管理
-	AutoReloadAgent	m_cAutoReloadAgent;
+	AutoReloadAgent		m_cAutoReloadAgent;
 	DocOutline			m_cDocOutline;
 	DocLocker			m_cDocLocker;
 
 	// 動的状態
-public:
 	int				m_nCommandExecNum;			// コマンド実行回数
 
 	// 環境情報
-public:
 	FuncLookup		m_cFuncLookup;				// 機能名，機能番号などのresolve
 
 	// 未整理変数
-public:
 	int				m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
 	bool			m_bTextWrapMethodCurTemp;	// 折り返し方法一時設定適用中	// 2008.05.30 nasukoji
 	LOGFONT			m_lfCur;					// 一時設定フォント

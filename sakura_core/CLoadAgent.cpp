@@ -185,18 +185,18 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 
 	// 文書種別確定
 	pcDoc->m_cDocType.SetDocumentType( sLoadInfo.nType, true );
-	pcDoc->m_pcEditWnd->m_pcViewFontMiniMap->UpdateFont(&pcDoc->m_pcEditWnd->GetLogfont());
-	InitCharWidthCache( pcDoc->m_pcEditWnd->m_pcViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
-	SelectCharWidthCache( CharWidthFontMode::Edit, pcDoc->m_pcEditWnd->GetLogfontCacheMode() );
-	InitCharWidthCache( pcDoc->m_pcEditWnd->GetLogfont() );
-	pcDoc->m_pcEditWnd->m_pcViewFont->UpdateFont(&pcDoc->m_pcEditWnd->GetLogfont());
+	pcDoc->m_pEditWnd->m_pcViewFontMiniMap->UpdateFont(&pcDoc->m_pEditWnd->GetLogfont());
+	InitCharWidthCache( pcDoc->m_pEditWnd->m_pcViewFontMiniMap->GetLogfont(), CharWidthFontMode::MiniMap );
+	SelectCharWidthCache( CharWidthFontMode::Edit, pcDoc->m_pEditWnd->GetLogfontCacheMode() );
+	InitCharWidthCache( pcDoc->m_pEditWnd->GetLogfont() );
+	pcDoc->m_pEditWnd->m_pcViewFont->UpdateFont(&pcDoc->m_pEditWnd->GetLogfont());
 
 	// 起動と同時に読む場合は予めアウトライン解析画面を配置しておく
 	// （ファイル読み込み開始とともにビューが表示されるので、あとで配置すると画面のちらつきが大きいの）
-	if (!pcDoc->m_pcEditWnd->m_cDlgFuncList.m_bEditWndReady) {
-		pcDoc->m_pcEditWnd->m_cDlgFuncList.Refresh();
-		HWND hEditWnd = pcDoc->m_pcEditWnd->GetHwnd();
-		if (!::IsIconic( hEditWnd ) && pcDoc->m_pcEditWnd->m_cDlgFuncList.GetHwnd()) {
+	if (!pcDoc->m_pEditWnd->m_cDlgFuncList.m_bEditWndReady) {
+		pcDoc->m_pEditWnd->m_cDlgFuncList.Refresh();
+		HWND hEditWnd = pcDoc->m_pEditWnd->GetHwnd();
+		if (!::IsIconic( hEditWnd ) && pcDoc->m_pEditWnd->m_cDlgFuncList.GetHwnd()) {
 			RECT rc;
 			::GetClientRect( hEditWnd, &rc );
 			::SendMessage( hEditWnd, WM_SIZE, ::IsZoomed( hEditWnd )? SIZE_MAXIMIZED: SIZE_RESTORED, MAKELONG( rc.right - rc.left, rc.bottom - rc.top ) );
@@ -209,7 +209,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 		ReadManager cReader;
 		ProgressSubject* pOld = EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&cReader);
 		CodeConvertResult eReadResult = cReader.ReadFile_To_CDocLineMgr(
-			&pcDoc->m_cDocLineMgr,
+			&pcDoc->m_docLineMgr,
 			sLoadInfo,
 			&pcDoc->m_cDocFile.m_sFileInfo
 		);
@@ -237,7 +237,7 @@ LoadResultType LoadAgent::OnLoad(const LoadInfo& sLoadInfo)
 
 	ProgressSubject* pOld = EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(&pcDoc->m_cLayoutMgr);
 	pcDoc->m_cLayoutMgr.SetLayoutInfo( true, ref, ref.m_nTabSpace, nMaxLineKetas );
-	pcDoc->m_pcEditWnd->ClearViewCaretPosInfo();
+	pcDoc->m_pEditWnd->ClearViewCaretPosInfo();
 	
 	EditApp::getInstance()->m_pcVisualProgress->ProgressListener::Listen(pOld);
 
@@ -250,7 +250,7 @@ void LoadAgent::OnAfterLoad(const LoadInfo& sLoadInfo)
 	EditDoc* pcDoc = GetListeningDoc();
 
 	// 親ウィンドウのタイトルを更新
-	pcDoc->m_pcEditWnd->UpdateCaption();
+	pcDoc->m_pEditWnd->UpdateCaption();
 
 	// -- -- ※ InitAllViewでやってたこと -- -- //	// 2009.08.28 nasukoji	CEditView::OnAfterLoad()からここに移動
 	pcDoc->m_nCommandExecNum = 0;

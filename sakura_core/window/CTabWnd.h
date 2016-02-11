@@ -157,8 +157,15 @@ protected:
 	}
 
 protected:
-	enum DragState { DRAG_NONE, DRAG_CHECK, DRAG_DRAG };
-	enum CaptureSrc { CAPT_NONE, CAPT_CLOSE };
+	enum DragState {
+		DRAG_NONE,
+		DRAG_CHECK,
+		DRAG_DRAG,
+	};
+	enum CaptureSrc {
+		CAPT_NONE,
+		CAPT_CLOSE,
+	};
 
 	typedef HIMAGELIST (WINAPI *FN_ImageList_Duplicate)(HIMAGELIST himl);
 

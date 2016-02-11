@@ -64,6 +64,7 @@ void RunningTimer::WriteTrace(const char* msg) const
 {
 	MYTRACE(_T("%3d:\"%hs\", %d‡_•b : %hs\n"), m_nDeapth, m_szText, timeGetTime() - m_nStartTime, msg);
 }
-#endif
+
+#endif // #ifdef _DEBUG
 
 

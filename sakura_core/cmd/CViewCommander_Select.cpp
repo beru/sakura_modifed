@@ -111,7 +111,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 	LayoutPoint ptCaret;
 
 	// 最下行（物理行）でない
-	if (GetCaret().GetCaretLogicPos().y < GetDocument()->m_cDocLineMgr.GetLineCount()) {
+	if (GetCaret().GetCaretLogicPos().y < GetDocument()->m_docLineMgr.GetLineCount()) {
 		// 1行先の物理行からレイアウト行を求める
 		GetDocument()->m_cLayoutMgr.LogicToLayout(LogicPoint(0, GetCaret().GetCaretLogicPos().y + 1), &ptCaret);
 
@@ -128,7 +128,7 @@ void ViewCommander::Command_SELECTLINE(int lparam)
 		// 選択するものが無い（[EOF]のみの行）時は選択状態としない
 		if (
 			!si.IsTextSelected()
-			&& (GetCaret().GetCaretLogicPos().y >= GetDocument()->m_cDocLineMgr.GetLineCount())
+			&& (GetCaret().GetCaretLogicPos().y >= GetDocument()->m_docLineMgr.GetLineCount())
 		) {
 			// 現在の選択範囲を非選択状態に戻す
 			si.DisableSelectArea(true);

@@ -80,7 +80,7 @@ enum PropComSheetOrder {
 	1つのダイアログボックスに複数のプロパティページが入った構造に
 	なっており、Dialog procedureとEvent Dispatcherがページごとにある．
 
-	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
+	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、Processにひとつあるのみ。
 */
 class PropCommon {
 public:

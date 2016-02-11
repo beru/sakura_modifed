@@ -122,7 +122,7 @@ void DlgProperty::SetData(void)
 	// To Here  2008/4/27 Uchi
 	cmemProp.AppendString(_T("\r\n"));
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_cDocLineMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_LINE_COUNT), pCEditDoc->m_docLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_LAYOUT_LINE), pCEditDoc->m_cLayoutMgr.GetLineCount());
@@ -140,7 +140,7 @@ void DlgProperty::SetData(void)
 	auto_sprintf(szWork, LS(STR_DLGFLPROP_CMD_COUNT), pCEditDoc->m_nCommandExecNum);
 	cmemProp.AppendString(szWork);
 
-	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_cDocLineMgr.GetLineCount());
+	auto_sprintf(szWork, LS(STR_DLGFLPROP_FILE_INFO), pCEditDoc->m_docLineMgr.GetLineCount());
 	cmemProp.AppendString(szWork);
 
 	if ((nFind = ::FindFirstFile(pCEditDoc->m_cDocFile.GetFilePath(), &wfd)) != INVALID_HANDLE_VALUE) {
@@ -158,7 +158,7 @@ void DlgProperty::SetData(void)
 			cmemProp.AppendString(szWork);
 		}
 
-		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pCEditDoc->m_cDocLineMgr.GetLineCount());
+		auto_sprintf(szWork, LS(STR_DLGFLPROP_ATTRIBUTES), pCEditDoc->m_docLineMgr.GetLineCount());
 		cmemProp.AppendString(szWork);
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
 			cmemProp.AppendString(LS(STR_DLGFLPROP_AT_ARCHIVE));

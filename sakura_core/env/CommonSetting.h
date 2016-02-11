@@ -663,16 +663,16 @@ struct CommonSetting_Plugin {
 //                        メインメニュー                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 // メインメニュー種類
-enum EMainMenuType {
-	T_NODE,			// Node
-	T_LEAF,			// 機能コマンド
-	T_SEPARATOR,	// 区切線
-	T_SPECIAL,		// 特殊機能コマンド
+enum class MainMenuType {
+	Node,			// Node
+	Leaf,			// 機能コマンド
+	Separator,		// 区切線
+	Special,		// 特殊機能コマンド
 }; 
 
 class MainMenu {
 public:
-	EMainMenuType	m_nType;		// 種類
+	MainMenuType	m_nType;		// 種類
 	EFunctionCode	m_nFunc;		// Function
 	WCHAR			m_sKey[2];		// アクセスキー
 	WCHAR			m_sName[MAX_MAIN_MENU_NAME_LEN + 1];	// 名前

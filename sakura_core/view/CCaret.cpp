@@ -299,7 +299,7 @@ LayoutInt Caret::MoveCursor(
 			textArea.OffsetViewTopLine(-nScrollRowNum);
 			if (m_pEditView->GetDrawSwitch()) {
 				m_pEditView->InvalidateRect(NULL);
-				if (m_pEditView->m_pcEditWnd->GetMiniMap().GetHwnd()) {
+				if (m_pEditView->m_pEditWnd->GetMiniMap().GetHwnd()) {
 					m_pEditView->MiniMapRedraw(true);
 				}
 			}
@@ -330,7 +330,7 @@ LayoutInt Caret::MoveCursor(
 
 			if (m_pEditView->GetDrawSwitch()) {
 				m_pEditView->ScrollDraw(nScrollRowNum, nScrollColNum, rcScroll, rcClip, rcClip2);
-				if (m_pEditView->m_pcEditWnd->GetMiniMap().GetHwnd()) {
+				if (m_pEditView->m_pEditWnd->GetMiniMap().GetHwnd()) {
 					m_pEditView->MiniMapRedraw(false);
 				}
 			}
@@ -667,7 +667,7 @@ void Caret::ShowCaretPosInfo()
 	}
 
 	// ステータスバーハンドルを取得
-	HWND hwndStatusBar = m_pEditDoc->m_pcEditWnd->m_cStatusBar.GetStatusHwnd();
+	HWND hwndStatusBar = m_pEditDoc->m_pEditWnd->m_cStatusBar.GetStatusHwnd();
 
 	// カーソル位置の文字列を取得
 	const Layout*	pcLayout;
@@ -863,7 +863,7 @@ void Caret::ShowCaretPosInfo()
 			szLeft,
 			szRight
 		);
-		m_pEditDoc->m_pcEditWnd->PrintMenubarMessage(szText);
+		m_pEditDoc->m_pEditWnd->PrintMenubarMessage(szText);
 	// ステータスバーに状態を書き出す
 	}else {
 		TCHAR	szText_1[64];
